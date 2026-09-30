@@ -20,16 +20,20 @@ skill file; this one follows the agent loop from its README).
 Run from the directory that holds the Python project (here: `backend/`):
 
 ```bash
-python-doctor . --json
+uv run python-doctor . --json
 ```
 
 Then loop:
 
 1. Read the report: `score`, and the findings per category.
-2. Fix findings — `python-doctor . --fix` for what ruff can auto-fix, by hand for the rest.
+2. Fix findings — `uv run python-doctor . --fix` for what ruff can auto-fix, by hand for the rest.
    Errors first, then warnings.
-3. `python-doctor . --score` to verify.
+3. `uv run python-doctor . --score` to verify.
 4. Repeat until the score is 100.
+5. Run `uv run mypy .` — the backend gate also requires zero mypy errors in strict mode.
+
+Run the gate once, after the task is complete, not after every edit. `.claude/CLAUDE.md`
+("Checks") is the authority on when and how the gate runs.
 
 Fix the code, not the score: do not silence a finding with `# noqa`, `# nosec` or a
 config exclusion unless it is a verified false positive, and say so when you do.
@@ -55,7 +59,9 @@ Each run writes `.python-doctor/state.json` and the next run shows the delta.
 
 ## Install or update
 
+python-doctor is a dev dependency pinned in `backend/pyproject.toml`; always run it through
+`uv run` so the gate uses the pinned version.
+
 ```bash
-pipx install python-doctor      # first install
-pipx upgrade python-doctor      # update to the latest release
+uv add --dev python-doctor      # first install
 ```
