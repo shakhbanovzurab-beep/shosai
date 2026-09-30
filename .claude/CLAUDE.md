@@ -187,7 +187,7 @@ Bundle size, re-renders, memory, network requests, lazy loading, code splitting,
 
 ## Performance
 
-Whisperer is designed for an audience of millions, deployed on a single server for now. Performance is an architectural requirement, not a later optimization phase.
+Whisperer is designed for 10 000 DAU, verified by calculation up to 100 000 DAU (the design point in §3 of the [target architecture](#target-architecture)). It runs as one compute plane on Docker Compose with managed services. Performance is an architectural requirement, not a later optimization phase.
 
 **Bottleneck audit is always on.** While building any feature, look for the places that will not hold under load and remove them.
 
