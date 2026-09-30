@@ -6,6 +6,31 @@ Whisperer is an AI workspace. It brings a person's knowledge, meetings, document
 
 `whisperer-v2` is a full, rethought rewrite of the earlier `whisperer` project. Rules below describe the target state. Carry over behaviour and lessons from the old code; do not assume its file or function names exist here.
 
+## Rewrite from the draft
+
+| Directory | Role |
+|---|---|
+| `/root/whisperer` | **The draft.** The old working project. A reference only: read it to learn behaviour, UI, API and WebSocket contracts, and lessons. Do not modify it. |
+| `/root/whisperer-v2` | **The final version.** All work happens here. |
+
+**Scope.** Only the draft's `backend/` and `frontend/` and the files tied to them: Dockerfiles, Compose files, `deploy/` configuration, CI workflows, and `specs/` and `docs/` as a source of requirements. Out of scope: the macOS, iOS, Linux and Windows clients, `pwa-app/`, `shared/` (the Swift `WhispererKit`), `hubspot-app/`, `content-factory/`, `article/`. Never decrypt or read `secrets/`.
+
+**Goal.** Rewrite the draft into the final version so that **a user notices no visual difference**: the same screens, layouts, texts and flows. At the same time the final version meets every rule in this file and every target in the [target architecture](#target-architecture). Native clients that are already shipped keep working without an update (nfr-12), so the HTTP and WebSocket contract they use is preserved even though their code is out of scope.
+
+**It is a rewrite, not a port.** Take behaviour from the draft; take structure, boundaries, data model and rules from this file and the target architecture. Do not copy draft code that breaks them.
+
+**Versions.** Use the versions in the [stack table](#technology-stack). Anything not listed there gets the latest stable version at the moment it is added. The draft's versions are outdated and are never carried over.
+
+**Order.** Features can be rewritten in any order; there is no required sequence.
+
+### Hosting constraints now
+
+The target architecture places data in two homes: PostgreSQL and S3 in Russia and in the EU, plus managed Valkey in the EU. **These are not available from the hosting provider yet.**
+
+- Code implements the target architecture as written, including home-aware data access. Do not simplify the design to fit today's hosting.
+- Develop and test against local containers.
+- Do not choose another provider or a workaround for the missing resources without asking the user.
+
 ## Target architecture
 
 [docs/design/ARCHITECTURE.md](../docs/design/ARCHITECTURE.md) is the target architecture, fixed by the owner, with a diagram in [docs/design/architecture.html](../docs/design/architecture.html). It is normative: where it and an implementation disagree, the implementation is wrong, or the document is updated first.
