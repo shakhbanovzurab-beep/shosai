@@ -56,7 +56,7 @@ Every change must be safe, measurable and of real engineering value. No changes 
 - Clean Architecture sets the direction of dependencies **inside** a slice: domain logic does not depend on the framework, the database or transport.
 - Slices talk to each other only through explicit contracts: a public interface, an event, or the HTTP API. `import-linter` enforces the boundaries on the backend.
 
-**File length.** A hand-written source file is at most **300 lines in `backend/`** and **200 lines in `frontend/`**, counting every line. Generated files and lock files are exempt. Split the file by responsibility before it reaches the limit.
+**File length.** A hand-written source file is at most **300 lines in `backend/`** and **200 lines in `frontend/`**, counting every line. Generated files and lock files are exempt ([what counts as generated](#ci)). Split the file by responsibility before it reaches the limit.
 
 ### Engineering principles
 
@@ -273,7 +273,7 @@ Tests are reproducible, independent of each other and have no effect on other te
 
 - Integration tests use a separate PostgreSQL server with the `pgvector` extension.
 - Connection parameters come only from environment variables.
-- **Never run tests against a production database.** Treat `DATABASE_URL` in `backend/.env` as production. Tests use their own variables and must refuse to start if the target is not a test database.
+- **Never run tests against a production database.** Treat `DATABASE_URL` in `backend/.env` as production. Tests read only `TEST_DATABASE_URL` and must refuse to start if the target is not a test database.
 - Several prepared test databases exist so agents can run in parallel. Before a run, claim one that no other agent is using.
 
 ### Clean up after every run
@@ -325,6 +325,24 @@ Not after every edit. The changed zone decides what runs:
 Code is not finished until every gate that applies passes. Fix the code rather than silencing rules. If a gate cannot be passed, list the remaining findings and why instead of reporting the target as met.
 
 No hook automates these gates yet. Run them yourself.
+
+### CI
+
+[.github/workflows/ci.yml](../.github/workflows/ci.yml) runs on every push to `main`. It repeats the gates above and adds checks the agent does not run by hand. A red CI on `main` is fixed before any other work.
+
+| Job | Runs | Checks |
+|---|---|---|
+| Repository rules | always | File length limits; no `.env` file tracked by git ([scripts/ci/check_repository.py](../scripts/ci/check_repository.py)) |
+| Semgrep | always | `p/default` rules over the whole repository except `.claude/` |
+| Backend | once `backend/pyproject.toml` exists | `uv sync --locked`, Ruff format and lint, mypy strict, import-linter, pytest with coverage, python-doctor 100, pip-audit |
+| Frontend | once `frontend/package.json` exists | `npm ci`, type check, tests, build, react-doctor 100 |
+
+What the projects must provide for CI to pass:
+
+- **Backend:** `uv.lock`; dev dependencies `ruff`, `mypy`, `import-linter`, `pytest`, `pytest-cov`, `python-doctor`, `pip-audit`; import-linter contracts. Tests read the database only from `TEST_DATABASE_URL` — CI provides PostgreSQL 18 with `pgvector` there.
+- **Frontend:** `package-lock.json`; `.nvmrc` with the Node version; npm scripts `typecheck`, `test` (single run, not watch mode), `build` and `doctor`.
+
+For the file length limit, generated code is exempt: files under a `generated/` or `__generated__/` directory, Alembic migrations (`alembic/versions/`, `migrations/versions/`), and files with an `@generated` marker in their first five lines.
 
 ## Self-review
 
