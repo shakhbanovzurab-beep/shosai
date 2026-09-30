@@ -1,0 +1,16 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Generated tool state
+.repowise/
+.python-doctor/
+
+# claude-seo runtime (created by `claude-seo setup`)
+.claude/skills/seo/.venv*/
+.claude/skills/seo/ms-playwright/
+.claude/settings.local.json
+
+__pycache__/
+*.pyc
