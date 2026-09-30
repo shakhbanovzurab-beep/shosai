@@ -23,6 +23,8 @@ Whisperer is an AI workspace. It brings a person's knowledge, meetings, document
 
 **Order.** Features can be rewritten in any order; there is no required sequence.
 
+**Plan and status.** The work is split into packages in [docs/plan/REWRITE_PLAN.md](../docs/plan/REWRITE_PLAN.md); each package's state is in [docs/plan/STATUS.md](../docs/plan/STATUS.md); each package has a launch prompt in [docs/plan/prompts/](../docs/plan/prompts/). The v2 test domain is **https://one.whisperer.one**.
+
 ### Hosting constraints now
 
 The target architecture places data in two homes: PostgreSQL and S3 in Russia and in the EU, plus managed Valkey in the EU. **These are not available from the hosting provider yet.**
@@ -426,7 +428,7 @@ The `docker-destructive-guardrails` skill defines the confirmation rules.
 
 These points are open. Do not assume an answer; check the old `whisperer` codebase first, then ask.
 
-- **Rendering of public pages.** The SEO strategy requires server rendering or static generation and real `404` responses. The target architecture makes the web cabinet a client-rendered SPA and PWA, and the public site (fr-11) a stretch goal without a rendering decision.
+- **Rendering of public pages.** The SEO strategy requires server rendering or static generation and real `404` responses. The target architecture makes the web cabinet a client-rendered SPA and PWA, and the public site (fr-11) a stretch goal without a rendering decision. The draft serves its public landing as pre-built static HTML from the backend (`web_landing*.py`, `static/landing/`); package S17 decides whether v2 keeps that approach.
 - **The role of `pgvector`.** The target architecture makes Qdrant the vector index and also lists `pgvector` for vectors in PostgreSQL; the test infrastructure requires `pgvector`. Which vectors live where is not stated.
 - **AI interface libraries.** `ai-elements`, `streamdown` and the Vercel AI SDK were considered. The target architecture adopts Tailwind CSS but none of these three.
 - **The shape of the error envelope.** The target architecture requires one error envelope everywhere and cursor pagination, but does not define the envelope.
