@@ -593,30 +593,32 @@ Each of these counters must stay at zero; any non-zero value pages.
 
 ### 18.2 Beyond the base
 
+Versions are the latest stable releases as of 2026-09-30, the starting point for v2; the draft's versions are not carried over. Exact versions are pinned in the lock files and image tags and change only through a deliberate upgrade. Managed services run the provider's version; native clients are outside the rewrite.
+
 | Area | Technology | Version | Purpose |
 |---|---|---|---|
 | Backend | Starlette | paired with FastAPI | ASGI toolkit under FastAPI |
-| Backend | Uvicorn | ≥ 0.34 | ASGI server, one process per container |
-| Backend | asyncpg | ≥ 0.30 | PostgreSQL driver |
-| Backend | pgvector | ≥ 0.4 | Vectors in PostgreSQL |
-| Backend | taskiq-redis | ≥ 1.0 | TaskIQ broker on Redis Streams |
-| Backend | websockets | ≥ 14 | Streaming connections to AI providers |
-| Backend | google-genai | ≥ 1.0 | Gemini Live client |
-| Backend | aioboto3 | ≥ 15 | S3 client; one bucket per data home |
-| Backend | livekit-api, livekit-protocol | ≥ 1.1 | Video rooms and egress control |
-| Backend | prometheus-fastapi-instrumentator | ≥ 7.0 | HTTP metrics |
-| Backend | slowapi | ≥ 0.1 | Request rate limits |
-| Backend | bcrypt, PyJWT, cryptography | ≥ 4.2, ≥ 2.10, ≥ 44 | Passwords and tokens; the token carries the data home |
+| Backend | Uvicorn | 0.54.0 | ASGI server, one process per container |
+| Backend | asyncpg | 0.31.0 | PostgreSQL driver |
+| Backend | pgvector | 0.5.0 | Vectors in PostgreSQL |
+| Backend | taskiq-redis | 1.2.4 | TaskIQ broker on Redis Streams |
+| Backend | websockets | 17.1 | Streaming connections to AI providers |
+| Backend | google-genai | 2.25.0 | Gemini Live client |
+| Backend | aioboto3 | 15.5.0 | S3 client; one bucket per data home |
+| Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
+| Backend | prometheus-fastapi-instrumentator | 8.1.0 | HTTP metrics |
+| Backend | slowapi | 0.1.10 | Request rate limits |
+| Backend | bcrypt, PyJWT, cryptography | 5.0.0, 2.15.1, 50.0.2 | Passwords and tokens; the token carries the data home |
 | Backend | pypdf, python-docx, openpyxl, python-pptx, striprtf | — | Knowledge-base document parsing |
 | Backend | tiktoken, rank-bm25, networkx | — | Token counting, keyword search, context graph |
-| Testing | pytest-asyncio | ≥ 0.25 | Async tests |
+| Testing | pytest-asyncio | 1.4.0 | Async tests |
 | Code quality | python-doctor | — | Backend code-health gate |
 | Data | PostgreSQL, managed (Timeweb, St Petersburg) | 18.4 | Russian data home |
 | Data | PostgreSQL, managed (EU) | 18 | EU data home and the directory |
 | Data | PgBouncer | transaction mode | Connection pooler in front of each database |
 | Data | PostgreSQL row-level security | — | Second line of tenant isolation for companies |
 | Data | Valkey, managed (Netherlands) | 9.1 | The managed Redis-compatible service: task queues, transcript queue, locks, meeting state, Leo checkpoints |
-| Data | Redis, container | 7.4.6 | Local LRU cache |
+| Data | Redis, container | 8.10.2 | Local LRU cache |
 | Data | S3 Timeweb ru-1 · S3 in the EU | — | Files of the Russian and EU data homes |
 | Realtime and integrations | LiveKit server, egress, coturn | pinned | Video rooms, recording, per-participant tracks to the ws gateway, TURN |
 | Realtime and integrations | Nango | pinned | OAuth proxy for connectors, one per data home |
@@ -630,19 +632,19 @@ Each of these counters must stay at zero; any non-zero value pages.
 | Payments | TBank, CloudPayments, lava.top | — | Card acquiring in RUB and foreign currency, incl. PayPal |
 | Payments | Bank statement API | — | Reconciliation of company invoices; bank not chosen |
 | Payments | Invoices, acts, UPD | — | Closing documents for Russian legal entities |
-| Infrastructure | certbot, Let's Encrypt | 5.1.0 | TLS certificates; CA keys are pinned in shipped clients |
+| Infrastructure | certbot, Let's Encrypt | 5.8.0 | TLS certificates; CA keys are pinned in shipped clients |
 | Infrastructure | scripts/release.sh | — | Zero-downtime deploy of the CI-built image |
 | Infrastructure | Container registry, staging | — | Built images; checks before production |
-| Observability | Prometheus, Alertmanager, blackbox exporter, nginx exporter | 3.1.0, 0.28.1, 0.26.0, 1.4.2 | Metrics, Telegram alerts, external probes |
+| Observability | Prometheus, Alertmanager, blackbox exporter, nginx exporter | 3.15.0, 0.34.1, 0.28.0, 1.5.3 | Metrics, Telegram alerts, external probes |
 | Observability | node exporter | — | Host metrics and disk alert |
 | Observability | OpenTelemetry Collector (contrib) | latest stable | One pipeline for logs and traces; tail sampling; bounded buffer |
 | Observability | Loki | latest stable | Log store, 14 days on local filesystem with a size cap; alerts via ruler |
 | Observability | Tempo | latest stable | Trace store, 7 days on local storage |
 | Observability | Grafana | latest stable | One pane for metrics, logs and traces |
-| Frontend | TanStack Query, React Router, Zustand | 5.62, 7.1, 5.0 | Data fetching, routing, state |
-| Frontend | i18next, react-i18next | 26.3, 17.0 | 16 languages |
-| Frontend | Tailwind CSS, Mermaid | 4.3.2, 11.16.0 | Styles; diagrams in answers |
-| Frontend | Vitest, react-doctor | 4.1, 0.9.2 | Tests; React code-health gate |
+| Frontend | TanStack Query, React Router, Zustand | 5.104.0, 8.4.0, 5.0.15 | Data fetching, routing, state |
+| Frontend | i18next, react-i18next | 26.4.2, 17.0.15 | 16 languages |
+| Frontend | Tailwind CSS, Mermaid | 4.3.3, 12.0.0 | Styles; diagrams in answers |
+| Frontend | Vitest, react-doctor | 5.0.3, 0.9.14 | Tests; React code-health gate |
 | Clients | macOS, iOS: Swift, SwiftUI, WhispererKit | Swift 6 | Apple desktop and mobile clients |
 | Clients | Linux: Swift, WhispererKit, GTK 4, PipeWire | Swift 6 | Linux desktop client |
 | Clients | Windows: C#, .NET, WPF, WebView2, CommunityToolkit.Mvvm, NAudio | .NET 10 | Windows desktop client |
