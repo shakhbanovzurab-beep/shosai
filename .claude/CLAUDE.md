@@ -6,6 +6,14 @@ Whisperer is an AI workspace. It brings a person's knowledge, meetings, document
 
 `whisperer-v2` is a full, rethought rewrite of the earlier `whisperer` project. Rules below describe the target state. Carry over behaviour and lessons from the old code; do not assume its file or function names exist here.
 
+## Target architecture
+
+[docs/design/ARCHITECTURE.md](../docs/design/ARCHITECTURE.md) is the target architecture, fixed by the owner, with a diagram in [docs/design/architecture.html](../docs/design/architecture.html). It is normative: where it and an implementation disagree, the implementation is wrong, or the document is updated first.
+
+It defines product scope, non-functional targets, topology (one compute plane in the EU, two data homes in Russia and the EU), the process model and code layout, data placement and residency, tenancy and access control, the data model, invariants, interfaces, critical flows, async work, resilience, observability, delivery and the full technology stack.
+
+Read the relevant section before you design or change a feature, a data model, an interface, an async flow or anything that touches residency, access or money. Keep the invariants (§9) and the engineering rules (§14) in every change.
+
 ## Order of authority
 
 When instructions conflict, the higher one wins:
@@ -17,6 +25,8 @@ When instructions conflict, the higher one wins:
 5. General habit.
 
 A skill's commands are replaced by this file's commands where they differ. Example: the `react-doctor` skill says `npx react-doctor@latest`; here the rule is `npm run doctor`.
+
+On architecture — components, data placement, interfaces, invariants — the [target architecture](#target-architecture) is normative. If this file and that document disagree, do not pick one silently: point out the conflict and ask.
 
 ## Language
 
@@ -73,6 +83,8 @@ Every change must be safe, measurable and of real engineering value. No changes 
 
 ## Technology stack
 
+This table is the base. The complete stack — drivers, managed services, AI providers, payments, frontend libraries, native clients, pinned versions — is in §18 of the [target architecture](#target-architecture).
+
 "Latest stable" is the rule for choosing a version when a dependency is added. After that the exact version is pinned in the lock file or image tag and changes only through a deliberate upgrade (see [Dependencies](#dependencies)).
 
 | Area | Technology | Version | Purpose |
@@ -128,6 +140,7 @@ Load and follow these skills whenever you work in the zone. This is not optional
 | Docker and Compose | `docker-project-foundations`, `docker-build-strategies`, `docker-compose-patterns`, `docker-destructive-guardrails` |
 | Python code health | `python-doctor` |
 | React code health | `react-doctor` |
+| Architecture, data model, interfaces, async flows | [docs/design/ARCHITECTURE.md](../docs/design/ARCHITECTURE.md) (document, not a skill) |
 | Public pages, SEO, AI search visibility | [docs/seo/STRATEGY.md](../docs/seo/STRATEGY.md) and the `seo-*` skills mapped in its section 17 |
 
 The `docker-agent-*` and `docker-sandboxes-*` skills apply only if Docker Agent or Docker Sandboxes are actually used.
@@ -327,7 +340,7 @@ Development is linear and happens **only on `main`**.
 
 ### Push is part of the commit
 
-**A commit is done only after `git push origin main`.** Local `main` must equal `origin/main` when a task ends. Production is built from the working tree, so an unpushed commit is code running in production that exists nowhere else.
+**A commit is done only after `git push origin main`.** Local `main` must equal `origin/main` when a task ends. Production images are built by CI from a pushed green commit, never on a production host, so an unpushed commit never reaches production and exists on one machine only.
 
 ```bash
 git add <paths>
@@ -370,11 +383,10 @@ The `docker-destructive-guardrails` skill defines the confirmation rules.
 
 These points are open. Do not assume an answer; check the old `whisperer` codebase first, then ask.
 
-- **Rendering of public pages.** The SEO strategy requires server rendering or static generation and real `404` responses; the stack is a client-rendered Vite app.
-- **Vector storage.** The stack names Qdrant; the test infrastructure names `pgvector`.
-- **AI interface libraries.** `ai-elements`, `streamdown` and the Vercel AI SDK were considered but are neither installed nor in the stack.
-- **Redis or a Redis-compatible server**, and the TaskIQ broker.
-- **The shared error format and pagination style** for the API.
+- **Rendering of public pages.** The SEO strategy requires server rendering or static generation and real `404` responses. The target architecture makes the web cabinet a client-rendered SPA and PWA, and the public site (fr-11) a stretch goal without a rendering decision.
+- **The role of `pgvector`.** The target architecture makes Qdrant the vector index and also lists `pgvector` for vectors in PostgreSQL; the test infrastructure requires `pgvector`. Which vectors live where is not stated.
+- **AI interface libraries.** `ai-elements`, `streamdown` and the Vercel AI SDK were considered. The target architecture adopts Tailwind CSS but none of these three.
+- **The shape of the error envelope.** The target architecture requires one error envelope everywhere and cursor pagination, but does not define the envelope.
 
 <!-- REPOWISE:START — Do not edit below this line. Auto-generated by Repowise. -->
 ## Codebase Intelligence for whisperer-v2 (Repowise)
