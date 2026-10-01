@@ -78,7 +78,7 @@ Draft models (`models/`, 4 300 lines, 69 files) follow the owner of each table; 
 | File | Routes | Purpose | v2 | D1 classes |
 |---|---|---|---|---|
 | `auth.py` | 14 under `/v1/auth` | Register, verify email code, resend, forgot and reset password, login, refresh, logout, sessions list and revoke (kept although unused, FM-5), `me`, desktop code exchange and refresh | S01 | native 6 · web 6 · unused 2 |
-| `me.py` | 9 under `/v1/me` | Profile, avatar, hotkeys, personal analytics, referral | S01, S05 (`/hotkeys`), S14 (`/analytics*`), S03 (`/referral`) | native 1 · web 8 |
+| `me.py` | 9 under `/v1/me` | Profile, avatar, hotkeys, personal analytics, referral. Native clients read the profile through `GET /v1/auth/me` (`auth.py`), not `GET /v1/me`; their only call here is `/hotkeys` | S01, S05 (`/hotkeys`), S14 (`/analytics*`), S03 (`/referral`) | native 1 · web 8 |
 | `me_data.py` | 4 under `/v1/me/data` | Export, "delete everything", account deletion | S01 | web 4 |
 | `me_onboarding.py` | 6 under `/v1/me/onboarding` | Interactive tour progress | S01 | web 6 |
 | `i18n.py` | `GET /v1/i18n/detect` | Language by IP for auto-detection | S01 | web 1 |
@@ -150,7 +150,7 @@ Draft models (`models/`, 4 300 lines, 69 files) follow the owner of each table; 
 | `admin/sessions.py` | 4 | Meeting view, mind-map enrichment, deletion | dropped (FM-5) | unused 4 |
 | `admin/app_builds.py` | 5 | Client build publishing | S16 | web 5 |
 | `ai/agent.py` | 4 under `/v1/ai/agent` | Leo turn over the LangGraph graph; confirm action (`chat`, `act`) | S09 | web 4 |
-| `ai/proxy.py` | 5 | `/v1/ai/chat/stream`, `/transcribe`, `/translate`, `/vision/analyze`, `/abuse/appeal` | S09 | native 3 · unused 2 |
+| `ai/proxy.py` | 5 | `/v1/ai/chat/stream`, `/transcribe`, `/translate`, `/vision/analyze`, `/abuse/appeal` | S09: `/chat/stream` and `/vision/analyze` (native) only; the rest dropped (FM-5). `/transcribe` is reached only from dead code in both native clients | native 2 · unused 3 |
 | `ai/dictate.py` | 1 | Dictation into chat via Gemini | S09 | web 1 |
 | `ai/voice.py`, `ai/voice_ws.py` | 2 + `WS /v1/ws/voice` | Leo voice: Gemini Live tokens (dropped, FM-5) and WS proxy | S05 | web 1 · unused 2 |
 | `ai/voice_translate.py`, `ai/voice_translate_ws.py` | 2 + `WS /v1/ws/voice-translate` | Simultaneous call translation | S05 | native 3 |
@@ -398,13 +398,13 @@ All decisions were taken by the user on 2026-10-01. In each case the user chose 
 | FM-2 | Legacy notes: `api/kb.py`, `api/graph.py`, `services/rag_pipeline.py`, `graph_builder.py`, `kb_scope.py`, `file_watcher.py`, tasks `knowledge.embed_chunks`, `knowledge.rebuild_graph`, tables `notes`, `chunks`, `embeddings`, `kb_link_edges` | **Merge** into S07: notes become one source of the knowledge base on Qdrant; Leo keeps saving notes and live answers keep finding them. `/v1/kb*`, the notes link graph and the server-folder watcher are dropped — no screen and no shipped client calls them. D3 maps the notes into the knowledge base; S07 decides what happens to the admin-global notes (`user_id` empty) | Keep as is: a second search store with its own API. Drop entirely: Leo can no longer save notes, live answers lose this source, existing notes are lost | 2026-10-01 |
 | FM-3 | OAuth outside Nango: calendars (`services/oauth_providers/google.py`, `microsoft.py`, `oauth_service.py`; CalDAV), Jira (`oauth_providers/jira.py`), meeting-result push (`services/oauth.py`) | **Keep the split**: Nango for Leo's connectors and knowledge sources; calendars, Jira and meeting push keep their own OAuth with tokens encrypted in the user's home; the deletion registry revokes every grant, inside and outside Nango. Recorded in [ADR 0002](../adr/0002-oauth-grants-outside-nango.md) | Everything in Nango: one grant registry, but M1 imports every token into Nango or users reconnect calendars, Jira and integrations | 2026-10-01 |
 | FM-4 | Shared platform capabilities: the provider port with cost rows, spend guard and abuse guard; email; the periodic-job registry | **New foundation package F6 Platform services** ([prompt](prompts/F6-platform-services.md)), after F1 and before S01. The draft imports the provider port from 10 slices and email from 7 | Inside F1: F1 grows and finishes later. With the first consumer (S09, S01, S11): S04, S05, S06, S07, S14 and S17 would wait for S09's first step, and S03, S08, S12, S14, S15 and S16 for S01's email | 2026-10-01 |
-| FM-5 | The 86 routes D1 classifies `unused`: no consumer in the web frontend, the shipped native clients or external parties | **Drop**, except four that the target architecture or operations need: `GET /v1/auth/sessions` and `DELETE /v1/auth/sessions/{session_id}` (S01: list and revoke one's own sessions, fr-6 devices), `GET /v1/admin/costs/guard` and `POST /v1/admin/costs/kill-switch` (F6: the operator's spend kill switch). Nothing visible changes: nobody calls these routes. The capability behind a dropped route stays where a screen or Leo uses it; only the HTTP route goes. Section 7.1 lists the routes | Keep all: more code and attack surface for no visible use. Drop all: the operator loses the kill switch over HTTP and users have no API for their device sessions | 2026-10-01 |
+| FM-5 | The 93 routes D1 classifies `unused`: no live consumer in the web frontend, the working native clients (macOS 1.4.5, Windows 1.4.5) or external parties. Seven of them are called only from dead code, which the owner decided on 2026-10-01 is not carried over | **Drop**, except four that the target architecture or operations need: `GET /v1/auth/sessions` and `DELETE /v1/auth/sessions/{session_id}` (S01: list and revoke one's own sessions, fr-6 devices), `GET /v1/admin/costs/guard` and `POST /v1/admin/costs/kill-switch` (F6: the operator's spend kill switch). Nothing visible changes: nobody calls these routes. The capability behind a dropped route stays where a screen or Leo uses it; only the HTTP route goes. Section 7.1 lists the routes | Keep all: more code and attack surface for no visible use. Drop all: the operator loses the kill switch over HTTP and users have no API for their device sessions | 2026-10-01 |
 
 Not put to a decision, because the target architecture already decides them: NATS, Temporal and Onyx are replaced (section 6.3). If the owner wants any of them kept, the target architecture changes first.
 
 ### 7.1 Routes dropped by FM-5
 
-82 routes, from D1's classification of 2026-10-01 (`contracts/draft/consumers.json`, in review). If D1 reclassifies a route before its slice is planned, the slice follows D1: a route that turns out to have a consumer is kept.
+89 routes, from D1's classification of 2026-10-01 (`contracts/draft/consumers.json`, in review). If D1 reclassifies a route before its slice is planned, the slice follows D1: a route that turns out to have a consumer is kept.
 
 | Draft file | Routes |
 |---|---|
@@ -413,7 +413,7 @@ Not put to a decision, because the target architecture already decides them: NAT
 | `api/admin/prompts.py` | `POST /v1/admin/prompts/{prompt_id}/duplicate` |
 | `api/admin/sessions.py` | `GET /v1/admin/sessions`, `DELETE /v1/admin/sessions/{session_id}`, `POST /v1/admin/sessions/{session_id}/enrich-mindmap`, `GET /v1/admin/sessions/{session_id}/full` |
 | `api/admin/storage.py` | `GET /v1/admin/storage/health`, `GET /v1/admin/storage/overview`, `GET /v1/admin/storage/users`, `GET /v1/admin/storage/users/{user_id}`, `PATCH /v1/admin/storage/users/{user_id}/quota` |
-| `api/ai/proxy.py` | `POST /v1/ai/abuse/appeal`, `POST /v1/ai/translate` |
+| `api/ai/proxy.py` | `POST /v1/ai/abuse/appeal`, `POST /v1/ai/transcribe`, `POST /v1/ai/translate` |
 | `api/ai/voice.py` | `POST /v1/ai/voice/token`, `POST /v1/ai/voice/usage` |
 | `api/graph.py` | `GET /v1/kb/graph`, `GET /v1/kb/graph/centrality`, `GET /v1/kb/graph/export`, `GET /v1/kb/graph/neighbors`, `GET /v1/kb/graph/shortest-path` |
 | `api/kb.py` | `POST /v1/kb/import`, `GET /v1/kb/notes`, `POST /v1/kb/notes`, `DELETE /v1/kb/notes/{note_id}`, `GET /v1/kb/notes/{note_id}`, `PUT /v1/kb/notes/{note_id}`, `POST /v1/kb/reindex`, `POST /v1/kb/search` |
@@ -435,6 +435,9 @@ Not put to a decision, because the target architecture already decides them: NAT
 | `features/analytics/channels/admin/targets.py` | `GET /v1/admin/targets`, `POST /v1/admin/targets/{slug}/progress` |
 | `features/knowledge/channels/http.py` | `POST /v1/knowledge/search`, `PATCH /v1/knowledge/sources/{source_id}` |
 | `features/proactive/channels/http.py` | `GET /v1/proactive/feed`, `POST /v1/proactive/feed/{nudge_id}/feedback`, `POST /v1/proactive/feed/{nudge_id}/read` |
+| `features/stream/channels/http.py` | `GET /v1/me/streams`, `DELETE /v1/me/streams/{stream_id}` |
+| `features/stream/channels/public_http.py` | `GET /v1/streams/live/bans`, `DELETE /v1/streams/live/bans/{principal}` |
+| `features/subtitles/channels/http.py` | `POST /v1/subtitles/interpret`, `POST /v1/subtitles/recognize` |
 
 ---
 
