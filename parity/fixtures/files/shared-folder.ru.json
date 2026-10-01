@@ -1,0 +1,97 @@
+{
+  "visit": "files/shared-folder",
+  "language": "ru",
+  "persona": null,
+  "url": "/app/s/parity-files-acme",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/storage/shared/parity-files-acme/list",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": true,
+        "needs_password": false,
+        "name": "Acme",
+        "download_disabled": false,
+        "entries": [
+          {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "name": "Встречи",
+            "is_folder": true,
+            "size": 0,
+            "updated_at": "2026-06-17T12:05:00+00:00"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "name": "Договор",
+            "is_folder": true,
+            "size": 0,
+            "updated_at": "2026-06-17T12:02:00+00:00"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "name": "Логотип_Acme.png",
+            "is_folder": false,
+            "size": 214016,
+            "updated_at": "2026-06-17T12:08:00+00:00"
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/storage/shared/parity-files-acme/list",
+      "query": "folder=00000000-0000-4000-8000-000000000002",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": true,
+        "needs_password": false,
+        "name": "Acme",
+        "download_disabled": false,
+        "entries": [
+          {
+            "id": "00000000-0000-4000-8000-000000000004",
+            "name": "Договор_Acme_2026.pdf",
+            "is_folder": false,
+            "size": 1245184,
+            "updated_at": "2026-06-17T12:03:00+00:00"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000005",
+            "name": "Приложение_1_SLA.docx",
+            "is_folder": false,
+            "size": 86528,
+            "updated_at": "2026-06-17T12:04:00+00:00"
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/storage/shared/parity-files-acme/meta",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": true,
+        "name": "Acme",
+        "size": 0,
+        "is_folder": true,
+        "needs_password": false,
+        "download_disabled": false
+      },
+      "origin": "recorded"
+    }
+  ]
+}

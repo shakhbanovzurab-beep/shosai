@@ -34,6 +34,9 @@ function exchangeReply(exchange: Exchange): Reply {
 function overrideReply(response: OverrideResponse): Reply {
   const contentType = response.contentType ?? "application/json";
   if (response.body === null) return { status: response.status, contentType, body: Buffer.alloc(0) };
+  if (response.bodyEncoding === "base64" && typeof response.body === "string") {
+    return { status: response.status, contentType, body: Buffer.from(response.body, "base64") };
+  }
   // Не-JSON (поток событий SSE) отдаётся как есть, JSON — сериализованным.
   const raw = typeof response.body === "string" && !contentType.includes("json");
   const text = raw ? String(response.body) : JSON.stringify(response.body);

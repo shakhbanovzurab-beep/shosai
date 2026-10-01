@@ -570,7 +570,7 @@
           "id": "00000000-0000-4000-8000-000000000020",
           "name": "Внедрение Acme",
           "key": "ACME",
-          "description": null,
+          "description": "Запуск Acme на платформе к 1 сентября",
           "archived": false,
           "position": 0
         },
@@ -599,7 +599,7 @@
           "minutes_total": 377,
           "ai_answers_total": 12,
           "tokens_total": 126144,
-          "users_total": 11
+          "users_total": 13
         }
       },
       "origin": "recorded"

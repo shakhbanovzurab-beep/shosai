@@ -31,3 +31,17 @@ MCP_TOKEN: str = _IDS["mcp"]["token"]
 MCP_CLIENT_ID: str = _IDS["mcp"]["clientId"]
 MCP_REDIRECT_URI: str = _IDS["mcp"]["redirectUri"]
 MCP_SCOPES: tuple[str, ...] = tuple(_IDS["mcp"]["scopes"])
+#: Комнаты «руководителя»: видеовстреча с Acme и сцена трансляции.
+ROOMS: dict[str, uuid.UUID] = {key: uuid.UUID(value) for key, value in _IDS["rooms"].items()}
+#: Трансляции «руководителя»: студия открывается по id.
+STREAMS: dict[str, uuid.UUID] = {key: uuid.UUID(value) for key, value in _IDS["streams"].items()}
+#: Приглашения в комнаты сверх календарных: со сквозным шифрованием и закрытая.
+ROOM_INVITES: dict[str, str] = dict(_IDS["roomInvites"])
+#: Токены публичных ссылок на файлы и папки.
+FILE_SHARES: dict[str, str] = dict(_IDS["fileShares"])
+#: Приглашения на трансляции сверх календарной: в эфире, завершённая, для своих.
+STREAM_INVITES: dict[str, str] = dict(_IDS["streamInvites"])
+#: Токены заявок на вход в эфир: зритель хранит свой в sessionStorage.
+KNOCKS: dict[str, str] = dict(_IDS["knocks"])
+#: Доски трекера «руководителя» по коду проекта.
+BOARDS: dict[str, uuid.UUID] = {key: uuid.UUID(value) for key, value in _IDS["boards"].items()}

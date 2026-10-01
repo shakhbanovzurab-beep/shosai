@@ -40,6 +40,7 @@ Two runs produce byte-identical fixtures. Check this after any change to the see
 | `PUBLIC_BASE_URL`, `ADMIN_ORIGIN` | `http://parity.localhost` | the harness origin; links the draft builds (share pages, the MCP endpoint) point to it |
 | `GOOGLE_LIVE_API_KEY` | a fake key | paid users get `features.voice` and the Leo microphone, as in production; no request reaches Google |
 | `WEBPUSH_VAPID_*` | a fake pair | the "notifications on this device" block shows, as in production; nothing subscribes or sends |
+| `LIVEKIT_*` | a fake key and secret, `LIVEKIT_URL=wss://livekit.parity.localhost`, `LIVEKIT_API_URL=http://127.0.0.1:1` | room tokens and stream passes are signed locally, so room and stream entry record for real; a server call to LiveKit fails at once instead of waiting on the network |
 
 ## Personas
 
@@ -55,9 +56,10 @@ Defined in [`seed/personas.py`](seed/personas.py); the password of every persona
 | `admin` | administrator |
 | `banned` | blocked account |
 | `editor` | used only by visits that change the profile |
-| `lead` | Pro; the whole workspace: nine meetings (transcripts, notes, mind map, speakers, impact, processing and failed runs), folders, share links, templates, integrations, a July calendar with a room and a stream, Google and iCal, context and knowledge base; hubs with boards, a charter and the Acme history of facts (every kind of pulse loop); the Leo tab (personalization, services, initiative, mail watches, a device, memory, errands); MCP (server token, external servers in every health state, the client «Claude» for the consent screen); prompts, skills, AI spend and a role assignment |
+| `lead` | Pro; the whole workspace: nine meetings (transcripts, notes, mind map, speakers, impact, processing and failed runs), folders, share links, templates, integrations, a July calendar with a room and a stream, Google and iCal, context and knowledge base; hubs with boards, a charter and the Acme history of facts (every kind of pulse loop); the Leo tab (personalization, services, initiative, mail watches, a device, memory, errands); MCP (server token, external servers in every health state, the client «Claude» for the consent screen); prompts, skills, AI spend and a role assignment; rooms (E2EE, closed, recordings ready, failed and stuck) and the LiveKit audit log; streams (live with a chat, hands and a waiting room, ended with a saved chat, members only); a file tree with every preview kind and share links (folder, password, view only, expired); tracker boards with tasks, labels and two Jira links (live and failing) |
+| `quota`, `overquota` | Pro with no files: 92 % of the storage limit used, and over the limit for five days |
 
-The seed modules: [`accounts.py`](seed/accounts.py) and [`world.py`](seed/world.py) for every persona; [`meetings.py`](seed/meetings.py), [`workspace.py`](seed/workspace.py), [`hubs_seed.py`](seed/hubs_seed.py), [`calendar_seed.py`](seed/calendar_seed.py), [`studio.py`](seed/studio.py), [`leo_cabinet.py`](seed/leo_cabinet.py), [`mcp_seed.py`](seed/mcp_seed.py) and [`prompts_models.py`](seed/prompts_models.py) for `lead`; the last one also adds two models to the registry on behalf of `admin`. Hubs reuse meetings that already exist: the ticker counts every meeting in the database, and a new meeting would change it on every screen. [`seed/ids.json`](seed/ids.json) holds the ids and tokens that visits need to open a known record (a meeting page, a share link); both the seed and the visits read it.
+The seed modules: [`accounts.py`](seed/accounts.py) and [`world.py`](seed/world.py) for every persona; [`meetings.py`](seed/meetings.py), [`workspace.py`](seed/workspace.py), [`hubs_seed.py`](seed/hubs_seed.py), [`calendar_seed.py`](seed/calendar_seed.py), [`studio.py`](seed/studio.py), [`leo_cabinet.py`](seed/leo_cabinet.py), [`mcp_seed.py`](seed/mcp_seed.py), [`prompts_models.py`](seed/prompts_models.py), [`tracker_seed.py`](seed/tracker_seed.py), [`rooms_seed.py`](seed/rooms_seed.py), [`streams_seed.py`](seed/streams_seed.py) and [`files_seed.py`](seed/files_seed.py) for `lead`; `prompts_models.py` also adds two models to the registry on behalf of `admin`, and `rooms_seed.py` writes the audit log as `admin`. Storage usage is a counter on the user, not a sum of rows, so `files_seed.set_storage_counters` sets it last, for `lead` and the quota personas. The stream's viewer count lives in Redis: `record.sh` writes it from [`seed/redis.txt`](seed/redis.txt) after emptying Redis. Hubs reuse meetings that already exist: the ticker counts every meeting in the database, and a new meeting would change it on every screen. [`seed/ids.json`](seed/ids.json) holds the ids and tokens that visits need to open a known record (a meeting page, a share link); both the seed and the visits read it.
 
 Rules the seed keeps:
 - **Past and future are explicit and lie outside the day after the parity clock.** The normalizer treats any timestamp in that day as the API's "now" and replaces it with the clock.
@@ -70,6 +72,8 @@ A visit that changes data uses a persona no other visit uses: the draft API cach
 
 A visit ([`../src/recording/visits/`](../src/recording/visits/)) is a persona, a URL, optional actions, a marker that exists only on the intended screen, and optionally a country and languages.
 
+A visit can also seed the browser (`storage` for localStorage, `session` for sessionStorage: the guest name and knock token of a stream viewer), hold requests it must not record (`hold`: the studio re-requests its audience without pause), and answer requests the stack cannot serve (`stubs`: LiveKit health and load). A stub is written to the fixture as synthetic, with its reason.
+
 - **Languages.** A visit is recorded in each of its languages, `ru` and `en` by default, into `fixtures/<visit>.<language>.json`. The page language and the persona's profile language are both the recording language: the draft switches the interface to the profile language, so the recorder sets it in `wh-auth` and in every `/v1/auth/me` response. A visit that changes data either uses language-specific data (`unverified-ru@…`, `unverified-en@…`) or records in one language.
 - **Texts.** Markers and actions take texts from the draft's translation catalogs by key, `t("auth:titleLogin")`, so the same visit works in any language.
 
@@ -77,7 +81,7 @@ The recorder:
 
 - signs the persona in through the API and puts its cookies and `wh-auth` into the browser, so the page boots like a returning user;
 - proxies `/v1` to the draft API and logs every exchange;
-- answers the third-party sign-in SDKs with stubs ([`../src/serve/third-party.ts`](../src/serve/third-party.ts)) and blocks every other external host;
+- answers the third-party sign-in SDKs with stubs ([`../src/serve/third-party.ts`](../src/serve/third-party.ts)) and blocks every other external host; a socket to another host (the LiveKit media server) is closed at once;
 - rejects the visit if the marker is missing, or if an error toast appears that the visit does not expect;
 - waits until the API has been quiet for one second, normalizes the exchanges ([`../src/recording/normalize.ts`](../src/recording/normalize.ts)) and writes the fixture.
 

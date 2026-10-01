@@ -1,0 +1,38 @@
+{
+  "visit": "rooms/guest",
+  "language": "ru",
+  "persona": null,
+  "url": "/app/rooms/join/parity-room-invite",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru"
+  },
+  "exchanges": [
+    {
+      "method": "POST",
+      "path": "/v1/rooms/join/parity-room-invite",
+      "query": "",
+      "requestBody": {
+        "name": "Гость Acme"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "status": "joined",
+        "token": "parity.jwt.token",
+        "url": "wss://livekit.parity.localhost",
+        "room": "r-parity-acme",
+        "e2ee": false,
+        "can_publish": true,
+        "can_publish_data": true,
+        "is_host": false,
+        "room_id": null,
+        "started_at": null,
+        "ai_assistant": true
+      },
+      "origin": "recorded"
+    }
+  ]
+}

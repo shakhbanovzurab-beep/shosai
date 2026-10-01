@@ -1,0 +1,76 @@
+{
+  "visit": "files/shared-folder-locked",
+  "language": "ru",
+  "persona": null,
+  "url": "/app/s/parity-files-locked",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/storage/shared/parity-files-locked/list",
+      "query": "ticket=parity.jwt.token",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": true,
+        "needs_password": false,
+        "name": "Проекты",
+        "download_disabled": false,
+        "entries": [
+          {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "name": "Портал",
+            "is_folder": true,
+            "size": 0,
+            "updated_at": "2026-06-17T12:10:00+00:00"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "name": "Архив_пилота_2025.zip",
+            "is_folder": false,
+            "size": 52428800,
+            "updated_at": "2026-06-17T12:13:00+00:00"
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/storage/shared/parity-files-locked/meta",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": true,
+        "name": "Проекты",
+        "size": 0,
+        "is_folder": true,
+        "needs_password": true,
+        "download_disabled": false
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/storage/shared/parity-files-locked/unlock",
+      "query": "download=1",
+      "requestBody": {
+        "password": "parity-pass"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "ok": true,
+        "ticket": "parity.jwt.token",
+        "url": ""
+      },
+      "origin": "recorded"
+    }
+  ]
+}

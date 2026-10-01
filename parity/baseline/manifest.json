@@ -459,9 +459,57 @@
     },
     {
       "cell": "desktop-dark-en",
+      "state": "rooms.guest.prejoin",
+      "sha256": "095f3b0cb6d419e569627a96aa95bc6972e5862571f3e8af24d6a326ae7b3c82",
+      "bytes": 30111
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "rooms.host.signin-required",
+      "sha256": "bcc94ad0cdb5208512cc877bf84a24fa3f006541bb5c50ffe20f1f7b01f68f0f",
+      "bytes": 27492
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "rooms.prejoin.granted",
+      "sha256": "9f1f113553871b7153638805887b7b2e8c9115aae08efa1a41f472c2bd710c5d",
+      "bytes": 28492
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "rooms.room.ai.listening",
+      "sha256": "02648beb1bc599efce98fe476f23578abe9fb34b906da1fe9fd3c3c50065e0cd",
+      "bytes": 33376
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "rooms.room.connect-error",
+      "sha256": "8fe6a51c57a457f0039f748e3ae99309b8591cfbade91353670cb2e5b73a0260",
+      "bytes": 19368
+    },
+    {
+      "cell": "desktop-dark-en",
       "state": "route.error-fallback",
       "sha256": "305f16ceafe1f54fc58eccb02cb82db196ea064adaad2302dda1f2001ca3a3d0",
       "bytes": 51854
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "shared.file.password",
+      "sha256": "c1b3f95dc2a296fe327959032faf3c003deec3eafcf83af3c096ae4aafccf756",
+      "bytes": 21979
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "shared.folder.browsing",
+      "sha256": "6ad4d9bdaf488d4052f0d69136a6a041b078454d680d95af26fb3f967866e550",
+      "bytes": 22943
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "shared.gone",
+      "sha256": "73df91e526ab9cebf63e8f8e374106d4269f4ebd73704b39cbb4b9e1070f1425",
+      "bytes": 15398
     },
     {
       "cell": "desktop-dark-en",
@@ -492,6 +540,54 @@
       "state": "shell.user",
       "sha256": "9c23441d4897e6c79d680ca4672c0a2a4e1539db21e1c3b00c025a1c56ef79ea",
       "bytes": 92426
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "storage.browser.grid",
+      "sha256": "df39e4ff9c86180aba868b9d097939ca8d69771816cfe26b9c4c9a91a6b3c1e7",
+      "bytes": 75301
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "storage.locked.free",
+      "sha256": "8dd5ddd397372896556daece501288a4dbe0383c7bce4b96f90a5efba8c5984c",
+      "bytes": 68996
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "streams.studio.on-air",
+      "sha256": "0ac027eaa4a23018324f0bcf1a65e0024c7025d853012319f75f0092a57b80a8",
+      "bytes": 68855
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "streams.watch.ended",
+      "sha256": "e9f941f4a4688a74050df6dc6858a9a1684281066c8bfc30d2f4b543f3e19c0d",
+      "bytes": 34623
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "streams.watch.live.audience",
+      "sha256": "f707242550fb714d6eb4ad1fb4ae0750f2fdce71c454a802277ab7ed3a1099b2",
+      "bytes": 48596
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "streams.watch.name-required",
+      "sha256": "4a882e1fc2d0cccd7dfb102056be7201a193698e473b67454a5ac1f4742b5e5d",
+      "bytes": 30522
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "tracker.board.populated",
+      "sha256": "0e7d8bad9d3210641f0d1713c6e633702136eb4f1e2acaa05b42d8ad8ce368cd",
+      "bytes": 93614
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "tracker.projects.populated",
+      "sha256": "7c1b46d05c5de0adc6d7bc02a875aa3dfcb25dd986c0dfe505bc1b44537c535d",
+      "bytes": 64310
     },
     {
       "cell": "desktop-dark-ru",
@@ -951,9 +1047,57 @@
     },
     {
       "cell": "desktop-dark-ru",
+      "state": "rooms.guest.prejoin",
+      "sha256": "a0e2faf4ce610162b1d26737d385675038bbac04372b651fb37fe9fbf389242b",
+      "bytes": 34304
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "rooms.host.signin-required",
+      "sha256": "c74011487c742f8833af529a6d45e86340fb816285b25598762b809d87d3e906",
+      "bytes": 27840
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "rooms.prejoin.granted",
+      "sha256": "f1e45e713cefe9ea7fa64c0a12536fc4a93a1ccb24a7aa33e5b40c3aabef3d08",
+      "bytes": 32754
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "rooms.room.ai.listening",
+      "sha256": "deae284362e1bc93e0803e06db3847a10d73fbde534f5bb57cb9556b8032ee6d",
+      "bytes": 35006
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "rooms.room.connect-error",
+      "sha256": "33a6794b10e7eef74ae88f33263791be0ffd627cbb05ebba066c0d69d8d6b54b",
+      "bytes": 19982
+    },
+    {
+      "cell": "desktop-dark-ru",
       "state": "route.error-fallback",
       "sha256": "8369a4c92330b0e7e0cc708ae684c929c59726a49aaf4c04d7f0dbf203a68f94",
       "bytes": 51365
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "shared.file.password",
+      "sha256": "42f10c22f0bb34dc5b0cedc2ccfbc73622e9f4547674806f38399d2adf7b854e",
+      "bytes": 22147
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "shared.folder.browsing",
+      "sha256": "a824b758654dccce675e20313b25afdbbfa83f8a72f77d9d856c923ece32f503",
+      "bytes": 21474
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "shared.gone",
+      "sha256": "2eeb4be818615a5242a58fa091dab138d8b2e7bbe9f12b71d2c5bf48d91fd45b",
+      "bytes": 16201
     },
     {
       "cell": "desktop-dark-ru",
@@ -984,6 +1128,54 @@
       "state": "shell.user",
       "sha256": "d5c6bbe0d167de765c961c987b43604ba25e2b4d8673bef843d0ceb63e7b82c6",
       "bytes": 91547
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "storage.browser.grid",
+      "sha256": "f411ca0d7628ac436d9cdd198f921e83bd6498a83a08e2a4b8471cd3136a8d02",
+      "bytes": 74177
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "storage.locked.free",
+      "sha256": "568a30988536327328b3d1c53e4b1b88a21a98ad07054abe9be9ee7aa831e04f",
+      "bytes": 71145
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "streams.studio.on-air",
+      "sha256": "cc4ccfbf1e270c881ff376f3d0bbef409051e20465dcc37cb9598d7de2fa3c04",
+      "bytes": 68440
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "streams.watch.ended",
+      "sha256": "f9b6cfe9d31b4408c1ea7f0791665c6408f4bfe43afe52a85542206267101091",
+      "bytes": 36017
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "streams.watch.live.audience",
+      "sha256": "c0b8d5b6ba878ac162df34ff490244abcf006ad5cac96a205f7d0dee9c931b18",
+      "bytes": 47512
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "streams.watch.name-required",
+      "sha256": "b37f95a47883a16ed184e13824a1edd068da276448b9187109ea7020b9332a42",
+      "bytes": 29972
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "tracker.board.populated",
+      "sha256": "6d10c695cd0b3ba444f49c95ac56d1dadbcf7ae4757480b4b697707e14811d68",
+      "bytes": 92408
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "tracker.projects.populated",
+      "sha256": "b519d8c04aa882c84cd039833ff0c3af0cbdcb7c923e07dc9cf82879b40f09f0",
+      "bytes": 62062
     },
     {
       "cell": "desktop-light-en",
@@ -1443,9 +1635,57 @@
     },
     {
       "cell": "desktop-light-en",
+      "state": "rooms.guest.prejoin",
+      "sha256": "b491452b278e768df9b734daa4d79659e71e257e665988e2445f331acdd2227a",
+      "bytes": 29165
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "rooms.host.signin-required",
+      "sha256": "d2c07c81b1a623dde24ee76df6be1f52cfc7330572d198bc2aa39e0c9c4f3a7a",
+      "bytes": 26568
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "rooms.prejoin.granted",
+      "sha256": "a87c30298f1414cc3044347c669d7fbf4d6f9ca4a157417460371f3fd9603a21",
+      "bytes": 27524
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "rooms.room.ai.listening",
+      "sha256": "1a424e230a288a64954a18211fa71762df60db57eb968a473a831dd5d6d998db",
+      "bytes": 32924
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "rooms.room.connect-error",
+      "sha256": "93a825abcd069e081d5bb9058076efa7f1a3632eed2f3cee4194c5cd2a57e1b0",
+      "bytes": 18913
+    },
+    {
+      "cell": "desktop-light-en",
       "state": "route.error-fallback",
       "sha256": "52d57447eef34650c077b65dbb149b4a16db9e3bf46d9d00ca9784d67c4755c9",
       "bytes": 51800
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "shared.file.password",
+      "sha256": "c335ad9a21c19cefb83ba824d88c0c319780c5170fe12c4609ccc56320ec7169",
+      "bytes": 21412
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "shared.folder.browsing",
+      "sha256": "20b69e6965d2f99f6994835e668d1c727b03e1891fcc97c3798ccd64701a282f",
+      "bytes": 21921
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "shared.gone",
+      "sha256": "d0d6278571fdfa1f305c09019884bdb10449d055134006911c86516f3224ca80",
+      "bytes": 15084
     },
     {
       "cell": "desktop-light-en",
@@ -1476,6 +1716,54 @@
       "state": "shell.user",
       "sha256": "3330b145ba03bc7dcf8fb64bbdce5fd6649a7809e5890b340ab622f3280ac9c8",
       "bytes": 91007
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "storage.browser.grid",
+      "sha256": "898f4d4140dced2a5b00883ae2459d19a3e145891b75b9a07a3d8afc48109315",
+      "bytes": 75080
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "storage.locked.free",
+      "sha256": "0d765fc96f329bc399caebd573c6b25568e2b81db7fab7b2e9f8074719ba8c16",
+      "bytes": 68309
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "streams.studio.on-air",
+      "sha256": "58ab177921afb2c04a7b358b5677c5b34275241f01b830a73310c8d16b31219b",
+      "bytes": 66116
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "streams.watch.ended",
+      "sha256": "7e4cde7fc72fe17395ce94a7141d3f210066a9d82b63ecda69f45c9e6447c20b",
+      "bytes": 32962
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "streams.watch.live.audience",
+      "sha256": "4e6c288b6fcf9481965af2dea47f9b318b0963b1ddf95c3c83975db5d6755a3b",
+      "bytes": 45467
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "streams.watch.name-required",
+      "sha256": "c1c6b1c9f20fe2e59fe4c7a51c86b60d10f10bf8a25ac4717a107ae2c7f395a9",
+      "bytes": 29238
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "tracker.board.populated",
+      "sha256": "2a55b1fde42468d209ef20c2e192ceb65912c9df4f158811070c9e4d9ef5dbf1",
+      "bytes": 92754
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "tracker.projects.populated",
+      "sha256": "c66054d2b730f058f65831714a0dff6860374eba906c93f4a8a99a8c3890676d",
+      "bytes": 63285
     },
     {
       "cell": "desktop-light-ru",
@@ -3267,6 +3555,114 @@
     },
     {
       "cell": "desktop-light-ru",
+      "state": "livekit.audit",
+      "sha256": "b7a7b7061dbe794ac2d545d29f8999380ec627c2d49c6a78a3be5e509029187b",
+      "bytes": 129880
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.audit.empty",
+      "sha256": "72bc9cedd19a250cf28c91e3368f81b423db05e0f8cd9b5c866bf2c33d28465b",
+      "bytes": 121774
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.egress.active",
+      "sha256": "204821264272255ef86c93a36b7dabce2f7ef3211f710d0e858bffa03d652c27",
+      "bytes": 137724
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.egress.stop-confirm",
+      "sha256": "7a247ec0109864206aa9bd6e19d35082d2f0ee363e49f10a9650a72301dd4d79",
+      "bytes": 145229
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.egress.stuck",
+      "sha256": "ed4590023bdaf19258fe872214245bdbc2c08ce2b43c83a7770482df0465aaf6",
+      "bytes": 131266
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.health.down",
+      "sha256": "11f3f51b2084333549b517e7940bc2fdfa918e9d8161e3e7da675ba5c318721c",
+      "bytes": 80080
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.health.load-warn",
+      "sha256": "e96041c28c03e8fcc484a3630dafa4d3faa5b8e339da14dab2b790c50b133fec",
+      "bytes": 131437
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.health.ok",
+      "sha256": "0328d394911f2565e5decaa29bb6d5ede56ef4a2e5436f9ef2f0fc3fd0f19994",
+      "bytes": 130548
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.health.recording-off",
+      "sha256": "e4ae429ac5d383e5e3d365837b6749ef1ddbc5682b1a09a8f59559d48e8bd8e9",
+      "bytes": 132384
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.loading",
+      "sha256": "baed4f9e3c6fe9d917a556c1a07df9f7583e1620183ff72062e4774403faee85",
+      "bytes": 69427
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.participant.kick-confirm",
+      "sha256": "7f537be77076681bc0080655a0420c8f84d923b1833c1488f81e8ffcea0aa7b9",
+      "bytes": 143007
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.room.close-confirm",
+      "sha256": "60dc8048c215fbe391de4d8b368761f36db63869e00b9af996931b9aa2e99241",
+      "bytes": 143206
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.room.expanded",
+      "sha256": "acac71c35051a07804a0e5880a64508235807689b7343af3fdd35d414783ac94",
+      "bytes": 139728
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.room.expanded-empty",
+      "sha256": "b48a232b01013f510178a39e4fa948b7206013ef8b038add629236d2707ca801",
+      "bytes": 131546
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.room.expanded-error",
+      "sha256": "4f5fb106a4c950d37c93a56c4b502efcdede929d8066fdef37f4926ea1aa63b1",
+      "bytes": 132487
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.room.expanded-loading",
+      "sha256": "3c1da97da4d7e91c2cf0026ed921fa8fc685b4dfca4870d85ca706b1c70a77b5",
+      "bytes": 130555
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.rooms.empty",
+      "sha256": "41edbd80e56389b47739011a1f6081e3dcc5d893e8d81ffa90e9b39e3ffe866b",
+      "bytes": 123299
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "livekit.rooms.loading",
+      "sha256": "ec9fc180b6a73f6079563fd90d284446167f536deadfc8c98f623988161f1461",
+      "bytes": 118103
+    },
+    {
+      "cell": "desktop-light-ru",
       "state": "mcp.client.add-error",
       "sha256": "986b66f89a8bda5c4ba31d10cf685e1fdb4ff238a5f02bbc512ab66f1f7069f3",
       "bytes": 110424
@@ -4341,9 +4737,285 @@
     },
     {
       "cell": "desktop-light-ru",
+      "state": "rooms.guest.finished",
+      "sha256": "a8d0c9426e397b1cbff3d7616cff88ef46f7a58d695a83e183a57b4a6f13be47",
+      "bytes": 18000
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.guest.in-room",
+      "sha256": "d34fdf22b1749c579031fff67daf5710fc0835f204d057fb0ba40055a3530cd4",
+      "bytes": 19335
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.guest.joining",
+      "sha256": "ed26de58b7211d866bf9f40a06133fa29dc7fc1b89dcd556ac5b98bc0ac18581",
+      "bytes": 33115
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.guest.prejoin",
+      "sha256": "c17ed338a6a2b2cc5bdafe3b795f4ba71590f3340ac1c826454af51411e81aa3",
+      "bytes": 33282
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.guest.unavailable",
+      "sha256": "d758f853a34ea8ce2b5e72b2ceaae8b2e68147003942c52d8f9e6afeded5a582",
+      "bytes": 35484
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.host.error",
+      "sha256": "32a287934160bf5d8ad67ee102d6351fb07b9b3fa613157e550a471aacba5249",
+      "bytes": 16260
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.host.finished",
+      "sha256": "56d7bd926eac21d99ab721b53bd8637123148ae293e2a338a16643d975085f94",
+      "bytes": 20930
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.host.loading",
+      "sha256": "fa190de85674ec6785621bc762350266c1be1af1b3f7e22d3e4449d234597531",
+      "bytes": 6127
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.host.signin-required",
+      "sha256": "65bc62ec3c6177f6c261735f5de809b25cedc04f7497e70e553509fb4ca7e6e9",
+      "bytes": 27011
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.prejoin.cam-off",
+      "sha256": "5b51d447e523fb8c557207a3e3121ed0f57d06553b181530c7d62cf0c64ef074",
+      "bytes": 35272
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.prejoin.denied",
+      "sha256": "038c22021ef9f726323c4ba37e0a52dbe461d3a388ddc66f544d97bbe5c3bd19",
+      "bytes": 33631
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.prejoin.granted",
+      "sha256": "059adade70f4a1460077e0c823b2988fdc3f05512098641b59fa496080675f3d",
+      "bytes": 31677
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.prejoin.permission-pending",
+      "sha256": "7657a41c81ed5e7ed3f50c76ac8353b5e8d68968f366820eac2a863a36020359",
+      "bytes": 24910
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.ai.answer",
+      "sha256": "6f171144511c78a48675448d051670db67ceada0aa85b0d86718d04876d3f8b0",
+      "bytes": 42270
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.ai.error",
+      "sha256": "e7fc9dfd2eac6dc246a07a5eff4d63e815f251f23f215bf8ec8b37b848933b7a",
+      "bytes": 38794
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.ai.error-subscription",
+      "sha256": "606b9e920c333eb017353f62902fffab6dd0caf0a992bf3a928fed9a31396ae7",
+      "bytes": 39080
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.ai.error-too-often",
+      "sha256": "a4b9bdf5edc84b46806d53bff5f54ec8403789d2541132857b2fa06909fd3ec8",
+      "bytes": 38949
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.ai.listening",
+      "sha256": "822aa765aa12e2620b37c984b16912b7c6afc427e8b78b494cd9f4f1dd063453",
+      "bytes": 34423
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.ai.thinking",
+      "sha256": "f01cd54107c3c5137bd5204fa3c9e780cb48472203386021b999227134b1d459",
+      "bytes": 37313
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.chat.empty",
+      "sha256": "9ad1870784fd794e4da0a8cb535cdf0f92744c53b9d9ea0ce37f21e8aa7c138e",
+      "bytes": 25579
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.connect-error",
+      "sha256": "3fdd465bed6fdbcc8b6b7ca494746de9677e94611e183c2651586097344142d0",
+      "bytes": 19598
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.connecting",
+      "sha256": "d50b71e11b749defd442ac090845be987e7eb059ca0c3ff8910f78200af12b89",
+      "bytes": 17465
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.e2ee",
+      "sha256": "d34fdf22b1749c579031fff67daf5710fc0835f204d057fb0ba40055a3530cd4",
+      "bytes": 19335
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.invite-modal",
+      "sha256": "4a34d276d31f6fbd84002c64e4929bcfb9be522c1d2b7dc6b585bc36c4d2ca4f",
+      "bytes": 32080
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.more-menu",
+      "sha256": "bad8224153538553f9e1c4beba831a237f8f1980361936b4153315004ab16d37",
+      "bytes": 21797
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.more-menu.e2ee",
+      "sha256": "a331c6f7b6446692991f0c270062712c9c2dee53cb9e420c5dc322c8e9f06a3c",
+      "bytes": 20089
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.reactions-picker",
+      "sha256": "6ce6bb22d865027686fa0dea06eb5ec8259456cf3605843b74f921836b7cdbb3",
+      "bytes": 28454
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.record.active",
+      "sha256": "7e1e79f686146f5348ba13557e26e9e0e1fb58097c48a2c7850bbad554cd2e4c",
+      "bytes": 19661
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.record.busy",
+      "sha256": "986b6f9ffc33eb5de81e48d339de8a12d239f95c981aec2dda75d8e6fa3cd1e4",
+      "bytes": 19458
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.record.error-toast",
+      "sha256": "72e7c7f61bc6be516e17e794f810e343d7035e86b0ef1bcbb890976e3310ad80",
+      "bytes": 21412
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.record.stopping",
+      "sha256": "d09a41de96cee78440e388ac14e0e4a760d826fae135c24b9b8e63b1a6b84ac0",
+      "bytes": 19694
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.translator.lang-differ",
+      "sha256": "a49468bbaef34b0b2108899678338a296e7117fa7de83cc2fc52b529e0143d4a",
+      "bytes": 46037
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.translator.off",
+      "sha256": "e86e44521bc5afcc6e479a01d28ea7fb4f0f953babdab5aaaa0cb259c703c6ab",
+      "bytes": 45601
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "rooms.room.translator.on-idle",
+      "sha256": "2ff2e1b64114266297e26e8894f0ec5e714715487e2ef9cef162c869633dc088",
+      "bytes": 50328
+    },
+    {
+      "cell": "desktop-light-ru",
       "state": "route.error-fallback",
       "sha256": "27a0c81cafef65b5f785f965eaeaf05247a093b82d2d5a2b130b6eeb8cdd13ee",
       "bytes": 51414
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.file.password",
+      "sha256": "c29b4a0ab6850e19bb00df6b3d9f0aafc61191055bfa415423e92944f3b85d13",
+      "bytes": 21630
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.file.view-only",
+      "sha256": "907e4b667704004ae3a95e4ca05df2e6ee3f1f9274d31d20e2ba33b364f6ac3a",
+      "bytes": 21985
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.file.wrong",
+      "sha256": "77998c79d6423a1555b523ef9c1a5381b7a4bf6700046389dd66a98024332ab8",
+      "bytes": 21197
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.folder.browsing",
+      "sha256": "e9b45f671a04e3e3b7f8205d6103edab2e689f9e819ea77745703e432075c481",
+      "bytes": 20619
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.folder.empty",
+      "sha256": "2a05a29b2b5d1dd6a6e6856cd4873ac4af438466e9dd6bb6275dca2a66a45573",
+      "bytes": 12772
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.folder.gone",
+      "sha256": "52b1939477e50f85527af095c9a861b9705a03db8632f7e0dfed0fc5fdccd15d",
+      "bytes": 16535
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.folder.list-loading",
+      "sha256": "f6e226a58a6efcf7dd2585e0966ef1b18b0cb1223beea586b8602c60b64d27e1",
+      "bytes": 12148
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.folder.password",
+      "sha256": "b692b9d1aec0b4217340ee029c2488b64a117065e418f766915b945e0992de56",
+      "bytes": 19100
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.folder.subfolder",
+      "sha256": "fbb95e54c9d7eaf91c20d43ab74f7bcb02bb73ba8abe8d300614291c2a8684ee",
+      "bytes": 21306
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.folder.unlocked",
+      "sha256": "b5500d767e36cc7a9f7b8e8f0666db8aaa034805aa0e81b8b9192ee68735ec42",
+      "bytes": 18576
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.gone",
+      "sha256": "73ba869fc4bc2668ef994264be685ee1a4ec08ff581d83ee536a97618027b1c2",
+      "bytes": 15773
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shared.loading",
+      "sha256": "34fb4d6dbd87fcf7190d3f58c506457a5387295589c3a3fac75dcfe4f7ac5ea4",
+      "bytes": 11403
     },
     {
       "cell": "desktop-light-ru",
@@ -4396,8 +5068,8 @@
     {
       "cell": "desktop-light-ru",
       "state": "shell.palette.results",
-      "sha256": "cf5e68e39d3cdc6218b918d3c701815eba1a46a2e667a494c79ecc7d7b859bb7",
-      "bytes": 114089
+      "sha256": "ff79ed3344a8357340a10b934a20d799dd5625f4e45fe831464b8b84f1b0b0bd",
+      "bytes": 110941
     },
     {
       "cell": "desktop-light-ru",
@@ -4422,6 +5094,624 @@
       "state": "shell.user",
       "sha256": "0e5798432b29dc0295f2174cd5864eab7bb3e6b4b34674adaac1d5d1e0822497",
       "bytes": 90684
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.browser.empty",
+      "sha256": "76fe5886c35a9cea2edaf96787e6b2863fc8b5d44af1b5fd994f8e623a51a195",
+      "bytes": 76310
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.browser.grid",
+      "sha256": "a20000a500fe35b1d8d757ca3dfcd4afb9cb4c393353acb4662a1f772db10438",
+      "bytes": 74253
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.browser.list",
+      "sha256": "e364b03c518c9666002589d9b413620be151e0657b9dd62e946fe55995e2bd68",
+      "bytes": 94472
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.browser.loading",
+      "sha256": "3bebea660a58a9d82c014af7e74dbdfc15dd6dff41d6057d57bf20661c3125b7",
+      "bytes": 59483
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.browser.nested",
+      "sha256": "b9978873a780132678324728439721d3540f14b754fa683146396f1d8ae7d992",
+      "bytes": 63278
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.browser.search",
+      "sha256": "f787ab3c1d584c1b3972fc53f648648fd717414d5ba62794eed0166065cefbb9",
+      "bytes": 68287
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.browser.search-empty",
+      "sha256": "018d61097ec8b56b9c3afbec247e81c172d9acc9cb95c7885a1a595a67e8ba96",
+      "bytes": 59394
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.browser.sort-size",
+      "sha256": "ac0ddab9f56388a95f08187868fa8434f81804799aa56eb3c7718f3bf6269409",
+      "bytes": 74283
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.browser.subfolder",
+      "sha256": "ad8f19c91709ac0aec87002d9b5a6670c1369c50e6bca60bb82c7a4572ac73f1",
+      "bytes": 64396
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.context-menu.file",
+      "sha256": "7b6e9eb7d01090cb11a32a5299053435555b741fd73b25a90cc4675503a6b5bd",
+      "bytes": 84318
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.context-menu.folder",
+      "sha256": "02d12707ef08152685c848a5cd7b1bb666251a8ec72e27ee74f0ac50ba20c6eb",
+      "bytes": 79771
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.context-menu.shared",
+      "sha256": "0550c972602e2ac2af0d747a2f6ab6000ce11fe01d2b14aeb0db315222395cec",
+      "bytes": 82432
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.dialog.bulk-delete",
+      "sha256": "39a94518dfbed17f9b542ace8aa13dde8d6479647d20adeea241b1107766cc11",
+      "bytes": 93798
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.dialog.bulk-move",
+      "sha256": "055a0c6882680bc1e43b17cbc7631097070532040623044a46dd9bc49ca1a183",
+      "bytes": 91511
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.dialog.delete",
+      "sha256": "19e54d36d32845baa2943343873b77ff528e69d446dfb2af48c0dd06ce29cb8c",
+      "bytes": 87359
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.dialog.move",
+      "sha256": "75d7450798916ee46f0b44482cee0dfb6693a3509bb8057110a103a0b9f1c78a",
+      "bytes": 92451
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.dialog.new-folder",
+      "sha256": "2257c6988256414815ad2ba08c8cd5c79a85a9c8b11b1f46ed94a49c8d967074",
+      "bytes": 86428
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.dialog.rename",
+      "sha256": "40bb57a9e3a47ac40b97703531d732c3ffdb15b9c471719c678700fe3a637476",
+      "bytes": 88857
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.locked.free",
+      "sha256": "b86ca2c7a6d5665386265448f9894c3e9a75c74b650bf343ab67c30d245183cb",
+      "bytes": 70498
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.locked.no-quota",
+      "sha256": "b550e2a259a4a21f4fd45e5796c5843f5d03732cbae6fa9b508dc70883db5463",
+      "bytes": 71035
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.quota.danger",
+      "sha256": "ebbfa699b6e6dc089a6934b4ded777e785553dcb6b5f431b6c1416adb7b840fc",
+      "bytes": 75425
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.quota.over",
+      "sha256": "a0c516734b8fe826ee532341c9c98b59bc7c834fecf7aee6bb8a640345121c83",
+      "bytes": 78016
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.selection-bar",
+      "sha256": "603a337f1c1b43804b72d6fe990395990db8bef056cc5c14a0dd4423c14309a7",
+      "bytes": 89466
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.share.main",
+      "sha256": "78bf2e03ed1788cb8d584086246bbf8b1596d6b7a6da713fadab47f8a651f70f",
+      "bytes": 89904
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.share.main-folder",
+      "sha256": "9b86f91941f81856e917670c10669e85add98346f8bc0f43dfe94eb3acd10a7e",
+      "bytes": 89685
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.share.qr",
+      "sha256": "019bc29405f3941b21d6332cc48088c92e63eb4ed426ed3622f88259e67b3469",
+      "bytes": 78803
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.share.save-error",
+      "sha256": "dd959aafa3fcac9533fd4548548461e91f123606dd4028a2591a1d15db9ff3e5",
+      "bytes": 84978
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.share.saved",
+      "sha256": "dab6fdeb8ef69c10c071eeacb4c982f74534a4e6836790bb478008ecba7a8cce",
+      "bytes": 84563
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.share.security",
+      "sha256": "16427da0a705974c855f8a04d85958c04a82ce11cdad8da9563b7c5eef9f571c",
+      "bytes": 84939
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.toast.action-error",
+      "sha256": "8a0f5ec33274aed60c624068bbec5d50d559fdc260bea28461a45188a0bcc4a6",
+      "bytes": 75523
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.toast.knowledge-sent",
+      "sha256": "522250781d0ce2fe05eff2a8f7b713e051be9660f7be4bf1883e9b61c009a802",
+      "bytes": 73953
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.toast.knowledge-skipped",
+      "sha256": "e6230d09394202f9db2eadf94eef2ca2bb72c42ba75a633d72982f6d37b07b56",
+      "bytes": 73832
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.upload-menu",
+      "sha256": "8ffb5a059c7290cdac40b41836e9bf5477edd227c945e7f80cd057631382e91d",
+      "bytes": 76407
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.audio",
+      "sha256": "39a0f5c58bf09eb9b7d3e1f13b109ff80476eeb4a03474ce966254f4a0380104",
+      "bytes": 47046
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.code",
+      "sha256": "dd725f4577aac6104f4488a8d0aeb4ca6add91e0e42829c6fda312d9ac1fb4e9",
+      "bytes": 59376
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.code-python",
+      "sha256": "e7b4a5ab90028bf628b4fb1ea01341899ea9be533f43458029d5cda3fc0bc988",
+      "bytes": 65692
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.docx",
+      "sha256": "514eeacd385d22950420412df062a0e1220cdca529f6109d91148f6fb190d1bf",
+      "bytes": 76765
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.error",
+      "sha256": "c32b8a2ccd4df4424bb3ea2278b97d310b47e8cbb2d515a7d202851947f38ab9",
+      "bytes": 46808
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.image",
+      "sha256": "8795f0d15207e05d8623bedee66f4fde9ccba0284a71f5477620555598e6b503",
+      "bytes": 46110
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.loading",
+      "sha256": "b3e87075b729f5f0c415caf68d159aae513cac5a3efce6b91d0662b7cba2166a",
+      "bytes": 45701
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.no-preview",
+      "sha256": "bd0fb42168961d1b06f0cb686cd63da5c8ad587323668320d329fb6f10c7379d",
+      "bytes": 47348
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.pdf",
+      "sha256": "9db0010163ac38126edaa2e765281a8541485f215a6212b4df39e72e133fc951",
+      "bytes": 47633
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.save-error",
+      "sha256": "2b2c9faec6f3cc4cf71c6b6d4e198b2f3fe04a50d26a08e0147b2e499467c29a",
+      "bytes": 61510
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.sheet",
+      "sha256": "19f5ec25e3f782011028efb54c15dbcbc8f287373c1dc9dae2d62324e2698391",
+      "bytes": 56649
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.viewer.video",
+      "sha256": "a03aa92928839207ba382c9bb6727ce2f937f33eb56c0389e5667393c7426ca4",
+      "bytes": 46927
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.chat",
+      "sha256": "258b6f7ef3161076d484367301aa12a506bb639d8d7cdd2b3f29139d8bc0cf86",
+      "bytes": 45893
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.confirm-end",
+      "sha256": "6dde7d5e4c18240aea6527624bc6115f9cd60b85f18df44037a7ac4019540139",
+      "bytes": 79498
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.loading",
+      "sha256": "fa190de85674ec6785621bc762350266c1be1af1b3f7e22d3e4449d234597531",
+      "bytes": 6127
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.off-air",
+      "sha256": "2aa2c2e3672ad02afd3d862a793bdc234fb08070b6c9ab3ea587a1f432176bb9",
+      "bytes": 68653
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.on-air",
+      "sha256": "ad29680dcb404727c6e7ef7297b48d18e8f318eecad4585dc227559df88c5f71",
+      "bytes": 65716
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.panel.failure",
+      "sha256": "ba547001998dda89dc9cc296d5c321fe98e60e8eb243860c31dec9fe3036cdc2",
+      "bytes": 65485
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.panel.hall",
+      "sha256": "9feb07c59765736a431b4d9a24303f499b4556fc13b00eeb3f2c47b287753463",
+      "bytes": 70741
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.panel.rules",
+      "sha256": "22529b983f4921b088ee3b14f366b2e688cfb79544fa18eb4e4bdd6857b7dd0b",
+      "bytes": 65626
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.start-failed",
+      "sha256": "1f1a80576606208c8a8382570e12e73f607dff908524aaf0b9306fc093c9e70a",
+      "bytes": 68677
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.unavailable",
+      "sha256": "14a2d28e3234096ed5aff2ddfe064575c27f8ec6c0ae6fc8e12982574d5b9128",
+      "bytes": 10498
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.broken",
+      "sha256": "75d106d8ab779cf4a87dcf0708c41f4159b97714803a033ba3e05614c3df234b",
+      "bytes": 15867
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.denied",
+      "sha256": "a0a9ca782e6a3d9a66c12c9439e3affa65daa7ec9ea4ce3fe0d1f7a1c9e1e075",
+      "bytes": 15962
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.ended",
+      "sha256": "e3c42d5d3ac6035e23762dc37fdbd084d6f9fd9e291d894da69bfb3e59a79b1c",
+      "bytes": 34141
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.ended.no-archive",
+      "sha256": "8778ea29be24d7fbf2d672a94241dc201bd8d219d89a9ee9133b2f29e18d6348",
+      "bytes": 25219
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.live.audience",
+      "sha256": "08ca2520b9e6575a97972585a20606bdd2a5db221ab36826804eb55fa4da84be",
+      "bytes": 44456
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.live.chat-banned",
+      "sha256": "5779649d2bfe4262d74495c41d568b53bd35af4ed605486441dc55061cdb07c8",
+      "bytes": 47305
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.live.chat-off",
+      "sha256": "62a5c421870dbaf6e7569dfdbda52839bd9cd052b6b8b8bcdb90d4e2e696119d",
+      "bytes": 43273
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.live.chat-too-fast",
+      "sha256": "5bb77c1e8ecf237a043728bf56bca3575dcaccacce6781998f3fca45ab4c0860",
+      "bytes": 47548
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.live.ended-by-host",
+      "sha256": "cebc9726c83cac384b1614b7c14d3df25788352c63285003b47061bb04eddd70",
+      "bytes": 18239
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.live.hand-down",
+      "sha256": "18a516c53abdfa49815e40ab595e9d9004395d282ef823e200e65c17276a0ce0",
+      "bytes": 44126
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.live.left",
+      "sha256": "a3f8b5f7c5ba7d79db37dbbfe9b1f10695c99d2b45d9fbb884d4cd0070a3b6ea",
+      "bytes": 27371
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.live.on-stage",
+      "sha256": "e8fbbb74677a0b1ef0e8ceb79e0161146eea64487829ddfd286090560fe82636",
+      "bytes": 45191
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.live.reactions",
+      "sha256": "9ee9d8fff41982c2c5faaacf3f78cc143cb9222cfd87b735b20643a1bd4b751d",
+      "bytes": 50488
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.loading",
+      "sha256": "fa190de85674ec6785621bc762350266c1be1af1b3f7e22d3e4449d234597531",
+      "bytes": 6127
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.name-required",
+      "sha256": "db5413134194f249158927293b04da3812efea79bcc121b69fa666d479b955b9",
+      "bytes": 28758
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.not-live",
+      "sha256": "ac453ef3f82b29e601e590f26d7b0dc6bf5fd1853b93b29bcf3f61c6d6e11dba",
+      "bytes": 25942
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.registration-required",
+      "sha256": "79bdb02e46be000936d779f9d1398725e5238af4ea8ba9ef34727a42f6d8ec47",
+      "bytes": 26203
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.watch.waiting",
+      "sha256": "f4400c64e2363e96b0826e9d908dfc1f4d06a7c0488724fdd81067be72ba5103",
+      "bytes": 27242
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.column-delete-error",
+      "sha256": "b19f84db3e275e36040d1c1082dedb5e35f643d38daa79c707ef7433b63c3eab",
+      "bytes": 94811
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.column-menu",
+      "sha256": "ee5e3df7571c9e7821f539ab6ae5296343497525cb7b1200f487419213b84c64",
+      "bytes": 94773
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.delete-confirm",
+      "sha256": "0107160d1bd9c3d8d4854385d9731516ae0c3a5d0c0b76eeb17e0257ba609340",
+      "bytes": 108198
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.filter-priority",
+      "sha256": "207df273e98026fd4c07f63317385990a14d21dfa3e2134d995d5c1cb457447d",
+      "bytes": 67632
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.filtered",
+      "sha256": "40b9abf67d8cc3c087830f670afdca84d1d25627faeb5fde02ea38825960dd1b",
+      "bytes": 67842
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.loading",
+      "sha256": "b9e10a175eb3b0864f89a7f2e7d3b49039d6f92be1890f77c72913989320a02f",
+      "bytes": 46583
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.pending",
+      "sha256": "ea3e47b603d54133fd785ecc2aac57e1bf0180d65ecac0d412f73d6d75198396",
+      "bytes": 94654
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.populated",
+      "sha256": "07ebe6388f594520fc994062023ec3330541b263dc38f50ce18e18a163a21a86",
+      "bytes": 91789
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.status-modal.edit",
+      "sha256": "81d37e2c29c968a6407df66de296bbe5c85ca7061598b9ee51bdce52dbc02c0d",
+      "bytes": 100503
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.status-modal.new",
+      "sha256": "01547804e52d766f8bc9afaf10890b7cf793875a43085d1df68f1bd03a166a60",
+      "bytes": 99023
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.task-menu",
+      "sha256": "5b822f7971d2a11e214707545fd684988f9b6ac6e1993d19a860f34ec027a2cb",
+      "bytes": 96214
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.task-modal.edit",
+      "sha256": "0eec782b08552babd179d2a7f20c305d4ea4b3dbe8fb4fed95599a67f2de6ca7",
+      "bytes": 119221
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.board.task-modal.new",
+      "sha256": "9472a1f734abe3548506d5b1f4048efb91baef7ef87f595b6b08921db5beaaf6",
+      "bytes": 112229
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.jira.chip.failing",
+      "sha256": "971d38820387448753c8529e68bbd23d856d182d79fb87eeda7002ae9561d192",
+      "bytes": 60343
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.jira.chip.unlinked",
+      "sha256": "75a1875f4425a55f7b478d72c6057cdcc9a6374741fd0c13729b54ea0fa56a5a",
+      "bytes": 91472
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.jira.modal.choose",
+      "sha256": "cad77c1c6d58523471b4b4cb07e519a6d21b8ba317e389405baadf698f4c269c",
+      "bytes": 102352
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.jira.modal.connect",
+      "sha256": "4fb0434394c9d4516be8b9128dde4925567dbdf4925a37b0c77e2e54a2f64aa8",
+      "bytes": 106470
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.jira.modal.failing",
+      "sha256": "2f52cfb053092ac38aa90c3cf3c191856766792aecc985cff34ca12eb9796d68",
+      "bytes": 87835
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.jira.modal.linked",
+      "sha256": "16213c050f9939785b0362202a19dbe1bdec6dc85700f00ac0f440e5bf43d4f0",
+      "bytes": 107074
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.jira.toast.synced",
+      "sha256": "b467b4c85807279e305365bb2bdc3b47bd0a56222b4e2b620d85cb8cc5ea9a32",
+      "bytes": 106159
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.project.delete-confirm",
+      "sha256": "4036a4f682e338fde995dd654d1f250fba580e3f13d9c2889806e5745fcb09bb",
+      "bytes": 76848
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.project.modal.edit",
+      "sha256": "303fb7ec8fb4df340e589f4ed1d3b6a647cfa14fba4f6685666a2f67b96fd4f2",
+      "bytes": 84057
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.project.modal.new",
+      "sha256": "118d5aedb37d969fee5d7d1bcb1a796a9d5b66df4c8c1ed2a02514324885a903",
+      "bytes": 79156
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.projects.action-error",
+      "sha256": "e3bc7c200756c3fb61e8093d9a9586f50832bd897bbcdf9e30526e25cc4ca531",
+      "bytes": 61417
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.projects.archived",
+      "sha256": "ccfd667eae5e701c0e6412d1a5df74c29a0d248707971311e196fc02ae8287ec",
+      "bytes": 57354
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.projects.empty",
+      "sha256": "bcb293a2a2fa4f1dd3bdc4d08d544bf289d278798531f5dea3a647aebd31e582",
+      "bytes": 57241
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.projects.loading",
+      "sha256": "a0879a62349dc02c15aa9e6e64ca22f4552a5cab2d3d82713c41d6b960eed5a0",
+      "bytes": 51629
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.projects.menu",
+      "sha256": "6bfb1a32b73016abefcb5bdf8f334098e6143b0de929404a55cfec2c6f09e899",
+      "bytes": 66550
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.projects.pending-card",
+      "sha256": "ef22a7b933d66b9c1223c37192cf0a05305c33f9fb08edd66764fcadb9c7c859",
+      "bytes": 65966
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "tracker.projects.populated",
+      "sha256": "d8e389b0fabff33fc9bc98293148a7da84ea1e47d3885727a2644ce14e5eab9c",
+      "bytes": 61209
     },
     {
       "cell": "mobile-dark-en",
@@ -4875,9 +6165,63 @@
     },
     {
       "cell": "mobile-dark-en",
+      "state": "rooms.guest.prejoin",
+      "sha256": "f86746acb202816963df92fce6edc3baba26172e4347bd946358fc8de0aef02c",
+      "bytes": 24449
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "rooms.host.signin-required",
+      "sha256": "ac56b093f391717da77057f2c01ea9df55defb856c32cb6e491c9198b2e2e454",
+      "bytes": 19457
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "rooms.prejoin.granted",
+      "sha256": "13ad7f21166f8efd7f238b4d47d3d0cc61db1faedcdfefd36f8c2cab2af7d350",
+      "bytes": 23139
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "rooms.room.ai.listening",
+      "sha256": "3798c7d125ed5ba6ca74083289b1ed9a6a0a677998a4bfbacda77b0a46a13707",
+      "bytes": 15528
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "rooms.room.connect-error",
+      "sha256": "7c256431d1b05eaeda30b0e15dea623105ab8ed3a559300bb480c6466131821b",
+      "bytes": 10675
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "rooms.room.more-menu.mobile",
+      "sha256": "1222f696d22485e22b2b2d2d371f903072907d7863e28951fa0d5b6efe09dffe",
+      "bytes": 20387
+    },
+    {
+      "cell": "mobile-dark-en",
       "state": "route.error-fallback",
       "sha256": "5b2f9b738f7786da7a50adb49b23d08cf4c249ce7d50e773356ef066f5321e35",
       "bytes": 14314
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "shared.file.password",
+      "sha256": "bbdb2e91d85bc616cf9f484a12495b244279ba171ce7f6d0f9400b9ad81ccb13",
+      "bytes": 17941
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "shared.folder.browsing",
+      "sha256": "cbe4c3125de84fc7519002a1b201d4eb52b9747dc3bceffb74aab4ffb1a65dc4",
+      "bytes": 17949
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "shared.gone",
+      "sha256": "3f1fc6e973dd973783ed6e9dda35863edabe6ed137b4182b3b74da97e7abd8e9",
+      "bytes": 11943
     },
     {
       "cell": "mobile-dark-en",
@@ -4908,6 +6252,54 @@
       "state": "shell.user",
       "sha256": "4efd4f997c4d5ec9002ba86fb6d5c08aaaece1dd0eadfc2ebc7f2fd61d2abf15",
       "bytes": 35956
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "storage.browser.grid",
+      "sha256": "fe6b31ccfd145c8c1d2c05b63540c401b210068a75f8a9cbd6c968d44c86da71",
+      "bytes": 38049
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "storage.locked.free",
+      "sha256": "3ac8f77b7f265f37e0a59f5a3444d5612dcd56e041093aaa069e5c640047b4d8",
+      "bytes": 29001
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "streams.studio.on-air",
+      "sha256": "5043452b2c6e398e15cbaa7335b07fe0201ee7e6a4377258a0ada0d6bf537cae",
+      "bytes": 12330
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "streams.watch.ended",
+      "sha256": "547762cfaf0774c5a5b2258520fdf8de9f0aa87ee29f6df1177da120c90145fb",
+      "bytes": 29655
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "streams.watch.live.audience",
+      "sha256": "2f9ea637e5454e25f484e1ee603a155a6d00f841ca214aa79203b5073c02405e",
+      "bytes": 9950
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "streams.watch.name-required",
+      "sha256": "b724a1fec92ed941c4ce0a249595ad9a38f35590a24d1f02a930c76e5dd4c102",
+      "bytes": 26481
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "tracker.board.populated",
+      "sha256": "463c1a2ede877b1561ec3c7b345089c093b94532eda28a5580423d85ef0f1c4b",
+      "bytes": 39230
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "tracker.projects.populated",
+      "sha256": "4eb7ce5b6ecc8ff5a6ce4e53dfd443ae20ba5c94a87b0a4c6871110861169447",
+      "bytes": 29644
     },
     {
       "cell": "mobile-dark-ru",
@@ -5361,9 +6753,63 @@
     },
     {
       "cell": "mobile-dark-ru",
+      "state": "rooms.guest.prejoin",
+      "sha256": "6e5e593e6cb4e08b8b2fc424154315d3d9c41b18552b9d61c7190e3312843146",
+      "bytes": 25952
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "rooms.host.signin-required",
+      "sha256": "0d63f8cd334be5a9030b088581f1134576c7fce1d09aa1d0693a58a597ac150e",
+      "bytes": 20225
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "rooms.prejoin.granted",
+      "sha256": "52d500b615afd0cb1d1ab8c26134af62beb21bd92fe2f1eff6aa713717462344",
+      "bytes": 24672
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "rooms.room.ai.listening",
+      "sha256": "43e4e03baf687696b7775c5ba464a14a03fd0e53d5bb5cb3172a3a0c7c91ff20",
+      "bytes": 16492
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "rooms.room.connect-error",
+      "sha256": "6315328017b1e9d328f64b1237c0539b63a93190e92d71d2facf0e5dc9c55b09",
+      "bytes": 11297
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "rooms.room.more-menu.mobile",
+      "sha256": "665a089eef3e16ec2e1128fd279a533549b4e77b6e119752df882ef288f04767",
+      "bytes": 21183
+    },
+    {
+      "cell": "mobile-dark-ru",
       "state": "route.error-fallback",
       "sha256": "0038731fe2869252dfc1b438f2e21bbcd87cb203505afdaad26d4f35c649bf1f",
       "bytes": 15104
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "shared.file.password",
+      "sha256": "0eee140e83e7b90678d7ff474f471c2f6c41db850f565880d3aebc0a6ab901cc",
+      "bytes": 18097
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "shared.folder.browsing",
+      "sha256": "6b78f4780f610a09f94d91cfca91fcb49fdd559e04b557789538250b3693e182",
+      "bytes": 17372
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "shared.gone",
+      "sha256": "b2fe0fed5c3f8c76ab11f9a00aedaf8e66aa1f82b2e29157cfceede73e3021b1",
+      "bytes": 12623
     },
     {
       "cell": "mobile-dark-ru",
@@ -5394,6 +6840,54 @@
       "state": "shell.user",
       "sha256": "c6f2f276a93830723a218c9554a791dfc033a5dece105166497b1dd67e4ee590",
       "bytes": 38276
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "storage.browser.grid",
+      "sha256": "72cc1b851976402398fe8b48cf59fff0dc7f5741de277405854535b7564f3752",
+      "bytes": 37599
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "storage.locked.free",
+      "sha256": "dfae00eb7ebe6e2ccc6d3725979beb9a233d41b9e8248ad5826d5206bcc22288",
+      "bytes": 32215
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "streams.studio.on-air",
+      "sha256": "5043452b2c6e398e15cbaa7335b07fe0201ee7e6a4377258a0ada0d6bf537cae",
+      "bytes": 12330
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "streams.watch.ended",
+      "sha256": "7e68fbcb79c69655f635be858e66cc9df637fc24a29fe21c5c5e1dff3fd85dae",
+      "bytes": 30369
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "streams.watch.live.audience",
+      "sha256": "2f9ea637e5454e25f484e1ee603a155a6d00f841ca214aa79203b5073c02405e",
+      "bytes": 9950
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "streams.watch.name-required",
+      "sha256": "fa3294f100602535939642200781e391a5a841cdcc734e33db18510034de96da",
+      "bytes": 26062
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "tracker.board.populated",
+      "sha256": "57b47b83b1d775e7a4511492b921250cb29781ce37724237269253f18826448d",
+      "bytes": 39795
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "tracker.projects.populated",
+      "sha256": "c42096761a7c0fb73e179b2b82047591d2ccc8f7d0c34e3d3f811c639e1ee559",
+      "bytes": 28989
     },
     {
       "cell": "mobile-light-en",
@@ -5847,9 +7341,63 @@
     },
     {
       "cell": "mobile-light-en",
+      "state": "rooms.guest.prejoin",
+      "sha256": "39d1a484567517c4d0b8c7cedb4d9e657d814dde0924076b4a685a72f80ed28a",
+      "bytes": 22735
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "rooms.host.signin-required",
+      "sha256": "9a04512b2aea07a78f9b43dc3eeb381168409346aa2e59f4dd6e65fbd4144469",
+      "bytes": 18675
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "rooms.prejoin.granted",
+      "sha256": "42a6fcfb6925a30c4591fa7bfacfd4892b215989315c5a2921874babebfc165a",
+      "bytes": 21391
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "rooms.room.ai.listening",
+      "sha256": "b47b1bed93b1aa426e38e33f226ef781cd28829f7b25051cd583962d2bdc4541",
+      "bytes": 15062
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "rooms.room.connect-error",
+      "sha256": "bf9886bbbcd2b89b051f61cc3f8e0cc7d2804e92ac5ef49b7becb07a65763cd2",
+      "bytes": 10726
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "rooms.room.more-menu.mobile",
+      "sha256": "cab364b3b548e2a55d650f0f0bdc52533f190f79e5dc8f77e2d3b57c74b27941",
+      "bytes": 19025
+    },
+    {
+      "cell": "mobile-light-en",
       "state": "route.error-fallback",
       "sha256": "2d018130817cc63b63121a90fe56f955ea97eb7d1024e5a90842d314f1bab341",
       "bytes": 13793
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "shared.file.password",
+      "sha256": "502bc4fb2ff0db7a5d626030c0b3e4e0251179cae7c4134aa5a6856ecf7b41b6",
+      "bytes": 17045
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "shared.folder.browsing",
+      "sha256": "fe95dfa40fa4d3c33ff69304f0e3c7b2184a6147c72311fdcde5cd70696cd6e9",
+      "bytes": 16646
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "shared.gone",
+      "sha256": "cc8b7067b5d93037d0a193b6fd6e37e4521a294931e65d9bd478d718da8bed43",
+      "bytes": 11550
     },
     {
       "cell": "mobile-light-en",
@@ -5880,6 +7428,54 @@
       "state": "shell.user",
       "sha256": "cd879dade6654e5deed9f5ec77a4ce08e31950126f5ce4bdc3fd7bc40315f213",
       "bytes": 34346
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "storage.browser.grid",
+      "sha256": "124d8d3f6b7a77954ee675c289238f24ef5226cd62bff9b1b7980045c6f6bc1e",
+      "bytes": 37643
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "storage.locked.free",
+      "sha256": "458342746950e6b47f18aad77c8bf94a44cc8626b64dded942539bbebfd3ace3",
+      "bytes": 27601
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "streams.studio.on-air",
+      "sha256": "fa59d9b20ceaa12107a46da4c298582c14eefaae0af957893c04b81d622d2758",
+      "bytes": 12456
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "streams.watch.ended",
+      "sha256": "699a8cdd16d87f6a864782e9178578ee5b110db2afd064958830338425148055",
+      "bytes": 27033
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "streams.watch.live.audience",
+      "sha256": "b50d7a89c2b4f9feb154c06e3c5611d36502565cad84804aedab2fb844c51a85",
+      "bytes": 10035
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "streams.watch.name-required",
+      "sha256": "c369ae8b2d0700aa0808240cae639f13e98e49cc899840da86f9278c3bbd2ea4",
+      "bytes": 24588
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "tracker.board.populated",
+      "sha256": "ef15aad46610fafc1795bf59629ef862fc2ec784978094eb07bb9fa10de29bdc",
+      "bytes": 38271
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "tracker.projects.populated",
+      "sha256": "f6b8dd382316006063b9e7d05a1409b9f72efddb08976afdeeacbe30c9c4e9e5",
+      "bytes": 27847
     },
     {
       "cell": "mobile-light-ru",
@@ -6345,9 +7941,63 @@
     },
     {
       "cell": "mobile-light-ru",
+      "state": "rooms.guest.prejoin",
+      "sha256": "584173f9b4c68092e321cbff71c6ed9c01c73dc915949e8c3c5fd4d9f1e5cf9e",
+      "bytes": 24157
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "rooms.host.signin-required",
+      "sha256": "396fc77336095d86f9a996ad74f0b4cd24dff505acc2bf43aaa487d2de9708b8",
+      "bytes": 19376
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "rooms.prejoin.granted",
+      "sha256": "adae63370ef621ef75764fc4886eb5e11f1a03b3e049c6ed28b4aa24c8a9cf66",
+      "bytes": 22880
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "rooms.room.ai.listening",
+      "sha256": "793ffa51df8041e577c8a8a1b79a5ce19f850d70171467b2443c1f2c24a4d9bf",
+      "bytes": 15893
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "rooms.room.connect-error",
+      "sha256": "bc49ae2935ba0e7626938c12df39bd92264fc1db5e80111c99c1afd796edff56",
+      "bytes": 11413
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "rooms.room.more-menu.mobile",
+      "sha256": "df7420e05bae81cdbcc3ad35244f2e638272030ee580bf5165347ff675e4e112",
+      "bytes": 19878
+    },
+    {
+      "cell": "mobile-light-ru",
       "state": "route.error-fallback",
       "sha256": "9df474335e26b493f4f4b46bcfd0b86b05b9215b33170140d7dfdbca815237c3",
       "bytes": 14618
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "shared.file.password",
+      "sha256": "1f2bd8f1f7b398d4c17801d99b5c722b1b9b84f32c3f328d897bba753c5b1dfd",
+      "bytes": 17194
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "shared.folder.browsing",
+      "sha256": "fa333e0be3a1d20d83a9276bef4c27c45ce5f146da15cf4f4c3c6bb959355e88",
+      "bytes": 16167
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "shared.gone",
+      "sha256": "afb286d681678ca19973bd182e4629f4d7b1eeaa5c6d05cca4f6e27c1962a8a5",
+      "bytes": 12096
     },
     {
       "cell": "mobile-light-ru",
@@ -6378,6 +8028,54 @@
       "state": "shell.user",
       "sha256": "9f3b94927e9025313f461ea9c39cf1cb0e4f27ae08016e9e5c219bd6da60bf01",
       "bytes": 36574
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "storage.browser.grid",
+      "sha256": "e8a93d8d88db9fa834a875c022c7c3e1c7363c02975033672fbefb237f4caf43",
+      "bytes": 37255
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "storage.locked.free",
+      "sha256": "16e65b99c6367ec74f322906d1f84990aadc42885e952f6cc8c7f3be2d7e5439",
+      "bytes": 30667
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "streams.studio.on-air",
+      "sha256": "fa59d9b20ceaa12107a46da4c298582c14eefaae0af957893c04b81d622d2758",
+      "bytes": 12456
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "streams.watch.ended",
+      "sha256": "2664040abf3e03b2d9219e30aff385abbd0dcce9d368342fc29cfe8a478a9a65",
+      "bytes": 27641
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "streams.watch.live.audience",
+      "sha256": "b50d7a89c2b4f9feb154c06e3c5611d36502565cad84804aedab2fb844c51a85",
+      "bytes": 10035
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "streams.watch.name-required",
+      "sha256": "b0f0a29478255feeb0a02ea7ad06f1139d7cfac088e87a206d821d3ce3f106bd",
+      "bytes": 24163
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "tracker.board.populated",
+      "sha256": "1d5026c3d6990d39ff694bfa623fe9ae5539266343a1e00373d51cf0fd7d1f8a",
+      "bytes": 38782
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "tracker.projects.populated",
+      "sha256": "c5a70d4ba6ff91309ba603bd1b4f0652a666ec2dba747030f7a4fb50369a0602",
+      "bytes": 27221
     }
   ]
 }

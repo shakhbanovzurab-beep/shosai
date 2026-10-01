@@ -1,6 +1,6 @@
 // Подготовка страницы до первого скрипта приложения: localStorage, генератор
-// случайных чисел с фиксированным зерном, заглушка капчи, а при съёмке ещё и
-// остановленные анимации и учёт изменений DOM.
+// случайных чисел с фиксированным зерном, заглушки капчи и распознавания речи,
+// а при съёмке ещё и остановленные анимации и учёт изменений DOM.
 //
 // Функция `setUpPage` выполняется в браузере и сериализуется Playwright, поэтому
 // она самодостаточна: никаких замыканий и импортов.
@@ -13,6 +13,8 @@ export const RANDOM_SEED = 0x2f6b1d;
 export interface PageSetup {
   /** Ключи localStorage: сессия (wh-auth), тема (wh.theme), язык (wh.lang). */
   readonly storage: Readonly<Record<string, string>>;
+  /** Ключи sessionStorage: заявка зрителя на вход в эфир (wh.stream.knock.<приглашение>). */
+  readonly session?: Readonly<Record<string, string>>;
   readonly randomSeed: number;
   /**
    * Съёмка: анимации и переходы нулевой длины с первого кадра и счётчик
@@ -34,6 +36,9 @@ export const PERSISTENT_ANIMATIONS: readonly string[] = ['[style*="toast-bar"]']
 function setUpPage(setup: PageSetup): void {
   for (const [key, value] of Object.entries(setup.storage)) {
     window.localStorage.setItem(key, value);
+  }
+  for (const [key, value] of Object.entries(setup.session ?? {})) {
+    window.sessionStorage.setItem(key, value);
   }
   // mulberry32: короткий детерминированный генератор с равномерным распределением.
   let state = setup.randomSeed | 0;
@@ -59,6 +64,36 @@ function setUpPage(setup: PageSetup): void {
     reset(): void {},
   };
   Object.defineProperty(window, "turnstile", { value: turnstile, configurable: true });
+  // Распознавание речи Chromium шлёт звук на серверы Google из процесса браузера,
+  // мимо перехвата страницы. Заглушка запускается и молчит: экран тот же, что у
+  // пользователя Chrome, пока он ничего не сказал, а в сеть ничего не уходит.
+  class SilentRecognition extends EventTarget {
+    continuous = false;
+    interimResults = false;
+    lang = "";
+    onstart: ((event: Event) => void) | null = null;
+    onend: ((event: Event) => void) | null = null;
+    onresult: ((event: Event) => void) | null = null;
+    onerror: ((event: Event) => void) | null = null;
+    start(): void {
+      window.setTimeout(() => {
+        const event = new Event("start");
+        this.dispatchEvent(event);
+        this.onstart?.(event);
+      }, 0);
+    }
+    stop(): void {
+      const event = new Event("end");
+      this.dispatchEvent(event);
+      this.onend?.(event);
+    }
+    abort(): void {
+      this.stop();
+    }
+  }
+  for (const name of ["SpeechRecognition", "webkitSpeechRecognition"]) {
+    Object.defineProperty(window, name, { value: SilentRecognition, configurable: true });
+  }
   if (!setup.freezeMotion) return;
 
   // Анимации, конец которых меняет экран (полоска тоста закрывает тост по

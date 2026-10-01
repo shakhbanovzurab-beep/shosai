@@ -1,0 +1,28 @@
+{
+  "visit": "rooms/guest-finished",
+  "language": "ru",
+  "persona": null,
+  "url": "/app/rooms/join/parity-old-invite",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru"
+  },
+  "exchanges": [
+    {
+      "method": "POST",
+      "path": "/v1/rooms/join/parity-old-invite",
+      "query": "",
+      "requestBody": {
+        "name": "Гость Acme"
+      },
+      "status": 404,
+      "contentType": "application/json",
+      "body": {
+        "detail": "room_finished"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

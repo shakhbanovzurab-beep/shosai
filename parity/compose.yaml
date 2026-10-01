@@ -141,6 +141,14 @@ services:
       # бою. Пара фиктивная: подписку и отправку стенд не выполняет.
       WEBPUSH_VAPID_PUBLIC_KEY: parity-vapid-public-key
       WEBPUSH_VAPID_PRIVATE_KEY: ${PARITY_DRAFT_VAPID_PRIVATE_KEY:-parity-vapid-private-key}
+      # Видеокомнаты и трансляции, как в бою: токен входа черновик подписывает сам,
+      # по ключам LiveKit, без обращения к серверу. Ключи фиктивные. Адрес
+      # медиасервера браузер не увидит (сокеты на чужие хосты стенд закрывает), а
+      # серверные вызовы LiveKit упираются в закрытый порт и сразу падают.
+      LIVEKIT_URL: wss://livekit.parity.localhost
+      LIVEKIT_API_URL: http://127.0.0.1:1
+      LIVEKIT_API_KEY: parity-livekit-key
+      LIVEKIT_API_SECRET: ${PARITY_DRAFT_LIVEKIT_API_SECRET:-parity-livekit-secret-0123456789abcdef}
       TZ: UTC
       # Фиксированный момент стенда сравнения (parity.config.json), часы идут от него.
       # Задаёт record.sh и сразу проверяет, что API видит именно этот момент.

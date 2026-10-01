@@ -470,3 +470,73 @@ Interaction to leave pre-join: click the dark button "Присоединитьс
   - ContextMenus close on scroll/resize.
   - `useIsMobile` breakpoint is 860px and changes dock/panel layouts.
   - The onboarding tour can overlay `/tracker` and `/storage` (`features/onboarding/contracts/steps.ts:86-88`).
+
+### Findings (step 6 of D2)
+
+Draft defects visible on screen. By decision 4 of the D2 plan they stay out of the baseline, and v2 shows the intended behaviour.
+
+1. **Guest join outcomes without a screen.** For `registration_required`, `admission_denied` and `{status:"waiting"}` the guest page draws the pre-join form again with no message (`GuestJoinPage`: only `finished` and `unavailable` have text). For "waiting" it also never polls: the knock URL it would use, `GET /v1/rooms/knock/{token}`, is not a backend route. Contract note: the draft backend never sends these three outcomes on the rooms endpoints; they belong to streams. Out of the baseline: `rooms.guest.registration`, `.denied`, `.waiting`.
+2. **The stream viewer page spins forever.** When the join request fails but the stream card loads (for example a 403 on a members-only stream), and after «Отменить» in the waiting room, the page shows only the full-screen spinner (`card` set, `entry` and `outcome` empty). Out of the baseline: `streams.watch.stuck-spinner`, `streams.watch.waiting.cancelled`.
+3. **A storage list error looks like an empty folder.** A failed `GET /v1/me/storage/list` renders the drop zone «Перетащите файлы или папку сюда», as for a folder with no files. Out of the baseline; v2 shows an error.
+4. **Tracker errors look like data.** A failed projects list renders «Пока нет проектов»; a failed board request keeps the spinner forever. Out of the baseline; v2 shows an error.
+5. **LiveKit health failure reads as healthy.** When `GET /v1/admin/livekit/health` fails, the page shows the tag «SFU в норме» with no metrics and no sections (`health` undefined is treated as "not down"). Out of the baseline: `livekit.health.request-failed`.
+6. **The LiveKit admin page is not translated.** All texts of `/admin/livekit` are hard-coded in Russian (`features/rooms/admin/*.tsx`), so an English admin sees Russian. `livekit.*` is captured in ru cells only.
+7. **The studio re-requests the audience without pause (contract and performance note, not a screen).** While «Пульт» is open, `GET /v1/streams/live/audience` repeats about every 300 ms plus the round trip: the effect in `AudienceSection` depends on an object that is new on every render (`ui/StudioPanel.tsx:273-276`, `hooks/useStudio.ts:88`). The harness answers the first request and holds the rest. v2 refreshes the hall on events or a fixed interval.
+8. **A Start user briefly sees the full storage screen.** Before `GET /v1/me/storage/stats` answers 403, a paid Start user sees the toolbar and the browser, then the «Хранилище на Pro и Max» banner replaces them. The baseline captures the settled banner (`storage.locked.no-quota`); v2 decides access before drawing the browser.
+
+### Coverage in the screenshot matrix (step 6 of D2)
+
+**How the harness reproduces this group:**
+- **Media server.** The recording API runs with fake LiveKit keys (`compose.yaml`): tokens and stream passes are signed locally, so room and stream entry record for real. The browser's socket to `wss://livekit.parity.localhost` is closed by the harness, and the room stays in «Не удалось подключиться». The dock, panels, menus and dialogs draw over HTTP and are captured in that state. `rooms.room.connecting` keeps the socket open and silent instead.
+- **Camera and microphone.** Chromium's fake devices give a granted preview; its moving test picture is masked. `mediaAccess` on a state makes `getUserMedia` reject (`denied`) or never settle (`permission-pending`) (`src/determinism/media-access.ts`).
+- **Speech recognition.** The Web Speech API is replaced by a silent recogniser (`src/determinism/page-setup.ts`): the AI assistant shows «Транскрипция идёт» with no lines and sends nothing to Google.
+- **Stream viewer storage.** The guest name lives in localStorage (`wh.stream.name`, recorded with the visit) and the knock token in sessionStorage (`session` on the visit and on the state).
+- **Viewer count.** `record.sh` writes `stream:viewers:r-parity-live` to Redis after the flush (`recording/seed/redis.txt`), so the count is recorded, not synthetic.
+- **Files without S3.** The recording stand has no S3, so the draft answers previews with an empty body or a 500. File content is set by the state:
+  - text and code — the `content` response as text;
+  - DOCX and XLSX — the `content` response as bytes (`bodyEncoding: "base64"`), built in memory by `src/samples/office.ts`;
+  - image and PDF — a synthetic `download-url` that points at a stand-in object store, `http://objects.parity.localhost` (`src/serve/object-store.ts`, samples from `src/samples/images.ts`);
+  - video and audio — the same, but the object is absent: the harness browser has no H.264 or AAC decoders, so both targets show an empty player and only its frame is compared.
+- **Harness browser limits, the same for both targets.** Chromium headless shell has no built-in PDF viewer, so `storage.viewer.pdf` shows the fallback text of `<object>`. Native date fields (`<input type=date>`) format dates by the browser build (mm/dd/yyyy), not by the page locale.
+- **Recorded refusals.** Deleting a column with tasks (422 with the draft's text), a wrong share password and the share folder unlock are recorded by the visits.
+- **Synthetic responses.** Each has a reason: LiveKit health, load, participants and egress; recording start and stop; the meeting assistant's answers; Atlassian sites, projects and sync; file content and signed URLs; share links minted with a random token; the stream audience.
+
+**Captured inside another state:**
+
+| state | screenshot |
+|---|---|
+| `rooms.room.record.idle` | `rooms.room.connect-error` (the record button is in the dock) |
+| `rooms.room.connected.e2ee` without record and AI | `rooms.room.e2ee`, `rooms.room.more-menu.e2ee` |
+| mobile record menu item, mobile dock | `rooms.room.more-menu.mobile`, the mobile cells of `rooms.room.connect-error` |
+| `rooms.prejoin.mobile` | the mobile cells of `rooms.host.signin-required` and `rooms.prejoin.granted` |
+| `rooms.guest.prejoin` permission variants | `rooms.prejoin.*` (the same component; the guest adds the name field) |
+| `streams.watch.ended.archive` | `streams.watch.ended` |
+| `streams.watch.live.connecting`, `.viewers`, `.chat.*` (desktop open by default) | `streams.watch.live.audience` |
+| `streams.studio.panel.*` sections: waiting room, hands, link, layout, stage | `streams.studio.on-air` |
+| `streams.studio.record.*` | `rooms.room.record.*` (the same control) |
+| `storage.quota.normal` | `storage.browser.grid` |
+| `storage.viewer.code` edited | `storage.viewer.save-error` (Save enabled after typing) |
+| `storage.dialog.move` into a nested folder | `storage.dialog.move` (root level) |
+| `tracker.board.empty-column` | `tracker.board.populated` (column «На проверке») |
+| `tracker.jira.chip.linked` | `tracker.board.populated` |
+| `livekit.rooms.populated`, `.egress.unavailable`, `.audit.populated` | `livekit.health.ok`, `livekit.audit` |
+
+**Not screenshotted:**
+
+| state | reason |
+|---|---|
+| `rooms.room.connected.*`, `.layout.*`, `.tile.*`, `.chat.populated`, `.chat.unread-badge`, `.reaction-floating`, `.device-menu`, `.subtitles-overlay`, `.translator.listening`, `.ready`, `.failure-*`, `.notepad`, `.board.*`, `.board-saved-toast` | need a connected SFU, its data channel or the subtitles socket (decision 3 of the D2 plan) |
+| `streams.watch.live.no-speakers`, `.stage-grid`, `.spotlight`, `.presentation`; stage tiles in the studio | need a connected SFU (decision 3) |
+| `rooms.room.ai.saved`, `.save-error` | need transcript lines from live speech recognition |
+| `rooms.guest.registration`, `.denied`, `.waiting` | Finding 1 |
+| `rooms.guest.redirect-stream` | the server sends the guest to the backend page `/live/<token>`, not to the SPA |
+| `streams.watch.stuck-spinner`, `.waiting.cancelled` | Finding 2 |
+| storage list error, tracker projects and board errors | Findings 3 and 4 |
+| `livekit.health.request-failed` | Finding 5 |
+| `en` cells of `livekit.*` | Finding 6 |
+| `rooms.room.invite-modal.copied`, `storage.share` copy toasts, studio «Скопировано» | need clipboard permission and live 1.8 s on a real timer |
+| `storage.marquee`, `storage.drop-hover`, `storage.drop-reading`, `tracker.board.drag` | intermediate frames of a pointer or file drag; the harness captures settled screens |
+| `shared.file.success` | navigates away to the signed S3 URL |
+| `streams.studio` start and end success toasts | the screen after a start is `streams.studio.on-air`; ending navigates to `/calendar` |
+| `tracker.jira.modal.loading` | the chip that opens the modal appears only after the status has loaded, and the modal reuses it |
+| `tracker.jira` link and sync error toasts | the same toast component as `tracker.jira.toast.synced` with another text |

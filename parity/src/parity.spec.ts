@@ -8,6 +8,7 @@ import { expect, test as base } from "@playwright/test";
 
 import { stateSnapshotSegments } from "./baseline/manifest.ts";
 import { FIXTURES_DIR, loadParityConfig, ORIGIN } from "./config.ts";
+import { installMediaAccess } from "./determinism/media-access.ts";
 import { installOpenStreams, openStreamsOf } from "./determinism/open-streams.ts";
 import { installPageSetup, PERSISTENT_ANIMATIONS, RANDOM_SEED } from "./determinism/page-setup.ts";
 import { settle } from "./determinism/settle.ts";
@@ -17,6 +18,7 @@ import { translator } from "./i18n/texts.ts";
 import { cellTag, SINGLE_CELL, type Cell } from "./matrix.ts";
 import { FixtureReplay } from "./replay/replay.ts";
 import { routeSockets, storedUserId } from "./replay/sockets.ts";
+import { OBJECT_STORE_ORIGIN, storedObject } from "./serve/object-store.ts";
 import { serveSite } from "./serve/site.ts";
 import { thirdPartyStub } from "./serve/third-party.ts";
 import { ALL_STATES, stateCells } from "./states/registry.ts";
@@ -45,14 +47,20 @@ for (const state of ALL_STATES) {
     const replay = new FixtureReplay(fixture, state.overrides ?? []);
     await installPageSetup(context, {
       storage: pageStorage(state, fixture, cell),
+      ...(state.session === undefined ? {} : { session: state.session }),
       randomSeed: RANDOM_SEED,
       freezeMotion: true,
       persistentAnimations: PERSISTENT_ANIMATIONS,
     });
     await installOpenStreams(context, openStreamsOf(state.overrides ?? []));
+    await installMediaAccess(context, state.mediaAccess);
     await routeSockets(context, state.sockets ?? []);
     await context.route("**/*", async (route) => {
       const url = new URL(route.request().url());
+      if (url.origin === OBJECT_STORE_ORIGIN) {
+        const object = storedObject(url);
+        return object === null ? route.fulfill({ status: 404 }) : route.fulfill({ status: 200, ...object });
+      }
       if (url.origin !== ORIGIN) {
         const stub = thirdPartyStub(url);
         if (stub === null) return route.abort("blockedbyclient");

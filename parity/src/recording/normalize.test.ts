@@ -95,3 +95,20 @@ test("адрес визита получает те же заглушки, чт�
   expect(result.exchanges[0]?.path).toBe("/v1/me/sessions/00000000-0000-4000-8000-000000000001/full");
   expect(result.url).toBe("/app/meetings/00000000-0000-4000-8000-000000000001#seg-00000000-0000-4000-8000-000000000002");
 });
+
+test("случайные идентификаторы участников заменяются заглушками по порядку появления", () => {
+  const user = "5eed0000-0000-4000-8000-0000000000aa";
+  const normalized = normalizeFixture(
+    fixtureWith([
+      get("/v1/streams/live/state", { me: `${user}__1a2b3c4d`, guests: ["guest-0123456789ab", "guest-ba9876543210"] }),
+      get("/v1/streams/live/chat", [{ principal: "guest-0123456789ab" }, { identity: `${user}__1a2b3c4d` }]),
+    ]),
+    CLOCK,
+  );
+  const placeholder = "00000000-0000-4000-8000-000000000001";
+  expect(normalized.exchanges[0]?.body).toEqual({
+    me: `${placeholder}__00000001`,
+    guests: ["guest-000000000001", "guest-000000000002"],
+  });
+  expect(normalized.exchanges[1]?.body).toEqual([{ principal: "guest-000000000001" }, { identity: `${placeholder}__00000001` }]);
+});

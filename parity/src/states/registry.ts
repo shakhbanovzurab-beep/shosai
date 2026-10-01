@@ -37,6 +37,16 @@ import { PROMPTS_EDITOR_STATES } from "./prompts-editor.ts";
 import { SHELL_VARIANT_STATES } from "./shell-variants.ts";
 import { STUDIO_CONTEXT_STATES } from "./studio-context.ts";
 import { STUDIO_KNOWLEDGE_STATES } from "./studio-knowledge.ts";
+import { ROOMS_STATES } from "./rooms.ts";
+import { ROOMS_GUEST_STATES } from "./rooms-guest.ts";
+import { ROOMS_PANEL_STATES } from "./rooms-panels.ts";
+import { SHARED_FILES_STATES } from "./shared-files.ts";
+import { STORAGE_STATES } from "./storage.ts";
+import { STREAMS_STUDIO_STATES } from "./streams-studio.ts";
+import { STREAMS_WATCH_STATES } from "./streams-watch.ts";
+import { STORAGE_VIEWER_STATES } from "./storage-viewer.ts";
+import { TRACKER_STATES } from "./tracker.ts";
+import { TRACKER_BOARD_STATES } from "./tracker-board.ts";
 import { stateLanguages, type State } from "./types.ts";
 
 export const ALL_STATES: readonly State[] = [
@@ -72,6 +82,16 @@ export const ALL_STATES: readonly State[] = [
   ...PROMPTS_EDITOR_STATES,
   ...MODELS_STATES,
   ...HUB_STATES,
+  ...STORAGE_STATES,
+  ...STORAGE_VIEWER_STATES,
+  ...SHARED_FILES_STATES,
+  ...TRACKER_STATES,
+  ...TRACKER_BOARD_STATES,
+  ...ROOMS_STATES,
+  ...ROOMS_PANEL_STATES,
+  ...ROOMS_GUEST_STATES,
+  ...STREAMS_WATCH_STATES,
+  ...STREAMS_STUDIO_STATES,
 ];
 
 export function stateCells(state: State): Cell[] {

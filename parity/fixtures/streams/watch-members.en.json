@@ -1,0 +1,59 @@
+{
+  "visit": "streams/watch-members",
+  "language": "en",
+  "persona": null,
+  "url": "/app/live/parity-stream-members",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "en",
+    "wh.stream.name": "Гость"
+  },
+  "exchanges": [
+    {
+      "method": "POST",
+      "path": "/v1/streams/parity-stream-members/join",
+      "query": "",
+      "requestBody": {
+        "name": "Гость",
+        "lang": "en"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "outcome": "registration_required",
+        "card": {
+          "id": "00000000-0000-4000-8000-000000000001",
+          "title": "Разбор для сотрудников",
+          "description": "",
+          "status": "live",
+          "started_at": "2026-07-17T11:50:00Z",
+          "ended_at": null,
+          "stage": {
+            "mode": "grid",
+            "pinned": null,
+            "members": [
+              {
+                "principal": "00000000-0000-4000-8000-000000000002",
+                "name": "Мария Соколова",
+                "role": "host",
+                "on_air": true,
+                "position": 0
+              }
+            ]
+          },
+          "chat_mode": "everyone",
+          "reactions_enabled": true,
+          "requests_enabled": true,
+          "registered_only": true,
+          "chat_archived": true,
+          "viewers": null
+        },
+        "entry": null,
+        "knock_token": null
+      },
+      "origin": "recorded"
+    }
+  ]
+}

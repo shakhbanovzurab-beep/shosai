@@ -1,0 +1,30 @@
+{
+  "visit": "files/shared-file-view",
+  "language": "en",
+  "persona": null,
+  "url": "/app/s/parity-file-view",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "en"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/storage/shared/parity-file-view/meta",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": true,
+        "name": "Скриншот_дашборда.jpg",
+        "size": 512000,
+        "is_folder": false,
+        "needs_password": false,
+        "download_disabled": true
+      },
+      "origin": "recorded"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-"""Дела (хабы) «руководителя»: доски трекера, хабы, история фактов Acme, материалы.
+"""Дела (хабы) «руководителя»: хабы с досками трекера (tracker_seed.py), история фактов Acme, материалы.
 
 Встречи Acme — уже засеянные: «без названия» (начало внедрения), «Демо для
 клиента Acme» и «Планирование бюджета Q4». Новых встреч засев не заводит:
@@ -23,14 +23,10 @@ from meetassist.features.context_graph.infrastructure.models import PcgEntity, P
 from meetassist.features.hub.infrastructure.models import Hub, HubMaterial, HubMeeting
 from meetassist.models.session import Session
 from meetassist.models.storage import StorageFile
-from meetassist.models.tracker import TrackerProject, TrackerStatus
 from meetassist.models.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from stable_ids import HUBS, KNOWLEDGE_DOCUMENT
-
-_STATUSES = (("To Do", "todo", "#94A3B8"), ("In Progress", "in_progress", "#3B82F6"), ("Done", "done", "#22C55E"))
-
 
 @dataclass(frozen=True)
 class _Fact:
@@ -72,9 +68,9 @@ _FACTS = (
 _RAISED = {"b": 0, "d": 2, "h": 0, "i": 0, "j": 0, "n": 0}
 
 
-async def seed_hubs(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session]) -> None:
-    """Засевает дела владельца и всё, что дело показывает."""
-    boards = await _boards(db, owner, clock)
+async def seed_hubs(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session],
+                    boards: dict[str, uuid.UUID]) -> None:
+    """Засевает дела владельца и всё, что дело показывает; доски — из засева трекера."""
     acme = Hub(id=HUBS["acme"], user_id=owner.id, name="Acme", kind="client", tracker_project_id=boards["ACME"],
                purpose="Внедрение Whisperer в отделе продаж Acme",
                success="40 сотрудников Acme ежедневно работают в системе две недели подряд",
@@ -95,19 +91,6 @@ async def seed_hubs(db: AsyncSession, owner: User, clock: datetime, sessions: di
                    source_id=str(sync.id), extracted_by="leo", created_at=sync.ended_at))
     await _facts(db, owner, clock, sessions)
     await _materials(db, owner, acme, clock, sessions)
-
-
-async def _boards(db: AsyncSession, owner: User, clock: datetime) -> dict[str, uuid.UUID]:
-    boards: dict[str, uuid.UUID] = {}
-    for position, (key, name) in enumerate((("ACME", "Внедрение Acme"), ("PORTAL", "Портал"))):
-        project = TrackerProject(user_id=owner.id, name=name, key=key, position=position,
-                                 created_at=clock - timedelta(days=50 - position))
-        db.add(project)
-        await db.flush()
-        for order, (status, category, color) in enumerate(_STATUSES):
-            db.add(TrackerStatus(project_id=project.id, name=status, category=category, color=color, position=order))
-        boards[key] = project.id
-    return boards
 
 
 async def _facts(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session]) -> None:

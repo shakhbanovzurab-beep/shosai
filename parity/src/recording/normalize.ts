@@ -7,6 +7,8 @@
 //    похожего на настоящий токен);
 //  * UUID → заглушки по порядку первого появления в отсортированной фикстуре,
 //    одинаково везде — в телах, путях, строках запроса и адресе визита;
+//  * случайные идентификаторы участников видеокомнат и трансляций (суффикс
+//    `__<8 hex>` у аккаунта, `guest-<12 hex>` у гостя) → так же, заглушки;
 //  * метки времени в пределах суток после момента стенда сравнения — это «сейчас» API
 //    под libfaketime, которое сдвигается на секунды записи → сам момент, в том
 //    же формате. Засев задаёт прошлое и будущее явно и вне этого окна.
@@ -15,6 +17,8 @@ import type { Exchange, Fixture, JsonValue } from "../fixtures/format.ts";
 
 const JWT = /eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g;
 const UUID = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi;
+const IDENTITY_SUFFIX = /__[0-9a-f]{8}\b/g;
+const GUEST_IDENTITY = /\bguest-[0-9a-f]{12}\b/g;
 const ISO_DATETIME = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?/g;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -36,8 +40,19 @@ const VOLATILE_RESPONSE_FIELDS: ReadonlyMap<string, readonly string[]> = new Map
   ["GET /v1/auth/social/vk/prepare", ["state", "code_verifier"]],
 ]);
 
+/** Заглушка по порядку первого появления значения. */
+function placeholder(known: Map<string, string>, value: string, format: (index: string) => string): string {
+  const existing = known.get(value);
+  if (existing !== undefined) return existing;
+  const created = format(String(known.size + 1));
+  known.set(value, created);
+  return created;
+}
+
 class Normalizer {
   private readonly uuids = new Map<string, string>();
+  private readonly suffixes = new Map<string, string>();
+  private readonly guests = new Map<string, string>();
   private readonly clock: Date;
 
   constructor(clock: Date) {
@@ -48,6 +63,8 @@ class Normalizer {
     return value
       .replace(JWT, "parity.jwt.token")
       .replace(UUID, (uuid) => this.uuid(uuid.toLowerCase()))
+      .replace(IDENTITY_SUFFIX, (suffix) => placeholder(this.suffixes, suffix, (n) => `__${n.padStart(8, "0")}`))
+      .replace(GUEST_IDENTITY, (guest) => placeholder(this.guests, guest, (n) => `guest-${n.padStart(12, "0")}`))
       .replace(ISO_DATETIME, (stamp, fraction: string | undefined, zone: string | undefined) =>
         this.timestamp(stamp, fraction, zone),
       );

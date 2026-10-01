@@ -7,6 +7,7 @@
 import type { Route } from "@playwright/test";
 
 import { canonicalQuery, type Exchange, type JsonValue } from "../fixtures/format.ts";
+import type { VisitStub } from "./visits/types.ts";
 
 /** Адрес API черновика из контейнера стенда сравнения (compose.yaml, сеть draft). */
 export const DRAFT_API = process.env["PARITY_DRAFT_API"] ?? "http://draft-api:8000";
@@ -68,6 +69,24 @@ export class ExchangeJournal {
       }
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
+  }
+
+  /** Отвечает заглушкой визита и пишет обмен как синтетический, с причиной. */
+  async stub(route: Route, url: URL, stub: VisitStub): Promise<void> {
+    this.lastActivity = Date.now();
+    const sent = requestBody(route);
+    this.entries.push({
+      method: stub.method,
+      path: url.pathname,
+      query: canonicalQuery(url.searchParams),
+      ...(sent === undefined ? {} : { requestBody: sent }),
+      status: stub.status,
+      contentType: "application/json",
+      body: stub.body,
+      origin: "synthetic",
+      reason: stub.reason,
+    });
+    await route.fulfill({ status: stub.status, contentType: "application/json", body: JSON.stringify(stub.body) });
   }
 
   /** Пересылает запрос в API черновика, отдаёт ответ браузеру и пишет обмен. */

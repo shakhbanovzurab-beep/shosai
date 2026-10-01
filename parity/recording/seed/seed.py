@@ -27,13 +27,17 @@ from sqlalchemy import func, select
 import meetassist.composition.metadata  # noqa: F401
 from accounts import create_account
 from calendar_seed import seed_calendar
+from files_seed import seed_files, set_storage_counters
 from hubs_seed import seed_hubs
 from leo_cabinet import seed_leo_cabinet
 from mcp_seed import seed_mcp
 from meetings import seed_meetings
 from personas import PERSONAS
 from prompts_models import seed_prompts_models
+from rooms_seed import seed_rooms
+from streams_seed import seed_streams
 from studio import seed_studio
+from tracker_seed import seed_boards, seed_tracker
 from workspace import seed_workspace
 from world import seed_world
 
@@ -64,12 +68,19 @@ async def seed() -> None:
         lead = accounts["lead"]
         sessions = await seed_meetings(db, lead, clock)
         await seed_workspace(db, lead, clock, sessions)
-        await seed_hubs(db, lead, clock, sessions)
+        boards = await seed_boards(db, lead, clock)
+        await seed_hubs(db, lead, clock, sessions, {key: columns[""] for key, columns in boards.items()})
+        await seed_tracker(db, lead, clock, boards)
         await seed_calendar(db, lead, clock, sessions)
         await seed_studio(db, lead, clock)
         await seed_leo_cabinet(db, lead, clock)
         await seed_mcp(db, lead, clock)
         await seed_prompts_models(db, lead, accounts["admin"], clock)
+        await seed_rooms(db, lead, accounts["admin"], clock)
+        await seed_streams(db, accounts, clock)
+        await seed_files(db, lead, clock)
+        # Последним: счётчик занятого места — сумма всех файлов «руководителя».
+        await set_storage_counters(db, accounts, clock)
         await db.commit()
     log.info("засев завершён: персон %d", len(accounts), extra={"personas": len(accounts)})
 

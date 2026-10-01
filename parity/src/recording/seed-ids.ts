@@ -14,6 +14,15 @@ interface SeedIds {
   readonly shares: Readonly<Record<string, string>>;
   readonly sharePassword: string;
   readonly hubs: Readonly<Record<string, string>>;
+  readonly rooms: Readonly<Record<string, string>>;
+  readonly streams: Readonly<Record<string, string>>;
+  readonly roomInvite: string;
+  readonly roomInvites: Readonly<Record<string, string>>;
+  readonly fileShares: Readonly<Record<string, string>>;
+  readonly streamInvites: Readonly<Record<string, string>>;
+  readonly knocks: Readonly<Record<string, string>>;
+  readonly boards: Readonly<Record<string, string>>;
+  readonly streamInvite: string;
   readonly prompts: Readonly<Record<string, string>>;
   readonly mcp: {
     readonly clientId: string;
@@ -71,4 +80,19 @@ export function mcpConsentUrl(): string {
     resource: `${ORIGIN}/mcp`,
   });
   return `/app/connect/mcp?${query.toString()}`;
+}
+
+/** Адрес входа хоста в комнату «руководителя» по ключу засева. */
+export function roomUrl(key: string): string {
+  return `/app/rooms/${known(SEED_IDS.rooms, key, "комнаты")}`;
+}
+
+/** Адрес студии трансляции «руководителя» по ключу засева. */
+export function studioUrl(key: string): string {
+  return `/app/studio/${known(SEED_IDS.streams, key, "трансляции")}`;
+}
+
+/** Адрес доски трекера «руководителя» по коду проекта. */
+export function boardUrl(key: string): string {
+  return `/app/tracker/${known(SEED_IDS.boards, key, "доски")}`;
 }

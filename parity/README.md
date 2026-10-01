@@ -48,8 +48,13 @@ Screenshots are taken only inside the pinned Playwright container ([`compose.yam
      - `respond` is one reply or a sequence: the n-th request gets the n-th reply, and the last repeats. A reply is a response, `"hold"` (no answer: loading), `"fail"` (network failure), `"recorded"` (the recorded answer), or `{ merge }` (the recorded answer with fields merged in, for variants of the same data such as "quota almost full");
      - `stream(...)` answers with a finished server-sent event stream; an event named `""` is a bare `data:` frame (the prompt test run, `[DONE]`);
      - `openStream(...)` sends its events and keeps the stream open: a reply still being written. A shim over `fetch` in the page serves it ([`src/determinism/open-streams.ts`](src/determinism/open-streams.ts)), because a response fulfilled by Playwright always ends.
-   - `sockets`: WebSocket frames for `/v1/ws/...` ([`src/replay/sockets.ts`](src/replay/sockets.ts)). `frames` go right after the page connects; `afterClient` goes after the page's first message, the way the voice server answers microphone audio. Without a script a socket stays silent.
+     - `content(...)` answers with a file's text under its own type, `binary(...)` with bytes (`bodyEncoding: "base64"`): file previews, whose content the recording stand cannot read without S3. Sample documents are built in memory ([`src/samples/`](src/samples/));
+     - a signed S3 URL in a synthetic `download-url` points at the stand-in object store `http://objects.parity.localhost` ([`src/serve/object-store.ts`](src/serve/object-store.ts)), which serves the sample image and PDF and answers 404 for anything else.
+   - `sockets`: WebSocket frames for `/v1/ws/...` ([`src/replay/sockets.ts`](src/replay/sockets.ts)). `frames` go right after the page connects; `afterClient` goes after the page's first message, the way the voice server answers microphone audio. Without a script a `/v1/` socket stays silent and a socket to another host (the LiveKit media server) is closed; a script for `/rtc/v1` with no frames keeps the media server connecting.
    - `storage`: localStorage keys the frontend keeps in the browser, built from the fixture's user id: the Leo conversation (`agent-chat-v1:<user>`).
+   - `session`: sessionStorage keys, such as a stream viewer's knock token.
+   - `mediaAccess`: the browser's answer to the camera and microphone request — `"denied"` or `"pending"` (never answered) instead of the granted fake devices ([`src/determinism/media-access.ts`](src/determinism/media-access.ts)).
+   - `mask`: regions drawn by real time or a live device, such as the fake camera's moving picture, with a reason.
    - `reveal`: the marker is below the edge of the screen; once the page has settled, the marker is scrolled to the centre of its scroll area (always the same position, whatever the action scrolled before) and the page settles again before the screenshot.
    - `keepPointer`: the state is a hover; the pointer stays where the action left it.
 3. **Texts** in markers and actions come from the draft's translation catalogs by key: `t("billing:cab.tariffs")`. Use literal keys, then run `npm run texts`.
@@ -64,7 +69,8 @@ Every state is rendered under the same conditions:
 - the system setting "reduce motion" is on;
 - animations and transitions have zero duration from the first frame, except the animations in `PERSISTENT_ANIMATIONS` (`src/determinism/page-setup.ts`), which stop on their first frame because their end changes the screen (a toast closes when its bar ends);
 - the pointer is parked at (0, 0), and service workers are blocked;
-- the origin `http://parity.localhost` is a secure context, as HTTPS is in production: the microphone, AudioWorklet and push exist. Chromium has a fake microphone that grants itself ([`src/determinism/browser-flags.ts`](src/determinism/browser-flags.ts)); recording uses the same browser;
+- the origin `http://parity.localhost` is a secure context, as HTTPS is in production: the microphone, AudioWorklet and push exist. Chromium has a fake microphone and camera that grant themselves ([`src/determinism/browser-flags.ts`](src/determinism/browser-flags.ts)); recording uses the same browser;
+- the Web Speech API is a silent recogniser: it starts and never hears anything, so nothing goes to the browser vendor's speech service;
 - partial raster is off (`--disable-partial-raster`): a changed tile is redrawn whole. Otherwise an action on a drawn page redraws only changed rectangles, and anti-aliasing at their edges differs by a few brightness levels from run to run;
 - text is always anti-aliased in greyscale (`--disable-lcd-text`). Chromium uses subpixel (LCD) text only outside composited layers, and blocks with an entry animation move in and out of a layer depending on timing, so the same text came out coloured in one run and grey in another;
 - external hosts are blocked; third-party sign-in SDKs and the captcha are stubs ([`src/serve/third-party.ts`](src/serve/third-party.ts));
@@ -77,8 +83,8 @@ Values that follow real time, such as a "resend in 60 s" countdown, are masked p
 These also follow from the goal that users notice no difference:
 
 - **Base path and URLs.** The SPA lives under `/app/`, and the same paths and query parameters address the same screens.
-- **Persisted client state.** `wh-auth` (`{state:{csrfToken,user},version:0}`), `wh.theme`, `wh.lang` and `wh.appearance` keep their meaning. Users stay signed in across the cutover, and the harness seeds these keys. The Leo conversation stays in `agent-chat-v1:<user id>` and `agent-session-v1:<user id>` with the draft's message shape: users keep their thread, and Leo states seed it.
-- **API.** The same `/v1` contract (D1), including the SSE events of Leo and the prompt test run and the WebSocket frames of `/v1/ws/voice` and `/v1/ws/user`. Fonts are served at `/fonts/`.
+- **Persisted client state.** `wh-auth` (`{state:{csrfToken,user},version:0}`), `wh.theme`, `wh.lang` and `wh.appearance` keep their meaning. Users stay signed in across the cutover, and the harness seeds these keys. The Leo conversation stays in `agent-chat-v1:<user id>` and `agent-session-v1:<user id>` with the draft's message shape: users keep their thread, and Leo states seed it. A stream viewer's name stays in `wh.stream.name` and a pending knock in sessionStorage `wh.stream.knock.<invite>`.
+- **API.** The same `/v1` contract (D1), including the SSE events of Leo and the prompt test run and the WebSocket frames of `/v1/ws/voice` and `/v1/ws/user`. File previews take text and documents from `content` and media from the URL that `download-url` returns. Fonts are served at `/fonts/`.
 - **Selectors used by states.** Texts from the draft catalogs, roles, `aria-label`s and `data-onboarding` anchors stay. The few draft class names in state definitions (`.onb-card`) are kept or the selector is replaced together with the state.
 - **Motion.** v2 honours `prefers-reduced-motion` where the draft does. Random choices on screen use `Math.random`. If a toast closes on a different animation than `toast-bar`, its selector is added to `PERSISTENT_ANIMATIONS`.
 

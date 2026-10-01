@@ -1,0 +1,442 @@
+{
+  "visit": "admin/livekit",
+  "language": "ru",
+  "persona": "admin",
+  "url": "/app/admin/livekit",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru",
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"admin@parity.test\",\"username\":\"Администратор\",\"phone\":null,\"avatar_url\":null,\"role\":\"admin\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"free\",\"name\":\"Free\",\"price_rub\":0,\"price_usd\":0,\"price_eur\":0,\"period_days\":0,\"minutes_limit\":60,\"allow_knowledge_base\":false,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":null,\"currency\":\"RUB\",\"price\":0},\"started_at\":\"2026-06-01T12:00:00Z\",\"expires_at\":null,\"days_left\":null,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":false,\"limit_minutes\":60,\"bonus_minutes\":0,\"used_minutes\":12,\"remaining_minutes\":48,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":false,\"teleprompter\":false,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/admin/costs/summary",
+      "query": "group_by=provider",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "kpis": [
+          {
+            "label": "День",
+            "cost_rub": "0",
+            "cost_usd": "0",
+            "input_tokens": 0,
+            "output_tokens": 0
+          },
+          {
+            "label": "Месяц",
+            "cost_rub": "0",
+            "cost_usd": "0",
+            "input_tokens": 0,
+            "output_tokens": 0
+          },
+          {
+            "label": "Всё время",
+            "cost_rub": "0",
+            "cost_usd": "0",
+            "input_tokens": 0,
+            "output_tokens": 0
+          }
+        ],
+        "breakdown": [],
+        "group_by": "provider",
+        "rate_used": "95.0000",
+        "runs_total": 0,
+        "latency_p50_ms": null
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/livekit/audit",
+      "query": "limit=30",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000003",
+          "created_at": "2026-07-17T10:00:00+00:00",
+          "admin_email": "admin@parity.test",
+          "action": "remove_participant",
+          "lk_room": "r-parity-acme",
+          "target_identity": "guest-000000000001",
+          "egress_id": null,
+          "result": "ok",
+          "detail": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000004",
+          "created_at": "2026-07-15T10:00:00+00:00",
+          "admin_email": "admin@parity.test",
+          "action": "close_room",
+          "lk_room": "r-parity-old",
+          "target_identity": null,
+          "egress_id": null,
+          "result": "failed",
+          "detail": "SFU не ответил"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000005",
+          "created_at": "2026-07-14T14:00:00+00:00",
+          "admin_email": "admin@parity.test",
+          "action": "stop_recording",
+          "lk_room": "r-parity-old",
+          "target_identity": null,
+          "egress_id": "EG_parity_old",
+          "result": "ok",
+          "detail": null
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/livekit/egress",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "available": false,
+        "active": [],
+        "stuck": [
+          {
+            "recording_id": "00000000-0000-4000-8000-000000000006",
+            "egress_id": "EG_parity_stuck",
+            "lk_room": "r-parity-old",
+            "owner_email": "lead@parity.test",
+            "started_at": "2026-07-17T09:00:00+00:00",
+            "age_minutes": 186
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/livekit/health",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "status": "ok",
+        "checked_at": "2026-07-17T12:00:00+00:00",
+        "recording_available": true
+      },
+      "origin": "synthetic",
+      "reason": "здоровье и статистику отдаёт сервер LiveKit; на стенде его нет"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/livekit/stats",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "active_rooms": 3,
+        "total_participants": 7,
+        "total_publishers": 5,
+        "total_subscriptions": 14,
+        "active_recordings": 1,
+        "soft_subscription_capacity": 1440,
+        "load_pct": 12,
+        "rooms": [
+          {
+            "name": "r-parity-acme",
+            "sid": "RM_r-parity-acme",
+            "num_participants": 4,
+            "num_publishers": 3,
+            "max_participants": 0,
+            "subscriptions": 12,
+            "creation_time": 1784288400,
+            "active_recording": true,
+            "domain": {
+              "room_id": "00000000-0000-4000-8000-000000000007",
+              "title": "Созвон с Acme",
+              "owner_email": "lead@parity.test",
+              "owner_id": "00000000-0000-4000-8000-000000000008",
+              "status": "active",
+              "e2ee": false,
+              "recording_enabled": true,
+              "max_participants": 0,
+              "created_at": "2026-07-14T12:00:00Z"
+            },
+            "orphan": false
+          },
+          {
+            "name": "r-parity-e2ee",
+            "sid": "RM_r-parity-e2ee",
+            "num_participants": 2,
+            "num_publishers": 2,
+            "max_participants": 0,
+            "subscriptions": 4,
+            "creation_time": 1784288400,
+            "active_recording": false,
+            "domain": {
+              "room_id": "00000000-0000-4000-8000-000000000009",
+              "title": "Юристы (E2EE)",
+              "owner_email": "lead@parity.test",
+              "owner_id": "00000000-0000-4000-8000-000000000008",
+              "status": "active",
+              "e2ee": true,
+              "recording_enabled": false,
+              "max_participants": 0,
+              "created_at": "2026-07-14T12:00:00Z"
+            },
+            "orphan": false
+          },
+          {
+            "name": "r-orphan-7f3c",
+            "sid": "RM_r-orphan-7f3c",
+            "num_participants": 1,
+            "num_publishers": 0,
+            "max_participants": 0,
+            "subscriptions": 0,
+            "creation_time": 1784288400,
+            "active_recording": false,
+            "domain": null,
+            "orphan": true
+          }
+        ]
+      },
+      "origin": "synthetic",
+      "reason": "здоровье и статистику отдаёт сервер LiveKit; на стенде его нет"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/prompts",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/tickets/unread-count",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "count": 0
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/app/builds",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000010",
+          "platform": "macos",
+          "platform_label": "macOS",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-1.4.5.dmg",
+          "size_bytes": 89438208,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000010/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000011",
+          "platform": "windows",
+          "platform_label": "Windows",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-Setup-1.4.5.exe",
+          "size_bytes": 74235904,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000011/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/auth/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "email": "admin@parity.test",
+        "username": "Администратор",
+        "phone": null,
+        "avatar_url": null,
+        "role": "admin",
+        "status": "active",
+        "is_active": true,
+        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "language": "ru",
+        "timezone": "Europe/Moscow",
+        "no_logs": false,
+        "meeting_auto_tasks": false,
+        "memory_enabled": true,
+        "leo_voice_enabled": true,
+        "leo_web_search_enabled": true,
+        "leo_kb_search_enabled": true,
+        "leo_connector_search_enabled": true,
+        "marketing_consent": false,
+        "appearance": {
+          "font": "whisperer"
+        },
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "free",
+            "name": "Free",
+            "price_rub": 0,
+            "price_usd": 0,
+            "price_eur": 0,
+            "period_days": 0,
+            "minutes_limit": 60,
+            "allow_knowledge_base": false,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": null,
+            "currency": "RUB",
+            "price": 0
+          },
+          "started_at": "2026-06-01T12:00:00Z",
+          "expires_at": null,
+          "days_left": null,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "quota": {
+          "unlimited": false,
+          "limit_minutes": 60,
+          "bonus_minutes": 0,
+          "used_minutes": 12,
+          "remaining_minutes": 48,
+          "exhausted": false
+        },
+        "features": {
+          "voice_translation": false,
+          "voice": false,
+          "teleprompter": false,
+          "premium_weekly_remaining_pct": null,
+          "premium_credit_usd": 0,
+          "premium_credit_currency": "RUB",
+          "premium_credit_amount": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "free",
+            "name": "Free",
+            "price_rub": 0,
+            "price_usd": 0,
+            "price_eur": 0,
+            "period_days": 0,
+            "minutes_limit": 60,
+            "allow_knowledge_base": false,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": null,
+            "currency": "RUB",
+            "price": 0
+          },
+          "started_at": "2026-06-01T12:00:00Z",
+          "expires_at": null,
+          "days_left": null,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "usage": {
+          "session_count": 0,
+          "minutes_used": 0,
+          "ai_questions": 0,
+          "total_tokens": 0
+        },
+        "quota": {
+          "unlimited": false,
+          "limit_minutes": 60,
+          "bonus_minutes": 0,
+          "used_minutes": 12,
+          "remaining_minutes": 48,
+          "exhausted": false
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/referral",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "code": "ADMIN2026",
+        "link": "/app/register?ref=ADMIN2026",
+        "invited": 0,
+        "converted_paid": 0,
+        "currency": "RUB",
+        "balance": 0,
+        "reward_per_referral": 500,
+        "balance_rub": 0,
+        "reward_per_referral_rub": 500
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ticker",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "weather": null,
+        "holiday": null,
+        "stats": {
+          "meetings_total": 9,
+          "minutes_total": 377,
+          "ai_answers_total": 12,
+          "tokens_total": 126144,
+          "users_total": 13
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "access_token": "parity-access_token",
+        "token_type": "Bearer",
+        "expires_in": 1800,
+        "csrf_token": "parity-csrf_token"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

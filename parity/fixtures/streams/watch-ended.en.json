@@ -1,0 +1,186 @@
+{
+  "visit": "streams/watch-ended",
+  "language": "en",
+  "persona": "free",
+  "url": "/app/live/parity-stream-ended",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "en",
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"free@parity.test\",\"username\":\"Анна Смирнова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"en\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"free\",\"name\":\"Free\",\"price_rub\":0,\"price_usd\":0,\"price_eur\":0,\"period_days\":0,\"minutes_limit\":60,\"allow_knowledge_base\":false,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":null,\"currency\":\"RUB\",\"price\":0},\"started_at\":\"2026-06-01T12:00:00Z\",\"expires_at\":null,\"days_left\":null,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":false,\"limit_minutes\":60,\"bonus_minutes\":0,\"used_minutes\":12,\"remaining_minutes\":48,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":false,\"teleprompter\":false,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/auth/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "email": "free@parity.test",
+        "username": "Анна Смирнова",
+        "phone": null,
+        "avatar_url": null,
+        "role": "user",
+        "status": "active",
+        "is_active": true,
+        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "language": "en",
+        "timezone": "Europe/Moscow",
+        "no_logs": false,
+        "meeting_auto_tasks": false,
+        "memory_enabled": true,
+        "leo_voice_enabled": true,
+        "leo_web_search_enabled": true,
+        "leo_kb_search_enabled": true,
+        "leo_connector_search_enabled": true,
+        "marketing_consent": false,
+        "appearance": {
+          "font": "whisperer"
+        },
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "free",
+            "name": "Free",
+            "price_rub": 0,
+            "price_usd": 0,
+            "price_eur": 0,
+            "period_days": 0,
+            "minutes_limit": 60,
+            "allow_knowledge_base": false,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": null,
+            "currency": "RUB",
+            "price": 0
+          },
+          "started_at": "2026-06-01T12:00:00Z",
+          "expires_at": null,
+          "days_left": null,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "quota": {
+          "unlimited": false,
+          "limit_minutes": 60,
+          "bonus_minutes": 0,
+          "used_minutes": 12,
+          "remaining_minutes": 48,
+          "exhausted": false
+        },
+        "features": {
+          "voice_translation": false,
+          "voice": false,
+          "teleprompter": false,
+          "premium_weekly_remaining_pct": null,
+          "premium_credit_usd": 0,
+          "premium_credit_currency": "RUB",
+          "premium_credit_amount": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/streams/parity-stream-ended/chat",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000003",
+          "principal": "00000000-0000-4000-8000-000000000004",
+          "author": "Мария Соколова",
+          "text": "Спасибо всем, что пришли!",
+          "at": "2026-07-15T12:28:00Z",
+          "pinned": false,
+          "from_stage": true
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000005",
+          "principal": "guest-000000000001",
+          "author": "Игорь",
+          "text": "Спасибо, было полезно",
+          "at": "2026-07-15T12:30:00Z",
+          "pinned": false,
+          "from_stage": false
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000006",
+          "principal": "guest-000000000002",
+          "author": "Светлана",
+          "text": "Где взять презентацию?",
+          "at": "2026-07-15T12:33:00Z",
+          "pinned": false,
+          "from_stage": false
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "access_token": "parity-access_token",
+        "token_type": "Bearer",
+        "expires_in": 1800,
+        "csrf_token": "parity-csrf_token"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/streams/parity-stream-ended/join",
+      "query": "",
+      "requestBody": {
+        "name": "",
+        "lang": "en"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "outcome": "ended",
+        "card": {
+          "id": "00000000-0000-4000-8000-000000000007",
+          "title": "Запуск партнёрского портала",
+          "description": "",
+          "status": "ended",
+          "started_at": "2026-07-15T12:00:00Z",
+          "ended_at": "2026-07-15T12:58:00Z",
+          "stage": {
+            "mode": "grid",
+            "pinned": null,
+            "members": [
+              {
+                "principal": "00000000-0000-4000-8000-000000000004",
+                "name": "Мария Соколова",
+                "role": "host",
+                "on_air": true,
+                "position": 0
+              }
+            ]
+          },
+          "chat_mode": "everyone",
+          "reactions_enabled": true,
+          "requests_enabled": true,
+          "registered_only": false,
+          "chat_archived": true,
+          "viewers": null
+        },
+        "entry": null,
+        "knock_token": null
+      },
+      "origin": "recorded"
+    }
+  ]
+}

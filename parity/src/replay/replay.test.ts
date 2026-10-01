@@ -141,3 +141,14 @@ test("открытый поток, дошедший до сети, — сбой 
   expect((await call(replay, "POST", "/v1/ai/agent/chat")).aborted).toBe("failed");
   expect(replay.unmatched).toEqual(["POST /v1/ai/agent/chat (открытый поток дошёл до сети)"]);
 });
+
+test("двоичное тело переопределения отдаётся байтами из base64", async () => {
+  const bytes = Buffer.from("PK\u0003\u0004 документ", "utf8");
+  const replay = new FixtureReplay(fixture([]), [{
+    method: "GET",
+    path: "/v1/file",
+    respond: { status: 200, body: bytes.toString("base64"), bodyEncoding: "base64", contentType: "application/octet-stream" },
+    reason: "тест",
+  }]);
+  expect((await call(replay, "GET", "/v1/file")).fulfilled?.body).toBe(bytes.toString("utf8"));
+});

@@ -4,6 +4,7 @@
 
 import type { Page } from "@playwright/test";
 
+import type { JsonValue } from "../../fixtures/format.ts";
 import type { Translate } from "../../i18n/texts.ts";
 
 /** Языки записи по умолчанию — языки полной матрицы съёмки. */
@@ -13,6 +14,19 @@ export interface VisitContext {
   readonly language: string;
   /** Тексты интерфейса черновика на языке записи. */
   readonly t: Translate;
+}
+
+/**
+ * Ответ, который стенд записи дать не может (сервер LiveKit, внешние API), но от
+ * которого зависит, какие ещё запросы сделает страница. Запись отвечает им вместо
+ * API и сохраняет обмен как синтетический, с причиной.
+ */
+export interface VisitStub {
+  readonly method: string;
+  readonly path: string;
+  readonly status: number;
+  readonly body: JsonValue;
+  readonly reason: string;
 }
 
 export interface Visit {
@@ -42,4 +56,15 @@ export interface Visit {
    * профиля персоны: черновик переключает интерфейс на язык профиля.
    */
   readonly languages?: readonly string[];
+  /** Дополнительные ключи localStorage: имя анонимного зрителя трансляции. */
+  readonly storage?: Readonly<Record<string, string>>;
+  /** Ключи sessionStorage до загрузки страницы: заявка зрителя на вход в эфир. */
+  readonly session?: Readonly<Record<string, string>>;
+  /**
+   * Запросы «МЕТОД путь», которые запись не пропускает к API: они остаются без
+   * ответа и в фикстуру не попадают. Только для запросов, которые черновик
+   * повторяет без конца (список зала студии), — их ответ задаёт состояние.
+   */
+  readonly hold?: readonly string[];
+  readonly stubs?: readonly VisitStub[];
 }

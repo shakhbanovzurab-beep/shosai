@@ -20,7 +20,7 @@ from meetassist.models.session import Session
 from meetassist.models.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from stable_ids import ICAL_TOKEN, ROOM_INVITE, STREAM_INVITE
+from stable_ids import ICAL_TOKEN, ROOM_INVITE, ROOMS, STREAM_INVITE, STREAMS
 
 _ZONE = "Europe/Moscow"
 _GOOGLE_ACCOUNT = "maria.sokolova@gmail.com"
@@ -51,13 +51,13 @@ _EVENTS = (
 
 async def seed_calendar(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session]) -> None:
     """Засевает календарь владельца, его подключение Google и ссылку iCal."""
-    room = Room(owner_id=owner.id, name="Созвон с Acme", lk_room_name="r-parity-acme", invite_token=ROOM_INVITE,
+    room = Room(id=ROOMS["acme"], owner_id=owner.id, name="Созвон с Acme", lk_room_name="r-parity-acme", invite_token=ROOM_INVITE,
                 status="active", created_at=clock - timedelta(days=3))
-    stage = Room(owner_id=owner.id, name="Эфир: итоги квартала", lk_room_name="r-parity-stream",
+    stage = Room(id=ROOMS["stage"], owner_id=owner.id, name="Эфир: итоги квартала", lk_room_name="r-parity-stream",
                  invite_token=STREAM_INVITE, status="active", created_at=clock - timedelta(days=3))
     db.add_all([room, stage])
     await db.flush()
-    stream = Stream(owner_id=owner.id, room_id=stage.id, title="Эфир: итоги квартала",
+    stream = Stream(id=STREAMS["quarter"], owner_id=owner.id, room_id=stage.id, title="Эфир: итоги квартала",
                     description="Итоги второго квартала для всей компании", status="scheduled",
                     created_at=clock - timedelta(days=3))
     db.add(stream)

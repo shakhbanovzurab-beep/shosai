@@ -57,6 +57,9 @@ fi
   -c "DROP DATABASE IF EXISTS draft" \
   -c "CREATE DATABASE draft TEMPLATE draft_seeded" >/dev/null
 "${compose[@]}" exec -T draft-redis redis-cli FLUSHALL >/dev/null
+# Значения, которые черновик держит только в Redis (число зрителей эфира):
+# каждый прогон начинает с них.
+"${compose[@]}" exec -T draft-redis redis-cli <recording/seed/redis.txt >/dev/null
 "${compose[@]}" up -d --wait --force-recreate draft-api
 
 api_date=$("${compose[@]}" exec -T draft-api python -c "import datetime; print(datetime.datetime.now(datetime.UTC).date())")

@@ -4,6 +4,7 @@
 
 import type { Page } from "@playwright/test";
 
+import type { MediaAccess } from "../determinism/media-access.ts";
 import type { JsonValue } from "../fixtures/format.ts";
 import type { Translate } from "../i18n/texts.ts";
 import type { Scope, ViewportName } from "../matrix.ts";
@@ -13,6 +14,8 @@ export interface OverrideResponse {
   readonly status: number;
   readonly body: JsonValue;
   readonly contentType?: string;
+  /** Тело — двоичные данные в base64 (документ Office для просмотра файла). */
+  readonly bodyEncoding?: "base64";
 }
 
 /**
@@ -103,10 +106,17 @@ export interface State {
   /** Кадры веб-сокетов: голосовой режим, напоминания. По умолчанию сокеты молчат. */
   readonly sockets?: readonly SocketScript[];
   /**
+   * Ответ браузера на запрос камеры и микрофона: отказ пользователя или запрос,
+   * который ещё ждёт ответа. По умолчанию доступ есть (поддельное устройство).
+   */
+  readonly mediaAccess?: MediaAccess;
+  /**
    * Дополнительные ключи localStorage: то, что фронтенд хранит в браузере
    * (переписка Leo). Ключи зависят от id пользователя фикстуры.
    */
   readonly storage?: (seed: StorageSeed) => Readonly<Record<string, string>>;
+  /** Ключи sessionStorage: заявка зрителя на вход в эфир. */
+  readonly session?: Readonly<Record<string, string>>;
   /**
    * Маркер ниже края экрана (конец длинной страницы, низ окна): когда страница
    * успокоилась, поставить его в центр области прокрутки и дождаться покоя ещё раз.

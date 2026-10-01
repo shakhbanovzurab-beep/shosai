@@ -57,6 +57,9 @@ PERSONAS: tuple[Persona, ...] = (
     Persona("admin", "Администратор", "ADMIN2026", role="admin", onboarding=None),
     Persona("banned", "Илья Зайцев", "ILYA2026", status="banned"),
     Persona("editor", "Карина Белова", "KARINA2026"),
+    #: Квоты файлов: 92 % тарифа Pro и перебор (files_seed.py).
+    Persona("quota", "Олег Зуев", "OLEG2026", tariff="pro_1m"),
+    Persona("overquota", "Полина Ершова", "POLINA2026", tariff="pro_1m"),
     #: Рабочее пространство целиком: встречи, календарь, контекст, база знаний.
     Persona("lead", "Мария Соколова", "MARIA2026", registered_days_ago=120, tariff="pro_1m", paid_days_ago=10),
 )

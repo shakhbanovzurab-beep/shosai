@@ -1,0 +1,62 @@
+{
+  "visit": "streams/watch-wait",
+  "language": "ru",
+  "persona": null,
+  "url": "/app/live/parity-stream-live",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru",
+    "wh.stream.name": "Гость"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/streams/knock/parity-knock-wait",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "outcome": "wait",
+        "card": {
+          "id": "00000000-0000-4000-8000-000000000001",
+          "title": "Квартальные итоги продаж",
+          "description": "",
+          "status": "live",
+          "started_at": "2026-07-17T11:35:00Z",
+          "ended_at": null,
+          "stage": {
+            "mode": "grid",
+            "pinned": null,
+            "members": [
+              {
+                "principal": "00000000-0000-4000-8000-000000000002",
+                "name": "Мария Соколова",
+                "role": "host",
+                "on_air": true,
+                "position": 0
+              },
+              {
+                "principal": "00000000-0000-4000-8000-000000000003",
+                "name": "Жанна Морозова",
+                "role": "speaker",
+                "on_air": true,
+                "position": 1
+              }
+            ]
+          },
+          "chat_mode": "everyone",
+          "reactions_enabled": true,
+          "requests_enabled": true,
+          "registered_only": false,
+          "chat_archived": true,
+          "viewers": 128
+        },
+        "entry": null,
+        "knock_token": "parity-knock-wait"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

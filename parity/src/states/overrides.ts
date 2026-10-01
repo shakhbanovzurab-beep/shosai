@@ -81,3 +81,13 @@ export function streamBody(events: readonly StreamEvent[]): string {
 export function rateLimited(method: string, path: string, limit: string): Override {
   return reply(method, path, 429, { error: `Rate limit exceeded: ${limit}` }, "лимиты на стенде записи выключены; тело — обработчик slowapi черновика");
 }
+
+/** Содержимое файла как есть: текст под своим типом (не JSON). */
+export function content(method: string, path: string, body: string, contentType: string, reason: string): Override {
+  return { method, path, respond: { status: 200, body, contentType }, reason };
+}
+
+/** Двоичное содержимое файла (документ Office): тело уходит байтами. */
+export function binary(method: string, path: string, bytes: Buffer, contentType: string, reason: string): Override {
+  return { method, path, respond: { status: 200, body: bytes.toString("base64"), bodyEncoding: "base64", contentType }, reason };
+}

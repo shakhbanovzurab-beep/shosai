@@ -92,8 +92,10 @@ Requests to any other host are aborted: analytics, the CloudPayments widget and 
   - A finished server-sent event stream is an ordinary reply with the whole body.
   - A stream still being written is an open stream. A shim over `fetch` in the page sends its events and never ends it.
   - WebSocket frames for `/v1/ws/...` are a script on the state: frames on connect and frames after the page's first message (step 5).
+  - A socket to another host, the LiveKit media server, is closed; a script for it with no frames keeps the room connecting (step 6).
   - The conversation of Leo lives in the browser, so the state seeds it into localStorage.
 - A state is a **fixture** + **overrides**: an error status, an empty list, a held request for the loading state, a network failure. Each override is synthetic and needs a reason.
+- File previews read content the recording stack cannot serve without S3. A state answers `content` with text or bytes (sample DOCX and XLSX built in memory), and points a synthetic `download-url` at a stand-in object store that serves a sample image and PDF (step 6).
 - A short, closed list of background requests is answered by default when a fixture lacks them, because they fire later than a recording ends: analytics flushes, the satisfaction prompt after 25 s, the connection probe.
 - Replay is strict. A request with no matching response fails the test and is reported by name. The draft's tool answered unknown paths with `[]`, which made broken screens look clean.
 - Recorded fixtures have the draft's real shapes by construction. Synthetic fixtures are validated in CI against the draft's OpenAPI from D1 (`contracts/draft/`), so an invented or renamed field fails before any screenshot is taken.
@@ -122,7 +124,7 @@ Scope rule:
 
 Selectors use roles, `aria-label`, visible text and `data-onboarding` anchors, so the same definition drives the draft and v2. Visible texts come from the draft's translation catalogs by key (`t("auth:titleLogin")`, generated into `src/i18n/texts.json`), so one definition works in all 16 languages. Draft class names are used only where nothing else exists (`.onb-card`), so F2 can keep them or replace the selector.
 
-A state can also restrict its viewports (the mobile drawer exists only on a phone), mask a region that follows real time (a "resend in 60 s" countdown), and raise its tolerance. A mask and a tolerance each need a written reason.
+A state can also restrict its viewports (the mobile drawer exists only on a phone), mask a region that follows real time (a "resend in 60 s" countdown) or a live device (the fake camera's picture), and raise its tolerance. A mask and a tolerance each need a written reason. It can set the browser's answer to the camera request (denied, or never answered) and sessionStorage keys (step 6).
 
 ### 3.5 Determinism
 
@@ -134,7 +136,8 @@ The pilot recipe, applied to every state:
 - pointer parked;
 - captcha and sign-in SDK stubs;
 - service workers blocked;
-- a secure-context origin (`http://parity.localhost`) and a fake microphone, so voice, recording and push render as in production (step 5);
+- a secure-context origin (`http://parity.localhost`) and a fake microphone and camera, so voice, recording, push and the room preview render as in production (step 5, camera in step 6);
+- a silent Web Speech recogniser: the meeting assistant listens and hears nothing, and no audio leaves the browser (step 6);
 - an interaction starts only once the page has settled (fonts loaded, 500 ms without API requests and DOM changes) (step 5);
 - Chromium partial raster off: an interaction on a drawn page otherwise redraws only the changed rectangles inside existing tiles, and anti-aliasing at their edges varied from run to run (step 5);
 - greyscale text anti-aliasing (`--disable-lcd-text`): Chromium draws subpixel text only outside composited layers, and blocks with an entry animation entered and left a layer depending on timing, so the same text came out coloured or grey (step 5);
@@ -154,6 +157,11 @@ Measured in step 5: 495 states, 1063 screenshots, 86.3 MB in the bucket; `baseli
   - the Acme hub on meeting chips and library cards;
   - the origin `parity.localhost` in share, referral and iCal links.
 - **Masks.** One mask was added: the waveform and timer of the Leo voice recorder.
+
+Measured in step 6: 663 states, 1346 screenshots, 100.2 MB in the bucket; `baseline` and two `verify` runs matched with zero tolerance, the first restoring every image from S3. All 100 visits were recorded twice, byte-identical.
+- **Data changes on earlier screens.** One earlier screenshot changed: `shell.palette.results`, because the palette search now also finds a seeded tracker task. The new personas raise the user count in the admin data, which no earlier screen shows.
+- **Masks.** One mask was added: the fake camera's moving picture in the room preview.
+- **Harness browser limits.** Chromium headless shell has no PDF viewer and formats native date fields by its build, not by the page locale; both targets are drawn in the same browser, so the comparison is unaffected (inventory, «Coverage in the screenshot matrix», step 6).
 
 ### 3.6 Recording from the draft backend
 
@@ -220,7 +228,7 @@ Each step is one session, ends with checks and a report, and is committed after 
 | 3b | The remaining states of the shell, auth, account and billing group (inventory: shell-auth-account-billing.md), on the core of step 3:<br>• loading, empty and error variants through overrides;<br>• sign-in by social networks and consent;<br>• registration and reset validation;<br>• onboarding: tour steps on this group's routes, finish, checklist, launchers;<br>• billing flows: upgrade, promo, checkout, card sheet, renewal, payment issues;<br>• connection overlay, toasts, error boundary, command palette.<br>Tour steps 5–18 run on other features' routes and join the steps of those features. Every state of the group is screenshotted, captured inside another state, or left out with a reason (inventory, «Coverage in the screenshot matrix»). | `verify` shows 0 differences for those states |
 | 4 | Meetings, calendar, context, knowledge, search (inventory: meetings-calendar-knowledge.md):<br>• seed persona `lead` with the whole workspace; ids shared by seed and visits in `recording/seed/ids.json`;<br>• library, import, meeting page (document, AI version, mind map, impact, share, menus, transcript), templates, integrations, shared page `/r/:token`;<br>• calendar views, event and stream dialogs, calendar integrations;<br>• context, knowledge base files, sources and connect flows; palette results.<br>Streams that send events over time join step 5. | same, for these states |
 | 5 | Leo, prompts, models, MCP, hub (inventory: leo-prompts-models-mcp-hub.md):<br>• replay of open SSE streams and WebSocket frames on the state; the Leo conversation seeded in localStorage; the harness origin `http://parity.localhost` is a secure context, with a fake microphone;<br>• seed for `lead`: the Leo tab, MCP, hubs with boards and the Acme history of facts, prompts, skills, AI spend; two registry models from `admin`;<br>• Leo widget (panel, conversation content, streaming, actions, composer, mentions, voice, reminders), Leo cabinet tab, MCP tab and consent screen, prompts, skills, editor and test run, models, admin AI models, hubs;<br>• also the meeting AI version and mind map while their streams send text.<br>Done: 180 states, 288 screenshots | same, for these states |
-| 6 | Rooms, streams, storage, tracker (WebSocket replay; SFU states excluded) | same |
+| 6 | Rooms, streams, storage, tracker (inventory: rooms-streams-storage-tracker.md):<br>• fake LiveKit keys in the recording stack: room tokens and stream passes are signed locally; the harness closes the media server socket, so rooms stay «Не удалось подключиться» and everything drawn over HTTP is captured; SFU states excluded (decision 3);<br>• seed for `lead`: rooms with recordings and the LiveKit audit log, streams (live, ended, members only) with chat, hands and a waiting room, a file tree with share links, tracker boards with Jira links; personas `quota` and `overquota`;<br>• host and guest rooms, LiveKit admin, stream viewer and studio, files with every preview kind and the share dialog, public share pages, tracker projects, board and Jira.<br>Done: 168 states, 283 screenshots | same, for these states |
 | 7 | Admin, product analytics, analytics, satisfaction, support | same |
 | 8 | Locale sweep, full baseline in S3, full `verify`, status `done` | the prompt's definition of done |
 

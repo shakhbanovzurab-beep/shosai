@@ -19,12 +19,14 @@ import { normalizeFixture } from "./normalize.ts";
 import { signIn } from "./session.ts";
 import { ACCOUNT_VISITS } from "./visits/account.ts";
 import { AUTH_VISITS } from "./visits/auth.ts";
+import { FILES_VISITS } from "./visits/files.ts";
 import { MEETINGS_VISITS } from "./visits/meetings.ts";
+import { ROOMS_VISITS } from "./visits/rooms.ts";
 import { LEO_VISITS } from "./visits/leo.ts";
 import { DEFAULT_LANGUAGES, type Visit } from "./visits/types.ts";
 import { WORKSPACE_VISITS } from "./visits/workspace.ts";
 
-const VISITS: readonly Visit[] = [...AUTH_VISITS, ...ACCOUNT_VISITS, ...MEETINGS_VISITS, ...WORKSPACE_VISITS, ...LEO_VISITS];
+const VISITS: readonly Visit[] = [...AUTH_VISITS, ...ACCOUNT_VISITS, ...MEETINGS_VISITS, ...WORKSPACE_VISITS, ...LEO_VISITS, ...ROOMS_VISITS, ...FILES_VISITS];
 
 /** Персона изменяющего визита не встречается в других визитах; id уникальны. */
 function assertConsistentVisits(visits: readonly Visit[]): void {
@@ -51,17 +53,27 @@ for (const language of languages) {
     for (const visit of VISITS.filter((v) => (v.languages ?? DEFAULT_LANGUAGES).includes(language))) {
       test(`${visit.id}.${language}`, async ({ page, context }) => {
         const session = visit.persona === null ? null : await signIn(context, visit.persona);
-        const storage: Record<string, string> = { "wh.theme": "light", "wh.lang": language };
+        const storage: Record<string, string> = { "wh.theme": "light", "wh.lang": language, ...visit.storage };
         if (session !== null) {
           const user = { ...session.user, language };
           storage["wh-auth"] = JSON.stringify({ state: { csrfToken: session.csrfToken, user }, version: 0 });
         }
-        await installPageSetup(context, { storage, randomSeed: RANDOM_SEED, freezeMotion: false, persistentAnimations: [] });
+        await installPageSetup(context, {
+          storage,
+          ...(visit.session === undefined ? {} : { session: visit.session }),
+          randomSeed: RANDOM_SEED,
+          freezeMotion: false,
+          persistentAnimations: [],
+        });
 
         const journal = new ExchangeJournal(visit.country ?? "RU", language);
-        // Сокеты (/v1/ws/user) открываются без сервера: кадров нет, как у
-        // пользователя без событий, и запись от них не зависит.
-        await context.routeWebSocket(/\/v1\/ws\//, () => undefined);
+        // Сокеты своего API (/v1/ws/user) открываются без сервера: кадров нет,
+        // как у пользователя без событий, и запись от них не зависит. Сокеты на
+        // чужие хосты (медиасервер из ответа на вход в комнату) закрываются: в
+        // сеть запись не ходит.
+        await context.routeWebSocket(/.*/, (socket) => {
+          if (!new URL(socket.url()).pathname.startsWith("/v1/")) void socket.close();
+        });
         await context.route("**/*", async (route) => {
           const url = new URL(route.request().url());
           if (url.origin !== ORIGIN) {
@@ -69,6 +81,10 @@ for (const language of languages) {
             if (stub === null) return route.abort("blockedbyclient");
             return route.fulfill({ status: 200, contentType: stub.contentType, body: stub.body });
           }
+          const call = `${route.request().method()} ${url.pathname}`;
+          if ((visit.hold ?? []).includes(call)) return undefined;
+          const stub = visit.stubs?.find((candidate) => `${candidate.method} ${candidate.path}` === call);
+          if (stub !== undefined) return journal.stub(route, url, stub);
           if (url.pathname.startsWith("/v1/")) return journal.proxy(route, url);
           return serveSite(route, url, site);
         });

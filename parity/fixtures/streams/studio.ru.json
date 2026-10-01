@@ -1,0 +1,339 @@
+{
+  "visit": "streams/studio",
+  "language": "ru",
+  "persona": "lead",
+  "url": "/app/studio/00000000-0000-4000-8000-000000000004",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru",
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"lead@parity.test\",\"username\":\"Мария Соколова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"pro_1m\",\"name\":\"Pro (31 день)\",\"price_rub\":1990,\"price_usd\":27,\"price_eur\":24,\"period_days\":31,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":107374182400,\"currency\":\"RUB\",\"price\":1990},\"started_at\":\"2026-07-07T12:00:00Z\",\"expires_at\":\"2026-08-07T12:00:00Z\",\"days_left\":21,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":true,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/auth/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "email": "lead@parity.test",
+        "username": "Мария Соколова",
+        "phone": null,
+        "avatar_url": null,
+        "role": "user",
+        "status": "active",
+        "is_active": true,
+        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "language": "ru",
+        "timezone": "Europe/Moscow",
+        "no_logs": false,
+        "meeting_auto_tasks": false,
+        "memory_enabled": true,
+        "leo_voice_enabled": true,
+        "leo_web_search_enabled": true,
+        "leo_kb_search_enabled": true,
+        "leo_connector_search_enabled": true,
+        "marketing_consent": false,
+        "appearance": {
+          "font": "whisperer"
+        },
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "pro_1m",
+            "name": "Pro (31 день)",
+            "price_rub": 1990,
+            "price_usd": 27,
+            "price_eur": 24,
+            "period_days": 31,
+            "minutes_limit": null,
+            "allow_knowledge_base": true,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": 107374182400,
+            "currency": "RUB",
+            "price": 1990
+          },
+          "started_at": "2026-07-07T12:00:00Z",
+          "expires_at": "2026-08-07T12:00:00Z",
+          "days_left": 21,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "quota": {
+          "unlimited": true,
+          "limit_minutes": null,
+          "bonus_minutes": 0,
+          "used_minutes": null,
+          "remaining_minutes": null,
+          "exhausted": false
+        },
+        "features": {
+          "voice_translation": false,
+          "voice": true,
+          "teleprompter": true,
+          "premium_weekly_remaining_pct": null,
+          "premium_credit_usd": 0,
+          "premium_credit_currency": "RUB",
+          "premium_credit_amount": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/rooms/00000000-0000-4000-8000-000000000003/recordings",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/storage/stats",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "used_bytes": 999870144,
+        "limit_bytes": 107374182400,
+        "available_bytes": 106374312256,
+        "over_limit": false,
+        "over_limit_since": null,
+        "grace_deadline": null,
+        "max_file_bytes": 5368709120
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/streams/00000000-0000-4000-8000-000000000004",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000004",
+        "room_id": "00000000-0000-4000-8000-000000000003",
+        "status": "live",
+        "settings": {
+          "title": "Квартальные итоги продаж",
+          "description": "",
+          "speaker_limit": 10,
+          "registered_only": false,
+          "manual_admit": false,
+          "chat_mode": "everyone",
+          "reactions_enabled": true,
+          "requests_enabled": true,
+          "save_chat": true
+        },
+        "stage": {
+          "mode": "grid",
+          "pinned": null,
+          "members": [
+            {
+              "principal": "00000000-0000-4000-8000-000000000001",
+              "name": "Мария Соколова",
+              "role": "host",
+              "on_air": true,
+              "position": 0
+            },
+            {
+              "principal": "00000000-0000-4000-8000-000000000005",
+              "name": "Жанна Морозова",
+              "role": "speaker",
+              "on_air": true,
+              "position": 1
+            }
+          ]
+        },
+        "requests": [
+          {
+            "id": "00000000-0000-4000-8000-000000000006",
+            "principal": "00000000-0000-4000-8000-000000000007",
+            "name": "Егор Волков",
+            "requested_at": "2026-07-17T12:00:00Z"
+          }
+        ],
+        "admissions": [
+          {
+            "id": "00000000-0000-4000-8000-000000000008",
+            "name": "Олег Петров",
+            "requested_at": "2026-07-17T12:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000009",
+            "name": "Гость",
+            "requested_at": "2026-07-17T12:00:00Z"
+          }
+        ],
+        "started_at": "2026-07-17T11:35:00Z",
+        "ended_at": null,
+        "watch_url": "http://parity.localhost/live/parity-stream-live",
+        "viewers": 128,
+        "max_speaker_limit": 20
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/streams/live/chat",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000010",
+          "principal": "00000000-0000-4000-8000-000000000001",
+          "author": "Мария Соколова",
+          "text": "Добрый день! Начинаем через минуту.",
+          "at": "2026-07-17T11:36:00Z",
+          "pinned": false,
+          "from_stage": true
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000011",
+          "principal": "guest-000000000001",
+          "author": "Олег",
+          "text": "Звук отличный, всё слышно",
+          "at": "2026-07-17T11:38:00Z",
+          "pinned": false,
+          "from_stage": false
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000012",
+          "principal": "00000000-0000-4000-8000-000000000005",
+          "author": "Жанна Морозова",
+          "text": "Сегодня покажу итоги квартала по продажам",
+          "at": "2026-07-17T11:40:00Z",
+          "pinned": true,
+          "from_stage": true
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000013",
+          "principal": "guest-000000000002",
+          "author": "Анна",
+          "text": "Будет ли запись эфира?",
+          "at": "2026-07-17T11:45:00Z",
+          "pinned": false,
+          "from_stage": false
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000014",
+          "principal": "00000000-0000-4000-8000-000000000001",
+          "author": "Мария Соколова",
+          "text": "Да, запись пришлём всем участникам",
+          "at": "2026-07-17T11:46:00Z",
+          "pinned": false,
+          "from_stage": true
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/streams/live/state",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "status": "live",
+        "stage": {
+          "mode": "grid",
+          "pinned": null,
+          "members": [
+            {
+              "principal": "00000000-0000-4000-8000-000000000001",
+              "name": "Мария Соколова",
+              "role": "host",
+              "on_air": true,
+              "position": 0
+            },
+            {
+              "principal": "00000000-0000-4000-8000-000000000005",
+              "name": "Жанна Морозова",
+              "role": "speaker",
+              "on_air": true,
+              "position": 1
+            }
+          ]
+        },
+        "role": "host",
+        "chat_mode": "everyone",
+        "reactions_enabled": true,
+        "requests_enabled": true,
+        "pinned_message": {
+          "id": "00000000-0000-4000-8000-000000000012",
+          "principal": "00000000-0000-4000-8000-000000000005",
+          "author": "Жанна Морозова",
+          "text": "Сегодня покажу итоги квартала по продажам",
+          "at": "2026-07-17T11:40:00Z",
+          "pinned": true,
+          "from_stage": true
+        },
+        "my_request": null,
+        "viewers": 128,
+        "requests": [
+          {
+            "id": "00000000-0000-4000-8000-000000000006",
+            "principal": "00000000-0000-4000-8000-000000000007",
+            "name": "Егор Волков",
+            "requested_at": "2026-07-17T12:00:00Z"
+          }
+        ],
+        "admissions": [
+          {
+            "id": "00000000-0000-4000-8000-000000000008",
+            "name": "Олег Петров",
+            "requested_at": "2026-07-17T12:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000009",
+            "name": "Гость",
+            "requested_at": "2026-07-17T12:00:00Z"
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "access_token": "parity-access_token",
+        "token_type": "Bearer",
+        "expires_in": 1800,
+        "csrf_token": "parity-csrf_token"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/me/streams/00000000-0000-4000-8000-000000000004/token",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "token": "parity.jwt.token",
+        "url": "wss://livekit.parity.localhost",
+        "room": "r-parity-live",
+        "identity": "00000000-0000-4000-8000-000000000001__00000001",
+        "role": "host",
+        "can_publish": true,
+        "can_publish_data": true
+      },
+      "origin": "recorded"
+    }
+  ]
+}

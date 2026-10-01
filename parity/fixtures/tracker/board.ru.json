@@ -1,0 +1,939 @@
+{
+  "visit": "tracker/board",
+  "language": "ru",
+  "persona": "lead",
+  "url": "/app/tracker/00000000-0000-4000-8000-000000000019",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru",
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"lead@parity.test\",\"username\":\"Мария Соколова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"pro_1m\",\"name\":\"Pro (31 день)\",\"price_rub\":1990,\"price_usd\":27,\"price_eur\":24,\"period_days\":31,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":107374182400,\"currency\":\"RUB\",\"price\":1990},\"started_at\":\"2026-07-07T12:00:00Z\",\"expires_at\":\"2026-08-07T12:00:00Z\",\"days_left\":21,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":true,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+  },
+  "exchanges": [
+    {
+      "method": "DELETE",
+      "path": "/v1/me/tracker/statuses/00000000-0000-4000-8000-000000000003",
+      "query": "",
+      "status": 422,
+      "contentType": "application/json",
+      "body": {
+        "detail": "Нельзя удалить колонку с задачами: сначала перенесите или удалите их"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/context",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000004",
+        "text": "Я руководитель продуктового направления в финтех-компании, отвечаю за партнёрский портал и продажи крупным клиентам.\n\nОтвечай коротко и по делу, на «ты». Цифры показывай таблицей, сроки — датами.\n\nСейчас в фокусе: бюджет на четвёртый квартал, проект «Северный ветер» и внедрение у клиента Acme. Ключевые люди: Иван Петров (финансы), Ольга Ким (маркетинг), Дмитрий Орлов (разработка).\n\nНе предлагай решения, которые увеличивают расходы на офлайн-ивенты: мы их сокращаем. Если вопрос касается договоров, напомни согласовать с юристом.",
+        "roles": [
+          "responses",
+          "agent"
+        ],
+        "updated_at": "2026-07-15T12:00:00Z",
+        "files": [
+          {
+            "id": "00000000-0000-4000-8000-000000000005",
+            "filename": "profile.md",
+            "mime_type": "text/markdown",
+            "size_bytes": 2100,
+            "created_at": "2026-07-07T12:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000006",
+            "filename": "projects/q4/budget-plan.md",
+            "mime_type": "text/markdown",
+            "size_bytes": 5400,
+            "created_at": "2026-07-08T12:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000007",
+            "filename": "projects/q4/notes/risks.txt",
+            "mime_type": "text/plain",
+            "size_bytes": 1800,
+            "created_at": "2026-07-09T12:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000008",
+            "filename": "docs/api/spec.yaml",
+            "mime_type": "application/yaml",
+            "size_bytes": 9300,
+            "created_at": "2026-07-10T12:00:00Z"
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/prompts",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "name": "Ответы на звонках продаж",
+          "version_tag": "v3",
+          "system_prompt": "Ты помогаешь на звонках с клиентом {{client}}. Отвечай коротко, опирайся на прошлые договорённости и не обещай скидок без согласования.",
+          "user_prompt_template": "Клиент: {{client}}\nВопрос: {{question}}",
+          "variable_schema": {
+            "client": {
+              "type": "string"
+            }
+          },
+          "llm_config": null,
+          "is_active": true,
+          "role": "responses",
+          "tags": [
+            "продажи",
+            "эфир"
+          ],
+          "is_archived": false,
+          "id": "00000000-0000-4000-8000-000000000009",
+          "created_at": "2026-07-16T12:00:00Z",
+          "skills": []
+        },
+        {
+          "name": "Разбор скриншотов",
+          "version_tag": "v1",
+          "system_prompt": "Опиши, что на скриншоте, и предложи ответ.",
+          "user_prompt_template": "",
+          "variable_schema": null,
+          "llm_config": null,
+          "is_active": true,
+          "role": "vision",
+          "tags": [
+            "скриншоты"
+          ],
+          "is_archived": false,
+          "id": "00000000-0000-4000-8000-000000000010",
+          "created_at": "2026-07-14T12:00:00Z",
+          "skills": []
+        },
+        {
+          "name": "Собеседование: Python",
+          "version_tag": "v2",
+          "system_prompt": "Помогай решать задачи на Python: сначала идея, потом код и сложность.",
+          "user_prompt_template": "",
+          "variable_schema": null,
+          "llm_config": null,
+          "is_active": true,
+          "role": "coding",
+          "tags": [
+            "собеседование",
+            "python"
+          ],
+          "is_archived": false,
+          "id": "00000000-0000-4000-8000-000000000011",
+          "created_at": "2026-07-12T12:00:00Z",
+          "skills": [
+            {
+              "skill_id": "00000000-0000-4000-8000-000000000012",
+              "slug": "code-review",
+              "description": "Чек-лист code-review: шаги и критерии",
+              "mode": "append"
+            },
+            {
+              "skill_id": "00000000-0000-4000-8000-000000000013",
+              "slug": "star-method",
+              "description": "Чек-лист star-method: шаги и критерии",
+              "mode": "replace"
+            }
+          ]
+        },
+        {
+          "name": "Тренер по System Design",
+          "version_tag": "v1",
+          "system_prompt": "Веди разбор архитектуры: требования, оценка нагрузки, компоненты, компромиссы.",
+          "user_prompt_template": "",
+          "variable_schema": null,
+          "llm_config": null,
+          "is_active": true,
+          "role": "system_design",
+          "tags": [
+            "собеседование"
+          ],
+          "is_archived": false,
+          "id": "00000000-0000-4000-8000-000000000014",
+          "created_at": "2026-07-09T12:00:00Z",
+          "skills": []
+        },
+        {
+          "name": "Заметки встречи",
+          "version_tag": "v1",
+          "system_prompt": "Собери итоги встречи: решения, задачи, сроки.",
+          "user_prompt_template": "",
+          "variable_schema": null,
+          "llm_config": null,
+          "is_active": true,
+          "role": "generation",
+          "tags": [
+            "заметки"
+          ],
+          "is_archived": false,
+          "id": "00000000-0000-4000-8000-000000000015",
+          "created_at": "2026-07-05T12:00:00Z",
+          "skills": []
+        },
+        {
+          "name": "Черновик ответов (старый)",
+          "version_tag": "v1",
+          "system_prompt": "Отвечай развёрнуто.",
+          "user_prompt_template": "",
+          "variable_schema": null,
+          "llm_config": null,
+          "is_active": false,
+          "role": "responses",
+          "tags": [
+            "черновик"
+          ],
+          "is_archived": false,
+          "id": "00000000-0000-4000-8000-000000000016",
+          "created_at": "2026-06-27T12:00:00Z",
+          "skills": []
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/app/builds",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000017",
+          "platform": "macos",
+          "platform_label": "macOS",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-1.4.5.dmg",
+          "size_bytes": 89438208,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000017/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000018",
+          "platform": "windows",
+          "platform_label": "Windows",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-Setup-1.4.5.exe",
+          "size_bytes": 74235904,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000018/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/auth/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "email": "lead@parity.test",
+        "username": "Мария Соколова",
+        "phone": null,
+        "avatar_url": null,
+        "role": "user",
+        "status": "active",
+        "is_active": true,
+        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "language": "ru",
+        "timezone": "Europe/Moscow",
+        "no_logs": false,
+        "meeting_auto_tasks": false,
+        "memory_enabled": true,
+        "leo_voice_enabled": true,
+        "leo_web_search_enabled": true,
+        "leo_kb_search_enabled": true,
+        "leo_connector_search_enabled": true,
+        "marketing_consent": false,
+        "appearance": {
+          "font": "whisperer"
+        },
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "pro_1m",
+            "name": "Pro (31 день)",
+            "price_rub": 1990,
+            "price_usd": 27,
+            "price_eur": 24,
+            "period_days": 31,
+            "minutes_limit": null,
+            "allow_knowledge_base": true,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": 107374182400,
+            "currency": "RUB",
+            "price": 1990
+          },
+          "started_at": "2026-07-07T12:00:00Z",
+          "expires_at": "2026-08-07T12:00:00Z",
+          "days_left": 21,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "quota": {
+          "unlimited": true,
+          "limit_minutes": null,
+          "bonus_minutes": 0,
+          "used_minutes": null,
+          "remaining_minutes": null,
+          "exhausted": false
+        },
+        "features": {
+          "voice_translation": false,
+          "voice": true,
+          "teleprompter": true,
+          "premium_weekly_remaining_pct": null,
+          "premium_credit_usd": 0,
+          "premium_credit_currency": "RUB",
+          "premium_credit_amount": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "pro_1m",
+            "name": "Pro (31 день)",
+            "price_rub": 1990,
+            "price_usd": 27,
+            "price_eur": 24,
+            "period_days": 31,
+            "minutes_limit": null,
+            "allow_knowledge_base": true,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": 107374182400,
+            "currency": "RUB",
+            "price": 1990
+          },
+          "started_at": "2026-07-07T12:00:00Z",
+          "expires_at": "2026-08-07T12:00:00Z",
+          "days_left": 21,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "usage": {
+          "session_count": 9,
+          "minutes_used": 377,
+          "ai_questions": 0,
+          "total_tokens": 0
+        },
+        "quota": {
+          "unlimited": true,
+          "limit_minutes": null,
+          "bonus_minutes": 0,
+          "used_minutes": null,
+          "remaining_minutes": null,
+          "exhausted": false
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/jira/links/00000000-0000-4000-8000-000000000019",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "connected": true,
+        "account": "Мария Соколова",
+        "project_key": "ACME",
+        "project_name": "Acme Implementation",
+        "site_url": "https://acme.atlassian.net",
+        "last_sync_at": "2026-07-17T10:00:00Z",
+        "last_error": null,
+        "live": true
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/onboarding",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "status": "completed",
+        "audio_status": "declined",
+        "version": 1,
+        "current_step": null,
+        "completed_steps": [],
+        "done_actions": [],
+        "started_at": "2026-03-19T12:00:00Z",
+        "completed_at": "2026-03-19T12:20:00Z"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/referral",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "code": "MARIA2026",
+        "link": "/app/register?ref=MARIA2026",
+        "invited": 0,
+        "converted_paid": 0,
+        "currency": "RUB",
+        "balance": 0,
+        "reward_per_referral": 500,
+        "balance_rub": 0,
+        "reward_per_referral_rub": 500
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets/unread-count",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "count": 0
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tracker/projects/00000000-0000-4000-8000-000000000019/board",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "project": {
+          "id": "00000000-0000-4000-8000-000000000019",
+          "name": "Внедрение Acme",
+          "key": "ACME",
+          "description": "Запуск Acme на платформе к 1 сентября",
+          "archived": false,
+          "position": 0
+        },
+        "statuses": [
+          {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "To Do",
+            "category": "todo",
+            "color": "#94A3B8",
+            "position": 0,
+            "tasks": [
+              {
+                "id": "00000000-0000-4000-8000-000000000020",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000003",
+                "title": "Открыть тестовый доступ к API",
+                "description": "Ключи и песочница для команды Acme",
+                "priority": "urgent",
+                "position": 0,
+                "due_at": "2026-07-14T09:00:00Z",
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000021",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Интеграция",
+                    "color": "#8B5CF6"
+                  }
+                ]
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000022",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000003",
+                "title": "Подготовить скрипт миграции по отделам",
+                "description": null,
+                "priority": "high",
+                "position": 1,
+                "due_at": "2026-07-31T09:00:00Z",
+                "labels": []
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000023",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000003",
+                "title": "Собрать требования к SSO",
+                "description": null,
+                "priority": "medium",
+                "position": 2,
+                "due_at": null,
+                "labels": []
+              }
+            ]
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000024",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "In Progress",
+            "category": "in_progress",
+            "color": "#3B82F6",
+            "position": 1,
+            "tasks": [
+              {
+                "id": "00000000-0000-4000-8000-000000000025",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000024",
+                "title": "Настроить вход через Azure AD",
+                "description": null,
+                "priority": "high",
+                "position": 0,
+                "due_at": "2026-07-24T09:00:00Z",
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000026",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Безопасность",
+                    "color": "#EF4444"
+                  }
+                ]
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000027",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000024",
+                "title": "Программа обучения администраторов",
+                "description": null,
+                "priority": "medium",
+                "position": 1,
+                "due_at": "2026-07-21T09:00:00Z",
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000028",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Обучение",
+                    "color": "#F59E0B"
+                  }
+                ]
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000029",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000024",
+                "title": "Обновить смету пилота",
+                "description": null,
+                "priority": "low",
+                "position": 2,
+                "due_at": "2026-07-28T09:00:00Z",
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000030",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Финансы",
+                    "color": "#22C55E"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000031",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "На проверке",
+            "category": "in_progress",
+            "color": "#A855F7",
+            "position": 2,
+            "tasks": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000032",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Done",
+            "category": "done",
+            "color": "#22C55E",
+            "position": 3,
+            "tasks": [
+              {
+                "id": "00000000-0000-4000-8000-000000000033",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000032",
+                "title": "Согласовать бюджет пилота",
+                "description": null,
+                "priority": "medium",
+                "position": 0,
+                "due_at": null,
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000030",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Финансы",
+                    "color": "#22C55E"
+                  }
+                ]
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000034",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000032",
+                "title": "Подписать NDA",
+                "description": null,
+                "priority": "high",
+                "position": 1,
+                "due_at": null,
+                "labels": []
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000035",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000032",
+                "title": "Кик-офф с командой Acme",
+                "description": null,
+                "priority": "low",
+                "position": 2,
+                "due_at": null,
+                "labels": []
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000036",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000032",
+                "title": "Демо для клиента",
+                "description": null,
+                "priority": "medium",
+                "position": 3,
+                "due_at": null,
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000028",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Обучение",
+                    "color": "#F59E0B"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "labels": [
+          {
+            "id": "00000000-0000-4000-8000-000000000026",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Безопасность",
+            "color": "#EF4444"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000021",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Интеграция",
+            "color": "#8B5CF6"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000028",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Обучение",
+            "color": "#F59E0B"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000030",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Финансы",
+            "color": "#22C55E"
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tracker/projects/00000000-0000-4000-8000-000000000019/board",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "project": {
+          "id": "00000000-0000-4000-8000-000000000019",
+          "name": "Внедрение Acme",
+          "key": "ACME",
+          "description": "Запуск Acme на платформе к 1 сентября",
+          "archived": false,
+          "position": 0
+        },
+        "statuses": [
+          {
+            "id": "00000000-0000-4000-8000-000000000003",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "To Do",
+            "category": "todo",
+            "color": "#94A3B8",
+            "position": 0,
+            "tasks": [
+              {
+                "id": "00000000-0000-4000-8000-000000000020",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000003",
+                "title": "Открыть тестовый доступ к API",
+                "description": "Ключи и песочница для команды Acme",
+                "priority": "urgent",
+                "position": 0,
+                "due_at": "2026-07-14T09:00:00Z",
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000021",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Интеграция",
+                    "color": "#8B5CF6"
+                  }
+                ]
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000022",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000003",
+                "title": "Подготовить скрипт миграции по отделам",
+                "description": null,
+                "priority": "high",
+                "position": 1,
+                "due_at": "2026-07-31T09:00:00Z",
+                "labels": []
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000023",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000003",
+                "title": "Собрать требования к SSO",
+                "description": null,
+                "priority": "medium",
+                "position": 2,
+                "due_at": null,
+                "labels": []
+              }
+            ]
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000024",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "In Progress",
+            "category": "in_progress",
+            "color": "#3B82F6",
+            "position": 1,
+            "tasks": [
+              {
+                "id": "00000000-0000-4000-8000-000000000025",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000024",
+                "title": "Настроить вход через Azure AD",
+                "description": null,
+                "priority": "high",
+                "position": 0,
+                "due_at": "2026-07-24T09:00:00Z",
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000026",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Безопасность",
+                    "color": "#EF4444"
+                  }
+                ]
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000027",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000024",
+                "title": "Программа обучения администраторов",
+                "description": null,
+                "priority": "medium",
+                "position": 1,
+                "due_at": "2026-07-21T09:00:00Z",
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000028",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Обучение",
+                    "color": "#F59E0B"
+                  }
+                ]
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000029",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000024",
+                "title": "Обновить смету пилота",
+                "description": null,
+                "priority": "low",
+                "position": 2,
+                "due_at": "2026-07-28T09:00:00Z",
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000030",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Финансы",
+                    "color": "#22C55E"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000031",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "На проверке",
+            "category": "in_progress",
+            "color": "#A855F7",
+            "position": 2,
+            "tasks": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000032",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Done",
+            "category": "done",
+            "color": "#22C55E",
+            "position": 3,
+            "tasks": [
+              {
+                "id": "00000000-0000-4000-8000-000000000033",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000032",
+                "title": "Согласовать бюджет пилота",
+                "description": null,
+                "priority": "medium",
+                "position": 0,
+                "due_at": null,
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000030",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Финансы",
+                    "color": "#22C55E"
+                  }
+                ]
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000034",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000032",
+                "title": "Подписать NDA",
+                "description": null,
+                "priority": "high",
+                "position": 1,
+                "due_at": null,
+                "labels": []
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000035",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000032",
+                "title": "Кик-офф с командой Acme",
+                "description": null,
+                "priority": "low",
+                "position": 2,
+                "due_at": null,
+                "labels": []
+              },
+              {
+                "id": "00000000-0000-4000-8000-000000000036",
+                "project_id": "00000000-0000-4000-8000-000000000019",
+                "status_id": "00000000-0000-4000-8000-000000000032",
+                "title": "Демо для клиента",
+                "description": null,
+                "priority": "medium",
+                "position": 3,
+                "due_at": null,
+                "labels": [
+                  {
+                    "id": "00000000-0000-4000-8000-000000000028",
+                    "project_id": "00000000-0000-4000-8000-000000000019",
+                    "name": "Обучение",
+                    "color": "#F59E0B"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "labels": [
+          {
+            "id": "00000000-0000-4000-8000-000000000026",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Безопасность",
+            "color": "#EF4444"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000021",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Интеграция",
+            "color": "#8B5CF6"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000028",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Обучение",
+            "color": "#F59E0B"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000030",
+            "project_id": "00000000-0000-4000-8000-000000000019",
+            "name": "Финансы",
+            "color": "#22C55E"
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ticker",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "weather": null,
+        "holiday": null,
+        "stats": {
+          "meetings_total": 9,
+          "minutes_total": 377,
+          "ai_answers_total": 12,
+          "tokens_total": 126144,
+          "users_total": 13
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "access_token": "parity-access_token",
+        "token_type": "Bearer",
+        "expires_in": 1800,
+        "csrf_token": "parity-csrf_token"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

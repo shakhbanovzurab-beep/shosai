@@ -1,0 +1,13 @@
+{
+  "visit": "rooms/host-anonymous",
+  "language": "ru",
+  "persona": null,
+  "url": "/app/rooms/00000000-0000-4000-8000-000000000001",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru"
+  },
+  "exchanges": []
+}

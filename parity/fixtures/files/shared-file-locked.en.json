@@ -1,0 +1,46 @@
+{
+  "visit": "files/shared-file-locked",
+  "language": "en",
+  "persona": null,
+  "url": "/app/s/parity-file-locked",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "en"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/storage/shared/parity-file-locked/meta",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": true,
+        "name": "Презентация_Q3.pdf",
+        "size": 4718592,
+        "is_folder": false,
+        "needs_password": true,
+        "download_disabled": false
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/storage/shared/parity-file-locked/unlock",
+      "query": "download=1",
+      "requestBody": {
+        "password": "неверный"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "ok": false,
+        "ticket": "",
+        "url": ""
+      },
+      "origin": "recorded"
+    }
+  ]
+}

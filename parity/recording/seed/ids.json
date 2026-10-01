@@ -43,5 +43,45 @@
     ],
     "codeChallenge": "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM",
     "state": "parity-state-0001"
+  },
+  "rooms": {
+    "acme": "5eed0006-0000-4000-8000-0000000000f1",
+    "stage": "5eed0006-0000-4000-8000-0000000000f2",
+    "e2ee": "5eed0006-0000-4000-8000-0000000000f4",
+    "closed": "5eed0006-0000-4000-8000-0000000000f5",
+    "liveStage": "5eed0006-0000-4000-8000-0000000000f6",
+    "endedStage": "5eed0006-0000-4000-8000-0000000000f7",
+    "membersStage": "5eed0006-0000-4000-8000-0000000000f8"
+  },
+  "streams": {
+    "quarter": "5eed0007-0000-4000-8000-0000000000f3",
+    "live": "5eed0007-0000-4000-8000-0000000000f9",
+    "ended": "5eed0007-0000-4000-8000-0000000000fa",
+    "members": "5eed0007-0000-4000-8000-0000000000fb"
+  },
+  "roomInvites": {
+    "e2ee": "parity-e2ee-invite",
+    "closed": "parity-old-invite"
+  },
+  "fileShares": {
+    "folder": "parity-files-acme",
+    "folderLocked": "parity-files-locked",
+    "fileLocked": "parity-file-locked",
+    "fileView": "parity-file-view",
+    "fileExpired": "parity-file-expired"
+  },
+  "streamInvites": {
+    "live": "parity-stream-live",
+    "ended": "parity-stream-ended",
+    "members": "parity-stream-members"
+  },
+  "knocks": {
+    "pending": "parity-knock-pending",
+    "wait": "parity-knock-wait",
+    "denied": "parity-knock-denied"
+  },
+  "boards": {
+    "ACME": "5eed0008-0000-4000-8000-0000000000a1",
+    "PORTAL": "5eed0008-0000-4000-8000-0000000000a2"
   }
 }
