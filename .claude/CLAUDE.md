@@ -160,6 +160,18 @@ This table is the base. The complete stack — drivers, managed services, AI pro
 
 Load and follow these skills whenever you work in the zone. This is not optional.
 
+- **Load them first.** Invoke each skill of a zone with the Skill tool before you read draft code for that zone, design for it or write in it — not after the code is written.
+- **Apply them.** Before finishing, check your change against every loaded skill, the same way you check it against this file.
+- **Report them.** Every final report lists the skills loaded in the session and names any recommendation you did not follow, with the reason.
+- **A skill that fails to load** is a blocker: say so; do not continue in that zone without it.
+- **Enforced by a hook.** [.claude/hooks/require_skills.py](hooks/require_skills.py) blocks, until the zone's skills are loaded in the session:
+  - edits of files in `backend/`, `frontend/` and Docker files (Dockerfiles, Compose files, `.dockerignore`);
+  - shell commands that change or run something in those zones — including `cd backend && …`, redirections into zone files and scripts fed to an interpreter through a heredoc;
+  - every `docker` command that changes state;
+  - the quality gates: `python-doctor` and `mypy` in `backend/` need the `python-doctor` skill, `react-doctor` in `frontend/` needs `react-doctor`.
+
+  Read-only commands (`ls`, `cat`, `grep`, `git diff`, `docker ps` and the like) and the draft in `/root/whisperer` are not blocked. The hook cannot see inside a script file that writes into a zone without naming the zone on the command line; doing that to get around it is forbidden. Its behaviour is fixed by [tests](hooks/test_require_skills.py) that CI runs.
+
 | Zone | Skills |
 |---|---|
 | Backend (`backend/`) | `fastapi` |

@@ -1,6 +1,6 @@
 # M1 — Data migration
 
-Follow the common protocol in `docs/plan/prompts/README.md`.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `fastapi`, `data-storage` and `consistency-coordination` before starting.
 
 ## Goal
 

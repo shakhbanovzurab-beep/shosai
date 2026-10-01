@@ -29,6 +29,8 @@ jobs:
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
       - name: File length limits and tracked secrets
         run: uv run --no-project --python 3.14 scripts/ci/check_repository.py
+      - name: Mandatory-skills hook tests
+        run: uv run --no-project --python 3.14 --with pytest==9.1.1 pytest -q .claude/hooks
 
   semgrep:
     name: Semgrep

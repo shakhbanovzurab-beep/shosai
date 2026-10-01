@@ -1,6 +1,6 @@
 # F5 — Observability
 
-Follow the common protocol in `docs/plan/prompts/README.md`.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `observability`, `distributed-logging`, `docker-compose-patterns` and `docker-destructive-guardrails` before starting; load `fastapi` before touching `backend/`.
 
 ## Goal
 

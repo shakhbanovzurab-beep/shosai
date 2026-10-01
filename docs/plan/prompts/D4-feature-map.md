@@ -1,6 +1,6 @@
 # D4 — Feature map
 
-Follow the common protocol in `docs/plan/prompts/README.md`.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the skill `service-decomposition` before assigning modules: it is the method for deciding where a boundary belongs.
 
 ## Goal
 

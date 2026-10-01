@@ -1,6 +1,6 @@
 # D1 — API and WebSocket contract baseline
 
-Follow the common protocol in `docs/plan/prompts/README.md`.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the `fastapi` skill before reading the draft backend: it is how you recognise the draft's routes, dependencies and response models correctly.
 
 ## Goal
 

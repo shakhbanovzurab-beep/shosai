@@ -1,6 +1,6 @@
 # M2 — Cutover
 
-Follow the common protocol in `docs/plan/prompts/README.md`. Load the skill `docker-destructive-guardrails`.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the four Docker skills — `docker-project-foundations`, `docker-build-strategies`, `docker-compose-patterns` and `docker-destructive-guardrails` — before starting.
 
 ## Goal
 

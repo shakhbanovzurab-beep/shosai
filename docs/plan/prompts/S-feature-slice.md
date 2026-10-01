@@ -2,7 +2,14 @@
 
 Follow the common protocol in `docs/plan/prompts/README.md`. The slice ID (S01–S17) is given in the launch line.
 
-Load the mandatory skills for the zones you touch (CLAUDE.md "Mandatory skills") before writing code.
+Load the skills before studying the draft, not before writing code — they shape the plan as much as the code:
+
+- every slice: `fastapi` for the backend and the four Vercel skills for the frontend (CLAUDE.md "Mandatory skills");
+- S17 (public site) also: the `seo` skill and the `seo-*` skills that `docs/seo/STRATEGY.md` §17 maps to the work at hand;
+- design questions inside a slice: the matching building-block skill (`api-design`, `data-storage`, `caching`, `messaging-streaming`, `task-scheduling`, `resilience-failure`, `consistency-coordination`), and `system-design` for decisions that change the target architecture;
+- `python-doctor` and `react-doctor` when running the gates.
+
+The slice plan lists which skills apply to each step; every implementation session loads them first.
 
 ## Goal
 
@@ -25,6 +32,7 @@ A slice is too large for one session. Check STATUS.md and `docs/plan/slices/<ID>
    - **Differences from the draft** demanded by CLAUDE.md or the target architecture, each with its user-visible effect. Any visible change needs the user's approval.
    - **Design:** contracts first — the slice's public interface, events, OpenAPI paths and WebSocket frames; tables and migrations per home; access control; invariants and how tests prove them.
    - **Steps:** ordered, each small enough for one session, each with its own checks. Typical order: contracts → data model and migrations → domain and application services → HTTP and WebSocket channels → tasks → frontend screens → parity and contract verification → staging check.
+   - **Skills per step:** which skills each step loads.
    - **Decisions needed** from the user.
 5. Set the slice to `planned` in STATUS.md once the user approves the plan.
 

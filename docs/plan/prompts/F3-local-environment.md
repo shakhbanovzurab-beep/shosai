@@ -1,6 +1,6 @@
 # F3 — Local environment
 
-Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `docker-project-foundations`, `docker-compose-patterns` and `docker-destructive-guardrails` before starting.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the four Docker skills — `docker-project-foundations`, `docker-build-strategies`, `docker-compose-patterns` and `docker-destructive-guardrails` — before starting.
 
 ## Goal
 

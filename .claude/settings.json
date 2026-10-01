@@ -1,3 +1,20 @@
 {
-  "enabledMcpjsonServers": ["repowise"]
+  "enabledMcpjsonServers": [
+    "repowise"
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/require_skills.py\"",
+            "timeout": 10,
+            "statusMessage": "Checking mandatory skills..."
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -1,6 +1,6 @@
 # D3 — Data inventory and mapping
 
-Follow the common protocol in `docs/plan/prompts/README.md`.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `data-storage` and `consistency-coordination` before mapping: they are the method for keys, partitioning, replication and consistency decisions.
 
 ## Goal
 

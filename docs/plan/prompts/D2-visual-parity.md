@@ -1,6 +1,6 @@
 # D2 — Visual baseline and parity harness
 
-Follow the common protocol in `docs/plan/prompts/README.md`.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions` and `web-design-guidelines` before studying the draft frontend: the harness must capture the states and transitions these skills care about.
 
 ## Goal
 
