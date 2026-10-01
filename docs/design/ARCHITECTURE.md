@@ -83,7 +83,7 @@
 1. All application processes run as **one deployment in the EU** (the compute plane), next to the AI providers. AI providers are not reachable from Russian addresses.
 2. Data lives in **two homes**. Each home = one managed PostgreSQL cluster (primary + standby, WAL archive, PITR) behind PgBouncer + one S3 bucket.
    - Russian home: St Petersburg, 45 ms from the plane.
-   - EU home: Netherlands, < 2 ms from the plane. It also holds the directory.
+   - EU home: Netherlands, < 2 ms from the plane. It also holds the directory and the data without an owning account (§6).
 3. A request opens its database session **in the home named by the access token** (user home, or the company's home for a work account). Workers take the home from the task payload.
 4. No cross-home writes. A user or company belongs to exactly one home.
 
