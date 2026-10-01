@@ -166,6 +166,7 @@
   - platform tables: tariffs, promo codes, payment routes, exchange rates, the model registry and defaults, platform prompts and notes, MCP client registrations, admin mailings, provider error logs, desktop builds;
   - home tables reference them by id without a foreign key; a platform id is retired, never deleted;
   - telemetry without an account (product events before registration, anonymous client error reports), subject to the legal review in §22.
+- **Schema per home:** one migration history for both homes; the directory tables and the data without an owning account exist only in the EU home's schema, so a read routed to the wrong home fails instead of returning nothing ([ADR 0010](../adr/0010-home-scoped-revisions-in-one-alembic-history.md)).
 - **Home routing:**
   - sign-in finds the home by `HMAC(email)`, checks the password in that home and issues a token that carries the home;
   - later requests use the token and do not consult the directory;
@@ -284,7 +285,7 @@
 - OpenAPI 3.x is the contract between backend, web and native clients.
 - Changes are additive only; unknown fields and frame types are ignored by clients.
 - Collections use cursor pagination with a maximum page size. This includes meeting transcript, map and model executions.
-- One error envelope everywhere.
+- One error envelope everywhere: `{"error": {code, request_id, …}, "detail": …}`, where `detail` keeps the shape shipped clients read ([ADR 0008](../adr/0008-error-envelope-with-compatible-detail.md)).
 - A snapshot test covers public routes and the full set of WebSocket frame types.
 
 ## 11. Critical flows
@@ -612,7 +613,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | aioboto3 | 15.5.0 | S3 client; one bucket per data home |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
 | Backend | prometheus-fastapi-instrumentator | 8.1.0 | HTTP metrics |
-| Backend | slowapi | 0.1.10 | Request rate limits |
+| Backend | Own GCRA limiter on redis-py, state in Valkey | — | Request rate limits; replaces slowapi, whose storage is synchronous ([ADR 0011](../adr/0011-rate-limits-gcra-in-valkey.md)) |
 | Backend | bcrypt, PyJWT, cryptography | 5.0.0, 2.15.1, 50.0.2 | Passwords and tokens; the token carries the data home |
 | Backend | pypdf, python-docx, openpyxl, python-pptx, striprtf | — | Knowledge-base document parsing |
 | Backend | tiktoken, rank-bm25, networkx | — | Token counting, keyword search, context graph |
