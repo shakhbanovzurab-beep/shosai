@@ -1,0 +1,2585 @@
+{
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "entries": [
+    {
+      "cell": "desktop-dark-en",
+      "state": "account.cabinet.data",
+      "sha256": "f531a75565e6adec616e2ca400aa0462e981a84dfc39f00f5220eabe391be243",
+      "bytes": 104251
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "account.cabinet.data.purge-confirm",
+      "sha256": "93d0f1217233b4cf139ddc47bff6ee51bde4197447bd97a76c163f45ffa89e40",
+      "bytes": 111699
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "account.cabinet.general",
+      "sha256": "00e6a8b24b017bbb57eddffea468bdc81e4b0ea26c052b7b4c4d0cab2c2252d6",
+      "bytes": 110858
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "account.cabinet.profile",
+      "sha256": "ded59acfc59b1a70eb8082dbc91799f40ca8ca470f0f231dde325f756ab250f5",
+      "bytes": 95795
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "account.cabinet.profile.delete-confirm",
+      "sha256": "bb34dc08c601fe303e6f5f99979de9f2e2923e2d394349a4aa15ead84267d51f",
+      "bytes": 100160
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.connect.anonymous",
+      "sha256": "92b57926333d6d0b15ccf5e2bc131473e05170e4e4653075c717493fe834f9fd",
+      "bytes": 23962
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.connect.done",
+      "sha256": "27886d6f75f6f82121bc3c315ab63fbd024308ca81541b0515d8feeda9e90e60",
+      "bytes": 21773
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.forgot.default",
+      "sha256": "6f5f5b23a992f53f1780011c768ab6356c5e628972f21206e7cd9527a54c9a15",
+      "bytes": 122526
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.forgot.sent",
+      "sha256": "592129c5f4778d4b4426e1c0915114414429c3093aaa4131b54f818988ef3aaa",
+      "bytes": 124784
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.login.default",
+      "sha256": "26448c2633a4731965702dd372476086a6835b7c9f26a874a97feeddfd2b5f2d",
+      "bytes": 128302
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.login.error-invalid",
+      "sha256": "4435a883d1b911bc5b5bd0369cd5884b5dc509b8d235959ba278d2616c7c36a2",
+      "bytes": 129623
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.login.social-world",
+      "sha256": "b34d5ab88b30742c85357c4b2d5a5bf3629f7ca2493f1396d6d2e7c4f1742b0d",
+      "bytes": 129135
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.login.unverified",
+      "sha256": "1b96d540ab80e4bde43c5c0b1069615ea1ac8976a2e4042ecce1a6dd0a670b63",
+      "bytes": 134021
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.register.default",
+      "sha256": "a93e44a60cb890b7ff99b8658d6ef1d6a31442aab2a1fefd1d4a55d4704a562e",
+      "bytes": 140101
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.reset.default",
+      "sha256": "8126deee124b82e9a18ffcb26594d13177daab64ac64348aedf60007de31da06",
+      "bytes": 22457
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.reset.no-token",
+      "sha256": "0b2ea6067d6ca78ce6a230bbddba954c94e8970f59f9d216dd74ba749b0510af",
+      "bytes": 17235
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.social-consent.default",
+      "sha256": "6e0e2191413bd9cc3fc749d94468329f2c4f87c116984034d77be322000f07dc",
+      "bytes": 136585
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "auth.verify.default",
+      "sha256": "f0d51963a6153b3dea8b90ef7d8578799e5506f6beb90c0d168a16a2e5f1a70a",
+      "bytes": 134111
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "billing.card-sheet.tab",
+      "sha256": "54bdcfc4f20840176ac9af09a6ae66fae365e20e90eb0a1d6cfd9c511e6cfb96",
+      "bytes": 192357
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "billing.payments.card",
+      "sha256": "12a016d4f4d731e98667aa460aa8c0771dbcfb2093588b38cc3797eab4cf7547",
+      "bytes": 98799
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "billing.payments.empty",
+      "sha256": "8b32bf8bd769a618ac71c21c353fba04b1fe5097f989d8e32beeddc7572af5de",
+      "bytes": 80141
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "billing.subscription.free",
+      "sha256": "55fa0257e42230618504d25101f5e4c2544d65d5406290c7bb462b244c4b2857",
+      "bytes": 121325
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "billing.subscription.max",
+      "sha256": "569fa1315295fc754b74d61c09e807fcb2c08592c2363b318ff17a02f15953bc",
+      "bytes": 118905
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "billing.subscription.pro",
+      "sha256": "7ff52f0e89d992ae070ce5cffb3c3a0ac3fbe83a0020a787dc3b78d5cd39fcbe",
+      "bytes": 129804
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "billing.subscription.start",
+      "sha256": "5624c8ea4bc91a1bea62a3db885ded0280caa1e8d58f2f186311672c3645d9aa",
+      "bytes": 117750
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "downloads.empty",
+      "sha256": "f337001fcb2cd156584c946d592ac32edf8958bf15e76fc08e0e8dd3612fad58",
+      "bytes": 70392
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "downloads.loading",
+      "sha256": "c4091774516477d9406e41e7d087508dc294e2dbd91194db51a28be13691bd0f",
+      "bytes": 65726
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "downloads.populated",
+      "sha256": "8bd5a3a324ef4fe8f0618d1d3019363c2b89fd83443bda91a638b4fa9d60cdb3",
+      "bytes": 76019
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "hotkeys.loading",
+      "sha256": "d4a099e18a0563d724d71cb57069d0428dd7186846868ad7b259b13b752ea0f7",
+      "bytes": 64824
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "hotkeys.populated",
+      "sha256": "746f876417f040d564a5ffb27ff0289718cb4ebf53fc26209329742494a6deaa",
+      "bytes": 94587
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "onboarding.checklist",
+      "sha256": "d75a7c55b394fe9fee62118c68acefef1ba632e9315e4bee6dfb982d2490f7bb",
+      "bytes": 130847
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "onboarding.finish",
+      "sha256": "f5bef84c334d0104cafc1180c43516d8f5b12b43b4f7628facee85b7d46b9c0e",
+      "bytes": 125226
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "onboarding.tour.step-1",
+      "sha256": "aedca51554c613b27c80aee7b5e10fc925d4d09b8e7e56b10957652e1cd2cc77",
+      "bytes": 114882
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "onboarding.welcome",
+      "sha256": "329434851f7ae29d7bcb5d9e1a6cfacb74e9f55ee29a5fa540f854a58e72543b",
+      "bytes": 131266
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "referral.loading",
+      "sha256": "c7549d70f30085ff8ab956fd7cb203ff6ab2323232278e9cb0f20e6274703d86",
+      "bytes": 67609
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "referral.populated",
+      "sha256": "b555ef550a9ef014d26324217768efb70633c079ff6486307ce14e68007b83ff",
+      "bytes": 90962
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "route.error-fallback",
+      "sha256": "0659fd972e82ea56a62fd2309f2a9da1096246bddacc080866d79b242864511c",
+      "bytes": 54218
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "shell.admin",
+      "sha256": "9a9542d9b33a9b04192c90a228cba2637fb6a79d1c3566962f34ae54edb5bed2",
+      "bytes": 77986
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "shell.connection-lost",
+      "sha256": "a704c928b3157da7db70bce3bb1635363a275f3430106d611609d0ff5a38445a",
+      "bytes": 104065
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "shell.paid",
+      "sha256": "c2a5d074095faf11cd3e61527abaa773995bd07a055e4fa7a5fba9cb7fcf0218",
+      "bytes": 94704
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "shell.palette.open",
+      "sha256": "25e5de69bb34bd36a84d3fc5899542de6daf6d47096034df36f944bb0fdd8abf",
+      "bytes": 106942
+    },
+    {
+      "cell": "desktop-dark-en",
+      "state": "shell.user",
+      "sha256": "ef68bdcdc597e278360dfc769acc1fd29b173e7c3d7050192540895cbbb0573d",
+      "bytes": 95302
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "account.cabinet.data",
+      "sha256": "66a49c3b2ecd146b9c02ba38447e46ac67014a061fe82524dcb909f0cd110ff4",
+      "bytes": 106870
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "account.cabinet.data.purge-confirm",
+      "sha256": "54c20072197de416f265c9a0e25b48c3682447201123be1a5b9f945b3cda7284",
+      "bytes": 113484
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "account.cabinet.general",
+      "sha256": "70fe008ed66b10a8545bb0d5d4f9ac948aac2c2931f21086fbe2d5c79629e144",
+      "bytes": 112599
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "account.cabinet.profile",
+      "sha256": "2806c420198bc8559e76fc7117d15fef9635b97f322567b56974654d4913ea78",
+      "bytes": 96031
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "account.cabinet.profile.delete-confirm",
+      "sha256": "d201137efdb9694cc75fab5e8385488059d28bb88d34623e2b66e5745505b59c",
+      "bytes": 100759
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.connect.anonymous",
+      "sha256": "4650aeeb2e7a64c72ec512fb4c7ad6953cbc3d39e28f1c9e65de1b184f777213",
+      "bytes": 24656
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.connect.done",
+      "sha256": "1824b321d43c0dc88aa725ea4467ae4ad46d98f5a05764cec7222eae35048d60",
+      "bytes": 23605
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.forgot.default",
+      "sha256": "385fba496b8dda0345128174b0c145a727367bedf465ebb0784255d37debd322",
+      "bytes": 126325
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.forgot.sent",
+      "sha256": "a648dfa9ee81f477ffc6de70aa67222e2a15f172f65934a3b3e217e8040870ec",
+      "bytes": 130785
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.login.default",
+      "sha256": "e0fedfb7d6735341e44a1e2f479cfda73283510397c38259b91acaf8cbb4848b",
+      "bytes": 130513
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.login.error-invalid",
+      "sha256": "a1356246a164be8c55ad7759b44b517987326a4ce3a5b11c10e048fc858d86b0",
+      "bytes": 131845
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.login.unverified",
+      "sha256": "2ba4ea48b7a478a07f6e85be78920e26584b89af7bed18e3d01d4b894c5bc74c",
+      "bytes": 136356
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.register.default",
+      "sha256": "6399dac339e693731a645812c2d7aafdb79185cd0a195a447ad9e65f66d8f254",
+      "bytes": 145301
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.reset.default",
+      "sha256": "7f129048dfcbc9ca32b7df3b94fdf3f3e76c757ab5806fd68588b88610835e06",
+      "bytes": 20622
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.reset.no-token",
+      "sha256": "8649264447c4df576e2b30c8101dae4eb563e3f1ee53d2cc5ee2433c1e9a8048",
+      "bytes": 16823
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.social-consent.default",
+      "sha256": "14469c5bb7e5178537197983a525a9b353718d0a59e7a7c118c632b5ca047f39",
+      "bytes": 138687
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "auth.verify.default",
+      "sha256": "63cf90d9e86725d1447308408fee57eedb44ea9ccca7499ab63c3656a53fcb3e",
+      "bytes": 137920
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "billing.card-sheet.tab",
+      "sha256": "03db9140d3f3dbb4bfd39ed537a9f74be56ef2a3646990fda05ad55d7a747fc0",
+      "bytes": 197241
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "billing.payments.card",
+      "sha256": "c45a701bb21fe4bba507d82d4cd9a01c16b192f758a6b7ec018275781b51c009",
+      "bytes": 100498
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "billing.payments.empty",
+      "sha256": "33da10b5a6a653662388254392e4e4cf36db3e356bf1c8eec5478c042ca8ac20",
+      "bytes": 79932
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "billing.subscription.free",
+      "sha256": "49171f1fb7e8cc4cbb5fd8779ebc3fd4d1176ad1ce3d1933fd4196c2070690da",
+      "bytes": 123934
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "billing.subscription.max",
+      "sha256": "c47b0f3d7e9683df2de46e12967425dd05f80052c3997e0c301431107a327ea8",
+      "bytes": 117195
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "billing.subscription.pro",
+      "sha256": "22b5f07df7364c042cb5eb46d418de46ca25dc949224432d0a0500183639daf4",
+      "bytes": 128558
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "billing.subscription.start",
+      "sha256": "417a5a33800125b360a621d8bf1944f71c74516ee15999bbfbd32cf80cd34eee",
+      "bytes": 114779
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "downloads.empty",
+      "sha256": "4f15d81f1974b9992d4cea1dfc7ca268fee0f1d7ab54a1ae684473c3c95bd6d1",
+      "bytes": 71411
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "downloads.loading",
+      "sha256": "49bc0256cfe584b752f764849c706a90308c22c268e87c691e09f5e8fe40b773",
+      "bytes": 66326
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "downloads.populated",
+      "sha256": "eb5df58c4d6eb58b61b2039fe81c05137266e8f9ba70b8e07c3fe0ea0f0f3ada",
+      "bytes": 76613
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "hotkeys.loading",
+      "sha256": "bf743ac4f09f0bd12efcde0a61d295271667859d24e81043eabe0d89ebb09346",
+      "bytes": 66082
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "hotkeys.populated",
+      "sha256": "1072699e655ce7472a099ac146403bf0eab4df5bc15143deb598ead820188d0e",
+      "bytes": 96795
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "onboarding.checklist",
+      "sha256": "67b6408b0272e69519dbf6d584e5ad2975c2d02338c853bcaaaff7dbd30ad34c",
+      "bytes": 134373
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "onboarding.finish",
+      "sha256": "1fc2dadcfc400c018b221ecab991e14527285a3e43d6e1de7c75a0a4fde3fb69",
+      "bytes": 128898
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "onboarding.tour.step-1",
+      "sha256": "4f64c8df84827d6a75de8fe8927ea3e4cf7ab9d3f29eeea49ef0990146f7f3b2",
+      "bytes": 115189
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "onboarding.welcome",
+      "sha256": "b80eb6270e6a33d10fbc27593c973bef3079f0a9af9797da57bbb5f3ae220dce",
+      "bytes": 134633
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "referral.loading",
+      "sha256": "9965c1becfa7916f46f45d2e45547dec83a404caf8d140309a4c8b50768ee446",
+      "bytes": 68969
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "referral.populated",
+      "sha256": "a3bb70a701427c740960cc34194f253f5ef09dabc890bc886ab3bdf58e4d226d",
+      "bytes": 93973
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "route.error-fallback",
+      "sha256": "4d74cb77ad1a7aac5abc3dc2c786dc2493a1bb10dda29d560b2b87adfac6c41c",
+      "bytes": 54177
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "shell.admin",
+      "sha256": "13c7de154998e76a4bfed533ca7f4504d2b384a4e0c78e0562a29dc5af65c4b0",
+      "bytes": 80489
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "shell.connection-lost",
+      "sha256": "d341559cf3634ec4ca8f123dddfc607bf8f098124bab3c1012edf94028518d97",
+      "bytes": 110159
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "shell.paid",
+      "sha256": "f0fcc351af7ca141861aa887e98a8c14b735ea761ea4818299658c1b811e92ce",
+      "bytes": 93809
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "shell.palette.open",
+      "sha256": "841f2d81e62d0e83932e198ecb2d6de56ca900f322437a6550e923eedfbe5d8a",
+      "bytes": 104939
+    },
+    {
+      "cell": "desktop-dark-ru",
+      "state": "shell.user",
+      "sha256": "df90824c4cfc316276f0c1e8b69fe6f8b29b4b9c488eb8094580ee9fc6f87045",
+      "bytes": 94696
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "account.cabinet.data",
+      "sha256": "ed044195d72712c8d77193d24da1c3de0e8db9ea3cf5ebb769b5961d026adcb8",
+      "bytes": 102829
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "account.cabinet.data.purge-confirm",
+      "sha256": "cd2f6fd411797e693185340b59fb1cdec5fa60a023139933501535d546030e17",
+      "bytes": 110557
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "account.cabinet.general",
+      "sha256": "08f087abd60800c2ab525f22b5cc29877d823d3c4dbc2f0a4c53f059e7451ef0",
+      "bytes": 108083
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "account.cabinet.profile",
+      "sha256": "c0f3497648357aad9a4fd20ffc18e6f42f59e06712a0f3765c1fa4c33f0815b9",
+      "bytes": 94166
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "account.cabinet.profile.delete-confirm",
+      "sha256": "4defcc63c8b7ec7f620e46a79d693d417ad6754ee3887cba13d67f242dd18a88",
+      "bytes": 99414
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.connect.anonymous",
+      "sha256": "67f53a943b5e2d34f292af5974fbc73367446ed462292b6c1c8b26a8a92b20a1",
+      "bytes": 24893
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.connect.done",
+      "sha256": "c9aae6ce05b27b6fe38fb0841c4a6b2db42c8c27e7ca53eb161c52566e82b2be",
+      "bytes": 22794
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.forgot.default",
+      "sha256": "3502788aa4f7a7ec223b70c5312f1ac2de10e7efd412f4a6c738a3aa7a587085",
+      "bytes": 122304
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.forgot.sent",
+      "sha256": "6928929617ae1f2fa9ba86404b2ce73d2f72643a742c385b53ff61659da29be8",
+      "bytes": 124155
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.login.default",
+      "sha256": "a41368c94cbeafc8f031defbbb7ce0d48b13d25648e8c9e4e4f70bf2c2b99607",
+      "bytes": 128218
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.login.error-invalid",
+      "sha256": "24290603aa2d4322e03891d96b1f475f7cf7589ec23aa7567560e2dd707348b7",
+      "bytes": 129531
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.login.social-world",
+      "sha256": "873b54ff8bc33620d064a8d975ac5efc46da08a57015368859e1bd1c43be3369",
+      "bytes": 129238
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.login.unverified",
+      "sha256": "47eeacf15364f4b6f11bde88722981b28c8a805ebcd7048e763e545b7855ecd0",
+      "bytes": 133131
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.register.default",
+      "sha256": "5a1faddfa080f7b86fd39f4800e2e8fabe0e170db187072158d20ce66cb14236",
+      "bytes": 139533
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.reset.default",
+      "sha256": "a1c747fc1e2dd93c651aed694b6449b00475880c8ad3992e31394d3fc7e98524",
+      "bytes": 22220
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.reset.no-token",
+      "sha256": "9a25f35d641f62c124c3476e5f91ba6400362bbb082c4c6d1bc692653a29917f",
+      "bytes": 17357
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.social-consent.default",
+      "sha256": "229bb99784e6010fcc240462ee4512c11919222e097084eb78d2a2225fab8a68",
+      "bytes": 136506
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "auth.verify.default",
+      "sha256": "1fc2b8ea01d504d5b1106f24ca4a8e86ef97534295aaae72fda340e0d0f2ae6f",
+      "bytes": 133652
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "billing.card-sheet.tab",
+      "sha256": "49d1c6f35cf7b5eb6ca2bfbedb23d443fd386d4f2d54f22cceb24307e71813f3",
+      "bytes": 182660
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "billing.payments.card",
+      "sha256": "fc274e676a5b74967c78558ab1baa517681351eebe70cc210fe9fa579aae034a",
+      "bytes": 97136
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "billing.payments.empty",
+      "sha256": "2f6ab89ff63ed6b130c7b392747ec158f1fb4d9e101ffd624ffceaaf7185fe0c",
+      "bytes": 79421
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "billing.subscription.free",
+      "sha256": "6bf61f6186b8b03ced2af877694f67f77683c69a6ad6522bc62547209ab04fb7",
+      "bytes": 119116
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "billing.subscription.max",
+      "sha256": "149235b7ef1d23dd1fa257ac89c9b18f617bb2ef2e1aed5119aa4cafed190f6a",
+      "bytes": 116610
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "billing.subscription.pro",
+      "sha256": "ee3feeec189a6cbe44feec0398d882820b66e7395a5d0c6b8b89dfec0d8ab541",
+      "bytes": 126866
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "billing.subscription.start",
+      "sha256": "51fc6f9478803a66a39553d195dff43d3a82898da31d64aa98c4f902d2319a2d",
+      "bytes": 115640
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "downloads.empty",
+      "sha256": "5d7edf5e7ca2052af84390a0b84038ee332049c89f23db8b67da52103753650c",
+      "bytes": 70288
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "downloads.loading",
+      "sha256": "12918d24ed8443d16ea02420cabfea8c6aa8a4b160b0ca91f5d70c22868dcb13",
+      "bytes": 65675
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "downloads.populated",
+      "sha256": "8f052369232bf353b3928d0b413e106a5ee62283a1d4659bf883de6cd8daa381",
+      "bytes": 75270
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "hotkeys.loading",
+      "sha256": "721f321d3b0eab6b4119557468d89ecd6b2016e78e7878be4bedbae9343b546a",
+      "bytes": 64618
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "hotkeys.populated",
+      "sha256": "2f8e184e64e43456e2426ce5beb85a6928d47214787f38314aa921c6df5aa79c",
+      "bytes": 92699
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "onboarding.checklist",
+      "sha256": "83a408445087160cdbdbf6976cbde19a4972b554b1fd20c4b9915a8bf1e9baac",
+      "bytes": 127616
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "onboarding.finish",
+      "sha256": "080c03da178f63d64c6d7dbcb06cfa66eba281dcc121826a7c4f4b3689047fa8",
+      "bytes": 121213
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "onboarding.tour.step-1",
+      "sha256": "2ff62cc96f19c135b253a6fb004c4a317e74b2920c1d237615403074ddf02811",
+      "bytes": 114510
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "onboarding.welcome",
+      "sha256": "287c0898cd727b418af3f8347060a29d748678cb37fcabbf585e3b4e8dc85d34",
+      "bytes": 128794
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "referral.loading",
+      "sha256": "0429eab173315a07f106760a43f93ca50dfadf0ba4985c1378d590fd653df107",
+      "bytes": 67512
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "referral.populated",
+      "sha256": "a3da3d5a837a7ef8c90fe2dd717cb9d9fd5ebedde694f552a6b76d67e6d52eb0",
+      "bytes": 89462
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "route.error-fallback",
+      "sha256": "0cfccc9b8fa929dd8e4ad2b1daac2c4f4c96f5af3cec6853763c065578b1a427",
+      "bytes": 53822
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "shell.admin",
+      "sha256": "795a0412635a9cf700bbf894d707deb6692d1c18e7e4fd12adf86fc1413a8436",
+      "bytes": 76807
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "shell.connection-lost",
+      "sha256": "85351b82d7dc7689ee13a97f29cfbdf086a45f0a4ed86aacfe7d4a2b69abf1c5",
+      "bytes": 108873
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "shell.paid",
+      "sha256": "6abfc28fb5e8471037a2c9e598e332d76121d0631ec8f0192812e9bdd94a2467",
+      "bytes": 93008
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "shell.palette.open",
+      "sha256": "bab05c3e6768c0f71d0973f7f6f6d19ca23265b75e9f36bd56ce82e9081282a8",
+      "bytes": 105210
+    },
+    {
+      "cell": "desktop-light-en",
+      "state": "shell.user",
+      "sha256": "23d0d3792ea2cd375997b3da880395330539ac3b96ca3ccdff66e448e7da58ff",
+      "bytes": 93605
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.data",
+      "sha256": "891ec7bc711dffc3a496f5fb9c10e95508d1cd8b1ad62f86f033433452e9d4a9",
+      "bytes": 105193
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.data.export-failed",
+      "sha256": "a6ad41b098a0ebdc5d4699d28b5388de709bc46bd7999a3303fdda69263df7b1",
+      "bytes": 107845
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.data.export-pending",
+      "sha256": "b78a8ee6765ddbc2d7e8e75e268d58ff81ac1dceb8a9459afe45a7c07276f76d",
+      "bytes": 104797
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.data.export-ready",
+      "sha256": "fe1e34de57d83ee63f5f75dfa83f382068cb10541ed82cabf66bc57bfb3b6d6f",
+      "bytes": 111536
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.data.export-requested",
+      "sha256": "93914d79ab1a148c2766594e8d55d168899df98a053c50123eff6bb5a3add125",
+      "bytes": 108845
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.data.purge-confirm",
+      "sha256": "b1e9e95b3bcb86de05569604d77fc60eb43fbaaad1d8867f909ee7618169d2b9",
+      "bytes": 111890
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.data.purge-done",
+      "sha256": "cbfcc325d58e645637a55b113812a178237a2c465757154770d6ee2a558b7dc6",
+      "bytes": 106919
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.data.purge-failed",
+      "sha256": "5bbed56e2085467573c384d7e019defc0a1acbbb0db18c3adccba60dbf461c66",
+      "bytes": 113554
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.data.toggle-error",
+      "sha256": "6b8edfef895465892c626bffb7de3d36c5d1a1c4abda931ae60c38b902b8cfb8",
+      "bytes": 108260
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.general",
+      "sha256": "65d493c930948c0a52d3b245d6012ebe7e679ad83c3a93d4cb1808282616c33f",
+      "bytes": 109778
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.general.font-mono",
+      "sha256": "a903b047ac6030da05ca328e3a261db857c506a476413b96ec5970d8ac9a073c",
+      "bytes": 107082
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.general.font-native",
+      "sha256": "888a252445b5ed4e8ff4a7580129a65a0aa2d536c4c891bec27b89f1072ef830",
+      "bytes": 116025
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.general.font-sans",
+      "sha256": "8aeaa2efcd5f52b3086463739e588eb3890a67fc7ea1cc3f8254bc42c4516a5e",
+      "bytes": 111613
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.general.font-serif",
+      "sha256": "31361fe1b91bda1977f25b023e55e73f73ae486974438100ff4507cee422e748",
+      "bytes": 109576
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.general.lang-menu",
+      "sha256": "9489aee6a310d4c86507c29f04c05748f2a01e7092c6ceb8545d091c69317780",
+      "bytes": 116066
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.general.marketing-on",
+      "sha256": "bd7ef46c37989c7f3e8b91c9e9b604fdc678a5dba8ce88770360439110383bca",
+      "bytes": 109932
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.general.tz-open",
+      "sha256": "85358669c17cf5f744f253820e686c481e9cef481a64deef639e32ef0c54c8cf",
+      "bytes": 122949
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.profile",
+      "sha256": "3344b16a070a4e16a2b752a39c91e9af9c7a9b8d88daddd52d971b47a56e89b8",
+      "bytes": 94577
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.profile.avatar-error",
+      "sha256": "706372bb1aa037f88eb1325c3d913edfcbcfc8802bd1718448daeee324225169",
+      "bytes": 98242
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.profile.avatar-uploading",
+      "sha256": "5e16b4c44bbda43482e231f952979cb7fa813994b13a7cc4f92c5c47ef74171b",
+      "bytes": 94150
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.profile.delete-confirm",
+      "sha256": "a85a9214cedbdbc956c96fc780bd2a20a8bd9d5767e570eadbcd32ecafb13a29",
+      "bytes": 99581
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.profile.delete-error",
+      "sha256": "4589ac28c7ea1a985d4f1c26c2fdbd9ecd6e18051c64395b0992d09cf63ab924",
+      "bytes": 101347
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.profile.saved",
+      "sha256": "bac21b8b5d744e9bf4ecc420525869716c4fcea1624c25e0143c6f6939fe848a",
+      "bytes": 95386
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "account.cabinet.profile.saving",
+      "sha256": "0e4d68f0a7cce83c280f6b2ee90bc7aa3c80595995d549f5d58da1946720904c",
+      "bytes": 93914
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.connect.anonymous",
+      "sha256": "f8c956eda295edfaae7b511867d5ae2b2063682b311df98c7ab6eb82bad338a5",
+      "bytes": 25602
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.connect.done",
+      "sha256": "9060fcea582e2f829e8cbfa646a5f045de61276f9afbf6a13140471cf9f93417",
+      "bytes": 24546
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.connect.error",
+      "sha256": "72226b86f692fb3b62d522ff609445f3eb854caf77d62d3dd323219bd2e18caf",
+      "bytes": 23835
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.connect.working",
+      "sha256": "80a676303decbc611facba3f4327b3d436af115c57cc0c71e7d4a90bd4398a6e",
+      "bytes": 23032
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.forgot.default",
+      "sha256": "ee3737b6aeb31593bfda336084a84b010889ce0e95e43ef204113fc29431d230",
+      "bytes": 126238
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.forgot.error",
+      "sha256": "da062069e9d508436968fce492dbac0a82038ccd258274a1f52ef1704c15c236",
+      "bytes": 130389
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.forgot.sending",
+      "sha256": "a1fc7ebb749aaffd8831f083d94bc095d7d2113f4f54afad32c7c400ba307d82",
+      "bytes": 126343
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.forgot.sent",
+      "sha256": "3c9bea33b4b59a00a62597a481228b7eff4dc6fb111e3495ec36e8d80d6048c8",
+      "bytes": 130134
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.default",
+      "sha256": "9d07f600b5ca19b7da97e8a798af19ff36295b0775557dc60e04caee3c3be43b",
+      "bytes": 130486
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.error-banned",
+      "sha256": "cc7bdc9a0ad4af6bb951292af8b9296f88c8f2715aed723cb5fe8625436bdf22",
+      "bytes": 134079
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.error-captcha",
+      "sha256": "de2e0a7c7d3f3f931bdec3928e61b761f27151204c40ae3582b6fc235ab9f2a5",
+      "bytes": 133229
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.error-generic",
+      "sha256": "2e607c2aa22ee9bdf56320aeb1c7ad0300f056ec3f772241274080ee06406e2c",
+      "bytes": 131193
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.error-invalid",
+      "sha256": "08068093c4dd5662fddbcba28acf4846a82f2b422174d5b7b15254208ec7e30f",
+      "bytes": 131847
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.error-network",
+      "sha256": "d6f04f4601f43435e55459e418485402664d28738f8215de8beffc45a269c65f",
+      "bytes": 131561
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.error-rate-limited",
+      "sha256": "afdddc054c0dba122d162ccf8cd0f7030f468ed94853f18bac679df22b2c9b15",
+      "bytes": 134369
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.error-server",
+      "sha256": "f2e1a28a3b98c554a1063a7948faa55ea8135a35e3affcc93d09597c37fd1fc9",
+      "bytes": 134322
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.error-validation",
+      "sha256": "9f73237106a98b80519803fa0027d14c30173f4f8afc3006d170d1a29f4b7ce7",
+      "bytes": 132864
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.lang-menu",
+      "sha256": "bb60fffee0e7663b1e4395e5541012e5ea34fdc001429ef3e481e0db78ded47b",
+      "bytes": 141553
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.password-revealed",
+      "sha256": "f9f7291724564923dfc76966edd3f011bc45235141f1ad44aed96dfa5799153a",
+      "bytes": 131733
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.ready",
+      "sha256": "c1d4b340548238c464c7a6f1bbcd9c5cd36c4c1d14dc97c0f904a2f9438fe10a",
+      "bytes": 130735
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.social-return-error",
+      "sha256": "de76b8c66656838666083d95e256f39b051463bfdb633f4f266cf4cd9a44d79d",
+      "bytes": 132418
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.social-return-failed",
+      "sha256": "522dded58c72881d8b45d3b3aca7ad4a3e5c16df36925da43fc67b88b5846615",
+      "bytes": 134794
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.social-tip",
+      "sha256": "9e93cc0818d9e58b7198412e3583f65be7185b53f1fc1e0c5bc0d9adc139c7a7",
+      "bytes": 136998
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.submitting",
+      "sha256": "a2003857f8b0a1b285d6a2e16ef0994f6917ac38b662698c9c4926d7fceedbbf",
+      "bytes": 131195
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.login.unverified",
+      "sha256": "333a24b7c36139ee62d3feb1cd5c9a2a2fb8c1fe7d517f9d48788ab29f93c5eb",
+      "bytes": 135413
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.default",
+      "sha256": "9775aa021c20c169b6ca24f5c667db456ff12dda144231b2bfef8089b1885b88",
+      "bytes": 144878
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.error-email-invalid",
+      "sha256": "14579242f5fd484a221b4264ee0e77c87a74c82fa8b3099e7539b043ff875c58",
+      "bytes": 148423
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.error-email-taken",
+      "sha256": "68b1fa1c2b034d737f172a765c55849ee00cda1f03b70c0a4c4e38120e7c6de9",
+      "bytes": 149035
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.error-generic",
+      "sha256": "010bbffd1fb37ab8245bdddd03a6315a2bdbedbaf35e4fa9f42f28cab444a6b3",
+      "bytes": 148842
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.error-password-short",
+      "sha256": "d0f8f0ba568a6d2b92810c263448fccc241d5e409e89e14038ccc0b6e306ce0a",
+      "bytes": 150854
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.pw-fair",
+      "sha256": "be3de19925ccd26d4f871ee132894d59c2eb9b2703c5ae2ce5f0e2f09ac351df",
+      "bytes": 148415
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.pw-good",
+      "sha256": "c9f6a35d7d9548aa8e8af8a42932b94942def7c4f4723b894111f472317cbe80",
+      "bytes": 147843
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.pw-strong",
+      "sha256": "a05f384322263d9b65c2ab9866c3693fe48abb2ffc333fce59603d671fe70da7",
+      "bytes": 146613
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.pw-weak",
+      "sha256": "4b14dcdfc42e22c0c2cd5746129223d6f0616c6bb19c824ccf8deae75e666627",
+      "bytes": 150581
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.ready",
+      "sha256": "10ec2a3c0181f3859b35f4459427a95af01e539923367cb9714d4e39d3daec0b",
+      "bytes": 147467
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.register.submitting",
+      "sha256": "75d973c2c9bc6877716e1ace375755c9734e714c1691a38ecb7a75a3104228a3",
+      "bytes": 146978
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.reset.default",
+      "sha256": "9afb7b076a669f684945ff0b1173739b5e30f6e68f239d833cb22fa1eace29eb",
+      "bytes": 20388
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.reset.error-mismatch",
+      "sha256": "08bb6e2bc6a1baa6743aeee74f5abb241bd0ea529b6f6a4eae3b38d2e03573e2",
+      "bytes": 24173
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.reset.error-short",
+      "sha256": "014f318ba7728f708ed62b2d6e5af168268fe671d891830981baef9bb84f6dae",
+      "bytes": 26543
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.reset.error-token",
+      "sha256": "9478317d058d7580c765af04dfbbf2be9a451098f3d2f398d254fa32937d1354",
+      "bytes": 26502
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.reset.no-token",
+      "sha256": "563ade2ddf1225d0fbcb71f687bac9072ae54eeba78cbd9940de8ce9bb775bdc",
+      "bytes": 17039
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.reset.saving",
+      "sha256": "5e0f34d8415855a05f0452bc773709f27230802a304f98e6defdbc4a81e7cf0c",
+      "bytes": 20546
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.social-consent.checked",
+      "sha256": "c84cf3497ede8351500189385405a3cce87c5bfe9f5ae8e885c503f1fd133b64",
+      "bytes": 138801
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.social-consent.default",
+      "sha256": "6f57eb2448c473d613fa01395eb6ec4862cf4534816727507d22dc98999631c8",
+      "bytes": 138414
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.social-consent.error",
+      "sha256": "674a9985a95ae59fa87ac6c702856e8d05a0413e5457d8f87b95ce573032964f",
+      "bytes": 140769
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.social-consent.submitting",
+      "sha256": "8786f1a69584b316e94cada45635212367e6bd89e1eb89be912cad3983a31fc6",
+      "bytes": 139153
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.verify.code-entered",
+      "sha256": "a0e702768f95db8f659948ab2b5b068364eca10fd84d61a217fb027595a2d9f7",
+      "bytes": 137405
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.verify.default",
+      "sha256": "0d9c9e82e9597c24846a07541ae207628963b9d2115f6d51babe481ec2222c49",
+      "bytes": 137467
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.verify.error",
+      "sha256": "8b53cdb4af82a79e53a40e0cece9225279d385496ace23a43cb94aac0837ccf5",
+      "bytes": 134657
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "auth.verify.submitting",
+      "sha256": "b489f2fc21026469548d2ffe8a6869164ac01d36f0717e62c4e47619b1a181c5",
+      "bytes": 132431
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.billing.loading",
+      "sha256": "a41293c2e268bbf040d651e823df4680769daceb453dbe9b404cbb6c09ccdf96",
+      "bytes": 67625
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.billing.no-card",
+      "sha256": "683226e53ca4de19eb7d53ad4f17f961ac3c0e8cec864cb7aec58edeabf1dbdc",
+      "bytes": 96671
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.card-sheet.not-eligible",
+      "sha256": "c9e86b68c11b1897b5cc968370a1a84b520c625a41d7e89966545a974124f61d",
+      "bytes": 102683
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.card-sheet.tab",
+      "sha256": "86f88f45f759685e6f39681b451e8fe7b9aed990f565acade52c66370d5f4b1c",
+      "bytes": 186094
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.card-sheet.too-many",
+      "sha256": "caf813cde2ec1d6dd52fdcafc658a4b84a9b93fc4dfdca8be274500ed0bc56e5",
+      "bytes": 101602
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.card-sheet.unavailable",
+      "sha256": "5ee52f3c92d050c1c4146260e42465a999dd500ecad7091c09484115b3a72a4c",
+      "bytes": 101819
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.checkout.already-done",
+      "sha256": "9c6b40b90a181fb95796121c61fb54d08e22831e1df5b5d403bebef65f07138a",
+      "bytes": 125613
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.checkout.error",
+      "sha256": "e22d987988206b9a819d46d28c334aedab2f4da907e8981475fcccbdcd37df37",
+      "bytes": 124073
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.checkout.preparing",
+      "sha256": "70d6e92fb2ee37b38552acc36f1b50ba866dee343d934706a45228692f267230",
+      "bytes": 121074
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.issue.awaiting",
+      "sha256": "e03eaab3a4510f663766357981230a8fd3f9645e8f1efaf2b980a6300eb1fab1",
+      "bytes": 127272
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.issue.declined",
+      "sha256": "1375d09401bcad89d8dfef27d3823969020870070c033fe018dd5e47f888a704",
+      "bytes": 127838
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.issue.exhausted",
+      "sha256": "fcdc8d738d70342362559e5be3f471c68b8d6048303d3106c2081e77b02e60e5",
+      "bytes": 127874
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.issue.processing",
+      "sha256": "b0d27f8d670c1f89a3560ec8e6b014f2582159260c60d4f54d224b3068584306",
+      "bytes": 127321
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.payments.card",
+      "sha256": "2be5cfeb43ffe8ffe2c567c74cb09405eafbcfbdae4c58356a01da4d10b385b3",
+      "bytes": 98762
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.payments.empty",
+      "sha256": "c4acb6be8f9ad16042549b11911afc8fb0f0d91cc7d23a7b128a3e3459ba2581",
+      "bytes": 79111
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.promo.affiliate",
+      "sha256": "d9e1d2a82bc1684ddc3f2479ad87d42e2d2fea6b624a7a844ff0af1c0aa97a5a",
+      "bytes": 122057
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.promo.days",
+      "sha256": "1a6e27c01f4083d0fc0ed30cfe5abce4e54a738d2b6496da4cb7811bae7097df",
+      "bytes": 121525
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.promo.invalid",
+      "sha256": "1e92ceac1d75144160281860e38f2ca9331b87b7ae5a5d5eeea8ad289bb6d86f",
+      "bytes": 121725
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.promo.percent",
+      "sha256": "f994d03b6b93fadcff91965a46c2925206dc3dff0064bd8f0ec8fc6660eaad4d",
+      "bytes": 123043
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.renewal.off",
+      "sha256": "adc1455c8c863ec6648acf59d9a3433fc2a7c934c2d89347f1e49b58a357755b",
+      "bytes": 97455
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.subscription.exhausted",
+      "sha256": "2da30948f07f820a4b86dc1ec84729b971c8072d235265802a74f895de5d241d",
+      "bytes": 120720
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.subscription.free",
+      "sha256": "4b3b83a1b13ee0f5cf7c8ca4d6905aa139352d7e467bc66f50f8d8da6893bbf3",
+      "bytes": 121300
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.subscription.grace",
+      "sha256": "f84a1031de14ae67b86e84f1369361830d0699a8b2f3439a8e8377a999d8dd9b",
+      "bytes": 127953
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.subscription.loading",
+      "sha256": "6456dcd8f4840d89b6b978c197aebe05cdf879fbd7e2b177b9f0c2b7949e77dd",
+      "bytes": 112413
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.subscription.max",
+      "sha256": "e23f612b9d391c004a69de4d8dcfca0b0289a0b8abf0d36b19595c6dbef0871e",
+      "bytes": 114867
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.subscription.none",
+      "sha256": "00751936253901e8068c550b8c5a59081d9b54b68b5756e1ae2ebe9f38ca332a",
+      "bytes": 114241
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.subscription.pro",
+      "sha256": "8680a05acbb9ea88b76e6635e4f2f9553d26ea452cf8679072c06c5ec0d7a768",
+      "bytes": 125406
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.subscription.start",
+      "sha256": "33b79ba642379109a6788e45af31eb289c879e9a3bf10641bf9b12e44ef9f8f5",
+      "bytes": 112665
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "billing.upgrade.unavailable",
+      "sha256": "300ec6b96f4c1673dfb78b143348c29a0484ac532e70cfc54c031ea390d74756",
+      "bytes": 119458
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "boot.spinner",
+      "sha256": "4b868f1229cca713699634b2ffc588f410748e8d3a151584db333b1189fec1f5",
+      "bytes": 6191
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "downloads.empty",
+      "sha256": "fdd6fd8bb61d13b2b430a4bc988760ae2f353cb303fe9f233ecd0ba088d4977b",
+      "bytes": 71551
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "downloads.linux-limitations",
+      "sha256": "4e9bd6364c3ef1b44291516b930c9214cf1417a3469a5165fc63be3b6ee867e5",
+      "bytes": 88677
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "downloads.loading",
+      "sha256": "58881df3f14ec2790f76e8feebb08ce76d8658af06dded1e96e18faa27a5c1e7",
+      "bytes": 66517
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "downloads.populated",
+      "sha256": "d2a9ff3aff8aca7ad6da6d5e4aeaf3533e66c823a1affdca2ef3a3aa923750bb",
+      "bytes": 76121
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "hotkeys.error-save",
+      "sha256": "6ebdaea26666d4a9ea024b6425aafb748ddb6b34b0add5d6b3d024d295caeff5",
+      "bytes": 88748
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "hotkeys.loading",
+      "sha256": "55e48aeaa03260c7c7bfbe18d2b7006a6744866446ca64f9272d106c515f30ca",
+      "bytes": 65974
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "hotkeys.populated",
+      "sha256": "00bf1625e2fccd94f4b31dde25707231f612faf32af385f6e1e6ca62e945f7bc",
+      "bytes": 94735
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "hotkeys.recording",
+      "sha256": "f1de19044b5ef60a65f09b8422655dbc4ccb09715744373efe6dd741140eb7ad",
+      "bytes": 95901
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.checklist",
+      "sha256": "ef90e7f432106b2f5bb8bf3490162acd273cbd67717f7d00a97dc489a38e48d8",
+      "bytes": 130859
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.finish",
+      "sha256": "cd07f748061e0483ee545a2415d37559855b3d31ae28207acedd246e11305ffa",
+      "bytes": 124151
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.launcher-checklist",
+      "sha256": "deac2d12572852a01b00b6d579a56c09df690d85a90cbcd447ad1b65042e8b79",
+      "bytes": 95383
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.launcher-listen",
+      "sha256": "1a6225d0d4d3f61051634a59f15ca5e7d2cbd81db2139346c4cfcf4ef4207f85",
+      "bytes": 95259
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-1",
+      "sha256": "c46029bf2e6b319f6bca67980f1541ea70b5f2580577ef03be6e0b56fbdf0c8a",
+      "bytes": 114778
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-19",
+      "sha256": "508c8a53c5428f68083b1f18957ffbe3489371ff880be1a4b5fdcfb6d608f408",
+      "bytes": 120216
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-2",
+      "sha256": "ef52cabf0ff922ebaedffef68ce76304416ce896c32c28de9d3028867771b235",
+      "bytes": 106310
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-20",
+      "sha256": "bc32ea9f9786cfba6be10386c32bcf1694bf9f2b6280786756f8a5e8a037b0e7",
+      "bytes": 104250
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-21",
+      "sha256": "fb894eaf3e2941cf058fcf86a40eec98bf2859220093d31db672d9f79bb49a40",
+      "bytes": 110750
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-22",
+      "sha256": "49a6cb92a7ea434581d72be597d9de12f92f5c90e9ae3fa7f3131a21807409b4",
+      "bytes": 111228
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-23",
+      "sha256": "f0253760d1704bfaee63bd0bb87854dd3f59222204a3a690e328f8d57a29d46e",
+      "bytes": 125177
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-24",
+      "sha256": "cc7527cf03d3e3bf84b5f37ff34ba128d00557b3ab1966f70cc7a17fb256d819",
+      "bytes": 130105
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-3",
+      "sha256": "012455db52a17a67555a16ea28ae37011bea80a7fe4ba1102536c79d2cb2a1a0",
+      "bytes": 121269
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.tour.step-4",
+      "sha256": "19a722e68fbd71d9c354baeae49d756689d9c5fa4e7252c92dda7ed7909d9119",
+      "bytes": 121405
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "onboarding.welcome",
+      "sha256": "8588ff3dcde1365519c3efba1500ebe3364829b2119f3efe6a89b705b04050e2",
+      "bytes": 131727
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "referral.loading",
+      "sha256": "c6eedd9a8a2624584f0b2f00576776fa098a3e97c02f4dfc677b659fa62ccd60",
+      "bytes": 69044
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "referral.populated",
+      "sha256": "6e719a83338b2dffa6542e6f7bbd8c6fd4cd30c27c1daf9edddb2fe99d840814",
+      "bytes": 92489
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "route.error-fallback",
+      "sha256": "451c354d0ce1eed5b040825fd087a59e4986cdc87d840a452d3087fc1bbe6f76",
+      "bytes": 53732
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.admin",
+      "sha256": "b4d6e533e9c082a0eb5783d649ed6f28bb5a8974ea7a85c812ba6a1d79d0f675",
+      "bytes": 79674
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.connection-lost",
+      "sha256": "922a1751b81713b734469cea0104c4d65c7e20663c41e024a9457cd3d80b40ea",
+      "bytes": 115019
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.connection-restored",
+      "sha256": "dd7dcafd44f8b32b195b2de5be97c5956b50588173740490e10d4dc0499ad100",
+      "bytes": 95548
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.desktop-rail",
+      "sha256": "c26d95c7d6874c43f40d1a882ad49813500da3ddbe650519e86e46f135f5d827",
+      "bytes": 71794
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.paid",
+      "sha256": "13a4dd77ccfb242d64464c2e0f7c5e1f632cf35a66eb6b35a553d7d1d39e08a0",
+      "bytes": 92591
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.palette.empty",
+      "sha256": "13ce34be906be3aa536b62eb1c88cff717ffec7d3e99b9110cb050faa5da6c3d",
+      "bytes": 91864
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.palette.kb-unavailable",
+      "sha256": "bc96a9fcb1c534c1fdb93302281190dc6544ff0a506ef6e39006e196ce3b34cc",
+      "bytes": 92724
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.palette.open",
+      "sha256": "0d013361fa37b9da7357d008fc8dda4f07c653b989699e565391d34e21be92e5",
+      "bytes": 103192
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.palette.searching",
+      "sha256": "64c213b3cbd2ddf72b08fae4683827ad01db16a0e8c5e30ddbf4f3479139b00d",
+      "bytes": 89624
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.palette.too-short",
+      "sha256": "82f6edef2eb66e6d36af4159381bba72d32bba9062ce8207f6141b00ae89c7d7",
+      "bytes": 91116
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.support-badge",
+      "sha256": "7ec7683fa2329d97fe08b02cd01b27fe54d6fb6d4d3206f6e391b5f15e4545cc",
+      "bytes": 93638
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "shell.user",
+      "sha256": "892cf99d5d4a717c326b2620e1dac03c192dccbf8b974141cedba3bd3fa5abe2",
+      "bytes": 93479
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "account.cabinet.data",
+      "sha256": "e2291cd1505d6cb8e3d4d7084295a06820200edaadeda9697191a595bc3c252e",
+      "bytes": 34103
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "account.cabinet.data.purge-confirm",
+      "sha256": "105c3aec1d0795f1d6a070a364d14af04115efb9bb1e703f7a809f7d781a36dd",
+      "bytes": 41835
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "account.cabinet.general",
+      "sha256": "75f7187081ed7c90c018872f2694f9b4adba789a5da9f49d42a2cbf8bf1652a5",
+      "bytes": 40770
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "account.cabinet.profile",
+      "sha256": "f1689d17d038c93fffd788b5e81af56826d49f7a539a4eb83c6cf620a38176de",
+      "bytes": 39806
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "account.cabinet.profile.delete-confirm",
+      "sha256": "6cc1f200053b394f6c1e5fde22a457f318972dc60117ab0afb119de6c3dee0a3",
+      "bytes": 42861
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.connect.anonymous",
+      "sha256": "1eb4c780b64bcf3ad4a50f99910f2fca407dfc0b7eb41fdfb695496388292350",
+      "bytes": 18522
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.connect.done",
+      "sha256": "09d08a72f87a11a9bc00091577739da3598a7e68bbe2ad99eeb4c382e44de1f1",
+      "bytes": 16478
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.forgot.default",
+      "sha256": "ae2d68d43712b23b530bf4696eaa9ed320ee7cc516e836b86bac843dcd30cebb",
+      "bytes": 18993
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.forgot.sent",
+      "sha256": "9879bee0064b48d6310ea8d03f4030af01a5f9c7b350deceb5fa66745c29874c",
+      "bytes": 20672
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.login.default",
+      "sha256": "10a636b1d22fb1c06b86916ed39ab81d02a23fa7e9ed5e5fda4922bfb357c24c",
+      "bytes": 24218
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.login.error-invalid",
+      "sha256": "ac82aad04ffa2df72c2f50730e256c80dc0579b540d439d1b5e06d8736beb092",
+      "bytes": 25438
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.login.social-world",
+      "sha256": "002b1e95364498fec81f58cb2a1e3067739a41330ed14d5bfc644debd8acd4db",
+      "bytes": 25181
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.login.unverified",
+      "sha256": "7bba734864974d8a25858c9f153a8d164d242bf3ae2040c3aa14a94b0fec96ae",
+      "bytes": 27894
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.register.default",
+      "sha256": "c432157737b9961a0dc4e9b25e8f550bb338dbd82e49ef6592c34a57062d9198",
+      "bytes": 33511
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.reset.default",
+      "sha256": "b92fb6f491cfcf2cec3a3996fd7ab6a13aa55f230da7124e5902b66d468704db",
+      "bytes": 18381
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.reset.no-token",
+      "sha256": "1a58da49de8486f0f52222041766bbafa1e3f068e4afe250bb1eb7b5a2c73800",
+      "bytes": 13316
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.social-consent.default",
+      "sha256": "0af03466ce4623e191ef3260730e0d1dab43a471186d3a450496b8bed4bcbfe1",
+      "bytes": 30115
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "auth.verify.default",
+      "sha256": "8dcaf8951d837b0ce6172fdec635aaf0172c1bba8da69b1b1e65e0dc06f4785b",
+      "bytes": 29534
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "billing.card-sheet.tab",
+      "sha256": "4dd75d02299b9fbcb42b7b5e9346057bca8cbf2dabc3a15b6a27f68cf53a0fee",
+      "bytes": 18211
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "billing.payments.card",
+      "sha256": "fe1af195062a11808d2c8fdc421551f7e70e3957edcdaff7cecc1c5ac45f0ff8",
+      "bytes": 36899
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "billing.payments.empty",
+      "sha256": "9f62f0faacde4b0d12d9f14e7fa2068dd47986200558368c9ea0389bd118f8ed",
+      "bytes": 25042
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "billing.subscription.free",
+      "sha256": "a7f98493db1f9657bbec8956cf072de0cce3581c4457984ae05f7af8b93da178",
+      "bytes": 33449
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "billing.subscription.max",
+      "sha256": "2c7c24b4c0be5a86c4bf809f0536ee687e9d788b543a60180257508f73927f71",
+      "bytes": 43386
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "billing.subscription.pro",
+      "sha256": "cb3088dcaf7436d1faf6f611587d32e511089255cb4c43f64a096f02e62d04db",
+      "bytes": 38672
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "billing.subscription.start",
+      "sha256": "a480d814cfed082387f3673b2b19279259c014b1ea75324a8adb14047746fa7c",
+      "bytes": 38337
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "downloads.empty",
+      "sha256": "41e008de15a349cdc988b09813975ec107dfb380d6ee0c7d71862f47ae807f94",
+      "bytes": 27415
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "downloads.loading",
+      "sha256": "4e2de1e4a418e75e57c3631076ad66c7ed9b46e42a10b91f0740f5c20e52a486",
+      "bytes": 22486
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "downloads.populated",
+      "sha256": "305c811252a7bc4dbc264bc04cfdcc80a6660ac93de8da8c877b2e243842de09",
+      "bytes": 35392
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "hotkeys.loading",
+      "sha256": "96887f29f65394b11d2a316f9903152f8a983719853370f540f0de936dc2b01c",
+      "bytes": 21589
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "hotkeys.populated",
+      "sha256": "705d848f3a918d3f4a9977a6f7e6b49070cba6cd7f261403c415269b1d95f372",
+      "bytes": 45469
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "onboarding.finish",
+      "sha256": "480965bce27dce11ea77befbc8ac013a217884b53ad8e3d207f551871316187a",
+      "bytes": 52544
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "onboarding.tour.step-1",
+      "sha256": "3d1922aeffd03f0213e35ba9665199e6fe057275fdd91cf2a65e070f17744243",
+      "bytes": 54826
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "onboarding.welcome",
+      "sha256": "274048499eff94bc325331b8c6c6ba31b76ddd86fc095db1fe4bf862fff52433",
+      "bytes": 42547
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "referral.loading",
+      "sha256": "7a2c5c4f6c40d6b9864f68191759e70d519a59aa67524d6fcbba918021c5bfd7",
+      "bytes": 23711
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "referral.populated",
+      "sha256": "3821a9384cd05b03d2351acea45000115cbd82f641573386ff1b350ac135f912",
+      "bytes": 43489
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "route.error-fallback",
+      "sha256": "bce49539c9f993a2f76510652bb2d860f0bf243bb28cca136536881d03551242",
+      "bytes": 14814
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "shell.admin",
+      "sha256": "6736ab0f994766a917ed679290ed565c8c6d79461d45bf47e13c747bcf91008c",
+      "bytes": 35134
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "shell.connection-lost",
+      "sha256": "f76f87fbaa40b443ea99e30351da1f730986b47a9882c76106af4dab6c682654",
+      "bytes": 47568
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "shell.mobile-drawer-open",
+      "sha256": "b66335ee6ed3ff7d801dfa70e7f8c59fa5b7adf17d867c0450d1fcf69bd0da5c",
+      "bytes": 42291
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "shell.paid",
+      "sha256": "b1ca915250f1db2ac7fb8673c1f804a0a2777cefed451d3e9387f285fb358c3c",
+      "bytes": 36368
+    },
+    {
+      "cell": "mobile-dark-en",
+      "state": "shell.user",
+      "sha256": "475f85337ea3543f49d8308aa68b611d6efc96f2dc84f30757509dafc28b3a83",
+      "bytes": 36436
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "account.cabinet.data",
+      "sha256": "cfac2fb1ed061f6a7b867750f75b2546b87d5a765c801b112f792c1de13e90a3",
+      "bytes": 35409
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "account.cabinet.data.purge-confirm",
+      "sha256": "8eecd45faf9d0750bdeb2eb9b93f1b874ba865be4d47e56fc1d9721cf93c42ae",
+      "bytes": 41446
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "account.cabinet.general",
+      "sha256": "ab0266853ebbabefdef35ba2504c10b519cdbceadd7a0ab6f323deb0ce5c5d9d",
+      "bytes": 42472
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "account.cabinet.profile",
+      "sha256": "865752d2f730dc8a2886c69897abaebb01a08d5d4302c2a8229865be26a0984d",
+      "bytes": 40284
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "account.cabinet.profile.delete-confirm",
+      "sha256": "acb9daac98f97736122837ff4051a0e8ecbbed668542fe7015cf8636143811a3",
+      "bytes": 44501
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.connect.anonymous",
+      "sha256": "1cb9dd544332a484c662b6c8d8795b111f67ad119155b34a150839234e9cff59",
+      "bytes": 18948
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.connect.done",
+      "sha256": "fb5d6a925da5d00ed0d270b949faeb134bc4e152340b0258722737fc0b7d154a",
+      "bytes": 17941
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.forgot.default",
+      "sha256": "31aa5c7f7c4184da324e9b6397bafc9ed16fbba2122ee77f12bbba22b380324a",
+      "bytes": 20671
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.forgot.sent",
+      "sha256": "39e643ecfaf9d410f4e1dccdd999ed757ac903cd0446772ae91419ed9f63945f",
+      "bytes": 23203
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.login.default",
+      "sha256": "bba15ac745c4267f0cb03c635d3f17115c9046b43821f22d040a07b9515ec442",
+      "bytes": 23747
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.login.error-invalid",
+      "sha256": "4398eae69d57edf09f3d72323fcdedf81259cbc16fda5645470664603d167b7c",
+      "bytes": 25026
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.login.unverified",
+      "sha256": "b0932550cf075c8ba4b409c3c0890d8deacf373c40615e39743c6ec843401835",
+      "bytes": 28721
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.register.default",
+      "sha256": "f5725bed9f59234765693b28349b963a30521f816e0519188030d34297c0c58b",
+      "bytes": 36925
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.reset.default",
+      "sha256": "32f2435abf24a8d7148d67ac8e99a51df8122ea1541b5a012da582bc479294b3",
+      "bytes": 16651
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.reset.no-token",
+      "sha256": "3c98a74b7f13f97a7ab31647b972d3e4a4bfe45e8161987ec2a492448db84a9c",
+      "bytes": 12507
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.social-consent.default",
+      "sha256": "ccdff9b513e629499e7da830e8793b00a9e91a31e06ebe387d87e7d7c61e9a03",
+      "bytes": 30107
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "auth.verify.default",
+      "sha256": "0d71eea76e995f4be5bff098367091d77b151028c8fbd13696496d5200b1d01a",
+      "bytes": 30538
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "billing.card-sheet.tab",
+      "sha256": "9f7566eb9d81cdddb0fbc606c6960f27723c8b46013c87ae92e3078d6428fcf3",
+      "bytes": 18723
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "billing.payments.card",
+      "sha256": "ba3fbb592333475ce8814dcb2b3acb3ff2266f1d9f04243ec146e86e775af6dc",
+      "bytes": 39521
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "billing.payments.empty",
+      "sha256": "01bcb693aa4395c31623d97bfd36a21ba6e0cbea0df5326eca36f7aca9507653",
+      "bytes": 25658
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "billing.subscription.free",
+      "sha256": "fc193359e05d52ca61cb8166792c65965914ce26776ac0ef5d87cb3d9c87c41b",
+      "bytes": 35741
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "billing.subscription.max",
+      "sha256": "abb9da0adc147ef9c114daef5842681220e2b57a6a55284bd19ab70f020c2483",
+      "bytes": 42733
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "billing.subscription.pro",
+      "sha256": "591827c14fc8861a0fc6d897decb18aa88eee477d8d80c96401e3d7acb3217b3",
+      "bytes": 36957
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "billing.subscription.start",
+      "sha256": "e99c487d96f58658ddb6d2cf87f77241180a2fd4e6c5f23874e3b40a6a1d9ae7",
+      "bytes": 38336
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "downloads.empty",
+      "sha256": "f71f754c596cb50c30986ac614f7b9239ed696627897df9aeeeefad8bd53f014",
+      "bytes": 29013
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "downloads.loading",
+      "sha256": "0e53ba6a26a1a61d522205a4308786fba933703051a24efd7099fe177607aff3",
+      "bytes": 23767
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "downloads.populated",
+      "sha256": "0f8a2ac957b43724962d224b45a3ac3b2e21ad7cca27a0049315c6dc17c1cd32",
+      "bytes": 36627
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "hotkeys.loading",
+      "sha256": "9cf63db7125aecb69c493b49a9a12bb3b61f2a010969e41cd2280c711cc0b0a4",
+      "bytes": 23625
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "hotkeys.populated",
+      "sha256": "24c7a64d89e619da5da0ab8626b0136442e2017a26d5d8e28b4c32797ffd39cf",
+      "bytes": 46175
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "onboarding.finish",
+      "sha256": "8c9e6936a44a239b08514ab7e0cf54f82b77077416ab3b115289e795d8609d89",
+      "bytes": 56764
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "onboarding.tour.step-1",
+      "sha256": "71705e235f8cf9909b8e0227dd75a3cf203a8a08c17d7ca9a5029edcc8cd9821",
+      "bytes": 55395
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "onboarding.welcome",
+      "sha256": "25c7775236148463d4a74646cad21d07bed236839fcee5105aff27c76a298cdd",
+      "bytes": 48916
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "referral.loading",
+      "sha256": "4267b908c164660ee112058b69af468f7ea235cee3a7b9b51cf6ba3858b5fbfb",
+      "bytes": 26075
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "referral.populated",
+      "sha256": "fa2be62c09d76e54851a6c0aba5ceb4ca077ac8270d0effdba9995c06cfc12cd",
+      "bytes": 46205
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "route.error-fallback",
+      "sha256": "6007ce17cc5d81ef6af7a8bf4316abf465186a4b0bbe924b41b676f74c1f4a80",
+      "bytes": 15828
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "shell.admin",
+      "sha256": "1ce5a368aaccabe706d8d07d4f6ef8b47647741586aaeee64e4af5d0cea096e2",
+      "bytes": 36346
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "shell.connection-lost",
+      "sha256": "18e7849809f015c95d78f84114b8beb6ccd1c33d2b92466f7f038fa88ca31a1c",
+      "bytes": 51213
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "shell.mobile-drawer-open",
+      "sha256": "26f5f6d598d14467f321dc18632a05539fb97f00505883499108ff938e5f7655",
+      "bytes": 42122
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "shell.paid",
+      "sha256": "9bb665276a1be907fc4e893a3ca70713b0560c58ba347c5255dc1311a343f84e",
+      "bytes": 38945
+    },
+    {
+      "cell": "mobile-dark-ru",
+      "state": "shell.user",
+      "sha256": "24ccad0e8b5473a26e6777c8c8de61c0c099187c0f6d7cb614e0c3fc187f0485",
+      "bytes": 39036
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "account.cabinet.data",
+      "sha256": "2e2a90835491c9727b2aa66773c9cb5b96c08b757aab1fa9e81f20ea28d3a511",
+      "bytes": 32610
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "account.cabinet.data.purge-confirm",
+      "sha256": "97bfbd96100f51f7190f5c9b0363e67843dd7cda0b40e5ee652d37a540f2c6d8",
+      "bytes": 41542
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "account.cabinet.general",
+      "sha256": "3a9d18ec379db135c081fa19110cb923283804583a839b1eb647045f9bf0fad3",
+      "bytes": 39434
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "account.cabinet.profile",
+      "sha256": "0d1b6326f122ae7eefc5917d66a2c64d701302633cdbb50e4157ea06e9cc9818",
+      "bytes": 38377
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "account.cabinet.profile.delete-confirm",
+      "sha256": "4c03f8f1abe6041496a10189c08fcf00964f87ded1d4c1273d87625070486a86",
+      "bytes": 42270
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.connect.anonymous",
+      "sha256": "907d4c066328c408d063040fa0d18e5093e2c4d0306602423190c55f8f34369a",
+      "bytes": 19261
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.connect.done",
+      "sha256": "a5ff60ee21b507c281ba2ac1c8a72e240081f425fbde5823e4350697a43fc8c2",
+      "bytes": 17316
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.forgot.default",
+      "sha256": "44d026bb0aab1336a9805e85307810093cf9cd03f7889f0fc1b2eec9f7eb76fd",
+      "bytes": 18422
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.forgot.sent",
+      "sha256": "69d2e505bc12cf686bde2148d72649559873d41c618efa3c6b399cd99241e70a",
+      "bytes": 19791
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.login.default",
+      "sha256": "09b5ffafb858fa76181506e0042c58423facd0f548564f676a7749881b74af8a",
+      "bytes": 23282
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.login.error-invalid",
+      "sha256": "95b495c27e1f76da0f5978c6330eaf3a3c0df599bbdec89b1ed22a12e021aa65",
+      "bytes": 24292
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.login.social-world",
+      "sha256": "8ac9988b35d522bcb9eb900087c6053aaa1038694554343a8fa8b5c84fa1da6f",
+      "bytes": 24539
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.login.unverified",
+      "sha256": "ed7d8743d79703f504c4523c9d3d12827ee8a9ff6c3a08bb5fc533af6b698d8d",
+      "bytes": 26830
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.register.default",
+      "sha256": "212da418d730c05f325bf8889fa288be87012c18614b94795191133a0199ac34",
+      "bytes": 32322
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.reset.default",
+      "sha256": "c4d8b2282b905ec7f8f0012e20a2862e24e7ba77b1aa867047d6d0e69c37d03f",
+      "bytes": 18116
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.reset.no-token",
+      "sha256": "7bee42ac21e844574ed876f080506209c060dc00590a6d64879034f0bdd2f328",
+      "bytes": 13506
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.social-consent.default",
+      "sha256": "43a17e3bb8505128a87a89696eede4069fa4fddda205709d7fa0c40f8ebcebf4",
+      "bytes": 29435
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "auth.verify.default",
+      "sha256": "59afd83e49d7cc85b596f48ddc00bf20a0f6ba250c7f789497ea61583399cd63",
+      "bytes": 28392
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "billing.card-sheet.tab",
+      "sha256": "c2bd12b7ab23d821c7b227742f797113e425880f6f9fde934cccc3f100073c6a",
+      "bytes": 16942
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "billing.payments.card",
+      "sha256": "0534a071ce8726848fc3a60d7eecb20e3494c6f7d96121da3daeaf56f5abbdc5",
+      "bytes": 35867
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "billing.payments.empty",
+      "sha256": "1c92735bdacf0016525f65d4d7fabd24def6e4f0777c0c4f5fe1e97e5542063c",
+      "bytes": 24310
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "billing.subscription.free",
+      "sha256": "5511abcc1359e826c56fb09db21635c9470ad08398ea90b8c04375ead22540a3",
+      "bytes": 32580
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "billing.subscription.max",
+      "sha256": "fa59da7bb04d6eb484ae5946cd267eb6dc11b36f2e990302b998d471ae21a3b3",
+      "bytes": 41246
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "billing.subscription.pro",
+      "sha256": "3afcdf4528c2ec430664d38f51f297c89168fea93e27a61b7ed022530a155776",
+      "bytes": 37628
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "billing.subscription.start",
+      "sha256": "095f2966818ab6db0b921028f056fe2ab7655d74c9d65326af456c6b40f0cbab",
+      "bytes": 37445
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "downloads.empty",
+      "sha256": "b651a56de4017d8b26d18740b3deb96e15cc2e55d1c4387696ce4cfe659e232b",
+      "bytes": 27309
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "downloads.loading",
+      "sha256": "3f0bb83cf7e890640487fde7320e46816aa638a392cd0343aad6901c124546b1",
+      "bytes": 22474
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "downloads.populated",
+      "sha256": "4b09ef872311902486e0b8fdf97fc67827bfd0c48ea14c964fba15e604590197",
+      "bytes": 34147
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "hotkeys.loading",
+      "sha256": "baa32adb4aeb90d616f00624b1bb5c916eaf7359b340fb86527392a8b104e350",
+      "bytes": 21307
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "hotkeys.populated",
+      "sha256": "4903da08d78a55fe85b26d9a59cc3547a7fe55bda8de835b595d2ccfb40cc7cc",
+      "bytes": 42280
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "onboarding.finish",
+      "sha256": "1bfd4d955d31bb0c713d7723ffadb644cf2a6925c1127391c1d7ff78856c476d",
+      "bytes": 49070
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "onboarding.tour.step-1",
+      "sha256": "26b5c0fa0cb77417aa9a79e260fd7223a7c996564847015843649a426e352add",
+      "bytes": 53937
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "onboarding.welcome",
+      "sha256": "d5d0dcbdbaaa99e2248e0a43fe551665f508900db4bdac61b02f2bb352f82a2f",
+      "bytes": 40160
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "referral.loading",
+      "sha256": "0fbf2ad6ef5d3a4cefc87db4e96c558636d9e65d6b13a9eaff419625d6aee963",
+      "bytes": 23739
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "referral.populated",
+      "sha256": "11891d6ae9a723b596d503c4edca8d9b833a19e827c4a54f8fe433300226df62",
+      "bytes": 41826
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "route.error-fallback",
+      "sha256": "c289e395c26f9ea084eb9a5c035b705488e2640afeace5b90d9e4ed2896f5bb6",
+      "bytes": 14300
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "shell.admin",
+      "sha256": "90597942a1a910e7436e4b90e9b8ccd4b778b3659c471773a093468ef767a87c",
+      "bytes": 33857
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "shell.connection-lost",
+      "sha256": "ea94f9418f388279bcf93919e78ba3314381db571e8354493b565a3ae3958f43",
+      "bytes": 47551
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "shell.mobile-drawer-open",
+      "sha256": "a47270ef4213638801956dc3ed0af3b0e4d4506743df66ade502b1b92ce08ee6",
+      "bytes": 41805
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "shell.paid",
+      "sha256": "839c15ba152df31f2891c56fcd55280688fad8c8473fbdff11e047e3102af8ec",
+      "bytes": 34712
+    },
+    {
+      "cell": "mobile-light-en",
+      "state": "shell.user",
+      "sha256": "d7aab12c2e4b756bf7b7d7f3fff0336db674df7e9ad18a08a72ba919f573fa2e",
+      "bytes": 34788
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "account.cabinet.data",
+      "sha256": "58f88a6f69beba7f5ca8e1d5058467ed75754796e3c23adb688b586db16f093b",
+      "bytes": 34157
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "account.cabinet.data.purge-confirm",
+      "sha256": "586569cb5b5260c80f68edeef366122e0cde1bdfda690682556cdb500a429d40",
+      "bytes": 41162
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "account.cabinet.general",
+      "sha256": "365310a9ba703d22a736273d861c004ee227138f474ccdbc955d3a0ff725566f",
+      "bytes": 41095
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "account.cabinet.profile",
+      "sha256": "103f2a47950cf59b30b52a708a29e21b85e0987f74961ab16b0f115c0334d606",
+      "bytes": 39111
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "account.cabinet.profile.delete-confirm",
+      "sha256": "d06886e620b05e1426413b2bbf3a33e144149018af5600c7f76755d85ee7b1c0",
+      "bytes": 43943
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.connect.anonymous",
+      "sha256": "03ae52120fc4b70c9b7f4750ff94d7a8082478b13d63ac8ffe1942cc106cf969",
+      "bytes": 19697
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.connect.done",
+      "sha256": "04244d6d32a4dad063ae49c942f9c4f1db7c567047e18d41e987b2c419ed66c0",
+      "bytes": 18684
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.forgot.default",
+      "sha256": "c480ef07609bcaab2181f0138434ce42f6af81bae8a6d395d13bc3449cf2a8c9",
+      "bytes": 20134
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.forgot.sent",
+      "sha256": "e2bed7236a5cd85de8f9dbf69e4bc9b17626f7369b380acd7c376b64404c0814",
+      "bytes": 22337
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.login.default",
+      "sha256": "a25eaf58865ff4ceefbc8795ae6c118ef79451031730a081addef7368c758411",
+      "bytes": 22951
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.login.error-invalid",
+      "sha256": "1976ac58393af5d4abf5fa25672eb7051c61bfcd9aef9e7989e0ba89bc7f6c93",
+      "bytes": 23973
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.login.unverified",
+      "sha256": "8ff4bf825690d18f7b29bb40f2f2d02157d237028b78bd57493c0b84a9b82fe9",
+      "bytes": 27128
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.register.default",
+      "sha256": "e73d25bc9e0432654f9160e816f1ff8c37932aa9a095de6d2cd7c098b63bc372",
+      "bytes": 35683
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.reset.default",
+      "sha256": "2cc931bc2b85fc9b1ad1fb06f5b258c5278ac81e1cbc8dcb5357e31040d285ca",
+      "bytes": 16384
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.reset.no-token",
+      "sha256": "63b97627b09df9a9604dddc7e34a628a5e3a84d1d834f0f91e6777e98eae5277",
+      "bytes": 12935
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.social-consent.default",
+      "sha256": "b69dd10a0ae9bb65ef4a687cb8a84eee613ec777195c184d50467a88a1698c6a",
+      "bytes": 29247
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "auth.verify.default",
+      "sha256": "20b44500087892634079472e77df6dc6ecc8d7531d8d33b3f30fdf834fade3ed",
+      "bytes": 29339
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "billing.card-sheet.tab",
+      "sha256": "eaeb3affa1cbb01f58f76ee0c12a3fc1567bb99e3262d2dbcf56c329f8a09fbb",
+      "bytes": 17497
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "billing.payments.card",
+      "sha256": "5a3da198a98f655932be1ab4c28f33d93275ca01bbb201848ced3b45bd232fd7",
+      "bytes": 38444
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "billing.payments.empty",
+      "sha256": "3d28354dbaf79b3d19e1445e6f5329c4b64d58ed426a35e707fe4e372182b1d9",
+      "bytes": 24811
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "billing.subscription.free",
+      "sha256": "38fecbe4b4be878e4c315efcbdd15581692120a0cb050a13e3eda230b4490a56",
+      "bytes": 34908
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "billing.subscription.max",
+      "sha256": "c66f1d65b80cf4f85218c47ac7efcfa6fa8968d73c1a028d6737152a212ebbd8",
+      "bytes": 40665
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "billing.subscription.pro",
+      "sha256": "ec1f1cd793c809f8b7b589f5d2d7a64a003a08edb1c4d5d2ed3fdc5b55eeb0a1",
+      "bytes": 35977
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "billing.subscription.start",
+      "sha256": "4b26eb0c951d8ea4bdf342631d88918b438203ed6997daf54713af6981c6ce4e",
+      "bytes": 37470
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "downloads.empty",
+      "sha256": "9ed3f8e988de07d31e3be7cc1a366207fee79e67274206e8e07067eb86aa4efe",
+      "bytes": 28959
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "downloads.loading",
+      "sha256": "9f314cb1c918d2e6534f0f3815c55de7bd0c320a26a1c7c114c296349df2b1a4",
+      "bytes": 23772
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "downloads.populated",
+      "sha256": "6050bec5ab7bbd9b85b84e71ca49837da8c28ffd5f94a9aef16cedd597e8684a",
+      "bytes": 35381
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "hotkeys.loading",
+      "sha256": "7a402b46f20bad22c6f0973d6d03c3d80c5fcdfe040de59f0a3099176efbc084",
+      "bytes": 23448
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "hotkeys.populated",
+      "sha256": "3e99388cd98a41a866f45e8ce8e3fac2d1d5dda76db2dcd44ec15c86525aae5f",
+      "bytes": 43235
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "onboarding.finish",
+      "sha256": "f3772b11439aaa3c15682d8aef1480ef6f33e8e0bfca336b09c32cf747e091f2",
+      "bytes": 53149
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "onboarding.tour.mobile-drawer",
+      "sha256": "c522b48590adca0a27a380a17035fd4233af721fdd0996920205a3aa20727043",
+      "bytes": 51070
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "onboarding.tour.step-1",
+      "sha256": "6b5f414de231f68e44e51441a8fea88504dab96aea21383301b10cd1160a7e00",
+      "bytes": 54198
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "onboarding.welcome",
+      "sha256": "3a2ebed3a11174b1e94afff8bfa3123127ca8acb81c132fd71d7954886fcdb08",
+      "bytes": 46126
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "referral.loading",
+      "sha256": "a00c81b5467c73b767b6cf9a57cb3cc783548ba2041333db65c8f1fbef66d1d6",
+      "bytes": 26117
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "referral.populated",
+      "sha256": "db9847ccc8b837ec5cd15bdef355a031b37f3b83dc4064e1bc85cb96eb2751ac",
+      "bytes": 44507
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "route.error-fallback",
+      "sha256": "ef980a76de000eb1332628a65cd57f90be67dcc289f4a91ba6d7f7ab2bc07789",
+      "bytes": 15253
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "shell.admin",
+      "sha256": "28d06ff57e2f200e649a89566e3b73ba080add14a3f4dcc7d2380b9cafb86055",
+      "bytes": 35093
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "shell.connection-lost",
+      "sha256": "beee6a500ecd243e1b8c0dfe50ed3612d1a96d8a6ed9a12b399911097b50463f",
+      "bytes": 50911
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "shell.mobile-drawer-open",
+      "sha256": "17c7056886e8d43aadaa66b4441ec43fa254f4b6d307be84a8943f1e2c620bc5",
+      "bytes": 41563
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "shell.paid",
+      "sha256": "23e4dfec98f20df40aa44c94d7bbbcb0ddb1960f8d323c5987a617e2bd636e88",
+      "bytes": 37183
+    },
+    {
+      "cell": "mobile-light-ru",
+      "state": "shell.user",
+      "sha256": "fddf9c7f2b2655e99e4c7f9880aaadc4352dd979ceee4eae63896d043db53674",
+      "bytes": 37267
+    }
+  ]
+}

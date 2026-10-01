@@ -30,6 +30,10 @@ LENGTH_LIMITS = (
         frozenset({".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".css"}),
         200,
     ),
+    # Стенд визуального паритета (D2): TypeScript — по лимиту фронтенда,
+    # засев черновика на Python — по лимиту бэкенда.
+    LengthLimit("parity", frozenset({".ts", ".js", ".mjs"}), 200),
+    LengthLimit("parity", frozenset({".py"}), 300),
 )
 
 # Сгенерированный код под лимит не попадает: каталоги генераторов и миграции Alembic.

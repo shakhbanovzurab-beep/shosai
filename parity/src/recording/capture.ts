@@ -8,7 +8,7 @@ import type { Route } from "@playwright/test";
 
 import { canonicalQuery, type Exchange, type JsonValue } from "../fixtures/format.ts";
 
-/** Адрес API черновика из контейнера гармошки (compose.yaml, сеть draft). */
+/** Адрес API черновика из контейнера стенда сравнения (compose.yaml, сеть draft). */
 export const DRAFT_API = process.env["PARITY_DRAFT_API"] ?? "http://draft-api:8000";
 
 function isText(contentType: string): boolean {
@@ -42,8 +42,17 @@ export class ExchangeJournal {
   private inFlight = 0;
   private lastActivity = Date.now();
 
-  /** country — страна посетителя для заголовка CF-IPCountry. */
-  constructor(private readonly country: string) {}
+  private readonly country: string;
+  private readonly profileLanguage: string;
+
+  /**
+   * country — страна посетителя для заголовка CF-IPCountry; profileLanguage —
+   * язык записи, который получает профиль персоны в ответе /v1/auth/me.
+   */
+  constructor(country: string, profileLanguage: string) {
+    this.country = country;
+    this.profileLanguage = profileLanguage;
+  }
 
   get exchanges(): readonly Exchange[] {
     return this.entries;
@@ -85,8 +94,8 @@ export class ExchangeJournal {
       maxRedirects: 0,
     });
     // Браузеру — исходные байты: текстовая перекодировка испортила бы двоичный ответ.
-    const bytes = await response.body();
     const contentType = response.headers()["content-type"] ?? "";
+    const bytes = this.withProfileLanguage(request.method(), url.pathname, await response.body());
     const sent = requestBody(route);
     this.entries.push({
       method: request.method(),
@@ -99,5 +108,17 @@ export class ExchangeJournal {
       origin: "recorded",
     });
     await route.fulfill({ response, body: bytes });
+  }
+
+  /**
+   * Язык профиля — язык записи. Черновик переключает интерфейс на язык из
+   * профиля, а у персон засева он русский; без подмены английская запись
+   * превратилась бы в русскую на полпути.
+   */
+  private withProfileLanguage(method: string, pathname: string, bytes: Buffer): Buffer {
+    if (method !== "GET" || pathname !== "/v1/auth/me" || bytes.length === 0) return bytes;
+    const profile = JSON.parse(bytes.toString("utf8")) as Record<string, unknown>;
+    if (typeof profile !== "object" || profile === null || !("language" in profile)) return bytes;
+    return Buffer.from(JSON.stringify({ ...profile, language: this.profileLanguage }), "utf8");
   }
 }

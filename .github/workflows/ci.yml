@@ -81,6 +81,34 @@ jobs:
       - name: python-doctor 100/100
         run: uv run python-doctor . --min-score 100 --no-cache
 
+  parity:
+    name: Parity harness
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: parity
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: parity/.nvmrc
+          cache: npm
+          cache-dependency-path: parity/package-lock.json
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Type check
+        run: npm run typecheck
+      - name: Harness tests (state registry, draft contract, replay, normalization)
+        run: npm test
+      - name: Shell scripts and Compose definition
+        run: |
+          docker run --rm -v "$PWD:/mnt:ro" -w /mnt koalaman/shellcheck:v0.11.0 --severity=style \
+            scripts/*.sh recording/record.sh
+          docker compose --file compose.yaml config --quiet
+
   detect:
     name: Detect projects
     runs-on: ubuntu-24.04

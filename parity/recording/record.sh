@@ -10,7 +10,7 @@
 #      когда меняется засев, Dockerfile API или коммит черновика;
 #   4. рабочая база — свежая копия шаблона, Redis — пустой, API — перезапущен:
 #      каждый прогон начинается с одного и того же состояния;
-#   5. API стартует под libfaketime в момент гармошки, и это проверяется;
+#   5. API стартует под libfaketime в момент стенда сравнения, и это проверяется;
 #   6. рекордер (playwright.record.config.ts) пишет fixtures/.
 #
 # Ничего боевого стенд не видит: сеть draft без выхода наружу, переменные
@@ -21,7 +21,7 @@ parity_dir=$(cd "$(dirname "$0")/.." && pwd)
 cd "$parity_dir"
 
 if [[ ! -d node_modules/@playwright/test ]]; then
-  echo "Нет зависимостей гармошки: выполните npm ci в $parity_dir" >&2
+  echo "Нет зависимостей стенда сравнения: выполните npm ci в $parity_dir" >&2
   exit 1
 fi
 
@@ -31,7 +31,8 @@ psql=("${compose[@]}" exec -T draft-db psql -U draft -d postgres -v ON_ERROR_STO
 
 clock=$(node -p "require('./parity.config.json').clock")
 # libfaketime: «@» — часы стартуют с этого момента и идут дальше.
-export PARITY_FAKETIME="@$(node -p "new Date('$clock').toISOString().slice(0, 19).replace('T', ' ')")"
+faketime_start=$(node -p "new Date('$clock').toISOString().slice(0, 19).replace('T', ' ')")
+export PARITY_FAKETIME="@$faketime_start"
 
 bash scripts/build-draft.sh >/dev/null
 "${compose[@]}" build draft-api

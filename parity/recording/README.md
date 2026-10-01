@@ -57,7 +57,12 @@ A visit that changes data uses a persona no other visit uses: the draft API cach
 
 ## Visits
 
-A visit ([`../src/recording/visits/`](../src/recording/visits/)) is a persona, a URL, optional actions, a marker that exists only on the intended screen, and optionally a country and a language. The recorder:
+A visit ([`../src/recording/visits/`](../src/recording/visits/)) is a persona, a URL, optional actions, a marker that exists only on the intended screen, and optionally a country and languages.
+
+- **Languages.** A visit is recorded in each of its languages, `ru` and `en` by default, into `fixtures/<visit>.<language>.json`. The page language and the persona's profile language are both the recording language: the draft switches the interface to the profile language, so the recorder sets it in `wh-auth` and in every `/v1/auth/me` response. A visit that changes data either uses language-specific data (`unverified-ru@…`, `unverified-en@…`) or records in one language.
+- **Texts.** Markers and actions take texts from the draft's translation catalogs by key, `t("auth:titleLogin")`, so the same visit works in any language.
+
+The recorder:
 
 - signs the persona in through the API and puts its cookies and `wh-auth` into the browser, so the page boots like a returning user;
 - proxies `/v1` to the draft API and logs every exchange;

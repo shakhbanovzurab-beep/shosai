@@ -2,6 +2,11 @@
   "draft": {
     "commit": "589917e847f7d7213b3af5a3959bcc88c7500fe7"
   },
+  "v2": {
+    "appDir": "../frontend/dist",
+    "fontDirs": ["../frontend/dist/fonts"],
+    "rootDir": "../frontend/dist"
+  },
   "clock": "2026-07-17T12:00:00Z",
   "timezone": "Europe/Moscow"
 }

@@ -5,11 +5,19 @@
   "description": "Visual parity harness: renders the draft and v2 frontends from recorded API data and compares screenshots",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "record": "bash recording/record.sh"
+    "test": "playwright test -c playwright.unit.config.ts",
+    "texts": "node scripts/extract-texts.ts",
+    "record": "bash recording/record.sh",
+    "baseline": "bash scripts/parity.sh baseline",
+    "verify": "bash scripts/parity.sh verify",
+    "compare": "bash scripts/parity.sh compare"
   },
   "devDependencies": {
+    "@aws-sdk/client-s3": "3.1144.0",
     "@playwright/test": "1.63.0",
     "@types/node": "24.19.0",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
     "typescript": "7.0.2"
   }
 }

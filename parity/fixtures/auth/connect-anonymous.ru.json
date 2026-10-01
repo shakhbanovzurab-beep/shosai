@@ -1,0 +1,13 @@
+{
+  "visit": "auth/connect-anonymous",
+  "language": "ru",
+  "persona": null,
+  "url": "/app/connect?state=parity-state",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru"
+  },
+  "exchanges": []
+}

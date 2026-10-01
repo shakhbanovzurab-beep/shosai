@@ -1,4 +1,4 @@
-# Гармошка визуального паритета: браузер в закреплённом образе и стенд записи
+# Стенд сравнения визуального паритета: браузер в закреплённом образе и стенд записи
 # фикстур с API черновика. План: docs/plan/packages/D2-visual-parity.md.
 #
 # Профиль `recording` поднимает черновик: его PostgreSQL, Redis и API. Они живут
@@ -27,13 +27,29 @@ services:
     <<: *hardening
     image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
     profiles: ["tools"]
-    working_dir: /parity
+    # Раскладка как в репозитории: стенду нужны сборка v2 (../frontend/dist) и
+    # контракт черновика (../contracts/draft). Монтируется только это: остальной
+    # репозиторий, включая backend/.env с боевыми значениями, в контейнер с
+    # зависимостями npm не попадает.
+    working_dir: /repo/parity
     init: true
+    environment:
+      PARITY_TARGET: ${PARITY_TARGET:-}
+      PARITY_MODE: ${PARITY_MODE:-}
+      PARITY_WORKERS: ${PARITY_WORKERS:-4}
+      # Хранилище эталона (план D2 §5): бакет и ключ задаёт оператор.
+      PARITY_S3_ENDPOINT: ${PARITY_S3_ENDPOINT:-}
+      PARITY_S3_REGION: ${PARITY_S3_REGION:-}
+      PARITY_S3_BUCKET: ${PARITY_S3_BUCKET:-}
+      PARITY_S3_ACCESS_KEY_ID: ${PARITY_S3_ACCESS_KEY_ID:-}
+      PARITY_S3_SECRET_ACCESS_KEY: ${PARITY_S3_SECRET_ACCESS_KEY:-}
     # Chromium держит общую память в /dev/shm; без ipc: host он падает на
     # тяжёлых страницах.
     ipc: host
     volumes:
-      - .:/parity
+      - .:/repo/parity
+      - ../frontend:/repo/frontend:ro
+      - ../contracts:/repo/contracts:ro
     networks:
       - default
       - draft
@@ -118,7 +134,7 @@ services:
       SOCIAL_LOGIN_GITHUB_ENABLED: "true"
       SOCIAL_LOGIN_GITHUB_CLIENT_ID: parity-github-client
       TZ: UTC
-      # Фиксированный момент гармошки (parity.config.json), часы идут от него.
+      # Фиксированный момент стенда сравнения (parity.config.json), часы идут от него.
       # Задаёт record.sh и сразу проверяет, что API видит именно этот момент.
       FAKETIME: ${PARITY_FAKETIME:-}
     volumes:

@@ -7,7 +7,7 @@
 //    похожего на настоящий токен);
 //  * UUID → заглушки по порядку первого появления в отсортированной фикстуре,
 //    одинаково везде — в телах, путях и строках запроса;
-//  * метки времени в пределах суток после момента гармошки — это «сейчас» API
+//  * метки времени в пределах суток после момента стенда сравнения — это «сейчас» API
 //    под libfaketime, которое сдвигается на секунды записи → сам момент, в том
 //    же формате. Засев задаёт прошлое и будущее явно и вне этого окна.
 
@@ -38,8 +38,11 @@ const VOLATILE_RESPONSE_FIELDS: ReadonlyMap<string, readonly string[]> = new Map
 
 class Normalizer {
   private readonly uuids = new Map<string, string>();
+  private readonly clock: Date;
 
-  constructor(private readonly clock: Date) {}
+  constructor(clock: Date) {
+    this.clock = clock;
+  }
 
   string(value: string): string {
     return value

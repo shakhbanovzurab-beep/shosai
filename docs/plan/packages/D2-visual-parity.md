@@ -51,22 +51,26 @@ Tablet (861–1024 px, rail sidebar) is not in the prompt's matrix and is not co
 
 ```text
 parity/
-  README.md                  how a slice runs the comparison for its routes
-  package.json, package-lock.json, tsconfig.json
+  README.md                  how a slice runs the comparison and adds its states
+  package.json, package-lock.json, tsconfig.json, .nvmrc
   compose.yaml               harness container (pinned image); draft recording stack
   playwright.config.ts       one project per matrix cell
+  parity.config.json         pinned draft commit, v2 build paths, clock, time zone
+  scripts/parity.sh          baseline / verify / compare
   src/
-    targets/                 draft and v2: how to build and which files to serve
-    serve/                   static files, SPA fallback, fonts; everything else blocked
-    replay/                  strict fixture router for HTTP, SSE and WebSocket
+    targets/                 draft and v2: which files to serve
+    serve/                   static files, SPA fallback, fonts; third-party stubs; everything else blocked
+    replay/                  strict fixture router and the closed list of background requests
     determinism/             init script and the settle step
-    states/<feature>.ts      typed state definitions
-    parity.spec.ts           one test per state × cell
-  fixtures/
-    personas/                anonymous, free, start, pro, max, admin: user and shell responses
-    <feature>/<scenario>.json
-  recording/                 draft backend stack, seeds, recorder, normalizer
-  inventory/                 route and state inventory (done)
+    states/<feature>.ts      typed state definitions; registry.ts lists them
+    i18n/texts.json          translation texts used by markers, generated from the draft
+    baseline/                manifest and S3 store
+    contracts/               validation of synthetic responses against the draft OpenAPI (D1)
+    recording/               recorder, visits, normalizer
+    parity.spec.ts           one test per state, tagged with its cells
+  fixtures/<visit>.<lang>.json
+  recording/                 draft API image, seeds, record.sh
+  inventory/                 route and state inventory
   baseline/manifest.json     state, cell, SHA-256 and size of each image; the PNGs live in S3
 ```
 
@@ -77,14 +81,15 @@ The harness is its own npm project. It runs inside the pinned Playwright contain
 A target is a built frontend plus the static files it needs, served at the origin `http://parity.test` by request interception. No server process is involved.
 
 - **draft**: `git archive` of the pinned commit (the draft tree is never touched), `npm ci`, `vite build` into the harness cache. Fonts come from the draft's `backend/static/landing/fonts` and `backend/static/webfonts`, served at `/fonts/` as the draft backend serves them.
-- **v2**: `frontend/dist` of this repository and v2's own font directory. F2 fills in the target when the frontend exists.
+- **v2**: `frontend/dist` of this repository and v2's own font directory, set in `parity.config.json`; F2 adjusts the paths when the frontend exists.
 
-Requests to any other host are aborted: analytics, Turnstile, social SDKs, the CloudPayments widget.
+Requests to any other host are aborted: analytics, the CloudPayments widget and the rest. The Yandex, VK and Google sign-in SDKs and the Turnstile captcha get stubs. Blocked, they make the draft show an error toast that users never see.
 
 ### 3.3 Fixtures and replay
 
-- A fixture is a JSON list of responses: method, path, query, status, body, and `origin` (`recorded` or `synthetic` with a reason). Server-sent events are a list of events; WebSocket conversations are a list of frames.
-- A state is a **persona** (the user and the shell responses every signed-in page needs) + a **scenario** (the page's data) + **overrides** (an error status, an empty list, a held request for the loading state).
+- A fixture is the recording of one visit in one language: the persona's storage and every `/v1` exchange (method, path, query, status, body, `origin`). Visits are recorded in `ru` and `en`, because some requests carry the language. Server-sent events and WebSocket frames join the format in the steps that need them (5 and 6).
+- A state is a **fixture** + **overrides**: an error status, an empty list, a held request for the loading state, a network failure. Each override is synthetic and needs a reason.
+- A short, closed list of background requests is answered by default when a fixture lacks them, because they fire later than a recording ends: analytics flushes, the satisfaction prompt after 25 s, the connection probe.
 - Replay is strict. A request with no matching response fails the test and is reported by name. The draft's tool answered unknown paths with `[]`, which made broken screens look clean.
 - Recorded fixtures have the draft's real shapes by construction. Synthetic fixtures are validated in CI against the draft's OpenAPI from D1 (`contracts/draft/`), so an invented or renamed field fails before any screenshot is taken.
 
@@ -110,18 +115,25 @@ Scope rule:
   - sibling states written as `a` / `b` / `c` in the inventory.
 - A state whose layout changes is `full`, for example when a banner pushes content down or a panel opens.
 
-Selectors use roles, `aria-label`, visible text and `data-onboarding` anchors, so the same definition drives the draft and v2. Draft class names are used only where nothing else exists, and are listed so F2 can keep them or replace the selector.
+Selectors use roles, `aria-label`, visible text and `data-onboarding` anchors, so the same definition drives the draft and v2. Visible texts come from the draft's translation catalogs by key (`t("auth:titleLogin")`, generated into `src/i18n/texts.json`), so one definition works in all 16 languages. Draft class names are used only where nothing else exists (`.onb-card`), so F2 can keep them or replace the selector.
+
+A state can also restrict its viewports (the mobile drawer exists only on a phone), mask a region that follows real time (a "resend in 60 s" countdown), and raise its tolerance. A mask and a tolerance each need a written reason.
 
 ### 3.5 Determinism
 
 The pilot recipe, applied to every state:
-- frozen clock and timezone;
+- frozen clock and time zone;
 - seeded `Math.random`;
-- animations and transitions zeroed from document start;
+- "reduce motion" emulated: the draft then stops the sign-in poster and Leo's gaze, which otherwise change every frame;
+- animations and transitions zeroed from document start, except animations whose end changes the screen: the draft's toast closes when its `toast-bar` animation ends, so that animation stops on its first frame;
 - pointer parked;
-- turnstile stub;
+- captcha and sign-in SDK stubs;
 - service workers blocked;
-- then marker, fonts, network-quiet and DOM-quiet waits before `toHaveScreenshot`.
+- then marker, fonts, 500 ms without API requests and 500 ms without DOM changes before `toHaveScreenshot`.
+
+Measured in step 3: the 237 screenshots of steps 2–3, captured from scratch and restored from S3, matched with zero tolerance in every run.
+
+Measured in step 3b: 145 states, 430 screenshots, 31.7 MB in the bucket; `baseline` and two `verify` runs matched with zero tolerance. Masks cover two regions driven by real timers: the resend countdown on the code screen and the `mm:ss` stamps of the connection log.
 
 ### 3.6 Recording from the draft backend
 
@@ -148,13 +160,13 @@ Fixtures come from the draft backend running locally with seeded test data, as t
 
 ### 3.7 Commands
 
-Run from `parity/`, inside the container. A slice selects its states by id prefix.
+Run from `parity/`; screenshots are taken inside the container. A slice selects its states with `--grep` on the state id.
 
 | Command | What it does |
 |---|---|
 | `npm run baseline -- [--grep <prefix>]` | renders the draft, uploads the images to the S3 bucket and rewrites `baseline/manifest.json` |
 | `npm run verify -- [--grep <prefix>]` | renders the draft again and compares with zero tolerance (definition of done: two runs, no differences) |
-| `npm run compare -- --grep meetings.` | renders v2 and compares with the parity tolerance; HTML report with expected, actual and diff per state and cell |
+| `npm run compare -- --grep "meetings\."` | renders v2 and compares with the parity tolerance; HTML report with expected, actual and diff per state and cell |
 | `npm run record -- --grep <prefix>` | re-records fixtures from the local draft stack |
 
 Parity tolerance: per-pixel colour threshold 0.1 and at most 0.1 % of pixels per screenshot, overridable per state with a reason.
@@ -168,10 +180,11 @@ These follow from the goal "a user notices no difference" and are what lets one 
 - **API.** The same `/v1` HTTP, SSE and WebSocket contract (D1). Fonts are served at `/fonts/`.
 - **Randomness.** Random choices visible on screen go through `Math.random`, so the seed applies.
 - **Selectors.** The texts, `aria-label`s, roles and `data-onboarding` anchors used as markers and interactions stay.
+- **Motion.** v2 honours `prefers-reduced-motion` where the draft does. If a toast closes on another animation than `toast-bar`, its selector joins `PERSISTENT_ANIMATIONS`.
 
 ### 3.9 CI
 
-D2 adds a `parity` job: `npm ci`, type check, and unit tests of the harness (fixture validation, replay matching, uniqueness and completeness of state definitions). It also extends the 200-line limit of `scripts/ci/check_repository.py` to `parity/`.
+D2 adds a `parity` job: `npm ci`, type check, and unit tests of the harness: state registry, synthetic responses against the draft OpenAPI, replay matching, normalization, matrix, manifest, translation texts. The job also runs shellcheck on the scripts and validates the Compose file. `scripts/ci/check_repository.py` applies the 200-line limit to TypeScript in `parity/` and the 300-line limit to Python there.
 
 Screenshot runs on v2 are wired into CI by F2, when v2 has a frontend to compare.
 
@@ -183,7 +196,8 @@ Each step is one session, ends with checks and a report, and is committed after 
 |---|---|---|
 | 1 | Inventory, this plan, ADR 0003, status | inventory covers every route; plan and ADR approved |
 | 2 | Recording stack: draft backend at the pinned commit with PostgreSQL and Redis, libfaketime, persona seeds, recorder, normalizer; fixtures for boot, shell, auth, account, billing, onboarding, referral, downloads, hotkeys | the stack starts with one command and records those fixtures; no production value is read |
-| 3 | Harness core: targets, serving, strict replay, determinism, state DSL, matrix, `baseline` / `verify` / `compare`, report, unit tests, CI job, `parity/README.md`; state definitions and baseline for step 2's features | `verify` shows 0 differences for those states |
+| 3 | Harness core: targets, serving, strict replay, determinism, state DSL, matrix, `baseline` / `verify` / `compare`, report, unit tests, CI job, `parity/README.md`; the main states of step 2's features. Done: 44 states, 237 screenshots in S3 | `verify` shows 0 differences for those states |
+| 3b | The remaining states of the shell, auth, account and billing group (inventory: shell-auth-account-billing.md), on the core of step 3:<br>• loading, empty and error variants through overrides;<br>• sign-in by social networks and consent;<br>• registration and reset validation;<br>• onboarding: tour steps on this group's routes, finish, checklist, launchers;<br>• billing flows: upgrade, promo, checkout, card sheet, renewal, payment issues;<br>• connection overlay, toasts, error boundary, command palette.<br>Tour steps 5–18 run on other features' routes and join the steps of those features. Every state of the group is screenshotted, captured inside another state, or left out with a reason (inventory, «Coverage in the screenshot matrix»). | `verify` shows 0 differences for those states |
 | 4 | Meetings, calendar, context, knowledge, search | same, for these states |
 | 5 | Leo, prompts, models, MCP, hub (SSE replay for chat and prompt tests) | same |
 | 6 | Rooms, streams, storage, tracker (WebSocket replay; SFU states excluded) | same |
@@ -205,6 +219,9 @@ The owner approved this plan on 2026-10-01.
    - Live participant tiles, the live whiteboard and stage video are not screenshotted, because WebRTC media cannot be recorded and replayed deterministically.
    - They are checked by hand on the staging domain.
    - Everything those pages render over HTTP is covered.
+4. **Draft defects visible on screen — decided 2026-10-01: v2 fixes them; they stay out of the baseline.**
+   - Example: the payment-return toasts show raw translation keys («cab.paySuccess» and the rest); v2 shows the translated texts.
+   - The inventory marks such a state as a defect and leaves it out of the baseline; the slice that owns the screen checks the corrected behaviour with its own tests.
 
 ## 6. Risks
 
@@ -212,6 +229,8 @@ The owner approved this plan on 2026-10-01.
 |---|---|
 | The draft API needs more services at startup than PostgreSQL and Redis | resolved in step 2: NATS and Temporal are optional for the draft API; it starts with PostgreSQL and Redis only |
 | Production enables a different set of social sign-in providers than the recording stack | resolved 2026-10-01: the owner confirmed that production enables all four — Yandex and VK for Russia and the Russian language, Google and GitHub for everyone else — as the recording stack does |
+| A state needs a combination of requests that the draft API cannot produce | found in step 3b: hotkeys are never saved (the API caps the map at 16 actions, the page sends 22). Such states are marked unreachable in the inventory and stay out of the baseline |
+| A draft defect would become a baseline that v2 must repeat | resolved 2026-10-01 (decision 4): defects stay out of the baseline, and v2 fixes them |
 | A screen depends on time in a way libfaketime does not cover | the normalizer rule set is per field and reviewed in the recording report |
 | Semgrep `p/default` flags token-like strings in fixtures | fixtures use fake values that do not look like JWTs or keys |
 | v2 renders the same design with a newer Tailwind or React and differs by a few pixels | per-state tolerance with a written reason; never a global increase |

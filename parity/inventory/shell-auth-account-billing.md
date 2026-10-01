@@ -442,7 +442,7 @@ Always called while the cabinet is open: `GET /v1/me` (every 15 s) and `GET /v1/
 | `account.cabinet.general.theme-dark` / `system` | click «Тёмная» / «Система» | `html[data-theme=dark]`; `wh.theme` | — |
 | `account.cabinet.general.font-serif` (and the other roles) | click a tile | `html[data-font=serif]` (attribute removed for Whisperer) | `PATCH /v1/me/profile {appearance:{font}}`; error toast «Не удалось сохранить настройку. Она действует только на этом устройстве.» |
 | `account.cabinet.general.lang-menu` | click `button[aria-label="Язык"]` | 16-item list | `PATCH /v1/me/profile {language}` on pick |
-| `account.cabinet.general.tz-open` | click `[role=combobox][aria-label="Часовой пояс"]` | listbox + search `aria-label="Поиск…"` | `PATCH /v1/me/profile {timezone}`; error «Не удалось сохранить часовой пояс» |
+| `account.cabinet.general.tz-open` | click the button «Часовой пояс» (a `button`, not a combobox — checked in step 3 of D2) | listbox + search `aria-label="Поиск…"` | `PATCH /v1/me/profile {timezone}`; error «Не удалось сохранить часовой пояс» |
 | `account.cabinet.general.marketing-on` / `off` | `user.marketing_consent` | switch `aria-checked` | `PATCH …{marketing_consent}`; error «Не удалось сохранить настройку рассылок» |
 | `account.cabinet.profile` | `/app/cabinet/profile` | «Профиль», avatar initial, name or «Как к вам обращаться», email, «Сменить аватар», inputs «Имя» / «Email» (disabled), status «Изменения сохраняются автоматически», danger row «Удалить аккаунт», row «Выход из аккаунта» + «Выйти» | — |
 | `account.cabinet.profile.saving` / `saved` | type a name, wait 700 ms | «Сохранение…» → «✓ Изменения сохранены» | `PATCH /v1/me/profile {username}` → `GET /v1/auth/me` |
@@ -538,8 +538,8 @@ Page: `/root/whisperer/frontend/src/features/hotkeys/pages/HotkeysPage.tsx`.
 | `hotkeys.loading` | GET delayed | «№12» «Десктоп» «Горячие клавиши» + spinner card | `GET /v1/me/hotkeys` → `{hotkeys: HotkeyMap}` (`/root/whisperer/frontend/src/features/hotkeys/api.ts:5`; `contracts/types.ts:3-8`) |
 | `hotkeys.populated` | map **with all 22 actions** (`contracts/types.ts:17-39`) | 22 rows: labels «Открыть приложение», «Старт / пауза записи», …; binding text such as «⌥ ⌘ Z» | same |
 | `hotkeys.recording` | click a binding button | Yellow «Нажмите клавиши…»; a capture-phase keydown listener is active | — |
-| `hotkeys.saved` | press e.g. Ctrl+Alt+K, wait 700 ms | New label; no "saved" text is rendered | `PUT /v1/me/hotkeys {hotkeys}` |
-| `hotkeys.error-conflict` | PUT → 4xx/5xx with a **string** `detail` | «Комбинации не должны повторяться» | same |
+| `hotkeys.saved` | **Unreachable with the draft API** (checked in step 3b of D2): the frontend sends all 22 actions, `HotkeysUpdate` accepts at most 16 (`/root/whisperer/backend/src/meetassist/api/me.py:158-160`), so every save ends in 422 and `hotkeys.error-save`. Not in the screenshot matrix. | New label; no "saved" text is rendered | `PUT /v1/me/hotkeys {hotkeys}` |
+| `hotkeys.error-conflict` | **Unreachable with the draft API** for the same reason: the length check answers 422 with a list `detail` before any conflict check. Not in the screenshot matrix. | «Комбинации не должны повторяться» | same |
 | `hotkeys.error-save` | PUT with no string detail, or network failure | «Не удалось сохранить» | same |
 | `hotkeys.error-load` | GET → 500 | spinner forever | — |
 | `hotkeys.crash` | a map missing any action | route error fallback | — |
@@ -658,7 +658,7 @@ On tablet the sidebar defaults to the 66 px rail. The sidebar width is exported 
 
 ### Findings / bugs worth recording as known states
 
-1. **Payment-return toasts show raw keys.** `usePaymentReturn` translates `account:cab.paySuccess|payFailed|payProcessing` (`/root/whisperer/frontend/src/features/billing/hooks/usePaymentReturn.ts:17,53,62,83,85,87`), but those keys exist only in the billing catalogs (`/root/whisperer/frontend/src/features/billing/locales/ru.json:87-91`). The toasts read «cab.paySuccess» and so on. «Проверяем оплату…» is fine.
+1. **Payment-return toasts show raw keys.** v2 shows the translated texts (owner, 2026-10-01). `usePaymentReturn` translates `account:cab.paySuccess|payFailed|payProcessing` (`/root/whisperer/frontend/src/features/billing/hooks/usePaymentReturn.ts:17,53,62,83,85,87`), but those keys exist only in the billing catalogs (`/root/whisperer/frontend/src/features/billing/locales/ru.json:87-91`). The toasts read «cab.paySuccess» and so on. «Проверяем оплату…» is fine.
 2. **The dev-stub payment redirect leaves the SPA base.** It goes to `/cabinet?paid=1` without `/app` (`/root/whisperer/frontend/src/features/billing/ui/UpgradeButton.tsx:150`).
 3. **Hotkeys page crashes on an incomplete map.** `formatBinding(undefined)` throws when any of the 22 actions is missing. Also, any string `detail` is reported as «Комбинации не должны повторяться».
 4. **Some load errors have no error UI.** `/referral` and `/hotkeys` spin forever; `/download` shows the empty state.
@@ -666,3 +666,58 @@ On tablet the sidebar defaults to the 66 px rail. The sidebar width is exported 
 6. **The collapsed sidebar search tooltip hard-codes ⌘** in the ru string «Поиск (⌘K)» on every OS.
 7. **`localeOf` falls back to `zh`** (`LOCALES[1]`) for unknown codes (`/root/whisperer/frontend/src/shared/i18n/locales.ts:49-51`).
 8. **The `index.html` comment about SmartCaptcha is stale.**
+9. **Hotkeys are never saved.** The page sends the whole map of 22 actions; the API allows 16 entries and answers 422. Every change ends in «Не удалось сохранить». Found while recording in step 3b of D2.
+10. **⌘K while recording a hotkey also opens the command palette.** The page's capture-phase listener records the combination but does not stop the event, and the palette's own listener opens over the page. The harness records ⌥⌘J for this reason.
+
+### Coverage in the screenshot matrix (step 3b of D2)
+
+Every state of this document is either a state in the registry ([src/states/](../src/states/)) under its own id, captured inside another screenshot, or left out for a stated reason. Tour steps on routes of other groups (5–18) are captured with those groups, on their fixtures.
+
+**Captured inside another state:**
+
+| state | screenshot |
+|---|---|
+| `auth.login.poster`, `auth.login.mobile`, `auth.login.social-ru` | `auth.login.default` (desktop and mobile cells; the recording runs with `CF-IPCountry: RU`) |
+| `auth.login.social-tip-open` | `auth.login.social-tip` |
+| `auth.connect.anon` | `auth.connect.anonymous` |
+| `auth.login.success`, `auth.login.redirect-authed`, `onboarding.welcome-later`, `onboarding.tour.later` | `shell.user`: each ends on the signed-in home |
+| `boot.refresh-dead`, `account.cabinet.profile.logout` | `auth.login.default`: each ends on the sign-in page |
+| `boot.refresh-network`, `shell.connection-probing`, `shell.connection-calm` | `shell.connection-lost` (probing, reduced motion) |
+| `shell.desktop-full`, `shell.nav-active`, `shell.hub-beta`, `shell.ticker` | `shell.user` |
+| `shell.theme-toggle`, `account.cabinet.general.theme-dark` | the dark cells of every full-scope state |
+| `shell.palette.kb-loading` | `shell.palette.searching` (both texts show together) |
+| `shell.toast.error`, `success`, `info` | the error states, `account.cabinet.data.purge-done`, `account.cabinet.data.export-requested` |
+| `onboarding.tour.step-N.cta` | `onboarding.tour.step-3`, `onboarding.tour.step-21` |
+| `onboarding.tour.step-N.paid-locked` | `onboarding.tour.step-23`, `onboarding.tour.step-24` |
+| `onboarding.launcher-resume` | the tour steps (sidebar «Продолжить обучение») |
+| `onboarding.restart` | `onboarding.tour.step-1` |
+| `account.cabinet.subscription`, `billing.tariffs.grid`, `billing.upgrade.methods` | `billing.subscription.*` |
+| `account.cabinet.data.export-none` | `account.cabinet.data` |
+| `billing.premium-limits` | `billing.subscription.max` |
+| `billing.billing.card`, `billing.renewal.not-eligible`, `billing.history.empty` | `billing.payments.card`, `billing.payments.empty` |
+| `billing.card-sheet.errors` | `billing.card-sheet.too-many`, `not-eligible`, `unavailable` |
+| `referral.mobile` | the mobile cells of `referral.populated` |
+| `hotkeys.crash` | `route.error-fallback` (the same trigger) |
+
+**Not screenshotted:**
+
+| state | reason |
+|---|---|
+| `auth.login.error-too-many`, `hotkeys.saved`, `hotkeys.error-conflict` | unreachable with the draft API (see the rows above) |
+| `billing.pay-return.*` | the toasts show raw translation keys (finding 1). **Decided by the owner on 2026-10-01: v2 shows the translated texts** («Оплата прошла…» and the rest of `billing:cab.paySuccess`, `payFailed`, `payProcessing`), so the draft's screen is not a baseline. The billing slice checks these toasts with its own tests |
+| `referral.error`, `hotkeys.error-load` | render exactly as `referral.loading` and `hotkeys.loading` (finding 4) |
+| `auth.login.social-return-busy` | no visible change: the submit button is disabled, as on an empty form |
+| `auth.captcha.loading`, `ready`, `dead`, `stalled` | the Turnstile widget is a third-party script; the harness stubs it with a fixed 300 × 65 frame |
+| `auth.verify.resend-ready`, `auth.verify.resent` | the resend button unlocks after 60 s on a real timer |
+| `auth.reset.done` | lives 1.8 s on a real timer, then navigates to `/login`, which is screenshotted |
+| `referral.copied` | lives 1.5 s on a real timer and needs clipboard permission |
+| `boot.i18n-pending` | an empty `#root` for the moment before React mounts |
+| `route.loading`, `account.cabinet.loading` | a lazy chunk loading; the harness serves chunks from disk at once and overrides only `/v1` |
+| `shell.connection-retry-n` with N > 1, `shell.connection-rebooting`, `shell.connection-easter-egg` | timers on the real clock (backoff, 900 ms reboot) |
+| `shell.toast.warning` | no flow of this group raises a warning toast |
+| `shell.tablet` | the tablet layout is not in the matrix (plan §2) |
+| `onboarding.audio.*` | subtitles follow the playback time of an mp3 |
+| `billing.checkout.sheet`, `billing.card-sheet.form`, `stuck`, `broken` | the CloudPayments widget is a third-party script and iframe; the harness stubs third-party scripts |
+| `billing.checkout.redirect`, `downloads.click` | navigate away from the app |
+| `account.cabinet.leo`, `account.cabinet.mcp` | belong to the Leo and MCP features (step 5) |
+| `paywall.premium-locked` | renders on routes of other groups; captured with them |

@@ -1,0 +1,760 @@
+{
+  "visit": "billing/payments-pro",
+  "language": "ru",
+  "persona": "pro",
+  "url": "/app/cabinet/billing",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru",
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"pro@parity.test\",\"username\":\"Егор Волков\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"pro_1m\",\"name\":\"Pro (31 день)\",\"price_rub\":1990,\"price_usd\":27,\"price_eur\":24,\"period_days\":31,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":107374182400,\"currency\":\"RUB\",\"price\":1990},\"started_at\":\"2026-07-07T12:00:00Z\",\"expires_at\":\"2026-08-07T12:00:00Z\",\"days_left\":21,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":false,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/admin/context",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000003",
+        "text": "",
+        "roles": [
+          "responses",
+          "coding",
+          "vision",
+          "system_design",
+          "agent"
+        ],
+        "updated_at": null,
+        "files": []
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/prompts",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/app/builds",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000004",
+          "platform": "macos",
+          "platform_label": "macOS",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-1.4.5.dmg",
+          "size_bytes": 89438208,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000004/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000005",
+          "platform": "windows",
+          "platform_label": "Windows",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-Setup-1.4.5.exe",
+          "size_bytes": 74235904,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000005/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/auth/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "email": "pro@parity.test",
+        "username": "Егор Волков",
+        "phone": null,
+        "avatar_url": null,
+        "role": "user",
+        "status": "active",
+        "is_active": true,
+        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "language": "ru",
+        "timezone": "Europe/Moscow",
+        "no_logs": false,
+        "meeting_auto_tasks": false,
+        "memory_enabled": true,
+        "leo_voice_enabled": true,
+        "leo_web_search_enabled": true,
+        "leo_kb_search_enabled": true,
+        "leo_connector_search_enabled": true,
+        "marketing_consent": false,
+        "appearance": {
+          "font": "whisperer"
+        },
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "pro_1m",
+            "name": "Pro (31 день)",
+            "price_rub": 1990,
+            "price_usd": 27,
+            "price_eur": 24,
+            "period_days": 31,
+            "minutes_limit": null,
+            "allow_knowledge_base": true,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": 107374182400,
+            "currency": "RUB",
+            "price": 1990
+          },
+          "started_at": "2026-07-07T12:00:00Z",
+          "expires_at": "2026-08-07T12:00:00Z",
+          "days_left": 21,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "quota": {
+          "unlimited": true,
+          "limit_minutes": null,
+          "bonus_minutes": 0,
+          "used_minutes": null,
+          "remaining_minutes": null,
+          "exhausted": false
+        },
+        "features": {
+          "voice_translation": false,
+          "voice": false,
+          "teleprompter": true,
+          "premium_weekly_remaining_pct": null,
+          "premium_credit_usd": 0,
+          "premium_credit_currency": "RUB",
+          "premium_credit_amount": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "pro_1m",
+            "name": "Pro (31 день)",
+            "price_rub": 1990,
+            "price_usd": 27,
+            "price_eur": 24,
+            "period_days": 31,
+            "minutes_limit": null,
+            "allow_knowledge_base": true,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": 107374182400,
+            "currency": "RUB",
+            "price": 1990
+          },
+          "started_at": "2026-07-07T12:00:00Z",
+          "expires_at": "2026-08-07T12:00:00Z",
+          "days_left": 21,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "usage": {
+          "session_count": 0,
+          "minutes_used": 0,
+          "ai_questions": 0,
+          "total_tokens": 0
+        },
+        "quota": {
+          "unlimited": true,
+          "limit_minutes": null,
+          "bonus_minutes": 0,
+          "used_minutes": null,
+          "remaining_minutes": null,
+          "exhausted": false
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/analytics",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "session_count": 0,
+        "minutes_used": 0,
+        "ai_questions": 0,
+        "total_tokens": 0
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/analytics/activity",
+      "query": "tz=Europe%2FMoscow",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "timezone": "Europe/Moscow",
+        "start": "2025-07-18",
+        "end": "2026-07-17",
+        "days": [],
+        "years": [
+          2026
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/analytics/series",
+      "query": "granularity=day",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "granularity": "day",
+        "points": [
+          {
+            "label": "18.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "19.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "20.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "21.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "22.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "23.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "24.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "25.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "26.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "27.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "28.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "29.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "30.06",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "01.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "02.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "03.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "04.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "05.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "06.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "07.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "08.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "09.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "10.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "11.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "12.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "13.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "14.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "15.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "16.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          },
+          {
+            "label": "17.07",
+            "sessions": 0,
+            "minutes": 0,
+            "avg_duration": 0,
+            "ai_responses": 0
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/billing/auto-renew",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "eligible": true,
+        "enabled": true,
+        "renewal_provider": null,
+        "method": {
+          "mask": "4242",
+          "exp": "12/2027",
+          "brand": "visa"
+        },
+        "next_charge": {
+          "date": "2026-08-07",
+          "amount": 1990,
+          "currency": "RUB"
+        },
+        "issue": null
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/billing/transactions",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000006",
+          "status": "success",
+          "tariff_code": "pro_1m",
+          "product_kind": "tariff",
+          "amount": 1990,
+          "currency": "RUB",
+          "method": "tbank",
+          "created_at": "2026-07-07T12:00:00+00:00",
+          "paid_at": "2026-07-07T12:00:00+00:00"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000007",
+          "status": "refunded",
+          "tariff_code": "start",
+          "product_kind": "tariff",
+          "amount": 790,
+          "currency": "RUB",
+          "method": "tbank",
+          "created_at": "2026-06-07T12:00:00+00:00",
+          "paid_at": "2026-06-07T12:00:00+00:00"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/onboarding",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "status": "completed",
+        "audio_status": "declined",
+        "version": 1,
+        "current_step": null,
+        "completed_steps": [],
+        "done_actions": [],
+        "started_at": "2026-06-01T12:00:00Z",
+        "completed_at": "2026-06-01T12:20:00Z"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/referral",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "code": "EGOR2026",
+        "link": "/app/register?ref=EGOR2026",
+        "invited": 0,
+        "converted_paid": 0,
+        "currency": "RUB",
+        "balance": 0,
+        "reward_per_referral": 500,
+        "balance_rub": 0,
+        "reward_per_referral_rub": 500
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets/unread-count",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "count": 0
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/tariffs",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000008",
+          "code": "free",
+          "name": "Free",
+          "price_rub": 0,
+          "price_usd": 0,
+          "price_eur": 0,
+          "period_days": 0,
+          "minutes_limit": 60,
+          "allow_knowledge_base": false,
+          "allow_multiscreenshot": true,
+          "allow_system_design": true,
+          "allow_frontier_models": false,
+          "is_active": true,
+          "storage_limit_bytes": null,
+          "knowledge_limit_bytes": null,
+          "currency": "RUB",
+          "price": 0
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000009",
+          "code": "start",
+          "name": "Start",
+          "price_rub": 790,
+          "price_usd": 10,
+          "price_eur": 9,
+          "period_days": 7,
+          "minutes_limit": null,
+          "allow_knowledge_base": true,
+          "allow_multiscreenshot": true,
+          "allow_system_design": true,
+          "allow_frontier_models": false,
+          "is_active": true,
+          "storage_limit_bytes": null,
+          "knowledge_limit_bytes": 52428800,
+          "currency": "RUB",
+          "price": 790
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000002",
+          "code": "pro_1m",
+          "name": "Pro (31 день)",
+          "price_rub": 1990,
+          "price_usd": 27,
+          "price_eur": 24,
+          "period_days": 31,
+          "minutes_limit": null,
+          "allow_knowledge_base": true,
+          "allow_multiscreenshot": true,
+          "allow_system_design": true,
+          "allow_frontier_models": false,
+          "is_active": true,
+          "storage_limit_bytes": 107374182400,
+          "knowledge_limit_bytes": 52428800,
+          "currency": "RUB",
+          "price": 1990
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000010",
+          "code": "max_1m",
+          "name": "Max (31 день)",
+          "price_rub": 3490,
+          "price_usd": 47,
+          "price_eur": 43,
+          "period_days": 31,
+          "minutes_limit": null,
+          "allow_knowledge_base": true,
+          "allow_multiscreenshot": true,
+          "allow_system_design": true,
+          "allow_frontier_models": true,
+          "is_active": true,
+          "storage_limit_bytes": 268435456000,
+          "knowledge_limit_bytes": 104857600,
+          "currency": "RUB",
+          "price": 3490
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000011",
+          "code": "pro_6m",
+          "name": "Pro (185 дней)",
+          "price_rub": 9990,
+          "price_usd": 136,
+          "price_eur": 123,
+          "period_days": 185,
+          "minutes_limit": null,
+          "allow_knowledge_base": true,
+          "allow_multiscreenshot": true,
+          "allow_system_design": true,
+          "allow_frontier_models": false,
+          "is_active": true,
+          "storage_limit_bytes": 107374182400,
+          "knowledge_limit_bytes": 52428800,
+          "currency": "RUB",
+          "price": 9990
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000012",
+          "code": "pro_1y",
+          "name": "Pro (366 дней)",
+          "price_rub": 14990,
+          "price_usd": 205,
+          "price_eur": 185,
+          "period_days": 366,
+          "minutes_limit": null,
+          "allow_knowledge_base": true,
+          "allow_multiscreenshot": true,
+          "allow_system_design": true,
+          "allow_frontier_models": false,
+          "is_active": true,
+          "storage_limit_bytes": 107374182400,
+          "knowledge_limit_bytes": 52428800,
+          "currency": "RUB",
+          "price": 14990
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000013",
+          "code": "max_6m",
+          "name": "Max (185 дней)",
+          "price_rub": 17490,
+          "price_usd": 239,
+          "price_eur": 216,
+          "period_days": 185,
+          "minutes_limit": null,
+          "allow_knowledge_base": true,
+          "allow_multiscreenshot": true,
+          "allow_system_design": true,
+          "allow_frontier_models": true,
+          "is_active": true,
+          "storage_limit_bytes": 268435456000,
+          "knowledge_limit_bytes": 104857600,
+          "currency": "RUB",
+          "price": 17490
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000014",
+          "code": "max_1y",
+          "name": "Max (366 дней)",
+          "price_rub": 20990,
+          "price_usd": 287,
+          "price_eur": 259,
+          "period_days": 366,
+          "minutes_limit": null,
+          "allow_knowledge_base": true,
+          "allow_multiscreenshot": true,
+          "allow_system_design": true,
+          "allow_frontier_models": true,
+          "is_active": true,
+          "storage_limit_bytes": 268435456000,
+          "knowledge_limit_bytes": 104857600,
+          "currency": "RUB",
+          "price": 20990
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ticker",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "weather": null,
+        "holiday": null,
+        "stats": {
+          "meetings_total": 0,
+          "minutes_total": 0,
+          "ai_answers_total": 0,
+          "tokens_total": 0,
+          "users_total": 10
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "access_token": "parity-access_token",
+        "token_type": "Bearer",
+        "expires_in": 1800,
+        "csrf_token": "parity-csrf_token"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

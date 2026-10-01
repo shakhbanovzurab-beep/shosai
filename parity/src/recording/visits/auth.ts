@@ -2,66 +2,57 @@
 // Состояния — parity/inventory/shell-auth-account-billing.md, разделы /login,
 // /register, /reset-password, /connect.
 
-import type { Page } from "@playwright/test";
-
 import { ORIGIN } from "../../config.ts";
+import { exactText, withText, type Translate } from "../../i18n/texts.ts";
+import {
+  ALERT,
+  NEW_PASSWORD,
+  PERSONA_PASSWORD,
+  startRegistration,
+  STATUS,
+  submitLogin,
+  WRONG_PASSWORD,
+} from "../../ui/draft-ui.ts";
 import type { Visit } from "./types.ts";
 
-const WRONG_PASSWORD = "wrong-password-1";
-const PERSONA_PASSWORD = "parity-password-1";
-/** Пароль новых регистраций: проходит все правила надёжности черновика. */
-const NEW_PASSWORD = "Parity-password-2";
-
-async function submitLogin(page: Page, email: string, password: string): Promise<void> {
-  await page.locator("input[type=email]").fill(email);
-  await page.locator("input[type=password]").fill(password);
-  await page.locator("button[type=submit]:enabled").click();
-}
-
-async function startRegistration(page: Page, email: string): Promise<void> {
-  await page.locator("input[placeholder='Имя']").fill("Лев Новиков");
-  await page.locator("input[type=email]").fill(email);
-  await page.locator("input[type=password]").fill(NEW_PASSWORD);
-  await page.locator("form input[type=checkbox]").first().check();
-  await page.locator("button[type=submit]:enabled").click();
-  await page.locator("h1:has-text('Почти всё')").waitFor();
-}
+const loginTitle = (t: Translate): string => withText("h1", t("auth:titleLogin"));
 
 export const AUTH_VISITS: readonly Visit[] = [
   // Набор кнопок соцвхода черновик выбирает по стране и языку: русский язык или
   // страна RU — Яндекс и VK; иначе Google и GitHub.
-  { id: "auth/login", persona: null, url: "/app/login", marker: "h1:has-text('Привет!')" },
+  { id: "auth/login", persona: null, url: "/app/login", marker: loginTitle },
   {
     id: "auth/login-world",
     persona: null,
     url: "/app/login",
-    marker: "a[href*='/v1/auth/social/github/start']",
+    marker: () => "a[href*='/v1/auth/social/github/start']",
     country: "US",
-    language: "en",
+    languages: ["en"],
   },
   {
     id: "auth/login-invalid",
     persona: null,
     url: "/app/login",
-    marker: "[role=alert]:has-text('Неверный email или пароль')",
+    marker: (t) => withText(ALERT, t("errors:invalid_credentials")),
     act: (page) => submitLogin(page, "free@parity.test", WRONG_PASSWORD),
   },
   {
     id: "auth/login-banned",
     persona: null,
     url: "/app/login",
-    marker: "[role=alert]:has-text('Аккаунт заблокирован')",
+    marker: (t) => withText(ALERT, t("errors:account_banned")),
     act: (page) => submitLogin(page, "banned@parity.test", PERSONA_PASSWORD),
   },
-  { id: "auth/register", persona: null, url: "/app/register", marker: "h1:has-text('Знакомимся')" },
+  { id: "auth/register", persona: null, url: "/app/register", marker: (t) => withText("h1", t("auth:titleRegister")) },
   {
     id: "auth/register-verify",
     persona: null,
     url: "/app/register",
-    marker: "[role=alert]:has-text('Неверный или истёкший код')",
+    marker: (t) => withText(ALERT, t("errors:invalid_code")),
     mutates: true,
-    act: async (page) => {
-      await startRegistration(page, "register@parity.test");
+    languages: ["ru"],
+    act: async (page, context) => {
+      await startRegistration(page, context.t, "register@parity.test");
       await page.locator("input[autocomplete=one-time-code]").fill("000000");
       await page.locator("button[type=submit]:enabled").click();
     },
@@ -72,21 +63,23 @@ export const AUTH_VISITS: readonly Visit[] = [
     id: "auth/login-unverified",
     persona: null,
     url: "/app/register",
-    marker: "[role=status]:has-text('Подтвердите email')",
+    marker: (t) => withText("h1", t("auth:titleVerify")),
     mutates: true,
-    act: async (page) => {
-      await startRegistration(page, "unverified@parity.test");
+    act: async (page, context) => {
+      const email = `unverified-${context.language}@parity.test`;
+      await startRegistration(page, context.t, email);
       await page.goto(`${ORIGIN}/app/login`);
-      await submitLogin(page, "unverified@parity.test", NEW_PASSWORD);
+      await submitLogin(page, email, NEW_PASSWORD);
+      await page.locator(STATUS).first().waitFor();
     },
   },
   {
     id: "auth/forgot",
     persona: null,
     url: "/app/login",
-    marker: "[role=status]:has-text('Инструкции по восстановлению доступа')",
-    act: async (page) => {
-      await page.getByText("Забыли пароль?").click();
+    marker: (t) => withText(STATUS, t("auth:resetLinkSent")),
+    act: async (page, { t }) => {
+      await page.getByText(t("auth:forgotLink")).click();
       await page.locator("input[type=email]").fill("free@parity.test");
       await page.locator("button[type=submit]:enabled").click();
     },
@@ -95,7 +88,7 @@ export const AUTH_VISITS: readonly Visit[] = [
     id: "auth/reset-invalid",
     persona: null,
     url: "/app/reset-password?token=parity-invalid-token",
-    marker: "[role=alert]:has-text('Ссылка сброса недействительна или истекла')",
+    marker: (t) => withText(ALERT, t("errors:reset_token_invalid")),
     act: async (page) => {
       const fields = page.locator("input[type=password]");
       await fields.nth(0).fill(NEW_PASSWORD);
@@ -103,6 +96,11 @@ export const AUTH_VISITS: readonly Visit[] = [
       await page.locator("button[type=submit]:enabled").click();
     },
   },
-  { id: "auth/connect-anonymous", persona: null, url: "/app/connect?state=parity-state", marker: "text=Подключение приложения" },
-  { id: "auth/connect", persona: "free", url: "/app/connect?state=parity-state", marker: "text=Готово!" },
+  {
+    id: "auth/connect-anonymous",
+    persona: null,
+    url: "/app/connect?state=parity-state",
+    marker: (t) => exactText(t("auth:connect.title")),
+  },
+  { id: "auth/connect", persona: "free", url: "/app/connect?state=parity-state", marker: (t) => exactText(t("auth:connect.doneTitle")) },
 ];

@@ -1,0 +1,109 @@
+{
+  "visit": "auth/login-invalid",
+  "language": "ru",
+  "persona": null,
+  "url": "/app/login",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/app/builds",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000001",
+          "platform": "macos",
+          "platform_label": "macOS",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-1.4.5.dmg",
+          "size_bytes": 89438208,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000001/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000002",
+          "platform": "windows",
+          "platform_label": "Windows",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-Setup-1.4.5.exe",
+          "size_bytes": 74235904,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000002/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/auth/social/providers",
+      "query": "language=ru",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "providers": [
+          "yandex",
+          "vk"
+        ],
+        "config": {
+          "yandex": {
+            "client_id": "parity-yandex-client",
+            "token_page_url": "http://parity.test/v1/auth/social/yandex/token-page"
+          },
+          "vk": {
+            "app_id": "51000000",
+            "redirect_url": "http://parity.test/v1/auth/social/vk/callback"
+          }
+        },
+        "audience": {
+          "yandex": "ru",
+          "vk": "ru"
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/auth/social/vk/prepare",
+      "query": "language=ru",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "app_id": "51000000",
+        "redirect_url": "http://parity.test/v1/auth/social/vk/callback",
+        "state": "parity-state",
+        "code_verifier": "parity-code_verifier",
+        "scope": "email"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/login",
+      "query": "",
+      "requestBody": {
+        "email": "free@parity.test",
+        "password": "wrong-password-1",
+        "captcha_token": "parity-captcha"
+      },
+      "status": 401,
+      "contentType": "application/json",
+      "body": {
+        "detail": "Invalid email or password"
+      },
+      "origin": "recorded"
+    }
+  ]
+}
