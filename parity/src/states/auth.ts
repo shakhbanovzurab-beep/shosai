@@ -5,7 +5,7 @@ import { ORIGIN } from "../config.ts";
 import { exactText, withText, type Translate } from "../i18n/texts.ts";
 import { NEW_PASSWORD, PERSONA_PASSWORD, startRegistration, STATUS, submitLogin, WRONG_PASSWORD } from "../ui/draft-ui.ts";
 import { alert, countdownMask, loginTitle } from "./common.ts";
-import { hold, reply, serverError } from "./overrides.ts";
+import { hold, rateLimited, reply, serverError } from "./overrides.ts";
 import type { State } from "./types.ts";
 
 const LOGIN = "/v1/auth/login";
@@ -73,15 +73,7 @@ export const AUTH_STATES: readonly State[] = [
     fixture: "auth/login-invalid",
     scope: "single",
     expectsAlert: true,
-    overrides: [
-      reply(
-        "POST",
-        LOGIN,
-        429,
-        { error: "Rate limit exceeded: 5 per 1 minute" },
-        "лимиты на стенде записи выключены; тело — обработчик slowapi черновика",
-      ),
-    ],
+    overrides: [rateLimited("POST", LOGIN, "5 per 1 minute")],
     act: async (page) => submitLogin(page, "free@parity.test", WRONG_PASSWORD),
     marker: alert((t) => t("errors:rate_limited")),
   },

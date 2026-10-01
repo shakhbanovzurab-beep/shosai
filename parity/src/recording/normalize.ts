@@ -6,7 +6,7 @@
 //  * JWT и поля токенов → постоянные строки (заодно в фикстурах нет ничего,
 //    похожего на настоящий токен);
 //  * UUID → заглушки по порядку первого появления в отсортированной фикстуре,
-//    одинаково везде — в телах, путях и строках запроса;
+//    одинаково везде — в телах, путях, строках запроса и адресе визита;
 //  * метки времени в пределах суток после момента стенда сравнения — это «сейчас» API
 //    под libfaketime, которое сдвигается на секунды записи → сам момент, в том
 //    же формате. Засев задаёт прошлое и будущее явно и вне этого окна.
@@ -114,9 +114,8 @@ export function normalizeFixture(fixture: Fixture, clock: Date): Fixture {
       ? JSON.stringify(normalizer.json(JSON.parse(value) as JsonValue))
       : normalizer.string(value);
   }
-  return {
-    ...fixture,
-    storage,
-    exchanges: fixture.exchanges.map((exchange) => normalizeExchange(normalizer, exchange)),
-  };
+  const exchanges = fixture.exchanges.map((exchange) => normalizeExchange(normalizer, exchange));
+  // Адрес — после обменов: id записи в нём (/app/meetings/<id>) получает ту же
+  // заглушку, что в путях запросов, и стенд открывает страницу по ней.
+  return { ...fixture, url: normalizer.string(fixture.url), storage, exchanges };
 }

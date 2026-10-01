@@ -37,13 +37,18 @@ Screenshots are taken only inside the pinned Playwright container ([`compose.yam
 
 ## Add the states of a slice
 
-1. **Record** the visits the screens need (persona, URL, actions, marker) in `src/recording/visits/`. Run `npm run record -- --grep <visit>`, then record everything twice to confirm the fixtures do not change.
+1. **Record** the visits the screens need (persona, URL, actions, marker) in `src/recording/visits/`. Run `npm run record -- --grep <visit>`, then record everything twice to confirm the fixtures do not change. A visit opens a known record through the ids in [`recording/seed/ids.json`](recording/seed/ids.json); the normalizer maps the ids in its URL to the same placeholders as in the requests. Data loaded on demand (a dialog, a tab) is in the fixture only if the visit opens it.
 2. **Define** each inventoried state in `src/states/<feature>.ts` and add the list to [`src/states/registry.ts`](src/states/registry.ts):
    - `fixture`: the visit that provides the data;
    - `scope`: `full` for main states, which get all 8 cells; `single` for small variants, which get one cell: ru, desktop, light;
    - `act`: the interaction;
    - `marker`: a selector that exists only in that state. Without the marker the state fails.
-   - `overrides`: responses the recording stack cannot produce, such as an error status, a held request for loading, or a network failure. Each needs a reason, and each must exist in the draft's OpenAPI and match its schema. The unit tests check this.
+   - `overrides`: responses the recording stack cannot produce, such as an error status, a held request for loading, or a network failure. Each needs a reason, and each must exist in the draft's OpenAPI and match its schema. The unit tests check this. Helpers are in [`src/states/overrides.ts`](src/states/overrides.ts):
+     - a path may use `{param}` segments (`/v1/me/sessions/{id}/full`): ids in fixtures are placeholders, and an exact path wins over a template;
+     - `respond` is one reply or a sequence: the n-th request gets the n-th reply, and the last repeats. A reply is a response, `"hold"` (no answer: loading), `"fail"` (network failure), `"recorded"` (the recorded answer), or `{ merge }` (the recorded answer with fields merged in, for variants of the same data such as "quota almost full");
+     - `stream(...)` answers with a finished server-sent event stream. A stream that keeps sending over time needs step 5's SSE replay.
+   - `reveal`: the marker is below the edge of the screen; scroll it into view before the screenshot.
+   - `keepPointer`: the state is a hover; the pointer stays where the action left it.
 3. **Texts** in markers and actions come from the draft's translation catalogs by key: `t("billing:cab.tariffs")`. Use literal keys, then run `npm run texts`.
 4. **Baseline**: `npm run baseline -- --grep "<feature>\."`, then `npm run verify -- --grep "<feature>\."` must report no differences.
 5. **Commit** the visits, fixtures, state definitions, `texts.json` and `baseline/manifest.json`. The images are already in S3.

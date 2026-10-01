@@ -57,4 +57,6 @@ PERSONAS: tuple[Persona, ...] = (
     Persona("admin", "Администратор", "ADMIN2026", role="admin", onboarding=None),
     Persona("banned", "Илья Зайцев", "ILYA2026", status="banned"),
     Persona("editor", "Карина Белова", "KARINA2026"),
+    #: Рабочее пространство целиком: встречи, календарь, контекст, база знаний.
+    Persona("lead", "Мария Соколова", "MARIA2026", registered_days_ago=120, tariff="pro_1m", paid_days_ago=10),
 )

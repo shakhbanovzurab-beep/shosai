@@ -52,6 +52,14 @@ Defined in [`seed/personas.py`](seed/personas.py); the password of every persona
 | `admin` | administrator |
 | `banned` | blocked account |
 | `editor` | used only by visits that change the profile |
+| `lead` | Pro; the whole workspace: nine meetings (transcripts, notes, mind map, speakers, impact, processing and failed runs), folders, hubs, share links, templates, integrations, a July calendar with a room and a stream, Google and iCal, context and knowledge base |
+
+The seed modules: [`accounts.py`](seed/accounts.py) and [`world.py`](seed/world.py) for every persona; [`meetings.py`](seed/meetings.py), [`workspace.py`](seed/workspace.py), [`calendar_seed.py`](seed/calendar_seed.py) and [`studio.py`](seed/studio.py) for `lead`. [`seed/ids.json`](seed/ids.json) holds the ids and tokens that visits need to open a known record (a meeting page, a share link); both the seed and the visits read it.
+
+Rules the seed keeps:
+- **Past and future are explicit and lie outside the day after the parity clock.** The normalizer treats any timestamp in that day as the API's "now" and replaces it with the clock.
+- **Every list has a stable order.** Rows get distinct `created_at` and `position` values: rows that tie would come back in a different order and shift the UUID placeholders.
+- **The ticker counts all meetings in the database.** A seed change that adds or removes meetings changes the header of every signed-in screen: record every visit again and re-capture the baseline.
 
 A visit that changes data uses a persona no other visit uses: the draft API caches per user in memory, and a change must not leak into another visit of the same run. The recorder enforces this.
 

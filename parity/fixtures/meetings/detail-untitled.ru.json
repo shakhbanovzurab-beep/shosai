@@ -1,0 +1,741 @@
+{
+  "visit": "meetings/detail-untitled",
+  "language": "ru",
+  "persona": "lead",
+  "url": "/app/meetings/00000000-0000-4000-8000-000000000012",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru",
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"lead@parity.test\",\"username\":\"Мария Соколова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"pro_1m\",\"name\":\"Pro (31 день)\",\"price_rub\":1990,\"price_usd\":27,\"price_eur\":24,\"period_days\":31,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":107374182400,\"currency\":\"RUB\",\"price\":1990},\"started_at\":\"2026-07-07T12:00:00Z\",\"expires_at\":\"2026-08-07T12:00:00Z\",\"days_left\":21,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":false,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/admin/context",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000003",
+        "text": "Я руководитель продуктового направления в финтех-компании, отвечаю за партнёрский портал и продажи крупным клиентам.\n\nОтвечай коротко и по делу, на «ты». Цифры показывай таблицей, сроки — датами.\n\nСейчас в фокусе: бюджет на четвёртый квартал, проект «Северный ветер» и внедрение у клиента Acme. Ключевые люди: Иван Петров (финансы), Ольга Ким (маркетинг), Дмитрий Орлов (разработка).\n\nНе предлагай решения, которые увеличивают расходы на офлайн-ивенты: мы их сокращаем. Если вопрос касается договоров, напомни согласовать с юристом.",
+        "roles": [
+          "responses",
+          "agent"
+        ],
+        "updated_at": "2026-07-15T12:00:00Z",
+        "files": [
+          {
+            "id": "00000000-0000-4000-8000-000000000004",
+            "filename": "profile.md",
+            "mime_type": "text/markdown",
+            "size_bytes": 2100,
+            "created_at": "2026-07-07T12:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000005",
+            "filename": "projects/q4/budget-plan.md",
+            "mime_type": "text/markdown",
+            "size_bytes": 5400,
+            "created_at": "2026-07-08T12:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000006",
+            "filename": "projects/q4/notes/risks.txt",
+            "mime_type": "text/plain",
+            "size_bytes": 1800,
+            "created_at": "2026-07-09T12:00:00Z"
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000007",
+            "filename": "docs/api/spec.yaml",
+            "mime_type": "application/yaml",
+            "size_bytes": 9300,
+            "created_at": "2026-07-10T12:00:00Z"
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/prompts",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/app/builds",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000008",
+          "platform": "macos",
+          "platform_label": "macOS",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-1.4.5.dmg",
+          "size_bytes": 89438208,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000008/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000009",
+          "platform": "windows",
+          "platform_label": "Windows",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-Setup-1.4.5.exe",
+          "size_bytes": 74235904,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000009/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/auth/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "email": "lead@parity.test",
+        "username": "Мария Соколова",
+        "phone": null,
+        "avatar_url": null,
+        "role": "user",
+        "status": "active",
+        "is_active": true,
+        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "language": "ru",
+        "timezone": "Europe/Moscow",
+        "no_logs": false,
+        "meeting_auto_tasks": false,
+        "memory_enabled": true,
+        "leo_voice_enabled": true,
+        "leo_web_search_enabled": true,
+        "leo_kb_search_enabled": true,
+        "leo_connector_search_enabled": true,
+        "marketing_consent": false,
+        "appearance": {
+          "font": "whisperer"
+        },
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "pro_1m",
+            "name": "Pro (31 день)",
+            "price_rub": 1990,
+            "price_usd": 27,
+            "price_eur": 24,
+            "period_days": 31,
+            "minutes_limit": null,
+            "allow_knowledge_base": true,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": 107374182400,
+            "currency": "RUB",
+            "price": 1990
+          },
+          "started_at": "2026-07-07T12:00:00Z",
+          "expires_at": "2026-08-07T12:00:00Z",
+          "days_left": 21,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "quota": {
+          "unlimited": true,
+          "limit_minutes": null,
+          "bonus_minutes": 0,
+          "used_minutes": null,
+          "remaining_minutes": null,
+          "exhausted": false
+        },
+        "features": {
+          "voice_translation": false,
+          "voice": false,
+          "teleprompter": true,
+          "premium_weekly_remaining_pct": null,
+          "premium_credit_usd": 0,
+          "premium_credit_currency": "RUB",
+          "premium_credit_amount": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/hubs",
+      "query": "include_archived=false",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "items": [
+          {
+            "id": "00000000-0000-4000-8000-000000000010",
+            "name": "Северный ветер",
+            "kind": "internal",
+            "tracker_project_id": null,
+            "organisation_id": null,
+            "archived": false,
+            "created_at": "2026-06-07T12:00:00Z",
+            "purpose": "Портал для партнёров",
+            "success": null,
+            "overdue": 0
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000011",
+            "name": "Acme",
+            "kind": "client",
+            "tracker_project_id": null,
+            "organisation_id": null,
+            "archived": false,
+            "created_at": "2026-06-02T12:00:00Z",
+            "purpose": "Внедрение Whisperer в отделе продаж Acme",
+            "success": null,
+            "overdue": 0
+          }
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/hubs/of-meeting/00000000-0000-4000-8000-000000000012",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": null,
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "pro_1m",
+            "name": "Pro (31 день)",
+            "price_rub": 1990,
+            "price_usd": 27,
+            "price_eur": 24,
+            "period_days": 31,
+            "minutes_limit": null,
+            "allow_knowledge_base": true,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": 107374182400,
+            "currency": "RUB",
+            "price": 1990
+          },
+          "started_at": "2026-07-07T12:00:00Z",
+          "expires_at": "2026-08-07T12:00:00Z",
+          "days_left": 21,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "usage": {
+          "session_count": 9,
+          "minutes_used": 377,
+          "ai_questions": 0,
+          "total_tokens": 0
+        },
+        "quota": {
+          "unlimited": true,
+          "limit_minutes": null,
+          "bonus_minutes": 0,
+          "used_minutes": null,
+          "remaining_minutes": null,
+          "exhausted": false
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/folders",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000013",
+          "name": "Работа",
+          "icon": "layers",
+          "color": "#7C5CFF",
+          "parent_id": null,
+          "favorite": false,
+          "position": 0
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000014",
+          "name": "Юридическое",
+          "icon": "shield",
+          "color": "#1D8C3E",
+          "parent_id": "00000000-0000-4000-8000-000000000013",
+          "favorite": false,
+          "position": 1
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000015",
+          "name": "Договоры",
+          "icon": "book",
+          "color": "#E1261C",
+          "parent_id": "00000000-0000-4000-8000-000000000014",
+          "favorite": false,
+          "position": 2
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000016",
+          "name": "Финансы",
+          "icon": "trend",
+          "color": "#2563EB",
+          "parent_id": null,
+          "favorite": true,
+          "position": 3
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000017",
+          "name": "Найм",
+          "icon": "user",
+          "color": "#E8893B",
+          "parent_id": null,
+          "favorite": false,
+          "position": 4
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/integrations",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "type": "slack",
+          "status": "connected",
+          "accountLabel": "#meetings",
+          "mapping": {
+            "pushNotes": true,
+            "pushActionItems": true,
+            "target": null
+          },
+          "oauthAvailable": false
+        },
+        {
+          "type": "zapier",
+          "status": "disconnected",
+          "accountLabel": null,
+          "mapping": {
+            "pushNotes": true,
+            "pushActionItems": true,
+            "target": null
+          },
+          "oauthAvailable": false,
+          "accessGranted": null
+        },
+        {
+          "type": "notion",
+          "status": "connected",
+          "accountLabel": "Whisperer Workspace",
+          "mapping": {
+            "pushNotes": true,
+            "pushActionItems": false,
+            "target": "1f2e3d4c5b6a49788796a5b4c3d2e1f0"
+          },
+          "oauthAvailable": false
+        },
+        {
+          "type": "hubspot",
+          "status": "disconnected",
+          "accountLabel": null,
+          "mapping": {
+            "pushNotes": true,
+            "pushActionItems": true,
+            "target": null
+          },
+          "oauthAvailable": false,
+          "accessGranted": null
+        },
+        {
+          "type": "attio",
+          "status": "disconnected",
+          "accountLabel": null,
+          "mapping": {
+            "pushNotes": true,
+            "pushActionItems": true,
+            "target": null
+          },
+          "oauthAvailable": false,
+          "accessGranted": null
+        },
+        {
+          "type": "affinity",
+          "status": "disconnected",
+          "accountLabel": null,
+          "mapping": {
+            "pushNotes": true,
+            "pushActionItems": true,
+            "target": null
+          },
+          "oauthAvailable": false,
+          "accessGranted": null
+        },
+        {
+          "type": "google_drive",
+          "status": "disconnected",
+          "accountLabel": null,
+          "mapping": {
+            "pushNotes": true,
+            "pushActionItems": true,
+            "target": null
+          },
+          "oauthAvailable": false,
+          "accessGranted": false
+        },
+        {
+          "type": "dropbox",
+          "status": "disconnected",
+          "accountLabel": null,
+          "mapping": {
+            "pushNotes": true,
+            "pushActionItems": true,
+            "target": null
+          },
+          "oauthAvailable": false,
+          "accessGranted": false
+        },
+        {
+          "type": "yandex_disk",
+          "status": "disconnected",
+          "accountLabel": null,
+          "mapping": {
+            "pushNotes": true,
+            "pushActionItems": true,
+            "target": null
+          },
+          "oauthAvailable": false,
+          "accessGranted": false
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/onboarding",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "status": "completed",
+        "audio_status": "declined",
+        "version": 1,
+        "current_step": null,
+        "completed_steps": [],
+        "done_actions": [],
+        "started_at": "2026-03-19T12:00:00Z",
+        "completed_at": "2026-03-19T12:20:00Z"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/referral",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "code": "MARIA2026",
+        "link": "/app/register?ref=MARIA2026",
+        "invited": 0,
+        "converted_paid": 0,
+        "currency": "RUB",
+        "balance": 0,
+        "reward_per_referral": 500,
+        "balance_rub": 0,
+        "reward_per_referral_rub": 500
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/sessions/00000000-0000-4000-8000-000000000012/full",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000012",
+        "title": "",
+        "status": "completed",
+        "started_at": "2026-07-02T16:00:00Z",
+        "ended_at": "2026-07-02T16:12:00Z",
+        "segments": [],
+        "map_nodes": [],
+        "executions": [],
+        "folder_id": null,
+        "tags": [],
+        "ephemeral": false,
+        "mcp_shared": false
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/sessions/00000000-0000-4000-8000-000000000012/full",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000012",
+        "title": "",
+        "status": "completed",
+        "started_at": "2026-07-02T16:00:00Z",
+        "ended_at": "2026-07-02T16:12:00Z",
+        "segments": [],
+        "map_nodes": [],
+        "executions": [],
+        "folder_id": null,
+        "tags": [],
+        "ephemeral": false,
+        "mcp_shared": false
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/sessions/00000000-0000-4000-8000-000000000012/hub-suggestion",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": null,
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/sessions/00000000-0000-4000-8000-000000000012/impact",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "items": []
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/sessions/00000000-0000-4000-8000-000000000012/note",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "meetingId": "00000000-0000-4000-8000-000000000012",
+        "draftMarkdown": "",
+        "enhancedMarkdown": null,
+        "actionItems": [],
+        "templateId": null,
+        "updatedAt": "2026-07-17T12:00:00.000000+00:00",
+        "version": 0,
+        "lastAuthoringClient": "web"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/sessions/00000000-0000-4000-8000-000000000012/outline",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "items": []
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/sessions/00000000-0000-4000-8000-000000000012/processing",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "run_id": "00000000-0000-4000-8000-000000000018",
+        "state": "completed",
+        "attempt": 1,
+        "stages": [
+          {
+            "stage": "audio_ingestion",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 1500,
+            "error_code": null
+          },
+          {
+            "stage": "transcription",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 2200,
+            "error_code": null
+          },
+          {
+            "stage": "diarization",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 2900,
+            "error_code": null
+          },
+          {
+            "stage": "speaker_alignment",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 3600,
+            "error_code": null
+          },
+          {
+            "stage": "speaker_identification",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 4300,
+            "error_code": null
+          },
+          {
+            "stage": "canonicalization",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 5000,
+            "error_code": null
+          },
+          {
+            "stage": "notes",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 5700,
+            "error_code": null
+          },
+          {
+            "stage": "intelligence",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 6400,
+            "error_code": null
+          },
+          {
+            "stage": "model_build",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 7100,
+            "error_code": null
+          },
+          {
+            "stage": "projections",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 7800,
+            "error_code": null
+          },
+          {
+            "stage": "workspace_impact",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 8500,
+            "error_code": null
+          },
+          {
+            "stage": "mutations",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 9200,
+            "error_code": null
+          },
+          {
+            "stage": "validation",
+            "status": "succeeded",
+            "attempt": 1,
+            "duration_ms": 9900,
+            "error_code": null
+          }
+        ],
+        "cancel_requested": false,
+        "created_at": "2026-07-02T16:12:00Z",
+        "completed_at": "2026-07-02T16:15:00Z"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/sessions/00000000-0000-4000-8000-000000000012/speakers",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets/unread-count",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "count": 0
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ticker",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "weather": null,
+        "holiday": null,
+        "stats": {
+          "meetings_total": 9,
+          "minutes_total": 377,
+          "ai_answers_total": 0,
+          "tokens_total": 0,
+          "users_total": 11
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "access_token": "parity-access_token",
+        "token_type": "Bearer",
+        "expires_in": 1800,
+        "csrf_token": "parity-csrf_token"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

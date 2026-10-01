@@ -23,8 +23,14 @@ from meetassist.models.base import async_session_factory
 from meetassist.models.user import User
 from sqlalchemy import func, select
 
+# Регистрирует все таблицы черновика: у засеваемых моделей внешние ключи на чужие.
+import meetassist.composition.metadata  # noqa: F401
 from accounts import create_account
+from calendar_seed import seed_calendar
+from meetings import seed_meetings
 from personas import PERSONAS
+from studio import seed_studio
+from workspace import seed_workspace
 from world import seed_world
 
 log = logging.getLogger("parity.seed")
@@ -51,6 +57,11 @@ async def seed() -> None:
         for persona in PERSONAS:
             accounts[persona.key] = await create_account(db, persona, clock, accounts)
         await seed_world(db, clock, accounts)
+        lead = accounts["lead"]
+        sessions = await seed_meetings(db, lead, clock)
+        await seed_workspace(db, lead, clock, sessions)
+        await seed_calendar(db, lead, clock, sessions)
+        await seed_studio(db, lead, clock)
         await db.commit()
     log.info("засев завершён: персон %d", len(accounts), extra={"personas": len(accounts)})
 

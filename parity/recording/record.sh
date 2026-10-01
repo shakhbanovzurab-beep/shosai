@@ -38,7 +38,7 @@ bash scripts/build-draft.sh >/dev/null
 "${compose[@]}" build draft-api
 "${compose[@]}" up -d --wait draft-db draft-redis
 
-seed_hash=$(cat recording/seed/*.py recording/api.Dockerfile parity.config.json | sha256sum | cut -c1-16)
+seed_hash=$(cat recording/seed/*.py recording/seed/*.json recording/api.Dockerfile parity.config.json | sha256sum | cut -c1-16)
 current_hash=$("${psql[@]}" -c "SELECT shobj_description(oid, 'pg_database') FROM pg_database WHERE datname = 'draft_seeded'")
 
 "${compose[@]}" stop draft-api >/dev/null 2>&1 || true

@@ -84,3 +84,14 @@ test("случайные поля конкретных ответов замен
   expect(result.exchanges[0]?.body).toEqual({ code: "parity-code", expires_in: 120 });
   expect(result.exchanges[1]?.body).toEqual({ state: "parity-state", code_verifier: "parity-code_verifier", app_id: "51000000" });
 });
+
+test("адрес визита получает те же заглушки, что пути запросов", () => {
+  const id = "5eed0001-0000-4000-8000-0000000000a1";
+  const segment = "5eed0002-0000-4000-8000-0000000000b5";
+  const result = normalizeFixture(
+    { ...fixtureWith([get(`/v1/me/sessions/${id}/full`, { segments: [{ id: segment }] })]), url: `/app/meetings/${id}#seg-${segment}` },
+    CLOCK,
+  );
+  expect(result.exchanges[0]?.path).toBe("/v1/me/sessions/00000000-0000-4000-8000-000000000001/full");
+  expect(result.url).toBe("/app/meetings/00000000-0000-4000-8000-000000000001#seg-00000000-0000-4000-8000-000000000002");
+});

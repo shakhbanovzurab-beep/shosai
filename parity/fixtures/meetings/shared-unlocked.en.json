@@ -1,0 +1,108 @@
+{
+  "visit": "meetings/shared-unlocked",
+  "language": "en",
+  "persona": null,
+  "url": "/app/r/parity-locked",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "en"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/meetings/shared/parity-locked",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": false,
+        "visibility": "shared",
+        "needs_password": true,
+        "title": "",
+        "started_at": null,
+        "ended_at": null,
+        "language": null,
+        "summary_markdown": "",
+        "mindmap": [],
+        "decisions": [],
+        "highlights": [],
+        "action_items": [],
+        "segments": [],
+        "transcript_truncated": false,
+        "comments": {
+          "enabled": false,
+          "items": [],
+          "total": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/meetings/shared/parity-locked",
+      "query": "ticket=parity.jwt.token",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": true,
+        "visibility": "shared",
+        "needs_password": false,
+        "title": "Звонок с юристом по договору",
+        "started_at": "2026-06-24T11:00:00+00:00",
+        "ended_at": "2026-06-24T11:25:00+00:00",
+        "language": "ru",
+        "summary_markdown": "## Итоги\nДоговор с подрядчиком требует правки пункта об ответственности.\n\n## Решения\n- Ответственность делаем взаимной с лимитом в размере стоимости работ.\n\n## Следующие шаги\n- Андрей присылает новую редакцию до конца недели.",
+        "mindmap": [],
+        "decisions": [],
+        "highlights": [],
+        "action_items": [],
+        "segments": [
+          {
+            "speaker": "Мария Соколова",
+            "start_offset_ms": 0,
+            "text": "Андрей, добрый день. Посмотрели договор с подрядчиком?"
+          },
+          {
+            "speaker": "Андрей Лебедев",
+            "start_offset_ms": 12000,
+            "text": "Да. Пункт об ответственности односторонний, его нужно переписать."
+          },
+          {
+            "speaker": "Мария Соколова",
+            "start_offset_ms": 30000,
+            "text": "Что предлагаете?"
+          },
+          {
+            "speaker": "Андрей Лебедев",
+            "start_offset_ms": 38000,
+            "text": "Взаимную ответственность и лимит в размере стоимости работ."
+          }
+        ],
+        "transcript_truncated": false,
+        "comments": {
+          "enabled": true,
+          "items": [],
+          "total": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/meetings/shared/parity-locked/unlock",
+      "query": "",
+      "requestBody": {
+        "password": "parity-pass"
+      },
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "ok": true,
+        "ticket": "parity.jwt.token"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

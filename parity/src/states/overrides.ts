@@ -44,3 +44,23 @@ export function validationError(method: string, path: string, field: string): Ov
 export function guestRefresh(): Override {
   return reply("POST", "/v1/auth/refresh", 401, { detail: "Missing refresh cookie" }, "у гостя нет сессии: 401 на вход через соцсеть запускает попытку обновить токен");
 }
+
+/** Событие потока SSE: имя и данные, как их шлёт черновик. */
+export interface StreamEvent {
+  readonly event: string;
+  readonly data: JsonValue;
+}
+
+/**
+ * Законченный поток событий (SSE) одним ответом. Поток, который ещё идёт,
+ * так не передать: ответ отдаётся целиком.
+ */
+export function stream(method: string, path: string, events: readonly StreamEvent[], reason: string): Override {
+  const body = events.map(({ event, data }) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`).join("");
+  return { method, path, respond: { status: 200, body, contentType: "text/event-stream" }, reason };
+}
+
+/** Перебор частоты: тело обработчика slowapi черновика. Лимиты на стенде записи выключены. */
+export function rateLimited(method: string, path: string, limit: string): Override {
+  return reply(method, path, 429, { error: `Rate limit exceeded: ${limit}` }, "лимиты на стенде записи выключены; тело — обработчик slowapi черновика");
+}

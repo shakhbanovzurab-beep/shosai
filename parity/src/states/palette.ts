@@ -35,6 +35,14 @@ function paletteState(id: string, query: string, overrides: State["overrides"], 
 }
 
 export const PALETTE_STATES: readonly State[] = [
+  {
+    // Находки по данным «руководителя»: встречи, календарь, контекст, документы.
+    id: "shell.palette.results",
+    fixture: "meetings/search",
+    scope: "single",
+    act: async (page, context) => typeQuery(page, context, "бюджет"),
+    marker: (t) => `${palette(t)} >> text="Планирование бюджета Q4"`,
+  },
   paletteState("too-short", "z", undefined, (t) => exactText(t("common:search.tooShort"))),
   paletteState("searching", QUERY, [hold("GET", SEARCH)], (t) => exactText(t("common:search.searching"))),
   paletteState(

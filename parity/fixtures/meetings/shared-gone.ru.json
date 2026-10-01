@@ -1,0 +1,43 @@
+{
+  "visit": "meetings/shared-gone",
+  "language": "ru",
+  "persona": null,
+  "url": "/app/r/parity-expired",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/meetings/shared/parity-expired",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "found": false,
+        "visibility": "shared",
+        "needs_password": false,
+        "title": "",
+        "started_at": null,
+        "ended_at": null,
+        "language": null,
+        "summary_markdown": "",
+        "mindmap": [],
+        "decisions": [],
+        "highlights": [],
+        "action_items": [],
+        "segments": [],
+        "transcript_truncated": false,
+        "comments": {
+          "enabled": false,
+          "items": [],
+          "total": 0
+        }
+      },
+      "origin": "recorded"
+    }
+  ]
+}

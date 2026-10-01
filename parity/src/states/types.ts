@@ -15,8 +15,21 @@ export interface OverrideResponse {
   readonly contentType?: string;
 }
 
-/** Один ответ переопределения: hold — без ответа (загрузка), fail — сетевой сбой. */
-export type OverrideReply = OverrideResponse | "hold" | "fail";
+/**
+ * Один ответ переопределения: hold — без ответа (загрузка), fail — сетевой сбой,
+ * recorded — записанный ответ (последовательность «первые два как в записи, третий
+ * висит»).
+ */
+export type OverrideReply = OverrideResponse | OverrideMerge | "hold" | "fail" | "recorded";
+
+/**
+ * Записанный ответ с правкой: поля `merge` вливаются в его JSON-тело (объекты —
+ * глубоко, массивы и значения — заменой). Вариант экрана на тех же данных:
+ * «стенограмма обрезана», «место почти кончилось».
+ */
+export interface OverrideMerge {
+  readonly merge: { readonly [key: string]: JsonValue };
+}
 
 export interface Override {
   readonly method: string;
@@ -56,6 +69,13 @@ export interface State {
   readonly marker: (t: Translate) => string;
   /** Маркер — тост ошибки: такой тост ожидаем, остальные — признак сбоя. */
   readonly expectsAlert?: boolean;
+  /**
+   * Состояние — наведение: указатель остаётся там, где его оставило действие.
+   * По умолчанию перед снимком он уходит в угол.
+   */
+  readonly keepPointer?: boolean;
+  /** Маркер ниже края экрана (конец длинной страницы, низ окна): прокрутить к нему. */
+  readonly reveal?: boolean;
   /**
    * Области, закрытые на снимке: значения, которые идут по настоящим часам
    * (обратный отсчёт «через 60 с»), а не по замороженным. Только с причиной.

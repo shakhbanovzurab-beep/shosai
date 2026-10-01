@@ -10,9 +10,10 @@
 
 import type { Route } from "@playwright/test";
 
-import { canonicalQuery, exchangeKey, type Exchange, type Fixture } from "../fixtures/format.ts";
-import type { Override, OverrideReply, OverrideResponse } from "../states/types.ts";
+import { canonicalQuery, exchangeKey, type Exchange, type Fixture, type JsonValue } from "../fixtures/format.ts";
+import type { Override, OverrideMerge, OverrideReply, OverrideResponse } from "../states/types.ts";
 import { BACKGROUND } from "./background.ts";
+import { matchesTemplate } from "./path-template.ts";
 
 interface Reply {
   readonly status: number;
@@ -32,8 +33,30 @@ function exchangeReply(exchange: Exchange): Reply {
 
 function overrideReply(response: OverrideResponse): Reply {
   const contentType = response.contentType ?? "application/json";
-  const body = response.body === null ? Buffer.alloc(0) : Buffer.from(JSON.stringify(response.body), "utf8");
-  return { status: response.status, contentType, body };
+  if (response.body === null) return { status: response.status, contentType, body: Buffer.alloc(0) };
+  // Не-JSON (поток событий SSE) отдаётся как есть, JSON — сериализованным.
+  const raw = typeof response.body === "string" && !contentType.includes("json");
+  const text = raw ? String(response.body) : JSON.stringify(response.body);
+  return { status: response.status, contentType, body: Buffer.from(text, "utf8") };
+}
+
+function isObject(value: JsonValue | undefined): value is { [key: string]: JsonValue } {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function deepMerge(base: JsonValue, patch: { readonly [key: string]: JsonValue }): JsonValue {
+  const result: { [key: string]: JsonValue } = isObject(base) ? { ...base } : {};
+  for (const [key, value] of Object.entries(patch)) {
+    const current = result[key];
+    result[key] = isObject(value) && isObject(current) ? deepMerge(current, value) : value;
+  }
+  return result;
+}
+
+/** Записанный обмен с влитой правкой тела. */
+function merged(exchange: Exchange, reply: OverrideMerge): Exchange {
+  if (!isObject(exchange.body)) throw new Error(`Правка ${exchange.path}: записанное тело не объект JSON`);
+  return { ...exchange, body: deepMerge(exchange.body, reply.merge) };
 }
 
 export class FixtureReplay {
@@ -61,22 +84,23 @@ export class FixtureReplay {
   async handle(route: Route, url: URL): Promise<void> {
     this.lastActivity = Date.now();
     const method = route.request().method();
-    const overrideKey = `${method} ${url.pathname}`;
-    const override = this.overrides.get(overrideKey);
-    if (override !== undefined) {
-      const reply = this.nextReply(overrideKey, override);
-      // Удержанный запрос не получает ответа никогда: экран остаётся в загрузке.
-      if (reply === "hold") return;
-      if (reply === "fail") return route.abort("failed");
-      return this.fulfill(route, overrideReply(reply));
-    }
+    const override = this.overrideFor(method, url.pathname);
+    const overrideKey = override === undefined ? "" : `${override.method} ${override.path}`;
+    const reply = override === undefined ? "recorded" : this.nextReply(overrideKey, override);
+    // Удержанный запрос не получает ответа никогда: экран остаётся в загрузке.
+    if (reply === "hold") return;
+    if (reply === "fail") return route.abort("failed");
+    if (reply !== "recorded" && !("merge" in reply)) return this.fulfill(route, overrideReply(reply));
     const key = exchangeKey({ method, path: url.pathname, query: canonicalQuery(url.searchParams) });
     const replies = this.recorded.get(key);
     if (replies !== undefined && replies.length > 0) {
       const index = this.served.get(key) ?? 0;
       this.served.set(key, index + 1);
       const exchange = replies[Math.min(index, replies.length - 1)];
-      if (exchange !== undefined) return this.fulfill(route, exchangeReply(exchange));
+      if (exchange !== undefined) {
+        const recorded = typeof reply === "object" ? merged(exchange, reply) : exchange;
+        return this.fulfill(route, exchangeReply(recorded));
+      }
     }
     const background = BACKGROUND.get(`${method} ${url.pathname}`);
     if (background !== undefined) return this.fulfill(route, overrideReply(background));
@@ -86,6 +110,16 @@ export class FixtureReplay {
       contentType: "application/json",
       body: Buffer.from(JSON.stringify({ detail: "parity: no recorded response" }), "utf8"),
     });
+  }
+
+  /** Подмена запроса: точный путь, иначе первый подходящий шаблон с `{параметр}`. */
+  private overrideFor(method: string, pathname: string): Override | undefined {
+    const exact = this.overrides.get(`${method} ${pathname}`);
+    if (exact !== undefined) return exact;
+    for (const override of this.overrides.values()) {
+      if (override.method === method && override.path.includes("{") && matchesTemplate(override.path, pathname)) return override;
+    }
+    return undefined;
   }
 
   /** Очередной ответ переопределения: по порядку запросов, последний повторяется. */

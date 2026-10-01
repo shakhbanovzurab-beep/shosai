@@ -127,8 +127,8 @@ All paths are relative to the router basename `/app` (`src/app/main.tsx:48`), so
 | meetings.detail.enhanced | `enhancedMarkdown: "# H1\n..."` | `[data-doc-prose] .mtg-prose`; chip `button.mtg-chip[title="AI-версия"][aria-expanded]` with chevron (menu trigger) | GET /v1/me/templates (EnhancedMenu mounts) |
 | meetings.detail.enhanced-menu | From `enhanced`, click the "AI-версия" chip | `.mtg-menu` containing `button[aria-label="Пересобрать AI-версию"]`, label "Шаблоны", template rows, links "Все шаблоны…" and "Новый шаблон" (→ `/templates?new=1`) | same |
 | meetings.detail.enhanced-empty | `enhancedMarkdown: null`; click `button[aria-label="AI-версия"]` | "Соберём структурированные заметки и майнд-карту из ваших тезисов и транскрипта." + button "Собрать AI-версию" | — |
-| meetings.detail.enhanced-streaming | Click "Собрать AI-версию"; SSE stays open with `event:status data:{"phase":"generating"}`, then `event:delta data:{"text":"…"}` | `output.mtg-gen-card` "Собираем заметки…" (phase "saving" → "Сохраняем…", "mindmap" → "Собираем майнд-карту…"). Before the first delta the button reads "Собираем…" | SSE POST /v1/me/sessions/{id}/note/regenerate-enhanced/stream |
-| meetings.detail.enhanced-error | SSE returns 402 / 429 / other non-OK, or the connection drops, or `event:error {message}` | `p.mtg-doc-error`. With no content: "Не удалось собрать AI-версию." + button "Попробовать снова". 402 → "Исчерпан лимит минут тарифа."; 429 → "Слишком много запросов — попробуйте позже."; drop → "Соединение прервано." | same |
+| meetings.detail.enhanced-streaming | Click "Собрать AI-версию"; SSE stays open with `event:status data:{"phase":"generating"}`, then `event:delta data:{"text":"…"}` | `output.mtg-gen-card` "Собираем заметки…" (phase "saving" → "Сохраняем…", "mindmap" → "Собираем майнд-карту…"). The card shows from the click, before any event (checked in step 4 of D2) | SSE POST /v1/me/sessions/{id}/note/regenerate-enhanced/stream |
+| meetings.detail.enhanced-error | SSE returns non-OK, or the connection drops, or `event:error {code, message}` | `p.mtg-doc-error`. With no content: "Не удалось собрать AI-версию." + button "Попробовать снова". `event:error` shows its `message` (the draft sends Russian text, `api/me_notes.py:339`). 402, 429 and a drop also show the generic text — a defect, see Findings | same |
 | meetings.detail.enhanced-truncated | SSE `event:warning data:{}` | `p.mtg-doc-error` "Заметка упёрлась в лимит длины — список задач мог собраться не полностью." | same |
 | meetings.detail.enhanced-private | `SessionFull.ephemeral: true`; click the AI chip | "Приватная встреча (no-logs) — AI-версия не создаётся." | — |
 | meetings.detail.mindmap-loading | Click `button[aria-label="Майнд-карта"]`; hold the 3rd `/full` call (cache key `["session",id]`) | `article.mtg-doc--wide` + `svg.spin` in `div.p-10` | GET /full |
@@ -146,7 +146,7 @@ All paths are relative to the router basename `/app` (`src/app/main.tsx:48`), so
 | meetings.detail.impact-manual-only | `policy: "never"` | `.mtg-impact-policy` "только вручную" | — |
 | meetings.detail.impact-diff | `before_state` / `after_state` with `dueAt` or `due_at` | `.mtg-impact-diff` "Было: …" ("без срока" when one side is missing) | — |
 | meetings.detail.impact-apply-error | `POST …/impact/{iid}/apply` → 4xx | `p.mtg-impact-error[role="alert"]` "Не удалось применить. Попробуйте снова." (code-specific text via `apiErrorMessage`) | POST /impact/{iid}/apply, POST /impact/{iid}/reject |
-| meetings.detail.processing | `GET /processing` → `{state:"running", attempt:2, stages:[{stage:"transcription",status:"running",…}]}` | `section.mtg-processing` "Идёт обработка" + `li.mtg-stage[data-status=…]` ("Расшифровка", …), "попытка 2", "12s" | GET /processing (polled every 5 s until a final state) |
+| meetings.detail.processing | `GET /processing` → `{state:"transcribing", attempt:1, stages:[{stage:"transcription",status:"running",…}]}` | `section.mtg-processing` "Идёт обработка" + `li.mtg-stage[data-status=…]` ("Расшифровка", …), "12s". From attempt 2 the label reads "attempt 2" in English — a defect, see Findings | GET /processing (polled every 5 s until a final state) |
 | meetings.detail.status-chips | `SessionFull.status` "processing" or "failed"; `ephemeral: true`; `mcp_shared: true` | Chips "Обработка" / "Ошибка обработки" / "Приватная" / "MCP" (`title="Доступ внешним AI открыт"`) | — |
 | meetings.detail.private | `ephemeral: true` | No "Поделиться", no "Влияние" chip, no hub chip; chip "Приватная" | — |
 | meetings.detail.action-items | `note.actionItems` non-empty, view draft or enhanced | `h2` "Задачи" + "1/3" + `button.mtg-task[aria-pressed]` | PATCH /note/action-items/{aid} on click |
@@ -435,7 +435,7 @@ SSE, via `@microsoft/fetch-event-source`. Both send `Authorization: Bearer` from
 | kb.sources.catalog-filter | Type into "Найти источник" | Filtered groups | — |
 | kb.sources.catalog-disabled | Spec `available:false` (auth oauth or planned) or kind already connected | Card `opacity-45` with "Скоро: нужен вход через провайдера" / "Скоро: своя интеграция в разработке" / "Подключено" | — |
 | kb.sources.disconnect-confirm | Click trash | `dialog[aria-label="Отключить"]` "Отключить «X»? Проиндексированные материалы перестанут находиться." | DELETE /v1/knowledge/sources/{id} |
-| kb.connect.form | Click a token / basic / none spec | `dialog[aria-label="Подключение: Jira"]`, "Название", fields (labels are raw field names), "Подключить" / "Подключаем…" | POST /v1/knowledge/sources |
+| kb.connect.form | Click a token / basic / none spec. At the pinned commit only "Веб-сайт" (`web`, field `base_url`) has a form; Jira and the rest are OAuth | `dialog[aria-label="Подключение: Веб-сайт"]`, "Название", fields (labels are raw field names), "Подключить" / "Подключаем…" | POST /v1/knowledge/sources |
 | kb.connect.form-error | POST → `{detail:"missing_field:api_token"}` or another code | "Заполните поле «api_token»" / "Не удалось подключить источник" / … | same |
 | kb.connect.push-pending | Click a push spec (Obsidian); the POST fires immediately | Spinner + "Ничего вводить не нужно: заметки присылает плагин…" | same |
 | kb.connect.push-token | POST → `{…, push_token:"abc"}` | `dialog[aria-label="Obsidian: хранилище подключено"]`, `code` token, "Скопировать", "Токен показывается один раз…", steps 1-3, link "Открыть в каталоге", "Готово" | — |
@@ -531,3 +531,59 @@ All three use `RedirectTo` with `replace` and no `keepSearch` (`app/router/guard
   - Meeting aside ≥1360px (rail sidebar) or ≥1560px (full sidebar).
   - Calendar toolbar compaction at 1560 / 1360 / 1200 / 900px.
   - Pick fixed viewports per state.
+
+### Findings (step 4 of D2)
+
+Draft defects visible on screen. By decision 4 of the D2 plan they stay out of the baseline, and v2 shows the intended text.
+
+1. **The AI version stream loses its error text.** On 402, 429 or a dropped connection, `notesStream` reports the specific message («Исчерпан лимит минут тарифа.», «Слишком много запросов…», «Соединение прервано.»). Then `useEnhanceStream`'s `.catch` overwrites it with the generic «Не удалось собрать AI-версию.» (`frontend/src/features/meetings/hooks/useEnhanceStream.ts:126`).
+2. **Russian plural forms are missing for «попытка».** The ru catalog has only `attempt_one` and `attempt_other`. Russian `2` needs `few`, so i18next falls back to English and shows «attempt 2» on the processing panel (`features/meetings/locales/ru.json`, `meet.detail.processing.attempt`).
+3. **A private meeting offers to send itself out.** The actions menu of an `ephemeral` meeting lists «Отправить» → Slack / Notion next to «Приватная встреча (no-logs) — наружу не передаётся».
+4. **The shared page logo lives outside the SPA.** `SharedMeetingPage` loads `/icon-512.png` from the site root, which only the backend serves. This is not a defect of the screen, but the harness must serve the draft's root icons (`scripts/export-draft.sh`).
+
+### Coverage in the screenshot matrix (step 4 of D2)
+
+**Captured inside another state:**
+
+| state | screenshot |
+|---|---|
+| `meetings.library.card-variants`, `folders-populated`, `folders-favorites`, `import-idle` | `meetings.library.populated` |
+| `meetings.library.folders-empty` | `meetings.library.empty` |
+| `meetings.library.mobile-folders-collapsed` | the mobile cells of `meetings.library.populated` |
+| `meetings.library.import-refusal-client`, `import-refusal-server` | `meetings.library.import-refusal-format`, `-empty`, `-too-large`, `-quota`, `-rate`, `-storage`, `-no-logs` |
+| `meetings.detail.enhanced-streaming` | `meetings.detail.enhanced-generating` (the card before the first text) |
+| `meetings.detail.impact-decided`, `impact-manual-only`, `impact-diff` | `meetings.detail.impact-populated` |
+| `meetings.detail.status-chips` | `meetings.detail.processing`, `status-failed`, `private`, `enhanced` (MCP) |
+| `meetings.detail.action-items`, `transcript-pill`, `aside`, `hub-chip-assigned`, `folder-chip` | `meetings.detail.enhanced` |
+| `meetings.detail.hub-chip-suggested` | `meetings.detail.draft` |
+| `meetings.detail.hub-chip-unassigned` | `meetings.detail.draft-placeholder` |
+| `meetings.detail.share-shared` | `meetings.detail.share-password-set` |
+| `meetings.detail.share-comments` | `meetings.detail.share-public` |
+| `meetings.detail.speaker-guess` | `meetings.detail.transcript-open` |
+| `meetings.templates.editor-save-error` | `meetings.templates.editor-save-error-limit`, `-builtin`, `-generic` |
+| `meetings.integrations.populated-disconnected` | `meetings.integrations.disconnected` |
+| `meetings.integrations.card-connected`, `card-target` | `meetings.integrations.populated` |
+| `meetings.integrations.card-connect-error` | `meetings.integrations.connect-error-validation`, `-upstream`, `-generic` |
+| `meetings.integrations.oauth-toast` | `meetings.integrations.oauth-toast-ok`, `-attio`, `-error` |
+| `meetings.shared.comments-open` | `meetings.shared.comment-failed` (the form, scrolled into view) |
+| `calendar.month.overflow`, `calendar.sidebar-day-events` | `calendar.month.populated` |
+| `calendar.mobile`, `calendar.toolbar-compact` | the mobile cells of the calendar states (compaction below 900 px) |
+| `calendar.event-modal-edit` | `calendar.event-modal-meeting`, `-stream`, `-session-link` |
+| `calendar.ical-rotate-confirm` | `calendar.integrations-ical-rotate-confirm` |
+| `calendar.toasts` | `calendar.toast-saved`, `toast-save-error`, `toast-deleted`, `toast-delete-error`; the meet and copy toasts need LiveKit and the clipboard |
+| `context.files-tree` | `context.populated` |
+| `kb.quota` | `kb.files.populated` |
+| `kb.sources.catalog-disabled` | `kb.sources.populated` (connected kinds are disabled) |
+| `search.palette.*` | `shell.palette.open`, `too-short`, `searching` (with `knowledge-loading`), `empty`, `kb-unavailable`, `results` |
+
+**Not screenshotted:**
+
+| state | reason |
+|---|---|
+| `meetings.layout.chunk-loading` | a lazy chunk loading; the harness serves chunks from disk at once and overrides only `/v1` |
+| `meetings.detail.share-copied` | lives 1.6 s on a real timer and needs clipboard permission |
+| `meetings.detail.enhanced-error` for 402, 429, a drop; `actions-menu-private`; the «попытка N» label | draft defects (Findings 1–3) |
+| `calendar.zoom` | needs a viewport of 1560 px or wider; the matrix desktop is 1440 px |
+| `kb.files.packing` | lasts only while the browser zips a picked folder |
+| streaming SSE states with text arriving (`enhanced-streaming` after the first delta, `mindmap-building` with draft nodes) | need an open stream that sends events over time; step 5 adds SSE replay |
+

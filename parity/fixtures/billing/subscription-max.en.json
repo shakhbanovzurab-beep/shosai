@@ -712,11 +712,11 @@
         "weather": null,
         "holiday": null,
         "stats": {
-          "meetings_total": 0,
-          "minutes_total": 0,
+          "meetings_total": 9,
+          "minutes_total": 377,
           "ai_answers_total": 0,
           "tokens_total": 0,
-          "users_total": 10
+          "users_total": 11
         }
       },
       "origin": "recorded"

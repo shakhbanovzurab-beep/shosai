@@ -55,6 +55,7 @@ for (const state of ALL_STATES) {
     await page.goto(`${ORIGIN}${state.url ?? fixture.url}`);
     if (state.act !== undefined) await state.act(page, { language: cell.language, t });
     await expect(page.locator(state.marker(t)).first()).toBeVisible();
+    if (state.reveal === true) await page.locator(state.marker(t)).first().scrollIntoViewIfNeeded();
     await settle(page, replay);
 
     expect(replay.unmatched, "запросы без записанного ответа").toEqual([]);
@@ -62,7 +63,8 @@ for (const state of ALL_STATES) {
       expect(await page.locator("[role=alert]").allInnerTexts(), "неожиданные тосты ошибок").toEqual([]);
     }
     // Указатель — в угол: элементы, следящие за ним (глаза Leo), стоят одинаково.
-    await page.mouse.move(0, 0);
+    // Состояния наведения оставляют его на месте: действие ставит его одинаково.
+    if (state.keepPointer !== true) await page.mouse.move(0, 0);
     // Путь по сегментам идентификатора: одной строкой Playwright заменил бы точки
     // на дефисы, и `a.b-c` совпало бы с `a-b.c`.
     await expect(page).toHaveScreenshot(stateSnapshotSegments(state.id), {

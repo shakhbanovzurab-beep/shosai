@@ -135,6 +135,8 @@ Measured in step 3: the 237 screenshots of steps 2–3, captured from scratch an
 
 Measured in step 3b: 145 states, 430 screenshots, 31.7 MB in the bucket; `baseline` and two `verify` runs matched with zero tolerance. Masks cover two regions driven by real timers: the resend countdown on the code screen and the `mm:ss` stamps of the connection log.
 
+Measured in step 4: 315 states, 775 screenshots, 59.2 MB in the bucket; `baseline` and two `verify` runs matched with zero tolerance. The seed now holds meetings, so the ticker's meeting count changed on every signed-in screen: all visits were recorded again (twice, byte-identical) and every screenshot was re-captured.
+
 ### 3.6 Recording from the draft backend
 
 Fixtures come from the draft backend running locally with seeded test data, as the prompt requires. Built in step 2; the operating manual is [parity/recording/README.md](../../../parity/recording/README.md).
@@ -198,8 +200,8 @@ Each step is one session, ends with checks and a report, and is committed after 
 | 2 | Recording stack: draft backend at the pinned commit with PostgreSQL and Redis, libfaketime, persona seeds, recorder, normalizer; fixtures for boot, shell, auth, account, billing, onboarding, referral, downloads, hotkeys | the stack starts with one command and records those fixtures; no production value is read |
 | 3 | Harness core: targets, serving, strict replay, determinism, state DSL, matrix, `baseline` / `verify` / `compare`, report, unit tests, CI job, `parity/README.md`; the main states of step 2's features. Done: 44 states, 237 screenshots in S3 | `verify` shows 0 differences for those states |
 | 3b | The remaining states of the shell, auth, account and billing group (inventory: shell-auth-account-billing.md), on the core of step 3:<br>• loading, empty and error variants through overrides;<br>• sign-in by social networks and consent;<br>• registration and reset validation;<br>• onboarding: tour steps on this group's routes, finish, checklist, launchers;<br>• billing flows: upgrade, promo, checkout, card sheet, renewal, payment issues;<br>• connection overlay, toasts, error boundary, command palette.<br>Tour steps 5–18 run on other features' routes and join the steps of those features. Every state of the group is screenshotted, captured inside another state, or left out with a reason (inventory, «Coverage in the screenshot matrix»). | `verify` shows 0 differences for those states |
-| 4 | Meetings, calendar, context, knowledge, search | same, for these states |
-| 5 | Leo, prompts, models, MCP, hub (SSE replay for chat and prompt tests) | same |
+| 4 | Meetings, calendar, context, knowledge, search (inventory: meetings-calendar-knowledge.md):<br>• seed persona `lead` with the whole workspace; ids shared by seed and visits in `recording/seed/ids.json`;<br>• library, import, meeting page (document, AI version, mind map, impact, share, menus, transcript), templates, integrations, shared page `/r/:token`;<br>• calendar views, event and stream dialogs, calendar integrations;<br>• context, knowledge base files, sources and connect flows; palette results.<br>Streams that send events over time join step 5. | same, for these states |
+| 5 | Leo, prompts, models, MCP, hub (SSE replay for chat and prompt tests; also the meeting AI version and mind map while their streams send text) | same |
 | 6 | Rooms, streams, storage, tracker (WebSocket replay; SFU states excluded) | same |
 | 7 | Admin, product analytics, analytics, satisfaction, support | same |
 | 8 | Locale sweep, full baseline in S3, full `verify`, status `done` | the prompt's definition of done |

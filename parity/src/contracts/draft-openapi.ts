@@ -12,6 +12,7 @@ import addFormats from "ajv-formats";
 
 import { PARITY_ROOT } from "../config.ts";
 import type { JsonValue } from "../fixtures/format.ts";
+import { matchesTemplate } from "../replay/path-template.ts";
 
 export const DRAFT_OPENAPI_FILE = path.resolve(PARITY_ROOT, "..", "contracts", "draft", "openapi.json");
 
@@ -23,15 +24,8 @@ interface OpenApi {
   readonly components?: object;
 }
 
-/** Путь подходит под шаблон: те же сегменты, `{параметр}` — любой непустой сегмент. */
-function matchesTemplate(template: string, requestPath: string): boolean {
-  const expected = template.split("/");
-  const actual = requestPath.split("/");
-  if (expected.length !== actual.length) return false;
-  return expected.every((segment, index) => {
-    const value = actual[index] ?? "";
-    return segment.startsWith("{") && segment.endsWith("}") ? value !== "" : segment === value;
-  });
+function isDomainRefusal(body: JsonValue): boolean {
+  return typeof body === "object" && body !== null && !Array.isArray(body) && typeof body["detail"] === "string";
 }
 
 export class DraftContract {
@@ -50,6 +44,10 @@ export class DraftContract {
 
   /** Ошибки соответствия тела схеме; пусто — соответствует или статус не описан. */
   bodyProblems(operation: Operation, status: number, body: JsonValue): string[] {
+    // 422 FastAPI описывает только как ошибку валидации тела (detail — массив).
+    // Доменные отказы черновика — HTTPException(422, detail="код"): строка. Эта
+    // форма в OpenAPI не попадает, но это настоящий ответ черновика.
+    if (status === 422 && isDomainRefusal(body)) return [];
     const schema = operation.responses?.[String(status)]?.content?.["application/json"]?.schema;
     if (schema === undefined) return [];
     const validate = this.ajv.compile({ ...schema, components: this.spec.components });

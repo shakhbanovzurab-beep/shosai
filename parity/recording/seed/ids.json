@@ -1,0 +1,27 @@
+{
+  "comment": "Stable ids and tokens shared by the seed (Python) and the recording visits (TypeScript). The normalizer still maps every UUID to a placeholder in fixtures; these ids only let a visit open a known record.",
+  "meetings": {
+    "budget": "5eed0001-0000-4000-8000-0000000000a1",
+    "sync": "5eed0001-0000-4000-8000-0000000000a2",
+    "interview": "5eed0001-0000-4000-8000-0000000000a3",
+    "retro": "5eed0001-0000-4000-8000-0000000000a4",
+    "demo": "5eed0001-0000-4000-8000-0000000000a5",
+    "untitled": "5eed0001-0000-4000-8000-0000000000a6",
+    "lawyer": "5eed0001-0000-4000-8000-0000000000a7",
+    "kickoff": "5eed0001-0000-4000-8000-0000000000a8",
+    "report": "5eed0001-0000-4000-8000-0000000000a9"
+  },
+  "budgetSegment": "5eed0002-0000-4000-8000-0000000000b5",
+  "knowledgeDocument": "5eed0003-0000-4000-8000-0000000000c1",
+  "shares": {
+    "public": "parity-share",
+    "locked": "parity-locked",
+    "closed": "parity-closed",
+    "expired": "parity-expired",
+    "revoked": "parity-revoked"
+  },
+  "sharePassword": "parity-pass",
+  "roomInvite": "parity-room-invite",
+  "streamInvite": "parity-stream-invite",
+  "icalToken": "parity-ical-token-0000000000000000000000000"
+}

@@ -5,6 +5,7 @@ import { expect, test } from "@playwright/test";
 import type { Route } from "@playwright/test";
 
 import type { Exchange, Fixture } from "../fixtures/format.ts";
+import { stream } from "../states/overrides.ts";
 import { FixtureReplay } from "./replay.ts";
 
 interface Outcome {
@@ -93,4 +94,43 @@ test("переопределение заменяет записанный от�
   expect(await call(replay, "GET", "/v1/slow")).toEqual({});
   expect((await call(replay, "GET", "/v1/down")).aborted).toBe("failed");
   expect(replay.unmatched).toEqual([]);
+});
+
+test("поток событий отдаётся как есть, строка JSON — сериализованной", async () => {
+  const replay = new FixtureReplay(fixture([]), [
+    stream("POST", "/v1/stream", [{ event: "delta", data: { text: "a" } }, { event: "done", data: {} }], "тест"),
+    { method: "GET", path: "/v1/text", respond: { status: 200, body: "ok" }, reason: "тест" },
+  ]);
+  expect((await call(replay, "POST", "/v1/stream")).fulfilled?.body).toBe('event: delta\ndata: {"text":"a"}\n\nevent: done\ndata: {}\n\n');
+  expect((await call(replay, "GET", "/v1/text")).fulfilled?.body).toBe('"ok"');
+});
+
+test("ответ recorded в последовательности отдаёт записанное", async () => {
+  const replay = new FixtureReplay(fixture([exchange("/v1/full", { n: 1 })]), [
+    { method: "GET", path: "/v1/full", respond: ["recorded", "recorded", "hold"], reason: "тест" },
+  ]);
+  expect((await call(replay, "GET", "/v1/full")).fulfilled?.body).toBe('{"n":1}');
+  expect((await call(replay, "GET", "/v1/full")).fulfilled?.body).toBe('{"n":1}');
+  expect(await call(replay, "GET", "/v1/full")).toEqual({});
+});
+
+test("подмена по шаблону пути отвечает на любой id, точный путь важнее шаблона", async () => {
+  const replay = new FixtureReplay(fixture([]), [
+    { method: "DELETE", path: "/v1/items/{id}", respond: { status: 500, body: null }, reason: "тест" },
+    { method: "DELETE", path: "/v1/items/kept", respond: { status: 204, body: null }, reason: "тест" },
+  ]);
+  expect((await call(replay, "DELETE", "/v1/items/abc")).fulfilled?.status).toBe(500);
+  expect((await call(replay, "DELETE", "/v1/items/kept")).fulfilled?.status).toBe(204);
+  expect((await call(replay, "DELETE", "/v1/items/abc/extra")).fulfilled?.status).toBe(404);
+});
+
+test("правка записанного ответа вливает поля глубоко, массивы заменяет", async () => {
+  const replay = new FixtureReplay(fixture([exchange("/v1/space", { used: 1, quota: { limit: 10, ratio: 0.1 }, tags: ["a"] })]), [
+    { method: "GET", path: "/v1/space", respond: { merge: { quota: { ratio: 0.9 }, tags: ["b"] } }, reason: "тест" },
+  ]);
+  expect(JSON.parse((await call(replay, "GET", "/v1/space")).fulfilled?.body ?? "")).toEqual({
+    used: 1,
+    quota: { limit: 10, ratio: 0.9 },
+    tags: ["b"],
+  });
 });

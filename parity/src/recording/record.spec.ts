@@ -19,9 +19,11 @@ import { normalizeFixture } from "./normalize.ts";
 import { signIn } from "./session.ts";
 import { ACCOUNT_VISITS } from "./visits/account.ts";
 import { AUTH_VISITS } from "./visits/auth.ts";
+import { MEETINGS_VISITS } from "./visits/meetings.ts";
 import { DEFAULT_LANGUAGES, type Visit } from "./visits/types.ts";
+import { WORKSPACE_VISITS } from "./visits/workspace.ts";
 
-const VISITS: readonly Visit[] = [...AUTH_VISITS, ...ACCOUNT_VISITS];
+const VISITS: readonly Visit[] = [...AUTH_VISITS, ...ACCOUNT_VISITS, ...MEETINGS_VISITS, ...WORKSPACE_VISITS];
 
 /** Персона изменяющего визита не встречается в других визитах; id уникальны. */
 function assertConsistentVisits(visits: readonly Visit[]): void {

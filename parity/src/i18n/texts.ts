@@ -50,6 +50,14 @@ export function withText(selector: string, text: string): string {
   return `${selector}:has-text(${JSON.stringify(text)})`;
 }
 
+/**
+ * Элемент, текст которого содержит строку (без учёта регистра). Для текстов с
+ * подстановкой, которую форматирует сам фронтенд (размер, дата): маркер — их начало.
+ */
+export function containsText(text: string): string {
+  return `text=${text.trim()}`;
+}
+
 /** Элемент, весь текст которого равен строке (видимость проверяется у него самого). */
 export function exactText(text: string): string {
   return `text=${JSON.stringify(text)}`;
