@@ -1,0 +1,210 @@
+# D2 — Visual baseline and parity harness: package plan
+
+Prompt: [prompts/D2-visual-parity.md](../prompts/D2-visual-parity.md). Status: [STATUS.md](../STATUS.md). Decision record: [ADR 0003](../../adr/0003-playwright-visual-parity-harness.md).
+
+The harness proves that a v2 screen looks like the draft screen. It renders the draft and v2 from identical recorded API data, in a pinned browser, and compares the screenshots per route and state.
+
+## 1. Facts this plan rests on
+
+**Draft pinned at** `589917e847f7d7213b3af5a3959bcc88c7500fe7`. The baseline, the fixtures and the inventory refer to this commit. Moving the pin means re-recording and re-capturing.
+
+**Inventory** ([parity/inventory/](../../../parity/inventory/README.md)): 55 route paths plus the cabinet modal route; about 850 states in 5 group documents. Every declared path is covered.
+
+**Pilot** (2026-10-01, scratch, not committed). Setup:
+- the draft built at the pinned commit and served through Playwright request interception;
+- 10 screens on desktop and mobile, light and dark, `ru` = 40 screenshots;
+- Playwright 1.63.0 in the image `mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27` (Chromium build 1243).
+
+| Measured | Result |
+|---|---|
+| Size | 57 KB per PNG on average, at device scale factor 1 (25–108 KB) |
+| Page height | Equals the viewport. The app scrolls inner containers, not the page, so a full-page screenshot captures only the viewport. Content below the fold needs its own scrolled state. |
+| Speed | About 1 screenshot per second with 4 workers on this host (4 CPU, 7 GB) |
+| Wrong screens | 8 of 40 failed the marker check. The draft's own hand-written fixtures did not render the intended screen on mobile and analytics. Markers are mandatory. |
+| Determinism, first attempt | Every screen differed between two runs by about 4 300 px. Cause: the ticker's tip of the day is chosen by `Math.random()` (`app/shell/TopBar.tsx:118`). |
+| Determinism, second attempt | Two mobile screens alternated between two renderings (23 px and about 4 000 px). Cause: entrance animations (`.rise`) left text rasterized at a fractional offset; whether it was repainted before the shot varied. Raster flags (`--disable-lcd-text`, `--disable-partial-raster`) did not help. |
+| Determinism, final | Seeded `Math.random`, animations and transitions set to zero from document start, then wait for marker, fonts loaded, 500 ms without requests and 500 ms without DOM mutations. **4 repeats × 32 screenshots: 0 px difference.** |
+
+## 2. Matrix and volume
+
+| Axis | Values |
+|---|---|
+| Viewport | desktop 1440 × 900; mobile 390 × 844 with touch (mobile layout is ≤ 860 px). Device scale factor 1. |
+| Theme | light, dark (`wh.theme`) |
+| Locale | `ru` and `en` |
+| Scope | **full**: all 8 cells (viewport × theme × locale) for the main states of a screen; **single**: one cell — `ru`, desktop, light — for small variants (decision 2, §5) |
+| Locale sweep | the 14 other locales (`ar de es fr hi id it ja ko pt th tr vi zh`) on one text-dense signed-in screen — `meetings.library.populated` — desktop and mobile, light |
+| Fixed | clock `2026-07-17T12:00:00Z` (a Friday, 15:00 in Moscow), timezone `Europe/Moscow`, `Math.random` seed, pointer parked at (0, 0) |
+
+Tablet (861–1024 px, rail sidebar) is not in the prompt's matrix and is not covered.
+
+| Volume | Estimate |
+|---|---|
+| States × cells | between ≈ 3 800 (if half of the states are variants) and 6 800 (if none are) + 28 in the locale sweep; counted exactly as the state definitions are written in steps 3–7 |
+| One full baseline | ≈ 220–390 MB |
+| One full run | ≈ 1–2 hours on this host; shards across runners |
+| One slice | tens to a few hundred screenshots; minutes |
+
+## 3. Design
+
+### 3.1 Layout
+
+```text
+parity/
+  README.md                  how a slice runs the comparison for its routes
+  package.json, package-lock.json, tsconfig.json
+  compose.yaml               harness container (pinned image); draft recording stack
+  playwright.config.ts       one project per matrix cell
+  src/
+    targets/                 draft and v2: how to build and which files to serve
+    serve/                   static files, SPA fallback, fonts; everything else blocked
+    replay/                  strict fixture router for HTTP, SSE and WebSocket
+    determinism/             init script and the settle step
+    states/<feature>.ts      typed state definitions
+    parity.spec.ts           one test per state × cell
+  fixtures/
+    personas/                anonymous, free, start, pro, max, admin: user and shell responses
+    <feature>/<scenario>.json
+  recording/                 draft backend stack, seeds, recorder, normalizer
+  inventory/                 route and state inventory (done)
+  baseline/manifest.json     state, cell, SHA-256 and size of each image; the PNGs live in S3
+```
+
+The harness is its own npm project. It runs inside the pinned Playwright container, so the browser, its fonts and Node are the same on every machine and in CI.
+
+### 3.2 Targets
+
+A target is a built frontend plus the static files it needs, served at the origin `http://parity.test` by request interception. No server process is involved.
+
+- **draft**: `git archive` of the pinned commit (the draft tree is never touched), `npm ci`, `vite build` into the harness cache. Fonts come from the draft's `backend/static/landing/fonts` and `backend/static/webfonts`, served at `/fonts/` as the draft backend serves them.
+- **v2**: `frontend/dist` of this repository and v2's own font directory. F2 fills in the target when the frontend exists.
+
+Requests to any other host are aborted: analytics, Turnstile, social SDKs, the CloudPayments widget.
+
+### 3.3 Fixtures and replay
+
+- A fixture is a JSON list of responses: method, path, query, status, body, and `origin` (`recorded` or `synthetic` with a reason). Server-sent events are a list of events; WebSocket conversations are a list of frames.
+- A state is a **persona** (the user and the shell responses every signed-in page needs) + a **scenario** (the page's data) + **overrides** (an error status, an empty list, a held request for the loading state).
+- Replay is strict. A request with no matching response fails the test and is reported by name. The draft's tool answered unknown paths with `[]`, which made broken screens look clean.
+- Recorded fixtures have the draft's real shapes by construction. Synthetic fixtures are validated in CI against the draft's OpenAPI from D1 (`contracts/draft/`), so an invented or renamed field fails before any screenshot is taken.
+
+### 3.4 State definitions
+
+A typed record per state:
+- id;
+- persona;
+- URL;
+- scenario and overrides;
+- interactions;
+- marker;
+- matrix scope: `full` or `single`;
+- optional per-state tolerance with a reason.
+
+Scope rule:
+- **`full`** covers the main states of a screen: populated, empty, loading, page-level error, every dialog, drawer, menu and tab, the paywall, and the first step of a sequence.
+- **`single`** covers variants that differ from a `full` state of the same screen only by a message or a step:
+  - one toast per error code;
+  - inline validation hints;
+  - password-strength levels;
+  - tour steps after the first, and audio stops;
+  - sibling states written as `a` / `b` / `c` in the inventory.
+- A state whose layout changes is `full`, for example when a banner pushes content down or a panel opens.
+
+Selectors use roles, `aria-label`, visible text and `data-onboarding` anchors, so the same definition drives the draft and v2. Draft class names are used only where nothing else exists, and are listed so F2 can keep them or replace the selector.
+
+### 3.5 Determinism
+
+The pilot recipe, applied to every state:
+- frozen clock and timezone;
+- seeded `Math.random`;
+- animations and transitions zeroed from document start;
+- pointer parked;
+- turnstile stub;
+- service workers blocked;
+- then marker, fonts, network-quiet and DOM-quiet waits before `toHaveScreenshot`.
+
+### 3.6 Recording from the draft backend
+
+Fixtures come from the draft backend running locally with seeded test data, as the prompt requires:
+
+- **Stack** in `parity/recording/`:
+  - the draft backend built from the pinned commit's own Dockerfile and versions (it is the reference, not v2 code);
+  - its PostgreSQL with pgvector and Redis, on a private Compose network with no published database ports.
+- **Isolation from production.** The draft reads `.env` from its working directory, so it runs from the exported copy, never from `/root/whisperer/backend`. Every variable is passed explicitly, and provider keys are empty.
+- **Time.** Seeds write explicit timestamps around the fixed clock. The API process runs under libfaketime at the same instant, so server-side "days left" and "today" match the frozen browser. Values generated per request (tokens, request ids) are normalized by declared rules.
+- **Seeds.** One persona each for free, start, pro, max and admin. Data goes in through the draft's HTTP API where it exists, and through its ORM where the draft creates it with AI or external services (transcripts, notes, mind maps).
+- **Recorder.** The draft frontend runs against the live draft backend. Each state is driven with request capture, and the captured `/v1` responses are written as fixtures.
+- **Synthetic fixtures.** Data that comes from external services unavailable locally is written by hand:
+  - OpenRouter balance, LiveKit health, connector catalogs, weather in the ticker.
+  - Each such fixture is validated against the draft type and marked synthetic with the reason.
+
+### 3.7 Commands
+
+Run from `parity/`, inside the container. A slice selects its states by id prefix.
+
+| Command | What it does |
+|---|---|
+| `npm run baseline -- [--grep <prefix>]` | renders the draft, uploads the images to the S3 bucket and rewrites `baseline/manifest.json` |
+| `npm run verify -- [--grep <prefix>]` | renders the draft again and compares with zero tolerance (definition of done: two runs, no differences) |
+| `npm run compare -- --grep meetings.` | renders v2 and compares with the parity tolerance; HTML report with expected, actual and diff per state and cell |
+| `npm run record -- --grep <prefix>` | re-records fixtures from the local draft stack |
+
+Parity tolerance: per-pixel colour threshold 0.1 and at most 0.1 % of pixels per screenshot, overridable per state with a reason.
+
+### 3.8 What the harness requires from v2
+
+These follow from the goal "a user notices no difference" and are what lets one state definition drive both frontends. F2 and the slices keep them:
+
+- **Base path.** The SPA is served under `/app/`, and the same paths and query parameters address the same screens.
+- **Persisted client state.** `wh-auth` (`{state:{csrfToken,user},version:0}`), `wh.theme`, `wh.lang`, `wh.appearance`. A user signed in before the cutover stays signed in with the same theme and language. The harness seeds the same keys.
+- **API.** The same `/v1` HTTP, SSE and WebSocket contract (D1). Fonts are served at `/fonts/`.
+- **Randomness.** Random choices visible on screen go through `Math.random`, so the seed applies.
+- **Selectors.** The texts, `aria-label`s, roles and `data-onboarding` anchors used as markers and interactions stay.
+
+### 3.9 CI
+
+D2 adds a `parity` job: `npm ci`, type check, and unit tests of the harness (fixture validation, replay matching, uniqueness and completeness of state definitions). It also extends the 200-line limit of `scripts/ci/check_repository.py` to `parity/`.
+
+Screenshot runs on v2 are wired into CI by F2, when v2 has a frontend to compare.
+
+## 4. Steps
+
+Each step is one session, ends with checks and a report, and is committed after «Принято».
+
+| Step | Content | Done when |
+|---|---|---|
+| 1 | Inventory, this plan, ADR 0003, status | inventory covers every route; plan and ADR approved |
+| 2 | Recording stack: draft backend at the pinned commit with PostgreSQL and Redis, libfaketime, persona seeds, recorder, normalizer; fixtures for boot, shell, auth, account, billing, onboarding, referral, downloads, hotkeys | the stack starts with one command and records those fixtures; no production value is read |
+| 3 | Harness core: targets, serving, strict replay, determinism, state DSL, matrix, `baseline` / `verify` / `compare`, report, unit tests, CI job, `parity/README.md`; state definitions and baseline for step 2's features | `verify` shows 0 differences for those states |
+| 4 | Meetings, calendar, context, knowledge, search | same, for these states |
+| 5 | Leo, prompts, models, MCP, hub (SSE replay for chat and prompt tests) | same |
+| 6 | Rooms, streams, storage, tracker (WebSocket replay; SFU states excluded) | same |
+| 7 | Admin, product analytics, analytics, satisfaction, support | same |
+| 8 | Locale sweep, full baseline in S3, full `verify`, status `done` | the prompt's definition of done |
+
+## 5. Decisions
+
+The owner approved this plan on 2026-10-01.
+
+1. **Baseline storage — decided 2026-10-01: the production S3 bucket, prefix `parity-baseline/`.**
+   - **Layout.** The PNGs live in object storage, not in git. Git holds a manifest: state, cell, SHA-256 and size of every baseline image. The harness downloads the images it needs by hash and checks them; `baseline` uploads new images and rewrites the manifest.
+   - **Exception.** The owner allowed the production bucket and its credentials from `backend/.env`. This is an exception to REWRITE_PLAN §2 for this prefix only. The prefix is deleted when the rewrite is finished.
+   - **Credentials.** The harness reads them from `PARITY_S3_*` environment variables; it never parses `backend/.env` itself. In CI they come from repository secrets that the owner adds.
+   - **Prefix guard.** The harness refuses any object key outside `parity-baseline/`, and only `baseline` writes. Nothing else in the bucket is read, listed or deleted.
+   - **Migration.** The bucket becomes the Russian home's bucket ([ADR 0006](../../adr/0006-draft-bucket-becomes-russian-home-bucket.md)), so M1 skips this prefix and M2 removes it.
+2. **Matrix depth — decided 2026-10-01.** Main states get all 8 cells; small variants get one cell: `ru`, desktop, light. The rule is in §3.4. The owner's decision narrows the prompt's "`ru` and `en` for every state".
+3. **SFU-dependent states — decided 2026-10-01: outside the matrix.**
+   - Live participant tiles, the live whiteboard and stage video are not screenshotted, because WebRTC media cannot be recorded and replayed deterministically.
+   - They are checked by hand on the staging domain.
+   - Everything those pages render over HTTP is covered.
+
+## 6. Risks
+
+| Risk | Mitigation |
+|---|---|
+| The draft API needs more services at startup than PostgreSQL and Redis (the draft has Compose files for NATS and Temporal) | step 2 adds them from the draft's own Compose files; if one cannot run locally, the affected endpoints get synthetic fixtures with a reason |
+| A screen depends on time in a way libfaketime does not cover | the normalizer rule set is per field and reviewed in the recording report |
+| Semgrep `p/default` flags token-like strings in fixtures | fixtures use fake values that do not look like JWTs or keys |
+| v2 renders the same design with a newer Tailwind or React and differs by a few pixels | per-state tolerance with a written reason; never a global increase |
+| The production bucket key sits on a development host and in CI secrets | the prefix guard above; the key is used only by `baseline` (write) and `verify` / `compare` (read); the owner can swap in a key limited to the prefix at any time without code changes |
+| Full runs are too slow for every push | slices run their own prefix; F2 decides sharding and the schedule for full runs |
