@@ -10,7 +10,7 @@ import { stateSnapshotSegments } from "./baseline/manifest.ts";
 import { FIXTURES_DIR, loadParityConfig, ORIGIN } from "./config.ts";
 import { installMediaAccess } from "./determinism/media-access.ts";
 import { installOpenStreams, openStreamsOf } from "./determinism/open-streams.ts";
-import { installPageSetup, PERSISTENT_ANIMATIONS, RANDOM_SEED } from "./determinism/page-setup.ts";
+import { ENTRY_ANIMATIONS, installPageSetup, PERSISTENT_ANIMATIONS, RANDOM_SEED } from "./determinism/page-setup.ts";
 import { settle } from "./determinism/settle.ts";
 import { readFixture, type Fixture } from "./fixtures/format.ts";
 import { parseMode, toleranceFor } from "./harness/mode.ts";
@@ -51,6 +51,7 @@ for (const state of ALL_STATES) {
       randomSeed: RANDOM_SEED,
       freezeMotion: true,
       persistentAnimations: PERSISTENT_ANIMATIONS,
+      entryAnimations: ENTRY_ANIMATIONS,
     });
     await installOpenStreams(context, openStreamsOf(state.overrides ?? []));
     await installMediaAccess(context, state.mediaAccess);

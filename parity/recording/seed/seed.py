@@ -26,8 +26,11 @@ from sqlalchemy import func, select
 # Регистрирует все таблицы черновика: у засеваемых моделей внешние ключи на чужие.
 import meetassist.composition.metadata  # noqa: F401
 from accounts import create_account
+from admin_seed import seed_admin
+from analytics_seed import seed_analytics
 from calendar_seed import seed_calendar
 from files_seed import seed_files, set_storage_counters
+from finance_seed import seed_finance
 from hubs_seed import seed_hubs
 from leo_cabinet import seed_leo_cabinet
 from mcp_seed import seed_mcp
@@ -35,8 +38,11 @@ from meetings import seed_meetings
 from personas import PERSONAS
 from prompts_models import seed_prompts_models
 from rooms_seed import seed_rooms
+from satisfaction_seed import seed_satisfaction
+from security_seed import seed_security
 from streams_seed import seed_streams
 from studio import seed_studio
+from support_seed import seed_support
 from tracker_seed import seed_boards, seed_tracker
 from workspace import seed_workspace
 from world import seed_world
@@ -79,10 +85,17 @@ async def seed() -> None:
         await seed_rooms(db, lead, accounts["admin"], clock)
         await seed_streams(db, accounts, clock)
         await seed_files(db, lead, clock)
+        await seed_support(db, accounts)
+        await seed_satisfaction(db, accounts, clock)
+        await seed_security(db, accounts, clock)
+        await seed_admin(db, accounts, clock)
+        await seed_finance(db, accounts, clock)
+        events = await seed_analytics(db)
         # Последним: счётчик занятого места — сумма всех файлов «руководителя».
         await set_storage_counters(db, accounts, clock)
         await db.commit()
-    log.info("засев завершён: персон %d", len(accounts), extra={"personas": len(accounts)})
+    log.info("засев завершён: персон %d, событий аналитики %d", len(accounts), events,
+             extra={"personas": len(accounts), "analytics_events": events})
 
 
 if __name__ == "__main__":

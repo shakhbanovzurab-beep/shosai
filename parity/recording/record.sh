@@ -10,7 +10,8 @@
 #      когда меняется засев, Dockerfile API или коммит черновика;
 #   4. рабочая база — свежая копия шаблона, Redis — пустой, API — перезапущен:
 #      каждый прогон начинается с одного и того же состояния;
-#   5. API стартует под libfaketime в момент стенда сравнения, и это проверяется;
+#   5. API работает под libfaketime с часами, остановленными на моменте стенда
+#      сравнения, и это проверяется;
 #   6. рекордер (playwright.record.config.ts) пишет fixtures/.
 #
 # Ничего боевого стенд не видит: сеть draft без выхода наружу, переменные
@@ -30,9 +31,12 @@ db_password=${PARITY_DRAFT_DB_PASSWORD:-parity-local}
 psql=("${compose[@]}" exec -T draft-db psql -U draft -d postgres -v ON_ERROR_STOP=1 -qAt)
 
 clock=$(node -p "require('./parity.config.json').clock")
-# libfaketime: «@» — часы стартуют с этого момента и идут дальше.
-faketime_start=$(node -p "new Date('$clock').toISOString().slice(0, 19).replace('T', ' ')")
-export PARITY_FAKETIME="@$faketime_start"
+# libfaketime без «@»: настенные часы API стоят на моменте стенда весь прогон.
+# Окна «за 10 минут», «за 30 дней» и темп целей не зависят от того, когда визит
+# записан. Монотонные часы настоящие (FAKETIME_DONT_FAKE_MONOTONIC в образе):
+# таймеры и тайм-ауты asyncio идут.
+faketime_moment=$(node -p "new Date('$clock').toISOString().slice(0, 19).replace('T', ' ')")
+export PARITY_FAKETIME="$faketime_moment"
 
 bash scripts/build-draft.sh >/dev/null
 "${compose[@]}" build draft-api
@@ -62,9 +66,9 @@ fi
 "${compose[@]}" exec -T draft-redis redis-cli <recording/seed/redis.txt >/dev/null
 "${compose[@]}" up -d --wait --force-recreate draft-api
 
-api_date=$("${compose[@]}" exec -T draft-api python -c "import datetime; print(datetime.datetime.now(datetime.UTC).date())")
-if [[ "$api_date" != "${clock:0:10}" ]]; then
-  echo "API черновика видит дату $api_date вместо ${clock:0:10}: libfaketime не подхватился" >&2
+api_now=$("${compose[@]}" exec -T draft-api python -c "import datetime; print(datetime.datetime.now(datetime.UTC).strftime('%Y-%m-%dT%H:%M:%S'))")
+if [[ "$api_now" != "${clock:0:19}" ]]; then
+  echo "API черновика видит время $api_now вместо ${clock:0:19}: libfaketime не подхватился или часы идут" >&2
   exit 1
 fi
 

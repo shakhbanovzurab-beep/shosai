@@ -8,7 +8,7 @@
   "storage": {
     "wh.theme": "light",
     "wh.lang": "ru",
-    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"lead@parity.test\",\"username\":\"Мария Соколова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"pro_1m\",\"name\":\"Pro (31 день)\",\"price_rub\":1990,\"price_usd\":27,\"price_eur\":24,\"period_days\":31,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":107374182400,\"currency\":\"RUB\",\"price\":1990},\"started_at\":\"2026-07-07T12:00:00Z\",\"expires_at\":\"2026-08-07T12:00:00Z\",\"days_left\":21,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":true,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"lead@parity.test\",\"username\":\"Мария Соколова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"pro_1m\",\"name\":\"Pro (31 день)\",\"price_rub\":1990,\"price_usd\":27,\"price_eur\":24,\"period_days\":31,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":107374182400,\"currency\":\"RUB\",\"price\":1990},\"started_at\":\"2026-07-07T12:00:00Z\",\"expires_at\":\"2026-08-07T12:00:00Z\",\"days_left\":21,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":true,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
   },
   "exchanges": [
     {
@@ -220,7 +220,7 @@
           "is_current": true,
           "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000017/download",
           "published_at": "2026-07-12T12:00:00Z",
-          "created_at": "2026-07-12T12:00:00Z"
+          "created_at": "2026-07-12T10:48:00Z"
         }
       ],
       "origin": "recorded"
@@ -240,7 +240,7 @@
         "role": "user",
         "status": "active",
         "is_active": true,
-        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "last_login_at": "2026-07-17T12:00:00Z",
         "language": "ru",
         "timezone": "Europe/Moscow",
         "no_logs": false,
@@ -363,8 +363,8 @@
         "current_step": null,
         "completed_steps": [],
         "done_actions": [],
-        "started_at": "2026-03-19T12:00:00Z",
-        "completed_at": "2026-03-19T12:20:00Z"
+        "started_at": "2026-03-19T11:48:00Z",
+        "completed_at": "2026-03-19T12:08:00Z"
       },
       "origin": "recorded"
     },
@@ -535,77 +535,12 @@
     {
       "method": "GET",
       "path": "/v1/me/storage/list",
-      "query": "parent_id=00000000-0000-4000-8000-000000000027",
-      "status": 200,
-      "contentType": "application/json",
-      "body": [
-        {
-          "id": "00000000-0000-4000-8000-000000000028",
-          "name": "migrate_users.py",
-          "is_folder": false,
-          "parent_id": "00000000-0000-4000-8000-000000000027",
-          "size": 6144,
-          "mime_type": "text/x-python",
-          "shared": false,
-          "share_url": null,
-          "created_at": "2026-06-17T12:12:00Z",
-          "updated_at": null,
-          "share_has_password": false,
-          "share_expires_at": null,
-          "share_download_disabled": false
-        }
-      ],
-      "origin": "recorded"
-    },
-    {
-      "method": "GET",
-      "path": "/v1/me/storage/list",
-      "query": "parent_id=00000000-0000-4000-8000-000000000029",
-      "status": 200,
-      "contentType": "application/json",
-      "body": [
-        {
-          "id": "00000000-0000-4000-8000-000000000030",
-          "name": "Демо_Acme.mp4",
-          "is_folder": false,
-          "parent_id": "00000000-0000-4000-8000-000000000029",
-          "size": 734003200,
-          "mime_type": "video/mp4",
-          "shared": false,
-          "share_url": null,
-          "created_at": "2026-06-17T12:06:00Z",
-          "updated_at": null,
-          "share_has_password": false,
-          "share_expires_at": null,
-          "share_download_disabled": false
-        },
-        {
-          "id": "00000000-0000-4000-8000-000000000031",
-          "name": "Планирование_Q4.mp3",
-          "is_folder": false,
-          "parent_id": "00000000-0000-4000-8000-000000000029",
-          "size": 18874368,
-          "mime_type": "audio/mpeg",
-          "shared": false,
-          "share_url": null,
-          "created_at": "2026-06-17T12:07:00Z",
-          "updated_at": null,
-          "share_has_password": false,
-          "share_expires_at": null,
-          "share_download_disabled": false
-        }
-      ],
-      "origin": "recorded"
-    },
-    {
-      "method": "GET",
-      "path": "/v1/me/storage/list",
       "query": "parent_id=00000000-0000-4000-8000-000000000020",
       "status": 200,
       "contentType": "application/json",
       "body": [
         {
-          "id": "00000000-0000-4000-8000-000000000032",
+          "id": "00000000-0000-4000-8000-000000000027",
           "name": "Портал",
           "is_folder": true,
           "parent_id": "00000000-0000-4000-8000-000000000020",
@@ -620,7 +555,7 @@
           "share_download_disabled": false
         },
         {
-          "id": "00000000-0000-4000-8000-000000000033",
+          "id": "00000000-0000-4000-8000-000000000028",
           "name": "Архив_пилота_2025.zip",
           "is_folder": false,
           "parent_id": "00000000-0000-4000-8000-000000000020",
@@ -640,15 +575,40 @@
     {
       "method": "GET",
       "path": "/v1/me/storage/list",
-      "query": "parent_id=00000000-0000-4000-8000-000000000034",
+      "query": "parent_id=00000000-0000-4000-8000-000000000029",
       "status": 200,
       "contentType": "application/json",
       "body": [
         {
-          "id": "00000000-0000-4000-8000-000000000035",
+          "id": "00000000-0000-4000-8000-000000000030",
+          "name": "migrate_users.py",
+          "is_folder": false,
+          "parent_id": "00000000-0000-4000-8000-000000000029",
+          "size": 6144,
+          "mime_type": "text/x-python",
+          "shared": false,
+          "share_url": null,
+          "created_at": "2026-06-17T12:12:00Z",
+          "updated_at": null,
+          "share_has_password": false,
+          "share_expires_at": null,
+          "share_download_disabled": false
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/storage/list",
+      "query": "parent_id=00000000-0000-4000-8000-000000000031",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000032",
           "name": "Договор_Acme_2026.pdf",
           "is_folder": false,
-          "parent_id": "00000000-0000-4000-8000-000000000034",
+          "parent_id": "00000000-0000-4000-8000-000000000031",
           "size": 1245184,
           "mime_type": "application/pdf",
           "shared": false,
@@ -660,10 +620,10 @@
           "share_download_disabled": false
         },
         {
-          "id": "00000000-0000-4000-8000-000000000036",
+          "id": "00000000-0000-4000-8000-000000000033",
           "name": "Приложение_1_SLA.docx",
           "is_folder": false,
-          "parent_id": "00000000-0000-4000-8000-000000000034",
+          "parent_id": "00000000-0000-4000-8000-000000000031",
           "size": 86528,
           "mime_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           "shared": false,
@@ -680,12 +640,77 @@
     {
       "method": "GET",
       "path": "/v1/me/storage/list",
-      "query": "parent_id=00000000-0000-4000-8000-000000000018",
+      "query": "parent_id=00000000-0000-4000-8000-000000000027",
       "status": 200,
       "contentType": "application/json",
       "body": [
         {
           "id": "00000000-0000-4000-8000-000000000029",
+          "name": "Скрипты",
+          "is_folder": true,
+          "parent_id": "00000000-0000-4000-8000-000000000027",
+          "size": 0,
+          "mime_type": null,
+          "shared": false,
+          "share_url": null,
+          "created_at": "2026-06-17T12:11:00Z",
+          "updated_at": null,
+          "share_has_password": false,
+          "share_expires_at": null,
+          "share_download_disabled": false
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/storage/list",
+      "query": "parent_id=00000000-0000-4000-8000-000000000034",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000035",
+          "name": "Демо_Acme.mp4",
+          "is_folder": false,
+          "parent_id": "00000000-0000-4000-8000-000000000034",
+          "size": 734003200,
+          "mime_type": "video/mp4",
+          "shared": false,
+          "share_url": null,
+          "created_at": "2026-06-17T12:06:00Z",
+          "updated_at": null,
+          "share_has_password": false,
+          "share_expires_at": null,
+          "share_download_disabled": false
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000036",
+          "name": "Планирование_Q4.mp3",
+          "is_folder": false,
+          "parent_id": "00000000-0000-4000-8000-000000000034",
+          "size": 18874368,
+          "mime_type": "audio/mpeg",
+          "shared": false,
+          "share_url": null,
+          "created_at": "2026-06-17T12:07:00Z",
+          "updated_at": null,
+          "share_has_password": false,
+          "share_expires_at": null,
+          "share_download_disabled": false
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/storage/list",
+      "query": "parent_id=00000000-0000-4000-8000-000000000018",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000034",
           "name": "Встречи",
           "is_folder": true,
           "parent_id": "00000000-0000-4000-8000-000000000018",
@@ -700,7 +725,7 @@
           "share_download_disabled": false
         },
         {
-          "id": "00000000-0000-4000-8000-000000000034",
+          "id": "00000000-0000-4000-8000-000000000031",
           "name": "Договор",
           "is_folder": true,
           "parent_id": "00000000-0000-4000-8000-000000000018",
@@ -735,31 +760,6 @@
     {
       "method": "GET",
       "path": "/v1/me/storage/list",
-      "query": "parent_id=00000000-0000-4000-8000-000000000032",
-      "status": 200,
-      "contentType": "application/json",
-      "body": [
-        {
-          "id": "00000000-0000-4000-8000-000000000027",
-          "name": "Скрипты",
-          "is_folder": true,
-          "parent_id": "00000000-0000-4000-8000-000000000032",
-          "size": 0,
-          "mime_type": null,
-          "shared": false,
-          "share_url": null,
-          "created_at": "2026-06-17T12:11:00Z",
-          "updated_at": null,
-          "share_has_password": false,
-          "share_expires_at": null,
-          "share_download_disabled": false
-        }
-      ],
-      "origin": "recorded"
-    },
-    {
-      "method": "GET",
-      "path": "/v1/me/storage/list",
       "query": "q=Acme",
       "status": 200,
       "contentType": "application/json",
@@ -780,10 +780,10 @@
           "share_download_disabled": false
         },
         {
-          "id": "00000000-0000-4000-8000-000000000030",
+          "id": "00000000-0000-4000-8000-000000000035",
           "name": "Демо_Acme.mp4",
           "is_folder": false,
-          "parent_id": "00000000-0000-4000-8000-000000000029",
+          "parent_id": "00000000-0000-4000-8000-000000000034",
           "size": 734003200,
           "mime_type": "video/mp4",
           "shared": false,
@@ -795,10 +795,10 @@
           "share_download_disabled": false
         },
         {
-          "id": "00000000-0000-4000-8000-000000000035",
+          "id": "00000000-0000-4000-8000-000000000032",
           "name": "Договор_Acme_2026.pdf",
           "is_folder": false,
-          "parent_id": "00000000-0000-4000-8000-000000000034",
+          "parent_id": "00000000-0000-4000-8000-000000000031",
           "size": 1245184,
           "mime_type": "application/pdf",
           "shared": false,
@@ -897,9 +897,9 @@
         "stats": {
           "meetings_total": 9,
           "minutes_total": 377,
-          "ai_answers_total": 12,
-          "tokens_total": 126144,
-          "users_total": 13
+          "ai_answers_total": 28,
+          "tokens_total": 535314,
+          "users_total": 22
         }
       },
       "origin": "recorded"

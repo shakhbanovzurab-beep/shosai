@@ -68,6 +68,7 @@ Every state is rendered under the same conditions:
 - `Math.random` is seeded;
 - the system setting "reduce motion" is on;
 - animations and transitions have zero duration from the first frame, except the animations in `PERSISTENT_ANIMATIONS` (`src/determinism/page-setup.ts`), which stop on their first frame because their end changes the screen (a toast closes when its bar ends);
+- entry animations in `ENTRY_ANIMATIONS` (the draft's `.rise`) are removed altogether: their last frame is the element's own style, and a filled zero-length animation of opacity and offset sometimes put the element on a composited layer, which moved its anti-aliasing by one colour level;
 - the pointer is parked at (0, 0), and service workers are blocked;
 - the origin `http://parity.localhost` is a secure context, as HTTPS is in production: the microphone, AudioWorklet and push exist. Chromium has a fake microphone and camera that grant themselves ([`src/determinism/browser-flags.ts`](src/determinism/browser-flags.ts)); recording uses the same browser;
 - the Web Speech API is a silent recogniser: it starts and never hears anything, so nothing goes to the browser vendor's speech service;
@@ -86,7 +87,7 @@ These also follow from the goal that users notice no difference:
 - **Persisted client state.** `wh-auth` (`{state:{csrfToken,user},version:0}`), `wh.theme`, `wh.lang` and `wh.appearance` keep their meaning. Users stay signed in across the cutover, and the harness seeds these keys. The Leo conversation stays in `agent-chat-v1:<user id>` and `agent-session-v1:<user id>` with the draft's message shape: users keep their thread, and Leo states seed it. A stream viewer's name stays in `wh.stream.name` and a pending knock in sessionStorage `wh.stream.knock.<invite>`.
 - **API.** The same `/v1` contract (D1), including the SSE events of Leo and the prompt test run and the WebSocket frames of `/v1/ws/voice` and `/v1/ws/user`. File previews take text and documents from `content` and media from the URL that `download-url` returns. Fonts are served at `/fonts/`.
 - **Selectors used by states.** Texts from the draft catalogs, roles, `aria-label`s and `data-onboarding` anchors stay. The few draft class names in state definitions (`.onb-card`) are kept or the selector is replaced together with the state.
-- **Motion.** v2 honours `prefers-reduced-motion` where the draft does. Random choices on screen use `Math.random`. If a toast closes on a different animation than `toast-bar`, its selector is added to `PERSISTENT_ANIMATIONS`.
+- **Motion.** v2 honours `prefers-reduced-motion` where the draft does. Random choices on screen use `Math.random`. If a toast closes on a different animation than `toast-bar`, its selector is added to `PERSISTENT_ANIMATIONS`. If v2 names its entry animation differently from `.rise`, its selector is added to `ENTRY_ANIMATIONS`.
 
 ## Baseline storage
 

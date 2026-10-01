@@ -40,6 +40,9 @@ class Persona:
     referred_by: str | None = None
     #: Сохранённая карта и включённое автопродление.
     saved_card: bool = False
+    #: Пройденные шаги тура и первые действия — для воронки онбординга в админке.
+    tour_steps: tuple[str, ...] = ()
+    first_actions: tuple[str, ...] = ()
 
     @property
     def email(self) -> str:
@@ -62,4 +65,22 @@ PERSONAS: tuple[Persona, ...] = (
     Persona("overquota", "Полина Ершова", "POLINA2026", tariff="pro_1m"),
     #: Рабочее пространство целиком: встречи, календарь, контекст, база знаний.
     Persona("lead", "Мария Соколова", "MARIA2026", registered_days_ago=120, tariff="pro_1m", paid_days_ago=10),
+    #: Админка (admin_seed.py, security_seed.py): замороженный аккаунт, шеринг
+    #: аккаунта с разных IP, очередь abuse, партнёрская программа. Визитов у них нет.
+    #: Пятеро зарегистрированы за последний месяц: их обучение — воронка дашборда.
+    Persona("frozen", "Лев Фомин", "LEV2026", status="frozen", registered_days_ago=25,
+            tour_steps=("map", "search", "agent", "analytics", "meetings"), first_actions=("first_question",)),
+    Persona("sharer", "Никита Гусев", "NIKITA2026", tariff="pro_1m", registered_days_ago=75),
+    Persona("sharer2", "Роман Титов", "ROMAN2026", registered_days_ago=9, onboarding="active", tour_step="agent",
+            tour_steps=("map", "search"), first_actions=("first_question", "context_filled")),
+    Persona("abuser", "Семён Мухин", "SEMEN2026", registered_days_ago=27,
+            tour_steps=("map", "search", "agent", "analytics", "hub", "meetings", "audio-upload"),
+            first_actions=("first_question", "first_prompt", "first_meeting", "desktop_downloaded")),
+    Persona("cheap", "Тимур Ахмедов", "TIMUR2026", tariff="pro_1m", registered_days_ago=52),
+    Persona("trusted", "Ульяна Крылова", "ULYANA2026", tariff="max_1m", registered_days_ago=88),
+    Persona("blogger", "Филипп Рябов", "FILIPP2026", registered_days_ago=95),
+    Persona("applicant", "Эмилия Цветкова", "EMILIA2026", registered_days_ago=21,
+            tour_steps=("map", "search", "agent"), first_actions=("first_upload",)),
+    Persona("declined", "Юрий Шестаков", "YURI2026", registered_days_ago=18, onboarding="skipped",
+            tour_steps=("map",)),
 )

@@ -18,6 +18,8 @@ import { ExchangeJournal } from "./capture.ts";
 import { normalizeFixture } from "./normalize.ts";
 import { signIn } from "./session.ts";
 import { ACCOUNT_VISITS } from "./visits/account.ts";
+import { ADMIN_VISITS } from "./visits/admin.ts";
+import { ADMIN_OPS_VISITS } from "./visits/admin-ops.ts";
 import { AUTH_VISITS } from "./visits/auth.ts";
 import { FILES_VISITS } from "./visits/files.ts";
 import { MEETINGS_VISITS } from "./visits/meetings.ts";
@@ -26,7 +28,7 @@ import { LEO_VISITS } from "./visits/leo.ts";
 import { DEFAULT_LANGUAGES, type Visit } from "./visits/types.ts";
 import { WORKSPACE_VISITS } from "./visits/workspace.ts";
 
-const VISITS: readonly Visit[] = [...AUTH_VISITS, ...ACCOUNT_VISITS, ...MEETINGS_VISITS, ...WORKSPACE_VISITS, ...LEO_VISITS, ...ROOMS_VISITS, ...FILES_VISITS];
+const VISITS: readonly Visit[] = [...AUTH_VISITS, ...ACCOUNT_VISITS, ...MEETINGS_VISITS, ...WORKSPACE_VISITS, ...LEO_VISITS, ...ROOMS_VISITS, ...FILES_VISITS, ...ADMIN_VISITS, ...ADMIN_OPS_VISITS];
 
 /** Персона изменяющего визита не встречается в других визитах; id уникальны. */
 function assertConsistentVisits(visits: readonly Visit[]): void {
@@ -64,6 +66,7 @@ for (const language of languages) {
           randomSeed: RANDOM_SEED,
           freezeMotion: false,
           persistentAnimations: [],
+          entryAnimations: [],
         });
 
         const journal = new ExchangeJournal(visit.country ?? "RU", language);

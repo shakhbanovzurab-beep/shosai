@@ -29,12 +29,19 @@ async def create_account(
 ) -> User:
     """Создаёт аккаунт персоны со всем её состоянием."""
     user = await register(db, persona.email, PASSWORD, name=persona.name, language="ru")
-    registered_at = clock - timedelta(days=persona.registered_days_ago)
+    # Минуты по порядку создания: список пользователей в админке сортируется
+    # только по дате регистрации, и равные даты база отдала бы в любом порядке.
+    registered_at = clock - timedelta(days=persona.registered_days_ago, minutes=len(accounts))
     user.created_at = registered_at
+    # Рекордер входит за персону, и черновик ставит «последний вход» = сейчас.
+    # Засеянное «сейчас» не зависит от того, какие визиты уже прошли.
+    user.last_login_at = clock
     user.timezone = TIMEZONE
     user.referral_code = persona.referral_code
     user.role = persona.role
     user.status = persona.status
+    # Черновик снимает активность при заморозке и бане (api/admin/users.py).
+    user.is_active = persona.status == "active"
     user.ai_minutes_used = persona.minutes_used
     if persona.referred_by is not None:
         user.referred_by_user_id = accounts[persona.referred_by].id
@@ -79,8 +86,8 @@ def _onboarding(user: User, persona: Persona, registered_at: datetime) -> UserOn
         status=persona.onboarding,
         version=1,
         current_step=persona.tour_step,
-        completed_steps=[],
-        done_actions=[],
+        completed_steps=list(persona.tour_steps),
+        done_actions=list(persona.first_actions),
         audio_status="declined",
         started_at=registered_at,
         completed_at=registered_at + timedelta(minutes=20) if completed else None,

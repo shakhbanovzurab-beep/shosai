@@ -16,29 +16,33 @@ from meetassist.models.user import User
 from meetassist.services.tariff_service import get_tariff_by_code
 from sqlalchemy.ext.asyncio import AsyncSession
 
-#: Размеры — как у настоящих сборок 1.4.5: экран показывает их в мегабайтах.
+#: Размеры — как у настоящих сборок: экран показывает их в мегабайтах.
+#: Платформа, версия, файл, размер, опубликована, суток назад загружена. Список в
+#: админке сортируется по времени загрузки, поэтому оно у всех разное; снятая
+#: 1.4.4 видна только там.
 _BUILDS = (
-    ("macos", "Whisperer-1.4.5.dmg", 89_438_208),
-    ("windows", "Whisperer-Setup-1.4.5.exe", 74_235_904),
+    ("macos", "1.4.5", "Whisperer-1.4.5.dmg", 89_438_208, True, 5),
+    ("windows", "1.4.5", "Whisperer-Setup-1.4.5.exe", 74_235_904, True, 5.05),
+    ("macos", "1.4.4", "Whisperer-1.4.4.dmg", 88_965_120, False, 26),
 )
 
 
 async def seed_world(db: AsyncSession, clock: datetime, accounts: dict[str, User]) -> None:
     """Засевает общее окружение и окружение персон."""
     admin = accounts["admin"]
-    for platform, file_name, size in _BUILDS:
+    for platform, version, file_name, size, current, days in _BUILDS:
         db.add(
             AppBuild(
                 platform=platform,
-                version="1.4.5",
-                notes="Стабильность записи и новые горячие клавиши.",
+                version=version,
+                notes="Стабильность записи и новые горячие клавиши." if current else "Исправления звука на AirPods.",
                 file_name=file_name,
-                storage_name=f"parity-{platform}-1.4.5",
+                storage_name=f"parity-{platform}-{version}",
                 size_bytes=size,
-                is_current=True,
-                published_at=clock - timedelta(days=5),
+                is_current=current,
+                published_at=clock - timedelta(days=5 if current else days),
                 uploaded_by_user_id=admin.id,
-                created_at=clock - timedelta(days=5),
+                created_at=clock - timedelta(days=days),
             )
         )
     payment = await _payment(db, accounts["pro"], "pro_1m", clock - timedelta(days=10), TX_SUCCESS)

@@ -10,8 +10,10 @@
 //  * случайные идентификаторы участников видеокомнат и трансляций (суффикс
 //    `__<8 hex>` у аккаунта, `guest-<12 hex>` у гостя) → так же, заглушки;
 //  * метки времени в пределах суток после момента стенда сравнения — это «сейчас» API
-//    под libfaketime, которое сдвигается на секунды записи → сам момент, в том
-//    же формате. Засев задаёт прошлое и будущее явно и вне этого окна.
+//    под libfaketime → сам момент, в том же формате. Засев задаёт прошлое и
+//    будущее явно и вне этого окна;
+//  * группы, которые черновик отдаёт без порядка (список ниже), → по убыванию
+//    числа, затем по ключу.
 
 import type { Exchange, Fixture, JsonValue } from "../fixtures/format.ts";
 
@@ -39,6 +41,41 @@ const VOLATILE_RESPONSE_FIELDS: ReadonlyMap<string, readonly string[]> = new Map
   // PKCE входа через VK ID: свежие state и code_verifier на каждый показ кнопки.
   ["GET /v1/auth/social/vk/prepare", ["state", "code_verifier"]],
 ]);
+
+/**
+ * Группы, которые черновик отдаёт в неопределённом порядке (GROUP BY без
+ * ORDER BY, сортировка без второго ключа): «метод путь» → поля верхнего уровня.
+ * Экран показывает их как пришли, и от прогона к прогону порядок менялся.
+ * Запись фиксирует один порядок — по убыванию числа, затем по ключу; v2 обязан
+ * упорядочивать так же.
+ */
+const UNORDERED_GROUPS: ReadonlyMap<string, readonly string[]> = new Map([
+  ["GET /v1/admin/dashboard", ["users_by_tariff", "users_by_status", "ltv_by_tariff"]],
+  ["GET /v1/admin/analytics/onboarding", ["steps", "actions"]],
+]);
+
+/** Число группы: значение словаря или поле `count` строки. */
+function groupSize(value: JsonValue | undefined): number {
+  if (typeof value === "number") return value;
+  if (value !== null && typeof value === "object" && !Array.isArray(value) && typeof value["count"] === "number") return value["count"];
+  return 0;
+}
+
+function groupKey(value: JsonValue | undefined, fallback: string): string {
+  if (value !== null && typeof value === "object" && !Array.isArray(value) && typeof value["key"] === "string") return value["key"];
+  return fallback;
+}
+
+function byCountThenKey(a: [string, JsonValue], b: [string, JsonValue]): number {
+  return groupSize(b[1]) - groupSize(a[1]) || (groupKey(a[1], a[0]) < groupKey(b[1], b[0]) ? -1 : 1);
+}
+
+/** Группа в постоянном порядке: словарь — по ключам, список строк — по своим полям. */
+function ordered(value: JsonValue): JsonValue {
+  if (Array.isArray(value)) return value.map((item, index): [string, JsonValue] => [String(index), item]).sort(byCountThenKey).map(([, item]) => item);
+  if (value === null || typeof value !== "object") return value;
+  return Object.fromEntries(Object.entries(value).sort(byCountThenKey));
+}
 
 /** Заглушка по порядку первого появления значения. */
 function placeholder(known: Map<string, string>, value: string, format: (index: string) => string): string {
@@ -101,12 +138,18 @@ class Normalizer {
 }
 
 function withoutVolatileFields(exchange: Exchange): JsonValue {
-  const fields = VOLATILE_RESPONSE_FIELDS.get(`${exchange.method} ${exchange.path}`);
+  const key = `${exchange.method} ${exchange.path}`;
+  const fields = VOLATILE_RESPONSE_FIELDS.get(key) ?? [];
+  const groups = UNORDERED_GROUPS.get(key) ?? [];
   const body = exchange.body;
-  if (fields === undefined || body === null || typeof body !== "object" || Array.isArray(body)) return body;
+  if (body === null || typeof body !== "object" || Array.isArray(body)) return body;
   const result: { [key: string]: JsonValue } = { ...body };
   for (const field of fields) {
     if (field in result) result[field] = `parity-${field}`;
+  }
+  for (const field of groups) {
+    const value = result[field];
+    if (value !== undefined) result[field] = ordered(value);
   }
   return result;
 }

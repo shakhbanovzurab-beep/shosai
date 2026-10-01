@@ -1,0 +1,573 @@
+{
+  "visit": "support/list",
+  "language": "ru",
+  "persona": "max",
+  "url": "/app/support",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru",
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"max@parity.test\",\"username\":\"Жанна Морозова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"max_1m\",\"name\":\"Max (31 день)\",\"price_rub\":3490,\"price_usd\":47,\"price_eur\":43,\"period_days\":31,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":true,\"is_active\":true,\"storage_limit_bytes\":268435456000,\"currency\":\"RUB\",\"price\":3490},\"started_at\":\"2026-07-07T12:00:00Z\",\"expires_at\":\"2026-08-07T12:00:00Z\",\"days_left\":21,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":true,\"voice\":true,\"teleprompter\":true,\"premium_weekly_remaining_pct\":100,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/admin/context",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000003",
+        "text": "",
+        "roles": [
+          "responses",
+          "coding",
+          "vision",
+          "system_design",
+          "agent"
+        ],
+        "updated_at": null,
+        "files": []
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/prompts",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/app/builds",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000004",
+          "platform": "macos",
+          "platform_label": "macOS",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-1.4.5.dmg",
+          "size_bytes": 89438208,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000004/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000005",
+          "platform": "windows",
+          "platform_label": "Windows",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-Setup-1.4.5.exe",
+          "size_bytes": 74235904,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000005/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T10:48:00Z"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/auth/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "email": "max@parity.test",
+        "username": "Жанна Морозова",
+        "phone": null,
+        "avatar_url": null,
+        "role": "user",
+        "status": "active",
+        "is_active": true,
+        "last_login_at": "2026-07-17T12:00:00Z",
+        "language": "ru",
+        "timezone": "Europe/Moscow",
+        "no_logs": false,
+        "meeting_auto_tasks": false,
+        "memory_enabled": true,
+        "leo_voice_enabled": true,
+        "leo_web_search_enabled": true,
+        "leo_kb_search_enabled": true,
+        "leo_connector_search_enabled": true,
+        "marketing_consent": false,
+        "appearance": {
+          "font": "whisperer"
+        },
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "max_1m",
+            "name": "Max (31 день)",
+            "price_rub": 3490,
+            "price_usd": 47,
+            "price_eur": 43,
+            "period_days": 31,
+            "minutes_limit": null,
+            "allow_knowledge_base": true,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": true,
+            "is_active": true,
+            "storage_limit_bytes": 268435456000,
+            "currency": "RUB",
+            "price": 3490
+          },
+          "started_at": "2026-07-07T12:00:00Z",
+          "expires_at": "2026-08-07T12:00:00Z",
+          "days_left": 21,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "quota": {
+          "unlimited": true,
+          "limit_minutes": null,
+          "bonus_minutes": 0,
+          "used_minutes": null,
+          "remaining_minutes": null,
+          "exhausted": false
+        },
+        "features": {
+          "voice_translation": true,
+          "voice": true,
+          "teleprompter": true,
+          "premium_weekly_remaining_pct": 100,
+          "premium_credit_usd": 0,
+          "premium_credit_currency": "RUB",
+          "premium_credit_amount": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "max_1m",
+            "name": "Max (31 день)",
+            "price_rub": 3490,
+            "price_usd": 47,
+            "price_eur": 43,
+            "period_days": 31,
+            "minutes_limit": null,
+            "allow_knowledge_base": true,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": true,
+            "is_active": true,
+            "storage_limit_bytes": 268435456000,
+            "currency": "RUB",
+            "price": 3490
+          },
+          "started_at": "2026-07-07T12:00:00Z",
+          "expires_at": "2026-08-07T12:00:00Z",
+          "days_left": 21,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "usage": {
+          "session_count": 0,
+          "minutes_used": 0,
+          "ai_questions": 0,
+          "total_tokens": 0
+        },
+        "quota": {
+          "unlimited": true,
+          "limit_minutes": null,
+          "bonus_minutes": 0,
+          "used_minutes": null,
+          "remaining_minutes": null,
+          "exhausted": false
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/onboarding",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "status": "completed",
+        "audio_status": "declined",
+        "version": 1,
+        "current_step": null,
+        "completed_steps": [],
+        "done_actions": [],
+        "started_at": "2026-06-01T11:54:00Z",
+        "completed_at": "2026-06-01T12:14:00Z"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/referral",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "code": "ZHANNA2026",
+        "link": "/app/register?ref=ZHANNA2026",
+        "invited": 0,
+        "converted_paid": 0,
+        "currency": "RUB",
+        "balance": 0,
+        "reward_per_referral": 500,
+        "balance_rub": 0,
+        "reward_per_referral_rub": 500
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000006",
+          "number": 100003,
+          "user_id": "00000000-0000-4000-8000-000000000001",
+          "subject": "Запись обрывается на длинных встречах",
+          "status": "in_progress",
+          "created_at": "2026-07-14T07:40:00Z",
+          "message_count": 6,
+          "has_unread": true,
+          "user_email": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000007",
+          "number": 100002,
+          "user_id": "00000000-0000-4000-8000-000000000001",
+          "subject": "Не подключается Google Календарь",
+          "status": "open",
+          "created_at": "2026-07-13T16:20:00Z",
+          "message_count": 5,
+          "has_unread": false,
+          "user_email": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000008",
+          "number": 100001,
+          "user_id": "00000000-0000-4000-8000-000000000001",
+          "subject": "Как скачать стенограмму встречи в Word?",
+          "status": "resolved",
+          "created_at": "2026-07-05T14:20:00Z",
+          "message_count": 6,
+          "has_unread": false,
+          "user_email": null
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000006",
+          "number": 100003,
+          "user_id": "00000000-0000-4000-8000-000000000001",
+          "subject": "Запись обрывается на длинных встречах",
+          "status": "in_progress",
+          "created_at": "2026-07-14T07:40:00Z",
+          "message_count": 6,
+          "has_unread": true,
+          "user_email": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000007",
+          "number": 100002,
+          "user_id": "00000000-0000-4000-8000-000000000001",
+          "subject": "Не подключается Google Календарь",
+          "status": "open",
+          "created_at": "2026-07-13T16:20:00Z",
+          "message_count": 5,
+          "has_unread": false,
+          "user_email": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000008",
+          "number": 100001,
+          "user_id": "00000000-0000-4000-8000-000000000001",
+          "subject": "Как скачать стенограмму встречи в Word?",
+          "status": "resolved",
+          "created_at": "2026-07-05T14:20:00Z",
+          "message_count": 6,
+          "has_unread": false,
+          "user_email": null
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000006",
+          "number": 100003,
+          "user_id": "00000000-0000-4000-8000-000000000001",
+          "subject": "Запись обрывается на длинных встречах",
+          "status": "in_progress",
+          "created_at": "2026-07-14T07:40:00Z",
+          "message_count": 6,
+          "has_unread": true,
+          "user_email": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000007",
+          "number": 100002,
+          "user_id": "00000000-0000-4000-8000-000000000001",
+          "subject": "Не подключается Google Календарь",
+          "status": "open",
+          "created_at": "2026-07-13T16:20:00Z",
+          "message_count": 5,
+          "has_unread": false,
+          "user_email": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000008",
+          "number": 100001,
+          "user_id": "00000000-0000-4000-8000-000000000001",
+          "subject": "Как скачать стенограмму встречи в Word?",
+          "status": "resolved",
+          "created_at": "2026-07-05T14:20:00Z",
+          "message_count": 6,
+          "has_unread": false,
+          "user_email": null
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets/00000000-0000-4000-8000-000000000008",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000008",
+        "number": 100001,
+        "user_id": "00000000-0000-4000-8000-000000000001",
+        "subject": "Как скачать стенограмму встречи в Word?",
+        "status": "resolved",
+        "created_at": "2026-07-05T14:20:00Z",
+        "messages": [
+          {
+            "id": "00000000-0000-4000-8000-000000000009",
+            "author_user_id": "00000000-0000-4000-8000-000000000001",
+            "from_staff": false,
+            "body": "Нужно отправить стенограмму клиенту в формате Word. Есть такая выгрузка?",
+            "created_at": "2026-07-05T14:20:00Z",
+            "attachments": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000010",
+            "author_user_id": "00000000-0000-4000-8000-000000000011",
+            "from_staff": true,
+            "body": "Да: откройте встречу, меню **⋯ → Скачать → DOCX**. В файл попадут стенограмма и AI-заметки.",
+            "created_at": "2026-07-05T15:02:00Z",
+            "attachments": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000012",
+            "author_user_id": "00000000-0000-4000-8000-000000000001",
+            "from_staff": false,
+            "body": "А можно без AI-заметок, только текст разговора?",
+            "created_at": "2026-07-05T15:20:00Z",
+            "attachments": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000013",
+            "author_user_id": "00000000-0000-4000-8000-000000000011",
+            "from_staff": true,
+            "body": "Можно: в окне скачивания снимите галочку «AI-заметки».",
+            "created_at": "2026-07-05T15:26:00Z",
+            "attachments": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000014",
+            "author_user_id": "00000000-0000-4000-8000-000000000001",
+            "from_staff": false,
+            "body": "Получилось, спасибо!",
+            "created_at": "2026-07-05T15:40:00Z",
+            "attachments": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000015",
+            "author_user_id": "00000000-0000-4000-8000-000000000011",
+            "from_staff": true,
+            "body": "Рады помочь! Закрываем обращение.",
+            "created_at": "2026-07-05T15:55:00Z",
+            "attachments": []
+          }
+        ],
+        "user_email": null
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets/00000000-0000-4000-8000-000000000007",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000007",
+        "number": 100002,
+        "user_id": "00000000-0000-4000-8000-000000000001",
+        "subject": "Не подключается Google Календарь",
+        "status": "open",
+        "created_at": "2026-07-13T16:20:00Z",
+        "messages": [
+          {
+            "id": "00000000-0000-4000-8000-000000000016",
+            "author_user_id": "00000000-0000-4000-8000-000000000001",
+            "from_staff": false,
+            "body": "При подключении календаря Google показывает ошибку доступа. Скриншот приложила.",
+            "created_at": "2026-07-13T16:20:00Z",
+            "attachments": [
+              {
+                "id": "00000000-0000-4000-8000-000000000017",
+                "filename": "kalendar.png",
+                "mime": "image/png",
+                "size": 186940,
+                "url": null
+              }
+            ]
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000018",
+            "author_user_id": "00000000-0000-4000-8000-000000000001",
+            "from_staff": false,
+            "body": "Пробовала в другом браузере — то же самое.",
+            "created_at": "2026-07-14T09:02:00Z",
+            "attachments": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000019",
+            "author_user_id": "00000000-0000-4000-8000-000000000001",
+            "from_staff": false,
+            "body": "Ошибка «доступ запрещён» появляется сразу после выбора аккаунта.",
+            "created_at": "2026-07-15T12:30:00Z",
+            "attachments": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000020",
+            "author_user_id": "00000000-0000-4000-8000-000000000001",
+            "from_staff": false,
+            "body": "Есть новости?",
+            "created_at": "2026-07-16T09:12:00Z",
+            "attachments": []
+          },
+          {
+            "id": "00000000-0000-4000-8000-000000000021",
+            "author_user_id": "00000000-0000-4000-8000-000000000001",
+            "from_staff": false,
+            "body": "Нашла в справке про права календаря — все галочки стоят.",
+            "created_at": "2026-07-16T09:20:00Z",
+            "attachments": []
+          }
+        ],
+        "user_email": null
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets/unread-count",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "count": 1
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets/unread-count",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "count": 1
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/tickets/unread-count",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "count": 1
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ticker",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "weather": null,
+        "holiday": null,
+        "stats": {
+          "meetings_total": 9,
+          "minutes_total": 377,
+          "ai_answers_total": 28,
+          "tokens_total": 535314,
+          "users_total": 22
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "access_token": "parity-access_token",
+        "token_type": "Bearer",
+        "expires_in": 1800,
+        "csrf_token": "parity-csrf_token"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

@@ -8,7 +8,7 @@
   "storage": {
     "wh.theme": "light",
     "wh.lang": "en",
-    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"overquota@parity.test\",\"username\":\"Полина Ершова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"en\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"pro_1m\",\"name\":\"Pro (31 день)\",\"price_rub\":1990,\"price_usd\":27,\"price_eur\":24,\"period_days\":31,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":107374182400,\"currency\":\"RUB\",\"price\":1990},\"started_at\":\"2026-07-07T12:00:00Z\",\"expires_at\":\"2026-08-07T12:00:00Z\",\"days_left\":21,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":true,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"overquota@parity.test\",\"username\":\"Полина Ершова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00Z\",\"language\":\"en\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"pro_1m\",\"name\":\"Pro (31 день)\",\"price_rub\":1990,\"price_usd\":27,\"price_eur\":24,\"period_days\":31,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":107374182400,\"currency\":\"RUB\",\"price\":1990},\"started_at\":\"2026-07-07T12:00:00Z\",\"expires_at\":\"2026-08-07T12:00:00Z\",\"days_left\":21,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":true,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
   },
   "exchanges": [
     {
@@ -72,7 +72,7 @@
           "is_current": true,
           "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000005/download",
           "published_at": "2026-07-12T12:00:00Z",
-          "created_at": "2026-07-12T12:00:00Z"
+          "created_at": "2026-07-12T10:48:00Z"
         }
       ],
       "origin": "recorded"
@@ -92,7 +92,7 @@
         "role": "user",
         "status": "active",
         "is_active": true,
-        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "last_login_at": "2026-07-17T12:00:00Z",
         "language": "en",
         "timezone": "Europe/Moscow",
         "no_logs": false,
@@ -215,8 +215,8 @@
         "current_step": null,
         "completed_steps": [],
         "done_actions": [],
-        "started_at": "2026-06-01T12:00:00Z",
-        "completed_at": "2026-06-01T12:20:00Z"
+        "started_at": "2026-06-01T11:49:00Z",
+        "completed_at": "2026-06-01T12:09:00Z"
       },
       "origin": "recorded"
     },
@@ -288,9 +288,9 @@
         "stats": {
           "meetings_total": 9,
           "minutes_total": 377,
-          "ai_answers_total": 12,
-          "tokens_total": 126144,
-          "users_total": 13
+          "ai_answers_total": 28,
+          "tokens_total": 535314,
+          "users_total": 22
         }
       },
       "origin": "recorded"

@@ -133,6 +133,7 @@ The pilot recipe, applied to every state:
 - seeded `Math.random`;
 - "reduce motion" emulated: the draft then stops the sign-in poster and Leo's gaze, which otherwise change every frame;
 - animations and transitions zeroed from document start, except animations whose end changes the screen: the draft's toast closes when its `toast-bar` animation ends, so that animation stops on its first frame;
+- entry animations whose last frame is the element's own style (the draft's `.rise`) removed: a filled zero-length animation of opacity and offset sometimes put the element on a composited layer, and its anti-aliasing moved by one colour level (step 7);
 - pointer parked;
 - captcha and sign-in SDK stubs;
 - service workers blocked;
@@ -163,6 +164,16 @@ Measured in step 6: 663 states, 1346 screenshots, 100.2 MB in the bucket; `basel
 - **Masks.** One mask was added: the fake camera's moving picture in the room preview.
 - **Harness browser limits.** Chromium headless shell has no PDF viewer and formats native date fields by its build, not by the page locale; both targets are drawn in the same browser, so the comparison is unaffected (inventory, «Coverage in the screenshot matrix», step 6).
 
+Measured in step 7: 833 states, 1573 screenshots, 121.9 MB in the bucket; `baseline` and two `verify` runs matched with zero tolerance, the first restoring every image from S3. All 115 visits (215 fixtures) were recorded twice, byte-identical.
+- **What made it repeatable.**
+  - The recording API's wall clock stands still, so window starts such as "the last 30 days" no longer drift between runs.
+  - The normalizer sorts groups the draft returns in database order (`UNORDERED_GROUPS`: dashboard breakdowns, onboarding steps and actions).
+  - Entry animations are removed (rule above). The comparator ignores anti-aliased pixels, so before the rule only the mobile light shared meeting page showed it, one or two pixels in some runs; the rule re-rendered 684 earlier screenshots with no visible change.
+- **Data changes on earlier screens.** Earlier fixtures were recorded again: the seed now sets each account's sign-in time and registration minute explicitly, and the platform totals include the new personas and the admin spend. 40 earlier screenshots changed for data, all from the support unread badge in the desktop sidebar:
+  - the administrator's count on every admin screen (`shell.admin`, AI models, LiveKit);
+  - Max's count on `billing.subscription.max`.
+- **Admin screens are ru only.** The draft's admin texts are not translated, so admin states are captured in Russian (inventory, «Findings», step 7).
+
 ### 3.6 Recording from the draft backend
 
 Fixtures come from the draft backend running locally with seeded test data, as the prompt requires. Built in step 2; the operating manual is [parity/recording/README.md](../../../parity/recording/README.md).
@@ -175,7 +186,7 @@ Fixtures come from the draft backend running locally with seeded test data, as t
   - The draft reads `.env` from its working directory, so it runs from a `git archive` export of tracked files, never from `/root/whisperer/backend`.
   - Every variable is passed explicitly, and provider keys are empty.
   - Verified: no `.env` in the export, and no outbound connection succeeds from the API.
-- **Time.** The API runs under libfaketime at the parity clock, so server-side "days left" and "today" match the frozen browser. Seeds write explicit timestamps. "Now" values and per-request tokens, ids and PKCE values are normalized by declared rules.
+- **Time.** The API runs under libfaketime with its wall clock stopped at the parity clock (from step 7; monotonic time stays real, so timers and time-outs run). Server-side "days left", "today" and windows such as "the last 10 minutes" or "the last 30 days" match the frozen browser whenever in the run a visit is recorded. Seeds write explicit timestamps. "Now" values and per-request tokens, ids and PKCE values are normalized by declared rules.
 - **State per run.** A template database holds the migrated, seeded draft. Every run copies it, empties Redis and restarts the API. A visit that changes data uses its own persona.
 - **Seeds.** Ten personas cover the tariffs, tour states, quota exhaustion, a saved card with payment history, a referrer, an administrator and a blocked account. They are created through the draft's own service registration, then adjusted through its ORM. Later steps add personas and data for their features the same way: through the ORM where the draft produces the data with AI or external services (transcripts, notes, mind maps).
 - **Recorder.**
@@ -229,7 +240,7 @@ Each step is one session, ends with checks and a report, and is committed after 
 | 4 | Meetings, calendar, context, knowledge, search (inventory: meetings-calendar-knowledge.md):<br>• seed persona `lead` with the whole workspace; ids shared by seed and visits in `recording/seed/ids.json`;<br>• library, import, meeting page (document, AI version, mind map, impact, share, menus, transcript), templates, integrations, shared page `/r/:token`;<br>• calendar views, event and stream dialogs, calendar integrations;<br>• context, knowledge base files, sources and connect flows; palette results.<br>Streams that send events over time join step 5. | same, for these states |
 | 5 | Leo, prompts, models, MCP, hub (inventory: leo-prompts-models-mcp-hub.md):<br>• replay of open SSE streams and WebSocket frames on the state; the Leo conversation seeded in localStorage; the harness origin `http://parity.localhost` is a secure context, with a fake microphone;<br>• seed for `lead`: the Leo tab, MCP, hubs with boards and the Acme history of facts, prompts, skills, AI spend; two registry models from `admin`;<br>• Leo widget (panel, conversation content, streaming, actions, composer, mentions, voice, reminders), Leo cabinet tab, MCP tab and consent screen, prompts, skills, editor and test run, models, admin AI models, hubs;<br>• also the meeting AI version and mind map while their streams send text.<br>Done: 180 states, 288 screenshots | same, for these states |
 | 6 | Rooms, streams, storage, tracker (inventory: rooms-streams-storage-tracker.md):<br>• fake LiveKit keys in the recording stack: room tokens and stream passes are signed locally; the harness closes the media server socket, so rooms stay «Не удалось подключиться» and everything drawn over HTTP is captured; SFU states excluded (decision 3);<br>• seed for `lead`: rooms with recordings and the LiveKit audit log, streams (live, ended, members only) with chat, hands and a waiting room, a file tree with share links, tracker boards with Jira links; personas `quota` and `overquota`;<br>• host and guest rooms, LiveKit admin, stream viewer and studio, files with every preview kind and the share dialog, public share pages, tracker projects, board and Jira.<br>Done: 168 states, 283 screenshots | same, for these states |
-| 7 | Admin, product analytics, analytics, satisfaction, support | same |
+| 7 | Admin, product analytics, analytics, satisfaction, support (inventory: admin-analytics-support.md):<br>• the recording API's wall clock stops at the parity clock;<br>• seeds for every admin screen and a deterministic simulation of product analytics events; nine admin-only personas;<br>• dashboard, product analytics, users, tariffs, money, finance, security, support and broadcasts, app builds, client errors, platform prompts, affiliates, satisfaction and the survey card; the user's activity and support pages. Admin visits are read-only.<br>Done: 170 states, 227 screenshots | same, for these states |
 | 8 | Locale sweep, full baseline in S3, full `verify`, status `done` | the prompt's definition of done |
 
 ## 5. Decisions

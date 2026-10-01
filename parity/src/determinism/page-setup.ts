@@ -24,6 +24,8 @@ export interface PageSetup {
   readonly freezeMotion: boolean;
   /** Селекторы анимаций, которые при съёмке стоят на первом кадре (PERSISTENT_ANIMATIONS). */
   readonly persistentAnimations: readonly string[];
+  /** Селекторы анимаций появления, которые при съёмке снимаются совсем (ENTRY_ANIMATIONS). */
+  readonly entryAnimations: readonly string[];
 }
 
 /**
@@ -32,6 +34,15 @@ export interface PageSetup {
  * устроит закрытие тоста иначе, F2 дописывает сюда свой селектор.
  */
 export const PERSISTENT_ANIMATIONS: readonly string[] = ['[style*="toast-bar"]'];
+
+/**
+ * Анимации появления, последний кадр которых совпадает с собственным стилем
+ * элемента. Нулевая длительность их не убирает: заполненная анимация прозрачности
+ * и сдвига иногда выносит элемент в отдельный слой композитора, и сглаживание
+ * карточки уходит на один уровень цвета — шаг 7 поймал так `.rise` на публичной
+ * странице встречи. Без анимации элемент рисуется тем же кадром, но всегда одинаково.
+ */
+export const ENTRY_ANIMATIONS: readonly string[] = [".rise"];
 
 function setUpPage(setup: PageSetup): void {
   for (const [key, value] of Object.entries(setup.storage)) {
@@ -100,12 +111,14 @@ function setUpPage(setup: PageSetup): void {
   // animationend), не обнуляются, а стоят на первом кадре: иначе тост исчез бы
   // через доли секунды. Селектор специфичнее `*`, поэтому перекрывает общее правило.
   const persistent = setup.persistentAnimations.join(",");
+  const entry = setup.entryAnimations.join(",");
   const motion =
     "*,*::before,*::after{animation-duration:0s!important;animation-delay:0s!important;" +
     "transition-duration:0s!important;transition-delay:0s!important;caret-color:transparent!important}" +
     (persistent === ""
       ? ""
-      : `${persistent}{animation-duration:100000s!important;animation-delay:0s!important;animation-play-state:paused!important}`);
+      : `${persistent}{animation-duration:100000s!important;animation-delay:0s!important;animation-play-state:paused!important}`) +
+    (entry === "" ? "" : `${entry}{animation-name:none!important}`);
   const tracker = window as unknown as { __parityLastMutation: number };
   tracker.__parityLastMutation = performance.now();
   const install = (): void => {

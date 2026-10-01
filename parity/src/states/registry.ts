@@ -6,6 +6,13 @@ import { existsSync } from "node:fs";
 import { fixturePath } from "../fixtures/format.ts";
 import { cellsFor, type Cell } from "../matrix.ts";
 import { ACCOUNT_STATES } from "./account.ts";
+import { ACTIVITY_STATES } from "./activity.ts";
+import { ADMIN_ANALYTICS_STATES } from "./admin-analytics.ts";
+import { ADMIN_DASHBOARD_STATES } from "./admin-dashboard.ts";
+import { ADMIN_FINANCE_STATES } from "./admin-finance.ts";
+import { ADMIN_OPS_STATES } from "./admin-ops.ts";
+import { ADMIN_SATISFACTION_STATES } from "./admin-satisfaction.ts";
+import { ADMIN_USERS_STATES } from "./admin-users.ts";
 import { ACCOUNT_ACTION_STATES } from "./account-actions.ts";
 import { ACCOUNT_VARIANT_STATES } from "./account-variants.ts";
 import { AUTH_STATES } from "./auth.ts";
@@ -92,6 +99,13 @@ export const ALL_STATES: readonly State[] = [
   ...ROOMS_GUEST_STATES,
   ...STREAMS_WATCH_STATES,
   ...STREAMS_STUDIO_STATES,
+  ...ADMIN_DASHBOARD_STATES,
+  ...ADMIN_ANALYTICS_STATES,
+  ...ADMIN_USERS_STATES,
+  ...ADMIN_FINANCE_STATES,
+  ...ADMIN_OPS_STATES,
+  ...ADMIN_SATISFACTION_STATES,
+  ...ACTIVITY_STATES,
 ];
 
 export function stateCells(state: State): Cell[] {

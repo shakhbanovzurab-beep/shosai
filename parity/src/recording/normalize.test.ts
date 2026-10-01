@@ -112,3 +112,13 @@ test("случайные идентификаторы участников за�
   });
   expect(normalized.exchanges[1]?.body).toEqual([{ principal: "guest-000000000001" }, { identity: `${placeholder}__00000001` }]);
 });
+
+test("группы без порядка у черновика — по убыванию числа, затем по ключу, только в объявленных ответах", () => {
+  const result = normalizeFixture(fixtureWith([
+    get("/v1/admin/dashboard", { users_by_tariff: { start: 1, free: 13, pro_1m: 6, max_1m: 2 }, other: { b: 1, a: 2 } }),
+    get("/v1/admin/analytics/onboarding", { steps: [{ key: "hub", count: 1 }, { key: "map", count: 5 }, { key: "audio", count: 1 }] }),
+  ]), CLOCK);
+  const [dashboard, onboarding] = result.exchanges.map((exchange) => JSON.stringify(exchange.body));
+  expect(dashboard).toBe('{"users_by_tariff":{"free":13,"pro_1m":6,"max_1m":2,"start":1},"other":{"b":1,"a":2}}');
+  expect(onboarding).toBe('{"steps":[{"key":"map","count":5},{"key":"audio","count":1},{"key":"hub","count":1}]}');
+});

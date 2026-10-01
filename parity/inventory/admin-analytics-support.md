@@ -123,7 +123,7 @@ Sections are chosen with a Radix `Select` labelled "Раздел". There is **no
 - **Hazards, current date:**
   - FunnelView (l.16-17, 49), FeatureHealthBoard (l.19, 82) and MetricExplorer (l.26, 39) default to `from = isoDay(-30d)`, `to = isoDay(0)`. CohortMatrixView defaults to `-120d` (l.19, 54).
   - `isoDay = new Date(Date.now()+shift).toISOString().slice(0,10)` is a **UTC** date.
-  - The dates go into **POST bodies, not URLs**, formatted as `new Date(`${d}T00:00:00Z`).toISOString()`. With the clock frozen at 2026-10-01T12:00Z: funnel, health and explorer send `"date_from":"2026-09-01T00:00:00.000Z","date_to":"2026-10-01T00:00:00.000Z"`; cohort sends `"date_from":"2026-06-03T00:00:00.000Z"`. Fixtures must match on body, or ignore the body.
+  - The dates go into **POST bodies, not URLs**, formatted as `new Date(`${d}T00:00:00Z`).toISOString()`. With the parity clock 2026-07-17T12:00Z: funnel, health and explorer send `"date_from":"2026-06-17T00:00:00.000Z","date_to":"2026-07-17T00:00:00.000Z"`; cohort sends `"date_from":"2026-03-19T00:00:00.000Z"`. The harness matches requests on method, path and query, not on the body.
   - The native `<input type=date>` display format follows the browser locale.
 - **Other hazards:**
   - `MetricChart` is a hand-written SVG with width from a `ResizeObserver` (min 320, l.52-58). Axis labels use `toLocale*("ru-RU")` with no timeZone, so they depend on the browser TZ (l.38-43).
@@ -525,3 +525,61 @@ Both then pass `RequireAdmin`; a `user` ends on `/analytics`.
 7. **No virtualization, no iframes, no avatars** in this scope. External resources are limited to ticket attachment `<img>` (S3 signed URLs) and affiliate blog links.
 8. **Tab state not in URL.** `/admin/analytics` sections, `/admin/support` tabs, the `/admin/security` tab after mount, the `/costs` grouping and the `/analytics` metric and granularity are all local state. Only `/admin/security?tab=` is deep-linkable, and only on first load.
 9. **Typing in search inputs fires a request per keystroke** on `/admin/users` and `/admin/client-errors` (no debounce). Use `fill()` and match the final `q=` URL.
+
+### Findings (step 7 of D2)
+
+Draft defects visible on screen. By decision 4 of the D2 plan they stay out of the baseline, and v2 shows the intended behaviour.
+
+1. **A failed request looks like loading or like empty data.** Most admin queries render `isLoading || !data` as a spinner, so an error spins forever: `/dashboard`, `/costs`, every `/admin/analytics` section, and the funnels section when the funnel list is empty. A failed users list shows «Никого не нашлось», a failed client-error list «Ошибок не найдено». On `/analytics` a failed summary shows zero cards, and a failed or empty usage series shows the loading box. Out of the baseline: these error branches; v2 shows an error.
+2. **The admin screens are not translated.** Every admin page except `/costs` is hard-coded Russian, so an English admin sees Russian. Their states are captured in ru cells only.
+3. **Message counts are not pluralised.** The user ticket list renders `{{count}} сообщений` / `{{count}} messages` from a catalogue with no plural forms, and the admin list hard-codes «N сообщений». So one message reads «1 сообщений» / «1 messages». The seed gives every thread 5 to 20 messages, the only counts the draft spells correctly in both languages; v2 pluralises.
+
+Contract and data notes (not screens):
+- `/costs` shows only the spend of the administrator who opens it (`provider_costs.user_id = admin`); platform-wide spend is on `/dashboard`.
+- The users list and the app builds list sort only by creation time, so rows created at the same moment come back in any order. The seed gives every row a distinct time; v2 adds a tie-breaker.
+- The dashboard's breakdowns by tariff and status and its LTV cards come from `GROUP BY` without `ORDER BY`, and the onboarding funnel sorts steps and actions by count only. The screen shows them in the order received, so equal and unordered groups changed places between two recordings of the same data. The recorder fixes one order, count descending then key (`UNORDERED_GROUPS` in `src/recording/normalize.ts`); v2 orders them the same way.
+- An abuse audit with a state but no events is drawable but not producible by the draft's own code: every transition writes an event. `admin.security.audit.no-events` is captured as the UI the draft draws for such data.
+
+### Coverage in the screenshot matrix (step 7 of D2)
+
+**How the harness reproduces this group:**
+- **Frozen API clock.** From this step the recording API runs with its wall clock stopped at the parity clock (`FAKETIME` without `@`; monotonic time stays real, so timers and time-outs work). Windows such as «за 10 минут», «за час», «за 30 дней», the target pace and the drill period no longer depend on when a visit is recorded.
+- **Product analytics events.** `recording/seed/analytics_seed.py` simulates four and a half months of the product (about 94 000 events): landing visitors, sign-ups, desktop installs and permissions, returning users with decaying retention, meetings, copied answers, paywall and checkout. Thursday 16 July has a meeting drop on macOS 1.4.5 and an abort spike, which gives findings, fired alerts and lagging targets. The generator is seeded and deterministic.
+- **Admin data.** Seeds for every admin screen: tickets and broadcasts, satisfaction answers across segments, multi-IP logins, the error log and the abuse queue, client errors over every filter window, promo codes, a tariff without $ and € prices, an unpublished build, two platform prompt layers, affiliate partners and payouts, payments in every method and status, the administrator's own model spend and two token spikes for the dashboard alerts. Nine personas were added for them; none of them signs in during recording.
+- **Read-only visits.** Admin visits open sections, drawers, tabs, filters and pages, and run only refusals that change nothing: a promo code and a tariff with a taken code (409), a single-user broadcast to a blocked account (404), the automatic refund refusal (409) and the release notification (queued, never sent). Every action that changes data is synthetic in its state or not captured.
+
+**Captured inside another state:**
+
+| state | screenshot |
+|---|---|
+| `admin.dashboard.ltv-cards`, `.drill.populated`, `.drill.series-chart` | `admin.dashboard.populated` |
+| `admin.analytics.overview.burning` | `admin.analytics.overview.populated` |
+| `admin.analytics.findings.unchecked` | `admin.analytics.findings.populated` |
+| `admin.tariffs.missing-price`, `.promos.populated` | `admin.tariffs.populated` |
+| `admin.security.queue` whitelist badge | `admin.security.queue.populated` |
+| `admin.support.tickets.unread`, `.ticket-modal.attachments` (chips) | `admin.support.tickets.populated`, `admin.support.ticket-modal` |
+| `admin.support.broadcast.history` | `admin.support.broadcast.form` |
+| `admin.app.form` | `admin.app.populated` |
+| `admin.client-errors.filter-level`, `.filter-category`, search | `admin.client-errors.filter-platform`, `.filter-days` (the same filter bar) |
+| `admin.satisfaction` country, OS, plan and language filters | `admin.satisfaction.filter-gender` (the same select) |
+| `shell.satisfaction-prompt` | `admin.satisfaction.replay` (the card appears at once after «Посмотреть анкету») |
+| `analytics.usage.chart`, `analytics.calendar.populated` | `analytics.home.populated` |
+| `support.list.unread`, `support.list.resolved` | `support.list.populated` |
+| `support.send-error-toast` | `support.attach-error` |
+
+**Not screenshotted:**
+
+| state | reason |
+|---|---|
+| error branches listed in Finding 1 | Finding 1 |
+| `en` cells of the admin screens | Finding 2 |
+| `admin.tariffs.empty` | unreachable: the Free tariff must exist for the draft to register users |
+| `admin.dashboard.drill.dimension-event` | counts every login, including the recorder's own, so it depends on the visits run before it |
+| `admin.analytics.explorer.chart-gaps`, `.no-points`, `.grain`, `.breakdown`; `graph.dangling`, `graph.hover` | the same chart and graph components with other data or a pointer hover; the registry declares no dangling dependency |
+| `admin.finance.acquiring.flags` («нет кредов») | the recording API runs in billing dev mode, where every method reports credentials |
+| `admin.app.file-too-large`, `.uploading` | a file over 500 MB, and upload progress driven by the network |
+| `admin.prompts.saved` | «Сохранено» lives for 2 s on a real timer |
+| `admin.costs.chart-hover` | a pointer hover over a chart bar |
+| ticket image previews | attachments are S3 signed URLs; without S3 the draft returns chips |
+| `admin.support.ticket-modal.reply-pending`, `support` reply and create errors | the optimistic bubble uses a random id and the current time; the error toasts are the same component as `support.attach-error` |
+| results of admin mutations (freeze, ban, tariff change, bonus minutes, approve and reject, mark paid, confirmed refund, abuse actions, ticket status, deletions, uploads) | the screen after a change is the same page with changed data; the confirmation dialogs are captured |
