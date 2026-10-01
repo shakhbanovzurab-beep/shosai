@@ -1,6 +1,15 @@
 # F1 — Backend foundation
 
-Follow the common protocol in `docs/plan/prompts/README.md`. Load the `fastapi` skill before writing code.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the `fastapi` skill before reading the draft or designing anything.
+
+**This package is multi-session.** Work in the session mode described in `docs/plan/prompts/README.md`; the package plan is `docs/plan/packages/F1-backend-foundation.md`. A split that fits the work below — adjust it in the plan if the design needs another order:
+
+1. Project skeleton: `uv` project, `pyproject.toml` with Ruff, mypy strict and import-linter, layout of §5, the license copy, test infrastructure against F3 (item 12), CI backend job green on an empty project.
+2. Configuration, structured logging, telemetry hooks and the error envelope (items 3, ADR on the envelope).
+3. Home-aware data access, Alembic for both homes and RLS groundwork (items 4, 7, 8).
+4. Valkey, Redis cache and S3 clients per home (item 5).
+5. Outbox, processed events and the relay contract (item 6).
+6. The four process roles, health endpoints, the model-facing-English test and the import-linter contracts between features (items 2, 9, 10, 11).
 
 ## Goal
 

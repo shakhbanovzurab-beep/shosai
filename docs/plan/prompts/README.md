@@ -21,3 +21,18 @@ Every agent follows these steps, in addition to its package prompt.
 7. **Verify** with the checks from CLAUDE.md for the zones you changed, plus your package's definition of done. Check the change against every loaded skill. Report failures as failures.
 8. **Update STATUS.md**: your row's status, the link to your package plan if you wrote one, and a one-line note.
 9. **Report and wait.** Summarise what changed, what was verified and what is open, and list the skills you loaded and any skill recommendation you did not follow, with the reason. Commit and push only after the user says «Принято», with explicit paths, following CLAUDE.md "Git workflow".
+
+## Session mode for multi-session packages
+
+A package whose prompt says it is multi-session is too large for one session. The user starts it with the same launch line every time; the package plan in `docs/plan/packages/<ID>.md` tells each session what to do. Feature slices follow the same idea with their own plan path (`S-feature-slice.md`).
+
+- **No package plan yet → planning session.** Read the inputs the prompt names, then write `docs/plan/packages/<ID>.md`:
+  - the facts the plan rests on, with sources;
+  - the design: structure, public interfaces, how the target architecture's rules are met;
+  - the decisions the user must take, each with a proposed answer and its trade-off; record the confirmed ones as ADRs;
+  - a **Steps** table with the columns `Step | Content | Skills | Done when`. Each step fits one session, leaves the project working, and has its own checks.
+
+  Write no application code in this session. Set the status to `planned` in STATUS.md once the user approves the plan.
+- **Plan approved → implementation session.** Take the first step of the plan that is not marked done. Implement it, verify it, mark it done in the plan with a one-line result, set STATUS.md to `in progress` (`done` after the last step), report, and stop. Do not start the next step in the same session.
+- **Every step ends releasable.** A step is a task in the sense of CLAUDE.md: its checks and the zone's gates pass at its end, and after «Принято» it is committed and pushed, so CI on `main` stays green.
+- **A session stopped by a usage limit** is resumed in the same session after the limit resets — write «продолжай» — instead of starting a new one, so the step's context is not lost.

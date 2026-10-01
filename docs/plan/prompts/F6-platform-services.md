@@ -1,6 +1,16 @@
 # F6 — Platform services
 
-Follow the common protocol in `docs/plan/prompts/README.md`. Load the `fastapi` skill before writing code.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the `fastapi` skill before reading the draft or designing anything; load `resilience-failure` and `task-scheduling` for items 2 and 6.
+
+**This package is multi-session.** Work in the session mode described in `docs/plan/prompts/README.md`; the package plan is `docs/plan/packages/F6-platform-services.md`. The planning session settles both ADR decisions below with the user first, because every step depends on them. A split that fits the work below — adjust it in the plan if the design needs another order:
+
+1. Provider port with cost rows and effect keys, its test double (items 1, 8).
+2. Deadlines, retries, breakers and the provider-wide semaphore (item 2).
+3. Spend control and the kill switch (item 3).
+4. Abuse guard and the admin API for costs and abuse (item 4).
+5. Email port, SMTP sender, base layout and its test double (items 5, 8).
+6. Periodic-job registry and the scheduler walk over both homes (item 6).
+7. Provider telemetry and the "calls without a cost row" monitor (item 7).
 
 ## Goal
 
