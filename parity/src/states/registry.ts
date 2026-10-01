@@ -19,6 +19,7 @@ import { CALENDAR_INTEGRATION_STATES } from "./calendar-integrations.ts";
 import { HUB_STATES } from "./hub.ts";
 import { LEO_CABINET_STATES } from "./leo-cabinet.ts";
 import { LEO_CHAT_STATES } from "./leo-chat.ts";
+import { LEO_MEMORY_STATES } from "./leo-memory.ts";
 import { LEO_COMPOSER_STATES } from "./leo-composer.ts";
 import { LEO_STREAM_STATES } from "./leo-stream.ts";
 import { MCP_STATES } from "./mcp.ts";
@@ -32,6 +33,7 @@ import { MEETINGS_TRANSCRIPT_STATES } from "./meetings-transcript.ts";
 import { MODELS_STATES } from "./models.ts";
 import { PALETTE_STATES } from "./palette.ts";
 import { PROMPTS_STATES } from "./prompts.ts";
+import { PROMPTS_EDITOR_STATES } from "./prompts-editor.ts";
 import { SHELL_VARIANT_STATES } from "./shell-variants.ts";
 import { STUDIO_CONTEXT_STATES } from "./studio-context.ts";
 import { STUDIO_KNOWLEDGE_STATES } from "./studio-knowledge.ts";
@@ -64,8 +66,10 @@ export const ALL_STATES: readonly State[] = [
   ...LEO_STREAM_STATES,
   ...LEO_COMPOSER_STATES,
   ...LEO_CABINET_STATES,
+  ...LEO_MEMORY_STATES,
   ...MCP_STATES,
   ...PROMPTS_STATES,
+  ...PROMPTS_EDITOR_STATES,
   ...MODELS_STATES,
   ...HUB_STATES,
 ];
