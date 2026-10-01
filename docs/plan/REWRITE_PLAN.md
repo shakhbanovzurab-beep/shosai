@@ -61,30 +61,31 @@ These packages read the draft and produce the references that every later packag
 | F3 | Local environment | `compose.dev.yaml`: PostgreSQL 18 with pgvector as **two databases standing in for the RU and EU homes**, Valkey, Redis cache, Qdrant, and later LiveKit; prepared test databases; one command to start and one to reset |
 | F4 | Delivery to staging | Dockerfile (one image, four roles), production Compose, NGINX, TLS, image registry, `scripts/release.sh`, CI build and deploy to https://one.whisperer.one |
 | F5 | Observability | OpenTelemetry Collector, Prometheus, Alertmanager, Loki, Tempo, Grafana configuration per target architecture §16, including the `alerting` domain |
+| F6 | Platform services | The AI provider port that writes a cost row for every call, with spend control and the abuse guard; the email port; the periodic-job registry on `schedule_runs`. Added by D4 (decision FM-4) because most slices need them from their first step |
 
 ### Phase 2 — Feature slices
 
-Each slice is a vertical piece: backend slice, frontend slice, tests, contract compatibility with D1, visual parity with D2 for its screens. The initial mapping below is refined by D4.
+Each slice is a vertical piece: backend slice, frontend slice, tests, contract compatibility with D1, visual parity with D2 for its screens. The table below is the summary as D4 left it; the module-by-module map, the decisions FM-1…FM-5 (including the routes dropped for lack of any consumer) and the dependencies between slices are in [FEATURE_MAP.md](FEATURE_MAP.md).
 
 | ID | Slice | Draft sources (backend) | Draft sources (frontend) |
 |---|---|---|---|
-| S01 | Identity: accounts, sign-in, sessions, devices, email verification, social login, token rotation, directory and home routing, data export and deletion | `features/identity`, `services/auth*`, `oauth*`, `account_data.py`, `api/auth.py`, `api/me.py`, `api/me_data.py` | `auth`, `account`, `onboarding` |
+| S01 | Identity: accounts, sign-in, sessions, devices, email verification, social login, token rotation, directory and home routing, data export and deletion | `features/identity`, `services/auth_service.py`, `refresh_session_service.py`, `desktop_auth_service.py`, `pending_registration.py`, `account_data.py`, `onboarding.py`, `api/auth.py`, `api/me.py`, `api/me_data.py`, `api/me_onboarding.py` | `auth`, `account`, `onboarding` |
 | S02 | Organizations: companies, members, roles, seats, access policy, RLS, audit — **new in v2** | none; target architecture §7 | new screens in the draft's visual language |
-| S03 | Billing: tariffs, subscriptions, credits, acquirers, auto-renewal, reconciliation, referral and affiliate, company invoices | `features/billing`, `services/payment`, `billing_service.py`, `auto_renew*`, `tariff_service.py`, `card_binding_service.py`, `affiliate_service.py`, `api/me_billing.py`, `api/billing_webhook.py`, `api/tariffs.py`, `api/me_affiliate.py` | `billing`, `referral` |
-| S04 | Meetings: sessions, transcripts, notes, folders and tags, templates, import, recordings, mind map, sharing, post-meeting pipeline | `features/meetings`, `features/meeting_assistant`, `api/sessions.py`, `api/me_sessions*`, `api/me_notes.py`, `api/me_templates.py`, `api/me_mindmap.py`, `api/transcripts.py`, `api/me_recordings.py`, `services/mindmap_*`, `notes_enhancer.py` | `meetings` |
-| S05 | Realtime: live capture, voice assistant, call translation, subtitles, broadcasts | `features/realtime`, `features/stream`, `features/subtitles`, `api/realtime*.py` | `streams`, `hotkeys` |
-| S06 | Rooms: LiveKit rooms, recording, per-participant track transcription | `services/livekit`, `room_service.py`, `api/me_rooms.py`, `api/rooms_public.py`, `api/livekit_webhooks.py` | `rooms` |
-| S07 | Knowledge and search: sources, indexing, Qdrant, keyword search, context graph | `features/knowledge`, `features/knowledge_engine`, `features/context_graph`, `api/kb.py`, `api/graph.py`, `api/me_search.py`, `services/global_search.py` | `knowledge`, `search`, `context` |
+| S03 | Billing: tariffs, subscriptions, credits, acquirers, auto-renewal, reconciliation, referral and affiliate, company invoices | `features/billing`, `services/payment`, `billing_service.py`, `auto_renew*`, `tariff_service.py`, `card_binding_service.py`, `affiliate_service.py`, `api/me_billing.py`, `api/billing_webhook.py`, `api/tariffs.py`, `api/admin/{tariffs,finance,payments,promocodes,affiliates}.py` | `billing`, `referral` |
+| S04 | Meetings: sessions, transcripts, notes, folders and tags, templates, import, recordings, mind map, sharing, post-meeting pipeline | `features/meetings`, `api/sessions.py`, `api/me_sessions*`, `api/me_notes.py`, `api/me_templates.py`, `api/me_mindmap.py`, `api/me_meeting_org.py`, `services/session_manager.py`, `services/meeting_*`, `services/mindmap_*`, `notes_enhancer.py`, `web_meeting_result.py` | `meetings` |
+| S05 | Realtime: live capture, voice assistant, call translation, subtitles, hotkeys | `features/realtime`, `features/subtitles`, `api/realtime*.py`, `api/websocket.py`, `api/ai/voice*.py`, `services/hotkey_service.py` | `hotkeys`; the live page of `meetings` |
+| S06 | Rooms: LiveKit rooms, recording, per-participant track transcription, broadcasts, room whiteboard and AI panel | `services/livekit`, `room_*.py`, `api/me_rooms.py`, `api/rooms_public.py`, `api/livekit_webhooks.py`, `features/stream`, `features/whiteboard`, `features/meeting_assistant`, `web_meeting.py`, `web_stream.py` | `rooms`, `streams` |
+| S07 | Knowledge and search: sources, indexing, Qdrant, keyword search, context graph; the legacy notes merged in (FM-2) | `features/knowledge`, `features/knowledge_engine`, `features/context_graph`, the legacy notes behind `services/rag_pipeline.py`, `api/me_search.py`, `services/global_search.py` | `knowledge`, `search` |
 | S08 | Storage: files, presigned uploads, quotas, public links | `services/storage`, `api/me_storage.py`, `api/storage_public.py` | `storage` |
-| S09 | Agent (Leo): chat, tools, skills, memory, personalization, proactive hints, model selection, prompts, provider port and cost | `services/agent`, `services/llm`, `services/skills`, `features/memory`, `features/personalization`, `features/proactive`, `features/docs_assistant`, `api/ai/`, `api/prompts.py`, `api/me_models.py`, `api/me_skills.py` | `leo`, `prompts`, `models` |
-| S10 | MCP: Whisperer as an MCP server, MCP OAuth, MCP client | `api/mcp_*.py`, `api/me_mcp.py`, `services/mcp*` | `mcp` |
-| S11 | Errands and scheduler: delayed Leo actions, periodic jobs | `features/errands`, `tasks/` | — |
-| S12 | Connectors and calendar: Nango, calendar sync, Jira, CRM, Notion, OAuth integrations | `features/connectors`, `features/jira`, `services/calendar`, `api/calendar_*.py`, `api/me_calendar*.py`, `api/me_integrations.py`, `api/oauth_integrations.py` | `calendar` |
-| S13 | Tracker | `api/me_tracker.py` and its services | `tracker` |
-| S14 | Analytics: product analytics, satisfaction, client errors | `features/analytics`, `features/satisfaction`, `api/client_errors.py` | `analytics`, `product-analytics`, `satisfaction` |
-| S15 | Administration and support: platform admin, model registry, tickets | `api/admin/`, `api/tickets.py`, `services/ticket_attachment_service.py` | `platform-admin`, `support` |
-| S16 | Hub, downloads and remaining modules | `features/hub`, `features/whiteboard`, `features/demo`, `features/desktop`, `api/app_builds.py` | `hub`, `downloads` |
-| S17 | Public site: landing, legal, help centre and blog in 16 languages, SEO per [docs/seo/STRATEGY.md](../seo/STRATEGY.md) | `web_landing*.py`, `web_meeting.py`, `legal.py`, `static/landing/` | — |
+| S09 | Agent (Leo): chat, tools, skills, memory, personalization, proactive hints with Web Push, personal context, model catalogue and selection, prompts | `services/agent`, `services/skills`, model catalogue and registry in `services/llm`, `features/memory`, `features/personalization`, `features/proactive`, `api/ai/agent.py`, `api/ai/proxy.py`, `api/ai/dictate.py`, `api/me_models.py`, `api/me_skills.py`, `api/admin/{models,prompts,context}.py` | `leo`, `prompts`, `models`, `context` |
+| S10 | MCP: Whisperer as an MCP server, MCP OAuth, MCP client | `api/mcp_*.py`, `api/me_mcp.py`, `services/mcp*`, `services/llm/mcp_*` | `mcp` |
+| S11 | Errands: delayed Leo actions (periodic jobs moved to F6) | `features/errands` | — (panel inside `leo`) |
+| S12 | Connectors and calendar: Nango, calendar sync, Jira, meeting-result push to Notion, Slack and CRM, OAuth integrations ([ADR 0002](../adr/0002-oauth-grants-outside-nango.md)) | `features/connectors`, `features/jira`, `services/calendar`, `services/oauth_providers`, `services/oauth*.py`, `services/integration*.py`, `api/calendar_*.py`, `api/me_calendar*.py`, `api/me_integrations.py`, `api/oauth_integrations.py` | `calendar` |
+| S13 | Tracker | `api/me_tracker.py`, `services/tracker.py` | `tracker` |
+| S14 | Analytics: product analytics, personal usage, satisfaction, client errors | `features/analytics`, `features/satisfaction`, `api/client_errors.py`, `api/admin/{analytics,client_errors}.py` | `analytics`, `product-analytics`, `satisfaction` |
+| S15 | Administration and support: admin screens, users, dashboard, monitoring, tickets, newsletters | `api/admin/{users,dashboard,monitoring,tickets,broadcasts}.py`, `api/tickets.py`, `api/unsubscribe.py`, `services/ticket*_service.py`, `services/broadcast_service.py` | `platform-admin`, `support` |
+| S16 | Hub, downloads and remaining modules: hubs (FM-1), client downloads, top-bar ticker | `features/hub`, `features/desktop`, `api/app_builds.py`, `api/admin/app_builds.py`, `api/ticker.py` | `hub`, `downloads` |
+| S17 | Public site: landing with its live demo, legal, help centre with its assistant, blog in 16 languages, SEO per [docs/seo/STRATEGY.md](../seo/STRATEGY.md) | `web_static.py`, `web_landing*.py`, `web_share.py`, `legal.py`, `features/demo`, `features/docs_assistant` (FM-1), `static/landing/`, `static/docs/` | — |
 
 ### Phase 3 — Data migration and cutover
 
@@ -97,14 +98,15 @@ Each slice is a vertical piece: backend slice, frontend slice, tests, contract c
 
 ```text
 D1 D2 D3 D4          (parallel, any time)
-F3 ── F1 ── S01 ── S02..S17   (slices in any order, in parallel)
-      F2 ─┘                  
+F3 ── F1 ── F6 ── S01 ── S02..S16   (slices in any order, in parallel)
+      F2 ───────┘
+F1 F2 F6 ── S17
 F1 F2 ── F4 ── F5
 all S + D3 ── M1 ── M2
 ```
 
 - The user chose no feature order. The only fixed dependencies are technical:
-  - F1, F2 and F3 come before any slice;
+  - F1, F2, F3 and F6 come before any slice;
   - S01 (identity) comes before the other slices, because every other slice needs an authenticated user;
   - D1 and D2 must exist before a slice can prove contract compatibility and visual parity.
 - Slices run in parallel. Each touches only its own paths. Shared registration points (router, composition root, navigation, locale bundles) take small, additive edits, committed with explicit paths.
@@ -116,7 +118,7 @@ all S + D3 ── M1 ── M2
 |---|---|
 | F4 | The server for https://one.whisperer.one, SSH access for deployment, the DNS record, and the image registry (GHCR is proposed) |
 | F4 | Whether deploys to staging run automatically after green CI and production deploys are manual with approval (proposed) |
-| D4, S16 | Which draft modules without a place in the target architecture are kept, merged or dropped |
+| D4, S16 | Which draft modules without a place in the target architecture are kept, merged or dropped — **decided 2026-10-01**, [FEATURE_MAP.md](FEATURE_MAP.md) section 7 |
 | S03 | Sandbox credentials of the acquirers (TBank, CloudPayments, lava.top) for staging |
 | S09, S05 | API keys of AI providers for staging |
 | M1, M2 | Read access to a copy of the production database and storage, and the cutover date |
@@ -138,6 +140,7 @@ Paste one line as the first message of a new session. Replace `<ID>` where shown
 | F3 | `Execute work package F3 from docs/plan/prompts/F3-local-environment.md.` |
 | F4 | `Execute work package F4 from docs/plan/prompts/F4-delivery-staging.md.` |
 | F5 | `Execute work package F5 from docs/plan/prompts/F5-observability.md.` |
+| F6 | `Execute work package F6 from docs/plan/prompts/F6-platform-services.md.` |
 | S01–S17 | `Execute feature slice <ID> from docs/plan/prompts/S-feature-slice.md.` |
 | M1 | `Execute work package M1 from docs/plan/prompts/M1-data-migration.md.` |
 | M2 | `Execute work package M2 from docs/plan/prompts/M2-cutover.md.` |
