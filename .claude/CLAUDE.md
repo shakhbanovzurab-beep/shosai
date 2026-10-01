@@ -373,6 +373,7 @@ No hook automates these gates yet. Run them yourself.
 |---|---|---|
 | Repository rules | always | File length limits; no `.env` file tracked by git ([scripts/ci/check_repository.py](../scripts/ci/check_repository.py)) |
 | Semgrep | always | `p/default` rules over the whole repository except `.claude/` |
+| Contracts | always | `uv sync --locked`, Ruff format and lint, mypy strict, pytest (harness, consistency of the draft API baseline, rendered documents in sync), python-doctor 100 — see [contracts/README.md](../contracts/README.md) |
 | Backend | once `backend/pyproject.toml` exists | `uv sync --locked`, Ruff format and lint, mypy strict, import-linter, pytest with coverage, python-doctor 100, pip-audit |
 | Frontend | once `frontend/package.json` exists | `npm ci`, type check, tests, build, react-doctor 100 |
 
@@ -380,6 +381,7 @@ What the projects must provide for CI to pass:
 
 - **Backend:** `uv.lock`; dev dependencies `ruff`, `mypy`, `import-linter`, `pytest`, `pytest-cov`, `python-doctor`, `pip-audit`; import-linter contracts. Tests read the database only from `TEST_DATABASE_URL` — CI provides PostgreSQL 18 with `pgvector` there.
 - **Frontend:** `package-lock.json`; `.nvmrc` with the Node version; npm scripts `typecheck`, `test` (single run, not watch mode), `build` and `doctor`.
+- **Contracts:** after a change under `contracts/`, run `uv run whisperer-contracts render` if `draft/*.json` changed, then `uv run pytest` and `uv run python-doctor . --score` there.
 
 For the file length limit, generated code is exempt: files under a `generated/` or `__generated__/` directory, Alembic migrations (`alembic/versions/`, `migrations/versions/`), and files with an `@generated` marker in their first five lines.
 

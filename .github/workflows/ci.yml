@@ -1,6 +1,7 @@
 # Quality gates for every push to main. The rules behind each job are in
 # .claude/CLAUDE.md ("Checks") and docs/design/ARCHITECTURE.md (§14, §17).
 # Backend and frontend jobs run only once their project files exist.
+# The contracts job guards the draft API baseline and its harness (contracts/README.md).
 name: CI
 
 on:
@@ -50,6 +51,35 @@ jobs:
       - name: Scan
         # .claude/ holds third-party agent skills, not Whisperer code.
         run: semgrep scan --config p/default --error --metrics=off --exclude .claude
+
+  contracts:
+    name: Contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: contracts
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        with:
+          working-directory: contracts
+          enable-cache: true
+          cache-dependency-glob: contracts/uv.lock
+      - name: Install locked dependencies
+        run: uv sync --locked
+      - name: Ruff format
+        run: uv run ruff format --check .
+      - name: Ruff lint
+        run: uv run ruff check .
+      - name: mypy (strict)
+        run: uv run mypy
+      - name: Harness tests, baseline consistency, rendered documents
+        run: uv run pytest
+      - name: python-doctor 100/100
+        run: uv run python-doctor . --min-score 100 --no-cache
 
   detect:
     name: Detect projects

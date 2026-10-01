@@ -1,0 +1,4762 @@
+[
+  {
+    "method": "GET",
+    "path": "/",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:412"
+  },
+  {
+    "method": "GET",
+    "path": "/.well-known/oauth-authorization-server",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:70"
+  },
+  {
+    "method": "HEAD",
+    "path": "/.well-known/oauth-authorization-server",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:70"
+  },
+  {
+    "method": "GET",
+    "path": "/.well-known/oauth-protected-resource",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:63"
+  },
+  {
+    "method": "HEAD",
+    "path": "/.well-known/oauth-protected-resource",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:63"
+  },
+  {
+    "method": "GET",
+    "path": "/app",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:796"
+  },
+  {
+    "method": "GET",
+    "path": "/app/assets/{path:path}",
+    "kind": "static_mount",
+    "in_openapi": false,
+    "module": "starlette.staticfiles",
+    "source": ""
+  },
+  {
+    "method": "GET",
+    "path": "/app/{full_path:path}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:800"
+  },
+  {
+    "method": "GET",
+    "path": "/apple-touch-icon.png",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:573"
+  },
+  {
+    "method": "GET",
+    "path": "/assets/{name}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_landing_assets",
+    "source": "backend/src/meetassist/web_landing_assets.py:100"
+  },
+  {
+    "method": "GET",
+    "path": "/blog/{slug}/",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:347"
+  },
+  {
+    "method": "GET",
+    "path": "/docs",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:623"
+  },
+  {
+    "method": "GET",
+    "path": "/docs/",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:623"
+  },
+  {
+    "method": "GET",
+    "path": "/docs/{path:path}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:657"
+  },
+  {
+    "method": "GET",
+    "path": "/email/{name}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:694"
+  },
+  {
+    "method": "GET",
+    "path": "/favicon-32.png",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:573"
+  },
+  {
+    "method": "GET",
+    "path": "/favicon.ico",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:533"
+  },
+  {
+    "method": "GET",
+    "path": "/favicon.svg",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:529"
+  },
+  {
+    "method": "GET",
+    "path": "/files/{name}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_landing_assets",
+    "source": "backend/src/meetassist/web_landing_assets.py:129"
+  },
+  {
+    "method": "GET",
+    "path": "/fonts/{name}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_landing_assets",
+    "source": "backend/src/meetassist/web_landing_assets.py:76"
+  },
+  {
+    "method": "GET",
+    "path": "/health",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.health",
+    "source": "backend/src/meetassist/api/health.py:21"
+  },
+  {
+    "method": "GET",
+    "path": "/icon-192.png",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:573"
+  },
+  {
+    "method": "GET",
+    "path": "/icon-512.png",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:573"
+  },
+  {
+    "method": "GET",
+    "path": "/icon-maskable-512.png",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:573"
+  },
+  {
+    "method": "GET",
+    "path": "/img/{name}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_landing_assets",
+    "source": "backend/src/meetassist/web_landing_assets.py:155"
+  },
+  {
+    "method": "GET",
+    "path": "/indexnow-key.txt",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:553"
+  },
+  {
+    "method": "GET",
+    "path": "/j/{token}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_meeting",
+    "source": "backend/src/meetassist/web_meeting.py:88"
+  },
+  {
+    "method": "GET",
+    "path": "/live/{token}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_stream",
+    "source": "backend/src/meetassist/web_stream.py:84"
+  },
+  {
+    "method": "GET",
+    "path": "/llms-full.txt",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:482"
+  },
+  {
+    "method": "GET",
+    "path": "/llms.txt",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:477"
+  },
+  {
+    "method": "GET",
+    "path": "/llms/{name}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:491"
+  },
+  {
+    "method": "GET",
+    "path": "/manifest.webmanifest",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:588"
+  },
+  {
+    "method": "GET",
+    "path": "/mcp",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.api.mcp_transport",
+    "source": "backend/src/meetassist/api/mcp_transport.py:637"
+  },
+  {
+    "method": "POST",
+    "path": "/mcp",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_transport",
+    "source": "backend/src/meetassist/api/mcp_transport.py:658"
+  },
+  {
+    "method": "GET",
+    "path": "/meet/{token}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_meeting",
+    "source": "backend/src/meetassist/web_meeting.py:88"
+  },
+  {
+    "method": "GET",
+    "path": "/metrics",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "prometheus_fastapi_instrumentator.instrumentation",
+    "source": ""
+  },
+  {
+    "method": "GET",
+    "path": "/navercac2ace4a44a2b76cf4e4f08bca928f6.html",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_site_verification",
+    "source": "backend/src/meetassist/web_site_verification.py:35"
+  },
+  {
+    "method": "GET",
+    "path": "/og.png",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:541"
+  },
+  {
+    "method": "GET",
+    "path": "/og/{name}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:545"
+  },
+  {
+    "method": "GET",
+    "path": "/r/{token}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_meeting_result",
+    "source": "backend/src/meetassist/web_meeting_result.py:98"
+  },
+  {
+    "method": "GET",
+    "path": "/ready",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.health",
+    "source": "backend/src/meetassist/api/health.py:89"
+  },
+  {
+    "method": "GET",
+    "path": "/robots.txt",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:513"
+  },
+  {
+    "method": "GET",
+    "path": "/rooms/join/{token}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_meeting",
+    "source": "backend/src/meetassist/web_meeting.py:88"
+  },
+  {
+    "method": "GET",
+    "path": "/seznam-wmt-9kInaB6nUyK3vhH0s8Yg32LDxKt3F6hb.txt",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_site_verification",
+    "source": "backend/src/meetassist/web_site_verification.py:35"
+  },
+  {
+    "method": "GET",
+    "path": "/sitemap.xml",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:517"
+  },
+  {
+    "method": "GET",
+    "path": "/sitemap.xsl",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:523"
+  },
+  {
+    "method": "GET",
+    "path": "/updates/{slug}/",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:382"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/abuse",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.abuse",
+    "source": "backend/src/meetassist/api/admin/abuse.py:68"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/abuse/{user_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.abuse",
+    "source": "backend/src/meetassist/api/admin/abuse.py:97"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/abuse/{user_id}/action",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.abuse",
+    "source": "backend/src/meetassist/api/admin/abuse.py:139"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/affiliates",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.affiliates",
+    "source": "backend/src/meetassist/api/admin/affiliates.py:59"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/affiliates/payouts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.affiliates",
+    "source": "backend/src/meetassist/api/admin/affiliates.py:117"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/affiliates/payouts/{payout_id}/mark-paid",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.affiliates",
+    "source": "backend/src/meetassist/api/admin/affiliates.py:143"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/affiliates/payouts/{payout_id}/reject",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.affiliates",
+    "source": "backend/src/meetassist/api/admin/affiliates.py:152"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/affiliates/{partner_id}/approve",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.affiliates",
+    "source": "backend/src/meetassist/api/admin/affiliates.py:92"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/affiliates/{partner_id}/reject",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.affiliates",
+    "source": "backend/src/meetassist/api/admin/affiliates.py:104"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/alerts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.alerts",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/alerts.py:52"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/alerts/check",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.alerts",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/alerts.py:74"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/analytics/drill",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.analytics",
+    "source": "backend/src/meetassist/api/admin/analytics.py:343"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/analytics/models",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.analytics",
+    "source": "backend/src/meetassist/api/admin/analytics.py:441"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/analytics/onboarding",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.analytics",
+    "source": "backend/src/meetassist/api/admin/analytics.py:722"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/analytics/series",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.analytics",
+    "source": "backend/src/meetassist/api/admin/analytics.py:392"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/analytics/users",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.analytics",
+    "source": "backend/src/meetassist/api/admin/analytics.py:485"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/analytics/users/{user_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.analytics",
+    "source": "backend/src/meetassist/api/admin/analytics.py:634"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/app/builds",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.app_builds",
+    "source": "backend/src/meetassist/api/admin/app_builds.py:61"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/app/builds",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.app_builds",
+    "source": "backend/src/meetassist/api/admin/app_builds.py:70"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/app/builds/notify",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.app_builds",
+    "source": "backend/src/meetassist/api/admin/app_builds.py:178"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/app/builds/{build_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.app_builds",
+    "source": "backend/src/meetassist/api/admin/app_builds.py:163"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/app/builds/{build_id}/unpublish",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.app_builds",
+    "source": "backend/src/meetassist/api/admin/app_builds.py:149"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/broadcasts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.broadcasts",
+    "source": "backend/src/meetassist/api/admin/broadcasts.py:56"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/broadcasts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.broadcasts",
+    "source": "backend/src/meetassist/api/admin/broadcasts.py:65"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/broadcasts/{broadcast_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.broadcasts",
+    "source": "backend/src/meetassist/api/admin/broadcasts.py:86"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/client-errors",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.client_errors",
+    "source": "backend/src/meetassist/api/admin/client_errors.py:51"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/client-errors/{error_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.client_errors",
+    "source": "backend/src/meetassist/api/admin/client_errors.py:83"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/cohorts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.cohorts",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/cohorts.py:61"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/cohorts/{slug}/matrix",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.cohorts",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/cohorts.py:76"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/context",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.context",
+    "source": "backend/src/meetassist/api/admin/context.py:101"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/admin/context",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.context",
+    "source": "backend/src/meetassist/api/admin/context.py:109"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/context/files",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.context",
+    "source": "backend/src/meetassist/api/admin/context.py:147"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/context/files/{file_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.context",
+    "source": "backend/src/meetassist/api/admin/context.py:210"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/admin/context/roles",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.context",
+    "source": "backend/src/meetassist/api/admin/context.py:122"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/costs/guard",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.costs",
+    "source": "backend/src/meetassist/api/admin/costs.py:159"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/costs/kill-switch",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.costs",
+    "source": "backend/src/meetassist/api/admin/costs.py:188"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/costs/summary",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.costs",
+    "source": "backend/src/meetassist/api/admin/costs.py:214"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/costs/timeline",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.costs",
+    "source": "backend/src/meetassist/api/admin/costs.py:242"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/dashboard",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.dashboard",
+    "source": "backend/src/meetassist/api/admin/dashboard.py:146"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/experiments",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.experiments",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/experiments.py:84"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/experiments/{slug}/result",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.experiments",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/experiments.py:107"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/feature-health",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.health",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/health.py:52"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/finance/export.csv",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.finance",
+    "source": "backend/src/meetassist/api/admin/finance.py:151"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/finance/summary",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.finance",
+    "source": "backend/src/meetassist/api/admin/finance.py:71"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/finance/transactions",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.finance",
+    "source": "backend/src/meetassist/api/admin/finance.py:79"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/finance/transactions/{transaction_id}/refund",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.finance",
+    "source": "backend/src/meetassist/api/admin/finance.py:106"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/funnels",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.funnels",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/funnels.py:65"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/funnels/{slug}/run",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.funnels",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/funnels.py:82"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/insights/anomalies",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.insights",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/insights.py:75"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/insights/digest",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.reports",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/reports.py:82"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/journeys/next-steps",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.journeys",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/journeys.py:102"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/journeys/timeline",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.journeys",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/journeys.py:67"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/livekit/audit",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.livekit",
+    "source": "backend/src/meetassist/api/admin/livekit.py:95"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/livekit/egress",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.livekit",
+    "source": "backend/src/meetassist/api/admin/livekit.py:78"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/livekit/egress/{egress_id}/stop",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.livekit",
+    "source": "backend/src/meetassist/api/admin/livekit.py:168"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/livekit/health",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.livekit",
+    "source": "backend/src/meetassist/api/admin/livekit.py:105"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/livekit/rooms/{lk_room}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.livekit",
+    "source": "backend/src/meetassist/api/admin/livekit.py:58"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/livekit/rooms/{lk_room}/close",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.livekit",
+    "source": "backend/src/meetassist/api/admin/livekit.py:113"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/livekit/rooms/{lk_room}/participants/{identity}/remove",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.livekit",
+    "source": "backend/src/meetassist/api/admin/livekit.py:136"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/livekit/stats",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.livekit",
+    "source": "backend/src/meetassist/api/admin/livekit.py:37"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/metrics",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.metrics",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/metrics.py:67"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/metrics/export",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.reports",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/reports.py:32"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/metrics/graph",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.metrics",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/metrics.py:102"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/metrics/query",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.metrics",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/metrics.py:27"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/metrics/{slug}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.metrics",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/metrics.py:136"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/models/balance",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:310"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/models/configs",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:185"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/models/model-defaults",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:382"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/admin/models/model-defaults",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:390"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/models/registry",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:536"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/models/registry",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:570"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/models/registry/preview",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:547"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/models/registry/{registry_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:654"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/admin/models/registry/{registry_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:618"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/models/roles",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:194"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/admin/models/roles/{role}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:235"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/models/usage",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.models",
+    "source": "backend/src/meetassist/api/admin/models.py:332"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/monitoring",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.monitoring",
+    "source": "backend/src/meetassist/api/admin/monitoring.py:37"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/overview",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.overview",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/overview.py:84"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/payments/routing",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.payments",
+    "source": "backend/src/meetassist/api/admin/payments.py:83"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/admin/payments/routing/{scope}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.payments",
+    "source": "backend/src/meetassist/api/admin/payments.py:89"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/promocodes",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.promocodes",
+    "source": "backend/src/meetassist/api/admin/promocodes.py:77"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/promocodes",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.promocodes",
+    "source": "backend/src/meetassist/api/admin/promocodes.py:86"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/promocodes/{promo_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.promocodes",
+    "source": "backend/src/meetassist/api/admin/promocodes.py:118"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/admin/promocodes/{promo_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.promocodes",
+    "source": "backend/src/meetassist/api/admin/promocodes.py:102"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/prompts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.prompts",
+    "source": "backend/src/meetassist/api/admin/prompts.py:166"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/prompts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.prompts",
+    "source": "backend/src/meetassist/api/admin/prompts.py:188"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/prompts/stats",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.prompts",
+    "source": "backend/src/meetassist/api/admin/prompts.py:232"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/prompts/{prompt_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.prompts",
+    "source": "backend/src/meetassist/api/admin/prompts.py:372"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/prompts/{prompt_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.prompts",
+    "source": "backend/src/meetassist/api/admin/prompts.py:299"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/admin/prompts/{prompt_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.prompts",
+    "source": "backend/src/meetassist/api/admin/prompts.py:308"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/prompts/{prompt_id}/duplicate",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.prompts",
+    "source": "backend/src/meetassist/api/admin/prompts.py:384"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/admin/prompts/{prompt_id}/skills",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.prompts",
+    "source": "backend/src/meetassist/api/admin/prompts.py:326"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/prompts/{prompt_id}/test",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.prompts",
+    "source": "backend/src/meetassist/api/admin/prompts.py:488"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/satisfaction/dictionary",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.satisfaction.channels.admin",
+    "source": "backend/src/meetassist/features/satisfaction/channels/admin.py:145"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/satisfaction/overview",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.satisfaction.channels.admin",
+    "source": "backend/src/meetassist/features/satisfaction/channels/admin.py:153"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/satisfaction/replay",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.satisfaction.channels.admin",
+    "source": "backend/src/meetassist/features/satisfaction/channels/admin.py:130"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/sessions",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.sessions",
+    "source": "backend/src/meetassist/api/admin/sessions.py:61"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/sessions/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.sessions",
+    "source": "backend/src/meetassist/api/admin/sessions.py:212"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/sessions/{session_id}/enrich-mindmap",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.sessions",
+    "source": "backend/src/meetassist/api/admin/sessions.py:197"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/sessions/{session_id}/full",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.sessions",
+    "source": "backend/src/meetassist/api/admin/sessions.py:122"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/storage/health",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.storage",
+    "source": "backend/src/meetassist/api/admin/storage.py:60"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/storage/overview",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.storage",
+    "source": "backend/src/meetassist/api/admin/storage.py:25"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/storage/users",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.storage",
+    "source": "backend/src/meetassist/api/admin/storage.py:32"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/storage/users/{user_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.storage",
+    "source": "backend/src/meetassist/api/admin/storage.py:43"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/admin/storage/users/{user_id}/quota",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.storage",
+    "source": "backend/src/meetassist/api/admin/storage.py:50"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/targets",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.targets",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/targets.py:73"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/targets/progress",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.targets",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/targets.py:128"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/targets/{slug}/progress",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.admin.targets",
+    "source": "backend/src/meetassist/features/analytics/channels/admin/targets.py:134"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/tariffs",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tariffs",
+    "source": "backend/src/meetassist/api/admin/tariffs.py:63"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/tariffs",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tariffs",
+    "source": "backend/src/meetassist/api/admin/tariffs.py:72"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/tariffs/{tariff_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tariffs",
+    "source": "backend/src/meetassist/api/admin/tariffs.py:103"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/admin/tariffs/{tariff_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tariffs",
+    "source": "backend/src/meetassist/api/admin/tariffs.py:87"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/tickets",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tickets",
+    "source": "backend/src/meetassist/api/admin/tickets.py:37"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/tickets/attachments",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tickets",
+    "source": "backend/src/meetassist/api/admin/tickets.py:88"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/tickets/attachments/{upload_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tickets",
+    "source": "backend/src/meetassist/api/admin/tickets.py:99"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/tickets/unread-count",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tickets",
+    "source": "backend/src/meetassist/api/admin/tickets.py:78"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/admin/tickets/{ticket_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tickets",
+    "source": "backend/src/meetassist/api/admin/tickets.py:154"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/tickets/{ticket_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tickets",
+    "source": "backend/src/meetassist/api/admin/tickets.py:107"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/tickets/{ticket_id}/reply",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tickets",
+    "source": "backend/src/meetassist/api/admin/tickets.py:119"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/tickets/{ticket_id}/status",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.tickets",
+    "source": "backend/src/meetassist/api/admin/tickets.py:141"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/users",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.users",
+    "source": "backend/src/meetassist/api/admin/users.py:81"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/admin/users/{user_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.users",
+    "source": "backend/src/meetassist/api/admin/users.py:146"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/users/{user_id}/ban",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.users",
+    "source": "backend/src/meetassist/api/admin/users.py:205"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/users/{user_id}/change-tariff",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.users",
+    "source": "backend/src/meetassist/api/admin/users.py:214"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/users/{user_id}/freeze",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.users",
+    "source": "backend/src/meetassist/api/admin/users.py:187"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/users/{user_id}/grant-bonus",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.users",
+    "source": "backend/src/meetassist/api/admin/users.py:230"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/admin/users/{user_id}/unfreeze",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.admin.users",
+    "source": "backend/src/meetassist/api/admin/users.py:196"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/abuse/appeal",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.proxy",
+    "source": "backend/src/meetassist/api/ai/proxy.py:220"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/agent/act",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.agent",
+    "source": "backend/src/meetassist/api/ai/agent.py:852"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/agent/chat",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.agent",
+    "source": "backend/src/meetassist/api/ai/agent.py:609"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/agent/prewarm",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.agent",
+    "source": "backend/src/meetassist/api/ai/agent.py:746"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/agent/reminder-context",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.agent",
+    "source": "backend/src/meetassist/api/ai/agent.py:796"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/chat/stream",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.proxy",
+    "source": "backend/src/meetassist/api/ai/proxy.py:615"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/dictate",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.dictate",
+    "source": "backend/src/meetassist/api/ai/dictate.py:122"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/transcribe",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.proxy",
+    "source": "backend/src/meetassist/api/ai/proxy.py:665"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/translate",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.proxy",
+    "source": "backend/src/meetassist/api/ai/proxy.py:496"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/vision/analyze",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.proxy",
+    "source": "backend/src/meetassist/api/ai/proxy.py:780"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/voice-translate/token",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.voice_translate",
+    "source": "backend/src/meetassist/api/ai/voice_translate.py:334"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/voice-translate/usage",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.voice_translate",
+    "source": "backend/src/meetassist/api/ai/voice_translate.py:417"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/voice/token",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.voice",
+    "source": "backend/src/meetassist/api/ai/voice.py:86"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/ai/voice/usage",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ai.voice",
+    "source": "backend/src/meetassist/api/ai/voice.py:184"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/analytics/collect",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.analytics.channels.http",
+    "source": "backend/src/meetassist/features/analytics/channels/http.py:101"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/app/builds",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.app_builds",
+    "source": "backend/src/meetassist/api/app_builds.py:35"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/app/builds/{build_id}/download",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.app_builds",
+    "source": "backend/src/meetassist/api/app_builds.py:46"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/desktop/code",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:632"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/desktop/exchange",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:645"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/desktop/refresh",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:663"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/forgot-password",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:452"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/login",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:488"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/logout",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:694"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/auth/me",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:797"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/refresh",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:547"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/register",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:317"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/resend-code",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:433"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/reset-password",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:472"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/auth/sessions",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:725"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/auth/sessions/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:755"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/social/complete",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.identity.channels.http",
+    "source": "backend/src/meetassist/features/identity/channels/http.py:513"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/social/consent",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.identity.channels.http",
+    "source": "backend/src/meetassist/features/identity/channels/http.py:470"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/auth/social/pending",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.identity.channels.http",
+    "source": "backend/src/meetassist/features/identity/channels/http.py:452"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/auth/social/providers",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.identity.channels.http",
+    "source": "backend/src/meetassist/features/identity/channels/http.py:182"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/auth/social/vk/prepare",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.identity.channels.http",
+    "source": "backend/src/meetassist/features/identity/channels/http.py:221"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/auth/social/yandex/token-page",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.features.identity.channels.http",
+    "source": "backend/src/meetassist/features/identity/channels/http.py:259"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/auth/social/{provider}/callback",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.identity.channels.http",
+    "source": "backend/src/meetassist/features/identity/channels/http.py:369"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/auth/social/{provider}/start",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.identity.channels.http",
+    "source": "backend/src/meetassist/features/identity/channels/http.py:331"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/social/{provider}/widget-token",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.identity.channels.http",
+    "source": "backend/src/meetassist/features/identity/channels/http.py:274"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/auth/verify-email",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.auth",
+    "source": "backend/src/meetassist/api/auth.py:380"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/billing/webhook/{provider}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.billing_webhook",
+    "source": "backend/src/meetassist/api/billing_webhook.py:91"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/billing/webhook/{provider}/{kind}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.billing_webhook",
+    "source": "backend/src/meetassist/api/billing_webhook.py:101"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/calendar/export.ics",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.calendar_public",
+    "source": "backend/src/meetassist/api/calendar_public.py:22"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/client/csp-report",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.client_errors",
+    "source": "backend/src/meetassist/api/client_errors.py:166"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/client/errors",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.client_errors",
+    "source": "backend/src/meetassist/api/client_errors.py:101"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/connectors",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.connectors.channels.http",
+    "source": "backend/src/meetassist/features/connectors/channels/http.py:61"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/connectors/session",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.connectors.channels.http",
+    "source": "backend/src/meetassist/features/connectors/channels/http.py:75"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/connectors/sync",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.connectors.channels.http",
+    "source": "backend/src/meetassist/features/connectors/channels/http.py:100"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/connectors/{provider_config_key}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.connectors.channels.http",
+    "source": "backend/src/meetassist/features/connectors/channels/http.py:111"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/demo/ask",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.demo.channels.http",
+    "source": "backend/src/meetassist/features/demo/channels/http.py:169"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/demo/minutes",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.demo.channels.http",
+    "source": "backend/src/meetassist/features/demo/channels/http.py:198"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/demo/translate/budget",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.demo.channels.translate_ws",
+    "source": "backend/src/meetassist/features/demo/channels/translate_ws.py:100"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/demo/voice",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.demo.channels.http",
+    "source": "backend/src/meetassist/features/demo/channels/http.py:222"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/docs/ask",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.docs_assistant.channels.http",
+    "source": "backend/src/meetassist/features/docs_assistant/channels/http.py:159"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/errands",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.errands.channels.http",
+    "source": "backend/src/meetassist/features/errands/channels/http.py:42"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/errands/{errand_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.errands.channels.http",
+    "source": "backend/src/meetassist/features/errands/channels/http.py:84"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/errands/{errand_id}/snooze",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.errands.channels.http",
+    "source": "backend/src/meetassist/features/errands/channels/http.py:58"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/health",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.health",
+    "source": "backend/src/meetassist/api/health.py:21"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/hubs",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:70"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/hubs",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:97"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/hubs/of-meeting/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:225"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/hubs/{hub_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:371"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/hubs/{hub_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:343"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/hubs/{hub_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:112"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/hubs/{hub_id}/archived",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:170"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/hubs/{hub_id}/charter",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:133"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/hubs/{hub_id}/digest/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:273"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/hubs/{hub_id}/feed",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:353"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/hubs/{hub_id}/materials",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:388"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/hubs/{hub_id}/materials",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:413"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/hubs/{hub_id}/materials/{material_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:437"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/hubs/{hub_id}/meetings",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:188"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/hubs/{hub_id}/meetings/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:212"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/hubs/{hub_id}/pulse",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:250"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/hubs/{hub_id}/pulse/dismiss",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:315"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/hubs/{hub_id}/target",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.hub.channels.http",
+    "source": "backend/src/meetassist/features/hub/channels/http.py:155"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/i18n/detect",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.i18n",
+    "source": "backend/src/meetassist/api/i18n.py:24"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/integrations/google/notifications",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.calendar_webhooks",
+    "source": "backend/src/meetassist/api/calendar_webhooks.py:44"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/integrations/microsoft/notifications",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.calendar_webhooks",
+    "source": "backend/src/meetassist/api/calendar_webhooks.py:61"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/integrations/oauth/attio/callback",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.oauth_integrations",
+    "source": "backend/src/meetassist/api/oauth_integrations.py:123"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/integrations/oauth/hubspot/callback",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.oauth_integrations",
+    "source": "backend/src/meetassist/api/oauth_integrations.py:143"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/integrations/oauth/notion/callback",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.oauth_integrations",
+    "source": "backend/src/meetassist/api/oauth_integrations.py:167"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/integrations/oauth/slack/callback",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.oauth_integrations",
+    "source": "backend/src/meetassist/api/oauth_integrations.py:104"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/integrations/oauth/{provider}/callback",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.calendar_oauth",
+    "source": "backend/src/meetassist/api/calendar_oauth.py:33"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/jira/oauth/callback",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.jira.channels.webhook",
+    "source": "backend/src/meetassist/features/jira/channels/webhook.py:82"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/jira/webhook/{link_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.jira.channels.webhook",
+    "source": "backend/src/meetassist/features/jira/channels/webhook.py:54"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/kb/graph",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.graph",
+    "source": "backend/src/meetassist/api/graph.py:23"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/kb/graph/centrality",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.graph",
+    "source": "backend/src/meetassist/api/graph.py:51"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/kb/graph/export",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.graph",
+    "source": "backend/src/meetassist/api/graph.py:62"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/kb/graph/neighbors",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.graph",
+    "source": "backend/src/meetassist/api/graph.py:30"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/kb/graph/shortest-path",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.graph",
+    "source": "backend/src/meetassist/api/graph.py:40"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/kb/import",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.kb",
+    "source": "backend/src/meetassist/api/kb.py:168"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/kb/notes",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.kb",
+    "source": "backend/src/meetassist/api/kb.py:63"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/kb/notes",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.kb",
+    "source": "backend/src/meetassist/api/kb.py:34"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/kb/notes/{note_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.kb",
+    "source": "backend/src/meetassist/api/kb.py:133"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/kb/notes/{note_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.kb",
+    "source": "backend/src/meetassist/api/kb.py:94"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/kb/notes/{note_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.kb",
+    "source": "backend/src/meetassist/api/kb.py:107"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/kb/reindex",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.kb",
+    "source": "backend/src/meetassist/api/kb.py:78"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/kb/search",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.kb",
+    "source": "backend/src/meetassist/api/kb.py:146"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/knowledge/catalog",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:105"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/knowledge/documents",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:362"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/knowledge/documents",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:377"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/knowledge/documents/{document_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:409"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/knowledge/search",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:422"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/knowledge/sources",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:141"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/knowledge/sources",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:148"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/knowledge/sources/oauth-folders",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:212"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/knowledge/sources/oauth-preview",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:251"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/knowledge/sources/oauth-session",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:190"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/knowledge/sources/{source_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:349"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/knowledge/sources/{source_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:308"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/knowledge/sources/{source_id}/active",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:321"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/knowledge/sources/{source_id}/fetch",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:276"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/knowledge/sources/{source_id}/sync",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:336"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/knowledge/space",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.http",
+    "source": "backend/src/meetassist/features/knowledge/channels/http.py:87"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/knowledge/vault/manifest",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.vault_http",
+    "source": "backend/src/meetassist/features/knowledge/channels/vault_http.py:167"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/knowledge/vault/notes",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.vault_http",
+    "source": "backend/src/meetassist/features/knowledge/channels/vault_http.py:192"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/knowledge/vault/status",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.knowledge.channels.vault_http",
+    "source": "backend/src/meetassist/features/knowledge/channels/vault_http.py:128"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/livekit/webhook",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.livekit_webhooks",
+    "source": "backend/src/meetassist/api/livekit_webhooks.py:47"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/mcp/oauth/authorize",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:246"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/mcp/oauth/authorize",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:286"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/mcp/oauth/callback",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:560"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/mcp/oauth/clients",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:500"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/mcp/oauth/clients/{client_pk}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:523"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/mcp/oauth/register",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:149"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/mcp/oauth/revoke",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:483"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/mcp/oauth/token",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.mcp_oauth",
+    "source": "backend/src/meetassist/api/mcp_oauth.py:378"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me",
+    "source": "backend/src/meetassist/api/me.py:131"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/affiliate",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_affiliate",
+    "source": "backend/src/meetassist/api/me_affiliate.py:99"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/affiliate/apply",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_affiliate",
+    "source": "backend/src/meetassist/api/me_affiliate.py:107"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/affiliate/payout",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_affiliate",
+    "source": "backend/src/meetassist/api/me_affiliate.py:118"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/analytics",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me",
+    "source": "backend/src/meetassist/api/me.py:283"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/analytics/activity",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me",
+    "source": "backend/src/meetassist/api/me.py:518"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/analytics/series",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me",
+    "source": "backend/src/meetassist/api/me.py:305"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/avatar",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me",
+    "source": "backend/src/meetassist/api/me.py:263"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/billing/auto-renew",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:515"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/billing/auto-renew/disable",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:525"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/billing/auto-renew/enable",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:545"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/billing/checkout",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:232"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/billing/credits/checkout",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:384"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/billing/credits/options",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:360"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/billing/methods",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:174"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/billing/payment-method",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:645"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/billing/payment-method/binding",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:582"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/billing/payment-method/binding/{binding_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:619"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/billing/promo-check",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:791"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/billing/transactions",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:684"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/billing/transactions/{transaction_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_billing",
+    "source": "backend/src/meetassist/api/me_billing.py:730"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/calendar/events",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar",
+    "source": "backend/src/meetassist/api/me_calendar.py:106"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/calendar/events",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar",
+    "source": "backend/src/meetassist/api/me_calendar.py:119"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/calendar/events/{event_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar",
+    "source": "backend/src/meetassist/api/me_calendar.py:172"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/calendar/events/{event_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar",
+    "source": "backend/src/meetassist/api/me_calendar.py:141"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/calendar/events/{event_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar",
+    "source": "backend/src/meetassist/api/me_calendar.py:161"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/calendar/events/{event_id}/join",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar",
+    "source": "backend/src/meetassist/api/me_calendar.py:151"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/calendar/ical-token",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar",
+    "source": "backend/src/meetassist/api/me_calendar.py:181"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/calendar/ical-token/rotate",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar",
+    "source": "backend/src/meetassist/api/me_calendar.py:190"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/calendar/integrations",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar_integrations",
+    "source": "backend/src/meetassist/api/me_calendar_integrations.py:142"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/calendar/integrations/caldav/connect",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar_integrations",
+    "source": "backend/src/meetassist/api/me_calendar_integrations.py:166"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/calendar/integrations/{integ_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar_integrations",
+    "source": "backend/src/meetassist/api/me_calendar_integrations.py:301"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/calendar/integrations/{integ_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar_integrations",
+    "source": "backend/src/meetassist/api/me_calendar_integrations.py:239"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/calendar/integrations/{integ_id}/calendars",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar_integrations",
+    "source": "backend/src/meetassist/api/me_calendar_integrations.py:205"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/calendar/integrations/{integ_id}/sync-now",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar_integrations",
+    "source": "backend/src/meetassist/api/me_calendar_integrations.py:290"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/calendar/integrations/{provider}/authorize",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar_integrations",
+    "source": "backend/src/meetassist/api/me_calendar_integrations.py:151"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/calendar/meet-now",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_calendar",
+    "source": "backend/src/meetassist/api/me_calendar.py:129"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/data/account",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_data",
+    "source": "backend/src/meetassist/api/me_data.py:186"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/data/export",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_data",
+    "source": "backend/src/meetassist/api/me_data.py:129"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/data/export",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_data",
+    "source": "backend/src/meetassist/api/me_data.py:139"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/data/purge",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_data",
+    "source": "backend/src/meetassist/api/me_data.py:168"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/folders",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:126"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/folders",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:138"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/folders/{folder_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:206"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/folders/{folder_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:162"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/folders/{folder_id}/move",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:183"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/hotkeys",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me",
+    "source": "backend/src/meetassist/api/me.py:163"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/me/hotkeys",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me",
+    "source": "backend/src/meetassist/api/me.py:170"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/integrations",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_integrations",
+    "source": "backend/src/meetassist/api/me_integrations.py:109"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/integrations/{integration_type}/connect",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_integrations",
+    "source": "backend/src/meetassist/api/me_integrations.py:198"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/integrations/{integration_type}/disconnect",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_integrations",
+    "source": "backend/src/meetassist/api/me_integrations.py:248"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/integrations/{integration_type}/mapping",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_integrations",
+    "source": "backend/src/meetassist/api/me_integrations.py:261"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/integrations/{integration_type}/oauth/authorize",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_integrations",
+    "source": "backend/src/meetassist/api/me_integrations.py:133"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/integrations/{integration_type}/push/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_integrations",
+    "source": "backend/src/meetassist/api/me_integrations.py:344"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/jira/authorize",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.jira.channels.http",
+    "source": "backend/src/meetassist/features/jira/channels/http.py:201"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/jira/links",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.jira.channels.http",
+    "source": "backend/src/meetassist/features/jira/channels/http.py:151"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/jira/links/{tracker_project_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.jira.channels.http",
+    "source": "backend/src/meetassist/features/jira/channels/http.py:173"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/jira/links/{tracker_project_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.jira.channels.http",
+    "source": "backend/src/meetassist/features/jira/channels/http.py:136"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/jira/links/{tracker_project_id}/sync",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.jira.channels.http",
+    "source": "backend/src/meetassist/features/jira/channels/http.py:184"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/jira/projects",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.jira.channels.http",
+    "source": "backend/src/meetassist/features/jira/channels/http.py:123"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/jira/sites",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.jira.channels.http",
+    "source": "backend/src/meetassist/features/jira/channels/http.py:112"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/mcp/clients",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mcp",
+    "source": "backend/src/meetassist/api/me_mcp.py:199"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/mcp/clients",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mcp",
+    "source": "backend/src/meetassist/api/me_mcp.py:211"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/mcp/clients/{client_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mcp",
+    "source": "backend/src/meetassist/api/me_mcp.py:288"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/mcp/clients/{client_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mcp",
+    "source": "backend/src/meetassist/api/me_mcp.py:275"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/mcp/clients/{client_id}/oauth/start",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mcp",
+    "source": "backend/src/meetassist/api/me_mcp.py:248"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/mcp/server",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mcp",
+    "source": "backend/src/meetassist/api/me_mcp.py:74"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/mcp/server/resources/{key}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mcp",
+    "source": "backend/src/meetassist/api/me_mcp.py:92"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/mcp/server/rotate",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mcp",
+    "source": "backend/src/meetassist/api/me_mcp.py:127"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/mcp/sessions/{session_id}/share",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mcp",
+    "source": "backend/src/meetassist/api/me_mcp.py:154"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/models/configs",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_models",
+    "source": "backend/src/meetassist/api/me_models.py:40"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/models/roles",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_models",
+    "source": "backend/src/meetassist/api/me_models.py:76"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/me/models/roles/{role}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_models",
+    "source": "backend/src/meetassist/api/me_models.py:123"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/onboarding",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_onboarding",
+    "source": "backend/src/meetassist/api/me_onboarding.py:96"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/onboarding/audio",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_onboarding",
+    "source": "backend/src/meetassist/api/me_onboarding.py:164"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/onboarding/complete",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_onboarding",
+    "source": "backend/src/meetassist/api/me_onboarding.py:138"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/onboarding/progress",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_onboarding",
+    "source": "backend/src/meetassist/api/me_onboarding.py:106"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/onboarding/restart",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_onboarding",
+    "source": "backend/src/meetassist/api/me_onboarding.py:186"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/onboarding/skip",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_onboarding",
+    "source": "backend/src/meetassist/api/me_onboarding.py:151"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/profile",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me",
+    "source": "backend/src/meetassist/api/me.py:234"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/recordings",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_recordings",
+    "source": "backend/src/meetassist/api/me_recordings.py:27"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/recordings/{recording_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_recordings",
+    "source": "backend/src/meetassist/api/me_recordings.py:34"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/referral",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me",
+    "source": "backend/src/meetassist/api/me.py:566"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/rooms",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_rooms",
+    "source": "backend/src/meetassist/api/me_rooms.py:83"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/rooms",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_rooms",
+    "source": "backend/src/meetassist/api/me_rooms.py:73"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/rooms/{room_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_rooms",
+    "source": "backend/src/meetassist/api/me_rooms.py:90"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/rooms/{room_id}/close",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_rooms",
+    "source": "backend/src/meetassist/api/me_rooms.py:107"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/rooms/{room_id}/recording/start",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_rooms",
+    "source": "backend/src/meetassist/api/me_rooms.py:115"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/rooms/{room_id}/recording/stop",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_rooms",
+    "source": "backend/src/meetassist/api/me_rooms.py:125"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/rooms/{room_id}/recordings",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_rooms",
+    "source": "backend/src/meetassist/api/me_rooms.py:136"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/rooms/{room_id}/token",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_rooms",
+    "source": "backend/src/meetassist/api/me_rooms.py:97"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/search",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_search",
+    "source": "backend/src/meetassist/api/me_search.py:66"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:208"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/from-transcript",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:311"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/import",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:660"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/import/{job_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:740"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/sessions/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:536"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/sessions/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:519"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/audio/init",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:580"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/sessions/{session_id}/audio/{run_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:750"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/{session_id}/audio/{run_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:686"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/audio/{run_id}/complete",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:713"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/me/sessions/{session_id}/audio/{run_id}/part/{number}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:652"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/enrich-mindmap",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:430"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/me/sessions/{session_id}/folder",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:224"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/{session_id}/full",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:350"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/{session_id}/hub-suggestion",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:212"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/{session_id}/impact",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:285"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/impact/{impact_id}/apply",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:337"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/impact/{impact_id}/reject",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:392"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/map-nodes",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:550"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/sessions/{session_id}/map-nodes/{node_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:621"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/sessions/{session_id}/map-nodes/{node_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:575"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/map-nodes/{node_id}/move",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:597"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/{session_id}/note",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_notes",
+    "source": "backend/src/meetassist/api/me_notes.py:66"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/sessions/{session_id}/note/action-items/{item_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_notes",
+    "source": "backend/src/meetassist/api/me_notes.py:122"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/me/sessions/{session_id}/note/draft",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_notes",
+    "source": "backend/src/meetassist/api/me_notes.py:78"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/note/regenerate-enhanced",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_notes",
+    "source": "backend/src/meetassist/api/me_notes.py:168"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/note/regenerate-enhanced/stream",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_notes",
+    "source": "backend/src/meetassist/api/me_notes.py:423"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/{session_id}/outline",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:247"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/{session_id}/processing",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:79"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/regenerate-mindmap",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:453"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/regenerate-mindmap/stream",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_mindmap",
+    "source": "backend/src/meetassist/api/me_mindmap.py:169"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/sessions/{session_id}/save-to-storage",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:492"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/sessions/{session_id}/segments/{segment_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:492"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/sessions/{session_id}/segments/{segment_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.http",
+    "source": "backend/src/meetassist/features/meetings/channels/http.py:442"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/sessions/{session_id}/share",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.share_http",
+    "source": "backend/src/meetassist/features/meetings/channels/share_http.py:198"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/{session_id}/share",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.share_http",
+    "source": "backend/src/meetassist/features/meetings/channels/share_http.py:158"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/me/sessions/{session_id}/share",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.share_http",
+    "source": "backend/src/meetassist/features/meetings/channels/share_http.py:169"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/sessions/{session_id}/share/comments/{comment_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.share_http",
+    "source": "backend/src/meetassist/features/meetings/channels/share_http.py:211"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/sessions/{session_id}/speakers",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:869"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/sessions/{session_id}/speakers",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_sessions",
+    "source": "backend/src/meetassist/api/me_sessions.py:881"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/me/sessions/{session_id}/tags",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:335"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/skills",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_skills",
+    "source": "backend/src/meetassist/api/me_skills.py:184"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/skills",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_skills",
+    "source": "backend/src/meetassist/api/me_skills.py:236"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/skills/discover",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_skills",
+    "source": "backend/src/meetassist/api/me_skills.py:145"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/skills/search",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_skills",
+    "source": "backend/src/meetassist/api/me_skills.py:134"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/skills/{skill_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_skills",
+    "source": "backend/src/meetassist/api/me_skills.py:320"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/skills/{skill_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_skills",
+    "source": "backend/src/meetassist/api/me_skills.py:197"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/skills/{skill_id}/refresh",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_skills",
+    "source": "backend/src/meetassist/api/me_skills.py:289"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/storage/bulk-delete",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:207"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/storage/bulk-move",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:218"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/storage/content/{file_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:160"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/me/storage/content/{file_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:176"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/storage/download-url/{file_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:149"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/storage/folder",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:130"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/storage/knowledge",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:232"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/storage/list",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:119"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/storage/stats",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:112"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/storage/upload",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:138"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/storage/{file_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:200"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/storage/{file_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:188"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/storage/{file_id}/share",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:293"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/storage/{file_id}/share",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_storage",
+    "source": "backend/src/meetassist/api/me_storage.py:267"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/streams",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.http",
+    "source": "backend/src/meetassist/features/stream/channels/http.py:81"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/streams",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.http",
+    "source": "backend/src/meetassist/features/stream/channels/http.py:62"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/streams/{stream_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.http",
+    "source": "backend/src/meetassist/features/stream/channels/http.py:134"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/streams/{stream_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.http",
+    "source": "backend/src/meetassist/features/stream/channels/http.py:92"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/streams/{stream_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.http",
+    "source": "backend/src/meetassist/features/stream/channels/http.py:103"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/streams/{stream_id}/end",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.http",
+    "source": "backend/src/meetassist/features/stream/channels/http.py:158"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/streams/{stream_id}/start",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.http",
+    "source": "backend/src/meetassist/features/stream/channels/http.py:147"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/streams/{stream_id}/token",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.http",
+    "source": "backend/src/meetassist/features/stream/channels/http.py:170"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tags",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:277"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tags",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:287"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/tags/{tag_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_meeting_org",
+    "source": "backend/src/meetassist/api/me_meeting_org.py:321"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/templates",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_templates",
+    "source": "backend/src/meetassist/api/me_templates.py:65"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/templates",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_templates",
+    "source": "backend/src/meetassist/api/me_templates.py:78"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/templates/{template_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_templates",
+    "source": "backend/src/meetassist/api/me_templates.py:120"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tickets",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tickets",
+    "source": "backend/src/meetassist/api/tickets.py:38"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tickets",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tickets",
+    "source": "backend/src/meetassist/api/tickets.py:63"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tickets/attachments",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tickets",
+    "source": "backend/src/meetassist/api/tickets.py:109"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/tickets/attachments/{upload_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tickets",
+    "source": "backend/src/meetassist/api/tickets.py:120"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tickets/unread-count",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tickets",
+    "source": "backend/src/meetassist/api/tickets.py:97"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/tickets/{ticket_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tickets",
+    "source": "backend/src/meetassist/api/tickets.py:173"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tickets/{ticket_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tickets",
+    "source": "backend/src/meetassist/api/tickets.py:129"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tickets/{ticket_id}/reply",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tickets",
+    "source": "backend/src/meetassist/api/tickets.py:141"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tickets/{ticket_id}/status",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tickets",
+    "source": "backend/src/meetassist/api/tickets.py:159"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/tracker/labels/{label_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:806"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/tracker/labels/{label_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:782"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tracker/projects",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:300"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tracker/projects",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:314"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/tracker/projects/{project_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:388"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tracker/projects/{project_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:349"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/tracker/projects/{project_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:358"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tracker/projects/{project_id}/board",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:404"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tracker/projects/{project_id}/labels",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:744"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tracker/projects/{project_id}/labels",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:757"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tracker/projects/{project_id}/statuses",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:442"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tracker/projects/{project_id}/statuses/reorder",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:498"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tracker/projects/{project_id}/tasks",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:535"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tracker/projects/{project_id}/tasks",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:601"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/tracker/statuses/{status_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:517"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/tracker/statuses/{status_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:470"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/me/tracker/tasks/{task_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:732"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/me/tracker/tasks/{task_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:638"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/me/tracker/tasks/{task_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:649"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/me/tracker/tasks/{task_id}/labels",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:713"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/me/tracker/tasks/{task_id}/move",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.me_tracker",
+    "source": "backend/src/meetassist/api/me_tracker.py:680"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/meeting-ai/ask",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meeting_assistant.channels.http",
+    "source": "backend/src/meetassist/features/meeting_assistant/channels/http.py:112"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/meetings/shared/{token}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.share_public_http",
+    "source": "backend/src/meetassist/features/meetings/channels/share_public_http.py:190"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/meetings/shared/{token}/comments",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.share_public_http",
+    "source": "backend/src/meetassist/features/meetings/channels/share_public_http.py:258"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/meetings/shared/{token}/unlock",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.meetings.channels.share_public_http",
+    "source": "backend/src/meetassist/features/meetings/channels/share_public_http.py:235"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/memory",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.memory.channels.http",
+    "source": "backend/src/meetassist/features/memory/channels/http.py:53"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/memory/summary",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.memory.channels.http",
+    "source": "backend/src/meetassist/features/memory/channels/http.py:68"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/memory/summary",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.memory.channels.http",
+    "source": "backend/src/meetassist/features/memory/channels/http.py:95"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/memory/summary/ask",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.memory.channels.http",
+    "source": "backend/src/meetassist/features/memory/channels/http.py:142"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/memory/{item_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.memory.channels.http",
+    "source": "backend/src/meetassist/features/memory/channels/http.py:164"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/personalization",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.personalization.channels.http",
+    "source": "backend/src/meetassist/features/personalization/channels/http.py:25"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/personalization",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.personalization.channels.http",
+    "source": "backend/src/meetassist/features/personalization/channels/http.py:31"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/proactive/feed",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:187"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/proactive/feed/{nudge_id}/feedback",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:257"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/proactive/feed/{nudge_id}/read",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:193"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/proactive/mail-watches",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:100"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/proactive/mail-watches",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:70"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/proactive/mail-watches",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:78"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/proactive/nudges/{nudge_id}/voice",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:222"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/proactive/push/devices",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:173"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/proactive/push/devices",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:133"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/proactive/push/devices",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:141"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/proactive/push/key",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:116"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/proactive/reminders/{errand_id}/done",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:248"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/proactive/reminders/{errand_id}/voice",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:199"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/proactive/settings",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:39"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/proactive/settings",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.proactive.channels.http",
+    "source": "backend/src/meetassist/features/proactive/channels/http.py:45"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/prompts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.prompts",
+    "source": "backend/src/meetassist/api/prompts.py:68"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/prompts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.prompts",
+    "source": "backend/src/meetassist/api/prompts.py:45"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/prompts/{prompt_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.prompts",
+    "source": "backend/src/meetassist/api/prompts.py:84"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/prompts/{prompt_id}/execute",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.prompts",
+    "source": "backend/src/meetassist/api/prompts.py:93"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/ready",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.health",
+    "source": "backend/src/meetassist/api/health.py:89"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/rooms/join/{invite_token}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.rooms_public",
+    "source": "backend/src/meetassist/api/rooms_public.py:38"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/satisfaction/answer",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.satisfaction.channels.http",
+    "source": "backend/src/meetassist/features/satisfaction/channels/http.py:132"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/satisfaction/dismiss",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.satisfaction.channels.http",
+    "source": "backend/src/meetassist/features/satisfaction/channels/http.py:146"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/satisfaction/prompt",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.satisfaction.channels.http",
+    "source": "backend/src/meetassist/features/satisfaction/channels/http.py:118"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/sessions",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.sessions",
+    "source": "backend/src/meetassist/api/sessions.py:90"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/sessions",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.sessions",
+    "source": "backend/src/meetassist/api/sessions.py:43"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/sessions/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.sessions",
+    "source": "backend/src/meetassist/api/sessions.py:160"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/sessions/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.sessions",
+    "source": "backend/src/meetassist/api/sessions.py:120"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/sessions/{session_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.sessions",
+    "source": "backend/src/meetassist/api/sessions.py:129"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/sessions/{session_id}/export",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.sessions",
+    "source": "backend/src/meetassist/api/sessions.py:170"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/sessions/{session_id}/transcripts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.transcripts",
+    "source": "backend/src/meetassist/api/transcripts.py:50"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/sessions/{session_id}/transcripts",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.transcripts",
+    "source": "backend/src/meetassist/api/transcripts.py:70"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/storage/shared/{token}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.storage_public",
+    "source": "backend/src/meetassist/api/storage_public.py:136"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/storage/shared/{token}/file/{file_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.storage_public",
+    "source": "backend/src/meetassist/api/storage_public.py:211"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/storage/shared/{token}/list",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.storage_public",
+    "source": "backend/src/meetassist/api/storage_public.py:179"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/storage/shared/{token}/meta",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.storage_public",
+    "source": "backend/src/meetassist/api/storage_public.py:157"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/storage/shared/{token}/unlock",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.storage_public",
+    "source": "backend/src/meetassist/api/storage_public.py:247"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/streams/knock/{knock_token}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:246"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/admissions/{admission_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:449"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/streams/live/audience",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:315"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/streams/live/bans",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:530"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/bans",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:539"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/streams/live/bans/{principal}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:549"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/streams/live/chat",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:468"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/chat",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:481"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/chat/pin",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:507"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/streams/live/chat/{message_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:495"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/streams/live/hand",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:428"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/hand",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:419"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/reactions",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:517"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/requests/{request_id}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:438"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/streams/live/stage",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:394"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/stage/leave",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:407"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/stage/members",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:333"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v1/streams/live/stage/members/{principal}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:350"
+  },
+  {
+    "method": "PATCH",
+    "path": "/v1/streams/live/stage/members/{principal}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:359"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/live/stage/members/{principal}/mute",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:379"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/streams/live/state",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:299"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/streams/{invite_token}",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:142"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/streams/{invite_token}/chat",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:272"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/streams/{invite_token}/join",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.stream.channels.public_http",
+    "source": "backend/src/meetassist/features/stream/channels/public_http.py:209"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/subtitles/interpret",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.subtitles.channels.http",
+    "source": "backend/src/meetassist/features/subtitles/channels/http.py:164"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/subtitles/recognize",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.subtitles.channels.http",
+    "source": "backend/src/meetassist/features/subtitles/channels/http.py:131"
+  },
+  {
+    "method": "WS",
+    "path": "/v1/subtitles/stream",
+    "kind": "websocket",
+    "in_openapi": false,
+    "module": "meetassist.features.subtitles.channels.ws",
+    "source": "backend/src/meetassist/features/subtitles/channels/ws.py:288"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/subtitles/translate",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.subtitles.channels.http",
+    "source": "backend/src/meetassist/features/subtitles/channels/http.py:208"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/sync/batch",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.transcripts",
+    "source": "backend/src/meetassist/api/transcripts.py:137"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/tariffs",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.tariffs",
+    "source": "backend/src/meetassist/api/tariffs.py:50"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/ticker",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.ticker",
+    "source": "backend/src/meetassist/api/ticker.py:26"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/unsubscribe",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.unsubscribe",
+    "source": "backend/src/meetassist/api/unsubscribe.py:99"
+  },
+  {
+    "method": "POST",
+    "path": "/v1/unsubscribe",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.api.unsubscribe",
+    "source": "backend/src/meetassist/api/unsubscribe.py:81"
+  },
+  {
+    "method": "GET",
+    "path": "/v1/whiteboard/scene",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.whiteboard.channels.http",
+    "source": "backend/src/meetassist/features/whiteboard/channels/http.py:109"
+  },
+  {
+    "method": "PUT",
+    "path": "/v1/whiteboard/scene",
+    "kind": "http",
+    "in_openapi": true,
+    "module": "meetassist.features.whiteboard.channels.http",
+    "source": "backend/src/meetassist/features/whiteboard/channels/http.py:123"
+  },
+  {
+    "method": "WS",
+    "path": "/v1/ws/demo-translate",
+    "kind": "websocket",
+    "in_openapi": false,
+    "module": "meetassist.features.demo.channels.translate_ws",
+    "source": "backend/src/meetassist/features/demo/channels/translate_ws.py:323"
+  },
+  {
+    "method": "WS",
+    "path": "/v1/ws/realtime",
+    "kind": "websocket",
+    "in_openapi": false,
+    "module": "meetassist.api.realtime",
+    "source": "backend/src/meetassist/api/realtime.py:689"
+  },
+  {
+    "method": "WS",
+    "path": "/v1/ws/sessions/{session_id}",
+    "kind": "websocket",
+    "in_openapi": false,
+    "module": "meetassist.api.websocket",
+    "source": "backend/src/meetassist/api/websocket.py:104"
+  },
+  {
+    "method": "WS",
+    "path": "/v1/ws/user",
+    "kind": "websocket",
+    "in_openapi": false,
+    "module": "meetassist.features.proactive.channels.ws",
+    "source": "backend/src/meetassist/features/proactive/channels/ws.py:54"
+  },
+  {
+    "method": "WS",
+    "path": "/v1/ws/voice",
+    "kind": "websocket",
+    "in_openapi": false,
+    "module": "meetassist.api.ai.voice_ws",
+    "source": "backend/src/meetassist/api/ai/voice_ws.py:708"
+  },
+  {
+    "method": "WS",
+    "path": "/v1/ws/voice-translate",
+    "kind": "websocket",
+    "in_openapi": false,
+    "module": "meetassist.api.ai.voice_translate_ws",
+    "source": "backend/src/meetassist/api/ai/voice_translate_ws.py:312"
+  },
+  {
+    "method": "GET",
+    "path": "/{full_path:path}",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:764"
+  },
+  {
+    "method": "GET",
+    "path": "/{lang}/blog/{slug}/",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:360"
+  },
+  {
+    "method": "GET",
+    "path": "/{lang}/updates/{slug}/",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:391"
+  },
+  {
+    "method": "GET",
+    "path": "/{lang}/{doc}/",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:435"
+  },
+  {
+    "method": "GET",
+    "path": "/{lang}/{group}/{slug}/",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:447"
+  },
+  {
+    "method": "GET",
+    "path": "/{slug}/",
+    "kind": "http",
+    "in_openapi": false,
+    "module": "meetassist.web_static",
+    "source": "backend/src/meetassist/web_static.py:416"
+  }
+]

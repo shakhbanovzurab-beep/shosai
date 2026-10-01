@@ -1,0 +1,8 @@
+# Локальное окружение и кэши инструментов проекта contracts/.
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.python-doctor/
+__pycache__/

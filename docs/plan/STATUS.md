@@ -6,7 +6,7 @@ Statuses: `todo` · `planned` (package plan written, approved) · `in progress` 
 
 | ID | Package | Depends on | Status | Package plan | Notes |
 |---|---|---|---|---|---|
-| D1 | API and WebSocket contract baseline | — | todo | — | |
+| D1 | API and WebSocket contract baseline | — | done | — | [contracts/](../../contracts/README.md): draft OpenAPI and route table, 588 routes classified (34 native for macOS 1.4.5 and Windows 1.4.5, 74 external; Linux frozen, dead code not carried), 7 WebSocket endpoints catalogued, harness and CI job |
 | D2 | Visual baseline and parity harness | — | todo | — | |
 | D3 | Data inventory and mapping | — | done | [DATA_MAPPING.md](DATA_MAPPING.md) | All 131 tables, 9 S3 prefixes, local disk, Redis and other stores mapped, aligned with D4; 33 risks with M1 verifications; the owner decided U-1…U-11: migrated accounts start in the RU home ([ADR 0004](../adr/0004-migrated-accounts-start-in-russian-home.md)), data without an owner in the EU home ([ADR 0005](../adr/0005-data-without-owner-in-eu-home.md)), the draft bucket becomes the RU bucket ([ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md)), usage tombstones kept ([ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md)) |
 | D4 | Feature map | — | done | [FEATURE_MAP.md](FEATURE_MAP.md) | Every draft module and frontend feature mapped; the owner decided FM-1…FM-5: hub, whiteboard, landing demo and help assistant kept; legacy notes merged into S07; OAuth outside Nango kept ([ADR 0002](../adr/0002-oauth-grants-outside-nango.md)); F6 added; routes D1 found unused dropped except four |

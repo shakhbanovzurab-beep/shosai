@@ -1,0 +1,81 @@
+Whisperer Commercial License
+
+Copyright (c) 2026 Shakhbanov Zurab Mukhtarovich, sole trader
+(INN 054203786124, OGRNIP 326050000099429). All rights reserved.
+
+1. Definitions
+
+"Licensor" means the copyright holder named above.
+
+"Software" means everything in this repository: source code, object code,
+configuration, data files, documentation and any work derived from them.
+
+"Commercial Agreement" means a separate written agreement signed by the
+Licensor that grants rights to the Software.
+
+2. Ownership
+
+The Software is the proprietary property of the Licensor and is protected by
+copyright law and international treaties. No title or ownership passes to any
+person who receives, accesses or uses the Software.
+
+3. No rights without a Commercial Agreement
+
+Possession of, or access to, the Software grants no license. Using, copying,
+modifying, merging, publishing, distributing, sublicensing, selling, renting,
+leasing, hosting for third parties or otherwise exploiting the Software is
+permitted only under a Commercial Agreement and only within the scope that
+agreement defines.
+
+The only exception is a person whom the Licensor has authorised in writing to
+work on the Software on the Licensor's behalf. Such a person may use the
+Software solely to perform that work and for no other purpose.
+
+4. Restrictions
+
+Unless a Commercial Agreement expressly permits it, no person may:
+
+  a) disclose the Software, or any part of it, to a third party;
+  b) decompile, disassemble or reverse engineer any part of the Software that
+     is distributed in compiled form, except to the extent mandatory law
+     permits it despite this restriction;
+  c) remove or alter any copyright, license or proprietary notice;
+  d) use the Software to build a competing product or service.
+
+5. Confidentiality
+
+The source code of the Software is confidential information of the Licensor.
+Every person given access to it must keep it confidential and protect it with
+at least the care they use for their own confidential information.
+
+6. Third-party components
+
+Components owned by third parties are licensed under their own terms. This
+license does not change those terms, and those terms do not grant any right to
+the Licensor's own Software.
+
+7. Termination
+
+Any breach of this license ends, automatically and immediately, every right
+held under it. On termination, all copies of the Software in the possession or
+control of the person in breach must be destroyed.
+
+8. No warranty
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NON-INFRINGEMENT, EXCEPT AS A COMMERCIAL AGREEMENT EXPRESSLY
+PROVIDES.
+
+9. Limitation of liability
+
+TO THE EXTENT PERMITTED BY APPLICABLE LAW, THE LICENSOR IS NOT LIABLE FOR ANY
+INDIRECT, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES, OR FOR ANY LOSS OF
+PROFIT, DATA OR BUSINESS, ARISING FROM THE SOFTWARE OR ITS USE, EXCEPT AS A
+COMMERCIAL AGREEMENT EXPRESSLY PROVIDES.
+
+10. Governing law
+
+This license is governed by the laws of the Russian Federation. Disputes are
+resolved by the competent court at the Licensor's place of registration,
+unless a Commercial Agreement provides otherwise.
