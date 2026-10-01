@@ -12,7 +12,7 @@ Statuses: `todo` · `planned` (package plan written, approved) · `in progress` 
 | D4 | Feature map | — | done | [FEATURE_MAP.md](FEATURE_MAP.md) | Every draft module and frontend feature mapped; the owner decided FM-1…FM-5: hub, whiteboard, landing demo and help assistant kept; legacy notes merged into S07; OAuth outside Nango kept ([ADR 0002](../adr/0002-oauth-grants-outside-nango.md)); F6 added; routes D1 found unused dropped except four |
 | F1 | Backend foundation | F3 | todo | — | |
 | F2 | Frontend foundation | D2 | todo | — | |
-| F3 | Local environment | — | todo | — | |
+| F3 | Local environment | — | done | — | `compose.dev.yaml`: two PostgreSQL 18 homes behind transaction-mode PgBouncer, Valkey, Redis cache, Qdrant, SeaweedFS; [development.md](../development.md); [ADR 0001](../adr/0001-local-environment.md) |
 | F4 | Delivery to staging | F1, F2 | todo | — | Needs server, DNS and registry from the user |
 | F5 | Observability | F1, F4 | todo | — | |
 | F6 | Platform services | F1 | todo | — | Added by D4 (FM-4): AI provider port with cost rows, spend and abuse control; email; periodic-job registry |

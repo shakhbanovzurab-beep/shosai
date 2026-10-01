@@ -1,0 +1,286 @@
+# Локальное окружение Whisperer v2: замена управляемых сервисов, которых у
+# хостинга пока нет (CLAUDE.md, «Hosting constraints now»). Топология повторяет
+# target architecture §4: два дома данных — два отдельных сервера PostgreSQL,
+# каждый за своим PgBouncer, по бакету на дом в S3, плюс общие для плоскости
+# Valkey, кэш Redis и Qdrant.
+#
+# Запуск, остановка, сброс и соответствие домов серверам — docs/development.md.
+# Все порты слушают только 127.0.0.1. Пароли ниже — локальные значения по
+# умолчанию, только для этой машины; переопределяются в .env (см. .env.example).
+
+name: whisperer-v2-local
+
+x-service-defaults: &service-defaults
+  restart: unless-stopped
+  read_only: true
+  security_opt:
+    - no-new-privileges:true
+  # Ротация логов у каждого контейнера (§14 правило 11).
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+x-postgres-environment: &postgres-environment
+  POSTGRES_USER: postgres
+  POSTGRES_DB: postgres
+  POSTGRES_PASSWORD: ${LOCAL_POSTGRES_PASSWORD:-local-postgres}
+  WHISPERER_MIGRATOR_PASSWORD: ${LOCAL_MIGRATOR_PASSWORD:-local-migrator}
+  WHISPERER_APP_PASSWORD: ${LOCAL_APP_PASSWORD:-local-app}
+  WHISPERER_TEST_DATABASE_COUNT: ${LOCAL_TEST_DATABASE_COUNT:-8}
+
+x-postgres: &postgres
+  <<: *service-defaults
+  image: pgvector/pgvector:0.8.6-pg18-trixie
+  # Параллельные запросы и индексы по векторам используют /dev/shm.
+  shm_size: 256m
+  tmpfs:
+    - /var/run/postgresql
+    - /tmp
+  healthcheck:
+    # Проверка по TCP, а не через сокет: на время init-скриптов entrypoint
+    # поднимает временный сервер только на сокете, и сервис не должен считаться
+    # готовым, пока роли и базы не созданы.
+    test: ["CMD", "pg_isready", "--host=127.0.0.1", "--username=postgres", "--dbname=postgres"]
+    interval: 30s
+    timeout: 3s
+    retries: 3
+    start_interval: 1s
+    start_period: 60s
+  deploy:
+    resources:
+      limits:
+        memory: 1g
+
+x-pgbouncer: &pgbouncer
+  <<: *service-defaults
+  image: edoburu/pgbouncer:v1.26.0-p0
+  entrypoint: ["/bin/sh", "/etc/pgbouncer/start.sh"]
+  command: []
+  environment:
+    PGBOUNCER_APP_USER: whisperer_app
+    PGBOUNCER_APP_PASSWORD: ${LOCAL_APP_PASSWORD:-local-app}
+  tmpfs:
+    - /run/pgbouncer:uid=70,gid=70,mode=0700
+  healthcheck:
+    test: ["CMD", "pg_isready", "--host=127.0.0.1", "--port=6432", "--username=whisperer_app", "--dbname=whisperer"]
+    interval: 30s
+    timeout: 3s
+    retries: 3
+    start_interval: 1s
+    start_period: 10s
+  deploy:
+    resources:
+      limits:
+        memory: 64m
+
+services:
+  # Российский дом: источник истины для пользователей и компаний с домом RU.
+  postgres-ru:
+    <<: *postgres
+    environment:
+      <<: *postgres-environment
+      WHISPERER_HOME: ru
+    volumes:
+      - postgres-ru-data:/var/lib/postgresql
+      - ./deploy/local/postgres/init-home.sh:/docker-entrypoint-initdb.d/10-init-home.sh:ro
+    ports:
+      - "127.0.0.1:${LOCAL_POSTGRES_RU_PORT:-15432}:5432"
+
+  # Европейский дом: источник истины для дома EU и таблицы справочника (§6).
+  postgres-eu:
+    <<: *postgres
+    environment:
+      <<: *postgres-environment
+      WHISPERER_HOME: eu
+    volumes:
+      - postgres-eu-data:/var/lib/postgresql
+      - ./deploy/local/postgres/init-home.sh:/docker-entrypoint-initdb.d/10-init-home.sh:ro
+    ports:
+      - "127.0.0.1:${LOCAL_POSTGRES_EU_PORT:-15433}:5432"
+
+  pgbouncer-ru:
+    <<: *pgbouncer
+    volumes:
+      - ./deploy/local/pgbouncer/start.sh:/etc/pgbouncer/start.sh:ro
+      - ./deploy/local/pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro
+      - ./deploy/local/pgbouncer/databases-ru.ini:/etc/pgbouncer/databases.ini:ro
+    depends_on:
+      postgres-ru:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${LOCAL_PGBOUNCER_RU_PORT:-16432}:6432"
+
+  pgbouncer-eu:
+    <<: *pgbouncer
+    volumes:
+      - ./deploy/local/pgbouncer/start.sh:/etc/pgbouncer/start.sh:ro
+      - ./deploy/local/pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro
+      - ./deploy/local/pgbouncer/databases-eu.ini:/etc/pgbouncer/databases.ini:ro
+    depends_on:
+      postgres-eu:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${LOCAL_PGBOUNCER_EU_PORT:-16433}:6432"
+
+  # Замена управляемого Valkey: потоки задач, очередь транскрипта, блокировки,
+  # состояние встреч. Как у управляемого сервиса: AOF каждую секунду и
+  # noeviction — переполнение даёт ошибку записи, а не тихую потерю задач.
+  valkey:
+    <<: *service-defaults
+    image: valkey/valkey:9.1.2-alpine
+    command:
+      - valkey-server
+      - --appendonly
+      - "yes"
+      - --appendfsync
+      - everysec
+      - --maxmemory
+      - 512mb
+      - --maxmemory-policy
+      - noeviction
+      - --requirepass
+      - ${LOCAL_VALKEY_PASSWORD:-local-valkey}
+    environment:
+      VALKEYCLI_AUTH: ${LOCAL_VALKEY_PASSWORD:-local-valkey}
+    volumes:
+      - valkey-data:/data
+    ports:
+      - "127.0.0.1:${LOCAL_VALKEY_PORT:-16379}:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli ping | grep -qx PONG"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          # Выше maxmemory: сверх данных процесс держит буферы и перезапись AOF.
+          memory: 768m
+
+  # Кэш с вытеснением по LRU (§4.2): потеря безвредна по определению роли,
+  # поэтому без диска — ни RDB, ни AOF, ни тома; рестарт даёт холодный кэш.
+  redis-cache:
+    <<: *service-defaults
+    image: redis:8.10.2-alpine
+    command:
+      - redis-server
+      - --maxmemory
+      - 256mb
+      - --maxmemory-policy
+      - allkeys-lru
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      - --requirepass
+      - ${LOCAL_REDIS_CACHE_PASSWORD:-local-redis-cache}
+    environment:
+      REDISCLI_AUTH: ${LOCAL_REDIS_CACHE_PASSWORD:-local-redis-cache}
+    tmpfs:
+      - /data
+    ports:
+      - "127.0.0.1:${LOCAL_REDIS_CACHE_PORT:-16380}:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep -qx PONG"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 320m
+
+  # Векторный индекс (§4.2). Производные данные, перестраиваются из источников.
+  qdrant:
+    <<: *service-defaults
+    image: qdrant/qdrant:v1.19.1-unprivileged
+    environment:
+      QDRANT__SERVICE__API_KEY: ${LOCAL_QDRANT_API_KEY:-local-qdrant}
+      # Индекс содержит пользовательские данные: статистика наружу не уходит.
+      QDRANT__TELEMETRY_DISABLED: "true"
+      QDRANT__STORAGE__SNAPSHOTS_PATH: /qdrant/snapshots
+      # Файл-маркер инициализации по умолчанию пишется в рабочий каталог,
+      # который при read_only недоступен для записи.
+      QDRANT_INIT_FILE_PATH: /qdrant/storage/.qdrant-initialized
+    volumes:
+      - qdrant-storage:/qdrant/storage
+      - qdrant-snapshots:/qdrant/snapshots
+    tmpfs:
+      - /tmp
+    ports:
+      - "127.0.0.1:${LOCAL_QDRANT_HTTP_PORT:-16333}:6333"
+      - "127.0.0.1:${LOCAL_QDRANT_GRPC_PORT:-16334}:6334"
+    healthcheck:
+      # В образе нет curl и wget; /readyz доступен без ключа API.
+      test:
+        - CMD
+        - bash
+        - -c
+        - exec 3<>/dev/tcp/127.0.0.1/6333 && printf 'GET /readyz HTTP/1.0\r\n\r\n' >&3 && head -n 1 <&3 | grep -q ' 200 '
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+
+  # S3-совместимое хранилище: по бакету на дом (§4.1). SeaweedFS выбран вместо
+  # MinIO, чьи образы больше не публикуются (ADR 0001). Бакеты создаются при
+  # старте; автосоздание бакетов при загрузке выключено, как у настоящего S3.
+  s3:
+    <<: *service-defaults
+    image: chrislusf/seaweedfs:4.48
+    user: "1000:1000"
+    command:
+      - mini
+      - -dir=/data
+      - -bucket=whisperer-ru,whisperer-eu
+      - -s3.autoCreateBucket=false
+      - -webdav=false
+      - -admin.ui=false
+      - -master.telemetry=false
+      - -s3.port.iceberg=0
+      - -s3.port.lance=0
+    environment:
+      AWS_ACCESS_KEY_ID: ${LOCAL_S3_ACCESS_KEY_ID:-local-s3-access}
+      AWS_SECRET_ACCESS_KEY: ${LOCAL_S3_SECRET_ACCESS_KEY:-local-s3-secret}
+    volumes:
+      - s3-data:/data
+    tmpfs:
+      - /tmp
+    ports:
+      - "127.0.0.1:${LOCAL_S3_PORT:-18333}:8333"
+    healthcheck:
+      # Готовность — это S3 API плюс оба бакета, а не только живой процесс.
+      test:
+        - CMD-SHELL
+        - >-
+          curl -fsS -o /dev/null http://127.0.0.1:8333/healthz &&
+          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/whisperer-ru/ &&
+          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/whisperer-eu/
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+volumes:
+  postgres-ru-data:
+  postgres-eu-data:
+  valkey-data:
+  qdrant-storage:
+  qdrant-snapshots:
+  s3-data:
