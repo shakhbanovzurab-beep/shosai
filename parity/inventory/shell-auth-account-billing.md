@@ -113,8 +113,8 @@ The form has 5 modes: login, register, forgot, verify, socialConsent (:57). **Er
 | `auth.login.submitting` | `POST /v1/auth/login` delayed | Button text «Заходим…» + `svg.spin` | `POST /v1/auth/login` |
 | `auth.login.error-invalid` | login → 401 `{"detail":"Invalid email or password"}` | toast `[role=alert]` «Неверный email или пароль»; captcha remounts and the token is cleared (:464) | same |
 | `auth.login.error-captcha` | 400 `{"detail":"captcha_failed"}` | «Не удалось пройти капчу — попробуйте ещё раз» | same |
-| `auth.login.error-too-many` | 429 `{"detail":"too_many_attempts"}` | «Слишком много попыток входа. Подождите немного и попробуйте снова.» | same |
-| `auth.login.error-rate-limited` | 429 `{"detail":"Rate limit exceeded: 5 per 1 minute"}` | «Слишком много запросов. Подождите минуту и попробуйте снова.» | same |
+| `auth.login.error-too-many` | **Unreachable.** The draft backend never returns `too_many_attempts` (checked in step 2 of D2); the frontend branch is dead. Not in the screenshot matrix. | «Слишком много попыток входа. Подождите немного и попробуйте снова.» | — |
+| `auth.login.error-rate-limited` | 429 `{"error":"Rate limit exceeded: 5 per 1 minute"}` — slowapi's own handler, body under `error`, not `detail` (checked in step 2 of D2) | «Слишком много запросов. Подождите минуту и попробуйте снова.» | same |
 | `auth.login.error-banned` | 403 `{"detail":"account_banned"}` (also `account_frozen`, `account_disabled`) | «Аккаунт заблокирован. Обратитесь в поддержку.» (frozen: «Аккаунт заморожен…», disabled: «Аккаунт отключён…») | same |
 | `auth.login.error-validation` | 422 `{"detail":[…]}` | «Проверьте правильность введённых данных.» | same |
 | `auth.login.error-server` | 500 | «Ошибка сервера. Мы уже разбираемся — попробуйте позже.» | same |

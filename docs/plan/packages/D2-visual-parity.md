@@ -125,18 +125,26 @@ The pilot recipe, applied to every state:
 
 ### 3.6 Recording from the draft backend
 
-Fixtures come from the draft backend running locally with seeded test data, as the prompt requires:
+Fixtures come from the draft backend running locally with seeded test data, as the prompt requires. Built in step 2; the operating manual is [parity/recording/README.md](../../../parity/recording/README.md).
 
-- **Stack** in `parity/recording/`:
-  - the draft backend built from the pinned commit's own Dockerfile and versions (it is the reference, not v2 code);
-  - its PostgreSQL with pgvector and Redis, on a private Compose network with no published database ports.
-- **Isolation from production.** The draft reads `.env` from its working directory, so it runs from the exported copy, never from `/root/whisperer/backend`. Every variable is passed explicitly, and provider keys are empty.
-- **Time.** Seeds write explicit timestamps around the fixed clock. The API process runs under libfaketime at the same instant, so server-side "days left" and "today" match the frozen browser. Values generated per request (tokens, request ids) are normalized by declared rules.
-- **Seeds.** One persona each for free, start, pro, max and admin. Data goes in through the draft's HTTP API where it exists, and through its ORM where the draft creates it with AI or external services (transcripts, notes, mind maps).
-- **Recorder.** The draft frontend runs against the live draft backend. Each state is driven with request capture, and the captured `/v1` responses are written as fixtures.
-- **Synthetic fixtures.** Data that comes from external services unavailable locally is written by hand:
-  - OpenRouter balance, LiveKit health, connector catalogs, weather in the ticker.
-  - Each such fixture is validated against the draft type and marked synthetic with the reason.
+- **Stack** (`parity/compose.yaml`, profile `recording`):
+  - the draft API built from the draft's own `requirements.txt` on Python 3.12 — it is the reference, not v2 code;
+  - PostgreSQL 18 with pgvector and Redis 7.4.6, the versions the draft runs in production;
+  - all of it on the `internal` network `draft`, with no route out and no published ports.
+- **Isolation from production.**
+  - The draft reads `.env` from its working directory, so it runs from a `git archive` export of tracked files, never from `/root/whisperer/backend`.
+  - Every variable is passed explicitly, and provider keys are empty.
+  - Verified: no `.env` in the export, and no outbound connection succeeds from the API.
+- **Time.** The API runs under libfaketime at the parity clock, so server-side "days left" and "today" match the frozen browser. Seeds write explicit timestamps. "Now" values and per-request tokens, ids and PKCE values are normalized by declared rules.
+- **State per run.** A template database holds the migrated, seeded draft. Every run copies it, empties Redis and restarts the API. A visit that changes data uses its own persona.
+- **Seeds.** Ten personas cover the tariffs, tour states, quota exhaustion, a saved card with payment history, a referrer, an administrator and a blocked account. They are created through the draft's own service registration, then adjusted through its ORM. Later steps add personas and data for their features the same way: through the ORM where the draft produces the data with AI or external services (transcripts, notes, mind maps).
+- **Recorder.**
+  - The draft frontend runs against the live draft API, with the persona signed in like a returning user. Every `/v1` exchange is captured.
+  - The visitor's country goes in `CF-IPCountry` (default `RU`): currency, prices and the sign-in buttons depend on it.
+  - Third-party sign-in SDKs get stubs, so they neither render nor raise the error toast a blocked script causes.
+  - A visit fails when its marker is missing or an unexpected error toast appears.
+  - Two runs give byte-identical fixtures.
+- **Synthetic data.** What the local stack cannot produce is an override in the harness's state definitions, marked synthetic with a reason. Examples: a 429 from the rate limiter, a failed captcha, the OpenRouter balance, LiveKit health, connector catalogs, weather in the ticker. Overrides are validated against the draft's OpenAPI (D1).
 
 ### 3.7 Commands
 
@@ -202,7 +210,8 @@ The owner approved this plan on 2026-10-01.
 
 | Risk | Mitigation |
 |---|---|
-| The draft API needs more services at startup than PostgreSQL and Redis (the draft has Compose files for NATS and Temporal) | step 2 adds them from the draft's own Compose files; if one cannot run locally, the affected endpoints get synthetic fixtures with a reason |
+| The draft API needs more services at startup than PostgreSQL and Redis | resolved in step 2: NATS and Temporal are optional for the draft API; it starts with PostgreSQL and Redis only |
+| Production enables a different set of social sign-in providers than the recording stack | resolved 2026-10-01: the owner confirmed that production enables all four — Yandex and VK for Russia and the Russian language, Google and GitHub for everyone else — as the recording stack does |
 | A screen depends on time in a way libfaketime does not cover | the normalizer rule set is per field and reviewed in the recording report |
 | Semgrep `p/default` flags token-like strings in fixtures | fixtures use fake values that do not look like JWTs or keys |
 | v2 renders the same design with a newer Tailwind or React and differs by a few pixels | per-state tolerance with a written reason; never a global increase |

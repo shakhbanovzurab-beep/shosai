@@ -1,0 +1,286 @@
+{
+  "visit": "shell/admin",
+  "persona": "admin",
+  "url": "/app/download",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "ru",
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"admin@parity.test\",\"username\":\"Администратор\",\"phone\":null,\"avatar_url\":null,\"role\":\"admin\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"free\",\"name\":\"Free\",\"price_rub\":0,\"price_usd\":0,\"price_eur\":0,\"period_days\":0,\"minutes_limit\":60,\"allow_knowledge_base\":false,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":null,\"currency\":\"RUB\",\"price\":0},\"started_at\":\"2026-06-01T12:00:00Z\",\"expires_at\":null,\"days_left\":null,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":false,\"limit_minutes\":60,\"bonus_minutes\":0,\"used_minutes\":12,\"remaining_minutes\":48,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":false,\"teleprompter\":false,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/admin/costs/summary",
+      "query": "group_by=provider",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "kpis": [
+          {
+            "label": "День",
+            "cost_rub": "0",
+            "cost_usd": "0",
+            "input_tokens": 0,
+            "output_tokens": 0
+          },
+          {
+            "label": "Месяц",
+            "cost_rub": "0",
+            "cost_usd": "0",
+            "input_tokens": 0,
+            "output_tokens": 0
+          },
+          {
+            "label": "Всё время",
+            "cost_rub": "0",
+            "cost_usd": "0",
+            "input_tokens": 0,
+            "output_tokens": 0
+          }
+        ],
+        "breakdown": [],
+        "group_by": "provider",
+        "rate_used": "95.0000",
+        "runs_total": 0,
+        "latency_p50_ms": null
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/prompts",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/tickets/unread-count",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "count": 0
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/app/builds",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000003",
+          "platform": "macos",
+          "platform_label": "macOS",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-1.4.5.dmg",
+          "size_bytes": 89438208,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000003/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000004",
+          "platform": "windows",
+          "platform_label": "Windows",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-Setup-1.4.5.exe",
+          "size_bytes": 74235904,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000004/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/auth/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "email": "admin@parity.test",
+        "username": "Администратор",
+        "phone": null,
+        "avatar_url": null,
+        "role": "admin",
+        "status": "active",
+        "is_active": true,
+        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "language": "ru",
+        "timezone": "Europe/Moscow",
+        "no_logs": false,
+        "meeting_auto_tasks": false,
+        "memory_enabled": true,
+        "leo_voice_enabled": true,
+        "leo_web_search_enabled": true,
+        "leo_kb_search_enabled": true,
+        "leo_connector_search_enabled": true,
+        "marketing_consent": false,
+        "appearance": {
+          "font": "whisperer"
+        },
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "free",
+            "name": "Free",
+            "price_rub": 0,
+            "price_usd": 0,
+            "price_eur": 0,
+            "period_days": 0,
+            "minutes_limit": 60,
+            "allow_knowledge_base": false,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": null,
+            "currency": "RUB",
+            "price": 0
+          },
+          "started_at": "2026-06-01T12:00:00Z",
+          "expires_at": null,
+          "days_left": null,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "quota": {
+          "unlimited": false,
+          "limit_minutes": 60,
+          "bonus_minutes": 0,
+          "used_minutes": 12,
+          "remaining_minutes": 48,
+          "exhausted": false
+        },
+        "features": {
+          "voice_translation": false,
+          "voice": false,
+          "teleprompter": false,
+          "premium_weekly_remaining_pct": null,
+          "premium_credit_usd": 0,
+          "premium_credit_currency": "RUB",
+          "premium_credit_amount": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "free",
+            "name": "Free",
+            "price_rub": 0,
+            "price_usd": 0,
+            "price_eur": 0,
+            "period_days": 0,
+            "minutes_limit": 60,
+            "allow_knowledge_base": false,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": null,
+            "currency": "RUB",
+            "price": 0
+          },
+          "started_at": "2026-06-01T12:00:00Z",
+          "expires_at": null,
+          "days_left": null,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "usage": {
+          "session_count": 0,
+          "minutes_used": 0,
+          "ai_questions": 0,
+          "total_tokens": 0
+        },
+        "quota": {
+          "unlimited": false,
+          "limit_minutes": 60,
+          "bonus_minutes": 0,
+          "used_minutes": 12,
+          "remaining_minutes": 48,
+          "exhausted": false
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/referral",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "code": "ADMIN2026",
+        "link": "/app/register?ref=ADMIN2026",
+        "invited": 0,
+        "converted_paid": 0,
+        "currency": "RUB",
+        "balance": 0,
+        "reward_per_referral": 500,
+        "balance_rub": 0,
+        "reward_per_referral_rub": 500
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ticker",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "weather": null,
+        "holiday": null,
+        "stats": {
+          "meetings_total": 0,
+          "minutes_total": 0,
+          "ai_answers_total": 0,
+          "tokens_total": 0,
+          "users_total": 10
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "access_token": "parity-access_token",
+        "token_type": "Bearer",
+        "expires_in": 1800,
+        "csrf_token": "parity-csrf_token"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

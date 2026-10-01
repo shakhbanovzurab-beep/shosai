@@ -1,0 +1,139 @@
+# Гармошка визуального паритета: браузер в закреплённом образе и стенд записи
+# фикстур с API черновика. План: docs/plan/packages/D2-visual-parity.md.
+#
+# Профиль `recording` поднимает черновик: его PostgreSQL, Redis и API. Они живут
+# в сети `draft` без выхода наружу и без опубликованных портов: API черновика не
+# может обратиться ни к внешним провайдерам, ни к боевым ресурсам, даже если
+# переменную окружения передали по ошибке. Запускается через recording/record.sh.
+#
+# Пароль базы и секрет JWT ниже — локальные значения по умолчанию для
+# одноразового стенда; переопределяются переменными окружения.
+
+name: whisperer-parity
+
+x-hardening: &hardening
+  security_opt:
+    - no-new-privileges:true
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+x-draft-database-url: &draft-database-url postgresql+asyncpg://draft:${PARITY_DRAFT_DB_PASSWORD:-parity-local}@draft-db:5432/draft
+
+services:
+  harness:
+    <<: *hardening
+    image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+    profiles: ["tools"]
+    working_dir: /parity
+    init: true
+    # Chromium держит общую память в /dev/shm; без ipc: host он падает на
+    # тяжёлых страницах.
+    ipc: host
+    volumes:
+      - .:/parity
+    networks:
+      - default
+      - draft
+
+  draft-db:
+    <<: *hardening
+    image: pgvector/pgvector:0.8.6-pg18-trixie@sha256:78bf48b801e792f99e3ac62b5036fd3876e9be48afda16c1e331af1c75ceb2ff
+    profiles: ["recording"]
+    environment:
+      POSTGRES_USER: draft
+      POSTGRES_PASSWORD: ${PARITY_DRAFT_DB_PASSWORD:-parity-local}
+      POSTGRES_DB: postgres
+    shm_size: 256m
+    volumes:
+      - draft-db-data:/var/lib/postgresql
+    networks:
+      - draft
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U draft -d postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  draft-redis:
+    <<: *hardening
+    image: redis:7.4.6-alpine@sha256:3b73847e72874be07e6657b129a94761662b79bc0f679273757d4218573b2a98
+    profiles: ["recording"]
+    # Состояние Redis между прогонами не нужно: каждый прогон начинается с
+    # чистого (record.sh делает FLUSHALL).
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    networks:
+      - draft
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  draft-api:
+    <<: *hardening
+    profiles: ["recording"]
+    build:
+      context: recording
+      dockerfile: api.Dockerfile
+      additional_contexts:
+        draft: .cache/draft/current/backend
+    image: whisperer-parity/draft-api:local
+    environment:
+      ENVIRONMENT: dev
+      PROCESS_ROLE: api
+      DATABASE_URL: *draft-database-url
+      DATABASE_URL_SYNC: postgresql://draft:${PARITY_DRAFT_DB_PASSWORD:-parity-local}@draft-db:5432/draft
+      DB_POOL_PRE_PING: "true"
+      REDIS_URL: redis://draft-redis:6379/0
+      RATE_LIMIT_STORAGE_URI: redis://draft-redis:6379/1
+      # Рекордер входит и обновляет токен в каждом визите с одного адреса; лимит
+      # 5/мин на /auth/login и /auth/refresh остановил бы запись на шестом визите.
+      # Ответ 429 черновика записан в фикстуры синтетически, с причиной.
+      RATELIMIT_ENABLED: "false"
+      JWT_SECRET: ${PARITY_DRAFT_JWT_SECRET:-parity-local-jwt-secret}
+      SCHEDULERS_ENABLED: "false"
+      PUBLIC_BASE_URL: http://parity.test
+      ADMIN_ORIGIN: http://parity.test
+      BILLING_DEV_MODE: "true"
+      # Страна посетителя — из заголовка CF-IPCountry, как за Cloudflare в бою:
+      # от неё зависят валюта, цены и автопродление. Рекордер ставит заголовок
+      # по стране визита.
+      TRUST_CF_IPCOUNTRY: "true"
+      # Вход через соцсети: провайдер показывается, когда он включён и у него есть
+      # идентификатор клиента. Идентификаторы фиктивные, секретов нет — кнопки
+      # рисуются, а до самих провайдеров стенд не достаёт. Набор по стране
+      # посетителя черновик выбирает сам: RU — Яндекс и VK, иначе Google и GitHub.
+      SOCIAL_LOGIN_YANDEX_ENABLED: "true"
+      SOCIAL_LOGIN_YANDEX_CLIENT_ID: parity-yandex-client
+      SOCIAL_LOGIN_VK_ENABLED: "true"
+      # У VK идентификатор приложения — число: фронтенд передаёт Number(app_id).
+      SOCIAL_LOGIN_VK_CLIENT_ID: "51000000"
+      SOCIAL_LOGIN_GOOGLE_ENABLED: "true"
+      SOCIAL_LOGIN_GOOGLE_CLIENT_ID: parity-google-client
+      SOCIAL_LOGIN_GITHUB_ENABLED: "true"
+      SOCIAL_LOGIN_GITHUB_CLIENT_ID: parity-github-client
+      TZ: UTC
+      # Фиксированный момент гармошки (parity.config.json), часы идут от него.
+      # Задаёт record.sh и сразу проверяет, что API видит именно этот момент.
+      FAKETIME: ${PARITY_FAKETIME:-}
+    volumes:
+      - ./recording/seed:/seed:ro
+    networks:
+      - draft
+    depends_on:
+      draft-db:
+        condition: service_healthy
+      draft-redis:
+        condition: service_healthy
+
+volumes:
+  draft-db-data:
+
+networks:
+  draft:
+    internal: true

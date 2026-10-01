@@ -1,0 +1,15 @@
+{
+  "name": "whisperer-parity",
+  "private": true,
+  "type": "module",
+  "description": "Visual parity harness: renders the draft and v2 frontends from recorded API data and compares screenshots",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "record": "bash recording/record.sh"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.19.0",
+    "typescript": "7.0.2"
+  }
+}
