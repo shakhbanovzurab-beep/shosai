@@ -27,8 +27,12 @@ from sqlalchemy import func, select
 import meetassist.composition.metadata  # noqa: F401
 from accounts import create_account
 from calendar_seed import seed_calendar
+from hubs_seed import seed_hubs
+from leo_cabinet import seed_leo_cabinet
+from mcp_seed import seed_mcp
 from meetings import seed_meetings
 from personas import PERSONAS
+from prompts_models import seed_prompts_models
 from studio import seed_studio
 from workspace import seed_workspace
 from world import seed_world
@@ -60,8 +64,12 @@ async def seed() -> None:
         lead = accounts["lead"]
         sessions = await seed_meetings(db, lead, clock)
         await seed_workspace(db, lead, clock, sessions)
+        await seed_hubs(db, lead, clock, sessions)
         await seed_calendar(db, lead, clock, sessions)
         await seed_studio(db, lead, clock)
+        await seed_leo_cabinet(db, lead, clock)
+        await seed_mcp(db, lead, clock)
+        await seed_prompts_models(db, lead, accounts["admin"], clock)
         await db.commit()
     log.info("засев завершён: персон %d", len(accounts), extra={"personas": len(accounts)})
 

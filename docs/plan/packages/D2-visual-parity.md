@@ -78,7 +78,7 @@ The harness is its own npm project. It runs inside the pinned Playwright contain
 
 ### 3.2 Targets
 
-A target is a built frontend plus the static files it needs, served at the origin `http://parity.test` by request interception. No server process is involved.
+A target is a built frontend plus the static files it needs, served at the origin `http://parity.localhost` by request interception. No server process is involved. A `.localhost` origin is a secure context, as HTTPS is in production, so the browser exposes the APIs that only secure contexts get: the microphone, AudioWorklet and push.
 
 - **draft**: `git archive` of the pinned commit (the draft tree is never touched), `npm ci`, `vite build` into the harness cache. Fonts come from the draft's `backend/static/landing/fonts` and `backend/static/webfonts`, served at `/fonts/` as the draft backend serves them.
 - **v2**: `frontend/dist` of this repository and v2's own font directory, set in `parity.config.json`; F2 adjusts the paths when the frontend exists.
@@ -87,7 +87,12 @@ Requests to any other host are aborted: analytics, the CloudPayments widget and 
 
 ### 3.3 Fixtures and replay
 
-- A fixture is the recording of one visit in one language: the persona's storage and every `/v1` exchange (method, path, query, status, body, `origin`). Visits are recorded in `ru` and `en`, because some requests carry the language. Server-sent events and WebSocket frames join the format in the steps that need them (5 and 6).
+- A fixture is the recording of one visit in one language: the persona's storage and every `/v1` exchange (method, path, query, status, body, `origin`). Visits are recorded in `ru` and `en`, because some requests carry the language.
+- Streams and sockets belong to the state, not to the fixture: their content comes from a model, a voice provider or a scheduler that the recording stack does not have.
+  - A finished server-sent event stream is an ordinary reply with the whole body.
+  - A stream still being written is an open stream. A shim over `fetch` in the page sends its events and never ends it.
+  - WebSocket frames for `/v1/ws/...` are a script on the state: frames on connect and frames after the page's first message (step 5).
+  - The conversation of Leo lives in the browser, so the state seeds it into localStorage.
 - A state is a **fixture** + **overrides**: an error status, an empty list, a held request for the loading state, a network failure. Each override is synthetic and needs a reason.
 - A short, closed list of background requests is answered by default when a fixture lacks them, because they fire later than a recording ends: analytics flushes, the satisfaction prompt after 25 s, the connection probe.
 - Replay is strict. A request with no matching response fails the test and is reported by name. The draft's tool answered unknown paths with `[]`, which made broken screens look clean.
@@ -129,13 +134,26 @@ The pilot recipe, applied to every state:
 - pointer parked;
 - captcha and sign-in SDK stubs;
 - service workers blocked;
-- then marker, fonts, 500 ms without API requests and 500 ms without DOM changes before `toHaveScreenshot`.
+- a secure-context origin (`http://parity.localhost`) and a fake microphone, so voice, recording and push render as in production (step 5);
+- an interaction starts only once the page has settled (fonts loaded, 500 ms without API requests and DOM changes) (step 5);
+- Chromium partial raster off: an interaction on a drawn page otherwise redraws only the changed rectangles inside existing tiles, and anti-aliasing at their edges varied from run to run (step 5);
+- greyscale text anti-aliasing (`--disable-lcd-text`): Chromium draws subpixel text only outside composited layers, and blocks with an entry animation entered and left a layer depending on timing, so the same text came out coloured or grey (step 5);
+- then marker, fonts, 500 ms without API requests and 500 ms without DOM changes before `toHaveScreenshot`;
+- a state scrolled to content below the fold scrolls only after that wait, always to the same position (the marker centred in its scroll area), and waits again (step 5). Scrolling earlier, or only "if not visible", left a position that depended on when the blocks above finished loading.
 
 Measured in step 3: the 237 screenshots of steps 2–3, captured from scratch and restored from S3, matched with zero tolerance in every run.
 
 Measured in step 3b: 145 states, 430 screenshots, 31.7 MB in the bucket; `baseline` and two `verify` runs matched with zero tolerance. Masks cover two regions driven by real timers: the resend countdown on the code screen and the `mm:ss` stamps of the connection log.
 
 Measured in step 4: 315 states, 775 screenshots, 59.2 MB in the bucket; `baseline` and two `verify` runs matched with zero tolerance. The seed now holds meetings, so the ticker's meeting count changed on every signed-in screen: all visits were recorded again (twice, byte-identical) and every screenshot was re-captured.
+
+Measured in step 5: 495 states, 1063 screenshots, 86.3 MB in the bucket; `baseline` and two `verify` runs matched with zero tolerance, the first restoring every image from S3. All 70 visits were recorded twice, byte-identical.
+- **What made it repeatable.** Four harness rules above came from failing `verify` runs: an interaction waits for a settled page, a scrolled state centres its marker after that wait, partial raster is off, and text is greyscale. The last one re-rendered every screenshot.
+- **Data changes on earlier screens.** The new seed shows only where its data appears:
+  - the ticker's AI answer and token totals, from the seeded AI spend;
+  - the Acme hub on meeting chips and library cards;
+  - the origin `parity.localhost` in share, referral and iCal links.
+- **Masks.** One mask was added: the waveform and timer of the Leo voice recorder.
 
 ### 3.6 Recording from the draft backend
 
@@ -201,7 +219,7 @@ Each step is one session, ends with checks and a report, and is committed after 
 | 3 | Harness core: targets, serving, strict replay, determinism, state DSL, matrix, `baseline` / `verify` / `compare`, report, unit tests, CI job, `parity/README.md`; the main states of step 2's features. Done: 44 states, 237 screenshots in S3 | `verify` shows 0 differences for those states |
 | 3b | The remaining states of the shell, auth, account and billing group (inventory: shell-auth-account-billing.md), on the core of step 3:<br>• loading, empty and error variants through overrides;<br>• sign-in by social networks and consent;<br>• registration and reset validation;<br>• onboarding: tour steps on this group's routes, finish, checklist, launchers;<br>• billing flows: upgrade, promo, checkout, card sheet, renewal, payment issues;<br>• connection overlay, toasts, error boundary, command palette.<br>Tour steps 5–18 run on other features' routes and join the steps of those features. Every state of the group is screenshotted, captured inside another state, or left out with a reason (inventory, «Coverage in the screenshot matrix»). | `verify` shows 0 differences for those states |
 | 4 | Meetings, calendar, context, knowledge, search (inventory: meetings-calendar-knowledge.md):<br>• seed persona `lead` with the whole workspace; ids shared by seed and visits in `recording/seed/ids.json`;<br>• library, import, meeting page (document, AI version, mind map, impact, share, menus, transcript), templates, integrations, shared page `/r/:token`;<br>• calendar views, event and stream dialogs, calendar integrations;<br>• context, knowledge base files, sources and connect flows; palette results.<br>Streams that send events over time join step 5. | same, for these states |
-| 5 | Leo, prompts, models, MCP, hub (SSE replay for chat and prompt tests; also the meeting AI version and mind map while their streams send text) | same |
+| 5 | Leo, prompts, models, MCP, hub (inventory: leo-prompts-models-mcp-hub.md):<br>• replay of open SSE streams and WebSocket frames on the state; the Leo conversation seeded in localStorage; the harness origin `http://parity.localhost` is a secure context, with a fake microphone;<br>• seed for `lead`: the Leo tab, MCP, hubs with boards and the Acme history of facts, prompts, skills, AI spend; two registry models from `admin`;<br>• Leo widget (panel, conversation content, streaming, actions, composer, mentions, voice, reminders), Leo cabinet tab, MCP tab and consent screen, prompts, skills, editor and test run, models, admin AI models, hubs;<br>• also the meeting AI version and mind map while their streams send text.<br>Done: 180 states, 288 screenshots | same, for these states |
 | 6 | Rooms, streams, storage, tracker (WebSocket replay; SFU states excluded) | same |
 | 7 | Admin, product analytics, analytics, satisfaction, support | same |
 | 8 | Locale sweep, full baseline in S3, full `verify`, status `done` | the prompt's definition of done |

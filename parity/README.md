@@ -41,13 +41,16 @@ Screenshots are taken only inside the pinned Playwright container ([`compose.yam
 2. **Define** each inventoried state in `src/states/<feature>.ts` and add the list to [`src/states/registry.ts`](src/states/registry.ts):
    - `fixture`: the visit that provides the data;
    - `scope`: `full` for main states, which get all 8 cells; `single` for small variants, which get one cell: ru, desktop, light;
-   - `act`: the interaction;
+   - `act`: the interaction. It starts once the page has settled (fonts, API and DOM quiet), as a user who waits for the page: an action on a page still loading scrolls to its target in a layout that is about to change;
    - `marker`: a selector that exists only in that state. Without the marker the state fails.
    - `overrides`: responses the recording stack cannot produce, such as an error status, a held request for loading, or a network failure. Each needs a reason, and each must exist in the draft's OpenAPI and match its schema. The unit tests check this. Helpers are in [`src/states/overrides.ts`](src/states/overrides.ts):
      - a path may use `{param}` segments (`/v1/me/sessions/{id}/full`): ids in fixtures are placeholders, and an exact path wins over a template;
      - `respond` is one reply or a sequence: the n-th request gets the n-th reply, and the last repeats. A reply is a response, `"hold"` (no answer: loading), `"fail"` (network failure), `"recorded"` (the recorded answer), or `{ merge }` (the recorded answer with fields merged in, for variants of the same data such as "quota almost full");
-     - `stream(...)` answers with a finished server-sent event stream. A stream that keeps sending over time needs step 5's SSE replay.
-   - `reveal`: the marker is below the edge of the screen; scroll it into view before the screenshot.
+     - `stream(...)` answers with a finished server-sent event stream; an event named `""` is a bare `data:` frame (the prompt test run, `[DONE]`);
+     - `openStream(...)` sends its events and keeps the stream open: a reply still being written. A shim over `fetch` in the page serves it ([`src/determinism/open-streams.ts`](src/determinism/open-streams.ts)), because a response fulfilled by Playwright always ends.
+   - `sockets`: WebSocket frames for `/v1/ws/...` ([`src/replay/sockets.ts`](src/replay/sockets.ts)). `frames` go right after the page connects; `afterClient` goes after the page's first message, the way the voice server answers microphone audio. Without a script a socket stays silent.
+   - `storage`: localStorage keys the frontend keeps in the browser, built from the fixture's user id: the Leo conversation (`agent-chat-v1:<user>`).
+   - `reveal`: the marker is below the edge of the screen; once the page has settled, the marker is scrolled to the centre of its scroll area (always the same position, whatever the action scrolled before) and the page settles again before the screenshot.
    - `keepPointer`: the state is a hover; the pointer stays where the action left it.
 3. **Texts** in markers and actions come from the draft's translation catalogs by key: `t("billing:cab.tariffs")`. Use literal keys, then run `npm run texts`.
 4. **Baseline**: `npm run baseline -- --grep "<feature>\."`, then `npm run verify -- --grep "<feature>\."` must report no differences.
@@ -61,6 +64,9 @@ Every state is rendered under the same conditions:
 - the system setting "reduce motion" is on;
 - animations and transitions have zero duration from the first frame, except the animations in `PERSISTENT_ANIMATIONS` (`src/determinism/page-setup.ts`), which stop on their first frame because their end changes the screen (a toast closes when its bar ends);
 - the pointer is parked at (0, 0), and service workers are blocked;
+- the origin `http://parity.localhost` is a secure context, as HTTPS is in production: the microphone, AudioWorklet and push exist. Chromium has a fake microphone that grants itself ([`src/determinism/browser-flags.ts`](src/determinism/browser-flags.ts)); recording uses the same browser;
+- partial raster is off (`--disable-partial-raster`): a changed tile is redrawn whole. Otherwise an action on a drawn page redraws only changed rectangles, and anti-aliasing at their edges differs by a few brightness levels from run to run;
+- text is always anti-aliased in greyscale (`--disable-lcd-text`). Chromium uses subpixel (LCD) text only outside composited layers, and blocks with an entry animation move in and out of a layer depending on timing, so the same text came out coloured in one run and grey in another;
 - external hosts are blocked; third-party sign-in SDKs and the captcha are stubs ([`src/serve/third-party.ts`](src/serve/third-party.ts));
 - the screenshot waits for the marker, loaded fonts, and 500 ms without API requests and without DOM changes.
 
@@ -71,8 +77,8 @@ Values that follow real time, such as a "resend in 60 s" countdown, are masked p
 These also follow from the goal that users notice no difference:
 
 - **Base path and URLs.** The SPA lives under `/app/`, and the same paths and query parameters address the same screens.
-- **Persisted client state.** `wh-auth` (`{state:{csrfToken,user},version:0}`), `wh.theme`, `wh.lang` and `wh.appearance` keep their meaning. Users stay signed in across the cutover, and the harness seeds these keys.
-- **API.** The same `/v1` contract (D1). Fonts are served at `/fonts/`.
+- **Persisted client state.** `wh-auth` (`{state:{csrfToken,user},version:0}`), `wh.theme`, `wh.lang` and `wh.appearance` keep their meaning. Users stay signed in across the cutover, and the harness seeds these keys. The Leo conversation stays in `agent-chat-v1:<user id>` and `agent-session-v1:<user id>` with the draft's message shape: users keep their thread, and Leo states seed it.
+- **API.** The same `/v1` contract (D1), including the SSE events of Leo and the prompt test run and the WebSocket frames of `/v1/ws/voice` and `/v1/ws/user`. Fonts are served at `/fonts/`.
 - **Selectors used by states.** Texts from the draft catalogs, roles, `aria-label`s and `data-onboarding` anchors stay. The few draft class names in state definitions (`.onb-card`) are kept or the selector is replaced together with the state.
 - **Motion.** v2 honours `prefers-reduced-motion` where the draft does. Random choices on screen use `Math.random`. If a toast closes on a different animation than `toast-bar`, its selector is added to `PERSISTENT_ANIMATIONS`.
 

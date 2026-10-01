@@ -551,7 +551,6 @@ Draft defects visible on screen. By decision 4 of the D2 plan they stay out of t
 | `meetings.library.folders-empty` | `meetings.library.empty` |
 | `meetings.library.mobile-folders-collapsed` | the mobile cells of `meetings.library.populated` |
 | `meetings.library.import-refusal-client`, `import-refusal-server` | `meetings.library.import-refusal-format`, `-empty`, `-too-large`, `-quota`, `-rate`, `-storage`, `-no-logs` |
-| `meetings.detail.enhanced-streaming` | `meetings.detail.enhanced-generating` (the card before the first text) |
 | `meetings.detail.impact-decided`, `impact-manual-only`, `impact-diff` | `meetings.detail.impact-populated` |
 | `meetings.detail.status-chips` | `meetings.detail.processing`, `status-failed`, `private`, `enhanced` (MCP) |
 | `meetings.detail.action-items`, `transcript-pill`, `aside`, `hub-chip-assigned`, `folder-chip` | `meetings.detail.enhanced` |
@@ -585,5 +584,5 @@ Draft defects visible on screen. By decision 4 of the D2 plan they stay out of t
 | `meetings.detail.enhanced-error` for 402, 429, a drop; `actions-menu-private`; the «попытка N» label | draft defects (Findings 1–3) |
 | `calendar.zoom` | needs a viewport of 1560 px or wider; the matrix desktop is 1440 px |
 | `kb.files.packing` | lasts only while the browser zips a picked folder |
-| streaming SSE states with text arriving (`enhanced-streaming` after the first delta, `mindmap-building` with draft nodes) | need an open stream that sends events over time; step 5 adds SSE replay |
 
+Step 5 added replay of open SSE streams. The two streaming states deferred above are now captured as their own states: `meetings.detail.enhanced-streaming` (text arriving, no end of stream yet) and `meetings.detail.mindmap-building-nodes` (draft nodes arriving).

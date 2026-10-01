@@ -113,8 +113,8 @@ services:
       RATELIMIT_ENABLED: "false"
       JWT_SECRET: ${PARITY_DRAFT_JWT_SECRET:-parity-local-jwt-secret}
       SCHEDULERS_ENABLED: "false"
-      PUBLIC_BASE_URL: http://parity.test
-      ADMIN_ORIGIN: http://parity.test
+      PUBLIC_BASE_URL: http://parity.localhost
+      ADMIN_ORIGIN: http://parity.localhost
       BILLING_DEV_MODE: "true"
       # Страна посетителя — из заголовка CF-IPCountry, как за Cloudflare в бою:
       # от неё зависят валюта, цены и автопродление. Рекордер ставит заголовок
@@ -133,6 +133,14 @@ services:
       SOCIAL_LOGIN_GOOGLE_CLIENT_ID: parity-google-client
       SOCIAL_LOGIN_GITHUB_ENABLED: "true"
       SOCIAL_LOGIN_GITHUB_CLIENT_ID: parity-github-client
+      # Голос Leo: черновик включает его платным (features.voice) только при ключе
+      # Gemini Live, как в бою. Ключ фиктивный: до Google стенд не достаёт, а
+      # экраны голоса рисуются по кадрам, которые задаёт состояние.
+      GOOGLE_LIVE_API_KEY: ${PARITY_DRAFT_GOOGLE_LIVE_API_KEY:-parity-no-key}
+      # Уведомления Leo на устройство: блок настроек виден при паре VAPID, как в
+      # бою. Пара фиктивная: подписку и отправку стенд не выполняет.
+      WEBPUSH_VAPID_PUBLIC_KEY: parity-vapid-public-key
+      WEBPUSH_VAPID_PRIVATE_KEY: ${PARITY_DRAFT_VAPID_PRIVATE_KEY:-parity-vapid-private-key}
       TZ: UTC
       # Фиксированный момент стенда сравнения (parity.config.json), часы идут от него.
       # Задаёт record.sh и сразу проверяет, что API видит именно этот момент.

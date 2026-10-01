@@ -37,6 +37,9 @@ Two runs produce byte-identical fixtures. Check this after any change to the see
 | `TRUST_CF_IPCOUNTRY` | `true` | the visitor's country, sent by the recorder as `CF-IPCountry`, decides currency, prices and auto-renewal, as behind Cloudflare in production |
 | Social sign-in | Yandex, VK, Google and GitHub enabled with fake client ids | the buttons render; no request reaches the providers |
 | `SCHEDULERS_ENABLED` | `false` | no background loops between visits |
+| `PUBLIC_BASE_URL`, `ADMIN_ORIGIN` | `http://parity.localhost` | the harness origin; links the draft builds (share pages, the MCP endpoint) point to it |
+| `GOOGLE_LIVE_API_KEY` | a fake key | paid users get `features.voice` and the Leo microphone, as in production; no request reaches Google |
+| `WEBPUSH_VAPID_*` | a fake pair | the "notifications on this device" block shows, as in production; nothing subscribes or sends |
 
 ## Personas
 
@@ -52,9 +55,9 @@ Defined in [`seed/personas.py`](seed/personas.py); the password of every persona
 | `admin` | administrator |
 | `banned` | blocked account |
 | `editor` | used only by visits that change the profile |
-| `lead` | Pro; the whole workspace: nine meetings (transcripts, notes, mind map, speakers, impact, processing and failed runs), folders, hubs, share links, templates, integrations, a July calendar with a room and a stream, Google and iCal, context and knowledge base |
+| `lead` | Pro; the whole workspace: nine meetings (transcripts, notes, mind map, speakers, impact, processing and failed runs), folders, share links, templates, integrations, a July calendar with a room and a stream, Google and iCal, context and knowledge base; hubs with boards, a charter and the Acme history of facts (every kind of pulse loop); the Leo tab (personalization, services, initiative, mail watches, a device, memory, errands); MCP (server token, external servers in every health state, the client «Claude» for the consent screen); prompts, skills, AI spend and a role assignment |
 
-The seed modules: [`accounts.py`](seed/accounts.py) and [`world.py`](seed/world.py) for every persona; [`meetings.py`](seed/meetings.py), [`workspace.py`](seed/workspace.py), [`calendar_seed.py`](seed/calendar_seed.py) and [`studio.py`](seed/studio.py) for `lead`. [`seed/ids.json`](seed/ids.json) holds the ids and tokens that visits need to open a known record (a meeting page, a share link); both the seed and the visits read it.
+The seed modules: [`accounts.py`](seed/accounts.py) and [`world.py`](seed/world.py) for every persona; [`meetings.py`](seed/meetings.py), [`workspace.py`](seed/workspace.py), [`hubs_seed.py`](seed/hubs_seed.py), [`calendar_seed.py`](seed/calendar_seed.py), [`studio.py`](seed/studio.py), [`leo_cabinet.py`](seed/leo_cabinet.py), [`mcp_seed.py`](seed/mcp_seed.py) and [`prompts_models.py`](seed/prompts_models.py) for `lead`; the last one also adds two models to the registry on behalf of `admin`. Hubs reuse meetings that already exist: the ticker counts every meeting in the database, and a new meeting would change it on every screen. [`seed/ids.json`](seed/ids.json) holds the ids and tokens that visits need to open a known record (a meeting page, a share link); both the seed and the visits read it.
 
 Rules the seed keeps:
 - **Past and future are explicit and lie outside the day after the parity clock.** The normalizer treats any timestamp in that day as the API's "now" and replaces it with the clock.

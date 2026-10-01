@@ -4,8 +4,9 @@
 import { expect, test } from "@playwright/test";
 import type { Route } from "@playwright/test";
 
+import { ORIGIN } from "../config.ts";
 import type { Exchange, Fixture } from "../fixtures/format.ts";
-import { stream } from "../states/overrides.ts";
+import { openStream, stream } from "../states/overrides.ts";
 import { FixtureReplay } from "./replay.ts";
 
 interface Outcome {
@@ -45,7 +46,7 @@ function fixture(exchanges: Exchange[]): Fixture {
 
 async function call(replay: FixtureReplay, method: string, url: string): Promise<Outcome> {
   const outcome: Outcome = {};
-  await replay.handle(fakeRoute(method, outcome), new URL(`http://parity.test${url}`));
+  await replay.handle(fakeRoute(method, outcome), new URL(`${ORIGIN}${url}`));
   return outcome;
 }
 
@@ -133,4 +134,10 @@ test("правка записанного ответа вливает поля �
     quota: { limit: 10, ratio: 0.9 },
     tags: ["b"],
   });
+});
+
+test("открытый поток, дошедший до сети, — сбой стенда: запрос попадает в несопоставленные", async () => {
+  const replay = new FixtureReplay(fixture([]), [openStream("POST", "/v1/ai/agent/chat", [], "модели нет")]);
+  expect((await call(replay, "POST", "/v1/ai/agent/chat")).aborted).toBe("failed");
+  expect(replay.unmatched).toEqual(["POST /v1/ai/agent/chat (открытый поток дошёл до сети)"]);
 });

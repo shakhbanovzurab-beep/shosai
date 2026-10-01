@@ -60,11 +60,11 @@
         "config": {
           "yandex": {
             "client_id": "parity-yandex-client",
-            "token_page_url": "http://parity.test/v1/auth/social/yandex/token-page"
+            "token_page_url": "http://parity.localhost/v1/auth/social/yandex/token-page"
           },
           "vk": {
             "app_id": "51000000",
-            "redirect_url": "http://parity.test/v1/auth/social/vk/callback"
+            "redirect_url": "http://parity.localhost/v1/auth/social/vk/callback"
           }
         },
         "audience": {
@@ -82,7 +82,7 @@
       "contentType": "application/json",
       "body": {
         "app_id": "51000000",
-        "redirect_url": "http://parity.test/v1/auth/social/vk/callback",
+        "redirect_url": "http://parity.localhost/v1/auth/social/vk/callback",
         "state": "parity-state",
         "code_verifier": "parity-code_verifier",
         "scope": "email"

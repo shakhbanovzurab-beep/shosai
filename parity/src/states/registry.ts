@@ -16,6 +16,12 @@ import { BILLING_VARIANT_STATES } from "./billing-variants.ts";
 import { ONBOARDING_VARIANT_STATES } from "./onboarding-variants.ts";
 import { CALENDAR_STATES } from "./calendar.ts";
 import { CALENDAR_INTEGRATION_STATES } from "./calendar-integrations.ts";
+import { HUB_STATES } from "./hub.ts";
+import { LEO_CABINET_STATES } from "./leo-cabinet.ts";
+import { LEO_CHAT_STATES } from "./leo-chat.ts";
+import { LEO_COMPOSER_STATES } from "./leo-composer.ts";
+import { LEO_STREAM_STATES } from "./leo-stream.ts";
+import { MCP_STATES } from "./mcp.ts";
 import { MEETINGS_DOC_STATES } from "./meetings-doc.ts";
 import { MEETINGS_IMPORT_STATES } from "./meetings-import.ts";
 import { MEETINGS_LIBRARY_STATES } from "./meetings-library.ts";
@@ -23,7 +29,9 @@ import { MEETINGS_PANEL_STATES } from "./meetings-panels.ts";
 import { MEETINGS_SETUP_STATES } from "./meetings-setup.ts";
 import { MEETINGS_SHARED_STATES } from "./meetings-shared.ts";
 import { MEETINGS_TRANSCRIPT_STATES } from "./meetings-transcript.ts";
+import { MODELS_STATES } from "./models.ts";
 import { PALETTE_STATES } from "./palette.ts";
+import { PROMPTS_STATES } from "./prompts.ts";
 import { SHELL_VARIANT_STATES } from "./shell-variants.ts";
 import { STUDIO_CONTEXT_STATES } from "./studio-context.ts";
 import { STUDIO_KNOWLEDGE_STATES } from "./studio-knowledge.ts";
@@ -52,6 +60,14 @@ export const ALL_STATES: readonly State[] = [
   ...CALENDAR_INTEGRATION_STATES,
   ...STUDIO_CONTEXT_STATES,
   ...STUDIO_KNOWLEDGE_STATES,
+  ...LEO_CHAT_STATES,
+  ...LEO_STREAM_STATES,
+  ...LEO_COMPOSER_STATES,
+  ...LEO_CABINET_STATES,
+  ...MCP_STATES,
+  ...PROMPTS_STATES,
+  ...MODELS_STATES,
+  ...HUB_STATES,
 ];
 
 export function stateCells(state: State): Cell[] {
@@ -78,6 +94,9 @@ export function registryProblems(states: readonly State[], fixturesDir: string):
     }
     if (state.mask !== undefined && state.mask.reason.trim() === "") problems.push(`${state.id}: маска без причины`);
     if (state.tolerance !== undefined && state.tolerance.reason.trim() === "") problems.push(`${state.id}: допуск без причины`);
+    for (const socket of state.sockets ?? []) {
+      if (socket.reason.trim() === "") problems.push(`${state.id}: сокет ${socket.path} без причины`);
+    }
   }
   return problems;
 }

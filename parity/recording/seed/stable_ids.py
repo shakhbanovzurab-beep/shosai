@@ -21,3 +21,13 @@ SHARE_PASSWORD: str = _IDS["sharePassword"]
 ROOM_INVITE: str = _IDS["roomInvite"]
 STREAM_INVITE: str = _IDS["streamInvite"]
 ICAL_TOKEN: str = _IDS["icalToken"]
+#: Дела «руководителя»: клиент Acme, внутреннее «Северный ветер» и архивное.
+HUBS: dict[str, uuid.UUID] = {key: uuid.UUID(value) for key, value in _IDS["hubs"].items()}
+#: Промпты, которые визиты открывают в редакторе.
+PROMPTS: dict[str, uuid.UUID] = {key: uuid.UUID(value) for key, value in _IDS["prompts"].items()}
+#: Открытый токен сервера MCP: черновик хранит хеш и показывает маску по нему.
+MCP_TOKEN: str = _IDS["mcp"]["token"]
+#: Клиент OAuth, которого экран согласия находит без сети.
+MCP_CLIENT_ID: str = _IDS["mcp"]["clientId"]
+MCP_REDIRECT_URI: str = _IDS["mcp"]["redirectUri"]
+MCP_SCOPES: tuple[str, ...] = tuple(_IDS["mcp"]["scopes"])

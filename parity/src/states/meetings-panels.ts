@@ -4,7 +4,7 @@
 import type { Page } from "@playwright/test";
 
 import { exactText, withText, type Translate } from "../i18n/texts.ts";
-import { hold, reply, stream } from "./overrides.ts";
+import { hold, openStream, reply, stream } from "./overrides.ts";
 import type { State, StateContext } from "./types.ts";
 
 const FULL = "/v1/me/sessions/{id}/full";
@@ -45,6 +45,24 @@ export const MEETINGS_PANEL_STATES: readonly State[] = [
     },
     (t) => withText("button:disabled", t("meetings:meet.detail.mindmap.generating")),
     { overrides: [hold("POST", MINDMAP)] },
+  ),
+  panel(
+    "mindmap-building-nodes",
+    "sync",
+    async (page, context) => {
+      await tab("mindmap")(page, context);
+      await page.getByRole("button", { name: context.t("meetings:meet.detail.mindmap.generate"), exact: true }).click();
+    },
+    () => '.mtg-map-node:has-text("Экспорт для Acme")',
+    {
+      overrides: [
+        openStream("POST", MINDMAP, [
+          { event: "status", data: { phase: "building" } },
+          { event: "node", data: { type: "topic", title: "Релиз 2.4", parent_title: null } },
+          { event: "node", data: { type: "action_item", title: "Экспорт для Acme", parent_title: "Релиз 2.4" } },
+        ], "карту собирает модель, которой на стенде нет; узлы ещё приходят"),
+      ],
+    },
   ),
   panel(
     "mindmap-failed",

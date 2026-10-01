@@ -8,7 +8,7 @@
   "storage": {
     "wh.theme": "light",
     "wh.lang": "ru",
-    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"start@parity.test\",\"username\":\"Дарья Новикова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"start\",\"name\":\"Start\",\"price_rub\":790,\"price_usd\":10,\"price_eur\":9,\"period_days\":7,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":null,\"currency\":\"RUB\",\"price\":790},\"started_at\":\"2026-07-15T12:00:00Z\",\"expires_at\":\"2026-07-22T12:00:00Z\",\"days_left\":5,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":false,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"start@parity.test\",\"username\":\"Дарья Новикова\",\"phone\":null,\"avatar_url\":null,\"role\":\"user\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"ru\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"start\",\"name\":\"Start\",\"price_rub\":790,\"price_usd\":10,\"price_eur\":9,\"period_days\":7,\"minutes_limit\":null,\"allow_knowledge_base\":true,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":null,\"currency\":\"RUB\",\"price\":790},\"started_at\":\"2026-07-15T12:00:00Z\",\"expires_at\":\"2026-07-22T12:00:00Z\",\"days_left\":5,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":true,\"limit_minutes\":null,\"bonus_minutes\":0,\"used_minutes\":null,\"remaining_minutes\":null,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":true,\"teleprompter\":true,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
   },
   "exchanges": [
     {
@@ -142,7 +142,7 @@
         },
         "features": {
           "voice_translation": false,
-          "voice": false,
+          "voice": true,
           "teleprompter": true,
           "premium_weekly_remaining_pct": null,
           "premium_credit_usd": 0,
@@ -733,8 +733,8 @@
         "stats": {
           "meetings_total": 9,
           "minutes_total": 377,
-          "ai_answers_total": 0,
-          "tokens_total": 0,
+          "ai_answers_total": 12,
+          "tokens_total": 126144,
           "users_total": 11
         }
       },

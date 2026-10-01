@@ -504,8 +504,8 @@
         "stats": {
           "meetings_total": 9,
           "minutes_total": 377,
-          "ai_answers_total": 0,
-          "tokens_total": 0,
+          "ai_answers_total": 12,
+          "tokens_total": 126144,
           "users_total": 11
         }
       },

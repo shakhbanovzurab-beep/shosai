@@ -20,7 +20,13 @@ export interface OverrideResponse {
  * recorded — записанный ответ (последовательность «первые два как в записи, третий
  * висит»).
  */
-export type OverrideReply = OverrideResponse | OverrideMerge | "hold" | "fail" | "recorded";
+export type OverrideReply = OverrideResponse | OverrideMerge | OverrideOpenStream | "hold" | "fail" | "recorded";
+
+/** Поток, который не заканчивается: тело уходит сразу, соединение остаётся открытым. */
+export interface OverrideOpenStream {
+  readonly open: string;
+  readonly contentType?: string;
+}
 
 /**
  * Записанный ответ с правкой: поля `merge` вливаются в его JSON-тело (объекты —
@@ -42,6 +48,26 @@ export interface Override {
   readonly respond: OverrideReply | readonly OverrideReply[];
   /** Почему ответ не записан: чего стенд записи не может воспроизвести. */
   readonly reason: string;
+}
+
+/** Веб-сокет состояния: кадры подставного сервера после подключения и в ответ странице. */
+export interface SocketScript {
+  /** Путь сокета: `/v1/ws/voice`. */
+  readonly path: string;
+  /** Кадры сразу после подключения. */
+  readonly frames: readonly JsonValue[];
+  /**
+   * Кадры после первого сообщения страницы. Голос Leo отвечает фазами на звук
+   * микрофона: пришедшая раньше фаза перетёрлась бы «Слушаю…» при его старте.
+   */
+  readonly afterClient?: readonly JsonValue[];
+  /** Почему кадры заданы: чего стенд записи не может воспроизвести. */
+  readonly reason: string;
+}
+
+/** То, что нужно для ключей localStorage состояния: id пользователя фикстуры. */
+export interface StorageSeed {
+  readonly userId: string;
 }
 
 export interface StateContext {
@@ -74,7 +100,17 @@ export interface State {
    * По умолчанию перед снимком он уходит в угол.
    */
   readonly keepPointer?: boolean;
-  /** Маркер ниже края экрана (конец длинной страницы, низ окна): прокрутить к нему. */
+  /** Кадры веб-сокетов: голосовой режим, напоминания. По умолчанию сокеты молчат. */
+  readonly sockets?: readonly SocketScript[];
+  /**
+   * Дополнительные ключи localStorage: то, что фронтенд хранит в браузере
+   * (переписка Leo). Ключи зависят от id пользователя фикстуры.
+   */
+  readonly storage?: (seed: StorageSeed) => Readonly<Record<string, string>>;
+  /**
+   * Маркер ниже края экрана (конец длинной страницы, низ окна): когда страница
+   * успокоилась, поставить его в центр области прокрутки и дождаться покоя ещё раз.
+   */
   readonly reveal?: boolean;
   /**
    * Области, закрытые на снимке: значения, которые идут по настоящим часам

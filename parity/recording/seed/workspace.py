@@ -1,4 +1,4 @@
-"""Окружение встреч «руководителя»: папки, хабы, ссылки на итоги, шаблоны, интеграции.
+"""Окружение встреч «руководителя»: папки, ссылки на итоги, шаблоны, интеграции.
 
 Токены ссылок — из ids.json: черновик хранит их открытым текстом, и визиты
 записи открывают публичную страницу по известному адресу.
@@ -8,8 +8,6 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 
-from meetassist.features.context_graph.infrastructure.models import PcgFact
-from meetassist.features.hub.infrastructure.models import Hub, HubMeeting
 from meetassist.features.meetings.infrastructure.share_comment_models import MeetingShareComment
 from meetassist.features.meetings.infrastructure.share_models import MeetingResultShare
 from meetassist.models.meeting_folder import MeetingFolder
@@ -44,7 +42,6 @@ _TEMPLATES = (
 async def seed_workspace(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session]) -> None:
     """Засевает окружение встреч владельца."""
     await _folders(db, owner, clock, sessions)
-    await _hubs(db, owner, clock, sessions)
     await _shares(db, owner, clock, sessions)
     for index, (name, sections) in enumerate(_TEMPLATES):
         db.add(
@@ -77,25 +74,6 @@ async def _folders(db: AsyncSession, owner: User, clock: datetime, sessions: dic
         folders[key] = folder
     for meeting, folder in _FOLDER_OF.items():
         sessions[meeting].folder_id = folders[folder].id
-
-
-async def _hubs(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session]) -> None:
-    """Два дела; «Бюджет» и «Кик-офф» отнесены к ним человеком. «Синку» черновик
-    подскажет «Acme»: факт из его стенограммы называет клиента по имени."""
-    acme = Hub(user_id=owner.id, name="Acme", kind="client", purpose="Внедрение Whisperer в отделе продаж Acme",
-               created_at=clock - timedelta(days=45))
-    wind = Hub(user_id=owner.id, name="Северный ветер", kind="internal", purpose="Портал для партнёров",
-               created_at=clock - timedelta(days=40))
-    db.add_all([acme, wind])
-    await db.flush()
-    for hub, meeting in ((acme, "budget"), (wind, "kickoff")):
-        db.add(HubMeeting(user_id=owner.id, hub_id=hub.id, session_id=sessions[meeting].id, primary=True,
-                          addressed_by="human", confidence=1.0, created_at=sessions[meeting].ended_at))
-    sync = sessions["sync"]
-    db.add(PcgFact(user_id=owner.id, kind="commitment", text="Исправить экспорт отчётов для Acme до среды",
-                   dedup_key="parity:acme-export", status="detected", confidence=0.8, source_kind="meeting",
-                   source_id=str(sync.id), extracted_by="leo", created_at=sync.ended_at))
-    await db.flush()
 
 
 async def _shares(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session]) -> None:

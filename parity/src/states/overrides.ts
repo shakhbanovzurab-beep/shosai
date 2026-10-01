@@ -52,12 +52,29 @@ export interface StreamEvent {
 }
 
 /**
- * Законченный поток событий (SSE) одним ответом. Поток, который ещё идёт,
- * так не передать: ответ отдаётся целиком.
+ * Законченный поток событий (SSE) одним ответом. Поток, который ещё идёт, —
+ * `openStream`: ответ, отданный Playwright, всегда заканчивается.
  */
 export function stream(method: string, path: string, events: readonly StreamEvent[], reason: string): Override {
-  const body = events.map(({ event, data }) => `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`).join("");
-  return { method, path, respond: { status: 200, body, contentType: "text/event-stream" }, reason };
+  return { method, path, respond: { status: 200, body: streamBody(events), contentType: "text/event-stream" }, reason };
+}
+
+/**
+ * Поток, который ещё идёт: события уже пришли, соединение открыто, конца нет.
+ * Экран застывает в «ответ печатается».
+ */
+export function openStream(method: string, path: string, events: readonly StreamEvent[], reason: string): Override {
+  return { method, path, respond: { open: streamBody(events) }, reason };
+}
+
+/** Кадры SSE: именованные события или безымянные `data:` (событие ""). */
+export function streamBody(events: readonly StreamEvent[]): string {
+  return events
+    .map(({ event, data }) => {
+      const payload = typeof data === "string" ? data : JSON.stringify(data);
+      return event === "" ? `data: ${payload}\n\n` : `event: ${event}\ndata: ${payload}\n\n`;
+    })
+    .join("");
 }
 
 /** Перебор частоты: тело обработчика slowapi черновика. Лимиты на стенде записи выключены. */

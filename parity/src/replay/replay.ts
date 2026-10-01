@@ -90,6 +90,12 @@ export class FixtureReplay {
     // Удержанный запрос не получает ответа никогда: экран остаётся в загрузке.
     if (reply === "hold") return;
     if (reply === "fail") return route.abort("failed");
+    // Открытый поток отдаёт страница сама (determinism/open-streams.ts); запрос,
+    // дошедший сюда, значит, что подмена fetch его не узнала.
+    if (typeof reply === "object" && "open" in reply) {
+      this.unmatched.push(`${method} ${url.pathname} (открытый поток дошёл до сети)`);
+      return route.abort("failed");
+    }
     if (reply !== "recorded" && !("merge" in reply)) return this.fulfill(route, overrideReply(reply));
     const key = exchangeKey({ method, path: url.pathname, query: canonicalQuery(url.searchParams) });
     const replies = this.recorded.get(key);

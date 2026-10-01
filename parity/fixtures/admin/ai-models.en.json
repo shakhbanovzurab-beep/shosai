@@ -1,0 +1,2629 @@
+{
+  "visit": "admin/ai-models",
+  "language": "en",
+  "persona": "admin",
+  "url": "/app/admin/ai-models",
+  "draftCommit": "589917e847f7d7213b3af5a3959bcc88c7500fe7",
+  "clock": "2026-07-17T12:00:00.000Z",
+  "storage": {
+    "wh.theme": "light",
+    "wh.lang": "en",
+    "wh-auth": "{\"state\":{\"csrfToken\":\"parity-csrfToken\",\"user\":{\"id\":\"00000000-0000-4000-8000-000000000001\",\"email\":\"admin@parity.test\",\"username\":\"Администратор\",\"phone\":null,\"avatar_url\":null,\"role\":\"admin\",\"status\":\"active\",\"is_active\":true,\"last_login_at\":\"2026-07-17T12:00:00.000000Z\",\"language\":\"en\",\"timezone\":\"Europe/Moscow\",\"no_logs\":false,\"meeting_auto_tasks\":false,\"memory_enabled\":true,\"leo_voice_enabled\":true,\"leo_web_search_enabled\":true,\"leo_kb_search_enabled\":true,\"leo_connector_search_enabled\":true,\"marketing_consent\":false,\"appearance\":{\"font\":\"whisperer\"},\"subscription\":{\"status\":\"active\",\"tariff\":{\"id\":\"00000000-0000-4000-8000-000000000002\",\"code\":\"free\",\"name\":\"Free\",\"price_rub\":0,\"price_usd\":0,\"price_eur\":0,\"period_days\":0,\"minutes_limit\":60,\"allow_knowledge_base\":false,\"allow_multiscreenshot\":true,\"allow_system_design\":true,\"allow_frontier_models\":false,\"is_active\":true,\"storage_limit_bytes\":null,\"currency\":\"RUB\",\"price\":0},\"started_at\":\"2026-06-01T12:00:00Z\",\"expires_at\":null,\"days_left\":null,\"bonus_minutes\":0,\"credits\":0},\"quota\":{\"unlimited\":false,\"limit_minutes\":60,\"bonus_minutes\":0,\"used_minutes\":12,\"remaining_minutes\":48,\"exhausted\":false},\"features\":{\"voice_translation\":false,\"voice\":false,\"teleprompter\":false,\"premium_weekly_remaining_pct\":null,\"premium_credit_usd\":0,\"premium_credit_currency\":\"USD\",\"premium_credit_amount\":0}}},\"version\":0}"
+  },
+  "exchanges": [
+    {
+      "method": "GET",
+      "path": "/v1/admin/costs/summary",
+      "query": "group_by=provider",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "kpis": [
+          {
+            "label": "День",
+            "cost_rub": "0",
+            "cost_usd": "0",
+            "input_tokens": 0,
+            "output_tokens": 0
+          },
+          {
+            "label": "Месяц",
+            "cost_rub": "0",
+            "cost_usd": "0",
+            "input_tokens": 0,
+            "output_tokens": 0
+          },
+          {
+            "label": "Всё время",
+            "cost_rub": "0",
+            "cost_usd": "0",
+            "input_tokens": 0,
+            "output_tokens": 0
+          }
+        ],
+        "breakdown": [],
+        "group_by": "provider",
+        "rate_used": "95.0000",
+        "runs_total": 0,
+        "latency_p50_ms": null
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/models/balance",
+      "query": "",
+      "status": 503,
+      "contentType": "application/json",
+      "body": {
+        "detail": "openrouter_key_missing"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/models/balance",
+      "query": "",
+      "status": 503,
+      "contentType": "application/json",
+      "body": {
+        "detail": "openrouter_key_missing"
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/models/model-defaults",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "matrix": [
+          {
+            "tariff_code": "free",
+            "role": "responses",
+            "model_id": "nvidia/nemotron-3-super-120b-a12b:free"
+          },
+          {
+            "tariff_code": "free",
+            "role": "coding",
+            "model_id": "openai/gpt-oss-20b:free"
+          },
+          {
+            "tariff_code": "free",
+            "role": "vision",
+            "model_id": "google/gemma-4-26b-a4b-it:free"
+          },
+          {
+            "tariff_code": "free",
+            "role": "system_design",
+            "model_id": "nvidia/nemotron-3-super-120b-a12b:free"
+          },
+          {
+            "tariff_code": "free",
+            "role": "generation",
+            "model_id": "nvidia/nemotron-3-super-120b-a12b:free"
+          },
+          {
+            "tariff_code": "free",
+            "role": "transcription",
+            "model_id": "openai/gpt-4o-mini-transcribe"
+          },
+          {
+            "tariff_code": "start",
+            "role": "responses",
+            "model_id": "anthropic/claude-haiku-4.5"
+          },
+          {
+            "tariff_code": "start",
+            "role": "coding",
+            "model_id": "qwen/qwen3-coder"
+          },
+          {
+            "tariff_code": "start",
+            "role": "vision",
+            "model_id": "google/gemini-3-flash-preview"
+          },
+          {
+            "tariff_code": "start",
+            "role": "system_design",
+            "model_id": "anthropic/claude-haiku-4.5"
+          },
+          {
+            "tariff_code": "start",
+            "role": "generation",
+            "model_id": "deepseek/deepseek-v4-flash"
+          },
+          {
+            "tariff_code": "start",
+            "role": "transcription",
+            "model_id": "openai/gpt-4o-mini-transcribe"
+          },
+          {
+            "tariff_code": "pro",
+            "role": "responses",
+            "model_id": "anthropic/claude-haiku-4.5"
+          },
+          {
+            "tariff_code": "pro",
+            "role": "coding",
+            "model_id": "qwen/qwen3-coder"
+          },
+          {
+            "tariff_code": "pro",
+            "role": "vision",
+            "model_id": "google/gemini-3-flash-preview"
+          },
+          {
+            "tariff_code": "pro",
+            "role": "system_design",
+            "model_id": "anthropic/claude-haiku-4.5"
+          },
+          {
+            "tariff_code": "pro",
+            "role": "generation",
+            "model_id": "deepseek/deepseek-v4-flash"
+          },
+          {
+            "tariff_code": "pro",
+            "role": "transcription",
+            "model_id": "openai/gpt-4o-mini-transcribe"
+          },
+          {
+            "tariff_code": "max",
+            "role": "responses",
+            "model_id": "anthropic/claude-haiku-4.5"
+          },
+          {
+            "tariff_code": "max",
+            "role": "coding",
+            "model_id": "qwen/qwen3-coder"
+          },
+          {
+            "tariff_code": "max",
+            "role": "vision",
+            "model_id": "google/gemini-3-flash-preview"
+          },
+          {
+            "tariff_code": "max",
+            "role": "system_design",
+            "model_id": "anthropic/claude-haiku-4.5"
+          },
+          {
+            "tariff_code": "max",
+            "role": "generation",
+            "model_id": "deepseek/deepseek-v4-flash"
+          },
+          {
+            "tariff_code": "max",
+            "role": "transcription",
+            "model_id": "openai/gpt-4o-mini-transcribe"
+          }
+        ],
+        "agent_model_id": "deepseek/deepseek-v4-flash",
+        "tariffs": [
+          "free",
+          "start",
+          "pro",
+          "max"
+        ],
+        "roles": [
+          "responses",
+          "coding",
+          "vision",
+          "system_design",
+          "generation",
+          "transcription"
+        ]
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/models/registry",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000003",
+          "openrouter_model_id": "openai/gpt-4o-mini-transcribe",
+          "provider": "openai",
+          "display": "OpenAI • GPT-4o mini transcribe",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000004",
+          "openrouter_model_id": "poolside/laguna-m.1:free",
+          "provider": "poolside",
+          "display": "Poolside • Laguna M.1",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000005",
+          "openrouter_model_id": "z-ai/glm-4.5-air",
+          "provider": "z-ai",
+          "display": "Z.ai • GLM-4.5-Air",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000006",
+          "openrouter_model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "provider": "nvidia",
+          "display": "NVIDIA • Nemotron 3 Ultra",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000007",
+          "openrouter_model_id": "google/gemma-4-31b-it:free",
+          "provider": "google",
+          "display": "Google • Gemma 4",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000008",
+          "openrouter_model_id": "qwen/qwen3.7-plus",
+          "provider": "qwen",
+          "display": "Alibaba • Qwen3.7 Plus",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000009",
+          "openrouter_model_id": "qwen/qwen3.7-max",
+          "provider": "qwen",
+          "display": "Alibaba • Qwen3.7 Max",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000010",
+          "openrouter_model_id": "qwen/qwen3-coder",
+          "provider": "qwen",
+          "display": "Alibaba • Qwen3 Coder",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000011",
+          "openrouter_model_id": "deepseek/deepseek-v4-flash",
+          "provider": "deepseek",
+          "display": "DeepSeek • Deepseek V4 Flash",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000084",
+          "pricing_output": "0.000168",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000012",
+          "openrouter_model_id": "deepseek/deepseek-v4-pro",
+          "provider": "deepseek",
+          "display": "DeepSeek • Deepseek V4 Pro",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000435",
+          "pricing_output": "0.000870",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000013",
+          "openrouter_model_id": "deepseek/deepseek-chat-v3-0324",
+          "provider": "deepseek",
+          "display": "DeepSeek • Deepseek V3",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000240",
+          "pricing_output": "0.000900",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000014",
+          "openrouter_model_id": "moonshotai/kimi-k2.6",
+          "provider": "moonshotai",
+          "display": "Moonshot AI • Kimi K2.6",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000015",
+          "openrouter_model_id": "google/gemma-4-31b-it",
+          "provider": "google",
+          "display": "Google • Gemma 4",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000016",
+          "openrouter_model_id": "anthropic/claude-haiku-4.5",
+          "provider": "anthropic",
+          "display": "Anthropic • Claude Haiku 4.5",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000017",
+          "openrouter_model_id": "x-ai/grok-4.3",
+          "provider": "x-ai",
+          "display": "X AI • Grok 4.3",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000018",
+          "openrouter_model_id": "x-ai/grok-build-0.1",
+          "provider": "x-ai",
+          "display": "X AI • Grok Build",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000019",
+          "openrouter_model_id": "google/gemini-3-flash-preview",
+          "provider": "google",
+          "display": "Google • Gemini 3 Flash",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000500",
+          "pricing_output": "0.003000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000020",
+          "openrouter_model_id": "openai/gpt-5.4-mini",
+          "provider": "openai",
+          "display": "OpenAI • GPT-5.4 Mini",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000021",
+          "openrouter_model_id": "perplexity/sonar",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "WEB SEARCH"
+          ],
+          "context_window": null,
+          "pricing_input": "0.001000",
+          "pricing_output": "0.001000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000022",
+          "openrouter_model_id": "google/gemini-3.5-flash",
+          "provider": "google",
+          "display": "Google • Gemini 3.5 Flash",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.001500",
+          "pricing_output": "0.009000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000023",
+          "openrouter_model_id": "google/gemini-3.1-pro-preview",
+          "provider": "google",
+          "display": "Google • Gemini 3.1 Pro",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.002000",
+          "pricing_output": "0.012000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000024",
+          "openrouter_model_id": "anthropic/claude-opus-4.8",
+          "provider": "anthropic",
+          "display": "Anthropic • Claude Opus 4.8",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.005000",
+          "pricing_output": "0.025000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000025",
+          "openrouter_model_id": "anthropic/claude-sonnet-5",
+          "provider": "anthropic",
+          "display": "Anthropic • Claude Sonnet 5",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.002000",
+          "pricing_output": "0.010000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000026",
+          "openrouter_model_id": "openai/gpt-5.5",
+          "provider": "openai",
+          "display": "OpenAI • GPT-5.5",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.005000",
+          "pricing_output": "0.030000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000027",
+          "openrouter_model_id": "openai/gpt-5.3-codex",
+          "provider": "openai",
+          "display": "OpenAI • GPT-5.3 Codex",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.001750",
+          "pricing_output": "0.014000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000028",
+          "openrouter_model_id": "openai/gpt-5.5-pro",
+          "provider": "openai",
+          "display": "OpenAI • GPT-5.5 Pro",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.030000",
+          "pricing_output": "0.180000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000029",
+          "openrouter_model_id": "perplexity/sonar-pro",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar Pro",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "WEB SEARCH",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.003000",
+          "pricing_output": "0.015000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000030",
+          "openrouter_model_id": "perplexity/sonar-reasoning-pro",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar Reasoning Pro",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "WEB SEARCH"
+          ],
+          "context_window": null,
+          "pricing_input": "0.002000",
+          "pricing_output": "0.008000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000031",
+          "openrouter_model_id": "perplexity/sonar-pro-search",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar Pro Search",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "WEB SEARCH",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.003000",
+          "pricing_output": "0.015000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000032",
+          "openrouter_model_id": "perplexity/sonar-deep-research",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar Deep Research",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "WEB SEARCH",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.002000",
+          "pricing_output": "0.008000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000033",
+          "openrouter_model_id": "openai/gpt-realtime-translate",
+          "provider": "openai",
+          "display": "OpenAI • Realtime Translate",
+          "type": "speech",
+          "tier": "premium",
+          "capabilities": [
+            "AUDIO",
+            "MULTILINGUAL"
+          ],
+          "context_window": null,
+          "pricing_input": "0.566667",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000034",
+          "openrouter_model_id": "google/gemini-3.1-flash-live-preview",
+          "provider": "google",
+          "display": "Google • Gemini 3.1 Flash Live",
+          "type": "speech",
+          "tier": "premium",
+          "capabilities": [
+            "AUDIO",
+            "MULTILINGUAL"
+          ],
+          "context_window": null,
+          "pricing_input": "0.003000",
+          "pricing_output": "0.012000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000035",
+          "openrouter_model_id": "openai/gpt-realtime-whisper",
+          "provider": "openai",
+          "display": "OpenAI • Realtime Whisper",
+          "type": "transcription",
+          "tier": "standard",
+          "capabilities": [
+            "AUDIO",
+            "STREAMING"
+          ],
+          "context_window": null,
+          "pricing_input": "0.283333",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000036",
+          "openrouter_model_id": "openai/gpt-live-transcribe",
+          "provider": "openai",
+          "display": "OpenAI • Live Transcribe",
+          "type": "transcription",
+          "tier": "standard",
+          "capabilities": [
+            "AUDIO",
+            "STREAMING"
+          ],
+          "context_window": null,
+          "pricing_input": "0.283333",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000037",
+          "openrouter_model_id": "qwen/qwen3-asr-flash-2026-02-10",
+          "provider": "qwen",
+          "display": "Alibaba • Qwen3 ASR Flash",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000038",
+          "openrouter_model_id": "openai/gpt-4o-transcribe",
+          "provider": "openai",
+          "display": "OpenAI • GPT-4o transcribe",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000039",
+          "openrouter_model_id": "nvidia/nemotron-3-super-120b-a12b:free",
+          "provider": "nvidia",
+          "display": "NVIDIA • Nemotron 3 Super",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000040",
+          "openrouter_model_id": "openai/whisper-large-v3-turbo",
+          "provider": "openai",
+          "display": "OpenAI • Whisper",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000041",
+          "openrouter_model_id": "nvidia/parakeet-tdt-0.6b-v3",
+          "provider": "nvidia",
+          "display": "NVIDIA • Parakeet",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000042",
+          "openrouter_model_id": "google/chirp-3",
+          "provider": "google",
+          "display": "Google • Chirp",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000043",
+          "openrouter_model_id": "bytedance-seed/seedream-4.5",
+          "provider": "bytedance-seed",
+          "display": "ByteDance • Seedream 4.5",
+          "type": "image",
+          "tier": "standard",
+          "capabilities": [
+            "IMAGE",
+            "TEXT",
+            "IMAGE OUTPUT"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.002441",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000044",
+          "openrouter_model_id": "nvidia/nemotron-3-nano-30b-a3b:free",
+          "provider": "nvidia",
+          "display": "NVIDIA • Nemotron 3 Nano",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000045",
+          "openrouter_model_id": "openai/gpt-oss-20b:free",
+          "provider": "openai",
+          "display": "OpenAI • GPT-OSS 20B",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000046",
+          "openrouter_model_id": "google/gemma-4-26b-a4b-it:free",
+          "provider": "google",
+          "display": "Google • Gemma 4 Lite",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000047",
+          "openrouter_model_id": "nvidia/nemotron-nano-12b-v2-vl:free",
+          "provider": "nvidia",
+          "display": "NVIDIA • Nemotron Nano VL",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "context_window": null,
+          "pricing_input": "0.000000",
+          "pricing_output": "0.000000",
+          "enabled": true,
+          "version": 1,
+          "description": "",
+          "description_source": "",
+          "translated_languages": 0,
+          "created_at": "2026-10-01T12:19:36.482314+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000048",
+          "openrouter_model_id": "minimax/minimax-m2",
+          "provider": "minimax",
+          "display": "MiniMax • M2",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": 262144,
+          "pricing_input": "0.000300",
+          "pricing_output": "0.001200",
+          "enabled": true,
+          "version": 1,
+          "description": "Strong long-context model for analysis and drafting.",
+          "description_source": "Strong long-context model for analysis and drafting.",
+          "translated_languages": 2,
+          "created_at": "2026-07-15T12:00:00+00:00",
+          "updated_at": null
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000049",
+          "openrouter_model_id": "mistralai/mistral-large-3",
+          "provider": "mistralai",
+          "display": "Mistral • Large 3",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "context_window": 262144,
+          "pricing_input": "0.000500",
+          "pricing_output": "0.001500",
+          "enabled": true,
+          "version": 1,
+          "description": "Strong long-context model for analysis and drafting.",
+          "description_source": "Strong long-context model for analysis and drafting.",
+          "translated_languages": 2,
+          "created_at": "2026-07-13T12:00:00+00:00",
+          "updated_at": null
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/models/usage",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "model_id": "deepseek/deepseek-v4-flash",
+          "input_tokens": 25500,
+          "output_tokens": 6900,
+          "cost_usd": "0.201600",
+          "cost_rub": "19.20"
+        },
+        {
+          "model_id": "google/gemini-3-flash-preview",
+          "input_tokens": 25056,
+          "output_tokens": 6768,
+          "cost_usd": "0.151200",
+          "cost_rub": "14.40"
+        },
+        {
+          "model_id": "qwen/qwen3-coder",
+          "input_tokens": 24612,
+          "output_tokens": 6636,
+          "cost_usd": "0.100800",
+          "cost_rub": "9.60"
+        },
+        {
+          "model_id": "anthropic/claude-haiku-4.5",
+          "input_tokens": 24168,
+          "output_tokens": 6504,
+          "cost_usd": "0.050400",
+          "cost_rub": "4.80"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/prompts",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/admin/tickets/unread-count",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "count": 0
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/app/builds",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "00000000-0000-4000-8000-000000000050",
+          "platform": "macos",
+          "platform_label": "macOS",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-1.4.5.dmg",
+          "size_bytes": 89438208,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000050/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        },
+        {
+          "id": "00000000-0000-4000-8000-000000000051",
+          "platform": "windows",
+          "platform_label": "Windows",
+          "version": "1.4.5",
+          "notes": "Стабильность записи и новые горячие клавиши.",
+          "file_name": "Whisperer-Setup-1.4.5.exe",
+          "size_bytes": 74235904,
+          "is_current": true,
+          "download_url": "/v1/app/builds/00000000-0000-4000-8000-000000000051/download",
+          "published_at": "2026-07-12T12:00:00Z",
+          "created_at": "2026-07-12T12:00:00Z"
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/auth/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "id": "00000000-0000-4000-8000-000000000001",
+        "email": "admin@parity.test",
+        "username": "Администратор",
+        "phone": null,
+        "avatar_url": null,
+        "role": "admin",
+        "status": "active",
+        "is_active": true,
+        "last_login_at": "2026-07-17T12:00:00.000000Z",
+        "language": "en",
+        "timezone": "Europe/Moscow",
+        "no_logs": false,
+        "meeting_auto_tasks": false,
+        "memory_enabled": true,
+        "leo_voice_enabled": true,
+        "leo_web_search_enabled": true,
+        "leo_kb_search_enabled": true,
+        "leo_connector_search_enabled": true,
+        "marketing_consent": false,
+        "appearance": {
+          "font": "whisperer"
+        },
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "free",
+            "name": "Free",
+            "price_rub": 0,
+            "price_usd": 0,
+            "price_eur": 0,
+            "period_days": 0,
+            "minutes_limit": 60,
+            "allow_knowledge_base": false,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": null,
+            "currency": "RUB",
+            "price": 0
+          },
+          "started_at": "2026-06-01T12:00:00Z",
+          "expires_at": null,
+          "days_left": null,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "quota": {
+          "unlimited": false,
+          "limit_minutes": 60,
+          "bonus_minutes": 0,
+          "used_minutes": 12,
+          "remaining_minutes": 48,
+          "exhausted": false
+        },
+        "features": {
+          "voice_translation": false,
+          "voice": false,
+          "teleprompter": false,
+          "premium_weekly_remaining_pct": null,
+          "premium_credit_usd": 0,
+          "premium_credit_currency": "RUB",
+          "premium_credit_amount": 0
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "subscription": {
+          "status": "active",
+          "tariff": {
+            "id": "00000000-0000-4000-8000-000000000002",
+            "code": "free",
+            "name": "Free",
+            "price_rub": 0,
+            "price_usd": 0,
+            "price_eur": 0,
+            "period_days": 0,
+            "minutes_limit": 60,
+            "allow_knowledge_base": false,
+            "allow_multiscreenshot": true,
+            "allow_system_design": true,
+            "allow_frontier_models": false,
+            "is_active": true,
+            "storage_limit_bytes": null,
+            "currency": "RUB",
+            "price": 0
+          },
+          "started_at": "2026-06-01T12:00:00Z",
+          "expires_at": null,
+          "days_left": null,
+          "bonus_minutes": 0,
+          "credits": 0
+        },
+        "usage": {
+          "session_count": 0,
+          "minutes_used": 0,
+          "ai_questions": 0,
+          "total_tokens": 0
+        },
+        "quota": {
+          "unlimited": false,
+          "limit_minutes": 60,
+          "bonus_minutes": 0,
+          "used_minutes": 12,
+          "remaining_minutes": 48,
+          "exhausted": false
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/models/configs",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": [
+        {
+          "id": "nvidia/nemotron-3-super-120b-a12b:free",
+          "provider": "nvidia",
+          "display": "NVIDIA • Nemotron 3 Super",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Большая модель NVIDIA. Хорошо рассуждает по шагам и держит длинные документы в памяти — берите для разбора объёмных встреч и сложных вопросов.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "poolside/laguna-m.1:free",
+          "provider": "poolside",
+          "display": "Poolside • Laguna M.1",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Модель с упором на рассуждение. Подойдёт для аккуратных, продуманных ответов на повседневные рабочие задачи.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "z-ai/glm-4.5-air",
+          "provider": "z-ai",
+          "display": "Z.ai • GLM-4.5-Air",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Лёгкая и быстрая модель. Хороший выбор по умолчанию для коротких вопросов и быстрых подсказок без ожидания.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "provider": "nvidia",
+          "display": "NVIDIA • Nemotron 3 Ultra",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Самая мощная модель NVIDIA: сильное рассуждение и очень длинный контекст. Берите, когда нужен глубокий разбор большого текста — отвечает медленнее «лёгких» моделей.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "google/gemma-4-31b-it:free",
+          "provider": "google",
+          "display": "Google • Gemma 4",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Модель Google, которая умеет «видеть» картинки и скриншоты и рассуждать по ним. Удобна, когда нужно разобрать изображение или схему.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "qwen/qwen3.7-plus",
+          "provider": "qwen",
+          "display": "Alibaba • Qwen3.7 Plus",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Сбалансированная рабочая модель Alibaba: хорошо рассуждает и держит длинный контекст. Надёжный выбор по умолчанию для ответов ассистента.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "qwen/qwen3.7-max",
+          "provider": "qwen",
+          "display": "Alibaba • Qwen3.7 Max",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Старшая версия Qwen — умнее и внимательнее к деталям, отвечает чуть медленнее. Для задач, где важна точность и полнота.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "qwen/qwen3-coder",
+          "provider": "qwen",
+          "display": "Alibaba • Qwen3 Coder",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Модель, заточенная под код и технические тексты. Берите для написания, разбора и объяснения программного кода.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "deepseek/deepseek-v4-flash",
+          "provider": "deepseek",
+          "display": "DeepSeek • Deepseek V4 Flash",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Быстрая модель DeepSeek с хорошим рассуждением. Отличный баланс скорости и качества для повседневной работы.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "deepseek/deepseek-v4-pro",
+          "provider": "deepseek",
+          "display": "DeepSeek • Deepseek V4 Pro",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Старшая DeepSeek: глубже рассуждает и точнее в сложных задачах. Для аналитики и вопросов, где нужно подумать как следует.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "deepseek/deepseek-chat-v3-0324",
+          "provider": "deepseek",
+          "display": "DeepSeek • Deepseek V3",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Проверенная предыдущая версия DeepSeek. Стабильный и предсказуемый вариант для обычных диалогов.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "moonshotai/kimi-k2.6",
+          "provider": "moonshotai",
+          "display": "Moonshot AI • Kimi K2.6",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Модель Moonshot с пониманием изображений и сильным рассуждением. Универсал для текста и картинок.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "google/gemma-4-31b-it",
+          "provider": "google",
+          "display": "Google • Gemma 4",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Модель Google с поддержкой изображений. Удобна для разбора скриншотов, схем и фото вместе с текстом.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "anthropic/claude-haiku-4.5",
+          "provider": "anthropic",
+          "display": "Anthropic • Claude Haiku 4.5",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Быстрая модель Anthropic Claude: вежливые, аккуратные и хорошо структурированные ответы. Отличный выбор по умолчанию для ответов на встречах.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "x-ai/grok-4.3",
+          "provider": "x-ai",
+          "display": "X AI • Grok 4.3",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Модель Grok от xAI: понимает картинки, бойко рассуждает и держит длинный контекст. Живой и развёрнутый стиль ответов.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "x-ai/grok-build-0.1",
+          "provider": "x-ai",
+          "display": "X AI • Grok Build",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Версия Grok с упором на технические и рабочие задачи. Подойдёт для разбора инструкций и пошаговых решений.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "google/gemini-3-flash-preview",
+          "provider": "google",
+          "display": "Google • Gemini 3 Flash",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Быстрая модель Google Gemini: понимает текст и картинки, держит большой объём. Хороший выбор для зрения (анализа изображений) и скорости.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "openai/gpt-5.4-mini",
+          "provider": "openai",
+          "display": "OpenAI • GPT-5.4 Mini",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Компактная модель OpenAI: умная, понимает картинки. Удобный универсал, когда нужен качественный ответ.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "perplexity/sonar",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "WEB SEARCH"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Поисковая модель Perplexity: ищет ответ в интернете в реальном времени и приводит свежие факты со ссылками на источники. Берите, когда нужны актуальные данные, а не знания «из памяти» модели.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "google/gemini-3.5-flash",
+          "provider": "google",
+          "display": "Google • Gemini 3.5 Flash",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Быстрая мощная модель Google: понимает текст и изображения, очень большой объём памяти. Высокая скорость для объёмных задач.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "google/gemini-3.1-pro-preview",
+          "provider": "google",
+          "display": "Google • Gemini 3.1 Pro",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Старшая модель Google для самых сложных задач: глубокий анализ больших документов и изображений. Для максимального качества.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "anthropic/claude-opus-4.8",
+          "provider": "anthropic",
+          "display": "Anthropic • Claude Opus 4.8",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Флагман Anthropic Claude — одна из самых умных моделей. Лучшая для сложного анализа, длинных документов и аккуратных, продуманных ответов.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "anthropic/claude-sonnet-5",
+          "provider": "anthropic",
+          "display": "Anthropic • Claude Sonnet 5",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Сильная и сбалансированная модель Claude: почти как флагман, но быстрее. Отличный выбор для серьёзной работы каждый день.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "openai/gpt-5.5",
+          "provider": "openai",
+          "display": "OpenAI • GPT-5.5",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Флагманская модель OpenAI: очень умная, понимает картинки, держит большой объём. Универсал высшего класса для любых сложных задач.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "openai/gpt-5.3-codex",
+          "provider": "openai",
+          "display": "OpenAI • GPT-5.3 Codex",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Версия GPT для программирования: пишет и разбирает код на профессиональном уровне. Для технических задач и разработки.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "openai/gpt-5.5-pro",
+          "provider": "openai",
+          "display": "OpenAI • GPT-5.5 Pro",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Максимальная версия GPT-5.5 для самых требовательных задач: глубочайшее рассуждение и качество. Когда нужен лучший возможный результат.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "perplexity/sonar-pro",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar Pro",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "WEB SEARCH",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Продвинутый поиск Perplexity: глубже изучает несколько источников и даёт развёрнутые ответы со ссылками. Для серьёзных запросов, где важны точность и свежесть фактов.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "perplexity/sonar-reasoning-pro",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar Reasoning Pro",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "WEB SEARCH"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Perplexity с поиском в интернете и пошаговым рассуждением: сначала находит свежие факты, затем аккуратно их обдумывает. Для сложных вопросов, где нужны и актуальные данные, и логика.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "perplexity/sonar-pro-search",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar Pro Search",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "WEB SEARCH",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Агентный поиск Perplexity: сам строит цепочку запросов и собирает ответ из множества источников. Для исследовательских задач, где простого поиска мало. Каждый поиск тарифицируется дополнительно.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "perplexity/sonar-deep-research",
+          "provider": "perplexity",
+          "display": "Perplexity • Sonar Deep Research",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "WEB SEARCH",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Глубокое исследование Perplexity: автономно изучает десятки источников и готовит подробный отчёт со ссылками. Для обзоров темы или рынка, требующих основательного разбора. Поиски и рассуждение тарифицируются дополнительно.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "openai/gpt-realtime-translate",
+          "provider": "openai",
+          "display": "OpenAI • Realtime Translate",
+          "type": "speech",
+          "tier": "premium",
+          "capabilities": [
+            "AUDIO",
+            "MULTILINGUAL"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Живой перевод речи от OpenAI: слышит собеседника и сразу отдаёт текст на вашем языке. На ней работает переводчик встречи.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "google/gemini-3.1-flash-live-preview",
+          "provider": "google",
+          "display": "Google • Gemini 3.1 Flash Live",
+          "type": "speech",
+          "tier": "premium",
+          "capabilities": [
+            "AUDIO",
+            "MULTILINGUAL"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Голосовой движок Google: слышит речь и отвечает голосом в реальном времени. На нём работают голосовой режим ассистента и синхронный перевод разговора. Расход идёт из недельного лимита premium.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "openai/gpt-realtime-whisper",
+          "provider": "openai",
+          "display": "OpenAI • Realtime Whisper",
+          "type": "transcription",
+          "tier": "standard",
+          "capabilities": [
+            "AUDIO",
+            "STREAMING"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Потоковое распознавание речи от OpenAI: показывает текст прямо во время разговора, не дожидаясь конца фразы. Для живых субтитров встречи.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "openai/gpt-live-transcribe",
+          "provider": "openai",
+          "display": "OpenAI • Live Transcribe",
+          "type": "transcription",
+          "tier": "standard",
+          "capabilities": [
+            "AUDIO",
+            "STREAMING"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Потоковое распознавание речи от OpenAI: текст появляется прямо во время разговора. Точнее держит длинные фразы целиком.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "qwen/qwen3-asr-flash-2026-02-10",
+          "provider": "qwen",
+          "display": "Alibaba • Qwen3 ASR Flash",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Быстрое распознавание речи от Alibaba: переводит аудио встречи в текст. Скоростной вариант для расшифровок.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "openai/gpt-4o-transcribe",
+          "provider": "openai",
+          "display": "OpenAI • GPT-4o transcribe",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Распознавание речи от OpenAI: самая точная из линейки, увереннее держит быструю речь и шумную комнату. На ней работают живые субтитры встречи.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "openai/gpt-4o-mini-transcribe",
+          "provider": "openai",
+          "display": "OpenAI • GPT-4o mini transcribe",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Распознавание речи от OpenAI: точно превращает аудио в текст, хорошо справляется с разными языками. Надёжный выбор по умолчанию.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "openai/whisper-large-v3-turbo",
+          "provider": "openai",
+          "display": "OpenAI • Whisper",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Классический Whisper от OpenAI: проверенное распознавание речи с хорошим качеством на многих языках.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "nvidia/parakeet-tdt-0.6b-v3",
+          "provider": "nvidia",
+          "display": "NVIDIA • Parakeet",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Лёгкая модель распознавания речи от NVIDIA. Быстрая расшифровка с упором на скорость.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "google/chirp-3",
+          "provider": "google",
+          "display": "Google • Chirp",
+          "type": "transcription",
+          "tier": "start",
+          "capabilities": [
+            "AUDIO"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Распознавание речи от Google: уверенно работает с разными языками и акцентами. Хороший выбор для многоязычных встреч.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "bytedance-seed/seedream-4.5",
+          "provider": "bytedance-seed",
+          "display": "ByteDance • Seedream 4.5",
+          "type": "image",
+          "tier": "standard",
+          "capabilities": [
+            "IMAGE",
+            "TEXT",
+            "IMAGE OUTPUT"
+          ],
+          "supports_temperature": false,
+          "reasoning_control": "none",
+          "reasoning_default": false,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Рисует картинку по описанию и правит присланную: убирает лишнее, меняет фон, дорисовывает детали. Хорошо держит исходник — при правке лицо, предмет и стиль остаются узнаваемыми.",
+          "hidden_reason": "generator",
+          "allowed": false
+        },
+        {
+          "id": "nvidia/nemotron-3-nano-30b-a3b:free",
+          "provider": "nvidia",
+          "display": "NVIDIA • Nemotron 3 Nano",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Небольшая быстрая модель NVIDIA с рассуждением. Берите для коротких вопросов по ходу встречи, когда ответ нужен сразу.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "openai/gpt-oss-20b:free",
+          "provider": "openai",
+          "display": "OpenAI • GPT-OSS 20B",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Открытая модель OpenAI. Ровно отвечает на повседневные рабочие задачи и хорошо разбирает код.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "google/gemma-4-26b-a4b-it:free",
+          "provider": "google",
+          "display": "Google • Gemma 4 Lite",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Облегчённая Gemma 4: тоже «видит» скриншоты, но отвечает быстрее старшей модели. Хороший выбор по умолчанию для разбора картинок.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "nvidia/nemotron-nano-12b-v2-vl:free",
+          "provider": "nvidia",
+          "display": "NVIDIA • Nemotron Nano VL",
+          "type": "chat",
+          "tier": "start",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "VISION",
+            "REASONING",
+            "MULTIMODAL"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "always",
+          "reasoning_default": true,
+          "ratings": null,
+          "enabled": true,
+          "blurb": "Компактная зрячая модель NVIDIA: читает текст и схемы со скриншотов. Запасной вариант, когда основная модель для картинок занята.",
+          "hidden_reason": "",
+          "allowed": true
+        },
+        {
+          "id": "mistralai/mistral-large-3",
+          "provider": "mistralai",
+          "display": "Mistral • Large 3",
+          "type": "chat",
+          "tier": "standard",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "optional",
+          "reasoning_default": false,
+          "ratings": {
+            "value": 4,
+            "intelligence": 4,
+            "coding": 4,
+            "agentic": 4,
+            "context": 3,
+            "speed": 4
+          },
+          "enabled": true,
+          "blurb": "Сильная модель с длинным контекстом для анализа и черновиков.",
+          "hidden_reason": "",
+          "allowed": false
+        },
+        {
+          "id": "minimax/minimax-m2",
+          "provider": "minimax",
+          "display": "MiniMax • M2",
+          "type": "chat",
+          "tier": "premium",
+          "capabilities": [
+            "CHAT",
+            "STREAMING",
+            "REASONING",
+            "LONG CONTEXT"
+          ],
+          "supports_temperature": true,
+          "reasoning_control": "optional",
+          "reasoning_default": false,
+          "ratings": {
+            "value": 4,
+            "intelligence": 4,
+            "coding": 4,
+            "agentic": 4,
+            "context": 3,
+            "speed": 4
+          },
+          "enabled": true,
+          "blurb": "Сильная модель с длинным контекстом для анализа и черновиков.",
+          "hidden_reason": "",
+          "allowed": false
+        }
+      ],
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/me/referral",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "code": "ADMIN2026",
+        "link": "/app/register?ref=ADMIN2026",
+        "invited": 0,
+        "converted_paid": 0,
+        "currency": "RUB",
+        "balance": 0,
+        "reward_per_referral": 500,
+        "balance_rub": 0,
+        "reward_per_referral_rub": 500
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "GET",
+      "path": "/v1/ticker",
+      "query": "",
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "weather": null,
+        "holiday": null,
+        "stats": {
+          "meetings_total": 9,
+          "minutes_total": 377,
+          "ai_answers_total": 12,
+          "tokens_total": 126144,
+          "users_total": 11
+        }
+      },
+      "origin": "recorded"
+    },
+    {
+      "method": "POST",
+      "path": "/v1/auth/refresh",
+      "query": "",
+      "requestBody": {},
+      "status": 200,
+      "contentType": "application/json",
+      "body": {
+        "access_token": "parity-access_token",
+        "token_type": "Bearer",
+        "expires_in": 1800,
+        "csrf_token": "parity-csrf_token"
+      },
+      "origin": "recorded"
+    }
+  ]
+}

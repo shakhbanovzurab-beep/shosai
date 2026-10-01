@@ -61,6 +61,14 @@ export const MEETINGS_TRANSCRIPT_STATES: readonly State[] = [
     id: "meetings.detail.transcript-deeplink",
     fixture: "meetings/detail-deeplink",
     scope: "single",
+    // Черновик прокручивает к реплике из адреса один раз, пока раскладка ещё
+    // меняется, и повторяет прокрутку по hashchange. Событие на готовой странице
+    // ставит реплику в центр всегда одинаково.
+    act: async (page) => {
+      await page.evaluate(() => {
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+      });
+    },
     marker: () => ".mtg-dock-card",
   },
   transcript(

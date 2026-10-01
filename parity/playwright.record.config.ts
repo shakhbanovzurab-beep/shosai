@@ -4,6 +4,7 @@
 import { defineConfig } from "@playwright/test";
 
 import { loadParityConfig } from "./src/config.ts";
+import { CHROMIUM_ARGS } from "./src/determinism/browser-flags.ts";
 
 const config = loadParityConfig();
 
@@ -23,5 +24,6 @@ export default defineConfig({
     timezoneId: config.timezone,
     colorScheme: "light",
     serviceWorkers: "block",
+    launchOptions: { args: [...CHROMIUM_ARGS] },
   },
 });

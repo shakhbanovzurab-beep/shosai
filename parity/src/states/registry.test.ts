@@ -24,7 +24,7 @@ test("синтетические ответы существуют в контр
       const replies = Array.isArray(override.respond) ? override.respond : [override.respond];
       for (const reply of replies) {
         // Записанный ответ и его правка — данные черновика, их проверяет запись.
-        if (typeof reply === "string" || "merge" in reply) continue;
+        if (typeof reply === "string" || "merge" in reply || "open" in reply) continue;
         // Поток событий (SSE) — не JSON: его схему OpenAPI не описывает.
         if (reply.contentType !== undefined && !reply.contentType.includes("json")) continue;
         for (const problem of contract.bodyProblems(operation, reply.status, reply.body)) {

@@ -9,8 +9,10 @@ export const PARITY_ROOT = path.resolve(import.meta.dirname, "..");
 export const FIXTURES_DIR = path.join(PARITY_ROOT, "fixtures");
 
 /** Origin, под которым браузер видит фронтенд. Резолва в DNS нет: все запросы
- *  к нему обслуживает перехват Playwright. */
-export const ORIGIN = "http://parity.test";
+ *  к нему обслуживает перехват Playwright. Имя в зоне .localhost — защищённый
+ *  контекст по стандарту, как HTTPS в бою: без него браузер прячет AudioWorklet
+ *  голоса Leo, микрофон и push, и черновик рисует ошибки, которых в бою нет. */
+export const ORIGIN = "http://parity.localhost";
 
 export interface SitePaths {
   readonly appDir: string;

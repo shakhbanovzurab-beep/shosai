@@ -7,6 +7,7 @@
 
 import { request, type APIRequestContext, type BrowserContext } from "@playwright/test";
 
+import { ORIGIN } from "../config.ts";
 import { DRAFT_API } from "./capture.ts";
 
 /** Общий пароль персон стенда (recording/seed/personas.py). */
@@ -86,7 +87,7 @@ export async function signIn(context: BrowserContext, persona: string): Promise<
       .headersArray()
       .filter((header) => header.name.toLowerCase() === "set-cookie")
       .map((header) => parseSetCookie(header.value));
-    await context.addCookies(setCookies.map((cookie) => ({ ...cookie, domain: "parity.test", sameSite: "Lax" as const })));
+    await context.addCookies(setCookies.map((cookie) => ({ ...cookie, domain: new URL(ORIGIN).hostname, sameSite: "Lax" as const })));
     const user = await committedProfile(api, persona, tokens.access_token);
     const csrfCookie = setCookies.find((cookie) => cookie.name === "meetassist_csrf");
     return { csrfToken: tokens.csrf_token ?? csrfCookie?.value ?? "", user };

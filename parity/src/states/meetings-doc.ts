@@ -5,7 +5,7 @@
 import type { Page } from "@playwright/test";
 
 import { exactText, withText, type Translate } from "../i18n/texts.ts";
-import { hold, reply, serverError, stream, type StreamEvent } from "./overrides.ts";
+import { hold, openStream, reply, serverError, stream, type StreamEvent } from "./overrides.ts";
 import type { Override, State, StateContext } from "./types.ts";
 
 const ENHANCE = "/v1/me/sessions/{id}/note/regenerate-enhanced/stream";
@@ -73,6 +73,15 @@ export const MEETINGS_DOC_STATES: readonly State[] = [
     act: async (page, { t }) => page.locator(aiTab(t)).click(),
   }),
   generation("generating", hold("POST", ENHANCE), (t) => exactText(t("meetings:meet.detail.doc.phaseGenerating"))),
+  // Текст уже идёт, конца ещё нет: поток открыт.
+  generation(
+    "streaming",
+    openStream("POST", ENHANCE, [
+      { event: "status", data: { phase: "generating" } },
+      { event: "delta", data: { text: "## Синк\n- Релиз 2.4 — в пятницу.\n- Экспорт отчётов для Acme" } },
+    ], STREAM_REASON),
+    () => 'article li:has-text("Релиз 2.4")',
+  ),
   // 402, 429 и обрыв связи черновик показывает этим же общим текстом — дефект
   // (инвентарь, Findings): в эталон они не входят, v2 показывает свой текст.
   generation("error", serverError("POST", ENHANCE), docError((t) => t("meetings:meet.errors.enhanceFailed"))),

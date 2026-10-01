@@ -488,3 +488,72 @@ Endpoints:
   - Connector popups and OAuth redirects (`window.open`, `window.location.assign/href`).
   - Fonts are served from `/fonts/` (backend in dev, via the vite proxy at `vite.config.ts:147-160`).
 - **Cabinet host:** `/cabinet/*` polls `GET /v1/me` every 15 s, also calls `GET /v1/me/referral`, and on direct URL renders `AnalyticsPage` underneath (its endpoints are owned by the analytics feature).
+
+### Findings (step 5 of D2)
+
+Draft defects visible on screen. By decision 4 of the D2 plan they stay out of the baseline, and v2 shows the intended behaviour.
+
+1. **Leo error texts by code never show.** `agentErrorText` looks up `agent.err_<code>` without the `leo:` namespace. The default namespace is `common`, so the lookup always misses (`frontend/src/features/leo/api/agent.ts:92-98`). As a result:
+   - stream errors with their own text («Действие устарело…», «Нет действия, ожидающего подтверждения.», «Нужно ввести секрет.») show the generic «Что-то пошло не так. Попробуйте ещё раз.»;
+   - HTTP refusals before the stream show the server's English `message`, e.g. «File analysis requires a paid subscription.», in every UI language.
+
+   Out of the baseline: `leo.chat.error.http` and stream errors with a known code. The baseline keeps `leo.chat.error.stream` with `turn_deadline`: that code has no text of its own, and the generic text is the intended fallback.
+2. **The prompt editor shows nothing for a missing prompt.** `PromptEditorPage` returns `null` while loading and on any error (`PromptEditorPage.tsx:36`). A 404 leaves an empty content area with no message. Out of the baseline: `prompts.editor.loading` and `.error`.
+3. **Failed requests leave a spinner forever.** On `/models`, on the MCP server tab and in the blocks of the Leo cabinet tab, a failed GET keeps the loading spinner (`if (isLoading || !data)`). The baseline keeps these spinners only as loading states (a held request). The error branch is not captured, and v2 shows an error there.
+4. **The admin AI models page is not translated.** All texts of `/admin/ai-models` are hard-coded in Russian (`features/models/admin/*.tsx`), so an English admin sees Russian. `admin-models.*` is captured in ru cells only.
+5. **«Это не так» in a hub pulse fails on the server (contract note, not a screen).** `pulse_service.dismiss` passes `kind=` to `ContextGraphService.refute`, which has no such parameter. Read from the code, not run. The seed writes refutations directly. v2 implements dismissal for real.
+6. **The skills paywall exists only in the UI (contract note).** The UI tells a Free user that skills need Start or higher. The draft API installs skills without a paid check: the router `me_skills` has no dependency, and a stale test still expects 403. The baseline shows the notice as the draft draws it. The v2 backend package decides where the gate lives.
+
+### Coverage in the screenshot matrix (step 5 of D2)
+
+**How the harness reproduces this group:**
+- **Leo conversation.** Seeded in localStorage (`agent-chat-v1:<user>`) through the state field `storage`.
+- **Streams.** Leo chat and confirmation, and the prompt test run, are SSE.
+  - A finished stream is a response with the whole body.
+  - A stream still running is an open stream from an in-page `fetch` shim (`src/determinism/open-streams.ts`): the body is sent and the stream never closes.
+- **Voice and reminders.** These are WebSocket frames: `sockets` on the state, plus `afterClient`, the frames sent after the page's first message. The voice server answers microphone audio with phases. Chromium gives a fake microphone (`src/determinism/browser-flags.ts`).
+- **Secure context.** The harness origin is `http://parity.localhost`, a secure context like HTTPS in production. On `http://parity.test` the browser hid AudioWorklet, the microphone and push, and the draft drew a voice error that does not happen in production.
+- **Recording environment.** It gets a fake Gemini Live key (paid users get `features.voice`) and a fake VAPID pair (the push block shows), as in production.
+- **Synthetic responses.** Data from external services is synthetic, each with a reason: the model, OpenRouter, skills.sh and GitHub, Nango.
+
+**Captured inside another state:**
+
+| state | screenshot |
+|---|---|
+| `leo.panel.mobile-sheet` | the mobile cells of `leo.panel.empty`, `leo.chat.populated`, `leo.chat.streaming.waiting`, `leo.chat.action.proposed`, `leo.voice.listening` |
+| `leo.panel.new-chat`, `leo.composer.empty` | `leo.panel.empty` (the same screen) |
+| `leo.voice.error.<code>` | `leo.voice.error.minutes`, `.upgrade`, `.retry`, `.disabled` |
+| `leo.cab.initiative.<level>` | `leo.cab.initiative` (reserved), `leo.cab.initiative-active`, `leo.cab.initiative-off` |
+| `leo.cab.quiet-hours` | `leo.cab.initiative` (on), `leo.cab.quiet-hours-off` |
+| `leo.cab.connectors` (all card kinds) | `leo.cab.connectors` (connected, broken), `leo.cab.connectors-available` |
+| `leo.cab.memory-summary.*` | `leo.cab.memory-summary`, `.pending`, `.empty`, `.loading` |
+| `prompts.list.filter.<role>` | `prompts.list.filter.coding` |
+| `prompts.editor.role-help`, `prompts.testrun.idle`, `prompts.editor.skills-populated` | `prompts.editor.populated` |
+| `prompts.editor.skills-empty` | `prompts.editor.variables` |
+| `prompts.skills.repo-*` | `prompts.skills.repo-idle`, `.repo-results`, `.repo-error` |
+| `models.role.blind-vision`, `models.role.temp-unsupported`, `models.role.reasoning.*` | `models.role.variants` |
+| `models.mobile` | the mobile cells of `models.populated` |
+| `admin-models.import.idle` | `admin-models.import.error` (the form before a preview) |
+| `hub.detail.digest`, `hub.detail.charter.filled`, `hub.detail.loops.populated` | `hub.detail.populated` |
+| `hub.detail.loops.clear`, `hub.detail.materials` of an empty hub | `hub.detail.quiet` |
+| `hub.detail.feed.loading`, `hub.detail.loops.loading`, `hub.detail.materials.loading` | `hub.detail.blocks-loading` |
+| `hub.detail.feed.populated`, `hub.detail.materials.populated` | `hub.detail.feed`, `hub.detail.materials` (scrolled into view) |
+| `hub.closing.*` | `hub.closing.left`, `.clear`, `.loading` |
+| the hub chip on a meeting | step 4: `meetings.detail.hub-popover`, `hub-popover-suggested` |
+| redirects (`/settings/mcp`, `/cabinet/leo` and `/cabinet/mcp` for Free, `/admin/ai-models` for a user) | `mcp.settings-redirect`, `leo.cab.free-redirect`, `mcp.free-redirect`, `admin-models.redirect` |
+
+**Not screenshotted:**
+
+| state | reason |
+|---|---|
+| `leo.panel.list-loading` | a lazy chunk loading; the harness serves chunks from disk at once |
+| `leo.chat.copied`, `mcp.server.copied` | live 1.4–1.5 s on a real timer and need clipboard permission |
+| `leo.chat.youtube`, `leo.chat.youtube-playing` | external media (i.ytimg.com thumbnail, youtube.com iframe); the harness blocks third-party hosts |
+| `leo.chat.error.http`, stream errors with a known code | Finding 1 |
+| `leo.voice.ended` | goes back to text on a real 2.5 s timer |
+| `leo.voice.error.mic_denied`, `voice_error` | need a denied microphone or a broken socket; the layout is the same as the captured voice errors |
+| `prompts.create` | the result is the editor (`prompts.editor.*`) with the new prompt's default fields |
+| `prompts.editor.loading`, `.error` | Finding 2 |
+| `prompts.editor.autosave` | a successful save changes nothing on screen |
+| error branches of `/models`, the MCP server tab and the Leo cabinet blocks | Finding 3 |
+| `en` cells of `admin-models.*` | Finding 4 |

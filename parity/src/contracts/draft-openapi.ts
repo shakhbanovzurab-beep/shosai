@@ -28,9 +28,18 @@ function isDomainRefusal(body: JsonValue): boolean {
   return typeof body === "object" && body !== null && !Array.isArray(body) && typeof body["detail"] === "string";
 }
 
+/**
+ * Формат `time` Pydantic пишет для `datetime.time` и отдаёт время без пояса
+ * («22:00:00»); `time` в ajv-formats требует пояс по RFC 3339. Проверка следует
+ * за черновиком: пояс необязателен.
+ */
+const PYDANTIC_TIME = /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d(\.\d+)?)?(Z|[+-]([01]\d|2[0-3]):[0-5]\d)?$/i;
+
 export class DraftContract {
   private readonly spec: OpenApi;
-  private readonly ajv = addFormats.default(new Ajv2020({ strict: false, allErrors: true }));
+  private readonly ajv = addFormats
+    .default(new Ajv2020({ strict: false, allErrors: true }))
+    .addFormat("time", PYDANTIC_TIME);
   constructor(file: string = DRAFT_OPENAPI_FILE) {
     this.spec = JSON.parse(readFileSync(file, "utf8")) as OpenApi;
   }

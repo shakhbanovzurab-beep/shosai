@@ -5,8 +5,9 @@
 
 import { defineConfig } from "@playwright/test";
 
-import { loadParityConfig } from "./src/config.ts";
 import { cellGrep } from "./src/cell-grep.ts";
+import { loadParityConfig } from "./src/config.ts";
+import { CHROMIUM_ARGS } from "./src/determinism/browser-flags.ts";
 import { allCells, browserLocale, VIEWPORTS, type Cell } from "./src/matrix.ts";
 
 const config = loadParityConfig();
@@ -31,6 +32,7 @@ export default defineConfig<{ cell: Cell }>({
   use: {
     timezoneId: config.timezone,
     serviceWorkers: "block",
+    launchOptions: { args: [...CHROMIUM_ARGS] },
     deviceScaleFactor: 1,
     // «Уменьшить движение»: черновик останавливает по нему постер входа, взгляд
     // Leo и игру экрана разрыва связи — то, что иначе меняет кадр каждые

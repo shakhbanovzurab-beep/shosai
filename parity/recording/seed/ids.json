@@ -23,5 +23,25 @@
   "sharePassword": "parity-pass",
   "roomInvite": "parity-room-invite",
   "streamInvite": "parity-stream-invite",
-  "icalToken": "parity-ical-token-0000000000000000000000000"
+  "icalToken": "parity-ical-token-0000000000000000000000000",
+  "hubs": {
+    "acme": "5eed0004-0000-4000-8000-0000000000d1",
+    "wind": "5eed0004-0000-4000-8000-0000000000d2",
+    "archived": "5eed0004-0000-4000-8000-0000000000d3"
+  },
+  "prompts": {
+    "sales": "5eed0005-0000-4000-8000-0000000000e1",
+    "coding": "5eed0005-0000-4000-8000-0000000000e2"
+  },
+  "mcp": {
+    "token": "whmcp_parity_recording_token_000000000000000000",
+    "clientId": "mcp_client_parity_claude_0001",
+    "redirectUri": "https://claude.ai/api/mcp/auth_callback",
+    "scopes": [
+      "whisperer:meetings.read",
+      "whisperer:tracker.write"
+    ],
+    "codeChallenge": "E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM",
+    "state": "parity-state-0001"
+  }
 }
