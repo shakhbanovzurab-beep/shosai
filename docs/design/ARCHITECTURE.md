@@ -103,7 +103,7 @@
 | LiveKit | plane | SFU, egress (room recording, per-participant audio tracks to the WS gateway), coturn | pinned versions |
 | Nango | plane | OAuth proxy for connectors; one instance per home, state in its home database | pinned versions |
 | PostgreSQL RU | Russia | Source of truth of the Russian home | managed, PgBouncer |
-| PostgreSQL EU | EU | Source of truth of the EU home; directory tables | managed, PgBouncer |
+| PostgreSQL EU | EU | Source of truth of the EU home; directory tables; platform tables and telemetry without an account (§6) | managed, PgBouncer |
 | S3 RU, S3 EU | per home | Files, recordings, exports, knowledge sources; lifecycle rules | — |
 | AI providers | external | OpenRouter, OpenAI Realtime, Google Gemini Live, Deepgram, pyannote, Mistral OCR — reached directly from the plane | quotas per contract |
 | Payments | external | TBank, CloudPayments, lava.top (cards); bank statement API (invoices) | — |
@@ -158,9 +158,14 @@
 - **Home of an entity:**
   - personal account → home chosen by country at registration;
   - company → home fixed by contract;
-  - work account → home of its company.
+  - work account → home of its company;
+  - account migrated from the draft → Russian home; it moves to the EU home by account transfer once the person confirms a country outside Russia ([ADR 0004](../adr/0004-migrated-accounts-start-in-russian-home.md)).
   A person with a personal and a work space has two accounts.
 - **Directory** (EU home): `email_hmac`, `user_id`, `home`, `state`, `version`. `directory_domains` maps a verified company email domain to the company and its home. No other personal data outside a home.
+- **Data without an owning account** (EU home, one copy, one writer; [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md)):
+  - platform tables: tariffs, promo codes, payment routes, exchange rates, the model registry and defaults, platform prompts and notes, MCP client registrations, admin mailings, provider error logs, desktop builds;
+  - home tables reference them by id without a foreign key; a platform id is retired, never deleted;
+  - telemetry without an account (product events before registration, anonymous client error reports), subject to the legal review in §22.
 - **Home routing:**
   - sign-in finds the home by `HMAC(email)`, checks the password in that home and issues a token that carries the home;
   - later requests use the token and do not consult the directory;
@@ -217,7 +222,7 @@
 | Pipeline run | `meeting_processing_runs`, stage state in JSONB | UUID; idempotency (session_id, source) | home DB; stage executed by the message lease holder | finished stages skipped; results upserted by natural keys | stage commit; the queue may be lost, the sweep restores from DB | with the meeting; audio ≤ 72 h |
 | Cost | `provider_costs` (monthly partitions), credit ledger | UUID + effect key (run:stage:call or request id) | home DB; subscription row lock on debit | same effect key → no second row or debit | written by the provider port with the call result; live capture batched every minute | never deleted; partitions > 24 months dropped |
 | Vector | Qdrant point | UUIDv5(source, window, build) | none — derived | overwrite by point id; tenant and access from request scope | commit of the source | with the source; full rebuild by cursor |
-| File | S3 object + `storage_files` | UUID; key prefixed by owner | home DB: pointer after upload completes | objects immutable | multipart complete, then pointer commit | row, then object; orphans by lifecycle rules |
+| File | S3 object + `storage_files` | UUID; key prefixed by owner (objects migrated from the draft keep their keys, [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md)) | home DB: pointer after upload completes | objects immutable | multipart complete, then pointer commit | row, then object; orphans by lifecycle rules |
 | Leo state | checkpoints in Redis, TTL 24 h | thread `user_id:session_id` | Redis; writing action guarded by a one-time key | last checkpoint wins | Redis AOF; loss restarts the dialogue | TTL |
 | Errand and schedule | `errands`, `schedule_runs` in the home DB | UUID; job name | `FOR UPDATE SKIP LOCKED`; the scheduler walks both homes | errand runs only from `scheduled`; a job runs only if `last_run_at` is older than its interval | commit | finished errands after 24 h |
 | Event | `outbox_messages`, `processed_events` | event UUID = dedup key; (consumer, event_id) unique | home DB | per-subscriber task; mark in the subscriber's transaction | commit with the effect | published rows after 7 days |
@@ -232,7 +237,7 @@
 - No cross-home write conflicts by construction.
 - High-volume tables:
   - UUIDv7 keys and monthly partitions: `transcript_segments`, `provider_costs`, `prompt_executions`, `usage_events`, `login_events`, `error_logs`, `client_errors`, `agent_audit`, `org_audit_events`;
-  - retention by dropping partitions.
+  - retention by dropping partitions, except `usage_events`: its tombstones count toward the lifetime Free quota and live as long as the account ([ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md)).
 - Every store is declared authoritative (with acknowledgement point, RPO, RTO) or derived (with source and cursor).
 - Derived stores are rebuildable:
   - Qdrant — cursor `sessions.indexed_upto_seq` + build version;
@@ -701,7 +706,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 
 | Item | Owner | Needed before |
 |---|---|---|
-| Legal review: email HMAC outside Russia; derived copies in the EU; cross-border transfer to AI providers; processor agreement (152-FZ) and DPA (GDPR) with the list of subprocessors | owner, lawyer | first transfer of accounts; first company contract |
+| Legal review: email HMAC outside Russia; derived copies in the EU; telemetry without an account in the EU home (ADR 0005); data of people outside Russia kept in the Russian home until their transfer (ADR 0004); cross-border transfer to AI providers; processor agreement (152-FZ) and DPA (GDPR) with the list of subprocessors | owner, lawyer | first transfer of accounts; first company contract |
 | Tax, closing documents, document exchange for Russian legal entities | owner, accountant | first invoice |
 | Provider of the EU PostgreSQL and EU S3; bank for statement API | owner | building the EU home; first invoice |
 | Provider quotas for 2 600 concurrent recognition and voice sessions | owner | 1 000 concurrent meetings |
