@@ -31,7 +31,12 @@ from whisperer.core.tasks.declaration import (
 from whisperer.core.tasks.payloads import HomeTaskPayload, TaskPayload, TaskSecret
 from whisperer.core.tasks.queues import STREAM_CAPACITY, TaskQueue, dead_letter_key, stream_key
 from whisperer.core.tasks.stream import as_text
-from whisperer.core.tasks.system import StreamOptions, TaskSystem, build_task_system
+from whisperer.core.tasks.system import (
+    HandlerBinding,
+    StreamOptions,
+    TaskSystem,
+    build_task_system,
+)
 from whisperer.core.tasks.timing import Backoff, StreamTiming
 from whisperer.core.tasks.worker import consume_queue
 
@@ -141,13 +146,33 @@ def workbench(
     capacity: int = STREAM_CAPACITY,
 ) -> Workbench:
     """A task system with fast limits and its own metrics registry."""
-    registry = CollectorRegistry()
+    options = StreamOptions(timing=FAST, consumer=consumer, capacity=capacity)
+    return assemble(client, lambda _sender: handlers, CollectorRegistry(), tracer_provider, options)
+
+
+def bound_workbench(
+    client: Redis,
+    bind_handlers: HandlerBinding,
+    registry: CollectorRegistry,
+    *,
+    consumer: str = "worker-a",
+    tracer_provider: TracerProvider | None = None,
+) -> Workbench:
+    """A task system with fast limits whose handlers are bound to its own sender."""
+    options = StreamOptions(timing=FAST, consumer=consumer)
+    return assemble(client, bind_handlers, registry, tracer_provider, options)
+
+
+def assemble(
+    client: Redis,
+    bind_handlers: HandlerBinding,
+    registry: CollectorRegistry,
+    tracer_provider: TracerProvider | None,
+    options: StreamOptions,
+) -> Workbench:
+    """The task system and the registry its metrics went to."""
     system = build_task_system(
-        client,
-        handlers,
-        registry,
-        tracer_provider or TracerProvider(),
-        StreamOptions(timing=FAST, consumer=consumer, capacity=capacity),
+        client, bind_handlers, registry, tracer_provider or TracerProvider(), options
     )
     return Workbench(client, system, registry)
 

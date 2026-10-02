@@ -25,6 +25,7 @@ class LogFields(TypedDict, total=False):
     session_id: UUID
     task_name: str
     task_id: str
+    event_id: UUID
 
 
 @contextmanager

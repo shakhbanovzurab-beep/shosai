@@ -9,10 +9,15 @@ server connection behind PgBouncer. The block commits on exit and rolls back on 
 There is no request-wide session: a handler commits before it answers and calls external
 services between transactions, never inside one. Round trips per transaction: `BEGIN`,
 the scope, one per statement, `COMMIT`: four of 45 ms for one read in the Russian home (§3).
+
+The session remembers the scope and the mode of its transaction (`transaction_info`), so
+work written into the caller's transaction — an outbox event — takes the transaction's
+own tenancy instead of a second copy the caller could get wrong.
 """
 
 from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from typing import Final
 
 import structlog
@@ -33,7 +38,29 @@ SCOPE_STATEMENT: Final = text(
     "set_config('app.user_id', :user_id, true), "
     "set_config('app.org_id', :org_id, true)"
 )
+TRANSACTION_INFO_KEY: Final = "whisperer.transaction"
 log = structlog.stdlib.get_logger(__name__)
+
+
+@dataclass(frozen=True, slots=True)
+class TransactionInfo:
+    """The tenancy scope and the mode of the transaction a session is in."""
+
+    scope: TenancyScope
+    read_only: bool
+
+
+class NotAHomeTransactionError(Exception):
+    """The session was not opened by `HomeTransactions.begin`: its scope is unknown."""
+
+
+def transaction_info(session: AsyncSession) -> TransactionInfo:
+    """The scope and mode of the session's transaction, as `HomeTransactions.begin` opened it."""
+    info = session.info.get(TRANSACTION_INFO_KEY)
+    if not isinstance(info, TransactionInfo):
+        message = "сессия открыта не через HomeTransactions.begin: скоуп транзакции неизвестен"
+        raise NotAHomeTransactionError(message)
+    return info
 
 
 class HomeTransactions:
@@ -56,6 +83,7 @@ class HomeTransactions:
         async with factory() as session, session.begin():
             await self._acquire(session, scope.home)
             await session.execute(SCOPE_STATEMENT, self._scope_values(scope, read_only=read_only))
+            session.info[TRANSACTION_INFO_KEY] = TransactionInfo(scope, read_only=read_only)
             yield session
 
     async def _acquire(self, session: AsyncSession, home: Home) -> None:

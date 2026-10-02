@@ -9,9 +9,10 @@ from sqlalchemy import MetaData, Table
 
 from whisperer.core.db.home_identity import HomeIdentity
 from whisperer.core.db.model_base import NAMING_CONVENTION, ModelBase
+from whisperer.core.events.records import OutboxMessage, ProcessedEvent
 
 # Модели ядра; слайсы добавляют свои модели здесь, рядом со своим модулем в композиции.
-APPLICATION_MODELS: tuple[type[ModelBase], ...] = (HomeIdentity,)
+APPLICATION_MODELS: tuple[type[ModelBase], ...] = (HomeIdentity, OutboxMessage, ProcessedEvent)
 
 
 def application_metadata() -> MetaData:

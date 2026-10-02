@@ -1,11 +1,13 @@
 """The task system of one process: a broker per queue with every task, and the sender.
 
 Every role registers every task (draft lesson: a worker built without a slice's tasks
-dropped them as unknown). Composition passes the handlers of all slices; each goes to the
+dropped them as unknown). Composition passes a binding that builds the handlers of all
+slices with the process's sender, because a handler may queue further work: a pipeline
+stage queues the next one, the outbox relay queues deliveries. Each handler goes to the
 broker of its queue, and a name may be declared only once in the whole backend.
 """
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any
@@ -44,14 +46,18 @@ class StreamOptions:
     capacity: int = STREAM_CAPACITY
 
 
+# Обработчики строятся с отправителем процесса: обработчик может ставить задачи сам.
+type HandlerBinding = Callable[[TaskSender], Sequence[TaskHandler[Any]]]
+
+
 def build_task_system(
     client: Redis,
-    handlers: Sequence[TaskHandler[Any]],
+    bind_handlers: HandlerBinding,
     registry: CollectorRegistry,
     tracer_provider: TracerProvider,
     options: StreamOptions | None = None,
 ) -> TaskSystem:
-    """The task system over the process's Valkey client, with every handler registered."""
+    """The task system over the process's Valkey client, with every bound handler registered."""
     chosen = options or StreamOptions()
     consumer = chosen.consumer or new_consumer_name()
     metrics = TaskMetrics(registry)
@@ -65,12 +71,13 @@ def build_task_system(
             TaskTracing(tracer_provider, queue), TaskLifecycle(broker, metrics, ticks)
         )
         brokers[queue] = broker
+    frozen = MappingProxyType(brokers)
+    sender = TaskSender(frozen, ticks, metrics)
     seen: set[str] = set()
-    for handler in handlers:
+    for handler in bind_handlers(sender):
         if handler.task.name in seen:
             message = f"задача {handler.task.name} объявлена дважды"
             raise ValueError(message)
         seen.add(handler.task.name)
         brokers[handler.task.queue].register(handler)
-    frozen = MappingProxyType(brokers)
-    return TaskSystem(brokers=frozen, sender=TaskSender(frozen, ticks, metrics), metrics=metrics)
+    return TaskSystem(brokers=frozen, sender=sender, metrics=metrics)

@@ -38,16 +38,20 @@ class RegisteredTask(AsyncTaskiqDecoratedTask[[JsonObject], Coroutine[Any, Any, 
         self.return_type = None
 
 
+def validation_problems(error: ValidationError) -> list[str]:
+    """`field: kind` of each problem; the rejected values never enter the text."""
+    return [
+        f"{'.'.join(str(part) for part in item['loc']) or '<payload>'}: {item['type']}"
+        for item in error.errors(include_url=False, include_input=False, include_context=False)
+    ]
+
+
 def parse_payload[P: TaskPayload](task: TaskDeclaration[P], payload: object) -> P:
     """The payload as the declared model; problems name fields and kinds, never values."""
     try:
         return task.payload.model_validate(payload)
     except ValidationError as error:
-        problems = [
-            f"{'.'.join(str(part) for part in item['loc']) or '<payload>'}: {item['type']}"
-            for item in error.errors(include_url=False, include_input=False, include_context=False)
-        ]
-        raise InvalidTaskPayloadError(task.name, problems) from None
+        raise InvalidTaskPayloadError(task.name, validation_problems(error)) from None
 
 
 def handler_function(handler: TaskHandler[Any]) -> TaskFunction:
