@@ -56,7 +56,7 @@ What the shipped clients read (D1, `contracts/draft/consumers.json`):
 ## Consequences
 
 - One renderer and one set of handlers in `core`; every slice raises errors and never formats them.
-- F2 reads `error.code`, keeps the draft's texts through `errors:<code>`, and shows `request_id` for support (§16.2).
+- F2 reads `error.code`, keeps the draft's texts through `errors:<code>`, and shows `request_id` for support (§16.2). Decided by the owner on 2026-10-02 (F2-D3): the id is a second, muted monospace line of the error toast, copied by a click, shown for 5xx and for codes without a translation; not for validation errors, known domain codes or failures without a response.
 - Each slice that owns a `native` route tests the `detail` shape of its errors against the draft; the D1 harness does not compare error bodies.
 - The 422 body no longer echoes input, which removes a path for passwords and tokens to reach the client or logs.
 - Dropping `detail` later is itself a contract change and needs the supported clients to read `error`.

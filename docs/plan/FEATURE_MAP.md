@@ -264,11 +264,11 @@ The draft publishes domain events through `outbox_messages` to NATS JetStream (s
 | Path | Content | v2 |
 |---|---|---|
 | `app/` — router, registry, shell (`AppShell`, `Sidebar`, `TopBar`, `ConnectionOverlay`, nav groups), analytics bootstrap, i18n bootstrap | App frame | F2 |
-| `shared/api`, `auth`, `hooks`, `i18n`, `lib`, `navigation`, `pwa`, `query`, `stores`, `styles`, `theme`, `types`, `ui` | Shared infrastructure, design tokens, UI kit | F2 |
-| `shared/markdown` | Markdown, code highlight, math, Mermaid | F2 |
+| `shared/api`, `auth`, `hooks`, `i18n`, `lib`, `navigation`, `pwa`, `query`, `stores`, `styles`, `theme`, `types`, `ui` | Shared infrastructure, design tokens, UI kit | F2; a module only one slice imports moves into that slice (F2-D4, [F2 plan](packages/F2-frontend-foundation.md) §3.9) |
+| `shared/markdown` | Markdown, code highlight, math, Mermaid | F2 hosts it in `core/`; built by the first slice that needs it (F2-D4) |
 | `shared/analytics` | Event SDK, GA4, Yandex Metrika goals | F2 hosts it; the event catalogue follows S14 |
 | `shared/entitlements` | Premium banner, subscription state | F2 hosts it; reads S03's contract |
-| `shared/uploads` | Upload centre and queue | F2 hosts it; uses S08's upload contract |
+| `shared/uploads` | Upload centre and queue | F2 hosts it in `core/`; built by the first slice that needs it (F2-D4); uses S08's upload contract |
 | `locales/` | 16 locales | F2 |
 
 ---
