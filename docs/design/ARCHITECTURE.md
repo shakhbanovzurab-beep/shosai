@@ -36,7 +36,7 @@
 | nfr-1 | Availability | 99.9% per month for sign-in, meeting capture and payment. Third-party AI outages are excluded and must degrade, not stop capture |
 | nfr-2 | RPO | ≤ 5 min on database node loss; no acknowledged payment is lost on ordinary failover |
 | nfr-3 | RTO | ≤ 1 h on server or database node loss; ≤ 4 h for data corruption or operator error (restore from backup) |
-| nfr-4 | Residency | Primary data of Russian users and Russian companies stays in Russia, of others in the EU. Outside a home only the email HMAC, user id and home id exist. Derived copies (see §6) are an accepted exception |
+| nfr-4 | Residency | Primary data of Russian users and Russian companies stays in Russia, of others in the EU. Outside a home only the email HMAC, user id and home id exist. Derived copies and the files of the EU home, kept in the one bucket in Russia (see §6), are accepted exceptions |
 | nfr-5 | Scale | 10 000 DAU, of which 3 000 company seats = 2 600 concurrent meetings; verified by calculation up to 100 000 DAU |
 | nfr-6 | Live latency | Transcript line on screen p95 ≤ 2 s after the end of the phrase; platform share ≤ 300 ms |
 | nfr-7 | API latency | Cabinet reads p95 ≤ 300 ms; platform overhead of a Leo turn ≤ 500 ms. Not met for Russian users by this placement (accepted, §20) |
@@ -81,7 +81,7 @@
 ### 4.1 Placement rules
 
 1. All application processes run as **one deployment in the EU** (the compute plane), next to the AI providers. AI providers are not reachable from Russian addresses.
-2. Data lives in **two homes**. Each home = one managed PostgreSQL cluster (primary + standby, WAL archive, PITR) behind PgBouncer + one S3 bucket.
+2. Data lives in **two homes**. Each home = one managed PostgreSQL cluster (primary + standby, WAL archive, PITR) behind PgBouncer. Files of both homes live in **one S3 bucket in Russia** ([ADR 0014](../adr/0014-one-object-store-in-russia.md)).
    - Russian home: St Petersburg, 45 ms from the plane.
    - EU home: Netherlands, < 2 ms from the plane. It also holds the directory and the data without an owning account (§6).
 3. A request opens its database session **in the home named by the access token** (user home, or the company's home for a work account). Workers take the home from the task payload.
@@ -104,7 +104,7 @@
 | Nango | plane | OAuth proxy for connectors; one instance per home, state in its home database | pinned versions |
 | PostgreSQL RU | Russia | Source of truth of the Russian home | managed, PgBouncer |
 | PostgreSQL EU | EU | Source of truth of the EU home; directory tables; platform tables and telemetry without an account (§6) | managed, PgBouncer |
-| S3 RU, S3 EU | per home | Files, recordings, exports, knowledge sources; lifecycle rules | — |
+| S3 | Russia | One bucket for both homes and the platform: files, recordings, exports, knowledge sources; lifecycle rules ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) | — |
 | AI providers | external | OpenRouter, OpenAI Realtime, Google Gemini Live, Deepgram, pyannote, Mistral OCR — reached directly from the plane | quotas per contract |
 | Payments | external | TBank, CloudPayments, lava.top (cards); bank statement API (invoices) | — |
 | Observability | plane + outside | Grafana stack: Prometheus (metrics), Loki (logs), Tempo (traces), Grafana (one pane); OpenTelemetry Collector; Alertmanager (Telegram); node exporter; uptime probes run outside the plane | single nodes, local disks with size caps |
@@ -130,7 +130,7 @@
 | Workers → PostgreSQL (home) | SQL | statement 60 s | sweep of unfinished runs; ≤ 3 attempts per stage on every path | pool 5 per process per database |
 | API, Workers → AI | chat, Leo, search, analysis | connect 10 s; stream stall 45 s; 120 s per analysis call | one retry before the first byte; breaker per call kind; stage ≤ 3 attempts with effect key | provider-wide semaphore in Redis; retry budget 20% |
 | API, Workers → Qdrant | search, indexing | search 2 s; write 60 s | search: none (fallback to PostgreSQL keyword search); indexing: cursor sweep | 32 queries per process, 4 per tenant |
-| Clients → S3 (home) | presigned upload and download | signature valid 15 min | client | size limit in the signature |
+| Clients → S3 | presigned upload and download | signature valid 15 min | client | size limit in the signature |
 | API → Payments | checkout, charge | 20 s, outside any transaction | reconciliation every minute by order id | intent committed before the call |
 | Payments → Edge | webhook | answer within 5 s, after commit | acquirer | row lock wait 5 s |
 | Workers → bank | statement | 30 s | next hourly pass | one day of payments |
@@ -172,6 +172,7 @@
   - later requests use the token and do not consult the directory;
   - processes cache directory entries for 60 s;
   - account transfer bumps `token_version`.
+- **Files in one bucket in Russia — accepted exception to nfr-4** ([ADR 0014](../adr/0014-one-object-store-in-russia.md)): the objects of both homes and of the platform live in one bucket in Russia; the pointer rows stay in the owner's home database. Keys do not name the home, so an account transfer moves no bytes. Files of people and companies of the EU home are subject to the legal review in §22.
 - **Derived copies in the EU — accepted exception to nfr-4:** meeting resume state, Leo checkpoints (Redis), task payloads, vector index points of Russian users and companies. Retention ≤ 24 h in Redis; index points live as long as their source.
 - **Cross-border AI:**
   - personal user — consent in the product;
@@ -218,12 +219,12 @@
 | Membership | `memberships` | (org_id, user_id); a work account has one company | company home | only admins change roles; last owner stays | commit + audit event; removal bumps token version | row kept as `removed` |
 | Access | `org_id`, `access` columns + `resource_grants` | (resource type, resource id, member id) | company home | last write wins; revocation immediate | commit + audit; index updated via outbox | with the resource |
 | Payment | `transactions`, `auto_charge_attempts`; outbox in the same transaction | UUID; acquirer order id; period key `subscription:date` | home: transaction row and subscription row locks | webhook replay stops at the lock and status | commit before acquirer ack and before the charge call; unknown outcome stays `charging` until reconciliation | never deleted |
-| Company invoice | `org_invoices`; PDF in the home bucket | invoice number from a home sequence | company home | payment matched once by invoice number; unmatched → operator queue | payment, seats and audit in one transaction | never deleted |
+| Company invoice | `org_invoices`; PDF in the bucket | invoice number from a home sequence | company home | payment matched once by invoice number; unmatched → operator queue | payment, seats and audit in one transaction | never deleted |
 | Transcript line | `transcript_segments`, monthly partitions | (session_id, seq); seq assigned by the server at phrase intake; `started_at` = phrase start | the WS process leading the meeting | replay of (session_id, seq) ignored; equal text is not a conflict | Redis transcript queue (AOF) before the frame is sent; home DB in 500 ms batches, `ON CONFLICT DO NOTHING` | with the meeting; partitions > 12 months exported to S3 |
 | Pipeline run | `meeting_processing_runs`, stage state in JSONB | UUID; idempotency (session_id, source) | home DB; stage executed by the message lease holder | finished stages skipped; results upserted by natural keys | stage commit; the queue may be lost, the sweep restores from DB | with the meeting; audio ≤ 72 h |
 | Cost | `provider_costs` (monthly partitions), credit ledger | UUID + effect key (run:stage:call or request id) | home DB; subscription row lock on debit | same effect key → no second row or debit | written by the provider port with the call result; live capture batched every minute | never deleted; partitions > 24 months dropped |
 | Vector | Qdrant point | UUIDv5(source, window, build) | none — derived | overwrite by point id; tenant and access from request scope | commit of the source | with the source; full rebuild by cursor |
-| File | S3 object + `storage_files` | UUID; key prefixed by owner (objects migrated from the draft keep their keys, [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md)) | home DB: pointer after upload completes | objects immutable | multipart complete, then pointer commit | row, then object; orphans by lifecycle rules |
+| File | S3 object + `storage_files` | UUID; key prefixed by owner (objects migrated from the draft keep their keys, [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md)) | home DB: pointer after upload completes; the object in the one bucket in Russia (ADR 0014) | objects immutable | multipart complete, then pointer commit | row, then object; orphans by lifecycle rules |
 | Leo state | checkpoints in Redis, TTL 24 h | thread `user_id:session_id` | Redis; writing action guarded by a one-time key | last checkpoint wins | Redis AOF; loss restarts the dialogue | TTL |
 | Errand and schedule | `errands`, `schedule_runs` in the home DB | UUID; job name | `FOR UPDATE SKIP LOCKED`; the scheduler walks both homes | errand runs only from `scheduled`; a job runs only if `last_run_at` is older than its interval | commit | finished errands after 24 h |
 | Event | `outbox_messages`, `processed_events` | event UUID = dedup key; (consumer, event_id) unique | home DB | per-subscriber task; mark in the subscriber's transaction | commit with the effect | published rows after 7 days |
@@ -249,7 +250,7 @@
 | id | Invariant |
 |---|---|
 | inv-1 | An account has exactly one home; an email is unique across homes |
-| inv-2 | Outside its home, primary data exists only as email HMAC, user id and home id; derived copies per §6 |
+| inv-2 | Outside its home, primary data exists only as email HMAC, user id and home id; derived copies and files of the EU home per §6 |
 | inv-3 | Entitlements fail closed; a paid period is never lost under concurrent confirmations |
 | inv-4 | One charge per order and per renewal period; the acquirer is acknowledged only after the record is durable |
 | inv-5 | Every grant (period, credits, reward) follows from exactly one successful transaction |
@@ -258,7 +259,7 @@
 | inv-8 | A pipeline stage counts once; a retry creates no duplicate results |
 | inv-9 | One external model call produces one cost row and at most one credit debit |
 | inv-10 | A vector index is derived and rebuildable; a query never returns data the requester may not see |
-| inv-11 | Bytes live only in the owner's home; the storage quota is not exceeded |
+| inv-11 | Bytes live only in the one bucket in Russia, reachable only through a pointer in the owner's home; the storage quota is not exceeded |
 | inv-12 | A writing agent action runs at most once and only after confirmation |
 | inv-13 | No money ceiling stops a meeting or standard transcription (unlimited-meetings promise) |
 | inv-14 | A company resource opens only for its members at the resource's access level; checked on every access, never cached; search and Leo obey the same rule |
@@ -320,7 +321,7 @@
    2. Acquirer called outside the transaction.
    3. Webhook: lock the transaction row → mark success → extend the subscription under its row lock → outbox (receipt email, rewards) → commit → answer 2xx.
 7. **Invoice payment.**
-   1. API commits the invoice and stores the PDF in the home bucket.
+   1. API commits the invoice and stores the PDF in the bucket.
    2. Hourly worker reads the bank statement and matches by invoice number.
    3. One transaction: invoice paid + seats extended + audit event.
 8. **Link to the Russian DB lost.**
@@ -353,6 +354,7 @@
 - The compute plane is shared by both jurisdictions; processes inside it are duplicated.
 - The link plane → Russian DB; losing it stops Russian users.
 - Managed Valkey (with replica): task streams, transcript queue, meeting state.
+- The S3 bucket in Russia: uploads and downloads of both homes.
 - EU DB as directory primary: registration and transfer depend on it.
 - The access policy: one module for all checks, covered by isolation tests on every read path and by RLS.
 - One operator.
@@ -610,7 +612,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | taskiq-redis | 1.2.4 | TaskIQ broker on Redis Streams |
 | Backend | websockets | 17.1 | Streaming connections to AI providers |
 | Backend | google-genai | 2.25.0 | Gemini Live client |
-| Backend | aioboto3 | 15.5.0 | S3 client; one bucket per data home |
+| Backend | aioboto3 | 15.5.0 | S3 client; one bucket for both homes |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
 | Backend | Own HTTP metrics on prometheus-client, recorded by the request boundary | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |
 | Backend | Own GCRA limiter on redis-py, state in Valkey | — | Request rate limits; replaces slowapi, whose storage is synchronous ([ADR 0011](../adr/0011-rate-limits-gcra-in-valkey.md)) |
@@ -625,7 +627,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Data | PostgreSQL row-level security | — | Second line of tenant isolation for companies |
 | Data | Valkey, managed (Netherlands) | 9.1 | The managed Redis-compatible service: task queues, transcript queue, locks, meeting state, Leo checkpoints |
 | Data | Redis, container | 8.10.2 | Local LRU cache |
-| Data | S3 Timeweb ru-1 · S3 in the EU | — | Files of the Russian and EU data homes |
+| Data | S3 Timeweb ru-1 | — | One bucket: files of both data homes and the platform ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) |
 | Realtime and integrations | LiveKit server, egress, coturn | pinned | Video rooms, recording, per-participant tracks to the ws gateway, TURN |
 | Realtime and integrations | Nango | pinned | OAuth proxy for connectors, one per data home |
 | Realtime and integrations | Web Push (VAPID) | — | PWA notifications |
@@ -681,12 +683,14 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Grafana stack for observability: Prometheus, Loki, Tempo, Grafana | one ecosystem: native links metric → trace → logs; log alerts through the Loki ruler into the same Alertmanager; S3 storage available for Loki and Tempo when needed | label discipline in Loki; ad-hoc search by a high-cardinality field scans lines within the time range | ad-hoc searches by user or company over long periods become routine, or logs grow far beyond ≈ 1.5 GB/day stored → revisit the log store |
 | Tempo for traces, 7 days on local storage | native Grafana integration: TraceQL, trace → logs in Loki, exemplars from Prometheus | one more store; tail sampling needed | trace volume outgrows the local disk → Tempo on S3 |
 | One OpenTelemetry Collector for logs and traces | the application is independent of the stores; tail sampling in one place | one more process to run | never |
-| Presigned uploads directly to the home bucket; lifecycle rules | no DB session or API process held by file transfer | two-step upload; abandoned uploads removed by bucket rules | the storage provider lacks presigned multipart or lifecycle rules |
+| One S3 bucket in Russia for both homes ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) | object storage exists only in Russia; the draft's bucket is kept (ADR 0006); an account transfer moves no bytes | files of the EU home outside the EU (legal review, §22); one bucket is a single point of failure for files | the legal review rules it inadmissible, a company contract requires EU storage, or an EU bucket becomes available → a bucket per home, objects of the EU home copied with identical keys |
+| Presigned uploads directly to the bucket; lifecycle rules | no DB session or API process held by file transfer | two-step upload; abandoned uploads removed by bucket rules | the storage provider lacks presigned multipart or lifecycle rules |
 
 ## 20. Accepted trade-offs
 
 - Russian users: cabinet and Leo latency bound by 45 ms per DB round trip. nfr-7 is not met for them.
 - Derived copies of Russian users' and companies' data live in the EU (§6).
+- Files of people and companies of the EU home live in Russia, in the one bucket (§6, ADR 0014).
 - Availability for Russian users = plane × link to the Russian DB.
 - A Redis failover can lose up to 1 s of transcript lines.
 - 99.9% of meeting capture excludes the AI provider; its outage degrades capture.
@@ -707,9 +711,9 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 
 | Item | Owner | Needed before |
 |---|---|---|
-| Legal review: email HMAC outside Russia; derived copies in the EU; telemetry without an account in the EU home (ADR 0005); data of people outside Russia kept in the Russian home until their transfer (ADR 0004); cross-border transfer to AI providers; processor agreement (152-FZ) and DPA (GDPR) with the list of subprocessors | owner, lawyer | first transfer of accounts; first company contract |
+| Legal review: email HMAC outside Russia; derived copies in the EU; telemetry without an account in the EU home (ADR 0005); data of people outside Russia kept in the Russian home until their transfer (ADR 0004); files of the EU home in the bucket in Russia (ADR 0014); cross-border transfer to AI providers; processor agreement (152-FZ) and DPA (GDPR) with the list of subprocessors | owner, lawyer | first transfer of accounts; first company contract |
 | Tax, closing documents, document exchange for Russian legal entities | owner, accountant | first invoice |
-| Provider of the EU PostgreSQL and EU S3; bank for statement API | owner | building the EU home; first invoice |
+| Provider of the EU PostgreSQL; bank for statement API | owner | building the EU home; first invoice |
 | Provider quotas for 2 600 concurrent recognition and voice sessions | owner | 1 000 concurrent meetings |
 | Seat price ≥ recognition cost ($7.92–15.84 per seat per month) plus models | owner | announcing prices |
 | Measurement gates: link plane → Russian DB (latency, availability, one month); Redis latency from WS processes (< 5 ms); meetings per WS process under a real provider; tracks per egress and per WS process; RLS overhead on meeting read and search | engineering | the corresponding step |

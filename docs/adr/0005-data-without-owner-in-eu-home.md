@@ -1,6 +1,6 @@
 # ADR 0005 — Data without an owning account lives in the EU home
 
-- **Status:** accepted by the owner on 2026-10-01 (D3, decisions U-2 and U-8 in [DATA_MAPPING.md](../plan/DATA_MAPPING.md#10-decisions-for-the-user)).
+- **Status:** accepted by the owner on 2026-10-01 (D3, decisions U-2 and U-8 in [DATA_MAPPING.md](../plan/DATA_MAPPING.md#10-decisions-for-the-user)). The files of this data (desktop builds) live in the one bucket in Russia under `platform/` since [ADR 0014](0014-one-object-store-in-russia.md) (2026-10-02); their rows stay in the EU home.
 - **Package:** D3; applied by M1 and by the slices that own these tables (S03, S07, S09, S10, S14, S15, S16).
 - **Context documents:** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §4.1, §4.2, §6, §22; [DATA_MAPPING.md](../plan/DATA_MAPPING.md) rule R12.
 

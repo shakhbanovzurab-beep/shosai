@@ -27,7 +27,7 @@ Whisperer is an AI workspace. It brings a person's knowledge, meetings, document
 
 ### Hosting constraints now
 
-The target architecture places data in two homes: PostgreSQL and S3 in Russia and in the EU, plus managed Valkey in the EU. **These are not available from the hosting provider yet.**
+The target architecture places data in two homes: PostgreSQL in Russia and in the EU, one S3 bucket in Russia for both homes ([ADR 0014](../docs/adr/0014-one-object-store-in-russia.md)), plus a managed Redis-compatible store (Valkey) in the EU. **The owner is adding these resources; until F4 connects them, they are not available to development.**
 
 - Code implements the target architecture as written, including home-aware data access. Do not simplify the design to fit today's hosting.
 - Develop and test against local containers.

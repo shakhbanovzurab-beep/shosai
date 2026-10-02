@@ -1,6 +1,6 @@
 # ADR 0006 — The draft's bucket becomes the Russian home bucket; object keys are kept
 
-- **Status:** accepted by the owner on 2026-10-01 (D3, decision U-3 in [DATA_MAPPING.md](../plan/DATA_MAPPING.md#10-decisions-for-the-user)).
+- **Status:** accepted by the owner on 2026-10-01 (D3, decision U-3 in [DATA_MAPPING.md](../plan/DATA_MAPPING.md#10-decisions-for-the-user)). Since [ADR 0014](0014-one-object-store-in-russia.md) (2026-10-02) this bucket is the one bucket of both homes and the platform; the decisions below hold unchanged.
 - **Package:** D3; applied by M1, S08 and every slice with object pointers.
 - **Context documents:** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §4.1, §8.1 (File), §14 rule 7; [DATA_MAPPING.md](../plan/DATA_MAPPING.md) section 6.
 

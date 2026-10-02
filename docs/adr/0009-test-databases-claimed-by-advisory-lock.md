@@ -15,7 +15,7 @@
 1. **Tests read only variables prefixed with `TEST_`.** A runtime variable a test needs is read under its runtime name with the prefix:
    - `TEST_HOME_RU_DATABASE_URL`, `TEST_HOME_EU_DATABASE_URL` — `whisperer_app` through PgBouncer;
    - `TEST_HOME_RU_MIGRATION_DATABASE_URL`, `TEST_HOME_EU_MIGRATION_DATABASE_URL` — `whisperer_migrator`, directly;
-   - `TEST_VALKEY_URL`, `TEST_REDIS_CACHE_URL`, `TEST_HOME_RU_S3_*`, `TEST_HOME_EU_S3_*`;
+   - `TEST_VALKEY_URL`, `TEST_REDIS_CACHE_URL`, `TEST_S3_*` (one bucket for both homes since [ADR 0014](0014-one-object-store-in-russia.md));
    - `TEST_DATABASE_SLOTS` — the number of prepared slots, at most 15.
 
    The database name in every database URL is `whisperer_test`; the harness appends `_<slot>`. The application under test receives settings built from these values only; runtime variables such as `HOME_RU_DATABASE_URL` or `DATABASE_URL` are never read.
@@ -31,7 +31,7 @@
 4. **State.** A catalog fingerprint covers every object in the database that does not belong to an extension: relations, types, functions, schemas, policies, triggers, grants and default privileges, plus the installed extensions and the database's rights and settings.
    - On claim, the slot is returned to the state the F3 init script prepares, and only then is the fingerprint taken as the reference. A crashed run's objects are dropped: non-extension objects in `public`, other schemas, extensions owned by `whisperer_migrator`. What does not go away with objects is restored: the migrator's default privileges, the owner and rights of the `public` schema, the rights on the database and its settings. On a clean slot this changes nothing. Without it, a right a crashed run had changed would enter the next run's reference, and that run's downgrade would fail it. (Amended by the owner on 2026-10-02; the first version dropped only objects in `public`.)
    - The run applies `alembic upgrade head` to both homes.
-   - After each test, every application table in both homes is truncated through the migrator connection; the slot's Valkey and Redis databases are flushed; objects under `tests/slot-<N>/` in both buckets are deleted.
+   - After each test, every application table in both homes is truncated through the migrator connection; the slot's Valkey and Redis databases are flushed; objects under `tests/slot-<N>/` in the bucket are deleted.
    - At the end, `alembic downgrade base` runs in both homes and the fingerprint must equal the reference. A difference fails the run and names the objects.
 
 5. **CI uses the same mechanism** against the same `compose.dev.yaml` services, normally on slot 1.

@@ -380,7 +380,7 @@ All of these keep an owner; none conflicts with the target architecture. They fo
 | NATS JetStream for domain events | Outbox + one TaskIQ task per subscriber (§12) | none |
 | Temporal for errands | `errands` rows run by the scheduler (§12, §19) | none |
 | Onyx for knowledge search | Qdrant with PostgreSQL keyword fallback (§4.2) | none expected. **Risk for M1:** documents uploaded through the draft's knowledge form went straight to Onyx and were not stored by the draft (`knowledge_engine/application/intake.py`); D3 must find whether originals exist for every document |
-| Uploads proxied through the API process | Presigned multipart to the home bucket (§10, §19) | none; draft paths stay for native clients |
+| Uploads proxied through the API process | Presigned multipart to the bucket (§10, §19) | none; draft paths stay for native clients |
 | One database | Two homes and the directory | none for a user; transfer between homes is new |
 
 ---
