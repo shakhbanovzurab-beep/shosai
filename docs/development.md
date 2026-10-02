@@ -65,7 +65,14 @@ Both PgBouncers run in transaction mode with protocol-level prepared statements 
 
 Every server holds prepared test databases `whisperer_test_1` … `whisperer_test_8` (`LOCAL_TEST_DATABASE_COUNT`, at most 64), owned by `whisperer_migrator`, with `vector` installed. Slot `N` has the same name on both servers, so a run that claims slot `N` has one database per home.
 
-How a run claims a free slot, and how tests address the second home, is defined by package F1 in its ADR. Whatever the mechanism, the rules in CLAUDE.md "Test database" apply: tests read only `TEST_DATABASE_URL`, refuse anything that is not a test database, and leave data and schema exactly as they found them.
+Backend tests use them as [ADR 0009](adr/0009-test-databases-claimed-by-advisory-lock.md) describes:
+
+- Tests read only `TEST_*` variables (section 3 of [`.env.example`](../.env.example)): per home, the application role through PgBouncer and the migration role directly, each with the database name `whisperer_test`, plus `TEST_DATABASE_SLOTS`. The harness appends the slot number; runtime variables are never read.
+- A run claims the first slot free on both servers with `pg_try_advisory_lock` over direct `whisperer_migrator` connections and holds them until it ends, so parallel runs (other agents, pytest-xdist workers) never share a slot. A crashed run's locks are released with its connections.
+- Before anything is written, the harness refuses a host that is not loopback, a database name other than `whisperer_test`, a database without the `Prepared test database` comment of the init script, and a `TEST_` URL equal to a runtime URL.
+- On claim it returns the slot to the state the init script prepares — it drops a crashed run's objects and the extensions `whisperer_migrator` created, and restores default privileges, rights on the `public` schema and on the database, and database settings — then records a fingerprint of each home's catalog; at the end of the run both catalogs must match it, or the run fails and names the objects.
+- Run from `backend/` with the environment up: `uv run --env-file ../.env pytest`. Tests that do not touch the databases also run without it.
+- More parallel runs need more slots: raise `LOCAL_TEST_DATABASE_COUNT`, reset, and raise `TEST_DATABASE_SLOTS` (at most 15).
 
 ## Configuration
 

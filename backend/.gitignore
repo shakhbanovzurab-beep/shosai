@@ -1,0 +1,12 @@
+# Локальное окружение и кэши инструментов проекта backend/.
+# backend/.env (production-значения чистовика) исключает корневой .gitignore.
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.python-doctor/
+.coverage
+.coverage.*
+htmlcov/
+__pycache__/
