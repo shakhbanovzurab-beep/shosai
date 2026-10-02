@@ -10,7 +10,7 @@ The target architecture places data in two homes — a managed PostgreSQL cluste
 
 ## Decisions
 
-1. **S3 stand-in: SeaweedFS 4.48** (`chrislusf/seaweedfs`, `weed mini`), one store with one bucket per home.
+1. **S3 stand-in: SeaweedFS 4.48** (`chrislusf/seaweedfs`, `weed mini`), one store with one bucket per home (one bucket for both homes since [ADR 0014](0014-one-object-store-in-russia.md)).
    MinIO, the usual choice, stopped publishing community images in late 2025, and its repository was archived in early 2026. Before adoption, SeaweedFS was checked here for every operation the design relies on:
    - signed put and get;
    - presigned GET, with a tampered URL rejected;
@@ -37,7 +37,7 @@ The target architecture places data in two homes — a managed PostgreSQL cluste
 - Backend code must turn asyncpg's statement cache off. The default cache fails behind the local PgBouncer with `prepared statement "__asyncpg_stmt_N__" does not exist`; this was observed during verification. (Superseded by [ADR 0013](0013-psycopg-driver-behind-pgbouncer.md) on 2026-10-02: the backend uses psycopg 3 without server-side prepared statements.)
 - Session `SET`, session advisory locks and `LISTEN` are unavailable to the application; `SET LOCAL` per transaction is the pattern (§7).
 - Two third-party images that are not Docker official images (SeaweedFS, edoburu/pgbouncer) are pinned by tag in a development-only file. They never run in staging or production.
-- Both buckets share one local store and one key pair; per-home storage configuration in code is still separate.
+- Both buckets share one local store and one key pair; per-home storage configuration in code is still separate. (Superseded by [ADR 0014](0014-one-object-store-in-russia.md) on 2026-10-02: the local store keeps one bucket, `whisperer`, as production keeps one bucket in Russia; the code has one storage configuration, `S3_*`.)
 
 ## Revisit when
 

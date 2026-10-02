@@ -445,6 +445,7 @@
 - RLS on company-scoped tables.
 - The application role cannot modify the audit log.
 - Secrets only from the environment. Tokens, passwords and keys are never logged.
+- Connections leaving the plane are encrypted: each home's database with `sslmode=verify-full`, the bucket over HTTPS, the managed Valkey over TLS (`rediss://`); production refuses to start otherwise. The Redis cache stays inside the plane.
 - Recording and transcription are visible to all participants (indicator; consent at room entry).
 - Signatures of acquirer webhooks are checked before parsing the body.
 - Directory HMAC secret is stored outside the database.
@@ -612,7 +613,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | taskiq-redis | 1.2.4 | TaskIQ broker on Redis Streams |
 | Backend | websockets | 17.1 | Streaming connections to AI providers |
 | Backend | google-genai | 2.25.0 | Gemini Live client |
-| Backend | aioboto3 | 15.5.0 | S3 client; one bucket for both homes |
+| Backend | aiobotocore | 3.9.2 | S3 client; one bucket for both homes; replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
 | Backend | Own HTTP metrics on prometheus-client, recorded by the request boundary | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |
 | Backend | Own GCRA limiter on redis-py, state in Valkey | — | Request rate limits; replaces slowapi, whose storage is synchronous ([ADR 0011](../adr/0011-rate-limits-gcra-in-valkey.md)) |

@@ -7,12 +7,16 @@ A slice adds its own checks (for example, billing dev mode) through `extra_check
 
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass
+from urllib.parse import urlsplit
 
 from whisperer.core.config.loading import Settings
 from whisperer.core.config.sections import home_prefix
 from whisperer.core.config.values import Environment, LogLevel, database_url_parameter
 
 SECURE_STORAGE_SCHEME = "https"
+# Управляемый Valkey стоит вне контейнеров плоскости: задачи, строки транскрипта и
+# состояние встреч идут к нему по сети провайдера (решение владельца F1-D12).
+SECURE_VALKEY_SCHEME = "rediss"
 # Дом RU — в другой юрисдикции и за 45 мс по сети (§4.1): без проверки сертификата и
 # имени сервера соединение можно перехватить на пути.
 SECURE_DATABASE_SSLMODE = "verify-full"
@@ -79,12 +83,18 @@ def debug_logs_off(settings: Settings) -> Iterator[GateViolation]:
 
 
 def storage_over_tls(settings: Settings) -> Iterator[GateViolation]:
-    """Files and their signed links travel to each home's bucket only over TLS."""
-    for home, home_settings in settings.homes.items():
-        if home_settings.s3_endpoint_url.scheme != SECURE_STORAGE_SCHEME:
-            yield GateViolation(
-                f"{home_prefix(home)}S3_ENDPOINT_URL", "к хранилищу в production — только https"
-            )
+    """Files and their signed links travel to the one bucket only over TLS (ADR 0014)."""
+    if settings.storage.s3_endpoint_url.scheme != SECURE_STORAGE_SCHEME:
+        yield GateViolation("S3_ENDPOINT_URL", "к хранилищу в production — только https")
+
+
+def valkey_over_tls(settings: Settings) -> Iterator[GateViolation]:
+    """Task payloads, transcript lines and meeting state reach the managed Valkey over TLS."""
+    url = settings.shared_services.valkey_url.get_secret_value()
+    if urlsplit(url).scheme != SECURE_VALKEY_SCHEME:
+        yield GateViolation(
+            "VALKEY_URL", f"к Valkey в production — только {SECURE_VALKEY_SCHEME}://"
+        )
 
 
 def databases_over_tls(settings: Settings) -> Iterator[GateViolation]:
@@ -110,5 +120,6 @@ CORE_CHECKS: tuple[ProductionCheck, ...] = (
     encryption_key_present,
     debug_logs_off,
     storage_over_tls,
+    valkey_over_tls,
     databases_over_tls,
 )

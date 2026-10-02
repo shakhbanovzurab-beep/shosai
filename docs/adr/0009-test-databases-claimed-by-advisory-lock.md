@@ -15,16 +15,16 @@
 1. **Tests read only variables prefixed with `TEST_`.** A runtime variable a test needs is read under its runtime name with the prefix:
    - `TEST_HOME_RU_DATABASE_URL`, `TEST_HOME_EU_DATABASE_URL` — `whisperer_app` through PgBouncer;
    - `TEST_HOME_RU_MIGRATION_DATABASE_URL`, `TEST_HOME_EU_MIGRATION_DATABASE_URL` — `whisperer_migrator`, directly;
-   - `TEST_VALKEY_URL`, `TEST_REDIS_CACHE_URL`, `TEST_S3_*` (one bucket for both homes since [ADR 0014](0014-one-object-store-in-russia.md));
+   - `TEST_VALKEY_URL`, `TEST_REDIS_CACHE_URL` — without a database index, which the slot number supplies; `TEST_S3_*` (one bucket for both homes since [ADR 0014](0014-one-object-store-in-russia.md));
    - `TEST_DATABASE_SLOTS` — the number of prepared slots, at most 15.
 
    The database name in every database URL is `whisperer_test`; the harness appends `_<slot>`. The application under test receives settings built from these values only; runtime variables such as `HOME_RU_DATABASE_URL` or `DATABASE_URL` are never read.
 
 2. **The guard refuses to start** before anything is written, if any of these fails:
-   - every host is a loopback address;
+   - every host is a loopback address, the bucket's endpoint included;
    - every database name is `whisperer_test`, and the claimed database's comment starts with `Prepared test database` (set by the F3 init script and nowhere else);
    - the Valkey and Redis database index replaced by the slot is not 0, which development uses;
-   - no `TEST_` URL equals a runtime URL present in the environment.
+   - no database, Valkey or cache `TEST_` URL equals a runtime URL present in the environment. The bucket's endpoint may equal the development one: locally both use the one bucket of the local store, and a run writes only under `tests/slot-<N>/` and empties it after every test. (Amended by the owner on 2026-10-02, F1-D11; the first version applied the rule to every `TEST_` URL, which the one local bucket of ADR 0014 cannot satisfy.)
 
 3. **Claiming.** For slot 1 … N, the harness opens a direct `whisperer_migrator` connection to `whisperer_test_<slot>` in the RU home and calls `pg_try_advisory_lock` on a fixed key, then does the same in the EU home. The first slot locked in both homes is the run's; the connections stay open until the run ends. A crashed run's connections close, so its locks are released without any manual step. No free slot fails the run with a message naming N. Each pytest-xdist worker, if used, claims its own slot.
 

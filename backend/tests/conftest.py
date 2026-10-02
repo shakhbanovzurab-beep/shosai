@@ -2,8 +2,9 @@
 
 The test database slot is claimed by the first test that needs it and held until the
 run ends (ADR 0009): both homes are migrated to the head after the claim and downgraded
-to the base at the end, before the catalog check. Tests without databases run without
-the local environment too.
+to the base at the end, before the catalog check. The slot also names the run's Valkey
+and cache databases and its prefix in the bucket (`tests/harness/shared_services.py`).
+Tests without databases and services run without the local environment too.
 A harness failure is reported as short text without a traceback: its local variables
 would contain the whole process environment.
 """
@@ -21,7 +22,7 @@ from tests.harness.settings import HarnessConfigurationError, HarnessSettings
 from tests.harness.slots import NoFreeSlotError
 
 RUN_SLOT_SUMMARY = pytest.StashKey[list[str]]()
-pytest_plugins = ("tests.harness.database_access",)
+pytest_plugins = ("tests.harness.database_access", "tests.harness.shared_services")
 
 
 @pytest.fixture(scope="session")

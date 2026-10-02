@@ -1,8 +1,8 @@
 # Локальное окружение Whisperer v2: замена управляемых сервисов, которых у
 # хостинга пока нет (CLAUDE.md, «Hosting constraints now»). Топология повторяет
 # target architecture §4: два дома данных — два отдельных сервера PostgreSQL,
-# каждый за своим PgBouncer, по бакету на дом в S3, плюс общие для плоскости
-# Valkey, кэш Redis и Qdrant.
+# каждый за своим PgBouncer, один бакет S3 на оба дома (ADR 0014), плюс общие
+# для плоскости Valkey, кэш Redis и Qdrant.
 #
 # Запуск, остановка, сброс и соответствие домов серверам — docs/development.md.
 # Все порты слушают только 127.0.0.1. Пароли ниже — локальные значения по
@@ -233,9 +233,11 @@ services:
         limits:
           memory: 1g
 
-  # S3-совместимое хранилище: по бакету на дом (§4.1). SeaweedFS выбран вместо
-  # MinIO, чьи образы больше не публикуются (ADR 0001). Бакеты создаются при
-  # старте; автосоздание бакетов при загрузке выключено, как у настоящего S3.
+  # S3-совместимое хранилище: один бакет для обоих домов, как бакет в России
+  # (§4.1, ADR 0014). SeaweedFS выбран вместо MinIO, чьи образы больше не
+  # публикуются (ADR 0001). Бакет создаётся при старте; автосоздание бакетов при
+  # загрузке выключено, как у настоящего S3. Тесты пишут только под
+  # tests/slot-<N>/ этого же бакета (ADR 0009).
   s3:
     <<: *service-defaults
     image: chrislusf/seaweedfs:4.48
@@ -243,7 +245,7 @@ services:
     command:
       - mini
       - -dir=/data
-      - -bucket=whisperer-ru,whisperer-eu
+      - -bucket=whisperer
       - -s3.autoCreateBucket=false
       - -webdav=false
       - -admin.ui=false
@@ -260,13 +262,12 @@ services:
     ports:
       - "127.0.0.1:${LOCAL_S3_PORT:-18333}:8333"
     healthcheck:
-      # Готовность — это S3 API плюс оба бакета, а не только живой процесс.
+      # Готовность — это S3 API плюс бакет, а не только живой процесс.
       test:
         - CMD-SHELL
         - >-
           curl -fsS -o /dev/null http://127.0.0.1:8333/healthz &&
-          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/whisperer-ru/ &&
-          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/whisperer-eu/
+          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/whisperer/
       interval: 30s
       timeout: 3s
       retries: 3

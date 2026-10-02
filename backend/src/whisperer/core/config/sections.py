@@ -61,7 +61,7 @@ class RuntimeSettings(SettingsSection):
 
 
 class HomeSettings(SettingsSection):
-    """One data home: its PostgreSQL behind PgBouncer and its S3 bucket (`HOME_<RU|EU>_*`).
+    """One data home: its PostgreSQL behind PgBouncer (`HOME_<RU|EU>_*`).
 
     The migration address is only for the `migrate` command: the long-running roles work
     under the application role and do not receive the owner's password.
@@ -69,6 +69,11 @@ class HomeSettings(SettingsSection):
 
     database_url: DatabaseUrl
     migration_database_url: DatabaseUrl | None = None
+
+
+class StorageSettings(SettingsSection):
+    """The one S3 bucket in Russia: files of both homes and of the platform (ADR 0014)."""
+
     s3_endpoint_url: HttpUrl
     s3_region: NonEmptyText
     s3_bucket: NonEmptyText

@@ -1,12 +1,14 @@
-"""Guards against a database that is not a test database (ADR 0009, item 2).
+"""Guards against a target that is not a test one (ADR 0009, item 2).
 
 They run before the first write. Messages name the variable and the host, never the
-whole URL: it contains the password.
+whole URL: it contains the password. Databases, Valkey, the cache and the bucket must be
+on loopback; database, Valkey and cache addresses must differ from every runtime address.
 """
 
 from collections.abc import Mapping
 from ipaddress import ip_address
 
+from tests.harness.service_settings import ServiceTargets, storage_variable
 from tests.harness.settings import TEST_DATABASE_NAME, DatabaseTarget, HarnessSettings
 
 TEST_VARIABLE_PREFIX = "TEST_"
@@ -29,7 +31,8 @@ def ensure_safe_targets(settings: HarnessSettings, environ: Mapping[str, str]) -
     ]
     problems = [
         *(problem for target in targets for problem in _target_problems(target)),
-        *_runtime_url_problems(settings.database_variables(), environ),
+        *_service_problems(settings.services),
+        *_runtime_url_problems(settings.separated_url_variables(), environ),
     ]
     if problems:
         raise UnsafeTestTargetError("\n".join(problems))
@@ -64,6 +67,19 @@ def _target_problems(target: DatabaseTarget) -> list[str]:
             f"{target.variable}: имя базы {target.database}, ожидается {TEST_DATABASE_NAME}"
         )
     return problems
+
+
+def _service_problems(services: ServiceTargets) -> list[str]:
+    hosts = {
+        services.valkey.variable: services.valkey.host,
+        services.cache.variable: services.cache.host,
+        storage_variable("s3_endpoint_url"): services.storage_host(),
+    }
+    return [
+        f"{variable}: хост {host} не петлевой адрес"
+        for variable, host in hosts.items()
+        if not is_loopback(host)
+    ]
 
 
 def _runtime_url_problems(test_variables: tuple[str, ...], environ: Mapping[str, str]) -> list[str]:

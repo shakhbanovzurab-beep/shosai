@@ -11,6 +11,7 @@ from urllib.parse import quote, unquote, urlsplit
 
 from pydantic import SecretStr
 
+from tests.harness.service_settings import ServiceTargets
 from whisperer.core.kernel.homes import Home
 
 DATABASE_URL_SCHEME = "postgresql"
@@ -80,10 +81,11 @@ class HomeTargets:
 
 @dataclass(frozen=True, slots=True)
 class HarnessSettings:
-    """Everything the harness knows about test databases: both homes' URLs and the slot count."""
+    """Both homes' database URLs, the slot count and the shared services of the test runs."""
 
     homes: Mapping[Home, HomeTargets]
     database_slots: int
+    services: ServiceTargets
 
     @classmethod
     def from_environ(cls, environ: Mapping[str, str]) -> Self:
@@ -96,9 +98,10 @@ class HarnessSettings:
             if application is not None and migration is not None:
                 homes[home] = HomeTargets(application=application, migration=migration)
         database_slots = _read_slots(environ, problems)
-        if problems:
+        services = ServiceTargets.read(environ, problems)
+        if problems or services is None:
             raise HarnessConfigurationError("\n".join([*problems, SETUP_HINT]))
-        return cls(homes=homes, database_slots=database_slots)
+        return cls(homes=homes, database_slots=database_slots, services=services)
 
     def database_variables(self) -> tuple[str, ...]:
         """Names of every database URL variable the harness read."""
@@ -106,6 +109,18 @@ class HarnessSettings:
             target.variable
             for targets in self.homes.values()
             for target in (targets.application, targets.migration)
+        )
+
+    def separated_url_variables(self) -> tuple[str, ...]:
+        """URL variables that must differ from every runtime URL: databases, Valkey, cache.
+
+        The bucket's endpoint is not one of them: tests share the development bucket and
+        stay under their own prefix (ADR 0009, item 2).
+        """
+        return (
+            *self.database_variables(),
+            self.services.valkey.variable,
+            self.services.cache.variable,
         )
 
 

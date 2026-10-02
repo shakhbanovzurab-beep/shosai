@@ -45,8 +45,8 @@ def test_reads_every_section_of_a_local_environment() -> None:
     assert set(settings.homes) == set(Home)
     ru = settings.homes[Home.RU]
     assert ru.database_url.get_secret_value().endswith("@127.0.0.1:16432/whisperer")
-    assert ru.s3_bucket == "whisperer-ru"
-    assert settings.homes[Home.EU].s3_region == "local-eu"
+    assert settings.storage.s3_bucket == "whisperer"
+    assert settings.storage.s3_region == "local"
     assert settings.shared_services.valkey_url.get_secret_value().endswith(":16379/0")
     assert settings.web.api_docs_enabled is False
     assert settings.web.cors_allowed_origins == ()
@@ -84,8 +84,8 @@ def test_the_process_environment_is_never_read(monkeypatch: pytest.MonkeyPatch) 
 
 
 def test_an_empty_variable_counts_as_unset() -> None:
-    assert problems_of(local_environ(HOME_EU_S3_BUCKET="")) == (
-        "HOME_EU_S3_BUCKET: обязательная переменная не задана",
+    assert problems_of(local_environ(S3_BUCKET="")) == (
+        "S3_BUCKET: обязательная переменная не задана",
     )
 
 
@@ -125,7 +125,7 @@ def test_lists_are_comma_separated_and_normalized() -> None:
         ("HOME_EU_DATABASE_URL", "postgresql://whisperer_app:x@127.0.0.1"),
         ("HOME_EU_DATABASE_URL", "postgresql://u:x@127.0.0.1/whisperer?application_name=x"),
         ("HOME_RU_MIGRATION_DATABASE_URL", "postgresql://u:x@127.0.0.1/whisperer#fragment"),
-        ("HOME_RU_S3_ENDPOINT_URL", "s3.example"),
+        ("S3_ENDPOINT_URL", "s3.example"),
         ("VALKEY_URL", "http://127.0.0.1:16379"),
         ("CORS_ALLOWED_ORIGINS", "*"),
         ("CORS_ALLOWED_ORIGINS", "https://app.example.com/path"),

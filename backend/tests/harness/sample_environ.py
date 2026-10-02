@@ -14,7 +14,16 @@ def sample_url(user: str, port: int, *, host: str = "127.0.0.1", database: str =
 def sample_environ(**overrides: str) -> dict[str, str]:
     """A full TEST_* set with F3's local ports; `overrides` replaces or adds variables."""
     ports = {Home.RU: (16432, 15432), Home.EU: (16433, 15433)}
-    environ = {"TEST_DATABASE_SLOTS": "8"}
+    environ = {
+        "TEST_DATABASE_SLOTS": "8",
+        "TEST_VALKEY_URL": f"redis://:{SAMPLE_PASSWORD}@127.0.0.1:16379",
+        "TEST_REDIS_CACHE_URL": f"redis://:{SAMPLE_PASSWORD}@127.0.0.1:16380",
+        "TEST_S3_ENDPOINT_URL": "http://127.0.0.1:18333",
+        "TEST_S3_REGION": "local",
+        "TEST_S3_BUCKET": "whisperer",
+        "TEST_S3_ACCESS_KEY_ID": "local-s3-access",
+        "TEST_S3_SECRET_ACCESS_KEY": SAMPLE_PASSWORD,
+    }
     for home, (application_port, migration_port) in ports.items():
         environ[f"TEST_HOME_{home.name}_DATABASE_URL"] = sample_url(
             "whisperer_app", application_port

@@ -17,7 +17,7 @@ import-linter contracts in `pyproject.toml` (`uv run lint-imports`):
 `core/config` reads the settings once per process from environment variables and passes them in; nothing reads a `.env` file or keeps a cached global. Every variable is documented with its purpose in section 2 of [`.env.example`](../.env.example), and a test keeps that section in step with the settings sections. Locally uv passes the file: `uv run --env-file ../.env …`.
 
 - `load_settings(os.environ)` reports every invalid or missing variable at once, by name, never by value.
-- `ENVIRONMENT` is required. With `production`, `enforce_production_gate` refuses to start when the API docs are on, `TRUSTED_PROXY_ADDRESSES` or `FERNET_KEY` is missing, `LOG_LEVEL` is `DEBUG` or a home's storage endpoint is not `https`. A slice adds its own checks through `extra_checks`.
+- `ENVIRONMENT` is required. With `production`, `enforce_production_gate` refuses to start when the API docs are on, `TRUSTED_PROXY_ADDRESSES` or `FERNET_KEY` is missing, `LOG_LEVEL` is `DEBUG`, the bucket's endpoint is not `https`, `VALKEY_URL` is not `rediss://` or a home's database address lacks `sslmode=verify-full`. A slice adds its own checks through `extra_checks`.
 - A slice declares its own section as a subclass of `SettingsSection` and documents its variables in section 2.
 
 ## Logs, traces, metrics
@@ -64,6 +64,18 @@ One Alembic history in `src/whisperer/migrations/` for both homes, applied home 
 - New tables are closed to the application role until `grant_to_application(scope, table, privileges)`; `revoke_from_application` undoes it.
 - A test compares the models with the migrated schema of each home (`compare_metadata` must be empty).
 
+## Valkey, cache, object storage
+
+Slices receive these clients from composition by injection; none is a global.
+
+- **Clients:** `connect_redis(url, client_name, tracer_provider)` gives one client with a bounded pool (64 connections) per Redis-protocol server per process: Valkey (`VALKEY_URL`) and the LRU cache (`REDIS_CACHE_URL`). The client never retries by itself: every call waits at most its own deadline (`asyncio.timeout`), and the caller decides what a failure means. Commands become client spans with their arguments replaced by `?`. Keys are `whisperer:<purpose>:<part>…` (`build_key`), parts from `[A-Za-z0-9_.-]`, so no free text becomes a key.
+- **Locks:** `async with locks.hold(name, ttl=…, outage=LockOutagePolicy.FAIL_CLOSED) as lease:` — `lease` is None while another process holds the lock; extend long work with `await lease.extend(ttl)`, which is False once the lock was lost. Every caller states what happens when Valkey does not answer within 50 ms: fail closed raises `LockUnavailableError`, fail open runs the work unguarded. Release and extension compare the holder's token in Lua.
+- **Rate limits** ([ADR 0011](../docs/adr/0011-rate-limits-gcra-in-valkey.md)): declare `RateLimit("sign_in", rate=5, period=timedelta(minutes=1), burst=5)` and put `Depends(rate_limited(limiter, limit))` on the route; the subject is the client address by default or any dependency returning a key, such as the user id; `detail=` keeps a native route's draft `detail`. Over the limit: 429 `rate_limited` with `Retry-After`. Valkey out or slower than 50 ms: the request passes, counted in `whisperer_rate_limit_decisions_total{limit, decision="failed_open"}`.
+- **Cache:** the port `Cache` (`get`, `get_many`, `set` with a TTL, `delete`), adapter `RedisCache`. Keys are `CacheKey(namespace, name)`; the namespace is a fixed code with the version of the value's shape (`directory.v1`). Every entry has a TTL, shortened by up to 10% at random; a call waits at most 20 ms; any failure is a miss, counted in `whisperer_cache_operations_total{namespace, operation, result}`. Never cache access rights (§7).
+- **Object storage** ([ADR 0014](../docs/adr/0014-one-object-store-in-russia.md), [ADR 0015](../docs/adr/0015-aiobotocore-instead-of-aioboto3.md)): the ports `ObjectStorage` and `MultipartUploads`, adapters `S3ObjectStorage` and `S3MultipartUploads` over one aiobotocore client of the one bucket (`open_s3_client(settings.storage)`): connect 2 s, read 20 s, at most 3 attempts. Clients upload and download with presigned requests valid 15 minutes; an upload link is signed for one content type and one length, a download link can pin the content type. The bucket out of reach is 503 `storage_unavailable` with `Retry-After`; a missing object is `ObjectNotFoundError`, a refused request `StorageRejectedError(code)`. Keys may contain file names, so they never enter logs, spans or metrics. No database transaction is open across a storage call (§14 rule 8).
+- **Outages** of these dependencies are logged at most once per 10 s per operation (`OutageLog`), with the number of failures held back; every failure is counted.
+- **Readiness:** `probe_dependencies([redis_probe("valkey", …), redis_probe("cache", …), storage_probe(objects)])` checks every dependency at once, each within 2 s, and reports `ok` or `down`; only the failures a probe declares mean `down`.
+
 ## Tests
 
 Tests that touch the databases need the local environment ([docs/development.md](../docs/development.md)); all tests read only `TEST_*` variables ([ADR 0009](../docs/adr/0009-test-databases-claimed-by-advisory-lock.md)), listed with local values in section 3 of [`.env.example`](../.env.example).
@@ -75,9 +87,10 @@ uv run --env-file ../.env pytest
 ```
 
 - The session fixture `run_slot` claims a free prepared slot `whisperer_test_<N>` in both homes with an advisory lock, so parallel runs never share one, and gives a direct migration-role connection per home. A crashed run's lock is released with its connections. The pytest summary names the slot.
-- The harness refuses to start if a host is not loopback, a database name is not `whisperer_test`, the claimed database is not a prepared test database, or a `TEST_` URL equals a runtime URL.
+- The harness refuses to start if a host is not loopback (the bucket's endpoint included), a database name is not `whisperer_test`, the claimed database is not a prepared test database, or a database, Valkey or cache `TEST_` URL equals a runtime URL.
 - On claim the harness returns the slot to the state F3 prepares — it drops a crashed run's objects and the extensions the migration role created, and restores default privileges, rights on the `public` schema and on the database, and database settings. At the end it fails the run, naming the objects, if the catalog of either home differs.
 - After the claim both homes are upgraded to the head with the production runner; at the end they are downgraded to the base, the version table is dropped, and only then are the catalogs compared.
+- The slot is also database `N` of Valkey and of the cache and the prefix `tests/slot-<N>/` of the bucket. A test that writes there takes `valkey`, `redis_cache` or `bucket` (`tests/harness/shared_services.py`), which empty the slot's part after it; a run that ends with keys or objects left fails.
 - A test that writes application data takes the `homes` fixture (`tests/harness/database_access.py`): the `api` database access of the run, emptied of application data after the test. `open_database_access(urls, ProcessShape(...))` builds the access of another role, pool, tracer, history or clock.
 
 ### Model-facing text

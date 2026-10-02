@@ -1,6 +1,6 @@
 # Local development environment
 
-The managed services of the target architecture — PostgreSQL and S3 in the Russian and EU data homes, managed Valkey in the EU — are not available from the hosting provider yet ([CLAUDE.md](../.claude/CLAUDE.md), "Hosting constraints now"). [`compose.dev.yaml`](../compose.dev.yaml) runs local stand-ins with the same topology, so home-aware code is developed and tested for real: two homes are two separate PostgreSQL servers, each behind its own PgBouncer, each with its own bucket.
+The managed services of the target architecture — PostgreSQL in the Russian and EU data homes, the one S3 bucket in Russia, managed Valkey in the EU — are not available from the hosting provider yet ([CLAUDE.md](../.claude/CLAUDE.md), "Hosting constraints now"). [`compose.dev.yaml`](../compose.dev.yaml) runs local stand-ins with the same topology, so home-aware code is developed and tested for real: two homes are two separate PostgreSQL servers, each behind its own PgBouncer, and the files of both homes live in one bucket ([ADR 0014](adr/0014-one-object-store-in-russia.md)).
 
 Requirements: Docker 29.8 or later with Compose 5.5 or later. Nothing else is installed on the host.
 
@@ -19,23 +19,23 @@ Reset touches only the volumes labelled with this Compose project (`whisperer-v2
 
 ## How the homes map to the servers
 
-| Home | PostgreSQL server | Direct port (migrations, admin) | PgBouncer | Application port | S3 bucket |
-|---|---|---|---|---|---|
-| Russian home | `postgres-ru` | `127.0.0.1:15432` | `pgbouncer-ru` | `127.0.0.1:16432` | `whisperer-ru` |
-| EU home, also the directory | `postgres-eu` | `127.0.0.1:15433` | `pgbouncer-eu` | `127.0.0.1:16433` | `whisperer-eu` |
+| Home | PostgreSQL server | Direct port (migrations, admin) | PgBouncer | Application port |
+|---|---|---|---|---|
+| Russian home | `postgres-ru` | `127.0.0.1:15432` | `pgbouncer-ru` | `127.0.0.1:16432` |
+| EU home, also the directory | `postgres-eu` | `127.0.0.1:15433` | `pgbouncer-eu` | `127.0.0.1:16433` |
 
 - Each server holds the home database `whisperer`. The database comment names its home (`\l+` in `psql`), so a misrouted connection is visible at a glance.
 - The directory (target architecture §6) is a set of tables in the EU home database, not a separate server or database.
-- Both buckets live in one local S3 store (SeaweedFS, `127.0.0.1:18333`). Code still configures storage per home — endpoint, region, credentials and bucket — exactly as it will for two providers.
+- The files of both homes and of the platform live in one bucket, `whisperer`, in the local S3 store (SeaweedFS, `127.0.0.1:18333`), as production keeps one bucket in Russia (ADR 0014). The code has one storage configuration, `S3_*`; the home is not part of an object key.
 
 Shared services of the compute plane:
 
 | Service | Stands in for | Port | Notes |
 |---|---|---|---|
-| `valkey` | managed Valkey (EU) | `127.0.0.1:16379` | Task streams, transcript queue, locks, meeting state. AOF every second, `noeviction`, password required. |
+| `valkey` | managed Valkey (EU) | `127.0.0.1:16379` | Task streams, transcript queue, locks, rate limits, meeting state. AOF every second, `noeviction`, password required. Production reaches it only over TLS (`rediss://`). |
 | `redis-cache` | Redis cache container | `127.0.0.1:16380` | LRU cache only (`allkeys-lru`, 256 MB). No persistence: a restart gives a cold cache, as in production. |
 | `qdrant` | Qdrant | `127.0.0.1:16333` (HTTP), `16334` (gRPC) | API key required; telemetry off. |
-| `s3` | S3 of both homes | `127.0.0.1:18333` | Buckets exist from the start; uploading to a missing bucket fails, as on real S3. |
+| `s3` | the one bucket in Russia | `127.0.0.1:18333` | Bucket `whisperer` exists from the start; uploading to a missing bucket fails, as on real S3. |
 
 Every port listens on `127.0.0.1` only. Connection strings for all of them are in [`.env.example`](../.env.example).
 
@@ -83,6 +83,12 @@ Backend tests use them as [ADR 0009](adr/0009-test-databases-claimed-by-advisory
 - Run from `backend/` with the environment up: `uv run --env-file ../.env pytest`. Tests that do not touch the databases also run without it.
 - More parallel runs need more slots: raise `LOCAL_TEST_DATABASE_COUNT`, reset, and raise `TEST_DATABASE_SLOTS` (at most 15).
 
+The slot also names the run's share of the shared services: database `N` of Valkey and of the Redis cache, and the prefix `tests/slot-<N>/` of the bucket.
+
+- `TEST_VALKEY_URL` and `TEST_REDIS_CACHE_URL` carry no database index; the harness adds the slot number. Development keeps database 0.
+- `TEST_S3_*` point at the development bucket: a run writes only under its prefix. The harness refuses an endpoint that is not loopback.
+- A test that writes takes the `valkey`, `redis_cache` or `bucket` fixture, which empties the slot's database or prefix after it; pending multipart uploads under the prefix are aborted too. A crashed run's leftovers are removed when the next run opens the slot, and a run that ends with keys or objects left fails.
+
 ## Configuration
 
 - `compose.dev.yaml` works without any `.env`. To change a port or a local password, copy [`.env.example`](../.env.example) to `.env` in the repository root and edit section 1.
@@ -97,6 +103,7 @@ Backend tests use them as [ADR 0009](adr/0009-test-databases-claimed-by-advisory
 
 ## Lifecycle notes
 
+- A volume created before ADR 0014 still holds the empty buckets `whisperer-ru` and `whisperer-eu`. Nothing reads them; `scripts/local-env.sh reset` removes them with the rest of the data.
 - Data persists in the named volumes `postgres-ru-data`, `postgres-eu-data`, `valkey-data`, `qdrant-storage`, `qdrant-snapshots` and `s3-data` (prefixed with `whisperer-v2-local_`). The Redis cache has no volume by design.
 - Every container runs with a read-only root filesystem and `no-new-privileges`, has a memory limit and rotates its logs (10 MB × 3, target architecture §14 rule 11).
 - Image versions are pinned in `compose.dev.yaml` and change only through a deliberate upgrade (CLAUDE.md, "Dependencies"). Decisions behind the stand-ins are in [ADR 0001](adr/0001-local-environment.md).
