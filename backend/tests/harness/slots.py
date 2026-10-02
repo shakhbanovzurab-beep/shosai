@@ -10,7 +10,7 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from typing import Final
 
-from tests.harness.connections import Connection, connect
+from tests.harness.connections import Connection, connect, fetch_value
 from tests.harness.guards import ensure_prepared_test_database
 from tests.harness.settings import DatabaseTarget, HarnessSettings, HomeTargets
 from whisperer.core.kernel.homes import Home
@@ -21,7 +21,7 @@ DATABASE_COMMENT_SQL: Final = (
     "SELECT shobj_description(oid, 'pg_database') FROM pg_database "
     "WHERE datname = current_database()"
 )
-TRY_LOCK_SQL: Final = "SELECT pg_try_advisory_lock($1)"
+TRY_LOCK_SQL: Final = "SELECT pg_try_advisory_lock(%s)"
 UNLOCK_ALL_SQL: Final = "SELECT pg_advisory_unlock_all()"
 
 
@@ -84,7 +84,7 @@ async def release_all(connections: Iterable[Connection]) -> None:
 async def _release(connection: Connection) -> None:
     """Release locks explicitly: after a close the server frees them only once its process exits."""
     try:
-        if not connection.is_closed():
+        if not connection.closed:
             await connection.execute(UNLOCK_ALL_SQL)
     finally:
         await connection.close()
@@ -113,13 +113,13 @@ async def _lock_database(target: DatabaseTarget, lock_key: int) -> Connection | 
     """Check the prepared-database mark and try to take the slot lock without waiting."""
     connection = await connect(target)
     try:
-        comment: str | None = await connection.fetchval(DATABASE_COMMENT_SQL)
-        ensure_prepared_test_database(target, comment)
-        locked: bool = await connection.fetchval(TRY_LOCK_SQL, lock_key)
+        comment = await fetch_value(connection, DATABASE_COMMENT_SQL)
+        ensure_prepared_test_database(target, comment if isinstance(comment, str) else None)
+        locked = await fetch_value(connection, TRY_LOCK_SQL, (lock_key,))
     except BaseException:
         await connection.close()
         raise
-    if locked:
+    if locked is True:
         return connection
     await connection.close()
     return None

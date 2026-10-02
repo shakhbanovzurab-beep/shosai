@@ -34,7 +34,7 @@ The target architecture places data in two homes — a managed PostgreSQL cluste
 
 ## Consequences
 
-- Backend code must turn asyncpg's statement cache off. The default cache fails behind the local PgBouncer with `prepared statement "__asyncpg_stmt_N__" does not exist`; this was observed during verification.
+- Backend code must turn asyncpg's statement cache off. The default cache fails behind the local PgBouncer with `prepared statement "__asyncpg_stmt_N__" does not exist`; this was observed during verification. (Superseded by [ADR 0013](0013-psycopg-driver-behind-pgbouncer.md) on 2026-10-02: the backend uses psycopg 3 without server-side prepared statements.)
 - Session `SET`, session advisory locks and `LISTEN` are unavailable to the application; `SET LOCAL` per transaction is the pattern (§7).
 - Two third-party images that are not Docker official images (SeaweedFS, edoburu/pgbouncer) are pinned by tag in a development-only file. They never run in staging or production.
 - Both buckets share one local store and one key pair; per-home storage configuration in code is still separate.

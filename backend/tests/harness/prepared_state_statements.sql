@@ -1,14 +1,15 @@
 -- Возврат захваченной тестовой базы к состоянию, которое готовит F3
 -- (deploy/local/postgres/init-home.sh), в том, что не уходит вместе с объектами:
 -- расширения, созданные ролью миграций; её привилегии по умолчанию; владелец и
--- права схемы public; права на саму базу и её настройки. $1 — роль приложения.
+-- права схемы public; права на саму базу и её настройки. {application_role} — роль
+-- приложения, литерал подставляет харнесс.
 -- Команды строятся только для отличий от подготовленного состояния, поэтому на
 -- чистой базе запрос пуст. Идентификаторы экранирует сервер (format с %I).
 WITH migrator AS (
     SELECT oid, rolname FROM pg_roles WHERE rolname = current_user
 ),
 application AS (
-    SELECT oid, rolname FROM pg_roles WHERE rolname = $1
+    SELECT oid, rolname FROM pg_roles WHERE rolname = {application_role}
 ),
 target_database AS (
     SELECT oid, datname, datdba, datacl FROM pg_database WHERE datname = current_database()

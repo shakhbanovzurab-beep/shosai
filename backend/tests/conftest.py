@@ -1,7 +1,9 @@
 """Shared fixtures of the backend tests.
 
 The test database slot is claimed by the first test that needs it and held until the
-run ends (ADR 0009). Tests without databases run without the local environment too.
+run ends (ADR 0009): both homes are migrated to the head after the claim and downgraded
+to the base at the end, before the catalog check. Tests without databases run without
+the local environment too.
 A harness failure is reported as short text without a traceback: its local variables
 would contain the whole process environment.
 """
@@ -13,11 +15,13 @@ import pytest
 import pytest_asyncio
 
 from tests.harness.guards import UnsafeTestTargetError, ensure_safe_targets
+from tests.harness.migrations import migrate_slot, unmigrate_slot
 from tests.harness.run_slot import RunSlot, open_run_slot
 from tests.harness.settings import HarnessConfigurationError, HarnessSettings
 from tests.harness.slots import NoFreeSlotError
 
 RUN_SLOT_SUMMARY = pytest.StashKey[list[str]]()
+pytest_plugins = ("tests.harness.database_access",)
 
 
 @pytest.fixture(scope="session")
@@ -43,7 +47,9 @@ async def run_slot(
         raise harness_stopped(error) from None
     pytestconfig.stash[RUN_SLOT_SUMMARY] = slot.summary()
     try:
+        await migrate_slot(slot.claimed)
         yield slot
+        await unmigrate_slot(slot.claimed)
         changes = await slot.catalog_changes()
         if changes:
             pytest.fail(

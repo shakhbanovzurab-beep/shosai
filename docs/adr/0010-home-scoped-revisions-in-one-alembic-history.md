@@ -17,7 +17,12 @@ An empty copy turns a routing mistake into a silent wrong answer: code that read
 3. **A revision is either for every home or scoped; it never mixes.** A change that needs both is split into two revisions.
 4. **EU-only tables do not exist in the Russian home:** the directory tables, the platform tables of ADR 0005, the telemetry without an account. A read routed to the wrong home fails with "relation does not exist".
 5. **Code names the home of platform and directory data explicitly** (`Home.EU`); it never takes it from the request's home.
-6. **A process refuses to start unless every home is at the head revision** (draft specification 035), and the release applies migrations to both homes before any process starts (§17).
+6. **A process refuses to start when a home's database is behind its code** (draft specification 035), and the release applies migrations to both homes before any process starts (§17). (Amended by the owner on 2026-10-02, F1 step 4, decisions F1-D7 and F1-D8; the first version required every home to be exactly at the head and reachable.)
+   - At the head: the process starts.
+   - A revision this code does not know is newer: a later release applied it, and migrations only expand the schema (§17), so the previous image starts. A rollback of the image is a redeploy (§13.3), never a downgrade. The process logs a warning.
+   - No revision, or a revision of this code's history other than the head: the schema is behind; the process refuses to start.
+   - A database that names another home in `home_identity`: the addresses are swapped; the process refuses to start.
+   - A home out of reach does not stop the start, so an outage of one home does not stop the other (§13.2). Its transactions are refused with 503 until the check passes; the check is repeated before a transaction in that home, at most once per 5 s. If it then finds another home or a schema behind the code, the home stays closed until restart and the process logs a critical line and reports `whisperer_db_home_state`.
 
 ## Consequences
 

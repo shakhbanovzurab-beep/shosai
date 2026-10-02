@@ -3,7 +3,9 @@
 from dataclasses import dataclass
 from typing import Self
 
-from tests.harness.connections import Connection, load_sql
+from psycopg import sql
+
+from tests.harness.connections import Connection, fetch_rows, load_sql
 
 FINGERPRINT_SQL_FILE = "catalog_fingerprint.sql"
 LEFTOVERS_SQL_FILE = "leftover_drop_statements.sql"
@@ -33,7 +35,7 @@ class CatalogFingerprint:
     @classmethod
     async def take(cls, connection: Connection) -> Self:
         """Take the fingerprint inside the connection's current transaction."""
-        rows = await connection.fetch(load_sql(FINGERPRINT_SQL_FILE))
+        rows = await fetch_rows(connection, load_sql(FINGERPRINT_SQL_FILE))
         return cls(
             entries=frozenset(
                 CatalogEntry(kind=row["kind"], identity=row["identity"], detail=row["detail"])
@@ -59,10 +61,14 @@ async def restore_prepared_state(connection: Connection, application_role: str) 
     gives an empty list.
     """
     before = await CatalogFingerprint.take(connection)
+    # Файл — доверенный текст харнесса; роль подставляется литералом с экранированием psycopg.
+    prepared_state = sql.SQL(load_sql(PREPARED_STATE_SQL_FILE)).format(
+        application_role=sql.Literal(application_role)
+    )
     async with connection.transaction():
-        for row in await connection.fetch(load_sql(LEFTOVERS_SQL_FILE)):
-            await connection.execute(row["statement"])
-        for row in await connection.fetch(load_sql(PREPARED_STATE_SQL_FILE), application_role):
-            await connection.execute(row["statement"])
+        for row in await fetch_rows(connection, load_sql(LEFTOVERS_SQL_FILE)):
+            await connection.execute(row["statement"].encode())
+        for row in await fetch_rows(connection, prepared_state):
+            await connection.execute(row["statement"].encode())
     after = await CatalogFingerprint.take(connection)
     return after.changes_since(before)

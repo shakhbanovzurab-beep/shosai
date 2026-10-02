@@ -47,13 +47,9 @@ EXPECTED_RESTORATION = (
 async def changes_inside_rolled_back(connection: Connection, ddl: str) -> list[str]:
     """Catalog changes made by DDL inside a transaction that is then rolled back."""
     before = await CatalogFingerprint.take(connection)
-    transaction = connection.transaction()
-    await transaction.start()
-    try:
-        await connection.execute(ddl)
+    async with connection.transaction(force_rollback=True):
+        await connection.execute(ddl.encode())
         changes = (await CatalogFingerprint.take(connection)).changes_since(before)
-    finally:
-        await transaction.rollback()
     assert await CatalogFingerprint.take(connection) == before
     return changes
 
@@ -107,11 +103,17 @@ async def test_extension_objects_are_not_part_of_the_fingerprint(run_slot: RunSl
         assert not any(identity.startswith("vector(") for identity in identities), home
 
 
-async def test_a_prepared_slot_is_left_as_it_is(run_slot: RunSlot) -> None:
-    for home, connection in run_slot.claimed.connections.items():
-        application_role = run_slot.claimed.settings.homes[home].application.user
+async def test_a_prepared_slot_is_left_as_it_is(harness_settings: HarnessSettings) -> None:
+    # Свой слот: слот прогона уже промигрирован, и восстановление снесло бы его схему.
+    claimed = await claim_slot(harness_settings, range(1, harness_settings.database_slots + 1))
+    try:
+        await prepare_run_slot(claimed)
+        for home, connection in claimed.connections.items():
+            application_role = harness_settings.homes[home].application.user
 
-        assert await restore_prepared_state(connection, application_role) == [], home
+            assert await restore_prepared_state(connection, application_role) == [], home
+    finally:
+        await claimed.release()
 
 
 async def test_a_claim_restores_what_a_crashed_run_left(
@@ -122,7 +124,7 @@ async def test_a_claim_restores_what_a_crashed_run_left(
     try:
         await prepare_run_slot(claimed)
         for connection in claimed.connections.values():
-            await connection.execute(LEFTOVERS_OF_A_CRASHED_RUN)
+            await connection.execute(LEFTOVERS_OF_A_CRASHED_RUN.encode())
 
         next_run = await prepare_run_slot(claimed)
 

@@ -8,7 +8,7 @@ SAMPLE_PASSWORD = "sample-secret-value"
 def sample_url(user: str, port: int, *, host: str = "127.0.0.1", database: str = "") -> str:
     """A test database URL in the application's format."""
     name = database or "whisperer_test"
-    return f"postgresql+asyncpg://{user}:{SAMPLE_PASSWORD}@{host}:{port}/{name}"
+    return f"postgresql://{user}:{SAMPLE_PASSWORD}@{host}:{port}/{name}"
 
 
 def sample_environ(**overrides: str) -> dict[str, str]:

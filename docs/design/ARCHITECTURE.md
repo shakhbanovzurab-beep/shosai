@@ -457,7 +457,7 @@ Goal: for every user journey, answer "what is happening now and why" within minu
 |---|---|---|---|---|
 | Metrics | HTTP RED metrics recorded by the request boundary from the route FastAPI has already matched, under the names and labels of prometheus-fastapi-instrumentator 8.1.0 ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)); application metrics (RED per route template, queues, pools, WS slots, provider sessions); node, nginx and blackbox exporters | scrape | Prometheus | 30 days, size cap |
 | Logs | structlog JSON on stdout | OpenTelemetry Collector (filelog → OTLP/HTTP) | Loki, single binary, local filesystem | 14 days, size cap |
-| Traces | OpenTelemetry SDK: FastAPI, SQLAlchemy/asyncpg, HTTPX, Redis, TaskIQ, WS sessions | OTLP → OpenTelemetry Collector (tail sampling) | Tempo, single binary, local storage | 7 days |
+| Traces | OpenTelemetry SDK: FastAPI, SQLAlchemy/psycopg, HTTPX, Redis, TaskIQ, WS sessions | OTLP → OpenTelemetry Collector (tail sampling) | Tempo, single binary, local storage | 7 days |
 | Client telemetry | web and desktop errors, Web Vitals, WS reconnects | API endpoint → logs | Loki | 14 days |
 | Product facts | analytics events | outbox → analytics | PostgreSQL | analytics policy |
 
@@ -605,7 +605,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 |---|---|---|---|
 | Backend | Starlette | paired with FastAPI | ASGI toolkit under FastAPI |
 | Backend | Uvicorn | 0.54.0 | ASGI server, one process per container |
-| Backend | asyncpg | 0.31.0 | PostgreSQL driver |
+| Backend | psycopg (`psycopg[binary]`) | 3.3.6 | PostgreSQL driver; statements unprepared, one round trip each behind PgBouncer in transaction mode ([ADR 0013](../adr/0013-psycopg-driver-behind-pgbouncer.md)) |
 | Backend | pgvector | 0.5.0 | Vectors in PostgreSQL |
 | Backend | taskiq-redis | 1.2.4 | TaskIQ broker on Redis Streams |
 | Backend | websockets | 17.1 | Streaming connections to AI providers |

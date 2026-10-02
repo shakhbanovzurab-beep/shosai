@@ -121,8 +121,10 @@ def test_lists_are_comma_separated_and_normalized() -> None:
     ("variable", "value"),
     [
         ("ENVIRONMENT", "prod"),
-        ("HOME_RU_DATABASE_URL", "postgresql://whisperer_app:x@127.0.0.1/whisperer"),
-        ("HOME_EU_DATABASE_URL", "postgresql+asyncpg://whisperer_app:x@127.0.0.1"),
+        ("HOME_RU_DATABASE_URL", "postgresql+asyncpg://whisperer_app:x@127.0.0.1/whisperer"),
+        ("HOME_EU_DATABASE_URL", "postgresql://whisperer_app:x@127.0.0.1"),
+        ("HOME_EU_DATABASE_URL", "postgresql://u:x@127.0.0.1/whisperer?application_name=x"),
+        ("HOME_RU_MIGRATION_DATABASE_URL", "postgresql://u:x@127.0.0.1/whisperer#fragment"),
         ("HOME_RU_S3_ENDPOINT_URL", "s3.example"),
         ("VALKEY_URL", "http://127.0.0.1:16379"),
         ("CORS_ALLOWED_ORIGINS", "*"),

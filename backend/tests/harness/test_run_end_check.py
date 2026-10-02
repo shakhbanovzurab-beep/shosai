@@ -11,6 +11,7 @@ import re
 import sys
 from pathlib import Path
 
+from tests.harness.connections import fetch_value
 from tests.harness.run_slot import prepare_run_slot
 from tests.harness.settings import HarnessSettings
 from tests.harness.slots import NoFreeSlotError, claim_slot
@@ -79,7 +80,7 @@ async def test_a_run_that_leaves_a_table_fails_and_the_next_claim_drops_it(
         return
     try:
         await prepare_run_slot(claimed)
-        forgotten = await claimed.connections[Home.EU].fetchval(FORGOTTEN_TABLE_SQL)
+        forgotten = await fetch_value(claimed.connections[Home.EU], FORGOTTEN_TABLE_SQL)
     finally:
         await claimed.release()
     assert forgotten is None

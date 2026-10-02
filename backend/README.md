@@ -43,6 +43,27 @@ import-linter contracts in `pyproject.toml` (`uv run lint-imports`):
 - **Proxy trust** is uvicorn's: `forwarded_allow_ips(web_settings)` lists `TRUSTED_PROXY_ADDRESSES`; an empty list trusts nobody, so `X-Forwarded-*` from anyone else is ignored.
 - **Health:** `GET /v1/health` answers `200 {"status": "ok"}` with `Cache-Control: no-store` and checks no dependency. `tests/core/web/test_health.py` runs the D1 harness ([contracts/README.md](../contracts/README.md)) over F1's routes; a slice copies that test with its own slice id.
 
+## Data access
+
+`core/db` gives every process exactly one connection pool per data home (§14 rule 2) and opens short transactions in the home of a tenancy scope (§4.1, §7). The driver is psycopg 3 without server-side prepared statements, behind PgBouncer in transaction mode ([ADR 0013](../docs/adr/0013-psycopg-driver-behind-pgbouncer.md)).
+
+- **Engines:** `HomeDatabases.create(urls, role, tracer_provider=…)` builds one engine per home from the application-role addresses. Limits per role come from §4.3: pool 10 / 5 / 2 / 2 for `api` / `workers` / `ws` / `scheduler`, no overflow, pool wait 2 s, statement timeout 10 s (60 s for `workers`), recycle after 600 s, no pre-ping, TCP keepalives. Bound values never reach an exception text or a log.
+- **Transactions:** a slice receives `HomeTransactions` and writes `async with transactions.begin(TenancyScope(home, user_id, org_id), read_only=…) as session:`. The first statement sets, for this transaction only, the statement timeout, read-only mode and `app.user_id` / `app.org_id`; the block commits on exit and rolls back on error. There is no request-wide session: commit before answering, and call external services between transactions, never inside one. A scoped read costs four round trips (`BEGIN`, scope, statement, `COMMIT`).
+- **A home out of reach** answers 503 `home_unavailable` with `Retry-After`, for its users only (§13.2): an exhausted pool or a refused connection is counted in `whisperer_db_unavailable_total{home, reason}`.
+- **Home check:** `HomeGate.verify_at_start()` reads `home_identity` and the revision of each home. Another home's database or a schema behind the code stops the start; a newer schema (an image rolled back) passes with a warning; a home out of reach does not stop the start and is checked again before its first transaction ([ADR 0010](../docs/adr/0010-home-scoped-revisions-in-one-alembic-history.md), item 6). `whisperer_db_home_state{home}` reports the result.
+- **Models:** declare tables on `ModelBase` and list the model in `composition/metadata.py`. A table that exists only in the EU home declares `__table_args__ = {"info": table_info(homes=(Home.EU,))}`; code that reads it names `Home.EU` explicitly. Constraint names follow `NAMING_CONVENTION`.
+- **Row-level security:** `app_user_id()` and `app_org_id()` read the scope of the transaction. `enable_company_isolation(table)` in a revision makes a table with `org_id` show a company's rows only within that company's scope.
+- **Telemetry:** one client span per statement under the current span, with the parametrised SQL text, never the values; pool occupancy per home in `whisperer_db_pool_connections{home, state}` and `whisperer_db_pool_capacity{home}` (`register_pool_occupancy`).
+
+## Migrations
+
+One Alembic history in `src/whisperer/migrations/` for both homes, applied home by home by `core/db/migrations.py` under the migration role over a direct connection ([ADR 0010](../docs/adr/0010-home-scoped-revisions-in-one-alembic-history.md)).
+
+- `uv run alembic revision -m "…"` writes a revision from the template. A revision declares `applies_to` (`EVERY_HOME` or a subset) and wraps `upgrade(scope)` and `downgrade(scope)` with `runs_in(applies_to)`; in another home the step is skipped and the revision is still stamped. A revision is either for every home or for one set, never both.
+- Changes only expand the schema (§17), and every revision has a working downgrade: each test run executes it.
+- New tables are closed to the application role until `grant_to_application(scope, table, privileges)`; `revoke_from_application` undoes it.
+- A test compares the models with the migrated schema of each home (`compare_metadata` must be empty).
+
 ## Tests
 
 Tests that touch the databases need the local environment ([docs/development.md](../docs/development.md)); all tests read only `TEST_*` variables ([ADR 0009](../docs/adr/0009-test-databases-claimed-by-advisory-lock.md)), listed with local values in section 3 of [`.env.example`](../.env.example).
@@ -56,6 +77,8 @@ uv run --env-file ../.env pytest
 - The session fixture `run_slot` claims a free prepared slot `whisperer_test_<N>` in both homes with an advisory lock, so parallel runs never share one, and gives a direct migration-role connection per home. A crashed run's lock is released with its connections. The pytest summary names the slot.
 - The harness refuses to start if a host is not loopback, a database name is not `whisperer_test`, the claimed database is not a prepared test database, or a `TEST_` URL equals a runtime URL.
 - On claim the harness returns the slot to the state F3 prepares — it drops a crashed run's objects and the extensions the migration role created, and restores default privileges, rights on the `public` schema and on the database, and database settings. At the end it fails the run, naming the objects, if the catalog of either home differs.
+- After the claim both homes are upgraded to the head with the production runner; at the end they are downgraded to the base, the version table is dropped, and only then are the catalogs compared.
+- A test that writes application data takes the `homes` fixture (`tests/harness/database_access.py`): the `api` database access of the run, emptied of application data after the test. `open_database_access(urls, ProcessShape(...))` builds the access of another role, pool, tracer, history or clock.
 
 ### Model-facing text
 

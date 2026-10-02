@@ -37,11 +37,10 @@ def local_environ(**overrides: str) -> dict[str, str]:
         prefix = f"HOME_{home.name}_"
         environ |= {
             f"{prefix}DATABASE_URL": (
-                f"postgresql+asyncpg://whisperer_app:{SAMPLE_SECRET}@127.0.0.1:"
-                f"{application_port}/whisperer"
+                f"postgresql://whisperer_app:{SAMPLE_SECRET}@127.0.0.1:{application_port}/whisperer"
             ),
             f"{prefix}MIGRATION_DATABASE_URL": (
-                f"postgresql+asyncpg://whisperer_migrator:{SAMPLE_SECRET}@127.0.0.1:"
+                f"postgresql://whisperer_migrator:{SAMPLE_SECRET}@127.0.0.1:"
                 f"{migration_port}/whisperer"
             ),
             f"{prefix}S3_ENDPOINT_URL": "http://127.0.0.1:18333",
@@ -65,5 +64,14 @@ def production_environ(**overrides: str) -> dict[str, str]:
     )
     for home in Home:
         del environ[f"HOME_{home.name}_MIGRATION_DATABASE_URL"]
+        environ[f"HOME_{home.name}_DATABASE_URL"] = production_database_url(home)
     environ.update(overrides)
     return environ
+
+
+def production_database_url(home: Home, *, role: str = "whisperer_app") -> str:
+    """A production-like address of a home's database: TLS with certificate and host checks."""
+    return (
+        f"postgresql://{role}:{SAMPLE_SECRET}@db.{home.value}.example:6432/whisperer"
+        "?sslmode=verify-full&sslrootcert=system"
+    )

@@ -7,11 +7,13 @@ here: without `TEST_*` the run fails instead of reaching a working database.
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from typing import Self
-from urllib.parse import unquote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
+
+from pydantic import SecretStr
 
 from whisperer.core.kernel.homes import Home
 
-DATABASE_URL_SCHEME = "postgresql+asyncpg"
+DATABASE_URL_SCHEME = "postgresql"
 TEST_DATABASE_NAME = "whisperer_test"
 DATABASE_SLOTS_VARIABLE = "TEST_DATABASE_SLOTS"
 # Valkey держит 16 логических баз, база 0 — у разработки: слотов не больше 15.
@@ -59,6 +61,14 @@ class DatabaseTarget:
             database=f"{self.database}_{slot}",
         )
 
+    def url(self) -> SecretStr:
+        """The address in the application's format, for the settings of the code under test."""
+        credentials = f"{quote(self.user, safe='')}:{quote(self.password, safe='')}"
+        host = f"[{self.host}]" if ":" in self.host else self.host
+        return SecretStr(
+            f"{DATABASE_URL_SCHEME}://{credentials}@{host}:{self.port}/{quote(self.database)}"
+        )
+
 
 @dataclass(frozen=True, slots=True)
 class HomeTargets:
@@ -100,7 +110,7 @@ class HarnessSettings:
 
 
 def parse_database_url(variable: str, url: str) -> DatabaseTarget:
-    """Parse a URL of the form `postgresql+asyncpg://user:password@host:port/database`."""
+    """Parse a URL of the form `postgresql://user:password@host:port/database`."""
     parts = urlsplit(url)
     if parts.scheme != DATABASE_URL_SCHEME:
         message = f"{variable}: схема адреса должна быть {DATABASE_URL_SCHEME}"

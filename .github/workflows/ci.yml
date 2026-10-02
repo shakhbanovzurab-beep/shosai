@@ -137,10 +137,10 @@ jobs:
     env:
       # Tests read only TEST_* variables (ADR 0009). The values are the throwaway
       # local defaults of compose.dev.yaml, the same as .env.example section 3.
-      TEST_HOME_RU_DATABASE_URL: postgresql+asyncpg://whisperer_app:local-app@127.0.0.1:16432/whisperer_test
-      TEST_HOME_EU_DATABASE_URL: postgresql+asyncpg://whisperer_app:local-app@127.0.0.1:16433/whisperer_test
-      TEST_HOME_RU_MIGRATION_DATABASE_URL: postgresql+asyncpg://whisperer_migrator:local-migrator@127.0.0.1:15432/whisperer_test
-      TEST_HOME_EU_MIGRATION_DATABASE_URL: postgresql+asyncpg://whisperer_migrator:local-migrator@127.0.0.1:15433/whisperer_test
+      TEST_HOME_RU_DATABASE_URL: postgresql://whisperer_app:local-app@127.0.0.1:16432/whisperer_test
+      TEST_HOME_EU_DATABASE_URL: postgresql://whisperer_app:local-app@127.0.0.1:16433/whisperer_test
+      TEST_HOME_RU_MIGRATION_DATABASE_URL: postgresql://whisperer_migrator:local-migrator@127.0.0.1:15432/whisperer_test
+      TEST_HOME_EU_MIGRATION_DATABASE_URL: postgresql://whisperer_migrator:local-migrator@127.0.0.1:15433/whisperer_test
       TEST_DATABASE_SLOTS: "8"
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

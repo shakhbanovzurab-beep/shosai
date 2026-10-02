@@ -9,12 +9,19 @@ import binascii
 from enum import StrEnum
 from ipaddress import IPv4Network, IPv6Network, ip_network
 from typing import Annotated
-from urllib.parse import urlsplit
+from urllib.parse import parse_qsl, urlsplit
 
 from pydantic import AfterValidator, BeforeValidator, Field, SecretStr
 from pydantic_settings import NoDecode
 
-DATABASE_URL_SCHEME = "postgresql+asyncpg"
+# Стандартный адрес libpq: драйвер выбирает код (ADR 0013), а psql и другие инструменты
+# принимают ту же строку.
+DATABASE_URL_SCHEME = "postgresql"
+# В строке запроса адреса базы — только параметры TLS; соединение (таймауты, имя
+# приложения, подготовленные выражения) настраивает код, и адрес не может их перебить.
+DATABASE_URL_TLS_PARAMETERS = frozenset(
+    {"sslmode", "sslrootcert", "sslcert", "sslkey", "sslcrl", "sslcrldir", "sslnegotiation"}
+)
 REDIS_URL_SCHEMES = frozenset({"redis", "rediss"})
 ORIGIN_SCHEMES = frozenset({"http", "https"})
 FERNET_KEY_BYTES = 32
@@ -50,7 +57,7 @@ def upper_case(value: object) -> object:
 
 
 def check_database_url(url: SecretStr) -> SecretStr:
-    """A PostgreSQL address for asyncpg with a host and a database name."""
+    """A libpq PostgreSQL address with a host, a database name and only TLS parameters."""
     parts = urlsplit(url.get_secret_value())
     if parts.scheme != DATABASE_URL_SCHEME:
         message = f"ожидается адрес вида {DATABASE_URL_SCHEME}://…"
@@ -58,7 +65,20 @@ def check_database_url(url: SecretStr) -> SecretStr:
     if not parts.hostname or not parts.path.removeprefix("/"):
         message = "в адресе нужны хост и имя базы"
         raise ValueError(message)
+    if parts.fragment or any(
+        name not in DATABASE_URL_TLS_PARAMETERS
+        for name, _ in parse_qsl(parts.query, keep_blank_values=True)
+    ):
+        allowed = ", ".join(sorted(DATABASE_URL_TLS_PARAMETERS))
+        message = f"в строке запроса допустимы только параметры TLS: {allowed}"
+        raise ValueError(message)
     return url
+
+
+def database_url_parameter(url: SecretStr, name: str) -> str | None:
+    """The value of one query parameter of a database address, if it is given."""
+    query = parse_qsl(urlsplit(url.get_secret_value()).query, keep_blank_values=True)
+    return next((value for key, value in query if key == name), None)
 
 
 def check_redis_url(url: SecretStr) -> SecretStr:

@@ -10,9 +10,12 @@ from dataclasses import dataclass
 
 from whisperer.core.config.loading import Settings
 from whisperer.core.config.sections import home_prefix
-from whisperer.core.config.values import Environment, LogLevel
+from whisperer.core.config.values import Environment, LogLevel, database_url_parameter
 
 SECURE_STORAGE_SCHEME = "https"
+# Дом RU — в другой юрисдикции и за 45 мс по сети (§4.1): без проверки сертификата и
+# имени сервера соединение можно перехватить на пути.
+SECURE_DATABASE_SSLMODE = "verify-full"
 
 
 @dataclass(frozen=True, slots=True)
@@ -84,10 +87,28 @@ def storage_over_tls(settings: Settings) -> Iterator[GateViolation]:
             )
 
 
+def databases_over_tls(settings: Settings) -> Iterator[GateViolation]:
+    """Each home's database is reached over TLS that checks the certificate and the host."""
+    for home, home_settings in settings.homes.items():
+        addresses = {
+            "DATABASE_URL": home_settings.database_url,
+            "MIGRATION_DATABASE_URL": home_settings.migration_database_url,
+        }
+        for name, url in addresses.items():
+            if url is None:
+                continue
+            if database_url_parameter(url, "sslmode") != SECURE_DATABASE_SSLMODE:
+                yield GateViolation(
+                    f"{home_prefix(home)}{name}",
+                    f"к базе дома в production — только sslmode={SECURE_DATABASE_SSLMODE}",
+                )
+
+
 CORE_CHECKS: tuple[ProductionCheck, ...] = (
     api_docs_closed,
     proxies_trusted,
     encryption_key_present,
     debug_logs_off,
     storage_over_tls,
+    databases_over_tls,
 )

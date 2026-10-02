@@ -52,10 +52,10 @@ def test_never_falls_back_to_runtime_variables() -> None:
 @pytest.mark.parametrize(
     ("url", "reason"),
     [
-        ("postgresql://u:p@127.0.0.1:5432/whisperer_test", "схема адреса"),
-        ("postgresql+asyncpg://u:p@127.0.0.1:5432/whisperer_test?ssl=require", "параметры"),
-        ("postgresql+asyncpg://u@127.0.0.1:5432/whisperer_test", "пароль"),
-        ("postgresql+asyncpg://u:p@127.0.0.1:port/whisperer_test", "порт"),
+        ("postgresql+asyncpg://u:p@127.0.0.1:5432/whisperer_test", "схема адреса"),
+        ("postgresql://u:p@127.0.0.1:5432/whisperer_test?sslmode=require", "параметры"),
+        ("postgresql://u@127.0.0.1:5432/whisperer_test", "пароль"),
+        ("postgresql://u:p@127.0.0.1:port/whisperer_test", "порт"),
     ],
 )
 def test_rejects_a_malformed_url_naming_the_variable(url: str, reason: str) -> None:
@@ -84,7 +84,7 @@ def test_password_stays_out_of_errors_and_repr() -> None:
 
 
 def test_decodes_credentials_and_reads_ipv6_hosts() -> None:
-    url = "postgresql+asyncpg://who%40ever:p%2Fss@[::1]:16432/whisperer_test"
+    url = "postgresql://who%40ever:p%2Fss@[::1]:16432/whisperer_test"
 
     target = (
         HarnessSettings.from_environ(sample_environ(TEST_HOME_RU_DATABASE_URL=url))

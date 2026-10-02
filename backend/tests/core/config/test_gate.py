@@ -4,13 +4,19 @@ from collections.abc import Iterator
 
 import pytest
 
-from tests.core.config.sample_environ import SAMPLE_SECRET, local_environ, production_environ
+from tests.core.config.sample_environ import (
+    SAMPLE_SECRET,
+    local_environ,
+    production_database_url,
+    production_environ,
+)
 from whisperer.core.config.gate import (
     GateViolation,
     UnsafeConfigurationError,
     enforce_production_gate,
 )
 from whisperer.core.config.loading import ConfigurationError, Settings, load_settings
+from whisperer.core.kernel.homes import Home
 
 
 def refusal(environ: dict[str, str]) -> str:
@@ -51,6 +57,29 @@ def test_outside_production_the_gate_does_not_apply() -> None:
             "HOME_EU_S3_ENDPOINT_URL",
         ),
         (without(production_environ(), "ENVIRONMENT"), "ENVIRONMENT"),
+        (
+            production_environ(
+                HOME_RU_DATABASE_URL=production_database_url(Home.RU).replace(
+                    "verify-full", "require"
+                )
+            ),
+            "HOME_RU_DATABASE_URL",
+        ),
+        (
+            production_environ(
+                HOME_EU_DATABASE_URL=f"postgresql://whisperer_app:{SAMPLE_SECRET}@db.eu/whisperer"
+            ),
+            "HOME_EU_DATABASE_URL",
+        ),
+        (
+            production_environ(
+                HOME_EU_MIGRATION_DATABASE_URL=(
+                    f"postgresql://whisperer_migrator:{SAMPLE_SECRET}@db.eu/whisperer"
+                    "?sslmode=prefer"
+                )
+            ),
+            "HOME_EU_MIGRATION_DATABASE_URL",
+        ),
     ],
 )
 def test_each_unsafe_setting_refuses_start_and_is_named(
@@ -60,6 +89,14 @@ def test_each_unsafe_setting_refuses_start_and_is_named(
 
     assert f"\n{setting}: " in message
     assert SAMPLE_SECRET not in message
+
+
+def test_a_migration_address_with_verified_tls_passes() -> None:
+    environ = production_environ(
+        HOME_RU_MIGRATION_DATABASE_URL=production_database_url(Home.RU, role="whisperer_migrator")
+    )
+
+    enforce_production_gate(load_settings(environ))
 
 
 def test_every_violation_is_reported_at_once() -> None:

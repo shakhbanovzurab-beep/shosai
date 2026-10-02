@@ -11,14 +11,17 @@ license-files = ["LICENSE"]
 # Рантайм-зависимости добавляет шаг плана F1, которому они нужны
 # (docs/plan/packages/F1-backend-foundation.md, раздел 4).
 dependencies = [
+    "alembic>=1.20.0",
     "cryptography>=50.0.2",
     "fastapi>=0.142.2",
     "opentelemetry-api>=1.45.0",
     "opentelemetry-exporter-otlp-proto-http>=1.45.0",
     "opentelemetry-sdk>=1.45.0",
     "prometheus-client>=0.26.0",
+    "psycopg[binary]>=3.3.6",
     "pydantic>=2.13.5",
     "pydantic-settings>=2.15.0",
+    "sqlalchemy[asyncio]>=2.1.2",
     "structlog>=26.1.0",
     "uvicorn>=0.54.0",
 ]
@@ -26,8 +29,6 @@ dependencies = [
 [dependency-groups]
 dev = [
     # Харнесс тестовых баз (ADR 0009) держит прямые соединения роли миграций.
-    "asyncpg>=0.31.0",
-    "asyncpg-stubs>=0.31.3",
     # Тесты HTTP-оболочки ходят в приложение через ASGI-транспорт HTTPX.
     "httpx>=0.28.1",
     "hypothesis>=6.168.3",
@@ -80,6 +81,9 @@ mypy_path = "src"
 explicit_package_bases = true
 plugins = ["pydantic.mypy"]
 warn_unreachable = true
+# SQLAlchemy 2.1 не аннотирует конструктор DDL (строка и словарь подстановок);
+# остальные вызовы SQLAlchemy проверяются строго.
+untyped_calls_exclude = ["sqlalchemy.sql.ddl.DDL"]
 enable_error_code = [
     "ignore-without-code",
     "redundant-expr",
@@ -143,11 +147,17 @@ name = "Pure kernel"
 type = "forbidden"
 source_modules = ["whisperer.core.kernel"]
 forbidden_modules = [
-    "aioboto3", "aiobotocore", "asyncpg", "botocore", "fastapi", "httpx", "opentelemetry",
-    "prometheus_client", "redis", "sqlalchemy", "starlette", "structlog", "taskiq",
+    "aioboto3", "aiobotocore", "alembic", "botocore", "fastapi", "httpx", "opentelemetry",
+    "prometheus_client", "psycopg", "redis", "sqlalchemy", "starlette", "structlog", "taskiq",
     "taskiq_redis", "uvicorn",
 ]
 broken_contract_guidance = "core.kernel stays framework-free; move the adapter to its core package."
+
+# Только для `uv run alembic revision -m "…"`: новая ревизия по шаблону с applies_to.
+# Применяет миграции не CLI Alembic, а раннер whisperer.core.db.migrations (ADR 0010).
+[tool.alembic]
+script_location = "%(here)s/src/whisperer/migrations"
+file_template = "%%(year)d_%%(month).2d_%%(day).2d_%%(rev)s_%%(slug)s"
 
 [tool.uv.sources]
 whisperer-contracts = { path = "../contracts", editable = true }

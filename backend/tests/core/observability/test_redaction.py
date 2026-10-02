@@ -81,20 +81,20 @@ def test_a_secret_string_never_reaches_a_line_under_any_key(
 
 @given(key=plain_keys, password=secrets)
 def test_a_password_inside_a_url_never_reaches_a_line(key: str, password: str) -> None:
-    url = f"postgresql+asyncpg://whisperer_app:{password}@db.ru.example:6432/whisperer"
+    url = f"postgresql://whisperer_app:{password}@db.ru.example:6432/whisperer"
 
     # Адрес внутри самого сообщения: так его пишут, когда текст ошибки собран заранее.
     message = f"Нет соединения с {url}"
     with captured_logs() as captured:
         log.info(message, **{key: url})
-        logging.getLogger("asyncpg").error("Сбой %s", url)
+        logging.getLogger("psycopg").error("Сбой %s", url)
         try:
             raise ConnectionError(url)
         except ConnectionError:
             log.exception("Сбой подключения")
 
     assert password not in captured.text()
-    assert "postgresql+asyncpg://whisperer_app:***@db.ru.example:6432/whisperer" in captured.text()
+    assert "postgresql://whisperer_app:***@db.ru.example:6432/whisperer" in captured.text()
 
 
 def test_logging_the_settings_reveals_no_secret() -> None:

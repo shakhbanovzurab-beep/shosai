@@ -57,9 +57,17 @@ The init script [`deploy/local/postgres/init-home.sh`](../deploy/local/postgres/
 
 Both PgBouncers run in transaction mode with protocol-level prepared statements turned off (`max_prepared_statements = 0`), the strictest reading of target architecture §19. Code that works here works behind any provider's pooler. In practice:
 
-- asyncpg's statement cache must be off (`statement_cache_size=0`, and in SQLAlchemy `prepared_statement_cache_size=0`). With the default cache, queries fail with `prepared statement "__asyncpg_stmt_N__" does not exist`.
+- The backend uses psycopg 3 with `prepare_threshold=None` ([ADR 0013](adr/0013-psycopg-driver-behind-pgbouncer.md)): every statement is sent unprepared, in one round trip, so no named statement is left on a server connection the next client reuses. Database addresses are plain libpq URLs (`postgresql://…`).
 - Session state does not survive a transaction: use `SET LOCAL` inside the transaction (as for `app.org_id` and `app.user_id`, §7), never `SET`; no session advisory locks; no `LISTEN`.
 - Only `whisperer_app` is known to PgBouncer. Migrations need session features and connect to the server directly.
+
+## Migrations
+
+One Alembic history in `backend/src/whisperer/migrations/` serves both homes ([ADR 0010](adr/0010-home-scoped-revisions-in-one-alembic-history.md)). The runner `whisperer.core.db.migrations` applies it home by home under `whisperer_migrator`, directly, with a session advisory lock and `lock_timeout = 5s`; the `whisperer migrate` command arrives with F1 step 8.
+
+- A new revision: `uv run alembic revision -m "…"` in `backend/`. The template declares `applies_to = EVERY_HOME` and wraps `upgrade` and `downgrade` with `runs_in(applies_to)`; an EU-only revision sets `applies_to = (Home.EU,)`. Both steps receive the `MigrationScope` of the home: its `home` and the `application_role` of that home's application address.
+- A new table is closed to `whisperer_app` until the revision grants it: `grant_to_application(scope, "table")`, and `revoke_from_application` in the downgrade. A company-scoped table gets row-level security with `enable_company_isolation("table")`.
+- Every downgrade runs on every test run: the harness upgrades both homes of its slot to the head and downgrades them to the base at the end.
 
 ## Test databases
 
@@ -71,6 +79,7 @@ Backend tests use them as [ADR 0009](adr/0009-test-databases-claimed-by-advisory
 - A run claims the first slot free on both servers with `pg_try_advisory_lock` over direct `whisperer_migrator` connections and holds them until it ends, so parallel runs (other agents, pytest-xdist workers) never share a slot. A crashed run's locks are released with its connections.
 - Before anything is written, the harness refuses a host that is not loopback, a database name other than `whisperer_test`, a database without the `Prepared test database` comment of the init script, and a `TEST_` URL equal to a runtime URL.
 - On claim it returns the slot to the state the init script prepares — it drops a crashed run's objects and the extensions `whisperer_migrator` created, and restores default privileges, rights on the `public` schema and on the database, and database settings — then records a fingerprint of each home's catalog; at the end of the run both catalogs must match it, or the run fails and names the objects.
+- After the claim both homes are migrated to the head; at the end they are downgraded to the base and the version table is dropped. A test that writes application data takes the `homes` fixture, which empties every application table of both homes after it.
 - Run from `backend/` with the environment up: `uv run --env-file ../.env pytest`. Tests that do not touch the databases also run without it.
 - More parallel runs need more slots: raise `LOCAL_TEST_DATABASE_COUNT`, reset, and raise `TEST_DATABASE_SLOTS` (at most 15).
 
