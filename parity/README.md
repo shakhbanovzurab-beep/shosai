@@ -41,6 +41,7 @@ Screenshots are taken only inside the pinned Playwright container ([`compose.yam
 2. **Define** each inventoried state in `src/states/<feature>.ts` and add the list to [`src/states/registry.ts`](src/states/registry.ts):
    - `fixture`: the visit that provides the data;
    - `scope`: `full` for main states, which get all 8 cells; `single` for small variants, which get one cell: ru, desktop, light;
+   - `sweep`: the state is also captured in the 14 other locales, desktop and mobile, light — the locale sweep, which catches layout breaks in long and right-to-left scripts. It is set on one text-dense screen, `meetings.library.populated`; its visit records in all 16 languages (`languages`), and the unit tests require a fixture in the language of every cell;
    - `act`: the interaction. It starts once the page has settled (fonts, API and DOM quiet), as a user who waits for the page: an action on a page still loading scrolls to its target in a layout that is about to change;
    - `marker`: a selector that exists only in that state. Without the marker the state fails.
    - `overrides`: responses the recording stack cannot produce, such as an error status, a held request for loading, or a network failure. Each needs a reason, and each must exist in the draft's OpenAPI and match its schema. The unit tests check this. Helpers are in [`src/states/overrides.ts`](src/states/overrides.ts):

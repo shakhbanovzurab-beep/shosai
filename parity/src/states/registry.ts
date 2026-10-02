@@ -121,7 +121,10 @@ export function registryProblems(states: readonly State[], fixturesDir: string):
     seen.add(state.id);
     if (!/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(state.id)) problems.push(`${state.id}: идентификатор не в виде раздел.экран.состояние`);
     if (stateCells(state).length === 0) problems.push(`${state.id}: ни одной ячейки съёмки`);
-    for (const language of stateLanguages(state)) {
+    // Фикстура нужна на языке фикстуры состояния и на языке каждой его ячейки:
+    // прогон по языкам (sweep) снимает экран и на остальных 14.
+    const languages = new Set([...stateLanguages(state), ...stateCells(state).map((cell) => cell.language)]);
+    for (const language of languages) {
       if (!existsSync(fixturePath(fixturesDir, state.fixture, language))) {
         problems.push(`${state.id}: нет фикстуры ${state.fixture} на языке ${language}`);
       }

@@ -38,7 +38,7 @@ function library(id: string, act: Act, marker: (t: Translate) => string, extra: 
 }
 
 export const MEETINGS_LIBRARY_STATES: readonly State[] = [
-  { id: "meetings.library.populated", fixture: LIBRARY, scope: "full", marker: () => card(BUDGET_TITLE) },
+  { id: "meetings.library.populated", fixture: LIBRARY, scope: "full", sweep: true, marker: () => card(BUDGET_TITLE) },
   {
     id: "meetings.library.empty",
     fixture: "meetings/library-empty",

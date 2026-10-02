@@ -87,7 +87,7 @@ Requests to any other host are aborted: analytics, the CloudPayments widget and 
 
 ### 3.3 Fixtures and replay
 
-- A fixture is the recording of one visit in one language: the persona's storage and every `/v1` exchange (method, path, query, status, body, `origin`). Visits are recorded in `ru` and `en`, because some requests carry the language.
+- A fixture is the recording of one visit in one language: the persona's storage and every `/v1` exchange (method, path, query, status, body, `origin`). Visits are recorded in `ru` and `en`, because some requests carry the language. Admin visits are recorded in `ru` only, since the draft's admin texts are not translated (step 7); the visit of the locale sweep screen is recorded in all 16 languages (step 8).
 - Streams and sockets belong to the state, not to the fixture: their content comes from a model, a voice provider or a scheduler that the recording stack does not have.
   - A finished server-sent event stream is an ordinary reply with the whole body.
   - A stream still being written is an open stream. A shim over `fetch` in the page sends its events and never ends it.
@@ -174,6 +174,9 @@ Measured in step 7: 833 states, 1573 screenshots, 121.9 MB in the bucket; `basel
   - Max's count on `billing.subscription.max`.
 - **Admin screens are ru only.** The draft's admin texts are not translated, so admin states are captured in Russian (inventory, «Findings», step 7).
 
+Measured in step 8: 833 states, 1601 screenshots, 123.9 MB in the bucket; `baseline` and two `verify` runs matched with zero tolerance, the first restoring every image from S3. The library visit was recorded twice in 16 languages, byte-identical; its `ru` and `en` fixtures and every earlier screenshot stayed unchanged.
+- **Locale sweep.** The 14 locales render with the draft's own web fonts for each language (`/fonts/roles-<lang>-<role>.css`), not with the container's fallback fonts: Arabic right to left, Devanagari, Thai and CJK as users see them. The seeded meeting titles stay Russian; the sweep checks the interface texts around them. Dates follow the locale, such as the Buddhist year 2569 in `th`.
+
 ### 3.6 Recording from the draft backend
 
 Fixtures come from the draft backend running locally with seeded test data, as the prompt requires. Built in step 2; the operating manual is [parity/recording/README.md](../../../parity/recording/README.md).
@@ -241,7 +244,7 @@ Each step is one session, ends with checks and a report, and is committed after 
 | 5 | Leo, prompts, models, MCP, hub (inventory: leo-prompts-models-mcp-hub.md):<br>• replay of open SSE streams and WebSocket frames on the state; the Leo conversation seeded in localStorage; the harness origin `http://parity.localhost` is a secure context, with a fake microphone;<br>• seed for `lead`: the Leo tab, MCP, hubs with boards and the Acme history of facts, prompts, skills, AI spend; two registry models from `admin`;<br>• Leo widget (panel, conversation content, streaming, actions, composer, mentions, voice, reminders), Leo cabinet tab, MCP tab and consent screen, prompts, skills, editor and test run, models, admin AI models, hubs;<br>• also the meeting AI version and mind map while their streams send text.<br>Done: 180 states, 288 screenshots | same, for these states |
 | 6 | Rooms, streams, storage, tracker (inventory: rooms-streams-storage-tracker.md):<br>• fake LiveKit keys in the recording stack: room tokens and stream passes are signed locally; the harness closes the media server socket, so rooms stay «Не удалось подключиться» and everything drawn over HTTP is captured; SFU states excluded (decision 3);<br>• seed for `lead`: rooms with recordings and the LiveKit audit log, streams (live, ended, members only) with chat, hands and a waiting room, a file tree with share links, tracker boards with Jira links; personas `quota` and `overquota`;<br>• host and guest rooms, LiveKit admin, stream viewer and studio, files with every preview kind and the share dialog, public share pages, tracker projects, board and Jira.<br>Done: 168 states, 283 screenshots | same, for these states |
 | 7 | Admin, product analytics, analytics, satisfaction, support (inventory: admin-analytics-support.md):<br>• the recording API's wall clock stops at the parity clock;<br>• seeds for every admin screen and a deterministic simulation of product analytics events; nine admin-only personas;<br>• dashboard, product analytics, users, tariffs, money, finance, security, support and broadcasts, app builds, client errors, platform prompts, affiliates, satisfaction and the survey card; the user's activity and support pages. Admin visits are read-only.<br>Done: 170 states, 227 screenshots | same, for these states |
-| 8 | Locale sweep, full baseline in S3, full `verify`, status `done` | the prompt's definition of done |
+| 8 | Locale sweep, full baseline in S3, full `verify`, status `done`:<br>• `meetings.library.populated` in the 14 other locales, desktop and mobile, light; the library visit records in all 16 languages;<br>• the registry test requires a fixture in the language of every cell.<br>Done: 1 state in 28 more cells; in total 833 states, 1601 screenshots | the prompt's definition of done |
 
 ## 5. Decisions
 

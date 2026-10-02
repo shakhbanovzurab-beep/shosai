@@ -7,6 +7,7 @@
 import type { Page } from "@playwright/test";
 
 import { exactText, type Translate } from "../../i18n/texts.ts";
+import { MATRIX_LANGUAGES, SWEEP_LANGUAGES } from "../../matrix.ts";
 import { meetingUrl, SEED_IDS, sharedUrl } from "../seed-ids.ts";
 import type { Visit, VisitContext } from "./types.ts";
 
@@ -41,7 +42,9 @@ async function submitPassword(page: Page, { t }: VisitContext, password: string)
 const libraryCard = (): string => 'a.mtg-card-brand:has-text("Планирование бюджета Q4")';
 
 export const MEETINGS_VISITS: readonly Visit[] = [
-  { id: "meetings/library", persona: "lead", url: "/app/meetings", marker: libraryCard },
+  // Библиотека — экран прогона по языкам (план D2 §2): записывается на всех 16.
+  { id: "meetings/library", persona: "lead", url: "/app/meetings", marker: libraryCard,
+    languages: [...MATRIX_LANGUAGES, ...SWEEP_LANGUAGES] },
   { id: "meetings/library-empty", persona: "free", url: "/app/meetings", marker: (t) => exactText(t("meetings:meet.library.emptyTitle")) },
   detail("budget", () => "ul.mtg-impact-list", async (page, context) => {
     await peekShare(page, context, `input[readonly]`);
