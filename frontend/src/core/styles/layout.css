@@ -1,0 +1,31 @@
+/* Раскладка экранов внутри основной области оболочки ([data-main-scroll]) на
+   узких экранах и зеркалирование направленных элементов в письме справа налево. */
+@layer components {
+  /* Мобильная версия: 860px — тот же порог, что у оболочки. */
+  @media (max-width: 860px) {
+    /* Широкие таблицы не сплющиваются, а прокручиваются по горизонтали. */
+    [data-main-scroll] table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+    /* Крупные заголовки не вылезают за экран, но слова не рвутся по буквам. */
+    [data-main-scroll] .display { line-height: 1.04; overflow-wrap: break-word; word-break: normal; hyphens: none; }
+    /* Многоколоночные сетки карточек — в две колонки. */
+    [data-main-scroll] [data-grid-cols] {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+  @media (max-width: 520px) {
+    /* Очень узкие экраны: одна колонка и скромнее крупные числа. */
+    [data-main-scroll] [data-grid-cols] {
+      grid-template-columns: 1fr !important;
+    }
+    [data-main-scroll] .idx { font-size: 1.5rem !important; }
+  }
+
+  /* Стрелки и шевроны указывают по ходу чтения; в RTL они отражаются. */
+  [dir="rtl"] .rtl-mirror { transform: scaleX(-1); }
+}

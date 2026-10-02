@@ -1,0 +1,72 @@
+/* Палитра светлой темы. Тёмная — tokens-dark.css с теми же именами; тест
+   держит наборы имён равными. */
+html[data-theme="light"] {
+  color-scheme: light;
+  --bg:        #F4F1EA;
+  --paper:    #FFFFFF;
+  --raised:   #ECE7DC;
+  --hover:    #E5E0D2;
+  --pressed:  #D9D2C0;
+  --ink:      #0A0A0A;
+  --ink-2:    #1A1A1A;
+  --muted:    #4A4A4A;
+  --faint:    #767676;
+  --line:     #0A0A0A;
+  --line-soft:#C8C2B2;
+  --tint:     rgba(0,0,0,0.04);
+  --danger:   #C0392B;
+  --ok:       #1D8C3E;
+  /* Цвет жёсткой тени: из него theme-bridge.css собирает шкалу shadow-*. */
+  --shadow-ink: #0A0A0A;
+  --shadow-hard: 4px 4px 0 0 var(--shadow-ink);
+  /* Текст на --danger: на тёмно-красном читается белый (5.9:1). */
+  --danger-ink: #FFFFFF;
+
+  /* Календарь: тип события цветом. fill — заливка плашки, ink — текст по ней,
+     line — полоска в списке. Заливки насыщенные; цвет текста подобран под
+     каждую. Полоска встречи темнее заливки: #FFC300 на белом даёт 1.61:1. */
+  --cal-meet-fill: #FFC300;  --cal-meet-ink: #2A1F00;  --cal-meet-line: #C48A00;
+  --cal-task-fill: #1F49C8;  --cal-task-ink: #FFFFFF;  --cal-task-line: #1F49C8;
+  --cal-rem-fill:  #0F7A34;  --cal-rem-ink:  #FFFFFF;  --cal-rem-line:  #0F7A34;
+  /* Стрим — пурпур: три других тона заняты. Белый по #7B2CBF — 7.9:1. */
+  --cal-stream-fill: #7B2CBF;  --cal-stream-ink: #FFFFFF;  --cal-stream-line: #7B2CBF;
+
+  /* Календарь активности: пять ступеней расходятся светлотой, а не только
+     оттенком; вверх шкала уходит в янтарь. Нулевая ступень — бежево-серая,
+     иначе пустая клетка сливается с промежутками сетки. */
+  --heat-0: #E4DFD0;
+  --heat-1: #FFF0A8;
+  --heat-2: #FFDE4D;
+  --heat-3: #F2B705;
+  --heat-4: #C07E00;
+
+  /* Подсветка кода. Блок кода инвертирован к теме (фон --ink, текст --bg),
+     поэтому в светлой теме палитра пишется по почти чёрному. Контраст каждого
+     токена к подложке не ниже 4.5:1. */
+  --code-line:    rgba(244,241,234,0.16);
+  --code-mute:    rgba(244,241,234,0.55);
+  --code-hover:   rgba(244,241,234,0.10);
+  --hl-comment:   #8A857A;
+  --hl-keyword:   #FFD500;
+  --hl-string:    #8FD98F;
+  --hl-number:    #F2A65A;
+  --hl-title:     #7FB4FF;
+  --hl-meta:      #C9A6E9;
+  --hl-deletion:  #FF7B6B;
+  /* Затемнение вокруг подсветки в туре обучения — плотнее скрима модалок. */
+  --onb-scrim: rgba(20, 18, 12, 0.46);
+
+  /* Тихая интенсивность экранов чтения. */
+  --quiet-ink: #1C1C1A;
+  --quiet-hair:   rgba(20,18,12,0.10);
+  --quiet-hair-2: rgba(20,18,12,0.16);
+  --quiet-elev-1: 0 1px 2px rgba(20,18,12,0.04), 0 2px 8px rgba(20,18,12,0.06);
+  --quiet-elev-2: 0 2px 4px rgba(20,18,12,0.05), 0 8px 20px rgba(20,18,12,0.09);
+  --quiet-elev-3: 0 8px 16px rgba(20,18,12,0.08), 0 20px 48px rgba(20,18,12,0.14);
+  --quiet-tint:  rgba(255,224,0,0.12);
+  /* Выделение текста в поле чтения: олива вместо громкого жёлтого. */
+  --quiet-select: rgba(110,122,47,0.22);
+  --quiet-tint-2: rgba(255,224,0,0.45);
+  --quiet-hover:   rgba(20,18,12,0.035);
+  --quiet-elev-card: 0 2px 6px rgba(20,18,12,0.08), 0 12px 28px rgba(20,18,12,0.13);
+}

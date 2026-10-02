@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" role="img" aria-label="Whisperer">
+  <!-- Фавикон-версия знака: ОДНА плитка с буквой W. В мелком кегле браузерной
+       вкладки (16-32px) полная сетка 3×3 нечитаема, поэтому здесь крупная W.
+       Тяжёлый гротеск (Arial Black; обводка текста добирает вес там, где такого
+       начертания нет). Крупные иконки (apple-touch, PWA, OG) несут полный знак
+       WHISPERER — их рисует backend/scripts/generate_app_icons.py. -->
+  <rect x="5" y="5" width="90" height="90" rx="14.4" fill="#FFE000" stroke="#0A0A0A" stroke-width="6.3"/>
+  <text x="50" y="50" text-anchor="middle" dominant-baseline="central"
+        font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900"
+        font-size="60" fill="#0A0A0A" stroke="#0A0A0A" stroke-width="2.4" paint-order="stroke">W</text>
+</svg>

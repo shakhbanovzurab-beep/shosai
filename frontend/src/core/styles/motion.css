@@ -1,0 +1,80 @@
+/* Движение. Каждой анимации задано поведение при prefers-reduced-motion
+   (тест tests/styles/motion.test.ts): декоративное движение останавливается,
+   а анимация, которая несёт состояние, продолжается — см. блок внизу.
+   Стенд паритета снимает с включённым reduced motion и с нулевой длительностью
+   анимаций; замер 2026-10-02 показал одинаковые пиксели в обоих вариантах. */
+@layer components {
+  /* Смена темы: цвета перетекают 320 мс, класс снимается через 400 мс
+     (core/theme/themePreference.ts). Это растворение цвета, а не движение. */
+  .theme-anim, .theme-anim * {
+    transition-property: background-color, color, border-color, fill, stroke, box-shadow;
+    transition-duration: 320ms;
+    transition-timing-function: var(--ease-out);
+  }
+
+  /* Появление блока снизу. Стенд паритета перечисляет .rise в ENTRY_ANIMATIONS. */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .rise { animation: rise 360ms var(--ease-out) both; }
+
+  /* Мигающий курсор после текста, который ещё пишется. */
+  @keyframes blink { 0%, 60% { opacity: 1 } 61%, 100% { opacity: 0 } }
+  .cursor::after {
+    content: "▮"; margin-inline-start: 4px; color: var(--y-ink);
+    background: var(--y); padding: 0 1px;
+    animation: blink 1s steps(1) infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { animation: spin 0.8s linear infinite; }
+
+  /* Бегущая строка верхней панели. Содержимое продублировано, сдвиг ровно на
+     половину даёт бесшовную петлю. translateX физический, а раскладка ряда
+     логическая, поэтому у письма справа налево своя пара кадров. */
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  @keyframes ticker-rtl {
+    from { transform: translateX(0); }
+    to   { transform: translateX(50%); }
+  }
+
+  @keyframes pulse-y {
+    0%, 100% { box-shadow: 0 0 0 0 var(--y); }
+    50% { box-shadow: 0 0 0 6px transparent; }
+  }
+  .pulse-y { animation: pulse-y 1.8s infinite; }
+
+  .ticker {
+    display: flex;
+    white-space: nowrap;
+    animation: ticker 60s linear infinite;
+  }
+  [dir="rtl"] .ticker { animation-name: ticker-rtl; }
+  .ticker:hover { animation-play-state: paused; }
+
+  /* Появление окна и меню сверху. */
+  @keyframes pop {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .pop { animation: pop 180ms var(--ease-out) both; }
+
+  /* Полоса обратного отсчёта тоста: её конец закрывает тост. Стенд паритета
+     держит её на первом кадре (PERSISTENT_ANIMATIONS). */
+  @keyframes toast-bar {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+  }
+
+  /* Декоративное движение останавливается; элемент остаётся в конечном виде,
+     потому что последний кадр каждой из этих анимаций — его собственный стиль.
+     Продолжают двигаться: .spin — индикатор ожидания (замерший читается как
+     зависание), toast-bar — таймер закрытия тоста. */
+  @media (prefers-reduced-motion: reduce) {
+    .rise, .pop, .pulse-y, .ticker, [dir="rtl"] .ticker, .cursor::after { animation: none; }
+  }
+}

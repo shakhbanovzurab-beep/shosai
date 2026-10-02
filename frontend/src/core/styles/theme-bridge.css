@@ -1,0 +1,90 @@
+/* Мост токенов в Tailwind (спека 077 черновика, Фазы 0, 3–5).
+
+   Тема живёт на html[data-theme], а не на классе .dark и не на
+   prefers-color-scheme: без этой строки все dark:-утилиты мертвы. */
+@custom-variant dark (&:where(html[data-theme="dark"], html[data-theme="dark"] *));
+
+/* `inline` обязателен: значение подставляется в утилиту как есть
+   (`bg-primary` → `background-color: var(--y)`), и цвет перечитывается при смене
+   темы. Промежуточных shadcn-переменных не заводим: наш --muted — цвет ТЕКСТА,
+   а у RetroUI --muted — поверхность; пространство имён v4 своё (--color-*). */
+@theme inline {
+  --color-background:           var(--bg);
+  --color-foreground:           var(--ink);
+  --color-card:                 var(--paper);
+  --color-card-foreground:      var(--ink);
+  --color-popover:              var(--paper);
+  --color-popover-foreground:   var(--ink);
+  --color-primary:              var(--y);
+  --color-primary-hover:        var(--y-2);
+  --color-primary-foreground:   var(--y-ink);
+  --color-border:               var(--line);
+  --color-destructive:          var(--danger);
+
+  /* bg-input — заливка поля, bg-muted — поверхность, текст — text-muted-foreground.
+     --color-ring не заводим: RetroUI фокусируется через outline-primary. */
+  --color-input:                var(--paper);
+  --color-muted:                var(--raised);
+  --color-muted-foreground:     var(--muted);
+  --color-secondary:            var(--raised);
+  --color-secondary-hover:      var(--pressed);
+  --color-secondary-foreground: var(--ink);
+  --color-accent:               var(--hover);
+  --color-accent-foreground:    var(--ink);
+  --color-destructive-foreground: var(--danger-ink);
+
+  /* Наши токены под своими именами — доступ к тем же значениям из утилит. */
+  --color-faint:     var(--faint);     /* третичный текст */
+  --color-ink-2:     var(--ink-2);     /* крупные цифры и заголовки */
+  --color-hairline:  var(--line-soft); /* волосяной разделитель */
+  --color-ok:        var(--ok);        /* успех */
+
+  /* Тихая интенсивность экранов чтения — встречи, чат, редактор: волосяная
+     линия вместо рамки 2px, мягкая тень вместо жёсткой, #1C1C1A вместо чёрного.
+     Механизм тот же, отличаются только значения. */
+  --color-quiet-hair:   var(--quiet-hair);
+  --color-quiet-hair-2: var(--quiet-hair-2);
+  --color-quiet-ink:    var(--quiet-ink);
+  --color-quiet-hover:  var(--quiet-hover);
+  --color-quiet-tint:   var(--quiet-tint);
+  --color-quiet-select: var(--quiet-select);
+  --color-quiet-tint-2: var(--quiet-tint-2);
+  --color-quiet-bar:    var(--quiet-bar);
+
+  --shadow-quiet-1:    var(--quiet-elev-1);
+  --shadow-quiet-2:    var(--quiet-elev-2);
+  --shadow-quiet-3:    var(--quiet-elev-3);
+  --shadow-quiet-card: var(--quiet-elev-card);
+
+  /* Шрифты через var(), а не литералом: `inline` заморозил бы литерал при
+     сборке, и `.font-head` не следовал бы за ролью, выбранной человеком. */
+  --font-sans: var(--ui-sans);
+  --font-head: var(--ui-head);
+  --font-serif: var(--ui-serif);
+  --font-mono: var(--ui-mono);
+
+  /* Брутализм: жёсткий кант со сдвигом, без размытия. RetroUI жмёт кнопку
+     сменой shadow-md → shadow → none. */
+  --shadow-2xs: 1px 1px 0 0 var(--shadow-ink);
+  --shadow-xs:  1px 1px 0 0 var(--shadow-ink);
+  --shadow-sm:  2px 2px 0 0 var(--shadow-ink);
+  --shadow:     2px 2px 0 0 var(--shadow-ink);
+  --shadow-md:  4px 4px 0 0 var(--shadow-ink);
+  --shadow-lg:  6px 6px 0 0 var(--shadow-ink);
+  --shadow-xl:  8px 8px 0 0 var(--shadow-ink);
+  --shadow-2xl: 12px 12px 0 0 var(--shadow-ink);
+}
+
+/* Шкала радиуса — отдельно и БЕЗ `inline`: так Tailwind объявляет --radius-* в
+   :root, и шкалу читает и утилита, и рукописный CSS (.tag-k). Объявлять
+   --radius-* в неслоёном :root нельзя — он молча перебьёт все rounded-*.
+   Брутализм со скруглёнными углами. */
+@theme {
+  --radius-xs:  4px;
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  18px;
+  --radius-full: 999px;
+  --radius:     8px;
+}

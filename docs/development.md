@@ -102,12 +102,17 @@ npm ci                  # once, and after every change of package-lock.json
 npm run dev             # dev server on http://127.0.0.1:5173/app/
 ```
 
+The dev server also serves what the backend serves in the draft: the fonts at `/fonts/` from `frontend/fonts/` and the site root files (`/favicon.svg`, `/manifest.webmanifest` and the icons) from `frontend/public/`. No proxy to the backend is needed for them.
+
 | Check | Command |
 |---|---|
 | Types | `npm run typecheck` |
 | Tests, the architecture rules included | `npm test` |
 | Production bundle in `frontend/dist/` | `npm run build` |
 | Code-health gate, must print `100` | `npm run doctor -- --score` |
+| Font stylesheets equal the font catalogue (also part of `npm test`) | `npm run fonts -- --check` |
+
+After a change of the font catalogue (`src/core/theme/fontCatalogue.ts`) or of `fonts/faces.json`, rewrite the generated stylesheets with `npm run fonts` and commit them together with the change.
 
 `npm run doctor` needs network: react-doctor gets the score from its vendor's service ([ADR 0020](adr/0020-react-doctor-score-from-the-vendor-service.md)). [frontend/README.md](../frontend/README.md) describes the layout and the boundaries.
 

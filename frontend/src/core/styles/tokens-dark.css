@@ -1,0 +1,68 @@
+/* Палитра тёмной темы: те же имена, что в tokens-light.css. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg:        #0E0E0E;
+  --paper:    #161616;
+  --raised:   #1E1E1E;
+  --hover:    #262626;
+  --pressed:  #2E2E2E;
+  --ink:      #F2EFE6;
+  --ink-2:    #FFFFFF;
+  --muted:    #A8A39A;
+  --faint:    #6E6A62;
+  --line:     #F2EFE6;
+  --line-soft:#2E2A22;
+  --tint:     rgba(255,255,255,0.04);
+  --y-ink:    #0E0E0E;
+  --danger:   #FF6B5E;
+  --ok:       #35C46A;
+  /* Жёсткая тень жёлтая: чёрная на #0E0E0E не видна. */
+  --shadow-ink: var(--y);
+  --shadow-hard: 4px 4px 0 0 var(--shadow-ink);
+  /* --danger здесь светлый (лосось): текст на нём тёмный. */
+  --danger-ink: #0E0E0E;
+
+  /* Подсветка кода по кремовой подложке: те же шесть ролей в тёмных
+     оттенках, контраст к #F2EFE6 не ниже 4.5:1. */
+  --code-line:    rgba(14,14,14,0.16);
+  --code-mute:    rgba(14,14,14,0.58);
+  --code-hover:   rgba(14,14,14,0.08);
+  --hl-comment:   #6E6A5E;
+  --hl-keyword:   #8A6A00;
+  --hl-string:    #1D7A3A;
+  --hl-number:    #A64B00;
+  --hl-title:     #1F49C8;
+  --hl-meta:      #6B3FA0;
+  --hl-deletion:  #C0392B;
+  /* Затемнение плотнее: при 0.46 погашенное и подсвеченное почти не различить. */
+  --onb-scrim: rgba(0, 0, 0, 0.62);
+
+  /* Календарь: те же роли, притушенные. Полоска списка светлее заливки:
+     синяя #2E56D6 на #161616 тонет (2.95:1), у #4A72E8 4.19:1. */
+  --cal-meet-fill: #E8AE00;  --cal-meet-ink: #2A1F00;  --cal-meet-line: #E8AE00;
+  --cal-task-fill: #2E56D6;  --cal-task-ink: #FFFFFF;  --cal-task-line: #4A72E8;
+  --cal-rem-fill:  #12833A;  --cal-rem-ink:  #FFFFFF;  --cal-rem-line:  #2CB868;
+  --cal-stream-fill: #8B3FD1;  --cal-stream-ink: #FFFFFF;  --cal-stream-line: #A968E6;
+
+  /* Календарь активности: шкала перевёрнута — насыщенность растёт свечением,
+     на пике брендовый --y. Нулевая ступень чуть светлее карточки. */
+  --heat-0: #212121;
+  --heat-1: #4A3A00;
+  --heat-2: #8A6A00;
+  --heat-3: #C99C00;
+  --heat-4: #FFE000;
+
+  /* Тихая интенсивность экранов чтения. */
+  --quiet-ink: #ECE7DC;
+  --quiet-hair:   rgba(242,239,230,0.12);
+  --quiet-hair-2: rgba(242,239,230,0.20);
+  --quiet-elev-1: 0 1px 2px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.50);
+  --quiet-elev-2: 0 2px 4px rgba(0,0,0,0.45), 0 8px 20px rgba(0,0,0,0.60);
+  --quiet-elev-3: 0 8px 16px rgba(0,0,0,0.55), 0 20px 48px rgba(0,0,0,0.70);
+  --quiet-tint:  rgba(255,224,0,0.16);
+  /* На тёмной подложке олива не читается — приглушённый жёлтый. */
+  --quiet-select: rgba(255,224,0,0.20);
+  --quiet-tint-2: rgba(255,224,0,0.40);
+  --quiet-hover:   rgba(255,255,255,0.05);
+  --quiet-elev-card: 0 2px 6px rgba(0,0,0,0.50), 0 12px 28px rgba(0,0,0,0.62);
+}

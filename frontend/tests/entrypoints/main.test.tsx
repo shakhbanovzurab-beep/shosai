@@ -3,8 +3,12 @@ import type { createRoot as CreateRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Одна и та же подмена на все повторные загрузки модуля точки входа.
-const { createRoot } = vi.hoisted(() => ({ createRoot: vi.fn<typeof CreateRoot>() }));
+const { createRoot, startTheme } = vi.hoisted(() => ({
+  createRoot: vi.fn<typeof CreateRoot>(),
+  startTheme: vi.fn<() => () => void>(),
+}));
 vi.mock("react-dom/client", () => ({ createRoot }));
+vi.mock("@/core/theme/themeStore", () => ({ startTheme }));
 
 describe("точка входа", () => {
   beforeEach(() => {
@@ -30,8 +34,22 @@ describe("точка входа", () => {
     expect(isValidElement(child) && child.type).toBe(AppRoot);
   });
 
+  it("поднимает оформление до первого рендера", async () => {
+    const render = vi.fn<(children: ReactNode) => void>();
+    createRoot.mockReturnValue({ render, unmount: vi.fn() });
+    const container = document.createElement("div");
+    container.id = "root";
+    document.body.append(container);
+
+    await import("@/entrypoints/main");
+
+    expect(startTheme).toHaveBeenCalledOnce();
+    expect(startTheme.mock.invocationCallOrder[0]).toBeLessThan(render.mock.invocationCallOrder[0] ?? 0);
+  });
+
   it("без #root падает сразу и ничего не монтирует", async () => {
     await expect(import("@/entrypoints/main")).rejects.toThrow("#root");
     expect(createRoot).not.toHaveBeenCalled();
+    expect(startTheme).not.toHaveBeenCalled();
   });
 });

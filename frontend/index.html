@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- lang и dir выставляет i18n; ru — до его инициализации, как в черновике. -->
 <html lang="ru" translate="no" class="notranslate" data-theme="light">
   <head>
     <meta charset="utf-8" />
@@ -8,6 +9,58 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#FFE000" />
     <title>Whisperer</title>
+
+    <!-- Корневые файлы сайта (public/): адреса общие с лендингом. Манифест тот
+         же, что у лендинга: приложение одно, и второй манифест дал бы вторую
+         иконку на домашнем экране. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Тема, роль шрифта и язык ДО первого кадра: иначе тёмная тема мигнёт
+         белым во весь экран, а текст переверстается, когда приедет модуль.
+         Единственный встроенный скрипт страницы. Роли и карта языков здесь
+         дублируют core/theme и core/i18n осознанно — модуль приезжает отдельным
+         запросом; равенство держит tests/theme/prePaint.test.ts. Фирменная роль
+         снимает data-font: без атрибута не совпадает ни одно правило выбора. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        try {
+          var preference = localStorage.getItem("wh.theme") || "light";
+          var systemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+          var theme = preference === "system" ? (systemDark ? "dark" : "light") : (preference === "dark" ? "dark" : "light");
+          root.setAttribute("data-theme", theme);
+        } catch (e) {
+          root.setAttribute("data-theme", "light");
+        }
+        try {
+          var appearance = JSON.parse(localStorage.getItem("wh.appearance") || "{}") || {};
+          if (["sans", "serif", "native", "mono"].indexOf(appearance.font) >= 0) {
+            root.setAttribute("data-font", appearance.font);
+          }
+        } catch (e) {
+          /* приватный режим или битый JSON — остаётся фирменная роль */
+        }
+        // Правила шрифтов адресуются парой html[lang][data-font]: без lang ни одно
+        // не совпадёт. Объявления @font-face выбранной роли — отдельным файлом.
+        try {
+          var hreflang = { "zh": "zh-Hant" };
+          var code = localStorage.getItem("wh.lang") || "";
+          if (/^[a-z]{2}$/.test(code)) {
+            var lang = hreflang[code] || code;
+            root.lang = lang;
+            var link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = "/fonts/roles-" + lang + "-" + (root.getAttribute("data-font") || "whisperer") + ".css";
+            document.head.appendChild(link);
+          }
+        } catch (e) {
+          /* без языка остаётся системный шрифт — читаемо и не сломано */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

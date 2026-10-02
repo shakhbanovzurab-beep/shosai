@@ -1,0 +1,41 @@
+/* Типографика Пульта. Каждый класс задаёт свои свойства целиком: утилита того
+   же свойства на элементе с ним выигрывает, потому что слой utilities старше. */
+@layer components {
+  .display { font-family: var(--ui-head); font-weight: 800; letter-spacing: -0.03em; line-height: 0.95; }
+  .mono    { font-family: var(--ui-mono); }
+  .tnum    { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+  .upper   { text-transform: uppercase; letter-spacing: 0.04em; }
+
+  /* Разделитель над шапкой раздела. */
+  .rule { border-top: 2px solid var(--line); }
+
+  /* Маркер: жёлтая полоса под нижней частью строки. */
+  .hi {
+    background: linear-gradient(transparent 55%, var(--y) 55% 92%, transparent 92%);
+    padding: 0 2px;
+  }
+
+  /* Крупный номер раздела и счётчики. */
+  .idx {
+    font-family: var(--ui-head);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.04em;
+  }
+
+  /* Чёрная плашка-ярлык. Ставится прямо в разметку, мимо компонента Tag,
+     поэтому скругление берёт из той же шкалы радиуса. */
+  .tag-k {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 2px 7px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+}

@@ -1,0 +1,37 @@
+/* ──────────────────────────────────────────────────────────
+   WHISPERER · ПУЛЬТ — точка входа стилей кабинета.
+   Жёлтое, чёрное, плотное. Цифры — крупно.
+   ──────────────────────────────────────────────────────────
+
+   Tailwind v4 настраивается отсюда (спека 077 черновика): ни JS-конфига, ни
+   postcss.config.js нет, сборку ведёт плагин @tailwindcss/vite.
+
+   PREFLIGHT НЕ ИМПОРТИРУЕТСЯ. `@import "tailwindcss"` втянул бы слой base с
+   preflight, а тот сбрасывает размеры h1–h6, маркеры списков и вид каждого
+   контрола: поехали бы экраны чтения и все кнопки. Поэтому слои Tailwind
+   подключаются поштучно. Рамки утилит без preflight работают: v4 эмитит
+   `border-style: var(--tw-border-style)` с начальным значением solid.
+
+   ПОРЯДОК ВАЖЕН. Правила кабинета живут в слое components, и утилита того же
+   свойства их перебивает. Токены палитры и правила шрифтов — вне слоёв. */
+@layer theme, base, components, utilities;
+
+/* Правила «язык × роль → семейства» (спека 084): генерируются из
+   core/theme/fontCatalogue.ts. Самих @font-face здесь нет — их 3 МБ, и они
+   подключаются файлами /fonts/roles-<lang>-<role>.css по одному. */
+@import "./generated/font-roles.css";
+@import "tailwindcss/theme.css" layer(theme);
+/* Корень скана классов задан явно: src/, а не каталог запуска. */
+@import "tailwindcss/utilities.css" layer(utilities) source("../../");
+
+@import "./theme-bridge.css";
+@import "./tokens.css";
+@import "./tokens-light.css";
+@import "./tokens-dark.css";
+
+@import "./base.css";
+@import "./typography.css";
+@import "./motion.css";
+@import "./connection.css";
+@import "./controls.css";
+@import "./layout.css";
