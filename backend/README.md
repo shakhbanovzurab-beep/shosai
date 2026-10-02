@@ -30,6 +30,17 @@ import-linter contracts in `pyproject.toml` (`uv run lint-imports`):
 - Lines and spans leave through bounded queues and never block the event loop; what does not fit is dropped and counted in `whisperer_telemetry_dropped_total{signal, reason}`. Without `OTEL_EXPORTER_OTLP_ENDPOINT` spans are recorded for the log correlation but not exported.
 - Metrics register in the process registry passed in (`build_metrics_registry`), never in the global one; labels stay bounded (§16.7). `watch_event_loop_lag` feeds `whisperer_event_loop_lag_seconds`.
 
+## HTTP shell
+
+`core/web` builds every public app: `build_http_app(web_settings, HttpTelemetry(registry, tracer_provider), routers)`. Nothing creates an app at import time; a role builds its app at start.
+
+- **Middlewares**, outermost first: `RequestBoundary` — the request id of [ADR 0008](../docs/adr/0008-error-envelope-with-compatible-detail.md), the log context, `X-Request-ID`, `X-Content-Type-Options`, `Referrer-Policy` and, over HTTPS, `Strict-Transport-Security` on every response, one access line (`method`, `route` template, `status`, `duration_ms`) and the last-resort 500; then the Prometheus instrumentator (`http_requests_total{handler, method, status}` per route template and status class; an unmatched path is `none`); then CORS, only for `CORS_ALLOWED_ORIGINS`. All are pure ASGI.
+- **Traces:** FastAPI's native tracing wraps the stack — one server span per request, named by the route template, no spans for dependencies and serialization. The process sampler drops raw paths, queries, full URLs, client addresses and user agents from every span (§16.8).
+- **Errors:** a slice raises `AppError(code, HTTPStatus.…, params=…, detail=…)` from `core.kernel.errors` and never builds an error body. The code is snake_case (the client's i18n key `errors:<code>`); a text param is only a code or an id, so an email or a name cannot pass; `detail` is set only on a `native` route whose draft contract gives it another shape; a `retry_after_seconds` param becomes `Retry-After`. The handlers also render `HTTPException` (a code-like `detail` becomes the code, a sentence is replaced by the status code, headers such as `Allow` and `WWW-Authenticate` are kept), validation (422 with the `loc` and `type` of each field, never the input) and an unknown path (404 JSON). An unhandled exception is one 500 envelope and one error line with its stack.
+- **OpenAPI:** the `default` response of every operation is `ErrorResponse`. The docs (`/docs`, `/redoc`, `/openapi.json`) exist only with `API_DOCS_ENABLED=true`, which the production gate refuses.
+- **Proxy trust** is uvicorn's: `forwarded_allow_ips(web_settings)` lists `TRUSTED_PROXY_ADDRESSES`; an empty list trusts nobody, so `X-Forwarded-*` from anyone else is ignored.
+- **Health:** `GET /v1/health` answers `200 {"status": "ok"}` with `Cache-Control: no-store` and checks no dependency. `tests/core/web/test_health.py` runs the D1 harness ([contracts/README.md](../contracts/README.md)) over F1's routes; a slice copies that test with its own slice id.
+
 ## Tests
 
 Tests that touch the databases need the local environment ([docs/development.md](../docs/development.md)); all tests read only `TEST_*` variables ([ADR 0009](../docs/adr/0009-test-databases-claimed-by-advisory-lock.md)), listed with local values in section 3 of [`.env.example`](../.env.example).

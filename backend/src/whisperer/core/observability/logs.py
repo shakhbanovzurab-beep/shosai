@@ -26,8 +26,11 @@ from whisperer.core.observability.metrics import ObservabilityMetrics
 from whisperer.core.observability.redaction import redact_event
 
 LOG_QUEUE_CAPACITY = 10_000
-# Библиотеки, чьи INFO и DEBUG заглушают наши строки; шаги F1 дополняют список своими.
-QUIET_LIBRARY_LOGGERS = ("urllib3",)
+# Библиотеки, чьи INFO и DEBUG заглушают наши строки или выдают лишнее; шаги F1 дополняют
+# список своими. HTTPX пишет на INFO каждый исходящий запрос с полным адресом, где бывают
+# ключи и токены в строке запроса. uvicorn.access дублирует строку доступа границы запроса
+# (core/web/boundary.py), но с сырым путём, строкой запроса и адресом клиента (§16.8).
+QUIET_LIBRARY_LOGGERS = ("urllib3", "httpx", "httpcore", "uvicorn.access")
 
 
 class DroppingQueueHandler(QueueHandler):

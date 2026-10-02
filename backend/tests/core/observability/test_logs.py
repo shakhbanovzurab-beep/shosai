@@ -5,6 +5,7 @@ import logging
 import queue
 from uuid import UUID
 
+import pytest
 import structlog
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
@@ -145,3 +146,12 @@ def test_a_full_queue_drops_the_line_and_counts_it() -> None:
         "whisperer_telemetry_dropped_total", {"signal": "logs", "reason": "queue_full"}
     )
     assert dropped == 3
+
+
+@pytest.mark.parametrize("name", ["httpx", "httpcore", "uvicorn.access"])
+def test_libraries_that_log_raw_addresses_write_only_warnings(name: str) -> None:
+    with captured_logs() as captured:
+        logging.getLogger(name).info("GET https://provider/v1?key=k 200")
+        logging.getLogger(name).warning("Соединение сброшено")
+
+    assert [line["message"] for line in captured.lines()] == ["Соединение сброшено"]

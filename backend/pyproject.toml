@@ -12,13 +12,16 @@ license-files = ["LICENSE"]
 # (docs/plan/packages/F1-backend-foundation.md, раздел 4).
 dependencies = [
     "cryptography>=50.0.2",
+    "fastapi>=0.142.2",
     "opentelemetry-api>=1.45.0",
     "opentelemetry-exporter-otlp-proto-http>=1.45.0",
     "opentelemetry-sdk>=1.45.0",
     "prometheus-client>=0.26.0",
+    "prometheus-fastapi-instrumentator>=8.1.0",
     "pydantic>=2.13.5",
     "pydantic-settings>=2.15.0",
     "structlog>=26.1.0",
+    "uvicorn>=0.54.0",
 ]
 
 [dependency-groups]
@@ -26,6 +29,8 @@ dev = [
     # Харнесс тестовых баз (ADR 0009) держит прямые соединения роли миграций.
     "asyncpg>=0.31.0",
     "asyncpg-stubs>=0.31.3",
+    # Тесты HTTP-оболочки ходят в приложение через ASGI-транспорт HTTPX.
+    "httpx>=0.28.1",
     "hypothesis>=6.168.3",
     "import-linter>=2.15",
     "mypy>=2.4.0",
@@ -35,6 +40,8 @@ dev = [
     "pytest-cov>=7.1.0",
     "python-doctor>=2026.5.11",
     "ruff>=0.16.10",
+    # Харнесс D1: тесты сверяют маршруты слайса с контрактом черновика (contracts/README.md).
+    "whisperer-contracts",
 ]
 
 [build-system]
@@ -142,3 +149,6 @@ forbidden_modules = [
     "taskiq_redis", "uvicorn",
 ]
 broken_contract_guidance = "core.kernel stays framework-free; move the adapter to its core package."
+
+[tool.uv.sources]
+whisperer-contracts = { path = "../contracts", editable = true }

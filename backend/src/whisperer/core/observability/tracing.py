@@ -1,9 +1,10 @@
 """Traces: the process tracer provider and a bounded way out to the collector (§16.1).
 
 Every span is recorded (the collector samples by tail), so log lines and task headers
-always carry a trace context. Without `OTEL_EXPORTER_OTLP_ENDPOINT` nothing is exported.
-With it, spans leave through a bounded queue: a span that does not fit, a batch the
-collector refused and whatever is left after the shutdown budget are dropped and counted.
+always carry a trace context; attributes that may carry user input are dropped first.
+Without `OTEL_EXPORTER_OTLP_ENDPOINT` nothing is exported. With it, spans leave through
+a bounded queue: a span that does not fit, a batch the collector refused and whatever is
+left after the shutdown budget are dropped and counted.
 """
 
 import threading
@@ -16,13 +17,13 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExport
 from opentelemetry.sdk.resources import SERVICE_NAME, SERVICE_VERSION, Resource
 from opentelemetry.sdk.trace import ReadableSpan, Span, SpanProcessor, TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor, SpanExporter, SpanExportResult
-from opentelemetry.sdk.trace.sampling import ALWAYS_ON
 from pydantic import HttpUrl
 
 from whisperer.core.config.roles import ProcessRole
 from whisperer.core.config.sections import ObservabilitySettings
 from whisperer.core.config.values import Environment
 from whisperer.core.observability.metrics import ObservabilityMetrics
+from whisperer.core.observability.span_privacy import PrivateAttributesSampler
 
 SPAN_QUEUE_CAPACITY = 2048
 EXPORT_BATCH_SIZE = 512
@@ -50,7 +51,9 @@ def build_tracer_provider(
         }
     )
     # Без выхода при завершении интерпретатора: провайдер останавливает сам процесс.
-    provider = TracerProvider(resource=resource, sampler=ALWAYS_ON, shutdown_on_exit=False)
+    provider = TracerProvider(
+        resource=resource, sampler=PrivateAttributesSampler(), shutdown_on_exit=False
+    )
     if settings.otel_exporter_otlp_endpoint is not None:
         exporter = OTLPSpanExporter(
             endpoint=traces_endpoint(settings.otel_exporter_otlp_endpoint),
