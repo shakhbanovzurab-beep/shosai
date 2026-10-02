@@ -148,10 +148,24 @@ def test_a_full_queue_drops_the_line_and_counts_it() -> None:
     assert dropped == 3
 
 
-@pytest.mark.parametrize("name", ["httpx", "httpcore", "uvicorn.access"])
+@pytest.mark.parametrize("name", ["httpx", "httpcore", "uvicorn.access", "taskiq.kicker"])
 def test_libraries_that_log_raw_addresses_write_only_warnings(name: str) -> None:
     with captured_logs() as captured:
         logging.getLogger(name).info("GET https://provider/v1?key=k 200")
         logging.getLogger(name).warning("Соединение сброшено")
 
     assert [line["message"] for line in captured.lines()] == ["Соединение сброшено"]
+
+
+def test_a_library_line_repeating_our_own_is_dropped() -> None:
+    receiver = logging.getLogger("taskiq.receiver.receiver")
+    with captured_logs() as captured:
+        try:
+            raise ValueError("сбой задачи")
+        except ValueError:
+            receiver.exception("Exception found while executing function.")
+            receiver.exception("Cannot parse message")
+            log.error("Строка structlog проходит фильтр")
+
+    messages = [line["message"] for line in captured.lines()]
+    assert messages == ["Cannot parse message", "Строка structlog проходит фильтр"]

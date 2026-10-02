@@ -610,7 +610,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | Uvicorn | 0.54.0 | ASGI server, one process per container |
 | Backend | psycopg (`psycopg[binary]`) | 3.3.6 | PostgreSQL driver; statements unprepared, one round trip each behind PgBouncer in transaction mode ([ADR 0013](../adr/0013-psycopg-driver-behind-pgbouncer.md)) |
 | Backend | pgvector | 0.5.0 | Vectors in PostgreSQL |
-| Backend | taskiq-redis | 1.2.4 | TaskIQ broker on Redis Streams |
+| Backend | Own task broker on TaskIQ's `AsyncBroker`, streams in Valkey through redis-py | — | One stream per queue holding only unfinished tasks: enqueue within 50 ms or 503, lease renewal, retries as delayed redeliveries, at most 5 deliveries, dead letter; replaces taskiq-redis, whose broker built its own pool, had no deadline or delivery limit and trimmed unfinished tasks ([ADR 0016](../adr/0016-own-task-broker-on-valkey-streams.md)) |
 | Backend | websockets | 17.1 | Streaming connections to AI providers |
 | Backend | google-genai | 2.25.0 | Gemini Live client |
 | Backend | aiobotocore | 3.9.2 | S3 client; one bucket for both homes; replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |

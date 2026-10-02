@@ -10,7 +10,7 @@ from contextlib import contextmanager
 from typing import TypedDict, Unpack
 from uuid import UUID
 
-from structlog.contextvars import bound_contextvars
+from structlog.contextvars import bind_contextvars, bound_contextvars, get_contextvars
 
 from whisperer.core.kernel.homes import Home
 
@@ -32,3 +32,18 @@ def log_context(**fields: Unpack[LogFields]) -> Iterator[None]:
     """Add the fields to every log line written inside the block; restore the outer ones after."""
     with bound_contextvars(**{key: str(value) for key, value in fields.items()}):
         yield
+
+
+def bind_log_fields(**fields: Unpack[LogFields]) -> None:
+    """Add the fields to every later log line of the current asyncio task.
+
+    For a unit of work that owns its task, such as one task run in a worker: the values
+    die with the task and never reach the next one.
+    """
+    bind_contextvars(**{key: str(value) for key, value in fields.items()})
+
+
+def bound_request_id() -> str | None:
+    """The `request_id` of the unit of work in progress, if it has one."""
+    value = get_contextvars().get("request_id")
+    return value if isinstance(value, str) else None

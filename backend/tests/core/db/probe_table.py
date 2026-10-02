@@ -1,4 +1,7 @@
-"""Fixtures of the database tests: a probe table with company isolation in both homes."""
+"""A probe table with company isolation in both homes, for tests that write rows.
+
+A pytest plugin of the root `conftest.py`: the database tests and the task tests share it.
+"""
 
 from collections.abc import AsyncIterator
 

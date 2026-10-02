@@ -30,7 +30,25 @@ LOG_QUEUE_CAPACITY = 10_000
 # список своими. HTTPX пишет на INFO каждый исходящий запрос с полным адресом, где бывают
 # ключи и токены в строке запроса. uvicorn.access дублирует строку доступа границы запроса
 # (core/web/boundary.py), но с сырым путём, строкой запроса и адресом клиента (§16.8).
-QUIET_LIBRARY_LOGGERS = ("urllib3", "httpx", "httpcore", "uvicorn.access")
+# TaskIQ пишет на DEBUG аргументы каждой поставленной задачи, а на INFO — каждый запуск.
+QUIET_LIBRARY_LOGGERS = ("urllib3", "httpx", "httpcore", "uvicorn.access", "taskiq")
+# Строки библиотек, которые повторяют нашу строку о том же событии. Приёмник TaskIQ пишет
+# исключение задачи сам, а строка жизненного цикла задачи (core/tasks/lifecycle.py) несёт
+# то же исключение со стеком и решением: повтор или dead letter.
+DUPLICATE_LIBRARY_LINES = frozenset(
+    {("taskiq.receiver.receiver", "Exception found while executing function.")}
+)
+
+
+class DuplicateLibraryLines(logging.Filter):
+    """Drops a library line that repeats a line of our own about the same event."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        """False for a known duplicate; every other record passes."""
+        # У записей structlog сообщение — словарь события; дубли бывают только у библиотек.
+        if not isinstance(record.msg, str):
+            return True
+        return (record.name, record.msg) not in DUPLICATE_LIBRARY_LINES
 
 
 class DroppingQueueHandler(QueueHandler):
@@ -77,6 +95,7 @@ def configure_logging(
     """Route structlog and standard-library logging of the process into JSON lines on `stream`."""
     log_queue: queue.Queue[logging.LogRecord] = queue.Queue(LOG_QUEUE_CAPACITY)
     handler = DroppingQueueHandler(log_queue, metrics)
+    handler.addFilter(DuplicateLibraryLines())
     handler.setFormatter(
         structlog.stdlib.ProcessorFormatter(processors=line_processors(settings, role))
     )

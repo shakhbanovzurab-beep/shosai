@@ -22,7 +22,11 @@ from tests.harness.settings import HarnessConfigurationError, HarnessSettings
 from tests.harness.slots import NoFreeSlotError
 
 RUN_SLOT_SUMMARY = pytest.StashKey[list[str]]()
-pytest_plugins = ("tests.harness.database_access", "tests.harness.shared_services")
+pytest_plugins = (
+    "tests.harness.database_access",
+    "tests.harness.shared_services",
+    "tests.core.db.probe_table",
+)
 
 
 @pytest.fixture(scope="session")
