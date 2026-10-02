@@ -1,6 +1,17 @@
 # F2 — Frontend foundation
 
-Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions` and `web-design-guidelines` before writing code.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions` and `web-design-guidelines` before reading the draft or designing anything; load `react-doctor` before running the gate.
+
+**This package is multi-session.** Work in the session mode described in `docs/plan/prompts/README.md`; the package plan is `docs/plan/packages/F2-frontend-foundation.md`. A split that fits the work below — adjust it in the plan if the design needs another order:
+
+1. Project skeleton: Vite, React 19.3, TypeScript, the pinned libraries, `.nvmrc`, npm scripts, the license copy if the project needs one, CI frontend job green on an empty project (items 1, 2).
+2. Visual foundation: design tokens, Tailwind theme, fonts, icons, global styles, light and dark themes (item 3).
+3. Base UI components from the draft's `shared/ui` that the shell and every slice use — buttons, fields, dialogs, toasts and the like. Split into two steps if they do not fit one session (item 3).
+4. App shell and navigation: layout, menus, not-found page, error boundary (item 3).
+5. Router with lazy-loaded routes and the registration point for slices (item 4).
+6. Data fetching layer: API client, the error envelope of ADR 0008, `request_id` shown on errors (item 5).
+7. i18n with all 16 locales, keys kept stable (item 6).
+8. Parity: the D2 harness wired to this project, and the shell proven identical to the draft in both themes and on both viewports (item 7, definition of done).
 
 ## Goal
 

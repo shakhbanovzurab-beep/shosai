@@ -14,7 +14,7 @@ Statuses: `todo` · `planned` (package plan written, approved) · `in progress` 
 | F2 | Frontend foundation | D2 | todo | — | |
 | F3 | Local environment | — | done | — | `compose.dev.yaml`: two PostgreSQL 18 homes behind transaction-mode PgBouncer, Valkey, Redis cache, Qdrant, SeaweedFS; [development.md](../development.md); [ADR 0001](../adr/0001-local-environment.md) |
 | F4 | Delivery to staging | F1, F2 | todo | — | Needs server, DNS and registry from the user |
-| F5 | Observability | F1, F4 | todo | — | |
+| F5 | Observability | F1; F4 for the last step | todo | — | Steps 1–6 run locally; step 7 needs staging |
 | F6 | Platform services | F1 | todo | — | Added by D4 (FM-4): AI provider port with cost rows, spend and abuse control; email; periodic-job registry |
 | S01 | Identity | F1, F2, F3, F6, D1, D2 | todo | — | |
 | S02 | Organizations | S01 | todo | — | New in v2 |
