@@ -1,6 +1,15 @@
 # F4 — Delivery to staging
 
-Follow the common protocol in `docs/plan/prompts/README.md`. Load the four Docker skills — `docker-project-foundations`, `docker-build-strategies`, `docker-compose-patterns` and `docker-destructive-guardrails` — before starting.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the four Docker skills — `docker-project-foundations`, `docker-build-strategies`, `docker-compose-patterns` and `docker-destructive-guardrails` — before starting; load `fastapi` before touching `backend/` and the four Vercel skills before touching `frontend/`.
+
+**This package is multi-session.** Work in the session mode described in `docs/plan/prompts/README.md`; the package plan is `docs/plan/packages/F4-delivery-staging.md`. The planning session asks the user for everything in "Before starting". Steps 1–5 need only F1; step 6 needs F2. A split that fits the work below — adjust it in the plan if the design needs another order:
+
+1. Backend image: multi-stage Dockerfile with the four roles, non-root user, `.dockerignore`; built and started locally against F3 (item 1, backend part).
+2. Staging server: production Compose for the compute plane, parameterised for staging; NGINX with TLS from certbot, rate limits, `/v1/ws/*` with `least_conn` and 1013 when full (items 2, 3, 4). Needs the server and the DNS record.
+3. Staging data stores and secrets: staging's own databases for both homes, object store and Valkey — the managed services the owner provides, or what the user decides while they are missing (CLAUDE.md "Hosting constraints now"); secrets only in the CI environment (item 7).
+4. CI: build the image only from a green commit, push it to the registry, deploy to staging (item 5).
+5. `scripts/release.sh` with the migration and drain order of §17, keeping the previous image; the rollback command rehearsed once (item 6, definition of done).
+6. Frontend: the built frontend in the image, served by NGINX (item 1, frontend part).
 
 ## Goal
 

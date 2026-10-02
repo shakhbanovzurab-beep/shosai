@@ -17,7 +17,7 @@ How the draft (`/root/whisperer`) is rewritten into the final version (`/root/wh
 
 2. The first message of the session is the package's launch line from [section 6](#6-launch-lines). It points the agent to its prompt file in [prompts/](prompts/).
 3. The agent works, runs the checks, reports, and waits. It commits only after the user says «Принято».
-4. A large package spans several sessions: every feature slice, and F1, F2, F5 and F6. The user starts it with the same launch line each time; the first session writes the package plan, each later session implements the next step of that plan ([prompts/README.md](prompts/README.md), "Session mode for multi-session packages").
+4. A large package spans several sessions: every feature slice, and F1, F2, F4, F5 and F6. The user starts it with the same launch line each time; the first session writes the package plan, each later session implements the next step of that plan ([prompts/README.md](prompts/README.md), "Session mode for multi-session packages").
 5. Several packages may run in parallel sessions when their dependencies are done ([section 4](#4-dependencies-and-parallelism)).
 
 ## 2. Facts every agent needs
@@ -101,7 +101,7 @@ D1 D2 D3 D4          (parallel, any time)
 F3 ── F1 ── F6 ── S01 ── S02..S16   (slices in any order, in parallel)
       F2 ───────┘
 F1 F2 F6 ── S17
-F1 F2 ── F4 ── F5 (steps 1–6 of F5 need only F1)
+F1 F2 ── F4 ── F5 (steps 1–5 of F4 and 1–6 of F5 need only F1)
 all S + D3 ── M1 ── M2
 ```
 
