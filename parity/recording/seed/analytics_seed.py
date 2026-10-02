@@ -1,17 +1,17 @@
-"""События продуктовой аналитики: четыре с половиной месяца жизни продукта.
+"""Product analytics events: four and a half months of the product's life.
 
-Продуктовую аналитику черновик считает по запросу из таблицы событий, а в бою её
-наполняют клиенты и шина фактов. Здесь события порождает симуляция: каждый день
-приходят посетители лендинга, часть регистрируется, ставит desktop-клиент и
-выдаёт разрешения; зарегистрированные возвращаются с затухающей вероятностью,
-проводят встречи, копируют ответы, упираются в лимит и открывают оплату.
+The draft computes product analytics on request from the events table; in production
+the table is filled by the clients and the fact bus. Here a simulation produces the
+events: every day landing visitors arrive, some of them sign up, install the desktop
+client and grant permissions; registered people come back with a decaying probability,
+hold meetings, copy answers, hit the limit and open checkout.
 
-Генератор детерминирован: зерно фиксировано, порядок обхода — по дням и людям.
-Люди симуляции — не аккаунты черновика: их id есть только в событиях.
+The generator is deterministic: the seed is fixed, and the traversal order is by day
+and by person. Simulated people are not draft accounts: their ids exist only in events.
 
-Четверг 16 июля — последний закрытый день. В нём встреч на macOS 1.4.5 втрое
-меньше обычного, а обрывов — всплеск: это даёт находки, сработавших сторожей и
-отстающие цели. Сегодняшних событий нет: их пишут визиты записи.
+Thursday, July 16 is the last closed day. On it there are three times fewer meetings on
+macOS 1.4.5 than usual and a spike of aborts: this produces findings, fired alerts and
+lagging targets. There are no events for today: the recording visits write them.
 """
 
 from __future__ import annotations
@@ -109,7 +109,7 @@ def _moment(rng: random.Random, day: date, start_hour: int = 7, end_hour: int = 
 
 
 def _arrivals(writer: _Writer, day: date, people: list[_Person]) -> None:
-    """Посетители лендинга; часть регистрируется и ставит клиент."""
+    """Landing visitors; some of them sign up and install the client."""
     rng = writer.rng
     weekend = day.weekday() >= 5
     for _ in range(rng.randint(70, 85) if weekend else rng.randint(135, 160)):
@@ -146,7 +146,7 @@ def _install(writer: _Writer, person: _Person, at: datetime) -> None:
 
 
 def _activity(writer: _Writer, day: date, person: _Person) -> None:
-    """Один активный день человека: встречи, ответы, фичи, лимит и оплата."""
+    """One active day of a person: meetings, answers, features, the limit and checkout."""
     rng = writer.rng
     session = writer.uid()
     at = _moment(rng, day, 8, 19)
@@ -186,7 +186,7 @@ def _activity(writer: _Writer, day: date, person: _Person) -> None:
 
 
 def _shared_pages(writer: _Writer, day: date, people: list[_Person]) -> None:
-    """Открытия публичных результатов встреч: часть гостей регистрируется."""
+    """Views of public meeting results: some of the guests sign up."""
     rng = writer.rng
     for _ in range(rng.randint(12, 24)):
         anonymous_id = writer.uid()
@@ -222,7 +222,7 @@ def _events() -> list[dict[str, Any]]:
 
 
 async def seed_analytics(db: AsyncSession) -> int:
-    """Создаёт партиции марта–июля и вставляет события пачками; возвращает их число."""
+    """Create the March to July partitions, insert the events in batches, return their count."""
     await ensure_partitions(db, lookahead_months=4, now=datetime(2026, 3, 15, tzinfo=UTC))
     rows = _events()
     for start in range(0, len(rows), _BATCH):

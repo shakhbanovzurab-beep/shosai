@@ -1,7 +1,7 @@
-"""Окружение встреч «руководителя»: папки, ссылки на итоги, шаблоны, интеграции.
+"""Meeting surroundings of the `lead` persona: folders, result share links, templates, integrations.
 
-Токены ссылок — из ids.json: черновик хранит их открытым текстом, и визиты
-записи открывают публичную страницу по известному адресу.
+The link tokens come from ids.json: the draft stores them in plain text, and the
+recording visits open the public page at a known address.
 """
 
 from __future__ import annotations
@@ -40,7 +40,7 @@ _TEMPLATES = (
 
 
 async def seed_workspace(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session]) -> None:
-    """Засевает окружение встреч владельца."""
+    """Seed the owner's meeting surroundings."""
     await _folders(db, owner, clock, sessions)
     await _shares(db, owner, clock, sessions)
     for index, (name, sections) in enumerate(_TEMPLATES):
@@ -77,8 +77,8 @@ async def _folders(db: AsyncSession, owner: User, clock: datetime, sessions: dic
 
 
 async def _shares(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session]) -> None:
-    """Открытая с обсуждением, по паролю, с закрытым обсуждением и истёкшая.
-    Отозванная ссылка — это отсутствие строки: её токен в базу не попадает."""
+    """Public with comments, password-protected, with comments closed, and expired.
+    A revoked link is the absence of a row: its token never reaches the database."""
     public = _share(owner, sessions["budget"], SHARES["public"], "public", clock)
     locked = _share(owner, sessions["lawyer"], SHARES["locked"], "shared", clock)
     locked.password_hash = hash_password(SHARE_PASSWORD)

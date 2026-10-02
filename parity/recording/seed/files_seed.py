@@ -1,14 +1,14 @@
-"""Файлы «руководителя»: дерево папок, файлы разных видов и ссылки на них; квоты.
+"""Files of the `lead` persona: a folder tree, files of different kinds and share links; quotas.
 
-Файлы в хранилище не лежат: S3 у стенда нет. Списки, поиск, ссылки и квоты
-черновик отдаёт из базы; просмотр и скачивание идут в S3 — их ответы задаёт
-состояние.
+The files are not in storage: the parity stand has no S3. The draft serves lists, search,
+share links and quotas from the database; preview and download go to S3, so the state
+defines those responses.
 
-Занятое место черновик берёт из счётчика пользователя, а не из строк файлов:
-сверку счётчика делает планировщик, а на стенде он выключен. Счётчик
-«руководителя» засев выставляет по сумме его файлов (включая записи комнат и
-смету из засева дел) — последним шагом. У персон квот файлов нет: 92 % тарифа Pro
-и перебор с 12 июля.
+The draft takes used storage from the user's counter, not from the file rows: the
+scheduler reconciles the counter, and it is disabled on the stand. The seed sets the
+counter of `lead` to the sum of its files (including room recordings and the estimate
+from the hubs seed) as the last step. The quota personas (`quota`, `overquota`) have no
+files: 92 % of the Pro tariff limit, and over the limit since July 12.
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ DOCX = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
 @dataclass(frozen=True)
 class _Item:
-    """Папка (mime None) или файл; `share` — ключ ссылки в ids.json."""
+    """A folder (mime None) or a file; `share` is the share link key in ids.json."""
 
     name: str
     size: int = 0
@@ -76,7 +76,7 @@ _QUOTAS = {"quota": (98_784_247_808, None), "overquota": (120_259_084_288, timed
 
 
 async def seed_files(db: AsyncSession, owner: User, clock: datetime) -> None:
-    """Дерево файлов владельца; созданы раньше суток до момента стенда."""
+    """The owner's file tree; created more than a day before the parity clock."""
     counter = 0
 
     def add(items: tuple[_Item, ...], parent: uuid.UUID | None) -> None:
@@ -101,7 +101,7 @@ async def seed_files(db: AsyncSession, owner: User, clock: datetime) -> None:
 
 
 async def set_storage_counters(db: AsyncSession, accounts: dict[str, User], clock: datetime) -> None:
-    """Счётчики занятого места: у «руководителя» — сумма его файлов, у персон квот — заданные."""
+    """Used storage counters: the sum of its files for `lead`, set values for the quota personas."""
     lead = accounts["lead"]
     lead.storage_used_bytes = int(await db.scalar(
         select(func.coalesce(func.sum(StorageFile.size), 0)).where(StorageFile.owner_id == lead.id)) or 0)

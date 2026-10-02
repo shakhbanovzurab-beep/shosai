@@ -1,10 +1,10 @@
-"""Сравнение одной HTTP-операции черновика с операцией v2 по документам OpenAPI.
+"""Comparison of one draft HTTP operation with the v2 operation using the OpenAPI documents.
 
-Операции сопоставляются по методу и шаблону пути без имён параметров:
-`/v1/me/sessions/{session_id}` и `/v1/me/sessions/{id}` — один адрес для
-клиента. Параметры пути сравниваются по позиции, остальные — по месту и имени.
-Ответы ошибок не сравниваются: черновик описывает в OpenAPI только 422, а
-форма конверта ошибок v2 — отдельное решение (см. README).
+Operations are matched by method and by the path template without parameter names:
+`/v1/me/sessions/{session_id}` and `/v1/me/sessions/{id}` are the same endpoint for
+a client. Path parameters are compared by position, the others by location and name.
+Error responses are not compared: the draft describes only 422 in OpenAPI, and the
+shape of the v2 error envelope is a separate decision (see README).
 """
 
 import re
@@ -21,13 +21,13 @@ _PATH_PARAMETER = re.compile(r"\{([^}:]+)(?::[^}]+)?\}")
 
 
 def normalize_path(path: str) -> str:
-    """Шаблон пути без имён параметров: так его видит клиент."""
+    """Path template without parameter names, as a client sees it."""
     return _PATH_PARAMETER.sub("{}", path)
 
 
 @dataclass(frozen=True, slots=True)
 class Operation:
-    """Операция документа OpenAPI с исходным шаблоном пути."""
+    """An operation of an OpenAPI document with its original path template."""
 
     method: str
     path: str
@@ -36,12 +36,12 @@ class Operation:
 
     @property
     def key(self) -> tuple[str, str]:
-        """Ключ сопоставления: метод и нормализованный путь."""
+        """Matching key: the method and the normalized path."""
         return self.method, normalize_path(self.path)
 
 
 def operations(document: JsonObject) -> dict[tuple[str, str], Operation]:
-    """Все операции документа по ключу сопоставления."""
+    """Every operation of the document by its matching key."""
     found: dict[tuple[str, str], Operation] = {}
     for path, raw_item in optional_object(document.get("paths")).items():
         item = optional_object(raw_item)
@@ -54,7 +54,7 @@ def operations(document: JsonObject) -> dict[tuple[str, str], Operation]:
 
 @dataclass(frozen=True, slots=True)
 class Parameter:
-    """Параметр запроса, приведённый к ключу сопоставления."""
+    """A request parameter reduced to its matching key."""
 
     key: str
     required: bool
@@ -62,7 +62,7 @@ class Parameter:
 
 
 def _parameters(document: SchemaDocument, operation: Operation) -> dict[str, Parameter]:
-    """Параметры операции: путь — по позиции, заголовки — без учёта регистра."""
+    """Operation parameters: path ones by position, headers case-insensitively."""
     raw = optional_list(operation.path_parameters.get("parameters"))
     raw += optional_list(operation.spec.get("parameters"))
     positions = {name: index for index, name in enumerate(_PATH_PARAMETER.findall(operation.path))}
@@ -86,10 +86,10 @@ def _parameters(document: SchemaDocument, operation: Operation) -> dict[str, Par
 
 
 def _media(content: JsonObject) -> dict[str, JsonObject]:
-    """Схемы по типам содержимого; параметры типа (`; charset`) отбрасываются.
+    """Schemas by content type; media type parameters (`; charset`) are dropped.
 
-    У потоков (`text/event-stream`, JSON Lines) FastAPI описывает схему одного
-    элемента в `itemSchema`, а не всего тела в `schema`.
+    For streams (`text/event-stream`, JSON Lines) FastAPI describes the schema of one
+    item in `itemSchema`, not of the whole body in `schema`.
     """
     found: dict[str, JsonObject] = {}
     for media, raw in content.items():
@@ -102,7 +102,7 @@ def _media(content: JsonObject) -> dict[str, JsonObject]:
 def _request_body(
     document: SchemaDocument, operation: Operation
 ) -> tuple[bool, dict[str, JsonObject]]:
-    """Обязательность тела запроса и его схемы по типам содержимого."""
+    """Whether the request body is required, and its schemas by content type."""
     raw = optional_object(operation.spec.get("requestBody"))
     if not raw:
         return False, {}
@@ -113,7 +113,7 @@ def _request_body(
 def primary_response(
     document: SchemaDocument, operation: Operation
 ) -> tuple[str, dict[str, JsonObject]] | None:
-    """Основной успешный ответ: наименьший код 2xx, иначе 3xx."""
+    """The primary successful response: the lowest 2xx code, otherwise 3xx."""
     responses = optional_object(operation.spec.get("responses"))
     codes = sorted(code for code in responses if code[:1] in {"2", "3"} and code[1:].isdigit())
     success = [code for code in codes if code.startswith("2")] or codes
@@ -124,7 +124,7 @@ def primary_response(
 
 
 def response_is_untyped(document: SchemaDocument, operation: Operation) -> bool:
-    """Черновик не описал форму успешного ответа — схемой его не защитить."""
+    """The draft did not describe the successful response's shape; no schema can protect it."""
     primary = primary_response(document, operation)
     if primary is None:
         return True
@@ -135,7 +135,7 @@ def response_is_untyped(document: SchemaDocument, operation: Operation) -> bool:
 def compare_operation(
     documents: DocumentPair, draft: Operation, candidate: Operation
 ) -> list[Difference]:
-    """Все расхождения операции v2 с операцией черновика."""
+    """Every difference between the v2 operation and the draft operation."""
     differences = _compare_parameters(documents, draft, candidate)
     differences += _compare_body(documents, draft, candidate)
     differences += _compare_response(documents, draft, candidate)

@@ -1,4 +1,4 @@
-"""Проверка целиком: область, классы, принятые расхождения, маршруты вне OpenAPI."""
+"""The whole check: scope, classes, accepted deviations, routes outside OpenAPI."""
 
 import pytest
 

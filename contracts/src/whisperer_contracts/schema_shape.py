@@ -1,11 +1,11 @@
-"""Нормализация JSON Schema из OpenAPI 3.1 в плоскую «форму» для сравнения.
+"""Normalization of JSON Schema from OpenAPI 3.1 into a flat "shape" for comparison.
 
-FastAPI и Pydantic пишут одну и ту же форму данных по-разному: `$ref` на
-компонент, `allOf` из одного элемента, `anyOf [X, null]` вместо nullable,
-`type` строкой или списком. Сравнивать сырые схемы значило бы ловить эти
-различия записи вместо различий контракта, поэтому схема сначала сводится к
-`Shape`: набор типов, nullable, свойства, элементы массива, перечисление,
-варианты объединения.
+FastAPI and Pydantic write the same data shape in different ways: a `$ref` to a
+component, an `allOf` with one member, `anyOf [X, null]` instead of nullable, `type`
+as a string or a list. Comparing raw schemas would catch these differences in
+notation instead of differences in the contract, so a schema is first reduced to a
+`Shape`: a set of types, nullable, properties, array items, an enumeration, union
+variants.
 """
 
 import json
@@ -27,7 +27,7 @@ REF_PREFIX = "#/"
 
 @dataclass(frozen=True, slots=True)
 class Shape:
-    """Нормализованная форма схемы; вложенные схемы остаются сырыми до сравнения."""
+    """Normalized shape of a schema; nested schemas stay raw until they are compared."""
 
     types: frozenset[str]
     nullable: bool
@@ -43,28 +43,28 @@ class Shape:
 
     @property
     def is_any(self) -> bool:
-        """Схема ничего не ограничивает (`{}` или только описание)."""
+        """The schema constrains nothing (`{}` or only a description)."""
         return not self.types and not self.variants and self.enum is None
 
     @property
     def label(self) -> str:
-        """Имя для сопоставления вариантов: заголовок, имя компонента или набор типов.
+        """Name for matching variants: the title, the component name or the set of types.
 
-        Заголовок идёт первым: Pydantic называет компонент ответа `Item-Output`,
-        когда схемы ввода и вывода различаются, а заголовок остаётся `Item`.
+        The title comes first: Pydantic names a response component `Item-Output` when the
+        input and output schemas differ, while the title stays `Item`.
         """
         return self.title or self.name or ",".join(sorted(self.types)) or "any"
 
 
 class SchemaDocument:
-    """Документ OpenAPI, в котором разрешаются ссылки и строятся формы схем."""
+    """An OpenAPI document in which references are resolved and schema shapes are built."""
 
     def __init__(self, document: JsonObject) -> None:
-        """Документ разбирается лениво: ссылки разрешаются по мере сравнения."""
+        """The document is read lazily: references are resolved as the comparison needs them."""
         self._document = document
 
     def resolve(self, schema: JsonObject) -> tuple[JsonObject, str]:
-        """Проходит цепочку `$ref`; возвращает целевую схему и имя компонента."""
+        """Follow the `$ref` chain; return the target schema and the component name."""
         name = ""
         current = schema
         for _ in range(MAX_REF_CHAIN):
@@ -76,7 +76,7 @@ class SchemaDocument:
         raise ContractInputError(f"$ref chain longer than {MAX_REF_CHAIN} at {name}")
 
     def _follow(self, reference: str) -> JsonObject:
-        """Переходит по локальному JSON Pointer внутри документа."""
+        """Follow a local JSON Pointer inside the document."""
         if not reference.startswith(REF_PREFIX):
             raise ContractInputError(f"only local references are supported: {reference}")
         node: Json = self._document
@@ -90,7 +90,7 @@ class SchemaDocument:
         return node
 
     def shape(self, schema: JsonObject) -> Shape:
-        """Строит нормализованную форму схемы."""
+        """Build the normalized shape of a schema."""
         resolved, name = self.resolve(schema)
         merged = self._merge_all_of(resolved)
         nullable, variants = self._split_null(merged)
@@ -124,7 +124,7 @@ class SchemaDocument:
         )
 
     def _split_null(self, schema: JsonObject) -> tuple[bool, list[JsonObject]]:
-        """Отделяет вариант `null` от остальных вариантов anyOf/oneOf."""
+        """Separate the `null` variant from the other anyOf/oneOf variants."""
         nullable = False
         variants: list[JsonObject] = []
         for raw in optional_list(schema.get("anyOf")) + optional_list(schema.get("oneOf")):
@@ -136,7 +136,7 @@ class SchemaDocument:
         return nullable, variants
 
     def _merge_all_of(self, schema: JsonObject) -> JsonObject:
-        """Сливает члены `allOf` в одну схему: свойства и обязательные поля объединяются."""
+        """Merge the `allOf` members into one schema, combining properties and required fields."""
         members = optional_list(schema.get("allOf"))
         if not members:
             return schema
@@ -159,12 +159,12 @@ class SchemaDocument:
 
 
 def _has_own_constraints(schema: JsonObject) -> bool:
-    """У схемы есть ограничения помимо anyOf/oneOf (тогда она не сводится к варианту)."""
+    """The schema has constraints besides anyOf/oneOf (then it does not reduce to a variant)."""
     return any(key in schema for key in ("type", "properties", "items", "enum", "const"))
 
 
 def _declared_types(schema: JsonObject) -> tuple[frozenset[str], bool]:
-    """Типы из `type` (строка или список) с выводом из `properties`/`items`."""
+    """Types from `type` (a string or a list), with inference from `properties`/`items`."""
     raw = schema.get("type")
     declared = {raw} if isinstance(raw, str) else set(str_list(raw, "type"))
     nullable = "null" in declared
@@ -177,7 +177,7 @@ def _declared_types(schema: JsonObject) -> tuple[frozenset[str], bool]:
 
 
 def _enum_values(schema: JsonObject) -> frozenset[str] | None:
-    """Значения `enum`/`const` в каноническом JSON-виде, чтобы 1 и "1" различались."""
+    """`enum`/`const` values in canonical JSON form, so that 1 and "1" stay distinct."""
     if "const" in schema:
         return frozenset({json.dumps(schema["const"], sort_keys=True)})
     if "enum" in schema:
@@ -188,7 +188,7 @@ def _enum_values(schema: JsonObject) -> frozenset[str] | None:
 
 
 def _additional(value: Json) -> JsonObject | bool | None:
-    """`additionalProperties`: схема значений словаря, запрет/разрешение или не задано."""
+    """`additionalProperties`: the schema of map values, a boolean ban or permission, or unset."""
     if isinstance(value, bool):
         return value
     if isinstance(value, dict):

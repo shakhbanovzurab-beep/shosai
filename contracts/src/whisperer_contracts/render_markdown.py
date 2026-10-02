@@ -1,4 +1,4 @@
-"""Общие примитивы Markdown для документов базы: таблицы, ссылки на код, экранирование."""
+"""Shared Markdown primitives for the baseline documents: tables, code references, escaping."""
 
 from collections.abc import Sequence
 
@@ -33,12 +33,12 @@ CLASS_LEGEND = (
 
 
 def cell(value: str) -> str:
-    """Текст для ячейки таблицы: без переводов строк и с экранированной чертой."""
+    """Text for a table cell: without line breaks and with the pipe escaped."""
     return " ".join(value.split()).replace("|", "\\|")
 
 
 def table(header: tuple[str, ...], rows: list[tuple[str, ...]]) -> list[str]:
-    """Таблица Markdown; пустая таблица заменяется явной строкой «нет»."""
+    """A Markdown table; an empty table is replaced with an explicit `_None._` line."""
     if not rows:
         return ["_None._"]
     lines = ["| " + " | ".join(header) + " |", "|" + "---|" * len(header)]
@@ -47,7 +47,7 @@ def table(header: tuple[str, ...], rows: list[tuple[str, ...]]) -> list[str]:
 
 
 def reference(item: JsonObject) -> str:
-    """Ссылка на место в коде черновика: `file:line`; мёртвый код помечается."""
+    """Reference to a place in the draft code: `file:line`; dead code is marked."""
     file = optional_str(item.get("file"))
     line = item.get("line")
     place = f"`{file}:{line}`" if isinstance(line, int) and line > 0 else f"`{file}`"
@@ -55,12 +55,12 @@ def reference(item: JsonObject) -> str:
 
 
 def references(items: Sequence[Json]) -> str:
-    """Ссылки через запятую."""
+    """Comma-separated references."""
     return ", ".join(reference(optional_object(item)) for item in items) or "—"
 
 
 def consumers_by_client(items: Json) -> str:
-    """Потребители, сгруппированные по клиенту: `macos (3), web (1)`."""
+    """Consumers grouped by client: `macos (3), web (1)`."""
     counts: dict[str, int] = {}
     for raw in optional_list(items):
         client = optional_str(optional_object(raw).get("client"))
@@ -69,5 +69,5 @@ def consumers_by_client(items: Json) -> str:
 
 
 def code(value: str) -> str:
-    """Значение как код; пустое значение — тире."""
+    """The value as code; an empty value becomes a dash."""
     return f"`{value}`" if value else "—"

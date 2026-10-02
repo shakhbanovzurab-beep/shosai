@@ -1,13 +1,13 @@
-"""Промпты, скиллы и модели «руководителя»; две модели реестра от администратора.
+"""Prompts, skills and models of the `lead` persona; two registry models added by `admin`.
 
-Промпты черновик показывает владельцу (администратору — только платформенные),
-поэтому они у «руководителя». Плитки страницы промптов черновик считает по
-расходам на модели (`provider_costs`) за 30 дней и с полуночи UTC; те же расходы
-видит раздел администратора по всем пользователям.
+The draft shows prompts to their owner (and only the platform ones to an administrator),
+so they belong to `lead`. The draft computes the tiles of the prompts page from model
+spend (`provider_costs`) over 30 days and since midnight UTC; the administrator's
+section sees the same spend across all users.
 
-Каталог моделей черновика — реестр: миграции переносят в него встроенные модели
-без оценок. Две модели реестра засев добавляет с метриками — каталог покажет у
-них оценки; одна из группы, недоступной тарифу Pro.
+The draft's model catalog is a registry: migrations move the built-in models into it
+without scores. The seed adds two registry models with metrics, so the catalog shows
+scores for them; one of them is in a group the Pro tariff has no access to.
 """
 
 from __future__ import annotations
@@ -61,7 +61,7 @@ _RUB_PER_USD = Decimal("95")
 
 
 async def seed_prompts_models(db: AsyncSession, owner: User, admin: User, clock: datetime) -> None:
-    """Засевает промпты, скиллы, расходы и назначения владельца и модели реестра."""
+    """Seed the owner's prompts, skills, spend and role assignments, and the registry models."""
     prompts: dict[str, PromptTemplate] = {}
     for key, name, role, tags, version, days, active, system in _PROMPTS:
         prompt = PromptTemplate(name=name, role=role, tags=tags, version_tag=version, system_prompt=system,
@@ -97,7 +97,7 @@ async def seed_prompts_models(db: AsyncSession, owner: User, admin: User, clock:
 
 
 def _spend(db: AsyncSession, owner: User, clock: datetime) -> None:
-    """48 вызовов за месяц; шесть первых — сегодня, после полуночи UTC."""
+    """48 calls over a month; the first six are today, after midnight UTC."""
     for index in range(48):
         model, role = _SPEND_MODELS[index % len(_SPEND_MODELS)]
         if index < 6:

@@ -1,4 +1,4 @@
-"""Каталог WebSocket: разбор формата и правила сравнения кадров и подключения."""
+"""WebSocket catalogue: format parsing and comparison rules for frames and the connection."""
 
 import pytest
 

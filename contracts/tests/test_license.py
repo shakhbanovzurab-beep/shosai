@@ -1,4 +1,4 @@
-"""Лицензия проекта: копия в `contracts/` совпадает с каноническим текстом в корне."""
+"""The project license: the copy in `contracts/` matches the canonical text at the root."""
 
 from pathlib import Path
 

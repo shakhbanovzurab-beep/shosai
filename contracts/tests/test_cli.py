@@ -1,4 +1,4 @@
-"""Командная строка: коды выхода, форматы вывода, проверка документов базы."""
+"""The command line: exit codes, output formats, the check of the baseline documents."""
 
 import json
 import shutil
@@ -13,7 +13,7 @@ from whisperer_contracts.jsonvalue import JsonObject, as_object, load_json
 
 @pytest.fixture
 def broken_openapi(tmp_path: Path) -> Path:
-    """OpenAPI черновика, у которого пропала операция, нужная нативным клиентам."""
+    """A draft OpenAPI that has lost an operation native clients need."""
     document = as_object(load_json(DEFAULT_BASELINE / "openapi.json"), "openapi.json")
     paths: JsonObject = dict(as_object(document["paths"], "paths"))
     del paths["/v1/auth/me"]

@@ -1,7 +1,7 @@
-"""Содержимое встреч персоны «руководитель»: стенограммы, заметки, карта, влияние.
+"""Meeting content of the `lead` persona: transcripts, notes, mind map, impact.
 
-Только данные. Смещения — секунды от начала встречи; индексы говорящих — те же,
-что у кластеров диаризации черновика (`speaker_idx`, с нуля).
+Data only. Offsets are seconds from the start of the meeting; speaker indexes are the
+same as the draft's diarization clusters (`speaker_idx`, zero-based).
 """
 
 from __future__ import annotations
@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Line:
-    """Реплика стенограммы."""
+    """A transcript line."""
 
     offset_s: int
     speaker: int
@@ -20,7 +20,7 @@ class Line:
 
 @dataclass(frozen=True)
 class Node:
-    """Узел майнд-карты; `parent` — индекс родителя в том же списке."""
+    """A mind map node; `parent` is the index of the parent in the same list."""
 
     kind: str
     title: str
@@ -30,7 +30,7 @@ class Node:
 
 @dataclass(frozen=True)
 class Impact:
-    """Предложенное встречей изменение в задачах, календаре или обязательствах."""
+    """A change to tasks, the calendar or commitments proposed by a meeting."""
 
     target_kind: str
     operation: str

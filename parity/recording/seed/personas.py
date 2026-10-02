@@ -1,11 +1,12 @@
-"""Персоны стенда сравнения: пользователи черновика, от имени которых пишутся фикстуры.
+"""Personas of the parity stand: draft users on whose behalf the fixtures are recorded.
 
-Персона описывает состояние аккаунта, а не экран: тариф, шаг обучения, кто кого
-пригласил. Экран выбирает персону в определении визита (src/recording/visits).
+A persona describes the state of an account, not a screen: the tariff, the onboarding
+step, who invited whom. A screen picks its persona in the visit definition
+(src/recording/visits).
 
-Визит, который меняет данные, получает свою персону. Внутрипроцессные кэши API
-черновика привязаны к пользователю, и изменение одного визита не должно
-просочиться в другой, записанный в том же прогоне.
+A visit that changes data gets its own persona. The draft API's in-process caches are
+per user, and a change made by one visit must not leak into another one recorded in the
+same run.
 """
 
 from __future__ import annotations
@@ -21,7 +22,7 @@ TIMEZONE = "Europe/Moscow"
 
 @dataclass(frozen=True)
 class Persona:
-    """Состояние одного аккаунта черновика."""
+    """The state of one draft account."""
 
     key: str
     name: str

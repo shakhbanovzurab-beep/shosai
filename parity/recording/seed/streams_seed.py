@@ -1,18 +1,18 @@
-"""Трансляции «руководителя» сверх календарной: в эфире, завершённая и для своих.
+"""Streams of the `lead` persona beyond the calendar one: live, ended and members only.
 
-В эфире: ведущая и спикер на сцене, чат с закреплённым сообщением, заявки на
-вход (ждёт, ждёт по ссылке визита, отклонена) и поднятая рука «Про». Вход
-свободный: зритель с аккаунтом попадает в эфир сразу, а заявки видны в пульте и
-по своему токену. Число зрителей черновик берёт у SFU или из Redis; Redis
-чистится перед каждой записью, поэтому значение кладёт record.sh
-(recording/seed/redis.txt).
+Live (`live`): the host and a speaker on stage, a chat with a pinned message, entry
+requests (waiting, waiting through the visit's link, denied) and a raised hand from
+`pro`. Entry is open: a viewer with an account gets into the stream at once, and the
+requests are visible in the control panel and through their own token. The draft takes
+the viewer count from the SFU or from Redis; Redis is emptied before every recording, so
+record.sh writes the value (recording/seed/redis.txt).
 
-Заявки и поднятые руки черновик забывает через 10 и 20 минут, а запись идёт
-дольше: их время — на шесть часов вперёд. Экран его не показывает, а нормализатор
-сводит метки в пределах суток к моменту стенда.
+The draft forgets entry requests and raised hands after 10 and 20 minutes, while a
+recording takes longer: their time is six hours ahead. The screen does not show it, and
+the normalizer maps timestamps within that day to the parity clock.
 
-Завершённая: архив чата сохранён — зритель видит переписку зала.
-Для своих: гостю черновик отвечает «нужен аккаунт».
+Ended (`ended`): the chat archive is saved, so a viewer sees the audience's messages.
+Members only (`members`): the draft answers a guest that an account is required.
 """
 
 from __future__ import annotations
@@ -58,7 +58,7 @@ def _principal(author: str, accounts: dict[str, User]) -> str:
 
 
 async def seed_streams(db: AsyncSession, accounts: dict[str, User], clock: datetime) -> None:
-    """Засевает трансляции «руководителя» и их очереди."""
+    """Seed the streams of `lead` and their queues."""
     lead = accounts["lead"]
     live = await _stream(db, lead, clock, "live", "Квартальные итоги продаж", status="live",
                          started_at=clock - timedelta(minutes=25))
@@ -89,7 +89,7 @@ async def seed_streams(db: AsyncSession, accounts: dict[str, User], clock: datet
 
 async def _stream(db: AsyncSession, owner: User, clock: datetime, key: str, title: str, *, status: str,
                   started_at: datetime, ended_at: datetime | None = None, **settings: bool) -> Stream:
-    """Сцена (комната), трансляция и ведущая на сцене."""
+    """The stage (a room), the stream and the host on stage."""
     room = Room(id=ROOMS[f"{key}Stage"], owner_id=owner.id, name=title, lk_room_name=f"r-parity-{key}",
                 invite_token=STREAM_INVITES[key], status="closed" if status == "ended" else "active",
                 closed_at=ended_at, created_at=clock - timedelta(days=5))

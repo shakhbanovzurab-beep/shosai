@@ -1,4 +1,4 @@
-"""Стабильные идентификаторы и токены засева: общий файл с визитами записи (ids.json)."""
+"""Stable ids and tokens of the seed: a file shared with the recording visits (ids.json)."""
 
 from __future__ import annotations
 

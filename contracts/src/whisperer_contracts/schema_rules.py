@@ -1,7 +1,7 @@
-"""Каталог правил сравнения схем: опасность и текст каждого расхождения.
+"""Catalogue of schema comparison rules: the impact and text of each difference.
 
-Правила собраны в одном месте, чтобы README и отчёт ссылались на одни и те
-же имена, а код сравнения не повторял формулировки.
+The rules live in one place so that the README and the report refer to the same
+names and the comparison code does not repeat the wording.
 """
 
 from enum import StrEnum
@@ -10,14 +10,14 @@ from whisperer_contracts.model import Difference, Impact
 
 
 class Direction(StrEnum):
-    """Кто пишет данные: клиент (запрос) или сервер (ответ)."""
+    """Who writes the data: the client (request) or the server (response)."""
 
     REQUEST = "request"
     RESPONSE = "response"
 
 
 def types_covered(inner: frozenset[str], outer: frozenset[str]) -> bool:
-    """Каждый тип из `inner` допустим в `outer`; целое число — частный случай числа."""
+    """Every type in `inner` is allowed in `outer`; an integer is a special case of a number."""
     return all(kind in outer or (kind == "integer" and "number" in outer) for kind in inner)
 
 
@@ -86,6 +86,6 @@ SCHEMA_RULES: dict[str, tuple[Impact, str]] = {
 
 
 def schema_difference(rule: str, pointer: str, **values: str) -> Difference:
-    """Расхождение по правилу из каталога; неизвестное правило — ошибка программы."""
+    """A difference under a catalogue rule; an unknown rule is a programming error."""
     impact, template = SCHEMA_RULES[rule]
     return Difference(rule, impact, pointer, template.format(**values))

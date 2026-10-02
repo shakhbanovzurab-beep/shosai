@@ -1,7 +1,7 @@
-"""Командная строка харнесса: `check` для срезов, `render` для документов базы.
+"""Harness command line: `check` for slices, `render` for the baseline documents.
 
-Коды выхода: 0 — совместимо (или документы актуальны), 1 — найдены ошибки
-(или документы устарели), 2 — неверные входные данные.
+Exit codes: 0 — compatible (or the documents are up to date), 1 — errors found
+(or the documents are out of date), 2 — invalid input.
 """
 
 import argparse
@@ -112,7 +112,7 @@ def _run_render(arguments: argparse.Namespace) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Точка входа `whisperer-contracts`."""
+    """Entry point of `whisperer-contracts`."""
     arguments = _parser().parse_args(argv)
     try:
         if arguments.command == "check":

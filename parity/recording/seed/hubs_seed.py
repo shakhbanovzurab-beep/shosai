@@ -1,13 +1,15 @@
-"""Дела (хабы) «руководителя»: хабы с досками трекера (tracker_seed.py), история фактов Acme, материалы.
+"""Hubs of the `lead` persona with tracker boards (tracker_seed.py), Acme fact history, materials.
 
-Встречи Acme — уже засеянные: «без названия» (начало внедрения), «Демо для
-клиента Acme» и «Планирование бюджета Q4». Новых встреч засев не заводит:
-бегущая строка считает все встречи базы, и новые сдвинули бы её на каждом экране.
+The Acme meetings are ones already seeded: `untitled` (no title; the start of the
+rollout), `demo` (the demo for the client Acme) and `budget` (Q4 budget planning). The
+seed creates no new meetings: the ticker counts every meeting in the database, and new
+ones would shift it on every screen.
 
-Факты разложены так, чтобы пульс дела показал каждый вид петли: решение
-изменилось (противоречие), просрочено, просрочено после отклонения, «круг 3»,
-скоро срок, вопрос без ответа. Учёт показа (`raised_at`) засеян моментом стенда:
-иначе первый же GET пульса записал бы показ, и петли пошли бы на второй круг.
+The facts are laid out so that the hub pulse shows every kind of loop: a decision
+changed (contradiction), overdue, overdue after a refutation, "round 3", due soon, an
+unanswered question. The display record (`raised_at`) is seeded with the parity clock:
+otherwise the very first pulse GET would record a display, and the loops would start a
+second round.
 """
 
 from __future__ import annotations
@@ -70,7 +72,7 @@ _RAISED = {"b": 0, "d": 2, "h": 0, "i": 0, "j": 0, "n": 0}
 
 async def seed_hubs(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session],
                     boards: dict[str, uuid.UUID]) -> None:
-    """Засевает дела владельца и всё, что дело показывает; доски — из засева трекера."""
+    """Seed the owner's hubs and everything a hub shows; the boards come from the tracker seed."""
     acme = Hub(id=HUBS["acme"], user_id=owner.id, name="Acme", kind="client", tracker_project_id=boards["ACME"],
                purpose="Внедрение Whisperer в отделе продаж Acme",
                success="40 сотрудников Acme ежедневно работают в системе две недели подряд",

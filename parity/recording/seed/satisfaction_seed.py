@@ -1,13 +1,13 @@
-"""Анкеты удовлетворённости за последние 112 дней.
+"""Satisfaction surveys over the last 112 days.
 
-Показы разнесены не меньше чем на 20 суток у одного человека — так их выдаёт
-черновик. Разрезы (пол, ОС, страна, тариф, язык) не дают равных строк в отчёте:
-порядок равных база не гарантирует. Ни одна метка не лежит ближе часа к
-границам окон 30, 90, 180 и 365 суток.
+One person's displays are at least 20 days apart: that is how the draft issues them.
+The breakdowns (gender, OS, country, tariff, language) produce no tied rows in the
+report: the database does not guarantee the order of ties. No timestamp lies within an
+hour of the edges of the 30, 90, 180 and 365 day windows.
 
-Каждая персона визитов недавно видела анкету, поэтому черновик отвечает ей
-«пока рано» и сам ничего не пишет. Анкету может получить только «Исчерпанный»
-(последний показ — 38 суток назад).
+Every persona used by visits has seen the survey recently, so the draft answers it with
+"too early" and writes nothing itself. Only `exhausted` can get the survey (its last
+display was 38 days ago).
 """
 
 from __future__ import annotations
@@ -48,7 +48,7 @@ _SURVEYS = (
 
 
 async def seed_satisfaction(db: AsyncSession, accounts: dict[str, User], clock: datetime) -> None:
-    """Засевает показы анкеты с ответами, отказами и одним показом без исхода."""
+    """Seed survey displays with answers, dismissals and one display without an outcome."""
     day = clock.replace(hour=0, minute=0, second=0, microsecond=0)
     for key, days, hour, minute, score, dismissed, platform, country, language, plan, gender, source in _SURVEYS:
         user = accounts[key]

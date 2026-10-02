@@ -1,4 +1,4 @@
-"""`draft/websocket.md` из `draft/websocket.json`: каталог кадров для чтения человеком."""
+"""`draft/websocket.md` from `draft/websocket.json`: the frame catalogue for human readers."""
 
 from whisperer_contracts.jsonvalue import (
     Json,
@@ -97,7 +97,7 @@ def _frame(frame: JsonObject) -> list[str]:
 
 
 def _source(item: JsonObject) -> JsonObject:
-    """`source` хранится строкой `file:line`; для ссылки разбирается обратно."""
+    """`source` is stored as a `file:line` string; it is parsed back for a reference."""
     file, _, line = optional_str(item.get("source")).rpartition(":")
     return (
         {"file": file, "line": int(line)}
@@ -175,7 +175,7 @@ def _endpoint(endpoint: JsonObject) -> list[str]:
 
 
 def render_websocket(document: JsonObject, preamble: str) -> str:
-    """Полный текст `websocket.md`."""
+    """Full text of `websocket.md`."""
     endpoints = _objects(document.get("endpoints"))
     lines = [
         GENERATED_NOTICE.format(source="websocket.json"),

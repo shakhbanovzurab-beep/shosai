@@ -1,8 +1,8 @@
-"""Общая модель харнесса: классы совместимости, находки и отчёт.
+"""Shared model of the harness: compatibility classes, findings and the report.
 
-Находка («finding») описывает одно расхождение v2 с базой черновика. Её
-серьёзность выводится из двух осей: насколько изменение опасно для клиента
-(`Impact`) и кто этим адресом пользуется (`CompatClass`).
+A finding describes one deviation of v2 from the draft baseline. Its severity is
+derived from two axes: how dangerous the change is for a client (`Impact`) and who
+uses the endpoint (`CompatClass`).
 """
 
 from dataclasses import dataclass, field, replace
@@ -10,7 +10,7 @@ from enum import StrEnum
 
 
 class CompatClass(StrEnum):
-    """Кто пользуется адресом или кадром — отсюда, можно ли его менять."""
+    """Who uses an endpoint or a frame, and therefore whether it may change."""
 
     NATIVE = "native"  # выпущенный нативный клиент: менять нельзя (nfr-12)
     EXTERNAL = "external"  # внешние интеграции, ссылки в письмах, пробы: менять нельзя
@@ -20,7 +20,7 @@ class CompatClass(StrEnum):
 
     @property
     def must_stay_compatible(self) -> bool:
-        """Адрес обязан остаться совместимым без обновления клиента."""
+        """The endpoint must stay compatible without a client update."""
         return self in {CompatClass.NATIVE, CompatClass.EXTERNAL}
 
 
@@ -35,14 +35,14 @@ CLASS_STRENGTH: tuple[CompatClass, ...] = (
 
 
 class Impact(StrEnum):
-    """Насколько изменение опасно для клиента, написанного под черновик."""
+    """How dangerous a change is for a client written against the draft."""
 
     BREAKING = "breaking"  # клиент гарантированно сломается или потеряет данные
     RISKY = "risky"  # клиент может сломаться; нужна проверка человеком
 
 
 class Severity(StrEnum):
-    """Итоговая серьёзность находки в отчёте."""
+    """Final severity of a finding in the report."""
 
     ERROR = "error"
     WARNING = "warning"
@@ -50,7 +50,7 @@ class Severity(StrEnum):
 
 
 def severity_for(impact: Impact, compat_class: CompatClass) -> Severity:
-    """Серьёзность = опасность изменения x класс потребителя."""
+    """Severity = the change's impact x the consumer class."""
     if compat_class.must_stay_compatible:
         return Severity.ERROR if impact is Impact.BREAKING else Severity.WARNING
     if compat_class is CompatClass.WEB:
@@ -60,7 +60,7 @@ def severity_for(impact: Impact, compat_class: CompatClass) -> Severity:
 
 @dataclass(frozen=True, slots=True)
 class Difference:
-    """Расхождение, найденное сравнением, до привязки к адресу и классу."""
+    """A difference found by a comparison, before it is tied to an endpoint and a class."""
 
     rule: str
     impact: Impact
@@ -70,7 +70,7 @@ class Difference:
 
 @dataclass(frozen=True, slots=True)
 class Finding:
-    """Расхождение, привязанное к адресу или кадру, с итоговой серьёзностью."""
+    """A difference tied to an endpoint or a frame, with its final severity."""
 
     rule: str
     subject: str
@@ -84,19 +84,19 @@ class Finding:
 
     @property
     def finding_id(self) -> str:
-        """Стабильный идентификатор для списка осознанно принятых расхождений."""
+        """Stable identifier for the list of deliberately accepted deviations."""
         suffix = f" {self.pointer}" if self.pointer else ""
         return f"{self.rule} {self.subject}{suffix}"
 
     def accept(self, reason: str) -> Finding:
-        """Помечает находку принятой: она остаётся в отчёте, но не валит проверку."""
+        """Mark the finding as accepted: it stays in the report but does not fail the check."""
         return replace(self, accepted_reason=reason, severity=Severity.INFO)
 
 
 def locate(
     difference: Difference, subject: str, compat_class: CompatClass, slice_id: str
 ) -> Finding:
-    """Привязывает расхождение к адресу и выводит его серьёзность."""
+    """Tie a difference to an endpoint and derive its severity."""
     return Finding(
         rule=difference.rule,
         subject=subject,
@@ -111,7 +111,7 @@ def locate(
 
 @dataclass(frozen=True, slots=True)
 class Coverage:
-    """Сколько элементов базы попало в проверку — чтобы пустой отчёт не выглядел победой."""
+    """How many baseline items the check covered, so an empty report does not look like a win."""
 
     operations: int = 0
     routes: int = 0
@@ -122,21 +122,21 @@ class Coverage:
 
 @dataclass(frozen=True, slots=True)
 class Report:
-    """Результат проверки кандидата v2 против базы черновика."""
+    """Result of checking a v2 candidate against the draft baseline."""
 
     findings: tuple[Finding, ...]
     coverage: Coverage = field(default_factory=Coverage)
     unused_acceptances: tuple[str, ...] = ()
 
     def count(self, severity: Severity) -> int:
-        """Число находок данной серьёзности."""
+        """Number of findings with the given severity."""
         return sum(1 for finding in self.findings if finding.severity is severity)
 
     @property
     def is_compatible(self) -> bool:
-        """Совместим, если не осталось ни одной непринятой ошибки.
+        """Compatible when no unaccepted error remains.
 
-        Неиспользованные принятия только показываются: при проверке одного
-        среза принятия других срезов законно ни с чем не совпадают.
+        Unused acceptances are only shown: when one slice is checked, the acceptances of
+        other slices legitimately match nothing.
         """
         return self.count(Severity.ERROR) == 0

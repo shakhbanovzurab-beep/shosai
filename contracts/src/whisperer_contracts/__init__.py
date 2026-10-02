@@ -1,7 +1,7 @@
-"""Харнесс совместимости контракта v2 с черновиком.
+"""Compatibility harness between the v2 contract and the draft.
 
-Публичный интерфейс для тестов срезов v2: загрузить базу, собрать кандидата
-из артефактов v2, проверить в области среза и получить отчёт.
+Public interface for the tests of v2 slices: load the baseline, build a candidate
+from v2 artifacts, check it within the slice's scope and get a report.
 """
 
 from whisperer_contracts.check import check

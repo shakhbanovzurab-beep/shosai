@@ -61,11 +61,12 @@ On architecture — components, data placement, interfaces, invariants — the [
 |---|---|
 | This file, skills, anything else a coding agent reads as instructions | English |
 | Everything a language model reads in the product (see [Prompts](#prompts-and-model-facing-text)) | English |
-| Code comments and docstrings | Russian — they are for the engineer |
+| Docstrings (Python) | English — tools publish them: FastAPI into OpenAPI, Pydantic into JSON schemas, MCP and agent frameworks into tool descriptions |
+| Code comments, including TypeScript doc comments | Russian — they are for the engineer |
 | Log messages | Russian; field names and event keys are English identifiers |
 | Text shown to users (UI, emails, HTTP errors) | The user's language, through i18n |
 
-Do not write comments in English because this file is in English.
+Do not write comments in English because this file is in English. A test in each Python project checks that every docstring is English.
 
 ## Production by default
 
@@ -292,7 +293,7 @@ A Russian instruction is a language signal: the model takes it as a cue to answe
 - MCP server instructions, which an external client's model reads;
 - prompts for auxiliary models (vision, transcription, translation, mind maps, catalog descriptions).
 
-**What is not a prompt:** comments, docstrings, logs, and text shown to users through i18n.
+**What is not a prompt:** comments, logs, and text shown to users through i18n. Docstrings are English by the [language rule](#language); one that a tool turns into a schema or a tool description is also a prompt and is registered like one.
 
 **Instruction language is not output language.** The prompt is English; the language the model must answer in is a separate product decision stated explicitly in the prompt, for example "answer in the language of the user's latest message".
 

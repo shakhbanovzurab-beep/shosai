@@ -1,10 +1,10 @@
-"""Машиночитаемый каталог WebSocket-контракта: формат и разбор.
+"""Machine-readable catalogue of the WebSocket contract: its format and parsing.
 
-WebSocket не описывается в OpenAPI, поэтому кадры фиксируются отдельным
-каталогом. Один формат у базы черновика (`draft/websocket.json`) и у v2: v2
-выгружает свой каталог из описаний кадров, харнесс сравнивает их. Поля
-документации (`description`, `source`) разбор пропускает; класс потребителя и
-срез читаются только из базы.
+OpenAPI does not describe WebSocket, so frames are recorded in a separate catalogue.
+The draft baseline (`draft/websocket.json`) and v2 share one format: v2 exports its
+catalogue from its frame descriptions, and the harness compares the two. Parsing
+skips the documentation fields (`description`, `source`); the consumer class and
+the slice are read only from the baseline.
 """
 
 from dataclasses import dataclass
@@ -29,14 +29,14 @@ ANY_TYPE = "any"
 
 
 class FrameDirection(StrEnum):
-    """Кто отправляет кадр."""
+    """Who sends the frame."""
 
     CLIENT_TO_SERVER = "client_to_server"
     SERVER_TO_CLIENT = "server_to_client"
 
 
 class FrameEncoding(StrEnum):
-    """Как кадр передаётся по соединению."""
+    """How the frame travels over the connection."""
 
     JSON = "json"
     BINARY = "binary"
@@ -45,7 +45,7 @@ class FrameEncoding(StrEnum):
 
 @dataclass(frozen=True, slots=True)
 class FrameField:
-    """Поле кадра или параметр подключения; пустой набор типов означает «любой»."""
+    """A frame field or a connection parameter; an empty set of types means any type."""
 
     name: str
     types: frozenset[str]
@@ -54,7 +54,7 @@ class FrameField:
 
 @dataclass(frozen=True, slots=True)
 class Frame:
-    """Один тип кадра в одном направлении."""
+    """One frame type in one direction."""
 
     direction: FrameDirection
     frame_type: str
@@ -65,17 +65,17 @@ class Frame:
 
     @property
     def key(self) -> tuple[FrameDirection, str]:
-        """Ключ сопоставления кадров черновика и v2."""
+        """Key for matching draft and v2 frames."""
         return self.direction, self.frame_type
 
 
 @dataclass(frozen=True, slots=True)
 class CloseCode:
-    """Код закрытия соединения или HTTP-статус отказа в рукопожатии.
+    """A connection close code or the HTTP status of a rejected handshake.
 
-    Клиенты реагируют на оба по-разному: статус 401/403 вместо 101 у
-    выпущенных клиентов означает «не переподключаться», поэтому статусы
-    рукопожатия — часть контракта наравне с кодами закрытия.
+    Clients react to each in their own way: for shipped clients, a 401/403 status
+    instead of 101 means "do not reconnect", so handshake statuses are part of the
+    contract on a par with close codes.
     """
 
     code: int
@@ -84,7 +84,7 @@ class CloseCode:
 
 @dataclass(frozen=True, slots=True)
 class Endpoint:
-    """WebSocket-адрес с подключением, кодами закрытия и кадрами."""
+    """A WebSocket endpoint with its connection, close codes and frames."""
 
     path: str
     discriminator: str
@@ -98,7 +98,7 @@ class Endpoint:
 
 
 def parse_types(raw: str, where: str) -> frozenset[str]:
-    """Тип поля в записи `string|null`; `any` — без ограничений."""
+    """Field type in the `string|null` notation; `any` means unconstrained."""
     parts = frozenset(part.strip() for part in raw.split("|"))
     if ANY_TYPE in parts:
         return frozenset()
@@ -190,7 +190,7 @@ def _endpoint(raw: Json, where: str) -> Endpoint:
 
 
 def parse_catalogue(document: Json, origin: str) -> tuple[Endpoint, ...]:
-    """Разбирает каталог; неверный формат — явная ошибка входа, а не пустой каталог."""
+    """Parse the catalogue; a wrong format is an explicit input error, not an empty catalogue."""
     root = as_object(document, origin)
     declared = root.get("format")
     if declared != CATALOGUE_FORMAT:

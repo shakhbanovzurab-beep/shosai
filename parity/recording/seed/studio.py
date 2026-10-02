@@ -1,10 +1,11 @@
-"""Контекст и база знаний «руководителя».
+"""Context and knowledge base of the `lead` persona.
 
-Квота базы знаний — лимит тарифа Pro (50 МиБ); занято 20 МиБ, то есть 40 %.
-Размеры документов, включая пришедшие из источника, в сумме дают занятое место:
-ежедневная сверка черновика пересчитывает его по документам. Пять документов
-называются «Бюджет…»: поиск по «бюджет» тогда находит их по имени и не идёт в
-векторный индекс, которого на стенде нет (иначе — «База знаний не ответила»).
+The knowledge base quota is the Pro tariff limit (50 MiB); 20 MiB is used, that is 40 %.
+The document sizes, including the ones that came from a source, add up to the used
+space: the draft's daily reconciliation recomputes it from the documents. Five document
+names contain the Russian word for "budget": a search for that word then finds them by
+name and does not go to the vector index, which the stand does not have (otherwise the
+screen shows the "knowledge base did not answer" error).
 """
 
 from __future__ import annotations
@@ -63,7 +64,7 @@ _SOURCE_DOCUMENT_MIB = 6
 
 
 async def seed_studio(db: AsyncSession, owner: User, clock: datetime) -> None:
-    """Засевает контекст о себе и базу знаний владельца."""
+    """Seed the owner's "about me" context and knowledge base."""
     context = UserContext(user_id=owner.id, text=_CONTEXT, roles=["responses", "agent"],
                           updated_at=clock - timedelta(days=2))
     db.add(context)

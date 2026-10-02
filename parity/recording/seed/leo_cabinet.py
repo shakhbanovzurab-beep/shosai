@@ -1,12 +1,12 @@
-"""Вкладка Leo кабинета «руководителя»: персонализация, сервисы, инициатива, память, поручения.
+"""Leo tab of the `lead` persona's cabinet: personalization, services, initiative, memory, errands.
 
-Память черновик показывает с «удержанием», которое считает по часам сервера от
-`last_used_at`. API работает под libfaketime от момента стенда, поэтому моменты
-заданы от него же; одна запись давно не вспоминалась — её удержание ниже порога,
-и экран помечает её «забыто».
+The draft shows memory with a "retention" it computes from the server clock and
+`last_used_at`. The API runs under libfaketime from the parity clock, so the timestamps
+are set relative to it as well; one item has not been recalled for a long time: its
+retention is below the threshold, and the screen marks it as forgotten.
 
-Поручения — без `workflow_id`: отмена тогда не идёт в движок поручений, которого
-на стенде нет.
+Errands have no `workflow_id`: cancelling one then does not go to the errand engine,
+which the stand does not have.
 """
 
 from __future__ import annotations
@@ -49,7 +49,7 @@ _ERRANDS = (
 
 
 async def seed_leo_cabinet(db: AsyncSession, owner: User, clock: datetime) -> None:
-    """Засевает вкладку Leo владельца."""
+    """Seed the owner's Leo tab."""
     db.add(LeoPersonalization(user_id=owner.id, occupation="Руководитель продукта в финтехе", style="friendly",
                               warmth="more", enthusiasm="default", structure="more", emoji="less",
                               instructions="Сначала вывод, потом детали. Цифры — таблицей, сроки — датами.",
@@ -102,7 +102,7 @@ def _errands(db: AsyncSession, owner: User, clock: datetime) -> None:
 
 
 def _finished_at(status: str, run_at: datetime, clock: datetime) -> datetime | None:
-    """Выполненное и сорвавшееся завершились в свой срок, отменённое — за день до срока."""
+    """Done and failed errands finished at their run time, a cancelled one a day before it."""
     if status in ("done", "failed"):
         return run_at
     if status == "cancelled":

@@ -1,11 +1,11 @@
-"""Проверки репозитория, не зависящие от стека: длина файлов и секреты в git.
+"""Stack-independent repository checks: file length and secrets in git.
 
-Правила — в `.claude/CLAUDE.md` (разделы Architecture и Security). Скрипт
-смотрит только на файлы, отслеживаемые git, поэтому `node_modules/`, `.venv/`
-и прочие игнорируемые каталоги в проверку не попадают.
+The rules are in `.claude/CLAUDE.md` (the Architecture and Security sections). The script
+looks only at files tracked by git, so `node_modules/`, `.venv/` and other ignored
+directories are not checked.
 
-Запуск из корня репозитория: `python3 scripts/ci/check_repository.py`.
-Код выхода 1 — нарушения найдены, 0 — всё чисто.
+Run from the repository root: `python3 scripts/ci/check_repository.py`.
+Exit code 1 means violations were found, 0 means everything is clean.
 """
 
 import subprocess
@@ -16,7 +16,7 @@ from pathlib import PurePosixPath
 
 @dataclass(frozen=True)
 class LengthLimit:
-    """Лимит строк для исходников одной зоны."""
+    """Line limit for the source files of one zone."""
 
     zone: str
     suffixes: frozenset[str]
@@ -46,7 +46,7 @@ ALLOWED_ENV_FILES = frozenset({".env.example"})
 
 
 def tracked_files() -> list[PurePosixPath]:
-    """Возвращает пути всех файлов, отслеживаемых git."""
+    """Returns the paths of all files tracked by git."""
     output = subprocess.run(
         ["git", "ls-files", "-z"],
         check=True,
@@ -56,7 +56,7 @@ def tracked_files() -> list[PurePosixPath]:
 
 
 def is_generated(path: PurePosixPath, lines: list[str]) -> bool:
-    """Файл сгенерирован: лежит в каталоге генератора, это миграция или есть маркер."""
+    """The file is generated: it is in a generator directory, is a migration or has the marker."""
     parts = path.parts
     if GENERATED_DIRECTORIES.intersection(parts):
         return True
@@ -67,7 +67,7 @@ def is_generated(path: PurePosixPath, lines: list[str]) -> bool:
 
 
 def length_violation(path: PurePosixPath) -> str | None:
-    """Возвращает описание нарушения лимита строк или None."""
+    """Returns a description of the line limit violation, or None."""
     for limit in LENGTH_LIMITS:
         if path.parts[0] != limit.zone or path.suffix not in limit.suffixes:
             continue
@@ -79,7 +79,7 @@ def length_violation(path: PurePosixPath) -> str | None:
 
 
 def env_violation(path: PurePosixPath) -> str | None:
-    """Возвращает описание нарушения, если в git попал файл окружения."""
+    """Returns a description of the violation if an environment file got into git."""
     name = path.name
     is_env_file = name == ".env" or name.startswith(".env.")
     if is_env_file and name not in ALLOWED_ENV_FILES:
@@ -88,7 +88,7 @@ def env_violation(path: PurePosixPath) -> str | None:
 
 
 def main() -> int:
-    """Проверяет все отслеживаемые файлы и печатает нарушения в формате GitHub Actions."""
+    """Checks all tracked files and prints the violations in the GitHub Actions format."""
     violations: list[str] = []
     for path in tracked_files():
         for check in (env_violation, length_violation):

@@ -1,14 +1,15 @@
-"""Трекер «руководителя»: доски, колонки, задачи, метки и связи с Jira.
+"""Tracker of the `lead` persona: boards, columns, tasks, labels and Jira links.
 
-Доски нужны и делам (хаб отправляет работу на доску), поэтому они засеваются
-первыми. У доски Acme есть пустая колонка «На проверке» — экран пустой колонки.
+Hubs need the boards too (a hub sends work to a board), so the boards are seeded first.
+The `ACME` board has an empty "in review" column: the empty column screen.
 
-У задачи не больше одной метки: метки задачи черновик читает без сортировки, и
-порядок двух меток мог бы меняться от записи к записи. Сроки — 09:00 UTC, чтобы
-дата по Москве не сдвигалась.
+A task has at most one label: the draft reads a task's labels unsorted, and the order of
+two labels could change from recording to recording. Due dates are at 09:00 UTC so that
+the Moscow date does not shift.
 
-Jira: одна учётная запись Atlassian без токенов и две связи — живая на Acme и
-сбойная на «Портале». Статус связи черновик отдаёт из базы, без сети.
+Jira: one Atlassian account without tokens and two links, a live one on `ACME` and a
+failing one on `PORTAL`. The draft returns the link status from the database, without a
+network call.
 """
 
 from __future__ import annotations
@@ -62,7 +63,7 @@ _TASKS = (
 
 
 async def seed_boards(db: AsyncSession, owner: User, clock: datetime) -> dict[str, dict[str, uuid.UUID]]:
-    """Доски и колонки владельца; возвращает id колонок по доске и названию (`""` — сама доска)."""
+    """The owner's boards and columns; return column ids by board and name (`""` is the board)."""
     boards: dict[str, dict[str, uuid.UUID]] = {}
     for position, (key, name, description) in enumerate(_BOARDS):
         project = TrackerProject(id=BOARDS[key], user_id=owner.id, name=name, key=key, description=description,
@@ -81,7 +82,7 @@ async def seed_boards(db: AsyncSession, owner: User, clock: datetime) -> dict[st
 
 
 async def seed_tracker(db: AsyncSession, owner: User, clock: datetime, boards: dict[str, dict[str, uuid.UUID]]) -> None:
-    """Задачи и метки доски Acme и связи досок с Jira."""
+    """Tasks and labels of the Acme board, and the boards' Jira links."""
     acme = boards["ACME"]
     labels: dict[str, uuid.UUID] = {}
     for index, (name, color) in enumerate(_LABELS):

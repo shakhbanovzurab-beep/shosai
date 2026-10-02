@@ -1,8 +1,8 @@
-"""Проверка кандидата v2 против базы черновика: точка входа для срезов и CLI.
+"""Check of a v2 candidate against the draft baseline: the entry point for slices and the CLI.
 
-Проверка идёт от базы: каждый адрес и кадр черновика в области проверки
-обязан найтись в v2 в совместимой форме. Новые адреса v2 не проверяются —
-добавление совместимо по определению (§10: изменения только аддитивные).
+The check starts from the baseline: every draft endpoint and frame within the scope
+must be found in v2 in a compatible form. New v2 endpoints are not checked:
+an addition is compatible by definition (§10: changes are additive only).
 """
 
 from dataclasses import dataclass, field
@@ -37,7 +37,7 @@ from whisperer_contracts.ws_check import (
 
 @dataclass(slots=True)
 class _Run:
-    """Накопитель одной проверки."""
+    """Accumulator of one check run."""
 
     findings: list[Finding] = field(default_factory=list)
     operations: int = 0
@@ -62,7 +62,7 @@ def check(
     scope: Scope | None = None,
     acceptances: dict[str, str] | None = None,
 ) -> Report:
-    """Сравнивает артефакты v2 с базой черновика в заданной области."""
+    """Compare v2 artifacts with the draft baseline within the given scope."""
     area = scope or Scope()
     run = _Run()
     in_scope = [
@@ -87,7 +87,7 @@ def _check_operations(
     in_scope: list[BaselineOperation],
     run: _Run,
 ) -> None:
-    """Операции из OpenAPI черновика против OpenAPI v2."""
+    """Operations from the draft OpenAPI against the v2 OpenAPI."""
     documents = DocumentPair(SchemaDocument(baseline.openapi), SchemaDocument(candidate_openapi))
     draft_operations = operations(baseline.openapi)
     candidate_operations = operations(candidate_openapi)
@@ -124,7 +124,7 @@ def _check_routes(
     in_scope: list[BaselineOperation],
     run: _Run,
 ) -> None:
-    """Маршруты вне OpenAPI (страницы, ссылки, служебные адреса) — по снимку маршрутов v2."""
+    """Routes outside OpenAPI (pages, links, service endpoints), against the v2 route snapshot."""
     documented = set(operations(candidate_openapi)) if candidate_openapi is not None else set()
     for item in in_scope:
         if item.in_openapi:
@@ -140,7 +140,7 @@ def _check_routes(
 
 
 def _check_websocket(endpoints: list[Endpoint], candidate: tuple[Endpoint, ...], run: _Run) -> None:
-    """WebSocket-адреса и кадры черновика против каталога v2."""
+    """Draft WebSocket endpoints and frames against the v2 catalogue."""
     candidate_endpoints = {normalize_path(item.path): item for item in candidate}
     for draft in endpoints:
         run.endpoints += 1
@@ -175,7 +175,7 @@ def _check_websocket(endpoints: list[Endpoint], candidate: tuple[Endpoint, ...],
 
 
 def _apply_acceptances(run: _Run, acceptances: dict[str, str]) -> Report:
-    """Принятые расхождения остаются в отчёте, но перестают быть ошибками."""
+    """Accepted deviations stay in the report but stop being errors."""
     used: set[str] = set()
     findings: list[Finding] = []
     for finding in run.findings:

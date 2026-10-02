@@ -1,12 +1,13 @@
-"""Видеокомнаты «руководителя» сверх календарных и журнал администратора LiveKit.
+"""Video rooms of the `lead` persona beyond the calendar ones, and the LiveKit admin log.
 
-Комната со сквозным шифрованием — без записи и AI-ассистента. Закрытая комната
-держит зависшую запись: раздел администратора показывает её «висит N мин».
-Записи комнаты Acme — готовая и сорвавшаяся; активной нет, поэтому кнопка
-записи стоит в покое.
+The end-to-end encrypted room (`e2ee`) has no recording and no AI assistant. The closed
+room (`closed`) holds a stuck recording: the administrator's section shows it as stuck
+for N minutes. The Acme room (`acme`) has a ready recording and a failed one; none is
+active, so the record button is idle.
 
-Готовая запись в бою создаёт файл в корне хранилища и новую встречу. Файл засев
-кладёт так же, а встречу не создаёт: бегущая строка считает все встречи базы.
+In production a ready recording creates a file in the storage root and a new meeting.
+The seed puts the file there the same way but creates no meeting: the ticker counts
+every meeting in the database.
 """
 
 from __future__ import annotations
@@ -31,7 +32,7 @@ _AUDIT = (
 
 
 async def seed_rooms(db: AsyncSession, owner: User, admin: User, clock: datetime) -> None:
-    """Засевает комнаты, записи и журнал вмешательств."""
+    """Seed the rooms, the recordings and the intervention log."""
     db.add_all([
         Room(id=ROOMS["e2ee"], owner_id=owner.id, name="Юристы (E2EE)", lk_room_name="r-parity-e2ee",
              invite_token=ROOM_INVITES["e2ee"], status="active", e2ee=True, created_at=clock - timedelta(days=1, hours=2)),

@@ -1,4 +1,4 @@
-"""Отчёт проверки в двух видах: текст для человека и JSON для CI и агентов."""
+"""The check report in two forms: text for people and JSON for CI and agents."""
 
 import json
 
@@ -23,7 +23,7 @@ def _visible(report: Report, minimum: Severity) -> list[Finding]:
 
 
 def render_text(report: Report, scope: Scope, minimum: Severity = Severity.INFO) -> str:
-    """Человекочитаемый отчёт: итог, покрытие, затем находки от ошибок к сведениям."""
+    """Human-readable report: the result, the coverage, then findings from errors to info."""
     coverage = report.coverage
     accepted = sum(1 for item in report.findings if item.accepted_reason)
     lines = [
@@ -56,7 +56,7 @@ def render_text(report: Report, scope: Scope, minimum: Severity = Severity.INFO)
 
 
 def render_json(report: Report, scope: Scope, minimum: Severity = Severity.INFO) -> str:
-    """Машиночитаемый отчёт с тем же содержанием, что и текстовый."""
+    """Machine-readable report with the same content as the text one."""
     coverage = report.coverage
     document = {
         "compatible": report.is_compatible,

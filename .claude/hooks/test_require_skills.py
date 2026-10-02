@@ -1,4 +1,4 @@
-"""Тесты хука require_skills: что блокируется без скиллов, а что — нет."""
+"""Tests of the require_skills hook: what is blocked without skills and what is not."""
 
 import json
 import os
@@ -56,7 +56,7 @@ ALLOWED_WITHOUT_SKILLS = [
 
 
 def write_transcript(directory: Path, skills: tuple[str, ...]) -> Path:
-    """Транскрипт сессии, в которой загружены указанные скиллы."""
+    """A transcript of a session in which the given skills are loaded."""
     content = [{"type": "tool_use", "name": "Skill", "input": {"skill": skill}} for skill in skills]
     path = directory / "transcript.jsonl"
     path.write_text(json.dumps({"message": {"content": content or "no skills"}}) + "\n", encoding="utf-8")
@@ -64,7 +64,7 @@ def write_transcript(directory: Path, skills: tuple[str, ...]) -> Path:
 
 
 def run_hook(tool: str, argument: str, transcript: Path | None) -> int:
-    """Запускает хук так же, как Claude Code, и возвращает код выхода."""
+    """Runs the hook the same way Claude Code does and returns its exit code."""
     tool_input = {"command": argument} if tool == "Bash" else {"file_path": argument}
     payload = {"tool_name": tool, "cwd": str(PROJECT), "tool_input": tool_input}
     if transcript is not None:

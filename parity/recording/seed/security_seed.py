@@ -1,15 +1,16 @@
-"""Безопасность в админке: шеринг аккаунта, журнал ошибок модели и очередь abuse.
+"""Security in the admin: account sharing, the model error log and the abuse queue.
 
-Шеринг черновик видит по успешным входам с четырёх и больше IP за сутки. Его
-персоны в визитах не входят: вход рекордера добавил бы ещё один IP. Адреса —
-из документационных диапазонов (RFC 5737).
+The draft detects sharing from successful sign-ins from four or more IPs within a day.
+Its personas (`sharer`, `sharer2`) never sign in during visits: the recorder's sign-in
+would add one more IP. The addresses come from the documentation ranges (RFC 5737).
 
-Журнал ошибок пишет прокси моделей; три записи — в последний час. Часы API
-стоят на моменте стенда, поэтому «за час» не зависит от того, когда записан визит.
+The model proxy writes the error log; three entries are within the last hour. The API
+clock stands at the parity clock, so "within an hour" does not depend on when the visit
+is recorded.
 
-Очередь abuse — помеченный, переведённый на дешёвый роут и помеченный из белого
-списка (жёсткий признак срабатывает и для него). Оценки разные: очередь
-сортируется по ним, и равные база отдала бы в любом порядке.
+The abuse queue: flagged (`abuser`), moved to the cheap route (`cheap`) and flagged
+while whitelisted (`trusted`; the hard signal fires for it too). The scores differ: the
+queue is sorted by them, and the database would return ties in any order.
 """
 
 from __future__ import annotations
@@ -77,7 +78,7 @@ _QUEUE = (
 
 
 async def seed_security(db: AsyncSession, accounts: dict[str, User], clock: datetime) -> None:
-    """Засевает входы с разных IP, журнал ошибок и очередь abuse с историей."""
+    """Seed sign-ins from different IPs, the error log and the abuse queue with its history."""
     for key, ip, agent, minutes, success in _LOGINS:
         db.add(LoginEvent(user_id=accounts[key].id, ip=ip, user_agent=agent, outcome="success" if success else "failed",
                           created_at=clock - timedelta(minutes=minutes)))

@@ -1,13 +1,13 @@
-"""Снимает с черновика `draft/openapi.json` и `draft/routes.json`.
+"""Capture `draft/openapi.json` and `draft/routes.json` from the draft.
 
-Запускается интерпретатором одноразового окружения черновика (Python 3.12 и
-его `requirements.txt`), а не окружением `contracts/`: приложение черновика
-собирается как есть, его lifespan не запускается, сеть и база не нужны.
+Runs under the interpreter of a throwaway draft environment (Python 3.12 and its
+`requirements.txt`), not under the `contracts/` environment: the draft application
+is built as is, its lifespan does not run, and no network or database is needed.
 
-Производственная конфигурация не используется: все настройки задаются здесь
-фиктивными локальными значениями, рабочий каталог — пустой временный (файл
-`.env` черновика читается относительно него и не находится), а запуск идёт
-под `env -i`, чтобы не унаследовать переменные хоста. Порядок — в README.
+The production configuration is not used: every setting gets a fake local value
+here, the working directory is an empty temporary one (the draft's `.env` file is
+read relative to it and is not found), and the run goes under `env -i` so as not
+to inherit the host's variables. The procedure is in the README.
 """
 
 import argparse
@@ -43,30 +43,30 @@ type Row = dict[str, str | bool]
 
 
 class DraftRoute(Protocol):
-    """Маршрут Starlette или FastAPI; остальные атрибуты зависят от вида маршрута."""
+    """A Starlette or FastAPI route; its other attributes depend on the route kind."""
 
     path: str
 
 
 class DraftApplication(Protocol):
-    """То, что инструмент читает у приложения черновика.
+    """What the tool reads from the draft application.
 
-    Типы FastAPI черновика в окружении `contracts/` не установлены, поэтому
-    приложение описано структурно, а вид маршрута определяется по имени класса.
+    The draft's FastAPI types are not installed in the `contracts/` environment, so the
+    application is described structurally and the route kind is told by class name.
     """
 
     routes: list[DraftRoute]
 
     def openapi(self) -> dict[str, object]:
-        """Документ OpenAPI собранного приложения."""
+        """OpenAPI document of the built application."""
         ...
 
 
 def _source(endpoint: Callable[..., object], backend_src: Path) -> str:
-    """Место обработчика в репозитории черновика: `backend/src/...:строка`.
+    """Location of the handler in the draft repository: `backend/src/...:line`.
 
-    Обработчик сторонней библиотеки (например, `/metrics`) места в черновике
-    не имеет — его выдаёт поле `module`.
+    A handler from a third-party library (for example, `/metrics`) has no location in
+    the draft; the `module` field identifies it instead.
     """
     target = inspect.unwrap(endpoint)
     file = inspect.getsourcefile(target)
@@ -80,7 +80,7 @@ def _source(endpoint: Callable[..., object], backend_src: Path) -> str:
 def _endpoint_row(
     route: DraftRoute, method: str, kind: str, in_openapi: bool, backend_src: Path
 ) -> Row:
-    """Запись маршрута с обработчиком."""
+    """Row for a route with a handler."""
     endpoint = getattr(route, "endpoint", None)
     if not callable(endpoint):
         raise RuntimeError(f"route {route.path} has no endpoint")
@@ -95,7 +95,7 @@ def _endpoint_row(
 
 
 def _routes(app: DraftApplication, in_schema: set[tuple[str, str]], backend_src: Path) -> list[Row]:
-    """Все маршруты собранного приложения, по одной записи на метод."""
+    """Every route of the built application, one row per method."""
     rows: list[Row] = []
     for route in app.routes:
         kind = type(route).__name__
@@ -129,7 +129,7 @@ def _routes(app: DraftApplication, in_schema: set[tuple[str, str]], backend_src:
 
 
 def _documented(schema: dict[str, object]) -> set[tuple[str, str]]:
-    """Пары «метод, путь», описанные в OpenAPI."""
+    """The (method, path) pairs described in OpenAPI."""
     paths = schema.get("paths")
     if not isinstance(paths, dict):
         raise RuntimeError("the draft OpenAPI document has no paths")
@@ -137,7 +137,7 @@ def _documented(schema: dict[str, object]) -> set[tuple[str, str]]:
 
 
 def main() -> int:
-    """Собирает приложение черновика и пишет OpenAPI и таблицу маршрутов."""
+    """Build the draft application and write the OpenAPI document and the route table."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--draft", type=Path, required=True, help="draft repository root")
     parser.add_argument("--out", type=Path, required=True, help="contracts/draft directory")

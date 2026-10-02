@@ -1,18 +1,17 @@
-"""Обращения в поддержку и рассылки.
+"""Support tickets and broadcasts.
 
-Обращения — у «Макса» (три: решённое, в работе с непрочитанным ответом и
-открытое, где пользователь дописывает подробности, пока ждёт), по одному у
-«Свободной» (решённое) и «Про» (в работе). Сотрудник поддержки — «Администратор».
-Номер обращения выдаёт последовательность базы, поэтому обращения вставляются по
-одному в порядке дат.
+The tickets belong to `max` (three: resolved, in progress with an unread reply, and
+open, where the user adds details while waiting), and one each to `free` (resolved) and
+`pro` (in progress). The support agent is `admin`. The ticket number comes from a
+database sequence, so the tickets are inserted one by one in date order.
 
-Метки «прочитано» заданы явно: у «Макса» один непрочитанный ответ, у
-администратора — непрочитанные сообщения в двух обращениях. Открытие обращения
-само пишет метку, поэтому визиты открывают только те, где новых сообщений нет.
+The read markers are set explicitly: `max` has one unread reply, and `admin` has unread
+messages in two tickets. Opening a ticket writes the marker itself, so visits open only
+the tickets with no new messages.
 
-Вложения лежали бы в S3; без него черновик отдаёт их без ссылки — плашкой.
-Рассылки: письма разосланы, канал Telegram — в очереди (его черновик не
-отправляет никогда).
+Attachments would live in S3; without it the draft returns them without a link, as a
+badge. Broadcasts: the emails are sent, the Telegram channel one is queued (the draft
+never sends it).
 """
 
 from __future__ import annotations
@@ -110,7 +109,7 @@ _BROADCASTS = (
 
 
 async def seed_support(db: AsyncSession, accounts: dict[str, User]) -> None:
-    """Засевает обращения с перепиской и вложениями и историю рассылок."""
+    """Seed tickets with their messages and attachments, and the broadcast history."""
     staff = accounts["admin"]
     for spec in sorted(_TICKETS, key=lambda item: item.messages[0].at):
         owner = accounts[spec.owner]

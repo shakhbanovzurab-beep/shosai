@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
-"""PreToolUse-хук: не даёт писать код и выполнять команды зоны, пока не загружены её скиллы.
+"""PreToolUse hook: blocks writing code and running zone commands until its skills are loaded.
 
-Зоны и скиллы — из раздела "Mandatory skills" в `.claude/CLAUDE.md`:
+Zones and skills come from the "Mandatory skills" section of `.claude/CLAUDE.md`:
 
-- правка файла (Edit, Write, MultiEdit, NotebookEdit) в `backend/`, `frontend/` или
-  Docker-файла чистовика;
-- команда Bash, которая что-то меняет или запускает в этих зонах (в том числе через
-  `cd backend && …`), любая изменяющая команда `docker`, а также гейты качества:
-  `python-doctor` и `mypy` требуют скилл `python-doctor`, `react-doctor` — `react-doctor`.
+- editing a file (Edit, Write, MultiEdit, NotebookEdit) in `backend/`, `frontend/` or a
+  Docker file of the final version;
+- a Bash command that changes or runs something in those zones (including through
+  `cd backend && …`), any state-changing `docker` command, and the quality gates:
+  `python-doctor` and `mypy` require the `python-doctor` skill, `react-doctor` requires
+  `react-doctor`.
 
-Команды только для чтения (`ls`, `cat`, `grep`, `git diff`, `docker ps` и т. п.) не
-блокируются. Какие скиллы уже загружены, хук узнаёт из транскрипта сессии: вызовы
-инструмента `Skill` и слэш-команды вида `/fastapi`.
+Read-only commands (`ls`, `cat`, `grep`, `git diff`, `docker ps` and the like) are not
+blocked. The hook learns which skills are already loaded from the session transcript:
+calls of the `Skill` tool and slash commands such as `/fastapi`.
 
-Код выхода 2 блокирует действие, а текст из stderr получает агент. При собственной
-ошибке (нет транскрипта, битый JSON) хук пропускает действие: сломанная проверка не
-должна останавливать работу.
+Exit code 2 blocks the action, and the agent receives the text from stderr. On an error of
+its own (no transcript, broken JSON) the hook lets the action through: a broken check must
+not stop the work.
 """
 
 import json
@@ -69,7 +70,7 @@ COMMAND_PREFIXES = frozenset({"sudo", "time", "env", "nice", "timeout", "exec", 
 
 
 def zones_of_path(path: Path, project: Path) -> set[str]:
-    """Зоны, к которым относится путь; пустое множество — путь вне чистовика или вне зон."""
+    """Zones the path belongs to; empty when it is outside the final version or in no zone."""
     try:
         relative = PurePosixPath(path.resolve().relative_to(project).as_posix())
     except ValueError:
@@ -83,7 +84,7 @@ def zones_of_path(path: Path, project: Path) -> set[str]:
 
 
 def command_words(segment: str) -> list[str]:
-    """Слова сегмента команды без присваиваний переменных и префиксов вроде sudo."""
+    """Words of a command segment without variable assignments and prefixes such as sudo."""
     try:
         words = shlex.split(segment, comments=True)
     except ValueError:
@@ -94,7 +95,7 @@ def command_words(segment: str) -> list[str]:
 
 
 def is_read_only(words: list[str], segment: str) -> bool:
-    """Сегмент ничего не меняет: команда из списка чтения и без записи в файл."""
+    """The segment changes nothing: a command from the read-only list, with no file write."""
     if not words or WRITE_REDIRECT.search(SAFE_REDIRECT.sub("", segment)):
         return False
     name = Path(words[0]).name
@@ -111,7 +112,7 @@ def is_read_only(words: list[str], segment: str) -> bool:
 
 
 def docker_read_only(words: list[str]) -> bool:
-    """Команда docker только читает: ps, logs, inspect, `compose ps`, `image ls` и т. п."""
+    """The docker command only reads: ps, logs, inspect, `compose ps`, `image ls` and the like."""
     arguments = [word for word in words[1:] if not word.startswith("-")]
     if Path(words[0]).name == "docker-compose":
         arguments = ["compose", *arguments]
@@ -121,7 +122,7 @@ def docker_read_only(words: list[str]) -> bool:
 
 
 def path_tokens(words: list[str], segment: str, project: Path) -> Iterator[str]:
-    """Всё, что в сегменте похоже на путь: слова, цели перенаправлений, пути внутри строк."""
+    """Path-like tokens of the segment: words, redirection targets, paths inside strings."""
     for word in words:
         candidate = word.lstrip("<>&0123456789").strip("'\"")
         if "/" in candidate or DOCKER_FILE.fullmatch(candidate):
@@ -132,7 +133,7 @@ def path_tokens(words: list[str], segment: str, project: Path) -> Iterator[str]:
 
 
 def segment_requirements(words: list[str], segment: str, cwd: Path, project: Path) -> set[str]:
-    """Скиллы, которых требует один изменяющий сегмент команды."""
+    """Skills that one state-changing command segment requires."""
     zones = zones_of_path(cwd, project)
     for token in path_tokens(words, segment, project):
         zones |= zones_of_path(cwd / os.path.expanduser(token), project)
@@ -148,11 +149,11 @@ def segment_requirements(words: list[str], segment: str, cwd: Path, project: Pat
 
 
 def split_heredocs(command: str) -> tuple[str, list[str]]:
-    """Отделяет тела heredoc от команды.
+    """Separates heredoc bodies from the command.
 
-    Тело, которое читает интерпретатор (`python3 - <<EOF`), — это код, и его пути
-    проверяются. Тело для `cat > файл <<EOF` или `git commit -F -` — это данные: важна
-    только цель записи, которая остаётся в самой команде.
+    A body that an interpreter reads (`python3 - <<EOF`) is code, and its paths are
+    checked. A body for `cat > file <<EOF` or `git commit -F -` is data: only the write
+    target matters, and it stays in the command itself.
     """
     kept: list[str] = []
     executed: list[str] = []
@@ -172,7 +173,7 @@ def split_heredocs(command: str) -> tuple[str, list[str]]:
 
 
 def bash_requirements(command: str, cwd: Path, project: Path) -> set[str]:
-    """Скиллы для команды Bash: объединение по всем изменяющим сегментам."""
+    """Skills for a Bash command: the union over all its state-changing segments."""
     command, executed_bodies = split_heredocs(command)
     skills: set[str] = set()
     for body in executed_bodies:
@@ -189,7 +190,7 @@ def bash_requirements(command: str, cwd: Path, project: Path) -> set[str]:
 
 
 def loaded_skills(paths: Iterable[str]) -> set[str]:
-    """Скиллы, загруженные в сессии, по её транскриптам (JSONL)."""
+    """Skills loaded in the session, taken from its transcripts (JSONL)."""
     loaded: set[str] = set()
     for raw_path in paths:
         with open(raw_path, encoding="utf-8", errors="replace") as transcript:
@@ -200,7 +201,7 @@ def loaded_skills(paths: Iterable[str]) -> set[str]:
 
 
 def skills_in_line(line: str) -> Iterator[str]:
-    """Имена скиллов из одной записи транскрипта."""
+    """Skill names from one transcript entry."""
     try:
         entry = json.loads(line)
     except json.JSONDecodeError:
@@ -211,7 +212,7 @@ def skills_in_line(line: str) -> Iterator[str]:
 
 
 def skills_in_content(content: object) -> Iterator[str]:
-    """Вызовы инструмента Skill и слэш-команды внутри содержимого сообщения."""
+    """Calls of the Skill tool and slash commands inside a message's content."""
     if isinstance(content, str):
         for chunk in content.split("<command-name>/")[1:]:
             yield chunk.split("<", 1)[0].strip()
@@ -231,7 +232,7 @@ def skills_in_content(content: object) -> Iterator[str]:
 
 
 def requirements(payload: dict[str, object], project: Path) -> tuple[set[str], str]:
-    """Нужные скиллы и описание действия для сообщения агенту."""
+    """The required skills and a description of the action for the message to the agent."""
     tool_name = payload.get("tool_name")
     tool_input = payload.get("tool_input")
     if not isinstance(tool_input, dict):
@@ -250,7 +251,7 @@ def requirements(payload: dict[str, object], project: Path) -> tuple[set[str], s
 
 
 def main() -> int:
-    """Возвращает 2 и объясняет агенту, какие скиллы загрузить, если их нет."""
+    """Returns 2 and tells the agent which skills to load if they are missing."""
     try:
         payload = json.load(sys.stdin)
     except json.JSONDecodeError:

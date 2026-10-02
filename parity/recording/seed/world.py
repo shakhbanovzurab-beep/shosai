@@ -1,7 +1,8 @@
-"""Окружение персон: опубликованные сборки клиентов, платежи и реферальные бонусы.
+"""Persona surroundings: published client builds, payments and referral rewards.
 
-Сборки видны всем, поэтому их засев общий. Платежи и бонусы привязаны к
-персонам: история оплат «Про» и бонус «Свободной» за то, что «Про» оплатил.
+Builds are visible to everyone, so their seed is shared. Payments and rewards belong to
+personas: the payment history of `pro` and the reward of `free` for the payment `pro`
+made.
 """
 
 from __future__ import annotations
@@ -28,7 +29,7 @@ _BUILDS = (
 
 
 async def seed_world(db: AsyncSession, clock: datetime, accounts: dict[str, User]) -> None:
-    """Засевает общее окружение и окружение персон."""
+    """Seed the shared surroundings and the surroundings of the personas."""
     admin = accounts["admin"]
     for platform, version, file_name, size, current, days in _BUILDS:
         db.add(

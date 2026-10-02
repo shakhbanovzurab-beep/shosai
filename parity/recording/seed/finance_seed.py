@@ -1,15 +1,15 @@
-"""Деньги в админке: оплаты персон, собственные расходы администратора на модели
-и всплески токенов, на которые дашборд поднимает тревогу.
+"""Money in the admin: persona payments, the administrator's own model spend and the
+token spikes the dashboard raises alerts on.
 
-Раздел «Деньги» показывает расходы того администратора, который его открыл, —
-поэтому у «Администратора» свои вызовы: 18 моделей у четырёх провайдеров за
-месяц, три сегодня. Вместе с моделями «Руководителя» их больше 20 — у разбивки
-дашборда есть вторая страница. Стоимости у моделей разные: разбивка сортируется
-по ним, и равные база отдала бы в любом порядке.
+The "Money" section shows the spend of the administrator who opened it, so `admin` has
+its own calls: 18 models from four providers over a month, three of them today. Together
+with the models of `lead` there are more than 20, so the dashboard breakdown has a second
+page. The models have different costs: the breakdown is sorted by them, and the database
+would return ties in any order.
 
-Тревоги дашборда: «Семён» сжёг 200 тысяч токенов за последний час, у «Тимура»
-за 10 минут в 60 раз больше обычного. Часы API стоят на моменте стенда, поэтому
-окна «час» и «10 минут» не зависят от того, когда записан визит.
+Dashboard alerts: `abuser` burned 200 thousand tokens in the last hour, and `cheap` used
+60 times more than usual in 10 minutes. The API clock stands at the parity clock, so the
+"hour" and "10 minutes" windows do not depend on when the visit is recorded.
 """
 
 from __future__ import annotations
@@ -61,7 +61,7 @@ _ADMIN_MODELS = (
 
 
 async def seed_finance(db: AsyncSession, accounts: dict[str, User], clock: datetime) -> None:
-    """Засевает оплаты, расходы администратора и всплески токенов для тревог."""
+    """Seed payments, the administrator's spend and the token spikes for the alerts."""
     for key, code, method, status, currency, amount, hours in _PAYMENTS:
         user = accounts[key]
         tariff = await get_tariff_by_code(db, code)

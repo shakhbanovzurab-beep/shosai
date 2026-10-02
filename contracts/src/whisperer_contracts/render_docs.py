@@ -1,4 +1,4 @@
-"""Сборка Markdown-документов базы из её JSON: единственный источник правды — JSON."""
+"""Rendering of the baseline's Markdown documents from its JSON, the single source of truth."""
 
 from pathlib import Path
 
@@ -8,7 +8,7 @@ from whisperer_contracts.render_websocket import render_websocket
 
 
 def _preamble(draft: Json) -> str:
-    """Откуда снята база: репозиторий, коммит, дата и способ."""
+    """Where the baseline was captured from: repository, commit, date and method."""
     info = optional_object(draft)
     return (
         f"Captured from the draft repository `{optional_str(info.get('repository'))}` at commit "
@@ -18,7 +18,7 @@ def _preamble(draft: Json) -> str:
 
 
 def render_baseline_documents(directory: Path) -> dict[str, str]:
-    """Тексты `consumers.md` и `websocket.md` для каталога базы."""
+    """Texts of `consumers.md` and `websocket.md` for a baseline directory."""
     consumers = as_object(load_json(directory / "consumers.json"), "consumers.json")
     websocket = as_object(load_json(directory / "websocket.json"), "websocket.json")
     openapi = as_object(load_json(directory / "openapi.json"), "openapi.json")

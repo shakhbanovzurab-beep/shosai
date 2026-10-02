@@ -1,9 +1,10 @@
-"""Календарь «руководителя»: события июля, видеовстреча, стрим, Google и iCal.
+"""Calendar of the `lead` persona: July events, a video meeting, a stream, Google and iCal.
 
-Момент стенда — пятница 17 июля 2026, 15:00 по Москве. Сетка месяца показывает
-29 июня — 9 августа. Пятнадцатого пять событий — у дня кнопка «+N». Сегодняшнее
-событие уже прошло. Будущие события лежат дальше суток от момента стенда:
-нормализатор фикстур считает отметки в пределах суток «сейчас» API и заменил бы их.
+The parity clock is Friday, July 17, 2026, 15:00 Moscow time. The month grid shows
+June 29 to August 9. The 15th has five events, so that day gets a "+N" button. Today's
+event is already over. Future events lie more than a day after the parity clock: the
+fixture normalizer treats timestamps within that day as the API's "now" and would
+replace them.
 """
 
 from __future__ import annotations
@@ -50,7 +51,7 @@ _EVENTS = (
 
 
 async def seed_calendar(db: AsyncSession, owner: User, clock: datetime, sessions: dict[str, Session]) -> None:
-    """Засевает календарь владельца, его подключение Google и ссылку iCal."""
+    """Seed the owner's calendar, their Google connection and the iCal link."""
     room = Room(id=ROOMS["acme"], owner_id=owner.id, name="Созвон с Acme", lk_room_name="r-parity-acme", invite_token=ROOM_INVITE,
                 status="active", created_at=clock - timedelta(days=3))
     stage = Room(id=ROOMS["stage"], owner_id=owner.id, name="Эфир: итоги квартала", lk_room_name="r-parity-stream",
@@ -90,7 +91,7 @@ async def seed_calendar(db: AsyncSession, owner: User, clock: datetime, sessions
 
 
 async def _google(db: AsyncSession, owner: User, clock: datetime) -> None:
-    """Подключённый Google: основной календарь и семейный, оба синхронизированы."""
+    """Connected Google: the primary calendar and a family one, both synced."""
     account = OAuthAccount(user_id=owner.id, provider="google", external_account_id="parity-google-account",
                            display_name=_GOOGLE_ACCOUNT, access_token_enc=b"parity-seed", expires_at=None, scopes=[],
                            status="active", created_at=clock - timedelta(days=14))

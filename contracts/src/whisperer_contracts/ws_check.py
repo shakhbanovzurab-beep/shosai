@@ -1,8 +1,8 @@
-"""Сравнение WebSocket-адреса черновика с адресом v2 по каталогам кадров.
+"""Comparison of a draft WebSocket endpoint with the v2 endpoint using the frame catalogues.
 
-Кадр клиента сравнивается как запрос (v2 обязан его принять), кадр сервера —
-как ответ (v2 обязан слать то, что клиент черновика умеет прочитать). Новые
-типы кадров сервера допустимы: по правилу §10 клиенты игнорируют незнакомые.
+A client frame is compared as a request (v2 must accept it), a server frame as a
+response (v2 must send what a draft client can read). New server frame types are
+allowed: under the §10 rule clients ignore unknown ones.
 """
 
 from whisperer_contracts.model import CompatClass, Difference, Impact
@@ -17,13 +17,13 @@ from whisperer_contracts.ws_catalogue import (
 
 
 def frame_subject(endpoint_path: str, frame: Frame) -> str:
-    """Подпись кадра в отчёте: `WS <путь> client:<тип>` или `server:<тип>`."""
+    """Label of a frame in the report: `WS <path> client:<type>` or `server:<type>`."""
     side = "client" if frame.direction is FrameDirection.CLIENT_TO_SERVER else "server"
     return f"WS {endpoint_path} {side}:{frame.frame_type}"
 
 
 def compare_connection(draft: Endpoint, candidate: Endpoint) -> list[Difference]:
-    """Подключение: дискриминатор, способы аутентификации, параметры, коды закрытия."""
+    """The connection: discriminator, authentication mechanisms, parameters, close codes."""
     differences: list[Difference] = []
     if draft.discriminator != candidate.discriminator:
         differences.append(
@@ -67,7 +67,7 @@ def _compare_codes(
     prefix: str,
     action: str,
 ) -> list[Difference]:
-    """Каждый код черновика обязан встречаться в v2; код, на который реагируют клиенты, — строго."""
+    """Every draft code must occur in v2; strictly so for a code that clients react to."""
     present = {item.code for item in candidate}
     handled = {item.code for item in draft if item.handled_by_clients}
     return [
@@ -84,7 +84,7 @@ def _compare_codes(
 
 
 def compare_frame(draft: Frame, candidate: Frame | None) -> list[Difference]:
-    """Кадр v2 против кадра черновика; отсутствие кадра — несовместимость."""
+    """A v2 frame against the draft frame; a missing frame is an incompatibility."""
     if candidate is None:
         rule, message = (
             ("ws.frame_not_accepted", "v2 does not accept this frame from draft clients")
@@ -122,7 +122,7 @@ def compare_fields(
     direction: FrameDirection,
     prefix: str,
 ) -> list[Difference]:
-    """Поля кадра или параметры подключения в направлении данных."""
+    """Frame fields or connection parameters, compared in the direction of the data."""
     draft_fields = {field.name: field for field in draft}
     candidate_fields = {field.name: field for field in candidate}
     if direction is FrameDirection.CLIENT_TO_SERVER:
@@ -137,7 +137,7 @@ def _pointer(prefix: str, name: str) -> str:
 def _client_fields(
     draft: dict[str, FrameField], candidate: dict[str, FrameField], prefix: str
 ) -> list[Difference]:
-    """Клиент шлёт старую форму: v2 обязан её принять."""
+    """The client sends the old shape: v2 must accept it."""
     differences: list[Difference] = []
     for name, field in sorted(candidate.items()):
         previous = draft.get(name)
@@ -176,7 +176,7 @@ def _client_fields(
 def _server_fields(
     draft: dict[str, FrameField], candidate: dict[str, FrameField], prefix: str
 ) -> list[Difference]:
-    """Клиент читает старую форму: v2 обязан её отдавать."""
+    """The client reads the old shape: v2 must keep sending it."""
     differences: list[Difference] = []
     for name, field in sorted(draft.items()):
         current = candidate.get(name)
@@ -224,7 +224,7 @@ def _server_fields(
 
 
 def frame_class(endpoint: Endpoint, frame: Frame) -> CompatClass:
-    """Класс кадра; без явного класса кадр защищается как его адрес."""
+    """The frame's class; a frame without an explicit class is protected like its endpoint."""
     return frame.compat_class or endpoint.compat_class or CompatClass.UNUSED
 
 

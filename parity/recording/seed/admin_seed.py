@@ -1,16 +1,16 @@
-"""Справочники админки: ошибки клиентов, промокоды, тариф, слои промптов, партнёры.
+"""Admin reference data: client errors, promo codes, a tariff, prompt layers, partners.
 
-Ошибок клиентов 52 — больше страницы списка (50): видна вторая страница. Они
-разнесены по окнам фильтра «сутки / 7 / 30 дней / всё время» с запасом от их
-границ и все разного времени: список сортируется только по нему.
+There are 52 client errors, more than one list page (50): the second page shows. They
+are spread across the filter windows "day / 7 / 30 days / all time" with a margin from
+the window edges, and every one has a distinct time: the list is sorted by time only.
 
-Тариф Team выключен: публичные цены его не показывают, а админка — карточкой
-«не продаётся за $ и €». Слоёв платформенных промптов засеяно два из трёх:
-третий показывает подсказку пустого слоя.
+The Team tariff is disabled: public prices do not show it, and the admin shows it as a
+"not sold for $ and €" card. Two of the three platform prompt layers are seeded: the
+third shows the empty-layer hint.
 
-Партнёрская программа: одобренный партнёр с начислениями и выплатами (выплачена,
-запрошена, отклонена), заявка на рассмотрении и отклонённая. Покупатели по
-партнёрской ссылке — платные персоны; начисление у покупателя одно.
+Affiliate program: an approved partner with commissions and payouts (paid, requested,
+rejected), a pending application and a rejected one. The buyers through the affiliate
+link are the paid personas; each buyer has one commission.
 """
 
 from __future__ import annotations
@@ -67,7 +67,7 @@ _LAYERS = (
 
 
 async def seed_admin(db: AsyncSession, accounts: dict[str, User], clock: datetime) -> None:
-    """Засевает справочники админки."""
+    """Seed the admin reference data."""
     _client_errors(db, accounts, clock)
     for code, kind, value, max_uses, used, active, days in _PROMOS:
         db.add(PromoCode(code=code, kind=kind, value=value, max_uses=max_uses, used_count=used, is_active=active,

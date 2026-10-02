@@ -1,12 +1,12 @@
-"""MCP «руководителя»: свой сервер для внешних AI и внешние MCP-серверы для Leo.
+"""MCP of the `lead` persona: its own server for external AIs and external MCP servers for Leo.
 
-Токен сервера черновик хранит хешем и показывает маской по хешу: открытый токен
-задан в ids.json, чтобы маска не менялась от засева к засеву. Внешние серверы —
-по одному на каждое здоровье, которое черновик выводит из счётчика сбоев:
-работает (OAuth), сбоит, недоступен и ещё не проверялся.
+The draft stores the server token as a hash and shows a mask derived from the hash: the
+plain token is set in ids.json so that the mask does not change from seed to seed. The
+external servers are one per health state the draft derives from the failure counter:
+working (OAuth), failing, unreachable and not checked yet.
 
-Клиент OAuth — зарегистрированный (DCR) «Claude»: экран согласия находит его по
-`client_id` без обращения в сеть.
+The OAuth client is the registered (DCR) client "Claude": the consent screen finds it by
+`client_id` without a network call.
 """
 
 from __future__ import annotations
@@ -30,7 +30,7 @@ _CLIENTS = (
 
 
 async def seed_mcp(db: AsyncSession, owner: User, clock: datetime) -> None:
-    """Засевает сервер MCP владельца, его внешние серверы и клиента OAuth."""
+    """Seed the owner's MCP server, their external servers and the OAuth client."""
     db.add(McpToken(user_id=owner.id, token_hash=hash_token(MCP_TOKEN), kind="personal", expires_at=None,
                     created_at=clock - timedelta(days=20)))
     # Стенограммы скрыты владельцем, задачи скрыты по умолчанию черновика.

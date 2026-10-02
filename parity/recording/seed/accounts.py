@@ -1,10 +1,10 @@
-"""Аккаунты персон: пользователь, подписка, обучение, сохранённая карта.
+"""Persona accounts: user, subscription, onboarding, saved card.
 
-Пользователь создаётся служебной регистрацией черновика (`auth_service.register`) —
-той же, что сидинг и тесты черновика. Она проставляет подписку Free и реферальный
-код ровно так, как настоящая регистрация; засев потом только сдвигает состояние.
-Случайные значения регистрации (реферальный код, моменты «сейчас») заменяются
-явными: они видны на экранах и обязаны совпадать между записями.
+The user is created by the draft's internal registration (`auth_service.register`),
+the same one the draft's seeding and tests use. It sets up the Free subscription and
+the referral code exactly as a real sign-up does; the seed then only shifts the state.
+The random values of registration (referral code, "now" timestamps) are replaced with
+explicit ones: they are visible on screens and must match between recordings.
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ log = logging.getLogger("parity.seed")
 async def create_account(
     db: AsyncSession, persona: Persona, clock: datetime, accounts: dict[str, User]
 ) -> User:
-    """Создаёт аккаунт персоны со всем её состоянием."""
+    """Create the persona's account with all of its state."""
     user = await register(db, persona.email, PASSWORD, name=persona.name, language="ru")
     # Минуты по порядку создания: список пользователей в админке сортируется
     # только по дате регистрации, и равные даты база отдала бы в любом порядке.
@@ -63,7 +63,7 @@ async def create_account(
 async def _set_subscription(
     db: AsyncSession, user: User, persona: Persona, clock: datetime, registered_at: datetime
 ) -> None:
-    """Free — с момента регистрации, бессрочно; платный — с явными датами."""
+    """Free: from registration, with no end date; a paid tariff: with explicit dates."""
     subscription = await get_subscription(db, user.id)
     if subscription is None:
         raise RuntimeError(f"регистрация не создала подписку персоне {persona.key}")

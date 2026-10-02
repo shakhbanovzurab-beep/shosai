@@ -1,4 +1,4 @@
-"""`draft/consumers.md` из `draft/consumers.json`: классификация адресов и их потребители."""
+"""`draft/consumers.md` from `draft/consumers.json`: route classification and consumers."""
 
 from whisperer_contracts.http_check import (
     Operation,
@@ -173,7 +173,7 @@ def _unmatched(unmatched: list[JsonObject]) -> list[str]:
 
 
 def _untyped(items: list[JsonObject], openapi: JsonObject) -> list[str]:
-    """Обязательные к совместимости операции, чей ответ черновик не описал схемой."""
+    """Must-keep operations whose response the draft did not describe with a schema."""
     document = SchemaDocument(openapi)
     index: dict[tuple[str, str], Operation] = operations(openapi)
     rows: list[tuple[str, ...]] = []
@@ -195,7 +195,7 @@ def _untyped(items: list[JsonObject], openapi: JsonObject) -> list[str]:
 
 
 def render_consumers(document: JsonObject, openapi: JsonObject, preamble: str) -> str:
-    """Полный текст `consumers.md`."""
+    """Full text of `consumers.md`."""
     items = _objects(document.get("operations"))
     clients = _objects(document.get("clients"))
     lines = [

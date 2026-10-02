@@ -1,4 +1,4 @@
-"""Правила сравнения схем: запрос принимает старую форму, ответ отдаёт читаемую."""
+"""Schema comparison rules: a request accepts the old shape, a response returns a readable one."""
 
 import pytest
 from hypothesis import given

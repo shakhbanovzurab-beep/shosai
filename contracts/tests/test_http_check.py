@@ -1,4 +1,4 @@
-"""Сравнение HTTP-операций: сопоставление путей, параметры, тело, ответ."""
+"""Comparison of HTTP operations: path matching, parameters, body, response."""
 
 from whisperer_contracts.http_check import (
     compare_operation,

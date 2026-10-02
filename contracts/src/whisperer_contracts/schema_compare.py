@@ -1,9 +1,9 @@
-"""Сравнение схем черновика и v2 с учётом направления данных.
+"""Comparison of draft and v2 schemas that takes the direction of data into account.
 
-Запрос: v2 обязан принять всё, что принимал черновик, — клиент шлёт старую
-форму. Ответ: v2 обязан отдавать только то, что клиент черновика умеет
-прочитать, — клиент декодирует старую форму. Отсюда зеркальные правила:
-новое обязательное поле ломает запрос, а пропавшее поле ломает ответ.
+Request: v2 must accept everything the draft accepted, because the client sends the
+old shape. Response: v2 must return only what a draft client can read, because the
+client decodes the old shape. Hence the mirrored rules: a new required field breaks
+a request, and a missing field breaks a response.
 """
 
 from dataclasses import dataclass, field
@@ -18,7 +18,7 @@ MAX_DEPTH = 40
 
 @dataclass(frozen=True, slots=True)
 class DocumentPair:
-    """Документы OpenAPI черновика и v2, в которых разрешаются ссылки схем."""
+    """The draft and v2 OpenAPI documents in which schema references are resolved."""
 
     draft: SchemaDocument
     candidate: SchemaDocument
@@ -30,7 +30,7 @@ class DocumentPair:
         direction: Direction,
         pointer: str,
     ) -> list[Difference]:
-        """Все расхождения пары схем в данном направлении."""
+        """Every difference between a pair of schemas in the given direction."""
         comparison = _Comparison(self, direction)
         comparison.compare(draft_schema, candidate_schema, pointer, 0)
         return comparison.differences
@@ -38,7 +38,7 @@ class DocumentPair:
 
 @dataclass(slots=True)
 class _Comparison:
-    """Одно сравнение; накапливает расхождения и защищается от циклов ссылок."""
+    """One comparison; it accumulates differences and guards against reference cycles."""
 
     documents: DocumentPair
     direction: Direction
@@ -69,7 +69,7 @@ class _Comparison:
             self.response(draft, cand, pointer, depth)
 
     def request(self, draft: Shape, cand: Shape, pointer: str, depth: int) -> None:
-        """v2 обязан принять любое значение, допустимое по схеме черновика."""
+        """v2 must accept any value that the draft schema allows."""
         if cand.is_any:
             return
         if draft.is_any:
@@ -92,7 +92,7 @@ class _Comparison:
         self.items(draft, cand, pointer, depth)
 
     def response(self, draft: Shape, cand: Shape, pointer: str, depth: int) -> None:
-        """v2 обязан отдавать только значения, которые клиент черновика умеет прочитать."""
+        """v2 must return only values that a draft client can read."""
         if draft.is_any:
             return
         if cand.is_any:
@@ -155,11 +155,11 @@ class _Comparison:
             self.compare(draft.items, cand.items, f"{pointer}[]", depth + 1)
 
     def variants(self, draft: Shape, cand: Shape, pointer: str, depth: int) -> None:
-        """Объединения сопоставляются по имени варианта (компонент или заголовок).
+        """Unions are matched by variant name (component or title).
 
-        Запрос: каждый вариант черновика обязан приниматься v2. Ответ: каждый
-        вариант v2 обязан быть знаком клиенту черновика. Если другая сторона —
-        не объединение, вариант сравнивается с ней целиком.
+        Request: v2 must accept every draft variant. Response: every v2 variant must be
+        known to a draft client. If the other side is not a union, the variant is compared
+        with it as a whole.
         """
         request = self.direction is Direction.REQUEST
         documents = self.documents

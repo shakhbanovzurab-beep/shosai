@@ -1,9 +1,10 @@
-"""Встречи персоны «руководитель»: сессии, стенограммы, заметки, карта, влияние.
+"""Meetings of the `lead` persona: sessions, transcripts, notes, mind map, impact.
 
-Засев пишет строки напрямую, в обход конвейера обработки: заметки, карту,
-говорящих и влияние в бою строит конвейер (STT, LLM, S3), которого на стенде
-нет. У каждой завершённой встречи есть завершённый прогон — иначе фоновое
-«спасение» черновика сочло бы встречу брошенной и запустило бы конвейер.
+The seed writes rows directly, bypassing the processing pipeline: in production the
+notes, the map, the speakers and the impact are built by the pipeline (STT, LLM, S3),
+which the stand does not have. Every completed meeting has a completed run: otherwise
+the draft's background "rescue" would consider the meeting abandoned and start the
+pipeline.
 """
 
 from __future__ import annotations
@@ -33,7 +34,7 @@ from stable_ids import BUDGET_SEGMENT, MEETINGS
 
 @dataclass(frozen=True)
 class MeetingSpec:
-    """Встреча: когда, сколько, в каком состоянии и с каким содержимым."""
+    """A meeting: when, how long, in which state and with which content."""
 
     key: str
     title: str
@@ -56,7 +57,7 @@ class MeetingSpec:
 
 
 def meeting_specs(clock: datetime) -> tuple[MeetingSpec, ...]:
-    """Встречи от момента стенда: сегодня, вчера, на этой неделе и раньше."""
+    """Meetings relative to the parity clock: today, yesterday, this week and earlier."""
     day = timedelta(days=1)
     today = clock.replace(hour=0, minute=0, second=0, microsecond=0)
     return (
@@ -86,7 +87,7 @@ def meeting_specs(clock: datetime) -> tuple[MeetingSpec, ...]:
 
 
 async def seed_meetings(db: AsyncSession, owner: User, clock: datetime) -> dict[str, Session]:
-    """Засевает встречи владельца; возвращает их по ключу."""
+    """Seed the owner's meetings; return them by key."""
     sessions: dict[str, Session] = {}
     for spec in meeting_specs(clock):
         sessions[spec.key] = await _meeting(db, owner, spec)
@@ -128,7 +129,7 @@ async def _meeting(db: AsyncSession, owner: User, spec: MeetingSpec) -> Session:
 
 
 def _run(owner: User, session: Session, spec: MeetingSpec, end: datetime) -> MeetingProcessingRun:
-    """Прогон обработки: завершённый, упавший или идущий на второй попытке расшифровки."""
+    """A processing run: completed, failed, or still transcribing on its first attempt."""
     finished = end + timedelta(minutes=3)
     stages: dict[str, dict[str, object]] = {}
     for position, stage in enumerate(STAGE_ORDER):
@@ -201,7 +202,7 @@ async def _note(db: AsyncSession, session: Session, spec: MeetingSpec, segments:
 
 
 async def _map(db: AsyncSession, session: Session, spec: MeetingSpec) -> None:
-    """Узлы карты по порядку: родитель всегда раньше ребёнка."""
+    """Map nodes in order: a parent always comes before its child."""
     created: list[MeetingMapNode] = []
     for position, node in enumerate(spec.nodes):
         row = MeetingMapNode(

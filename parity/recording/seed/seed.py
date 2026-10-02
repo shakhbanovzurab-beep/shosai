@@ -1,15 +1,15 @@
-"""Засев стенда записи фикстур: персоны стенда сравнения и их окружение.
+"""Seed of the fixture recording stand: the parity personas and their surroundings.
 
-Запускается внутри образа API черновика на свежей промигрированной базе:
+Runs inside the draft API image on a freshly migrated database:
 
     python /seed/seed.py
 
-Время процесса подменено libfaketime на момент стенда сравнения, поэтому всё, что
-черновик ставит «сейчас», совпадает с замороженными часами браузера. Моменты в
-прошлом и будущем засев задаёт явно, от того же момента (`PARITY_CLOCK`).
+The process time is replaced by libfaketime with the parity clock, so everything the
+draft stamps as "now" matches the browser's frozen clock. The seed sets past and future
+timestamps explicitly, relative to the same moment (`PARITY_CLOCK`).
 
-Засев работает только на пустой базе. Шаблон базы пересоздаёт record.sh при
-любом изменении засева; непустая база — ошибка, а не повод досеять.
+The seed works only on an empty database. record.sh recreates the database template on
+any change to the seed; a non-empty database is an error, not a reason to seed more.
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ log = logging.getLogger("parity.seed")
 
 
 def parity_clock() -> datetime:
-    """Момент стенда сравнения из окружения; без него засев не запускается."""
+    """The parity clock from the environment; the seed does not run without it."""
     raw = os.environ.get("PARITY_CLOCK")
     if not raw:
         raise RuntimeError("PARITY_CLOCK не задан: засев запускается через record.sh")

@@ -1,4 +1,4 @@
-"""Зафиксированная база черновика: полнота, согласованность классов, актуальность документов."""
+"""The recorded draft baseline: completeness, consistent classes, up-to-date documents."""
 
 import json
 from pathlib import Path
@@ -59,14 +59,14 @@ def test_in_openapi_flags_match_the_document(consumers: JsonObject) -> None:
 
 
 def test_routes_outside_openapi_are_explained(consumers: JsonObject) -> None:
-    """Маршрут вне OpenAPI (страница, ссылка, служебный адрес) обязан объяснять, кто его ждёт."""
+    """A route outside OpenAPI (page, link, service endpoint) must explain who expects it."""
     for item in _objects(consumers["operations"]):
         if item["in_openapi"] is not True:
             assert str(item["reason"]).strip(), f"{item['method']} {item['path']}"
 
 
 def test_shipped_app_usage_is_always_must_keep(consumers: JsonObject) -> None:
-    """Живой вызов из кода рабочего приложения делает адрес нативным — без исключений."""
+    """A live call from the code of a working app makes the endpoint native, no exceptions."""
     for item in _objects(consumers["operations"]):
         clients = {ref["client"] for ref in _objects(item["consumers"]) if not ref.get("dead")}
         if clients & SHIPPED_APPS:
@@ -85,7 +85,7 @@ def test_shipped_app_frames_are_must_keep() -> None:
 
 
 def test_dead_call_sites_carry_evidence_and_never_raise_the_class(consumers: JsonObject) -> None:
-    """Мёртвый код не переносится: такой вызов записан с доказательством и класс не поднимает."""
+    """Dead code is not carried over: its call is recorded with evidence, not raising the class."""
     for item in _objects(consumers["operations"]):
         refs = _objects(item["consumers"])
         for ref in refs:
@@ -130,7 +130,7 @@ def test_markdown_documents_are_rendered_from_the_json() -> None:
 
 
 def test_openapi_is_stored_in_canonical_form() -> None:
-    """Канонический вид (сортированные ключи) делает diff базы при обновлении читаемым."""
+    """The canonical form (sorted keys) keeps the baseline diff readable on updates."""
     path: Path = DEFAULT_BASELINE / "openapi.json"
     raw = path.read_text(encoding="utf-8")
     assert raw == json.dumps(json.loads(raw), indent=2, sort_keys=True, ensure_ascii=False) + "\n"
