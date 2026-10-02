@@ -10,7 +10,16 @@ license = "LicenseRef-Whisperer-Commercial"
 license-files = ["LICENSE"]
 # Рантайм-зависимости добавляет шаг плана F1, которому они нужны
 # (docs/plan/packages/F1-backend-foundation.md, раздел 4).
-dependencies = []
+dependencies = [
+    "cryptography>=50.0.2",
+    "opentelemetry-api>=1.45.0",
+    "opentelemetry-exporter-otlp-proto-http>=1.45.0",
+    "opentelemetry-sdk>=1.45.0",
+    "prometheus-client>=0.26.0",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+    "structlog>=26.1.0",
+]
 
 [dependency-groups]
 dev = [
@@ -21,8 +30,6 @@ dev = [
     "import-linter>=2.15",
     "mypy>=2.4.0",
     "pip-audit>=2.10.1",
-    # Проверка текста для моделей обходит JSON-схемы моделей Pydantic.
-    "pydantic>=2.13.5",
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
     "pytest-cov>=7.1.0",
