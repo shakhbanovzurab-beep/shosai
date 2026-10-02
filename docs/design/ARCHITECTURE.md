@@ -608,6 +608,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 |---|---|---|---|
 | Backend | Starlette | paired with FastAPI | ASGI toolkit under FastAPI |
 | Backend | Uvicorn | 0.54.0 | ASGI server, one process per container |
+| Backend | uvloop | 0.23.0 | Event loop of every backend process |
 | Backend | psycopg (`psycopg[binary]`) | 3.3.6 | PostgreSQL driver; statements unprepared, one round trip each behind PgBouncer in transaction mode ([ADR 0013](../adr/0013-psycopg-driver-behind-pgbouncer.md)) |
 | Backend | pgvector | 0.5.0 | Vectors in PostgreSQL |
 | Backend | Own task broker on TaskIQ's `AsyncBroker`, streams in Valkey through redis-py | — | One stream per queue holding only unfinished tasks: enqueue within 50 ms or 503, lease renewal, retries as delayed redeliveries, at most 5 deliveries, dead letter; replaces taskiq-redis, whose broker built its own pool, had no deadline or delivery limit and trimmed unfinished tasks ([ADR 0016](../adr/0016-own-task-broker-on-valkey-streams.md)) |

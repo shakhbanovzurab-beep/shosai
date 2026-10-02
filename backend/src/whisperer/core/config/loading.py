@@ -17,6 +17,7 @@ from whisperer.core.config.sections import (
     HomeSettings,
     ObservabilitySettings,
     RuntimeSettings,
+    ServerSettings,
     SharedServicesSettings,
     StorageSettings,
     WebSettings,
@@ -63,6 +64,7 @@ class Settings:
     storage: StorageSettings
     shared_services: SharedServicesSettings
     web: WebSettings
+    server: ServerSettings
     observability: ObservabilitySettings
     crypto: CryptoSettings
 
@@ -75,6 +77,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
     storage = reader.read(StorageSettings, "")
     shared_services = reader.read(SharedServicesSettings, "")
     web = reader.read(WebSettings, "")
+    server = reader.read(ServerSettings, "")
     observability = reader.read(ObservabilitySettings, "")
     crypto = reader.read(CryptoSettings, "")
     if reader.problems:
@@ -85,6 +88,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
         storage=_present(storage),
         shared_services=_present(shared_services),
         web=_present(web),
+        server=_present(server),
         observability=_present(observability),
         crypto=_present(crypto),
     )
@@ -106,7 +110,7 @@ class _SectionReader:
             # Значение-JSON не разобрано; сообщение pydantic-settings называет поле, но не значение.
             self.problems.append(f"{section.__name__}: {error}")
         except ValidationError as error:
-            self.problems.extend(_describe(error, prefix))
+            self.problems.extend(_describe(error, prefix, section.__name__))
         return None
 
 
@@ -119,11 +123,12 @@ def _present[S](section: S | None) -> S:
     return section
 
 
-def _describe(error: ValidationError, prefix: str) -> list[str]:
+def _describe(error: ValidationError, prefix: str, section: str) -> list[str]:
     problems: list[str] = []
     for item in error.errors(include_url=False, include_input=False, include_context=False):
         field = str(item["loc"][0]) if item["loc"] else ""
-        variable = f"{prefix}{field}".upper()
+        # Проверка всей секции (например, разные порты) не привязана к одной переменной.
+        variable = f"{prefix}{field}".upper() if field else section
         if item["type"] == MISSING_ERROR_TYPE:
             problems.append(f"{variable}: обязательная переменная не задана")
         else:

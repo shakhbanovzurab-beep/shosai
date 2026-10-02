@@ -28,7 +28,12 @@ dependencies = [
     "structlog>=26.1.0",
     "taskiq>=0.13.0",
     "uvicorn>=0.54.0",
+    "uvloop>=0.23.0",
 ]
+
+# Одна консольная команда образа: роль процесса — подкоманда (README, «Process roles»).
+[project.scripts]
+whisperer = "whisperer.entrypoints.cli:main"
 
 [dependency-groups]
 dev = [

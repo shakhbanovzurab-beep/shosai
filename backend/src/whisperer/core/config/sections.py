@@ -4,7 +4,10 @@
 a dotenv file: `env_file` is off, and an empty variable counts as unset.
 """
 
-from pydantic import HttpUrl, SecretStr
+from ipaddress import IPv4Address
+from typing import Self
+
+from pydantic import HttpUrl, IPvAnyAddress, SecretStr, model_validator
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
 from whisperer.core.config.values import (
@@ -16,6 +19,7 @@ from whisperer.core.config.values import (
     LogLevelName,
     NonEmptyText,
     Origins,
+    Port,
     ProxyNetworks,
     RedisUrl,
 )
@@ -94,6 +98,25 @@ class WebSettings(SettingsSection):
     api_docs_enabled: bool = False
     cors_allowed_origins: Origins = ()
     trusted_proxy_addresses: ProxyNetworks = ()
+
+
+class ServerSettings(SettingsSection):
+    """Where a process listens: the public port of `api` and `ws` and the ops port of every role.
+
+    The ops port serves liveness, readiness and metrics; the edge never proxies it (F1-C3).
+    """
+
+    bind_host: IPvAnyAddress = IPv4Address("127.0.0.1")
+    http_port: Port = 8000
+    ops_port: Port = 9100
+
+    @model_validator(mode="after")
+    def ports_differ(self) -> Self:
+        """The public and the ops server cannot share a port."""
+        if self.http_port == self.ops_port:
+            message = "HTTP_PORT и OPS_PORT совпадают"
+            raise ValueError(message)
+        return self
 
 
 class ObservabilitySettings(SettingsSection):

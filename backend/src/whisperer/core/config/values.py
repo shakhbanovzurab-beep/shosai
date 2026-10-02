@@ -139,6 +139,7 @@ def check_fernet_key(key: SecretStr) -> SecretStr:
 DatabaseUrl = Annotated[SecretStr, AfterValidator(check_database_url)]
 RedisUrl = Annotated[SecretStr, AfterValidator(check_redis_url)]
 NonEmptyText = Annotated[str, Field(min_length=1)]
+Port = Annotated[int, Field(ge=1, le=65535)]
 Origin = Annotated[str, AfterValidator(normalize_origin)]
 ProxyNetwork = Annotated[IPv4Network | IPv6Network, BeforeValidator(parse_proxy_network)]
 FernetKey = Annotated[SecretStr, AfterValidator(check_fernet_key)]

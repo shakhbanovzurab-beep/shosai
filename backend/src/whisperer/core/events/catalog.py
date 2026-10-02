@@ -7,9 +7,13 @@ gives the routes the relay queues: one delivery task per subscriber. An event ty
 listed without subscribers is a fact nobody consumes yet; an event type that is not
 listed at all cannot be written, and the relay holds back rows of such a type written by
 a newer image.
+
+The event classes are known before any slice is built (`EventTypes`): the outbox slices
+write through needs only them, while subscriptions are built later, with the process's
+services, and complete the catalog.
 """
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Any
@@ -28,6 +32,23 @@ class DeliveryRoute:
     task: TaskDeclaration[EventDeliveryPayload]
 
 
+class EventTypes:
+    """Every event class of the backend, one class per event type."""
+
+    def __init__(self, events: Sequence[type[DomainEvent]]) -> None:
+        classes: dict[str, type[DomainEvent]] = {}
+        for event in events:
+            if event.event_type in classes:
+                message = f"тип события {event.event_type} объявлен двумя классами"
+                raise ValueError(message)
+            classes[event.event_type] = event
+        self.classes: Mapping[str, type[DomainEvent]] = MappingProxyType(classes)
+
+    def lists(self, event: DomainEvent) -> bool:
+        """Whether the event's class is the one listed for its type."""
+        return self.classes.get(event.event_type) is type(event)
+
+
 class EventCatalog:
     """Every event class and subscription of the backend, checked once at start."""
 
@@ -36,12 +57,8 @@ class EventCatalog:
         events: Sequence[type[DomainEvent]],
         subscriptions: Sequence[EventSubscription[Any]],
     ) -> None:
-        classes: dict[str, type[DomainEvent]] = {}
-        for event in events:
-            if event.event_type in classes:
-                message = f"тип события {event.event_type} объявлен двумя классами"
-                raise ValueError(message)
-            classes[event.event_type] = event
+        self._types = EventTypes(events)
+        classes = self._types.classes
         routes: dict[str, list[DeliveryRoute]] = {event_type: [] for event_type in classes}
         consumers: set[str] = set()
         for subscription in subscriptions:
@@ -54,14 +71,13 @@ class EventCatalog:
                 message = f"потребитель {subscription.consumer} ждёт событие вне каталога"
                 raise ValueError(message)
             routes[event_type].append(DeliveryRoute(subscription, delivery_task(subscription)))
-        self._classes = MappingProxyType(classes)
         self._routes = MappingProxyType(
             {event_type: tuple(found) for event_type, found in routes.items()}
         )
 
     def lists(self, event: DomainEvent) -> bool:
         """Whether the event's class is the one listed for its type."""
-        return self._classes.get(event.event_type) is type(event)
+        return self._types.lists(event)
 
     def routes_of(self, event_type: str) -> tuple[DeliveryRoute, ...] | None:
         """The delivery routes of an event type; None for a type this catalog does not list."""

@@ -11,7 +11,7 @@ import pytest
 import sqlalchemy as sa
 from alembic import op
 from alembic.autogenerate import compare_metadata
-from alembic.runtime.migration import MigrationContext
+from alembic.runtime.migration import MigrationContext, RevisionStep
 from alembic.script import ScriptDirectory
 from sqlalchemy import Connection, NullPool, make_url
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -160,3 +160,12 @@ def test_a_revision_is_at_the_head_newer_or_behind() -> None:
     assert history.state_of("a1") is RevisionState.BEHIND
     assert history.state_of(None) is RevisionState.BEHIND
     assert history.state_of("c3") is RevisionState.NEWER
+
+
+def test_alembic_names_every_scoped_step_in_its_log_line() -> None:
+    script = ScriptDirectory.from_config(alembic_config())
+
+    for revision in script.walk_revisions():
+        for is_upgrade, name in ((True, "upgrade"), (False, "downgrade")):
+            step = RevisionStep(script.revision_map, revision, is_upgrade)
+            assert str(step).startswith(f"{name} ")

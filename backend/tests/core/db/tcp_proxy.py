@@ -57,6 +57,13 @@ class CountingProxy:
         if self._server is not None:
             await self._server.wait_closed()
 
+    async def cut(self) -> None:
+        """Cut every forwarded connection and drop new ones, as a home that went away does."""
+        self.upstream = None
+        for task in self._pipes:
+            task.cancel()
+        await asyncio.gather(*self._pipes, return_exceptions=True)
+
     def reset(self) -> None:
         """Start counting from zero; the next client message opens a new turn."""
         self.turns = 0

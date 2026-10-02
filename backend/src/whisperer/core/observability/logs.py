@@ -31,7 +31,16 @@ LOG_QUEUE_CAPACITY = 10_000
 # ключи и токены в строке запроса. uvicorn.access дублирует строку доступа границы запроса
 # (core/web/boundary.py), но с сырым путём, строкой запроса и адресом клиента (§16.8).
 # TaskIQ пишет на DEBUG аргументы каждой поставленной задачи, а на INFO — каждый запуск.
-QUIET_LIBRARY_LOGGERS = ("urllib3", "httpx", "httpcore", "uvicorn.access", "taskiq")
+# uvicorn.error на INFO повторяет строки старта и остановки серверов (core/runtime/servers.py);
+# его предупреждения и ошибки проходят.
+QUIET_LIBRARY_LOGGERS = (
+    "urllib3",
+    "httpx",
+    "httpcore",
+    "uvicorn.access",
+    "uvicorn.error",
+    "taskiq",
+)
 # Строки библиотек, которые повторяют нашу строку о том же событии. Приёмник TaskIQ пишет
 # исключение задачи сам, а строка жизненного цикла задачи (core/tasks/lifecycle.py) несёт
 # то же исключение со стеком и решением: повтор или dead letter.

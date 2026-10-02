@@ -16,7 +16,7 @@ from tests.core.events.bench import (
     recording,
 )
 from tests.harness.database_access import DatabaseAccess
-from whisperer.core.events.catalog import EventCatalog
+from whisperer.core.events.catalog import EventCatalog, EventTypes
 from whisperer.core.events.domain_event import DomainEvent
 from whisperer.core.events.subscriptions import EventSubscription, ReceivedEvent
 from whisperer.core.events.system import PURGE_OUTBOX, RELAY_OUTBOX
@@ -107,3 +107,12 @@ def test_every_role_registers_the_relay_the_purge_and_each_delivery(
     assert critical.declaration("events.mail.welcome") is not None
     assert bench.tasks.broker(TaskQueue.BULK).declaration(PURGE_OUTBOX.name) is PURGE_OUTBOX
     assert bench.tasks.broker().declaration("events.search.index_note") is not None
+
+
+def test_the_event_types_alone_list_each_class_once() -> None:
+    types = EventTypes([NoteWritten, NoteArchived])
+
+    assert types.lists(NoteWritten(record_id=UUID(int=1), state=NoteState.DRAFT))
+    assert not types.lists(OtherNoteWritten(record_id=UUID(int=1)))
+    with pytest.raises(ValueError, match="двумя классами"):
+        EventTypes([NoteWritten, OtherNoteWritten])

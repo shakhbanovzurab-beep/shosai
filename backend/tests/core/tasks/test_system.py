@@ -50,3 +50,13 @@ def test_registration_leaves_the_handler_module_untouched(valkey: Redis) -> None
     assert registered is not None
     assert registered.original_func.__name__ == "run_task"
     assert not [name for name in vars(sys.modules[handlers.__name__]) if "taskiq" in name]
+
+
+def test_handlers_registered_later_are_checked_against_every_queue(valkey: Redis) -> None:
+    bench = workbench(valkey, [RUNS.handler(declare("probe.first"))])
+
+    bench.system.register([RUNS.handler(declare("probe.later", queue=TaskQueue.BULK))])
+
+    assert bench.broker(TaskQueue.BULK).declaration("probe.later") is not None
+    with pytest.raises(ValueError, match="дважды"):
+        bench.system.register([RUNS.handler(declare("probe.first", queue=TaskQueue.BULK))])

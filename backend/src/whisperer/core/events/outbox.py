@@ -12,6 +12,7 @@ continue the producer's trace and log lines (§16.2).
 """
 
 import uuid
+from typing import Protocol
 from uuid import UUID
 
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
@@ -19,7 +20,6 @@ from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from whisperer.core.db.transactions import transaction_info
-from whisperer.core.events.catalog import EventCatalog
 from whisperer.core.events.domain_event import DomainEvent
 from whisperer.core.events.records import OutboxMessage
 from whisperer.core.observability.log_context import bound_request_id
@@ -48,10 +48,18 @@ def current_traceparent() -> str | None:
     return carrier.get(TRACEPARENT)
 
 
+class ListedEvents(Protocol):
+    """The event classes composition listed: `EventTypes` or the full `EventCatalog`."""
+
+    def lists(self, event: DomainEvent) -> bool:
+        """Whether the event's class is the one listed for its type."""
+        ...
+
+
 class EventOutbox:
     """Writes events into the caller's transaction; slices receive it by injection."""
 
-    def __init__(self, catalog: EventCatalog) -> None:
+    def __init__(self, catalog: ListedEvents) -> None:
         self._catalog = catalog
 
     async def add(self, session: AsyncSession, event: DomainEvent) -> UUID:

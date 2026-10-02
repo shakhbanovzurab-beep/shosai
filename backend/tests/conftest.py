@@ -9,8 +9,9 @@ A harness failure is reported as short text without a traceback: its local varia
 would contain the whole process environment.
 """
 
+import logging
 import os
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Iterator
 
 import pytest
 import pytest_asyncio
@@ -22,6 +23,7 @@ from tests.harness.settings import HarnessConfigurationError, HarnessSettings
 from tests.harness.slots import NoFreeSlotError
 
 RUN_SLOT_SUMMARY = pytest.StashKey[list[str]]()
+UVICORN_ACCESS_LOGGER = "uvicorn.access"
 pytest_plugins = (
     "tests.harness.database_access",
     "tests.harness.shared_services",
@@ -62,6 +64,21 @@ async def run_slot(
             )
     finally:
         await slot.claimed.release()
+
+
+@pytest.fixture(autouse=True)
+def uvicorn_access_logger() -> Iterator[None]:
+    """uvicorn's access logger as it was before the test.
+
+    uvicorn's settings detach that logger from the root when access lines are off, as every
+    process of the backend wants; a server one test starts must not change what the logs of
+    another test see.
+    """
+    access = logging.getLogger(UVICORN_ACCESS_LOGGER)
+    handlers, propagate = list(access.handlers), access.propagate
+    yield
+    access.handlers[:] = handlers
+    access.propagate = propagate
 
 
 def harness_stopped(error: Exception) -> BaseException:

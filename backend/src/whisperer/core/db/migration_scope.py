@@ -6,6 +6,7 @@ skipped while the revision is still stamped, so both homes stay on one revision.
 Tables are closed to the application role until a revision grants them explicitly.
 """
 
+import functools
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from typing import Final, Literal
@@ -57,7 +58,8 @@ class ScopedStep:
             raise ValueError(message)
         self.step = step
         self.applies_to = applies_to
-        self.__doc__ = step.__doc__
+        # Имя и описание шага: Alembic пишет их в строку «Running upgrade …» каждой ревизии.
+        functools.update_wrapper(self, step)
 
     def __call__(self, scope: MigrationScope) -> None:
         """Run the step in a home it applies to; elsewhere do nothing."""

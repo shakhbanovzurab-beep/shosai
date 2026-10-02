@@ -30,13 +30,9 @@ from whisperer.core.tasks.declaration import (
 )
 from whisperer.core.tasks.payloads import HomeTaskPayload, TaskPayload, TaskSecret
 from whisperer.core.tasks.queues import STREAM_CAPACITY, TaskQueue, dead_letter_key, stream_key
+from whisperer.core.tasks.sender import TaskSender
 from whisperer.core.tasks.stream import as_text
-from whisperer.core.tasks.system import (
-    HandlerBinding,
-    StreamOptions,
-    TaskSystem,
-    build_task_system,
-)
+from whisperer.core.tasks.system import StreamOptions, TaskSystem, build_task_system
 from whisperer.core.tasks.timing import Backoff, StreamTiming
 from whisperer.core.tasks.worker import consume_queue
 
@@ -129,6 +125,8 @@ class Workbench:
 
 
 type Fields = dict[bytes | str, bytes | str]
+# Обработчики, построенные с отправителем стенда: так их строит композиция процесса.
+type HandlerBinding = Callable[[TaskSender], Sequence[TaskHandler[Any]]]
 
 
 async def stream_entries_of(client: Redis, key: str) -> list[tuple[str, Fields]]:
@@ -171,9 +169,8 @@ def assemble(
     options: StreamOptions,
 ) -> Workbench:
     """The task system and the registry its metrics went to."""
-    system = build_task_system(
-        client, bind_handlers, registry, tracer_provider or TracerProvider(), options
-    )
+    system = build_task_system(client, registry, tracer_provider or TracerProvider(), options)
+    system.register(bind_handlers(system.sender))
     return Workbench(client, system, registry)
 
 

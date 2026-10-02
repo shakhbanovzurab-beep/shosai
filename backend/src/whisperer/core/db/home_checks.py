@@ -134,6 +134,10 @@ class HomeGate:
             raise HomeMisconfiguredError(fatal)
         return checks
 
+    def is_closed(self, home: Home) -> bool:
+        """Whether the check found another home's database or a schema behind the code."""
+        return self._states[home] in FATAL_STATES
+
     async def ensure_open(self, home: Home) -> None:
         """Return for a verified home; otherwise check it again or refuse with 503."""
         if self._states[home] is HomeState.VERIFIED:

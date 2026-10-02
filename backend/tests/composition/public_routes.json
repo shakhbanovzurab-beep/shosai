@@ -1,0 +1,8 @@
+{
+  "api": [
+    "GET /v1/health"
+  ],
+  "ws": [
+    "GET /v1/health"
+  ]
+}

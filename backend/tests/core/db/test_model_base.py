@@ -3,7 +3,7 @@
 import pytest
 from sqlalchemy import CheckConstraint, Column, Integer, MetaData, Table, Text, UniqueConstraint
 
-from whisperer.composition.metadata import APPLICATION_MODELS, application_metadata
+from whisperer.composition.metadata import application_metadata, application_models
 from whisperer.core.db.home_identity import HomeIdentity
 from whisperer.core.db.model_base import (
     NAMING_CONVENTION,
@@ -65,7 +65,7 @@ def test_a_table_belongs_to_at_least_one_home() -> None:
 def test_the_application_metadata_has_exactly_the_listed_models() -> None:
     metadata = application_metadata()
 
-    assert set(metadata.tables) == {model.__tablename__ for model in APPLICATION_MODELS}
+    assert set(metadata.tables) == {model.__tablename__ for model in application_models()}
     assert metadata.naming_convention == NAMING_CONVENTION
     assert application_metadata() is not metadata
 

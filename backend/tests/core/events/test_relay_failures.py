@@ -91,12 +91,8 @@ async def test_a_silent_valkey_holds_events_back_through_the_real_sender(
     await write_notes(homes.transactions, bench.outbox, Home.RU, 2)
     stopped = connect_redis(redis_url(closed_port()), "whisperer-tests")
     try:
-        tasks = build_task_system(
-            stopped,
-            lambda sender: event_task_handlers(bench.resources, sender),
-            CollectorRegistry(),
-            TracerProvider(),
-        )
+        tasks = build_task_system(stopped, CollectorRegistry(), TracerProvider())
+        tasks.register(event_task_handlers(bench.resources, tasks.sender))
         result = await OutboxRelay(bench.resources, tasks.sender).relay(Home.RU)
     finally:
         await stopped.aclose()

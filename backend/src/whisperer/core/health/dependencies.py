@@ -1,11 +1,45 @@
-"""Probes of the shared services of the plane: Valkey, the cache and the one bucket."""
+"""Probes of the dependencies of a process: each home's database, Valkey, the cache, the bucket."""
+
+from typing import Final
 
 from redis.asyncio import Redis
+from sqlalchemy import exc, text
 
+from whisperer.core.db.engines import HomeDatabases
+from whisperer.core.db.home_checks import HomeGate
 from whisperer.core.health.probes import DependencyProbe
+from whisperer.core.kernel.homes import Home
 from whisperer.core.kv.connection import REDIS_FAILURES
 from whisperer.core.storage.errors import StorageRejectedError, StorageUnavailableError
 from whisperer.core.storage.port import ObjectStorage
+
+PING_STATEMENT: Final = text("SELECT 1")
+# Отказ соединения, исчерпанный пул и оборванное соединение — база дома недоступна.
+DATABASE_FAILURES: Final = (exc.OperationalError, exc.InterfaceError, exc.TimeoutError)
+
+
+class HomeClosedError(Exception):
+    """The start check closed the home: its database is another home's or behind the code."""
+
+
+def home_probe_name(home: Home) -> str:
+    """`homes.ru`, `homes.eu`: the name of a home's database in the readiness report."""
+    return f"homes.{home.value}"
+
+
+def home_probe(home: Home, databases: HomeDatabases, gate: HomeGate) -> DependencyProbe:
+    """One statement through the home's own pool; a home the check closed is down too."""
+
+    async def check() -> None:
+        if gate.is_closed(home):
+            message = f"дом {home.value} закрыт проверкой базы"
+            raise HomeClosedError(message)
+        async with databases.engine(home).connect() as connection:
+            await connection.execute(PING_STATEMENT)
+
+    return DependencyProbe(
+        name=home_probe_name(home), check=check, failures=(*DATABASE_FAILURES, HomeClosedError)
+    )
 
 
 def redis_probe(name: str, client: Redis) -> DependencyProbe:

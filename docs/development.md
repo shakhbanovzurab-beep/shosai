@@ -63,11 +63,34 @@ Both PgBouncers run in transaction mode with protocol-level prepared statements 
 
 ## Migrations
 
-One Alembic history in `backend/src/whisperer/migrations/` serves both homes ([ADR 0010](adr/0010-home-scoped-revisions-in-one-alembic-history.md)). The runner `whisperer.core.db.migrations` applies it home by home under `whisperer_migrator`, directly, with a session advisory lock and `lock_timeout = 5s`; the `whisperer migrate` command arrives with F1 step 8.
+One Alembic history in `backend/src/whisperer/migrations/` serves both homes ([ADR 0010](adr/0010-home-scoped-revisions-in-one-alembic-history.md)). The runner `whisperer.core.db.migrations` applies it home by home under `whisperer_migrator`, directly, with a session advisory lock and `lock_timeout = 5s`; `uv run --env-file ../.env whisperer migrate upgrade` in `backend/` runs it for both homes, RU first, and `… migrate current` logs each home's revision.
 
 - A new revision: `uv run alembic revision -m "…"` in `backend/`. The template declares `applies_to = EVERY_HOME` and wraps `upgrade` and `downgrade` with `runs_in(applies_to)`; an EU-only revision sets `applies_to = (Home.EU,)`. Both steps receive the `MigrationScope` of the home: its `home` and the `application_role` of that home's application address.
 - A new table is closed to `whisperer_app` until the revision grants it: `grant_to_application(scope, "table")`, and `revoke_from_application` in the downgrade. A company-scoped table gets row-level security with `enable_company_isolation("table")`.
 - Every downgrade runs on every test run: the harness upgrades both homes of its slot to the head and downgrades them to the base at the end.
+
+## Run the backend
+
+Every role of the one backend image runs from `backend/` with the variables of section 2 of `.env` (copy [`.env.example`](../.env.example) once: `cp -n .env.example .env`). The backend never reads `.env` itself; uv passes it.
+
+```bash
+cd backend
+uv run --env-file ../.env whisperer migrate upgrade    # once, and after every new revision
+uv run --env-file ../.env whisperer api                # public API on 127.0.0.1:8000
+```
+
+| Role | Command | Public port | Ops port |
+|---|---|---|---|
+| API | `whisperer api` | `HTTP_PORT` (8000) | `OPS_PORT` (9100) |
+| WS gateway | `whisperer ws` | `HTTP_PORT` | `OPS_PORT` |
+| Worker of one queue | `whisperer workers --queue critical` (or `default`, `bulk`, `meeting`) | — | `OPS_PORT` |
+| Scheduler | `whisperer scheduler` | — | `OPS_PORT` |
+
+- Several roles at once need different ports: `HTTP_PORT=8001 OPS_PORT=9101 uv run --env-file ../.env whisperer ws`, `OPS_PORT=9102 … whisperer scheduler`, and so on. A variable set on the command line wins over `.env`.
+- Each role answers `http://127.0.0.1:<OPS_PORT>/livez`, `/readyz` (the status of both homes, Valkey, the cache and the bucket) and `/metrics`. The API also answers `http://127.0.0.1:8000/v1/health`.
+- A role refuses to start while a home's schema is behind the code: run `whisperer migrate upgrade` first. A home that is down does not stop the start: its requests get 503 until it answers again, and `/readyz` reports it `down`.
+- `Ctrl+C` or `SIGTERM` stops a role cleanly: it stops taking work, finishes what is in flight, then closes. Logs are JSON lines on stdout.
+- Locally every role listens on `127.0.0.1` only (`BIND_HOST`); the image binds `0.0.0.0` inside its container.
 
 ## Test databases
 

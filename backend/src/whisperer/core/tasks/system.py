@@ -1,13 +1,14 @@
 """The task system of one process: a broker per queue with every task, and the sender.
 
 Every role registers every task (draft lesson: a worker built without a slice's tasks
-dropped them as unknown). Composition passes a binding that builds the handlers of all
-slices with the process's sender, because a handler may queue further work: a pipeline
-stage queues the next one, the outbox relay queues deliveries. Each handler goes to the
-broker of its queue, and a name may be declared only once in the whole backend.
+dropped them as unknown). The sender exists before any handler, because a handler may
+queue further work — a pipeline stage queues the next one, the outbox relay queues
+deliveries — and slices receive it together with the other core services. Composition
+then registers the handlers of every slice before the role starts. Each handler goes to
+the broker of its queue, and a name may be declared only once in the whole backend.
 """
 
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from types import MappingProxyType
 from typing import Any
@@ -36,6 +37,15 @@ class TaskSystem:
     sender: TaskSender
     metrics: TaskMetrics
 
+    def register(self, handlers: Sequence[TaskHandler[Any]]) -> None:
+        """Make every handler runnable on the broker of its queue; a name only once."""
+        for handler in handlers:
+            name = handler.task.name
+            if any(broker.declaration(name) is not None for broker in self.brokers.values()):
+                message = f"задача {name} объявлена дважды"
+                raise ValueError(message)
+            self.brokers[handler.task.queue].register(handler)
+
 
 @dataclass(frozen=True, slots=True)
 class StreamOptions:
@@ -46,18 +56,13 @@ class StreamOptions:
     capacity: int = STREAM_CAPACITY
 
 
-# Обработчики строятся с отправителем процесса: обработчик может ставить задачи сам.
-type HandlerBinding = Callable[[TaskSender], Sequence[TaskHandler[Any]]]
-
-
 def build_task_system(
     client: Redis,
-    bind_handlers: HandlerBinding,
     registry: CollectorRegistry,
     tracer_provider: TracerProvider,
     options: StreamOptions | None = None,
 ) -> TaskSystem:
-    """The task system over the process's Valkey client, with every bound handler registered."""
+    """The brokers and the sender over the process's Valkey client, before any handler."""
     chosen = options or StreamOptions()
     consumer = chosen.consumer or new_consumer_name()
     metrics = TaskMetrics(registry)
@@ -72,12 +77,4 @@ def build_task_system(
         )
         brokers[queue] = broker
     frozen = MappingProxyType(brokers)
-    sender = TaskSender(frozen, ticks, metrics)
-    seen: set[str] = set()
-    for handler in bind_handlers(sender):
-        if handler.task.name in seen:
-            message = f"задача {handler.task.name} объявлена дважды"
-            raise ValueError(message)
-        seen.add(handler.task.name)
-        brokers[handler.task.queue].register(handler)
-    return TaskSystem(brokers=frozen, sender=sender, metrics=metrics)
+    return TaskSystem(brokers=frozen, sender=TaskSender(frozen, ticks, metrics), metrics=metrics)

@@ -1,6 +1,6 @@
 # Whisperer backend
 
-One modular monolith, one image, four process roles (`api`, `ws`, `workers`, `scheduler`), built feature-first: `core/`, `features/<slice>/`, `composition/`, `entrypoints/` under `src/whisperer/` ([target architecture](../docs/design/ARCHITECTURE.md) §5). The package is built step by step by [F1](../docs/plan/packages/F1-backend-foundation.md); this file grows with it.
+One modular monolith, one image, four process roles (`api`, `ws`, `workers`, `scheduler`), built feature-first: `core/`, `features/<slice>/`, `composition/`, `entrypoints/` under `src/whisperer/` ([target architecture](../docs/design/ARCHITECTURE.md) §5). [F1](../docs/plan/packages/F1-backend-foundation.md) built the foundation described here; each slice adds its own README in its package.
 
 ## Boundaries
 
@@ -82,7 +82,7 @@ Slices receive these clients from composition by injection; none is a global.
 
 - **Declare** a task once, as a module constant of the slice: `TaskDeclaration(name="meetings.send_digest", queue=TaskQueue.DEFAULT, payload=SendDigest, deadline=timedelta(seconds=60), retry=RETRY_TRANSIENT)`. The name is `slice.task` and never changes while messages may carry it. The payload is a `TaskPayload` (frozen, unknown fields ignored); a task acting in a home uses `HomeTaskPayload` and opens its transactions in `payload.scope()`. A new field is optional. A secret travels as a `TaskSecret` field and is masked wherever the payload is kept.
 - **Retry policy:** `NO_RETRY` (the default choice for anything that charges or sends) or `RETRY_TRANSIENT` — up to 5 deliveries after a failure of the home, the bucket, Valkey, the network or the deadline; a `RetryPolicy` names other failures explicitly. A retry is a redelivery after 5 s doubling to 120 s, jittered; no worker slot waits through it. Every task must tolerate running twice.
-- **Bind** it in composition: `TaskHandler(SEND_DIGEST, digests.send)`; `build_task_system(valkey, bind_handlers, registry, tracer_provider)` calls `bind_handlers(sender)` with the process's `TaskSender`, so a handler can queue further work, registers every handler it returns in every role and gives the sender slices receive by injection.
+- **Bind** it in the slice's build: `TaskHandler(SEND_DIGEST, digests.send)` in `FeatureParts.task_handlers`. `build_task_system(valkey, registry, tracer_provider)` makes the brokers and the `TaskSender` first, so a handler built with `services.tasks` can queue further work; composition then registers every handler of every slice in every role (`TaskSystem.register`), and a name declared twice stops the start.
 - **Send:** `await sender.send(SEND_DIGEST, SendDigest(...))` within 50 ms, or `TaskQueueUnavailableError` (503 `queue_unavailable` with `Retry-After`) when Valkey is silent or the stream holds 500 000 tasks. Work that must not be lost — money, email — goes through the outbox. A periodic task (`kind=TaskKind.TICK`) goes through `send_tick(task, payload, *marker)`, which skips the tick while the previous one with the same marker is in flight; a failed tick is dropped, the next one does its work.
 - **Run:** `consume_queue(broker, stop)` runs one queue's tasks in a worker process (`critical` 16 at once, `default` 5, `bulk` 3, `meeting` 3) and drains for up to 20 s when `stop` is set. The handler runs within its declared deadline. A worker renews the lease of every message it holds; a message idle 120 s belongs to a dead worker and is delivered again.
 - **Dead letter** (`whisperer:dead-letter:<queue>`, 7 days): the last failed delivery, a failure the policy does not retry, a task abandoned on its last delivery, a message of an unknown task or one that is not a task. An entry keeps the task, deliveries, error type and text, trace and request ids and the payload with secrets masked; it is counted in `whisperer_task_dead_letters_total{queue, reason}`, unknown tasks also in `whisperer_task_unknown_total{queue}` (§16.4).
@@ -95,11 +95,52 @@ Slices receive these clients from composition by injection; none is a global.
 - **Declare** an event once, in the producing slice's `contracts` module: a `DomainEvent` subclass with `event_type: ClassVar[str] = "meetings.note.enhanced"` (`slice.object.happened`, past tense) and `version: ClassVar[int] = 1`. A field is an id, a number, a flag, a time, an enum or an `EventCode` (`[a-z0-9_.:-]{1,64}`), or a tuple or frozenset of them; anything else — `str`, a dict, a nested model — fails when the class is defined, so no email, name or title enters an event. A new field is optional; a change consumers cannot read gets a new event type.
 - **Write** it in the effect's transaction: `await outbox.add(session, NoteEnhanced(...))` with the `EventOutbox` the slice receives. The writer commits nothing; it takes the home and the account and company of the transaction (`HomeTransactions` records them in the session), the trace context and the request id. A class composition did not list, a read-only transaction or a session not opened by `HomeTransactions.begin` is refused.
 - **Subscribe** in the consuming slice: `EventSubscription(consumer="search.index_note", event=NoteEnhanced, queue=TaskQueue.DEFAULT, deadline=timedelta(seconds=30), handle=…)`. The consumer name never changes: it keys the delivery marks and names the delivery task `events.<consumer>`. The handler receives the delivery's session and a `ReceivedEvent` (event, id, version, time, scope) and writes its effect in that session only; the mark `processed_events (consumer, event_id)` commits with it, so a redelivered event changes nothing. Like every transaction it holds no external call: such work goes to a task or a row the slice processes later.
-- **Compose:** `EventCatalog(events, subscriptions)` refuses a type listed twice, a consumer subscribed twice and a subscription to an unlisted event; `event_task_handlers(EventResources(...), sender)` gives the relay, the purge and one delivery task per subscription, registered in every role through `build_task_system`.
+- **Compose:** a slice lists its event classes in `FeatureModule.events` and its subscriptions in `FeatureParts.subscriptions`. The outbox exists before any slice is built and knows only the classes (`EventTypes`); `EventCatalog(events, subscriptions)` then refuses a type listed twice, a consumer subscribed twice and a subscription to an unlisted event, and `event_task_handlers(EventResources(...), sender)` gives the relay, the purge and one delivery task per subscription, registered in every role.
 - **Relay** (`events.relay_outbox`, `critical`, a tick per home every 5 s): claims up to 100 due rows for 30 s (`FOR UPDATE SKIP LOCKED`) and commits, queues one delivery per subscriber outside any transaction, then marks them published. A row whose deliveries were not queued — Valkey out, a delivery task missing from the process, an event type a newer image wrote — waits `min(2^attempts, 300)` s and comes back; it is never dropped. Each home relays on its own, so an outage of one never stops the other. The relay opens a producer span per event as the child of the producer's trace, so the delivery continues that trace and carries its `request_id`.
 - **Delivery:** a consumer this process does not know is an unknown task and is dead-lettered and counted; a payload its class cannot read is dead-lettered without running; failures of the home, the bucket, Valkey or the network get up to 5 deliveries.
 - **Purge** (`events.purge_outbox`, `bulk`, daily per home): published events after 7 days, delivery marks after 14, in batches of 5 000; unpublished events stay.
 - **Observability:** `whisperer_outbox_published_total{home}`, `whisperer_outbox_held_back_total{home, reason}`, `whisperer_outbox_purged_rows_total{home, table}`, `whisperer_event_duplicate_deliveries_total{consumer}`; `OutboxMonitor.refresh()` sets `whisperer_outbox_pending{home}` and `whisperer_outbox_oldest_age_seconds{home}` (the "outbox events older than 5 min" monitor, §16.4); the scheduler runs it. Task metrics of the deliveries carry the task `events.<consumer>`.
+
+## Process roles
+
+One console command, `whisperer`, runs one role per process on one uvloop event loop (§5). Composition (`composition/`) builds what the role needs; `entrypoints/cli.py` only parses the command line.
+
+| Command | Serves | Runs |
+|---|---|---|
+| `whisperer api` | the public app on `HTTP_PORT`: every slice's HTTP routes and `GET /v1/health` | — |
+| `whisperer ws` | the public app of the WS gateway on `HTTP_PORT`: every slice's WebSocket routes and `GET /v1/health` | — |
+| `whisperer workers --queue Q` | — | TaskIQ's receiver of queue `Q` (`critical`, `default`, `bulk`, `meeting`) |
+| `whisperer scheduler` | — | the loops: the outbox relay of each home every 5 s, its purge daily, the queue and outbox gauges every 15 s, every slice's loops |
+| `whisperer migrate upgrade` / `current` | — | Alembic for both homes, RU first; logs each home's revision |
+
+- **Ops port.** Every long-running role also serves `OPS_PORT`, which the edge never proxies: `GET /livez` (200 while the event loop runs; checks nothing else), `GET /readyz` (200 while the process takes work, 503 while it starts or drains; the body names `homes.ru`, `homes.eu`, `valkey`, `cache`, `storage` and each slice's probes `ok` or `down`, each within 2 s) and `GET /metrics` (the process registry; OpenMetrics when asked, for exemplars). A dependency that is down never fails readiness (F1-C2): it is alerted through metrics.
+- **Start**, each step named in the one critical line when it fails, exit code 1: settings and the production gate → logs, metrics, traces → the ops server → `features` (no slice listed twice) → `databases` (one engine per home; another home's database or a schema behind the code stops the start, a home out of reach does not) → `shared_services` → `tasks` → `feature:<name>` for each slice → `events` (catalog, every task registered) → `probes` (each name once) → the role. Valkey, the cache and the bucket are not contacted at start, so their outage never stops it (§13.2).
+- **Stop** on SIGTERM or SIGINT: readiness turns 503 at once → the role drains (in-flight requests up to 20 s, running tasks up to 20 s — the rest return to their queue after the lease — and the loops' current iteration) → the slices, the clients and the engines close → the ops server stops → spans are exported within 5 s and the log queue written out. The stop fits a 30 s container grace period (F4 sets `stop_grace_period: 30s`). The public server keeps an idle connection 75 s, so the edge's idle upstream connections (NGINX: 60 s by default) must stay shorter. A server or worker that ends by itself stops the process with exit code 1, so the orchestrator restarts it.
+- **Loops** (`core/runtime/loops.py`) run at start and then once per interval, never as a backlog; an iteration has a deadline (10 s by default), a failing one is logged with its stack and counted in `whisperer_loop_failures_total{loop}`, and the loop goes on. `whisperer_loop_last_success_timestamp{loop}` and `whisperer_loop_interval_seconds{loop}` let an alert tell a stuck loop from a slow one. A loop only queues tasks or reads gauges; workers do the work (§4.2).
+
+### Run locally
+
+With the local environment up ([docs/development.md](../docs/development.md), "Run the backend"):
+
+```bash
+uv run --env-file ../.env whisperer migrate upgrade
+uv run --env-file ../.env whisperer api
+OPS_PORT=9101 uv run --env-file ../.env whisperer scheduler
+OPS_PORT=9102 uv run --env-file ../.env whisperer workers --queue critical
+```
+
+Several roles on one machine need different ports; in containers each process has its own.
+
+## Adding a slice
+
+A slice is a package `features/<name>/` whose public surface is `contracts.py` (the import-linter contract "Features meet through contracts"). Inside, `channels` (HTTP, WS, tasks, consumers) → `application` → `domain`, with `infrastructure` implementing the domain's ports; the domain imports no framework.
+
+1. Declare one `FeatureModule` (`core/features.py`) in the slice: `name` (its package), `contract_slice` (its id in the plan and in D1, such as `S04`), `models`, `events`, `production_checks` and `build`.
+2. `build(services: CoreServices)` is an async context manager entered at start in every role and left at stop. It receives the process's `transactions`, `tasks` (the sender), `outbox`, `cache`, `objects`, `uploads`, `locks`, `rate_limiter`, `valkey`, `settings`, `registry` and `tracer_provider`, opens the slice's own clients, and yields `FeatureParts`: `http_routers`, `ws_routers`, `task_handlers`, `subscriptions`, `loops` and `probes`. Each role uses only its part; every role registers every task.
+3. Add the module to `FEATURES` in `composition/features.py`. Its models join the metadata Alembic and the schema test compare; its routes join the route snapshot (`tests/composition/public_routes.json`, updated in the same commit) and the D1 gate checks the draft routes its `contract_slice` owns.
+4. Register every source of model-facing text in `tests/model_facing/registry.py`, and add the slice's variables to `.env.example` section 2.
+
+`tests/composition/fixture_features.py` shows two slices that use every part; `tests/composition/test_platform.py` proves each part is wired.
 
 ## Tests
 
