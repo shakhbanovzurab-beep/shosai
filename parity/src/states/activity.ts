@@ -41,6 +41,15 @@ async function newTicket(page: Page, { t }: StateContext): Promise<void> {
 }
 
 const ticketDialog = (t: Translate): string => `dialog[aria-label=${JSON.stringify(t("support:support.ticket"))}]`;
+const newTicketDialog = (t: Translate): string => `dialog[aria-label=${JSON.stringify(t("support:support.newTicket"))}]`;
+
+/** Снимок экрана, который человек прикрепляет к обращению: 48 КБ нулей. */
+const SCREENSHOT = Buffer.alloc(48_213);
+
+async function attach(page: Page, { t }: StateContext): Promise<void> {
+  await page.locator(`input[type=file][aria-label=${JSON.stringify(t("support:support.attach"))}]`)
+    .setInputFiles({ name: "skrinshot.png", mimeType: "image/png", buffer: SCREENSHOT });
+}
 
 export const ACTIVITY_STATES: readonly State[] = [
   activity("home.populated", () => "table[role=grid]", { scope: "full" }),
@@ -92,7 +101,7 @@ export const ACTIVITY_STATES: readonly State[] = [
     reveal: true,
     act: async (page) => page.locator("button[aria-controls='faq-panel-1']").click(),
   }),
-  support("new-ticket-modal", (t) => `dialog[aria-label=${JSON.stringify(t("support:support.newTicket"))}]`, { act: newTicket }),
+  support("new-ticket-modal", (t) => newTicketDialog(t), { act: newTicket }),
   support("thread-modal", (t) => withText(ticketDialog(t), "kalendar.png"), { act: openTicket("Не подключается Google Календарь") }),
   support("thread-modal.resolved", (t) => withText(ticketDialog(t), "DOCX"), { act: openTicket("Как скачать стенограмму встречи в Word?") }),
   support("thread-modal.loading", (t) => `${ticketDialog(t)} svg.spin`, {
@@ -103,14 +112,22 @@ export const ACTIVITY_STATES: readonly State[] = [
     t("support:support.deleteConfirm")), {
     act: async (page, { t }) => page.locator(`button[aria-label=${JSON.stringify(t("support:support.delete"))}]`).first().click(),
   }),
+  support("new-ticket.attachments", (t) => `${newTicketDialog(t)} button[aria-label=${JSON.stringify(t("support:support.attachRemove"))}]`, {
+    overrides: [reply("POST", "/v1/me/tickets/attachments", 201,
+      { id: "00000000-0000-4000-8000-00000000a7a1", filename: "skrinshot.png", mime: "image/png", size: SCREENSHOT.length },
+      "вложения хранятся в S3; у стенда записи его нет — ответ по схеме черновика")],
+    act: async (page, context) => {
+      await newTicket(page, context);
+      await attach(page, context);
+    },
+  }),
   support("attach-error", (t) => withText("[role=alert]", t("support:support.attachFailed")), {
     expectsAlert: true,
     overrides: [reply("POST", "/v1/me/tickets/attachments", 503, { detail: "storage_unavailable" },
       "вложения хранятся в S3; ответ — как у черновика без него")],
     act: async (page, context) => {
       await newTicket(page, context);
-      await page.locator(`input[type=file][aria-label=${JSON.stringify(context.t("support:support.attach"))}]`)
-        .setInputFiles({ name: "skrinshot.png", mimeType: "image/png", buffer: Buffer.from("parity") });
+      await attach(page, context);
     },
   }),
 ];

@@ -88,6 +88,15 @@ export const STREAMS_STUDIO_STATES: readonly State[] = [
   studio("chat", (t) => exactText(t("streams:stream.chat.title")), {
     act: async (page, { t }) => page.locator(dockButton(t("streams:stream.chat.title"))).click(),
   }),
+  studio("end-failed", (t) => withText("[role=alert]", t("streams:stream.studio.endFailed")), {
+    expectsAlert: true,
+    overrides: [serverError("POST", "/v1/me/streams/{id}/end")],
+    act: async (page, { t }) => {
+      await page.locator(dockButton(t("streams:stream.studio.end"))).click();
+      const dialog = page.locator(`dialog[aria-label=${JSON.stringify(t("streams:stream.studio.confirmEndTitle"))}]`);
+      await dialog.getByRole("button", { name: t("streams:stream.studio.end"), exact: true }).click();
+    },
+  }),
   scheduled("start-failed", (t) => withText("[role=alert]", t("streams:stream.studio.startFailed")), {
     expectsAlert: true,
     overrides: [serverError("POST", "/v1/me/streams/{id}/start")],

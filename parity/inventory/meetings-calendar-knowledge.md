@@ -334,7 +334,7 @@ SSE, via `@microsoft/fetch-event-source`. Both send `Authorization: Bearer` from
 | calendar.day | Toggle "День", or click a week header day | Single column of hour slots, no sticky header | GET events (day range) |
 | calendar.zoom | Viewport ≥1560px, view week or day | `input[type=range][aria-label="Zoom"]` + "100%" | — |
 | calendar.toolbar-compact | Viewport ≤1360px / ≤1200px / ≤900px | Square icon buttons `[aria-label="Интеграции"]`, `[aria-label="Встреча"]` with `data-onboarding="calendar-meet"`, and "Стрим" | — |
-| calendar.sidebar-day-events / upcoming | Events on the selected date or in the future | Headings "События дня" / "Ближайшие" with `EventRow` items | — |
+| calendar.sidebar-day-events / sidebar-upcoming | Events on the selected date or in the future | Headings "События дня" / "Ближайшие" with `EventRow` items | — |
 | calendar.mobile | Viewport ≤860px | No sidebar | — |
 | calendar.context-menu-slot | Right-click a month cell or an hour slot | Single item "Добавить" | — |
 | calendar.context-menu-event | Right-click an event | Items "Открыть" and "Удалить" | DELETE /v1/me/calendar/events/{id} (optimistic) |
@@ -540,6 +540,7 @@ Draft defects visible on screen. By decision 4 of the D2 plan they stay out of t
 2. **Russian plural forms are missing for «попытка».** The ru catalog has only `attempt_one` and `attempt_other`. Russian `2` needs `few`, so i18next falls back to English and shows «attempt 2» on the processing panel (`features/meetings/locales/ru.json`, `meet.detail.processing.attempt`).
 3. **A private meeting offers to send itself out.** The actions menu of an `ephemeral` meeting lists «Отправить» → Slack / Notion next to «Приватная встреча (no-logs) — наружу не передаётся».
 4. **The shared page logo lives outside the SPA.** `SharedMeetingPage` loads `/icon-512.png` from the site root, which only the backend serves. This is not a defect of the screen, but the harness must serve the draft's root icons (`scripts/export-draft.sh`).
+5. **The shared page spins forever on a failed request.** When `GET /v1/meetings/shared/{token}` answers 5xx or the network fails, `.catch` sets the result to `null` and the spinner never ends (`SharedMeetingPage.tsx:107`, `:161`). Out of the baseline; v2 shows an error. Recorded in step 8 of D2, when the inventory coverage check found the row without a decision.
 
 ### Coverage in the screenshot matrix (step 4 of D2)
 
@@ -565,7 +566,7 @@ Draft defects visible on screen. By decision 4 of the D2 plan they stay out of t
 | `meetings.integrations.card-connect-error` | `meetings.integrations.connect-error-validation`, `-upstream`, `-generic` |
 | `meetings.integrations.oauth-toast` | `meetings.integrations.oauth-toast-ok`, `-attio`, `-error` |
 | `meetings.shared.comments-open` | `meetings.shared.comment-failed` (the form, scrolled into view) |
-| `calendar.month.overflow`, `calendar.sidebar-day-events` | `calendar.month.populated` |
+| `calendar.month.overflow`, `calendar.sidebar-day-events`, `calendar.sidebar-upcoming` | `calendar.month.populated` |
 | `calendar.mobile`, `calendar.toolbar-compact` | the mobile cells of the calendar states (compaction below 900 px) |
 | `calendar.event-modal-edit` | `calendar.event-modal-meeting`, `-stream`, `-session-link` |
 | `calendar.ical-rotate-confirm` | `calendar.integrations-ical-rotate-confirm` |
@@ -582,6 +583,8 @@ Draft defects visible on screen. By decision 4 of the D2 plan they stay out of t
 | `meetings.layout.chunk-loading` | a lazy chunk loading; the harness serves chunks from disk at once and overrides only `/v1` |
 | `meetings.detail.share-copied` | lives 1.6 s on a real timer and needs clipboard permission |
 | `meetings.detail.enhanced-error` for 402, 429, a drop; `actions-menu-private`; the «попытка N» label | draft defects (Findings 1–3) |
+| `meetings.shared.loading-stuck` | draft defect (Finding 5) |
+| `context.saved` | «Сохранено» lives 2 s on a real timer |
 | `calendar.zoom` | needs a viewport of 1560 px or wider; the matrix desktop is 1440 px |
 | `kb.files.packing` | lasts only while the browser zips a picked folder |
 

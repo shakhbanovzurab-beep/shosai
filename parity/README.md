@@ -59,8 +59,9 @@ Screenshots are taken only inside the pinned Playwright container ([`compose.yam
    - `reveal`: the marker is below the edge of the screen; once the page has settled, the marker is scrolled to the centre of its scroll area (always the same position, whatever the action scrolled before) and the page settles again before the screenshot.
    - `keepPointer`: the state is a hover; the pointer stays where the action left it.
 3. **Texts** in markers and actions come from the draft's translation catalogs by key: `t("billing:cab.tariffs")`. Use literal keys, then run `npm run texts`.
-4. **Baseline**: `npm run baseline -- --grep "<feature>\."`, then `npm run verify -- --grep "<feature>\."` must report no differences.
-5. **Commit** the visits, fixtures, state definitions, `texts.json` and `baseline/manifest.json`. The images are already in S3.
+4. **Coverage**: a state of the inventory that is not screenshotted under its own id gets a row in its group's «Coverage in the screenshot matrix» section — captured inside another screenshot, or left out with a reason. `npm test` fails on a state with neither ([inventory/README.md](inventory/README.md)).
+5. **Baseline**: `npm run baseline -- --grep "<feature>\."`, then `npm run verify -- --grep "<feature>\."` must report no differences.
+6. **Commit** the visits, fixtures, state definitions, `texts.json` and `baseline/manifest.json`. The images are already in S3.
 
 ## What makes a screenshot repeatable
 

@@ -141,7 +141,7 @@ Manifest: `feature.ts:24`. Register mode is triggered at `LoginPage.tsx:149-156`
 | state id | how to reach | marker | endpoints |
 |---|---|---|---|
 | `auth.register.default` | `/app/register` | `h1` «Знакомимся», «Создайте аккаунт — 60 минут бесплатно.», fields «Имя» (autofocus), «Email», «Пароль», two consent checkboxes («Я ознакомлен(а) с политикой, офертой и даю согласие на обработку персональных данных», «Я даю согласие на получение информационных рассылок»), «Зарегистрироваться» disabled, **no social buttons**, link «Уже есть аккаунт? Войти» | providers |
-| `auth.register.pw-weak` / `fair` / `good` / `strong` | password `abc` / `Abcdefgh` / `Abcdefg1` / `Abcdef1!` | Strength label «Слабый» / «Средний» / «Хороший» / «Надёжный»; unmet-rule chips «Не меньше 8 символов», «Строчные и прописные», «Хотя бы одна цифра», «Хотя бы один спецсимвол» (`/root/whisperer/frontend/src/features/auth/ui/PasswordStrength.tsx:17-23,69-84`) | — |
+| `auth.register.pw-weak` / `pw-fair` / `pw-good` / `pw-strong` | password `abc` / `Abcdefgh` / `Abcdefg1` / `Abcdef1!` | Strength label «Слабый» / «Средний» / «Хороший» / «Надёжный»; unmet-rule chips «Не меньше 8 символов», «Строчные и прописные», «Хотя бы одна цифра», «Хотя бы один спецсимвол» (`/root/whisperer/frontend/src/features/auth/ui/PasswordStrength.tsx:17-23,69-84`) | — |
 | `auth.register.ready` | name + email + password + first checkbox + captcha | Button enabled | — |
 | `auth.register.error-email-invalid` | email `abc` (everything else valid) | toast «Введите корректный email.» (no request) | — |
 | `auth.register.error-password-short` | password shorter than 8 | toast «Пароль должен быть не короче 8 символов.» | — |
@@ -439,24 +439,24 @@ Always called while the cabinet is open: `GET /v1/me` (every 15 s) and `GET /v1/
 |---|---|---|---|
 | `account.cabinet.loading` | first open, chunk loading | Direct route: content `svg.spin`. Modal: may flash the **full-screen** spinner (App-level Suspense, App.tsx:86). | — |
 | `account.cabinet.general` | `/app/cabinet` | Section «Внешний вид» with hint «Тема действует в этом браузере…»; tiles «Светлая» / «Тёмная» / «Система» (`aria-pressed`); «Шрифт» tiles Whisperer / Sans / Serif / Native / Mono with sample «Аа Бб»; row «Язык» showing «Русский»; «Часовой пояс» with local time `HH:MM` + combobox; «Рассылки» switch `[role=switch][aria-label="Получать информационные рассылки"]`; «Обучение» «Пройти заново» | `/v1/me`, `/v1/me/referral` |
-| `account.cabinet.general.theme-dark` / `system` | click «Тёмная» / «Система» | `html[data-theme=dark]`; `wh.theme` | — |
+| `account.cabinet.general.theme-dark` / `theme-system` | click «Тёмная» / «Система» | `html[data-theme=dark]`; `wh.theme` | — |
 | `account.cabinet.general.font-serif` (and the other roles) | click a tile | `html[data-font=serif]` (attribute removed for Whisperer) | `PATCH /v1/me/profile {appearance:{font}}`; error toast «Не удалось сохранить настройку. Она действует только на этом устройстве.» |
 | `account.cabinet.general.lang-menu` | click `button[aria-label="Язык"]` | 16-item list | `PATCH /v1/me/profile {language}` on pick |
 | `account.cabinet.general.tz-open` | click the button «Часовой пояс» (a `button`, not a combobox — checked in step 3 of D2) | listbox + search `aria-label="Поиск…"` | `PATCH /v1/me/profile {timezone}`; error «Не удалось сохранить часовой пояс» |
-| `account.cabinet.general.marketing-on` / `off` | `user.marketing_consent` | switch `aria-checked` | `PATCH …{marketing_consent}`; error «Не удалось сохранить настройку рассылок» |
+| `account.cabinet.general.marketing-on` / `marketing-off` | `user.marketing_consent` | switch `aria-checked` | `PATCH …{marketing_consent}`; error «Не удалось сохранить настройку рассылок» |
 | `account.cabinet.profile` | `/app/cabinet/profile` | «Профиль», avatar initial, name or «Как к вам обращаться», email, «Сменить аватар», inputs «Имя» / «Email» (disabled), status «Изменения сохраняются автоматически», danger row «Удалить аккаунт», row «Выход из аккаунта» + «Выйти» | — |
 | `account.cabinet.profile.saving` / `saved` | type a name, wait 700 ms | «Сохранение…» → «✓ Изменения сохранены» | `PATCH /v1/me/profile {username}` → `GET /v1/auth/me` |
 | `account.cabinet.profile.avatar-uploading` / `avatar-error` | pick a file; upload pending or 413 | «Загрузка…» / «Не удалось загрузить. PNG/JPEG/WEBP/GIF до 512 КБ.» | `POST /v1/me/avatar` (multipart) → `{avatar_url}` |
 | `account.cabinet.profile.delete-confirm` | click «Удалить аккаунт» | `dialog[aria-label="Удалить аккаунт"]`, warning text, input «Наберите {email}, чтобы подтвердить», «Отмена», danger button disabled until the email matches | — |
-| `account.cabinet.profile.delete-error` / `success` | DELETE → 500: toast «Не удалось удалить аккаунт.»; 200: `wh-auth` cleared and `location.replace('/app/login')` | | `DELETE /v1/me/data/account {confirm_email}` |
+| `account.cabinet.profile.delete-error` / `delete-success` | DELETE → 500: toast «Не удалось удалить аккаунт.»; 200: `wh-auth` cleared and `location.replace('/app/login')` | | `DELETE /v1/me/data/account {confirm_email}` |
 | `account.cabinet.profile.logout` | «Выйти» | full reload to `/app/login` | `POST /v1/auth/logout` |
 | `account.cabinet.leo` | paid user, `/cabinet/leo` | Leo blocks (personalisation, connectors, initiative, memory, errands, capabilities). APIs belong to the Leo feature. | features/leo |
 | `account.cabinet.mcp` | paid user, `/cabinet/mcp` | Segmented toggle «Сервер» / «Клиент» + hint. APIs belong to the MCP feature. | features/mcp |
 | `account.cabinet.subscription` / `billing` | see the Billing section below | | |
 | `account.cabinet.data` | `/cabinet/data` | «Приватность»: switches `aria-label="Включить режим no-logs"` and «Заводить задачи из встреч автоматически»; «Использование» 2×2 grid «Сессий» / «Минут» / «Ответов AI» / «Токенов»; panels «Экспорт данных» and «Удалить всё» | `GET /v1/me/data/export` |
-| `account.cabinet.data.export-none` / `pending` / `ready` / `failed` | export → `null`; `{status:"pending"\|"running"}` (polls every 3 s); `{status:"ready", download_url}`; `{status:"failed"}` | «Запросить архив» / «Готовим архив…» / extra «Скачать архив» + «Ссылка действует 24 часа…» / red «Не удалось собрать архив. Попробуйте позже.» | `DataExportJob` (`/root/whisperer/frontend/src/features/account/api.ts:15-22`) |
+| `account.cabinet.data.export-none` / `export-pending` / `export-ready` / `export-failed` | export → `null`; `{status:"pending"\|"running"}` (polls every 3 s); `{status:"ready", download_url}`; `{status:"failed"}` | «Запросить архив» / «Готовим архив…» / extra «Скачать архив» + «Ссылка действует 24 часа…» / red «Не удалось собрать архив. Попробуйте позже.» | `DataExportJob` (`/root/whisperer/frontend/src/features/account/api.ts:15-22`) |
 | `account.cabinet.data.export-requested` | click «Запросить архив» | toast «Собираем архив. Пришлём ссылку на почту, когда будет готов.» | `POST /v1/me/data/export` |
-| `account.cabinet.data.purge-confirm` / `done` / `failed` | «Удалить всё» → confirm modal; then toast «Все данные удалены.» or «Не удалось удалить данные.» | | `POST /v1/me/data/purge {confirm_email}` → `{files_removed}` |
+| `account.cabinet.data.purge-confirm` / `purge-done` / `purge-failed` | «Удалить всё» → confirm modal; then toast «Все данные удалены.» or «Не удалось удалить данные.» | | `POST /v1/me/data/purge {confirm_email}` → `{files_removed}` |
 | `account.cabinet.data.toggle-error` | PATCH fails | «Не удалось сохранить режим no-logs» / «Не удалось сохранить настройку» | `PATCH /v1/me/profile` |
 
 Hazards: the timezone row shows the current time (CabinetSettings.tsx:608-618); the timezone list comes from `Intl.supportedValuesOf`; `.pop` card animation; font tiles load all role CSS (`ensureAllRoles`); hover styles are written inline.
@@ -680,8 +680,8 @@ Every state of this document is either a state in the registry ([src/states/](..
 | `auth.login.poster`, `auth.login.mobile`, `auth.login.social-ru` | `auth.login.default` (desktop and mobile cells; the recording runs with `CF-IPCountry: RU`) |
 | `auth.login.social-tip-open` | `auth.login.social-tip` |
 | `auth.connect.anon` | `auth.connect.anonymous` |
-| `auth.login.success`, `auth.login.redirect-authed`, `onboarding.welcome-later`, `onboarding.tour.later` | `shell.user`: each ends on the signed-in home |
-| `boot.refresh-dead`, `account.cabinet.profile.logout` | `auth.login.default`: each ends on the sign-in page |
+| `auth.login.success`, `auth.login.redirect-authed`, `onboarding.welcome-later`, `onboarding.tour.later`, `onboarding.tour.skip` | `shell.user`: each ends on the signed-in home |
+| `boot.refresh-dead`, `account.cabinet.profile.logout`, `account.cabinet.profile.delete-success` | `auth.login.default`: each ends on the sign-in page |
 | `boot.refresh-network`, `shell.connection-probing`, `shell.connection-calm` | `shell.connection-lost` (probing, reduced motion) |
 | `shell.desktop-full`, `shell.nav-active`, `shell.hub-beta`, `shell.ticker` | `shell.user` |
 | `shell.theme-toggle`, `account.cabinet.general.theme-dark` | the dark cells of every full-scope state |
@@ -693,8 +693,10 @@ Every state of this document is either a state in the registry ([src/states/](..
 | `onboarding.restart` | `onboarding.tour.step-1` |
 | `account.cabinet.subscription`, `billing.tariffs.grid`, `billing.upgrade.methods` | `billing.subscription.*` |
 | `account.cabinet.data.export-none` | `account.cabinet.data` |
+| `account.cabinet.general.marketing-off` | `account.cabinet.general`: the seeded users have not agreed to mailings |
+| `account.cabinet.billing` | `billing.payments.*` (the «Оплата» tab) |
 | `billing.premium-limits` | `billing.subscription.max` |
-| `billing.billing.card`, `billing.renewal.not-eligible`, `billing.history.empty` | `billing.payments.card`, `billing.payments.empty` |
+| `billing.billing.card`, `billing.renewal.not-eligible`, `.on`, `billing.history.empty`, `.rows` | `billing.payments.card`, `billing.payments.empty` |
 | `billing.card-sheet.errors` | `billing.card-sheet.too-many`, `not-eligible`, `unavailable` |
 | `referral.mobile` | the mobile cells of `referral.populated` |
 | `hotkeys.crash` | `route.error-fallback` (the same trigger) |
@@ -707,8 +709,8 @@ Every state of this document is either a state in the registry ([src/states/](..
 | `billing.pay-return.*` | the toasts show raw translation keys (finding 1). **Decided by the owner on 2026-10-01: v2 shows the translated texts** («Оплата прошла…» and the rest of `billing:cab.paySuccess`, `payFailed`, `payProcessing`), so the draft's screen is not a baseline. The billing slice checks these toasts with its own tests |
 | `referral.error`, `hotkeys.error-load` | render exactly as `referral.loading` and `hotkeys.loading` (finding 4) |
 | `auth.login.social-return-busy` | no visible change: the submit button is disabled, as on an empty form |
-| `auth.captcha.loading`, `ready`, `dead`, `stalled` | the Turnstile widget is a third-party script; the harness stubs it with a fixed 300 × 65 frame |
-| `auth.verify.resend-ready`, `auth.verify.resent` | the resend button unlocks after 60 s on a real timer |
+| `auth.captcha.loading`, `ready`, `solved`, `dead`, `stalled` | the Turnstile widget is a third-party script; the harness stubs it with a fixed 300 × 65 frame |
+| `auth.verify.resend-ready`, `auth.verify.resent`, `auth.verify.resend-failed` | the resend button unlocks after 60 s on a real timer |
 | `auth.reset.done` | lives 1.8 s on a real timer, then navigates to `/login`, which is screenshotted |
 | `referral.copied` | lives 1.5 s on a real timer and needs clipboard permission |
 | `boot.i18n-pending` | an empty `#root` for the moment before React mounts |
@@ -717,7 +719,7 @@ Every state of this document is either a state in the registry ([src/states/](..
 | `shell.toast.warning` | no flow of this group raises a warning toast |
 | `shell.tablet` | the tablet layout is not in the matrix (plan §2) |
 | `onboarding.audio.*` | subtitles follow the playback time of an mp3 |
-| `billing.checkout.sheet`, `billing.card-sheet.form`, `stuck`, `broken` | the CloudPayments widget is a third-party script and iframe; the harness stubs third-party scripts |
+| `billing.checkout.sheet`, `.broken`, `.settling`, `billing.card-sheet.form`, `.stuck`, `.broken` | the CloudPayments widget is a third-party script and iframe; the harness stubs third-party scripts |
 | `billing.checkout.redirect`, `downloads.click` | navigate away from the app |
 | `account.cabinet.leo`, `account.cabinet.mcp` | belong to the Leo and MCP features (step 5) |
 | `paywall.premium-locked` | renders on routes of other groups; captured with them |

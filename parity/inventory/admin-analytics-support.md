@@ -179,23 +179,23 @@ Access `admin`, inside the shell. Page: `features/platform-admin/admin/TariffsPa
 
 ## /admin/ai-models (models feature)
 
-Access `admin`, inside the shell. Page: `features/models/admin/AiModelsPage.tsx`. Sections are numbered 01–05 with h2 titles.
+Access `admin`, inside the shell. Page: `features/models/admin/AiModelsPage.tsx`. Sections are numbered 01–05 with h2 titles. The page is also inventoried in [leo-prompts-models-mcp-hub.md](leo-prompts-models-mcp-hub.md) and captured with that group (step 5); the ids below are the ids of the registry.
 
 | state id | how to reach | marker | endpoints |
 |---|---|---|---|
-| `admin.ai-models.populated` | all fixtures | h1 "Модели и расходы (OpenRouter)"; h2 "Баланс OpenRouter", "Расходы по моделям", "Реестр моделей (импорт из OpenRouter)", "Каталог моделей", "Дефолты моделей" | see the endpoint list below |
-| `admin.ai-models.balance.loading` / `.error` / `.populated` | balance request | error: "Баланс OpenRouter недоступен."; cards "Баланс (остаток)", "Пополнено", "Израсходовано" in `$` with en-US format | GET /v1/admin/models/balance |
-| `admin.ai-models.usage.empty` / `.populated` | usage `[]` or rows | "Расходов по моделям пока нет." / table "Модель", "Вход (ток.)", "Выход (ток.)", "USD", "RUB" | GET /v1/admin/models/usage |
-| `admin.ai-models.registry.empty` / `.populated` | registry `[]` or rows | "Реестр пуст — импортируйте модель выше." / headers "Тип", "Тир", "Версия", "Цена вх.", "Цена вых.", "USD", "Вкл."; `role=switch` with aria-label "Включена <display>" | GET /v1/admin/models/registry (and usage) |
-| `admin.ai-models.registry.price-dirty` | edit `input[aria-label="Цена вход <display>"]` | button "Сохранить цену" | PATCH /v1/admin/models/registry/{id} |
-| `admin.ai-models.registry.delete-confirm` | click `[aria-label="Удалить <display> из реестра"]` | `dialog[aria-label="Удалить модель"]` with "…Историческая статистика расходов сохранится." | DELETE /v1/admin/models/registry/{id} |
-| `admin.ai-models.import.preview` | fill "Тикер модели (provider/model)", click "Получить спеки" | display name, tag with the model id, "N ctx", selects "Группа (тир)" and "Тип", button "Добавить в реестр" | GET /v1/admin/models/registry/preview?ticker=… |
-| `admin.ai-models.import.price-unknown` | `price_known:false` | tag "цена не задана — введите вручную"; "Добавить в реестр" disabled | same |
-| `admin.ai-models.import.error` | preview fails | "Не удалось получить спеки: проверьте тикер и доступность OpenRouter." | same |
-| `admin.ai-models.catalog.populated` | configs | headers "№", "Модель", "Провайдер", "Тип", "Группа", "Источник", "Вкл."; tags "реестр" / "встроенная"; "в коде"; "✓" / "—" | GET /v1/me/models/configs |
-| `admin.ai-models.defaults.loading` / `.populated` | defaults and catalog | matrix headers "Тариф", "Ответы", "Код", "Зрение", "System Design", "Генерация", "Транскрипция"; triggers `aria-label="Модель для Free · Ответы"`; card "Модель агента Leo"; button "Сохранить дефолты" | GET /v1/admin/models/model-defaults, GET /v1/me/models/configs |
-| `admin.ai-models.defaults.stale-cell` | a cell value is not among the eligible options | option "<id> (вне каталога)" or "(без зрения)" | — |
-| `admin.ai-models.defaults.error` | empty cell, or PUT error | "Заполните все ячейки матрицы." or another `ERR` text (`ModelDefaults.tsx:22-28`) | PUT /v1/admin/models/model-defaults |
+| `admin-models.populated` | all fixtures | h1 "Модели и расходы (OpenRouter)"; h2 "Баланс OpenRouter", "Расходы по моделям", "Реестр моделей (импорт из OpenRouter)", "Каталог моделей", "Дефолты моделей" | see the endpoint list below |
+| `admin-models.balance.loading` / `.error` / `.ok` | balance request | error: "Баланс OpenRouter недоступен."; cards "Баланс (остаток)", "Пополнено", "Израсходовано" in `$` with en-US format | GET /v1/admin/models/balance |
+| `admin-models.usage.empty` / `.populated` | usage `[]` or rows | "Расходов по моделям пока нет." / table "Модель", "Вход (ток.)", "Выход (ток.)", "USD", "RUB" | GET /v1/admin/models/usage |
+| `admin-models.registry.empty` / `.populated` | registry `[]` or rows | "Реестр пуст — импортируйте модель выше." / headers "Тип", "Тир", "Версия", "Цена вх.", "Цена вых.", "USD", "Вкл."; `role=switch` with aria-label "Включена <display>" | GET /v1/admin/models/registry (and usage) |
+| `admin-models.registry.dirty-price` | edit `input[aria-label="Цена вход <display>"]` | button "Сохранить цену" | PATCH /v1/admin/models/registry/{id} |
+| `admin-models.registry.delete-confirm` | click `[aria-label="Удалить <display> из реестра"]` | `dialog[aria-label="Удалить модель"]` with "…Историческая статистика расходов сохранится." | DELETE /v1/admin/models/registry/{id} |
+| `admin-models.import.preview` | fill "Тикер модели (provider/model)", click "Получить спеки" | display name, tag with the model id, "N ctx", selects "Группа (тир)" and "Тип", button "Добавить в реестр" | GET /v1/admin/models/registry/preview?ticker=… |
+| `admin-models.import.price-unknown` | `price_known:false` | tag "цена не задана — введите вручную"; "Добавить в реестр" disabled | same |
+| `admin-models.import.error` | preview fails | "Не удалось получить спеки: проверьте тикер и доступность OpenRouter." | same |
+| `admin-models.catalog` | configs | headers "№", "Модель", "Провайдер", "Тип", "Группа", "Источник", "Вкл."; tags "реестр" / "встроенная"; "в коде"; "✓" / "—" | GET /v1/me/models/configs |
+| `admin-models.defaults.loading` / `admin-models.defaults` | defaults and catalog | matrix headers "Тариф", "Ответы", "Код", "Зрение", "System Design", "Генерация", "Транскрипция"; triggers `aria-label="Модель для Free · Ответы"`; card "Модель агента Leo"; button "Сохранить дефолты" | GET /v1/admin/models/model-defaults, GET /v1/me/models/configs |
+| `admin-models.defaults.stale-cell` | a cell value is not among the eligible options | option "<id> (вне каталога)" or "(без зрения)" | — |
+| `admin-models.defaults.error` | empty cell, or PUT error | "Заполните все ячейки матрицы." or another `ERR` text (`ModelDefaults.tsx:22-28`) | PUT /v1/admin/models/model-defaults |
 
 - **Response shapes** (`features/models/contracts/types.ts`): `OpenRouterBalance` :84, `ModelUsageRow` :91, `RegistryModel` :15, `RegistryPreview` :1, `CatalogModelOut` :61, `ModelDefaultsOut` :116.
 - **Hazards:**
@@ -371,21 +371,21 @@ Access `admin`, inside the shell. Page: `features/referral/admin/AffiliatesPage.
 
 ## /admin/livekit (rooms feature)
 
-Access `admin`, inside the shell. Page: `features/rooms/admin/LivekitPage.tsx`.
+Access `admin`, inside the shell. Page: `features/rooms/admin/LivekitPage.tsx`. The page is also inventoried in [rooms-streams-storage-tracker.md](rooms-streams-storage-tracker.md) and captured with that group (step 6); the ids below are the ids of the registry.
 
 | state id | how to reach | marker | endpoints |
 |---|---|---|---|
-| `admin.livekit.loading` | hold health | spinner under "Видео-инфраструктура" | GET /v1/admin/livekit/health |
-| `admin.livekit.sfu-down` | `{status:"down",detail:"not_configured"}` | tag "SFU недоступен", "Видео-комнаты неактивны. SFU не сконфигурирован (нет ключей LIVEKIT_*) — функция дормантна."; sections absent | health only; stats is not requested |
-| `admin.livekit.sfu-ok` | `{status:"ok",checked_at,recording_available}` | tag "SFU в норме", "проверено в HH:MM:SS"; metrics "Комнат", "Участников", "Публикуют", "Подписок", "Записей идёт", "Нагрузка узла"; h2 "Активные комнаты", "Записи", "Журнал вмешательств" | health, GET /v1/admin/livekit/stats, GET /v1/admin/livekit/egress, GET /v1/admin/livekit/audit?limit=30 |
-| `admin.livekit.load-warn` | `load_pct >= 75` | the "N%" value is red (`text-destructive`) | stats |
-| `admin.livekit.recording-off` | `recording_available:false` | tag "запись выключена" | health |
-| `admin.livekit.rooms.empty` / `.populated` | `stats.rooms` | "Активных комнат нет." / headers "Комната", "Владелец", "Участники", "Идёт", "Состояние"; tags "сирота", "запись", "E2EE", "закрыта в БД"; "публикуют: N · подписок: M" | stats |
-| `admin.livekit.room-expanded.*` | click `[aria-label="Участники комнаты <title>"]` (`aria-expanded`) | loading spinner; error "Не удалось получить участников комнаты."; empty "В комнате никого нет."; table "Участник", "Состояние", "В комнате", "Публикует" with tags "бот записи", "зритель стрима", "только смотрит", "камера", "микрофон · выкл", and "Отключить" | GET /v1/admin/livekit/rooms/{name} |
-| `admin.livekit.close-confirm` / `.kick-confirm` | "Завершить" / "Отключить" | `dialog[aria-label="Завершить комнату"]` / `dialog[aria-label="Отключить участника"]` | POST …/rooms/{name}/close, POST …/participants/{id}/remove |
-| `admin.livekit.egress.unavailable` / `.empty` / `.active` / `.stuck` | egress fixture | "Запись выключена: не заданы ключи S3-хранилища…" / "Активных записей нет." / tags "идёт", "запускается", "сбой", "идёт N мин", "Остановить" / "Зависшие записи" with "висит N мин" | egress |
-| `admin.livekit.stop-confirm` | "Остановить" | `dialog[aria-label="Остановить запись"]` | POST /v1/admin/livekit/egress/{id}/stop?lk_room=… |
-| `admin.livekit.audit.empty` / `.populated` | audit | "Админы ещё не вмешивались в чужие звонки — журнал пуст." / rows "завершил комнату" etc., "не удалось" | audit |
+| `livekit.loading` | hold health | spinner under "Видео-инфраструктура" | GET /v1/admin/livekit/health |
+| `livekit.health.down` | `{status:"down",detail:"not_configured"}` | tag "SFU недоступен", "Видео-комнаты неактивны. SFU не сконфигурирован (нет ключей LIVEKIT_*) — функция дормантна."; sections absent | health only; stats is not requested |
+| `livekit.health.ok` | `{status:"ok",checked_at,recording_available}` | tag "SFU в норме", "проверено в HH:MM:SS"; metrics "Комнат", "Участников", "Публикуют", "Подписок", "Записей идёт", "Нагрузка узла"; h2 "Активные комнаты", "Записи", "Журнал вмешательств" | health, GET /v1/admin/livekit/stats, GET /v1/admin/livekit/egress, GET /v1/admin/livekit/audit?limit=30 |
+| `livekit.health.load-warn` | `load_pct >= 75` | the "N%" value is red (`text-destructive`) | stats |
+| `livekit.health.recording-off` | `recording_available:false` | tag "запись выключена" | health |
+| `livekit.rooms.empty` / `.populated` | `stats.rooms` | "Активных комнат нет." / headers "Комната", "Владелец", "Участники", "Идёт", "Состояние"; tags "сирота", "запись", "E2EE", "закрыта в БД"; "публикуют: N · подписок: M" | stats |
+| `livekit.room.expanded-*` | click `[aria-label="Участники комнаты <title>"]` (`aria-expanded`) | loading spinner; error "Не удалось получить участников комнаты."; empty "В комнате никого нет."; table "Участник", "Состояние", "В комнате", "Публикует" with tags "бот записи", "зритель стрима", "только смотрит", "камера", "микрофон · выкл", and "Отключить" | GET /v1/admin/livekit/rooms/{name} |
+| `livekit.room.close-confirm`, `livekit.participant.kick-confirm` | "Завершить" / "Отключить" | `dialog[aria-label="Завершить комнату"]` / `dialog[aria-label="Отключить участника"]` | POST …/rooms/{name}/close, POST …/participants/{id}/remove |
+| `livekit.egress.unavailable` / `.empty` / `.active` / `.stuck` | egress fixture | "Запись выключена: не заданы ключи S3-хранилища…" / "Активных записей нет." / tags "идёт", "запускается", "сбой", "идёт N мин", "Остановить" / "Зависшие записи" with "висит N мин" | egress |
+| `livekit.egress.stop-confirm` | "Остановить" | `dialog[aria-label="Остановить запись"]` | POST /v1/admin/livekit/egress/{id}/stop?lk_room=… |
+| `livekit.audit.empty` / `livekit.audit` | audit | "Админы ещё не вмешивались в чужие звонки — журнал пуст." / rows "завершил комнату" etc., "не удалось" | audit |
 
 - **Response shapes** (`features/rooms/api/admin.ts`): `LkHealth` :122, `LkStats` :35, `LkRoom` :18, `LkRoomDetail` :96, `LkParticipant` :57, `LkEgressOverview` :104, `LkAuditEntry` :110.
 - **Hazards:**
@@ -561,21 +561,26 @@ Contract and data notes (not screens):
 | `admin.support.broadcast.history` | `admin.support.broadcast.form` |
 | `admin.app.form` | `admin.app.populated` |
 | `admin.client-errors.filter-level`, `.filter-category`, search | `admin.client-errors.filter-platform`, `.filter-days` (the same filter bar) |
-| `admin.satisfaction` country, OS, plan and language filters | `admin.satisfaction.filter-gender` (the same select) |
+| `admin.satisfaction.filters`: country, OS, plan and language | `admin.satisfaction.filter-gender` (the same select) |
 | `shell.satisfaction-prompt` | `admin.satisfaction.replay` (the card appears at once after «Посмотреть анкету») |
 | `analytics.usage.chart`, `analytics.calendar.populated` | `analytics.home.populated` |
-| `support.list.unread`, `support.list.resolved` | `support.list.populated` |
+| `support.list.unread`, `support.list.resolved`, `support.faq.default` | `support.list.populated` (the first FAQ item is open by default) |
+| `support.thread-modal.populated` | `support.thread-modal` |
+| `analytics.usage.loading-or-empty` | `analytics.usage.loading`: an empty series looks the same (Finding 1) |
+| `admin.users.filter-status` | `admin.users.filter-frozen`, `admin.users.filter-banned` (the same select) |
+| `livekit.rooms.populated`, `.egress.unavailable` | `livekit.health.ok` |
+| `shell.satisfaction-prompt.hidden` | every signed-in screenshot: no survey is due, so the card is absent |
 | `support.send-error-toast` | `support.attach-error` |
 
 **Not screenshotted:**
 
 | state | reason |
 |---|---|
-| error branches listed in Finding 1 | Finding 1 |
+| error branches listed in Finding 1, `analytics.home.summary-error` | Finding 1 |
 | `en` cells of the admin screens | Finding 2 |
 | `admin.tariffs.empty` | unreachable: the Free tariff must exist for the draft to register users |
 | `admin.dashboard.drill.dimension-event` | counts every login, including the recorder's own, so it depends on the visits run before it |
-| `admin.analytics.explorer.chart-gaps`, `.no-points`, `.grain`, `.breakdown`; `graph.dangling`, `graph.hover` | the same chart and graph components with other data or a pointer hover; the registry declares no dangling dependency |
+| `admin.analytics.explorer.chart-gaps`, `.no-points`, `.grain`, `.breakdown`; `.graph.dangling`, `.graph.hover` | the same chart and graph components with other data or a pointer hover; the registry declares no dangling dependency |
 | `admin.finance.acquiring.flags` («нет кредов») | the recording API runs in billing dev mode, where every method reports credentials |
 | `admin.app.file-too-large`, `.uploading` | a file over 500 MB, and upload progress driven by the network |
 | `admin.prompts.saved` | «Сохранено» lives for 2 s on a real timer |

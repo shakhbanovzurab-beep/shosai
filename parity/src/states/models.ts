@@ -6,10 +6,13 @@ import type { Page } from "@playwright/test";
 
 import type { JsonValue } from "../fixtures/format.ts";
 import { exactText, type Translate } from "../i18n/texts.ts";
-import { hold, reply } from "./overrides.ts";
+import { merged } from "./admin-dashboard.ts";
+import { hold, reply, serverError } from "./overrides.ts";
 import type { State } from "./types.ts";
 
 const PREVIEW = "/v1/admin/models/registry/preview";
+const DEFAULTS = "/v1/admin/models/model-defaults";
+const RETIRED_MODEL = "openai/gpt-4o-2024-05-13";
 const OPENROUTER = "спеки и баланс приходят из API OpenRouter; у стенда нет ключа и сети";
 
 function models(id: string, marker: (t: Translate) => string, extra: Partial<State> = {}): State {
@@ -52,6 +55,19 @@ const role = (name: string, model: string, type = "chat"): { [key: string]: Json
   reasoning: false,
 });
 
+/** Роль «Скриншоты» после правки: температура засева 0.7 сдвинута на шаг ползунка. */
+const WARMER_VISION = { ...role("vision", "google/gemini-3-flash-preview"), temperature: 0.8 };
+const ROLE_SAVED = "правка роли меняет данные засева; после сохранения черновик перечитывает назначения";
+const SAVED_ROLES: JsonValue = [
+  role("responses", "anthropic/claude-haiku-4.5"),
+  { ...role("coding", "deepseek/deepseek-v4-pro"), temperature: 0.2, max_tokens: 8192 },
+  WARMER_VISION,
+  role("system_design", "anthropic/claude-haiku-4.5"),
+  role("generation", "deepseek/deepseek-v4-flash"),
+  role("transcription", "openai/gpt-4o-mini-transcribe", "transcription"),
+  { ...role("agent", "deepseek/deepseek-v4-flash"), reasoning: null },
+];
+
 /**
  * Назначения, которые показывают особые строки роли: модель с выбором
  * рассуждения, «Скриншоты» на модели без зрения, модель без температуры и без
@@ -78,6 +94,20 @@ export const MODELS_STATES: readonly State[] = [
       await page.getByRole("option", { name: "Alibaba • Qwen3 Coder", exact: true }).click();
     },
   }),
+  // «✓» есть и в колонке «Вкл.» каталога; у роли это ячейка статуса сохранения.
+  // Смена модели пересоздаёт строку (ключ — модель), и «✓» пропадает; держится
+  // он после правки температуры или лимита токенов.
+  models("role.saved", () => 'div.upper.text-end:text-is("✓")', {
+    overrides: [
+      reply("PUT", "/v1/me/models/roles/{role}", 200, WARMER_VISION, ROLE_SAVED),
+      { method: "GET", path: "/v1/me/models/roles", reason: ROLE_SAVED, respond: ["recorded", { status: 200, body: SAVED_ROLES }] },
+    ],
+    act: async (page, { t }) => {
+      // Ползунки температуры идут по порядку ролей: «Ответы в эфире», затем «Скриншоты».
+      await page.getByLabel(t("models:models.temperature"), { exact: true }).nth(1).focus();
+      await page.keyboard.press("ArrowRight");
+    },
+  }),
   models("role.variants", (t) => `[role=switch][aria-label=${JSON.stringify(t("models:models.reasoningLabel", { role: t("common:roles.responses") }))}]`, {
     overrides: [reply("GET", "/v1/me/models/roles", 200, VARIANT_ROLES, "засеяны обычные назначения; особые строки роли — у других моделей")],
   }),
@@ -95,6 +125,9 @@ export const MODELS_STATES: readonly State[] = [
   }),
   admin("balance.error", () => 'text="Баланс OpenRouter недоступен."'),
   admin("balance.loading", () => "svg.spin", { overrides: [hold("GET", "/v1/admin/models/balance")] }),
+  admin("balance.ok", () => 'text="Пополнено"', {
+    overrides: [reply("GET", "/v1/admin/models/balance", 200, { total_credits: 250, total_usage: 87.4321, balance: 162.5679, currency: "USD" }, OPENROUTER)],
+  }),
   admin("usage.empty", () => 'text="Расходов по моделям пока нет."', {
     overrides: [reply("GET", "/v1/admin/models/usage", 200, [], "у засеянной персоны есть расходы на модели")],
   }),
@@ -104,9 +137,20 @@ export const MODELS_STATES: readonly State[] = [
   }),
   admin("catalog", () => 'text="Каталог моделей"', { reveal: true }),
   admin("defaults", () => 'text="Дефолты моделей"', { reveal: true }),
+  admin("defaults.loading", () => "svg.spin", { reveal: true, overrides: [hold("GET", DEFAULTS)] }),
+  admin("defaults.error", () => 'text="Не удалось сохранить. Проверьте выбор моделей."', {
+    reveal: true,
+    overrides: [serverError("PUT", DEFAULTS)],
+    act: async (page) => page.getByRole("button", { name: "Сохранить дефолты", exact: true }).click(),
+  }),
+  admin("defaults.stale-cell", () => `text="${RETIRED_MODEL} (вне каталога)"`, {
+    reveal: true,
+    overrides: [merged("GET", DEFAULTS, { agent_model_id: RETIRED_MODEL },
+      "модель агента сняли с каталога после назначения; засев назначает только модели каталога")],
+  }),
   admin("defaults.saving", () => 'button:disabled:has-text("Сохранение…")', {
     reveal: true,
-    overrides: [hold("PUT", "/v1/admin/models/model-defaults")],
+    overrides: [hold("PUT", DEFAULTS)],
     act: async (page) => page.getByRole("button", { name: "Сохранить дефолты", exact: true }).click(),
   }),
   admin("import.preview", () => 'button:has-text("Добавить в реестр")', {

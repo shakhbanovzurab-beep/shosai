@@ -203,7 +203,7 @@ Interaction to leave pre-join: click the dark button "Присоединитьс
 | `streams.watch.live.reactions` | `reactions_enabled:true` → click "Реакции". | `.vroom-pop` picker. | reactions |
 | `streams.watch.live.on-stage` | `state.role:"speaker"\|"cohost"`. | Dock buttons "Включить микрофон", "Включить камеру", "Демонстрация экрана", leave `aria-label="Покинуть сцену"` (arrowDown icon). | SFU |
 | `streams.watch.live.ended-by-host` | `state.status:"ended"` (GET or data event `{type:"ended"}`). | "Эфир завершён" + "Трансляция закончилась." + button "Обновить страницу". No card. | state |
-| `streams.watch.left` | Viewer clicks `button[aria-label="Выйти"]`. | "Вы вышли из эфира" + "Трансляция продолжается без вас…" + "Вернуться в эфир" (reloads the page). | |
+| `streams.watch.live.left` | Viewer clicks `button[aria-label="Выйти"]`. | "Вы вышли из эфира" + "Трансляция продолжается без вас…" + "Вернуться в эфир" (reloads the page). | |
 
 **Endpoints** (types in `features/streams/contracts/types.ts`). Separate axios instances `pub` (`/v1/streams`) and `live` (`/v1/streams/live`) do **not** go through the refresh interceptor.
 - `POST /v1/streams/{token}/join` body `{name, lang}`, plus Bearer access token if present → `JoinResult` (:144: outcome/card/entry/knock_token). `StreamCard` :92, `StreamPass` :109.
@@ -243,7 +243,7 @@ Interaction to leave pre-join: click the dark button "Присоединитьс
 | `streams.studio.off-air` | `overview.status` is `"scheduled"` (also shown for `"ended"`). | Yellow button "Начать эфир" above the dock; desktop chip with grey dot "Эфир не начат". Panel "Пульт" open by default on desktop. Stage spinner until SFU connects; then "На сцене пока никого" or tiles (offline members are dimmed placeholders). | |
 | `streams.studio.on-air` | `live.status` or `overview.status` is `"live"`. | Chip with red dot "В эфире" (+ "· Зрителей: N"); red dock button `aria-label="Завершить эфир"`. | |
 | `streams.studio.confirm-end` | On air → click "Завершить эфир". | `dialog[aria-label="Завершить эфир?"]` "Зрители увидят, что трансляция закончилась. Начать её заново будет нельзя." with buttons "Отменить" / "Завершить эфир". | end |
-| `streams.studio.toasts` | Start/end succeed or fail. | "Эфир начался" / "Не удалось начать эфир" / "Эфир завершён" (then navigates to `/calendar`) / "Не удалось завершить эфир". | |
+| `streams.studio.toast-started` / `start-failed` / `toast-ended` / `end-failed` | Start/end succeed or fail. | "Эфир начался" / "Не удалось начать эфир" / "Эфир завершён" (then navigates to `/calendar`) / "Не удалось завершить эфир". | |
 | `streams.studio.panel.*` | `button[aria-label="Пульт"]` (badge = admissions + requests). | Header "Пульт". Sections in order: "Зал ожидания · N" (buttons "Впустить"/"Отклонить"), "Просят слова · N" ("Дать слово"/"Отказать"), "Ссылка для зрителей" (input + "Скопировать" → "Скопировано", "Поделиться", hint), "Как показывать сцену" (segments "Сетка"/"Крупно"/"Показ экрана"), "На сцене · N" (row actions "Закрепить на сцене", "Выключить микрофон", "Выключить камеру", "Убрать из эфира"/"Вернуть в эфир", "Сделать со-ведущим", "Убрать со сцены"; labels "ведущий", "со-ведущий"), "Зал" (search "Найти зрителя…", empty "В зале пока никого", viewer rows with tags "гость"/"аккаунт"/"Pro"/"истёк"/country/lang/time and button "На сцену"; "Свободных мест на сцене нет" when full), "Правила эфира" (Чат select, Реакции / Просить слово / Только зарегистрированные / Принимать вручную / Сохранять чат switches, "Мест на сцене" number input). | see below |
 | `streams.studio.panel.failure` | Any studio action fails. | Red box "Свободных мест на сцене нет" (`{error:"speaker_limit_reached"}`) / "Это действие не по вашей роли" / "Не удалось сохранить". | |
 | `streams.studio.chat` | `button[aria-label="Чат"]`. Renders only after `/state` loads. | Same chat panel; moderators get hover buttons "Закрепить", "Удалить сообщение", "Заблокировать в чате", plus an unpin `aria-label="Открепить"`. | chat |
@@ -301,7 +301,7 @@ Interaction to leave pre-join: click the dark button "Присоединитьс
 | `storage.share.main` | Menu → "Поделиться". | Modal `dialog[aria-label="Ссылка на файл"]` (folders: "Ссылка на папку"), cards "Просмотр" / "Просматривать смогут все, у кого есть ссылка" and "Настройки безопасности", buttons "Скопировать", "QR-код", "Удалить" (disabled when no link exists yet). | |
 | `storage.share.security` | Click "Настройки безопасности". | Back button (title "Назад"), password input "Пароль" ("Не короче 4 символов", or "Пароль установлен — введите новый, чтобы заменить" + "Убрать"), "Срок действия" select ("Без срока", "1 дн."…), "Действует до …", checkbox "Запретить скачивание", footer "Сохранить". | POST share |
 | `storage.share.qr` | Click "QR-код". This creates the link if missing. | `svg[role=img][aria-label="QR-код"]` + "Скачать QR-код"; spinner while the lib loads; error "Не удалось построить QR-код". | POST share |
-| `storage.share.toasts` | | "Ссылка скопирована", "Не удалось скопировать", "Настройки сохранены", "Не удалось сохранить настройки ссылки", "Ссылка удалена". | |
+| `storage.share.copied` / `copy-failed` / `saved` / `save-error` / `revoked` | | "Ссылка скопирована", "Не удалось скопировать", "Настройки сохранены", "Не удалось сохранить настройки ссылки", "Ссылка удалена". | |
 | `storage.viewer.loading` / `.error` | Click a file tile (or "Открыть"). | Full-height `dialog[aria-label="{file name}"]` with spinner / "Не удалось открыть файл". | content / download-url |
 | `storage.viewer.code` | `.txt` / `.py` / `.json` etc. | CodeMirror editor + "Сохранить" (disabled until edited) + "Скачать". | GET content (text) |
 | `storage.viewer.pdf` / `.image` / `.video` / `.audio` | By extension or MIME (`model/fileKind.ts`). | `<object type=application/pdf>` / `<img>` / `<video controls>` / `<audio controls>` pointing at the presigned URL. | download-url?inline=true + S3 |
@@ -505,6 +505,7 @@ Draft defects visible on screen. By decision 4 of the D2 plan they stay out of t
 
 | state | screenshot |
 |---|---|
+| `shared.folder.expired` | `shared.folder.password`: the same password form |
 | `rooms.room.record.idle` | `rooms.room.connect-error` (the record button is in the dock) |
 | `rooms.room.connected.e2ee` without record and AI | `rooms.room.e2ee`, `rooms.room.more-menu.e2ee` |
 | mobile record menu item, mobile dock | `rooms.room.more-menu.mobile`, the mobile cells of `rooms.room.connect-error` |
@@ -525,7 +526,7 @@ Draft defects visible on screen. By decision 4 of the D2 plan they stay out of t
 
 | state | reason |
 |---|---|
-| `rooms.room.connected.*`, `.layout.*`, `.tile.*`, `.chat.populated`, `.chat.unread-badge`, `.reaction-floating`, `.device-menu`, `.subtitles-overlay`, `.translator.listening`, `.ready`, `.failure-*`, `.notepad`, `.board.*`, `.board-saved-toast` | need a connected SFU, its data channel or the subtitles socket (decision 3 of the D2 plan) |
+| `rooms.room.connected.*`, `.layout.*`, `.tile.*`, `.chat.populated`, `.chat.unread-badge`, `.reaction-floating`, `.device-menu`, `.subtitles-overlay`, `.translator.listening`, `.translator.ready`, `.translator.failure-*`, `.translator.notepad`, `.board.*`, `.board-saved-toast` | need a connected SFU, its data channel or the subtitles socket (decision 3 of the D2 plan) |
 | `streams.watch.live.no-speakers`, `.stage-grid`, `.spotlight`, `.presentation`; stage tiles in the studio | need a connected SFU (decision 3) |
 | `rooms.room.ai.saved`, `.save-error` | need transcript lines from live speech recognition |
 | `rooms.guest.registration`, `.denied`, `.waiting` | Finding 1 |
@@ -534,9 +535,9 @@ Draft defects visible on screen. By decision 4 of the D2 plan they stay out of t
 | storage list error, tracker projects and board errors | Findings 3 and 4 |
 | `livekit.health.request-failed` | Finding 5 |
 | `en` cells of `livekit.*` | Finding 6 |
-| `rooms.room.invite-modal.copied`, `storage.share` copy toasts, studio «Скопировано» | need clipboard permission and live 1.8 s on a real timer |
+| `rooms.room.invite-modal.copied`, `storage.share.copied`, studio «Скопировано» | need clipboard permission and live 1.8 s on a real timer |
 | `storage.marquee`, `storage.drop-hover`, `storage.drop-reading`, `tracker.board.drag` | intermediate frames of a pointer or file drag; the harness captures settled screens |
 | `shared.file.success` | navigates away to the signed S3 URL |
-| `streams.studio` start and end success toasts | the screen after a start is `streams.studio.on-air`; ending navigates to `/calendar` |
+| `streams.studio.toast-started`, `.toast-ended` | the screen after a start is `streams.studio.on-air`; ending navigates to `/calendar` |
 | `tracker.jira.modal.loading` | the chip that opens the modal appears only after the status has loaded, and the modal reuses it |
 | `tracker.jira` link and sync error toasts | the same toast component as `tracker.jira.toast.synced` with another text |

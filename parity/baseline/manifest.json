@@ -2049,6 +2049,12 @@
     },
     {
       "cell": "desktop-light-ru",
+      "state": "account.cabinet.general.theme-system",
+      "sha256": "9c6d4febffda110eeeeb25faa76373cc78e40bc0e56f1e7fbfa2b3d5af681935",
+      "bytes": 106910
+    },
+    {
+      "cell": "desktop-light-ru",
       "state": "account.cabinet.general.tz-open",
       "sha256": "8aeca8d0116d62985903de35a51b40914f246c07cfe7e19f427e111d47e8d689",
       "bytes": 119706
@@ -2109,6 +2115,12 @@
     },
     {
       "cell": "desktop-light-ru",
+      "state": "admin-models.balance.ok",
+      "sha256": "f849abf6129a984241edb794888a84daed5db5e98fbd63c67fa66002c61d597b",
+      "bytes": 136928
+    },
+    {
+      "cell": "desktop-light-ru",
       "state": "admin-models.catalog",
       "sha256": "2aa9071dac4b549c3a330ec65523c359e3ff853f180f91b7619add88dde2df63",
       "bytes": 164296
@@ -2121,9 +2133,27 @@
     },
     {
       "cell": "desktop-light-ru",
+      "state": "admin-models.defaults.error",
+      "sha256": "0bd0109b7d3bb7c28e1106d12c176ce9fbde69ef7b4c213a544b1cce7528a418",
+      "bytes": 132066
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "admin-models.defaults.loading",
+      "sha256": "37ca475e371907371d3d692fbe1cbfc38940972b575f599b652bcbacf6a49728",
+      "bytes": 160028
+    },
+    {
+      "cell": "desktop-light-ru",
       "state": "admin-models.defaults.saving",
       "sha256": "b3014d5da98f93229c2e369d3b5db2ff1a51b8df28cc809719fd91717bd0a243",
       "bytes": 128230
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "admin-models.defaults.stale-cell",
+      "sha256": "f879847bb2974042dd6df62720aafd194d30419675794f967f6619f816360f16",
+      "bytes": 130879
     },
     {
       "cell": "desktop-light-ru",
@@ -2253,6 +2283,12 @@
     },
     {
       "cell": "desktop-light-ru",
+      "state": "admin.analytics.dictionary.loading",
+      "sha256": "985e50e0bd6c1fed9ec763fb347d1b7973524ce2837fa12ff7647f230aeef02e",
+      "bytes": 72504
+    },
+    {
+      "cell": "desktop-light-ru",
       "state": "admin.analytics.dictionary.passport-open",
       "sha256": "21b7537627ace1cf97f18fd0e0be68917cb04aaf3cc06411d98c8769a5d2379b",
       "bytes": 109574
@@ -2328,6 +2364,12 @@
       "state": "admin.analytics.graph.empty",
       "sha256": "6bdf9eeabfeea73ef41b5f3a102bca98702af088c4634aaf5634296cfc8895de",
       "bytes": 74259
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "admin.analytics.graph.loading",
+      "sha256": "fc80e742b5947e18124e01feb6cbbaefc72348801cc69bec82f3f5231625ca32",
+      "bytes": 71937
     },
     {
       "cell": "desktop-light-ru",
@@ -4719,6 +4761,12 @@
     },
     {
       "cell": "desktop-light-ru",
+      "state": "livekit.egress.empty",
+      "sha256": "2b97729056d44693f44a36851fc78b93037dde65d2f6fa9441a03b2a5ed2bdbd",
+      "bytes": 129076
+    },
+    {
+      "cell": "desktop-light-ru",
       "state": "livekit.egress.stop-confirm",
       "sha256": "82810a076c66205a7d29296639b2322a55d5598b6b78b4e8a33788c27ec538a6",
       "bytes": 145405
@@ -5589,6 +5637,12 @@
     },
     {
       "cell": "desktop-light-ru",
+      "state": "models.role.saved",
+      "sha256": "3ffbfedbf126a78b64a6df2360dc201523c0f92c2f461e70eae11735c2b91b00",
+      "bytes": 130431
+    },
+    {
+      "cell": "desktop-light-ru",
       "state": "models.role.saving",
       "sha256": "63b520cf4912248d318002546b16626f09d4c66e843244add1ed1069dc8775c0",
       "bytes": 130952
@@ -6381,6 +6435,12 @@
     },
     {
       "cell": "desktop-light-ru",
+      "state": "storage.share.copy-failed",
+      "sha256": "eeaabdd06da3870ca06e4947984222a810c2bcf8e9e06b705ae4d4aa10d20d6a",
+      "bytes": 89011
+    },
+    {
+      "cell": "desktop-light-ru",
       "state": "storage.share.main",
       "sha256": "78bf2e03ed1788cb8d584086246bbf8b1596d6b7a6da713fadab47f8a651f70f",
       "bytes": 89904
@@ -6396,6 +6456,12 @@
       "state": "storage.share.qr",
       "sha256": "019bc29405f3941b21d6332cc48088c92e63eb4ed426ed3622f88259e67b3469",
       "bytes": 78803
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "storage.share.revoked",
+      "sha256": "29282df75612883af9251bfdc069adc6629b1a0e1b57350e1f0314534220c826",
+      "bytes": 73323
     },
     {
       "cell": "desktop-light-ru",
@@ -6522,6 +6588,12 @@
       "state": "streams.studio.confirm-end",
       "sha256": "6dde7d5e4c18240aea6527624bc6115f9cd60b85f18df44037a7ac4019540139",
       "bytes": 79498
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "streams.studio.end-failed",
+      "sha256": "2126a0ccfdb9a8ca9f96de7a56e1dc14e0c06eb89ec39ade942dcad781432118",
+      "bytes": 66035
     },
     {
       "cell": "desktop-light-ru",
@@ -6720,6 +6792,12 @@
       "state": "support.new-ticket-modal",
       "sha256": "a6c3cce0efeb691c0ddb9e9ded2574f1a33f6c34131929833c192c89c4aaf570",
       "bytes": 97355
+    },
+    {
+      "cell": "desktop-light-ru",
+      "state": "support.new-ticket.attachments",
+      "sha256": "9a364e5d28b606b4ad6faba68e8aabcaaeda8f24f760f2283964658928bb14d5",
+      "bytes": 98130
     },
     {
       "cell": "desktop-light-ru",

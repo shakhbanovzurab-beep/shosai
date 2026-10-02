@@ -14,6 +14,8 @@ The routes were taken from the feature manifests (`src/features/*/feature.ts(x)`
 
 A row can name several related states (`a` / `b` / `c`, `step-N` for N = 1…24). Expanded, the inventory holds about 850 states.
 
+Every state named in a group's tables is screenshotted under its id, captured inside another screenshot, or left out with a reason in the group's «Coverage in the screenshot matrix» section. The unit test [src/inventory/coverage.test.ts](../src/inventory/coverage.test.ts) enforces it: a new row needs a state in the registry or a coverage row. Variants are written relative to the full id before them (`a.b.c` / `.d` / `e`).
+
 ## How to read a state
 
 - **State id**: `<feature>.<screen>.<state>`, kebab-case. The id is stable; the harness, the fixtures and the baseline file names use it.

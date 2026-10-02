@@ -133,4 +133,17 @@ export const STORAGE_VIEWER_STATES: readonly State[] = [
     await openSecurity(page, context);
     await button(page, context.t("storage:storage.share.save")).click();
   }, { expectsAlert: true, overrides: [serverError("POST", SHARE)] }),
+  // Буфер обмена без разрешения отказывает — так копирование и не удаётся у человека.
+  share("copy-failed", (t) => withText("[role=alert]", t("storage:storage.share.copyFailed")), async (page, context) => {
+    await openShare(page, context);
+    await button(page, context.t("storage:storage.share.copy")).click();
+  }, { expectsAlert: true, overrides: [shareResponse(false)] }),
+  // «Удалить» в окне ждёт ссылку: её заводит QR-код, затем — назад и удалить.
+  // У уже расшаренного файла меню предлагает «Закрыть доступ» без окна и без тоста.
+  share("revoked", (t) => withText("[role=status]", t("storage:storage.share.revoked")), async (page, context) => {
+    await openShare(page, context);
+    await button(page, context.t("storage:storage.share.qr")).click();
+    await page.getByTitle(context.t("storage:storage.share.back"), { exact: true }).click();
+    await button(page, context.t("storage:storage.share.revoke")).click();
+  }, { overrides: [shareResponse(false), reply("DELETE", SHARE, 204, null, "удаление ссылки меняет данные засева, общие для других визитов")] }),
 ];

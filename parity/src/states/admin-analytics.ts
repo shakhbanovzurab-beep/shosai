@@ -87,12 +87,14 @@ export const ADMIN_ANALYTICS_STATES: readonly State[] = [
     async (page) => choose(page, "выберите метрику", "Начатые встречи")),
   section("Конструктор", "explorer.chart", () => "svg[role=img]", {},
     async (page) => choose(page, "выберите метрику", "Начатые встречи")),
+  section("Словарь метрик", "dictionary.loading", () => "svg.spin", { overrides: [hold("GET", "/v1/admin/metrics")] }),
   section("Словарь метрик", "dictionary.populated", () => "button[aria-expanded]"),
   section("Словарь метрик", "dictionary.passport-open", text("Версия определения"), {},
     async (page) => page.getByRole("button", { name: /^Регистрации/ }).first().click()),
   section("Словарь метрик", "dictionary.empty", text("Метрики не объявлены."), {
     overrides: [reply("GET", "/v1/admin/metrics", 200, [], SEEDED)],
   }),
+  section("Связи", "graph.loading", () => "svg.spin", { overrides: [hold("GET", "/v1/admin/metrics/graph")] }),
   section("Связи", "graph.populated", text("Уровень 0 · меняется само")),
   section("Связи", "graph.empty", text("Метрики не объявлены."), {
     overrides: [merged("GET", "/v1/admin/metrics/graph", { nodes: [], edges: [], dangling: [] }, SEEDED)],

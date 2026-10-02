@@ -133,6 +133,10 @@ export const ROOMS_GUEST_STATES: readonly State[] = [
       await page.locator('button[aria-label="Отключить Гость Acme"]').click();
     },
   }),
+  livekit("egress.empty", () => 'text="Активных записей нет."', {
+    reveal: true,
+    overrides: [merged(EGRESS, { available: true, stuck: [] }, "запись включена, когда у LiveKit есть ключи S3; у стенда их нет")],
+  }),
   livekit("egress.active", () => 'text="идёт"', { reveal: true, overrides: [ACTIVE_EGRESS] }),
   livekit("egress.stuck", () => 'text="Зависшие записи"', { reveal: true, overrides: [ACTIVE_EGRESS] }),
   livekit("audit", () => 'text="SFU не ответил"', { reveal: true }),

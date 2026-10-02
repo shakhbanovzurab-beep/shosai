@@ -44,6 +44,14 @@ export const ACCOUNT_ACTION_STATES: readonly State[] = [
     marker: (t) => `${cabinetSwitch(t, t("account:cab.marketingLabel"))}[aria-checked=true]`,
   },
   {
+    // «Система» следует теме устройства: в светлой ячейке экран светлый, выбрана третья плитка.
+    id: "account.cabinet.general.theme-system",
+    fixture: "account/cabinet-general",
+    scope: "single",
+    act: async (page, context) => clickCabinet(page, context, context.t("account:cab.themeSystem")),
+    marker: (t) => `${cabinetDialog(t)} button[aria-pressed=true]:has-text(${JSON.stringify(t("account:cab.themeSystem"))})`,
+  },
+  {
     id: "account.cabinet.profile.saving",
     fixture: "account/cabinet-profile",
     scope: "single",
