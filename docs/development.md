@@ -92,6 +92,25 @@ uv run --env-file ../.env whisperer api                # public API on 127.0.0.1
 - `Ctrl+C` or `SIGTERM` stops a role cleanly: it stops taking work, finishes what is in flight, then closes. Logs are JSON lines on stdout.
 - Locally every role listens on `127.0.0.1` only (`BIND_HOST`); the image binds `0.0.0.0` inside its container.
 
+## Run the frontend
+
+The web cabinet in `frontend/` needs Node.js at the version in [`frontend/.nvmrc`](../frontend/.nvmrc) and npm 11; nothing else is installed on the host.
+
+```bash
+cd frontend
+npm ci                  # once, and after every change of package-lock.json
+npm run dev             # dev server on http://127.0.0.1:5173/app/
+```
+
+| Check | Command |
+|---|---|
+| Types | `npm run typecheck` |
+| Tests, the architecture rules included | `npm test` |
+| Production bundle in `frontend/dist/` | `npm run build` |
+| Code-health gate, must print `100` | `npm run doctor -- --score` |
+
+`npm run doctor` needs network: react-doctor gets the score from its vendor's service ([ADR 0020](adr/0020-react-doctor-score-from-the-vendor-service.md)). [frontend/README.md](../frontend/README.md) describes the layout and the boundaries.
+
 ## Test databases
 
 Every server holds prepared test databases `whisperer_test_1` … `whisperer_test_8` (`LOCAL_TEST_DATABASE_COUNT`, at most 64), owned by `whisperer_migrator`, with `vector` installed. Slot `N` has the same name on both servers, so a run that claims slot `N` has one database per home.
