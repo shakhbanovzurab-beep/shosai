@@ -1,6 +1,6 @@
 # F1 — Backend foundation: package plan
 
-Prompt: [prompts/F1-backend-foundation.md](../prompts/F1-backend-foundation.md). Status: [STATUS.md](../STATUS.md). Decision records: [ADR 0008](../../adr/0008-error-envelope-with-compatible-detail.md) (error envelope), [ADR 0009](../../adr/0009-test-databases-claimed-by-advisory-lock.md) (test databases), [ADR 0010](../../adr/0010-home-scoped-revisions-in-one-alembic-history.md) (home-scoped migrations), [ADR 0011](../../adr/0011-rate-limits-gcra-in-valkey.md) (rate limits).
+Prompt: [prompts/F1-backend-foundation.md](../prompts/F1-backend-foundation.md). Status: [STATUS.md](../STATUS.md). Decision records: [ADR 0008](../../adr/0008-error-envelope-with-compatible-detail.md) (error envelope), [ADR 0009](../../adr/0009-test-databases-claimed-by-advisory-lock.md) (test databases), [ADR 0010](../../adr/0010-home-scoped-revisions-in-one-alembic-history.md) (home-scoped migrations), [ADR 0011](../../adr/0011-rate-limits-gcra-in-valkey.md) (rate limits), [ADR 0012](../../adr/0012-http-metrics-in-the-request-boundary.md) (HTTP metrics).
 
 The package builds the `backend/` project every slice stands on: configuration, logging and telemetry, the HTTP shell and the error envelope, home-aware database access with migrations and RLS groundwork, Valkey, cache and object storage clients, TaskIQ, the outbox, the four process roles and the test harness. It contains no feature code.
 
@@ -40,7 +40,7 @@ Read in `/root/whisperer/backend/src/meetassist/`. Each lesson becomes a rule he
 | `HTTPException` became 500 under a yield dependency with `BaseHTTPMiddleware` (`core/exceptions.py:95`) | Pure ASGI middlewares only |
 | Unhandled 500s probably left without `X-Request-ID` (middleware order) | The request-id middleware is outermost and renders the 500 itself (ADR 0008) |
 | Tests had no production guard and once wrote to the production Redis (`tests/conftest.py:12, 56`) | ADR 0009 |
-| A Starlette upgrade broke the metrics instrumentator: 500 on every request (`requirements.txt` header) | A test exercises the instrumentator on every run |
+| A Starlette upgrade broke the metrics instrumentator: 500 on every request (`requirements.txt` header) | HTTP metrics are recorded by the request boundary without the instrumentator (ADR 0012); a test runs them with the native tracing on every run |
 | mypy targeted 3.11 and silently checked nothing (`pyproject.toml`) | mypy targets 3.14 and covers `src`, `tests` and `migrations` |
 | Feature `on_startup` hooks were never called (`composition/registry.py:176`) | The feature registry is exercised by tests with fixture features |
 | `utils/` mixed unrelated helpers | Not carried as a module: each helper moves with the slice that first uses it |
@@ -59,7 +59,7 @@ Latest stable releases on PyPI, pinned by `uv.lock` when each step adds them:
 | sqlalchemy | 2.1.1 | structlog | 26.1.0 |
 | asyncpg | 0.31.0 | opentelemetry-sdk / exporter-otlp-proto-http | 1.45.0 |
 | alembic | 1.20.0 | opentelemetry instrumentations | 0.66b0 |
-| httpx | 0.28.1 | prometheus-fastapi-instrumentator / prometheus-client | 8.1.0 / 0.26.0 |
+| httpx | 0.28.1 | prometheus-client (the instrumentator was removed, ADR 0012) | 0.26.0 |
 | cryptography | 50.0.2 | ruff / mypy / import-linter | 0.16.10 / 2.4.0 / 2.15 |
 | pytest / pytest-asyncio / pytest-cov | 9.1.1 / 1.4.0 / 7.1.0 | hypothesis / python-doctor / pip-audit | 6.168.3 / 2026.5.11 / 2.10.1 |
 
@@ -81,6 +81,12 @@ Confirmed by the owner on 2026-10-01:
 | F1-D3 | One Alembic history; a revision may declare `applies_to`; EU-only tables do not exist in the RU home | ADR 0010; §6 updated |
 | F1-D4 | Own GCRA limiter in Valkey through redis-py instead of slowapi | ADR 0011; §18.2 updated |
 
+Confirmed by the owner on 2026-10-02:
+
+| ID | Decision | Record |
+|---|---|---|
+| F1-D5 | HTTP metrics are recorded by the request boundary from the route FastAPI has already matched, under the names, help texts, labels and buckets of prometheus-fastapi-instrumentator 8.1.0, which is removed; label values come from closed sets | ADR 0012; §16.1, §16.7, §18.2 updated; was open item F1-O1 |
+
 Design choices made in this plan, open to objection at plan review:
 
 | ID | Choice | Why |
@@ -91,12 +97,6 @@ Design choices made in this plan, open to objection at plan review:
 | F1-C4 | The application-wide 120 requests per minute per IP of draft spec 010 is not carried; per-route limits stay with their slices | The edge already bounds 50 req/s per IP (§4.3), and a company of 30 seats behind one office address would hit 120/min |
 | F1-C5 | `processed_events` rows kept 14 days, published outbox rows 7 days (§8.1) | A delivery mark must outlive any redelivery of its event |
 | F1-C6 | Cross-tenant sweeps under RLS are not decided here; S02 decides with its first policies | §7 asks for a dedicated role, §14 rule 2 for one pool per database per process; the trade-off depends on S02's policies |
-
-Open, for the owner:
-
-| ID | Question | Measurement and proposal |
-|---|---|---|
-| F1-O1 | Keep prometheus-fastapi-instrumentator (§16.1, §18.2) for HTTP metrics? | Step 3 measured it on 600 routes (the draft has 588), median per request, logging included: without it 0.24 ms on the first route and 0.87 ms on the last; with it 0.45 ms and 1.41 ms. It flattens and re-matches the whole route table before routing, so it costs ≈ 0.37 ms of CPU per request on average: ≈ 4% of a core at 116 req/s (§3), ≈ 43% at 100 000 DAU. Proposal: record the same metric names in the request boundary from the route the router already matched, and update §16.1, §18.2 with an ADR. Until decided, the instrumentator stays as the architecture fixes it |
 
 ## 3. Design
 
@@ -114,7 +114,7 @@ backend/
       kernel/                 framework-free: Home, TenancyScope, AppError family, UUIDv7 ids, clock
       config/                 settings sections, production gate
       observability/          structlog, redaction, log context, tracer provider, metrics registry, loop lag
-      web/                    ASGI middlewares, error envelope, rate-limit dependency, health router
+      web/                    ASGI middlewares, error envelope, HTTP metrics, route templates, rate-limit dependency, health router
       db/                     engines per home, transactions with tenancy scope, model base, home identity, pool metrics
       kv/                     Valkey client, distributed locks, GCRA limiter
       cache/                  cache port and Redis adapter
@@ -164,9 +164,9 @@ With no features yet, a test runs `lint-imports` on a fixture tree with two feat
 - Redaction by key (exact names and suffixes, as in the draft); request bodies, headers and query strings are never logged (§16.8).
 - One access line per request: method, route template, status, duration.
 - Traces: our own `TracerProvider` with a bounded batch queue and a short export timeout; no exporter when `OTEL_EXPORTER_OTLP_ENDPOINT` is unset; dropped spans are counted (§16.1). FastAPI's native tracing with `auto_configure`, `metrics` and `logs` off; instrumentation of SQLAlchemy, HTTPX, redis and TaskIQ.
-- Metrics: prometheus-fastapi-instrumentator for HTTP (route template, status class), `prometheus_client` for the rest: event-loop lag (a histogram, so a spike between two scrapes is seen), pool occupancy per home, task and outbox metrics, telemetry drops. One registry per process, passed in; labels stay bounded (§16.7).
+- Metrics: HTTP RED metrics recorded by the request boundary from the route FastAPI has already matched, under the instrumentator's contract (ADR 0012); `prometheus_client` for the rest: event-loop lag (a histogram, so a spike between two scrapes is seen), pool occupancy per home, task and outbox metrics, telemetry drops. One registry per process, passed in; labels stay bounded (§16.7).
 - Logs leave through a bounded queue to a writer thread, rendered in the caller's thread; a full queue drops the line and counts it (§16.1).
-- The fastapi skill prefers FastAPI's native metrics and logs; §16.1 fixes metrics through the instrumentator and logs through structlog, so those two are off.
+- The fastapi skill prefers FastAPI's native metrics and logs; §16.1 keeps the HTTP metrics under the instrumentator's names and labels (ADR 0012) and logs through structlog, so those two are off.
 
 ### 3.5 HTTP shell and errors
 
@@ -257,6 +257,7 @@ Every step leaves the project working: its tests pass, python-doctor prints 100,
 | 1 | **Skeleton and test harness.** `uv` project on Python 3.14 with only this step's dependencies; Ruff (with `ASYNC`, `S`, `ANN`), mypy strict (pydantic plugin, 3.14), pytest and coverage settings; `LICENSE` copy; the layout of §3.1 with empty `features`; import-linter contracts of §3.2 with the fixture test; harness of ADR 0009 for the databases (settings, guards, two-home slot claim, catalog fingerprint); model-facing registry and test; CI backend job on the compose services; `.env.example` `TEST_*` section and `development.md` test-slot paragraph.<br>Done: 71 tests; four concurrent runs held four different slots in every round; the end-of-run check fails a run that leaves a table; a claim also restores extensions, default privileges, schema and database rights and settings (ADR 0009 amended); docstrings are English and checked; asyncpg and Pydantic are dev dependencies until steps 2 and 4 need them at runtime | fastapi, python-doctor, Docker ×4 | Gates pass locally; two concurrent runs hold different slots; the guard refuses `whisperer` and a non-loopback host; a leftover table is detected and cleaned; CI backend job green |
 | 2 | **Configuration and observability.** Settings and production gate; `.env.example` section 2 complete; structlog pipeline with redaction and context; tracer provider with bounded export and drop counter; metrics registry and loop-lag gauge; crypto key ring; locales and Accept-Language<br>Done: `core/config` (sections from an explicit mapping, every problem by name, gate with slice checks), `core/observability` (JSON lines through a bounded queue, redaction, `log_context`, bounded span processor counting drops, registry, loop-lag histogram), `core/crypto`, `core/i18n`; 99 new tests (170 in all) incl. Hypothesis properties; a test keeps `.env.example` section 2 equal to the settings | fastapi, python-doctor, observability | A `.env` in the working directory is ignored; each gate case refuses start and names the setting; no secret value appears in any log line (property test); log lines carry `trace_id` inside a span; key rotation decrypts old ciphertexts |
 | 3 | **HTTP shell.** API app factory without features; request-id, access-log and security-header middlewares; error envelope and every handler (ADR 0008); `ErrorResponse` in OpenAPI; native tracing and the instrumentator; proxy trust; `GET /v1/health`<br>Done: `core/kernel/errors` (`AppError` checks code, status and params), `core/web` (one pure-ASGI request boundary for the id, log context, common headers, the access line and the last-resort 500; handlers for every error path; `ErrorResponse` as every operation's `default` response; native server spans without operation spans; instrumentator; CORS allowlist; `forwarded_allow_ips`; `GET /v1/health`); a sampler drops raw paths, queries and client addresses from spans; HTTPX and `uvicorn.access` loggers quieted; D1 harness as a dev dependency, F1 routes compatible; 83 new tests (253 in all). Measured: the instrumentator re-matches the route table per request, +0.2 ms on the first and +0.54 ms on the 600th route — open item F1-O1 | fastapi, python-doctor, api-design | Every error path (domain, `HTTPException`, unknown `/v1` path, 405, 422, 500) returns the envelope with `X-Request-ID`; 422 never echoes input; one log line per 500; the D1 harness passes for F1's route |
+| 3a | **HTTP metrics in the request boundary** (F1-D5, ADR 0012): `core/web/http_metrics.py` and `core/web/route_templates.py` on prometheus-client; the instrumentator removed; §16.1, §16.7, §18.2 updated<br>Done: the five metrics keep the instrumentator's names, help texts, labels and buckets; the template is looked up in maps built at start through `iter_route_contexts`, never matched again; prefixes, nested routers, mounts and Starlette routes resolve; label values come from closed sets; 64 new tests (317 in all). Measured on 600 routes: 258 µs of CPU per request with the instrumentator, 7 µs with the boundary | fastapi, python-doctor | The contract test pins the five metrics; a property test finds no label value outside the closed sets; each request is recorded once, cancellation included; the shell adds no `matches()` call to FastAPI's routing; every layout resolves to the template FastAPI traces |
 | 4 | **Home-aware data access, migrations, RLS groundwork.** §3.6 and §3.7; harness extended with upgrade, per-test truncation, downgrade | fastapi, python-doctor, data-storage, Docker ×4 | A row written through the EU home is invisible through the RU home and the reverse; `SET LOCAL` does not leak across PgBouncer transactions; a policy hides foreign rows under `whisperer_app`; swapped home URLs fail at start; a home behind head fails at start; `compare_metadata` is empty; round trips per transaction counted |
 | 5 | **Valkey, cache, object storage.** Clients, locks, GCRA limiter (ADR 0011), cache port, S3 port per home, readiness probes; harness extended with slot databases in Valkey and Redis and the `tests/slot-<N>/` prefix | fastapi, python-doctor, caching, blob-store, resilience-failure, Docker ×4 | Limiter property tests and fail-open under a stopped Valkey; lock fail-closed and fail-open cases; presigned multipart round trip on SeaweedFS in each home; a cache outage is a miss; no keys or objects left |
 | 6 | **Tasks.** Brokers per queue, task declaration, middlewares, leases, dead letter with redaction, retries with backoff, unknown-task handling, tick markers | fastapi, python-doctor, messaging-streaming, task-scheduling, Docker ×4 | A task runs in the home named by its payload; a long task is not redelivered while its lease is extended; the fifth failed delivery lands in the dead letter with redacted fields; an unknown task is dead-lettered and counted; trace context crosses enqueue → execution |
@@ -269,7 +270,7 @@ Every step leaves the project working: its tests pass, python-doctor prints 100,
 |---|---|
 | A dependency lacks Python 3.14 wheels | Found by `uv sync` in step 1; building from source in CI is the fallback, a version change needs the user |
 | The `independence` contract misbehaves with zero features | Step 1's fixture test shows it before any slice relies on it |
-| FastAPI's native tracing and the instrumentator conflict | Step 3's metrics test catches it; native tracing is switched off if they do |
+| A FastAPI upgrade changes what routing leaves in the scope | `tests/core/web/test_route_templates.py`, including agreement with FastAPI's own `http.route`, fails CI before the upgrade reaches production (ADR 0012) |
 | SQLAlchemy 2.1 behind PgBouncer reuses statement names under concurrency | Step 4 runs concurrent transactions through PgBouncer before declaring the factory done |
 | Lease extension in taskiq-redis needs internals that change between versions | Built behind our own broker class with tests on the pinned version; an upgrade reruns them |
 | SeaweedFS differs from the providers' S3 | Tests use only operations ADR 0001 verified; the ADR's revisit trigger applies |

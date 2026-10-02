@@ -1,6 +1,6 @@
 """A public app with probe routes for every error path, its metrics and its spans in memory."""
 
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Sequence
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from http import HTTPStatus
@@ -123,14 +123,14 @@ class ProbeApp:
         return self.spans.get_finished_spans()
 
 
-def build_probe_app(web: WebSettings | None = None) -> ProbeApp:
-    """The probe routes inside the real shell, with telemetry kept in memory."""
+def build_probe_app(web: WebSettings | None = None, extra: Sequence[APIRouter] = ()) -> ProbeApp:
+    """The probe routes and any extra ones inside the real shell, telemetry in memory."""
     registry = CollectorRegistry()
     spans = InMemorySpanExporter()
     provider = TracerProvider(sampler=PrivateAttributesSampler(), shutdown_on_exit=False)
     provider.add_span_processor(SimpleSpanProcessor(spans))
     app = build_http_app(
-        web or WebSettings(), HttpTelemetry(registry, provider), routers=[probe_router()]
+        web or WebSettings(), HttpTelemetry(registry, provider), routers=[probe_router(), *extra]
     )
     return ProbeApp(app, registry, spans)
 

@@ -455,7 +455,7 @@ Goal: for every user journey, answer "what is happening now and why" within minu
 
 | Signal | Source | Transport | Store | Retention |
 |---|---|---|---|---|
-| Metrics | prometheus-fastapi-instrumentator; application metrics (RED per route template, queues, pools, WS slots, provider sessions); node, nginx and blackbox exporters | scrape | Prometheus | 30 days, size cap |
+| Metrics | HTTP RED metrics recorded by the request boundary from the route FastAPI has already matched, under the names and labels of prometheus-fastapi-instrumentator 8.1.0 ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)); application metrics (RED per route template, queues, pools, WS slots, provider sessions); node, nginx and blackbox exporters | scrape | Prometheus | 30 days, size cap |
 | Logs | structlog JSON on stdout | OpenTelemetry Collector (filelog → OTLP/HTTP) | Loki, single binary, local filesystem | 14 days, size cap |
 | Traces | OpenTelemetry SDK: FastAPI, SQLAlchemy/asyncpg, HTTPX, Redis, TaskIQ, WS sessions | OTLP → OpenTelemetry Collector (tail sampling) | Tempo, single binary, local storage | 7 days |
 | Client telemetry | web and desktop errors, Web Vitals, WS reconnects | API endpoint → logs | Loki | 14 days |
@@ -529,7 +529,7 @@ Each of these counters must stay at zero; any non-zero value pages.
 
 ### 16.7 Cardinality, sampling, volume
 
-- Metric labels are bounded: role, route template, status class, home, queue, provider. User, company and session ids appear only in logs and traces.
+- Metric labels are bounded: role, route template, HTTP method from a closed set, status class, home, queue, provider. User, company and session ids appear only in logs and traces.
 - Loki labels are bounded too: `service`, `role`, `level`, `home`. `trace_id`, `request_id`, `user_id`, `org_id`, `session_id` go to structured metadata, never to labels. A search by one of them is bounded by a time range — usually the range of the trace it came from.
 - Traces: keep 100% of errors and of requests slower than their SLO, 5% of the rest (tail sampling in the collector).
 - Logs: INFO by default; DEBUG only through a time-limited switch for one company or user.
@@ -612,7 +612,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | google-genai | 2.25.0 | Gemini Live client |
 | Backend | aioboto3 | 15.5.0 | S3 client; one bucket per data home |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
-| Backend | prometheus-fastapi-instrumentator | 8.1.0 | HTTP metrics |
+| Backend | Own HTTP metrics on prometheus-client, recorded by the request boundary | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |
 | Backend | Own GCRA limiter on redis-py, state in Valkey | — | Request rate limits; replaces slowapi, whose storage is synchronous ([ADR 0011](../adr/0011-rate-limits-gcra-in-valkey.md)) |
 | Backend | bcrypt, PyJWT, cryptography | 5.0.0, 2.15.1, 50.0.2 | Passwords and tokens; the token carries the data home |
 | Backend | pypdf, python-docx, openpyxl, python-pptx, striprtf | — | Knowledge-base document parsing |

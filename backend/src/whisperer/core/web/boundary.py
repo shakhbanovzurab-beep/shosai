@@ -2,9 +2,13 @@
 
 Every request gets an id, kept from the client or generated, and a log context carrying
 it. Every response gets the common headers: `X-Request-ID` and the security headers.
-One access line records the method, the route template, the status and the duration.
-An exception no handler took becomes the 500 envelope here and is logged once, on that
-same line, with its stack. No response leaves the app without its request id.
+One access line records the method, the route template, the status and the duration,
+and the same outcome feeds the HTTP metrics once per request. An exception no handler
+took becomes the 500 envelope here and is logged once, on that same line, with its
+stack. No response leaves the app without its request id.
+
+The route template comes from FastAPI's routing result (`RouteTemplates`); the boundary
+never matches the path again.
 
 Pure ASGI: under the draft's `BaseHTTPMiddleware` an `HTTPException` raised below a
 dependency with `yield` turned into a 500.
@@ -20,7 +24,9 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 from whisperer.core.observability.log_context import log_context
 from whisperer.core.web.envelope import error_body, error_response
 from whisperer.core.web.error_handlers import status_code
+from whisperer.core.web.http_metrics import CompletedRequest, HttpMetrics, content_length
 from whisperer.core.web.request_ids import REQUEST_ID_HEADER, assign_request_id
+from whisperer.core.web.route_templates import RouteTemplates
 
 log = structlog.stdlib.get_logger(__name__)
 
@@ -38,10 +44,12 @@ SERVER_ERROR_STATUS = 500
 
 
 class RequestBoundary:
-    """Request id, log context, common headers, access line and the last-resort 500."""
+    """Request id, log context, common headers, access line, metrics and the last 500."""
 
-    def __init__(self, app: ASGIApp) -> None:
+    def __init__(self, app: ASGIApp, metrics: HttpMetrics, templates: RouteTemplates) -> None:
         self.app = app
+        self._metrics = metrics
+        self._templates = templates
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         """Run the request inside its context; other ASGI scopes pass through."""
@@ -51,33 +59,36 @@ class RequestBoundary:
         request_id = assign_request_id(scope)
         with log_context(request_id=request_id):
             if scope["type"] == "http":
-                await _HttpExchange(self.app, scope, request_id).run(receive, send)
+                exchange = _HttpExchange(self.app, scope, request_id, self._templates)
+                try:
+                    await exchange.run(receive, send)
+                finally:
+                    # Как у инструментатора: запись и при отмене задачи посреди запроса.
+                    self._metrics.observe(exchange.completed())
             else:
                 # Кадры и коды закрытия WebSocket — забота S05; здесь только контекст логов.
                 await self.app(scope, receive, send)
 
 
-def route_template(scope: Scope) -> str:
-    """The template of the matched route, `/v1/items/{item_id}`; never the raw path."""
-    route = scope.get("route")
-    template = getattr(route, "path_format", None)
-    return template if isinstance(template, str) else UNMATCHED_ROUTE
-
-
 class _HttpExchange:
-    """One HTTP request passing the boundary: its response status and timing."""
+    """One HTTP request passing the boundary: its response status, size and timing."""
 
-    def __init__(self, app: ASGIApp, scope: Scope, request_id: str) -> None:
+    def __init__(
+        self, app: ASGIApp, scope: Scope, request_id: str, templates: RouteTemplates
+    ) -> None:
         self._app = app
         self._scope = scope
         self._request_id = request_id
+        self._templates = templates
         self._status: int | None = None
+        self._response_bytes = 0
         self._started = time.perf_counter()
 
     async def run(self, receive: Receive, send: Send) -> None:
         async def send_with_headers(message: Message) -> None:
             if message["type"] == "http.response.start":
                 self._status = int(message["status"])
+                self._response_bytes = content_length(message.get("headers", ()))
                 self._add_headers(MutableHeaders(scope=message))
             await send(message)
 
@@ -102,6 +113,17 @@ class _HttpExchange:
         else:
             log.info("Запрос обработан", **self._outcome())
 
+    def completed(self) -> CompletedRequest:
+        """The outcome for the HTTP metrics; a request left without an answer counts as 500."""
+        return CompletedRequest(
+            method=str(self._scope.get("method", "")),
+            handler=self._templates.of(self._scope),
+            status=self._status or SERVER_ERROR_STATUS,
+            duration_seconds=time.perf_counter() - self._started,
+            request_bytes=content_length(self._scope.get("headers", ())),
+            response_bytes=self._response_bytes,
+        )
+
     async def _answer_internal_error(self, receive: Receive, send: Send) -> None:
         code = status_code(SERVER_ERROR_STATUS)
         response = error_response(SERVER_ERROR_STATUS, error_body(code, self._request_id))
@@ -117,7 +139,7 @@ class _HttpExchange:
     def _outcome(self) -> dict[str, object]:
         return {
             "method": self._scope.get("method"),
-            "route": route_template(self._scope),
+            "route": self._templates.of(self._scope) or UNMATCHED_ROUTE,
             "status": self._status,
             "duration_ms": round((time.perf_counter() - self._started) * 1000, 3),
         }

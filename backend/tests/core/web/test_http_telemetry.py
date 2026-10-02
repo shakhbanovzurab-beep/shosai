@@ -1,7 +1,7 @@
 """RED metrics and server spans of the public app, with no user input in either.
 
-The draft lost every request to a 500 once an upgrade broke the metrics instrumentator;
-these tests run the instrumentator and the native tracing together on every run.
+The draft lost every request to a 500 once an upgrade broke its metrics instrumentator;
+these tests run the HTTP metrics and the native tracing together on every run.
 """
 
 from opentelemetry.trace import SpanKind, StatusCode

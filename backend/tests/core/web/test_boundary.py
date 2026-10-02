@@ -4,18 +4,28 @@ from typing import Any
 
 import pytest
 import structlog
-from starlette.types import Message, Receive, Scope, Send
+from fastapi import FastAPI
+from prometheus_client import CollectorRegistry
+from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from tests.core.observability.capture import captured_logs
 from tests.core.web.probe_app import ITEM_ROUTE, build_probe_app, client_of
 from whisperer.core.web.boundary import RequestBoundary
+from whisperer.core.web.http_metrics import HttpMetrics
 from whisperer.core.web.request_ids import (
     REQUEST_ID_HEADER,
     RequestIdMissingError,
     request_id_of,
 )
+from whisperer.core.web.route_templates import RouteTemplates
 
 log = structlog.stdlib.get_logger("tests.boundary")
+
+
+def boundary(app: ASGIApp) -> RequestBoundary:
+    """The boundary around a bare ASGI app, with its own metrics and no routes."""
+    templates = RouteTemplates(FastAPI(openapi_url=None, docs_url=None, redoc_url=None))
+    return RequestBoundary(app, metrics=HttpMetrics(CollectorRegistry()), templates=templates)
 
 
 async def test_a_safe_client_request_id_is_kept() -> None:
@@ -129,7 +139,7 @@ async def test_a_failure_after_the_status_was_sent_is_logged_once_and_not_raised
 
     recorder = Recorder()
     with captured_logs() as captured:
-        await RequestBoundary(streams_then_fails)(http_scope(), recorder.receive, recorder.send)
+        await boundary(streams_then_fails)(http_scope(), recorder.receive, recorder.send)
 
     assert [message["type"] for message in recorder.messages] == [
         "http.response.start",
@@ -147,7 +157,7 @@ async def test_an_app_that_never_answers_is_logged_as_an_error() -> None:
 
     recorder = Recorder()
     with captured_logs() as captured:
-        await RequestBoundary(silent)(http_scope(), recorder.receive, recorder.send)
+        await boundary(silent)(http_scope(), recorder.receive, recorder.send)
 
     [line] = captured.lines()
     assert line["level"] == "error"
@@ -164,7 +174,7 @@ async def test_a_websocket_runs_inside_the_context_of_its_id() -> None:
     recorder = Recorder()
     with captured_logs() as captured:
         scope = {"type": "websocket", "path": "/v1/ws/user", "headers": []}
-        await RequestBoundary(socket)(scope, recorder.receive, recorder.send)
+        await boundary(socket)(scope, recorder.receive, recorder.send)
 
     [line] = captured.lines()
     assert line["request_id"] == seen[0]
@@ -178,7 +188,7 @@ async def test_other_scopes_pass_through_untouched() -> None:
 
     recorder = Recorder()
     scope: dict[str, Any] = {"type": "lifespan"}
-    await RequestBoundary(lifespan)(scope, recorder.receive, recorder.send)
+    await boundary(lifespan)(scope, recorder.receive, recorder.send)
 
     assert passed == [{"type": "lifespan"}]
 
