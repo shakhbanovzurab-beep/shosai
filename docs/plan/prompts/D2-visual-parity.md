@@ -1,5 +1,7 @@
 # D2 — Visual baseline and parity harness
 
+> **Superseded on 2026-10-07** by [ADR 0022](../../adr/0022-new-web-design-replaces-draft-parity.md): visual parity with the draft is no longer a goal. The package is done; its baseline stays as a record of the draft's screens and a coverage list.
+
 Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions` and `web-design-guidelines` before studying the draft frontend: the harness must capture the states and transitions these skills care about.
 
 ## Goal

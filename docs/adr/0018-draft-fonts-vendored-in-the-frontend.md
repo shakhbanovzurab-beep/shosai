@@ -1,6 +1,6 @@
 # ADR 0018 — The draft's font files are vendored in the frontend
 
-- **Status:** accepted by the owner on 2026-10-02 (F2 planning, decision F2-D2).
+- **Status:** superseded by [ADR 0022](0022-new-web-design-replaces-draft-parity.md) on 2026-10-07; accepted by the owner on 2026-10-02 (F2 planning, decision F2-D2).
 - **Package:** F2, frontend foundation; the public site (S17) serves the same files.
 - **Context documents:** [F2 plan](../plan/packages/F2-frontend-foundation.md) §3.5; draft spec 084 (font roles); [parity/README.md](../../parity/README.md) "What v2 must keep"; [CLAUDE.md](../../.claude/CLAUDE.md) "Rewrite from the draft".
 

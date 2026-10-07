@@ -1,6 +1,6 @@
 # ADR 0003 — Playwright in a pinned container for the visual parity harness
 
-- **Status:** Accepted (2026-10-01, with the D2 plan)
+- **Status:** superseded by [ADR 0022](0022-new-web-design-replaces-draft-parity.md) on 2026-10-07; accepted 2026-10-01 with the D2 plan
 - **Date:** 2026-10-01
 - **Package:** D2 ([plan](../plan/packages/D2-visual-parity.md))
 

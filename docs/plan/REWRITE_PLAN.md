@@ -48,7 +48,7 @@ These packages read the draft and produce the references that every later packag
 | ID | Package | Output |
 |---|---|---|
 | D1 | API and WebSocket contract baseline | `contracts/draft/`: the draft's OpenAPI, the WebSocket frame catalogue, and the list of endpoints and frames the shipped native clients use |
-| D2 | Visual baseline and parity harness | A route inventory, recorded API fixtures, and a Playwright harness that screenshots the draft and v2 frontends against the same fixtures and compares them |
+| D2 | Visual baseline and parity harness | A route inventory, recorded API fixtures, and a Playwright harness that screenshots the draft and v2 frontends against the same fixtures and compares them. Since 2026-10-07 a record of the draft's screens and a coverage list, not a gate ([ADR 0022](../adr/0022-new-web-design-replaces-draft-parity.md)) |
 | D3 | Data inventory and mapping | `docs/plan/DATA_MAPPING.md`: every draft table and bucket prefix mapped to its v2 place, including the home and company model |
 | D4 | Feature map | `docs/plan/FEATURE_MAP.md`: every draft backend module and frontend feature mapped to a v2 slice; anything proposed for removal listed for the user's decision |
 
@@ -57,7 +57,7 @@ These packages read the draft and produce the references that every later packag
 | ID | Package | Output |
 |---|---|---|
 | F1 | Backend foundation | `backend/` project: `core/`, `composition/`, `entrypoints/` for `api`, `ws`, `workers`, `scheduler`; configuration; home-aware database sessions; Valkey, Redis cache and S3 clients; structured logging and telemetry; the error envelope; the model-facing-English test; import-linter contracts; test-database claiming; health endpoints |
-| F2 | Frontend foundation | `frontend/` project: Vite, React 19.3, TypeScript, Tailwind, router, data fetching, i18n with the draft's 16 locales, the draft's design tokens and app shell carried over for visual parity, npm scripts required by CI, the D2 harness wired in |
+| F2 | Frontend foundation | The cabinet in `frontend/`: the new web UI moved from Next.js to a Vite SPA without visual change — React Router, TanStack Query, `use-intl` with 16 locales, a data layer generated from the OpenAPI contract, the sample API removed, npm scripts required by CI ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) |
 | F3 | Local environment | `compose.dev.yaml`: PostgreSQL 18 with pgvector as **two databases standing in for the RU and EU homes**, Valkey, Redis cache, Qdrant, and later LiveKit; prepared test databases; one command to start and one to reset |
 | F4 | Delivery to staging | Dockerfile (one image, four roles), production Compose, NGINX, TLS, image registry, `scripts/release.sh`, CI build and deploy to https://one.whisperer.one |
 | F5 | Observability | OpenTelemetry Collector, Prometheus, Alertmanager, Loki, Tempo, Grafana configuration per target architecture §16, including the `alerting` domain |
@@ -65,7 +65,7 @@ These packages read the draft and produce the references that every later packag
 
 ### Phase 2 — Feature slices
 
-Each slice is a vertical piece: backend slice, frontend slice, tests, contract compatibility with D1, visual parity with D2 for its screens. The table below is the summary as D4 left it; the module-by-module map, the decisions FM-1…FM-5 (including the routes dropped for lack of any consumer) and the dependencies between slices are in [FEATURE_MAP.md](FEATURE_MAP.md).
+Each slice is a vertical piece: backend slice, frontend slice, tests, contract compatibility with D1, the slice's screens of the new web UI working on the API ([ADR 0022](../adr/0022-new-web-design-replaces-draft-parity.md)). The table below is the summary as D4 left it; the module-by-module map, the decisions FM-1…FM-5 (including the routes dropped for lack of any consumer) and the dependencies between slices are in [FEATURE_MAP.md](FEATURE_MAP.md).
 
 | ID | Slice | Draft sources (backend) | Draft sources (frontend) |
 |---|---|---|---|
@@ -85,7 +85,7 @@ Each slice is a vertical piece: backend slice, frontend slice, tests, contract c
 | S14 | Analytics: product analytics, personal usage, satisfaction, client errors | `features/analytics`, `features/satisfaction`, `api/client_errors.py`, `api/admin/{analytics,client_errors}.py` | `analytics`, `product-analytics`, `satisfaction` |
 | S15 | Administration and support: admin screens, users, dashboard, monitoring, tickets, newsletters | `api/admin/{users,dashboard,monitoring,tickets,broadcasts}.py`, `api/tickets.py`, `api/unsubscribe.py`, `services/ticket*_service.py`, `services/broadcast_service.py` | `platform-admin`, `support` |
 | S16 | Hub, downloads and remaining modules: hubs (FM-1), client downloads, top-bar ticker | `features/hub`, `features/desktop`, `api/app_builds.py`, `api/admin/app_builds.py`, `api/ticker.py` | `hub`, `downloads` |
-| S17 | Public site: landing with its live demo, legal, help centre with its assistant, blog in 16 languages, SEO per [docs/seo/STRATEGY.md](../seo/STRATEGY.md) | `web_static.py`, `web_landing*.py`, `web_share.py`, `legal.py`, `features/demo`, `features/docs_assistant` (FM-1), `static/landing/`, `static/docs/` | — |
+| S17 | Public site in `site/` on Next.js ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)): landing with its live demo, pricing, documentation, legal, help centre with its assistant, blog in 16 languages, public pages of shared links, SEO per [docs/seo/STRATEGY.md](../seo/STRATEGY.md) | `web_static.py`, `web_landing*.py`, `web_share.py`, `legal.py`, `features/demo`, `features/docs_assistant` (FM-1), `static/landing/`, `static/docs/` | — |
 
 ### Phase 3 — Data migration and cutover
 
@@ -108,7 +108,7 @@ all S + D3 ── M1 ── M2
 - The user chose no feature order. The only fixed dependencies are technical:
   - F1, F2, F3 and F6 come before any slice;
   - S01 (identity) comes before the other slices, because every other slice needs an authenticated user;
-  - D1 and D2 must exist before a slice can prove contract compatibility and visual parity.
+  - D1 must exist before a slice can prove contract compatibility.
 - Slices run in parallel. Each touches only its own paths. Shared registration points (router, composition root, navigation, locale bundles) take small, additive edits, committed with explicit paths.
 - F4 is needed before a slice can be checked on https://one.whisperer.one; until then slices are verified locally.
 

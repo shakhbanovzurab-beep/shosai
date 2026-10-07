@@ -1,40 +1,33 @@
-# F2 — Frontend foundation
+# F2 — Frontend foundation (cabinet on Vite)
 
-Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions` and `web-design-guidelines` before reading the draft or designing anything; load `react-doctor` before running the gate.
+Follow the common protocol in `docs/plan/prompts/README.md`. Load the skills `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions` and `web-design-guidelines` before reading the code or designing anything; load `react-doctor` before running the gate.
 
-**This package is multi-session.** Work in the session mode described in `docs/plan/prompts/README.md`; the package plan is `docs/plan/packages/F2-frontend-foundation.md`. A split that fits the work below — adjust it in the plan if the design needs another order:
-
-1. Project skeleton: Vite, React 19.3, TypeScript, the pinned libraries, `.nvmrc`, npm scripts, the license copy if the project needs one, CI frontend job green on an empty project (items 1, 2).
-2. Visual foundation: design tokens, Tailwind theme, fonts, icons, global styles, light and dark themes (item 3).
-3. Base UI components from the draft's `shared/ui` that the shell and every slice use — buttons, fields, dialogs, toasts and the like. Split into two steps if they do not fit one session (item 3).
-4. App shell and navigation: layout, menus, not-found page, error boundary (item 3).
-5. Router with lazy-loaded routes and the registration point for slices (item 4).
-6. Data fetching layer: API client, the error envelope of ADR 0008, `request_id` shown on errors (item 5).
-7. i18n with all 16 locales, keys kept stable (item 6).
-8. Parity: the D2 harness wired to this project, and the shell proven identical to the draft in both themes and on both viewports (item 7, definition of done).
+**This package is multi-session.** Work in the session mode described in `docs/plan/prompts/README.md`. The package plan is `docs/plan/packages/F2-frontend-foundation.md`; the plan of 2026-10-02 there was written for visual parity with the draft and is superseded ([ADR 0022](../../adr/0022-new-web-design-replaces-draft-parity.md)). The first session writes a new plan.
 
 ## Goal
 
-A frontend project in `frontend/` that looks exactly like the draft's shell — navigation, layout, typography, colours, theme, loading and error states — and that every slice builds its screens into. After this package the frontend CI job runs and is green.
+The cabinet in `frontend/` — the new web UI committed on 2026-10-07 on Next.js — runs as a **Vite single-page app** ([ADR 0021](../../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)), looks and behaves exactly as it does now, and is the project every slice builds its screens into. After this package the frontend CI job runs and is green.
 
 ## Read first
 
-- CLAUDE.md "Frontend" and "Checks"; target architecture §4.2 (web cabinet), §18.2 (frontend libraries and versions).
-- The draft: `/root/whisperer/frontend/src/app/` (shell, router manifest), `src/shared/`, styles, Tailwind configuration, fonts, icons, `src/locales/`, `index.html`, `vite.config.ts`, `public/`.
-- `parity/README.md` from D2.
+- ADR 0021 and ADR 0022; CLAUDE.md "Frontend" and "Checks"; target architecture §4.2, §5, §18.2.
+- `frontend/` as committed in `f4f8430`: `src/app/` (routes, layouts, metadata), `src/features/`, `src/i18n/`, `src/proxy.ts`, `package.json`, `doctor.config.json`, `src/scripts/` (architecture and i18n checks).
+- `contracts/README.md` (D1): which routes are `web` and may change with the new frontend.
 
 ## Work
 
-1. Vite project with React 19.3, TypeScript, and the libraries and versions from target architecture §18.2, pinned in `package-lock.json`; `.nvmrc` with Node.js 26.10.0.
-2. npm scripts required by CLAUDE.md "CI": `typecheck`, `test` (single run), `build`, `doctor` (react-doctor pinned in `package.json`).
-3. Carry over the draft's visual foundation so screens can match pixel for pixel: design tokens, Tailwind theme, fonts, icons, global styles, the app shell and navigation. Rewrite the code to the v2 rules (feature-first slices, file length ≤ 200 lines, no barrel files); keep the look identical.
-4. Router with lazy-loaded routes per feature, and a registration point where each slice adds its routes and navigation entries.
-5. Data fetching layer against the v2 API contract, with the error envelope from F1 and `request_id` shown to the user on errors.
-6. i18n with all 16 locales. Carry over the draft's translation files; keep keys stable so slices can bring their screens' texts.
-7. Wire the D2 parity harness to this project.
+1. Vite project, latest stable, with React 19.3 and TypeScript; the libraries of §18.2 that the cabinet needs (React Router, TanStack Query, Zustand, Tailwind); `use-intl` for translations. Versions pinned in `package-lock.json`; `.nvmrc` stays 26.10.0.
+2. Routing: every page and layout of `src/app/` becomes a React Router route with lazy loading, under the same paths and query parameters. `next/link`, `next/navigation`, `next/dynamic`, `next/font` and `next-themes` are replaced.
+3. Translations: `next-intl` and `next-intl/server` → `use-intl`; locale detection moves from `src/proxy.ts` to the client; the 16 message catalogues and their keys stay as they are.
+4. Page metadata: `metadata` and `generateMetadata` → `<title>` and `<meta>` rendered by the page; the cabinet sends `noindex`.
+5. The sample backend (`src/app/api/`, `src/server/`, `features/*/server/`) is removed. The data layer is a client generated from the backend's OpenAPI contract with the error envelope of ADR 0008; how screens get data before their slice publishes endpoints is a decision of the plan (for example mocks in development and tests, removed slice by slice).
+6. Public pages (`sitemap.ts`, `robots.ts`, Open Graph images, `/s/[token]`) leave `frontend/`; they belong to the public site (S17).
+7. npm scripts required by CLAUDE.md "CI": `typecheck`, `test` (single run), `build`, `doctor`. The CI frontend job and the repository checks fit the new project; the `parity-compare` job is removed (ADR 0022).
+8. Every file within the 200-line limit; the architecture check of `src/scripts/` runs in `npm test`.
 
 ## Definition of done
 
+- Every screen of the cabinet renders as it did on Next.js, in both themes, on desktop and mobile widths, in the 16 languages.
+- No Next.js dependency in `frontend/`; no API inside `frontend/`.
 - `npm run doctor -- --score` prints 100; `typecheck`, `test` and `build` pass.
-- The parity harness shows no difference between the draft and v2 for the shell: navigation, empty layout, not-found page, in both themes and on both viewports.
 - CI frontend job is green after push.

@@ -1,5 +1,7 @@
 # F2 — Frontend foundation: package plan
 
+> **Superseded on 2026-10-07** by [ADR 0021](../../adr/0021-public-site-on-nextjs-cabinet-on-vite.md) and [ADR 0022](../../adr/0022-new-web-design-replaces-draft-parity.md). This plan builds the cabinet as a copy of the draft for visual parity; the cabinet is now the new web UI moved to Vite. The next F2 session replaces this plan ([prompt](../prompts/F2-frontend-foundation.md)). Steps 1–2 below were done and their code was replaced in `f4f8430`.
+
 Prompt: [prompts/F2-frontend-foundation.md](../prompts/F2-frontend-foundation.md). Status: [STATUS.md](../STATUS.md). Decision records: [ADR 0017](../../adr/0017-parity-stand-ins-and-pending-regions.md) (stand-ins and pending regions, CI comparison), [ADR 0018](../../adr/0018-draft-fonts-vendored-in-the-frontend.md) (fonts), [ADR 0019](../../adr/0019-no-session-replay-in-the-cabinet.md) (no session replay), [ADR 0008](../../adr/0008-error-envelope-with-compatible-detail.md) amended (where `request_id` shows), [ADR 0020](../../adr/0020-react-doctor-score-from-the-vendor-service.md) (react-doctor score).
 
 The package builds the `frontend/` project every slice builds its screens into: the Vite and React project, the visual foundation (tokens, Tailwind theme, fonts, icons, themes), the base UI kit, i18n in 16 languages, the data layer with the error envelope and the session, the router with the registration point for slices, the app shell, the analytics bootstrap, and the wiring of the D2 parity harness. It contains no feature screens.

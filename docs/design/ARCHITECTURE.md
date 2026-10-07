@@ -1,6 +1,6 @@
 # Whisperer v2 — Target Architecture
 
-- **Status:** target state, fixed by the owner on 2026-09-30. Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
+- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
 - **Diagram:** [architecture.html](architecture.html).
 - **Scope:** B2C and B2B (small and mid-size companies, 5–200 seats) on one platform.
 - **Placement:** one compute plane in the EU; two data homes — Russia and the EU.
@@ -21,7 +21,7 @@
 | fr-8 | Export and full deletion of account data, including revocation of external grants | core |
 | fr-9 | Voice assistant and simultaneous call translation | core |
 | fr-10 | Video rooms and recordings (LiveKit), broadcasts, subtitles | stretch |
-| fr-11 | Public site, help centre and blog in 16 languages | stretch |
+| fr-11 | Public site (landing, pricing, documentation, help centre, blog) and public pages of shared links, in 16 languages; server-rendered ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | stretch |
 | fr-12 | Company: creation, invitations by link and email, joining by verified email domain; roles owner, admin, member, guest | core |
 | fr-13 | Access inside a company: meeting, note, folder and knowledge collection visible to the owner, selected members or the whole company; search and Leo see only what the user may see | core |
 | fr-14 | Company administration: seats, members and roles, default access level, meeting retention, audit log, export and deletion of company data | core |
@@ -91,8 +91,9 @@
 
 | Component | Where | Responsibility | Scaling |
 |---|---|---|---|
-| Clients | user devices | Web cabinet (SPA, PWA); macOS, iOS, Linux, Windows apps; external MCP clients. One base URL `whisperer.one`. Desktop clients buffer up to 30 s of unsent audio | — |
-| Edge | plane | NGINX ×2: TLS, static assets, rate limits; `/v1/ws/*` → WS gateway (least_conn), everything else → API; handshake closed with 1013 when the plane is full | 2 nodes |
+| Clients | user devices | Web cabinet (Vite SPA, PWA); public site in the browser; macOS, iOS, Linux, Windows apps; external MCP clients. One base URL `whisperer.one`. Desktop clients buffer up to 30 s of unsent audio | — |
+| Edge | plane | NGINX ×2: TLS, static assets, rate limits; `/v1/ws/*` → WS gateway (least_conn), `/v1/*` → API; cabinet paths (`/app/*`, `/admin/*`, OAuth callback) → the cabinet's static files; every other path → public site; handshake closed with 1013 when the plane is full | 2 nodes |
+| Public site | plane | Next.js: server-rendered and statically generated public pages — landing, pricing, documentation, blog, legal, help centre, shared-link pages with previews; real `404`; `sitemap.xml`, `robots.txt`. Reads data only from the API; holds no business logic, database connection or queue ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | N stateless processes |
 | API | plane | FastAPI: cabinet, Leo, billing, companies and access policy, administration, presigned uploads, acquirer webhooks | N processes; one pool per database |
 | WS gateway | plane | Live capture, voice, translation, subtitles, ingest of room participant tracks from LiveKit egress. Meeting resume state lives in Redis; any process can resume any meeting | 250 meetings per process; 11–13 processes |
 | Workers | plane | TaskIQ on Redis Streams, queues `critical`, `default`, `bulk`, `meeting`: outbox relay, transcript queue drain, post-meeting pipeline, indexing, bank statement reconciliation | processes per queue; one pool per database |
@@ -139,6 +140,7 @@
 ## 5. Process model and code structure
 
 - **One modular monolith, one image**, four process roles: `api`, `ws`, `workers` (per queue), `scheduler`.
+- **Two web applications** beside it ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)): the cabinet in `frontend/` (Vite SPA, static files served by the edge) and the public site in `site/` (Next.js, its own image and process). Both follow the same feature-first layout; neither owns an API — the backend is FastAPI only.
 - **Feature First** (vertical slices): `core/`, `features/<domain>/`, `composition/`, `entrypoints/`. A feature owns its data, application services, channels (HTTP, WS, tasks, consumers) and its README.
 - A feature depends on another only through its `contracts`. Boundaries are enforced by import-linter contracts in CI.
 - Domains this design places responsibilities on:
@@ -575,7 +577,8 @@ Each of these counters must stay at zero; any non-zero value pages.
 | Backend | import-linter | latest stable | Architecture boundary checks |
 | Frontend | React | 19.3 | UI |
 | Frontend | TypeScript | latest stable | Typing |
-| Frontend | Vite | latest stable | Build and dev tooling |
+| Frontend | Vite | latest stable | Build and dev tooling of the cabinet |
+| Frontend | Next.js | latest stable | Public site: server rendering and static generation ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) |
 | Frontend | npm | — | Package management and scripts |
 | Data | PostgreSQL | latest supported | Source of truth |
 | Data | Qdrant | latest stable | Vector database, RAG |
@@ -652,7 +655,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Observability | Tempo | latest stable | Trace store, 7 days on local storage |
 | Observability | Grafana | latest stable | One pane for metrics, logs and traces |
 | Frontend | TanStack Query, React Router, Zustand | 5.104.0, 8.4.0, 5.0.15 | Data fetching, routing, state |
-| Frontend | i18next, react-i18next | 26.4.2, 17.0.15 | 16 languages |
+| Frontend | use-intl (cabinet), next-intl (public site) | latest stable | 16 languages, ICU messages; replaces i18next ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) |
 | Frontend | Tailwind CSS, Mermaid | 4.3.3, 12.0.0 | Styles; diagrams in answers |
 | Frontend | Vitest, react-doctor | 5.0.3, 0.9.14 | Tests; React code-health gate |
 | Clients | macOS, iOS: Swift, SwiftUI, WhispererKit | Swift 6 | Apple desktop and mobile clients |
@@ -686,6 +689,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Tempo for traces, 7 days on local storage | native Grafana integration: TraceQL, trace → logs in Loki, exemplars from Prometheus | one more store; tail sampling needed | trace volume outgrows the local disk → Tempo on S3 |
 | One OpenTelemetry Collector for logs and traces | the application is independent of the stores; tail sampling in one place | one more process to run | never |
 | One S3 bucket in Russia for both homes ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) | object storage exists only in Russia; the draft's bucket is kept (ADR 0006); an account transfer moves no bytes | files of the EU home outside the EU (legal review, §22); one bucket is a single point of failure for files | the legal review rules it inadmissible, a company contract requires EU storage, or an EU bucket becomes available → a bucket per home, objects of the EU home copied with identical keys |
+| Public site on Next.js, cabinet on a Vite SPA, backend only on FastAPI ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | public pages need server rendering and real `404` (SEO); the cabinet needs none and stays static; one API for every client | one more process role and frontend project; two translation entry points over one message format | the cabinet needs server rendering for a measured reason, or the site's server becomes a bottleneck → static generation |
 | Presigned uploads directly to the bucket; lifecycle rules | no DB session or API process held by file transfer | two-step upload; abandoned uploads removed by bucket rules | the storage provider lacks presigned multipart or lifecycle rules |
 
 ## 20. Accepted trade-offs

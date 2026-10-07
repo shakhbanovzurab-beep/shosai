@@ -1,6 +1,6 @@
 # ADR 0017 — Stand-ins and pending regions for visual parity during the rewrite
 
-- **Status:** accepted by the owner on 2026-10-02 (F2 planning, decisions F2-D1 and F2-D6).
+- **Status:** superseded by [ADR 0022](0022-new-web-design-replaces-draft-parity.md) on 2026-10-07; accepted by the owner on 2026-10-02 (F2 planning, decisions F2-D1 and F2-D6).
 - **Package:** F2, frontend foundation; applied by every slice until the last one lands.
 - **Context documents:** [ADR 0003](0003-playwright-visual-parity-harness.md); [parity/README.md](../../parity/README.md); [D2 plan](../plan/packages/D2-visual-parity.md) §3.8; [F2 plan](../plan/packages/F2-frontend-foundation.md) §3.11; [REWRITE_PLAN.md](../plan/REWRITE_PLAN.md) §4.
 

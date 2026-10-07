@@ -15,7 +15,7 @@ Whisperer is an AI workspace. It brings a person's knowledge, meetings, document
 
 **Scope.** Only the draft's `backend/` and `frontend/` and the files tied to them: Dockerfiles, Compose files, `deploy/` configuration, CI workflows, and `specs/` and `docs/` as a source of requirements. Out of scope: the macOS, iOS, Linux and Windows clients, `pwa-app/`, `shared/` (the Swift `WhispererKit`), `hubspot-app/`, `content-factory/`, `article/`. Never decrypt or read `secrets/`.
 
-**Goal.** Rewrite the draft into the final version so that **a user notices no visual difference**: the same screens, layouts, texts and flows. At the same time the final version meets every rule in this file and every target in the [target architecture](#target-architecture). Native clients that are already shipped keep working without an update (nfr-12), so the HTTP and WebSocket contract they use is preserved even though their code is out of scope.
+**Goal.** Rewrite the draft into the final version with the **new web design** in `frontend/` as the visual reference: the draft supplies behaviour, business rules and the API contract, not the look ([ADR 0022](../docs/adr/0022-new-web-design-replaces-draft-parity.md)). Visual parity with the draft is not a goal. The final version meets every rule in this file and every target in the [target architecture](#target-architecture). Native clients that are already shipped keep working without an update (nfr-12), so the HTTP and WebSocket contract they use is preserved even though their code is out of scope.
 
 **It is a rewrite, not a port.** Take behaviour from the draft; take structure, boundaries, data model and rules from this file and the target architecture. Do not copy draft code that breaks them.
 
@@ -78,13 +78,13 @@ Every change must be safe, measurable and of real engineering value. No changes 
 
 ## Architecture
 
-**Feature-first vertical slices are the only allowed structure, in both `backend/` and `frontend/`.**
+**Feature-first vertical slices are the only allowed structure, in `backend/`, `frontend/` and `site/`.**
 
 - A slice holds everything its feature needs. Backend: models, schemas, services, endpoints. Frontend: components, hooks, state, API calls. The two sides mirror each other by feature name.
 - Clean Architecture sets the direction of dependencies **inside** a slice: domain logic does not depend on the framework, the database or transport.
 - Slices talk to each other only through explicit contracts: a public interface, an event, or the HTTP API. `import-linter` enforces the boundaries on the backend.
 
-**File length.** A hand-written source file is at most **300 lines in `backend/`** and **200 lines in `frontend/`**, counting every line. Generated files and lock files are exempt ([what counts as generated](#ci)). Split the file by responsibility before it reaches the limit.
+**File length.** A hand-written source file is at most **300 lines in `backend/`** and **200 lines in `frontend/` and `site/`**, counting every line. Generated files and lock files are exempt ([what counts as generated](#ci)). Split the file by responsibility before it reaches the limit.
 
 ### Engineering principles
 
@@ -128,7 +128,8 @@ This table is the base. The complete stack — drivers, managed services, AI pro
 | | import-linter | latest stable | Architecture boundary checks |
 | **Frontend** | React | 19.3 | UI |
 | | TypeScript | latest stable | Typing |
-| | Vite | latest stable | Build and dev tooling |
+| | Vite | latest stable | Build and dev tooling of the cabinet (`frontend/`) |
+| | Next.js | latest stable | Public site (`site/`): server rendering, static generation |
 | | npm | — | Package management and scripts |
 | **Data** | PostgreSQL | latest supported | Source of truth |
 | | Qdrant | latest stable | Vector database, RAG |
@@ -176,7 +177,7 @@ Load and follow these skills whenever you work in the zone. This is not optional
 | Zone | Skills |
 |---|---|
 | Backend (`backend/`) | `fastapi` |
-| Frontend (`frontend/`) | `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions`, `web-design-guidelines` |
+| Frontend (`frontend/`, `site/`) | `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions`, `web-design-guidelines` |
 | Docker and Compose | `docker-project-foundations`, `docker-build-strategies`, `docker-compose-patterns`, `docker-destructive-guardrails` |
 | Python code health | `python-doctor` |
 | React code health | `react-doctor` |
@@ -197,7 +198,14 @@ Judge every architectural decision on performance, scalability, fault tolerance 
 
 ## Frontend
 
-The frontend is one workspace. The user never feels a switch between features; each capability reads as the natural continuation of the previous one. The interface is fast, consistent and predictable, and keeps cognitive load low.
+Two web applications ([ADR 0021](../docs/adr/0021-public-site-on-nextjs-cabinet-on-vite.md)), on one design system:
+
+- **Cabinet** — `frontend/`, a Vite single-page app and PWA: everything a signed-in user and an administrator work in. Not indexable.
+- **Public site** — `site/`, Next.js: landing, pricing, documentation, blog, legal pages, help centre and public pages of shared links. Server-rendered or statically generated, under [docs/seo/STRATEGY.md](../docs/seo/STRATEGY.md).
+
+Neither application owns an API, business logic, a database connection or a queue: the backend is FastAPI only. A Next.js route handler, server action or middleware only renders, redirects or proxies.
+
+The cabinet is one workspace. The user never feels a switch between features; each capability reads as the natural continuation of the previous one. The interface is fast, consistent and predictable, and keeps cognitive load low.
 
 ### UX principles
 
@@ -219,7 +227,7 @@ Follow the Vercel skills. The rules that matter most here:
 - **Composition.** No components driven by many boolean flags. Build with composition, `children` slots and compound components instead of deep prop drilling. Keep data and logic containers separate from presentational components.
 - **AI output.** Streamed model output renders smoothly, without layout shift, and stays accessible.
 
-The frontend is a Vite single-page app. Guidance in the Vercel skills that assumes Next.js or React Server Components does not apply unless server rendering is adopted (see [Undecided](#undecided)).
+Guidance in the Vercel skills that assumes Next.js or React Server Components applies to `site/` only, not to `frontend/`.
 
 ### Performance focus
 
@@ -443,7 +451,6 @@ The `docker-destructive-guardrails` skill defines the confirmation rules.
 
 These points are open. Do not assume an answer; check the old `whisperer` codebase first, then ask.
 
-- **Rendering of public pages.** The SEO strategy requires server rendering or static generation and real `404` responses. The target architecture makes the web cabinet a client-rendered SPA and PWA, and the public site (fr-11) a stretch goal without a rendering decision. The draft serves its public landing as pre-built static HTML from the backend (`web_landing*.py`, `static/landing/`); package S17 decides whether v2 keeps that approach.
 - **The role of `pgvector`.** The target architecture makes Qdrant the vector index and also lists `pgvector` for vectors in PostgreSQL; the test infrastructure requires `pgvector`. Which vectors live where is not stated.
 - **AI interface libraries.** `ai-elements`, `streamdown` and the Vercel AI SDK were considered. The target architecture adopts Tailwind CSS but none of these three.
 

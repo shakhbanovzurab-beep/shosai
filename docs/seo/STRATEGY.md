@@ -529,7 +529,7 @@ removes it, and may pick either canonical when a script changes it; preview
 crawlers do not run JavaScript at all.
 
 Phase 1 requires server-side rendering or static generation for public pages.
-How this is reached with the project stack is an open decision (18.1).
+Public pages are served by the Next.js public site (ADR 0021, 18.1).
 
 ### 6.10 Performance `[S63]`
 
@@ -1584,10 +1584,10 @@ client-rendered single-page app, with no server rendering. A single-page app
 serves one HTML shell for every URL, which is exactly the soft 404 that 6.7
 forbids.
 
-A decision is needed on how public pages are produced: static generation for the
-public site, server rendering, or a separate public site next to the application.
-This is an architectural decision and belongs in an ADR. Whichever option is
-chosen must give each public page its own path URL (6.2), let the server decide
+**Resolved on 2026-10-07** by [ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md):
+public pages live in a separate public site on Next.js (`site/`), server-rendered
+or statically generated; the cabinet stays a Vite single-page app outside the
+indexable inventory. The site must give each public page its own path URL (6.2), let the server decide
 the status (6.7), put the head elements in the server response (6.9) and take
 the origin from configuration (6.12).
 
@@ -1678,9 +1678,9 @@ trust pages with their footer links (8.13), visible dates (8.10), figure
 captions (8.14), breadcrumbs (8.12). Invisible rules do not touch parity: head
 metadata, structured data, status codes, redirects, headers, sitemaps.
 
-This document assumes that S17 ships the invisible rules together with parity,
-and that each visible change to an existing draft page ships afterwards as a
-separate, deliberate change. Confirm.
+**Resolved on 2026-10-07** by [ADR 0022](../adr/0022-new-web-design-replaces-draft-parity.md):
+visual parity with the draft is no longer a goal, so S17 ships the visible and
+the invisible rules together.
 
 ### 18.13 Definition of the first useful action
 
@@ -1712,9 +1712,6 @@ check. It does not mean built: S17 builds the public site against this document.
 
 Deliberately deferred:
 
-- **How public pages are rendered** (18.1). The rules that bind any choice are
-  already in 6.2, 6.7, 6.9 and 6.12.
-- **Visible changes to existing draft pages** until visual parity (18.12).
 - **Phases 2 and 3** (4): the benchmark, community work, languages beyond
   English and programmatic SEO.
 - **Yandex data** (17.4): no tool reads it yet.
