@@ -1,0 +1,50 @@
+{
+  "title": "Concentrazione",
+  "sound": {
+    "label": "Suono a fine sessione",
+    "on": "Suono attivo",
+    "off": "Suono disattivato"
+  },
+  "rhythm": "Ritmo di concentrazione",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Tecnica Pomodoro",
+      "hint": "{focus} di concentrazione, {pause} di pausa, {longBreak} di pausa lunga dopo ogni {every, plural, one {sessione} many {# di sessioni} other {# sessioni}}. Ideale per iniziare e per le giornate piene."
+    },
+    "fifty": {
+      "name": "Esteso",
+      "hint": "{focus} di concentrazione, {pause} di pausa, {longBreak} di pausa lunga dopo ogni {every, plural, one {sessione} many {# di sessioni} other {# sessioni}}. Ideale per scrivere e progettare."
+    },
+    "fiftyTwo": {
+      "name": "Ritmo {focus, number}/{pause, number}",
+      "hint": "{focus} di concentrazione, {pause} di pausa: il ritmo delle persone più produttive secondo lo studio di DeskTime."
+    },
+    "deepWork": {
+      "name": "Lavoro profondo",
+      "hint": "{focus} di concentrazione, {pause} di pausa: un ciclo naturale di attenzione, per i problemi difficili."
+    }
+  },
+  "phase": {
+    "focus": "Concentrazione",
+    "break": "Pausa breve",
+    "long_break": "Pausa lunga"
+  },
+  "start": "Avvia",
+  "pause": "Metti in pausa",
+  "resume": "Riprendi",
+  "restart": "Ricomincia questa fase",
+  "skipBreak": "Salta la pausa",
+  "skipToBreak": "Passa alla pausa",
+  "cycle": "{done, number} di {every, plural, one {# sessione} many {# di sessioni} other {# sessioni}} prima della pausa lunga",
+  "doneToday": "{count, plural, one {# sessione completata oggi} many {# di sessioni completate oggi} other {# sessioni completate oggi}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Sessione di concentrazione finita: fai una pausa.",
+    "focusLong": "Sessione di concentrazione finita: fai una pausa lunga.",
+    "break": "Pausa finita: è ora di concentrarsi.",
+    "next": "{preset} · premi Avvia quando vuoi."
+  }
+}

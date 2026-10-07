@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Notas aprimoradas",
+    "description": "O Leo escolhe a estrutura que combina com a reunião."
+  },
+  "sections": {
+    "summary": "Resumo",
+    "keyPoints": "Pontos principais",
+    "decisions": "Decisões",
+    "actionItems": "Próximos passos"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Acompanhamento: investidor",
+      "description": "Atualização regular com um investidor: em que pé estão as coisas e no que o investidor pode ajudar."
+    },
+    "catchUpPortfolio": {
+      "name": "Acompanhamento: empresa do portfólio",
+      "description": "Conversa com uma empresa do portfólio sobre métricas, riscos e pedidos."
+    },
+    "lpProspective": {
+      "name": "LP: em prospecção",
+      "description": "Primeiras conversas com um potencial cotista (LP)."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: reunião do conselho",
+      "description": "Discussão do conselho, deliberações e responsáveis."
+    },
+    "vcPitch": {
+      "name": "VC: pitch",
+      "description": "Pitch de uma startup: o que se destacou, o veredito e a due diligence a fazer."
+    },
+    "oneOnOne": {
+      "name": "1:1",
+      "description": "Uma conversa individual: como as coisas estão, temas e próximos passos combinados."
+    },
+    "customerCall": {
+      "name": "Reunião com cliente",
+      "description": "Descoberta ou acompanhamento com um cliente: dores, pedidos e pendências."
+    },
+    "teamSync": {
+      "name": "Alinhamento da equipe",
+      "description": "Uma reunião recorrente da equipe: novidades, decisões e quem faz o quê."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Onde estamos",
+    "updatesShared": "Novidades compartilhadas",
+    "whatWeAgreed": "O que combinamos",
+    "followUps": "Pendências",
+    "companyUpdate": "Novidades da empresa",
+    "metricsAndHighlights": "Métricas e destaques",
+    "howWeCanHelp": "Como podemos ajudar",
+    "overview": "Visão geral",
+    "theirInterests": "Interesses deles",
+    "nextSteps": "Próximos passos",
+    "boardSummary": "Resumo do conselho",
+    "discussion": "Discussão",
+    "resolutions": "Deliberações",
+    "ownersAndDeadlines": "Responsáveis e prazos",
+    "thePitch": "O pitch",
+    "whatStoodOut": "O que se destacou",
+    "verdict": "Veredito",
+    "diligenceToDos": "Tarefas de due diligence",
+    "howItsGoing": "Como estão as coisas",
+    "topics": "Temas",
+    "context": "Contexto",
+    "painsAndRequests": "Dores e pedidos",
+    "outcome": "Resultado",
+    "updates": "Novidades",
+    "decisions": "Decisões",
+    "whoDoesWhat": "Quem faz o quê"
+  },
+  "icons": {
+    "enhanced": "Notas aprimoradas",
+    "briefcase": "Maleta",
+    "chart": "Gráfico",
+    "handshake": "Aperto de mão",
+    "landmark": "Edifício",
+    "lightbulb": "Lâmpada",
+    "magnet": "Ímã",
+    "phone": "Telefone",
+    "rocket": "Foguete",
+    "calendar": "Calendário",
+    "users": "Pessoas"
+  },
+  "menu": {
+    "label": "Template das notas aprimoradas",
+    "search": "Pesquisar templates…",
+    "noMatch": "Nenhum template encontrado.",
+    "heading": "Templates",
+    "regenerate": "Gerar notas novamente",
+    "newTemplate": "Novo template…"
+  },
+  "rewritten": "Notas reescritas com o template “{template}”",
+  "regenerated": "Notas aprimoradas geradas novamente",
+  "created": "Template “{template}” criado",
+  "dialog": {
+    "title": "Novo template",
+    "description": "Escolha quais seções o Leo escreve para uma reunião e que nome cada uma recebe.",
+    "namePlaceholder": "ex.: Descoberta de vendas…",
+    "nameRequired": "Dê um nome ao template.",
+    "descriptionLabel": "Descrição",
+    "descriptionPlaceholder": "Quando usar…",
+    "ownDescription": "Seu próprio template.",
+    "icon": "Ícone",
+    "sections": "Seções",
+    "include": "Incluir {section}",
+    "heading": "Título de {section}",
+    "sectionsRequired": "Mantenha pelo menos uma seção.",
+    "create": "Criar template"
+  }
+}

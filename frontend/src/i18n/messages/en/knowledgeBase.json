@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Knowledge",
+    "description": "Choose the files and sources Leo answers from in Personal."
+  },
+  "heading": "Knowledge",
+  "intro": "What Leo answers from when you ask in Personal: files you choose from File Manager, sources you connect, and what your workspaces share with you. Only you see these answers.",
+  "tabs": {
+    "files": "Files",
+    "sources": "Sources",
+    "workspaces": "From workspaces"
+  },
+  "loadFailed": "Couldn’t load your files",
+  "leoFolders": {
+    "heading": "Folders Leo reads",
+    "stop": "Stop using {folder}"
+  },
+  "leoFiles": {
+    "heading": "Files Leo uses",
+    "emptyTitle": "Leo doesn’t use any of your files yet",
+    "emptyDescription": "Choose files or whole folders from File Manager, or upload new ones above."
+  },
+  "summary": {
+    "files": "Files",
+    "chunks": "Chunks",
+    "processing": "Processing",
+    "embeddings": "Embeddings",
+    "used": "{used} used",
+    "usedOfLimit": "{used} of {limit} on your plan",
+    "failedUsage": "{failed, plural, one {# failed} other {# failed}} · {usage}",
+    "inIndex": "in the vector index",
+    "busy": "parsing and embedding",
+    "caughtUp": "all caught up",
+    "dimensions": "{dimensions, number}-d"
+  },
+  "dropzone": {
+    "label": "Add files for Leo",
+    "title": "Drop files here for Leo to use",
+    "uploading": "Uploading {count, plural, one {# file} other {# files}}…",
+    "description": "They’re saved to My files in File Manager. {types}, up to {size} each.",
+    "choose": "Choose from your files",
+    "upload": "Upload new",
+    "skipped": "{count, plural, one {Skipped # file} other {Skipped # files}}",
+    "unreadable": "{name}: Leo can’t read this type or size",
+    "tooMany": "{name}: more than {max, number} files at once"
+  },
+  "choose": {
+    "title": "Choose from your files",
+    "description": "Leo reads what you pick and answers from it in Personal. A folder includes files you add to it later.",
+    "folders": "Whole folders",
+    "files": "Files",
+    "alreadyUsed": "Leo uses it already",
+    "submit": "Use with Leo",
+    "readingOne": "Leo is reading it now",
+    "readingMany": "{count, plural, one {Leo is reading # pick now} other {Leo is reading # picks now}}",
+    "readingDescription": "It answers from them in Personal once indexing finishes."
+  },
+  "table": {
+    "status": "Status",
+    "chunks": "Chunks",
+    "size": "Size",
+    "workspaces": "Workspaces",
+    "actions": "Actions",
+    "wholeFolder": "<name>{folder}</name> · whole folder"
+  },
+  "steps": {
+    "queued": "Queued",
+    "parsing": "Parsing",
+    "chunking": "Chunking",
+    "embedding": "Embedding",
+    "indexed": "Indexed",
+    "failed": "Failed"
+  },
+  "status": {
+    "step": "{step, number} of {total, number}",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Re-index",
+    "showInFileManager": "Show in File Manager",
+    "stopFolder": "Stop using “{folder}”",
+    "stopFile": "Stop using with Leo"
+  }
+}

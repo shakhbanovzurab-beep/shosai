@@ -1,0 +1,23 @@
+{
+  "description": "Hubungkan server Model Context Protocol agar Leo mendapat alat dan data dari aplikasi lain.",
+  "add": "Tambahkan server",
+  "empty": {
+    "title": "Tidak ada server MCP",
+    "description": "Tambahkan server jarak jauh melalui URL-nya."
+  },
+  "hasAuth": "Dengan otorisasi",
+  "notReached": "Belum dihubungi",
+  "tools": "{count, plural, other {# alat}}",
+  "enable": "Aktifkan {name}",
+  "disable": "Nonaktifkan {name}",
+  "remove": "Hapus {name}",
+  "removed": "{name} dihapus",
+  "form": {
+    "transport": "Transpor",
+    "url": "URL server",
+    "auth": "Header otorisasi <optional>(opsional)</optional>"
+  },
+  "addFailed": "Tidak dapat menambahkan server.",
+  "toggleFailed": "Tidak dapat mengubah server",
+  "removeFailed": "Tidak dapat menghapus server"
+}

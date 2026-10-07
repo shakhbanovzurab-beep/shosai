@@ -1,0 +1,60 @@
+{
+  "title": "Riunioni",
+  "loading": "Caricamento delle riunioni…",
+  "loadFailed": "Impossibile caricare le riunioni",
+  "loadFailedHint": "Controlla la connessione e riprova.",
+  "newMeeting": "Nuova riunione",
+  "actions": {
+    "schedule": "Pianifica in Calendario",
+    "upload": "Carica una registrazione"
+  },
+  "filters": "Filtri delle riunioni",
+  "views": {
+    "all": "Tutte",
+    "upcoming": "In programma",
+    "live": "In corso",
+    "past": "Passate"
+  },
+  "recent": "Recenti",
+  "viewAll": "Vedi tutte",
+  "noMoreToday": "Nessun’altra riunione oggi.",
+  "day": {
+    "today": "Oggi",
+    "tomorrow": "Domani",
+    "yesterday": "Ieri"
+  },
+  "liveBadge": "In diretta",
+  "liveSince": "{minutes, plural, =0 {Appena iniziata · termina alle {end}} one {Iniziata # min fa · termina alle {end}} many {Iniziata # min fa · termina alle {end}} other {Iniziata # min fa · termina alle {end}}}",
+  "startsIn": "{minutes, plural, =0 {Inizia ora} one {Tra # min} many {Tra # min} other {Tra # min}}",
+  "join": "Partecipa alla riunione",
+  "opensInNewTab": "(si apre in una nuova scheda)",
+  "source": {
+    "whisperer": "Stanza Whisperer",
+    "in_person": "Di persona"
+  },
+  "participants": "Partecipanti: {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "Le note non sono ancora pronte.",
+    "tasks": "{count, plural, one {# attività} many {# di attività} other {# attività}}",
+    "decisions": "{count, plural, one {# decisione} many {# di decisioni} other {# decisioni}}"
+  },
+  "empty": {
+    "none": {
+      "title": "Ancora nessuna riunione",
+      "description": "Pianifica una riunione in Calendario o carica una registrazione per ricevere le note di Leo."
+    },
+    "upcoming": {
+      "title": "Niente in programma",
+      "description": "Qui compaiono le riunioni che pianifichi in Calendario."
+    },
+    "live": {
+      "title": "Nessuna riunione in corso",
+      "description": "Una riunione compare qui mentre è in corso, così puoi partecipare."
+    },
+    "past": {
+      "title": "Ancora nessuna riunione passata",
+      "description": "Qui compaiono le riunioni registrate con il riepilogo di Leo, le attività e le decisioni."
+    }
+  }
+}

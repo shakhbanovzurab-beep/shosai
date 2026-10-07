@@ -1,0 +1,12 @@
+{
+  "notMultipart": "メッセージは multipart/form-data で送信してください。",
+  "emptyMessage": "メッセージを入力するか、ファイルを添付してください。",
+  "messageTooLong": "メッセージは {max, number} 文字未満にしてください。",
+  "tooManyFiles": "{max, plural, other {添付できるファイルは # 件までです。}}",
+  "fileTooBig": "{name} は {size} を超えています。",
+  "subjectRequired": "チケットに短い件名を付けてください。",
+  "topicRequired": "トピックを選択してください。",
+  "detailsRequired": "何が起きたかを説明してください。",
+  "ticketNotFound": "チケットが見つかりません。",
+  "invalidUpdate": "ステータス、評価、または未読フラグを送信してください。"
+}

@@ -1,0 +1,70 @@
+{
+  "title": "Instellingen",
+  "description": "Hoe {workspace} werkt voor iedereen erin. Wijzigingen worden meteen opgeslagen.",
+  "adminsOnly": "Alleen beheerders kunnen de instellingen van de werkruimte wijzigen.",
+  "adminsOnlyAsk": "Alleen beheerders kunnen de instellingen van de werkruimte wijzigen. Vraag het {name}.",
+  "general": {
+    "title": "Algemeen",
+    "name": "Naam van werkruimte",
+    "nameHint": "Zichtbaar in de wisselaar en in uitnodigingen.",
+    "renamed": "Naam van werkruimte gewijzigd",
+    "join": "Lid worden met een zakelijk e-mailadres",
+    "joinHint": "Laat collega’s zonder uitnodiging lid worden als hun e-mailadres op jullie domein staat.",
+    "joinOn": "Iedereen met een e-mailadres op @{domain} kan lid worden zolang er licenties vrij zijn.",
+    "domain": "E-maildomein",
+    "joinEnabled": "Mensen van {domain} kunnen nu lid worden",
+    "joinDisabled": "Lid worden via e-maildomein staat uit"
+  },
+  "sharing": {
+    "title": "Delen",
+    "description": "Vergaderingen met mensen van buiten {workspace} worden nooit automatisch gedeeld. Organisatoren kunnen altijd wijzigen wie een vergadering ziet.",
+    "reviewTitle": "Bevestigen hoe vergaderingen worden gedeeld",
+    "reviewHint": "Dit zijn de aanbevolen regels. Wijzig wat je wilt, of laat ze zoals ze zijn.",
+    "keep": "Deze regels houden",
+    "confirmed": "Deelregels bevestigd",
+    "defaultLevel": "Notities na een vergadering delen met",
+    "defaultLevelHint": "Voor vergaderingen waarbij iedereen in {workspace} zit.",
+    "levels": {
+      "private": "Alleen de organisator",
+      "participants": "Deelnemers (aanbevolen)",
+      "workspace": "Iedereen in {workspace}"
+    },
+    "levelChanged": "Nieuwe vergaderingen gaan naar: {level}",
+    "transcripts": "Transcripties meesturen",
+    "transcriptsHint": "Uit: mensen zien de samenvatting, besluiten en taken, maar niet de woordelijke transcriptie.",
+    "transcriptsOn": "Transcripties worden ook gedeeld",
+    "transcriptsOff": "Alleen samenvattingen worden gedeeld",
+    "membersInvite": "Leden kunnen mensen uitnodigen",
+    "membersInviteHint": "Uit: alleen beheerders kunnen uitnodigen.",
+    "membersInviteOn": "Leden kunnen mensen uitnodigen",
+    "membersInviteOff": "Nu kunnen alleen beheerders uitnodigen"
+  },
+  "plan": {
+    "title": "Abonnement en gebruik",
+    "description": "Gefactureerd aan de werkruimte, los van ieders persoonlijke abonnement.",
+    "name": "{plan}-abonnement",
+    "seats": "{taken, number} van {total, number} licenties",
+    "price": "{perSeat} per licentie per maand · {total} in totaal · wordt verlengd op {renews}",
+    "change": "Licenties of abonnement wijzigen",
+    "ownerOnly": "Alleen de eigenaar beheert de facturering.",
+    "usageFailed": "Kan het gebruik niet laden.",
+    "usageIn": "Gebruik in {month}",
+    "idle": "{count, plural, one {# lid is al {days, number}+ dagen inactief: een licentie die je opnieuw kunt gebruiken.} other {# leden zijn al {days, number}+ dagen inactief: licenties die je opnieuw kunt gebruiken.}}",
+    "member": "Lid",
+    "meetings": "Vergaderingen",
+    "minutes": "Minuten",
+    "lastActive": "Laatst actief",
+    "inactive": "Inactief"
+  },
+  "danger": {
+    "delete": "Werkruimte verwijderen",
+    "deleteHint": "Verwijdert de werkruimte voor iedereen en stopt de facturering.",
+    "deleteTitle": "{name} verwijderen?",
+    "deleteDescription": "Iedereen verliest de projecten, taken, besluiten en uploads ervan. Opnames en bestanden die mensen hebben gedeeld, blijven van hen, in hun eigen Notities en Bestandsbeheer. Dit kan niet ongedaan worden gemaakt.",
+    "leave": "Werkruimte verlaten",
+    "leaveHint": "Je kunt later opnieuw worden uitgenodigd; je licentie komt vrij.",
+    "leaveTitle": "{name} verlaten?",
+    "leaveDescription": "Vergaderingen en bestanden die je hebt gedeeld, gaan met je mee en blijven in je Notities en Bestandsbeheer. Bestanden die je aan de werkruimte hebt overgedragen, blijven hier. Taken blijven bij het team; je open taken worden niet meer toegewezen.",
+    "leaveConfirm": "Verlaten"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "title": "スキル",
+  "tabs": {
+    "readyMade": "既製",
+    "repository": "自分のリポジトリ",
+    "mine": "マイスキル（{count, number}）"
+  },
+  "readyMade": {
+    "placeholder": "スキルを検索：システム設計、コードレビュー…",
+    "label": "スキルを検索",
+    "help": "skills.sh のディレクトリを検索",
+    "noMatches": "一致するスキルはありません。別の言葉でお試しください。",
+    "emptyTitle": "既製スキルのディレクトリ",
+    "emptyDescription": "入力して検索を始めてください。スキルとは、プロンプトに添付できる既製の指示です。",
+    "searchFailed": "skills.sh を検索できませんでした。もう一度お試しください。"
+  },
+  "repository": {
+    "label": "GitHub リポジトリ",
+    "placeholder": "owner/repo または GitHub のリンク",
+    "find": "スキルを検索",
+    "help": "SKILL.md ファイルを含む公開リポジトリ",
+    "emptyTitle": "GitHub から自作のスキルを追加",
+    "emptyDescription": "公開リポジトリを入力すると、その中の SKILL.md ファイルを検索します。",
+    "scanFailed": "リポジトリを読み込めませんでした。"
+  },
+  "candidate": {
+    "installs": "{count, plural, other {# 回インストール}}",
+    "installed": "インストール済み"
+  },
+  "mine": {
+    "extraFiles": "スクリプトなどのファイルも含まれていますが、使用されるのは SKILL.md の指示だけです。",
+    "update": "{name} を更新",
+    "updateHint": "最新のコミットに更新",
+    "remove": "{name} を削除",
+    "emptyTitle": "スキルはまだありません",
+    "emptyDescription": "「既製」またはリポジトリから追加してください。"
+  },
+  "remove": {
+    "title": "{name} を削除しますか？",
+    "titleUnnamed": "このスキルを削除しますか？",
+    "description": "このスキルを使用しているすべてのプロンプトから外されます。後でもう一度追加できます。"
+  },
+  "toasts": {
+    "installed": "{name} をインストールしました",
+    "installedHint": "プロンプトエディタからプロンプトに添付してください。",
+    "installFailed": "スキルをインストールできませんでした",
+    "upToDate": "{name} は最新です",
+    "updated": "{name} を更新しました",
+    "updateFailed": "スキルを更新できませんでした",
+    "removed": "{name} を削除しました",
+    "removeFailed": "スキルを削除できませんでした"
+  }
+}

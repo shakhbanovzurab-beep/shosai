@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "Ruang kerja",
+    "home": "Beranda ruang kerja",
+    "new": "Ruang kerja baru",
+    "settings": "Pengaturan ruang kerja",
+    "members": "Anggota",
+    "decisions": "Keputusan",
+    "projects": "Proyek",
+    "tasks": "Tugas",
+    "knowledge": "Pengetahuan ruang kerja",
+    "meetings": "Rapat ruang kerja",
+    "project": "Proyek",
+    "meeting": "Rapat"
+  },
+  "createWorkspace": "Buat ruang kerja",
+  "roles": {
+    "owner": {
+      "label": "Pemilik",
+      "description": "Semuanya, termasuk tagihan dan menghapus ruang kerja."
+    },
+    "admin": {
+      "label": "Admin",
+      "description": "Mengelola orang, tim, aturan berbagi, dan pengaturan."
+    },
+    "member": {
+      "label": "Anggota",
+      "description": "Merekam, membagikan, dan menindaklanjuti rapat."
+    }
+  },
+  "teams": {
+    "private": "Tim privat"
+  },
+  "audience": {
+    "participants": "Peserta",
+    "everyone": "Semua orang di {workspace}",
+    "aTeam": "Satu tim",
+    "sharedWith": "{level, select, participants {Dibagikan kepada peserta} workspace {Dibagikan kepada semua orang di {workspace}} other {Dibagikan kepada {team}}}",
+    "hint": "{level, select, participants {Anggota yang hadir dalam rapat.} other {Semua orang di ruang kerja, sekarang dan nanti.}}",
+    "teamHint": "{private, select, true {Anggota {team} (tim privat), ditambah peserta.} other {Anggota {team}, ditambah peserta.}}"
+  },
+  "people": {
+    "list": "Orang: {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name} (Anda)"
+  },
+  "filters": {
+    "team": "Tim",
+    "allTeams": "Semua tim",
+    "project": "Proyek",
+    "allProjects": "Semua proyek",
+    "clearSearch": "Hapus pencarian"
+  },
+  "blocks": {
+    "loading": {
+      "files": "Memuat file…",
+      "tasks": "Memuat tugas…",
+      "yourTasks": "Memuat tugas Anda…",
+      "projects": "Memuat proyek…",
+      "meetings": "Memuat rapat…",
+      "upcomingMeetings": "Memuat rapat mendatang…",
+      "decisions": "Memuat keputusan…"
+    },
+    "failed": {
+      "files": "Tidak dapat memuat file.",
+      "tasks": "Tidak dapat memuat tugas.",
+      "yourTasks": "Tidak dapat memuat tugas Anda.",
+      "projects": "Tidak dapat memuat proyek.",
+      "meetings": "Tidak dapat memuat rapat.",
+      "upcomingMeetings": "Tidak dapat memuat rapat mendatang.",
+      "decisions": "Tidak dapat memuat keputusan."
+    }
+  },
+  "dates": {
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "tomorrow": "Besok",
+    "targetOverdue": "Terlambat · {date}",
+    "targetToday": "Target hari ini",
+    "targetTomorrow": "Target besok",
+    "targetDay": "Target {day}",
+    "targetDate": "Target {date}",
+    "ago": "{days, plural, =0 {hari ini} =1 {kemarin} other {# hari lalu}}",
+    "on": "pada {date}",
+    "neverSignedIn": "Belum pernah masuk",
+    "activeNow": "Aktif sekarang",
+    "hoursAgo": "{count, plural, other {# jam lalu}}",
+    "daysAgo": "{count, plural, =1 {Kemarin} other {# hari lalu}}"
+  },
+  "gate": {
+    "loading": "Memuat ruang kerja…",
+    "loadFailed": "Tidak dapat memuat ruang kerja",
+    "listFailed": "Tidak dapat memuat ruang kerja Anda",
+    "unavailable": "Ruang kerja ini tidak tersedia",
+    "unavailableHint": "Ruang kerja ini tidak ada, atau Anda bukan anggotanya. Minta seseorang di dalamnya untuk mengundang Anda, atau buat ruang kerja sendiri.",
+    "backToPersonal": "Kembali ke Pribadi",
+    "suspended": "{name} ditangguhkan",
+    "suspendedOwnerHint": "Akses dijeda untuk semua orang di dalamnya. Hubungi dukungan untuk memulihkannya; tidak ada yang dihapus dari ruang kerja.",
+    "suspendedHint": "Akses dijeda untuk semua orang di dalamnya. Pemiliknya dapat menghubungi dukungan untuk memulihkannya. Catatan, file, dan papan Anda di Pribadi tidak terpengaruh."
+  },
+  "switcher": {
+    "invite": "Undang orang ke {name}",
+    "settings": "Pengaturan ruang kerja",
+    "current": "Saat ini",
+    "hint": "Beralih antara Pribadi dan ruang kerja",
+    "personal": "Pribadi",
+    "personalHint": "Email, catatan, papan, dan tugas Anda",
+    "workspaces": "Ruang kerja",
+    "suspended": "Ditangguhkan",
+    "detail": "{role} · {count, plural, other {# anggota}}",
+    "loadFailed": "Tidak dapat memuat ruang kerja Anda. Coba lagi",
+    "none": "Anda belum bergabung dengan ruang kerja"
+  },
+  "create": {
+    "title": "Ajak tim Anda ke Leo",
+    "intro": "Ruang kerja bersama untuk pekerjaan yang Anda lakukan bersama. Pribadi tetap milik Anda: email, kalender, catatan, dan papan bersifat privat sampai Anda memilih untuk membagikan sesuatu.",
+    "value": {
+      "meetings": {
+        "title": "Rapat bersama",
+        "text": "Bagikan rekaman dari Catatan Anda, atau biarkan catatan dikirim ke orang yang tepat saat rapat berakhir. Rapat dengan tamu tetap privat."
+      },
+      "work": {
+        "title": "Proyek, tugas, dan keputusan",
+        "text": "Apa yang diputuskan dan siapa harus mengerjakan apa, dikelompokkan per proyek. Tugas Anda juga muncul di Produktivitas dan Kanban Anda sendiri."
+      },
+      "knowledge": {
+        "title": "Pengetahuan tim",
+        "text": "Bagikan file dari Pengelola file, unggah file baru, atau hubungkan drive bersama. Leo menjawab berdasarkan file tersebut untuk siapa pun yang boleh melihatnya."
+      }
+    },
+    "billing": "Ditagih per lisensi pada paket Team. <link>Lihat harga</link>",
+    "formHint": "Anda akan menjadi pemiliknya. Undang orang setelahnya.",
+    "name": "Nama ruang kerja",
+    "namePlaceholder": "mis. Acme",
+    "nameRequired": "Beri nama ruang kerja.",
+    "seats": "Lisensi",
+    "fewerSeats": "Kurangi lisensi",
+    "moreSeats": "Tambahkan lisensi",
+    "seatsHint": "Satu per orang, termasuk Anda. {min, number}–{max, number}; dapat diubah kapan saja.",
+    "submit": "Buat ruang kerja"
+  },
+  "toasts": {
+    "workspaceReady": "{name} siap",
+    "workspaceReadyHint": "Undang tim Anda untuk mulai berbagi rapat.",
+    "createWorkspaceFailed": "Tidak dapat membuat ruang kerja.",
+    "saveFailed": "Tidak dapat menyimpan perubahan",
+    "workspaceDeleted": "{name} telah dihapus",
+    "deleteWorkspaceFailed": "Tidak dapat menghapus ruang kerja",
+    "workspaceLeft": "Anda keluar dari {name}",
+    "leaveWorkspaceFailed": "Tidak dapat keluar dari ruang kerja",
+    "projectSaveFailed": "Tidak dapat menyimpan proyek",
+    "projectDeleted": "{name} telah dihapus",
+    "projectDeletedHint": "Rapat dan tugasnya masih ada di sini.",
+    "projectDeleteFailed": "Tidak dapat menghapus proyek",
+    "filesAdded": "{count, plural, =1 {{name} ditambahkan} other {# file ditambahkan}}",
+    "filesAddedHint": "{count, plural, other {Leo dapat menjawab berdasarkan file ini setelah pengindeksan selesai.}}",
+    "sourceConnected": "{name} terhubung",
+    "sourceConnectedHint": "Leo dapat menjawab berdasarkan sumber ini setelah sinkronisasi pertama.",
+    "knowledgeChangeFailed": "Tidak dapat mengubahnya",
+    "stoppedSharing": "Berhenti membagikan {name}",
+    "stoppedSharingHint": "Item ini tetap ada di Pengelola file pemiliknya; Leo tidak lagi menjawab berdasarkan item ini di sini.",
+    "knowledgeRemoved": "{name} dihapus",
+    "knowledgeRemovedHint": "Leo tidak lagi menjawab berdasarkan item ini.",
+    "knowledgeRemoveFailed": "Tidak dapat menghapusnya",
+    "fileStaysYours": "{count, plural, other {File tetap ada di Pengelola file dan tetap milik Anda.}}",
+    "shareFileFailed": "Tidak dapat membagikannya",
+    "filesShared": "{count, plural, =1 {{name} dibagikan} other {# file dibagikan}}",
+    "stillInFileManager": "File masih ada di Pengelola file Anda.",
+    "unshareFileFailed": "Tidak dapat berhenti membagikannya",
+    "meetingShareFailed": "Tidak dapat membagikan rapat",
+    "meetingChangeFailed": "Tidak dapat mengubah rapat",
+    "changeUndone": "Perubahan diurungkan",
+    "noLongerShared": "Tidak lagi dibagikan",
+    "stillInYourNotes": "Rapat masih ada di Catatan Anda.",
+    "stillInOwnerNotes": "Rapat masih ada di Catatan pemiliknya.",
+    "sharedAgain": "Dibagikan lagi",
+    "unshareMeetingFailed": "Tidak dapat berhenti membagikan",
+    "taskUpdateFailed": "Tidak dapat memperbarui tugas",
+    "markedDone": "Ditandai selesai",
+    "taskAdded": "Tugas ditambahkan"
+  }
+}

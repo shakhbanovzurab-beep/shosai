@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "الإنتاجية",
+    "description": "مهام اليوم والمشاريع ومؤقت التركيز والتقويم وأحدث الملاحظات، مع نظرة سريعة على عمل عام كامل."
+  },
+  "greeting": "{period, select, morning {صباح الخير، {name}.} afternoon {طاب يومك، {name}.} other {مساء الخير، {name}.}}",
+  "greetingAnyTime": "مرحبًا، {name}.",
+  "sidePanel": "التقويم والتركيز والملاحظات",
+  "tasks": {
+    "heading": "اليوم",
+    "progress": "تم إنجاز {done, number} من {total, number}",
+    "newTask": "مهمة جديدة",
+    "addTask": "إضافة مهمة"
+  },
+  "projects": {
+    "heading": "المشاريع",
+    "status": {
+      "inProgress": "قيد التنفيذ",
+      "planning": "التخطيط"
+    },
+    "progressOf": "تقدم {project}",
+    "due": "تاريخ الاستحقاق: {date}"
+  },
+  "notes": {
+    "heading": "أحدث الملاحظات",
+    "viewAll": "عرض الكل",
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "empty": "لا توجد ملاحظات بعد",
+    "emptyHint": "ستظهر هنا ملاحظات الاجتماعات."
+  }
+}

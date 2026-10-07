@@ -1,0 +1,23 @@
+{
+  "memory": "Memori",
+  "memoryHint": "Leo mengingat fakta berguna dari chat dan rapat Anda, lalu memakainya dalam jawaban berikutnya.",
+  "summary": {
+    "title": "Ringkasan memori",
+    "description": "Tinjau gambaran umum tentang apa yang telah dipelajari Leo tentang Anda. Tuliskan hal yang harus selalu diperhitungkan Leo di <link>instruksi kustom</link> Anda.",
+    "dialogDescription": "Apa yang telah dipelajari Leo tentang Anda.",
+    "updated": "Diperbarui {ago}",
+    "actions": "Tindakan ringkasan memori",
+    "refresh": "Perbarui ringkasan",
+    "refreshFailed": "Tidak dapat memperbarui",
+    "copy": "Salin teks",
+    "copied": "Ringkasan disalin",
+    "copyFailed": "Tidak dapat menyalin",
+    "learnMore": "Pelajari lebih lanjut"
+  },
+  "composer": {
+    "placeholder": "Tanyakan atau perbarui",
+    "label": "Tanyakan tentang ringkasan memori Anda atau beri tahu Leo apa yang perlu diubah",
+    "send": "Kirim",
+    "sendFailed": "Tidak dapat mengirim"
+  }
+}

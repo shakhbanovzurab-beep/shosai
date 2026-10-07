@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "Client de messagerie open source",
+    "description": "Un client de messagerie open source : navigation dans la boîte de réception, recherche, lecture, réponse et archivage des e-mails."
+  },
+  "preview": {
+    "title": "Aperçu de la messagerie",
+    "description": "Ce cadre affiche l’écran de messagerie autonome. Ouvrez-le en plein écran pour mieux le voir.",
+    "openInNewTab": "Ouvrir la messagerie dans un nouvel onglet"
+  },
+  "nav": {
+    "inbox": "Boîte de réception",
+    "priority": "Prioritaires",
+    "drafts": "Brouillons",
+    "sent": "Envoyés",
+    "archive": "Archives",
+    "trash": "Corbeille",
+    "helpFeedback": "Aide et commentaires",
+    "keyboardShortcuts": "Raccourcis clavier"
+  },
+  "sidebar": {
+    "newEmail": "Nouvel e-mail",
+    "folders": "Dossiers"
+  },
+  "accounts": {
+    "switchTo": "Passer à {name}",
+    "menu": "Menu du compte",
+    "title": "Comptes",
+    "add": "Ajouter un compte",
+    "manage": "Gérer les comptes",
+    "settings": "Paramètres du compte",
+    "signOut": "Se déconnecter"
+  },
+  "inbox": {
+    "filter": "Filtrer les e-mails",
+    "refresh": "Actualiser la boîte de réception",
+    "noSelection": "Aucun e-mail sélectionné",
+    "needsYou": "À traiter",
+    "allMail": "Tous les e-mails",
+    "pinnedGroup": "Épinglés ({count, number})",
+    "inboxGroup": "Boîte de réception ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "E-mail",
+    "drawerDescription": "Lire l’e-mail sélectionné",
+    "to": "À : <names>{list}</names>",
+    "cc": "Cc : <names>{list}</names>",
+    "attachments": "Pièces jointes ({count, number})"
+  },
+  "toolbar": {
+    "close": "Fermer l’e-mail",
+    "previous": "E-mail précédent",
+    "next": "E-mail suivant",
+    "pin": "Épingler le fil de discussion",
+    "reply": "Répondre",
+    "more": "Plus d’actions",
+    "replyAll": "Répondre à tous",
+    "forward": "Transférer",
+    "addLabel": "Ajouter un libellé"
+  },
+  "menu": {
+    "markRead": "Marquer comme lu",
+    "markUnread": "Marquer comme non lu",
+    "pin": "Épingler en haut",
+    "unpin": "Désépingler",
+    "markPriority": "Marquer comme prioritaire",
+    "removePriority": "Retirer des prioritaires",
+    "labels": "Libellés",
+    "copySender": "Copier l’adresse de l’expéditeur",
+    "archive": "Archiver",
+    "trash": "Placer dans la corbeille"
+  },
+  "replyBar": {
+    "placeholder": "Répondre à {name}…",
+    "label": "Répondre à {name}",
+    "addEmoji": "Ajouter un emoji",
+    "attachFile": "Joindre un fichier",
+    "send": "Envoyer"
+  },
+  "toasts": {
+    "senderCopied": "{email} copiée",
+    "senderCopyFailed": "Impossible de copier l’adresse",
+    "replySent": "Réponse envoyée à {name}",
+    "archived": "{count, plural, one {# e-mail archivé} many {# d’e-mails archivés} other {# e-mails archivés}}",
+    "moved": "{folder, select, inbox {« {subject} » déplacé dans la boîte de réception} drafts {« {subject} » déplacé dans Brouillons} sent {« {subject} » déplacé dans Envoyés} archive {« {subject} » déplacé dans Archives} trash {« {subject} » déplacé dans la corbeille} other {« {subject} » déplacé}}"
+  }
+}

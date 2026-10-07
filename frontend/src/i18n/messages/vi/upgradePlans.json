@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} mỗi người dùng",
+    "from": "từ {amount}",
+    "unlimited": "không giới hạn"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Họp không giới hạn",
+    "meetingMinutes": "{minutes, plural, other {# phút họp}} mỗi tháng",
+    "noMeetings": "Cuộc họp",
+    "fileManager": "Trình quản lý tệp · {storage}",
+    "noFileManager": "Trình quản lý tệp",
+    "knowledge": "Kiến thức cho Leo · {storage}",
+    "noKnowledge": "Kiến thức cho Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Không gian làm việc chung cho nhóm",
+    "member_management": "Quản lý người dùng",
+    "centralized_billing": "Thanh toán tập trung",
+    "billing_and_users": "Thanh toán tập trung và quản lý người dùng",
+    "admin_controls": "Bảo mật và quyền quản trị cấp doanh nghiệp",
+    "sso": "Đăng nhập một lần (SSO)",
+    "priority_support": "Hỗ trợ ưu tiên",
+    "usage_analytics": "Phân tích mức sử dụng"
+  },
+  "compare": {
+    "title": "So sánh các gói",
+    "feature": "Tính năng",
+    "included": "Có",
+    "notIncluded": "Không có",
+    "unlimited": "Không giới hạn",
+    "minutes": "{minutes, plural, other {# phút}} / tháng",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Tùy chỉnh",
+    "rows": {
+      "meetings": "Cuộc họp",
+      "fileManager": "Trình quản lý tệp",
+      "knowledge": "Kiến thức cho Leo",
+      "apps": "Leo, Email, Lịch, Kanban, Ghi chú",
+      "users": "Người dùng",
+      "sharedWorkspace": "Không gian làm việc chung",
+      "billingAndUsers": "Thanh toán tập trung và quản lý người dùng",
+      "sso": "Đăng nhập một lần (SSO)",
+      "adminControls": "Bảo mật và quyền quản trị",
+      "prioritySupport": "Hỗ trợ ưu tiên",
+      "usageAnalytics": "Phân tích mức sử dụng"
+    }
+  }
+}

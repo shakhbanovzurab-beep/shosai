@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "強化版筆記",
+    "description": "Leo 會挑選最適合這場會議的結構。"
+  },
+  "sections": {
+    "summary": "摘要",
+    "keyPoints": "重點",
+    "decisions": "決策",
+    "actionItems": "待辦事項"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "近況更新：投資人",
+      "description": "與投資人的定期更新：目前進展，以及對方可以提供哪些協助。"
+    },
+    "catchUpPortfolio": {
+      "name": "近況更新：投資組合公司",
+      "description": "與投資組合公司確認指標、風險和需求。"
+    },
+    "lpProspective": {
+      "name": "LP：潛在投資人",
+      "description": "與潛在有限合夥人（LP）的初步洽談。"
+    },
+    "vcBoardMeeting": {
+      "name": "VC：董事會",
+      "description": "董事會討論、決議和負責人。"
+    },
+    "vcPitch": {
+      "name": "VC：提案簡報",
+      "description": "創辦人的提案簡報：亮點、結論和待完成的盡職調查。"
+    },
+    "oneOnOne": {
+      "name": "一對一",
+      "description": "一對一會談：近況、討論主題和議定的後續步驟。"
+    },
+    "customerCall": {
+      "name": "客戶通話",
+      "description": "與客戶的需求探索或例行確認：痛點、需求和後續追蹤。"
+    },
+    "teamSync": {
+      "name": "團隊同步",
+      "description": "定期團隊會議：近況更新、決策和分工。"
+    }
+  },
+  "headings": {
+    "whereWeAre": "目前進展",
+    "updatesShared": "近況分享",
+    "whatWeAgreed": "達成的共識",
+    "followUps": "後續追蹤",
+    "companyUpdate": "公司近況",
+    "metricsAndHighlights": "指標與亮點",
+    "howWeCanHelp": "我們能提供的協助",
+    "overview": "概覽",
+    "theirInterests": "對方的關注重點",
+    "nextSteps": "後續步驟",
+    "boardSummary": "董事會摘要",
+    "discussion": "討論",
+    "resolutions": "決議",
+    "ownersAndDeadlines": "負責人與截止日期",
+    "thePitch": "提案內容",
+    "whatStoodOut": "亮點",
+    "verdict": "結論",
+    "diligenceToDos": "盡職調查待辦",
+    "howItsGoing": "近況",
+    "topics": "討論主題",
+    "context": "背景資訊",
+    "painsAndRequests": "痛點與需求",
+    "outcome": "成果",
+    "updates": "近況更新",
+    "decisions": "決策",
+    "whoDoesWhat": "分工"
+  },
+  "icons": {
+    "enhanced": "強化版筆記",
+    "briefcase": "公事包",
+    "chart": "圖表",
+    "handshake": "握手",
+    "landmark": "地標",
+    "lightbulb": "燈泡",
+    "magnet": "磁鐵",
+    "phone": "電話",
+    "rocket": "火箭",
+    "calendar": "行事曆",
+    "users": "人員"
+  },
+  "menu": {
+    "label": "強化版筆記範本",
+    "search": "搜尋範本…",
+    "noMatch": "沒有相符的範本。",
+    "heading": "範本",
+    "regenerate": "重新產生筆記",
+    "newTemplate": "新增範本…"
+  },
+  "rewritten": "已使用「{template}」重寫筆記",
+  "regenerated": "已重新產生強化版筆記",
+  "created": "已建立範本「{template}」",
+  "dialog": {
+    "title": "新增範本",
+    "description": "選擇 Leo 要為會議撰寫哪些區段，以及各區段的名稱。",
+    "namePlaceholder": "例如：銷售需求探索…",
+    "nameRequired": "請為範本命名。",
+    "descriptionLabel": "說明",
+    "descriptionPlaceholder": "使用時機…",
+    "ownDescription": "你自己的範本。",
+    "icon": "圖示",
+    "sections": "區段",
+    "include": "包含「{section}」",
+    "heading": "「{section}」的標題",
+    "sectionsRequired": "請至少保留一個區段。",
+    "create": "建立範本"
+  }
+}

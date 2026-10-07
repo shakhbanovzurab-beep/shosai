@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Clear",
+    "partly": "Partly cloudy",
+    "overcast": "Overcast",
+    "fog": "Fog",
+    "drizzle": "Drizzle",
+    "rain": "Rain",
+    "snow": "Snow",
+    "storm": "Thunderstorm",
+    "unknown": "Unknown"
+  },
+  "fallbackPlace": "Moscow",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, high {high}, low {low}",
+  "summaryAt": "{condition}, {now}, high {high}, low {low} in {place}"
+}

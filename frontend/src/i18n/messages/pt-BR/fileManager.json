@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Gerenciador de arquivos",
+    "description": "Navegue, organize e faça upload dos seus arquivos e escolha quais o Leo usa.",
+    "folderTitle": "Pasta · Gerenciador de arquivos"
+  },
+  "myFiles": "Meus arquivos",
+  "loading": "Carregando seus arquivos…",
+  "loadFailed": "Não foi possível carregar seus arquivos",
+  "allFiles": {
+    "heading": "Todos os arquivos",
+    "emptyTitle": "Nenhum arquivo ainda",
+    "emptyDescription": "Faça upload de arquivos ou solte-os aqui. Depois escolha quais o Leo pode usar."
+  },
+  "folders": {
+    "heading": "Pastas",
+    "new": "Nova pasta",
+    "untitled": "Pasta sem título",
+    "emptyTitle": "Nenhuma pasta ainda",
+    "emptyDescription": "Crie uma pasta para organizar seus arquivos ou para deixar o Leo ler um conjunto inteiro de uma vez.",
+    "fileCount": "{count, plural, one {# arquivo} many {# de arquivos} other {# arquivos}}",
+    "dropHere": "Solte para mover para cá",
+    "dropHereLeo": "Solte para mover para cá. O Leo vai usá-lo.",
+    "updated": "Atualizada {ago}",
+    "leoReadsAll": "O Leo usa tudo o que consegue ler nesta pasta"
+  },
+  "folder": {
+    "notFound": "Pasta não encontrada",
+    "notFoundDescription": "Ela pode ter sido excluída ou renomeada em outra sessão.",
+    "backToMyFiles": "Voltar para Meus arquivos",
+    "back": "Voltar",
+    "emptyTitle": "Esta pasta está vazia",
+    "emptyLeo": "Faça upload ou mova arquivos para cá e o Leo vai usá-los.",
+    "empty": "Faça upload de arquivos aqui, arraste-os para esta pasta em Meus arquivos ou use Mover para no menu de um arquivo."
+  },
+  "section": {
+    "label": "Arquivos",
+    "view": "Visualização de arquivos",
+    "grid": "Grade",
+    "list": "Lista",
+    "noMatch": "Nenhum arquivo encontrado",
+    "noMatchDescription": "Nada aqui corresponde a este filtro.",
+    "clearFilters": "Limpar filtros"
+  },
+  "toolbar": {
+    "filterSort": "Filtrar e ordenar",
+    "show": "Mostrar",
+    "fileType": "Tipo de arquivo",
+    "allTypes": "Todos os tipos",
+    "sortBy": "Ordenar por"
+  },
+  "show": {
+    "all": "Todos os arquivos",
+    "starred": "Com estrela",
+    "leo": "Usados pelo Leo",
+    "shared": "Compartilhados em espaços de trabalho"
+  },
+  "sort": {
+    "modified": "Última modificação",
+    "name": "Nome",
+    "size": "Tamanho do arquivo"
+  },
+  "kinds": {
+    "archive": "Arquivo compactado",
+    "design": "Design",
+    "document": "Documento",
+    "image": "Imagem",
+    "other": "Arquivo",
+    "pdf": "PDF",
+    "presentation": "Apresentação",
+    "spreadsheet": "Planilha",
+    "text": "Texto"
+  },
+  "file": {
+    "star": "Adicionar estrela a {name}",
+    "unstar": "Remover estrela de {name}",
+    "modified": "Modificado {ago}",
+    "inFolderModified": "<hidden>Na pasta </hidden><name>{folder}</name> · Modificado {ago}",
+    "inFolder": "<hidden>Na pasta </hidden><name>{folder}</name>",
+    "sharedIn": "Compartilhado em {workspaces}",
+    "sharedInHidden": "<hidden>Compartilhado em </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Modificado",
+    "size": "Tamanho",
+    "actions": "Ações"
+  },
+  "leo": {
+    "viaFile": "O Leo usa este arquivo porque você o escolheu",
+    "viaFolder": "O Leo usa este arquivo por meio da pasta dele",
+    "reading": "Leo · lendo",
+    "failed": "O Leo não conseguiu ler este arquivo",
+    "tooLarge": "O Leo lê arquivos de até {size}",
+    "extension": "O Leo não consegue ler arquivos .{extension}",
+    "unknownType": "O Leo não consegue ler este tipo de arquivo"
+  },
+  "menu": {
+    "addStar": "Adicionar estrela",
+    "removeStar": "Remover estrela",
+    "moveTo": "Mover para",
+    "useWithLeo": "Usar com o Leo",
+    "usedThrough": "Usado por meio de “{folder}”",
+    "share": "Compartilhar em um espaço de trabalho…",
+    "sharing": "Compartilhando em espaços de trabalho…",
+    "transferTo": "Transferir para",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Excluir pasta"
+  },
+  "dialogs": {
+    "renameFile": "Renomear arquivo",
+    "renameFolder": "Renomear pasta",
+    "shareTitle": "Compartilhar “{name}”",
+    "shareDescription": "O Leo responde com base nele no espaço de trabalho para quem você escolher. Ele continua aqui, continua sendo seu e sai do espaço de trabalho se você o excluir ou sair.",
+    "transferTitle": "Transferir “{name}” para {workspace}?",
+    "transferDescription": "Ele sai dos seus arquivos e passa a pertencer a {workspace}: continua lá quando você sair, e os administradores de lá o gerenciam. Os outros espaços de trabalho em que você o compartilhou deixam de tê-lo. Não é possível desfazer esta ação.",
+    "transfer": "Transferir"
+  },
+  "upload": {
+    "button": "Fazer upload",
+    "uploading": "Fazendo upload de {count, plural, one {# arquivo} many {# de arquivos} other {# arquivos}}…",
+    "dropHere": "Solte para fazer upload aqui",
+    "skipped": "{count, plural, one {# arquivo ignorado} many {# de arquivos ignorados} other {# arquivos ignorados}}",
+    "skippedDescription": "Arquivos vazios ou maiores que {size} são ignorados, e no máximo {max, number} são enviados de uma vez."
+  },
+  "picker": {
+    "search": "Pesquisar seus arquivos",
+    "noMatch": "Nenhum arquivo encontrado.",
+    "noFiles": "Nenhum arquivo ainda. Primeiro faça upload de alguns no Gerenciador de arquivos.",
+    "yourFiles": "Seus arquivos",
+    "alreadyShared": "Já compartilhado aqui"
+  }
+}

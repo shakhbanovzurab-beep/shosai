@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Açık",
+    "partly": "Parçalı bulutlu",
+    "overcast": "Kapalı",
+    "fog": "Sisli",
+    "drizzle": "Çisenti",
+    "rain": "Yağmurlu",
+    "snow": "Karlı",
+    "storm": "Gök gürültülü sağanak",
+    "unknown": "Bilinmiyor"
+  },
+  "fallbackPlace": "Moskova",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, en yüksek {high}, en düşük {low}",
+  "summaryAt": "{place}: {condition}, {now}, en yüksek {high}, en düşük {low}"
+}

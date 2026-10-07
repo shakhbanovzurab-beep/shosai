@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "Unggah ke {workspace}",
+    "description": "File yang diunggah menjadi milik {workspace}: file tetap ada saat Anda keluar, dan admin yang mengelolanya. Untuk membagikan file dan tetap memilikinya, bagikan dari file Anda.",
+    "dropZone": "Lepaskan file untuk menambahkan",
+    "drop": "Lepaskan file di sini",
+    "choose": "Pilih file",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown, atau teks · maksimal {limit} per file",
+    "chosen": "File yang dipilih",
+    "removeFile": "Hapus {name}",
+    "tooBig": "{count, plural, other {{names} melebihi {limit} dan tidak disertakan.}}",
+    "noFiles": "Pilih setidaknya satu file.",
+    "submit": "{count, plural, =0 {Unggah} =1 {Unggah} other {Unggah # file}}"
+  },
+  "connect": {
+    "title": "Hubungkan sumber",
+    "description": "Drive bersama, wiki, atau situs tempat {workspace} sudah menyimpan dokumennya. Sumber ini tetap tersinkron, menjadi milik ruang kerja, dan Leo menjawab darinya untuk siapa pun yang Anda pilih.",
+    "source": "Sumber",
+    "link": "Tautan",
+    "linkHint": "Folder, ruang, atau halaman yang akan tetap disinkronkan.",
+    "submit": "Hubungkan"
+  },
+  "share": {
+    "title": "Bagikan dari file saya",
+    "description": "Leo menjawab dari file ini di {workspace} untuk siapa pun yang Anda pilih. File tetap ada di Pengelola file Anda, tetap milik Anda, dan ikut keluar bersama Anda.",
+    "submit": "{count, plural, =0 {Bagikan} =1 {Bagikan} other {Bagikan # file}}"
+  }
+}

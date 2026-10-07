@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Detalles",
+    "stages": "Etapas",
+    "history": "Cómo fue",
+    "summaryDecided": "{rounds, plural, one {Se habló # vez; se decidió el {date}.} many {Se habló # de veces; se decidió el {date}.} other {Se habló # veces; se decidió el {date}.}}",
+    "summaryOpen": "{rounds, plural, one {Se habló # vez, sin decisión.} many {Se habló # de veces, sin decisión.} other {Se habló # veces, sin decisión.}}",
+    "blockers": "Cada vez fue: {quotes}.",
+    "round": "Ronda {index, number}",
+    "blocker": "Qué lo frenó",
+    "decision": "Decisión",
+    "decisionChanged": "La decisión cambió",
+    "previous": "Antes",
+    "current": "Ahora",
+    "decidedAt": "{date}, «{meeting}»",
+    "outcome": "Cómo resultó",
+    "outcomeUnknown": "aún no se conoce el resultado",
+    "links": {
+      "causes": "Frena",
+      "blocked_by": "Frenado por",
+      "outcome_of": "Surge de la decisión"
+    },
+    "sources": "Fuentes",
+    "dismissals": "Descartes",
+    "dismissedByYou": "Lo descartaste tú",
+    "disproved": "Desmentido: {evidence}",
+    "dismissedUntil": "hasta el {date}",
+    "returned": "se acabó el plazo y volvió",
+    "owner": "Responsable",
+    "noOwner": "sin asignar",
+    "due": "Fecha límite",
+    "noDue": "sin fecha",
+    "goneTitle": "Esto ya no está aquí",
+    "goneText": "Puede que se haya eliminado el hub o la grabación de la reunión.",
+    "loadError": "No se pudieron cargar los detalles"
+  },
+  "why": {
+    "source": "Fuente",
+    "meeting": "reunión del {date}, «{title}»",
+    "said": "Lo dijo",
+    "moment": "Momento",
+    "jump": "Ir al momento",
+    "signals": {
+      "series": "Las reuniones de esta serie ya están aquí.",
+      "subject": "La conversación trataba sobre este hub.",
+      "title": "Aparece en el título de la reunión.",
+      "entity": "El nombre salió en la conversación.",
+      "organisation": "Las personas son de esta organización.",
+      "human": "Lo pusiste aquí tú."
+    },
+    "loadError": "No se pudo cargar la fuente"
+  }
+}

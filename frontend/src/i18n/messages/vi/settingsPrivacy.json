@@ -1,0 +1,49 @@
+{
+  "data": "Dữ liệu",
+  "improveModels": "Giúp cải thiện mô hình",
+  "improveModelsHint": "Cho phép dùng cuộc trò chuyện và ghi chú cuộc họp của bạn để huấn luyện và cải thiện mô hình. Mặc định tắt.",
+  "shareLocation": "Chia sẻ vị trí gần đúng",
+  "shareLocationHint": "Dùng cho thời tiết tại chỗ và các câu trả lời theo giờ địa phương. Chỉ khu vực được chia sẻ, không bao giờ là vị trí chính xác của bạn.",
+  "yourData": "Dữ liệu của bạn",
+  "export": "Xuất dữ liệu",
+  "exportHint": "Tải xuống bản sao cài đặt, câu lệnh, bộ nhớ và hoạt động của bạn.",
+  "kinds": {
+    "shared_chats": {
+      "title": "Cuộc trò chuyện đã chia sẻ",
+      "description": "Cuộc trò chuyện mà ai có liên kết cũng xem được. Ngừng chia sẻ sẽ tắt liên kết.",
+      "removeItem": "Ngừng chia sẻ {title}",
+      "removeAll": "Ngừng chia sẻ tất cả",
+      "confirmAll": "Ngừng chia sẻ tất cả cuộc trò chuyện?",
+      "empty": "Không có cuộc trò chuyện nào được chia sẻ"
+    },
+    "shared_artifacts": {
+      "title": "Artifact đã chia sẻ",
+      "description": "Tài liệu và trang bạn đã xuất bản từ cuộc trò chuyện.",
+      "removeItem": "Ngừng chia sẻ {title}",
+      "removeAll": "Ngừng chia sẻ tất cả",
+      "confirmAll": "Ngừng chia sẻ tất cả artifact?",
+      "empty": "Không có artifact nào được chia sẻ"
+    },
+    "uploaded_files": {
+      "title": "Tệp đã tải lên",
+      "description": "Tệp bạn đã đính kèm trong cuộc trò chuyện. Khi xóa một tệp, tệp đó cũng bị gỡ khỏi các cuộc trò chuyện ấy.",
+      "removeItem": "Xóa {title}",
+      "removeAll": "Xóa tất cả tệp",
+      "confirmAll": "Xóa tất cả tệp?",
+      "empty": "Không có tệp nào được tải lên"
+    },
+    "feedback": {
+      "title": "Phản hồi của bạn",
+      "description": "Đánh giá và nhận xét bạn đã để lại cho câu trả lời của Leo.",
+      "removeItem": "Xóa {title}",
+      "removeAll": "Xóa tất cả phản hồi",
+      "confirmAll": "Xóa tất cả phản hồi?",
+      "empty": "Chưa có phản hồi nào"
+    }
+  },
+  "nothingToManage": "Không có gì để quản lý ở đây.",
+  "copyLinkTo": "Sao chép liên kết đến {title}",
+  "cantUndo": "Không thể hoàn tác thao tác này.",
+  "removeFailed": "Không thể gỡ mục này",
+  "removeAllFailed": "Không thể gỡ các mục này"
+}

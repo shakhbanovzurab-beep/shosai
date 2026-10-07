@@ -1,0 +1,6 @@
+{
+  "invalidSettings": "Không thể đọc cài đặt. Hãy tải lại trang và thử lại.",
+  "unknownSource": "Nguồn này không tồn tại.",
+  "notConnected": "Nguồn này chưa được kết nối.",
+  "fieldRequired": "Hãy điền {field}."
+}

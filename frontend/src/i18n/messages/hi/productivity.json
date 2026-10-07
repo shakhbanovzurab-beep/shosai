@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "उत्पादकता",
+    "description": "आज के टास्क, प्रोजेक्ट, फ़ोकस टाइमर, कैलेंडर और हाल के नोट, साथ ही पूरे साल का पूरा किया गया काम एक नज़र में।"
+  },
+  "greeting": "{period, select, morning {सुप्रभात, {name}!} afternoon {नमस्ते, {name}!} other {शुभ संध्या, {name}!}}",
+  "greetingAnyTime": "नमस्ते, {name}!",
+  "sidePanel": "कैलेंडर, फ़ोकस और नोट",
+  "tasks": {
+    "heading": "आज",
+    "progress": "{total, number} में से {done, number} पूरे",
+    "newTask": "नया टास्क",
+    "addTask": "टास्क जोड़ें"
+  },
+  "projects": {
+    "heading": "प्रोजेक्ट",
+    "status": {
+      "inProgress": "जारी है",
+      "planning": "प्लानिंग"
+    },
+    "progressOf": "{project} की प्रगति",
+    "due": "आख़िरी तारीख: {date}"
+  },
+  "notes": {
+    "heading": "हाल के नोट",
+    "viewAll": "सभी देखें",
+    "today": "आज",
+    "yesterday": "कल",
+    "empty": "अभी तक कोई नोट नहीं है",
+    "emptyHint": "आपकी मीटिंग के नोट यहां दिखेंगे।"
+  }
+}

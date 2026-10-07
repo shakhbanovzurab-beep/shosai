@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "Instellingen",
+    "sectionsLabel": "Onderdelen van de instellingen",
+    "autosave": "Wijzigingen worden automatisch opgeslagen."
+  },
+  "sections": {
+    "account": "Account",
+    "privacy": "Privacy",
+    "billing": "Facturering",
+    "usage": "Gebruik",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "Geheugen",
+    "connectors": "Koppelingen",
+    "hotkeys": "Sneltoetsen"
+  },
+  "loadFailed": "Kan dit onderdeel niet laden",
+  "manage": "Beheren",
+  "saving": "Opslaan…",
+  "saveFailed": "Kan niet opslaan",
+  "profile": {
+    "title": "Profiel",
+    "email": "E-mail",
+    "emailHint": "Met dit adres log je in via je provider.",
+    "fullName": "Volledige naam",
+    "displayName": "Hoe moet Leo je noemen?",
+    "displayNameHint": "Leo gebruikt dit om je te begroeten en in antwoorden.",
+    "workRole": "Wat beschrijft je werk het best?",
+    "workRoleHint": "Leo stemt voorbeelden en termen hiermee af op jouw vakgebied."
+  },
+  "workRoles": {
+    "product_management": "Productmanagement",
+    "engineering": "Techniek",
+    "human_resources": "Personeelszaken",
+    "finance": "Financiën",
+    "marketing": "Marketing en communicatie",
+    "sales": "Verkoop",
+    "operations": "Bedrijfsvoering",
+    "data_science": "Datawetenschap",
+    "design": "Ontwerp",
+    "legal": "Juridisch",
+    "scientist": "Wetenschapper",
+    "student": "Student of scholier",
+    "founder": "Oprichter",
+    "healthcare": "Zorg",
+    "writer": "Schrijver",
+    "educator": "Docent",
+    "consultant": "Adviseur",
+    "researcher": "Onderzoeker",
+    "software_engineer": "Softwareontwikkelaar",
+    "other": "Anders"
+  },
+  "avatar": {
+    "change": "Profielfoto wijzigen",
+    "hint": "Elke afbeelding is goed. Hij wordt automatisch vierkant bijgesneden en verkleind.",
+    "upload": "Foto uploaden",
+    "updateFailed": "Kan je foto niet bijwerken",
+    "removeFailed": "Kan je foto niet verwijderen",
+    "tooLarge": "Kies een foto kleiner dan {size}.",
+    "unreadable": "Deze browser kan die afbeelding niet lezen. Probeer een JPEG of PNG.",
+    "processFailed": "Kan de afbeelding niet verwerken."
+  },
+  "deleteAccount": {
+    "group": "Gevarenzone",
+    "title": "Account verwijderen",
+    "description": "Verwijder je account en alles erin definitief: chats, notities, bestanden, prompts en instellingen.",
+    "confirmTitle": "Je account verwijderen?",
+    "confirmDescription": "Dit kan niet ongedaan worden gemaakt. Je chats, notities, bestanden, prompts, geheugen en instellingen worden verwijderd en een eventueel abonnement wordt opgezegd.",
+    "confirmLabel": "Typ <address>{email}</address> om te bevestigen",
+    "deleted": "Je account is verwijderd",
+    "failed": "Kan je account niet verwijderen"
+  }
+}

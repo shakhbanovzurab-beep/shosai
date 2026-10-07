@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "고객 지원",
+    "description": "팀에 도움을 요청하고 문의 진행 상황을 확인해요."
+  },
+  "categories": {
+    "billing": "결제",
+    "bug": "버그 신고",
+    "account": "계정",
+    "feature": "기능 요청",
+    "other": "기타"
+  },
+  "statuses": {
+    "open": "답변 대기 중",
+    "awaiting_you": "내 답장 필요",
+    "resolved": "해결됨"
+  },
+  "events": {
+    "acknowledged": "메시지를 받았어요. 보통 몇 시간 안에 담당자가 답장하며, 여기서 알려 드려요.",
+    "resolved": "해결됨으로 표시했어요",
+    "reopened": "다시 열었어요"
+  },
+  "toolbar": {
+    "search": "문의 검색",
+    "filter": "문의 필터",
+    "all": "전체",
+    "open": "진행 중",
+    "resolved": "해결됨"
+  },
+  "newTicket": "새 문의",
+  "table": {
+    "number": "번호",
+    "subject": "제목",
+    "status": "상태",
+    "topic": "주제",
+    "updated": "업데이트",
+    "unread": "읽지 않음:"
+  },
+  "list": {
+    "loading": "문의를 불러오는 중",
+    "loadError": "문의를 불러오지 못했어요",
+    "emptyTitle": "무엇을 도와드릴까요?",
+    "emptyDescription": "문의를 남기면 보통 몇 시간 안에 팀이 여기로 답장해요.",
+    "noMatchesTitle": "문의를 찾을 수 없어요",
+    "noMatchesDescription": "다른 검색어나 필터를 사용해 보세요."
+  },
+  "panel": {
+    "ticket": "문의",
+    "description": "고객 지원과 나눈 대화"
+  },
+  "form": {
+    "title": "무엇을 도와드릴까요?",
+    "subtitle": "보통 몇 시간 안에 답장해요.",
+    "topic": "주제",
+    "subject": "제목",
+    "subjectPlaceholder": "간단한 요약",
+    "body": "어떤 일이 있었나요?",
+    "bodyPlaceholder": "재현 단계, 예상한 결과와 실제 결과를 적어 주세요. 스크린샷이 있으면 도움이 돼요.",
+    "send": "보내기"
+  },
+  "attach": {
+    "button": "파일 첨부",
+    "list": "첨부 파일",
+    "remove": "{name} 제거",
+    "tooBig": "{count, plural, other {{names}이(가) {size}보다 커요}}",
+    "tooMany": "{max, plural, other {파일은 최대 #개까지 첨부할 수 있어요}}"
+  },
+  "composer": {
+    "message": "메시지",
+    "emoji": "이모지 추가",
+    "hint": "Enter로 보내기 · Shift+Enter로 줄 바꿈",
+    "send": "보내기",
+    "reply": "답장 작성…",
+    "replyToReopen": "답장하면 다시 열려요…"
+  },
+  "thread": {
+    "loading": "문의를 불러오는 중",
+    "close": "문의 닫기",
+    "reopen": "다시 열기",
+    "resolve": "해결됨으로 표시",
+    "resolvedNote": "해결됐어요. 아직 도움이 필요하면 아래에 답장해 주세요. 문의가 다시 열려요.",
+    "thanks": "의견을 보내 주셔서 감사해요.",
+    "rate": "답변이 도움이 되었나요?",
+    "good": "좋아요",
+    "bad": "별로예요",
+    "you": "나",
+    "support": "고객 지원",
+    "supportAuthor": "{name} · 고객 지원",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "읽음으로 표시",
+    "markUnread": "읽지 않음으로 표시",
+    "copyNumber": "문의 번호 복사",
+    "copySubject": "제목 복사"
+  },
+  "toasts": {
+    "opened": "문의 #{number}을(를) 접수했어요",
+    "openFailed": "문의를 접수하지 못했어요",
+    "updateFailed": "문의를 업데이트하지 못했어요",
+    "sendFailed": "답장을 보내지 못했어요",
+    "markedRead": "읽음으로 표시했어요",
+    "markedUnread": "읽지 않음으로 표시했어요",
+    "reopened": "문의를 다시 열었어요",
+    "resolved": "해결됨으로 표시했어요",
+    "numberCopied": "문의 번호를 복사했어요",
+    "subjectCopied": "제목을 복사했어요",
+    "numberCopyFailed": "문의 번호를 복사하지 못했어요",
+    "subjectCopyFailed": "제목을 복사하지 못했어요"
+  }
+}

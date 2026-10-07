@@ -1,0 +1,62 @@
+{
+  "intro": "Hướng dẫn để trợ lý đảm nhận các vai trò. Dùng kỹ năng có sẵn từ danh mục hoặc kỹ năng riêng từ kho lưu trữ của bạn.",
+  "role": "Vai trò",
+  "skills": "Kỹ năng",
+  "search": {
+    "placeholder": "Tìm theo tên…",
+    "label": "Tìm câu lệnh theo tên"
+  },
+  "loadFailed": "Không thể tải câu lệnh",
+  "empty": {
+    "title": "Chưa có câu lệnh nào",
+    "description": "Hãy tạo câu lệnh cho một vai trò, rồi đính kèm kỹ năng để mở rộng câu lệnh đó."
+  },
+  "noMatches": {
+    "title": "Không có kết quả phù hợp",
+    "description": "Hãy thử tên hoặc vai trò khác."
+  },
+  "copyName": "{name} (bản sao)",
+  "delete": {
+    "title": "Xóa “{name}”?",
+    "description": "Nếu một vai trò đang dùng câu lệnh này, vai trò đó sẽ quay về câu lệnh mặc định tích hợp sẵn."
+  },
+  "filter": {
+    "label": "Lọc theo vai trò",
+    "all": "Tất cả",
+    "allHelp": "Mọi câu lệnh, bất kể vai trò."
+  },
+  "table": {
+    "number": "STT",
+    "updated": "Cập nhật",
+    "inUse": "Đang dùng",
+    "deleteNamed": "Xóa {name}"
+  },
+  "menu": {
+    "edit": "Chỉnh sửa…",
+    "stopUsing": "Ngừng sử dụng",
+    "useFor": "Dùng cho {role}",
+    "duplicate": "Nhân bản…",
+    "delete": "Xóa…"
+  },
+  "editor": {
+    "editTitle": "Chỉnh sửa câu lệnh",
+    "newTitle": "Câu lệnh mới",
+    "description": "Hướng dẫn trợ lý làm theo trong vai trò đã chọn, cùng các kỹ năng đi kèm.",
+    "namePlaceholder": "Phiên bản AI",
+    "instructions": "Hướng dẫn",
+    "instructionsPlaceholder": "Cho trợ lý biết cách hành xử trong vai trò này. Có thể dùng Markdown.",
+    "noSkills": "Chưa cài kỹ năng nào — hãy thêm bằng nút Kỹ năng.",
+    "saveFailed": "Không thể lưu — hãy tiếp tục nhập để thử lại",
+    "savesAutomatically": "Thay đổi được lưu tự động",
+    "done": "Xong"
+  },
+  "toasts": {
+    "deleted": "Đã xóa “{name}”",
+    "deleteFailed": "Không thể xóa câu lệnh",
+    "inUse": "{role} hiện dùng “{name}”",
+    "backToDefault": "{role} đã quay về câu lệnh tích hợp sẵn",
+    "changeFailed": "Không thể thay đổi câu lệnh",
+    "created": "Đã tạo “{name}”",
+    "createFailed": "Không thể tạo câu lệnh"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "Hub",
+    "removeLabel": "Đưa cuộc họp ra khỏi {hub}",
+    "suggestion": "Có vẻ thuộc “{hub}”",
+    "file": "Thêm",
+    "other": "Hub khác…",
+    "fileTo": "Thêm vào hub…",
+    "createFirst": "Tạo hub đầu tiên",
+    "noBoard": "hub chưa có bảng",
+    "archived": "hub đã được lưu trữ",
+    "filedToast": "Các cuộc họp tiếp theo trong chuỗi này sẽ tự động được đưa vào đây",
+    "removedToast": "Đã đưa ra khỏi {hub}",
+    "pickerTitle": "Thêm vào hub",
+    "pickerSearch": "Tìm hub",
+    "pickerEmpty": "Không có hub nào phù hợp"
+  },
+  "brief": {
+    "title": "Hôm nay",
+    "empty": "Hôm nay không có gì gấp",
+    "prepTitle": "Sắp tới",
+    "prepFor": "Trước cuộc họp ngày {date}",
+    "prepOpen": "Đang mở trong hub này",
+    "prepLast": "Lần trước · {date}",
+    "prepMaterials": "Tài liệu",
+    "signal": "{circles, plural, other {{subject} đã được thảo luận # lần mà chưa có quyết định.}}",
+    "blockers": "Lần nào cũng là: {quotes}."
+  }
+}

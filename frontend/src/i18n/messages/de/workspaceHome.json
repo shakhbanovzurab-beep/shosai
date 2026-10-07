@@ -1,0 +1,62 @@
+{
+  "description": "Was auf dich wartet, was ansteht und wo die Arbeit des Teams steht.",
+  "invitePeople": "Personen einladen",
+  "quietStart": "Sobald Meetings geteilt werden oder Projekte starten, zeigt diese Seite, was auf dich wartet, was ansteht und was das Team entschieden hat.",
+  "blocks": {
+    "needsYou": "Wartet auf dich",
+    "allTasks": "Alle Aufgaben",
+    "nothingWaiting": "Hier wartet nichts auf dich. Dir zugewiesene Aufgaben erscheinen hier und in deiner Produktivität.",
+    "moreTasks": "{count, plural, one {# weitere Aufgabe} other {# weitere Aufgaben}}",
+    "comingUp": "Demnächst",
+    "projects": "Projekte",
+    "allProjects": "Alle Projekte",
+    "recentDecisions": "Neueste Entscheidungen",
+    "decisionLog": "Alle Entscheidungen"
+  },
+  "comingUp": {
+    "empty": "Keine anstehenden Team-Meetings.",
+    "live": "Live",
+    "guestsPrivate": "Bleibt privat: Gäste nehmen teil",
+    "private": "Notizen bleiben privat",
+    "notesGoTo": "Notizen gehen an: {audience}"
+  },
+  "decisions": {
+    "empty": "Entscheidungen aus geteilten Meetings erscheinen hier, verknüpft mit dem Meeting, in dem sie getroffen wurden.",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "Keine aktiven Projekte. Starte eines, um seine Meetings, Aufgaben und Entscheidungen zu bündeln.",
+    "ledBy": "Leitung: {name}",
+    "ledByYou": "Leitung: du"
+  },
+  "setup": {
+    "title": "Richte deinen Workspace ein",
+    "progress": "{done, number} von {total, number} erledigt. Jeder Schritt macht das nächste Meeting für alle nützlicher.",
+    "progressLabel": "{done, number} von {total, number} Einrichtungsschritten erledigt",
+    "hide": "Einrichtungs-Checkliste ausblenden",
+    "done": "Erledigt",
+    "toDo": "Offen",
+    "steps": {
+      "invite": {
+        "title": "Lade dein Team ein",
+        "description": "Füge mindestens zwei Personen hinzu, damit Meetings und Aufgaben einen Empfänger haben.",
+        "action": "Personen einladen"
+      },
+      "sharing": {
+        "title": "Bestätige, wie Meetings geteilt werden",
+        "description": "Lege fest, wohin Notizen nach einem Meeting gehen. Meetings mit Gästen bleiben in jedem Fall privat.",
+        "action": "Prüfen"
+      },
+      "share": {
+        "title": "Teile eines deiner Meetings",
+        "description": "Deine Aufnahmen bleiben in deinen Notizen, bis du eine hier teilst, samt ihren Entscheidungen und Aufgaben.",
+        "action": "Meeting teilen"
+      },
+      "knowledge": {
+        "title": "Füge Team-Wissen hinzu",
+        "description": "Teile deine Dateien, lade neue hoch oder verbinde ein geteiltes Laufwerk, damit Leo daraus antworten kann.",
+        "action": "Wissen hinzufügen"
+      }
+    }
+  }
+}

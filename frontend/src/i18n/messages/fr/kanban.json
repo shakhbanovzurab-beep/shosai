@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Kanban",
+    "description": "Des tableaux pour le travail, la maison et tout le reste, y compris ceux synchronisés avec Jira."
+  },
+  "loadBoardsFailed": "Impossible de charger vos tableaux",
+  "loadBoardFailed": "Impossible de charger le tableau",
+  "addTask": "Ajouter une tâche",
+  "taskCount": "{count, plural, one {# tâche} many {# de tâches} other {# tâches}}",
+  "progress": "Progression",
+  "views": {
+    "label": "Affichage",
+    "board": "Tableau",
+    "list": "Liste",
+    "table": "Grille"
+  },
+  "toolbar": {
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "moreWaysToAdd": "Autres façons d’ajouter des tâches",
+    "importCsv": "Importer un CSV",
+    "addFromTemplate": "Ajouter depuis un modèle",
+    "createAutomation": "Créer une automatisation"
+  },
+  "column": {
+    "drag": "Faire glisser la colonne {column}",
+    "addTask": "Ajouter une tâche dans {column}",
+    "empty": "Aucune tâche dans {column}"
+  },
+  "columnMenu": {
+    "managedInJira": "Les colonnes sont gérées dans Jira",
+    "rename": "Renommer la colonne…",
+    "sortByPriority": "Trier par priorité",
+    "moveEarlier": "Décaler vers le début",
+    "moveLater": "Décaler vers la fin",
+    "clear": "Vider la colonne"
+  },
+  "taskMenu": {
+    "openInJira": "Ouvrir {key} dans Jira",
+    "openInWorkspace": "Ouvrir dans {workspace}",
+    "moveTo": "Déplacer vers",
+    "moveToTop": "Déplacer en haut",
+    "moveToBottom": "Déplacer en bas",
+    "delete": "Supprimer la tâche"
+  },
+  "priority": {
+    "label": "Priorité",
+    "high": "Haute",
+    "medium": "Moyenne",
+    "low": "Basse"
+  },
+  "card": {
+    "unassigned": "Non attribuée",
+    "completed": "Terminée",
+    "fromSource": "Depuis {source}",
+    "jiraIssue": "{type} (ouvre Jira dans un nouvel onglet)",
+    "workspaceTask": "Tâche de cet espace de travail. Toute modification faite ici s’y applique aussi.",
+    "insights": {
+      "attachments": "{count, plural, one {# pièce jointe} many {# de pièces jointes} other {# pièces jointes}}",
+      "comments": "{count, plural, one {# commentaire} many {# de commentaires} other {# commentaires}}",
+      "documents": "{count, plural, one {# document} many {# de documents} other {# documents}}"
+    }
+  },
+  "table": {
+    "task": "Tâche",
+    "status": "Statut",
+    "owner": "Propriétaire",
+    "label": "Libellé",
+    "due": "Échéance",
+    "actions": "Actions",
+    "empty": "Aucune tâche pour l’instant",
+    "progressOf": "Progression de la tâche {task}"
+  },
+  "commands": {
+    "renameTask": "Renommer la tâche",
+    "renameColumn": "Renommer la colonne",
+    "newTaskIn": "Nouvelle tâche dans {column}",
+    "copyTitle": "{title} (copie)",
+    "deleted": "Tâche « {title} » supprimée",
+    "cleared": "{count, plural, one {# tâche supprimée de la colonne {column}} many {# de tâches supprimées de la colonne {column}} other {# tâches supprimées de la colonne {column}}}",
+    "jiraLinkCopied": "Lien vers {key} copié"
+  },
+  "errors": {
+    "addTask": "Impossible d’ajouter la tâche",
+    "saveChange": "Impossible d’enregistrer la modification",
+    "deleteTasks": "{count, plural, one {Impossible de supprimer la tâche} many {Impossible de supprimer les tâches} other {Impossible de supprimer les tâches}}",
+    "saveBoard": "Impossible d’enregistrer le tableau"
+  }
+}

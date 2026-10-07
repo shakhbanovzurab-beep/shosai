@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "प्लान अपग्रेड करें"
+  },
+  "title": "अपना प्लान अपग्रेड करें",
+  "subtitle": "हर महीने {minutes, plural, one {# मिनट की मीटिंग} other {# मिनट की मीटिंग}} के साथ मुफ़्त शुरू करें। जब आपकी मीटिंग के लिए ज़्यादा चाहिए, तब अपग्रेड करें।",
+  "loading": "प्लान लोड हो रहे हैं…",
+  "loadFailed": "प्लान लोड नहीं किए जा सके।",
+  "seatNote": "<b>{workspace}</b> में आपकी सीट में {plan} शामिल है, इसलिए आपकी अपनी मीटिंग, फ़ाइल मैनेजर और Leo की नॉलेज पर उसी की सीमाएं लागू होती हैं। आपका निजी प्लान अलग है।",
+  "pricesNote": "कीमतें अमेरिकी डॉलर में हैं, टैक्स के बिना; Team का बिल हर यूज़र के हिसाब से बनता है। पेमेंट की जानकारी सिर्फ़ पेमेंट प्रोवाइडर के सुरक्षित पेज पर डाली जाती है।",
+  "audiences": {
+    "individual": "अकेले के लिए",
+    "team": "टीम",
+    "enterprise": "एंटरप्राइज़"
+  },
+  "seatRange": "({min, number}–{max, number} यूज़र)",
+  "seatRangeOpen": "({min, number}+ यूज़र)",
+  "card": {
+    "yourPlan": "आपका प्लान",
+    "recommended": "सुझाया गया",
+    "custom": "कस्टम",
+    "tailored": "आपके संगठन के हिसाब से",
+    "perMonth": "/ महीना",
+    "perUserPerMonth": "प्रति यूज़र / महीना",
+    "billedMonthly": "हर महीने बिल, कभी भी रद्द करें",
+    "freeForever": "हमेशा मुफ़्त",
+    "seatsTotal": "{seats, plural, one {# यूज़र} other {# यूज़र}} के लिए {total} / महीना",
+    "notIncluded": "शामिल नहीं: {item}"
+  },
+  "seats": {
+    "label": "यूज़र",
+    "fewer": "कम यूज़र",
+    "more": "ज़्यादा यूज़र"
+  },
+  "action": {
+    "current": "मौजूदा प्लान",
+    "upgradeTo": "{plan} पर अपग्रेड करें",
+    "switchTo": "{plan} पर स्विच करें",
+    "upgradeFailed": "अपग्रेड शुरू नहीं किया जा सका।",
+    "switchFailed": "प्लान नहीं बदला जा सका।"
+  },
+  "usage": {
+    "label": "इस महीने के मीटिंग मिनट",
+    "title": "मीटिंग मिनट",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "{limit, plural, one {# मिनट} other {# मिनट}} में से {used, number} इस्तेमाल हुए",
+    "left": "{limit, plural, one {# मीटिंग मिनट} other {# मीटिंग मिनट}} में से {left, number} बचे हैं",
+    "allUsed": "आपने अपने सभी मीटिंग मिनट इस्तेमाल कर लिए हैं",
+    "resets": "{date} को रीसेट होगा",
+    "leftShort": "{left, plural, one {# मिनट} other {# मिनट}} बचे · {date} को रीसेट",
+    "recordingPaused": "{date} तक रिकॉर्डिंग रुकी हुई है।",
+    "paused": "{date} तक मीटिंग रुकी हुई हैं।",
+    "pausedUpgrade": "{date} तक मीटिंग रुकी हुई हैं। असीमित मीटिंग के लिए {plan} पर अपग्रेड करें।",
+    "getUnlimited": "असीमित मीटिंग पाएं"
+  },
+  "gate": {
+    "checking": "आपका प्लान जांचा जा रहा है…",
+    "seePlans": "प्लान देखें",
+    "comparePlans": "प्लान की तुलना करें",
+    "upgradeTo": "{plan} पर अपग्रेड करें",
+    "offer": "{plan} में {unlimited, select, yes {असीमित स्टोरेज} other {{amount}}} शामिल है।",
+    "offerPriced": "{plan} में {price} प्रति महीने पर {unlimited, select, yes {असीमित स्टोरेज} other {{amount}}} शामिल है।",
+    "file_manager": {
+      "partOf": "फ़ाइल मैनेजर {plan} का हिस्सा है",
+      "notInPlan": "फ़ाइल मैनेजर आपके प्लान में शामिल नहीं है",
+      "pitch": "अपनी फ़ाइलें एक जगह रखें, चुनें कि Leo किनका इस्तेमाल करे, और उन्हें वर्कस्पेस में शेयर करें।"
+    },
+    "knowledge_base": {
+      "partOf": "नॉलेज {plan} का हिस्सा है",
+      "notInPlan": "नॉलेज आपके प्लान में शामिल नहीं है",
+      "pitch": "फ़ाइलें चुनें और स्रोत कनेक्ट करें, ताकि Leo उनसे जवाब दे सके।"
+    }
+  },
+  "sales": {
+    "contact": "सेल्स टीम से संपर्क करें",
+    "title": "सेल्स टीम से बात करें",
+    "description": "हमें अपनी टीम के बारे में बताएं, हम आपके लिए Enterprise प्लान तैयार करेंगे।",
+    "workEmail": "ऑफ़िस ईमेल",
+    "company": "कंपनी",
+    "teamSize": "टीम का साइज़",
+    "teamSizePlaceholder": "चुनें",
+    "teamSizeRange": "{min, number}–{max, number} लोग",
+    "teamSizeOpen": "{min, number}+ लोग",
+    "message": "आपको क्या चाहिए? <muted>(वैकल्पिक)</muted>",
+    "messagePlaceholder": "SSO प्रोवाइडर, सुरक्षा जांच, सीटों की संख्या…",
+    "send": "अनुरोध भेजें",
+    "chooseTeamSize": "अपनी टीम का साइज़ चुनें।",
+    "sendFailed": "आपका अनुरोध नहीं भेजा जा सका।",
+    "sentTitle": "धन्यवाद — हम आपसे संपर्क करेंगे",
+    "sentDescription": "हमारी टीम आम तौर पर एक कामकाजी दिन के अंदर जवाब देती है।",
+    "done": "हो गया"
+  }
+}

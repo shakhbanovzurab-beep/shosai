@@ -1,0 +1,54 @@
+{
+  "panel": {
+    "loadFailed": "Impossible de charger le lien.",
+    "anyone": "Toute personne disposant du lien",
+    "anyoneHint": "Les personnes extérieures à la réunion peuvent ouvrir ses notes.",
+    "linkLabel": "Lien vers les notes",
+    "toggles": {
+      "showTranscript": {
+        "label": "Afficher la transcription",
+        "description": "Les propos exacts des participants."
+      },
+      "showNames": {
+        "label": "Afficher les noms des participants",
+        "description": "Sinon, la transcription indique « {first} », « {second} »."
+      },
+      "allowComments": {
+        "label": "Autoriser les commentaires",
+        "description": "Toute personne disposant du lien peut répondre."
+      }
+    },
+    "expires": "Expiration",
+    "never": "Jamais",
+    "days": "{count, plural, one {# jour} many {# de jours} other {# jours}}",
+    "stopsOn": "Le lien cessera de fonctionner le {date}.",
+    "keepsWorking": "Le lien reste actif sans limite de durée.",
+    "updateFailed": "Impossible de mettre à jour le lien",
+    "turnedOff": "Lien désactivé",
+    "turnOffFailed": "Impossible de désactiver le lien"
+  },
+  "page": {
+    "unavailable": "Lien indisponible",
+    "eyebrow": "Notes de réunion partagées",
+    "people": "{count, plural, one {# personne} many {# de personnes} other {# personnes}}",
+    "transcript": "Transcription",
+    "done": "Terminée",
+    "open": "À faire",
+    "speaker": "Intervenant {order, number}"
+  },
+  "gone": {
+    "title": "Ce lien ne fonctionne plus",
+    "description": "Il a peut-être expiré ou été désactivé. Demandez-en un nouveau à la personne qui vous l’a envoyé."
+  },
+  "comments": {
+    "title": "Commentaires",
+    "loadFailed": "Impossible de charger les commentaires.",
+    "comment": "Votre commentaire",
+    "commentPlaceholder": "Écrivez une réponse…",
+    "name": "Votre nom",
+    "namePlaceholder": "Facultatif, sinon « {guest} » s’affiche",
+    "guest": "Invité",
+    "post": "Publier le commentaire",
+    "postFailed": "Impossible de publier votre commentaire"
+  }
+}

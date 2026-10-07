@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo leest je inbox…",
+    "readingNew": "{count, plural, one {Leo leest # nieuwe e-mail…} other {Leo leest # nieuwe e-mails…}}",
+    "sorted": "{count, plural, one {Leo heeft # e-mail gesorteerd} other {Leo heeft # e-mails gesorteerd}}",
+    "sortedWithDrafts": "{count, plural, one {Leo heeft # e-mail gesorteerd} other {Leo heeft # e-mails gesorteerd}} · {drafts, plural, one {# antwoord als concept klaar} other {# antwoorden als concept klaar}}",
+    "sortFailed": "Leo kan je inbox niet sorteren"
+  },
+  "focus": {
+    "mostUrgentFirst": "Meest dringend eerst ({count, number})",
+    "setAside": "{count, plural, one {# andere e-mail heeft jou nu niet nodig.} other {# andere e-mails hebben jou nu niet nodig.}}",
+    "setAsideLow": "{count, plural, one {# andere e-mail heeft jou nu niet nodig} other {# andere e-mails hebben jou nu niet nodig}}, {low, plural, one {waarvan # met lage prioriteit.} other {waarvan # met lage prioriteit.}}",
+    "showAll": "Alle e-mail tonen",
+    "archiveLow": "Lage prioriteit archiveren",
+    "caughtUpTitle": "Je bent helemaal bij",
+    "caughtUpDescription": "Er wacht niets op je. Leo markeert nieuwe e-mails die een antwoord of besluit van je nodig hebben."
+  },
+  "triage": {
+    "needs_you": "Wacht op jou",
+    "fyi": "Ter info",
+    "low": "Lage prioriteit"
+  },
+  "triageHint": {
+    "needs_you": "Wacht op je antwoord of besluit",
+    "fyi": "Goed om te weten, geen actie nodig",
+    "low": "Kan wachten of worden gearchiveerd"
+  },
+  "triageMenu": {
+    "trigger": "Gesorteerd als {triage}. Wijzigen hoe deze e-mail is gesorteerd",
+    "sortedByYou": "Door jou gesorteerd",
+    "sortedByLeo": "Door Leo gesorteerd",
+    "leosPick": "Leo’s keuze · {hint}"
+  },
+  "replyBy": {
+    "overdue": "Te laat",
+    "today": "Vandaag beantwoorden",
+    "tomorrow": "Morgen beantwoorden",
+    "by": "Beantwoorden vóór {when}"
+  },
+  "tags": {
+    "reading": "Leo leest…",
+    "replied": "Beantwoord",
+    "needsYou": "Wacht op jou",
+    "draftReady": "Concept klaar"
+  },
+  "card": {
+    "label": "Leo’s samenvatting",
+    "readingEmail": "Leo leest deze e-mail…",
+    "readFailed": "Leo kan deze e-mail niet lezen",
+    "readFailedHint": "Probeer het zo opnieuw.",
+    "repliedAgo": "Beantwoord {ago}",
+    "repliedOn": "Beantwoord op {date}",
+    "reviewDraft": "Concept bekijken",
+    "noDraft": "Geen concept: voor dit antwoord is jouw eigen inbreng nodig.",
+    "archive": "Archiveren"
+  },
+  "draft": {
+    "reviewLabel": "Leo’s conceptantwoord aan {name} bekijken",
+    "drafted": "Leo heeft een conceptantwoord geschreven",
+    "review": "Bekijken",
+    "heading": "Leo’s concept · bekijk het voor je het verstuurt",
+    "collapse": "Concept inklappen",
+    "field": "{name} beantwoorden",
+    "discard": "Weggooien",
+    "send": "Versturen",
+    "discarded": "Concept weggegooid"
+  }
+}

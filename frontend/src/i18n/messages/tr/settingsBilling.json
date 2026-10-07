@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "{plan} planı",
+    "current": "Mevcut",
+    "price": "{interval, select, month {Aylık {price}} year {Yıllık {price}} other {Her zaman ücretsiz}}",
+    "renews": "Yenilenme tarihi: {date}",
+    "upgrade": "Planı yükselt"
+  },
+  "payment": {
+    "title": "Ödeme",
+    "description": "Abonelik yenilemeleri, ek kullanım ve otomatik yükleme için varsayılan ödeme yönteminizden ücret alınır.",
+    "add": "Ödeme yöntemi ekle",
+    "empty": "Henüz ödeme yöntemi yok.",
+    "default": "Varsayılan",
+    "unknownCard": "Kart",
+    "endingIn": "Son dört hanesi {last4} olan {card}",
+    "expires": "Son kullanma tarihi: {date}",
+    "update": "Güncelle",
+    "updateCard": "Son dört hanesi {last4} olan {card} kartını güncelle",
+    "openFailed": "Ödeme sayfası açılamadı"
+  },
+  "history": {
+    "title": "Fatura geçmişi",
+    "description": "Geçmiş faturalarınızı görüntüleyin ve indirin.",
+    "empty": "Henüz fatura yok. Faturalar ilk ödemenizden sonra burada görünür.",
+    "columns": {
+      "date": "Tarih",
+      "description": "Açıklama",
+      "amount": "Tutar",
+      "status": "Durum",
+      "download": "İndir"
+    },
+    "status": {
+      "paid": "Ödendi",
+      "pending": "Bekliyor",
+      "failed": "Ödenemedi"
+    },
+    "download": "{number} numaralı faturayı indir",
+    "notReady": "{number} numaralı fatura henüz hazır değil"
+  }
+}

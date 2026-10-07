@@ -1,0 +1,120 @@
+{
+  "title": "メンバー",
+  "description": "{workspace} の全メンバーとそのロール、共有先のチームです。",
+  "invitePeople": "メンバーを招待",
+  "adminsInvite": "メンバーを招待できるのは管理者だけです。",
+  "adminsInviteAsk": "メンバーを招待できるのは管理者だけです。{name} さんに依頼してください。",
+  "tabs": {
+    "members": "メンバー",
+    "teams": "チーム"
+  },
+  "search": "メンバーを検索",
+  "pendingInvitations": "保留中の招待 · {count, number}",
+  "membersCount": "メンバー · {count, number}",
+  "noMatches": "一致するメンバーはいません",
+  "noMatchesHint": "名前、メールアドレス、職種でお試しください。",
+  "clearSearch": "検索をクリア",
+  "seats": {
+    "label": "シート",
+    "taken": "{total, number} シート中 {taken, number} シート使用中",
+    "breakdown": "· {members, plural, other {# 人のメンバー}}",
+    "breakdownPending": "· {members, plural, other {# 人のメンバー}}、{pending, plural, other {保留中の招待 # 件}}",
+    "left": "{count, plural, other {空きシートは残り # です。}}保留中の招待は、承諾または取り消されるまでシートを使用します。",
+    "fullAdd": "シートがすべて使用されています。さらに招待するにはシートを追加してください。",
+    "fullAsk": "シートがすべて使用されています。オーナーにシートの追加を依頼してください。",
+    "change": "シートを変更"
+  },
+  "invitation": {
+    "by": "{name} さんが招待 · {ago}",
+    "byYou": "自分が招待 · {ago}",
+    "byFormerMember": "元メンバーが招待 · {ago}",
+    "resend": "再送信",
+    "revoke": "取り消し",
+    "revokeFor": "{email} への招待を取り消し"
+  },
+  "member": {
+    "you": "自分",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, other {# 日以上利用なし}}",
+    "roleOf": "{name} さんのロール",
+    "remove": "ワークスペースから削除",
+    "removeTitle": "{name} さんを {workspace} から削除しますか？",
+    "removeDescription": "{name} さんが自分のノートやファイル管理から共有した会議とファイルは、ワークスペースから外れます。タスクは残り、未完了のタスクは未割り当てになります。シートは空きになります。",
+    "joinedTeam": "{name} さんが {team} に参加しました",
+    "leftTeam": "{name} さんが {team} から退出しました"
+  },
+  "teams": {
+    "new": "新しいチーム",
+    "empty": "チームはまだありません",
+    "emptyHint": "チームは任意です。エンジニアリングや営業など、グループで会議やナレッジを共有したいときに作成してください。",
+    "intro": "会議やナレッジを、1 人ずつではなくチーム単位で共有できます。",
+    "deleteTitle": "{name} を削除しますか？",
+    "deleteDescription": "会議は参加者が引き続き閲覧でき、メンバーはワークスペースに残ります。チームのナレッジは公開先なしにできないため、先に移動してください。"
+  },
+  "team": {
+    "noDescription": "説明はまだありません。",
+    "edit": "チームを編集",
+    "delete": "チームを削除",
+    "members": "{count, plural, other {# 人のメンバー}}",
+    "membersLedBy": "{count, plural, other {# 人のメンバー}} · リーダー：{name}",
+    "membersLedByYou": "{count, plural, other {# 人のメンバー}} · リーダー：自分",
+    "join": "チームに参加",
+    "leave": "チームから退出",
+    "youJoined": "{team} に参加しました",
+    "youLeft": "{team} から退出しました"
+  },
+  "teamForm": {
+    "editTitle": "{name} を編集",
+    "description": "会議やナレッジを、1 人ずつではなくグループで共有できます。",
+    "nameRequired": "チームの名前を入力してください。",
+    "namePlaceholder": "例：デザイン",
+    "descriptionLabel": "説明",
+    "descriptionPlaceholder": "このチームの担当業務",
+    "color": "色",
+    "colors": {
+      "blue": "青",
+      "green": "緑",
+      "amber": "琥珀",
+      "violet": "紫",
+      "rose": "ローズ",
+      "sky": "空色"
+    },
+    "privateHint": "チームとチームに共有された内容は、メンバーと管理者だけが閲覧できます。",
+    "create": "チームを作成"
+  },
+  "invite": {
+    "title": "{workspace} にメンバーを招待",
+    "description": "参加用リンクが記載されたメールが届きます。1 人につき 1 シートを使用します。",
+    "emails": "メールアドレス",
+    "hint": "アドレスはカンマまたは改行で区切ってください。{left, plural, other {空きシートは残り # です。}}",
+    "overSeats": "{count, plural, other {# 人}}を招待しようとしていますが、{left, plural, other {空きシートは残り # です。}}",
+    "seatsAfter": "{count, plural, other {招待 # 件}} · {left, plural, other {招待後の空きシートは # です。}}",
+    "checkEmails": "{emails} を確認してください。",
+    "allExisting": "すでにワークスペースのメンバーか、招待済みです。",
+    "emailRequired": "メールアドレスを追加してください。",
+    "tooMany": "{count, plural, other {一度に招待できるのは最大 # 人です。}}",
+    "skipped": "メンバーまたは招待済みのためスキップしました：{emails}。",
+    "role": "ロール",
+    "teams": "チームに追加（任意）",
+    "addSeats": "シートを追加",
+    "send": "{count, plural, =1 {招待を送信} other {# 件の招待を送信}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, =1 {{email} に招待を送信しました} other {# 件の招待を送信しました}}",
+    "inviteFailed": "招待を送信できませんでした。",
+    "invitationRevoked": "{email} への招待を取り消しました",
+    "revokeFailed": "取り消しできませんでした",
+    "invitationResent": "{email} に招待を再送信しました",
+    "resendFailed": "再送信できませんでした",
+    "roleChanged": "{role, select, admin {{name} さんが管理者になりました} other {{name} さんがメンバーになりました}}",
+    "roleChangeFailed": "ロールを変更できませんでした",
+    "teamsUpdateFailed": "チームを更新できませんでした",
+    "memberRemoved": "{name} さんをワークスペースから削除しました",
+    "removeMemberFailed": "削除できませんでした",
+    "teamCreated": "{name} を作成しました",
+    "teamSaved": "{name} を保存しました",
+    "teamSaveFailed": "チームを保存できませんでした。",
+    "teamDeleted": "{name} を削除しました",
+    "teamDeleteFailed": "チームを削除できませんでした"
+  }
+}

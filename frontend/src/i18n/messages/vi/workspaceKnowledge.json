@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Kiến thức của không gian làm việc"
+  },
+  "title": "Kiến thức",
+  "description": "Những gì Leo biết trong {workspace}. Leo chỉ trả lời mỗi người dựa trên những gì họ được dùng: kiến thức chung cho mọi người và kiến thức của các nhóm họ tham gia.",
+  "search": {
+    "placeholder": "Tìm theo tên",
+    "label": "Tìm kiếm kiến thức"
+  },
+  "loadFailed": "Không thể tải kiến thức của không gian làm việc",
+  "loading": "Đang tải kiến thức",
+  "alwaysIncluded": {
+    "text": "Leo cũng trả lời dựa trên các cuộc họp, quyết định và dự án mà mỗi người có thể mở tại đây. Không ai cần thêm chúng.",
+    "label": "Luôn bao gồm",
+    "meetings": "{count, plural, other {# cuộc họp}}",
+    "meetingsLoading": "Cuộc họp",
+    "decisions": "{count, plural, other {# quyết định}}",
+    "decisionsLoading": "Quyết định",
+    "projects": "{count, plural, other {# dự án}}"
+  },
+  "empty": {
+    "title": "Chưa có tệp hay nguồn nào",
+    "text": "Chia sẻ tệp của bạn (tệp vẫn thuộc về bạn), tải lên tệp thuộc về {workspace}, hoặc kết nối một ổ đĩa dùng chung hay wiki. Leo trả lời dựa trên chúng cho những ai được phép dùng."
+  },
+  "noMatch": {
+    "title": "Không có kết quả phù hợp",
+    "text": "Hãy thử tên khác hoặc nhóm khác.",
+    "clear": "Xóa bộ lọc"
+  },
+  "sections": {
+    "files": "Tệp · {count, number}",
+    "filesLabel": "Tệp",
+    "noFilesMatch": "Không có tệp nào phù hợp.",
+    "sources": "Nguồn đã kết nối · {count, number}",
+    "sourcesLabel": "Nguồn đã kết nối",
+    "sourcesEmptyAdmin": "Kết nối ổ đĩa hoặc wiki mà nhóm bạn đang dùng, Leo sẽ luôn cập nhật theo.",
+    "sourcesEmpty": "Quản trị viên có thể kết nối ổ đĩa hoặc wiki mà nhóm bạn đang dùng."
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "Tài liệu",
+    "text": "Văn bản",
+    "sheet": "Bảng tính",
+    "slides": "Trang chiếu",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "Trang web"
+  },
+  "status": {
+    "syncing": "Đang đồng bộ",
+    "indexing": "Đang lập chỉ mục",
+    "failed": "Không thể đọc"
+  },
+  "pages": "{count, plural, other {# trang}}",
+  "origin": {
+    "personal": "{who, select, me {Tệp của bạn, đã chia sẻ} former {Tệp của một cựu thành viên, đã chia sẻ} other {Tệp của {name}, đã chia sẻ}}",
+    "connector": "{who, select, me {Do bạn kết nối} former {Do một cựu thành viên kết nối} other {Do {name} kết nối}}",
+    "upload": "{who, select, me {Thuộc về {workspace} · do bạn thêm} former {Thuộc về {workspace} · do một cựu thành viên thêm} other {Thuộc về {workspace} · do {name} thêm}}"
+  },
+  "added": "{days, plural, =0 {Hôm nay} =1 {Hôm qua} other {# ngày trước}}",
+  "leaves": "{who, select, me {Sẽ rời đi cùng bạn, trừ khi bạn chuyển nó cho không gian làm việc từ Trình quản lý tệp} former {Sẽ rời đi cùng chủ sở hữu, trừ khi họ chuyển nó cho không gian làm việc} other {Sẽ rời đi cùng {name}, trừ khi họ chuyển nó cho không gian làm việc}}",
+  "access": {
+    "label": "Ai được dùng",
+    "hint": "Leo chỉ trả lời dựa trên mục này cho những người đó. Bạn có thể thay đổi sau.",
+    "everyone": "Mọi người tại {workspace}",
+    "someTeam": "Một nhóm"
+  },
+  "menu": {
+    "openIn": "Mở trong {provider}",
+    "project": "Dự án",
+    "noProject": "Không có dự án"
+  },
+  "remove": {
+    "stopSharing": "Ngừng chia sẻ",
+    "stopSharingTitle": "Ngừng chia sẻ {name}?",
+    "stopSharingText": "{who, select, me {Leo sẽ ngừng trả lời dựa trên mục này trong {workspace}. Mục này vẫn nằm trong Trình quản lý tệp của bạn.} former {Leo sẽ ngừng trả lời dựa trên mục này trong {workspace}. Mục này vẫn nằm trong Trình quản lý tệp của chủ sở hữu.} other {Leo sẽ ngừng trả lời dựa trên mục này trong {workspace}. Mục này vẫn nằm trong Trình quản lý tệp của {name}.}}",
+    "disconnect": "Ngắt kết nối",
+    "disconnectTitle": "Ngắt kết nối {name}?",
+    "disconnectText": "Việc đồng bộ sẽ dừng và Leo sẽ ngừng trả lời dựa trên nguồn này. Không có gì thay đổi trong {provider}.",
+    "removeTitle": "Gỡ {name}?",
+    "removeText": "Mục này sẽ bị xóa khỏi {workspace} và Leo sẽ ngừng trả lời dựa trên nó cho mọi người."
+  },
+  "changed": {
+    "everyone": "Giờ đây mọi người tại {workspace} đều có thể dùng",
+    "team": "Giờ đây {team} có thể dùng",
+    "addedToProject": "Đã thêm vào {project}",
+    "noProject": "Hiện không thuộc dự án nào"
+  },
+  "addMenu": {
+    "addFile": "Thêm tệp",
+    "addKnowledge": "Thêm kiến thức",
+    "share": "Chia sẻ từ tệp của tôi",
+    "shareHint": "Vẫn thuộc về bạn, rời đi cùng bạn",
+    "upload": "Tải lên {workspace}",
+    "uploadHint": "Thuộc về không gian làm việc",
+    "connect": "Kết nối nguồn",
+    "connectHint": "Drive, Notion, Confluence hoặc trang web"
+  }
+}

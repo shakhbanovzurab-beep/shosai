@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Projetos",
+    "project": "Projeto"
+  },
+  "title": "Projetos",
+  "description": "Um projeto reúne uma frente de trabalho em um só lugar: as reuniões, decisões e tarefas dela.",
+  "newProject": "Novo projeto",
+  "filter": {
+    "label": "Quais projetos",
+    "open": "Em andamento",
+    "all": "Todos"
+  },
+  "empty": {
+    "title": "Nenhum projeto ainda",
+    "text": "Crie um para trabalhos que se estendem por várias reuniões, como um lançamento ou uma contratação. Depois, é possível adicionar reuniões e tarefas a ele."
+  },
+  "status": {
+    "planned": "Planejado",
+    "active": "Ativo",
+    "paused": "Pausado",
+    "completed": "Concluído"
+  },
+  "ledBy": "{who, select, me {Liderado por você} other {Liderado por {name}}}",
+  "noLead": "Sem líder",
+  "target": {
+    "none": "Sem data prevista",
+    "overdue": "Atrasado · {date}",
+    "today": "Previsto para hoje",
+    "tomorrow": "Previsto para amanhã",
+    "on": "Previsto para {date}"
+  },
+  "progress": {
+    "label": "{total, plural, one {{done, number} de # tarefa concluída} many {{done, number} de # de tarefas concluídas} other {{done, number} de # tarefas concluídas}}",
+    "count": "{done, number}/{total, number}",
+    "none": "Sem tarefas"
+  },
+  "notFound": {
+    "title": "Este projeto não está mais aqui",
+    "text": "Ele pode ter sido excluído. As reuniões e tarefas dele continuam no espaço de trabalho.",
+    "action": "Todos os projetos"
+  },
+  "sections": {
+    "tasks": "Tarefas",
+    "addTask": "Adicionar tarefa",
+    "tasksEmpty": "Nenhuma tarefa ainda. Adicione uma ou compartilhe uma reunião neste projeto para trazer as tarefas dela.",
+    "meetings": "Reuniões",
+    "meetingsEmpty": "As reuniões compartilhadas neste projeto aparecem aqui.",
+    "decisions": "Decisões",
+    "files": "Arquivos",
+    "filesLabel": "Arquivos de {project}",
+    "filesEmpty": "Os arquivos adicionados a este projeto aparecem aqui, e o Leo os usa nele."
+  },
+  "header": {
+    "edit": "Editar projeto",
+    "delete": "Excluir projeto",
+    "lead": "Líder",
+    "team": "Equipe",
+    "target": "Data prevista",
+    "deleteTitle": "Excluir {name}?",
+    "deleteText": "As reuniões, tarefas e decisões dele continuam no espaço de trabalho; só deixam de pertencer a um projeto."
+  },
+  "dialog": {
+    "newTitle": "Novo projeto",
+    "editTitle": "Editar {name}",
+    "description": "Um só lugar para uma frente de trabalho: as reuniões, decisões e tarefas dela.",
+    "nameRequired": "Dê um nome ao projeto.",
+    "namePlaceholder": "ex.: Beta do app para celular",
+    "purpose": "Para que serve",
+    "lead": "Líder",
+    "me": "{name} (você)",
+    "team": "Equipe",
+    "wholeWorkspace": "Todo o espaço de trabalho",
+    "status": "Status",
+    "target": "Data prevista",
+    "create": "Criar projeto",
+    "saved": "{name} salvo",
+    "created": "{name} criado"
+  }
+}

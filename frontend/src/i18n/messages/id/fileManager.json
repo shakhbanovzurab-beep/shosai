@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Pengelola file",
+    "description": "Jelajahi, atur, dan unggah file Anda, lalu pilih yang digunakan Leo.",
+    "folderTitle": "Folder · Pengelola file"
+  },
+  "myFiles": "File saya",
+  "loading": "Memuat file Anda…",
+  "loadFailed": "Tidak dapat memuat file Anda",
+  "allFiles": {
+    "heading": "Semua file",
+    "emptyTitle": "Belum ada file",
+    "emptyDescription": "Unggah file atau letakkan di sini. Lalu pilih file yang boleh digunakan Leo."
+  },
+  "folders": {
+    "heading": "Folder",
+    "new": "Folder baru",
+    "untitled": "Folder tanpa judul",
+    "emptyTitle": "Belum ada folder",
+    "emptyDescription": "Buat folder untuk mengatur file Anda, atau agar Leo dapat membaca satu set file sekaligus.",
+    "fileCount": "{count, plural, other {# file}}",
+    "dropHere": "Letakkan untuk memindahkan ke sini",
+    "dropHereLeo": "Letakkan untuk memindahkan ke sini. Leo akan menggunakannya.",
+    "updated": "Diperbarui {ago}",
+    "leoReadsAll": "Leo menggunakan semua yang dapat dibacanya di folder ini"
+  },
+  "folder": {
+    "notFound": "Folder tidak ditemukan",
+    "notFoundDescription": "Folder ini mungkin telah dihapus atau diganti namanya di sesi lain.",
+    "backToMyFiles": "Kembali ke File saya",
+    "back": "Kembali",
+    "emptyTitle": "Folder ini kosong",
+    "emptyLeo": "Unggah atau pindahkan file ke sini, dan Leo akan menggunakannya.",
+    "empty": "Unggah file ke sini, seret file ke folder ini di File saya, atau gunakan Pindahkan ke di menu file."
+  },
+  "section": {
+    "label": "File",
+    "view": "Tampilan file",
+    "grid": "Kisi",
+    "list": "Daftar",
+    "noMatch": "Tidak ada file yang cocok",
+    "noMatchDescription": "Tidak ada yang sesuai dengan filter ini.",
+    "clearFilters": "Hapus filter"
+  },
+  "toolbar": {
+    "filterSort": "Filter & urutkan",
+    "show": "Tampilkan",
+    "fileType": "Jenis file",
+    "allTypes": "Semua jenis",
+    "sortBy": "Urutkan menurut"
+  },
+  "show": {
+    "all": "Semua file",
+    "starred": "Berbintang",
+    "leo": "Digunakan Leo",
+    "shared": "Dibagikan di ruang kerja"
+  },
+  "sort": {
+    "modified": "Terakhir diubah",
+    "name": "Nama",
+    "size": "Ukuran file"
+  },
+  "kinds": {
+    "archive": "Arsip",
+    "design": "Desain",
+    "document": "Dokumen",
+    "image": "Gambar",
+    "other": "File",
+    "pdf": "PDF",
+    "presentation": "Presentasi",
+    "spreadsheet": "Spreadsheet",
+    "text": "Teks"
+  },
+  "file": {
+    "star": "Beri bintang pada {name}",
+    "unstar": "Hapus bintang dari {name}",
+    "modified": "Diubah {ago}",
+    "inFolderModified": "<hidden>Di folder </hidden><name>{folder}</name> · Diubah {ago}",
+    "inFolder": "<hidden>Di folder </hidden><name>{folder}</name>",
+    "sharedIn": "Dibagikan di {workspaces}",
+    "sharedInHidden": "<hidden>Dibagikan di </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Diubah",
+    "size": "Ukuran",
+    "actions": "Tindakan"
+  },
+  "leo": {
+    "viaFile": "Leo menggunakan file ini karena Anda memilihnya",
+    "viaFolder": "Leo menggunakan file ini melalui foldernya",
+    "reading": "Leo · membaca",
+    "failed": "Leo tidak dapat membacanya",
+    "tooLarge": "Leo membaca file hingga {size}",
+    "extension": "Leo tidak dapat membaca file .{extension}",
+    "unknownType": "Leo tidak dapat membaca jenis file ini"
+  },
+  "menu": {
+    "addStar": "Beri bintang",
+    "removeStar": "Hapus bintang",
+    "moveTo": "Pindahkan ke",
+    "useWithLeo": "Gunakan dengan Leo",
+    "usedThrough": "Digunakan melalui “{folder}”",
+    "share": "Bagikan di ruang kerja…",
+    "sharing": "Berbagi di ruang kerja…",
+    "transferTo": "Alihkan ke",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Hapus folder"
+  },
+  "dialogs": {
+    "renameFile": "Ganti nama file",
+    "renameFolder": "Ganti nama folder",
+    "shareTitle": "Bagikan “{name}”",
+    "shareDescription": "Leo menjawab darinya di ruang kerja untuk siapa pun yang Anda pilih. File tetap di sini, tetap milik Anda, dan keluar dari ruang kerja jika Anda menghapusnya atau keluar.",
+    "transferTitle": "Alihkan “{name}” ke {workspace}?",
+    "transferDescription": "File ini keluar dari file Anda dan menjadi milik {workspace}: tetap di sana saat Anda keluar, dan dikelola oleh admin ruang kerja itu. Ruang kerja lain tempat Anda membagikannya akan kehilangan file ini. Tindakan ini tidak dapat diurungkan.",
+    "transfer": "Alihkan"
+  },
+  "upload": {
+    "button": "Unggah",
+    "uploading": "Mengunggah {count, plural, other {# file}}…",
+    "dropHere": "Letakkan untuk mengunggah ke sini",
+    "skipped": "{count, plural, other {# file dilewati}}",
+    "skippedDescription": "File yang kosong atau lebih dari {size} akan dilewati, dan paling banyak {max, number} file diunggah sekaligus."
+  },
+  "picker": {
+    "search": "Cari file Anda",
+    "noMatch": "Tidak ada file yang cocok.",
+    "noFiles": "Belum ada file. Unggah file di Pengelola file terlebih dahulu.",
+    "yourFiles": "File Anda",
+    "alreadyShared": "Sudah dibagikan di sini"
+  }
+}

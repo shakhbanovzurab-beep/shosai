@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "Ayarlar",
+    "sectionsLabel": "Ayar bölümleri",
+    "autosave": "Değişiklikler otomatik olarak kaydedilir."
+  },
+  "sections": {
+    "account": "Hesap",
+    "privacy": "Gizlilik",
+    "billing": "Faturalandırma",
+    "usage": "Kullanım",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "Bellek",
+    "connectors": "Bağlayıcılar",
+    "hotkeys": "Kısayollar"
+  },
+  "loadFailed": "Bu bölüm yüklenemedi",
+  "manage": "Yönet",
+  "saving": "Kaydediliyor…",
+  "saveFailed": "Kaydedilemedi",
+  "profile": {
+    "title": "Profil",
+    "email": "E-posta",
+    "emailHint": "Bu adresle sağlayıcınız üzerinden giriş yaparsınız.",
+    "fullName": "Ad soyad",
+    "displayName": "Leo size nasıl hitap etsin?",
+    "displayNameHint": "Leo sizi selamlarken ve yanıtlarında bu adı kullanır.",
+    "workRole": "İşinizi en iyi ne tanımlıyor?",
+    "workRoleHint": "Leo, örnekleri ve terimleri alanınıza göre seçmek için bunu kullanır."
+  },
+  "workRoles": {
+    "product_management": "Ürün yönetimi",
+    "engineering": "Mühendislik",
+    "human_resources": "İnsan kaynakları",
+    "finance": "Finans",
+    "marketing": "Pazarlama",
+    "sales": "Satış",
+    "operations": "Operasyon",
+    "data_science": "Veri bilimi",
+    "design": "Tasarım",
+    "legal": "Hukuk",
+    "scientist": "Bilim insanı",
+    "student": "Öğrenci",
+    "founder": "Kurucu",
+    "healthcare": "Sağlık",
+    "writer": "Yazar",
+    "educator": "Eğitimci",
+    "consultant": "Danışman",
+    "researcher": "Araştırmacı",
+    "software_engineer": "Yazılım mühendisi",
+    "other": "Diğer"
+  },
+  "avatar": {
+    "change": "Profil fotoğrafını değiştir",
+    "hint": "Her görsel olur. Kare olarak kırpılır ve boyutu sizin için ayarlanır.",
+    "upload": "Fotoğraf yükle",
+    "updateFailed": "Fotoğrafınız güncellenemedi",
+    "removeFailed": "Fotoğrafınız kaldırılamadı",
+    "tooLarge": "{size} boyutundan küçük bir fotoğraf seçin.",
+    "unreadable": "Bu tarayıcı o görseli okuyamıyor. JPEG veya PNG deneyin.",
+    "processFailed": "Görsel işlenemedi."
+  },
+  "deleteAccount": {
+    "group": "Tehlikeli bölge",
+    "title": "Hesabı sil",
+    "description": "Hesabınızı ve içindeki her şeyi kalıcı olarak silin: sohbetler, notlar, dosyalar, istemler ve ayarlar.",
+    "confirmTitle": "Hesabınız silinsin mi?",
+    "confirmDescription": "Bu işlem geri alınamaz. Sohbetleriniz, notlarınız, dosyalarınız, istemleriniz, belleğiniz ve ayarlarınız silinir; varsa aboneliğiniz iptal edilir.",
+    "confirmLabel": "Onaylamak için <address>{email}</address> yazın",
+    "deleted": "Hesabınız silindi",
+    "failed": "Hesabınız silinemedi"
+  }
+}

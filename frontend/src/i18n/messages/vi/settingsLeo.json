@@ -1,0 +1,36 @@
+{
+  "answers": "Câu trả lời",
+  "model": {
+    "title": "Mô hình",
+    "description": "Tự động sẽ chọn mô hình phù hợp cho từng việc. Mô hình hàng đầu dùng token hằng tuần dành cho mô hình hàng đầu của bạn (xem Mức sử dụng).",
+    "label": "Mô hình của Leo",
+    "auto": "Tự động",
+    "autoHint": "Leo chọn theo từng việc"
+  },
+  "language": {
+    "title": "Ngôn ngữ trả lời",
+    "description": "Tự động sẽ trả lời bằng ngôn ngữ của giao diện.",
+    "auto": "Tự động"
+  },
+  "length": {
+    "title": "Độ dài câu trả lời",
+    "description": "Mức độ chi tiết mặc định trong câu trả lời của Leo.",
+    "options": {
+      "concise": "Ngắn gọn",
+      "balanced": "Cân bằng",
+      "detailed": "Chi tiết"
+    }
+  },
+  "advanced": {
+    "title": "Cài đặt nâng cao",
+    "description": "Những gì Leo được phép dùng. Mục nào đã tắt sẽ không được đề xuất cũng như sử dụng.",
+    "webSearch": "Tìm kiếm trên web",
+    "webSearchHint": "Cho phép Leo tự động tìm câu trả lời trên internet.",
+    "voiceMode": "Chế độ giọng nói",
+    "voiceModeHint": "Trò chuyện thành tiếng với Leo. Khi tắt, micrô sẽ được gỡ khỏi giao diện.",
+    "knowledgeSearch": "Tìm kiếm kiến thức",
+    "knowledgeSearchHint": "Tìm câu trả lời trong các tệp và nguồn bạn đã chọn cho Leo.",
+    "connectedSearch": "Tìm kiếm trong dịch vụ đã kết nối",
+    "connectedSearchHint": "Tìm kiếm trong các dịch vụ đã kết nối, chẳng hạn Google Drive và Notion."
+  }
+}

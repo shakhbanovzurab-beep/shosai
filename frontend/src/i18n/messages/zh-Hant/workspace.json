@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "工作空間",
+    "home": "工作空間首頁",
+    "new": "新工作空間",
+    "settings": "工作空間設定",
+    "members": "成員",
+    "decisions": "決策",
+    "projects": "專案",
+    "tasks": "任務",
+    "knowledge": "工作空間知識庫",
+    "meetings": "工作空間會議",
+    "project": "專案",
+    "meeting": "會議"
+  },
+  "createWorkspace": "建立工作空間",
+  "roles": {
+    "owner": {
+      "label": "擁有者",
+      "description": "擁有所有權限，包括帳單和刪除工作空間。"
+    },
+    "admin": {
+      "label": "管理員",
+      "description": "管理成員、團隊、共用規則和設定。"
+    },
+    "member": {
+      "label": "成員",
+      "description": "錄製、共用和追蹤會議。"
+    }
+  },
+  "teams": {
+    "private": "私人團隊"
+  },
+  "audience": {
+    "participants": "參與者",
+    "everyone": "{workspace} 的所有人",
+    "aTeam": "特定團隊",
+    "sharedWith": "{level, select, participants {已與參與者共用} workspace {已與 {workspace} 的所有人共用} other {已與 {team} 共用}}",
+    "hint": "{level, select, participants {參加這場會議的成員。} other {工作空間中現在和日後的所有人。}}",
+    "teamHint": "{private, select, true {{team}（私人團隊）的成員，以及參與者。} other {{team} 的成員，以及參與者。}}"
+  },
+  "people": {
+    "list": "成員：{names}",
+    "more": "+{count, number}",
+    "nameYou": "{name}（你）"
+  },
+  "filters": {
+    "team": "團隊",
+    "allTeams": "所有團隊",
+    "project": "專案",
+    "allProjects": "所有專案",
+    "clearSearch": "清除搜尋"
+  },
+  "blocks": {
+    "loading": {
+      "files": "正在載入檔案…",
+      "tasks": "正在載入任務…",
+      "yourTasks": "正在載入你的任務…",
+      "projects": "正在載入專案…",
+      "meetings": "正在載入會議…",
+      "upcomingMeetings": "正在載入即將舉行的會議…",
+      "decisions": "正在載入決策…"
+    },
+    "failed": {
+      "files": "無法載入檔案。",
+      "tasks": "無法載入任務。",
+      "yourTasks": "無法載入你的任務。",
+      "projects": "無法載入專案。",
+      "meetings": "無法載入會議。",
+      "upcomingMeetings": "無法載入即將舉行的會議。",
+      "decisions": "無法載入決策。"
+    }
+  },
+  "dates": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "tomorrow": "明天",
+    "targetOverdue": "已逾期 · {date}",
+    "targetToday": "目標：今天",
+    "targetTomorrow": "目標：明天",
+    "targetDay": "目標：{day}",
+    "targetDate": "目標：{date}",
+    "ago": "{days, plural, =0 {今天} =1 {昨天} other {# 天前}}",
+    "on": "於 {date}",
+    "neverSignedIn": "從未登入",
+    "activeNow": "目前在線上",
+    "hoursAgo": "{count, plural, other {# 小時前}}",
+    "daysAgo": "{count, plural, =1 {昨天} other {# 天前}}"
+  },
+  "gate": {
+    "loading": "正在載入工作空間…",
+    "loadFailed": "無法載入工作空間",
+    "listFailed": "無法載入你的工作空間",
+    "unavailable": "無法使用這個工作空間",
+    "unavailableHint": "這個工作空間不存在，或你不是成員。請其中的成員邀請你，或建立你自己的工作空間。",
+    "backToPersonal": "返回個人空間",
+    "suspended": "{name} 已停權",
+    "suspendedOwnerHint": "所有成員的存取權都已暫停。請聯絡支援團隊重新啟用；工作空間中的內容都沒有被刪除。",
+    "suspendedHint": "所有成員的存取權都已暫停。擁有者可以聯絡支援團隊重新啟用。你在個人空間中的筆記、檔案和看板不受影響。"
+  },
+  "switcher": {
+    "invite": "邀請成員加入 {name}",
+    "settings": "工作空間設定",
+    "current": "目前",
+    "hint": "在個人空間和工作空間之間切換",
+    "personal": "個人",
+    "personalHint": "你的郵件、筆記、看板和任務",
+    "workspaces": "工作空間",
+    "suspended": "已停權",
+    "detail": "{role} · {count, plural, other {# 位成員}}",
+    "loadFailed": "無法載入你的工作空間。請再試一次",
+    "none": "你還沒有加入任何工作空間"
+  },
+  "create": {
+    "title": "讓你的團隊加入 Leo",
+    "intro": "為團隊合作打造的共用工作空間。個人空間仍然只屬於你：郵件、行事曆、筆記和看板都是私人的，除非你選擇共用。",
+    "value": {
+      "meetings": {
+        "title": "共用會議",
+        "text": "從筆記共用錄製內容，或在會議結束時把筆記傳給合適的人。有訪客參加的會議會保持私人。"
+      },
+      "work": {
+        "title": "專案、任務和決策",
+        "text": "決定了什麼、誰該負責什麼，都依專案分類。你的任務也會顯示在你自己的生產力和看板中。"
+      },
+      "knowledge": {
+        "title": "團隊知識庫",
+        "text": "從檔案管理共用檔案、上傳新檔案，或連接共用雲端硬碟。Leo 會根據有權查看的人，用這些內容回答問題。"
+      }
+    },
+    "billing": "團隊版方案依席位計費。<link>查看價格</link>",
+    "formHint": "你將成為擁有者，建立後即可邀請成員。",
+    "name": "工作空間名稱",
+    "namePlaceholder": "例如 Acme",
+    "nameRequired": "請為工作空間命名。",
+    "seats": "席位",
+    "fewerSeats": "減少席位",
+    "moreSeats": "增加席位",
+    "seatsHint": "每人一個席位，包括你在內。{min, number}–{max, number} 個，隨時可以變更。",
+    "submit": "建立工作空間"
+  },
+  "toasts": {
+    "workspaceReady": "{name} 已準備就緒",
+    "workspaceReadyHint": "邀請你的團隊，開始共用會議。",
+    "createWorkspaceFailed": "無法建立工作空間。",
+    "saveFailed": "無法儲存變更",
+    "workspaceDeleted": "已刪除 {name}",
+    "deleteWorkspaceFailed": "無法刪除工作空間",
+    "workspaceLeft": "你已離開 {name}",
+    "leaveWorkspaceFailed": "無法離開工作空間",
+    "projectSaveFailed": "無法儲存專案",
+    "projectDeleted": "已刪除 {name}",
+    "projectDeletedHint": "專案中的會議和任務仍然保留。",
+    "projectDeleteFailed": "無法刪除專案",
+    "filesAdded": "{count, plural, =1 {已新增 {name}} other {已新增 # 個檔案}}",
+    "filesAddedHint": "{count, plural, =1 {建立索引完成後，Leo 就能根據這個檔案回答。} other {建立索引完成後，Leo 就能根據這些檔案回答。}}",
+    "sourceConnected": "已連接 {name}",
+    "sourceConnectedHint": "第一次同步後，Leo 就能根據這個來源回答。",
+    "knowledgeChangeFailed": "無法變更",
+    "stoppedSharing": "已停止共用 {name}",
+    "stoppedSharingHint": "檔案仍在擁有者的檔案管理中；Leo 不會再在這裡根據它回答。",
+    "knowledgeRemoved": "已移除 {name}",
+    "knowledgeRemovedHint": "Leo 不會再根據它回答。",
+    "knowledgeRemoveFailed": "無法移除",
+    "fileStaysYours": "{count, plural, =1 {檔案仍在你的檔案管理中，而且仍屬於你。} other {這些檔案仍在你的檔案管理中，而且仍屬於你。}}",
+    "shareFileFailed": "無法共用",
+    "filesShared": "{count, plural, =1 {已共用 {name}} other {已共用 # 個檔案}}",
+    "stillInFileManager": "檔案仍在你的檔案管理中。",
+    "unshareFileFailed": "無法停止共用",
+    "meetingShareFailed": "無法共用會議",
+    "meetingChangeFailed": "無法變更會議",
+    "changeUndone": "已復原變更",
+    "noLongerShared": "已停止共用",
+    "stillInYourNotes": "會議仍在你的筆記中。",
+    "stillInOwnerNotes": "會議仍在擁有者的筆記中。",
+    "sharedAgain": "已重新共用",
+    "unshareMeetingFailed": "無法停止共用",
+    "taskUpdateFailed": "無法更新任務",
+    "markedDone": "已標示為完成",
+    "taskAdded": "已新增任務"
+  }
+}

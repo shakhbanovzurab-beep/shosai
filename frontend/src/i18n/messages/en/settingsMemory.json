@@ -1,0 +1,23 @@
+{
+  "memory": "Memory",
+  "memoryHint": "Leo remembers useful facts from your chats and meetings and uses them in later answers.",
+  "summary": {
+    "title": "Memory summary",
+    "description": "Review an overview of what Leo has learned about you. Put what it should always take into account in your <link>custom instructions</link>.",
+    "dialogDescription": "What Leo has learned about you.",
+    "updated": "Updated {ago}",
+    "actions": "Memory summary actions",
+    "refresh": "Refresh summary",
+    "refreshFailed": "Couldn’t refresh",
+    "copy": "Copy text",
+    "copied": "Summary copied",
+    "copyFailed": "Couldn’t copy",
+    "learnMore": "Learn more"
+  },
+  "composer": {
+    "placeholder": "Ask or update",
+    "label": "Ask about your memory summary or tell Leo what to change",
+    "send": "Send",
+    "sendFailed": "Couldn’t send"
+  }
+}

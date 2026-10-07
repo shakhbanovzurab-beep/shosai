@@ -1,0 +1,107 @@
+{
+  "title": "Rapat",
+  "description": "Rekaman yang dibagikan anggota di sini, beserta ringkasan, keputusan, dan tugas dari Leo.",
+  "sharingRules": "Aturan berbagi",
+  "reviewSharingRules": "Tinjau aturan berbagi",
+  "shareMeeting": "Bagikan rapat",
+  "searchMeetings": "Cari rapat",
+  "loading": "Memuat rapat…",
+  "loadFailed": "Tidak dapat memuat rapat",
+  "empty": {
+    "title": "Belum ada yang dibagikan",
+    "text": "Rapat muncul saat anggota membagikan salah satu rekamannya, atau saat rapat yang hanya diikuti anggota {workspace} berakhir dan aturan berbagi berlaku."
+  },
+  "noMatch": {
+    "title": "Tidak ada rapat yang cocok",
+    "text": "Coba kata lain, tim lain, atau semua rapat.",
+    "clear": "Hapus filter"
+  },
+  "recency": {
+    "thisWeek": "Minggu ini",
+    "lastWeek": "Minggu lalu",
+    "earlier": "Sebelumnya"
+  },
+  "scope": {
+    "label": "Rapat mana",
+    "all": "Semua",
+    "mine": "Yang saya ikuti"
+  },
+  "when": {
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "tomorrow": "Besok"
+  },
+  "row": {
+    "recordedByYou": "direkam oleh Anda",
+    "recordedBy": "direkam oleh {name}",
+    "withGuests": "dengan tamu",
+    "decisions": "{count, plural, other {# keputusan}}",
+    "tasks": "{count, plural, other {# tugas}}"
+  },
+  "meeting": {
+    "back": "Rapat",
+    "loading": "Memuat rapat…",
+    "loadFailed": "Tidak dapat memuat rapat",
+    "date": "Tanggal",
+    "duration": "Durasi",
+    "participants": "Peserta",
+    "participantsWithGuests": "{names} ({count, plural, other {# orang dari luar {workspace}}})",
+    "project": "Proyek",
+    "recordedByYou": "Direkam oleh Anda. Rapat ini juga ada di Catatan Anda; berhenti membagikan kapan saja dan rapat tetap ada di sana.",
+    "sharedBy": "Direkam dan dibagikan oleh {name}",
+    "summary": "Ringkasan",
+    "transcript": "Transkrip",
+    "keyPoints": "Poin penting",
+    "decisions": "Keputusan",
+    "replacedLater": "Diganti kemudian",
+    "tasks": "Tugas",
+    "transcriptPrivateTitle": "Hanya ringkasan yang dibagikan",
+    "transcriptPrivate": "{name} menjaga transkrip tetap privat. Tanyakan kepadanya jika Anda memerlukan kata-kata persisnya.",
+    "transcriptPrivateUnknown": "Penyelenggara menjaga transkrip tetap privat. Tanyakan kepadanya jika Anda memerlukan kata-kata persisnya.",
+    "unavailableTitle": "Rapat ini tidak tersedia",
+    "unavailable": "Rapat ini tidak ada, belum dibagikan kepada Anda, atau pemiliknya berhenti membagikannya.",
+    "backToMeetings": "Kembali ke rapat"
+  },
+  "project": {
+    "label": "Proyek",
+    "none": "Tanpa proyek"
+  },
+  "audience": {
+    "participants": "Peserta",
+    "workspace": "Semua orang di {workspace}",
+    "unknownTeam": "Satu tim",
+    "participantsHint": "Anggota yang hadir dalam rapat.",
+    "workspaceHint": "Semua orang di ruang kerja, sekarang dan nanti.",
+    "teamHint": "Anggota {team}, ditambah peserta.",
+    "privateTeamHint": "Anggota {team} (tim privat), ditambah peserta.",
+    "sharedWith": "{level, select, participants {Dibagikan kepada peserta} workspace {Dibagikan kepada semua orang di {workspace}} other {Dibagikan kepada {team}}}",
+    "sharedToast": "{level, select, participants {“{title}” dibagikan kepada peserta di {workspace}} workspace {“{title}” dibagikan kepada semua orang di {workspace}} other {“{title}” dibagikan kepada {team} di {workspace}}}"
+  },
+  "share": {
+    "lockedHint": "Hanya orang yang membagikannya, atau admin, yang dapat mengubah siapa yang dapat melihatnya",
+    "change": "Ubah siapa yang dapat melihat rapat ini",
+    "title": "Siapa yang dapat melihat rapat ini",
+    "description": "Ringkasan, keputusan, dan tugas. Pertanyaan yang diajukan orang kepada Leo tetap milik mereka sendiri.",
+    "external": "Orang dari luar {workspace} ikut serta. Bagikan hanya yang tidak keberatan mereka lihat.",
+    "audienceLabel": "Dibagikan kepada",
+    "includeTranscript": "Sertakan transkrip",
+    "includeTranscriptHint": "Jika tidak, hanya ringkasan yang dibagikan.",
+    "transcriptShared": "Transkrip juga dibagikan",
+    "summaryOnly": "Kini hanya ringkasan yang dibagikan",
+    "addedToProject": "Ditambahkan ke proyek",
+    "removedFromProject": "Dihapus dari proyek",
+    "stopMine": "Berhenti membagikan (simpan di Catatan saya)",
+    "takeOut": "Keluarkan dari {workspace}"
+  },
+  "shareDialog": {
+    "allSharedTitle": "Semua sudah dibagikan",
+    "allShared": "Semua rekaman Anda sudah ada di {workspace}.",
+    "title": "Bagikan salah satu rapat Anda",
+    "description": "Rapat tetap milik Anda dan tetap ada di Catatan Anda; {workspace} dapat melihatnya sampai Anda berhenti membagikan.",
+    "meeting": "Rapat",
+    "movesFrom": "Rapat ini sekarang dibagikan di {workspace}; membagikannya di sini akan memindahkannya.",
+    "audience": "Siapa yang dapat melihatnya",
+    "audienceHint": "Keputusan dan tugasnya ikut dibagikan; peserta selalu dapat melihatnya.",
+    "submit": "Bagikan"
+  }
+}

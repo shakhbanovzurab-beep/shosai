@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Helder",
+    "partly": "Half bewolkt",
+    "overcast": "Bewolkt",
+    "fog": "Mist",
+    "drizzle": "Motregen",
+    "rain": "Regen",
+    "snow": "Sneeuw",
+    "storm": "Onweer",
+    "unknown": "Onbekend"
+  },
+  "fallbackPlace": "Moskou",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, max. {high}, min. {low}",
+  "summaryAt": "{condition}, {now}, max. {high}, min. {low} in {place}"
+}

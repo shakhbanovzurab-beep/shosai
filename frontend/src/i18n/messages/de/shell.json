@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "Produktivität",
+    "hub": "Hub",
+    "email": "E-Mail",
+    "meetings": "Meetings",
+    "calendar": "Kalender",
+    "kanban": "Kanban",
+    "notes": "Notizen",
+    "fileManager": "Dateimanager",
+    "studio": "Studio",
+    "knowledge": "Wissen",
+    "downloadApp": "App herunterladen",
+    "appGroup": "Apps",
+    "workspacesGroup": "Workspaces"
+  },
+  "workspaceNav": {
+    "home": "Startseite",
+    "projects": "Projekte",
+    "tasks": "Aufgaben",
+    "meetings": "Meetings",
+    "decisions": "Entscheidungen",
+    "knowledge": "Wissen",
+    "group": "Workspace",
+    "members": "Mitglieder",
+    "settings": "Einstellungen"
+  },
+  "badge": {
+    "new": "Neu",
+    "soon": "Bald"
+  },
+  "search": {
+    "label": "Suchen",
+    "placeholder": "Was suchst du?",
+    "noResults": "Keine Ergebnisse gefunden.",
+    "pagesGroup": "Seiten"
+  },
+  "userMenu": {
+    "settings": "Einstellungen",
+    "language": "Sprache",
+    "upgrade": "Tarif upgraden",
+    "support": "Support",
+    "logOut": "Abmelden"
+  },
+  "sidebar": {
+    "open": "Seitenleiste ausklappen",
+    "close": "Seitenleiste einklappen"
+  }
+}

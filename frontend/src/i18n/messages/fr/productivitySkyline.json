@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, one {<b>#</b> tâche terminée sur l’année écoulée} many {<b>#</b> de tâches terminées sur l’année écoulée} other {<b>#</b> tâches terminées sur l’année écoulée}}",
+  "chart": {
+    "flat": "{count, plural, one {Carte de chaleur : # tâche terminée du {from} au {to}. Utilisez les flèches du clavier pour consulter chaque jour.} many {Carte de chaleur : # de tâches terminées du {from} au {to}. Utilisez les flèches du clavier pour consulter chaque jour.} other {Carte de chaleur : # tâches terminées du {from} au {to}. Utilisez les flèches du clavier pour consulter chaque jour.}}",
+    "skyline": "{count, plural, one {Relief 3D : # tâche terminée du {from} au {to}. Utilisez les flèches du clavier pour consulter chaque jour.} many {Relief 3D : # de tâches terminées du {from} au {to}. Utilisez les flèches du clavier pour consulter chaque jour.} other {Relief 3D : # tâches terminées du {from} au {to}. Utilisez les flèches du clavier pour consulter chaque jour.}}"
+  },
+  "day": "{count, plural, =0 {Aucune tâche terminée le {date}} one {# tâche terminée le {date}} many {# de tâches terminées le {date}} other {# tâches terminées le {date}}}",
+  "tooltip": "{count, plural, =0 {<b>Aucune tâche terminée</b> le {date}} one {<b># tâche terminée</b> le {date}} many {<b># de tâches terminées</b> le {date}} other {<b># tâches terminées</b> le {date}}}",
+  "views": {
+    "label": "Type de graphique",
+    "flat": "Carte de chaleur",
+    "skyline": "Relief 3D"
+  },
+  "hint": {
+    "flat": "Survolez un jour pour plus de détails · flèches pour explorer",
+    "skyline": "Faites glisser pour pivoter · double-cliquez pour réinitialiser"
+  },
+  "levels": {
+    "label": "Niveaux d’activité",
+    "less": "Moins",
+    "more": "Plus",
+    "none": "Aucune tâche terminée",
+    "light": "Faible",
+    "moderate": "Modérée",
+    "heavy": "Élevée",
+    "heaviest": "Très élevée"
+  },
+  "stats": {
+    "total": "Année écoulée",
+    "busiest": "Jour le plus actif",
+    "longest": "Plus longue série",
+    "current": "Série en cours"
+  },
+  "units": {
+    "contributions": "{count, plural, one {tâche terminée} many {de tâches terminées} other {tâches terminées}}",
+    "days": "{count, plural, one {jour} many {de jours} other {jours}}"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "{plan}-abonnement",
+    "current": "Huidig",
+    "price": "{interval, select, month {{price} per maand} year {{price} per jaar} other {Altijd gratis}}",
+    "renews": "Wordt verlengd op {date}",
+    "upgrade": "Abonnement upgraden"
+  },
+  "payment": {
+    "title": "Betaling",
+    "description": "Je standaardbetaalmethode wordt gebruikt voor verlengingen van je abonnement, extra gebruik en automatisch aanvullen.",
+    "add": "Betaalmethode toevoegen",
+    "empty": "Nog geen betaalmethode.",
+    "default": "Standaard",
+    "unknownCard": "Kaart",
+    "endingIn": "{card} eindigend op {last4}",
+    "expires": "Verloopt {date}",
+    "update": "Bijwerken",
+    "updateCard": "{card} eindigend op {last4} bijwerken",
+    "openFailed": "Kan de betaalpagina niet openen"
+  },
+  "history": {
+    "title": "Factuurgeschiedenis",
+    "description": "Bekijk en download je eerdere facturen.",
+    "empty": "Nog geen facturen. Ze verschijnen hier na je eerste betaling.",
+    "columns": {
+      "date": "Datum",
+      "description": "Omschrijving",
+      "amount": "Bedrag",
+      "status": "Status",
+      "download": "Downloaden"
+    },
+    "status": {
+      "paid": "Betaald",
+      "pending": "In behandeling",
+      "failed": "Mislukt"
+    },
+    "download": "Factuur {number} downloaden",
+    "notReady": "Factuur {number} is nog niet klaar"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "description": "Connect your apps so Leo can search and act in them. Each app signs you in on its own page with OAuth 2.0, so Leo never sees your password.",
+  "columns": {
+    "connector": "Connector",
+    "type": "Type",
+    "status": "Status"
+  },
+  "categories": {
+    "mail": "Mail",
+    "files": "Files",
+    "notes": "Notes",
+    "communication": "Communication",
+    "tasks": "Tasks",
+    "crm": "CRM"
+  },
+  "connect": "Connect",
+  "connecting": "Connecting…",
+  "connected": "Connected",
+  "options": "Options for {name}, connected",
+  "disconnect": "Disconnect",
+  "toasts": {
+    "connected": "{name} connected",
+    "notConnected": "{name} wasn’t connected",
+    "connectFailed": "Couldn’t connect {name}",
+    "disconnected": "{name} disconnected",
+    "disconnectFailed": "Couldn’t disconnect {name}"
+  },
+  "callback": {
+    "metaTitle": "Connecting…",
+    "connected": {
+      "title": "Connected",
+      "body": "You can close this window and return to the dashboard."
+    },
+    "denied": {
+      "title": "Access not granted",
+      "body": "Nothing was connected. You can close this window."
+    },
+    "error": {
+      "title": "Couldn’t connect",
+      "body": "Something went wrong while connecting. Try again from Settings."
+    },
+    "back": "Back to the dashboard"
+  },
+  "consent": {
+    "metaTitle": "Demo authorization",
+    "badge": "Demo · no real account is used",
+    "title": "Connect {app} to Leo?",
+    "titleUnknown": "Connect this app to Leo?",
+    "body": "In production, this step is {app}’s own consent screen. Approving lets Leo read and act in your {app} account on your behalf.",
+    "bodyUnknown": "In production, this step is the provider’s own consent screen. Approving lets Leo read and act in your account on your behalf.",
+    "disconnectHint": "You can disconnect at any time in Settings › Connectors.",
+    "allow": "Allow"
+  }
+}

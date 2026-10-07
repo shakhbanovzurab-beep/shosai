@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Kalender",
+    "description": "Rencanakan rapat, acara, dan waktu fokus per bulan, minggu, atau hari."
+  },
+  "summary": "{days, plural, other {# hari}} · {events, plural, other {# acara}}",
+  "calendars": {
+    "label": "Kalender",
+    "all": "Semua kalender",
+    "work": "Pekerjaan",
+    "personal": "Pribadi",
+    "team": "Tim",
+    "focus": "Waktu fokus"
+  },
+  "views": {
+    "label": "Tampilan",
+    "dayGridMonth": "Bulan",
+    "timeGridWeek": "Minggu",
+    "timeGridDay": "Hari"
+  },
+  "previous": "Periode sebelumnya",
+  "next": "Periode berikutnya",
+  "today": "Hari ini",
+  "addEvent": "Tambahkan acara",
+  "loading": "Memuat kalender…",
+  "eventMenu": {
+    "reschedule": "Jadwalkan ulang",
+    "dayEarlier": "Satu hari lebih awal",
+    "dayLater": "Satu hari lebih lambat",
+    "nextWeek": "Minggu depan",
+    "moveToToday": "Pindahkan ke hari ini",
+    "copyDetails": "Salin detail",
+    "delete": "Hapus acara"
+  },
+  "dayMenu": {
+    "newAllDay": "Acara sepanjang hari baru…",
+    "newAt": "Acara baru pukul {time}…",
+    "openDay": "Buka hari",
+    "openWeek": "Buka minggu"
+  },
+  "renameTitle": "Ganti nama acara",
+  "newTitle": "Acara baru · {when}",
+  "copyName": "{title} (salinan)",
+  "details": "{title} — {when}",
+  "detailsCopied": "Detail acara disalin",
+  "detailsCopyFailed": "Tidak dapat menyalin detail acara",
+  "deleted": "“{title}” dihapus"
+}

@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Chatten met Leo",
+    "close": "Chat met Leo sluiten",
+    "tooltipOpen": "Leo iets vragen",
+    "tooltipClose": "Leo sluiten"
+  },
+  "panel": {
+    "label": "Chat met Leo",
+    "subtitle": "AI-agent",
+    "working": "Aan het werk…",
+    "newChat": "Nieuwe chat",
+    "fullScreen": "Volledig scherm",
+    "exitFullScreen": "Volledig scherm sluiten",
+    "close": "Sluiten",
+    "dropFiles": "Laat de bestanden los om ze bij te voegen"
+  },
+  "place": {
+    "personal": "Persoonlijk",
+    "workspace": "In ‘{name}’",
+    "hub": "In ‘{name}’",
+    "scopePersonal": "Ik werk met je e-mail, agenda, notities, taken en de bestanden die je voor me hebt gekozen, plus wat je werkruimtes met je delen. Alleen jij ziet deze chat.",
+    "scopeWorkspace": "Ik antwoord alleen op basis van wat {name} met je deelt: vergaderingen, besluiten, projecten en kennis. Deze chat blijft in {name}.",
+    "scopeHub": "Ik antwoord alleen op basis van {name}: vergaderingen, besluiten en materiaal. Deze chat blijft hier.",
+    "boundHub": "Ik antwoord alleen over ‘{name}’"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {Goedenavond} morning {Goedemorgen} afternoon {Goedemiddag} other {Goedenavond}}",
+    "hi": "Hoi",
+    "intro": "{greeting}, ik ben Leo",
+    "howCanIHelp": "Waarmee kan ik je vandaag helpen?",
+    "suggestionsLabel": "Suggesties"
+  },
+  "suggestions": {
+    "default": {
+      "first": "Plan mijn dag",
+      "second": "Vat samen wat mijn aandacht nodig heeft",
+      "third": "Waarmee kun je me helpen?"
+    },
+    "hub": {
+      "first": "Waar loopt dit op vast?",
+      "second": "Wat is er in de laatste vergadering veranderd?",
+      "third": "Bereid me voor op de volgende vergadering"
+    },
+    "workspace": {
+      "first": "Wat hebben we over de prijzen besloten?",
+      "second": "Welke taken van mij zijn hier te laat?",
+      "third": "Zoek ons beveiligingsbeleid"
+    },
+    "productivity": {
+      "first": "Plan mijn dag",
+      "second": "Waar moet ik me eerst op richten?",
+      "third": "Vat mijn week samen"
+    },
+    "mail": {
+      "first": "Vat mijn inbox samen",
+      "second": "Stel een beleefde follow-up op",
+      "third": "Welke e-mails zijn dringend?"
+    },
+    "calendar": {
+      "first": "Wat staat er vandaag in mijn agenda?",
+      "second": "Zoek een vrij uur deze week",
+      "third": "Bereid me voor op mijn volgende vergadering"
+    },
+    "kanban": {
+      "first": "Welke taken zijn te laat?",
+      "second": "Vat dit bord samen",
+      "third": "Wat kan ik hierna doorschuiven?"
+    },
+    "meetings": {
+      "first": "Welke vergaderingen heb ik vandaag?",
+      "second": "Plan een call met het team",
+      "third": "Bereid me voor op mijn volgende call"
+    },
+    "notes": {
+      "first": "Vat mijn laatste vergadering samen",
+      "second": "Zet mijn actiepunten op een rij",
+      "third": "Wat hebben we deze week besloten?"
+    },
+    "fileManager": {
+      "first": "Zoek mijn recente bestanden",
+      "second": "Wat neemt de meeste ruimte in?",
+      "third": "Orden mijn bestanden"
+    },
+    "studio": {
+      "first": "Schrijf een systeembericht",
+      "second": "Vergelijk de beschikbare modellen",
+      "third": "Verbeter deze prompt"
+    }
+  },
+  "composer": {
+    "placeholder": "Vraag Leo wat je maar wilt",
+    "label": "Bericht aan Leo",
+    "attach": "Bestanden bijvoegen",
+    "attachLimit": "Maximaal {max, plural, one {# bestand} other {# bestanden}} bijvoegen",
+    "filesToSend": "Te verzenden bestanden",
+    "removeFile": "{name} verwijderen",
+    "disclaimer": "Leo kan fouten maken. Controleer belangrijke informatie.",
+    "stop": "Leo stoppen",
+    "send": "Bericht verzenden",
+    "startVoice": "Spraakmodus starten",
+    "voiceMode": "Spraakmodus"
+  },
+  "message": {
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd",
+    "copyFailed": "Kan niet naar het klembord kopiëren",
+    "regenerate": "Opnieuw genereren",
+    "tryAgain": "Opnieuw proberen",
+    "replyFailed": "Leo kan het antwoord niet afronden. Controleer je verbinding en probeer het opnieuw.",
+    "edit": "Bewerken",
+    "editMessage": "Bericht bewerken",
+    "attachedFiles": "Bijgevoegde bestanden"
+  },
+  "steps": {
+    "gettingStarted": "Ik ga aan de slag",
+    "doneIn": "Klaar in {duration}",
+    "stoppedAfter": "Gestopt na {duration}",
+    "somethingWrong": "Er ging iets mis",
+    "label": "Leo’s acties",
+    "needsApproval": "Goedkeuring nodig",
+    "detail": "‘{detail}’",
+    "status": "{status, select, running {Bezig} done {Klaar} error {Mislukt} stopped {Gestopt} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} is te groot",
+    "sizeLimit": "Bestanden mogen maximaal {size} groot zijn.",
+    "tooMany": "Je kunt maximaal {max, plural, one {# bestand} other {# bestanden}} bijvoegen."
+  },
+  "voice": {
+    "unavailable": "Spraakmodus is niet beschikbaar",
+    "listening": "Luisteren…",
+    "thinking": "Leo denkt na…",
+    "speaking": "Leo spreekt…",
+    "micOff": "Microfoon staat uit",
+    "turnMicOn": "Microfoon aanzetten",
+    "turnMicOff": "Microfoon uitzetten",
+    "end": "Spraakmodus beëindigen",
+    "micBlocked": "Microfoontoegang is geblokkeerd",
+    "micBlockedHint": "Geef toegang tot de microfoon om met Leo te praten.",
+    "needsHttps": "Spraakmodus heeft een beveiligde verbinding (HTTPS) nodig om de microfoon te gebruiken.",
+    "unsupported": "Deze browser ondersteunt geen spraakmodus. Probeer de nieuwste versie van Chrome, Edge of Safari."
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "ワークスペース",
+    "home": "ワークスペースのホーム",
+    "new": "新しいワークスペース",
+    "settings": "ワークスペースの設定",
+    "members": "メンバー",
+    "decisions": "決定事項",
+    "projects": "プロジェクト",
+    "tasks": "タスク",
+    "knowledge": "ワークスペースのナレッジ",
+    "meetings": "ワークスペースの会議",
+    "project": "プロジェクト",
+    "meeting": "会議"
+  },
+  "createWorkspace": "ワークスペースを作成",
+  "roles": {
+    "owner": {
+      "label": "オーナー",
+      "description": "請求やワークスペースの削除を含め、すべての操作ができます。"
+    },
+    "admin": {
+      "label": "管理者",
+      "description": "メンバー、チーム、共有ルール、設定を管理します。"
+    },
+    "member": {
+      "label": "メンバー",
+      "description": "会議をレコーディング・共有し、フォローアップします。"
+    }
+  },
+  "teams": {
+    "private": "非公開チーム"
+  },
+  "audience": {
+    "participants": "参加者",
+    "everyone": "{workspace} の全員",
+    "aTeam": "チーム",
+    "sharedWith": "{level, select, participants {参加者と共有中} workspace {{workspace} の全員と共有中} other {{team} と共有中}}",
+    "hint": "{level, select, participants {会議に参加したメンバーです。} other {今後加わる人も含め、ワークスペースの全員です。}}",
+    "teamHint": "{private, select, true {{team}（非公開チーム）のメンバーと参加者です。} other {{team} のメンバーと参加者です。}}"
+  },
+  "people": {
+    "list": "メンバー：{names}",
+    "more": "+{count, number}",
+    "nameYou": "{name}（自分）"
+  },
+  "filters": {
+    "team": "チーム",
+    "allTeams": "すべてのチーム",
+    "project": "プロジェクト",
+    "allProjects": "すべてのプロジェクト",
+    "clearSearch": "検索をクリア"
+  },
+  "blocks": {
+    "loading": {
+      "files": "ファイルを読み込み中…",
+      "tasks": "タスクを読み込み中…",
+      "yourTasks": "自分のタスクを読み込み中…",
+      "projects": "プロジェクトを読み込み中…",
+      "meetings": "会議を読み込み中…",
+      "upcomingMeetings": "今後の会議を読み込み中…",
+      "decisions": "決定事項を読み込み中…"
+    },
+    "failed": {
+      "files": "ファイルを読み込めませんでした。",
+      "tasks": "タスクを読み込めませんでした。",
+      "yourTasks": "自分のタスクを読み込めませんでした。",
+      "projects": "プロジェクトを読み込めませんでした。",
+      "meetings": "会議を読み込めませんでした。",
+      "upcomingMeetings": "今後の会議を読み込めませんでした。",
+      "decisions": "決定事項を読み込めませんでした。"
+    }
+  },
+  "dates": {
+    "today": "今日",
+    "yesterday": "昨日",
+    "tomorrow": "明日",
+    "targetOverdue": "期限切れ · {date}",
+    "targetToday": "目標：今日",
+    "targetTomorrow": "目標：明日",
+    "targetDay": "目標：{day}",
+    "targetDate": "目標：{date}",
+    "ago": "{days, plural, =0 {今日} =1 {昨日} other {# 日前}}",
+    "on": "{date}",
+    "neverSignedIn": "ログイン履歴なし",
+    "activeNow": "オンライン",
+    "hoursAgo": "{count, plural, other {# 時間前}}",
+    "daysAgo": "{count, plural, =1 {昨日} other {# 日前}}"
+  },
+  "gate": {
+    "loading": "ワークスペースを読み込み中…",
+    "loadFailed": "ワークスペースを読み込めませんでした",
+    "listFailed": "ワークスペースの一覧を読み込めませんでした",
+    "unavailable": "このワークスペースは利用できません",
+    "unavailableHint": "存在しないか、メンバーになっていません。メンバーに招待を依頼するか、自分でワークスペースを作成してください。",
+    "backToPersonal": "個人に戻る",
+    "suspended": "{name} は停止中です",
+    "suspendedOwnerHint": "全員のアクセスが一時停止されています。復元するにはサポートにお問い合わせください。ワークスペース内のものは削除されていません。",
+    "suspendedHint": "全員のアクセスが一時停止されています。復元するには、オーナーがサポートに問い合わせる必要があります。個人のノート、ファイル、ボードには影響ありません。"
+  },
+  "switcher": {
+    "invite": "{name} にメンバーを招待",
+    "settings": "ワークスペースの設定",
+    "current": "現在",
+    "hint": "個人とワークスペースを切り替え",
+    "personal": "個人",
+    "personalHint": "自分のメール、ノート、ボード、タスク",
+    "workspaces": "ワークスペース",
+    "suspended": "停止中",
+    "detail": "{role} · {count, plural, other {# 人のメンバー}}",
+    "loadFailed": "ワークスペースを読み込めませんでした。もう一度お試しください",
+    "none": "まだワークスペースに参加していません"
+  },
+  "create": {
+    "title": "チームで Leo を使う",
+    "intro": "チームで一緒に進める仕事のための共有ワークスペースです。個人は自分だけのスペースのままです。メール、カレンダー、ノート、ボードは、共有するまで非公開です。",
+    "value": {
+      "meetings": {
+        "title": "会議の共有",
+        "text": "ノートからレコーディングを共有したり、会議の終了時に適切なメンバーへノートを届けたりできます。ゲストが参加する会議は非公開のままです。"
+      },
+      "work": {
+        "title": "プロジェクト、タスク、決定事項",
+        "text": "決まったことと担当者を、プロジェクトごとにまとめます。自分のタスクは生産性やかんばんにも表示されます。"
+      },
+      "knowledge": {
+        "title": "チームのナレッジ",
+        "text": "ファイル管理からファイルを共有したり、新しくアップロードしたり、共有ドライブを接続したりできます。Leo は、閲覧できる人に対してその内容をもとに回答します。"
+      }
+    },
+    "billing": "Team プランでシートごとに請求されます。<link>料金を見る</link>",
+    "formHint": "作成すると自分がオーナーになります。その後すぐにメンバーを招待できます。",
+    "name": "ワークスペース名",
+    "namePlaceholder": "例：Acme",
+    "nameRequired": "ワークスペースの名前を入力してください。",
+    "seats": "シート",
+    "fewerSeats": "シートを減らす",
+    "moreSeats": "シートを増やす",
+    "seatsHint": "自分を含め 1 人につき 1 シートです。{min, number}～{max, number} の範囲で、いつでも変更できます。",
+    "submit": "ワークスペースを作成"
+  },
+  "toasts": {
+    "workspaceReady": "{name} の準備ができました",
+    "workspaceReadyHint": "チームを招待して、会議の共有を始めましょう。",
+    "createWorkspaceFailed": "ワークスペースを作成できませんでした。",
+    "saveFailed": "変更を保存できませんでした",
+    "workspaceDeleted": "{name} を削除しました",
+    "deleteWorkspaceFailed": "ワークスペースを削除できませんでした",
+    "workspaceLeft": "{name} から退出しました",
+    "leaveWorkspaceFailed": "ワークスペースから退出できませんでした",
+    "projectSaveFailed": "プロジェクトを保存できませんでした",
+    "projectDeleted": "{name} を削除しました",
+    "projectDeletedHint": "会議とタスクはそのまま残っています。",
+    "projectDeleteFailed": "プロジェクトを削除できませんでした",
+    "filesAdded": "{count, plural, =1 {{name} を追加しました} other {# 件のファイルを追加しました}}",
+    "filesAddedHint": "{count, plural, other {インデックス作成が終わると、Leo がその内容をもとに回答できるようになります。}}",
+    "sourceConnected": "{name} を接続しました",
+    "sourceConnectedHint": "最初の同期が終わると、Leo がその内容をもとに回答できるようになります。",
+    "knowledgeChangeFailed": "変更できませんでした",
+    "stoppedSharing": "{name} の共有を停止しました",
+    "stoppedSharingHint": "オーナーのファイル管理には残ります。このワークスペースでは Leo はその内容をもとに回答しなくなります。",
+    "knowledgeRemoved": "{name} を削除しました",
+    "knowledgeRemovedHint": "Leo はその内容をもとに回答しなくなります。",
+    "knowledgeRemoveFailed": "削除できませんでした",
+    "fileStaysYours": "{count, plural, other {ファイルは自分のファイル管理に残り、引き続き自分のものです。}}",
+    "shareFileFailed": "共有できませんでした",
+    "filesShared": "{count, plural, =1 {{name} を共有しました} other {# 件のファイルを共有しました}}",
+    "stillInFileManager": "ファイル管理には残っています。",
+    "unshareFileFailed": "共有を停止できませんでした",
+    "meetingShareFailed": "会議を共有できませんでした",
+    "meetingChangeFailed": "会議を変更できませんでした",
+    "changeUndone": "変更を元に戻しました",
+    "noLongerShared": "共有を停止しました",
+    "stillInYourNotes": "自分のノートには残っています。",
+    "stillInOwnerNotes": "オーナーのノートには残っています。",
+    "sharedAgain": "再度共有しました",
+    "unshareMeetingFailed": "共有を停止できませんでした",
+    "taskUpdateFailed": "タスクを更新できませんでした",
+    "markedDone": "完了にしました",
+    "taskAdded": "タスクを追加しました"
+  }
+}

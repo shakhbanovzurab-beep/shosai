@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "ワークスペースのナレッジ"
+  },
+  "title": "ナレッジ",
+  "description": "{workspace} で Leo が参照できる情報です。Leo は、全員向けのナレッジと所属チームのナレッジなど、各メンバーが利用できるものだけをもとに回答します。",
+  "search": {
+    "placeholder": "名前で検索",
+    "label": "ナレッジを検索"
+  },
+  "loadFailed": "ワークスペースのナレッジを読み込めませんでした",
+  "loading": "ナレッジを読み込み中…",
+  "alwaysIncluded": {
+    "text": "Leo は、各メンバーがここで開ける会議、決定事項、プロジェクトの内容ももとに回答します。追加する必要はありません。",
+    "label": "常に含まれるもの",
+    "meetings": "{count, plural, other {会議 # 件}}",
+    "meetingsLoading": "会議",
+    "decisions": "{count, plural, other {決定事項 # 件}}",
+    "decisionsLoading": "決定事項",
+    "projects": "{count, plural, other {プロジェクト # 件}}"
+  },
+  "empty": {
+    "title": "ファイルやソースはまだありません",
+    "text": "自分のファイルを共有する（自分のものとして残ります）、{workspace} のファイルをアップロードする、または共有ドライブや Wiki を接続してください。Leo は、利用できる人に対してその内容をもとに回答します。"
+  },
+  "noMatch": {
+    "title": "一致するものはありません",
+    "text": "別の名前やチームでお試しください。",
+    "clear": "フィルタをクリア"
+  },
+  "sections": {
+    "files": "ファイル · {count, number}",
+    "filesLabel": "ファイル",
+    "noFilesMatch": "一致するファイルはありません。",
+    "sources": "接続済みのソース · {count, number}",
+    "sourcesLabel": "接続済みのソース",
+    "sourcesEmptyAdmin": "チームで使っているドライブや Wiki を接続すると、Leo が常に最新の内容を把握します。",
+    "sourcesEmpty": "チームで使っているドライブや Wiki は、管理者が接続できます。"
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "ドキュメント",
+    "text": "テキスト",
+    "sheet": "スプレッドシート",
+    "slides": "スライド",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "ウェブサイト"
+  },
+  "status": {
+    "syncing": "同期中",
+    "indexing": "インデックス作成中",
+    "failed": "読み取れませんでした"
+  },
+  "pages": "{count, plural, other {# ページ}}",
+  "origin": {
+    "personal": "{who, select, me {自分のファイル（共有中）} former {元メンバーのファイル（共有中）} other {{name} さんのファイル（共有中）}}",
+    "connector": "{who, select, me {自分が接続} former {元メンバーが接続} other {{name} さんが接続}}",
+    "upload": "{who, select, me {{workspace} のファイル · 自分が追加} former {{workspace} のファイル · 元メンバーが追加} other {{workspace} のファイル · {name} さんが追加}}"
+  },
+  "added": "{days, plural, =0 {今日} =1 {昨日} other {# 日前}}",
+  "leaves": "{who, select, me {ファイル管理からワークスペースに移管しない限り、自分が退出するとワークスペースから外れます} former {オーナーがワークスペースに移管しない限り、オーナーの退出時にワークスペースから外れます} other {{name} さんがワークスペースに移管しない限り、{name} さんの退出時にワークスペースから外れます}}",
+  "access": {
+    "label": "利用できる人",
+    "hint": "Leo は、ここで選んだ人に対してだけその内容をもとに回答します。後で変更できます。",
+    "everyone": "{workspace} の全員",
+    "someTeam": "チーム"
+  },
+  "menu": {
+    "openIn": "{provider} で開く",
+    "project": "プロジェクト",
+    "noProject": "プロジェクトなし"
+  },
+  "remove": {
+    "stopSharing": "共有を停止",
+    "stopSharingTitle": "{name} の共有を停止しますか？",
+    "stopSharingText": "{who, select, me {{workspace} で Leo がその内容をもとに回答しなくなります。ファイルは自分のファイル管理に残ります。} former {{workspace} で Leo がその内容をもとに回答しなくなります。ファイルはオーナーのファイル管理に残ります。} other {{workspace} で Leo がその内容をもとに回答しなくなります。ファイルは {name} さんのファイル管理に残ります。}}",
+    "disconnect": "接続を解除",
+    "disconnectTitle": "{name} の接続を解除しますか？",
+    "disconnectText": "同期が停止し、Leo はその内容をもとに回答しなくなります。{provider} 側は何も変わりません。",
+    "removeTitle": "{name} を削除しますか？",
+    "removeText": "{workspace} から削除され、Leo は全員に対してその内容をもとに回答しなくなります。"
+  },
+  "changed": {
+    "everyone": "{workspace} の全員が利用できるようになりました",
+    "team": "{team} が利用できるようになりました",
+    "addedToProject": "{project} に追加しました",
+    "noProject": "プロジェクトから外しました"
+  },
+  "addMenu": {
+    "addFile": "ファイルを追加",
+    "addKnowledge": "ナレッジを追加",
+    "share": "自分のファイルから共有",
+    "shareHint": "自分のファイルのまま、退出時に外れる",
+    "upload": "{workspace} にアップロード",
+    "uploadHint": "ワークスペースのものになります",
+    "connect": "ソースを接続",
+    "connectHint": "ドライブ、Notion、Confluence、ウェブサイト"
+  }
+}

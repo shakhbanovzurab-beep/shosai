@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Conoscenza",
+    "description": "Scegli i file e le fonti in base a cui Leo risponde in Personale."
+  },
+  "heading": "Conoscenza",
+  "intro": "Ciò in base a cui Leo risponde quando chiedi in Personale: i file che scegli da Gestione file, le fonti che colleghi e ciò che i tuoi spazi di lavoro condividono con te. Solo tu vedi queste risposte.",
+  "tabs": {
+    "files": "File",
+    "sources": "Fonti",
+    "workspaces": "Dagli spazi di lavoro"
+  },
+  "loadFailed": "Impossibile caricare i file",
+  "leoFolders": {
+    "heading": "Cartelle che Leo legge",
+    "stop": "Smetti di usare {folder}"
+  },
+  "leoFiles": {
+    "heading": "File che Leo usa",
+    "emptyTitle": "Leo non usa ancora nessuno dei tuoi file",
+    "emptyDescription": "Scegli file o intere cartelle da Gestione file oppure caricane di nuovi qui sopra."
+  },
+  "summary": {
+    "files": "File",
+    "chunks": "Frammenti",
+    "processing": "Elaborazione",
+    "embeddings": "Embedding",
+    "used": "{used} usati",
+    "usedOfLimit": "{used} su {limit} con il tuo piano",
+    "failedUsage": "{failed, plural, one {# non riuscito} many {# di non riusciti} other {# non riusciti}} · {usage}",
+    "inIndex": "nell’indice vettoriale",
+    "busy": "analisi e embedding in corso",
+    "caughtUp": "tutto aggiornato",
+    "dimensions": "{dimensions, number} dimensioni"
+  },
+  "dropzone": {
+    "label": "Aggiungi file per Leo",
+    "title": "Trascina qui i file che Leo deve usare",
+    "uploading": "Caricamento di {count, plural, one {# file} many {# di file} other {# file}}…",
+    "description": "Vengono salvati in I miei file, in Gestione file. {types}, fino a {size} ciascuno.",
+    "choose": "Scegli dai tuoi file",
+    "upload": "Carica nuovi",
+    "skipped": "{count, plural, one {# file saltato} many {# di file saltati} other {# file saltati}}",
+    "unreadable": "{name}: Leo non può leggere questo tipo o questa dimensione",
+    "tooMany": "{name}: più di {max, number} file alla volta"
+  },
+  "choose": {
+    "title": "Scegli dai tuoi file",
+    "description": "Leo legge ciò che scegli e risponde in base a questo in Personale. Una cartella include anche i file che vi aggiungerai in seguito.",
+    "folders": "Cartelle intere",
+    "files": "File",
+    "alreadyUsed": "Leo lo usa già",
+    "submit": "Usa con Leo",
+    "readingOne": "Leo lo sta leggendo ora",
+    "readingMany": "{count, plural, one {Leo sta leggendo # elemento scelto} many {Leo sta leggendo # di elementi scelti} other {Leo sta leggendo # elementi scelti}}",
+    "readingDescription": "Risponderà in base a questi in Personale al termine dell’indicizzazione."
+  },
+  "table": {
+    "status": "Stato",
+    "chunks": "Frammenti",
+    "size": "Dimensione",
+    "workspaces": "Spazi di lavoro",
+    "actions": "Azioni",
+    "wholeFolder": "<name>{folder}</name> · cartella intera"
+  },
+  "steps": {
+    "queued": "In coda",
+    "parsing": "Analisi",
+    "chunking": "Suddivisione",
+    "embedding": "Embedding",
+    "indexed": "Indicizzato",
+    "failed": "Non riuscito"
+  },
+  "status": {
+    "step": "{step, number} di {total, number}",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Reindicizza",
+    "showInFileManager": "Mostra in Gestione file",
+    "stopFolder": "Smetti di usare «{folder}»",
+    "stopFile": "Smetti di usare con Leo"
+  }
+}

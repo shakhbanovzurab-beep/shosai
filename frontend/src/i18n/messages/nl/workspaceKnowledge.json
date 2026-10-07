@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Kennis van werkruimte"
+  },
+  "title": "Kennis",
+  "description": "Wat Leo weet in {workspace}. Leo antwoordt iedereen alleen uit wat die persoon mag gebruiken: kennis voor iedereen en die van de eigen teams.",
+  "search": {
+    "placeholder": "Zoeken op naam",
+    "label": "Kennis doorzoeken"
+  },
+  "loadFailed": "Kan de kennis van de werkruimte niet laden",
+  "loading": "Kennis laden",
+  "alwaysIncluded": {
+    "text": "Leo antwoordt ook uit de vergaderingen, besluiten en projecten die iemand hier kan openen. Niemand hoeft die toe te voegen.",
+    "label": "Altijd inbegrepen",
+    "meetings": "{count, plural, one {# vergadering} other {# vergaderingen}}",
+    "meetingsLoading": "Vergaderingen",
+    "decisions": "{count, plural, one {# besluit} other {# besluiten}}",
+    "decisionsLoading": "Besluiten",
+    "projects": "{count, plural, one {# project} other {# projecten}}"
+  },
+  "empty": {
+    "title": "Nog geen bestanden of bronnen",
+    "text": "Deel je eigen bestanden (die blijven van jou), upload bestanden die bij {workspace} horen, of koppel een gedeelde drive of wiki. Leo antwoordt eruit voor iedereen die ze mag gebruiken."
+  },
+  "noMatch": {
+    "title": "Niets gevonden",
+    "text": "Probeer een andere naam of een ander team.",
+    "clear": "Filters wissen"
+  },
+  "sections": {
+    "files": "Bestanden · {count, number}",
+    "filesLabel": "Bestanden",
+    "noFilesMatch": "Geen bestanden gevonden.",
+    "sources": "Gekoppelde bronnen · {count, number}",
+    "sourcesLabel": "Gekoppelde bronnen",
+    "sourcesEmptyAdmin": "Koppel de drive of wiki die je team al gebruikt, dan blijft Leo ermee bij.",
+    "sourcesEmpty": "Beheerders kunnen de drive of wiki koppelen die je team al gebruikt."
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "Document",
+    "text": "Tekst",
+    "sheet": "Spreadsheet",
+    "slides": "Presentatie",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "Website"
+  },
+  "status": {
+    "syncing": "Synchroniseren",
+    "indexing": "Indexeren",
+    "failed": "Kan niet lezen"
+  },
+  "pages": "{count, plural, one {# pagina} other {# pagina’s}}",
+  "origin": {
+    "personal": "{who, select, me {Jouw bestand, gedeeld} former {Bestand van een voormalig lid, gedeeld} other {Bestand van {name}, gedeeld}}",
+    "connector": "{who, select, me {Gekoppeld door jou} former {Gekoppeld door een voormalig lid} other {Gekoppeld door {name}}}",
+    "upload": "{who, select, me {Hoort bij {workspace} · toegevoegd door jou} former {Hoort bij {workspace} · toegevoegd door een voormalig lid} other {Hoort bij {workspace} · toegevoegd door {name}}}"
+  },
+  "added": "{days, plural, =0 {Vandaag} =1 {Gisteren} one {# dag geleden} other {# dagen geleden}}",
+  "leaves": "{who, select, me {Gaat met jou mee, tenzij je het vanuit je Bestandsbeheer aan de werkruimte overdraagt} former {Gaat met de eigenaar mee, tenzij die het aan de werkruimte overdraagt} other {Gaat met {name} mee, tenzij die het aan de werkruimte overdraagt}}",
+  "access": {
+    "label": "Wie het mag gebruiken",
+    "hint": "Leo antwoordt er alleen voor hen uit. Je kunt dit later wijzigen.",
+    "everyone": "Iedereen in {workspace}",
+    "someTeam": "Een team"
+  },
+  "menu": {
+    "openIn": "Openen in {provider}",
+    "project": "Project",
+    "noProject": "Geen project"
+  },
+  "remove": {
+    "stopSharing": "Niet meer delen",
+    "stopSharingTitle": "{name} niet meer delen?",
+    "stopSharingText": "{who, select, me {Leo antwoordt er in {workspace} niet meer uit. Het blijft in je Bestandsbeheer.} former {Leo antwoordt er in {workspace} niet meer uit. Het blijft in het Bestandsbeheer van de eigenaar.} other {Leo antwoordt er in {workspace} niet meer uit. Het blijft in het Bestandsbeheer van {name}.}}",
+    "disconnect": "Ontkoppelen",
+    "disconnectTitle": "{name} ontkoppelen?",
+    "disconnectText": "De synchronisatie stopt en Leo antwoordt er niet meer uit. In {provider} verandert niets.",
+    "removeTitle": "{name} verwijderen?",
+    "removeText": "Het wordt uit {workspace} verwijderd, en Leo antwoordt er voor niemand meer uit."
+  },
+  "changed": {
+    "everyone": "Iedereen in {workspace} kan het nu gebruiken",
+    "team": "{team} kan het nu gebruiken",
+    "addedToProject": "Toegevoegd aan {project}",
+    "noProject": "Nu niet in een project"
+  },
+  "addMenu": {
+    "addFile": "Bestand toevoegen",
+    "addKnowledge": "Kennis toevoegen",
+    "share": "Delen uit mijn bestanden",
+    "shareHint": "Blijft van jou, gaat met je mee",
+    "upload": "Uploaden naar {workspace}",
+    "uploadHint": "Hoort bij de werkruimte",
+    "connect": "Bron koppelen",
+    "connectHint": "Drive, Notion, Confluence of een website"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "fileGone": "Diese Datei existiert nicht mehr.",
+  "folderGone": "Dieser Ordner existiert nicht mehr.",
+  "chooseFile": "Wähle mindestens eine Datei aus.",
+  "tooManyFiles": "Lade höchstens {max, number} Dateien gleichzeitig hoch.",
+  "tooLarge": "„{name}“ ist größer als {size}.",
+  "overLeoLimit": "In deinem Tarif kann Leo bis zu {limit} deiner Dateien nutzen. Deaktiviere zuerst einige.",
+  "notUsedByLeo": "Leo nutzt diese Datei nicht.",
+  "shareFirst": "Teile die Datei zuerst in diesem Workspace.",
+  "fileNameRequired": "Gib einen Dateinamen ein.",
+  "folderNameRequired": "Gib einen Ordnernamen ein.",
+  "nameTooLong": "Der Name darf höchstens {max, number} Zeichen lang sein.",
+  "nameSlash": "Ein Name darf weder / noch \\ enthalten.",
+  "invalidRequest": "Mit der Anfrage stimmt etwas nicht. Lade die Seite neu und versuche es erneut.",
+  "copyName": "{name} Kopie"
+}

@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "name_taken": "Bu adda bir merkeziniz zaten var.",
+    "name_too_short": "{min, plural, one {En az # karakter kullanın.} other {En az # karakter kullanın.}}",
+    "name_too_long": "{max, plural, one {En fazla # karakter kullanın.} other {En fazla # karakter kullanın.}}",
+    "too_many_hubs": "Çok fazla merkeziniz var. Gerekmeyenleri arşivleyin veya silin.",
+    "not_found": "Bu artık burada değil, silinmiş olabilir.",
+    "hub_archived": "Merkez arşivlendi.",
+    "no_board": "Merkezin panosu yok, bu yüzden işlerin gideceği yer yok.",
+    "no_hub": "Toplantı bir merkeze ekli değil.",
+    "board_gone": "Bu merkezin panosu artık mevcut değil.",
+    "invalid": "Her şeyin doğru doldurulduğunu kontrol edin.",
+    "network": "Sunucuya ulaşılamıyor.",
+    "unknown": "Sunucu beklenen şekilde yanıt vermedi."
+  },
+  "fixes": {
+    "choose_board": "Pano seç",
+    "file_meeting": "Toplantıyı bir merkeze ekle",
+    "restore_hub": "Merkezi arşivden geri yükle"
+  }
+}

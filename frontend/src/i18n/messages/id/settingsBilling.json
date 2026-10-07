@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "Paket {plan}",
+    "current": "Saat ini",
+    "price": "{interval, select, month {{price} per bulan} year {{price} per tahun} other {Gratis selamanya}}",
+    "renews": "Diperpanjang {date}",
+    "upgrade": "Tingkatkan paket"
+  },
+  "payment": {
+    "title": "Pembayaran",
+    "description": "Metode pembayaran utama Anda ditagih untuk perpanjangan langganan, penggunaan tambahan, dan isi ulang otomatis.",
+    "add": "Tambahkan metode pembayaran",
+    "empty": "Belum ada metode pembayaran.",
+    "default": "Utama",
+    "unknownCard": "Kartu",
+    "endingIn": "{card} berakhiran {last4}",
+    "expires": "Kedaluwarsa {date}",
+    "update": "Perbarui",
+    "updateCard": "Perbarui {card} berakhiran {last4}",
+    "openFailed": "Tidak dapat membuka halaman pembayaran"
+  },
+  "history": {
+    "title": "Riwayat tagihan",
+    "description": "Lihat dan unduh faktur Anda sebelumnya.",
+    "empty": "Belum ada faktur. Faktur akan muncul di sini setelah pembayaran pertama Anda.",
+    "columns": {
+      "date": "Tanggal",
+      "description": "Deskripsi",
+      "amount": "Jumlah",
+      "status": "Status",
+      "download": "Unduh"
+    },
+    "status": {
+      "paid": "Lunas",
+      "pending": "Menunggu",
+      "failed": "Tidak berhasil"
+    },
+    "download": "Unduh faktur {number}",
+    "notReady": "Faktur {number} belum siap"
+  }
+}

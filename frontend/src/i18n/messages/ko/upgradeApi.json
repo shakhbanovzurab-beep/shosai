@@ -1,0 +1,13 @@
+{
+  "choosePlan": "플랜을 선택해 주세요.",
+  "planUnavailable": "이 플랜은 사용할 수 없어요.",
+  "salesOnly": "이 플랜은 영업팀과 상담해 가입할 수 있어요.",
+  "alreadyOnPlan": "이미 이 플랜을 사용하고 있어요.",
+  "chooseUsers": "사용자를 {min, number}–{max, number}명 사이로 선택해 주세요.",
+  "chooseUsersOrMore": "{min, plural, other {사용자를 #명 이상 선택해 주세요.}}",
+  "singleUser": "이 플랜은 사용자 1명용이에요.",
+  "paymentsNotConnected": "아직 결제가 연결되지 않았어요. 결제가 활성화되면 결제 대행사의 보안 결제 페이지가 열려요.",
+  "invalidEmail": "올바른 업무용 이메일을 입력해 주세요.",
+  "companyRequired": "회사 이름을 입력해 주세요.",
+  "checkForm": "입력한 내용을 확인해 주세요."
+}

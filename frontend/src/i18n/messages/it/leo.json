@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Chatta con Leo",
+    "close": "Chiudi la chat con Leo",
+    "tooltipOpen": "Chiedi a Leo",
+    "tooltipClose": "Chiudi Leo"
+  },
+  "panel": {
+    "label": "Chat con Leo",
+    "subtitle": "Agente IA",
+    "working": "Sto lavorando…",
+    "newChat": "Nuova chat",
+    "fullScreen": "Schermo intero",
+    "exitFullScreen": "Esci da schermo intero",
+    "close": "Chiudi",
+    "dropFiles": "Rilascia i file per allegarli"
+  },
+  "place": {
+    "personal": "Personale",
+    "workspace": "Nello spazio {name}",
+    "hub": "Nell’hub {name}",
+    "scopePersonal": "Lavoro con la tua posta, il calendario, le note, le attività e i file che hai scelto per me, oltre a ciò che i tuoi spazi di lavoro condividono con te. Solo tu vedi questa chat.",
+    "scopeWorkspace": "Rispondo solo in base a ciò che {name} condivide con te: riunioni, decisioni, progetti e conoscenza. Questa chat resta in {name}.",
+    "scopeHub": "Rispondo solo in base all’hub «{name}»: riunioni, decisioni e materiali. Questa chat resta qui.",
+    "boundHub": "Rispondo solo su «{name}»"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {Buonasera} morning {Buongiorno} afternoon {Buon pomeriggio} other {Buonasera}}",
+    "hi": "Ciao",
+    "intro": "{greeting}, sono Leo",
+    "howCanIHelp": "Come posso aiutarti oggi?",
+    "suggestionsLabel": "Suggerimenti"
+  },
+  "suggestions": {
+    "default": {
+      "first": "Pianifica la mia giornata",
+      "second": "Cosa richiede la mia attenzione?",
+      "third": "In cosa puoi aiutarmi?"
+    },
+    "hub": {
+      "first": "Cosa sta bloccando i lavori?",
+      "second": "Cos’è cambiato nell’ultima riunione?",
+      "third": "Preparami per la prossima riunione"
+    },
+    "workspace": {
+      "first": "Cosa abbiamo deciso sui prezzi?",
+      "second": "Cosa ho in ritardo qui?",
+      "third": "Trova la nostra policy di sicurezza"
+    },
+    "productivity": {
+      "first": "Pianifica la mia giornata",
+      "second": "Su cosa dovrei concentrarmi prima?",
+      "third": "Riassumi la mia settimana"
+    },
+    "mail": {
+      "first": "Riassumi la mia posta in arrivo",
+      "second": "Prepara un sollecito cortese",
+      "third": "Quali email sono urgenti?"
+    },
+    "calendar": {
+      "first": "Cosa ho in calendario oggi?",
+      "second": "Trova un’ora libera questa settimana",
+      "third": "Preparami per la prossima riunione"
+    },
+    "kanban": {
+      "first": "Quali attività sono in ritardo?",
+      "second": "Riassumi questa bacheca",
+      "third": "Suggeriscimi cosa spostare dopo"
+    },
+    "meetings": {
+      "first": "Quali riunioni ho oggi?",
+      "second": "Fissa una chiamata con il team",
+      "third": "Preparami per la prossima chiamata"
+    },
+    "notes": {
+      "first": "Riassumi la mia ultima riunione",
+      "second": "Elenca le mie azioni da intraprendere",
+      "third": "Cosa abbiamo deciso questa settimana?"
+    },
+    "fileManager": {
+      "first": "Trova i miei file recenti",
+      "second": "Cosa occupa più spazio?",
+      "third": "Organizza i miei file"
+    },
+    "studio": {
+      "first": "Scrivi un messaggio di sistema",
+      "second": "Confronta i modelli disponibili",
+      "third": "Migliora questo prompt"
+    }
+  },
+  "composer": {
+    "placeholder": "Chiedi qualsiasi cosa a Leo",
+    "label": "Messaggio per Leo",
+    "attach": "Allega file",
+    "attachLimit": "Allega fino a {max, plural, one {# file} many {# di file} other {# file}}",
+    "filesToSend": "File da inviare",
+    "removeFile": "Rimuovi {name}",
+    "disclaimer": "Leo può sbagliare. Verifica le informazioni importanti.",
+    "stop": "Interrompi Leo",
+    "send": "Invia messaggio",
+    "startVoice": "Avvia modalità vocale",
+    "voiceMode": "Modalità vocale"
+  },
+  "message": {
+    "copy": "Copia",
+    "copied": "Copiato",
+    "copyFailed": "Impossibile copiare negli appunti",
+    "regenerate": "Rigenera",
+    "tryAgain": "Riprova",
+    "replyFailed": "Leo non è riuscito a completare la risposta. Controlla la connessione e riprova.",
+    "edit": "Modifica",
+    "editMessage": "Modifica messaggio",
+    "attachedFiles": "File allegati"
+  },
+  "steps": {
+    "gettingStarted": "Comincio",
+    "doneIn": "Completato in {duration}",
+    "stoppedAfter": "Interrotto dopo {duration}",
+    "somethingWrong": "Qualcosa è andato storto",
+    "label": "Azioni di Leo",
+    "needsApproval": "Da approvare",
+    "detail": "«{detail}»",
+    "status": "{status, select, running {In corso} done {Completato} error {Errore} stopped {Interrotto} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} è troppo grande",
+    "sizeLimit": "Ogni file può pesare al massimo {size}.",
+    "tooMany": "Puoi allegare fino a {max, plural, one {# file} many {# di file} other {# file}}."
+  },
+  "voice": {
+    "unavailable": "Modalità vocale non disponibile",
+    "listening": "In ascolto…",
+    "thinking": "Leo sta pensando…",
+    "speaking": "Leo sta parlando…",
+    "micOff": "Microfono disattivato",
+    "turnMicOn": "Attiva il microfono",
+    "turnMicOff": "Disattiva il microfono",
+    "end": "Termina la modalità vocale",
+    "micBlocked": "Accesso al microfono bloccato",
+    "micBlockedHint": "Consenti l’accesso al microfono per parlare con Leo.",
+    "needsHttps": "La modalità vocale richiede una connessione sicura (HTTPS) per usare il microfono.",
+    "unsupported": "Questo browser non supporta la modalità vocale. Prova l’ultima versione di Chrome, Edge o Safari."
+  }
+}

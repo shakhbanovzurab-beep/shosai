@@ -1,0 +1,23 @@
+{
+  "memory": "메모리",
+  "memoryHint": "Leo가 채팅과 회의에서 유용한 정보를 기억해 이후 답변에 활용해요.",
+  "summary": {
+    "title": "메모리 요약",
+    "description": "Leo가 파악한 내용을 한눈에 확인해 보세요. 항상 고려해야 할 내용은 <link>맞춤 지침</link>에 적어 주세요.",
+    "dialogDescription": "Leo가 파악한 내용이에요.",
+    "updated": "{ago} 업데이트됨",
+    "actions": "메모리 요약 옵션",
+    "refresh": "요약 새로고침",
+    "refreshFailed": "새로고침하지 못했어요",
+    "copy": "텍스트 복사",
+    "copied": "요약을 복사했어요",
+    "copyFailed": "복사하지 못했어요",
+    "learnMore": "자세히 알아보기"
+  },
+  "composer": {
+    "placeholder": "질문하거나 수정할 내용 입력",
+    "label": "메모리 요약에 대해 질문하거나 Leo에게 바꿀 내용을 알려 주세요",
+    "send": "보내기",
+    "sendFailed": "보내지 못했어요"
+  }
+}

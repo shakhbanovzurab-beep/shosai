@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Scarica l’app",
+    "description": "Scarica l’app desktop per macOS e Windows."
+  },
+  "title": "Scarica l’app desktop",
+  "subtitle": "Registra le riunioni, tieni note e traduzione in tempo reale durante qualsiasi chiamata e raggiungi Leo ovunque con una scorciatoia.",
+  "notes": {
+    "mobile": "L’app desktop funziona su macOS e Windows. Apri questa pagina dal computer per scaricarla.",
+    "linux": "Non c’è ancora una versione per Linux. L’app desktop funziona su macOS e Windows."
+  },
+  "card": {
+    "yourComputer": "Il tuo computer",
+    "requirement": "{system} o successivo",
+    "downloadFor": "Scarica per {name}",
+    "downloadBuild": "Scarica per {arch} · {size}",
+    "meta": "Versione {version} · {size} · {type} · {date}",
+    "loadFailed": "Impossibile caricare il download per {platform}.",
+    "notYet": "L’app per {platform} non è ancora disponibile. Riprova tra un po’.",
+    "universal": "Apple silicon e Intel"
+  },
+  "checksum": {
+    "button": "Checksum",
+    "verify": "Per verificare, esegui <code>{command}</code> e confronta il risultato.",
+    "copy": "Copia checksum",
+    "copied": "Checksum copiato",
+    "copyFailed": "Impossibile copiare il checksum"
+  },
+  "install": {
+    "title": "Installa in tre passaggi",
+    "macos": {
+      "open": "Apri il file {type} scaricato.",
+      "drag": "Trascina l’app nella cartella Applicazioni, poi aprila da lì.",
+      "allow": "Accedi e, quando macOS lo chiede, consenti l’accesso al microfono e la registrazione dello schermo e dell’audio di sistema: è così che vengono registrate le riunioni."
+    },
+    "windows": {
+      "run": "Esegui il programma di installazione scaricato ({type}).",
+      "setup": "Segui l’installazione, poi apri l’app dal menu Start.",
+      "allow": "Accedi e, quando Windows lo chiede, consenti l’accesso al microfono."
+    }
+  },
+  "features": {
+    "title": "Solo su desktop",
+    "customize": "Personalizza scorciatoie",
+    "shortcutOff": "Scorciatoia disattivata",
+    "shortcut": "Scorciatoia: {keys}",
+    "toggle_recording": {
+      "title": "Registrazione",
+      "text": "Avvia o metti in pausa la registrazione di qualsiasi riunione, da qualsiasi app."
+    },
+    "toggle_overlay": {
+      "title": "Overlay",
+      "text": "Note in tempo reale sopra la chiamata; riducile a una pillola."
+    },
+    "live_translation": {
+      "title": "Traduzione in tempo reale",
+      "text": "Segui la conversazione nella tua lingua mentre le persone parlano."
+    },
+    "prompter": {
+      "title": "Suggeritore",
+      "text": "Suggerimenti discreti di Leo mentre parli, visibili solo a te."
+    }
+  }
+}

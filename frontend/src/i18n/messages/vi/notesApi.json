@@ -1,0 +1,7 @@
+{
+  "meetingNotFound": "Không tìm thấy cuộc họp.",
+  "notesTooLong": "Ghi chú chỉ được dài tối đa {max, number} ký tự.",
+  "linkSettingsInvalid": "Cài đặt liên kết có điểm chưa đúng. Hãy tải lại trang và thử lại.",
+  "commentsClosed": "Liên kết này không nhận bình luận.",
+  "commentInvalid": "Hãy viết bình luận dài tối đa {max, number} ký tự."
+}

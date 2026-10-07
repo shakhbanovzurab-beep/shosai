@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "カレンダー",
+    "description": "会議、予定、集中時間を月、週、日ごとに計画できます。"
+  },
+  "summary": "{days, plural, other {# 日}} · {events, plural, other {# 件の予定}}",
+  "calendars": {
+    "label": "カレンダー",
+    "all": "すべてのカレンダー",
+    "work": "仕事",
+    "personal": "個人",
+    "team": "チーム",
+    "focus": "集中時間"
+  },
+  "views": {
+    "label": "表示",
+    "dayGridMonth": "月",
+    "timeGridWeek": "週",
+    "timeGridDay": "日"
+  },
+  "previous": "前の期間",
+  "next": "次の期間",
+  "today": "今日",
+  "addEvent": "予定を追加",
+  "loading": "カレンダーを読み込み中…",
+  "eventMenu": {
+    "reschedule": "日時を変更",
+    "dayEarlier": "1 日前に移動",
+    "dayLater": "1 日後に移動",
+    "nextWeek": "来週に移動",
+    "moveToToday": "今日に移動",
+    "copyDetails": "詳細をコピー",
+    "delete": "予定を削除"
+  },
+  "dayMenu": {
+    "newAllDay": "新しい終日の予定…",
+    "newAt": "{time} に新しい予定…",
+    "openDay": "日を表示",
+    "openWeek": "週を表示"
+  },
+  "renameTitle": "予定の名前を変更",
+  "newTitle": "新しい予定 · {when}",
+  "copyName": "{title}（コピー）",
+  "details": "{title} — {when}",
+  "detailsCopied": "予定の詳細をコピーしました",
+  "detailsCopyFailed": "予定の詳細をコピーできませんでした",
+  "deleted": "「{title}」を削除しました"
+}

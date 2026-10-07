@@ -1,0 +1,49 @@
+{
+  "data": "Datos",
+  "improveModels": "Ayudar a mejorar los modelos",
+  "improveModelsHint": "Permite usar tus chats y notas de reuniones para entrenar y mejorar los modelos. Desactivado de forma predeterminada.",
+  "shareLocation": "Compartir ubicación aproximada",
+  "shareLocationHint": "Se usa para el clima local y respuestas según la hora. Solo se comparte la zona, nunca tu posición exacta.",
+  "yourData": "Tus datos",
+  "export": "Exportar datos",
+  "exportHint": "Descarga una copia de tu configuración, prompts, memoria y actividad.",
+  "kinds": {
+    "shared_chats": {
+      "title": "Chats compartidos",
+      "description": "Chats que puede ver cualquier persona con el enlace. Al dejar de compartir, el enlace se desactiva.",
+      "removeItem": "Dejar de compartir {title}",
+      "removeAll": "Dejar de compartir todo",
+      "confirmAll": "¿Dejar de compartir todos los chats?",
+      "empty": "No hay chats compartidos"
+    },
+    "shared_artifacts": {
+      "title": "Artefactos compartidos",
+      "description": "Documentos y páginas que publicaste desde los chats.",
+      "removeItem": "Dejar de compartir {title}",
+      "removeAll": "Dejar de compartir todo",
+      "confirmAll": "¿Dejar de compartir todos los artefactos?",
+      "empty": "No hay artefactos compartidos"
+    },
+    "uploaded_files": {
+      "title": "Archivos subidos",
+      "description": "Archivos que adjuntaste en los chats. Si eliminas uno, también desaparece de esos chats.",
+      "removeItem": "Eliminar {title}",
+      "removeAll": "Eliminar todos los archivos",
+      "confirmAll": "¿Eliminar todos los archivos?",
+      "empty": "No hay archivos subidos"
+    },
+    "feedback": {
+      "title": "Tus comentarios",
+      "description": "Valoraciones y comentarios que dejaste en las respuestas de Leo.",
+      "removeItem": "Eliminar {title}",
+      "removeAll": "Eliminar todos los comentarios",
+      "confirmAll": "¿Eliminar todos los comentarios?",
+      "empty": "Aún no hay comentarios"
+    }
+  },
+  "nothingToManage": "No hay nada que administrar aquí.",
+  "copyLinkTo": "Copiar enlace de {title}",
+  "cantUndo": "Esta acción no se puede deshacer.",
+  "removeFailed": "No se pudo quitar",
+  "removeAllFailed": "No se pudieron quitar"
+}

@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Quang đãng",
+    "partly": "Có mây rải rác",
+    "overcast": "U ám",
+    "fog": "Sương mù",
+    "drizzle": "Mưa phùn",
+    "rain": "Mưa",
+    "snow": "Tuyết",
+    "storm": "Dông",
+    "unknown": "Không rõ"
+  },
+  "fallbackPlace": "Moskva",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, cao nhất {high}, thấp nhất {low}",
+  "summaryAt": "{condition}, {now}, cao nhất {high}, thấp nhất {low} tại {place}"
+}

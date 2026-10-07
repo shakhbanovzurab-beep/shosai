@@ -1,0 +1,13 @@
+{
+  "choosePlan": "Wähle einen Tarif.",
+  "planUnavailable": "Dieser Tarif ist nicht verfügbar.",
+  "salesOnly": "Dieser Tarif wird mit dem Vertrieb vereinbart.",
+  "alreadyOnPlan": "Du nutzt diesen Tarif bereits.",
+  "chooseUsers": "Wähle {min, number}–{max, number} Nutzer.",
+  "chooseUsersOrMore": "Wähle {min, plural, one {# oder mehr Nutzer} other {# oder mehr Nutzer}}.",
+  "singleUser": "Dieser Tarif ist für einen einzelnen Nutzer.",
+  "paymentsNotConnected": "Zahlungen sind noch nicht angebunden. Sobald die Abrechnung aktiv ist, öffnet sich hier die sichere Bezahlseite des Anbieters.",
+  "invalidEmail": "Gib eine gültige geschäftliche E-Mail-Adresse ein.",
+  "companyRequired": "Gib dein Unternehmen ein.",
+  "checkForm": "Prüfe das Formular."
+}

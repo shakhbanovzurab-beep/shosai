@@ -1,0 +1,74 @@
+{
+  "back": "All notes",
+  "notFound": "Note not found",
+  "participants": {
+    "count": "{count, plural, one {# participant} other {# participants}}",
+    "inMeeting": "{count, plural, one {# person in this meeting.} other {# people in this meeting.}}",
+    "you": "{name} (you)",
+    "added": "{email} added to the meeting",
+    "addPlaceholder": "Add by email…",
+    "addLabel": "Add a participant by email",
+    "invalid": "Enter an email address, like name@company.com.",
+    "duplicate": "They’re already in this meeting."
+  },
+  "tabs": {
+    "notes": "Notes",
+    "enhanced": "Enhanced",
+    "transcript": "Transcript",
+    "mindMap": "Mind map"
+  },
+  "enhanced": {
+    "writtenBy": "Written by Leo from the meeting transcript and your notes.",
+    "writtenByTemplate": "Written by Leo from the meeting transcript and your notes, laid out as “{template}”.",
+    "writing": "Writing enhanced notes…",
+    "nothingFor": "This meeting has nothing for the sections of “{template}”."
+  },
+  "export": {
+    "button": "Export",
+    "transcriptAs": "Transcript as"
+  },
+  "myNotes": {
+    "loadFailed": "Couldn’t load your notes",
+    "saveFailed": "Couldn’t save your notes"
+  },
+  "editor": {
+    "placeholder": "Write your notes…",
+    "label": "Your notes",
+    "toolbar": "Formatting",
+    "addLink": "Add link",
+    "removeLink": "Remove link",
+    "bold": "Bold",
+    "italic": "Italic",
+    "linkPlaceholder": "Paste a link…",
+    "linkAddress": "Link address",
+    "link": "Link",
+    "turnInto": "Turn into",
+    "blocks": {
+      "text": "Text",
+      "h1": "Heading 1",
+      "h2": "Heading 2",
+      "h3": "Heading 3",
+      "ordered": "Numbered list",
+      "bullet": "Bulleted list"
+    }
+  },
+  "transcript": {
+    "label": "Transcript",
+    "search": "Search transcript",
+    "searchPlaceholder": "Search transcript…",
+    "matches": "{count, plural, =0 {No matches} one {# match} other {# matches}}",
+    "position": "{current, number} of {total, number}",
+    "previous": "Previous match",
+    "next": "Next match",
+    "clear": "Clear search"
+  },
+  "speakers": {
+    "title": "Who spoke",
+    "share": "{speaker}: {share} of the talk time",
+    "lines": "{count, plural, one {# line} other {# lines}}"
+  },
+  "mindMap": {
+    "title": "Mind map: {topic}",
+    "caption": "Generated from the meeting transcript."
+  }
+}

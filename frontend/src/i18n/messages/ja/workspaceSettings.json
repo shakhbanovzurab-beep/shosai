@@ -1,0 +1,70 @@
+{
+  "title": "設定",
+  "description": "{workspace} の全員に適用される設定です。変更はすぐに保存されます。",
+  "adminsOnly": "ワークスペースの設定を変更できるのは管理者だけです。",
+  "adminsOnlyAsk": "ワークスペースの設定を変更できるのは管理者だけです。{name} さんに依頼してください。",
+  "general": {
+    "title": "全般",
+    "name": "ワークスペース名",
+    "nameHint": "切り替えメニューと招待に表示されます。",
+    "renamed": "ワークスペースの名前を変更しました",
+    "join": "会社のメールアドレスで参加",
+    "joinHint": "自社ドメインのメールアドレスを持つ同僚が、招待なしで参加できるようにします。",
+    "joinOn": "シートに空きがある間は、@{domain} のメールアドレスを持つ人なら誰でもメンバーとして参加できます。",
+    "domain": "メールドメイン",
+    "joinEnabled": "{domain} のユーザーが参加できるようになりました",
+    "joinDisabled": "メールドメインによる参加をオフにしました"
+  },
+  "sharing": {
+    "title": "共有",
+    "description": "{workspace} 外の人が参加した会議は、自動では共有されません。主催者はいつでも会議の公開範囲を変更できます。",
+    "reviewTitle": "会議の共有方法を確認",
+    "reviewHint": "おすすめのルールです。必要に応じて変更するか、このまま使用してください。",
+    "keep": "このルールを使用",
+    "confirmed": "共有ルールを確定しました",
+    "defaultLevel": "会議後のノートの共有先",
+    "defaultLevelHint": "参加者全員が {workspace} のメンバーである会議に適用されます。",
+    "levels": {
+      "private": "主催者のみ",
+      "participants": "参加者（おすすめ）",
+      "workspace": "{workspace} の全員"
+    },
+    "levelChanged": "新しい会議の共有先：{level}",
+    "transcripts": "文字起こしを含める",
+    "transcriptsHint": "オフの場合、要約、決定事項、タスクのみが共有され、文字起こしの全文は共有されません。",
+    "transcriptsOn": "文字起こしも共有されます",
+    "transcriptsOff": "要約のみが共有されます",
+    "membersInvite": "メンバーによる招待を許可",
+    "membersInviteHint": "オフの場合、管理者だけが招待できます。",
+    "membersInviteOn": "メンバーが招待できるようになりました",
+    "membersInviteOff": "管理者だけが招待できるようになりました"
+  },
+  "plan": {
+    "title": "プランと使用量",
+    "description": "個人のプランとは別に、ワークスペースに請求されます。",
+    "name": "{plan} プラン",
+    "seats": "{total, number} シート中 {taken, number} シート使用",
+    "price": "1 シートあたり月額 {perSeat} · 合計 {total} · {renews} に更新",
+    "change": "シートまたはプランを変更",
+    "ownerOnly": "請求を管理できるのはオーナーだけです。",
+    "usageFailed": "使用量を読み込めませんでした。",
+    "usageIn": "{month} の使用量",
+    "idle": "{count, plural, other {# 人のメンバーが {days, number} 日以上利用していません。そのシートを再利用できます。}}",
+    "member": "メンバー",
+    "meetings": "会議",
+    "minutes": "分数",
+    "lastActive": "最終利用",
+    "inactive": "利用なし"
+  },
+  "danger": {
+    "delete": "ワークスペースを削除",
+    "deleteHint": "全員に対してワークスペースが削除され、請求も停止します。",
+    "deleteTitle": "{name} を削除しますか？",
+    "deleteDescription": "全員がプロジェクト、タスク、決定事項、アップロードしたファイルにアクセスできなくなります。共有されたレコーディングとファイルは、各自のノートとファイル管理に残ります。この操作は元に戻せません。",
+    "leave": "ワークスペースから退出",
+    "leaveHint": "後で再度招待してもらえます。自分のシートは空きになります。",
+    "leaveTitle": "{name} から退出しますか？",
+    "leaveDescription": "自分が共有した会議とファイルはワークスペースから外れ、自分のノートとファイル管理に残ります。ワークスペースに移管したファイルはここに残ります。タスクはチームに残り、自分の未完了のタスクは未割り当てになります。",
+    "leaveConfirm": "退出"
+  }
+}

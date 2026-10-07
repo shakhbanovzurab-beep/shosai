@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "Opensource-e-mailclient",
+    "description": "Een opensource-e-mailclient om door je inbox te navigeren en berichten te zoeken, lezen, beantwoorden en archiveren."
+  },
+  "preview": {
+    "title": "Voorbeeld van e-mail",
+    "description": "Dit kader toont het losse e-mailscherm. Open het op volledig scherm voor een beter beeld.",
+    "openInNewTab": "E-mail openen in een nieuw tabblad"
+  },
+  "nav": {
+    "inbox": "Inbox",
+    "priority": "Prioriteit",
+    "drafts": "Concepten",
+    "sent": "Verzonden",
+    "archive": "Archief",
+    "trash": "Prullenbak",
+    "helpFeedback": "Hulp en feedback",
+    "keyboardShortcuts": "Sneltoetsen"
+  },
+  "sidebar": {
+    "newEmail": "Nieuwe e-mail",
+    "folders": "Mappen"
+  },
+  "accounts": {
+    "switchTo": "Overschakelen naar {name}",
+    "menu": "Accountmenu",
+    "title": "Accounts",
+    "add": "Account toevoegen",
+    "manage": "Accounts beheren",
+    "settings": "Accountinstellingen",
+    "signOut": "Uitloggen"
+  },
+  "inbox": {
+    "filter": "E-mail filteren",
+    "refresh": "Inbox vernieuwen",
+    "noSelection": "Geen e-mail geselecteerd",
+    "needsYou": "Wacht op jou",
+    "allMail": "Alle e-mail",
+    "pinnedGroup": "Vastgezet ({count, number})",
+    "inboxGroup": "In de inbox ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "E-mail",
+    "drawerDescription": "De geselecteerde e-mail lezen",
+    "to": "Aan: <names>{list}</names>",
+    "cc": "Cc: <names>{list}</names>",
+    "attachments": "Bijlagen ({count, number})"
+  },
+  "toolbar": {
+    "close": "E-mail sluiten",
+    "previous": "Vorige e-mail",
+    "next": "Volgende e-mail",
+    "pin": "Gesprek vastzetten",
+    "reply": "Beantwoorden",
+    "more": "Meer acties",
+    "replyAll": "Allen beantwoorden",
+    "forward": "Doorsturen",
+    "addLabel": "Label toevoegen"
+  },
+  "menu": {
+    "markRead": "Markeren als gelezen",
+    "markUnread": "Markeren als ongelezen",
+    "pin": "Bovenaan vastzetten",
+    "unpin": "Losmaken",
+    "markPriority": "Markeren als prioriteit",
+    "removePriority": "Uit Prioriteit verwijderen",
+    "labels": "Labels",
+    "copySender": "Adres van afzender kopiëren",
+    "archive": "Archiveren",
+    "trash": "Naar prullenbak verplaatsen"
+  },
+  "replyBar": {
+    "placeholder": "{name} beantwoorden…",
+    "label": "{name} beantwoorden",
+    "addEmoji": "Emoji toevoegen",
+    "attachFile": "Bestand bijvoegen",
+    "send": "Versturen"
+  },
+  "toasts": {
+    "senderCopied": "{email} gekopieerd",
+    "senderCopyFailed": "Kan het adres niet kopiëren",
+    "replySent": "Antwoord verstuurd naar {name}",
+    "archived": "{count, plural, one {# e-mail gearchiveerd} other {# e-mails gearchiveerd}}",
+    "moved": "{folder, select, inbox {‘{subject}’ verplaatst naar Inbox} drafts {‘{subject}’ verplaatst naar Concepten} sent {‘{subject}’ verplaatst naar Verzonden} archive {‘{subject}’ verplaatst naar Archief} trash {‘{subject}’ verplaatst naar Prullenbak} other {‘{subject}’ verplaatst}}"
+  }
+}

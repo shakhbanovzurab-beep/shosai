@@ -1,0 +1,54 @@
+{
+  "description": "連接你的應用程式，讓 Leo 可以在其中搜尋和執行動作。每個應用程式都會透過 OAuth 2.0 在自己的頁面讓你登入，因此 Leo 絕不會看到你的密碼。",
+  "columns": {
+    "connector": "連接器",
+    "type": "類型",
+    "status": "狀態"
+  },
+  "categories": {
+    "mail": "郵件",
+    "files": "檔案",
+    "notes": "筆記",
+    "communication": "通訊",
+    "tasks": "任務",
+    "crm": "客戶關係管理"
+  },
+  "connect": "連接",
+  "connecting": "正在連接…",
+  "connected": "已連接",
+  "options": "{name} 的選項，已連接",
+  "disconnect": "中斷連接",
+  "toasts": {
+    "connected": "已連接 {name}",
+    "notConnected": "未連接 {name}",
+    "connectFailed": "無法連接 {name}",
+    "disconnected": "已中斷與 {name} 的連接",
+    "disconnectFailed": "無法中斷與 {name} 的連接"
+  },
+  "callback": {
+    "metaTitle": "正在連接…",
+    "connected": {
+      "title": "已連接",
+      "body": "你可以關閉這個視窗並返回資訊主頁。"
+    },
+    "denied": {
+      "title": "未授予存取權",
+      "body": "沒有連接任何項目。你可以關閉這個視窗。"
+    },
+    "error": {
+      "title": "無法連接",
+      "body": "連接時發生問題。請從「設定」再試一次。"
+    },
+    "back": "返回資訊主頁"
+  },
+  "consent": {
+    "metaTitle": "示範授權",
+    "badge": "示範 · 不會使用真實帳號",
+    "title": "要將 {app} 連接到 Leo 嗎？",
+    "titleUnknown": "要將這個應用程式連接到 Leo 嗎？",
+    "body": "在正式環境中，這個步驟會是 {app} 自己的同意畫面。核准後，Leo 就能代表你讀取 {app} 帳號的內容並執行動作。",
+    "bodyUnknown": "在正式環境中，這個步驟會是服務供應商自己的同意畫面。核准後，Leo 就能代表你讀取帳號的內容並執行動作。",
+    "disconnectHint": "你隨時可以在「設定 › 連接器」中斷連接。",
+    "allow": "允許"
+  }
+}

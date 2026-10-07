@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Download the app",
+    "description": "Download the desktop app for macOS and Windows."
+  },
+  "title": "Get the desktop app",
+  "subtitle": "Record meetings, keep live notes and translation over any call, and reach Leo from anywhere with a shortcut.",
+  "notes": {
+    "mobile": "The desktop app runs on macOS and Windows. Open this page on your computer to download it.",
+    "linux": "There’s no Linux version yet. The desktop app runs on macOS and Windows."
+  },
+  "card": {
+    "yourComputer": "Your computer",
+    "requirement": "{system} or later",
+    "downloadFor": "Download for {name}",
+    "downloadBuild": "Download for {arch} · {size}",
+    "meta": "Version {version} · {size} · {type} · {date}",
+    "loadFailed": "Couldn’t load the {platform} download.",
+    "notYet": "The {platform} app isn’t available yet. Check back soon.",
+    "universal": "Apple silicon and Intel"
+  },
+  "checksum": {
+    "button": "Checksum",
+    "verify": "To verify, run <code>{command}</code> and compare the result.",
+    "copy": "Copy checksum",
+    "copied": "Checksum copied",
+    "copyFailed": "Couldn’t copy the checksum"
+  },
+  "install": {
+    "title": "Install in three steps",
+    "macos": {
+      "open": "Open the downloaded {type} file.",
+      "drag": "Drag the app into your Applications folder, then open it from there.",
+      "allow": "Sign in, and allow microphone and screen & system audio recording when macOS asks — that’s how meetings are captured."
+    },
+    "windows": {
+      "run": "Run the downloaded installer ({type}).",
+      "setup": "Follow the setup, then open the app from the Start menu.",
+      "allow": "Sign in, and allow microphone access when Windows asks."
+    }
+  },
+  "features": {
+    "title": "Only on desktop",
+    "customize": "Customize shortcuts",
+    "shortcutOff": "Shortcut off",
+    "shortcut": "Shortcut: {keys}",
+    "toggle_recording": {
+      "title": "Recording",
+      "text": "Start or pause recording any meeting, from any app."
+    },
+    "toggle_overlay": {
+      "title": "Overlay",
+      "text": "Live notes on top of your call; collapse them to a pill."
+    },
+    "live_translation": {
+      "title": "Live translation",
+      "text": "Follow the conversation in your language as people speak."
+    },
+    "prompter": {
+      "title": "Prompter",
+      "text": "Quiet suggestions from Leo while you talk, visible only to you."
+    }
+  }
+}

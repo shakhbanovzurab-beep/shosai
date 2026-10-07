@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "Boards",
+    "jiraBoards": "Mit Jira synchronisiert",
+    "newBoard": "Neues Board…",
+    "syncJiraBoard": "Jira-Board synchronisieren…",
+    "rename": "Board umbenennen…",
+    "showWorkspaceTasks": "Deine Workspace-Aufgaben hier anzeigen",
+    "changeIcon": "Symbol ändern",
+    "delete": "Board löschen…",
+    "stopSyncing": "Synchronisierung beenden…"
+  },
+  "icons": {
+    "work": "Arbeit",
+    "home": "Zuhause",
+    "personal": "Persönlich",
+    "health": "Gesundheit",
+    "study": "Lernen",
+    "travel": "Reisen",
+    "shopping": "Einkaufen",
+    "fitness": "Sport",
+    "project": "Projekt",
+    "reading": "Lesen"
+  },
+  "empty": {
+    "title": "Noch keine Boards",
+    "description": "Erstelle ein Board für Arbeit, Zuhause oder alles andere – oder hol dir ein Board aus Jira.",
+    "newBoard": "Neues Board",
+    "syncJiraBoard": "Jira-Board synchronisieren"
+  },
+  "newBoard": {
+    "title": "Neues Board",
+    "description": "Arbeit, Zuhause und alles andere – jedes auf einem eigenen Board.",
+    "namePlaceholder": "z. B. Zuhause",
+    "icon": "Symbol",
+    "columns": "Spalten",
+    "create": "Board erstellen"
+  },
+  "templates": {
+    "simple": "Einfach",
+    "project": "Projekt"
+  },
+  "columnNames": {
+    "backlog": "Backlog",
+    "todo": "Zu erledigen",
+    "inProgress": "In Arbeit",
+    "review": "In Prüfung",
+    "done": "Erledigt"
+  },
+  "renameTitle": "Board umbenennen",
+  "delete": {
+    "title": "„{board}“ löschen?",
+    "description": "{count, plural, =0 {Das Board wird gelöscht. Das kann nicht rückgängig gemacht werden.} one {Das Board und die Aufgabe darauf werden gelöscht. Das kann nicht rückgängig gemacht werden.} other {Das Board und alle # Aufgaben darauf werden gelöscht. Das kann nicht rückgängig gemacht werden.}}",
+    "confirm": "Board löschen",
+    "stopTitle": "Synchronisierung von „{board}“ beenden?",
+    "stopDescription": "Das Board wird hier entfernt. In Jira ändert sich nichts, und du kannst es später wieder synchronisieren.",
+    "stopConfirm": "Synchronisierung beenden"
+  },
+  "jira": {
+    "title": "Jira-Board synchronisieren",
+    "description": "Arbeite hier an einem Jira-Board – jede Änderung wird in beide Richtungen synchronisiert.",
+    "connectTitle": "Zuerst Jira verbinden",
+    "connectDescription": "Melde dich unter Einstellungen › Konnektoren bei Jira an und komm dann zurück, um ein Board auszuwählen.",
+    "openConnectors": "Konnektoren öffnen",
+    "connectedAs": "Verbunden als {account}.",
+    "connected": "Mit Jira verbunden.",
+    "noBoards": "In deinem Jira-Konto gibt es noch keine Boards.",
+    "boardList": "Jira-Boards",
+    "alreadySynced": "Bereits synchronisiert · öffnen",
+    "type": {
+      "kanban": "Kanban-Board",
+      "scrum": "Scrum-Board"
+    },
+    "howColumns": "Spalten und Vorgänge kommen aus dem Jira-Board.",
+    "howMoves": "Wenn du eine Karte verschiebst, ändert sich der Status des Vorgangs in Jira; neue Aufgaben werden zu Jira-Vorgängen.",
+    "howChanges": "Änderungen in Jira erscheinen hier automatisch.",
+    "sync": "Board synchronisieren"
+  },
+  "sync": {
+    "syncing": "Wird mit Jira synchronisiert…",
+    "paused": "Synchronisierung pausiert",
+    "synced": "Mit Jira synchronisiert",
+    "syncedAgo": "Zuletzt {ago} mit Jira synchronisiert",
+    "syncNow": "Jetzt synchronisieren",
+    "openBoard": "{board} in Jira öffnen",
+    "openHint": "In Jira öffnen · {project} auf {site}"
+  },
+  "banners": {
+    "syncStopped": "Die Synchronisierung mit Jira wurde unterbrochen.",
+    "changesPaused": "Änderungen sind pausiert.",
+    "importing": "{board} wird aus Jira importiert…",
+    "importingHint": "Spalten und Vorgänge erscheinen gleich hier.",
+    "offer": "{count, plural, one {Du hast # offene Aufgabe in deinen Workspaces. Auf „{board}“ anzeigen?} other {Du hast # offene Aufgaben in deinen Workspaces. Auf „{board}“ anzeigen?}} Wenn du eine Karte verschiebst, wird die Aufgabe für dein Team aktualisiert.",
+    "notNow": "Nicht jetzt",
+    "showHere": "{count, plural, one {Hier anzeigen} other {Hier anzeigen}}"
+  },
+  "toasts": {
+    "createFailed": "Board konnte nicht erstellt werden",
+    "connectFailed": "Jira-Board konnte nicht synchronisiert werden",
+    "updateFailed": "Board konnte nicht aktualisiert werden",
+    "deleteFailed": "Board konnte nicht gelöscht werden",
+    "syncFailed": "Board konnte nicht mit Jira synchronisiert werden",
+    "deleted": "„{board}“ gelöscht",
+    "stoppedSyncing": "Synchronisierung von „{board}“ beendet",
+    "workspaceTasksOn": "Deine Workspace-Aufgaben werden jetzt auf „{board}“ angezeigt",
+    "workspaceTasksOff": "Deine Workspace-Aufgaben werden auf keinem Board mehr angezeigt",
+    "workspaceTasksHint": "Wenn du eine Karte verschiebst, ändert sich die Aufgabe in ihrem Workspace.",
+    "workspaceTasksFailed": "Einstellung für Workspace-Aufgaben konnte nicht geändert werden"
+  }
+}

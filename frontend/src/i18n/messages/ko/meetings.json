@@ -1,0 +1,60 @@
+{
+  "title": "회의",
+  "loading": "회의를 불러오는 중…",
+  "loadFailed": "회의를 불러오지 못했어요",
+  "loadFailedHint": "연결을 확인하고 다시 시도해 주세요.",
+  "newMeeting": "새 회의",
+  "actions": {
+    "schedule": "캘린더에서 일정 잡기",
+    "upload": "녹음 업로드"
+  },
+  "filters": "회의 필터",
+  "views": {
+    "all": "전체",
+    "upcoming": "예정",
+    "live": "진행 중",
+    "past": "지난 회의"
+  },
+  "recent": "최근",
+  "viewAll": "모두 보기",
+  "noMoreToday": "오늘은 남은 회의가 없어요.",
+  "day": {
+    "today": "오늘",
+    "tomorrow": "내일",
+    "yesterday": "어제"
+  },
+  "liveBadge": "진행 중",
+  "liveSince": "{minutes, plural, =0 {방금 시작 · {end} 종료} other {#분 전 시작 · {end} 종료}}",
+  "startsIn": "{minutes, plural, =0 {곧 시작} other {#분 후}}",
+  "join": "회의 참여",
+  "opensInNewTab": "(새 탭에서 열림)",
+  "source": {
+    "whisperer": "Whisperer 회의실",
+    "in_person": "대면"
+  },
+  "participants": "참석자: {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "노트가 아직 준비되지 않았어요.",
+    "tasks": "{count, plural, other {작업 #개}}",
+    "decisions": "{count, plural, other {결정 사항 #개}}"
+  },
+  "empty": {
+    "none": {
+      "title": "아직 회의가 없어요",
+      "description": "캘린더에서 회의 일정을 잡거나 녹음을 업로드해 Leo의 노트를 받아 보세요."
+    },
+    "upcoming": {
+      "title": "예정된 회의가 없어요",
+      "description": "캘린더에서 잡은 회의가 여기에 표시돼요."
+    },
+    "live": {
+      "title": "진행 중인 회의가 없어요",
+      "description": "회의가 진행되는 동안 여기에 표시되어 바로 참여할 수 있어요."
+    },
+    "past": {
+      "title": "아직 지난 회의가 없어요",
+      "description": "녹음한 회의가 Leo의 요약, 작업, 결정 사항과 함께 여기에 표시돼요."
+    }
+  }
+}

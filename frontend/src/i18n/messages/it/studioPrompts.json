@@ -1,0 +1,62 @@
+{
+  "intro": "Le istruzioni con cui l’assistente svolge i suoi ruoli. Skill pronte dal catalogo, le tue dal tuo repository.",
+  "role": "Ruolo",
+  "skills": "Skill",
+  "search": {
+    "placeholder": "Cerca per nome…",
+    "label": "Cerca prompt per nome"
+  },
+  "loadFailed": "Impossibile caricare i prompt",
+  "empty": {
+    "title": "Ancora nessun prompt",
+    "description": "Crea un prompt per un ruolo, poi allega delle skill per ampliarlo."
+  },
+  "noMatches": {
+    "title": "Nessun risultato",
+    "description": "Prova un altro nome o un altro ruolo."
+  },
+  "copyName": "{name} (copia)",
+  "delete": {
+    "title": "Eliminare «{name}»?",
+    "description": "Se un ruolo lo usa, quel ruolo torna al prompt predefinito integrato."
+  },
+  "filter": {
+    "label": "Filtra per ruolo",
+    "all": "Tutti",
+    "allHelp": "Tutti i prompt, di qualsiasi ruolo."
+  },
+  "table": {
+    "number": "N.",
+    "updated": "Aggiornato",
+    "inUse": "In uso",
+    "deleteNamed": "Elimina {name}"
+  },
+  "menu": {
+    "edit": "Modifica…",
+    "stopUsing": "Smetti di usare",
+    "useFor": "Usa per {role}",
+    "duplicate": "Duplica…",
+    "delete": "Elimina…"
+  },
+  "editor": {
+    "editTitle": "Modifica prompt",
+    "newTitle": "Nuovo prompt",
+    "description": "Istruzioni che l’assistente segue nel ruolo scelto, più eventuali skill.",
+    "namePlaceholder": "Versione IA",
+    "instructions": "Istruzioni",
+    "instructionsPlaceholder": "Spiega all’assistente come comportarsi in questo ruolo. Puoi usare Markdown.",
+    "noSkills": "Ancora nessuna skill installata: aggiungile con il pulsante Skill.",
+    "saveFailed": "Impossibile salvare: continua a scrivere per riprovare",
+    "savesAutomatically": "Le modifiche vengono salvate automaticamente",
+    "done": "Fine"
+  },
+  "toasts": {
+    "deleted": "«{name}» eliminato",
+    "deleteFailed": "Impossibile eliminare il prompt",
+    "inUse": "{role} ora usa «{name}»",
+    "backToDefault": "{role} è tornato al prompt integrato",
+    "changeFailed": "Impossibile cambiare il prompt",
+    "created": "«{name}» creato",
+    "createFailed": "Impossibile creare il prompt"
+  }
+}

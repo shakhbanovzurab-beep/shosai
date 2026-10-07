@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Verstuur het bericht als multipart/form-data.",
+  "emptyMessage": "Schrijf een bericht of voeg een bestand bij.",
+  "messageTooLong": "Houd het bericht korter dan {max, number} tekens.",
+  "tooManyFiles": "{max, plural, one {Voeg maximaal # bestand bij.} other {Voeg maximaal # bestanden bij.}}",
+  "fileTooBig": "{name} is groter dan {size}.",
+  "subjectRequired": "Geef het ticket een kort onderwerp.",
+  "topicRequired": "Kies een categorie.",
+  "detailsRequired": "Beschrijf wat er is gebeurd.",
+  "ticketNotFound": "Ticket niet gevonden.",
+  "invalidUpdate": "Stuur een status, een beoordeling of de markering ongelezen."
+}

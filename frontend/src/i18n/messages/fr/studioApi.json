@@ -1,0 +1,22 @@
+{
+  "invalidRequest": "La demande contient une erreur. Rechargez la page et réessayez.",
+  "contextTooLong": "Le contexte ne peut pas dépasser {max, plural, one {# caractère} many {# de caractères} other {# caractères}}. Raccourcissez-le pour l’enregistrer.",
+  "unknownRole": "Ce rôle n’existe pas.",
+  "modelNotOnPlan": "Ce modèle n’est pas inclus dans votre abonnement.",
+  "modelCantDoRole": "{model} ne peut pas être utilisé pour {role}.",
+  "maxTokensRange": "Le nombre maximal de jetons doit être compris entre {min, number} et {max, number}.",
+  "promptNameRequired": "Donnez un nom au prompt.",
+  "promptNameTooLong": "Ce nom est trop long. Utilisez au maximum {max, plural, one {# caractère} many {# de caractères} other {# caractères}}.",
+  "promptTooLong": "Les instructions sont trop longues. Utilisez au maximum {max, plural, one {# caractère} many {# de caractères} other {# caractères}}.",
+  "tooManySkills": "Un prompt peut utiliser au maximum {max, plural, one {# compétence} many {# de compétences} other {# compétences}}.",
+  "promptNotFound": "Prompt introuvable.",
+  "promptForOtherRole": "Ce prompt est conçu pour un autre rôle.",
+  "skillNotFound": "Compétence introuvable.",
+  "skillReferenceInvalid": "Utilisez propriétaire/dépôt/compétence, ou un lien skills.sh ou GitHub vers la compétence.",
+  "skillFileEmpty": "Le fichier SKILL.md de cette compétence est vide.",
+  "skillMissing": "Impossible de trouver {path} dans {repository}.",
+  "repositoryInvalid": "Utilisez propriétaire/dépôt ou un lien GitHub.",
+  "repositoryUnreadable": "Impossible de lire {repository}. Ce dépôt est-il public ?",
+  "repositoryNoSkills": "Aucun fichier SKILL.md dans {repository}.",
+  "directoryUnavailable": "L’annuaire skills.sh ne répond pas actuellement. Réessayez dans un instant."
+}

@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Ajuste com quem o assistente está falando, como ele se comporta e quais modelos o executam."
+  },
+  "tabs": {
+    "context": "Contexto",
+    "prompts": "Seus prompts",
+    "models": "Modelos"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Respostas ao vivo",
+      "description": "Respostas do assistente: sobreposição, chat, reunião",
+      "help": "Respostas ao vivo: a sobreposição, o chat e as respostas durante uma reunião. O prompt define o tom, o tamanho e o formato do que o assistente diz."
+    },
+    "screenshots": {
+      "name": "Capturas de tela",
+      "description": "Leitura da tela, de slides e documentos",
+      "help": "Análise de capturas de tela: o botão “Captura de tela” na sobreposição e o compartilhamento de tela em uma reunião. O prompt diz ao modelo como ler a imagem e o que responder."
+    },
+    "code": {
+      "name": "Código",
+      "description": "Perguntas sobre código e algoritmos",
+      "help": "Perguntas sobre código e algoritmos. O prompt define a linguagem de programação, o quanto explicar e se deve mostrar complexidade e testes."
+    },
+    "system_design": {
+      "name": "Design de sistemas",
+      "description": "Design de arquitetura para entrevistas",
+      "help": "Perguntas de arquitetura em entrevistas. O prompt define a estrutura da explicação: requisitos, estimativas, design e prós e contras."
+    },
+    "notes": {
+      "name": "Notas e mapas",
+      "description": "Versão por IA das notas de reunião e do mapa mental",
+      "help": "A versão por IA das notas de reunião e do mapa mental. O prompt decide o que manter: decisões, próximos passos, questões em aberto."
+    },
+    "transcript": {
+      "name": "Transcrição",
+      "description": "Conversão de fala em texto em tempo real",
+      "help": "Conversão de fala em texto em tempo real. Funciona com um modelo de fala e não usa prompt."
+    }
+  },
+  "autosave": {
+    "saving": "Salvando…"
+  },
+  "context": {
+    "intro": "Um texto curto sobre você — ele é inserido como a primeira mensagem do sistema em cada solicitação ao modelo. Quanto mais preciso, menos perguntas de volta você recebe.",
+    "loadFailed": "Não foi possível carregar seu contexto",
+    "title": "Sobre você",
+    "description": "Quem você é, no que trabalha e como prefere as respostas. Fatos valem mais que adjetivos.",
+    "example": "Cargo: engenheiro backend sênior, 6 anos, fintech.\nStack: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nMomento: me preparando para entrevistas de design de sistemas em empresas de produto.\nRespostas: concisas, com prós e contras; código em Python, a menos que eu diga outra coisa.\nEvitar: conselhos genéricos, introduções longas.",
+    "count": "{count, number} / {max, plural, one {# caractere} many {# de caracteres} other {# caracteres}} · ~{tokens, plural, one {# token} many {# de tokens} other {# tokens}}",
+    "tooLong": "Encurte o texto para salvar.",
+    "saveFailed": "Não foi possível salvar.",
+    "savedAgo": "Salvo {ago}",
+    "savesAutomatically": "Salvamento automático"
+  },
+  "preview": {
+    "title": "Como é enviado",
+    "description": "A versão salva abre cada solicitação, antes do prompt da função.",
+    "system": "Sistema",
+    "user": "Usuário",
+    "empty": "(vazio — nada é enviado)",
+    "rolePrompt": "prompt da função, da aba Seus prompts",
+    "question": "sua pergunta"
+  },
+  "models": {
+    "intro": "Escolha qual modelo responde em cada função. A lista mostra apenas os modelos incluídos na sua assinatura.",
+    "loadFailed": "Não foi possível carregar os modelos",
+    "model": "Modelo",
+    "temperature": "Temperatura",
+    "maxTokens": "Máximo de tokens",
+    "reasoning": "Raciocínio",
+    "unsupported": "Não compatível",
+    "modelFor": "Modelo para {role}",
+    "temperatureFor": "Temperatura para {role}",
+    "maxTokensRange": "O máximo de tokens deve ser um número inteiro de {min, number} a {max, number}.",
+    "saveFailed": "Não foi possível salvar as configurações do modelo"
+  },
+  "picker": {
+    "placeholder": "Selecionar modelo…",
+    "search": "Pesquisar modelos…",
+    "empty": "Nenhum modelo encontrado.",
+    "frontier": "De ponta"
+  }
+}

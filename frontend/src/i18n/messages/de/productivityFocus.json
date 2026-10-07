@@ -1,0 +1,50 @@
+{
+  "title": "Fokus",
+  "sound": {
+    "label": "Ton am Ende einer Einheit",
+    "on": "Ton an",
+    "off": "Ton aus"
+  },
+  "rhythm": "Fokus-Rhythmus",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Pomodoro-Technik",
+      "hint": "{focus} Fokus, {pause} Pause, {longBreak} lange Pause nach {every, plural, one {jeder Einheit} other {je # Einheiten}}. Gut für den Einstieg und volle Tage."
+    },
+    "fifty": {
+      "name": "Erweitert",
+      "hint": "{focus} Fokus, {pause} Pause, {longBreak} lange Pause nach {every, plural, one {jeder Einheit} other {je # Einheiten}}. Gut zum Schreiben und Gestalten."
+    },
+    "fiftyTwo": {
+      "name": "{focus, number}/{pause, number}-Rhythmus",
+      "hint": "{focus} Fokus, {pause} Pause – so arbeiteten die produktivsten Menschen in der Studie von DeskTime."
+    },
+    "deepWork": {
+      "name": "Deep Work",
+      "hint": "{focus} Fokus, {pause} Pause – ein natürlicher Aufmerksamkeitszyklus für schwierige Aufgaben."
+    }
+  },
+  "phase": {
+    "focus": "Fokus",
+    "break": "Kurze Pause",
+    "long_break": "Lange Pause"
+  },
+  "start": "Starten",
+  "pause": "Pausieren",
+  "resume": "Fortsetzen",
+  "restart": "Phase neu starten",
+  "skipBreak": "Pause überspringen",
+  "skipToBreak": "Direkt zur Pause",
+  "cycle": "{done, number} von {every, plural, one {# Einheit} other {# Einheiten}} bis zur langen Pause",
+  "doneToday": "{count, plural, one {# Einheit heute erledigt} other {# Einheiten heute erledigt}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Fokuseinheit beendet – mach eine Pause.",
+    "focusLong": "Fokuseinheit beendet – mach eine lange Pause.",
+    "break": "Die Pause ist vorbei – bereit für den Fokus?",
+    "next": "{preset} · Drücke auf „Starten“, wenn du bereit bist."
+  }
+}

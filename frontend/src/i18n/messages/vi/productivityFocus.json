@@ -1,0 +1,50 @@
+{
+  "title": "Tập trung",
+  "sound": {
+    "label": "Âm thanh khi kết thúc phiên",
+    "on": "Đã bật âm thanh",
+    "off": "Đã tắt âm thanh"
+  },
+  "rhythm": "Nhịp tập trung",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Pomodoro cổ điển",
+      "hint": "Tập trung {focus}, nghỉ {pause}, nghỉ dài {longBreak} sau mỗi {every, plural, =1 {phiên} other {# phiên}}. Phù hợp để khởi động và cho những ngày bận rộn."
+    },
+    "fifty": {
+      "name": "Mở rộng",
+      "hint": "Tập trung {focus}, nghỉ {pause}, nghỉ dài {longBreak} sau mỗi {every, plural, =1 {phiên} other {# phiên}}. Phù hợp cho viết lách và thiết kế."
+    },
+    "fiftyTwo": {
+      "name": "Nhịp {focus, number}/{pause, number}",
+      "hint": "Tập trung {focus}, nghỉ {pause} — nhịp làm việc của những người năng suất nhất trong nghiên cứu của DeskTime."
+    },
+    "deepWork": {
+      "name": "Làm việc sâu",
+      "hint": "Tập trung {focus}, nghỉ {pause} — một chu kỳ chú ý tự nhiên, dành cho những vấn đề khó."
+    }
+  },
+  "phase": {
+    "focus": "Tập trung",
+    "break": "Nghỉ ngắn",
+    "long_break": "Nghỉ dài"
+  },
+  "start": "Bắt đầu",
+  "pause": "Tạm dừng",
+  "resume": "Tiếp tục",
+  "restart": "Bắt đầu lại giai đoạn này",
+  "skipBreak": "Bỏ qua giờ nghỉ",
+  "skipToBreak": "Chuyển sang giờ nghỉ",
+  "cycle": "Đã xong {done, number} trên {every, plural, other {# phiên}} trước khi nghỉ dài",
+  "doneToday": "{count, plural, other {Hôm nay đã xong # phiên}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Đã xong phiên tập trung — hãy nghỉ một chút.",
+    "focusLong": "Đã xong phiên tập trung — hãy nghỉ dài.",
+    "break": "Hết giờ nghỉ — sẵn sàng tập trung chưa?",
+    "next": "{preset} · nhấn Bắt đầu khi bạn sẵn sàng."
+  }
+}

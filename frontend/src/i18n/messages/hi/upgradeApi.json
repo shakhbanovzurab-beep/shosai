@@ -1,0 +1,13 @@
+{
+  "choosePlan": "प्लान चुनें।",
+  "planUnavailable": "यह प्लान उपलब्ध नहीं है।",
+  "salesOnly": "यह प्लान हमारी सेल्स टीम के साथ तय किया जाता है।",
+  "alreadyOnPlan": "आप पहले से इसी प्लान पर हैं।",
+  "chooseUsers": "{min, number}–{max, number} यूज़र चुनें।",
+  "chooseUsersOrMore": "{min, plural, one {# या उससे ज़्यादा यूज़र} other {# या उससे ज़्यादा यूज़र}} चुनें।",
+  "singleUser": "यह प्लान एक यूज़र के लिए है।",
+  "paymentsNotConnected": "पेमेंट अभी कनेक्ट नहीं हैं। बिलिंग शुरू होने पर यहां से प्रोवाइडर का सुरक्षित चेकआउट खुलेगा।",
+  "invalidEmail": "सही ऑफ़िस ईमेल डालें।",
+  "companyRequired": "अपनी कंपनी का नाम डालें।",
+  "checkForm": "फ़ॉर्म जांचें।"
+}

@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Chat with Leo",
+    "close": "Close chat with Leo",
+    "tooltipOpen": "Ask Leo",
+    "tooltipClose": "Close Leo"
+  },
+  "panel": {
+    "label": "Chat with Leo",
+    "subtitle": "AI agent",
+    "working": "Working…",
+    "newChat": "New chat",
+    "fullScreen": "Full screen",
+    "exitFullScreen": "Exit full screen",
+    "close": "Close",
+    "dropFiles": "Drop files to attach"
+  },
+  "place": {
+    "personal": "Personal",
+    "workspace": "In {name}",
+    "hub": "In {name}",
+    "scopePersonal": "I work with your mail, calendar, notes, tasks and the files you chose for me, plus what your workspaces share with you. Only you see this chat.",
+    "scopeWorkspace": "I answer only from what {name} shares with you: its meetings, decisions, projects and knowledge. This chat stays in {name}.",
+    "scopeHub": "I answer only from {name}: its meetings, decisions and materials. This chat stays here.",
+    "boundHub": "Answering only about “{name}”"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {Good evening} morning {Good morning} afternoon {Good afternoon} other {Good evening}}",
+    "hi": "Hi",
+    "intro": "{greeting}, I’m Leo",
+    "howCanIHelp": "How can I help you today?",
+    "suggestionsLabel": "Suggestions"
+  },
+  "suggestions": {
+    "default": {
+      "first": "Plan my day",
+      "second": "Summarize what needs my attention",
+      "third": "What can you help me with?"
+    },
+    "hub": {
+      "first": "What’s holding this up?",
+      "second": "What changed at the last meeting?",
+      "third": "Prepare me for the next meeting"
+    },
+    "workspace": {
+      "first": "What did we decide about pricing?",
+      "second": "What’s overdue for me here?",
+      "third": "Find our security policy"
+    },
+    "productivity": {
+      "first": "Plan my day",
+      "second": "What should I focus on first?",
+      "third": "Summarize my week"
+    },
+    "mail": {
+      "first": "Summarize my inbox",
+      "second": "Draft a polite follow-up",
+      "third": "Which emails are urgent?"
+    },
+    "calendar": {
+      "first": "What’s on my calendar today?",
+      "second": "Find a free hour this week",
+      "third": "Prepare me for my next meeting"
+    },
+    "kanban": {
+      "first": "Which tasks are overdue?",
+      "second": "Summarize this board",
+      "third": "Suggest what to move next"
+    },
+    "meetings": {
+      "first": "What meetings do I have today?",
+      "second": "Schedule a call with the team",
+      "third": "Prepare me for my next call"
+    },
+    "notes": {
+      "first": "Summarize my last meeting",
+      "second": "List my action items",
+      "third": "What did we decide this week?"
+    },
+    "fileManager": {
+      "first": "Find my recent files",
+      "second": "What’s taking up the most space?",
+      "third": "Organize my files"
+    },
+    "studio": {
+      "first": "Write a system prompt",
+      "second": "Compare available models",
+      "third": "Improve this prompt"
+    }
+  },
+  "composer": {
+    "placeholder": "Ask Leo anything",
+    "label": "Message Leo",
+    "attach": "Attach files",
+    "attachLimit": "Attach up to {max, plural, one {# file} other {# files}}",
+    "filesToSend": "Files to send",
+    "removeFile": "Remove {name}",
+    "disclaimer": "Leo can make mistakes. Check important info.",
+    "stop": "Stop Leo",
+    "send": "Send message",
+    "startVoice": "Start voice mode",
+    "voiceMode": "Voice mode"
+  },
+  "message": {
+    "copy": "Copy",
+    "copied": "Copied",
+    "copyFailed": "Couldn’t copy to the clipboard",
+    "regenerate": "Regenerate",
+    "tryAgain": "Try again",
+    "replyFailed": "Leo couldn’t finish. Check your connection and try again.",
+    "edit": "Edit",
+    "editMessage": "Edit message",
+    "attachedFiles": "Attached files"
+  },
+  "steps": {
+    "gettingStarted": "Getting started",
+    "doneIn": "Done in {duration}",
+    "stoppedAfter": "Stopped after {duration}",
+    "somethingWrong": "Something went wrong",
+    "label": "Leo’s actions",
+    "needsApproval": "Needs approval",
+    "detail": "“{detail}”",
+    "status": "{status, select, running {In progress} done {Done} error {Failed} stopped {Stopped} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} is too large",
+    "sizeLimit": "Files can be up to {size}.",
+    "tooMany": "You can attach up to {max, plural, one {# file} other {# files}}."
+  },
+  "voice": {
+    "unavailable": "Voice mode is unavailable",
+    "listening": "Listening…",
+    "thinking": "Leo is thinking…",
+    "speaking": "Leo is speaking…",
+    "micOff": "Microphone is off",
+    "turnMicOn": "Turn microphone on",
+    "turnMicOff": "Turn microphone off",
+    "end": "End voice mode",
+    "micBlocked": "Microphone access is blocked",
+    "micBlockedHint": "Allow the microphone to talk to Leo.",
+    "needsHttps": "Voice mode needs a secure (HTTPS) connection to use the microphone.",
+    "unsupported": "This browser doesn’t support voice mode. Try the latest Chrome, Edge or Safari."
+  }
+}

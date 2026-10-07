@@ -1,0 +1,74 @@
+{
+  "back": "Tất cả ghi chú",
+  "notFound": "Không tìm thấy ghi chú",
+  "participants": {
+    "count": "{count, plural, other {# người tham gia}}",
+    "inMeeting": "{count, plural, other {# người trong cuộc họp này.}}",
+    "you": "{name} (bạn)",
+    "added": "Đã thêm {email} vào cuộc họp",
+    "addPlaceholder": "Thêm bằng email…",
+    "addLabel": "Thêm người tham gia bằng email",
+    "invalid": "Hãy nhập địa chỉ email, chẳng hạn name@company.com.",
+    "duplicate": "Người này đã có trong cuộc họp."
+  },
+  "tabs": {
+    "notes": "Ghi chú",
+    "enhanced": "Bản nâng cao",
+    "transcript": "Bản chép lời",
+    "mindMap": "Sơ đồ tư duy"
+  },
+  "enhanced": {
+    "writtenBy": "Leo viết dựa trên bản chép lời cuộc họp và ghi chú của bạn.",
+    "writtenByTemplate": "Leo viết dựa trên bản chép lời cuộc họp và ghi chú của bạn, theo bố cục “{template}”.",
+    "writing": "Đang viết bản ghi chú nâng cao…",
+    "nothingFor": "Cuộc họp này không có nội dung cho các phần của “{template}”."
+  },
+  "export": {
+    "button": "Xuất",
+    "transcriptAs": "Bản chép lời dạng"
+  },
+  "myNotes": {
+    "loadFailed": "Không thể tải ghi chú của bạn",
+    "saveFailed": "Không thể lưu ghi chú của bạn"
+  },
+  "editor": {
+    "placeholder": "Viết ghi chú của bạn…",
+    "label": "Ghi chú của bạn",
+    "toolbar": "Định dạng",
+    "addLink": "Thêm liên kết",
+    "removeLink": "Gỡ liên kết",
+    "bold": "In đậm",
+    "italic": "In nghiêng",
+    "linkPlaceholder": "Dán liên kết…",
+    "linkAddress": "Địa chỉ liên kết",
+    "link": "Liên kết",
+    "turnInto": "Chuyển thành",
+    "blocks": {
+      "text": "Văn bản",
+      "h1": "Tiêu đề 1",
+      "h2": "Tiêu đề 2",
+      "h3": "Tiêu đề 3",
+      "ordered": "Danh sách đánh số",
+      "bullet": "Danh sách dấu đầu dòng"
+    }
+  },
+  "transcript": {
+    "label": "Bản chép lời",
+    "search": "Tìm trong bản chép lời",
+    "searchPlaceholder": "Tìm trong bản chép lời…",
+    "matches": "{count, plural, =0 {Không có kết quả} other {# kết quả}}",
+    "position": "{current, number} trên {total, number}",
+    "previous": "Kết quả trước",
+    "next": "Kết quả tiếp theo",
+    "clear": "Xóa nội dung tìm kiếm"
+  },
+  "speakers": {
+    "title": "Ai đã nói",
+    "share": "{speaker}: {share} thời gian nói",
+    "lines": "{count, plural, other {# lượt nói}}"
+  },
+  "mindMap": {
+    "title": "Sơ đồ tư duy: {topic}",
+    "caption": "Được tạo từ bản chép lời cuộc họp."
+  }
+}

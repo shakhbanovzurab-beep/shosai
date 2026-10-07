@@ -1,0 +1,26 @@
+{
+  "description": "Atalhos do app para computador. Eles funcionam em qualquer lugar do computador, mesmo com o app em segundo plano, e são sincronizados em todos os seus dispositivos.",
+  "commands": {
+    "open_app": "Abrir o app",
+    "toggle_recording": "Iniciar / pausar gravação",
+    "toggle_overlay": "Mostrar / ocultar sobreposição",
+    "open_settings": "Configurações",
+    "collapse_overlay": "Recolher sobreposição em pílula",
+    "close_app": "Fechar o app",
+    "live_translation": "Tradução ao vivo",
+    "prompter": "Teleprompter"
+  },
+  "off": "Desativado",
+  "pressKeys": "Pressione as teclas…",
+  "hint": "Esc para cancelar · Backspace para desativar",
+  "reset": "Restaurar o padrão de {command}",
+  "record": "Pressione o novo atalho para {command}",
+  "change": "{command}: {keys}. Alterar",
+  "changeOff": "{command}: desativado. Alterar",
+  "resetAll": "Restaurar todos os padrões",
+  "problems": {
+    "needsModifier": "Use ⌘/Ctrl ou ⌥/Alt com outra tecla.",
+    "reserved": "Esse atalho é reservado pelo sistema.",
+    "taken": "Já usado em “{command}”."
+  }
+}

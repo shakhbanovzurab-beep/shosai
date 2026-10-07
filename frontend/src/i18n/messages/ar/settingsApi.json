@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "هناك خطأ ما في الطلب. يرجى إعادة تحميل الصفحة ثم إعادة المحاولة.",
+    "nameRequired": "يرجى إدخال الاسم.",
+    "hotkeyUnsupported": "هذا الاختصار غير مدعوم.",
+    "modelNotOnPlan": "هذا النموذج غير متاح في الاشتراك الحالي.",
+    "emailMismatch": "هذا البريد الإلكتروني لا يطابق بريد الحساب.",
+    "deletionUnavailable": "لم يُفعَّل حذف الحساب بعد. لم يُحذف أي شيء.",
+    "avatarMissing": "يرجى اختيار صورة لرفعها.",
+    "avatarType": "يرجى استخدام صورة بتنسيق WebP أو JPEG أو PNG.",
+    "paymentsUnavailable": "لم يُفعَّل الدفع بعد. ستفتح هذه الصفحة الآمنة لدى مزوّد الدفع بعد تفعيل الفوترة.",
+    "checkoutUnavailable": "لم يُفعَّل الدفع بعد. ستفتح صفحة الدفع لدى المزوّد بعد تفعيل الفوترة.",
+    "invoiceNotFound": "لم يتم العثور على الفاتورة.",
+    "connectorNotFound": "لم يتم العثور على الموصل.",
+    "authorizationExpired": "انتهت صلاحية التفويض أو سبق استخدامه. يرجى إعادة محاولة الربط.",
+    "dataKindUnknown": "نوع بيانات غير معروف.",
+    "dataItemNotFound": "هذا العنصر لم يعد موجودًا.",
+    "mcpNameRequired": "يرجى إدخال اسم للخادم.",
+    "mcpNameTooLong": "الاسم طويل جدًا. يرجى اختيار اسم أقصر.",
+    "mcpUrlInvalid": "يرجى إدخال عنوان URL للخادم يبدأ بـ http(s).",
+    "mcpServerNotFound": "لم يتم العثور على الخادم.",
+    "memoryNotFound": "لم يتم العثور على عنصر الذاكرة.",
+    "summaryMessageRequired": "يرجى كتابة سؤال أو تحديث."
+  },
+  "avatarTooLarge": "حجم الصورة أكبر من {size}.",
+  "invoice": {
+    "title": "الفاتورة {number}",
+    "date": "التاريخ: {date}",
+    "description": "الوصف: {description}",
+    "amount": "المبلغ: {amount}",
+    "status": "الحالة: {status}",
+    "demoNote": "فاتورة تجريبية. الفاتورة الفعلية ملف PDF يصدر من نظام الفوترة."
+  },
+  "notesFromYou": "ملاحظات منك"
+}

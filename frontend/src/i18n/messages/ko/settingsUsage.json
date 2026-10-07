@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, other {{amount} 토큰}}",
+  "resets": "한도는 매주 초기화돼요. 다음 초기화: {date}.",
+  "thisWeek": "이번 주",
+  "tiers": {
+    "standard": {
+      "title": "표준 모델",
+      "description": "플랜에 포함되어 있어요. 모두 사용하면 매주 초기화될 때까지 기다려 주세요."
+    },
+    "frontier": {
+      "title": "최상위 모델",
+      "description": "Claude Opus, GPT Astra 등 최고 성능 모델이에요. 한도를 넘으면 추가 토큰이 사용돼요."
+    }
+  },
+  "used": "{count, plural, other {{used} / {limit} 토큰}}",
+  "usedLabel": "{tier}: 이번 주 토큰의 {percent} 사용",
+  "frontierThisWeek": "이번 주 최상위 모델",
+  "topUp": {
+    "title": "최상위 모델용 추가 토큰",
+    "description": "이번 주 최상위 모델 한도를 모두 사용하면 쓰여요. 초기화되지 않으며 표준 모델에는 사용할 수 없어요.",
+    "balance": "{count, plural, other {<big>{amount} 토큰</big> 남음}}",
+    "buyMore": "추가 구매",
+    "buy": "토큰 구매",
+    "failed": "구매를 시작하지 못했어요"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Réunions",
+  "loading": "Chargement des réunions…",
+  "loadFailed": "Impossible de charger les réunions",
+  "loadFailedHint": "Vérifiez votre connexion et réessayez.",
+  "newMeeting": "Nouvelle réunion",
+  "actions": {
+    "schedule": "Planifier dans le calendrier",
+    "upload": "Importer un enregistrement"
+  },
+  "filters": "Filtres des réunions",
+  "views": {
+    "all": "Toutes",
+    "upcoming": "À venir",
+    "live": "En direct",
+    "past": "Passées"
+  },
+  "recent": "Récentes",
+  "viewAll": "Tout afficher",
+  "noMoreToday": "Plus aucune réunion aujourd’hui.",
+  "day": {
+    "today": "Aujourd’hui",
+    "tomorrow": "Demain",
+    "yesterday": "Hier"
+  },
+  "liveBadge": "En direct",
+  "liveSince": "{minutes, plural, =0 {Vient de commencer · fin à {end}} one {Commencée il y a # min · fin à {end}} many {Commencée il y a # min · fin à {end}} other {Commencée il y a # min · fin à {end}}}",
+  "startsIn": "{minutes, plural, =0 {Commence maintenant} one {Dans # min} many {Dans # min} other {Dans # min}}",
+  "join": "Rejoindre la réunion",
+  "opensInNewTab": "(s’ouvre dans un nouvel onglet)",
+  "source": {
+    "whisperer": "Salle Whisperer",
+    "in_person": "En présentiel"
+  },
+  "participants": "Participants : {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "Les notes ne sont pas encore prêtes.",
+    "tasks": "{count, plural, one {# tâche} many {# de tâches} other {# tâches}}",
+    "decisions": "{count, plural, one {# décision} many {# de décisions} other {# décisions}}"
+  },
+  "empty": {
+    "none": {
+      "title": "Aucune réunion pour l’instant",
+      "description": "Planifiez une réunion dans le calendrier ou importez un enregistrement pour obtenir les notes de Leo."
+    },
+    "upcoming": {
+      "title": "Rien de prévu",
+      "description": "Les réunions que vous planifiez dans le calendrier apparaissent ici."
+    },
+    "live": {
+      "title": "Aucune réunion en cours",
+      "description": "Une réunion s’affiche ici pendant qu’elle a lieu, pour que vous puissiez la rejoindre."
+    },
+    "past": {
+      "title": "Aucune réunion passée pour l’instant",
+      "description": "Les réunions enregistrées apparaissent ici avec le résumé, les tâches et les décisions de Leo."
+    }
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "Bacheche",
+    "jiraBoards": "Sincronizzate con Jira",
+    "newBoard": "Nuova bacheca…",
+    "syncJiraBoard": "Sincronizza una bacheca Jira…",
+    "rename": "Rinomina bacheca…",
+    "showWorkspaceTasks": "Mostra qui le mie attività degli spazi di lavoro",
+    "changeIcon": "Cambia icona",
+    "delete": "Elimina bacheca…",
+    "stopSyncing": "Interrompi sincronizzazione…"
+  },
+  "icons": {
+    "work": "Lavoro",
+    "home": "Casa",
+    "personal": "Personale",
+    "health": "Salute",
+    "study": "Formazione",
+    "travel": "Viaggi",
+    "shopping": "Acquisti",
+    "fitness": "Allenamento",
+    "project": "Progetto",
+    "reading": "Lettura"
+  },
+  "empty": {
+    "title": "Ancora nessuna bacheca",
+    "description": "Crea una bacheca per il lavoro, la casa o qualsiasi altra cosa, oppure importane una da Jira.",
+    "newBoard": "Nuova bacheca",
+    "syncJiraBoard": "Sincronizza una bacheca Jira"
+  },
+  "newBoard": {
+    "title": "Nuova bacheca",
+    "description": "Tieni lavoro, casa e tutto il resto su bacheche separate.",
+    "namePlaceholder": "es. Casa",
+    "icon": "Icona",
+    "columns": "Colonne",
+    "create": "Crea bacheca"
+  },
+  "templates": {
+    "simple": "Semplice",
+    "project": "Progetto"
+  },
+  "columnNames": {
+    "backlog": "Da pianificare",
+    "todo": "Da fare",
+    "inProgress": "In corso",
+    "review": "In revisione",
+    "done": "Completate"
+  },
+  "renameTitle": "Rinomina bacheca",
+  "delete": {
+    "title": "Eliminare «{board}»?",
+    "description": "{count, plural, =0 {La bacheca verrà eliminata. L’operazione non può essere annullata.} one {Verranno eliminate la bacheca e l’attività che contiene. L’operazione non può essere annullata.} many {Verranno eliminate la bacheca e le # di attività che contiene. L’operazione non può essere annullata.} other {Verranno eliminate la bacheca e le # attività che contiene. L’operazione non può essere annullata.}}",
+    "confirm": "Elimina bacheca",
+    "stopTitle": "Interrompere la sincronizzazione di «{board}»?",
+    "stopDescription": "La bacheca verrà rimossa da qui. In Jira non cambia nulla e potrai sincronizzarla di nuovo in seguito.",
+    "stopConfirm": "Interrompi sincronizzazione"
+  },
+  "jira": {
+    "title": "Sincronizza una bacheca Jira",
+    "description": "Lavora su una bacheca Jira da qui: ogni modifica resta sincronizzata in entrambe le direzioni.",
+    "connectTitle": "Prima collega Jira",
+    "connectDescription": "Accedi a Jira in Impostazioni › Connettori, poi torna qui per scegliere una bacheca.",
+    "openConnectors": "Apri Connettori",
+    "connectedAs": "Account collegato: {account}.",
+    "connected": "Jira è collegato.",
+    "noBoards": "Ancora nessuna bacheca nel tuo account Jira.",
+    "boardList": "Bacheche Jira",
+    "alreadySynced": "Già sincronizzata · aprila",
+    "type": {
+      "kanban": "Bacheca Kanban",
+      "scrum": "Bacheca Scrum"
+    },
+    "howColumns": "Colonne e ticket arrivano dalla bacheca Jira.",
+    "howMoves": "Se sposti una scheda, cambia lo stato del ticket in Jira; le nuove attività diventano ticket Jira.",
+    "howChanges": "Le modifiche fatte in Jira compaiono qui automaticamente.",
+    "sync": "Sincronizza bacheca"
+  },
+  "sync": {
+    "syncing": "Sincronizzazione con Jira…",
+    "paused": "Sincronizzazione in pausa",
+    "synced": "Sincronizzata con Jira",
+    "syncedAgo": "Sincronizzata con Jira {ago}",
+    "syncNow": "Sincronizza ora",
+    "openBoard": "Apri {board} in Jira",
+    "openHint": "Apri in Jira · {project} su {site}"
+  },
+  "banners": {
+    "syncStopped": "La sincronizzazione con Jira si è interrotta.",
+    "changesPaused": "Le modifiche sono in pausa.",
+    "importing": "Importazione di {board} da Jira…",
+    "importingHint": "Colonne e ticket compariranno qui tra poco.",
+    "offer": "{count, plural, one {Hai # attività aperta nei tuoi spazi di lavoro. Vuoi mostrarla su «{board}»?} many {Hai # di attività aperte nei tuoi spazi di lavoro. Vuoi mostrarle su «{board}»?} other {Hai # attività aperte nei tuoi spazi di lavoro. Vuoi mostrarle su «{board}»?}} Se sposti una scheda, l’attività si aggiorna per il tuo team.",
+    "notNow": "Non ora",
+    "showHere": "{count, plural, one {Mostrala qui} many {Mostrale qui} other {Mostrale qui}}"
+  },
+  "toasts": {
+    "createFailed": "Impossibile creare la bacheca",
+    "connectFailed": "Impossibile sincronizzare la bacheca Jira",
+    "updateFailed": "Impossibile aggiornare la bacheca",
+    "deleteFailed": "Impossibile eliminare la bacheca",
+    "syncFailed": "Impossibile sincronizzare con Jira",
+    "deleted": "Bacheca «{board}» eliminata",
+    "stoppedSyncing": "Sincronizzazione di «{board}» interrotta",
+    "workspaceTasksOn": "Le attività dei tuoi spazi di lavoro ora compaiono su «{board}»",
+    "workspaceTasksOff": "Le attività dei tuoi spazi di lavoro non compaiono più su nessuna bacheca",
+    "workspaceTasksHint": "Se sposti una scheda, l’attività cambia anche nel suo spazio di lavoro.",
+    "workspaceTasksFailed": "Impossibile cambiare dove compaiono le attività degli spazi di lavoro"
+  }
+}

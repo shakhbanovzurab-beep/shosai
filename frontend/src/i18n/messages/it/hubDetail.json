@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Dettagli",
+    "stages": "Fasi",
+    "history": "Com’è andata",
+    "summaryDecided": "{rounds, plural, one {Discusso # volta, deciso il {date}.} many {Discusso # di volte, deciso il {date}.} other {Discusso # volte, deciso il {date}.}}",
+    "summaryOpen": "{rounds, plural, one {Discusso # volta, nessuna decisione.} many {Discusso # di volte, nessuna decisione.} other {Discusso # volte, nessuna decisione.}}",
+    "blockers": "Ogni volta il motivo era: {quotes}.",
+    "round": "Giro {index, number}",
+    "blocker": "Cosa lo ha bloccato",
+    "decision": "Decisione",
+    "decisionChanged": "La decisione è cambiata",
+    "previous": "Prima",
+    "current": "Ora",
+    "decidedAt": "{date}, «{meeting}»",
+    "outcome": "Com’è finita",
+    "outcomeUnknown": "l’esito non è ancora noto",
+    "links": {
+      "causes": "Blocca",
+      "blocked_by": "Bloccato da",
+      "outcome_of": "Deriva dalla decisione"
+    },
+    "sources": "Fonti",
+    "dismissals": "Esclusioni",
+    "dismissedByYou": "Ignorato da te",
+    "disproved": "Smentito: {evidence}",
+    "dismissedUntil": "fino al {date}",
+    "returned": "il tempo è scaduto ed è tornato",
+    "owner": "Proprietario",
+    "noOwner": "non assegnato",
+    "due": "Scadenza",
+    "noDue": "nessuna data",
+    "goneTitle": "Non è più qui",
+    "goneText": "L’hub potrebbe essere stato eliminato o la registrazione della riunione rimossa.",
+    "loadError": "Impossibile caricare i dettagli"
+  },
+  "why": {
+    "source": "Fonte",
+    "meeting": "riunione del {date}, «{title}»",
+    "said": "Detto da",
+    "moment": "Momento",
+    "jump": "Vai al momento",
+    "signals": {
+      "series": "Le riunioni di questa serie sono già qui.",
+      "subject": "La conversazione riguardava questo hub.",
+      "title": "È nel titolo della riunione.",
+      "entity": "Il nome è emerso nella conversazione.",
+      "organisation": "Le persone sono di questa organizzazione.",
+      "human": "L’hai messa qui tu."
+    },
+    "loadError": "Impossibile caricare la fonte"
+  }
+}

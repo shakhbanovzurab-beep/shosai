@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} pro Nutzer",
+    "from": "ab {amount}",
+    "unlimited": "unbegrenzt"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Unbegrenzte Meetings",
+    "meetingMinutes": "{minutes, plural, one {# Meeting-Minute} other {# Meeting-Minuten}} pro Monat",
+    "noMeetings": "Meetings",
+    "fileManager": "Dateimanager · {storage}",
+    "noFileManager": "Dateimanager",
+    "knowledge": "Wissen für Leo · {storage}",
+    "noKnowledge": "Wissen für Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Gemeinsamer Team-Workspace",
+    "member_management": "Nutzerverwaltung",
+    "centralized_billing": "Zentrale Abrechnung",
+    "billing_and_users": "Zentrale Abrechnung und Nutzerverwaltung",
+    "admin_controls": "Sicherheit und Admin-Funktionen auf Enterprise-Niveau",
+    "sso": "Einmalanmeldung (SSO)",
+    "priority_support": "Priorisierter Support",
+    "usage_analytics": "Nutzungsanalysen"
+  },
+  "compare": {
+    "title": "Tarife vergleichen",
+    "feature": "Funktion",
+    "included": "Enthalten",
+    "notIncluded": "Nicht enthalten",
+    "unlimited": "Unbegrenzt",
+    "minutes": "{minutes, plural, one {# Min.} other {# Min.}} / Monat",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Individuell",
+    "rows": {
+      "meetings": "Meetings",
+      "fileManager": "Dateimanager",
+      "knowledge": "Wissen für Leo",
+      "apps": "Leo, E-Mail, Kalender, Kanban, Notizen",
+      "users": "Nutzer",
+      "sharedWorkspace": "Gemeinsamer Workspace",
+      "billingAndUsers": "Zentrale Abrechnung und Nutzerverwaltung",
+      "sso": "Einmalanmeldung (SSO)",
+      "adminControls": "Sicherheit und Admin-Funktionen",
+      "prioritySupport": "Priorisierter Support",
+      "usageAnalytics": "Nutzungsanalysen"
+    }
+  }
+}

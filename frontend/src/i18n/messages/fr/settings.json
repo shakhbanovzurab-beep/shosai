@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "Paramètres",
+    "sectionsLabel": "Sections des paramètres",
+    "autosave": "Les modifications sont enregistrées automatiquement."
+  },
+  "sections": {
+    "account": "Compte",
+    "privacy": "Confidentialité",
+    "billing": "Facturation",
+    "usage": "Utilisation",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "Mémoire",
+    "connectors": "Connecteurs",
+    "hotkeys": "Raccourcis clavier"
+  },
+  "loadFailed": "Impossible de charger cette section",
+  "manage": "Gérer",
+  "saving": "Enregistrement…",
+  "saveFailed": "Impossible d’enregistrer",
+  "profile": {
+    "title": "Profil",
+    "email": "E-mail",
+    "emailHint": "Vous vous connectez avec cette adresse via votre fournisseur.",
+    "fullName": "Nom complet",
+    "displayName": "Comment Leo doit-il vous appeler ?",
+    "displayNameHint": "Utilisé quand Leo vous salue et dans ses réponses.",
+    "workRole": "Qu’est-ce qui décrit le mieux votre travail ?",
+    "workRoleHint": "Leo s’en sert pour adapter ses exemples et son vocabulaire à votre domaine."
+  },
+  "workRoles": {
+    "product_management": "Gestion de produit",
+    "engineering": "Ingénierie",
+    "human_resources": "Ressources humaines",
+    "finance": "Finances",
+    "marketing": "Marketing et communication",
+    "sales": "Ventes",
+    "operations": "Opérations",
+    "data_science": "Science des données",
+    "design": "Design et UX",
+    "legal": "Juridique",
+    "scientist": "Sciences",
+    "student": "Études",
+    "founder": "Création d’entreprise",
+    "healthcare": "Santé",
+    "writer": "Écriture",
+    "educator": "Enseignement",
+    "consultant": "Conseil",
+    "researcher": "Recherche",
+    "software_engineer": "Développement logiciel",
+    "other": "Autre"
+  },
+  "avatar": {
+    "change": "Changer la photo de profil",
+    "hint": "Toute image convient. Elle est recadrée en carré et redimensionnée automatiquement.",
+    "upload": "Importer une photo",
+    "updateFailed": "Impossible de mettre à jour votre photo",
+    "removeFailed": "Impossible de retirer votre photo",
+    "tooLarge": "Choisissez une photo de moins de {size}.",
+    "unreadable": "Ce navigateur ne peut pas lire cette image. Essayez un JPEG ou un PNG.",
+    "processFailed": "Impossible de traiter l’image."
+  },
+  "deleteAccount": {
+    "group": "Zone de danger",
+    "title": "Supprimer le compte",
+    "description": "Supprimez définitivement votre compte et tout son contenu : conversations, notes, fichiers, prompts et paramètres.",
+    "confirmTitle": "Supprimer votre compte ?",
+    "confirmDescription": "Cette action est irréversible. Vos conversations, notes, fichiers, prompts, votre mémoire et vos paramètres seront supprimés, et tout abonnement en cours sera résilié.",
+    "confirmLabel": "Saisissez <address>{email}</address> pour confirmer",
+    "deleted": "Votre compte a été supprimé",
+    "failed": "Impossible de supprimer votre compte"
+  }
+}

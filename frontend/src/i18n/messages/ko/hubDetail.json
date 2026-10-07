@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "세부 정보",
+    "stages": "단계",
+    "history": "진행 과정",
+    "summaryDecided": "{rounds, plural, other {#번 논의한 끝에 {date}에 결정했어요.}}",
+    "summaryOpen": "{rounds, plural, other {#번 논의했지만 결정하지 못했어요.}}",
+    "blockers": "매번 이런 이유였어요: {quotes}.",
+    "round": "{index, number}회차",
+    "blocker": "걸림돌",
+    "decision": "결정 사항",
+    "decisionChanged": "결정이 바뀌었어요",
+    "previous": "이전",
+    "current": "현재",
+    "decidedAt": "{date}, “{meeting}”",
+    "outcome": "결과",
+    "outcomeUnknown": "아직 결과를 알 수 없어요",
+    "links": {
+      "causes": "이 항목이 막고 있는 일",
+      "blocked_by": "이 항목을 막고 있는 일",
+      "outcome_of": "결정에 따른 후속 작업"
+    },
+    "sources": "출처",
+    "dismissals": "무시 기록",
+    "dismissedByYou": "내가 무시함",
+    "disproved": "반박됨: {evidence}",
+    "dismissedUntil": "{date}까지",
+    "returned": "기간이 끝나 다시 표시됐어요",
+    "owner": "담당자",
+    "noOwner": "지정 안 됨",
+    "due": "마감일",
+    "noDue": "날짜 없음",
+    "goneTitle": "더 이상 여기에 없어요",
+    "goneText": "허브가 삭제되었거나 회의 녹음이 제거되었을 수 있어요.",
+    "loadError": "세부 정보를 불러오지 못했어요"
+  },
+  "why": {
+    "source": "출처",
+    "meeting": "{date} 회의, “{title}”",
+    "said": "발언자",
+    "moment": "지점",
+    "jump": "해당 지점으로 이동",
+    "signals": {
+      "series": "이 시리즈의 회의가 이미 여기에 있어요.",
+      "subject": "이 허브에 관한 대화였어요.",
+      "title": "회의 제목에 들어 있어요.",
+      "entity": "대화에서 이름이 언급됐어요.",
+      "organisation": "참석자가 이 조직 소속이에요.",
+      "human": "직접 여기에 추가했어요."
+    },
+    "loadError": "출처를 불러오지 못했어요"
+  }
+}

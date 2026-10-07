@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Gestionnaire de fichiers",
+    "description": "Parcourez, organisez et importez vos fichiers, et choisissez ceux que Leo utilise.",
+    "folderTitle": "Dossier · Gestionnaire de fichiers"
+  },
+  "myFiles": "Mes fichiers",
+  "loading": "Chargement de vos fichiers…",
+  "loadFailed": "Impossible de charger vos fichiers",
+  "allFiles": {
+    "heading": "Tous les fichiers",
+    "emptyTitle": "Aucun fichier pour l’instant",
+    "emptyDescription": "Importez des fichiers ou déposez-les ici. Choisissez ensuite ceux que Leo peut utiliser."
+  },
+  "folders": {
+    "heading": "Dossiers",
+    "new": "Nouveau dossier",
+    "untitled": "Dossier sans titre",
+    "emptyTitle": "Aucun dossier pour l’instant",
+    "emptyDescription": "Créez un dossier pour organiser vos fichiers ou pour que Leo lise tout un ensemble d’un coup.",
+    "fileCount": "{count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}",
+    "dropHere": "Déposer pour déplacer ici",
+    "dropHereLeo": "Déposer pour déplacer ici. Leo l’utilisera.",
+    "updated": "Mis à jour {ago}",
+    "leoReadsAll": "Leo utilise tout ce qu’il peut lire dans ce dossier"
+  },
+  "folder": {
+    "notFound": "Dossier introuvable",
+    "notFoundDescription": "Il a peut-être été supprimé ou renommé dans une autre session.",
+    "backToMyFiles": "Retour à Mes fichiers",
+    "back": "Retour",
+    "emptyTitle": "Ce dossier est vide",
+    "emptyLeo": "Importez ou déplacez des fichiers ici, et Leo les utilisera.",
+    "empty": "Importez des fichiers ici, faites-les glisser sur ce dossier dans Mes fichiers ou utilisez Déplacer vers dans le menu d’un fichier."
+  },
+  "section": {
+    "label": "Fichiers",
+    "view": "Affichage des fichiers",
+    "grid": "Grille",
+    "list": "Liste",
+    "noMatch": "Aucun fichier ne correspond",
+    "noMatchDescription": "Rien ici ne correspond à ce filtre.",
+    "clearFilters": "Effacer les filtres"
+  },
+  "toolbar": {
+    "filterSort": "Filtrer et trier",
+    "show": "Afficher",
+    "fileType": "Type de fichier",
+    "allTypes": "Tous les types",
+    "sortBy": "Trier par"
+  },
+  "show": {
+    "all": "Tous les fichiers",
+    "starred": "Favoris",
+    "leo": "Utilisés par Leo",
+    "shared": "Partagés dans des espaces de travail"
+  },
+  "sort": {
+    "modified": "Dernière modification",
+    "name": "Nom",
+    "size": "Taille du fichier"
+  },
+  "kinds": {
+    "archive": "Archive",
+    "design": "Maquette",
+    "document": "Document",
+    "image": "Image",
+    "other": "Fichier",
+    "pdf": "PDF",
+    "presentation": "Présentation",
+    "spreadsheet": "Feuille de calcul",
+    "text": "Texte"
+  },
+  "file": {
+    "star": "Ajouter {name} aux favoris",
+    "unstar": "Retirer {name} des favoris",
+    "modified": "Modifié {ago}",
+    "inFolderModified": "<hidden>Dans le dossier </hidden><name>{folder}</name> · Modifié {ago}",
+    "inFolder": "<hidden>Dans le dossier </hidden><name>{folder}</name>",
+    "sharedIn": "Partagé dans {workspaces}",
+    "sharedInHidden": "<hidden>Partagé dans </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Modifié",
+    "size": "Taille",
+    "actions": "Actions"
+  },
+  "leo": {
+    "viaFile": "Leo utilise ce fichier parce que vous l’avez choisi",
+    "viaFolder": "Leo utilise ce fichier via son dossier",
+    "reading": "Leo · lecture",
+    "failed": "Leo n’a pas pu le lire",
+    "tooLarge": "Leo lit les fichiers jusqu’à {size}",
+    "extension": "Leo ne peut pas lire les fichiers .{extension}",
+    "unknownType": "Leo ne peut pas lire ce type de fichier"
+  },
+  "menu": {
+    "addStar": "Ajouter aux favoris",
+    "removeStar": "Retirer des favoris",
+    "moveTo": "Déplacer vers",
+    "useWithLeo": "Utiliser avec Leo",
+    "usedThrough": "Utilisé via « {folder} »",
+    "share": "Partager dans un espace de travail…",
+    "sharing": "Partage dans les espaces de travail…",
+    "transferTo": "Transférer à",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Supprimer le dossier"
+  },
+  "dialogs": {
+    "renameFile": "Renommer le fichier",
+    "renameFolder": "Renommer le dossier",
+    "shareTitle": "Partager « {name} »",
+    "shareDescription": "Leo s’en sert pour répondre dans l’espace de travail aux personnes que vous choisissez. Il reste ici, reste à vous et quitte l’espace de travail si vous le supprimez ou si vous partez.",
+    "transferTitle": "Transférer « {name} » à {workspace} ?",
+    "transferDescription": "Il quitte vos fichiers et appartient à {workspace} : il y reste si vous partez, et ses administrateurs le gèrent. Les autres espaces de travail où vous l’avez partagé le perdent. Cette action est irréversible.",
+    "transfer": "Transférer"
+  },
+  "upload": {
+    "button": "Importer",
+    "uploading": "Importation de {count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}…",
+    "dropHere": "Déposer pour importer ici",
+    "skipped": "{count, plural, one {# fichier ignoré} many {# de fichiers ignorés} other {# fichiers ignorés}}",
+    "skippedDescription": "Les fichiers vides ou de plus de {size} sont ignorés, et {max, number} fichiers au maximum sont importés à la fois."
+  },
+  "picker": {
+    "search": "Rechercher dans vos fichiers",
+    "noMatch": "Aucun fichier ne correspond.",
+    "noFiles": "Aucun fichier pour l’instant. Importez-en d’abord dans le Gestionnaire de fichiers.",
+    "yourFiles": "Vos fichiers",
+    "alreadyShared": "Déjà partagé ici"
+  }
+}

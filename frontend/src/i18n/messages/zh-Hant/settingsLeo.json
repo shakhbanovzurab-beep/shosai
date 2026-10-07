@@ -1,0 +1,36 @@
+{
+  "answers": "回答",
+  "model": {
+    "title": "模型",
+    "description": "「自動」會為每項任務挑選合適的模型。頂尖模型會使用你每週的頂尖模型 Token（請見「用量」）。",
+    "label": "Leo 模型",
+    "auto": "自動",
+    "autoHint": "由 Leo 依任務挑選"
+  },
+  "language": {
+    "title": "回答語言",
+    "description": "「自動」會以介面語言回答。",
+    "auto": "自動"
+  },
+  "length": {
+    "title": "回答長度",
+    "description": "Leo 預設要回答多少內容。",
+    "options": {
+      "concise": "簡潔",
+      "balanced": "適中",
+      "detailed": "詳細"
+    }
+  },
+  "advanced": {
+    "title": "進階設定",
+    "description": "Leo 可以使用的功能。關閉的項目既不會提供，也不會使用。",
+    "webSearch": "網頁搜尋",
+    "webSearchHint": "讓 Leo 自動在網路上搜尋答案。",
+    "voiceMode": "語音模式",
+    "voiceModeHint": "以語音和 Leo 對話。關閉後，介面中的麥克風就會移除。",
+    "knowledgeSearch": "知識庫搜尋",
+    "knowledgeSearchHint": "在你為 Leo 選擇的檔案和來源中尋找答案。",
+    "connectedSearch": "搜尋已連接的服務",
+    "connectedSearchHint": "搜尋已連接的服務，例如 Google Drive 和 Notion。"
+  }
+}

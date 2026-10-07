@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo 正在閱讀你的收件匣…",
+    "readingNew": "{count, plural, other {Leo 正在閱讀 # 封新郵件…}}",
+    "sorted": "{count, plural, other {Leo 已分類 # 封郵件}}",
+    "sortedWithDrafts": "{count, plural, other {Leo 已分類 # 封郵件}} · {drafts, plural, other {已擬好 # 封回覆草稿}}",
+    "sortFailed": "Leo 無法分類你的收件匣"
+  },
+  "focus": {
+    "mostUrgentFirst": "最緊急的優先（{count, number}）",
+    "setAside": "{count, plural, other {另有 # 封郵件目前不需要你處理。}}",
+    "setAsideLow": "{count, plural, other {另有 # 封郵件目前不需要你處理}}，{low, plural, other {其中 # 封為低優先順序。}}",
+    "showAll": "顯示所有郵件",
+    "archiveLow": "封存低優先順序郵件",
+    "caughtUpTitle": "全部處理完畢",
+    "caughtUpDescription": "目前沒有等你處理的郵件。需要你回覆或做決定的新郵件，Leo 會為你標示出來。"
+  },
+  "triage": {
+    "needs_you": "需要你處理",
+    "fyi": "供你參考",
+    "low": "低優先順序"
+  },
+  "triageHint": {
+    "needs_you": "等你回覆或做決定",
+    "fyi": "值得知道，不需處理",
+    "low": "可以稍後處理或封存"
+  },
+  "triageMenu": {
+    "trigger": "已分類為「{triage}」。變更這封郵件的分類",
+    "sortedByYou": "由你分類",
+    "sortedByLeo": "由 Leo 分類",
+    "leosPick": "Leo 的判斷 · {hint}"
+  },
+  "replyBy": {
+    "overdue": "已逾期",
+    "today": "今天回覆",
+    "tomorrow": "明天回覆",
+    "by": "請在 {when} 前回覆"
+  },
+  "tags": {
+    "reading": "Leo 正在閱讀…",
+    "replied": "已回覆",
+    "needsYou": "需要你處理",
+    "draftReady": "草稿已就緒"
+  },
+  "card": {
+    "label": "Leo 的摘要",
+    "readingEmail": "Leo 正在閱讀這封郵件…",
+    "readFailed": "Leo 無法閱讀這封郵件",
+    "readFailedHint": "請稍後再試一次。",
+    "repliedAgo": "回覆於 {ago}",
+    "repliedOn": "已於 {date} 回覆",
+    "reviewDraft": "檢閱草稿",
+    "noDraft": "沒有草稿：這封回覆需要你親自表達看法。",
+    "archive": "封存"
+  },
+  "draft": {
+    "reviewLabel": "檢閱 Leo 給 {name} 的回覆草稿",
+    "drafted": "Leo 已擬好回覆",
+    "review": "檢閱",
+    "heading": "Leo 的草稿 · 傳送前請先檢閱",
+    "collapse": "收合草稿",
+    "field": "回覆 {name}",
+    "discard": "捨棄",
+    "send": "傳送",
+    "discarded": "已捨棄草稿"
+  }
+}

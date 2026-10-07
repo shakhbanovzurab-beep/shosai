@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Ghi chú nâng cao",
+    "description": "Leo chọn cấu trúc phù hợp với cuộc họp."
+  },
+  "sections": {
+    "summary": "Tóm tắt",
+    "keyPoints": "Ý chính",
+    "decisions": "Quyết định",
+    "actionItems": "Việc cần làm"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Cập nhật: nhà đầu tư",
+      "description": "Cập nhật định kỳ với nhà đầu tư: tình hình hiện tại và họ có thể hỗ trợ gì."
+    },
+    "catchUpPortfolio": {
+      "name": "Cập nhật: công ty trong danh mục",
+      "description": "Trao đổi với công ty trong danh mục đầu tư về chỉ số, rủi ro và đề xuất hỗ trợ."
+    },
+    "lpProspective": {
+      "name": "LP: tiềm năng",
+      "description": "Những lần trao đổi đầu tiên với một LP (nhà đầu tư góp vốn) tiềm năng."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: Họp hội đồng quản trị",
+      "description": "Thảo luận của hội đồng quản trị, nghị quyết và người phụ trách."
+    },
+    "vcPitch": {
+      "name": "VC: Gọi vốn",
+      "description": "Phần trình bày gọi vốn của nhà sáng lập: điểm nổi bật, kết luận và việc cần thẩm định."
+    },
+    "oneOnOne": {
+      "name": "Họp 1:1",
+      "description": "Cuộc họp một-một: tình hình công việc, các chủ đề và bước tiếp theo đã thống nhất."
+    },
+    "customerCall": {
+      "name": "Cuộc gọi khách hàng",
+      "description": "Tìm hiểu nhu cầu hoặc trao đổi định kỳ với khách hàng: vấn đề, yêu cầu và việc cần theo dõi."
+    },
+    "teamSync": {
+      "name": "Họp nhóm",
+      "description": "Cuộc họp nhóm định kỳ: cập nhật, quyết định và ai làm việc gì."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Tình hình hiện tại",
+    "updatesShared": "Thông tin cập nhật",
+    "whatWeAgreed": "Những gì đã thống nhất",
+    "followUps": "Việc cần theo dõi",
+    "companyUpdate": "Cập nhật về công ty",
+    "metricsAndHighlights": "Chỉ số và điểm nổi bật",
+    "howWeCanHelp": "Chúng tôi có thể hỗ trợ gì",
+    "overview": "Tổng quan",
+    "theirInterests": "Mối quan tâm của họ",
+    "nextSteps": "Bước tiếp theo",
+    "boardSummary": "Tóm tắt của hội đồng quản trị",
+    "discussion": "Thảo luận",
+    "resolutions": "Nghị quyết",
+    "ownersAndDeadlines": "Người phụ trách và hạn chót",
+    "thePitch": "Nội dung gọi vốn",
+    "whatStoodOut": "Điểm nổi bật",
+    "verdict": "Kết luận",
+    "diligenceToDos": "Việc cần thẩm định",
+    "howItsGoing": "Tình hình công việc",
+    "topics": "Chủ đề",
+    "context": "Ngữ cảnh",
+    "painsAndRequests": "Vấn đề và yêu cầu",
+    "outcome": "Kết quả",
+    "updates": "Cập nhật",
+    "decisions": "Quyết định",
+    "whoDoesWhat": "Ai làm gì"
+  },
+  "icons": {
+    "enhanced": "Ghi chú nâng cao",
+    "briefcase": "Cặp tài liệu",
+    "chart": "Biểu đồ",
+    "handshake": "Bắt tay",
+    "landmark": "Tòa nhà",
+    "lightbulb": "Bóng đèn",
+    "magnet": "Nam châm",
+    "phone": "Điện thoại",
+    "rocket": "Tên lửa",
+    "calendar": "Lịch",
+    "users": "Mọi người"
+  },
+  "menu": {
+    "label": "Mẫu ghi chú nâng cao",
+    "search": "Tìm mẫu…",
+    "noMatch": "Không có mẫu nào phù hợp.",
+    "heading": "Mẫu",
+    "regenerate": "Tạo lại ghi chú",
+    "newTemplate": "Mẫu mới…"
+  },
+  "rewritten": "Đã viết lại ghi chú theo “{template}”",
+  "regenerated": "Đã tạo lại ghi chú nâng cao",
+  "created": "Đã tạo mẫu “{template}”",
+  "dialog": {
+    "title": "Mẫu mới",
+    "description": "Chọn những phần Leo sẽ viết cho cuộc họp và đặt tên cho từng phần.",
+    "namePlaceholder": "Ví dụ: Tìm hiểu nhu cầu khách hàng…",
+    "nameRequired": "Hãy đặt tên cho mẫu.",
+    "descriptionLabel": "Mô tả",
+    "descriptionPlaceholder": "Khi nào nên dùng…",
+    "ownDescription": "Mẫu của riêng bạn.",
+    "icon": "Biểu tượng",
+    "sections": "Các phần",
+    "include": "Bao gồm {section}",
+    "heading": "Tiêu đề cho {section}",
+    "sectionsRequired": "Hãy giữ lại ít nhất một phần.",
+    "create": "Tạo mẫu"
+  }
+}

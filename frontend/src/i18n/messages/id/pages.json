@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "Dasbor admin open source yang rapi, dibuat dengan shadcn/ui."
+  },
+  "actions": {
+    "goHome": "Ke beranda",
+    "goBack": "Kembali"
+  },
+  "placeholder": {
+    "title": "{title} segera hadir",
+    "description": "Bagian ini sedang dikembangkan dan akan segera tersedia.",
+    "badge": "Dalam pengembangan"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "Semua"
+  },
+  "emoji": {
+    "search": "Cari emoji",
+    "empty": "Emoji tidak ditemukan"
+  },
+  "notFound": {
+    "metaTitle": "Halaman tidak ditemukan",
+    "badge": "Kesalahan {code}",
+    "title": "Halaman ini tersesat",
+    "description": "Tautannya mungkin rusak, atau halaman telah dipindahkan atau dihapus. Mari kembali ke jalur yang benar.",
+    "popularPages": "Halaman populer",
+    "jumpTo": "Atau langsung ke"
+  },
+  "unauthorized": {
+    "metaTitle": "Tidak ada akses",
+    "title": "Anda tidak memiliki akses",
+    "description": "Anda tidak memiliki izin untuk melihat halaman ini. Jika menurut Anda ini keliru, hubungi administrator Anda."
+  }
+}

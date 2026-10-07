@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Catatan",
+    "description": "Rapat yang telah ditranskripsikan beserta catatan, tindak lanjut, dan peta pikiran."
+  },
+  "recency": {
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "thisWeek": "Minggu ini",
+    "earlier": "Sebelumnya"
+  },
+  "fields": {
+    "meeting": "Rapat",
+    "folder": "Folder",
+    "people": "Orang",
+    "participants": "Peserta",
+    "duration": "Durasi",
+    "date": "Tanggal"
+  },
+  "views": {
+    "label": "Tata letak",
+    "timeline": "Linimasa",
+    "grid": "Kisi",
+    "list": "Daftar"
+  },
+  "upload": {
+    "button": "Unggah rekaman",
+    "hint": "Atau lepaskan file di mana saja pada halaman",
+    "dropTitle": "Lepaskan rekaman untuk mengunggah",
+    "dropHint": "mp3, m4a, wav, mp4, webm, dan lainnya · hingga {size}",
+    "notMedia": "{name} bukan file audio atau video",
+    "tooLarge": "{name} terlalu besar",
+    "sizeLimit": "Ukuran rekaman maksimal {size}."
+  },
+  "recordings": {
+    "uploading": "Mengunggah",
+    "justNow": "Baru saja",
+    "transcribing": "Membuat transkrip",
+    "transcribingNow": "Membuat transkrip…",
+    "waiting": "Menunggu pembuatan transkrip…",
+    "timelineStatus": "Membuat transkrip… Catatan, keputusan, dan peta pikiran akan muncul di sini setelah selesai."
+  },
+  "remove": "Hapus {name}",
+  "folders": {
+    "label": "Folder",
+    "all": "Semua rapat",
+    "new": "Folder baru",
+    "newMenu": "Folder baru…",
+    "newNamed": "Folder baru “{name}”",
+    "defaultName": "Folder baru",
+    "nameLabel": "Nama folder",
+    "none": "Tanpa folder",
+    "add": "Tambahkan ke folder",
+    "moveTo": "Pindahkan ke folder",
+    "search": "Cari folder…",
+    "noMatch": "Tidak ada folder yang cocok.",
+    "movedTo": "Dipindahkan ke {folder}",
+    "removedFrom": "Dihapus dari folder",
+    "emptyTitle": "Folder ini kosong",
+    "emptyDescription": "Klik kanan rapat dan pilih “{action}” untuk menambahkannya ke sini."
+  },
+  "card": {
+    "latest": "Rapat terbaru",
+    "keyPoints": "Poin penting",
+    "openNotes": "Buka catatan",
+    "openItems": "{count, plural, other {# belum selesai}}"
+  },
+  "timeline": {
+    "decision": "Keputusan:",
+    "openTasks": "{count, plural, other {# tugas belum selesai}}"
+  },
+  "menu": {
+    "openInNewTab": "Buka di tab baru",
+    "exportTranscript": "Ekspor transkrip"
+  },
+  "exportFormats": {
+    "txt": "Teks biasa",
+    "md": "Markdown",
+    "srt": "Subtitle SubRip",
+    "vtt": "Subtitle WebVTT",
+    "json": "Data JSON"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "“{title}” dihapus"
+}

@@ -1,0 +1,62 @@
+{
+  "description": "Wat op jou wacht, wat eraan komt en hoe het werk van het team ervoor staat.",
+  "invitePeople": "Mensen uitnodigen",
+  "quietStart": "Zodra er vergaderingen worden gedeeld of projecten starten, zie je hier wat op jou wacht, wat eraan komt en wat het team heeft besloten.",
+  "blocks": {
+    "needsYou": "Wacht op jou",
+    "allTasks": "Alle taken",
+    "nothingWaiting": "Hier wacht niets op jou. Taken die aan jou zijn toegewezen, komen hier en in je Productiviteit terecht.",
+    "moreTasks": "{count, plural, one {Nog # taak} other {Nog # taken}}",
+    "comingUp": "Binnenkort",
+    "projects": "Projecten",
+    "allProjects": "Alle projecten",
+    "recentDecisions": "Recente besluiten",
+    "decisionLog": "Besluitenlog"
+  },
+  "comingUp": {
+    "empty": "Geen teamvergaderingen gepland.",
+    "live": "Live",
+    "guestsPrivate": "Blijft privé: er zijn gasten bij",
+    "private": "Notities blijven privé",
+    "notesGoTo": "Notities gaan naar {audience}"
+  },
+  "decisions": {
+    "empty": "Besluiten uit gedeelde vergaderingen verschijnen hier, gekoppeld aan waar ze zijn genomen.",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "Geen actieve projecten. Start er een om de vergaderingen, taken en besluiten ervan te groeperen.",
+    "ledBy": "Geleid door {name}",
+    "ledByYou": "Geleid door jou"
+  },
+  "setup": {
+    "title": "Je werkruimte inrichten",
+    "progress": "{done, number} van {total, number} klaar. Elke stap maakt de volgende vergadering nuttiger voor iedereen.",
+    "progressLabel": "{done, number} van {total, number} inrichtingsstappen klaar",
+    "hide": "Checklist voor inrichten verbergen",
+    "done": "Klaar",
+    "toDo": "Te doen",
+    "steps": {
+      "invite": {
+        "title": "Je team uitnodigen",
+        "description": "Voeg minstens twee mensen toe, zodat vergaderingen en taken ergens naartoe kunnen.",
+        "action": "Mensen uitnodigen"
+      },
+      "sharing": {
+        "title": "Bevestigen hoe vergaderingen worden gedeeld",
+        "description": "Kies waar notities na een vergadering naartoe gaan. Vergaderingen met gasten blijven hoe dan ook privé.",
+        "action": "Bekijken"
+      },
+      "share": {
+        "title": "Een van je vergaderingen delen",
+        "description": "Je opnames blijven in je Notities tot je er hier een deelt, met de besluiten en taken erbij.",
+        "action": "Vergadering delen"
+      },
+      "knowledge": {
+        "title": "Teamkennis toevoegen",
+        "description": "Deel je bestanden, upload nieuwe of koppel een gedeelde drive, zodat Leo eruit kan antwoorden.",
+        "action": "Kennis toevoegen"
+      }
+    }
+  }
+}

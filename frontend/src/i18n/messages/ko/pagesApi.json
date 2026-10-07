@@ -1,0 +1,12 @@
+{
+  "notMultipart": "메시지를 multipart/form-data 형식으로 보내 주세요.",
+  "emptyMessage": "메시지를 입력하거나 파일을 첨부해 주세요.",
+  "messageTooLong": "메시지는 {max, number}자 미만으로 입력해 주세요.",
+  "tooManyFiles": "{max, plural, other {파일은 최대 #개까지 첨부해 주세요.}}",
+  "fileTooBig": "{name}이(가) {size}보다 커요.",
+  "subjectRequired": "문의 제목을 짧게 입력해 주세요.",
+  "topicRequired": "주제를 선택해 주세요.",
+  "detailsRequired": "어떤 일이 있었는지 설명해 주세요.",
+  "ticketNotFound": "문의를 찾을 수 없어요.",
+  "invalidUpdate": "상태, 평가 또는 읽지 않음 표시를 보내 주세요."
+}

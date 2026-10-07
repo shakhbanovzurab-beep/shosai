@@ -1,0 +1,60 @@
+{
+  "title": "Reuniones",
+  "loading": "Cargando reuniones…",
+  "loadFailed": "No se pudieron cargar las reuniones",
+  "loadFailedHint": "Revisa tu conexión e inténtalo de nuevo.",
+  "newMeeting": "Nueva reunión",
+  "actions": {
+    "schedule": "Programar en Calendario",
+    "upload": "Subir una grabación"
+  },
+  "filters": "Filtros de reuniones",
+  "views": {
+    "all": "Todas",
+    "upcoming": "Próximas",
+    "live": "En vivo",
+    "past": "Pasadas"
+  },
+  "recent": "Recientes",
+  "viewAll": "Ver todas",
+  "noMoreToday": "No hay más reuniones hoy.",
+  "day": {
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "yesterday": "Ayer"
+  },
+  "liveBadge": "En vivo",
+  "liveSince": "{minutes, plural, =0 {Acaba de empezar · termina a las {end}} one {Empezó hace # min · termina a las {end}} many {Empezó hace # min · termina a las {end}} other {Empezó hace # min · termina a las {end}}}",
+  "startsIn": "{minutes, plural, =0 {Empieza ahora} one {En # min} many {En # min} other {En # min}}",
+  "join": "Unirse a la reunión",
+  "opensInNewTab": "(se abre en una pestaña nueva)",
+  "source": {
+    "whisperer": "Sala de Whisperer",
+    "in_person": "Presencial"
+  },
+  "participants": "Participantes: {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "Las notas aún no están listas.",
+    "tasks": "{count, plural, one {# tarea} many {# de tareas} other {# tareas}}",
+    "decisions": "{count, plural, one {# decisión} many {# de decisiones} other {# decisiones}}"
+  },
+  "empty": {
+    "none": {
+      "title": "Aún no hay reuniones",
+      "description": "Programa una reunión en Calendario o sube una grabación para recibir las notas de Leo."
+    },
+    "upcoming": {
+      "title": "No hay nada programado",
+      "description": "Aquí aparecerán las reuniones que planifiques en Calendario."
+    },
+    "live": {
+      "title": "No hay ninguna reunión en curso",
+      "description": "Las reuniones aparecen aquí mientras se celebran, para que puedas unirte."
+    },
+    "past": {
+      "title": "Aún no hay reuniones pasadas",
+      "description": "Aquí aparecerán las reuniones grabadas con el resumen, las tareas y las decisiones de Leo."
+    }
+  }
+}

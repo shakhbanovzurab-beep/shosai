@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "Een verzorgd opensource-beheerdashboard, gebouwd met shadcn/ui."
+  },
+  "actions": {
+    "goHome": "Naar startpagina",
+    "goBack": "Teruggaan"
+  },
+  "placeholder": {
+    "title": "{title} komt eraan",
+    "description": "Aan dit onderdeel wordt nog gewerkt. Het is binnenkort beschikbaar.",
+    "badge": "In ontwikkeling"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "Alle"
+  },
+  "emoji": {
+    "search": "Emoji zoeken",
+    "empty": "Geen emoji gevonden"
+  },
+  "notFound": {
+    "metaTitle": "Pagina niet gevonden",
+    "badge": "Foutcode {code}",
+    "title": "Deze pagina is zoekgeraakt",
+    "description": "Misschien is de link kapot, of is de pagina verplaatst of verwijderd. We helpen je weer op weg.",
+    "popularPages": "Populaire pagina’s",
+    "jumpTo": "Of ga naar"
+  },
+  "unauthorized": {
+    "metaTitle": "Geen toegang",
+    "title": "Je hebt geen toegang",
+    "description": "Je hebt geen toestemming om deze pagina te bekijken. Denk je dat dit niet klopt, neem dan contact op met je beheerder."
+  }
+}

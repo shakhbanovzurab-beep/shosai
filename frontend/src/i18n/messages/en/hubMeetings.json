@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "Hub",
+    "removeLabel": "Take the meeting out of {hub}",
+    "suggestion": "Looks like “{hub}”",
+    "file": "Add",
+    "other": "Another hub…",
+    "fileTo": "Add to a hub…",
+    "createFirst": "Create the first one",
+    "noBoard": "the hub has no board",
+    "archived": "the hub is archived",
+    "filedToast": "Next meetings in this series will land here on their own",
+    "removedToast": "Taken out of {hub}",
+    "pickerTitle": "Add to a hub",
+    "pickerSearch": "Find a hub",
+    "pickerEmpty": "No hubs match"
+  },
+  "brief": {
+    "title": "Today",
+    "empty": "Nothing’s on fire today",
+    "prepTitle": "Coming up",
+    "prepFor": "Before the meeting on {date}",
+    "prepOpen": "Open in this hub",
+    "prepLast": "Last time · {date}",
+    "prepMaterials": "Materials",
+    "signal": "{circles, plural, =2 {{subject} has been discussed twice with no decision.} =3 {{subject} has been discussed three times with no decision.} =4 {{subject} has been discussed four times with no decision.} =5 {{subject} has been discussed five times with no decision.} one {{subject} has been discussed # time with no decision.} other {{subject} has been discussed # times with no decision.}}",
+    "blockers": "Each time it was: {quotes}."
+  }
+}

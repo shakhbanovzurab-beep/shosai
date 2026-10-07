@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "साफ़",
+    "partly": "आंशिक बादल",
+    "overcast": "बादल छाए",
+    "fog": "कोहरा",
+    "drizzle": "बूंदाबांदी",
+    "rain": "बारिश",
+    "snow": "बर्फ़बारी",
+    "storm": "गरज के साथ बारिश",
+    "unknown": "जानकारी नहीं"
+  },
+  "fallbackPlace": "मॉस्को",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, अधिकतम {high}, न्यूनतम {low}",
+  "summaryAt": "{place} में {condition}, {now}, अधिकतम {high}, न्यूनतम {low}"
+}

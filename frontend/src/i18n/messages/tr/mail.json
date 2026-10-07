@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "Açık kaynak e-posta istemcisi",
+    "description": "Gelen kutusunda gezinme, mesaj arama, okuma, yanıtlama ve arşivleme özelliklerine sahip açık kaynak bir e-posta istemcisi."
+  },
+  "preview": {
+    "title": "E-posta önizlemesi",
+    "description": "Bu çerçeve bağımsız e-posta ekranını gösterir. Daha rahat görmek için tam ekranda açın.",
+    "openInNewTab": "E-postayı yeni sekmede aç"
+  },
+  "nav": {
+    "inbox": "Gelen kutusu",
+    "priority": "Öncelikli",
+    "drafts": "Taslaklar",
+    "sent": "Gönderilenler",
+    "archive": "Arşiv",
+    "trash": "Çöp kutusu",
+    "helpFeedback": "Yardım ve geri bildirim",
+    "keyboardShortcuts": "Klavye kısayolları"
+  },
+  "sidebar": {
+    "newEmail": "Yeni e-posta",
+    "folders": "Klasörler"
+  },
+  "accounts": {
+    "switchTo": "Şu hesaba geç: {name}",
+    "menu": "Hesap menüsü",
+    "title": "Hesaplar",
+    "add": "Hesap ekle",
+    "manage": "Hesapları yönet",
+    "settings": "Hesap ayarları",
+    "signOut": "Çıkış yap"
+  },
+  "inbox": {
+    "filter": "E-postaları filtrele",
+    "refresh": "Gelen kutusunu yenile",
+    "noSelection": "E-posta seçilmedi",
+    "needsYou": "Sizi bekliyor",
+    "allMail": "Tüm e-postalar",
+    "pinnedGroup": "Sabitlenenler ({count, number})",
+    "inboxGroup": "Gelen kutusu ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "E-posta",
+    "drawerDescription": "Seçili e-postayı okuyun",
+    "to": "Kime: <names>{list}</names>",
+    "cc": "Bilgi: <names>{list}</names>",
+    "attachments": "Ekler ({count, number})"
+  },
+  "toolbar": {
+    "close": "E-postayı kapat",
+    "previous": "Önceki e-posta",
+    "next": "Sonraki e-posta",
+    "pin": "Yazışmayı sabitle",
+    "reply": "Yanıtla",
+    "more": "Diğer işlemler",
+    "replyAll": "Tümünü yanıtla",
+    "forward": "Yönlendir",
+    "addLabel": "Etiket ekle"
+  },
+  "menu": {
+    "markRead": "Okundu olarak işaretle",
+    "markUnread": "Okunmadı olarak işaretle",
+    "pin": "En üste sabitle",
+    "unpin": "Sabitlemeyi kaldır",
+    "markPriority": "Öncelikli olarak işaretle",
+    "removePriority": "Öncelikliden kaldır",
+    "labels": "Etiketler",
+    "copySender": "Gönderen adresini kopyala",
+    "archive": "Arşivle",
+    "trash": "Çöp kutusuna taşı"
+  },
+  "replyBar": {
+    "placeholder": "{name} adlı kişiye yanıt yazın…",
+    "label": "Yanıtla: {name}",
+    "addEmoji": "Emoji ekle",
+    "attachFile": "Dosya ekle",
+    "send": "Gönder"
+  },
+  "toasts": {
+    "senderCopied": "{email} kopyalandı",
+    "senderCopyFailed": "Adres kopyalanamadı",
+    "replySent": "Yanıt gönderildi: {name}",
+    "archived": "{count, plural, one {# e-posta arşivlendi} other {# e-posta arşivlendi}}",
+    "moved": "{folder, select, inbox {“{subject}” Gelen kutusuna taşındı} drafts {“{subject}” Taslaklara taşındı} sent {“{subject}” Gönderilenlere taşındı} archive {“{subject}” arşivlendi} trash {“{subject}” Çöp kutusuna taşındı} other {“{subject}” taşındı}}"
+  }
+}

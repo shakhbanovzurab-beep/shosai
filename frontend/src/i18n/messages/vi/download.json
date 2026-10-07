@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Tải ứng dụng",
+    "description": "Tải ứng dụng máy tính cho macOS và Windows."
+  },
+  "title": "Tải ứng dụng máy tính",
+  "subtitle": "Ghi lại cuộc họp, ghi chú và dịch trực tiếp trong mọi cuộc gọi, và gọi Leo từ bất cứ đâu bằng phím tắt.",
+  "notes": {
+    "mobile": "Ứng dụng máy tính chạy trên macOS và Windows. Hãy mở trang này trên máy tính để tải về.",
+    "linux": "Chưa có phiên bản cho Linux. Ứng dụng máy tính chạy trên macOS và Windows."
+  },
+  "card": {
+    "yourComputer": "Máy tính của bạn",
+    "requirement": "{system} trở lên",
+    "downloadFor": "Tải cho {name}",
+    "downloadBuild": "Tải cho {arch} · {size}",
+    "meta": "Phiên bản {version} · {size} · {type} · {date}",
+    "loadFailed": "Không thể tải thông tin bản tải về cho {platform}.",
+    "notYet": "Ứng dụng cho {platform} chưa sẵn sàng. Hãy quay lại sau.",
+    "universal": "Apple silicon và Intel"
+  },
+  "checksum": {
+    "button": "Mã kiểm tra",
+    "verify": "Để xác minh, hãy chạy <code>{command}</code> và so sánh kết quả.",
+    "copy": "Sao chép mã kiểm tra",
+    "copied": "Đã sao chép mã kiểm tra",
+    "copyFailed": "Không thể sao chép mã kiểm tra"
+  },
+  "install": {
+    "title": "Cài đặt trong ba bước",
+    "macos": {
+      "open": "Mở tệp {type} vừa tải về.",
+      "drag": "Kéo ứng dụng vào thư mục Applications rồi mở từ đó.",
+      "allow": "Đăng nhập, rồi cho phép micrô và ghi màn hình & âm thanh hệ thống khi macOS hỏi — đó là cách ghi lại cuộc họp."
+    },
+    "windows": {
+      "run": "Chạy trình cài đặt vừa tải về ({type}).",
+      "setup": "Làm theo các bước cài đặt, rồi mở ứng dụng từ menu Start.",
+      "allow": "Đăng nhập, rồi cho phép truy cập micrô khi Windows hỏi."
+    }
+  },
+  "features": {
+    "title": "Chỉ có trên máy tính",
+    "customize": "Tùy chỉnh phím tắt",
+    "shortcutOff": "Đã tắt phím tắt",
+    "shortcut": "Phím tắt: {keys}",
+    "toggle_recording": {
+      "title": "Ghi cuộc họp",
+      "text": "Bắt đầu hoặc tạm dừng ghi mọi cuộc họp, từ bất kỳ ứng dụng nào."
+    },
+    "toggle_overlay": {
+      "title": "Lớp phủ",
+      "text": "Ghi chú trực tiếp nằm trên cuộc gọi; thu gọn thành một viên nhỏ."
+    },
+    "live_translation": {
+      "title": "Dịch trực tiếp",
+      "text": "Theo dõi cuộc trò chuyện bằng ngôn ngữ của bạn ngay khi mọi người nói."
+    },
+    "prompter": {
+      "title": "Nhắc lời",
+      "text": "Gợi ý kín đáo từ Leo khi bạn nói, chỉ mình bạn thấy."
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "answers": "Yanıtlar",
+  "model": {
+    "title": "Model",
+    "description": "Otomatik seçenek her görev için uygun bir model seçer. En gelişmiş modeller, bu modellere ayrılan haftalık token sınırınızdan düşer (bkz. Kullanım).",
+    "label": "Leo modeli",
+    "auto": "Otomatik",
+    "autoHint": "Leo her görev için seçer"
+  },
+  "language": {
+    "title": "Yanıt dili",
+    "description": "Otomatik seçenekte Leo arayüz dilinde yanıt verir.",
+    "auto": "Otomatik"
+  },
+  "length": {
+    "title": "Yanıt uzunluğu",
+    "description": "Leo’nun varsayılan olarak ne kadar ayrıntılı yanıt vereceği.",
+    "options": {
+      "concise": "Kısa",
+      "balanced": "Dengeli",
+      "detailed": "Ayrıntılı"
+    }
+  },
+  "advanced": {
+    "title": "Gelişmiş ayarlar",
+    "description": "Leo’nun neleri kullanabileceği. Kapalı olan özellikler ne önerilir ne de kullanılır.",
+    "webSearch": "Web araması",
+    "webSearchHint": "Leo’nun yanıt bulmak için internette otomatik olarak arama yapmasına izin verin.",
+    "voiceMode": "Sesli mod",
+    "voiceModeHint": "Leo ile sesli konuşma. Kapatırsanız mikrofon arayüzden kaldırılır.",
+    "knowledgeSearch": "Bilgi bankasında arama",
+    "knowledgeSearchHint": "Leo için seçtiğiniz dosyalarda ve kaynaklarda yanıt arar.",
+    "connectedSearch": "Bağlı hizmetlerde arama",
+    "connectedSearchHint": "Google Drive ve Notion gibi bağlı hizmetlerde arama yapar."
+  }
+}

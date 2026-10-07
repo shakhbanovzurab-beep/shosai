@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "name_taken": "Bạn đã có một hub mang tên này.",
+    "name_too_short": "{min, plural, other {Hãy dùng ít nhất # ký tự.}}",
+    "name_too_long": "{max, plural, other {Hãy giữ tên trong # ký tự.}}",
+    "too_many_hubs": "Bạn có quá nhiều hub. Hãy lưu trữ hoặc xóa những hub không cần nữa.",
+    "not_found": "Mục này không còn ở đây — có thể đã bị xóa.",
+    "hub_archived": "Hub đã được lưu trữ.",
+    "no_board": "Hub chưa có bảng, nên công việc không có chỗ để chuyển vào.",
+    "no_hub": "Cuộc họp chưa thuộc hub nào.",
+    "board_gone": "Bảng của hub này không còn tồn tại.",
+    "invalid": "Hãy kiểm tra xem mọi thông tin đã được điền đúng chưa.",
+    "network": "Không thể kết nối với máy chủ.",
+    "unknown": "Máy chủ không phản hồi như mong đợi."
+  },
+  "fixes": {
+    "choose_board": "Chọn bảng",
+    "file_meeting": "Thêm cuộc họp vào hub",
+    "restore_hub": "Khôi phục hub từ lưu trữ"
+  }
+}

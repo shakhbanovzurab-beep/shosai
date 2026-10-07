@@ -1,0 +1,85 @@
+{
+  "loadFailed": "ソースを読み込めませんでした",
+  "loading": "ソースを読み込み中…",
+  "connectedCount": "{total, plural, other {# 件のソース}}のうち {connected, number} 件が接続済みです。新しいコンテンツや変更されたコンテンツは、同期のたびにインデックスが更新されます。",
+  "status": {
+    "connecting": "接続中",
+    "syncing": "同期中",
+    "connected": "接続済み",
+    "error": "エラー"
+  },
+  "card": {
+    "items": "{count, plural, other {# 件のアイテム}}",
+    "synced": "{ago} に同期",
+    "syncNow": "今すぐ同期",
+    "syncing": "同期中…",
+    "settings": "設定…",
+    "disconnect": "接続を解除…",
+    "signIn": "{provider} でログイン",
+    "public": "公開ページ、ログイン不要",
+    "connect": "接続"
+  },
+  "dialog": {
+    "connectTitle": "{name} を接続",
+    "settingsTitle": "{name} の設定",
+    "oauthNote": "{provider} にログインして読み取り専用のアクセス（OAuth 2.0）を承認したあと、ここに戻ります。このページでパスワードやトークンを入力することはありません。",
+    "optional": "（任意）",
+    "saveAndSync": "保存して同期",
+    "continueWith": "{provider} で続行",
+    "connect": "接続",
+    "connectFailed": "接続できませんでした。"
+  },
+  "disconnect": {
+    "title": "{name} の接続を解除しますか？",
+    "description": "同期が停止し、保存された認証情報が削除されます。このソースからインデックスに登録されたコンテンツは、ベクトルインデックスから削除されます。",
+    "confirm": "接続を解除"
+  },
+  "toasts": {
+    "connected": "{name} を接続しました",
+    "firstSync": "最初の同期を開始しました。",
+    "syncFailed": "{name} を同期できませんでした",
+    "disconnected": "{name} の接続を解除しました",
+    "disconnectFailed": "{name} の接続を解除できませんでした"
+  },
+  "website": "ウェブサイト",
+  "descriptions": {
+    "slack": "公開チャンネルのメッセージとスレッド。",
+    "confluence": "スペース内のページとブログ投稿。",
+    "notion": "ログイン時に共有したページとデータベース。",
+    "obsidian": "GitHub に同期した保管庫の Markdown ノート。",
+    "jira": "課題、説明、コメント。",
+    "github": "README、ドキュメント、Issue、プルリクエスト。",
+    "gitlab": "リポジトリ、Wiki、Issue、マージリクエスト。",
+    "google_drive": "ドキュメント、スプレッドシート、スライド、PDF。",
+    "sharepoint": "Microsoft 365 のファイルとページ。",
+    "dropbox": "フォルダ内のファイルと Paper ドキュメント。",
+    "yandex_disk": "Yandex Disk フォルダ内のドキュメント。",
+    "website": "サイトやドキュメントポータルからクロールしたページ。"
+  },
+  "fields": {
+    "channels": "チャンネル",
+    "spaces": "スペースキー",
+    "repository": "保管庫のリポジトリ",
+    "branch": "ブランチ",
+    "jql": "JQL フィルタ",
+    "repositories": "リポジトリ",
+    "base_url": "インスタンスの URL",
+    "projects": "プロジェクト",
+    "folder_id": "フォルダ ID",
+    "site_url": "SharePoint サイト",
+    "path": "フォルダのパス",
+    "start_url": "開始 URL",
+    "max_depth": "クロールの深さ",
+    "include": "一致するパスのみ"
+  },
+  "help": {
+    "channels": "空欄にすると、すべての公開チャンネルが対象になります。",
+    "spaces": "空欄にすると、閲覧できるすべてのスペースが対象になります。",
+    "repositories": "空欄にすると、アクセスを許可したすべてのリポジトリが対象になります。",
+    "base_url": "セルフマネージドの GitLab の場合のみ。",
+    "projects": "空欄にすると、閲覧できるすべてのプロジェクトが対象になります。",
+    "folder_id": "空欄にすると、閲覧できるものすべてのインデックスを作成します。",
+    "site_url": "空欄にすると、OneDrive が対象になります。",
+    "max_depth": "開始ページからたどるリンクの階層数。"
+  }
+}

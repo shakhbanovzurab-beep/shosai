@@ -1,0 +1,81 @@
+{
+  "title": "작업",
+  "description": "회의에서 정하거나 프로젝트에 추가한 작업이에요. 내 작업은 내 생산성과 칸반에도 표시돼요.",
+  "newTask": "새 작업",
+  "loading": "작업을 불러오는 중…",
+  "loadFailed": "작업을 불러오지 못했어요",
+  "empty": {
+    "title": "아직 작업이 없어요",
+    "text": "누군가 할 일을 정한 회의를 공유하거나, 프로젝트에 작업을 추가하면 여기에 표시돼요.",
+    "add": "작업 추가"
+  },
+  "noMatch": {
+    "title": "필터와 일치하는 작업이 없어요",
+    "text": "다른 프로젝트, 팀 또는 사람으로 찾아보세요.",
+    "clear": "필터 지우기"
+  },
+  "caughtUp": {
+    "title": "모두 처리했어요",
+    "text": "여기서 나를 기다리는 작업은 없어요. 나에게 배정된 새 작업은 여기와 내 생산성에 표시돼요.",
+    "seeEveryone": "모든 사람의 작업 보기"
+  },
+  "views": {
+    "label": "누구의 작업",
+    "mine": "내 작업",
+    "team": "전체"
+  },
+  "assignee": {
+    "label": "담당자",
+    "anyone": "모든 사람"
+  },
+  "owner": {
+    "label": "담당자",
+    "unassigned": "담당자 없음",
+    "you": "나",
+    "meOption": "{name}(나)",
+    "change": "담당자: {name}. 담당자 변경",
+    "changedToYou": "이제 내 작업이에요",
+    "changedTo": "이제 {name} 님이 담당해요",
+    "cleared": "이제 담당자가 없어요"
+  },
+  "groups": {
+    "overdue": "기한 지남 · {count, number}",
+    "today": "오늘 마감 · {count, number}",
+    "week": "이번 주 · {count, number}",
+    "later": "나중 · {count, number}",
+    "undated": "마감일 없음 · {count, number}"
+  },
+  "showDone": "완료된 작업 보기 · {count, number}",
+  "hideDone": "완료된 작업 숨기기",
+  "status": {
+    "todo": "할 일",
+    "in_progress": "진행 중",
+    "done": "완료"
+  },
+  "due": {
+    "none": "마감일 없음",
+    "add": "마감일 추가",
+    "clear": "마감일 지우기",
+    "change": "{due}. 마감일 변경",
+    "overdue": "기한 지남 · {date}",
+    "today": "오늘 마감",
+    "tomorrow": "내일 마감",
+    "on": "{date} 마감",
+    "was": "{date} 마감이었음",
+    "changed": "마감일을 변경했어요",
+    "cleared": "마감일을 지웠어요"
+  },
+  "form": {
+    "title": "새 작업",
+    "description": "담당자는 자신의 생산성과 칸반에서도 이 작업을 볼 수 있어요.",
+    "task": "작업",
+    "taskPlaceholder": "예: 출시 안내 이메일 초안 작성",
+    "titleRequired": "할 일을 입력해 주세요.",
+    "nobodyYet": "담당자 없음",
+    "due": "마감일",
+    "project": "프로젝트",
+    "noProject": "프로젝트 없음",
+    "projectHint": "여기에 추가한 작업은 워크스페이스의 모든 멤버가 볼 수 있어요.",
+    "submit": "작업 추가"
+  }
+}

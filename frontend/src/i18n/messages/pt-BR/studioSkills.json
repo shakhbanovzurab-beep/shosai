@@ -1,0 +1,53 @@
+{
+  "title": "Habilidades",
+  "tabs": {
+    "readyMade": "Prontas",
+    "repository": "Seu repositório",
+    "mine": "Instaladas ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Encontre uma habilidade: design de sistemas, revisão de código…",
+    "label": "Pesquisar habilidades",
+    "help": "Pesquisar no catálogo skills.sh",
+    "noMatches": "Nenhuma habilidade encontrada. Tente outras palavras.",
+    "emptyTitle": "Catálogo de habilidades prontas",
+    "emptyDescription": "Comece a digitar. Uma habilidade é uma instrução pronta que você pode anexar a um prompt.",
+    "searchFailed": "Não foi possível pesquisar no skills.sh. Tente novamente."
+  },
+  "repository": {
+    "label": "Repositório do GitHub",
+    "placeholder": "proprietário/repositório ou um link do GitHub",
+    "find": "Encontrar habilidades",
+    "help": "Um repositório público com um arquivo SKILL.md",
+    "emptyTitle": "Sua própria habilidade do GitHub",
+    "emptyDescription": "Digite um repositório público para encontrar os arquivos SKILL.md nele.",
+    "scanFailed": "Não foi possível ler o repositório."
+  },
+  "candidate": {
+    "installs": "{count, plural, one {# instalação} many {# de instalações} other {# instalações}}",
+    "installed": "Instalada"
+  },
+  "mine": {
+    "extraFiles": "Inclui scripts ou outros arquivos — só as instruções do SKILL.md são usadas.",
+    "update": "Atualizar {name}",
+    "updateHint": "Atualizar para o commit mais recente",
+    "remove": "Remover {name}",
+    "emptyTitle": "Nenhuma habilidade ainda",
+    "emptyDescription": "Adicione uma em Prontas ou do seu repositório."
+  },
+  "remove": {
+    "title": "Remover {name}?",
+    "titleUnnamed": "Remover esta habilidade?",
+    "description": "Ela será desanexada de todos os prompts que a usam. Você pode adicioná-la novamente depois."
+  },
+  "toasts": {
+    "installed": "{name} instalada",
+    "installedHint": "Anexe-a a um prompt no editor de prompts.",
+    "installFailed": "Não foi possível instalar a habilidade",
+    "upToDate": "{name} já está atualizada",
+    "updated": "{name} atualizada",
+    "updateFailed": "Não foi possível atualizar a habilidade",
+    "removed": "{name} removida",
+    "removeFailed": "Não foi possível remover a habilidade"
+  }
+}

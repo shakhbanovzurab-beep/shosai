@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Abonnement upgraden"
+  },
+  "title": "Upgrade je abonnement",
+  "subtitle": "Begin gratis met {minutes, plural, one {# vergaderminuut} other {# vergaderminuten}} per maand. Upgrade als je vergaderingen meer nodig hebben.",
+  "loading": "Abonnementen laden…",
+  "loadFailed": "Kan de abonnementen niet laden",
+  "seatNote": "Je licentie in <b>{workspace}</b> omvat {plan}, dus voor je eigen vergaderingen, Bestandsbeheer en kennis voor Leo gelden de limieten daarvan. Je persoonlijke abonnement staat daar los van.",
+  "pricesNote": "Prijzen in Amerikaanse dollars, exclusief belastingen; Team wordt per gebruiker gefactureerd. Betaalgegevens voer je alleen in op de beveiligde pagina van de betaalprovider.",
+  "audiences": {
+    "individual": "Individueel",
+    "team": "Team",
+    "enterprise": "Enterprise"
+  },
+  "seatRange": "({min, number}–{max, number} gebruikers)",
+  "seatRangeOpen": "({min, number}+ gebruikers)",
+  "card": {
+    "yourPlan": "Jouw abonnement",
+    "recommended": "Aanbevolen",
+    "custom": "Op maat",
+    "tailored": "Afgestemd op je organisatie",
+    "perMonth": "/ maand",
+    "perUserPerMonth": "per gebruiker / maand",
+    "billedMonthly": "Maandelijks gefactureerd, altijd opzegbaar",
+    "freeForever": "Altijd gratis",
+    "seatsTotal": "{total} / maand voor {seats, plural, one {# gebruiker} other {# gebruikers}}",
+    "notIncluded": "Niet inbegrepen: {item}"
+  },
+  "seats": {
+    "label": "Gebruikers",
+    "fewer": "Minder gebruikers",
+    "more": "Meer gebruikers"
+  },
+  "action": {
+    "current": "Huidig abonnement",
+    "upgradeTo": "Upgraden naar {plan}",
+    "switchTo": "Overstappen naar {plan}",
+    "upgradeFailed": "Kan de upgrade niet starten",
+    "switchFailed": "Kan het abonnement niet wijzigen"
+  },
+  "usage": {
+    "label": "Vergaderminuten deze maand",
+    "title": "Vergaderminuten",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "{used, number} van {limit, plural, one {# minuut} other {# minuten}} gebruikt",
+    "left": "{left, number} van {limit, plural, one {# vergaderminuut} other {# vergaderminuten}} over",
+    "allUsed": "Je hebt al je vergaderminuten gebruikt",
+    "resets": "Wordt gereset op {date}",
+    "leftShort": "{left, plural, one {# min} other {# min}} over · reset op {date}",
+    "recordingPaused": "Opnemen gepauzeerd tot {date}.",
+    "paused": "Vergaderingen zijn gepauzeerd tot {date}.",
+    "pausedUpgrade": "Vergaderingen zijn gepauzeerd tot {date}. Upgrade naar {plan} voor onbeperkt vergaderen.",
+    "getUnlimited": "Onbeperkt vergaderen"
+  },
+  "gate": {
+    "checking": "Je abonnement controleren…",
+    "seePlans": "Abonnementen bekijken",
+    "comparePlans": "Abonnementen vergelijken",
+    "upgradeTo": "Upgraden naar {plan}",
+    "offer": "{plan} omvat {unlimited, select, yes {onbeperkte opslag} other {{amount}}}.",
+    "offerPriced": "{plan} omvat {unlimited, select, yes {onbeperkte opslag} other {{amount}}} voor {price} per maand.",
+    "file_manager": {
+      "partOf": "Bestandsbeheer hoort bij {plan}",
+      "notInPlan": "Bestandsbeheer zit niet in je abonnement",
+      "pitch": "Bewaar je bestanden op één plek, kies welke Leo gebruikt en deel ze in werkruimtes."
+    },
+    "knowledge_base": {
+      "partOf": "Kennis hoort bij {plan}",
+      "notInPlan": "Kennis zit niet in je abonnement",
+      "pitch": "Kies bestanden en koppel bronnen, zodat Leo daaruit kan antwoorden."
+    }
+  },
+  "sales": {
+    "contact": "Contact met sales",
+    "title": "Praat met sales",
+    "description": "Vertel ons over je team, dan stellen we een Enterprise-abonnement samen.",
+    "workEmail": "Zakelijk e-mailadres",
+    "company": "Bedrijf",
+    "teamSize": "Teamgrootte",
+    "teamSizePlaceholder": "Kiezen",
+    "teamSizeRange": "{min, number}–{max, number} mensen",
+    "teamSizeOpen": "{min, number}+ mensen",
+    "message": "Wat heb je nodig? <muted>(optioneel)</muted>",
+    "messagePlaceholder": "SSO-provider, beveiligingsreview, aantal licenties…",
+    "send": "Aanvraag versturen",
+    "chooseTeamSize": "Kies je teamgrootte.",
+    "sendFailed": "Kan je aanvraag niet versturen.",
+    "sentTitle": "Bedankt — we nemen contact met je op",
+    "sentDescription": "Ons team antwoordt meestal binnen één werkdag.",
+    "done": "Klaar"
+  }
+}

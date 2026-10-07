@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "अनुरोध में कुछ गड़बड़ है। पेज रीलोड करके फिर से कोशिश करें।",
+    "nameRequired": "अपना नाम डालें।",
+    "hotkeyUnsupported": "यह शॉर्टकट इस्तेमाल नहीं किया जा सकता।",
+    "modelNotOnPlan": "यह मॉडल आपकी सदस्यता में शामिल नहीं है।",
+    "emailMismatch": "यह ईमेल आपके खाते से मेल नहीं खाता।",
+    "deletionUnavailable": "खाता मिटाने की सुविधा अभी जुड़ी नहीं है। कुछ भी नहीं मिटाया गया।",
+    "avatarMissing": "अपलोड करने के लिए कोई इमेज चुनें।",
+    "avatarType": "WebP, JPEG या PNG इमेज इस्तेमाल करें।",
+    "paymentsUnavailable": "पेमेंट की सुविधा अभी जुड़ी नहीं है। बिलिंग शुरू होने पर यहां से प्रोवाइडर का सुरक्षित पेज खुलेगा।",
+    "checkoutUnavailable": "पेमेंट की सुविधा अभी जुड़ी नहीं है। बिलिंग शुरू होने पर यहां से प्रोवाइडर का चेकआउट पेज खुलेगा।",
+    "invoiceNotFound": "इनवॉइस नहीं मिला।",
+    "connectorNotFound": "कनेक्टर नहीं मिला।",
+    "authorizationExpired": "ऑथराइज़ेशन की अवधि ख़त्म हो गई है या उसका इस्तेमाल हो चुका है। फिर से कनेक्ट करें।",
+    "dataKindUnknown": "यह डेटा का अनजान प्रकार है।",
+    "dataItemNotFound": "यह आइटम अब मौजूद नहीं है।",
+    "mcpNameRequired": "सर्वर को कोई नाम दें।",
+    "mcpNameTooLong": "यह नाम बहुत लंबा है। छोटा नाम रखें।",
+    "mcpUrlInvalid": "सर्वर का http(s) URL डालें।",
+    "mcpServerNotFound": "सर्वर नहीं मिला।",
+    "memoryNotFound": "मेमोरी नहीं मिली।",
+    "summaryMessageRequired": "कोई सवाल या अपडेट लिखें।"
+  },
+  "avatarTooLarge": "इमेज {size} से बड़ी है।",
+  "invoice": {
+    "title": "इनवॉइस {number}",
+    "date": "तारीख: {date}",
+    "description": "विवरण: {description}",
+    "amount": "रकम: {amount}",
+    "status": "स्थिति: {status}",
+    "demoNote": "यह डेमो इनवॉइस है। असली इनवॉइस बिलिंग बैकएंड से PDF के रूप में आता है।"
+  },
+  "notesFromYou": "आपकी ओर से नोट"
+}

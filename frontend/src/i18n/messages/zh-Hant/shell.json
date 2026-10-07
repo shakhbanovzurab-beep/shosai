@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "生產力",
+    "hub": "中樞",
+    "email": "郵件",
+    "meetings": "會議",
+    "calendar": "行事曆",
+    "kanban": "看板",
+    "notes": "筆記",
+    "fileManager": "檔案管理",
+    "studio": "Studio",
+    "knowledge": "知識庫",
+    "downloadApp": "下載應用程式",
+    "appGroup": "應用程式",
+    "workspacesGroup": "工作空間"
+  },
+  "workspaceNav": {
+    "home": "首頁",
+    "projects": "專案",
+    "tasks": "任務",
+    "meetings": "會議",
+    "decisions": "決策",
+    "knowledge": "知識庫",
+    "group": "工作空間",
+    "members": "成員",
+    "settings": "設定"
+  },
+  "badge": {
+    "new": "新",
+    "soon": "即將推出"
+  },
+  "search": {
+    "label": "搜尋",
+    "placeholder": "你想找什麼？",
+    "noResults": "找不到結果。",
+    "pagesGroup": "頁面"
+  },
+  "userMenu": {
+    "settings": "設定",
+    "language": "語言",
+    "upgrade": "升級方案",
+    "support": "支援",
+    "logOut": "登出"
+  },
+  "sidebar": {
+    "open": "展開側邊欄",
+    "close": "收合側邊欄"
+  }
+}

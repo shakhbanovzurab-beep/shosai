@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "Hub",
+    "removeLabel": "Sacar la reunión de {hub}",
+    "suggestion": "Parece de «{hub}»",
+    "file": "Agregar",
+    "other": "Otro hub…",
+    "fileTo": "Agregar a un hub…",
+    "createFirst": "Crear el primero",
+    "noBoard": "el hub no tiene tablero",
+    "archived": "el hub está archivado",
+    "filedToast": "Las próximas reuniones de esta serie llegarán aquí solas",
+    "removedToast": "Se sacó de {hub}",
+    "pickerTitle": "Agregar a un hub",
+    "pickerSearch": "Buscar un hub",
+    "pickerEmpty": "Ningún hub coincide"
+  },
+  "brief": {
+    "title": "Hoy",
+    "empty": "Hoy no hay nada urgente",
+    "prepTitle": "Próximas reuniones",
+    "prepFor": "Antes de la reunión del {date}",
+    "prepOpen": "Pendiente en este hub",
+    "prepLast": "La última vez · {date}",
+    "prepMaterials": "Materiales",
+    "signal": "{circles, plural, =2 {Se habló de {subject} dos veces sin llegar a una decisión.} =3 {Se habló de {subject} tres veces sin llegar a una decisión.} =4 {Se habló de {subject} cuatro veces sin llegar a una decisión.} =5 {Se habló de {subject} cinco veces sin llegar a una decisión.} one {Se habló de {subject} # vez sin llegar a una decisión.} many {Se habló de {subject} # de veces sin llegar a una decisión.} other {Se habló de {subject} # veces sin llegar a una decisión.}}",
+    "blockers": "Cada vez fue: {quotes}."
+  }
+}

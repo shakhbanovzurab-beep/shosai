@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo đang đọc hộp thư đến của bạn…",
+    "readingNew": "{count, plural, other {Leo đang đọc # thư mới…}}",
+    "sorted": "{count, plural, other {Leo đã phân loại # thư}}",
+    "sortedWithDrafts": "{count, plural, other {Leo đã phân loại # thư}} · {drafts, plural, other {đã soạn # thư nháp trả lời}}",
+    "sortFailed": "Leo không thể phân loại hộp thư đến của bạn"
+  },
+  "focus": {
+    "mostUrgentFirst": "Gấp nhất trước ({count, number})",
+    "setAside": "{count, plural, other {# thư khác chưa cần bạn xử lý lúc này.}}",
+    "setAsideLow": "{count, plural, other {# thư khác chưa cần bạn xử lý lúc này}}, {low, plural, other {trong đó # thư có mức ưu tiên thấp.}}",
+    "showAll": "Hiện tất cả thư",
+    "archiveLow": "Lưu trữ thư ưu tiên thấp",
+    "caughtUpTitle": "Bạn đã xử lý hết",
+    "caughtUpDescription": "Không có gì đang chờ bạn. Leo sẽ đánh dấu những thư mới cần bạn trả lời hoặc quyết định."
+  },
+  "triage": {
+    "needs_you": "Cần bạn xử lý",
+    "fyi": "Để tham khảo",
+    "low": "Ưu tiên thấp"
+  },
+  "triageHint": {
+    "needs_you": "Đang chờ bạn trả lời hoặc quyết định",
+    "fyi": "Nên biết, không cần làm gì",
+    "low": "Có thể để sau hoặc lưu trữ"
+  },
+  "triageMenu": {
+    "trigger": "Đã phân loại là {triage}. Đổi cách phân loại thư này",
+    "sortedByYou": "Do bạn phân loại",
+    "sortedByLeo": "Do Leo phân loại",
+    "leosPick": "Leo chọn · {hint}"
+  },
+  "replyBy": {
+    "overdue": "Quá hạn",
+    "today": "Trả lời hôm nay",
+    "tomorrow": "Trả lời ngày mai",
+    "by": "Trả lời trước {when}"
+  },
+  "tags": {
+    "reading": "Leo đang đọc…",
+    "replied": "Đã trả lời",
+    "needsYou": "Cần bạn xử lý",
+    "draftReady": "Thư nháp đã sẵn sàng"
+  },
+  "card": {
+    "label": "Tóm tắt của Leo",
+    "readingEmail": "Leo đang đọc thư này…",
+    "readFailed": "Leo không thể đọc thư này",
+    "readFailedHint": "Hãy thử lại sau giây lát.",
+    "repliedAgo": "Đã trả lời {ago}",
+    "repliedOn": "Đã trả lời ngày {date}",
+    "reviewDraft": "Xem thư nháp",
+    "noDraft": "Không có thư nháp: thư trả lời này cần ý kiến của chính bạn.",
+    "archive": "Lưu trữ"
+  },
+  "draft": {
+    "reviewLabel": "Xem thư nháp Leo soạn để trả lời {name}",
+    "drafted": "Leo đã soạn thư trả lời",
+    "review": "Xem lại",
+    "heading": "Thư nháp của Leo · xem lại trước khi gửi",
+    "collapse": "Thu gọn thư nháp",
+    "field": "Trả lời {name}",
+    "discard": "Bỏ",
+    "send": "Gửi",
+    "discarded": "Đã bỏ thư nháp"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "Mit der Anfrage stimmt etwas nicht. Lade die Seite neu und versuche es erneut.",
+    "nameRequired": "Gib deinen Namen ein.",
+    "hotkeyUnsupported": "Dieses Tastenkürzel wird nicht unterstützt.",
+    "modelNotOnPlan": "Dieses Modell ist in deinem Abo nicht enthalten.",
+    "emailMismatch": "Diese E-Mail-Adresse passt nicht zu deinem Konto.",
+    "deletionUnavailable": "Das Löschen von Konten ist noch nicht angebunden. Es wurde nichts gelöscht.",
+    "avatarMissing": "Wähle ein Bild zum Hochladen aus.",
+    "avatarType": "Verwende ein Bild im Format WebP, JPEG oder PNG.",
+    "paymentsUnavailable": "Zahlungen sind noch nicht angebunden. Sobald die Abrechnung aktiv ist, öffnet sich hier die sichere Seite des Anbieters.",
+    "checkoutUnavailable": "Zahlungen sind noch nicht angebunden. Sobald die Abrechnung aktiv ist, öffnet sich hier der Bezahlvorgang des Anbieters.",
+    "invoiceNotFound": "Rechnung nicht gefunden.",
+    "connectorNotFound": "Konnektor nicht gefunden.",
+    "authorizationExpired": "Die Autorisierung ist abgelaufen oder wurde bereits verwendet. Versuche erneut, die Verbindung herzustellen.",
+    "dataKindUnknown": "Unbekannte Datenart.",
+    "dataItemNotFound": "Dieser Eintrag existiert nicht mehr.",
+    "mcpNameRequired": "Gib dem Server einen Namen.",
+    "mcpNameTooLong": "Der Name ist zu lang. Verwende einen kürzeren.",
+    "mcpUrlInvalid": "Gib die http(s)-URL des Servers ein.",
+    "mcpServerNotFound": "Server nicht gefunden.",
+    "memoryNotFound": "Gedächtniseintrag nicht gefunden.",
+    "summaryMessageRequired": "Schreib eine Frage oder eine Änderung."
+  },
+  "avatarTooLarge": "Das Bild ist größer als {size}.",
+  "invoice": {
+    "title": "Rechnung {number}",
+    "date": "Datum: {date}",
+    "description": "Beschreibung: {description}",
+    "amount": "Betrag: {amount}",
+    "status": "Zahlungsstatus: {status}",
+    "demoNote": "Demo-Rechnung. Die echte Rechnung ist ein PDF aus dem Abrechnungssystem."
+  },
+  "notesFromYou": "Deine Anmerkungen"
+}

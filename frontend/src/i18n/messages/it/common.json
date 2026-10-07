@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "add": "Aggiungi",
+    "cancel": "Annulla",
+    "close": "Chiudi",
+    "copyLink": "Copia link",
+    "create": "Crea",
+    "delete": "Elimina",
+    "duplicate": "Duplica",
+    "open": "Apri",
+    "remove": "Rimuovi",
+    "rename": "Rinomina",
+    "renameMenu": "Rinomina…",
+    "retry": "Riprova",
+    "save": "Salva",
+    "undo": "Annulla"
+  },
+  "fields": {
+    "name": "Nome"
+  },
+  "feedback": {
+    "linkCopied": "Link copiato",
+    "linkCopyFailed": "Impossibile copiare il link",
+    "loading": "Caricamento…"
+  },
+  "actionsFor": "Azioni per {name}",
+  "errors": {
+    "backendUnreachable": "Impossibile raggiungere il server. Riprova tra qualche istante."
+  }
+}

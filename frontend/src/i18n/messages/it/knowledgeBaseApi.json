@@ -1,0 +1,6 @@
+{
+  "invalidSettings": "Impossibile leggere le impostazioni. Ricarica la pagina e riprova.",
+  "unknownSource": "Questa fonte non esiste.",
+  "notConnected": "Questa fonte non è collegata.",
+  "fieldRequired": "Il campo {field} è obbligatorio."
+}

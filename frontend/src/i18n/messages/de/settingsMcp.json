@@ -1,0 +1,23 @@
+{
+  "description": "Verbinde Model-Context-Protocol-Server, um Leo Tools und Daten aus anderen Apps zu geben.",
+  "add": "Server hinzufügen",
+  "empty": {
+    "title": "Keine MCP-Server",
+    "description": "Füge einen Remote-Server über seine URL hinzu."
+  },
+  "hasAuth": "Mit Autorisierung",
+  "notReached": "Noch nicht erreicht",
+  "tools": "{count, plural, one {# Tool} other {# Tools}}",
+  "enable": "{name} aktivieren",
+  "disable": "{name} deaktivieren",
+  "remove": "{name} entfernen",
+  "removed": "{name} entfernt",
+  "form": {
+    "transport": "Übertragung",
+    "url": "Server-URL",
+    "auth": "Authorization-Header <optional>(optional)</optional>"
+  },
+  "addFailed": "Der Server konnte nicht hinzugefügt werden.",
+  "toggleFailed": "Der Server konnte nicht geändert werden",
+  "removeFailed": "Der Server konnte nicht entfernt werden"
+}

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Dự án",
+    "project": "Dự án"
+  },
+  "title": "Dự án",
+  "description": "Mỗi dự án gom một phần công việc vào một nơi: các cuộc họp, quyết định và công việc của nó.",
+  "newProject": "Dự án mới",
+  "filter": {
+    "label": "Dự án nào",
+    "open": "Đang thực hiện",
+    "all": "Tất cả"
+  },
+  "empty": {
+    "title": "Chưa có dự án nào",
+    "text": "Hãy tạo dự án cho công việc kéo dài qua nhiều cuộc họp, như một đợt ra mắt hay tuyển dụng. Sau đó có thể thêm cuộc họp và công việc vào dự án."
+  },
+  "status": {
+    "planned": "Đã lên kế hoạch",
+    "active": "Đang hoạt động",
+    "paused": "Tạm dừng",
+    "completed": "Hoàn thành"
+  },
+  "ledBy": "{who, select, me {Bạn là trưởng dự án} other {Trưởng dự án: {name}}}",
+  "noLead": "Chưa có trưởng dự án",
+  "target": {
+    "none": "Chưa có ngày dự kiến",
+    "overdue": "Quá hạn · {date}",
+    "today": "Dự kiến hôm nay",
+    "tomorrow": "Dự kiến ngày mai",
+    "on": "Dự kiến {date}"
+  },
+  "progress": {
+    "label": "{total, plural, other {Đã xong {done, number}/# công việc}}",
+    "count": "{done, number}/{total, number}",
+    "none": "Chưa có công việc"
+  },
+  "notFound": {
+    "title": "Dự án này không còn ở đây",
+    "text": "Có thể dự án đã bị xóa. Các cuộc họp và công việc của nó vẫn còn trong không gian làm việc.",
+    "action": "Tất cả dự án"
+  },
+  "sections": {
+    "tasks": "Công việc",
+    "addTask": "Thêm công việc",
+    "tasksEmpty": "Chưa có công việc nào. Hãy thêm một công việc, hoặc chia sẻ một cuộc họp vào dự án này để đưa công việc của cuộc họp vào.",
+    "meetings": "Cuộc họp",
+    "meetingsEmpty": "Cuộc họp được chia sẻ vào dự án này sẽ hiện ở đây.",
+    "decisions": "Quyết định",
+    "files": "Tệp",
+    "filesLabel": "Tệp của {project}",
+    "filesEmpty": "Tệp được thêm vào dự án này sẽ hiện ở đây, và Leo sẽ dùng chúng cho dự án."
+  },
+  "header": {
+    "edit": "Chỉnh sửa dự án",
+    "delete": "Xóa dự án",
+    "lead": "Trưởng dự án",
+    "team": "Nhóm",
+    "target": "Ngày dự kiến",
+    "deleteTitle": "Xóa {name}?",
+    "deleteText": "Các cuộc họp, công việc và quyết định của dự án vẫn ở lại trong không gian làm việc; chúng chỉ không còn thuộc dự án nào."
+  },
+  "dialog": {
+    "newTitle": "Dự án mới",
+    "editTitle": "Chỉnh sửa {name}",
+    "description": "Một nơi cho một phần công việc: các cuộc họp, quyết định và công việc của nó.",
+    "nameRequired": "Hãy đặt tên cho dự án.",
+    "namePlaceholder": "Ví dụ: Bản beta ứng dụng di động",
+    "purpose": "Mục đích",
+    "lead": "Trưởng dự án",
+    "me": "{name} (bạn)",
+    "team": "Nhóm",
+    "wholeWorkspace": "Cả không gian làm việc",
+    "status": "Trạng thái",
+    "target": "Ngày dự kiến",
+    "create": "Tạo dự án",
+    "saved": "Đã lưu {name}",
+    "created": "Đã tạo {name}"
+  }
+}

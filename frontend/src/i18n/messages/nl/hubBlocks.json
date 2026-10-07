@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "Wat nog openstaat",
+    "empty": "Er hangt niets — alles is afgesloten",
+    "more": "{count, plural, one {Nog # minder dringend punt wordt hier niet getoond} other {Nog # minder dringende punten worden hier niet getoond}}",
+    "why": "Waarom?",
+    "done": "Klaar",
+    "dismiss": "Klopt niet",
+    "assign": "Toewijzen",
+    "abandon": "Laten vallen",
+    "rowLabel": "{subject} — details",
+    "doneToast": "Gemarkeerd als klaar",
+    "dismissToast": "{days, plural, one {Weggeklikt voor # dag} other {Weggeklikt voor # dagen}}",
+    "abandonToast": "Gemarkeerd als laten vallen",
+    "assignedToast": "Toegewezen aan {owner}",
+    "assignTitle": "Wie pakt het op?",
+    "assignLabel": "Eigenaar",
+    "assignPlaceholder": "Naam",
+    "loadError": "Kan niet laden wat nog openstaat"
+  },
+  "digest": {
+    "title": "Sinds de vorige vergadering",
+    "meeting": "{title}, {date}",
+    "opened": "Nieuw",
+    "closed": "Afgesloten",
+    "untouched": "Niet besproken",
+    "untouchedHint": "houdt de hub op, maar niemand heeft er in de vergadering iets over gezegd",
+    "loadError": "Kan de samenvatting van de vorige vergadering niet laden"
+  },
+  "feed": {
+    "title": "Wat hier is gebeurd",
+    "facts": {
+      "decision": "Besluit",
+      "promise": "Afspraak",
+      "risk": "Risico",
+      "problem": "Probleem",
+      "question": "Open vraag"
+    },
+    "superseded": "vervangen",
+    "replacedBy": "op {date} vervangen door ‘{text}’",
+    "jumpTo": "Naar het moment {moment} gaan",
+    "earlier": "Eerdere vergaderingen tonen",
+    "empty": "Nog geen vergaderingen hier. Ze verschijnen zodra de eerste in deze hub terechtkomt.",
+    "quiet": "Er is niets bijzonders gezegd",
+    "loadError": "Kan niet laden wat hier is gebeurd"
+  },
+  "materials": {
+    "title": "Materialen",
+    "addLink": "Link toevoegen",
+    "upload": "Uploaden",
+    "find": "Zoeken in materialen",
+    "removeLabel": "{title} uit hub verwijderen",
+    "gone": "dit materiaal is er niet meer",
+    "origin": "{source, select, meeting {uit een vergadering · {date}} other {handmatig toegevoegd · {date}}}",
+    "empty": "Nog geen materialen. Samenvattingen van vergaderingen komen hier vanzelf; voeg op elk moment links of bestanden toe.",
+    "noMatches": "Niets gevonden voor ‘{query}’",
+    "addTitle": "Link toevoegen",
+    "titleLabel": "Titel",
+    "urlLabel": "Link",
+    "added": "Toegevoegd",
+    "removed": "Uit hub verwijderd",
+    "uploadFailed": "{file}: {reason}",
+    "loadError": "Kan de materialen niet laden"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "Năng suất",
+    "hub": "Hub",
+    "email": "Email",
+    "meetings": "Cuộc họp",
+    "calendar": "Lịch",
+    "kanban": "Kanban",
+    "notes": "Ghi chú",
+    "fileManager": "Trình quản lý tệp",
+    "studio": "Studio",
+    "knowledge": "Kiến thức",
+    "downloadApp": "Tải ứng dụng",
+    "appGroup": "Ứng dụng",
+    "workspacesGroup": "Không gian làm việc"
+  },
+  "workspaceNav": {
+    "home": "Trang chủ",
+    "projects": "Dự án",
+    "tasks": "Công việc",
+    "meetings": "Cuộc họp",
+    "decisions": "Quyết định",
+    "knowledge": "Kiến thức",
+    "group": "Không gian làm việc",
+    "members": "Thành viên",
+    "settings": "Cài đặt"
+  },
+  "badge": {
+    "new": "Mới",
+    "soon": "Sắp có"
+  },
+  "search": {
+    "label": "Tìm kiếm",
+    "placeholder": "Bạn đang tìm gì?",
+    "noResults": "Không tìm thấy kết quả nào.",
+    "pagesGroup": "Trang"
+  },
+  "userMenu": {
+    "settings": "Cài đặt",
+    "language": "Ngôn ngữ",
+    "upgrade": "Nâng cấp gói",
+    "support": "Hỗ trợ",
+    "logOut": "Đăng xuất"
+  },
+  "sidebar": {
+    "open": "Mở rộng thanh bên",
+    "close": "Thu gọn thanh bên"
+  }
+}

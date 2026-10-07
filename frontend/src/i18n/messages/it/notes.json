@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Note",
+    "description": "Riunioni trascritte con note, azioni da intraprendere e mappe mentali."
+  },
+  "recency": {
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "thisWeek": "Questa settimana",
+    "earlier": "Meno recenti"
+  },
+  "fields": {
+    "meeting": "Riunione",
+    "folder": "Cartella",
+    "people": "Persone",
+    "participants": "Partecipanti",
+    "duration": "Durata",
+    "date": "Data"
+  },
+  "views": {
+    "label": "Disposizione",
+    "timeline": "Cronologia",
+    "grid": "Griglia",
+    "list": "Elenco"
+  },
+  "upload": {
+    "button": "Carica registrazione",
+    "hint": "Oppure trascina un file in un punto qualsiasi della pagina",
+    "dropTitle": "Rilascia le registrazioni per caricarle",
+    "dropHint": "mp3, m4a, wav, mp4, webm e altri · fino a {size}",
+    "notMedia": "{name} non è un file audio o video",
+    "tooLarge": "{name} è troppo grande",
+    "sizeLimit": "Le registrazioni possono arrivare fino a {size}."
+  },
+  "recordings": {
+    "uploading": "Caricamento",
+    "justNow": "Adesso",
+    "transcribing": "Trascrizione in corso",
+    "transcribingNow": "Trascrizione in corso…",
+    "waiting": "In attesa della trascrizione…",
+    "timelineStatus": "Trascrizione in corso… Al termine, qui compariranno note, decisioni e una mappa mentale."
+  },
+  "remove": "Rimuovi {name}",
+  "folders": {
+    "label": "Cartelle",
+    "all": "Tutte le riunioni",
+    "new": "Nuova cartella",
+    "newMenu": "Nuova cartella…",
+    "newNamed": "Nuova cartella «{name}»",
+    "defaultName": "Nuova cartella",
+    "nameLabel": "Nome della cartella",
+    "none": "Nessuna cartella",
+    "add": "Aggiungi a cartella",
+    "moveTo": "Sposta in cartella",
+    "search": "Cerca cartelle…",
+    "noMatch": "Nessuna cartella corrispondente.",
+    "movedTo": "Spostata in {folder}",
+    "removedFrom": "Rimossa dalla cartella",
+    "emptyTitle": "Questa cartella è vuota",
+    "emptyDescription": "Fai clic con il tasto destro su una riunione e scegli «{action}» per aggiungerla qui."
+  },
+  "card": {
+    "latest": "Ultima riunione",
+    "keyPoints": "Punti chiave",
+    "openNotes": "Apri le note",
+    "openItems": "{count, plural, one {# aperta} many {# aperte} other {# aperte}}"
+  },
+  "timeline": {
+    "decision": "Decisione:",
+    "openTasks": "{count, plural, one {# attività aperta} many {# di attività aperte} other {# attività aperte}}"
+  },
+  "menu": {
+    "openInNewTab": "Apri in una nuova scheda",
+    "exportTranscript": "Esporta trascrizione"
+  },
+  "exportFormats": {
+    "txt": "Testo semplice",
+    "md": "Markdown",
+    "srt": "Sottotitoli SubRip",
+    "vtt": "Sottotitoli WebVTT",
+    "json": "File JSON"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "«{title}» eliminata"
+}

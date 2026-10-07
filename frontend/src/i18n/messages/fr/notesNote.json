@@ -1,0 +1,74 @@
+{
+  "back": "Toutes les notes",
+  "notFound": "Note introuvable",
+  "participants": {
+    "count": "{count, plural, one {# participant} many {# de participants} other {# participants}}",
+    "inMeeting": "{count, plural, one {# personne dans cette réunion.} many {# de personnes dans cette réunion.} other {# personnes dans cette réunion.}}",
+    "you": "{name} (vous)",
+    "added": "{email} fait maintenant partie de la réunion",
+    "addPlaceholder": "Ajouter par e-mail…",
+    "addLabel": "Ajouter un participant par e-mail",
+    "invalid": "Saisissez une adresse e-mail, par exemple nom@entreprise.com.",
+    "duplicate": "Cette personne participe déjà à cette réunion."
+  },
+  "tabs": {
+    "notes": "Notes",
+    "enhanced": "Enrichies",
+    "transcript": "Transcription",
+    "mindMap": "Carte mentale"
+  },
+  "enhanced": {
+    "writtenBy": "Rédigées par Leo à partir de la transcription de la réunion et de vos notes.",
+    "writtenByTemplate": "Rédigées par Leo à partir de la transcription de la réunion et de vos notes, selon le modèle « {template} ».",
+    "writing": "Rédaction des notes enrichies…",
+    "nothingFor": "Cette réunion ne contient rien pour les rubriques du modèle « {template} »."
+  },
+  "export": {
+    "button": "Exporter",
+    "transcriptAs": "Transcription au format"
+  },
+  "myNotes": {
+    "loadFailed": "Impossible de charger vos notes",
+    "saveFailed": "Impossible d’enregistrer vos notes"
+  },
+  "editor": {
+    "placeholder": "Écrivez vos notes…",
+    "label": "Vos notes",
+    "toolbar": "Mise en forme",
+    "addLink": "Ajouter un lien",
+    "removeLink": "Retirer le lien",
+    "bold": "Gras",
+    "italic": "Italique",
+    "linkPlaceholder": "Collez un lien…",
+    "linkAddress": "Adresse du lien",
+    "link": "Lien",
+    "turnInto": "Transformer en",
+    "blocks": {
+      "text": "Texte",
+      "h1": "Titre 1",
+      "h2": "Titre 2",
+      "h3": "Titre 3",
+      "ordered": "Liste numérotée",
+      "bullet": "Liste à puces"
+    }
+  },
+  "transcript": {
+    "label": "Transcription",
+    "search": "Rechercher dans la transcription",
+    "searchPlaceholder": "Rechercher dans la transcription…",
+    "matches": "{count, plural, =0 {Aucun résultat} one {# résultat} many {# de résultats} other {# résultats}}",
+    "position": "{current, number} sur {total, number}",
+    "previous": "Résultat précédent",
+    "next": "Résultat suivant",
+    "clear": "Effacer la recherche"
+  },
+  "speakers": {
+    "title": "Qui a parlé",
+    "share": "{speaker} : {share} du temps de parole",
+    "lines": "{count, plural, one {# intervention} many {# d’interventions} other {# interventions}}"
+  },
+  "mindMap": {
+    "title": "Carte mentale : {topic}",
+    "caption": "Générée à partir de la transcription de la réunion."
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "title": "मीटिंग",
+  "description": "सदस्यों ने यहां जो रिकॉर्डिंग शेयर की हैं, Leo के सारांश, फ़ैसलों और टास्क के साथ।",
+  "sharingRules": "शेयर करने के नियम",
+  "reviewSharingRules": "शेयर करने के नियम देखें",
+  "shareMeeting": "मीटिंग शेयर करें",
+  "searchMeetings": "मीटिंग खोजें",
+  "loading": "मीटिंग लोड हो रही हैं…",
+  "loadFailed": "मीटिंग लोड नहीं की जा सकीं",
+  "empty": {
+    "title": "अभी तक कुछ भी शेयर नहीं किया गया है",
+    "text": "मीटिंग यहां तब आती हैं, जब कोई सदस्य अपनी कोई रिकॉर्डिंग शेयर करता है, या जब सिर्फ़ {workspace} के सदस्यों वाली कोई मीटिंग ख़त्म होती है और शेयर करने के नियम लागू होते हैं।"
+  },
+  "noMatch": {
+    "title": "कोई मीटिंग मेल नहीं खाती",
+    "text": "दूसरे शब्द, कोई दूसरी टीम या सभी मीटिंग आज़माएं।",
+    "clear": "फ़िल्टर साफ़ करें"
+  },
+  "recency": {
+    "thisWeek": "इस हफ़्ते",
+    "lastWeek": "पिछले हफ़्ते",
+    "earlier": "इससे पहले"
+  },
+  "scope": {
+    "label": "कौन-सी मीटिंग",
+    "all": "सभी",
+    "mine": "जिनमें आप थे"
+  },
+  "when": {
+    "today": "आज",
+    "yesterday": "कल",
+    "tomorrow": "कल"
+  },
+  "row": {
+    "recordedByYou": "आपने रिकॉर्ड की",
+    "recordedBy": "{name} ने रिकॉर्ड की",
+    "withGuests": "मेहमानों के साथ",
+    "decisions": "{count, plural, one {# फ़ैसला} other {# फ़ैसले}}",
+    "tasks": "{count, plural, one {# टास्क} other {# टास्क}}"
+  },
+  "meeting": {
+    "back": "मीटिंग",
+    "loading": "मीटिंग लोड हो रही है…",
+    "loadFailed": "मीटिंग लोड नहीं की जा सकी",
+    "date": "तारीख",
+    "duration": "अवधि",
+    "participants": "प्रतिभागी",
+    "participantsWithGuests": "{names} ({count, plural, one {{workspace} से बाहर का # व्यक्ति} other {{workspace} से बाहर के # लोग}})",
+    "project": "प्रोजेक्ट",
+    "recordedByYou": "आपने रिकॉर्ड की। यह आपके नोट में भी है; आप कभी भी शेयर करना बंद कर सकते हैं, यह वहीं रहेगी।",
+    "sharedBy": "{name} ने रिकॉर्ड और शेयर की",
+    "summary": "सारांश",
+    "transcript": "ट्रांसक्रिप्ट",
+    "keyPoints": "मुख्य बातें",
+    "decisions": "फ़ैसले",
+    "replacedLater": "बाद में बदला गया",
+    "tasks": "टास्क",
+    "transcriptPrivateTitle": "सिर्फ़ सारांश शेयर किया गया है",
+    "transcriptPrivate": "{name} ने ट्रांसक्रिप्ट प्राइवेट रखा है। अगर आपको सटीक शब्द चाहिए, तो उनसे पूछें।",
+    "transcriptPrivateUnknown": "आयोजक ने ट्रांसक्रिप्ट प्राइवेट रखा है। अगर आपको सटीक शब्द चाहिए, तो उनसे पूछें।",
+    "unavailableTitle": "यह मीटिंग उपलब्ध नहीं है",
+    "unavailable": "यह मौजूद नहीं है, आपके साथ शेयर नहीं की गई है, या इसके मालिक ने इसे शेयर करना बंद कर दिया है।",
+    "backToMeetings": "मीटिंग पर वापस जाएं"
+  },
+  "project": {
+    "label": "प्रोजेक्ट",
+    "none": "कोई प्रोजेक्ट नहीं"
+  },
+  "audience": {
+    "participants": "प्रतिभागी",
+    "workspace": "{workspace} में सभी",
+    "unknownTeam": "एक टीम",
+    "participantsHint": "वे सदस्य जो मीटिंग में थे।",
+    "workspaceHint": "वर्कस्पेस में सभी, अभी और आगे भी।",
+    "teamHint": "{team} के सदस्य, और प्रतिभागी।",
+    "privateTeamHint": "{team} (प्राइवेट टीम) के सदस्य, और प्रतिभागी।",
+    "sharedWith": "{level, select, participants {प्रतिभागियों के साथ शेयर किया गया} workspace {{workspace} में सभी के साथ शेयर किया गया} other {{team} के साथ शेयर किया गया}}",
+    "sharedToast": "{level, select, participants {“{title}” {workspace} में प्रतिभागियों के साथ शेयर की गई} workspace {“{title}” {workspace} में सभी के साथ शेयर की गई} other {“{title}” {workspace} में {team} के साथ शेयर की गई}}"
+  },
+  "share": {
+    "lockedHint": "सिर्फ़ इसे शेयर करने वाला व्यक्ति या कोई एडमिन ही बदल सकता है कि इसे कौन देखे",
+    "change": "बदलें कि यह मीटिंग कौन देखे",
+    "title": "यह मीटिंग कौन देखता है",
+    "description": "सारांश, फ़ैसले और टास्क। लोग Leo से जो सवाल पूछते हैं, वे उन्हीं तक रहते हैं।",
+    "external": "{workspace} से बाहर के लोग भी शामिल थे। सिर्फ़ वही शेयर करें जिससे उन्हें कोई आपत्ति न हो।",
+    "audienceLabel": "किसके साथ शेयर की गई",
+    "includeTranscript": "ट्रांसक्रिप्ट भी शामिल करें",
+    "includeTranscriptHint": "नहीं तो सिर्फ़ सारांश शेयर होगा।",
+    "transcriptShared": "ट्रांसक्रिप्ट भी शेयर किया गया है",
+    "summaryOnly": "अब सिर्फ़ सारांश शेयर किया गया है",
+    "addedToProject": "प्रोजेक्ट में जोड़ा गया",
+    "removedFromProject": "प्रोजेक्ट से हटाया गया",
+    "stopMine": "शेयर करना बंद करें (मेरे नोट में रखें)",
+    "takeOut": "{workspace} से हटाएं"
+  },
+  "shareDialog": {
+    "allSharedTitle": "सब कुछ शेयर किया जा चुका है",
+    "allShared": "आपकी सभी रिकॉर्डिंग पहले से {workspace} में हैं।",
+    "title": "अपनी कोई मीटिंग शेयर करें",
+    "description": "यह आपकी ही रहती है और आपके नोट में बनी रहती है; जब तक आप शेयर करना बंद नहीं करते, {workspace} इसे देख सकता है।",
+    "meeting": "मीटिंग",
+    "movesFrom": "यह अभी {workspace} में शेयर की गई है; यहां शेयर करने पर यह यहां आ जाएगी।",
+    "audience": "इसे कौन देखता है",
+    "audienceHint": "इसके फ़ैसले और टास्क भी साथ आते हैं; प्रतिभागी इसे हमेशा देख सकते हैं।",
+    "submit": "शेयर करें"
+  }
+}

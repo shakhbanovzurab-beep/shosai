@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Details",
+    "stages": "Phasen",
+    "history": "Verlauf",
+    "summaryDecided": "{rounds, plural, one {# Mal besprochen – entschieden am {date}.} other {# Mal besprochen – entschieden am {date}.}}",
+    "summaryOpen": "{rounds, plural, one {# Mal besprochen – keine Entscheidung.} other {# Mal besprochen – keine Entscheidung.}}",
+    "blockers": "Jedes Mal hieß es: {quotes}.",
+    "round": "Runde {index, number}",
+    "blocker": "Was im Weg stand",
+    "decision": "Entscheidung",
+    "decisionChanged": "Die Entscheidung hat sich geändert",
+    "previous": "Vorher",
+    "current": "Jetzt",
+    "decidedAt": "{date}, „{meeting}“",
+    "outcome": "Wie es ausging",
+    "outcomeUnknown": "das Ergebnis steht noch aus",
+    "links": {
+      "causes": "Blockiert",
+      "blocked_by": "Blockiert durch",
+      "outcome_of": "Folgt aus der Entscheidung"
+    },
+    "sources": "Quellen",
+    "dismissals": "Ausblendungen",
+    "dismissedByYou": "Von dir ausgeblendet",
+    "disproved": "Widerlegt: {evidence}",
+    "dismissedUntil": "bis {date}",
+    "returned": "die Frist ist abgelaufen und es ist wieder da",
+    "owner": "Zugewiesen an",
+    "noOwner": "nicht zugewiesen",
+    "due": "Fällig",
+    "noDue": "kein Datum",
+    "goneTitle": "Das ist nicht mehr da",
+    "goneText": "Der Hub wurde möglicherweise gelöscht oder die Aufnahme des Meetings entfernt.",
+    "loadError": "Die Details konnten nicht geladen werden"
+  },
+  "why": {
+    "source": "Quelle",
+    "meeting": "Meeting am {date}, „{title}“",
+    "said": "Gesagt von",
+    "moment": "Zeitpunkt",
+    "jump": "Zum Zeitpunkt springen",
+    "signals": {
+      "series": "Meetings dieser Serie sind schon hier.",
+      "subject": "Im Gespräch ging es um diesen Hub.",
+      "title": "Er steht im Titel des Meetings.",
+      "entity": "Der Name fiel im Gespräch.",
+      "organisation": "Die Personen gehören zu dieser Organisation.",
+      "human": "Du hast es selbst hier eingeordnet."
+    },
+    "loadError": "Die Quelle konnte nicht geladen werden"
+  }
+}

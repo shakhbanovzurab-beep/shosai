@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Catatan yang disempurnakan",
+    "description": "Leo memilih struktur yang sesuai dengan rapat."
+  },
+  "sections": {
+    "summary": "Ringkasan",
+    "keyPoints": "Poin penting",
+    "decisions": "Keputusan",
+    "actionItems": "Tindak lanjut"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Kabar terkini: investor",
+      "description": "Kabar rutin untuk investor: posisi saat ini dan bantuan apa yang bisa mereka berikan."
+    },
+    "catchUpPortfolio": {
+      "name": "Kabar terkini: perusahaan portofolio",
+      "description": "Pemantauan rutin dengan perusahaan portofolio tentang metrik, risiko, dan permintaan."
+    },
+    "lpProspective": {
+      "name": "LP: calon mitra",
+      "description": "Percakapan awal dengan calon LP (mitra terbatas)."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: Rapat dewan",
+      "description": "Diskusi dewan, keputusan, dan pemiliknya."
+    },
+    "vcPitch": {
+      "name": "VC: Sesi pitch",
+      "description": "Pitch dari pendiri: apa yang menonjol, kesimpulan, dan uji tuntas yang perlu dilakukan."
+    },
+    "oneOnOne": {
+      "name": "1:1",
+      "description": "Rapat empat mata: perkembangan, topik, dan langkah berikutnya yang disepakati."
+    },
+    "customerCall": {
+      "name": "Panggilan pelanggan",
+      "description": "Penggalian kebutuhan atau pemantauan dengan pelanggan: kendala, permintaan, dan tindak lanjut."
+    },
+    "teamSync": {
+      "name": "Sinkronisasi tim",
+      "description": "Rapat tim rutin: kabar terbaru, keputusan, dan siapa mengerjakan apa."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Posisi saat ini",
+    "updatesShared": "Kabar yang disampaikan",
+    "whatWeAgreed": "Kesepakatan",
+    "followUps": "Tindak lanjut",
+    "companyUpdate": "Kabar perusahaan",
+    "metricsAndHighlights": "Metrik dan sorotan",
+    "howWeCanHelp": "Bagaimana kami dapat membantu",
+    "overview": "Gambaran umum",
+    "theirInterests": "Minat mereka",
+    "nextSteps": "Langkah berikutnya",
+    "boardSummary": "Ringkasan dewan",
+    "discussion": "Diskusi",
+    "resolutions": "Resolusi",
+    "ownersAndDeadlines": "Pemilik dan tenggat",
+    "thePitch": "Isi pitch",
+    "whatStoodOut": "Yang menonjol",
+    "verdict": "Kesimpulan",
+    "diligenceToDos": "Daftar uji tuntas",
+    "howItsGoing": "Perkembangan",
+    "topics": "Topik",
+    "context": "Konteks",
+    "painsAndRequests": "Kendala dan permintaan",
+    "outcome": "Hasil",
+    "updates": "Kabar terbaru",
+    "decisions": "Keputusan",
+    "whoDoesWhat": "Siapa mengerjakan apa"
+  },
+  "icons": {
+    "enhanced": "Catatan yang disempurnakan",
+    "briefcase": "Tas kerja",
+    "chart": "Grafik",
+    "handshake": "Jabat tangan",
+    "landmark": "Gedung",
+    "lightbulb": "Bola lampu",
+    "magnet": "Magnet tapal kuda",
+    "phone": "Telepon",
+    "rocket": "Roket",
+    "calendar": "Kalender",
+    "users": "Orang"
+  },
+  "menu": {
+    "label": "Template catatan yang disempurnakan",
+    "search": "Cari template…",
+    "noMatch": "Tidak ada template yang cocok.",
+    "heading": "Template",
+    "regenerate": "Buat ulang catatan",
+    "newTemplate": "Template baru…"
+  },
+  "rewritten": "Catatan ditulis ulang dengan “{template}”",
+  "regenerated": "Catatan yang disempurnakan telah dibuat ulang",
+  "created": "Template “{template}” dibuat",
+  "dialog": {
+    "title": "Template baru",
+    "description": "Pilih bagian yang ditulis Leo untuk rapat dan nama setiap bagian.",
+    "namePlaceholder": "mis. Penggalian kebutuhan penjualan…",
+    "nameRequired": "Beri nama template.",
+    "descriptionLabel": "Deskripsi",
+    "descriptionPlaceholder": "Kapan memakainya…",
+    "ownDescription": "Template milik Anda.",
+    "icon": "Ikon",
+    "sections": "Bagian",
+    "include": "Sertakan {section}",
+    "heading": "Judul untuk {section}",
+    "sectionsRequired": "Pertahankan minimal satu bagian.",
+    "create": "Buat template"
+  }
+}

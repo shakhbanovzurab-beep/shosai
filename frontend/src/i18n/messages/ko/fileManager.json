@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "파일 관리자",
+    "description": "파일을 둘러보고 정리하고 업로드하며, Leo가 사용할 파일을 골라요.",
+    "folderTitle": "폴더 · 파일 관리자"
+  },
+  "myFiles": "내 파일",
+  "loading": "파일을 불러오는 중…",
+  "loadFailed": "파일을 불러오지 못했어요",
+  "allFiles": {
+    "heading": "모든 파일",
+    "emptyTitle": "아직 파일이 없어요",
+    "emptyDescription": "파일을 업로드하거나 여기에 끌어다 놓아 보세요. 그런 다음 Leo가 사용할 파일을 고르세요."
+  },
+  "folders": {
+    "heading": "폴더",
+    "new": "새 폴더",
+    "untitled": "제목 없는 폴더",
+    "emptyTitle": "아직 폴더가 없어요",
+    "emptyDescription": "폴더를 만들어 파일을 정리하거나, Leo가 여러 파일을 한 번에 읽게 해 보세요.",
+    "fileCount": "{count, plural, other {파일 #개}}",
+    "dropHere": "놓아서 여기로 이동",
+    "dropHereLeo": "놓아서 여기로 이동하세요. Leo가 이 파일을 사용해요.",
+    "updated": "{ago} 업데이트",
+    "leoReadsAll": "Leo가 이 폴더에서 읽을 수 있는 모든 파일을 사용해요"
+  },
+  "folder": {
+    "notFound": "폴더를 찾을 수 없어요",
+    "notFoundDescription": "다른 세션에서 삭제되었거나 이름이 바뀌었을 수 있어요.",
+    "backToMyFiles": "내 파일로 돌아가기",
+    "back": "뒤로",
+    "emptyTitle": "이 폴더는 비어 있어요",
+    "emptyLeo": "파일을 여기에 업로드하거나 옮기면 Leo가 사용해요.",
+    "empty": "파일을 여기에 업로드하거나, 내 파일에서 이 폴더로 끌어다 놓거나, 파일 메뉴의 이동을 사용해 보세요."
+  },
+  "section": {
+    "label": "파일",
+    "view": "파일 보기",
+    "grid": "격자",
+    "list": "목록",
+    "noMatch": "일치하는 파일이 없어요",
+    "noMatchDescription": "이 필터에 맞는 항목이 없어요.",
+    "clearFilters": "필터 지우기"
+  },
+  "toolbar": {
+    "filterSort": "필터 및 정렬",
+    "show": "표시",
+    "fileType": "파일 형식",
+    "allTypes": "모든 형식",
+    "sortBy": "정렬 기준"
+  },
+  "show": {
+    "all": "모든 파일",
+    "starred": "즐겨찾기",
+    "leo": "Leo가 사용 중",
+    "shared": "워크스페이스에 공유됨"
+  },
+  "sort": {
+    "modified": "최근 수정",
+    "name": "이름",
+    "size": "파일 크기"
+  },
+  "kinds": {
+    "archive": "압축 파일",
+    "design": "디자인",
+    "document": "문서",
+    "image": "이미지",
+    "other": "파일",
+    "pdf": "PDF",
+    "presentation": "프레젠테이션",
+    "spreadsheet": "스프레드시트",
+    "text": "텍스트"
+  },
+  "file": {
+    "star": "{name} 즐겨찾기에 추가",
+    "unstar": "{name} 즐겨찾기에서 제거",
+    "modified": "{ago} 수정",
+    "inFolderModified": "<hidden>폴더: </hidden><name>{folder}</name> · {ago} 수정",
+    "inFolder": "<hidden>폴더: </hidden><name>{folder}</name>",
+    "sharedIn": "{workspaces}에 공유됨",
+    "sharedInHidden": "<hidden>공유된 워크스페이스: </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "수정일",
+    "size": "크기",
+    "actions": "옵션"
+  },
+  "leo": {
+    "viaFile": "직접 선택한 파일이라 Leo가 사용해요",
+    "viaFolder": "폴더를 통해 Leo가 이 파일을 사용해요",
+    "reading": "Leo · 읽는 중",
+    "failed": "Leo가 읽지 못했어요",
+    "tooLarge": "Leo는 최대 {size}까지 파일을 읽을 수 있어요",
+    "extension": "Leo는 .{extension} 파일을 읽을 수 없어요",
+    "unknownType": "Leo는 이 형식의 파일을 읽을 수 없어요"
+  },
+  "menu": {
+    "addStar": "즐겨찾기에 추가",
+    "removeStar": "즐겨찾기에서 제거",
+    "moveTo": "이동",
+    "useWithLeo": "Leo와 함께 사용",
+    "usedThrough": "“{folder}” 폴더를 통해 사용 중",
+    "share": "워크스페이스에 공유…",
+    "sharing": "워크스페이스 공유 관리…",
+    "transferTo": "소유권 이전",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "폴더 삭제"
+  },
+  "dialogs": {
+    "renameFile": "파일 이름 변경",
+    "renameFolder": "폴더 이름 변경",
+    "shareTitle": "“{name}” 공유",
+    "shareDescription": "선택한 사람에게 Leo가 워크스페이스에서 이 파일을 바탕으로 답해요. 파일은 여기 그대로 남고 계속 내 소유이며, 파일을 삭제하거나 워크스페이스에서 나가면 워크스페이스에서도 사라져요.",
+    "transferTitle": "“{name}”을(를) {workspace}(으)로 이전할까요?",
+    "transferDescription": "파일이 내 파일에서 빠져나가 {workspace} 소유가 돼요. 내가 나가도 그곳에 남고, 관리자가 관리해요. 이 파일을 공유한 다른 워크스페이스에서는 사라져요. 되돌릴 수 없어요.",
+    "transfer": "이전"
+  },
+  "upload": {
+    "button": "업로드",
+    "uploading": "{count, plural, other {파일 #개 업로드 중…}}",
+    "dropHere": "놓아서 여기에 업로드",
+    "skipped": "{count, plural, other {파일 #개를 건너뛰었어요}}",
+    "skippedDescription": "비어 있거나 {size}보다 큰 파일은 건너뛰며, 한 번에 최대 {max, number}개까지 업로드할 수 있어요."
+  },
+  "picker": {
+    "search": "내 파일 검색",
+    "noMatch": "일치하는 파일이 없어요.",
+    "noFiles": "아직 파일이 없어요. 먼저 파일 관리자에서 업로드해 주세요.",
+    "yourFiles": "내 파일",
+    "alreadyShared": "이미 여기에 공유됨"
+  }
+}

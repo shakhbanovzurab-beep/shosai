@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Nâng cấp gói"
+  },
+  "title": "Nâng cấp gói của bạn",
+  "subtitle": "Bắt đầu miễn phí với {minutes, plural, other {# phút họp}} mỗi tháng. Nâng cấp khi bạn cần họp nhiều hơn.",
+  "loading": "Đang tải các gói…",
+  "loadFailed": "Không thể tải các gói",
+  "seatNote": "Suất của bạn trong <b>{workspace}</b> bao gồm {plan}, nên cuộc họp riêng, Trình quản lý tệp và kiến thức cho Leo của bạn theo giới hạn của gói này. Gói cá nhân của bạn là riêng biệt.",
+  "pricesNote": "Giá tính bằng đô la Mỹ, chưa gồm thuế; gói Team tính phí theo người dùng. Thông tin thanh toán chỉ được nhập trên trang bảo mật của nhà cung cấp thanh toán.",
+  "audiences": {
+    "individual": "Cá nhân",
+    "team": "Nhóm",
+    "enterprise": "Doanh nghiệp"
+  },
+  "seatRange": "({min, number}–{max, number} người dùng)",
+  "seatRangeOpen": "({min, number}+ người dùng)",
+  "card": {
+    "yourPlan": "Gói của bạn",
+    "recommended": "Đề xuất",
+    "custom": "Tùy chỉnh",
+    "tailored": "Thiết kế riêng cho tổ chức của bạn",
+    "perMonth": "/ tháng",
+    "perUserPerMonth": "mỗi người dùng / tháng",
+    "billedMonthly": "Thanh toán hằng tháng, hủy bất cứ lúc nào",
+    "freeForever": "Miễn phí mãi mãi",
+    "seatsTotal": "{total} / tháng cho {seats, plural, other {# người dùng}}",
+    "notIncluded": "Không bao gồm: {item}"
+  },
+  "seats": {
+    "label": "Người dùng",
+    "fewer": "Bớt người dùng",
+    "more": "Thêm người dùng"
+  },
+  "action": {
+    "current": "Gói hiện tại",
+    "upgradeTo": "Nâng cấp lên {plan}",
+    "switchTo": "Chuyển sang {plan}",
+    "upgradeFailed": "Không thể bắt đầu nâng cấp",
+    "switchFailed": "Không thể đổi gói"
+  },
+  "usage": {
+    "label": "Phút họp tháng này",
+    "title": "Phút họp",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "Đã dùng {used, number} trên {limit, plural, other {# phút}}",
+    "left": "Còn {left, number} trên {limit, plural, other {# phút họp}}",
+    "allUsed": "Bạn đã dùng hết phút họp",
+    "resets": "Đặt lại vào {date}",
+    "leftShort": "Còn {left, plural, other {# phút}} · đặt lại vào {date}",
+    "recordingPaused": "Đã tạm dừng ghi đến {date}.",
+    "paused": "Cuộc họp tạm dừng đến {date}.",
+    "pausedUpgrade": "Cuộc họp tạm dừng đến {date}. Hãy nâng cấp lên {plan} để họp không giới hạn.",
+    "getUnlimited": "Họp không giới hạn"
+  },
+  "gate": {
+    "checking": "Đang kiểm tra gói của bạn…",
+    "seePlans": "Xem các gói",
+    "comparePlans": "So sánh các gói",
+    "upgradeTo": "Nâng cấp lên {plan}",
+    "offer": "{plan} bao gồm {unlimited, select, yes {dung lượng không giới hạn} other {{amount}}}.",
+    "offerPriced": "{plan} bao gồm {unlimited, select, yes {dung lượng không giới hạn} other {{amount}}} với giá {price} mỗi tháng.",
+    "file_manager": {
+      "partOf": "Trình quản lý tệp có trong {plan}",
+      "notInPlan": "Gói của bạn không có Trình quản lý tệp",
+      "pitch": "Giữ tệp ở một nơi, chọn tệp nào Leo được dùng, và chia sẻ trong các không gian làm việc."
+    },
+    "knowledge_base": {
+      "partOf": "Kiến thức có trong {plan}",
+      "notInPlan": "Gói của bạn không có Kiến thức",
+      "pitch": "Chọn tệp và kết nối nguồn để Leo có thể dựa vào đó mà trả lời."
+    }
+  },
+  "sales": {
+    "contact": "Liên hệ bộ phận kinh doanh",
+    "title": "Trao đổi với bộ phận kinh doanh",
+    "description": "Hãy cho chúng tôi biết về nhóm của bạn, chúng tôi sẽ xây dựng gói Enterprise phù hợp.",
+    "workEmail": "Email công việc",
+    "company": "Công ty",
+    "teamSize": "Quy mô nhóm",
+    "teamSizePlaceholder": "Chọn",
+    "teamSizeRange": "{min, number}–{max, number} người",
+    "teamSizeOpen": "{min, number}+ người",
+    "message": "Bạn cần gì? <muted>(không bắt buộc)</muted>",
+    "messagePlaceholder": "Nhà cung cấp SSO, đánh giá bảo mật, số suất…",
+    "send": "Gửi yêu cầu",
+    "chooseTeamSize": "Hãy chọn quy mô nhóm.",
+    "sendFailed": "Không thể gửi yêu cầu của bạn.",
+    "sentTitle": "Cảm ơn bạn — chúng tôi sẽ sớm liên hệ",
+    "sentDescription": "Đội ngũ của chúng tôi thường trả lời trong vòng một ngày làm việc.",
+    "done": "Xong"
+  }
+}

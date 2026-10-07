@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "Bacheca non trovata.",
+  "taskNotFound": "Attività non trovata.",
+  "columnNotFound": "Colonna non trovata.",
+  "boardChanged": "La bacheca è cambiata. Ricaricala e riprova.",
+  "managedInJira": "Questa bacheca è gestita in Jira. Apporta la modifica lì.",
+  "reconnectJira": "Per apportare modifiche, ricollega Jira in Impostazioni › Connettori.",
+  "firstSync": "Attendi che finisca la prima sincronizzazione con Jira.",
+  "jiraDisconnected": "Jira è scollegato. Ricollegalo in Impostazioni › Connettori per mantenere sincronizzata questa bacheca.",
+  "connectJiraFirst": "Prima collega Jira in Impostazioni › Connettori.",
+  "jiraBoardUnavailable": "Questa bacheca Jira non è disponibile per il tuo account Jira.",
+  "jiraBoardSynced": "Questa bacheca Jira è già sincronizzata.",
+  "notJiraBoard": "Puoi sincronizzare solo le bacheche collegate a Jira.",
+  "jiraBoardWorkspaceTasks": "Le bacheche Jira mostrano solo ticket Jira. Scegli una bacheca gestita nell’app.",
+  "workspaceTaskCopy": "Le attività degli spazi di lavoro non si possono duplicare qui. Aggiungi invece un’attività nello spazio di lavoro.",
+  "workspaceTaskDelete": "Le attività degli spazi di lavoro lasciano la bacheca quando vengono completate o riassegnate nello spazio di lavoro.",
+  "boardNameRequired": "Dai un nome alla bacheca.",
+  "boardNameTooLong": "Il nome è troppo lungo. Usane uno più breve.",
+  "taskTitleRequired": "Dai un titolo all’attività.",
+  "invalidRequest": "Qualcosa nella richiesta non va. Ricarica la pagina e riprova."
+}

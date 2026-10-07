@@ -1,0 +1,36 @@
+{
+  "answers": "Answers",
+  "model": {
+    "title": "Model",
+    "description": "Auto picks a fitting model for each task. Frontier models use your weekly frontier tokens (see Usage).",
+    "label": "Leo model",
+    "auto": "Auto",
+    "autoHint": "Leo picks per task"
+  },
+  "language": {
+    "title": "Response language",
+    "description": "Auto answers in the language of the interface.",
+    "auto": "Auto"
+  },
+  "length": {
+    "title": "Response length",
+    "description": "How much Leo says by default.",
+    "options": {
+      "concise": "Concise",
+      "balanced": "Balanced",
+      "detailed": "Detailed"
+    }
+  },
+  "advanced": {
+    "title": "Advanced settings",
+    "description": "What Leo may use. Anything switched off is neither offered nor used.",
+    "webSearch": "Web search",
+    "webSearchHint": "Let Leo automatically search the internet for answers.",
+    "voiceMode": "Voice mode",
+    "voiceModeHint": "Talking to Leo out loud. Switching it off removes the microphone from the interface.",
+    "knowledgeSearch": "Knowledge search",
+    "knowledgeSearchHint": "Look for answers in the files and sources you chose for Leo.",
+    "connectedSearch": "Search in connected services",
+    "connectedSearchHint": "Search connected services, such as Google Drive and Notion."
+  }
+}

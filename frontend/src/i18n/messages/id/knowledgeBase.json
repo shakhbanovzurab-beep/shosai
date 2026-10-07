@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Pengetahuan",
+    "description": "Pilih file dan sumber yang digunakan Leo untuk menjawab di Pribadi."
+  },
+  "heading": "Pengetahuan",
+  "intro": "Sumber jawaban Leo saat Anda bertanya di Pribadi: file yang Anda pilih dari Pengelola file, sumber yang Anda hubungkan, dan yang dibagikan ruang kerja Anda kepada Anda. Hanya Anda yang melihat jawaban ini.",
+  "tabs": {
+    "files": "File",
+    "sources": "Sumber",
+    "workspaces": "Dari ruang kerja"
+  },
+  "loadFailed": "Tidak dapat memuat file Anda",
+  "leoFolders": {
+    "heading": "Folder yang dibaca Leo",
+    "stop": "Berhenti menggunakan {folder}"
+  },
+  "leoFiles": {
+    "heading": "File yang digunakan Leo",
+    "emptyTitle": "Leo belum menggunakan file Anda",
+    "emptyDescription": "Pilih file atau seluruh folder dari Pengelola file, atau unggah file baru di atas."
+  },
+  "summary": {
+    "files": "File",
+    "chunks": "Potongan",
+    "processing": "Diproses",
+    "embeddings": "Embedding",
+    "used": "{used} digunakan",
+    "usedOfLimit": "{used} dari {limit} dalam paket Anda",
+    "failedUsage": "{failed, plural, other {# tidak berhasil}} · {usage}",
+    "inIndex": "di indeks vektor",
+    "busy": "mengurai dan membuat embedding",
+    "caughtUp": "semua sudah diproses",
+    "dimensions": "{dimensions, number} dimensi"
+  },
+  "dropzone": {
+    "label": "Tambahkan file untuk Leo",
+    "title": "Letakkan file di sini agar digunakan Leo",
+    "uploading": "Mengunggah {count, plural, other {# file}}…",
+    "description": "File disimpan ke File saya di Pengelola file. {types}, masing-masing hingga {size}.",
+    "choose": "Pilih dari file Anda",
+    "upload": "Unggah baru",
+    "skipped": "{count, plural, other {# file dilewati}}",
+    "unreadable": "{name}: Leo tidak dapat membaca jenis atau ukuran ini",
+    "tooMany": "{name}: lebih dari {max, number} file sekaligus"
+  },
+  "choose": {
+    "title": "Pilih dari file Anda",
+    "description": "Leo membaca yang Anda pilih dan menjawab darinya di Pribadi. Folder juga mencakup file yang Anda tambahkan nanti.",
+    "folders": "Seluruh folder",
+    "files": "File",
+    "alreadyUsed": "Sudah digunakan Leo",
+    "submit": "Gunakan dengan Leo",
+    "readingOne": "Leo sedang membacanya",
+    "readingMany": "{count, plural, other {Leo sedang membaca # pilihan}}",
+    "readingDescription": "Leo akan menjawab darinya di Pribadi setelah pengindeksan selesai."
+  },
+  "table": {
+    "status": "Status",
+    "chunks": "Potongan",
+    "size": "Ukuran",
+    "workspaces": "Ruang kerja",
+    "actions": "Tindakan",
+    "wholeFolder": "<name>{folder}</name> · seluruh folder"
+  },
+  "steps": {
+    "queued": "Dalam antrean",
+    "parsing": "Mengurai",
+    "chunking": "Memotong",
+    "embedding": "Membuat embedding",
+    "indexed": "Terindeks",
+    "failed": "Tidak berhasil"
+  },
+  "status": {
+    "step": "{step, number} dari {total, number}",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Indeks ulang",
+    "showInFileManager": "Tampilkan di Pengelola file",
+    "stopFolder": "Berhenti menggunakan “{folder}”",
+    "stopFile": "Berhenti gunakan dengan Leo"
+  }
+}

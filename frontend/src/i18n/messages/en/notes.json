@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Notes",
+    "description": "Transcribed meetings with notes, action items and mind maps."
+  },
+  "recency": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "thisWeek": "This week",
+    "earlier": "Earlier"
+  },
+  "fields": {
+    "meeting": "Meeting",
+    "folder": "Folder",
+    "people": "People",
+    "participants": "Participants",
+    "duration": "Duration",
+    "date": "Date"
+  },
+  "views": {
+    "label": "Layout",
+    "timeline": "Timeline",
+    "grid": "Grid",
+    "list": "List"
+  },
+  "upload": {
+    "button": "Upload recording",
+    "hint": "Or drop a file anywhere on the page",
+    "dropTitle": "Drop recordings to upload",
+    "dropHint": "mp3, m4a, wav, mp4, webm and more · up to {size}",
+    "notMedia": "{name} isn’t an audio or video file",
+    "tooLarge": "{name} is too large",
+    "sizeLimit": "Recordings can be up to {size}."
+  },
+  "recordings": {
+    "uploading": "Uploading",
+    "justNow": "Just now",
+    "transcribing": "Transcribing",
+    "transcribingNow": "Transcribing…",
+    "waiting": "Waiting for transcription…",
+    "timelineStatus": "Transcribing… notes, decisions and a mind map will appear here when it’s done."
+  },
+  "remove": "Remove {name}",
+  "folders": {
+    "label": "Folders",
+    "all": "All meetings",
+    "new": "New folder",
+    "newMenu": "New folder…",
+    "newNamed": "New folder “{name}”",
+    "defaultName": "New folder",
+    "nameLabel": "Folder name",
+    "none": "No folder",
+    "add": "Add to folder",
+    "moveTo": "Move to folder",
+    "search": "Search folders…",
+    "noMatch": "No folders match.",
+    "movedTo": "Moved to {folder}",
+    "removedFrom": "Removed from folder",
+    "emptyTitle": "This folder is empty",
+    "emptyDescription": "Right-click a meeting and choose “{action}” to add it here."
+  },
+  "card": {
+    "latest": "Latest meeting",
+    "keyPoints": "Key points",
+    "openNotes": "Open notes",
+    "openItems": "{count, plural, one {# open} other {# open}}"
+  },
+  "timeline": {
+    "decision": "Decision:",
+    "openTasks": "{count, plural, one {# open task} other {# open tasks}}"
+  },
+  "menu": {
+    "openInNewTab": "Open in new tab",
+    "exportTranscript": "Export transcript"
+  },
+  "exportFormats": {
+    "txt": "Plain text",
+    "md": "Markdown",
+    "srt": "SubRip subtitles",
+    "vtt": "WebVTT subtitles",
+    "json": "JSON"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "“{title}” deleted"
+}

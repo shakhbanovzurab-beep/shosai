@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, one {Son bir yılda <b>#</b> görev tamamlandı} other {Son bir yılda <b>#</b> görev tamamlandı}}",
+  "chart": {
+    "flat": "{count, plural, one {{from} ile {to} arasında # görev tamamlandı; ısı haritası olarak gösteriliyor. Günleri tek tek okumak için ok tuşlarını kullanın.} other {{from} ile {to} arasında # görev tamamlandı; ısı haritası olarak gösteriliyor. Günleri tek tek okumak için ok tuşlarını kullanın.}}",
+    "skyline": "{count, plural, one {{from} ile {to} arasında # görev tamamlandı; 3B şehir silüeti olarak gösteriliyor. Günleri tek tek okumak için ok tuşlarını kullanın.} other {{from} ile {to} arasında # görev tamamlandı; 3B şehir silüeti olarak gösteriliyor. Günleri tek tek okumak için ok tuşlarını kullanın.}}"
+  },
+  "day": "{count, plural, =0 {{date} tarihinde tamamlanan görev yok} one {{date} tarihinde # görev tamamlandı} other {{date} tarihinde # görev tamamlandı}}",
+  "tooltip": "{count, plural, =0 {{date} tarihinde <b>tamamlanan görev yok</b>} one {{date} tarihinde <b># görev tamamlandı</b>} other {{date} tarihinde <b># görev tamamlandı</b>}}",
+  "views": {
+    "label": "Grafik görünümü",
+    "flat": "Düz ısı haritası",
+    "skyline": "3B silüet"
+  },
+  "hint": {
+    "flat": "Ayrıntılar için bir günün üzerine gelin · gezinmek için ok tuşları",
+    "skyline": "Döndürmek için sürükleyin · sıfırlamak için çift tıklayın"
+  },
+  "levels": {
+    "label": "Etkinlik düzeyleri",
+    "less": "Az",
+    "more": "Çok",
+    "none": "Tamamlanan görev yok",
+    "light": "Hafif",
+    "moderate": "Orta",
+    "heavy": "Yoğun",
+    "heaviest": "Çok yoğun"
+  },
+  "stats": {
+    "total": "Son bir yıl",
+    "busiest": "En yoğun gün",
+    "longest": "En uzun seri",
+    "current": "Mevcut seri"
+  },
+  "units": {
+    "contributions": "{count, plural, one {tamamlanan görev} other {tamamlanan görev}}",
+    "days": "{count, plural, one {gün} other {gün}}"
+  }
+}

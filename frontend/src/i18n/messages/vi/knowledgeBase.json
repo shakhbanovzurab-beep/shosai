@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Kiến thức",
+    "description": "Chọn tệp và nguồn mà Leo dựa vào để trả lời trong không gian cá nhân."
+  },
+  "heading": "Kiến thức",
+  "intro": "Những gì Leo dựa vào để trả lời khi bạn hỏi trong không gian cá nhân: tệp bạn chọn từ Trình quản lý tệp, nguồn bạn kết nối, và những gì các không gian làm việc chia sẻ với bạn. Chỉ bạn thấy các câu trả lời này.",
+  "tabs": {
+    "files": "Tệp",
+    "sources": "Nguồn",
+    "workspaces": "Từ không gian làm việc"
+  },
+  "loadFailed": "Không thể tải tệp của bạn",
+  "leoFolders": {
+    "heading": "Thư mục Leo đọc",
+    "stop": "Ngừng dùng {folder}"
+  },
+  "leoFiles": {
+    "heading": "Tệp Leo dùng",
+    "emptyTitle": "Leo chưa dùng tệp nào của bạn",
+    "emptyDescription": "Chọn tệp hoặc cả thư mục từ Trình quản lý tệp, hoặc tải tệp mới lên ở trên."
+  },
+  "summary": {
+    "files": "Tệp",
+    "chunks": "Đoạn",
+    "processing": "Đang xử lý",
+    "embeddings": "Vector nhúng",
+    "used": "Đã dùng {used}",
+    "usedOfLimit": "{used} trên {limit} của gói",
+    "failedUsage": "{failed, plural, other {# tệp có lỗi}} · {usage}",
+    "inIndex": "trong chỉ mục vector",
+    "busy": "đang phân tích và tạo vector nhúng",
+    "caughtUp": "đã xử lý xong",
+    "dimensions": "{dimensions, number} chiều"
+  },
+  "dropzone": {
+    "label": "Thêm tệp cho Leo",
+    "title": "Thả tệp vào đây để Leo dùng",
+    "uploading": "Đang tải lên {count, plural, other {# tệp}}…",
+    "description": "Tệp được lưu vào Tệp của tôi trong Trình quản lý tệp. {types}, mỗi tệp tối đa {size}.",
+    "choose": "Chọn từ tệp của bạn",
+    "upload": "Tải tệp mới lên",
+    "skipped": "{count, plural, other {Đã bỏ qua # tệp}}",
+    "unreadable": "{name}: Leo không đọc được loại tệp hoặc kích thước này",
+    "tooMany": "{name}: quá {max, number} tệp cùng lúc"
+  },
+  "choose": {
+    "title": "Chọn từ tệp của bạn",
+    "description": "Leo đọc những gì bạn chọn và dựa vào đó để trả lời trong không gian cá nhân. Thư mục bao gồm cả các tệp bạn thêm vào sau này.",
+    "folders": "Cả thư mục",
+    "files": "Tệp",
+    "alreadyUsed": "Leo đã dùng rồi",
+    "submit": "Dùng với Leo",
+    "readingOne": "Leo đang đọc",
+    "readingMany": "{count, plural, other {Leo đang đọc # mục bạn chọn}}",
+    "readingDescription": "Leo sẽ trả lời dựa trên chúng trong không gian cá nhân khi lập chỉ mục xong."
+  },
+  "table": {
+    "status": "Trạng thái",
+    "chunks": "Đoạn",
+    "size": "Kích thước",
+    "workspaces": "Không gian làm việc",
+    "actions": "Thao tác",
+    "wholeFolder": "<name>{folder}</name> · cả thư mục"
+  },
+  "steps": {
+    "queued": "Đang chờ",
+    "parsing": "Đang phân tích",
+    "chunking": "Đang chia đoạn",
+    "embedding": "Đang tạo vector nhúng",
+    "indexed": "Đã lập chỉ mục",
+    "failed": "Có lỗi"
+  },
+  "status": {
+    "step": "{step, number}/{total, number}",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Lập chỉ mục lại",
+    "showInFileManager": "Hiện trong Trình quản lý tệp",
+    "stopFolder": "Ngừng dùng “{folder}”",
+    "stopFile": "Ngừng dùng với Leo"
+  }
+}

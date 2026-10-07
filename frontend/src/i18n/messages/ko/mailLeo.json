@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo가 받은편지함을 읽는 중…",
+    "readingNew": "{count, plural, other {Leo가 새 메일 #개를 읽는 중…}}",
+    "sorted": "{count, plural, other {Leo가 메일 #개를 분류했어요}}",
+    "sortedWithDrafts": "{count, plural, other {Leo가 메일 #개를 분류했어요}} · {drafts, plural, other {답장 초안 #개 작성}}",
+    "sortFailed": "Leo가 받은편지함을 분류하지 못했어요"
+  },
+  "focus": {
+    "mostUrgentFirst": "가장 급한 메일부터({count, number})",
+    "setAside": "{count, plural, other {나머지 메일 #개는 지금 확인하지 않아도 돼요.}}",
+    "setAsideLow": "{count, plural, other {나머지 메일 #개는 지금 확인하지 않아도 돼요}}. {low, plural, other {그중 #개는 우선순위가 낮아요.}}",
+    "showAll": "전체 메일 보기",
+    "archiveLow": "낮은 우선순위 보관",
+    "caughtUpTitle": "모두 확인했어요",
+    "caughtUpDescription": "기다리는 메일이 없어요. 답장이나 결정이 필요한 새 메일이 오면 Leo가 알려 드려요."
+  },
+  "triage": {
+    "needs_you": "확인 필요",
+    "fyi": "참고용",
+    "low": "낮은 우선순위"
+  },
+  "triageHint": {
+    "needs_you": "내 답장이나 결정을 기다리고 있어요",
+    "fyi": "알아 두면 좋지만 할 일은 없어요",
+    "low": "나중에 보거나 보관해도 돼요"
+  },
+  "triageMenu": {
+    "trigger": "{triage}(으)로 분류됨. 이 메일의 분류 변경",
+    "sortedByYou": "내가 분류함",
+    "sortedByLeo": "Leo가 분류함",
+    "leosPick": "Leo의 분류 · {hint}"
+  },
+  "replyBy": {
+    "overdue": "기한 지남",
+    "today": "오늘 답장",
+    "tomorrow": "내일 답장",
+    "by": "{when}까지 답장"
+  },
+  "tags": {
+    "reading": "Leo가 읽는 중…",
+    "replied": "답장함",
+    "needsYou": "확인 필요",
+    "draftReady": "초안 준비됨"
+  },
+  "card": {
+    "label": "Leo의 요약",
+    "readingEmail": "Leo가 이 메일을 읽는 중…",
+    "readFailed": "Leo가 이 메일을 읽지 못했어요",
+    "readFailedHint": "잠시 후 다시 시도해 주세요.",
+    "repliedAgo": "{ago} 답장함",
+    "repliedOn": "{date}에 답장함",
+    "reviewDraft": "초안 검토",
+    "noDraft": "초안 없음: 직접 판단해서 답장해야 하는 메일이에요.",
+    "archive": "보관"
+  },
+  "draft": {
+    "reviewLabel": "{name}에게 보낼 Leo의 답장 초안 검토",
+    "drafted": "Leo가 답장 초안을 작성했어요",
+    "review": "검토",
+    "heading": "Leo의 초안 · 보내기 전에 검토해 주세요",
+    "collapse": "초안 접기",
+    "field": "{name}에게 답장",
+    "discard": "버리기",
+    "send": "보내기",
+    "discarded": "초안을 버렸어요"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "add": "新增",
+    "cancel": "取消",
+    "close": "關閉",
+    "copyLink": "複製連結",
+    "create": "建立",
+    "delete": "刪除",
+    "duplicate": "建立副本",
+    "open": "開啟",
+    "remove": "移除",
+    "rename": "重新命名",
+    "renameMenu": "重新命名…",
+    "retry": "重試",
+    "save": "儲存",
+    "undo": "復原"
+  },
+  "fields": {
+    "name": "名稱"
+  },
+  "feedback": {
+    "linkCopied": "已複製連結",
+    "linkCopyFailed": "無法複製連結",
+    "loading": "正在載入…"
+  },
+  "actionsFor": "{name} 的動作",
+  "errors": {
+    "backendUnreachable": "無法連線到伺服器。請稍後再試一次。"
+  }
+}

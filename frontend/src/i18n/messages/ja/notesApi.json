@@ -1,0 +1,7 @@
+{
+  "meetingNotFound": "会議が見つかりません。",
+  "notesTooLong": "ノートは {max, number} 文字までです。",
+  "linkSettingsInvalid": "リンクの設定に問題があります。ページを再読み込みして、もう一度お試しください。",
+  "commentsClosed": "このリンクではコメントを受け付けていません。",
+  "commentInvalid": "{max, number} 文字以内でコメントを入力してください。"
+}

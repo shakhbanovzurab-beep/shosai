@@ -1,0 +1,6 @@
+{
+  "invalidSettings": "無法讀取設定。請重新載入頁面，然後再試一次。",
+  "unknownSource": "這個來源不存在。",
+  "notConnected": "這個來源尚未連接。",
+  "fieldRequired": "{field} 為必填欄位。"
+}

@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "Cliente de e-mail de código aberto",
+    "description": "Um cliente de e-mail de código aberto com navegação pela caixa de entrada, pesquisa de mensagens, leitura, resposta e arquivamento."
+  },
+  "preview": {
+    "title": "Prévia do e-mail",
+    "description": "Este quadro mostra a tela de e-mail independente. Abra em tela cheia para ver melhor.",
+    "openInNewTab": "Abrir e-mail em uma nova aba"
+  },
+  "nav": {
+    "inbox": "Caixa de entrada",
+    "priority": "Prioritários",
+    "drafts": "Rascunhos",
+    "sent": "Enviados",
+    "archive": "Arquivados",
+    "trash": "Lixeira",
+    "helpFeedback": "Ajuda e feedback",
+    "keyboardShortcuts": "Atalhos de teclado"
+  },
+  "sidebar": {
+    "newEmail": "Novo e-mail",
+    "folders": "Pastas"
+  },
+  "accounts": {
+    "switchTo": "Mudar para {name}",
+    "menu": "Menu da conta",
+    "title": "Contas",
+    "add": "Adicionar conta",
+    "manage": "Gerenciar contas",
+    "settings": "Configurações da conta",
+    "signOut": "Sair"
+  },
+  "inbox": {
+    "filter": "Filtrar e-mails",
+    "refresh": "Atualizar caixa de entrada",
+    "noSelection": "Nenhum e-mail selecionado",
+    "needsYou": "Precisa de você",
+    "allMail": "Todos os e-mails",
+    "pinnedGroup": "Fixados ({count, number})",
+    "inboxGroup": "Caixa de entrada ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "E-mail",
+    "drawerDescription": "Ler o e-mail selecionado",
+    "to": "Para: <names>{list}</names>",
+    "cc": "Cc: <names>{list}</names>",
+    "attachments": "Anexos ({count, number})"
+  },
+  "toolbar": {
+    "close": "Fechar e-mail",
+    "previous": "E-mail anterior",
+    "next": "Próximo e-mail",
+    "pin": "Fixar conversa",
+    "reply": "Responder",
+    "more": "Mais ações",
+    "replyAll": "Responder a todos",
+    "forward": "Encaminhar",
+    "addLabel": "Adicionar marcador"
+  },
+  "menu": {
+    "markRead": "Marcar como lido",
+    "markUnread": "Marcar como não lido",
+    "pin": "Fixar no topo",
+    "unpin": "Desafixar",
+    "markPriority": "Marcar como prioritário",
+    "removePriority": "Remover de Prioritários",
+    "labels": "Marcadores",
+    "copySender": "Copiar endereço do remetente",
+    "archive": "Arquivar",
+    "trash": "Mover para a lixeira"
+  },
+  "replyBar": {
+    "placeholder": "Responder a {name}…",
+    "label": "Responder a {name}",
+    "addEmoji": "Adicionar emoji",
+    "attachFile": "Anexar arquivo",
+    "send": "Enviar"
+  },
+  "toasts": {
+    "senderCopied": "{email} copiado",
+    "senderCopyFailed": "Não foi possível copiar o endereço",
+    "replySent": "Resposta enviada para {name}",
+    "archived": "{count, plural, one {# e-mail arquivado} many {# de e-mails arquivados} other {# e-mails arquivados}}",
+    "moved": "{folder, select, inbox {“{subject}” movido para a Caixa de entrada} drafts {“{subject}” movido para Rascunhos} sent {“{subject}” movido para Enviados} archive {“{subject}” movido para Arquivados} trash {“{subject}” movido para a Lixeira} other {“{subject}” movido}}"
+  }
+}

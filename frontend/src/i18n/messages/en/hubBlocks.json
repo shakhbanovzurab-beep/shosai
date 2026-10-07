@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "What’s unresolved",
+    "empty": "Nothing’s hanging — everything is closed",
+    "more": "{count, plural, one {# more, less urgent, isn’t shown here} other {# more, less urgent, aren’t shown here}}",
+    "why": "Why?",
+    "done": "Done",
+    "dismiss": "Not the case",
+    "assign": "Assign",
+    "abandon": "Abandoned",
+    "rowLabel": "{subject} — details",
+    "doneToast": "Marked as done",
+    "dismissToast": "{days, plural, one {Dismissed for # day} other {Dismissed for # days}}",
+    "abandonToast": "Marked as abandoned",
+    "assignedToast": "Assigned to {owner}",
+    "assignTitle": "Who takes it?",
+    "assignLabel": "Owner",
+    "assignPlaceholder": "Name",
+    "loadError": "Couldn’t load what’s unresolved"
+  },
+  "digest": {
+    "title": "Since the last meeting",
+    "meeting": "{title}, {date}",
+    "opened": "New",
+    "closed": "Closed",
+    "untouched": "Not discussed",
+    "untouchedHint": "holds the hub up, yet nobody said a word about it at the meeting",
+    "loadError": "Couldn’t load the last meeting’s summary"
+  },
+  "feed": {
+    "title": "What happened here",
+    "facts": {
+      "decision": "Decision",
+      "promise": "Promise",
+      "risk": "Risk",
+      "problem": "Problem",
+      "question": "Open question"
+    },
+    "superseded": "superseded",
+    "replacedBy": "replaced by “{text}” on {date}",
+    "jumpTo": "Jump to the moment {moment}",
+    "earlier": "Show earlier meetings",
+    "empty": "No meetings here yet. They’ll show up as soon as the first one lands in this hub.",
+    "quiet": "Nothing of note was said",
+    "loadError": "Couldn’t load what happened here"
+  },
+  "materials": {
+    "title": "Materials",
+    "addLink": "Add a link",
+    "upload": "Upload",
+    "find": "Find in materials",
+    "removeLabel": "Remove {title} from the hub",
+    "gone": "this material is gone",
+    "origin": "{source, select, meeting {from a meeting · {date}} other {added by hand · {date}}}",
+    "empty": "No materials yet. Meeting summaries land here on their own; add links or files any time.",
+    "noMatches": "Nothing matches “{query}”",
+    "addTitle": "Add a link",
+    "titleLabel": "Title",
+    "urlLabel": "Link",
+    "added": "Added",
+    "removed": "Removed from the hub",
+    "uploadFailed": "{file}: {reason}",
+    "loadError": "Couldn’t load the materials"
+  }
+}

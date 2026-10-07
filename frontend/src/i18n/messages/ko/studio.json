@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "어시스턴트가 누구와 대화하는지, 어떻게 행동하는지, 어떤 모델로 동작하는지 설정해요."
+  },
+  "tabs": {
+    "context": "컨텍스트",
+    "prompts": "프롬프트",
+    "models": "모델"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "실시간 답변",
+      "description": "어시스턴트 답변: 오버레이, 채팅, 회의",
+      "help": "실시간 답변: 오버레이, 채팅, 회의 중 답변이에요. 프롬프트로 어시스턴트 답변의 어조, 길이, 형식을 정해요."
+    },
+    "screenshots": {
+      "name": "스크린샷",
+      "description": "화면, 슬라이드, 문서 읽기",
+      "help": "스크린샷 분석: 오버레이의 “스크린샷” 버튼과 회의 중 화면 공유에 쓰여요. 프롬프트로 모델이 이미지를 읽는 방법과 답변할 내용을 정해요."
+    },
+    "code": {
+      "name": "코드",
+      "description": "코드와 알고리즘에 관한 질문",
+      "help": "코드와 알고리즘에 관한 질문이에요. 프롬프트로 프로그래밍 언어, 설명의 깊이, 복잡도와 테스트 표시 여부를 정해요."
+    },
+    "system_design": {
+      "name": "시스템 설계",
+      "description": "면접용 아키텍처 설계",
+      "help": "면접의 아키텍처 질문이에요. 프롬프트로 요구 사항, 추정, 설계, 트레이드오프 등 설명의 구성을 정해요."
+    },
+    "notes": {
+      "name": "노트와 마인드맵",
+      "description": "AI가 만든 회의 노트와 마인드맵",
+      "help": "AI가 만든 회의 노트와 마인드맵이에요. 프롬프트로 결정 사항, 후속 작업, 남은 질문 등 무엇을 남길지 정해요."
+    },
+    "transcript": {
+      "name": "스크립트",
+      "description": "실시간 음성 텍스트 변환",
+      "help": "실시간으로 음성을 텍스트로 변환해요. 음성 모델로 동작하며 프롬프트는 사용하지 않아요."
+    }
+  },
+  "autosave": {
+    "saving": "저장 중…"
+  },
+  "context": {
+    "intro": "나에 대한 짧은 소개예요. 모든 모델 요청의 첫 번째 시스템 메시지로 들어가요. 정확할수록 추가 질문이 줄어들어요.",
+    "loadFailed": "컨텍스트를 불러오지 못했어요",
+    "title": "내 소개",
+    "description": "어떤 사람인지, 어떤 일을 하는지, 어떤 답변을 원하는지 적어 주세요. 형용사보다 사실이 효과적이에요.",
+    "example": "역할: 시니어 백엔드 엔지니어, 6년 차, 핀테크.\n스택: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\n현재: 제품 회사의 시스템 설계 면접 준비 중.\n답변: 간결하게, 트레이드오프 포함. 따로 말하지 않으면 코드는 Python으로.\n피할 것: 일반적인 조언, 긴 서론.",
+    "count": "{count, number} / {max, plural, other {#자}} · 약 {tokens, plural, other {# 토큰}}",
+    "tooLong": "저장하려면 내용을 줄여 주세요.",
+    "saveFailed": "저장하지 못했어요.",
+    "savedAgo": "{ago} 저장됨",
+    "savesAutomatically": "자동으로 저장돼요"
+  },
+  "preview": {
+    "title": "전송 방식",
+    "description": "저장된 버전이 모든 요청의 맨 앞, 역할 프롬프트보다 먼저 들어가요.",
+    "system": "시스템",
+    "user": "사용자",
+    "empty": "(비어 있음 — 아무것도 보내지 않아요)",
+    "rolePrompt": "프롬프트 탭의 역할 프롬프트",
+    "question": "내 질문"
+  },
+  "models": {
+    "intro": "역할마다 답변할 모델을 선택해요. 목록에는 현재 구독에 포함된 모델만 표시돼요.",
+    "loadFailed": "모델을 불러오지 못했어요",
+    "model": "모델",
+    "temperature": "온도",
+    "maxTokens": "최대 토큰",
+    "reasoning": "추론",
+    "unsupported": "지원 안 됨",
+    "modelFor": "{role} 모델",
+    "temperatureFor": "{role} 온도",
+    "maxTokensRange": "최대 토큰은 {min, number}~{max, number} 사이의 정수여야 해요.",
+    "saveFailed": "모델 설정을 저장하지 못했어요"
+  },
+  "picker": {
+    "placeholder": "모델 선택…",
+    "search": "모델 검색…",
+    "empty": "일치하는 모델이 없어요.",
+    "frontier": "최상위"
+  }
+}

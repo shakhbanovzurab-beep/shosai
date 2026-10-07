@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo gelen kutunuzu okuyor…",
+    "readingNew": "{count, plural, one {Leo # yeni e-postayı okuyor…} other {Leo # yeni e-postayı okuyor…}}",
+    "sorted": "{count, plural, one {Leo # e-postayı sınıflandırdı} other {Leo # e-postayı sınıflandırdı}}",
+    "sortedWithDrafts": "{count, plural, one {Leo # e-postayı sınıflandırdı} other {Leo # e-postayı sınıflandırdı}} · {drafts, plural, one {# yanıt taslağı hazır} other {# yanıt taslağı hazır}}",
+    "sortFailed": "Leo gelen kutunuzu sınıflandıramadı"
+  },
+  "focus": {
+    "mostUrgentFirst": "En acil olanlar önce ({count, number})",
+    "setAside": "{count, plural, one {Diğer # e-posta şu an sizi beklemiyor.} other {Diğer # e-posta şu an sizi beklemiyor.}}",
+    "setAsideLow": "{count, plural, one {Diğer # e-posta şu an sizi beklemiyor} other {Diğer # e-posta şu an sizi beklemiyor}}; {low, plural, one {bunların # tanesi düşük öncelikli.} other {bunların # tanesi düşük öncelikli.}}",
+    "showAll": "Tüm e-postaları göster",
+    "archiveLow": "Düşük öncelikli olanları arşivle",
+    "caughtUpTitle": "Her şeye yetiştiniz",
+    "caughtUpDescription": "Sizi bekleyen bir şey yok. Leo, yanıt veya karar gerektiren yeni e-postaları işaretleyecek."
+  },
+  "triage": {
+    "needs_you": "Sizi bekliyor",
+    "fyi": "Bilginize",
+    "low": "Düşük öncelik"
+  },
+  "triageHint": {
+    "needs_you": "Yanıtınızı veya kararınızı bekliyor",
+    "fyi": "Bilmeye değer, yapılacak bir şey yok",
+    "low": "Bekleyebilir veya arşivlenebilir"
+  },
+  "triageMenu": {
+    "trigger": "Sınıf: {triage}. Bu e-postanın sınıfını değiştirin",
+    "sortedByYou": "Siz sınıflandırdınız",
+    "sortedByLeo": "Leo sınıflandırdı",
+    "leosPick": "Leo’nun seçimi · {hint}"
+  },
+  "replyBy": {
+    "overdue": "Gecikti",
+    "today": "Bugün yanıtla",
+    "tomorrow": "Yarın yanıtla",
+    "by": "Son yanıt tarihi: {when}"
+  },
+  "tags": {
+    "reading": "Leo okuyor…",
+    "replied": "Yanıtlandı",
+    "needsYou": "Sizi bekliyor",
+    "draftReady": "Taslak hazır"
+  },
+  "card": {
+    "label": "Leo’nun özeti",
+    "readingEmail": "Leo bu e-postayı okuyor…",
+    "readFailed": "Leo bu e-postayı okuyamadı",
+    "readFailedHint": "Birazdan tekrar deneyin.",
+    "repliedAgo": "{ago} yanıtlandı",
+    "repliedOn": "{date} tarihinde yanıtlandı",
+    "reviewDraft": "Taslağı incele",
+    "noDraft": "Taslak yok: bu yanıtı sizin yazmanız gerekiyor.",
+    "archive": "Arşivle"
+  },
+  "draft": {
+    "reviewLabel": "Leo’nun {name} için hazırladığı yanıt taslağını incele",
+    "drafted": "Leo bir yanıt taslağı hazırladı",
+    "review": "İncele",
+    "heading": "Leo’nun taslağı · göndermeden önce inceleyin",
+    "collapse": "Taslağı daralt",
+    "field": "Yanıtla: {name}",
+    "discard": "Sil",
+    "send": "Gönder",
+    "discarded": "Taslak silindi"
+  }
+}

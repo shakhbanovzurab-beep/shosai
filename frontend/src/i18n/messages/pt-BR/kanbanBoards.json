@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "Quadros",
+    "jiraBoards": "Sincronizados com o Jira",
+    "newBoard": "Novo quadro…",
+    "syncJiraBoard": "Sincronizar quadro do Jira…",
+    "rename": "Renomear quadro…",
+    "showWorkspaceTasks": "Mostrar aqui minhas tarefas dos espaços de trabalho",
+    "changeIcon": "Alterar ícone",
+    "delete": "Excluir quadro…",
+    "stopSyncing": "Parar de sincronizar…"
+  },
+  "icons": {
+    "work": "Trabalho",
+    "home": "Casa",
+    "personal": "Pessoal",
+    "health": "Saúde",
+    "study": "Estudos",
+    "travel": "Viagem",
+    "shopping": "Compras",
+    "fitness": "Exercícios",
+    "project": "Projeto",
+    "reading": "Leitura"
+  },
+  "empty": {
+    "title": "Nenhum quadro ainda",
+    "description": "Crie um quadro para o trabalho, a casa ou o que quiser, ou traga um quadro do Jira.",
+    "newBoard": "Novo quadro",
+    "syncJiraBoard": "Sincronizar quadro do Jira"
+  },
+  "newBoard": {
+    "title": "Novo quadro",
+    "description": "Separe trabalho, casa e tudo mais em quadros próprios.",
+    "namePlaceholder": "Ex.: Casa",
+    "icon": "Ícone",
+    "columns": "Colunas",
+    "create": "Criar quadro"
+  },
+  "templates": {
+    "simple": "Simples",
+    "project": "Projeto"
+  },
+  "columnNames": {
+    "backlog": "Pendências",
+    "todo": "A fazer",
+    "inProgress": "Em andamento",
+    "review": "Em revisão",
+    "done": "Concluído"
+  },
+  "renameTitle": "Renomear quadro",
+  "delete": {
+    "title": "Excluir “{board}”?",
+    "description": "{count, plural, =0 {O quadro será excluído. Essa ação não pode ser desfeita.} one {O quadro será excluído com # tarefa. Essa ação não pode ser desfeita.} many {O quadro será excluído com suas # de tarefas. Essa ação não pode ser desfeita.} other {O quadro será excluído com suas # tarefas. Essa ação não pode ser desfeita.}}",
+    "confirm": "Excluir quadro",
+    "stopTitle": "Parar de sincronizar “{board}”?",
+    "stopDescription": "O quadro será removido daqui. Nada muda no Jira, e você pode sincronizá-lo novamente mais tarde.",
+    "stopConfirm": "Parar de sincronizar"
+  },
+  "jira": {
+    "title": "Sincronizar quadro do Jira",
+    "description": "Trabalhe em um quadro do Jira por aqui; todas as alterações ficam sincronizadas nos dois sentidos.",
+    "connectTitle": "Conecte o Jira primeiro",
+    "connectDescription": "Entre no Jira em Configurações › Conectores e depois volte aqui para escolher um quadro.",
+    "openConnectors": "Abrir Conectores",
+    "connectedAs": "Conectado como {account}.",
+    "connected": "Conectado ao Jira.",
+    "noBoards": "Sua conta do Jira ainda não tem quadros.",
+    "boardList": "Quadros do Jira",
+    "alreadySynced": "Já sincronizado · abrir",
+    "type": {
+      "kanban": "Quadro Kanban",
+      "scrum": "Quadro Scrum"
+    },
+    "howColumns": "As colunas e os itens vêm do quadro do Jira.",
+    "howMoves": "Mover um cartão altera o status do item no Jira; novas tarefas viram itens do Jira.",
+    "howChanges": "As alterações feitas no Jira aparecem aqui automaticamente.",
+    "sync": "Sincronizar quadro"
+  },
+  "sync": {
+    "syncing": "Sincronizando com o Jira…",
+    "paused": "Sincronização pausada",
+    "synced": "Sincronizado com o Jira",
+    "syncedAgo": "Sincronizado com o Jira {ago}",
+    "syncNow": "Sincronizar agora",
+    "openBoard": "Abrir {board} no Jira",
+    "openHint": "Abrir no Jira · {project} em {site}"
+  },
+  "banners": {
+    "syncStopped": "A sincronização com o Jira foi interrompida.",
+    "changesPaused": "As alterações estão pausadas.",
+    "importing": "Importando {board} do Jira…",
+    "importingHint": "As colunas e os itens vão aparecer aqui em instantes.",
+    "offer": "{count, plural, one {Você tem # tarefa em aberto nos seus espaços de trabalho. Mostrá-la em “{board}”?} many {Você tem # de tarefas em aberto nos seus espaços de trabalho. Mostrá-las em “{board}”?} other {Você tem # tarefas em aberto nos seus espaços de trabalho. Mostrá-las em “{board}”?}} Mover um cartão atualiza a tarefa para sua equipe.",
+    "notNow": "Agora não",
+    "showHere": "{count, plural, one {Mostrar aqui} many {Mostrar aqui} other {Mostrar aqui}}"
+  },
+  "toasts": {
+    "createFailed": "Não foi possível criar o quadro",
+    "connectFailed": "Não foi possível sincronizar o quadro do Jira",
+    "updateFailed": "Não foi possível atualizar o quadro",
+    "deleteFailed": "Não foi possível excluir o quadro",
+    "syncFailed": "Não foi possível sincronizar com o Jira",
+    "deleted": "Quadro “{board}” excluído",
+    "stoppedSyncing": "Sincronização de “{board}” interrompida",
+    "workspaceTasksOn": "Suas tarefas dos espaços de trabalho agora aparecem em “{board}”",
+    "workspaceTasksOff": "Suas tarefas dos espaços de trabalho não aparecem mais em nenhum quadro",
+    "workspaceTasksHint": "Mover um cartão altera a tarefa no espaço de trabalho dela.",
+    "workspaceTasksFailed": "Não foi possível alterar onde as tarefas dos espaços de trabalho aparecem"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "title": "專注",
+  "sound": {
+    "label": "每輪結束時播放音效",
+    "on": "音效開啟",
+    "off": "音效關閉"
+  },
+  "rhythm": "專注節奏",
+  "presetLabel": "{name}：{hint}",
+  "presetTooltip": "<b>{name}。</b>{hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "番茄鐘",
+      "hint": "專注 {focus}，休息 {pause}，{every, plural, =1 {每一輪} other {每 # 輪}}後長休息 {longBreak}。適合剛開始和忙碌的日子。"
+    },
+    "fifty": {
+      "name": "延長版",
+      "hint": "專注 {focus}，休息 {pause}，{every, plural, =1 {每一輪} other {每 # 輪}}後長休息 {longBreak}。適合寫作和設計。"
+    },
+    "fiftyTwo": {
+      "name": "{focus, number}/{pause, number} 節奏",
+      "hint": "專注 {focus}，休息 {pause}。這是 DeskTime 研究中生產力最高的人採用的節奏。"
+    },
+    "deepWork": {
+      "name": "深度工作",
+      "hint": "專注 {focus}，休息 {pause}。剛好一個自然的注意力週期，適合處理困難問題。"
+    }
+  },
+  "phase": {
+    "focus": "專注",
+    "break": "短休息",
+    "long_break": "長休息"
+  },
+  "start": "開始",
+  "pause": "暫停",
+  "resume": "繼續",
+  "restart": "重新開始這個階段",
+  "skipBreak": "跳過休息",
+  "skipToBreak": "直接休息",
+  "cycle": "已完成 {done, number} / {every, plural, other {# 輪}}，之後長休息",
+  "doneToday": "{count, plural, other {今天已完成 # 輪}}",
+  "announce": "{phase}，{clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "專注結束。休息一下。",
+    "focusLong": "專注結束。好好長休息一下。",
+    "break": "休息結束。準備好專注了嗎？",
+    "next": "{preset} · 準備好後按「開始」。"
+  }
+}

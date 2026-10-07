@@ -1,0 +1,51 @@
+{
+  "share": "Share",
+  "sharedIn": "Shared in {workspace}",
+  "workspace": "Workspace",
+  "stopSharing": "Stop sharing",
+  "fileShare": {
+    "title": "Share in a workspace",
+    "description": "Leo answers from it there for whoever you choose. It stays in your File Manager and stays yours.",
+    "access": "Who can use it",
+    "everyone": "Everyone at {workspace}",
+    "sharedOption": "{workspace} · shared",
+    "noWorkspace": "You aren’t in any workspace yet.",
+    "toast": "{level, select, workspace {“{file}”: everyone at {workspace} can use it} other {“{file}”: {team} can use it in {workspace}}}"
+  },
+  "recordingShare": {
+    "title": "Share to a workspace",
+    "description": "It stays yours and stays here in your Notes. Questions you ask Leo about it stay private.",
+    "openIn": "Open it in {workspace}",
+    "tabWorkspace": "Workspace",
+    "tabLink": "Link",
+    "loadFailed": "Couldn’t load {workspace}.",
+    "moveTo": "Move to {workspace}",
+    "audienceHint": "Its summary, decisions and tasks. Participants can always see it.",
+    "sharedElsewhere": "It’s shared in {workspace} now; a meeting lives in one workspace at a time."
+  },
+  "myTasks": {
+    "title": "From your workspaces",
+    "onKanban": "On your Kanban",
+    "loadFailed": "Couldn’t load your workspace tasks.",
+    "empty": "Nothing assigned to you in your workspaces."
+  },
+  "actionItems": {
+    "tracked": "Tracked as tasks in <link>{workspace}</link>; changes here change them there."
+  },
+  "sharedMeetings": {
+    "nav": "Shared with you",
+    "loadFailed": "Couldn’t load shared meetings.",
+    "emptyTitle": "Nothing shared with you here yet",
+    "empty": "Meetings your teammates share with you, or with a team you’re in, show up here.",
+    "intro": "Shared with you in <link>{workspace}</link>. They live there; open one to see its notes, decisions and tasks."
+  },
+  "knowledge": {
+    "open": "Open its knowledge",
+    "summary": "{meetings, plural, one {# meeting} other {# meetings}}, {decisions, plural, one {# decision} other {# decisions}} and {projects, plural, one {# project} other {# projects}} you can open, plus {items, plural, one {# file or source} other {# files or sources}} you can use.",
+    "listLabel": "Knowledge of {workspace}",
+    "loadFailed": "Couldn’t load your workspaces’ knowledge",
+    "emptyTitle": "No workspaces yet",
+    "empty": "When you join a workspace, Leo can also answer here from what it shares with you.",
+    "intro": "Leo uses these when you ask in Personal, and only for you. Each answer says which workspace it came from. Knowledge for teams you aren’t in stays out."
+  }
+}

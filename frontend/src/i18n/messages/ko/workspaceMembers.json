@@ -1,0 +1,120 @@
+{
+  "title": "멤버",
+  "description": "{workspace}의 모든 멤버와 역할, 함께 공유하는 팀이에요.",
+  "invitePeople": "사람 초대",
+  "adminsInvite": "관리자만 사람을 초대할 수 있어요.",
+  "adminsInviteAsk": "관리자만 사람을 초대할 수 있어요. {name} 님에게 요청해 주세요.",
+  "tabs": {
+    "members": "멤버",
+    "teams": "팀"
+  },
+  "search": "사람 검색",
+  "pendingInvitations": "대기 중인 초대 · {count, number}",
+  "membersCount": "멤버 · {count, number}",
+  "noMatches": "일치하는 사람이 없어요",
+  "noMatchesHint": "이름, 이메일 또는 직함으로 찾아보세요.",
+  "clearSearch": "검색어 지우기",
+  "seats": {
+    "label": "라이선스",
+    "taken": "라이선스 {total, number}개 중 {taken, number}개 사용 중",
+    "breakdown": "· {members, plural, other {멤버 #명}}",
+    "breakdownPending": "· {members, plural, other {멤버 #명}}, {pending, plural, other {대기 중인 초대 #건}}",
+    "left": "{count, plural, other {남은 라이선스 #개.}} 대기 중인 초대는 수락되거나 취소될 때까지 라이선스를 차지해요.",
+    "fullAdd": "라이선스가 모두 사용 중이에요. 더 많은 사람을 초대하려면 라이선스를 추가해 주세요.",
+    "fullAsk": "라이선스가 모두 사용 중이에요. 소유자에게 라이선스 추가를 요청해 주세요.",
+    "change": "라이선스 변경"
+  },
+  "invitation": {
+    "by": "{name} 님이 초대함 · {ago}",
+    "byYou": "내가 초대함 · {ago}",
+    "byFormerMember": "이전 멤버가 초대함 · {ago}",
+    "resend": "다시 보내기",
+    "revoke": "취소",
+    "revokeFor": "{email} 초대 취소"
+  },
+  "member": {
+    "you": "나",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, other {#일 이상 비활성}}",
+    "roleOf": "{name} 님의 역할",
+    "remove": "워크스페이스에서 제거",
+    "removeTitle": "{name} 님을 {workspace}에서 제거할까요?",
+    "removeDescription": "{name} 님이 자신의 노트와 파일 관리자에서 공유한 회의와 파일은 함께 빠져요. 작업은 남고, 진행 중인 작업은 담당자 없음으로 바뀌어요. 라이선스 하나가 비게 돼요.",
+    "joinedTeam": "{name} 님이 {team} 팀에 참여했어요",
+    "leftTeam": "{name} 님이 {team} 팀에서 나갔어요"
+  },
+  "teams": {
+    "new": "새 팀",
+    "empty": "아직 팀이 없어요",
+    "emptyHint": "팀은 선택 사항이에요. 엔지니어링이나 영업처럼 그룹과 회의와 지식을 공유하고 싶을 때 만들어 보세요.",
+    "intro": "한 사람씩 공유하는 대신 팀과 회의와 지식을 공유해요.",
+    "deleteTitle": "{name} 팀을 삭제할까요?",
+    "deleteDescription": "팀의 회의는 참석자에게 계속 보이고, 팀 멤버는 워크스페이스에 그대로 남아요. 지식은 공개 대상 없이 남을 수 없으니 먼저 팀의 지식을 옮겨 주세요."
+  },
+  "team": {
+    "noDescription": "아직 설명이 없어요.",
+    "edit": "팀 편집",
+    "delete": "팀 삭제",
+    "members": "{count, plural, other {멤버 #명}}",
+    "membersLedBy": "{count, plural, other {멤버 #명}} · 리더: {name}",
+    "membersLedByYou": "{count, plural, other {멤버 #명}} · 리더: 나",
+    "join": "팀 참여",
+    "leave": "팀 나가기",
+    "youJoined": "{team} 팀에 참여했어요",
+    "youLeft": "{team} 팀에서 나갔어요"
+  },
+  "teamForm": {
+    "editTitle": "{name} 편집",
+    "description": "한 사람씩 공유하는 대신 그룹과 회의와 지식을 공유해요.",
+    "nameRequired": "팀 이름을 입력해 주세요.",
+    "namePlaceholder": "예: 디자인",
+    "descriptionLabel": "설명",
+    "descriptionPlaceholder": "이 팀이 하는 일",
+    "color": "색상",
+    "colors": {
+      "blue": "파란색",
+      "green": "초록색",
+      "amber": "호박색",
+      "violet": "보라색",
+      "rose": "장미색",
+      "sky": "하늘색"
+    },
+    "privateHint": "팀 멤버와 관리자만 이 팀과 팀에 공유된 내용을 볼 수 있어요.",
+    "create": "팀 만들기"
+  },
+  "invite": {
+    "title": "{workspace}에 사람 초대",
+    "description": "참여 링크가 담긴 이메일이 발송돼요. 1인당 라이선스 1개를 사용해요.",
+    "emails": "이메일 주소",
+    "hint": "주소는 쉼표나 줄바꿈으로 구분해 주세요. {left, plural, other {남은 라이선스 #개.}}",
+    "overSeats": "{count, plural, other {#명을 입력했지만}} 남은 라이선스는 {left, plural, other {#개뿐이에요.}}",
+    "seatsAfter": "{count, plural, other {초대 #건}} · {left, plural, other {초대 후 남는 라이선스 #개.}}",
+    "checkEmails": "{emails}을(를) 확인해 주세요.",
+    "allExisting": "이미 워크스페이스에 있거나 초대된 사람들이에요.",
+    "emailRequired": "이메일 주소를 추가해 주세요.",
+    "tooMany": "{count, plural, other {한 번에 최대 #명까지 초대할 수 있어요.}}",
+    "skipped": "이미 참여 중이거나 초대되어 건너뜀: {emails}.",
+    "role": "역할",
+    "teams": "팀에 추가(선택 사항)",
+    "addSeats": "라이선스 추가",
+    "send": "{count, plural, =1 {초대 보내기} other {초대 #건 보내기}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, =1 {{email}에게 초대를 보냈어요} other {초대 #건을 보냈어요}}",
+    "inviteFailed": "초대를 보내지 못했어요.",
+    "invitationRevoked": "{email} 초대를 취소했어요",
+    "revokeFailed": "취소하지 못했어요",
+    "invitationResent": "{email}에게 초대를 다시 보냈어요",
+    "resendFailed": "다시 보내지 못했어요",
+    "roleChanged": "{role, select, admin {이제 {name} 님은 관리자예요} other {이제 {name} 님은 멤버예요}}",
+    "roleChangeFailed": "역할을 변경하지 못했어요",
+    "teamsUpdateFailed": "팀을 업데이트하지 못했어요",
+    "memberRemoved": "{name} 님을 워크스페이스에서 제거했어요",
+    "removeMemberFailed": "제거하지 못했어요",
+    "teamCreated": "{name} 팀을 만들었어요",
+    "teamSaved": "{name} 팀을 저장했어요",
+    "teamSaveFailed": "팀을 저장하지 못했어요.",
+    "teamDeleted": "{name} 팀을 삭제했어요",
+    "teamDeleteFailed": "팀을 삭제하지 못했어요"
+  }
+}

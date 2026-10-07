@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Kanban",
+    "description": "Papan untuk pekerjaan, rumah, dan apa saja, termasuk papan yang disinkronkan dengan Jira."
+  },
+  "loadBoardsFailed": "Tidak dapat memuat papan Anda",
+  "loadBoardFailed": "Tidak dapat memuat papan",
+  "addTask": "Tambahkan tugas",
+  "taskCount": "{count, plural, other {# tugas}}",
+  "progress": "Progres",
+  "views": {
+    "label": "Tampilan",
+    "board": "Papan",
+    "list": "Daftar",
+    "table": "Tabel"
+  },
+  "toolbar": {
+    "filter": "Filter",
+    "sort": "Urutkan",
+    "moreWaysToAdd": "Cara lain menambahkan tugas",
+    "importCsv": "Impor CSV",
+    "addFromTemplate": "Tambahkan dari template",
+    "createAutomation": "Buat otomatisasi"
+  },
+  "column": {
+    "drag": "Seret kolom {column}",
+    "addTask": "Tambahkan tugas ke {column}",
+    "empty": "Tidak ada tugas di {column}"
+  },
+  "columnMenu": {
+    "managedInJira": "Kolom dikelola di Jira",
+    "rename": "Ganti nama kolom…",
+    "sortByPriority": "Urutkan menurut prioritas",
+    "moveEarlier": "Pindahkan lebih awal",
+    "moveLater": "Pindahkan lebih akhir",
+    "clear": "Kosongkan kolom"
+  },
+  "taskMenu": {
+    "openInJira": "Buka {key} di Jira",
+    "openInWorkspace": "Buka di {workspace}",
+    "moveTo": "Pindahkan ke",
+    "moveToTop": "Pindahkan ke paling atas",
+    "moveToBottom": "Pindahkan ke paling bawah",
+    "delete": "Hapus tugas"
+  },
+  "priority": {
+    "label": "Prioritas",
+    "high": "Tinggi",
+    "medium": "Sedang",
+    "low": "Rendah"
+  },
+  "card": {
+    "unassigned": "Belum ditugaskan",
+    "completed": "Selesai",
+    "fromSource": "Dari {source}",
+    "jiraIssue": "{type} (membuka Jira di tab baru)",
+    "workspaceTask": "Tugas di ruang kerja ini. Perubahan di sini juga berlaku di sana.",
+    "insights": {
+      "attachments": "{count, plural, other {# lampiran}}",
+      "comments": "{count, plural, other {# komentar}}",
+      "documents": "{count, plural, other {# dokumen}}"
+    }
+  },
+  "table": {
+    "task": "Tugas",
+    "status": "Status",
+    "owner": "Pemilik",
+    "label": "Label",
+    "due": "Tenggat",
+    "actions": "Tindakan",
+    "empty": "Belum ada tugas",
+    "progressOf": "Progres {task}"
+  },
+  "commands": {
+    "renameTask": "Ganti nama tugas",
+    "renameColumn": "Ganti nama kolom",
+    "newTaskIn": "Tugas baru di {column}",
+    "copyTitle": "{title} (salinan)",
+    "deleted": "“{title}” dihapus",
+    "cleared": "{count, plural, other {# tugas dihapus dari {column}}}",
+    "jiraLinkCopied": "Tautan ke {key} disalin"
+  },
+  "errors": {
+    "addTask": "Tidak dapat menambahkan tugas",
+    "saveChange": "Tidak dapat menyimpan perubahan",
+    "deleteTasks": "{count, plural, other {Tidak dapat menghapus tugas}}",
+    "saveBoard": "Tidak dapat menyimpan papan"
+  }
+}

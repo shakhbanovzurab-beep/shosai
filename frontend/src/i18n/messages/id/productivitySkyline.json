@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, other {<b>#</b> tugas selesai dalam setahun terakhir}}",
+  "chart": {
+    "flat": "{count, plural, other {# tugas selesai dari {from} hingga {to}, ditampilkan sebagai peta panas. Gunakan tombol panah untuk membaca setiap hari.}}",
+    "skyline": "{count, plural, other {# tugas selesai dari {from} hingga {to}, ditampilkan sebagai skyline 3D. Gunakan tombol panah untuk membaca setiap hari.}}"
+  },
+  "day": "{count, plural, =0 {Tidak ada tugas selesai pada {date}} other {# tugas selesai pada {date}}}",
+  "tooltip": "{count, plural, =0 {<b>Tidak ada tugas selesai</b> pada {date}} other {<b># tugas selesai</b> pada {date}}}",
+  "views": {
+    "label": "Tampilan grafik",
+    "flat": "Peta panas datar",
+    "skyline": "Skyline 3D"
+  },
+  "hint": {
+    "flat": "Arahkan kursor ke suatu hari untuk detail · tombol panah untuk menjelajah",
+    "skyline": "Seret untuk memutar · klik dua kali untuk mengatur ulang"
+  },
+  "levels": {
+    "label": "Tingkat aktivitas",
+    "less": "Sedikit",
+    "more": "Banyak",
+    "none": "Tidak ada tugas selesai",
+    "light": "Rendah",
+    "moderate": "Sedang",
+    "heavy": "Tinggi",
+    "heaviest": "Sangat tinggi"
+  },
+  "stats": {
+    "total": "Setahun terakhir",
+    "busiest": "Hari tersibuk",
+    "longest": "Hari beruntun terpanjang",
+    "current": "Hari beruntun saat ini"
+  },
+  "units": {
+    "contributions": "{count, plural, other {tugas selesai}}",
+    "days": "{count, plural, other {hari}}"
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "專案",
+    "project": "專案"
+  },
+  "title": "專案",
+  "description": "專案把一項工作集中在一個地方：相關的會議、決策和任務。",
+  "newProject": "新專案",
+  "filter": {
+    "label": "顯示哪些專案",
+    "open": "進行中",
+    "all": "全部"
+  },
+  "empty": {
+    "title": "還沒有專案",
+    "text": "為跨越多場會議的工作建立專案，例如產品上市或招募，之後就能把會議和任務加入專案。"
+  },
+  "status": {
+    "planned": "已規劃",
+    "active": "進行中",
+    "paused": "已暫停",
+    "completed": "已完成"
+  },
+  "ledBy": "{who, select, me {由你負責} other {負責人：{name}}}",
+  "noLead": "沒有負責人",
+  "target": {
+    "none": "沒有目標日期",
+    "overdue": "已逾期 · {date}",
+    "today": "目標：今天",
+    "tomorrow": "目標：明天",
+    "on": "目標：{date}"
+  },
+  "progress": {
+    "label": "{total, plural, other {已完成 {done, number}/# 項任務}}",
+    "count": "{done, number}/{total, number}",
+    "none": "沒有任務"
+  },
+  "notFound": {
+    "title": "這個專案已不存在",
+    "text": "專案可能已被刪除。其中的會議和任務仍在工作空間中。",
+    "action": "所有專案"
+  },
+  "sections": {
+    "tasks": "任務",
+    "addTask": "新增任務",
+    "tasksEmpty": "還沒有任務。新增任務，或將會議共用到這個專案，以帶入其中的任務。",
+    "meetings": "會議",
+    "meetingsEmpty": "共用到這個專案的會議會顯示在這裡。",
+    "decisions": "決策",
+    "files": "檔案",
+    "filesLabel": "{project} 的檔案",
+    "filesEmpty": "新增到這個專案的檔案會顯示在這裡，Leo 也會在這個專案中使用。"
+  },
+  "header": {
+    "edit": "編輯專案",
+    "delete": "刪除專案",
+    "lead": "負責人",
+    "team": "團隊",
+    "target": "目標日期",
+    "deleteTitle": "要刪除 {name} 嗎？",
+    "deleteText": "其中的會議、任務和決策仍會留在工作空間中，只是不再屬於任何專案。"
+  },
+  "dialog": {
+    "newTitle": "新專案",
+    "editTitle": "編輯 {name}",
+    "description": "把一項工作集中在一個地方：相關的會議、決策和任務。",
+    "nameRequired": "請為專案命名。",
+    "namePlaceholder": "例如 行動版 App Beta",
+    "purpose": "用途",
+    "lead": "負責人",
+    "me": "{name}（你）",
+    "team": "團隊",
+    "wholeWorkspace": "整個工作空間",
+    "status": "狀態",
+    "target": "目標日期",
+    "create": "建立專案",
+    "saved": "已儲存 {name}",
+    "created": "已建立 {name}"
+  }
+}

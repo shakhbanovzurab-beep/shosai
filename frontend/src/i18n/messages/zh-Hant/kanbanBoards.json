@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "看板",
+    "jiraBoards": "已與 Jira 同步",
+    "newBoard": "新增看板…",
+    "syncJiraBoard": "同步 Jira 看板…",
+    "rename": "重新命名看板…",
+    "showWorkspaceTasks": "在這裡顯示我的工作空間任務",
+    "changeIcon": "變更圖示",
+    "delete": "刪除看板…",
+    "stopSyncing": "停止同步…"
+  },
+  "icons": {
+    "work": "工作",
+    "home": "居家",
+    "personal": "個人",
+    "health": "健康",
+    "study": "學習",
+    "travel": "旅遊",
+    "shopping": "購物",
+    "fitness": "健身",
+    "project": "專案",
+    "reading": "閱讀"
+  },
+  "empty": {
+    "title": "還沒有看板",
+    "description": "建立看板來管理工作、居家或其他大小事，或從 Jira 帶入看板。",
+    "newBoard": "新增看板",
+    "syncJiraBoard": "同步 Jira 看板"
+  },
+  "newBoard": {
+    "title": "新增看板",
+    "description": "把工作、居家和其他大小事分別放在各自的看板上。",
+    "namePlaceholder": "例如：居家",
+    "icon": "圖示",
+    "columns": "欄",
+    "create": "建立看板"
+  },
+  "templates": {
+    "simple": "簡易",
+    "project": "專案"
+  },
+  "columnNames": {
+    "backlog": "待規劃",
+    "todo": "待辦",
+    "inProgress": "進行中",
+    "review": "審查中",
+    "done": "完成"
+  },
+  "renameTitle": "重新命名看板",
+  "delete": {
+    "title": "要刪除「{board}」嗎？",
+    "description": "{count, plural, =0 {看板將會刪除，且無法復原。} other {看板和其中的 # 項任務將會刪除，且無法復原。}}",
+    "confirm": "刪除看板",
+    "stopTitle": "要停止同步「{board}」嗎？",
+    "stopDescription": "看板會從這裡移除。Jira 中的內容不會有任何變更，之後也可以再次同步。",
+    "stopConfirm": "停止同步"
+  },
+  "jira": {
+    "title": "同步 Jira 看板",
+    "description": "直接在這裡處理 Jira 看板，所有變更都會雙向同步。",
+    "connectTitle": "請先連接 Jira",
+    "connectDescription": "在「設定 › 連接器」中登入 Jira，再回到這裡選擇看板。",
+    "openConnectors": "開啟連接器",
+    "connectedAs": "已以 {account} 的身分連接。",
+    "connected": "已連接至 Jira。",
+    "noBoards": "你的 Jira 帳號還沒有任何看板。",
+    "boardList": "Jira 看板",
+    "alreadySynced": "已同步 · 開啟",
+    "type": {
+      "kanban": "看板",
+      "scrum": "Scrum 看板"
+    },
+    "howColumns": "欄和議題都來自 Jira 看板。",
+    "howMoves": "移動卡片會變更 Jira 中議題的狀態；新任務會成為 Jira 議題。",
+    "howChanges": "在 Jira 中所做的變更會自動顯示在這裡。",
+    "sync": "同步看板"
+  },
+  "sync": {
+    "syncing": "正在與 Jira 同步…",
+    "paused": "同步已暫停",
+    "synced": "已與 Jira 同步",
+    "syncedAgo": "上次與 Jira 同步：{ago}",
+    "syncNow": "立即同步",
+    "openBoard": "在 Jira 中開啟「{board}」",
+    "openHint": "在 Jira 中開啟 · {site} 上的 {project}"
+  },
+  "banners": {
+    "syncStopped": "已停止與 Jira 同步。",
+    "changesPaused": "變更已暫停。",
+    "importing": "正在從 Jira 匯入「{board}」…",
+    "importingHint": "欄和議題稍後就會出現在這裡。",
+    "offer": "{count, plural, other {你的工作空間中有 # 項未完成的任務。要在「{board}」上顯示嗎？}}移動卡片時，任務也會為你的團隊一併更新。",
+    "notNow": "暫時不要",
+    "showHere": "{count, plural, other {在這裡顯示}}"
+  },
+  "toasts": {
+    "createFailed": "無法建立看板",
+    "connectFailed": "無法同步 Jira 看板",
+    "updateFailed": "無法更新看板",
+    "deleteFailed": "無法刪除看板",
+    "syncFailed": "無法與 Jira 同步",
+    "deleted": "已刪除「{board}」",
+    "stoppedSyncing": "已停止同步「{board}」",
+    "workspaceTasksOn": "你的工作空間任務現在會顯示在「{board}」上",
+    "workspaceTasksOff": "你的工作空間任務已不再顯示於任何看板",
+    "workspaceTasksHint": "移動卡片會變更工作空間中的任務。",
+    "workspaceTasksFailed": "無法變更工作空間任務的顯示位置"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "answers": "回答",
+  "model": {
+    "title": "モデル",
+    "description": "自動では、タスクごとに適したモデルが選ばれます。最先端モデルは週ごとの最先端モデル用トークンを消費します（使用量を参照）。",
+    "label": "Leo のモデル",
+    "auto": "自動",
+    "autoHint": "Leo がタスクごとに選択"
+  },
+  "language": {
+    "title": "回答の言語",
+    "description": "自動では、インターフェースと同じ言語で回答します。",
+    "auto": "自動"
+  },
+  "length": {
+    "title": "回答の長さ",
+    "description": "Leo の回答の標準的な詳しさです。",
+    "options": {
+      "concise": "簡潔",
+      "balanced": "標準",
+      "detailed": "詳細"
+    }
+  },
+  "advanced": {
+    "title": "詳細設定",
+    "description": "Leo が使用できる機能です。オフにした機能は提案も使用もされません。",
+    "webSearch": "ウェブ検索",
+    "webSearchHint": "Leo がインターネットを自動的に検索して回答できるようにします。",
+    "voiceMode": "音声モード",
+    "voiceModeHint": "Leo と声で会話します。オフにすると、インターフェースからマイクが表示されなくなります。",
+    "knowledgeSearch": "ナレッジ検索",
+    "knowledgeSearchHint": "Leo 用に選んだファイルやソースから回答を探します。",
+    "connectedSearch": "接続済みサービスの検索",
+    "connectedSearchHint": "Google Drive や Notion など、接続済みのサービスを検索します。"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "title": "Kỹ năng",
+  "tabs": {
+    "readyMade": "Có sẵn",
+    "repository": "Kho lưu trữ của bạn",
+    "mine": "Đã cài ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Tìm kỹ năng: thiết kế hệ thống, đánh giá mã…",
+    "label": "Tìm kiếm kỹ năng",
+    "help": "Tìm kiếm trong danh mục skills.sh",
+    "noMatches": "Không có kỹ năng nào phù hợp. Hãy thử từ khóa khác.",
+    "emptyTitle": "Danh mục kỹ năng có sẵn",
+    "emptyDescription": "Hãy bắt đầu nhập. Kỹ năng là hướng dẫn soạn sẵn mà bạn có thể đính kèm vào câu lệnh.",
+    "searchFailed": "Không thể tìm kiếm trên skills.sh. Hãy thử lại."
+  },
+  "repository": {
+    "label": "Kho lưu trữ GitHub",
+    "placeholder": "owner/repo hoặc liên kết GitHub",
+    "find": "Tìm kỹ năng",
+    "help": "Kho lưu trữ công khai có chứa tệp SKILL.md",
+    "emptyTitle": "Kỹ năng của riêng bạn từ GitHub",
+    "emptyDescription": "Nhập một kho lưu trữ công khai để tìm các tệp SKILL.md trong đó.",
+    "scanFailed": "Không thể đọc kho lưu trữ."
+  },
+  "candidate": {
+    "installs": "{count, plural, other {# lượt cài đặt}}",
+    "installed": "Đã cài đặt"
+  },
+  "mine": {
+    "extraFiles": "Có kèm tập lệnh hoặc tệp khác — chỉ hướng dẫn trong SKILL.md được sử dụng.",
+    "update": "Cập nhật {name}",
+    "updateHint": "Cập nhật lên commit mới nhất",
+    "remove": "Gỡ {name}",
+    "emptyTitle": "Chưa có kỹ năng nào",
+    "emptyDescription": "Hãy thêm từ mục Có sẵn hoặc từ kho lưu trữ của bạn."
+  },
+  "remove": {
+    "title": "Gỡ {name}?",
+    "titleUnnamed": "Gỡ kỹ năng này?",
+    "description": "Kỹ năng sẽ được gỡ khỏi mọi câu lệnh đang dùng. Bạn có thể thêm lại sau."
+  },
+  "toasts": {
+    "installed": "Đã cài đặt {name}",
+    "installedHint": "Hãy đính kèm kỹ năng vào câu lệnh từ trình chỉnh sửa câu lệnh.",
+    "installFailed": "Không thể cài đặt kỹ năng",
+    "upToDate": "{name} đã là phiên bản mới nhất",
+    "updated": "Đã cập nhật {name}",
+    "updateFailed": "Không thể cập nhật kỹ năng",
+    "removed": "Đã gỡ {name}",
+    "removeFailed": "Không thể gỡ kỹ năng"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "設定助理的對話對象、行為方式，以及使用哪些模型。"
+  },
+  "tabs": {
+    "context": "背景資訊",
+    "prompts": "提示詞",
+    "models": "模型"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "即時回答",
+      "description": "助理的回覆：浮動視窗、對話、會議",
+      "help": "即時回覆：浮動視窗、對話和會議中的回答。提示詞決定助理回答的語氣、長度和格式。"
+    },
+    "screenshots": {
+      "name": "螢幕截圖",
+      "description": "讀取螢幕、投影片和文件",
+      "help": "螢幕截圖分析：浮動視窗中的「螢幕截圖」按鈕，以及會議中的螢幕分享。提示詞告訴模型如何解讀圖片，以及該回答什麼。"
+    },
+    "code": {
+      "name": "程式碼",
+      "description": "程式碼和演算法相關問題",
+      "help": "程式碼和演算法相關問題。提示詞決定程式語言、解說的詳細程度，以及是否列出複雜度和測試。"
+    },
+    "system_design": {
+      "name": "系統設計",
+      "description": "面試用的架構設計",
+      "help": "面試中的架構問題。提示詞決定解說的結構：需求、估算、設計和取捨。"
+    },
+    "notes": {
+      "name": "筆記與心智圖",
+      "description": "AI 版會議筆記和心智圖",
+      "help": "AI 版會議筆記和心智圖。提示詞決定要保留哪些內容：決策、待辦事項、待解決的問題。"
+    },
+    "transcript": {
+      "name": "逐字稿",
+      "description": "即時語音轉文字",
+      "help": "即時語音轉文字。使用語音模型執行，不需要提示詞。"
+    }
+  },
+  "autosave": {
+    "saving": "正在儲存…"
+  },
+  "context": {
+    "intro": "一段關於你的簡短文字，會在每次向模型提出要求時，作為第一則系統訊息插入。寫得越精確，你需要回答的追問就越少。",
+    "loadFailed": "無法載入你的背景資訊",
+    "title": "關於你",
+    "description": "你是誰、做什麼工作，以及你喜歡怎樣的回答。具體事實比形容詞更有用。",
+    "example": "職位：資深後端工程師，6 年經驗，金融科技業。\n技術堆疊：Python、FastAPI、PostgreSQL、Kafka、Kubernetes。\n目前：準備產品公司的系統設計面試。\n回答：簡潔，並說明取捨；除非我另外指定，程式碼一律用 Python。\n避免：泛泛的建議、冗長的開場白。",
+    "count": "{count, number} / {max, plural, other {# 個字元}} · 約 {tokens, plural, other {# 個 Token}}",
+    "tooLong": "請縮短內容後再儲存。",
+    "saveFailed": "無法儲存。",
+    "savedAgo": "已於 {ago} 儲存",
+    "savesAutomatically": "自動儲存"
+  },
+  "preview": {
+    "title": "傳送方式",
+    "description": "每次提出要求時，都會先傳送已儲存的版本，再傳送角色的提示詞。",
+    "system": "系統",
+    "user": "使用者",
+    "empty": "（空白，不會傳送任何內容）",
+    "rolePrompt": "「提示詞」中的角色提示詞",
+    "question": "你的問題"
+  },
+  "models": {
+    "intro": "選擇每個角色由哪個模型回答。清單只會顯示你的訂閱所包含的模型。",
+    "loadFailed": "無法載入模型",
+    "model": "模型",
+    "temperature": "溫度",
+    "maxTokens": "Token 上限",
+    "reasoning": "推理",
+    "unsupported": "不支援",
+    "modelFor": "{role} 模型",
+    "temperatureFor": "{role} 溫度",
+    "maxTokensRange": "Token 上限必須是介於 {min, number} 到 {max, number} 之間的整數。",
+    "saveFailed": "無法儲存模型設定"
+  },
+  "picker": {
+    "placeholder": "選擇模型…",
+    "search": "搜尋模型…",
+    "empty": "沒有相符的模型。",
+    "frontier": "頂尖"
+  }
+}

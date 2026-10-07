@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Tune who the assistant is talking to, how it behaves, and which models run it."
+  },
+  "tabs": {
+    "context": "Context",
+    "prompts": "Prompts",
+    "models": "Models"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Live answers",
+      "description": "Assistant replies: overlay, chat, meeting",
+      "help": "Live replies: the overlay, the chat and answers during a meeting. The prompt sets the tone, length and format of what the assistant says."
+    },
+    "screenshots": {
+      "name": "Screenshots",
+      "description": "Reading the screen, slides, documents",
+      "help": "Screenshot analysis: the “Screenshot” button in the overlay and screen sharing in a meeting. The prompt tells the model how to read the image and what to answer."
+    },
+    "code": {
+      "name": "Code",
+      "description": "Questions about code and algorithms",
+      "help": "Questions about code and algorithms. The prompt sets the programming language, how much to explain, and whether to show complexity and tests."
+    },
+    "system_design": {
+      "name": "System Design",
+      "description": "Architecture design for interviews",
+      "help": "Architecture questions in interviews. The prompt sets the structure of the walkthrough: requirements, estimates, design and trade-offs."
+    },
+    "notes": {
+      "name": "Notes & maps",
+      "description": "AI version of meeting notes and the mind map",
+      "help": "The AI version of meeting notes and the mind map. The prompt decides what to keep: decisions, action items, open questions."
+    },
+    "transcript": {
+      "name": "Transcript",
+      "description": "Speech to text in real time",
+      "help": "Speech to text in real time. Runs on a speech model and takes no prompt."
+    }
+  },
+  "autosave": {
+    "saving": "Saving…"
+  },
+  "context": {
+    "intro": "A short text about you — it’s inserted as the first system message in every model request. The more precise it is, the fewer follow-up questions you’ll get.",
+    "loadFailed": "Couldn’t load your context",
+    "title": "About you",
+    "description": "Who you are, what you work on and how you like answers. Facts beat adjectives.",
+    "example": "Role: Senior backend engineer, 6 years, fintech.\nStack: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nNow: preparing for system design interviews at product companies.\nAnswers: concise, with trade-offs; code in Python unless I say otherwise.\nAvoid: generic advice, long introductions.",
+    "count": "{count, number} / {max, plural, one {# character} other {# characters}} · ~{tokens, plural, one {# token} other {# tokens}}",
+    "tooLong": "Shorten it to save.",
+    "saveFailed": "Couldn’t save.",
+    "savedAgo": "Saved {ago}",
+    "savesAutomatically": "Saves automatically"
+  },
+  "preview": {
+    "title": "How it’s sent",
+    "description": "The saved version opens every request, before the role’s prompt.",
+    "system": "System",
+    "user": "User",
+    "empty": "(empty — nothing is sent)",
+    "rolePrompt": "role prompt from Prompts",
+    "question": "your question"
+  },
+  "models": {
+    "intro": "Choose which model answers in each role. The list shows only the models on your subscription.",
+    "loadFailed": "Couldn’t load models",
+    "model": "Model",
+    "temperature": "Temperature",
+    "maxTokens": "Max tokens",
+    "reasoning": "Reasoning",
+    "unsupported": "Not supported",
+    "modelFor": "{role} model",
+    "temperatureFor": "{role} temperature",
+    "maxTokensRange": "Max tokens must be a whole number from {min, number} to {max, number}.",
+    "saveFailed": "Couldn’t save the model settings"
+  },
+  "picker": {
+    "placeholder": "Select a model…",
+    "search": "Search models…",
+    "empty": "No models match.",
+    "frontier": "Frontier"
+  }
+}

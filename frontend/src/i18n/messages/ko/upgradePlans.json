@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "사용자당 {amount}",
+    "from": "{amount}부터",
+    "unlimited": "무제한"
+  },
+  "highlights": {
+    "unlimitedMeetings": "회의 무제한",
+    "meetingMinutes": "매달 회의 {minutes, plural, other {#분}}",
+    "noMeetings": "회의",
+    "fileManager": "파일 관리자 · {storage}",
+    "noFileManager": "파일 관리자",
+    "knowledge": "Leo용 지식 · {storage}",
+    "noKnowledge": "Leo용 지식"
+  },
+  "capabilities": {
+    "shared_workspace": "팀 공유 워크스페이스",
+    "member_management": "사용자 관리",
+    "centralized_billing": "통합 결제",
+    "billing_and_users": "통합 결제 및 사용자 관리",
+    "admin_controls": "엔터프라이즈급 보안 및 관리자 제어",
+    "sso": "SSO(통합 인증)",
+    "priority_support": "우선 고객 지원",
+    "usage_analytics": "사용량 분석"
+  },
+  "compare": {
+    "title": "플랜 비교",
+    "feature": "기능",
+    "included": "포함",
+    "notIncluded": "포함되지 않음",
+    "unlimited": "무제한",
+    "minutes": "{minutes, plural, other {#분}} / 월",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "맞춤형",
+    "rows": {
+      "meetings": "회의",
+      "fileManager": "파일 관리자",
+      "knowledge": "Leo용 지식",
+      "apps": "Leo, 메일, 캘린더, 칸반, 노트",
+      "users": "사용자",
+      "sharedWorkspace": "공유 워크스페이스",
+      "billingAndUsers": "통합 결제 및 사용자 관리",
+      "sso": "SSO(통합 인증)",
+      "adminControls": "보안 및 관리자 제어",
+      "prioritySupport": "우선 고객 지원",
+      "usageAnalytics": "사용량 분석"
+    }
+  }
+}

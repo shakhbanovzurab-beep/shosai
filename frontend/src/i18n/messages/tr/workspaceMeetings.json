@@ -1,0 +1,107 @@
+{
+  "title": "Toplantılar",
+  "description": "Üyelerin burada paylaştığı kayıtlar; Leo’nun özeti, kararlar ve görevlerle birlikte.",
+  "sharingRules": "Paylaşım kuralları",
+  "reviewSharingRules": "Paylaşım kurallarını gözden geçir",
+  "shareMeeting": "Toplantı paylaş",
+  "searchMeetings": "Toplantılarda ara",
+  "loading": "Toplantılar yükleniyor…",
+  "loadFailed": "Toplantılar yüklenemedi",
+  "empty": {
+    "title": "Henüz paylaşılan bir şey yok",
+    "text": "Bir üye kayıtlarından birini paylaştığında veya yalnızca {workspace} üyelerinin katıldığı bir toplantı bitip paylaşım kuralları uygulandığında toplantılar burada görünür."
+  },
+  "noMatch": {
+    "title": "Eşleşen toplantı yok",
+    "text": "Başka kelimeler, başka bir ekip veya tüm toplantıları deneyin.",
+    "clear": "Filtreleri temizle"
+  },
+  "recency": {
+    "thisWeek": "Bu hafta",
+    "lastWeek": "Geçen hafta",
+    "earlier": "Daha önce"
+  },
+  "scope": {
+    "label": "Hangi toplantılar",
+    "all": "Tümü",
+    "mine": "Katıldıklarım"
+  },
+  "when": {
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "tomorrow": "Yarın"
+  },
+  "row": {
+    "recordedByYou": "kaydeden: siz",
+    "recordedBy": "kaydeden: {name}",
+    "withGuests": "misafirlerle",
+    "decisions": "{count, plural, one {# karar} other {# karar}}",
+    "tasks": "{count, plural, one {# görev} other {# görev}}"
+  },
+  "meeting": {
+    "back": "Toplantılar",
+    "loading": "Toplantı yükleniyor…",
+    "loadFailed": "Toplantı yüklenemedi",
+    "date": "Tarih",
+    "duration": "Süre",
+    "participants": "Katılımcılar",
+    "participantsWithGuests": "{names} ({count, plural, one {{workspace} dışından # kişi} other {{workspace} dışından # kişi}})",
+    "project": "Proje",
+    "recordedByYou": "Bu kaydı siz yaptınız. Notlar’ınızda da bulunur; paylaşımı istediğiniz zaman durdurabilirsiniz, orada kalır.",
+    "sharedBy": "Kaydeden ve paylaşan: {name}",
+    "summary": "Özet",
+    "transcript": "Transkript",
+    "keyPoints": "Önemli noktalar",
+    "decisions": "Kararlar",
+    "replacedLater": "Sonradan değiştirildi",
+    "tasks": "Görevler",
+    "transcriptPrivateTitle": "Yalnızca özet paylaşıldı",
+    "transcriptPrivate": "Transkript gizli tutuldu. Kelimesi kelimesine ne söylendiğini öğrenmek istiyorsanız şu kişiye sorun: {name}.",
+    "transcriptPrivateUnknown": "Düzenleyen kişi transkripti gizli tuttu. Kelimesi kelimesine ne söylendiğini öğrenmek istiyorsanız ona sorun.",
+    "unavailableTitle": "Bu toplantı kullanılamıyor",
+    "unavailable": "Toplantı mevcut değil, sizinle paylaşılmamış veya sahibi paylaşımı durdurmuş.",
+    "backToMeetings": "Toplantılara dön"
+  },
+  "project": {
+    "label": "Proje",
+    "none": "Proje yok"
+  },
+  "audience": {
+    "participants": "Katılımcılar",
+    "workspace": "{workspace} çalışma alanındaki herkes",
+    "unknownTeam": "Bir ekip",
+    "participantsHint": "Toplantıda bulunan üyeler.",
+    "workspaceHint": "Çalışma alanındaki herkes, şimdi ve ileride.",
+    "teamHint": "{team} üyeleri ve katılımcılar.",
+    "privateTeamHint": "{team} üyeleri (özel ekip) ve katılımcılar.",
+    "sharedWith": "{level, select, participants {Katılımcılarla paylaşıldı} workspace {{workspace} çalışma alanındaki herkesle paylaşıldı} other {Paylaşıldığı ekip: {team}}}",
+    "sharedToast": "{level, select, participants {“{title}”, {workspace} çalışma alanındaki katılımcılarla paylaşıldı} workspace {“{title}”, {workspace} çalışma alanındaki herkesle paylaşıldı} other {“{title}”, {workspace} çalışma alanında şu ekiple paylaşıldı: {team}}}"
+  },
+  "share": {
+    "lockedHint": "Bu toplantıyı kimlerin göreceğini yalnızca paylaşan kişi veya bir yönetici değiştirebilir",
+    "change": "Bu toplantıyı kimlerin göreceğini değiştir",
+    "title": "Bu toplantıyı kimler görür",
+    "description": "Özet, kararlar ve görevler. Kişilerin Leo’ya sorduğu sorular kendilerine özel kalır.",
+    "external": "Toplantıya {workspace} dışından kişiler katıldı. Yalnızca onların da rahatsız olmayacağı şeyleri paylaşın.",
+    "audienceLabel": "Paylaşılanlar",
+    "includeTranscript": "Transkripti dahil et",
+    "includeTranscriptHint": "Aksi halde yalnızca özet paylaşılır.",
+    "transcriptShared": "Transkript de paylaşıldı",
+    "summaryOnly": "Artık yalnızca özet paylaşılıyor",
+    "addedToProject": "Projeye eklendi",
+    "removedFromProject": "Projeden kaldırıldı",
+    "stopMine": "Paylaşımı durdur (Notlar’ımda kalsın)",
+    "takeOut": "{workspace} çalışma alanından çıkar"
+  },
+  "shareDialog": {
+    "allSharedTitle": "Her şey paylaşıldı",
+    "allShared": "Tüm kayıtlarınız zaten {workspace} çalışma alanında.",
+    "title": "Toplantılarınızdan birini paylaşın",
+    "description": "Size ait kalır ve Notlar’ınızda durur; paylaşımı durdurana kadar {workspace} çalışma alanı onu görür.",
+    "meeting": "Toplantı",
+    "movesFrom": "Şu anda {workspace} çalışma alanında paylaşılıyor; burada paylaşırsanız buraya taşınır.",
+    "audience": "Kimler görür",
+    "audienceHint": "Kararları ve görevleri de birlikte gelir; katılımcılar her zaman görebilir.",
+    "submit": "Paylaş"
+  }
+}

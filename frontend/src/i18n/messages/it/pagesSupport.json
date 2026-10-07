@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Assistenza",
+    "description": "Chiedi aiuto al team di assistenza e segui le tue richieste."
+  },
+  "categories": {
+    "billing": "Fatturazione",
+    "bug": "Segnalazione di bug",
+    "account": "Account",
+    "feature": "Richiesta di funzionalità",
+    "other": "Altro"
+  },
+  "statuses": {
+    "open": "In attesa dell’assistenza",
+    "awaiting_you": "In attesa di te",
+    "resolved": "Risolta"
+  },
+  "events": {
+    "acknowledged": "Messaggio ricevuto. Di solito uno specialista risponde entro poche ore: riceverai una notifica qui.",
+    "resolved": "Segnata come risolta",
+    "reopened": "Riaperta"
+  },
+  "toolbar": {
+    "search": "Cerca richieste",
+    "filter": "Filtra richieste",
+    "all": "Tutte",
+    "open": "Aperte",
+    "resolved": "Risolte"
+  },
+  "newTicket": "Nuova richiesta",
+  "table": {
+    "number": "N.",
+    "subject": "Oggetto",
+    "status": "Stato",
+    "topic": "Argomento",
+    "updated": "Aggiornata",
+    "unread": "Non letti:"
+  },
+  "list": {
+    "loading": "Caricamento delle richieste",
+    "loadError": "Impossibile caricare le richieste",
+    "emptyTitle": "Di cosa hai bisogno?",
+    "emptyDescription": "Apri una richiesta e il team di assistenza risponderà qui, di solito entro poche ore.",
+    "noMatchesTitle": "Nessuna richiesta trovata",
+    "noMatchesDescription": "Prova con un’altra ricerca o un altro filtro."
+  },
+  "panel": {
+    "ticket": "Richiesta",
+    "description": "La tua conversazione con l’assistenza"
+  },
+  "form": {
+    "title": "Di cosa hai bisogno?",
+    "subtitle": "Di solito l’assistenza risponde entro poche ore.",
+    "topic": "Argomento",
+    "subject": "Oggetto",
+    "subjectPlaceholder": "Un breve riepilogo",
+    "body": "Cosa è successo?",
+    "bodyPlaceholder": "I passaggi, cosa ti aspettavi e cosa hai visto invece. Gli screenshot aiutano.",
+    "send": "Invia"
+  },
+  "attach": {
+    "button": "Allega file",
+    "list": "File allegati",
+    "remove": "Rimuovi {name}",
+    "tooBig": "{count, plural, one {{names} supera {size}} many {{names} superano {size}} other {{names} superano {size}}}",
+    "tooMany": "{max, plural, one {Allega al massimo # file} many {Allega al massimo # di file} other {Allega al massimo # file}}"
+  },
+  "composer": {
+    "message": "Messaggio",
+    "emoji": "Aggiungi emoji",
+    "hint": "Invio per inviare · Maiusc+Invio per andare a capo",
+    "send": "Invia",
+    "reply": "Scrivi una risposta…",
+    "replyToReopen": "Rispondi per riaprire…"
+  },
+  "thread": {
+    "loading": "Caricamento della richiesta",
+    "close": "Chiudi richiesta",
+    "reopen": "Riapri",
+    "resolve": "Segna come risolta",
+    "resolvedNote": "Risolta. Se hai ancora bisogno di aiuto, rispondi qui sotto: la richiesta verrà riaperta.",
+    "thanks": "Grazie per il tuo feedback.",
+    "rate": "Com’è andata?",
+    "good": "Bene",
+    "bad": "Male",
+    "you": "Tu",
+    "support": "Assistenza",
+    "supportAuthor": "{name} · Assistenza",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Segna come letta",
+    "markUnread": "Segna come non letta",
+    "copyNumber": "Copia numero della richiesta",
+    "copySubject": "Copia oggetto"
+  },
+  "toasts": {
+    "opened": "Richiesta n. {number} aperta",
+    "openFailed": "Impossibile aprire la richiesta",
+    "updateFailed": "Impossibile aggiornare la richiesta",
+    "sendFailed": "Impossibile inviare la risposta",
+    "markedRead": "Segnata come letta",
+    "markedUnread": "Segnata come non letta",
+    "reopened": "Richiesta riaperta",
+    "resolved": "Segnata come risolta",
+    "numberCopied": "Numero della richiesta copiato",
+    "subjectCopied": "Oggetto copiato",
+    "numberCopyFailed": "Impossibile copiare il numero della richiesta",
+    "subjectCopyFailed": "Impossibile copiare l’oggetto"
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "title": "成員",
+  "description": "{workspace} 中的所有人、他們的權限，以及你共用內容的團隊。",
+  "invitePeople": "邀請成員",
+  "adminsInvite": "只有管理員可以邀請成員。",
+  "adminsInviteAsk": "只有管理員可以邀請成員。請詢問 {name}。",
+  "tabs": {
+    "members": "成員",
+    "teams": "團隊"
+  },
+  "search": "搜尋成員",
+  "pendingInvitations": "待接受的邀請 · {count, number}",
+  "membersCount": "成員 · {count, number}",
+  "noMatches": "沒有符合的成員",
+  "noMatchesHint": "試試姓名、電子郵件地址或職稱。",
+  "clearSearch": "清除搜尋",
+  "seats": {
+    "label": "席位",
+    "taken": "已使用 {taken, number}/{total, number} 個席位",
+    "breakdown": "· {members, plural, other {# 位成員}}",
+    "breakdownPending": "· {members, plural, other {# 位成員}}，{pending, plural, other {# 個待接受的邀請}}",
+    "left": "{count, plural, other {剩餘 # 個席位。}}待接受的邀請會占用席位，直到被接受或撤銷為止。",
+    "fullAdd": "席位已全部用完。新增席位即可邀請更多成員。",
+    "fullAsk": "席位已全部用完。請擁有者新增席位。",
+    "change": "變更席位"
+  },
+  "invitation": {
+    "by": "{name} 邀請 · {ago}",
+    "byYou": "你邀請 · {ago}",
+    "byFormerMember": "前成員邀請 · {ago}",
+    "resend": "重新傳送",
+    "revoke": "撤銷",
+    "revokeFor": "撤銷給 {email} 的邀請"
+  },
+  "member": {
+    "you": "你",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, other {已閒置 # 天以上}}",
+    "roleOf": "{name} 的權限",
+    "remove": "從工作空間移除",
+    "removeTitle": "要將 {name} 從 {workspace} 移除嗎？",
+    "removeDescription": "{name} 從自己的筆記和檔案管理共用的會議和檔案會隨對方移除。任務會保留，對方未完成的任務將變成未指派。席位會釋出。",
+    "joinedTeam": "{name} 已加入 {team}",
+    "leftTeam": "{name} 已離開 {team}"
+  },
+  "teams": {
+    "new": "新團隊",
+    "empty": "還沒有團隊",
+    "emptyHint": "團隊是選用的。想與一群人（例如工程或業務）共用會議和知識庫時，再建立團隊。",
+    "intro": "與整個團隊共用會議和知識庫，不必一次共用給一個人。",
+    "deleteTitle": "要刪除 {name} 嗎？",
+    "deleteDescription": "團隊的會議仍對參與者可見，成員也仍會留在工作空間中。請先移動團隊的知識庫；知識庫不能沒有共用對象。"
+  },
+  "team": {
+    "noDescription": "還沒有說明。",
+    "edit": "編輯團隊",
+    "delete": "刪除團隊",
+    "members": "{count, plural, other {# 位成員}}",
+    "membersLedBy": "{count, plural, other {# 位成員}} · 負責人：{name}",
+    "membersLedByYou": "{count, plural, other {# 位成員}} · 由你負責",
+    "join": "加入團隊",
+    "leave": "離開團隊",
+    "youJoined": "你已加入 {team}",
+    "youLeft": "你已離開 {team}"
+  },
+  "teamForm": {
+    "editTitle": "編輯 {name}",
+    "description": "與一群人共用會議和知識庫，不必逐一共用。",
+    "nameRequired": "請為團隊命名。",
+    "namePlaceholder": "例如 Design",
+    "descriptionLabel": "說明",
+    "descriptionPlaceholder": "這個團隊負責的工作",
+    "color": "顏色",
+    "colors": {
+      "blue": "藍色",
+      "green": "綠色",
+      "amber": "琥珀色",
+      "violet": "紫色",
+      "rose": "玫瑰色",
+      "sky": "天藍色"
+    },
+    "privateHint": "只有團隊成員和管理員可以看到這個團隊，以及與它共用的內容。",
+    "create": "建立團隊"
+  },
+  "invite": {
+    "title": "邀請成員加入 {workspace}",
+    "description": "對方會收到附有加入連結的電子郵件。每個人會占用一個席位。",
+    "emails": "電子郵件地址",
+    "hint": "請用逗號或換行分隔地址。{left, plural, other {剩餘 # 個席位。}}",
+    "overSeats": "{count, plural, other {共 # 人}}，但{left, plural, other {只剩 # 個席位。}}",
+    "seatsAfter": "{count, plural, other {# 個邀請}} · {left, plural, other {傳送後剩餘 # 個席位。}}",
+    "checkEmails": "請檢查 {emails}。",
+    "allExisting": "這些人已在工作空間中或已受邀。",
+    "emailRequired": "請新增電子郵件地址。",
+    "tooMany": "{count, plural, other {一次最多邀請 # 人。}}",
+    "skipped": "已在工作空間中或已受邀，已略過：{emails}。",
+    "role": "權限",
+    "teams": "加入團隊（選用）",
+    "addSeats": "新增席位",
+    "send": "{count, plural, =1 {傳送邀請} other {傳送 # 個邀請}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, =1 {已傳送邀請給 {email}} other {已傳送 # 個邀請}}",
+    "inviteFailed": "無法傳送邀請。",
+    "invitationRevoked": "已撤銷給 {email} 的邀請",
+    "revokeFailed": "無法撤銷",
+    "invitationResent": "已重新傳送邀請給 {email}",
+    "resendFailed": "無法重新傳送",
+    "roleChanged": "{role, select, admin {{name} 現在是管理員} other {{name} 現在是成員}}",
+    "roleChangeFailed": "無法變更權限",
+    "teamsUpdateFailed": "無法更新團隊",
+    "memberRemoved": "已將 {name} 從工作空間移除",
+    "removeMemberFailed": "無法移除",
+    "teamCreated": "已建立 {name}",
+    "teamSaved": "已儲存 {name}",
+    "teamSaveFailed": "無法儲存團隊。",
+    "teamDeleted": "已刪除 {name}",
+    "teamDeleteFailed": "無法刪除團隊"
+  }
+}

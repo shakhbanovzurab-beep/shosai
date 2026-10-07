@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "name_taken": "Você já tem um hub com este nome.",
+    "name_too_short": "{min, plural, one {Use pelo menos # caractere.} many {Use pelo menos # de caracteres.} other {Use pelo menos # caracteres.}}",
+    "name_too_long": "{max, plural, one {Use no máximo # caractere.} many {Use no máximo # de caracteres.} other {Use no máximo # caracteres.}}",
+    "too_many_hubs": "Você tem hubs demais. Arquive ou exclua os que não precisa mais.",
+    "not_found": "Isto não está mais aqui — pode ter sido excluído.",
+    "hub_archived": "O hub está arquivado.",
+    "no_board": "O hub não tem quadro, então o trabalho não tem para onde ir.",
+    "no_hub": "A reunião não está em nenhum hub.",
+    "board_gone": "O quadro deste hub não existe mais.",
+    "invalid": "Verifique se tudo está preenchido corretamente.",
+    "network": "Não foi possível conectar ao servidor.",
+    "unknown": "O servidor não respondeu como esperado."
+  },
+  "fixes": {
+    "choose_board": "Escolher quadro",
+    "file_meeting": "Adicionar a reunião a um hub",
+    "restore_hub": "Desarquivar o hub"
+  }
+}

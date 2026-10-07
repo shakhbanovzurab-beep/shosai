@@ -1,0 +1,36 @@
+{
+  "answers": "Antwoorden",
+  "model": {
+    "title": "Model",
+    "description": "Met Automatisch kiest Leo per taak een passend model. De krachtigste modellen gebruiken je aparte wekelijkse tokens daarvoor (zie Gebruik).",
+    "label": "Leo-model",
+    "auto": "Automatisch",
+    "autoHint": "Leo kiest per taak"
+  },
+  "language": {
+    "title": "Antwoordtaal",
+    "description": "Met Automatisch antwoordt Leo in de taal van de interface.",
+    "auto": "Automatisch"
+  },
+  "length": {
+    "title": "Antwoordlengte",
+    "description": "Hoeveel Leo standaard zegt.",
+    "options": {
+      "concise": "Beknopt",
+      "balanced": "Gebalanceerd",
+      "detailed": "Uitgebreid"
+    }
+  },
+  "advanced": {
+    "title": "Geavanceerde instellingen",
+    "description": "Wat Leo mag gebruiken. Wat uitstaat, wordt niet aangeboden en niet gebruikt.",
+    "webSearch": "Zoeken op het web",
+    "webSearchHint": "Laat Leo automatisch op internet naar antwoorden zoeken.",
+    "voiceMode": "Spraakmodus",
+    "voiceModeHint": "Hardop met Leo praten. Als je dit uitzet, verdwijnt de microfoon uit de interface.",
+    "knowledgeSearch": "Zoeken in kennis",
+    "knowledgeSearchHint": "Zoek naar antwoorden in de bestanden en bronnen die je voor Leo hebt gekozen.",
+    "connectedSearch": "Zoeken in gekoppelde diensten",
+    "connectedSearchHint": "Zoek in gekoppelde diensten, zoals Google Drive en Notion."
+  }
+}

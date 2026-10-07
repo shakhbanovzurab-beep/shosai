@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Détails",
+    "stages": "Étapes",
+    "history": "Déroulement",
+    "summaryDecided": "{rounds, plural, one {Discuté # fois — décidé le {date}.} many {Discuté # de fois — décidé le {date}.} other {Discuté # fois — décidé le {date}.}}",
+    "summaryOpen": "{rounds, plural, one {Discuté # fois — aucune décision.} many {Discuté # de fois — aucune décision.} other {Discuté # fois — aucune décision.}}",
+    "blockers": "À chaque fois : {quotes}.",
+    "round": "Tour {index, number}",
+    "blocker": "Ce qui bloquait",
+    "decision": "Décision",
+    "decisionChanged": "La décision a changé",
+    "previous": "Avant",
+    "current": "Maintenant",
+    "decidedAt": "{date}, « {meeting} »",
+    "outcome": "Résultat",
+    "outcomeUnknown": "le résultat n’est pas encore connu",
+    "links": {
+      "causes": "Bloque",
+      "blocked_by": "Bloqué par",
+      "outcome_of": "Découle de la décision"
+    },
+    "sources": "Sources",
+    "dismissals": "Mises à l’écart",
+    "dismissedByYou": "Écarté par vous",
+    "disproved": "Démenti : {evidence}",
+    "dismissedUntil": "jusqu’au {date}",
+    "returned": "le délai a expiré et le sujet est revenu",
+    "owner": "Responsable",
+    "noOwner": "non attribué",
+    "due": "Échéance",
+    "noDue": "aucune date",
+    "goneTitle": "Cet élément n’existe plus",
+    "goneText": "Le hub a peut-être été supprimé, ou l’enregistrement de la réunion retiré.",
+    "loadError": "Impossible de charger les détails"
+  },
+  "why": {
+    "source": "Source",
+    "meeting": "réunion du {date}, « {title} »",
+    "said": "Dit par",
+    "moment": "Moment",
+    "jump": "Aller au moment",
+    "signals": {
+      "series": "Des réunions de cette série sont déjà ici.",
+      "subject": "La conversation portait sur ce hub.",
+      "title": "C’est dans le titre de la réunion.",
+      "entity": "Le nom a été mentionné dans la conversation.",
+      "organisation": "Les participants font partie de cette organisation.",
+      "human": "Vous l’avez placé ici vous-même."
+    },
+    "loadError": "Impossible de charger la source"
+  }
+}

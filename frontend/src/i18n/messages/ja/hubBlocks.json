@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "未解決のこと",
+    "empty": "保留中のものはありません。すべて終了しています",
+    "more": "{count, plural, other {緊急度の低い残り # 件はここに表示されていません}}",
+    "why": "理由は？",
+    "done": "完了",
+    "dismiss": "該当しない",
+    "assign": "割り当て",
+    "abandon": "中止",
+    "rowLabel": "{subject} — 詳細",
+    "doneToast": "完了にしました",
+    "dismissToast": "{days, plural, other {# 日間非表示にしました}}",
+    "abandonToast": "中止にしました",
+    "assignedToast": "{owner} に割り当てました",
+    "assignTitle": "誰が担当しますか？",
+    "assignLabel": "担当者",
+    "assignPlaceholder": "名前",
+    "loadError": "未解決のことを読み込めませんでした"
+  },
+  "digest": {
+    "title": "前回の会議以降",
+    "meeting": "{title}、{date}",
+    "opened": "新規",
+    "closed": "終了",
+    "untouched": "議論されていないこと",
+    "untouchedHint": "ハブの進行を止めているのに、会議では誰も触れませんでした",
+    "loadError": "前回の会議の要約を読み込めませんでした"
+  },
+  "feed": {
+    "title": "ここでの経緯",
+    "facts": {
+      "decision": "決定事項",
+      "promise": "約束",
+      "risk": "リスク",
+      "problem": "問題",
+      "question": "未解決の質問"
+    },
+    "superseded": "変更済み",
+    "replacedBy": "{date} に「{text}」に置き換えられました",
+    "jumpTo": "{moment} の場面に移動",
+    "earlier": "以前の会議を表示",
+    "empty": "会議はまだありません。最初の会議がこのハブに追加されるとすぐに表示されます。",
+    "quiet": "特筆すべき発言はありませんでした",
+    "loadError": "ここでの経緯を読み込めませんでした"
+  },
+  "materials": {
+    "title": "資料",
+    "addLink": "リンクを追加",
+    "upload": "アップロード",
+    "find": "資料内を検索",
+    "removeLabel": "{title} をハブから削除",
+    "gone": "この資料は削除されています",
+    "origin": "{source, select, meeting {会議から · {date}} other {手動で追加 · {date}}}",
+    "empty": "資料はまだありません。会議の要約は自動的にここに追加されます。リンクやファイルはいつでも追加できます。",
+    "noMatches": "「{query}」に一致するものはありません",
+    "addTitle": "リンクを追加",
+    "titleLabel": "タイトル",
+    "urlLabel": "リンク",
+    "added": "追加しました",
+    "removed": "ハブから削除しました",
+    "uploadFailed": "{file}：{reason}",
+    "loadError": "資料を読み込めませんでした"
+  }
+}

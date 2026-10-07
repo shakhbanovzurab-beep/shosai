@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Workspace knowledge"
+  },
+  "title": "Knowledge",
+  "description": "What Leo knows in {workspace}. It answers each person only from what they can use: knowledge for everyone, and their own teams’.",
+  "search": {
+    "placeholder": "Search by name",
+    "label": "Search knowledge"
+  },
+  "loadFailed": "Couldn’t load the workspace’s knowledge",
+  "loading": "Loading knowledge",
+  "alwaysIncluded": {
+    "text": "Leo also answers from the meetings, decisions and projects each person can open here. Nobody has to add them.",
+    "label": "Always included",
+    "meetings": "{count, plural, one {# meeting} other {# meetings}}",
+    "meetingsLoading": "Meetings",
+    "decisions": "{count, plural, one {# decision} other {# decisions}}",
+    "decisionsLoading": "Decisions",
+    "projects": "{count, plural, one {# project} other {# projects}}"
+  },
+  "empty": {
+    "title": "No files or sources yet",
+    "text": "Share your own files (they stay yours), upload files that belong to {workspace}, or connect a shared drive or wiki. Leo answers from them for whoever can use them."
+  },
+  "noMatch": {
+    "title": "Nothing matches",
+    "text": "Try another name or team.",
+    "clear": "Clear filters"
+  },
+  "sections": {
+    "files": "Files · {count, number}",
+    "filesLabel": "Files",
+    "noFilesMatch": "No files match.",
+    "sources": "Connected sources · {count, number}",
+    "sourcesLabel": "Connected sources",
+    "sourcesEmptyAdmin": "Connect the drive or wiki your team already uses, and Leo keeps up with it.",
+    "sourcesEmpty": "Admins can connect the drive or wiki your team already uses."
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "Document",
+    "text": "Text",
+    "sheet": "Spreadsheet",
+    "slides": "Slides",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "Website"
+  },
+  "status": {
+    "syncing": "Syncing",
+    "indexing": "Indexing",
+    "failed": "Couldn’t read"
+  },
+  "pages": "{count, plural, one {# page} other {# pages}}",
+  "origin": {
+    "personal": "{who, select, me {Your file, shared} former {A former member’s file, shared} other {{name}’s file, shared}}",
+    "connector": "{who, select, me {Connected by you} former {Connected by a former member} other {Connected by {name}}}",
+    "upload": "{who, select, me {Belongs to {workspace} · added by you} former {Belongs to {workspace} · added by a former member} other {Belongs to {workspace} · added by {name}}}"
+  },
+  "added": "{days, plural, =0 {Today} =1 {Yesterday} one {# day ago} other {# days ago}}",
+  "leaves": "{who, select, me {Leaves with you unless you transfer it to the workspace from your File Manager} former {Leaves with its owner unless they transfer it to the workspace} other {Leaves with {name} unless they transfer it to the workspace}}",
+  "access": {
+    "label": "Who can use it",
+    "hint": "Leo answers from it only for them. You can change this later.",
+    "everyone": "Everyone at {workspace}",
+    "someTeam": "A team"
+  },
+  "menu": {
+    "openIn": "Open in {provider}",
+    "project": "Project",
+    "noProject": "No project"
+  },
+  "remove": {
+    "stopSharing": "Stop sharing",
+    "stopSharingTitle": "Stop sharing {name}?",
+    "stopSharingText": "{who, select, me {Leo stops answering from it in {workspace}. It stays in your File Manager.} former {Leo stops answering from it in {workspace}. It stays in its owner’s File Manager.} other {Leo stops answering from it in {workspace}. It stays in {name}’s File Manager.}}",
+    "disconnect": "Disconnect",
+    "disconnectTitle": "Disconnect {name}?",
+    "disconnectText": "Syncing stops and Leo stops answering from it. Nothing changes in {provider}.",
+    "removeTitle": "Remove {name}?",
+    "removeText": "It’s deleted from {workspace}, and Leo stops answering from it for everyone."
+  },
+  "changed": {
+    "everyone": "Everyone at {workspace} can use it now",
+    "team": "{team} can use it now",
+    "addedToProject": "Added to {project}",
+    "noProject": "Not in a project now"
+  },
+  "addMenu": {
+    "addFile": "Add file",
+    "addKnowledge": "Add knowledge",
+    "share": "Share from my files",
+    "shareHint": "Stays yours, leaves with you",
+    "upload": "Upload to {workspace}",
+    "uploadHint": "Belongs to the workspace",
+    "connect": "Connect a source",
+    "connectHint": "Drive, Notion, Confluence or a site"
+  }
+}

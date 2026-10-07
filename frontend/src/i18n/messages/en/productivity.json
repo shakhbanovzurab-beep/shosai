@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Productivity",
+    "description": "Today’s tasks, projects, focus timer, calendar and recent notes, with a year of completed work at a glance."
+  },
+  "greeting": "{period, select, morning {Good morning, {name}.} afternoon {Good afternoon, {name}.} other {Good evening, {name}.}}",
+  "greetingAnyTime": "Hello, {name}.",
+  "sidePanel": "Calendar, focus and notes",
+  "tasks": {
+    "heading": "Today",
+    "progress": "{done, number} of {total, number} done",
+    "newTask": "New task",
+    "addTask": "Add task"
+  },
+  "projects": {
+    "heading": "Projects",
+    "status": {
+      "inProgress": "In progress",
+      "planning": "Planning"
+    },
+    "progressOf": "Progress of {project}",
+    "due": "Due {date}"
+  },
+  "notes": {
+    "heading": "Recent notes",
+    "viewAll": "View all",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "empty": "No notes yet",
+    "emptyHint": "Notes from your meetings will appear here."
+  }
+}

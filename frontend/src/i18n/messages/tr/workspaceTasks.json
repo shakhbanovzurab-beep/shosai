@@ -1,0 +1,81 @@
+{
+  "title": "Görevler",
+  "description": "Toplantılarda üzerinde anlaşılan veya projelere eklenen işler. Sizinkiler Verimlilik ve Kanban alanınızda da görünür.",
+  "newTask": "Yeni görev",
+  "loading": "Görevler yükleniyor…",
+  "loadFailed": "Görevler yüklenemedi",
+  "empty": {
+    "title": "Henüz görev yok",
+    "text": "Biri üzerinde iş anlaşılan bir toplantıyı paylaştığında veya bir projeye görev eklediğinizde görevler burada görünür.",
+    "add": "Görev ekle"
+  },
+  "noMatch": {
+    "title": "Bu filtrelerle eşleşen bir şey yok",
+    "text": "Başka bir proje, ekip veya kişi deneyin.",
+    "clear": "Filtreleri temizle"
+  },
+  "caughtUp": {
+    "title": "Her şey yolunda",
+    "text": "Burada sizi bekleyen bir şey yok. Size atanan yeni görevler burada ve Verimlilik bölümünüzde görünür.",
+    "seeEveryone": "Herkesin görevlerini gör"
+  },
+  "views": {
+    "label": "Kimin görevleri",
+    "mine": "Benim",
+    "team": "Herkes"
+  },
+  "assignee": {
+    "label": "Atanan kişi",
+    "anyone": "Herkes"
+  },
+  "owner": {
+    "label": "Sorumlu",
+    "unassigned": "Atanmadı",
+    "you": "Siz",
+    "meOption": "{name} (siz)",
+    "change": "Sorumlu: {name}. Sorumluyu değiştir",
+    "changedToYou": "Artık sizin",
+    "changedTo": "Yeni sorumlu: {name}",
+    "cleared": "Artık sorumlusu yok"
+  },
+  "groups": {
+    "overdue": "Gecikmiş · {count, number}",
+    "today": "Bugün bitiyor · {count, number}",
+    "week": "Bu hafta · {count, number}",
+    "later": "Daha sonra · {count, number}",
+    "undated": "Son tarih yok · {count, number}"
+  },
+  "showDone": "Tamamlananları göster · {count, number}",
+  "hideDone": "Tamamlananları gizle",
+  "status": {
+    "todo": "Yapılacak",
+    "in_progress": "Devam ediyor",
+    "done": "Tamamlandı"
+  },
+  "due": {
+    "none": "Son tarih yok",
+    "add": "Son tarih ekle",
+    "clear": "Son tarihi temizle",
+    "change": "{due}. Son tarihi değiştir",
+    "overdue": "Gecikti · {date}",
+    "today": "Son tarih bugün",
+    "tomorrow": "Son tarih yarın",
+    "on": "Son tarih: {date}",
+    "was": "Son tarihi geçti: {date}",
+    "changed": "Son tarih değiştirildi",
+    "cleared": "Son tarih temizlendi"
+  },
+  "form": {
+    "title": "Yeni görev",
+    "description": "Görevin sorumlusu onu kendi Verimlilik ve Kanban alanında da görür.",
+    "task": "Görev",
+    "taskPlaceholder": "ör. Lansman e-postasının taslağını yaz",
+    "titleRequired": "Ne yapılması gerektiğini yazın.",
+    "nobodyYet": "Henüz kimse",
+    "due": "Son tarih",
+    "project": "Proje",
+    "noProject": "Proje yok",
+    "projectHint": "Buraya eklenen görevleri çalışma alanındaki herkes görebilir.",
+    "submit": "Görev ekle"
+  }
+}

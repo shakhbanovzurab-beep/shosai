@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, one {<b>#</b> erledigte Aufgabe im letzten Jahr} other {<b>#</b> erledigte Aufgaben im letzten Jahr}}",
+  "chart": {
+    "flat": "{count, plural, one {# erledigte Aufgabe von {from} bis {to}, dargestellt als Heatmap. Mit den Pfeiltasten kannst du einzelne Tage ablesen.} other {# erledigte Aufgaben von {from} bis {to}, dargestellt als Heatmap. Mit den Pfeiltasten kannst du einzelne Tage ablesen.}}",
+    "skyline": "{count, plural, one {# erledigte Aufgabe von {from} bis {to}, dargestellt als 3D-Skyline. Mit den Pfeiltasten kannst du einzelne Tage ablesen.} other {# erledigte Aufgaben von {from} bis {to}, dargestellt als 3D-Skyline. Mit den Pfeiltasten kannst du einzelne Tage ablesen.}}"
+  },
+  "day": "{count, plural, =0 {Keine erledigten Aufgaben am {date}} one {# erledigte Aufgabe am {date}} other {# erledigte Aufgaben am {date}}}",
+  "tooltip": "{count, plural, =0 {<b>Keine erledigten Aufgaben</b> am {date}} one {<b># erledigte Aufgabe</b> am {date}} other {<b># erledigte Aufgaben</b> am {date}}}",
+  "views": {
+    "label": "Diagrammansicht",
+    "flat": "Flache Heatmap",
+    "skyline": "3D-Skyline"
+  },
+  "hint": {
+    "flat": "Zeige auf einen Tag für Details · Pfeiltasten zum Erkunden",
+    "skyline": "Ziehen zum Drehen · Doppelklick zum Zurücksetzen"
+  },
+  "levels": {
+    "label": "Aktivitätsstufen",
+    "less": "Weniger",
+    "more": "Mehr",
+    "none": "Keine erledigten Aufgaben",
+    "light": "Gering",
+    "moderate": "Mittel",
+    "heavy": "Hoch",
+    "heaviest": "Sehr hoch"
+  },
+  "stats": {
+    "total": "Letztes Jahr",
+    "busiest": "Aktivster Tag",
+    "longest": "Längste Serie",
+    "current": "Aktuelle Serie"
+  },
+  "units": {
+    "contributions": "{count, plural, one {erledigte Aufgabe} other {erledigte Aufgaben}}",
+    "days": "{count, plural, one {Tag} other {Tage}}"
+  }
+}

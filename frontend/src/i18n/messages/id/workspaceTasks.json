@@ -1,0 +1,81 @@
+{
+  "title": "Tugas",
+  "description": "Pekerjaan yang disepakati dalam rapat atau ditambahkan ke proyek. Tugas Anda juga muncul di Produktivitas dan Kanban Anda.",
+  "newTask": "Tugas baru",
+  "loading": "Memuat tugas…",
+  "loadFailed": "Tidak dapat memuat tugas",
+  "empty": {
+    "title": "Belum ada tugas",
+    "text": "Tugas muncul saat seseorang membagikan rapat yang menyepakati pekerjaan, atau saat Anda menambahkan tugas ke proyek.",
+    "add": "Tambahkan tugas"
+  },
+  "noMatch": {
+    "title": "Tidak ada yang cocok dengan filter ini",
+    "text": "Coba proyek, tim, atau orang lain.",
+    "clear": "Hapus filter"
+  },
+  "caughtUp": {
+    "title": "Semua sudah beres",
+    "text": "Tidak ada yang menunggu Anda di sini. Tugas baru yang ditugaskan kepada Anda muncul di sini dan di Produktivitas Anda.",
+    "seeEveryone": "Lihat tugas semua orang"
+  },
+  "views": {
+    "label": "Tugas siapa",
+    "mine": "Milik saya",
+    "team": "Semua orang"
+  },
+  "assignee": {
+    "label": "Penerima tugas",
+    "anyone": "Siapa saja"
+  },
+  "owner": {
+    "label": "Penanggung jawab",
+    "unassigned": "Belum ditugaskan",
+    "you": "Anda",
+    "meOption": "{name} (Anda)",
+    "change": "Penanggung jawab: {name}. Ubah penanggung jawab",
+    "changedToYou": "Sekarang milik Anda",
+    "changedTo": "Sekarang milik {name}",
+    "cleared": "Kini tidak ada penanggung jawabnya"
+  },
+  "groups": {
+    "overdue": "Terlambat · {count, number}",
+    "today": "Tenggat hari ini · {count, number}",
+    "week": "Minggu ini · {count, number}",
+    "later": "Nanti · {count, number}",
+    "undated": "Tanpa tenggat · {count, number}"
+  },
+  "showDone": "Tampilkan yang selesai · {count, number}",
+  "hideDone": "Sembunyikan yang selesai",
+  "status": {
+    "todo": "Belum dikerjakan",
+    "in_progress": "Sedang dikerjakan",
+    "done": "Selesai"
+  },
+  "due": {
+    "none": "Tanpa tenggat",
+    "add": "Tambahkan tenggat",
+    "clear": "Hapus tenggat",
+    "change": "{due}. Ubah tenggat",
+    "overdue": "Terlambat · {date}",
+    "today": "Tenggat hari ini",
+    "tomorrow": "Tenggat besok",
+    "on": "Tenggat {date}",
+    "was": "Tenggat sebelumnya {date}",
+    "changed": "Tenggat diubah",
+    "cleared": "Tenggat dihapus"
+  },
+  "form": {
+    "title": "Tugas baru",
+    "description": "Penanggung jawabnya juga melihat tugas ini di Produktivitas dan Kanban miliknya.",
+    "task": "Tugas",
+    "taskPlaceholder": "mis. Buat draf email peluncuran",
+    "titleRequired": "Tulis apa yang perlu dikerjakan.",
+    "nobodyYet": "Belum ada",
+    "due": "Tenggat",
+    "project": "Proyek",
+    "noProject": "Tanpa proyek",
+    "projectHint": "Semua orang di ruang kerja dapat melihat tugas yang ditambahkan di sini.",
+    "submit": "Tambahkan tugas"
+  }
+}

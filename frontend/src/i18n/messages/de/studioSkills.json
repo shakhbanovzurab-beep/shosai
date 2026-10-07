@@ -1,0 +1,53 @@
+{
+  "title": "Skills",
+  "tabs": {
+    "readyMade": "Fertige",
+    "repository": "Dein Repository",
+    "mine": "Meine ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Skill finden: Systemdesign, Code-Review…",
+    "label": "Skills suchen",
+    "help": "Das Verzeichnis von skills.sh durchsuchen",
+    "noMatches": "Keine passenden Skills. Versuche es mit anderen Begriffen.",
+    "emptyTitle": "Verzeichnis fertiger Skills",
+    "emptyDescription": "Beginne zu tippen. Ein Skill ist eine fertige Anweisung, die du an einen Prompt anhängen kannst.",
+    "searchFailed": "skills.sh konnte nicht durchsucht werden. Versuche es erneut."
+  },
+  "repository": {
+    "label": "GitHub-Repository",
+    "placeholder": "inhaber/repo oder ein GitHub-Link",
+    "find": "Skills finden",
+    "help": "Ein öffentliches Repository mit einer SKILL.md-Datei",
+    "emptyTitle": "Dein eigener Skill von GitHub",
+    "emptyDescription": "Gib ein öffentliches Repository ein, um die SKILL.md-Dateien darin zu finden.",
+    "scanFailed": "Das Repository konnte nicht gelesen werden."
+  },
+  "candidate": {
+    "installs": "{count, plural, one {# Installation} other {# Installationen}}",
+    "installed": "Installiert"
+  },
+  "mine": {
+    "extraFiles": "Enthält Skripte oder andere Dateien – verwendet werden nur die Anweisungen in SKILL.md.",
+    "update": "{name} aktualisieren",
+    "updateHint": "Auf den neuesten Commit aktualisieren",
+    "remove": "{name} entfernen",
+    "emptyTitle": "Noch keine Skills",
+    "emptyDescription": "Füge einen aus „Fertige“ oder aus deinem Repository hinzu."
+  },
+  "remove": {
+    "title": "{name} entfernen?",
+    "titleUnnamed": "Diesen Skill entfernen?",
+    "description": "Er wird von allen Prompts gelöst, die ihn verwenden. Du kannst ihn später wieder hinzufügen."
+  },
+  "toasts": {
+    "installed": "{name} installiert",
+    "installedHint": "Hänge ihn im Prompt-Editor an einen Prompt an.",
+    "installFailed": "Der Skill konnte nicht installiert werden",
+    "upToDate": "{name} ist auf dem neuesten Stand",
+    "updated": "{name} aktualisiert",
+    "updateFailed": "Der Skill konnte nicht aktualisiert werden",
+    "removed": "{name} entfernt",
+    "removeFailed": "Der Skill konnte nicht entfernt werden"
+  }
+}

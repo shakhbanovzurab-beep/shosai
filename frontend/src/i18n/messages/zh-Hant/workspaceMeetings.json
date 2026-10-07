@@ -1,0 +1,107 @@
+{
+  "title": "會議",
+  "description": "成員在這裡共用的錄製內容，附上 Leo 整理的摘要、決策和任務。",
+  "sharingRules": "共用規則",
+  "reviewSharingRules": "檢查共用規則",
+  "shareMeeting": "共用會議",
+  "searchMeetings": "搜尋會議",
+  "loading": "正在載入會議…",
+  "loadFailed": "無法載入會議",
+  "empty": {
+    "title": "還沒有共用的內容",
+    "text": "成員共用自己的錄製內容，或只有 {workspace} 成員參加的會議結束並套用共用規則時，會議就會出現在這裡。"
+  },
+  "noMatch": {
+    "title": "沒有符合的會議",
+    "text": "試試其他字詞、其他團隊，或查看所有會議。",
+    "clear": "清除篩選條件"
+  },
+  "recency": {
+    "thisWeek": "本週",
+    "lastWeek": "上週",
+    "earlier": "更早"
+  },
+  "scope": {
+    "label": "顯示哪些會議",
+    "all": "全部",
+    "mine": "我參加的"
+  },
+  "when": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "tomorrow": "明天"
+  },
+  "row": {
+    "recordedByYou": "由你錄製",
+    "recordedBy": "由 {name} 錄製",
+    "withGuests": "有訪客",
+    "decisions": "{count, plural, other {# 項決策}}",
+    "tasks": "{count, plural, other {# 項任務}}"
+  },
+  "meeting": {
+    "back": "會議",
+    "loading": "正在載入會議…",
+    "loadFailed": "無法載入會議",
+    "date": "日期",
+    "duration": "時長",
+    "participants": "參與者",
+    "participantsWithGuests": "{names}（{count, plural, other {# 位 {workspace} 外部人員}}）",
+    "project": "專案",
+    "recordedByYou": "由你錄製。這場會議也在你的筆記中；你隨時可以停止共用，會議仍會保留在筆記中。",
+    "sharedBy": "由 {name} 錄製並共用",
+    "summary": "摘要",
+    "transcript": "逐字稿",
+    "keyPoints": "重點",
+    "decisions": "決策",
+    "replacedLater": "之後已被取代",
+    "tasks": "任務",
+    "transcriptPrivateTitle": "只共用了摘要",
+    "transcriptPrivate": "{name} 未共用逐字稿。如果需要確切的內容，請詢問對方。",
+    "transcriptPrivateUnknown": "主辦人未共用逐字稿。如果需要確切的內容，請詢問對方。",
+    "unavailableTitle": "無法查看這場會議",
+    "unavailable": "這場會議不存在、未與你共用，或擁有者已停止共用。",
+    "backToMeetings": "返回會議"
+  },
+  "project": {
+    "label": "專案",
+    "none": "無專案"
+  },
+  "audience": {
+    "participants": "參與者",
+    "workspace": "{workspace} 的所有人",
+    "unknownTeam": "特定團隊",
+    "participantsHint": "參加這場會議的成員。",
+    "workspaceHint": "工作空間中現在和日後的所有人。",
+    "teamHint": "{team} 的成員，以及參與者。",
+    "privateTeamHint": "{team}（私人團隊）的成員，以及參與者。",
+    "sharedWith": "{level, select, participants {已與參與者共用} workspace {已與 {workspace} 的所有人共用} other {已與 {team} 共用}}",
+    "sharedToast": "{level, select, participants {已與 {workspace} 中的參與者共用「{title}」} workspace {已與 {workspace} 的所有人共用「{title}」} other {已與 {workspace} 中的 {team} 共用「{title}」}}"
+  },
+  "share": {
+    "lockedHint": "只有共用者或管理員可以變更誰能查看",
+    "change": "變更誰能查看這場會議",
+    "title": "誰能查看這場會議",
+    "description": "包括摘要、決策和任務。其他人向 Leo 提出的問題只有自己看得到。",
+    "external": "有 {workspace} 外部的人參加了這場會議。只共用他們也能接受公開的內容。",
+    "audienceLabel": "共用對象",
+    "includeTranscript": "包含逐字稿",
+    "includeTranscriptHint": "否則只會共用摘要。",
+    "transcriptShared": "逐字稿也已共用",
+    "summaryOnly": "現在只共用摘要",
+    "addedToProject": "已加入專案",
+    "removedFromProject": "已從專案移除",
+    "stopMine": "停止共用（保留在我的筆記中）",
+    "takeOut": "從 {workspace} 中移出"
+  },
+  "shareDialog": {
+    "allSharedTitle": "全部都已共用",
+    "allShared": "你所有的錄製內容都已在 {workspace} 中。",
+    "title": "共用你的一場會議",
+    "description": "會議仍屬於你，也會保留在你的筆記中；在你停止共用之前，{workspace} 都能看到。",
+    "meeting": "會議",
+    "movesFrom": "這場會議目前已在 {workspace} 中共用；在這裡共用會將它移過來。",
+    "audience": "誰能查看",
+    "audienceHint": "其中的決策和任務會一起共用；參與者一律可以查看。",
+    "submit": "共用"
+  }
+}

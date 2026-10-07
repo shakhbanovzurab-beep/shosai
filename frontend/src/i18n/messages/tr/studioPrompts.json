@@ -1,0 +1,62 @@
+{
+  "intro": "Asistanınızın rollerini yerine getirirken uyduğu talimatlar. Katalogdan hazır beceriler, deponuzdan kendi becerileriniz.",
+  "role": "Rol",
+  "skills": "Beceriler",
+  "search": {
+    "placeholder": "Ada göre ara…",
+    "label": "İstemleri ada göre ara"
+  },
+  "loadFailed": "İstemler yüklenemedi",
+  "empty": {
+    "title": "Henüz istem yok",
+    "description": "Bir rol için istem oluşturun, ardından genişletmek için beceri ekleyin."
+  },
+  "noMatches": {
+    "title": "Eşleşen sonuç yok",
+    "description": "Başka bir ad veya rol deneyin."
+  },
+  "copyName": "{name} kopyası",
+  "delete": {
+    "title": "“{name}” silinsin mi?",
+    "description": "Bir rol bu istemi kullanıyorsa o rol yerleşik varsayılan istemine döner."
+  },
+  "filter": {
+    "label": "Role göre filtrele",
+    "all": "Tümü",
+    "allHelp": "Rolü ne olursa olsun tüm istemler."
+  },
+  "table": {
+    "number": "No.",
+    "updated": "Güncelleme",
+    "inUse": "Kullanımda",
+    "deleteNamed": "{name} istemini sil"
+  },
+  "menu": {
+    "edit": "Düzenle…",
+    "stopUsing": "Kullanmayı bırak",
+    "useFor": "{role} için kullan",
+    "duplicate": "Kopyasını oluştur…",
+    "delete": "Sil…"
+  },
+  "editor": {
+    "editTitle": "İstemi düzenle",
+    "newTitle": "Yeni istem",
+    "description": "Asistanın seçilen rolde uyduğu talimatlar ve varsa beceriler.",
+    "namePlaceholder": "Yapay zekâ sürümü",
+    "instructions": "Talimatlar",
+    "instructionsPlaceholder": "Asistana bu rolde nasıl davranacağını anlatın. Markdown kullanabilirsiniz.",
+    "noSkills": "Henüz yüklü beceri yok. Beceriler düğmesiyle ekleyin.",
+    "saveFailed": "Kaydedilemedi. Tekrar denemek için yazmaya devam edin.",
+    "savesAutomatically": "Değişiklikler otomatik olarak kaydedilir",
+    "done": "Bitti"
+  },
+  "toasts": {
+    "deleted": "“{name}” silindi",
+    "deleteFailed": "İstem silinemedi",
+    "inUse": "{role} artık “{name}” istemini kullanıyor",
+    "backToDefault": "{role} yerleşik istemine döndü",
+    "changeFailed": "İstem değiştirilemedi",
+    "created": "“{name}” oluşturuldu",
+    "createFailed": "İstem oluşturulamadı"
+  }
+}

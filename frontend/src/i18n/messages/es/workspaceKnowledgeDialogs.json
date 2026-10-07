@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "Subir a {workspace}",
+    "description": "Los archivos subidos pertenecen a {workspace}: se quedan cuando sales y están a cargo de los administradores. Para compartir un archivo y que siga siendo tuyo, compártelo desde tus archivos.",
+    "dropZone": "Suelta archivos para agregarlos",
+    "drop": "Suelta los archivos aquí",
+    "choose": "Elegir archivos",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown o texto · hasta {limit} cada uno",
+    "chosen": "Archivos elegidos",
+    "removeFile": "Quitar {name}",
+    "tooBig": "{count, plural, one {{names} supera {limit} y se omitió.} many {{names} superan {limit} y se omitieron.} other {{names} superan {limit} y se omitieron.}}",
+    "noFiles": "Elige al menos un archivo.",
+    "submit": "{count, plural, =0 {Subir} one {Subir} many {Subir # de archivos} other {Subir # archivos}}"
+  },
+  "connect": {
+    "title": "Conectar una fuente",
+    "description": "Una unidad compartida, wiki o sitio donde {workspace} ya guarda sus documentos. Se mantiene sincronizada, pertenece al espacio de trabajo y Leo responde con ella a quien tú elijas.",
+    "source": "Fuente",
+    "link": "Enlace",
+    "linkHint": "La carpeta, el espacio o la página que se mantendrá sincronizada.",
+    "submit": "Conectar"
+  },
+  "share": {
+    "title": "Compartir desde mis archivos",
+    "description": "Leo responde con ellos en {workspace} a quien tú elijas. Siguen en tu Administrador de archivos, siguen siendo tuyos y se van contigo.",
+    "submit": "{count, plural, =0 {Compartir} one {Compartir} many {Compartir # de archivos} other {Compartir # archivos}}"
+  }
+}

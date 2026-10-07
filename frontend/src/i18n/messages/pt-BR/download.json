@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Baixar o app",
+    "description": "Baixe o app para computador no macOS e no Windows."
+  },
+  "title": "Baixe o app para computador",
+  "subtitle": "Grave reuniões, tenha notas e tradução ao vivo em qualquer chamada e fale com o Leo de qualquer lugar com um atalho.",
+  "notes": {
+    "mobile": "O app para computador funciona no macOS e no Windows. Abra esta página no seu computador para baixá-lo.",
+    "linux": "Ainda não há versão para Linux. O app para computador funciona no macOS e no Windows."
+  },
+  "card": {
+    "yourComputer": "Seu computador",
+    "requirement": "{system} ou posterior",
+    "downloadFor": "Baixar para {name}",
+    "downloadBuild": "Baixar para {arch} · {size}",
+    "meta": "Versão {version} · {size} · {type} · {date}",
+    "loadFailed": "Não foi possível carregar o download para {platform}.",
+    "notYet": "O app para {platform} ainda não está disponível. Volte em breve.",
+    "universal": "Apple silicon e Intel"
+  },
+  "checksum": {
+    "button": "Checksum",
+    "verify": "Para verificar, execute <code>{command}</code> e compare o resultado.",
+    "copy": "Copiar checksum",
+    "copied": "Checksum copiado",
+    "copyFailed": "Não foi possível copiar o checksum"
+  },
+  "install": {
+    "title": "Instale em três passos",
+    "macos": {
+      "open": "Abra o arquivo {type} baixado.",
+      "drag": "Arraste o app para a pasta “Aplicativos” e abra-o a partir dela.",
+      "allow": "Entre na sua conta e permita o acesso ao microfone e a gravação de tela e áudio do sistema quando o macOS pedir — é assim que as reuniões são capturadas."
+    },
+    "windows": {
+      "run": "Execute o instalador baixado ({type}).",
+      "setup": "Siga a instalação e abra o app pelo menu Iniciar.",
+      "allow": "Entre na sua conta e permita o acesso ao microfone quando o Windows pedir."
+    }
+  },
+  "features": {
+    "title": "Só no computador",
+    "customize": "Personalizar atalhos",
+    "shortcutOff": "Atalho desativado",
+    "shortcut": "Atalho: {keys}",
+    "toggle_recording": {
+      "title": "Gravação",
+      "text": "Inicie ou pause a gravação de qualquer reunião, em qualquer app."
+    },
+    "toggle_overlay": {
+      "title": "Sobreposição",
+      "text": "Notas ao vivo por cima da sua chamada; recolha-as em uma pílula."
+    },
+    "live_translation": {
+      "title": "Tradução ao vivo",
+      "text": "Acompanhe a conversa no seu idioma enquanto as pessoas falam."
+    },
+    "prompter": {
+      "title": "Ponto eletrônico",
+      "text": "Sugestões discretas do Leo enquanto você fala, visíveis só para você."
+    }
+  }
+}

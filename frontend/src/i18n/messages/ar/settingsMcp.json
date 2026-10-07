@@ -1,0 +1,23 @@
+{
+  "description": "يمكن ربط خوادم Model Context Protocol لمنح Leo أدوات وبيانات من تطبيقات أخرى.",
+  "add": "إضافة خادم",
+  "empty": {
+    "title": "لا توجد خوادم MCP",
+    "description": "يمكن إضافة خادم بعيد عبر عنوان URL الخاص به."
+  },
+  "hasAuth": "مع تفويض",
+  "notReached": "لم يتم الوصول إليه بعد",
+  "tools": "{count, plural, zero {# أداة} one {أداة واحدة} two {أداتان} few {# أدوات} many {# أداة} other {# أداة}}",
+  "enable": "تفعيل {name}",
+  "disable": "تعطيل {name}",
+  "remove": "إزالة {name}",
+  "removed": "تمت إزالة {name}",
+  "form": {
+    "transport": "النقل",
+    "url": "عنوان URL للخادم",
+    "auth": "ترويسة التفويض <optional>(اختياري)</optional>"
+  },
+  "addFailed": "تعذرت إضافة الخادم.",
+  "toggleFailed": "تعذر تغيير حالة الخادم",
+  "removeFailed": "تعذرت إزالة الخادم"
+}

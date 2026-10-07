@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Notlar",
+    "description": "Notları, takip görevleri ve zihin haritalarıyla transkripti oluşturulmuş toplantılar."
+  },
+  "recency": {
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "thisWeek": "Bu hafta",
+    "earlier": "Daha önce"
+  },
+  "fields": {
+    "meeting": "Toplantı",
+    "folder": "Klasör",
+    "people": "Kişiler",
+    "participants": "Katılımcılar",
+    "duration": "Süre",
+    "date": "Tarih"
+  },
+  "views": {
+    "label": "Düzen",
+    "timeline": "Zaman çizelgesi",
+    "grid": "Izgara",
+    "list": "Liste"
+  },
+  "upload": {
+    "button": "Kayıt yükle",
+    "hint": "Veya dosyayı sayfada herhangi bir yere bırakın",
+    "dropTitle": "Yüklemek için kayıtları bırakın",
+    "dropHint": "mp3, m4a, wav, mp4, webm ve daha fazlası · en fazla {size}",
+    "notMedia": "{name} bir ses veya video dosyası değil",
+    "tooLarge": "{name} çok büyük",
+    "sizeLimit": "Kayıtlar en fazla {size} olabilir."
+  },
+  "recordings": {
+    "uploading": "Yükleniyor",
+    "justNow": "Az önce",
+    "transcribing": "Transkript oluşturuluyor",
+    "transcribingNow": "Transkript oluşturuluyor…",
+    "waiting": "Transkript sırası bekleniyor…",
+    "timelineStatus": "Transkript oluşturuluyor… Tamamlandığında notlar, kararlar ve zihin haritası burada görünecek."
+  },
+  "remove": "Kaldır: {name}",
+  "folders": {
+    "label": "Klasörler",
+    "all": "Tüm toplantılar",
+    "new": "Yeni klasör",
+    "newMenu": "Yeni klasör…",
+    "newNamed": "Yeni klasör: “{name}”",
+    "defaultName": "Yeni klasör",
+    "nameLabel": "Klasör adı",
+    "none": "Klasör yok",
+    "add": "Klasöre ekle",
+    "moveTo": "Klasöre taşı",
+    "search": "Klasör ara…",
+    "noMatch": "Eşleşen klasör yok.",
+    "movedTo": "{folder} klasörüne taşındı",
+    "removedFrom": "Klasörden kaldırıldı",
+    "emptyTitle": "Bu klasör boş",
+    "emptyDescription": "Buraya eklemek için bir toplantıya sağ tıklayıp “{action}” seçeneğini belirleyin."
+  },
+  "card": {
+    "latest": "Son toplantı",
+    "keyPoints": "Önemli noktalar",
+    "openNotes": "Notları aç",
+    "openItems": "{count, plural, one {# açık} other {# açık}}"
+  },
+  "timeline": {
+    "decision": "Karar:",
+    "openTasks": "{count, plural, one {# açık görev} other {# açık görev}}"
+  },
+  "menu": {
+    "openInNewTab": "Yeni sekmede aç",
+    "exportTranscript": "Transkripti dışa aktar"
+  },
+  "exportFormats": {
+    "txt": "Düz metin",
+    "md": "Markdown",
+    "srt": "SubRip altyazıları",
+    "vtt": "WebVTT altyazıları",
+    "json": "JSON verisi"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "“{title}” silindi"
+}

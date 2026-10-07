@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Define con quién habla el asistente, cómo se comporta y qué modelos lo hacen funcionar."
+  },
+  "tabs": {
+    "context": "Contexto",
+    "prompts": "Prompts de rol",
+    "models": "Modelos"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Respuestas en vivo",
+      "description": "Respuestas del asistente: superposición, chat, reunión",
+      "help": "Respuestas en vivo: la superposición, el chat y las respuestas durante una reunión. El prompt define el tono, la longitud y el formato de lo que dice el asistente."
+    },
+    "screenshots": {
+      "name": "Capturas de pantalla",
+      "description": "Lectura de la pantalla, diapositivas y documentos",
+      "help": "Análisis de capturas de pantalla: el botón «Captura» de la superposición y la pantalla compartida en una reunión. El prompt le indica al modelo cómo leer la imagen y qué responder."
+    },
+    "code": {
+      "name": "Código",
+      "description": "Preguntas sobre código y algoritmos",
+      "help": "Preguntas sobre código y algoritmos. El prompt define el lenguaje de programación, cuánto explicar y si mostrar la complejidad y las pruebas."
+    },
+    "system_design": {
+      "name": "Diseño de sistemas",
+      "description": "Diseño de arquitectura para entrevistas",
+      "help": "Preguntas de arquitectura en entrevistas. El prompt define la estructura de la explicación: requisitos, estimaciones, diseño y ventajas y desventajas."
+    },
+    "notes": {
+      "name": "Notas y mapas",
+      "description": "Versión con IA de las notas de reunión y el mapa mental",
+      "help": "La versión con IA de las notas de reunión y el mapa mental. El prompt decide qué conservar: decisiones, tareas de seguimiento, preguntas abiertas."
+    },
+    "transcript": {
+      "name": "Transcripción",
+      "description": "Voz a texto en tiempo real",
+      "help": "Voz a texto en tiempo real. Funciona con un modelo de voz y no usa prompt."
+    }
+  },
+  "autosave": {
+    "saving": "Guardando…"
+  },
+  "context": {
+    "intro": "Un texto breve sobre ti: se inserta como primer mensaje del sistema en cada solicitud al modelo. Cuanto más preciso sea, menos preguntas de seguimiento recibirás.",
+    "loadFailed": "No se pudo cargar tu contexto",
+    "title": "Sobre ti",
+    "description": "Quién eres, en qué trabajas y cómo prefieres las respuestas. Los datos valen más que los adjetivos.",
+    "example": "Puesto: ingeniero backend sénior, 6 años, fintech.\nStack: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nAhora: preparo entrevistas de diseño de sistemas en empresas de producto.\nRespuestas: concisas, con ventajas y desventajas; código en Python salvo que indique otra cosa.\nEvitar: consejos genéricos, introducciones largas.",
+    "count": "{count, number} / {max, plural, one {# carácter} many {# de caracteres} other {# caracteres}} · ~{tokens, plural, one {# token} many {# de tokens} other {# tokens}}",
+    "tooLong": "Acórtalo para guardarlo.",
+    "saveFailed": "No se pudo guardar.",
+    "savedAgo": "Guardado {ago}",
+    "savesAutomatically": "Se guarda automáticamente"
+  },
+  "preview": {
+    "title": "Cómo se envía",
+    "description": "La versión guardada abre cada solicitud, antes del prompt del rol.",
+    "system": "Sistema",
+    "user": "Usuario",
+    "empty": "(vacío: no se envía nada)",
+    "rolePrompt": "prompt del rol (pestaña Prompts de rol)",
+    "question": "tu pregunta"
+  },
+  "models": {
+    "intro": "Elige qué modelo responde en cada rol. La lista muestra solo los modelos incluidos en tu suscripción.",
+    "loadFailed": "No se pudieron cargar los modelos",
+    "model": "Modelo",
+    "temperature": "Temperatura",
+    "maxTokens": "Máximo de tokens",
+    "reasoning": "Razonamiento",
+    "unsupported": "No compatible",
+    "modelFor": "Modelo para {role}",
+    "temperatureFor": "Temperatura para {role}",
+    "maxTokensRange": "El máximo de tokens debe ser un número entero entre {min, number} y {max, number}.",
+    "saveFailed": "No se pudo guardar la configuración del modelo"
+  },
+  "picker": {
+    "placeholder": "Elige un modelo…",
+    "search": "Buscar modelos…",
+    "empty": "Ningún modelo coincide.",
+    "frontier": "Vanguardia"
+  }
+}

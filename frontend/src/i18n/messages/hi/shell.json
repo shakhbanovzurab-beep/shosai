@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "उत्पादकता",
+    "hub": "हब",
+    "email": "ईमेल",
+    "meetings": "मीटिंग",
+    "calendar": "कैलेंडर",
+    "kanban": "कानबान",
+    "notes": "नोट",
+    "fileManager": "फ़ाइल मैनेजर",
+    "studio": "Studio",
+    "knowledge": "नॉलेज",
+    "downloadApp": "ऐप डाउनलोड करें",
+    "appGroup": "ऐप",
+    "workspacesGroup": "वर्कस्पेस"
+  },
+  "workspaceNav": {
+    "home": "होम",
+    "projects": "प्रोजेक्ट",
+    "tasks": "टास्क",
+    "meetings": "मीटिंग",
+    "decisions": "फ़ैसले",
+    "knowledge": "नॉलेज",
+    "group": "वर्कस्पेस",
+    "members": "सदस्य",
+    "settings": "सेटिंग"
+  },
+  "badge": {
+    "new": "नया",
+    "soon": "जल्द ही"
+  },
+  "search": {
+    "label": "खोजें",
+    "placeholder": "आप क्या खोज रहे हैं?",
+    "noResults": "कोई नतीजा नहीं मिला।",
+    "pagesGroup": "पेज"
+  },
+  "userMenu": {
+    "settings": "सेटिंग",
+    "language": "भाषा",
+    "upgrade": "प्लान अपग्रेड करें",
+    "support": "सहायता",
+    "logOut": "साइन आउट करें"
+  },
+  "sidebar": {
+    "open": "साइडबार खोलें",
+    "close": "साइडबार बंद करें"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "下載應用程式",
+    "description": "下載適用於 macOS 和 Windows 的電腦版應用程式。"
+  },
+  "title": "取得電腦版應用程式",
+  "subtitle": "錄製會議、在任何通話中使用即時筆記和翻譯，並隨時用快速鍵呼叫 Leo。",
+  "notes": {
+    "mobile": "電腦版應用程式可在 macOS 和 Windows 上執行。請在電腦上開啟這個頁面來下載。",
+    "linux": "目前還沒有 Linux 版本。電腦版應用程式可在 macOS 和 Windows 上執行。"
+  },
+  "card": {
+    "yourComputer": "你的電腦",
+    "requirement": "{system} 或更新版本",
+    "downloadFor": "下載 {name} 版",
+    "downloadBuild": "下載 {arch} 版 · {size}",
+    "meta": "版本 {version} · {size} · {type} · {date}",
+    "loadFailed": "無法載入 {platform} 版的下載項目。",
+    "notYet": "{platform} 版應用程式還無法使用。請稍後再回來查看。",
+    "universal": "Apple 晶片和 Intel"
+  },
+  "checksum": {
+    "button": "總和檢查碼",
+    "verify": "如要驗證，請執行 <code>{command}</code> 並比對結果。",
+    "copy": "複製總和檢查碼",
+    "copied": "已複製總和檢查碼",
+    "copyFailed": "無法複製總和檢查碼"
+  },
+  "install": {
+    "title": "三個步驟完成安裝",
+    "macos": {
+      "open": "開啟下載的 {type} 檔案。",
+      "drag": "將應用程式拖曳到「應用程式」資料夾，再從那裡開啟。",
+      "allow": "登入，並在 macOS 詢問時允許使用麥克風及「螢幕與系統錄音」，這樣才能錄下會議。"
+    },
+    "windows": {
+      "run": "執行下載的安裝程式（{type}）。",
+      "setup": "依照安裝步驟操作，再從「開始」功能表開啟應用程式。",
+      "allow": "登入，並在 Windows 詢問時允許使用麥克風。"
+    }
+  },
+  "features": {
+    "title": "電腦版獨有功能",
+    "customize": "自訂快速鍵",
+    "shortcutOff": "快速鍵已關閉",
+    "shortcut": "快速鍵：{keys}",
+    "toggle_recording": {
+      "title": "錄製",
+      "text": "在任何應用程式中，開始或暫停錄製任何會議。"
+    },
+    "toggle_overlay": {
+      "title": "懸浮視窗",
+      "text": "即時筆記會顯示在通話畫面上方，也能收合成小圓條。"
+    },
+    "live_translation": {
+      "title": "即時翻譯",
+      "text": "對方說話時，以你的語言跟上對話內容。"
+    },
+    "prompter": {
+      "title": "提詞器",
+      "text": "你說話時，Leo 會低調提供建議，只有你看得到。"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Définissez à qui l’assistant s’adresse, comment il se comporte et quels modèles le font fonctionner."
+  },
+  "tabs": {
+    "context": "Contexte",
+    "prompts": "Prompts des rôles",
+    "models": "Modèles"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Réponses en direct",
+      "description": "Réponses de l’assistant : fenêtre flottante, conversation, réunion",
+      "help": "Réponses en direct : la fenêtre flottante, la conversation et les réponses pendant une réunion. Le prompt définit le ton, la longueur et le format de ce que dit l’assistant."
+    },
+    "screenshots": {
+      "name": "Captures d’écran",
+      "description": "Lecture de l’écran, des diapositives, des documents",
+      "help": "Analyse des captures d’écran : le bouton « Capture d’écran » de la fenêtre flottante et le partage d’écran en réunion. Le prompt indique au modèle comment lire l’image et quoi répondre."
+    },
+    "code": {
+      "name": "Code",
+      "description": "Questions sur le code et les algorithmes",
+      "help": "Questions sur le code et les algorithmes. Le prompt définit le langage de programmation, le niveau d’explication et s’il faut montrer la complexité et les tests."
+    },
+    "system_design": {
+      "name": "Conception de systèmes",
+      "description": "Conception d’architecture pour les entretiens",
+      "help": "Questions d’architecture en entretien. Le prompt définit la structure du raisonnement : exigences, estimations, conception et compromis."
+    },
+    "notes": {
+      "name": "Notes et cartes mentales",
+      "description": "Version IA des notes de réunion et de la carte mentale",
+      "help": "La version IA des notes de réunion et de la carte mentale. Le prompt décide de ce qu’il faut garder : décisions, actions à mener, questions ouvertes."
+    },
+    "transcript": {
+      "name": "Transcription",
+      "description": "Transcription de la parole en temps réel",
+      "help": "Transcription de la parole en temps réel. Fonctionne avec un modèle de reconnaissance vocale et n’utilise pas de prompt."
+    }
+  },
+  "autosave": {
+    "saving": "Enregistrement…"
+  },
+  "context": {
+    "intro": "Un court texte sur vous, inséré comme premier message système dans chaque requête au modèle. Plus il est précis, moins vous aurez de questions complémentaires.",
+    "loadFailed": "Impossible de charger votre contexte",
+    "title": "À propos de vous",
+    "description": "Qui vous êtes, sur quoi vous travaillez et quelles réponses vous préférez. Les faits valent mieux que les adjectifs.",
+    "example": "Rôle : ingénieur backend senior, 6 ans d’expérience, fintech.\nStack : Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nEn ce moment : je prépare des entretiens de conception de systèmes dans des entreprises produit.\nRéponses : concises, avec les compromis ; code en Python sauf indication contraire.\nÀ éviter : conseils génériques, longues introductions.",
+    "count": "{count, number} / {max, plural, one {# caractère} many {# de caractères} other {# caractères}} · ~{tokens, plural, one {# jeton} many {# de jetons} other {# jetons}}",
+    "tooLong": "Raccourcissez le texte pour l’enregistrer.",
+    "saveFailed": "Impossible d’enregistrer.",
+    "savedAgo": "Enregistré {ago}",
+    "savesAutomatically": "Enregistrement automatique"
+  },
+  "preview": {
+    "title": "Ce qui est envoyé",
+    "description": "La version enregistrée ouvre chaque requête, avant le prompt du rôle.",
+    "system": "Système",
+    "user": "Utilisateur",
+    "empty": "(vide : rien n’est envoyé)",
+    "rolePrompt": "prompt du rôle, depuis Prompts des rôles",
+    "question": "votre question"
+  },
+  "models": {
+    "intro": "Choisissez le modèle qui répond pour chaque rôle. La liste ne montre que les modèles inclus dans votre abonnement.",
+    "loadFailed": "Impossible de charger les modèles",
+    "model": "Modèle",
+    "temperature": "Température",
+    "maxTokens": "Nombre maximal de jetons",
+    "reasoning": "Raisonnement",
+    "unsupported": "Non pris en charge",
+    "modelFor": "Modèle pour {role}",
+    "temperatureFor": "Température pour {role}",
+    "maxTokensRange": "Le nombre maximal de jetons doit être un nombre entier compris entre {min, number} et {max, number}.",
+    "saveFailed": "Impossible d’enregistrer les paramètres du modèle"
+  },
+  "picker": {
+    "placeholder": "Choisir un modèle…",
+    "search": "Rechercher un modèle…",
+    "empty": "Aucun modèle ne correspond.",
+    "frontier": "De pointe"
+  }
+}

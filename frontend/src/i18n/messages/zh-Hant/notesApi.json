@@ -1,0 +1,7 @@
+{
+  "meetingNotFound": "找不到會議。",
+  "notesTooLong": "筆記最多只能有 {max, number} 個字元。",
+  "linkSettingsInvalid": "連結設定有誤。請重新載入頁面，然後再試一次。",
+  "commentsClosed": "這個連結不開放留言。",
+  "commentInvalid": "請輸入留言，最多 {max, number} 個字元。"
+}

@@ -1,0 +1,50 @@
+{
+  "title": "Concentración",
+  "sound": {
+    "label": "Sonido al terminar una sesión",
+    "on": "Sonido activado",
+    "off": "Sonido desactivado"
+  },
+  "rhythm": "Ritmo de concentración",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Técnica Pomodoro",
+      "hint": "{focus} de concentración, {pause} de descanso y {longBreak} cada {every, plural, one {sesión} many {# de sesiones} other {# sesiones}}. Ideal para arrancar y para días con mucho trabajo."
+    },
+    "fifty": {
+      "name": "Extendido",
+      "hint": "{focus} de concentración, {pause} de descanso y {longBreak} cada {every, plural, one {sesión} many {# de sesiones} other {# sesiones}}. Ideal para escribir y diseñar."
+    },
+    "fiftyTwo": {
+      "name": "Ritmo {focus, number}/{pause, number}",
+      "hint": "{focus} de concentración y {pause} de descanso: así trabajaban las personas más productivas en el estudio de DeskTime."
+    },
+    "deepWork": {
+      "name": "Trabajo profundo",
+      "hint": "{focus} de concentración y {pause} de descanso: un ciclo natural de atención, para problemas difíciles."
+    }
+  },
+  "phase": {
+    "focus": "Concentración",
+    "break": "Descanso corto",
+    "long_break": "Descanso largo"
+  },
+  "start": "Iniciar",
+  "pause": "Pausar",
+  "resume": "Reanudar",
+  "restart": "Reiniciar esta fase",
+  "skipBreak": "Saltar el descanso",
+  "skipToBreak": "Pasar al descanso",
+  "cycle": "{done, number} de {every, plural, one {# sesión} many {# de sesiones} other {# sesiones}} antes de un descanso largo",
+  "doneToday": "{count, plural, one {# sesión completada hoy} many {# de sesiones completadas hoy} other {# sesiones completadas hoy}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Sesión de concentración terminada: tómate un descanso.",
+    "focusLong": "Sesión de concentración terminada: tómate un descanso largo.",
+    "break": "Fin del descanso. ¿Retomas la concentración?",
+    "next": "{preset} · presiona Iniciar cuando quieras."
+  }
+}

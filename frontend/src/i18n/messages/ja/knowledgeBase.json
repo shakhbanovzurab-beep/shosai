@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "ナレッジ",
+    "description": "個人スペースで Leo が回答に使うファイルとソースを選べます。"
+  },
+  "heading": "ナレッジ",
+  "intro": "個人スペースで質問したときに Leo が回答に使うもの：ファイル管理から選んだファイル、接続したソース、ワークスペースで共有されたもの。回答は自分にだけ表示されます。",
+  "tabs": {
+    "files": "ファイル",
+    "sources": "ソース",
+    "workspaces": "ワークスペースから"
+  },
+  "loadFailed": "ファイルを読み込めませんでした",
+  "leoFolders": {
+    "heading": "Leo が読み取るフォルダ",
+    "stop": "{folder} の使用を停止"
+  },
+  "leoFiles": {
+    "heading": "Leo が使用するファイル",
+    "emptyTitle": "Leo が使用するファイルはまだありません",
+    "emptyDescription": "ファイル管理からファイルやフォルダを選ぶか、上で新しいファイルをアップロードしてください。"
+  },
+  "summary": {
+    "files": "ファイル",
+    "chunks": "チャンク",
+    "processing": "処理中",
+    "embeddings": "埋め込み",
+    "used": "{used} 使用中",
+    "usedOfLimit": "プランの上限 {limit} のうち {used} 使用中",
+    "failedUsage": "{failed, plural, other {# 件失敗}} · {usage}",
+    "inIndex": "ベクトルインデックス内",
+    "busy": "解析と埋め込み中",
+    "caughtUp": "すべて処理済み",
+    "dimensions": "{dimensions, number} 次元"
+  },
+  "dropzone": {
+    "label": "Leo 用のファイルを追加",
+    "title": "Leo に使わせるファイルをここにドロップ",
+    "uploading": "{count, plural, other {# 件のファイルをアップロード中…}}",
+    "description": "ファイル管理のマイファイルに保存されます。{types}、1 ファイルあたり {size} まで。",
+    "choose": "自分のファイルから選択",
+    "upload": "新規アップロード",
+    "skipped": "{count, plural, other {# 件のファイルをスキップしました}}",
+    "unreadable": "{name}：Leo はこの種類またはサイズのファイルを読み取れません",
+    "tooMany": "{name}：一度に {max, number} 件を超えています"
+  },
+  "choose": {
+    "title": "自分のファイルから選択",
+    "description": "選んだものを Leo が読み取り、個人スペースでの回答に使います。フォルダの場合は、あとから追加したファイルも含まれます。",
+    "folders": "フォルダ全体",
+    "files": "ファイル",
+    "alreadyUsed": "Leo が使用中",
+    "submit": "Leo で使用",
+    "readingOne": "Leo が読み取っています",
+    "readingMany": "{count, plural, other {Leo が選択した # 件を読み取っています}}",
+    "readingDescription": "インデックス作成が終わると、個人スペースでの回答に使われます。"
+  },
+  "table": {
+    "status": "ステータス",
+    "chunks": "チャンク",
+    "size": "サイズ",
+    "workspaces": "ワークスペース",
+    "actions": "操作",
+    "wholeFolder": "<name>{folder}</name> · フォルダ全体"
+  },
+  "steps": {
+    "queued": "待機中",
+    "parsing": "解析中",
+    "chunking": "分割中",
+    "embedding": "埋め込み中",
+    "indexed": "インデックス作成済み",
+    "failed": "失敗"
+  },
+  "status": {
+    "step": "{step, number}/{total, number}",
+    "progress": "{name}：{step}、{percent}"
+  },
+  "menu": {
+    "reindex": "インデックスを更新",
+    "showInFileManager": "ファイル管理で表示",
+    "stopFolder": "「{folder}」の使用を停止",
+    "stopFile": "Leo での使用を停止"
+  }
+}

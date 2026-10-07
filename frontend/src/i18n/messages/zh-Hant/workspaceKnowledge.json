@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "工作空間知識庫"
+  },
+  "title": "知識庫",
+  "description": "Leo 在 {workspace} 中知道的內容。Leo 只會根據每個人可以使用的內容回答：給所有人的知識庫，以及他們所屬團隊的知識庫。",
+  "search": {
+    "placeholder": "依名稱搜尋",
+    "label": "搜尋知識庫"
+  },
+  "loadFailed": "無法載入工作空間知識庫",
+  "loading": "正在載入知識庫",
+  "alwaysIncluded": {
+    "text": "Leo 也會根據每個人在這裡可以開啟的會議、決策和專案回答，不需要另外新增。",
+    "label": "一律包含",
+    "meetings": "{count, plural, other {# 場會議}}",
+    "meetingsLoading": "會議",
+    "decisions": "{count, plural, other {# 項決策}}",
+    "decisionsLoading": "決策",
+    "projects": "{count, plural, other {# 個專案}}"
+  },
+  "empty": {
+    "title": "還沒有檔案或來源",
+    "text": "共用你自己的檔案（仍屬於你）、上傳屬於 {workspace} 的檔案，或連接共用雲端硬碟或 Wiki。Leo 會為可以使用的人根據這些內容回答。"
+  },
+  "noMatch": {
+    "title": "沒有符合的項目",
+    "text": "試試其他名稱或團隊。",
+    "clear": "清除篩選條件"
+  },
+  "sections": {
+    "files": "檔案 · {count, number}",
+    "filesLabel": "檔案",
+    "noFilesMatch": "沒有符合的檔案。",
+    "sources": "已連接的來源 · {count, number}",
+    "sourcesLabel": "已連接的來源",
+    "sourcesEmptyAdmin": "連接團隊已在使用的雲端硬碟或 Wiki，Leo 會隨時掌握最新內容。",
+    "sourcesEmpty": "管理員可以連接團隊已在使用的雲端硬碟或 Wiki。"
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "文件",
+    "text": "純文字",
+    "sheet": "試算表",
+    "slides": "簡報",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "網站"
+  },
+  "status": {
+    "syncing": "正在同步…",
+    "indexing": "正在建立索引…",
+    "failed": "無法讀取"
+  },
+  "pages": "{count, plural, other {# 頁}}",
+  "origin": {
+    "personal": "{who, select, me {你的檔案，已共用} former {前成員的檔案，已共用} other {{name} 的檔案，已共用}}",
+    "connector": "{who, select, me {由你連接} former {由前成員連接} other {由 {name} 連接}}",
+    "upload": "{who, select, me {屬於 {workspace} · 由你新增} former {屬於 {workspace} · 由前成員新增} other {屬於 {workspace} · 由 {name} 新增}}"
+  },
+  "added": "{days, plural, =0 {今天} =1 {昨天} other {# 天前}}",
+  "leaves": "{who, select, me {會隨你離開，除非你從檔案管理將它轉移給工作空間} former {會隨擁有者離開，除非對方將它轉移給工作空間} other {會隨 {name} 離開，除非對方將它轉移給工作空間}}",
+  "access": {
+    "label": "誰可以使用",
+    "hint": "Leo 只會為這些人根據它回答。你之後可以變更。",
+    "everyone": "{workspace} 的所有人",
+    "someTeam": "特定團隊"
+  },
+  "menu": {
+    "openIn": "在 {provider} 中開啟",
+    "project": "專案",
+    "noProject": "無專案"
+  },
+  "remove": {
+    "stopSharing": "停止共用",
+    "stopSharingTitle": "要停止共用 {name} 嗎？",
+    "stopSharingText": "{who, select, me {Leo 將不再於 {workspace} 中根據它回答。檔案仍在你的檔案管理中。} former {Leo 將不再於 {workspace} 中根據它回答。檔案仍在擁有者的檔案管理中。} other {Leo 將不再於 {workspace} 中根據它回答。檔案仍在 {name} 的檔案管理中。}}",
+    "disconnect": "中斷連接",
+    "disconnectTitle": "要中斷連接 {name} 嗎？",
+    "disconnectText": "同步會停止，Leo 也不會再根據它回答。{provider} 中的內容不會有任何變更。",
+    "removeTitle": "要移除 {name} 嗎？",
+    "removeText": "它會從 {workspace} 中刪除，Leo 也不會再為任何人根據它回答。"
+  },
+  "changed": {
+    "everyone": "{workspace} 的所有人現在都可以使用",
+    "team": "{team} 現在可以使用",
+    "addedToProject": "已加入 {project}",
+    "noProject": "目前不在任何專案中"
+  },
+  "addMenu": {
+    "addFile": "新增檔案",
+    "addKnowledge": "新增知識庫",
+    "share": "從我的檔案共用",
+    "shareHint": "仍屬於你，隨你離開",
+    "upload": "上傳到 {workspace}",
+    "uploadHint": "屬於工作空間",
+    "connect": "連接來源",
+    "connectHint": "雲端硬碟、Notion、Confluence 或網站"
+  }
+}

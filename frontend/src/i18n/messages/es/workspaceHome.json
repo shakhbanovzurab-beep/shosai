@@ -1,0 +1,62 @@
+{
+  "description": "Lo que requiere tu atención, lo que viene y cómo va el trabajo del equipo.",
+  "invitePeople": "Invitar personas",
+  "quietStart": "Cuando se compartan reuniones o empiecen proyectos, esta página mostrará lo que requiere tu atención, lo que viene y lo que decidió el equipo.",
+  "blocks": {
+    "needsYou": "Para ti",
+    "allTasks": "Todas las tareas",
+    "nothingWaiting": "Aquí no hay nada pendiente de ti. Las tareas que te asignen aparecerán aquí y en tu Productividad.",
+    "moreTasks": "{count, plural, one {# tarea más} many {# de tareas más} other {# tareas más}}",
+    "comingUp": "Próximamente",
+    "projects": "Proyectos",
+    "allProjects": "Todos los proyectos",
+    "recentDecisions": "Decisiones recientes",
+    "decisionLog": "Registro de decisiones"
+  },
+  "comingUp": {
+    "empty": "No hay reuniones del equipo próximamente.",
+    "live": "En vivo",
+    "guestsPrivate": "Sigue siendo privada: asisten invitados",
+    "private": "Las notas siguen siendo privadas",
+    "notesGoTo": "Las notas van a {audience}"
+  },
+  "decisions": {
+    "empty": "Las decisiones de las reuniones compartidas aparecerán aquí, enlazadas al lugar donde se tomaron.",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "No hay proyectos activos. Crea uno para agrupar sus reuniones, tareas y decisiones.",
+    "ledBy": "Liderado por {name}",
+    "ledByYou": "Liderado por ti"
+  },
+  "setup": {
+    "title": "Configura tu espacio de trabajo",
+    "progress": "{done, number} de {total, number} completados. Cada paso hace que la próxima reunión sea más útil para todos.",
+    "progressLabel": "{done, number} de {total, number} pasos de configuración completados",
+    "hide": "Ocultar la lista de configuración",
+    "done": "Completado",
+    "toDo": "Pendiente",
+    "steps": {
+      "invite": {
+        "title": "Invita a tu equipo",
+        "description": "Agrega al menos a dos personas para que las reuniones y tareas tengan adónde ir.",
+        "action": "Invitar personas"
+      },
+      "sharing": {
+        "title": "Confirma cómo se comparten las reuniones",
+        "description": "Elige adónde van las notas después de una reunión. Las reuniones con invitados siguen siendo privadas en cualquier caso.",
+        "action": "Revisar"
+      },
+      "share": {
+        "title": "Comparte una de tus reuniones",
+        "description": "Tus grabaciones se quedan en tus Notas hasta que compartas una aquí, con sus decisiones y tareas.",
+        "action": "Compartir una reunión"
+      },
+      "knowledge": {
+        "title": "Agrega conocimiento del equipo",
+        "description": "Comparte tus archivos, sube otros nuevos o conecta una unidad compartida para que Leo responda con ellos.",
+        "action": "Agregar conocimiento"
+      }
+    }
+  }
+}

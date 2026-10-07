@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "Không gian làm việc",
+    "home": "Trang chủ không gian làm việc",
+    "new": "Không gian làm việc mới",
+    "settings": "Cài đặt không gian làm việc",
+    "members": "Thành viên",
+    "decisions": "Quyết định",
+    "projects": "Dự án",
+    "tasks": "Công việc",
+    "knowledge": "Kiến thức của không gian làm việc",
+    "meetings": "Cuộc họp của không gian làm việc",
+    "project": "Dự án",
+    "meeting": "Cuộc họp"
+  },
+  "createWorkspace": "Tạo không gian làm việc",
+  "roles": {
+    "owner": {
+      "label": "Chủ sở hữu",
+      "description": "Toàn quyền, kể cả thanh toán và xóa không gian làm việc."
+    },
+    "admin": {
+      "label": "Quản trị viên",
+      "description": "Quản lý mọi người, nhóm, quy tắc chia sẻ và cài đặt."
+    },
+    "member": {
+      "label": "Thành viên",
+      "description": "Ghi, chia sẻ và theo dõi các việc sau cuộc họp."
+    }
+  },
+  "teams": {
+    "private": "Nhóm riêng tư"
+  },
+  "audience": {
+    "participants": "Người tham gia",
+    "everyone": "Mọi người tại {workspace}",
+    "aTeam": "Một nhóm",
+    "sharedWith": "{level, select, participants {Đã chia sẻ với người tham gia} workspace {Đã chia sẻ với mọi người tại {workspace}} other {Đã chia sẻ với {team}}}",
+    "hint": "{level, select, participants {Các thành viên đã có mặt trong cuộc họp.} other {Mọi người trong không gian làm việc, hiện tại và sau này.}}",
+    "teamHint": "{private, select, true {Thành viên của {team} (nhóm riêng tư) và người tham gia.} other {Thành viên của {team} và người tham gia.}}"
+  },
+  "people": {
+    "list": "Mọi người: {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name} (bạn)"
+  },
+  "filters": {
+    "team": "Nhóm",
+    "allTeams": "Tất cả nhóm",
+    "project": "Dự án",
+    "allProjects": "Tất cả dự án",
+    "clearSearch": "Xóa tìm kiếm"
+  },
+  "blocks": {
+    "loading": {
+      "files": "Đang tải tệp…",
+      "tasks": "Đang tải công việc…",
+      "yourTasks": "Đang tải công việc của bạn…",
+      "projects": "Đang tải dự án…",
+      "meetings": "Đang tải cuộc họp…",
+      "upcomingMeetings": "Đang tải cuộc họp sắp tới…",
+      "decisions": "Đang tải quyết định…"
+    },
+    "failed": {
+      "files": "Không thể tải tệp.",
+      "tasks": "Không thể tải công việc.",
+      "yourTasks": "Không thể tải công việc của bạn.",
+      "projects": "Không thể tải dự án.",
+      "meetings": "Không thể tải cuộc họp.",
+      "upcomingMeetings": "Không thể tải cuộc họp sắp tới.",
+      "decisions": "Không thể tải quyết định."
+    }
+  },
+  "dates": {
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "tomorrow": "Ngày mai",
+    "targetOverdue": "Quá hạn · {date}",
+    "targetToday": "Dự kiến hôm nay",
+    "targetTomorrow": "Dự kiến ngày mai",
+    "targetDay": "Dự kiến {day}",
+    "targetDate": "Dự kiến {date}",
+    "ago": "{days, plural, =0 {hôm nay} =1 {hôm qua} other {# ngày trước}}",
+    "on": "vào {date}",
+    "neverSignedIn": "Chưa từng đăng nhập",
+    "activeNow": "Đang hoạt động",
+    "hoursAgo": "{count, plural, other {# giờ trước}}",
+    "daysAgo": "{count, plural, =1 {Hôm qua} other {# ngày trước}}"
+  },
+  "gate": {
+    "loading": "Đang tải không gian làm việc…",
+    "loadFailed": "Không thể tải không gian làm việc",
+    "listFailed": "Không thể tải các không gian làm việc của bạn",
+    "unavailable": "Không gian làm việc này không khả dụng",
+    "unavailableHint": "Không gian này không tồn tại hoặc bạn không phải thành viên. Hãy nhờ một thành viên mời bạn, hoặc tạo không gian của riêng bạn.",
+    "backToPersonal": "Quay lại Cá nhân",
+    "suspended": "{name} đã bị tạm ngưng",
+    "suspendedOwnerHint": "Quyền truy cập đã bị tạm dừng với mọi người trong đó. Hãy liên hệ bộ phận hỗ trợ để khôi phục; không có gì trong không gian làm việc bị xóa.",
+    "suspendedHint": "Quyền truy cập đã bị tạm dừng với mọi người trong đó. Chủ sở hữu có thể liên hệ bộ phận hỗ trợ để khôi phục. Ghi chú, tệp và bảng của bạn trong Cá nhân không bị ảnh hưởng."
+  },
+  "switcher": {
+    "invite": "Mời mọi người vào {name}",
+    "settings": "Cài đặt không gian làm việc",
+    "current": "Hiện tại",
+    "hint": "Chuyển giữa Cá nhân và các không gian làm việc",
+    "personal": "Cá nhân",
+    "personalHint": "Thư, ghi chú, bảng và công việc của bạn",
+    "workspaces": "Không gian làm việc",
+    "suspended": "Đã tạm ngưng",
+    "detail": "{role} · {count, plural, other {# thành viên}}",
+    "loadFailed": "Không thể tải các không gian làm việc của bạn. Hãy thử lại",
+    "none": "Bạn chưa tham gia không gian làm việc nào"
+  },
+  "create": {
+    "title": "Đưa nhóm của bạn vào Leo",
+    "intro": "Một không gian làm việc chung cho những việc các bạn làm cùng nhau. Không gian cá nhân vẫn là của riêng bạn: thư, lịch, ghi chú và bảng luôn riêng tư cho đến khi bạn chọn chia sẻ.",
+    "value": {
+      "meetings": {
+        "title": "Cuộc họp chung",
+        "text": "Chia sẻ bản ghi từ Ghi chú, hoặc để ghi chú tự đến đúng người khi cuộc họp kết thúc. Cuộc họp có khách vẫn được giữ riêng tư."
+      },
+      "work": {
+        "title": "Dự án, công việc và quyết định",
+        "text": "Những gì đã quyết định và ai cần làm gì, nhóm theo dự án. Công việc của bạn cũng hiện trong Năng suất và Kanban của riêng bạn."
+      },
+      "knowledge": {
+        "title": "Kiến thức của nhóm",
+        "text": "Chia sẻ tệp từ Trình quản lý tệp, tải tệp mới lên hoặc kết nối một ổ đĩa dùng chung. Leo trả lời dựa trên chúng cho những ai được phép xem."
+      }
+    },
+    "billing": "Tính phí theo suất trên gói Team. <link>Xem bảng giá</link>",
+    "formHint": "Bạn sẽ là chủ sở hữu. Hãy mời mọi người ngay sau đó.",
+    "name": "Tên không gian làm việc",
+    "namePlaceholder": "Ví dụ: Acme",
+    "nameRequired": "Hãy đặt tên cho không gian làm việc.",
+    "seats": "Suất",
+    "fewerSeats": "Bớt suất",
+    "moreSeats": "Thêm suất",
+    "seatsHint": "Mỗi người một suất, kể cả bạn. Từ {min, number} đến {max, number}; có thể thay đổi bất cứ lúc nào.",
+    "submit": "Tạo không gian làm việc"
+  },
+  "toasts": {
+    "workspaceReady": "{name} đã sẵn sàng",
+    "workspaceReadyHint": "Hãy mời nhóm của bạn để bắt đầu chia sẻ cuộc họp.",
+    "createWorkspaceFailed": "Không thể tạo không gian làm việc.",
+    "saveFailed": "Không thể lưu thay đổi",
+    "workspaceDeleted": "Đã xóa {name}",
+    "deleteWorkspaceFailed": "Không thể xóa không gian làm việc",
+    "workspaceLeft": "Bạn đã rời {name}",
+    "leaveWorkspaceFailed": "Không thể rời không gian làm việc",
+    "projectSaveFailed": "Không thể lưu dự án",
+    "projectDeleted": "Đã xóa {name}",
+    "projectDeletedHint": "Các cuộc họp và công việc của dự án vẫn còn ở đây.",
+    "projectDeleteFailed": "Không thể xóa dự án",
+    "filesAdded": "{count, plural, =1 {Đã thêm {name}} other {Đã thêm # tệp}}",
+    "filesAddedHint": "{count, plural, other {Leo có thể trả lời dựa trên nội dung này sau khi lập chỉ mục xong.}}",
+    "sourceConnected": "Đã kết nối {name}",
+    "sourceConnectedHint": "Leo có thể trả lời dựa trên nguồn này sau lần đồng bộ đầu tiên.",
+    "knowledgeChangeFailed": "Không thể thay đổi",
+    "stoppedSharing": "Đã ngừng chia sẻ {name}",
+    "stoppedSharingHint": "Mục này vẫn nằm trong Trình quản lý tệp của chủ sở hữu; Leo không còn trả lời dựa trên nó ở đây.",
+    "knowledgeRemoved": "Đã gỡ {name}",
+    "knowledgeRemovedHint": "Leo không còn trả lời dựa trên mục này.",
+    "knowledgeRemoveFailed": "Không thể gỡ",
+    "fileStaysYours": "{count, plural, other {Tệp vẫn nằm trong Trình quản lý tệp và vẫn thuộc về bạn.}}",
+    "shareFileFailed": "Không thể chia sẻ",
+    "filesShared": "{count, plural, =1 {Đã chia sẻ {name}} other {Đã chia sẻ # tệp}}",
+    "stillInFileManager": "Tệp vẫn nằm trong Trình quản lý tệp của bạn.",
+    "unshareFileFailed": "Không thể ngừng chia sẻ",
+    "meetingShareFailed": "Không thể chia sẻ cuộc họp",
+    "meetingChangeFailed": "Không thể thay đổi cuộc họp",
+    "changeUndone": "Đã hoàn tác thay đổi",
+    "noLongerShared": "Đã ngừng chia sẻ",
+    "stillInYourNotes": "Cuộc họp vẫn nằm trong Ghi chú của bạn.",
+    "stillInOwnerNotes": "Cuộc họp vẫn nằm trong Ghi chú của chủ sở hữu.",
+    "sharedAgain": "Đã chia sẻ lại",
+    "unshareMeetingFailed": "Không thể ngừng chia sẻ",
+    "taskUpdateFailed": "Không thể cập nhật công việc",
+    "markedDone": "Đã đánh dấu hoàn thành",
+    "taskAdded": "Đã thêm công việc"
+  }
+}

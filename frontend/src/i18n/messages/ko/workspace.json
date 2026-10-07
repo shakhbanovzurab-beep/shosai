@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "워크스페이스",
+    "home": "워크스페이스 홈",
+    "new": "새 워크스페이스",
+    "settings": "워크스페이스 설정",
+    "members": "멤버",
+    "decisions": "결정 사항",
+    "projects": "프로젝트",
+    "tasks": "작업",
+    "knowledge": "워크스페이스 지식",
+    "meetings": "워크스페이스 회의",
+    "project": "프로젝트",
+    "meeting": "회의"
+  },
+  "createWorkspace": "워크스페이스 만들기",
+  "roles": {
+    "owner": {
+      "label": "소유자",
+      "description": "결제와 워크스페이스 삭제를 포함한 모든 권한이 있어요."
+    },
+    "admin": {
+      "label": "관리자",
+      "description": "사람, 팀, 공유 규칙과 설정을 관리해요."
+    },
+    "member": {
+      "label": "멤버",
+      "description": "회의를 녹음하고 공유하며 후속 작업을 챙겨요."
+    }
+  },
+  "teams": {
+    "private": "비공개 팀"
+  },
+  "audience": {
+    "participants": "참석자",
+    "everyone": "{workspace}의 모든 멤버",
+    "aTeam": "특정 팀",
+    "sharedWith": "{level, select, participants {참석자와 공유됨} workspace {{workspace}의 모든 멤버와 공유됨} other {{team} 팀과 공유됨}}",
+    "hint": "{level, select, participants {회의에 참석한 멤버예요.} other {지금과 앞으로의 워크스페이스 멤버 모두예요.}}",
+    "teamHint": "{private, select, true {{team}(비공개 팀) 멤버와 참석자예요.} other {{team} 멤버와 참석자예요.}}"
+  },
+  "people": {
+    "list": "사람: {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name}(나)"
+  },
+  "filters": {
+    "team": "팀",
+    "allTeams": "모든 팀",
+    "project": "프로젝트",
+    "allProjects": "모든 프로젝트",
+    "clearSearch": "검색어 지우기"
+  },
+  "blocks": {
+    "loading": {
+      "files": "파일을 불러오는 중…",
+      "tasks": "작업을 불러오는 중…",
+      "yourTasks": "내 작업을 불러오는 중…",
+      "projects": "프로젝트를 불러오는 중…",
+      "meetings": "회의를 불러오는 중…",
+      "upcomingMeetings": "예정된 회의를 불러오는 중…",
+      "decisions": "결정 사항을 불러오는 중…"
+    },
+    "failed": {
+      "files": "파일을 불러오지 못했어요.",
+      "tasks": "작업을 불러오지 못했어요.",
+      "yourTasks": "내 작업을 불러오지 못했어요.",
+      "projects": "프로젝트를 불러오지 못했어요.",
+      "meetings": "회의를 불러오지 못했어요.",
+      "upcomingMeetings": "예정된 회의를 불러오지 못했어요.",
+      "decisions": "결정 사항을 불러오지 못했어요."
+    }
+  },
+  "dates": {
+    "today": "오늘",
+    "yesterday": "어제",
+    "tomorrow": "내일",
+    "targetOverdue": "기한 지남 · {date}",
+    "targetToday": "목표일: 오늘",
+    "targetTomorrow": "목표일: 내일",
+    "targetDay": "목표일: {day}",
+    "targetDate": "목표일: {date}",
+    "ago": "{days, plural, =0 {오늘} =1 {어제} other {#일 전}}",
+    "on": "{date}",
+    "neverSignedIn": "로그인한 적 없음",
+    "activeNow": "지금 활동 중",
+    "hoursAgo": "{count, plural, other {#시간 전}}",
+    "daysAgo": "{count, plural, =1 {어제} other {#일 전}}"
+  },
+  "gate": {
+    "loading": "워크스페이스를 불러오는 중…",
+    "loadFailed": "워크스페이스를 불러오지 못했어요",
+    "listFailed": "워크스페이스 목록을 불러오지 못했어요",
+    "unavailable": "이 워크스페이스를 사용할 수 없어요",
+    "unavailableHint": "워크스페이스가 없거나 멤버가 아니에요. 워크스페이스 멤버에게 초대를 요청하거나 새 워크스페이스를 만들어 보세요.",
+    "backToPersonal": "개인으로 돌아가기",
+    "suspended": "{name} 워크스페이스가 정지됐어요",
+    "suspendedOwnerHint": "모든 멤버의 접근이 일시 중지됐어요. 복원하려면 고객 지원에 문의해 주세요. 워크스페이스의 내용은 삭제되지 않았어요.",
+    "suspendedHint": "모든 멤버의 접근이 일시 중지됐어요. 소유자가 고객 지원에 문의해 복원할 수 있어요. 개인 공간의 노트, 파일, 보드는 영향을 받지 않아요."
+  },
+  "switcher": {
+    "invite": "{name}에 사람 초대",
+    "settings": "워크스페이스 설정",
+    "current": "현재",
+    "hint": "개인과 워크스페이스 간 전환",
+    "personal": "개인",
+    "personalHint": "내 메일, 노트, 보드, 작업",
+    "workspaces": "워크스페이스",
+    "suspended": "정지됨",
+    "detail": "{role} · {count, plural, other {멤버 #명}}",
+    "loadFailed": "워크스페이스를 불러오지 못했어요. 다시 시도해 주세요",
+    "none": "아직 참여한 워크스페이스가 없어요"
+  },
+  "create": {
+    "title": "팀과 함께 Leo를 사용해 보세요",
+    "intro": "함께하는 일을 위한 공유 워크스페이스예요. 개인 공간은 그대로 내 것이에요. 메일, 캘린더, 노트, 보드는 직접 공유하기 전까지 비공개예요.",
+    "value": {
+      "meetings": {
+        "title": "공유 회의",
+        "text": "노트에서 녹음을 공유하거나, 회의가 끝나면 노트가 알맞은 사람에게 전달되게 해 보세요. 게스트가 있는 회의는 비공개로 유지돼요."
+      },
+      "work": {
+        "title": "프로젝트, 작업, 결정 사항",
+        "text": "무엇을 결정했고 누가 무엇을 맡았는지 프로젝트별로 모아 보여 줘요. 내 작업은 개인 생산성과 칸반에도 표시돼요."
+      },
+      "knowledge": {
+        "title": "팀 지식",
+        "text": "파일 관리자의 파일을 공유하거나, 새 파일을 업로드하거나, 공유 드라이브를 연결해 보세요. Leo는 볼 권한이 있는 사람에게 이 자료를 바탕으로 답해요."
+      }
+    },
+    "billing": "Team 플랜에서 라이선스당 요금이 청구돼요. <link>요금 보기</link>",
+    "formHint": "내가 소유자가 돼요. 만든 직후 사람을 초대할 수 있어요.",
+    "name": "워크스페이스 이름",
+    "namePlaceholder": "예: Acme",
+    "nameRequired": "워크스페이스 이름을 입력해 주세요.",
+    "seats": "라이선스",
+    "fewerSeats": "라이선스 줄이기",
+    "moreSeats": "라이선스 늘리기",
+    "seatsHint": "나를 포함해 1인당 1개예요. {min, number}–{max, number}개, 언제든 변경할 수 있어요.",
+    "submit": "워크스페이스 만들기"
+  },
+  "toasts": {
+    "workspaceReady": "{name} 워크스페이스가 준비됐어요",
+    "workspaceReadyHint": "팀을 초대해 회의를 공유해 보세요.",
+    "createWorkspaceFailed": "워크스페이스를 만들지 못했어요.",
+    "saveFailed": "변경 사항을 저장하지 못했어요",
+    "workspaceDeleted": "{name} 워크스페이스를 삭제했어요",
+    "deleteWorkspaceFailed": "워크스페이스를 삭제하지 못했어요",
+    "workspaceLeft": "{name} 워크스페이스에서 나갔어요",
+    "leaveWorkspaceFailed": "워크스페이스에서 나가지 못했어요",
+    "projectSaveFailed": "프로젝트를 저장하지 못했어요",
+    "projectDeleted": "{name} 프로젝트를 삭제했어요",
+    "projectDeletedHint": "프로젝트의 회의와 작업은 그대로 남아 있어요.",
+    "projectDeleteFailed": "프로젝트를 삭제하지 못했어요",
+    "filesAdded": "{count, plural, =1 {{name}을(를) 추가했어요} other {파일 #개를 추가했어요}}",
+    "filesAddedHint": "{count, plural, =1 {색인 생성이 끝나면 Leo가 이 파일을 바탕으로 답할 수 있어요.} other {색인 생성이 끝나면 Leo가 이 파일들을 바탕으로 답할 수 있어요.}}",
+    "sourceConnected": "{name}을(를) 연결했어요",
+    "sourceConnectedHint": "첫 동기화가 끝나면 Leo가 이 소스를 바탕으로 답할 수 있어요.",
+    "knowledgeChangeFailed": "변경하지 못했어요",
+    "stoppedSharing": "{name} 공유를 중지했어요",
+    "stoppedSharingHint": "소유자의 파일 관리자에는 그대로 있지만, 이제 Leo가 여기서 이 파일을 바탕으로 답하지 않아요.",
+    "knowledgeRemoved": "{name}을(를) 제거했어요",
+    "knowledgeRemovedHint": "이제 Leo가 이 자료를 바탕으로 답하지 않아요.",
+    "knowledgeRemoveFailed": "제거하지 못했어요",
+    "fileStaysYours": "{count, plural, =1 {파일은 내 파일 관리자에 그대로 있고 계속 내 것이에요.} other {파일들은 내 파일 관리자에 그대로 있고 계속 내 것이에요.}}",
+    "shareFileFailed": "공유하지 못했어요",
+    "filesShared": "{count, plural, =1 {{name}을(를) 공유했어요} other {파일 #개를 공유했어요}}",
+    "stillInFileManager": "파일 관리자에는 그대로 있어요.",
+    "unshareFileFailed": "공유를 중지하지 못했어요",
+    "meetingShareFailed": "회의를 공유하지 못했어요",
+    "meetingChangeFailed": "회의를 변경하지 못했어요",
+    "changeUndone": "변경을 취소했어요",
+    "noLongerShared": "공유를 중지했어요",
+    "stillInYourNotes": "노트에는 그대로 있어요.",
+    "stillInOwnerNotes": "소유자의 노트에는 그대로 있어요.",
+    "sharedAgain": "다시 공유했어요",
+    "unshareMeetingFailed": "공유를 중지하지 못했어요",
+    "taskUpdateFailed": "작업을 업데이트하지 못했어요",
+    "markedDone": "완료로 표시했어요",
+    "taskAdded": "작업을 추가했어요"
+  }
+}

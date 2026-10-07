@@ -1,0 +1,53 @@
+{
+  "title": "Skills",
+  "tabs": {
+    "readyMade": "Ready-made",
+    "repository": "Your repository",
+    "mine": "Mine ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Find a skill: system design, code review…",
+    "label": "Search skills",
+    "help": "Search the skills.sh directory",
+    "noMatches": "No skills match. Try other words.",
+    "emptyTitle": "Directory of ready-made skills",
+    "emptyDescription": "Start typing. A skill is a ready-made instruction you can attach to a prompt.",
+    "searchFailed": "Couldn’t search skills.sh. Try again."
+  },
+  "repository": {
+    "label": "GitHub repository",
+    "placeholder": "owner/repo or a GitHub link",
+    "find": "Find skills",
+    "help": "A public repository containing a SKILL.md file",
+    "emptyTitle": "Your own skill from GitHub",
+    "emptyDescription": "Enter a public repository to find the SKILL.md files in it.",
+    "scanFailed": "Couldn’t read the repository."
+  },
+  "candidate": {
+    "installs": "{count, plural, one {# install} other {# installs}}",
+    "installed": "Installed"
+  },
+  "mine": {
+    "extraFiles": "Ships scripts or other files — only the instructions in SKILL.md are used.",
+    "update": "Update {name}",
+    "updateHint": "Update to the latest commit",
+    "remove": "Remove {name}",
+    "emptyTitle": "No skills yet",
+    "emptyDescription": "Add one from Ready-made or from your repository."
+  },
+  "remove": {
+    "title": "Remove {name}?",
+    "titleUnnamed": "Remove this skill?",
+    "description": "It is detached from every prompt that uses it. You can add it again later."
+  },
+  "toasts": {
+    "installed": "Installed {name}",
+    "installedHint": "Attach it to a prompt from the prompt editor.",
+    "installFailed": "Couldn’t install the skill",
+    "upToDate": "{name} is up to date",
+    "updated": "Updated {name}",
+    "updateFailed": "Couldn’t update the skill",
+    "removed": "Removed {name}",
+    "removeFailed": "Couldn’t remove the skill"
+  }
+}

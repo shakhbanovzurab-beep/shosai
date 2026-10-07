@@ -1,0 +1,85 @@
+{
+  "loadFailed": "Quellen konnten nicht geladen werden",
+  "loading": "Quellen werden geladen…",
+  "connectedCount": "{connected, number} von {total, plural, one {# Quelle} other {# Quellen}} verbunden. Neue und geänderte Inhalte werden bei jeder Synchronisierung neu indexiert.",
+  "status": {
+    "connecting": "Wird verbunden",
+    "syncing": "Wird synchronisiert",
+    "connected": "Verbunden",
+    "error": "Fehler"
+  },
+  "card": {
+    "items": "{count, plural, one {# Element} other {# Elemente}}",
+    "synced": "Synchronisiert {ago}",
+    "syncNow": "Jetzt synchronisieren",
+    "syncing": "Wird synchronisiert…",
+    "settings": "Einstellungen…",
+    "disconnect": "Trennen…",
+    "signIn": "Mit {provider} anmelden",
+    "public": "Öffentliche Seiten, ohne Anmeldung",
+    "connect": "Verbinden"
+  },
+  "dialog": {
+    "connectTitle": "{name} verbinden",
+    "settingsTitle": "Einstellungen für {name}",
+    "oauthNote": "Du meldest dich bei {provider} an, erlaubst reinen Lesezugriff (OAuth 2.0) und kehrst dann hierher zurück. Auf dieser Seite werden keine Passwörter oder Tokens eingegeben.",
+    "optional": "(optional)",
+    "saveAndSync": "Speichern und synchronisieren",
+    "continueWith": "Weiter mit {provider}",
+    "connect": "Verbinden",
+    "connectFailed": "Verbindung konnte nicht hergestellt werden."
+  },
+  "disconnect": {
+    "title": "{name} trennen?",
+    "description": "Die Synchronisierung endet und die gespeicherten Zugangsdaten werden gelöscht. Bereits daraus indexierte Inhalte werden aus dem Vektorindex entfernt.",
+    "confirm": "Trennen"
+  },
+  "toasts": {
+    "connected": "{name} verbunden",
+    "firstSync": "Die erste Synchronisierung hat begonnen.",
+    "syncFailed": "{name} konnte nicht synchronisiert werden",
+    "disconnected": "{name} getrennt",
+    "disconnectFailed": "{name} konnte nicht getrennt werden"
+  },
+  "website": "Website",
+  "descriptions": {
+    "slack": "Nachrichten und Threads aus öffentlichen Channels.",
+    "confluence": "Seiten und Blogbeiträge aus deinen Bereichen.",
+    "notion": "Seiten und Datenbanken, die du bei der Anmeldung teilst.",
+    "obsidian": "Markdown-Notizen aus einem mit GitHub synchronisierten Vault.",
+    "jira": "Vorgänge, Beschreibungen und Kommentare.",
+    "github": "READMEs, Dokumentation, Issues und Pull Requests.",
+    "gitlab": "Repositorys, Wikis, Issues und Merge Requests.",
+    "google_drive": "Docs, Sheets, Slides und PDFs.",
+    "sharepoint": "Dateien und Seiten aus Microsoft 365.",
+    "dropbox": "Dateien und Paper-Dokumente aus einem Ordner.",
+    "yandex_disk": "Dokumente aus einem Ordner auf Yandex Disk.",
+    "website": "Gecrawlte Seiten einer Website oder eines Doku-Portals."
+  },
+  "fields": {
+    "channels": "Channels",
+    "spaces": "Bereichsschlüssel",
+    "repository": "Vault-Repository",
+    "branch": "Branch",
+    "jql": "JQL-Filter",
+    "repositories": "Repositorys",
+    "base_url": "Instanz-URL",
+    "projects": "Projekte",
+    "folder_id": "Ordner-ID",
+    "site_url": "SharePoint-Website",
+    "path": "Ordnerpfad",
+    "start_url": "Start-URL",
+    "max_depth": "Crawl-Tiefe",
+    "include": "Nur passende Pfade"
+  },
+  "help": {
+    "channels": "Leer lassen für alle öffentlichen Channels.",
+    "spaces": "Leer lassen für alle Bereiche, die du lesen kannst.",
+    "repositories": "Leer lassen für alle Repositorys, auf die du Zugriff gewährst.",
+    "base_url": "Nur für selbst gehostetes GitLab.",
+    "projects": "Leer lassen für alle Projekte, die du lesen kannst.",
+    "folder_id": "Leer lassen, um alles zu indexieren, was du lesen kannst.",
+    "site_url": "Leer lassen für dein OneDrive.",
+    "max_depth": "Wie vielen Links ab der Startseite gefolgt wird."
+  }
+}

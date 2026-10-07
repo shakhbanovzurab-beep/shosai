@@ -1,0 +1,54 @@
+{
+  "panel": {
+    "loadFailed": "Não foi possível carregar o link.",
+    "anyone": "Qualquer pessoa com o link",
+    "anyoneHint": "Pessoas de fora da reunião podem abrir as notas.",
+    "linkLabel": "Link para as notas",
+    "toggles": {
+      "showTranscript": {
+        "label": "Mostrar transcrição",
+        "description": "Falas literais dos participantes."
+      },
+      "showNames": {
+        "label": "Mostrar nomes dos participantes",
+        "description": "Caso contrário, a transcrição mostra “{first}”, “{second}”."
+      },
+      "allowComments": {
+        "label": "Permitir comentários",
+        "description": "Qualquer pessoa com o link pode responder."
+      }
+    },
+    "expires": "Expiração",
+    "never": "Nunca",
+    "days": "{count, plural, one {# dia} many {# de dias} other {# dias}}",
+    "stopsOn": "O link deixa de funcionar em {date}.",
+    "keepsWorking": "O link continua funcionando.",
+    "updateFailed": "Não foi possível atualizar o link",
+    "turnedOff": "Link desativado",
+    "turnOffFailed": "Não foi possível desativar o link"
+  },
+  "page": {
+    "unavailable": "Link indisponível",
+    "eyebrow": "Notas de reunião compartilhadas",
+    "people": "{count, plural, one {# pessoa} many {# de pessoas} other {# pessoas}}",
+    "transcript": "Transcrição",
+    "done": "Concluído",
+    "open": "Em aberto",
+    "speaker": "Falante {order, number}"
+  },
+  "gone": {
+    "title": "Este link não funciona mais",
+    "description": "Ele pode ter expirado ou sido desativado. Peça um novo link a quem o enviou."
+  },
+  "comments": {
+    "title": "Comentários",
+    "loadFailed": "Não foi possível carregar os comentários.",
+    "comment": "Seu comentário",
+    "commentPlaceholder": "Escreva uma resposta…",
+    "name": "Seu nome",
+    "namePlaceholder": "Opcional; sem nome, aparece como “{guest}”",
+    "guest": "Visitante",
+    "post": "Publicar comentário",
+    "postFailed": "Não foi possível publicar seu comentário"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "مدير الملفات",
+    "description": "تصفح الملفات وتنظيمها ورفعها، واختيار ما يستخدمه Leo منها.",
+    "folderTitle": "مجلد · مدير الملفات"
+  },
+  "myFiles": "ملفاتي",
+  "loading": "جارٍ تحميل الملفات…",
+  "loadFailed": "تعذر تحميل الملفات",
+  "allFiles": {
+    "heading": "كل الملفات",
+    "emptyTitle": "لا توجد ملفات بعد",
+    "emptyDescription": "يمكن رفع الملفات أو إفلاتها هنا، ثم اختيار ما يمكن أن يستخدمه Leo منها."
+  },
+  "folders": {
+    "heading": "المجلدات",
+    "new": "مجلد جديد",
+    "untitled": "مجلد بلا عنوان",
+    "emptyTitle": "لا توجد مجلدات بعد",
+    "emptyDescription": "يمكن إنشاء مجلد لتنظيم الملفات، أو ليقرأ Leo مجموعة كاملة منها دفعة واحدة.",
+    "fileCount": "{count, plural, zero {# ملف} one {ملف واحد} two {ملفان} few {# ملفات} many {# ملفًا} other {# ملف}}",
+    "dropHere": "الإفلات للنقل إلى هنا",
+    "dropHereLeo": "الإفلات للنقل إلى هنا. سيستخدمه Leo.",
+    "updated": "تم التحديث {ago}",
+    "leoReadsAll": "يستخدم Leo كل ما يمكنه قراءته في هذا المجلد"
+  },
+  "folder": {
+    "notFound": "المجلد غير موجود",
+    "notFoundDescription": "ربما تم حذفه أو إعادة تسميته في جلسة أخرى.",
+    "backToMyFiles": "العودة إلى ملفاتي",
+    "back": "رجوع",
+    "emptyTitle": "هذا المجلد فارغ",
+    "emptyLeo": "يمكن رفع الملفات أو نقلها إلى هنا وسيستخدمها Leo.",
+    "empty": "يمكن رفع الملفات هنا، أو سحبها إلى هذا المجلد في «ملفاتي»، أو استخدام «نقل إلى» في قائمة الملف."
+  },
+  "section": {
+    "label": "الملفات",
+    "view": "عرض الملفات",
+    "grid": "شبكة",
+    "list": "قائمة",
+    "noMatch": "لا توجد ملفات مطابقة",
+    "noMatchDescription": "لا شيء هنا يطابق عامل التصفية هذا.",
+    "clearFilters": "مسح عوامل التصفية"
+  },
+  "toolbar": {
+    "filterSort": "التصفية والترتيب",
+    "show": "عرض",
+    "fileType": "نوع الملف",
+    "allTypes": "كل الأنواع",
+    "sortBy": "ترتيب حسب"
+  },
+  "show": {
+    "all": "كل الملفات",
+    "starred": "المميزة بنجمة",
+    "leo": "يستخدمها Leo",
+    "shared": "مشتركة في مساحات العمل"
+  },
+  "sort": {
+    "modified": "آخر تعديل",
+    "name": "الاسم",
+    "size": "حجم الملف"
+  },
+  "kinds": {
+    "archive": "أرشيف",
+    "design": "تصميم",
+    "document": "مستند",
+    "image": "صورة",
+    "other": "ملف",
+    "pdf": "PDF",
+    "presentation": "عرض تقديمي",
+    "spreadsheet": "جدول بيانات",
+    "text": "نص"
+  },
+  "file": {
+    "star": "تمييز {name} بنجمة",
+    "unstar": "إزالة النجمة من {name}",
+    "modified": "تم التعديل {ago}",
+    "inFolderModified": "<hidden>في المجلد </hidden><name>{folder}</name> · تم التعديل {ago}",
+    "inFolder": "<hidden>في المجلد </hidden><name>{folder}</name>",
+    "sharedIn": "مشترك في {workspaces}",
+    "sharedInHidden": "<hidden>مشترك في </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "آخر تعديل",
+    "size": "الحجم",
+    "actions": "الإجراءات"
+  },
+  "leo": {
+    "viaFile": "يستخدم Leo هذا الملف لأنه تم اختياره",
+    "viaFolder": "يستخدم Leo هذا الملف عبر مجلده",
+    "reading": "Leo · جارٍ القراءة",
+    "failed": "تعذر على Leo قراءته",
+    "tooLarge": "يقرأ Leo الملفات حتى {size}",
+    "extension": "لا يمكن لـ Leo قراءة ملفات .{extension}",
+    "unknownType": "لا يمكن لـ Leo قراءة هذا النوع من الملفات"
+  },
+  "menu": {
+    "addStar": "تمييز بنجمة",
+    "removeStar": "إزالة النجمة",
+    "moveTo": "نقل إلى",
+    "useWithLeo": "الاستخدام مع Leo",
+    "usedThrough": "مستخدم عبر «{folder}»",
+    "share": "مشاركة في مساحة عمل…",
+    "sharing": "المشاركة في مساحات العمل…",
+    "transferTo": "نقل الملكية إلى",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "حذف المجلد"
+  },
+  "dialogs": {
+    "renameFile": "إعادة تسمية الملف",
+    "renameFolder": "إعادة تسمية المجلد",
+    "shareTitle": "مشاركة «{name}»",
+    "shareDescription": "يجيب Leo منه في مساحة العمل لمن يتم اختيارهم. يبقى هنا وملكًا لك، ويُزال من مساحة العمل عند حذفه أو مغادرتها.",
+    "transferTitle": "هل يتم نقل ملكية «{name}» إلى {workspace}؟",
+    "transferDescription": "سيخرج من ملفاتك ويصبح ملكًا لـ {workspace}: يبقى هناك عند مغادرتك، ويديره مشرفو مساحة العمل. وستفقده مساحات العمل الأخرى التي تمت مشاركته فيها. لا يمكن التراجع عن ذلك.",
+    "transfer": "نقل الملكية"
+  },
+  "upload": {
+    "button": "رفع",
+    "uploading": "جارٍ رفع {count, plural, zero {# ملف} one {ملف واحد} two {ملفين} few {# ملفات} many {# ملفًا} other {# ملف}}…",
+    "dropHere": "الإفلات للرفع هنا",
+    "skipped": "{count, plural, zero {تم تخطي # ملف} one {تم تخطي ملف واحد} two {تم تخطي ملفين} few {تم تخطي # ملفات} many {تم تخطي # ملفًا} other {تم تخطي # ملف}}",
+    "skippedDescription": "يتم تخطي الملفات الفارغة أو التي يزيد حجمها على {size}، ولا يمكن أن يتجاوز عدد الملفات المرفوعة في المرة الواحدة {max, number}."
+  },
+  "picker": {
+    "search": "البحث في الملفات",
+    "noMatch": "لا توجد ملفات مطابقة.",
+    "noFiles": "لا توجد ملفات بعد. يمكن رفع بعضها أولًا في مدير الملفات.",
+    "yourFiles": "ملفاتك",
+    "alreadyShared": "تمت مشاركته هنا بالفعل"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "description": "Leo को दूसरे ऐप के टूल और डेटा देने के लिए Model Context Protocol सर्वर कनेक्ट करें।",
+  "add": "सर्वर जोड़ें",
+  "empty": {
+    "title": "कोई MCP सर्वर नहीं",
+    "description": "किसी रिमोट सर्वर को उसके URL से जोड़ें।"
+  },
+  "hasAuth": "ऑथराइज़ेशन है",
+  "notReached": "अभी तक संपर्क नहीं हुआ",
+  "tools": "{count, plural, one {# टूल} other {# टूल}}",
+  "enable": "{name} चालू करें",
+  "disable": "{name} बंद करें",
+  "remove": "{name} हटाएं",
+  "removed": "{name} हटाया गया",
+  "form": {
+    "transport": "ट्रांसपोर्ट",
+    "url": "सर्वर का URL",
+    "auth": "ऑथराइज़ेशन हेडर <optional>(वैकल्पिक)</optional>"
+  },
+  "addFailed": "सर्वर नहीं जोड़ा जा सका।",
+  "toggleFailed": "सर्वर की स्थिति नहीं बदली जा सकी।",
+  "removeFailed": "सर्वर हटाया नहीं जा सका।"
+}

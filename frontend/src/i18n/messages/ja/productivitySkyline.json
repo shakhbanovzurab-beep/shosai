@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, other {過去 1 年間の完了タスク <b>#</b> 件}}",
+  "chart": {
+    "flat": "{count, plural, other {{from}～{to} の完了タスク # 件をヒートマップで表示しています。矢印キーで日ごとの数を確認できます。}}",
+    "skyline": "{count, plural, other {{from}～{to} の完了タスク # 件を 3D スカイラインで表示しています。矢印キーで日ごとの数を確認できます。}}"
+  },
+  "day": "{count, plural, =0 {{date} の完了タスクはありません} other {{date} の完了タスク # 件}}",
+  "tooltip": "{count, plural, =0 {{date} は<b>完了タスクなし</b>} other {{date} の<b>完了タスク # 件</b>}}",
+  "views": {
+    "label": "グラフの表示",
+    "flat": "平面のヒートマップ",
+    "skyline": "3D スカイライン"
+  },
+  "hint": {
+    "flat": "日にポインタを合わせると詳細を表示 · 矢印キーで移動",
+    "skyline": "ドラッグで回転 · ダブルクリックでリセット"
+  },
+  "levels": {
+    "label": "アクティビティのレベル",
+    "less": "少",
+    "more": "多",
+    "none": "完了タスクなし",
+    "light": "少なめ",
+    "moderate": "普通",
+    "heavy": "多め",
+    "heaviest": "非常に多い"
+  },
+  "stats": {
+    "total": "過去 1 年",
+    "busiest": "最も多かった日",
+    "longest": "最長連続記録",
+    "current": "現在の連続記録"
+  },
+  "units": {
+    "contributions": "{count, plural, other {件完了}}",
+    "days": "{count, plural, other {日}}"
+  }
+}

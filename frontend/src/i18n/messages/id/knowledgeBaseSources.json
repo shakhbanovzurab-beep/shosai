@@ -1,0 +1,85 @@
+{
+  "loadFailed": "Tidak dapat memuat sumber",
+  "loading": "Memuat sumber…",
+  "connectedCount": "{connected, number} dari {total, plural, other {# sumber}} terhubung. Konten baru dan yang berubah diindeks ulang setiap kali sinkronisasi.",
+  "status": {
+    "connecting": "Menghubungkan",
+    "syncing": "Menyinkronkan",
+    "connected": "Terhubung",
+    "error": "Bermasalah"
+  },
+  "card": {
+    "items": "{count, plural, other {# item}}",
+    "synced": "Disinkronkan {ago}",
+    "syncNow": "Sinkronkan sekarang",
+    "syncing": "Menyinkronkan…",
+    "settings": "Pengaturan…",
+    "disconnect": "Putuskan koneksi…",
+    "signIn": "Masuk dengan {provider}",
+    "public": "Halaman publik, tanpa masuk",
+    "connect": "Hubungkan"
+  },
+  "dialog": {
+    "connectTitle": "Hubungkan {name}",
+    "settingsTitle": "Pengaturan {name}",
+    "oauthNote": "Anda akan masuk dengan {provider} dan menyetujui akses baca saja (OAuth 2.0), lalu kembali ke sini. Tidak ada kata sandi atau token yang dimasukkan di halaman ini.",
+    "optional": "(opsional)",
+    "saveAndSync": "Simpan dan sinkronkan",
+    "continueWith": "Lanjutkan dengan {provider}",
+    "connect": "Hubungkan",
+    "connectFailed": "Tidak dapat menghubungkan."
+  },
+  "disconnect": {
+    "title": "Putuskan koneksi {name}?",
+    "description": "Sinkronisasi berhenti dan kredensial yang tersimpan dihapus. Konten yang sudah diindeks dari sumber ini dihapus dari indeks vektor.",
+    "confirm": "Putuskan koneksi"
+  },
+  "toasts": {
+    "connected": "{name} terhubung",
+    "firstSync": "Sinkronisasi pertama telah dimulai.",
+    "syncFailed": "Tidak dapat menyinkronkan {name}",
+    "disconnected": "Koneksi {name} diputuskan",
+    "disconnectFailed": "Tidak dapat memutuskan koneksi {name}"
+  },
+  "website": "Situs web",
+  "descriptions": {
+    "slack": "Pesan dan percakapan dari kanal publik.",
+    "confluence": "Halaman dan postingan blog dari space Anda.",
+    "notion": "Halaman dan database yang Anda bagikan saat masuk.",
+    "obsidian": "Catatan Markdown dari vault yang disinkronkan ke GitHub.",
+    "jira": "Issue, deskripsi, dan komentar.",
+    "github": "README, dokumentasi, issue, dan pull request.",
+    "gitlab": "Repositori, wiki, issue, dan merge request.",
+    "google_drive": "Docs, Sheets, Slides, dan PDF.",
+    "sharepoint": "File dan halaman dari Microsoft 365.",
+    "dropbox": "File dan dokumen Paper dari sebuah folder.",
+    "yandex_disk": "Dokumen dari folder Yandex Disk.",
+    "website": "Halaman yang dirayapi dari situs atau portal dokumentasi."
+  },
+  "fields": {
+    "channels": "Kanal",
+    "spaces": "Kunci space",
+    "repository": "Repositori vault",
+    "branch": "Branch",
+    "jql": "Filter JQL",
+    "repositories": "Repositori",
+    "base_url": "URL instans",
+    "projects": "Proyek",
+    "folder_id": "ID folder",
+    "site_url": "Situs SharePoint",
+    "path": "Jalur folder",
+    "start_url": "URL awal",
+    "max_depth": "Kedalaman perayapan",
+    "include": "Hanya jalur yang cocok"
+  },
+  "help": {
+    "channels": "Kosongkan untuk semua kanal publik.",
+    "spaces": "Kosongkan untuk semua space yang dapat Anda baca.",
+    "repositories": "Kosongkan untuk semua repositori yang Anda beri akses.",
+    "base_url": "Hanya untuk GitLab yang dikelola sendiri.",
+    "projects": "Kosongkan untuk semua proyek yang dapat Anda baca.",
+    "folder_id": "Kosongkan untuk mengindeks semua yang dapat Anda baca.",
+    "site_url": "Kosongkan untuk OneDrive Anda.",
+    "max_depth": "Tautan yang diikuti dari halaman awal."
+  }
+}

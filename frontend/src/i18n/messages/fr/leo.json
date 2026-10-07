@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Discuter avec Leo",
+    "close": "Fermer la conversation avec Leo",
+    "tooltipOpen": "Demander à Leo",
+    "tooltipClose": "Fermer Leo"
+  },
+  "panel": {
+    "label": "Conversation avec Leo",
+    "subtitle": "Agent IA",
+    "working": "Je travaille…",
+    "newChat": "Nouvelle conversation",
+    "fullScreen": "Plein écran",
+    "exitFullScreen": "Quitter le plein écran",
+    "close": "Fermer",
+    "dropFiles": "Déposez des fichiers pour les joindre"
+  },
+  "place": {
+    "personal": "Personnel",
+    "workspace": "Dans {name}",
+    "hub": "Dans {name}",
+    "scopePersonal": "Je travaille avec vos e-mails, votre calendrier, vos notes, vos tâches et les fichiers que vous avez choisis pour moi, ainsi qu’avec ce que vos espaces de travail partagent avec vous. Cette conversation n’est visible que par vous.",
+    "scopeWorkspace": "Je réponds uniquement à partir de ce que {name} partage avec vous : ses réunions, ses décisions, ses projets et ses connaissances. Cette conversation reste dans {name}.",
+    "scopeHub": "Je réponds uniquement à partir du hub {name} : ses réunions, ses décisions et ses documents. Cette conversation reste ici.",
+    "boundHub": "Mes réponses portent uniquement sur « {name} »"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {Bonsoir} morning {Bonjour} afternoon {Bonjour} other {Bonsoir}}",
+    "hi": "Bonjour",
+    "intro": "{greeting}, je suis Leo",
+    "howCanIHelp": "Comment puis-je vous aider aujourd’hui ?",
+    "suggestionsLabel": "Suggestions"
+  },
+  "suggestions": {
+    "default": {
+      "first": "Planifie ma journée",
+      "second": "Résume ce qui demande mon attention",
+      "third": "En quoi peux-tu m’aider ?"
+    },
+    "hub": {
+      "first": "Qu’est-ce qui bloque ici ?",
+      "second": "Qu’est-ce qui a changé lors de la dernière réunion ?",
+      "third": "Prépare-moi pour la prochaine réunion"
+    },
+    "workspace": {
+      "first": "Qu’est-ce qu’on a décidé pour les tarifs ?",
+      "second": "Qu’est-ce que j’ai en retard ici ?",
+      "third": "Trouve notre politique de sécurité"
+    },
+    "productivity": {
+      "first": "Planifie ma journée",
+      "second": "Sur quoi me concentrer en premier ?",
+      "third": "Résume ma semaine"
+    },
+    "mail": {
+      "first": "Résume ma boîte de réception",
+      "second": "Rédige une relance polie",
+      "third": "Quels e-mails sont urgents ?"
+    },
+    "calendar": {
+      "first": "Qu’y a-t-il dans mon calendrier aujourd’hui ?",
+      "second": "Trouve une heure libre cette semaine",
+      "third": "Prépare-moi pour ma prochaine réunion"
+    },
+    "kanban": {
+      "first": "Quelles tâches sont en retard ?",
+      "second": "Résume ce tableau",
+      "third": "Quelle tâche faire avancer ensuite ?"
+    },
+    "meetings": {
+      "first": "Quelles réunions ai-je aujourd’hui ?",
+      "second": "Planifie un appel avec l’équipe",
+      "third": "Prépare-moi pour mon prochain appel"
+    },
+    "notes": {
+      "first": "Résume ma dernière réunion",
+      "second": "Liste mes actions à mener",
+      "third": "Qu’est-ce qu’on a décidé cette semaine ?"
+    },
+    "fileManager": {
+      "first": "Trouve mes fichiers récents",
+      "second": "Qu’est-ce qui prend le plus de place ?",
+      "third": "Organise mes fichiers"
+    },
+    "studio": {
+      "first": "Rédige un message système",
+      "second": "Compare les modèles disponibles",
+      "third": "Améliore ce prompt"
+    }
+  },
+  "composer": {
+    "placeholder": "Demandez ce que vous voulez à Leo",
+    "label": "Message pour Leo",
+    "attach": "Joindre des fichiers",
+    "attachLimit": "Joindre jusqu’à {max, plural, one {# fichier} many {# de fichiers} other {# fichiers}}",
+    "filesToSend": "Fichiers à envoyer",
+    "removeFile": "Retirer {name}",
+    "disclaimer": "Leo peut se tromper. Vérifiez les informations importantes.",
+    "stop": "Arrêter Leo",
+    "send": "Envoyer le message",
+    "startVoice": "Activer le mode vocal",
+    "voiceMode": "Mode vocal"
+  },
+  "message": {
+    "copy": "Copier",
+    "copied": "Copié",
+    "copyFailed": "Impossible de copier dans le presse-papiers",
+    "regenerate": "Régénérer",
+    "tryAgain": "Réessayer",
+    "replyFailed": "Leo n’a pas pu terminer. Vérifiez votre connexion et réessayez.",
+    "edit": "Modifier",
+    "editMessage": "Modifier le message",
+    "attachedFiles": "Pièces jointes"
+  },
+  "steps": {
+    "gettingStarted": "Je commence",
+    "doneIn": "Terminé en {duration}",
+    "stoppedAfter": "Arrêté après {duration}",
+    "somethingWrong": "Un problème est survenu",
+    "label": "Actions de Leo",
+    "needsApproval": "Approbation requise",
+    "detail": "« {detail} »",
+    "status": "{status, select, running {En cours} done {Terminé} error {Échec} stopped {Arrêté} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "Le fichier {name} est trop volumineux",
+    "sizeLimit": "Les fichiers ne doivent pas dépasser {size}.",
+    "tooMany": "Vous pouvez joindre jusqu’à {max, plural, one {# fichier} many {# de fichiers} other {# fichiers}}."
+  },
+  "voice": {
+    "unavailable": "Le mode vocal est indisponible",
+    "listening": "J’écoute…",
+    "thinking": "Leo réfléchit…",
+    "speaking": "Leo parle…",
+    "micOff": "Micro désactivé",
+    "turnMicOn": "Activer le micro",
+    "turnMicOff": "Désactiver le micro",
+    "end": "Quitter le mode vocal",
+    "micBlocked": "L’accès au micro est bloqué",
+    "micBlockedHint": "Autorisez l’accès au micro pour parler à Leo.",
+    "needsHttps": "Le mode vocal nécessite une connexion sécurisée (HTTPS) pour utiliser le micro.",
+    "unsupported": "Ce navigateur ne prend pas en charge le mode vocal. Essayez la dernière version de Chrome, Edge ou Safari."
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "answers": "Antworten",
+  "model": {
+    "title": "Modell",
+    "description": "Automatisch wählt für jede Aufgabe ein passendes Modell. Spitzenmodelle verbrauchen deine wöchentlichen Tokens für Spitzenmodelle (siehe Nutzung).",
+    "label": "Leo-Modell",
+    "auto": "Automatisch",
+    "autoHint": "Leo wählt je nach Aufgabe"
+  },
+  "language": {
+    "title": "Antwortsprache",
+    "description": "Automatisch antwortet in der Sprache der Oberfläche.",
+    "auto": "Automatisch"
+  },
+  "length": {
+    "title": "Antwortlänge",
+    "description": "Wie ausführlich Leo standardmäßig antwortet.",
+    "options": {
+      "concise": "Knapp",
+      "balanced": "Ausgewogen",
+      "detailed": "Ausführlich"
+    }
+  },
+  "advanced": {
+    "title": "Erweiterte Einstellungen",
+    "description": "Was Leo verwenden darf. Alles, was ausgeschaltet ist, wird weder angeboten noch verwendet.",
+    "webSearch": "Websuche",
+    "webSearchHint": "Leo darf für Antworten automatisch im Internet suchen.",
+    "voiceMode": "Sprachmodus",
+    "voiceModeHint": "Sprich laut mit Leo. Wenn du ihn ausschaltest, verschwindet das Mikrofon aus der Oberfläche.",
+    "knowledgeSearch": "Wissenssuche",
+    "knowledgeSearchHint": "Suche nach Antworten in den Dateien und Quellen, die du für Leo ausgewählt hast.",
+    "connectedSearch": "Suche in verbundenen Diensten",
+    "connectedSearchHint": "Durchsuche verbundene Dienste wie Google Drive und Notion."
+  }
+}

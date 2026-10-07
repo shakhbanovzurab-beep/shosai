@@ -1,0 +1,13 @@
+{
+  "choosePlan": "Choisissez un forfait.",
+  "planUnavailable": "Ce forfait n’est pas disponible.",
+  "salesOnly": "Ce forfait se met en place avec notre équipe commerciale.",
+  "alreadyOnPlan": "Vous avez déjà ce forfait.",
+  "chooseUsers": "Choisissez entre {min, number} et {max, number} utilisateurs.",
+  "chooseUsersOrMore": "Choisissez {min, plural, one {# utilisateur ou plus} many {# d’utilisateurs ou plus} other {# utilisateurs ou plus}}.",
+  "singleUser": "Ce forfait est prévu pour un seul utilisateur.",
+  "paymentsNotConnected": "Les paiements ne sont pas encore connectés. Une fois la facturation active, ce bouton ouvrira la page de paiement sécurisée du prestataire.",
+  "invalidEmail": "Saisissez une adresse e-mail professionnelle valide.",
+  "companyRequired": "Saisissez le nom de votre entreprise.",
+  "checkForm": "Vérifiez le formulaire."
+}

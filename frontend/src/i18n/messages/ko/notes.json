@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "노트",
+    "description": "노트, 후속 작업, 마인드맵이 포함된 스크립트 회의 기록이에요."
+  },
+  "recency": {
+    "today": "오늘",
+    "yesterday": "어제",
+    "thisWeek": "이번 주",
+    "earlier": "이전"
+  },
+  "fields": {
+    "meeting": "회의",
+    "folder": "폴더",
+    "people": "사람",
+    "participants": "참석자",
+    "duration": "시간",
+    "date": "날짜"
+  },
+  "views": {
+    "label": "레이아웃",
+    "timeline": "타임라인",
+    "grid": "그리드",
+    "list": "목록"
+  },
+  "upload": {
+    "button": "녹음 업로드",
+    "hint": "또는 페이지 아무 곳에나 파일을 끌어다 놓으세요",
+    "dropTitle": "녹음 파일을 놓으면 업로드돼요",
+    "dropHint": "mp3, m4a, wav, mp4, webm 등 · 최대 {size}",
+    "notMedia": "{name}은(는) 오디오나 동영상 파일이 아니에요",
+    "tooLarge": "{name}이(가) 너무 커요",
+    "sizeLimit": "녹음 파일은 최대 {size}까지 업로드할 수 있어요."
+  },
+  "recordings": {
+    "uploading": "업로드 중",
+    "justNow": "방금",
+    "transcribing": "스크립트 생성 중",
+    "transcribingNow": "스크립트 생성 중…",
+    "waiting": "스크립트 생성 대기 중…",
+    "timelineStatus": "스크립트 생성 중… 완료되면 노트, 결정 사항, 마인드맵이 여기에 표시돼요."
+  },
+  "remove": "{name} 제거",
+  "folders": {
+    "label": "폴더",
+    "all": "모든 회의",
+    "new": "새 폴더",
+    "newMenu": "새 폴더…",
+    "newNamed": "새 폴더 “{name}”",
+    "defaultName": "새 폴더",
+    "nameLabel": "폴더 이름",
+    "none": "폴더 없음",
+    "add": "폴더에 추가",
+    "moveTo": "폴더로 이동",
+    "search": "폴더 검색…",
+    "noMatch": "일치하는 폴더가 없어요.",
+    "movedTo": "{folder}(으)로 이동했어요",
+    "removedFrom": "폴더에서 제거했어요",
+    "emptyTitle": "이 폴더는 비어 있어요",
+    "emptyDescription": "회의를 마우스 오른쪽 버튼으로 클릭하고 “{action}”을(를) 선택하면 여기에 추가돼요."
+  },
+  "card": {
+    "latest": "최근 회의",
+    "keyPoints": "핵심 내용",
+    "openNotes": "노트 열기",
+    "openItems": "{count, plural, other {미완료 #개}}"
+  },
+  "timeline": {
+    "decision": "결정 사항:",
+    "openTasks": "{count, plural, other {미완료 작업 #개}}"
+  },
+  "menu": {
+    "openInNewTab": "새 탭에서 열기",
+    "exportTranscript": "스크립트 내보내기"
+  },
+  "exportFormats": {
+    "txt": "일반 텍스트",
+    "md": "Markdown",
+    "srt": "SubRip 자막",
+    "vtt": "WebVTT 자막",
+    "json": "JSON 데이터"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "“{title}”을(를) 삭제했어요"
+}

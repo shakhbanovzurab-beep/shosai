@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Geliştirilmiş notlar",
+    "description": "Leo, toplantıya uyan yapıyı seçer."
+  },
+  "sections": {
+    "summary": "Özet",
+    "keyPoints": "Önemli noktalar",
+    "decisions": "Kararlar",
+    "actionItems": "Takip görevleri"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Görüşme: yatırımcı",
+      "description": "Bir yatırımcıyla düzenli güncelleme: işlerin durumu ve nasıl yardımcı olabilecekleri."
+    },
+    "catchUpPortfolio": {
+      "name": "Görüşme: portföy şirketi",
+      "description": "Bir portföy şirketiyle metrikler, riskler ve talepler üzerine durum görüşmesi."
+    },
+    "lpProspective": {
+      "name": "LP: potansiyel",
+      "description": "Potansiyel bir sınırlı ortakla (LP) ilk görüşmeler."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: Yönetim kurulu toplantısı",
+      "description": "Kurul tartışması, alınan kararlar ve sahipleri."
+    },
+    "vcPitch": {
+      "name": "VC: Sunum",
+      "description": "Bir kurucunun sunumu: öne çıkanlar, değerlendirme ve yapılacak detaylı inceleme."
+    },
+    "oneOnOne": {
+      "name": "Birebir",
+      "description": "Birebir görüşme: işler nasıl gidiyor, konular ve üzerinde anlaşılan sonraki adımlar."
+    },
+    "customerCall": {
+      "name": "Müşteri görüşmesi",
+      "description": "Bir müşteriyle keşif veya durum görüşmesi: sorunlar, talepler ve takip adımları."
+    },
+    "teamSync": {
+      "name": "Ekip toplantısı",
+      "description": "Düzenli ekip toplantısı: güncellemeler, kararlar ve kimin ne yapacağı."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Mevcut durum",
+    "updatesShared": "Paylaşılan güncellemeler",
+    "whatWeAgreed": "Üzerinde anlaştıklarımız",
+    "followUps": "Takip adımları",
+    "companyUpdate": "Şirket güncellemesi",
+    "metricsAndHighlights": "Metrikler ve öne çıkanlar",
+    "howWeCanHelp": "Nasıl yardımcı olabiliriz",
+    "overview": "Genel bakış",
+    "theirInterests": "İlgi alanları",
+    "nextSteps": "Sonraki adımlar",
+    "boardSummary": "Kurul özeti",
+    "discussion": "Tartışma",
+    "resolutions": "Kurul kararları",
+    "ownersAndDeadlines": "Sahipler ve son tarihler",
+    "thePitch": "Sunum",
+    "whatStoodOut": "Öne çıkanlar",
+    "verdict": "Değerlendirme",
+    "diligenceToDos": "Detaylı inceleme adımları",
+    "howItsGoing": "İşler nasıl gidiyor",
+    "topics": "Konular",
+    "context": "Bağlam",
+    "painsAndRequests": "Sorunlar ve talepler",
+    "outcome": "Sonuç",
+    "updates": "Güncellemeler",
+    "decisions": "Kararlar",
+    "whoDoesWhat": "Kim ne yapacak"
+  },
+  "icons": {
+    "enhanced": "Geliştirilmiş notlar",
+    "briefcase": "Çanta",
+    "chart": "Grafik",
+    "handshake": "El sıkışma",
+    "landmark": "Bina",
+    "lightbulb": "Ampul",
+    "magnet": "Mıknatıs",
+    "phone": "Telefon",
+    "rocket": "Roket",
+    "calendar": "Takvim",
+    "users": "Kişiler"
+  },
+  "menu": {
+    "label": "Geliştirilmiş not şablonu",
+    "search": "Şablon ara…",
+    "noMatch": "Eşleşen şablon yok.",
+    "heading": "Şablonlar",
+    "regenerate": "Notları yeniden oluştur",
+    "newTemplate": "Yeni şablon…"
+  },
+  "rewritten": "Notlar “{template}” şablonuyla yeniden yazıldı",
+  "regenerated": "Geliştirilmiş notlar yeniden oluşturuldu",
+  "created": "“{template}” şablonu oluşturuldu",
+  "dialog": {
+    "title": "Yeni şablon",
+    "description": "Leo’nun bir toplantı için hangi bölümleri yazacağını ve bunlara ne ad vereceğini seçin.",
+    "namePlaceholder": "ör. Satış keşif görüşmesi…",
+    "nameRequired": "Şablona bir ad verin.",
+    "descriptionLabel": "Açıklama",
+    "descriptionPlaceholder": "Ne zaman kullanılır…",
+    "ownDescription": "Kendi şablonunuz.",
+    "icon": "Simge",
+    "sections": "Bölümler",
+    "include": "{section} bölümünü dahil et",
+    "heading": "{section} başlığı",
+    "sectionsRequired": "En az bir bölüm bırakın.",
+    "create": "Şablon oluştur"
+  }
+}

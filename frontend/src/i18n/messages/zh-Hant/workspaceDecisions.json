@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "決策"
+  },
+  "title": "決策",
+  "description": "與你共用的會議中做出的所有決策，依新到舊排列，並連結到提出的地方。",
+  "searchLabel": "搜尋決策",
+  "loading": "正在載入決策…",
+  "loadFailed": "無法載入決策",
+  "empty": {
+    "title": "還沒有決策",
+    "text": "Leo 會找出共用會議中做出的決策，並保存在這裡，連結到對應的會議。",
+    "action": "前往會議"
+  },
+  "noMatch": {
+    "title": "沒有符合的決策",
+    "text": "試試其他字詞或其他團隊。",
+    "clear": "清除篩選條件"
+  },
+  "replaced": "已取代",
+  "replacedBy": "已被 {meeting} 中的<link>「{decision}」</link>取代。",
+  "replacedHidden": "已被一場未與你共用的會議中較新的決策取代。",
+  "day": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "tomorrow": "明天"
+  }
+}

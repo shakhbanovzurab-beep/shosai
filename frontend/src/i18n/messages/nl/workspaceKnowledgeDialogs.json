@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "Uploaden naar {workspace}",
+    "description": "Geüploade bestanden horen bij {workspace}: ze blijven als je vertrekt, en beheerders beheren ze. Wil je een bestand delen en het van jou houden, deel het dan vanuit je bestanden.",
+    "dropZone": "Sleep bestanden hierheen om toe te voegen",
+    "drop": "Zet bestanden hier neer",
+    "choose": "Bestanden kiezen",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown of tekst · maximaal {limit} per bestand",
+    "chosen": "Gekozen bestanden",
+    "removeFile": "{name} verwijderen",
+    "tooBig": "{count, plural, one {{names} is groter dan {limit} en is weggelaten.} other {{names} zijn groter dan {limit} en zijn weggelaten.}}",
+    "noFiles": "Kies minstens één bestand.",
+    "submit": "{count, plural, =0 {Uploaden} one {Uploaden} other {# bestanden uploaden}}"
+  },
+  "connect": {
+    "title": "Bron koppelen",
+    "description": "Een gedeelde drive, wiki of website waar {workspace} de documenten al bewaart. Die blijft gesynchroniseerd, hoort bij de werkruimte, en Leo antwoordt eruit voor wie jij kiest.",
+    "source": "Bron",
+    "link": "Link",
+    "linkHint": "De map, ruimte of pagina die gesynchroniseerd moet blijven.",
+    "submit": "Koppelen"
+  },
+  "share": {
+    "title": "Delen uit mijn bestanden",
+    "description": "Leo antwoordt eruit in {workspace} voor wie jij kiest. Ze blijven in je Bestandsbeheer, blijven van jou en gaan met je mee.",
+    "submit": "{count, plural, =0 {Delen} one {Delen} other {# bestanden delen}}"
+  }
+}

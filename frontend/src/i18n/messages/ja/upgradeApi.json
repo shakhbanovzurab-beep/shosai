@@ -1,0 +1,13 @@
+{
+  "choosePlan": "プランを選択してください。",
+  "planUnavailable": "このプランは利用できません。",
+  "salesOnly": "このプランは営業チームを通じてご契約いただけます。",
+  "alreadyOnPlan": "すでにこのプランをご利用中です。",
+  "chooseUsers": "{min, number}～{max, number} ユーザーの範囲で選択してください。",
+  "chooseUsersOrMore": "{min, plural, other {# ユーザー以上}}を選択してください。",
+  "singleUser": "このプランは 1 ユーザー用です。",
+  "paymentsNotConnected": "支払いはまだ接続されていません。請求機能が有効になると、決済代行会社の安全な決済ページが開きます。",
+  "invalidEmail": "有効な勤務先のメールアドレスを入力してください。",
+  "companyRequired": "会社名を入力してください。",
+  "checkForm": "フォームの内容を確認してください。"
+}

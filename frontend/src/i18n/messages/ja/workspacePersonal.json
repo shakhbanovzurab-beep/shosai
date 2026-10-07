@@ -1,0 +1,51 @@
+{
+  "share": "共有",
+  "sharedIn": "{workspace} で共有中",
+  "workspace": "ワークスペース",
+  "stopSharing": "共有を停止",
+  "fileShare": {
+    "title": "ワークスペースで共有",
+    "description": "共有先では、選んだ人に対して Leo がその内容をもとに回答します。ファイルは自分のファイル管理に残り、自分のもののままです。",
+    "access": "利用できる人",
+    "everyone": "{workspace} の全員",
+    "sharedOption": "{workspace} · 共有中",
+    "noWorkspace": "まだワークスペースに参加していません。",
+    "toast": "{level, select, workspace {「{file}」：{workspace} の全員が利用できます} other {「{file}」：{workspace} の {team} が利用できます}}"
+  },
+  "recordingShare": {
+    "title": "ワークスペースに共有",
+    "description": "自分のもののまま、ここ（自分のノート）に残ります。この会議について Leo にした質問は非公開のままです。",
+    "openIn": "{workspace} で開く",
+    "tabWorkspace": "ワークスペース",
+    "tabLink": "リンク",
+    "loadFailed": "{workspace} を読み込めませんでした。",
+    "moveTo": "{workspace} に移動",
+    "audienceHint": "要約、決定事項、タスクが共有されます。参加者はいつでも閲覧できます。",
+    "sharedElsewhere": "現在 {workspace} で共有されています。会議を共有できるワークスペースは一度に 1 つだけです。"
+  },
+  "myTasks": {
+    "title": "ワークスペースのタスク",
+    "onKanban": "かんばんに表示中",
+    "loadFailed": "ワークスペースのタスクを読み込めませんでした。",
+    "empty": "ワークスペースで自分に割り当てられたタスクはありません。"
+  },
+  "actionItems": {
+    "tracked": "<link>{workspace}</link> でタスクとして管理されています。ここでの変更はワークスペースにも反映されます。"
+  },
+  "sharedMeetings": {
+    "nav": "自分と共有",
+    "loadFailed": "共有された会議を読み込めませんでした。",
+    "emptyTitle": "共有された会議はまだありません",
+    "empty": "チームメンバーが自分や所属チームと共有した会議がここに表示されます。",
+    "intro": "<link>{workspace}</link> で自分と共有された会議です。会議はワークスペースにあり、開くとノート、決定事項、タスクを確認できます。"
+  },
+  "knowledge": {
+    "open": "ナレッジを開く",
+    "summary": "開ける会議 {meetings, plural, other {# 件}}、決定事項 {decisions, plural, other {# 件}}、プロジェクト {projects, plural, other {# 件}}と、利用できるファイルまたはソース {items, plural, other {# 件}}。",
+    "listLabel": "{workspace} のナレッジ",
+    "loadFailed": "ワークスペースのナレッジを読み込めませんでした",
+    "emptyTitle": "ワークスペースはまだありません",
+    "empty": "ワークスペースに参加すると、自分と共有された内容をもとに、ここでも Leo が回答できるようになります。",
+    "intro": "個人で質問したとき、Leo は自分のためだけにこれらを使います。回答には、どのワークスペースの情報かが表示されます。所属していないチームのナレッジは使われません。"
+  }
+}

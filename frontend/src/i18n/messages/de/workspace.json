@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "Workspaces",
+    "home": "Workspace-Startseite",
+    "new": "Neuer Workspace",
+    "settings": "Workspace-Einstellungen",
+    "members": "Mitglieder",
+    "decisions": "Entscheidungen",
+    "projects": "Projekte",
+    "tasks": "Aufgaben",
+    "knowledge": "Workspace-Wissen",
+    "meetings": "Workspace-Meetings",
+    "project": "Projekt",
+    "meeting": "Meeting"
+  },
+  "createWorkspace": "Workspace erstellen",
+  "roles": {
+    "owner": {
+      "label": "Inhaber",
+      "description": "Alles, einschließlich Abrechnung und Löschen des Workspace."
+    },
+    "admin": {
+      "label": "Admin",
+      "description": "Verwaltet Personen, Teams, Regeln zum Teilen und Einstellungen."
+    },
+    "member": {
+      "label": "Mitglied",
+      "description": "Nimmt Meetings auf, teilt sie und kümmert sich um die nächsten Schritte."
+    }
+  },
+  "teams": {
+    "private": "Privates Team"
+  },
+  "audience": {
+    "participants": "Teilnehmer",
+    "everyone": "Alle in {workspace}",
+    "aTeam": "Ein Team",
+    "sharedWith": "{level, select, participants {Mit Teilnehmern geteilt} workspace {Mit allen in {workspace} geteilt} other {Mit {team} geteilt}}",
+    "hint": "{level, select, participants {Mitglieder, die am Meeting teilgenommen haben.} other {Alle im Workspace, jetzt und künftig.}}",
+    "teamHint": "{private, select, true {Mitglieder von {team} (privates Team) sowie die Teilnehmer.} other {Mitglieder von {team} sowie die Teilnehmer.}}"
+  },
+  "people": {
+    "list": "Personen: {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name} (du)"
+  },
+  "filters": {
+    "team": "Team",
+    "allTeams": "Alle Teams",
+    "project": "Projekt",
+    "allProjects": "Alle Projekte",
+    "clearSearch": "Suche löschen"
+  },
+  "blocks": {
+    "loading": {
+      "files": "Dateien werden geladen…",
+      "tasks": "Aufgaben werden geladen…",
+      "yourTasks": "Deine Aufgaben werden geladen…",
+      "projects": "Projekte werden geladen…",
+      "meetings": "Meetings werden geladen…",
+      "upcomingMeetings": "Anstehende Meetings werden geladen…",
+      "decisions": "Entscheidungen werden geladen…"
+    },
+    "failed": {
+      "files": "Dateien konnten nicht geladen werden.",
+      "tasks": "Aufgaben konnten nicht geladen werden.",
+      "yourTasks": "Deine Aufgaben konnten nicht geladen werden.",
+      "projects": "Projekte konnten nicht geladen werden.",
+      "meetings": "Meetings konnten nicht geladen werden.",
+      "upcomingMeetings": "Anstehende Meetings konnten nicht geladen werden.",
+      "decisions": "Entscheidungen konnten nicht geladen werden."
+    }
+  },
+  "dates": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "tomorrow": "Morgen",
+    "targetOverdue": "Überfällig · {date}",
+    "targetToday": "Ziel: heute",
+    "targetTomorrow": "Ziel: morgen",
+    "targetDay": "Ziel: {day}",
+    "targetDate": "Ziel: {date}",
+    "ago": "{days, plural, =0 {heute} =1 {gestern} one {vor # Tag} other {vor # Tagen}}",
+    "on": "am {date}",
+    "neverSignedIn": "Nie angemeldet",
+    "activeNow": "Jetzt aktiv",
+    "hoursAgo": "{count, plural, one {vor # Stunde} other {vor # Stunden}}",
+    "daysAgo": "{count, plural, =1 {Gestern} one {Vor # Tag} other {Vor # Tagen}}"
+  },
+  "gate": {
+    "loading": "Workspace wird geladen…",
+    "loadFailed": "Workspace konnte nicht geladen werden",
+    "listFailed": "Deine Workspaces konnten nicht geladen werden",
+    "unavailable": "Dieser Workspace ist nicht verfügbar",
+    "unavailableHint": "Er existiert nicht, oder du bist kein Mitglied. Bitte jemanden darin, dich einzuladen, oder erstelle deinen eigenen.",
+    "backToPersonal": "Zurück zu Persönlich",
+    "suspended": "{name} ist gesperrt",
+    "suspendedOwnerHint": "Der Zugriff ist für alle Mitglieder pausiert. Wende dich an den Support, um ihn wiederherzustellen; im Workspace wurde nichts gelöscht.",
+    "suspendedHint": "Der Zugriff ist für alle Mitglieder pausiert. Der Inhaber kann sich an den Support wenden, um ihn wiederherzustellen. Deine Notizen, Dateien und Boards in Persönlich sind nicht betroffen."
+  },
+  "switcher": {
+    "invite": "Personen zu {name} einladen",
+    "settings": "Workspace-Einstellungen",
+    "current": "Aktuell",
+    "hint": "Zwischen Persönlich und Workspaces wechseln",
+    "personal": "Persönlich",
+    "personalHint": "Deine E-Mails, Notizen, Boards und Aufgaben",
+    "workspaces": "Workspaces",
+    "suspended": "Gesperrt",
+    "detail": "{role} · {count, plural, one {# Mitglied} other {# Mitglieder}}",
+    "loadFailed": "Deine Workspaces konnten nicht geladen werden. Versuche es erneut.",
+    "none": "Du bist noch in keinem Workspace"
+  },
+  "create": {
+    "title": "Hol dein Team zu Leo",
+    "intro": "Ein gemeinsamer Workspace für eure Zusammenarbeit. Persönlich bleibt deins: E-Mails, Kalender, Notizen und Boards sind privat, bis du etwas teilst.",
+    "value": {
+      "meetings": {
+        "title": "Geteilte Meetings",
+        "text": "Teile eine Aufnahme aus deinen Notizen oder lass Notizen nach dem Meeting automatisch an die richtigen Personen gehen. Meetings mit Gästen bleiben privat."
+      },
+      "work": {
+        "title": "Projekte, Aufgaben und Entscheidungen",
+        "text": "Was entschieden wurde und wer was zu erledigen hat, nach Projekt gruppiert. Deine Aufgaben erscheinen auch in deiner Produktivität und deinem Kanban."
+      },
+      "knowledge": {
+        "title": "Team-Wissen",
+        "text": "Teile Dateien aus deinem Dateimanager, lade neue hoch oder verbinde ein geteiltes Laufwerk. Leo antwortet daraus für alle, die sie sehen dürfen."
+      }
+    },
+    "billing": "Abrechnung pro Lizenz im Team-Tarif. <link>Preise ansehen</link>",
+    "formHint": "Du wirst Inhaber. Lade danach direkt Personen ein.",
+    "name": "Name des Workspace",
+    "namePlaceholder": "z. B. Acme",
+    "nameRequired": "Gib dem Workspace einen Namen.",
+    "seats": "Lizenzen",
+    "fewerSeats": "Weniger Lizenzen",
+    "moreSeats": "Mehr Lizenzen",
+    "seatsHint": "Eine pro Person, dich eingeschlossen. {min, number}–{max, number}; jederzeit änderbar.",
+    "submit": "Workspace erstellen"
+  },
+  "toasts": {
+    "workspaceReady": "{name} ist bereit",
+    "workspaceReadyHint": "Lade dein Team ein, um Meetings zu teilen.",
+    "createWorkspaceFailed": "Workspace konnte nicht erstellt werden.",
+    "saveFailed": "Änderung konnte nicht gespeichert werden",
+    "workspaceDeleted": "{name} wurde gelöscht",
+    "deleteWorkspaceFailed": "Workspace konnte nicht gelöscht werden",
+    "workspaceLeft": "Du hast {name} verlassen",
+    "leaveWorkspaceFailed": "Workspace konnte nicht verlassen werden",
+    "projectSaveFailed": "Projekt konnte nicht gespeichert werden",
+    "projectDeleted": "{name} wurde gelöscht",
+    "projectDeletedHint": "Die zugehörigen Meetings und Aufgaben bleiben erhalten.",
+    "projectDeleteFailed": "Projekt konnte nicht gelöscht werden",
+    "filesAdded": "{count, plural, one {{name} hinzugefügt} other {# Dateien hinzugefügt}}",
+    "filesAddedHint": "{count, plural, one {Leo kann daraus antworten, sobald die Indexierung abgeschlossen ist.} other {Leo kann daraus antworten, sobald die Indexierung abgeschlossen ist.}}",
+    "sourceConnected": "{name} verbunden",
+    "sourceConnectedHint": "Leo kann nach der ersten Synchronisierung daraus antworten.",
+    "knowledgeChangeFailed": "Änderung konnte nicht übernommen werden",
+    "stoppedSharing": "{name} wird nicht mehr geteilt",
+    "stoppedSharingHint": "Die Datei bleibt im Dateimanager des Inhabers; Leo antwortet hier nicht mehr daraus.",
+    "knowledgeRemoved": "{name} entfernt",
+    "knowledgeRemovedHint": "Leo antwortet nicht mehr daraus.",
+    "knowledgeRemoveFailed": "Konnte nicht entfernt werden",
+    "fileStaysYours": "{count, plural, one {Die Datei bleibt in deinem Dateimanager und gehört weiter dir.} other {Die Dateien bleiben in deinem Dateimanager und gehören weiter dir.}}",
+    "shareFileFailed": "Konnte nicht geteilt werden",
+    "filesShared": "{count, plural, one {{name} geteilt} other {# Dateien geteilt}}",
+    "stillInFileManager": "Die Datei ist weiterhin in deinem Dateimanager.",
+    "unshareFileFailed": "Teilen konnte nicht beendet werden",
+    "meetingShareFailed": "Meeting konnte nicht geteilt werden",
+    "meetingChangeFailed": "Meeting konnte nicht geändert werden",
+    "changeUndone": "Änderung rückgängig gemacht",
+    "noLongerShared": "Nicht mehr geteilt",
+    "stillInYourNotes": "Es ist weiterhin in deinen Notizen.",
+    "stillInOwnerNotes": "Es ist weiterhin in den Notizen des Inhabers.",
+    "sharedAgain": "Wieder geteilt",
+    "unshareMeetingFailed": "Teilen konnte nicht beendet werden",
+    "taskUpdateFailed": "Aufgabe konnte nicht aktualisiert werden",
+    "markedDone": "Als erledigt markiert",
+    "taskAdded": "Aufgabe hinzugefügt"
+  }
+}

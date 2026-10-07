@@ -1,0 +1,26 @@
+{
+  "description": "Masaüstü uygulamasının kısayolları. Uygulama arka planda olsa bile bilgisayarınızın her yerinde çalışır ve tüm cihazlarınızla senkronize edilir.",
+  "commands": {
+    "open_app": "Uygulamayı aç",
+    "toggle_recording": "Kaydı başlat / duraklat",
+    "toggle_overlay": "Katmanı göster / gizle",
+    "open_settings": "Ayarlar",
+    "collapse_overlay": "Katmanı küçük düğmeye daralt",
+    "close_app": "Uygulamayı kapat",
+    "live_translation": "Canlı çeviri",
+    "prompter": "Suflör"
+  },
+  "off": "Kapalı",
+  "pressKeys": "Tuşlara basın…",
+  "hint": "İptal için Esc · Kapatmak için Backspace",
+  "reset": "{command} kısayolunu varsayılana sıfırla",
+  "record": "{command} için yeni kısayola basın",
+  "change": "{command}: {keys}. Değiştir",
+  "changeOff": "{command}: kapalı. Değiştir",
+  "resetAll": "Tümünü varsayılana sıfırla",
+  "problems": {
+    "needsModifier": "⌘/Ctrl veya ⌥/Alt tuşunu başka bir tuşla birlikte kullanın.",
+    "reserved": "Bu kısayol sistem tarafından kullanılıyor.",
+    "taken": "Bu kısayol zaten “{command}” için kullanılıyor."
+  }
+}

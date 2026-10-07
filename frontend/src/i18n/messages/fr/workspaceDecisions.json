@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Décisions"
+  },
+  "title": "Décisions",
+  "description": "Tout ce qui a été décidé dans les réunions partagées avec vous, des plus récentes aux plus anciennes, avec un lien vers le moment où cela a été dit.",
+  "searchLabel": "Rechercher des décisions",
+  "loading": "Chargement des décisions…",
+  "loadFailed": "Impossible de charger les décisions",
+  "empty": {
+    "title": "Aucune décision pour l’instant",
+    "text": "Leo repère ce qui a été décidé dans les réunions partagées et le conserve ici, avec un lien vers la réunion.",
+    "action": "Voir les réunions"
+  },
+  "noMatch": {
+    "title": "Aucune décision ne correspond",
+    "text": "Essayez d’autres mots ou une autre équipe.",
+    "clear": "Effacer les filtres"
+  },
+  "replaced": "Remplacée",
+  "replacedBy": "Remplacée par <link>« {decision} »</link> dans {meeting}.",
+  "replacedHidden": "Remplacée par une décision ultérieure, prise dans une réunion qui n’est pas partagée avec vous.",
+  "day": {
+    "today": "Aujourd’hui",
+    "yesterday": "Hier",
+    "tomorrow": "Demain"
+  }
+}

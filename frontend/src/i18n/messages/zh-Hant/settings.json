@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "設定",
+    "sectionsLabel": "設定區段",
+    "autosave": "變更會自動儲存。"
+  },
+  "sections": {
+    "account": "帳號",
+    "privacy": "隱私權",
+    "billing": "帳單",
+    "usage": "用量",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "記憶",
+    "connectors": "連接器",
+    "hotkeys": "快速鍵"
+  },
+  "loadFailed": "無法載入這個區段",
+  "manage": "管理",
+  "saving": "正在儲存…",
+  "saveFailed": "無法儲存",
+  "profile": {
+    "title": "個人資料",
+    "email": "電子郵件",
+    "emailHint": "你會透過服務供應商以這個地址登入。",
+    "fullName": "全名",
+    "displayName": "Leo 該怎麼稱呼你？",
+    "displayNameHint": "Leo 向你打招呼和回答時會用到。",
+    "workRole": "哪一項最符合你的工作？",
+    "workRoleHint": "Leo 會據此挑選貼近你領域的範例和用語。"
+  },
+  "workRoles": {
+    "product_management": "產品管理",
+    "engineering": "工程",
+    "human_resources": "人力資源",
+    "finance": "財務",
+    "marketing": "行銷",
+    "sales": "業務",
+    "operations": "營運",
+    "data_science": "資料科學",
+    "design": "設計",
+    "legal": "法務",
+    "scientist": "科學家",
+    "student": "學生",
+    "founder": "創辦人",
+    "healthcare": "醫療照護",
+    "writer": "寫作者",
+    "educator": "教育工作者",
+    "consultant": "顧問",
+    "researcher": "研究人員",
+    "software_engineer": "軟體工程師",
+    "other": "其他"
+  },
+  "avatar": {
+    "change": "變更個人資料相片",
+    "hint": "任何圖片都可以，系統會自動裁成正方形並調整大小。",
+    "upload": "上傳相片",
+    "updateFailed": "無法更新你的相片",
+    "removeFailed": "無法移除你的相片",
+    "tooLarge": "請選擇小於 {size} 的相片。",
+    "unreadable": "這個瀏覽器無法讀取該圖片。請改用 JPEG 或 PNG。",
+    "processFailed": "無法處理這張圖片。"
+  },
+  "deleteAccount": {
+    "group": "危險區域",
+    "title": "刪除帳號",
+    "description": "永久刪除你的帳號和其中所有內容：對話、筆記、檔案、提示詞和設定。",
+    "confirmTitle": "要刪除你的帳號嗎？",
+    "confirmDescription": "這項操作無法復原。你的對話、筆記、檔案、提示詞、記憶和設定都會刪除，所有訂閱也會取消。",
+    "confirmLabel": "輸入 <address>{email}</address> 以確認",
+    "deleted": "已刪除你的帳號",
+    "failed": "無法刪除你的帳號"
+  }
+}

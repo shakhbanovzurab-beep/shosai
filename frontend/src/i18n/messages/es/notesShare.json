@@ -1,0 +1,54 @@
+{
+  "panel": {
+    "loadFailed": "No se pudo cargar el enlace.",
+    "anyone": "Cualquier persona con el enlace",
+    "anyoneHint": "Personas ajenas a la reunión pueden abrir sus notas.",
+    "linkLabel": "Enlace a las notas",
+    "toggles": {
+      "showTranscript": {
+        "label": "Mostrar transcripción",
+        "description": "Las intervenciones textuales de los participantes."
+      },
+      "showNames": {
+        "label": "Mostrar nombres de los participantes",
+        "description": "Si no, la transcripción muestra «{first}», «{second}»."
+      },
+      "allowComments": {
+        "label": "Permitir comentarios",
+        "description": "Cualquier persona con el enlace puede responder."
+      }
+    },
+    "expires": "Caduca",
+    "never": "Nunca",
+    "days": "{count, plural, one {# día} many {# de días} other {# días}}",
+    "stopsOn": "El enlace dejará de funcionar el {date}.",
+    "keepsWorking": "El enlace seguirá funcionando.",
+    "updateFailed": "No se pudo actualizar el enlace",
+    "turnedOff": "Enlace desactivado",
+    "turnOffFailed": "No se pudo desactivar el enlace"
+  },
+  "page": {
+    "unavailable": "Enlace no disponible",
+    "eyebrow": "Notas de reunión compartidas",
+    "people": "{count, plural, one {# persona} many {# de personas} other {# personas}}",
+    "transcript": "Transcripción",
+    "done": "Completada",
+    "open": "Pendiente",
+    "speaker": "Hablante {order, number}"
+  },
+  "gone": {
+    "title": "Este enlace ya no funciona",
+    "description": "Puede que haya caducado o que se haya desactivado. Pide uno nuevo a la persona que te lo envió."
+  },
+  "comments": {
+    "title": "Comentarios",
+    "loadFailed": "No se pudieron cargar los comentarios.",
+    "comment": "Tu comentario",
+    "commentPlaceholder": "Escribe una respuesta…",
+    "name": "Tu nombre",
+    "namePlaceholder": "Opcional; si no, aparecerás como «{guest}»",
+    "guest": "Invitado",
+    "post": "Publicar comentario",
+    "postFailed": "No se pudo publicar tu comentario"
+  }
+}

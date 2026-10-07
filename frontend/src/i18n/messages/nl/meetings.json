@@ -1,0 +1,60 @@
+{
+  "title": "Vergaderingen",
+  "loading": "Vergaderingen laden…",
+  "loadFailed": "Kan de vergaderingen niet laden",
+  "loadFailedHint": "Controleer je verbinding en probeer het opnieuw.",
+  "newMeeting": "Nieuwe vergadering",
+  "actions": {
+    "schedule": "Plannen in Agenda",
+    "upload": "Opname uploaden"
+  },
+  "filters": "Vergaderfilters",
+  "views": {
+    "all": "Alle",
+    "upcoming": "Gepland",
+    "live": "Nu bezig",
+    "past": "Afgelopen"
+  },
+  "recent": "Recente vergaderingen",
+  "viewAll": "Alles bekijken",
+  "noMoreToday": "Vandaag geen vergaderingen meer.",
+  "day": {
+    "today": "Vandaag",
+    "tomorrow": "Morgen",
+    "yesterday": "Gisteren"
+  },
+  "liveBadge": "Nu live",
+  "liveSince": "{minutes, plural, =0 {Net begonnen · eindigt om {end}} one {# min geleden begonnen · eindigt om {end}} other {# min geleden begonnen · eindigt om {end}}}",
+  "startsIn": "{minutes, plural, =0 {Begint nu} one {Over # min} other {Over # min}}",
+  "join": "Deelnemen",
+  "opensInNewTab": "(opent in een nieuw tabblad)",
+  "source": {
+    "whisperer": "Whisperer-ruimte",
+    "in_person": "Op locatie"
+  },
+  "participants": "Deelnemers: {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "De notities zijn nog niet klaar.",
+    "tasks": "{count, plural, one {# taak} other {# taken}}",
+    "decisions": "{count, plural, one {# besluit} other {# besluiten}}"
+  },
+  "empty": {
+    "none": {
+      "title": "Nog geen vergaderingen",
+      "description": "Plan een vergadering in Agenda of upload een opname om notities van Leo te krijgen."
+    },
+    "upcoming": {
+      "title": "Niets gepland",
+      "description": "Vergaderingen die je in Agenda plant, verschijnen hier."
+    },
+    "live": {
+      "title": "Geen vergadering bezig",
+      "description": "Een vergadering verschijnt hier zolang die bezig is, zodat je kunt deelnemen."
+    },
+    "past": {
+      "title": "Nog geen afgelopen vergaderingen",
+      "description": "Opgenomen vergaderingen verschijnen hier met Leo’s samenvatting, taken en besluiten."
+    }
+  }
+}

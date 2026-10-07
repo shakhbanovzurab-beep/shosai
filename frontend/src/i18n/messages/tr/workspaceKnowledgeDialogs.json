@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "{workspace} çalışma alanına yükle",
+    "description": "Yüklenen dosyalar {workspace} çalışma alanına ait olur: siz ayrılsanız da kalırlar ve yöneticiler tarafından yönetilirler. Bir dosyayı size ait kalacak şekilde paylaşmak için bunun yerine dosyalarınızdan paylaşın.",
+    "dropZone": "Eklemek için dosyaları bırakın",
+    "drop": "Dosyaları buraya bırakın",
+    "choose": "Dosya seç",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown veya metin · her biri en fazla {limit}",
+    "chosen": "Seçilen dosyalar",
+    "removeFile": "Kaldır: {name}",
+    "tooBig": "{count, plural, one {{limit} sınırını aştığı için eklenmedi: {names}} other {{limit} sınırını aştıkları için eklenmedi: {names}}}",
+    "noFiles": "En az bir dosya seçin.",
+    "submit": "{count, plural, =0 {Yükle} one {Yükle} other {# dosya yükle}}"
+  },
+  "connect": {
+    "title": "Kaynak bağla",
+    "description": "{workspace} çalışma alanının belgelerini zaten tuttuğu ortak bir sürücü, wiki veya site. Senkronize kalır, çalışma alanına ait olur ve Leo seçtiğiniz kişilere ondan yanıt verir.",
+    "source": "Kaynak",
+    "link": "Bağlantı",
+    "linkHint": "Senkronize tutulacak klasör, alan veya sayfa.",
+    "submit": "Bağla"
+  },
+  "share": {
+    "title": "Dosyalarımdan paylaş",
+    "description": "Leo, {workspace} çalışma alanında seçtiğiniz kişilere bu dosyalardan yanıt verir. Dosyalar Dosya yöneticinizde kalır, size ait olmaya devam eder ve sizinle birlikte ayrılır.",
+    "submit": "{count, plural, =0 {Paylaş} one {Paylaş} other {# dosya paylaş}}"
+  }
+}

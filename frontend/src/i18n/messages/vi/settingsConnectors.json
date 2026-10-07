@@ -1,0 +1,54 @@
+{
+  "description": "Kết nối ứng dụng để Leo có thể tìm kiếm và thao tác trong đó. Mỗi ứng dụng đăng nhập cho bạn trên trang riêng bằng OAuth 2.0, nên Leo không bao giờ thấy mật khẩu của bạn.",
+  "columns": {
+    "connector": "Trình kết nối",
+    "type": "Loại",
+    "status": "Trạng thái"
+  },
+  "categories": {
+    "mail": "Thư",
+    "files": "Tệp",
+    "notes": "Ghi chú",
+    "communication": "Liên lạc",
+    "tasks": "Công việc",
+    "crm": "Quản lý khách hàng"
+  },
+  "connect": "Kết nối",
+  "connecting": "Đang kết nối…",
+  "connected": "Đã kết nối",
+  "options": "Tùy chọn cho {name}, đã kết nối",
+  "disconnect": "Ngắt kết nối",
+  "toasts": {
+    "connected": "Đã kết nối {name}",
+    "notConnected": "Chưa kết nối {name}",
+    "connectFailed": "Không thể kết nối {name}",
+    "disconnected": "Đã ngắt kết nối {name}",
+    "disconnectFailed": "Không thể ngắt kết nối {name}"
+  },
+  "callback": {
+    "metaTitle": "Đang kết nối…",
+    "connected": {
+      "title": "Đã kết nối",
+      "body": "Bạn có thể đóng cửa sổ này và quay lại bảng điều khiển."
+    },
+    "denied": {
+      "title": "Chưa được cấp quyền truy cập",
+      "body": "Không có gì được kết nối. Bạn có thể đóng cửa sổ này."
+    },
+    "error": {
+      "title": "Không thể kết nối",
+      "body": "Đã xảy ra sự cố khi kết nối. Hãy thử lại từ Cài đặt."
+    },
+    "back": "Quay lại bảng điều khiển"
+  },
+  "consent": {
+    "metaTitle": "Cấp quyền mô phỏng",
+    "badge": "Bản demo · không dùng tài khoản thật",
+    "title": "Kết nối {app} với Leo?",
+    "titleUnknown": "Kết nối ứng dụng này với Leo?",
+    "body": "Trong môi trường thật, bước này là màn hình đồng ý của chính {app}. Khi chấp nhận, bạn cho phép Leo đọc và thao tác trong tài khoản {app} thay cho bạn.",
+    "bodyUnknown": "Trong môi trường thật, bước này là màn hình đồng ý của chính nhà cung cấp. Khi chấp nhận, bạn cho phép Leo đọc và thao tác trong tài khoản của bạn thay cho bạn.",
+    "disconnectHint": "Bạn có thể ngắt kết nối bất cứ lúc nào trong Cài đặt › Trình kết nối.",
+    "allow": "Cho phép"
+  }
+}

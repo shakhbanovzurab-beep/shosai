@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} per pengguna",
+    "from": "mulai {amount}",
+    "unlimited": "tanpa batas"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Rapat tanpa batas",
+    "meetingMinutes": "{minutes, plural, other {# menit rapat}} per bulan",
+    "noMeetings": "Rapat",
+    "fileManager": "Pengelola file · {storage}",
+    "noFileManager": "Pengelola file",
+    "knowledge": "Pengetahuan untuk Leo · {storage}",
+    "noKnowledge": "Pengetahuan untuk Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Ruang kerja tim bersama",
+    "member_management": "Manajemen pengguna",
+    "centralized_billing": "Tagihan terpusat",
+    "billing_and_users": "Tagihan terpusat & manajemen pengguna",
+    "admin_controls": "Keamanan dan kontrol admin kelas enterprise",
+    "sso": "Masuk tunggal (SSO)",
+    "priority_support": "Dukungan prioritas",
+    "usage_analytics": "Analitik penggunaan"
+  },
+  "compare": {
+    "title": "Bandingkan paket",
+    "feature": "Fitur",
+    "included": "Termasuk",
+    "notIncluded": "Tidak termasuk",
+    "unlimited": "Tanpa batas",
+    "minutes": "{minutes, plural, other {# mnt}} / bulan",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Kustom",
+    "rows": {
+      "meetings": "Rapat",
+      "fileManager": "Pengelola file",
+      "knowledge": "Pengetahuan untuk Leo",
+      "apps": "Leo, Email, Kalender, Kanban, Catatan",
+      "users": "Pengguna",
+      "sharedWorkspace": "Ruang kerja bersama",
+      "billingAndUsers": "Tagihan terpusat & manajemen pengguna",
+      "sso": "Masuk tunggal (SSO)",
+      "adminControls": "Keamanan dan kontrol admin",
+      "prioritySupport": "Dukungan prioritas",
+      "usageAnalytics": "Analitik penggunaan"
+    }
+  }
+}

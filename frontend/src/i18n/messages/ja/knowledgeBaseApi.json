@@ -1,0 +1,6 @@
+{
+  "invalidSettings": "設定を読み取れませんでした。ページを再読み込みして、もう一度お試しください。",
+  "unknownSource": "このソースは見つかりません。",
+  "notConnected": "このソースは接続されていません。",
+  "fieldRequired": "{field} を入力してください。"
+}

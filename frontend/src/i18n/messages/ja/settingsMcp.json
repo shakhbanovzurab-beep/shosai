@@ -1,0 +1,23 @@
+{
+  "description": "Model Context Protocol サーバーを接続して、ほかのアプリのツールやデータを Leo が使えるようにします。",
+  "add": "サーバーを追加",
+  "empty": {
+    "title": "MCP サーバーはありません",
+    "description": "URL を指定してリモートサーバーを追加してください。"
+  },
+  "hasAuth": "認証あり",
+  "notReached": "未接続",
+  "tools": "{count, plural, other {# 個のツール}}",
+  "enable": "{name} を有効にする",
+  "disable": "{name} を無効にする",
+  "remove": "{name} を削除",
+  "removed": "{name} を削除しました",
+  "form": {
+    "transport": "トランスポート",
+    "url": "サーバーの URL",
+    "auth": "Authorization ヘッダー <optional>（任意）</optional>"
+  },
+  "addFailed": "サーバーを追加できませんでした。",
+  "toggleFailed": "サーバーを変更できませんでした",
+  "removeFailed": "サーバーを削除できませんでした"
+}

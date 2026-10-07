@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "A polished open-source admin dashboard built with shadcn/ui."
+  },
+  "actions": {
+    "goHome": "Go to home",
+    "goBack": "Go back"
+  },
+  "placeholder": {
+    "title": "{title} is on the way",
+    "description": "This section is under development and will be available soon.",
+    "badge": "In development"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "All"
+  },
+  "emoji": {
+    "search": "Search emoji",
+    "empty": "No emoji found"
+  },
+  "notFound": {
+    "metaTitle": "Page not found",
+    "badge": "Error {code}",
+    "title": "This page wandered off",
+    "description": "The link may be broken, or the page was moved or removed. Let’s get you back on track.",
+    "popularPages": "Popular pages",
+    "jumpTo": "Or jump to"
+  },
+  "unauthorized": {
+    "metaTitle": "No access",
+    "title": "You don’t have access",
+    "description": "You don’t have permission to view this page. If you think this is a mistake, contact your administrator."
+  }
+}

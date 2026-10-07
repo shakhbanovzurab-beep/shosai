@@ -1,0 +1,50 @@
+{
+  "title": "التركيز",
+  "sound": {
+    "label": "صوت عند انتهاء الجلسة",
+    "on": "الصوت مفعل",
+    "off": "الصوت معطل"
+  },
+  "rhythm": "إيقاع التركيز",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "بومودورو",
+      "hint": "{focus} تركيز، {pause} استراحة، {longBreak} بعد كل {every, plural, zero {# جلسة} one {جلسة} two {جلستين} few {# جلسات} many {# جلسة} other {# جلسة}}. مناسب للبدء وللأيام المزدحمة."
+    },
+    "fifty": {
+      "name": "الممتد",
+      "hint": "{focus} تركيز، {pause} استراحة، {longBreak} بعد كل {every, plural, zero {# جلسة} one {جلسة} two {جلستين} few {# جلسات} many {# جلسة} other {# جلسة}}. مناسب للكتابة والتصميم."
+    },
+    "fiftyTwo": {
+      "name": "إيقاع {focus, number}/{pause, number}",
+      "hint": "{focus} تركيز، {pause} استراحة — هكذا عمل الأكثر إنتاجية في دراسة DeskTime."
+    },
+    "deepWork": {
+      "name": "العمل العميق",
+      "hint": "{focus} تركيز، {pause} استراحة — دورة انتباه طبيعية واحدة، للمشكلات الصعبة."
+    }
+  },
+  "phase": {
+    "focus": "تركيز",
+    "break": "استراحة قصيرة",
+    "long_break": "استراحة طويلة"
+  },
+  "start": "بدء",
+  "pause": "إيقاف مؤقت",
+  "resume": "استئناف",
+  "restart": "إعادة بدء هذه المرحلة",
+  "skipBreak": "تخطي الاستراحة",
+  "skipToBreak": "الانتقال إلى الاستراحة",
+  "cycle": "{done, number} من {every, plural, zero {# جلسة} one {جلسة واحدة} two {جلستين} few {# جلسات} many {# جلسة} other {# جلسة}} قبل الاستراحة الطويلة",
+  "doneToday": "{count, plural, zero {لم تكتمل أي جلسة اليوم} one {اكتملت جلسة واحدة اليوم} two {اكتملت جلستان اليوم} few {اكتملت # جلسات اليوم} many {اكتملت # جلسة اليوم} other {اكتملت # جلسة اليوم}}",
+  "announce": "{phase}، {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "انتهت جلسة التركيز — حان وقت الاستراحة.",
+    "focusLong": "انتهت جلسة التركيز — حان وقت استراحة طويلة.",
+    "break": "انتهت الاستراحة — حان وقت التركيز.",
+    "next": "{preset} · يمكن الضغط على «بدء» عند الاستعداد."
+  }
+}

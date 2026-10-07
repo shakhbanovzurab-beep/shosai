@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "Panolar",
+    "jiraBoards": "Jira ile senkronize edilenler",
+    "newBoard": "Yeni pano…",
+    "syncJiraBoard": "Jira panosu senkronize et…",
+    "rename": "Panoyu yeniden adlandır…",
+    "showWorkspaceTasks": "Çalışma alanı görevlerimi burada göster",
+    "changeIcon": "Simgeyi değiştir",
+    "delete": "Panoyu sil…",
+    "stopSyncing": "Senkronizasyonu durdur…"
+  },
+  "icons": {
+    "work": "İş",
+    "home": "Ev",
+    "personal": "Kişisel",
+    "health": "Sağlık",
+    "study": "Eğitim",
+    "travel": "Seyahat",
+    "shopping": "Alışveriş",
+    "fitness": "Spor",
+    "project": "Proje",
+    "reading": "Okuma"
+  },
+  "empty": {
+    "title": "Henüz pano yok",
+    "description": "İş, ev ya da başka bir şey için pano oluşturun veya bir Jira panosunu senkronize edin.",
+    "newBoard": "Yeni pano",
+    "syncJiraBoard": "Jira panosu senkronize et"
+  },
+  "newBoard": {
+    "title": "Yeni pano",
+    "description": "İş, ev ve diğer her şeyi ayrı panolarda tutun.",
+    "namePlaceholder": "ör. Ev",
+    "icon": "Simge",
+    "columns": "Sütunlar",
+    "create": "Pano oluştur"
+  },
+  "templates": {
+    "simple": "Basit",
+    "project": "Proje"
+  },
+  "columnNames": {
+    "backlog": "Bekleyen işler",
+    "todo": "Yapılacaklar",
+    "inProgress": "Devam ediyor",
+    "review": "İnceleme",
+    "done": "Tamamlandı"
+  },
+  "renameTitle": "Panoyu yeniden adlandır",
+  "delete": {
+    "title": "“{board}” silinsin mi?",
+    "description": "{count, plural, =0 {Pano silinecek. Bu işlem geri alınamaz.} one {Pano ve içindeki # görev silinecek. Bu işlem geri alınamaz.} other {Pano ve içindeki # görev silinecek. Bu işlem geri alınamaz.}}",
+    "confirm": "Panoyu sil",
+    "stopTitle": "“{board}” için senkronizasyon durdurulsun mu?",
+    "stopDescription": "Pano buradan kaldırılacak. Jira’da hiçbir şey değişmez ve panoyu daha sonra tekrar senkronize edebilirsiniz.",
+    "stopConfirm": "Senkronizasyonu durdur"
+  },
+  "jira": {
+    "title": "Jira panosu senkronize et",
+    "description": "Bir Jira panosunda buradan çalışın; tüm değişiklikler iki yönlü senkronize edilir.",
+    "connectTitle": "Önce Jira’yı bağlayın",
+    "connectDescription": "Ayarlar › Bağlayıcılar bölümünde Jira’ya giriş yapın, ardından bir pano seçmek için buraya dönün.",
+    "openConnectors": "Bağlayıcıları aç",
+    "connectedAs": "{account} hesabıyla bağlı.",
+    "connected": "Jira’ya bağlı.",
+    "noBoards": "Jira hesabınızda henüz pano yok.",
+    "boardList": "Jira panoları",
+    "alreadySynced": "Zaten senkronize · aç",
+    "type": {
+      "kanban": "Kanban panosu",
+      "scrum": "Scrum panosu"
+    },
+    "howColumns": "Sütunlar ve işler Jira panosundan gelir.",
+    "howMoves": "Bir kartı taşıdığınızda işin Jira’daki durumu değişir; yeni görevler Jira’da iş olarak oluşturulur.",
+    "howChanges": "Jira’da yapılan değişiklikler burada kendiliğinden görünür.",
+    "sync": "Panoyu senkronize et"
+  },
+  "sync": {
+    "syncing": "Jira ile senkronize ediliyor…",
+    "paused": "Senkronizasyon duraklatıldı",
+    "synced": "Jira ile senkronize edildi",
+    "syncedAgo": "{ago} Jira ile senkronize edildi",
+    "syncNow": "Şimdi senkronize et",
+    "openBoard": "{board} panosunu Jira’da aç",
+    "openHint": "Jira’da aç · {site} üzerindeki {project}"
+  },
+  "banners": {
+    "syncStopped": "Jira ile senkronizasyon durdu.",
+    "changesPaused": "Değişiklikler duraklatıldı.",
+    "importing": "{board} panosu Jira’dan içe aktarılıyor…",
+    "importingHint": "Sütunlar ve işler birazdan burada görünecek.",
+    "offer": "{count, plural, one {Çalışma alanlarınızda # açık göreviniz var. “{board}” panosunda gösterilsin mi?} other {Çalışma alanlarınızda # açık göreviniz var. “{board}” panosunda gösterilsin mi?}} Bir kartı taşıdığınızda görev ekibiniz için de güncellenir.",
+    "notNow": "Şimdi değil",
+    "showHere": "{count, plural, one {Burada göster} other {Burada göster}}"
+  },
+  "toasts": {
+    "createFailed": "Pano oluşturulamadı",
+    "connectFailed": "Jira panosu senkronize edilemedi",
+    "updateFailed": "Pano güncellenemedi",
+    "deleteFailed": "Pano silinemedi",
+    "syncFailed": "Jira ile senkronize edilemedi",
+    "deleted": "“{board}” silindi",
+    "stoppedSyncing": "“{board}” için senkronizasyon durduruldu",
+    "workspaceTasksOn": "Çalışma alanı görevleriniz artık “{board}” panosunda görünüyor",
+    "workspaceTasksOff": "Çalışma alanı görevleriniz artık hiçbir panoda görünmüyor",
+    "workspaceTasksHint": "Bir kartı taşıdığınızda görev kendi çalışma alanında da değişir.",
+    "workspaceTasksFailed": "Çalışma alanı görevlerinin görüneceği yer değiştirilemedi"
+  }
+}

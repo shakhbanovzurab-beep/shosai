@@ -1,0 +1,70 @@
+{
+  "title": "Einstellungen",
+  "description": "Wie {workspace} für alle darin funktioniert. Änderungen werden sofort gespeichert.",
+  "adminsOnly": "Nur Admins können die Workspace-Einstellungen ändern.",
+  "adminsOnlyAsk": "Nur Admins können die Workspace-Einstellungen ändern. Frag {name}.",
+  "general": {
+    "title": "Allgemein",
+    "name": "Name des Workspace",
+    "nameHint": "Wird im Umschalter und in Einladungen angezeigt.",
+    "renamed": "Workspace umbenannt",
+    "join": "Mit Firmen-E-Mail beitreten",
+    "joinHint": "Kollegen können ohne Einladung beitreten, wenn ihre E-Mail-Adresse zu deiner Domain gehört.",
+    "joinOn": "Alle mit einer @{domain}-E-Mail-Adresse können als Mitglied beitreten, solange Lizenzen frei sind.",
+    "domain": "E-Mail-Domain",
+    "joinEnabled": "Personen mit {domain} können jetzt beitreten",
+    "joinDisabled": "Beitritt per E-Mail-Domain ist aus"
+  },
+  "sharing": {
+    "title": "Teilen",
+    "description": "Meetings mit Personen außerhalb von {workspace} werden nie automatisch geteilt. Organisatoren können jederzeit ändern, wer ein Meeting sieht.",
+    "reviewTitle": "Bestätige, wie Meetings geteilt werden",
+    "reviewHint": "Das sind die empfohlenen Regeln. Ändere einzelne davon oder behalte sie bei.",
+    "keep": "Regeln beibehalten",
+    "confirmed": "Regeln zum Teilen bestätigt",
+    "defaultLevel": "Notizen nach einem Meeting teilen mit",
+    "defaultLevelHint": "Für Meetings, bei denen alle in {workspace} sind.",
+    "levels": {
+      "private": "Nur dem Organisator",
+      "participants": "Teilnehmern (empfohlen)",
+      "workspace": "Allen in {workspace}"
+    },
+    "levelChanged": "Neue Meetings gehen an: {level}",
+    "transcripts": "Transkripte einschließen",
+    "transcriptsHint": "Aus: Personen sehen Zusammenfassung, Entscheidungen und Aufgaben, aber nicht das wörtliche Transkript.",
+    "transcriptsOn": "Transkripte werden ebenfalls geteilt",
+    "transcriptsOff": "Nur Zusammenfassungen werden geteilt",
+    "membersInvite": "Mitglieder können Personen einladen",
+    "membersInviteHint": "Aus: Nur Admins können einladen.",
+    "membersInviteOn": "Mitglieder können Personen einladen",
+    "membersInviteOff": "Jetzt können nur Admins einladen"
+  },
+  "plan": {
+    "title": "Tarif und Nutzung",
+    "description": "Wird dem Workspace berechnet, getrennt von persönlichen Tarifen.",
+    "name": "{plan}-Tarif",
+    "seats": "{taken, number} von {total, number} Lizenzen",
+    "price": "{perSeat} pro Lizenz und Monat · {total} insgesamt · Verlängerung am {renews}",
+    "change": "Lizenzen oder Tarif ändern",
+    "ownerOnly": "Nur der Inhaber verwaltet die Abrechnung.",
+    "usageFailed": "Nutzung konnte nicht geladen werden.",
+    "usageIn": "Nutzung im {month}",
+    "idle": "{count, plural, one {# Mitglied seit {days, number}+ Tagen inaktiv: eine Lizenz, die du neu vergeben könntest.} other {# Mitglieder seit {days, number}+ Tagen inaktiv: Lizenzen, die du neu vergeben könntest.}}",
+    "member": "Mitglied",
+    "meetings": "Meetings",
+    "minutes": "Minuten",
+    "lastActive": "Zuletzt aktiv",
+    "inactive": "Inaktiv"
+  },
+  "danger": {
+    "delete": "Workspace löschen",
+    "deleteHint": "Entfernt den Workspace für alle und beendet die Abrechnung.",
+    "deleteTitle": "{name} löschen?",
+    "deleteDescription": "Alle verlieren die Projekte, Aufgaben, Entscheidungen und Uploads. Geteilte Aufnahmen und Dateien gehören weiter den jeweiligen Personen, in ihren eigenen Notizen und Dateimanagern. Das kann nicht rückgängig gemacht werden.",
+    "leave": "Workspace verlassen",
+    "leaveHint": "Du kannst später wieder eingeladen werden; deine Lizenz wird frei.",
+    "leaveTitle": "{name} verlassen?",
+    "leaveDescription": "Meetings und Dateien, die du geteilt hast, gehen mit dir und bleiben in deinen Notizen und deinem Dateimanager. Dateien, die du an den Workspace übertragen hast, bleiben hier. Aufgaben bleiben beim Team; deine offenen werden nicht mehr zugewiesen.",
+    "leaveConfirm": "Verlassen"
+  }
+}

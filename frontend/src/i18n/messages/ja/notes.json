@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "ノート",
+    "description": "ノート、アクションアイテム、マインドマップ付きの文字起こし済みの会議です。"
+  },
+  "recency": {
+    "today": "今日",
+    "yesterday": "昨日",
+    "thisWeek": "今週",
+    "earlier": "それ以前"
+  },
+  "fields": {
+    "meeting": "会議",
+    "folder": "フォルダ",
+    "people": "人",
+    "participants": "参加者",
+    "duration": "時間",
+    "date": "日付"
+  },
+  "views": {
+    "label": "レイアウト",
+    "timeline": "タイムライン",
+    "grid": "グリッド",
+    "list": "リスト"
+  },
+  "upload": {
+    "button": "レコーディングをアップロード",
+    "hint": "ページのどこにでもファイルをドロップできます",
+    "dropTitle": "ドロップしてレコーディングをアップロード",
+    "dropHint": "mp3、m4a、wav、mp4、webm など · 最大 {size}",
+    "notMedia": "{name} は音声ファイルでも動画ファイルでもありません",
+    "tooLarge": "{name} はサイズが大きすぎます",
+    "sizeLimit": "レコーディングは {size} までです。"
+  },
+  "recordings": {
+    "uploading": "アップロード中",
+    "justNow": "たった今",
+    "transcribing": "文字起こし中",
+    "transcribingNow": "文字起こし中…",
+    "waiting": "文字起こしを待っています…",
+    "timelineStatus": "文字起こし中… 完了すると、ノート、決定事項、マインドマップがここに表示されます。"
+  },
+  "remove": "{name} を削除",
+  "folders": {
+    "label": "フォルダ",
+    "all": "すべての会議",
+    "new": "新しいフォルダ",
+    "newMenu": "新しいフォルダ…",
+    "newNamed": "新しいフォルダ「{name}」",
+    "defaultName": "新しいフォルダ",
+    "nameLabel": "フォルダ名",
+    "none": "フォルダなし",
+    "add": "フォルダに追加",
+    "moveTo": "フォルダに移動",
+    "search": "フォルダを検索…",
+    "noMatch": "一致するフォルダはありません。",
+    "movedTo": "{folder} に移動しました",
+    "removedFrom": "フォルダから削除しました",
+    "emptyTitle": "このフォルダは空です",
+    "emptyDescription": "会議を右クリックして「{action}」を選ぶと、ここに追加されます。"
+  },
+  "card": {
+    "latest": "最新の会議",
+    "keyPoints": "要点",
+    "openNotes": "ノートを開く",
+    "openItems": "{count, plural, other {未完了 # 件}}"
+  },
+  "timeline": {
+    "decision": "決定事項：",
+    "openTasks": "{count, plural, other {未完了のタスク # 件}}"
+  },
+  "menu": {
+    "openInNewTab": "新しいタブで開く",
+    "exportTranscript": "文字起こしをエクスポート"
+  },
+  "exportFormats": {
+    "txt": "プレーンテキスト",
+    "md": "Markdown",
+    "srt": "SubRip 字幕",
+    "vtt": "WebVTT 字幕",
+    "json": "JSON 形式"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "「{title}」を削除しました"
+}

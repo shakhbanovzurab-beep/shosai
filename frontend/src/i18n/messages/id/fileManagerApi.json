@@ -1,0 +1,16 @@
+{
+  "fileGone": "File ini sudah tidak ada.",
+  "folderGone": "Folder ini sudah tidak ada.",
+  "chooseFile": "Pilih setidaknya satu file.",
+  "tooManyFiles": "Unggah paling banyak {max, number} file sekaligus.",
+  "tooLarge": "“{name}” lebih besar dari {size}.",
+  "overLeoLimit": "Dengan paket Anda, Leo dapat menggunakan hingga {limit} file Anda. Hentikan penggunaan beberapa file terlebih dahulu.",
+  "notUsedByLeo": "Leo tidak menggunakan file ini.",
+  "shareFirst": "Bagikan file di ruang kerja tersebut terlebih dahulu.",
+  "fileNameRequired": "Masukkan nama file.",
+  "folderNameRequired": "Masukkan nama folder.",
+  "nameTooLong": "Gunakan nama kurang dari {max, number} karakter.",
+  "nameSlash": "Nama tidak boleh berisi / atau \\.",
+  "invalidRequest": "Ada yang tidak benar dalam permintaan. Muat ulang halaman, lalu coba lagi.",
+  "copyName": "Salinan {name}"
+}

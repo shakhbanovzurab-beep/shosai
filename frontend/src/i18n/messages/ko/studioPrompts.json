@@ -1,0 +1,62 @@
+{
+  "intro": "어시스턴트가 각 역할을 수행할 때 따르는 지침이에요. 카탈로그의 스킬도, 내 저장소의 스킬도 쓸 수 있어요.",
+  "role": "역할",
+  "skills": "스킬",
+  "search": {
+    "placeholder": "이름으로 검색…",
+    "label": "이름으로 프롬프트 검색"
+  },
+  "loadFailed": "프롬프트를 불러오지 못했어요",
+  "empty": {
+    "title": "아직 프롬프트가 없어요",
+    "description": "역할에 맞는 프롬프트를 만들고 스킬을 첨부해 확장해 보세요."
+  },
+  "noMatches": {
+    "title": "일치하는 항목이 없어요",
+    "description": "다른 이름이나 역할로 찾아보세요."
+  },
+  "copyName": "{name}(사본)",
+  "delete": {
+    "title": "“{name}”을(를) 삭제할까요?",
+    "description": "이 프롬프트를 사용하는 역할은 기본 제공 프롬프트로 돌아가요."
+  },
+  "filter": {
+    "label": "역할로 필터",
+    "all": "전체",
+    "allHelp": "역할과 관계없이 모든 프롬프트예요."
+  },
+  "table": {
+    "number": "번호",
+    "updated": "업데이트",
+    "inUse": "사용 중",
+    "deleteNamed": "{name} 삭제"
+  },
+  "menu": {
+    "edit": "편집…",
+    "stopUsing": "사용 중지",
+    "useFor": "{role}에 사용",
+    "duplicate": "복제…",
+    "delete": "삭제…"
+  },
+  "editor": {
+    "editTitle": "프롬프트 편집",
+    "newTitle": "새 프롬프트",
+    "description": "선택한 역할에서 어시스턴트가 따르는 지침과 스킬이에요.",
+    "namePlaceholder": "AI 버전",
+    "instructions": "지침",
+    "instructionsPlaceholder": "이 역할에서 어시스턴트가 어떻게 행동할지 적어 주세요. Markdown을 써도 돼요.",
+    "noSkills": "아직 설치한 스킬이 없어요. 스킬 버튼으로 추가해 보세요.",
+    "saveFailed": "저장하지 못했어요. 계속 입력하면 다시 시도해요",
+    "savesAutomatically": "변경 사항은 자동으로 저장돼요",
+    "done": "완료"
+  },
+  "toasts": {
+    "deleted": "“{name}”을(를) 삭제했어요",
+    "deleteFailed": "프롬프트를 삭제하지 못했어요",
+    "inUse": "이제 {role}에서 “{name}”을(를) 사용해요",
+    "backToDefault": "{role}이(가) 기본 제공 프롬프트로 돌아갔어요",
+    "changeFailed": "프롬프트를 변경하지 못했어요",
+    "created": "“{name}”을(를) 만들었어요",
+    "createFailed": "프롬프트를 만들지 못했어요"
+  }
+}

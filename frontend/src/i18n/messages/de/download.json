@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "App herunterladen",
+    "description": "Lade die Desktop-App für macOS und Windows herunter."
+  },
+  "title": "Hol dir die Desktop-App",
+  "subtitle": "Nimm Meetings auf, nutze Live-Notizen und Übersetzung in jedem Call und erreiche Leo überall per Tastenkürzel.",
+  "notes": {
+    "mobile": "Die Desktop-App läuft unter macOS und Windows. Öffne diese Seite auf deinem Computer, um sie herunterzuladen.",
+    "linux": "Eine Linux-Version gibt es noch nicht. Die Desktop-App läuft unter macOS und Windows."
+  },
+  "card": {
+    "yourComputer": "Dein Computer",
+    "requirement": "{system} oder neuer",
+    "downloadFor": "Für {name} herunterladen",
+    "downloadBuild": "Für {arch} herunterladen · {size}",
+    "meta": "Version {version} · {size} · {type} · vom {date}",
+    "loadFailed": "Der Download für {platform} konnte nicht geladen werden.",
+    "notYet": "Die App für {platform} ist noch nicht verfügbar. Schau bald wieder vorbei.",
+    "universal": "Apple Silicon und Intel"
+  },
+  "checksum": {
+    "button": "Prüfsumme",
+    "verify": "Führe zur Prüfung <code>{command}</code> aus und vergleiche das Ergebnis.",
+    "copy": "Prüfsumme kopieren",
+    "copied": "Prüfsumme kopiert",
+    "copyFailed": "Prüfsumme konnte nicht kopiert werden"
+  },
+  "install": {
+    "title": "Installation in drei Schritten",
+    "macos": {
+      "open": "Öffne die heruntergeladene {type}-Datei.",
+      "drag": "Zieh die App in deinen Programme-Ordner und öffne sie dort.",
+      "allow": "Melde dich an und erlaube Mikrofon sowie Bildschirm- und Systemaudioaufnahme, wenn macOS danach fragt – so werden Meetings aufgenommen."
+    },
+    "windows": {
+      "run": "Starte das heruntergeladene Installationsprogramm ({type}).",
+      "setup": "Folge der Einrichtung und öffne die App dann über das Startmenü.",
+      "allow": "Melde dich an und erlaube den Zugriff aufs Mikrofon, wenn Windows danach fragt."
+    }
+  },
+  "features": {
+    "title": "Nur auf dem Desktop",
+    "customize": "Tastenkürzel anpassen",
+    "shortcutOff": "Tastenkürzel aus",
+    "shortcut": "Tastenkürzel: {keys}",
+    "toggle_recording": {
+      "title": "Aufnahme",
+      "text": "Starte oder pausiere die Aufnahme eines Meetings aus jeder App."
+    },
+    "toggle_overlay": {
+      "title": "Overlay",
+      "text": "Live-Notizen über deinem Call – einklappbar zu einer kleinen Leiste."
+    },
+    "live_translation": {
+      "title": "Live-Übersetzung",
+      "text": "Verfolge das Gespräch in deiner Sprache, während andere sprechen."
+    },
+    "prompter": {
+      "title": "Souffleur",
+      "text": "Dezente Vorschläge von Leo, während du sprichst – nur für dich sichtbar."
+    }
+  }
+}

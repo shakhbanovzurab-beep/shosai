@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Notizen",
+    "description": "Transkribierte Meetings mit Notizen, To-dos und Mindmaps."
+  },
+  "recency": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "thisWeek": "Diese Woche",
+    "earlier": "Früher"
+  },
+  "fields": {
+    "meeting": "Meeting",
+    "folder": "Ordner",
+    "people": "Personen",
+    "participants": "Teilnehmer",
+    "duration": "Dauer",
+    "date": "Datum"
+  },
+  "views": {
+    "label": "Ansicht",
+    "timeline": "Zeitleiste",
+    "grid": "Raster",
+    "list": "Liste"
+  },
+  "upload": {
+    "button": "Aufnahme hochladen",
+    "hint": "Oder zieh eine Datei an eine beliebige Stelle der Seite",
+    "dropTitle": "Aufnahmen zum Hochladen ablegen",
+    "dropHint": "mp3, m4a, wav, mp4, webm und mehr · bis {size}",
+    "notMedia": "{name} ist keine Audio- oder Videodatei",
+    "tooLarge": "{name} ist zu groß",
+    "sizeLimit": "Aufnahmen dürfen bis zu {size} groß sein."
+  },
+  "recordings": {
+    "uploading": "Wird hochgeladen",
+    "justNow": "Gerade eben",
+    "transcribing": "Wird transkribiert",
+    "transcribingNow": "Wird transkribiert…",
+    "waiting": "Wartet auf Transkription…",
+    "timelineStatus": "Wird transkribiert… Notizen, Entscheidungen und eine Mindmap erscheinen hier, sobald es fertig ist."
+  },
+  "remove": "{name} entfernen",
+  "folders": {
+    "label": "Ordner",
+    "all": "Alle Meetings",
+    "new": "Neuer Ordner",
+    "newMenu": "Neuer Ordner…",
+    "newNamed": "Neuer Ordner „{name}“",
+    "defaultName": "Neuer Ordner",
+    "nameLabel": "Ordnername",
+    "none": "Kein Ordner",
+    "add": "Zu Ordner hinzufügen",
+    "moveTo": "In Ordner verschieben",
+    "search": "Ordner suchen…",
+    "noMatch": "Keine passenden Ordner.",
+    "movedTo": "In {folder} verschoben",
+    "removedFrom": "Aus Ordner entfernt",
+    "emptyTitle": "Dieser Ordner ist leer",
+    "emptyDescription": "Klicke mit der rechten Maustaste auf ein Meeting und wähle „{action}“, um es hier hinzuzufügen."
+  },
+  "card": {
+    "latest": "Neuestes Meeting",
+    "keyPoints": "Kernpunkte",
+    "openNotes": "Notizen öffnen",
+    "openItems": "{count, plural, one {# offen} other {# offen}}"
+  },
+  "timeline": {
+    "decision": "Entscheidung:",
+    "openTasks": "{count, plural, one {# offene Aufgabe} other {# offene Aufgaben}}"
+  },
+  "menu": {
+    "openInNewTab": "In neuem Tab öffnen",
+    "exportTranscript": "Transkript exportieren"
+  },
+  "exportFormats": {
+    "txt": "Nur Text",
+    "md": "Markdown",
+    "srt": "SubRip-Untertitel",
+    "vtt": "WebVTT-Untertitel",
+    "json": "JSON-Datei"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "„{title}“ gelöscht"
+}

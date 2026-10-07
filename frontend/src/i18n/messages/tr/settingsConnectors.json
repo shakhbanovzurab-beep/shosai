@@ -1,0 +1,54 @@
+{
+  "description": "Leo’nun uygulamalarınızda arama yapıp işlem yapabilmesi için onları bağlayın. Her uygulama OAuth 2.0 ile kendi sayfasında giriş yapmanızı sağlar; Leo şifrenizi hiçbir zaman görmez.",
+  "columns": {
+    "connector": "Bağlayıcı",
+    "type": "Tür",
+    "status": "Durum"
+  },
+  "categories": {
+    "mail": "E-posta",
+    "files": "Dosyalar",
+    "notes": "Notlar",
+    "communication": "İletişim",
+    "tasks": "Görevler",
+    "crm": "CRM sistemleri"
+  },
+  "connect": "Bağla",
+  "connecting": "Bağlanıyor…",
+  "connected": "Bağlı",
+  "options": "{name} seçenekleri, bağlı",
+  "disconnect": "Bağlantıyı kes",
+  "toasts": {
+    "connected": "{name} bağlandı",
+    "notConnected": "{name} bağlanmadı",
+    "connectFailed": "{name} bağlanamadı",
+    "disconnected": "{name} bağlantısı kesildi",
+    "disconnectFailed": "{name} bağlantısı kesilemedi"
+  },
+  "callback": {
+    "metaTitle": "Bağlanıyor…",
+    "connected": {
+      "title": "Bağlandı",
+      "body": "Bu pencereyi kapatıp panele dönebilirsiniz."
+    },
+    "denied": {
+      "title": "Erişim izni verilmedi",
+      "body": "Hiçbir şey bağlanmadı. Bu pencereyi kapatabilirsiniz."
+    },
+    "error": {
+      "title": "Bağlanamadı",
+      "body": "Bağlanırken bir sorun oluştu. Ayarlar bölümünden tekrar deneyin."
+    },
+    "back": "Panele dön"
+  },
+  "consent": {
+    "metaTitle": "Demo yetkilendirme",
+    "badge": "Demo · gerçek bir hesap kullanılmaz",
+    "title": "{app} Leo’ya bağlansın mı?",
+    "titleUnknown": "Bu uygulama Leo’ya bağlansın mı?",
+    "body": "Gerçek kullanımda bu adım, {app} uygulamasının kendi onay ekranıdır. Onaylarsanız Leo, {app} hesabınızda sizin adınıza okuma ve işlem yapabilir.",
+    "bodyUnknown": "Gerçek kullanımda bu adım, sağlayıcının kendi onay ekranıdır. Onaylarsanız Leo, hesabınızda sizin adınıza okuma ve işlem yapabilir.",
+    "disconnectHint": "Bağlantıyı istediğiniz zaman Ayarlar › Bağlayıcılar bölümünden kesebilirsiniz.",
+    "allow": "İzin ver"
+  }
+}

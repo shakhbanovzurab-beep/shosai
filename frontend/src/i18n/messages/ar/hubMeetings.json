@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "المركز",
+    "removeLabel": "إخراج الاجتماع من {hub}",
+    "suggestion": "يبدو أنه «{hub}»",
+    "file": "إضافة",
+    "other": "مركز آخر…",
+    "fileTo": "إضافة إلى مركز…",
+    "createFirst": "إنشاء أول مركز",
+    "noBoard": "لا توجد لوحة للمركز",
+    "archived": "المركز مؤرشف",
+    "filedToast": "ستصل الاجتماعات التالية من هذه السلسلة إلى هنا تلقائيًا",
+    "removedToast": "تم الإخراج من {hub}",
+    "pickerTitle": "إضافة إلى مركز",
+    "pickerSearch": "البحث عن مركز",
+    "pickerEmpty": "لا توجد مراكز مطابقة"
+  },
+  "brief": {
+    "title": "اليوم",
+    "empty": "لا شيء عاجل اليوم",
+    "prepTitle": "القادم",
+    "prepFor": "قبل اجتماع {date}",
+    "prepOpen": "مفتوح في هذا المركز",
+    "prepLast": "المرة الأخيرة · {date}",
+    "prepMaterials": "المواد",
+    "signal": "{circles, plural, =2 {نوقش {subject} مرتين دون قرار.} =3 {نوقش {subject} ثلاث مرات دون قرار.} =4 {نوقش {subject} أربع مرات دون قرار.} =5 {نوقش {subject} خمس مرات دون قرار.} zero {نوقش {subject} # مرة دون قرار.} one {نوقش {subject} مرة واحدة دون قرار.} two {نوقش {subject} مرتين دون قرار.} few {نوقش {subject} # مرات دون قرار.} many {نوقش {subject} # مرة دون قرار.} other {نوقش {subject} # مرة دون قرار.}}",
+    "blockers": "في كل مرة كان العائق: {quotes}."
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "description": "Ce qui vous attend, ce qui arrive et où en est le travail de l’équipe.",
+  "invitePeople": "Inviter des personnes",
+  "quietStart": "Dès que des réunions sont partagées ou que des projets démarrent, cette page affiche ce qui vous attend, ce qui arrive et ce que l’équipe a décidé.",
+  "blocks": {
+    "needsYou": "À traiter",
+    "allTasks": "Toutes les tâches",
+    "nothingWaiting": "Rien ne vous attend ici. Les tâches qui vous sont attribuées arrivent ici et dans votre Productivité.",
+    "moreTasks": "{count, plural, one {# autre tâche} many {# d’autres tâches} other {# autres tâches}}",
+    "comingUp": "À venir",
+    "projects": "Projets",
+    "allProjects": "Tous les projets",
+    "recentDecisions": "Décisions récentes",
+    "decisionLog": "Journal des décisions"
+  },
+  "comingUp": {
+    "empty": "Aucune réunion d’équipe à venir.",
+    "live": "En direct",
+    "guestsPrivate": "Reste privée : personnes externes présentes",
+    "private": "Les notes restent privées",
+    "notesGoTo": "Notes envoyées à : {audience}"
+  },
+  "decisions": {
+    "empty": "Les décisions des réunions partagées apparaîtront ici, avec un lien vers le moment où elles ont été prises.",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "Aucun projet actif. Créez-en un pour regrouper ses réunions, ses tâches et ses décisions.",
+    "ledBy": "Piloté par {name}",
+    "ledByYou": "Piloté par vous"
+  },
+  "setup": {
+    "title": "Configurez votre espace de travail",
+    "progress": "Progression : {done, number} sur {total, number}. Chaque étape rend la prochaine réunion plus utile pour tout le monde.",
+    "progressLabel": "{done, number} étapes de configuration terminées sur {total, number}",
+    "hide": "Masquer la liste de configuration",
+    "done": "Terminée",
+    "toDo": "À faire",
+    "steps": {
+      "invite": {
+        "title": "Invitez votre équipe",
+        "description": "Ajoutez au moins deux personnes pour que les réunions et les tâches aient une destination.",
+        "action": "Inviter des personnes"
+      },
+      "sharing": {
+        "title": "Confirmez le partage des réunions",
+        "description": "Choisissez où vont les notes après une réunion. Les réunions avec des personnes externes restent privées dans tous les cas.",
+        "action": "Vérifier"
+      },
+      "share": {
+        "title": "Partagez l’une de vos réunions",
+        "description": "Vos enregistrements restent dans vos Notes jusqu’à ce que vous en partagiez un ici, avec ses décisions et ses tâches.",
+        "action": "Partager une réunion"
+      },
+      "knowledge": {
+        "title": "Ajoutez des connaissances d’équipe",
+        "description": "Partagez vos fichiers, importez-en de nouveaux ou connectez un drive partagé pour que Leo s’en serve dans ses réponses.",
+        "action": "Ajouter des connaissances"
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "{plan} 플랜",
+    "current": "현재 플랜",
+    "price": "{interval, select, month {월 {price}} year {연 {price}} other {영구 무료}}",
+    "renews": "{date}에 갱신",
+    "upgrade": "플랜 업그레이드"
+  },
+  "payment": {
+    "title": "결제 수단",
+    "description": "구독 갱신, 추가 사용량, 자동 충전 금액은 기본 결제 수단으로 청구돼요.",
+    "add": "결제 수단 추가",
+    "empty": "아직 결제 수단이 없어요.",
+    "default": "기본",
+    "unknownCard": "카드",
+    "endingIn": "{card} 끝자리 {last4}",
+    "expires": "만료일 {date}",
+    "update": "변경",
+    "updateCard": "{card} 끝자리 {last4} 변경",
+    "openFailed": "결제 페이지를 열지 못했어요"
+  },
+  "history": {
+    "title": "결제 내역",
+    "description": "지난 청구서를 확인하고 다운로드해요.",
+    "empty": "아직 청구서가 없어요. 첫 결제 후 여기에 표시돼요.",
+    "columns": {
+      "date": "날짜",
+      "description": "설명",
+      "amount": "금액",
+      "status": "상태",
+      "download": "다운로드"
+    },
+    "status": {
+      "paid": "결제 완료",
+      "pending": "대기 중",
+      "failed": "결제 실패"
+    },
+    "download": "청구서 {number} 다운로드",
+    "notReady": "청구서 {number}이(가) 아직 준비되지 않았어요"
+  }
+}

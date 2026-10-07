@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "الخطة {plan}",
+    "current": "الحالية",
+    "price": "{interval, select, month {{price} شهريًا} year {{price} سنويًا} other {مجانية دائمًا}}",
+    "renews": "تتجدد في {date}",
+    "upgrade": "ترقية الخطة"
+  },
+  "payment": {
+    "title": "الدفع",
+    "description": "تُخصم رسوم تجديد الاشتراك والاستخدام الإضافي وإعادة الشحن التلقائية من طريقة الدفع الافتراضية.",
+    "add": "إضافة طريقة دفع",
+    "empty": "لا توجد طرق دفع بعد.",
+    "default": "افتراضية",
+    "unknownCard": "بطاقة",
+    "endingIn": "{card} تنتهي بـ {last4}",
+    "expires": "تنتهي صلاحيتها في {date}",
+    "update": "تحديث",
+    "updateCard": "تحديث {card} المنتهية بـ {last4}",
+    "openFailed": "تعذر فتح صفحة الدفع"
+  },
+  "history": {
+    "title": "سجل الفوترة",
+    "description": "عرض الفواتير السابقة وتنزيلها.",
+    "empty": "لا توجد فواتير بعد. ستظهر هنا بعد أول عملية دفع.",
+    "columns": {
+      "date": "التاريخ",
+      "description": "الوصف",
+      "amount": "المبلغ",
+      "status": "الحالة",
+      "download": "تنزيل"
+    },
+    "status": {
+      "paid": "مدفوعة",
+      "pending": "قيد الانتظار",
+      "failed": "تعذر الدفع"
+    },
+    "download": "تنزيل الفاتورة {number}",
+    "notReady": "الفاتورة {number} غير جاهزة بعد"
+  }
+}

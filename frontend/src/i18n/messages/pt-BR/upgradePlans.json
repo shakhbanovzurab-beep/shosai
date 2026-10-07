@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} por usuário",
+    "from": "a partir de {amount}",
+    "unlimited": "ilimitado"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Reuniões ilimitadas",
+    "meetingMinutes": "{minutes, plural, one {# minuto de reunião} many {# de minutos de reunião} other {# minutos de reunião}} por mês",
+    "noMeetings": "Reuniões",
+    "fileManager": "Gerenciador de arquivos · {storage}",
+    "noFileManager": "Gerenciador de arquivos",
+    "knowledge": "Conhecimento para o Leo · {storage}",
+    "noKnowledge": "Conhecimento para o Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Espaço de trabalho compartilhado da equipe",
+    "member_management": "Gerenciamento de usuários",
+    "centralized_billing": "Faturamento centralizado",
+    "billing_and_users": "Faturamento centralizado e gerenciamento de usuários",
+    "admin_controls": "Segurança e controles administrativos de nível empresarial",
+    "sso": "Login único (SSO)",
+    "priority_support": "Suporte prioritário",
+    "usage_analytics": "Análise de uso"
+  },
+  "compare": {
+    "title": "Comparar planos",
+    "feature": "Recurso",
+    "included": "Incluído",
+    "notIncluded": "Não incluído",
+    "unlimited": "Ilimitado",
+    "minutes": "{minutes, plural, one {# min} many {# min} other {# min}} / mês",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Sob medida",
+    "rows": {
+      "meetings": "Reuniões",
+      "fileManager": "Gerenciador de arquivos",
+      "knowledge": "Conhecimento para o Leo",
+      "apps": "Leo, E-mail, Calendário, Kanban, Notas",
+      "users": "Usuários",
+      "sharedWorkspace": "Espaço de trabalho compartilhado",
+      "billingAndUsers": "Faturamento centralizado e gerenciamento de usuários",
+      "sso": "Login único (SSO)",
+      "adminControls": "Segurança e controles administrativos",
+      "prioritySupport": "Suporte prioritário",
+      "usageAnalytics": "Análise de uso"
+    }
+  }
+}

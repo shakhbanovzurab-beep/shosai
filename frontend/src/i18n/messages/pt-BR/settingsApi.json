@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "Há algo errado na solicitação. Recarregue a página e tente novamente.",
+    "nameRequired": "Digite seu nome.",
+    "hotkeyUnsupported": "Esse atalho não é compatível.",
+    "modelNotOnPlan": "Esse modelo não está incluído na sua assinatura.",
+    "emailMismatch": "Esse e-mail não corresponde à sua conta.",
+    "deletionUnavailable": "A exclusão de conta ainda não está disponível. Nada foi excluído.",
+    "avatarMissing": "Escolha uma imagem para fazer upload.",
+    "avatarType": "Use uma imagem WebP, JPEG ou PNG.",
+    "paymentsUnavailable": "Os pagamentos ainda não estão disponíveis. Quando o faturamento estiver ativo, isto abrirá a página segura do provedor.",
+    "checkoutUnavailable": "Os pagamentos ainda não estão disponíveis. Quando o faturamento estiver ativo, isto abrirá o checkout do provedor.",
+    "invoiceNotFound": "Fatura não encontrada.",
+    "connectorNotFound": "Conector não encontrado.",
+    "authorizationExpired": "A autorização expirou ou já foi usada. Tente conectar novamente.",
+    "dataKindUnknown": "Tipo de dado desconhecido.",
+    "dataItemNotFound": "Esse item não existe mais.",
+    "mcpNameRequired": "Dê um nome ao servidor.",
+    "mcpNameTooLong": "Esse nome é longo demais. Use um mais curto.",
+    "mcpUrlInvalid": "Digite a URL http(s) do servidor.",
+    "mcpServerNotFound": "Servidor não encontrado.",
+    "memoryNotFound": "Memória não encontrada.",
+    "summaryMessageRequired": "Escreva uma pergunta ou uma atualização."
+  },
+  "avatarTooLarge": "A imagem tem mais de {size}.",
+  "invoice": {
+    "title": "Fatura {number}",
+    "date": "Data: {date}",
+    "description": "Descrição: {description}",
+    "amount": "Valor: {amount}",
+    "status": "Status do pagamento: {status}",
+    "demoNote": "Fatura de demonstração. A fatura real é um PDF gerado pelo sistema de faturamento."
+  },
+  "notesFromYou": "Suas observações"
+}

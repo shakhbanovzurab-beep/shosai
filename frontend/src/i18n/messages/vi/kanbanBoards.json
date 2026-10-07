@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "Bảng",
+    "jiraBoards": "Đồng bộ với Jira",
+    "newBoard": "Bảng mới…",
+    "syncJiraBoard": "Đồng bộ bảng Jira…",
+    "rename": "Đổi tên bảng…",
+    "showWorkspaceTasks": "Hiển thị công việc từ không gian làm việc của bạn tại đây",
+    "changeIcon": "Đổi biểu tượng",
+    "delete": "Xóa bảng…",
+    "stopSyncing": "Dừng đồng bộ…"
+  },
+  "icons": {
+    "work": "Công việc",
+    "home": "Nhà",
+    "personal": "Cá nhân",
+    "health": "Sức khỏe",
+    "study": "Học tập",
+    "travel": "Du lịch",
+    "shopping": "Mua sắm",
+    "fitness": "Tập luyện",
+    "project": "Dự án",
+    "reading": "Đọc sách"
+  },
+  "empty": {
+    "title": "Chưa có bảng nào",
+    "description": "Tạo bảng cho công việc, việc nhà hay mọi thứ khác, hoặc đưa một bảng từ Jira sang đây.",
+    "newBoard": "Bảng mới",
+    "syncJiraBoard": "Đồng bộ bảng Jira"
+  },
+  "newBoard": {
+    "title": "Bảng mới",
+    "description": "Tách công việc, việc nhà và mọi thứ khác ra từng bảng riêng.",
+    "namePlaceholder": "Ví dụ: Việc nhà",
+    "icon": "Biểu tượng",
+    "columns": "Cột",
+    "create": "Tạo bảng"
+  },
+  "templates": {
+    "simple": "Đơn giản",
+    "project": "Dự án"
+  },
+  "columnNames": {
+    "backlog": "Tồn đọng",
+    "todo": "Cần làm",
+    "inProgress": "Đang làm",
+    "review": "Đang duyệt",
+    "done": "Hoàn thành"
+  },
+  "renameTitle": "Đổi tên bảng",
+  "delete": {
+    "title": "Xóa “{board}”?",
+    "description": "{count, plural, =0 {Bảng sẽ bị xóa. Không thể hoàn tác thao tác này.} other {Bảng và # công việc trong đó sẽ bị xóa. Không thể hoàn tác thao tác này.}}",
+    "confirm": "Xóa bảng",
+    "stopTitle": "Dừng đồng bộ “{board}”?",
+    "stopDescription": "Bảng sẽ được gỡ khỏi đây. Trên Jira không có gì thay đổi, và bạn có thể đồng bộ lại sau.",
+    "stopConfirm": "Dừng đồng bộ"
+  },
+  "jira": {
+    "title": "Đồng bộ bảng Jira",
+    "description": "Làm việc trên bảng Jira ngay tại đây; mọi thay đổi đều được đồng bộ hai chiều.",
+    "connectTitle": "Hãy kết nối Jira trước",
+    "connectDescription": "Đăng nhập Jira trong Cài đặt › Trình kết nối, rồi quay lại đây để chọn bảng.",
+    "openConnectors": "Mở Trình kết nối",
+    "connectedAs": "Đã kết nối bằng tài khoản {account}.",
+    "connected": "Đã kết nối với Jira.",
+    "noBoards": "Tài khoản Jira của bạn chưa có bảng nào.",
+    "boardList": "Bảng Jira",
+    "alreadySynced": "Đã đồng bộ · mở bảng",
+    "type": {
+      "kanban": "Bảng Kanban",
+      "scrum": "Bảng Scrum"
+    },
+    "howColumns": "Cột và issue được lấy từ bảng Jira.",
+    "howMoves": "Di chuyển thẻ sẽ đổi trạng thái của issue trong Jira; công việc mới sẽ trở thành issue Jira.",
+    "howChanges": "Thay đổi trong Jira sẽ tự động hiện ở đây.",
+    "sync": "Đồng bộ bảng"
+  },
+  "sync": {
+    "syncing": "Đang đồng bộ với Jira…",
+    "paused": "Đã tạm dừng đồng bộ",
+    "synced": "Đã đồng bộ với Jira",
+    "syncedAgo": "Đã đồng bộ với Jira {ago}",
+    "syncNow": "Đồng bộ ngay",
+    "openBoard": "Mở {board} trong Jira",
+    "openHint": "Mở trong Jira · {project} trên {site}"
+  },
+  "banners": {
+    "syncStopped": "Đã dừng đồng bộ với Jira.",
+    "changesPaused": "Mọi thay đổi đang tạm dừng.",
+    "importing": "Đang nhập {board} từ Jira…",
+    "importingHint": "Cột và issue sẽ hiện ở đây trong giây lát.",
+    "offer": "{count, plural, other {Bạn có # công việc đang mở trong không gian làm việc. Bạn có muốn hiển thị trên “{board}” không?}} Khi bạn di chuyển thẻ, công việc cũng được cập nhật cho cả nhóm.",
+    "notNow": "Để sau",
+    "showHere": "{count, plural, other {Hiển thị tại đây}}"
+  },
+  "toasts": {
+    "createFailed": "Không thể tạo bảng",
+    "connectFailed": "Không thể đồng bộ bảng Jira",
+    "updateFailed": "Không thể cập nhật bảng",
+    "deleteFailed": "Không thể xóa bảng",
+    "syncFailed": "Không thể đồng bộ với Jira",
+    "deleted": "Đã xóa “{board}”",
+    "stoppedSyncing": "Đã dừng đồng bộ “{board}”",
+    "workspaceTasksOn": "Công việc từ không gian làm việc của bạn giờ hiển thị trên “{board}”",
+    "workspaceTasksOff": "Công việc từ không gian làm việc của bạn không còn hiển thị trên bảng nào",
+    "workspaceTasksHint": "Khi bạn di chuyển thẻ, công việc trong không gian làm việc cũng thay đổi theo.",
+    "workspaceTasksFailed": "Không thể thay đổi nơi hiển thị công việc từ không gian làm việc"
+  }
+}

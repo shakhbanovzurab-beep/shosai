@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "Çalışma alanları",
+    "home": "Çalışma alanı ana sayfası",
+    "new": "Yeni çalışma alanı",
+    "settings": "Çalışma alanı ayarları",
+    "members": "Üyeler",
+    "decisions": "Kararlar",
+    "projects": "Projeler",
+    "tasks": "Görevler",
+    "knowledge": "Çalışma alanı bilgileri",
+    "meetings": "Çalışma alanı toplantıları",
+    "project": "Proje",
+    "meeting": "Toplantı"
+  },
+  "createWorkspace": "Çalışma alanı oluştur",
+  "roles": {
+    "owner": {
+      "label": "Sahip",
+      "description": "Faturalandırma ve çalışma alanını silme dahil her şey."
+    },
+    "admin": {
+      "label": "Yönetici",
+      "description": "Kişileri, ekipleri, paylaşım kurallarını ve ayarları yönetir."
+    },
+    "member": {
+      "label": "Üye",
+      "description": "Toplantıları kaydeder, paylaşır ve takip eder."
+    }
+  },
+  "teams": {
+    "private": "Özel ekip"
+  },
+  "audience": {
+    "participants": "Katılımcılar",
+    "everyone": "{workspace} çalışma alanındaki herkes",
+    "aTeam": "Bir ekip",
+    "sharedWith": "{level, select, participants {Katılımcılarla paylaşıldı} workspace {{workspace} çalışma alanındaki herkesle paylaşıldı} other {Paylaşıldığı ekip: {team}}}",
+    "hint": "{level, select, participants {Toplantıda bulunan üyeler.} other {Çalışma alanındaki herkes, şimdi ve ileride.}}",
+    "teamHint": "{private, select, true {{team} üyeleri (özel ekip) ve katılımcılar.} other {{team} üyeleri ve katılımcılar.}}"
+  },
+  "people": {
+    "list": "Kişiler: {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name} (siz)"
+  },
+  "filters": {
+    "team": "Ekip",
+    "allTeams": "Tüm ekipler",
+    "project": "Proje",
+    "allProjects": "Tüm projeler",
+    "clearSearch": "Aramayı temizle"
+  },
+  "blocks": {
+    "loading": {
+      "files": "Dosyalar yükleniyor…",
+      "tasks": "Görevler yükleniyor…",
+      "yourTasks": "Görevleriniz yükleniyor…",
+      "projects": "Projeler yükleniyor…",
+      "meetings": "Toplantılar yükleniyor…",
+      "upcomingMeetings": "Yaklaşan toplantılar yükleniyor…",
+      "decisions": "Kararlar yükleniyor…"
+    },
+    "failed": {
+      "files": "Dosyalar yüklenemedi.",
+      "tasks": "Görevler yüklenemedi.",
+      "yourTasks": "Görevleriniz yüklenemedi.",
+      "projects": "Projeler yüklenemedi.",
+      "meetings": "Toplantılar yüklenemedi.",
+      "upcomingMeetings": "Yaklaşan toplantılar yüklenemedi.",
+      "decisions": "Kararlar yüklenemedi."
+    }
+  },
+  "dates": {
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "tomorrow": "Yarın",
+    "targetOverdue": "Gecikti · {date}",
+    "targetToday": "Hedef: bugün",
+    "targetTomorrow": "Hedef: yarın",
+    "targetDay": "Hedef: {day}",
+    "targetDate": "Hedef: {date}",
+    "ago": "{days, plural, =0 {bugün} =1 {dün} one {# gün önce} other {# gün önce}}",
+    "on": "Tarih: {date}",
+    "neverSignedIn": "Hiç giriş yapmadı",
+    "activeNow": "Şu anda etkin",
+    "hoursAgo": "{count, plural, one {# saat önce} other {# saat önce}}",
+    "daysAgo": "{count, plural, =1 {Dün} one {# gün önce} other {# gün önce}}"
+  },
+  "gate": {
+    "loading": "Çalışma alanı yükleniyor…",
+    "loadFailed": "Çalışma alanı yüklenemedi",
+    "listFailed": "Çalışma alanlarınız yüklenemedi",
+    "unavailable": "Bu çalışma alanı kullanılamıyor",
+    "unavailableHint": "Bu çalışma alanı mevcut değil veya üyesi değilsiniz. İçindeki birinden sizi davet etmesini isteyin ya da kendi çalışma alanınızı oluşturun.",
+    "backToPersonal": "Kişisel alana dön",
+    "suspended": "{name} askıya alındı",
+    "suspendedOwnerHint": "Erişim, içindeki herkes için durduruldu. Yeniden açmak için destekle iletişime geçin; çalışma alanındaki hiçbir şey silinmedi.",
+    "suspendedHint": "Erişim, içindeki herkes için durduruldu. Yeniden açmak için sahibi destekle iletişime geçebilir. Kişisel alanınızdaki notlarınız, dosyalarınız ve panolarınız bundan etkilenmez."
+  },
+  "switcher": {
+    "invite": "Kişileri davet et: {name}",
+    "settings": "Çalışma alanı ayarları",
+    "current": "Geçerli",
+    "hint": "Kişisel alan ile çalışma alanları arasında geçiş yapın",
+    "personal": "Kişisel",
+    "personalHint": "E-postalarınız, notlarınız, panolarınız ve görevleriniz",
+    "workspaces": "Çalışma alanları",
+    "suspended": "Askıya alındı",
+    "detail": "{role} · {count, plural, one {# üye} other {# üye}}",
+    "loadFailed": "Çalışma alanlarınız yüklenemedi. Tekrar deneyin",
+    "none": "Henüz bir çalışma alanında değilsiniz"
+  },
+  "create": {
+    "title": "Ekibinizi Leo’ya getirin",
+    "intro": "Birlikte yaptığınız işler için ortak bir çalışma alanı. Kişisel alan size ait kalır: e-posta, takvim, notlar ve panolar, siz bir şeyi paylaşmayı seçene kadar gizlidir.",
+    "value": {
+      "meetings": {
+        "title": "Paylaşılan toplantılar",
+        "text": "Notlar’daki bir kaydı paylaşın veya toplantı bittiğinde notların doğru kişilere gitmesini sağlayın. Misafirlerin katıldığı toplantılar gizli kalır."
+      },
+      "work": {
+        "title": "Projeler, görevler ve kararlar",
+        "text": "Neye karar verildiği ve kimin ne yapacağı, projelere göre gruplanmış halde. Görevleriniz kendi Verimlilik ve Kanban alanınızda da görünür."
+      },
+      "knowledge": {
+        "title": "Ekip bilgileri",
+        "text": "Dosya yöneticinizden dosya paylaşın, yenilerini yükleyin veya ortak bir sürücü bağlayın. Leo, bu dosyaları görebilen herkese onlardan yanıt verir."
+      }
+    },
+    "billing": "Team planında lisans başına faturalandırılır. <link>Fiyatları görün</link>",
+    "formHint": "Sahibi siz olacaksınız. Hemen ardından kişileri davet edin.",
+    "name": "Çalışma alanı adı",
+    "namePlaceholder": "ör. Acme",
+    "nameRequired": "Çalışma alanına bir ad verin.",
+    "seats": "Lisanslar",
+    "fewerSeats": "Lisans sayısını azalt",
+    "moreSeats": "Lisans sayısını artır",
+    "seatsHint": "Siz dahil kişi başına bir lisans. {min, number}–{max, number}; istediğiniz zaman değiştirebilirsiniz.",
+    "submit": "Çalışma alanı oluştur"
+  },
+  "toasts": {
+    "workspaceReady": "{name} hazır",
+    "workspaceReadyHint": "Toplantı paylaşmaya başlamak için ekibinizi davet edin.",
+    "createWorkspaceFailed": "Çalışma alanı oluşturulamadı.",
+    "saveFailed": "Değişiklik kaydedilemedi",
+    "workspaceDeleted": "{name} silindi",
+    "deleteWorkspaceFailed": "Çalışma alanı silinemedi",
+    "workspaceLeft": "Ayrıldığınız çalışma alanı: {name}",
+    "leaveWorkspaceFailed": "Çalışma alanından ayrılınamadı",
+    "projectSaveFailed": "Proje kaydedilemedi",
+    "projectDeleted": "{name} silindi",
+    "projectDeletedHint": "Toplantıları ve görevleri hâlâ burada.",
+    "projectDeleteFailed": "Proje silinemedi",
+    "filesAdded": "{count, plural, one {{name} eklendi} other {# dosya eklendi}}",
+    "filesAddedHint": "{count, plural, one {Dizine ekleme tamamlanınca Leo bu dosyadan yanıt verebilir.} other {Dizine ekleme tamamlanınca Leo bu dosyalardan yanıt verebilir.}}",
+    "sourceConnected": "{name} bağlandı",
+    "sourceConnectedHint": "İlk senkronizasyondan sonra Leo bu kaynaktan yanıt verebilir.",
+    "knowledgeChangeFailed": "Değiştirilemedi",
+    "stoppedSharing": "{name} artık paylaşılmıyor",
+    "stoppedSharingHint": "Sahibinin Dosya yöneticisinde kalır; Leo burada artık bundan yanıt vermez.",
+    "knowledgeRemoved": "{name} kaldırıldı",
+    "knowledgeRemovedHint": "Leo artık bundan yanıt vermez.",
+    "knowledgeRemoveFailed": "Kaldırılamadı",
+    "fileStaysYours": "{count, plural, one {Dosya yöneticinizde kalır ve size ait olmaya devam eder.} other {Dosya yöneticinizde kalırlar ve size ait olmaya devam ederler.}}",
+    "shareFileFailed": "Paylaşılamadı",
+    "filesShared": "{count, plural, one {{name} paylaşıldı} other {# dosya paylaşıldı}}",
+    "stillInFileManager": "Dosya yöneticinizde duruyor.",
+    "unshareFileFailed": "Paylaşım durdurulamadı",
+    "meetingShareFailed": "Toplantı paylaşılamadı",
+    "meetingChangeFailed": "Toplantı değiştirilemedi",
+    "changeUndone": "Değişiklik geri alındı",
+    "noLongerShared": "Artık paylaşılmıyor",
+    "stillInYourNotes": "Notlar’ınızda duruyor.",
+    "stillInOwnerNotes": "Sahibinin Notlar’ında duruyor.",
+    "sharedAgain": "Yeniden paylaşıldı",
+    "unshareMeetingFailed": "Paylaşım durdurulamadı",
+    "taskUpdateFailed": "Görev güncellenemedi",
+    "markedDone": "Tamamlandı olarak işaretlendi",
+    "taskAdded": "Görev eklendi"
+  }
+}

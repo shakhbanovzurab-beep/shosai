@@ -1,0 +1,23 @@
+{
+  "memory": "メモリ",
+  "memoryHint": "Leo はチャットや会議から役立つ情報を覚え、その後の回答に活用します。",
+  "summary": {
+    "title": "メモリの要約",
+    "description": "Leo が自分について覚えた内容の概要を確認できます。常に考慮してほしいことは<link>カスタム指示</link>に入力してください。",
+    "dialogDescription": "Leo が自分について覚えた内容です。",
+    "updated": "{ago}に更新",
+    "actions": "メモリの要約の操作",
+    "refresh": "要約を更新",
+    "refreshFailed": "更新できませんでした",
+    "copy": "テキストをコピー",
+    "copied": "要約をコピーしました",
+    "copyFailed": "コピーできませんでした",
+    "learnMore": "詳細"
+  },
+  "composer": {
+    "placeholder": "質問または更新",
+    "label": "メモリの要約について質問するか、Leo に変更内容を伝える",
+    "send": "送信",
+    "sendFailed": "送信できませんでした"
+  }
+}

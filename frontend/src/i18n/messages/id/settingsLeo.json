@@ -1,0 +1,36 @@
+{
+  "answers": "Jawaban",
+  "model": {
+    "title": "Model",
+    "description": "Otomatis memilih model yang sesuai untuk setiap tugas. Model tercanggih memakai token model tercanggih mingguan Anda (lihat Penggunaan).",
+    "label": "Model Leo",
+    "auto": "Otomatis",
+    "autoHint": "Leo memilih per tugas"
+  },
+  "language": {
+    "title": "Bahasa jawaban",
+    "description": "Otomatis menjawab dalam bahasa antarmuka.",
+    "auto": "Otomatis"
+  },
+  "length": {
+    "title": "Panjang jawaban",
+    "description": "Seberapa banyak Leo menjawab secara default.",
+    "options": {
+      "concise": "Ringkas",
+      "balanced": "Seimbang",
+      "detailed": "Terperinci"
+    }
+  },
+  "advanced": {
+    "title": "Pengaturan lanjutan",
+    "description": "Apa yang boleh dipakai Leo. Apa pun yang dinonaktifkan tidak akan ditawarkan maupun dipakai.",
+    "webSearch": "Pencarian web",
+    "webSearchHint": "Izinkan Leo mencari jawaban di internet secara otomatis.",
+    "voiceMode": "Mode suara",
+    "voiceModeHint": "Berbicara dengan Leo secara lisan. Jika dinonaktifkan, mikrofon dihilangkan dari antarmuka.",
+    "knowledgeSearch": "Pencarian pengetahuan",
+    "knowledgeSearchHint": "Cari jawaban di file dan sumber yang Anda pilih untuk Leo.",
+    "connectedSearch": "Pencarian di layanan terhubung",
+    "connectedSearchHint": "Cari di layanan yang terhubung, seperti Google Drive dan Notion."
+  }
+}

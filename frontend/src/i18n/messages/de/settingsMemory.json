@@ -1,0 +1,23 @@
+{
+  "memory": "Gedächtnis",
+  "memoryHint": "Leo merkt sich nützliche Fakten aus deinen Chats und Meetings und nutzt sie in späteren Antworten.",
+  "summary": {
+    "title": "Gedächtnis-Zusammenfassung",
+    "description": "Sieh dir eine Übersicht an, was Leo über dich gelernt hat. Was Leo immer berücksichtigen soll, gehört in deine <link>eigenen Anweisungen</link>.",
+    "dialogDescription": "Was Leo über dich gelernt hat.",
+    "updated": "Aktualisiert {ago}",
+    "actions": "Aktionen für die Gedächtnis-Zusammenfassung",
+    "refresh": "Zusammenfassung aktualisieren",
+    "refreshFailed": "Zusammenfassung konnte nicht aktualisiert werden",
+    "copy": "Text kopieren",
+    "copied": "Zusammenfassung kopiert",
+    "copyFailed": "Text konnte nicht kopiert werden",
+    "learnMore": "Mehr erfahren"
+  },
+  "composer": {
+    "placeholder": "Fragen oder ändern",
+    "label": "Stelle eine Frage zu deiner Gedächtnis-Zusammenfassung oder sag Leo, was geändert werden soll",
+    "send": "Senden",
+    "sendFailed": "Nachricht konnte nicht gesendet werden"
+  }
+}

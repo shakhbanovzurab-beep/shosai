@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Unduh aplikasi",
+    "description": "Unduh aplikasi desktop untuk macOS dan Windows."
+  },
+  "title": "Dapatkan aplikasi desktop",
+  "subtitle": "Rekam rapat, buat catatan langsung dan terjemahan di setiap panggilan, dan panggil Leo dari mana saja dengan pintasan.",
+  "notes": {
+    "mobile": "Aplikasi desktop berjalan di macOS dan Windows. Buka halaman ini di komputer Anda untuk mengunduhnya.",
+    "linux": "Belum ada versi Linux. Aplikasi desktop berjalan di macOS dan Windows."
+  },
+  "card": {
+    "yourComputer": "Komputer Anda",
+    "requirement": "{system} atau yang lebih baru",
+    "downloadFor": "Unduh untuk {name}",
+    "downloadBuild": "Unduh untuk {arch} · {size}",
+    "meta": "Versi {version} · {size} · {type} · {date}",
+    "loadFailed": "Tidak dapat memuat unduhan {platform}.",
+    "notYet": "Aplikasi {platform} belum tersedia. Periksa lagi nanti.",
+    "universal": "Apple silicon dan Intel"
+  },
+  "checksum": {
+    "button": "Checksum",
+    "verify": "Untuk memverifikasi, jalankan <code>{command}</code> dan bandingkan hasilnya.",
+    "copy": "Salin checksum",
+    "copied": "Checksum disalin",
+    "copyFailed": "Tidak dapat menyalin checksum"
+  },
+  "install": {
+    "title": "Pasang dalam tiga langkah",
+    "macos": {
+      "open": "Buka file {type} yang telah diunduh.",
+      "drag": "Seret aplikasi ke folder Applications, lalu buka dari sana.",
+      "allow": "Masuk, lalu izinkan rekaman mikrofon serta layar dan audio sistem saat diminta macOS — itulah cara rapat direkam."
+    },
+    "windows": {
+      "run": "Jalankan penginstal yang telah diunduh ({type}).",
+      "setup": "Ikuti langkah penyiapan, lalu buka aplikasi dari menu Start.",
+      "allow": "Masuk, lalu izinkan akses mikrofon saat diminta Windows."
+    }
+  },
+  "features": {
+    "title": "Hanya di desktop",
+    "customize": "Sesuaikan pintasan",
+    "shortcutOff": "Pintasan nonaktif",
+    "shortcut": "Pintasan: {keys}",
+    "toggle_recording": {
+      "title": "Rekaman",
+      "text": "Mulai atau jeda rekaman rapat apa pun, dari aplikasi apa pun."
+    },
+    "toggle_overlay": {
+      "title": "Overlay",
+      "text": "Catatan langsung di atas panggilan Anda; ciutkan menjadi pil."
+    },
+    "live_translation": {
+      "title": "Terjemahan langsung",
+      "text": "Ikuti percakapan dalam bahasa Anda saat orang berbicara."
+    },
+    "prompter": {
+      "title": "Prompter",
+      "text": "Saran tenang dari Leo saat Anda berbicara, hanya terlihat oleh Anda."
+    }
+  }
+}

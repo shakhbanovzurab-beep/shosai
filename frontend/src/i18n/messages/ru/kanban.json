@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Канбан",
+    "description": "Доски для работы, дома и всего остального, в том числе синхронизированные с Jira."
+  },
+  "loadBoardsFailed": "Не удалось загрузить доски",
+  "loadBoardFailed": "Не удалось загрузить доску",
+  "addTask": "Добавить задачу",
+  "taskCount": "{count, plural, one {# задача} few {# задачи} many {# задач} other {# задачи}}",
+  "progress": "Прогресс",
+  "views": {
+    "label": "Вид",
+    "board": "Доска",
+    "list": "Список",
+    "table": "Таблица"
+  },
+  "toolbar": {
+    "filter": "Фильтр",
+    "sort": "Сортировка",
+    "moreWaysToAdd": "Другие способы добавить задачи",
+    "importCsv": "Импортировать из CSV",
+    "addFromTemplate": "Добавить из шаблона",
+    "createAutomation": "Создать автоматизацию"
+  },
+  "column": {
+    "drag": "Перетащить колонку «{column}»",
+    "addTask": "Добавить задачу в колонку «{column}»",
+    "empty": "В колонке «{column}» нет задач"
+  },
+  "columnMenu": {
+    "managedInJira": "Колонки настраиваются в Jira",
+    "rename": "Переименовать колонку…",
+    "sortByPriority": "Сортировать по приоритету",
+    "moveEarlier": "Сдвинуть ближе к началу",
+    "moveLater": "Сдвинуть ближе к концу",
+    "clear": "Очистить колонку"
+  },
+  "taskMenu": {
+    "openInJira": "Открыть {key} в Jira",
+    "openInWorkspace": "Открыть в {workspace}",
+    "moveTo": "Переместить в",
+    "moveToTop": "Переместить в начало",
+    "moveToBottom": "Переместить в конец",
+    "delete": "Удалить задачу"
+  },
+  "priority": {
+    "label": "Приоритет",
+    "high": "Высокий",
+    "medium": "Средний",
+    "low": "Низкий"
+  },
+  "card": {
+    "unassigned": "Не назначен",
+    "completed": "Выполнена",
+    "fromSource": "Из «{source}»",
+    "jiraIssue": "{type} (откроется в Jira в новой вкладке)",
+    "workspaceTask": "Задача этого рабочего пространства. Изменения здесь отразятся и там.",
+    "insights": {
+      "attachments": "{count, plural, one {# вложение} few {# вложения} many {# вложений} other {# вложения}}",
+      "comments": "{count, plural, one {# комментарий} few {# комментария} many {# комментариев} other {# комментария}}",
+      "documents": "{count, plural, one {# документ} few {# документа} many {# документов} other {# документа}}"
+    }
+  },
+  "table": {
+    "task": "Задача",
+    "status": "Статус",
+    "owner": "Ответственный",
+    "label": "Ярлык",
+    "due": "Срок",
+    "actions": "Действия",
+    "empty": "Задач пока нет",
+    "progressOf": "Прогресс задачи «{task}»"
+  },
+  "commands": {
+    "renameTask": "Переименовать задачу",
+    "renameColumn": "Переименовать колонку",
+    "newTaskIn": "Новая задача в колонке «{column}»",
+    "copyTitle": "{title} (копия)",
+    "deleted": "Задача «{title}» удалена",
+    "cleared": "{count, plural, one {Из колонки «{column}» удалена # задача} few {Из колонки «{column}» удалены # задачи} many {Из колонки «{column}» удалено # задач} other {Из колонки «{column}» удалено # задачи}}",
+    "jiraLinkCopied": "Ссылка на {key} скопирована"
+  },
+  "errors": {
+    "addTask": "Не удалось добавить задачу",
+    "saveChange": "Не удалось сохранить изменение",
+    "deleteTasks": "{count, plural, =1 {Не удалось удалить задачу} one {Не удалось удалить задачи} few {Не удалось удалить задачи} many {Не удалось удалить задачи} other {Не удалось удалить задачи}}",
+    "saveBoard": "Не удалось сохранить доску"
+  }
+}

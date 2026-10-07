@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "Pano bulunamadı.",
+  "taskNotFound": "Görev bulunamadı.",
+  "columnNotFound": "Sütun bulunamadı.",
+  "boardChanged": "Pano değişti. Panoyu yeniden yükleyip tekrar deneyin.",
+  "managedInJira": "Bu pano Jira’da yönetiliyor. Bu değişikliği orada yapın.",
+  "reconnectJira": "Değişiklik yapmak için Ayarlar › Bağlayıcılar bölümünde Jira’yı yeniden bağlayın.",
+  "firstSync": "Jira ile ilk senkronizasyonun tamamlanmasını bekleyin.",
+  "jiraDisconnected": "Jira bağlantısı kesildi. Bu panonun senkronize kalması için Ayarlar › Bağlayıcılar bölümünde Jira’yı yeniden bağlayın.",
+  "connectJiraFirst": "Önce Ayarlar › Bağlayıcılar bölümünde Jira’yı bağlayın.",
+  "jiraBoardUnavailable": "Bu Jira panosuna Jira hesabınızla erişilemiyor.",
+  "jiraBoardSynced": "Bu Jira panosu zaten senkronize ediliyor.",
+  "notJiraBoard": "Yalnızca Jira ile senkronize edilen panolar senkronize edilebilir.",
+  "jiraBoardWorkspaceTasks": "Jira panoları yalnızca Jira işlerini gösterir. Uygulamada tutulan bir pano seçin.",
+  "workspaceTaskCopy": "Çalışma alanı görevlerinin burada kopyası oluşturulamaz. Bunun yerine çalışma alanına bir görev ekleyin.",
+  "workspaceTaskDelete": "Çalışma alanı görevleri, çalışma alanında tamamlandığında veya başka birine atandığında panodan kalkar.",
+  "boardNameRequired": "Panoya bir ad verin.",
+  "boardNameTooLong": "Bu ad çok uzun. Daha kısa bir ad kullanın.",
+  "taskTitleRequired": "Göreve bir başlık verin.",
+  "invalidRequest": "İstekte bir sorun var. Sayfayı yeniden yükleyip tekrar deneyin."
+}

@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Ondersteuning",
+    "description": "Vraag ons team om hulp en volg je tickets."
+  },
+  "categories": {
+    "billing": "Facturering",
+    "bug": "Bugmelding",
+    "account": "Account",
+    "feature": "Functieverzoek",
+    "other": "Overig"
+  },
+  "statuses": {
+    "open": "Wacht op ondersteuning",
+    "awaiting_you": "Wacht op jou",
+    "resolved": "Opgelost"
+  },
+  "events": {
+    "acknowledged": "We hebben je bericht ontvangen. Een specialist antwoordt meestal binnen een paar uur — je krijgt hier een melding.",
+    "resolved": "Gemarkeerd als opgelost",
+    "reopened": "Heropend"
+  },
+  "toolbar": {
+    "search": "Tickets zoeken",
+    "filter": "Tickets filteren",
+    "all": "Alle",
+    "open": "Open",
+    "resolved": "Opgelost"
+  },
+  "newTicket": "Nieuw ticket",
+  "table": {
+    "number": "Nr.",
+    "subject": "Onderwerp",
+    "status": "Status",
+    "topic": "Categorie",
+    "updated": "Bijgewerkt",
+    "unread": "Ongelezen:"
+  },
+  "list": {
+    "loading": "Tickets laden",
+    "loadError": "Kan je tickets niet laden",
+    "emptyTitle": "Waarmee kunnen we helpen?",
+    "emptyDescription": "Open een ticket en ons team antwoordt hier, meestal binnen een paar uur.",
+    "noMatchesTitle": "Geen tickets gevonden",
+    "noMatchesDescription": "Probeer een andere zoekopdracht of een ander filter."
+  },
+  "panel": {
+    "ticket": "Ticket",
+    "description": "Je gesprek met de ondersteuning"
+  },
+  "form": {
+    "title": "Waarmee kunnen we helpen?",
+    "subtitle": "We antwoorden meestal binnen een paar uur.",
+    "topic": "Categorie",
+    "subject": "Onderwerp",
+    "subjectPlaceholder": "Een korte samenvatting",
+    "body": "Wat is er gebeurd?",
+    "bodyPlaceholder": "De stappen, wat je verwachtte en wat je in plaats daarvan zag. Schermafbeeldingen helpen.",
+    "send": "Versturen"
+  },
+  "attach": {
+    "button": "Bestanden bijvoegen",
+    "list": "Bijgevoegde bestanden",
+    "remove": "{name} verwijderen",
+    "tooBig": "{count, plural, one {{names} is groter dan {size}} other {{names} zijn groter dan {size}}}",
+    "tooMany": "{max, plural, one {Voeg maximaal # bestand bij} other {Voeg maximaal # bestanden bij}}"
+  },
+  "composer": {
+    "message": "Bericht",
+    "emoji": "Emoji toevoegen",
+    "hint": "Enter om te versturen · Shift+Enter voor een nieuwe regel",
+    "send": "Versturen",
+    "reply": "Schrijf een antwoord…",
+    "replyToReopen": "Antwoord om te heropenen…"
+  },
+  "thread": {
+    "loading": "Ticket laden",
+    "close": "Ticket sluiten",
+    "reopen": "Heropenen",
+    "resolve": "Markeren als opgelost",
+    "resolvedNote": "Opgelost. Heb je nog hulp nodig, antwoord dan hieronder — dan gaat het ticket weer open.",
+    "thanks": "Bedankt voor je feedback.",
+    "rate": "Hoe hebben we het gedaan?",
+    "good": "Goed",
+    "bad": "Slecht",
+    "you": "Jij",
+    "support": "Ondersteuning",
+    "supportAuthor": "{name} · Ondersteuning",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Markeren als gelezen",
+    "markUnread": "Markeren als ongelezen",
+    "copyNumber": "Ticketnummer kopiëren",
+    "copySubject": "Onderwerp kopiëren"
+  },
+  "toasts": {
+    "opened": "Ticket #{number} geopend",
+    "openFailed": "Kan het ticket niet openen",
+    "updateFailed": "Kan het ticket niet bijwerken",
+    "sendFailed": "Kan je antwoord niet versturen",
+    "markedRead": "Gemarkeerd als gelezen",
+    "markedUnread": "Gemarkeerd als ongelezen",
+    "reopened": "Ticket heropend",
+    "resolved": "Gemarkeerd als opgelost",
+    "numberCopied": "Ticketnummer gekopieerd",
+    "subjectCopied": "Onderwerp gekopieerd",
+    "numberCopyFailed": "Kan het ticketnummer niet kopiëren",
+    "subjectCopyFailed": "Kan het onderwerp niet kopiëren"
+  }
+}

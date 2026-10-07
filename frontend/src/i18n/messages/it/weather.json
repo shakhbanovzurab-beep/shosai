@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Sereno",
+    "partly": "Parzialmente nuvoloso",
+    "overcast": "Coperto",
+    "fog": "Nebbia",
+    "drizzle": "Pioviggine",
+    "rain": "Pioggia",
+    "snow": "Neve",
+    "storm": "Temporale",
+    "unknown": "Non disponibile"
+  },
+  "fallbackPlace": "Mosca",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, max {high}, min {low}",
+  "summaryAt": "{condition}, {now}, max {high}, min {low} a {place}"
+}

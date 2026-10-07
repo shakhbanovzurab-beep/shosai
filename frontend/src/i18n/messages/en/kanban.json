@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Kanban",
+    "description": "Boards for work, home and anything else, including boards synced with Jira."
+  },
+  "loadBoardsFailed": "Couldn’t load your boards",
+  "loadBoardFailed": "Couldn’t load the board",
+  "addTask": "Add task",
+  "taskCount": "{count, plural, one {# task} other {# tasks}}",
+  "progress": "Progress",
+  "views": {
+    "label": "View",
+    "board": "Board",
+    "list": "List",
+    "table": "Table"
+  },
+  "toolbar": {
+    "filter": "Filter",
+    "sort": "Sort",
+    "moreWaysToAdd": "More ways to add tasks",
+    "importCsv": "Import CSV",
+    "addFromTemplate": "Add from template",
+    "createAutomation": "Create automation"
+  },
+  "column": {
+    "drag": "Drag the {column} column",
+    "addTask": "Add task to {column}",
+    "empty": "No tasks in {column}"
+  },
+  "columnMenu": {
+    "managedInJira": "Columns are managed in Jira",
+    "rename": "Rename column…",
+    "sortByPriority": "Sort by priority",
+    "moveEarlier": "Move earlier",
+    "moveLater": "Move later",
+    "clear": "Clear column"
+  },
+  "taskMenu": {
+    "openInJira": "Open {key} in Jira",
+    "openInWorkspace": "Open in {workspace}",
+    "moveTo": "Move to",
+    "moveToTop": "Move to top",
+    "moveToBottom": "Move to bottom",
+    "delete": "Delete task"
+  },
+  "priority": {
+    "label": "Priority",
+    "high": "High",
+    "medium": "Medium",
+    "low": "Low"
+  },
+  "card": {
+    "unassigned": "Unassigned",
+    "completed": "Done",
+    "fromSource": "From {source}",
+    "jiraIssue": "{type} (opens Jira in a new tab)",
+    "workspaceTask": "A task in this workspace. Changes here change it there.",
+    "insights": {
+      "attachments": "{count, plural, one {# attachment} other {# attachments}}",
+      "comments": "{count, plural, one {# comment} other {# comments}}",
+      "documents": "{count, plural, one {# document} other {# documents}}"
+    }
+  },
+  "table": {
+    "task": "Task",
+    "status": "Status",
+    "owner": "Owner",
+    "label": "Label",
+    "due": "Due",
+    "actions": "Actions",
+    "empty": "No tasks yet",
+    "progressOf": "Progress of {task}"
+  },
+  "commands": {
+    "renameTask": "Rename task",
+    "renameColumn": "Rename column",
+    "newTaskIn": "New task in {column}",
+    "copyTitle": "{title} (copy)",
+    "deleted": "Deleted “{title}”",
+    "cleared": "{count, plural, one {Cleared # task from {column}} other {Cleared # tasks from {column}}}",
+    "jiraLinkCopied": "Copied the link to {key}"
+  },
+  "errors": {
+    "addTask": "Couldn’t add the task",
+    "saveChange": "Couldn’t save the change",
+    "deleteTasks": "{count, plural, one {Couldn’t delete the task} other {Couldn’t delete the tasks}}",
+    "saveBoard": "Couldn’t save the board"
+  }
+}

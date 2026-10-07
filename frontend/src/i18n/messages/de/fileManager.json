@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Dateimanager",
+    "description": "Durchsuche, ordne und lade deine Dateien hoch und wähle, welche Leo nutzt.",
+    "folderTitle": "Ordner · Dateimanager"
+  },
+  "myFiles": "Meine Dateien",
+  "loading": "Deine Dateien werden geladen…",
+  "loadFailed": "Deine Dateien konnten nicht geladen werden",
+  "allFiles": {
+    "heading": "Alle Dateien",
+    "emptyTitle": "Noch keine Dateien",
+    "emptyDescription": "Lade Dateien hoch oder zieh sie hierher. Wähle dann, welche Leo nutzen darf."
+  },
+  "folders": {
+    "heading": "Ordner",
+    "new": "Neuer Ordner",
+    "untitled": "Unbenannter Ordner",
+    "emptyTitle": "Noch keine Ordner",
+    "emptyDescription": "Erstelle einen Ordner, um deine Dateien zu ordnen oder Leo eine ganze Sammlung auf einmal lesen zu lassen.",
+    "fileCount": "{count, plural, one {# Datei} other {# Dateien}}",
+    "dropHere": "Zum Verschieben hier ablegen",
+    "dropHereLeo": "Zum Verschieben hier ablegen. Leo wird sie nutzen.",
+    "updated": "Aktualisiert {ago}",
+    "leoReadsAll": "Leo nutzt alles, was er in diesem Ordner lesen kann"
+  },
+  "folder": {
+    "notFound": "Ordner nicht gefunden",
+    "notFoundDescription": "Er wurde möglicherweise in einer anderen Sitzung gelöscht oder umbenannt.",
+    "backToMyFiles": "Zurück zu Meine Dateien",
+    "back": "Zurück",
+    "emptyTitle": "Dieser Ordner ist leer",
+    "emptyLeo": "Lade Dateien hoch oder verschiebe sie hierher, dann nutzt Leo sie.",
+    "empty": "Lade Dateien hierher hoch, zieh sie in Meine Dateien auf diesen Ordner oder nutze Verschieben nach im Menü einer Datei."
+  },
+  "section": {
+    "label": "Dateien",
+    "view": "Dateiansicht",
+    "grid": "Raster",
+    "list": "Liste",
+    "noMatch": "Keine passenden Dateien",
+    "noMatchDescription": "Hier passt nichts zu diesem Filter.",
+    "clearFilters": "Filter zurücksetzen"
+  },
+  "toolbar": {
+    "filterSort": "Filtern und sortieren",
+    "show": "Anzeigen",
+    "fileType": "Dateityp",
+    "allTypes": "Alle Typen",
+    "sortBy": "Sortieren nach"
+  },
+  "show": {
+    "all": "Alle Dateien",
+    "starred": "Favoriten",
+    "leo": "Von Leo genutzt",
+    "shared": "In Workspaces geteilt"
+  },
+  "sort": {
+    "modified": "Zuletzt geändert",
+    "name": "Name",
+    "size": "Dateigröße"
+  },
+  "kinds": {
+    "archive": "Archiv",
+    "design": "Grafik",
+    "document": "Dokument",
+    "image": "Bild",
+    "other": "Datei",
+    "pdf": "PDF",
+    "presentation": "Präsentation",
+    "spreadsheet": "Tabelle",
+    "text": "Text"
+  },
+  "file": {
+    "star": "{name} zu Favoriten hinzufügen",
+    "unstar": "{name} aus Favoriten entfernen",
+    "modified": "Geändert {ago}",
+    "inFolderModified": "<hidden>Im Ordner </hidden><name>{folder}</name> · Geändert {ago}",
+    "inFolder": "<hidden>Im Ordner </hidden><name>{folder}</name>",
+    "sharedIn": "Geteilt in {workspaces}",
+    "sharedInHidden": "<hidden>Geteilt in </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Geändert",
+    "size": "Größe",
+    "actions": "Aktionen"
+  },
+  "leo": {
+    "viaFile": "Leo nutzt diese Datei, weil du sie ausgewählt hast",
+    "viaFolder": "Leo nutzt diese Datei über ihren Ordner",
+    "reading": "Leo · liest",
+    "failed": "Leo konnte sie nicht lesen",
+    "tooLarge": "Leo liest Dateien bis {size}",
+    "extension": "Leo kann keine .{extension}-Dateien lesen",
+    "unknownType": "Leo kann diesen Dateityp nicht lesen"
+  },
+  "menu": {
+    "addStar": "Zu Favoriten hinzufügen",
+    "removeStar": "Aus Favoriten entfernen",
+    "moveTo": "Verschieben nach",
+    "useWithLeo": "Mit Leo nutzen",
+    "usedThrough": "Genutzt über „{folder}“",
+    "share": "In einem Workspace teilen…",
+    "sharing": "In Workspaces geteilt…",
+    "transferTo": "Übertragen an",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Ordner löschen"
+  },
+  "dialogs": {
+    "renameFile": "Datei umbenennen",
+    "renameFolder": "Ordner umbenennen",
+    "shareTitle": "„{name}“ teilen",
+    "shareDescription": "Leo antwortet daraus im Workspace für die Personen, die du auswählst. Die Datei bleibt hier, gehört weiter dir und verlässt den Workspace, wenn du sie löschst oder austrittst.",
+    "transferTitle": "„{name}“ an {workspace} übertragen?",
+    "transferDescription": "Die Datei verlässt deine Dateien und gehört dann {workspace}: Sie bleibt dort, wenn du austrittst, und die Admins verwalten sie. Andere Workspaces, in denen du sie geteilt hast, verlieren sie. Das kann nicht rückgängig gemacht werden.",
+    "transfer": "Übertragen"
+  },
+  "upload": {
+    "button": "Hochladen",
+    "uploading": "{count, plural, one {# Datei wird hochgeladen…} other {# Dateien werden hochgeladen…}}",
+    "dropHere": "Zum Hochladen hier ablegen",
+    "skipped": "{count, plural, one {# Datei übersprungen} other {# Dateien übersprungen}}",
+    "skippedDescription": "Leere Dateien und Dateien über {size} werden übersprungen; höchstens {max, number} werden gleichzeitig hochgeladen."
+  },
+  "picker": {
+    "search": "Deine Dateien durchsuchen",
+    "noMatch": "Keine passenden Dateien.",
+    "noFiles": "Noch keine Dateien. Lade zuerst welche im Dateimanager hoch.",
+    "yourFiles": "Deine Dateien",
+    "alreadyShared": "Hier bereits geteilt"
+  }
+}

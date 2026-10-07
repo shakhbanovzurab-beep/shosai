@@ -1,0 +1,85 @@
+{
+  "loadFailed": "Kaynaklar yüklenemedi",
+  "loading": "Kaynaklar yükleniyor…",
+  "connectedCount": "{total, plural, one {# kaynaktan {connected, number} tanesi bağlı.} other {# kaynaktan {connected, number} tanesi bağlı.}} Yeni ve değişen içerik her senkronizasyonda yeniden dizine eklenir.",
+  "status": {
+    "connecting": "Bağlanıyor",
+    "syncing": "Senkronize ediliyor",
+    "connected": "Bağlı",
+    "error": "Hata"
+  },
+  "card": {
+    "items": "{count, plural, one {# öğe} other {# öğe}}",
+    "synced": "{ago} senkronize edildi",
+    "syncNow": "Şimdi senkronize et",
+    "syncing": "Senkronize ediliyor…",
+    "settings": "Ayarlar…",
+    "disconnect": "Bağlantıyı kes…",
+    "signIn": "{provider} ile giriş yap",
+    "public": "Herkese açık sayfalar, giriş gerekmez",
+    "connect": "Bağla"
+  },
+  "dialog": {
+    "connectTitle": "{name} kaynağını bağla",
+    "settingsTitle": "{name} ayarları",
+    "oauthNote": "{provider} ile giriş yapıp salt okunur erişimi (OAuth 2.0) onaylayacak, ardından buraya döneceksiniz. Bu sayfada parola veya token girilmez.",
+    "optional": "(isteğe bağlı)",
+    "saveAndSync": "Kaydet ve senkronize et",
+    "continueWith": "{provider} ile devam et",
+    "connect": "Bağla",
+    "connectFailed": "Bağlanılamadı."
+  },
+  "disconnect": {
+    "title": "{name} bağlantısı kesilsin mi?",
+    "description": "Senkronizasyon durur ve kayıtlı kimlik bilgileri silinir. Bu kaynaktan dizine eklenmiş içerik vektör dizininden kaldırılır.",
+    "confirm": "Bağlantıyı kes"
+  },
+  "toasts": {
+    "connected": "{name} bağlandı",
+    "firstSync": "İlk senkronizasyon başladı.",
+    "syncFailed": "{name} senkronize edilemedi",
+    "disconnected": "{name} bağlantısı kesildi",
+    "disconnectFailed": "{name} bağlantısı kesilemedi"
+  },
+  "website": "Web sitesi",
+  "descriptions": {
+    "slack": "Herkese açık kanallardaki mesajlar ve yazışmalar.",
+    "confluence": "Alanlarınızdaki sayfalar ve blog yazıları.",
+    "notion": "Giriş sırasında paylaştığınız sayfalar ve veritabanları.",
+    "obsidian": "GitHub ile senkronize edilen bir kasadaki Markdown notları.",
+    "jira": "İşler (issue), açıklamalar ve yorumlar.",
+    "github": "README’ler, belgeler, issue’lar ve pull request’ler.",
+    "gitlab": "Depolar, wiki’ler, issue’lar ve merge request’ler.",
+    "google_drive": "Docs, Sheets, Slides dosyaları ve PDF’ler.",
+    "sharepoint": "Microsoft 365’teki dosyalar ve sayfalar.",
+    "dropbox": "Bir klasördeki dosyalar ve Paper belgeleri.",
+    "yandex_disk": "Bir Yandex Disk klasöründeki belgeler.",
+    "website": "Bir siteden veya belge portalından taranan sayfalar."
+  },
+  "fields": {
+    "channels": "Kanallar",
+    "spaces": "Alan anahtarları",
+    "repository": "Kasa deposu",
+    "branch": "Dal",
+    "jql": "JQL filtresi",
+    "repositories": "Depolar",
+    "base_url": "Sunucu URL’si",
+    "projects": "Projeler",
+    "folder_id": "Klasör kimliği",
+    "site_url": "SharePoint sitesi",
+    "path": "Klasör yolu",
+    "start_url": "Başlangıç URL’si",
+    "max_depth": "Tarama derinliği",
+    "include": "Yalnızca eşleşen yollar"
+  },
+  "help": {
+    "channels": "Tüm herkese açık kanallar için boş bırakın.",
+    "spaces": "Okuyabildiğiniz tüm alanlar için boş bırakın.",
+    "repositories": "Erişim verdiğiniz tüm depolar için boş bırakın.",
+    "base_url": "Yalnızca kendi sunucunuzda barındırılan GitLab için.",
+    "projects": "Okuyabildiğiniz tüm projeler için boş bırakın.",
+    "folder_id": "Okuyabildiğiniz her şeyi dizine eklemek için boş bırakın.",
+    "site_url": "OneDrive’ınız için boş bırakın.",
+    "max_depth": "Başlangıç sayfasından izlenecek bağlantı derinliği."
+  }
+}

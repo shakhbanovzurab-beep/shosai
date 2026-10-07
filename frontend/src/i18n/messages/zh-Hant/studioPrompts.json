@@ -1,0 +1,62 @@
+{
+  "intro": "助理扮演各個角色時遵循的指令。可以使用目錄中的現成技能，也可以從你的儲存庫加入自己的技能。",
+  "role": "角色",
+  "skills": "技能",
+  "search": {
+    "placeholder": "依名稱搜尋…",
+    "label": "依名稱搜尋提示詞"
+  },
+  "loadFailed": "無法載入提示詞",
+  "empty": {
+    "title": "還沒有提示詞",
+    "description": "為角色建立提示詞，再附加技能來擴充功能。"
+  },
+  "noMatches": {
+    "title": "沒有相符的項目",
+    "description": "請試試其他名稱或角色。"
+  },
+  "copyName": "{name}（副本）",
+  "delete": {
+    "title": "要刪除「{name}」嗎？",
+    "description": "如果有角色正在使用這個提示詞，該角色會改回內建的預設提示詞。"
+  },
+  "filter": {
+    "label": "依角色篩選",
+    "all": "全部",
+    "allHelp": "所有提示詞，不分角色。"
+  },
+  "table": {
+    "number": "編號",
+    "updated": "更新時間",
+    "inUse": "使用中",
+    "deleteNamed": "刪除 {name}"
+  },
+  "menu": {
+    "edit": "編輯…",
+    "stopUsing": "停止使用",
+    "useFor": "用於 {role}",
+    "duplicate": "建立副本…",
+    "delete": "刪除…"
+  },
+  "editor": {
+    "editTitle": "編輯提示詞",
+    "newTitle": "新增提示詞",
+    "description": "助理在所選角色中遵循的指令，以及附加的技能。",
+    "namePlaceholder": "AI 版本",
+    "instructions": "指令",
+    "instructionsPlaceholder": "告訴助理在這個角色中該如何表現。可以使用 Markdown。",
+    "noSkills": "還沒有安裝任何技能。請使用「技能」按鈕新增。",
+    "saveFailed": "無法儲存。繼續輸入即可重試。",
+    "savesAutomatically": "變更會自動儲存",
+    "done": "完成"
+  },
+  "toasts": {
+    "deleted": "已刪除「{name}」",
+    "deleteFailed": "無法刪除提示詞",
+    "inUse": "{role} 現在使用「{name}」",
+    "backToDefault": "{role} 已改回內建提示詞",
+    "changeFailed": "無法變更提示詞",
+    "created": "已建立「{name}」",
+    "createFailed": "無法建立提示詞"
+  }
+}

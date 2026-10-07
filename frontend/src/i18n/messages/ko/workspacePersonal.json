@@ -1,0 +1,51 @@
+{
+  "share": "공유",
+  "sharedIn": "{workspace}에 공유됨",
+  "workspace": "워크스페이스",
+  "stopSharing": "공유 중지",
+  "fileShare": {
+    "title": "워크스페이스에 공유",
+    "description": "그 워크스페이스에서 Leo가 내가 선택한 사람에게 이 파일을 바탕으로 답해요. 파일은 내 파일 관리자에 그대로 있고 계속 내 것이에요.",
+    "access": "사용할 수 있는 사람",
+    "everyone": "{workspace}의 모든 멤버",
+    "sharedOption": "{workspace} · 공유됨",
+    "noWorkspace": "아직 참여한 워크스페이스가 없어요.",
+    "toast": "{level, select, workspace {“{file}”: 이제 {workspace}의 모든 멤버가 사용할 수 있어요} other {“{file}”: 이제 {workspace}의 {team} 팀이 사용할 수 있어요}}"
+  },
+  "recordingShare": {
+    "title": "워크스페이스에 공유",
+    "description": "녹음은 계속 내 것이고 이곳 내 노트에 그대로 있어요. 이 녹음에 대해 Leo에게 한 질문은 비공개로 유지돼요.",
+    "openIn": "{workspace}에서 열기",
+    "tabWorkspace": "워크스페이스",
+    "tabLink": "링크",
+    "loadFailed": "{workspace}을(를) 불러오지 못했어요.",
+    "moveTo": "{workspace}(으)로 이동",
+    "audienceHint": "요약, 결정 사항, 작업이 공유돼요. 참석자는 언제나 볼 수 있어요.",
+    "sharedElsewhere": "지금 {workspace}에 공유되어 있어요. 회의는 한 번에 한 워크스페이스에만 있을 수 있어요."
+  },
+  "myTasks": {
+    "title": "내 워크스페이스에서",
+    "onKanban": "내 칸반에 있음",
+    "loadFailed": "워크스페이스 작업을 불러오지 못했어요.",
+    "empty": "워크스페이스에서 나에게 배정된 작업이 없어요."
+  },
+  "actionItems": {
+    "tracked": "<link>{workspace}</link>에서 작업으로 관리 중이에요. 여기서 바꾸면 그곳에도 반영돼요."
+  },
+  "sharedMeetings": {
+    "nav": "나와 공유됨",
+    "loadFailed": "공유된 회의를 불러오지 못했어요.",
+    "emptyTitle": "아직 나와 공유된 회의가 없어요",
+    "empty": "팀원이 나 또는 내가 속한 팀과 공유한 회의가 여기에 표시돼요.",
+    "intro": "<link>{workspace}</link>에서 나와 공유된 회의예요. 회의는 워크스페이스에 있으며, 열면 노트, 결정 사항, 작업을 볼 수 있어요."
+  },
+  "knowledge": {
+    "open": "지식 열기",
+    "summary": "열 수 있는 {meetings, plural, other {회의 #개}}, {decisions, plural, other {결정 사항 #개}}, {projects, plural, other {프로젝트 #개}}와 사용할 수 있는 {items, plural, other {파일 또는 소스 #개}}가 있어요.",
+    "listLabel": "{workspace}의 지식",
+    "loadFailed": "워크스페이스 지식을 불러오지 못했어요",
+    "emptyTitle": "아직 워크스페이스가 없어요",
+    "empty": "워크스페이스에 참여하면 Leo가 여기서도 나와 공유된 자료를 바탕으로 답할 수 있어요.",
+    "intro": "개인 공간에서 질문하면 Leo가 이 지식을 나에게만 활용해요. 각 답변에는 어느 워크스페이스에서 왔는지 표시돼요. 내가 속하지 않은 팀의 지식은 포함되지 않아요."
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "title": "Cuộc họp",
+  "loading": "Đang tải cuộc họp…",
+  "loadFailed": "Không thể tải cuộc họp",
+  "loadFailedHint": "Hãy kiểm tra kết nối và thử lại.",
+  "newMeeting": "Cuộc họp mới",
+  "actions": {
+    "schedule": "Lên lịch trong Lịch",
+    "upload": "Tải bản ghi lên"
+  },
+  "filters": "Bộ lọc cuộc họp",
+  "views": {
+    "all": "Tất cả",
+    "upcoming": "Sắp tới",
+    "live": "Đang diễn ra",
+    "past": "Đã qua"
+  },
+  "recent": "Gần đây",
+  "viewAll": "Xem tất cả",
+  "noMoreToday": "Hôm nay không còn cuộc họp nào.",
+  "day": {
+    "today": "Hôm nay",
+    "tomorrow": "Ngày mai",
+    "yesterday": "Hôm qua"
+  },
+  "liveBadge": "Trực tiếp",
+  "liveSince": "{minutes, plural, =0 {Vừa bắt đầu · kết thúc lúc {end}} other {Bắt đầu # phút trước · kết thúc lúc {end}}}",
+  "startsIn": "{minutes, plural, =0 {Đang bắt đầu} other {Sau # phút}}",
+  "join": "Tham gia cuộc họp",
+  "opensInNewTab": "(mở trong thẻ mới)",
+  "source": {
+    "whisperer": "Phòng Whisperer",
+    "in_person": "Gặp mặt trực tiếp"
+  },
+  "participants": "Người tham gia: {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "Ghi chú chưa sẵn sàng.",
+    "tasks": "{count, plural, other {# công việc}}",
+    "decisions": "{count, plural, other {# quyết định}}"
+  },
+  "empty": {
+    "none": {
+      "title": "Chưa có cuộc họp nào",
+      "description": "Hãy lên lịch cuộc họp trong Lịch hoặc tải bản ghi lên để nhận ghi chú từ Leo."
+    },
+    "upcoming": {
+      "title": "Chưa có cuộc họp nào được lên lịch",
+      "description": "Các cuộc họp bạn lên kế hoạch trong Lịch sẽ xuất hiện ở đây."
+    },
+    "live": {
+      "title": "Không có cuộc họp nào đang diễn ra",
+      "description": "Cuộc họp sẽ xuất hiện ở đây khi đang diễn ra để bạn có thể tham gia."
+    },
+    "past": {
+      "title": "Chưa có cuộc họp nào đã qua",
+      "description": "Các cuộc họp đã ghi sẽ xuất hiện ở đây cùng bản tóm tắt, công việc và quyết định từ Leo."
+    }
+  }
+}

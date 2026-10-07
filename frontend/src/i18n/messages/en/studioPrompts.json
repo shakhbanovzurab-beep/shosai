@@ -1,0 +1,62 @@
+{
+  "intro": "The instructions your assistant plays its roles by. Ready-made skills from the catalog, your own from your repository.",
+  "role": "Role",
+  "skills": "Skills",
+  "search": {
+    "placeholder": "Search by name…",
+    "label": "Search prompts by name"
+  },
+  "loadFailed": "Couldn’t load prompts",
+  "empty": {
+    "title": "No prompts yet",
+    "description": "Create a prompt for a role, then attach skills to extend it."
+  },
+  "noMatches": {
+    "title": "Nothing matches",
+    "description": "Try another name or role."
+  },
+  "copyName": "{name} (copy)",
+  "delete": {
+    "title": "Delete “{name}”?",
+    "description": "If a role uses it, that role goes back to its built-in default prompt."
+  },
+  "filter": {
+    "label": "Filter by role",
+    "all": "All",
+    "allHelp": "Every prompt, whatever its role."
+  },
+  "table": {
+    "number": "№",
+    "updated": "Updated",
+    "inUse": "In use",
+    "deleteNamed": "Delete {name}"
+  },
+  "menu": {
+    "edit": "Edit…",
+    "stopUsing": "Stop using",
+    "useFor": "Use for {role}",
+    "duplicate": "Duplicate…",
+    "delete": "Delete…"
+  },
+  "editor": {
+    "editTitle": "Edit prompt",
+    "newTitle": "New prompt",
+    "description": "Instructions the assistant follows in the chosen role, plus any skills.",
+    "namePlaceholder": "AI version",
+    "instructions": "Instructions",
+    "instructionsPlaceholder": "Tell the assistant how to behave in this role. Markdown is fine.",
+    "noSkills": "No skills installed yet — add some with the Skills button.",
+    "saveFailed": "Couldn’t save — keep typing to retry",
+    "savesAutomatically": "Changes save automatically",
+    "done": "Done"
+  },
+  "toasts": {
+    "deleted": "Deleted “{name}”",
+    "deleteFailed": "Couldn’t delete the prompt",
+    "inUse": "{role} now uses “{name}”",
+    "backToDefault": "{role} is back to its built-in prompt",
+    "changeFailed": "Couldn’t change the prompt",
+    "created": "“{name}” created",
+    "createFailed": "Couldn’t create the prompt"
+  }
+}

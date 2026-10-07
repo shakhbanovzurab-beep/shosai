@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "Um painel administrativo de código aberto, bem acabado, feito com shadcn/ui."
+  },
+  "actions": {
+    "goHome": "Ir para o início",
+    "goBack": "Voltar"
+  },
+  "placeholder": {
+    "title": "{title} está a caminho",
+    "description": "Esta seção está em desenvolvimento e estará disponível em breve.",
+    "badge": "Em desenvolvimento"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "Todos"
+  },
+  "emoji": {
+    "search": "Pesquisar emoji",
+    "empty": "Nenhum emoji encontrado"
+  },
+  "notFound": {
+    "metaTitle": "Página não encontrada",
+    "badge": "Erro {code}",
+    "title": "Esta página se perdeu",
+    "description": "O link pode estar quebrado, ou a página foi movida ou removida. Vamos ajudar você a voltar ao caminho certo.",
+    "popularPages": "Páginas populares",
+    "jumpTo": "Ou vá para"
+  },
+  "unauthorized": {
+    "metaTitle": "Sem acesso",
+    "title": "Você não tem acesso",
+    "description": "Você não tem permissão para ver esta página. Se acha que isso é um engano, fale com o administrador."
+  }
+}

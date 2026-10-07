@@ -1,0 +1,62 @@
+{
+  "intro": "Instruksi yang dipakai asisten untuk menjalankan perannya. Skill siap pakai dari katalog, skill milik Anda dari repositori Anda.",
+  "role": "Peran",
+  "skills": "Skill",
+  "search": {
+    "placeholder": "Cari menurut nama…",
+    "label": "Cari prompt menurut nama"
+  },
+  "loadFailed": "Tidak dapat memuat prompt",
+  "empty": {
+    "title": "Belum ada prompt",
+    "description": "Buat prompt untuk suatu peran, lalu lampirkan skill untuk memperluasnya."
+  },
+  "noMatches": {
+    "title": "Tidak ada yang cocok",
+    "description": "Coba nama atau peran lain."
+  },
+  "copyName": "{name} (salinan)",
+  "delete": {
+    "title": "Hapus “{name}”?",
+    "description": "Jika ada peran yang memakainya, peran tersebut kembali ke prompt bawaannya."
+  },
+  "filter": {
+    "label": "Filter menurut peran",
+    "all": "Semua",
+    "allHelp": "Semua prompt, apa pun perannya."
+  },
+  "table": {
+    "number": "No.",
+    "updated": "Diperbarui",
+    "inUse": "Dipakai",
+    "deleteNamed": "Hapus {name}"
+  },
+  "menu": {
+    "edit": "Edit prompt…",
+    "stopUsing": "Berhenti memakai",
+    "useFor": "Pakai untuk {role}",
+    "duplicate": "Duplikat…",
+    "delete": "Hapus…"
+  },
+  "editor": {
+    "editTitle": "Mengedit prompt",
+    "newTitle": "Prompt baru",
+    "description": "Instruksi yang diikuti asisten dalam peran yang dipilih, beserta skill apa pun.",
+    "namePlaceholder": "Versi AI",
+    "instructions": "Instruksi",
+    "instructionsPlaceholder": "Beri tahu asisten cara bersikap dalam peran ini. Boleh memakai Markdown.",
+    "noSkills": "Belum ada skill yang dipasang — tambahkan dengan tombol Skill.",
+    "saveFailed": "Tidak dapat menyimpan — terus mengetik untuk mencoba lagi",
+    "savesAutomatically": "Perubahan disimpan otomatis",
+    "done": "Selesai"
+  },
+  "toasts": {
+    "deleted": "“{name}” dihapus",
+    "deleteFailed": "Tidak dapat menghapus prompt",
+    "inUse": "{role} sekarang memakai “{name}”",
+    "backToDefault": "{role} kembali memakai prompt bawaannya",
+    "changeFailed": "Tidak dapat mengubah prompt",
+    "created": "“{name}” dibuat",
+    "createFailed": "Tidak dapat membuat prompt"
+  }
+}

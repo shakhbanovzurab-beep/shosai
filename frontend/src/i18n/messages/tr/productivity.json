@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Verimlilik",
+    "description": "Bugünün görevleri, projeler, odak zamanlayıcısı, takvim ve son notlar; bir yılda tamamlanan işler tek bakışta."
+  },
+  "greeting": "{period, select, morning {Günaydın, {name}.} afternoon {İyi günler, {name}.} other {İyi akşamlar, {name}.}}",
+  "greetingAnyTime": "Merhaba, {name}.",
+  "sidePanel": "Takvim, odak ve notlar",
+  "tasks": {
+    "heading": "Bugün",
+    "progress": "{done, number} / {total, number} tamamlandı",
+    "newTask": "Yeni görev",
+    "addTask": "Görev ekle"
+  },
+  "projects": {
+    "heading": "Projeler",
+    "status": {
+      "inProgress": "Devam ediyor",
+      "planning": "Planlanıyor"
+    },
+    "progressOf": "{project} projesinin ilerlemesi",
+    "due": "Son tarih: {date}"
+  },
+  "notes": {
+    "heading": "Son notlar",
+    "viewAll": "Tümünü gör",
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "empty": "Henüz not yok",
+    "emptyHint": "Toplantılarınızın notları burada görünecek."
+  }
+}

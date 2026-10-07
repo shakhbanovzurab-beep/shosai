@@ -1,0 +1,120 @@
+{
+  "title": "Leden",
+  "description": "Iedereen in {workspace}, hun rollen en de teams waarmee je deelt.",
+  "invitePeople": "Mensen uitnodigen",
+  "adminsInvite": "Alleen beheerders kunnen mensen uitnodigen.",
+  "adminsInviteAsk": "Alleen beheerders kunnen mensen uitnodigen. Vraag het {name}.",
+  "tabs": {
+    "members": "Leden",
+    "teams": "Teams"
+  },
+  "search": "Mensen zoeken",
+  "pendingInvitations": "Openstaande uitnodigingen · {count, number}",
+  "membersCount": "Leden · {count, number}",
+  "noMatches": "Niemand gevonden",
+  "noMatchesHint": "Probeer een naam, e-mailadres of functie.",
+  "clearSearch": "Zoekopdracht wissen",
+  "seats": {
+    "label": "Licenties",
+    "taken": "{taken, number} van {total, number} licenties in gebruik",
+    "breakdown": "· {members, plural, one {# lid} other {# leden}}",
+    "breakdownPending": "· {members, plural, one {# lid} other {# leden}}, {pending, plural, one {# openstaande uitnodiging} other {# openstaande uitnodigingen}}",
+    "left": "{count, plural, one {Nog # licentie over.} other {Nog # licenties over.}} Openstaande uitnodigingen houden een licentie bezet tot ze worden geaccepteerd of ingetrokken.",
+    "fullAdd": "Alle licenties zijn in gebruik. Voeg licenties toe om meer mensen uit te nodigen.",
+    "fullAsk": "Alle licenties zijn in gebruik. Vraag de eigenaar om licenties toe te voegen.",
+    "change": "Licenties wijzigen"
+  },
+  "invitation": {
+    "by": "Uitgenodigd door {name} {ago}",
+    "byYou": "Uitgenodigd door jou {ago}",
+    "byFormerMember": "Uitgenodigd door een voormalig lid {ago}",
+    "resend": "Opnieuw sturen",
+    "revoke": "Intrekken",
+    "revokeFor": "Uitnodiging voor {email} intrekken"
+  },
+  "member": {
+    "you": "Jij",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, one {# dag of langer inactief} other {# dagen of langer inactief}}",
+    "roleOf": "Rol van {name}",
+    "remove": "Uit werkruimte verwijderen",
+    "removeTitle": "{name} uit {workspace} verwijderen?",
+    "removeDescription": "Vergaderingen en bestanden die {name} uit de eigen Notities en het eigen Bestandsbeheer heeft gedeeld, gaan mee. Taken blijven, en de open taken worden niet meer toegewezen. De licentie komt vrij.",
+    "joinedTeam": "{name} is lid geworden van {team}",
+    "leftTeam": "{name} heeft {team} verlaten"
+  },
+  "teams": {
+    "new": "Nieuw team",
+    "empty": "Nog geen teams",
+    "emptyHint": "Teams zijn optioneel. Maak ze als je vergaderingen en kennis met een groep wilt delen, zoals Engineering of Sales.",
+    "intro": "Deel vergaderingen en kennis met een heel team in plaats van met één persoon tegelijk.",
+    "deleteTitle": "{name} verwijderen?",
+    "deleteDescription": "De vergaderingen blijven zichtbaar voor de mensen die erbij waren, en de leden blijven in de werkruimte. Verplaats eerst de kennis van het team; die kan niet zonder doelgroep blijven."
+  },
+  "team": {
+    "noDescription": "Nog geen beschrijving.",
+    "edit": "Team bewerken",
+    "delete": "Team verwijderen",
+    "members": "{count, plural, one {# lid} other {# leden}}",
+    "membersLedBy": "{count, plural, one {# lid} other {# leden}} · geleid door {name}",
+    "membersLedByYou": "{count, plural, one {# lid} other {# leden}} · geleid door jou",
+    "join": "Lid worden",
+    "leave": "Team verlaten",
+    "youJoined": "Je bent lid geworden van {team}",
+    "youLeft": "Je hebt {team} verlaten"
+  },
+  "teamForm": {
+    "editTitle": "{name} bewerken",
+    "description": "Deel vergaderingen en kennis met een groep in plaats van één voor één.",
+    "nameRequired": "Geef het team een naam.",
+    "namePlaceholder": "bijv. Design",
+    "descriptionLabel": "Beschrijving",
+    "descriptionPlaceholder": "Waar dit team aan werkt",
+    "color": "Kleur",
+    "colors": {
+      "blue": "Blauw",
+      "green": "Groen",
+      "amber": "Amber",
+      "violet": "Violet",
+      "rose": "Roze",
+      "sky": "Hemelsblauw"
+    },
+    "privateHint": "Alleen de leden en beheerders zien het team en wat ermee gedeeld is.",
+    "create": "Team maken"
+  },
+  "invite": {
+    "title": "Mensen uitnodigen voor {workspace}",
+    "description": "Ze krijgen een e-mail met een link om lid te worden. Elke persoon neemt een licentie in.",
+    "emails": "E-mailadressen",
+    "hint": "Scheid adressen met komma’s of nieuwe regels. {left, plural, one {Nog # licentie over.} other {Nog # licenties over.}}",
+    "overSeats": "{count, plural, one {# persoon} other {# mensen}}, maar {left, plural, one {nog maar # licentie over.} other {nog maar # licenties over.}}",
+    "seatsAfter": "{count, plural, one {# uitnodiging} other {# uitnodigingen}} · {left, plural, one {daarna nog # licentie over.} other {daarna nog # licenties over.}}",
+    "checkEmails": "Controleer {emails}.",
+    "allExisting": "Ze zitten al in de werkruimte of zijn al uitgenodigd.",
+    "emailRequired": "Voeg een e-mailadres toe.",
+    "tooMany": "{count, plural, one {Nodig maximaal # persoon tegelijk uit.} other {Nodig maximaal # mensen tegelijk uit.}}",
+    "skipped": "Al lid of uitgenodigd, overgeslagen: {emails}.",
+    "role": "Rol",
+    "teams": "Aan teams toevoegen (optioneel)",
+    "addSeats": "Licenties toevoegen",
+    "send": "{count, plural, one {Uitnodiging sturen} other {# uitnodigingen sturen}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, one {Uitnodiging gestuurd naar {email}} other {# uitnodigingen gestuurd}}",
+    "inviteFailed": "Kan de uitnodigingen niet sturen.",
+    "invitationRevoked": "Uitnodiging voor {email} ingetrokken",
+    "revokeFailed": "Kan de uitnodiging niet intrekken",
+    "invitationResent": "Uitnodiging opnieuw gestuurd naar {email}",
+    "resendFailed": "Kan de uitnodiging niet opnieuw sturen",
+    "roleChanged": "{role, select, admin {{name} is nu beheerder} other {{name} is nu lid}}",
+    "roleChangeFailed": "Kan de rol niet wijzigen",
+    "teamsUpdateFailed": "Kan de teams niet bijwerken",
+    "memberRemoved": "{name} is uit de werkruimte verwijderd",
+    "removeMemberFailed": "Kan deze persoon niet verwijderen",
+    "teamCreated": "{name} gemaakt",
+    "teamSaved": "{name} opgeslagen",
+    "teamSaveFailed": "Kan het team niet opslaan.",
+    "teamDeleted": "{name} is verwijderd",
+    "teamDeleteFailed": "Kan het team niet verwijderen"
+  }
+}

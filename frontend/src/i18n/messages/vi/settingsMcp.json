@@ -1,0 +1,23 @@
+{
+  "description": "Kết nối máy chủ Model Context Protocol để cung cấp cho Leo công cụ và dữ liệu từ các ứng dụng khác.",
+  "add": "Thêm máy chủ",
+  "empty": {
+    "title": "Chưa có máy chủ MCP nào",
+    "description": "Thêm máy chủ từ xa bằng URL của máy chủ đó."
+  },
+  "hasAuth": "Có cấp quyền",
+  "notReached": "Chưa kết nối được",
+  "tools": "{count, plural, other {# công cụ}}",
+  "enable": "Bật {name}",
+  "disable": "Tắt {name}",
+  "remove": "Gỡ {name}",
+  "removed": "Đã gỡ {name}",
+  "form": {
+    "transport": "Phương thức truyền",
+    "url": "URL máy chủ",
+    "auth": "Tiêu đề cấp quyền <optional>(không bắt buộc)</optional>"
+  },
+  "addFailed": "Không thể thêm máy chủ.",
+  "toggleFailed": "Không thể thay đổi máy chủ",
+  "removeFailed": "Không thể gỡ máy chủ"
+}

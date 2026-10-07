@@ -1,0 +1,70 @@
+{
+  "title": "Ayarlar",
+  "description": "{workspace} çalışma alanının içindeki herkes için nasıl çalıştığı. Değişiklikler hemen kaydedilir.",
+  "adminsOnly": "Çalışma alanı ayarlarını yalnızca yöneticiler değiştirebilir.",
+  "adminsOnlyAsk": "Çalışma alanı ayarlarını yalnızca yöneticiler değiştirebilir. Şu kişiye sorun: {name}.",
+  "general": {
+    "title": "Genel",
+    "name": "Çalışma alanı adı",
+    "nameHint": "Alan değiştiricide ve davetlerde gösterilir.",
+    "renamed": "Çalışma alanı yeniden adlandırıldı",
+    "join": "Şirket e-postasıyla katılım",
+    "joinHint": "E-posta adresi alan adınızda olan iş arkadaşlarınızın davet olmadan katılmasına izin verin.",
+    "joinOn": "Boş lisans olduğu sürece @{domain} e-posta adresine sahip herkes üye olarak katılabilir.",
+    "domain": "E-posta alan adı",
+    "joinEnabled": "Artık şu alan adındaki kişiler katılabilir: {domain}",
+    "joinDisabled": "E-posta alan adıyla katılım kapalı"
+  },
+  "sharing": {
+    "title": "Paylaşım",
+    "description": "{workspace} dışından kişilerin katıldığı toplantılar asla otomatik olarak paylaşılmaz. Düzenleyenler bir toplantıyı kimlerin göreceğini her zaman değiştirebilir.",
+    "reviewTitle": "Toplantıların nasıl paylaşılacağını onaylayın",
+    "reviewHint": "Bunlar önerilen kurallardır. Herhangi birini değiştirin veya olduğu gibi bırakın.",
+    "keep": "Bu kuralları koru",
+    "confirmed": "Paylaşım kuralları onaylandı",
+    "defaultLevel": "Toplantıdan sonra notları şunlarla paylaş",
+    "defaultLevelHint": "Herkesin {workspace} çalışma alanında olduğu toplantılar için.",
+    "levels": {
+      "private": "Yalnızca düzenleyen kişi",
+      "participants": "Katılımcılar (önerilen)",
+      "workspace": "{workspace} çalışma alanındaki herkes"
+    },
+    "levelChanged": "Yeni toplantıların gideceği yer: {level}",
+    "transcripts": "Transkriptleri dahil et",
+    "transcriptsHint": "Kapalıyken kişiler kelimesi kelimesine transkripti değil; özeti, kararları ve görevleri görür.",
+    "transcriptsOn": "Transkriptler de paylaşılıyor",
+    "transcriptsOff": "Yalnızca özetler paylaşılıyor",
+    "membersInvite": "Üyeler kişi davet edebilir",
+    "membersInviteHint": "Kapalıyken yalnızca yöneticiler davet edebilir.",
+    "membersInviteOn": "Üyeler kişi davet edebilir",
+    "membersInviteOff": "Artık yalnızca yöneticiler davet edebilir"
+  },
+  "plan": {
+    "title": "Plan ve kullanım",
+    "description": "Herhangi birinin kişisel planından ayrı olarak çalışma alanına faturalandırılır.",
+    "name": "{plan} planı",
+    "seats": "{total, number} lisanstan {taken, number} tanesi",
+    "price": "Aylık kullanıcı başına {perSeat} · toplam {total} · yenileme: {renews}",
+    "change": "Lisansları veya planı değiştir",
+    "ownerOnly": "Faturalandırmayı yalnızca sahip yönetir.",
+    "usageFailed": "Kullanım yüklenemedi.",
+    "usageIn": "Kullanım: {month}",
+    "idle": "{count, plural, one {# üye {days, number}+ gündür etkin değil: yeniden kullanabileceğiniz bir lisans.} other {# üye {days, number}+ gündür etkin değil: yeniden kullanabileceğiniz lisanslar.}}",
+    "member": "Üye",
+    "meetings": "Toplantılar",
+    "minutes": "Dakika",
+    "lastActive": "Son etkinlik",
+    "inactive": "Etkin değil"
+  },
+  "danger": {
+    "delete": "Çalışma alanını sil",
+    "deleteHint": "Çalışma alanını herkes için kaldırır ve faturalandırmasını durdurur.",
+    "deleteTitle": "{name} silinsin mi?",
+    "deleteDescription": "Herkes çalışma alanının projelerini, görevlerini, kararlarını ve yüklemelerini kaybeder. Kişilerin paylaştığı kayıtlar ve dosyalar kendi Notlar’ında ve Dosya yöneticisinde, kendilerine ait olarak kalır. Bu işlem geri alınamaz.",
+    "leave": "Çalışma alanından ayrıl",
+    "leaveHint": "Daha sonra yeniden davet edilebilirsiniz; lisansınız boşa çıkar.",
+    "leaveTitle": "{name} çalışma alanından ayrılmak istiyor musunuz?",
+    "leaveDescription": "Paylaştığınız toplantılar ve dosyalar sizinle birlikte ayrılır ve Notlar’ınızda ve Dosya yöneticinizde kalır. Çalışma alanına devrettiğiniz dosyalar burada kalır. Görevler ekipte kalır; açık görevlerinizin atanan kişisi kaldırılır.",
+    "leaveConfirm": "Ayrıl"
+  }
+}

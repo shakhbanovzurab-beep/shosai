@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "Upload to {workspace}",
+    "description": "Uploaded files belong to {workspace}: they stay when you leave, and admins manage them. To share a file and keep it yours, share it from your files instead.",
+    "dropZone": "Drop files to add",
+    "drop": "Drop files here",
+    "choose": "Choose files",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown or text · up to {limit} each",
+    "chosen": "Chosen files",
+    "removeFile": "Remove {name}",
+    "tooBig": "{count, plural, one {{names} is over {limit} and was left out.} other {{names} are over {limit} and were left out.}}",
+    "noFiles": "Choose at least one file.",
+    "submit": "{count, plural, =0 {Upload} one {Upload} other {Upload # files}}"
+  },
+  "connect": {
+    "title": "Connect a source",
+    "description": "A shared drive, wiki or site {workspace} already keeps its documents in. It stays in sync, belongs to the workspace, and Leo answers from it for whoever you choose.",
+    "source": "Source",
+    "link": "Link",
+    "linkHint": "The folder, space or page to keep in sync.",
+    "submit": "Connect"
+  },
+  "share": {
+    "title": "Share from my files",
+    "description": "Leo answers from them in {workspace} for whoever you choose. They stay in your File Manager, stay yours, and leave with you.",
+    "submit": "{count, plural, =0 {Share} one {Share} other {Share # files}}"
+  }
+}

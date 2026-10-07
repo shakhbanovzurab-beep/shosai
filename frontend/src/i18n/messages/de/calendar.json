@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Kalender",
+    "description": "Plane Meetings, Termine und Fokuszeit nach Monat, Woche oder Tag."
+  },
+  "summary": "{days, plural, one {# Tag} other {# Tage}} · {events, plural, one {# Termin} other {# Termine}}",
+  "calendars": {
+    "label": "Kalender",
+    "all": "Alle Kalender",
+    "work": "Arbeit",
+    "personal": "Persönlich",
+    "team": "Team",
+    "focus": "Fokuszeit"
+  },
+  "views": {
+    "label": "Ansicht",
+    "dayGridMonth": "Monat",
+    "timeGridWeek": "Woche",
+    "timeGridDay": "Tag"
+  },
+  "previous": "Vorheriger Zeitraum",
+  "next": "Nächster Zeitraum",
+  "today": "Heute",
+  "addEvent": "Termin hinzufügen",
+  "loading": "Kalender wird geladen…",
+  "eventMenu": {
+    "reschedule": "Verschieben",
+    "dayEarlier": "Einen Tag früher",
+    "dayLater": "Einen Tag später",
+    "nextWeek": "Nächste Woche",
+    "moveToToday": "Auf heute verschieben",
+    "copyDetails": "Details kopieren",
+    "delete": "Termin löschen"
+  },
+  "dayMenu": {
+    "newAllDay": "Neuer ganztägiger Termin…",
+    "newAt": "Neuer Termin um {time}…",
+    "openDay": "Tag öffnen",
+    "openWeek": "Woche öffnen"
+  },
+  "renameTitle": "Termin umbenennen",
+  "newTitle": "Neuer Termin · {when}",
+  "copyName": "{title} (Kopie)",
+  "details": "{title} – {when}",
+  "detailsCopied": "Termindetails kopiert",
+  "detailsCopyFailed": "Termindetails konnten nicht kopiert werden",
+  "deleted": "„{title}“ gelöscht"
+}

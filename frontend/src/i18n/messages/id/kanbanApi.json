@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "Papan tidak ditemukan.",
+  "taskNotFound": "Tugas tidak ditemukan.",
+  "columnNotFound": "Kolom tidak ditemukan.",
+  "boardChanged": "Papan telah berubah. Muat ulang papan, lalu coba lagi.",
+  "managedInJira": "Papan ini dikelola di Jira. Lakukan perubahan ini di sana.",
+  "reconnectJira": "Hubungkan kembali Jira di Pengaturan › Konektor untuk melakukan perubahan.",
+  "firstSync": "Tunggu hingga sinkronisasi pertama dengan Jira selesai.",
+  "jiraDisconnected": "Koneksi ke Jira terputus. Hubungkan kembali di Pengaturan › Konektor agar papan ini tetap sinkron.",
+  "connectJiraFirst": "Hubungkan Jira terlebih dahulu di Pengaturan › Konektor.",
+  "jiraBoardUnavailable": "Papan Jira tersebut tidak tersedia untuk akun Jira Anda.",
+  "jiraBoardSynced": "Papan Jira ini sudah disinkronkan.",
+  "notJiraBoard": "Hanya papan yang disinkronkan dengan Jira yang dapat disinkronkan.",
+  "jiraBoardWorkspaceTasks": "Papan Jira hanya menampilkan issue Jira. Pilih papan yang dikelola di aplikasi.",
+  "workspaceTaskCopy": "Tugas ruang kerja tidak dapat diduplikat di sini. Sebagai gantinya, tambahkan tugas di ruang kerja.",
+  "workspaceTaskDelete": "Tugas ruang kerja hilang dari papan setelah selesai atau ditugaskan ke orang lain di ruang kerja.",
+  "boardNameRequired": "Beri nama papan ini.",
+  "boardNameTooLong": "Nama itu terlalu panjang. Gunakan nama yang lebih pendek.",
+  "taskTitleRequired": "Beri judul untuk tugas ini.",
+  "invalidRequest": "Ada yang salah dengan permintaan ini. Muat ulang halaman, lalu coba lagi."
+}

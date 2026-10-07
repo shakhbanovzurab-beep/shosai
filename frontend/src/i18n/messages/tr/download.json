@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Uygulamayı indir",
+    "description": "macOS ve Windows için masaüstü uygulamasını indirin."
+  },
+  "title": "Masaüstü uygulamasını edinin",
+  "subtitle": "Toplantıları kaydedin, her görüşmede canlı not ve çeviri alın, kısayolla Leo’ya her yerden ulaşın.",
+  "notes": {
+    "mobile": "Masaüstü uygulaması macOS ve Windows’ta çalışır. İndirmek için bu sayfayı bilgisayarınızda açın.",
+    "linux": "Henüz Linux sürümü yok. Masaüstü uygulaması macOS ve Windows’ta çalışır."
+  },
+  "card": {
+    "yourComputer": "Bilgisayarınız",
+    "requirement": "{system} veya üzeri",
+    "downloadFor": "{name} için indir",
+    "downloadBuild": "{arch} için indir · {size}",
+    "meta": "Sürüm {version} · {size} · {type} · {date}",
+    "loadFailed": "{platform} indirmesi yüklenemedi.",
+    "notYet": "{platform} uygulaması henüz hazır değil. Yakında tekrar bakın.",
+    "universal": "Apple silicon ve Intel"
+  },
+  "checksum": {
+    "button": "Sağlama toplamı",
+    "verify": "Doğrulamak için <code>{command}</code> komutunu çalıştırın ve sonucu karşılaştırın.",
+    "copy": "Sağlama toplamını kopyala",
+    "copied": "Sağlama toplamı kopyalandı",
+    "copyFailed": "Sağlama toplamı kopyalanamadı"
+  },
+  "install": {
+    "title": "Üç adımda yükleyin",
+    "macos": {
+      "open": "İndirilen {type} dosyasını açın.",
+      "drag": "Uygulamayı Uygulamalar klasörünüze sürükleyin, sonra oradan açın.",
+      "allow": "Giriş yapın ve macOS sorduğunda mikrofona, ekran ve sistem sesi kaydına izin verin; toplantılar bu şekilde kaydedilir."
+    },
+    "windows": {
+      "run": "İndirilen yükleyiciyi ({type}) çalıştırın.",
+      "setup": "Kurulum adımlarını izleyin, sonra uygulamayı Başlat menüsünden açın.",
+      "allow": "Giriş yapın ve Windows sorduğunda mikrofon erişimine izin verin."
+    }
+  },
+  "features": {
+    "title": "Yalnızca masaüstünde",
+    "customize": "Kısayolları özelleştir",
+    "shortcutOff": "Kısayol kapalı",
+    "shortcut": "Kısayol: {keys}",
+    "toggle_recording": {
+      "title": "Kayıt",
+      "text": "Herhangi bir toplantının kaydını her uygulamadan başlatın veya duraklatın."
+    },
+    "toggle_overlay": {
+      "title": "Üst katman",
+      "text": "Görüşmenizin üzerinde canlı notlar; isterseniz küçük bir simgeye daraltın."
+    },
+    "live_translation": {
+      "title": "Canlı çeviri",
+      "text": "Konuşulanları kişiler konuşurken kendi dilinizde takip edin."
+    },
+    "prompter": {
+      "title": "Suflör",
+      "text": "Siz konuşurken Leo’dan yalnızca sizin görebileceğiniz sessiz öneriler."
+    }
+  }
+}

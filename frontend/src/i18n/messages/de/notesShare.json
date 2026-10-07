@@ -1,0 +1,54 @@
+{
+  "panel": {
+    "loadFailed": "Der Link konnte nicht geladen werden.",
+    "anyone": "Alle mit dem Link",
+    "anyoneHint": "Auch Personen außerhalb des Meetings können die Notizen öffnen.",
+    "linkLabel": "Link zu den Notizen",
+    "toggles": {
+      "showTranscript": {
+        "label": "Transkript anzeigen",
+        "description": "Wörtliche Beiträge der Teilnehmer."
+      },
+      "showNames": {
+        "label": "Namen der Teilnehmer anzeigen",
+        "description": "Sonst steht im Transkript „{first}“, „{second}“."
+      },
+      "allowComments": {
+        "label": "Kommentare erlauben",
+        "description": "Alle mit dem Link können antworten."
+      }
+    },
+    "expires": "Läuft ab",
+    "never": "Nie",
+    "days": "{count, plural, one {# Tag} other {# Tage}}",
+    "stopsOn": "Der Link läuft am {date} ab.",
+    "keepsWorking": "Der Link bleibt gültig.",
+    "updateFailed": "Der Link konnte nicht aktualisiert werden",
+    "turnedOff": "Link deaktiviert",
+    "turnOffFailed": "Der Link konnte nicht deaktiviert werden"
+  },
+  "page": {
+    "unavailable": "Link nicht verfügbar",
+    "eyebrow": "Geteilte Meeting-Notizen",
+    "people": "{count, plural, one {# Person} other {# Personen}}",
+    "transcript": "Transkript",
+    "done": "Erledigt",
+    "open": "Offen",
+    "speaker": "Sprecher {order, number}"
+  },
+  "gone": {
+    "title": "Dieser Link funktioniert nicht mehr",
+    "description": "Er ist möglicherweise abgelaufen oder wurde deaktiviert. Bitte die Person, die ihn dir geschickt hat, um einen neuen."
+  },
+  "comments": {
+    "title": "Kommentare",
+    "loadFailed": "Die Kommentare konnten nicht geladen werden.",
+    "comment": "Dein Kommentar",
+    "commentPlaceholder": "Antwort schreiben…",
+    "name": "Dein Name",
+    "namePlaceholder": "Optional, sonst wird „{guest}“ angezeigt",
+    "guest": "Gast",
+    "post": "Kommentar senden",
+    "postFailed": "Dein Kommentar konnte nicht gesendet werden"
+  }
+}

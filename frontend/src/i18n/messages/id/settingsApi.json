@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "Ada yang tidak benar dalam permintaan. Muat ulang halaman dan coba lagi.",
+    "nameRequired": "Masukkan nama Anda.",
+    "hotkeyUnsupported": "Pintasan tersebut tidak didukung.",
+    "modelNotOnPlan": "Model tersebut tidak termasuk dalam langganan Anda.",
+    "emailMismatch": "Email tersebut tidak cocok dengan akun Anda.",
+    "deletionUnavailable": "Penghapusan akun belum tersedia. Tidak ada yang dihapus.",
+    "avatarMissing": "Pilih gambar untuk diunggah.",
+    "avatarType": "Gunakan gambar WebP, JPEG, atau PNG.",
+    "paymentsUnavailable": "Pembayaran belum tersedia. Setelah sistem tagihan aktif, tombol ini akan membuka halaman aman milik penyedia.",
+    "checkoutUnavailable": "Pembayaran belum tersedia. Setelah sistem tagihan aktif, tombol ini akan membuka halaman pembayaran milik penyedia.",
+    "invoiceNotFound": "Faktur tidak ditemukan.",
+    "connectorNotFound": "Konektor tidak ditemukan.",
+    "authorizationExpired": "Otorisasi sudah kedaluwarsa atau sudah dipakai. Coba hubungkan lagi.",
+    "dataKindUnknown": "Jenis data tidak dikenal.",
+    "dataItemNotFound": "Item tersebut sudah tidak ada.",
+    "mcpNameRequired": "Beri nama server.",
+    "mcpNameTooLong": "Nama tersebut terlalu panjang. Gunakan nama yang lebih pendek.",
+    "mcpUrlInvalid": "Masukkan URL http(s) server.",
+    "mcpServerNotFound": "Server tidak ditemukan.",
+    "memoryNotFound": "Memori tidak ditemukan.",
+    "summaryMessageRequired": "Tulis pertanyaan atau pembaruan."
+  },
+  "avatarTooLarge": "Gambar lebih besar dari {size}.",
+  "invoice": {
+    "title": "Faktur {number}",
+    "date": "Tanggal: {date}",
+    "description": "Deskripsi: {description}",
+    "amount": "Jumlah: {amount}",
+    "status": "Status faktur: {status}",
+    "demoNote": "Faktur demo. Faktur asli berupa PDF dari sistem tagihan."
+  },
+  "notesFromYou": "Catatan dari Anda"
+}

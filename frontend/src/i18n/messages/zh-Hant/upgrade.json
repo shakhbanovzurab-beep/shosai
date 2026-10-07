@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "升級方案"
+  },
+  "title": "升級你的方案",
+  "subtitle": "免費開始使用，每月享有 {minutes, plural, other {# 分鐘會議時間}}。會議需求增加時再升級。",
+  "loading": "正在載入方案…",
+  "loadFailed": "無法載入方案",
+  "seatNote": "你在 <b>{workspace}</b> 的席位包含 {plan}，因此你自己的會議、檔案管理和 Leo 知識庫都適用該方案的上限。你的個人方案是分開計算的。",
+  "pricesNote": "價格以美元計，不含稅；Team 依使用者人數計費。付款資料只會在付款服務商的安全頁面上輸入。",
+  "audiences": {
+    "individual": "個人",
+    "team": "團隊",
+    "enterprise": "企業"
+  },
+  "seatRange": "（{min, number}–{max, number} 位使用者）",
+  "seatRangeOpen": "（{min, number} 位以上使用者）",
+  "card": {
+    "yourPlan": "你的方案",
+    "recommended": "推薦",
+    "custom": "自訂",
+    "tailored": "依你的組織量身打造",
+    "perMonth": "/ 月",
+    "perUserPerMonth": "每位使用者 / 月",
+    "billedMonthly": "按月計費，可隨時取消",
+    "freeForever": "永久免費",
+    "seatsTotal": "{seats, plural, other {# 位使用者}}每月 {total}",
+    "notIncluded": "不包含：{item}"
+  },
+  "seats": {
+    "label": "使用者",
+    "fewer": "減少使用者",
+    "more": "增加使用者"
+  },
+  "action": {
+    "current": "目前方案",
+    "upgradeTo": "升級至 {plan}",
+    "switchTo": "切換至 {plan}",
+    "upgradeFailed": "無法開始升級",
+    "switchFailed": "無法變更方案"
+  },
+  "usage": {
+    "label": "本月會議時間",
+    "title": "會議時間",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "已使用 {used, number} 分鐘，共 {limit, plural, other {# 分鐘}}",
+    "left": "剩餘 {left, number} 分鐘，共 {limit, plural, other {# 分鐘會議時間}}",
+    "allUsed": "你已用完所有會議時間",
+    "resets": "{date} 重設",
+    "leftShort": "剩餘 {left, plural, other {# 分鐘}} · {date} 重設",
+    "recordingPaused": "錄製已暫停，直到 {date}。",
+    "paused": "會議功能已暫停，直到 {date}。",
+    "pausedUpgrade": "會議功能已暫停，直到 {date}。升級至 {plan} 即可無限制開會。",
+    "getUnlimited": "取得無限制會議"
+  },
+  "gate": {
+    "checking": "正在檢查你的方案…",
+    "seePlans": "查看方案",
+    "comparePlans": "比較方案",
+    "upgradeTo": "升級至 {plan}",
+    "offer": "{plan} 包含{unlimited, select, yes {無限制儲存空間} other { {amount} 儲存空間}}。",
+    "offerPriced": "{plan} 包含{unlimited, select, yes {無限制儲存空間} other { {amount} 儲存空間}}，每月 {price}。",
+    "file_manager": {
+      "partOf": "檔案管理包含在 {plan} 中",
+      "notInPlan": "你的方案不包含檔案管理",
+      "pitch": "將檔案集中在一處、選擇 Leo 要使用哪些檔案，並在工作空間中共用。"
+    },
+    "knowledge_base": {
+      "partOf": "知識庫包含在 {plan} 中",
+      "notInPlan": "你的方案不包含知識庫",
+      "pitch": "選擇檔案並連接來源，讓 Leo 可以根據這些內容回答。"
+    }
+  },
+  "sales": {
+    "contact": "聯絡業務團隊",
+    "title": "與業務團隊洽談",
+    "description": "告訴我們你的團隊概況，我們會為你規劃 Enterprise 方案。",
+    "workEmail": "工作電子郵件",
+    "company": "公司",
+    "teamSize": "團隊規模",
+    "teamSizePlaceholder": "請選擇",
+    "teamSizeRange": "{min, number}–{max, number} 人",
+    "teamSizeOpen": "{min, number} 人以上",
+    "message": "你需要什麼？<muted>（選填）</muted>",
+    "messagePlaceholder": "SSO 服務商、安全性審查、席位數量…",
+    "send": "傳送需求",
+    "chooseTeamSize": "請選擇團隊規模。",
+    "sendFailed": "無法傳送你的需求。",
+    "sentTitle": "謝謝，我們會再與你聯絡",
+    "sentDescription": "我們的團隊通常會在一個工作天內回覆。",
+    "done": "完成"
+  }
+}

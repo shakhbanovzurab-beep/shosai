@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo está leyendo tu bandeja de entrada…",
+    "readingNew": "{count, plural, one {Leo está leyendo # correo nuevo…} many {Leo está leyendo # de correos nuevos…} other {Leo está leyendo # correos nuevos…}}",
+    "sorted": "{count, plural, one {Leo clasificó # correo} many {Leo clasificó # de correos} other {Leo clasificó # correos}}",
+    "sortedWithDrafts": "{count, plural, one {Leo clasificó # correo} many {Leo clasificó # de correos} other {Leo clasificó # correos}} · {drafts, plural, one {# respuesta en borrador} many {# de respuestas en borrador} other {# respuestas en borrador}}",
+    "sortFailed": "Leo no pudo clasificar tu bandeja de entrada"
+  },
+  "focus": {
+    "mostUrgentFirst": "Lo más urgente primero ({count, number})",
+    "setAside": "{count, plural, one {# correo más no te necesita ahora.} many {# de correos más no te necesitan ahora.} other {# correos más no te necesitan ahora.}}",
+    "setAsideLow": "{count, plural, one {# correo más no te necesita ahora} many {# de correos más no te necesitan ahora} other {# correos más no te necesitan ahora}}, {low, plural, one {# de ellos tiene prioridad baja.} many {# de ellos tienen prioridad baja.} other {# de ellos tienen prioridad baja.}}",
+    "showAll": "Mostrar todo el correo",
+    "archiveLow": "Archivar prioridad baja",
+    "caughtUpTitle": "Estás al día",
+    "caughtUpDescription": "Nada te está esperando. Leo marcará los correos nuevos que necesiten una respuesta o una decisión."
+  },
+  "triage": {
+    "needs_you": "Te necesita",
+    "fyi": "Informativo",
+    "low": "Prioridad baja"
+  },
+  "triageHint": {
+    "needs_you": "Espera tu respuesta o tu decisión",
+    "fyi": "Conviene saberlo, no hay nada que hacer",
+    "low": "Puede esperar o archivarse"
+  },
+  "triageMenu": {
+    "trigger": "Clasificado como {triage}. Cambiar la clasificación de este correo",
+    "sortedByYou": "Clasificado por ti",
+    "sortedByLeo": "Clasificado por Leo",
+    "leosPick": "Elección de Leo · {hint}"
+  },
+  "replyBy": {
+    "overdue": "Vencido",
+    "today": "Responder hoy",
+    "tomorrow": "Responder mañana",
+    "by": "Responder antes del {when}"
+  },
+  "tags": {
+    "reading": "Leo está leyendo…",
+    "replied": "Respondido",
+    "needsYou": "Te necesita",
+    "draftReady": "Borrador listo"
+  },
+  "card": {
+    "label": "Resumen de Leo",
+    "readingEmail": "Leo está leyendo este correo…",
+    "readFailed": "Leo no pudo leer este correo",
+    "readFailedHint": "Inténtalo de nuevo en un momento.",
+    "repliedAgo": "Respondido {ago}",
+    "repliedOn": "Respondido el {date}",
+    "reviewDraft": "Revisar borrador",
+    "noDraft": "Sin borrador: esta respuesta necesita tu propio criterio.",
+    "archive": "Archivar"
+  },
+  "draft": {
+    "reviewLabel": "Revisar el borrador de respuesta de Leo para {name}",
+    "drafted": "Leo redactó una respuesta",
+    "review": "Revisar",
+    "heading": "Borrador de Leo · revísalo antes de enviarlo",
+    "collapse": "Contraer borrador",
+    "field": "Responder a {name}",
+    "discard": "Descartar",
+    "send": "Enviar",
+    "discarded": "Borrador descartado"
+  }
+}

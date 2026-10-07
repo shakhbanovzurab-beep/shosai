@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "Bảng điều khiển quản trị mã nguồn mở, chỉn chu, xây dựng bằng shadcn/ui."
+  },
+  "actions": {
+    "goHome": "Về trang chủ",
+    "goBack": "Quay lại"
+  },
+  "placeholder": {
+    "title": "{title} sắp ra mắt",
+    "description": "Mục này đang được phát triển và sẽ sớm có.",
+    "badge": "Đang phát triển"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "Tất cả"
+  },
+  "emoji": {
+    "search": "Tìm biểu tượng cảm xúc",
+    "empty": "Không tìm thấy biểu tượng cảm xúc"
+  },
+  "notFound": {
+    "metaTitle": "Không tìm thấy trang",
+    "badge": "Lỗi {code}",
+    "title": "Trang này đã đi lạc",
+    "description": "Có thể liên kết bị hỏng, hoặc trang đã được chuyển đi hay gỡ bỏ. Hãy quay lại đúng hướng nhé.",
+    "popularPages": "Trang phổ biến",
+    "jumpTo": "Hoặc chuyển đến"
+  },
+  "unauthorized": {
+    "metaTitle": "Không có quyền truy cập",
+    "title": "Bạn không có quyền truy cập",
+    "description": "Bạn không có quyền xem trang này. Nếu bạn nghĩ đây là nhầm lẫn, hãy liên hệ quản trị viên."
+  }
+}

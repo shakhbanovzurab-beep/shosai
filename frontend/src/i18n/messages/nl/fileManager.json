@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Bestandsbeheer",
+    "description": "Blader door je bestanden, orden en upload ze, en kies welke Leo gebruikt.",
+    "folderTitle": "Map · Bestandsbeheer"
+  },
+  "myFiles": "Mijn bestanden",
+  "loading": "Je bestanden laden…",
+  "loadFailed": "Kan je bestanden niet laden",
+  "allFiles": {
+    "heading": "Alle bestanden",
+    "emptyTitle": "Nog geen bestanden",
+    "emptyDescription": "Upload bestanden of sleep ze hierheen. Kies daarna welke Leo mag gebruiken."
+  },
+  "folders": {
+    "heading": "Mappen",
+    "new": "Nieuwe map",
+    "untitled": "Naamloze map",
+    "emptyTitle": "Nog geen mappen",
+    "emptyDescription": "Maak een map om je bestanden te ordenen, of om Leo een hele set tegelijk te laten lezen.",
+    "fileCount": "{count, plural, one {# bestand} other {# bestanden}}",
+    "dropHere": "Loslaten om hierheen te verplaatsen",
+    "dropHereLeo": "Loslaten om hierheen te verplaatsen. Leo gaat het gebruiken.",
+    "updated": "Bijgewerkt {ago}",
+    "leoReadsAll": "Leo gebruikt alles wat hij in deze map kan lezen"
+  },
+  "folder": {
+    "notFound": "Map niet gevonden",
+    "notFoundDescription": "Misschien is hij in een andere sessie verwijderd of heeft hij een andere naam gekregen.",
+    "backToMyFiles": "Terug naar Mijn bestanden",
+    "back": "Terug",
+    "emptyTitle": "Deze map is leeg",
+    "emptyLeo": "Upload of verplaats bestanden hierheen en Leo gaat ze gebruiken.",
+    "empty": "Upload hier bestanden, sleep ze in Mijn bestanden naar deze map, of kies Verplaatsen naar in het menu van een bestand."
+  },
+  "section": {
+    "label": "Bestanden",
+    "view": "Bestandsweergave",
+    "grid": "Raster",
+    "list": "Lijst",
+    "noMatch": "Geen bestanden gevonden",
+    "noMatchDescription": "Niets hier past bij dit filter.",
+    "clearFilters": "Filters wissen"
+  },
+  "toolbar": {
+    "filterSort": "Filteren en sorteren",
+    "show": "Tonen",
+    "fileType": "Bestandstype",
+    "allTypes": "Alle typen",
+    "sortBy": "Sorteren op"
+  },
+  "show": {
+    "all": "Alle bestanden",
+    "starred": "Met ster",
+    "leo": "Gebruikt door Leo",
+    "shared": "Gedeeld in werkruimtes"
+  },
+  "sort": {
+    "modified": "Laatst gewijzigd",
+    "name": "Naam",
+    "size": "Bestandsgrootte"
+  },
+  "kinds": {
+    "archive": "Archief",
+    "design": "Ontwerp",
+    "document": "Document",
+    "image": "Afbeelding",
+    "other": "Bestand",
+    "pdf": "PDF",
+    "presentation": "Presentatie",
+    "spreadsheet": "Spreadsheet",
+    "text": "Tekst"
+  },
+  "file": {
+    "star": "Ster toevoegen aan {name}",
+    "unstar": "Ster verwijderen van {name}",
+    "modified": "Gewijzigd {ago}",
+    "inFolderModified": "<hidden>In map </hidden><name>{folder}</name> · Gewijzigd {ago}",
+    "inFolder": "<hidden>In map </hidden><name>{folder}</name>",
+    "sharedIn": "Gedeeld in {workspaces}",
+    "sharedInHidden": "<hidden>Gedeeld in </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Gewijzigd",
+    "size": "Grootte",
+    "actions": "Acties"
+  },
+  "leo": {
+    "viaFile": "Leo gebruikt dit bestand omdat jij het hebt gekozen",
+    "viaFolder": "Leo gebruikt dit bestand via de map",
+    "reading": "Leo · lezen",
+    "failed": "Leo kan het niet lezen",
+    "tooLarge": "Leo leest bestanden tot {size}",
+    "extension": "Leo kan geen .{extension}-bestanden lezen",
+    "unknownType": "Leo kan dit bestandstype niet lezen"
+  },
+  "menu": {
+    "addStar": "Ster toevoegen",
+    "removeStar": "Ster verwijderen",
+    "moveTo": "Verplaatsen naar",
+    "useWithLeo": "Gebruiken met Leo",
+    "usedThrough": "Gebruikt via ‘{folder}’",
+    "share": "Delen in een werkruimte…",
+    "sharing": "Delen in werkruimtes…",
+    "transferTo": "Overdragen aan",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Map verwijderen"
+  },
+  "dialogs": {
+    "renameFile": "Naam van bestand wijzigen",
+    "renameFolder": "Naam van map wijzigen",
+    "shareTitle": "‘{name}’ delen",
+    "shareDescription": "In de werkruimte gebruikt Leo het in zijn antwoorden voor de mensen die je kiest. Het blijft hier, blijft van jou en verdwijnt uit de werkruimte als je het verwijdert of de werkruimte verlaat.",
+    "transferTitle": "‘{name}’ overdragen aan {workspace}?",
+    "transferDescription": "Het verdwijnt uit je bestanden en wordt van {workspace}: het blijft daar als je vertrekt en de beheerders beheren het. Andere werkruimtes waarin je het hebt gedeeld, raken het kwijt. Je kunt dit niet ongedaan maken.",
+    "transfer": "Overdragen"
+  },
+  "upload": {
+    "button": "Uploaden",
+    "uploading": "{count, plural, one {# bestand uploaden…} other {# bestanden uploaden…}}",
+    "dropHere": "Loslaten om hier te uploaden",
+    "skipped": "{count, plural, one {# bestand overgeslagen} other {# bestanden overgeslagen}}",
+    "skippedDescription": "Lege bestanden en bestanden groter dan {size} worden overgeslagen, en er worden maximaal {max, number} tegelijk geüpload."
+  },
+  "picker": {
+    "search": "Je bestanden doorzoeken",
+    "noMatch": "Geen bestanden gevonden.",
+    "noFiles": "Nog geen bestanden. Upload eerst bestanden in Bestandsbeheer.",
+    "yourFiles": "Je bestanden",
+    "alreadyShared": "Hier al gedeeld"
+  }
+}

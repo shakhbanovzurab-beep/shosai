@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "上傳到 {workspace}",
+    "description": "上傳的檔案屬於 {workspace}：你離開後檔案仍會保留，並由管理員管理。如果想共用檔案又保有擁有權，請改從你的檔案共用。",
+    "dropZone": "拖放檔案以新增",
+    "drop": "將檔案拖放到這裡",
+    "choose": "選擇檔案",
+    "formats": "PDF、Word、Excel、PowerPoint、Markdown 或純文字 · 每個檔案上限 {limit}",
+    "chosen": "已選擇的檔案",
+    "removeFile": "移除 {name}",
+    "tooBig": "{count, plural, other {{names} 超過 {limit}，已略過。}}",
+    "noFiles": "請至少選擇一個檔案。",
+    "submit": "{count, plural, =0 {上傳} =1 {上傳} other {上傳 # 個檔案}}"
+  },
+  "connect": {
+    "title": "連接來源",
+    "description": "{workspace} 原本用來存放文件的共用雲端硬碟、Wiki 或網站。來源會保持同步並屬於工作空間，Leo 會為你選擇的人根據它回答。",
+    "source": "來源",
+    "link": "連結",
+    "linkHint": "要保持同步的資料夾、空間或頁面。",
+    "submit": "連接"
+  },
+  "share": {
+    "title": "從我的檔案共用",
+    "description": "Leo 會在 {workspace} 中為你選擇的人根據這些檔案回答。檔案仍在你的檔案管理中，仍屬於你，並會隨你離開。",
+    "submit": "{count, plural, =0 {共用} =1 {共用} other {共用 # 個檔案}}"
+  }
+}

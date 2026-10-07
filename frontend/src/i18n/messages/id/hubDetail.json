@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Detail",
+    "stages": "Tahap",
+    "history": "Jalannya",
+    "summaryDecided": "{rounds, plural, other {Dibahas # kali — diputuskan {date}.}}",
+    "summaryOpen": "{rounds, plural, other {Dibahas # kali — belum ada keputusan.}}",
+    "blockers": "Setiap kali kendalanya: {quotes}.",
+    "round": "Putaran {index, number}",
+    "blocker": "Yang menghambat",
+    "decision": "Keputusan",
+    "decisionChanged": "Keputusan berubah",
+    "previous": "Sebelumnya",
+    "current": "Sekarang",
+    "decidedAt": "{date}, “{meeting}”",
+    "outcome": "Hasilnya",
+    "outcomeUnknown": "hasilnya belum diketahui",
+    "links": {
+      "causes": "Menghambat",
+      "blocked_by": "Dihambat oleh",
+      "outcome_of": "Akibat dari keputusan"
+    },
+    "sources": "Sumber",
+    "dismissals": "Pengabaian",
+    "dismissedByYou": "Diabaikan oleh Anda",
+    "disproved": "Dibantah: {evidence}",
+    "dismissedUntil": "hingga {date}",
+    "returned": "waktunya habis dan ini muncul lagi",
+    "owner": "Pemilik",
+    "noOwner": "belum ditugaskan",
+    "due": "Tenggat",
+    "noDue": "tanpa tanggal",
+    "goneTitle": "Ini sudah tidak ada",
+    "goneText": "Hub mungkin telah dihapus, atau rekaman rapat telah dihapus.",
+    "loadError": "Tidak dapat memuat detail"
+  },
+  "why": {
+    "source": "Sumber",
+    "meeting": "rapat {date}, “{title}”",
+    "said": "Diucapkan oleh",
+    "moment": "Momen",
+    "jump": "Lompat ke momen",
+    "signals": {
+      "series": "Rapat dari seri ini sudah ada di sini.",
+      "subject": "Percakapannya membahas hub ini.",
+      "title": "Ada di judul rapat.",
+      "entity": "Namanya disebut dalam percakapan.",
+      "organisation": "Para pesertanya berasal dari organisasi ini.",
+      "human": "Anda sendiri yang menaruhnya di sini."
+    },
+    "loadError": "Tidak dapat memuat sumber"
+  }
+}

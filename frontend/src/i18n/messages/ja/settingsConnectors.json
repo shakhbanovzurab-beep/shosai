@@ -1,0 +1,54 @@
+{
+  "description": "アプリを接続すると、Leo がその中で検索や操作をできるようになります。各アプリでは OAuth 2.0 を使って専用のページでログインするため、Leo がパスワードを見ることはありません。",
+  "columns": {
+    "connector": "コネクタ",
+    "type": "種類",
+    "status": "ステータス"
+  },
+  "categories": {
+    "mail": "メール",
+    "files": "ファイル",
+    "notes": "ノート",
+    "communication": "コミュニケーション",
+    "tasks": "タスク",
+    "crm": "顧客管理"
+  },
+  "connect": "接続",
+  "connecting": "接続中…",
+  "connected": "接続済み",
+  "options": "{name} のオプション（接続済み）",
+  "disconnect": "接続を解除",
+  "toasts": {
+    "connected": "{name} を接続しました",
+    "notConnected": "{name} は接続されませんでした",
+    "connectFailed": "{name} を接続できませんでした",
+    "disconnected": "{name} の接続を解除しました",
+    "disconnectFailed": "{name} の接続を解除できませんでした"
+  },
+  "callback": {
+    "metaTitle": "接続中…",
+    "connected": {
+      "title": "接続済み",
+      "body": "このウィンドウを閉じて、ダッシュボードに戻ってください。"
+    },
+    "denied": {
+      "title": "アクセスが許可されませんでした",
+      "body": "何も接続されていません。このウィンドウは閉じてかまいません。"
+    },
+    "error": {
+      "title": "接続できませんでした",
+      "body": "接続中に問題が発生しました。設定からもう一度お試しください。"
+    },
+    "back": "ダッシュボードに戻る"
+  },
+  "consent": {
+    "metaTitle": "デモ認証",
+    "badge": "デモ・実際のアカウントは使用しません",
+    "title": "{app} を Leo に接続しますか？",
+    "titleUnknown": "このアプリを Leo に接続しますか？",
+    "body": "本番環境では、この画面は {app} 自身の同意画面になります。許可すると、Leo がユーザーに代わって {app} アカウントの内容を読み取り、操作できるようになります。",
+    "bodyUnknown": "本番環境では、この画面はプロバイダ自身の同意画面になります。許可すると、Leo がユーザーに代わってアカウントの内容を読み取り、操作できるようになります。",
+    "disconnectHint": "接続はいつでも「設定 › コネクタ」で解除できます。",
+    "allow": "許可"
+  }
+}

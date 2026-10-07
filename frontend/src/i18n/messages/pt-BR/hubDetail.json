@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Detalhes",
+    "stages": "Etapas",
+    "history": "Como foi",
+    "summaryDecided": "{rounds, plural, one {Discutido # vez — decidido em {date}.} many {Discutido # de vezes — decidido em {date}.} other {Discutido # vezes — decidido em {date}.}}",
+    "summaryOpen": "{rounds, plural, one {Discutido # vez — sem decisão.} many {Discutido # de vezes — sem decisão.} other {Discutido # vezes — sem decisão.}}",
+    "blockers": "Em todas as vezes foi: {quotes}.",
+    "round": "Rodada {index, number}",
+    "blocker": "O que atrapalhou",
+    "decision": "Decisão",
+    "decisionChanged": "A decisão mudou",
+    "previous": "Antes",
+    "current": "Agora",
+    "decidedAt": "{date}, “{meeting}”",
+    "outcome": "Como terminou",
+    "outcomeUnknown": "o resultado ainda não é conhecido",
+    "links": {
+      "causes": "Trava",
+      "blocked_by": "Travado por",
+      "outcome_of": "Decorre da decisão"
+    },
+    "sources": "Fontes",
+    "dismissals": "Dispensas",
+    "dismissedByYou": "Dispensado por você",
+    "disproved": "Refutado: {evidence}",
+    "dismissedUntil": "até {date}",
+    "returned": "o prazo acabou e voltou",
+    "owner": "Responsável",
+    "noOwner": "não atribuído",
+    "due": "Prazo",
+    "noDue": "sem data",
+    "goneTitle": "Isto não está mais aqui",
+    "goneText": "O hub pode ter sido excluído, ou a gravação da reunião, removida.",
+    "loadError": "Não foi possível carregar os detalhes"
+  },
+  "why": {
+    "source": "Fonte",
+    "meeting": "reunião de {date}, “{title}”",
+    "said": "Dito por",
+    "moment": "Momento",
+    "jump": "Ir para o momento",
+    "signals": {
+      "series": "Reuniões desta série já estão aqui.",
+      "subject": "A conversa foi sobre este hub.",
+      "title": "Está no título da reunião.",
+      "entity": "O nome apareceu na conversa.",
+      "organisation": "As pessoas são desta organização.",
+      "human": "Foi você que colocou aqui."
+    },
+    "loadError": "Não foi possível carregar a fonte"
+  }
+}

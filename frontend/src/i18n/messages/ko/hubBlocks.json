@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "해결되지 않은 일",
+    "empty": "걸려 있는 일이 없어요. 모두 종료됐어요",
+    "more": "{count, plural, other {덜 급한 항목 #개는 여기에 표시하지 않아요}}",
+    "why": "이유는?",
+    "done": "완료",
+    "dismiss": "해당 없음",
+    "assign": "담당자 지정",
+    "abandon": "중단",
+    "rowLabel": "{subject} — 세부 정보",
+    "doneToast": "완료로 표시했어요",
+    "dismissToast": "{days, plural, other {#일 동안 숨겼어요}}",
+    "abandonToast": "중단으로 표시했어요",
+    "assignedToast": "{owner} 님을 담당자로 지정했어요",
+    "assignTitle": "누가 맡을까요?",
+    "assignLabel": "담당자",
+    "assignPlaceholder": "이름",
+    "loadError": "해결되지 않은 일을 불러오지 못했어요"
+  },
+  "digest": {
+    "title": "지난 회의 이후",
+    "meeting": "{title}, {date}",
+    "opened": "새로 생김",
+    "closed": "종료됨",
+    "untouched": "논의 안 됨",
+    "untouchedHint": "허브의 진행을 막고 있는데 회의에서 아무도 언급하지 않았어요",
+    "loadError": "지난 회의 요약을 불러오지 못했어요"
+  },
+  "feed": {
+    "title": "여기서 있었던 일",
+    "facts": {
+      "decision": "결정 사항",
+      "promise": "약속",
+      "risk": "위험",
+      "problem": "문제",
+      "question": "미해결 질문"
+    },
+    "superseded": "대체됨",
+    "replacedBy": "{date}에 “{text}”(으)로 대체됨",
+    "jumpTo": "{moment} 지점으로 이동",
+    "earlier": "이전 회의 보기",
+    "empty": "아직 회의가 없어요. 첫 회의가 이 허브에 들어오면 바로 표시돼요.",
+    "quiet": "특별히 언급된 내용이 없어요",
+    "loadError": "여기서 있었던 일을 불러오지 못했어요"
+  },
+  "materials": {
+    "title": "자료",
+    "addLink": "링크 추가",
+    "upload": "업로드",
+    "find": "자료에서 찾기",
+    "removeLabel": "허브에서 {title} 제거",
+    "gone": "이 자료가 더 이상 없어요",
+    "origin": "{source, select, meeting {회의에서 추가 · {date}} other {직접 추가 · {date}}}",
+    "empty": "아직 자료가 없어요. 회의 요약은 자동으로 여기에 모이고, 링크나 파일은 언제든 추가할 수 있어요.",
+    "noMatches": "“{query}”와(과) 일치하는 항목이 없어요",
+    "addTitle": "링크 추가",
+    "titleLabel": "제목",
+    "urlLabel": "링크",
+    "added": "추가했어요",
+    "removed": "허브에서 제거했어요",
+    "uploadFailed": "{file}: {reason}",
+    "loadError": "자료를 불러오지 못했어요"
+  }
+}

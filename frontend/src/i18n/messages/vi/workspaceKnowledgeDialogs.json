@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "Tải lên {workspace}",
+    "description": "Tệp đã tải lên thuộc về {workspace}: tệp vẫn ở lại khi bạn rời đi và do quản trị viên quản lý. Nếu muốn chia sẻ mà vẫn giữ quyền sở hữu, hãy chia sẻ từ tệp của bạn.",
+    "dropZone": "Thả tệp để thêm",
+    "drop": "Thả tệp vào đây",
+    "choose": "Chọn tệp",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown hoặc văn bản · tối đa {limit} mỗi tệp",
+    "chosen": "Tệp đã chọn",
+    "removeFile": "Gỡ {name}",
+    "tooBig": "{count, plural, other {{names} vượt quá {limit} nên đã bị bỏ qua.}}",
+    "noFiles": "Hãy chọn ít nhất một tệp.",
+    "submit": "{count, plural, =0 {Tải lên} =1 {Tải lên} other {Tải lên # tệp}}"
+  },
+  "connect": {
+    "title": "Kết nối nguồn",
+    "description": "Ổ đĩa dùng chung, wiki hoặc trang web nơi {workspace} đang lưu tài liệu. Nguồn luôn được đồng bộ, thuộc về không gian làm việc, và Leo trả lời dựa trên nó cho những người bạn chọn.",
+    "source": "Nguồn",
+    "link": "Liên kết",
+    "linkHint": "Thư mục, không gian hoặc trang cần đồng bộ.",
+    "submit": "Kết nối"
+  },
+  "share": {
+    "title": "Chia sẻ từ tệp của tôi",
+    "description": "Leo trả lời dựa trên các tệp này trong {workspace} cho những người bạn chọn. Tệp vẫn nằm trong Trình quản lý tệp, vẫn thuộc về bạn và rời đi cùng bạn.",
+    "submit": "{count, plural, =0 {Chia sẻ} =1 {Chia sẻ} other {Chia sẻ # tệp}}"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "description": "Hubungkan aplikasi Anda agar Leo dapat mencari dan bertindak di dalamnya. Setiap aplikasi meminta Anda masuk di halamannya sendiri dengan OAuth 2.0, jadi Leo tidak pernah melihat kata sandi Anda.",
+  "columns": {
+    "connector": "Konektor",
+    "type": "Jenis",
+    "status": "Status"
+  },
+  "categories": {
+    "mail": "Email",
+    "files": "File",
+    "notes": "Catatan",
+    "communication": "Komunikasi",
+    "tasks": "Tugas",
+    "crm": "Manajemen pelanggan"
+  },
+  "connect": "Hubungkan",
+  "connecting": "Menghubungkan…",
+  "connected": "Terhubung",
+  "options": "Opsi untuk {name}, terhubung",
+  "disconnect": "Putuskan koneksi",
+  "toasts": {
+    "connected": "{name} terhubung",
+    "notConnected": "{name} tidak terhubung",
+    "connectFailed": "Tidak dapat menghubungkan {name}",
+    "disconnected": "Koneksi {name} diputuskan",
+    "disconnectFailed": "Tidak dapat memutuskan koneksi {name}"
+  },
+  "callback": {
+    "metaTitle": "Menghubungkan…",
+    "connected": {
+      "title": "Terhubung",
+      "body": "Anda dapat menutup jendela ini dan kembali ke dasbor."
+    },
+    "denied": {
+      "title": "Akses tidak diberikan",
+      "body": "Tidak ada yang dihubungkan. Anda dapat menutup jendela ini."
+    },
+    "error": {
+      "title": "Tidak dapat menghubungkan",
+      "body": "Terjadi masalah saat menghubungkan. Coba lagi dari Pengaturan."
+    },
+    "back": "Kembali ke dasbor"
+  },
+  "consent": {
+    "metaTitle": "Otorisasi demo",
+    "badge": "Demo · tidak memakai akun sungguhan",
+    "title": "Hubungkan {app} ke Leo?",
+    "titleUnknown": "Hubungkan aplikasi ini ke Leo?",
+    "body": "Dalam versi produksi, langkah ini adalah layar persetujuan milik {app} sendiri. Dengan menyetujuinya, Leo dapat membaca dan bertindak di akun {app} Anda atas nama Anda.",
+    "bodyUnknown": "Dalam versi produksi, langkah ini adalah layar persetujuan milik penyedia sendiri. Dengan menyetujuinya, Leo dapat membaca dan bertindak di akun Anda atas nama Anda.",
+    "disconnectHint": "Anda dapat memutuskan koneksi kapan saja di Pengaturan › Konektor.",
+    "allow": "Izinkan"
+  }
+}

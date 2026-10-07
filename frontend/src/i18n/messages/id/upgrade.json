@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Tingkatkan paket"
+  },
+  "title": "Tingkatkan paket Anda",
+  "subtitle": "Mulai gratis dengan {minutes, plural, other {# menit rapat}} per bulan. Tingkatkan saat rapat Anda butuh lebih.",
+  "loading": "Memuat paket…",
+  "loadFailed": "Tidak dapat memuat paket",
+  "seatNote": "Lisensi Anda di <b>{workspace}</b> mencakup {plan}, jadi rapat Anda sendiri, Pengelola file, dan pengetahuan untuk Leo mengikuti batas paket itu. Paket pribadi Anda terpisah.",
+  "pricesNote": "Harga dalam dolar AS, belum termasuk pajak; paket Team ditagih per pengguna. Detail pembayaran hanya dimasukkan di halaman aman penyedia pembayaran.",
+  "audiences": {
+    "individual": "Untuk pribadi",
+    "team": "Untuk tim",
+    "enterprise": "Untuk perusahaan"
+  },
+  "seatRange": "({min, number}–{max, number} pengguna)",
+  "seatRangeOpen": "({min, number}+ pengguna)",
+  "card": {
+    "yourPlan": "Paket Anda",
+    "recommended": "Direkomendasikan",
+    "custom": "Kustom",
+    "tailored": "Disesuaikan untuk organisasi Anda",
+    "perMonth": "/ bulan",
+    "perUserPerMonth": "per pengguna / bulan",
+    "billedMonthly": "Ditagih bulanan, batalkan kapan saja",
+    "freeForever": "Gratis selamanya",
+    "seatsTotal": "{total} / bulan untuk {seats, plural, other {# pengguna}}",
+    "notIncluded": "Tidak termasuk: {item}"
+  },
+  "seats": {
+    "label": "Pengguna",
+    "fewer": "Kurangi pengguna",
+    "more": "Tambah pengguna"
+  },
+  "action": {
+    "current": "Paket saat ini",
+    "upgradeTo": "Tingkatkan ke {plan}",
+    "switchTo": "Beralih ke {plan}",
+    "upgradeFailed": "Tidak dapat memulai peningkatan",
+    "switchFailed": "Tidak dapat mengubah paket"
+  },
+  "usage": {
+    "label": "Menit rapat bulan ini",
+    "title": "Menit rapat",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "{used, number} dari {limit, plural, other {# menit}} digunakan",
+    "left": "{left, number} dari {limit, plural, other {# menit rapat}} tersisa",
+    "allUsed": "Anda telah menggunakan semua menit rapat",
+    "resets": "Diatur ulang {date}",
+    "leftShort": "{left, plural, other {# mnt}} tersisa · diatur ulang {date}",
+    "recordingPaused": "Rekaman dijeda hingga {date}.",
+    "paused": "Rapat dijeda hingga {date}.",
+    "pausedUpgrade": "Rapat dijeda hingga {date}. Tingkatkan ke {plan} untuk rapat tanpa batas.",
+    "getUnlimited": "Dapatkan rapat tanpa batas"
+  },
+  "gate": {
+    "checking": "Memeriksa paket Anda…",
+    "seePlans": "Lihat paket",
+    "comparePlans": "Bandingkan paket",
+    "upgradeTo": "Tingkatkan ke {plan}",
+    "offer": "{plan} mencakup {unlimited, select, yes {penyimpanan tanpa batas} other {{amount}}}.",
+    "offerPriced": "{plan} mencakup {unlimited, select, yes {penyimpanan tanpa batas} other {{amount}}} seharga {price} per bulan.",
+    "file_manager": {
+      "partOf": "Pengelola file termasuk dalam {plan}",
+      "notInPlan": "Pengelola file tidak termasuk dalam paket Anda",
+      "pitch": "Simpan file Anda di satu tempat, pilih yang digunakan Leo, dan bagikan di ruang kerja."
+    },
+    "knowledge_base": {
+      "partOf": "Pengetahuan termasuk dalam {plan}",
+      "notInPlan": "Pengetahuan tidak termasuk dalam paket Anda",
+      "pitch": "Pilih file dan hubungkan sumber agar Leo dapat menjawab darinya."
+    }
+  },
+  "sales": {
+    "contact": "Hubungi tim penjualan",
+    "title": "Bicara dengan tim penjualan",
+    "description": "Ceritakan tentang tim Anda, dan kami akan menyusun paket Enterprise.",
+    "workEmail": "Email kerja",
+    "company": "Perusahaan",
+    "teamSize": "Ukuran tim",
+    "teamSizePlaceholder": "Pilih",
+    "teamSizeRange": "{min, number}–{max, number} orang",
+    "teamSizeOpen": "{min, number}+ orang",
+    "message": "Apa yang Anda butuhkan? <muted>(opsional)</muted>",
+    "messagePlaceholder": "Penyedia SSO, tinjauan keamanan, jumlah lisensi…",
+    "send": "Kirim permintaan",
+    "chooseTeamSize": "Pilih ukuran tim Anda.",
+    "sendFailed": "Tidak dapat mengirim permintaan Anda.",
+    "sentTitle": "Terima kasih — kami akan menghubungi Anda",
+    "sentDescription": "Tim kami biasanya membalas dalam satu hari kerja.",
+    "done": "Selesai"
+  }
+}

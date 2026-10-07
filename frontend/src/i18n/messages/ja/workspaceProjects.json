@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "プロジェクト",
+    "project": "プロジェクト"
+  },
+  "title": "プロジェクト",
+  "description": "プロジェクトは、ひとつの仕事に関する会議、決定事項、タスクを 1 か所にまとめます。",
+  "newProject": "新しいプロジェクト",
+  "filter": {
+    "label": "表示するプロジェクト",
+    "open": "進行中",
+    "all": "すべて"
+  },
+  "empty": {
+    "title": "プロジェクトはまだありません",
+    "text": "リリースや採用など、複数の会議にまたがる仕事のためにプロジェクトを作成してください。作成後、会議やタスクを追加できます。"
+  },
+  "status": {
+    "planned": "予定",
+    "active": "進行中",
+    "paused": "一時停止",
+    "completed": "完了"
+  },
+  "ledBy": "{who, select, me {リーダー：自分} other {リーダー：{name}}}",
+  "noLead": "リーダーなし",
+  "target": {
+    "none": "目標日なし",
+    "overdue": "期限切れ · {date}",
+    "today": "目標：今日",
+    "tomorrow": "目標：明日",
+    "on": "目標：{date}"
+  },
+  "progress": {
+    "label": "{total, plural, other {# 件中 {done, number} 件のタスクが完了}}",
+    "count": "{done, number}/{total, number}",
+    "none": "タスクなし"
+  },
+  "notFound": {
+    "title": "このプロジェクトは見つかりません",
+    "text": "削除された可能性があります。会議とタスクはワークスペースに残っています。",
+    "action": "すべてのプロジェクト"
+  },
+  "sections": {
+    "tasks": "タスク",
+    "addTask": "タスクを追加",
+    "tasksEmpty": "タスクはまだありません。タスクを追加するか、このプロジェクトに会議を共有してそのタスクを取り込んでください。",
+    "meetings": "会議",
+    "meetingsEmpty": "このプロジェクトに共有された会議がここに表示されます。",
+    "decisions": "決定事項",
+    "files": "ファイル",
+    "filesLabel": "{project} のファイル",
+    "filesEmpty": "このプロジェクトに追加したファイルがここに表示され、Leo がプロジェクトのために使います。"
+  },
+  "header": {
+    "edit": "プロジェクトを編集",
+    "delete": "プロジェクトを削除",
+    "lead": "リーダー",
+    "team": "チーム",
+    "target": "目標日",
+    "deleteTitle": "{name} を削除しますか？",
+    "deleteText": "会議、タスク、決定事項はワークスペースに残り、プロジェクトに属さなくなるだけです。"
+  },
+  "dialog": {
+    "newTitle": "新しいプロジェクト",
+    "editTitle": "{name} を編集",
+    "description": "ひとつの仕事に関する会議、決定事項、タスクをまとめる場所です。",
+    "nameRequired": "プロジェクトの名前を入力してください。",
+    "namePlaceholder": "例：モバイルアプリのベータ版",
+    "purpose": "目的",
+    "lead": "リーダー",
+    "me": "{name}（自分）",
+    "team": "チーム",
+    "wholeWorkspace": "ワークスペース全体",
+    "status": "ステータス",
+    "target": "目標日",
+    "create": "プロジェクトを作成",
+    "saved": "{name} を保存しました",
+    "created": "{name} を作成しました"
+  }
+}

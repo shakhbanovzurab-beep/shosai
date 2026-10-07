@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Улучшенные заметки",
+    "description": "Leo подбирает структуру под встречу."
+  },
+  "sections": {
+    "summary": "Сводка",
+    "keyPoints": "Ключевые моменты",
+    "decisions": "Решения",
+    "actionItems": "Задачи из встречи"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Встреча с инвестором",
+      "description": "Регулярная встреча с инвестором: как идут дела и чем он может помочь."
+    },
+    "catchUpPortfolio": {
+      "name": "Встреча с портфельной компанией",
+      "description": "Регулярная сверка с портфельной компанией: метрики, риски и запросы."
+    },
+    "lpProspective": {
+      "name": "LP: потенциальный инвестор",
+      "description": "Первые разговоры с потенциальным инвестором фонда (LP)."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: совет директоров",
+      "description": "Обсуждение на совете директоров, принятые решения и ответственные."
+    },
+    "vcPitch": {
+      "name": "VC: питч",
+      "description": "Питч основателя: что запомнилось, вердикт и что проверить."
+    },
+    "oneOnOne": {
+      "name": "1:1",
+      "description": "Встреча один на один: как дела, темы и согласованные следующие шаги."
+    },
+    "customerCall": {
+      "name": "Звонок с клиентом",
+      "description": "Знакомство или регулярная встреча с клиентом: боли, запросы и дальнейшие шаги."
+    },
+    "teamSync": {
+      "name": "Встреча команды",
+      "description": "Регулярная встреча команды: новости, решения и кто что делает."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Где мы сейчас",
+    "updatesShared": "Что рассказали",
+    "whatWeAgreed": "О чём договорились",
+    "followUps": "Что сделать после встречи",
+    "companyUpdate": "Новости компании",
+    "metricsAndHighlights": "Метрики и главное",
+    "howWeCanHelp": "Чем мы можем помочь",
+    "overview": "Обзор",
+    "theirInterests": "Их интересы",
+    "nextSteps": "Следующие шаги",
+    "boardSummary": "Итоги совета",
+    "discussion": "Обсуждение",
+    "resolutions": "Решения совета",
+    "ownersAndDeadlines": "Ответственные и сроки",
+    "thePitch": "Питч",
+    "whatStoodOut": "Что запомнилось",
+    "verdict": "Вердикт",
+    "diligenceToDos": "Что проверить",
+    "howItsGoing": "Как дела",
+    "topics": "Темы",
+    "context": "Контекст",
+    "painsAndRequests": "Боли и запросы",
+    "outcome": "Итог",
+    "updates": "Новости",
+    "decisions": "Решения",
+    "whoDoesWhat": "Кто что делает"
+  },
+  "icons": {
+    "enhanced": "Улучшенные заметки",
+    "briefcase": "Портфель",
+    "chart": "График",
+    "handshake": "Рукопожатие",
+    "landmark": "Здание с колоннами",
+    "lightbulb": "Лампочка",
+    "magnet": "Магнит",
+    "phone": "Телефон",
+    "rocket": "Ракета",
+    "calendar": "Календарь",
+    "users": "Люди"
+  },
+  "menu": {
+    "label": "Шаблон улучшенных заметок",
+    "search": "Найти шаблон…",
+    "noMatch": "Подходящих шаблонов нет.",
+    "heading": "Шаблоны",
+    "regenerate": "Составить заметки заново",
+    "newTemplate": "Новый шаблон…"
+  },
+  "rewritten": "Заметки переписаны по шаблону «{template}»",
+  "regenerated": "Улучшенные заметки составлены заново",
+  "created": "Шаблон «{template}» создан",
+  "dialog": {
+    "title": "Новый шаблон",
+    "description": "Выберите, какие разделы Leo пишет для встречи и как их назвать.",
+    "namePlaceholder": "Например, знакомство с клиентом…",
+    "nameRequired": "Дайте шаблону название.",
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Когда его использовать…",
+    "ownDescription": "Ваш собственный шаблон.",
+    "icon": "Значок",
+    "sections": "Разделы",
+    "include": "Включить раздел «{section}»",
+    "heading": "Заголовок раздела «{section}»",
+    "sectionsRequired": "Оставьте хотя бы один раздел.",
+    "create": "Создать шаблон"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "memory": "Bộ nhớ",
+  "memoryHint": "Leo ghi nhớ những thông tin hữu ích từ cuộc trò chuyện và cuộc họp của bạn để dùng trong các câu trả lời sau.",
+  "summary": {
+    "title": "Tóm tắt bộ nhớ",
+    "description": "Xem tổng quan những gì Leo đã biết về bạn. Điều gì Leo cần luôn lưu ý, hãy ghi vào <link>hướng dẫn tùy chỉnh</link>.",
+    "dialogDescription": "Những gì Leo đã biết về bạn.",
+    "updated": "Cập nhật {ago}",
+    "actions": "Thao tác với tóm tắt bộ nhớ",
+    "refresh": "Làm mới tóm tắt",
+    "refreshFailed": "Không thể làm mới",
+    "copy": "Sao chép văn bản",
+    "copied": "Đã sao chép tóm tắt",
+    "copyFailed": "Không thể sao chép",
+    "learnMore": "Tìm hiểu thêm"
+  },
+  "composer": {
+    "placeholder": "Hỏi hoặc cập nhật",
+    "label": "Hỏi về tóm tắt bộ nhớ hoặc cho Leo biết cần thay đổi gì",
+    "send": "Gửi",
+    "sendFailed": "Không thể gửi"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "प्रति यूज़र {amount}",
+    "from": "{amount} से",
+    "unlimited": "असीमित"
+  },
+  "highlights": {
+    "unlimitedMeetings": "असीमित मीटिंग",
+    "meetingMinutes": "हर महीने {minutes, plural, one {# मीटिंग मिनट} other {# मीटिंग मिनट}}",
+    "noMeetings": "मीटिंग",
+    "fileManager": "फ़ाइल मैनेजर · {storage}",
+    "noFileManager": "फ़ाइल मैनेजर",
+    "knowledge": "Leo के लिए नॉलेज · {storage}",
+    "noKnowledge": "Leo के लिए नॉलेज"
+  },
+  "capabilities": {
+    "shared_workspace": "टीम का शेयर किया गया वर्कस्पेस",
+    "member_management": "यूज़र मैनेजमेंट",
+    "centralized_billing": "एक जगह से बिलिंग",
+    "billing_and_users": "एक जगह से बिलिंग और यूज़र मैनेजमेंट",
+    "admin_controls": "एंटरप्राइज़ स्तर की सुरक्षा और एडमिन कंट्रोल",
+    "sso": "सिंगल साइन-ऑन (SSO)",
+    "priority_support": "प्राथमिकता वाली सहायता",
+    "usage_analytics": "इस्तेमाल का एनालिटिक्स"
+  },
+  "compare": {
+    "title": "प्लान की तुलना करें",
+    "feature": "फ़ीचर",
+    "included": "शामिल",
+    "notIncluded": "शामिल नहीं",
+    "unlimited": "असीमित",
+    "minutes": "{minutes, plural, one {# मिनट} other {# मिनट}} / महीना",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "कस्टम",
+    "rows": {
+      "meetings": "मीटिंग",
+      "fileManager": "फ़ाइल मैनेजर",
+      "knowledge": "Leo के लिए नॉलेज",
+      "apps": "Leo, मेल, कैलेंडर, कानबान, नोट",
+      "users": "यूज़र",
+      "sharedWorkspace": "शेयर किया गया वर्कस्पेस",
+      "billingAndUsers": "एक जगह से बिलिंग और यूज़र मैनेजमेंट",
+      "sso": "सिंगल साइन-ऑन (SSO)",
+      "adminControls": "सुरक्षा और एडमिन कंट्रोल",
+      "prioritySupport": "प्राथमिकता वाली सहायता",
+      "usageAnalytics": "इस्तेमाल का एनालिटिक्स"
+    }
+  }
+}

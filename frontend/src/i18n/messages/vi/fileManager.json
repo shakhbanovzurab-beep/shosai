@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Trình quản lý tệp",
+    "description": "Duyệt, sắp xếp và tải tệp lên, rồi chọn tệp nào Leo được dùng.",
+    "folderTitle": "Thư mục · Trình quản lý tệp"
+  },
+  "myFiles": "Tệp của tôi",
+  "loading": "Đang tải tệp của bạn…",
+  "loadFailed": "Không thể tải tệp của bạn",
+  "allFiles": {
+    "heading": "Tất cả tệp",
+    "emptyTitle": "Chưa có tệp nào",
+    "emptyDescription": "Tải tệp lên hoặc thả vào đây. Sau đó chọn tệp nào Leo được dùng."
+  },
+  "folders": {
+    "heading": "Thư mục",
+    "new": "Thư mục mới",
+    "untitled": "Thư mục chưa đặt tên",
+    "emptyTitle": "Chưa có thư mục nào",
+    "emptyDescription": "Tạo thư mục để sắp xếp tệp, hoặc để Leo đọc cả một nhóm tệp cùng lúc.",
+    "fileCount": "{count, plural, other {# tệp}}",
+    "dropHere": "Thả để chuyển vào đây",
+    "dropHereLeo": "Thả để chuyển vào đây. Leo sẽ dùng tệp này.",
+    "updated": "Cập nhật {ago}",
+    "leoReadsAll": "Leo dùng mọi thứ có thể đọc trong thư mục này"
+  },
+  "folder": {
+    "notFound": "Không tìm thấy thư mục",
+    "notFoundDescription": "Có thể thư mục đã bị xóa hoặc đổi tên trong một phiên khác.",
+    "backToMyFiles": "Quay lại Tệp của tôi",
+    "back": "Quay lại",
+    "emptyTitle": "Thư mục này trống",
+    "emptyLeo": "Tải tệp lên hoặc chuyển tệp vào đây, Leo sẽ dùng chúng.",
+    "empty": "Tải tệp lên đây, kéo tệp vào thư mục này trong Tệp của tôi, hoặc dùng Chuyển đến trong menu của tệp."
+  },
+  "section": {
+    "label": "Tệp",
+    "view": "Chế độ xem tệp",
+    "grid": "Lưới",
+    "list": "Danh sách",
+    "noMatch": "Không có tệp nào phù hợp",
+    "noMatchDescription": "Không có gì ở đây khớp với bộ lọc này.",
+    "clearFilters": "Xóa bộ lọc"
+  },
+  "toolbar": {
+    "filterSort": "Lọc và sắp xếp",
+    "show": "Hiển thị",
+    "fileType": "Loại tệp",
+    "allTypes": "Tất cả loại",
+    "sortBy": "Sắp xếp theo"
+  },
+  "show": {
+    "all": "Tất cả tệp",
+    "starred": "Có gắn dấu sao",
+    "leo": "Leo đang dùng",
+    "shared": "Đã chia sẻ trong không gian làm việc"
+  },
+  "sort": {
+    "modified": "Sửa đổi gần nhất",
+    "name": "Tên",
+    "size": "Kích thước tệp"
+  },
+  "kinds": {
+    "archive": "Tệp nén",
+    "design": "Thiết kế",
+    "document": "Tài liệu",
+    "image": "Hình ảnh",
+    "other": "Tệp",
+    "pdf": "PDF",
+    "presentation": "Bản trình bày",
+    "spreadsheet": "Bảng tính",
+    "text": "Văn bản"
+  },
+  "file": {
+    "star": "Gắn dấu sao cho {name}",
+    "unstar": "Bỏ gắn dấu sao cho {name}",
+    "modified": "Sửa đổi {ago}",
+    "inFolderModified": "<hidden>Trong thư mục </hidden><name>{folder}</name> · Sửa đổi {ago}",
+    "inFolder": "<hidden>Trong thư mục </hidden><name>{folder}</name>",
+    "sharedIn": "Đã chia sẻ trong {workspaces}",
+    "sharedInHidden": "<hidden>Đã chia sẻ trong </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Sửa đổi",
+    "size": "Kích thước",
+    "actions": "Thao tác"
+  },
+  "leo": {
+    "viaFile": "Leo dùng tệp này vì bạn đã chọn nó",
+    "viaFolder": "Leo dùng tệp này qua thư mục chứa nó",
+    "reading": "Leo · đang đọc",
+    "failed": "Leo không thể đọc tệp này",
+    "tooLarge": "Leo đọc tệp có kích thước tối đa {size}",
+    "extension": "Leo không đọc được tệp .{extension}",
+    "unknownType": "Leo không đọc được loại tệp này"
+  },
+  "menu": {
+    "addStar": "Gắn dấu sao",
+    "removeStar": "Bỏ gắn dấu sao",
+    "moveTo": "Chuyển đến",
+    "useWithLeo": "Dùng với Leo",
+    "usedThrough": "Đang dùng qua “{folder}”",
+    "share": "Chia sẻ trong không gian làm việc…",
+    "sharing": "Đang chia sẻ trong không gian làm việc…",
+    "transferTo": "Chuyển giao cho",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Xóa thư mục"
+  },
+  "dialogs": {
+    "renameFile": "Đổi tên tệp",
+    "renameFolder": "Đổi tên thư mục",
+    "shareTitle": "Chia sẻ “{name}”",
+    "shareDescription": "Leo sẽ trả lời dựa trên tệp này trong không gian làm việc cho những người bạn chọn. Tệp vẫn ở đây, vẫn thuộc về bạn, và sẽ rời không gian làm việc nếu bạn xóa tệp hoặc rời đi.",
+    "transferTitle": "Chuyển giao “{name}” cho {workspace}?",
+    "transferDescription": "Tệp sẽ rời khỏi tệp của bạn và thuộc về {workspace}: tệp vẫn ở đó khi bạn rời đi, và quản trị viên ở đó sẽ quản lý nó. Các không gian làm việc khác mà bạn đã chia sẻ sẽ mất tệp này. Bạn không thể hoàn tác thao tác này.",
+    "transfer": "Chuyển giao"
+  },
+  "upload": {
+    "button": "Tải lên",
+    "uploading": "Đang tải lên {count, plural, other {# tệp}}…",
+    "dropHere": "Thả để tải lên đây",
+    "skipped": "{count, plural, other {Đã bỏ qua # tệp}}",
+    "skippedDescription": "Tệp trống hoặc lớn hơn {size} sẽ bị bỏ qua, và mỗi lần chỉ tải lên tối đa {max, number} tệp."
+  },
+  "picker": {
+    "search": "Tìm kiếm tệp của bạn",
+    "noMatch": "Không có tệp nào phù hợp.",
+    "noFiles": "Chưa có tệp nào. Hãy tải tệp lên Trình quản lý tệp trước.",
+    "yourFiles": "Tệp của bạn",
+    "alreadyShared": "Đã chia sẻ ở đây"
+  }
+}

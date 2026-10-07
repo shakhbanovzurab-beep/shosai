@@ -1,0 +1,62 @@
+{
+  "intro": "Las instrucciones con las que tu asistente desempeña sus roles. Habilidades listas del catálogo o propias desde tu repositorio.",
+  "role": "Rol",
+  "skills": "Habilidades",
+  "search": {
+    "placeholder": "Buscar por nombre…",
+    "label": "Buscar prompts por nombre"
+  },
+  "loadFailed": "No se pudieron cargar los prompts",
+  "empty": {
+    "title": "Aún no hay prompts",
+    "description": "Crea un prompt para un rol y luego adjúntale habilidades para ampliarlo."
+  },
+  "noMatches": {
+    "title": "No hay coincidencias",
+    "description": "Prueba con otro nombre o rol."
+  },
+  "copyName": "{name} (copia)",
+  "delete": {
+    "title": "¿Eliminar «{name}»?",
+    "description": "Si algún rol lo usa, ese rol vuelve a su prompt integrado."
+  },
+  "filter": {
+    "label": "Filtrar por rol",
+    "all": "Todos",
+    "allHelp": "Todos los prompts, sea cual sea su rol."
+  },
+  "table": {
+    "number": "N.º",
+    "updated": "Actualizado",
+    "inUse": "En uso",
+    "deleteNamed": "Eliminar {name}"
+  },
+  "menu": {
+    "edit": "Editar…",
+    "stopUsing": "Dejar de usar",
+    "useFor": "Usar para {role}",
+    "duplicate": "Duplicar…",
+    "delete": "Eliminar…"
+  },
+  "editor": {
+    "editTitle": "Editar prompt",
+    "newTitle": "Nuevo prompt",
+    "description": "Instrucciones que el asistente sigue en el rol elegido, además de las habilidades.",
+    "namePlaceholder": "Versión con IA",
+    "instructions": "Instrucciones",
+    "instructionsPlaceholder": "Indica al asistente cómo comportarse en este rol. Puedes usar Markdown.",
+    "noSkills": "Aún no hay habilidades instaladas. Agrégalas con el botón Habilidades.",
+    "saveFailed": "No se pudo guardar. Sigue escribiendo y se reintentará.",
+    "savesAutomatically": "Los cambios se guardan automáticamente",
+    "done": "Listo"
+  },
+  "toasts": {
+    "deleted": "«{name}» eliminado",
+    "deleteFailed": "No se pudo eliminar el prompt",
+    "inUse": "{role} ahora usa «{name}»",
+    "backToDefault": "{role} vuelve a usar su prompt integrado",
+    "changeFailed": "No se pudo cambiar el prompt",
+    "created": "«{name}» creado",
+    "createFailed": "No se pudo crear el prompt"
+  }
+}

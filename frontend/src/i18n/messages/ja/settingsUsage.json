@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, other {{amount} トークン}}",
+  "resets": "上限は毎週リセットされます。次回のリセット：{date}。",
+  "thisWeek": "今週",
+  "tiers": {
+    "standard": {
+      "title": "標準モデル",
+      "description": "プランに含まれています。上限に達したら、週ごとのリセットをお待ちください。"
+    },
+    "frontier": {
+      "title": "最先端モデル",
+      "description": "Claude Opus、GPT Astra などの最上位モデルです。上限に達すると、追加トークンが使われます。"
+    }
+  },
+  "used": "{count, plural, other {{used} / {limit} トークン}}",
+  "usedLabel": "{tier}：今週のトークンを {percent} 使用",
+  "frontierThisWeek": "今週の最先端モデル",
+  "topUp": {
+    "title": "最先端モデル用の追加トークン",
+    "description": "今週の最先端モデルの上限に達した後に使われます。リセットされず、標準モデルには使用できません。",
+    "balance": "{count, plural, other {残り <big>{amount} トークン</big>}}",
+    "buyMore": "追加購入",
+    "buy": "トークンを購入",
+    "failed": "購入を開始できませんでした"
+  }
+}

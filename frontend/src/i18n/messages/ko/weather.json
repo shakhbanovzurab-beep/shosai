@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "맑음",
+    "partly": "구름 조금",
+    "overcast": "흐림",
+    "fog": "안개",
+    "drizzle": "이슬비",
+    "rain": "비",
+    "snow": "눈",
+    "storm": "뇌우",
+    "unknown": "알 수 없음"
+  },
+  "fallbackPlace": "모스크바",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, 최고 {high}, 최저 {low}",
+  "summaryAt": "{place} {condition}, {now}, 최고 {high}, 최저 {low}"
+}

@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Kanban",
+    "description": "Tableros para el trabajo, el hogar y todo lo demás, incluidos tableros sincronizados con Jira."
+  },
+  "loadBoardsFailed": "No se pudieron cargar tus tableros",
+  "loadBoardFailed": "No se pudo cargar el tablero",
+  "addTask": "Agregar tarea",
+  "taskCount": "{count, plural, one {# tarea} many {# de tareas} other {# tareas}}",
+  "progress": "Progreso",
+  "views": {
+    "label": "Vista",
+    "board": "Tablero",
+    "list": "Lista",
+    "table": "Tabla"
+  },
+  "toolbar": {
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "moreWaysToAdd": "Más formas de agregar tareas",
+    "importCsv": "Importar CSV",
+    "addFromTemplate": "Agregar desde plantilla",
+    "createAutomation": "Crear automatización"
+  },
+  "column": {
+    "drag": "Arrastrar la columna {column}",
+    "addTask": "Agregar tarea a {column}",
+    "empty": "No hay tareas en {column}"
+  },
+  "columnMenu": {
+    "managedInJira": "Las columnas se administran en Jira",
+    "rename": "Cambiar nombre de la columna…",
+    "sortByPriority": "Ordenar por prioridad",
+    "moveEarlier": "Mover antes",
+    "moveLater": "Mover después",
+    "clear": "Vaciar columna"
+  },
+  "taskMenu": {
+    "openInJira": "Abrir {key} en Jira",
+    "openInWorkspace": "Abrir en {workspace}",
+    "moveTo": "Mover a",
+    "moveToTop": "Mover al principio",
+    "moveToBottom": "Mover al final",
+    "delete": "Eliminar tarea"
+  },
+  "priority": {
+    "label": "Prioridad",
+    "high": "Alta",
+    "medium": "Media",
+    "low": "Baja"
+  },
+  "card": {
+    "unassigned": "Sin asignar",
+    "completed": "Completada",
+    "fromSource": "De {source}",
+    "jiraIssue": "{type} (abre Jira en una pestaña nueva)",
+    "workspaceTask": "Una tarea de este espacio de trabajo. Si la cambias aquí, también cambia allí.",
+    "insights": {
+      "attachments": "{count, plural, one {# adjunto} many {# de adjuntos} other {# adjuntos}}",
+      "comments": "{count, plural, one {# comentario} many {# de comentarios} other {# comentarios}}",
+      "documents": "{count, plural, one {# documento} many {# de documentos} other {# documentos}}"
+    }
+  },
+  "table": {
+    "task": "Tarea",
+    "status": "Estado",
+    "owner": "Propietario",
+    "label": "Etiqueta",
+    "due": "Fecha límite",
+    "actions": "Acciones",
+    "empty": "Aún no hay tareas",
+    "progressOf": "Progreso de {task}"
+  },
+  "commands": {
+    "renameTask": "Cambiar nombre de la tarea",
+    "renameColumn": "Cambiar nombre de la columna",
+    "newTaskIn": "Nueva tarea en {column}",
+    "copyTitle": "{title} (copia)",
+    "deleted": "Se eliminó «{title}»",
+    "cleared": "{count, plural, one {Se eliminó # tarea de {column}} many {Se eliminaron # de tareas de {column}} other {Se eliminaron # tareas de {column}}}",
+    "jiraLinkCopied": "Enlace a {key} copiado"
+  },
+  "errors": {
+    "addTask": "No se pudo agregar la tarea",
+    "saveChange": "No se pudo guardar el cambio",
+    "deleteTasks": "{count, plural, one {No se pudo eliminar la tarea} many {No se pudieron eliminar las tareas} other {No se pudieron eliminar las tareas}}",
+    "saveBoard": "No se pudo guardar el tablero"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "找不到這個看板。",
+  "taskNotFound": "找不到這項任務。",
+  "columnNotFound": "找不到這一欄。",
+  "boardChanged": "看板已有變更。請重新載入後再試一次。",
+  "managedInJira": "這個看板由 Jira 管理。請到 Jira 進行這項變更。",
+  "reconnectJira": "如要進行變更，請在「設定 › 連接器」中重新連接 Jira。",
+  "firstSync": "請等待與 Jira 的首次同步完成。",
+  "jiraDisconnected": "Jira 已中斷連接。請在「設定 › 連接器」中重新連接，讓這個看板保持同步。",
+  "connectJiraFirst": "請先在「設定 › 連接器」中連接 Jira。",
+  "jiraBoardUnavailable": "你的 Jira 帳號無法存取該 Jira 看板。",
+  "jiraBoardSynced": "這個 Jira 看板已經同步。",
+  "notJiraBoard": "只有與 Jira 同步的看板才能進行同步。",
+  "jiraBoardWorkspaceTasks": "Jira 看板只會顯示 Jira 議題。請改選直接在應用程式中管理的看板。",
+  "workspaceTaskCopy": "無法在這裡為工作空間任務建立副本。請改在工作空間中新增任務。",
+  "workspaceTaskDelete": "工作空間任務在工作空間中完成或改派給他人後，就會從看板上移除。",
+  "boardNameRequired": "請為看板命名。",
+  "boardNameTooLong": "名稱太長。請改用較短的名稱。",
+  "taskTitleRequired": "請為任務輸入標題。",
+  "invalidRequest": "要求內容有誤。請重新載入頁面，然後再試一次。"
+}

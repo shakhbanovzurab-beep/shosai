@@ -1,0 +1,62 @@
+{
+  "description": "Những gì cần bạn xử lý, sắp diễn ra, và tiến độ công việc của nhóm.",
+  "invitePeople": "Mời mọi người",
+  "quietStart": "Khi có cuộc họp được chia sẻ hoặc dự án bắt đầu, trang này sẽ hiện những gì cần bạn xử lý, những gì sắp diễn ra và những gì nhóm đã quyết định.",
+  "blocks": {
+    "needsYou": "Cần bạn xử lý",
+    "allTasks": "Tất cả công việc",
+    "nothingWaiting": "Không có gì đang chờ bạn ở đây. Công việc giao cho bạn sẽ hiện ở đây và trong Năng suất của bạn.",
+    "moreTasks": "{count, plural, other {Thêm # công việc}}",
+    "comingUp": "Sắp diễn ra",
+    "projects": "Dự án",
+    "allProjects": "Tất cả dự án",
+    "recentDecisions": "Quyết định gần đây",
+    "decisionLog": "Nhật ký quyết định"
+  },
+  "comingUp": {
+    "empty": "Không có cuộc họp nhóm nào sắp diễn ra.",
+    "live": "Trực tiếp",
+    "guestsPrivate": "Giữ riêng tư: có khách tham dự",
+    "private": "Ghi chú được giữ riêng tư",
+    "notesGoTo": "Ghi chú được gửi đến {audience}"
+  },
+  "decisions": {
+    "empty": "Quyết định từ các cuộc họp được chia sẻ sẽ hiện ở đây, kèm liên kết đến nơi đưa ra quyết định.",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "Không có dự án nào đang hoạt động. Hãy tạo một dự án để nhóm các cuộc họp, công việc và quyết định của nó.",
+    "ledBy": "Trưởng dự án: {name}",
+    "ledByYou": "Bạn là trưởng dự án"
+  },
+  "setup": {
+    "title": "Thiết lập không gian làm việc",
+    "progress": "Đã xong {done, number}/{total, number}. Mỗi bước giúp cuộc họp tiếp theo hữu ích hơn cho mọi người.",
+    "progressLabel": "Đã xong {done, number}/{total, number} bước thiết lập",
+    "hide": "Ẩn danh sách thiết lập",
+    "done": "Đã xong",
+    "toDo": "Cần làm",
+    "steps": {
+      "invite": {
+        "title": "Mời nhóm của bạn",
+        "description": "Thêm ít nhất hai người để cuộc họp và công việc có nơi để chuyển đến.",
+        "action": "Mời mọi người"
+      },
+      "sharing": {
+        "title": "Xác nhận cách chia sẻ cuộc họp",
+        "description": "Chọn nơi ghi chú được gửi đến sau cuộc họp. Cuộc họp có khách luôn được giữ riêng tư.",
+        "action": "Xem lại"
+      },
+      "share": {
+        "title": "Chia sẻ một cuộc họp của bạn",
+        "description": "Bản ghi của bạn nằm trong Ghi chú cho đến khi bạn chia sẻ tại đây, cùng các quyết định và công việc của nó.",
+        "action": "Chia sẻ cuộc họp"
+      },
+      "knowledge": {
+        "title": "Thêm kiến thức của nhóm",
+        "description": "Chia sẻ tệp của bạn, tải tệp mới lên hoặc kết nối một ổ đĩa dùng chung để Leo trả lời dựa trên đó.",
+        "action": "Thêm kiến thức"
+      }
+    }
+  }
+}

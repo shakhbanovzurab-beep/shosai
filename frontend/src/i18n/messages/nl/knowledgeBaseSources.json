@@ -1,0 +1,85 @@
+{
+  "loadFailed": "Kan de bronnen niet laden",
+  "loading": "Bronnen laden…",
+  "connectedCount": "{connected, number} van {total, plural, one {# bron} other {# bronnen}} gekoppeld. Nieuwe en gewijzigde inhoud wordt bij elke synchronisatie opnieuw geïndexeerd.",
+  "status": {
+    "connecting": "Koppelen",
+    "syncing": "Synchroniseren",
+    "connected": "Gekoppeld",
+    "error": "Fout"
+  },
+  "card": {
+    "items": "{count, plural, one {# item} other {# items}}",
+    "synced": "Gesynchroniseerd {ago}",
+    "syncNow": "Nu synchroniseren",
+    "syncing": "Synchroniseren…",
+    "settings": "Instellingen…",
+    "disconnect": "Ontkoppelen…",
+    "signIn": "Inloggen met {provider}",
+    "public": "Openbare pagina’s, zonder inloggen",
+    "connect": "Koppelen"
+  },
+  "dialog": {
+    "connectTitle": "{name} koppelen",
+    "settingsTitle": "Instellingen van {name}",
+    "oauthNote": "Je logt in met {provider} en geeft alleen-lezentoegang (OAuth 2.0). Daarna kom je hier terug. Op deze pagina voer je geen wachtwoorden of tokens in.",
+    "optional": "(optioneel)",
+    "saveAndSync": "Opslaan en synchroniseren",
+    "continueWith": "Doorgaan met {provider}",
+    "connect": "Koppelen",
+    "connectFailed": "Kan niet koppelen."
+  },
+  "disconnect": {
+    "title": "{name} ontkoppelen?",
+    "description": "Het synchroniseren stopt en de opgeslagen inloggegevens worden verwijderd. Inhoud die al uit deze bron is geïndexeerd, wordt uit de vectorindex gehaald.",
+    "confirm": "Ontkoppelen"
+  },
+  "toasts": {
+    "connected": "{name} gekoppeld",
+    "firstSync": "De eerste synchronisatie is gestart.",
+    "syncFailed": "Kan {name} niet synchroniseren",
+    "disconnected": "{name} ontkoppeld",
+    "disconnectFailed": "Kan {name} niet ontkoppelen"
+  },
+  "website": "Website",
+  "descriptions": {
+    "slack": "Berichten en antwoorden daarop uit openbare kanalen.",
+    "confluence": "Pagina’s en blogposts uit je spaces.",
+    "notion": "Pagina’s en databases die je bij het inloggen deelt.",
+    "obsidian": "Markdown-notities uit een vault die met GitHub wordt gesynchroniseerd.",
+    "jira": "Issues, beschrijvingen en opmerkingen.",
+    "github": "README’s, documentatie, issues en pull requests.",
+    "gitlab": "Repository’s, wiki’s, issues en merge requests.",
+    "google_drive": "Docs, Sheets, Slides en pdf’s.",
+    "sharepoint": "Bestanden en pagina’s uit Microsoft 365.",
+    "dropbox": "Bestanden en Paper-documenten uit een map.",
+    "yandex_disk": "Documenten uit een map op Yandex Disk.",
+    "website": "Pagina’s die van een site of documentatieportaal worden opgehaald."
+  },
+  "fields": {
+    "channels": "Kanalen",
+    "spaces": "Space-sleutels",
+    "repository": "Repository van de vault",
+    "branch": "Branch",
+    "jql": "JQL-filter",
+    "repositories": "Repository’s",
+    "base_url": "URL van de instance",
+    "projects": "Projecten",
+    "folder_id": "Map-ID",
+    "site_url": "SharePoint-site",
+    "path": "Mappad",
+    "start_url": "Start-URL",
+    "max_depth": "Crawldiepte",
+    "include": "Alleen paden die overeenkomen met"
+  },
+  "help": {
+    "channels": "Laat leeg voor alle openbare kanalen.",
+    "spaces": "Laat leeg voor elke space die je kunt lezen.",
+    "repositories": "Laat leeg voor elke repository waartoe je toegang geeft.",
+    "base_url": "Alleen voor een zelfbeheerde GitLab-instance.",
+    "projects": "Laat leeg voor elk project dat je kunt lezen.",
+    "folder_id": "Laat leeg om alles te indexeren wat je kunt lezen.",
+    "site_url": "Laat leeg voor je OneDrive.",
+    "max_depth": "Aantal links dat vanaf de startpagina wordt gevolgd."
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "يقرأ Leo البريد الوارد…",
+    "readingNew": "{count, plural, zero {يقرأ Leo # رسالة جديدة…} one {يقرأ Leo رسالة جديدة واحدة…} two {يقرأ Leo رسالتين جديدتين…} few {يقرأ Leo # رسائل جديدة…} many {يقرأ Leo # رسالة جديدة…} other {يقرأ Leo # رسالة جديدة…}}",
+    "sorted": "{count, plural, zero {فرز Leo # رسالة} one {فرز Leo رسالة واحدة} two {فرز Leo رسالتين} few {فرز Leo # رسائل} many {فرز Leo # رسالة} other {فرز Leo # رسالة}}",
+    "sortedWithDrafts": "{count, plural, zero {فرز Leo # رسالة} one {فرز Leo رسالة واحدة} two {فرز Leo رسالتين} few {فرز Leo # رسائل} many {فرز Leo # رسالة} other {فرز Leo # رسالة}} · {drafts, plural, zero {# مسودة رد} one {مسودة رد واحدة} two {مسودتا رد} few {# مسودات رد} many {# مسودة رد} other {# مسودة رد}}",
+    "sortFailed": "تعذر على Leo فرز البريد الوارد"
+  },
+  "focus": {
+    "mostUrgentFirst": "الأكثر إلحاحًا أولًا ({count, number})",
+    "setAside": "{count, plural, zero {# رسالة أخرى لا تحتاج إليك الآن.} one {رسالة أخرى لا تحتاج إليك الآن.} two {رسالتان أخريان لا تحتاجان إليك الآن.} few {# رسائل أخرى لا تحتاج إليك الآن.} many {# رسالة أخرى لا تحتاج إليك الآن.} other {# رسالة أخرى لا تحتاج إليك الآن.}}",
+    "setAsideLow": "{count, plural, zero {# رسالة أخرى لا تحتاج إليك الآن} one {رسالة أخرى لا تحتاج إليك الآن} two {رسالتان أخريان لا تحتاجان إليك الآن} few {# رسائل أخرى لا تحتاج إليك الآن} many {# رسالة أخرى لا تحتاج إليك الآن} other {# رسالة أخرى لا تحتاج إليك الآن}}، {low, plural, zero {منها # رسالة منخفضة الأولوية.} one {منها رسالة واحدة منخفضة الأولوية.} two {منها رسالتان منخفضتا الأولوية.} few {منها # رسائل منخفضة الأولوية.} many {منها # رسالة منخفضة الأولوية.} other {منها # رسالة منخفضة الأولوية.}}",
+    "showAll": "عرض كل البريد",
+    "archiveLow": "أرشفة الرسائل منخفضة الأولوية",
+    "caughtUpTitle": "لا شيء بانتظارك",
+    "caughtUpDescription": "لا شيء ينتظر ردك. سينبه Leo إلى الرسائل الجديدة التي تحتاج إلى رد أو قرار."
+  },
+  "triage": {
+    "needs_you": "بانتظارك",
+    "fyi": "للعلم",
+    "low": "أولوية منخفضة"
+  },
+  "triageHint": {
+    "needs_you": "بانتظار ردك أو قرارك",
+    "fyi": "مفيدة للعلم، ولا إجراء مطلوب",
+    "low": "يمكن تأجيلها أو أرشفتها"
+  },
+  "triageMenu": {
+    "trigger": "الفئة: {triage}. تغيير فئة هذه الرسالة",
+    "sortedByYou": "من اختيارك",
+    "sortedByLeo": "من اختيار Leo",
+    "leosPick": "اختيار Leo · {hint}"
+  },
+  "replyBy": {
+    "overdue": "متأخر",
+    "today": "الرد اليوم",
+    "tomorrow": "الرد غدًا",
+    "by": "الرد قبل {when}"
+  },
+  "tags": {
+    "reading": "يقرؤها Leo…",
+    "replied": "تم الرد",
+    "needsYou": "بانتظارك",
+    "draftReady": "المسودة جاهزة"
+  },
+  "card": {
+    "label": "ملخص Leo",
+    "readingEmail": "يقرأ Leo هذه الرسالة…",
+    "readFailed": "تعذر على Leo قراءة هذه الرسالة",
+    "readFailedHint": "يرجى إعادة المحاولة بعد قليل.",
+    "repliedAgo": "تم الرد {ago}",
+    "repliedOn": "تم الرد في {date}",
+    "reviewDraft": "مراجعة المسودة",
+    "noDraft": "لا توجد مسودة: هذا الرد يحتاج إلى رأيك الشخصي.",
+    "archive": "أرشفة"
+  },
+  "draft": {
+    "reviewLabel": "مراجعة مسودة رد Leo على {name}",
+    "drafted": "صاغ Leo ردًا",
+    "review": "مراجعة",
+    "heading": "مسودة Leo · يرجى المراجعة قبل الإرسال",
+    "collapse": "طي المسودة",
+    "field": "الرد على {name}",
+    "discard": "تجاهل",
+    "send": "إرسال",
+    "discarded": "تم تجاهل المسودة"
+  }
+}

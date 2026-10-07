@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "المعرفة",
+    "description": "اختيار الملفات والمصادر التي يجيب منها Leo في المساحة الشخصية."
+  },
+  "heading": "المعرفة",
+  "intro": "ما يجيب منه Leo عند سؤاله في المساحة الشخصية: الملفات المختارة من مدير الملفات، والمصادر المرتبطة، وما تشاركه مساحات العمل معك. لا يرى هذه الإجابات أحد غيرك.",
+  "tabs": {
+    "files": "الملفات",
+    "sources": "المصادر",
+    "workspaces": "من مساحات العمل"
+  },
+  "loadFailed": "تعذر تحميل الملفات",
+  "leoFolders": {
+    "heading": "المجلدات التي يقرؤها Leo",
+    "stop": "إيقاف استخدام {folder}"
+  },
+  "leoFiles": {
+    "heading": "الملفات التي يستخدمها Leo",
+    "emptyTitle": "لا يستخدم Leo أيًا من ملفاتك بعد",
+    "emptyDescription": "يمكن اختيار ملفات أو مجلدات كاملة من مدير الملفات، أو رفع ملفات جديدة أعلاه."
+  },
+  "summary": {
+    "files": "الملفات",
+    "chunks": "المقاطع",
+    "processing": "المعالجة",
+    "embeddings": "التضمينات",
+    "used": "المستخدم: {used}",
+    "usedOfLimit": "{used} من {limit} في خطتك",
+    "failedUsage": "{failed, plural, zero {متعذر: #} one {متعذر: #} two {متعذر: #} few {متعذر: #} many {متعذر: #} other {متعذر: #}} · {usage}",
+    "inIndex": "في الفهرس المتجهي",
+    "busy": "جارٍ التحليل والتضمين",
+    "caughtUp": "كل شيء محدث",
+    "dimensions": "{dimensions, number} بعدًا"
+  },
+  "dropzone": {
+    "label": "إضافة ملفات لـ Leo",
+    "title": "يمكن إفلات الملفات هنا ليستخدمها Leo",
+    "uploading": "جارٍ رفع {count, plural, zero {# ملف} one {ملف واحد} two {ملفين} few {# ملفات} many {# ملفًا} other {# ملف}}…",
+    "description": "يتم حفظها في «ملفاتي» في مدير الملفات. {types}، بحجم يصل إلى {size} لكل ملف.",
+    "choose": "الاختيار من ملفاتك",
+    "upload": "رفع ملفات جديدة",
+    "skipped": "{count, plural, zero {تم تخطي # ملف} one {تم تخطي ملف واحد} two {تم تخطي ملفين} few {تم تخطي # ملفات} many {تم تخطي # ملفًا} other {تم تخطي # ملف}}",
+    "unreadable": "{name}: لا يمكن لـ Leo قراءة هذا النوع أو هذا الحجم",
+    "tooMany": "{name}: تم تجاوز الحد الأقصى للملفات في المرة الواحدة ({max, number})"
+  },
+  "choose": {
+    "title": "الاختيار من ملفاتك",
+    "description": "يقرأ Leo ما يتم اختياره ويجيب منه في المساحة الشخصية. يشمل المجلد الملفات التي تضاف إليه لاحقًا.",
+    "folders": "مجلدات كاملة",
+    "files": "الملفات",
+    "alreadyUsed": "يستخدمه Leo بالفعل",
+    "submit": "الاستخدام مع Leo",
+    "readingOne": "يقرأه Leo الآن",
+    "readingMany": "{count, plural, zero {يقرأ Leo الآن # عنصر محدد} one {يقرأ Leo الآن عنصرًا محددًا واحدًا} two {يقرأ Leo الآن عنصرين محددين} few {يقرأ Leo الآن # عناصر محددة} many {يقرأ Leo الآن # عنصرًا محددًا} other {يقرأ Leo الآن # عنصر محدد}}",
+    "readingDescription": "سيجيب منها في المساحة الشخصية فور انتهاء الفهرسة."
+  },
+  "table": {
+    "status": "الحالة",
+    "chunks": "المقاطع",
+    "size": "الحجم",
+    "workspaces": "مساحات العمل",
+    "actions": "الإجراءات",
+    "wholeFolder": "<name>{folder}</name> · المجلد بالكامل"
+  },
+  "steps": {
+    "queued": "في قائمة الانتظار",
+    "parsing": "التحليل",
+    "chunking": "التقسيم",
+    "embedding": "التضمين",
+    "indexed": "مفهرس",
+    "failed": "تعذرت المعالجة"
+  },
+  "status": {
+    "step": "{step, number} من {total, number}",
+    "progress": "{name}: {step}، {percent}"
+  },
+  "menu": {
+    "reindex": "إعادة الفهرسة",
+    "showInFileManager": "العرض في مدير الملفات",
+    "stopFolder": "إيقاف استخدام «{folder}»",
+    "stopFile": "إيقاف الاستخدام مع Leo"
+  }
+}

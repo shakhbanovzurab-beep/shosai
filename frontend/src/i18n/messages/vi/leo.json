@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Trò chuyện với Leo",
+    "close": "Đóng cuộc trò chuyện với Leo",
+    "tooltipOpen": "Hỏi Leo",
+    "tooltipClose": "Đóng Leo"
+  },
+  "panel": {
+    "label": "Trò chuyện với Leo",
+    "subtitle": "Trợ lý AI",
+    "working": "Đang xử lý…",
+    "newChat": "Cuộc trò chuyện mới",
+    "fullScreen": "Toàn màn hình",
+    "exitFullScreen": "Thoát toàn màn hình",
+    "close": "Đóng",
+    "dropFiles": "Thả tệp vào đây để đính kèm"
+  },
+  "place": {
+    "personal": "Cá nhân",
+    "workspace": "Trong {name}",
+    "hub": "Trong {name}",
+    "scopePersonal": "Tôi làm việc với hộp thư, lịch, ghi chú, công việc của bạn và những tệp bạn đã chọn cho tôi, cùng những gì các không gian làm việc chia sẻ với bạn. Chỉ bạn thấy cuộc trò chuyện này.",
+    "scopeWorkspace": "Tôi chỉ trả lời dựa trên những gì {name} chia sẻ với bạn: các cuộc họp, quyết định, dự án và kiến thức trong đó. Cuộc trò chuyện này chỉ lưu trong {name}.",
+    "scopeHub": "Tôi chỉ trả lời dựa trên {name}: các cuộc họp, quyết định và tài liệu trong đó. Cuộc trò chuyện này chỉ lưu tại đây.",
+    "boundHub": "Chỉ trả lời về “{name}”"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {Chào buổi tối} morning {Chào buổi sáng} afternoon {Chào buổi chiều} other {Chào buổi tối}}",
+    "hi": "Chào bạn",
+    "intro": "{greeting}, tôi là Leo",
+    "howCanIHelp": "Hôm nay tôi có thể giúp gì cho bạn?",
+    "suggestionsLabel": "Gợi ý"
+  },
+  "suggestions": {
+    "default": {
+      "first": "Giúp tôi lên kế hoạch cho hôm nay",
+      "second": "Tóm tắt những việc tôi cần chú ý",
+      "third": "Bạn có thể giúp tôi những gì?"
+    },
+    "hub": {
+      "first": "Việc này đang bị vướng ở đâu?",
+      "second": "Cuộc họp gần nhất đã thay đổi những gì?",
+      "third": "Giúp tôi chuẩn bị cho cuộc họp tiếp theo"
+    },
+    "workspace": {
+      "first": "Chúng tôi đã quyết định gì về giá?",
+      "second": "Ở đây tôi có việc gì quá hạn?",
+      "third": "Tìm chính sách bảo mật của chúng tôi"
+    },
+    "productivity": {
+      "first": "Giúp tôi lên kế hoạch cho hôm nay",
+      "second": "Tôi nên tập trung vào việc gì trước?",
+      "third": "Tóm tắt tuần này của tôi"
+    },
+    "mail": {
+      "first": "Tóm tắt hộp thư đến của tôi",
+      "second": "Soạn thư nhắc lại thật lịch sự",
+      "third": "Thư nào cần xử lý gấp?"
+    },
+    "calendar": {
+      "first": "Hôm nay lịch của tôi có gì?",
+      "second": "Tìm một giờ trống trong tuần này",
+      "third": "Giúp tôi chuẩn bị cho cuộc họp tiếp theo"
+    },
+    "kanban": {
+      "first": "Công việc nào đang quá hạn?",
+      "second": "Tóm tắt bảng này",
+      "third": "Tiếp theo nên chuyển công việc nào?"
+    },
+    "meetings": {
+      "first": "Hôm nay tôi có những cuộc họp nào?",
+      "second": "Lên lịch một cuộc gọi với nhóm",
+      "third": "Giúp tôi chuẩn bị cho cuộc gọi tiếp theo"
+    },
+    "notes": {
+      "first": "Tóm tắt cuộc họp gần nhất của tôi",
+      "second": "Liệt kê việc cần làm của tôi",
+      "third": "Tuần này chúng tôi đã quyết định những gì?"
+    },
+    "fileManager": {
+      "first": "Tìm các tệp gần đây của tôi",
+      "second": "Cái gì đang chiếm nhiều dung lượng nhất?",
+      "third": "Sắp xếp lại tệp của tôi"
+    },
+    "studio": {
+      "first": "Viết một câu lệnh hệ thống",
+      "second": "So sánh các mô hình hiện có",
+      "third": "Cải thiện câu lệnh này"
+    }
+  },
+  "composer": {
+    "placeholder": "Hỏi Leo bất cứ điều gì",
+    "label": "Tin nhắn gửi Leo",
+    "attach": "Đính kèm tệp",
+    "attachLimit": "Đính kèm tối đa {max, plural, other {# tệp}}",
+    "filesToSend": "Tệp sẽ gửi",
+    "removeFile": "Gỡ {name}",
+    "disclaimer": "Leo có thể mắc lỗi. Hãy kiểm tra thông tin quan trọng.",
+    "stop": "Dừng Leo",
+    "send": "Gửi tin nhắn",
+    "startVoice": "Bật chế độ giọng nói",
+    "voiceMode": "Chế độ giọng nói"
+  },
+  "message": {
+    "copy": "Sao chép",
+    "copied": "Đã sao chép",
+    "copyFailed": "Không thể sao chép vào bảng nhớ tạm",
+    "regenerate": "Tạo lại",
+    "tryAgain": "Thử lại",
+    "replyFailed": "Leo không thể hoàn tất câu trả lời. Hãy kiểm tra kết nối và thử lại.",
+    "edit": "Chỉnh sửa",
+    "editMessage": "Chỉnh sửa tin nhắn",
+    "attachedFiles": "Tệp đính kèm"
+  },
+  "steps": {
+    "gettingStarted": "Đang bắt đầu",
+    "doneIn": "Hoàn tất trong {duration}",
+    "stoppedAfter": "Đã dừng sau {duration}",
+    "somethingWrong": "Đã xảy ra sự cố",
+    "label": "Thao tác của Leo",
+    "needsApproval": "Cần phê duyệt",
+    "detail": "“{detail}”",
+    "status": "{status, select, running {Đang thực hiện} done {Hoàn tất} error {Không thành công} stopped {Đã dừng} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "Tệp {name} quá lớn",
+    "sizeLimit": "Kích thước tệp tối đa là {size}.",
+    "tooMany": "Bạn có thể đính kèm tối đa {max, plural, other {# tệp}}."
+  },
+  "voice": {
+    "unavailable": "Chế độ giọng nói không khả dụng",
+    "listening": "Đang nghe…",
+    "thinking": "Leo đang suy nghĩ…",
+    "speaking": "Leo đang nói…",
+    "micOff": "Micrô đang tắt",
+    "turnMicOn": "Bật micrô",
+    "turnMicOff": "Tắt micrô",
+    "end": "Tắt chế độ giọng nói",
+    "micBlocked": "Quyền truy cập micrô bị chặn",
+    "micBlockedHint": "Hãy cho phép dùng micrô để nói chuyện với Leo.",
+    "needsHttps": "Chế độ giọng nói cần kết nối bảo mật (HTTPS) để dùng micrô.",
+    "unsupported": "Trình duyệt này không hỗ trợ chế độ giọng nói. Hãy thử phiên bản mới nhất của Chrome, Edge hoặc Safari."
+  }
+}

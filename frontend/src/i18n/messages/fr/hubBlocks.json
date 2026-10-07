@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "Ce qui reste en suspens",
+    "empty": "Rien n’est en suspens : tout est clos",
+    "more": "{count, plural, one {# autre sujet, moins urgent, n’est pas affiché ici} many {# d’autres sujets, moins urgents, ne sont pas affichés ici} other {# autres sujets, moins urgents, ne sont pas affichés ici}}",
+    "why": "Pourquoi ?",
+    "done": "Terminé",
+    "dismiss": "Ce n’est pas le cas",
+    "assign": "Attribuer",
+    "abandon": "Abandonné",
+    "rowLabel": "{subject} — détails",
+    "doneToast": "Marqué comme terminé",
+    "dismissToast": "{days, plural, one {Écarté pour # jour} many {Écarté pour # de jours} other {Écarté pour # jours}}",
+    "abandonToast": "Marqué comme abandonné",
+    "assignedToast": "Attribué à {owner}",
+    "assignTitle": "Qui s’en charge ?",
+    "assignLabel": "Responsable",
+    "assignPlaceholder": "Nom",
+    "loadError": "Impossible de charger ce qui reste en suspens"
+  },
+  "digest": {
+    "title": "Depuis la dernière réunion",
+    "meeting": "{title}, {date}",
+    "opened": "Nouveaux",
+    "closed": "Clos",
+    "untouched": "Non abordés",
+    "untouchedHint": "bloque le hub, et pourtant personne n’en a dit un mot pendant la réunion",
+    "loadError": "Impossible de charger le résumé de la dernière réunion"
+  },
+  "feed": {
+    "title": "Ce qui s’est passé ici",
+    "facts": {
+      "decision": "Décision",
+      "promise": "Engagement",
+      "risk": "Risque",
+      "problem": "Problème",
+      "question": "Question ouverte"
+    },
+    "superseded": "remplacé",
+    "replacedBy": "remplacé par « {text} » le {date}",
+    "jumpTo": "Aller au moment {moment}",
+    "earlier": "Afficher les réunions précédentes",
+    "empty": "Aucune réunion ici pour l’instant. Elles apparaîtront dès que la première arrivera dans ce hub.",
+    "quiet": "Rien de notable n’a été dit",
+    "loadError": "Impossible de charger ce qui s’est passé ici"
+  },
+  "materials": {
+    "title": "Ressources",
+    "addLink": "Ajouter un lien",
+    "upload": "Importer",
+    "find": "Rechercher dans les ressources",
+    "removeLabel": "Retirer {title} du hub",
+    "gone": "cette ressource n’existe plus",
+    "origin": "{source, select, meeting {issu d’une réunion · {date}} other {ajouté manuellement · {date}}}",
+    "empty": "Aucune ressource pour l’instant. Les résumés de réunion arrivent ici d’eux-mêmes ; ajoutez des liens ou des fichiers quand vous voulez.",
+    "noMatches": "Rien ne correspond à « {query} »",
+    "addTitle": "Ajouter un lien",
+    "titleLabel": "Titre",
+    "urlLabel": "Lien",
+    "added": "Ajouté",
+    "removed": "Retiré du hub",
+    "uploadFailed": "{file} : {reason}",
+    "loadError": "Impossible de charger les ressources"
+  }
+}

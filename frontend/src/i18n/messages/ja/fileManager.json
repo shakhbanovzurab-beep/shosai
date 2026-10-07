@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "ファイル管理",
+    "description": "ファイルを閲覧、整理、アップロードし、Leo が使うファイルを選べます。",
+    "folderTitle": "フォルダ · ファイル管理"
+  },
+  "myFiles": "マイファイル",
+  "loading": "ファイルを読み込み中…",
+  "loadFailed": "ファイルを読み込めませんでした",
+  "allFiles": {
+    "heading": "すべてのファイル",
+    "emptyTitle": "ファイルはまだありません",
+    "emptyDescription": "ファイルをアップロードするか、ここにドロップしてください。そのあと Leo が使えるファイルを選べます。"
+  },
+  "folders": {
+    "heading": "フォルダ",
+    "new": "新しいフォルダ",
+    "untitled": "無題のフォルダ",
+    "emptyTitle": "フォルダはまだありません",
+    "emptyDescription": "フォルダを作成すると、ファイルを整理したり、まとめて Leo に読ませたりできます。",
+    "fileCount": "{count, plural, other {# 件のファイル}}",
+    "dropHere": "ドロップしてここに移動",
+    "dropHereLeo": "ドロップしてここに移動します。Leo が使用します。",
+    "updated": "{ago} に更新",
+    "leoReadsAll": "Leo はこのフォルダ内の読み取れるファイルをすべて使用します"
+  },
+  "folder": {
+    "notFound": "フォルダが見つかりません",
+    "notFoundDescription": "別のセッションで削除されたか、名前が変更された可能性があります。",
+    "backToMyFiles": "マイファイルに戻る",
+    "back": "戻る",
+    "emptyTitle": "このフォルダは空です",
+    "emptyLeo": "ここにファイルをアップロードまたは移動すると、Leo が使用します。",
+    "empty": "ここにファイルをアップロードするか、マイファイルでこのフォルダにドラッグするか、ファイルのメニューの「移動」を使ってください。"
+  },
+  "section": {
+    "label": "ファイル",
+    "view": "ファイルの表示",
+    "grid": "グリッド",
+    "list": "リスト",
+    "noMatch": "一致するファイルはありません",
+    "noMatchDescription": "このフィルタに一致するものはありません。",
+    "clearFilters": "フィルタをクリア"
+  },
+  "toolbar": {
+    "filterSort": "フィルタと並べ替え",
+    "show": "表示",
+    "fileType": "ファイルの種類",
+    "allTypes": "すべての種類",
+    "sortBy": "並べ替え"
+  },
+  "show": {
+    "all": "すべてのファイル",
+    "starred": "スター付き",
+    "leo": "Leo が使用中",
+    "shared": "ワークスペースで共有"
+  },
+  "sort": {
+    "modified": "最終更新",
+    "name": "名前",
+    "size": "ファイルサイズ"
+  },
+  "kinds": {
+    "archive": "圧縮ファイル",
+    "design": "デザイン",
+    "document": "ドキュメント",
+    "image": "画像",
+    "other": "ファイル",
+    "pdf": "PDF",
+    "presentation": "プレゼンテーション",
+    "spreadsheet": "スプレッドシート",
+    "text": "テキスト"
+  },
+  "file": {
+    "star": "{name} にスターを付ける",
+    "unstar": "{name} のスターを外す",
+    "modified": "{ago} に更新",
+    "inFolderModified": "<hidden>フォルダ </hidden><name>{folder}</name> · {ago} に更新",
+    "inFolder": "<hidden>フォルダ </hidden><name>{folder}</name>",
+    "sharedIn": "{workspaces} で共有中",
+    "sharedInHidden": "<hidden>共有先 </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "更新日時",
+    "size": "サイズ",
+    "actions": "操作"
+  },
+  "leo": {
+    "viaFile": "このファイルは自分で選んだため Leo が使用しています",
+    "viaFolder": "このファイルはフォルダ経由で Leo が使用しています",
+    "reading": "Leo · 読み取り中",
+    "failed": "Leo はこのファイルを読み取れませんでした",
+    "tooLarge": "Leo が読み取れるのは {size} までのファイルです",
+    "extension": "Leo は .{extension} ファイルを読み取れません",
+    "unknownType": "Leo はこの種類のファイルを読み取れません"
+  },
+  "menu": {
+    "addStar": "スターを付ける",
+    "removeStar": "スターを外す",
+    "moveTo": "移動",
+    "useWithLeo": "Leo で使用",
+    "usedThrough": "「{folder}」経由で使用中",
+    "share": "ワークスペースで共有…",
+    "sharing": "ワークスペースでの共有…",
+    "transferTo": "譲渡先",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "フォルダを削除"
+  },
+  "dialogs": {
+    "renameFile": "ファイルの名前を変更",
+    "renameFolder": "フォルダの名前を変更",
+    "shareTitle": "「{name}」を共有",
+    "shareDescription": "選んだメンバーに対して、Leo がワークスペースでこのファイルをもとに回答します。ファイルはここに残り、自分のものです。削除するかワークスペースから退出すると、ワークスペースからは外れます。",
+    "transferTitle": "「{name}」を {workspace} に譲渡しますか？",
+    "transferDescription": "ファイルは自分のファイルから移動し、{workspace} のものになります。退出してもワークスペースに残り、管理者が管理します。共有していた他のワークスペースからは外れます。この操作は元に戻せません。",
+    "transfer": "譲渡"
+  },
+  "upload": {
+    "button": "アップロード",
+    "uploading": "{count, plural, other {# 件のファイルをアップロード中…}}",
+    "dropHere": "ドロップしてここにアップロード",
+    "skipped": "{count, plural, other {# 件のファイルをスキップしました}}",
+    "skippedDescription": "空のファイルや {size} を超えるファイルはスキップされます。一度にアップロードできるのは {max, number} 件までです。"
+  },
+  "picker": {
+    "search": "ファイルを検索",
+    "noMatch": "一致するファイルはありません。",
+    "noFiles": "ファイルはまだありません。まずファイル管理でアップロードしてください。",
+    "yourFiles": "自分のファイル",
+    "alreadyShared": "ここで共有済み"
+  }
+}

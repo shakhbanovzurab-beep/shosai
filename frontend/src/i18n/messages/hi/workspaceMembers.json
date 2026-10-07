@@ -1,0 +1,120 @@
+{
+  "title": "सदस्य",
+  "description": "{workspace} में सभी लोग, उनकी भूमिकाएं, और वे टीमें जिनके साथ आप शेयर करते हैं।",
+  "invitePeople": "लोगों को न्योता भेजें",
+  "adminsInvite": "सिर्फ़ एडमिन ही लोगों को न्योता भेज सकते हैं।",
+  "adminsInviteAsk": "सिर्फ़ एडमिन ही लोगों को न्योता भेज सकते हैं। {name} से कहें।",
+  "tabs": {
+    "members": "सदस्य",
+    "teams": "टीमें"
+  },
+  "search": "लोगों को खोजें",
+  "pendingInvitations": "बाकी न्योते · {count, number}",
+  "membersCount": "सदस्य · {count, number}",
+  "noMatches": "कोई मेल नहीं खाता",
+  "noMatchesHint": "कोई नाम, ईमेल या पद आज़माएं।",
+  "clearSearch": "खोज साफ़ करें",
+  "seats": {
+    "label": "सीट",
+    "taken": "{total, number} में से {taken, number} सीटें भरी हैं",
+    "breakdown": "· {members, plural, one {# सदस्य} other {# सदस्य}}",
+    "breakdownPending": "· {members, plural, one {# सदस्य} other {# सदस्य}}, {pending, plural, one {# बाकी न्योता} other {# बाकी न्योते}}",
+    "left": "{count, plural, one {# सीट बची है।} other {# सीटें बची हैं।}} बाकी न्योते स्वीकार किए जाने या वापस लिए जाने तक एक सीट रोके रखते हैं।",
+    "fullAdd": "सभी सीटें भर गई हैं। और लोगों को न्योता भेजने के लिए सीटें जोड़ें।",
+    "fullAsk": "सभी सीटें भर गई हैं। मालिक से सीटें जोड़ने को कहें।",
+    "change": "सीटें बदलें"
+  },
+  "invitation": {
+    "by": "{name} ने {ago} न्योता भेजा",
+    "byYou": "आपने {ago} न्योता भेजा",
+    "byFormerMember": "एक पूर्व सदस्य ने {ago} न्योता भेजा",
+    "resend": "फिर से भेजें",
+    "revoke": "वापस लें",
+    "revokeFor": "{email} का न्योता वापस लें"
+  },
+  "member": {
+    "you": "आप",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, one {# दिन या उससे ज़्यादा से निष्क्रिय} other {# दिन या उससे ज़्यादा से निष्क्रिय}}",
+    "roleOf": "{name} की भूमिका",
+    "remove": "वर्कस्पेस से हटाएं",
+    "removeTitle": "{name} को {workspace} से हटाएं?",
+    "removeDescription": "{name} ने अपने नोट और फ़ाइल मैनेजर से जो मीटिंग और फ़ाइलें शेयर की थीं, वे उनके साथ चली जाएंगी। टास्क बने रहेंगे, और उनके खुले टास्क किसी को असाइन नहीं रहेंगे। सीट खाली हो जाएगी।",
+    "joinedTeam": "{name} {team} में शामिल हुए",
+    "leftTeam": "{name} ने {team} छोड़ दी"
+  },
+  "teams": {
+    "new": "नई टीम",
+    "empty": "अभी तक कोई टीम नहीं है",
+    "emptyHint": "टीमें ज़रूरी नहीं हैं। इन्हें तब बनाएं जब आप मीटिंग और नॉलेज किसी ग्रुप के साथ शेयर करना चाहें, जैसे इंजीनियरिंग या सेल्स।",
+    "intro": "मीटिंग और नॉलेज एक-एक व्यक्ति के बजाय पूरी टीम के साथ शेयर करें।",
+    "deleteTitle": "{name} को मिटाएं?",
+    "deleteDescription": "इसकी मीटिंग उनमें शामिल हुए लोगों को दिखती रहेंगी, और इसके सदस्य वर्कस्पेस में बने रहेंगे। पहले टीम की नॉलेज कहीं और ले जाएं; उसे बिना किसी ऑडियंस के नहीं छोड़ा जा सकता।"
+  },
+  "team": {
+    "noDescription": "अभी तक कोई विवरण नहीं है।",
+    "edit": "टीम में बदलाव करें",
+    "delete": "टीम मिटाएं",
+    "members": "{count, plural, one {# सदस्य} other {# सदस्य}}",
+    "membersLedBy": "{count, plural, one {# सदस्य} other {# सदस्य}} · लीड: {name}",
+    "membersLedByYou": "{count, plural, one {# सदस्य} other {# सदस्य}} · लीड: आप",
+    "join": "टीम में शामिल हों",
+    "leave": "टीम छोड़ें",
+    "youJoined": "आप {team} में शामिल हो गए",
+    "youLeft": "आपने {team} छोड़ दी"
+  },
+  "teamForm": {
+    "editTitle": "{name} में बदलाव करें",
+    "description": "मीटिंग और नॉलेज एक-एक करके के बजाय पूरे ग्रुप के साथ शेयर करें।",
+    "nameRequired": "टीम को कोई नाम दें।",
+    "namePlaceholder": "जैसे डिज़ाइन",
+    "descriptionLabel": "विवरण",
+    "descriptionPlaceholder": "यह टीम किस पर काम करती है",
+    "color": "रंग",
+    "colors": {
+      "blue": "नीला",
+      "green": "हरा",
+      "amber": "अंबर",
+      "violet": "बैंगनी",
+      "rose": "गुलाबी",
+      "sky": "आसमानी"
+    },
+    "privateHint": "इसे और इसके साथ शेयर की गई चीज़ों को सिर्फ़ इसके सदस्य और एडमिन देख सकते हैं।",
+    "create": "टीम बनाएं"
+  },
+  "invite": {
+    "title": "{workspace} में लोगों को न्योता भेजें",
+    "description": "उन्हें जुड़ने के लिंक के साथ एक ईमेल मिलेगा। हर व्यक्ति एक सीट लेता है।",
+    "emails": "ईमेल पते",
+    "hint": "पतों को कॉमा या नई लाइन से अलग करें। {left, plural, one {# सीट बची है।} other {# सीटें बची हैं।}}",
+    "overSeats": "{count, plural, one {# व्यक्ति} other {# लोग}}, लेकिन {left, plural, one {सिर्फ़ # सीट बची है।} other {सिर्फ़ # सीटें बची हैं।}}",
+    "seatsAfter": "{count, plural, one {# न्योता} other {# न्योते}} · {left, plural, one {इसके बाद # सीट बचेगी।} other {इसके बाद # सीटें बचेंगी।}}",
+    "checkEmails": "{emails} जांच लें।",
+    "allExisting": "ये लोग पहले से वर्कस्पेस में हैं या इन्हें न्योता भेजा जा चुका है।",
+    "emailRequired": "कोई ईमेल पता जोड़ें।",
+    "tooMany": "{count, plural, one {एक बार में ज़्यादा से ज़्यादा # व्यक्ति को न्योता भेजें।} other {एक बार में ज़्यादा से ज़्यादा # लोगों को न्योता भेजें।}}",
+    "skipped": "पहले से शामिल हैं या न्योता भेजा जा चुका है, इसलिए छोड़ दिए गए: {emails}।",
+    "role": "भूमिका",
+    "teams": "टीमों में जोड़ें (ज़रूरी नहीं)",
+    "addSeats": "सीटें जोड़ें",
+    "send": "{count, plural, one {न्योता भेजें} other {# न्योते भेजें}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, one {{email} को न्योता भेजा गया} other {# न्योते भेजे गए}}",
+    "inviteFailed": "न्योते नहीं भेजे जा सके।",
+    "invitationRevoked": "{email} का न्योता वापस लिया गया",
+    "revokeFailed": "इसे वापस नहीं लिया जा सका",
+    "invitationResent": "{email} को न्योता फिर से भेजा गया",
+    "resendFailed": "इसे फिर से नहीं भेजा जा सका",
+    "roleChanged": "{role, select, admin {{name} अब एडमिन हैं} other {{name} अब सदस्य हैं}}",
+    "roleChangeFailed": "भूमिका नहीं बदली जा सकी",
+    "teamsUpdateFailed": "टीमें अपडेट नहीं की जा सकीं",
+    "memberRemoved": "{name} को वर्कस्पेस से हटा दिया गया",
+    "removeMemberFailed": "उन्हें नहीं हटाया जा सका",
+    "teamCreated": "{name} बनाई गई",
+    "teamSaved": "{name} सेव की गई",
+    "teamSaveFailed": "टीम सेव नहीं की जा सकी।",
+    "teamDeleted": "{name} मिटा दी गई",
+    "teamDeleteFailed": "टीम नहीं मिटाई जा सकी"
+  }
+}

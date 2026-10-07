@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "Çözülmemiş konular",
+    "empty": "Askıda bir şey yok, her şey kapandı",
+    "more": "{count, plural, one {Daha az acil # konu daha burada gösterilmiyor} other {Daha az acil # konu daha burada gösterilmiyor}}",
+    "why": "Neden?",
+    "done": "Bitti",
+    "dismiss": "Doğru değil",
+    "assign": "Ata",
+    "abandon": "Bırakıldı",
+    "rowLabel": "{subject} — ayrıntılar",
+    "doneToast": "Tamamlandı olarak işaretlendi",
+    "dismissToast": "{days, plural, one {# gün için reddedildi} other {# gün için reddedildi}}",
+    "abandonToast": "Bırakıldı olarak işaretlendi",
+    "assignedToast": "Atanan kişi: {owner}",
+    "assignTitle": "Bunu kim üstlenecek?",
+    "assignLabel": "Sahip",
+    "assignPlaceholder": "Ad",
+    "loadError": "Çözülmemiş konular yüklenemedi"
+  },
+  "digest": {
+    "title": "Son toplantıdan bu yana",
+    "meeting": "{title}, {date}",
+    "opened": "Yeni",
+    "closed": "Kapanan",
+    "untouched": "Konuşulmayan",
+    "untouchedHint": "merkezdeki işi bekletiyor, ama toplantıda kimse bu konuda tek söz etmedi",
+    "loadError": "Son toplantının özeti yüklenemedi"
+  },
+  "feed": {
+    "title": "Burada neler oldu",
+    "facts": {
+      "decision": "Karar",
+      "promise": "Söz",
+      "risk": "Risk",
+      "problem": "Sorun",
+      "question": "Açık soru"
+    },
+    "superseded": "geçersiz kaldı",
+    "replacedBy": "{date} tarihinde “{text}” ile değiştirildi",
+    "jumpTo": "{moment} anına git",
+    "earlier": "Önceki toplantıları göster",
+    "empty": "Burada henüz toplantı yok. İlk toplantı bu merkeze gelir gelmez görünecek.",
+    "quiet": "Kayda değer bir şey konuşulmadı",
+    "loadError": "Burada olanlar yüklenemedi"
+  },
+  "materials": {
+    "title": "Materyaller",
+    "addLink": "Bağlantı ekle",
+    "upload": "Dosya yükle",
+    "find": "Materyallerde ara",
+    "removeLabel": "{title} öğesini merkezden kaldır",
+    "gone": "bu materyal artık yok",
+    "origin": "{source, select, meeting {toplantıdan · {date}} other {elle eklendi · {date}}}",
+    "empty": "Henüz materyal yok. Toplantı özetleri buraya kendiliğinden gelir; bağlantı veya dosyayı istediğiniz zaman ekleyin.",
+    "noMatches": "“{query}” ile eşleşen bir şey yok",
+    "addTitle": "Bağlantı ekle",
+    "titleLabel": "Başlık",
+    "urlLabel": "Bağlantı",
+    "added": "Eklendi",
+    "removed": "Merkezden kaldırıldı",
+    "uploadFailed": "{file}: {reason}",
+    "loadError": "Materyaller yüklenemedi"
+  }
+}

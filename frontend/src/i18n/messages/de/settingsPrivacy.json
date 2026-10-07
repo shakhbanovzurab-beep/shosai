@@ -1,0 +1,49 @@
+{
+  "data": "Daten",
+  "improveModels": "Modelle verbessern helfen",
+  "improveModelsHint": "Erlaube, dass deine Chats und Meeting-Notizen zum Trainieren und Verbessern von Modellen verwendet werden. Standardmäßig aus.",
+  "shareLocation": "Ungefähren Standort teilen",
+  "shareLocationHint": "Wird für lokales Wetter und zeitbezogene Antworten genutzt. Geteilt wird nur die Region, nie dein genauer Standort.",
+  "yourData": "Deine Daten",
+  "export": "Daten exportieren",
+  "exportHint": "Lade eine Kopie deiner Einstellungen, Prompts, deines Gedächtnisses und deiner Aktivitäten herunter.",
+  "kinds": {
+    "shared_chats": {
+      "title": "Geteilte Chats",
+      "description": "Chats, die alle mit dem Link ansehen können. Wenn du das Teilen beendest, wird der Link deaktiviert.",
+      "removeItem": "Teilen von {title} beenden",
+      "removeAll": "Teilen für alle beenden",
+      "confirmAll": "Teilen für alle Chats beenden?",
+      "empty": "Keine geteilten Chats"
+    },
+    "shared_artifacts": {
+      "title": "Geteilte Artefakte",
+      "description": "Dokumente und Seiten, die du aus Chats veröffentlicht hast.",
+      "removeItem": "Teilen von {title} beenden",
+      "removeAll": "Teilen für alle beenden",
+      "confirmAll": "Teilen für alle Artefakte beenden?",
+      "empty": "Keine geteilten Artefakte"
+    },
+    "uploaded_files": {
+      "title": "Hochgeladene Dateien",
+      "description": "Dateien, die du in Chats angehängt hast. Wenn du eine löschst, wird sie auch aus diesen Chats entfernt.",
+      "removeItem": "{title} löschen",
+      "removeAll": "Alle Dateien löschen",
+      "confirmAll": "Alle Dateien löschen?",
+      "empty": "Keine hochgeladenen Dateien"
+    },
+    "feedback": {
+      "title": "Dein Feedback",
+      "description": "Bewertungen und Kommentare, die du zu den Antworten von Leo hinterlassen hast.",
+      "removeItem": "{title} löschen",
+      "removeAll": "Gesamtes Feedback löschen",
+      "confirmAll": "Gesamtes Feedback löschen?",
+      "empty": "Noch kein Feedback"
+    }
+  },
+  "nothingToManage": "Hier gibt es nichts zu verwalten.",
+  "copyLinkTo": "Link zu {title} kopieren",
+  "cantUndo": "Das kann nicht rückgängig gemacht werden.",
+  "removeFailed": "Eintrag konnte nicht entfernt werden",
+  "removeAllFailed": "Einträge konnten nicht entfernt werden"
+}

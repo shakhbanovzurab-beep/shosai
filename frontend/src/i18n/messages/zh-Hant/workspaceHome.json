@@ -1,0 +1,62 @@
+{
+  "description": "需要你處理的事、即將到來的安排，以及團隊工作的進度。",
+  "invitePeople": "邀請成員",
+  "quietStart": "共用會議或開始專案後，這個頁面會顯示需要你處理的事、即將到來的安排，以及團隊做出的決策。",
+  "blocks": {
+    "needsYou": "需要你處理",
+    "allTasks": "所有任務",
+    "nothingWaiting": "這裡目前沒有需要你處理的事。指派給你的任務會顯示在這裡和你的生產力中。",
+    "moreTasks": "{count, plural, other {還有 # 項任務}}",
+    "comingUp": "即將到來",
+    "projects": "專案",
+    "allProjects": "所有專案",
+    "recentDecisions": "最近的決策",
+    "decisionLog": "決策紀錄"
+  },
+  "comingUp": {
+    "empty": "沒有即將舉行的團隊會議。",
+    "live": "進行中",
+    "guestsPrivate": "保持私人：有訪客參加",
+    "private": "筆記保持私人",
+    "notesGoTo": "筆記會傳給 {audience}"
+  },
+  "decisions": {
+    "empty": "共用會議中的決策會顯示在這裡，並連結到做出決策的地方。",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "沒有進行中的專案。開始一個專案，把相關的會議、任務和決策集中在一起。",
+    "ledBy": "負責人：{name}",
+    "ledByYou": "由你負責"
+  },
+  "setup": {
+    "title": "設定你的工作空間",
+    "progress": "已完成 {done, number}/{total, number} 項。每完成一步，下一場會議對所有人都會更有幫助。",
+    "progressLabel": "已完成 {done, number}/{total, number} 項設定步驟",
+    "hide": "隱藏設定檢查清單",
+    "done": "已完成",
+    "toDo": "待完成",
+    "steps": {
+      "invite": {
+        "title": "邀請你的團隊",
+        "description": "至少新增兩位成員，會議和任務才有人可以接手。",
+        "action": "邀請成員"
+      },
+      "sharing": {
+        "title": "確認會議的共用方式",
+        "description": "選擇會議結束後筆記要傳給誰。無論如何，有訪客參加的會議都會保持私人。",
+        "action": "檢查"
+      },
+      "share": {
+        "title": "共用你的一場會議",
+        "description": "你的錄製內容會留在你的筆記中，直到你在這裡共用，連同其中的決策和任務。",
+        "action": "共用會議"
+      },
+      "knowledge": {
+        "title": "新增團隊知識庫",
+        "description": "共用你的檔案、上傳新檔案或連接共用雲端硬碟，讓 Leo 根據這些內容回答。",
+        "action": "新增知識庫"
+      }
+    }
+  }
+}

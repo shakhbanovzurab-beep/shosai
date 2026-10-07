@@ -1,0 +1,51 @@
+{
+  "share": "Chia sẻ",
+  "sharedIn": "Đã chia sẻ trong {workspace}",
+  "workspace": "Không gian làm việc",
+  "stopSharing": "Ngừng chia sẻ",
+  "fileShare": {
+    "title": "Chia sẻ vào không gian làm việc",
+    "description": "Leo trả lời dựa trên tệp này tại đó cho những người bạn chọn. Tệp vẫn nằm trong Trình quản lý tệp và vẫn thuộc về bạn.",
+    "access": "Ai được dùng",
+    "everyone": "Mọi người tại {workspace}",
+    "sharedOption": "{workspace} · đã chia sẻ",
+    "noWorkspace": "Bạn chưa tham gia không gian làm việc nào.",
+    "toast": "{level, select, workspace {“{file}”: mọi người tại {workspace} đều có thể dùng} other {“{file}”: {team} có thể dùng trong {workspace}}}"
+  },
+  "recordingShare": {
+    "title": "Chia sẻ vào không gian làm việc",
+    "description": "Bản ghi vẫn thuộc về bạn và vẫn nằm ở đây trong Ghi chú. Câu hỏi bạn đặt cho Leo về bản ghi vẫn được giữ riêng tư.",
+    "openIn": "Mở trong {workspace}",
+    "tabWorkspace": "Không gian làm việc",
+    "tabLink": "Liên kết",
+    "loadFailed": "Không thể tải {workspace}.",
+    "moveTo": "Chuyển sang {workspace}",
+    "audienceHint": "Tóm tắt, quyết định và công việc của cuộc họp. Người tham gia luôn xem được.",
+    "sharedElsewhere": "Cuộc họp đang được chia sẻ trong {workspace}; mỗi lúc một cuộc họp chỉ nằm trong một không gian làm việc."
+  },
+  "myTasks": {
+    "title": "Từ không gian làm việc của bạn",
+    "onKanban": "Trên Kanban của bạn",
+    "loadFailed": "Không thể tải công việc từ không gian làm việc của bạn.",
+    "empty": "Không có gì được giao cho bạn trong các không gian làm việc."
+  },
+  "actionItems": {
+    "tracked": "Được theo dõi dưới dạng công việc trong <link>{workspace}</link>; thay đổi ở đây sẽ cập nhật cả ở đó."
+  },
+  "sharedMeetings": {
+    "nav": "Đã chia sẻ với bạn",
+    "loadFailed": "Không thể tải cuộc họp đã chia sẻ.",
+    "emptyTitle": "Chưa có gì được chia sẻ với bạn ở đây",
+    "empty": "Cuộc họp mà đồng nghiệp chia sẻ với bạn, hoặc với nhóm bạn tham gia, sẽ hiện ở đây.",
+    "intro": "Đã chia sẻ với bạn trong <link>{workspace}</link>. Cuộc họp nằm ở đó; hãy mở một cuộc họp để xem ghi chú, quyết định và công việc."
+  },
+  "knowledge": {
+    "open": "Mở kiến thức",
+    "summary": "{meetings, plural, other {# cuộc họp}}, {decisions, plural, other {# quyết định}} và {projects, plural, other {# dự án}} bạn có thể mở, cùng {items, plural, other {# tệp hoặc nguồn}} bạn có thể dùng.",
+    "listLabel": "Kiến thức của {workspace}",
+    "loadFailed": "Không thể tải kiến thức từ các không gian làm việc của bạn",
+    "emptyTitle": "Chưa có không gian làm việc nào",
+    "empty": "Khi bạn tham gia một không gian làm việc, Leo cũng có thể trả lời tại đây dựa trên những gì được chia sẻ với bạn.",
+    "intro": "Leo dùng những nguồn này khi bạn hỏi trong Cá nhân, và chỉ cho riêng bạn. Mỗi câu trả lời đều cho biết đến từ không gian làm việc nào. Kiến thức của các nhóm bạn không tham gia sẽ không được dùng."
+  }
+}

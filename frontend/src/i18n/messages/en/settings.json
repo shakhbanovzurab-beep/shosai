@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "Settings",
+    "sectionsLabel": "Settings sections",
+    "autosave": "Changes save automatically."
+  },
+  "sections": {
+    "account": "Account",
+    "privacy": "Privacy",
+    "billing": "Billing",
+    "usage": "Usage",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "Memory",
+    "connectors": "Connectors",
+    "hotkeys": "Hotkeys"
+  },
+  "loadFailed": "Couldn’t load this section",
+  "manage": "Manage",
+  "saving": "Saving…",
+  "saveFailed": "Couldn’t save",
+  "profile": {
+    "title": "Profile",
+    "email": "Email",
+    "emailHint": "You sign in with this address through your provider.",
+    "fullName": "Full name",
+    "displayName": "What should Leo call you?",
+    "displayNameHint": "Used when Leo greets you and in answers.",
+    "workRole": "What best describes your work?",
+    "workRoleHint": "Leo uses it to pitch examples and terms to your field."
+  },
+  "workRoles": {
+    "product_management": "Product management",
+    "engineering": "Engineering",
+    "human_resources": "Human resources",
+    "finance": "Finance",
+    "marketing": "Marketing",
+    "sales": "Sales",
+    "operations": "Operations",
+    "data_science": "Data science",
+    "design": "Design",
+    "legal": "Legal",
+    "scientist": "Scientist",
+    "student": "Student",
+    "founder": "Founder",
+    "healthcare": "Healthcare",
+    "writer": "Writer",
+    "educator": "Educator",
+    "consultant": "Consultant",
+    "researcher": "Researcher",
+    "software_engineer": "Software engineer",
+    "other": "Other"
+  },
+  "avatar": {
+    "change": "Change profile photo",
+    "hint": "Any image works. It’s cropped square and resized for you.",
+    "upload": "Upload photo",
+    "updateFailed": "Couldn’t update your photo",
+    "removeFailed": "Couldn’t remove your photo",
+    "tooLarge": "Choose a photo under {size}.",
+    "unreadable": "This browser can’t read that image. Try a JPEG or PNG.",
+    "processFailed": "Couldn’t process the image."
+  },
+  "deleteAccount": {
+    "group": "Danger zone",
+    "title": "Delete account",
+    "description": "Permanently delete your account and everything in it: chats, notes, files, prompts and settings.",
+    "confirmTitle": "Delete your account?",
+    "confirmDescription": "This can’t be undone. Your chats, notes, files, prompts, memory and settings are deleted, and any subscription is cancelled.",
+    "confirmLabel": "Type <address>{email}</address> to confirm",
+    "deleted": "Your account was deleted",
+    "failed": "Couldn’t delete your account"
+  }
+}

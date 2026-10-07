@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, one {<b>#</b> afgeronde taak in het afgelopen jaar} other {<b>#</b> afgeronde taken in het afgelopen jaar}}",
+  "chart": {
+    "flat": "{count, plural, one {# afgeronde taak van {from} tot {to}, weergegeven als heatmap. Gebruik de pijltjestoetsen om afzonderlijke dagen te lezen.} other {# afgeronde taken van {from} tot {to}, weergegeven als heatmap. Gebruik de pijltjestoetsen om afzonderlijke dagen te lezen.}}",
+    "skyline": "{count, plural, one {# afgeronde taak van {from} tot {to}, weergegeven als 3D-skyline. Gebruik de pijltjestoetsen om afzonderlijke dagen te lezen.} other {# afgeronde taken van {from} tot {to}, weergegeven als 3D-skyline. Gebruik de pijltjestoetsen om afzonderlijke dagen te lezen.}}"
+  },
+  "day": "{count, plural, =0 {Geen afgeronde taken op {date}} one {# afgeronde taak op {date}} other {# afgeronde taken op {date}}}",
+  "tooltip": "{count, plural, =0 {<b>Geen afgeronde taken</b> op {date}} one {<b># afgeronde taak</b> op {date}} other {<b># afgeronde taken</b> op {date}}}",
+  "views": {
+    "label": "Grafiekweergave",
+    "flat": "Platte heatmap",
+    "skyline": "3D-skyline"
+  },
+  "hint": {
+    "flat": "Wijs een dag aan voor details · pijltjestoetsen om te verkennen",
+    "skyline": "Sleep om te draaien · dubbelklik om te herstellen"
+  },
+  "levels": {
+    "label": "Activiteitsniveaus",
+    "less": "Minder",
+    "more": "Meer",
+    "none": "Geen afgeronde taken",
+    "light": "Licht",
+    "moderate": "Gemiddeld",
+    "heavy": "Hoog",
+    "heaviest": "Hoogst"
+  },
+  "stats": {
+    "total": "Afgelopen jaar",
+    "busiest": "Drukste dag",
+    "longest": "Langste reeks",
+    "current": "Huidige reeks"
+  },
+  "units": {
+    "contributions": "{count, plural, one {afgeronde taak} other {afgeronde taken}}",
+    "days": "{count, plural, one {dag} other {dagen}}"
+  }
+}

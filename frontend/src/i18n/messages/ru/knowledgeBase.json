@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "База знаний",
+    "description": "Выберите файлы и источники, по которым Leo отвечает в Личном."
+  },
+  "heading": "База знаний",
+  "intro": "По чему Leo отвечает на ваши вопросы в Личном: файлы, выбранные в разделе «Файлы», подключённые источники и то, чем с вами делятся рабочие пространства. Эти ответы видите только вы.",
+  "tabs": {
+    "files": "Файлы",
+    "sources": "Источники",
+    "workspaces": "Из пространств"
+  },
+  "loadFailed": "Не удалось загрузить файлы",
+  "leoFolders": {
+    "heading": "Папки, которые читает Leo",
+    "stop": "Перестать использовать {folder}"
+  },
+  "leoFiles": {
+    "heading": "Файлы, которые использует Leo",
+    "emptyTitle": "Leo пока не использует ваши файлы",
+    "emptyDescription": "Выберите файлы или целые папки в разделе «Файлы» или загрузите новые выше."
+  },
+  "summary": {
+    "files": "Файлы",
+    "chunks": "Фрагменты",
+    "processing": "Обработка",
+    "embeddings": "Векторы",
+    "used": "Использовано: {used}",
+    "usedOfLimit": "{used} из {limit} по тарифу",
+    "failedUsage": "{failed, plural, one {# ошибка} few {# ошибки} many {# ошибок} other {# ошибки}} · {usage}",
+    "inIndex": "в векторном индексе",
+    "busy": "разбор и векторизация",
+    "caughtUp": "всё обработано",
+    "dimensions": "размерность {dimensions, number}"
+  },
+  "dropzone": {
+    "label": "Добавить файлы для Leo",
+    "title": "Перетащите сюда файлы для Leo",
+    "uploading": "Загрузка {count, plural, one {# файла} few {# файлов} many {# файлов} other {# файла}}…",
+    "description": "Они сохранятся в Моих файлах в разделе «Файлы». {types}, до {size} каждый.",
+    "choose": "Выбрать из своих файлов",
+    "upload": "Загрузить новые",
+    "skipped": "{count, plural, one {Пропущен # файл} few {Пропущено # файла} many {Пропущено # файлов} other {Пропущено # файла}}",
+    "unreadable": "{name}: Leo не может прочитать файл такого типа или размера",
+    "tooMany": "{name}: за раз можно не больше {max, number}"
+  },
+  "choose": {
+    "title": "Выбрать из своих файлов",
+    "description": "Leo прочитает выбранное и будет отвечать по нему в Личном. Если выбрать папку, в неё войдут и файлы, добавленные позже.",
+    "folders": "Целые папки",
+    "files": "Файлы",
+    "alreadyUsed": "Leo уже использует",
+    "submit": "Дать доступ Leo",
+    "readingOne": "Leo уже читает",
+    "readingMany": "Leo уже читает выбранное: {count, plural, one {# элемент} few {# элемента} many {# элементов} other {# элемента}}",
+    "readingDescription": "Когда индексация закончится, Leo будет отвечать по ним в Личном."
+  },
+  "table": {
+    "status": "Статус",
+    "chunks": "Фрагменты",
+    "size": "Размер",
+    "workspaces": "Пространства",
+    "actions": "Действия",
+    "wholeFolder": "<name>{folder}</name> · вся папка"
+  },
+  "steps": {
+    "queued": "В очереди",
+    "parsing": "Разбор",
+    "chunking": "Разбивка",
+    "embedding": "Векторизация",
+    "indexed": "Проиндексировано",
+    "failed": "Ошибка"
+  },
+  "status": {
+    "step": "{step, number} из {total, number}",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Переиндексировать",
+    "showInFileManager": "Показать в Файлах",
+    "stopFolder": "Перестать использовать «{folder}»",
+    "stopFile": "Закрыть доступ Leo"
+  }
+}

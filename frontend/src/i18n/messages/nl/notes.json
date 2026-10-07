@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Notities",
+    "description": "Getranscribeerde vergaderingen met notities, actiepunten en mindmaps."
+  },
+  "recency": {
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "thisWeek": "Deze week",
+    "earlier": "Eerder"
+  },
+  "fields": {
+    "meeting": "Vergadering",
+    "folder": "Map",
+    "people": "Personen",
+    "participants": "Deelnemers",
+    "duration": "Duur",
+    "date": "Datum"
+  },
+  "views": {
+    "label": "Weergave",
+    "timeline": "Tijdlijn",
+    "grid": "Raster",
+    "list": "Lijst"
+  },
+  "upload": {
+    "button": "Opname uploaden",
+    "hint": "Of zet een bestand ergens op de pagina neer",
+    "dropTitle": "Laat opnames los om te uploaden",
+    "dropHint": "mp3, m4a, wav, mp4, webm en meer · tot {size}",
+    "notMedia": "{name} is geen audio- of videobestand",
+    "tooLarge": "{name} is te groot",
+    "sizeLimit": "Opnames mogen maximaal {size} zijn."
+  },
+  "recordings": {
+    "uploading": "Uploaden",
+    "justNow": "Zojuist",
+    "transcribing": "Transcriberen",
+    "transcribingNow": "Transcriberen…",
+    "waiting": "Wachten op transcriptie…",
+    "timelineStatus": "Transcriberen… Notities, besluiten en een mindmap verschijnen hier zodra het klaar is."
+  },
+  "remove": "{name} verwijderen",
+  "folders": {
+    "label": "Mappen",
+    "all": "Alle vergaderingen",
+    "new": "Nieuwe map",
+    "newMenu": "Nieuwe map…",
+    "newNamed": "Nieuwe map ‘{name}’",
+    "defaultName": "Nieuwe map",
+    "nameLabel": "Mapnaam",
+    "none": "Geen map",
+    "add": "Aan map toevoegen",
+    "moveTo": "Naar map verplaatsen",
+    "search": "Mappen zoeken…",
+    "noMatch": "Geen mappen gevonden.",
+    "movedTo": "Verplaatst naar {folder}",
+    "removedFrom": "Uit map verwijderd",
+    "emptyTitle": "Deze map is leeg",
+    "emptyDescription": "Klik met de rechtermuisknop op een vergadering en kies ‘{action}’ om die hier toe te voegen."
+  },
+  "card": {
+    "latest": "Laatste vergadering",
+    "keyPoints": "Kernpunten",
+    "openNotes": "Notities openen",
+    "openItems": "{count, plural, one {# openstaand} other {# openstaand}}"
+  },
+  "timeline": {
+    "decision": "Besluit:",
+    "openTasks": "{count, plural, one {# openstaande taak} other {# openstaande taken}}"
+  },
+  "menu": {
+    "openInNewTab": "Openen in nieuw tabblad",
+    "exportTranscript": "Transcriptie exporteren"
+  },
+  "exportFormats": {
+    "txt": "Platte tekst",
+    "md": "Markdown",
+    "srt": "SubRip-ondertitels",
+    "vtt": "WebVTT-ondertitels",
+    "json": "JSON-bestand"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "‘{title}’ verwijderd"
+}

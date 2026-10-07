@@ -1,0 +1,12 @@
+{
+  "notMultipart": "يرجى إرسال الرسالة بتنسيق multipart/form-data.",
+  "emptyMessage": "يرجى كتابة رسالة أو إرفاق ملف.",
+  "messageTooLong": "يجب ألا يتجاوز عدد أحرف الرسالة {max, number}.",
+  "tooManyFiles": "{max, plural, zero {يمكن إرفاق # ملف كحد أقصى.} one {يمكن إرفاق ملف واحد كحد أقصى.} two {يمكن إرفاق ملفين كحد أقصى.} few {يمكن إرفاق # ملفات كحد أقصى.} many {يمكن إرفاق # ملفًا كحد أقصى.} other {يمكن إرفاق # ملف كحد أقصى.}}",
+  "fileTooBig": "حجم {name} أكبر من {size}.",
+  "subjectRequired": "يرجى إدخال موضوع قصير لطلب الدعم.",
+  "topicRequired": "يرجى اختيار فئة.",
+  "detailsRequired": "يرجى وصف ما حدث.",
+  "ticketNotFound": "طلب الدعم غير موجود.",
+  "invalidUpdate": "يرجى إرسال حالة أو تقييم أو علامة عدم القراءة."
+}

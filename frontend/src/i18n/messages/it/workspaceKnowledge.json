@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Conoscenza dello spazio di lavoro"
+  },
+  "title": "Conoscenza",
+  "description": "Ciò che Leo sa in {workspace}. Risponde a ogni persona solo in base a ciò che può usare: la conoscenza aperta a tutti e quella dei suoi team.",
+  "search": {
+    "placeholder": "Cerca per nome",
+    "label": "Cerca nella conoscenza"
+  },
+  "loadFailed": "Impossibile caricare la conoscenza dello spazio di lavoro",
+  "loading": "Caricamento della conoscenza",
+  "alwaysIncluded": {
+    "text": "Leo risponde anche in base alle riunioni, alle decisioni e ai progetti che ogni persona può aprire qui. Nessuno deve aggiungerli.",
+    "label": "Sempre inclusi",
+    "meetings": "{count, plural, one {# riunione} many {# di riunioni} other {# riunioni}}",
+    "meetingsLoading": "Riunioni",
+    "decisions": "{count, plural, one {# decisione} many {# di decisioni} other {# decisioni}}",
+    "decisionsLoading": "Decisioni",
+    "projects": "{count, plural, one {# progetto} many {# di progetti} other {# progetti}}"
+  },
+  "empty": {
+    "title": "Ancora nessun file o fonte",
+    "text": "Condividi i tuoi file (restano tuoi), carica file che appartengono a {workspace} o collega un drive condiviso o una wiki. Leo li usa per rispondere a chi può usarli."
+  },
+  "noMatch": {
+    "title": "Nessun risultato",
+    "text": "Prova con un altro nome o un altro team.",
+    "clear": "Rimuovi i filtri"
+  },
+  "sections": {
+    "files": "File · {count, number}",
+    "filesLabel": "File",
+    "noFilesMatch": "Nessun file corrispondente.",
+    "sources": "Fonti collegate · {count, number}",
+    "sourcesLabel": "Fonti collegate",
+    "sourcesEmptyAdmin": "Collega il drive o la wiki che il tuo team usa già, e Leo resterà aggiornato.",
+    "sourcesEmpty": "Gli amministratori possono collegare il drive o la wiki che il tuo team usa già."
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "Documento",
+    "text": "Testo",
+    "sheet": "Foglio di calcolo",
+    "slides": "Presentazione",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "Sito web"
+  },
+  "status": {
+    "syncing": "Sincronizzazione…",
+    "indexing": "Indicizzazione…",
+    "failed": "Impossibile leggere"
+  },
+  "pages": "{count, plural, one {# pagina} many {# di pagine} other {# pagine}}",
+  "origin": {
+    "personal": "{who, select, me {Il tuo file, condiviso} former {File di un ex membro, condiviso} other {File di {name}, condiviso}}",
+    "connector": "{who, select, me {Collegato da te} former {Collegato da un ex membro} other {Collegato da {name}}}",
+    "upload": "{who, select, me {Appartiene a {workspace} · aggiunto da te} former {Appartiene a {workspace} · aggiunto da un ex membro} other {Appartiene a {workspace} · aggiunto da {name}}}"
+  },
+  "added": "{days, plural, =0 {Oggi} =1 {Ieri} one {# giorno fa} many {# di giorni fa} other {# giorni fa}}",
+  "leaves": "{who, select, me {Se ne va con te, a meno che non lo trasferisci allo spazio di lavoro dalla tua Gestione file} former {Se ne va con il proprietario, a meno che non lo trasferisca allo spazio di lavoro} other {Se ne va con {name}, a meno che non lo trasferisca allo spazio di lavoro}}",
+  "access": {
+    "label": "Chi può usarlo",
+    "hint": "Leo lo usa per rispondere solo a loro. Puoi cambiarlo in seguito.",
+    "everyone": "Tutti in {workspace}",
+    "someTeam": "Un team"
+  },
+  "menu": {
+    "openIn": "Apri in {provider}",
+    "project": "Progetto",
+    "noProject": "Nessun progetto"
+  },
+  "remove": {
+    "stopSharing": "Interrompi condivisione",
+    "stopSharingTitle": "Interrompere la condivisione di {name}?",
+    "stopSharingText": "{who, select, me {Leo smette di usarlo per rispondere in {workspace}. Resta nella tua Gestione file.} former {Leo smette di usarlo per rispondere in {workspace}. Resta nella Gestione file del proprietario.} other {Leo smette di usarlo per rispondere in {workspace}. Resta nella Gestione file di {name}.}}",
+    "disconnect": "Scollega",
+    "disconnectTitle": "Scollegare {name}?",
+    "disconnectText": "La sincronizzazione si interrompe e Leo smette di usarlo per rispondere. In {provider} non cambia nulla.",
+    "removeTitle": "Rimuovere {name}?",
+    "removeText": "Viene eliminato da {workspace} e Leo smette di usarlo per rispondere a tutti."
+  },
+  "changed": {
+    "everyone": "Ora tutti in {workspace} possono usarlo",
+    "team": "Ora {team} può usarlo",
+    "addedToProject": "Aggiunto a {project}",
+    "noProject": "Ora non fa parte di nessun progetto"
+  },
+  "addMenu": {
+    "addFile": "Aggiungi file",
+    "addKnowledge": "Aggiungi conoscenza",
+    "share": "Condividi dai miei file",
+    "shareHint": "Resta tuo, se ne va con te",
+    "upload": "Carica in {workspace}",
+    "uploadHint": "Appartiene allo spazio di lavoro",
+    "connect": "Collega una fonte",
+    "connectHint": "Drive, Notion, Confluence o un sito"
+  }
+}

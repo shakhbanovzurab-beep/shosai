@@ -1,0 +1,74 @@
+{
+  "back": "所有筆記",
+  "notFound": "找不到筆記",
+  "participants": {
+    "count": "{count, plural, other {# 位參與者}}",
+    "inMeeting": "{count, plural, other {這場會議有 # 位參與者。}}",
+    "you": "{name}（你）",
+    "added": "已將 {email} 加入會議",
+    "addPlaceholder": "輸入電子郵件以新增…",
+    "addLabel": "以電子郵件新增參與者",
+    "invalid": "請輸入電子郵件地址，例如 name@company.com。",
+    "duplicate": "這位參與者已在這場會議中。"
+  },
+  "tabs": {
+    "notes": "筆記",
+    "enhanced": "強化版",
+    "transcript": "逐字稿",
+    "mindMap": "心智圖"
+  },
+  "enhanced": {
+    "writtenBy": "由 Leo 根據會議逐字稿和你的筆記撰寫。",
+    "writtenByTemplate": "由 Leo 根據會議逐字稿和你的筆記撰寫，採用「{template}」版面。",
+    "writing": "正在撰寫強化版筆記…",
+    "nothingFor": "這場會議沒有符合「{template}」各區段的內容。"
+  },
+  "export": {
+    "button": "匯出",
+    "transcriptAs": "逐字稿格式"
+  },
+  "myNotes": {
+    "loadFailed": "無法載入你的筆記",
+    "saveFailed": "無法儲存你的筆記"
+  },
+  "editor": {
+    "placeholder": "撰寫筆記…",
+    "label": "你的筆記",
+    "toolbar": "格式",
+    "addLink": "新增連結",
+    "removeLink": "移除連結",
+    "bold": "粗體",
+    "italic": "斜體",
+    "linkPlaceholder": "貼上連結…",
+    "linkAddress": "連結網址",
+    "link": "連結",
+    "turnInto": "轉換為",
+    "blocks": {
+      "text": "文字",
+      "h1": "標題 1",
+      "h2": "標題 2",
+      "h3": "標題 3",
+      "ordered": "編號清單",
+      "bullet": "項目符號清單"
+    }
+  },
+  "transcript": {
+    "label": "逐字稿",
+    "search": "搜尋逐字稿",
+    "searchPlaceholder": "搜尋逐字稿…",
+    "matches": "{count, plural, =0 {沒有相符的結果} other {# 個相符結果}}",
+    "position": "第 {current, number} 個，共 {total, number} 個",
+    "previous": "上一個相符結果",
+    "next": "下一個相符結果",
+    "clear": "清除搜尋"
+  },
+  "speakers": {
+    "title": "發言者",
+    "share": "{speaker}：佔發言時間的 {share}",
+    "lines": "{count, plural, other {# 段發言}}"
+  },
+  "mindMap": {
+    "title": "心智圖：{topic}",
+    "caption": "根據會議逐字稿產生。"
+  }
+}

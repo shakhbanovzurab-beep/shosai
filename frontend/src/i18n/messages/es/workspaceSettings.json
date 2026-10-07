@@ -1,0 +1,70 @@
+{
+  "title": "Configuración",
+  "description": "Cómo funciona {workspace} para todos sus miembros. Los cambios se guardan al instante.",
+  "adminsOnly": "Solo los administradores pueden cambiar la configuración del espacio de trabajo.",
+  "adminsOnlyAsk": "Solo los administradores pueden cambiar la configuración del espacio de trabajo. Pídeselo a {name}.",
+  "general": {
+    "title": "General",
+    "name": "Nombre del espacio de trabajo",
+    "nameHint": "Se muestra en el selector y en las invitaciones.",
+    "renamed": "Se cambió el nombre del espacio de trabajo",
+    "join": "Unirse con un correo de la empresa",
+    "joinHint": "Permite que tus colegas se unan sin invitación cuando su correo es de tu dominio.",
+    "joinOn": "Cualquier persona con un correo @{domain} puede unirse como miembro mientras haya licencias libres.",
+    "domain": "Dominio de correo",
+    "joinEnabled": "Ahora las personas de {domain} pueden unirse",
+    "joinDisabled": "Unirse por dominio de correo está desactivado"
+  },
+  "sharing": {
+    "title": "Compartir",
+    "description": "Las reuniones con personas ajenas a {workspace} nunca se comparten automáticamente. Los organizadores siempre pueden cambiar quién ve una reunión.",
+    "reviewTitle": "Confirma cómo se comparten las reuniones",
+    "reviewHint": "Estas son las reglas recomendadas. Cambia las que quieras o déjalas como están.",
+    "keep": "Mantener estas reglas",
+    "confirmed": "Reglas para compartir confirmadas",
+    "defaultLevel": "Después de una reunión, compartir las notas con",
+    "defaultLevelHint": "Para reuniones en las que todos están en {workspace}.",
+    "levels": {
+      "private": "Solo el organizador",
+      "participants": "Participantes (recomendado)",
+      "workspace": "Todos en {workspace}"
+    },
+    "levelChanged": "Las nuevas reuniones van a: {level}",
+    "transcripts": "Incluir transcripciones",
+    "transcriptsHint": "Desactivado: se ven el resumen, las decisiones y las tareas, no la transcripción palabra por palabra.",
+    "transcriptsOn": "También se comparten las transcripciones",
+    "transcriptsOff": "Solo se comparten los resúmenes",
+    "membersInvite": "Los miembros pueden invitar personas",
+    "membersInviteHint": "Desactivado: solo los administradores pueden invitar.",
+    "membersInviteOn": "Los miembros pueden invitar personas",
+    "membersInviteOff": "Ahora solo los administradores pueden invitar"
+  },
+  "plan": {
+    "title": "Plan y uso",
+    "description": "Se factura al espacio de trabajo, por separado del plan personal de cada persona.",
+    "name": "Plan {plan}",
+    "seats": "{taken, number} de {total, number} licencias",
+    "price": "{perSeat} por licencia al mes · {total} en total · se renueva el {renews}",
+    "change": "Cambiar licencias o plan",
+    "ownerOnly": "Solo el propietario administra la facturación.",
+    "usageFailed": "No se pudo cargar el uso.",
+    "usageIn": "Uso en {month}",
+    "idle": "{count, plural, one {# miembro inactivo desde hace {days, number} días o más: una licencia que podrías reutilizar.} many {# de miembros inactivos desde hace {days, number} días o más: licencias que podrías reutilizar.} other {# miembros inactivos desde hace {days, number} días o más: licencias que podrías reutilizar.}}",
+    "member": "Miembro",
+    "meetings": "Reuniones",
+    "minutes": "Minutos",
+    "lastActive": "Última actividad",
+    "inactive": "Inactivo"
+  },
+  "danger": {
+    "delete": "Eliminar espacio de trabajo",
+    "deleteHint": "Elimina el espacio de trabajo para todos y detiene su facturación.",
+    "deleteTitle": "¿Eliminar {name}?",
+    "deleteDescription": "Todos pierden sus proyectos, tareas, decisiones y archivos subidos. Las grabaciones y los archivos que cada persona compartió siguen siendo suyos, en sus propias Notas y su Administrador de archivos. Esta acción no se puede deshacer.",
+    "leave": "Salir del espacio de trabajo",
+    "leaveHint": "Pueden volver a invitarte más adelante; se libera tu licencia.",
+    "leaveTitle": "¿Salir de {name}?",
+    "leaveDescription": "Las reuniones y los archivos que compartiste se van contigo y siguen en tus Notas y tu Administrador de archivos. Los archivos que transferiste al espacio de trabajo se quedan aquí. Las tareas se quedan con el equipo; las tuyas abiertas pasan a estar sin asignar.",
+    "leaveConfirm": "Salir"
+  }
+}

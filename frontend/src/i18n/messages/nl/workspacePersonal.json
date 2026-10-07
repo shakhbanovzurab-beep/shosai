@@ -1,0 +1,51 @@
+{
+  "share": "Delen",
+  "sharedIn": "Gedeeld in {workspace}",
+  "workspace": "Werkruimte",
+  "stopSharing": "Niet meer delen",
+  "fileShare": {
+    "title": "Delen in een werkruimte",
+    "description": "Leo antwoordt er daar uit voor wie jij kiest. Het blijft in je Bestandsbeheer en blijft van jou.",
+    "access": "Wie het mag gebruiken",
+    "everyone": "Iedereen in {workspace}",
+    "sharedOption": "{workspace} · gedeeld",
+    "noWorkspace": "Je zit nog niet in een werkruimte.",
+    "toast": "{level, select, workspace {‘{file}’: iedereen in {workspace} kan het gebruiken} other {‘{file}’: {team} kan het gebruiken in {workspace}}}"
+  },
+  "recordingShare": {
+    "title": "Delen naar een werkruimte",
+    "description": "Ze blijft van jou en blijft hier in je Notities. Vragen die je Leo erover stelt, blijven privé.",
+    "openIn": "Openen in {workspace}",
+    "tabWorkspace": "Werkruimte",
+    "tabLink": "Link",
+    "loadFailed": "Kan {workspace} niet laden.",
+    "moveTo": "Verplaatsen naar {workspace}",
+    "audienceHint": "De samenvatting, besluiten en taken. Deelnemers kunnen haar altijd zien.",
+    "sharedElsewhere": "Ze is nu gedeeld in {workspace}; een vergadering staat steeds in één werkruimte tegelijk."
+  },
+  "myTasks": {
+    "title": "Uit je werkruimtes",
+    "onKanban": "Op je Kanban",
+    "loadFailed": "Kan je taken uit werkruimtes niet laden.",
+    "empty": "Niets aan jou toegewezen in je werkruimtes."
+  },
+  "actionItems": {
+    "tracked": "Bijgehouden als taken in <link>{workspace}</link>; wat je hier wijzigt, wijzigt daar ook."
+  },
+  "sharedMeetings": {
+    "nav": "Gedeeld met jou",
+    "loadFailed": "Kan de gedeelde vergaderingen niet laden.",
+    "emptyTitle": "Hier is nog niets met je gedeeld",
+    "empty": "Vergaderingen die je teamgenoten met jou delen, of met een team waar je in zit, verschijnen hier.",
+    "intro": "Met jou gedeeld in <link>{workspace}</link>. Ze staan daar; open er een om de notities, besluiten en taken te zien."
+  },
+  "knowledge": {
+    "open": "Kennis openen",
+    "summary": "{meetings, plural, one {# vergadering} other {# vergaderingen}}, {decisions, plural, one {# besluit} other {# besluiten}} en {projects, plural, one {# project} other {# projecten}} die je kunt openen, plus {items, plural, one {# bestand of bron} other {# bestanden of bronnen}} die je kunt gebruiken.",
+    "listLabel": "Kennis van {workspace}",
+    "loadFailed": "Kan de kennis van je werkruimtes niet laden",
+    "emptyTitle": "Nog geen werkruimtes",
+    "empty": "Zodra je lid wordt van een werkruimte, kan Leo hier ook antwoorden uit wat die met je deelt.",
+    "intro": "Leo gebruikt dit als je iets vraagt in Persoonlijk, en alleen voor jou. Bij elk antwoord staat uit welke werkruimte het komt. Kennis van teams waar je niet in zit, blijft erbuiten."
+  }
+}

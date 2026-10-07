@@ -1,0 +1,23 @@
+{
+  "description": "Model Context Protocol 서버를 연결해 Leo에게 다른 앱의 도구와 데이터를 제공해요.",
+  "add": "서버 추가",
+  "empty": {
+    "title": "MCP 서버가 없어요",
+    "description": "URL로 원격 서버를 추가해 보세요."
+  },
+  "hasAuth": "인증 정보 있음",
+  "notReached": "아직 연결 확인 안 됨",
+  "tools": "{count, plural, other {도구 #개}}",
+  "enable": "{name} 켜기",
+  "disable": "{name} 끄기",
+  "remove": "{name} 제거",
+  "removed": "{name}을(를) 제거했어요",
+  "form": {
+    "transport": "전송 방식",
+    "url": "서버 URL",
+    "auth": "Authorization 헤더 <optional>(선택)</optional>"
+  },
+  "addFailed": "서버를 추가하지 못했어요.",
+  "toggleFailed": "서버 설정을 변경하지 못했어요",
+  "removeFailed": "서버를 제거하지 못했어요"
+}

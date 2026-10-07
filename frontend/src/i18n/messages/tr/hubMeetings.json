@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "Merkez",
+    "removeLabel": "Toplantıyı {hub} merkezinden çıkar",
+    "suggestion": "“{hub}” gibi görünüyor",
+    "file": "Ekle",
+    "other": "Başka merkez…",
+    "fileTo": "Merkeze ekle…",
+    "createFirst": "İlkini oluştur",
+    "noBoard": "merkezin panosu yok",
+    "archived": "merkez arşivlendi",
+    "filedToast": "Bu serinin sonraki toplantıları kendiliğinden buraya gelecek",
+    "removedToast": "{hub} merkezinden çıkarıldı",
+    "pickerTitle": "Merkeze ekle",
+    "pickerSearch": "Merkez bul",
+    "pickerEmpty": "Eşleşen merkez yok"
+  },
+  "brief": {
+    "title": "Bugün",
+    "empty": "Bugün acil bir şey yok",
+    "prepTitle": "Yaklaşanlar",
+    "prepFor": "{date} toplantısından önce",
+    "prepOpen": "Bu merkezde açık olanlar",
+    "prepLast": "Geçen sefer · {date}",
+    "prepMaterials": "Materyaller",
+    "signal": "{circles, plural, =2 {{subject} iki kez tartışıldı, karar yok.} =3 {{subject} üç kez tartışıldı, karar yok.} =4 {{subject} dört kez tartışıldı, karar yok.} =5 {{subject} beş kez tartışıldı, karar yok.} one {{subject} # kez tartışıldı, karar yok.} other {{subject} # kez tartışıldı, karar yok.}}",
+    "blockers": "Her seferinde engel şuydu: {quotes}."
+  }
+}

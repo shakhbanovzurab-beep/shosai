@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "shadcn/ui로 만든 완성도 높은 오픈소스 관리자 대시보드예요."
+  },
+  "actions": {
+    "goHome": "홈으로 이동",
+    "goBack": "뒤로 가기"
+  },
+  "placeholder": {
+    "title": "{title} 준비 중이에요",
+    "description": "이 섹션은 개발 중이며 곧 사용할 수 있어요.",
+    "badge": "개발 중"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "전체"
+  },
+  "emoji": {
+    "search": "이모지 검색",
+    "empty": "이모지를 찾을 수 없어요"
+  },
+  "notFound": {
+    "metaTitle": "페이지를 찾을 수 없어요",
+    "badge": "오류 {code}",
+    "title": "페이지가 길을 잃었어요",
+    "description": "링크가 잘못되었거나 페이지가 이동 또는 삭제되었을 수 있어요. 아래에서 다시 시작해 보세요.",
+    "popularPages": "자주 찾는 페이지",
+    "jumpTo": "또는 바로 이동"
+  },
+  "unauthorized": {
+    "metaTitle": "접근 권한 없음",
+    "title": "접근 권한이 없어요",
+    "description": "이 페이지를 볼 권한이 없어요. 잘못된 것 같다면 관리자에게 문의해 주세요."
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "title": "Tareas",
+  "description": "Trabajo acordado en reuniones o agregado a proyectos. Las tuyas también aparecen en tu Productividad y tu Kanban.",
+  "newTask": "Nueva tarea",
+  "loading": "Cargando tareas…",
+  "loadFailed": "No se pudieron cargar las tareas",
+  "empty": {
+    "title": "Aún no hay tareas",
+    "text": "Las tareas llegan cuando alguien comparte una reunión en la que se acordó trabajo, o cuando agregas una a un proyecto.",
+    "add": "Agregar una tarea"
+  },
+  "noMatch": {
+    "title": "Nada coincide con estos filtros",
+    "text": "Prueba con otro proyecto, equipo o persona.",
+    "clear": "Borrar filtros"
+  },
+  "caughtUp": {
+    "title": "Estás al día",
+    "text": "Aquí no hay nada pendiente de ti. Las nuevas tareas que te asignen aparecerán aquí y en tu Productividad.",
+    "seeEveryone": "Ver las tareas de todos"
+  },
+  "views": {
+    "label": "De quién son las tareas",
+    "mine": "Mías",
+    "team": "De todos"
+  },
+  "assignee": {
+    "label": "Responsable",
+    "anyone": "Cualquiera"
+  },
+  "owner": {
+    "label": "Responsable",
+    "unassigned": "Sin asignar",
+    "you": "Tú",
+    "meOption": "{name} (tú)",
+    "change": "Responsable: {name}. Cambiar responsable",
+    "changedToYou": "Ahora es tuya",
+    "changedTo": "Ahora el responsable es {name}",
+    "cleared": "Ahora no tiene responsable"
+  },
+  "groups": {
+    "overdue": "Vencidas · {count, number}",
+    "today": "Vencen hoy · {count, number}",
+    "week": "Esta semana · {count, number}",
+    "later": "Más adelante · {count, number}",
+    "undated": "Sin fecha límite · {count, number}"
+  },
+  "showDone": "Mostrar hechas · {count, number}",
+  "hideDone": "Ocultar hechas",
+  "status": {
+    "todo": "Pendiente",
+    "in_progress": "En curso",
+    "done": "Hecha"
+  },
+  "due": {
+    "none": "Sin fecha límite",
+    "add": "Agregar fecha límite",
+    "clear": "Borrar fecha límite",
+    "change": "{due}. Cambiar fecha límite",
+    "overdue": "Vencida · {date}",
+    "today": "Vence hoy",
+    "tomorrow": "Vence mañana",
+    "on": "Vence el {date}",
+    "was": "Venció el {date}",
+    "changed": "Fecha límite cambiada",
+    "cleared": "Fecha límite borrada"
+  },
+  "form": {
+    "title": "Nueva tarea",
+    "description": "Su responsable también la ve en su propia Productividad y su Kanban.",
+    "task": "Tarea",
+    "taskPlaceholder": "p. ej., Redactar el correo del lanzamiento",
+    "titleRequired": "Indica qué hay que hacer.",
+    "nobodyYet": "Nadie por ahora",
+    "due": "Fecha límite",
+    "project": "Proyecto",
+    "noProject": "Sin proyecto",
+    "projectHint": "Todos en el espacio de trabajo pueden ver las tareas que se agreguen aquí.",
+    "submit": "Agregar tarea"
+  }
+}

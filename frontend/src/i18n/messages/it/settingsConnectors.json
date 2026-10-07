@@ -1,0 +1,54 @@
+{
+  "description": "Collega le tue app perché Leo possa cercare e agire al loro interno. Ogni app ti fa accedere dalla propria pagina con OAuth 2.0, quindi Leo non vede mai la tua password.",
+  "columns": {
+    "connector": "Connettore",
+    "type": "Tipo",
+    "status": "Stato"
+  },
+  "categories": {
+    "mail": "Posta",
+    "files": "File",
+    "notes": "Note",
+    "communication": "Comunicazione",
+    "tasks": "Attività",
+    "crm": "Gestione clienti"
+  },
+  "connect": "Collega",
+  "connecting": "Collegamento…",
+  "connected": "Collegato",
+  "options": "Opzioni per {name}, collegato",
+  "disconnect": "Scollega",
+  "toasts": {
+    "connected": "{name} collegato",
+    "notConnected": "{name} non è stato collegato",
+    "connectFailed": "Impossibile collegare {name}",
+    "disconnected": "{name} scollegato",
+    "disconnectFailed": "Impossibile scollegare {name}"
+  },
+  "callback": {
+    "metaTitle": "Collegamento…",
+    "connected": {
+      "title": "Collegato",
+      "body": "Puoi chiudere questa finestra e tornare alla dashboard."
+    },
+    "denied": {
+      "title": "Accesso non concesso",
+      "body": "Non è stato collegato niente. Puoi chiudere questa finestra."
+    },
+    "error": {
+      "title": "Impossibile collegare",
+      "body": "Qualcosa è andato storto durante il collegamento. Riprova da Impostazioni."
+    },
+    "back": "Torna alla dashboard"
+  },
+  "consent": {
+    "metaTitle": "Autorizzazione demo",
+    "badge": "Demo · non viene usato nessun account reale",
+    "title": "Collegare {app} a Leo?",
+    "titleUnknown": "Collegare questa app a Leo?",
+    "body": "In produzione, questo passaggio è la schermata di consenso di {app}. Se approvi, Leo potrà leggere e agire nel tuo account {app} per conto tuo.",
+    "bodyUnknown": "In produzione, questo passaggio è la schermata di consenso del provider. Se approvi, Leo potrà leggere e agire nel tuo account per conto tuo.",
+    "disconnectHint": "Puoi scollegarla in qualsiasi momento in Impostazioni › Connettori.",
+    "allow": "Consenti"
+  }
+}

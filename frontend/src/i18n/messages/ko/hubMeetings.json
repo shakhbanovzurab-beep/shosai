@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "허브",
+    "removeLabel": "{hub}에서 회의 빼기",
+    "suggestion": "“{hub}” 관련 회의 같아요",
+    "file": "추가",
+    "other": "다른 허브…",
+    "fileTo": "허브에 추가…",
+    "createFirst": "첫 허브 만들기",
+    "noBoard": "허브에 보드가 없어요",
+    "archived": "보관된 허브예요",
+    "filedToast": "이 시리즈의 다음 회의도 자동으로 여기에 모여요",
+    "removedToast": "{hub}에서 뺐어요",
+    "pickerTitle": "허브에 추가",
+    "pickerSearch": "허브 찾기",
+    "pickerEmpty": "일치하는 허브가 없어요"
+  },
+  "brief": {
+    "title": "오늘",
+    "empty": "오늘은 급한 일이 없어요",
+    "prepTitle": "다가오는 회의",
+    "prepFor": "{date} 회의 전에",
+    "prepOpen": "이 허브에서 열기",
+    "prepLast": "지난번 · {date}",
+    "prepMaterials": "자료",
+    "signal": "{circles, plural, other {{subject}은(는) #번 논의했지만 아직 결정하지 못했어요.}}",
+    "blockers": "매번 이런 이유였어요: {quotes}."
+  }
+}

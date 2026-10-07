@@ -1,0 +1,26 @@
+{
+  "description": "電腦版的快速鍵。即使應用程式在背景執行，也能在電腦上的任何地方使用，並會同步到你的所有裝置。",
+  "commands": {
+    "open_app": "開啟應用程式",
+    "toggle_recording": "開始 / 暫停錄製",
+    "toggle_overlay": "顯示 / 隱藏浮動視窗",
+    "open_settings": "設定",
+    "collapse_overlay": "將浮動視窗收合成膠囊",
+    "close_app": "關閉應用程式",
+    "live_translation": "即時翻譯",
+    "prompter": "提詞器"
+  },
+  "off": "關閉",
+  "pressKeys": "請按下按鍵…",
+  "hint": "按 Esc 取消 · 按 Backspace 關閉",
+  "reset": "將「{command}」重設為預設值",
+  "record": "請按下「{command}」的新快速鍵",
+  "change": "{command}：{keys}。變更",
+  "changeOff": "{command}：已關閉。變更",
+  "resetAll": "全部重設為預設值",
+  "problems": {
+    "needsModifier": "請將 ⌘/Ctrl 或 ⌥/Alt 與其他按鍵搭配使用。",
+    "reserved": "這個快速鍵已由系統使用。",
+    "taken": "已用於「{command}」。"
+  }
+}

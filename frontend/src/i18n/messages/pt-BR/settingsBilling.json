@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "Plano {plan}",
+    "current": "Atual",
+    "price": "{interval, select, month {{price} por mês} year {{price} por ano} other {Grátis para sempre}}",
+    "renews": "Renova em {date}",
+    "upgrade": "Fazer upgrade"
+  },
+  "payment": {
+    "title": "Pagamento",
+    "description": "Sua forma de pagamento padrão é cobrada nas renovações da assinatura, no uso extra e na recarga automática.",
+    "add": "Adicionar forma de pagamento",
+    "empty": "Nenhuma forma de pagamento ainda.",
+    "default": "Padrão",
+    "unknownCard": "Cartão",
+    "endingIn": "{card} com final {last4}",
+    "expires": "Validade: {date}",
+    "update": "Atualizar",
+    "updateCard": "Atualizar {card} com final {last4}",
+    "openFailed": "Não foi possível abrir a página de pagamento"
+  },
+  "history": {
+    "title": "Histórico de faturamento",
+    "description": "Veja e baixe suas faturas anteriores.",
+    "empty": "Nenhuma fatura ainda. Elas aparecem aqui depois do seu primeiro pagamento.",
+    "columns": {
+      "date": "Data",
+      "description": "Descrição",
+      "amount": "Valor",
+      "status": "Status",
+      "download": "Baixar"
+    },
+    "status": {
+      "paid": "Paga",
+      "pending": "Pendente",
+      "failed": "Falhou"
+    },
+    "download": "Baixar fatura {number}",
+    "notReady": "A fatura {number} ainda não está pronta"
+  }
+}

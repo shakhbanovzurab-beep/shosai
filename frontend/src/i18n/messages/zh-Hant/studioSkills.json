@@ -1,0 +1,53 @@
+{
+  "title": "技能",
+  "tabs": {
+    "readyMade": "現成技能",
+    "repository": "你的儲存庫",
+    "mine": "我的技能（{count, number}）"
+  },
+  "readyMade": {
+    "placeholder": "尋找技能：系統設計、程式碼審查…",
+    "label": "搜尋技能",
+    "help": "搜尋 skills.sh 目錄",
+    "noMatches": "沒有相符的技能。請換個關鍵字試試。",
+    "emptyTitle": "現成技能目錄",
+    "emptyDescription": "開始輸入即可搜尋。技能是可以附加到提示詞的現成指令。",
+    "searchFailed": "無法搜尋 skills.sh。請再試一次。"
+  },
+  "repository": {
+    "label": "GitHub 儲存庫",
+    "placeholder": "owner/repo 或 GitHub 連結",
+    "find": "尋找技能",
+    "help": "含有 SKILL.md 檔案的公開儲存庫",
+    "emptyTitle": "從 GitHub 加入自己的技能",
+    "emptyDescription": "輸入公開儲存庫，即可找出其中的 SKILL.md 檔案。",
+    "scanFailed": "無法讀取儲存庫。"
+  },
+  "candidate": {
+    "installs": "{count, plural, other {# 次安裝}}",
+    "installed": "已安裝"
+  },
+  "mine": {
+    "extraFiles": "附帶指令碼或其他檔案，但只會使用 SKILL.md 中的指令。",
+    "update": "更新 {name}",
+    "updateHint": "更新至最新的提交版本",
+    "remove": "移除 {name}",
+    "emptyTitle": "還沒有技能",
+    "emptyDescription": "從「現成技能」或你的儲存庫新增技能。"
+  },
+  "remove": {
+    "title": "要移除 {name} 嗎？",
+    "titleUnnamed": "要移除這個技能嗎？",
+    "description": "這個技能會從所有使用它的提示詞中移除。你之後可以再新增回來。"
+  },
+  "toasts": {
+    "installed": "已安裝 {name}",
+    "installedHint": "在提示詞編輯器中將它附加到提示詞。",
+    "installFailed": "無法安裝技能",
+    "upToDate": "{name} 已是最新版本",
+    "updated": "已更新 {name}",
+    "updateFailed": "無法更新技能",
+    "removed": "已移除 {name}",
+    "removeFailed": "無法移除技能"
+  }
+}

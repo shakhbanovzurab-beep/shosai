@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "設定",
+    "sectionsLabel": "設定のセクション",
+    "autosave": "変更は自動的に保存されます。"
+  },
+  "sections": {
+    "account": "アカウント",
+    "privacy": "プライバシー",
+    "billing": "請求",
+    "usage": "使用量",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "メモリ",
+    "connectors": "コネクタ",
+    "hotkeys": "ショートカット"
+  },
+  "loadFailed": "このセクションを読み込めませんでした",
+  "manage": "管理",
+  "saving": "保存中…",
+  "saveFailed": "保存できませんでした",
+  "profile": {
+    "title": "プロフィール",
+    "email": "メールアドレス",
+    "emailHint": "このアドレスでプロバイダ経由でログインします。",
+    "fullName": "氏名",
+    "displayName": "Leo からの呼び名",
+    "displayNameHint": "Leo のあいさつや回答で使われます。",
+    "workRole": "職種",
+    "workRoleHint": "Leo が分野に合った例や用語を選ぶのに使います。"
+  },
+  "workRoles": {
+    "product_management": "プロダクトマネジメント",
+    "engineering": "エンジニアリング",
+    "human_resources": "人事",
+    "finance": "財務・経理",
+    "marketing": "マーケティング",
+    "sales": "営業",
+    "operations": "オペレーション",
+    "data_science": "データサイエンス",
+    "design": "デザイン",
+    "legal": "法務",
+    "scientist": "研究者（科学）",
+    "student": "学生",
+    "founder": "創業者",
+    "healthcare": "医療",
+    "writer": "ライター",
+    "educator": "教育",
+    "consultant": "コンサルタント",
+    "researcher": "リサーチャー",
+    "software_engineer": "ソフトウェアエンジニア",
+    "other": "その他"
+  },
+  "avatar": {
+    "change": "プロフィール写真を変更",
+    "hint": "どの画像でも使えます。正方形に切り抜かれ、サイズも自動で調整されます。",
+    "upload": "写真をアップロード",
+    "updateFailed": "写真を更新できませんでした",
+    "removeFailed": "写真を削除できませんでした",
+    "tooLarge": "{size} 未満の写真を選んでください。",
+    "unreadable": "このブラウザではその画像を読み込めません。JPEG か PNG をお試しください。",
+    "processFailed": "画像を処理できませんでした。"
+  },
+  "deleteAccount": {
+    "group": "危険な操作",
+    "title": "アカウントを削除",
+    "description": "アカウントとその中のすべて（チャット、ノート、ファイル、プロンプト、設定）を完全に削除します。",
+    "confirmTitle": "アカウントを削除しますか？",
+    "confirmDescription": "この操作は元に戻せません。チャット、ノート、ファイル、プロンプト、メモリ、設定が削除され、サブスクリプションも解約されます。",
+    "confirmLabel": "確認のため <address>{email}</address> と入力してください",
+    "deleted": "アカウントを削除しました",
+    "failed": "アカウントを削除できませんでした"
+  }
+}

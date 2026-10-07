@@ -1,0 +1,85 @@
+{
+  "loadFailed": "Couldn’t load sources",
+  "loading": "Loading sources…",
+  "connectedCount": "{connected, number} of {total, plural, one {# source} other {# sources}} connected. New and changed content is re-indexed on every sync.",
+  "status": {
+    "connecting": "Connecting",
+    "syncing": "Syncing",
+    "connected": "Connected",
+    "error": "Error"
+  },
+  "card": {
+    "items": "{count, plural, one {# item} other {# items}}",
+    "synced": "Synced {ago}",
+    "syncNow": "Sync now",
+    "syncing": "Syncing…",
+    "settings": "Settings…",
+    "disconnect": "Disconnect…",
+    "signIn": "Sign in with {provider}",
+    "public": "Public pages, no sign-in",
+    "connect": "Connect"
+  },
+  "dialog": {
+    "connectTitle": "Connect {name}",
+    "settingsTitle": "{name} settings",
+    "oauthNote": "You’ll sign in with {provider} and approve read-only access (OAuth 2.0), then come back here. No passwords or tokens are entered on this page.",
+    "optional": "(optional)",
+    "saveAndSync": "Save and sync",
+    "continueWith": "Continue with {provider}",
+    "connect": "Connect",
+    "connectFailed": "Couldn’t connect."
+  },
+  "disconnect": {
+    "title": "Disconnect {name}?",
+    "description": "Syncing stops and its saved credentials are deleted. Content already indexed from it is removed from the vector index.",
+    "confirm": "Disconnect"
+  },
+  "toasts": {
+    "connected": "{name} connected",
+    "firstSync": "The first sync has started.",
+    "syncFailed": "Couldn’t sync {name}",
+    "disconnected": "{name} disconnected",
+    "disconnectFailed": "Couldn’t disconnect {name}"
+  },
+  "website": "Website",
+  "descriptions": {
+    "slack": "Messages and threads from public channels.",
+    "confluence": "Pages and blog posts from your spaces.",
+    "notion": "Pages and databases you share during sign-in.",
+    "obsidian": "Markdown notes from a vault synced to GitHub.",
+    "jira": "Issues, descriptions and comments.",
+    "github": "READMEs, docs, issues and pull requests.",
+    "gitlab": "Repositories, wikis, issues and merge requests.",
+    "google_drive": "Docs, Sheets, Slides and PDFs.",
+    "sharepoint": "Files and pages from Microsoft 365.",
+    "dropbox": "Files and Paper docs from a folder.",
+    "yandex_disk": "Documents from a Yandex Disk folder.",
+    "website": "Pages crawled from a site or docs portal."
+  },
+  "fields": {
+    "channels": "Channels",
+    "spaces": "Space keys",
+    "repository": "Vault repository",
+    "branch": "Branch",
+    "jql": "JQL filter",
+    "repositories": "Repositories",
+    "base_url": "Instance URL",
+    "projects": "Projects",
+    "folder_id": "Folder ID",
+    "site_url": "SharePoint site",
+    "path": "Folder path",
+    "start_url": "Start URL",
+    "max_depth": "Crawl depth",
+    "include": "Only paths matching"
+  },
+  "help": {
+    "channels": "Leave empty for all public channels.",
+    "spaces": "Leave empty for every space you can read.",
+    "repositories": "Leave empty for every repository you grant access to.",
+    "base_url": "Only for a self-managed GitLab.",
+    "projects": "Leave empty for every project you can read.",
+    "folder_id": "Leave empty to index everything you can read.",
+    "site_url": "Leave empty for your OneDrive.",
+    "max_depth": "Links followed from the start page."
+  }
+}

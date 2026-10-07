@@ -1,0 +1,26 @@
+{
+  "description": "Tastenkürzel für die Desktop-App. Sie funktionieren überall auf deinem Computer, auch wenn die App im Hintergrund läuft, und werden auf all deinen Geräten synchronisiert.",
+  "commands": {
+    "open_app": "App öffnen",
+    "toggle_recording": "Aufnahme starten / pausieren",
+    "toggle_overlay": "Overlay ein- / ausblenden",
+    "open_settings": "Einstellungen",
+    "collapse_overlay": "Overlay minimieren",
+    "close_app": "App schließen",
+    "live_translation": "Live-Übersetzung",
+    "prompter": "Souffleur"
+  },
+  "off": "Aus",
+  "pressKeys": "Tasten drücken…",
+  "hint": "Esc zum Abbrechen · Rücktaste zum Ausschalten",
+  "reset": "{command} auf Standard zurücksetzen",
+  "record": "Drücke das neue Tastenkürzel für {command}",
+  "change": "{command}: {keys}. Ändern",
+  "changeOff": "{command}: aus. Ändern",
+  "resetAll": "Alle zurücksetzen",
+  "problems": {
+    "needsModifier": "Verwende ⌘/Strg oder ⌥/Alt zusammen mit einer anderen Taste.",
+    "reserved": "Dieses Tastenkürzel ist vom System belegt.",
+    "taken": "Bereits für „{command}“ verwendet."
+  }
+}

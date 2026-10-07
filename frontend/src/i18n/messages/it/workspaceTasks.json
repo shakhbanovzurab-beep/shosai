@@ -1,0 +1,81 @@
+{
+  "title": "Attività",
+  "description": "Il lavoro concordato nelle riunioni o aggiunto ai progetti. Le tue compaiono anche nella tua Produttività e nel tuo Kanban.",
+  "newTask": "Nuova attività",
+  "loading": "Caricamento delle attività…",
+  "loadFailed": "Impossibile caricare le attività",
+  "empty": {
+    "title": "Ancora nessuna attività",
+    "text": "Le attività arrivano quando qualcuno condivide una riunione in cui è stato concordato del lavoro, o quando ne aggiungi una a un progetto.",
+    "add": "Aggiungi un’attività"
+  },
+  "noMatch": {
+    "title": "Nessun risultato con questi filtri",
+    "text": "Prova con un altro progetto, team o persona.",
+    "clear": "Rimuovi i filtri"
+  },
+  "caughtUp": {
+    "title": "Sei in pari",
+    "text": "Qui non c’è niente che aspetta te. Le nuove attività assegnate a te compaiono qui e nella tua Produttività.",
+    "seeEveryone": "Vedi le attività di tutti"
+  },
+  "views": {
+    "label": "Di chi sono le attività",
+    "mine": "Mie",
+    "team": "Di tutti"
+  },
+  "assignee": {
+    "label": "Assegnatario",
+    "anyone": "Chiunque"
+  },
+  "owner": {
+    "label": "Assegnatario",
+    "unassigned": "Non assegnata",
+    "you": "Tu",
+    "meOption": "{name} (tu)",
+    "change": "Assegnatario: {name}. Cambia assegnatario",
+    "changedToYou": "Ora è tua",
+    "changedTo": "Ora è di {name}",
+    "cleared": "Ora non è assegnata a nessuno"
+  },
+  "groups": {
+    "overdue": "In ritardo · {count, number}",
+    "today": "Scadono oggi · {count, number}",
+    "week": "Questa settimana · {count, number}",
+    "later": "Più avanti · {count, number}",
+    "undated": "Senza scadenza · {count, number}"
+  },
+  "showDone": "Mostra completate · {count, number}",
+  "hideDone": "Nascondi completate",
+  "status": {
+    "todo": "Da fare",
+    "in_progress": "In corso",
+    "done": "Completata"
+  },
+  "due": {
+    "none": "Nessuna scadenza",
+    "add": "Aggiungi scadenza",
+    "clear": "Rimuovi scadenza",
+    "change": "{due}. Cambia scadenza",
+    "overdue": "In ritardo · {date}",
+    "today": "Scade oggi",
+    "tomorrow": "Scade domani",
+    "on": "Scade il {date}",
+    "was": "Scadeva il {date}",
+    "changed": "Scadenza modificata",
+    "cleared": "Scadenza rimossa"
+  },
+  "form": {
+    "title": "Nuova attività",
+    "description": "L’assegnatario la vede anche nella propria Produttività e nel proprio Kanban.",
+    "task": "Attività",
+    "taskPlaceholder": "ad es. Scrivi la bozza dell’email di lancio",
+    "titleRequired": "Indica cosa c’è da fare.",
+    "nobodyYet": "Ancora nessuno",
+    "due": "Scadenza",
+    "project": "Progetto",
+    "noProject": "Nessun progetto",
+    "projectHint": "Tutti nello spazio di lavoro possono vedere le attività aggiunte qui.",
+    "submit": "Aggiungi attività"
+  }
+}

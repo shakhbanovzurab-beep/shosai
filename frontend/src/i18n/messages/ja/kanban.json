@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "かんばん",
+    "description": "仕事や家のことなど、何でも整理できるボードです。Jira と同期したボードも使えます。"
+  },
+  "loadBoardsFailed": "ボードの一覧を読み込めませんでした",
+  "loadBoardFailed": "ボードを読み込めませんでした",
+  "addTask": "タスクを追加",
+  "taskCount": "{count, plural, other {# 件のタスク}}",
+  "progress": "進捗",
+  "views": {
+    "label": "表示",
+    "board": "ボード",
+    "list": "リスト",
+    "table": "テーブル"
+  },
+  "toolbar": {
+    "filter": "フィルタ",
+    "sort": "並べ替え",
+    "moreWaysToAdd": "その他のタスク追加方法",
+    "importCsv": "CSV をインポート",
+    "addFromTemplate": "テンプレートから追加",
+    "createAutomation": "自動化ルールを作成"
+  },
+  "column": {
+    "drag": "「{column}」列をドラッグ",
+    "addTask": "「{column}」にタスクを追加",
+    "empty": "「{column}」にタスクはありません"
+  },
+  "columnMenu": {
+    "managedInJira": "列は Jira で管理されています",
+    "rename": "列の名前を変更…",
+    "sortByPriority": "優先度で並べ替え",
+    "moveEarlier": "前に移動",
+    "moveLater": "後ろに移動",
+    "clear": "列をクリア"
+  },
+  "taskMenu": {
+    "openInJira": "Jira で {key} を開く",
+    "openInWorkspace": "{workspace} で開く",
+    "moveTo": "移動先",
+    "moveToTop": "一番上に移動",
+    "moveToBottom": "一番下に移動",
+    "delete": "タスクを削除"
+  },
+  "priority": {
+    "label": "優先度",
+    "high": "高",
+    "medium": "中",
+    "low": "低"
+  },
+  "card": {
+    "unassigned": "未割り当て",
+    "completed": "完了",
+    "fromSource": "{source} から",
+    "jiraIssue": "{type}（Jira を新しいタブで開きます）",
+    "workspaceTask": "ワークスペースのタスクです。ここで変更すると、ワークスペースにも反映されます。",
+    "insights": {
+      "attachments": "{count, plural, other {# 件の添付ファイル}}",
+      "comments": "{count, plural, other {# 件のコメント}}",
+      "documents": "{count, plural, other {# 件のドキュメント}}"
+    }
+  },
+  "table": {
+    "task": "タスク",
+    "status": "ステータス",
+    "owner": "オーナー",
+    "label": "ラベル",
+    "due": "期限",
+    "actions": "操作",
+    "empty": "タスクはまだありません",
+    "progressOf": "「{task}」の進捗"
+  },
+  "commands": {
+    "renameTask": "タスクの名前を変更",
+    "renameColumn": "列の名前を変更",
+    "newTaskIn": "「{column}」に新しいタスク",
+    "copyTitle": "{title} のコピー",
+    "deleted": "「{title}」を削除しました",
+    "cleared": "{count, plural, other {「{column}」から # 件のタスクを削除しました}}",
+    "jiraLinkCopied": "{key} のリンクをコピーしました"
+  },
+  "errors": {
+    "addTask": "タスクを追加できませんでした",
+    "saveChange": "変更を保存できませんでした",
+    "deleteTasks": "{count, plural, other {タスクを削除できませんでした}}",
+    "saveBoard": "ボードを保存できませんでした"
+  }
+}

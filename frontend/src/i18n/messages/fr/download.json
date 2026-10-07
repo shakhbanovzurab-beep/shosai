@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Télécharger l’application",
+    "description": "Téléchargez l’application de bureau pour macOS et Windows."
+  },
+  "title": "Installez l’application de bureau",
+  "subtitle": "Enregistrez vos réunions, gardez des notes et une traduction en direct pendant n’importe quel appel, et appelez Leo de partout avec un raccourci.",
+  "notes": {
+    "mobile": "L’application de bureau fonctionne sous macOS et Windows. Ouvrez cette page sur votre ordinateur pour la télécharger.",
+    "linux": "Il n’existe pas encore de version Linux. L’application de bureau fonctionne sous macOS et Windows."
+  },
+  "card": {
+    "yourComputer": "Votre ordinateur",
+    "requirement": "{system} ou version ultérieure",
+    "downloadFor": "Télécharger pour {name}",
+    "downloadBuild": "Télécharger pour {arch} · {size}",
+    "meta": "Version {version} · {size} · {type} · publiée le {date}",
+    "loadFailed": "Impossible de charger le téléchargement pour {platform}.",
+    "notYet": "L’application {platform} n’est pas encore disponible. Revenez bientôt.",
+    "universal": "Apple Silicon et Intel"
+  },
+  "checksum": {
+    "button": "Somme de contrôle",
+    "verify": "Pour vérifier, exécutez <code>{command}</code> et comparez le résultat.",
+    "copy": "Copier la somme de contrôle",
+    "copied": "Somme de contrôle copiée",
+    "copyFailed": "Impossible de copier la somme de contrôle"
+  },
+  "install": {
+    "title": "Installation en trois étapes",
+    "macos": {
+      "open": "Ouvrez le fichier {type} téléchargé.",
+      "drag": "Faites glisser l’application dans votre dossier Applications, puis ouvrez-la depuis ce dossier.",
+      "allow": "Connectez-vous, puis autorisez le micro et l’enregistrement de l’écran et de l’audio système quand macOS le demande : c’est ainsi que les réunions sont enregistrées."
+    },
+    "windows": {
+      "run": "Lancez le programme d’installation téléchargé ({type}).",
+      "setup": "Suivez l’installation, puis ouvrez l’application depuis le menu Démarrer.",
+      "allow": "Connectez-vous, puis autorisez l’accès au micro quand Windows le demande."
+    }
+  },
+  "features": {
+    "title": "Uniquement sur ordinateur",
+    "customize": "Personnaliser les raccourcis",
+    "shortcutOff": "Raccourci désactivé",
+    "shortcut": "Raccourci : {keys}",
+    "toggle_recording": {
+      "title": "Enregistrement",
+      "text": "Lancez ou mettez en pause l’enregistrement de n’importe quelle réunion, depuis n’importe quelle application."
+    },
+    "toggle_overlay": {
+      "title": "Fenêtre flottante",
+      "text": "Des notes en direct par-dessus votre appel, réductibles en pastille."
+    },
+    "live_translation": {
+      "title": "Traduction en direct",
+      "text": "Suivez la conversation dans votre langue pendant que les gens parlent."
+    },
+    "prompter": {
+      "title": "Souffleur",
+      "text": "Des suggestions discrètes de Leo pendant que vous parlez, visibles par vous seul."
+    }
+  }
+}

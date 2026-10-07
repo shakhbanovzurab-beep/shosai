@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "Configurações",
+    "sectionsLabel": "Seções das configurações",
+    "autosave": "As alterações são salvas automaticamente."
+  },
+  "sections": {
+    "account": "Conta",
+    "privacy": "Privacidade",
+    "billing": "Faturamento",
+    "usage": "Uso",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "Memória",
+    "connectors": "Conectores",
+    "hotkeys": "Atalhos"
+  },
+  "loadFailed": "Não foi possível carregar esta seção",
+  "manage": "Gerenciar",
+  "saving": "Salvando…",
+  "saveFailed": "Não foi possível salvar",
+  "profile": {
+    "title": "Perfil",
+    "email": "E-mail",
+    "emailHint": "Você entra com este endereço pelo seu provedor.",
+    "fullName": "Nome completo",
+    "displayName": "Como o Leo deve chamar você?",
+    "displayNameHint": "Usado quando o Leo cumprimenta você e nas respostas.",
+    "workRole": "O que melhor descreve seu trabalho?",
+    "workRoleHint": "O Leo usa isso para adaptar exemplos e termos à sua área."
+  },
+  "workRoles": {
+    "product_management": "Gestão de produto",
+    "engineering": "Engenharia",
+    "human_resources": "Recursos humanos",
+    "finance": "Finanças",
+    "marketing": "Marketing e publicidade",
+    "sales": "Vendas",
+    "operations": "Operações",
+    "data_science": "Ciência de dados",
+    "design": "Design e criação",
+    "legal": "Jurídico",
+    "scientist": "Cientista",
+    "student": "Estudante",
+    "founder": "Empreendedorismo",
+    "healthcare": "Saúde",
+    "writer": "Escrita",
+    "educator": "Educação",
+    "consultant": "Consultoria",
+    "researcher": "Pesquisa",
+    "software_engineer": "Engenharia de software",
+    "other": "Outra área"
+  },
+  "avatar": {
+    "change": "Alterar foto do perfil",
+    "hint": "Qualquer imagem serve. Ela é recortada em formato quadrado e redimensionada para você.",
+    "upload": "Fazer upload de foto",
+    "updateFailed": "Não foi possível atualizar sua foto",
+    "removeFailed": "Não foi possível remover sua foto",
+    "tooLarge": "Escolha uma foto com menos de {size}.",
+    "unreadable": "Este navegador não consegue ler essa imagem. Tente um JPEG ou PNG.",
+    "processFailed": "Não foi possível processar a imagem."
+  },
+  "deleteAccount": {
+    "group": "Zona de perigo",
+    "title": "Excluir conta",
+    "description": "Exclua para sempre sua conta e tudo o que há nela: chats, notas, arquivos, prompts e configurações.",
+    "confirmTitle": "Excluir sua conta?",
+    "confirmDescription": "Esta ação não pode ser desfeita. Seus chats, notas, arquivos, prompts, memória e configurações serão excluídos, e qualquer assinatura será cancelada.",
+    "confirmLabel": "Digite <address>{email}</address> para confirmar",
+    "deleted": "Sua conta foi excluída",
+    "failed": "Não foi possível excluir sua conta"
+  }
+}

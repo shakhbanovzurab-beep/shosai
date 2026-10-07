@@ -1,0 +1,81 @@
+{
+  "title": "Taken",
+  "description": "Werk dat in vergaderingen is afgesproken of aan projecten is toegevoegd. Jouw taken staan ook in je Productiviteit en Kanban.",
+  "newTask": "Nieuwe taak",
+  "loading": "Taken laden…",
+  "loadFailed": "Kan de taken niet laden",
+  "empty": {
+    "title": "Nog geen taken",
+    "text": "Taken verschijnen wanneer iemand een vergadering deelt waarin werk is afgesproken, of wanneer je er een aan een project toevoegt.",
+    "add": "Taak toevoegen"
+  },
+  "noMatch": {
+    "title": "Niets voldoet aan deze filters",
+    "text": "Probeer een ander project, team of persoon.",
+    "clear": "Filters wissen"
+  },
+  "caughtUp": {
+    "title": "Je bent helemaal bij",
+    "text": "Hier wacht niets op jou. Nieuwe taken die aan jou zijn toegewezen, verschijnen hier en in je Productiviteit.",
+    "seeEveryone": "Taken van iedereen bekijken"
+  },
+  "views": {
+    "label": "Wiens taken",
+    "mine": "Mijn taken",
+    "team": "Iedereen"
+  },
+  "assignee": {
+    "label": "Toegewezen aan",
+    "anyone": "Iedereen"
+  },
+  "owner": {
+    "label": "Verantwoordelijke",
+    "unassigned": "Niet toegewezen",
+    "you": "Jij",
+    "meOption": "{name} (jij)",
+    "change": "Verantwoordelijke: {name}. Wijzigen",
+    "changedToYou": "Nu van jou",
+    "changedTo": "Nu van {name}",
+    "cleared": "Niemand is nu verantwoordelijk"
+  },
+  "groups": {
+    "overdue": "Te laat · {count, number}",
+    "today": "Deadline vandaag · {count, number}",
+    "week": "Deze week · {count, number}",
+    "later": "Later · {count, number}",
+    "undated": "Geen deadline · {count, number}"
+  },
+  "showDone": "Afgeronde tonen · {count, number}",
+  "hideDone": "Afgeronde verbergen",
+  "status": {
+    "todo": "Te doen",
+    "in_progress": "Bezig",
+    "done": "Afgerond"
+  },
+  "due": {
+    "none": "Geen deadline",
+    "add": "Deadline toevoegen",
+    "clear": "Deadline wissen",
+    "change": "{due}. Deadline wijzigen",
+    "overdue": "Te laat · {date}",
+    "today": "Deadline vandaag",
+    "tomorrow": "Deadline morgen",
+    "on": "Deadline {date}",
+    "was": "Deadline was {date}",
+    "changed": "Deadline gewijzigd",
+    "cleared": "Deadline gewist"
+  },
+  "form": {
+    "title": "Nieuwe taak",
+    "description": "De verantwoordelijke ziet de taak ook in de eigen Productiviteit en Kanban.",
+    "task": "Taak",
+    "taskPlaceholder": "bijv. Lanceringsmail opstellen",
+    "titleRequired": "Beschrijf wat er moet gebeuren.",
+    "nobodyYet": "Nog niemand",
+    "due": "Deadline",
+    "project": "Project",
+    "noProject": "Geen project",
+    "projectHint": "Iedereen in de werkruimte kan taken zien die hier worden toegevoegd.",
+    "submit": "Taak toevoegen"
+  }
+}

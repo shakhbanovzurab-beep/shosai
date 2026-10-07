@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, one {{amount} token} other {{amount} tokens}}",
+  "resets": "Limits reset every week. Next reset: {date}.",
+  "thisWeek": "This week",
+  "tiers": {
+    "standard": {
+      "title": "Standard models",
+      "description": "Included in your plan. When it runs out, wait for the weekly reset."
+    },
+    "frontier": {
+      "title": "Frontier models",
+      "description": "Claude Opus, GPT Astra and other top models. After this, your extra tokens are used."
+    }
+  },
+  "used": "{count, plural, one {{used} of {limit} token} other {{used} of {limit} tokens}}",
+  "usedLabel": "{tier}: {percent} of this week’s tokens used",
+  "frontierThisWeek": "Frontier models this week",
+  "topUp": {
+    "title": "Extra tokens for frontier models",
+    "description": "Used once this week’s frontier allowance runs out. They don’t reset and can’t be spent on standard models.",
+    "balance": "{count, plural, one {<big>{amount} token</big> left} other {<big>{amount} tokens</big> left}}",
+    "buyMore": "Buy more",
+    "buy": "Buy tokens",
+    "failed": "Couldn’t start the purchase"
+  }
+}

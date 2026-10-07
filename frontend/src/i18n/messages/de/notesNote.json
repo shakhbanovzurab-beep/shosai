@@ -1,0 +1,74 @@
+{
+  "back": "Alle Notizen",
+  "notFound": "Notiz nicht gefunden",
+  "participants": {
+    "count": "{count, plural, one {# Teilnehmer} other {# Teilnehmer}}",
+    "inMeeting": "{count, plural, one {# Person in diesem Meeting.} other {# Personen in diesem Meeting.}}",
+    "you": "{name} (du)",
+    "added": "{email} zum Meeting hinzugefügt",
+    "addPlaceholder": "Per E-Mail hinzufügen…",
+    "addLabel": "Teilnehmer per E-Mail hinzufügen",
+    "invalid": "Gib eine E-Mail-Adresse ein, z. B. name@firma.de.",
+    "duplicate": "Diese Person ist bereits in diesem Meeting."
+  },
+  "tabs": {
+    "notes": "Notizen",
+    "enhanced": "Aufbereitet",
+    "transcript": "Transkript",
+    "mindMap": "Mindmap"
+  },
+  "enhanced": {
+    "writtenBy": "Von Leo aus dem Meeting-Transkript und deinen Notizen geschrieben.",
+    "writtenByTemplate": "Von Leo aus dem Meeting-Transkript und deinen Notizen geschrieben, aufgebaut nach „{template}“.",
+    "writing": "Aufbereitete Notizen werden geschrieben…",
+    "nothingFor": "Dieses Meeting enthält nichts für die Abschnitte von „{template}“."
+  },
+  "export": {
+    "button": "Exportieren",
+    "transcriptAs": "Transkript als"
+  },
+  "myNotes": {
+    "loadFailed": "Deine Notizen konnten nicht geladen werden",
+    "saveFailed": "Deine Notizen konnten nicht gespeichert werden"
+  },
+  "editor": {
+    "placeholder": "Schreib deine Notizen…",
+    "label": "Deine Notizen",
+    "toolbar": "Formatierung",
+    "addLink": "Link hinzufügen",
+    "removeLink": "Link entfernen",
+    "bold": "Fett",
+    "italic": "Kursiv",
+    "linkPlaceholder": "Link einfügen…",
+    "linkAddress": "Linkadresse",
+    "link": "Link",
+    "turnInto": "Umwandeln in",
+    "blocks": {
+      "text": "Fließtext",
+      "h1": "Überschrift 1",
+      "h2": "Überschrift 2",
+      "h3": "Überschrift 3",
+      "ordered": "Nummerierte Liste",
+      "bullet": "Aufzählung"
+    }
+  },
+  "transcript": {
+    "label": "Transkript",
+    "search": "Transkript durchsuchen",
+    "searchPlaceholder": "Transkript durchsuchen…",
+    "matches": "{count, plural, =0 {Keine Treffer} one {# Treffer} other {# Treffer}}",
+    "position": "{current, number} von {total, number}",
+    "previous": "Vorheriger Treffer",
+    "next": "Nächster Treffer",
+    "clear": "Suche zurücksetzen"
+  },
+  "speakers": {
+    "title": "Wer hat gesprochen",
+    "share": "{speaker}: {share} der Redezeit",
+    "lines": "{count, plural, one {# Beitrag} other {# Beiträge}}"
+  },
+  "mindMap": {
+    "title": "Mindmap: {topic}",
+    "caption": "Aus dem Meeting-Transkript erstellt."
+  }
+}

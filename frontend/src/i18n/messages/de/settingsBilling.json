@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "{plan}-Tarif",
+    "current": "Aktuell",
+    "price": "{interval, select, month {{price} pro Monat} year {{price} pro Jahr} other {Dauerhaft kostenlos}}",
+    "renews": "Verlängert sich am {date}",
+    "upgrade": "Tarif upgraden"
+  },
+  "payment": {
+    "title": "Zahlung",
+    "description": "Deine Standard-Zahlungsmethode wird für Abo-Verlängerungen, zusätzliche Nutzung und automatisches Aufladen belastet.",
+    "add": "Zahlungsmethode hinzufügen",
+    "empty": "Noch keine Zahlungsmethode.",
+    "default": "Standard",
+    "unknownCard": "Karte",
+    "endingIn": "{card} mit Endziffern {last4}",
+    "expires": "Gültig bis {date}",
+    "update": "Aktualisieren",
+    "updateCard": "{card} mit Endziffern {last4} aktualisieren",
+    "openFailed": "Die Zahlungsseite konnte nicht geöffnet werden"
+  },
+  "history": {
+    "title": "Rechnungsverlauf",
+    "description": "Sieh dir deine bisherigen Rechnungen an und lade sie herunter.",
+    "empty": "Noch keine Rechnungen. Sie erscheinen hier nach deiner ersten Zahlung.",
+    "columns": {
+      "date": "Datum",
+      "description": "Beschreibung",
+      "amount": "Betrag",
+      "status": "Status",
+      "download": "Herunterladen"
+    },
+    "status": {
+      "paid": "Bezahlt",
+      "pending": "Ausstehend",
+      "failed": "Fehler"
+    },
+    "download": "Rechnung {number} herunterladen",
+    "notReady": "Rechnung {number} ist noch nicht verfügbar"
+  }
+}

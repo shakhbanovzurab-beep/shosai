@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "Board nicht gefunden.",
+  "taskNotFound": "Aufgabe nicht gefunden.",
+  "columnNotFound": "Spalte nicht gefunden.",
+  "boardChanged": "Das Board wurde inzwischen geändert. Lade es neu und versuche es erneut.",
+  "managedInJira": "Dieses Board wird in Jira verwaltet. Nimm die Änderung dort vor.",
+  "reconnectJira": "Verbinde Jira unter Einstellungen › Konnektoren erneut, um Änderungen vorzunehmen.",
+  "firstSync": "Warte, bis die erste Synchronisierung mit Jira abgeschlossen ist.",
+  "jiraDisconnected": "Jira ist nicht mehr verbunden. Verbinde es unter Einstellungen › Konnektoren erneut, damit dieses Board synchronisiert bleibt.",
+  "connectJiraFirst": "Verbinde zuerst Jira unter Einstellungen › Konnektoren.",
+  "jiraBoardUnavailable": "Dieses Jira-Board ist für dein Jira-Konto nicht verfügbar.",
+  "jiraBoardSynced": "Dieses Jira-Board ist bereits synchronisiert.",
+  "notJiraBoard": "Nur mit Jira synchronisierte Boards können synchronisiert werden.",
+  "jiraBoardWorkspaceTasks": "Jira-Boards zeigen nur Jira-Vorgänge. Wähle ein Board, das in der App verwaltet wird.",
+  "workspaceTaskCopy": "Workspace-Aufgaben können hier nicht dupliziert werden. Füge die Aufgabe stattdessen im Workspace hinzu.",
+  "workspaceTaskDelete": "Workspace-Aufgaben verschwinden vom Board, sobald sie im Workspace erledigt oder neu zugewiesen werden.",
+  "boardNameRequired": "Gib dem Board einen Namen.",
+  "boardNameTooLong": "Der Name ist zu lang. Wähle einen kürzeren.",
+  "taskTitleRequired": "Gib der Aufgabe einen Titel.",
+  "invalidRequest": "Mit der Anfrage stimmt etwas nicht. Lade die Seite neu und versuche es erneut."
+}

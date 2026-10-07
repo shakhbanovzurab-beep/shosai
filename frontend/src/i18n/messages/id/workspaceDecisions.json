@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Keputusan"
+  },
+  "title": "Keputusan",
+  "description": "Semua yang diputuskan dalam rapat yang dibagikan kepada Anda, terbaru lebih dulu, masing-masing ditautkan ke tempat keputusan itu disampaikan.",
+  "searchLabel": "Cari keputusan",
+  "loading": "Memuat keputusan…",
+  "loadFailed": "Tidak dapat memuat keputusan",
+  "empty": {
+    "title": "Belum ada keputusan",
+    "text": "Leo mencatat apa yang diputuskan dalam rapat bersama dan menyimpannya di sini, tertaut ke rapatnya.",
+    "action": "Buka rapat"
+  },
+  "noMatch": {
+    "title": "Tidak ada keputusan yang cocok",
+    "text": "Coba kata lain atau tim lain.",
+    "clear": "Hapus filter"
+  },
+  "replaced": "Diganti",
+  "replacedBy": "Diganti oleh <link>“{decision}”</link> dalam {meeting}.",
+  "replacedHidden": "Diganti oleh keputusan yang lebih baru dalam rapat yang tidak dibagikan kepada Anda.",
+  "day": {
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "tomorrow": "Besok"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "name_taken": "你已經有同名的中樞。",
+    "name_too_short": "{min, plural, other {請至少輸入 # 個字元。}}",
+    "name_too_long": "{max, plural, other {請勿超過 # 個字元。}}",
+    "too_many_hubs": "你的中樞太多了。請封存或刪除不需要的中樞。",
+    "not_found": "這個項目已不在這裡，可能已被刪除。",
+    "hub_archived": "這個中樞已封存。",
+    "no_board": "這個中樞沒有看板，工作無處可送。",
+    "no_hub": "這場會議不在任何中樞中。",
+    "board_gone": "這個中樞的看板已不存在。",
+    "invalid": "請檢查所有欄位是否填寫正確。",
+    "network": "無法連線到伺服器。",
+    "unknown": "伺服器的回應不如預期。"
+  },
+  "fixes": {
+    "choose_board": "選擇看板",
+    "file_meeting": "將會議加入中樞",
+    "restore_hub": "從封存還原中樞"
+  }
+}

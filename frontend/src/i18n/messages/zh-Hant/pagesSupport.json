@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "支援",
+    "description": "向我們的團隊尋求協助，並追蹤你的支援單。"
+  },
+  "categories": {
+    "billing": "帳單",
+    "bug": "錯誤回報",
+    "account": "帳號",
+    "feature": "功能建議",
+    "other": "其他"
+  },
+  "statuses": {
+    "open": "等待支援回覆",
+    "awaiting_you": "等待你回覆",
+    "resolved": "已解決"
+  },
+  "events": {
+    "acknowledged": "我們已收到你的訊息。專員通常會在幾小時內回覆，屆時會在這裡通知你。",
+    "resolved": "已標示為已解決",
+    "reopened": "已重新開啟"
+  },
+  "toolbar": {
+    "search": "搜尋支援單",
+    "filter": "篩選支援單",
+    "all": "全部",
+    "open": "處理中",
+    "resolved": "已解決"
+  },
+  "newTicket": "新增支援單",
+  "table": {
+    "number": "編號",
+    "subject": "主旨",
+    "status": "狀態",
+    "topic": "主題",
+    "updated": "更新時間",
+    "unread": "未讀："
+  },
+  "list": {
+    "loading": "正在載入支援單",
+    "loadError": "無法載入你的支援單",
+    "emptyTitle": "需要什麼協助？",
+    "emptyDescription": "建立支援單後，我們的團隊會在這裡回覆，通常在幾小時內。",
+    "noMatchesTitle": "找不到支援單",
+    "noMatchesDescription": "試試其他搜尋字詞或篩選條件。"
+  },
+  "panel": {
+    "ticket": "支援單",
+    "description": "你與支援團隊的對話"
+  },
+  "form": {
+    "title": "需要什麼協助？",
+    "subtitle": "我們通常會在幾小時內回覆。",
+    "topic": "主題",
+    "subject": "主旨",
+    "subjectPlaceholder": "簡短摘要",
+    "body": "發生了什麼事？",
+    "bodyPlaceholder": "操作步驟、你預期的結果，以及實際看到的情況。附上螢幕截圖會更有幫助。",
+    "send": "傳送"
+  },
+  "attach": {
+    "button": "附加檔案",
+    "list": "已附加的檔案",
+    "remove": "移除 {name}",
+    "tooBig": "{count, plural, other {{names} 大於 {size}}}",
+    "tooMany": "{max, plural, other {最多只能附加 # 個檔案}}"
+  },
+  "composer": {
+    "message": "訊息",
+    "emoji": "新增表情符號",
+    "hint": "按 Enter 傳送 · 按 Shift+Enter 換行",
+    "send": "傳送",
+    "reply": "輸入回覆…",
+    "replyToReopen": "回覆即可重新開啟…"
+  },
+  "thread": {
+    "loading": "正在載入支援單",
+    "close": "關閉支援單",
+    "reopen": "重新開啟",
+    "resolve": "標示為已解決",
+    "resolvedNote": "已解決。如果仍需要協助，請在下方回覆，支援單就會重新開啟。",
+    "thanks": "感謝你的意見回饋。",
+    "rate": "我們的服務如何？",
+    "good": "很好",
+    "bad": "不好",
+    "you": "你",
+    "support": "支援團隊",
+    "supportAuthor": "{name} · 支援團隊",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "標示為已讀",
+    "markUnread": "標示為未讀",
+    "copyNumber": "複製支援單編號",
+    "copySubject": "複製主旨"
+  },
+  "toasts": {
+    "opened": "已建立支援單 #{number}",
+    "openFailed": "無法建立支援單",
+    "updateFailed": "無法更新支援單",
+    "sendFailed": "無法傳送你的回覆",
+    "markedRead": "已標示為已讀",
+    "markedUnread": "已標示為未讀",
+    "reopened": "已重新開啟支援單",
+    "resolved": "已標示為已解決",
+    "numberCopied": "已複製支援單編號",
+    "subjectCopied": "已複製主旨",
+    "numberCopyFailed": "無法複製支援單編號",
+    "subjectCopyFailed": "無法複製主旨"
+  }
+}

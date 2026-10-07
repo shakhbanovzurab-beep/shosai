@@ -1,0 +1,22 @@
+{
+  "invalidRequest": "هناك خطأ ما في الطلب. يرجى إعادة تحميل الصفحة ثم إعادة المحاولة.",
+  "contextTooLong": "الحد الأقصى لطول السياق {max, plural, zero {# حرف} one {حرف واحد} two {حرفان} few {# أحرف} many {# حرفًا} other {# حرف}}. يرجى اختصاره للحفظ.",
+  "unknownRole": "هذا الدور غير موجود.",
+  "modelNotOnPlan": "هذا النموذج غير متاح في الاشتراك الحالي.",
+  "modelCantDoRole": "لا يمكن استخدام {model} لدور «{role}».",
+  "maxTokensRange": "يجب أن يكون الحد الأقصى للرموز المميزة بين {min, number} و{max, number}.",
+  "promptNameRequired": "يرجى إدخال اسم للموجه.",
+  "promptNameTooLong": "الاسم طويل جدًا. الحد الأقصى {max, plural, zero {# حرف} one {حرف واحد} two {حرفان} few {# أحرف} many {# حرفًا} other {# حرف}}.",
+  "promptTooLong": "التعليمات طويلة جدًا. الحد الأقصى {max, plural, zero {# حرف} one {حرف واحد} two {حرفان} few {# أحرف} many {# حرفًا} other {# حرف}}.",
+  "tooManySkills": "الحد الأقصى لعدد المهارات في الموجه {max, plural, zero {# مهارة} one {مهارة واحدة} two {مهارتان} few {# مهارات} many {# مهارة} other {# مهارة}}.",
+  "promptNotFound": "لم يتم العثور على الموجه.",
+  "promptForOtherRole": "هذا الموجه مخصص لدور آخر.",
+  "skillNotFound": "لم يتم العثور على المهارة.",
+  "skillReferenceInvalid": "يرجى استخدام الصيغة owner/repo/skill، أو رابط skills.sh أو GitHub للمهارة.",
+  "skillFileEmpty": "ملف SKILL.md لهذه المهارة فارغ.",
+  "skillMissing": "تعذر العثور على {path} في {repository}.",
+  "repositoryInvalid": "يرجى استخدام الصيغة owner/repo أو رابط GitHub.",
+  "repositoryUnreadable": "تعذرت قراءة {repository}. يرجى التحقق من أن المستودع عام.",
+  "repositoryNoSkills": "لا توجد ملفات SKILL.md في {repository}.",
+  "directoryUnavailable": "دليل skills.sh لا يستجيب حاليًا. يرجى إعادة المحاولة بعد قليل."
+}

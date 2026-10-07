@@ -1,0 +1,107 @@
+{
+  "title": "Vergaderingen",
+  "description": "Opnames die leden hier hebben gedeeld, met Leo’s samenvatting, besluiten en taken.",
+  "sharingRules": "Deelregels",
+  "reviewSharingRules": "Deelregels bekijken",
+  "shareMeeting": "Vergadering delen",
+  "searchMeetings": "Vergaderingen zoeken",
+  "loading": "Vergaderingen laden…",
+  "loadFailed": "Kan de vergaderingen niet laden",
+  "empty": {
+    "title": "Nog niets gedeeld",
+    "text": "Vergaderingen verschijnen hier wanneer een lid een van zijn opnames deelt, of wanneer een vergadering met alleen leden van {workspace} eindigt en de deelregels gelden."
+  },
+  "noMatch": {
+    "title": "Geen vergaderingen gevonden",
+    "text": "Probeer andere woorden, een ander team of alle vergaderingen.",
+    "clear": "Filters wissen"
+  },
+  "recency": {
+    "thisWeek": "Deze week",
+    "lastWeek": "Vorige week",
+    "earlier": "Eerder"
+  },
+  "scope": {
+    "label": "Welke vergaderingen",
+    "all": "Alle",
+    "mine": "Waar ik bij was"
+  },
+  "when": {
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "tomorrow": "Morgen"
+  },
+  "row": {
+    "recordedByYou": "opgenomen door jou",
+    "recordedBy": "opgenomen door {name}",
+    "withGuests": "met gasten",
+    "decisions": "{count, plural, one {# besluit} other {# besluiten}}",
+    "tasks": "{count, plural, one {# taak} other {# taken}}"
+  },
+  "meeting": {
+    "back": "Vergaderingen",
+    "loading": "Vergadering laden…",
+    "loadFailed": "Kan de vergadering niet laden",
+    "date": "Datum",
+    "duration": "Duur",
+    "participants": "Deelnemers",
+    "participantsWithGuests": "{names} ({count, plural, one {# persoon van buiten {workspace}} other {# mensen van buiten {workspace}}})",
+    "project": "Project",
+    "recordedByYou": "Opgenomen door jou. Ze staat ook in je Notities; stop wanneer je wilt met delen, dan blijft ze daar staan.",
+    "sharedBy": "Opgenomen en gedeeld door {name}",
+    "summary": "Samenvatting",
+    "transcript": "Transcriptie",
+    "keyPoints": "Kernpunten",
+    "decisions": "Besluiten",
+    "replacedLater": "Later vervangen",
+    "tasks": "Taken",
+    "transcriptPrivateTitle": "Alleen de samenvatting is gedeeld",
+    "transcriptPrivate": "{name} heeft de transcriptie privé gehouden. Vraag het {name} als je de precieze woorden nodig hebt.",
+    "transcriptPrivateUnknown": "De organisator heeft de transcriptie privé gehouden. Vraag het de organisator als je de precieze woorden nodig hebt.",
+    "unavailableTitle": "Deze vergadering is niet beschikbaar",
+    "unavailable": "Ze bestaat niet, is niet met je gedeeld, of de eigenaar deelt haar niet meer.",
+    "backToMeetings": "Terug naar vergaderingen"
+  },
+  "project": {
+    "label": "Project",
+    "none": "Geen project"
+  },
+  "audience": {
+    "participants": "Deelnemers",
+    "workspace": "Iedereen in {workspace}",
+    "unknownTeam": "Een team",
+    "participantsHint": "Leden die bij de vergadering waren.",
+    "workspaceHint": "Iedereen in de werkruimte, nu en later.",
+    "teamHint": "Leden van {team}, plus de deelnemers.",
+    "privateTeamHint": "Leden van {team} (privéteam), plus de deelnemers.",
+    "sharedWith": "{level, select, participants {Gedeeld met deelnemers} workspace {Gedeeld met iedereen in {workspace}} other {Gedeeld met {team}}}",
+    "sharedToast": "{level, select, participants {‘{title}’ is gedeeld met de deelnemers in {workspace}} workspace {‘{title}’ is gedeeld met iedereen in {workspace}} other {‘{title}’ is gedeeld met {team} in {workspace}}}"
+  },
+  "share": {
+    "lockedHint": "Alleen degene die haar heeft gedeeld, of een beheerder, kan wijzigen wie haar ziet",
+    "change": "Wijzigen wie deze vergadering ziet",
+    "title": "Wie deze vergadering ziet",
+    "description": "De samenvatting, besluiten en taken. Vragen die mensen aan Leo stellen, blijven van henzelf.",
+    "external": "Er deden mensen van buiten {workspace} mee. Deel alleen wat zij prima zouden vinden.",
+    "audienceLabel": "Gedeeld met",
+    "includeTranscript": "Transcriptie meesturen",
+    "includeTranscriptHint": "Anders wordt alleen de samenvatting gedeeld.",
+    "transcriptShared": "De transcriptie wordt ook gedeeld",
+    "summaryOnly": "Nu wordt alleen de samenvatting gedeeld",
+    "addedToProject": "Aan het project toegevoegd",
+    "removedFromProject": "Uit het project verwijderd",
+    "stopMine": "Niet meer delen (in mijn Notities houden)",
+    "takeOut": "Uit {workspace} halen"
+  },
+  "shareDialog": {
+    "allSharedTitle": "Alles is gedeeld",
+    "allShared": "Al je opnames staan al in {workspace}.",
+    "title": "Een van je vergaderingen delen",
+    "description": "Ze blijft van jou en blijft in je Notities; {workspace} ziet haar tot je stopt met delen.",
+    "meeting": "Vergadering",
+    "movesFrom": "Ze is nu gedeeld in {workspace}; als je haar hier deelt, wordt ze verplaatst.",
+    "audience": "Wie haar ziet",
+    "audienceHint": "De besluiten en taken gaan mee; deelnemers kunnen haar altijd zien.",
+    "submit": "Delen"
+  }
+}

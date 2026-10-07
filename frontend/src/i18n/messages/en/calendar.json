@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Calendar",
+    "description": "Plan meetings, events and focus time by month, week or day."
+  },
+  "summary": "{days, plural, one {# day} other {# days}} · {events, plural, one {# event} other {# events}}",
+  "calendars": {
+    "label": "Calendar",
+    "all": "All calendars",
+    "work": "Work",
+    "personal": "Personal",
+    "team": "Team",
+    "focus": "Focus time"
+  },
+  "views": {
+    "label": "View",
+    "dayGridMonth": "Month",
+    "timeGridWeek": "Week",
+    "timeGridDay": "Day"
+  },
+  "previous": "Previous period",
+  "next": "Next period",
+  "today": "Today",
+  "addEvent": "Add event",
+  "loading": "Loading the calendar…",
+  "eventMenu": {
+    "reschedule": "Reschedule",
+    "dayEarlier": "One day earlier",
+    "dayLater": "One day later",
+    "nextWeek": "Next week",
+    "moveToToday": "Move to today",
+    "copyDetails": "Copy details",
+    "delete": "Delete event"
+  },
+  "dayMenu": {
+    "newAllDay": "New all-day event…",
+    "newAt": "New event at {time}…",
+    "openDay": "Open day",
+    "openWeek": "Open week"
+  },
+  "renameTitle": "Rename event",
+  "newTitle": "New event · {when}",
+  "copyName": "{title} (copy)",
+  "details": "{title} — {when}",
+  "detailsCopied": "Event details copied",
+  "detailsCopyFailed": "Couldn’t copy the event details",
+  "deleted": "Deleted “{title}”"
+}

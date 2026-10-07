@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, one {{amount} token} many {{amount} de tokens} other {{amount} tokens}}",
+  "resets": "Los límites se restablecen cada semana. Próximo restablecimiento: {date}.",
+  "thisWeek": "Esta semana",
+  "tiers": {
+    "standard": {
+      "title": "Modelos estándar",
+      "description": "Incluido en tu plan. Cuando se agote, espera al restablecimiento semanal."
+    },
+    "frontier": {
+      "title": "Modelos de vanguardia",
+      "description": "Claude Opus, GPT Astra y otros modelos punteros. Cuando se agote, se usan tus tokens adicionales."
+    }
+  },
+  "used": "{count, plural, one {{used} de {limit} token} many {{used} de {limit} de tokens} other {{used} de {limit} tokens}}",
+  "usedLabel": "{tier}: usado el {percent} de los tokens de esta semana",
+  "frontierThisWeek": "Modelos de vanguardia esta semana",
+  "topUp": {
+    "title": "Tokens adicionales para modelos de vanguardia",
+    "description": "Se usan cuando se agota la asignación semanal de modelos de vanguardia. No se restablecen y no se pueden usar con modelos estándar.",
+    "balance": "{count, plural, one {Queda <big>{amount} token</big>} many {Quedan <big>{amount} de tokens</big>} other {Quedan <big>{amount} tokens</big>}}",
+    "buyMore": "Comprar más",
+    "buy": "Comprar tokens",
+    "failed": "No se pudo iniciar la compra"
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Kanban",
+    "description": "Quadros para o trabalho, a casa e tudo mais, incluindo quadros sincronizados com o Jira."
+  },
+  "loadBoardsFailed": "Não foi possível carregar seus quadros",
+  "loadBoardFailed": "Não foi possível carregar o quadro",
+  "addTask": "Adicionar tarefa",
+  "taskCount": "{count, plural, one {# tarefa} many {# de tarefas} other {# tarefas}}",
+  "progress": "Progresso",
+  "views": {
+    "label": "Visualização",
+    "board": "Quadro",
+    "list": "Lista",
+    "table": "Tabela"
+  },
+  "toolbar": {
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "moreWaysToAdd": "Mais formas de adicionar tarefas",
+    "importCsv": "Importar CSV",
+    "addFromTemplate": "Adicionar de um template",
+    "createAutomation": "Criar automação"
+  },
+  "column": {
+    "drag": "Arrastar a coluna {column}",
+    "addTask": "Adicionar tarefa em {column}",
+    "empty": "Nenhuma tarefa em {column}"
+  },
+  "columnMenu": {
+    "managedInJira": "As colunas são gerenciadas no Jira",
+    "rename": "Renomear coluna…",
+    "sortByPriority": "Ordenar por prioridade",
+    "moveEarlier": "Mover para antes",
+    "moveLater": "Mover para depois",
+    "clear": "Limpar coluna"
+  },
+  "taskMenu": {
+    "openInJira": "Abrir {key} no Jira",
+    "openInWorkspace": "Abrir em {workspace}",
+    "moveTo": "Mover para",
+    "moveToTop": "Mover para o topo",
+    "moveToBottom": "Mover para o final",
+    "delete": "Excluir tarefa"
+  },
+  "priority": {
+    "label": "Prioridade",
+    "high": "Alta",
+    "medium": "Média",
+    "low": "Baixa"
+  },
+  "card": {
+    "unassigned": "Não atribuída",
+    "completed": "Concluída",
+    "fromSource": "De {source}",
+    "jiraIssue": "{type} (abre o Jira em uma nova aba)",
+    "workspaceTask": "Tarefa deste espaço de trabalho. O que você mudar aqui também muda lá.",
+    "insights": {
+      "attachments": "{count, plural, one {# anexo} many {# de anexos} other {# anexos}}",
+      "comments": "{count, plural, one {# comentário} many {# de comentários} other {# comentários}}",
+      "documents": "{count, plural, one {# documento} many {# de documentos} other {# documentos}}"
+    }
+  },
+  "table": {
+    "task": "Tarefa",
+    "status": "Status",
+    "owner": "Proprietário",
+    "label": "Marcador",
+    "due": "Prazo",
+    "actions": "Ações",
+    "empty": "Nenhuma tarefa ainda",
+    "progressOf": "Progresso de {task}"
+  },
+  "commands": {
+    "renameTask": "Renomear tarefa",
+    "renameColumn": "Renomear coluna",
+    "newTaskIn": "Nova tarefa em {column}",
+    "copyTitle": "{title} (cópia)",
+    "deleted": "Tarefa “{title}” excluída",
+    "cleared": "{count, plural, one {# tarefa excluída da coluna {column}} many {# de tarefas excluídas da coluna {column}} other {# tarefas excluídas da coluna {column}}}",
+    "jiraLinkCopied": "Link de {key} copiado"
+  },
+  "errors": {
+    "addTask": "Não foi possível adicionar a tarefa",
+    "saveChange": "Não foi possível salvar a alteração",
+    "deleteTasks": "{count, plural, one {Não foi possível excluir a tarefa} many {Não foi possível excluir as tarefas} other {Não foi possível excluir as tarefas}}",
+    "saveBoard": "Não foi possível salvar o quadro"
+  }
+}

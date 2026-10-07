@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "칸반",
+    "description": "업무, 집안일 등 무엇이든 보드로 정리하고, Jira 보드와도 동기화할 수 있어요."
+  },
+  "loadBoardsFailed": "보드 목록을 불러오지 못했어요",
+  "loadBoardFailed": "보드를 불러오지 못했어요",
+  "addTask": "작업 추가",
+  "taskCount": "{count, plural, other {작업 #개}}",
+  "progress": "진행률",
+  "views": {
+    "label": "보기",
+    "board": "보드",
+    "list": "목록",
+    "table": "표"
+  },
+  "toolbar": {
+    "filter": "필터",
+    "sort": "정렬",
+    "moreWaysToAdd": "다른 방법으로 작업 추가",
+    "importCsv": "CSV 가져오기",
+    "addFromTemplate": "템플릿에서 추가",
+    "createAutomation": "자동화 만들기"
+  },
+  "column": {
+    "drag": "{column} 열 끌어서 이동",
+    "addTask": "{column}에 작업 추가",
+    "empty": "{column}에 작업이 없어요"
+  },
+  "columnMenu": {
+    "managedInJira": "열은 Jira에서 관리돼요",
+    "rename": "열 이름 변경…",
+    "sortByPriority": "우선순위로 정렬",
+    "moveEarlier": "앞으로 이동",
+    "moveLater": "뒤로 이동",
+    "clear": "열 비우기"
+  },
+  "taskMenu": {
+    "openInJira": "Jira에서 {key} 열기",
+    "openInWorkspace": "{workspace}에서 열기",
+    "moveTo": "이동",
+    "moveToTop": "맨 위로 이동",
+    "moveToBottom": "맨 아래로 이동",
+    "delete": "작업 삭제"
+  },
+  "priority": {
+    "label": "우선순위",
+    "high": "높음",
+    "medium": "보통",
+    "low": "낮음"
+  },
+  "card": {
+    "unassigned": "담당자 없음",
+    "completed": "완료",
+    "fromSource": "{source} 워크스페이스",
+    "jiraIssue": "{type} (새 탭에서 Jira가 열려요)",
+    "workspaceTask": "워크스페이스 작업이에요. 여기서 바꾸면 워크스페이스에도 반영돼요.",
+    "insights": {
+      "attachments": "{count, plural, other {첨부 파일 #개}}",
+      "comments": "{count, plural, other {댓글 #개}}",
+      "documents": "{count, plural, other {문서 #개}}"
+    }
+  },
+  "table": {
+    "task": "작업",
+    "status": "상태",
+    "owner": "담당자",
+    "label": "라벨",
+    "due": "마감일",
+    "actions": "관리",
+    "empty": "아직 작업이 없어요",
+    "progressOf": "{task} 진행률"
+  },
+  "commands": {
+    "renameTask": "작업 이름 변경",
+    "renameColumn": "열 이름 변경",
+    "newTaskIn": "{column}에 새 작업",
+    "copyTitle": "{title} (사본)",
+    "deleted": "“{title}” 작업을 삭제했어요",
+    "cleared": "{count, plural, other {{column}에서 작업 #개를 삭제했어요}}",
+    "jiraLinkCopied": "{key} 링크를 복사했어요"
+  },
+  "errors": {
+    "addTask": "작업을 추가하지 못했어요",
+    "saveChange": "변경 사항을 저장하지 못했어요",
+    "deleteTasks": "{count, plural, other {작업을 삭제하지 못했어요}}",
+    "saveBoard": "보드를 저장하지 못했어요"
+  }
+}

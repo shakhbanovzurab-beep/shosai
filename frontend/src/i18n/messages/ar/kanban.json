@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "كانبان",
+    "description": "لوحات للعمل والمنزل وأي شيء آخر، ومنها لوحات تتم مزامنتها مع Jira."
+  },
+  "loadBoardsFailed": "تعذر تحميل اللوحات",
+  "loadBoardFailed": "تعذر تحميل اللوحة",
+  "addTask": "إضافة مهمة",
+  "taskCount": "{count, plural, zero {# مهمة} one {مهمة واحدة} two {مهمتان} few {# مهام} many {# مهمة} other {# مهمة}}",
+  "progress": "التقدم",
+  "views": {
+    "label": "العرض",
+    "board": "لوحة",
+    "list": "قائمة",
+    "table": "جدول"
+  },
+  "toolbar": {
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "moreWaysToAdd": "طرق أخرى لإضافة المهام",
+    "importCsv": "استيراد CSV",
+    "addFromTemplate": "إضافة من قالب",
+    "createAutomation": "إنشاء قاعدة أتمتة"
+  },
+  "column": {
+    "drag": "سحب عمود «{column}»",
+    "addTask": "إضافة مهمة إلى «{column}»",
+    "empty": "لا توجد مهام في «{column}»"
+  },
+  "columnMenu": {
+    "managedInJira": "تتم إدارة الأعمدة في Jira",
+    "rename": "إعادة تسمية العمود…",
+    "sortByPriority": "ترتيب حسب الأولوية",
+    "moveEarlier": "تقديم العمود",
+    "moveLater": "تأخير العمود",
+    "clear": "إفراغ العمود"
+  },
+  "taskMenu": {
+    "openInJira": "فتح {key} في Jira",
+    "openInWorkspace": "فتح في {workspace}",
+    "moveTo": "نقل إلى",
+    "moveToTop": "نقل إلى الأعلى",
+    "moveToBottom": "نقل إلى الأسفل",
+    "delete": "حذف المهمة"
+  },
+  "priority": {
+    "label": "الأولوية",
+    "high": "عالية",
+    "medium": "متوسطة",
+    "low": "منخفضة"
+  },
+  "card": {
+    "unassigned": "بلا مكلف",
+    "completed": "مكتملة",
+    "fromSource": "من {source}",
+    "jiraIssue": "{type} (يفتح Jira في علامة تبويب جديدة)",
+    "workspaceTask": "مهمة في مساحة العمل هذه. التغييرات التي تُجرى هنا تنطبق عليها هناك.",
+    "insights": {
+      "attachments": "{count, plural, zero {# مرفق} one {مرفق واحد} two {مرفقان} few {# مرفقات} many {# مرفقًا} other {# مرفق}}",
+      "comments": "{count, plural, zero {# تعليق} one {تعليق واحد} two {تعليقان} few {# تعليقات} many {# تعليقًا} other {# تعليق}}",
+      "documents": "{count, plural, zero {# مستند} one {مستند واحد} two {مستندان} few {# مستندات} many {# مستندًا} other {# مستند}}"
+    }
+  },
+  "table": {
+    "task": "المهمة",
+    "status": "الحالة",
+    "owner": "المالك",
+    "label": "التصنيف",
+    "due": "تاريخ الاستحقاق",
+    "actions": "الإجراءات",
+    "empty": "لا توجد مهام بعد",
+    "progressOf": "تقدم «{task}»"
+  },
+  "commands": {
+    "renameTask": "إعادة تسمية المهمة",
+    "renameColumn": "إعادة تسمية العمود",
+    "newTaskIn": "مهمة جديدة في «{column}»",
+    "copyTitle": "نسخة من {title}",
+    "deleted": "تم حذف «{title}»",
+    "cleared": "{count, plural, zero {لم تُحذف أي مهمة من «{column}»} one {تم حذف مهمة واحدة من «{column}»} two {تم حذف مهمتين من «{column}»} few {تم حذف # مهام من «{column}»} many {تم حذف # مهمة من «{column}»} other {تم حذف # مهمة من «{column}»}}",
+    "jiraLinkCopied": "تم نسخ رابط {key}"
+  },
+  "errors": {
+    "addTask": "تعذر إضافة المهمة",
+    "saveChange": "تعذر حفظ التغيير",
+    "deleteTasks": "{count, plural, zero {تعذر حذف المهام} one {تعذر حذف المهمة} two {تعذر حذف المهمتين} few {تعذر حذف المهام} many {تعذر حذف المهام} other {تعذر حذف المهام}}",
+    "saveBoard": "تعذر حفظ اللوحة"
+  }
+}

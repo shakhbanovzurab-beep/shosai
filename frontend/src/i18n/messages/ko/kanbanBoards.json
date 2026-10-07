@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "보드",
+    "jiraBoards": "Jira와 동기화됨",
+    "newBoard": "새 보드…",
+    "syncJiraBoard": "Jira 보드 동기화…",
+    "rename": "보드 이름 변경…",
+    "showWorkspaceTasks": "여기에 내 워크스페이스 작업 표시",
+    "changeIcon": "아이콘 변경",
+    "delete": "보드 삭제…",
+    "stopSyncing": "동기화 중지…"
+  },
+  "icons": {
+    "work": "업무",
+    "home": "집",
+    "personal": "개인",
+    "health": "건강",
+    "study": "공부",
+    "travel": "여행",
+    "shopping": "쇼핑",
+    "fitness": "운동",
+    "project": "프로젝트",
+    "reading": "독서"
+  },
+  "empty": {
+    "title": "아직 보드가 없어요",
+    "description": "업무, 집안일 등 원하는 보드를 만들거나 Jira 보드를 가져와 보세요.",
+    "newBoard": "새 보드",
+    "syncJiraBoard": "Jira 보드 동기화"
+  },
+  "newBoard": {
+    "title": "새 보드",
+    "description": "업무, 집안일 등을 각각의 보드로 나눠 관리해 보세요.",
+    "namePlaceholder": "예: 집안일",
+    "icon": "아이콘",
+    "columns": "열",
+    "create": "보드 만들기"
+  },
+  "templates": {
+    "simple": "기본",
+    "project": "프로젝트"
+  },
+  "columnNames": {
+    "backlog": "백로그",
+    "todo": "할 일",
+    "inProgress": "진행 중",
+    "review": "검토 중",
+    "done": "완료"
+  },
+  "renameTitle": "보드 이름 변경",
+  "delete": {
+    "title": "“{board}” 보드를 삭제할까요?",
+    "description": "{count, plural, =0 {보드가 삭제되며 되돌릴 수 없어요.} other {보드와 작업 #개가 삭제되며 되돌릴 수 없어요.}}",
+    "confirm": "보드 삭제",
+    "stopTitle": "“{board}” 보드 동기화를 중지할까요?",
+    "stopDescription": "이 보드는 여기서 제거돼요. Jira에는 아무 변화가 없고, 나중에 다시 동기화할 수 있어요.",
+    "stopConfirm": "동기화 중지"
+  },
+  "jira": {
+    "title": "Jira 보드 동기화",
+    "description": "Jira 보드를 여기서 관리하세요. 변경 사항은 양쪽에 모두 동기화돼요.",
+    "connectTitle": "먼저 Jira를 연결해 주세요",
+    "connectDescription": "설정 › 커넥터에서 Jira에 로그인한 다음, 돌아와서 보드를 선택해 주세요.",
+    "openConnectors": "커넥터 열기",
+    "connectedAs": "{account} 계정으로 연결됐어요.",
+    "connected": "Jira에 연결됐어요.",
+    "noBoards": "Jira 계정에 아직 보드가 없어요.",
+    "boardList": "Jira 보드",
+    "alreadySynced": "이미 동기화됨 · 열기",
+    "type": {
+      "kanban": "칸반",
+      "scrum": "스크럼"
+    },
+    "howColumns": "열과 이슈는 Jira 보드에서 가져와요.",
+    "howMoves": "카드를 옮기면 Jira에서 이슈 상태가 바뀌고, 새 작업은 Jira 이슈로 만들어져요.",
+    "howChanges": "Jira에서 바꾼 내용은 여기에 자동으로 반영돼요.",
+    "sync": "보드 동기화"
+  },
+  "sync": {
+    "syncing": "Jira와 동기화 중…",
+    "paused": "동기화 일시 중지됨",
+    "synced": "Jira와 동기화됨",
+    "syncedAgo": "{ago} Jira와 동기화됨",
+    "syncNow": "지금 동기화",
+    "openBoard": "Jira에서 {board} 열기",
+    "openHint": "Jira에서 열기 · {site}의 {project}"
+  },
+  "banners": {
+    "syncStopped": "Jira와의 동기화가 중지됐어요.",
+    "changesPaused": "지금은 변경할 수 없어요.",
+    "importing": "Jira에서 {board} 보드를 가져오는 중…",
+    "importingHint": "곧 열과 이슈가 여기에 표시돼요.",
+    "offer": "{count, plural, other {워크스페이스에 완료하지 않은 작업이 #개 있어요. “{board}” 보드에 표시할까요?}} 카드를 옮기면 팀 작업에도 반영돼요.",
+    "notNow": "나중에",
+    "showHere": "{count, plural, other {여기에 표시}}"
+  },
+  "toasts": {
+    "createFailed": "보드를 만들지 못했어요",
+    "connectFailed": "Jira 보드를 동기화하지 못했어요",
+    "updateFailed": "보드를 업데이트하지 못했어요",
+    "deleteFailed": "보드를 삭제하지 못했어요",
+    "syncFailed": "Jira와 동기화하지 못했어요",
+    "deleted": "“{board}” 보드를 삭제했어요",
+    "stoppedSyncing": "“{board}” 보드 동기화를 중지했어요",
+    "workspaceTasksOn": "이제 “{board}” 보드에 워크스페이스 작업이 표시돼요",
+    "workspaceTasksOff": "이제 워크스페이스 작업이 보드에 표시되지 않아요",
+    "workspaceTasksHint": "카드를 옮기면 해당 워크스페이스의 작업도 바뀌어요.",
+    "workspaceTasksFailed": "워크스페이스 작업 표시 위치를 바꾸지 못했어요"
+  }
+}

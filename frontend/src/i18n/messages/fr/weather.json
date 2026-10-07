@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Ciel dégagé",
+    "partly": "Partiellement nuageux",
+    "overcast": "Couvert",
+    "fog": "Brouillard",
+    "drizzle": "Bruine",
+    "rain": "Pluie",
+    "snow": "Neige",
+    "storm": "Orage",
+    "unknown": "Inconnu"
+  },
+  "fallbackPlace": "Moscou",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, max. {high}, min. {low}",
+  "summaryAt": "{condition}, {now}, max. {high}, min. {low} à {place}"
+}

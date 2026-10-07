@@ -1,0 +1,50 @@
+{
+  "title": "फ़ोकस",
+  "sound": {
+    "label": "सेशन ख़त्म होने पर आवाज़",
+    "on": "आवाज़ चालू",
+    "off": "आवाज़ बंद"
+  },
+  "rhythm": "फ़ोकस की लय",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}।</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "पोमोडोरो",
+      "hint": "{focus} फ़ोकस, {pause} ब्रेक, {every, plural, one {हर सेशन} other {हर # सेशन}} के बाद {longBreak}। शुरुआत करने और व्यस्त दिनों के लिए अच्छा।"
+    },
+    "fifty": {
+      "name": "लंबे सेशन",
+      "hint": "{focus} फ़ोकस, {pause} ब्रेक, {every, plural, one {हर सेशन} other {हर # सेशन}} के बाद {longBreak}। लिखने और डिज़ाइन के लिए अच्छा।"
+    },
+    "fiftyTwo": {
+      "name": "{focus, number}/{pause, number} की लय",
+      "hint": "{focus} फ़ोकस, {pause} ब्रेक — DeskTime की स्टडी में सबसे ज़्यादा उत्पादक लोग इसी तरह काम करते थे।"
+    },
+    "deepWork": {
+      "name": "डीप वर्क",
+      "hint": "{focus} फ़ोकस, {pause} ब्रेक — ध्यान का एक स्वाभाविक चक्र, मुश्किल समस्याओं के लिए।"
+    }
+  },
+  "phase": {
+    "focus": "फ़ोकस",
+    "break": "छोटा ब्रेक",
+    "long_break": "लंबा ब्रेक"
+  },
+  "start": "शुरू करें",
+  "pause": "रोकें",
+  "resume": "जारी रखें",
+  "restart": "यह चरण फिर से शुरू करें",
+  "skipBreak": "ब्रेक छोड़ें",
+  "skipToBreak": "सीधे ब्रेक पर जाएं",
+  "cycle": "लंबे ब्रेक से पहले {every, plural, one {# सेशन} other {# सेशन}} में से {done, number}",
+  "doneToday": "{count, plural, one {आज # सेशन पूरा हुआ} other {आज # सेशन पूरे हुए}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "फ़ोकस सेशन पूरा हुआ — अब ब्रेक लें।",
+    "focusLong": "फ़ोकस सेशन पूरा हुआ — अब लंबा ब्रेक लें।",
+    "break": "ब्रेक ख़त्म — फ़ोकस के लिए तैयार हैं?",
+    "next": "{preset} · तैयार हों तो “शुरू करें” दबाएं।"
+  }
+}

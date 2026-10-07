@@ -1,0 +1,50 @@
+{
+  "title": "Fokus",
+  "sound": {
+    "label": "Suara saat sesi berakhir",
+    "on": "Suara aktif",
+    "off": "Suara nonaktif"
+  },
+  "rhythm": "Ritme fokus",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Teknik Pomodoro",
+      "hint": "{focus} fokus, {pause} istirahat, {longBreak} setelah {every, plural, =1 {setiap sesi} other {setiap # sesi}}. Cocok untuk memulai dan untuk hari yang sibuk."
+    },
+    "fifty": {
+      "name": "Diperpanjang",
+      "hint": "{focus} fokus, {pause} istirahat, {longBreak} setelah {every, plural, =1 {setiap sesi} other {setiap # sesi}}. Cocok untuk menulis dan mendesain."
+    },
+    "fiftyTwo": {
+      "name": "Ritme {focus, number}/{pause, number}",
+      "hint": "{focus} fokus, {pause} istirahat — cara kerja orang paling produktif dalam studi DeskTime."
+    },
+    "deepWork": {
+      "name": "Kerja mendalam",
+      "hint": "{focus} fokus, {pause} istirahat — satu siklus perhatian alami, untuk masalah yang sulit."
+    }
+  },
+  "phase": {
+    "focus": "Fokus",
+    "break": "Istirahat singkat",
+    "long_break": "Istirahat panjang"
+  },
+  "start": "Mulai",
+  "pause": "Jeda",
+  "resume": "Lanjutkan",
+  "restart": "Mulai ulang fase ini",
+  "skipBreak": "Lewati istirahat",
+  "skipToBreak": "Langsung ke istirahat",
+  "cycle": "{done, number} dari {every, plural, other {# sesi}} sebelum istirahat panjang",
+  "doneToday": "{count, plural, other {# sesi selesai hari ini}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Sesi fokus selesai — saatnya istirahat.",
+    "focusLong": "Sesi fokus selesai — saatnya istirahat panjang.",
+    "break": "Istirahat selesai — siap untuk fokus?",
+    "next": "{preset} · tekan Mulai jika sudah siap."
+  }
+}

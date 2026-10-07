@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Connaissances",
+    "description": "Choisissez les fichiers et les sources dont Leo se sert pour répondre dans votre espace personnel."
+  },
+  "heading": "Connaissances",
+  "intro": "Ce dont Leo se sert quand vous lui posez une question dans votre espace personnel : les fichiers choisis dans le Gestionnaire de fichiers, les sources connectées et ce que vos espaces de travail partagent avec vous. Vous seul voyez ces réponses.",
+  "tabs": {
+    "files": "Fichiers",
+    "sources": "Sources",
+    "workspaces": "Des espaces de travail"
+  },
+  "loadFailed": "Impossible de charger vos fichiers",
+  "leoFolders": {
+    "heading": "Dossiers lus par Leo",
+    "stop": "Ne plus utiliser {folder}"
+  },
+  "leoFiles": {
+    "heading": "Fichiers utilisés par Leo",
+    "emptyTitle": "Leo n’utilise encore aucun de vos fichiers",
+    "emptyDescription": "Choisissez des fichiers ou des dossiers entiers dans le Gestionnaire de fichiers, ou importez-en de nouveaux ci-dessus."
+  },
+  "summary": {
+    "files": "Fichiers",
+    "chunks": "Fragments",
+    "processing": "Traitement",
+    "embeddings": "Vecteurs",
+    "used": "{used} utilisés",
+    "usedOfLimit": "{used} sur {limit} avec votre forfait",
+    "failedUsage": "{failed, plural, one {# en échec} many {# d’éléments en échec} other {# en échec}} · {usage}",
+    "inIndex": "dans l’index vectoriel",
+    "busy": "analyse et vectorisation",
+    "caughtUp": "tout est à jour",
+    "dimensions": "{dimensions, number} dimensions"
+  },
+  "dropzone": {
+    "label": "Ajouter des fichiers pour Leo",
+    "title": "Déposez ici des fichiers que Leo utilisera",
+    "uploading": "Importation de {count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}…",
+    "description": "Ils sont enregistrés dans Mes fichiers, dans le Gestionnaire de fichiers. {types}, {size} maximum chacun.",
+    "choose": "Choisir dans vos fichiers",
+    "upload": "Importer",
+    "skipped": "{count, plural, one {# fichier ignoré} many {# de fichiers ignorés} other {# fichiers ignorés}}",
+    "unreadable": "{name} : Leo ne peut pas lire ce type ou cette taille de fichier",
+    "tooMany": "{name} : plus de {max, number} fichiers à la fois"
+  },
+  "choose": {
+    "title": "Choisir dans vos fichiers",
+    "description": "Leo lit ce que vous choisissez et s’en sert pour répondre dans votre espace personnel. Un dossier inclut aussi les fichiers que vous y ajouterez plus tard.",
+    "folders": "Dossiers entiers",
+    "files": "Fichiers",
+    "alreadyUsed": "Déjà utilisé par Leo",
+    "submit": "Utiliser avec Leo",
+    "readingOne": "Leo est en train de le lire",
+    "readingMany": "{count, plural, one {Leo lit # élément choisi} many {Leo lit # d’éléments choisis} other {Leo lit # éléments choisis}}",
+    "readingDescription": "Il s’en servira pour répondre dans votre espace personnel une fois l’indexation terminée."
+  },
+  "table": {
+    "status": "Statut",
+    "chunks": "Fragments",
+    "size": "Taille",
+    "workspaces": "Espaces de travail",
+    "actions": "Actions",
+    "wholeFolder": "<name>{folder}</name> · dossier entier"
+  },
+  "steps": {
+    "queued": "En attente",
+    "parsing": "Analyse",
+    "chunking": "Découpage",
+    "embedding": "Vectorisation",
+    "indexed": "Indexé",
+    "failed": "Échec"
+  },
+  "status": {
+    "step": "{step, number} sur {total, number}",
+    "progress": "{name} : {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Réindexer",
+    "showInFileManager": "Afficher dans le Gestionnaire de fichiers",
+    "stopFolder": "Ne plus utiliser « {folder} »",
+    "stopFile": "Ne plus utiliser avec Leo"
+  }
+}

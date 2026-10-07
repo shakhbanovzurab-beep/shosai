@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "Pengaturan",
+    "sectionsLabel": "Bagian pengaturan",
+    "autosave": "Perubahan disimpan secara otomatis."
+  },
+  "sections": {
+    "account": "Akun",
+    "privacy": "Privasi",
+    "billing": "Tagihan",
+    "usage": "Penggunaan",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "Memori",
+    "connectors": "Konektor",
+    "hotkeys": "Pintasan keyboard"
+  },
+  "loadFailed": "Tidak dapat memuat bagian ini",
+  "manage": "Kelola",
+  "saving": "Menyimpan…",
+  "saveFailed": "Tidak dapat menyimpan",
+  "profile": {
+    "title": "Profil",
+    "email": "Email",
+    "emailHint": "Anda masuk dengan alamat ini melalui penyedia Anda.",
+    "fullName": "Nama lengkap",
+    "displayName": "Leo sebaiknya memanggil Anda apa?",
+    "displayNameHint": "Dipakai saat Leo menyapa Anda dan dalam jawabannya.",
+    "workRole": "Apa yang paling menggambarkan pekerjaan Anda?",
+    "workRoleHint": "Leo memakainya untuk menyesuaikan contoh dan istilah dengan bidang Anda."
+  },
+  "workRoles": {
+    "product_management": "Manajemen produk",
+    "engineering": "Teknik",
+    "human_resources": "Sumber daya manusia",
+    "finance": "Keuangan",
+    "marketing": "Pemasaran",
+    "sales": "Penjualan",
+    "operations": "Operasional",
+    "data_science": "Ilmu data",
+    "design": "Desain",
+    "legal": "Hukum",
+    "scientist": "Ilmuwan",
+    "student": "Pelajar",
+    "founder": "Pendiri",
+    "healthcare": "Layanan kesehatan",
+    "writer": "Penulis",
+    "educator": "Pendidik",
+    "consultant": "Konsultan",
+    "researcher": "Peneliti",
+    "software_engineer": "Insinyur perangkat lunak",
+    "other": "Lainnya"
+  },
+  "avatar": {
+    "change": "Ubah foto profil",
+    "hint": "Gambar apa pun bisa. Gambar akan dipotong persegi dan diubah ukurannya untuk Anda.",
+    "upload": "Unggah foto",
+    "updateFailed": "Tidak dapat memperbarui foto Anda",
+    "removeFailed": "Tidak dapat menghapus foto Anda",
+    "tooLarge": "Pilih foto yang lebih kecil dari {size}.",
+    "unreadable": "Browser ini tidak dapat membaca gambar tersebut. Coba JPEG atau PNG.",
+    "processFailed": "Tidak dapat memproses gambar."
+  },
+  "deleteAccount": {
+    "group": "Zona berbahaya",
+    "title": "Hapus akun",
+    "description": "Hapus akun Anda secara permanen beserta seluruh isinya: chat, catatan, file, prompt, dan pengaturan.",
+    "confirmTitle": "Hapus akun Anda?",
+    "confirmDescription": "Tindakan ini tidak dapat dibatalkan. Chat, catatan, file, prompt, memori, dan pengaturan Anda akan dihapus, dan langganan apa pun akan dibatalkan.",
+    "confirmLabel": "Ketik <address>{email}</address> untuk mengonfirmasi",
+    "deleted": "Akun Anda telah dihapus",
+    "failed": "Tidak dapat menghapus akun Anda"
+  }
+}

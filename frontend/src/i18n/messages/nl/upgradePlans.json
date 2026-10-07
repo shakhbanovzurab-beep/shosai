@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} per gebruiker",
+    "from": "vanaf {amount}",
+    "unlimited": "onbeperkt"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Onbeperkt vergaderen",
+    "meetingMinutes": "{minutes, plural, one {# vergaderminuut} other {# vergaderminuten}} per maand",
+    "noMeetings": "Vergaderingen",
+    "fileManager": "Bestandsbeheer · {storage}",
+    "noFileManager": "Bestandsbeheer",
+    "knowledge": "Kennis voor Leo · {storage}",
+    "noKnowledge": "Kennis voor Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Gedeelde teamwerkruimte",
+    "member_management": "Gebruikersbeheer",
+    "centralized_billing": "Centrale facturering",
+    "billing_and_users": "Centrale facturering en gebruikersbeheer",
+    "admin_controls": "Beveiliging en beheeropties op bedrijfsniveau",
+    "sso": "Eenmalig inloggen (SSO)",
+    "priority_support": "Ondersteuning met prioriteit",
+    "usage_analytics": "Gebruiksanalyses"
+  },
+  "compare": {
+    "title": "Abonnementen vergelijken",
+    "feature": "Functie",
+    "included": "Inbegrepen",
+    "notIncluded": "Niet inbegrepen",
+    "unlimited": "Onbeperkt",
+    "minutes": "{minutes, plural, one {# min} other {# min}} / maand",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Op maat",
+    "rows": {
+      "meetings": "Vergaderingen",
+      "fileManager": "Bestandsbeheer",
+      "knowledge": "Kennis voor Leo",
+      "apps": "Leo, E-mail, Agenda, Kanban, Notities",
+      "users": "Gebruikers",
+      "sharedWorkspace": "Gedeelde werkruimte",
+      "billingAndUsers": "Centrale facturering en gebruikersbeheer",
+      "sso": "Eenmalig inloggen (SSO)",
+      "adminControls": "Beveiliging en beheeropties",
+      "prioritySupport": "Ondersteuning met prioriteit",
+      "usageAnalytics": "Gebruiksanalyses"
+    }
+  }
+}

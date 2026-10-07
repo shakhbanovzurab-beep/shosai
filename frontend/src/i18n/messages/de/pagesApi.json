@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Sende die Nachricht als multipart/form-data.",
+  "emptyMessage": "Schreib eine Nachricht oder hänge eine Datei an.",
+  "messageTooLong": "Die Nachricht darf höchstens {max, number} Zeichen lang sein.",
+  "tooManyFiles": "{max, plural, one {Hänge höchstens # Datei an.} other {Hänge höchstens # Dateien an.}}",
+  "fileTooBig": "{name} ist größer als {size}.",
+  "subjectRequired": "Gib der Anfrage einen kurzen Betreff.",
+  "topicRequired": "Wähle ein Thema.",
+  "detailsRequired": "Beschreibe, was passiert ist.",
+  "ticketNotFound": "Anfrage nicht gefunden.",
+  "invalidUpdate": "Sende einen Status, eine Bewertung oder die Ungelesen-Markierung."
+}

@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Conhecimento",
+    "description": "Escolha os arquivos e as fontes que o Leo usa para responder em Pessoal."
+  },
+  "heading": "Conhecimento",
+  "intro": "O que o Leo usa para responder quando você pergunta em Pessoal: arquivos que você escolhe no Gerenciador de arquivos, fontes que você conecta e o que seus espaços de trabalho compartilham com você. Só você vê essas respostas.",
+  "tabs": {
+    "files": "Arquivos",
+    "sources": "Fontes",
+    "workspaces": "Dos espaços de trabalho"
+  },
+  "loadFailed": "Não foi possível carregar seus arquivos",
+  "leoFolders": {
+    "heading": "Pastas que o Leo lê",
+    "stop": "Parar de usar {folder}"
+  },
+  "leoFiles": {
+    "heading": "Arquivos que o Leo usa",
+    "emptyTitle": "O Leo ainda não usa nenhum dos seus arquivos",
+    "emptyDescription": "Escolha arquivos ou pastas inteiras no Gerenciador de arquivos ou faça upload de novos acima."
+  },
+  "summary": {
+    "files": "Arquivos",
+    "chunks": "Trechos",
+    "processing": "Processando",
+    "embeddings": "Embeddings",
+    "used": "{used} em uso",
+    "usedOfLimit": "{used} de {limit} no seu plano",
+    "failedUsage": "{failed, plural, one {# com falha} many {# com falha} other {# com falha}} · {usage}",
+    "inIndex": "no índice vetorial",
+    "busy": "analisando e gerando embeddings",
+    "caughtUp": "tudo em dia",
+    "dimensions": "{dimensions, number} dimensões"
+  },
+  "dropzone": {
+    "label": "Adicionar arquivos para o Leo",
+    "title": "Solte arquivos aqui para o Leo usar",
+    "uploading": "Fazendo upload de {count, plural, one {# arquivo} many {# de arquivos} other {# arquivos}}…",
+    "description": "Eles são salvos em Meus arquivos, no Gerenciador de arquivos. {types}, até {size} cada.",
+    "choose": "Escolher dos seus arquivos",
+    "upload": "Fazer upload",
+    "skipped": "{count, plural, one {# arquivo ignorado} many {# de arquivos ignorados} other {# arquivos ignorados}}",
+    "unreadable": "{name}: o Leo não consegue ler este tipo ou tamanho",
+    "tooMany": "{name}: mais de {max, number} arquivos de uma vez"
+  },
+  "choose": {
+    "title": "Escolher dos seus arquivos",
+    "description": "O Leo lê o que você escolher e responde com base nisso em Pessoal. Uma pasta inclui os arquivos que você adicionar a ela depois.",
+    "folders": "Pastas inteiras",
+    "files": "Arquivos",
+    "alreadyUsed": "O Leo já usa",
+    "submit": "Usar com o Leo",
+    "readingOne": "O Leo está lendo agora",
+    "readingMany": "{count, plural, one {O Leo está lendo # item agora} many {O Leo está lendo # de itens agora} other {O Leo está lendo # itens agora}}",
+    "readingDescription": "Ele vai responder com base neles em Pessoal quando a indexação terminar."
+  },
+  "table": {
+    "status": "Status",
+    "chunks": "Trechos",
+    "size": "Tamanho",
+    "workspaces": "Espaços de trabalho",
+    "actions": "Ações",
+    "wholeFolder": "<name>{folder}</name> · pasta inteira"
+  },
+  "steps": {
+    "queued": "Na fila",
+    "parsing": "Analisando",
+    "chunking": "Dividindo em trechos",
+    "embedding": "Gerando embeddings",
+    "indexed": "Indexado",
+    "failed": "Com falha"
+  },
+  "status": {
+    "step": "{step, number} de {total, number}",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Indexar novamente",
+    "showInFileManager": "Mostrar no Gerenciador de arquivos",
+    "stopFolder": "Parar de usar “{folder}”",
+    "stopFile": "Parar de usar com o Leo"
+  }
+}

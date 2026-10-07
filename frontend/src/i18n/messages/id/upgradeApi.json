@@ -1,0 +1,13 @@
+{
+  "choosePlan": "Pilih paket.",
+  "planUnavailable": "Paket ini tidak tersedia.",
+  "salesOnly": "Paket ini diatur bersama tim penjualan kami.",
+  "alreadyOnPlan": "Anda sudah menggunakan paket ini.",
+  "chooseUsers": "Pilih {min, number}–{max, number} pengguna.",
+  "chooseUsersOrMore": "Pilih {min, plural, other {# pengguna atau lebih}}.",
+  "singleUser": "Paket ini untuk satu pengguna.",
+  "paymentsNotConnected": "Pembayaran belum terhubung. Setelah aktif, tombol ini akan membuka halaman checkout aman penyedia.",
+  "invalidEmail": "Masukkan email kerja yang valid.",
+  "companyRequired": "Masukkan nama perusahaan Anda.",
+  "checkForm": "Periksa formulir."
+}

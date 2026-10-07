@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "Descargar la app",
+    "description": "Descarga la app de escritorio para macOS y Windows."
+  },
+  "title": "Descarga la app de escritorio",
+  "subtitle": "Graba reuniones, toma notas y traduce en vivo en cualquier llamada, y llama a Leo desde donde estés con un atajo.",
+  "notes": {
+    "mobile": "La app de escritorio funciona en macOS y Windows. Abre esta página en tu computadora para descargarla.",
+    "linux": "Aún no hay versión para Linux. La app de escritorio funciona en macOS y Windows."
+  },
+  "card": {
+    "yourComputer": "Tu computadora",
+    "requirement": "{system} o posterior",
+    "downloadFor": "Descargar para {name}",
+    "downloadBuild": "Descargar para {arch} · {size}",
+    "meta": "Versión {version} · {size} · {type} · {date}",
+    "loadFailed": "No se pudo cargar la descarga para {platform}.",
+    "notYet": "La app para {platform} aún no está disponible. Vuelve pronto.",
+    "universal": "Apple silicon e Intel"
+  },
+  "checksum": {
+    "button": "Suma de verificación",
+    "verify": "Para verificarla, ejecuta <code>{command}</code> y compara el resultado.",
+    "copy": "Copiar suma de verificación",
+    "copied": "Suma de verificación copiada",
+    "copyFailed": "No se pudo copiar la suma de verificación"
+  },
+  "install": {
+    "title": "Instalación en tres pasos",
+    "macos": {
+      "open": "Abre el archivo {type} descargado.",
+      "drag": "Arrastra la app a tu carpeta Aplicaciones y ábrela desde ahí.",
+      "allow": "Inicia sesión y, cuando macOS lo pida, permite el acceso al micrófono y la grabación de pantalla y audio del sistema: así se graban las reuniones."
+    },
+    "windows": {
+      "run": "Ejecuta el instalador descargado ({type}).",
+      "setup": "Sigue la instalación y abre la app desde el menú Inicio.",
+      "allow": "Inicia sesión y permite el acceso al micrófono cuando Windows lo pida."
+    }
+  },
+  "features": {
+    "title": "Solo en escritorio",
+    "customize": "Personalizar atajos",
+    "shortcutOff": "Atajo desactivado",
+    "shortcut": "Atajo: {keys}",
+    "toggle_recording": {
+      "title": "Grabación",
+      "text": "Inicia o pausa la grabación de cualquier reunión, desde cualquier app."
+    },
+    "toggle_overlay": {
+      "title": "Superposición",
+      "text": "Notas en vivo sobre tu llamada; contráelas en una píldora."
+    },
+    "live_translation": {
+      "title": "Traducción en vivo",
+      "text": "Sigue la conversación en tu idioma mientras hablan."
+    },
+    "prompter": {
+      "title": "Apuntador",
+      "text": "Sugerencias discretas de Leo mientras hablas, visibles solo para ti."
+    }
+  }
+}

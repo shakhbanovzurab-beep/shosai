@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "Gói {plan}",
+    "current": "Hiện tại",
+    "price": "{interval, select, month {{price} mỗi tháng} year {{price} mỗi năm} other {Miễn phí vĩnh viễn}}",
+    "renews": "Gia hạn vào {date}",
+    "upgrade": "Nâng cấp gói"
+  },
+  "payment": {
+    "title": "Thanh toán",
+    "description": "Phương thức thanh toán mặc định của bạn được dùng để gia hạn gói đăng ký, trả mức sử dụng thêm và tự động nạp lại.",
+    "add": "Thêm phương thức thanh toán",
+    "empty": "Chưa có phương thức thanh toán nào.",
+    "default": "Mặc định",
+    "unknownCard": "Thẻ",
+    "endingIn": "{card} có số cuối {last4}",
+    "expires": "Hết hạn {date}",
+    "update": "Cập nhật",
+    "updateCard": "Cập nhật {card} có số cuối {last4}",
+    "openFailed": "Không thể mở trang thanh toán"
+  },
+  "history": {
+    "title": "Lịch sử thanh toán",
+    "description": "Xem và tải xuống các hóa đơn trước đây.",
+    "empty": "Chưa có hóa đơn nào. Hóa đơn sẽ xuất hiện ở đây sau lần thanh toán đầu tiên.",
+    "columns": {
+      "date": "Ngày",
+      "description": "Mô tả",
+      "amount": "Số tiền",
+      "status": "Trạng thái",
+      "download": "Tải xuống"
+    },
+    "status": {
+      "paid": "Đã thanh toán",
+      "pending": "Đang chờ",
+      "failed": "Không thành công"
+    },
+    "download": "Tải xuống hóa đơn {number}",
+    "notReady": "Hóa đơn {number} chưa sẵn sàng"
+  }
+}

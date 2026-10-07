@@ -1,0 +1,51 @@
+{
+  "share": "Bagikan",
+  "sharedIn": "Dibagikan di {workspace}",
+  "workspace": "Ruang kerja",
+  "stopSharing": "Berhenti membagikan",
+  "fileShare": {
+    "title": "Bagikan di ruang kerja",
+    "description": "Leo menjawab dari file ini di sana untuk siapa pun yang Anda pilih. File tetap ada di Pengelola file Anda dan tetap milik Anda.",
+    "access": "Siapa yang dapat menggunakannya",
+    "everyone": "Semua orang di {workspace}",
+    "sharedOption": "{workspace} · dibagikan",
+    "noWorkspace": "Anda belum bergabung dengan ruang kerja mana pun.",
+    "toast": "{level, select, workspace {“{file}”: semua orang di {workspace} dapat menggunakannya} other {“{file}”: {team} dapat menggunakannya di {workspace}}}"
+  },
+  "recordingShare": {
+    "title": "Bagikan ke ruang kerja",
+    "description": "Rekaman tetap milik Anda dan tetap ada di sini, di Catatan Anda. Pertanyaan yang Anda ajukan kepada Leo tentang rekaman ini tetap privat.",
+    "openIn": "Buka di {workspace}",
+    "tabWorkspace": "Ruang kerja",
+    "tabLink": "Tautan",
+    "loadFailed": "Tidak dapat memuat {workspace}.",
+    "moveTo": "Pindahkan ke {workspace}",
+    "audienceHint": "Ringkasan, keputusan, dan tugasnya. Peserta selalu dapat melihatnya.",
+    "sharedElsewhere": "Rapat ini sekarang dibagikan di {workspace}; satu rapat hanya dapat berada di satu ruang kerja dalam satu waktu."
+  },
+  "myTasks": {
+    "title": "Dari ruang kerja Anda",
+    "onKanban": "Di Kanban Anda",
+    "loadFailed": "Tidak dapat memuat tugas ruang kerja Anda.",
+    "empty": "Tidak ada yang ditugaskan kepada Anda di ruang kerja Anda."
+  },
+  "actionItems": {
+    "tracked": "Dilacak sebagai tugas di <link>{workspace}</link>; perubahan di sini juga mengubahnya di sana."
+  },
+  "sharedMeetings": {
+    "nav": "Dibagikan kepada Anda",
+    "loadFailed": "Tidak dapat memuat rapat yang dibagikan.",
+    "emptyTitle": "Belum ada yang dibagikan kepada Anda di sini",
+    "empty": "Rapat yang dibagikan rekan tim kepada Anda, atau kepada tim tempat Anda bergabung, muncul di sini.",
+    "intro": "Dibagikan kepada Anda di <link>{workspace}</link>. Rapat ini berada di sana; buka salah satunya untuk melihat catatan, keputusan, dan tugasnya."
+  },
+  "knowledge": {
+    "open": "Buka pengetahuannya",
+    "summary": "{meetings, plural, other {# rapat}}, {decisions, plural, other {# keputusan}}, dan {projects, plural, other {# proyek}} yang dapat Anda buka, ditambah {items, plural, other {# file atau sumber}} yang dapat Anda gunakan.",
+    "listLabel": "Pengetahuan {workspace}",
+    "loadFailed": "Tidak dapat memuat pengetahuan ruang kerja Anda",
+    "emptyTitle": "Belum ada ruang kerja",
+    "empty": "Saat Anda bergabung dengan ruang kerja, Leo juga dapat menjawab di sini dari apa yang dibagikan kepada Anda.",
+    "intro": "Leo menggunakan ini saat Anda bertanya di Pribadi, dan hanya untuk Anda. Setiap jawaban menyebutkan asal ruang kerjanya. Pengetahuan untuk tim yang tidak Anda ikuti tidak disertakan."
+  }
+}

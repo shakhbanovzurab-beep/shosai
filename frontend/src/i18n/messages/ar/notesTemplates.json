@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "ملاحظات محسنة",
+    "description": "يختار Leo البنية المناسبة للاجتماع."
+  },
+  "sections": {
+    "summary": "الملخص",
+    "keyPoints": "النقاط الرئيسية",
+    "decisions": "القرارات",
+    "actionItems": "مهام المتابعة"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "متابعة: مستثمر",
+      "description": "تحديث دوري مع مستثمر: أين وصلت الأمور وفيمَ يمكنه المساعدة."
+    },
+    "catchUpPortfolio": {
+      "name": "متابعة: شركة من المحفظة",
+      "description": "متابعة مع شركة من المحفظة بشأن المؤشرات والمخاطر والطلبات."
+    },
+    "lpProspective": {
+      "name": "شريك محدود محتمل",
+      "description": "المحادثات الأولى مع شريك محدود محتمل."
+    },
+    "vcBoardMeeting": {
+      "name": "استثمار جريء: اجتماع مجلس الإدارة",
+      "description": "نقاش مجلس الإدارة والقرارات المعتمدة والمكلفون بتنفيذها."
+    },
+    "vcPitch": {
+      "name": "استثمار جريء: عرض تقديمي",
+      "description": "عرض تقديمي من مؤسس: ما لفت الانتباه والتقييم النهائي ومهام العناية الواجبة."
+    },
+    "oneOnOne": {
+      "name": "اجتماع فردي",
+      "description": "اجتماع فردي: كيف تسير الأمور والمواضيع والخطوات التالية المتفق عليها."
+    },
+    "customerCall": {
+      "name": "مكالمة عميل",
+      "description": "استكشاف أو متابعة مع عميل: المشكلات والطلبات ومهام المتابعة."
+    },
+    "teamSync": {
+      "name": "اجتماع الفريق",
+      "description": "اجتماع فريق دوري: التحديثات والقرارات وتوزيع المهام."
+    }
+  },
+  "headings": {
+    "whereWeAre": "أين وصلنا",
+    "updatesShared": "التحديثات المقدمة",
+    "whatWeAgreed": "ما اتفقنا عليه",
+    "followUps": "مهام المتابعة",
+    "companyUpdate": "مستجدات الشركة",
+    "metricsAndHighlights": "المؤشرات وأبرز النقاط",
+    "howWeCanHelp": "كيف يمكننا المساعدة",
+    "overview": "نظرة عامة",
+    "theirInterests": "اهتماماتهم",
+    "nextSteps": "الخطوات التالية",
+    "boardSummary": "ملخص مجلس الإدارة",
+    "discussion": "النقاش",
+    "resolutions": "القرارات المعتمدة",
+    "ownersAndDeadlines": "المكلفون وتواريخ الاستحقاق",
+    "thePitch": "العرض التقديمي",
+    "whatStoodOut": "ما لفت الانتباه",
+    "verdict": "التقييم النهائي",
+    "diligenceToDos": "مهام العناية الواجبة",
+    "howItsGoing": "كيف تسير الأمور",
+    "topics": "المواضيع",
+    "context": "السياق",
+    "painsAndRequests": "المشكلات والطلبات",
+    "outcome": "النتيجة",
+    "updates": "التحديثات",
+    "decisions": "القرارات",
+    "whoDoesWhat": "توزيع المهام"
+  },
+  "icons": {
+    "enhanced": "ملاحظات محسنة",
+    "briefcase": "حقيبة",
+    "chart": "مخطط",
+    "handshake": "مصافحة",
+    "landmark": "مبنى",
+    "lightbulb": "مصباح",
+    "magnet": "مغناطيس",
+    "phone": "هاتف",
+    "rocket": "صاروخ",
+    "calendar": "تقويم",
+    "users": "أشخاص"
+  },
+  "menu": {
+    "label": "قالب الملاحظات المحسنة",
+    "search": "البحث في القوالب…",
+    "noMatch": "لا توجد قوالب مطابقة.",
+    "heading": "القوالب",
+    "regenerate": "إعادة إنشاء الملاحظات",
+    "newTemplate": "قالب جديد…"
+  },
+  "rewritten": "تمت إعادة كتابة الملاحظات وفق «{template}»",
+  "regenerated": "تمت إعادة إنشاء الملاحظات المحسنة",
+  "created": "تم إنشاء القالب «{template}»",
+  "dialog": {
+    "title": "قالب جديد",
+    "description": "اختيار الأقسام التي يكتبها Leo للاجتماع وتسميتها.",
+    "namePlaceholder": "مثل: استكشاف المبيعات…",
+    "nameRequired": "يرجى إدخال اسم للقالب.",
+    "descriptionLabel": "الوصف",
+    "descriptionPlaceholder": "متى يُستخدم…",
+    "ownDescription": "قالب خاص.",
+    "icon": "الأيقونة",
+    "sections": "الأقسام",
+    "include": "تضمين {section}",
+    "heading": "عنوان {section}",
+    "sectionsRequired": "يجب الإبقاء على قسم واحد على الأقل.",
+    "create": "إنشاء قالب"
+  }
+}

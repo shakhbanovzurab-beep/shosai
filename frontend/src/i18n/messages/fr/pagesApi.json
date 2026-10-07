@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Envoyez le message au format multipart/form-data.",
+  "emptyMessage": "Écrivez un message ou joignez un fichier.",
+  "messageTooLong": "Le message doit faire moins de {max, number} caractères.",
+  "tooManyFiles": "{max, plural, one {Joignez # fichier au maximum.} many {Joignez # de fichiers au maximum.} other {Joignez # fichiers au maximum.}}",
+  "fileTooBig": "{name} dépasse {size}.",
+  "subjectRequired": "Donnez un objet court à la demande.",
+  "topicRequired": "Choisissez un sujet.",
+  "detailsRequired": "Décrivez ce qui s’est passé.",
+  "ticketNotFound": "Demande introuvable.",
+  "invalidUpdate": "Envoyez un statut, une note ou l’indicateur de lecture."
+}

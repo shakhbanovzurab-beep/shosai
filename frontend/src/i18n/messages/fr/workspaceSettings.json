@@ -1,0 +1,70 @@
+{
+  "title": "Paramètres",
+  "description": "Le fonctionnement de {workspace} pour tous ses membres. Les modifications sont enregistrées immédiatement.",
+  "adminsOnly": "Seuls les administrateurs peuvent modifier les paramètres de l’espace de travail.",
+  "adminsOnlyAsk": "Seuls les administrateurs peuvent modifier les paramètres de l’espace de travail. Demandez à {name}.",
+  "general": {
+    "title": "Général",
+    "name": "Nom de l’espace de travail",
+    "nameHint": "Affiché dans le sélecteur d’espace et dans les invitations.",
+    "renamed": "Espace de travail renommé",
+    "join": "Rejoindre avec un e-mail professionnel",
+    "joinHint": "Permettez à vos collègues de rejoindre l’espace sans invitation quand leur adresse e-mail est sur votre domaine.",
+    "joinOn": "Toute personne disposant d’une adresse @{domain} peut rejoindre l’espace en tant que membre tant qu’il reste des licences.",
+    "domain": "Domaine de messagerie",
+    "joinEnabled": "Les personnes de {domain} peuvent maintenant rejoindre l’espace",
+    "joinDisabled": "L’accès par domaine de messagerie est désactivé"
+  },
+  "sharing": {
+    "title": "Partage",
+    "description": "Les réunions avec des personnes extérieures à {workspace} ne sont jamais partagées automatiquement. Les organisateurs peuvent toujours changer qui voit une réunion.",
+    "reviewTitle": "Confirmez le partage des réunions",
+    "reviewHint": "Voici les règles recommandées. Modifiez-en une ou gardez-les telles quelles.",
+    "keep": "Garder ces règles",
+    "confirmed": "Règles de partage confirmées",
+    "defaultLevel": "Après une réunion, partager les notes avec",
+    "defaultLevelHint": "Pour les réunions dont tous les participants font partie de {workspace}.",
+    "levels": {
+      "private": "L’organisateur uniquement",
+      "participants": "Les participants (recommandé)",
+      "workspace": "Tout le monde dans {workspace}"
+    },
+    "levelChanged": "Destinataires des nouvelles réunions : {level}",
+    "transcripts": "Inclure les transcriptions",
+    "transcriptsHint": "Désactivé : les personnes voient le résumé, les décisions et les tâches, mais pas la transcription mot à mot.",
+    "transcriptsOn": "Les transcriptions sont aussi partagées",
+    "transcriptsOff": "Seuls les résumés sont partagés",
+    "membersInvite": "Les membres peuvent inviter des personnes",
+    "membersInviteHint": "Désactivé : seuls les administrateurs peuvent inviter.",
+    "membersInviteOn": "Les membres peuvent inviter des personnes",
+    "membersInviteOff": "Seuls les administrateurs peuvent désormais inviter"
+  },
+  "plan": {
+    "title": "Forfait et utilisation",
+    "description": "Facturé à l’espace de travail, indépendamment du forfait personnel de chacun.",
+    "name": "Forfait {plan}",
+    "seats": "{taken, number} licences sur {total, number}",
+    "price": "{perSeat} par licence et par mois · {total} au total · renouvellement le {renews}",
+    "change": "Modifier les licences ou le forfait",
+    "ownerOnly": "Seul le propriétaire gère la facturation.",
+    "usageFailed": "Impossible de charger l’utilisation.",
+    "usageIn": "Utilisation en {month}",
+    "idle": "{count, plural, one {# membre inactif depuis {days, number} jours ou plus : une licence que vous pourriez réattribuer.} many {# de membres inactifs depuis {days, number} jours ou plus : des licences que vous pourriez réattribuer.} other {# membres inactifs depuis {days, number} jours ou plus : des licences que vous pourriez réattribuer.}}",
+    "member": "Membre",
+    "meetings": "Réunions",
+    "minutes": "Minutes",
+    "lastActive": "Dernière activité",
+    "inactive": "Inactif"
+  },
+  "danger": {
+    "delete": "Supprimer l’espace de travail",
+    "deleteHint": "Supprime l’espace de travail pour tout le monde et arrête sa facturation.",
+    "deleteTitle": "Supprimer {name} ?",
+    "deleteDescription": "Tout le monde perd ses projets, tâches, décisions et fichiers importés. Les enregistrements et fichiers partagés restent à leurs propriétaires, dans leurs propres Notes et Gestionnaire de fichiers. Cette action est irréversible.",
+    "leave": "Quitter l’espace de travail",
+    "leaveHint": "Vous pourrez être réinvité plus tard ; votre licence est libérée.",
+    "leaveTitle": "Quitter {name} ?",
+    "leaveDescription": "Les réunions et fichiers que vous avez partagés partent avec vous et restent dans vos Notes et votre Gestionnaire de fichiers. Les fichiers que vous avez transférés à l’espace de travail y restent. Les tâches restent à l’équipe ; celles en cours qui vous étaient attribuées ne le sont plus.",
+    "leaveConfirm": "Quitter"
+  }
+}

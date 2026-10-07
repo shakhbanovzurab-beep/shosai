@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "Hub",
+    "removeLabel": "Tirar a reunião de {hub}",
+    "suggestion": "Parece ser “{hub}”",
+    "file": "Adicionar",
+    "other": "Outro hub…",
+    "fileTo": "Adicionar a um hub…",
+    "createFirst": "Criar o primeiro",
+    "noBoard": "o hub não tem quadro",
+    "archived": "o hub está arquivado",
+    "filedToast": "As próximas reuniões desta série vão chegar aqui sozinhas",
+    "removedToast": "Retirada de {hub}",
+    "pickerTitle": "Adicionar a um hub",
+    "pickerSearch": "Pesquisar hub",
+    "pickerEmpty": "Nenhum hub encontrado"
+  },
+  "brief": {
+    "title": "Hoje",
+    "empty": "Nada urgente hoje",
+    "prepTitle": "Em breve",
+    "prepFor": "Antes da reunião de {date}",
+    "prepOpen": "Abrir neste hub",
+    "prepLast": "Última vez · {date}",
+    "prepMaterials": "Materiais",
+    "signal": "{circles, plural, =2 {{subject} já foi discutido duas vezes sem decisão.} =3 {{subject} já foi discutido três vezes sem decisão.} =4 {{subject} já foi discutido quatro vezes sem decisão.} =5 {{subject} já foi discutido cinco vezes sem decisão.} one {{subject} já foi discutido # vez sem decisão.} many {{subject} já foi discutido # de vezes sem decisão.} other {{subject} já foi discutido # vezes sem decisão.}}",
+    "blockers": "Em todas as vezes foi: {quotes}."
+  }
+}

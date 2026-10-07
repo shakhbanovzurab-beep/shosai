@@ -1,0 +1,26 @@
+{
+  "description": "데스크톱 앱의 단축키예요. 앱이 백그라운드에 있어도 컴퓨터 어디서나 작동하며 모든 기기에 동기화돼요.",
+  "commands": {
+    "open_app": "앱 열기",
+    "toggle_recording": "녹음 시작 / 일시정지",
+    "toggle_overlay": "오버레이 표시 / 숨기기",
+    "open_settings": "설정",
+    "collapse_overlay": "오버레이를 작게 접기",
+    "close_app": "앱 닫기",
+    "live_translation": "실시간 번역",
+    "prompter": "프롬프터"
+  },
+  "off": "꺼짐",
+  "pressKeys": "키를 누르세요…",
+  "hint": "Esc로 취소 · Backspace로 끄기",
+  "reset": "{command} 기본값으로 재설정",
+  "record": "{command}에 사용할 새 단축키를 눌러 주세요",
+  "change": "{command}: {keys}. 변경",
+  "changeOff": "{command}: 꺼짐. 변경",
+  "resetAll": "모두 기본값으로 재설정",
+  "problems": {
+    "needsModifier": "⌘/Ctrl 또는 ⌥/Alt를 다른 키와 함께 사용해 주세요.",
+    "reserved": "시스템에서 사용하는 단축키예요.",
+    "taken": "이미 “{command}”에 사용 중이에요."
+  }
+}

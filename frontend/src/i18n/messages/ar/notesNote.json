@@ -1,0 +1,74 @@
+{
+  "back": "كل الملاحظات",
+  "notFound": "لم يتم العثور على الملاحظة",
+  "participants": {
+    "count": "{count, plural, zero {# مشارك} one {مشارك واحد} two {مشاركان} few {# مشاركين} many {# مشاركًا} other {# مشارك}}",
+    "inMeeting": "{count, plural, zero {لا يوجد أحد في هذا الاجتماع.} one {شخص واحد في هذا الاجتماع.} two {شخصان في هذا الاجتماع.} few {# أشخاص في هذا الاجتماع.} many {# شخصًا في هذا الاجتماع.} other {# شخص في هذا الاجتماع.}}",
+    "you": "{name} (أنت)",
+    "added": "تمت إضافة {email} إلى الاجتماع",
+    "addPlaceholder": "الإضافة بالبريد الإلكتروني…",
+    "addLabel": "إضافة مشارك بالبريد الإلكتروني",
+    "invalid": "يرجى إدخال عنوان بريد إلكتروني، مثل name@company.com.",
+    "duplicate": "هذا الشخص مشارك بالفعل في الاجتماع."
+  },
+  "tabs": {
+    "notes": "الملاحظات",
+    "enhanced": "المحسنة",
+    "transcript": "النص",
+    "mindMap": "الخريطة الذهنية"
+  },
+  "enhanced": {
+    "writtenBy": "كتبها Leo من نص الاجتماع وملاحظاتك.",
+    "writtenByTemplate": "كتبها Leo من نص الاجتماع وملاحظاتك وفق قالب «{template}».",
+    "writing": "جارٍ كتابة الملاحظات المحسنة…",
+    "nothingFor": "لا يحتوي هذا الاجتماع على ما يناسب أقسام «{template}»."
+  },
+  "export": {
+    "button": "تصدير",
+    "transcriptAs": "تصدير النص بتنسيق"
+  },
+  "myNotes": {
+    "loadFailed": "تعذر تحميل ملاحظاتك",
+    "saveFailed": "تعذر حفظ ملاحظاتك"
+  },
+  "editor": {
+    "placeholder": "كتابة الملاحظات…",
+    "label": "ملاحظاتك",
+    "toolbar": "التنسيق",
+    "addLink": "إضافة رابط",
+    "removeLink": "إزالة الرابط",
+    "bold": "غامق",
+    "italic": "مائل",
+    "linkPlaceholder": "لصق رابط…",
+    "linkAddress": "عنوان الرابط",
+    "link": "رابط",
+    "turnInto": "تحويل إلى",
+    "blocks": {
+      "text": "نص",
+      "h1": "عنوان 1",
+      "h2": "عنوان 2",
+      "h3": "عنوان 3",
+      "ordered": "قائمة مرقمة",
+      "bullet": "قائمة نقطية"
+    }
+  },
+  "transcript": {
+    "label": "النص",
+    "search": "البحث في النص",
+    "searchPlaceholder": "البحث في النص…",
+    "matches": "{count, plural, =0 {لا توجد نتائج مطابقة} zero {لا توجد نتائج مطابقة} one {نتيجة واحدة} two {نتيجتان} few {# نتائج} many {# نتيجة} other {# نتيجة}}",
+    "position": "{current, number} من {total, number}",
+    "previous": "النتيجة السابقة",
+    "next": "النتيجة التالية",
+    "clear": "مسح البحث"
+  },
+  "speakers": {
+    "title": "المتحدثون",
+    "share": "{speaker}: {share} من وقت الحديث",
+    "lines": "{count, plural, zero {# مداخلة} one {مداخلة واحدة} two {مداخلتان} few {# مداخلات} many {# مداخلة} other {# مداخلة}}"
+  },
+  "mindMap": {
+    "title": "الخريطة الذهنية: {topic}",
+    "caption": "تم إنشاؤها من نص الاجتماع."
+  }
+}

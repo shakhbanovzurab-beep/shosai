@@ -1,0 +1,53 @@
+{
+  "title": "스킬",
+  "tabs": {
+    "readyMade": "카탈로그",
+    "repository": "내 저장소",
+    "mine": "내 스킬({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "스킬 찾기: 시스템 설계, 코드 리뷰…",
+    "label": "스킬 검색",
+    "help": "skills.sh 디렉터리에서 검색",
+    "noMatches": "일치하는 스킬이 없어요. 다른 단어로 찾아보세요.",
+    "emptyTitle": "바로 쓸 수 있는 스킬 디렉터리",
+    "emptyDescription": "검색어를 입력해 보세요. 스킬은 프롬프트에 첨부할 수 있는 완성된 지침이에요.",
+    "searchFailed": "skills.sh를 검색하지 못했어요. 다시 시도해 주세요."
+  },
+  "repository": {
+    "label": "GitHub 저장소",
+    "placeholder": "owner/repo 또는 GitHub 링크",
+    "find": "스킬 찾기",
+    "help": "SKILL.md 파일이 있는 공개 저장소",
+    "emptyTitle": "GitHub에 있는 나만의 스킬",
+    "emptyDescription": "공개 저장소를 입력하면 그 안의 SKILL.md 파일을 찾아요.",
+    "scanFailed": "저장소를 읽지 못했어요."
+  },
+  "candidate": {
+    "installs": "{count, plural, other {#회 설치}}",
+    "installed": "설치됨"
+  },
+  "mine": {
+    "extraFiles": "스크립트나 다른 파일이 포함되어 있지만 SKILL.md의 지침만 사용해요.",
+    "update": "{name} 업데이트",
+    "updateHint": "최신 커밋으로 업데이트",
+    "remove": "{name} 제거",
+    "emptyTitle": "아직 스킬이 없어요",
+    "emptyDescription": "카탈로그나 내 저장소에서 추가해 보세요."
+  },
+  "remove": {
+    "title": "{name}을(를) 제거할까요?",
+    "titleUnnamed": "이 스킬을 제거할까요?",
+    "description": "이 스킬을 사용하는 모든 프롬프트에서 분리돼요. 나중에 다시 추가할 수 있어요."
+  },
+  "toasts": {
+    "installed": "{name}을(를) 설치했어요",
+    "installedHint": "프롬프트 편집기에서 프롬프트에 첨부해 보세요.",
+    "installFailed": "스킬을 설치하지 못했어요",
+    "upToDate": "{name}은(는) 최신 버전이에요",
+    "updated": "{name}을(를) 업데이트했어요",
+    "updateFailed": "스킬을 업데이트하지 못했어요",
+    "removed": "{name}을(를) 제거했어요",
+    "removeFailed": "스킬을 제거하지 못했어요"
+  }
+}

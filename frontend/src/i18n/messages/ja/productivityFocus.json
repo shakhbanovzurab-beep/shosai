@@ -1,0 +1,50 @@
+{
+  "title": "集中",
+  "sound": {
+    "label": "セッション終了時のサウンド",
+    "on": "サウンドオン",
+    "off": "サウンドオフ"
+  },
+  "rhythm": "集中のリズム",
+  "presetLabel": "{name}：{hint}",
+  "presetTooltip": "<b>{name}。</b>{hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "ポモドーロ",
+      "hint": "集中 {focus}、休憩 {pause}、{every, plural, other {# セッション}}ごとに {longBreak} の長い休憩。始めたばかりのときや忙しい日に向いています。"
+    },
+    "fifty": {
+      "name": "ロング",
+      "hint": "集中 {focus}、休憩 {pause}、{every, plural, other {# セッション}}ごとに {longBreak} の長い休憩。執筆やデザインに向いています。"
+    },
+    "fiftyTwo": {
+      "name": "{focus, number}/{pause, number} のリズム",
+      "hint": "集中 {focus}、休憩 {pause}。DeskTime の調査で、最も生産性の高い人たちが実践していた働き方です。"
+    },
+    "deepWork": {
+      "name": "ディープワーク",
+      "hint": "集中 {focus}、休憩 {pause}。自然な集中サイクル 1 回分で、難しい問題に向いています。"
+    }
+  },
+  "phase": {
+    "focus": "集中",
+    "break": "短い休憩",
+    "long_break": "長い休憩"
+  },
+  "start": "開始",
+  "pause": "一時停止",
+  "resume": "再開",
+  "restart": "このフェーズをやり直す",
+  "skipBreak": "休憩をスキップ",
+  "skipToBreak": "休憩に進む",
+  "cycle": "長い休憩まで {every, plural, other {# セッション}}中 {done, number} 回完了",
+  "doneToday": "{count, plural, other {今日 # セッション完了}}",
+  "announce": "{phase}、{clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "集中セッションが終わりました。休憩しましょう。",
+    "focusLong": "集中セッションが終わりました。長めの休憩をとりましょう。",
+    "break": "休憩終了です。集中する準備はできましたか？",
+    "next": "{preset} · 準備ができたら「開始」を押してください。"
+  }
+}

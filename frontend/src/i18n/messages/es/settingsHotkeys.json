@@ -1,0 +1,26 @@
+{
+  "description": "Atajos de la app de escritorio. Funcionan en cualquier parte de tu computadora, incluso con la app en segundo plano, y se sincronizan en todos tus dispositivos.",
+  "commands": {
+    "open_app": "Abrir la app",
+    "toggle_recording": "Iniciar / pausar grabación",
+    "toggle_overlay": "Mostrar / ocultar superposición",
+    "open_settings": "Configuración",
+    "collapse_overlay": "Contraer la superposición en una píldora",
+    "close_app": "Cerrar la app",
+    "live_translation": "Traducción en vivo",
+    "prompter": "Teleprompter"
+  },
+  "off": "Desactivado",
+  "pressKeys": "Presiona las teclas…",
+  "hint": "Esc para cancelar · Backspace para desactivar",
+  "reset": "Restablecer {command} al valor predeterminado",
+  "record": "Presiona el nuevo atajo para {command}",
+  "change": "{command}: {keys}. Cambiar",
+  "changeOff": "{command}: desactivado. Cambiar",
+  "resetAll": "Restablecer todo",
+  "problems": {
+    "needsModifier": "Usa ⌘/Ctrl o ⌥/Alt junto con otra tecla.",
+    "reserved": "Ese atajo lo usa el sistema.",
+    "taken": "Ya se usa para «{command}»."
+  }
+}

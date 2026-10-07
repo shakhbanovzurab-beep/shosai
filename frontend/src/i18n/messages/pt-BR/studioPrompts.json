@@ -1,0 +1,62 @@
+{
+  "intro": "As instruções que seu assistente segue em cada função. Habilidades prontas do catálogo e as suas, do seu repositório.",
+  "role": "Função",
+  "skills": "Habilidades",
+  "search": {
+    "placeholder": "Pesquisar por nome…",
+    "label": "Pesquisar prompts por nome"
+  },
+  "loadFailed": "Não foi possível carregar os prompts",
+  "empty": {
+    "title": "Nenhum prompt ainda",
+    "description": "Crie um prompt para uma função e depois anexe habilidades para ampliá-lo."
+  },
+  "noMatches": {
+    "title": "Nenhum resultado",
+    "description": "Tente outro nome ou outra função."
+  },
+  "copyName": "{name} (cópia)",
+  "delete": {
+    "title": "Excluir “{name}”?",
+    "description": "Se uma função usar este prompt, ela volta ao prompt padrão integrado."
+  },
+  "filter": {
+    "label": "Filtrar por função",
+    "all": "Todas",
+    "allHelp": "Todos os prompts, de qualquer função."
+  },
+  "table": {
+    "number": "Nº",
+    "updated": "Atualizado",
+    "inUse": "Em uso",
+    "deleteNamed": "Excluir {name}"
+  },
+  "menu": {
+    "edit": "Editar…",
+    "stopUsing": "Parar de usar",
+    "useFor": "Usar em {role}",
+    "duplicate": "Duplicar…",
+    "delete": "Excluir…"
+  },
+  "editor": {
+    "editTitle": "Editar prompt",
+    "newTitle": "Novo prompt",
+    "description": "Instruções que o assistente segue na função escolhida, além das habilidades.",
+    "namePlaceholder": "Versão por IA",
+    "instructions": "Instruções",
+    "instructionsPlaceholder": "Diga ao assistente como agir nesta função. Pode usar Markdown.",
+    "noSkills": "Nenhuma habilidade instalada ainda — adicione pelo botão Habilidades.",
+    "saveFailed": "Não foi possível salvar — continue digitando para tentar novamente",
+    "savesAutomatically": "As alterações são salvas automaticamente",
+    "done": "Concluído"
+  },
+  "toasts": {
+    "deleted": "“{name}” excluído",
+    "deleteFailed": "Não foi possível excluir o prompt",
+    "inUse": "{role} agora usa “{name}”",
+    "backToDefault": "{role} voltou ao prompt integrado",
+    "changeFailed": "Não foi possível alterar o prompt",
+    "created": "“{name}” criado",
+    "createFailed": "Não foi possível criar o prompt"
+  }
+}

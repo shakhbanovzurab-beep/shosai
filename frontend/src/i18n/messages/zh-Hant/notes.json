@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "筆記",
+    "description": "已轉錄的會議，附有筆記、待辦事項和心智圖。"
+  },
+  "recency": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "thisWeek": "本週",
+    "earlier": "更早"
+  },
+  "fields": {
+    "meeting": "會議",
+    "folder": "資料夾",
+    "people": "人員",
+    "participants": "參與者",
+    "duration": "時長",
+    "date": "日期"
+  },
+  "views": {
+    "label": "版面配置",
+    "timeline": "時間軸",
+    "grid": "格狀",
+    "list": "清單"
+  },
+  "upload": {
+    "button": "上傳錄製內容",
+    "hint": "或將檔案拖放到頁面上的任何位置",
+    "dropTitle": "拖放錄製內容即可上傳",
+    "dropHint": "mp3、m4a、wav、mp4、webm 等格式 · 上限 {size}",
+    "notMedia": "{name} 不是音訊或影片檔案",
+    "tooLarge": "{name} 太大",
+    "sizeLimit": "錄製內容的上限為 {size}。"
+  },
+  "recordings": {
+    "uploading": "正在上傳",
+    "justNow": "剛剛",
+    "transcribing": "正在轉錄",
+    "transcribingNow": "正在轉錄…",
+    "waiting": "正在等待轉錄…",
+    "timelineStatus": "正在轉錄…完成後，筆記、決策和心智圖會顯示在這裡。"
+  },
+  "remove": "移除 {name}",
+  "folders": {
+    "label": "資料夾",
+    "all": "所有會議",
+    "new": "新增資料夾",
+    "newMenu": "新增資料夾…",
+    "newNamed": "新增資料夾「{name}」",
+    "defaultName": "新資料夾",
+    "nameLabel": "資料夾名稱",
+    "none": "沒有資料夾",
+    "add": "加入資料夾",
+    "moveTo": "移至資料夾",
+    "search": "搜尋資料夾…",
+    "noMatch": "沒有相符的資料夾。",
+    "movedTo": "已移至 {folder}",
+    "removedFrom": "已從資料夾移除",
+    "emptyTitle": "這個資料夾是空的",
+    "emptyDescription": "在會議上按一下滑鼠右鍵，然後選擇「{action}」，即可將會議加入這裡。"
+  },
+  "card": {
+    "latest": "最近的會議",
+    "keyPoints": "重點",
+    "openNotes": "開啟筆記",
+    "openItems": "{count, plural, other {# 項未完成}}"
+  },
+  "timeline": {
+    "decision": "決策：",
+    "openTasks": "{count, plural, other {# 項未完成任務}}"
+  },
+  "menu": {
+    "openInNewTab": "在新分頁中開啟",
+    "exportTranscript": "匯出逐字稿"
+  },
+  "exportFormats": {
+    "txt": "純文字",
+    "md": "Markdown",
+    "srt": "SubRip 字幕",
+    "vtt": "WebVTT 字幕",
+    "json": "JSON 格式"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "已刪除「{title}」"
+}

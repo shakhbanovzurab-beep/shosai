@@ -1,0 +1,74 @@
+{
+  "back": "Semua catatan",
+  "notFound": "Catatan tidak ditemukan",
+  "participants": {
+    "count": "{count, plural, other {# peserta}}",
+    "inMeeting": "{count, plural, other {# orang dalam rapat ini.}}",
+    "you": "{name} (Anda)",
+    "added": "{email} ditambahkan ke rapat",
+    "addPlaceholder": "Tambahkan melalui email…",
+    "addLabel": "Tambahkan peserta melalui email",
+    "invalid": "Masukkan alamat email, seperti nama@perusahaan.com.",
+    "duplicate": "Orang ini sudah ada dalam rapat."
+  },
+  "tabs": {
+    "notes": "Catatan",
+    "enhanced": "Disempurnakan",
+    "transcript": "Transkrip",
+    "mindMap": "Peta pikiran"
+  },
+  "enhanced": {
+    "writtenBy": "Ditulis oleh Leo dari transkrip rapat dan catatan Anda.",
+    "writtenByTemplate": "Ditulis oleh Leo dari transkrip rapat dan catatan Anda, dengan tata letak “{template}”.",
+    "writing": "Menulis catatan yang disempurnakan…",
+    "nothingFor": "Rapat ini tidak memiliki isi untuk bagian-bagian “{template}”."
+  },
+  "export": {
+    "button": "Ekspor",
+    "transcriptAs": "Transkrip sebagai"
+  },
+  "myNotes": {
+    "loadFailed": "Tidak dapat memuat catatan Anda",
+    "saveFailed": "Tidak dapat menyimpan catatan Anda"
+  },
+  "editor": {
+    "placeholder": "Tulis catatan Anda…",
+    "label": "Catatan Anda",
+    "toolbar": "Format",
+    "addLink": "Tambahkan tautan",
+    "removeLink": "Hapus tautan",
+    "bold": "Tebal",
+    "italic": "Miring",
+    "linkPlaceholder": "Tempel tautan…",
+    "linkAddress": "Alamat tautan",
+    "link": "Tautan",
+    "turnInto": "Ubah menjadi",
+    "blocks": {
+      "text": "Teks",
+      "h1": "Judul 1",
+      "h2": "Judul 2",
+      "h3": "Judul 3",
+      "ordered": "Daftar bernomor",
+      "bullet": "Daftar berbutir"
+    }
+  },
+  "transcript": {
+    "label": "Transkrip",
+    "search": "Cari di transkrip",
+    "searchPlaceholder": "Cari di transkrip…",
+    "matches": "{count, plural, =0 {Tidak ada yang cocok} other {# kecocokan}}",
+    "position": "{current, number} dari {total, number}",
+    "previous": "Kecocokan sebelumnya",
+    "next": "Kecocokan berikutnya",
+    "clear": "Hapus pencarian"
+  },
+  "speakers": {
+    "title": "Siapa yang berbicara",
+    "share": "{speaker}: {share} dari waktu bicara",
+    "lines": "{count, plural, other {# baris}}"
+  },
+  "mindMap": {
+    "title": "Peta pikiran: {topic}",
+    "caption": "Dibuat dari transkrip rapat."
+  }
+}

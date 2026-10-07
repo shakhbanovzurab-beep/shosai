@@ -1,0 +1,120 @@
+{
+  "title": "Thành viên",
+  "description": "Mọi người trong {workspace}, vai trò của họ và các nhóm bạn chia sẻ cùng.",
+  "invitePeople": "Mời mọi người",
+  "adminsInvite": "Chỉ quản trị viên mới có thể mời người khác.",
+  "adminsInviteAsk": "Chỉ quản trị viên mới có thể mời người khác. Hãy hỏi {name}.",
+  "tabs": {
+    "members": "Thành viên",
+    "teams": "Nhóm"
+  },
+  "search": "Tìm người",
+  "pendingInvitations": "Lời mời đang chờ · {count, number}",
+  "membersCount": "Thành viên · {count, number}",
+  "noMatches": "Không có ai phù hợp",
+  "noMatchesHint": "Hãy thử tên, email hoặc chức danh.",
+  "clearSearch": "Xóa tìm kiếm",
+  "seats": {
+    "label": "Suất",
+    "taken": "Đã dùng {taken, number}/{total, number} suất",
+    "breakdown": "· {members, plural, other {# thành viên}}",
+    "breakdownPending": "· {members, plural, other {# thành viên}}, {pending, plural, other {# lời mời đang chờ}}",
+    "left": "{count, plural, other {Còn # suất.}} Mỗi lời mời đang chờ giữ một suất cho đến khi được chấp nhận hoặc bị thu hồi.",
+    "fullAdd": "Đã dùng hết suất. Hãy thêm suất để mời thêm người.",
+    "fullAsk": "Đã dùng hết suất. Hãy nhờ chủ sở hữu thêm suất.",
+    "change": "Thay đổi số suất"
+  },
+  "invitation": {
+    "by": "{name} đã mời {ago}",
+    "byYou": "Bạn đã mời {ago}",
+    "byFormerMember": "Một cựu thành viên đã mời {ago}",
+    "resend": "Gửi lại",
+    "revoke": "Thu hồi",
+    "revokeFor": "Thu hồi lời mời gửi {email}"
+  },
+  "member": {
+    "you": "Bạn",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, other {Không hoạt động từ # ngày trở lên}}",
+    "roleOf": "Vai trò của {name}",
+    "remove": "Gỡ khỏi không gian làm việc",
+    "removeTitle": "Gỡ {name} khỏi {workspace}?",
+    "removeDescription": "Cuộc họp và tệp mà {name} đã chia sẻ từ Ghi chú và Trình quản lý tệp của họ sẽ rời đi cùng họ. Công việc vẫn ở lại, những việc chưa xong của họ sẽ không còn người được giao. Suất sẽ được giải phóng.",
+    "joinedTeam": "{name} đã tham gia {team}",
+    "leftTeam": "{name} đã rời {team}"
+  },
+  "teams": {
+    "new": "Nhóm mới",
+    "empty": "Chưa có nhóm nào",
+    "emptyHint": "Nhóm là tùy chọn. Hãy tạo nhóm khi bạn muốn chia sẻ cuộc họp và kiến thức với một nhóm người, như Kỹ thuật hoặc Kinh doanh.",
+    "intro": "Chia sẻ cuộc họp và kiến thức với cả nhóm thay vì từng người một.",
+    "deleteTitle": "Xóa {name}?",
+    "deleteDescription": "Cuộc họp của nhóm vẫn hiện với những người đã tham gia, và thành viên vẫn ở trong không gian làm việc. Hãy chuyển kiến thức của nhóm trước; kiến thức không thể bị bỏ lại mà không có ai được dùng."
+  },
+  "team": {
+    "noDescription": "Chưa có mô tả.",
+    "edit": "Chỉnh sửa nhóm",
+    "delete": "Xóa nhóm",
+    "members": "{count, plural, other {# thành viên}}",
+    "membersLedBy": "{count, plural, other {# thành viên}} · trưởng nhóm: {name}",
+    "membersLedByYou": "{count, plural, other {# thành viên}} · bạn là trưởng nhóm",
+    "join": "Tham gia nhóm",
+    "leave": "Rời nhóm",
+    "youJoined": "Bạn đã tham gia {team}",
+    "youLeft": "Bạn đã rời {team}"
+  },
+  "teamForm": {
+    "editTitle": "Chỉnh sửa {name}",
+    "description": "Chia sẻ cuộc họp và kiến thức với cả nhóm thay vì từng người một.",
+    "nameRequired": "Hãy đặt tên cho nhóm.",
+    "namePlaceholder": "Ví dụ: Thiết kế",
+    "descriptionLabel": "Mô tả",
+    "descriptionPlaceholder": "Nhóm này làm gì",
+    "color": "Màu",
+    "colors": {
+      "blue": "Xanh dương",
+      "green": "Xanh lá",
+      "amber": "Hổ phách",
+      "violet": "Tím",
+      "rose": "Hồng",
+      "sky": "Xanh da trời"
+    },
+    "privateHint": "Chỉ thành viên của nhóm và quản trị viên mới thấy nhóm và những gì được chia sẻ với nhóm.",
+    "create": "Tạo nhóm"
+  },
+  "invite": {
+    "title": "Mời mọi người vào {workspace}",
+    "description": "Họ sẽ nhận được email có liên kết để tham gia. Mỗi người chiếm một suất.",
+    "emails": "Địa chỉ email",
+    "hint": "Phân tách địa chỉ bằng dấu phẩy hoặc xuống dòng. {left, plural, other {Còn # suất.}}",
+    "overSeats": "{count, plural, other {# người}}, nhưng {left, plural, other {chỉ còn # suất.}}",
+    "seatsAfter": "{count, plural, other {# lời mời}} · {left, plural, other {sau đó còn # suất.}}",
+    "checkEmails": "Hãy kiểm tra {emails}.",
+    "allExisting": "Những người này đã ở trong không gian làm việc hoặc đã được mời.",
+    "emailRequired": "Hãy thêm địa chỉ email.",
+    "tooMany": "{count, plural, other {Mỗi lần chỉ mời được tối đa # người.}}",
+    "skipped": "Đã bỏ qua người đã tham gia hoặc đã được mời: {emails}.",
+    "role": "Vai trò",
+    "teams": "Thêm vào nhóm (không bắt buộc)",
+    "addSeats": "Thêm suất",
+    "send": "{count, plural, =1 {Gửi lời mời} other {Gửi # lời mời}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, =1 {Đã gửi lời mời đến {email}} other {Đã gửi # lời mời}}",
+    "inviteFailed": "Không thể gửi lời mời.",
+    "invitationRevoked": "Đã thu hồi lời mời gửi {email}",
+    "revokeFailed": "Không thể thu hồi",
+    "invitationResent": "Đã gửi lại lời mời đến {email}",
+    "resendFailed": "Không thể gửi lại",
+    "roleChanged": "{role, select, admin {{name} giờ là quản trị viên} other {{name} giờ là thành viên}}",
+    "roleChangeFailed": "Không thể thay đổi vai trò",
+    "teamsUpdateFailed": "Không thể cập nhật nhóm",
+    "memberRemoved": "Đã gỡ {name} khỏi không gian làm việc",
+    "removeMemberFailed": "Không thể gỡ người này",
+    "teamCreated": "Đã tạo {name}",
+    "teamSaved": "Đã lưu {name}",
+    "teamSaveFailed": "Không thể lưu nhóm.",
+    "teamDeleted": "Đã xóa {name}",
+    "teamDeleteFailed": "Không thể xóa nhóm"
+  }
+}

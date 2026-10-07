@@ -1,0 +1,107 @@
+{
+  "title": "الاجتماعات",
+  "description": "تسجيلات شاركها الأعضاء هنا، مع ملخص Leo والقرارات والمهام.",
+  "sharingRules": "قواعد المشاركة",
+  "reviewSharingRules": "مراجعة قواعد المشاركة",
+  "shareMeeting": "مشاركة اجتماع",
+  "searchMeetings": "البحث في الاجتماعات",
+  "loading": "جارٍ تحميل الاجتماعات…",
+  "loadFailed": "تعذر تحميل الاجتماعات",
+  "empty": {
+    "title": "لا توجد اجتماعات مشتركة بعد",
+    "text": "تظهر الاجتماعات هنا عندما يشارك أحد الأعضاء أحد تسجيلاته، أو عندما ينتهي اجتماع يقتصر على أعضاء {workspace} وتنطبق عليه قواعد المشاركة."
+  },
+  "noMatch": {
+    "title": "لا توجد اجتماعات مطابقة",
+    "text": "يمكن تجربة كلمات أخرى أو فريق آخر أو كل الاجتماعات.",
+    "clear": "مسح عوامل التصفية"
+  },
+  "recency": {
+    "thisWeek": "هذا الأسبوع",
+    "lastWeek": "الأسبوع الماضي",
+    "earlier": "قبل ذلك"
+  },
+  "scope": {
+    "label": "أي الاجتماعات",
+    "all": "الكل",
+    "mine": "التي حضرتها"
+  },
+  "when": {
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "tomorrow": "غدًا"
+  },
+  "row": {
+    "recordedByYou": "سجلته أنت",
+    "recordedBy": "سجله {name}",
+    "withGuests": "بحضور ضيوف",
+    "decisions": "{count, plural, zero {# قرار} one {قرار واحد} two {قراران} few {# قرارات} many {# قرارًا} other {# قرار}}",
+    "tasks": "{count, plural, zero {# مهمة} one {مهمة واحدة} two {مهمتان} few {# مهام} many {# مهمة} other {# مهمة}}"
+  },
+  "meeting": {
+    "back": "الاجتماعات",
+    "loading": "جارٍ تحميل الاجتماع…",
+    "loadFailed": "تعذر تحميل الاجتماع",
+    "date": "التاريخ",
+    "duration": "المدة",
+    "participants": "المشاركون",
+    "participantsWithGuests": "{names} ({count, plural, zero {# شخص من خارج {workspace}} one {شخص واحد من خارج {workspace}} two {شخصان من خارج {workspace}} few {# أشخاص من خارج {workspace}} many {# شخصًا من خارج {workspace}} other {# شخص من خارج {workspace}}})",
+    "project": "المشروع",
+    "recordedByYou": "سجلته أنت. وهو موجود أيضًا في ملاحظاتك، ويبقى فيها إذا أوقفت المشاركة في أي وقت.",
+    "sharedBy": "سجله وشاركه {name}",
+    "summary": "الملخص",
+    "transcript": "النص",
+    "keyPoints": "النقاط الرئيسية",
+    "decisions": "القرارات",
+    "replacedLater": "استُبدل لاحقًا",
+    "tasks": "المهام",
+    "transcriptPrivateTitle": "تمت مشاركة الملخص فقط",
+    "transcriptPrivate": "أبقى {name} النص خاصًا. يمكن طلبه منه عند الحاجة إلى العبارات الحرفية.",
+    "transcriptPrivateUnknown": "أبقى المنظم النص خاصًا. يمكن طلبه منه عند الحاجة إلى العبارات الحرفية.",
+    "unavailableTitle": "هذا الاجتماع غير متاح",
+    "unavailable": "إما أنه غير موجود، أو لم تتم مشاركته معك، أو أوقف مالكه مشاركته.",
+    "backToMeetings": "العودة إلى الاجتماعات"
+  },
+  "project": {
+    "label": "المشروع",
+    "none": "بلا مشروع"
+  },
+  "audience": {
+    "participants": "المشاركون",
+    "workspace": "الجميع في {workspace}",
+    "unknownTeam": "فريق",
+    "participantsHint": "الأعضاء الذين حضروا الاجتماع.",
+    "workspaceHint": "كل من في مساحة العمل، الآن ولاحقًا.",
+    "teamHint": "أعضاء {team}، بالإضافة إلى المشاركين.",
+    "privateTeamHint": "أعضاء {team} (فريق خاص)، بالإضافة إلى المشاركين.",
+    "sharedWith": "{level, select, participants {مشترك مع المشاركين} workspace {مشترك مع الجميع في {workspace}} other {مشترك مع {team}}}",
+    "sharedToast": "{level, select, participants {تمت مشاركة «{title}» مع المشاركين في {workspace}} workspace {تمت مشاركة «{title}» مع الجميع في {workspace}} other {تمت مشاركة «{title}» مع {team} في {workspace}}}"
+  },
+  "share": {
+    "lockedHint": "يمكن فقط للشخص الذي شاركه أو لمشرف تغيير من يراه",
+    "change": "تغيير من يرى هذا الاجتماع",
+    "title": "من يرى هذا الاجتماع",
+    "description": "الملخص والقرارات والمهام. أما الأسئلة التي يطرحها الأشخاص على Leo فتبقى خاصة بهم.",
+    "external": "شارك أشخاص من خارج {workspace}. يرجى مشاركة ما يرتاحون لمشاركته فقط.",
+    "audienceLabel": "مشترك مع",
+    "includeTranscript": "تضمين النص",
+    "includeTranscriptHint": "وإلا فستتم مشاركة الملخص فقط.",
+    "transcriptShared": "تمت مشاركة النص أيضًا",
+    "summaryOnly": "تتم الآن مشاركة الملخص فقط",
+    "addedToProject": "تمت الإضافة إلى المشروع",
+    "removedFromProject": "تمت الإزالة من المشروع",
+    "stopMine": "إيقاف المشاركة (مع إبقائه في ملاحظاتي)",
+    "takeOut": "إخراجه من {workspace}"
+  },
+  "shareDialog": {
+    "allSharedTitle": "تمت مشاركة كل شيء",
+    "allShared": "كل تسجيلاتك موجودة بالفعل في {workspace}.",
+    "title": "مشاركة أحد اجتماعاتك",
+    "description": "يبقى ملكك وفي ملاحظاتك، ويظل مرئيًا في {workspace} إلى أن توقف المشاركة.",
+    "meeting": "الاجتماع",
+    "movesFrom": "تمت مشاركته حاليًا في {workspace}، ومشاركته هنا تنقله.",
+    "audience": "من يراه",
+    "audienceHint": "تنتقل معه قراراته ومهامه، ويمكن للمشاركين رؤيته دائمًا.",
+    "submit": "مشاركة"
+  }
+}

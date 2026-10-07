@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Kennis",
+    "description": "Kies de bestanden en bronnen waaruit Leo antwoordt in Persoonlijk."
+  },
+  "heading": "Kennis",
+  "intro": "Waaruit Leo antwoordt als je iets vraagt in Persoonlijk: bestanden die je kiest in Bestandsbeheer, bronnen die je koppelt en wat je werkruimtes met je delen. Alleen jij ziet deze antwoorden.",
+  "tabs": {
+    "files": "Bestanden",
+    "sources": "Bronnen",
+    "workspaces": "Uit werkruimtes"
+  },
+  "loadFailed": "Kan je bestanden niet laden",
+  "leoFolders": {
+    "heading": "Mappen die Leo leest",
+    "stop": "{folder} niet meer gebruiken"
+  },
+  "leoFiles": {
+    "heading": "Bestanden die Leo gebruikt",
+    "emptyTitle": "Leo gebruikt nog geen bestanden van je",
+    "emptyDescription": "Kies bestanden of hele mappen in Bestandsbeheer, of upload hierboven nieuwe bestanden."
+  },
+  "summary": {
+    "files": "Bestanden",
+    "chunks": "Fragmenten",
+    "processing": "Verwerken",
+    "embeddings": "Embeddings",
+    "used": "{used} gebruikt",
+    "usedOfLimit": "{used} van {limit} in je abonnement",
+    "failedUsage": "{failed, plural, one {# mislukt} other {# mislukt}} · {usage}",
+    "inIndex": "in de vectorindex",
+    "busy": "ontleden en vectoriseren",
+    "caughtUp": "alles bijgewerkt",
+    "dimensions": "{dimensions, number} dimensies"
+  },
+  "dropzone": {
+    "label": "Bestanden voor Leo toevoegen",
+    "title": "Sleep bestanden hierheen zodat Leo ze kan gebruiken",
+    "uploading": "{count, plural, one {# bestand uploaden…} other {# bestanden uploaden…}}",
+    "description": "Ze worden opgeslagen in Mijn bestanden in Bestandsbeheer. {types}, maximaal {size} per bestand.",
+    "choose": "Kiezen uit je bestanden",
+    "upload": "Nieuwe uploaden",
+    "skipped": "{count, plural, one {# bestand overgeslagen} other {# bestanden overgeslagen}}",
+    "unreadable": "{name}: Leo kan dit type of deze grootte niet lezen",
+    "tooMany": "{name}: meer dan {max, number} bestanden tegelijk"
+  },
+  "choose": {
+    "title": "Kiezen uit je bestanden",
+    "description": "Leo leest wat je kiest en gebruikt het in zijn antwoorden in Persoonlijk. Een map omvat ook bestanden die je er later aan toevoegt.",
+    "folders": "Hele mappen",
+    "files": "Bestanden",
+    "alreadyUsed": "Leo gebruikt het al",
+    "submit": "Gebruiken met Leo",
+    "readingOne": "Leo leest het nu",
+    "readingMany": "{count, plural, one {Leo leest nu # keuze} other {Leo leest nu # keuzes}}",
+    "readingDescription": "Zodra het indexeren klaar is, gebruikt Leo ze in zijn antwoorden in Persoonlijk."
+  },
+  "table": {
+    "status": "Status",
+    "chunks": "Fragmenten",
+    "size": "Grootte",
+    "workspaces": "Werkruimtes",
+    "actions": "Acties",
+    "wholeFolder": "<name>{folder}</name> · hele map"
+  },
+  "steps": {
+    "queued": "In wachtrij",
+    "parsing": "Ontleden",
+    "chunking": "Opdelen",
+    "embedding": "Vectoriseren",
+    "indexed": "Geïndexeerd",
+    "failed": "Mislukt"
+  },
+  "status": {
+    "step": "{step, number} van {total, number}",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Opnieuw indexeren",
+    "showInFileManager": "Tonen in Bestandsbeheer",
+    "stopFolder": "‘{folder}’ niet meer gebruiken",
+    "stopFile": "Niet meer gebruiken met Leo"
+  }
+}

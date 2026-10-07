@@ -1,0 +1,120 @@
+{
+  "title": "Üyeler",
+  "description": "{workspace} çalışma alanındaki herkes, rolleri ve paylaşım yaptığınız ekipler.",
+  "invitePeople": "Kişileri davet et",
+  "adminsInvite": "Kişileri yalnızca yöneticiler davet edebilir.",
+  "adminsInviteAsk": "Kişileri yalnızca yöneticiler davet edebilir. Şu kişiye sorun: {name}.",
+  "tabs": {
+    "members": "Üyeler",
+    "teams": "Ekipler"
+  },
+  "search": "Kişilerde ara",
+  "pendingInvitations": "Bekleyen davetler · {count, number}",
+  "membersCount": "Üyeler · {count, number}",
+  "noMatches": "Eşleşen kimse yok",
+  "noMatchesHint": "Bir ad, e-posta adresi veya unvan deneyin.",
+  "clearSearch": "Aramayı temizle",
+  "seats": {
+    "label": "Lisanslar",
+    "taken": "{total, number} lisansın {taken, number} tanesi kullanılıyor",
+    "breakdown": "· {members, plural, one {# üye} other {# üye}}",
+    "breakdownPending": "· {members, plural, one {# üye} other {# üye}}, {pending, plural, one {# bekleyen davet} other {# bekleyen davet}}",
+    "left": "{count, plural, one {# lisans kaldı.} other {# lisans kaldı.}} Bekleyen davetler kabul edilene veya iptal edilene kadar bir lisans kullanır.",
+    "fullAdd": "Tüm lisanslar kullanılıyor. Daha fazla kişi davet etmek için lisans ekleyin.",
+    "fullAsk": "Tüm lisanslar kullanılıyor. Sahipten lisans eklemesini isteyin.",
+    "change": "Lisansları değiştir"
+  },
+  "invitation": {
+    "by": "Davet eden: {name} · {ago}",
+    "byYou": "Davet eden: siz · {ago}",
+    "byFormerMember": "Davet eden: eski bir üye · {ago}",
+    "resend": "Yeniden gönder",
+    "revoke": "İptal et",
+    "revokeFor": "Daveti iptal et: {email}"
+  },
+  "member": {
+    "you": "Siz",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, one {# gün veya daha uzun süredir etkin değil} other {# gün veya daha uzun süredir etkin değil}}",
+    "roleOf": "Rol: {name}",
+    "remove": "Çalışma alanından kaldır",
+    "removeTitle": "{name}, {workspace} çalışma alanından kaldırılsın mı?",
+    "removeDescription": "{name} kaldırılırsa kendi Notlar’ından ve Dosya yöneticisinden paylaştığı toplantılar ve dosyalar onunla birlikte ayrılır. Görevler kalır; açık olanların atanan kişisi kaldırılır. Lisans boşa çıkar.",
+    "joinedTeam": "{name} şu ekibe katıldı: {team}",
+    "leftTeam": "{name} şu ekipten ayrıldı: {team}"
+  },
+  "teams": {
+    "new": "Yeni ekip",
+    "empty": "Henüz ekip yok",
+    "emptyHint": "Ekipler isteğe bağlıdır. Toplantıları ve bilgileri Mühendislik veya Satış gibi bir grupla paylaşmak istediğinizde oluşturun.",
+    "intro": "Toplantıları ve bilgileri tek tek kişilerle değil, bir ekiple paylaşın.",
+    "deleteTitle": "{name} silinsin mi?",
+    "deleteDescription": "Ekibin toplantıları katılan kişilere görünür kalır ve üyeleri çalışma alanında kalır. Önce ekibin bilgilerini taşıyın; bilgiler hedef kitlesiz bırakılamaz."
+  },
+  "team": {
+    "noDescription": "Henüz açıklama yok.",
+    "edit": "Ekibi düzenle",
+    "delete": "Ekibi sil",
+    "members": "{count, plural, one {# üye} other {# üye}}",
+    "membersLedBy": "{count, plural, one {# üye} other {# üye}} · lider: {name}",
+    "membersLedByYou": "{count, plural, one {# üye} other {# üye}} · lider: siz",
+    "join": "Ekibe katıl",
+    "leave": "Ekipten ayrıl",
+    "youJoined": "Şu ekibe katıldınız: {team}",
+    "youLeft": "Şu ekipten ayrıldınız: {team}"
+  },
+  "teamForm": {
+    "editTitle": "Düzenle: {name}",
+    "description": "Toplantıları ve bilgileri tek tek değil, bir grupla paylaşın.",
+    "nameRequired": "Ekibe bir ad verin.",
+    "namePlaceholder": "ör. Tasarım",
+    "descriptionLabel": "Açıklama",
+    "descriptionPlaceholder": "Bu ekip ne üzerinde çalışıyor",
+    "color": "Renk",
+    "colors": {
+      "blue": "Mavi",
+      "green": "Yeşil",
+      "amber": "Kehribar",
+      "violet": "Mor",
+      "rose": "Pembe",
+      "sky": "Gök mavisi"
+    },
+    "privateHint": "Ekibi ve ekiple paylaşılanları yalnızca üyeleri ve yöneticiler görür.",
+    "create": "Ekip oluştur"
+  },
+  "invite": {
+    "title": "{workspace} çalışma alanına kişi davet edin",
+    "description": "Katılmaları için bağlantı içeren bir e-posta alacaklar. Her kişi bir lisans kullanır.",
+    "emails": "E-posta adresleri",
+    "hint": "Adresleri virgülle veya yeni satırla ayırın. {left, plural, one {# lisans kaldı.} other {# lisans kaldı.}}",
+    "overSeats": "{count, plural, one {# kişi} other {# kişi}}, ancak {left, plural, one {yalnızca # lisans kaldı.} other {yalnızca # lisans kaldı.}}",
+    "seatsAfter": "{count, plural, one {# davet} other {# davet}} · {left, plural, one {Bundan sonra # lisans kalacak.} other {Bundan sonra # lisans kalacak.}}",
+    "checkEmails": "Şu adresleri kontrol edin: {emails}.",
+    "allExisting": "Bu kişiler zaten çalışma alanında veya davet edilmiş.",
+    "emailRequired": "Bir e-posta adresi ekleyin.",
+    "tooMany": "{count, plural, one {Tek seferde en fazla # kişi davet edin.} other {Tek seferde en fazla # kişi davet edin.}}",
+    "skipped": "Zaten üye veya davet edilmiş olduğu için atlandı: {emails}.",
+    "role": "Rol",
+    "teams": "Ekiplere ekle (isteğe bağlı)",
+    "addSeats": "Lisans ekle",
+    "send": "{count, plural, one {Davet gönder} other {# davet gönder}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, one {Davet gönderildi: {email}} other {# davet gönderildi}}",
+    "inviteFailed": "Davetler gönderilemedi.",
+    "invitationRevoked": "Davet iptal edildi: {email}",
+    "revokeFailed": "İptal edilemedi",
+    "invitationResent": "Davet yeniden gönderildi: {email}",
+    "resendFailed": "Yeniden gönderilemedi",
+    "roleChanged": "{role, select, admin {{name} artık yönetici} other {{name} artık üye}}",
+    "roleChangeFailed": "Rol değiştirilemedi",
+    "teamsUpdateFailed": "Ekipler güncellenemedi",
+    "memberRemoved": "{name} çalışma alanından kaldırıldı",
+    "removeMemberFailed": "Kişi kaldırılamadı",
+    "teamCreated": "{name} oluşturuldu",
+    "teamSaved": "{name} kaydedildi",
+    "teamSaveFailed": "Ekip kaydedilemedi.",
+    "teamDeleted": "{name} silindi",
+    "teamDeleteFailed": "Ekip silinemedi"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "add": "Toevoegen",
+    "cancel": "Annuleren",
+    "close": "Sluiten",
+    "copyLink": "Link kopiëren",
+    "create": "Maken",
+    "delete": "Verwijderen",
+    "duplicate": "Dupliceren",
+    "open": "Openen",
+    "remove": "Verwijderen",
+    "rename": "Naam wijzigen",
+    "renameMenu": "Naam wijzigen…",
+    "retry": "Opnieuw proberen",
+    "save": "Opslaan",
+    "undo": "Ongedaan maken"
+  },
+  "fields": {
+    "name": "Naam"
+  },
+  "feedback": {
+    "linkCopied": "Link gekopieerd",
+    "linkCopyFailed": "Kan de link niet kopiëren",
+    "loading": "Laden…"
+  },
+  "actionsFor": "Acties voor {name}",
+  "errors": {
+    "backendUnreachable": "Kan de server niet bereiken. Probeer het zo opnieuw."
+  }
+}

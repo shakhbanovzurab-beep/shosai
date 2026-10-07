@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Decisions"
+  },
+  "title": "Decisions",
+  "description": "Everything decided in meetings shared with you, newest first, each linked to where it was said.",
+  "searchLabel": "Search decisions",
+  "loading": "Loading decisions…",
+  "loadFailed": "Couldn’t load decisions",
+  "empty": {
+    "title": "No decisions yet",
+    "text": "Leo picks out what was decided in shared meetings and keeps it here, linked to the meeting.",
+    "action": "Go to meetings"
+  },
+  "noMatch": {
+    "title": "No decisions match",
+    "text": "Try other words or another team.",
+    "clear": "Clear filters"
+  },
+  "replaced": "Replaced",
+  "replacedBy": "Replaced by <link>“{decision}”</link> in {meeting}.",
+  "replacedHidden": "Replaced by a later decision in a meeting that isn’t shared with you.",
+  "day": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow"
+  }
+}

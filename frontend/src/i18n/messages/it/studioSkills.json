@@ -1,0 +1,53 @@
+{
+  "title": "Skill",
+  "tabs": {
+    "readyMade": "Pronte",
+    "repository": "Il tuo repository",
+    "mine": "Mie ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Trova una skill: system design, code review…",
+    "label": "Cerca skill",
+    "help": "Cerca nel catalogo di skills.sh",
+    "noMatches": "Nessuna skill corrispondente. Prova con altre parole.",
+    "emptyTitle": "Catalogo di skill pronte",
+    "emptyDescription": "Inizia a scrivere. Una skill è un’istruzione pronta che puoi allegare a un prompt.",
+    "searchFailed": "Impossibile cercare su skills.sh. Riprova."
+  },
+  "repository": {
+    "label": "Repository GitHub",
+    "placeholder": "owner/repo o un link GitHub",
+    "find": "Trova skill",
+    "help": "Un repository pubblico che contiene un file SKILL.md",
+    "emptyTitle": "La tua skill da GitHub",
+    "emptyDescription": "Inserisci un repository pubblico per trovare i file SKILL.md che contiene.",
+    "scanFailed": "Impossibile leggere il repository."
+  },
+  "candidate": {
+    "installs": "{count, plural, one {# installazione} many {# di installazioni} other {# installazioni}}",
+    "installed": "Installata"
+  },
+  "mine": {
+    "extraFiles": "Include script o altri file: vengono usate solo le istruzioni di SKILL.md.",
+    "update": "Aggiorna {name}",
+    "updateHint": "Aggiorna all’ultimo commit",
+    "remove": "Rimuovi {name}",
+    "emptyTitle": "Ancora nessuna skill",
+    "emptyDescription": "Aggiungine una da Pronte o dal tuo repository."
+  },
+  "remove": {
+    "title": "Rimuovere {name}?",
+    "titleUnnamed": "Rimuovere questa skill?",
+    "description": "Verrà scollegata da tutti i prompt che la usano. Potrai aggiungerla di nuovo in seguito."
+  },
+  "toasts": {
+    "installed": "{name} installata",
+    "installedHint": "Allegala a un prompt dall’editor dei prompt.",
+    "installFailed": "Impossibile installare la skill",
+    "upToDate": "{name} è aggiornata",
+    "updated": "{name} aggiornata",
+    "updateFailed": "Impossibile aggiornare la skill",
+    "removed": "{name} rimossa",
+    "removeFailed": "Impossibile rimuovere la skill"
+  }
+}

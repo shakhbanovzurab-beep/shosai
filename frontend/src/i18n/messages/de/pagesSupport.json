@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Support",
+    "description": "Bitte das Support-Team um Hilfe und verfolge deine Anfragen."
+  },
+  "categories": {
+    "billing": "Abrechnung",
+    "bug": "Fehlerbericht",
+    "account": "Konto",
+    "feature": "Funktionswunsch",
+    "other": "Sonstiges"
+  },
+  "statuses": {
+    "open": "Wartet auf Support",
+    "awaiting_you": "Wartet auf dich",
+    "resolved": "Gelöst"
+  },
+  "events": {
+    "acknowledged": "Deine Nachricht ist angekommen. Eine Antwort kommt meist innerhalb weniger Stunden – du wirst hier benachrichtigt.",
+    "resolved": "Als gelöst markiert",
+    "reopened": "Wieder geöffnet"
+  },
+  "toolbar": {
+    "search": "Anfragen durchsuchen",
+    "filter": "Anfragen filtern",
+    "all": "Alle",
+    "open": "Offen",
+    "resolved": "Gelöst"
+  },
+  "newTicket": "Neue Anfrage",
+  "table": {
+    "number": "Nr.",
+    "subject": "Betreff",
+    "status": "Status",
+    "topic": "Thema",
+    "updated": "Aktualisiert",
+    "unread": "Ungelesen:"
+  },
+  "list": {
+    "loading": "Anfragen werden geladen",
+    "loadError": "Deine Anfragen konnten nicht geladen werden",
+    "emptyTitle": "Wobei brauchst du Hilfe?",
+    "emptyDescription": "Stell eine Anfrage – das Support-Team antwortet hier, meist innerhalb weniger Stunden.",
+    "noMatchesTitle": "Keine Anfragen gefunden",
+    "noMatchesDescription": "Versuche es mit einer anderen Suche oder einem anderen Filter."
+  },
+  "panel": {
+    "ticket": "Anfrage",
+    "description": "Deine Konversation mit dem Support"
+  },
+  "form": {
+    "title": "Wobei brauchst du Hilfe?",
+    "subtitle": "Eine Antwort kommt meist innerhalb weniger Stunden.",
+    "topic": "Thema",
+    "subject": "Betreff",
+    "subjectPlaceholder": "Eine kurze Zusammenfassung",
+    "body": "Was ist passiert?",
+    "bodyPlaceholder": "Schritte, was du erwartet hast und was stattdessen passiert ist. Screenshots helfen.",
+    "send": "Senden"
+  },
+  "attach": {
+    "button": "Dateien anhängen",
+    "list": "Angehängte Dateien",
+    "remove": "{name} entfernen",
+    "tooBig": "{count, plural, one {{names} ist größer als {size}} other {{names} sind größer als {size}}}",
+    "tooMany": "{max, plural, one {Hänge höchstens # Datei an} other {Hänge höchstens # Dateien an}}"
+  },
+  "composer": {
+    "message": "Nachricht",
+    "emoji": "Emoji hinzufügen",
+    "hint": "Enter zum Senden · Shift+Enter für eine neue Zeile",
+    "send": "Senden",
+    "reply": "Antwort schreiben…",
+    "replyToReopen": "Antworten, um wieder zu öffnen…"
+  },
+  "thread": {
+    "loading": "Anfrage wird geladen",
+    "close": "Anfrage schließen",
+    "reopen": "Wieder öffnen",
+    "resolve": "Als gelöst markieren",
+    "resolvedNote": "Gelöst. Antworte unten, wenn du noch Hilfe brauchst – dann wird die Anfrage wieder geöffnet.",
+    "thanks": "Danke für dein Feedback.",
+    "rate": "Wie zufrieden bist du?",
+    "good": "Gut",
+    "bad": "Schlecht",
+    "you": "Du",
+    "support": "Support",
+    "supportAuthor": "{name} · Support",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Als gelesen markieren",
+    "markUnread": "Als ungelesen markieren",
+    "copyNumber": "Anfragenummer kopieren",
+    "copySubject": "Betreff kopieren"
+  },
+  "toasts": {
+    "opened": "Anfrage #{number} erstellt",
+    "openFailed": "Die Anfrage konnte nicht erstellt werden",
+    "updateFailed": "Die Anfrage konnte nicht aktualisiert werden",
+    "sendFailed": "Deine Antwort konnte nicht gesendet werden",
+    "markedRead": "Als gelesen markiert",
+    "markedUnread": "Als ungelesen markiert",
+    "reopened": "Anfrage wieder geöffnet",
+    "resolved": "Als gelöst markiert",
+    "numberCopied": "Anfragenummer kopiert",
+    "subjectCopied": "Betreff kopiert",
+    "numberCopyFailed": "Die Anfragenummer konnte nicht kopiert werden",
+    "subjectCopyFailed": "Der Betreff konnte nicht kopiert werden"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "title": "회의",
+  "description": "멤버들이 여기에 공유한 녹음과 Leo의 요약, 결정 사항, 작업이에요.",
+  "sharingRules": "공유 규칙",
+  "reviewSharingRules": "공유 규칙 검토",
+  "shareMeeting": "회의 공유",
+  "searchMeetings": "회의 검색",
+  "loading": "회의를 불러오는 중…",
+  "loadFailed": "회의를 불러오지 못했어요",
+  "empty": {
+    "title": "아직 공유된 회의가 없어요",
+    "text": "멤버가 자신의 녹음을 공유하거나, {workspace} 멤버만 참석한 회의가 끝나고 공유 규칙이 적용되면 여기에 회의가 표시돼요."
+  },
+  "noMatch": {
+    "title": "일치하는 회의가 없어요",
+    "text": "다른 검색어나 팀으로 찾거나, 모든 회의를 확인해 보세요.",
+    "clear": "필터 지우기"
+  },
+  "recency": {
+    "thisWeek": "이번 주",
+    "lastWeek": "지난주",
+    "earlier": "이전"
+  },
+  "scope": {
+    "label": "표시할 회의",
+    "all": "전체",
+    "mine": "내가 참석한 회의"
+  },
+  "when": {
+    "today": "오늘",
+    "yesterday": "어제",
+    "tomorrow": "내일"
+  },
+  "row": {
+    "recordedByYou": "내가 녹음함",
+    "recordedBy": "{name} 님이 녹음함",
+    "withGuests": "게스트 참석",
+    "decisions": "{count, plural, other {결정 사항 #개}}",
+    "tasks": "{count, plural, other {작업 #개}}"
+  },
+  "meeting": {
+    "back": "회의",
+    "loading": "회의를 불러오는 중…",
+    "loadFailed": "회의를 불러오지 못했어요",
+    "date": "날짜",
+    "duration": "길이",
+    "participants": "참석자",
+    "participantsWithGuests": "{names}({count, plural, other {{workspace} 외부 참석자 #명}})",
+    "project": "프로젝트",
+    "recordedByYou": "내가 녹음한 회의예요. 내 노트에도 있으며, 언제든 공유를 중지해도 노트에는 그대로 남아요.",
+    "sharedBy": "{name} 님이 녹음하고 공유함",
+    "summary": "요약",
+    "transcript": "스크립트",
+    "keyPoints": "핵심 내용",
+    "decisions": "결정 사항",
+    "replacedLater": "이후 대체됨",
+    "tasks": "작업",
+    "transcriptPrivateTitle": "요약만 공유됐어요",
+    "transcriptPrivate": "{name} 님이 스크립트를 비공개로 설정했어요. 정확한 발언이 필요하면 {name} 님에게 요청해 주세요.",
+    "transcriptPrivateUnknown": "주최자가 스크립트를 비공개로 설정했어요. 정확한 발언이 필요하면 주최자에게 요청해 주세요.",
+    "unavailableTitle": "이 회의를 볼 수 없어요",
+    "unavailable": "회의가 없거나, 나와 공유되지 않았거나, 소유자가 공유를 중지했어요.",
+    "backToMeetings": "회의로 돌아가기"
+  },
+  "project": {
+    "label": "프로젝트",
+    "none": "프로젝트 없음"
+  },
+  "audience": {
+    "participants": "참석자",
+    "workspace": "{workspace}의 모든 멤버",
+    "unknownTeam": "특정 팀",
+    "participantsHint": "회의에 참석한 멤버예요.",
+    "workspaceHint": "지금과 앞으로의 워크스페이스 멤버 모두예요.",
+    "teamHint": "{team} 멤버와 참석자예요.",
+    "privateTeamHint": "{team}(비공개 팀) 멤버와 참석자예요.",
+    "sharedWith": "{level, select, participants {참석자와 공유됨} workspace {{workspace}의 모든 멤버와 공유됨} other {{team} 팀과 공유됨}}",
+    "sharedToast": "{level, select, participants {“{title}”을(를) {workspace}의 참석자와 공유했어요} workspace {“{title}”을(를) {workspace}의 모든 멤버와 공유했어요} other {“{title}”을(를) {workspace}의 {team} 팀과 공유했어요}}"
+  },
+  "share": {
+    "lockedHint": "공유한 사람이나 관리자만 공개 범위를 변경할 수 있어요",
+    "change": "이 회의의 공개 범위 변경",
+    "title": "이 회의를 볼 수 있는 사람",
+    "description": "요약, 결정 사항, 작업이 공유돼요. 각자 Leo에게 한 질문은 공유되지 않아요.",
+    "external": "{workspace} 외부 사람이 참석했어요. 그 사람들이 불편하지 않을 내용만 공유해 주세요.",
+    "audienceLabel": "공유 대상",
+    "includeTranscript": "스크립트 포함",
+    "includeTranscriptHint": "포함하지 않으면 요약만 공유돼요.",
+    "transcriptShared": "스크립트도 공유돼요",
+    "summaryOnly": "이제 요약만 공유돼요",
+    "addedToProject": "프로젝트에 추가했어요",
+    "removedFromProject": "프로젝트에서 제거했어요",
+    "stopMine": "공유 중지(내 노트에는 유지)",
+    "takeOut": "{workspace}에서 빼기"
+  },
+  "shareDialog": {
+    "allSharedTitle": "모두 공유됐어요",
+    "allShared": "내 녹음이 모두 이미 {workspace}에 있어요.",
+    "title": "내 회의 하나 공유하기",
+    "description": "회의는 계속 내 것이고 내 노트에도 남아 있어요. 공유를 중지할 때까지 {workspace}에서 볼 수 있어요.",
+    "meeting": "회의",
+    "movesFrom": "지금 {workspace}에 공유되어 있어요. 여기에 공유하면 그쪽에서 옮겨져요.",
+    "audience": "볼 수 있는 사람",
+    "audienceHint": "결정 사항과 작업도 함께 공유되며, 참석자는 언제나 볼 수 있어요.",
+    "submit": "공유"
+  }
+}

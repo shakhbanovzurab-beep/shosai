@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Productivité",
+    "description": "Les tâches du jour, les projets, le minuteur de concentration, le calendrier et les notes récentes, avec une année de travail accompli en un coup d’œil."
+  },
+  "greeting": "{period, select, morning {Bonjour, {name}.} afternoon {Bonjour, {name}.} other {Bonsoir, {name}.}}",
+  "greetingAnyTime": "Bonjour, {name}.",
+  "sidePanel": "Calendrier, concentration et notes",
+  "tasks": {
+    "heading": "Aujourd’hui",
+    "progress": "{done, number} sur {total, number} terminées",
+    "newTask": "Nouvelle tâche",
+    "addTask": "Ajouter une tâche"
+  },
+  "projects": {
+    "heading": "Projets",
+    "status": {
+      "inProgress": "En cours",
+      "planning": "Planification"
+    },
+    "progressOf": "Avancement de {project}",
+    "due": "Échéance : {date}"
+  },
+  "notes": {
+    "heading": "Notes récentes",
+    "viewAll": "Tout afficher",
+    "today": "Aujourd’hui",
+    "yesterday": "Hier",
+    "empty": "Aucune note pour l’instant",
+    "emptyHint": "Les notes de vos réunions apparaîtront ici."
+  }
+}

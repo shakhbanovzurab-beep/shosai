@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Besluiten"
+  },
+  "title": "Besluiten",
+  "description": "Alles wat is besloten in vergaderingen die met je zijn gedeeld, nieuwste eerst, telkens gekoppeld aan waar het is gezegd.",
+  "searchLabel": "Besluiten zoeken",
+  "loading": "Besluiten laden…",
+  "loadFailed": "Kan de besluiten niet laden",
+  "empty": {
+    "title": "Nog geen besluiten",
+    "text": "Leo haalt uit gedeelde vergaderingen wat er is besloten en bewaart het hier, gekoppeld aan de vergadering.",
+    "action": "Naar vergaderingen"
+  },
+  "noMatch": {
+    "title": "Geen besluiten gevonden",
+    "text": "Probeer andere woorden of een ander team.",
+    "clear": "Filters wissen"
+  },
+  "replaced": "Vervangen",
+  "replacedBy": "Vervangen door <link>‘{decision}’</link> in {meeting}.",
+  "replacedHidden": "Vervangen door een later besluit in een vergadering die niet met je is gedeeld.",
+  "day": {
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "tomorrow": "Morgen"
+  }
+}

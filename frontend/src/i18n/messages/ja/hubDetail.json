@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "詳細",
+    "stages": "段階",
+    "history": "経緯",
+    "summaryDecided": "{rounds, plural, other {# 回議論し、{date} に決定しました。}}",
+    "summaryOpen": "{rounds, plural, other {# 回議論しましたが、決定していません。}}",
+    "blockers": "毎回の理由：{quotes}。",
+    "round": "{index, number} 回目",
+    "blocker": "妨げになったこと",
+    "decision": "決定事項",
+    "decisionChanged": "決定事項が変更されました",
+    "previous": "変更前",
+    "current": "現在",
+    "decidedAt": "{date}、「{meeting}」",
+    "outcome": "結果",
+    "outcomeUnknown": "結果はまだわかりません",
+    "links": {
+      "causes": "妨げているもの",
+      "blocked_by": "妨げられている原因",
+      "outcome_of": "決定事項から派生"
+    },
+    "sources": "ソース",
+    "dismissals": "却下",
+    "dismissedByYou": "自分が却下",
+    "disproved": "否定の根拠：{evidence}",
+    "dismissedUntil": "{date} まで",
+    "returned": "期間が過ぎたため、再び表示されています",
+    "owner": "担当者",
+    "noOwner": "未割り当て",
+    "due": "期限",
+    "noDue": "期限なし",
+    "goneTitle": "見つかりません",
+    "goneText": "ハブが削除されたか、会議のレコーディングが削除された可能性があります。",
+    "loadError": "詳細を読み込めませんでした"
+  },
+  "why": {
+    "source": "ソース",
+    "meeting": "{date} の会議「{title}」",
+    "said": "発言者",
+    "moment": "場面",
+    "jump": "その場面に移動",
+    "signals": {
+      "series": "このシリーズの会議がすでにここにあります。",
+      "subject": "このハブに関する会話でした。",
+      "title": "会議のタイトルに含まれています。",
+      "entity": "会話の中で名前が挙がりました。",
+      "organisation": "参加者がこの組織の人です。",
+      "human": "自分でここに追加しました。"
+    },
+    "loadError": "ソースを読み込めませんでした"
+  }
+}

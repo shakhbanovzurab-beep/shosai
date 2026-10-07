@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Stel in met wie de assistent praat, hoe hij zich gedraagt en welke modellen hem aansturen."
+  },
+  "tabs": {
+    "context": "Context",
+    "prompts": "Prompts",
+    "models": "Modellen"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Live-antwoorden",
+      "description": "Antwoorden van de assistent: overlay, chat, vergadering",
+      "help": "Live-antwoorden: de overlay, de chat en antwoorden tijdens een vergadering. De prompt bepaalt de toon, lengte en opmaak van wat de assistent zegt."
+    },
+    "screenshots": {
+      "name": "Schermafbeeldingen",
+      "description": "Het scherm, dia’s en documenten lezen",
+      "help": "Analyse van schermafbeeldingen: de knop ‘Schermafbeelding’ in de overlay en schermdelen tijdens een vergadering. De prompt vertelt het model hoe het de afbeelding moet lezen en wat het moet antwoorden."
+    },
+    "code": {
+      "name": "Code",
+      "description": "Vragen over code en algoritmen",
+      "help": "Vragen over code en algoritmen. De prompt bepaalt de programmeertaal, hoeveel uitleg er komt en of complexiteit en tests worden getoond."
+    },
+    "system_design": {
+      "name": "Systeemontwerp",
+      "description": "Architectuurontwerp voor sollicitatiegesprekken",
+      "help": "Architectuurvragen in sollicitatiegesprekken. De prompt bepaalt de opbouw van de uitwerking: eisen, schattingen, ontwerp en afwegingen."
+    },
+    "notes": {
+      "name": "Notities en mindmaps",
+      "description": "AI-versie van vergadernotities en de mindmap",
+      "help": "De AI-versie van vergadernotities en de mindmap. De prompt bepaalt wat erin komt: besluiten, actiepunten, open vragen."
+    },
+    "transcript": {
+      "name": "Transcriptie",
+      "description": "Spraak naar tekst in realtime",
+      "help": "Spraak naar tekst in realtime. Draait op een spraakmodel en gebruikt geen prompt."
+    }
+  },
+  "autosave": {
+    "saving": "Opslaan…"
+  },
+  "context": {
+    "intro": "Een korte tekst over jou. Die wordt als eerste systeembericht in elk verzoek aan het model ingevoegd. Hoe preciezer hij is, hoe minder vervolgvragen je krijgt.",
+    "loadFailed": "Kan je context niet laden",
+    "title": "Over jou",
+    "description": "Wie je bent, waar je aan werkt en hoe je antwoorden het liefst krijgt. Feiten zeggen meer dan bijvoeglijke naamwoorden.",
+    "example": "Rol: senior backend-engineer, 6 jaar ervaring, fintech.\nStack: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nNu: ik bereid me voor op sollicitatiegesprekken over systeemontwerp bij productbedrijven.\nAntwoorden: beknopt, met afwegingen; code in Python, tenzij ik iets anders zeg.\nVermijden: algemeen advies, lange inleidingen.",
+    "count": "{count, number} / {max, plural, one {# teken} other {# tekens}} · ~{tokens, plural, one {# token} other {# tokens}}",
+    "tooLong": "Maak de tekst korter om op te slaan.",
+    "saveFailed": "Kan niet opslaan.",
+    "savedAgo": "Opgeslagen {ago}",
+    "savesAutomatically": "Wordt automatisch opgeslagen"
+  },
+  "preview": {
+    "title": "Hoe het wordt verstuurd",
+    "description": "De opgeslagen versie staat aan het begin van elk verzoek, vóór de prompt van de rol.",
+    "system": "Systeem",
+    "user": "Gebruiker",
+    "empty": "(leeg: er wordt niets verstuurd)",
+    "rolePrompt": "rolprompt uit Prompts",
+    "question": "je vraag"
+  },
+  "models": {
+    "intro": "Kies welk model in elke rol antwoordt. De lijst toont alleen de modellen in je abonnement.",
+    "loadFailed": "Kan de modellen niet laden",
+    "model": "Model",
+    "temperature": "Temperatuur",
+    "maxTokens": "Max. tokens",
+    "reasoning": "Redeneren",
+    "unsupported": "Niet ondersteund",
+    "modelFor": "Model voor {role}",
+    "temperatureFor": "Temperatuur voor {role}",
+    "maxTokensRange": "Max. tokens moet een geheel getal van {min, number} tot {max, number} zijn.",
+    "saveFailed": "Kan de modelinstellingen niet opslaan"
+  },
+  "picker": {
+    "placeholder": "Kies een model…",
+    "search": "Modellen zoeken…",
+    "empty": "Geen modellen gevonden.",
+    "frontier": "Krachtigst"
+  }
+}

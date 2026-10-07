@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "결정 사항"
+  },
+  "title": "결정 사항",
+  "description": "나와 공유된 회의에서 결정된 모든 내용을 최신순으로 보여 줘요. 각 항목은 결정한 회의로 연결돼요.",
+  "searchLabel": "결정 사항 검색",
+  "loading": "결정 사항을 불러오는 중…",
+  "loadFailed": "결정 사항을 불러오지 못했어요",
+  "empty": {
+    "title": "아직 결정 사항이 없어요",
+    "text": "Leo가 공유된 회의에서 결정된 내용을 찾아 회의 링크와 함께 여기에 모아 둬요.",
+    "action": "회의로 이동"
+  },
+  "noMatch": {
+    "title": "일치하는 결정 사항이 없어요",
+    "text": "다른 검색어나 다른 팀으로 찾아보세요.",
+    "clear": "필터 지우기"
+  },
+  "replaced": "대체됨",
+  "replacedBy": "{meeting}에서 <link>“{decision}”</link>(으)로 대체됐어요.",
+  "replacedHidden": "나와 공유되지 않은 회의에서 이후 결정으로 대체됐어요.",
+  "day": {
+    "today": "오늘",
+    "yesterday": "어제",
+    "tomorrow": "내일"
+  }
+}

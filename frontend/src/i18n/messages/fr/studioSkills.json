@@ -1,0 +1,53 @@
+{
+  "title": "Compétences",
+  "tabs": {
+    "readyMade": "Prêtes à l’emploi",
+    "repository": "Votre dépôt",
+    "mine": "Les miennes ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Trouver une compétence : conception de systèmes, revue de code…",
+    "label": "Rechercher des compétences",
+    "help": "Rechercher dans l’annuaire skills.sh",
+    "noMatches": "Aucune compétence ne correspond. Essayez d’autres mots.",
+    "emptyTitle": "Annuaire de compétences prêtes à l’emploi",
+    "emptyDescription": "Commencez à taper. Une compétence est une instruction toute prête que vous pouvez ajouter à un prompt.",
+    "searchFailed": "Impossible de rechercher sur skills.sh. Réessayez."
+  },
+  "repository": {
+    "label": "Dépôt GitHub",
+    "placeholder": "propriétaire/dépôt ou lien GitHub",
+    "find": "Trouver des compétences",
+    "help": "Un dépôt public contenant un fichier SKILL.md",
+    "emptyTitle": "Votre propre compétence depuis GitHub",
+    "emptyDescription": "Saisissez un dépôt public pour y trouver les fichiers SKILL.md.",
+    "scanFailed": "Impossible de lire le dépôt."
+  },
+  "candidate": {
+    "installs": "{count, plural, one {# installation} many {# d’installations} other {# installations}}",
+    "installed": "Installée"
+  },
+  "mine": {
+    "extraFiles": "Contient des scripts ou d’autres fichiers : seules les instructions de SKILL.md sont utilisées.",
+    "update": "Mettre à jour {name}",
+    "updateHint": "Mettre à jour vers le dernier commit",
+    "remove": "Retirer {name}",
+    "emptyTitle": "Aucune compétence pour l’instant",
+    "emptyDescription": "Ajoutez-en une depuis l’onglet Prêtes à l’emploi ou depuis votre dépôt."
+  },
+  "remove": {
+    "title": "Retirer {name} ?",
+    "titleUnnamed": "Retirer cette compétence ?",
+    "description": "Elle sera retirée de tous les prompts qui l’utilisent. Vous pourrez l’ajouter de nouveau plus tard."
+  },
+  "toasts": {
+    "installed": "{name} installée",
+    "installedHint": "Ajoutez-la à un prompt depuis l’éditeur de prompts.",
+    "installFailed": "Impossible d’installer la compétence",
+    "upToDate": "{name} est à jour",
+    "updated": "{name} mise à jour",
+    "updateFailed": "Impossible de mettre à jour la compétence",
+    "removed": "{name} retirée",
+    "removeFailed": "Impossible de retirer la compétence"
+  }
+}

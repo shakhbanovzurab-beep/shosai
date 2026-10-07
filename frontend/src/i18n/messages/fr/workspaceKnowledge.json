@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Connaissances de l’espace de travail"
+  },
+  "title": "Connaissances",
+  "description": "Ce que Leo sait dans {workspace}. Il ne répond à chaque personne qu’à partir de ce qu’elle peut utiliser : les connaissances ouvertes à tous et celles de ses propres équipes.",
+  "search": {
+    "placeholder": "Rechercher par nom",
+    "label": "Rechercher dans les connaissances"
+  },
+  "loadFailed": "Impossible de charger les connaissances de l’espace de travail",
+  "loading": "Chargement des connaissances",
+  "alwaysIncluded": {
+    "text": "Leo répond aussi à partir des réunions, décisions et projets que chaque personne peut ouvrir ici. Personne n’a besoin de les ajouter.",
+    "label": "Toujours inclus",
+    "meetings": "{count, plural, one {# réunion} many {# de réunions} other {# réunions}}",
+    "meetingsLoading": "Réunions",
+    "decisions": "{count, plural, one {# décision} many {# de décisions} other {# décisions}}",
+    "decisionsLoading": "Décisions",
+    "projects": "{count, plural, one {# projet} many {# de projets} other {# projets}}"
+  },
+  "empty": {
+    "title": "Aucun fichier ni aucune source pour l’instant",
+    "text": "Partagez vos propres fichiers (ils restent les vôtres), importez des fichiers qui appartiennent à {workspace}, ou connectez un drive partagé ou un wiki. Leo s’en sert pour répondre à toute personne autorisée à les utiliser."
+  },
+  "noMatch": {
+    "title": "Aucun résultat",
+    "text": "Essayez un autre nom ou une autre équipe.",
+    "clear": "Effacer les filtres"
+  },
+  "sections": {
+    "files": "Fichiers · {count, number}",
+    "filesLabel": "Fichiers",
+    "noFilesMatch": "Aucun fichier ne correspond.",
+    "sources": "Sources connectées · {count, number}",
+    "sourcesLabel": "Sources connectées",
+    "sourcesEmptyAdmin": "Connectez le drive ou le wiki que votre équipe utilise déjà, et Leo le suit au fil des changements.",
+    "sourcesEmpty": "Les administrateurs peuvent connecter le drive ou le wiki que votre équipe utilise déjà."
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "Document",
+    "text": "Texte",
+    "sheet": "Feuille de calcul",
+    "slides": "Présentation",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "Site web"
+  },
+  "status": {
+    "syncing": "Synchronisation…",
+    "indexing": "Indexation…",
+    "failed": "Lecture impossible"
+  },
+  "pages": "{count, plural, one {# page} many {# de pages} other {# pages}}",
+  "origin": {
+    "personal": "{who, select, me {Votre fichier, partagé} former {Fichier d’un ancien membre, partagé} other {Fichier de {name}, partagé}}",
+    "connector": "{who, select, me {Connecté par vous} former {Connecté par un ancien membre} other {Connecté par {name}}}",
+    "upload": "{who, select, me {Appartient à {workspace} · ajouté par vous} former {Appartient à {workspace} · ajouté par un ancien membre} other {Appartient à {workspace} · ajouté par {name}}}"
+  },
+  "added": "{days, plural, =0 {Aujourd’hui} =1 {Hier} one {Il y a # jour} many {Il y a # de jours} other {Il y a # jours}}",
+  "leaves": "{who, select, me {Part avec vous, sauf si vous le transférez à l’espace de travail depuis votre Gestionnaire de fichiers} former {Part avec son propriétaire, sauf s’il est transféré à l’espace de travail} other {Part avec {name}, sauf transfert à l’espace de travail}}",
+  "access": {
+    "label": "Qui peut l’utiliser",
+    "hint": "Leo ne s’en sert pour répondre qu’à ces personnes. Vous pourrez modifier ce choix plus tard.",
+    "everyone": "Tout le monde dans {workspace}",
+    "someTeam": "Une équipe"
+  },
+  "menu": {
+    "openIn": "Ouvrir dans {provider}",
+    "project": "Projet",
+    "noProject": "Aucun projet"
+  },
+  "remove": {
+    "stopSharing": "Arrêter le partage",
+    "stopSharingTitle": "Arrêter le partage de {name} ?",
+    "stopSharingText": "{who, select, me {Leo cesse de s’en servir pour répondre dans {workspace}. Le fichier reste dans votre Gestionnaire de fichiers.} former {Leo cesse de s’en servir pour répondre dans {workspace}. Le fichier reste dans le Gestionnaire de fichiers de son propriétaire.} other {Leo cesse de s’en servir pour répondre dans {workspace}. Le fichier reste dans le Gestionnaire de fichiers de {name}.}}",
+    "disconnect": "Déconnecter",
+    "disconnectTitle": "Déconnecter {name} ?",
+    "disconnectText": "La synchronisation s’arrête et Leo cesse de s’en servir pour répondre. Rien ne change dans {provider}.",
+    "removeTitle": "Retirer {name} ?",
+    "removeText": "L’élément est supprimé de {workspace}, et Leo cesse de s’en servir pour répondre à tout le monde."
+  },
+  "changed": {
+    "everyone": "Tout le monde dans {workspace} peut maintenant l’utiliser",
+    "team": "{team} peut maintenant l’utiliser",
+    "addedToProject": "Ajouté à {project}",
+    "noProject": "Ne fait plus partie d’un projet"
+  },
+  "addMenu": {
+    "addFile": "Ajouter un fichier",
+    "addKnowledge": "Ajouter des connaissances",
+    "share": "Partager mes fichiers",
+    "shareHint": "Reste à vous, part avec vous",
+    "upload": "Importer dans {workspace}",
+    "uploadHint": "Appartient à l’espace de travail",
+    "connect": "Connecter une source",
+    "connectHint": "Drive, Notion, Confluence ou un site"
+  }
+}

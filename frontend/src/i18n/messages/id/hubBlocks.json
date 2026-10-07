@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "Yang belum selesai",
+    "empty": "Tidak ada yang menggantung — semuanya sudah ditutup",
+    "more": "{count, plural, other {# lagi yang kurang mendesak tidak ditampilkan di sini}}",
+    "why": "Mengapa?",
+    "done": "Selesai",
+    "dismiss": "Tidak benar",
+    "assign": "Tugaskan",
+    "abandon": "Ditinggalkan",
+    "rowLabel": "{subject} — detail",
+    "doneToast": "Ditandai selesai",
+    "dismissToast": "{days, plural, other {Diabaikan selama # hari}}",
+    "abandonToast": "Ditandai ditinggalkan",
+    "assignedToast": "Ditugaskan ke {owner}",
+    "assignTitle": "Siapa yang menanganinya?",
+    "assignLabel": "Pemilik",
+    "assignPlaceholder": "Nama",
+    "loadError": "Tidak dapat memuat yang belum selesai"
+  },
+  "digest": {
+    "title": "Sejak rapat terakhir",
+    "meeting": "{title}, {date}",
+    "opened": "Baru",
+    "closed": "Ditutup",
+    "untouched": "Tidak dibahas",
+    "untouchedHint": "menghambat hub, tetapi tidak ada yang menyinggungnya di rapat",
+    "loadError": "Tidak dapat memuat ringkasan rapat terakhir"
+  },
+  "feed": {
+    "title": "Yang terjadi di sini",
+    "facts": {
+      "decision": "Keputusan",
+      "promise": "Janji",
+      "risk": "Risiko",
+      "problem": "Masalah",
+      "question": "Pertanyaan terbuka"
+    },
+    "superseded": "digantikan",
+    "replacedBy": "diganti dengan “{text}” pada {date}",
+    "jumpTo": "Lompat ke momen {moment}",
+    "earlier": "Tampilkan rapat sebelumnya",
+    "empty": "Belum ada rapat di sini. Rapat akan muncul begitu yang pertama masuk ke hub ini.",
+    "quiet": "Tidak ada hal penting yang dibicarakan",
+    "loadError": "Tidak dapat memuat yang terjadi di sini"
+  },
+  "materials": {
+    "title": "Materi",
+    "addLink": "Tambahkan tautan",
+    "upload": "Unggah",
+    "find": "Cari di materi",
+    "removeLabel": "Hapus {title} dari hub",
+    "gone": "materi ini sudah tidak ada",
+    "origin": "{source, select, meeting {dari rapat · {date}} other {ditambahkan manual · {date}}}",
+    "empty": "Belum ada materi. Ringkasan rapat masuk ke sini dengan sendirinya; tambahkan tautan atau file kapan saja.",
+    "noMatches": "Tidak ada yang cocok dengan “{query}”",
+    "addTitle": "Tambahkan tautan",
+    "titleLabel": "Judul",
+    "urlLabel": "Tautan",
+    "added": "Ditambahkan",
+    "removed": "Dihapus dari hub",
+    "uploadFailed": "{file}: {reason}",
+    "loadError": "Tidak dapat memuat materi"
+  }
+}

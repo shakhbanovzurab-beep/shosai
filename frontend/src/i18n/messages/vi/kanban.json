@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Kanban",
+    "description": "Bảng cho công việc, việc nhà và mọi thứ khác, kể cả bảng đồng bộ với Jira."
+  },
+  "loadBoardsFailed": "Không thể tải các bảng của bạn",
+  "loadBoardFailed": "Không thể tải bảng",
+  "addTask": "Thêm công việc",
+  "taskCount": "{count, plural, other {# công việc}}",
+  "progress": "Tiến độ",
+  "views": {
+    "label": "Chế độ xem",
+    "board": "Bảng",
+    "list": "Danh sách",
+    "table": "Lưới"
+  },
+  "toolbar": {
+    "filter": "Lọc",
+    "sort": "Sắp xếp",
+    "moreWaysToAdd": "Cách khác để thêm công việc",
+    "importCsv": "Nhập tệp CSV",
+    "addFromTemplate": "Thêm từ mẫu",
+    "createAutomation": "Tạo quy tắc tự động hóa"
+  },
+  "column": {
+    "drag": "Kéo cột {column}",
+    "addTask": "Thêm công việc vào {column}",
+    "empty": "Chưa có công việc nào trong {column}"
+  },
+  "columnMenu": {
+    "managedInJira": "Cột được quản lý trong Jira",
+    "rename": "Đổi tên cột…",
+    "sortByPriority": "Sắp xếp theo mức ưu tiên",
+    "moveEarlier": "Chuyển lên trước",
+    "moveLater": "Chuyển ra sau",
+    "clear": "Làm trống cột"
+  },
+  "taskMenu": {
+    "openInJira": "Mở {key} trong Jira",
+    "openInWorkspace": "Mở trong {workspace}",
+    "moveTo": "Chuyển đến",
+    "moveToTop": "Chuyển lên đầu",
+    "moveToBottom": "Chuyển xuống cuối",
+    "delete": "Xóa công việc"
+  },
+  "priority": {
+    "label": "Mức ưu tiên",
+    "high": "Cao",
+    "medium": "Trung bình",
+    "low": "Thấp"
+  },
+  "card": {
+    "unassigned": "Chưa giao",
+    "completed": "Hoàn thành",
+    "fromSource": "Từ {source}",
+    "jiraIssue": "{type} (mở Jira trong thẻ mới)",
+    "workspaceTask": "Công việc thuộc không gian làm việc này. Thay đổi ở đây cũng sẽ cập nhật ở đó.",
+    "insights": {
+      "attachments": "{count, plural, other {# tệp đính kèm}}",
+      "comments": "{count, plural, other {# bình luận}}",
+      "documents": "{count, plural, other {# tài liệu}}"
+    }
+  },
+  "table": {
+    "task": "Công việc",
+    "status": "Trạng thái",
+    "owner": "Chủ sở hữu",
+    "label": "Nhãn",
+    "due": "Hạn chót",
+    "actions": "Thao tác",
+    "empty": "Chưa có công việc nào",
+    "progressOf": "Tiến độ của {task}"
+  },
+  "commands": {
+    "renameTask": "Đổi tên công việc",
+    "renameColumn": "Đổi tên cột",
+    "newTaskIn": "Công việc mới trong {column}",
+    "copyTitle": "{title} (bản sao)",
+    "deleted": "Đã xóa “{title}”",
+    "cleared": "{count, plural, other {Đã xóa # công việc khỏi {column}}}",
+    "jiraLinkCopied": "Đã sao chép liên kết đến {key}"
+  },
+  "errors": {
+    "addTask": "Không thể thêm công việc",
+    "saveChange": "Không thể lưu thay đổi",
+    "deleteTasks": "{count, plural, other {Không thể xóa công việc}}",
+    "saveBoard": "Không thể lưu bảng"
+  }
+}

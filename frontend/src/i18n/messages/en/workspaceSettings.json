@@ -1,0 +1,70 @@
+{
+  "title": "Settings",
+  "description": "How {workspace} works for everyone in it. Changes save at once.",
+  "adminsOnly": "Only admins can change workspace settings.",
+  "adminsOnlyAsk": "Only admins can change workspace settings. Ask {name}.",
+  "general": {
+    "title": "General",
+    "name": "Workspace name",
+    "nameHint": "Shown in the switcher and in invitations.",
+    "renamed": "Workspace renamed",
+    "join": "Join with a company email",
+    "joinHint": "Let colleagues join without an invitation when their email is at your domain.",
+    "joinOn": "Anyone with an @{domain} email can join as a member while seats are free.",
+    "domain": "Email domain",
+    "joinEnabled": "People at {domain} can join now",
+    "joinDisabled": "Joining by email domain is off"
+  },
+  "sharing": {
+    "title": "Sharing",
+    "description": "Meetings with people from outside {workspace} are never shared automatically. Organizers can always change who sees a meeting.",
+    "reviewTitle": "Confirm how meetings are shared",
+    "reviewHint": "These are the recommended rules. Change any of them, or keep them as they are.",
+    "keep": "Keep these rules",
+    "confirmed": "Sharing rules confirmed",
+    "defaultLevel": "After a meeting, share notes with",
+    "defaultLevelHint": "For meetings where everyone is in {workspace}.",
+    "levels": {
+      "private": "Only the organizer",
+      "participants": "Participants (recommended)",
+      "workspace": "Everyone at {workspace}"
+    },
+    "levelChanged": "New meetings go to: {level}",
+    "transcripts": "Include transcripts",
+    "transcriptsHint": "Off: people see the summary, decisions and tasks, not the word-for-word transcript.",
+    "transcriptsOn": "Transcripts are shared too",
+    "transcriptsOff": "Only summaries are shared",
+    "membersInvite": "Members can invite people",
+    "membersInviteHint": "Off: only admins can invite.",
+    "membersInviteOn": "Members can invite people",
+    "membersInviteOff": "Only admins can invite now"
+  },
+  "plan": {
+    "title": "Plan and usage",
+    "description": "Billed to the workspace, separately from anyone’s personal plan.",
+    "name": "{plan} plan",
+    "seats": "{taken, number} of {total, number} seats",
+    "price": "{perSeat} per seat a month · {total} in total · renews {renews}",
+    "change": "Change seats or plan",
+    "ownerOnly": "Only the owner manages billing.",
+    "usageFailed": "Couldn’t load usage.",
+    "usageIn": "Usage in {month}",
+    "idle": "{count, plural, one {# member inactive for {days, number}+ days: a seat you could reuse.} other {# members inactive for {days, number}+ days: seats you could reuse.}}",
+    "member": "Member",
+    "meetings": "Meetings",
+    "minutes": "Minutes",
+    "lastActive": "Last active",
+    "inactive": "Inactive"
+  },
+  "danger": {
+    "delete": "Delete workspace",
+    "deleteHint": "Removes the workspace for everyone and stops its billing.",
+    "deleteTitle": "Delete {name}?",
+    "deleteDescription": "Everyone loses its projects, tasks, decisions and uploads. Recordings and files people shared stay theirs, in their own Notes and File Manager. This can’t be undone.",
+    "leave": "Leave workspace",
+    "leaveHint": "You can be invited back later; your seat frees up.",
+    "leaveTitle": "Leave {name}?",
+    "leaveDescription": "Meetings and files you shared leave with you and stay in your Notes and File Manager. Files you transferred to the workspace stay here. Tasks stay with the team; your open ones become unassigned.",
+    "leaveConfirm": "Leave"
+  }
+}

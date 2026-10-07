@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Céu limpo",
+    "partly": "Parcialmente nublado",
+    "overcast": "Encoberto",
+    "fog": "Neblina",
+    "drizzle": "Garoa",
+    "rain": "Chuva",
+    "snow": "Neve",
+    "storm": "Tempestade",
+    "unknown": "Sem dados"
+  },
+  "fallbackPlace": "Moscou",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, máx. {high}, mín. {low}",
+  "summaryAt": "{condition}, {now}, máx. {high}, mín. {low} em {place}"
+}

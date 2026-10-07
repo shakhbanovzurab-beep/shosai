@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Definisci con chi parla l’assistente, come si comporta e quali modelli lo fanno funzionare."
+  },
+  "tabs": {
+    "context": "Contesto",
+    "prompts": "Prompt",
+    "models": "Modelli"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Risposte dal vivo",
+      "description": "Risposte dell’assistente: overlay, chat, riunione",
+      "help": "Risposte in tempo reale: l’overlay, la chat e le risposte durante una riunione. Il prompt definisce tono, lunghezza e formato di ciò che dice l’assistente."
+    },
+    "screenshots": {
+      "name": "Screenshot",
+      "description": "Lettura di schermo, slide e documenti",
+      "help": "Analisi degli screenshot: il pulsante «Screenshot» nell’overlay e la condivisione dello schermo in riunione. Il prompt indica al modello come leggere l’immagine e cosa rispondere."
+    },
+    "code": {
+      "name": "Codice",
+      "description": "Domande su codice e algoritmi",
+      "help": "Domande su codice e algoritmi. Il prompt definisce il linguaggio di programmazione, quanto spiegare e se mostrare complessità e test."
+    },
+    "system_design": {
+      "name": "Progettazione di sistemi",
+      "description": "Progettazione dell’architettura per i colloqui",
+      "help": "Domande di architettura nei colloqui. Il prompt definisce la struttura della risposta: requisiti, stime, progettazione e compromessi."
+    },
+    "notes": {
+      "name": "Note e mappe",
+      "description": "Versione IA delle note della riunione e mappa mentale",
+      "help": "La versione IA delle note della riunione e la mappa mentale. Il prompt decide cosa tenere: decisioni, azioni da intraprendere, domande aperte."
+    },
+    "transcript": {
+      "name": "Trascrizione",
+      "description": "Da voce a testo in tempo reale",
+      "help": "Da voce a testo in tempo reale. Usa un modello vocale e non richiede un prompt."
+    }
+  },
+  "autosave": {
+    "saving": "Salvataggio…"
+  },
+  "context": {
+    "intro": "Un breve testo su di te: viene inserito come primo messaggio di sistema in ogni richiesta al modello. Più è preciso, meno domande di chiarimento riceverai.",
+    "loadFailed": "Impossibile caricare il contesto",
+    "title": "Su di te",
+    "description": "Chi sei, di cosa ti occupi e come preferisci le risposte. Meglio i fatti degli aggettivi.",
+    "example": "Ruolo: ingegnere backend senior, 6 anni, fintech.\nStack: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nOra: mi preparo ai colloqui di system design nelle aziende di prodotto.\nRisposte: concise, con i compromessi; codice in Python salvo diversa indicazione.\nEvita: consigli generici, introduzioni lunghe.",
+    "count": "{count, number} / {max, plural, one {# carattere} many {# di caratteri} other {# caratteri}} · ~{tokens, plural, one {# token} many {# di token} other {# token}}",
+    "tooLong": "Accorcialo per salvare.",
+    "saveFailed": "Impossibile salvare.",
+    "savedAgo": "Salvato {ago}",
+    "savesAutomatically": "Salvataggio automatico"
+  },
+  "preview": {
+    "title": "Come viene inviato",
+    "description": "La versione salvata apre ogni richiesta, prima del prompt del ruolo.",
+    "system": "Sistema",
+    "user": "Utente",
+    "empty": "(vuoto: non viene inviato niente)",
+    "rolePrompt": "prompt del ruolo da Prompt",
+    "question": "la tua domanda"
+  },
+  "models": {
+    "intro": "Scegli quale modello risponde in ogni ruolo. L’elenco mostra solo i modelli inclusi nel tuo abbonamento.",
+    "loadFailed": "Impossibile caricare i modelli",
+    "model": "Modello",
+    "temperature": "Temperatura",
+    "maxTokens": "Numero massimo di token",
+    "reasoning": "Ragionamento",
+    "unsupported": "Non supportato",
+    "modelFor": "Modello per {role}",
+    "temperatureFor": "Temperatura per {role}",
+    "maxTokensRange": "Il numero massimo di token deve essere un numero intero da {min, number} a {max, number}.",
+    "saveFailed": "Impossibile salvare le impostazioni del modello"
+  },
+  "picker": {
+    "placeholder": "Seleziona un modello…",
+    "search": "Cerca modelli…",
+    "empty": "Nessun modello corrispondente.",
+    "frontier": "Frontiera"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Agenda",
+    "description": "Plan vergaderingen, afspraken en focustijd per maand, week of dag."
+  },
+  "summary": "{days, plural, one {# dag} other {# dagen}} · {events, plural, one {# afspraak} other {# afspraken}}",
+  "calendars": {
+    "label": "Agenda",
+    "all": "Alle agenda’s",
+    "work": "Werk",
+    "personal": "Persoonlijk",
+    "team": "Team",
+    "focus": "Focustijd"
+  },
+  "views": {
+    "label": "Weergave",
+    "dayGridMonth": "Maand",
+    "timeGridWeek": "Week",
+    "timeGridDay": "Dag"
+  },
+  "previous": "Vorige periode",
+  "next": "Volgende periode",
+  "today": "Vandaag",
+  "addEvent": "Afspraak toevoegen",
+  "loading": "Agenda laden…",
+  "eventMenu": {
+    "reschedule": "Verplaatsen",
+    "dayEarlier": "Een dag eerder",
+    "dayLater": "Een dag later",
+    "nextWeek": "Volgende week",
+    "moveToToday": "Naar vandaag verplaatsen",
+    "copyDetails": "Details kopiëren",
+    "delete": "Afspraak verwijderen"
+  },
+  "dayMenu": {
+    "newAllDay": "Nieuwe afspraak voor de hele dag…",
+    "newAt": "Nieuwe afspraak om {time}…",
+    "openDay": "Dag openen",
+    "openWeek": "Week openen"
+  },
+  "renameTitle": "Naam van afspraak wijzigen",
+  "newTitle": "Nieuwe afspraak · {when}",
+  "copyName": "{title} (kopie)",
+  "details": "{title} — {when}",
+  "detailsCopied": "Afspraakdetails gekopieerd",
+  "detailsCopyFailed": "Kan de afspraakdetails niet kopiëren",
+  "deleted": "‘{title}’ verwijderd"
+}

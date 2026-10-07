@@ -1,0 +1,62 @@
+{
+  "description": "Sizi bekleyenler, yaklaşanlar ve ekibin işlerinin durumu.",
+  "invitePeople": "Kişileri davet et",
+  "quietStart": "Toplantılar paylaşıldığında veya projeler başladığında bu sayfa sizi bekleyenleri, yaklaşanları ve ekibin aldığı kararları gösterir.",
+  "blocks": {
+    "needsYou": "Sizi bekleyenler",
+    "allTasks": "Tüm görevler",
+    "nothingWaiting": "Burada sizi bekleyen bir şey yok. Size atanan görevler burada ve Verimlilik bölümünüzde görünür.",
+    "moreTasks": "{count, plural, one {# görev daha} other {# görev daha}}",
+    "comingUp": "Yaklaşanlar",
+    "projects": "Projeler",
+    "allProjects": "Tüm projeler",
+    "recentDecisions": "Son kararlar",
+    "decisionLog": "Karar günlüğü"
+  },
+  "comingUp": {
+    "empty": "Yaklaşan ekip toplantısı yok.",
+    "live": "Canlı",
+    "guestsPrivate": "Gizli kalır: misafirler katılıyor",
+    "private": "Notlar gizli kalır",
+    "notesGoTo": "Notların gideceği yer: {audience}"
+  },
+  "decisions": {
+    "empty": "Paylaşılan toplantılardaki kararlar, alındıkları yere bağlı olarak burada görünür.",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "Etkin proje yok. Toplantılarını, görevlerini ve kararlarını gruplamak için bir proje başlatın.",
+    "ledBy": "Lider: {name}",
+    "ledByYou": "Lider: siz"
+  },
+  "setup": {
+    "title": "Çalışma alanınızı kurun",
+    "progress": "{total, number} adımdan {done, number} tanesi tamamlandı. Her adım, bir sonraki toplantıyı herkes için daha faydalı hale getirir.",
+    "progressLabel": "{total, number} kurulum adımından {done, number} tanesi tamamlandı",
+    "hide": "Kurulum listesini gizle",
+    "done": "Tamamlandı",
+    "toDo": "Yapılacak",
+    "steps": {
+      "invite": {
+        "title": "Ekibinizi davet edin",
+        "description": "Toplantıların ve görevlerin gidecek bir yeri olması için en az iki kişi ekleyin.",
+        "action": "Kişileri davet et"
+      },
+      "sharing": {
+        "title": "Toplantıların nasıl paylaşılacağını onaylayın",
+        "description": "Toplantıdan sonra notların nereye gideceğini seçin. Misafirlerin katıldığı toplantılar her durumda gizli kalır.",
+        "action": "Gözden geçir"
+      },
+      "share": {
+        "title": "Toplantılarınızdan birini paylaşın",
+        "description": "Kayıtlarınız, buradan biriyle kararları ve görevleri birlikte paylaşana kadar Notlar’ınızda kalır.",
+        "action": "Toplantı paylaş"
+      },
+      "knowledge": {
+        "title": "Ekip bilgileri ekleyin",
+        "description": "Leo’nun yanıt verebilmesi için dosyalarınızı paylaşın, yenilerini yükleyin veya ortak bir sürücü bağlayın.",
+        "action": "Bilgi ekle"
+      }
+    }
+  }
+}

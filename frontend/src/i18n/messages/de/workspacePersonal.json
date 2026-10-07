@@ -1,0 +1,51 @@
+{
+  "share": "Teilen",
+  "sharedIn": "Geteilt in {workspace}",
+  "workspace": "Workspace",
+  "stopSharing": "Nicht mehr teilen",
+  "fileShare": {
+    "title": "In einem Workspace teilen",
+    "description": "Leo antwortet dort daraus für alle, die du auswählst. Die Datei bleibt in deinem Dateimanager und gehört weiter dir.",
+    "access": "Wer es nutzen darf",
+    "everyone": "Alle in {workspace}",
+    "sharedOption": "{workspace} · geteilt",
+    "noWorkspace": "Du bist noch in keinem Workspace.",
+    "toast": "{level, select, workspace {„{file}“: Alle in {workspace} können es nutzen} other {„{file}“: {team} kann es in {workspace} nutzen}}"
+  },
+  "recordingShare": {
+    "title": "In einem Workspace teilen",
+    "description": "Es bleibt deins und bleibt hier in deinen Notizen. Fragen, die du Leo dazu stellst, bleiben privat.",
+    "openIn": "In {workspace} öffnen",
+    "tabWorkspace": "Workspace",
+    "tabLink": "Link",
+    "loadFailed": "{workspace} konnte nicht geladen werden.",
+    "moveTo": "Nach {workspace} verschieben",
+    "audienceHint": "Zusammenfassung, Entscheidungen und Aufgaben. Teilnehmer sehen es immer.",
+    "sharedElsewhere": "Es ist gerade in {workspace} geteilt; ein Meeting kann immer nur in einem Workspace sein."
+  },
+  "myTasks": {
+    "title": "Aus deinen Workspaces",
+    "onKanban": "In deinem Kanban",
+    "loadFailed": "Deine Workspace-Aufgaben konnten nicht geladen werden.",
+    "empty": "In deinen Workspaces ist dir nichts zugewiesen."
+  },
+  "actionItems": {
+    "tracked": "Als Aufgaben in <link>{workspace}</link> erfasst; Änderungen hier ändern sie auch dort."
+  },
+  "sharedMeetings": {
+    "nav": "Mit mir geteilt",
+    "loadFailed": "Geteilte Meetings konnten nicht geladen werden.",
+    "emptyTitle": "Noch nichts mit dir geteilt",
+    "empty": "Meetings, die deine Teamkollegen mit dir oder mit einem deiner Teams teilen, erscheinen hier.",
+    "intro": "Mit dir in <link>{workspace}</link> geteilt. Sie liegen dort; öffne eines, um Notizen, Entscheidungen und Aufgaben zu sehen."
+  },
+  "knowledge": {
+    "open": "Wissen öffnen",
+    "summary": "{meetings, plural, one {# Meeting} other {# Meetings}}, {decisions, plural, one {# Entscheidung} other {# Entscheidungen}} und {projects, plural, one {# Projekt} other {# Projekte}}, die du öffnen kannst, sowie {items, plural, one {# Datei oder Quelle} other {# Dateien oder Quellen}}, die du nutzen kannst.",
+    "listLabel": "Wissen von {workspace}",
+    "loadFailed": "Das Wissen deiner Workspaces konnte nicht geladen werden",
+    "emptyTitle": "Noch keine Workspaces",
+    "empty": "Wenn du einem Workspace beitrittst, kann Leo hier auch aus dem antworten, was er mit dir teilt.",
+    "intro": "Leo nutzt dies, wenn du in Persönlich fragst, und nur für dich. Jede Antwort nennt den Workspace, aus dem sie stammt. Wissen von Teams, in denen du nicht bist, bleibt außen vor."
+  }
+}

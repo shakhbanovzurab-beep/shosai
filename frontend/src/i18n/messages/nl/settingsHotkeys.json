@@ -1,0 +1,26 @@
+{
+  "description": "Sneltoetsen voor de desktopapp. Ze werken overal op je computer, ook als de app op de achtergrond draait, en worden gesynchroniseerd naar al je apparaten.",
+  "commands": {
+    "open_app": "App openen",
+    "toggle_recording": "Opname starten / pauzeren",
+    "toggle_overlay": "Overlay tonen / verbergen",
+    "open_settings": "Instellingen",
+    "collapse_overlay": "Overlay tot een pil inklappen",
+    "close_app": "App sluiten",
+    "live_translation": "Livevertaling",
+    "prompter": "Autocue"
+  },
+  "off": "Uit",
+  "pressKeys": "Druk op toetsen…",
+  "hint": "Esc om te annuleren · Backspace om uit te zetten",
+  "reset": "{command} herstellen naar standaard",
+  "record": "Druk op de nieuwe sneltoets voor {command}",
+  "change": "{command}: {keys}. Wijzigen",
+  "changeOff": "{command}: uit. Wijzigen",
+  "resetAll": "Alles herstellen naar standaard",
+  "problems": {
+    "needsModifier": "Gebruik ⌘/Ctrl of ⌥/Alt samen met een andere toets.",
+    "reserved": "Die sneltoets wordt door het systeem gebruikt.",
+    "taken": "Al in gebruik voor ‘{command}’."
+  }
+}

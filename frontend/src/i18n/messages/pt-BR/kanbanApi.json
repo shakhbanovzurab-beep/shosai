@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "Quadro não encontrado.",
+  "taskNotFound": "Tarefa não encontrada.",
+  "columnNotFound": "Coluna não encontrada.",
+  "boardChanged": "O quadro foi alterado. Recarregue o quadro e tente novamente.",
+  "managedInJira": "Este quadro é gerenciado no Jira. Faça essa alteração lá.",
+  "reconnectJira": "Reconecte o Jira em Configurações › Conectores para fazer alterações.",
+  "firstSync": "Aguarde o fim da primeira sincronização com o Jira.",
+  "jiraDisconnected": "O Jira está desconectado. Reconecte-o em Configurações › Conectores para manter este quadro sincronizado.",
+  "connectJiraFirst": "Primeiro, conecte o Jira em Configurações › Conectores.",
+  "jiraBoardUnavailable": "Esse quadro do Jira não está disponível para sua conta do Jira.",
+  "jiraBoardSynced": "Este quadro do Jira já está sincronizado.",
+  "notJiraBoard": "Apenas quadros do Jira podem ser sincronizados.",
+  "jiraBoardWorkspaceTasks": "Quadros do Jira mostram apenas itens do Jira. Escolha um quadro que não seja do Jira.",
+  "workspaceTaskCopy": "Tarefas de espaços de trabalho não podem ser duplicadas aqui. Adicione a tarefa no espaço de trabalho.",
+  "workspaceTaskDelete": "Tarefas de espaços de trabalho saem do quadro quando são concluídas ou atribuídas a outra pessoa no espaço de trabalho.",
+  "boardNameRequired": "Dê um nome ao quadro.",
+  "boardNameTooLong": "Esse nome é muito longo. Use um mais curto.",
+  "taskTitleRequired": "Dê um título à tarefa.",
+  "invalidRequest": "Há algo errado na solicitação. Recarregue a página e tente novamente."
+}

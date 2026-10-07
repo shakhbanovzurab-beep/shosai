@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "add": "추가",
+    "cancel": "취소",
+    "close": "닫기",
+    "copyLink": "링크 복사",
+    "create": "만들기",
+    "delete": "삭제",
+    "duplicate": "복제",
+    "open": "열기",
+    "remove": "제거",
+    "rename": "이름 변경",
+    "renameMenu": "이름 변경…",
+    "retry": "다시 시도",
+    "save": "저장",
+    "undo": "실행 취소"
+  },
+  "fields": {
+    "name": "이름"
+  },
+  "feedback": {
+    "linkCopied": "링크를 복사했어요",
+    "linkCopyFailed": "링크를 복사하지 못했어요",
+    "loading": "불러오는 중…"
+  },
+  "actionsFor": "{name} 옵션",
+  "errors": {
+    "backendUnreachable": "서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요."
+  }
+}

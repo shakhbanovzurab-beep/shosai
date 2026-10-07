@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} per utente",
+    "from": "da {amount}",
+    "unlimited": "illimitato"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Riunioni illimitate",
+    "meetingMinutes": "{minutes, plural, one {# minuto di riunione} many {# di minuti di riunione} other {# minuti di riunione}} al mese",
+    "noMeetings": "Riunioni",
+    "fileManager": "Gestione file · {storage}",
+    "noFileManager": "Gestione file",
+    "knowledge": "Conoscenza per Leo · {storage}",
+    "noKnowledge": "Conoscenza per Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Spazio di lavoro condiviso per il team",
+    "member_management": "Gestione degli utenti",
+    "centralized_billing": "Fatturazione centralizzata",
+    "billing_and_users": "Fatturazione centralizzata e gestione degli utenti",
+    "admin_controls": "Sicurezza e controlli di amministrazione di livello enterprise",
+    "sso": "Accesso singolo (SSO)",
+    "priority_support": "Assistenza prioritaria",
+    "usage_analytics": "Analisi dell’utilizzo"
+  },
+  "compare": {
+    "title": "Confronta i piani",
+    "feature": "Funzionalità",
+    "included": "Incluso",
+    "notIncluded": "Non incluso",
+    "unlimited": "Illimitato",
+    "minutes": "{minutes, plural, one {# min} many {# min} other {# min}} / mese",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Personalizzato",
+    "rows": {
+      "meetings": "Riunioni",
+      "fileManager": "Gestione file",
+      "knowledge": "Conoscenza per Leo",
+      "apps": "Leo, Email, Calendario, Kanban, Note",
+      "users": "Utenti",
+      "sharedWorkspace": "Spazio di lavoro condiviso",
+      "billingAndUsers": "Fatturazione centralizzata e gestione degli utenti",
+      "sso": "Accesso singolo (SSO)",
+      "adminControls": "Sicurezza e controlli di amministrazione",
+      "prioritySupport": "Assistenza prioritaria",
+      "usageAnalytics": "Analisi dell’utilizzo"
+    }
+  }
+}

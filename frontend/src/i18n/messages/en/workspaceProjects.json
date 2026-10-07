@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Projects",
+    "project": "Project"
+  },
+  "title": "Projects",
+  "description": "A project gathers a piece of work in one place: its meetings, decisions and tasks.",
+  "newProject": "New project",
+  "filter": {
+    "label": "Which projects",
+    "open": "In progress",
+    "all": "All"
+  },
+  "empty": {
+    "title": "No projects yet",
+    "text": "Start one for work that spans several meetings, like a launch or a hire. Meetings and tasks can then be added to it."
+  },
+  "status": {
+    "planned": "Planned",
+    "active": "Active",
+    "paused": "Paused",
+    "completed": "Completed"
+  },
+  "ledBy": "{who, select, me {Led by you} other {Led by {name}}}",
+  "noLead": "No lead",
+  "target": {
+    "none": "No target date",
+    "overdue": "Overdue · {date}",
+    "today": "Target today",
+    "tomorrow": "Target tomorrow",
+    "on": "Target {date}"
+  },
+  "progress": {
+    "label": "{total, plural, one {{done, number} of # task done} other {{done, number} of # tasks done}}",
+    "count": "{done, number}/{total, number}",
+    "none": "No tasks"
+  },
+  "notFound": {
+    "title": "This project isn’t here anymore",
+    "text": "It may have been deleted. Its meetings and tasks are still in the workspace.",
+    "action": "All projects"
+  },
+  "sections": {
+    "tasks": "Tasks",
+    "addTask": "Add task",
+    "tasksEmpty": "No tasks yet. Add one, or share a meeting into this project to bring its tasks.",
+    "meetings": "Meetings",
+    "meetingsEmpty": "Meetings shared into this project show up here.",
+    "decisions": "Decisions",
+    "files": "Files",
+    "filesLabel": "{project} files",
+    "filesEmpty": "Files added to this project show up here, and Leo uses them for it."
+  },
+  "header": {
+    "edit": "Edit project",
+    "delete": "Delete project",
+    "lead": "Lead",
+    "team": "Team",
+    "target": "Target date",
+    "deleteTitle": "Delete {name}?",
+    "deleteText": "Its meetings, tasks and decisions stay in the workspace; they just stop belonging to a project."
+  },
+  "dialog": {
+    "newTitle": "New project",
+    "editTitle": "Edit {name}",
+    "description": "One place for a piece of work: its meetings, decisions and tasks.",
+    "nameRequired": "Give the project a name.",
+    "namePlaceholder": "e.g. Mobile app beta",
+    "purpose": "What it’s for",
+    "lead": "Lead",
+    "me": "{name} (you)",
+    "team": "Team",
+    "wholeWorkspace": "Whole workspace",
+    "status": "Status",
+    "target": "Target date",
+    "create": "Create project",
+    "saved": "{name} saved",
+    "created": "{name} created"
+  }
+}

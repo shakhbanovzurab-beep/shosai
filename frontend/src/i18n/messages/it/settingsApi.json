@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "Qualcosa nella richiesta non va. Ricarica la pagina e riprova.",
+    "nameRequired": "Inserisci il tuo nome.",
+    "hotkeyUnsupported": "Questa scorciatoia non è supportata.",
+    "modelNotOnPlan": "Questo modello non è incluso nel tuo abbonamento.",
+    "emailMismatch": "Questa email non corrisponde al tuo account.",
+    "deletionUnavailable": "L’eliminazione dell’account non è ancora attiva. Non è stato eliminato niente.",
+    "avatarMissing": "Scegli un’immagine da caricare.",
+    "avatarType": "Usa un’immagine WebP, JPEG o PNG.",
+    "paymentsUnavailable": "I pagamenti non sono ancora attivi. Quando la fatturazione sarà attiva, qui si aprirà la pagina sicura del provider.",
+    "checkoutUnavailable": "I pagamenti non sono ancora attivi. Quando la fatturazione sarà attiva, qui si aprirà la pagina di pagamento del provider.",
+    "invoiceNotFound": "Fattura non trovata.",
+    "connectorNotFound": "Connettore non trovato.",
+    "authorizationExpired": "L’autorizzazione è scaduta o è già stata usata. Prova a collegarti di nuovo.",
+    "dataKindUnknown": "Tipo di dati sconosciuto.",
+    "dataItemNotFound": "Questo elemento non esiste più.",
+    "mcpNameRequired": "Dai un nome al server.",
+    "mcpNameTooLong": "Il nome è troppo lungo. Usane uno più breve.",
+    "mcpUrlInvalid": "Inserisci l’URL http(s) del server.",
+    "mcpServerNotFound": "Server non trovato.",
+    "memoryNotFound": "Ricordo non trovato.",
+    "summaryMessageRequired": "Scrivi una domanda o un aggiornamento."
+  },
+  "avatarTooLarge": "L’immagine supera {size}.",
+  "invoice": {
+    "title": "Fattura {number}",
+    "date": "Data: {date}",
+    "description": "Descrizione: {description}",
+    "amount": "Importo: {amount}",
+    "status": "Stato: {status}",
+    "demoNote": "Fattura demo. Quella reale è un PDF generato dal sistema di fatturazione."
+  },
+  "notesFromYou": "Le tue note"
+}

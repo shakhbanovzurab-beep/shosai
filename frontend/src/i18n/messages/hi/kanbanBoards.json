@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "बोर्ड",
+    "jiraBoards": "Jira के साथ सिंक किए गए",
+    "newBoard": "नया बोर्ड…",
+    "syncJiraBoard": "Jira बोर्ड सिंक करें…",
+    "rename": "बोर्ड का नाम बदलें…",
+    "showWorkspaceTasks": "मेरे वर्कस्पेस के टास्क यहां दिखाएं",
+    "changeIcon": "आइकन बदलें",
+    "delete": "बोर्ड मिटाएं…",
+    "stopSyncing": "सिंक करना बंद करें…"
+  },
+  "icons": {
+    "work": "काम",
+    "home": "घर",
+    "personal": "निजी",
+    "health": "सेहत",
+    "study": "पढ़ाई",
+    "travel": "यात्रा",
+    "shopping": "ख़रीदारी",
+    "fitness": "फ़िटनेस",
+    "project": "प्रोजेक्ट",
+    "reading": "पढ़ना"
+  },
+  "empty": {
+    "title": "अभी तक कोई बोर्ड नहीं है",
+    "description": "काम, घर या किसी भी चीज़ के लिए बोर्ड बनाएं, या Jira से कोई बोर्ड लाएं।",
+    "newBoard": "नया बोर्ड",
+    "syncJiraBoard": "Jira बोर्ड सिंक करें"
+  },
+  "newBoard": {
+    "title": "नया बोर्ड",
+    "description": "काम, घर और बाकी चीज़ों के लिए अलग-अलग बोर्ड रखें।",
+    "namePlaceholder": "जैसे, घर",
+    "icon": "आइकन",
+    "columns": "कॉलम",
+    "create": "बोर्ड बनाएं"
+  },
+  "templates": {
+    "simple": "सरल",
+    "project": "प्रोजेक्ट"
+  },
+  "columnNames": {
+    "backlog": "बैकलॉग",
+    "todo": "करना है",
+    "inProgress": "चल रहा है",
+    "review": "रिव्यू",
+    "done": "पूरा हुआ"
+  },
+  "renameTitle": "बोर्ड का नाम बदलें",
+  "delete": {
+    "title": "“{board}” मिटाएं?",
+    "description": "{count, plural, =0 {बोर्ड मिटा दिया जाएगा। इसे पहले जैसा नहीं किया जा सकेगा।} one {बोर्ड और उसका # टास्क मिटा दिए जाएंगे। इसे पहले जैसा नहीं किया जा सकेगा।} other {बोर्ड और उसके # टास्क मिटा दिए जाएंगे। इसे पहले जैसा नहीं किया जा सकेगा।}}",
+    "confirm": "बोर्ड मिटाएं",
+    "stopTitle": "“{board}” को सिंक करना बंद करें?",
+    "stopDescription": "बोर्ड यहां से हट जाएगा। Jira में कुछ नहीं बदलेगा, और आप इसे बाद में फिर से सिंक कर सकते हैं।",
+    "stopConfirm": "सिंक करना बंद करें"
+  },
+  "jira": {
+    "title": "Jira बोर्ड सिंक करें",
+    "description": "Jira बोर्ड पर यहीं से काम करें; हर बदलाव दोनों तरफ़ सिंक रहता है।",
+    "connectTitle": "पहले Jira कनेक्ट करें",
+    "connectDescription": "सेटिंग › कनेक्टर में Jira में साइन इन करें, फिर बोर्ड चुनने के लिए यहां वापस आएं।",
+    "openConnectors": "कनेक्टर खोलें",
+    "connectedAs": "{account} के रूप में कनेक्ट है।",
+    "connected": "Jira से कनेक्ट है।",
+    "noBoards": "आपके Jira खाते में अभी तक कोई बोर्ड नहीं है।",
+    "boardList": "Jira बोर्ड",
+    "alreadySynced": "पहले से सिंक है · खोलें",
+    "type": {
+      "kanban": "कानबान",
+      "scrum": "स्क्रम"
+    },
+    "howColumns": "कॉलम और इश्यू Jira बोर्ड से आते हैं।",
+    "howMoves": "कार्ड मूव करने पर Jira में इश्यू की स्थिति बदल जाती है; नए टास्क Jira इश्यू बन जाते हैं।",
+    "howChanges": "Jira में किए गए बदलाव यहां अपने-आप दिख जाते हैं।",
+    "sync": "बोर्ड सिंक करें"
+  },
+  "sync": {
+    "syncing": "Jira के साथ सिंक हो रहा है…",
+    "paused": "सिंक रुका हुआ है",
+    "synced": "Jira के साथ सिंक है",
+    "syncedAgo": "Jira के साथ {ago} सिंक हुआ",
+    "syncNow": "अभी सिंक करें",
+    "openBoard": "{board} को Jira में खोलें",
+    "openHint": "Jira में खोलें · {site} पर {project}"
+  },
+  "banners": {
+    "syncStopped": "Jira के साथ सिंक बंद हो गया है।",
+    "changesPaused": "बदलाव फ़िलहाल रोक दिए गए हैं।",
+    "importing": "Jira से {board} इंपोर्ट हो रहा है…",
+    "importingHint": "कॉलम और इश्यू कुछ ही पलों में यहां दिखेंगे।",
+    "offer": "{count, plural, one {आपके वर्कस्पेस में # खुला टास्क है। क्या इसे “{board}” पर दिखाएं?} other {आपके वर्कस्पेस में # खुले टास्क हैं। क्या इन्हें “{board}” पर दिखाएं?}} कार्ड मूव करने पर आपकी टीम के लिए भी टास्क अपडेट हो जाता है।",
+    "notNow": "अभी नहीं",
+    "showHere": "{count, plural, one {इसे यहां दिखाएं} other {इन्हें यहां दिखाएं}}"
+  },
+  "toasts": {
+    "createFailed": "बोर्ड नहीं बनाया जा सका।",
+    "connectFailed": "Jira बोर्ड सिंक नहीं किया जा सका।",
+    "updateFailed": "बोर्ड अपडेट नहीं किया जा सका।",
+    "deleteFailed": "बोर्ड नहीं मिटाया जा सका।",
+    "syncFailed": "Jira के साथ सिंक नहीं किया जा सका।",
+    "deleted": "“{board}” मिटा दिया गया",
+    "stoppedSyncing": "“{board}” को सिंक करना बंद कर दिया गया",
+    "workspaceTasksOn": "आपके वर्कस्पेस के टास्क अब “{board}” पर दिखेंगे",
+    "workspaceTasksOff": "आपके वर्कस्पेस के टास्क अब किसी बोर्ड पर नहीं दिखेंगे",
+    "workspaceTasksHint": "कार्ड मूव करने पर उसके वर्कस्पेस में भी टास्क बदल जाता है।",
+    "workspaceTasksFailed": "वर्कस्पेस के टास्क कहां दिखें, यह नहीं बदला जा सका।"
+  }
+}

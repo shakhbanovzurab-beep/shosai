@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Aufbereitete Notizen",
+    "description": "Leo wählt die Struktur, die zum Meeting passt."
+  },
+  "sections": {
+    "summary": "Zusammenfassung",
+    "keyPoints": "Kernpunkte",
+    "decisions": "Entscheidungen",
+    "actionItems": "To-dos"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Austausch: Investor",
+      "description": "Regelmäßiges Update mit einem Investor: aktueller Stand und wobei er helfen kann."
+    },
+    "catchUpPortfolio": {
+      "name": "Austausch: Portfoliounternehmen",
+      "description": "Check-in mit einem Portfoliounternehmen zu Kennzahlen, Risiken und Anliegen."
+    },
+    "lpProspective": {
+      "name": "LP: Interessent",
+      "description": "Erste Gespräche mit einem potenziellen Limited Partner."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: Board-Meeting",
+      "description": "Diskussion im Board, Entscheidungen und Verantwortliche."
+    },
+    "vcPitch": {
+      "name": "VC: Gründer-Pitch",
+      "description": "Ein Pitch von Gründern: was auffiel, das Fazit und die anstehende Due Diligence."
+    },
+    "oneOnOne": {
+      "name": "1:1",
+      "description": "Ein Einzelgespräch: wie es läuft, Themen und vereinbarte nächste Schritte."
+    },
+    "customerCall": {
+      "name": "Kundengespräch",
+      "description": "Bedarfsanalyse oder Check-in mit Kunden: Probleme, Wünsche und nächste Schritte."
+    },
+    "teamSync": {
+      "name": "Team-Abstimmung",
+      "description": "Ein regelmäßiges Team-Meeting: Neuigkeiten, Entscheidungen und wer was macht."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Aktueller Stand",
+    "updatesShared": "Neuigkeiten",
+    "whatWeAgreed": "Vereinbarungen",
+    "followUps": "Nachverfolgung",
+    "companyUpdate": "Neues aus dem Unternehmen",
+    "metricsAndHighlights": "Kennzahlen und Highlights",
+    "howWeCanHelp": "Möglichkeiten zur Unterstützung",
+    "overview": "Überblick",
+    "theirInterests": "Interessen",
+    "nextSteps": "Nächste Schritte",
+    "boardSummary": "Zusammenfassung für das Board",
+    "discussion": "Diskussion",
+    "resolutions": "Gefasste Entscheidungen",
+    "ownersAndDeadlines": "Verantwortliche und Fristen",
+    "thePitch": "Der Pitch",
+    "whatStoodOut": "Was auffiel",
+    "verdict": "Fazit",
+    "diligenceToDos": "To-dos für die Due Diligence",
+    "howItsGoing": "Wie es läuft",
+    "topics": "Themen",
+    "context": "Kontext",
+    "painsAndRequests": "Probleme und Wünsche",
+    "outcome": "Ergebnis",
+    "updates": "Neuigkeiten",
+    "decisions": "Entscheidungen",
+    "whoDoesWhat": "Wer macht was"
+  },
+  "icons": {
+    "enhanced": "Aufbereitete Notizen",
+    "briefcase": "Aktentasche",
+    "chart": "Diagramm",
+    "handshake": "Handschlag",
+    "landmark": "Gebäude",
+    "lightbulb": "Glühbirne",
+    "magnet": "Hufeisenmagnet",
+    "phone": "Telefon",
+    "rocket": "Rakete",
+    "calendar": "Kalender",
+    "users": "Personen"
+  },
+  "menu": {
+    "label": "Vorlage für aufbereitete Notizen",
+    "search": "Vorlagen suchen…",
+    "noMatch": "Keine passenden Vorlagen.",
+    "heading": "Vorlagen",
+    "regenerate": "Notizen neu generieren",
+    "newTemplate": "Neue Vorlage…"
+  },
+  "rewritten": "Notizen mit „{template}“ neu geschrieben",
+  "regenerated": "Aufbereitete Notizen neu generiert",
+  "created": "Vorlage „{template}“ erstellt",
+  "dialog": {
+    "title": "Neue Vorlage",
+    "description": "Wähle, welche Abschnitte Leo für ein Meeting schreibt und wie sie heißen.",
+    "namePlaceholder": "z. B. Vertriebsgespräch…",
+    "nameRequired": "Gib der Vorlage einen Namen.",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Wann sie verwendet wird…",
+    "ownDescription": "Deine eigene Vorlage.",
+    "icon": "Symbol",
+    "sections": "Abschnitte",
+    "include": "{section} aufnehmen",
+    "heading": "Überschrift für {section}",
+    "sectionsRequired": "Behalte mindestens einen Abschnitt.",
+    "create": "Vorlage erstellen"
+  }
+}

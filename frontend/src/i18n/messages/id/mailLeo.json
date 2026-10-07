@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo sedang membaca kotak masuk Anda…",
+    "readingNew": "{count, plural, other {Leo sedang membaca # email baru…}}",
+    "sorted": "{count, plural, other {Leo memilah # email}}",
+    "sortedWithDrafts": "{count, plural, other {Leo memilah # email}} · {drafts, plural, other {# draf balasan dibuat}}",
+    "sortFailed": "Leo tidak dapat memilah kotak masuk Anda"
+  },
+  "focus": {
+    "mostUrgentFirst": "Paling mendesak dulu ({count, number})",
+    "setAside": "{count, plural, other {# email lain tidak memerlukan Anda saat ini.}}",
+    "setAsideLow": "{count, plural, other {# email lain tidak memerlukan Anda saat ini}}, {low, plural, other {# di antaranya berprioritas rendah.}}",
+    "showAll": "Tampilkan semua email",
+    "archiveLow": "Arsipkan prioritas rendah",
+    "caughtUpTitle": "Semua sudah beres",
+    "caughtUpDescription": "Tidak ada yang menunggu Anda. Leo akan menandai email baru yang memerlukan balasan atau keputusan."
+  },
+  "triage": {
+    "needs_you": "Perlu Anda",
+    "fyi": "Sekadar info",
+    "low": "Prioritas rendah"
+  },
+  "triageHint": {
+    "needs_you": "Menunggu balasan atau keputusan Anda",
+    "fyi": "Perlu diketahui, tidak ada tindakan",
+    "low": "Bisa menunggu atau diarsipkan"
+  },
+  "triageMenu": {
+    "trigger": "Dipilah sebagai {triage}. Ubah cara email ini dipilah",
+    "sortedByYou": "Dipilah oleh Anda",
+    "sortedByLeo": "Dipilah oleh Leo",
+    "leosPick": "Pilihan Leo · {hint}"
+  },
+  "replyBy": {
+    "overdue": "Terlambat",
+    "today": "Balas hari ini",
+    "tomorrow": "Balas besok",
+    "by": "Balas sebelum {when}"
+  },
+  "tags": {
+    "reading": "Leo sedang membaca…",
+    "replied": "Dibalas",
+    "needsYou": "Perlu Anda",
+    "draftReady": "Draf siap"
+  },
+  "card": {
+    "label": "Ringkasan Leo",
+    "readingEmail": "Leo sedang membaca email ini…",
+    "readFailed": "Leo tidak dapat membaca email ini",
+    "readFailedHint": "Coba lagi sebentar lagi.",
+    "repliedAgo": "Dibalas {ago}",
+    "repliedOn": "Dibalas pada {date}",
+    "reviewDraft": "Tinjau draf",
+    "noDraft": "Tanpa draf: balasan ini perlu pendapat Anda sendiri.",
+    "archive": "Arsipkan"
+  },
+  "draft": {
+    "reviewLabel": "Tinjau draf balasan Leo untuk {name}",
+    "drafted": "Leo membuat draf balasan",
+    "review": "Tinjau",
+    "heading": "Draf Leo · tinjau sebelum mengirim",
+    "collapse": "Ciutkan draf",
+    "field": "Balas ke {name}",
+    "discard": "Buang",
+    "send": "Kirim",
+    "discarded": "Draf dibuang"
+  }
+}

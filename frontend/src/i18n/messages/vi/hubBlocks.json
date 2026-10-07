@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "Những gì chưa giải quyết",
+    "empty": "Không còn gì treo lại — mọi thứ đã đóng",
+    "more": "{count, plural, other {Còn # mục khác, ít gấp hơn, không hiển thị ở đây}}",
+    "why": "Vì sao?",
+    "done": "Xong",
+    "dismiss": "Không đúng",
+    "assign": "Giao",
+    "abandon": "Bỏ",
+    "rowLabel": "{subject} — chi tiết",
+    "doneToast": "Đã đánh dấu là xong",
+    "dismissToast": "{days, plural, other {Đã bỏ qua trong # ngày}}",
+    "abandonToast": "Đã đánh dấu là bỏ",
+    "assignedToast": "Đã giao cho {owner}",
+    "assignTitle": "Ai sẽ nhận việc này?",
+    "assignLabel": "Chủ sở hữu",
+    "assignPlaceholder": "Tên",
+    "loadError": "Không thể tải những gì chưa giải quyết"
+  },
+  "digest": {
+    "title": "Từ cuộc họp trước",
+    "meeting": "{title}, {date}",
+    "opened": "Mới",
+    "closed": "Đã đóng",
+    "untouched": "Chưa thảo luận",
+    "untouchedHint": "đang cản trở hub, nhưng không ai nhắc đến trong cuộc họp",
+    "loadError": "Không thể tải tóm tắt cuộc họp trước"
+  },
+  "feed": {
+    "title": "Những gì đã diễn ra",
+    "facts": {
+      "decision": "Quyết định",
+      "promise": "Cam kết",
+      "risk": "Rủi ro",
+      "problem": "Vấn đề",
+      "question": "Câu hỏi còn mở"
+    },
+    "superseded": "đã được thay thế",
+    "replacedBy": "được thay bằng “{text}” vào {date}",
+    "jumpTo": "Đến thời điểm {moment}",
+    "earlier": "Hiện các cuộc họp trước đó",
+    "empty": "Chưa có cuộc họp nào ở đây. Cuộc họp sẽ xuất hiện ngay khi cuộc họp đầu tiên được đưa vào hub này.",
+    "quiet": "Không có gì đáng chú ý",
+    "loadError": "Không thể tải những gì đã diễn ra"
+  },
+  "materials": {
+    "title": "Tài liệu",
+    "addLink": "Thêm liên kết",
+    "upload": "Tải lên",
+    "find": "Tìm trong tài liệu",
+    "removeLabel": "Gỡ {title} khỏi hub",
+    "gone": "tài liệu này không còn nữa",
+    "origin": "{source, select, meeting {từ cuộc họp · {date}} other {thêm thủ công · {date}}}",
+    "empty": "Chưa có tài liệu nào. Tóm tắt cuộc họp sẽ tự động có ở đây; bạn có thể thêm liên kết hoặc tệp bất cứ lúc nào.",
+    "noMatches": "Không có gì khớp với “{query}”",
+    "addTitle": "Thêm liên kết",
+    "titleLabel": "Tiêu đề",
+    "urlLabel": "Liên kết",
+    "added": "Đã thêm",
+    "removed": "Đã gỡ khỏi hub",
+    "uploadFailed": "{file}: {reason}",
+    "loadError": "Không thể tải tài liệu"
+  }
+}

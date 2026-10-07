@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "Papan",
+    "jiraBoards": "Disinkronkan dengan Jira",
+    "newBoard": "Papan baru…",
+    "syncJiraBoard": "Sinkronkan papan Jira…",
+    "rename": "Ganti nama papan…",
+    "showWorkspaceTasks": "Tampilkan tugas ruang kerja saya di sini",
+    "changeIcon": "Ganti ikon",
+    "delete": "Hapus papan…",
+    "stopSyncing": "Hentikan sinkronisasi…"
+  },
+  "icons": {
+    "work": "Pekerjaan",
+    "home": "Rumah",
+    "personal": "Pribadi",
+    "health": "Kesehatan",
+    "study": "Belajar",
+    "travel": "Perjalanan",
+    "shopping": "Belanja",
+    "fitness": "Kebugaran",
+    "project": "Proyek",
+    "reading": "Membaca"
+  },
+  "empty": {
+    "title": "Belum ada papan",
+    "description": "Buat papan untuk pekerjaan, rumah, atau apa saja, atau tambahkan papan dari Jira.",
+    "newBoard": "Papan baru",
+    "syncJiraBoard": "Sinkronkan papan Jira"
+  },
+  "newBoard": {
+    "title": "Papan baru",
+    "description": "Pisahkan pekerjaan, rumah, dan hal lainnya ke papan masing-masing.",
+    "namePlaceholder": "mis. Rumah",
+    "icon": "Ikon",
+    "columns": "Kolom",
+    "create": "Buat papan"
+  },
+  "templates": {
+    "simple": "Sederhana",
+    "project": "Proyek"
+  },
+  "columnNames": {
+    "backlog": "Antrean",
+    "todo": "Belum dikerjakan",
+    "inProgress": "Sedang dikerjakan",
+    "review": "Peninjauan",
+    "done": "Selesai"
+  },
+  "renameTitle": "Ganti nama papan",
+  "delete": {
+    "title": "Hapus “{board}”?",
+    "description": "{count, plural, =0 {Papan akan dihapus. Tindakan ini tidak dapat diurungkan.} other {Papan beserta # tugasnya akan dihapus. Tindakan ini tidak dapat diurungkan.}}",
+    "confirm": "Hapus papan",
+    "stopTitle": "Hentikan sinkronisasi “{board}”?",
+    "stopDescription": "Papan akan dihapus dari sini. Tidak ada yang berubah di Jira, dan Anda dapat menyinkronkannya lagi nanti.",
+    "stopConfirm": "Hentikan sinkronisasi"
+  },
+  "jira": {
+    "title": "Sinkronkan papan Jira",
+    "description": "Kelola papan Jira dari sini; setiap perubahan disinkronkan dua arah.",
+    "connectTitle": "Hubungkan Jira terlebih dahulu",
+    "connectDescription": "Masuk ke Jira di Pengaturan › Konektor, lalu kembali ke sini untuk memilih papan.",
+    "openConnectors": "Buka Konektor",
+    "connectedAs": "Terhubung sebagai {account}.",
+    "connected": "Terhubung ke Jira.",
+    "noBoards": "Akun Jira Anda belum memiliki papan.",
+    "boardList": "Papan Jira",
+    "alreadySynced": "Sudah disinkronkan · buka",
+    "type": {
+      "kanban": "Papan Kanban",
+      "scrum": "Papan Scrum"
+    },
+    "howColumns": "Kolom dan issue diambil dari papan Jira.",
+    "howMoves": "Memindahkan kartu akan mengubah status issue di Jira; tugas baru menjadi issue Jira.",
+    "howChanges": "Perubahan di Jira muncul di sini secara otomatis.",
+    "sync": "Sinkronkan papan"
+  },
+  "sync": {
+    "syncing": "Menyinkronkan dengan Jira…",
+    "paused": "Sinkronisasi dijeda",
+    "synced": "Disinkronkan dengan Jira",
+    "syncedAgo": "Disinkronkan dengan Jira {ago}",
+    "syncNow": "Sinkronkan sekarang",
+    "openBoard": "Buka {board} di Jira",
+    "openHint": "Buka di Jira · {project} di {site}"
+  },
+  "banners": {
+    "syncStopped": "Sinkronisasi dengan Jira berhenti.",
+    "changesPaused": "Perubahan dijeda.",
+    "importing": "Mengimpor {board} dari Jira…",
+    "importingHint": "Kolom dan issue akan segera muncul di sini.",
+    "offer": "{count, plural, other {Ada # tugas terbuka di ruang kerja Anda. Tampilkan di “{board}”?}} Memindahkan kartu akan memperbarui tugas tersebut untuk tim Anda.",
+    "notNow": "Nanti saja",
+    "showHere": "{count, plural, other {Tampilkan di sini}}"
+  },
+  "toasts": {
+    "createFailed": "Tidak dapat membuat papan",
+    "connectFailed": "Tidak dapat menyinkronkan papan Jira",
+    "updateFailed": "Tidak dapat memperbarui papan",
+    "deleteFailed": "Tidak dapat menghapus papan",
+    "syncFailed": "Tidak dapat menyinkronkan dengan Jira",
+    "deleted": "“{board}” dihapus",
+    "stoppedSyncing": "Sinkronisasi “{board}” dihentikan",
+    "workspaceTasksOn": "Tugas ruang kerja Anda kini tampil di “{board}”",
+    "workspaceTasksOff": "Tugas ruang kerja Anda tidak lagi tampil di papan mana pun",
+    "workspaceTasksHint": "Memindahkan kartu akan mengubah tugas di ruang kerjanya.",
+    "workspaceTasksFailed": "Tidak dapat mengubah tempat tugas ruang kerja ditampilkan"
+  }
+}

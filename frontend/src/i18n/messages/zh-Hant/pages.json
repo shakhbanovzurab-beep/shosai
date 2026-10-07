@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "以 shadcn/ui 打造、精心設計的開放原始碼管理儀表板。"
+  },
+  "actions": {
+    "goHome": "前往首頁",
+    "goBack": "返回"
+  },
+  "placeholder": {
+    "title": "{title} 即將推出",
+    "description": "這個區塊正在開發中，很快就能使用。",
+    "badge": "開發中"
+  },
+  "filter": {
+    "label": "{label}：",
+    "all": "全部"
+  },
+  "emoji": {
+    "search": "搜尋表情符號",
+    "empty": "找不到表情符號"
+  },
+  "notFound": {
+    "metaTitle": "找不到頁面",
+    "badge": "錯誤 {code}",
+    "title": "這個頁面走丟了",
+    "description": "連結可能已失效，或頁面已移動或移除。我們帶你回到正軌。",
+    "popularPages": "熱門頁面",
+    "jumpTo": "或前往"
+  },
+  "unauthorized": {
+    "metaTitle": "沒有存取權",
+    "title": "你沒有存取權",
+    "description": "你沒有檢視這個頁面的權限。如果你認為這是錯誤，請聯絡管理員。"
+  }
+}

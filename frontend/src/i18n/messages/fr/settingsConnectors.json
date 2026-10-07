@@ -1,0 +1,54 @@
+{
+  "description": "Connectez vos applications pour que Leo puisse y faire des recherches et y agir. Chaque application vous connecte sur sa propre page via OAuth 2.0 : Leo ne voit jamais votre mot de passe.",
+  "columns": {
+    "connector": "Connecteur",
+    "type": "Type",
+    "status": "Statut"
+  },
+  "categories": {
+    "mail": "E-mail",
+    "files": "Fichiers",
+    "notes": "Notes",
+    "communication": "Messagerie",
+    "tasks": "Tâches",
+    "crm": "Relation client"
+  },
+  "connect": "Connecter",
+  "connecting": "Connexion…",
+  "connected": "Connecté",
+  "options": "Options pour {name}, connecté",
+  "disconnect": "Déconnecter",
+  "toasts": {
+    "connected": "{name} connecté",
+    "notConnected": "{name} n’a pas été connecté",
+    "connectFailed": "Impossible de connecter {name}",
+    "disconnected": "{name} déconnecté",
+    "disconnectFailed": "Impossible de déconnecter {name}"
+  },
+  "callback": {
+    "metaTitle": "Connexion…",
+    "connected": {
+      "title": "Connecté",
+      "body": "Vous pouvez fermer cette fenêtre et revenir au tableau de bord."
+    },
+    "denied": {
+      "title": "Accès refusé",
+      "body": "Aucune application n’a été connectée. Vous pouvez fermer cette fenêtre."
+    },
+    "error": {
+      "title": "Impossible d’établir la connexion",
+      "body": "Un problème est survenu pendant la connexion. Réessayez depuis les paramètres."
+    },
+    "back": "Retour au tableau de bord"
+  },
+  "consent": {
+    "metaTitle": "Autorisation de démonstration",
+    "badge": "Démo · aucun compte réel n’est utilisé",
+    "title": "Connecter {app} à Leo ?",
+    "titleUnknown": "Connecter cette application à Leo ?",
+    "body": "En production, cette étape est l’écran de consentement de {app}. Si vous l’approuvez, Leo peut lire et agir dans votre compte {app} en votre nom.",
+    "bodyUnknown": "En production, cette étape est l’écran de consentement du fournisseur. Si vous l’approuvez, Leo peut lire et agir dans votre compte en votre nom.",
+    "disconnectHint": "Vous pouvez déconnecter l’application à tout moment dans Paramètres › Connecteurs.",
+    "allow": "Autoriser"
+  }
+}

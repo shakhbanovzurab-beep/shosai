@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "name_taken": "Je hebt al een hub met deze naam.",
+    "name_too_short": "{min, plural, one {Gebruik minstens # teken.} other {Gebruik minstens # tekens.}}",
+    "name_too_long": "{max, plural, one {Gebruik maximaal # teken.} other {Gebruik maximaal # tekens.}}",
+    "too_many_hubs": "Je hebt te veel hubs. Archiveer of verwijder de hubs die je niet nodig hebt.",
+    "not_found": "Dit is er niet meer — misschien is het verwijderd.",
+    "hub_archived": "De hub is gearchiveerd.",
+    "no_board": "De hub heeft geen bord, dus werk kan nergens heen.",
+    "no_hub": "De vergadering zit niet in een hub.",
+    "board_gone": "Het bord van deze hub bestaat niet meer.",
+    "invalid": "Controleer of alles goed is ingevuld.",
+    "network": "Kan de server niet bereiken.",
+    "unknown": "De server gaf een onverwacht antwoord."
+  },
+  "fixes": {
+    "choose_board": "Bord kiezen",
+    "file_meeting": "Vergadering aan een hub toevoegen",
+    "restore_hub": "Hub uit archief herstellen"
+  }
+}

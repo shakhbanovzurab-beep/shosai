@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Proyek",
+    "project": "Proyek"
+  },
+  "title": "Proyek",
+  "description": "Proyek mengumpulkan satu pekerjaan di satu tempat: rapat, keputusan, dan tugasnya.",
+  "newProject": "Proyek baru",
+  "filter": {
+    "label": "Proyek mana",
+    "open": "Berjalan",
+    "all": "Semua"
+  },
+  "empty": {
+    "title": "Belum ada proyek",
+    "text": "Mulai proyek untuk pekerjaan yang mencakup beberapa rapat, seperti peluncuran atau rekrutmen. Rapat dan tugas kemudian dapat ditambahkan ke proyek tersebut."
+  },
+  "status": {
+    "planned": "Direncanakan",
+    "active": "Aktif",
+    "paused": "Dijeda",
+    "completed": "Selesai"
+  },
+  "ledBy": "{who, select, me {Dipimpin oleh Anda} other {Dipimpin oleh {name}}}",
+  "noLead": "Tanpa pemimpin",
+  "target": {
+    "none": "Tanpa tanggal target",
+    "overdue": "Terlambat · {date}",
+    "today": "Target hari ini",
+    "tomorrow": "Target besok",
+    "on": "Target {date}"
+  },
+  "progress": {
+    "label": "{total, plural, other {{done, number} dari # tugas selesai}}",
+    "count": "{done, number}/{total, number}",
+    "none": "Tanpa tugas"
+  },
+  "notFound": {
+    "title": "Proyek ini sudah tidak ada",
+    "text": "Proyek ini mungkin telah dihapus. Rapat dan tugasnya masih ada di ruang kerja.",
+    "action": "Semua proyek"
+  },
+  "sections": {
+    "tasks": "Tugas",
+    "addTask": "Tambahkan tugas",
+    "tasksEmpty": "Belum ada tugas. Tambahkan tugas, atau bagikan rapat ke proyek ini untuk membawa tugasnya.",
+    "meetings": "Rapat",
+    "meetingsEmpty": "Rapat yang dibagikan ke proyek ini muncul di sini.",
+    "decisions": "Keputusan",
+    "files": "File",
+    "filesLabel": "File {project}",
+    "filesEmpty": "File yang ditambahkan ke proyek ini muncul di sini, dan Leo menggunakannya untuk proyek ini."
+  },
+  "header": {
+    "edit": "Edit proyek",
+    "delete": "Hapus proyek",
+    "lead": "Pemimpin",
+    "team": "Tim",
+    "target": "Tanggal target",
+    "deleteTitle": "Hapus {name}?",
+    "deleteText": "Rapat, tugas, dan keputusannya tetap ada di ruang kerja; hanya saja tidak lagi menjadi bagian dari proyek."
+  },
+  "dialog": {
+    "newTitle": "Proyek baru",
+    "editTitle": "Edit {name}",
+    "description": "Satu tempat untuk satu pekerjaan: rapat, keputusan, dan tugasnya.",
+    "nameRequired": "Beri nama proyek.",
+    "namePlaceholder": "mis. Beta aplikasi seluler",
+    "purpose": "Tujuannya",
+    "lead": "Pemimpin",
+    "me": "{name} (Anda)",
+    "team": "Tim",
+    "wholeWorkspace": "Seluruh ruang kerja",
+    "status": "Status",
+    "target": "Tanggal target",
+    "create": "Buat proyek",
+    "saved": "{name} disimpan",
+    "created": "{name} dibuat"
+  }
+}

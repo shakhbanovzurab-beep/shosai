@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Çalışma alanı bilgileri"
+  },
+  "title": "Bilgi bankası",
+  "description": "Leo’nun {workspace} çalışma alanında bildikleri. Herkese yalnızca kullanabildiklerinden yanıt verir: herkese açık bilgilerden ve kendi ekiplerinin bilgilerinden.",
+  "search": {
+    "placeholder": "Ada göre ara",
+    "label": "Bilgi bankasında ara"
+  },
+  "loadFailed": "Çalışma alanı bilgileri yüklenemedi",
+  "loading": "Bilgiler yükleniyor",
+  "alwaysIncluded": {
+    "text": "Leo, herkesin burada açabildiği toplantılardan, kararlardan ve projelerden de yanıt verir. Bunları kimsenin eklemesi gerekmez.",
+    "label": "Her zaman dahil",
+    "meetings": "{count, plural, one {# toplantı} other {# toplantı}}",
+    "meetingsLoading": "Toplantılar",
+    "decisions": "{count, plural, one {# karar} other {# karar}}",
+    "decisionsLoading": "Kararlar",
+    "projects": "{count, plural, one {# proje} other {# proje}}"
+  },
+  "empty": {
+    "title": "Henüz dosya veya kaynak yok",
+    "text": "Kendi dosyalarınızı paylaşın (size ait kalırlar), {workspace} çalışma alanına ait dosyalar yükleyin veya ortak bir sürücü ya da wiki bağlayın. Leo, bunları kullanabilen herkese onlardan yanıt verir."
+  },
+  "noMatch": {
+    "title": "Eşleşen bir şey yok",
+    "text": "Başka bir ad veya ekip deneyin.",
+    "clear": "Filtreleri temizle"
+  },
+  "sections": {
+    "files": "Dosyalar · {count, number}",
+    "filesLabel": "Dosyalar",
+    "noFilesMatch": "Eşleşen dosya yok.",
+    "sources": "Bağlı kaynaklar · {count, number}",
+    "sourcesLabel": "Bağlı kaynaklar",
+    "sourcesEmptyAdmin": "Ekibinizin zaten kullandığı sürücüyü veya wiki’yi bağlayın, Leo onu takip etsin.",
+    "sourcesEmpty": "Ekibinizin zaten kullandığı sürücüyü veya wiki’yi yöneticiler bağlayabilir."
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "Belge",
+    "text": "Metin",
+    "sheet": "Elektronik tablo",
+    "slides": "Sunum",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "Web sitesi"
+  },
+  "status": {
+    "syncing": "Senkronize ediliyor",
+    "indexing": "Dizine ekleniyor",
+    "failed": "Okunamadı"
+  },
+  "pages": "{count, plural, one {# sayfa} other {# sayfa}}",
+  "origin": {
+    "personal": "{who, select, me {Dosyanız, paylaşıldı} former {Eski bir üyenin dosyası, paylaşıldı} other {Paylaşılan dosya · sahibi: {name}}}",
+    "connector": "{who, select, me {Siz bağladınız} former {Eski bir üye bağladı} other {Bağlayan: {name}}}",
+    "upload": "{who, select, me {{workspace} çalışma alanına ait · siz eklediniz} former {{workspace} çalışma alanına ait · eski bir üye ekledi} other {{workspace} çalışma alanına ait · ekleyen: {name}}}"
+  },
+  "added": "{days, plural, =0 {Bugün} =1 {Dün} one {# gün önce} other {# gün önce}}",
+  "leaves": "{who, select, me {Dosya yöneticinizden çalışma alanına devretmezseniz siz ayrılınca kaldırılır} former {Sahibi çalışma alanına devretmezse sahibiyle birlikte kaldırılır} other {Sahibi çalışma alanına devretmezse sahibi ayrılınca kaldırılır: {name}}}",
+  "access": {
+    "label": "Kimler kullanabilir",
+    "hint": "Leo yalnızca bu kişilere bundan yanıt verir. Bunu daha sonra değiştirebilirsiniz.",
+    "everyone": "{workspace} çalışma alanındaki herkes",
+    "someTeam": "Bir ekip"
+  },
+  "menu": {
+    "openIn": "Şurada aç: {provider}",
+    "project": "Proje",
+    "noProject": "Proje yok"
+  },
+  "remove": {
+    "stopSharing": "Paylaşımı durdur",
+    "stopSharingTitle": "{name} paylaşımı durdurulsun mu?",
+    "stopSharingText": "{who, select, me {Leo, {workspace} çalışma alanında artık bundan yanıt vermez. Dosya yöneticinizde kalır.} former {Leo, {workspace} çalışma alanında artık bundan yanıt vermez. Sahibinin Dosya yöneticisinde kalır.} other {Leo, {workspace} çalışma alanında artık bundan yanıt vermez. Sahibinin ({name}) Dosya yöneticisinde kalır.}}",
+    "disconnect": "Bağlantıyı kes",
+    "disconnectTitle": "{name} bağlantısı kesilsin mi?",
+    "disconnectText": "Senkronizasyon durur ve Leo artık bundan yanıt vermez. {provider} tarafında hiçbir şey değişmez.",
+    "removeTitle": "{name} kaldırılsın mı?",
+    "removeText": "{workspace} çalışma alanından silinir ve Leo artık kimseye bundan yanıt vermez."
+  },
+  "changed": {
+    "everyone": "Artık {workspace} çalışma alanındaki herkes kullanabilir",
+    "team": "Artık şu ekip kullanabilir: {team}",
+    "addedToProject": "Projeye eklendi: {project}",
+    "noProject": "Artık bir projede değil"
+  },
+  "addMenu": {
+    "addFile": "Dosya ekle",
+    "addKnowledge": "Bilgi ekle",
+    "share": "Dosyalarımdan paylaş",
+    "shareHint": "Size ait kalır, sizinle birlikte ayrılır",
+    "upload": "{workspace} çalışma alanına yükle",
+    "uploadHint": "Çalışma alanına ait olur",
+    "connect": "Kaynak bağla",
+    "connectHint": "Drive, Notion, Confluence veya bir site"
+  }
+}

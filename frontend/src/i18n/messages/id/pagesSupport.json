@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Dukungan",
+    "description": "Minta bantuan tim kami dan pantau tiket dukungan Anda."
+  },
+  "categories": {
+    "billing": "Tagihan",
+    "bug": "Laporan bug",
+    "account": "Akun",
+    "feature": "Permintaan fitur",
+    "other": "Lainnya"
+  },
+  "statuses": {
+    "open": "Menunggu dukungan",
+    "awaiting_you": "Menunggu Anda",
+    "resolved": "Terselesaikan"
+  },
+  "events": {
+    "acknowledged": "Pesan Anda sudah kami terima. Spesialis biasanya membalas dalam beberapa jam — kami akan mengabari Anda di sini.",
+    "resolved": "Ditandai terselesaikan",
+    "reopened": "Dibuka kembali"
+  },
+  "toolbar": {
+    "search": "Cari tiket",
+    "filter": "Filter tiket",
+    "all": "Semua",
+    "open": "Terbuka",
+    "resolved": "Terselesaikan"
+  },
+  "newTicket": "Tiket baru",
+  "table": {
+    "number": "№",
+    "subject": "Subjek",
+    "status": "Status",
+    "topic": "Topik",
+    "updated": "Diperbarui",
+    "unread": "Belum dibaca:"
+  },
+  "list": {
+    "loading": "Memuat tiket",
+    "loadError": "Tidak dapat memuat tiket Anda",
+    "emptyTitle": "Ada yang bisa kami bantu?",
+    "emptyDescription": "Buka tiket dan tim kami akan membalas di sini, biasanya dalam beberapa jam.",
+    "noMatchesTitle": "Tiket tidak ditemukan",
+    "noMatchesDescription": "Coba pencarian atau filter lain."
+  },
+  "panel": {
+    "ticket": "Tiket",
+    "description": "Percakapan Anda dengan dukungan"
+  },
+  "form": {
+    "title": "Ada yang bisa kami bantu?",
+    "subtitle": "Kami biasanya membalas dalam beberapa jam.",
+    "topic": "Topik",
+    "subject": "Subjek",
+    "subjectPlaceholder": "Ringkasan singkat",
+    "body": "Apa yang terjadi?",
+    "bodyPlaceholder": "Langkah yang Anda lakukan, apa yang Anda harapkan, dan apa yang justru terjadi. Tangkapan layar sangat membantu.",
+    "send": "Kirim"
+  },
+  "attach": {
+    "button": "Lampirkan file",
+    "list": "File terlampir",
+    "remove": "Hapus {name}",
+    "tooBig": "{count, plural, other {{names} lebih besar dari {size}}}",
+    "tooMany": "{max, plural, other {Lampirkan paling banyak # file}}"
+  },
+  "composer": {
+    "message": "Pesan",
+    "emoji": "Tambahkan emoji",
+    "hint": "Enter untuk mengirim · Shift+Enter untuk baris baru",
+    "send": "Kirim",
+    "reply": "Tulis balasan…",
+    "replyToReopen": "Balas untuk membuka kembali…"
+  },
+  "thread": {
+    "loading": "Memuat tiket",
+    "close": "Tutup tiket",
+    "reopen": "Buka kembali",
+    "resolve": "Tandai terselesaikan",
+    "resolvedNote": "Terselesaikan. Balas di bawah jika Anda masih memerlukan bantuan — tiket akan dibuka kembali.",
+    "thanks": "Terima kasih atas masukan Anda.",
+    "rate": "Bagaimana layanan kami?",
+    "good": "Baik",
+    "bad": "Buruk",
+    "you": "Anda",
+    "support": "Dukungan",
+    "supportAuthor": "{name} · Dukungan",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Tandai sudah dibaca",
+    "markUnread": "Tandai belum dibaca",
+    "copyNumber": "Salin nomor tiket",
+    "copySubject": "Salin subjek"
+  },
+  "toasts": {
+    "opened": "Tiket #{number} dibuka",
+    "openFailed": "Tidak dapat membuka tiket",
+    "updateFailed": "Tidak dapat memperbarui tiket",
+    "sendFailed": "Tidak dapat mengirim balasan Anda",
+    "markedRead": "Ditandai sudah dibaca",
+    "markedUnread": "Ditandai belum dibaca",
+    "reopened": "Tiket dibuka kembali",
+    "resolved": "Ditandai terselesaikan",
+    "numberCopied": "Nomor tiket disalin",
+    "subjectCopied": "Subjek disalin",
+    "numberCopyFailed": "Tidak dapat menyalin nomor tiket",
+    "subjectCopyFailed": "Tidak dapat menyalin subjek"
+  }
+}

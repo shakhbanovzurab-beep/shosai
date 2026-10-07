@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "कानबान",
+    "description": "काम, घर और बाकी हर चीज़ के लिए बोर्ड, जिनमें Jira के साथ सिंक होने वाले बोर्ड भी हैं।"
+  },
+  "loadBoardsFailed": "आपके बोर्ड लोड नहीं किए जा सके।",
+  "loadBoardFailed": "बोर्ड लोड नहीं किया जा सका।",
+  "addTask": "टास्क जोड़ें",
+  "taskCount": "{count, plural, one {# टास्क} other {# टास्क}}",
+  "progress": "प्रगति",
+  "views": {
+    "label": "व्यू",
+    "board": "बोर्ड",
+    "list": "सूची",
+    "table": "टेबल"
+  },
+  "toolbar": {
+    "filter": "फ़िल्टर करें",
+    "sort": "क्रम से लगाएं",
+    "moreWaysToAdd": "टास्क जोड़ने के और तरीके",
+    "importCsv": "CSV इंपोर्ट करें",
+    "addFromTemplate": "टेंप्लेट से जोड़ें",
+    "createAutomation": "ऑटोमेशन बनाएं"
+  },
+  "column": {
+    "drag": "{column} कॉलम को खींचें",
+    "addTask": "{column} में टास्क जोड़ें",
+    "empty": "{column} में कोई टास्क नहीं है"
+  },
+  "columnMenu": {
+    "managedInJira": "कॉलम Jira में मैनेज किए जाते हैं",
+    "rename": "कॉलम का नाम बदलें…",
+    "sortByPriority": "प्राथमिकता के क्रम से लगाएं",
+    "moveEarlier": "शुरुआत की ओर ले जाएं",
+    "moveLater": "आख़िर की ओर ले जाएं",
+    "clear": "कॉलम खाली करें"
+  },
+  "taskMenu": {
+    "openInJira": "{key} को Jira में खोलें",
+    "openInWorkspace": "{workspace} में खोलें",
+    "moveTo": "इसमें ले जाएं",
+    "moveToTop": "सबसे ऊपर ले जाएं",
+    "moveToBottom": "सबसे नीचे ले जाएं",
+    "delete": "टास्क मिटाएं"
+  },
+  "priority": {
+    "label": "प्राथमिकता",
+    "high": "ज़्यादा",
+    "medium": "मध्यम",
+    "low": "कम"
+  },
+  "card": {
+    "unassigned": "असाइन नहीं किया गया",
+    "completed": "पूरा हुआ",
+    "fromSource": "{source} से",
+    "jiraIssue": "{type} (Jira नए टैब में खुलेगा)",
+    "workspaceTask": "यह इस वर्कस्पेस का टास्क है। यहां बदलाव करने पर वहां भी बदल जाएगा।",
+    "insights": {
+      "attachments": "{count, plural, one {# अटैचमेंट} other {# अटैचमेंट}}",
+      "comments": "{count, plural, one {# टिप्पणी} other {# टिप्पणियां}}",
+      "documents": "{count, plural, one {# दस्तावेज़} other {# दस्तावेज़}}"
+    }
+  },
+  "table": {
+    "task": "टास्क",
+    "status": "स्थिति",
+    "owner": "मालिक",
+    "label": "लेबल",
+    "due": "आख़िरी तारीख",
+    "actions": "कार्रवाइयां",
+    "empty": "अभी तक कोई टास्क नहीं है",
+    "progressOf": "{task} की प्रगति"
+  },
+  "commands": {
+    "renameTask": "टास्क का नाम बदलें",
+    "renameColumn": "कॉलम का नाम बदलें",
+    "newTaskIn": "{column} में नया टास्क",
+    "copyTitle": "{title} (कॉपी)",
+    "deleted": "“{title}” मिटा दिया गया",
+    "cleared": "{count, plural, one {{column} से # टास्क मिटा दिया गया} other {{column} से # टास्क मिटा दिए गए}}",
+    "jiraLinkCopied": "{key} का लिंक कॉपी किया गया"
+  },
+  "errors": {
+    "addTask": "टास्क नहीं जोड़ा जा सका।",
+    "saveChange": "बदलाव सेव नहीं किया जा सका।",
+    "deleteTasks": "{count, plural, one {टास्क नहीं मिटाया जा सका।} other {टास्क नहीं मिटाए जा सके।}}",
+    "saveBoard": "बोर्ड सेव नहीं किया जा सका।"
+  }
+}

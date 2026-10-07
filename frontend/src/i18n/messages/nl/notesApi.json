@@ -1,0 +1,7 @@
+{
+  "meetingNotFound": "Vergadering niet gevonden.",
+  "notesTooLong": "Notities mogen maximaal {max, number} tekens bevatten.",
+  "linkSettingsInvalid": "Er klopt iets niet in de linkinstellingen. Laad de pagina opnieuw en probeer het nog een keer.",
+  "commentsClosed": "Via deze link kun je geen opmerkingen plaatsen.",
+  "commentInvalid": "Schrijf een opmerking van maximaal {max, number} tekens."
+}

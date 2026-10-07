@@ -1,0 +1,26 @@
+{
+  "description": "Shortcuts for the desktop app. They work anywhere on your computer, even when the app is in the background, and sync to all your devices.",
+  "commands": {
+    "open_app": "Open app",
+    "toggle_recording": "Start / pause recording",
+    "toggle_overlay": "Show / hide overlay",
+    "open_settings": "Settings",
+    "collapse_overlay": "Collapse overlay to a pill",
+    "close_app": "Close app",
+    "live_translation": "Live translation",
+    "prompter": "Prompter"
+  },
+  "off": "Off",
+  "pressKeys": "Press keys…",
+  "hint": "Esc to cancel · Backspace to turn off",
+  "reset": "Reset {command} to default",
+  "record": "Press the new shortcut for {command}",
+  "change": "{command}: {keys}. Change",
+  "changeOff": "{command}: off. Change",
+  "resetAll": "Reset all to defaults",
+  "problems": {
+    "needsModifier": "Use ⌘/Ctrl or ⌥/Alt with another key.",
+    "reserved": "That shortcut belongs to the system.",
+    "taken": "Already used for “{command}”."
+  }
+}

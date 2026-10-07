@@ -1,0 +1,120 @@
+{
+  "title": "Miembros",
+  "description": "Todos en {workspace}, sus roles y los equipos con los que compartes.",
+  "invitePeople": "Invitar personas",
+  "adminsInvite": "Solo los administradores pueden invitar personas.",
+  "adminsInviteAsk": "Solo los administradores pueden invitar personas. Pídeselo a {name}.",
+  "tabs": {
+    "members": "Miembros",
+    "teams": "Equipos"
+  },
+  "search": "Buscar personas",
+  "pendingInvitations": "Invitaciones pendientes · {count, number}",
+  "membersCount": "Miembros · {count, number}",
+  "noMatches": "Nadie coincide",
+  "noMatchesHint": "Prueba con un nombre, un correo o un puesto.",
+  "clearSearch": "Borrar búsqueda",
+  "seats": {
+    "label": "Licencias",
+    "taken": "{taken, number} de {total, number} licencias en uso",
+    "breakdown": "· {members, plural, one {# miembro} many {# de miembros} other {# miembros}}",
+    "breakdownPending": "· {members, plural, one {# miembro} many {# de miembros} other {# miembros}}, {pending, plural, one {# invitación pendiente} many {# de invitaciones pendientes} other {# invitaciones pendientes}}",
+    "left": "{count, plural, one {Queda # licencia.} many {Quedan # de licencias.} other {Quedan # licencias.}} Las invitaciones pendientes ocupan una licencia hasta que se aceptan o se revocan.",
+    "fullAdd": "Todas las licencias están en uso. Agrega licencias para invitar a más personas.",
+    "fullAsk": "Todas las licencias están en uso. Pide al propietario que agregue licencias.",
+    "change": "Cambiar licencias"
+  },
+  "invitation": {
+    "by": "Invitado por {name} {ago}",
+    "byYou": "Invitado por ti {ago}",
+    "byFormerMember": "Invitado por un exmiembro {ago}",
+    "resend": "Reenviar",
+    "revoke": "Revocar",
+    "revokeFor": "Revocar la invitación de {email}"
+  },
+  "member": {
+    "you": "Tú",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, one {Inactivo desde hace # día o más} many {Inactivo desde hace # de días o más} other {Inactivo desde hace # días o más}}",
+    "roleOf": "Rol de {name}",
+    "remove": "Quitar del espacio de trabajo",
+    "removeTitle": "¿Quitar a {name} de {workspace}?",
+    "removeDescription": "Las reuniones y los archivos que {name} compartió desde sus propias Notas y su Administrador de archivos se van con esa persona. Las tareas se quedan y las abiertas pasan a estar sin asignar. Se libera la licencia.",
+    "joinedTeam": "{name} se unió a {team}",
+    "leftTeam": "{name} salió de {team}"
+  },
+  "teams": {
+    "new": "Nuevo equipo",
+    "empty": "Aún no hay equipos",
+    "emptyHint": "Los equipos son opcionales. Créalos cuando quieras compartir reuniones y conocimiento con un grupo, como Ingeniería o Ventas.",
+    "intro": "Comparte reuniones y conocimiento con un equipo en lugar de persona por persona.",
+    "deleteTitle": "¿Eliminar {name}?",
+    "deleteDescription": "Sus reuniones siguen visibles para quienes participaron y sus miembros siguen en el espacio de trabajo. Primero mueve el conocimiento del equipo; no puede quedarse sin audiencia."
+  },
+  "team": {
+    "noDescription": "Aún no hay descripción.",
+    "edit": "Editar equipo",
+    "delete": "Eliminar equipo",
+    "members": "{count, plural, one {# miembro} many {# de miembros} other {# miembros}}",
+    "membersLedBy": "{count, plural, one {# miembro} many {# de miembros} other {# miembros}} · liderado por {name}",
+    "membersLedByYou": "{count, plural, one {# miembro} many {# de miembros} other {# miembros}} · liderado por ti",
+    "join": "Unirse al equipo",
+    "leave": "Salir del equipo",
+    "youJoined": "Te uniste a {team}",
+    "youLeft": "Saliste de {team}"
+  },
+  "teamForm": {
+    "editTitle": "Editar {name}",
+    "description": "Comparte reuniones y conocimiento con un grupo en lugar de uno por uno.",
+    "nameRequired": "Ponle un nombre al equipo.",
+    "namePlaceholder": "p. ej., Diseño",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "En qué trabaja este equipo",
+    "color": "Color",
+    "colors": {
+      "blue": "Azul",
+      "green": "Verde",
+      "amber": "Ámbar",
+      "violet": "Violeta",
+      "rose": "Rosa",
+      "sky": "Celeste"
+    },
+    "privateHint": "Solo sus miembros y los administradores lo ven, junto con lo que se comparte con él.",
+    "create": "Crear equipo"
+  },
+  "invite": {
+    "title": "Invitar personas a {workspace}",
+    "description": "Recibirán un correo con un enlace para unirse. Cada persona ocupa una licencia.",
+    "emails": "Direcciones de correo",
+    "hint": "Separa las direcciones con comas o saltos de línea. {left, plural, one {Queda # licencia.} many {Quedan # de licencias.} other {Quedan # licencias.}}",
+    "overSeats": "{count, plural, one {# persona} many {# de personas} other {# personas}}, pero {left, plural, one {solo queda # licencia.} many {solo quedan # de licencias.} other {solo quedan # licencias.}}",
+    "seatsAfter": "{count, plural, one {# invitación} many {# de invitaciones} other {# invitaciones}} · {left, plural, one {quedará # licencia después.} many {quedarán # de licencias después.} other {quedarán # licencias después.}}",
+    "checkEmails": "Revisa {emails}.",
+    "allExisting": "Ya están en el espacio de trabajo o tienen invitación.",
+    "emailRequired": "Agrega una dirección de correo.",
+    "tooMany": "{count, plural, one {Invita como máximo a # persona a la vez.} many {Invita como máximo a # de personas a la vez.} other {Invita como máximo a # personas a la vez.}}",
+    "skipped": "Ya están dentro o tienen invitación, se omitieron: {emails}.",
+    "role": "Rol",
+    "teams": "Agregar a equipos (opcional)",
+    "addSeats": "Agregar licencias",
+    "send": "{count, plural, one {Enviar invitación} many {Enviar # de invitaciones} other {Enviar # invitaciones}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, one {Invitación enviada a {email}} many {# de invitaciones enviadas} other {# invitaciones enviadas}}",
+    "inviteFailed": "No se pudieron enviar las invitaciones.",
+    "invitationRevoked": "Se revocó la invitación de {email}",
+    "revokeFailed": "No se pudo revocar",
+    "invitationResent": "Se volvió a enviar la invitación a {email}",
+    "resendFailed": "No se pudo reenviar",
+    "roleChanged": "{role, select, admin {{name} ahora es administrador} other {{name} ahora es miembro}}",
+    "roleChangeFailed": "No se pudo cambiar el rol",
+    "teamsUpdateFailed": "No se pudieron actualizar los equipos",
+    "memberRemoved": "Se quitó a {name} del espacio de trabajo",
+    "removeMemberFailed": "No se pudo quitar a esta persona",
+    "teamCreated": "Se creó {name}",
+    "teamSaved": "Se guardó {name}",
+    "teamSaveFailed": "No se pudo guardar el equipo.",
+    "teamDeleted": "Se eliminó {name}",
+    "teamDeleteFailed": "No se pudo eliminar el equipo"
+  }
+}

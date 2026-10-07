@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "プランをアップグレード"
+  },
+  "title": "プランをアップグレード",
+  "subtitle": "毎月 {minutes, plural, other {# 分の会議時間}}付きで無料で始められます。会議が増えたらアップグレードしてください。",
+  "loading": "プランを読み込み中…",
+  "loadFailed": "プランを読み込めませんでした",
+  "seatNote": "<b>{workspace}</b> のシートには {plan} が含まれているため、自分の会議、ファイル管理、Leo 用のナレッジにはそのプランの上限が適用されます。個人のプランとは別です。",
+  "pricesNote": "価格は米ドル表示で、税は含まれていません。Team はユーザーごとに請求されます。支払い情報は決済代行会社の安全なページでのみ入力します。",
+  "audiences": {
+    "individual": "個人",
+    "team": "チーム",
+    "enterprise": "エンタープライズ"
+  },
+  "seatRange": "（{min, number}～{max, number} ユーザー）",
+  "seatRangeOpen": "（{min, number} ユーザー以上）",
+  "card": {
+    "yourPlan": "現在のプラン",
+    "recommended": "おすすめ",
+    "custom": "カスタム",
+    "tailored": "組織に合わせてカスタマイズ",
+    "perMonth": "/ 月",
+    "perUserPerMonth": "ユーザーあたり / 月",
+    "billedMonthly": "毎月請求、いつでも解約できます",
+    "freeForever": "ずっと無料",
+    "seatsTotal": "{seats, plural, other {# ユーザー}}で月額 {total}",
+    "notIncluded": "含まれないもの：{item}"
+  },
+  "seats": {
+    "label": "ユーザー",
+    "fewer": "ユーザーを減らす",
+    "more": "ユーザーを増やす"
+  },
+  "action": {
+    "current": "現在のプラン",
+    "upgradeTo": "{plan} にアップグレード",
+    "switchTo": "{plan} に変更",
+    "upgradeFailed": "アップグレードを開始できませんでした",
+    "switchFailed": "プランを変更できませんでした"
+  },
+  "usage": {
+    "label": "今月の会議時間",
+    "title": "会議時間",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "{limit, plural, other {# 分}}のうち {used, number} 分を使用済み",
+    "left": "{limit, plural, other {# 分の会議時間}}のうち残り {left, number} 分",
+    "allUsed": "会議時間をすべて使い切りました",
+    "resets": "{date} にリセット",
+    "leftShort": "残り {left, plural, other {# 分}} · {date} にリセット",
+    "recordingPaused": "{date} までレコーディングを一時停止しています。",
+    "paused": "{date} まで会議を一時停止しています。",
+    "pausedUpgrade": "{date} まで会議を一時停止しています。{plan} にアップグレードすると、会議を無制限に利用できます。",
+    "getUnlimited": "会議を無制限に"
+  },
+  "gate": {
+    "checking": "プランを確認中…",
+    "seePlans": "プランを見る",
+    "comparePlans": "プランを比較",
+    "upgradeTo": "{plan} にアップグレード",
+    "offer": "{plan} には {unlimited, select, yes {無制限のストレージ} other {{amount}}} が含まれます。",
+    "offerPriced": "{plan} には月額 {price} で {unlimited, select, yes {無制限のストレージ} other {{amount}}} が含まれます。",
+    "file_manager": {
+      "partOf": "ファイル管理は {plan} に含まれています",
+      "notInPlan": "ファイル管理は現在のプランに含まれていません",
+      "pitch": "ファイルを 1 か所にまとめ、Leo が使うファイルを選び、ワークスペースで共有できます。"
+    },
+    "knowledge_base": {
+      "partOf": "ナレッジは {plan} に含まれています",
+      "notInPlan": "ナレッジは現在のプランに含まれていません",
+      "pitch": "ファイルを選んだりソースを接続したりすると、Leo がそれをもとに回答できます。"
+    }
+  },
+  "sales": {
+    "contact": "営業に問い合わせ",
+    "title": "営業チームに相談",
+    "description": "チームについて教えていただければ、Enterprise プランをご提案します。",
+    "workEmail": "勤務先のメールアドレス",
+    "company": "会社名",
+    "teamSize": "チームの人数",
+    "teamSizePlaceholder": "選択",
+    "teamSizeRange": "{min, number}～{max, number} 人",
+    "teamSizeOpen": "{min, number} 人以上",
+    "message": "ご要望 <muted>（任意）</muted>",
+    "messagePlaceholder": "SSO プロバイダ、セキュリティ審査、シート数など…",
+    "send": "リクエストを送信",
+    "chooseTeamSize": "チームの人数を選択してください。",
+    "sendFailed": "リクエストを送信できませんでした。",
+    "sentTitle": "ありがとうございます。追ってご連絡します",
+    "sentDescription": "通常は 1 営業日以内に返信します。",
+    "done": "完了"
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Asistanın kiminle konuştuğunu, nasıl davrandığını ve hangi modellerle çalıştığını ayarlayın."
+  },
+  "tabs": {
+    "context": "Bağlam",
+    "prompts": "İstemler",
+    "models": "Modeller"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Canlı yanıtlar",
+      "description": "Asistan yanıtları: katman, sohbet, toplantı",
+      "help": "Canlı yanıtlar: katman, sohbet ve toplantı sırasındaki yanıtlar. İstem, asistanın söylediklerinin tonunu, uzunluğunu ve biçimini belirler."
+    },
+    "screenshots": {
+      "name": "Ekran görüntüleri",
+      "description": "Ekranı, slaytları ve belgeleri okuma",
+      "help": "Ekran görüntüsü analizi: katmandaki “Ekran görüntüsü” düğmesi ve toplantıda ekran paylaşımı. İstem, modele görseli nasıl okuyacağını ve ne yanıt vereceğini söyler."
+    },
+    "code": {
+      "name": "Kod",
+      "description": "Kod ve algoritma soruları",
+      "help": "Kod ve algoritma soruları. İstem; programlama dilini, ne kadar açıklama yapılacağını ve karmaşıklık ile testlerin gösterilip gösterilmeyeceğini belirler."
+    },
+    "system_design": {
+      "name": "Sistem tasarımı",
+      "description": "Mülakatlar için mimari tasarım",
+      "help": "Mülakatlardaki mimari soruları. İstem, anlatımın yapısını belirler: gereksinimler, tahminler, tasarım ve ödünleşimler."
+    },
+    "notes": {
+      "name": "Notlar ve haritalar",
+      "description": "Toplantı notlarının ve zihin haritasının yapay zekâ sürümü",
+      "help": "Toplantı notlarının ve zihin haritasının yapay zekâ sürümü. İstem neyin tutulacağına karar verir: kararlar, takip görevleri, açık sorular."
+    },
+    "transcript": {
+      "name": "Transkript",
+      "description": "Gerçek zamanlı konuşmadan metne",
+      "help": "Gerçek zamanlı konuşmadan metne dönüştürme. Bir konuşma modeliyle çalışır ve istem kullanmaz."
+    }
+  },
+  "autosave": {
+    "saving": "Kaydediliyor…"
+  },
+  "context": {
+    "intro": "Sizinle ilgili kısa bir metin. Her model isteğine ilk sistem mesajı olarak eklenir. Ne kadar net olursa o kadar az ek soru alırsınız.",
+    "loadFailed": "Bağlamınız yüklenemedi",
+    "title": "Hakkınızda",
+    "description": "Kim olduğunuz, ne üzerinde çalıştığınız ve nasıl yanıtlar istediğiniz. Somut bilgiler sıfatlardan daha işe yarar.",
+    "example": "Rol: Kıdemli backend mühendisi, 6 yıl, fintek.\nTeknolojiler: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nŞu an: ürün şirketlerinde sistem tasarımı mülakatlarına hazırlanıyorum.\nYanıtlar: kısa, ödünleşimleriyle birlikte; aksini söylemedikçe kod Python ile.\nKaçın: genel geçer öneriler, uzun girişler.",
+    "count": "{count, number} / {max, plural, one {# karakter} other {# karakter}} · ~{tokens, plural, one {# token} other {# token}}",
+    "tooLong": "Kaydetmek için kısaltın.",
+    "saveFailed": "Kaydedilemedi.",
+    "savedAgo": "Kaydedildi: {ago}",
+    "savesAutomatically": "Otomatik olarak kaydedilir"
+  },
+  "preview": {
+    "title": "Nasıl gönderilir",
+    "description": "Kaydedilen sürüm her isteğin başında, rolün isteminden önce yer alır.",
+    "system": "Sistem",
+    "user": "Kullanıcı",
+    "empty": "(boş — hiçbir şey gönderilmez)",
+    "rolePrompt": "İstemler bölümündeki rol istemi",
+    "question": "sorunuz"
+  },
+  "models": {
+    "intro": "Her rolde hangi modelin yanıt vereceğini seçin. Listede yalnızca aboneliğinize dahil modeller gösterilir.",
+    "loadFailed": "Modeller yüklenemedi",
+    "model": "Model",
+    "temperature": "Sıcaklık",
+    "maxTokens": "Maksimum token",
+    "reasoning": "Akıl yürütme",
+    "unsupported": "Desteklenmiyor",
+    "modelFor": "{role} modeli",
+    "temperatureFor": "{role} sıcaklığı",
+    "maxTokensRange": "Maksimum token, {min, number} ile {max, number} arasında bir tam sayı olmalıdır.",
+    "saveFailed": "Model ayarları kaydedilemedi"
+  },
+  "picker": {
+    "placeholder": "Model seçin…",
+    "search": "Model ara…",
+    "empty": "Eşleşen model yok.",
+    "frontier": "En gelişmiş"
+  }
+}

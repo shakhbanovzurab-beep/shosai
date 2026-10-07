@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "Produktivitas",
+    "hub": "Hub",
+    "email": "Email",
+    "meetings": "Rapat",
+    "calendar": "Kalender",
+    "kanban": "Kanban",
+    "notes": "Catatan",
+    "fileManager": "Pengelola file",
+    "studio": "Studio",
+    "knowledge": "Pengetahuan",
+    "downloadApp": "Unduh aplikasi",
+    "appGroup": "Aplikasi",
+    "workspacesGroup": "Ruang kerja"
+  },
+  "workspaceNav": {
+    "home": "Beranda",
+    "projects": "Proyek",
+    "tasks": "Tugas",
+    "meetings": "Rapat",
+    "decisions": "Keputusan",
+    "knowledge": "Pengetahuan",
+    "group": "Ruang kerja",
+    "members": "Anggota",
+    "settings": "Pengaturan"
+  },
+  "badge": {
+    "new": "Baru",
+    "soon": "Segera"
+  },
+  "search": {
+    "label": "Cari",
+    "placeholder": "Apa yang Anda cari?",
+    "noResults": "Tidak ada hasil.",
+    "pagesGroup": "Halaman"
+  },
+  "userMenu": {
+    "settings": "Pengaturan",
+    "language": "Bahasa",
+    "upgrade": "Tingkatkan paket",
+    "support": "Dukungan",
+    "logOut": "Keluar"
+  },
+  "sidebar": {
+    "open": "Buka bilah sisi",
+    "close": "Tutup bilah sisi"
+  }
+}

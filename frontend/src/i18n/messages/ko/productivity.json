@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "생산성",
+    "description": "오늘의 작업, 프로젝트, 집중 타이머, 캘린더, 최근 노트와 함께 1년간 완료한 작업을 한눈에 확인해요."
+  },
+  "greeting": "{period, select, morning {{name}님, 좋은 아침이에요.} afternoon {{name}님, 좋은 오후예요.} other {{name}님, 좋은 저녁이에요.}}",
+  "greetingAnyTime": "{name}님, 안녕하세요.",
+  "sidePanel": "캘린더, 집중, 노트",
+  "tasks": {
+    "heading": "오늘",
+    "progress": "{total, number}개 중 {done, number}개 완료",
+    "newTask": "새 작업",
+    "addTask": "작업 추가"
+  },
+  "projects": {
+    "heading": "프로젝트",
+    "status": {
+      "inProgress": "진행 중",
+      "planning": "계획 중"
+    },
+    "progressOf": "{project} 진행률",
+    "due": "마감일 {date}"
+  },
+  "notes": {
+    "heading": "최근 노트",
+    "viewAll": "모두 보기",
+    "today": "오늘",
+    "yesterday": "어제",
+    "empty": "아직 노트가 없어요",
+    "emptyHint": "회의 노트가 여기에 표시돼요."
+  }
+}

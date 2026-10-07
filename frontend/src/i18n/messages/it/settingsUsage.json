@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, one {{amount} token} many {{amount} di token} other {{amount} token}}",
+  "resets": "I limiti si azzerano ogni settimana. Prossimo azzeramento: {date}.",
+  "thisWeek": "Questa settimana",
+  "tiers": {
+    "standard": {
+      "title": "Modelli standard",
+      "description": "Inclusi nel tuo piano. Quando li esaurisci, attendi l’azzeramento settimanale."
+    },
+    "frontier": {
+      "title": "Modelli di frontiera",
+      "description": "Claude Opus, GPT Astra e altri modelli di punta. Dopo questo limite vengono usati i tuoi token extra."
+    }
+  },
+  "used": "{count, plural, one {{used} di {limit} token} many {{used} di {limit} di token} other {{used} di {limit} token}}",
+  "usedLabel": "{tier}: usato il {percent} dei token di questa settimana",
+  "frontierThisWeek": "Modelli di frontiera questa settimana",
+  "topUp": {
+    "title": "Token extra per i modelli di frontiera",
+    "description": "Vengono usati quando esaurisci la quota settimanale per i modelli di frontiera. Non si azzerano e non si possono usare per i modelli standard.",
+    "balance": "{count, plural, one {<big>{amount} token</big> rimasto} many {<big>{amount} di token</big> rimasti} other {<big>{amount} token</big> rimasti}}",
+    "buyMore": "Acquista altri",
+    "buy": "Acquista token",
+    "failed": "Impossibile avviare l’acquisto"
+  }
+}

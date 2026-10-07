@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Details",
+    "stages": "Fasen",
+    "history": "Hoe het verliep",
+    "summaryDecided": "{rounds, plural, one {# keer besproken — besloten op {date}.} other {# keer besproken — besloten op {date}.}}",
+    "summaryOpen": "{rounds, plural, one {# keer besproken — geen besluit.} other {# keer besproken — geen besluit.}}",
+    "blockers": "Elke keer was het: {quotes}.",
+    "round": "Ronde {index, number}",
+    "blocker": "Wat in de weg stond",
+    "decision": "Besluit",
+    "decisionChanged": "Het besluit is gewijzigd",
+    "previous": "Eerst",
+    "current": "Nu",
+    "decidedAt": "{date}, ‘{meeting}’",
+    "outcome": "Hoe het afliep",
+    "outcomeUnknown": "de uitkomst is nog niet bekend",
+    "links": {
+      "causes": "Houdt op",
+      "blocked_by": "Wordt opgehouden door",
+      "outcome_of": "Volgt uit het besluit"
+    },
+    "sources": "Bronnen",
+    "dismissals": "Weggeklikt",
+    "dismissedByYou": "Door jou weggeklikt",
+    "disproved": "Weerlegd: {evidence}",
+    "dismissedUntil": "tot {date}",
+    "returned": "de tijd is verstreken en het is terug",
+    "owner": "Eigenaar",
+    "noOwner": "niet toegewezen",
+    "due": "Deadline",
+    "noDue": "geen datum",
+    "goneTitle": "Dit is er niet meer",
+    "goneText": "Misschien is de hub verwijderd of de opname van de vergadering gewist.",
+    "loadError": "Kan de details niet laden"
+  },
+  "why": {
+    "source": "Bron",
+    "meeting": "vergadering {date}, ‘{title}’",
+    "said": "Gezegd door",
+    "moment": "Moment",
+    "jump": "Naar het moment gaan",
+    "signals": {
+      "series": "Vergaderingen uit deze reeks staan hier al.",
+      "subject": "Het gesprek ging over deze hub.",
+      "title": "Het staat in de titel van de vergadering.",
+      "entity": "De naam viel in het gesprek.",
+      "organisation": "De mensen zijn van deze organisatie.",
+      "human": "Je hebt het hier zelf neergezet."
+    },
+    "loadError": "Kan de bron niet laden"
+  }
+}

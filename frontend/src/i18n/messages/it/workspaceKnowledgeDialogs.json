@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "Carica in {workspace}",
+    "description": "I file caricati appartengono a {workspace}: restano anche se te ne vai e li gestiscono gli amministratori. Per condividere un file restandone proprietario, condividilo invece dai tuoi file.",
+    "dropZone": "Trascina qui i file da aggiungere",
+    "drop": "Rilascia qui i file",
+    "choose": "Scegli i file",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown o testo · fino a {limit} ciascuno",
+    "chosen": "File scelti",
+    "removeFile": "Rimuovi {name}",
+    "tooBig": "{count, plural, one {{names} supera {limit} ed è stato escluso.} many {{names} superano {limit} e sono stati esclusi.} other {{names} superano {limit} e sono stati esclusi.}}",
+    "noFiles": "Scegli almeno un file.",
+    "submit": "{count, plural, =0 {Carica} one {Carica} many {Carica # di file} other {Carica # file}}"
+  },
+  "connect": {
+    "title": "Collega una fonte",
+    "description": "Un drive condiviso, una wiki o un sito in cui {workspace} conserva già i propri documenti. Resta sincronizzato, appartiene allo spazio di lavoro e Leo lo usa per rispondere a chi scegli tu.",
+    "source": "Fonte",
+    "link": "Link",
+    "linkHint": "La cartella, lo spazio o la pagina da mantenere sincronizzati.",
+    "submit": "Collega"
+  },
+  "share": {
+    "title": "Condividi dai miei file",
+    "description": "Leo li usa per rispondere in {workspace} a chi scegli tu. Restano nella tua Gestione file, rimangono tuoi e se ne vanno con te.",
+    "submit": "{count, plural, =0 {Condividi} one {Condividi} many {Condividi # di file} other {Condividi # file}}"
+  }
+}

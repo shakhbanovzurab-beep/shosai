@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Lịch",
+    "description": "Lên lịch cuộc họp, sự kiện và thời gian tập trung theo tháng, tuần hoặc ngày."
+  },
+  "summary": "{days, plural, other {# ngày}} · {events, plural, other {# sự kiện}}",
+  "calendars": {
+    "label": "Lịch",
+    "all": "Tất cả lịch",
+    "work": "Công việc",
+    "personal": "Cá nhân",
+    "team": "Nhóm",
+    "focus": "Thời gian tập trung"
+  },
+  "views": {
+    "label": "Chế độ xem",
+    "dayGridMonth": "Tháng",
+    "timeGridWeek": "Tuần",
+    "timeGridDay": "Ngày"
+  },
+  "previous": "Kỳ trước",
+  "next": "Kỳ sau",
+  "today": "Hôm nay",
+  "addEvent": "Thêm sự kiện",
+  "loading": "Đang tải lịch…",
+  "eventMenu": {
+    "reschedule": "Đổi lịch",
+    "dayEarlier": "Sớm hơn một ngày",
+    "dayLater": "Muộn hơn một ngày",
+    "nextWeek": "Tuần sau",
+    "moveToToday": "Chuyển sang hôm nay",
+    "copyDetails": "Sao chép chi tiết",
+    "delete": "Xóa sự kiện"
+  },
+  "dayMenu": {
+    "newAllDay": "Sự kiện cả ngày mới…",
+    "newAt": "Sự kiện mới lúc {time}…",
+    "openDay": "Mở ngày",
+    "openWeek": "Mở tuần"
+  },
+  "renameTitle": "Đổi tên sự kiện",
+  "newTitle": "Sự kiện mới · {when}",
+  "copyName": "{title} (bản sao)",
+  "details": "{title} — {when}",
+  "detailsCopied": "Đã sao chép chi tiết sự kiện",
+  "detailsCopyFailed": "Không thể sao chép chi tiết sự kiện",
+  "deleted": "Đã xóa “{title}”"
+}

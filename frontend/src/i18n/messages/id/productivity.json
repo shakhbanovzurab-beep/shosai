@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Produktivitas",
+    "description": "Tugas hari ini, proyek, timer fokus, kalender, dan catatan terbaru, dengan gambaran pekerjaan yang selesai selama setahun."
+  },
+  "greeting": "{period, select, morning {Selamat pagi, {name}.} afternoon {Selamat siang, {name}.} other {Selamat malam, {name}.}}",
+  "greetingAnyTime": "Halo, {name}.",
+  "sidePanel": "Kalender, fokus, dan catatan",
+  "tasks": {
+    "heading": "Hari ini",
+    "progress": "{done, number} dari {total, number} selesai",
+    "newTask": "Tugas baru",
+    "addTask": "Tambahkan tugas"
+  },
+  "projects": {
+    "heading": "Proyek",
+    "status": {
+      "inProgress": "Berjalan",
+      "planning": "Perencanaan"
+    },
+    "progressOf": "Kemajuan {project}",
+    "due": "Tenggat {date}"
+  },
+  "notes": {
+    "heading": "Catatan terbaru",
+    "viewAll": "Lihat semua",
+    "today": "Hari ini",
+    "yesterday": "Kemarin",
+    "empty": "Belum ada catatan",
+    "emptyHint": "Catatan dari rapat Anda akan muncul di sini."
+  }
+}

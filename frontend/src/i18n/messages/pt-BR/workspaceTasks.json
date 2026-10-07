@@ -1,0 +1,81 @@
+{
+  "title": "Tarefas",
+  "description": "Trabalho combinado em reuniões ou adicionado a projetos. As suas também aparecem na sua Produtividade e no seu Kanban.",
+  "newTask": "Nova tarefa",
+  "loading": "Carregando tarefas…",
+  "loadFailed": "Não foi possível carregar as tarefas",
+  "empty": {
+    "title": "Nenhuma tarefa ainda",
+    "text": "As tarefas aparecem quando alguém compartilha uma reunião em que algo foi combinado ou quando você adiciona uma a um projeto.",
+    "add": "Adicionar tarefa"
+  },
+  "noMatch": {
+    "title": "Nada corresponde a esses filtros",
+    "text": "Tente outro projeto, equipe ou pessoa.",
+    "clear": "Limpar filtros"
+  },
+  "caughtUp": {
+    "title": "Tudo em dia",
+    "text": "Nada aqui depende de você. As novas tarefas atribuídas a você aparecem aqui e na sua Produtividade.",
+    "seeEveryone": "Ver as tarefas de todos"
+  },
+  "views": {
+    "label": "Tarefas de quem",
+    "mine": "Minhas",
+    "team": "De todos"
+  },
+  "assignee": {
+    "label": "Responsável",
+    "anyone": "Qualquer pessoa"
+  },
+  "owner": {
+    "label": "Responsável",
+    "unassigned": "Sem responsável",
+    "you": "Você",
+    "meOption": "{name} (você)",
+    "change": "Responsável: {name}. Alterar responsável",
+    "changedToYou": "Agora é sua",
+    "changedTo": "Agora o responsável é {name}",
+    "cleared": "Agora sem responsável"
+  },
+  "groups": {
+    "overdue": "Atrasadas · {count, number}",
+    "today": "Prazo hoje · {count, number}",
+    "week": "Esta semana · {count, number}",
+    "later": "Mais tarde · {count, number}",
+    "undated": "Sem prazo · {count, number}"
+  },
+  "showDone": "Mostrar concluídas · {count, number}",
+  "hideDone": "Ocultar concluídas",
+  "status": {
+    "todo": "A fazer",
+    "in_progress": "Em andamento",
+    "done": "Concluída"
+  },
+  "due": {
+    "none": "Sem prazo",
+    "add": "Adicionar prazo",
+    "clear": "Remover prazo",
+    "change": "{due}. Alterar prazo",
+    "overdue": "Atrasada · {date}",
+    "today": "Prazo: hoje",
+    "tomorrow": "Prazo: amanhã",
+    "on": "Prazo: {date}",
+    "was": "Prazo era {date}",
+    "changed": "Prazo alterado",
+    "cleared": "Prazo removido"
+  },
+  "form": {
+    "title": "Nova tarefa",
+    "description": "O responsável também a vê na própria Produtividade e no próprio Kanban.",
+    "task": "Tarefa",
+    "taskPlaceholder": "ex.: Escrever o e-mail de lançamento",
+    "titleRequired": "Diga o que precisa ser feito.",
+    "nobodyYet": "Ninguém ainda",
+    "due": "Prazo",
+    "project": "Projeto",
+    "noProject": "Sem projeto",
+    "projectHint": "Todos no espaço de trabalho podem ver as tarefas adicionadas aqui.",
+    "submit": "Adicionar tarefa"
+  }
+}

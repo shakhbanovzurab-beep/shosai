@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "Espaces de travail",
+    "home": "Accueil de l’espace de travail",
+    "new": "Nouvel espace de travail",
+    "settings": "Paramètres de l’espace de travail",
+    "members": "Membres",
+    "decisions": "Décisions",
+    "projects": "Projets",
+    "tasks": "Tâches",
+    "knowledge": "Connaissances de l’espace de travail",
+    "meetings": "Réunions de l’espace de travail",
+    "project": "Projet",
+    "meeting": "Réunion"
+  },
+  "createWorkspace": "Créer un espace de travail",
+  "roles": {
+    "owner": {
+      "label": "Propriétaire",
+      "description": "Tous les droits, y compris la facturation et la suppression de l’espace de travail."
+    },
+    "admin": {
+      "label": "Administrateur",
+      "description": "Gère les personnes, les équipes, les règles de partage et les paramètres."
+    },
+    "member": {
+      "label": "Membre",
+      "description": "Enregistre et partage les réunions, et en assure le suivi."
+    }
+  },
+  "teams": {
+    "private": "Équipe privée"
+  },
+  "audience": {
+    "participants": "Participants",
+    "everyone": "Tout le monde dans {workspace}",
+    "aTeam": "Une équipe",
+    "sharedWith": "{level, select, participants {Partagée avec les participants} workspace {Partagée avec tout le monde dans {workspace}} other {Partagée avec {team}}}",
+    "hint": "{level, select, participants {Les membres présents à la réunion.} other {Tous les membres de l’espace de travail, actuels et futurs.}}",
+    "teamHint": "{private, select, true {Les membres de {team} (équipe privée), ainsi que les participants.} other {Les membres de {team}, ainsi que les participants.}}"
+  },
+  "people": {
+    "list": "Personnes : {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name} (vous)"
+  },
+  "filters": {
+    "team": "Équipe",
+    "allTeams": "Toutes les équipes",
+    "project": "Projet",
+    "allProjects": "Tous les projets",
+    "clearSearch": "Effacer la recherche"
+  },
+  "blocks": {
+    "loading": {
+      "files": "Chargement des fichiers…",
+      "tasks": "Chargement des tâches…",
+      "yourTasks": "Chargement de vos tâches…",
+      "projects": "Chargement des projets…",
+      "meetings": "Chargement des réunions…",
+      "upcomingMeetings": "Chargement des réunions à venir…",
+      "decisions": "Chargement des décisions…"
+    },
+    "failed": {
+      "files": "Impossible de charger les fichiers.",
+      "tasks": "Impossible de charger les tâches.",
+      "yourTasks": "Impossible de charger vos tâches.",
+      "projects": "Impossible de charger les projets.",
+      "meetings": "Impossible de charger les réunions.",
+      "upcomingMeetings": "Impossible de charger les réunions à venir.",
+      "decisions": "Impossible de charger les décisions."
+    }
+  },
+  "dates": {
+    "today": "Aujourd’hui",
+    "yesterday": "Hier",
+    "tomorrow": "Demain",
+    "targetOverdue": "En retard · {date}",
+    "targetToday": "Prévu aujourd’hui",
+    "targetTomorrow": "Prévu demain",
+    "targetDay": "Prévu {day}",
+    "targetDate": "Prévu le {date}",
+    "ago": "{days, plural, =0 {aujourd’hui} =1 {hier} one {il y a # jour} many {il y a # de jours} other {il y a # jours}}",
+    "on": "le {date}",
+    "neverSignedIn": "Aucune connexion",
+    "activeNow": "En ligne",
+    "hoursAgo": "{count, plural, one {Il y a # heure} many {Il y a # d’heures} other {Il y a # heures}}",
+    "daysAgo": "{count, plural, =1 {Hier} one {Il y a # jour} many {Il y a # de jours} other {Il y a # jours}}"
+  },
+  "gate": {
+    "loading": "Chargement de l’espace de travail…",
+    "loadFailed": "Impossible de charger l’espace de travail",
+    "listFailed": "Impossible de charger vos espaces de travail",
+    "unavailable": "Cet espace de travail n’est pas disponible",
+    "unavailableHint": "Il n’existe pas, ou vous n’en êtes pas membre. Demandez à l’un de ses membres de vous inviter, ou créez le vôtre.",
+    "backToPersonal": "Retour à l’espace personnel",
+    "suspended": "{name} est suspendu",
+    "suspendedOwnerHint": "L’accès est suspendu pour tous ses membres. Contactez l’assistance pour le rétablir ; rien n’a été supprimé dans l’espace de travail.",
+    "suspendedHint": "L’accès est suspendu pour tous ses membres. Son propriétaire peut contacter l’assistance pour le rétablir. Vos notes, fichiers et tableaux de l’espace personnel ne sont pas concernés."
+  },
+  "switcher": {
+    "invite": "Inviter des personnes dans {name}",
+    "settings": "Paramètres de l’espace de travail",
+    "current": "Actuel",
+    "hint": "Basculer entre l’espace personnel et les espaces de travail",
+    "personal": "Personnel",
+    "personalHint": "Vos e-mails, notes, tableaux et tâches",
+    "workspaces": "Espaces de travail",
+    "suspended": "Suspendu",
+    "detail": "{role} · {count, plural, one {# membre} many {# de membres} other {# membres}}",
+    "loadFailed": "Impossible de charger vos espaces de travail. Réessayez",
+    "none": "Vous ne faites encore partie d’aucun espace de travail"
+  },
+  "create": {
+    "title": "Invitez votre équipe dans Leo",
+    "intro": "Un espace de travail partagé pour ce que vous faites ensemble. Votre espace personnel reste le vôtre : e-mails, calendrier, notes et tableaux restent privés tant que vous ne choisissez pas d’en partager quelque chose.",
+    "value": {
+      "meetings": {
+        "title": "Réunions partagées",
+        "text": "Partagez un enregistrement depuis vos Notes, ou laissez les notes partir vers les bonnes personnes à la fin d’une réunion. Les réunions avec des personnes externes restent privées."
+      },
+      "work": {
+        "title": "Projets, tâches et décisions",
+        "text": "Ce qui a été décidé et qui doit faire quoi, regroupé par projet. Vos tâches apparaissent aussi dans votre Productivité et votre Kanban."
+      },
+      "knowledge": {
+        "title": "Connaissances de l’équipe",
+        "text": "Partagez des fichiers de votre Gestionnaire de fichiers, importez-en de nouveaux ou connectez un drive partagé. Leo s’en sert pour répondre à toute personne autorisée à les voir."
+      }
+    },
+    "billing": "Facturé par licence avec le forfait Team. <link>Voir les tarifs</link>",
+    "formHint": "Vous en serez le propriétaire. Invitez des personnes juste après.",
+    "name": "Nom de l’espace de travail",
+    "namePlaceholder": "p. ex. Acme",
+    "nameRequired": "Donnez un nom à l’espace de travail.",
+    "seats": "Licences",
+    "fewerSeats": "Moins de licences",
+    "moreSeats": "Plus de licences",
+    "seatsHint": "Une par personne, vous compris. De {min, number} à {max, number} ; modifiable à tout moment.",
+    "submit": "Créer l’espace de travail"
+  },
+  "toasts": {
+    "workspaceReady": "{name} est prêt",
+    "workspaceReadyHint": "Invitez votre équipe pour commencer à partager des réunions.",
+    "createWorkspaceFailed": "Impossible de créer l’espace de travail.",
+    "saveFailed": "Impossible d’enregistrer la modification",
+    "workspaceDeleted": "{name} a été supprimé",
+    "deleteWorkspaceFailed": "Impossible de supprimer l’espace de travail",
+    "workspaceLeft": "Vous avez quitté {name}",
+    "leaveWorkspaceFailed": "Impossible de quitter l’espace de travail",
+    "projectSaveFailed": "Impossible d’enregistrer le projet",
+    "projectDeleted": "{name} a été supprimé",
+    "projectDeletedHint": "Ses réunions et ses tâches sont toujours là.",
+    "projectDeleteFailed": "Impossible de supprimer le projet",
+    "filesAdded": "{count, plural, one {{name} ajouté} many {# de fichiers ajoutés} other {# fichiers ajoutés}}",
+    "filesAddedHint": "{count, plural, one {Leo pourra s’en servir pour répondre une fois l’indexation terminée.} many {Leo pourra s’en servir pour répondre une fois l’indexation terminée.} other {Leo pourra s’en servir pour répondre une fois l’indexation terminée.}}",
+    "sourceConnected": "Source connectée : {name}",
+    "sourceConnectedHint": "Leo pourra s’en servir pour répondre après la première synchronisation.",
+    "knowledgeChangeFailed": "Impossible de modifier cet élément",
+    "stoppedSharing": "Partage de {name} arrêté",
+    "stoppedSharingHint": "Il reste dans le Gestionnaire de fichiers de son propriétaire ; Leo ne s’en sert plus pour répondre ici.",
+    "knowledgeRemoved": "Élément retiré : {name}",
+    "knowledgeRemovedHint": "Leo ne s’en sert plus pour répondre.",
+    "knowledgeRemoveFailed": "Impossible de retirer cet élément",
+    "fileStaysYours": "{count, plural, one {Il reste dans votre Gestionnaire de fichiers et vous appartient toujours.} many {Ils restent dans votre Gestionnaire de fichiers et vous appartiennent toujours.} other {Ils restent dans votre Gestionnaire de fichiers et vous appartiennent toujours.}}",
+    "shareFileFailed": "Impossible de partager le fichier",
+    "filesShared": "{count, plural, one {{name} partagé} many {# de fichiers partagés} other {# fichiers partagés}}",
+    "stillInFileManager": "Il est toujours dans votre Gestionnaire de fichiers.",
+    "unshareFileFailed": "Impossible d’arrêter le partage du fichier",
+    "meetingShareFailed": "Impossible de partager la réunion",
+    "meetingChangeFailed": "Impossible de modifier la réunion",
+    "changeUndone": "Modification annulée",
+    "noLongerShared": "Partage arrêté",
+    "stillInYourNotes": "Elle est toujours dans vos Notes.",
+    "stillInOwnerNotes": "Elle est toujours dans les Notes de son propriétaire.",
+    "sharedAgain": "De nouveau partagée",
+    "unshareMeetingFailed": "Impossible d’arrêter le partage",
+    "taskUpdateFailed": "Impossible de mettre à jour la tâche",
+    "markedDone": "Marquée comme terminée",
+    "taskAdded": "Tâche ajoutée"
+  }
+}

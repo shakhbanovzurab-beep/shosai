@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Atur dengan siapa asisten berbicara, bagaimana ia bersikap, dan model mana yang menjalankannya."
+  },
+  "tabs": {
+    "context": "Konteks",
+    "prompts": "Prompt",
+    "models": "Model"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Jawaban langsung",
+      "description": "Balasan asisten: overlay, chat, rapat",
+      "help": "Balasan langsung: overlay, chat, dan jawaban selama rapat. Prompt menentukan nada, panjang, dan format ucapan asisten."
+    },
+    "screenshots": {
+      "name": "Tangkapan layar",
+      "description": "Membaca layar, slide, dokumen",
+      "help": "Analisis tangkapan layar: tombol “Tangkapan layar” di overlay dan berbagi layar dalam rapat. Prompt menjelaskan kepada model cara membaca gambar dan apa yang harus dijawab."
+    },
+    "code": {
+      "name": "Kode",
+      "description": "Pertanyaan tentang kode dan algoritma",
+      "help": "Pertanyaan tentang kode dan algoritma. Prompt menentukan bahasa pemrograman, seberapa banyak penjelasan, serta apakah kompleksitas dan pengujian ditampilkan."
+    },
+    "system_design": {
+      "name": "Desain sistem",
+      "description": "Desain arsitektur untuk wawancara",
+      "help": "Pertanyaan arsitektur dalam wawancara. Prompt menentukan struktur pembahasan: kebutuhan, estimasi, desain, dan kompromi."
+    },
+    "notes": {
+      "name": "Catatan & peta",
+      "description": "Versi AI dari catatan rapat dan peta pikiran",
+      "help": "Versi AI dari catatan rapat dan peta pikiran. Prompt menentukan apa yang disimpan: keputusan, tindak lanjut, pertanyaan terbuka."
+    },
+    "transcript": {
+      "name": "Transkrip",
+      "description": "Ucapan ke teks secara real time",
+      "help": "Ucapan ke teks secara real time. Berjalan dengan model suara dan tidak memakai prompt."
+    }
+  },
+  "autosave": {
+    "saving": "Menyimpan…"
+  },
+  "context": {
+    "intro": "Teks singkat tentang Anda — disisipkan sebagai pesan sistem pertama di setiap permintaan ke model. Makin tepat isinya, makin sedikit pertanyaan lanjutan yang Anda terima.",
+    "loadFailed": "Tidak dapat memuat konteks Anda",
+    "title": "Tentang Anda",
+    "description": "Siapa Anda, apa yang Anda kerjakan, dan jawaban seperti apa yang Anda sukai. Fakta lebih berguna daripada kata sifat.",
+    "example": "Peran: Senior backend engineer, 6 tahun, fintech.\nStack: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nSaat ini: bersiap untuk wawancara system design di perusahaan produk.\nJawaban: ringkas, dengan kompromi; kode dalam Python kecuali saya minta lain.\nHindari: saran umum, pembukaan panjang.",
+    "count": "{count, number} / {max, plural, other {# karakter}} · ~{tokens, plural, other {# token}}",
+    "tooLong": "Persingkat untuk menyimpan.",
+    "saveFailed": "Tidak dapat menyimpan.",
+    "savedAgo": "Disimpan {ago}",
+    "savesAutomatically": "Disimpan otomatis"
+  },
+  "preview": {
+    "title": "Cara pengirimannya",
+    "description": "Versi yang tersimpan membuka setiap permintaan, sebelum prompt peran.",
+    "system": "Sistem",
+    "user": "Pengguna",
+    "empty": "(kosong — tidak ada yang dikirim)",
+    "rolePrompt": "prompt peran dari Prompt",
+    "question": "pertanyaan Anda"
+  },
+  "models": {
+    "intro": "Pilih model yang menjawab untuk setiap peran. Daftar ini hanya menampilkan model yang termasuk dalam langganan Anda.",
+    "loadFailed": "Tidak dapat memuat model",
+    "model": "Model",
+    "temperature": "Suhu",
+    "maxTokens": "Token maksimum",
+    "reasoning": "Penalaran",
+    "unsupported": "Tidak didukung",
+    "modelFor": "Model {role}",
+    "temperatureFor": "Suhu {role}",
+    "maxTokensRange": "Token maksimum harus berupa bilangan bulat dari {min, number} sampai {max, number}.",
+    "saveFailed": "Tidak dapat menyimpan pengaturan model"
+  },
+  "picker": {
+    "placeholder": "Pilih model…",
+    "search": "Cari model…",
+    "empty": "Tidak ada model yang cocok.",
+    "frontier": "Tercanggih"
+  }
+}

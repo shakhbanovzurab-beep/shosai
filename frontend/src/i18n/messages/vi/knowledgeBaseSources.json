@@ -1,0 +1,85 @@
+{
+  "loadFailed": "Không thể tải nguồn",
+  "loading": "Đang tải nguồn…",
+  "connectedCount": "Đã kết nối {connected, number} trên {total, plural, other {# nguồn}}. Nội dung mới và đã thay đổi được lập chỉ mục lại mỗi lần đồng bộ.",
+  "status": {
+    "connecting": "Đang kết nối",
+    "syncing": "Đang đồng bộ",
+    "connected": "Đã kết nối",
+    "error": "Có lỗi"
+  },
+  "card": {
+    "items": "{count, plural, other {# mục}}",
+    "synced": "Đã đồng bộ {ago}",
+    "syncNow": "Đồng bộ ngay",
+    "syncing": "Đang đồng bộ…",
+    "settings": "Cài đặt…",
+    "disconnect": "Ngắt kết nối…",
+    "signIn": "Đăng nhập bằng {provider}",
+    "public": "Trang công khai, không cần đăng nhập",
+    "connect": "Kết nối"
+  },
+  "dialog": {
+    "connectTitle": "Kết nối {name}",
+    "settingsTitle": "Cài đặt {name}",
+    "oauthNote": "Bạn sẽ đăng nhập bằng {provider} và cấp quyền chỉ đọc (OAuth 2.0), rồi quay lại đây. Trang này không yêu cầu nhập mật khẩu hay token.",
+    "optional": "(không bắt buộc)",
+    "saveAndSync": "Lưu và đồng bộ",
+    "continueWith": "Tiếp tục với {provider}",
+    "connect": "Kết nối",
+    "connectFailed": "Không thể kết nối."
+  },
+  "disconnect": {
+    "title": "Ngắt kết nối {name}?",
+    "description": "Việc đồng bộ sẽ dừng và thông tin xác thực đã lưu sẽ bị xóa. Nội dung đã lập chỉ mục từ nguồn này sẽ bị gỡ khỏi chỉ mục vector.",
+    "confirm": "Ngắt kết nối"
+  },
+  "toasts": {
+    "connected": "Đã kết nối {name}",
+    "firstSync": "Lần đồng bộ đầu tiên đã bắt đầu.",
+    "syncFailed": "Không thể đồng bộ {name}",
+    "disconnected": "Đã ngắt kết nối {name}",
+    "disconnectFailed": "Không thể ngắt kết nối {name}"
+  },
+  "website": "Trang web",
+  "descriptions": {
+    "slack": "Tin nhắn và chuỗi tin nhắn từ các kênh công khai.",
+    "confluence": "Trang và bài blog từ các không gian của bạn.",
+    "notion": "Trang và cơ sở dữ liệu bạn chia sẻ khi đăng nhập.",
+    "obsidian": "Ghi chú Markdown từ một vault được đồng bộ với GitHub.",
+    "jira": "Issue, mô tả và bình luận.",
+    "github": "README, tài liệu, issue và pull request.",
+    "gitlab": "Kho mã, wiki, issue và merge request.",
+    "google_drive": "Docs, Sheets, Slides và PDF.",
+    "sharepoint": "Tệp và trang từ Microsoft 365.",
+    "dropbox": "Tệp và tài liệu Paper từ một thư mục.",
+    "yandex_disk": "Tài liệu từ một thư mục trên Yandex Disk.",
+    "website": "Các trang được thu thập từ một trang web hoặc cổng tài liệu."
+  },
+  "fields": {
+    "channels": "Kênh",
+    "spaces": "Khóa không gian",
+    "repository": "Kho mã của vault",
+    "branch": "Nhánh",
+    "jql": "Bộ lọc JQL",
+    "repositories": "Kho mã",
+    "base_url": "URL của phiên bản",
+    "projects": "Dự án",
+    "folder_id": "ID thư mục",
+    "site_url": "Trang SharePoint",
+    "path": "Đường dẫn thư mục",
+    "start_url": "URL bắt đầu",
+    "max_depth": "Độ sâu thu thập",
+    "include": "Chỉ các đường dẫn khớp với"
+  },
+  "help": {
+    "channels": "Để trống để lấy tất cả kênh công khai.",
+    "spaces": "Để trống để lấy mọi không gian bạn có quyền đọc.",
+    "repositories": "Để trống để lấy mọi kho mã bạn cấp quyền truy cập.",
+    "base_url": "Chỉ dành cho GitLab tự quản lý.",
+    "projects": "Để trống để lấy mọi dự án bạn có quyền đọc.",
+    "folder_id": "Để trống để lập chỉ mục mọi thứ bạn có quyền đọc.",
+    "site_url": "Để trống để dùng OneDrive của bạn.",
+    "max_depth": "Số cấp liên kết đi theo từ trang bắt đầu."
+  }
+}

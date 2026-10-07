@@ -1,0 +1,74 @@
+{
+  "back": "Tutte le note",
+  "notFound": "Nota non trovata",
+  "participants": {
+    "count": "{count, plural, one {# partecipante} many {# di partecipanti} other {# partecipanti}}",
+    "inMeeting": "{count, plural, one {# persona in questa riunione.} many {# di persone in questa riunione.} other {# persone in questa riunione.}}",
+    "you": "{name} (tu)",
+    "added": "{email} aggiunto alla riunione",
+    "addPlaceholder": "Aggiungi tramite email…",
+    "addLabel": "Aggiungi un partecipante tramite email",
+    "invalid": "Inserisci un indirizzo email, ad esempio nome@azienda.com.",
+    "duplicate": "Questa persona partecipa già alla riunione."
+  },
+  "tabs": {
+    "notes": "Note",
+    "enhanced": "Migliorate",
+    "transcript": "Trascrizione",
+    "mindMap": "Mappa mentale"
+  },
+  "enhanced": {
+    "writtenBy": "Scritte da Leo a partire dalla trascrizione della riunione e dalle tue note.",
+    "writtenByTemplate": "Scritte da Leo a partire dalla trascrizione della riunione e dalle tue note, secondo il modello «{template}».",
+    "writing": "Scrittura delle note migliorate…",
+    "nothingFor": "In questa riunione non c’è niente per le sezioni di «{template}»."
+  },
+  "export": {
+    "button": "Esporta",
+    "transcriptAs": "Trascrizione come"
+  },
+  "myNotes": {
+    "loadFailed": "Impossibile caricare le tue note",
+    "saveFailed": "Impossibile salvare le tue note"
+  },
+  "editor": {
+    "placeholder": "Scrivi le tue note…",
+    "label": "Le tue note",
+    "toolbar": "Formattazione",
+    "addLink": "Aggiungi link",
+    "removeLink": "Rimuovi link",
+    "bold": "Grassetto",
+    "italic": "Corsivo",
+    "linkPlaceholder": "Incolla un link…",
+    "linkAddress": "Indirizzo del link",
+    "link": "Link",
+    "turnInto": "Trasforma in",
+    "blocks": {
+      "text": "Testo",
+      "h1": "Titolo 1",
+      "h2": "Titolo 2",
+      "h3": "Titolo 3",
+      "ordered": "Elenco numerato",
+      "bullet": "Elenco puntato"
+    }
+  },
+  "transcript": {
+    "label": "Trascrizione",
+    "search": "Cerca nella trascrizione",
+    "searchPlaceholder": "Cerca nella trascrizione…",
+    "matches": "{count, plural, =0 {Nessun risultato} one {# risultato} many {# di risultati} other {# risultati}}",
+    "position": "{current, number} di {total, number}",
+    "previous": "Risultato precedente",
+    "next": "Risultato successivo",
+    "clear": "Svuota ricerca"
+  },
+  "speakers": {
+    "title": "Chi ha parlato",
+    "share": "{speaker}: {share} del tempo di parola",
+    "lines": "{count, plural, one {# intervento} many {# di interventi} other {# interventi}}"
+  },
+  "mindMap": {
+    "title": "Mappa mentale: {topic}",
+    "caption": "Generata dalla trascrizione della riunione."
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Soporte",
+    "description": "Pide ayuda a nuestro equipo y sigue tus solicitudes de soporte."
+  },
+  "categories": {
+    "billing": "Facturación",
+    "bug": "Informe de error",
+    "account": "Cuenta",
+    "feature": "Solicitud de función",
+    "other": "Otro"
+  },
+  "statuses": {
+    "open": "Esperando a soporte",
+    "awaiting_you": "Esperando tu respuesta",
+    "resolved": "Resuelta"
+  },
+  "events": {
+    "acknowledged": "Recibimos tu mensaje. Un especialista suele responder en pocas horas; te avisaremos aquí.",
+    "resolved": "Marcada como resuelta",
+    "reopened": "Reabierta"
+  },
+  "toolbar": {
+    "search": "Buscar solicitudes",
+    "filter": "Filtrar solicitudes",
+    "all": "Todas",
+    "open": "Abiertas",
+    "resolved": "Resueltas"
+  },
+  "newTicket": "Nueva solicitud",
+  "table": {
+    "number": "N.º",
+    "subject": "Asunto",
+    "status": "Estado",
+    "topic": "Tema",
+    "updated": "Actualizada",
+    "unread": "No leídos:"
+  },
+  "list": {
+    "loading": "Cargando solicitudes",
+    "loadError": "No se pudieron cargar tus solicitudes",
+    "emptyTitle": "¿En qué podemos ayudarte?",
+    "emptyDescription": "Abre una solicitud y nuestro equipo te responderá aquí, normalmente en pocas horas.",
+    "noMatchesTitle": "No se encontraron solicitudes",
+    "noMatchesDescription": "Prueba con otra búsqueda u otro filtro."
+  },
+  "panel": {
+    "ticket": "Solicitud",
+    "description": "Tu conversación con soporte"
+  },
+  "form": {
+    "title": "¿En qué podemos ayudarte?",
+    "subtitle": "Solemos responder en pocas horas.",
+    "topic": "Tema",
+    "subject": "Asunto",
+    "subjectPlaceholder": "Un resumen breve",
+    "body": "¿Qué pasó?",
+    "bodyPlaceholder": "Los pasos, lo que esperabas y lo que viste en su lugar. Las capturas de pantalla ayudan.",
+    "send": "Enviar"
+  },
+  "attach": {
+    "button": "Adjuntar archivos",
+    "list": "Archivos adjuntos",
+    "remove": "Quitar {name}",
+    "tooBig": "{count, plural, one {{names} pesa más de {size}} many {{names} pesan más de {size}} other {{names} pesan más de {size}}}",
+    "tooMany": "{max, plural, one {Adjunta como máximo # archivo} many {Adjunta como máximo # de archivos} other {Adjunta como máximo # archivos}}"
+  },
+  "composer": {
+    "message": "Mensaje",
+    "emoji": "Agregar emoji",
+    "hint": "Enter para enviar · Shift+Enter para una nueva línea",
+    "send": "Enviar",
+    "reply": "Escribe una respuesta…",
+    "replyToReopen": "Responde para reabrirla…"
+  },
+  "thread": {
+    "loading": "Cargando solicitud",
+    "close": "Cerrar solicitud",
+    "reopen": "Reabrir",
+    "resolve": "Marcar como resuelta",
+    "resolvedNote": "Resuelta. Si aún necesitas ayuda, responde abajo y la solicitud se volverá a abrir.",
+    "thanks": "Gracias por tu opinión.",
+    "rate": "¿Qué tal lo hicimos?",
+    "good": "Bien",
+    "bad": "Mal",
+    "you": "Tú",
+    "support": "Soporte",
+    "supportAuthor": "{name} · Soporte",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Marcar como leída",
+    "markUnread": "Marcar como no leída",
+    "copyNumber": "Copiar número de solicitud",
+    "copySubject": "Copiar asunto"
+  },
+  "toasts": {
+    "opened": "Se abrió la solicitud n.º {number}",
+    "openFailed": "No se pudo abrir la solicitud",
+    "updateFailed": "No se pudo actualizar la solicitud",
+    "sendFailed": "No se pudo enviar tu respuesta",
+    "markedRead": "Marcada como leída",
+    "markedUnread": "Marcada como no leída",
+    "reopened": "Solicitud reabierta",
+    "resolved": "Marcada como resuelta",
+    "numberCopied": "Número de solicitud copiado",
+    "subjectCopied": "Asunto copiado",
+    "numberCopyFailed": "No se pudo copiar el número de solicitud",
+    "subjectCopyFailed": "No se pudo copiar el asunto"
+  }
+}

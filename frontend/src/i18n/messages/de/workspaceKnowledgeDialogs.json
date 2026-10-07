@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "In {workspace} hochladen",
+    "description": "Hochgeladene Dateien gehören zu {workspace}: Sie bleiben, wenn du gehst, und Admins verwalten sie. Wenn eine Datei deine bleiben soll, teile sie stattdessen aus deinen Dateien.",
+    "dropZone": "Dateien zum Hinzufügen ablegen",
+    "drop": "Dateien hier ablegen",
+    "choose": "Dateien auswählen",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown oder Text · jeweils bis {limit}",
+    "chosen": "Ausgewählte Dateien",
+    "removeFile": "{name} entfernen",
+    "tooBig": "{count, plural, one {{names} ist größer als {limit} und wurde ausgelassen.} other {{names} sind größer als {limit} und wurden ausgelassen.}}",
+    "noFiles": "Wähle mindestens eine Datei aus.",
+    "submit": "{count, plural, =0 {Hochladen} one {Hochladen} other {# Dateien hochladen}}"
+  },
+  "connect": {
+    "title": "Quelle verbinden",
+    "description": "Ein geteiltes Laufwerk, Wiki oder eine Website, in dem {workspace} seine Dokumente bereits ablegt. Die Quelle bleibt synchron, gehört zum Workspace, und Leo antwortet daraus für alle, die du auswählst.",
+    "source": "Quelle",
+    "link": "Link",
+    "linkHint": "Der Ordner, Bereich oder die Seite, die synchron bleiben soll.",
+    "submit": "Verbinden"
+  },
+  "share": {
+    "title": "Aus meinen Dateien teilen",
+    "description": "Leo antwortet in {workspace} daraus für alle, die du auswählst. Die Dateien bleiben in deinem Dateimanager, gehören weiter dir und gehen, wenn du gehst.",
+    "submit": "{count, plural, =0 {Teilen} one {Teilen} other {# Dateien teilen}}"
+  }
+}

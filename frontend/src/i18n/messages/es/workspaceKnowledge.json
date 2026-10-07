@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Conocimiento del espacio de trabajo"
+  },
+  "title": "Conocimiento",
+  "description": "Lo que Leo sabe en {workspace}. Responde a cada persona solo con lo que puede usar: el conocimiento para todos y el de sus propios equipos.",
+  "search": {
+    "placeholder": "Buscar por nombre",
+    "label": "Buscar conocimiento"
+  },
+  "loadFailed": "No se pudo cargar el conocimiento del espacio de trabajo",
+  "loading": "Cargando conocimiento",
+  "alwaysIncluded": {
+    "text": "Leo también responde con las reuniones, decisiones y proyectos que cada persona puede abrir aquí. Nadie tiene que agregarlos.",
+    "label": "Siempre incluido",
+    "meetings": "{count, plural, one {# reunión} many {# de reuniones} other {# reuniones}}",
+    "meetingsLoading": "Reuniones",
+    "decisions": "{count, plural, one {# decisión} many {# de decisiones} other {# decisiones}}",
+    "decisionsLoading": "Decisiones",
+    "projects": "{count, plural, one {# proyecto} many {# de proyectos} other {# proyectos}}"
+  },
+  "empty": {
+    "title": "Aún no hay archivos ni fuentes",
+    "text": "Comparte tus propios archivos (siguen siendo tuyos), sube archivos que pertenezcan a {workspace} o conecta una unidad compartida o una wiki. Leo responde con ellos a quien pueda usarlos."
+  },
+  "noMatch": {
+    "title": "No hay coincidencias",
+    "text": "Prueba con otro nombre u otro equipo.",
+    "clear": "Borrar filtros"
+  },
+  "sections": {
+    "files": "Archivos · {count, number}",
+    "filesLabel": "Archivos",
+    "noFilesMatch": "Ningún archivo coincide.",
+    "sources": "Fuentes conectadas · {count, number}",
+    "sourcesLabel": "Fuentes conectadas",
+    "sourcesEmptyAdmin": "Conecta la unidad o la wiki que tu equipo ya usa, y Leo se mantendrá al día con ella.",
+    "sourcesEmpty": "Los administradores pueden conectar la unidad o la wiki que tu equipo ya usa."
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "Documento",
+    "text": "Texto",
+    "sheet": "Hoja de cálculo",
+    "slides": "Presentación",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "Sitio web"
+  },
+  "status": {
+    "syncing": "Sincronizando",
+    "indexing": "Indexando",
+    "failed": "No se pudo leer"
+  },
+  "pages": "{count, plural, one {# página} many {# de páginas} other {# páginas}}",
+  "origin": {
+    "personal": "{who, select, me {Tu archivo, compartido} former {Archivo de un exmiembro, compartido} other {Archivo de {name}, compartido}}",
+    "connector": "{who, select, me {Conectado por ti} former {Conectado por un exmiembro} other {Conectado por {name}}}",
+    "upload": "{who, select, me {Pertenece a {workspace} · agregado por ti} former {Pertenece a {workspace} · agregado por un exmiembro} other {Pertenece a {workspace} · agregado por {name}}}"
+  },
+  "added": "{days, plural, =0 {Hoy} =1 {Ayer} one {Hace # día} many {Hace # de días} other {Hace # días}}",
+  "leaves": "{who, select, me {Se va contigo, a menos que lo transfieras al espacio de trabajo desde tu Administrador de archivos} former {Se va con su propietario, a menos que lo transfiera al espacio de trabajo} other {Se va con {name}, a menos que lo transfiera al espacio de trabajo}}",
+  "access": {
+    "label": "Quién puede usarlo",
+    "hint": "Leo responde con esto solo para ellos. Puedes cambiarlo más tarde.",
+    "everyone": "Todos en {workspace}",
+    "someTeam": "Un equipo"
+  },
+  "menu": {
+    "openIn": "Abrir en {provider}",
+    "project": "Proyecto",
+    "noProject": "Sin proyecto"
+  },
+  "remove": {
+    "stopSharing": "Dejar de compartir",
+    "stopSharingTitle": "¿Dejar de compartir {name}?",
+    "stopSharingText": "{who, select, me {Leo dejará de responder con esto en {workspace}. Seguirá en tu Administrador de archivos.} former {Leo dejará de responder con esto en {workspace}. Seguirá en el Administrador de archivos de su propietario.} other {Leo dejará de responder con esto en {workspace}. Seguirá en el Administrador de archivos de {name}.}}",
+    "disconnect": "Desconectar",
+    "disconnectTitle": "¿Desconectar {name}?",
+    "disconnectText": "La sincronización se detendrá y Leo dejará de responder con esta fuente. No cambia nada en {provider}.",
+    "removeTitle": "¿Quitar {name}?",
+    "removeText": "Se eliminará de {workspace} y Leo dejará de responder con esto para todos."
+  },
+  "changed": {
+    "everyone": "Ahora todos en {workspace} pueden usarlo",
+    "team": "Ahora {team} puede usarlo",
+    "addedToProject": "Se agregó a {project}",
+    "noProject": "Ya no está en un proyecto"
+  },
+  "addMenu": {
+    "addFile": "Agregar archivo",
+    "addKnowledge": "Agregar conocimiento",
+    "share": "Compartir desde mis archivos",
+    "shareHint": "Sigue siendo tuyo y se va contigo",
+    "upload": "Subir a {workspace}",
+    "uploadHint": "Pertenece al espacio de trabajo",
+    "connect": "Conectar una fuente",
+    "connectHint": "Drive, Notion, Confluence o un sitio"
+  }
+}

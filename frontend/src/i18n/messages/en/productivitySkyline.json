@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, one {<b>#</b> completed task in the past year} other {<b>#</b> completed tasks in the past year}}",
+  "chart": {
+    "flat": "{count, plural, one {# completed task from {from} to {to}, shown as a heat map. Use the arrow keys to read individual days.} other {# completed tasks from {from} to {to}, shown as a heat map. Use the arrow keys to read individual days.}}",
+    "skyline": "{count, plural, one {# completed task from {from} to {to}, shown as a 3D skyline. Use the arrow keys to read individual days.} other {# completed tasks from {from} to {to}, shown as a 3D skyline. Use the arrow keys to read individual days.}}"
+  },
+  "day": "{count, plural, =0 {No completed tasks on {date}} one {# completed task on {date}} other {# completed tasks on {date}}}",
+  "tooltip": "{count, plural, =0 {<b>No completed tasks</b> on {date}} one {<b># completed task</b> on {date}} other {<b># completed tasks</b> on {date}}}",
+  "views": {
+    "label": "Chart view",
+    "flat": "Flat heat map",
+    "skyline": "3D skyline"
+  },
+  "hint": {
+    "flat": "Hover a day for details · arrow keys to explore",
+    "skyline": "Drag to orbit · double-click to reset"
+  },
+  "levels": {
+    "label": "Activity levels",
+    "less": "Less",
+    "more": "More",
+    "none": "No completed tasks",
+    "light": "Light",
+    "moderate": "Moderate",
+    "heavy": "Heavy",
+    "heaviest": "Heaviest"
+  },
+  "stats": {
+    "total": "Past year",
+    "busiest": "Busiest day",
+    "longest": "Longest streak",
+    "current": "Current streak"
+  },
+  "units": {
+    "contributions": "{count, plural, one {completed task} other {completed tasks}}",
+    "days": "{count, plural, one {day} other {days}}"
+  }
+}

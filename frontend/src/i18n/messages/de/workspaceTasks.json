@@ -1,0 +1,81 @@
+{
+  "title": "Aufgaben",
+  "description": "In Meetings vereinbarte oder zu Projekten hinzugefügte Arbeit. Deine erscheinen auch in deiner Produktivität und deinem Kanban.",
+  "newTask": "Neue Aufgabe",
+  "loading": "Aufgaben werden geladen…",
+  "loadFailed": "Aufgaben konnten nicht geladen werden",
+  "empty": {
+    "title": "Noch keine Aufgaben",
+    "text": "Aufgaben erscheinen, wenn jemand ein Meeting teilt, in dem Arbeit vereinbart wurde, oder wenn du einem Projekt eine hinzufügst.",
+    "add": "Aufgabe hinzufügen"
+  },
+  "noMatch": {
+    "title": "Nichts passt zu diesen Filtern",
+    "text": "Versuche ein anderes Projekt, Team oder eine andere Person.",
+    "clear": "Filter zurücksetzen"
+  },
+  "caughtUp": {
+    "title": "Du bist auf dem neuesten Stand",
+    "text": "Hier wartet nichts auf dich. Neue Aufgaben, die dir zugewiesen werden, erscheinen hier und in deiner Produktivität.",
+    "seeEveryone": "Aufgaben aller anzeigen"
+  },
+  "views": {
+    "label": "Wessen Aufgaben",
+    "mine": "Meine",
+    "team": "Alle"
+  },
+  "assignee": {
+    "label": "Zugewiesen an",
+    "anyone": "Alle"
+  },
+  "owner": {
+    "label": "Verantwortlich",
+    "unassigned": "Nicht zugewiesen",
+    "you": "Du",
+    "meOption": "{name} (du)",
+    "change": "Verantwortlich: {name}. Ändern",
+    "changedToYou": "Jetzt deine",
+    "changedTo": "Jetzt bei {name}",
+    "cleared": "Jetzt ohne Verantwortliche"
+  },
+  "groups": {
+    "overdue": "Überfällig · {count, number}",
+    "today": "Heute fällig · {count, number}",
+    "week": "Diese Woche · {count, number}",
+    "later": "Später · {count, number}",
+    "undated": "Kein Fälligkeitsdatum · {count, number}"
+  },
+  "showDone": "Erledigte anzeigen · {count, number}",
+  "hideDone": "Erledigte ausblenden",
+  "status": {
+    "todo": "Zu erledigen",
+    "in_progress": "In Arbeit",
+    "done": "Erledigt"
+  },
+  "due": {
+    "none": "Kein Fälligkeitsdatum",
+    "add": "Fälligkeitsdatum hinzufügen",
+    "clear": "Fälligkeitsdatum entfernen",
+    "change": "{due}. Fälligkeitsdatum ändern",
+    "overdue": "Überfällig · {date}",
+    "today": "Heute fällig",
+    "tomorrow": "Morgen fällig",
+    "on": "Fällig am {date}",
+    "was": "War fällig am {date}",
+    "changed": "Fälligkeitsdatum geändert",
+    "cleared": "Fälligkeitsdatum entfernt"
+  },
+  "form": {
+    "title": "Neue Aufgabe",
+    "description": "Wer verantwortlich ist, sieht sie auch in der eigenen Produktivität und im eigenen Kanban.",
+    "task": "Aufgabe",
+    "taskPlaceholder": "z. B. Launch-E-Mail entwerfen",
+    "titleRequired": "Beschreibe, was zu tun ist.",
+    "nobodyYet": "Noch niemand",
+    "due": "Fällig",
+    "project": "Projekt",
+    "noProject": "Kein Projekt",
+    "projectHint": "Alle im Workspace sehen hier hinzugefügte Aufgaben.",
+    "submit": "Aufgabe hinzufügen"
+  }
+}

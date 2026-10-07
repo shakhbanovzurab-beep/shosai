@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "عميل بريد إلكتروني مفتوح المصدر",
+    "description": "عميل بريد إلكتروني مفتوح المصدر يتيح التنقل في البريد الوارد والبحث في الرسائل وقراءتها والرد عليها وأرشفتها."
+  },
+  "preview": {
+    "title": "معاينة البريد",
+    "description": "يعرض هذا الإطار شاشة البريد المستقلة. يمكن فتحها في وضع ملء الشاشة لعرض أفضل.",
+    "openInNewTab": "فتح البريد في علامة تبويب جديدة"
+  },
+  "nav": {
+    "inbox": "البريد الوارد",
+    "priority": "الأولوية",
+    "drafts": "المسودات",
+    "sent": "المرسل",
+    "archive": "الأرشيف",
+    "trash": "سلة المهملات",
+    "helpFeedback": "المساعدة والملاحظات",
+    "keyboardShortcuts": "اختصارات لوحة المفاتيح"
+  },
+  "sidebar": {
+    "newEmail": "رسالة جديدة",
+    "folders": "المجلدات"
+  },
+  "accounts": {
+    "switchTo": "التبديل إلى {name}",
+    "menu": "قائمة الحساب",
+    "title": "الحسابات",
+    "add": "إضافة حساب",
+    "manage": "إدارة الحسابات",
+    "settings": "إعدادات الحساب",
+    "signOut": "تسجيل الخروج"
+  },
+  "inbox": {
+    "filter": "تصفية البريد",
+    "refresh": "تحديث البريد الوارد",
+    "noSelection": "لم يتم تحديد أي رسالة",
+    "needsYou": "بانتظارك",
+    "allMail": "كل البريد",
+    "pinnedGroup": "المثبتة ({count, number})",
+    "inboxGroup": "البريد الوارد ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "الرسالة",
+    "drawerDescription": "قراءة الرسالة المحددة",
+    "to": "إلى: <names>{list}</names>",
+    "cc": "نسخة إلى: <names>{list}</names>",
+    "attachments": "المرفقات ({count, number})"
+  },
+  "toolbar": {
+    "close": "إغلاق الرسالة",
+    "previous": "الرسالة السابقة",
+    "next": "الرسالة التالية",
+    "pin": "تثبيت سلسلة الرسائل",
+    "reply": "رد",
+    "more": "إجراءات أخرى",
+    "replyAll": "رد على الكل",
+    "forward": "إعادة توجيه",
+    "addLabel": "إضافة تصنيف"
+  },
+  "menu": {
+    "markRead": "التحديد كمقروءة",
+    "markUnread": "التحديد كغير مقروءة",
+    "pin": "التثبيت في الأعلى",
+    "unpin": "إلغاء التثبيت",
+    "markPriority": "التحديد كأولوية",
+    "removePriority": "الإزالة من «الأولوية»",
+    "labels": "التصنيفات",
+    "copySender": "نسخ عنوان المرسل",
+    "archive": "أرشفة",
+    "trash": "نقل إلى سلة المهملات"
+  },
+  "replyBar": {
+    "placeholder": "الرد على {name}…",
+    "label": "الرد على {name}",
+    "addEmoji": "إضافة رمز تعبيري",
+    "attachFile": "إرفاق ملف",
+    "send": "إرسال"
+  },
+  "toasts": {
+    "senderCopied": "تم نسخ {email}",
+    "senderCopyFailed": "تعذر نسخ العنوان",
+    "replySent": "تم إرسال الرد إلى {name}",
+    "archived": "{count, plural, zero {تمت أرشفة # رسالة} one {تمت أرشفة رسالة واحدة} two {تمت أرشفة رسالتين} few {تمت أرشفة # رسائل} many {تمت أرشفة # رسالة} other {تمت أرشفة # رسالة}}",
+    "moved": "{folder, select, inbox {تم نقل «{subject}» إلى البريد الوارد} drafts {تم نقل «{subject}» إلى المسودات} sent {تم نقل «{subject}» إلى المرسل} archive {تم نقل «{subject}» إلى الأرشيف} trash {تم نقل «{subject}» إلى سلة المهملات} other {تم نقل «{subject}»}}"
+  }
+}

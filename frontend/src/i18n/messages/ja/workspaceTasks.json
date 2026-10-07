@@ -1,0 +1,81 @@
+{
+  "title": "タスク",
+  "description": "会議で合意した仕事や、プロジェクトに追加された仕事です。自分のタスクは生産性とかんばんにも表示されます。",
+  "newTask": "新しいタスク",
+  "loading": "タスクを読み込み中…",
+  "loadFailed": "タスクを読み込めませんでした",
+  "empty": {
+    "title": "タスクはまだありません",
+    "text": "仕事を合意した会議が共有されたときや、プロジェクトにタスクを追加したときに、ここに表示されます。",
+    "add": "タスクを追加"
+  },
+  "noMatch": {
+    "title": "このフィルタに一致するものはありません",
+    "text": "別のプロジェクト、チーム、メンバーでお試しください。",
+    "clear": "フィルタをクリア"
+  },
+  "caughtUp": {
+    "title": "対応待ちのタスクはありません",
+    "text": "ここで自分の対応を待っているものはありません。新しく割り当てられたタスクは、ここと生産性に表示されます。",
+    "seeEveryone": "全員のタスクを表示"
+  },
+  "views": {
+    "label": "表示するタスク",
+    "mine": "自分",
+    "team": "全員"
+  },
+  "assignee": {
+    "label": "担当者",
+    "anyone": "すべて"
+  },
+  "owner": {
+    "label": "担当者",
+    "unassigned": "未割り当て",
+    "you": "自分",
+    "meOption": "{name}（自分）",
+    "change": "担当者：{name}。担当者を変更",
+    "changedToYou": "自分に割り当てました",
+    "changedTo": "{name} さんに割り当てました",
+    "cleared": "担当者を外しました"
+  },
+  "groups": {
+    "overdue": "期限切れ · {count, number}",
+    "today": "今日が期限 · {count, number}",
+    "week": "今週 · {count, number}",
+    "later": "それ以降 · {count, number}",
+    "undated": "期限なし · {count, number}"
+  },
+  "showDone": "完了を表示 · {count, number}",
+  "hideDone": "完了を非表示",
+  "status": {
+    "todo": "未着手",
+    "in_progress": "進行中",
+    "done": "完了"
+  },
+  "due": {
+    "none": "期限なし",
+    "add": "期限を追加",
+    "clear": "期限をクリア",
+    "change": "{due}。期限を変更",
+    "overdue": "期限切れ · {date}",
+    "today": "今日が期限",
+    "tomorrow": "明日が期限",
+    "on": "期限：{date}",
+    "was": "期限：{date}（過ぎています）",
+    "changed": "期限を変更しました",
+    "cleared": "期限をクリアしました"
+  },
+  "form": {
+    "title": "新しいタスク",
+    "description": "担当者は自分の生産性とかんばんでもこのタスクを確認できます。",
+    "task": "タスク",
+    "taskPlaceholder": "例：リリース告知メールの下書きを作成",
+    "titleRequired": "やることを入力してください。",
+    "nobodyYet": "未定",
+    "due": "期限",
+    "project": "プロジェクト",
+    "noProject": "プロジェクトなし",
+    "projectHint": "ここで追加したタスクは、ワークスペースの全員が閲覧できます。",
+    "submit": "タスクを追加"
+  }
+}

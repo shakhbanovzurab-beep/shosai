@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Passer à un forfait supérieur"
+  },
+  "title": "Passez à un forfait supérieur",
+  "subtitle": "Commencez gratuitement avec {minutes, plural, one {# minute de réunion} many {# de minutes de réunion} other {# minutes de réunion}} par mois. Changez de forfait quand vos réunions en demandent plus.",
+  "loading": "Chargement des forfaits…",
+  "loadFailed": "Impossible de charger les forfaits",
+  "seatNote": "Votre licence dans <b>{workspace}</b> inclut {plan} : vos propres réunions, le Gestionnaire de fichiers et les connaissances de Leo suivent ses limites. Votre forfait personnel est distinct.",
+  "pricesNote": "Prix en dollars américains, hors taxes ; Team est facturé par utilisateur. Les informations de paiement sont saisies uniquement sur la page sécurisée du prestataire de paiement.",
+  "audiences": {
+    "individual": "Particulier",
+    "team": "Équipe",
+    "enterprise": "Entreprise"
+  },
+  "seatRange": "({min, number}–{max, number} utilisateurs)",
+  "seatRangeOpen": "({min, number} utilisateurs et plus)",
+  "card": {
+    "yourPlan": "Votre forfait",
+    "recommended": "Recommandé",
+    "custom": "Sur mesure",
+    "tailored": "Adapté à votre organisation",
+    "perMonth": "/ mois",
+    "perUserPerMonth": "par utilisateur / mois",
+    "billedMonthly": "Facturation mensuelle, résiliable à tout moment",
+    "freeForever": "Gratuit pour toujours",
+    "seatsTotal": "{total} / mois pour {seats, plural, one {# utilisateur} many {# d’utilisateurs} other {# utilisateurs}}",
+    "notIncluded": "Non inclus : {item}"
+  },
+  "seats": {
+    "label": "Utilisateurs",
+    "fewer": "Moins d’utilisateurs",
+    "more": "Plus d’utilisateurs"
+  },
+  "action": {
+    "current": "Forfait actuel",
+    "upgradeTo": "Passer à {plan}",
+    "switchTo": "Passer à {plan}",
+    "upgradeFailed": "Impossible de lancer le changement de forfait",
+    "switchFailed": "Impossible de changer de forfait"
+  },
+  "usage": {
+    "label": "Minutes de réunion ce mois-ci",
+    "title": "Minutes de réunion",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "{used, number} sur {limit, plural, one {# minute utilisée} many {# de minutes utilisées} other {# minutes utilisées}}",
+    "left": "{left, number} sur {limit, plural, one {# minute de réunion restante} many {# de minutes de réunion restantes} other {# minutes de réunion restantes}}",
+    "allUsed": "Vous avez utilisé toutes vos minutes de réunion",
+    "resets": "Réinitialisation le {date}",
+    "leftShort": "{left, plural, one {# min restante} many {# de min restantes} other {# min restantes}} · réinitialisation le {date}",
+    "recordingPaused": "Enregistrement suspendu jusqu’au {date}.",
+    "paused": "Les réunions sont suspendues jusqu’au {date}.",
+    "pausedUpgrade": "Les réunions sont suspendues jusqu’au {date}. Passez à {plan} pour des réunions illimitées.",
+    "getUnlimited": "Obtenir des réunions illimitées"
+  },
+  "gate": {
+    "checking": "Vérification de votre forfait…",
+    "seePlans": "Voir les forfaits",
+    "comparePlans": "Comparer les forfaits",
+    "upgradeTo": "Passer à {plan}",
+    "offer": "{plan} inclut {unlimited, select, yes {un stockage illimité} other {{amount}}}.",
+    "offerPriced": "{plan} inclut {unlimited, select, yes {un stockage illimité} other {{amount}}} pour {price} par mois.",
+    "file_manager": {
+      "partOf": "Le Gestionnaire de fichiers fait partie de {plan}",
+      "notInPlan": "Le Gestionnaire de fichiers n’est pas inclus dans votre forfait",
+      "pitch": "Regroupez vos fichiers au même endroit, choisissez ceux que Leo utilise et partagez-les dans vos espaces de travail."
+    },
+    "knowledge_base": {
+      "partOf": "Les connaissances font partie de {plan}",
+      "notInPlan": "Les connaissances ne sont pas incluses dans votre forfait",
+      "pitch": "Choisissez des fichiers et connectez des sources pour que Leo s’en serve dans ses réponses."
+    }
+  },
+  "sales": {
+    "contact": "Contacter l’équipe commerciale",
+    "title": "Parler à l’équipe commerciale",
+    "description": "Présentez-nous votre équipe et nous préparerons un forfait Enterprise.",
+    "workEmail": "E-mail professionnel",
+    "company": "Entreprise",
+    "teamSize": "Taille de l’équipe",
+    "teamSizePlaceholder": "Choisir",
+    "teamSizeRange": "{min, number}–{max, number} personnes",
+    "teamSizeOpen": "{min, number} personnes et plus",
+    "message": "De quoi avez-vous besoin ? <muted>(facultatif)</muted>",
+    "messagePlaceholder": "Fournisseur SSO, revue de sécurité, nombre de licences…",
+    "send": "Envoyer la demande",
+    "chooseTeamSize": "Choisissez la taille de votre équipe.",
+    "sendFailed": "Impossible d’envoyer votre demande.",
+    "sentTitle": "Merci, nous vous recontacterons",
+    "sentDescription": "Notre équipe répond généralement sous un jour ouvré.",
+    "done": "Terminé"
+  }
+}

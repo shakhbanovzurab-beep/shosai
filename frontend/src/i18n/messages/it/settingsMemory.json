@@ -1,0 +1,23 @@
+{
+  "memory": "Memoria",
+  "memoryHint": "Leo ricorda informazioni utili dalle tue chat e riunioni e le usa nelle risposte successive.",
+  "summary": {
+    "title": "Riepilogo della memoria",
+    "description": "Consulta una panoramica di ciò che Leo ha imparato su di te. Ciò di cui deve tenere sempre conto, scrivilo nelle tue <link>istruzioni personalizzate</link>.",
+    "dialogDescription": "Ciò che Leo ha imparato su di te.",
+    "updated": "Aggiornato {ago}",
+    "actions": "Azioni sul riepilogo della memoria",
+    "refresh": "Aggiorna riepilogo",
+    "refreshFailed": "Impossibile aggiornare",
+    "copy": "Copia testo",
+    "copied": "Riepilogo copiato",
+    "copyFailed": "Impossibile copiare",
+    "learnMore": "Scopri di più"
+  },
+  "composer": {
+    "placeholder": "Chiedi o aggiorna",
+    "label": "Fai una domanda sul riepilogo della memoria o di’ a Leo cosa cambiare",
+    "send": "Invia",
+    "sendFailed": "Impossibile inviare"
+  }
+}

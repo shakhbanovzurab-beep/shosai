@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "name_taken": "Hai già un hub con questo nome.",
+    "name_too_short": "{min, plural, one {Usa almeno # carattere.} many {Usa almeno # di caratteri.} other {Usa almeno # caratteri.}}",
+    "name_too_long": "{max, plural, one {Non superare # carattere.} many {Non superare # di caratteri.} other {Non superare # caratteri.}}",
+    "too_many_hubs": "Hai troppi hub. Archivia o elimina quelli che non ti servono.",
+    "not_found": "Non è più qui: potrebbe essere stato eliminato.",
+    "hub_archived": "L’hub è archiviato.",
+    "no_board": "L’hub non ha una bacheca, quindi il lavoro non ha dove andare.",
+    "no_hub": "La riunione non è in un hub.",
+    "board_gone": "La bacheca di questo hub non esiste più.",
+    "invalid": "Controlla che tutti i campi siano compilati correttamente.",
+    "network": "Impossibile raggiungere il server.",
+    "unknown": "Il server non ha risposto come previsto."
+  },
+  "fixes": {
+    "choose_board": "Scegli una bacheca",
+    "file_meeting": "Aggiungi la riunione a un hub",
+    "restore_hub": "Ripristina l’hub dall’archivio"
+  }
+}

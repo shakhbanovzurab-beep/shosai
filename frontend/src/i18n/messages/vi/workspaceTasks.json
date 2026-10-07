@@ -1,0 +1,81 @@
+{
+  "title": "Công việc",
+  "description": "Công việc đã thống nhất trong cuộc họp hoặc được thêm vào dự án. Công việc của bạn cũng hiện trong Năng suất và Kanban của bạn.",
+  "newTask": "Công việc mới",
+  "loading": "Đang tải công việc…",
+  "loadFailed": "Không thể tải công việc",
+  "empty": {
+    "title": "Chưa có công việc nào",
+    "text": "Công việc sẽ xuất hiện khi ai đó chia sẻ một cuộc họp có thống nhất việc cần làm, hoặc khi bạn thêm công việc vào dự án.",
+    "add": "Thêm công việc"
+  },
+  "noMatch": {
+    "title": "Không có kết quả phù hợp với bộ lọc",
+    "text": "Hãy thử dự án, nhóm hoặc người khác.",
+    "clear": "Xóa bộ lọc"
+  },
+  "caughtUp": {
+    "title": "Bạn đã xử lý hết",
+    "text": "Không có gì ở đây đang chờ bạn. Công việc mới giao cho bạn sẽ hiện ở đây và trong Năng suất của bạn.",
+    "seeEveryone": "Xem công việc của mọi người"
+  },
+  "views": {
+    "label": "Công việc của ai",
+    "mine": "Của tôi",
+    "team": "Mọi người"
+  },
+  "assignee": {
+    "label": "Người được giao",
+    "anyone": "Bất kỳ ai"
+  },
+  "owner": {
+    "label": "Người phụ trách",
+    "unassigned": "Chưa giao",
+    "you": "Bạn",
+    "meOption": "{name} (bạn)",
+    "change": "Người phụ trách: {name}. Đổi người phụ trách",
+    "changedToYou": "Giờ là việc của bạn",
+    "changedTo": "Giờ do {name} phụ trách",
+    "cleared": "Hiện không ai phụ trách"
+  },
+  "groups": {
+    "overdue": "Quá hạn · {count, number}",
+    "today": "Đến hạn hôm nay · {count, number}",
+    "week": "Tuần này · {count, number}",
+    "later": "Sau này · {count, number}",
+    "undated": "Không có hạn chót · {count, number}"
+  },
+  "showDone": "Hiện việc đã xong · {count, number}",
+  "hideDone": "Ẩn việc đã xong",
+  "status": {
+    "todo": "Cần làm",
+    "in_progress": "Đang thực hiện",
+    "done": "Hoàn thành"
+  },
+  "due": {
+    "none": "Không có hạn chót",
+    "add": "Thêm hạn chót",
+    "clear": "Xóa hạn chót",
+    "change": "{due}. Đổi hạn chót",
+    "overdue": "Quá hạn · {date}",
+    "today": "Đến hạn hôm nay",
+    "tomorrow": "Đến hạn ngày mai",
+    "on": "Hạn chót {date}",
+    "was": "Hạn chót cũ {date}",
+    "changed": "Đã đổi hạn chót",
+    "cleared": "Đã xóa hạn chót"
+  },
+  "form": {
+    "title": "Công việc mới",
+    "description": "Người phụ trách cũng thấy công việc này trong Năng suất và Kanban của họ.",
+    "task": "Công việc",
+    "taskPlaceholder": "Ví dụ: Soạn email ra mắt",
+    "titleRequired": "Hãy cho biết cần làm gì.",
+    "nobodyYet": "Chưa có ai",
+    "due": "Hạn chót",
+    "project": "Dự án",
+    "noProject": "Không có dự án",
+    "projectHint": "Mọi người trong không gian làm việc đều thấy công việc được thêm ở đây.",
+    "submit": "Thêm công việc"
+  }
+}

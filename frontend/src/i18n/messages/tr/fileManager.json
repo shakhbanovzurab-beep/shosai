@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Dosya yöneticisi",
+    "description": "Dosyalarınıza göz atın, düzenleyin, yükleyin ve Leo’nun hangilerini kullanacağını seçin.",
+    "folderTitle": "Klasör · Dosya yöneticisi"
+  },
+  "myFiles": "Dosyalarım",
+  "loading": "Dosyalarınız yükleniyor…",
+  "loadFailed": "Dosyalarınız yüklenemedi",
+  "allFiles": {
+    "heading": "Tüm dosyalar",
+    "emptyTitle": "Henüz dosya yok",
+    "emptyDescription": "Dosya yükleyin veya buraya bırakın. Sonra Leo’nun hangilerini kullanabileceğini seçin."
+  },
+  "folders": {
+    "heading": "Klasörler",
+    "new": "Yeni klasör",
+    "untitled": "Adsız klasör",
+    "emptyTitle": "Henüz klasör yok",
+    "emptyDescription": "Dosyalarınızı düzenlemek ya da Leo’nun bir dosya grubunu tek seferde okuması için klasör oluşturun.",
+    "fileCount": "{count, plural, one {# dosya} other {# dosya}}",
+    "dropHere": "Buraya taşımak için bırakın",
+    "dropHereLeo": "Buraya taşımak için bırakın. Leo bunu kullanacak.",
+    "updated": "{ago} güncellendi",
+    "leoReadsAll": "Leo bu klasörde okuyabildiği her şeyi kullanır"
+  },
+  "folder": {
+    "notFound": "Klasör bulunamadı",
+    "notFoundDescription": "Başka bir oturumda silinmiş veya yeniden adlandırılmış olabilir.",
+    "backToMyFiles": "Dosyalarım’a dön",
+    "back": "Geri",
+    "emptyTitle": "Bu klasör boş",
+    "emptyLeo": "Dosyaları buraya yükleyin veya taşıyın, Leo bunları kullansın.",
+    "empty": "Dosyaları buraya yükleyin, Dosyalarım’da bu klasörün üzerine sürükleyin ya da dosya menüsündeki Taşı seçeneğini kullanın."
+  },
+  "section": {
+    "label": "Dosyalar",
+    "view": "Dosya görünümü",
+    "grid": "Izgara",
+    "list": "Liste",
+    "noMatch": "Eşleşen dosya yok",
+    "noMatchDescription": "Bu filtreye uyan bir şey yok.",
+    "clearFilters": "Filtreleri temizle"
+  },
+  "toolbar": {
+    "filterSort": "Filtrele ve sırala",
+    "show": "Göster",
+    "fileType": "Dosya türü",
+    "allTypes": "Tüm türler",
+    "sortBy": "Sıralama ölçütü"
+  },
+  "show": {
+    "all": "Tüm dosyalar",
+    "starred": "Yıldızlı",
+    "leo": "Leo’nun kullandıkları",
+    "shared": "Çalışma alanlarında paylaşılan"
+  },
+  "sort": {
+    "modified": "Son değişiklik",
+    "name": "Ad",
+    "size": "Dosya boyutu"
+  },
+  "kinds": {
+    "archive": "Arşiv",
+    "design": "Tasarım",
+    "document": "Belge",
+    "image": "Görsel",
+    "other": "Dosya",
+    "pdf": "PDF",
+    "presentation": "Sunum",
+    "spreadsheet": "Elektronik tablo",
+    "text": "Metin"
+  },
+  "file": {
+    "star": "Yıldız ekle: {name}",
+    "unstar": "Yıldızı kaldır: {name}",
+    "modified": "{ago} değiştirildi",
+    "inFolderModified": "<hidden>Klasör: </hidden><name>{folder}</name> · {ago} değiştirildi",
+    "inFolder": "<hidden>Klasör: </hidden><name>{folder}</name>",
+    "sharedIn": "Paylaşıldığı yer: {workspaces}",
+    "sharedInHidden": "<hidden>Paylaşıldığı yer: </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Değiştirilme",
+    "size": "Boyut",
+    "actions": "İşlemler"
+  },
+  "leo": {
+    "viaFile": "Siz seçtiğiniz için Leo bu dosyayı kullanıyor",
+    "viaFolder": "Leo bu dosyayı klasörü üzerinden kullanıyor",
+    "reading": "Leo · okuyor",
+    "failed": "Leo bunu okuyamadı",
+    "tooLarge": "Leo en fazla {size} boyutundaki dosyaları okur",
+    "extension": "Leo .{extension} dosyalarını okuyamaz",
+    "unknownType": "Leo bu dosya türünü okuyamaz"
+  },
+  "menu": {
+    "addStar": "Yıldız ekle",
+    "removeStar": "Yıldızı kaldır",
+    "moveTo": "Taşı",
+    "useWithLeo": "Leo ile kullan",
+    "usedThrough": "“{folder}” üzerinden kullanılıyor",
+    "share": "Çalışma alanında paylaş…",
+    "sharing": "Çalışma alanlarında paylaşım…",
+    "transferTo": "Aktar",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Klasörü sil"
+  },
+  "dialogs": {
+    "renameFile": "Dosyayı yeniden adlandır",
+    "renameFolder": "Klasörü yeniden adlandır",
+    "shareTitle": "“{name}” dosyasını paylaş",
+    "shareDescription": "Leo, seçtiğiniz kişiler için çalışma alanında bu dosyaya dayanarak yanıt verir. Dosya burada ve sizin olarak kalır; silerseniz veya ayrılırsanız çalışma alanından çıkar.",
+    "transferTitle": "“{name}”, {workspace} çalışma alanına aktarılsın mı?",
+    "transferDescription": "Dosya, dosyalarınızdan çıkar ve {workspace} çalışma alanına ait olur: siz ayrıldığınızda orada kalır ve yöneticileri tarafından yönetilir. Paylaştığınız diğer çalışma alanları ona erişimini kaybeder. Bu işlem geri alınamaz.",
+    "transfer": "Aktar"
+  },
+  "upload": {
+    "button": "Dosya yükle",
+    "uploading": "{count, plural, one {# dosya yükleniyor…} other {# dosya yükleniyor…}}",
+    "dropHere": "Buraya yüklemek için bırakın",
+    "skipped": "{count, plural, one {# dosya atlandı} other {# dosya atlandı}}",
+    "skippedDescription": "Boş veya {size} üzerindeki dosyalar atlanır; tek seferde en fazla {max, number} dosya yüklenir."
+  },
+  "picker": {
+    "search": "Dosyalarınızda ara",
+    "noMatch": "Eşleşen dosya yok.",
+    "noFiles": "Henüz dosya yok. Önce Dosya yöneticisinde birkaç dosya yükleyin.",
+    "yourFiles": "Dosyalarınız",
+    "alreadyShared": "Burada zaten paylaşılmış"
+  }
+}

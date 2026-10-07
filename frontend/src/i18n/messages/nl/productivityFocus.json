@@ -1,0 +1,50 @@
+{
+  "title": "Focus",
+  "sound": {
+    "label": "Geluid aan het einde van een sessie",
+    "on": "Geluid aan",
+    "off": "Geluid uit"
+  },
+  "rhythm": "Focusritme",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Pomodoro-techniek",
+      "hint": "{focus} focus, {pause} pauze, {longBreak} na elke {every, plural, one {sessie} other {# sessies}}. Goed om op gang te komen en voor drukke dagen."
+    },
+    "fifty": {
+      "name": "Verlengd",
+      "hint": "{focus} focus, {pause} pauze, {longBreak} na elke {every, plural, one {sessie} other {# sessies}}. Goed voor schrijven en ontwerpen."
+    },
+    "fiftyTwo": {
+      "name": "{focus, number}/{pause, number}-ritme",
+      "hint": "{focus} focus, {pause} pauze – zo werkten de productiefste mensen in het onderzoek van DeskTime."
+    },
+    "deepWork": {
+      "name": "Diep werk",
+      "hint": "{focus} focus, {pause} pauze – één natuurlijke aandachtscyclus, voor lastige problemen."
+    }
+  },
+  "phase": {
+    "focus": "Focus",
+    "break": "Korte pauze",
+    "long_break": "Lange pauze"
+  },
+  "start": "Starten",
+  "pause": "Pauzeren",
+  "resume": "Hervatten",
+  "restart": "Deze fase opnieuw starten",
+  "skipBreak": "Pauze overslaan",
+  "skipToBreak": "Door naar de pauze",
+  "cycle": "{done, number} van {every, plural, one {# sessie} other {# sessies}} tot een lange pauze",
+  "doneToday": "{count, plural, one {Vandaag # sessie afgerond} other {Vandaag # sessies afgerond}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Focussessie klaar. Tijd voor een pauze.",
+    "focusLong": "Focussessie klaar. Tijd voor een lange pauze.",
+    "break": "De pauze is voorbij. Klaar om te focussen?",
+    "next": "{preset} · druk op Starten als je klaar bent."
+  }
+}

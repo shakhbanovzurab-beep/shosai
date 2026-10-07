@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "shadcn/ui で構築された、洗練されたオープンソースの管理ダッシュボードです。"
+  },
+  "actions": {
+    "goHome": "ホームに移動",
+    "goBack": "戻る"
+  },
+  "placeholder": {
+    "title": "{title} は準備中です",
+    "description": "このセクションは開発中です。まもなく利用できるようになります。",
+    "badge": "開発中"
+  },
+  "filter": {
+    "label": "{label}：",
+    "all": "すべて"
+  },
+  "emoji": {
+    "search": "絵文字を検索",
+    "empty": "絵文字が見つかりません"
+  },
+  "notFound": {
+    "metaTitle": "ページが見つかりません",
+    "badge": "エラー {code}",
+    "title": "このページは見つかりませんでした",
+    "description": "リンクが壊れているか、ページが移動または削除された可能性があります。以下から目的のページに戻れます。",
+    "popularPages": "よく使われるページ",
+    "jumpTo": "または次に移動"
+  },
+  "unauthorized": {
+    "metaTitle": "アクセス権なし",
+    "title": "アクセス権がありません",
+    "description": "このページを表示する権限がありません。誤りと思われる場合は、管理者に問い合わせてください。"
+  }
+}

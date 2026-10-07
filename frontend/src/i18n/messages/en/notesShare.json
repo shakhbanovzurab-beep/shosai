@@ -1,0 +1,54 @@
+{
+  "panel": {
+    "loadFailed": "Couldn’t load the link.",
+    "anyone": "Anyone with the link",
+    "anyoneHint": "People outside the meeting can open its notes.",
+    "linkLabel": "Link to the notes",
+    "toggles": {
+      "showTranscript": {
+        "label": "Show transcript",
+        "description": "Verbatim lines from the participants."
+      },
+      "showNames": {
+        "label": "Show participant names",
+        "description": "Otherwise the transcript says “{first}”, “{second}”."
+      },
+      "allowComments": {
+        "label": "Allow comments",
+        "description": "Anyone with the link can reply."
+      }
+    },
+    "expires": "Expires",
+    "never": "Never",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "stopsOn": "The link stops working on {date}.",
+    "keepsWorking": "The link keeps working.",
+    "updateFailed": "Couldn’t update the link",
+    "turnedOff": "Link turned off",
+    "turnOffFailed": "Couldn’t turn the link off"
+  },
+  "page": {
+    "unavailable": "Link unavailable",
+    "eyebrow": "Shared meeting notes",
+    "people": "{count, plural, one {# person} other {# people}}",
+    "transcript": "Transcript",
+    "done": "Done",
+    "open": "Open",
+    "speaker": "Speaker {order, number}"
+  },
+  "gone": {
+    "title": "This link doesn’t work anymore",
+    "description": "It may have expired or been turned off. Ask the person who sent it for a new one."
+  },
+  "comments": {
+    "title": "Comments",
+    "loadFailed": "Couldn’t load the comments.",
+    "comment": "Your comment",
+    "commentPlaceholder": "Write a reply…",
+    "name": "Your name",
+    "namePlaceholder": "Optional, shown as “{guest}” otherwise",
+    "guest": "Guest",
+    "post": "Post comment",
+    "postFailed": "Couldn’t post your comment"
+  }
+}

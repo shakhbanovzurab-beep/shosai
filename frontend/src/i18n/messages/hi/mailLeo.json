@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo आपका इनबॉक्स पढ़ रहा है…",
+    "readingNew": "{count, plural, one {Leo # नया ईमेल पढ़ रहा है…} other {Leo # नए ईमेल पढ़ रहा है…}}",
+    "sorted": "{count, plural, one {Leo ने # ईमेल छांट दिया} other {Leo ने # ईमेल छांट दिए}}",
+    "sortedWithDrafts": "{count, plural, one {Leo ने # ईमेल छांट दिया} other {Leo ने # ईमेल छांट दिए}} · {drafts, plural, one {# जवाब का ड्राफ़्ट बना} other {# जवाबों के ड्राफ़्ट बने}}",
+    "sortFailed": "Leo आपका इनबॉक्स नहीं छांट सका"
+  },
+  "focus": {
+    "mostUrgentFirst": "सबसे ज़रूरी पहले ({count, number})",
+    "setAside": "{count, plural, one {# दूसरे ईमेल को अभी आपकी ज़रूरत नहीं है।} other {# दूसरे ईमेल को अभी आपकी ज़रूरत नहीं है।}}",
+    "setAsideLow": "{count, plural, one {# दूसरे ईमेल को अभी आपकी ज़रूरत नहीं है} other {# दूसरे ईमेल को अभी आपकी ज़रूरत नहीं है}}, {low, plural, one {इनमें से # कम प्राथमिकता वाला है।} other {इनमें से # कम प्राथमिकता वाले हैं।}}",
+    "showAll": "सभी मेल दिखाएं",
+    "archiveLow": "कम प्राथमिकता वाले आर्काइव करें",
+    "caughtUpTitle": "सब निपट गया",
+    "caughtUpDescription": "कुछ भी आपका इंतज़ार नहीं कर रहा। जिन नए ईमेल को जवाब या फ़ैसले की ज़रूरत होगी, Leo उन्हें मार्क करेगा।"
+  },
+  "triage": {
+    "needs_you": "आपकी ज़रूरत है",
+    "fyi": "जानकारी के लिए",
+    "low": "कम प्राथमिकता"
+  },
+  "triageHint": {
+    "needs_you": "आपके जवाब या फ़ैसले का इंतज़ार",
+    "fyi": "जानने लायक, कुछ करना नहीं है",
+    "low": "इंतज़ार कर सकता है या आर्काइव हो सकता है"
+  },
+  "triageMenu": {
+    "trigger": "“{triage}” में छांटा गया। बदलें कि यह ईमेल कहां छांटा जाए",
+    "sortedByYou": "आपने छांटा",
+    "sortedByLeo": "Leo ने छांटा",
+    "leosPick": "Leo की पसंद · {hint}"
+  },
+  "replyBy": {
+    "overdue": "देर हो गई",
+    "today": "आज जवाब दें",
+    "tomorrow": "कल जवाब दें",
+    "by": "{when} तक जवाब दें"
+  },
+  "tags": {
+    "reading": "Leo पढ़ रहा है…",
+    "replied": "जवाब दिया",
+    "needsYou": "आपकी ज़रूरत है",
+    "draftReady": "ड्राफ़्ट तैयार है"
+  },
+  "card": {
+    "label": "Leo का सारांश",
+    "readingEmail": "Leo यह ईमेल पढ़ रहा है…",
+    "readFailed": "Leo यह ईमेल नहीं पढ़ सका",
+    "readFailedHint": "थोड़ी देर बाद फिर से कोशिश करें।",
+    "repliedAgo": "{ago} जवाब दिया",
+    "repliedOn": "{date} को जवाब दिया",
+    "reviewDraft": "ड्राफ़्ट देखें",
+    "noDraft": "कोई ड्राफ़्ट नहीं: इस जवाब के लिए आपकी अपनी राय चाहिए।",
+    "archive": "आर्काइव करें"
+  },
+  "draft": {
+    "reviewLabel": "{name} के लिए Leo का ड्राफ़्ट जवाब देखें",
+    "drafted": "Leo ने जवाब का ड्राफ़्ट बनाया",
+    "review": "देखें",
+    "heading": "Leo का ड्राफ़्ट · भेजने से पहले देख लें",
+    "collapse": "ड्राफ़्ट छोटा करें",
+    "field": "{name} को जवाब दें",
+    "discard": "हटाएं",
+    "send": "भेजें",
+    "discarded": "ड्राफ़्ट हटा दिया गया"
+  }
+}

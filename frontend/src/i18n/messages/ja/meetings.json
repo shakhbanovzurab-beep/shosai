@@ -1,0 +1,60 @@
+{
+  "title": "会議",
+  "loading": "会議を読み込み中…",
+  "loadFailed": "会議を読み込めませんでした",
+  "loadFailedHint": "接続を確認して、もう一度お試しください。",
+  "newMeeting": "新しい会議",
+  "actions": {
+    "schedule": "カレンダーで予定を作成",
+    "upload": "レコーディングをアップロード"
+  },
+  "filters": "会議のフィルタ",
+  "views": {
+    "all": "すべて",
+    "upcoming": "今後",
+    "live": "進行中",
+    "past": "過去"
+  },
+  "recent": "最近",
+  "viewAll": "すべて表示",
+  "noMoreToday": "今日の会議はこれ以上ありません。",
+  "day": {
+    "today": "今日",
+    "tomorrow": "明日",
+    "yesterday": "昨日"
+  },
+  "liveBadge": "進行中",
+  "liveSince": "{minutes, plural, =0 {開始したばかり · {end} に終了} other {# 分前に開始 · {end} に終了}}",
+  "startsIn": "{minutes, plural, =0 {まもなく開始} other {# 分後}}",
+  "join": "会議に参加",
+  "opensInNewTab": "（新しいタブで開きます）",
+  "source": {
+    "whisperer": "Whisperer ルーム",
+    "in_person": "対面"
+  },
+  "participants": "参加者：{names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "ノートはまだ準備できていません。",
+    "tasks": "{count, plural, other {タスク # 件}}",
+    "decisions": "{count, plural, other {決定事項 # 件}}"
+  },
+  "empty": {
+    "none": {
+      "title": "会議はまだありません",
+      "description": "カレンダーで会議を予定するか、レコーディングをアップロードすると Leo がノートを作成します。"
+    },
+    "upcoming": {
+      "title": "予定されている会議はありません",
+      "description": "カレンダーで予定した会議がここに表示されます。"
+    },
+    "live": {
+      "title": "進行中の会議はありません",
+      "description": "会議の開催中はここに表示され、参加できます。"
+    },
+    "past": {
+      "title": "過去の会議はまだありません",
+      "description": "レコーディングした会議が、Leo による要約、タスク、決定事項とともにここに表示されます。"
+    }
+  }
+}

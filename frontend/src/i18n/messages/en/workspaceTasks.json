@@ -1,0 +1,81 @@
+{
+  "title": "Tasks",
+  "description": "Work agreed in meetings or added to projects. Yours also appear in your Productivity and Kanban.",
+  "newTask": "New task",
+  "loading": "Loading tasks…",
+  "loadFailed": "Couldn’t load tasks",
+  "empty": {
+    "title": "No tasks yet",
+    "text": "Tasks arrive when someone shares a meeting where work was agreed, or when you add one to a project.",
+    "add": "Add a task"
+  },
+  "noMatch": {
+    "title": "Nothing matches these filters",
+    "text": "Try another project, team or person.",
+    "clear": "Clear filters"
+  },
+  "caughtUp": {
+    "title": "You’re all caught up",
+    "text": "Nothing here is waiting on you. New tasks assigned to you show up here and in your Productivity.",
+    "seeEveryone": "See everyone’s tasks"
+  },
+  "views": {
+    "label": "Whose tasks",
+    "mine": "Mine",
+    "team": "Everyone"
+  },
+  "assignee": {
+    "label": "Assignee",
+    "anyone": "Anyone"
+  },
+  "owner": {
+    "label": "Owner",
+    "unassigned": "Unassigned",
+    "you": "You",
+    "meOption": "{name} (you)",
+    "change": "Owner: {name}. Change owner",
+    "changedToYou": "Now yours",
+    "changedTo": "Now owned by {name}",
+    "cleared": "Nobody owns it now"
+  },
+  "groups": {
+    "overdue": "Overdue · {count, number}",
+    "today": "Due today · {count, number}",
+    "week": "This week · {count, number}",
+    "later": "Later · {count, number}",
+    "undated": "No due date · {count, number}"
+  },
+  "showDone": "Show done · {count, number}",
+  "hideDone": "Hide done",
+  "status": {
+    "todo": "To do",
+    "in_progress": "In progress",
+    "done": "Done"
+  },
+  "due": {
+    "none": "No due date",
+    "add": "Add due date",
+    "clear": "Clear due date",
+    "change": "{due}. Change due date",
+    "overdue": "Overdue · {date}",
+    "today": "Due today",
+    "tomorrow": "Due tomorrow",
+    "on": "Due {date}",
+    "was": "Was due {date}",
+    "changed": "Due date changed",
+    "cleared": "Due date cleared"
+  },
+  "form": {
+    "title": "New task",
+    "description": "Its owner also sees it in their own Productivity and Kanban.",
+    "task": "Task",
+    "taskPlaceholder": "e.g. Draft the launch email",
+    "titleRequired": "Say what needs doing.",
+    "nobodyYet": "Nobody yet",
+    "due": "Due",
+    "project": "Project",
+    "noProject": "No project",
+    "projectHint": "Everyone in the workspace can see tasks added here.",
+    "submit": "Add task"
+  }
+}

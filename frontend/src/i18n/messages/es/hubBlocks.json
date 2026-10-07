@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "Lo que está sin resolver",
+    "empty": "No queda nada pendiente: todo está cerrado",
+    "more": "{count, plural, one {Hay # más, menos urgente, que no se muestra aquí} many {Hay # más, menos urgentes, que no se muestran aquí} other {Hay # más, menos urgentes, que no se muestran aquí}}",
+    "why": "¿Por qué?",
+    "done": "Hecho",
+    "dismiss": "No es así",
+    "assign": "Asignar",
+    "abandon": "Abandonado",
+    "rowLabel": "{subject}: detalles",
+    "doneToast": "Marcado como hecho",
+    "dismissToast": "{days, plural, one {Descartado por # día} many {Descartado por # de días} other {Descartado por # días}}",
+    "abandonToast": "Marcado como abandonado",
+    "assignedToast": "Asignado a {owner}",
+    "assignTitle": "¿Quién se encarga?",
+    "assignLabel": "Responsable",
+    "assignPlaceholder": "Nombre",
+    "loadError": "No se pudo cargar lo que está sin resolver"
+  },
+  "digest": {
+    "title": "Desde la última reunión",
+    "meeting": "{title}, {date}",
+    "opened": "Nuevo",
+    "closed": "Cerrado",
+    "untouched": "Sin tratar",
+    "untouchedHint": "sostiene el hub, pero nadie dijo nada al respecto en la reunión",
+    "loadError": "No se pudo cargar el resumen de la última reunión"
+  },
+  "feed": {
+    "title": "Qué pasó aquí",
+    "facts": {
+      "decision": "Decisión",
+      "promise": "Compromiso",
+      "risk": "Riesgo",
+      "problem": "Problema",
+      "question": "Pregunta abierta"
+    },
+    "superseded": "reemplazado",
+    "replacedBy": "reemplazado por «{text}» el {date}",
+    "jumpTo": "Ir al momento {moment}",
+    "earlier": "Mostrar reuniones anteriores",
+    "empty": "Aún no hay reuniones. Aparecerán en cuanto llegue la primera a este hub.",
+    "quiet": "No se dijo nada relevante",
+    "loadError": "No se pudo cargar lo que pasó aquí"
+  },
+  "materials": {
+    "title": "Materiales",
+    "addLink": "Agregar un enlace",
+    "upload": "Subir",
+    "find": "Buscar en materiales",
+    "removeLabel": "Quitar {title} del hub",
+    "gone": "este material ya no está",
+    "origin": "{source, select, meeting {de una reunión · {date}} other {agregado a mano · {date}}}",
+    "empty": "Aún no hay materiales. Los resúmenes de las reuniones llegan solos; agrega enlaces o archivos cuando quieras.",
+    "noMatches": "Nada coincide con «{query}»",
+    "addTitle": "Agregar un enlace",
+    "titleLabel": "Título",
+    "urlLabel": "Enlace",
+    "added": "Agregado",
+    "removed": "Se quitó del hub",
+    "uploadFailed": "{file}: {reason}",
+    "loadError": "No se pudieron cargar los materiales"
+  }
+}

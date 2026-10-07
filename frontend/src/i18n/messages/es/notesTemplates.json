@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Notas mejoradas",
+    "description": "Leo elige la estructura que mejor se adapta a la reunión."
+  },
+  "sections": {
+    "summary": "Resumen",
+    "keyPoints": "Puntos clave",
+    "decisions": "Decisiones",
+    "actionItems": "Tareas de seguimiento"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Puesta al día: inversor",
+      "description": "Actualización periódica con un inversor: en qué punto está todo y en qué puede ayudar."
+    },
+    "catchUpPortfolio": {
+      "name": "Puesta al día: empresa en cartera",
+      "description": "Revisión con una empresa en cartera sobre métricas, riesgos y peticiones."
+    },
+    "lpProspective": {
+      "name": "LP: potencial",
+      "description": "Primeras conversaciones con un posible socio comanditario (LP)."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: reunión del consejo",
+      "description": "Debate del consejo, resoluciones y responsables."
+    },
+    "vcPitch": {
+      "name": "VC: presentación",
+      "description": "La presentación de un fundador: qué destacó, el veredicto y la due diligence pendiente."
+    },
+    "oneOnOne": {
+      "name": "1:1",
+      "description": "Una reunión individual: cómo va todo, temas y próximos pasos acordados."
+    },
+    "customerCall": {
+      "name": "Llamada con cliente",
+      "description": "Descubrimiento o seguimiento con un cliente: problemas, peticiones y próximos pasos."
+    },
+    "teamSync": {
+      "name": "Reunión de equipo",
+      "description": "Una reunión periódica del equipo: novedades, decisiones y quién hace qué."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Dónde estamos",
+    "updatesShared": "Novedades compartidas",
+    "whatWeAgreed": "Qué acordamos",
+    "followUps": "Seguimiento",
+    "companyUpdate": "Novedades de la empresa",
+    "metricsAndHighlights": "Métricas y aspectos destacados",
+    "howWeCanHelp": "Cómo podemos ayudar",
+    "overview": "Panorama general",
+    "theirInterests": "Sus intereses",
+    "nextSteps": "Próximos pasos",
+    "boardSummary": "Resumen del consejo",
+    "discussion": "Debate",
+    "resolutions": "Resoluciones",
+    "ownersAndDeadlines": "Responsables y plazos",
+    "thePitch": "La presentación",
+    "whatStoodOut": "Lo más destacado",
+    "verdict": "Veredicto",
+    "diligenceToDos": "Pendientes de due diligence",
+    "howItsGoing": "Cómo va todo",
+    "topics": "Temas",
+    "context": "Contexto",
+    "painsAndRequests": "Problemas y peticiones",
+    "outcome": "Resultado",
+    "updates": "Novedades",
+    "decisions": "Decisiones",
+    "whoDoesWhat": "Quién hace qué"
+  },
+  "icons": {
+    "enhanced": "Notas mejoradas",
+    "briefcase": "Maletín",
+    "chart": "Gráfico",
+    "handshake": "Apretón de manos",
+    "landmark": "Edificio con columnas",
+    "lightbulb": "Bombilla",
+    "magnet": "Imán",
+    "phone": "Teléfono",
+    "rocket": "Cohete",
+    "calendar": "Calendario",
+    "users": "Personas"
+  },
+  "menu": {
+    "label": "Plantilla de notas mejoradas",
+    "search": "Buscar plantillas…",
+    "noMatch": "Ninguna plantilla coincide.",
+    "heading": "Plantillas",
+    "regenerate": "Regenerar notas",
+    "newTemplate": "Nueva plantilla…"
+  },
+  "rewritten": "Notas reescritas con «{template}»",
+  "regenerated": "Notas mejoradas regeneradas",
+  "created": "Plantilla «{template}» creada",
+  "dialog": {
+    "title": "Nueva plantilla",
+    "description": "Elige qué secciones escribe Leo para una reunión y cómo llamarlas.",
+    "namePlaceholder": "p. ej., Descubrimiento de ventas…",
+    "nameRequired": "Ponle un nombre a la plantilla.",
+    "descriptionLabel": "Descripción",
+    "descriptionPlaceholder": "Cuándo usarla…",
+    "ownDescription": "Tu propia plantilla.",
+    "icon": "Icono",
+    "sections": "Secciones",
+    "include": "Incluir {section}",
+    "heading": "Título de {section}",
+    "sectionsRequired": "Conserva al menos una sección.",
+    "create": "Crear plantilla"
+  }
+}

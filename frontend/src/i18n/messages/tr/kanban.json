@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Kanban",
+    "description": "İş, ev ve diğer her şey için panolar; Jira ile senkronize edilen panolar da dahil."
+  },
+  "loadBoardsFailed": "Panolarınız yüklenemedi",
+  "loadBoardFailed": "Pano yüklenemedi",
+  "addTask": "Görev ekle",
+  "taskCount": "{count, plural, one {# görev} other {# görev}}",
+  "progress": "İlerleme",
+  "views": {
+    "label": "Görünüm",
+    "board": "Pano",
+    "list": "Liste",
+    "table": "Tablo"
+  },
+  "toolbar": {
+    "filter": "Filtrele",
+    "sort": "Sırala",
+    "moreWaysToAdd": "Görev eklemenin diğer yolları",
+    "importCsv": "CSV içe aktar",
+    "addFromTemplate": "Şablondan ekle",
+    "createAutomation": "Otomasyon oluştur"
+  },
+  "column": {
+    "drag": "{column} sütununu sürükle",
+    "addTask": "{column} sütununa görev ekle",
+    "empty": "{column} sütununda görev yok"
+  },
+  "columnMenu": {
+    "managedInJira": "Sütunlar Jira’da yönetiliyor",
+    "rename": "Sütunu yeniden adlandır…",
+    "sortByPriority": "Önceliğe göre sırala",
+    "moveEarlier": "Öne taşı",
+    "moveLater": "Arkaya taşı",
+    "clear": "Sütunu boşalt"
+  },
+  "taskMenu": {
+    "openInJira": "{key} işini Jira’da aç",
+    "openInWorkspace": "{workspace} çalışma alanında aç",
+    "moveTo": "Sütuna taşı",
+    "moveToTop": "En üste taşı",
+    "moveToBottom": "En alta taşı",
+    "delete": "Görevi sil"
+  },
+  "priority": {
+    "label": "Öncelik",
+    "high": "Yüksek",
+    "medium": "Orta",
+    "low": "Düşük"
+  },
+  "card": {
+    "unassigned": "Atanmamış",
+    "completed": "Tamamlandı",
+    "fromSource": "{source} çalışma alanından",
+    "jiraIssue": "{type} (Jira yeni sekmede açılır)",
+    "workspaceTask": "Bu çalışma alanına ait bir görev. Buradaki değişiklikler oraya da yansır.",
+    "insights": {
+      "attachments": "{count, plural, one {# ek} other {# ek}}",
+      "comments": "{count, plural, one {# yorum} other {# yorum}}",
+      "documents": "{count, plural, one {# belge} other {# belge}}"
+    }
+  },
+  "table": {
+    "task": "Görev",
+    "status": "Durum",
+    "owner": "Sahip",
+    "label": "Etiket",
+    "due": "Son tarih",
+    "actions": "İşlemler",
+    "empty": "Henüz görev yok",
+    "progressOf": "{task} görevinin ilerlemesi"
+  },
+  "commands": {
+    "renameTask": "Görevi yeniden adlandır",
+    "renameColumn": "Sütunu yeniden adlandır",
+    "newTaskIn": "{column} sütununda yeni görev",
+    "copyTitle": "{title} kopyası",
+    "deleted": "“{title}” silindi",
+    "cleared": "{count, plural, one {{column} sütunundan # görev silindi} other {{column} sütunundan # görev silindi}}",
+    "jiraLinkCopied": "{key} bağlantısı kopyalandı"
+  },
+  "errors": {
+    "addTask": "Görev eklenemedi",
+    "saveChange": "Değişiklik kaydedilemedi",
+    "deleteTasks": "{count, plural, one {Görev silinemedi} other {Görevler silinemedi}}",
+    "saveBoard": "Pano kaydedilemedi"
+  }
+}

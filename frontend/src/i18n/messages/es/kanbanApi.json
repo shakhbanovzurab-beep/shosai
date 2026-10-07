@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "No se encontró el tablero.",
+  "taskNotFound": "No se encontró la tarea.",
+  "columnNotFound": "No se encontró la columna.",
+  "boardChanged": "El tablero cambió. Recárgalo e inténtalo de nuevo.",
+  "managedInJira": "Este tablero se administra en Jira. Haz este cambio allí.",
+  "reconnectJira": "Vuelve a conectar Jira en Configuración › Conectores para hacer cambios.",
+  "firstSync": "Espera a que termine la primera sincronización con Jira.",
+  "jiraDisconnected": "Jira está desconectado. Vuelve a conectarlo en Configuración › Conectores para mantener este tablero sincronizado.",
+  "connectJiraFirst": "Primero conecta Jira en Configuración › Conectores.",
+  "jiraBoardUnavailable": "Ese tablero de Jira no está disponible para tu cuenta de Jira.",
+  "jiraBoardSynced": "Este tablero de Jira ya está sincronizado.",
+  "notJiraBoard": "Solo se pueden sincronizar los tableros de Jira.",
+  "jiraBoardWorkspaceTasks": "Los tableros de Jira solo muestran incidencias de Jira. Elige un tablero creado en la app.",
+  "workspaceTaskCopy": "Las tareas de espacios de trabajo no se pueden duplicar aquí. Agrega la tarea en el espacio de trabajo.",
+  "workspaceTaskDelete": "Las tareas de espacios de trabajo salen del tablero cuando se completan o se reasignan en el espacio de trabajo.",
+  "boardNameRequired": "Ponle un nombre al tablero.",
+  "boardNameTooLong": "Ese nombre es demasiado largo. Usa uno más corto.",
+  "taskTitleRequired": "Ponle un título a la tarea.",
+  "invalidRequest": "Algo en la solicitud no es correcto. Recarga la página e inténtalo de nuevo."
+}

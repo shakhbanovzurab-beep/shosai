@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "Something in the request isn’t right. Reload the page and try again.",
+    "nameRequired": "Enter your name.",
+    "hotkeyUnsupported": "That isn’t a supported shortcut.",
+    "modelNotOnPlan": "That model isn’t on your subscription.",
+    "emailMismatch": "That email doesn’t match your account.",
+    "deletionUnavailable": "Account deletion isn’t connected yet. Nothing was deleted.",
+    "avatarMissing": "Choose an image to upload.",
+    "avatarType": "Use a WebP, JPEG or PNG image.",
+    "paymentsUnavailable": "Payments aren’t connected yet. This opens the provider’s secure page once billing is live.",
+    "checkoutUnavailable": "Payments aren’t connected yet. This opens the provider’s checkout once billing is live.",
+    "invoiceNotFound": "Invoice not found.",
+    "connectorNotFound": "Connector not found.",
+    "authorizationExpired": "The authorization expired or was already used. Try connecting again.",
+    "dataKindUnknown": "Unknown kind of data.",
+    "dataItemNotFound": "That item no longer exists.",
+    "mcpNameRequired": "Give the server a name.",
+    "mcpNameTooLong": "That name is too long. Use a shorter one.",
+    "mcpUrlInvalid": "Enter the server’s http(s) URL.",
+    "mcpServerNotFound": "Server not found.",
+    "memoryNotFound": "Memory not found.",
+    "summaryMessageRequired": "Write a question or an update."
+  },
+  "avatarTooLarge": "The image is larger than {size}.",
+  "invoice": {
+    "title": "Invoice {number}",
+    "date": "Date: {date}",
+    "description": "Description: {description}",
+    "amount": "Amount: {amount}",
+    "status": "Status: {status}",
+    "demoNote": "Demo invoice. The real one is a PDF from the billing backend."
+  },
+  "notesFromYou": "Notes from you"
+}

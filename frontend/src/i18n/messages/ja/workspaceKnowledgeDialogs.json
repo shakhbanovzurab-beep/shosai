@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "{workspace} にアップロード",
+    "description": "アップロードしたファイルは {workspace} のものになります。自分が退出しても残り、管理者が管理します。自分のものとして残したまま共有するには、自分のファイルから共有してください。",
+    "dropZone": "ファイルをドロップして追加",
+    "drop": "ここにファイルをドロップ",
+    "choose": "ファイルを選択",
+    "formats": "PDF、Word、Excel、PowerPoint、Markdown、テキスト · 各 {limit} まで",
+    "chosen": "選択したファイル",
+    "removeFile": "{name} を削除",
+    "tooBig": "{count, plural, other {{names} は {limit} を超えているため除外されました。}}",
+    "noFiles": "ファイルを 1 つ以上選択してください。",
+    "submit": "{count, plural, =0 {アップロード} =1 {アップロード} other {# 件のファイルをアップロード}}"
+  },
+  "connect": {
+    "title": "ソースを接続",
+    "description": "{workspace} がすでにドキュメントを保管している共有ドライブ、Wiki、ウェブサイトです。常に同期され、ワークスペースのものとなり、Leo は選んだ人に対してその内容をもとに回答します。",
+    "source": "ソース",
+    "link": "リンク",
+    "linkHint": "同期するフォルダ、スペース、またはページ。",
+    "submit": "接続"
+  },
+  "share": {
+    "title": "自分のファイルから共有",
+    "description": "{workspace} で、選んだ人に対して Leo がその内容をもとに回答します。ファイルは自分のファイル管理に残り、自分のものとして、退出時にはワークスペースから外れます。",
+    "submit": "{count, plural, =0 {共有} =1 {共有} other {# 件のファイルを共有}}"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "title": "Reuniões",
+  "description": "Gravações que os membros compartilharam aqui, com o resumo, as decisões e as tarefas do Leo.",
+  "sharingRules": "Regras de compartilhamento",
+  "reviewSharingRules": "Revisar regras de compartilhamento",
+  "shareMeeting": "Compartilhar reunião",
+  "searchMeetings": "Pesquisar reuniões",
+  "loading": "Carregando reuniões…",
+  "loadFailed": "Não foi possível carregar as reuniões",
+  "empty": {
+    "title": "Nada compartilhado ainda",
+    "text": "As reuniões aparecem quando um membro compartilha uma de suas gravações ou quando termina uma reunião só com membros de {workspace} e as regras de compartilhamento se aplicam."
+  },
+  "noMatch": {
+    "title": "Nenhuma reunião encontrada",
+    "text": "Tente outras palavras, outra equipe ou todas as reuniões.",
+    "clear": "Limpar filtros"
+  },
+  "recency": {
+    "thisWeek": "Esta semana",
+    "lastWeek": "Semana passada",
+    "earlier": "Anteriores"
+  },
+  "scope": {
+    "label": "Quais reuniões",
+    "all": "Todas",
+    "mine": "Em que participei"
+  },
+  "when": {
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "tomorrow": "Amanhã"
+  },
+  "row": {
+    "recordedByYou": "gravada por você",
+    "recordedBy": "gravada por {name}",
+    "withGuests": "com convidados",
+    "decisions": "{count, plural, one {# decisão} many {# de decisões} other {# decisões}}",
+    "tasks": "{count, plural, one {# tarefa} many {# de tarefas} other {# tarefas}}"
+  },
+  "meeting": {
+    "back": "Reuniões",
+    "loading": "Carregando a reunião…",
+    "loadFailed": "Não foi possível carregar a reunião",
+    "date": "Data",
+    "duration": "Duração",
+    "participants": "Participantes",
+    "participantsWithGuests": "{names} ({count, plural, one {# pessoa de fora de {workspace}} many {# de pessoas de fora de {workspace}} other {# pessoas de fora de {workspace}}})",
+    "project": "Projeto",
+    "recordedByYou": "Gravada por você. Ela também está nas suas Notas; pare de compartilhar quando quiser e ela continuará lá.",
+    "sharedBy": "Gravada e compartilhada por {name}",
+    "summary": "Resumo",
+    "transcript": "Transcrição",
+    "keyPoints": "Pontos principais",
+    "decisions": "Decisões",
+    "replacedLater": "Substituída depois",
+    "tasks": "Tarefas",
+    "transcriptPrivateTitle": "Só o resumo está compartilhado",
+    "transcriptPrivate": "{name} manteve a transcrição privada. Peça a essa pessoa se precisar das palavras exatas.",
+    "transcriptPrivateUnknown": "O organizador manteve a transcrição privada. Peça a ele se precisar das palavras exatas.",
+    "unavailableTitle": "Esta reunião não está disponível",
+    "unavailable": "Ela não existe, não foi compartilhada com você ou o proprietário parou de compartilhá-la.",
+    "backToMeetings": "Voltar para reuniões"
+  },
+  "project": {
+    "label": "Projeto",
+    "none": "Sem projeto"
+  },
+  "audience": {
+    "participants": "Participantes",
+    "workspace": "Todos em {workspace}",
+    "unknownTeam": "Uma equipe",
+    "participantsHint": "Membros que estavam na reunião.",
+    "workspaceHint": "Todos no espaço de trabalho, agora e no futuro.",
+    "teamHint": "Membros de {team} e os participantes.",
+    "privateTeamHint": "Membros de {team} (equipe privada) e os participantes.",
+    "sharedWith": "{level, select, participants {Compartilhada com os participantes} workspace {Compartilhada com todos em {workspace}} other {Compartilhada com {team}}}",
+    "sharedToast": "{level, select, participants {“{title}” foi compartilhada com os participantes em {workspace}} workspace {“{title}” foi compartilhada com todos em {workspace}} other {“{title}” foi compartilhada com {team} em {workspace}}}"
+  },
+  "share": {
+    "lockedHint": "Só quem compartilhou ou um administrador pode alterar quem vê esta reunião",
+    "change": "Alterar quem vê esta reunião",
+    "title": "Quem vê esta reunião",
+    "description": "O resumo, as decisões e as tarefas. As perguntas que cada pessoa faz ao Leo continuam sendo só dela.",
+    "external": "Pessoas de fora de {workspace} participaram. Compartilhe só o que elas aprovariam.",
+    "audienceLabel": "Compartilhada com",
+    "includeTranscript": "Incluir a transcrição",
+    "includeTranscriptHint": "Caso contrário, só o resumo é compartilhado.",
+    "transcriptShared": "A transcrição também está compartilhada",
+    "summaryOnly": "Agora só o resumo está compartilhado",
+    "addedToProject": "Adicionada ao projeto",
+    "removedFromProject": "Removida do projeto",
+    "stopMine": "Parar de compartilhar (manter nas minhas Notas)",
+    "takeOut": "Tirar de {workspace}"
+  },
+  "shareDialog": {
+    "allSharedTitle": "Tudo já está compartilhado",
+    "allShared": "Todas as suas gravações já estão em {workspace}.",
+    "title": "Compartilhe uma das suas reuniões",
+    "description": "Ela continua sendo sua e continua nas suas Notas; {workspace} a vê até você parar de compartilhar.",
+    "meeting": "Reunião",
+    "movesFrom": "Ela está compartilhada em {workspace} agora; compartilhá-la aqui vai movê-la.",
+    "audience": "Quem vê",
+    "audienceHint": "As decisões e tarefas dela vêm junto; os participantes sempre podem vê-la.",
+    "submit": "Compartilhar"
+  }
+}

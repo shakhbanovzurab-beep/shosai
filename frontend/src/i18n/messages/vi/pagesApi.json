@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Hãy gửi tin nhắn dưới dạng multipart/form-data.",
+  "emptyMessage": "Hãy viết tin nhắn hoặc đính kèm tệp.",
+  "messageTooLong": "Tin nhắn phải ngắn hơn {max, number} ký tự.",
+  "tooManyFiles": "{max, plural, other {Chỉ đính kèm tối đa # tệp.}}",
+  "fileTooBig": "{name} lớn hơn {size}.",
+  "subjectRequired": "Hãy đặt tiêu đề ngắn cho yêu cầu hỗ trợ.",
+  "topicRequired": "Hãy chọn chủ đề.",
+  "detailsRequired": "Hãy mô tả chuyện gì đã xảy ra.",
+  "ticketNotFound": "Không tìm thấy yêu cầu hỗ trợ.",
+  "invalidUpdate": "Hãy gửi trạng thái, đánh giá hoặc cờ chưa đọc."
+}

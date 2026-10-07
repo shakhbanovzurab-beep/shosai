@@ -1,0 +1,50 @@
+{
+  "title": "Foco",
+  "sound": {
+    "label": "Som ao fim de uma sessão",
+    "on": "Som ativado",
+    "off": "Som desativado"
+  },
+  "rhythm": "Ritmo de foco",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Pomodoro clássico",
+      "hint": "{focus} de foco, {pause} de pausa, {longBreak} de pausa longa a cada {every, plural, one {sessão} many {# de sessões} other {# sessões}}. Bom para começar e para dias corridos."
+    },
+    "fifty": {
+      "name": "Estendido",
+      "hint": "{focus} de foco, {pause} de pausa, {longBreak} de pausa longa a cada {every, plural, one {sessão} many {# de sessões} other {# sessões}}. Bom para escrita e design."
+    },
+    "fiftyTwo": {
+      "name": "Ritmo {focus, number}/{pause, number}",
+      "hint": "{focus} de foco, {pause} de pausa — como trabalhavam as pessoas mais produtivas no estudo da DeskTime."
+    },
+    "deepWork": {
+      "name": "Trabalho profundo",
+      "hint": "{focus} de foco, {pause} de pausa — um ciclo natural de atenção, para problemas difíceis."
+    }
+  },
+  "phase": {
+    "focus": "Foco",
+    "break": "Pausa curta",
+    "long_break": "Pausa longa"
+  },
+  "start": "Iniciar",
+  "pause": "Pausar",
+  "resume": "Retomar",
+  "restart": "Reiniciar esta fase",
+  "skipBreak": "Pular a pausa",
+  "skipToBreak": "Ir para a pausa",
+  "cycle": "{done, number} de {every, plural, one {# sessão} many {# de sessões} other {# sessões}} antes de uma pausa longa",
+  "doneToday": "{count, plural, one {# sessão concluída hoje} many {# de sessões concluídas hoje} other {# sessões concluídas hoje}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Sessão de foco concluída — faça uma pausa.",
+    "focusLong": "Sessão de foco concluída — faça uma pausa longa.",
+    "break": "Fim da pausa — vamos voltar ao foco?",
+    "next": "{preset} · clique em Iniciar quando quiser."
+  }
+}

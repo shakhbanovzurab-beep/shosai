@@ -1,0 +1,36 @@
+{
+  "answers": "Risposte",
+  "model": {
+    "title": "Modello",
+    "description": "Con Automatico, Leo sceglie il modello più adatto a ogni attività. I modelli di frontiera usano i tuoi token settimanali per i modelli di frontiera (vedi Utilizzo).",
+    "label": "Modello di Leo",
+    "auto": "Automatico",
+    "autoHint": "Leo sceglie in base all’attività"
+  },
+  "language": {
+    "title": "Lingua delle risposte",
+    "description": "Con Automatica, Leo risponde nella lingua dell’interfaccia.",
+    "auto": "Automatica"
+  },
+  "length": {
+    "title": "Lunghezza delle risposte",
+    "description": "Quanto scrive Leo per impostazione predefinita.",
+    "options": {
+      "concise": "Sintetica",
+      "balanced": "Equilibrata",
+      "detailed": "Dettagliata"
+    }
+  },
+  "advanced": {
+    "title": "Impostazioni avanzate",
+    "description": "Cosa può usare Leo. Ciò che è disattivato non viene né proposto né usato.",
+    "webSearch": "Ricerca sul web",
+    "webSearchHint": "Consenti a Leo di cercare automaticamente le risposte su internet.",
+    "voiceMode": "Modalità vocale",
+    "voiceModeHint": "Parla con Leo a voce. Se la disattivi, il microfono sparisce dall’interfaccia.",
+    "knowledgeSearch": "Ricerca nella conoscenza",
+    "knowledgeSearchHint": "Cerca le risposte nei file e nelle fonti che hai scelto per Leo.",
+    "connectedSearch": "Ricerca nei servizi collegati",
+    "connectedSearchHint": "Cerca nei servizi collegati, come Google Drive e Notion."
+  }
+}

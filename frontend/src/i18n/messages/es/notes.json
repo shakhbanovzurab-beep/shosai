@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Notas",
+    "description": "Reuniones transcritas con notas, tareas de seguimiento y mapas mentales."
+  },
+  "recency": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "thisWeek": "Esta semana",
+    "earlier": "Anteriores"
+  },
+  "fields": {
+    "meeting": "Reunión",
+    "folder": "Carpeta",
+    "people": "Personas",
+    "participants": "Participantes",
+    "duration": "Duración",
+    "date": "Fecha"
+  },
+  "views": {
+    "label": "Vista",
+    "timeline": "Cronología",
+    "grid": "Cuadrícula",
+    "list": "Lista"
+  },
+  "upload": {
+    "button": "Subir grabación",
+    "hint": "O suelta un archivo en cualquier parte de la página",
+    "dropTitle": "Suelta las grabaciones para subirlas",
+    "dropHint": "mp3, m4a, wav, mp4, webm y más · hasta {size}",
+    "notMedia": "{name} no es un archivo de audio ni de video",
+    "tooLarge": "{name} es demasiado grande",
+    "sizeLimit": "Las grabaciones pueden pesar hasta {size}."
+  },
+  "recordings": {
+    "uploading": "Subiendo",
+    "justNow": "Ahora mismo",
+    "transcribing": "Transcribiendo",
+    "transcribingNow": "Transcribiendo…",
+    "waiting": "Esperando la transcripción…",
+    "timelineStatus": "Transcribiendo… Cuando termine, aquí aparecerán las notas, las decisiones y un mapa mental."
+  },
+  "remove": "Quitar {name}",
+  "folders": {
+    "label": "Carpetas",
+    "all": "Todas las reuniones",
+    "new": "Nueva carpeta",
+    "newMenu": "Nueva carpeta…",
+    "newNamed": "Nueva carpeta «{name}»",
+    "defaultName": "Nueva carpeta",
+    "nameLabel": "Nombre de la carpeta",
+    "none": "Sin carpeta",
+    "add": "Agregar a una carpeta",
+    "moveTo": "Mover a una carpeta",
+    "search": "Buscar carpetas…",
+    "noMatch": "Ninguna carpeta coincide.",
+    "movedTo": "Se movió a {folder}",
+    "removedFrom": "Se quitó de la carpeta",
+    "emptyTitle": "Esta carpeta está vacía",
+    "emptyDescription": "Haz clic derecho en una reunión y elige «{action}» para agregarla aquí."
+  },
+  "card": {
+    "latest": "Última reunión",
+    "keyPoints": "Puntos clave",
+    "openNotes": "Abrir notas",
+    "openItems": "{count, plural, one {# pendiente} many {# de pendientes} other {# pendientes}}"
+  },
+  "timeline": {
+    "decision": "Decisión:",
+    "openTasks": "{count, plural, one {# tarea pendiente} many {# de tareas pendientes} other {# tareas pendientes}}"
+  },
+  "menu": {
+    "openInNewTab": "Abrir en una pestaña nueva",
+    "exportTranscript": "Exportar transcripción"
+  },
+  "exportFormats": {
+    "txt": "Texto sin formato",
+    "md": "Markdown",
+    "srt": "Subtítulos SubRip",
+    "vtt": "Subtítulos WebVTT",
+    "json": "Archivo JSON"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "Se eliminó «{title}»"
+}

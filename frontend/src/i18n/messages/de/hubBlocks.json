@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "Was offen ist",
+    "empty": "Nichts hängt – alles ist abgeschlossen",
+    "more": "{count, plural, one {# weiterer, weniger dringender Punkt wird hier nicht angezeigt} other {# weitere, weniger dringende Punkte werden hier nicht angezeigt}}",
+    "why": "Warum?",
+    "done": "Erledigt",
+    "dismiss": "Trifft nicht zu",
+    "assign": "Zuweisen",
+    "abandon": "Aufgegeben",
+    "rowLabel": "{subject} – Details",
+    "doneToast": "Als erledigt markiert",
+    "dismissToast": "{days, plural, one {Für # Tag ausgeblendet} other {Für # Tage ausgeblendet}}",
+    "abandonToast": "Als aufgegeben markiert",
+    "assignedToast": "{owner} zugewiesen",
+    "assignTitle": "Wer übernimmt das?",
+    "assignLabel": "Zugewiesen an",
+    "assignPlaceholder": "Name",
+    "loadError": "Offene Punkte konnten nicht geladen werden"
+  },
+  "digest": {
+    "title": "Seit dem letzten Meeting",
+    "meeting": "{title}, {date}",
+    "opened": "Neu",
+    "closed": "Abgeschlossen",
+    "untouched": "Nicht besprochen",
+    "untouchedHint": "hält den Hub auf, doch im Meeting hat niemand ein Wort dazu gesagt",
+    "loadError": "Die Zusammenfassung des letzten Meetings konnte nicht geladen werden"
+  },
+  "feed": {
+    "title": "Was hier passiert ist",
+    "facts": {
+      "decision": "Entscheidung",
+      "promise": "Zusage",
+      "risk": "Risiko",
+      "problem": "Problem",
+      "question": "Offene Frage"
+    },
+    "superseded": "überholt",
+    "replacedBy": "am {date} ersetzt durch „{text}“",
+    "jumpTo": "Zum Zeitpunkt {moment} springen",
+    "earlier": "Frühere Meetings anzeigen",
+    "empty": "Noch keine Meetings hier. Sie erscheinen, sobald das erste in diesem Hub landet.",
+    "quiet": "Nichts Nennenswertes gesagt",
+    "loadError": "Der Verlauf konnte nicht geladen werden"
+  },
+  "materials": {
+    "title": "Materialien",
+    "addLink": "Link hinzufügen",
+    "upload": "Hochladen",
+    "find": "In Materialien suchen",
+    "removeLabel": "{title} aus dem Hub entfernen",
+    "gone": "dieses Material ist nicht mehr vorhanden",
+    "origin": "{source, select, meeting {aus einem Meeting · {date}} other {manuell hinzugefügt · {date}}}",
+    "empty": "Noch keine Materialien. Meeting-Zusammenfassungen landen von selbst hier; Links und Dateien kannst du jederzeit hinzufügen.",
+    "noMatches": "Nichts passt zu „{query}“",
+    "addTitle": "Link hinzufügen",
+    "titleLabel": "Titel",
+    "urlLabel": "Link",
+    "added": "Hinzugefügt",
+    "removed": "Aus dem Hub entfernt",
+    "uploadFailed": "{file}: {reason}",
+    "loadError": "Die Materialien konnten nicht geladen werden"
+  }
+}

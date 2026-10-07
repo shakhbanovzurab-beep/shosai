@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "name_taken": "이미 같은 이름의 허브가 있어요.",
+    "name_too_short": "{min, plural, other {#자 이상 입력해 주세요.}}",
+    "name_too_long": "{max, plural, other {#자 이내로 입력해 주세요.}}",
+    "too_many_hubs": "허브가 너무 많아요. 필요 없는 허브를 보관하거나 삭제해 주세요.",
+    "not_found": "더 이상 여기에 없어요. 삭제되었을 수 있어요.",
+    "hub_archived": "보관된 허브예요.",
+    "no_board": "허브에 보드가 없어서 작업이 갈 곳이 없어요.",
+    "no_hub": "이 회의는 허브에 속해 있지 않아요.",
+    "board_gone": "이 허브의 보드가 더 이상 없어요.",
+    "invalid": "모든 항목을 올바르게 입력했는지 확인해 주세요.",
+    "network": "서버에 연결할 수 없어요.",
+    "unknown": "서버에서 예상과 다른 응답이 왔어요."
+  },
+  "fixes": {
+    "choose_board": "보드 선택",
+    "file_meeting": "회의를 허브에 추가",
+    "restore_hub": "보관함에서 허브 복원"
+  }
+}

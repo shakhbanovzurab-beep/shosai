@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "{plan} plan",
+    "current": "Current",
+    "price": "{interval, select, month {{price} per month} year {{price} per year} other {Free forever}}",
+    "renews": "Renews {date}",
+    "upgrade": "Upgrade plan"
+  },
+  "payment": {
+    "title": "Payment",
+    "description": "Your default payment method is charged for subscription renewals, extra usage and auto-reload.",
+    "add": "Add payment method",
+    "empty": "No payment method yet.",
+    "default": "Default",
+    "unknownCard": "Card",
+    "endingIn": "{card} ending in {last4}",
+    "expires": "Expires {date}",
+    "update": "Update",
+    "updateCard": "Update {card} ending in {last4}",
+    "openFailed": "Couldn’t open the payment page"
+  },
+  "history": {
+    "title": "Billing history",
+    "description": "View and download your past invoices.",
+    "empty": "No invoices yet. They appear here after your first payment.",
+    "columns": {
+      "date": "Date",
+      "description": "Description",
+      "amount": "Amount",
+      "status": "Status",
+      "download": "Download"
+    },
+    "status": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "failed": "Failed"
+    },
+    "download": "Download invoice {number}",
+    "notReady": "Invoice {number} isn’t ready yet"
+  }
+}

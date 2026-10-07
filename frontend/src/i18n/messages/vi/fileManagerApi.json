@@ -1,0 +1,16 @@
+{
+  "fileGone": "Tệp này không còn tồn tại.",
+  "folderGone": "Thư mục này không còn tồn tại.",
+  "chooseFile": "Hãy chọn ít nhất một tệp.",
+  "tooManyFiles": "Mỗi lần chỉ tải lên tối đa {max, number} tệp.",
+  "tooLarge": "“{name}” lớn hơn {size}.",
+  "overLeoLimit": "Với gói hiện tại, Leo dùng được tối đa {limit} tệp của bạn. Hãy ngừng dùng bớt một số tệp trước.",
+  "notUsedByLeo": "Leo không dùng tệp này.",
+  "shareFirst": "Hãy chia sẻ tệp trong không gian làm việc đó trước.",
+  "fileNameRequired": "Hãy nhập tên tệp.",
+  "folderNameRequired": "Hãy nhập tên thư mục.",
+  "nameTooLong": "Tên phải ngắn hơn {max, number} ký tự.",
+  "nameSlash": "Tên không được chứa / hoặc \\.",
+  "invalidRequest": "Yêu cầu có điểm không đúng. Hãy tải lại trang và thử lại.",
+  "copyName": "{name} bản sao"
+}

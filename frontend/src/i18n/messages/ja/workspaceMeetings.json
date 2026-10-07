@@ -1,0 +1,107 @@
+{
+  "title": "会議",
+  "description": "メンバーが共有したレコーディングを、Leo による要約、決定事項、タスクとともに表示します。",
+  "sharingRules": "共有ルール",
+  "reviewSharingRules": "共有ルールを確認",
+  "shareMeeting": "会議を共有",
+  "searchMeetings": "会議を検索",
+  "loading": "会議を読み込み中…",
+  "loadFailed": "会議を読み込めませんでした",
+  "empty": {
+    "title": "共有された会議はまだありません",
+    "text": "メンバーがレコーディングを共有したとき、または {workspace} のメンバーだけの会議が終わって共有ルールが適用されたときに、ここに会議が表示されます。"
+  },
+  "noMatch": {
+    "title": "一致する会議はありません",
+    "text": "別のキーワードやチームを試すか、すべての会議を表示してください。",
+    "clear": "フィルタをクリア"
+  },
+  "recency": {
+    "thisWeek": "今週",
+    "lastWeek": "先週",
+    "earlier": "それ以前"
+  },
+  "scope": {
+    "label": "表示する会議",
+    "all": "すべて",
+    "mine": "参加した会議"
+  },
+  "when": {
+    "today": "今日",
+    "yesterday": "昨日",
+    "tomorrow": "明日"
+  },
+  "row": {
+    "recordedByYou": "自分がレコーディング",
+    "recordedBy": "{name} さんがレコーディング",
+    "withGuests": "ゲストあり",
+    "decisions": "{count, plural, other {決定事項 # 件}}",
+    "tasks": "{count, plural, other {タスク # 件}}"
+  },
+  "meeting": {
+    "back": "会議",
+    "loading": "会議を読み込み中…",
+    "loadFailed": "会議を読み込めませんでした",
+    "date": "日付",
+    "duration": "時間",
+    "participants": "参加者",
+    "participantsWithGuests": "{names}（{count, plural, other {{workspace} 外の参加者 # 人}}）",
+    "project": "プロジェクト",
+    "recordedByYou": "自分がレコーディングした会議です。自分のノートにも保存されており、共有を停止してもノートには残ります。",
+    "sharedBy": "{name} さんがレコーディング・共有",
+    "summary": "要約",
+    "transcript": "文字起こし",
+    "keyPoints": "要点",
+    "decisions": "決定事項",
+    "replacedLater": "後に置き換え",
+    "tasks": "タスク",
+    "transcriptPrivateTitle": "共有されているのは要約のみです",
+    "transcriptPrivate": "{name} さんが文字起こしを非公開にしています。正確な発言が必要な場合は、{name} さんに問い合わせてください。",
+    "transcriptPrivateUnknown": "主催者が文字起こしを非公開にしています。正確な発言が必要な場合は、主催者に問い合わせてください。",
+    "unavailableTitle": "この会議は利用できません",
+    "unavailable": "存在しないか、共有されていないか、オーナーが共有を停止しました。",
+    "backToMeetings": "会議に戻る"
+  },
+  "project": {
+    "label": "プロジェクト",
+    "none": "プロジェクトなし"
+  },
+  "audience": {
+    "participants": "参加者",
+    "workspace": "{workspace} の全員",
+    "unknownTeam": "チーム",
+    "participantsHint": "会議に参加したメンバーです。",
+    "workspaceHint": "今後加わる人も含め、ワークスペースの全員です。",
+    "teamHint": "{team} のメンバーと参加者です。",
+    "privateTeamHint": "{team}（非公開チーム）のメンバーと参加者です。",
+    "sharedWith": "{level, select, participants {参加者と共有中} workspace {{workspace} の全員と共有中} other {{team} と共有中}}",
+    "sharedToast": "{level, select, participants {「{title}」を {workspace} の参加者と共有しました} workspace {「{title}」を {workspace} の全員と共有しました} other {「{title}」を {workspace} の {team} と共有しました}}"
+  },
+  "share": {
+    "lockedHint": "公開範囲を変更できるのは、共有した本人か管理者だけです",
+    "change": "この会議の公開範囲を変更",
+    "title": "この会議の公開範囲",
+    "description": "要約、決定事項、タスクが共有されます。各メンバーが Leo にした質問は本人だけのものです。",
+    "external": "{workspace} 外の人が参加しています。その人たちに見られても問題ない内容だけを共有してください。",
+    "audienceLabel": "共有先",
+    "includeTranscript": "文字起こしを含める",
+    "includeTranscriptHint": "含めない場合、共有されるのは要約のみです。",
+    "transcriptShared": "文字起こしも共有されています",
+    "summaryOnly": "要約のみを共有するようになりました",
+    "addedToProject": "プロジェクトに追加しました",
+    "removedFromProject": "プロジェクトから外しました",
+    "stopMine": "共有を停止（自分のノートには残す）",
+    "takeOut": "{workspace} から外す"
+  },
+  "shareDialog": {
+    "allSharedTitle": "すべて共有済みです",
+    "allShared": "自分のレコーディングはすべて {workspace} に共有済みです。",
+    "title": "自分の会議を共有",
+    "description": "会議は自分のもののまま、自分のノートにも残ります。共有を停止するまで {workspace} で閲覧できます。",
+    "meeting": "会議",
+    "movesFrom": "現在 {workspace} で共有されています。ここで共有すると、こちらに移動します。",
+    "audience": "公開範囲",
+    "audienceHint": "決定事項とタスクも一緒に共有されます。参加者はいつでも閲覧できます。",
+    "submit": "共有"
+  }
+}

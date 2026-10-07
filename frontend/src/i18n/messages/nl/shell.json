@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "Productiviteit",
+    "hub": "Hub",
+    "email": "E-mail",
+    "meetings": "Vergaderingen",
+    "calendar": "Agenda",
+    "kanban": "Kanban",
+    "notes": "Notities",
+    "fileManager": "Bestandsbeheer",
+    "studio": "Studio",
+    "knowledge": "Kennis",
+    "downloadApp": "App downloaden",
+    "appGroup": "Apps",
+    "workspacesGroup": "Werkruimtes"
+  },
+  "workspaceNav": {
+    "home": "Start",
+    "projects": "Projecten",
+    "tasks": "Taken",
+    "meetings": "Vergaderingen",
+    "decisions": "Besluiten",
+    "knowledge": "Kennis",
+    "group": "Werkruimte",
+    "members": "Leden",
+    "settings": "Instellingen"
+  },
+  "badge": {
+    "new": "Nieuw",
+    "soon": "Binnenkort"
+  },
+  "search": {
+    "label": "Zoeken",
+    "placeholder": "Wat zoek je?",
+    "noResults": "Geen resultaten gevonden.",
+    "pagesGroup": "Pagina’s"
+  },
+  "userMenu": {
+    "settings": "Instellingen",
+    "language": "Taal",
+    "upgrade": "Abonnement upgraden",
+    "support": "Ondersteuning",
+    "logOut": "Uitloggen"
+  },
+  "sidebar": {
+    "open": "Zijbalk openen",
+    "close": "Zijbalk sluiten"
+  }
+}

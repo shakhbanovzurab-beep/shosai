@@ -1,0 +1,50 @@
+{
+  "title": "Focus",
+  "sound": {
+    "label": "Sound when a session ends",
+    "on": "Sound on",
+    "off": "Sound off"
+  },
+  "rhythm": "Focus rhythm",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Pomodoro",
+      "hint": "{focus} focus, {pause} break, {longBreak} after every {every, plural, one {session} other {# sessions}}. Good for getting started and busy days."
+    },
+    "fifty": {
+      "name": "Extended",
+      "hint": "{focus} focus, {pause} break, {longBreak} after every {every, plural, one {session} other {# sessions}}. Good for writing and design."
+    },
+    "fiftyTwo": {
+      "name": "{focus, number}/{pause, number} rhythm",
+      "hint": "{focus} focus, {pause} break — how the most productive people worked in DeskTime’s study."
+    },
+    "deepWork": {
+      "name": "Deep work",
+      "hint": "{focus} focus, {pause} break — one natural attention cycle, for hard problems."
+    }
+  },
+  "phase": {
+    "focus": "Focus",
+    "break": "Short break",
+    "long_break": "Long break"
+  },
+  "start": "Start",
+  "pause": "Pause",
+  "resume": "Resume",
+  "restart": "Restart this phase",
+  "skipBreak": "Skip the break",
+  "skipToBreak": "Skip to the break",
+  "cycle": "{done, number} of {every, plural, one {# session} other {# sessions}} before a long break",
+  "doneToday": "{count, plural, one {# session done today} other {# sessions done today}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Focus session done — take a break.",
+    "focusLong": "Focus session done — take a long break.",
+    "break": "Break’s over — ready to focus?",
+    "next": "{preset} · press Start when you’re ready."
+  }
+}

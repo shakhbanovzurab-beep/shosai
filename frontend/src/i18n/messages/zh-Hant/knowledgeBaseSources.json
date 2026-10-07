@@ -1,0 +1,85 @@
+{
+  "loadFailed": "無法載入來源",
+  "loading": "正在載入來源…",
+  "connectedCount": "已連接 {connected, number} 個來源，共 {total, plural, other {# 個來源}}。每次同步時，新增和變更的內容都會重新建立索引。",
+  "status": {
+    "connecting": "正在連接",
+    "syncing": "正在同步",
+    "connected": "已連接",
+    "error": "發生錯誤"
+  },
+  "card": {
+    "items": "{count, plural, other {# 個項目}}",
+    "synced": "同步於 {ago}",
+    "syncNow": "立即同步",
+    "syncing": "正在同步…",
+    "settings": "設定…",
+    "disconnect": "中斷連接…",
+    "signIn": "使用 {provider} 登入",
+    "public": "公開頁面，不需登入",
+    "connect": "連接"
+  },
+  "dialog": {
+    "connectTitle": "連接 {name}",
+    "settingsTitle": "{name} 設定",
+    "oauthNote": "你會使用 {provider} 登入並核准唯讀存取權（OAuth 2.0），然後回到這裡。這個頁面不需要輸入密碼或 Token。",
+    "optional": "（選填）",
+    "saveAndSync": "儲存並同步",
+    "continueWith": "使用 {provider} 繼續",
+    "connect": "連接",
+    "connectFailed": "無法連接。"
+  },
+  "disconnect": {
+    "title": "要中斷連接 {name} 嗎？",
+    "description": "同步會停止，儲存的憑證也會刪除。已從這個來源建立索引的內容，會從向量索引中移除。",
+    "confirm": "中斷連接"
+  },
+  "toasts": {
+    "connected": "已連接 {name}",
+    "firstSync": "已開始第一次同步。",
+    "syncFailed": "無法同步 {name}",
+    "disconnected": "已中斷連接 {name}",
+    "disconnectFailed": "無法中斷連接 {name}"
+  },
+  "website": "網站",
+  "descriptions": {
+    "slack": "公開頻道中的訊息和郵件串。",
+    "confluence": "你的空間中的頁面和部落格文章。",
+    "notion": "你在登入時共用的頁面和資料庫。",
+    "obsidian": "同步到 GitHub 的保存庫中的 Markdown 筆記。",
+    "jira": "問題、說明和留言。",
+    "github": "README、說明文件、Issue 和 Pull Request。",
+    "gitlab": "存放庫、Wiki、Issue 和合併請求。",
+    "google_drive": "文件、試算表、簡報和 PDF。",
+    "sharepoint": "Microsoft 365 中的檔案和頁面。",
+    "dropbox": "資料夾中的檔案和 Paper 文件。",
+    "yandex_disk": "Yandex Disk 資料夾中的文件。",
+    "website": "從網站或說明文件入口抓取的頁面。"
+  },
+  "fields": {
+    "channels": "頻道",
+    "spaces": "空間金鑰",
+    "repository": "保存庫存放庫",
+    "branch": "分支",
+    "jql": "JQL 篩選條件",
+    "repositories": "存放庫",
+    "base_url": "執行個體網址",
+    "projects": "專案",
+    "folder_id": "資料夾 ID",
+    "site_url": "SharePoint 網站",
+    "path": "資料夾路徑",
+    "start_url": "起始網址",
+    "max_depth": "抓取深度",
+    "include": "只包含符合的路徑"
+  },
+  "help": {
+    "channels": "留空即包含所有公開頻道。",
+    "spaces": "留空即包含你可以讀取的所有空間。",
+    "repositories": "留空即包含你授予存取權的所有存放庫。",
+    "base_url": "僅適用於自行管理的 GitLab。",
+    "projects": "留空即包含你可以讀取的所有專案。",
+    "folder_id": "留空即為你可以讀取的所有內容建立索引。",
+    "site_url": "留空即使用你的 OneDrive。",
+    "max_depth": "從起始頁面開始追蹤連結的層數。"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "choosePlan": "Scegli un piano.",
+  "planUnavailable": "Questo piano non è disponibile.",
+  "salesOnly": "Questo piano si concorda con il team commerciale.",
+  "alreadyOnPlan": "Hai già questo piano.",
+  "chooseUsers": "Scegli da {min, number} a {max, number} utenti.",
+  "chooseUsersOrMore": "Scegli {min, plural, one {# o più utenti} many {# di utenti o più} other {# o più utenti}}.",
+  "singleUser": "Questo piano è per un solo utente.",
+  "paymentsNotConnected": "I pagamenti non sono ancora collegati. Quando la fatturazione sarà attiva, qui si aprirà il checkout sicuro del fornitore.",
+  "invalidEmail": "Inserisci un’email di lavoro valida.",
+  "companyRequired": "Inserisci la tua azienda.",
+  "checkForm": "Controlla il modulo."
+}

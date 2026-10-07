@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Notes",
+    "description": "Réunions transcrites avec notes, actions à mener et cartes mentales."
+  },
+  "recency": {
+    "today": "Aujourd’hui",
+    "yesterday": "Hier",
+    "thisWeek": "Cette semaine",
+    "earlier": "Plus tôt"
+  },
+  "fields": {
+    "meeting": "Réunion",
+    "folder": "Dossier",
+    "people": "Personnes",
+    "participants": "Participants",
+    "duration": "Durée",
+    "date": "Date"
+  },
+  "views": {
+    "label": "Disposition",
+    "timeline": "Chronologie",
+    "grid": "Grille",
+    "list": "Liste"
+  },
+  "upload": {
+    "button": "Importer un enregistrement",
+    "hint": "Ou déposez un fichier n’importe où sur la page",
+    "dropTitle": "Déposez des enregistrements pour les importer",
+    "dropHint": "mp3, m4a, wav, mp4, webm et plus · jusqu’à {size}",
+    "notMedia": "{name} n’est pas un fichier audio ou vidéo",
+    "tooLarge": "{name} est trop volumineux",
+    "sizeLimit": "Les enregistrements peuvent faire jusqu’à {size}."
+  },
+  "recordings": {
+    "uploading": "Importation",
+    "justNow": "À l’instant",
+    "transcribing": "Transcription en cours",
+    "transcribingNow": "Transcription en cours…",
+    "waiting": "En attente de transcription…",
+    "timelineStatus": "Transcription en cours… Les notes, les décisions et une carte mentale apparaîtront ici une fois la transcription terminée."
+  },
+  "remove": "Retirer {name}",
+  "folders": {
+    "label": "Dossiers",
+    "all": "Toutes les réunions",
+    "new": "Nouveau dossier",
+    "newMenu": "Nouveau dossier…",
+    "newNamed": "Nouveau dossier « {name} »",
+    "defaultName": "Nouveau dossier",
+    "nameLabel": "Nom du dossier",
+    "none": "Aucun dossier",
+    "add": "Ajouter à un dossier",
+    "moveTo": "Déplacer vers un dossier",
+    "search": "Rechercher un dossier…",
+    "noMatch": "Aucun dossier ne correspond.",
+    "movedTo": "Déplacée vers {folder}",
+    "removedFrom": "Retirée du dossier",
+    "emptyTitle": "Ce dossier est vide",
+    "emptyDescription": "Faites un clic droit sur une réunion et choisissez « {action} » pour l’ajouter ici."
+  },
+  "card": {
+    "latest": "Dernière réunion",
+    "keyPoints": "Points clés",
+    "openNotes": "Ouvrir les notes",
+    "openItems": "{count, plural, one {# à faire} many {# à faire} other {# à faire}}"
+  },
+  "timeline": {
+    "decision": "Décision :",
+    "openTasks": "{count, plural, one {# tâche à faire} many {# de tâches à faire} other {# tâches à faire}}"
+  },
+  "menu": {
+    "openInNewTab": "Ouvrir dans un nouvel onglet",
+    "exportTranscript": "Exporter la transcription"
+  },
+  "exportFormats": {
+    "txt": "Texte brut",
+    "md": "Markdown",
+    "srt": "Sous-titres SubRip",
+    "vtt": "Sous-titres WebVTT",
+    "json": "Données JSON"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "« {title} » supprimée"
+}

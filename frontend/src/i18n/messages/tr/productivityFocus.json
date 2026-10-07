@@ -1,0 +1,50 @@
+{
+  "title": "Odak",
+  "sound": {
+    "label": "Oturum bittiğinde ses çal",
+    "on": "Ses açık",
+    "off": "Ses kapalı"
+  },
+  "rhythm": "Odak ritmi",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Pomodoro tekniği",
+      "hint": "{focus} odak, {pause} mola, her {every, plural, one {oturumdan} other {# oturumdan}} sonra {longBreak} uzun mola. Başlarken ve yoğun günlerde işe yarar."
+    },
+    "fifty": {
+      "name": "Uzun odak",
+      "hint": "{focus} odak, {pause} mola, her {every, plural, one {oturumdan} other {# oturumdan}} sonra {longBreak} uzun mola. Yazmak ve tasarım için uygundur."
+    },
+    "fiftyTwo": {
+      "name": "{focus, number}/{pause, number} ritmi",
+      "hint": "{focus} odak, {pause} mola. DeskTime’ın araştırmasında en verimli kişiler böyle çalışıyordu."
+    },
+    "deepWork": {
+      "name": "Derin çalışma",
+      "hint": "{focus} odak, {pause} mola. Zor problemler için tek bir doğal dikkat döngüsü."
+    }
+  },
+  "phase": {
+    "focus": "Odak",
+    "break": "Kısa mola",
+    "long_break": "Uzun mola"
+  },
+  "start": "Başlat",
+  "pause": "Duraklat",
+  "resume": "Devam et",
+  "restart": "Bu aşamayı yeniden başlat",
+  "skipBreak": "Molayı atla",
+  "skipToBreak": "Molaya geç",
+  "cycle": "Uzun molaya kadar {done, number} / {every, plural, one {# oturum} other {# oturum}}",
+  "doneToday": "{count, plural, one {Bugün # oturum tamamlandı} other {Bugün # oturum tamamlandı}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Odak oturumu bitti. Biraz mola verin.",
+    "focusLong": "Odak oturumu bitti. Uzun bir mola verin.",
+    "break": "Mola bitti. Odaklanmaya hazır mısınız?",
+    "next": "{preset} · hazır olduğunuzda Başlat’a basın."
+  }
+}

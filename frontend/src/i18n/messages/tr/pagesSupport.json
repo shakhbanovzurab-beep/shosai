@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Destek",
+    "description": "Ekibimizden yardım isteyin ve destek taleplerinizi takip edin."
+  },
+  "categories": {
+    "billing": "Faturalandırma",
+    "bug": "Hata bildirimi",
+    "account": "Hesap",
+    "feature": "Özellik isteği",
+    "other": "Diğer"
+  },
+  "statuses": {
+    "open": "Destek ekibi bekleniyor",
+    "awaiting_you": "Sizi bekliyor",
+    "resolved": "Çözüldü"
+  },
+  "events": {
+    "acknowledged": "Mesajınızı aldık. Bir uzman genellikle birkaç saat içinde yanıt verir; size burada haber vereceğiz.",
+    "resolved": "Çözüldü olarak işaretlendi",
+    "reopened": "Yeniden açıldı"
+  },
+  "toolbar": {
+    "search": "Taleplerde ara",
+    "filter": "Talepleri filtrele",
+    "all": "Tümü",
+    "open": "Açık",
+    "resolved": "Çözüldü"
+  },
+  "newTicket": "Yeni talep",
+  "table": {
+    "number": "No.",
+    "subject": "Konu",
+    "status": "Durum",
+    "topic": "Kategori",
+    "updated": "Güncelleme",
+    "unread": "Okunmamış:"
+  },
+  "list": {
+    "loading": "Talepler yükleniyor",
+    "loadError": "Talepleriniz yüklenemedi",
+    "emptyTitle": "Nasıl yardımcı olabiliriz?",
+    "emptyDescription": "Bir talep oluşturun; ekibimiz genellikle birkaç saat içinde burada yanıt verir.",
+    "noMatchesTitle": "Talep bulunamadı",
+    "noMatchesDescription": "Başka bir arama veya filtre deneyin."
+  },
+  "panel": {
+    "ticket": "Talep",
+    "description": "Destek ekibiyle yazışmanız"
+  },
+  "form": {
+    "title": "Nasıl yardımcı olabiliriz?",
+    "subtitle": "Genellikle birkaç saat içinde yanıt veririz.",
+    "topic": "Kategori",
+    "subject": "Konu",
+    "subjectPlaceholder": "Kısa bir özet",
+    "body": "Ne oldu?",
+    "bodyPlaceholder": "Adımlar, ne beklediğiniz ve bunun yerine ne gördüğünüz. Ekran görüntüleri işe yarar.",
+    "send": "Gönder"
+  },
+  "attach": {
+    "button": "Dosya ekle",
+    "list": "Eklenen dosyalar",
+    "remove": "Kaldır: {name}",
+    "tooBig": "{count, plural, one {{names}, {size} sınırından büyük} other {{names}, {size} sınırından büyük}}",
+    "tooMany": "{max, plural, one {En fazla # dosya ekleyin} other {En fazla # dosya ekleyin}}"
+  },
+  "composer": {
+    "message": "Mesaj",
+    "emoji": "Emoji ekle",
+    "hint": "Göndermek için Enter · Yeni satır için Shift+Enter",
+    "send": "Gönder",
+    "reply": "Yanıt yazın…",
+    "replyToReopen": "Yeniden açmak için yanıt yazın…"
+  },
+  "thread": {
+    "loading": "Talep yükleniyor",
+    "close": "Talebi kapat",
+    "reopen": "Yeniden aç",
+    "resolve": "Çözüldü olarak işaretle",
+    "resolvedNote": "Çözüldü. Hâlâ yardıma ihtiyacınız varsa aşağıdan yanıt yazın; talep yeniden açılır.",
+    "thanks": "Geri bildiriminiz için teşekkürler.",
+    "rate": "Desteğimizi nasıl buldunuz?",
+    "good": "İyi",
+    "bad": "Kötü",
+    "you": "Siz",
+    "support": "Destek",
+    "supportAuthor": "{name} · Destek",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Okundu olarak işaretle",
+    "markUnread": "Okunmadı olarak işaretle",
+    "copyNumber": "Talep numarasını kopyala",
+    "copySubject": "Konuyu kopyala"
+  },
+  "toasts": {
+    "opened": "#{number} numaralı talep oluşturuldu",
+    "openFailed": "Talep oluşturulamadı",
+    "updateFailed": "Talep güncellenemedi",
+    "sendFailed": "Yanıtınız gönderilemedi",
+    "markedRead": "Okundu olarak işaretlendi",
+    "markedUnread": "Okunmadı olarak işaretlendi",
+    "reopened": "Talep yeniden açıldı",
+    "resolved": "Çözüldü olarak işaretlendi",
+    "numberCopied": "Talep numarası kopyalandı",
+    "subjectCopied": "Konu kopyalandı",
+    "numberCopyFailed": "Talep numarası kopyalanamadı",
+    "subjectCopyFailed": "Konu kopyalanamadı"
+  }
+}

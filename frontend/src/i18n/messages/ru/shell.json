@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "Продуктивность",
+    "hub": "Хаб",
+    "email": "Почта",
+    "meetings": "Встречи",
+    "calendar": "Календарь",
+    "kanban": "Канбан",
+    "notes": "Заметки",
+    "fileManager": "Файлы",
+    "studio": "Studio",
+    "knowledge": "База знаний",
+    "downloadApp": "Скачать приложение",
+    "appGroup": "Приложение",
+    "workspacesGroup": "Пространства"
+  },
+  "workspaceNav": {
+    "home": "Главная",
+    "projects": "Проекты",
+    "tasks": "Задачи",
+    "meetings": "Встречи",
+    "decisions": "Решения",
+    "knowledge": "База знаний",
+    "group": "Пространство",
+    "members": "Участники",
+    "settings": "Настройки"
+  },
+  "badge": {
+    "new": "Новое",
+    "soon": "Скоро"
+  },
+  "search": {
+    "label": "Поиск",
+    "placeholder": "Что ищете?",
+    "noResults": "Ничего не найдено.",
+    "pagesGroup": "Разделы"
+  },
+  "userMenu": {
+    "settings": "Настройки",
+    "language": "Язык",
+    "upgrade": "Улучшить тариф",
+    "support": "Поддержка",
+    "logOut": "Выйти"
+  },
+  "sidebar": {
+    "open": "Развернуть боковую панель",
+    "close": "Свернуть боковую панель"
+  }
+}

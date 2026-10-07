@@ -1,0 +1,22 @@
+{
+  "invalidRequest": "要求內容有誤。請重新載入頁面，然後再試一次。",
+  "contextTooLong": "背景資訊最多只能有 {max, plural, other {# 個字元}}。請縮短內容後再儲存。",
+  "unknownRole": "這個角色不存在。",
+  "modelNotOnPlan": "你的訂閱不包含這個模型。",
+  "modelCantDoRole": "{model} 無法用於 {role}。",
+  "maxTokensRange": "Token 上限必須介於 {min, number} 到 {max, number} 之間。",
+  "promptNameRequired": "請為提示詞命名。",
+  "promptNameTooLong": "名稱太長。最多只能有 {max, plural, other {# 個字元}}。",
+  "promptTooLong": "指令太長。最多只能有 {max, plural, other {# 個字元}}。",
+  "tooManySkills": "每個提示詞最多只能使用 {max, plural, other {# 個技能}}。",
+  "promptNotFound": "找不到提示詞。",
+  "promptForOtherRole": "這個提示詞是為其他角色撰寫的。",
+  "skillNotFound": "找不到技能。",
+  "skillReferenceInvalid": "請使用 owner/repo/skill 格式，或是 skills.sh 或 GitHub 上的技能連結。",
+  "skillFileEmpty": "這個技能的 SKILL.md 是空的。",
+  "skillMissing": "在 {repository} 中找不到 {path}。",
+  "repositoryInvalid": "請使用 owner/repo 格式或 GitHub 連結。",
+  "repositoryUnreadable": "無法讀取 {repository}。請確認這是公開的儲存庫。",
+  "repositoryNoSkills": "{repository} 中沒有 SKILL.md 檔案。",
+  "directoryUnavailable": "skills.sh 目錄目前沒有回應。請稍後再試一次。"
+}

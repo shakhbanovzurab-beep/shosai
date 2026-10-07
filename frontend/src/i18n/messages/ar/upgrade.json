@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "ترقية الخطة"
+  },
+  "title": "ترقية الخطة",
+  "subtitle": "يمكن البدء مجانًا مع {minutes, plural, zero {# دقيقة اجتماعات} one {دقيقة اجتماعات واحدة} two {دقيقتي اجتماعات} few {# دقائق اجتماعات} many {# دقيقة اجتماعات} other {# دقيقة اجتماعات}} شهريًا، ثم الترقية عندما تحتاج الاجتماعات إلى المزيد.",
+  "loading": "جارٍ تحميل الخطط…",
+  "loadFailed": "تعذر تحميل الخطط",
+  "seatNote": "يشمل مقعدك في <b>{workspace}</b> خطة {plan}، لذا تخضع اجتماعاتك ومدير الملفات والمعرفة الخاصة بـ Leo لحدودها. خطتك الشخصية منفصلة.",
+  "pricesNote": "الأسعار بالدولار الأمريكي دون الضرائب، وتتم فوترة خطة Team لكل مستخدم. لا يتم إدخال بيانات الدفع إلا في الصفحة الآمنة لمزود الدفع.",
+  "audiences": {
+    "individual": "للأفراد",
+    "team": "للفرق",
+    "enterprise": "للمؤسسات"
+  },
+  "seatRange": "(المستخدمون: {min, number}–{max, number})",
+  "seatRangeOpen": "(المستخدمون: {min, number}+)",
+  "card": {
+    "yourPlan": "خطتك",
+    "recommended": "موصى بها",
+    "custom": "مخصصة",
+    "tailored": "مصممة خصيصًا لمؤسستك",
+    "perMonth": "/ شهر",
+    "perUserPerMonth": "لكل مستخدم / شهر",
+    "billedMonthly": "فوترة شهرية، مع إمكانية الإلغاء في أي وقت",
+    "freeForever": "مجانية دائمًا",
+    "seatsTotal": "{total} / شهر عن {seats, plural, zero {# مستخدم} one {مستخدم واحد} two {مستخدمين} few {# مستخدمين} many {# مستخدمًا} other {# مستخدم}}",
+    "notIncluded": "غير مشمول: {item}"
+  },
+  "seats": {
+    "label": "المستخدمون",
+    "fewer": "تقليل المستخدمين",
+    "more": "زيادة المستخدمين"
+  },
+  "action": {
+    "current": "الخطة الحالية",
+    "upgradeTo": "الترقية إلى {plan}",
+    "switchTo": "التبديل إلى {plan}",
+    "upgradeFailed": "تعذر بدء الترقية",
+    "switchFailed": "تعذر تغيير الخطة"
+  },
+  "usage": {
+    "label": "دقائق الاجتماعات هذا الشهر",
+    "title": "دقائق الاجتماعات",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "تم استخدام {used, number} من {limit, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}",
+    "left": "المتبقي {left, number} من {limit, plural, zero {# دقيقة اجتماعات} one {دقيقة اجتماعات واحدة} two {دقيقتي اجتماعات} few {# دقائق اجتماعات} many {# دقيقة اجتماعات} other {# دقيقة اجتماعات}}",
+    "allUsed": "تم استخدام كل دقائق الاجتماعات",
+    "resets": "تتم إعادة التعيين في {date}",
+    "leftShort": "المتبقي: {left, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتان} few {# دقائق} many {# دقيقة} other {# دقيقة}} · إعادة التعيين في {date}",
+    "recordingPaused": "التسجيل متوقف مؤقتًا حتى {date}.",
+    "paused": "الاجتماعات متوقفة مؤقتًا حتى {date}.",
+    "pausedUpgrade": "الاجتماعات متوقفة مؤقتًا حتى {date}. يمكن الترقية إلى {plan} للحصول على اجتماعات غير محدودة.",
+    "getUnlimited": "الحصول على اجتماعات غير محدودة"
+  },
+  "gate": {
+    "checking": "جارٍ التحقق من خطتك…",
+    "seePlans": "عرض الخطط",
+    "comparePlans": "مقارنة الخطط",
+    "upgradeTo": "الترقية إلى {plan}",
+    "offer": "تشمل خطة {plan} {unlimited, select, yes {مساحة تخزين غير محدودة} other {{amount}}}.",
+    "offerPriced": "تشمل خطة {plan} {unlimited, select, yes {مساحة تخزين غير محدودة} other {{amount}}} مقابل {price} شهريًا.",
+    "file_manager": {
+      "partOf": "مدير الملفات جزء من خطة {plan}",
+      "notInPlan": "مدير الملفات غير مشمول في خطتك",
+      "pitch": "ملفاتك في مكان واحد، مع اختيار ما يستخدمه Leo منها ومشاركتها في مساحات العمل."
+    },
+    "knowledge_base": {
+      "partOf": "المعرفة جزء من خطة {plan}",
+      "notInPlan": "المعرفة غير مشمولة في خطتك",
+      "pitch": "اختيار الملفات وربط المصادر ليتمكن Leo من الإجابة منها."
+    }
+  },
+  "sales": {
+    "contact": "التواصل مع المبيعات",
+    "title": "التحدث إلى فريق المبيعات",
+    "description": "يمكن إخبارنا عن فريقك وسنعد خطة Enterprise مناسبة له.",
+    "workEmail": "البريد الإلكتروني للعمل",
+    "company": "الشركة",
+    "teamSize": "حجم الفريق",
+    "teamSizePlaceholder": "اختيار",
+    "teamSizeRange": "عدد الأشخاص: {min, number}–{max, number}",
+    "teamSizeOpen": "عدد الأشخاص: {min, number}+",
+    "message": "ما الذي تحتاج إليه؟ <muted>(اختياري)</muted>",
+    "messagePlaceholder": "مزود SSO، مراجعة أمنية، عدد المقاعد…",
+    "send": "إرسال الطلب",
+    "chooseTeamSize": "يرجى اختيار حجم الفريق.",
+    "sendFailed": "تعذر إرسال الطلب.",
+    "sentTitle": "شكرًا، سنتواصل معك قريبًا",
+    "sentDescription": "يرد فريقنا عادةً خلال يوم عمل واحد.",
+    "done": "تم"
+  }
+}

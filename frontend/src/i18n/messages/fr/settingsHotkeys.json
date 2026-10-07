@@ -1,0 +1,26 @@
+{
+  "description": "Raccourcis de l’application de bureau. Ils fonctionnent partout sur votre ordinateur, même quand l’application est en arrière-plan, et se synchronisent sur tous vos appareils.",
+  "commands": {
+    "open_app": "Ouvrir l’application",
+    "toggle_recording": "Lancer / mettre en pause l’enregistrement",
+    "toggle_overlay": "Afficher / masquer la fenêtre flottante",
+    "open_settings": "Paramètres",
+    "collapse_overlay": "Réduire la fenêtre flottante en pastille",
+    "close_app": "Fermer l’application",
+    "live_translation": "Traduction en direct",
+    "prompter": "Prompteur"
+  },
+  "off": "Désactivé",
+  "pressKeys": "Appuyez sur les touches…",
+  "hint": "Échap pour annuler · Retour arrière pour désactiver",
+  "reset": "Rétablir le raccourci par défaut de {command}",
+  "record": "Appuyez sur le nouveau raccourci pour {command}",
+  "change": "{command} : {keys}. Modifier",
+  "changeOff": "{command} : désactivé. Modifier",
+  "resetAll": "Tout rétablir par défaut",
+  "problems": {
+    "needsModifier": "Utilisez ⌘/Ctrl ou ⌥/Alt avec une autre touche.",
+    "reserved": "Ce raccourci est réservé au système.",
+    "taken": "Déjà utilisé pour « {command} »."
+  }
+}

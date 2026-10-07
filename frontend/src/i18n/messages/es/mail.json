@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "Cliente de correo de código abierto",
+    "description": "Un cliente de correo de código abierto con navegación por la bandeja de entrada, búsqueda de mensajes, lectura, respuesta y archivado."
+  },
+  "preview": {
+    "title": "Vista previa del correo",
+    "description": "Este marco muestra la pantalla de correo independiente. Ábrela en pantalla completa para verla mejor.",
+    "openInNewTab": "Abrir el correo en una pestaña nueva"
+  },
+  "nav": {
+    "inbox": "Bandeja de entrada",
+    "priority": "Prioritarios",
+    "drafts": "Borradores",
+    "sent": "Enviados",
+    "archive": "Archivados",
+    "trash": "Papelera",
+    "helpFeedback": "Ayuda y comentarios",
+    "keyboardShortcuts": "Atajos de teclado"
+  },
+  "sidebar": {
+    "newEmail": "Nuevo correo",
+    "folders": "Carpetas"
+  },
+  "accounts": {
+    "switchTo": "Cambiar a {name}",
+    "menu": "Menú de la cuenta",
+    "title": "Cuentas",
+    "add": "Agregar cuenta",
+    "manage": "Administrar cuentas",
+    "settings": "Configuración de la cuenta",
+    "signOut": "Cerrar sesión"
+  },
+  "inbox": {
+    "filter": "Filtrar correo",
+    "refresh": "Actualizar bandeja de entrada",
+    "noSelection": "Ningún correo seleccionado",
+    "needsYou": "Te necesita",
+    "allMail": "Todo el correo",
+    "pinnedGroup": "Fijados ({count, number})",
+    "inboxGroup": "Bandeja de entrada ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "Correo",
+    "drawerDescription": "Lee el correo seleccionado",
+    "to": "Para: <names>{list}</names>",
+    "cc": "CC: <names>{list}</names>",
+    "attachments": "Archivos adjuntos ({count, number})"
+  },
+  "toolbar": {
+    "close": "Cerrar correo",
+    "previous": "Correo anterior",
+    "next": "Correo siguiente",
+    "pin": "Fijar hilo",
+    "reply": "Responder",
+    "more": "Más acciones",
+    "replyAll": "Responder a todos",
+    "forward": "Reenviar",
+    "addLabel": "Agregar etiqueta"
+  },
+  "menu": {
+    "markRead": "Marcar como leído",
+    "markUnread": "Marcar como no leído",
+    "pin": "Fijar arriba",
+    "unpin": "Dejar de fijar",
+    "markPriority": "Marcar como prioritario",
+    "removePriority": "Quitar de Prioritarios",
+    "labels": "Etiquetas",
+    "copySender": "Copiar dirección del remitente",
+    "archive": "Archivar",
+    "trash": "Mover a la papelera"
+  },
+  "replyBar": {
+    "placeholder": "Responder a {name}…",
+    "label": "Responder a {name}",
+    "addEmoji": "Agregar emoji",
+    "attachFile": "Adjuntar archivo",
+    "send": "Enviar"
+  },
+  "toasts": {
+    "senderCopied": "Se copió {email}",
+    "senderCopyFailed": "No se pudo copiar la dirección",
+    "replySent": "Respuesta enviada a {name}",
+    "archived": "{count, plural, one {Se archivó # correo} many {Se archivaron # de correos} other {Se archivaron # correos}}",
+    "moved": "{folder, select, inbox {Se movió «{subject}» a la Bandeja de entrada} drafts {Se movió «{subject}» a Borradores} sent {Se movió «{subject}» a Enviados} archive {Se movió «{subject}» a Archivados} trash {Se movió «{subject}» a la papelera} other {Se movió «{subject}»}}"
+  }
+}

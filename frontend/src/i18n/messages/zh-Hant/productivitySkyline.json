@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, other {過去一年完成了 <b>#</b> 項任務}}",
+  "chart": {
+    "flat": "{count, plural, other {{from} 至 {to} 期間完成了 # 項任務，以熱度圖呈現。使用方向鍵可查看每一天。}}",
+    "skyline": "{count, plural, other {{from} 至 {to} 期間完成了 # 項任務，以 3D 天際線呈現。使用方向鍵可查看每一天。}}"
+  },
+  "day": "{count, plural, =0 {{date} 沒有完成任務} other {{date} 完成了 # 項任務}}",
+  "tooltip": "{count, plural, =0 {{date} <b>沒有完成任務</b>} other {{date} 完成了 <b># 項任務</b>}}",
+  "views": {
+    "label": "圖表檢視",
+    "flat": "平面熱度圖",
+    "skyline": "3D 天際線"
+  },
+  "hint": {
+    "flat": "將游標移到某一天可查看詳細資料 · 使用方向鍵瀏覽",
+    "skyline": "拖曳即可旋轉 · 按兩下即可重設"
+  },
+  "levels": {
+    "label": "活躍程度",
+    "less": "較少",
+    "more": "較多",
+    "none": "沒有完成任務",
+    "light": "低",
+    "moderate": "中",
+    "heavy": "高",
+    "heaviest": "最高"
+  },
+  "stats": {
+    "total": "過去一年",
+    "busiest": "最忙碌的一天",
+    "longest": "最長連續天數",
+    "current": "目前連續天數"
+  },
+  "units": {
+    "contributions": "{count, plural, other {項任務}}",
+    "days": "{count, plural, other {天}}"
+  }
+}

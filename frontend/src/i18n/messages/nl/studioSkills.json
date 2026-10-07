@@ -1,0 +1,53 @@
+{
+  "title": "Vaardigheden",
+  "tabs": {
+    "readyMade": "Kant-en-klaar",
+    "repository": "Je repository",
+    "mine": "Mijn vaardigheden ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Zoek een vaardigheid: systeemontwerp, codereview…",
+    "label": "Vaardigheden zoeken",
+    "help": "Zoeken in de skills.sh-catalogus",
+    "noMatches": "Geen vaardigheden gevonden. Probeer andere woorden.",
+    "emptyTitle": "Catalogus met kant-en-klare vaardigheden",
+    "emptyDescription": "Begin met typen. Een vaardigheid is een kant-en-klare instructie die je aan een prompt kunt toevoegen.",
+    "searchFailed": "Kan niet zoeken in skills.sh. Probeer het opnieuw."
+  },
+  "repository": {
+    "label": "GitHub-repository",
+    "placeholder": "owner/repo of een GitHub-link",
+    "find": "Vaardigheden zoeken",
+    "help": "Een openbare repository met een SKILL.md-bestand",
+    "emptyTitle": "Je eigen vaardigheid van GitHub",
+    "emptyDescription": "Vul een openbare repository in om de SKILL.md-bestanden erin te vinden.",
+    "scanFailed": "Kan de repository niet lezen."
+  },
+  "candidate": {
+    "installs": "{count, plural, one {# installatie} other {# installaties}}",
+    "installed": "Geïnstalleerd"
+  },
+  "mine": {
+    "extraFiles": "Bevat scripts of andere bestanden. Alleen de instructies in SKILL.md worden gebruikt.",
+    "update": "{name} bijwerken",
+    "updateHint": "Bijwerken naar de nieuwste commit",
+    "remove": "{name} verwijderen",
+    "emptyTitle": "Nog geen vaardigheden",
+    "emptyDescription": "Voeg er een toe via Kant-en-klaar of uit je repository."
+  },
+  "remove": {
+    "title": "{name} verwijderen?",
+    "titleUnnamed": "Deze vaardigheid verwijderen?",
+    "description": "Ze wordt uit elke prompt gehaald waarin ze wordt gebruikt. Je kunt ze later opnieuw toevoegen."
+  },
+  "toasts": {
+    "installed": "{name} geïnstalleerd",
+    "installedHint": "Voeg de vaardigheid toe aan een prompt in de prompteditor.",
+    "installFailed": "Kan de vaardigheid niet installeren",
+    "upToDate": "{name} is al bijgewerkt",
+    "updated": "{name} bijgewerkt",
+    "updateFailed": "Kan de vaardigheid niet bijwerken",
+    "removed": "{name} verwijderd",
+    "removeFailed": "Kan de vaardigheid niet verwijderen"
+  }
+}

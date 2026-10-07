@@ -1,0 +1,23 @@
+{
+  "description": "Leo’ya diğer uygulamalardan araç ve veri sağlamak için Model Context Protocol sunucularını bağlayın.",
+  "add": "Sunucu ekle",
+  "empty": {
+    "title": "MCP sunucusu yok",
+    "description": "URL’sini girerek uzak bir sunucu ekleyin."
+  },
+  "hasAuth": "Yetkilendirme var",
+  "notReached": "Henüz ulaşılamadı",
+  "tools": "{count, plural, one {# araç} other {# araç}}",
+  "enable": "{name} sunucusunu etkinleştir",
+  "disable": "{name} sunucusunu devre dışı bırak",
+  "remove": "{name} sunucusunu kaldır",
+  "removed": "{name} kaldırıldı",
+  "form": {
+    "transport": "Aktarım",
+    "url": "Sunucu URL’si",
+    "auth": "Yetkilendirme başlığı <optional>(isteğe bağlı)</optional>"
+  },
+  "addFailed": "Sunucu eklenemedi.",
+  "toggleFailed": "Sunucunun durumu değiştirilemedi",
+  "removeFailed": "Sunucu kaldırılamadı"
+}

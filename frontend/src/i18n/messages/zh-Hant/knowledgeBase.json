@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "知識庫",
+    "description": "選擇 Leo 在個人空間中回答時使用的檔案和來源。"
+  },
+  "heading": "知識庫",
+  "intro": "你在個人空間中提問時，Leo 會根據這些內容回答：你從檔案管理中選擇的檔案、你連接的來源，以及工作空間與你共用的內容。只有你看得到這些回答。",
+  "tabs": {
+    "files": "檔案",
+    "sources": "來源",
+    "workspaces": "來自工作空間"
+  },
+  "loadFailed": "無法載入你的檔案",
+  "leoFolders": {
+    "heading": "Leo 讀取的資料夾",
+    "stop": "停止使用 {folder}"
+  },
+  "leoFiles": {
+    "heading": "Leo 使用的檔案",
+    "emptyTitle": "Leo 還沒有使用你的任何檔案",
+    "emptyDescription": "從檔案管理中選擇檔案或整個資料夾，或在上方上傳新檔案。"
+  },
+  "summary": {
+    "files": "檔案",
+    "chunks": "區塊",
+    "processing": "處理中",
+    "embeddings": "嵌入向量",
+    "used": "已使用 {used}",
+    "usedOfLimit": "已使用 {used}，方案上限為 {limit}",
+    "failedUsage": "{failed, plural, other {# 個失敗}} · {usage}",
+    "inIndex": "位於向量索引中",
+    "busy": "正在解析並建立嵌入向量",
+    "caughtUp": "全部處理完畢",
+    "dimensions": "{dimensions, number} 維"
+  },
+  "dropzone": {
+    "label": "新增檔案給 Leo",
+    "title": "將檔案拖放到這裡，讓 Leo 使用",
+    "uploading": "正在上傳 {count, plural, other {# 個檔案}}…",
+    "description": "檔案會儲存到檔案管理的「我的檔案」中。支援 {types}，每個檔案最大 {size}。",
+    "choose": "從你的檔案中選擇",
+    "upload": "上傳新檔案",
+    "skipped": "{count, plural, other {已略過 # 個檔案}}",
+    "unreadable": "{name}：Leo 無法讀取這種類型或大小的檔案",
+    "tooMany": "{name}：一次超過 {max, number} 個檔案"
+  },
+  "choose": {
+    "title": "從你的檔案中選擇",
+    "description": "Leo 會讀取你選擇的內容，並在個人空間中根據這些內容回答。資料夾也包含你之後新增的檔案。",
+    "folders": "整個資料夾",
+    "files": "檔案",
+    "alreadyUsed": "Leo 已在使用",
+    "submit": "讓 Leo 使用",
+    "readingOne": "Leo 正在讀取",
+    "readingMany": "{count, plural, other {Leo 正在讀取你選擇的 # 個項目}}",
+    "readingDescription": "建立索引完成後，Leo 就會在個人空間中根據這些內容回答。"
+  },
+  "table": {
+    "status": "狀態",
+    "chunks": "區塊",
+    "size": "大小",
+    "workspaces": "工作空間",
+    "actions": "動作",
+    "wholeFolder": "<name>{folder}</name> · 整個資料夾"
+  },
+  "steps": {
+    "queued": "排隊中",
+    "parsing": "正在解析",
+    "chunking": "正在分割區塊",
+    "embedding": "正在建立嵌入向量",
+    "indexed": "已建立索引",
+    "failed": "失敗"
+  },
+  "status": {
+    "step": "第 {step, number} 步，共 {total, number} 步",
+    "progress": "{name}：{step}，{percent}"
+  },
+  "menu": {
+    "reindex": "重新建立索引",
+    "showInFileManager": "在檔案管理中顯示",
+    "stopFolder": "停止使用「{folder}」",
+    "stopFile": "讓 Leo 停止使用"
+  }
+}

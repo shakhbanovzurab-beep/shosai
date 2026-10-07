@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "Boards",
+    "jiraBoards": "Synced with Jira",
+    "newBoard": "New board…",
+    "syncJiraBoard": "Sync a Jira board…",
+    "rename": "Rename board…",
+    "showWorkspaceTasks": "Show my workspace tasks here",
+    "changeIcon": "Change icon",
+    "delete": "Delete board…",
+    "stopSyncing": "Stop syncing…"
+  },
+  "icons": {
+    "work": "Work",
+    "home": "Home",
+    "personal": "Personal",
+    "health": "Health",
+    "study": "Study",
+    "travel": "Travel",
+    "shopping": "Shopping",
+    "fitness": "Fitness",
+    "project": "Project",
+    "reading": "Reading"
+  },
+  "empty": {
+    "title": "No boards yet",
+    "description": "Create a board for work, home or anything else, or bring in a board from Jira.",
+    "newBoard": "New board",
+    "syncJiraBoard": "Sync a Jira board"
+  },
+  "newBoard": {
+    "title": "New board",
+    "description": "Keep work, home and anything else on boards of their own.",
+    "namePlaceholder": "e.g. Home",
+    "icon": "Icon",
+    "columns": "Columns",
+    "create": "Create board"
+  },
+  "templates": {
+    "simple": "Simple",
+    "project": "Project"
+  },
+  "columnNames": {
+    "backlog": "Backlog",
+    "todo": "To do",
+    "inProgress": "In progress",
+    "review": "Review",
+    "done": "Done"
+  },
+  "renameTitle": "Rename board",
+  "delete": {
+    "title": "Delete “{board}”?",
+    "description": "{count, plural, =0 {The board is deleted. This can’t be undone.} one {The board and its # task are deleted. This can’t be undone.} other {The board and its # tasks are deleted. This can’t be undone.}}",
+    "confirm": "Delete board",
+    "stopTitle": "Stop syncing “{board}”?",
+    "stopDescription": "The board is removed from here. Nothing changes in Jira, and you can sync it again later.",
+    "stopConfirm": "Stop syncing"
+  },
+  "jira": {
+    "title": "Sync a Jira board",
+    "description": "Work on a Jira board from here; every change stays in sync both ways.",
+    "connectTitle": "Connect Jira first",
+    "connectDescription": "Sign in to Jira in Settings › Connectors, then come back to pick a board.",
+    "openConnectors": "Open Connectors",
+    "connectedAs": "Connected as {account}.",
+    "connected": "Connected to Jira.",
+    "noBoards": "Your Jira account has no boards yet.",
+    "boardList": "Jira boards",
+    "alreadySynced": "Already synced · open it",
+    "type": {
+      "kanban": "Kanban",
+      "scrum": "Scrum"
+    },
+    "howColumns": "Columns and issues come from the Jira board.",
+    "howMoves": "Moving a card changes the issue’s status in Jira; new tasks become Jira issues.",
+    "howChanges": "Changes made in Jira show up here on their own.",
+    "sync": "Sync board"
+  },
+  "sync": {
+    "syncing": "Syncing with Jira…",
+    "paused": "Sync paused",
+    "synced": "Synced with Jira",
+    "syncedAgo": "Synced with Jira {ago}",
+    "syncNow": "Sync now",
+    "openBoard": "Open {board} in Jira",
+    "openHint": "Open in Jira · {project} on {site}"
+  },
+  "banners": {
+    "syncStopped": "Syncing with Jira stopped.",
+    "changesPaused": "Changes are paused.",
+    "importing": "Importing {board} from Jira…",
+    "importingHint": "Columns and issues appear here in a moment.",
+    "offer": "{count, plural, one {You have # open task in your workspaces. Show it on “{board}”?} other {You have # open tasks in your workspaces. Show them on “{board}”?}} Moving a card updates the task for your team.",
+    "notNow": "Not now",
+    "showHere": "{count, plural, one {Show it here} other {Show them here}}"
+  },
+  "toasts": {
+    "createFailed": "Couldn’t create the board",
+    "connectFailed": "Couldn’t sync the Jira board",
+    "updateFailed": "Couldn’t update the board",
+    "deleteFailed": "Couldn’t delete the board",
+    "syncFailed": "Couldn’t sync with Jira",
+    "deleted": "Deleted “{board}”",
+    "stoppedSyncing": "Stopped syncing “{board}”",
+    "workspaceTasksOn": "Your workspace tasks now show on “{board}”",
+    "workspaceTasksOff": "Your workspace tasks no longer show on a board",
+    "workspaceTasksHint": "Moving a card changes the task in its workspace.",
+    "workspaceTasksFailed": "Couldn’t change where workspace tasks show"
+  }
+}

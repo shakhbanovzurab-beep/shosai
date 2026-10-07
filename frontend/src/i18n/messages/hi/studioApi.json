@@ -1,0 +1,22 @@
+{
+  "invalidRequest": "अनुरोध में कुछ गड़बड़ है। पेज रीलोड करके फिर से कोशिश करें।",
+  "contextTooLong": "संदर्भ ज़्यादा से ज़्यादा {max, plural, one {# अक्षर} other {# अक्षर}} का हो सकता है। सेव करने के लिए इसे छोटा करें।",
+  "unknownRole": "यह भूमिका मौजूद नहीं है।",
+  "modelNotOnPlan": "यह मॉडल आपकी सदस्यता में शामिल नहीं है।",
+  "modelCantDoRole": "{model} को {role} के लिए इस्तेमाल नहीं किया जा सकता।",
+  "maxTokensRange": "अधिकतम टोकन {min, number} से {max, number} के बीच होने चाहिए।",
+  "promptNameRequired": "प्रॉम्प्ट को कोई नाम दें।",
+  "promptNameTooLong": "यह नाम बहुत लंबा है। ज़्यादा से ज़्यादा {max, plural, one {# अक्षर} other {# अक्षर}} इस्तेमाल करें।",
+  "promptTooLong": "निर्देश बहुत लंबे हैं। ज़्यादा से ज़्यादा {max, plural, one {# अक्षर} other {# अक्षर}} इस्तेमाल करें।",
+  "tooManySkills": "{max, plural, one {एक प्रॉम्प्ट में ज़्यादा से ज़्यादा # स्किल इस्तेमाल हो सकती है।} other {एक प्रॉम्प्ट में ज़्यादा से ज़्यादा # स्किल इस्तेमाल हो सकती हैं।}}",
+  "promptNotFound": "प्रॉम्प्ट नहीं मिला।",
+  "promptForOtherRole": "यह प्रॉम्प्ट किसी दूसरी भूमिका के लिए लिखा गया है।",
+  "skillNotFound": "स्किल नहीं मिली।",
+  "skillReferenceInvalid": "owner/repo/skill या स्किल का skills.sh या GitHub लिंक इस्तेमाल करें।",
+  "skillFileEmpty": "इस स्किल की SKILL.md फ़ाइल खाली है।",
+  "skillMissing": "{repository} में {path} नहीं मिला।",
+  "repositoryInvalid": "owner/repo या GitHub लिंक इस्तेमाल करें।",
+  "repositoryUnreadable": "{repository} पढ़ी नहीं जा सकी। क्या यह पब्लिक है?",
+  "repositoryNoSkills": "{repository} में कोई SKILL.md फ़ाइल नहीं है।",
+  "directoryUnavailable": "skills.sh कैटलॉग अभी जवाब नहीं दे रहा है। थोड़ी देर बाद फिर से कोशिश करें।"
+}

@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Verrijkte notities",
+    "description": "Leo kiest de opbouw die bij de vergadering past."
+  },
+  "sections": {
+    "summary": "Samenvatting",
+    "keyPoints": "Kernpunten",
+    "decisions": "Besluiten",
+    "actionItems": "Actiepunten"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Bijpraten: investeerder",
+      "description": "Regelmatige update met een investeerder: hoe het ervoor staat en waarmee die kan helpen."
+    },
+    "catchUpPortfolio": {
+      "name": "Bijpraten: portfoliobedrijf",
+      "description": "Overleg met een portfoliobedrijf over cijfers, risico’s en verzoeken."
+    },
+    "lpProspective": {
+      "name": "LP: kennismaking",
+      "description": "Eerste gesprekken met een potentiële limited partner."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: bestuursvergadering",
+      "description": "Bespreking in het bestuur, besluiten en eigenaren."
+    },
+    "vcPitch": {
+      "name": "VC: pitch",
+      "description": "Een pitch van een oprichter: wat opviel, het oordeel en het due-diligencewerk dat nog moet gebeuren."
+    },
+    "oneOnOne": {
+      "name": "1:1",
+      "description": "Een één-op-ééngesprek: hoe het gaat, onderwerpen en afgesproken vervolgstappen."
+    },
+    "customerCall": {
+      "name": "Klantgesprek",
+      "description": "Verkennend gesprek of check-in met een klant: knelpunten, verzoeken en vervolgacties."
+    },
+    "teamSync": {
+      "name": "Teamoverleg",
+      "description": "Een terugkerende teamvergadering: updates, besluiten en wie wat doet."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Waar we staan",
+    "updatesShared": "Gedeelde updates",
+    "whatWeAgreed": "Wat we hebben afgesproken",
+    "followUps": "Vervolgacties",
+    "companyUpdate": "Update van het bedrijf",
+    "metricsAndHighlights": "Cijfers en hoogtepunten",
+    "howWeCanHelp": "Hoe we kunnen helpen",
+    "overview": "Overzicht",
+    "theirInterests": "Hun interesses",
+    "nextSteps": "Volgende stappen",
+    "boardSummary": "Samenvatting voor het bestuur",
+    "discussion": "Bespreking",
+    "resolutions": "Genomen besluiten",
+    "ownersAndDeadlines": "Eigenaren en deadlines",
+    "thePitch": "De pitch",
+    "whatStoodOut": "Wat opviel",
+    "verdict": "Oordeel",
+    "diligenceToDos": "Due-diligencetaken",
+    "howItsGoing": "Hoe het gaat",
+    "topics": "Onderwerpen",
+    "context": "Context",
+    "painsAndRequests": "Knelpunten en verzoeken",
+    "outcome": "Uitkomst",
+    "updates": "Stand van zaken",
+    "decisions": "Besluiten",
+    "whoDoesWhat": "Wie doet wat"
+  },
+  "icons": {
+    "enhanced": "Verrijkte notities",
+    "briefcase": "Aktetas",
+    "chart": "Grafiek",
+    "handshake": "Handdruk",
+    "landmark": "Bankgebouw",
+    "lightbulb": "Gloeilamp",
+    "magnet": "Magneet",
+    "phone": "Telefoon",
+    "rocket": "Raket",
+    "calendar": "Agenda",
+    "users": "Personen"
+  },
+  "menu": {
+    "label": "Sjabloon voor verrijkte notities",
+    "search": "Sjablonen zoeken…",
+    "noMatch": "Geen sjablonen gevonden.",
+    "heading": "Sjablonen",
+    "regenerate": "Notities opnieuw genereren",
+    "newTemplate": "Nieuw sjabloon…"
+  },
+  "rewritten": "Notities herschreven met ‘{template}’",
+  "regenerated": "Verrijkte notities opnieuw gegenereerd",
+  "created": "Sjabloon ‘{template}’ gemaakt",
+  "dialog": {
+    "title": "Nieuw sjabloon",
+    "description": "Kies welke secties Leo voor een vergadering schrijft en hoe ze heten.",
+    "namePlaceholder": "bijv. Verkennend salesgesprek…",
+    "nameRequired": "Geef het sjabloon een naam.",
+    "descriptionLabel": "Beschrijving",
+    "descriptionPlaceholder": "Wanneer je het gebruikt…",
+    "ownDescription": "Je eigen sjabloon.",
+    "icon": "Pictogram",
+    "sections": "Secties",
+    "include": "{section} opnemen",
+    "heading": "Kop voor {section}",
+    "sectionsRequired": "Houd minstens één sectie over.",
+    "create": "Sjabloon maken"
+  }
+}

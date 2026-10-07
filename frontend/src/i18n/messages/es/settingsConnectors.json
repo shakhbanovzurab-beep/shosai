@@ -1,0 +1,54 @@
+{
+  "description": "Conecta tus apps para que Leo pueda buscar y actuar en ellas. Cada app te pide iniciar sesión en su propia página con OAuth 2.0, así que Leo nunca ve tu contraseña.",
+  "columns": {
+    "connector": "Conector",
+    "type": "Tipo",
+    "status": "Estado"
+  },
+  "categories": {
+    "mail": "Correo",
+    "files": "Archivos",
+    "notes": "Notas",
+    "communication": "Comunicación",
+    "tasks": "Tareas",
+    "crm": "Clientes (CRM)"
+  },
+  "connect": "Conectar",
+  "connecting": "Conectando…",
+  "connected": "Conectado",
+  "options": "Opciones de {name}, conectado",
+  "disconnect": "Desconectar",
+  "toasts": {
+    "connected": "{name} conectado",
+    "notConnected": "No se conectó {name}",
+    "connectFailed": "No se pudo conectar {name}",
+    "disconnected": "{name} desconectado",
+    "disconnectFailed": "No se pudo desconectar {name}"
+  },
+  "callback": {
+    "metaTitle": "Conectando…",
+    "connected": {
+      "title": "Conectado",
+      "body": "Puedes cerrar esta ventana y volver al panel."
+    },
+    "denied": {
+      "title": "Acceso no concedido",
+      "body": "No se conectó nada. Puedes cerrar esta ventana."
+    },
+    "error": {
+      "title": "No se pudo conectar",
+      "body": "Algo salió mal durante la conexión. Inténtalo de nuevo desde Configuración."
+    },
+    "back": "Volver al panel"
+  },
+  "consent": {
+    "metaTitle": "Autorización de demostración",
+    "badge": "Demostración · no se usa ninguna cuenta real",
+    "title": "¿Conectar {app} con Leo?",
+    "titleUnknown": "¿Conectar esta app con Leo?",
+    "body": "En producción, este paso es la pantalla de consentimiento de {app}. Si lo apruebas, Leo podrá leer y actuar en tu cuenta de {app} en tu nombre.",
+    "bodyUnknown": "En producción, este paso es la pantalla de consentimiento del proveedor. Si lo apruebas, Leo podrá leer y actuar en tu cuenta en tu nombre.",
+    "disconnectHint": "Puedes desconectarlo cuando quieras en Configuración › Conectores.",
+    "allow": "Permitir"
+  }
+}

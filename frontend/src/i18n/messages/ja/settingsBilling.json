@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "{plan} プラン",
+    "current": "現在のプラン",
+    "price": "{interval, select, month {月額 {price}} year {年額 {price}} other {ずっと無料}}",
+    "renews": "{date} に更新",
+    "upgrade": "プランをアップグレード"
+  },
+  "payment": {
+    "title": "支払い",
+    "description": "サブスクリプションの更新、追加の使用量、自動チャージには、既定の支払い方法が請求されます。",
+    "add": "支払い方法を追加",
+    "empty": "支払い方法はまだありません。",
+    "default": "既定",
+    "unknownCard": "カード",
+    "endingIn": "{card}（末尾 {last4}）",
+    "expires": "有効期限 {date}",
+    "update": "更新",
+    "updateCard": "{card}（末尾 {last4}）を更新",
+    "openFailed": "支払いページを開けませんでした"
+  },
+  "history": {
+    "title": "請求履歴",
+    "description": "過去の請求書を確認、ダウンロードできます。",
+    "empty": "請求書はまだありません。最初の支払い後にここに表示されます。",
+    "columns": {
+      "date": "日付",
+      "description": "内容",
+      "amount": "金額",
+      "status": "ステータス",
+      "download": "ダウンロード"
+    },
+    "status": {
+      "paid": "支払い済み",
+      "pending": "保留中",
+      "failed": "失敗"
+    },
+    "download": "請求書 {number} をダウンロード",
+    "notReady": "請求書 {number} はまだ準備できていません"
+  }
+}

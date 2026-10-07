@@ -1,0 +1,54 @@
+{
+  "description": "Koppel je apps zodat Leo erin kan zoeken en er acties in kan uitvoeren. Je logt bij elke app in op de eigen pagina van die app met OAuth 2.0, dus Leo ziet je wachtwoord nooit.",
+  "columns": {
+    "connector": "Koppeling",
+    "type": "Soort",
+    "status": "Status"
+  },
+  "categories": {
+    "mail": "E-mail",
+    "files": "Bestanden",
+    "notes": "Notities",
+    "communication": "Communicatie",
+    "tasks": "Taken",
+    "crm": "CRM-systemen"
+  },
+  "connect": "Koppelen",
+  "connecting": "Koppelen…",
+  "connected": "Gekoppeld",
+  "options": "Opties voor {name}, gekoppeld",
+  "disconnect": "Ontkoppelen",
+  "toasts": {
+    "connected": "{name} gekoppeld",
+    "notConnected": "{name} is niet gekoppeld",
+    "connectFailed": "Kan {name} niet koppelen",
+    "disconnected": "{name} ontkoppeld",
+    "disconnectFailed": "Kan {name} niet ontkoppelen"
+  },
+  "callback": {
+    "metaTitle": "Koppelen…",
+    "connected": {
+      "title": "Gekoppeld",
+      "body": "Je kunt dit venster sluiten en teruggaan naar het dashboard."
+    },
+    "denied": {
+      "title": "Geen toegang gegeven",
+      "body": "Er is niets gekoppeld. Je kunt dit venster sluiten."
+    },
+    "error": {
+      "title": "Kan niet koppelen",
+      "body": "Er ging iets mis bij het koppelen. Probeer het opnieuw via Instellingen."
+    },
+    "back": "Terug naar het dashboard"
+  },
+  "consent": {
+    "metaTitle": "Demo-autorisatie",
+    "badge": "Demo · er wordt geen echt account gebruikt",
+    "title": "{app} aan Leo koppelen?",
+    "titleUnknown": "Deze app aan Leo koppelen?",
+    "body": "In productie is deze stap het eigen toestemmingsscherm van {app}. Als je toestemming geeft, kan Leo namens jou je {app}-account lezen en er acties in uitvoeren.",
+    "bodyUnknown": "In productie is deze stap het eigen toestemmingsscherm van de provider. Als je toestemming geeft, kan Leo namens jou je account lezen en er acties in uitvoeren.",
+    "disconnectHint": "Je kunt op elk moment ontkoppelen via Instellingen › Koppelingen.",
+    "allow": "Toestaan"
+  }
+}

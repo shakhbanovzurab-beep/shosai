@@ -1,0 +1,85 @@
+{
+  "loadFailed": "소스를 불러오지 못했어요",
+  "loading": "소스를 불러오는 중…",
+  "connectedCount": "{total, plural, other {소스 #개 중 {connected, number}개 연결됨}}. 동기화할 때마다 새로 추가되거나 바뀐 내용의 색인을 다시 생성해요.",
+  "status": {
+    "connecting": "연결 중",
+    "syncing": "동기화 중",
+    "connected": "연결됨",
+    "error": "오류"
+  },
+  "card": {
+    "items": "{count, plural, other {항목 #개}}",
+    "synced": "{ago} 동기화됨",
+    "syncNow": "지금 동기화",
+    "syncing": "동기화 중…",
+    "settings": "설정…",
+    "disconnect": "연결 해제…",
+    "signIn": "{provider}(으)로 로그인",
+    "public": "공개 페이지, 로그인 필요 없음",
+    "connect": "연결"
+  },
+  "dialog": {
+    "connectTitle": "{name} 연결",
+    "settingsTitle": "{name} 설정",
+    "oauthNote": "{provider}에 로그인해 읽기 전용 접근(OAuth 2.0)을 승인한 다음 이곳으로 돌아와요. 이 페이지에서는 비밀번호나 토큰을 입력하지 않아요.",
+    "optional": "(선택 사항)",
+    "saveAndSync": "저장 후 동기화",
+    "continueWith": "{provider}(으)로 계속",
+    "connect": "연결",
+    "connectFailed": "연결하지 못했어요."
+  },
+  "disconnect": {
+    "title": "{name} 연결을 해제할까요?",
+    "description": "동기화가 중지되고 저장된 인증 정보가 삭제돼요. 이 소스에서 이미 색인된 내용은 벡터 색인에서 제거돼요.",
+    "confirm": "연결 해제"
+  },
+  "toasts": {
+    "connected": "{name}을(를) 연결했어요",
+    "firstSync": "첫 동기화를 시작했어요.",
+    "syncFailed": "{name}을(를) 동기화하지 못했어요",
+    "disconnected": "{name} 연결을 해제했어요",
+    "disconnectFailed": "{name} 연결을 해제하지 못했어요"
+  },
+  "website": "웹사이트",
+  "descriptions": {
+    "slack": "공개 채널의 메시지와 스레드.",
+    "confluence": "스페이스의 페이지와 블로그 게시물.",
+    "notion": "로그인할 때 공유한 페이지와 데이터베이스.",
+    "obsidian": "GitHub에 동기화된 보관소의 Markdown 노트.",
+    "jira": "이슈, 설명, 댓글.",
+    "github": "README, 문서, 이슈, 풀 리퀘스트.",
+    "gitlab": "저장소, 위키, 이슈, 머지 리퀘스트.",
+    "google_drive": "Docs, Sheets, Slides, PDF.",
+    "sharepoint": "Microsoft 365의 파일과 페이지.",
+    "dropbox": "폴더의 파일과 Paper 문서.",
+    "yandex_disk": "Yandex Disk 폴더의 문서.",
+    "website": "사이트나 문서 포털에서 수집한 페이지."
+  },
+  "fields": {
+    "channels": "채널",
+    "spaces": "스페이스 키",
+    "repository": "보관소 저장소",
+    "branch": "브랜치",
+    "jql": "JQL 필터",
+    "repositories": "저장소",
+    "base_url": "인스턴스 URL",
+    "projects": "프로젝트",
+    "folder_id": "폴더 ID",
+    "site_url": "SharePoint 사이트",
+    "path": "폴더 경로",
+    "start_url": "시작 URL",
+    "max_depth": "수집 깊이",
+    "include": "다음과 일치하는 경로만"
+  },
+  "help": {
+    "channels": "비워 두면 모든 공개 채널이 포함돼요.",
+    "spaces": "비워 두면 읽을 수 있는 모든 스페이스가 포함돼요.",
+    "repositories": "비워 두면 접근 권한을 준 모든 저장소가 포함돼요.",
+    "base_url": "직접 운영하는 GitLab에만 해당돼요.",
+    "projects": "비워 두면 읽을 수 있는 모든 프로젝트가 포함돼요.",
+    "folder_id": "비워 두면 읽을 수 있는 모든 항목의 색인을 생성해요.",
+    "site_url": "비워 두면 OneDrive가 사용돼요.",
+    "max_depth": "시작 페이지에서 따라갈 링크 단계 수예요."
+  }
+}

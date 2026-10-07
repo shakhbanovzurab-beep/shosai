@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "サポート",
+    "description": "サポートチームに問い合わせて、チケットの状況を確認できます。"
+  },
+  "categories": {
+    "billing": "請求",
+    "bug": "不具合の報告",
+    "account": "アカウント",
+    "feature": "機能のリクエスト",
+    "other": "その他"
+  },
+  "statuses": {
+    "open": "サポートの対応待ち",
+    "awaiting_you": "自分の返信待ち",
+    "resolved": "解決済み"
+  },
+  "events": {
+    "acknowledged": "メッセージを受け付けました。通常は数時間以内に担当者が返信します。返信があればここでお知らせします。",
+    "resolved": "解決済みにしました",
+    "reopened": "再オープンしました"
+  },
+  "toolbar": {
+    "search": "チケットを検索",
+    "filter": "チケットをフィルタ",
+    "all": "すべて",
+    "open": "未解決",
+    "resolved": "解決済み"
+  },
+  "newTicket": "新しいチケット",
+  "table": {
+    "number": "番号",
+    "subject": "件名",
+    "status": "ステータス",
+    "topic": "トピック",
+    "updated": "更新日時",
+    "unread": "未読："
+  },
+  "list": {
+    "loading": "チケットを読み込み中",
+    "loadError": "チケットを読み込めませんでした",
+    "emptyTitle": "どのようなご用件ですか？",
+    "emptyDescription": "チケットを作成すると、通常は数時間以内にサポートチームがここで返信します。",
+    "noMatchesTitle": "チケットが見つかりません",
+    "noMatchesDescription": "別の検索語やフィルタをお試しください。"
+  },
+  "panel": {
+    "ticket": "チケット",
+    "description": "サポートとのやり取り"
+  },
+  "form": {
+    "title": "どのようなご用件ですか？",
+    "subtitle": "通常は数時間以内に返信します。",
+    "topic": "トピック",
+    "subject": "件名",
+    "subjectPlaceholder": "簡単な概要",
+    "body": "何が起きましたか？",
+    "bodyPlaceholder": "操作の手順、期待した結果、実際の結果を記入してください。スクリーンショットがあると助かります。",
+    "send": "送信"
+  },
+  "attach": {
+    "button": "ファイルを添付",
+    "list": "添付ファイル",
+    "remove": "{name} を削除",
+    "tooBig": "{count, plural, other {{names} は {size} を超えています}}",
+    "tooMany": "{max, plural, other {添付できるファイルは # 件までです}}"
+  },
+  "composer": {
+    "message": "メッセージ",
+    "emoji": "絵文字を追加",
+    "hint": "Enter で送信 · Shift+Enter で改行",
+    "send": "送信",
+    "reply": "返信を入力…",
+    "replyToReopen": "返信して再オープン…"
+  },
+  "thread": {
+    "loading": "チケットを読み込み中",
+    "close": "チケットを閉じる",
+    "reopen": "再オープン",
+    "resolve": "解決済みにする",
+    "resolvedNote": "解決済みです。まだサポートが必要な場合は、下から返信してください。チケットが再オープンされます。",
+    "thanks": "フィードバックをありがとうございます。",
+    "rate": "サポートの対応はいかがでしたか？",
+    "good": "良い",
+    "bad": "悪い",
+    "you": "自分",
+    "support": "サポート",
+    "supportAuthor": "{name} · サポート",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "既読にする",
+    "markUnread": "未読にする",
+    "copyNumber": "チケット番号をコピー",
+    "copySubject": "件名をコピー"
+  },
+  "toasts": {
+    "opened": "チケット #{number} を作成しました",
+    "openFailed": "チケットを作成できませんでした",
+    "updateFailed": "チケットを更新できませんでした",
+    "sendFailed": "返信を送信できませんでした",
+    "markedRead": "既読にしました",
+    "markedUnread": "未読にしました",
+    "reopened": "チケットを再オープンしました",
+    "resolved": "解決済みにしました",
+    "numberCopied": "チケット番号をコピーしました",
+    "subjectCopied": "件名をコピーしました",
+    "numberCopyFailed": "チケット番号をコピーできませんでした",
+    "subjectCopyFailed": "件名をコピーできませんでした"
+  }
+}

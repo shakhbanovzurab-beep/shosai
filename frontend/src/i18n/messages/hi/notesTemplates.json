@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "बेहतर नोट",
+    "description": "Leo मीटिंग के हिसाब से सही ढांचा चुनता है।"
+  },
+  "sections": {
+    "summary": "सारांश",
+    "keyPoints": "मुख्य बातें",
+    "decisions": "फ़ैसले",
+    "actionItems": "एक्शन आइटम"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "अपडेट: निवेशक",
+      "description": "निवेशक के साथ नियमित अपडेट: काम कहां तक पहुंचा है और वे किसमें मदद कर सकते हैं।"
+    },
+    "catchUpPortfolio": {
+      "name": "अपडेट: पोर्टफ़ोलियो कंपनी",
+      "description": "पोर्टफ़ोलियो कंपनी के साथ मेट्रिक्स, जोखिमों और ज़रूरतों पर बातचीत।"
+    },
+    "lpProspective": {
+      "name": "LP: संभावित",
+      "description": "संभावित LP निवेशक के साथ पहली बातचीत।"
+    },
+    "vcBoardMeeting": {
+      "name": "VC: बोर्ड मीटिंग",
+      "description": "बोर्ड की चर्चा, प्रस्ताव और ज़िम्मेदार लोग।"
+    },
+    "vcPitch": {
+      "name": "VC: पिच",
+      "description": "फ़ाउंडर की पिच: क्या ख़ास लगा, फ़ैसला और आगे की जांच-पड़ताल।"
+    },
+    "oneOnOne": {
+      "name": "1:1",
+      "description": "आमने-सामने की बातचीत: काम कैसा चल रहा है, विषय और तय किए गए अगले कदम।"
+    },
+    "customerCall": {
+      "name": "ग्राहक से कॉल",
+      "description": "ग्राहक के साथ डिस्कवरी या नियमित बातचीत: परेशानियां, अनुरोध और फ़ॉलो-अप।"
+    },
+    "teamSync": {
+      "name": "टीम सिंक",
+      "description": "टीम की नियमित मीटिंग: अपडेट, फ़ैसले और कौन क्या करेगा।"
+    }
+  },
+  "headings": {
+    "whereWeAre": "हम कहां हैं",
+    "updatesShared": "शेयर किए गए अपडेट",
+    "whatWeAgreed": "हमने क्या तय किया",
+    "followUps": "फ़ॉलो-अप",
+    "companyUpdate": "कंपनी का अपडेट",
+    "metricsAndHighlights": "मेट्रिक्स और ख़ास बातें",
+    "howWeCanHelp": "हम कैसे मदद कर सकते हैं",
+    "overview": "एक नज़र में",
+    "theirInterests": "उनकी दिलचस्पी",
+    "nextSteps": "अगले कदम",
+    "boardSummary": "बोर्ड का सारांश",
+    "discussion": "चर्चा",
+    "resolutions": "प्रस्ताव",
+    "ownersAndDeadlines": "ज़िम्मेदार लोग और आख़िरी तारीखें",
+    "thePitch": "पिच",
+    "whatStoodOut": "क्या ख़ास लगा",
+    "verdict": "फ़ैसला",
+    "diligenceToDos": "जांच-पड़ताल के काम",
+    "howItsGoing": "काम कैसा चल रहा है",
+    "topics": "विषय",
+    "context": "संदर्भ",
+    "painsAndRequests": "परेशानियां और अनुरोध",
+    "outcome": "नतीजा",
+    "updates": "अपडेट",
+    "decisions": "फ़ैसले",
+    "whoDoesWhat": "कौन क्या करेगा"
+  },
+  "icons": {
+    "enhanced": "बेहतर नोट",
+    "briefcase": "ब्रीफ़केस",
+    "chart": "चार्ट",
+    "handshake": "हाथ मिलाना",
+    "landmark": "इमारत",
+    "lightbulb": "बल्ब",
+    "magnet": "चुंबक",
+    "phone": "फ़ोन",
+    "rocket": "रॉकेट",
+    "calendar": "कैलेंडर",
+    "users": "लोग"
+  },
+  "menu": {
+    "label": "बेहतर नोट का टेंप्लेट",
+    "search": "टेंप्लेट खोजें…",
+    "noMatch": "कोई टेंप्लेट मेल नहीं खाता।",
+    "heading": "टेंप्लेट",
+    "regenerate": "नोट फिर से जनरेट करें",
+    "newTemplate": "नया टेंप्लेट…"
+  },
+  "rewritten": "नोट “{template}” के हिसाब से फिर से लिखे गए",
+  "regenerated": "बेहतर नोट फिर से जनरेट किए गए",
+  "created": "टेंप्लेट “{template}” बनाया गया",
+  "dialog": {
+    "title": "नया टेंप्लेट",
+    "description": "चुनें कि Leo मीटिंग के लिए कौन-से सेक्शन लिखे और उनके नाम क्या हों।",
+    "namePlaceholder": "जैसे, सेल्स डिस्कवरी…",
+    "nameRequired": "टेंप्लेट को कोई नाम दें।",
+    "descriptionLabel": "विवरण",
+    "descriptionPlaceholder": "इसे कब इस्तेमाल करना है…",
+    "ownDescription": "आपका अपना टेंप्लेट।",
+    "icon": "आइकन",
+    "sections": "सेक्शन",
+    "include": "{section} शामिल करें",
+    "heading": "{section} की हेडिंग",
+    "sectionsRequired": "कम से कम एक सेक्शन रखें।",
+    "create": "टेंप्लेट बनाएं"
+  }
+}

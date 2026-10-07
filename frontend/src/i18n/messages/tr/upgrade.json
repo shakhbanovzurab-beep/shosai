@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Planı yükselt"
+  },
+  "title": "Planınızı yükseltin",
+  "subtitle": "Ayda {minutes, plural, one {# dakika toplantı süresiyle} other {# dakika toplantı süresiyle}} ücretsiz başlayın. Toplantılarınız için daha fazlası gerektiğinde planınızı yükseltin.",
+  "loading": "Planlar yükleniyor…",
+  "loadFailed": "Planlar yüklenemedi",
+  "seatNote": "<b>{workspace}</b> çalışma alanındaki lisansınız {plan} planını içerir; kendi toplantılarınız, Dosya yöneticisi ve Leo için bilgi bankası bu planın sınırlarını kullanır. Kişisel planınız bundan ayrıdır.",
+  "pricesNote": "Fiyatlar ABD doları cinsindendir ve vergiler hariçtir; Team planı kullanıcı başına faturalandırılır. Ödeme bilgileri yalnızca ödeme sağlayıcısının güvenli sayfasında girilir.",
+  "audiences": {
+    "individual": "Bireysel",
+    "team": "Ekip",
+    "enterprise": "Kurumsal"
+  },
+  "seatRange": "({min, number}–{max, number} kullanıcı)",
+  "seatRangeOpen": "({min, number}+ kullanıcı)",
+  "card": {
+    "yourPlan": "Planınız",
+    "recommended": "Önerilen",
+    "custom": "Özel",
+    "tailored": "Kuruluşunuza göre uyarlanır",
+    "perMonth": "/ ay",
+    "perUserPerMonth": "kullanıcı başına / ay",
+    "billedMonthly": "Aylık faturalandırılır, istediğiniz zaman iptal edin",
+    "freeForever": "Her zaman ücretsiz",
+    "seatsTotal": "{seats, plural, one {# kullanıcı için ayda {total}} other {# kullanıcı için ayda {total}}}",
+    "notIncluded": "Dahil değil: {item}"
+  },
+  "seats": {
+    "label": "Kullanıcılar",
+    "fewer": "Daha az kullanıcı",
+    "more": "Daha fazla kullanıcı"
+  },
+  "action": {
+    "current": "Mevcut plan",
+    "upgradeTo": "{plan} planına yükselt",
+    "switchTo": "{plan} planına geç",
+    "upgradeFailed": "Plan yükseltme başlatılamadı",
+    "switchFailed": "Plan değiştirilemedi"
+  },
+  "usage": {
+    "label": "Bu ayki toplantı dakikaları",
+    "title": "Toplantı dakikaları",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "{limit, plural, one {Kullanılan: {used, number} / # dakika} other {Kullanılan: {used, number} / # dakika}}",
+    "left": "{limit, plural, one {Kalan: {left, number} / # dakika toplantı süresi} other {Kalan: {left, number} / # dakika toplantı süresi}}",
+    "allUsed": "Tüm toplantı dakikalarınızı kullandınız",
+    "resets": "Yenilenme: {date}",
+    "leftShort": "{left, plural, one {# dk kaldı} other {# dk kaldı}} · yenilenme: {date}",
+    "recordingPaused": "Kayıt {date} tarihine kadar duraklatıldı.",
+    "paused": "Toplantılar {date} tarihine kadar duraklatıldı.",
+    "pausedUpgrade": "Toplantılar {date} tarihine kadar duraklatıldı. Sınırsız toplantı için {plan} planına yükseltin.",
+    "getUnlimited": "Sınırsız toplantı edinin"
+  },
+  "gate": {
+    "checking": "Planınız kontrol ediliyor…",
+    "seePlans": "Planları gör",
+    "comparePlans": "Planları karşılaştır",
+    "upgradeTo": "{plan} planına yükselt",
+    "offer": "{plan} planında {unlimited, select, yes {sınırsız depolama alanı} other {{amount}}} var.",
+    "offerPriced": "{plan} planında ayda {price} karşılığında {unlimited, select, yes {sınırsız depolama alanı} other {{amount}}} var.",
+    "file_manager": {
+      "partOf": "Dosya yöneticisi {plan} planına dahildir",
+      "notInPlan": "Dosya yöneticisi planınıza dahil değil",
+      "pitch": "Dosyalarınızı tek yerde tutun, Leo’nun hangilerini kullanacağını seçin ve çalışma alanlarında paylaşın."
+    },
+    "knowledge_base": {
+      "partOf": "Bilgi bankası {plan} planına dahildir",
+      "notInPlan": "Bilgi bankası planınıza dahil değil",
+      "pitch": "Leo’nun bunlara dayanarak yanıt verebilmesi için dosyalar seçin ve kaynaklar bağlayın."
+    }
+  },
+  "sales": {
+    "contact": "Satış ekibiyle iletişime geç",
+    "title": "Satış ekibiyle görüşün",
+    "description": "Ekibinizden bahsedin, size özel bir Enterprise planı hazırlayalım.",
+    "workEmail": "İş e-postası",
+    "company": "Şirket",
+    "teamSize": "Ekip büyüklüğü",
+    "teamSizePlaceholder": "Seçin",
+    "teamSizeRange": "{min, number}–{max, number} kişi",
+    "teamSizeOpen": "{min, number}+ kişi",
+    "message": "Neye ihtiyacınız var? <muted>(isteğe bağlı)</muted>",
+    "messagePlaceholder": "SSO sağlayıcısı, güvenlik incelemesi, lisans sayısı…",
+    "send": "Talebi gönder",
+    "chooseTeamSize": "Ekip büyüklüğünüzü seçin.",
+    "sendFailed": "Talebiniz gönderilemedi.",
+    "sentTitle": "Teşekkürler, sizinle iletişime geçeceğiz",
+    "sentDescription": "Ekibimiz genellikle bir iş günü içinde yanıt verir.",
+    "done": "Bitti"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Leo 채팅 열기",
+    "close": "Leo 채팅 닫기",
+    "tooltipOpen": "Leo에게 질문",
+    "tooltipClose": "Leo 닫기"
+  },
+  "panel": {
+    "label": "Leo 채팅",
+    "subtitle": "AI 에이전트",
+    "working": "처리 중…",
+    "newChat": "새 채팅",
+    "fullScreen": "전체 화면",
+    "exitFullScreen": "전체 화면 종료",
+    "close": "닫기",
+    "dropFiles": "첨부할 파일을 여기에 놓아 주세요"
+  },
+  "place": {
+    "personal": "개인",
+    "workspace": "{name}에서",
+    "hub": "{name}에서",
+    "scopePersonal": "메일, 캘린더, 노트, 작업, 골라 주신 파일과 워크스페이스에서 공유된 내용을 활용해 도와드려요. 이 채팅은 다른 사람에게 보이지 않아요.",
+    "scopeWorkspace": "{name}에서 공유된 회의, 결정 사항, 프로젝트, 지식만으로 답변해요. 이 채팅은 {name} 안에만 남아요.",
+    "scopeHub": "{name}의 회의, 결정 사항, 자료만으로 답변해요. 이 채팅은 여기에만 남아요.",
+    "boundHub": "“{name}”에 대해서만 답변해요"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {좋은 저녁이에요} morning {좋은 아침이에요} afternoon {좋은 오후예요} other {좋은 저녁이에요}}",
+    "hi": "안녕하세요",
+    "intro": "{greeting}! 저는 Leo예요",
+    "howCanIHelp": "오늘은 무엇을 도와드릴까요?",
+    "suggestionsLabel": "추천 질문"
+  },
+  "suggestions": {
+    "default": {
+      "first": "오늘 하루 계획 짜 줘",
+      "second": "내가 챙겨야 할 일 요약해 줘",
+      "third": "뭘 도와줄 수 있어?"
+    },
+    "hub": {
+      "first": "진행을 막고 있는 게 뭐야?",
+      "second": "지난 회의에서 뭐가 바뀌었어?",
+      "third": "다음 회의 준비 도와줘"
+    },
+    "workspace": {
+      "first": "가격은 어떻게 하기로 했어?",
+      "second": "여기서 마감 지난 내 작업 있어?",
+      "third": "우리 보안 정책 찾아 줘"
+    },
+    "productivity": {
+      "first": "오늘 하루 계획 짜 줘",
+      "second": "뭐부터 하면 좋을까?",
+      "third": "이번 주 요약해 줘"
+    },
+    "mail": {
+      "first": "받은편지함 요약해 줘",
+      "second": "정중한 후속 메일 초안 써 줘",
+      "third": "급한 메일은 뭐야?"
+    },
+    "calendar": {
+      "first": "오늘 일정 뭐 있어?",
+      "second": "이번 주에 비는 한 시간 찾아 줘",
+      "third": "다음 회의 준비 도와줘"
+    },
+    "kanban": {
+      "first": "마감 지난 작업 뭐 있어?",
+      "second": "이 보드 요약해 줘",
+      "third": "다음에 옮길 작업 추천해 줘"
+    },
+    "meetings": {
+      "first": "오늘 회의 뭐 있어?",
+      "second": "팀 회의 일정 잡아 줘",
+      "third": "다음 통화 준비 도와줘"
+    },
+    "notes": {
+      "first": "지난 회의 요약해 줘",
+      "second": "내 후속 작업 목록 보여 줘",
+      "third": "이번 주에 결정한 게 뭐야?"
+    },
+    "fileManager": {
+      "first": "최근 파일 찾아 줘",
+      "second": "용량을 제일 많이 차지하는 게 뭐야?",
+      "third": "내 파일 정리해 줘"
+    },
+    "studio": {
+      "first": "시스템 메시지 써 줘",
+      "second": "사용 가능한 모델 비교해 줘",
+      "third": "이 프롬프트 다듬어 줘"
+    }
+  },
+  "composer": {
+    "placeholder": "Leo에게 무엇이든 물어보세요",
+    "label": "Leo 채팅 메시지",
+    "attach": "파일 첨부",
+    "attachLimit": "{max, plural, other {파일을 최대 #개까지 첨부할 수 있어요}}",
+    "filesToSend": "보낼 파일",
+    "removeFile": "{name} 제거",
+    "disclaimer": "Leo 답변에는 실수가 있을 수 있어요. 중요한 정보는 꼭 확인해 주세요.",
+    "stop": "Leo 중지",
+    "send": "메시지 보내기",
+    "startVoice": "음성 모드 시작",
+    "voiceMode": "음성 모드"
+  },
+  "message": {
+    "copy": "복사",
+    "copied": "복사했어요",
+    "copyFailed": "클립보드에 복사하지 못했어요",
+    "regenerate": "다시 생성",
+    "tryAgain": "다시 시도",
+    "replyFailed": "Leo 답변을 끝까지 받지 못했어요. 연결을 확인하고 다시 시도해 주세요.",
+    "edit": "편집",
+    "editMessage": "메시지 편집",
+    "attachedFiles": "첨부 파일"
+  },
+  "steps": {
+    "gettingStarted": "시작하는 중",
+    "doneIn": "{duration} 만에 완료",
+    "stoppedAfter": "{duration} 후 중지됨",
+    "somethingWrong": "문제가 생겼어요",
+    "label": "Leo 진행 과정",
+    "needsApproval": "승인 필요",
+    "detail": "“{detail}”",
+    "status": "{status, select, running {진행 중} done {완료} error {실패} stopped {중지됨} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} 파일이 너무 커요",
+    "sizeLimit": "파일은 최대 {size}까지 첨부할 수 있어요.",
+    "tooMany": "{max, plural, other {파일은 최대 #개까지 첨부할 수 있어요.}}"
+  },
+  "voice": {
+    "unavailable": "음성 모드를 사용할 수 없어요",
+    "listening": "듣는 중…",
+    "thinking": "Leo 생각 중…",
+    "speaking": "Leo 응답 중…",
+    "micOff": "마이크가 꺼져 있어요",
+    "turnMicOn": "마이크 켜기",
+    "turnMicOff": "마이크 끄기",
+    "end": "음성 모드 종료",
+    "micBlocked": "마이크 접근이 차단되어 있어요",
+    "micBlockedHint": "Leo 음성 대화를 이용하려면 마이크 접근을 허용해 주세요.",
+    "needsHttps": "음성 모드에서 마이크를 사용하려면 보안 연결(HTTPS)이 필요해요.",
+    "unsupported": "이 브라우저는 음성 모드를 지원하지 않아요. 최신 버전의 Chrome, Edge 또는 Safari를 사용해 보세요."
+  }
+}

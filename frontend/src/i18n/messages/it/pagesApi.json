@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Invia il messaggio come multipart/form-data.",
+  "emptyMessage": "Scrivi un messaggio o allega un file.",
+  "messageTooLong": "Il messaggio deve avere meno di {max, number} caratteri.",
+  "tooManyFiles": "{max, plural, one {Allega al massimo # file.} many {Allega al massimo # di file.} other {Allega al massimo # file.}}",
+  "fileTooBig": "{name} supera {size}.",
+  "subjectRequired": "Dai alla richiesta un oggetto breve.",
+  "topicRequired": "Scegli un argomento.",
+  "detailsRequired": "Descrivi cosa è successo.",
+  "ticketNotFound": "Richiesta non trovata.",
+  "invalidUpdate": "Invia uno stato, una valutazione o l’indicatore di non letto."
+}

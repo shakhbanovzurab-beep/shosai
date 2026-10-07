@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "Un tableau de bord d’administration open source soigné, construit avec shadcn/ui."
+  },
+  "actions": {
+    "goHome": "Aller à l’accueil",
+    "goBack": "Revenir en arrière"
+  },
+  "placeholder": {
+    "title": "{title} arrive bientôt",
+    "description": "Cette section est en cours de développement et sera bientôt disponible.",
+    "badge": "En développement"
+  },
+  "filter": {
+    "label": "{label} :",
+    "all": "Tous"
+  },
+  "emoji": {
+    "search": "Rechercher un emoji",
+    "empty": "Aucun emoji trouvé"
+  },
+  "notFound": {
+    "metaTitle": "Page introuvable",
+    "badge": "Erreur {code}",
+    "title": "Cette page s’est égarée",
+    "description": "Le lien est peut-être rompu, ou la page a été déplacée ou supprimée. Voici de quoi retrouver votre chemin.",
+    "popularPages": "Pages populaires",
+    "jumpTo": "Ou aller à"
+  },
+  "unauthorized": {
+    "metaTitle": "Accès refusé",
+    "title": "Vous n’avez pas accès à cette page",
+    "description": "Vous n’avez pas l’autorisation d’afficher cette page. Si vous pensez qu’il s’agit d’une erreur, contactez votre administrateur."
+  }
+}

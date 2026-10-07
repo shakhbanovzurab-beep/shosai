@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Kirim pesan sebagai multipart/form-data.",
+  "emptyMessage": "Tulis pesan atau lampirkan file.",
+  "messageTooLong": "Gunakan pesan kurang dari {max, number} karakter.",
+  "tooManyFiles": "{max, plural, other {Lampirkan paling banyak # file.}}",
+  "fileTooBig": "{name} lebih besar dari {size}.",
+  "subjectRequired": "Beri tiket subjek singkat.",
+  "topicRequired": "Pilih topik.",
+  "detailsRequired": "Jelaskan apa yang terjadi.",
+  "ticketNotFound": "Tiket tidak ditemukan.",
+  "invalidUpdate": "Kirim status, penilaian, atau penanda belum dibaca."
+}

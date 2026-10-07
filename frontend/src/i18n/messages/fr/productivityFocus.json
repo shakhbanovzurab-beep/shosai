@@ -1,0 +1,50 @@
+{
+  "title": "Concentration",
+  "sound": {
+    "label": "Son à la fin d’une session",
+    "on": "Son activé",
+    "off": "Son désactivé"
+  },
+  "rhythm": "Rythme de concentration",
+  "presetLabel": "{name} : {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "Méthode Pomodoro",
+      "hint": "{focus} de concentration, {pause} de pause, {longBreak} {every, plural, one {après chaque session} many {toutes les # de sessions} other {toutes les # sessions}}. Idéal pour démarrer et pour les journées chargées."
+    },
+    "fifty": {
+      "name": "Prolongé",
+      "hint": "{focus} de concentration, {pause} de pause, {longBreak} {every, plural, one {après chaque session} many {toutes les # de sessions} other {toutes les # sessions}}. Idéal pour l’écriture et le design."
+    },
+    "fiftyTwo": {
+      "name": "Rythme {focus, number}/{pause, number}",
+      "hint": "{focus} de concentration, {pause} de pause : le rythme des personnes les plus productives selon l’étude de DeskTime."
+    },
+    "deepWork": {
+      "name": "Travail en profondeur",
+      "hint": "{focus} de concentration, {pause} de pause : un cycle d’attention naturel, pour les problèmes difficiles."
+    }
+  },
+  "phase": {
+    "focus": "Concentration",
+    "break": "Pause courte",
+    "long_break": "Pause longue"
+  },
+  "start": "Démarrer",
+  "pause": "Mettre en pause",
+  "resume": "Reprendre",
+  "restart": "Recommencer cette phase",
+  "skipBreak": "Passer la pause",
+  "skipToBreak": "Passer à la pause",
+  "cycle": "{done, number} sur {every, plural, one {# session} many {# de sessions} other {# sessions}} avant une pause longue",
+  "doneToday": "{count, plural, one {# session terminée aujourd’hui} many {# de sessions terminées aujourd’hui} other {# sessions terminées aujourd’hui}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "Session de concentration terminée. Faites une pause.",
+    "focusLong": "Session de concentration terminée. Prenez une pause longue.",
+    "break": "La pause est terminée. Place à la concentration.",
+    "next": "{preset} · appuyez sur Démarrer quand vous le souhaitez."
+  }
+}

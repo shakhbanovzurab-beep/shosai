@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "リクエストに問題があります。ページを再読み込みして、もう一度お試しください。",
+    "nameRequired": "名前を入力してください。",
+    "hotkeyUnsupported": "そのショートカットには対応していません。",
+    "modelNotOnPlan": "そのモデルは現在のサブスクリプションでは使用できません。",
+    "emailMismatch": "メールアドレスがアカウントと一致しません。",
+    "deletionUnavailable": "アカウントの削除はまだ利用できません。何も削除されていません。",
+    "avatarMissing": "アップロードする画像を選んでください。",
+    "avatarType": "WebP、JPEG、PNG のいずれかの画像を使用してください。",
+    "paymentsUnavailable": "支払い機能はまだ利用できません。請求機能が有効になると、プロバイダの安全なページが開きます。",
+    "checkoutUnavailable": "支払い機能はまだ利用できません。請求機能が有効になると、プロバイダの決済ページが開きます。",
+    "invoiceNotFound": "請求書が見つかりません。",
+    "connectorNotFound": "コネクタが見つかりません。",
+    "authorizationExpired": "認証の有効期限が切れているか、すでに使用されています。もう一度接続してください。",
+    "dataKindUnknown": "不明な種類のデータです。",
+    "dataItemNotFound": "その項目は見つかりません。削除された可能性があります。",
+    "mcpNameRequired": "サーバーの名前を入力してください。",
+    "mcpNameTooLong": "名前が長すぎます。短くしてください。",
+    "mcpUrlInvalid": "サーバーの http(s) URL を入力してください。",
+    "mcpServerNotFound": "サーバーが見つかりません。",
+    "memoryNotFound": "メモリが見つかりません。",
+    "summaryMessageRequired": "質問か、更新する内容を入力してください。"
+  },
+  "avatarTooLarge": "画像が {size} を超えています。",
+  "invoice": {
+    "title": "請求書 {number}",
+    "date": "日付：{date}",
+    "description": "内容：{description}",
+    "amount": "金額：{amount}",
+    "status": "ステータス：{status}",
+    "demoNote": "デモ用の請求書です。実際の請求書は請求システムから PDF で発行されます。"
+  },
+  "notesFromYou": "自分から伝えたこと"
+}

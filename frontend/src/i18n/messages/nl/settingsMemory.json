@@ -1,0 +1,23 @@
+{
+  "memory": "Geheugen",
+  "memoryHint": "Leo onthoudt nuttige feiten uit je chats en vergaderingen en gebruikt ze in latere antwoorden.",
+  "summary": {
+    "title": "Geheugensamenvatting",
+    "description": "Bekijk een overzicht van wat Leo over je heeft geleerd. Zet wat Leo altijd moet meewegen in je <link>aangepaste instructies</link>.",
+    "dialogDescription": "Wat Leo over je heeft geleerd.",
+    "updated": "Bijgewerkt {ago}",
+    "actions": "Acties voor geheugensamenvatting",
+    "refresh": "Samenvatting vernieuwen",
+    "refreshFailed": "Kan niet vernieuwen",
+    "copy": "Tekst kopiëren",
+    "copied": "Samenvatting gekopieerd",
+    "copyFailed": "Kan niet kopiëren",
+    "learnMore": "Meer informatie"
+  },
+  "composer": {
+    "placeholder": "Vragen of bijwerken",
+    "label": "Stel een vraag over je geheugensamenvatting of vertel Leo wat er moet veranderen",
+    "send": "Versturen",
+    "sendFailed": "Kan niet versturen"
+  }
+}

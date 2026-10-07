@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "ボードが見つかりません。",
+  "taskNotFound": "タスクが見つかりません。",
+  "columnNotFound": "列が見つかりません。",
+  "boardChanged": "ボードが更新されています。再読み込みしてから、もう一度お試しください。",
+  "managedInJira": "このボードは Jira で管理されています。この変更は Jira で行ってください。",
+  "reconnectJira": "変更するには、「設定 › コネクタ」で Jira に再接続してください。",
+  "firstSync": "Jira との初回同期が完了するまでお待ちください。",
+  "jiraDisconnected": "Jira との接続が解除されています。このボードの同期を続けるには、「設定 › コネクタ」で再接続してください。",
+  "connectJiraFirst": "先に「設定 › コネクタ」で Jira に接続してください。",
+  "jiraBoardUnavailable": "お使いの Jira アカウントでは、この Jira ボードを利用できません。",
+  "jiraBoardSynced": "この Jira ボードはすでに同期されています。",
+  "notJiraBoard": "同期できるのは、Jira と同期しているボードだけです。",
+  "jiraBoardWorkspaceTasks": "Jira ボードには Jira の課題だけが表示されます。アプリ内で管理しているボードを選択してください。",
+  "workspaceTaskCopy": "ワークスペースのタスクはここでは複製できません。代わりにワークスペースでタスクを追加してください。",
+  "workspaceTaskDelete": "ワークスペースのタスクは、ワークスペースで完了するか担当者が変わると、このボードに表示されなくなります。",
+  "boardNameRequired": "ボード名を入力してください。",
+  "boardNameTooLong": "名前が長すぎます。短い名前にしてください。",
+  "taskTitleRequired": "タスクのタイトルを入力してください。",
+  "invalidRequest": "リクエストに問題があります。ページを再読み込みして、もう一度お試しください。"
+}

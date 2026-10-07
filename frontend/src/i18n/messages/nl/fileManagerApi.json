@@ -1,0 +1,16 @@
+{
+  "fileGone": "Dit bestand bestaat niet meer.",
+  "folderGone": "Deze map bestaat niet meer.",
+  "chooseFile": "Kies minstens één bestand.",
+  "tooManyFiles": "Upload maximaal {max, number} bestanden tegelijk.",
+  "tooLarge": "‘{name}’ is groter dan {size}.",
+  "overLeoLimit": "Met je abonnement kan Leo maximaal {limit} van je bestanden gebruiken. Laat Leo eerst een paar bestanden niet meer gebruiken.",
+  "notUsedByLeo": "Leo gebruikt dit bestand niet.",
+  "shareFirst": "Deel het bestand eerst in die werkruimte.",
+  "fileNameRequired": "Voer een bestandsnaam in.",
+  "folderNameRequired": "Voer een mapnaam in.",
+  "nameTooLong": "Houd de naam korter dan {max, number} tekens.",
+  "nameSlash": "Een naam mag geen / of \\ bevatten.",
+  "invalidRequest": "Er klopt iets niet in het verzoek. Laad de pagina opnieuw en probeer het nog eens.",
+  "copyName": "{name} kopie"
+}

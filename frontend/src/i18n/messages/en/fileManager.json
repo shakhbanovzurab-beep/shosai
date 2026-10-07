@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "File Manager",
+    "description": "Browse, organize and upload your files, and choose which ones Leo uses.",
+    "folderTitle": "Folder · File Manager"
+  },
+  "myFiles": "My files",
+  "loading": "Loading your files…",
+  "loadFailed": "Couldn’t load your files",
+  "allFiles": {
+    "heading": "All files",
+    "emptyTitle": "No files yet",
+    "emptyDescription": "Upload files or drop them here. Then choose which ones Leo can use."
+  },
+  "folders": {
+    "heading": "Folders",
+    "new": "New folder",
+    "untitled": "Untitled folder",
+    "emptyTitle": "No folders yet",
+    "emptyDescription": "Create a folder to organize your files, or to let Leo read a whole set at once.",
+    "fileCount": "{count, plural, one {# file} other {# files}}",
+    "dropHere": "Drop to move here",
+    "dropHereLeo": "Drop to move here. Leo will use it.",
+    "updated": "Updated {ago}",
+    "leoReadsAll": "Leo uses everything it can read in this folder"
+  },
+  "folder": {
+    "notFound": "Folder not found",
+    "notFoundDescription": "It may have been deleted or renamed in another session.",
+    "backToMyFiles": "Back to My files",
+    "back": "Back",
+    "emptyTitle": "This folder is empty",
+    "emptyLeo": "Upload or move files here and Leo will use them.",
+    "empty": "Upload files here, drag them onto this folder in My files, or use Move to in a file’s menu."
+  },
+  "section": {
+    "label": "Files",
+    "view": "File view",
+    "grid": "Grid",
+    "list": "List",
+    "noMatch": "No files match",
+    "noMatchDescription": "Nothing here fits this filter.",
+    "clearFilters": "Clear filters"
+  },
+  "toolbar": {
+    "filterSort": "Filter & sort",
+    "show": "Show",
+    "fileType": "File type",
+    "allTypes": "All types",
+    "sortBy": "Sort by"
+  },
+  "show": {
+    "all": "All files",
+    "starred": "Starred",
+    "leo": "Used by Leo",
+    "shared": "Shared in workspaces"
+  },
+  "sort": {
+    "modified": "Last modified",
+    "name": "Name",
+    "size": "File size"
+  },
+  "kinds": {
+    "archive": "Archive",
+    "design": "Design",
+    "document": "Document",
+    "image": "Image",
+    "other": "File",
+    "pdf": "PDF",
+    "presentation": "Presentation",
+    "spreadsheet": "Spreadsheet",
+    "text": "Text"
+  },
+  "file": {
+    "star": "Star {name}",
+    "unstar": "Unstar {name}",
+    "modified": "Modified {ago}",
+    "inFolderModified": "<hidden>In folder </hidden><name>{folder}</name> · Modified {ago}",
+    "inFolder": "<hidden>In folder </hidden><name>{folder}</name>",
+    "sharedIn": "Shared in {workspaces}",
+    "sharedInHidden": "<hidden>Shared in </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Modified",
+    "size": "Size",
+    "actions": "Actions"
+  },
+  "leo": {
+    "viaFile": "Leo uses this file because you chose it",
+    "viaFolder": "Leo uses this file through its folder",
+    "reading": "Leo · reading",
+    "failed": "Leo couldn’t read it",
+    "tooLarge": "Leo reads files up to {size}",
+    "extension": "Leo can’t read .{extension} files",
+    "unknownType": "Leo can’t read this type of file"
+  },
+  "menu": {
+    "addStar": "Add to starred",
+    "removeStar": "Remove from starred",
+    "moveTo": "Move to",
+    "useWithLeo": "Use with Leo",
+    "usedThrough": "Used through “{folder}”",
+    "share": "Share in a workspace…",
+    "sharing": "Sharing in workspaces…",
+    "transferTo": "Transfer to",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Delete folder"
+  },
+  "dialogs": {
+    "renameFile": "Rename file",
+    "renameFolder": "Rename folder",
+    "shareTitle": "Share “{name}”",
+    "shareDescription": "Leo answers from it in the workspace for whoever you choose. It stays here, stays yours, and leaves the workspace if you delete it or leave.",
+    "transferTitle": "Transfer “{name}” to {workspace}?",
+    "transferDescription": "It moves out of your files and belongs to {workspace}: it stays there when you leave, and its admins manage it. Other workspaces you shared it in lose it. You can’t undo this.",
+    "transfer": "Transfer"
+  },
+  "upload": {
+    "button": "Upload",
+    "uploading": "Uploading {count, plural, one {# file} other {# files}}…",
+    "dropHere": "Drop to upload here",
+    "skipped": "{count, plural, one {Skipped # file} other {Skipped # files}}",
+    "skippedDescription": "Files that are empty or over {size} are skipped, and at most {max, number} upload at once."
+  },
+  "picker": {
+    "search": "Search your files",
+    "noMatch": "No files match.",
+    "noFiles": "No files yet. Upload some in File Manager first.",
+    "yourFiles": "Your files",
+    "alreadyShared": "Already shared here"
+  }
+}

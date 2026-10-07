@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Projekte",
+    "project": "Projekt"
+  },
+  "title": "Projekte",
+  "description": "Ein Projekt bündelt ein Arbeitspaket an einem Ort: seine Meetings, Entscheidungen und Aufgaben.",
+  "newProject": "Neues Projekt",
+  "filter": {
+    "label": "Welche Projekte",
+    "open": "Laufend",
+    "all": "Alle"
+  },
+  "empty": {
+    "title": "Noch keine Projekte",
+    "text": "Starte eines für Arbeit, die sich über mehrere Meetings erstreckt, etwa einen Launch oder eine Einstellung. Danach kannst du Meetings und Aufgaben hinzufügen."
+  },
+  "status": {
+    "planned": "Geplant",
+    "active": "Aktiv",
+    "paused": "Pausiert",
+    "completed": "Abgeschlossen"
+  },
+  "ledBy": "{who, select, me {Leitung: du} other {Leitung: {name}}}",
+  "noLead": "Keine Leitung",
+  "target": {
+    "none": "Kein Zieldatum",
+    "overdue": "Überfällig · {date}",
+    "today": "Ziel: heute",
+    "tomorrow": "Ziel: morgen",
+    "on": "Ziel: {date}"
+  },
+  "progress": {
+    "label": "{total, plural, one {{done, number} von # Aufgabe erledigt} other {{done, number} von # Aufgaben erledigt}}",
+    "count": "{done, number}/{total, number}",
+    "none": "Keine Aufgaben"
+  },
+  "notFound": {
+    "title": "Dieses Projekt gibt es nicht mehr",
+    "text": "Es wurde möglicherweise gelöscht. Seine Meetings und Aufgaben sind weiterhin im Workspace.",
+    "action": "Alle Projekte"
+  },
+  "sections": {
+    "tasks": "Aufgaben",
+    "addTask": "Aufgabe hinzufügen",
+    "tasksEmpty": "Noch keine Aufgaben. Füge eine hinzu oder teile ein Meeting in dieses Projekt, um seine Aufgaben zu übernehmen.",
+    "meetings": "Meetings",
+    "meetingsEmpty": "In dieses Projekt geteilte Meetings erscheinen hier.",
+    "decisions": "Entscheidungen",
+    "files": "Dateien",
+    "filesLabel": "Dateien von {project}",
+    "filesEmpty": "Zu diesem Projekt hinzugefügte Dateien erscheinen hier, und Leo nutzt sie dafür."
+  },
+  "header": {
+    "edit": "Projekt bearbeiten",
+    "delete": "Projekt löschen",
+    "lead": "Leitung",
+    "team": "Team",
+    "target": "Zieldatum",
+    "deleteTitle": "{name} löschen?",
+    "deleteText": "Seine Meetings, Aufgaben und Entscheidungen bleiben im Workspace; sie gehören nur zu keinem Projekt mehr."
+  },
+  "dialog": {
+    "newTitle": "Neues Projekt",
+    "editTitle": "{name} bearbeiten",
+    "description": "Ein Ort für ein Arbeitspaket: seine Meetings, Entscheidungen und Aufgaben.",
+    "nameRequired": "Gib dem Projekt einen Namen.",
+    "namePlaceholder": "z. B. Beta der Mobile-App",
+    "purpose": "Wofür es ist",
+    "lead": "Leitung",
+    "me": "{name} (du)",
+    "team": "Team",
+    "wholeWorkspace": "Ganzer Workspace",
+    "status": "Status",
+    "target": "Zieldatum",
+    "create": "Projekt erstellen",
+    "saved": "{name} gespeichert",
+    "created": "{name} erstellt"
+  }
+}

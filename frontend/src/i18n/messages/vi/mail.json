@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "Ứng dụng email mã nguồn mở",
+    "description": "Ứng dụng email mã nguồn mở với hộp thư đến, tìm kiếm thư, đọc, trả lời và lưu trữ."
+  },
+  "preview": {
+    "title": "Xem trước hộp thư",
+    "description": "Khung này hiển thị màn hình thư độc lập. Hãy mở ở chế độ toàn màn hình để xem rõ hơn.",
+    "openInNewTab": "Mở hộp thư trong thẻ mới"
+  },
+  "nav": {
+    "inbox": "Hộp thư đến",
+    "priority": "Ưu tiên",
+    "drafts": "Thư nháp",
+    "sent": "Đã gửi",
+    "archive": "Lưu trữ",
+    "trash": "Thùng rác",
+    "helpFeedback": "Trợ giúp và góp ý",
+    "keyboardShortcuts": "Phím tắt"
+  },
+  "sidebar": {
+    "newEmail": "Thư mới",
+    "folders": "Thư mục"
+  },
+  "accounts": {
+    "switchTo": "Chuyển sang {name}",
+    "menu": "Menu tài khoản",
+    "title": "Tài khoản",
+    "add": "Thêm tài khoản",
+    "manage": "Quản lý tài khoản",
+    "settings": "Cài đặt tài khoản",
+    "signOut": "Đăng xuất"
+  },
+  "inbox": {
+    "filter": "Lọc thư",
+    "refresh": "Làm mới hộp thư đến",
+    "noSelection": "Chưa chọn thư nào",
+    "needsYou": "Cần bạn xử lý",
+    "allMail": "Tất cả thư",
+    "pinnedGroup": "Đã ghim ({count, number})",
+    "inboxGroup": "Hộp thư đến ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "Thư",
+    "drawerDescription": "Đọc thư đã chọn",
+    "to": "Đến: <names>{list}</names>",
+    "cc": "Cc: <names>{list}</names>",
+    "attachments": "Tệp đính kèm ({count, number})"
+  },
+  "toolbar": {
+    "close": "Đóng thư",
+    "previous": "Thư trước",
+    "next": "Thư sau",
+    "pin": "Ghim chuỗi thư",
+    "reply": "Trả lời",
+    "more": "Thao tác khác",
+    "replyAll": "Trả lời tất cả",
+    "forward": "Chuyển tiếp",
+    "addLabel": "Thêm nhãn"
+  },
+  "menu": {
+    "markRead": "Đánh dấu là đã đọc",
+    "markUnread": "Đánh dấu là chưa đọc",
+    "pin": "Ghim lên đầu",
+    "unpin": "Bỏ ghim",
+    "markPriority": "Đánh dấu là ưu tiên",
+    "removePriority": "Gỡ khỏi Ưu tiên",
+    "labels": "Nhãn",
+    "copySender": "Sao chép địa chỉ người gửi",
+    "archive": "Lưu trữ",
+    "trash": "Chuyển vào thùng rác"
+  },
+  "replyBar": {
+    "placeholder": "Trả lời {name}…",
+    "label": "Trả lời {name}",
+    "addEmoji": "Thêm biểu tượng cảm xúc",
+    "attachFile": "Đính kèm tệp",
+    "send": "Gửi"
+  },
+  "toasts": {
+    "senderCopied": "Đã sao chép {email}",
+    "senderCopyFailed": "Không thể sao chép địa chỉ",
+    "replySent": "Đã gửi thư trả lời cho {name}",
+    "archived": "{count, plural, other {Đã lưu trữ # thư}}",
+    "moved": "{folder, select, inbox {Đã chuyển “{subject}” vào Hộp thư đến} drafts {Đã chuyển “{subject}” vào Thư nháp} sent {Đã chuyển “{subject}” vào Đã gửi} archive {Đã chuyển “{subject}” vào Lưu trữ} trash {Đã chuyển “{subject}” vào Thùng rác} other {Đã chuyển “{subject}”}}"
+  }
+}

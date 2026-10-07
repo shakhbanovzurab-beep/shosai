@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "التقويم",
+    "description": "تخطيط الاجتماعات والأحداث ووقت التركيز حسب الشهر أو الأسبوع أو اليوم."
+  },
+  "summary": "{days, plural, zero {# يوم} one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}} · {events, plural, zero {# حدث} one {حدث واحد} two {حدثان} few {# أحداث} many {# حدثًا} other {# حدث}}",
+  "calendars": {
+    "label": "التقويم",
+    "all": "كل التقويمات",
+    "work": "العمل",
+    "personal": "شخصي",
+    "team": "الفريق",
+    "focus": "وقت التركيز"
+  },
+  "views": {
+    "label": "طريقة العرض",
+    "dayGridMonth": "شهر",
+    "timeGridWeek": "أسبوع",
+    "timeGridDay": "يوم"
+  },
+  "previous": "الفترة السابقة",
+  "next": "الفترة التالية",
+  "today": "اليوم",
+  "addEvent": "إضافة حدث",
+  "loading": "جارٍ تحميل التقويم…",
+  "eventMenu": {
+    "reschedule": "إعادة الجدولة",
+    "dayEarlier": "تقديم يوم واحد",
+    "dayLater": "تأجيل يوم واحد",
+    "nextWeek": "نقل إلى الأسبوع القادم",
+    "moveToToday": "نقل إلى اليوم",
+    "copyDetails": "نسخ التفاصيل",
+    "delete": "حذف الحدث"
+  },
+  "dayMenu": {
+    "newAllDay": "حدث جديد طوال اليوم…",
+    "newAt": "حدث جديد في {time}…",
+    "openDay": "فتح اليوم",
+    "openWeek": "فتح الأسبوع"
+  },
+  "renameTitle": "إعادة تسمية الحدث",
+  "newTitle": "حدث جديد · {when}",
+  "copyName": "{title} (نسخة)",
+  "details": "{title} — {when}",
+  "detailsCopied": "تم نسخ تفاصيل الحدث",
+  "detailsCopyFailed": "تعذر نسخ تفاصيل الحدث",
+  "deleted": "تم حذف «{title}»"
+}

@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Projeler",
+    "project": "Proje"
+  },
+  "title": "Projeler",
+  "description": "Proje, bir işi tek bir yerde toplar: toplantılarını, kararlarını ve görevlerini.",
+  "newProject": "Yeni proje",
+  "filter": {
+    "label": "Hangi projeler",
+    "open": "Devam edenler",
+    "all": "Tümü"
+  },
+  "empty": {
+    "title": "Henüz proje yok",
+    "text": "Bir lansman veya işe alım gibi birden fazla toplantıya yayılan işler için bir proje başlatın. Ardından projeye toplantılar ve görevler eklenebilir."
+  },
+  "status": {
+    "planned": "Planlandı",
+    "active": "Etkin",
+    "paused": "Duraklatıldı",
+    "completed": "Tamamlandı"
+  },
+  "ledBy": "{who, select, me {Lider: siz} other {Lider: {name}}}",
+  "noLead": "Lider yok",
+  "target": {
+    "none": "Hedef tarih yok",
+    "overdue": "Gecikti · {date}",
+    "today": "Hedef: bugün",
+    "tomorrow": "Hedef: yarın",
+    "on": "Hedef: {date}"
+  },
+  "progress": {
+    "label": "{total, plural, one {# görevden {done, number} tanesi tamamlandı} other {# görevden {done, number} tanesi tamamlandı}}",
+    "count": "{done, number}/{total, number}",
+    "none": "Görev yok"
+  },
+  "notFound": {
+    "title": "Bu proje artık burada değil",
+    "text": "Silinmiş olabilir. Toplantıları ve görevleri hâlâ çalışma alanında.",
+    "action": "Tüm projeler"
+  },
+  "sections": {
+    "tasks": "Görevler",
+    "addTask": "Görev ekle",
+    "tasksEmpty": "Henüz görev yok. Bir görev ekleyin veya görevlerini getirmek için bu projeye bir toplantı paylaşın.",
+    "meetings": "Toplantılar",
+    "meetingsEmpty": "Bu projeye paylaşılan toplantılar burada görünür.",
+    "decisions": "Kararlar",
+    "files": "Dosyalar",
+    "filesLabel": "Proje dosyaları: {project}",
+    "filesEmpty": "Bu projeye eklenen dosyalar burada görünür ve Leo bunları proje için kullanır."
+  },
+  "header": {
+    "edit": "Projeyi düzenle",
+    "delete": "Projeyi sil",
+    "lead": "Lider",
+    "team": "Ekip",
+    "target": "Hedef tarih",
+    "deleteTitle": "{name} silinsin mi?",
+    "deleteText": "Toplantıları, görevleri ve kararları çalışma alanında kalır; yalnızca artık bir projeye ait olmazlar."
+  },
+  "dialog": {
+    "newTitle": "Yeni proje",
+    "editTitle": "Düzenle: {name}",
+    "description": "Bir iş için tek bir yer: toplantıları, kararları ve görevleri.",
+    "nameRequired": "Projeye bir ad verin.",
+    "namePlaceholder": "ör. Mobil uygulama beta",
+    "purpose": "Ne için",
+    "lead": "Lider",
+    "me": "{name} (siz)",
+    "team": "Ekip",
+    "wholeWorkspace": "Tüm çalışma alanı",
+    "status": "Durum",
+    "target": "Hedef tarih",
+    "create": "Proje oluştur",
+    "saved": "{name} kaydedildi",
+    "created": "{name} oluşturuldu"
+  }
+}

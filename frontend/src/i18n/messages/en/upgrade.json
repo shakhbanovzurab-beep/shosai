@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Upgrade plan"
+  },
+  "title": "Upgrade your plan",
+  "subtitle": "Start free with {minutes, plural, one {# meeting minute} other {# meeting minutes}} a month. Upgrade when your meetings need more.",
+  "loading": "Loading plans…",
+  "loadFailed": "Couldn’t load plans",
+  "seatNote": "Your seat in <b>{workspace}</b> includes {plan}, so your own meetings, File Manager and knowledge for Leo have its limits. Your personal plan is separate.",
+  "pricesNote": "Prices in US dollars, excluding taxes; Team is billed per user. Payment details are entered only on the payment provider’s secure page.",
+  "audiences": {
+    "individual": "Individual",
+    "team": "Team",
+    "enterprise": "Enterprise"
+  },
+  "seatRange": "({min, number}–{max, number} users)",
+  "seatRangeOpen": "({min, number}+ users)",
+  "card": {
+    "yourPlan": "Your plan",
+    "recommended": "Recommended",
+    "custom": "Custom",
+    "tailored": "Tailored to your organization",
+    "perMonth": "/ month",
+    "perUserPerMonth": "per user / month",
+    "billedMonthly": "Billed monthly, cancel anytime",
+    "freeForever": "Free forever",
+    "seatsTotal": "{total} / month for {seats, plural, one {# user} other {# users}}",
+    "notIncluded": "Not included: {item}"
+  },
+  "seats": {
+    "label": "Users",
+    "fewer": "Fewer users",
+    "more": "More users"
+  },
+  "action": {
+    "current": "Current plan",
+    "upgradeTo": "Upgrade to {plan}",
+    "switchTo": "Switch to {plan}",
+    "upgradeFailed": "Couldn’t start the upgrade",
+    "switchFailed": "Couldn’t change the plan"
+  },
+  "usage": {
+    "label": "Meeting minutes this month",
+    "title": "Meeting minutes",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "{used, number} of {limit, plural, one {# minute} other {# minutes}} used",
+    "left": "{left, number} of {limit, plural, one {# meeting minute} other {# meeting minutes}} left",
+    "allUsed": "You’ve used all your meeting minutes",
+    "resets": "Resets {date}",
+    "leftShort": "{left, plural, one {# min} other {# min}} left · resets {date}",
+    "recordingPaused": "Recording paused until {date}.",
+    "paused": "Meetings are paused until {date}.",
+    "pausedUpgrade": "Meetings are paused until {date}. Upgrade to {plan} for unlimited meetings.",
+    "getUnlimited": "Get unlimited meetings"
+  },
+  "gate": {
+    "checking": "Checking your plan…",
+    "seePlans": "See plans",
+    "comparePlans": "Compare plans",
+    "upgradeTo": "Upgrade to {plan}",
+    "offer": "{plan} includes {unlimited, select, yes {unlimited storage} other {{amount}}}.",
+    "offerPriced": "{plan} includes {unlimited, select, yes {unlimited storage} other {{amount}}} for {price} a month.",
+    "file_manager": {
+      "partOf": "File Manager is part of {plan}",
+      "notInPlan": "File Manager isn’t in your plan",
+      "pitch": "Keep your files in one place, choose which ones Leo uses, and share them in workspaces."
+    },
+    "knowledge_base": {
+      "partOf": "Knowledge is part of {plan}",
+      "notInPlan": "Knowledge isn’t in your plan",
+      "pitch": "Choose files and connect sources so Leo can answer from them."
+    }
+  },
+  "sales": {
+    "contact": "Contact sales",
+    "title": "Talk to sales",
+    "description": "Tell us about your team and we’ll put together an Enterprise plan.",
+    "workEmail": "Work email",
+    "company": "Company",
+    "teamSize": "Team size",
+    "teamSizePlaceholder": "Choose",
+    "teamSizeRange": "{min, number}–{max, number} people",
+    "teamSizeOpen": "{min, number}+ people",
+    "message": "What do you need? <muted>(optional)</muted>",
+    "messagePlaceholder": "SSO provider, security review, number of seats…",
+    "send": "Send request",
+    "chooseTeamSize": "Choose your team size.",
+    "sendFailed": "Couldn’t send your request.",
+    "sentTitle": "Thanks — we’ll be in touch",
+    "sentDescription": "Our team usually replies within one business day.",
+    "done": "Done"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "memory": "記憶",
+  "memoryHint": "Leo 會記住對話和會議中的實用資訊，並在之後的回答中運用。",
+  "summary": {
+    "title": "記憶摘要",
+    "description": "查看 Leo 對你的了解概覽。希望 Leo 一律考量的事項，請寫在<link>自訂指令</link>中。",
+    "dialogDescription": "Leo 對你的了解。",
+    "updated": "更新於 {ago}",
+    "actions": "記憶摘要動作",
+    "refresh": "重新整理摘要",
+    "refreshFailed": "無法重新整理",
+    "copy": "複製文字",
+    "copied": "已複製摘要",
+    "copyFailed": "無法複製",
+    "learnMore": "瞭解詳情"
+  },
+  "composer": {
+    "placeholder": "提問或更新",
+    "label": "詢問記憶摘要的相關問題，或告訴 Leo 要變更什麼",
+    "send": "傳送",
+    "sendFailed": "無法傳送"
+  }
+}

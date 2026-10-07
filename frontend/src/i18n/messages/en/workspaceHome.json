@@ -1,0 +1,62 @@
+{
+  "description": "What needs you, what’s coming up, and where the team’s work stands.",
+  "invitePeople": "Invite people",
+  "quietStart": "Once meetings are shared or projects start, this page shows what needs you, what’s coming up and what the team decided.",
+  "blocks": {
+    "needsYou": "Needs you",
+    "allTasks": "All tasks",
+    "nothingWaiting": "Nothing is waiting on you here. Tasks assigned to you land here and in your Productivity.",
+    "moreTasks": "{count, plural, one {# more task} other {# more tasks}}",
+    "comingUp": "Coming up",
+    "projects": "Projects",
+    "allProjects": "All projects",
+    "recentDecisions": "Recent decisions",
+    "decisionLog": "Decision log"
+  },
+  "comingUp": {
+    "empty": "No team meetings coming up.",
+    "live": "Live",
+    "guestsPrivate": "Stays private: guests attend",
+    "private": "Notes stay private",
+    "notesGoTo": "Notes go to {audience}"
+  },
+  "decisions": {
+    "empty": "Decisions from shared meetings will show up here, linked to where they were made.",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "No active projects. Start one to group its meetings, tasks and decisions.",
+    "ledBy": "Led by {name}",
+    "ledByYou": "Led by you"
+  },
+  "setup": {
+    "title": "Set up your workspace",
+    "progress": "{done, number} of {total, number} done. Each step makes the next meeting more useful to everyone.",
+    "progressLabel": "{done, number} of {total, number} setup steps done",
+    "hide": "Hide the setup checklist",
+    "done": "Done",
+    "toDo": "To do",
+    "steps": {
+      "invite": {
+        "title": "Invite your team",
+        "description": "Add at least two people so meetings and tasks have somewhere to go.",
+        "action": "Invite people"
+      },
+      "sharing": {
+        "title": "Confirm how meetings are shared",
+        "description": "Pick where notes go after a meeting. Meetings with guests stay private either way.",
+        "action": "Review"
+      },
+      "share": {
+        "title": "Share one of your meetings",
+        "description": "Your recordings stay in your Notes until you share one here, with its decisions and tasks.",
+        "action": "Share a meeting"
+      },
+      "knowledge": {
+        "title": "Add team knowledge",
+        "description": "Share your files, upload new ones or connect a shared drive, for Leo to answer from.",
+        "action": "Add knowledge"
+      }
+    }
+  }
+}

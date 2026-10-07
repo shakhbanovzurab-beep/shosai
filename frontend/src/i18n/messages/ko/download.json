@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "앱 다운로드",
+    "description": "macOS와 Windows용 데스크톱 앱을 다운로드해요."
+  },
+  "title": "데스크톱 앱 받기",
+  "subtitle": "회의를 녹음하고, 어떤 통화에서든 실시간 노트와 번역을 사용하고, 단축키로 어디서나 Leo를 불러올 수 있어요.",
+  "notes": {
+    "mobile": "데스크톱 앱은 macOS와 Windows에서 실행돼요. 다운로드하려면 컴퓨터에서 이 페이지를 열어 주세요.",
+    "linux": "아직 Linux 버전은 없어요. 데스크톱 앱은 macOS와 Windows에서 실행돼요."
+  },
+  "card": {
+    "yourComputer": "내 컴퓨터",
+    "requirement": "{system} 이상",
+    "downloadFor": "{name}용 다운로드",
+    "downloadBuild": "{arch}용 다운로드 · {size}",
+    "meta": "버전 {version} · {size} · {type} · {date}",
+    "loadFailed": "{platform} 다운로드 정보를 불러오지 못했어요.",
+    "notYet": "{platform} 앱은 아직 준비 중이에요. 곧 다시 확인해 주세요.",
+    "universal": "Apple 실리콘 및 Intel"
+  },
+  "checksum": {
+    "button": "체크섬",
+    "verify": "확인하려면 <code>{command}</code>을(를) 실행하고 결과를 비교해 주세요.",
+    "copy": "체크섬 복사",
+    "copied": "체크섬을 복사했어요",
+    "copyFailed": "체크섬을 복사하지 못했어요"
+  },
+  "install": {
+    "title": "3단계로 설치",
+    "macos": {
+      "open": "다운로드한 {type} 파일을 열어 주세요.",
+      "drag": "앱을 응용 프로그램 폴더로 끌어다 놓은 다음 거기서 열어 주세요.",
+      "allow": "로그인한 다음 macOS에서 요청하면 마이크와 화면 및 시스템 오디오 녹음을 허용해 주세요. 그래야 회의를 녹음할 수 있어요."
+    },
+    "windows": {
+      "run": "다운로드한 설치 프로그램({type})을 실행해 주세요.",
+      "setup": "설치 안내를 따른 다음 시작 메뉴에서 앱을 열어 주세요.",
+      "allow": "로그인한 다음 Windows에서 요청하면 마이크 접근을 허용해 주세요."
+    }
+  },
+  "features": {
+    "title": "데스크톱 전용",
+    "customize": "단축키 설정",
+    "shortcutOff": "단축키 꺼짐",
+    "shortcut": "단축키: {keys}",
+    "toggle_recording": {
+      "title": "녹음",
+      "text": "어떤 앱에서든 회의 녹음을 시작하거나 일시 중지해요."
+    },
+    "toggle_overlay": {
+      "title": "오버레이",
+      "text": "통화 화면 위에 실시간 노트를 띄우고, 작은 알약 모양으로 접을 수 있어요."
+    },
+    "live_translation": {
+      "title": "실시간 번역",
+      "text": "상대가 말하는 동안 내 언어로 대화를 따라가요."
+    },
+    "prompter": {
+      "title": "프롬프터",
+      "text": "대화하는 동안 Leo가 나에게만 보이는 제안을 조용히 띄워 줘요."
+    }
+  }
+}

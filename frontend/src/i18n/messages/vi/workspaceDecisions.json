@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Quyết định"
+  },
+  "title": "Quyết định",
+  "description": "Mọi quyết định trong các cuộc họp được chia sẻ với bạn, mới nhất ở trên, kèm liên kết đến nơi đã nêu ra.",
+  "searchLabel": "Tìm kiếm quyết định",
+  "loading": "Đang tải quyết định…",
+  "loadFailed": "Không thể tải quyết định",
+  "empty": {
+    "title": "Chưa có quyết định nào",
+    "text": "Leo chọn ra những gì đã được quyết định trong các cuộc họp được chia sẻ và lưu tại đây, kèm liên kết đến cuộc họp.",
+    "action": "Đến cuộc họp"
+  },
+  "noMatch": {
+    "title": "Không có quyết định nào phù hợp",
+    "text": "Hãy thử từ khóa khác hoặc nhóm khác.",
+    "clear": "Xóa bộ lọc"
+  },
+  "replaced": "Đã thay thế",
+  "replacedBy": "Đã được thay bằng <link>“{decision}”</link> trong {meeting}.",
+  "replacedHidden": "Đã được thay bằng một quyết định sau đó trong cuộc họp chưa được chia sẻ với bạn.",
+  "day": {
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "tomorrow": "Ngày mai"
+  }
+}

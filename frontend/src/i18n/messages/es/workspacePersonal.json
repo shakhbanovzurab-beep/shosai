@@ -1,0 +1,51 @@
+{
+  "share": "Compartir",
+  "sharedIn": "Compartido en {workspace}",
+  "workspace": "Espacio de trabajo",
+  "stopSharing": "Dejar de compartir",
+  "fileShare": {
+    "title": "Compartir en un espacio de trabajo",
+    "description": "Allí Leo responde con él a quien tú elijas. Sigue en tu Administrador de archivos y sigue siendo tuyo.",
+    "access": "Quién puede usarlo",
+    "everyone": "Todos en {workspace}",
+    "sharedOption": "{workspace} · compartido",
+    "noWorkspace": "Aún no estás en ningún espacio de trabajo.",
+    "toast": "{level, select, workspace {«{file}»: todos en {workspace} pueden usarlo} other {«{file}»: {team} puede usarlo en {workspace}}}"
+  },
+  "recordingShare": {
+    "title": "Compartir en un espacio de trabajo",
+    "description": "Sigue siendo tuya y sigue aquí, en tus Notas. Las preguntas que le hagas a Leo sobre ella siguen siendo privadas.",
+    "openIn": "Abrir en {workspace}",
+    "tabWorkspace": "Espacio de trabajo",
+    "tabLink": "Enlace",
+    "loadFailed": "No se pudo cargar {workspace}.",
+    "moveTo": "Mover a {workspace}",
+    "audienceHint": "Su resumen, decisiones y tareas. Los participantes siempre pueden verla.",
+    "sharedElsewhere": "Ahora está compartida en {workspace}; una reunión solo puede estar en un espacio de trabajo a la vez."
+  },
+  "myTasks": {
+    "title": "De tus espacios de trabajo",
+    "onKanban": "En tu Kanban",
+    "loadFailed": "No se pudieron cargar las tareas de tus espacios de trabajo.",
+    "empty": "No tienes nada asignado en tus espacios de trabajo."
+  },
+  "actionItems": {
+    "tracked": "Se sigue como tareas en <link>{workspace}</link>; los cambios que hagas aquí también se aplican allí."
+  },
+  "sharedMeetings": {
+    "nav": "Compartido contigo",
+    "loadFailed": "No se pudieron cargar las reuniones compartidas.",
+    "emptyTitle": "Aún no hay nada compartido contigo aquí",
+    "empty": "Aquí aparecen las reuniones que tus compañeros comparten contigo o con un equipo del que formas parte.",
+    "intro": "Compartidas contigo en <link>{workspace}</link>. Están allí; abre una para ver sus notas, decisiones y tareas."
+  },
+  "knowledge": {
+    "open": "Abrir su conocimiento",
+    "summary": "{meetings, plural, one {# reunión} many {# de reuniones} other {# reuniones}}, {decisions, plural, one {# decisión} many {# de decisiones} other {# decisiones}} y {projects, plural, one {# proyecto} many {# de proyectos} other {# proyectos}} que puedes abrir, más {items, plural, one {# archivo o fuente} many {# de archivos o fuentes} other {# archivos o fuentes}} que puedes usar.",
+    "listLabel": "Conocimiento de {workspace}",
+    "loadFailed": "No se pudo cargar el conocimiento de tus espacios de trabajo",
+    "emptyTitle": "Aún no hay espacios de trabajo",
+    "empty": "Cuando te unas a un espacio de trabajo, Leo también podrá responder aquí con lo que se comparta contigo.",
+    "intro": "Leo usa esto cuando preguntas en Personal, y solo para ti. Cada respuesta indica de qué espacio de trabajo proviene. El conocimiento de equipos de los que no formas parte queda fuera."
+  }
+}

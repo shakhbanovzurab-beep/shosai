@@ -1,0 +1,23 @@
+{
+  "description": "Conecta servidores de Model Context Protocol para darle a Leo herramientas y datos de otras apps.",
+  "add": "Agregar servidor",
+  "empty": {
+    "title": "No hay servidores MCP",
+    "description": "Agrega un servidor remoto con su URL."
+  },
+  "hasAuth": "Con autorización",
+  "notReached": "Aún sin conexión",
+  "tools": "{count, plural, one {# herramienta} many {# de herramientas} other {# herramientas}}",
+  "enable": "Activar {name}",
+  "disable": "Desactivar {name}",
+  "remove": "Quitar {name}",
+  "removed": "Se quitó {name}",
+  "form": {
+    "transport": "Transporte",
+    "url": "URL del servidor",
+    "auth": "Encabezado de autorización <optional>(opcional)</optional>"
+  },
+  "addFailed": "No se pudo agregar el servidor.",
+  "toggleFailed": "No se pudo cambiar el servidor",
+  "removeFailed": "No se pudo quitar el servidor"
+}

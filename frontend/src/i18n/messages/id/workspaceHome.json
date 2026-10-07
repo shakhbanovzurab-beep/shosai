@@ -1,0 +1,62 @@
+{
+  "description": "Yang memerlukan Anda, yang akan datang, dan perkembangan pekerjaan tim.",
+  "invitePeople": "Undang orang",
+  "quietStart": "Setelah rapat dibagikan atau proyek dimulai, halaman ini menampilkan yang memerlukan Anda, yang akan datang, dan apa yang diputuskan tim.",
+  "blocks": {
+    "needsYou": "Memerlukan Anda",
+    "allTasks": "Semua tugas",
+    "nothingWaiting": "Tidak ada yang menunggu Anda di sini. Tugas yang ditugaskan kepada Anda muncul di sini dan di Produktivitas Anda.",
+    "moreTasks": "{count, plural, other {# tugas lainnya}}",
+    "comingUp": "Akan datang",
+    "projects": "Proyek",
+    "allProjects": "Semua proyek",
+    "recentDecisions": "Keputusan terbaru",
+    "decisionLog": "Log keputusan"
+  },
+  "comingUp": {
+    "empty": "Tidak ada rapat tim yang akan datang.",
+    "live": "Berlangsung",
+    "guestsPrivate": "Tetap privat: ada tamu",
+    "private": "Catatan tetap privat",
+    "notesGoTo": "Catatan dikirim ke {audience}"
+  },
+  "decisions": {
+    "empty": "Keputusan dari rapat bersama akan muncul di sini, tertaut ke rapat tempat keputusan itu dibuat.",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "Tidak ada proyek aktif. Mulai proyek untuk mengelompokkan rapat, tugas, dan keputusannya.",
+    "ledBy": "Dipimpin oleh {name}",
+    "ledByYou": "Dipimpin oleh Anda"
+  },
+  "setup": {
+    "title": "Siapkan ruang kerja Anda",
+    "progress": "{done, number} dari {total, number} selesai. Setiap langkah membuat rapat berikutnya lebih berguna bagi semua orang.",
+    "progressLabel": "{done, number} dari {total, number} langkah penyiapan selesai",
+    "hide": "Sembunyikan daftar penyiapan",
+    "done": "Selesai",
+    "toDo": "Belum selesai",
+    "steps": {
+      "invite": {
+        "title": "Undang tim Anda",
+        "description": "Tambahkan setidaknya dua orang agar rapat dan tugas punya tujuan.",
+        "action": "Undang orang"
+      },
+      "sharing": {
+        "title": "Konfirmasi cara rapat dibagikan",
+        "description": "Pilih ke mana catatan dikirim setelah rapat. Rapat dengan tamu tetap privat apa pun pilihannya.",
+        "action": "Tinjau"
+      },
+      "share": {
+        "title": "Bagikan salah satu rapat Anda",
+        "description": "Rekaman Anda tetap ada di Catatan sampai Anda membagikannya di sini, beserta keputusan dan tugasnya.",
+        "action": "Bagikan rapat"
+      },
+      "knowledge": {
+        "title": "Tambahkan pengetahuan tim",
+        "description": "Bagikan file Anda, unggah file baru, atau hubungkan drive bersama, sebagai sumber jawaban Leo.",
+        "action": "Tambahkan pengetahuan"
+      }
+    }
+  }
+}

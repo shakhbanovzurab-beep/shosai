@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Envía el mensaje como multipart/form-data.",
+  "emptyMessage": "Escribe un mensaje o adjunta un archivo.",
+  "messageTooLong": "Usa menos de {max, number} caracteres en el mensaje.",
+  "tooManyFiles": "{max, plural, one {Adjunta como máximo # archivo.} many {Adjunta como máximo # de archivos.} other {Adjunta como máximo # archivos.}}",
+  "fileTooBig": "{name} pesa más de {size}.",
+  "subjectRequired": "Escribe un asunto breve para la solicitud.",
+  "topicRequired": "Elige un tema.",
+  "detailsRequired": "Describe lo que pasó.",
+  "ticketNotFound": "No se encontró la solicitud.",
+  "invalidUpdate": "Envía un estado, una valoración o la marca de no leído."
+}

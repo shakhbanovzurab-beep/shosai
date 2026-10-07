@@ -1,0 +1,62 @@
+{
+  "intro": "アシスタントが各役割を果たすための指示です。カタログから既製のスキルを、リポジトリから自作のスキルを追加できます。",
+  "role": "役割",
+  "skills": "スキル",
+  "search": {
+    "placeholder": "名前で検索…",
+    "label": "プロンプトを名前で検索"
+  },
+  "loadFailed": "プロンプトを読み込めませんでした",
+  "empty": {
+    "title": "プロンプトはまだありません",
+    "description": "役割に合わせてプロンプトを作成し、スキルを添付して機能を拡張しましょう。"
+  },
+  "noMatches": {
+    "title": "一致するものはありません",
+    "description": "別の名前か役割をお試しください。"
+  },
+  "copyName": "{name}（コピー）",
+  "delete": {
+    "title": "「{name}」を削除しますか？",
+    "description": "役割で使用中の場合、その役割は組み込みの既定のプロンプトに戻ります。"
+  },
+  "filter": {
+    "label": "役割でフィルタ",
+    "all": "すべて",
+    "allHelp": "役割に関係なく、すべてのプロンプトです。"
+  },
+  "table": {
+    "number": "No.",
+    "updated": "更新日時",
+    "inUse": "使用中",
+    "deleteNamed": "{name} を削除"
+  },
+  "menu": {
+    "edit": "編集…",
+    "stopUsing": "使用を停止",
+    "useFor": "{role} に使用",
+    "duplicate": "複製…",
+    "delete": "削除…"
+  },
+  "editor": {
+    "editTitle": "プロンプトを編集",
+    "newTitle": "新しいプロンプト",
+    "description": "選択した役割でアシスタントが従う指示と、追加するスキルです。",
+    "namePlaceholder": "AI 版",
+    "instructions": "指示",
+    "instructionsPlaceholder": "この役割でのアシスタントの振る舞いを指示してください。Markdown も使えます。",
+    "noSkills": "スキルはまだインストールされていません。「スキル」ボタンから追加してください。",
+    "saveFailed": "保存できませんでした。入力を続けると再試行します",
+    "savesAutomatically": "変更は自動的に保存されます",
+    "done": "完了"
+  },
+  "toasts": {
+    "deleted": "「{name}」を削除しました",
+    "deleteFailed": "プロンプトを削除できませんでした",
+    "inUse": "{role} で「{name}」を使用するようになりました",
+    "backToDefault": "{role} は組み込みのプロンプトに戻りました",
+    "changeFailed": "プロンプトを変更できませんでした",
+    "created": "「{name}」を作成しました",
+    "createFailed": "プロンプトを作成できませんでした"
+  }
+}

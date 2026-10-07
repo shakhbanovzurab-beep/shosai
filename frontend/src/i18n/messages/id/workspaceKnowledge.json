@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "Pengetahuan ruang kerja"
+  },
+  "title": "Pengetahuan",
+  "description": "Yang diketahui Leo di {workspace}. Leo menjawab setiap orang hanya dari yang boleh mereka gunakan: pengetahuan untuk semua orang dan milik tim mereka sendiri.",
+  "search": {
+    "placeholder": "Cari menurut nama",
+    "label": "Cari pengetahuan"
+  },
+  "loadFailed": "Tidak dapat memuat pengetahuan ruang kerja",
+  "loading": "Memuat pengetahuan",
+  "alwaysIncluded": {
+    "text": "Leo juga menjawab dari rapat, keputusan, dan proyek yang dapat dibuka setiap orang di sini. Tidak ada yang perlu menambahkannya.",
+    "label": "Selalu disertakan",
+    "meetings": "{count, plural, other {# rapat}}",
+    "meetingsLoading": "Rapat",
+    "decisions": "{count, plural, other {# keputusan}}",
+    "decisionsLoading": "Keputusan",
+    "projects": "{count, plural, other {# proyek}}"
+  },
+  "empty": {
+    "title": "Belum ada file atau sumber",
+    "text": "Bagikan file Anda sendiri (tetap milik Anda), unggah file milik {workspace}, atau hubungkan drive bersama atau wiki. Leo menjawab dari sumber tersebut untuk siapa pun yang boleh menggunakannya."
+  },
+  "noMatch": {
+    "title": "Tidak ada yang cocok",
+    "text": "Coba nama atau tim lain.",
+    "clear": "Hapus filter"
+  },
+  "sections": {
+    "files": "File · {count, number}",
+    "filesLabel": "File",
+    "noFilesMatch": "Tidak ada file yang cocok.",
+    "sources": "Sumber yang terhubung · {count, number}",
+    "sourcesLabel": "Sumber yang terhubung",
+    "sourcesEmptyAdmin": "Hubungkan drive atau wiki yang sudah digunakan tim Anda, dan Leo akan selalu mengikutinya.",
+    "sourcesEmpty": "Admin dapat menghubungkan drive atau wiki yang sudah digunakan tim Anda."
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "Dokumen",
+    "text": "Teks",
+    "sheet": "Spreadsheet",
+    "slides": "Presentasi",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "Situs web"
+  },
+  "status": {
+    "syncing": "Menyinkronkan",
+    "indexing": "Mengindeks",
+    "failed": "Tidak dapat dibaca"
+  },
+  "pages": "{count, plural, other {# halaman}}",
+  "origin": {
+    "personal": "{who, select, me {File Anda, dibagikan} former {File mantan anggota, dibagikan} other {File {name}, dibagikan}}",
+    "connector": "{who, select, me {Dihubungkan oleh Anda} former {Dihubungkan oleh mantan anggota} other {Dihubungkan oleh {name}}}",
+    "upload": "{who, select, me {Milik {workspace} · ditambahkan oleh Anda} former {Milik {workspace} · ditambahkan oleh mantan anggota} other {Milik {workspace} · ditambahkan oleh {name}}}"
+  },
+  "added": "{days, plural, =0 {Hari ini} =1 {Kemarin} other {# hari lalu}}",
+  "leaves": "{who, select, me {Ikut keluar bersama Anda, kecuali Anda memindahkannya ke ruang kerja dari Pengelola file} former {Ikut keluar bersama pemiliknya, kecuali mereka memindahkannya ke ruang kerja} other {Ikut keluar bersama {name}, kecuali mereka memindahkannya ke ruang kerja}}",
+  "access": {
+    "label": "Siapa yang dapat menggunakannya",
+    "hint": "Leo menjawab darinya hanya untuk mereka. Anda dapat mengubahnya nanti.",
+    "everyone": "Semua orang di {workspace}",
+    "someTeam": "Satu tim"
+  },
+  "menu": {
+    "openIn": "Buka di {provider}",
+    "project": "Proyek",
+    "noProject": "Tanpa proyek"
+  },
+  "remove": {
+    "stopSharing": "Berhenti membagikan",
+    "stopSharingTitle": "Berhenti membagikan {name}?",
+    "stopSharingText": "{who, select, me {Leo berhenti menjawab darinya di {workspace}. File tetap ada di Pengelola file Anda.} former {Leo berhenti menjawab darinya di {workspace}. File tetap ada di Pengelola file pemiliknya.} other {Leo berhenti menjawab darinya di {workspace}. File tetap ada di Pengelola file {name}.}}",
+    "disconnect": "Putuskan koneksi",
+    "disconnectTitle": "Putuskan koneksi {name}?",
+    "disconnectText": "Sinkronisasi berhenti dan Leo berhenti menjawab dari sumber ini. Tidak ada yang berubah di {provider}.",
+    "removeTitle": "Hapus {name}?",
+    "removeText": "Item ini dihapus dari {workspace}, dan Leo berhenti menjawab darinya untuk semua orang."
+  },
+  "changed": {
+    "everyone": "Semua orang di {workspace} kini dapat menggunakannya",
+    "team": "{team} kini dapat menggunakannya",
+    "addedToProject": "Ditambahkan ke {project}",
+    "noProject": "Kini tidak ada di proyek"
+  },
+  "addMenu": {
+    "addFile": "Tambahkan file",
+    "addKnowledge": "Tambahkan pengetahuan",
+    "share": "Bagikan dari file saya",
+    "shareHint": "Tetap milik Anda, ikut keluar bersama Anda",
+    "upload": "Unggah ke {workspace}",
+    "uploadHint": "Milik ruang kerja",
+    "connect": "Hubungkan sumber",
+    "connectHint": "Drive, Notion, Confluence, atau situs"
+  }
+}

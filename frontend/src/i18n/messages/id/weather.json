@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Cerah",
+    "partly": "Cerah berawan",
+    "overcast": "Mendung",
+    "fog": "Kabut",
+    "drizzle": "Gerimis",
+    "rain": "Hujan",
+    "snow": "Salju",
+    "storm": "Badai petir",
+    "unknown": "Tidak diketahui"
+  },
+  "fallbackPlace": "Moskow",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, tertinggi {high}, terendah {low}",
+  "summaryAt": "{condition}, {now}, tertinggi {high}, terendah {low} di {place}"
+}

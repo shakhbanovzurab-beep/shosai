@@ -1,0 +1,23 @@
+{
+  "memory": "Memória",
+  "memoryHint": "O Leo se lembra de fatos úteis dos seus chats e reuniões e os usa nas respostas seguintes.",
+  "summary": {
+    "title": "Resumo da memória",
+    "description": "Veja um panorama do que o Leo aprendeu sobre você. Coloque nas suas <link>instruções personalizadas</link> o que ele deve sempre levar em conta.",
+    "dialogDescription": "O que o Leo aprendeu sobre você.",
+    "updated": "Atualizado {ago}",
+    "actions": "Ações do resumo da memória",
+    "refresh": "Atualizar resumo",
+    "refreshFailed": "Não foi possível atualizar",
+    "copy": "Copiar texto",
+    "copied": "Resumo copiado",
+    "copyFailed": "Não foi possível copiar",
+    "learnMore": "Saiba mais"
+  },
+  "composer": {
+    "placeholder": "Pergunte ou atualize",
+    "label": "Pergunte sobre o resumo da memória ou diga ao Leo o que mudar",
+    "send": "Enviar",
+    "sendFailed": "Não foi possível enviar"
+  }
+}

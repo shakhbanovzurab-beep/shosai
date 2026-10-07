@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "Importer dans {workspace}",
+    "description": "Les fichiers importés appartiennent à {workspace} : ils restent si vous partez, et les administrateurs les gèrent. Pour partager un fichier tout en le gardant, partagez-le plutôt depuis vos fichiers.",
+    "dropZone": "Déposez des fichiers pour les ajouter",
+    "drop": "Déposez des fichiers ici",
+    "choose": "Choisir des fichiers",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown ou texte · {limit} maximum par fichier",
+    "chosen": "Fichiers choisis",
+    "removeFile": "Retirer {name}",
+    "tooBig": "{count, plural, one {{names} dépasse {limit} et a été écarté.} many {{names} dépassent {limit} et ont été écartés.} other {{names} dépassent {limit} et ont été écartés.}}",
+    "noFiles": "Choisissez au moins un fichier.",
+    "submit": "{count, plural, =0 {Importer} one {Importer} many {Importer # de fichiers} other {Importer # fichiers}}"
+  },
+  "connect": {
+    "title": "Connecter une source",
+    "description": "Un drive partagé, un wiki ou un site où {workspace} conserve déjà ses documents. La source reste synchronisée, appartient à l’espace de travail, et Leo s’en sert pour répondre aux personnes de votre choix.",
+    "source": "Source",
+    "link": "Lien",
+    "linkHint": "Le dossier, l’espace ou la page à garder synchronisé.",
+    "submit": "Connecter"
+  },
+  "share": {
+    "title": "Partager mes fichiers",
+    "description": "Leo s’en sert pour répondre dans {workspace} aux personnes de votre choix. Ils restent dans votre Gestionnaire de fichiers, vous appartiennent toujours et partent avec vous.",
+    "submit": "{count, plural, =0 {Partager} one {Partager} many {Partager # de fichiers} other {Partager # fichiers}}"
+  }
+}

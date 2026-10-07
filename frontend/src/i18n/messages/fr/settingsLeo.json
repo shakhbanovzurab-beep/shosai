@@ -1,0 +1,36 @@
+{
+  "answers": "Réponses",
+  "model": {
+    "title": "Modèle",
+    "description": "En mode automatique, Leo choisit un modèle adapté à chaque tâche. Les modèles de pointe utilisent votre quota hebdomadaire de jetons dédié (voir Utilisation).",
+    "label": "Modèle de Leo",
+    "auto": "Automatique",
+    "autoHint": "Leo choisit selon la tâche"
+  },
+  "language": {
+    "title": "Langue des réponses",
+    "description": "En mode automatique, Leo répond dans la langue de l’interface.",
+    "auto": "Automatique"
+  },
+  "length": {
+    "title": "Longueur des réponses",
+    "description": "Le niveau de détail par défaut des réponses de Leo.",
+    "options": {
+      "concise": "Courte",
+      "balanced": "Équilibrée",
+      "detailed": "Détaillée"
+    }
+  },
+  "advanced": {
+    "title": "Paramètres avancés",
+    "description": "Ce que Leo peut utiliser. Tout ce qui est désactivé n’est ni proposé ni utilisé.",
+    "webSearch": "Recherche sur le Web",
+    "webSearchHint": "Laissez Leo chercher automatiquement des réponses sur Internet.",
+    "voiceMode": "Mode vocal",
+    "voiceModeHint": "Parlez à Leo à voix haute. Si vous le désactivez, le micro disparaît de l’interface.",
+    "knowledgeSearch": "Recherche dans les connaissances",
+    "knowledgeSearchHint": "Leo cherche des réponses dans les fichiers et sources que vous lui avez choisis.",
+    "connectedSearch": "Recherche dans les services connectés",
+    "connectedSearchHint": "Leo cherche dans les services connectés, comme Google Drive et Notion."
+  }
+}

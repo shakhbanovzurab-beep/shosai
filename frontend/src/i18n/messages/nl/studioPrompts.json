@@ -1,0 +1,62 @@
+{
+  "intro": "De instructies waarmee je assistent zijn rollen speelt. Kant-en-klare vaardigheden uit de catalogus, je eigen uit je repository.",
+  "role": "Rol",
+  "skills": "Vaardigheden",
+  "search": {
+    "placeholder": "Zoeken op naam…",
+    "label": "Prompts zoeken op naam"
+  },
+  "loadFailed": "Kan de prompts niet laden",
+  "empty": {
+    "title": "Nog geen prompts",
+    "description": "Maak een prompt voor een rol en voeg er vaardigheden aan toe om hem uit te breiden."
+  },
+  "noMatches": {
+    "title": "Geen resultaten",
+    "description": "Probeer een andere naam of rol."
+  },
+  "copyName": "{name} (kopie)",
+  "delete": {
+    "title": "‘{name}’ verwijderen?",
+    "description": "Als een rol deze prompt gebruikt, gaat die rol terug naar de ingebouwde standaardprompt."
+  },
+  "filter": {
+    "label": "Filteren op rol",
+    "all": "Alle",
+    "allHelp": "Elke prompt, voor welke rol ook."
+  },
+  "table": {
+    "number": "№",
+    "updated": "Bijgewerkt",
+    "inUse": "In gebruik",
+    "deleteNamed": "{name} verwijderen"
+  },
+  "menu": {
+    "edit": "Bewerken…",
+    "stopUsing": "Niet meer gebruiken",
+    "useFor": "Gebruiken voor {role}",
+    "duplicate": "Dupliceren…",
+    "delete": "Verwijderen…"
+  },
+  "editor": {
+    "editTitle": "Prompt bewerken",
+    "newTitle": "Nieuwe prompt",
+    "description": "Instructies die de assistent in de gekozen rol volgt, plus eventuele vaardigheden.",
+    "namePlaceholder": "AI-versie",
+    "instructions": "Instructies",
+    "instructionsPlaceholder": "Vertel de assistent hoe hij zich in deze rol moet gedragen. Markdown mag.",
+    "noSkills": "Nog geen vaardigheden geïnstalleerd. Voeg ze toe met de knop Vaardigheden.",
+    "saveFailed": "Kan niet opslaan. Typ verder om het opnieuw te proberen.",
+    "savesAutomatically": "Wijzigingen worden automatisch opgeslagen",
+    "done": "Klaar"
+  },
+  "toasts": {
+    "deleted": "‘{name}’ verwijderd",
+    "deleteFailed": "Kan de prompt niet verwijderen",
+    "inUse": "{role} gebruikt nu ‘{name}’",
+    "backToDefault": "{role} gebruikt weer de ingebouwde prompt",
+    "changeFailed": "Kan de prompt niet wijzigen",
+    "created": "‘{name}’ gemaakt",
+    "createFailed": "Kan de prompt niet maken"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} per user",
+    "from": "from {amount}",
+    "unlimited": "unlimited"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Unlimited meetings",
+    "meetingMinutes": "{minutes, plural, one {# meeting minute} other {# meeting minutes}} a month",
+    "noMeetings": "Meetings",
+    "fileManager": "File Manager · {storage}",
+    "noFileManager": "File Manager",
+    "knowledge": "Knowledge for Leo · {storage}",
+    "noKnowledge": "Knowledge for Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Shared team workspace",
+    "member_management": "User management",
+    "centralized_billing": "Centralized billing",
+    "billing_and_users": "Centralized billing & user management",
+    "admin_controls": "Enterprise-grade security and admin controls",
+    "sso": "Single sign-on (SSO)",
+    "priority_support": "Priority support",
+    "usage_analytics": "Usage analytics"
+  },
+  "compare": {
+    "title": "Compare plans",
+    "feature": "Feature",
+    "included": "Included",
+    "notIncluded": "Not included",
+    "unlimited": "Unlimited",
+    "minutes": "{minutes, plural, one {# min} other {# min}} / month",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Custom",
+    "rows": {
+      "meetings": "Meetings",
+      "fileManager": "File Manager",
+      "knowledge": "Knowledge for Leo",
+      "apps": "Leo, Mail, Calendar, Kanban, Notes",
+      "users": "Users",
+      "sharedWorkspace": "Shared workspace",
+      "billingAndUsers": "Centralized billing & user management",
+      "sso": "Single sign-on (SSO)",
+      "adminControls": "Security and admin controls",
+      "prioritySupport": "Priority support",
+      "usageAnalytics": "Usage analytics"
+    }
+  }
+}

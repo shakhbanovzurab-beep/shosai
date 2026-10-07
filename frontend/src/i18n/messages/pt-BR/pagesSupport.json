@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Suporte",
+    "description": "Peça ajuda à nossa equipe e acompanhe seus chamados."
+  },
+  "categories": {
+    "billing": "Faturamento",
+    "bug": "Relatar bug",
+    "account": "Conta",
+    "feature": "Sugerir recurso",
+    "other": "Outro"
+  },
+  "statuses": {
+    "open": "Aguardando o suporte",
+    "awaiting_you": "Aguardando você",
+    "resolved": "Resolvido"
+  },
+  "events": {
+    "acknowledged": "Recebemos sua mensagem. Um especialista costuma responder em poucas horas — vamos avisar você aqui.",
+    "resolved": "Marcado como resolvido",
+    "reopened": "Reaberto"
+  },
+  "toolbar": {
+    "search": "Pesquisar chamados",
+    "filter": "Filtrar chamados",
+    "all": "Todos",
+    "open": "Abertos",
+    "resolved": "Resolvidos"
+  },
+  "newTicket": "Novo chamado",
+  "table": {
+    "number": "Nº",
+    "subject": "Assunto",
+    "status": "Status",
+    "topic": "Tópico",
+    "updated": "Atualizado",
+    "unread": "Não lidas:"
+  },
+  "list": {
+    "loading": "Carregando chamados",
+    "loadError": "Não foi possível carregar seus chamados",
+    "emptyTitle": "Como podemos ajudar?",
+    "emptyDescription": "Abra um chamado e nossa equipe vai responder aqui, geralmente em poucas horas.",
+    "noMatchesTitle": "Nenhum chamado encontrado",
+    "noMatchesDescription": "Tente outra pesquisa ou outro filtro."
+  },
+  "panel": {
+    "ticket": "Chamado",
+    "description": "Sua conversa com o suporte"
+  },
+  "form": {
+    "title": "Como podemos ajudar?",
+    "subtitle": "Costumamos responder em poucas horas.",
+    "topic": "Tópico",
+    "subject": "Assunto",
+    "subjectPlaceholder": "Um resumo curto",
+    "body": "O que aconteceu?",
+    "bodyPlaceholder": "Os passos, o que você esperava e o que viu em vez disso. Capturas de tela ajudam.",
+    "send": "Enviar"
+  },
+  "attach": {
+    "button": "Anexar arquivos",
+    "list": "Arquivos anexados",
+    "remove": "Remover {name}",
+    "tooBig": "{count, plural, one {{names} é maior que {size}} many {{names} são maiores que {size}} other {{names} são maiores que {size}}}",
+    "tooMany": "{max, plural, one {Anexe no máximo # arquivo} many {Anexe no máximo # de arquivos} other {Anexe no máximo # arquivos}}"
+  },
+  "composer": {
+    "message": "Mensagem",
+    "emoji": "Adicionar emoji",
+    "hint": "Enter para enviar · Shift+Enter para nova linha",
+    "send": "Enviar",
+    "reply": "Escreva uma resposta…",
+    "replyToReopen": "Responda para reabrir…"
+  },
+  "thread": {
+    "loading": "Carregando chamado",
+    "close": "Fechar chamado",
+    "reopen": "Reabrir",
+    "resolve": "Marcar como resolvido",
+    "resolvedNote": "Resolvido. Se ainda precisar de ajuda, responda abaixo — isso reabre o chamado.",
+    "thanks": "Agradecemos seu feedback.",
+    "rate": "Como foi o atendimento?",
+    "good": "Bom",
+    "bad": "Ruim",
+    "you": "Você",
+    "support": "Suporte",
+    "supportAuthor": "{name} · Suporte",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Marcar como lido",
+    "markUnread": "Marcar como não lido",
+    "copyNumber": "Copiar número do chamado",
+    "copySubject": "Copiar assunto"
+  },
+  "toasts": {
+    "opened": "Chamado nº {number} aberto",
+    "openFailed": "Não foi possível abrir o chamado",
+    "updateFailed": "Não foi possível atualizar o chamado",
+    "sendFailed": "Não foi possível enviar sua resposta",
+    "markedRead": "Marcado como lido",
+    "markedUnread": "Marcado como não lido",
+    "reopened": "Chamado reaberto",
+    "resolved": "Marcado como resolvido",
+    "numberCopied": "Número do chamado copiado",
+    "subjectCopied": "Assunto copiado",
+    "numberCopyFailed": "Não foi possível copiar o número do chamado",
+    "subjectCopyFailed": "Não foi possível copiar o assunto"
+  }
+}

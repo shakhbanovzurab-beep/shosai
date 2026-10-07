@@ -1,0 +1,6 @@
+{
+  "invalidSettings": "Não foi possível ler as configurações. Recarregue a página e tente novamente.",
+  "unknownSource": "Esta fonte não existe.",
+  "notConnected": "Esta fonte não está conectada.",
+  "fieldRequired": "Preencha o campo {field}."
+}

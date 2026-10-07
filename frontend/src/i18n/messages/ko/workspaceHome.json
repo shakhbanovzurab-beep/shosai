@@ -1,0 +1,62 @@
+{
+  "description": "내가 처리할 일, 다가오는 일정, 팀 업무의 진행 상황을 한눈에 볼 수 있어요.",
+  "invitePeople": "사람 초대",
+  "quietStart": "회의가 공유되거나 프로젝트가 시작되면 이 페이지에 내가 처리할 일, 다가오는 일정, 팀의 결정 사항이 표시돼요.",
+  "blocks": {
+    "needsYou": "내 차례",
+    "allTasks": "모든 작업",
+    "nothingWaiting": "여기서 나를 기다리는 일은 없어요. 나에게 배정된 작업은 여기와 내 생산성에 표시돼요.",
+    "moreTasks": "{count, plural, other {작업 #개 더 보기}}",
+    "comingUp": "다가오는 일정",
+    "projects": "프로젝트",
+    "allProjects": "모든 프로젝트",
+    "recentDecisions": "최근 결정 사항",
+    "decisionLog": "결정 기록"
+  },
+  "comingUp": {
+    "empty": "예정된 팀 회의가 없어요.",
+    "live": "진행 중",
+    "guestsPrivate": "게스트 참석으로 비공개 유지",
+    "private": "노트는 비공개로 유지",
+    "notesGoTo": "노트 공유 대상: {audience}"
+  },
+  "decisions": {
+    "empty": "공유된 회의의 결정 사항이 결정한 회의 링크와 함께 여기에 표시돼요.",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "진행 중인 프로젝트가 없어요. 프로젝트를 시작해 회의, 작업, 결정 사항을 한데 모아 보세요.",
+    "ledBy": "리더: {name}",
+    "ledByYou": "리더: 나"
+  },
+  "setup": {
+    "title": "워크스페이스 설정하기",
+    "progress": "{total, number}단계 중 {done, number}단계 완료. 단계를 마칠수록 다음 회의가 모두에게 더 유용해져요.",
+    "progressLabel": "설정 {total, number}단계 중 {done, number}단계 완료",
+    "hide": "설정 체크리스트 숨기기",
+    "done": "완료",
+    "toDo": "할 일",
+    "steps": {
+      "invite": {
+        "title": "팀 초대하기",
+        "description": "회의와 작업을 나눌 수 있도록 최소 두 명을 추가해 보세요.",
+        "action": "사람 초대"
+      },
+      "sharing": {
+        "title": "회의 공유 방식 확인하기",
+        "description": "회의 후 노트를 누구에게 보낼지 선택해 주세요. 게스트가 있는 회의는 어느 경우든 비공개로 유지돼요.",
+        "action": "검토"
+      },
+      "share": {
+        "title": "내 회의 하나 공유하기",
+        "description": "녹음은 여기에 공유하기 전까지 내 노트에만 있어요. 공유하면 결정 사항과 작업도 함께 공유돼요.",
+        "action": "회의 공유"
+      },
+      "knowledge": {
+        "title": "팀 지식 추가하기",
+        "description": "Leo가 답변에 활용할 수 있도록 파일을 공유하거나, 새로 업로드하거나, 공유 드라이브를 연결해 보세요.",
+        "action": "지식 추가"
+      }
+    }
+  }
+}

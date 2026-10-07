@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Enhanced notes",
+    "description": "Leo picks the structure that fits the meeting."
+  },
+  "sections": {
+    "summary": "Summary",
+    "keyPoints": "Key points",
+    "decisions": "Decisions",
+    "actionItems": "Action items"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Catch-up: investor",
+      "description": "Regular update with an investor: where things stand and what they can help with."
+    },
+    "catchUpPortfolio": {
+      "name": "Catch-up: portfolio company",
+      "description": "Check-in with a portfolio company on metrics, risks and asks."
+    },
+    "lpProspective": {
+      "name": "LP: prospective",
+      "description": "First conversations with a prospective limited partner."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: Board meeting",
+      "description": "Board discussion, resolutions and owners."
+    },
+    "vcPitch": {
+      "name": "VC: Pitch",
+      "description": "A founder pitch: what stood out, the verdict and diligence to do."
+    },
+    "oneOnOne": {
+      "name": "1:1",
+      "description": "A one-on-one: how it’s going, topics and agreed next steps."
+    },
+    "customerCall": {
+      "name": "Customer call",
+      "description": "Discovery or check-in with a customer: pains, requests and follow-ups."
+    },
+    "teamSync": {
+      "name": "Team sync",
+      "description": "A recurring team meeting: updates, decisions and who does what."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Where we are",
+    "updatesShared": "Updates shared",
+    "whatWeAgreed": "What we agreed",
+    "followUps": "Follow-ups",
+    "companyUpdate": "Company update",
+    "metricsAndHighlights": "Metrics and highlights",
+    "howWeCanHelp": "How we can help",
+    "overview": "Overview",
+    "theirInterests": "Their interests",
+    "nextSteps": "Next steps",
+    "boardSummary": "Board summary",
+    "discussion": "Discussion",
+    "resolutions": "Resolutions",
+    "ownersAndDeadlines": "Owners and deadlines",
+    "thePitch": "The pitch",
+    "whatStoodOut": "What stood out",
+    "verdict": "Verdict",
+    "diligenceToDos": "Diligence to-dos",
+    "howItsGoing": "How it’s going",
+    "topics": "Topics",
+    "context": "Context",
+    "painsAndRequests": "Pains and requests",
+    "outcome": "Outcome",
+    "updates": "Updates",
+    "decisions": "Decisions",
+    "whoDoesWhat": "Who does what"
+  },
+  "icons": {
+    "enhanced": "Enhanced notes",
+    "briefcase": "Briefcase",
+    "chart": "Chart",
+    "handshake": "Handshake",
+    "landmark": "Landmark",
+    "lightbulb": "Light bulb",
+    "magnet": "Magnet",
+    "phone": "Phone",
+    "rocket": "Rocket",
+    "calendar": "Calendar",
+    "users": "People"
+  },
+  "menu": {
+    "label": "Enhanced notes template",
+    "search": "Search templates…",
+    "noMatch": "No templates match.",
+    "heading": "Templates",
+    "regenerate": "Regenerate notes",
+    "newTemplate": "New template…"
+  },
+  "rewritten": "Notes rewritten with “{template}”",
+  "regenerated": "Enhanced notes regenerated",
+  "created": "Template “{template}” created",
+  "dialog": {
+    "title": "New template",
+    "description": "Choose which sections Leo writes for a meeting and what to call them.",
+    "namePlaceholder": "e.g. Sales discovery…",
+    "nameRequired": "Give the template a name.",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "When to use it…",
+    "ownDescription": "Your own template.",
+    "icon": "Icon",
+    "sections": "Sections",
+    "include": "Include {section}",
+    "heading": "Heading for {section}",
+    "sectionsRequired": "Keep at least one section.",
+    "create": "Create template"
+  }
+}

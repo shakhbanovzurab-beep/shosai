@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Ayrıntılar",
+    "stages": "Aşamalar",
+    "history": "Nasıl ilerledi",
+    "summaryDecided": "{rounds, plural, one {# kez tartışıldı, {date} tarihinde karar verildi.} other {# kez tartışıldı, {date} tarihinde karar verildi.}}",
+    "summaryOpen": "{rounds, plural, one {# kez tartışıldı, karar yok.} other {# kez tartışıldı, karar yok.}}",
+    "blockers": "Her seferinde engel şuydu: {quotes}.",
+    "round": "{index, number}. tur",
+    "blocker": "Önündeki engel",
+    "decision": "Karar",
+    "decisionChanged": "Karar değişti",
+    "previous": "Önce",
+    "current": "Şimdi",
+    "decidedAt": "{date}, “{meeting}”",
+    "outcome": "Sonuç ne oldu",
+    "outcomeUnknown": "sonuç henüz belli değil",
+    "links": {
+      "causes": "Bekletiyor",
+      "blocked_by": "Bekleten",
+      "outcome_of": "Karardan doğdu"
+    },
+    "sources": "Kaynaklar",
+    "dismissals": "Reddedilenler",
+    "dismissedByYou": "Siz reddettiniz",
+    "disproved": "Çürütüldü: {evidence}",
+    "dismissedUntil": "{date} tarihine kadar",
+    "returned": "süre doldu ve yeniden gündeme geldi",
+    "owner": "Sahip",
+    "noOwner": "atanmadı",
+    "due": "Son tarih",
+    "noDue": "tarih yok",
+    "goneTitle": "Bu artık burada değil",
+    "goneText": "Merkez silinmiş ya da toplantı kaydı kaldırılmış olabilir.",
+    "loadError": "Ayrıntılar yüklenemedi"
+  },
+  "why": {
+    "source": "Kaynak",
+    "meeting": "{date} toplantısı, “{title}”",
+    "said": "Söyleyen",
+    "moment": "An",
+    "jump": "O ana git",
+    "signals": {
+      "series": "Bu serinin toplantıları zaten burada.",
+      "subject": "Konuşma bu merkezle ilgiliydi.",
+      "title": "Toplantı başlığında geçiyor.",
+      "entity": "Ad konuşmada geçti.",
+      "organisation": "Katılımcılar bu kuruluştan.",
+      "human": "Buraya siz eklediniz."
+    },
+    "loadError": "Kaynak yüklenemedi"
+  }
+}

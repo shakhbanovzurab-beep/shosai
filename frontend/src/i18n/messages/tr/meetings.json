@@ -1,0 +1,60 @@
+{
+  "title": "Toplantılar",
+  "loading": "Toplantılar yükleniyor…",
+  "loadFailed": "Toplantılar yüklenemedi",
+  "loadFailedHint": "Bağlantınızı kontrol edip tekrar deneyin.",
+  "newMeeting": "Yeni toplantı",
+  "actions": {
+    "schedule": "Takvim’de planla",
+    "upload": "Kayıt yükle"
+  },
+  "filters": "Toplantı filtreleri",
+  "views": {
+    "all": "Tümü",
+    "upcoming": "Yaklaşan",
+    "live": "Canlı",
+    "past": "Geçmiş"
+  },
+  "recent": "Son toplantılar",
+  "viewAll": "Tümünü gör",
+  "noMoreToday": "Bugün başka toplantı yok.",
+  "day": {
+    "today": "Bugün",
+    "tomorrow": "Yarın",
+    "yesterday": "Dün"
+  },
+  "liveBadge": "Canlı",
+  "liveSince": "{minutes, plural, =0 {Yeni başladı · bitiş: {end}} one {# dk önce başladı · bitiş: {end}} other {# dk önce başladı · bitiş: {end}}}",
+  "startsIn": "{minutes, plural, =0 {Şimdi başlıyor} one {# dk sonra} other {# dk sonra}}",
+  "join": "Toplantıya katıl",
+  "opensInNewTab": "(yeni sekmede açılır)",
+  "source": {
+    "whisperer": "Whisperer odası",
+    "in_person": "Yüz yüze"
+  },
+  "participants": "Katılımcılar: {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "Notlar henüz hazır değil.",
+    "tasks": "{count, plural, one {# görev} other {# görev}}",
+    "decisions": "{count, plural, one {# karar} other {# karar}}"
+  },
+  "empty": {
+    "none": {
+      "title": "Henüz toplantı yok",
+      "description": "Takvim’de bir toplantı planlayın veya Leo’nun notlarını almak için bir kayıt yükleyin."
+    },
+    "upcoming": {
+      "title": "Planlanmış toplantı yok",
+      "description": "Takvim’de planladığınız toplantılar burada görünür."
+    },
+    "live": {
+      "title": "Devam eden toplantı yok",
+      "description": "Bir toplantı sürerken burada görünür, böylece ona katılabilirsiniz."
+    },
+    "past": {
+      "title": "Henüz geçmiş toplantı yok",
+      "description": "Kaydedilen toplantılar Leo’nun özeti, görevleri ve kararlarıyla birlikte burada görünür."
+    }
+  }
+}

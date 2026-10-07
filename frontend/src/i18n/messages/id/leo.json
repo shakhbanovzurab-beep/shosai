@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Chat dengan Leo",
+    "close": "Tutup chat dengan Leo",
+    "tooltipOpen": "Tanya Leo",
+    "tooltipClose": "Tutup Leo"
+  },
+  "panel": {
+    "label": "Chat dengan Leo",
+    "subtitle": "Agen AI",
+    "working": "Memproses…",
+    "newChat": "Chat baru",
+    "fullScreen": "Layar penuh",
+    "exitFullScreen": "Keluar dari layar penuh",
+    "close": "Tutup",
+    "dropFiles": "Lepaskan file untuk melampirkannya"
+  },
+  "place": {
+    "personal": "Pribadi",
+    "workspace": "Di {name}",
+    "hub": "Di {name}",
+    "scopePersonal": "Saya bekerja dengan email, kalender, catatan, tugas, dan file yang Anda pilih untuk saya, serta apa yang dibagikan kepada Anda di ruang kerja. Hanya Anda yang dapat melihat chat ini.",
+    "scopeWorkspace": "Saya hanya menjawab berdasarkan apa yang dibagikan {name} kepada Anda: rapat, keputusan, proyek, dan pengetahuannya. Chat ini tetap berada di {name}.",
+    "scopeHub": "Saya hanya menjawab berdasarkan {name}: rapat, keputusan, dan materinya. Chat ini tetap berada di sini.",
+    "boundHub": "Hanya menjawab tentang “{name}”"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {Selamat malam} morning {Selamat pagi} afternoon {Selamat siang} other {Selamat malam}}",
+    "hi": "Halo",
+    "intro": "{greeting}, saya Leo",
+    "howCanIHelp": "Ada yang bisa saya bantu hari ini?",
+    "suggestionsLabel": "Saran"
+  },
+  "suggestions": {
+    "default": {
+      "first": "Rencanakan hari saya",
+      "second": "Ringkas hal yang perlu saya perhatikan",
+      "third": "Bisa bantu apa saja?"
+    },
+    "hub": {
+      "first": "Apa yang menghambat ini?",
+      "second": "Apa yang berubah di rapat terakhir?",
+      "third": "Bantu saya bersiap untuk rapat berikutnya"
+    },
+    "workspace": {
+      "first": "Apa yang kita putuskan tentang harga?",
+      "second": "Tugas saya apa saja yang lewat tenggat di sini?",
+      "third": "Cari kebijakan keamanan kita"
+    },
+    "productivity": {
+      "first": "Rencanakan hari saya",
+      "second": "Apa yang sebaiknya saya kerjakan dulu?",
+      "third": "Buat ringkasan minggu ini"
+    },
+    "mail": {
+      "first": "Ringkas kotak masuk saya",
+      "second": "Buat draf email tindak lanjut yang sopan",
+      "third": "Email mana yang mendesak?"
+    },
+    "calendar": {
+      "first": "Ada apa di kalender saya hari ini?",
+      "second": "Cari waktu kosong satu jam minggu ini",
+      "third": "Bantu saya bersiap untuk rapat berikutnya"
+    },
+    "kanban": {
+      "first": "Tugas mana yang lewat tenggat?",
+      "second": "Ringkas papan ini",
+      "third": "Sarankan tugas yang perlu dipindahkan berikutnya"
+    },
+    "meetings": {
+      "first": "Ada rapat apa saja hari ini?",
+      "second": "Jadwalkan panggilan dengan tim",
+      "third": "Bantu saya bersiap untuk panggilan berikutnya"
+    },
+    "notes": {
+      "first": "Ringkas rapat terakhir saya",
+      "second": "Tampilkan tindak lanjut saya",
+      "third": "Apa yang kita putuskan minggu ini?"
+    },
+    "fileManager": {
+      "first": "Cari file terbaru saya",
+      "second": "Apa yang paling banyak memakan ruang penyimpanan?",
+      "third": "Rapikan file saya"
+    },
+    "studio": {
+      "first": "Tulis pesan sistem",
+      "second": "Bandingkan model yang tersedia",
+      "third": "Sempurnakan prompt ini"
+    }
+  },
+  "composer": {
+    "placeholder": "Tanyakan apa saja kepada Leo",
+    "label": "Pesan untuk Leo",
+    "attach": "Lampirkan file",
+    "attachLimit": "Lampirkan hingga {max, plural, other {# file}}",
+    "filesToSend": "File yang akan dikirim",
+    "removeFile": "Hapus {name}",
+    "disclaimer": "Leo dapat membuat kesalahan. Periksa informasi penting.",
+    "stop": "Hentikan Leo",
+    "send": "Kirim pesan",
+    "startVoice": "Mulai mode suara",
+    "voiceMode": "Mode suara"
+  },
+  "message": {
+    "copy": "Salin",
+    "copied": "Disalin",
+    "copyFailed": "Tidak dapat menyalin ke papan klip",
+    "regenerate": "Buat ulang",
+    "tryAgain": "Coba lagi",
+    "replyFailed": "Leo tidak dapat menyelesaikan jawaban. Periksa koneksi Anda, lalu coba lagi.",
+    "edit": "Edit",
+    "editMessage": "Edit pesan",
+    "attachedFiles": "File terlampir"
+  },
+  "steps": {
+    "gettingStarted": "Memulai",
+    "doneIn": "Selesai dalam {duration}",
+    "stoppedAfter": "Dihentikan setelah {duration}",
+    "somethingWrong": "Terjadi kesalahan",
+    "label": "Tindakan Leo",
+    "needsApproval": "Perlu persetujuan",
+    "detail": "“{detail}”",
+    "status": "{status, select, running {Dalam proses} done {Selesai} error {Tidak berhasil} stopped {Dihentikan} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} terlalu besar",
+    "sizeLimit": "Ukuran file maksimal {size}.",
+    "tooMany": "Anda dapat melampirkan hingga {max, plural, other {# file}}."
+  },
+  "voice": {
+    "unavailable": "Mode suara tidak tersedia",
+    "listening": "Mendengarkan…",
+    "thinking": "Leo berpikir…",
+    "speaking": "Leo berbicara…",
+    "micOff": "Mikrofon nonaktif",
+    "turnMicOn": "Aktifkan mikrofon",
+    "turnMicOff": "Nonaktifkan mikrofon",
+    "end": "Akhiri mode suara",
+    "micBlocked": "Akses mikrofon diblokir",
+    "micBlockedHint": "Izinkan akses mikrofon untuk berbicara dengan Leo.",
+    "needsHttps": "Mode suara memerlukan koneksi aman (HTTPS) untuk menggunakan mikrofon.",
+    "unsupported": "Browser ini tidak mendukung mode suara. Coba versi terbaru Chrome, Edge, atau Safari."
+  }
+}

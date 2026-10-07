@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, one {<b>#</b> attività completata nell’ultimo anno} many {<b>#</b> di attività completate nell’ultimo anno} other {<b>#</b> attività completate nell’ultimo anno}}",
+  "chart": {
+    "flat": "{count, plural, one {# attività completata dal {from} al {to}, mostrata come mappa di calore. Usa i tasti freccia per leggere i singoli giorni.} many {# di attività completate dal {from} al {to}, mostrate come mappa di calore. Usa i tasti freccia per leggere i singoli giorni.} other {# attività completate dal {from} al {to}, mostrate come mappa di calore. Usa i tasti freccia per leggere i singoli giorni.}}",
+    "skyline": "{count, plural, one {# attività completata dal {from} al {to}, mostrata come skyline 3D. Usa i tasti freccia per leggere i singoli giorni.} many {# di attività completate dal {from} al {to}, mostrate come skyline 3D. Usa i tasti freccia per leggere i singoli giorni.} other {# attività completate dal {from} al {to}, mostrate come skyline 3D. Usa i tasti freccia per leggere i singoli giorni.}}"
+  },
+  "day": "{count, plural, =0 {Nessuna attività completata il {date}} one {# attività completata il {date}} many {# di attività completate il {date}} other {# attività completate il {date}}}",
+  "tooltip": "{count, plural, =0 {<b>Nessuna attività completata</b> il {date}} one {<b># attività completata</b> il {date}} many {<b># di attività completate</b> il {date}} other {<b># attività completate</b> il {date}}}",
+  "views": {
+    "label": "Vista del grafico",
+    "flat": "Mappa di calore piatta",
+    "skyline": "Skyline 3D"
+  },
+  "hint": {
+    "flat": "Passa il mouse su un giorno per i dettagli · usa i tasti freccia per esplorare",
+    "skyline": "Trascina per ruotare · doppio clic per reimpostare"
+  },
+  "levels": {
+    "label": "Livelli di attività",
+    "less": "Meno",
+    "more": "Più",
+    "none": "Nessuna attività completata",
+    "light": "Bassa",
+    "moderate": "Moderata",
+    "heavy": "Alta",
+    "heaviest": "Massima"
+  },
+  "stats": {
+    "total": "Ultimo anno",
+    "busiest": "Giorno più intenso",
+    "longest": "Serie più lunga",
+    "current": "Serie attuale"
+  },
+  "units": {
+    "contributions": "{count, plural, one {attività completata} many {di attività completate} other {attività completate}}",
+    "days": "{count, plural, one {giorno} many {di giorni} other {giorni}}"
+  }
+}

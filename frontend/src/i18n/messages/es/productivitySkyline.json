@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, one {<b>#</b> tarea completada en el último año} many {<b>#</b> de tareas completadas en el último año} other {<b>#</b> tareas completadas en el último año}}",
+  "chart": {
+    "flat": "{count, plural, one {# tarea completada del {from} al {to}, en un mapa de calor. Usa las flechas del teclado para consultar cada día.} many {# de tareas completadas del {from} al {to}, en un mapa de calor. Usa las flechas del teclado para consultar cada día.} other {# tareas completadas del {from} al {to}, en un mapa de calor. Usa las flechas del teclado para consultar cada día.}}",
+    "skyline": "{count, plural, one {# tarea completada del {from} al {to}, en un horizonte urbano en 3D. Usa las flechas del teclado para consultar cada día.} many {# de tareas completadas del {from} al {to}, en un horizonte urbano en 3D. Usa las flechas del teclado para consultar cada día.} other {# tareas completadas del {from} al {to}, en un horizonte urbano en 3D. Usa las flechas del teclado para consultar cada día.}}"
+  },
+  "day": "{count, plural, =0 {Ninguna tarea completada el {date}} one {# tarea completada el {date}} many {# de tareas completadas el {date}} other {# tareas completadas el {date}}}",
+  "tooltip": "{count, plural, =0 {<b>Ninguna tarea completada</b> el {date}} one {<b># tarea completada</b> el {date}} many {<b># de tareas completadas</b> el {date}} other {<b># tareas completadas</b> el {date}}}",
+  "views": {
+    "label": "Vista del gráfico",
+    "flat": "Mapa de calor plano",
+    "skyline": "Horizonte urbano 3D"
+  },
+  "hint": {
+    "flat": "Pasa el cursor sobre un día para ver detalles · flechas para explorar",
+    "skyline": "Arrastra para girar · doble clic para restablecer"
+  },
+  "levels": {
+    "label": "Niveles de actividad",
+    "less": "Menos",
+    "more": "Más",
+    "none": "Ninguna tarea completada",
+    "light": "Baja",
+    "moderate": "Moderada",
+    "heavy": "Alta",
+    "heaviest": "Muy alta"
+  },
+  "stats": {
+    "total": "Último año",
+    "busiest": "Día más activo",
+    "longest": "Racha más larga",
+    "current": "Racha actual"
+  },
+  "units": {
+    "contributions": "{count, plural, one {tarea completada} many {de tareas completadas} other {tareas completadas}}",
+    "days": "{count, plural, one {día} many {de días} other {días}}"
+  }
+}

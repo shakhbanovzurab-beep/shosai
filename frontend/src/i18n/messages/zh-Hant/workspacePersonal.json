@@ -1,0 +1,51 @@
+{
+  "share": "共用",
+  "sharedIn": "已在 {workspace} 中共用",
+  "workspace": "工作空間",
+  "stopSharing": "停止共用",
+  "fileShare": {
+    "title": "在工作空間中共用",
+    "description": "Leo 會在那裡為你選擇的人根據這個檔案回答。檔案仍在你的檔案管理中，仍屬於你。",
+    "access": "誰可以使用",
+    "everyone": "{workspace} 的所有人",
+    "sharedOption": "{workspace} · 已共用",
+    "noWorkspace": "你還沒有加入任何工作空間。",
+    "toast": "{level, select, workspace {「{file}」：{workspace} 的所有人都可以使用} other {「{file}」：{team} 可以在 {workspace} 中使用}}"
+  },
+  "recordingShare": {
+    "title": "共用到工作空間",
+    "description": "錄製內容仍屬於你，也會保留在你的筆記中。你向 Leo 提出的相關問題會保持私人。",
+    "openIn": "在 {workspace} 中開啟",
+    "tabWorkspace": "工作空間",
+    "tabLink": "連結",
+    "loadFailed": "無法載入 {workspace}。",
+    "moveTo": "移至 {workspace}",
+    "audienceHint": "包括摘要、決策和任務。參與者一律可以查看。",
+    "sharedElsewhere": "這場會議目前已在 {workspace} 中共用；一場會議一次只能屬於一個工作空間。"
+  },
+  "myTasks": {
+    "title": "來自你的工作空間",
+    "onKanban": "在你的看板上",
+    "loadFailed": "無法載入你的工作空間任務。",
+    "empty": "你的工作空間中沒有指派給你的任務。"
+  },
+  "actionItems": {
+    "tracked": "已在 <link>{workspace}</link> 中以任務追蹤；在這裡的變更也會同步到那裡。"
+  },
+  "sharedMeetings": {
+    "nav": "與我共用",
+    "loadFailed": "無法載入共用的會議。",
+    "emptyTitle": "這裡還沒有與你共用的內容",
+    "empty": "隊友與你或你所屬團隊共用的會議會顯示在這裡。",
+    "intro": "在 <link>{workspace}</link> 中與你共用。會議存放在那裡；開啟會議即可查看筆記、決策和任務。"
+  },
+  "knowledge": {
+    "open": "開啟知識庫",
+    "summary": "你可以開啟的 {meetings, plural, other {# 場會議}}、{decisions, plural, other {# 項決策}}和 {projects, plural, other {# 個專案}}，以及你可以使用的 {items, plural, other {# 個檔案或來源}}。",
+    "listLabel": "{workspace} 的知識庫",
+    "loadFailed": "無法載入你的工作空間知識庫",
+    "emptyTitle": "還沒有工作空間",
+    "empty": "加入工作空間後，Leo 也能在這裡根據工作空間與你共用的內容回答。",
+    "intro": "你在個人空間中提問時，Leo 會使用這些內容，而且只為你使用。每個回答都會註明來自哪個工作空間。你未加入的團隊的知識庫不會被使用。"
+  }
+}

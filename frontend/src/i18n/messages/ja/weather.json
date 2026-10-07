@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "晴れ",
+    "partly": "晴れ時々曇り",
+    "overcast": "曇り",
+    "fog": "霧",
+    "drizzle": "霧雨",
+    "rain": "雨",
+    "snow": "雪",
+    "storm": "雷雨",
+    "unknown": "不明"
+  },
+  "fallbackPlace": "モスクワ",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}、{now}、最高 {high}、最低 {low}",
+  "summaryAt": "{place}：{condition}、{now}、最高 {high}、最低 {low}"
+}

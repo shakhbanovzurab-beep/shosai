@@ -1,0 +1,60 @@
+{
+  "title": "會議",
+  "loading": "正在載入會議…",
+  "loadFailed": "無法載入會議",
+  "loadFailedHint": "請檢查網路連線，然後再試一次。",
+  "newMeeting": "新會議",
+  "actions": {
+    "schedule": "在行事曆中安排",
+    "upload": "上傳錄製內容"
+  },
+  "filters": "會議篩選條件",
+  "views": {
+    "all": "全部",
+    "upcoming": "即將舉行",
+    "live": "進行中",
+    "past": "已結束"
+  },
+  "recent": "最近",
+  "viewAll": "查看全部",
+  "noMoreToday": "今天沒有其他會議了。",
+  "day": {
+    "today": "今天",
+    "tomorrow": "明天",
+    "yesterday": "昨天"
+  },
+  "liveBadge": "進行中",
+  "liveSince": "{minutes, plural, =0 {剛開始 · {end} 結束} other {# 分鐘前開始 · {end} 結束}}",
+  "startsIn": "{minutes, plural, =0 {即將開始} other {# 分鐘後開始}}",
+  "join": "加入會議",
+  "opensInNewTab": "（在新分頁中開啟）",
+  "source": {
+    "whisperer": "Whisperer 會議室",
+    "in_person": "實體會議"
+  },
+  "participants": "參與者：{names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "筆記尚未準備好。",
+    "tasks": "{count, plural, other {# 項任務}}",
+    "decisions": "{count, plural, other {# 項決策}}"
+  },
+  "empty": {
+    "none": {
+      "title": "還沒有會議",
+      "description": "在行事曆中安排會議，或上傳錄製內容以取得 Leo 的筆記。"
+    },
+    "upcoming": {
+      "title": "沒有已安排的會議",
+      "description": "你在行事曆中規劃的會議會顯示在這裡。"
+    },
+    "live": {
+      "title": "沒有進行中的會議",
+      "description": "會議進行時會顯示在這裡，方便你加入。"
+    },
+    "past": {
+      "title": "還沒有過去的會議",
+      "description": "已錄製的會議會連同 Leo 的摘要、任務和決策顯示在這裡。"
+    }
+  }
+}

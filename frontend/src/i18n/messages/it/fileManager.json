@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Gestione file",
+    "description": "Sfoglia, organizza e carica i tuoi file e scegli quali usa Leo.",
+    "folderTitle": "Cartella · Gestione file"
+  },
+  "myFiles": "I miei file",
+  "loading": "Caricamento dei file…",
+  "loadFailed": "Impossibile caricare i file",
+  "allFiles": {
+    "heading": "Tutti i file",
+    "emptyTitle": "Ancora nessun file",
+    "emptyDescription": "Carica i file o trascinali qui. Poi scegli quali può usare Leo."
+  },
+  "folders": {
+    "heading": "Cartelle",
+    "new": "Nuova cartella",
+    "untitled": "Cartella senza titolo",
+    "emptyTitle": "Ancora nessuna cartella",
+    "emptyDescription": "Crea una cartella per organizzare i file o per far leggere a Leo un intero gruppo in una volta.",
+    "fileCount": "{count, plural, one {# file} many {# di file} other {# file}}",
+    "dropHere": "Rilascia per spostare qui",
+    "dropHereLeo": "Rilascia per spostare qui. Leo lo userà.",
+    "updated": "Aggiornata {ago}",
+    "leoReadsAll": "Leo usa tutto ciò che riesce a leggere in questa cartella"
+  },
+  "folder": {
+    "notFound": "Cartella non trovata",
+    "notFoundDescription": "Potrebbe essere stata eliminata o rinominata in un’altra sessione.",
+    "backToMyFiles": "Torna a I miei file",
+    "back": "Indietro",
+    "emptyTitle": "Questa cartella è vuota",
+    "emptyLeo": "Carica o sposta qui dei file e Leo li userà.",
+    "empty": "Carica qui i file, trascinali su questa cartella in I miei file o usa Sposta in nel menu di un file."
+  },
+  "section": {
+    "label": "File",
+    "view": "Visualizzazione file",
+    "grid": "Griglia",
+    "list": "Elenco",
+    "noMatch": "Nessun file corrisponde",
+    "noMatchDescription": "Nessun elemento corrisponde a questo filtro.",
+    "clearFilters": "Rimuovi i filtri"
+  },
+  "toolbar": {
+    "filterSort": "Filtra e ordina",
+    "show": "Mostra",
+    "fileType": "Tipo di file",
+    "allTypes": "Tutti i tipi",
+    "sortBy": "Ordina per"
+  },
+  "show": {
+    "all": "Tutti i file",
+    "starred": "Preferiti",
+    "leo": "Usati da Leo",
+    "shared": "Condivisi negli spazi di lavoro"
+  },
+  "sort": {
+    "modified": "Ultima modifica",
+    "name": "Nome",
+    "size": "Dimensione"
+  },
+  "kinds": {
+    "archive": "Archivio",
+    "design": "Design",
+    "document": "Documento",
+    "image": "Immagine",
+    "other": "File",
+    "pdf": "PDF",
+    "presentation": "Presentazione",
+    "spreadsheet": "Foglio di calcolo",
+    "text": "Testo"
+  },
+  "file": {
+    "star": "Aggiungi {name} ai preferiti",
+    "unstar": "Rimuovi {name} dai preferiti",
+    "modified": "Modificato {ago}",
+    "inFolderModified": "<hidden>Nella cartella </hidden><name>{folder}</name> · Modificato {ago}",
+    "inFolder": "<hidden>Nella cartella </hidden><name>{folder}</name>",
+    "sharedIn": "Condiviso in {workspaces}",
+    "sharedInHidden": "<hidden>Condiviso in </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Modificato",
+    "size": "Dimensione",
+    "actions": "Azioni"
+  },
+  "leo": {
+    "viaFile": "Leo usa questo file perché l’hai scelto tu",
+    "viaFolder": "Leo usa questo file tramite la sua cartella",
+    "reading": "Leo · lettura in corso",
+    "failed": "Leo non è riuscito a leggerlo",
+    "tooLarge": "Leo legge file fino a {size}",
+    "extension": "Leo non può leggere i file .{extension}",
+    "unknownType": "Leo non può leggere questo tipo di file"
+  },
+  "menu": {
+    "addStar": "Aggiungi ai preferiti",
+    "removeStar": "Rimuovi dai preferiti",
+    "moveTo": "Sposta in",
+    "useWithLeo": "Usa con Leo",
+    "usedThrough": "Usato tramite «{folder}»",
+    "share": "Condividi in uno spazio di lavoro…",
+    "sharing": "Condivisione negli spazi di lavoro…",
+    "transferTo": "Trasferisci a",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Elimina cartella"
+  },
+  "dialogs": {
+    "renameFile": "Rinomina file",
+    "renameFolder": "Rinomina cartella",
+    "shareTitle": "Condividi «{name}»",
+    "shareDescription": "Leo risponde in base a questo file nello spazio di lavoro per le persone che scegli. Resta qui, resta tuo e lascia lo spazio di lavoro se lo elimini o se esci.",
+    "transferTitle": "Trasferire «{name}» a {workspace}?",
+    "transferDescription": "Esce dai tuoi file e appartiene a {workspace}: resta lì quando esci e lo gestiscono i suoi amministratori. Gli altri spazi di lavoro in cui l’hai condiviso lo perdono. Non potrai annullare questa azione.",
+    "transfer": "Trasferisci"
+  },
+  "upload": {
+    "button": "Carica",
+    "uploading": "Caricamento di {count, plural, one {# file} many {# di file} other {# file}}…",
+    "dropHere": "Rilascia per caricare qui",
+    "skipped": "{count, plural, one {# file saltato} many {# di file saltati} other {# file saltati}}",
+    "skippedDescription": "I file vuoti o più grandi di {size} vengono saltati e se ne possono caricare al massimo {max, number} alla volta."
+  },
+  "picker": {
+    "search": "Cerca nei tuoi file",
+    "noMatch": "Nessun file corrisponde.",
+    "noFiles": "Ancora nessun file. Prima caricane qualcuno in Gestione file.",
+    "yourFiles": "I tuoi file",
+    "alreadyShared": "Già condiviso qui"
+  }
+}

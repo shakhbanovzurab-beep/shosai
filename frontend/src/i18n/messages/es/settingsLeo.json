@@ -1,0 +1,36 @@
+{
+  "answers": "Respuestas",
+  "model": {
+    "title": "Modelo",
+    "description": "Automático elige un modelo adecuado para cada tarea. Los modelos de vanguardia usan tus tokens semanales de vanguardia (consulta Uso).",
+    "label": "Modelo de Leo",
+    "auto": "Automático",
+    "autoHint": "Leo elige según la tarea"
+  },
+  "language": {
+    "title": "Idioma de las respuestas",
+    "description": "Automático responde en el idioma de la interfaz.",
+    "auto": "Automático"
+  },
+  "length": {
+    "title": "Longitud de las respuestas",
+    "description": "Cuánto dice Leo de forma predeterminada.",
+    "options": {
+      "concise": "Concisa",
+      "balanced": "Equilibrada",
+      "detailed": "Detallada"
+    }
+  },
+  "advanced": {
+    "title": "Configuración avanzada",
+    "description": "Lo que Leo puede usar. Lo que esté desactivado no se ofrece ni se usa.",
+    "webSearch": "Búsqueda web",
+    "webSearchHint": "Permite que Leo busque respuestas en internet automáticamente.",
+    "voiceMode": "Modo de voz",
+    "voiceModeHint": "Hablar con Leo en voz alta. Si lo desactivas, el micrófono desaparece de la interfaz.",
+    "knowledgeSearch": "Búsqueda en Conocimiento",
+    "knowledgeSearchHint": "Busca respuestas en los archivos y las fuentes que elegiste para Leo.",
+    "connectedSearch": "Búsqueda en servicios conectados",
+    "connectedSearchHint": "Busca en los servicios conectados, como Google Drive y Notion."
+  }
+}

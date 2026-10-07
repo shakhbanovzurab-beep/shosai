@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, one {{amount} token} other {{amount} token}}",
+  "resets": "Sınırlar her hafta sıfırlanır. Sonraki sıfırlama: {date}.",
+  "thisWeek": "Bu hafta",
+  "tiers": {
+    "standard": {
+      "title": "Standart modeller",
+      "description": "Planınıza dahildir. Sınır dolduğunda haftalık sıfırlamayı bekleyin."
+    },
+    "frontier": {
+      "title": "En gelişmiş modeller",
+      "description": "Claude Opus, GPT Astra ve diğer üst düzey modeller. Bu sınır dolduğunda ek token bakiyeniz kullanılır."
+    }
+  },
+  "used": "{count, plural, one {{used} / {limit} token} other {{used} / {limit} token}}",
+  "usedLabel": "{tier}: haftalık token sınırının {percent} kadarı kullanıldı",
+  "frontierThisWeek": "Bu hafta en gelişmiş modeller",
+  "topUp": {
+    "title": "En gelişmiş modeller için ek token",
+    "description": "Bu haftaki en gelişmiş model sınırı dolduğunda kullanılır. Sıfırlanmaz ve standart modellerde harcanamaz.",
+    "balance": "{count, plural, one {<big>{amount} token</big> kaldı} other {<big>{amount} token</big> kaldı}}",
+    "buyMore": "Daha fazla satın al",
+    "buy": "Token satın al",
+    "failed": "Satın alma başlatılamadı"
+  }
+}

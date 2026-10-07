@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Продуктивность",
+    "description": "Задачи на сегодня, проекты, таймер фокуса, календарь и недавние заметки, а также год выполненной работы на одном графике."
+  },
+  "greeting": "{period, select, morning {Доброе утро, {name}.} afternoon {Добрый день, {name}.} other {Добрый вечер, {name}.}}",
+  "greetingAnyTime": "Здравствуйте, {name}.",
+  "sidePanel": "Календарь, фокус и заметки",
+  "tasks": {
+    "heading": "Сегодня",
+    "progress": "Выполнено {done, number} из {total, number}",
+    "newTask": "Новая задача",
+    "addTask": "Добавить задачу"
+  },
+  "projects": {
+    "heading": "Проекты",
+    "status": {
+      "inProgress": "В работе",
+      "planning": "Планирование"
+    },
+    "progressOf": "Прогресс проекта «{project}»",
+    "due": "Срок: {date}"
+  },
+  "notes": {
+    "heading": "Недавние заметки",
+    "viewAll": "Показать все",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "empty": "Заметок пока нет",
+    "emptyHint": "Здесь появятся заметки с ваших встреч."
+  }
+}

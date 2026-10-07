@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "アプリをダウンロード",
+    "description": "macOS と Windows 用のデスクトップアプリをダウンロードできます。"
+  },
+  "title": "デスクトップアプリを入手",
+  "subtitle": "会議をレコーディングし、どの通話でもリアルタイムのノートと翻訳を表示できます。ショートカットでどこからでも Leo を呼び出せます。",
+  "notes": {
+    "mobile": "デスクトップアプリは macOS と Windows で動作します。ダウンロードするには、このページをパソコンで開いてください。",
+    "linux": "Linux 版はまだありません。デスクトップアプリは macOS と Windows で動作します。"
+  },
+  "card": {
+    "yourComputer": "このパソコン",
+    "requirement": "{system} 以降",
+    "downloadFor": "{name} 版をダウンロード",
+    "downloadBuild": "{arch} 版をダウンロード · {size}",
+    "meta": "バージョン {version} · {size} · {type} · {date}",
+    "loadFailed": "{platform} 版のダウンロードを読み込めませんでした。",
+    "notYet": "{platform} 版のアプリはまだ提供されていません。近日中にもう一度ご確認ください。",
+    "universal": "Apple シリコンと Intel"
+  },
+  "checksum": {
+    "button": "チェックサム",
+    "verify": "確認するには <code>{command}</code> を実行し、結果を比較してください。",
+    "copy": "チェックサムをコピー",
+    "copied": "チェックサムをコピーしました",
+    "copyFailed": "チェックサムをコピーできませんでした"
+  },
+  "install": {
+    "title": "3 ステップでインストール",
+    "macos": {
+      "open": "ダウンロードした {type} ファイルを開きます。",
+      "drag": "アプリを「アプリケーション」フォルダにドラッグし、そこから開きます。",
+      "allow": "ログインし、macOS から求められたらマイクと画面・システムオーディオの収録を許可します。これで会議をレコーディングできます。"
+    },
+    "windows": {
+      "run": "ダウンロードしたインストーラ（{type}）を実行します。",
+      "setup": "セットアップを完了し、スタートメニューからアプリを開きます。",
+      "allow": "ログインし、Windows から求められたらマイクへのアクセスを許可します。"
+    }
+  },
+  "features": {
+    "title": "デスクトップ版のみ",
+    "customize": "ショートカットをカスタマイズ",
+    "shortcutOff": "ショートカットはオフ",
+    "shortcut": "ショートカット：{keys}",
+    "toggle_recording": {
+      "title": "レコーディング",
+      "text": "どのアプリからでも、会議のレコーディングを開始・一時停止できます。"
+    },
+    "toggle_overlay": {
+      "title": "オーバーレイ",
+      "text": "通話の上にリアルタイムのノートを表示します。小さなバーに折りたたむこともできます。"
+    },
+    "live_translation": {
+      "title": "リアルタイム翻訳",
+      "text": "相手の発言を自分の言語でリアルタイムに追えます。"
+    },
+    "prompter": {
+      "title": "プロンプター",
+      "text": "会話中に Leo がさりげなくヒントを出します。表示されるのは自分だけです。"
+    }
+  }
+}

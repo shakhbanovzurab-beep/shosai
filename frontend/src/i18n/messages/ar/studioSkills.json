@@ -1,0 +1,53 @@
+{
+  "title": "المهارات",
+  "tabs": {
+    "readyMade": "جاهزة",
+    "repository": "مستودعك",
+    "mine": "مهاراتي ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "البحث عن مهارة: تصميم الأنظمة، مراجعة الشيفرة…",
+    "label": "البحث في المهارات",
+    "help": "البحث في دليل skills.sh",
+    "noMatches": "لا توجد مهارات مطابقة. يمكن تجربة كلمات أخرى.",
+    "emptyTitle": "دليل المهارات الجاهزة",
+    "emptyDescription": "يمكن البدء بالكتابة. المهارة تعليمات جاهزة يمكن إرفاقها بموجه.",
+    "searchFailed": "تعذر البحث في skills.sh. يرجى إعادة المحاولة."
+  },
+  "repository": {
+    "label": "مستودع GitHub",
+    "placeholder": "owner/repo أو رابط GitHub",
+    "find": "البحث عن مهارات",
+    "help": "مستودع عام يحتوي على ملف SKILL.md",
+    "emptyTitle": "مهارة خاصة من GitHub",
+    "emptyDescription": "يمكن إدخال مستودع عام للعثور على ملفات SKILL.md فيه.",
+    "scanFailed": "تعذرت قراءة المستودع."
+  },
+  "candidate": {
+    "installs": "{count, plural, zero {# تثبيت} one {تثبيت واحد} two {تثبيتان} few {# تثبيتات} many {# تثبيتًا} other {# تثبيت}}",
+    "installed": "مثبتة"
+  },
+  "mine": {
+    "extraFiles": "تتضمن نصوصًا برمجية أو ملفات أخرى — تُستخدم التعليمات الموجودة في SKILL.md فقط.",
+    "update": "تحديث {name}",
+    "updateHint": "التحديث إلى أحدث إصدار في المستودع",
+    "remove": "إزالة {name}",
+    "emptyTitle": "لا توجد مهارات بعد",
+    "emptyDescription": "يمكن إضافة مهارة من «جاهزة» أو من المستودع."
+  },
+  "remove": {
+    "title": "إزالة {name}؟",
+    "titleUnnamed": "إزالة هذه المهارة؟",
+    "description": "ستُفصل عن كل موجه يستخدمها. يمكن إضافتها مرة أخرى لاحقًا."
+  },
+  "toasts": {
+    "installed": "تم تثبيت {name}",
+    "installedHint": "يمكن إرفاقها بموجه من محرر الموجهات.",
+    "installFailed": "تعذر تثبيت المهارة",
+    "upToDate": "{name} محدّثة بالفعل",
+    "updated": "تم تحديث {name}",
+    "updateFailed": "تعذر تحديث المهارة",
+    "removed": "تمت إزالة {name}",
+    "removeFailed": "تعذرت إزالة المهارة"
+  }
+}

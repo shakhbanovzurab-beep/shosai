@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, other {<b>#</b> công việc đã hoàn thành trong năm qua}}",
+  "chart": {
+    "flat": "{count, plural, other {# công việc đã hoàn thành từ {from} đến {to}, hiển thị dưới dạng bản đồ nhiệt. Dùng phím mũi tên để xem từng ngày.}}",
+    "skyline": "{count, plural, other {# công việc đã hoàn thành từ {from} đến {to}, hiển thị dưới dạng đường chân trời 3D. Dùng phím mũi tên để xem từng ngày.}}"
+  },
+  "day": "{count, plural, =0 {Không có công việc nào hoàn thành vào {date}} other {# công việc đã hoàn thành vào {date}}}",
+  "tooltip": "{count, plural, =0 {<b>Không có công việc nào hoàn thành</b> vào {date}} other {<b># công việc đã hoàn thành</b> vào {date}}}",
+  "views": {
+    "label": "Kiểu biểu đồ",
+    "flat": "Bản đồ nhiệt phẳng",
+    "skyline": "Đường chân trời 3D"
+  },
+  "hint": {
+    "flat": "Di chuột lên một ngày để xem chi tiết · dùng phím mũi tên để khám phá",
+    "skyline": "Kéo để xoay · nhấp đúp để đặt lại"
+  },
+  "levels": {
+    "label": "Mức hoạt động",
+    "less": "Ít",
+    "more": "Nhiều",
+    "none": "Không có công việc nào hoàn thành",
+    "light": "Thấp",
+    "moderate": "Vừa",
+    "heavy": "Cao",
+    "heaviest": "Rất cao"
+  },
+  "stats": {
+    "total": "Năm qua",
+    "busiest": "Ngày bận nhất",
+    "longest": "Chuỗi dài nhất",
+    "current": "Chuỗi hiện tại"
+  },
+  "units": {
+    "contributions": "{count, plural, other {công việc đã hoàn thành}}",
+    "days": "{count, plural, other {ngày}}"
+  }
+}

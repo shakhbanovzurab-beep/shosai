@@ -1,0 +1,12 @@
+{
+  "notMultipart": "請以 multipart/form-data 格式傳送訊息。",
+  "emptyMessage": "請輸入訊息或附加檔案。",
+  "messageTooLong": "訊息請少於 {max, number} 個字元。",
+  "tooManyFiles": "{max, plural, other {最多只能附加 # 個檔案。}}",
+  "fileTooBig": "{name} 大於 {size}。",
+  "subjectRequired": "請為支援單輸入簡短的主旨。",
+  "topicRequired": "請選擇主題。",
+  "detailsRequired": "請描述發生了什麼事。",
+  "ticketNotFound": "找不到支援單。",
+  "invalidUpdate": "請傳送狀態、評分或未讀標記。"
+}

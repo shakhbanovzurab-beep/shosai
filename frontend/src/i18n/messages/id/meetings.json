@@ -1,0 +1,60 @@
+{
+  "title": "Rapat",
+  "loading": "Memuat rapat…",
+  "loadFailed": "Tidak dapat memuat rapat",
+  "loadFailedHint": "Periksa koneksi Anda dan coba lagi.",
+  "newMeeting": "Rapat baru",
+  "actions": {
+    "schedule": "Jadwalkan di Kalender",
+    "upload": "Unggah rekaman"
+  },
+  "filters": "Filter rapat",
+  "views": {
+    "all": "Semua",
+    "upcoming": "Mendatang",
+    "live": "Berlangsung",
+    "past": "Selesai"
+  },
+  "recent": "Terbaru",
+  "viewAll": "Lihat semua",
+  "noMoreToday": "Tidak ada rapat lagi hari ini.",
+  "day": {
+    "today": "Hari ini",
+    "tomorrow": "Besok",
+    "yesterday": "Kemarin"
+  },
+  "liveBadge": "Berlangsung",
+  "liveSince": "{minutes, plural, =0 {Baru dimulai · berakhir {end}} other {Dimulai # menit lalu · berakhir {end}}}",
+  "startsIn": "{minutes, plural, =0 {Dimulai sekarang} other {Dalam # menit}}",
+  "join": "Gabung ke rapat",
+  "opensInNewTab": "(terbuka di tab baru)",
+  "source": {
+    "whisperer": "Ruang Whisperer",
+    "in_person": "Tatap muka"
+  },
+  "participants": "Peserta: {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "Catatan belum siap.",
+    "tasks": "{count, plural, other {# tugas}}",
+    "decisions": "{count, plural, other {# keputusan}}"
+  },
+  "empty": {
+    "none": {
+      "title": "Belum ada rapat",
+      "description": "Jadwalkan rapat di Kalender, atau unggah rekaman untuk mendapatkan catatan dari Leo."
+    },
+    "upcoming": {
+      "title": "Belum ada jadwal",
+      "description": "Rapat yang Anda rencanakan di Kalender akan muncul di sini."
+    },
+    "live": {
+      "title": "Tidak ada rapat yang berlangsung",
+      "description": "Rapat muncul di sini selama berlangsung, sehingga Anda dapat bergabung."
+    },
+    "past": {
+      "title": "Belum ada rapat yang selesai",
+      "description": "Rapat yang direkam muncul di sini beserta ringkasan, tugas, dan keputusan dari Leo."
+    }
+  }
+}

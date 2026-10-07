@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "Hub",
+    "removeLabel": "Vergadering uit {hub} halen",
+    "suggestion": "Lijkt op ‘{hub}’",
+    "file": "Toevoegen",
+    "other": "Andere hub…",
+    "fileTo": "Aan een hub toevoegen…",
+    "createFirst": "De eerste maken",
+    "noBoard": "de hub heeft geen bord",
+    "archived": "de hub is gearchiveerd",
+    "filedToast": "Volgende vergaderingen in deze reeks komen hier vanzelf terecht",
+    "removedToast": "Uit {hub} gehaald",
+    "pickerTitle": "Aan een hub toevoegen",
+    "pickerSearch": "Hub zoeken",
+    "pickerEmpty": "Geen hubs gevonden"
+  },
+  "brief": {
+    "title": "Vandaag",
+    "empty": "Vandaag staat er niets in brand",
+    "prepTitle": "Binnenkort",
+    "prepFor": "Voor de vergadering op {date}",
+    "prepOpen": "Open in deze hub",
+    "prepLast": "Vorige keer · {date}",
+    "prepMaterials": "Materialen",
+    "signal": "{circles, plural, =2 {{subject} is twee keer besproken zonder besluit.} =3 {{subject} is drie keer besproken zonder besluit.} =4 {{subject} is vier keer besproken zonder besluit.} =5 {{subject} is vijf keer besproken zonder besluit.} one {{subject} is # keer besproken zonder besluit.} other {{subject} is # keer besproken zonder besluit.}}",
+    "blockers": "Elke keer was het: {quotes}."
+  }
+}

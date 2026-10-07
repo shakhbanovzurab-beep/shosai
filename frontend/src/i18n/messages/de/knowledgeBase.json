@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Wissen",
+    "description": "Wähle die Dateien und Quellen, aus denen Leo in deinem persönlichen Bereich antwortet."
+  },
+  "heading": "Wissen",
+  "intro": "Woraus Leo antwortet, wenn du in deinem persönlichen Bereich fragst: Dateien, die du im Dateimanager auswählst, Quellen, die du verbindest, und was deine Workspaces mit dir teilen. Nur du siehst diese Antworten.",
+  "tabs": {
+    "files": "Dateien",
+    "sources": "Quellen",
+    "workspaces": "Aus Workspaces"
+  },
+  "loadFailed": "Deine Dateien konnten nicht geladen werden",
+  "leoFolders": {
+    "heading": "Ordner, die Leo liest",
+    "stop": "{folder} nicht mehr nutzen"
+  },
+  "leoFiles": {
+    "heading": "Dateien, die Leo nutzt",
+    "emptyTitle": "Leo nutzt noch keine deiner Dateien",
+    "emptyDescription": "Wähle Dateien oder ganze Ordner aus dem Dateimanager oder lade oben neue hoch."
+  },
+  "summary": {
+    "files": "Dateien",
+    "chunks": "Abschnitte",
+    "processing": "In Bearbeitung",
+    "embeddings": "Einbettungen",
+    "used": "{used} genutzt",
+    "usedOfLimit": "{used} von {limit} in deinem Tarif",
+    "failedUsage": "{failed, plural, one {# mit Fehler} other {# mit Fehlern}} · {usage}",
+    "inIndex": "im Vektorindex",
+    "busy": "wird ausgelesen und eingebettet",
+    "caughtUp": "alles aktuell",
+    "dimensions": "{dimensions, number} Dim."
+  },
+  "dropzone": {
+    "label": "Dateien für Leo hinzufügen",
+    "title": "Zieh Dateien hierher, damit Leo sie nutzt",
+    "uploading": "{count, plural, one {# Datei wird hochgeladen…} other {# Dateien werden hochgeladen…}}",
+    "description": "Sie werden unter Meine Dateien im Dateimanager gespeichert. {types}, jeweils bis {size}.",
+    "choose": "Aus deinen Dateien wählen",
+    "upload": "Neue hochladen",
+    "skipped": "{count, plural, one {# Datei übersprungen} other {# Dateien übersprungen}}",
+    "unreadable": "{name}: Leo kann diesen Typ oder diese Größe nicht lesen",
+    "tooMany": "{name}: mehr als {max, number} Dateien gleichzeitig"
+  },
+  "choose": {
+    "title": "Aus deinen Dateien wählen",
+    "description": "Leo liest, was du auswählst, und antwortet daraus in deinem persönlichen Bereich. Ein Ordner umfasst auch Dateien, die du später hinzufügst.",
+    "folders": "Ganze Ordner",
+    "files": "Dateien",
+    "alreadyUsed": "Leo nutzt das bereits",
+    "submit": "Mit Leo nutzen",
+    "readingOne": "Leo liest es gerade",
+    "readingMany": "{count, plural, one {Leo liest gerade # ausgewähltes Element} other {Leo liest gerade # ausgewählte Elemente}}",
+    "readingDescription": "Sobald die Indexierung fertig ist, antwortet Leo daraus in deinem persönlichen Bereich."
+  },
+  "table": {
+    "status": "Status",
+    "chunks": "Abschnitte",
+    "size": "Größe",
+    "workspaces": "Workspaces",
+    "actions": "Aktionen",
+    "wholeFolder": "<name>{folder}</name> · ganzer Ordner"
+  },
+  "steps": {
+    "queued": "In Warteschlange",
+    "parsing": "Auslesen",
+    "chunking": "Aufteilen",
+    "embedding": "Einbetten",
+    "indexed": "Indexiert",
+    "failed": "Fehler"
+  },
+  "status": {
+    "step": "{step, number} von {total, number}",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Neu indexieren",
+    "showInFileManager": "Im Dateimanager anzeigen",
+    "stopFolder": "„{folder}“ nicht mehr nutzen",
+    "stopFile": "Nicht mehr mit Leo nutzen"
+  }
+}

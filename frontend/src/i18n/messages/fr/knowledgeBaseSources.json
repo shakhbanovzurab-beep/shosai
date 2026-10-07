@@ -1,0 +1,85 @@
+{
+  "loadFailed": "Impossible de charger les sources",
+  "loading": "Chargement des sources…",
+  "connectedCount": "{connected, number} sur {total, plural, one {# source connectée} many {# de sources connectées} other {# sources connectées}}. Le contenu nouveau ou modifié est réindexé à chaque synchronisation.",
+  "status": {
+    "connecting": "Connexion…",
+    "syncing": "Synchronisation…",
+    "connected": "Connecté",
+    "error": "Erreur"
+  },
+  "card": {
+    "items": "{count, plural, one {# élément} many {# d’éléments} other {# éléments}}",
+    "synced": "Synchronisé {ago}",
+    "syncNow": "Synchroniser",
+    "syncing": "Synchronisation…",
+    "settings": "Paramètres…",
+    "disconnect": "Déconnecter…",
+    "signIn": "Se connecter avec {provider}",
+    "public": "Pages publiques, sans connexion",
+    "connect": "Connecter"
+  },
+  "dialog": {
+    "connectTitle": "Connecter {name}",
+    "settingsTitle": "Paramètres de {name}",
+    "oauthNote": "Vous vous connecterez avec {provider} et autoriserez un accès en lecture seule (OAuth 2.0), puis vous reviendrez ici. Aucun mot de passe ni jeton n’est saisi sur cette page.",
+    "optional": "(facultatif)",
+    "saveAndSync": "Enregistrer et synchroniser",
+    "continueWith": "Continuer avec {provider}",
+    "connect": "Connecter",
+    "connectFailed": "Impossible de se connecter."
+  },
+  "disconnect": {
+    "title": "Déconnecter {name} ?",
+    "description": "La synchronisation s’arrête et les identifiants enregistrés sont supprimés. Le contenu déjà indexé depuis cette source est retiré de l’index vectoriel.",
+    "confirm": "Déconnecter"
+  },
+  "toasts": {
+    "connected": "{name} connecté",
+    "firstSync": "La première synchronisation a commencé.",
+    "syncFailed": "Impossible de synchroniser {name}",
+    "disconnected": "{name} déconnecté",
+    "disconnectFailed": "Impossible de déconnecter {name}"
+  },
+  "website": "Site web",
+  "descriptions": {
+    "slack": "Messages et fils de discussion des canaux publics.",
+    "confluence": "Pages et articles de blog de vos espaces.",
+    "notion": "Pages et bases de données que vous partagez lors de la connexion.",
+    "obsidian": "Notes Markdown d’un coffre synchronisé avec GitHub.",
+    "jira": "Tickets, descriptions et commentaires.",
+    "github": "README, documentation, tickets et pull requests.",
+    "gitlab": "Dépôts, wikis, tickets et merge requests.",
+    "google_drive": "Docs, Sheets, Slides et PDF.",
+    "sharepoint": "Fichiers et pages de Microsoft 365.",
+    "dropbox": "Fichiers et documents Paper d’un dossier.",
+    "yandex_disk": "Documents d’un dossier Yandex Disk.",
+    "website": "Pages explorées sur un site ou un portail de documentation."
+  },
+  "fields": {
+    "channels": "Canaux",
+    "spaces": "Clés d’espace",
+    "repository": "Dépôt du coffre",
+    "branch": "Branche",
+    "jql": "Filtre JQL",
+    "repositories": "Dépôts",
+    "base_url": "URL de l’instance",
+    "projects": "Projets",
+    "folder_id": "ID du dossier",
+    "site_url": "Site SharePoint",
+    "path": "Chemin du dossier",
+    "start_url": "URL de départ",
+    "max_depth": "Profondeur d’exploration",
+    "include": "Seulement les chemins correspondant à"
+  },
+  "help": {
+    "channels": "Laissez vide pour tous les canaux publics.",
+    "spaces": "Laissez vide pour tous les espaces que vous pouvez lire.",
+    "repositories": "Laissez vide pour tous les dépôts auxquels vous donnez accès.",
+    "base_url": "Uniquement pour une instance GitLab auto-hébergée.",
+    "projects": "Laissez vide pour tous les projets que vous pouvez lire.",
+    "folder_id": "Laissez vide pour indexer tout ce que vous pouvez lire.",
+    "site_url": "Laissez vide pour utiliser votre OneDrive.",
+    "max_depth": "Nombre de liens suivis depuis la page de départ."
+  }
+}

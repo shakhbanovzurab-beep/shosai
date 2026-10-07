@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, one {{amount} token} many {{amount} de tokens} other {{amount} tokens}}",
+  "resets": "Os limites são renovados toda semana. Próxima renovação: {date}.",
+  "thisWeek": "Nesta semana",
+  "tiers": {
+    "standard": {
+      "title": "Modelos padrão",
+      "description": "Incluído no seu plano. Quando acabar, aguarde a renovação semanal."
+    },
+    "frontier": {
+      "title": "Modelos de ponta",
+      "description": "Claude Opus, GPT Astra e outros modelos de ponta. Quando acabar, seus tokens extras são usados."
+    }
+  },
+  "used": "{count, plural, one {{used} de {limit} token} many {{used} de {limit} de tokens} other {{used} de {limit} tokens}}",
+  "usedLabel": "{tier}: {percent} dos tokens desta semana já usados",
+  "frontierThisWeek": "Modelos de ponta nesta semana",
+  "topUp": {
+    "title": "Tokens extras para modelos de ponta",
+    "description": "Usados quando a cota semanal de modelos de ponta acaba. Eles não são renovados e não podem ser usados em modelos padrão.",
+    "balance": "{count, plural, one {<big>{amount} token</big> restante} many {<big>{amount} de tokens</big> restantes} other {<big>{amount} tokens</big> restantes}}",
+    "buyMore": "Comprar mais",
+    "buy": "Comprar tokens",
+    "failed": "Não foi possível iniciar a compra"
+  }
+}

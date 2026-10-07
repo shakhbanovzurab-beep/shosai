@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "詳細資料",
+    "stages": "階段",
+    "history": "經過",
+    "summaryDecided": "{rounds, plural, other {討論了 # 次，於 {date} 做出決定。}}",
+    "summaryOpen": "{rounds, plural, other {討論了 # 次，尚無決策。}}",
+    "blockers": "每次的阻礙都是：{quotes}。",
+    "round": "第 {index, number} 輪",
+    "blocker": "阻礙",
+    "decision": "決策",
+    "decisionChanged": "決策已變更",
+    "previous": "之前",
+    "current": "現在",
+    "decidedAt": "{date}，「{meeting}」",
+    "outcome": "結果",
+    "outcomeUnknown": "結果尚不明確",
+    "links": {
+      "causes": "阻礙了",
+      "blocked_by": "受阻於",
+      "outcome_of": "源自決策"
+    },
+    "sources": "來源",
+    "dismissals": "略過記錄",
+    "dismissedByYou": "由你略過",
+    "disproved": "已被推翻：{evidence}",
+    "dismissedUntil": "直到 {date}",
+    "returned": "略過期限已過，這項又回來了",
+    "owner": "負責人",
+    "noOwner": "未指派",
+    "due": "截止日期",
+    "noDue": "沒有日期",
+    "goneTitle": "這個項目已不在這裡",
+    "goneText": "中樞可能已被刪除，或會議錄製內容已被移除。",
+    "loadError": "無法載入詳細資料"
+  },
+  "why": {
+    "source": "來源",
+    "meeting": "{date} 的會議「{title}」",
+    "said": "發言者",
+    "moment": "片段",
+    "jump": "跳到該片段",
+    "signals": {
+      "series": "這個系列的會議已經在這裡。",
+      "subject": "對話內容與這個中樞有關。",
+      "title": "會議標題中有提到。",
+      "entity": "對話中提到了這個名稱。",
+      "organisation": "參與者來自這個組織。",
+      "human": "這是你自己放在這裡的。"
+    },
+    "loadError": "無法載入來源"
+  }
+}

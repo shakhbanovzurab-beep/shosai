@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "Er klopt iets niet in het verzoek. Laad de pagina opnieuw en probeer het nog een keer.",
+    "nameRequired": "Vul je naam in.",
+    "hotkeyUnsupported": "Die sneltoets wordt niet ondersteund.",
+    "modelNotOnPlan": "Dat model zit niet in je abonnement.",
+    "emailMismatch": "Dat e-mailadres hoort niet bij je account.",
+    "deletionUnavailable": "Accounts verwijderen werkt nog niet. Er is niets verwijderd.",
+    "avatarMissing": "Kies een afbeelding om te uploaden.",
+    "avatarType": "Gebruik een WebP-, JPEG- of PNG-afbeelding.",
+    "paymentsUnavailable": "Betalingen zijn nog niet gekoppeld. Zodra facturering live is, opent dit de beveiligde pagina van de provider.",
+    "checkoutUnavailable": "Betalingen zijn nog niet gekoppeld. Zodra facturering live is, opent dit de betaalpagina van de provider.",
+    "invoiceNotFound": "Factuur niet gevonden.",
+    "connectorNotFound": "Koppeling niet gevonden.",
+    "authorizationExpired": "De autorisatie is verlopen of al gebruikt. Probeer opnieuw te koppelen.",
+    "dataKindUnknown": "Onbekend soort gegevens.",
+    "dataItemNotFound": "Dat item bestaat niet meer.",
+    "mcpNameRequired": "Geef de server een naam.",
+    "mcpNameTooLong": "Die naam is te lang. Kies een kortere.",
+    "mcpUrlInvalid": "Vul de http(s)-URL van de server in.",
+    "mcpServerNotFound": "Server niet gevonden.",
+    "memoryNotFound": "Herinnering niet gevonden.",
+    "summaryMessageRequired": "Schrijf een vraag of een wijziging."
+  },
+  "avatarTooLarge": "De afbeelding is groter dan {size}.",
+  "invoice": {
+    "title": "Factuur {number}",
+    "date": "Datum: {date}",
+    "description": "Omschrijving: {description}",
+    "amount": "Bedrag: {amount}",
+    "status": "Betaalstatus: {status}",
+    "demoNote": "Demofactuur. De echte factuur is een pdf uit het factureringssysteem."
+  },
+  "notesFromYou": "Notities van jou"
+}

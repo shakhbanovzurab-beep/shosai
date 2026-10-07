@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "Tableros",
+    "jiraBoards": "Sincronizados con Jira",
+    "newBoard": "Nuevo tablero…",
+    "syncJiraBoard": "Sincronizar un tablero de Jira…",
+    "rename": "Cambiar nombre del tablero…",
+    "showWorkspaceTasks": "Mostrar aquí mis tareas de espacios de trabajo",
+    "changeIcon": "Cambiar icono",
+    "delete": "Eliminar tablero…",
+    "stopSyncing": "Dejar de sincronizar…"
+  },
+  "icons": {
+    "work": "Trabajo",
+    "home": "Hogar",
+    "personal": "Personal",
+    "health": "Salud",
+    "study": "Estudios",
+    "travel": "Viajes",
+    "shopping": "Compras",
+    "fitness": "Ejercicio",
+    "project": "Proyecto",
+    "reading": "Lectura"
+  },
+  "empty": {
+    "title": "Aún no tienes tableros",
+    "description": "Crea un tablero para el trabajo, el hogar o lo que quieras, o sincroniza uno de Jira.",
+    "newBoard": "Nuevo tablero",
+    "syncJiraBoard": "Sincronizar un tablero de Jira"
+  },
+  "newBoard": {
+    "title": "Nuevo tablero",
+    "description": "Organiza el trabajo, el hogar y todo lo demás en tableros separados.",
+    "namePlaceholder": "p. ej., Hogar",
+    "icon": "Icono",
+    "columns": "Columnas",
+    "create": "Crear tablero"
+  },
+  "templates": {
+    "simple": "Básica",
+    "project": "Proyecto"
+  },
+  "columnNames": {
+    "backlog": "Pendientes",
+    "todo": "Por hacer",
+    "inProgress": "En curso",
+    "review": "En revisión",
+    "done": "Listo"
+  },
+  "renameTitle": "Cambiar nombre del tablero",
+  "delete": {
+    "title": "¿Eliminar «{board}»?",
+    "description": "{count, plural, =0 {Se eliminará el tablero. Esta acción no se puede deshacer.} one {Se eliminará el tablero junto con # tarea. Esta acción no se puede deshacer.} many {Se eliminará el tablero junto con sus # de tareas. Esta acción no se puede deshacer.} other {Se eliminará el tablero junto con sus # tareas. Esta acción no se puede deshacer.}}",
+    "confirm": "Eliminar tablero",
+    "stopTitle": "¿Dejar de sincronizar «{board}»?",
+    "stopDescription": "El tablero se quitará de aquí. En Jira no cambia nada y puedes volver a sincronizarlo más adelante.",
+    "stopConfirm": "Dejar de sincronizar"
+  },
+  "jira": {
+    "title": "Sincronizar un tablero de Jira",
+    "description": "Trabaja en un tablero de Jira desde aquí; cada cambio se sincroniza en ambos sentidos.",
+    "connectTitle": "Primero conecta Jira",
+    "connectDescription": "Inicia sesión en Jira en Configuración › Conectores y vuelve para elegir un tablero.",
+    "openConnectors": "Abrir Conectores",
+    "connectedAs": "Conectado como {account}.",
+    "connected": "Conectado a Jira.",
+    "noBoards": "Tu cuenta de Jira aún no tiene tableros.",
+    "boardList": "Tableros de Jira",
+    "alreadySynced": "Ya sincronizado · ábrelo",
+    "type": {
+      "kanban": "Tablero Kanban",
+      "scrum": "Tablero Scrum"
+    },
+    "howColumns": "Las columnas y las incidencias vienen del tablero de Jira.",
+    "howMoves": "Al mover una tarjeta, cambia el estado de la incidencia en Jira; las tareas nuevas se convierten en incidencias de Jira.",
+    "howChanges": "Los cambios hechos en Jira aparecen aquí automáticamente.",
+    "sync": "Sincronizar tablero"
+  },
+  "sync": {
+    "syncing": "Sincronizando con Jira…",
+    "paused": "Sincronización en pausa",
+    "synced": "Sincronizado con Jira",
+    "syncedAgo": "Sincronizado con Jira {ago}",
+    "syncNow": "Sincronizar ahora",
+    "openBoard": "Abrir {board} en Jira",
+    "openHint": "Abrir en Jira · {project} en {site}"
+  },
+  "banners": {
+    "syncStopped": "Se detuvo la sincronización con Jira.",
+    "changesPaused": "Los cambios están en pausa.",
+    "importing": "Importando {board} desde Jira…",
+    "importingHint": "Las columnas y las incidencias aparecerán aquí en un momento.",
+    "offer": "{count, plural, one {Tienes # tarea abierta en tus espacios de trabajo. ¿Mostrarla en «{board}»?} many {Tienes # de tareas abiertas en tus espacios de trabajo. ¿Mostrarlas en «{board}»?} other {Tienes # tareas abiertas en tus espacios de trabajo. ¿Mostrarlas en «{board}»?}} Al mover una tarjeta, la tarea se actualiza para tu equipo.",
+    "notNow": "Ahora no",
+    "showHere": "{count, plural, one {Mostrarla aquí} many {Mostrarlas aquí} other {Mostrarlas aquí}}"
+  },
+  "toasts": {
+    "createFailed": "No se pudo crear el tablero",
+    "connectFailed": "No se pudo sincronizar el tablero de Jira",
+    "updateFailed": "No se pudo actualizar el tablero",
+    "deleteFailed": "No se pudo eliminar el tablero",
+    "syncFailed": "No se pudo sincronizar con Jira",
+    "deleted": "Se eliminó «{board}»",
+    "stoppedSyncing": "Se dejó de sincronizar «{board}»",
+    "workspaceTasksOn": "Tus tareas de espacios de trabajo ahora aparecen en «{board}»",
+    "workspaceTasksOff": "Tus tareas de espacios de trabajo ya no aparecen en ningún tablero",
+    "workspaceTasksHint": "Al mover una tarjeta, la tarea cambia en su espacio de trabajo.",
+    "workspaceTasksFailed": "No se pudo cambiar dónde aparecen las tareas de espacios de trabajo"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Calendario",
+    "description": "Planifica reuniones, eventos y tiempo de concentración por mes, semana o día."
+  },
+  "summary": "{days, plural, one {# día} many {# de días} other {# días}} · {events, plural, one {# evento} many {# de eventos} other {# eventos}}",
+  "calendars": {
+    "label": "Calendario",
+    "all": "Todos los calendarios",
+    "work": "Trabajo",
+    "personal": "Personal",
+    "team": "Equipo",
+    "focus": "Concentración"
+  },
+  "views": {
+    "label": "Vista",
+    "dayGridMonth": "Mes",
+    "timeGridWeek": "Semana",
+    "timeGridDay": "Día"
+  },
+  "previous": "Período anterior",
+  "next": "Período siguiente",
+  "today": "Hoy",
+  "addEvent": "Agregar evento",
+  "loading": "Cargando el calendario…",
+  "eventMenu": {
+    "reschedule": "Reprogramar",
+    "dayEarlier": "Un día antes",
+    "dayLater": "Un día después",
+    "nextWeek": "La próxima semana",
+    "moveToToday": "Mover a hoy",
+    "copyDetails": "Copiar detalles",
+    "delete": "Eliminar evento"
+  },
+  "dayMenu": {
+    "newAllDay": "Nuevo evento de todo el día…",
+    "newAt": "Nuevo evento a las {time}…",
+    "openDay": "Abrir día",
+    "openWeek": "Abrir semana"
+  },
+  "renameTitle": "Cambiar nombre del evento",
+  "newTitle": "Nuevo evento · {when}",
+  "copyName": "{title} (copia)",
+  "details": "{title} — {when}",
+  "detailsCopied": "Detalles del evento copiados",
+  "detailsCopyFailed": "No se pudieron copiar los detalles del evento",
+  "deleted": "Se eliminó «{title}»"
+}

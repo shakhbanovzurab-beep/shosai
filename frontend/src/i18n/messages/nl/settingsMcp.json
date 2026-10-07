@@ -1,0 +1,23 @@
+{
+  "description": "Koppel Model Context Protocol-servers om Leo tools en gegevens uit andere apps te geven.",
+  "add": "Server toevoegen",
+  "empty": {
+    "title": "Geen MCP-servers",
+    "description": "Voeg een externe server toe via de URL."
+  },
+  "hasAuth": "Met autorisatie",
+  "notReached": "Nog niet bereikt",
+  "tools": "{count, plural, =0 {Geen tools} one {# tool} other {# tools}}",
+  "enable": "{name} inschakelen",
+  "disable": "{name} uitschakelen",
+  "remove": "{name} verwijderen",
+  "removed": "{name} verwijderd",
+  "form": {
+    "transport": "Transportprotocol",
+    "url": "Server-URL",
+    "auth": "Autorisatieheader <optional>(optioneel)</optional>"
+  },
+  "addFailed": "Kan de server niet toevoegen.",
+  "toggleFailed": "Kan de server niet wijzigen",
+  "removeFailed": "Kan de server niet verwijderen"
+}

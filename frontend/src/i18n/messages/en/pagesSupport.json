@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Support",
+    "description": "Ask our team for help and follow your support tickets."
+  },
+  "categories": {
+    "billing": "Billing",
+    "bug": "Bug report",
+    "account": "Account",
+    "feature": "Feature request",
+    "other": "Other"
+  },
+  "statuses": {
+    "open": "Waiting for support",
+    "awaiting_you": "Waiting for you",
+    "resolved": "Resolved"
+  },
+  "events": {
+    "acknowledged": "We’ve got your message. A specialist usually replies within a few hours — we’ll notify you here.",
+    "resolved": "Marked as resolved",
+    "reopened": "Reopened"
+  },
+  "toolbar": {
+    "search": "Search tickets",
+    "filter": "Filter tickets",
+    "all": "All",
+    "open": "Open",
+    "resolved": "Resolved"
+  },
+  "newTicket": "New ticket",
+  "table": {
+    "number": "№",
+    "subject": "Subject",
+    "status": "Status",
+    "topic": "Topic",
+    "updated": "Updated",
+    "unread": "Unread:"
+  },
+  "list": {
+    "loading": "Loading tickets",
+    "loadError": "Couldn’t load your tickets",
+    "emptyTitle": "How can we help?",
+    "emptyDescription": "Open a ticket and our team will reply here, usually within a few hours.",
+    "noMatchesTitle": "No tickets found",
+    "noMatchesDescription": "Try another search or filter."
+  },
+  "panel": {
+    "ticket": "Ticket",
+    "description": "Your conversation with support"
+  },
+  "form": {
+    "title": "How can we help?",
+    "subtitle": "We usually reply within a few hours.",
+    "topic": "Topic",
+    "subject": "Subject",
+    "subjectPlaceholder": "A short summary",
+    "body": "What happened?",
+    "bodyPlaceholder": "Steps, what you expected and what you saw instead. Screenshots help.",
+    "send": "Send"
+  },
+  "attach": {
+    "button": "Attach files",
+    "list": "Attached files",
+    "remove": "Remove {name}",
+    "tooBig": "{count, plural, one {{names} is larger than {size}} other {{names} are larger than {size}}}",
+    "tooMany": "{max, plural, one {Attach at most # file} other {Attach at most # files}}"
+  },
+  "composer": {
+    "message": "Message",
+    "emoji": "Add emoji",
+    "hint": "Enter to send · Shift+Enter for a new line",
+    "send": "Send",
+    "reply": "Write a reply…",
+    "replyToReopen": "Reply to reopen…"
+  },
+  "thread": {
+    "loading": "Loading ticket",
+    "close": "Close ticket",
+    "reopen": "Reopen",
+    "resolve": "Mark as resolved",
+    "resolvedNote": "Resolved. Reply below if you still need help — it reopens the ticket.",
+    "thanks": "Thanks for your feedback.",
+    "rate": "How did we do?",
+    "good": "Good",
+    "bad": "Bad",
+    "you": "You",
+    "support": "Support",
+    "supportAuthor": "{name} · Support",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Mark as read",
+    "markUnread": "Mark as unread",
+    "copyNumber": "Copy ticket number",
+    "copySubject": "Copy subject"
+  },
+  "toasts": {
+    "opened": "Ticket #{number} opened",
+    "openFailed": "Couldn’t open the ticket",
+    "updateFailed": "Couldn’t update the ticket",
+    "sendFailed": "Couldn’t send your reply",
+    "markedRead": "Marked as read",
+    "markedUnread": "Marked as unread",
+    "reopened": "Ticket reopened",
+    "resolved": "Marked as resolved",
+    "numberCopied": "Ticket number copied",
+    "subjectCopied": "Subject copied",
+    "numberCopyFailed": "Couldn’t copy the ticket number",
+    "subjectCopyFailed": "Couldn’t copy the subject"
+  }
+}

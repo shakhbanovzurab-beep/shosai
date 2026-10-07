@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "캘린더",
+    "description": "회의, 일정, 집중 시간을 월, 주, 일 단위로 계획해요."
+  },
+  "summary": "{days, plural, other {#일}} · {events, plural, other {일정 #개}}",
+  "calendars": {
+    "label": "캘린더",
+    "all": "모든 캘린더",
+    "work": "업무",
+    "personal": "개인",
+    "team": "팀",
+    "focus": "집중 시간"
+  },
+  "views": {
+    "label": "보기",
+    "dayGridMonth": "월",
+    "timeGridWeek": "주",
+    "timeGridDay": "일"
+  },
+  "previous": "이전 기간",
+  "next": "다음 기간",
+  "today": "오늘",
+  "addEvent": "일정 추가",
+  "loading": "캘린더를 불러오는 중…",
+  "eventMenu": {
+    "reschedule": "일정 변경",
+    "dayEarlier": "하루 앞당기기",
+    "dayLater": "하루 미루기",
+    "nextWeek": "다음 주로",
+    "moveToToday": "오늘로 이동",
+    "copyDetails": "세부 정보 복사",
+    "delete": "일정 삭제"
+  },
+  "dayMenu": {
+    "newAllDay": "새 종일 일정…",
+    "newAt": "{time}에 새 일정…",
+    "openDay": "일 보기 열기",
+    "openWeek": "주 보기 열기"
+  },
+  "renameTitle": "일정 이름 변경",
+  "newTitle": "새 일정 · {when}",
+  "copyName": "{title} (사본)",
+  "details": "{title} — {when}",
+  "detailsCopied": "일정 세부 정보를 복사했어요",
+  "detailsCopyFailed": "일정 세부 정보를 복사하지 못했어요",
+  "deleted": "“{title}” 일정을 삭제했어요"
+}

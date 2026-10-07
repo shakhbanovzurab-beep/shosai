@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "Un panel de administración de código abierto y bien cuidado, creado con shadcn/ui."
+  },
+  "actions": {
+    "goHome": "Ir al inicio",
+    "goBack": "Volver"
+  },
+  "placeholder": {
+    "title": "{title} llegará pronto",
+    "description": "Esta sección está en desarrollo y estará disponible pronto.",
+    "badge": "En desarrollo"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "Todos"
+  },
+  "emoji": {
+    "search": "Buscar emoji",
+    "empty": "No se encontraron emojis"
+  },
+  "notFound": {
+    "metaTitle": "Página no encontrada",
+    "badge": "Error {code}",
+    "title": "Esta página se perdió",
+    "description": "Puede que el enlace esté roto o que la página se haya movido o eliminado. Te ayudamos a volver al camino.",
+    "popularPages": "Páginas populares",
+    "jumpTo": "O ve a"
+  },
+  "unauthorized": {
+    "metaTitle": "Sin acceso",
+    "title": "No tienes acceso",
+    "description": "No tienes permiso para ver esta página. Si crees que es un error, contacta a tu administrador."
+  }
+}

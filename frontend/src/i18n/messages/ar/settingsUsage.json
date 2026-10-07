@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, zero {{amount} رمز مميز} one {{amount} رمز مميز} two {{amount} رمز مميز} few {{amount} رموز مميزة} many {{amount} رمزًا مميزًا} other {{amount} رمز مميز}}",
+  "resets": "تتم إعادة تعيين الحدود أسبوعيًا. إعادة التعيين التالية: {date}.",
+  "thisWeek": "هذا الأسبوع",
+  "tiers": {
+    "standard": {
+      "title": "النماذج القياسية",
+      "description": "مضمنة في الخطة. عند بلوغ الحد، يلزم انتظار إعادة التعيين الأسبوعية."
+    },
+    "frontier": {
+      "title": "النماذج الرائدة",
+      "description": "Claude Opus و GPT Astra وغيرهما من أقوى النماذج. بعد بلوغ هذا الحد، تُستخدم الرموز المميزة الإضافية."
+    }
+  },
+  "used": "{count, plural, zero {{used} من {limit} رمز مميز} one {{used} من {limit} رمز مميز} two {{used} من {limit} رمز مميز} few {{used} من {limit} رموز مميزة} many {{used} من {limit} رمزًا مميزًا} other {{used} من {limit} رمز مميز}}",
+  "usedLabel": "{tier}: تم استخدام {percent} من الرموز المميزة لهذا الأسبوع",
+  "frontierThisWeek": "النماذج الرائدة هذا الأسبوع",
+  "topUp": {
+    "title": "رموز مميزة إضافية للنماذج الرائدة",
+    "description": "تُستخدم بعد نفاد حصة النماذج الرائدة لهذا الأسبوع. لا تتم إعادة تعيينها ولا يمكن استخدامها للنماذج القياسية.",
+    "balance": "{count, plural, zero {المتبقي: <big>{amount} رمز مميز</big>} one {المتبقي: <big>{amount} رمز مميز</big>} two {المتبقي: <big>{amount} رمز مميز</big>} few {المتبقي: <big>{amount} رموز مميزة</big>} many {المتبقي: <big>{amount} رمزًا مميزًا</big>} other {المتبقي: <big>{amount} رمز مميز</big>}}",
+    "buyMore": "شراء المزيد",
+    "buy": "شراء رموز مميزة",
+    "failed": "تعذر بدء عملية الشراء"
+  }
+}

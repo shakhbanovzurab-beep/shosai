@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "Plan {plan}",
+    "current": "Actual",
+    "price": "{interval, select, month {{price} al mes} year {{price} al año} other {Gratis para siempre}}",
+    "renews": "Se renueva el {date}",
+    "upgrade": "Mejorar plan"
+  },
+  "payment": {
+    "title": "Pago",
+    "description": "Las renovaciones de la suscripción, el uso adicional y la recarga automática se cobran a tu método de pago predeterminado.",
+    "add": "Agregar método de pago",
+    "empty": "Aún no tienes un método de pago.",
+    "default": "Predeterminado",
+    "unknownCard": "Tarjeta",
+    "endingIn": "{card} terminada en {last4}",
+    "expires": "Vence el {date}",
+    "update": "Actualizar",
+    "updateCard": "Actualizar {card} terminada en {last4}",
+    "openFailed": "No se pudo abrir la página de pago"
+  },
+  "history": {
+    "title": "Historial de facturación",
+    "description": "Consulta y descarga tus facturas anteriores.",
+    "empty": "Aún no tienes facturas. Aparecerán aquí después de tu primer pago.",
+    "columns": {
+      "date": "Fecha",
+      "description": "Descripción",
+      "amount": "Importe",
+      "status": "Estado",
+      "download": "Descargar"
+    },
+    "status": {
+      "paid": "Pagada",
+      "pending": "Pendiente",
+      "failed": "Fallida"
+    },
+    "download": "Descargar factura {number}",
+    "notReady": "La factura {number} aún no está lista"
+  }
+}

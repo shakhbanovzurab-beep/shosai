@@ -1,0 +1,81 @@
+{
+  "title": "任務",
+  "description": "在會議中約定或新增到專案的工作。你的任務也會顯示在你的生產力和看板中。",
+  "newTask": "新任務",
+  "loading": "正在載入任務…",
+  "loadFailed": "無法載入任務",
+  "empty": {
+    "title": "還沒有任務",
+    "text": "有人共用約定了工作的會議，或你在專案中新增任務時，任務就會出現在這裡。",
+    "add": "新增任務"
+  },
+  "noMatch": {
+    "title": "沒有符合這些篩選條件的項目",
+    "text": "試試其他專案、團隊或成員。",
+    "clear": "清除篩選條件"
+  },
+  "caughtUp": {
+    "title": "你已處理完所有任務",
+    "text": "這裡沒有需要你處理的事。指派給你的新任務會顯示在這裡和你的生產力中。",
+    "seeEveryone": "查看所有人的任務"
+  },
+  "views": {
+    "label": "誰的任務",
+    "mine": "我的",
+    "team": "所有人"
+  },
+  "assignee": {
+    "label": "負責人",
+    "anyone": "任何人"
+  },
+  "owner": {
+    "label": "負責人",
+    "unassigned": "未指派",
+    "you": "你",
+    "meOption": "{name}（你）",
+    "change": "負責人：{name}。變更負責人",
+    "changedToYou": "現在由你負責",
+    "changedTo": "現在由 {name} 負責",
+    "cleared": "目前沒有負責人"
+  },
+  "groups": {
+    "overdue": "已逾期 · {count, number}",
+    "today": "今天到期 · {count, number}",
+    "week": "本週 · {count, number}",
+    "later": "之後 · {count, number}",
+    "undated": "沒有截止日期 · {count, number}"
+  },
+  "showDone": "顯示已完成 · {count, number}",
+  "hideDone": "隱藏已完成",
+  "status": {
+    "todo": "待處理",
+    "in_progress": "進行中",
+    "done": "已完成"
+  },
+  "due": {
+    "none": "沒有截止日期",
+    "add": "新增截止日期",
+    "clear": "清除截止日期",
+    "change": "{due}。變更截止日期",
+    "overdue": "已逾期 · {date}",
+    "today": "今天到期",
+    "tomorrow": "明天到期",
+    "on": "{date} 到期",
+    "was": "原定 {date} 到期",
+    "changed": "已變更截止日期",
+    "cleared": "已清除截止日期"
+  },
+  "form": {
+    "title": "新任務",
+    "description": "負責人也會在自己的生產力和看板中看到這項任務。",
+    "task": "任務",
+    "taskPlaceholder": "例如 撰寫產品上市電子郵件",
+    "titleRequired": "請說明需要做什麼。",
+    "nobodyYet": "尚未指派",
+    "due": "截止日期",
+    "project": "專案",
+    "noProject": "無專案",
+    "projectHint": "工作空間中的所有人都能看到在這裡新增的任務。",
+    "submit": "新增任務"
+  }
+}

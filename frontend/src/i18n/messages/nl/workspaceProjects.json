@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Projecten",
+    "project": "Project"
+  },
+  "title": "Projecten",
+  "description": "Een project brengt een stuk werk samen op één plek: de vergaderingen, besluiten en taken.",
+  "newProject": "Nieuw project",
+  "filter": {
+    "label": "Welke projecten",
+    "open": "Lopend",
+    "all": "Alle"
+  },
+  "empty": {
+    "title": "Nog geen projecten",
+    "text": "Start er een voor werk dat meerdere vergaderingen beslaat, zoals een lancering of een vacature. Daarna kun je er vergaderingen en taken aan toevoegen."
+  },
+  "status": {
+    "planned": "Gepland",
+    "active": "Actief",
+    "paused": "Gepauzeerd",
+    "completed": "Afgerond"
+  },
+  "ledBy": "{who, select, me {Geleid door jou} other {Geleid door {name}}}",
+  "noLead": "Geen projectleider",
+  "target": {
+    "none": "Geen doeldatum",
+    "overdue": "Te laat · {date}",
+    "today": "Doel: vandaag",
+    "tomorrow": "Doel: morgen",
+    "on": "Doel: {date}"
+  },
+  "progress": {
+    "label": "{total, plural, one {{done, number} van # taak afgerond} other {{done, number} van # taken afgerond}}",
+    "count": "{done, number}/{total, number}",
+    "none": "Geen taken"
+  },
+  "notFound": {
+    "title": "Dit project is er niet meer",
+    "text": "Misschien is het verwijderd. De vergaderingen en taken ervan staan nog in de werkruimte.",
+    "action": "Alle projecten"
+  },
+  "sections": {
+    "tasks": "Taken",
+    "addTask": "Taak toevoegen",
+    "tasksEmpty": "Nog geen taken. Voeg er een toe, of deel een vergadering in dit project om de taken ervan mee te nemen.",
+    "meetings": "Vergaderingen",
+    "meetingsEmpty": "Vergaderingen die in dit project zijn gedeeld, verschijnen hier.",
+    "decisions": "Besluiten",
+    "files": "Bestanden",
+    "filesLabel": "Bestanden van {project}",
+    "filesEmpty": "Bestanden die aan dit project zijn toegevoegd, verschijnen hier, en Leo gebruikt ze voor dit project."
+  },
+  "header": {
+    "edit": "Project bewerken",
+    "delete": "Project verwijderen",
+    "lead": "Projectleider",
+    "team": "Team",
+    "target": "Doeldatum",
+    "deleteTitle": "{name} verwijderen?",
+    "deleteText": "De vergaderingen, taken en besluiten blijven in de werkruimte; ze horen alleen niet meer bij een project."
+  },
+  "dialog": {
+    "newTitle": "Nieuw project",
+    "editTitle": "{name} bewerken",
+    "description": "Eén plek voor een stuk werk: de vergaderingen, besluiten en taken.",
+    "nameRequired": "Geef het project een naam.",
+    "namePlaceholder": "bijv. Bèta mobiele app",
+    "purpose": "Waar het voor is",
+    "lead": "Projectleider",
+    "me": "{name} (jij)",
+    "team": "Team",
+    "wholeWorkspace": "Hele werkruimte",
+    "status": "Status",
+    "target": "Doeldatum",
+    "create": "Project maken",
+    "saved": "{name} opgeslagen",
+    "created": "{name} gemaakt"
+  }
+}

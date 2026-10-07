@@ -1,0 +1,36 @@
+{
+  "answers": "Respostas",
+  "model": {
+    "title": "Modelo",
+    "description": "O modo Automático escolhe um modelo adequado para cada tarefa. Os modelos de ponta usam seus tokens semanais de modelos de ponta (veja Uso).",
+    "label": "Modelo do Leo",
+    "auto": "Automático",
+    "autoHint": "O Leo escolhe a cada tarefa"
+  },
+  "language": {
+    "title": "Idioma das respostas",
+    "description": "No modo Automático, o Leo responde no idioma da interface.",
+    "auto": "Automático"
+  },
+  "length": {
+    "title": "Tamanho das respostas",
+    "description": "Quanto o Leo escreve por padrão.",
+    "options": {
+      "concise": "Conciso",
+      "balanced": "Equilibrado",
+      "detailed": "Detalhado"
+    }
+  },
+  "advanced": {
+    "title": "Configurações avançadas",
+    "description": "O que o Leo pode usar. O que estiver desativado não é oferecido nem usado.",
+    "webSearch": "Pesquisa na web",
+    "webSearchHint": "Permita que o Leo pesquise automaticamente na internet para responder.",
+    "voiceMode": "Modo de voz",
+    "voiceModeHint": "Falar com o Leo em voz alta. Ao desativar, o microfone some da interface.",
+    "knowledgeSearch": "Pesquisa no conhecimento",
+    "knowledgeSearchHint": "Buscar respostas nos arquivos e fontes que você escolheu para o Leo.",
+    "connectedSearch": "Pesquisa em serviços conectados",
+    "connectedSearchHint": "Pesquisar em serviços conectados, como Google Drive e Notion."
+  }
+}

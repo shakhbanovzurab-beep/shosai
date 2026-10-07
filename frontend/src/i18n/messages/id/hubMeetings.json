@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "Hub",
+    "removeLabel": "Keluarkan rapat dari {hub}",
+    "suggestion": "Sepertinya “{hub}”",
+    "file": "Tambahkan",
+    "other": "Hub lain…",
+    "fileTo": "Tambahkan ke hub…",
+    "createFirst": "Buat yang pertama",
+    "noBoard": "hub belum punya papan",
+    "archived": "hub diarsipkan",
+    "filedToast": "Rapat berikutnya dalam seri ini akan masuk ke sini dengan sendirinya",
+    "removedToast": "Dikeluarkan dari {hub}",
+    "pickerTitle": "Tambahkan ke hub",
+    "pickerSearch": "Cari hub",
+    "pickerEmpty": "Tidak ada hub yang cocok"
+  },
+  "brief": {
+    "title": "Hari ini",
+    "empty": "Tidak ada yang mendesak hari ini",
+    "prepTitle": "Akan datang",
+    "prepFor": "Sebelum rapat pada {date}",
+    "prepOpen": "Terbuka di hub ini",
+    "prepLast": "Terakhir kali · {date}",
+    "prepMaterials": "Materi",
+    "signal": "{circles, plural, =2 {{subject} sudah dibahas dua kali tanpa keputusan.} =3 {{subject} sudah dibahas tiga kali tanpa keputusan.} =4 {{subject} sudah dibahas empat kali tanpa keputusan.} =5 {{subject} sudah dibahas lima kali tanpa keputusan.} other {{subject} sudah dibahas # kali tanpa keputusan.}}",
+    "blockers": "Setiap kali kendalanya: {quotes}."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Send the message as multipart/form-data.",
+  "emptyMessage": "Write a message or attach a file.",
+  "messageTooLong": "Keep the message under {max, number} characters.",
+  "tooManyFiles": "{max, plural, one {Attach at most # file.} other {Attach at most # files.}}",
+  "fileTooBig": "{name} is larger than {size}.",
+  "subjectRequired": "Give the ticket a short subject.",
+  "topicRequired": "Pick a topic.",
+  "detailsRequired": "Describe what happened.",
+  "ticketNotFound": "Ticket not found.",
+  "invalidUpdate": "Send a status, a rating or the unread flag."
+}

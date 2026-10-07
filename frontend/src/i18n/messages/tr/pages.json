@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "shadcn/ui ile oluşturulmuş, özenle hazırlanmış açık kaynak bir yönetim paneli."
+  },
+  "actions": {
+    "goHome": "Ana sayfaya git",
+    "goBack": "Geri dön"
+  },
+  "placeholder": {
+    "title": "{title} yolda",
+    "description": "Bu bölüm geliştiriliyor ve yakında kullanıma açılacak.",
+    "badge": "Geliştiriliyor"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "Tümü"
+  },
+  "emoji": {
+    "search": "Emoji ara",
+    "empty": "Emoji bulunamadı"
+  },
+  "notFound": {
+    "metaTitle": "Sayfa bulunamadı",
+    "badge": "Hata {code}",
+    "title": "Bu sayfa kaybolmuş",
+    "description": "Bağlantı bozuk olabilir ya da sayfa taşınmış veya kaldırılmış olabilir. Sizi doğru yola geri götürelim.",
+    "popularPages": "Popüler sayfalar",
+    "jumpTo": "Ya da şuraya gidin"
+  },
+  "unauthorized": {
+    "metaTitle": "Erişim yok",
+    "title": "Erişiminiz yok",
+    "description": "Bu sayfayı görüntüleme izniniz yok. Bunun bir yanlışlık olduğunu düşünüyorsanız yöneticinize başvurun."
+  }
+}

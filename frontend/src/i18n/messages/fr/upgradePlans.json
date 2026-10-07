@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} par utilisateur",
+    "from": "à partir de {amount}",
+    "unlimited": "illimité"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Réunions illimitées",
+    "meetingMinutes": "{minutes, plural, one {# minute de réunion} many {# de minutes de réunion} other {# minutes de réunion}} par mois",
+    "noMeetings": "Réunions",
+    "fileManager": "Gestionnaire de fichiers · {storage}",
+    "noFileManager": "Gestionnaire de fichiers",
+    "knowledge": "Connaissances pour Leo · {storage}",
+    "noKnowledge": "Connaissances pour Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Espace de travail d’équipe partagé",
+    "member_management": "Gestion des utilisateurs",
+    "centralized_billing": "Facturation centralisée",
+    "billing_and_users": "Facturation centralisée et gestion des utilisateurs",
+    "admin_controls": "Sécurité et contrôles d’administration de niveau entreprise",
+    "sso": "Authentification unique (SSO)",
+    "priority_support": "Assistance prioritaire",
+    "usage_analytics": "Statistiques d’utilisation"
+  },
+  "compare": {
+    "title": "Comparer les forfaits",
+    "feature": "Fonctionnalité",
+    "included": "Inclus",
+    "notIncluded": "Non inclus",
+    "unlimited": "Illimité",
+    "minutes": "{minutes, plural, one {# min} many {# min} other {# min}} / mois",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Sur mesure",
+    "rows": {
+      "meetings": "Réunions",
+      "fileManager": "Gestionnaire de fichiers",
+      "knowledge": "Connaissances pour Leo",
+      "apps": "Leo, E-mail, Calendrier, Kanban, Notes",
+      "users": "Utilisateurs",
+      "sharedWorkspace": "Espace de travail partagé",
+      "billingAndUsers": "Facturation centralisée et gestion des utilisateurs",
+      "sso": "Authentification unique (SSO)",
+      "adminControls": "Sécurité et contrôles d’administration",
+      "prioritySupport": "Assistance prioritaire",
+      "usageAnalytics": "Statistiques d’utilisation"
+    }
+  }
+}

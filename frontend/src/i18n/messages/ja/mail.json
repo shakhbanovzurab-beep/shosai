@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "オープンソースのメールクライアント",
+    "description": "受信トレイの移動、メッセージの検索、閲覧、返信、アーカイブができるオープンソースのメールクライアントです。"
+  },
+  "preview": {
+    "title": "メールのプレビュー",
+    "description": "このフレームには単独のメール画面が表示されています。全画面で開くと見やすくなります。",
+    "openInNewTab": "新しいタブでメールを開く"
+  },
+  "nav": {
+    "inbox": "受信トレイ",
+    "priority": "優先",
+    "drafts": "下書き",
+    "sent": "送信済み",
+    "archive": "アーカイブ",
+    "trash": "ゴミ箱",
+    "helpFeedback": "ヘルプとフィードバック",
+    "keyboardShortcuts": "キーボードショートカット"
+  },
+  "sidebar": {
+    "newEmail": "新規メール",
+    "folders": "フォルダ"
+  },
+  "accounts": {
+    "switchTo": "{name} に切り替え",
+    "menu": "アカウントメニュー",
+    "title": "アカウント",
+    "add": "アカウントを追加",
+    "manage": "アカウントを管理",
+    "settings": "アカウント設定",
+    "signOut": "ログアウト"
+  },
+  "inbox": {
+    "filter": "メールをフィルタ",
+    "refresh": "受信トレイを更新",
+    "noSelection": "メールが選択されていません",
+    "needsYou": "要対応",
+    "allMail": "すべてのメール",
+    "pinnedGroup": "固定（{count, number}）",
+    "inboxGroup": "受信トレイ（{count, number}）"
+  },
+  "reader": {
+    "drawerTitle": "メール",
+    "drawerDescription": "選択したメールを読む",
+    "to": "宛先：<names>{list}</names>",
+    "cc": "Cc：<names>{list}</names>",
+    "attachments": "添付ファイル（{count, number}）"
+  },
+  "toolbar": {
+    "close": "メールを閉じる",
+    "previous": "前のメール",
+    "next": "次のメール",
+    "pin": "スレッドを固定",
+    "reply": "返信",
+    "more": "その他の操作",
+    "replyAll": "全員に返信",
+    "forward": "転送",
+    "addLabel": "ラベルを追加"
+  },
+  "menu": {
+    "markRead": "既読にする",
+    "markUnread": "未読にする",
+    "pin": "上部に固定",
+    "unpin": "固定を解除",
+    "markPriority": "優先に設定",
+    "removePriority": "優先から削除",
+    "labels": "ラベル",
+    "copySender": "送信者のアドレスをコピー",
+    "archive": "アーカイブ",
+    "trash": "ゴミ箱に移動"
+  },
+  "replyBar": {
+    "placeholder": "{name} に返信…",
+    "label": "{name} に返信",
+    "addEmoji": "絵文字を追加",
+    "attachFile": "ファイルを添付",
+    "send": "送信"
+  },
+  "toasts": {
+    "senderCopied": "{email} をコピーしました",
+    "senderCopyFailed": "アドレスをコピーできませんでした",
+    "replySent": "{name} に返信を送信しました",
+    "archived": "{count, plural, other {# 件のメールをアーカイブしました}}",
+    "moved": "{folder, select, inbox {「{subject}」を受信トレイに移動しました} drafts {「{subject}」を下書きに移動しました} sent {「{subject}」を送信済みに移動しました} archive {「{subject}」をアーカイブに移動しました} trash {「{subject}」をゴミ箱に移動しました} other {「{subject}」を移動しました}}"
+  }
+}

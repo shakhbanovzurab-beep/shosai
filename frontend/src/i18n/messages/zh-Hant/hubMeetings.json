@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "中樞",
+    "removeLabel": "將會議移出 {hub}",
+    "suggestion": "看起來屬於「{hub}」",
+    "file": "加入",
+    "other": "其他中樞…",
+    "fileTo": "加入中樞…",
+    "createFirst": "建立第一個中樞",
+    "noBoard": "這個中樞沒有看板",
+    "archived": "這個中樞已封存",
+    "filedToast": "這個系列接下來的會議會自動歸入這裡",
+    "removedToast": "已移出 {hub}",
+    "pickerTitle": "加入中樞",
+    "pickerSearch": "尋找中樞",
+    "pickerEmpty": "沒有符合的中樞"
+  },
+  "brief": {
+    "title": "今天",
+    "empty": "今天沒有緊急事項",
+    "prepTitle": "即將進行",
+    "prepFor": "{date} 的會議之前",
+    "prepOpen": "這個中樞中未結案的事項",
+    "prepLast": "上次 · {date}",
+    "prepMaterials": "資料",
+    "signal": "{circles, plural, =2 {{subject} 已討論兩次，仍沒有決策。} =3 {{subject} 已討論三次，仍沒有決策。} =4 {{subject} 已討論四次，仍沒有決策。} =5 {{subject} 已討論五次，仍沒有決策。} other {{subject} 已討論 # 次，仍沒有決策。}}",
+    "blockers": "每次的阻礙都是：{quotes}。"
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "title": "Members",
+  "description": "Everyone in {workspace}, their roles, and the teams you share with.",
+  "invitePeople": "Invite people",
+  "adminsInvite": "Only admins can invite people.",
+  "adminsInviteAsk": "Only admins can invite people. Ask {name}.",
+  "tabs": {
+    "members": "Members",
+    "teams": "Teams"
+  },
+  "search": "Search people",
+  "pendingInvitations": "Pending invitations · {count, number}",
+  "membersCount": "Members · {count, number}",
+  "noMatches": "Nobody matches",
+  "noMatchesHint": "Try a name, an email or a job title.",
+  "clearSearch": "Clear search",
+  "seats": {
+    "label": "Seats",
+    "taken": "{taken, number} of {total, number} seats taken",
+    "breakdown": "· {members, plural, one {# member} other {# members}}",
+    "breakdownPending": "· {members, plural, one {# member} other {# members}}, {pending, plural, one {# pending invitation} other {# pending invitations}}",
+    "left": "{count, plural, one {# seat left.} other {# seats left.}} Pending invitations hold a seat until they’re accepted or revoked.",
+    "fullAdd": "All seats are taken. Add seats to invite more people.",
+    "fullAsk": "All seats are taken. Ask the owner to add seats.",
+    "change": "Change seats"
+  },
+  "invitation": {
+    "by": "Invited by {name} {ago}",
+    "byYou": "Invited by you {ago}",
+    "byFormerMember": "Invited by a former member {ago}",
+    "resend": "Resend",
+    "revoke": "Revoke",
+    "revokeFor": "Revoke the invitation for {email}"
+  },
+  "member": {
+    "you": "You",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, one {Inactive for # day or more} other {Inactive for # days or more}}",
+    "roleOf": "Role of {name}",
+    "remove": "Remove from workspace",
+    "removeTitle": "Remove {name} from {workspace}?",
+    "removeDescription": "Meetings and files {name} shared from their own Notes and File Manager leave with them. Tasks stay, and their open ones become unassigned. The seat frees up.",
+    "joinedTeam": "{name} joined {team}",
+    "leftTeam": "{name} left {team}"
+  },
+  "teams": {
+    "new": "New team",
+    "empty": "No teams yet",
+    "emptyHint": "Teams are optional. Create them when you want to share meetings and knowledge with a group, like Engineering or Sales.",
+    "intro": "Share meetings and knowledge with a team instead of one person at a time.",
+    "deleteTitle": "Delete {name}?",
+    "deleteDescription": "Its meetings stay visible to the people who took part, and its members stay in the workspace. Move the team’s knowledge first; it can’t be left without an audience."
+  },
+  "team": {
+    "noDescription": "No description yet.",
+    "edit": "Edit team",
+    "delete": "Delete team",
+    "members": "{count, plural, one {# member} other {# members}}",
+    "membersLedBy": "{count, plural, one {# member} other {# members}} · led by {name}",
+    "membersLedByYou": "{count, plural, one {# member} other {# members}} · led by you",
+    "join": "Join team",
+    "leave": "Leave team",
+    "youJoined": "You joined {team}",
+    "youLeft": "You left {team}"
+  },
+  "teamForm": {
+    "editTitle": "Edit {name}",
+    "description": "Share meetings and knowledge with a group instead of one by one.",
+    "nameRequired": "Give the team a name.",
+    "namePlaceholder": "e.g. Design",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "What this team works on",
+    "color": "Colour",
+    "colors": {
+      "blue": "Blue",
+      "green": "Green",
+      "amber": "Amber",
+      "violet": "Violet",
+      "rose": "Rose",
+      "sky": "Sky"
+    },
+    "privateHint": "Only its members and admins see it and what’s shared with it.",
+    "create": "Create team"
+  },
+  "invite": {
+    "title": "Invite people to {workspace}",
+    "description": "They’ll get an email with a link to join. Each person takes a seat.",
+    "emails": "Email addresses",
+    "hint": "Separate addresses with commas or new lines. {left, plural, one {# seat left.} other {# seats left.}}",
+    "overSeats": "{count, plural, one {# person} other {# people}}, but only {left, plural, one {# seat left.} other {# seats left.}}",
+    "seatsAfter": "{count, plural, one {# invitation} other {# invitations}} · {left, plural, one {# seat left after this.} other {# seats left after this.}}",
+    "checkEmails": "Check {emails}.",
+    "allExisting": "They’re already in the workspace or invited.",
+    "emailRequired": "Add an email address.",
+    "tooMany": "{count, plural, one {Invite at most # person at once.} other {Invite at most # people at once.}}",
+    "skipped": "Already in or invited, skipped: {emails}.",
+    "role": "Role",
+    "teams": "Add to teams (optional)",
+    "addSeats": "Add seats",
+    "send": "{count, plural, one {Send invitation} other {Send # invitations}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, one {Invitation sent to {email}} other {# invitations sent}}",
+    "inviteFailed": "Couldn’t send the invitations.",
+    "invitationRevoked": "Invitation for {email} revoked",
+    "revokeFailed": "Couldn’t revoke it",
+    "invitationResent": "Invitation sent again to {email}",
+    "resendFailed": "Couldn’t resend it",
+    "roleChanged": "{role, select, admin {{name} is now an admin} other {{name} is now a member}}",
+    "roleChangeFailed": "Couldn’t change the role",
+    "teamsUpdateFailed": "Couldn’t update teams",
+    "memberRemoved": "{name} was removed from the workspace",
+    "removeMemberFailed": "Couldn’t remove them",
+    "teamCreated": "{name} created",
+    "teamSaved": "{name} saved",
+    "teamSaveFailed": "Couldn’t save the team.",
+    "teamDeleted": "{name} was deleted",
+    "teamDeleteFailed": "Couldn’t delete the team"
+  }
+}

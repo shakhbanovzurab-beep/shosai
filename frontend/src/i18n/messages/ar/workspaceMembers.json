@@ -1,0 +1,120 @@
+{
+  "title": "الأعضاء",
+  "description": "كل من في {workspace}، وأدوارهم، والفرق التي تتم المشاركة معها.",
+  "invitePeople": "دعوة أشخاص",
+  "adminsInvite": "يمكن للمشرفين فقط دعوة الأشخاص.",
+  "adminsInviteAsk": "يمكن للمشرفين فقط دعوة الأشخاص. يمكن طلب ذلك من {name}.",
+  "tabs": {
+    "members": "الأعضاء",
+    "teams": "الفرق"
+  },
+  "search": "البحث عن أشخاص",
+  "pendingInvitations": "الدعوات المعلقة · {count, number}",
+  "membersCount": "الأعضاء · {count, number}",
+  "noMatches": "لا يوجد أحد مطابق",
+  "noMatchesHint": "يمكن تجربة اسم أو بريد إلكتروني أو مسمى وظيفي.",
+  "clearSearch": "مسح البحث",
+  "seats": {
+    "label": "المقاعد",
+    "taken": "المقاعد المشغولة: {taken, number} من {total, number}",
+    "breakdown": "· {members, plural, zero {# عضو} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}}",
+    "breakdownPending": "· {members, plural, zero {# عضو} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}}، {pending, plural, zero {# دعوة معلقة} one {دعوة معلقة واحدة} two {دعوتان معلقتان} few {# دعوات معلقة} many {# دعوة معلقة} other {# دعوة معلقة}}",
+    "left": "{count, plural, zero {لا توجد مقاعد متبقية.} one {يتبقى مقعد واحد.} two {يتبقى مقعدان.} few {يتبقى # مقاعد.} many {يتبقى # مقعدًا.} other {يتبقى # مقعد.}} تشغل الدعوات المعلقة مقعدًا إلى أن تُقبل أو تُلغى.",
+    "fullAdd": "كل المقاعد مشغولة. يرجى إضافة مقاعد لدعوة المزيد من الأشخاص.",
+    "fullAsk": "كل المقاعد مشغولة. يمكن طلب إضافة مقاعد من المالك.",
+    "change": "تغيير المقاعد"
+  },
+  "invitation": {
+    "by": "دعاه {name} {ago}",
+    "byYou": "دعوته أنت {ago}",
+    "byFormerMember": "دعاه عضو سابق {ago}",
+    "resend": "إعادة الإرسال",
+    "revoke": "إلغاء",
+    "revokeFor": "إلغاء دعوة {email}"
+  },
+  "member": {
+    "you": "أنت",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, zero {غير نشط منذ # يوم أو أكثر} one {غير نشط منذ يوم أو أكثر} two {غير نشط منذ يومين أو أكثر} few {غير نشط منذ # أيام أو أكثر} many {غير نشط منذ # يومًا أو أكثر} other {غير نشط منذ # يوم أو أكثر}}",
+    "roleOf": "دور {name}",
+    "remove": "إزالة من مساحة العمل",
+    "removeTitle": "إزالة {name} من {workspace}؟",
+    "removeDescription": "ستغادر معه الاجتماعات والملفات التي شاركها {name} من ملاحظاته ومدير الملفات لديه. تبقى المهام، وتصبح مهامه المفتوحة بلا مكلف. ويتحرر مقعده.",
+    "joinedTeam": "انضم {name} إلى {team}",
+    "leftTeam": "غادر {name} {team}"
+  },
+  "teams": {
+    "new": "فريق جديد",
+    "empty": "لا توجد فرق بعد",
+    "emptyHint": "الفرق اختيارية. يمكن إنشاؤها عند الحاجة إلى مشاركة الاجتماعات والمعرفة مع مجموعة، مثل الهندسة أو المبيعات.",
+    "intro": "مشاركة الاجتماعات والمعرفة مع فريق كامل بدلًا من شخص في كل مرة.",
+    "deleteTitle": "حذف {name}؟",
+    "deleteDescription": "تبقى اجتماعاته مرئية لمن حضرها، ويبقى أعضاؤه في مساحة العمل. يرجى نقل معرفة الفريق أولًا، إذ لا يمكن تركها بلا جمهور."
+  },
+  "team": {
+    "noDescription": "لا يوجد وصف بعد.",
+    "edit": "تعديل الفريق",
+    "delete": "حذف الفريق",
+    "members": "{count, plural, zero {# عضو} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}}",
+    "membersLedBy": "{count, plural, zero {# عضو} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}} · بقيادة {name}",
+    "membersLedByYou": "{count, plural, zero {# عضو} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}} · بقيادتك",
+    "join": "الانضمام إلى الفريق",
+    "leave": "مغادرة الفريق",
+    "youJoined": "تم الانضمام إلى {team}",
+    "youLeft": "تمت مغادرة {team}"
+  },
+  "teamForm": {
+    "editTitle": "تعديل {name}",
+    "description": "مشاركة الاجتماعات والمعرفة مع مجموعة بدلًا من كل شخص على حدة.",
+    "nameRequired": "يرجى إدخال اسم للفريق.",
+    "namePlaceholder": "مثل التصميم",
+    "descriptionLabel": "الوصف",
+    "descriptionPlaceholder": "ما يعمل عليه هذا الفريق",
+    "color": "اللون",
+    "colors": {
+      "blue": "أزرق",
+      "green": "أخضر",
+      "amber": "كهرماني",
+      "violet": "بنفسجي",
+      "rose": "وردي",
+      "sky": "سماوي"
+    },
+    "privateHint": "لا يراه وما تتم مشاركته معه إلا أعضاؤه والمشرفون.",
+    "create": "إنشاء فريق"
+  },
+  "invite": {
+    "title": "دعوة أشخاص إلى {workspace}",
+    "description": "سيصلهم بريد إلكتروني يحتوي على رابط للانضمام. يشغل كل شخص مقعدًا.",
+    "emails": "عناوين البريد الإلكتروني",
+    "hint": "يمكن الفصل بين العناوين بفواصل أو بأسطر جديدة. {left, plural, zero {لا توجد مقاعد متبقية.} one {يتبقى مقعد واحد.} two {يتبقى مقعدان.} few {يتبقى # مقاعد.} many {يتبقى # مقعدًا.} other {يتبقى # مقعد.}}",
+    "overSeats": "{count, plural, zero {# شخص} one {شخص واحد} two {شخصان} few {# أشخاص} many {# شخصًا} other {# شخص}}، لكن {left, plural, zero {لا توجد مقاعد متبقية.} one {يتبقى مقعد واحد فقط.} two {يتبقى مقعدان فقط.} few {يتبقى # مقاعد فقط.} many {يتبقى # مقعدًا فقط.} other {يتبقى # مقعد فقط.}}",
+    "seatsAfter": "{count, plural, zero {# دعوة} one {دعوة واحدة} two {دعوتان} few {# دعوات} many {# دعوة} other {# دعوة}} · {left, plural, zero {لن تتبقى مقاعد بعد ذلك.} one {سيتبقى مقعد واحد بعد ذلك.} two {سيتبقى مقعدان بعد ذلك.} few {سيتبقى # مقاعد بعد ذلك.} many {سيتبقى # مقعدًا بعد ذلك.} other {سيتبقى # مقعد بعد ذلك.}}",
+    "checkEmails": "يرجى التحقق من {emails}.",
+    "allExisting": "هم موجودون بالفعل في مساحة العمل أو تمت دعوتهم.",
+    "emailRequired": "يرجى إضافة عنوان بريد إلكتروني.",
+    "tooMany": "{count, plural, zero {يمكن دعوة # شخص كحد أقصى في المرة الواحدة.} one {يمكن دعوة شخص واحد كحد أقصى في المرة الواحدة.} two {يمكن دعوة شخصين كحد أقصى في المرة الواحدة.} few {يمكن دعوة # أشخاص كحد أقصى في المرة الواحدة.} many {يمكن دعوة # شخصًا كحد أقصى في المرة الواحدة.} other {يمكن دعوة # شخص كحد أقصى في المرة الواحدة.}}",
+    "skipped": "تم تخطي من هم موجودون أو مدعوون بالفعل: {emails}.",
+    "role": "الدور",
+    "teams": "إضافة إلى فرق (اختياري)",
+    "addSeats": "إضافة مقاعد",
+    "send": "{count, plural, zero {إرسال # دعوة} one {إرسال الدعوة} two {إرسال دعوتين} few {إرسال # دعوات} many {إرسال # دعوة} other {إرسال # دعوة}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, one {تم إرسال الدعوة إلى {email}} zero {تم إرسال # دعوة} two {تم إرسال دعوتين} few {تم إرسال # دعوات} many {تم إرسال # دعوة} other {تم إرسال # دعوة}}",
+    "inviteFailed": "تعذر إرسال الدعوات.",
+    "invitationRevoked": "تم إلغاء دعوة {email}",
+    "revokeFailed": "تعذر إلغاء الدعوة",
+    "invitationResent": "تمت إعادة إرسال الدعوة إلى {email}",
+    "resendFailed": "تعذر إعادة الإرسال",
+    "roleChanged": "{role, select, admin {أصبح {name} مشرفًا} other {أصبح {name} عضوًا}}",
+    "roleChangeFailed": "تعذر تغيير الدور",
+    "teamsUpdateFailed": "تعذر تحديث الفرق",
+    "memberRemoved": "تمت إزالة {name} من مساحة العمل",
+    "removeMemberFailed": "تعذر إزالة العضو",
+    "teamCreated": "تم إنشاء {name}",
+    "teamSaved": "تم حفظ {name}",
+    "teamSaveFailed": "تعذر حفظ الفريق.",
+    "teamDeleted": "تم حذف {name}",
+    "teamDeleteFailed": "تعذر حذف الفريق"
+  }
+}

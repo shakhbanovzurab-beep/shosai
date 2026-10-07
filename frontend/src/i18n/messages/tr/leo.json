@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Leo ile sohbet et",
+    "close": "Leo ile sohbeti kapat",
+    "tooltipOpen": "Leo’ya sor",
+    "tooltipClose": "Leo’yu kapat"
+  },
+  "panel": {
+    "label": "Leo ile sohbet",
+    "subtitle": "Yapay zekâ ajanı",
+    "working": "Çalışıyorum…",
+    "newChat": "Yeni sohbet",
+    "fullScreen": "Tam ekran",
+    "exitFullScreen": "Tam ekrandan çık",
+    "close": "Kapat",
+    "dropFiles": "Eklemek için dosyaları bırakın"
+  },
+  "place": {
+    "personal": "Kişisel",
+    "workspace": "Çalışma alanı: {name}",
+    "hub": "Merkez: {name}",
+    "scopePersonal": "E-postanız, takviminiz, notlarınız, görevleriniz ve benim için seçtiğiniz dosyalarla, ayrıca çalışma alanlarınızın sizinle paylaştıklarıyla çalışırım. Bu sohbeti yalnızca siz görürsünüz.",
+    "scopeWorkspace": "Yalnızca {name} çalışma alanının sizinle paylaştıklarına dayanarak yanıt veririm: toplantılar, kararlar, projeler ve bilgi bankası. Bu sohbet {name} çalışma alanında kalır.",
+    "scopeHub": "Yalnızca “{name}” merkezinin toplantılarına, kararlarına ve materyallerine dayanarak yanıt veririm. Bu sohbet burada kalır.",
+    "boundHub": "Yalnızca “{name}” hakkında yanıt veriyorum"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {İyi akşamlar} morning {Günaydın} afternoon {İyi günler} other {İyi akşamlar}}",
+    "hi": "Merhaba",
+    "intro": "{greeting}, ben Leo",
+    "howCanIHelp": "Bugün size nasıl yardımcı olabilirim?",
+    "suggestionsLabel": "Öneriler"
+  },
+  "suggestions": {
+    "default": {
+      "first": "Günümü planla",
+      "second": "İlgilenmem gerekenleri özetle",
+      "third": "Hangi konularda yardım edebilirsin?"
+    },
+    "hub": {
+      "first": "Bu iş neden ilerlemiyor?",
+      "second": "Son toplantıda ne değişti?",
+      "third": "Beni bir sonraki toplantıya hazırla"
+    },
+    "workspace": {
+      "first": "Fiyatlandırma konusunda ne karar verdik?",
+      "second": "Burada gecikmiş hangi işlerim var?",
+      "third": "Güvenlik politikamızı bul"
+    },
+    "productivity": {
+      "first": "Günümü planla",
+      "second": "Önce neye odaklanmalıyım?",
+      "third": "Haftamı özetle"
+    },
+    "mail": {
+      "first": "Gelen kutumu özetle",
+      "second": "Nazik bir hatırlatma e-postası yaz",
+      "third": "Hangi e-postalar acil?"
+    },
+    "calendar": {
+      "first": "Bugün takvimimde neler var?",
+      "second": "Bu hafta boş bir saat bul",
+      "third": "Beni bir sonraki toplantıma hazırla"
+    },
+    "kanban": {
+      "first": "Hangi görevlerin son tarihi geçti?",
+      "second": "Bu panoyu özetle",
+      "third": "Sırada hangi görevi taşımalıyım?"
+    },
+    "meetings": {
+      "first": "Bugün hangi toplantılarım var?",
+      "second": "Ekiple bir görüşme planla",
+      "third": "Beni bir sonraki görüşmeme hazırla"
+    },
+    "notes": {
+      "first": "Son toplantımı özetle",
+      "second": "Takip görevlerimi listele",
+      "third": "Bu hafta hangi kararları aldık?"
+    },
+    "fileManager": {
+      "first": "Son dosyalarımı bul",
+      "second": "En çok yeri ne kaplıyor?",
+      "third": "Dosyalarımı düzenle"
+    },
+    "studio": {
+      "first": "Bir sistem mesajı yaz",
+      "second": "Kullanılabilir modelleri karşılaştır",
+      "third": "Bu istemi iyileştir"
+    }
+  },
+  "composer": {
+    "placeholder": "Leo’ya istediğinizi sorun",
+    "label": "Leo’ya mesaj",
+    "attach": "Dosya ekle",
+    "attachLimit": "En fazla {max, plural, one {# dosya} other {# dosya}} eklenebilir",
+    "filesToSend": "Gönderilecek dosyalar",
+    "removeFile": "{name} dosyasını kaldır",
+    "disclaimer": "Leo hata yapabilir. Önemli bilgileri kontrol edin.",
+    "stop": "Leo’yu durdur",
+    "send": "Mesajı gönder",
+    "startVoice": "Sesli modu başlat",
+    "voiceMode": "Sesli mod"
+  },
+  "message": {
+    "copy": "Kopyala",
+    "copied": "Kopyalandı",
+    "copyFailed": "Kopyalanamadı",
+    "regenerate": "Yeniden oluştur",
+    "tryAgain": "Tekrar dene",
+    "replyFailed": "Leo’nun yanıtı tamamlanamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+    "edit": "Düzenle",
+    "editMessage": "Mesajı düzenle",
+    "attachedFiles": "Ekli dosyalar"
+  },
+  "steps": {
+    "gettingStarted": "Başlıyorum",
+    "doneIn": "{duration} içinde tamamlandı",
+    "stoppedAfter": "{duration} sonra durduruldu",
+    "somethingWrong": "Bir şeyler ters gitti",
+    "label": "Leo’nun işlemleri",
+    "needsApproval": "Onay gerekiyor",
+    "detail": "“{detail}”",
+    "status": "{status, select, running {Devam ediyor} done {Tamamlandı} error {Tamamlanamadı} stopped {Durduruldu} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} çok büyük",
+    "sizeLimit": "Dosyalar en fazla {size} olabilir.",
+    "tooMany": "En fazla {max, plural, one {# dosya} other {# dosya}} ekleyebilirsiniz."
+  },
+  "voice": {
+    "unavailable": "Sesli mod kullanılamıyor",
+    "listening": "Dinliyorum…",
+    "thinking": "Leo düşünüyor…",
+    "speaking": "Leo konuşuyor…",
+    "micOff": "Mikrofon kapalı",
+    "turnMicOn": "Mikrofonu aç",
+    "turnMicOff": "Mikrofonu kapat",
+    "end": "Sesli modu sonlandır",
+    "micBlocked": "Mikrofon erişimi engellendi",
+    "micBlockedHint": "Leo ile konuşmak için mikrofona izin verin.",
+    "needsHttps": "Sesli modun mikrofonu kullanabilmesi için güvenli (HTTPS) bağlantı gerekir.",
+    "unsupported": "Bu tarayıcı sesli modu desteklemiyor. Chrome, Edge veya Safari’nin en son sürümünü deneyin."
+  }
+}

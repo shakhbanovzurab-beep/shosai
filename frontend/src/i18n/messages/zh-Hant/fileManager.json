@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "檔案管理",
+    "description": "瀏覽、整理和上傳你的檔案，並選擇 Leo 要使用哪些檔案。",
+    "folderTitle": "資料夾 · 檔案管理"
+  },
+  "myFiles": "我的檔案",
+  "loading": "正在載入你的檔案…",
+  "loadFailed": "無法載入你的檔案",
+  "allFiles": {
+    "heading": "所有檔案",
+    "emptyTitle": "還沒有檔案",
+    "emptyDescription": "上傳檔案或拖放到這裡，再選擇 Leo 可以使用哪些檔案。"
+  },
+  "folders": {
+    "heading": "資料夾",
+    "new": "新增資料夾",
+    "untitled": "未命名資料夾",
+    "emptyTitle": "還沒有資料夾",
+    "emptyDescription": "建立資料夾來整理檔案，或讓 Leo 一次讀取整組檔案。",
+    "fileCount": "{count, plural, other {# 個檔案}}",
+    "dropHere": "放開即可移到這裡",
+    "dropHereLeo": "放開即可移到這裡。Leo 會使用這個檔案。",
+    "updated": "更新於 {ago}",
+    "leoReadsAll": "Leo 會使用這個資料夾中所有可讀取的內容"
+  },
+  "folder": {
+    "notFound": "找不到資料夾",
+    "notFoundDescription": "這個資料夾可能已在其他工作階段中被刪除或重新命名。",
+    "backToMyFiles": "返回我的檔案",
+    "back": "返回",
+    "emptyTitle": "這個資料夾是空的",
+    "emptyLeo": "將檔案上傳或移到這裡，Leo 就會使用這些檔案。",
+    "empty": "將檔案上傳到這裡、在「我的檔案」中把檔案拖曳到這個資料夾，或使用檔案選單中的「移至」。"
+  },
+  "section": {
+    "label": "檔案",
+    "view": "檔案檢視",
+    "grid": "格狀",
+    "list": "清單",
+    "noMatch": "沒有符合的檔案",
+    "noMatchDescription": "這裡沒有符合這個篩選條件的項目。",
+    "clearFilters": "清除篩選條件"
+  },
+  "toolbar": {
+    "filterSort": "篩選與排序",
+    "show": "顯示",
+    "fileType": "檔案類型",
+    "allTypes": "所有類型",
+    "sortBy": "排序方式"
+  },
+  "show": {
+    "all": "所有檔案",
+    "starred": "已加星號",
+    "leo": "Leo 使用中",
+    "shared": "已在工作空間共用"
+  },
+  "sort": {
+    "modified": "上次修改時間",
+    "name": "名稱",
+    "size": "檔案大小"
+  },
+  "kinds": {
+    "archive": "壓縮檔",
+    "design": "設計",
+    "document": "文件",
+    "image": "圖片",
+    "other": "檔案",
+    "pdf": "PDF",
+    "presentation": "簡報",
+    "spreadsheet": "試算表",
+    "text": "純文字"
+  },
+  "file": {
+    "star": "為 {name} 加上星號",
+    "unstar": "移除 {name} 的星號",
+    "modified": "修改於 {ago}",
+    "inFolderModified": "<hidden>位於資料夾 </hidden><name>{folder}</name> · 修改於 {ago}",
+    "inFolder": "<hidden>位於資料夾 </hidden><name>{folder}</name>",
+    "sharedIn": "已在 {workspaces} 共用",
+    "sharedInHidden": "<hidden>已共用至 </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "修改時間",
+    "size": "大小",
+    "actions": "動作"
+  },
+  "leo": {
+    "viaFile": "你選擇了這個檔案，所以 Leo 會使用它",
+    "viaFolder": "Leo 透過所在資料夾使用這個檔案",
+    "reading": "Leo · 正在讀取",
+    "failed": "Leo 無法讀取這個檔案",
+    "tooLarge": "Leo 可讀取的檔案上限為 {size}",
+    "extension": "Leo 無法讀取 .{extension} 檔案",
+    "unknownType": "Leo 無法讀取這種類型的檔案"
+  },
+  "menu": {
+    "addStar": "加上星號",
+    "removeStar": "移除星號",
+    "moveTo": "移至",
+    "useWithLeo": "讓 Leo 使用",
+    "usedThrough": "透過「{folder}」使用",
+    "share": "在工作空間中共用…",
+    "sharing": "工作空間共用設定…",
+    "transferTo": "轉移至",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "刪除資料夾"
+  },
+  "dialogs": {
+    "renameFile": "重新命名檔案",
+    "renameFolder": "重新命名資料夾",
+    "shareTitle": "共用「{name}」",
+    "shareDescription": "Leo 會在工作空間中為你選擇的人根據這個檔案回答。檔案仍保留在這裡、仍屬於你；如果你刪除檔案或離開工作空間，檔案就會從該工作空間移除。",
+    "transferTitle": "要將「{name}」轉移至 {workspace} 嗎？",
+    "transferDescription": "檔案會從你的檔案中移出，改為屬於 {workspace}：你離開後檔案仍會留在那裡，並由該工作空間的管理員管理。你曾共用這個檔案的其他工作空間將無法再使用它。這項操作無法復原。",
+    "transfer": "轉移"
+  },
+  "upload": {
+    "button": "上傳",
+    "uploading": "正在上傳 {count, plural, other {# 個檔案}}…",
+    "dropHere": "放開即可上傳到這裡",
+    "skipped": "{count, plural, other {已略過 # 個檔案}}",
+    "skippedDescription": "空白檔案或超過 {size} 的檔案會被略過，而且一次最多上傳 {max, number} 個檔案。"
+  },
+  "picker": {
+    "search": "搜尋你的檔案",
+    "noMatch": "沒有符合的檔案。",
+    "noFiles": "還沒有檔案。請先在檔案管理中上傳檔案。",
+    "yourFiles": "你的檔案",
+    "alreadyShared": "已在這裡共用"
+  }
+}

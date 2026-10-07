@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} на пользователя",
+    "from": "от {amount}",
+    "unlimited": "без ограничений"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Встречи без ограничений",
+    "meetingMinutes": "{minutes, plural, one {# минута встреч} few {# минуты встреч} many {# минут встреч} other {# минуты встреч}} в месяц",
+    "noMeetings": "Встречи",
+    "fileManager": "Файлы · {storage}",
+    "noFileManager": "Файлы",
+    "knowledge": "База знаний для Leo · {storage}",
+    "noKnowledge": "База знаний для Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Общее рабочее пространство команды",
+    "member_management": "Управление пользователями",
+    "centralized_billing": "Единая оплата",
+    "billing_and_users": "Единая оплата и управление пользователями",
+    "admin_controls": "Корпоративная безопасность и инструменты администратора",
+    "sso": "Единый вход (SSO)",
+    "priority_support": "Приоритетная поддержка",
+    "usage_analytics": "Аналитика использования"
+  },
+  "compare": {
+    "title": "Сравнение тарифов",
+    "feature": "Возможность",
+    "included": "Входит",
+    "notIncluded": "Не входит",
+    "unlimited": "Без ограничений",
+    "minutes": "{minutes, plural, one {# мин} few {# мин} many {# мин} other {# мин}} в месяц",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Индивидуально",
+    "rows": {
+      "meetings": "Встречи",
+      "fileManager": "Файлы",
+      "knowledge": "База знаний для Leo",
+      "apps": "Leo, Почта, Календарь, Канбан, Заметки",
+      "users": "Пользователи",
+      "sharedWorkspace": "Общее рабочее пространство",
+      "billingAndUsers": "Единая оплата и управление пользователями",
+      "sso": "Единый вход (SSO)",
+      "adminControls": "Безопасность и инструменты администратора",
+      "prioritySupport": "Приоритетная поддержка",
+      "usageAnalytics": "Аналитика использования"
+    }
+  }
+}

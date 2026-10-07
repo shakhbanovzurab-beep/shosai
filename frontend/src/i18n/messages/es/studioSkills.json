@@ -1,0 +1,53 @@
+{
+  "title": "Habilidades",
+  "tabs": {
+    "readyMade": "Catálogo",
+    "repository": "Tu repositorio",
+    "mine": "Mías ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Busca una habilidad: diseño de sistemas, revisión de código…",
+    "label": "Buscar habilidades",
+    "help": "Busca en el catálogo de skills.sh",
+    "noMatches": "Ninguna habilidad coincide. Prueba con otras palabras.",
+    "emptyTitle": "Catálogo de habilidades listas para usar",
+    "emptyDescription": "Empieza a escribir. Una habilidad es una instrucción lista que puedes adjuntar a un prompt.",
+    "searchFailed": "No se pudo buscar en skills.sh. Inténtalo de nuevo."
+  },
+  "repository": {
+    "label": "Repositorio de GitHub",
+    "placeholder": "propietario/repositorio o un enlace de GitHub",
+    "find": "Buscar habilidades",
+    "help": "Un repositorio público que contenga un archivo SKILL.md",
+    "emptyTitle": "Tu propia habilidad desde GitHub",
+    "emptyDescription": "Escribe un repositorio público para buscar sus archivos SKILL.md.",
+    "scanFailed": "No se pudo leer el repositorio."
+  },
+  "candidate": {
+    "installs": "{count, plural, one {# instalación} many {# de instalaciones} other {# instalaciones}}",
+    "installed": "Instalada"
+  },
+  "mine": {
+    "extraFiles": "Incluye scripts u otros archivos: solo se usan las instrucciones de SKILL.md.",
+    "update": "Actualizar {name}",
+    "updateHint": "Actualizar al último commit",
+    "remove": "Quitar {name}",
+    "emptyTitle": "Aún no hay habilidades",
+    "emptyDescription": "Agrega una desde Catálogo o desde tu repositorio."
+  },
+  "remove": {
+    "title": "¿Quitar {name}?",
+    "titleUnnamed": "¿Quitar esta habilidad?",
+    "description": "Se quitará de todos los prompts que la usan. Puedes volver a agregarla más tarde."
+  },
+  "toasts": {
+    "installed": "Se instaló {name}",
+    "installedHint": "Adjúntala a un prompt desde el editor de prompts.",
+    "installFailed": "No se pudo instalar la habilidad",
+    "upToDate": "{name} ya está al día",
+    "updated": "Se actualizó {name}",
+    "updateFailed": "No se pudo actualizar la habilidad",
+    "removed": "Se quitó {name}",
+    "removeFailed": "No se pudo quitar la habilidad"
+  }
+}

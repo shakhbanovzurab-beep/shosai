@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Assistance",
+    "description": "Demandez de l’aide à notre équipe et suivez vos demandes d’assistance."
+  },
+  "categories": {
+    "billing": "Facturation",
+    "bug": "Signaler un bug",
+    "account": "Compte",
+    "feature": "Suggérer une fonctionnalité",
+    "other": "Autre"
+  },
+  "statuses": {
+    "open": "En attente de l’assistance",
+    "awaiting_you": "En attente de votre réponse",
+    "resolved": "Résolue"
+  },
+  "events": {
+    "acknowledged": "Nous avons bien reçu votre message. Un spécialiste répond généralement en quelques heures ; vous serez notifié ici.",
+    "resolved": "Marquée comme résolue",
+    "reopened": "Rouverte"
+  },
+  "toolbar": {
+    "search": "Rechercher des demandes",
+    "filter": "Filtrer les demandes",
+    "all": "Toutes",
+    "open": "Ouvertes",
+    "resolved": "Résolues"
+  },
+  "newTicket": "Nouvelle demande",
+  "table": {
+    "number": "N°",
+    "subject": "Objet",
+    "status": "Statut",
+    "topic": "Sujet",
+    "updated": "Mise à jour",
+    "unread": "Non lus :"
+  },
+  "list": {
+    "loading": "Chargement des demandes",
+    "loadError": "Impossible de charger vos demandes",
+    "emptyTitle": "Comment pouvons-nous vous aider ?",
+    "emptyDescription": "Ouvrez une demande et notre équipe vous répondra ici, généralement en quelques heures.",
+    "noMatchesTitle": "Aucune demande trouvée",
+    "noMatchesDescription": "Essayez une autre recherche ou un autre filtre."
+  },
+  "panel": {
+    "ticket": "Demande",
+    "description": "Votre conversation avec l’assistance"
+  },
+  "form": {
+    "title": "Comment pouvons-nous vous aider ?",
+    "subtitle": "Nous répondons généralement en quelques heures.",
+    "topic": "Sujet",
+    "subject": "Objet",
+    "subjectPlaceholder": "Un bref résumé",
+    "body": "Que s’est-il passé ?",
+    "bodyPlaceholder": "Les étapes, ce que vous attendiez et ce que vous avez obtenu à la place. Des captures d’écran nous aident.",
+    "send": "Envoyer"
+  },
+  "attach": {
+    "button": "Joindre des fichiers",
+    "list": "Fichiers joints",
+    "remove": "Retirer {name}",
+    "tooBig": "{count, plural, one {{names} dépasse {size}} many {{names} dépassent {size}} other {{names} dépassent {size}}}",
+    "tooMany": "{max, plural, one {Joignez # fichier au maximum} many {Joignez # de fichiers au maximum} other {Joignez # fichiers au maximum}}"
+  },
+  "composer": {
+    "message": "Message",
+    "emoji": "Ajouter un emoji",
+    "hint": "Entrée pour envoyer · Maj+Entrée pour aller à la ligne",
+    "send": "Envoyer",
+    "reply": "Écrire une réponse…",
+    "replyToReopen": "Répondez pour rouvrir la demande…"
+  },
+  "thread": {
+    "loading": "Chargement de la demande",
+    "close": "Fermer la demande",
+    "reopen": "Rouvrir",
+    "resolve": "Marquer comme résolue",
+    "resolvedNote": "Résolue. Si vous avez encore besoin d’aide, répondez ci-dessous : la demande sera rouverte.",
+    "thanks": "Merci pour votre avis.",
+    "rate": "Comment s’est passé notre échange ?",
+    "good": "Bien",
+    "bad": "Pas bien",
+    "you": "Vous",
+    "support": "Assistance",
+    "supportAuthor": "{name} · Assistance",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Marquer comme lue",
+    "markUnread": "Marquer comme non lue",
+    "copyNumber": "Copier le numéro de la demande",
+    "copySubject": "Copier l’objet"
+  },
+  "toasts": {
+    "opened": "Demande n°{number} ouverte",
+    "openFailed": "Impossible d’ouvrir la demande",
+    "updateFailed": "Impossible de mettre à jour la demande",
+    "sendFailed": "Impossible d’envoyer votre réponse",
+    "markedRead": "Marquée comme lue",
+    "markedUnread": "Marquée comme non lue",
+    "reopened": "Demande rouverte",
+    "resolved": "Marquée comme résolue",
+    "numberCopied": "Numéro de la demande copié",
+    "subjectCopied": "Objet copié",
+    "numberCopyFailed": "Impossible de copier le numéro de la demande",
+    "subjectCopyFailed": "Impossible de copier l’objet"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "जानकारी",
+    "stages": "चरण",
+    "history": "क्या-क्या हुआ",
+    "summaryDecided": "{rounds, plural, one {# बार चर्चा हुई — {date} को फ़ैसला हुआ।} other {# बार चर्चा हुई — {date} को फ़ैसला हुआ।}}",
+    "summaryOpen": "{rounds, plural, one {# बार चर्चा हुई — कोई फ़ैसला नहीं।} other {# बार चर्चा हुई — कोई फ़ैसला नहीं।}}",
+    "blockers": "हर बार वजह यह थी: {quotes}।",
+    "round": "दौर {index, number}",
+    "blocker": "रुकावट क्या थी",
+    "decision": "फ़ैसला",
+    "decisionChanged": "फ़ैसला बदल गया",
+    "previous": "पहले",
+    "current": "अब",
+    "decidedAt": "{date}, “{meeting}”",
+    "outcome": "नतीजा क्या रहा",
+    "outcomeUnknown": "नतीजा अभी पता नहीं है",
+    "links": {
+      "causes": "इसे रोके हुए है",
+      "blocked_by": "इससे रुका हुआ है",
+      "outcome_of": "फ़ैसले से निकला"
+    },
+    "sources": "स्रोत",
+    "dismissals": "ख़ारिज किया गया",
+    "dismissedByYou": "आपने ख़ारिज किया",
+    "disproved": "ग़लत साबित हुआ: {evidence}",
+    "dismissedUntil": "{date} तक",
+    "returned": "समय पूरा हुआ और यह वापस आ गया",
+    "owner": "मालिक",
+    "noOwner": "असाइन नहीं किया गया",
+    "due": "आख़िरी तारीख",
+    "noDue": "कोई तारीख नहीं",
+    "goneTitle": "यह अब यहां नहीं है",
+    "goneText": "हो सकता है हब मिटा दिया गया हो, या मीटिंग की रिकॉर्डिंग हटा दी गई हो।",
+    "loadError": "जानकारी लोड नहीं की जा सकी।"
+  },
+  "why": {
+    "source": "स्रोत",
+    "meeting": "मीटिंग {date}, “{title}”",
+    "said": "किसने कहा",
+    "moment": "पल",
+    "jump": "उस पल पर जाएं",
+    "signals": {
+      "series": "इस सीरीज़ की मीटिंग पहले से यहां हैं।",
+      "subject": "बातचीत इसी हब के बारे में थी।",
+      "title": "यह मीटिंग के शीर्षक में है।",
+      "entity": "बातचीत में यह नाम आया।",
+      "organisation": "लोग इसी संगठन से हैं।",
+      "human": "आपने इसे ख़ुद यहां रखा।"
+    },
+    "loadError": "स्रोत लोड नहीं किया जा सका।"
+  }
+}

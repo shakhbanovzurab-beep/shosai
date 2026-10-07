@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "Forfait {plan}",
+    "current": "Actuel",
+    "price": "{interval, select, month {{price} par mois} year {{price} par an} other {Toujours gratuit}}",
+    "renews": "Renouvellement le {date}",
+    "upgrade": "Passer à un forfait supérieur"
+  },
+  "payment": {
+    "title": "Paiement",
+    "description": "Votre moyen de paiement par défaut est débité pour les renouvellements d’abonnement, l’utilisation supplémentaire et la recharge automatique.",
+    "add": "Ajouter un moyen de paiement",
+    "empty": "Aucun moyen de paiement pour l’instant.",
+    "default": "Par défaut",
+    "unknownCard": "Carte",
+    "endingIn": "{card} se terminant par {last4}",
+    "expires": "Expiration : {date}",
+    "update": "Mettre à jour",
+    "updateCard": "Mettre à jour la carte {card} se terminant par {last4}",
+    "openFailed": "Impossible d’ouvrir la page de paiement"
+  },
+  "history": {
+    "title": "Historique de facturation",
+    "description": "Consultez et téléchargez vos factures précédentes.",
+    "empty": "Aucune facture pour l’instant. Elles apparaîtront ici après votre premier paiement.",
+    "columns": {
+      "date": "Date",
+      "description": "Description",
+      "amount": "Montant",
+      "status": "Statut",
+      "download": "Télécharger"
+    },
+    "status": {
+      "paid": "Payée",
+      "pending": "En attente",
+      "failed": "Échouée"
+    },
+    "download": "Télécharger la facture {number}",
+    "notReady": "La facture {number} n’est pas encore prête"
+  }
+}

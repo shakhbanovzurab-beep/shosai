@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Produktivität",
+    "description": "Heutige Aufgaben, Projekte, Fokus-Timer, Kalender und neueste Notizen, dazu ein Jahr erledigter Arbeit auf einen Blick."
+  },
+  "greeting": "{period, select, morning {Guten Morgen, {name}.} afternoon {Guten Tag, {name}.} other {Guten Abend, {name}.}}",
+  "greetingAnyTime": "Hallo, {name}.",
+  "sidePanel": "Kalender, Fokus und Notizen",
+  "tasks": {
+    "heading": "Heute",
+    "progress": "{done, number} von {total, number} erledigt",
+    "newTask": "Neue Aufgabe",
+    "addTask": "Aufgabe hinzufügen"
+  },
+  "projects": {
+    "heading": "Projekte",
+    "status": {
+      "inProgress": "In Arbeit",
+      "planning": "In Planung"
+    },
+    "progressOf": "Fortschritt von {project}",
+    "due": "Fällig am {date}"
+  },
+  "notes": {
+    "heading": "Neueste Notizen",
+    "viewAll": "Alle anzeigen",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "empty": "Noch keine Notizen",
+    "emptyHint": "Hier erscheinen Notizen aus deinen Meetings."
+  }
+}

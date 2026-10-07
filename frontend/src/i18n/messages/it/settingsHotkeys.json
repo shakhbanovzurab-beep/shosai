@@ -1,0 +1,26 @@
+{
+  "description": "Scorciatoie per l’app desktop. Funzionano ovunque sul computer, anche quando l’app è in background, e si sincronizzano su tutti i tuoi dispositivi.",
+  "commands": {
+    "open_app": "Apri l’app",
+    "toggle_recording": "Avvia / metti in pausa la registrazione",
+    "toggle_overlay": "Mostra / nascondi l’overlay",
+    "open_settings": "Impostazioni",
+    "collapse_overlay": "Riduci l’overlay a pillola",
+    "close_app": "Chiudi l’app",
+    "live_translation": "Traduzione dal vivo",
+    "prompter": "Suggeritore"
+  },
+  "off": "Disattivata",
+  "pressKeys": "Premi i tasti…",
+  "hint": "Esc per annullare · Backspace per disattivare",
+  "reset": "Ripristina {command} al valore predefinito",
+  "record": "Premi la nuova scorciatoia per {command}",
+  "change": "{command}: {keys}. Modifica",
+  "changeOff": "{command}: disattivata. Modifica",
+  "resetAll": "Ripristina tutte le predefinite",
+  "problems": {
+    "needsModifier": "Usa ⌘/Ctrl o ⌥/Alt insieme a un altro tasto.",
+    "reserved": "Questa scorciatoia è riservata al sistema.",
+    "taken": "Già usata per «{command}»."
+  }
+}

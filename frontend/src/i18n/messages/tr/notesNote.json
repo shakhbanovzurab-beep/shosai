@@ -1,0 +1,74 @@
+{
+  "back": "Tüm notlar",
+  "notFound": "Not bulunamadı",
+  "participants": {
+    "count": "{count, plural, one {# katılımcı} other {# katılımcı}}",
+    "inMeeting": "{count, plural, one {Bu toplantıda # kişi var.} other {Bu toplantıda # kişi var.}}",
+    "you": "{name} (siz)",
+    "added": "{email} toplantıya eklendi",
+    "addPlaceholder": "E-posta ile ekle…",
+    "addLabel": "E-posta adresiyle katılımcı ekle",
+    "invalid": "ad@sirket.com gibi bir e-posta adresi girin.",
+    "duplicate": "Bu kişi zaten toplantıda."
+  },
+  "tabs": {
+    "notes": "Notlar",
+    "enhanced": "Geliştirilmiş",
+    "transcript": "Transkript",
+    "mindMap": "Zihin haritası"
+  },
+  "enhanced": {
+    "writtenBy": "Leo tarafından toplantı transkriptinden ve notlarınızdan yazıldı.",
+    "writtenByTemplate": "Leo tarafından toplantı transkriptinden ve notlarınızdan “{template}” düzeninde yazıldı.",
+    "writing": "Geliştirilmiş notlar yazılıyor…",
+    "nothingFor": "Bu toplantıda “{template}” bölümlerine uygun içerik yok."
+  },
+  "export": {
+    "button": "Dışa aktar",
+    "transcriptAs": "Transkript biçimi"
+  },
+  "myNotes": {
+    "loadFailed": "Notlarınız yüklenemedi",
+    "saveFailed": "Notlarınız kaydedilemedi"
+  },
+  "editor": {
+    "placeholder": "Notlarınızı yazın…",
+    "label": "Notlarınız",
+    "toolbar": "Biçimlendirme",
+    "addLink": "Bağlantı ekle",
+    "removeLink": "Bağlantıyı kaldır",
+    "bold": "Kalın",
+    "italic": "İtalik",
+    "linkPlaceholder": "Bağlantıyı yapıştırın…",
+    "linkAddress": "Bağlantı adresi",
+    "link": "Bağlantı",
+    "turnInto": "Dönüştür",
+    "blocks": {
+      "text": "Metin",
+      "h1": "Başlık 1",
+      "h2": "Başlık 2",
+      "h3": "Başlık 3",
+      "ordered": "Numaralı liste",
+      "bullet": "Madde işaretli liste"
+    }
+  },
+  "transcript": {
+    "label": "Transkript",
+    "search": "Transkriptte ara",
+    "searchPlaceholder": "Transkriptte ara…",
+    "matches": "{count, plural, =0 {Eşleşme yok} one {# eşleşme} other {# eşleşme}}",
+    "position": "{current, number} / {total, number}",
+    "previous": "Önceki eşleşme",
+    "next": "Sonraki eşleşme",
+    "clear": "Aramayı temizle"
+  },
+  "speakers": {
+    "title": "Kim konuştu",
+    "share": "{speaker}: konuşma süresinin {share} kadarı",
+    "lines": "{count, plural, one {# satır} other {# satır}}"
+  },
+  "mindMap": {
+    "title": "Zihin haritası: {topic}",
+    "caption": "Toplantı transkriptinden oluşturuldu."
+  }
+}

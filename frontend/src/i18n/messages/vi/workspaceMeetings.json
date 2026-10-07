@@ -1,0 +1,107 @@
+{
+  "title": "Cuộc họp",
+  "description": "Các bản ghi thành viên đã chia sẻ tại đây, kèm tóm tắt, quyết định và công việc từ Leo.",
+  "sharingRules": "Quy tắc chia sẻ",
+  "reviewSharingRules": "Xem lại quy tắc chia sẻ",
+  "shareMeeting": "Chia sẻ cuộc họp",
+  "searchMeetings": "Tìm kiếm cuộc họp",
+  "loading": "Đang tải cuộc họp…",
+  "loadFailed": "Không thể tải cuộc họp",
+  "empty": {
+    "title": "Chưa có gì được chia sẻ",
+    "text": "Cuộc họp sẽ xuất hiện khi một thành viên chia sẻ bản ghi của họ, hoặc khi một cuộc họp chỉ có thành viên của {workspace} kết thúc và quy tắc chia sẻ được áp dụng."
+  },
+  "noMatch": {
+    "title": "Không có cuộc họp nào phù hợp",
+    "text": "Hãy thử từ khóa khác, nhóm khác hoặc tất cả cuộc họp.",
+    "clear": "Xóa bộ lọc"
+  },
+  "recency": {
+    "thisWeek": "Tuần này",
+    "lastWeek": "Tuần trước",
+    "earlier": "Trước đó"
+  },
+  "scope": {
+    "label": "Cuộc họp nào",
+    "all": "Tất cả",
+    "mine": "Có tôi tham gia"
+  },
+  "when": {
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "tomorrow": "Ngày mai"
+  },
+  "row": {
+    "recordedByYou": "do bạn ghi",
+    "recordedBy": "do {name} ghi",
+    "withGuests": "có khách",
+    "decisions": "{count, plural, other {# quyết định}}",
+    "tasks": "{count, plural, other {# công việc}}"
+  },
+  "meeting": {
+    "back": "Cuộc họp",
+    "loading": "Đang tải cuộc họp…",
+    "loadFailed": "Không thể tải cuộc họp",
+    "date": "Ngày",
+    "duration": "Thời lượng",
+    "participants": "Người tham gia",
+    "participantsWithGuests": "{names} ({count, plural, other {# người ngoài {workspace}}})",
+    "project": "Dự án",
+    "recordedByYou": "Do bạn ghi. Cuộc họp cũng nằm trong Ghi chú của bạn; bạn có thể ngừng chia sẻ bất cứ lúc nào và nó vẫn ở đó.",
+    "sharedBy": "Do {name} ghi và chia sẻ",
+    "summary": "Tóm tắt",
+    "transcript": "Bản chép lời",
+    "keyPoints": "Ý chính",
+    "decisions": "Quyết định",
+    "replacedLater": "Đã được thay sau đó",
+    "tasks": "Công việc",
+    "transcriptPrivateTitle": "Chỉ chia sẻ bản tóm tắt",
+    "transcriptPrivate": "{name} giữ bản chép lời ở chế độ riêng tư. Hãy hỏi họ nếu bạn cần lời nói chính xác.",
+    "transcriptPrivateUnknown": "Người tổ chức giữ bản chép lời ở chế độ riêng tư. Hãy hỏi họ nếu bạn cần lời nói chính xác.",
+    "unavailableTitle": "Cuộc họp này không khả dụng",
+    "unavailable": "Cuộc họp không tồn tại, chưa được chia sẻ với bạn, hoặc chủ sở hữu đã ngừng chia sẻ.",
+    "backToMeetings": "Quay lại cuộc họp"
+  },
+  "project": {
+    "label": "Dự án",
+    "none": "Không có dự án"
+  },
+  "audience": {
+    "participants": "Người tham gia",
+    "workspace": "Mọi người tại {workspace}",
+    "unknownTeam": "Một nhóm",
+    "participantsHint": "Các thành viên đã có mặt trong cuộc họp.",
+    "workspaceHint": "Mọi người trong không gian làm việc, hiện tại và sau này.",
+    "teamHint": "Thành viên của {team} và người tham gia.",
+    "privateTeamHint": "Thành viên của {team} (nhóm riêng tư) và người tham gia.",
+    "sharedWith": "{level, select, participants {Đã chia sẻ với người tham gia} workspace {Đã chia sẻ với mọi người tại {workspace}} other {Đã chia sẻ với {team}}}",
+    "sharedToast": "{level, select, participants {Đã chia sẻ “{title}” với người tham gia trong {workspace}} workspace {Đã chia sẻ “{title}” với mọi người tại {workspace}} other {Đã chia sẻ “{title}” với {team} trong {workspace}}}"
+  },
+  "share": {
+    "lockedHint": "Chỉ người đã chia sẻ hoặc quản trị viên mới có thể thay đổi ai được xem",
+    "change": "Thay đổi ai được xem cuộc họp này",
+    "title": "Ai được xem cuộc họp này",
+    "description": "Bản tóm tắt, quyết định và công việc. Câu hỏi mọi người đặt cho Leo vẫn là của riêng họ.",
+    "external": "Có người ngoài {workspace} tham gia. Chỉ chia sẻ những gì họ thấy thoải mái.",
+    "audienceLabel": "Đã chia sẻ với",
+    "includeTranscript": "Kèm bản chép lời",
+    "includeTranscriptHint": "Nếu không, chỉ bản tóm tắt được chia sẻ.",
+    "transcriptShared": "Bản chép lời cũng được chia sẻ",
+    "summaryOnly": "Hiện chỉ chia sẻ bản tóm tắt",
+    "addedToProject": "Đã thêm vào dự án",
+    "removedFromProject": "Đã gỡ khỏi dự án",
+    "stopMine": "Ngừng chia sẻ (giữ trong Ghi chú của tôi)",
+    "takeOut": "Đưa ra khỏi {workspace}"
+  },
+  "shareDialog": {
+    "allSharedTitle": "Đã chia sẻ tất cả",
+    "allShared": "Tất cả bản ghi của bạn đều đã có trong {workspace}.",
+    "title": "Chia sẻ một cuộc họp của bạn",
+    "description": "Cuộc họp vẫn thuộc về bạn và vẫn nằm trong Ghi chú; {workspace} được xem cho đến khi bạn ngừng chia sẻ.",
+    "meeting": "Cuộc họp",
+    "movesFrom": "Cuộc họp đang được chia sẻ trong {workspace}; chia sẻ tại đây sẽ chuyển nó sang.",
+    "audience": "Ai được xem",
+    "audienceHint": "Quyết định và công việc đi kèm cuộc họp; người tham gia luôn xem được.",
+    "submit": "Chia sẻ"
+  }
+}

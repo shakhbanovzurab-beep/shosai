@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "الإنتاجية",
+    "hub": "المراكز",
+    "email": "البريد الإلكتروني",
+    "meetings": "الاجتماعات",
+    "calendar": "التقويم",
+    "kanban": "كانبان",
+    "notes": "الملاحظات",
+    "fileManager": "مدير الملفات",
+    "studio": "Studio",
+    "knowledge": "المعرفة",
+    "downloadApp": "تنزيل التطبيق",
+    "appGroup": "التطبيق",
+    "workspacesGroup": "مساحات العمل"
+  },
+  "workspaceNav": {
+    "home": "الرئيسية",
+    "projects": "المشاريع",
+    "tasks": "المهام",
+    "meetings": "الاجتماعات",
+    "decisions": "القرارات",
+    "knowledge": "المعرفة",
+    "group": "مساحة العمل",
+    "members": "الأعضاء",
+    "settings": "الإعدادات"
+  },
+  "badge": {
+    "new": "جديد",
+    "soon": "قريبًا"
+  },
+  "search": {
+    "label": "بحث",
+    "placeholder": "البحث في الصفحات",
+    "noResults": "لا توجد نتائج.",
+    "pagesGroup": "الصفحات"
+  },
+  "userMenu": {
+    "settings": "الإعدادات",
+    "language": "اللغة",
+    "upgrade": "ترقية الخطة",
+    "support": "الدعم",
+    "logOut": "تسجيل الخروج"
+  },
+  "sidebar": {
+    "open": "فتح الشريط الجانبي",
+    "close": "إغلاق الشريط الجانبي"
+  }
+}

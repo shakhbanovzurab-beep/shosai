@@ -1,0 +1,74 @@
+{
+  "back": "모든 노트",
+  "notFound": "노트를 찾을 수 없어요",
+  "participants": {
+    "count": "{count, plural, other {참석자 #명}}",
+    "inMeeting": "{count, plural, other {이 회의에 #명이 참석했어요.}}",
+    "you": "{name}(나)",
+    "added": "{email}을(를) 회의에 추가했어요",
+    "addPlaceholder": "이메일로 추가…",
+    "addLabel": "이메일로 참석자 추가",
+    "invalid": "name@company.com과 같은 이메일 주소를 입력해 주세요.",
+    "duplicate": "이미 이 회의의 참석자예요."
+  },
+  "tabs": {
+    "notes": "노트",
+    "enhanced": "AI 노트",
+    "transcript": "스크립트",
+    "mindMap": "마인드맵"
+  },
+  "enhanced": {
+    "writtenBy": "회의 스크립트와 내 노트를 바탕으로 Leo가 작성했어요.",
+    "writtenByTemplate": "회의 스크립트와 내 노트를 바탕으로 Leo가 “{template}” 형식으로 작성했어요.",
+    "writing": "AI 노트 작성 중…",
+    "nothingFor": "이 회의에는 “{template}” 섹션에 넣을 내용이 없어요."
+  },
+  "export": {
+    "button": "내보내기",
+    "transcriptAs": "스크립트 형식"
+  },
+  "myNotes": {
+    "loadFailed": "노트를 불러오지 못했어요",
+    "saveFailed": "노트를 저장하지 못했어요"
+  },
+  "editor": {
+    "placeholder": "노트를 작성하세요…",
+    "label": "내 노트",
+    "toolbar": "서식",
+    "addLink": "링크 추가",
+    "removeLink": "링크 제거",
+    "bold": "굵게",
+    "italic": "기울임꼴",
+    "linkPlaceholder": "링크 붙여넣기…",
+    "linkAddress": "링크 주소",
+    "link": "링크",
+    "turnInto": "변환",
+    "blocks": {
+      "text": "텍스트",
+      "h1": "제목 1",
+      "h2": "제목 2",
+      "h3": "제목 3",
+      "ordered": "번호 목록",
+      "bullet": "글머리 기호 목록"
+    }
+  },
+  "transcript": {
+    "label": "스크립트",
+    "search": "스크립트 검색",
+    "searchPlaceholder": "스크립트 검색…",
+    "matches": "{count, plural, =0 {일치 항목 없음} other {#개 일치}}",
+    "position": "{current, number}/{total, number}",
+    "previous": "이전 일치 항목",
+    "next": "다음 일치 항목",
+    "clear": "검색 지우기"
+  },
+  "speakers": {
+    "title": "발언자",
+    "share": "{speaker}: 발언 시간의 {share}",
+    "lines": "{count, plural, other {발언 #회}}"
+  },
+  "mindMap": {
+    "title": "마인드맵: {topic}",
+    "caption": "회의 스크립트에서 생성했어요."
+  }
+}

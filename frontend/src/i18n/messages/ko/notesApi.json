@@ -1,0 +1,7 @@
+{
+  "meetingNotFound": "회의를 찾을 수 없어요.",
+  "notesTooLong": "노트는 최대 {max, number}자까지 입력할 수 있어요.",
+  "linkSettingsInvalid": "링크 설정에 잘못된 부분이 있어요. 페이지를 새로고침한 후 다시 시도해 주세요.",
+  "commentsClosed": "이 링크에서는 댓글을 남길 수 없어요.",
+  "commentInvalid": "댓글은 최대 {max, number}자까지 입력해 주세요."
+}

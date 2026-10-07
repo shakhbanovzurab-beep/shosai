@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Ghi chú",
+    "description": "Các cuộc họp đã chép lời cùng ghi chú, việc cần làm và sơ đồ tư duy."
+  },
+  "recency": {
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "thisWeek": "Tuần này",
+    "earlier": "Trước đó"
+  },
+  "fields": {
+    "meeting": "Cuộc họp",
+    "folder": "Thư mục",
+    "people": "Mọi người",
+    "participants": "Người tham gia",
+    "duration": "Thời lượng",
+    "date": "Ngày"
+  },
+  "views": {
+    "label": "Bố cục",
+    "timeline": "Dòng thời gian",
+    "grid": "Lưới",
+    "list": "Danh sách"
+  },
+  "upload": {
+    "button": "Tải bản ghi lên",
+    "hint": "Hoặc thả tệp vào bất kỳ đâu trên trang",
+    "dropTitle": "Thả bản ghi để tải lên",
+    "dropHint": "mp3, m4a, wav, mp4, webm và nhiều định dạng khác · tối đa {size}",
+    "notMedia": "{name} không phải là tệp âm thanh hoặc video",
+    "tooLarge": "{name} quá lớn",
+    "sizeLimit": "Bản ghi có dung lượng tối đa {size}."
+  },
+  "recordings": {
+    "uploading": "Đang tải lên",
+    "justNow": "Vừa xong",
+    "transcribing": "Đang chép lời",
+    "transcribingNow": "Đang chép lời…",
+    "waiting": "Đang chờ chép lời…",
+    "timelineStatus": "Đang chép lời… Ghi chú, quyết định và sơ đồ tư duy sẽ xuất hiện ở đây khi hoàn tất."
+  },
+  "remove": "Gỡ {name}",
+  "folders": {
+    "label": "Thư mục",
+    "all": "Tất cả cuộc họp",
+    "new": "Thư mục mới",
+    "newMenu": "Thư mục mới…",
+    "newNamed": "Thư mục mới “{name}”",
+    "defaultName": "Thư mục mới",
+    "nameLabel": "Tên thư mục",
+    "none": "Không có thư mục",
+    "add": "Thêm vào thư mục",
+    "moveTo": "Chuyển vào thư mục",
+    "search": "Tìm thư mục…",
+    "noMatch": "Không có thư mục nào phù hợp.",
+    "movedTo": "Đã chuyển vào {folder}",
+    "removedFrom": "Đã gỡ khỏi thư mục",
+    "emptyTitle": "Thư mục này đang trống",
+    "emptyDescription": "Nhấp chuột phải vào một cuộc họp và chọn “{action}” để thêm vào đây."
+  },
+  "card": {
+    "latest": "Cuộc họp gần nhất",
+    "keyPoints": "Ý chính",
+    "openNotes": "Mở ghi chú",
+    "openItems": "{count, plural, other {# chưa xong}}"
+  },
+  "timeline": {
+    "decision": "Quyết định:",
+    "openTasks": "{count, plural, other {# công việc chưa xong}}"
+  },
+  "menu": {
+    "openInNewTab": "Mở trong thẻ mới",
+    "exportTranscript": "Xuất bản chép lời"
+  },
+  "exportFormats": {
+    "txt": "Văn bản thuần",
+    "md": "Markdown",
+    "srt": "Phụ đề SubRip",
+    "vtt": "Phụ đề WebVTT",
+    "json": "Dữ liệu JSON"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "Đã xóa “{title}”"
+}

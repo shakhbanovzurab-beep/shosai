@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "晴",
+    "partly": "晴時多雲",
+    "overcast": "陰",
+    "fog": "霧",
+    "drizzle": "毛毛雨",
+    "rain": "雨",
+    "snow": "雪",
+    "storm": "雷雨",
+    "unknown": "未知"
+  },
+  "fallbackPlace": "莫斯科",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}，{now}，最高 {high}，最低 {low}",
+  "summaryAt": "{place}：{condition}，{now}，最高 {high}，最低 {low}"
+}

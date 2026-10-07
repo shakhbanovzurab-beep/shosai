@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Productiviteit",
+    "description": "Je taken voor vandaag, projecten, focustimer, agenda en recente notities, met een jaar aan afgerond werk in één oogopslag."
+  },
+  "greeting": "{period, select, morning {Goedemorgen, {name}.} afternoon {Goedemiddag, {name}.} other {Goedenavond, {name}.}}",
+  "greetingAnyTime": "Hallo, {name}.",
+  "sidePanel": "Agenda, focus en notities",
+  "tasks": {
+    "heading": "Vandaag",
+    "progress": "{done, number} van {total, number} afgerond",
+    "newTask": "Nieuwe taak",
+    "addTask": "Taak toevoegen"
+  },
+  "projects": {
+    "heading": "Projecten",
+    "status": {
+      "inProgress": "Bezig",
+      "planning": "In planning"
+    },
+    "progressOf": "Voortgang van {project}",
+    "due": "Deadline {date}"
+  },
+  "notes": {
+    "heading": "Recente notities",
+    "viewAll": "Alles bekijken",
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "empty": "Nog geen notities",
+    "emptyHint": "Notities van je vergaderingen verschijnen hier."
+  }
+}

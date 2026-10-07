@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "Open source email client",
+    "description": "An open source email client with inbox navigation, message search, reading, replying and archiving."
+  },
+  "preview": {
+    "title": "Mail preview",
+    "description": "This frame shows the standalone mail screen. Open it in full screen for a better view.",
+    "openInNewTab": "Open mail in a new tab"
+  },
+  "nav": {
+    "inbox": "Inbox",
+    "priority": "Priority",
+    "drafts": "Drafts",
+    "sent": "Sent",
+    "archive": "Archive",
+    "trash": "Trash",
+    "helpFeedback": "Help & feedback",
+    "keyboardShortcuts": "Keyboard shortcuts"
+  },
+  "sidebar": {
+    "newEmail": "New email",
+    "folders": "Folders"
+  },
+  "accounts": {
+    "switchTo": "Switch to {name}",
+    "menu": "Account menu",
+    "title": "Accounts",
+    "add": "Add account",
+    "manage": "Manage accounts",
+    "settings": "Account settings",
+    "signOut": "Sign out"
+  },
+  "inbox": {
+    "filter": "Filter mail",
+    "refresh": "Refresh inbox",
+    "noSelection": "No email selected",
+    "needsYou": "Needs you",
+    "allMail": "All mail",
+    "pinnedGroup": "Pinned ({count, number})",
+    "inboxGroup": "Inbox ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "Email",
+    "drawerDescription": "Read the selected email",
+    "to": "To: <names>{list}</names>",
+    "cc": "Cc: <names>{list}</names>",
+    "attachments": "Attachments ({count, number})"
+  },
+  "toolbar": {
+    "close": "Close email",
+    "previous": "Previous email",
+    "next": "Next email",
+    "pin": "Pin thread",
+    "reply": "Reply",
+    "more": "More actions",
+    "replyAll": "Reply all",
+    "forward": "Forward",
+    "addLabel": "Add label"
+  },
+  "menu": {
+    "markRead": "Mark as read",
+    "markUnread": "Mark as unread",
+    "pin": "Pin to top",
+    "unpin": "Unpin",
+    "markPriority": "Mark as priority",
+    "removePriority": "Remove from Priority",
+    "labels": "Labels",
+    "copySender": "Copy sender address",
+    "archive": "Archive",
+    "trash": "Move to trash"
+  },
+  "replyBar": {
+    "placeholder": "Reply to {name}…",
+    "label": "Reply to {name}",
+    "addEmoji": "Add emoji",
+    "attachFile": "Attach file",
+    "send": "Send"
+  },
+  "toasts": {
+    "senderCopied": "Copied {email}",
+    "senderCopyFailed": "Couldn’t copy the address",
+    "replySent": "Reply sent to {name}",
+    "archived": "{count, plural, one {Archived # email} other {Archived # emails}}",
+    "moved": "{folder, select, inbox {Moved “{subject}” to Inbox} drafts {Moved “{subject}” to Drafts} sent {Moved “{subject}” to Sent} archive {Moved “{subject}” to Archive} trash {Moved “{subject}” to Trash} other {Moved “{subject}”}}"
+  }
+}

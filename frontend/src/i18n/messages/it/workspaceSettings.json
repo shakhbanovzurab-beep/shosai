@@ -1,0 +1,70 @@
+{
+  "title": "Impostazioni",
+  "description": "Come funziona {workspace} per tutti i suoi membri. Le modifiche vengono salvate subito.",
+  "adminsOnly": "Solo gli amministratori possono modificare le impostazioni dello spazio di lavoro.",
+  "adminsOnlyAsk": "Solo gli amministratori possono modificare le impostazioni dello spazio di lavoro. Chiedi a {name}.",
+  "general": {
+    "title": "Generali",
+    "name": "Nome dello spazio di lavoro",
+    "nameHint": "Compare nel selettore e negli inviti.",
+    "renamed": "Spazio di lavoro rinominato",
+    "join": "Accesso con l’email aziendale",
+    "joinHint": "Consenti ai colleghi di unirsi senza invito se la loro email appartiene al tuo dominio.",
+    "joinOn": "Chiunque abbia un’email @{domain} può unirsi come membro finché ci sono licenze libere.",
+    "domain": "Dominio email",
+    "joinEnabled": "Ora le persone di {domain} possono unirsi",
+    "joinDisabled": "L’accesso tramite dominio email è disattivato"
+  },
+  "sharing": {
+    "title": "Condivisione",
+    "description": "Le riunioni con persone esterne a {workspace} non vengono mai condivise automaticamente. Gli organizzatori possono sempre cambiare chi vede una riunione.",
+    "reviewTitle": "Conferma come vengono condivise le riunioni",
+    "reviewHint": "Queste sono le regole consigliate. Modificale o lasciale come sono.",
+    "keep": "Mantieni queste regole",
+    "confirmed": "Regole di condivisione confermate",
+    "defaultLevel": "Dopo una riunione, condividi le note con",
+    "defaultLevelHint": "Per le riunioni in cui tutti fanno parte di {workspace}.",
+    "levels": {
+      "private": "Solo l’organizzatore",
+      "participants": "Partecipanti (consigliato)",
+      "workspace": "Tutti in {workspace}"
+    },
+    "levelChanged": "Le nuove riunioni vanno a: {level}",
+    "transcripts": "Includi le trascrizioni",
+    "transcriptsHint": "Se disattivato, le persone vedono il riepilogo, le decisioni e le attività, ma non la trascrizione parola per parola.",
+    "transcriptsOn": "Vengono condivise anche le trascrizioni",
+    "transcriptsOff": "Vengono condivisi solo i riepiloghi",
+    "membersInvite": "I membri possono invitare persone",
+    "membersInviteHint": "Se disattivato, solo gli amministratori possono invitare.",
+    "membersInviteOn": "I membri possono invitare persone",
+    "membersInviteOff": "Ora solo gli amministratori possono invitare"
+  },
+  "plan": {
+    "title": "Piano e utilizzo",
+    "description": "Fatturato allo spazio di lavoro, separatamente dai piani personali.",
+    "name": "Piano {plan}",
+    "seats": "{taken, number} licenze su {total, number}",
+    "price": "{perSeat} per licenza al mese · {total} in totale · si rinnova il {renews}",
+    "change": "Modifica licenze o piano",
+    "ownerOnly": "Solo il proprietario gestisce la fatturazione.",
+    "usageFailed": "Impossibile caricare l’utilizzo.",
+    "usageIn": "Utilizzo a {month}",
+    "idle": "{count, plural, one {# membro inattivo da {days, number}+ giorni: una licenza che potresti riutilizzare.} many {# di membri inattivi da {days, number}+ giorni: licenze che potresti riutilizzare.} other {# membri inattivi da {days, number}+ giorni: licenze che potresti riutilizzare.}}",
+    "member": "Membro",
+    "meetings": "Riunioni",
+    "minutes": "Minuti",
+    "lastActive": "Ultima attività",
+    "inactive": "Inattivo"
+  },
+  "danger": {
+    "delete": "Elimina spazio di lavoro",
+    "deleteHint": "Rimuove lo spazio di lavoro per tutti e ne interrompe la fatturazione.",
+    "deleteTitle": "Eliminare {name}?",
+    "deleteDescription": "Tutti perdono i suoi progetti, attività, decisioni e file caricati. Le registrazioni e i file condivisi restano di chi li ha condivisi, nelle sue Note e nella sua Gestione file. Questa azione non può essere annullata.",
+    "leave": "Abbandona spazio di lavoro",
+    "leaveHint": "Potrai essere invitato di nuovo in seguito; la tua licenza si libera.",
+    "leaveTitle": "Abbandonare {name}?",
+    "leaveDescription": "Le riunioni e i file che hai condiviso se ne vanno con te e restano nelle tue Note e nella tua Gestione file. I file che hai trasferito allo spazio di lavoro restano qui. Le attività restano al team; quelle aperte assegnate a te non avranno più un assegnatario.",
+    "leaveConfirm": "Abbandona"
+  }
+}

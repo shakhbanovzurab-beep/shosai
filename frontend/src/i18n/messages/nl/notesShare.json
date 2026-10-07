@@ -1,0 +1,54 @@
+{
+  "panel": {
+    "loadFailed": "Kan de link niet laden.",
+    "anyone": "Iedereen met de link",
+    "anyoneHint": "Mensen buiten de vergadering kunnen de notities openen.",
+    "linkLabel": "Link naar de notities",
+    "toggles": {
+      "showTranscript": {
+        "label": "Transcriptie tonen",
+        "description": "Letterlijke uitspraken van de deelnemers."
+      },
+      "showNames": {
+        "label": "Namen van deelnemers tonen",
+        "description": "Anders staat er in de transcriptie ‘{first}’, ‘{second}’."
+      },
+      "allowComments": {
+        "label": "Opmerkingen toestaan",
+        "description": "Iedereen met de link kan reageren."
+      }
+    },
+    "expires": "Verloopt",
+    "never": "Nooit",
+    "days": "{count, plural, one {# dag} other {# dagen}}",
+    "stopsOn": "De link vervalt op {date}.",
+    "keepsWorking": "De link blijft werken.",
+    "updateFailed": "Kan de link niet bijwerken",
+    "turnedOff": "Link uitgeschakeld",
+    "turnOffFailed": "Kan de link niet uitschakelen"
+  },
+  "page": {
+    "unavailable": "Link niet beschikbaar",
+    "eyebrow": "Gedeelde vergadernotities",
+    "people": "{count, plural, one {# persoon} other {# personen}}",
+    "transcript": "Transcriptie",
+    "done": "Afgerond",
+    "open": "Openstaand",
+    "speaker": "Spreker {order, number}"
+  },
+  "gone": {
+    "title": "Deze link werkt niet meer",
+    "description": "Hij is misschien verlopen of uitgeschakeld. Vraag de afzender om een nieuwe."
+  },
+  "comments": {
+    "title": "Opmerkingen",
+    "loadFailed": "Kan de opmerkingen niet laden.",
+    "comment": "Je opmerking",
+    "commentPlaceholder": "Schrijf een reactie…",
+    "name": "Je naam",
+    "namePlaceholder": "Optioneel, anders wordt ‘{guest}’ getoond",
+    "guest": "Gast",
+    "post": "Opmerking plaatsen",
+    "postFailed": "Kan je opmerking niet plaatsen"
+  }
+}

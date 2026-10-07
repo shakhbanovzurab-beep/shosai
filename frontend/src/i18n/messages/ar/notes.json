@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "الملاحظات",
+    "description": "اجتماعات بنصوصها وملاحظاتها ومهام المتابعة والخرائط الذهنية."
+  },
+  "recency": {
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "thisWeek": "هذا الأسبوع",
+    "earlier": "أقدم"
+  },
+  "fields": {
+    "meeting": "الاجتماع",
+    "folder": "المجلد",
+    "people": "الأشخاص",
+    "participants": "المشاركون",
+    "duration": "المدة",
+    "date": "التاريخ"
+  },
+  "views": {
+    "label": "طريقة العرض",
+    "timeline": "المخطط الزمني",
+    "grid": "شبكة",
+    "list": "قائمة"
+  },
+  "upload": {
+    "button": "رفع تسجيل",
+    "hint": "أو إفلات ملف في أي مكان على الصفحة",
+    "dropTitle": "إفلات التسجيلات لرفعها",
+    "dropHint": "mp3، m4a، wav، mp4، webm وغيرها · حتى {size}",
+    "notMedia": "{name} ليس ملف صوت أو فيديو",
+    "tooLarge": "{name} كبير جدًا",
+    "sizeLimit": "الحد الأقصى لحجم التسجيل {size}."
+  },
+  "recordings": {
+    "uploading": "جارٍ الرفع",
+    "justNow": "الآن",
+    "transcribing": "جارٍ إنشاء النص",
+    "transcribingNow": "جارٍ إنشاء النص…",
+    "waiting": "بانتظار إنشاء النص…",
+    "timelineStatus": "جارٍ إنشاء النص… ستظهر هنا الملاحظات والقرارات والخريطة الذهنية عند الانتهاء."
+  },
+  "remove": "إزالة {name}",
+  "folders": {
+    "label": "المجلدات",
+    "all": "كل الاجتماعات",
+    "new": "مجلد جديد",
+    "newMenu": "مجلد جديد…",
+    "newNamed": "مجلد جديد «{name}»",
+    "defaultName": "مجلد جديد",
+    "nameLabel": "اسم المجلد",
+    "none": "بدون مجلد",
+    "add": "إضافة إلى مجلد",
+    "moveTo": "نقل إلى مجلد",
+    "search": "البحث في المجلدات…",
+    "noMatch": "لا توجد مجلدات مطابقة.",
+    "movedTo": "تم النقل إلى {folder}",
+    "removedFrom": "تمت الإزالة من المجلد",
+    "emptyTitle": "هذا المجلد فارغ",
+    "emptyDescription": "يمكن النقر بزر الماوس الأيمن على اجتماع واختيار «{action}» لإضافته هنا."
+  },
+  "card": {
+    "latest": "أحدث اجتماع",
+    "keyPoints": "النقاط الرئيسية",
+    "openNotes": "فتح الملاحظات",
+    "openItems": "{count, plural, zero {# مفتوحة} one {# مفتوحة} two {# مفتوحة} few {# مفتوحة} many {# مفتوحة} other {# مفتوحة}}"
+  },
+  "timeline": {
+    "decision": "القرار:",
+    "openTasks": "{count, plural, zero {# مهمة مفتوحة} one {مهمة مفتوحة واحدة} two {مهمتان مفتوحتان} few {# مهام مفتوحة} many {# مهمة مفتوحة} other {# مهمة مفتوحة}}"
+  },
+  "menu": {
+    "openInNewTab": "فتح في علامة تبويب جديدة",
+    "exportTranscript": "تصدير النص"
+  },
+  "exportFormats": {
+    "txt": "نص عادي",
+    "md": "Markdown",
+    "srt": "ترجمات SubRip",
+    "vtt": "ترجمات WebVTT",
+    "json": "بيانات JSON"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "تم حذف «{title}»"
+}

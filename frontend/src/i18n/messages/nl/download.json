@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "App downloaden",
+    "description": "Download de desktop-app voor macOS en Windows."
+  },
+  "title": "Download de desktop-app",
+  "subtitle": "Neem vergaderingen op, houd live notities en vertaling bij tijdens elk gesprek en roep Leo overal op met een sneltoets.",
+  "notes": {
+    "mobile": "De desktop-app werkt op macOS en Windows. Open deze pagina op je computer om hem te downloaden.",
+    "linux": "Er is nog geen versie voor Linux. De desktop-app werkt op macOS en Windows."
+  },
+  "card": {
+    "yourComputer": "Jouw computer",
+    "requirement": "{system} of hoger",
+    "downloadFor": "Downloaden voor {name}",
+    "downloadBuild": "Downloaden voor {arch} · {size}",
+    "meta": "Versie {version} · {size} · {type} · {date}",
+    "loadFailed": "Kan de download voor {platform} niet laden.",
+    "notYet": "De app voor {platform} is nog niet beschikbaar. Kom binnenkort terug.",
+    "universal": "Apple silicon en Intel"
+  },
+  "checksum": {
+    "button": "Checksum",
+    "verify": "Voer <code>{command}</code> uit en vergelijk het resultaat om te controleren.",
+    "copy": "Checksum kopiëren",
+    "copied": "Checksum gekopieerd",
+    "copyFailed": "Kan de checksum niet kopiëren"
+  },
+  "install": {
+    "title": "Installeren in drie stappen",
+    "macos": {
+      "open": "Open het gedownloade {type}-bestand.",
+      "drag": "Sleep de app naar je map Apps en open hem daarvandaan.",
+      "allow": "Log in en sta opname van microfoon, scherm en systeemaudio toe als macOS erom vraagt — zo worden vergaderingen opgenomen."
+    },
+    "windows": {
+      "run": "Voer het gedownloade installatieprogramma ({type}) uit.",
+      "setup": "Doorloop de installatie en open de app daarna via het menu Start.",
+      "allow": "Log in en geef toegang tot de microfoon als Windows erom vraagt."
+    }
+  },
+  "features": {
+    "title": "Alleen op desktop",
+    "customize": "Sneltoetsen aanpassen",
+    "shortcutOff": "Sneltoets uit",
+    "shortcut": "Sneltoets: {keys}",
+    "toggle_recording": {
+      "title": "Opname",
+      "text": "Start of pauzeer de opname van elke vergadering, vanuit elke app."
+    },
+    "toggle_overlay": {
+      "title": "Overlay",
+      "text": "Live notities boven je gesprek; klap ze in tot een klein label."
+    },
+    "live_translation": {
+      "title": "Live vertaling",
+      "text": "Volg het gesprek in jouw taal terwijl mensen praten."
+    },
+    "prompter": {
+      "title": "Souffleur",
+      "text": "Stille suggesties van Leo terwijl je praat, alleen zichtbaar voor jou."
+    }
+  }
+}

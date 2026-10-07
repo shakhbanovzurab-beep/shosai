@@ -1,0 +1,74 @@
+{
+  "back": "Alle notities",
+  "notFound": "Notitie niet gevonden",
+  "participants": {
+    "count": "{count, plural, one {# deelnemer} other {# deelnemers}}",
+    "inMeeting": "{count, plural, one {# persoon in deze vergadering.} other {# personen in deze vergadering.}}",
+    "you": "{name} (jij)",
+    "added": "{email} toegevoegd aan de vergadering",
+    "addPlaceholder": "Toevoegen via e-mail…",
+    "addLabel": "Deelnemer toevoegen via e-mail",
+    "invalid": "Vul een e-mailadres in, zoals naam@bedrijf.nl.",
+    "duplicate": "Deze persoon zit al in deze vergadering."
+  },
+  "tabs": {
+    "notes": "Notities",
+    "enhanced": "Verrijkt",
+    "transcript": "Transcriptie",
+    "mindMap": "Mindmap"
+  },
+  "enhanced": {
+    "writtenBy": "Geschreven door Leo op basis van de transcriptie en je notities.",
+    "writtenByTemplate": "Geschreven door Leo op basis van de transcriptie en je notities, opgemaakt volgens ‘{template}’.",
+    "writing": "Verrijkte notities schrijven…",
+    "nothingFor": "Deze vergadering bevat niets voor de secties van ‘{template}’."
+  },
+  "export": {
+    "button": "Exporteren",
+    "transcriptAs": "Transcriptie als"
+  },
+  "myNotes": {
+    "loadFailed": "Kan je notities niet laden",
+    "saveFailed": "Kan je notities niet opslaan"
+  },
+  "editor": {
+    "placeholder": "Schrijf je notities…",
+    "label": "Je notities",
+    "toolbar": "Opmaak",
+    "addLink": "Link toevoegen",
+    "removeLink": "Link verwijderen",
+    "bold": "Vet",
+    "italic": "Cursief",
+    "linkPlaceholder": "Plak een link…",
+    "linkAddress": "Linkadres",
+    "link": "Link",
+    "turnInto": "Omzetten naar",
+    "blocks": {
+      "text": "Tekst",
+      "h1": "Kop 1",
+      "h2": "Kop 2",
+      "h3": "Kop 3",
+      "ordered": "Genummerde lijst",
+      "bullet": "Lijst met opsommingstekens"
+    }
+  },
+  "transcript": {
+    "label": "Transcriptie",
+    "search": "Transcriptie doorzoeken",
+    "searchPlaceholder": "Transcriptie doorzoeken…",
+    "matches": "{count, plural, =0 {Geen resultaten} one {# resultaat} other {# resultaten}}",
+    "position": "{current, number} van {total, number}",
+    "previous": "Vorig resultaat",
+    "next": "Volgend resultaat",
+    "clear": "Zoekopdracht wissen"
+  },
+  "speakers": {
+    "title": "Wie sprak er",
+    "share": "{speaker}: {share} van de spreektijd",
+    "lines": "{count, plural, one {# regel} other {# regels}}"
+  },
+  "mindMap": {
+    "title": "Mindmap: {topic}",
+    "caption": "Gegenereerd uit de transcriptie van de vergadering."
+  }
+}

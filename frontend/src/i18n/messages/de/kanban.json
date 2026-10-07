@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Kanban",
+    "description": "Boards für Arbeit, Zuhause und alles andere, auch mit Jira synchronisierte Boards."
+  },
+  "loadBoardsFailed": "Deine Boards konnten nicht geladen werden",
+  "loadBoardFailed": "Board konnte nicht geladen werden",
+  "addTask": "Aufgabe hinzufügen",
+  "taskCount": "{count, plural, one {# Aufgabe} other {# Aufgaben}}",
+  "progress": "Fortschritt",
+  "views": {
+    "label": "Ansicht",
+    "board": "Board",
+    "list": "Liste",
+    "table": "Tabelle"
+  },
+  "toolbar": {
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "moreWaysToAdd": "Weitere Optionen zum Hinzufügen",
+    "importCsv": "CSV importieren",
+    "addFromTemplate": "Aus Vorlage hinzufügen",
+    "createAutomation": "Automatisierung erstellen"
+  },
+  "column": {
+    "drag": "Spalte {column} ziehen",
+    "addTask": "Aufgabe zu {column} hinzufügen",
+    "empty": "Keine Aufgaben in {column}"
+  },
+  "columnMenu": {
+    "managedInJira": "Spalten werden in Jira verwaltet",
+    "rename": "Spalte umbenennen…",
+    "sortByPriority": "Nach Priorität sortieren",
+    "moveEarlier": "Nach vorne verschieben",
+    "moveLater": "Nach hinten verschieben",
+    "clear": "Spalte leeren"
+  },
+  "taskMenu": {
+    "openInJira": "{key} in Jira öffnen",
+    "openInWorkspace": "In {workspace} öffnen",
+    "moveTo": "Verschieben nach",
+    "moveToTop": "Ganz nach oben verschieben",
+    "moveToBottom": "Ganz nach unten verschieben",
+    "delete": "Aufgabe löschen"
+  },
+  "priority": {
+    "label": "Priorität",
+    "high": "Hoch",
+    "medium": "Mittel",
+    "low": "Niedrig"
+  },
+  "card": {
+    "unassigned": "Nicht zugewiesen",
+    "completed": "Erledigt",
+    "fromSource": "Aus {source}",
+    "jiraIssue": "{type} (öffnet Jira in einem neuen Tab)",
+    "workspaceTask": "Eine Aufgabe in diesem Workspace. Änderungen hier gelten auch dort.",
+    "insights": {
+      "attachments": "{count, plural, one {# Anhang} other {# Anhänge}}",
+      "comments": "{count, plural, one {# Kommentar} other {# Kommentare}}",
+      "documents": "{count, plural, one {# Dokument} other {# Dokumente}}"
+    }
+  },
+  "table": {
+    "task": "Aufgabe",
+    "status": "Status",
+    "owner": "Inhaber",
+    "label": "Label",
+    "due": "Fällig",
+    "actions": "Aktionen",
+    "empty": "Noch keine Aufgaben",
+    "progressOf": "Fortschritt von {task}"
+  },
+  "commands": {
+    "renameTask": "Aufgabe umbenennen",
+    "renameColumn": "Spalte umbenennen",
+    "newTaskIn": "Neue Aufgabe in {column}",
+    "copyTitle": "{title} (Kopie)",
+    "deleted": "„{title}“ gelöscht",
+    "cleared": "{count, plural, one {# Aufgabe aus {column} gelöscht} other {# Aufgaben aus {column} gelöscht}}",
+    "jiraLinkCopied": "Link zu {key} kopiert"
+  },
+  "errors": {
+    "addTask": "Aufgabe konnte nicht hinzugefügt werden",
+    "saveChange": "Änderung konnte nicht gespeichert werden",
+    "deleteTasks": "{count, plural, one {Aufgabe konnte nicht gelöscht werden} other {Aufgaben konnten nicht gelöscht werden}}",
+    "saveBoard": "Board konnte nicht gespeichert werden"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo sta leggendo la tua posta in arrivo…",
+    "readingNew": "{count, plural, one {Leo sta leggendo # nuova email…} many {Leo sta leggendo # di nuove email…} other {Leo sta leggendo # nuove email…}}",
+    "sorted": "{count, plural, one {Leo ha smistato # email} many {Leo ha smistato # di email} other {Leo ha smistato # email}}",
+    "sortedWithDrafts": "{count, plural, one {Leo ha smistato # email} many {Leo ha smistato # di email} other {Leo ha smistato # email}} · {drafts, plural, one {# bozza di risposta} many {# di bozze di risposta} other {# bozze di risposta}}",
+    "sortFailed": "Leo non è riuscito a smistare la tua posta in arrivo"
+  },
+  "focus": {
+    "mostUrgentFirst": "Prima le più urgenti ({count, number})",
+    "setAside": "{count, plural, one {# altra email non ha bisogno di te ora.} many {Altre # di email non hanno bisogno di te ora.} other {Altre # email non hanno bisogno di te ora.}}",
+    "setAsideLow": "{count, plural, one {# altra email non ha bisogno di te ora} many {Altre # di email non hanno bisogno di te ora} other {Altre # email non hanno bisogno di te ora}}, {low, plural, one {# delle quali ha priorità bassa.} many {# delle quali hanno priorità bassa.} other {# delle quali hanno priorità bassa.}}",
+    "showAll": "Mostra tutta la posta",
+    "archiveLow": "Archivia priorità bassa",
+    "caughtUpTitle": "Sei in pari",
+    "caughtUpDescription": "Niente ti aspetta. Leo segnalerà le nuove email che richiedono una risposta o una decisione."
+  },
+  "triage": {
+    "needs_you": "Serve te",
+    "fyi": "Per info",
+    "low": "Priorità bassa"
+  },
+  "triageHint": {
+    "needs_you": "Attende una tua risposta o decisione",
+    "fyi": "Utile da sapere, niente da fare",
+    "low": "Può aspettare o essere archiviata"
+  },
+  "triageMenu": {
+    "trigger": "Smistata come {triage}. Cambia lo smistamento di questa email",
+    "sortedByYou": "Smistata da te",
+    "sortedByLeo": "Smistata da Leo",
+    "leosPick": "Scelta di Leo · {hint}"
+  },
+  "replyBy": {
+    "overdue": "In ritardo",
+    "today": "Rispondi oggi",
+    "tomorrow": "Rispondi domani",
+    "by": "Rispondi entro {when}"
+  },
+  "tags": {
+    "reading": "Leo sta leggendo…",
+    "replied": "Risposta inviata",
+    "needsYou": "Serve te",
+    "draftReady": "Bozza pronta"
+  },
+  "card": {
+    "label": "Riepilogo di Leo",
+    "readingEmail": "Leo sta leggendo questa email…",
+    "readFailed": "Leo non è riuscito a leggere questa email",
+    "readFailedHint": "Riprova tra un momento.",
+    "repliedAgo": "Risposta inviata {ago}",
+    "repliedOn": "Risposta inviata il {date}",
+    "reviewDraft": "Rivedi bozza",
+    "noDraft": "Nessuna bozza: questa risposta richiede il tuo punto di vista.",
+    "archive": "Archivia"
+  },
+  "draft": {
+    "reviewLabel": "Rivedi la bozza di risposta di Leo a {name}",
+    "drafted": "Leo ha preparato una bozza di risposta",
+    "review": "Rivedi",
+    "heading": "Bozza di Leo · rivedila prima di inviarla",
+    "collapse": "Comprimi bozza",
+    "field": "Risposta a {name}",
+    "discard": "Scarta",
+    "send": "Invia",
+    "discarded": "Bozza scartata"
+  }
+}

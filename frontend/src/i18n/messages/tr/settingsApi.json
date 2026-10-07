@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "İstekte bir sorun var. Sayfayı yeniden yükleyip tekrar deneyin.",
+    "nameRequired": "Adınızı girin.",
+    "hotkeyUnsupported": "Bu kısayol desteklenmiyor.",
+    "modelNotOnPlan": "Bu model aboneliğinize dahil değil.",
+    "emailMismatch": "Bu e-posta adresi hesabınızla eşleşmiyor.",
+    "deletionUnavailable": "Hesap silme henüz kullanıma açılmadı. Hiçbir şey silinmedi.",
+    "avatarMissing": "Yüklemek için bir görsel seçin.",
+    "avatarType": "WebP, JPEG veya PNG biçiminde bir görsel kullanın.",
+    "paymentsUnavailable": "Ödemeler henüz bağlı değil. Faturalandırma devreye girdiğinde bu adım sağlayıcının güvenli sayfasını açar.",
+    "checkoutUnavailable": "Ödemeler henüz bağlı değil. Faturalandırma devreye girdiğinde bu adım sağlayıcının ödeme sayfasını açar.",
+    "invoiceNotFound": "Fatura bulunamadı.",
+    "connectorNotFound": "Bağlayıcı bulunamadı.",
+    "authorizationExpired": "Yetkilendirmenin süresi doldu veya daha önce kullanıldı. Tekrar bağlanmayı deneyin.",
+    "dataKindUnknown": "Bilinmeyen veri türü.",
+    "dataItemNotFound": "Bu öğe artık mevcut değil.",
+    "mcpNameRequired": "Sunucuya bir ad verin.",
+    "mcpNameTooLong": "Bu ad çok uzun. Daha kısa bir ad kullanın.",
+    "mcpUrlInvalid": "Sunucunun http(s) URL’sini girin.",
+    "mcpServerNotFound": "Sunucu bulunamadı.",
+    "memoryNotFound": "Bellek kaydı bulunamadı.",
+    "summaryMessageRequired": "Bir soru veya güncelleme yazın."
+  },
+  "avatarTooLarge": "Görsel {size} boyutundan büyük.",
+  "invoice": {
+    "title": "Fatura {number}",
+    "date": "Tarih: {date}",
+    "description": "Açıklama: {description}",
+    "amount": "Tutar: {amount}",
+    "status": "Durum: {status}",
+    "demoNote": "Demo fatura. Gerçek fatura, faturalandırma sisteminden gelen bir PDF dosyasıdır."
+  },
+  "notesFromYou": "Sizden gelen notlar"
+}

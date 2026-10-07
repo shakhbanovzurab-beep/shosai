@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "name_taken": "Du hast schon einen Hub mit diesem Namen.",
+    "name_too_short": "{min, plural, one {Verwende mindestens # Zeichen.} other {Verwende mindestens # Zeichen.}}",
+    "name_too_long": "{max, plural, one {Verwende höchstens # Zeichen.} other {Verwende höchstens # Zeichen.}}",
+    "too_many_hubs": "Du hast zu viele Hubs. Archiviere oder lösche die, die du nicht brauchst.",
+    "not_found": "Das ist nicht mehr da – es wurde möglicherweise gelöscht.",
+    "hub_archived": "Der Hub ist archiviert.",
+    "no_board": "Der Hub hat kein Board, daher landen Aufgaben nirgends.",
+    "no_hub": "Das Meeting gehört zu keinem Hub.",
+    "board_gone": "Das Board dieses Hubs existiert nicht mehr.",
+    "invalid": "Prüfe, ob alles richtig ausgefüllt ist.",
+    "network": "Der Server ist nicht erreichbar.",
+    "unknown": "Der Server hat unerwartet geantwortet."
+  },
+  "fixes": {
+    "choose_board": "Board wählen",
+    "file_meeting": "Meeting einem Hub hinzufügen",
+    "restore_hub": "Hub aus dem Archiv holen"
+  }
+}

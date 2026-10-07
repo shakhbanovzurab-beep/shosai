@@ -1,0 +1,120 @@
+{
+  "title": "Anggota",
+  "description": "Semua orang di {workspace}, peran mereka, dan tim tempat Anda berbagi.",
+  "invitePeople": "Undang orang",
+  "adminsInvite": "Hanya admin yang dapat mengundang orang.",
+  "adminsInviteAsk": "Hanya admin yang dapat mengundang orang. Tanyakan kepada {name}.",
+  "tabs": {
+    "members": "Anggota",
+    "teams": "Tim"
+  },
+  "search": "Cari orang",
+  "pendingInvitations": "Undangan tertunda · {count, number}",
+  "membersCount": "Anggota · {count, number}",
+  "noMatches": "Tidak ada yang cocok",
+  "noMatchesHint": "Coba nama, email, atau jabatan.",
+  "clearSearch": "Hapus pencarian",
+  "seats": {
+    "label": "Lisensi",
+    "taken": "{taken, number} dari {total, number} lisensi terpakai",
+    "breakdown": "· {members, plural, other {# anggota}}",
+    "breakdownPending": "· {members, plural, other {# anggota}}, {pending, plural, other {# undangan tertunda}}",
+    "left": "{count, plural, other {Sisa # lisensi.}} Undangan tertunda memakai satu lisensi sampai diterima atau dicabut.",
+    "fullAdd": "Semua lisensi sudah terpakai. Tambahkan lisensi untuk mengundang lebih banyak orang.",
+    "fullAsk": "Semua lisensi sudah terpakai. Minta pemilik untuk menambahkan lisensi.",
+    "change": "Ubah lisensi"
+  },
+  "invitation": {
+    "by": "Diundang oleh {name} {ago}",
+    "byYou": "Diundang oleh Anda {ago}",
+    "byFormerMember": "Diundang oleh mantan anggota {ago}",
+    "resend": "Kirim ulang",
+    "revoke": "Cabut",
+    "revokeFor": "Cabut undangan untuk {email}"
+  },
+  "member": {
+    "you": "Anda",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, other {Tidak aktif selama # hari atau lebih}}",
+    "roleOf": "Peran {name}",
+    "remove": "Keluarkan dari ruang kerja",
+    "removeTitle": "Keluarkan {name} dari {workspace}?",
+    "removeDescription": "Rapat dan file yang dibagikan {name} dari Catatan dan Pengelola file miliknya ikut keluar bersamanya. Tugas tetap ada, dan tugasnya yang masih terbuka menjadi tanpa penerima tugas. Lisensinya menjadi kosong.",
+    "joinedTeam": "{name} bergabung dengan {team}",
+    "leftTeam": "{name} keluar dari {team}"
+  },
+  "teams": {
+    "new": "Tim baru",
+    "empty": "Belum ada tim",
+    "emptyHint": "Tim bersifat opsional. Buat tim saat Anda ingin membagikan rapat dan pengetahuan kepada satu kelompok, seperti Engineering atau Sales.",
+    "intro": "Bagikan rapat dan pengetahuan kepada satu tim, bukan kepada satu per satu orang.",
+    "deleteTitle": "Hapus {name}?",
+    "deleteDescription": "Rapatnya tetap terlihat oleh orang yang ikut serta, dan anggotanya tetap ada di ruang kerja. Pindahkan pengetahuan tim terlebih dahulu; pengetahuan tidak boleh dibiarkan tanpa audiens."
+  },
+  "team": {
+    "noDescription": "Belum ada deskripsi.",
+    "edit": "Edit tim",
+    "delete": "Hapus tim",
+    "members": "{count, plural, other {# anggota}}",
+    "membersLedBy": "{count, plural, other {# anggota}} · dipimpin oleh {name}",
+    "membersLedByYou": "{count, plural, other {# anggota}} · dipimpin oleh Anda",
+    "join": "Gabung ke tim",
+    "leave": "Keluar dari tim",
+    "youJoined": "Anda bergabung dengan {team}",
+    "youLeft": "Anda keluar dari {team}"
+  },
+  "teamForm": {
+    "editTitle": "Edit {name}",
+    "description": "Bagikan rapat dan pengetahuan kepada satu kelompok, bukan satu per satu.",
+    "nameRequired": "Beri nama tim.",
+    "namePlaceholder": "mis. Desain",
+    "descriptionLabel": "Deskripsi",
+    "descriptionPlaceholder": "Apa yang dikerjakan tim ini",
+    "color": "Warna",
+    "colors": {
+      "blue": "Biru",
+      "green": "Hijau",
+      "amber": "Kuning",
+      "violet": "Ungu",
+      "rose": "Merah muda",
+      "sky": "Biru muda"
+    },
+    "privateHint": "Hanya anggota dan admin yang dapat melihat tim ini dan apa yang dibagikan kepadanya.",
+    "create": "Buat tim"
+  },
+  "invite": {
+    "title": "Undang orang ke {workspace}",
+    "description": "Mereka akan menerima email berisi tautan untuk bergabung. Setiap orang memakai satu lisensi.",
+    "emails": "Alamat email",
+    "hint": "Pisahkan alamat dengan koma atau baris baru. {left, plural, other {Sisa # lisensi.}}",
+    "overSeats": "{count, plural, other {# orang}}, tetapi {left, plural, other {hanya tersisa # lisensi.}}",
+    "seatsAfter": "{count, plural, other {# undangan}} · {left, plural, other {sisa # lisensi setelah ini.}}",
+    "checkEmails": "Periksa {emails}.",
+    "allExisting": "Mereka sudah ada di ruang kerja atau sudah diundang.",
+    "emailRequired": "Tambahkan alamat email.",
+    "tooMany": "{count, plural, other {Undang paling banyak # orang sekaligus.}}",
+    "skipped": "Sudah bergabung atau diundang, dilewati: {emails}.",
+    "role": "Peran",
+    "teams": "Tambahkan ke tim (opsional)",
+    "addSeats": "Tambahkan lisensi",
+    "send": "{count, plural, =1 {Kirim undangan} other {Kirim # undangan}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, =1 {Undangan dikirim ke {email}} other {# undangan dikirim}}",
+    "inviteFailed": "Tidak dapat mengirim undangan.",
+    "invitationRevoked": "Undangan untuk {email} dicabut",
+    "revokeFailed": "Tidak dapat mencabutnya",
+    "invitationResent": "Undangan dikirim ulang ke {email}",
+    "resendFailed": "Tidak dapat mengirimnya ulang",
+    "roleChanged": "{role, select, admin {{name} sekarang menjadi admin} other {{name} sekarang menjadi anggota}}",
+    "roleChangeFailed": "Tidak dapat mengubah peran",
+    "teamsUpdateFailed": "Tidak dapat memperbarui tim",
+    "memberRemoved": "{name} telah dikeluarkan dari ruang kerja",
+    "removeMemberFailed": "Tidak dapat mengeluarkannya",
+    "teamCreated": "{name} dibuat",
+    "teamSaved": "{name} disimpan",
+    "teamSaveFailed": "Tidak dapat menyimpan tim.",
+    "teamDeleted": "{name} telah dihapus",
+    "teamDeleteFailed": "Tidak dapat menghapus tim"
+  }
+}

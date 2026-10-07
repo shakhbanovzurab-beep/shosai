@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "add": "إضافة",
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "copyLink": "نسخ الرابط",
+    "create": "إنشاء",
+    "delete": "حذف",
+    "duplicate": "إنشاء نسخة",
+    "open": "فتح",
+    "remove": "إزالة",
+    "rename": "إعادة التسمية",
+    "renameMenu": "إعادة التسمية…",
+    "retry": "إعادة المحاولة",
+    "save": "حفظ",
+    "undo": "تراجع"
+  },
+  "fields": {
+    "name": "الاسم"
+  },
+  "feedback": {
+    "linkCopied": "تم نسخ الرابط",
+    "linkCopyFailed": "تعذر نسخ الرابط",
+    "loading": "جارٍ التحميل…"
+  },
+  "actionsFor": "إجراءات {name}",
+  "errors": {
+    "backendUnreachable": "تعذر الاتصال بالخادم. يرجى إعادة المحاولة بعد قليل."
+  }
+}

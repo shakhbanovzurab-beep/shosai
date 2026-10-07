@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "AI 版ノート",
+    "description": "会議に合った構成を Leo が選びます。"
+  },
+  "sections": {
+    "summary": "要約",
+    "keyPoints": "要点",
+    "decisions": "決定事項",
+    "actionItems": "アクションアイテム"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "近況報告：投資家",
+      "description": "投資家との定期的な近況報告。現状と、支援をお願いしたいこと。"
+    },
+    "catchUpPortfolio": {
+      "name": "近況報告：投資先企業",
+      "description": "投資先企業との定期確認。指標、リスク、依頼事項。"
+    },
+    "lpProspective": {
+      "name": "LP：出資候補",
+      "description": "出資を検討しているリミテッドパートナーとの初回の面談。"
+    },
+    "vcBoardMeeting": {
+      "name": "VC：取締役会",
+      "description": "取締役会での議論、決議事項、オーナー。"
+    },
+    "vcPitch": {
+      "name": "VC：ピッチ",
+      "description": "創業者によるピッチ。印象に残った点、判断、デューデリジェンスの課題。"
+    },
+    "oneOnOne": {
+      "name": "1on1",
+      "description": "1 対 1 の面談。近況、話題、合意した次のステップ。"
+    },
+    "customerCall": {
+      "name": "顧客との通話",
+      "description": "顧客へのヒアリングや定期確認。課題、要望、フォローアップ。"
+    },
+    "teamSync": {
+      "name": "チーム定例",
+      "description": "定期的なチーム会議。進捗、決定事項、担当の割り振り。"
+    }
+  },
+  "headings": {
+    "whereWeAre": "現状",
+    "updatesShared": "共有された近況",
+    "whatWeAgreed": "合意した内容",
+    "followUps": "フォローアップ",
+    "companyUpdate": "会社の近況",
+    "metricsAndHighlights": "指標とハイライト",
+    "howWeCanHelp": "支援できること",
+    "overview": "概要",
+    "theirInterests": "相手の関心事",
+    "nextSteps": "次のステップ",
+    "boardSummary": "取締役会の要約",
+    "discussion": "議論",
+    "resolutions": "決議事項",
+    "ownersAndDeadlines": "オーナーと期限",
+    "thePitch": "ピッチの内容",
+    "whatStoodOut": "印象に残った点",
+    "verdict": "判断",
+    "diligenceToDos": "デューデリジェンスの課題",
+    "howItsGoing": "近況",
+    "topics": "話題",
+    "context": "背景",
+    "painsAndRequests": "課題と要望",
+    "outcome": "結果",
+    "updates": "進捗",
+    "decisions": "決定事項",
+    "whoDoesWhat": "担当の割り振り"
+  },
+  "icons": {
+    "enhanced": "AI 版ノート",
+    "briefcase": "ブリーフケース",
+    "chart": "グラフ",
+    "handshake": "握手",
+    "landmark": "建物",
+    "lightbulb": "電球",
+    "magnet": "磁石",
+    "phone": "電話",
+    "rocket": "ロケット",
+    "calendar": "カレンダー",
+    "users": "人"
+  },
+  "menu": {
+    "label": "AI 版ノートのテンプレート",
+    "search": "テンプレートを検索…",
+    "noMatch": "一致するテンプレートはありません。",
+    "heading": "テンプレート",
+    "regenerate": "ノートを再生成",
+    "newTemplate": "新しいテンプレート…"
+  },
+  "rewritten": "「{template}」でノートを書き直しました",
+  "regenerated": "AI 版ノートを再生成しました",
+  "created": "テンプレート「{template}」を作成しました",
+  "dialog": {
+    "title": "新しいテンプレート",
+    "description": "会議ごとに Leo が書くセクションとその名前を選びます。",
+    "namePlaceholder": "例：営業ヒアリング…",
+    "nameRequired": "テンプレートの名前を入力してください。",
+    "descriptionLabel": "説明",
+    "descriptionPlaceholder": "使用する場面…",
+    "ownDescription": "自作のテンプレートです。",
+    "icon": "アイコン",
+    "sections": "セクション",
+    "include": "{section} を含める",
+    "heading": "{section} の見出し",
+    "sectionsRequired": "セクションを 1 つ以上残してください。",
+    "create": "テンプレートを作成"
+  }
+}

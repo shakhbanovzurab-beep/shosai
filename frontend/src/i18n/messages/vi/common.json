@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "add": "Thêm",
+    "cancel": "Hủy",
+    "close": "Đóng",
+    "copyLink": "Sao chép liên kết",
+    "create": "Tạo",
+    "delete": "Xóa",
+    "duplicate": "Nhân bản",
+    "open": "Mở",
+    "remove": "Gỡ",
+    "rename": "Đổi tên",
+    "renameMenu": "Đổi tên…",
+    "retry": "Thử lại",
+    "save": "Lưu",
+    "undo": "Hoàn tác"
+  },
+  "fields": {
+    "name": "Tên"
+  },
+  "feedback": {
+    "linkCopied": "Đã sao chép liên kết",
+    "linkCopyFailed": "Không thể sao chép liên kết",
+    "loading": "Đang tải…"
+  },
+  "actionsFor": "Thao tác với {name}",
+  "errors": {
+    "backendUnreachable": "Không thể kết nối với máy chủ. Hãy thử lại sau giây lát."
+  }
+}

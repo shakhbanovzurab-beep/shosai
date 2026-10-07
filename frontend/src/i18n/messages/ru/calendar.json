@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Календарь",
+    "description": "Планируйте встречи, события и время для фокуса на месяц, неделю или день."
+  },
+  "summary": "{days, plural, one {# день} few {# дня} many {# дней} other {# дня}} · {events, plural, one {# событие} few {# события} many {# событий} other {# события}}",
+  "calendars": {
+    "label": "Календарь",
+    "all": "Все календари",
+    "work": "Работа",
+    "personal": "Личное",
+    "team": "Команда",
+    "focus": "Время для фокуса"
+  },
+  "views": {
+    "label": "Вид",
+    "dayGridMonth": "Месяц",
+    "timeGridWeek": "Неделя",
+    "timeGridDay": "День"
+  },
+  "previous": "Предыдущий период",
+  "next": "Следующий период",
+  "today": "Сегодня",
+  "addEvent": "Добавить событие",
+  "loading": "Загрузка календаря…",
+  "eventMenu": {
+    "reschedule": "Перенести",
+    "dayEarlier": "На день раньше",
+    "dayLater": "На день позже",
+    "nextWeek": "На следующую неделю",
+    "moveToToday": "Перенести на сегодня",
+    "copyDetails": "Копировать сведения",
+    "delete": "Удалить событие"
+  },
+  "dayMenu": {
+    "newAllDay": "Новое событие на весь день…",
+    "newAt": "Новое событие в {time}…",
+    "openDay": "Открыть день",
+    "openWeek": "Открыть неделю"
+  },
+  "renameTitle": "Переименовать событие",
+  "newTitle": "Новое событие · {when}",
+  "copyName": "{title} (копия)",
+  "details": "{title} — {when}",
+  "detailsCopied": "Сведения о событии скопированы",
+  "detailsCopyFailed": "Не удалось скопировать сведения о событии",
+  "deleted": "Событие «{title}» удалено"
+}

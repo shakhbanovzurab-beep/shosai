@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "Werkruimtes",
+    "home": "Start van werkruimte",
+    "new": "Nieuwe werkruimte",
+    "settings": "Instellingen van werkruimte",
+    "members": "Leden",
+    "decisions": "Besluiten",
+    "projects": "Projecten",
+    "tasks": "Taken",
+    "knowledge": "Kennis van werkruimte",
+    "meetings": "Vergaderingen van werkruimte",
+    "project": "Project",
+    "meeting": "Vergadering"
+  },
+  "createWorkspace": "Werkruimte maken",
+  "roles": {
+    "owner": {
+      "label": "Eigenaar",
+      "description": "Alles, ook facturering en de werkruimte verwijderen."
+    },
+    "admin": {
+      "label": "Beheerder",
+      "description": "Beheert mensen, teams, deelregels en instellingen."
+    },
+    "member": {
+      "label": "Lid",
+      "description": "Neemt vergaderingen op, deelt ze en volgt ze op."
+    }
+  },
+  "teams": {
+    "private": "Privéteam"
+  },
+  "audience": {
+    "participants": "Deelnemers",
+    "everyone": "Iedereen in {workspace}",
+    "aTeam": "Een team",
+    "sharedWith": "{level, select, participants {Gedeeld met deelnemers} workspace {Gedeeld met iedereen in {workspace}} other {Gedeeld met {team}}}",
+    "hint": "{level, select, participants {Leden die bij de vergadering waren.} other {Iedereen in de werkruimte, nu en later.}}",
+    "teamHint": "{private, select, true {Leden van {team} (privéteam), plus de deelnemers.} other {Leden van {team}, plus de deelnemers.}}"
+  },
+  "people": {
+    "list": "Mensen: {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name} (jij)"
+  },
+  "filters": {
+    "team": "Team",
+    "allTeams": "Alle teams",
+    "project": "Project",
+    "allProjects": "Alle projecten",
+    "clearSearch": "Zoekopdracht wissen"
+  },
+  "blocks": {
+    "loading": {
+      "files": "Bestanden laden…",
+      "tasks": "Taken laden…",
+      "yourTasks": "Je taken laden…",
+      "projects": "Projecten laden…",
+      "meetings": "Vergaderingen laden…",
+      "upcomingMeetings": "Komende vergaderingen laden…",
+      "decisions": "Besluiten laden…"
+    },
+    "failed": {
+      "files": "Kan de bestanden niet laden.",
+      "tasks": "Kan de taken niet laden.",
+      "yourTasks": "Kan je taken niet laden.",
+      "projects": "Kan de projecten niet laden.",
+      "meetings": "Kan de vergaderingen niet laden.",
+      "upcomingMeetings": "Kan de komende vergaderingen niet laden.",
+      "decisions": "Kan de besluiten niet laden."
+    }
+  },
+  "dates": {
+    "today": "Vandaag",
+    "yesterday": "Gisteren",
+    "tomorrow": "Morgen",
+    "targetOverdue": "Te laat · {date}",
+    "targetToday": "Doel: vandaag",
+    "targetTomorrow": "Doel: morgen",
+    "targetDay": "Doel: {day}",
+    "targetDate": "Doel: {date}",
+    "ago": "{days, plural, =0 {vandaag} =1 {gisteren} one {# dag geleden} other {# dagen geleden}}",
+    "on": "op {date}",
+    "neverSignedIn": "Nooit ingelogd",
+    "activeNow": "Nu actief",
+    "hoursAgo": "{count, plural, one {# uur geleden} other {# uur geleden}}",
+    "daysAgo": "{count, plural, =1 {Gisteren} one {# dag geleden} other {# dagen geleden}}"
+  },
+  "gate": {
+    "loading": "Werkruimte laden…",
+    "loadFailed": "Kan de werkruimte niet laden",
+    "listFailed": "Kan je werkruimtes niet laden",
+    "unavailable": "Deze werkruimte is niet beschikbaar",
+    "unavailableHint": "Ze bestaat niet, of je bent geen lid. Vraag iemand daar om je uit te nodigen, of begin je eigen werkruimte.",
+    "backToPersonal": "Terug naar Persoonlijk",
+    "suspended": "{name} is opgeschort",
+    "suspendedOwnerHint": "De toegang is voor iedereen gepauzeerd. Neem contact op met ondersteuning om die te herstellen; er is niets uit de werkruimte verwijderd.",
+    "suspendedHint": "De toegang is voor iedereen gepauzeerd. De eigenaar kan contact opnemen met ondersteuning om die te herstellen. Je notities, bestanden en borden in Persoonlijk blijven ongemoeid."
+  },
+  "switcher": {
+    "invite": "Mensen uitnodigen voor {name}",
+    "settings": "Instellingen van werkruimte",
+    "current": "Huidige",
+    "hint": "Wisselen tussen Persoonlijk en werkruimtes",
+    "personal": "Persoonlijk",
+    "personalHint": "Je mail, notities, borden en taken",
+    "workspaces": "Werkruimtes",
+    "suspended": "Opgeschort",
+    "detail": "{role} · {count, plural, one {# lid} other {# leden}}",
+    "loadFailed": "Kan je werkruimtes niet laden. Probeer het opnieuw",
+    "none": "Je zit nog niet in een werkruimte"
+  },
+  "create": {
+    "title": "Breng je team naar Leo",
+    "intro": "Een gedeelde werkruimte voor het werk dat jullie samen doen. Persoonlijk blijft van jou: mail, agenda, notities en borden zijn privé tot je zelf iets deelt.",
+    "value": {
+      "meetings": {
+        "title": "Gedeelde vergaderingen",
+        "text": "Deel een opname uit je Notities, of laat notities na afloop van een vergadering naar de juiste mensen gaan. Vergaderingen met gasten blijven privé."
+      },
+      "work": {
+        "title": "Projecten, taken en besluiten",
+        "text": "Wat er is besloten en wie wat moet doen, gegroepeerd per project. Je taken staan ook in je eigen Productiviteit en Kanban."
+      },
+      "knowledge": {
+        "title": "Teamkennis",
+        "text": "Deel bestanden uit je Bestandsbeheer, upload nieuwe of koppel een gedeelde drive. Leo antwoordt eruit voor iedereen die ze mag zien."
+      }
+    },
+    "billing": "Gefactureerd per licentie met het Team-abonnement. <link>Prijzen bekijken</link>",
+    "formHint": "Jij wordt de eigenaar. Nodig daarna meteen mensen uit.",
+    "name": "Naam van werkruimte",
+    "namePlaceholder": "bijv. Acme",
+    "nameRequired": "Geef de werkruimte een naam.",
+    "seats": "Licenties",
+    "fewerSeats": "Minder licenties",
+    "moreSeats": "Meer licenties",
+    "seatsHint": "Eén per persoon, jijzelf meegeteld. {min, number}–{max, number}; altijd aan te passen.",
+    "submit": "Werkruimte maken"
+  },
+  "toasts": {
+    "workspaceReady": "{name} is klaar",
+    "workspaceReadyHint": "Nodig je team uit om vergaderingen te delen.",
+    "createWorkspaceFailed": "Kan de werkruimte niet maken.",
+    "saveFailed": "Kan de wijziging niet opslaan",
+    "workspaceDeleted": "{name} is verwijderd",
+    "deleteWorkspaceFailed": "Kan de werkruimte niet verwijderen",
+    "workspaceLeft": "Je hebt {name} verlaten",
+    "leaveWorkspaceFailed": "Kan de werkruimte niet verlaten",
+    "projectSaveFailed": "Kan het project niet opslaan",
+    "projectDeleted": "{name} is verwijderd",
+    "projectDeletedHint": "De vergaderingen en taken ervan staan er nog.",
+    "projectDeleteFailed": "Kan het project niet verwijderen",
+    "filesAdded": "{count, plural, one {{name} toegevoegd} other {# bestanden toegevoegd}}",
+    "filesAddedHint": "{count, plural, one {Leo kan eruit antwoorden zodra het indexeren klaar is.} other {Leo kan eruit antwoorden zodra het indexeren klaar is.}}",
+    "sourceConnected": "{name} gekoppeld",
+    "sourceConnectedHint": "Leo kan eruit antwoorden na de eerste synchronisatie.",
+    "knowledgeChangeFailed": "Kan dit niet wijzigen",
+    "stoppedSharing": "{name} wordt niet meer gedeeld",
+    "stoppedSharingHint": "Het blijft in het Bestandsbeheer van de eigenaar; Leo antwoordt er hier niet meer uit.",
+    "knowledgeRemoved": "{name} verwijderd",
+    "knowledgeRemovedHint": "Leo antwoordt er niet meer uit.",
+    "knowledgeRemoveFailed": "Kan dit niet verwijderen",
+    "fileStaysYours": "{count, plural, one {Het blijft in je Bestandsbeheer en blijft van jou.} other {Ze blijven in je Bestandsbeheer en blijven van jou.}}",
+    "shareFileFailed": "Kan dit niet delen",
+    "filesShared": "{count, plural, one {{name} gedeeld} other {# bestanden gedeeld}}",
+    "stillInFileManager": "Het staat nog in je Bestandsbeheer.",
+    "unshareFileFailed": "Kan het delen niet stoppen",
+    "meetingShareFailed": "Kan de vergadering niet delen",
+    "meetingChangeFailed": "Kan de vergadering niet wijzigen",
+    "changeUndone": "Wijziging ongedaan gemaakt",
+    "noLongerShared": "Niet meer gedeeld",
+    "stillInYourNotes": "Het staat nog in je Notities.",
+    "stillInOwnerNotes": "Het staat nog in de Notities van de eigenaar.",
+    "sharedAgain": "Weer gedeeld",
+    "unshareMeetingFailed": "Kan het delen niet stoppen",
+    "taskUpdateFailed": "Kan de taak niet bijwerken",
+    "markedDone": "Gemarkeerd als afgerond",
+    "taskAdded": "Taak toegevoegd"
+  }
+}

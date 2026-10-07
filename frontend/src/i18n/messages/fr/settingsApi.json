@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "La demande contient une erreur. Rechargez la page et réessayez.",
+    "nameRequired": "Saisissez votre nom.",
+    "hotkeyUnsupported": "Ce raccourci n’est pas pris en charge.",
+    "modelNotOnPlan": "Ce modèle n’est pas inclus dans votre abonnement.",
+    "emailMismatch": "Cette adresse e-mail ne correspond pas à votre compte.",
+    "deletionUnavailable": "La suppression de compte n’est pas encore disponible. Rien n’a été supprimé.",
+    "avatarMissing": "Choisissez une image à importer.",
+    "avatarType": "Utilisez une image WebP, JPEG ou PNG.",
+    "paymentsUnavailable": "Les paiements ne sont pas encore disponibles. Ce bouton ouvrira la page sécurisée du fournisseur dès que la facturation sera active.",
+    "checkoutUnavailable": "Les paiements ne sont pas encore disponibles. Ce bouton ouvrira la page de paiement du fournisseur dès que la facturation sera active.",
+    "invoiceNotFound": "Facture introuvable.",
+    "connectorNotFound": "Connecteur introuvable.",
+    "authorizationExpired": "L’autorisation a expiré ou a déjà été utilisée. Relancez la connexion.",
+    "dataKindUnknown": "Type de données inconnu.",
+    "dataItemNotFound": "Cet élément n’existe plus.",
+    "mcpNameRequired": "Donnez un nom au serveur.",
+    "mcpNameTooLong": "Ce nom est trop long. Choisissez-en un plus court.",
+    "mcpUrlInvalid": "Saisissez l’URL http(s) du serveur.",
+    "mcpServerNotFound": "Serveur introuvable.",
+    "memoryNotFound": "Élément de mémoire introuvable.",
+    "summaryMessageRequired": "Écrivez une question ou ce qu’il faut modifier."
+  },
+  "avatarTooLarge": "L’image dépasse {size}.",
+  "invoice": {
+    "title": "Facture {number}",
+    "date": "Date : {date}",
+    "description": "Description : {description}",
+    "amount": "Montant : {amount}",
+    "status": "Statut : {status}",
+    "demoNote": "Facture de démonstration. La vraie facture est un PDF fourni par le système de facturation."
+  },
+  "notesFromYou": "Vos précisions"
+}

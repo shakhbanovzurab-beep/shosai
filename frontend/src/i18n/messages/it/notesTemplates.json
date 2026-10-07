@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Note migliorate",
+    "description": "Leo sceglie la struttura più adatta alla riunione."
+  },
+  "sections": {
+    "summary": "Riepilogo",
+    "keyPoints": "Punti chiave",
+    "decisions": "Decisioni",
+    "actionItems": "Azioni da intraprendere"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Aggiornamento: investitore",
+      "description": "Aggiornamento periodico con un investitore: a che punto sono le cose e come può aiutare."
+    },
+    "catchUpPortfolio": {
+      "name": "Aggiornamento: società in portafoglio",
+      "description": "Punto della situazione con una società in portafoglio su metriche, rischi e richieste."
+    },
+    "lpProspective": {
+      "name": "LP: potenziale",
+      "description": "Primi colloqui con un potenziale limited partner."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: consiglio di amministrazione",
+      "description": "Discussione del consiglio, delibere e responsabili."
+    },
+    "vcPitch": {
+      "name": "VC: pitch",
+      "description": "Il pitch di un fondatore: cosa ha colpito, il verdetto e la due diligence da fare."
+    },
+    "oneOnOne": {
+      "name": "1:1",
+      "description": "Un colloquio individuale: come sta andando, argomenti e prossimi passi concordati."
+    },
+    "customerCall": {
+      "name": "Chiamata con un cliente",
+      "description": "Esplorazione o aggiornamento con un cliente: problemi, richieste e azioni successive."
+    },
+    "teamSync": {
+      "name": "Allineamento del team",
+      "description": "Una riunione periodica del team: aggiornamenti, decisioni e chi fa cosa."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Situazione attuale",
+    "updatesShared": "Aggiornamenti condivisi",
+    "whatWeAgreed": "Cosa è stato concordato",
+    "followUps": "Azioni successive",
+    "companyUpdate": "Aggiornamenti sull’azienda",
+    "metricsAndHighlights": "Metriche e punti salienti",
+    "howWeCanHelp": "Come possiamo aiutare",
+    "overview": "Panoramica",
+    "theirInterests": "I loro interessi",
+    "nextSteps": "Prossimi passi",
+    "boardSummary": "Sintesi del consiglio",
+    "discussion": "Discussione",
+    "resolutions": "Delibere",
+    "ownersAndDeadlines": "Responsabili e scadenze",
+    "thePitch": "Il pitch",
+    "whatStoodOut": "Cosa ha colpito",
+    "verdict": "Verdetto",
+    "diligenceToDos": "Due diligence da fare",
+    "howItsGoing": "Come sta andando",
+    "topics": "Argomenti",
+    "context": "Contesto",
+    "painsAndRequests": "Problemi e richieste",
+    "outcome": "Esito",
+    "updates": "Aggiornamenti",
+    "decisions": "Decisioni",
+    "whoDoesWhat": "Chi fa cosa"
+  },
+  "icons": {
+    "enhanced": "Note migliorate",
+    "briefcase": "Valigetta",
+    "chart": "Grafico",
+    "handshake": "Stretta di mano",
+    "landmark": "Edificio storico",
+    "lightbulb": "Lampadina",
+    "magnet": "Calamita",
+    "phone": "Telefono",
+    "rocket": "Razzo",
+    "calendar": "Calendario",
+    "users": "Persone"
+  },
+  "menu": {
+    "label": "Modello delle note migliorate",
+    "search": "Cerca modelli…",
+    "noMatch": "Nessun modello corrispondente.",
+    "heading": "Modelli",
+    "regenerate": "Rigenera note",
+    "newTemplate": "Nuovo modello…"
+  },
+  "rewritten": "Note riscritte con «{template}»",
+  "regenerated": "Note migliorate rigenerate",
+  "created": "Modello «{template}» creato",
+  "dialog": {
+    "title": "Nuovo modello",
+    "description": "Scegli quali sezioni scrive Leo per una riunione e come chiamarle.",
+    "namePlaceholder": "es. Esplorazione commerciale…",
+    "nameRequired": "Dai un nome al modello.",
+    "descriptionLabel": "Descrizione",
+    "descriptionPlaceholder": "Quando usarlo…",
+    "ownDescription": "Il tuo modello personale.",
+    "icon": "Icona",
+    "sections": "Sezioni",
+    "include": "Includi {section}",
+    "heading": "Titolo per {section}",
+    "sectionsRequired": "Mantieni almeno una sezione.",
+    "create": "Crea modello"
+  }
+}

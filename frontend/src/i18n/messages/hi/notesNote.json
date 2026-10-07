@@ -1,0 +1,74 @@
+{
+  "back": "सभी नोट",
+  "notFound": "नोट नहीं मिला",
+  "participants": {
+    "count": "{count, plural, one {# प्रतिभागी} other {# प्रतिभागी}}",
+    "inMeeting": "{count, plural, one {इस मीटिंग में # व्यक्ति है।} other {इस मीटिंग में # लोग हैं।}}",
+    "you": "{name} (आप)",
+    "added": "{email} को मीटिंग में जोड़ा गया",
+    "addPlaceholder": "ईमेल से जोड़ें…",
+    "addLabel": "ईमेल से प्रतिभागी जोड़ें",
+    "invalid": "ईमेल पता डालें, जैसे name@company.com।",
+    "duplicate": "ये पहले से इस मीटिंग में हैं।"
+  },
+  "tabs": {
+    "notes": "नोट",
+    "enhanced": "बेहतर नोट",
+    "transcript": "ट्रांसक्रिप्ट",
+    "mindMap": "माइंड मैप"
+  },
+  "enhanced": {
+    "writtenBy": "Leo ने मीटिंग के ट्रांसक्रिप्ट और आपके नोट से लिखा है।",
+    "writtenByTemplate": "Leo ने मीटिंग के ट्रांसक्रिप्ट और आपके नोट से “{template}” के ढांचे में लिखा है।",
+    "writing": "बेहतर नोट लिखे जा रहे हैं…",
+    "nothingFor": "इस मीटिंग में “{template}” के सेक्शन के लिए कुछ नहीं है।"
+  },
+  "export": {
+    "button": "एक्सपोर्ट करें",
+    "transcriptAs": "ट्रांसक्रिप्ट इस रूप में"
+  },
+  "myNotes": {
+    "loadFailed": "आपके नोट लोड नहीं किए जा सके।",
+    "saveFailed": "आपके नोट सेव नहीं किए जा सके।"
+  },
+  "editor": {
+    "placeholder": "अपने नोट लिखें…",
+    "label": "आपके नोट",
+    "toolbar": "फ़ॉर्मैटिंग",
+    "addLink": "लिंक जोड़ें",
+    "removeLink": "लिंक हटाएं",
+    "bold": "बोल्ड",
+    "italic": "इटैलिक",
+    "linkPlaceholder": "लिंक पेस्ट करें…",
+    "linkAddress": "लिंक का पता",
+    "link": "लिंक",
+    "turnInto": "इसमें बदलें",
+    "blocks": {
+      "text": "टेक्स्ट",
+      "h1": "हेडिंग 1",
+      "h2": "हेडिंग 2",
+      "h3": "हेडिंग 3",
+      "ordered": "नंबर वाली सूची",
+      "bullet": "बुलेट वाली सूची"
+    }
+  },
+  "transcript": {
+    "label": "ट्रांसक्रिप्ट",
+    "search": "ट्रांसक्रिप्ट में खोजें",
+    "searchPlaceholder": "ट्रांसक्रिप्ट में खोजें…",
+    "matches": "{count, plural, =0 {कुछ नहीं मिला} one {# नतीजा} other {# नतीजे}}",
+    "position": "{total, number} में से {current, number}",
+    "previous": "पिछला नतीजा",
+    "next": "अगला नतीजा",
+    "clear": "खोज साफ़ करें"
+  },
+  "speakers": {
+    "title": "कौन बोला",
+    "share": "{speaker}: बातचीत के समय का {share}",
+    "lines": "{count, plural, one {# लाइन} other {# लाइनें}}"
+  },
+  "mindMap": {
+    "title": "माइंड मैप: {topic}",
+    "caption": "मीटिंग के ट्रांसक्रिप्ट से बनाया गया।"
+  }
+}

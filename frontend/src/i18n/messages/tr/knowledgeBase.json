@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Bilgi bankası",
+    "description": "Leo’nun Kişisel alanda yanıt verirken kullanacağı dosyaları ve kaynakları seçin."
+  },
+  "heading": "Bilgi bankası",
+  "intro": "Kişisel alanda sorduğunuzda Leo’nun yanıtlarını dayandırdığı içerikler: Dosya yöneticisinden seçtiğiniz dosyalar, bağladığınız kaynaklar ve çalışma alanlarınızın sizinle paylaştıkları. Bu yanıtları yalnızca siz görürsünüz.",
+  "tabs": {
+    "files": "Dosyalar",
+    "sources": "Kaynaklar",
+    "workspaces": "Çalışma alanlarından"
+  },
+  "loadFailed": "Dosyalarınız yüklenemedi",
+  "leoFolders": {
+    "heading": "Leo’nun okuduğu klasörler",
+    "stop": "{folder} kullanımını durdur"
+  },
+  "leoFiles": {
+    "heading": "Leo’nun kullandığı dosyalar",
+    "emptyTitle": "Leo henüz dosyalarınızdan hiçbirini kullanmıyor",
+    "emptyDescription": "Dosya yöneticisinden dosyalar veya klasörlerin tamamını seçin ya da yukarıdan yeni dosya yükleyin."
+  },
+  "summary": {
+    "files": "Dosyalar",
+    "chunks": "Parçalar",
+    "processing": "İşleniyor",
+    "embeddings": "Vektörler",
+    "used": "{used} kullanılıyor",
+    "usedOfLimit": "Planınızdaki {limit} sınırından {used} kullanılıyor",
+    "failedUsage": "{failed, plural, one {# işlenemedi} other {# işlenemedi}} · {usage}",
+    "inIndex": "vektör dizininde",
+    "busy": "ayrıştırılıyor ve vektörleştiriliyor",
+    "caughtUp": "hepsi güncel",
+    "dimensions": "{dimensions, number} boyutlu"
+  },
+  "dropzone": {
+    "label": "Leo için dosya ekle",
+    "title": "Leo’nun kullanması için dosyaları buraya bırakın",
+    "uploading": "{count, plural, one {# dosya yükleniyor…} other {# dosya yükleniyor…}}",
+    "description": "Dosyalar Dosya yöneticisinde Dosyalarım’a kaydedilir. {types}; her biri en fazla {size}.",
+    "choose": "Dosyalarınızdan seçin",
+    "upload": "Yeni yükle",
+    "skipped": "{count, plural, one {# dosya atlandı} other {# dosya atlandı}}",
+    "unreadable": "{name}: Leo bu türü veya boyutu okuyamaz",
+    "tooMany": "{name}: tek seferde {max, number} dosyadan fazlası"
+  },
+  "choose": {
+    "title": "Dosyalarınızdan seçin",
+    "description": "Leo seçtiklerinizi okur ve Kişisel alanda bunlara dayanarak yanıt verir. Klasör seçerseniz sonradan eklediğiniz dosyalar da dahil olur.",
+    "folders": "Klasörlerin tamamı",
+    "files": "Dosyalar",
+    "alreadyUsed": "Leo bunu zaten kullanıyor",
+    "submit": "Leo ile kullan",
+    "readingOne": "Leo şu anda bunu okuyor",
+    "readingMany": "{count, plural, one {Leo şu anda seçtiğiniz # öğeyi okuyor} other {Leo şu anda seçtiğiniz # öğeyi okuyor}}",
+    "readingDescription": "Dizine ekleme bitince Kişisel alanda bunlara dayanarak yanıt verir."
+  },
+  "table": {
+    "status": "Durum",
+    "chunks": "Parçalar",
+    "size": "Boyut",
+    "workspaces": "Çalışma alanları",
+    "actions": "İşlemler",
+    "wholeFolder": "<name>{folder}</name> · tüm klasör"
+  },
+  "steps": {
+    "queued": "Sırada",
+    "parsing": "Ayrıştırılıyor",
+    "chunking": "Parçalara bölünüyor",
+    "embedding": "Vektörleştiriliyor",
+    "indexed": "Dizine eklendi",
+    "failed": "İşlenemedi"
+  },
+  "status": {
+    "step": "{step, number}/{total, number}",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "Yeniden dizine ekle",
+    "showInFileManager": "Dosya yöneticisinde göster",
+    "stopFolder": "“{folder}” kullanımını durdur",
+    "stopFile": "Leo ile kullanmayı durdur"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Decisiones"
+  },
+  "title": "Decisiones",
+  "description": "Todo lo decidido en las reuniones compartidas contigo, de la más reciente a la más antigua, cada decisión enlazada al momento en que se tomó.",
+  "searchLabel": "Buscar decisiones",
+  "loading": "Cargando decisiones…",
+  "loadFailed": "No se pudieron cargar las decisiones",
+  "empty": {
+    "title": "Aún no hay decisiones",
+    "text": "Leo detecta lo que se decidió en las reuniones compartidas y lo guarda aquí, enlazado a la reunión.",
+    "action": "Ir a reuniones"
+  },
+  "noMatch": {
+    "title": "Ninguna decisión coincide",
+    "text": "Prueba con otras palabras u otro equipo.",
+    "clear": "Borrar filtros"
+  },
+  "replaced": "Reemplazada",
+  "replacedBy": "Reemplazada por <link>«{decision}»</link> en {meeting}.",
+  "replacedHidden": "Reemplazada por una decisión posterior en una reunión que no se compartió contigo.",
+  "day": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "tomorrow": "Mañana"
+  }
+}

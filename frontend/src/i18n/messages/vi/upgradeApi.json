@@ -1,0 +1,13 @@
+{
+  "choosePlan": "Hãy chọn một gói.",
+  "planUnavailable": "Gói này hiện không có sẵn.",
+  "salesOnly": "Gói này được thỏa thuận qua bộ phận kinh doanh.",
+  "alreadyOnPlan": "Bạn đang dùng gói này rồi.",
+  "chooseUsers": "Hãy chọn từ {min, number} đến {max, number} người dùng.",
+  "chooseUsersOrMore": "Hãy chọn {min, plural, other {từ # người dùng trở lên}}.",
+  "singleUser": "Gói này dành cho một người dùng.",
+  "paymentsNotConnected": "Chưa kết nối thanh toán. Khi thanh toán đi vào hoạt động, thao tác này sẽ mở trang thanh toán bảo mật của nhà cung cấp.",
+  "invalidEmail": "Hãy nhập email công việc hợp lệ.",
+  "companyRequired": "Hãy nhập tên công ty.",
+  "checkForm": "Hãy kiểm tra lại biểu mẫu."
+}

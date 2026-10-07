@@ -1,0 +1,21 @@
+{
+  "errors": {
+    "name_taken": "Anda sudah punya hub dengan nama ini.",
+    "name_too_short": "{min, plural, other {Gunakan setidaknya # karakter.}}",
+    "name_too_long": "{max, plural, other {Gunakan paling banyak # karakter.}}",
+    "too_many_hubs": "Hub Anda terlalu banyak. Arsipkan atau hapus hub yang tidak diperlukan.",
+    "not_found": "Ini sudah tidak ada — mungkin telah dihapus.",
+    "hub_archived": "Hub ini diarsipkan.",
+    "no_board": "Hub ini belum punya papan, jadi pekerjaan tidak punya tujuan.",
+    "no_hub": "Rapat ini tidak ada di hub mana pun.",
+    "board_gone": "Papan hub ini sudah tidak ada.",
+    "invalid": "Periksa apakah semuanya sudah diisi dengan benar.",
+    "network": "Tidak dapat menghubungi server.",
+    "unknown": "Server tidak merespons seperti yang diharapkan."
+  },
+  "fixes": {
+    "choose_board": "Pilih papan",
+    "file_meeting": "Tambahkan rapat ke hub",
+    "restore_hub": "Pulihkan hub dari arsip"
+  }
+}

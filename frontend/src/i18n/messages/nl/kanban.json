@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Kanban",
+    "description": "Borden voor werk, thuis en al het andere, ook borden die met Jira zijn gesynchroniseerd."
+  },
+  "loadBoardsFailed": "Kan je borden niet laden",
+  "loadBoardFailed": "Kan het bord niet laden",
+  "addTask": "Taak toevoegen",
+  "taskCount": "{count, plural, one {# taak} other {# taken}}",
+  "progress": "Voortgang",
+  "views": {
+    "label": "Weergave",
+    "board": "Bord",
+    "list": "Lijst",
+    "table": "Tabel"
+  },
+  "toolbar": {
+    "filter": "Filteren",
+    "sort": "Sorteren",
+    "moreWaysToAdd": "Meer manieren om taken toe te voegen",
+    "importCsv": "CSV importeren",
+    "addFromTemplate": "Uit sjabloon toevoegen",
+    "createAutomation": "Automatisering maken"
+  },
+  "column": {
+    "drag": "Kolom {column} verslepen",
+    "addTask": "Taak toevoegen aan {column}",
+    "empty": "Geen taken in {column}"
+  },
+  "columnMenu": {
+    "managedInJira": "Kolommen worden in Jira beheerd",
+    "rename": "Kolomnaam wijzigen…",
+    "sortByPriority": "Sorteren op prioriteit",
+    "moveEarlier": "Naar voren verplaatsen",
+    "moveLater": "Naar achteren verplaatsen",
+    "clear": "Kolom leegmaken"
+  },
+  "taskMenu": {
+    "openInJira": "{key} openen in Jira",
+    "openInWorkspace": "Openen in {workspace}",
+    "moveTo": "Verplaatsen naar",
+    "moveToTop": "Bovenaan plaatsen",
+    "moveToBottom": "Onderaan plaatsen",
+    "delete": "Taak verwijderen"
+  },
+  "priority": {
+    "label": "Prioriteit",
+    "high": "Hoog",
+    "medium": "Gemiddeld",
+    "low": "Laag"
+  },
+  "card": {
+    "unassigned": "Niet toegewezen",
+    "completed": "Afgerond",
+    "fromSource": "Uit {source}",
+    "jiraIssue": "{type} (opent Jira in een nieuw tabblad)",
+    "workspaceTask": "Een taak in deze werkruimte. Wat je hier wijzigt, verandert daar ook.",
+    "insights": {
+      "attachments": "{count, plural, one {# bijlage} other {# bijlagen}}",
+      "comments": "{count, plural, one {# opmerking} other {# opmerkingen}}",
+      "documents": "{count, plural, one {# document} other {# documenten}}"
+    }
+  },
+  "table": {
+    "task": "Taak",
+    "status": "Status",
+    "owner": "Eigenaar",
+    "label": "Label",
+    "due": "Deadline",
+    "actions": "Acties",
+    "empty": "Nog geen taken",
+    "progressOf": "Voortgang van {task}"
+  },
+  "commands": {
+    "renameTask": "Taaknaam wijzigen",
+    "renameColumn": "Kolomnaam wijzigen",
+    "newTaskIn": "Nieuwe taak in {column}",
+    "copyTitle": "{title} (kopie)",
+    "deleted": "‘{title}’ verwijderd",
+    "cleared": "{count, plural, one {# taak uit {column} verwijderd} other {# taken uit {column} verwijderd}}",
+    "jiraLinkCopied": "Link naar {key} gekopieerd"
+  },
+  "errors": {
+    "addTask": "Kan de taak niet toevoegen",
+    "saveChange": "Kan de wijziging niet opslaan",
+    "deleteTasks": "{count, plural, one {Kan de taak niet verwijderen} other {Kan de taken niet verwijderen}}",
+    "saveBoard": "Kan het bord niet opslaan"
+  }
+}

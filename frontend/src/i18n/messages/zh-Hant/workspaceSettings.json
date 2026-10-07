@@ -1,0 +1,70 @@
+{
+  "title": "設定",
+  "description": "{workspace} 對所有成員的運作方式。變更會立即儲存。",
+  "adminsOnly": "只有管理員可以變更工作空間設定。",
+  "adminsOnlyAsk": "只有管理員可以變更工作空間設定。請詢問 {name}。",
+  "general": {
+    "title": "一般",
+    "name": "工作空間名稱",
+    "nameHint": "會顯示在切換器和邀請中。",
+    "renamed": "已重新命名工作空間",
+    "join": "使用公司電子郵件加入",
+    "joinHint": "讓使用你網域電子郵件的同事不需邀請即可加入。",
+    "joinOn": "只要還有席位，任何使用 @{domain} 電子郵件的人都能以成員身分加入。",
+    "domain": "電子郵件網域",
+    "joinEnabled": "{domain} 的使用者現在可以加入",
+    "joinDisabled": "已關閉依電子郵件網域加入"
+  },
+  "sharing": {
+    "title": "共用",
+    "description": "有 {workspace} 外部人員參加的會議一律不會自動共用。主辦人隨時可以變更誰能查看會議。",
+    "reviewTitle": "確認會議的共用方式",
+    "reviewHint": "這些是建議的規則。你可以變更任何一項，或維持原樣。",
+    "keep": "保留這些規則",
+    "confirmed": "已確認共用規則",
+    "defaultLevel": "會議結束後，將筆記共用給",
+    "defaultLevelHint": "適用於所有人都在 {workspace} 中的會議。",
+    "levels": {
+      "private": "僅限主辦人",
+      "participants": "參與者（建議）",
+      "workspace": "{workspace} 的所有人"
+    },
+    "levelChanged": "新會議將共用給：{level}",
+    "transcripts": "包含逐字稿",
+    "transcriptsHint": "關閉時：成員只會看到摘要、決策和任務，不會看到完整的逐字稿。",
+    "transcriptsOn": "逐字稿也會共用",
+    "transcriptsOff": "只共用摘要",
+    "membersInvite": "成員可以邀請其他人",
+    "membersInviteHint": "關閉時：只有管理員可以邀請。",
+    "membersInviteOn": "成員可以邀請其他人",
+    "membersInviteOff": "現在只有管理員可以邀請"
+  },
+  "plan": {
+    "title": "方案和用量",
+    "description": "向工作空間收費，與任何人的個人方案分開計算。",
+    "name": "{plan} 方案",
+    "seats": "{taken, number}/{total, number} 個席位",
+    "price": "每個席位每月 {perSeat} · 總計 {total} · {renews} 續約",
+    "change": "變更席位或方案",
+    "ownerOnly": "只有擁有者可以管理帳單。",
+    "usageFailed": "無法載入用量。",
+    "usageIn": "{month} 的用量",
+    "idle": "{count, plural, other {# 位成員已閒置 {days, number} 天以上：這些席位可以重新分配。}}",
+    "member": "成員",
+    "meetings": "會議",
+    "minutes": "分鐘數",
+    "lastActive": "上次活動",
+    "inactive": "未活動"
+  },
+  "danger": {
+    "delete": "刪除工作空間",
+    "deleteHint": "為所有人移除工作空間，並停止計費。",
+    "deleteTitle": "要刪除 {name} 嗎？",
+    "deleteDescription": "所有人都會失去其中的專案、任務、決策和上傳的檔案。成員共用的錄製內容和檔案仍屬於他們，保留在各自的筆記和檔案管理中。這項操作無法復原。",
+    "leave": "離開工作空間",
+    "leaveHint": "之後仍可再次受邀加入；你的席位會釋出。",
+    "leaveTitle": "要離開 {name} 嗎？",
+    "leaveDescription": "你共用的會議和檔案會隨你離開，並保留在你的筆記和檔案管理中。你轉移給工作空間的檔案會留在這裡。任務會留給團隊；你未完成的任務將變成未指派。",
+    "leaveConfirm": "離開"
+  }
+}

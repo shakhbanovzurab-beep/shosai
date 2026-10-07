@@ -1,0 +1,26 @@
+{
+  "description": "デスクトップアプリのショートカットです。アプリがバックグラウンドにあってもパソコン上のどこでも使え、すべてのデバイスに同期されます。",
+  "commands": {
+    "open_app": "アプリを開く",
+    "toggle_recording": "レコーディングを開始 / 一時停止",
+    "toggle_overlay": "オーバーレイを表示 / 非表示",
+    "open_settings": "設定",
+    "collapse_overlay": "オーバーレイを最小化",
+    "close_app": "アプリを閉じる",
+    "live_translation": "ライブ翻訳",
+    "prompter": "プロンプター"
+  },
+  "off": "オフ",
+  "pressKeys": "キーを押してください…",
+  "hint": "Esc でキャンセル・Backspace でオフ",
+  "reset": "{command} を初期設定に戻す",
+  "record": "{command} の新しいショートカットを押してください",
+  "change": "{command}：{keys}。変更",
+  "changeOff": "{command}：オフ。変更",
+  "resetAll": "すべて初期設定に戻す",
+  "problems": {
+    "needsModifier": "⌘/Ctrl または ⌥/Alt をほかのキーと組み合わせてください。",
+    "reserved": "そのショートカットはシステムで使用されています。",
+    "taken": "すでに「{command}」で使用されています。"
+  }
+}

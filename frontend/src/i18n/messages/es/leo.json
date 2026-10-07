@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Abrir chat con Leo",
+    "close": "Cerrar chat con Leo",
+    "tooltipOpen": "Preguntar a Leo",
+    "tooltipClose": "Cerrar Leo"
+  },
+  "panel": {
+    "label": "Chat con Leo",
+    "subtitle": "Agente de IA",
+    "working": "Trabajando…",
+    "newChat": "Nuevo chat",
+    "fullScreen": "Pantalla completa",
+    "exitFullScreen": "Salir de pantalla completa",
+    "close": "Cerrar",
+    "dropFiles": "Suelta los archivos para adjuntarlos"
+  },
+  "place": {
+    "personal": "Personal",
+    "workspace": "En {name}",
+    "hub": "En {name}",
+    "scopePersonal": "Trabajo con tu correo, calendario, notas, tareas y los archivos que elegiste para mí, además de lo que tus espacios de trabajo comparten contigo. Solo tú ves este chat.",
+    "scopeWorkspace": "Respondo solo con lo que {name} comparte contigo: sus reuniones, decisiones, proyectos y conocimiento. Este chat se queda en {name}.",
+    "scopeHub": "Respondo solo con lo que hay en {name}: sus reuniones, decisiones y materiales. Este chat se queda aquí.",
+    "boundHub": "Respondo solo sobre «{name}»"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {Buenas noches} morning {Buenos días} afternoon {Buenas tardes} other {Buenas noches}}",
+    "hi": "Hola",
+    "intro": "{greeting}, soy Leo",
+    "howCanIHelp": "¿En qué puedo ayudarte hoy?",
+    "suggestionsLabel": "Sugerencias"
+  },
+  "suggestions": {
+    "default": {
+      "first": "Planifica mi día",
+      "second": "Resume lo que requiere mi atención",
+      "third": "¿En qué me puedes ayudar?"
+    },
+    "hub": {
+      "first": "¿Qué está frenando esto?",
+      "second": "¿Qué cambió en la última reunión?",
+      "third": "Prepárame para la próxima reunión"
+    },
+    "workspace": {
+      "first": "¿Qué decidimos sobre los precios?",
+      "second": "¿Qué tengo vencido aquí?",
+      "third": "Busca nuestra política de seguridad"
+    },
+    "productivity": {
+      "first": "Planifica mi día",
+      "second": "¿En qué debería concentrarme primero?",
+      "third": "Resume mi semana"
+    },
+    "mail": {
+      "first": "Resume mi bandeja de entrada",
+      "second": "Redacta un correo de seguimiento amable",
+      "third": "¿Qué correos son urgentes?"
+    },
+    "calendar": {
+      "first": "¿Qué tengo hoy en el calendario?",
+      "second": "Busca una hora libre esta semana",
+      "third": "Prepárame para mi próxima reunión"
+    },
+    "kanban": {
+      "first": "¿Qué tareas están vencidas?",
+      "second": "Resume este tablero",
+      "third": "Sugiere qué mover ahora"
+    },
+    "meetings": {
+      "first": "¿Qué reuniones tengo hoy?",
+      "second": "Programa una llamada con el equipo",
+      "third": "Prepárame para mi próxima llamada"
+    },
+    "notes": {
+      "first": "Resume mi última reunión",
+      "second": "Lista mis tareas de seguimiento",
+      "third": "¿Qué decidimos esta semana?"
+    },
+    "fileManager": {
+      "first": "Busca mis archivos recientes",
+      "second": "¿Qué ocupa más espacio?",
+      "third": "Organiza mis archivos"
+    },
+    "studio": {
+      "first": "Escribe un prompt del sistema",
+      "second": "Compara los modelos disponibles",
+      "third": "Mejora este prompt"
+    }
+  },
+  "composer": {
+    "placeholder": "Pregúntale a Leo lo que quieras",
+    "label": "Mensaje para Leo",
+    "attach": "Adjuntar archivos",
+    "attachLimit": "Adjunta hasta {max, plural, one {# archivo} many {# de archivos} other {# archivos}}",
+    "filesToSend": "Archivos para enviar",
+    "removeFile": "Quitar {name}",
+    "disclaimer": "Leo puede cometer errores. Verifica la información importante.",
+    "stop": "Detener a Leo",
+    "send": "Enviar mensaje",
+    "startVoice": "Iniciar modo de voz",
+    "voiceMode": "Modo de voz"
+  },
+  "message": {
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "copyFailed": "No se pudo copiar al portapapeles",
+    "regenerate": "Regenerar",
+    "tryAgain": "Reintentar",
+    "replyFailed": "Leo no pudo terminar. Revisa tu conexión e inténtalo de nuevo.",
+    "edit": "Editar",
+    "editMessage": "Editar mensaje",
+    "attachedFiles": "Archivos adjuntos"
+  },
+  "steps": {
+    "gettingStarted": "Empezando",
+    "doneIn": "Completado en {duration}",
+    "stoppedAfter": "Detenido tras {duration}",
+    "somethingWrong": "Algo salió mal",
+    "label": "Acciones de Leo",
+    "needsApproval": "Requiere aprobación",
+    "detail": "«{detail}»",
+    "status": "{status, select, running {En curso} done {Completado} error {Error} stopped {Detenido} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} es demasiado grande",
+    "sizeLimit": "El tamaño máximo por archivo es {size}.",
+    "tooMany": "Puedes adjuntar hasta {max, plural, one {# archivo} many {# de archivos} other {# archivos}}."
+  },
+  "voice": {
+    "unavailable": "El modo de voz no está disponible",
+    "listening": "Escuchando…",
+    "thinking": "Leo está pensando…",
+    "speaking": "Leo está hablando…",
+    "micOff": "Micrófono desactivado",
+    "turnMicOn": "Activar micrófono",
+    "turnMicOff": "Desactivar micrófono",
+    "end": "Salir del modo de voz",
+    "micBlocked": "El acceso al micrófono está bloqueado",
+    "micBlockedHint": "Permite el acceso al micrófono para hablar con Leo.",
+    "needsHttps": "El modo de voz requiere una conexión segura (HTTPS) para usar el micrófono.",
+    "unsupported": "Este navegador no admite el modo de voz. Prueba la última versión de Chrome, Edge o Safari."
+  }
+}

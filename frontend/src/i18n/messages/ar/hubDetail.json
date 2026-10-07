@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "التفاصيل",
+    "stages": "المراحل",
+    "history": "كيف سارت الأمور",
+    "summaryDecided": "{rounds, plural, zero {نوقش # مرة، وتم الحسم في {date}.} one {نوقش مرة واحدة، وتم الحسم في {date}.} two {نوقش مرتين، وتم الحسم في {date}.} few {نوقش # مرات، وتم الحسم في {date}.} many {نوقش # مرة، وتم الحسم في {date}.} other {نوقش # مرة، وتم الحسم في {date}.}}",
+    "summaryOpen": "{rounds, plural, zero {نوقش # مرة دون قرار.} one {نوقش مرة واحدة دون قرار.} two {نوقش مرتين دون قرار.} few {نوقش # مرات دون قرار.} many {نوقش # مرة دون قرار.} other {نوقش # مرة دون قرار.}}",
+    "blockers": "في كل مرة كان العائق: {quotes}.",
+    "round": "الجولة {index, number}",
+    "blocker": "ما كان عائقًا",
+    "decision": "القرار",
+    "decisionChanged": "تغير القرار",
+    "previous": "قبل",
+    "current": "الآن",
+    "decidedAt": "{date}، «{meeting}»",
+    "outcome": "النتيجة",
+    "outcomeUnknown": "النتيجة غير معروفة بعد",
+    "links": {
+      "causes": "يعطل",
+      "blocked_by": "معطل بسبب",
+      "outcome_of": "ناتج عن القرار"
+    },
+    "sources": "المصادر",
+    "dismissals": "مرات الاستبعاد",
+    "dismissedByYou": "تم استبعاده من قبلك",
+    "disproved": "تم دحضه: {evidence}",
+    "dismissedUntil": "حتى {date}",
+    "returned": "انتهت المدة فعاد للظهور",
+    "owner": "المكلف",
+    "noOwner": "دون تكليف",
+    "due": "تاريخ الاستحقاق",
+    "noDue": "بلا تاريخ",
+    "goneTitle": "لم يعد هذا موجودًا",
+    "goneText": "ربما تم حذف المركز أو إزالة تسجيل الاجتماع.",
+    "loadError": "تعذر تحميل التفاصيل"
+  },
+  "why": {
+    "source": "المصدر",
+    "meeting": "اجتماع {date}، «{title}»",
+    "said": "المتحدث",
+    "moment": "اللحظة",
+    "jump": "الانتقال إلى اللحظة",
+    "signals": {
+      "series": "اجتماعات هذه السلسلة موجودة هنا بالفعل.",
+      "subject": "كان الحديث عن هذا المركز.",
+      "title": "يرد ذلك في عنوان الاجتماع.",
+      "entity": "ورد الاسم في الحديث.",
+      "organisation": "المشاركون من هذه المؤسسة.",
+      "human": "تمت إضافته هنا يدويًا."
+    },
+    "loadError": "تعذر تحميل المصدر"
+  }
+}

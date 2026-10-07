@@ -1,0 +1,38 @@
+{
+  "title": "{count, plural, one {<b>#</b> tarefa concluída no último ano} many {<b>#</b> de tarefas concluídas no último ano} other {<b>#</b> tarefas concluídas no último ano}}",
+  "chart": {
+    "flat": "{count, plural, one {# tarefa concluída de {from} a {to}, em um mapa de calor. Use as setas do teclado para ler cada dia.} many {# de tarefas concluídas de {from} a {to}, em um mapa de calor. Use as setas do teclado para ler cada dia.} other {# tarefas concluídas de {from} a {to}, em um mapa de calor. Use as setas do teclado para ler cada dia.}}",
+    "skyline": "{count, plural, one {# tarefa concluída de {from} a {to}, em um skyline 3D. Use as setas do teclado para ler cada dia.} many {# de tarefas concluídas de {from} a {to}, em um skyline 3D. Use as setas do teclado para ler cada dia.} other {# tarefas concluídas de {from} a {to}, em um skyline 3D. Use as setas do teclado para ler cada dia.}}"
+  },
+  "day": "{count, plural, =0 {Nenhuma tarefa concluída em {date}} one {# tarefa concluída em {date}} many {# de tarefas concluídas em {date}} other {# tarefas concluídas em {date}}}",
+  "tooltip": "{count, plural, =0 {<b>Nenhuma tarefa concluída</b> em {date}} one {<b># tarefa concluída</b> em {date}} many {<b># de tarefas concluídas</b> em {date}} other {<b># tarefas concluídas</b> em {date}}}",
+  "views": {
+    "label": "Visualização do gráfico",
+    "flat": "Mapa de calor plano",
+    "skyline": "Skyline 3D"
+  },
+  "hint": {
+    "flat": "Passe o mouse sobre um dia para ver detalhes · use as setas para explorar",
+    "skyline": "Arraste para girar · clique duas vezes para redefinir"
+  },
+  "levels": {
+    "label": "Níveis de atividade",
+    "less": "Menos",
+    "more": "Mais",
+    "none": "Nenhuma tarefa concluída",
+    "light": "Leve",
+    "moderate": "Moderado",
+    "heavy": "Intenso",
+    "heaviest": "Muito intenso"
+  },
+  "stats": {
+    "total": "Último ano",
+    "busiest": "Dia mais produtivo",
+    "longest": "Maior sequência",
+    "current": "Sequência atual"
+  },
+  "units": {
+    "contributions": "{count, plural, one {tarefa concluída} many {de tarefas concluídas} other {tarefas concluídas}}",
+    "days": "{count, plural, one {dia} many {de dias} other {dias}}"
+  }
+}

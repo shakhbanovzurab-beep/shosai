@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Progetti",
+    "project": "Progetto"
+  },
+  "title": "Progetti",
+  "description": "Un progetto raccoglie un lavoro in un unico posto: le sue riunioni, decisioni e attività.",
+  "newProject": "Nuovo progetto",
+  "filter": {
+    "label": "Quali progetti",
+    "open": "In corso",
+    "all": "Tutti"
+  },
+  "empty": {
+    "title": "Ancora nessun progetto",
+    "text": "Avviane uno per un lavoro che si estende su più riunioni, come un lancio o un’assunzione. Potrai poi aggiungervi riunioni e attività."
+  },
+  "status": {
+    "planned": "Pianificato",
+    "active": "Attivo",
+    "paused": "In pausa",
+    "completed": "Completato"
+  },
+  "ledBy": "{who, select, me {Responsabile: tu} other {Responsabile: {name}}}",
+  "noLead": "Nessun responsabile",
+  "target": {
+    "none": "Nessuna data prevista",
+    "overdue": "In ritardo · {date}",
+    "today": "Previsto per oggi",
+    "tomorrow": "Previsto per domani",
+    "on": "Previsto per il {date}"
+  },
+  "progress": {
+    "label": "{total, plural, one {{done, number} attività su # completata} many {{done, number} attività su # di attività completate} other {{done, number} attività su # completate}}",
+    "count": "{done, number}/{total, number}",
+    "none": "Nessuna attività"
+  },
+  "notFound": {
+    "title": "Questo progetto non è più qui",
+    "text": "Potrebbe essere stato eliminato. Le sue riunioni e attività sono ancora nello spazio di lavoro.",
+    "action": "Tutti i progetti"
+  },
+  "sections": {
+    "tasks": "Attività",
+    "addTask": "Aggiungi attività",
+    "tasksEmpty": "Ancora nessuna attività. Aggiungine una, oppure condividi una riunione in questo progetto per portarne le attività.",
+    "meetings": "Riunioni",
+    "meetingsEmpty": "Qui compaiono le riunioni condivise in questo progetto.",
+    "decisions": "Decisioni",
+    "files": "File",
+    "filesLabel": "File di {project}",
+    "filesEmpty": "Qui compaiono i file aggiunti a questo progetto, e Leo li usa per il progetto."
+  },
+  "header": {
+    "edit": "Modifica progetto",
+    "delete": "Elimina progetto",
+    "lead": "Responsabile",
+    "team": "Team",
+    "target": "Data prevista",
+    "deleteTitle": "Eliminare {name}?",
+    "deleteText": "Le sue riunioni, attività e decisioni restano nello spazio di lavoro; semplicemente non appartengono più a un progetto."
+  },
+  "dialog": {
+    "newTitle": "Nuovo progetto",
+    "editTitle": "Modifica {name}",
+    "description": "Un unico posto per un lavoro: le sue riunioni, decisioni e attività.",
+    "nameRequired": "Dai un nome al progetto.",
+    "namePlaceholder": "ad es. Beta dell’app mobile",
+    "purpose": "A cosa serve",
+    "lead": "Responsabile",
+    "me": "{name} (tu)",
+    "team": "Team",
+    "wholeWorkspace": "Tutto lo spazio di lavoro",
+    "status": "Stato",
+    "target": "Data prevista",
+    "create": "Crea progetto",
+    "saved": "{name} salvato",
+    "created": "{name} creato"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "choosePlan": "Kies een abonnement.",
+  "planUnavailable": "Dit abonnement is niet beschikbaar.",
+  "salesOnly": "Dit abonnement regel je met ons salesteam.",
+  "alreadyOnPlan": "Je hebt dit abonnement al.",
+  "chooseUsers": "Kies {min, number}–{max, number} gebruikers.",
+  "chooseUsersOrMore": "Kies {min, plural, one {# of meer gebruikers} other {# of meer gebruikers}}.",
+  "singleUser": "Dit abonnement is voor één gebruiker.",
+  "paymentsNotConnected": "Betalingen zijn nog niet gekoppeld. Zodra facturering live is, opent dit de beveiligde betaalpagina van de provider.",
+  "invalidEmail": "Voer een geldig zakelijk e-mailadres in.",
+  "companyRequired": "Voer je bedrijf in.",
+  "checkForm": "Controleer het formulier."
+}

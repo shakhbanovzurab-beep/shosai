@@ -1,0 +1,12 @@
+{
+  "notMultipart": "मैसेज multipart/form-data के रूप में भेजें।",
+  "emptyMessage": "मैसेज लिखें या फ़ाइल अटैच करें।",
+  "messageTooLong": "मैसेज {max, number} अक्षरों से छोटा रखें।",
+  "tooManyFiles": "{max, plural, one {ज़्यादा से ज़्यादा # फ़ाइल अटैच करें।} other {ज़्यादा से ज़्यादा # फ़ाइलें अटैच करें।}}",
+  "fileTooBig": "{name} {size} से बड़ी है।",
+  "subjectRequired": "टिकट का एक छोटा-सा विषय लिखें।",
+  "topicRequired": "एक श्रेणी चुनें।",
+  "detailsRequired": "बताएं कि क्या हुआ।",
+  "ticketNotFound": "टिकट नहीं मिला।",
+  "invalidUpdate": "स्थिति, रेटिंग या “नहीं पढ़ा गया” फ़्लैग भेजें।"
+}

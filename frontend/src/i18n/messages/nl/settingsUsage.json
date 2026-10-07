@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, =0 {Geen tokens} one {{amount} token} other {{amount} tokens}}",
+  "resets": "Limieten worden elke week vernieuwd. Volgende vernieuwing: {date}.",
+  "thisWeek": "Deze week",
+  "tiers": {
+    "standard": {
+      "title": "Standaardmodellen",
+      "description": "Inbegrepen in je abonnement. Is het op, wacht dan tot de wekelijkse vernieuwing."
+    },
+    "frontier": {
+      "title": "Krachtigste modellen",
+      "description": "Claude Opus, GPT Astra en andere zeer krachtige modellen. Daarna worden je extra tokens gebruikt."
+    }
+  },
+  "used": "{count, plural, one {{used} van {limit} token} other {{used} van {limit} tokens}}",
+  "usedLabel": "{tier}: {percent} van de tokens van deze week gebruikt",
+  "frontierThisWeek": "Krachtigste modellen deze week",
+  "topUp": {
+    "title": "Extra tokens voor de krachtigste modellen",
+    "description": "Worden gebruikt zodra je weektegoed voor de krachtigste modellen op is. Ze vervallen niet en zijn niet te gebruiken voor standaardmodellen.",
+    "balance": "{count, plural, one {<big>{amount} token</big> over} other {<big>{amount} tokens</big> over}}",
+    "buyMore": "Meer kopen",
+    "buy": "Tokens kopen",
+    "failed": "Kan de aankoop niet starten"
+  }
+}

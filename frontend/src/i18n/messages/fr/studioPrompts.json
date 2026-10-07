@@ -1,0 +1,62 @@
+{
+  "intro": "Les instructions qui guident votre assistant dans chacun de ses rôles. Des compétences prêtes à l’emploi depuis le catalogue, ou les vôtres depuis votre dépôt.",
+  "role": "Rôle",
+  "skills": "Compétences",
+  "search": {
+    "placeholder": "Rechercher par nom…",
+    "label": "Rechercher des prompts par nom"
+  },
+  "loadFailed": "Impossible de charger les prompts",
+  "empty": {
+    "title": "Aucun prompt pour l’instant",
+    "description": "Créez un prompt pour un rôle, puis ajoutez-y des compétences pour l’enrichir."
+  },
+  "noMatches": {
+    "title": "Aucun résultat",
+    "description": "Essayez un autre nom ou un autre rôle."
+  },
+  "copyName": "{name} (copie)",
+  "delete": {
+    "title": "Supprimer « {name} » ?",
+    "description": "Si un rôle l’utilise, ce rôle reprend son prompt intégré par défaut."
+  },
+  "filter": {
+    "label": "Filtrer par rôle",
+    "all": "Tous",
+    "allHelp": "Tous les prompts, quel que soit leur rôle."
+  },
+  "table": {
+    "number": "N°",
+    "updated": "Mis à jour",
+    "inUse": "Utilisé",
+    "deleteNamed": "Supprimer {name}"
+  },
+  "menu": {
+    "edit": "Modifier…",
+    "stopUsing": "Ne plus utiliser",
+    "useFor": "Utiliser pour {role}",
+    "duplicate": "Dupliquer…",
+    "delete": "Supprimer…"
+  },
+  "editor": {
+    "editTitle": "Modifier le prompt",
+    "newTitle": "Nouveau prompt",
+    "description": "Les instructions que l’assistant suit dans le rôle choisi, ainsi que ses éventuelles compétences.",
+    "namePlaceholder": "Version IA",
+    "instructions": "Instructions",
+    "instructionsPlaceholder": "Expliquez à l’assistant comment se comporter dans ce rôle. Le Markdown est accepté.",
+    "noSkills": "Aucune compétence installée pour l’instant. Ajoutez-en avec le bouton Compétences.",
+    "saveFailed": "Impossible d’enregistrer. Continuez à écrire pour réessayer.",
+    "savesAutomatically": "Les modifications sont enregistrées automatiquement",
+    "done": "Terminé"
+  },
+  "toasts": {
+    "deleted": "« {name} » supprimé",
+    "deleteFailed": "Impossible de supprimer le prompt",
+    "inUse": "{role} utilise désormais « {name} »",
+    "backToDefault": "{role} utilise de nouveau son prompt intégré",
+    "changeFailed": "Impossible de changer le prompt",
+    "created": "« {name} » créé",
+    "createFailed": "Impossible de créer le prompt"
+  }
+}

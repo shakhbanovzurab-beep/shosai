@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "Cài đặt",
+    "sectionsLabel": "Các mục cài đặt",
+    "autosave": "Thay đổi được lưu tự động."
+  },
+  "sections": {
+    "account": "Tài khoản",
+    "privacy": "Quyền riêng tư",
+    "billing": "Thanh toán",
+    "usage": "Mức sử dụng",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "Bộ nhớ",
+    "connectors": "Trình kết nối",
+    "hotkeys": "Phím tắt"
+  },
+  "loadFailed": "Không thể tải mục này",
+  "manage": "Quản lý",
+  "saving": "Đang lưu…",
+  "saveFailed": "Không thể lưu",
+  "profile": {
+    "title": "Hồ sơ",
+    "email": "Email",
+    "emailHint": "Bạn đăng nhập bằng địa chỉ này qua nhà cung cấp của mình.",
+    "fullName": "Họ và tên",
+    "displayName": "Leo nên gọi bạn là gì?",
+    "displayNameHint": "Dùng khi Leo chào bạn và trong các câu trả lời.",
+    "workRole": "Điều gì mô tả đúng nhất công việc của bạn?",
+    "workRoleHint": "Leo dùng thông tin này để chọn ví dụ và thuật ngữ sát với lĩnh vực của bạn."
+  },
+  "workRoles": {
+    "product_management": "Quản lý sản phẩm",
+    "engineering": "Kỹ thuật",
+    "human_resources": "Nhân sự",
+    "finance": "Tài chính",
+    "marketing": "Tiếp thị",
+    "sales": "Kinh doanh",
+    "operations": "Vận hành",
+    "data_science": "Khoa học dữ liệu",
+    "design": "Thiết kế",
+    "legal": "Pháp lý",
+    "scientist": "Nhà khoa học",
+    "student": "Sinh viên",
+    "founder": "Nhà sáng lập",
+    "healthcare": "Y tế",
+    "writer": "Người viết",
+    "educator": "Nhà giáo dục",
+    "consultant": "Tư vấn viên",
+    "researcher": "Nhà nghiên cứu",
+    "software_engineer": "Kỹ sư phần mềm",
+    "other": "Khác"
+  },
+  "avatar": {
+    "change": "Đổi ảnh hồ sơ",
+    "hint": "Bạn có thể dùng ảnh bất kỳ. Ảnh sẽ được tự động cắt vuông và đổi kích thước.",
+    "upload": "Tải ảnh lên",
+    "updateFailed": "Không thể cập nhật ảnh của bạn",
+    "removeFailed": "Không thể gỡ ảnh của bạn",
+    "tooLarge": "Hãy chọn ảnh nhỏ hơn {size}.",
+    "unreadable": "Trình duyệt này không đọc được ảnh đó. Hãy thử ảnh JPEG hoặc PNG.",
+    "processFailed": "Không thể xử lý ảnh."
+  },
+  "deleteAccount": {
+    "group": "Vùng nguy hiểm",
+    "title": "Xóa tài khoản",
+    "description": "Xóa vĩnh viễn tài khoản của bạn cùng mọi thứ trong đó: cuộc trò chuyện, ghi chú, tệp, câu lệnh và cài đặt.",
+    "confirmTitle": "Xóa tài khoản của bạn?",
+    "confirmDescription": "Không thể hoàn tác thao tác này. Cuộc trò chuyện, ghi chú, tệp, câu lệnh, bộ nhớ và cài đặt của bạn sẽ bị xóa, mọi gói đăng ký cũng sẽ bị hủy.",
+    "confirmLabel": "Nhập <address>{email}</address> để xác nhận",
+    "deleted": "Đã xóa tài khoản của bạn",
+    "failed": "Không thể xóa tài khoản của bạn"
+  }
+}

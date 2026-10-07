@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "每位使用者 {amount}",
+    "from": "{amount} 起",
+    "unlimited": "無限制"
+  },
+  "highlights": {
+    "unlimitedMeetings": "無限制會議",
+    "meetingMinutes": "每月 {minutes, plural, other {# 分鐘會議時間}}",
+    "noMeetings": "會議",
+    "fileManager": "檔案管理 · {storage}",
+    "noFileManager": "檔案管理",
+    "knowledge": "Leo 知識庫 · {storage}",
+    "noKnowledge": "Leo 知識庫"
+  },
+  "capabilities": {
+    "shared_workspace": "共用的團隊工作空間",
+    "member_management": "使用者管理",
+    "centralized_billing": "集中管理帳單",
+    "billing_and_users": "集中管理帳單和使用者",
+    "admin_controls": "企業級安全性與管理控制項",
+    "sso": "單一登入 (SSO)",
+    "priority_support": "優先支援",
+    "usage_analytics": "用量分析"
+  },
+  "compare": {
+    "title": "比較方案",
+    "feature": "功能",
+    "included": "包含",
+    "notIncluded": "不包含",
+    "unlimited": "無限制",
+    "minutes": "每月 {minutes, plural, other {# 分鐘}}",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "自訂",
+    "rows": {
+      "meetings": "會議",
+      "fileManager": "檔案管理",
+      "knowledge": "Leo 知識庫",
+      "apps": "Leo、郵件、行事曆、看板、筆記",
+      "users": "使用者",
+      "sharedWorkspace": "共用工作空間",
+      "billingAndUsers": "集中管理帳單和使用者",
+      "sso": "單一登入 (SSO)",
+      "adminControls": "安全性與管理控制項",
+      "prioritySupport": "優先支援",
+      "usageAnalytics": "用量分析"
+    }
+  }
+}

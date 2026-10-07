@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "Verimlilik",
+    "hub": "Merkezler",
+    "email": "E-posta",
+    "meetings": "Toplantılar",
+    "calendar": "Takvim",
+    "kanban": "Kanban",
+    "notes": "Notlar",
+    "fileManager": "Dosya yöneticisi",
+    "studio": "Studio",
+    "knowledge": "Bilgi bankası",
+    "downloadApp": "Uygulamayı indir",
+    "appGroup": "Uygulama",
+    "workspacesGroup": "Çalışma alanları"
+  },
+  "workspaceNav": {
+    "home": "Ana sayfa",
+    "projects": "Projeler",
+    "tasks": "Görevler",
+    "meetings": "Toplantılar",
+    "decisions": "Kararlar",
+    "knowledge": "Bilgi bankası",
+    "group": "Çalışma alanı",
+    "members": "Üyeler",
+    "settings": "Ayarlar"
+  },
+  "badge": {
+    "new": "Yeni",
+    "soon": "Yakında"
+  },
+  "search": {
+    "label": "Ara",
+    "placeholder": "Ne arıyorsunuz?",
+    "noResults": "Sonuç bulunamadı.",
+    "pagesGroup": "Sayfalar"
+  },
+  "userMenu": {
+    "settings": "Ayarlar",
+    "language": "Dil",
+    "upgrade": "Planı yükselt",
+    "support": "Destek",
+    "logOut": "Çıkış yap"
+  },
+  "sidebar": {
+    "open": "Kenar çubuğunu aç",
+    "close": "Kenar çubuğunu kapat"
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "description": "앱을 연결하면 Leo가 앱 안에서 검색하고 작업을 처리할 수 있어요. 각 앱은 자체 페이지에서 OAuth 2.0으로 로그인하므로 Leo는 비밀번호를 볼 수 없어요.",
+  "columns": {
+    "connector": "커넥터",
+    "type": "유형",
+    "status": "상태"
+  },
+  "categories": {
+    "mail": "메일",
+    "files": "파일",
+    "notes": "노트",
+    "communication": "커뮤니케이션",
+    "tasks": "작업",
+    "crm": "고객 관리"
+  },
+  "connect": "연결",
+  "connecting": "연결 중…",
+  "connected": "연결됨",
+  "options": "{name} 옵션, 연결됨",
+  "disconnect": "연결 해제",
+  "toasts": {
+    "connected": "{name}을(를) 연결했어요",
+    "notConnected": "{name}이(가) 연결되지 않았어요",
+    "connectFailed": "{name}을(를) 연결하지 못했어요",
+    "disconnected": "{name} 연결을 해제했어요",
+    "disconnectFailed": "{name} 연결을 해제하지 못했어요"
+  },
+  "callback": {
+    "metaTitle": "연결 중…",
+    "connected": {
+      "title": "연결됨",
+      "body": "이 창을 닫고 대시보드로 돌아가도 돼요."
+    },
+    "denied": {
+      "title": "접근이 허용되지 않았어요",
+      "body": "아무것도 연결되지 않았어요. 이 창을 닫아도 돼요."
+    },
+    "error": {
+      "title": "연결하지 못했어요",
+      "body": "연결하는 중에 문제가 생겼어요. 설정에서 다시 시도해 주세요."
+    },
+    "back": "대시보드로 돌아가기"
+  },
+  "consent": {
+    "metaTitle": "데모 인증",
+    "badge": "데모 · 실제 계정은 사용하지 않아요",
+    "title": "{app}을(를) Leo에 연결할까요?",
+    "titleUnknown": "이 앱을 Leo에 연결할까요?",
+    "body": "실제 서비스에서는 이 단계에 {app}의 동의 화면이 표시돼요. 승인하면 Leo가 {app} 계정에서 대신 정보를 읽고 작업할 수 있어요.",
+    "bodyUnknown": "실제 서비스에서는 이 단계에 서비스 제공업체의 동의 화면이 표시돼요. 승인하면 Leo가 계정에서 대신 정보를 읽고 작업할 수 있어요.",
+    "disconnectHint": "언제든지 설정 › 커넥터에서 연결을 해제할 수 있어요.",
+    "allow": "허용"
+  }
+}

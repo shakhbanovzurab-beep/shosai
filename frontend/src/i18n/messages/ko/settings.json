@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "설정",
+    "sectionsLabel": "설정 섹션",
+    "autosave": "변경 사항은 자동으로 저장돼요."
+  },
+  "sections": {
+    "account": "계정",
+    "privacy": "개인정보 보호",
+    "billing": "결제",
+    "usage": "사용량",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "메모리",
+    "connectors": "커넥터",
+    "hotkeys": "단축키"
+  },
+  "loadFailed": "이 섹션을 불러오지 못했어요",
+  "manage": "관리",
+  "saving": "저장 중…",
+  "saveFailed": "저장하지 못했어요",
+  "profile": {
+    "title": "프로필",
+    "email": "이메일",
+    "emailHint": "이 주소로 로그인 서비스를 통해 로그인해요.",
+    "fullName": "이름",
+    "displayName": "Leo가 뭐라고 부르면 될까요?",
+    "displayNameHint": "Leo가 인사하거나 답변할 때 사용해요.",
+    "workRole": "어떤 일을 하시나요?",
+    "workRoleHint": "Leo가 하시는 분야에 맞는 예시와 용어를 사용해요."
+  },
+  "workRoles": {
+    "product_management": "제품 관리",
+    "engineering": "엔지니어링",
+    "human_resources": "인사",
+    "finance": "재무",
+    "marketing": "마케팅",
+    "sales": "영업",
+    "operations": "운영",
+    "data_science": "데이터 과학",
+    "design": "디자인",
+    "legal": "법무",
+    "scientist": "과학자",
+    "student": "학생",
+    "founder": "창업자",
+    "healthcare": "의료",
+    "writer": "작가",
+    "educator": "교육자",
+    "consultant": "컨설턴트",
+    "researcher": "연구원",
+    "software_engineer": "소프트웨어 엔지니어",
+    "other": "기타"
+  },
+  "avatar": {
+    "change": "프로필 사진 변경",
+    "hint": "어떤 이미지든 괜찮아요. 정사각형으로 잘라 크기를 자동으로 맞춰요.",
+    "upload": "사진 업로드",
+    "updateFailed": "사진을 변경하지 못했어요",
+    "removeFailed": "사진을 제거하지 못했어요",
+    "tooLarge": "{size} 이하의 사진을 선택해 주세요.",
+    "unreadable": "이 브라우저에서 이미지를 읽을 수 없어요. JPEG나 PNG를 사용해 보세요.",
+    "processFailed": "이미지를 처리하지 못했어요."
+  },
+  "deleteAccount": {
+    "group": "위험 구역",
+    "title": "계정 삭제",
+    "description": "계정과 그 안의 모든 데이터(채팅, 노트, 파일, 프롬프트, 설정)를 영구적으로 삭제해요.",
+    "confirmTitle": "계정을 삭제할까요?",
+    "confirmDescription": "되돌릴 수 없어요. 채팅, 노트, 파일, 프롬프트, 메모리, 설정이 삭제되고 구독도 모두 해지돼요.",
+    "confirmLabel": "확인하려면 <address>{email}</address>을(를) 입력해 주세요",
+    "deleted": "계정을 삭제했어요",
+    "failed": "계정을 삭제하지 못했어요"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Mit Leo chatten",
+    "close": "Chat mit Leo schließen",
+    "tooltipOpen": "Leo fragen",
+    "tooltipClose": "Leo schließen"
+  },
+  "panel": {
+    "label": "Chat mit Leo",
+    "subtitle": "KI-Agent",
+    "working": "Arbeitet…",
+    "newChat": "Neuer Chat",
+    "fullScreen": "Vollbild",
+    "exitFullScreen": "Vollbild beenden",
+    "close": "Schließen",
+    "dropFiles": "Lege Dateien hier ab, um sie anzuhängen"
+  },
+  "place": {
+    "personal": "Persönlich",
+    "workspace": "Im Workspace {name}",
+    "hub": "Im Hub „{name}“",
+    "scopePersonal": "Ich arbeite mit deinen E-Mails, deinem Kalender, deinen Notizen, Aufgaben und den Dateien, die du für mich ausgewählt hast – und mit allem, was deine Workspaces mit dir teilen. Diesen Chat siehst nur du.",
+    "scopeWorkspace": "Ich antworte nur anhand dessen, was {name} mit dir teilt: Meetings, Entscheidungen, Projekte und Wissen. Dieser Chat bleibt in {name}.",
+    "scopeHub": "Ich antworte nur mit Inhalten aus „{name}“: Meetings, Entscheidungen und Materialien. Dieser Chat bleibt hier.",
+    "boundHub": "Ich antworte nur zu „{name}“"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {Guten Abend} morning {Guten Morgen} afternoon {Guten Tag} other {Guten Abend}}",
+    "hi": "Hallo",
+    "intro": "{greeting}, ich bin Leo",
+    "howCanIHelp": "Wie kann ich dir heute helfen?",
+    "suggestionsLabel": "Vorschläge"
+  },
+  "suggestions": {
+    "default": {
+      "first": "Plane meinen Tag",
+      "second": "Fasse zusammen, worum ich mich kümmern muss",
+      "third": "Wobei kannst du mir helfen?"
+    },
+    "hub": {
+      "first": "Woran hakt es hier?",
+      "second": "Was hat sich beim letzten Meeting geändert?",
+      "third": "Bereite mich auf das nächste Meeting vor"
+    },
+    "workspace": {
+      "first": "Was haben wir zur Preisgestaltung entschieden?",
+      "second": "Was ist hier bei mir überfällig?",
+      "third": "Finde unsere Sicherheitsrichtlinie"
+    },
+    "productivity": {
+      "first": "Plane meinen Tag",
+      "second": "Worauf soll ich mich zuerst konzentrieren?",
+      "third": "Fasse meine Woche zusammen"
+    },
+    "mail": {
+      "first": "Fasse meinen Posteingang zusammen",
+      "second": "Entwirf eine höfliche Nachfrage",
+      "third": "Welche E-Mails sind dringend?"
+    },
+    "calendar": {
+      "first": "Was steht heute in meinem Kalender?",
+      "second": "Finde diese Woche eine freie Stunde",
+      "third": "Bereite mich auf mein nächstes Meeting vor"
+    },
+    "kanban": {
+      "first": "Welche Aufgaben sind überfällig?",
+      "second": "Fasse dieses Board zusammen",
+      "third": "Was sollte ich als Nächstes verschieben?"
+    },
+    "meetings": {
+      "first": "Welche Meetings habe ich heute?",
+      "second": "Plane einen Call mit dem Team",
+      "third": "Bereite mich auf meinen nächsten Call vor"
+    },
+    "notes": {
+      "first": "Fasse mein letztes Meeting zusammen",
+      "second": "Liste meine To-dos auf",
+      "third": "Was haben wir diese Woche entschieden?"
+    },
+    "fileManager": {
+      "first": "Finde meine neuesten Dateien",
+      "second": "Was belegt den meisten Speicherplatz?",
+      "third": "Räume meine Dateien auf"
+    },
+    "studio": {
+      "first": "Schreibe eine Systemnachricht",
+      "second": "Vergleiche die verfügbaren Modelle",
+      "third": "Verbessere diesen Prompt"
+    }
+  },
+  "composer": {
+    "placeholder": "Frag Leo etwas",
+    "label": "Nachricht an Leo",
+    "attach": "Dateien anhängen",
+    "attachLimit": "Bis zu {max, plural, one {# Datei} other {# Dateien}} anhängen",
+    "filesToSend": "Zu sendende Dateien",
+    "removeFile": "{name} entfernen",
+    "disclaimer": "Leo kann Fehler machen. Prüfe wichtige Infos.",
+    "stop": "Leo stoppen",
+    "send": "Nachricht senden",
+    "startVoice": "Sprachmodus starten",
+    "voiceMode": "Sprachmodus"
+  },
+  "message": {
+    "copy": "Kopieren",
+    "copied": "Kopiert",
+    "copyFailed": "Text konnte nicht in die Zwischenablage kopiert werden",
+    "regenerate": "Neu generieren",
+    "tryAgain": "Erneut versuchen",
+    "replyFailed": "Leo konnte die Antwort nicht fertigstellen. Prüfe deine Verbindung und versuche es erneut.",
+    "edit": "Bearbeiten",
+    "editMessage": "Nachricht bearbeiten",
+    "attachedFiles": "Angehängte Dateien"
+  },
+  "steps": {
+    "gettingStarted": "Legt los",
+    "doneIn": "Fertig nach {duration}",
+    "stoppedAfter": "Gestoppt nach {duration}",
+    "somethingWrong": "Etwas ist schiefgelaufen",
+    "label": "Aktionen von Leo",
+    "needsApproval": "Bestätigung erforderlich",
+    "detail": "„{detail}“",
+    "status": "{status, select, running {Läuft} done {Fertig} error {Fehler} stopped {Gestoppt} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} ist zu groß",
+    "sizeLimit": "Dateien dürfen höchstens {size} groß sein.",
+    "tooMany": "Du kannst bis zu {max, plural, one {# Datei} other {# Dateien}} anhängen."
+  },
+  "voice": {
+    "unavailable": "Sprachmodus ist nicht verfügbar",
+    "listening": "Hört zu…",
+    "thinking": "Leo denkt nach…",
+    "speaking": "Leo spricht…",
+    "micOff": "Mikrofon ist aus",
+    "turnMicOn": "Mikrofon einschalten",
+    "turnMicOff": "Mikrofon ausschalten",
+    "end": "Sprachmodus beenden",
+    "micBlocked": "Mikrofonzugriff ist blockiert",
+    "micBlockedHint": "Erlaube den Mikrofonzugriff, um mit Leo zu sprechen.",
+    "needsHttps": "Der Sprachmodus braucht eine sichere Verbindung (HTTPS), um das Mikrofon zu nutzen.",
+    "unsupported": "Dieser Browser unterstützt den Sprachmodus nicht. Probiere die neueste Version von Chrome, Edge oder Safari."
+  }
+}

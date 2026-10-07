@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "生産性",
+    "description": "今日のタスク、プロジェクト、集中タイマー、カレンダー、最近のノートに加え、1 年間の完了した作業をひと目で確認できます。"
+  },
+  "greeting": "{period, select, morning {おはようございます、{name} さん。} afternoon {こんにちは、{name} さん。} other {こんばんは、{name} さん。}}",
+  "greetingAnyTime": "こんにちは、{name} さん。",
+  "sidePanel": "カレンダー、集中、ノート",
+  "tasks": {
+    "heading": "今日",
+    "progress": "{total, number} 件中 {done, number} 件完了",
+    "newTask": "新しいタスク",
+    "addTask": "タスクを追加"
+  },
+  "projects": {
+    "heading": "プロジェクト",
+    "status": {
+      "inProgress": "進行中",
+      "planning": "計画中"
+    },
+    "progressOf": "{project} の進捗",
+    "due": "期限 {date}"
+  },
+  "notes": {
+    "heading": "最近のノート",
+    "viewAll": "すべて表示",
+    "today": "今日",
+    "yesterday": "昨日",
+    "empty": "ノートはまだありません",
+    "emptyHint": "会議のノートがここに表示されます。"
+  }
+}

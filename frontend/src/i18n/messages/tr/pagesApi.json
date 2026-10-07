@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Mesajı multipart/form-data olarak gönderin.",
+  "emptyMessage": "Bir mesaj yazın veya dosya ekleyin.",
+  "messageTooLong": "Mesaj en fazla {max, number} karakter olabilir.",
+  "tooManyFiles": "{max, plural, one {En fazla # dosya ekleyin.} other {En fazla # dosya ekleyin.}}",
+  "fileTooBig": "{name}, {size} sınırından büyük.",
+  "subjectRequired": "Talebe kısa bir konu yazın.",
+  "topicRequired": "Bir kategori seçin.",
+  "detailsRequired": "Ne olduğunu anlatın.",
+  "ticketNotFound": "Destek talebi bulunamadı.",
+  "invalidUpdate": "Bir durum, puan veya okunmadı işareti gönderin."
+}

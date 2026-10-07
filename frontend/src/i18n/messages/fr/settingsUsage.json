@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, one {{amount} jeton} many {{amount} de jetons} other {{amount} jetons}}",
+  "resets": "Les limites sont réinitialisées chaque semaine. Prochaine réinitialisation : {date}.",
+  "thisWeek": "Cette semaine",
+  "tiers": {
+    "standard": {
+      "title": "Modèles standard",
+      "description": "Inclus dans votre forfait. Une fois le quota épuisé, attendez la réinitialisation hebdomadaire."
+    },
+    "frontier": {
+      "title": "Modèles de pointe",
+      "description": "Claude Opus, GPT Astra et d’autres modèles haut de gamme. Au-delà, vos jetons supplémentaires sont utilisés."
+    }
+  },
+  "used": "{count, plural, one {{used} sur {limit} jeton} many {{used} sur {limit} de jetons} other {{used} sur {limit} jetons}}",
+  "usedLabel": "{tier} : {percent} des jetons de la semaine utilisés",
+  "frontierThisWeek": "Modèles de pointe cette semaine",
+  "topUp": {
+    "title": "Jetons supplémentaires pour les modèles de pointe",
+    "description": "Utilisés une fois le quota hebdomadaire des modèles de pointe épuisé. Ils ne sont pas réinitialisés et ne peuvent pas servir pour les modèles standard.",
+    "balance": "{count, plural, one {<big>{amount} jeton</big> restant} many {<big>{amount} de jetons</big> restants} other {<big>{amount} jetons</big> restants}}",
+    "buyMore": "En acheter plus",
+    "buy": "Acheter des jetons",
+    "failed": "Impossible de lancer l’achat"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "title": "Configurações",
+  "description": "Como {workspace} funciona para todos os membros. As alterações são salvas na hora.",
+  "adminsOnly": "Só administradores podem alterar as configurações do espaço de trabalho.",
+  "adminsOnlyAsk": "Só administradores podem alterar as configurações do espaço de trabalho. Peça a {name}.",
+  "general": {
+    "title": "Geral",
+    "name": "Nome do espaço de trabalho",
+    "nameHint": "Aparece no seletor e nos convites.",
+    "renamed": "Espaço de trabalho renomeado",
+    "join": "Entrar com e-mail corporativo",
+    "joinHint": "Permita que colegas entrem sem convite quando o e-mail deles for do seu domínio.",
+    "joinOn": "Qualquer pessoa com e-mail @{domain} pode entrar como membro enquanto houver licenças disponíveis.",
+    "domain": "Domínio de e-mail",
+    "joinEnabled": "Agora pessoas de {domain} podem entrar",
+    "joinDisabled": "Entrada por domínio de e-mail desativada"
+  },
+  "sharing": {
+    "title": "Compartilhamento",
+    "description": "Reuniões com pessoas de fora de {workspace} nunca são compartilhadas automaticamente. Os organizadores sempre podem alterar quem vê uma reunião.",
+    "reviewTitle": "Confirme como as reuniões são compartilhadas",
+    "reviewHint": "Estas são as regras recomendadas. Altere o que quiser ou mantenha como estão.",
+    "keep": "Manter estas regras",
+    "confirmed": "Regras de compartilhamento confirmadas",
+    "defaultLevel": "Depois de uma reunião, compartilhar as notas com",
+    "defaultLevelHint": "Para reuniões em que todos estão em {workspace}.",
+    "levels": {
+      "private": "Só o organizador",
+      "participants": "Participantes (recomendado)",
+      "workspace": "Todos em {workspace}"
+    },
+    "levelChanged": "Novas reuniões vão para: {level}",
+    "transcripts": "Incluir transcrições",
+    "transcriptsHint": "Desativado: as pessoas veem o resumo, as decisões e as tarefas, mas não a transcrição completa.",
+    "transcriptsOn": "As transcrições também são compartilhadas",
+    "transcriptsOff": "Só os resumos são compartilhados",
+    "membersInvite": "Membros podem convidar pessoas",
+    "membersInviteHint": "Desativado: só administradores podem convidar.",
+    "membersInviteOn": "Membros podem convidar pessoas",
+    "membersInviteOff": "Agora só administradores podem convidar"
+  },
+  "plan": {
+    "title": "Plano e uso",
+    "description": "Cobrado do espaço de trabalho, separado do plano pessoal de cada um.",
+    "name": "Plano {plan}",
+    "seats": "{taken, number} de {total, number} licenças",
+    "price": "{perSeat} por licença ao mês · {total} no total · renova em {renews}",
+    "change": "Alterar licenças ou plano",
+    "ownerOnly": "Só o proprietário gerencia o faturamento.",
+    "usageFailed": "Não foi possível carregar o uso.",
+    "usageIn": "Uso em {month}",
+    "idle": "{count, plural, one {# membro inativo há {days, number}+ dias: uma licença que você pode reaproveitar.} many {# de membros inativos há {days, number}+ dias: licenças que você pode reaproveitar.} other {# membros inativos há {days, number}+ dias: licenças que você pode reaproveitar.}}",
+    "member": "Membro",
+    "meetings": "Reuniões",
+    "minutes": "Minutos",
+    "lastActive": "Última atividade",
+    "inactive": "Inativo"
+  },
+  "danger": {
+    "delete": "Excluir espaço de trabalho",
+    "deleteHint": "Remove o espaço de trabalho para todos e encerra a cobrança.",
+    "deleteTitle": "Excluir {name}?",
+    "deleteDescription": "Todos perdem os projetos, tarefas, decisões e uploads dele. As gravações e os arquivos que as pessoas compartilharam continuam delas, nas próprias Notas e no Gerenciador de arquivos. Não é possível desfazer.",
+    "leave": "Sair do espaço de trabalho",
+    "leaveHint": "Você pode ser convidado de novo depois; sua licença é liberada.",
+    "leaveTitle": "Sair de {name}?",
+    "leaveDescription": "As reuniões e arquivos que você compartilhou saem com você e continuam nas suas Notas e no seu Gerenciador de arquivos. Os arquivos que você transferiu para o espaço de trabalho ficam aqui. As tarefas ficam com a equipe; as suas que estão abertas ficam sem responsável.",
+    "leaveConfirm": "Sair"
+  }
+}

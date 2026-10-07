@@ -1,0 +1,49 @@
+{
+  "nav": {
+    "productivity": "生産性",
+    "hub": "ハブ",
+    "email": "メール",
+    "meetings": "会議",
+    "calendar": "カレンダー",
+    "kanban": "かんばん",
+    "notes": "ノート",
+    "fileManager": "ファイル管理",
+    "studio": "Studio",
+    "knowledge": "ナレッジ",
+    "downloadApp": "アプリをダウンロード",
+    "appGroup": "アプリ",
+    "workspacesGroup": "ワークスペース"
+  },
+  "workspaceNav": {
+    "home": "ホーム",
+    "projects": "プロジェクト",
+    "tasks": "タスク",
+    "meetings": "会議",
+    "decisions": "決定事項",
+    "knowledge": "ナレッジ",
+    "group": "ワークスペース",
+    "members": "メンバー",
+    "settings": "設定"
+  },
+  "badge": {
+    "new": "新機能",
+    "soon": "近日公開"
+  },
+  "search": {
+    "label": "検索",
+    "placeholder": "何をお探しですか？",
+    "noResults": "結果が見つかりませんでした。",
+    "pagesGroup": "ページ"
+  },
+  "userMenu": {
+    "settings": "設定",
+    "language": "言語",
+    "upgrade": "プランをアップグレード",
+    "support": "サポート",
+    "logOut": "ログアウト"
+  },
+  "sidebar": {
+    "open": "サイドバーを開く",
+    "close": "サイドバーを閉じる"
+  }
+}

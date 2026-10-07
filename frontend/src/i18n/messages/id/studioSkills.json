@@ -1,0 +1,53 @@
+{
+  "title": "Skill",
+  "tabs": {
+    "readyMade": "Siap pakai",
+    "repository": "Repositori Anda",
+    "mine": "Milik saya ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Cari skill: system design, code review…",
+    "label": "Cari skill",
+    "help": "Cari di katalog skills.sh",
+    "noMatches": "Tidak ada skill yang cocok. Coba kata lain.",
+    "emptyTitle": "Katalog skill siap pakai",
+    "emptyDescription": "Mulai mengetik. Skill adalah instruksi siap pakai yang dapat Anda lampirkan ke prompt.",
+    "searchFailed": "Tidak dapat mencari di skills.sh. Coba lagi."
+  },
+  "repository": {
+    "label": "Repositori GitHub",
+    "placeholder": "owner/repo atau tautan GitHub",
+    "find": "Cari skill",
+    "help": "Repositori publik yang berisi file SKILL.md",
+    "emptyTitle": "Skill Anda sendiri dari GitHub",
+    "emptyDescription": "Masukkan repositori publik untuk menemukan file SKILL.md di dalamnya.",
+    "scanFailed": "Tidak dapat membaca repositori."
+  },
+  "candidate": {
+    "installs": "{count, plural, other {# pemasangan}}",
+    "installed": "Terpasang"
+  },
+  "mine": {
+    "extraFiles": "Disertai skrip atau file lain — hanya instruksi di SKILL.md yang dipakai.",
+    "update": "Perbarui {name}",
+    "updateHint": "Perbarui ke commit terbaru",
+    "remove": "Hapus {name}",
+    "emptyTitle": "Belum ada skill",
+    "emptyDescription": "Tambahkan dari Siap pakai atau dari repositori Anda."
+  },
+  "remove": {
+    "title": "Hapus {name}?",
+    "titleUnnamed": "Hapus skill ini?",
+    "description": "Skill ini akan dilepas dari setiap prompt yang memakainya. Anda dapat menambahkannya lagi nanti."
+  },
+  "toasts": {
+    "installed": "{name} terpasang",
+    "installedHint": "Lampirkan ke prompt dari editor prompt.",
+    "installFailed": "Tidak dapat memasang skill",
+    "upToDate": "{name} sudah versi terbaru",
+    "updated": "{name} diperbarui",
+    "updateFailed": "Tidak dapat memperbarui skill",
+    "removed": "{name} dihapus",
+    "removeFailed": "Tidak dapat menghapus skill"
+  }
+}

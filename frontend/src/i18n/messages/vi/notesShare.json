@@ -1,0 +1,54 @@
+{
+  "panel": {
+    "loadFailed": "Không thể tải liên kết.",
+    "anyone": "Bất kỳ ai có liên kết",
+    "anyoneHint": "Người ngoài cuộc họp có thể mở ghi chú của cuộc họp này.",
+    "linkLabel": "Liên kết đến ghi chú",
+    "toggles": {
+      "showTranscript": {
+        "label": "Hiện bản chép lời",
+        "description": "Nguyên văn lời của người tham gia."
+      },
+      "showNames": {
+        "label": "Hiện tên người tham gia",
+        "description": "Nếu tắt, bản chép lời sẽ ghi “{first}”, “{second}”."
+      },
+      "allowComments": {
+        "label": "Cho phép bình luận",
+        "description": "Bất kỳ ai có liên kết đều có thể trả lời."
+      }
+    },
+    "expires": "Hết hạn",
+    "never": "Không bao giờ",
+    "days": "{count, plural, other {# ngày}}",
+    "stopsOn": "Liên kết sẽ ngừng hoạt động vào {date}.",
+    "keepsWorking": "Liên kết sẽ tiếp tục hoạt động.",
+    "updateFailed": "Không thể cập nhật liên kết",
+    "turnedOff": "Đã tắt liên kết",
+    "turnOffFailed": "Không thể tắt liên kết"
+  },
+  "page": {
+    "unavailable": "Liên kết không khả dụng",
+    "eyebrow": "Ghi chú cuộc họp được chia sẻ",
+    "people": "{count, plural, other {# người}}",
+    "transcript": "Bản chép lời",
+    "done": "Hoàn thành",
+    "open": "Chưa xong",
+    "speaker": "Người nói {order, number}"
+  },
+  "gone": {
+    "title": "Liên kết này không còn hoạt động",
+    "description": "Liên kết có thể đã hết hạn hoặc đã bị tắt. Hãy nhờ người gửi cung cấp liên kết mới."
+  },
+  "comments": {
+    "title": "Bình luận",
+    "loadFailed": "Không thể tải bình luận.",
+    "comment": "Bình luận của bạn",
+    "commentPlaceholder": "Viết câu trả lời…",
+    "name": "Tên của bạn",
+    "namePlaceholder": "Không bắt buộc, nếu bỏ trống sẽ hiển thị là “{guest}”",
+    "guest": "Khách",
+    "post": "Đăng bình luận",
+    "postFailed": "Không thể đăng bình luận của bạn"
+  }
+}

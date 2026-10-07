@@ -1,0 +1,65 @@
+{
+  "unresolved": {
+    "title": "尚未解決的事項",
+    "empty": "沒有懸而未決的事項，全部都已結案",
+    "more": "{count, plural, other {另有 # 項較不緊急的事項未在此顯示}}",
+    "why": "為什麼？",
+    "done": "完成",
+    "dismiss": "不適用",
+    "assign": "指派",
+    "abandon": "已放棄",
+    "rowLabel": "{subject} — 詳細資料",
+    "doneToast": "已標示為完成",
+    "dismissToast": "{days, plural, other {已略過 # 天}}",
+    "abandonToast": "已標示為放棄",
+    "assignedToast": "已指派給 {owner}",
+    "assignTitle": "由誰負責？",
+    "assignLabel": "負責人",
+    "assignPlaceholder": "姓名",
+    "loadError": "無法載入尚未解決的事項"
+  },
+  "digest": {
+    "title": "自上次會議以來",
+    "meeting": "{title}，{date}",
+    "opened": "新增",
+    "closed": "已結案",
+    "untouched": "未討論",
+    "untouchedHint": "卡住了整個中樞，會議中卻沒有人提到",
+    "loadError": "無法載入上次會議的摘要"
+  },
+  "feed": {
+    "title": "這裡發生了什麼",
+    "facts": {
+      "decision": "決策",
+      "promise": "承諾",
+      "risk": "風險",
+      "problem": "問題",
+      "question": "待解問題"
+    },
+    "superseded": "已被取代",
+    "replacedBy": "已於 {date} 被「{text}」取代",
+    "jumpTo": "跳到 {moment} 的片段",
+    "earlier": "顯示較早的會議",
+    "empty": "這裡還沒有會議。第一場會議歸入這個中樞後，就會顯示在這裡。",
+    "quiet": "沒有值得注意的內容",
+    "loadError": "無法載入這裡發生的事"
+  },
+  "materials": {
+    "title": "資料",
+    "addLink": "新增連結",
+    "upload": "上傳",
+    "find": "在資料中搜尋",
+    "removeLabel": "從中樞移除 {title}",
+    "gone": "這份資料已不存在",
+    "origin": "{source, select, meeting {來自會議 · {date}} other {手動新增 · {date}}}",
+    "empty": "還沒有資料。會議摘要會自動出現在這裡，你也可以隨時新增連結或檔案。",
+    "noMatches": "沒有符合「{query}」的項目",
+    "addTitle": "新增連結",
+    "titleLabel": "標題",
+    "urlLabel": "連結",
+    "added": "已新增",
+    "removed": "已從中樞移除",
+    "uploadFailed": "{file}：{reason}",
+    "loadError": "無法載入資料"
+  }
+}

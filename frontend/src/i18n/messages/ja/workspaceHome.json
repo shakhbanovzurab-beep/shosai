@@ -1,0 +1,62 @@
+{
+  "description": "自分の対応が必要なこと、今後の予定、チームの仕事の進み具合を確認できます。",
+  "invitePeople": "メンバーを招待",
+  "quietStart": "会議が共有されたりプロジェクトが始まったりすると、自分の対応が必要なこと、今後の予定、チームの決定事項がこのページに表示されます。",
+  "blocks": {
+    "needsYou": "要対応",
+    "allTasks": "すべてのタスク",
+    "nothingWaiting": "ここで対応が必要なことはありません。自分に割り当てられたタスクは、ここと生産性に表示されます。",
+    "moreTasks": "{count, plural, other {ほか # 件のタスク}}",
+    "comingUp": "今後の予定",
+    "projects": "プロジェクト",
+    "allProjects": "すべてのプロジェクト",
+    "recentDecisions": "最近の決定事項",
+    "decisionLog": "決定事項の履歴"
+  },
+  "comingUp": {
+    "empty": "今後のチームの会議はありません。",
+    "live": "進行中",
+    "guestsPrivate": "ゲスト参加のため非公開",
+    "private": "ノートは非公開",
+    "notesGoTo": "ノートの共有先：{audience}"
+  },
+  "decisions": {
+    "empty": "共有された会議の決定事項が、決まった会議へのリンク付きでここに表示されます。",
+    "source": "<meeting>{title}</meeting> · {day}"
+  },
+  "projects": {
+    "empty": "進行中のプロジェクトはありません。プロジェクトを作成すると、会議、タスク、決定事項をまとめられます。",
+    "ledBy": "リーダー：{name}",
+    "ledByYou": "リーダー：自分"
+  },
+  "setup": {
+    "title": "ワークスペースを設定",
+    "progress": "{total, number} 件中 {done, number} 件完了。ステップを進めるほど、次の会議が全員にとって役立つものになります。",
+    "progressLabel": "セットアップ {total, number} 件中 {done, number} 件完了",
+    "hide": "セットアップのチェックリストを非表示",
+    "done": "完了",
+    "toDo": "未完了",
+    "steps": {
+      "invite": {
+        "title": "チームを招待",
+        "description": "会議やタスクの共有先ができるよう、2 人以上を追加してください。",
+        "action": "メンバーを招待"
+      },
+      "sharing": {
+        "title": "会議の共有方法を確認",
+        "description": "会議後のノートの共有先を選択してください。ゲストが参加する会議は、どの設定でも非公開のままです。",
+        "action": "確認"
+      },
+      "share": {
+        "title": "会議を 1 件共有",
+        "description": "レコーディングは、ここで共有するまで自分のノートに残ります。共有すると決定事項とタスクも一緒に共有されます。",
+        "action": "会議を共有"
+      },
+      "knowledge": {
+        "title": "チームのナレッジを追加",
+        "description": "ファイルを共有したり、新しくアップロードしたり、共有ドライブを接続したりすると、Leo がその内容をもとに回答します。",
+        "action": "ナレッジを追加"
+      }
+    }
+  }
+}

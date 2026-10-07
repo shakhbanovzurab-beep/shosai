@@ -1,0 +1,7 @@
+{
+  "meetingNotFound": "Réunion introuvable.",
+  "notesTooLong": "Les notes peuvent contenir jusqu’à {max, number} caractères.",
+  "linkSettingsInvalid": "Les paramètres du lien contiennent une erreur. Rechargez la page et réessayez.",
+  "commentsClosed": "Ce lien n’accepte pas les commentaires.",
+  "commentInvalid": "Écrivez un commentaire de {max, number} caractères maximum."
+}

@@ -1,0 +1,81 @@
+{
+  "title": "Tâches",
+  "description": "Le travail convenu en réunion ou ajouté aux projets. Vos tâches apparaissent aussi dans votre Productivité et votre Kanban.",
+  "newTask": "Nouvelle tâche",
+  "loading": "Chargement des tâches…",
+  "loadFailed": "Impossible de charger les tâches",
+  "empty": {
+    "title": "Aucune tâche pour l’instant",
+    "text": "Les tâches arrivent quand quelqu’un partage une réunion où du travail a été convenu, ou quand vous en ajoutez une à un projet.",
+    "add": "Ajouter une tâche"
+  },
+  "noMatch": {
+    "title": "Aucun résultat pour ces filtres",
+    "text": "Essayez un autre projet, une autre équipe ou une autre personne.",
+    "clear": "Effacer les filtres"
+  },
+  "caughtUp": {
+    "title": "Vous êtes à jour",
+    "text": "Rien ici ne vous attend. Les nouvelles tâches qui vous sont attribuées apparaissent ici et dans votre Productivité.",
+    "seeEveryone": "Voir les tâches de tout le monde"
+  },
+  "views": {
+    "label": "Tâches de qui",
+    "mine": "Les miennes",
+    "team": "Tout le monde"
+  },
+  "assignee": {
+    "label": "Responsable",
+    "anyone": "Tous"
+  },
+  "owner": {
+    "label": "Responsable",
+    "unassigned": "Non attribuée",
+    "you": "Vous",
+    "meOption": "{name} (vous)",
+    "change": "Responsable : {name}. Changer de responsable",
+    "changedToYou": "Elle vous est maintenant attribuée",
+    "changedTo": "Attribuée à {name}",
+    "cleared": "Plus attribuée à personne"
+  },
+  "groups": {
+    "overdue": "En retard · {count, number}",
+    "today": "Échéance aujourd’hui · {count, number}",
+    "week": "Cette semaine · {count, number}",
+    "later": "Plus tard · {count, number}",
+    "undated": "Sans échéance · {count, number}"
+  },
+  "showDone": "Afficher les terminées · {count, number}",
+  "hideDone": "Masquer les terminées",
+  "status": {
+    "todo": "À faire",
+    "in_progress": "En cours",
+    "done": "Terminée"
+  },
+  "due": {
+    "none": "Aucune échéance",
+    "add": "Ajouter une échéance",
+    "clear": "Effacer l’échéance",
+    "change": "{due}. Modifier l’échéance",
+    "overdue": "En retard · {date}",
+    "today": "Échéance aujourd’hui",
+    "tomorrow": "Échéance demain",
+    "on": "Échéance le {date}",
+    "was": "Échéance passée : {date}",
+    "changed": "Échéance modifiée",
+    "cleared": "Échéance effacée"
+  },
+  "form": {
+    "title": "Nouvelle tâche",
+    "description": "La personne responsable la voit aussi dans sa Productivité et son Kanban.",
+    "task": "Tâche",
+    "taskPlaceholder": "p. ex. Rédiger l’e-mail de lancement",
+    "titleRequired": "Indiquez ce qu’il faut faire.",
+    "nobodyYet": "Personne pour l’instant",
+    "due": "Échéance",
+    "project": "Projet",
+    "noProject": "Aucun projet",
+    "projectHint": "Tous les membres de l’espace de travail peuvent voir les tâches ajoutées ici.",
+    "submit": "Ajouter la tâche"
+  }
+}

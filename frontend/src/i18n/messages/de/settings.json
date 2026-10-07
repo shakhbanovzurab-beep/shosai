@@ -1,0 +1,74 @@
+{
+  "dialog": {
+    "title": "Einstellungen",
+    "sectionsLabel": "Bereiche der Einstellungen",
+    "autosave": "Änderungen werden automatisch gespeichert."
+  },
+  "sections": {
+    "account": "Konto",
+    "privacy": "Datenschutz",
+    "billing": "Abrechnung",
+    "usage": "Nutzung",
+    "leo": "Leo",
+    "mcp": "MCP",
+    "memory": "Gedächtnis",
+    "connectors": "Konnektoren",
+    "hotkeys": "Tastenkürzel"
+  },
+  "loadFailed": "Dieser Bereich konnte nicht geladen werden",
+  "manage": "Verwalten",
+  "saving": "Wird gespeichert…",
+  "saveFailed": "Änderungen konnten nicht gespeichert werden",
+  "profile": {
+    "title": "Profil",
+    "email": "E-Mail",
+    "emailHint": "Mit dieser Adresse meldest du dich über deinen Anbieter an.",
+    "fullName": "Vollständiger Name",
+    "displayName": "Wie soll Leo dich nennen?",
+    "displayNameHint": "Leo nutzt den Namen zur Begrüßung und in Antworten.",
+    "workRole": "Was beschreibt deine Arbeit am besten?",
+    "workRoleHint": "Leo passt Beispiele und Begriffe daran an dein Fachgebiet an."
+  },
+  "workRoles": {
+    "product_management": "Produktmanagement",
+    "engineering": "Ingenieurwesen",
+    "human_resources": "Personalwesen",
+    "finance": "Finanzen",
+    "marketing": "Marketing & Kommunikation",
+    "sales": "Vertrieb",
+    "operations": "Betrieb",
+    "data_science": "Data Science",
+    "design": "Gestaltung",
+    "legal": "Recht",
+    "scientist": "Wissenschaft",
+    "student": "Studium",
+    "founder": "Unternehmensgründung",
+    "healthcare": "Gesundheitswesen",
+    "writer": "Schreiben",
+    "educator": "Bildung",
+    "consultant": "Beratung",
+    "researcher": "Forschung",
+    "software_engineer": "Softwareentwicklung",
+    "other": "Sonstiges"
+  },
+  "avatar": {
+    "change": "Profilfoto ändern",
+    "hint": "Jedes Bild ist geeignet. Es wird automatisch quadratisch zugeschnitten und skaliert.",
+    "upload": "Foto hochladen",
+    "updateFailed": "Dein Foto konnte nicht aktualisiert werden",
+    "removeFailed": "Dein Foto konnte nicht entfernt werden",
+    "tooLarge": "Wähle ein Foto unter {size}.",
+    "unreadable": "Dieser Browser kann das Bild nicht lesen. Versuche es mit JPEG oder PNG.",
+    "processFailed": "Das Bild konnte nicht verarbeitet werden."
+  },
+  "deleteAccount": {
+    "group": "Gefahrenbereich",
+    "title": "Konto löschen",
+    "description": "Lösche dein Konto und alle Inhalte dauerhaft: Chats, Notizen, Dateien, Prompts und Einstellungen.",
+    "confirmTitle": "Dein Konto löschen?",
+    "confirmDescription": "Das kann nicht rückgängig gemacht werden. Deine Chats, Notizen, Dateien, Prompts, das Gedächtnis und die Einstellungen werden gelöscht, und ein bestehendes Abo wird gekündigt.",
+    "confirmLabel": "Gib zur Bestätigung <address>{email}</address> ein",
+    "deleted": "Dein Konto wurde gelöscht",
+    "failed": "Dein Konto konnte nicht gelöscht werden"
+  }
+}

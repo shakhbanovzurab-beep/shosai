@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Chi tiết",
+    "stages": "Các giai đoạn",
+    "history": "Diễn biến",
+    "summaryDecided": "{rounds, plural, other {Đã thảo luận # lần — quyết định vào {date}.}}",
+    "summaryOpen": "{rounds, plural, other {Đã thảo luận # lần — chưa có quyết định.}}",
+    "blockers": "Lần nào cũng là: {quotes}.",
+    "round": "Vòng {index, number}",
+    "blocker": "Điều gì cản trở",
+    "decision": "Quyết định",
+    "decisionChanged": "Quyết định đã thay đổi",
+    "previous": "Trước",
+    "current": "Hiện tại",
+    "decidedAt": "{date}, “{meeting}”",
+    "outcome": "Kết quả ra sao",
+    "outcomeUnknown": "chưa rõ kết quả",
+    "links": {
+      "causes": "Đang cản trở",
+      "blocked_by": "Bị cản trở bởi",
+      "outcome_of": "Phát sinh từ quyết định"
+    },
+    "sources": "Nguồn",
+    "dismissals": "Lần bỏ qua",
+    "dismissedByYou": "Bạn đã bỏ qua",
+    "disproved": "Đã bác bỏ: {evidence}",
+    "dismissedUntil": "đến {date}",
+    "returned": "đã hết thời gian nên mục này quay lại",
+    "owner": "Chủ sở hữu",
+    "noOwner": "chưa giao",
+    "due": "Hạn chót",
+    "noDue": "không có ngày",
+    "goneTitle": "Mục này không còn ở đây",
+    "goneText": "Có thể hub đã bị xóa, hoặc bản ghi cuộc họp đã bị gỡ.",
+    "loadError": "Không thể tải chi tiết"
+  },
+  "why": {
+    "source": "Nguồn",
+    "meeting": "cuộc họp {date}, “{title}”",
+    "said": "Người nói",
+    "moment": "Thời điểm",
+    "jump": "Đến thời điểm này",
+    "signals": {
+      "series": "Các cuộc họp trong chuỗi này đã có ở đây.",
+      "subject": "Cuộc trò chuyện nói về hub này.",
+      "title": "Tên hub có trong tiêu đề cuộc họp.",
+      "entity": "Cái tên này được nhắc đến trong cuộc trò chuyện.",
+      "organisation": "Những người tham gia đến từ tổ chức này.",
+      "human": "Chính bạn đã đưa nó vào đây."
+    },
+    "loadError": "Không thể tải nguồn"
+  }
+}

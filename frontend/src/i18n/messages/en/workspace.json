@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "Workspaces",
+    "home": "Workspace home",
+    "new": "New workspace",
+    "settings": "Workspace settings",
+    "members": "Members",
+    "decisions": "Decisions",
+    "projects": "Projects",
+    "tasks": "Tasks",
+    "knowledge": "Workspace knowledge",
+    "meetings": "Workspace meetings",
+    "project": "Project",
+    "meeting": "Meeting"
+  },
+  "createWorkspace": "Create a workspace",
+  "roles": {
+    "owner": {
+      "label": "Owner",
+      "description": "Everything, including billing and deleting the workspace."
+    },
+    "admin": {
+      "label": "Admin",
+      "description": "Manages people, teams, sharing rules and settings."
+    },
+    "member": {
+      "label": "Member",
+      "description": "Records, shares and follows up on meetings."
+    }
+  },
+  "teams": {
+    "private": "Private team"
+  },
+  "audience": {
+    "participants": "Participants",
+    "everyone": "Everyone at {workspace}",
+    "aTeam": "A team",
+    "sharedWith": "{level, select, participants {Shared with participants} workspace {Shared with everyone at {workspace}} other {Shared with {team}}}",
+    "hint": "{level, select, participants {Members who were in the meeting.} other {Everyone in the workspace, now and later.}}",
+    "teamHint": "{private, select, true {Members of {team} (private team), plus participants.} other {Members of {team}, plus participants.}}"
+  },
+  "people": {
+    "list": "People: {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name} (you)"
+  },
+  "filters": {
+    "team": "Team",
+    "allTeams": "All teams",
+    "project": "Project",
+    "allProjects": "All projects",
+    "clearSearch": "Clear search"
+  },
+  "blocks": {
+    "loading": {
+      "files": "Loading the files…",
+      "tasks": "Loading the tasks…",
+      "yourTasks": "Loading your tasks…",
+      "projects": "Loading the projects…",
+      "meetings": "Loading the meetings…",
+      "upcomingMeetings": "Loading upcoming meetings…",
+      "decisions": "Loading the decisions…"
+    },
+    "failed": {
+      "files": "Couldn’t load the files.",
+      "tasks": "Couldn’t load the tasks.",
+      "yourTasks": "Couldn’t load your tasks.",
+      "projects": "Couldn’t load the projects.",
+      "meetings": "Couldn’t load the meetings.",
+      "upcomingMeetings": "Couldn’t load upcoming meetings.",
+      "decisions": "Couldn’t load the decisions."
+    }
+  },
+  "dates": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow",
+    "targetOverdue": "Overdue · {date}",
+    "targetToday": "Target today",
+    "targetTomorrow": "Target tomorrow",
+    "targetDay": "Target {day}",
+    "targetDate": "Target {date}",
+    "ago": "{days, plural, =0 {today} =1 {yesterday} one {# day ago} other {# days ago}}",
+    "on": "on {date}",
+    "neverSignedIn": "Never signed in",
+    "activeNow": "Active now",
+    "hoursAgo": "{count, plural, one {# hour ago} other {# hours ago}}",
+    "daysAgo": "{count, plural, =1 {Yesterday} one {# day ago} other {# days ago}}"
+  },
+  "gate": {
+    "loading": "Loading the workspace…",
+    "loadFailed": "Couldn’t load the workspace",
+    "listFailed": "Couldn’t load your workspaces",
+    "unavailable": "This workspace isn’t available",
+    "unavailableHint": "It doesn’t exist, or you aren’t a member. Ask someone in it to invite you, or start your own.",
+    "backToPersonal": "Back to Personal",
+    "suspended": "{name} is suspended",
+    "suspendedOwnerHint": "Access is paused for everyone in it. Contact support to restore it; nothing in the workspace has been deleted.",
+    "suspendedHint": "Access is paused for everyone in it. Its owner can contact support to restore it. Your notes, files and boards in Personal aren’t affected."
+  },
+  "switcher": {
+    "invite": "Invite people to {name}",
+    "settings": "Workspace settings",
+    "current": "Current",
+    "hint": "Switch between Personal and workspaces",
+    "personal": "Personal",
+    "personalHint": "Your mail, notes, boards and tasks",
+    "workspaces": "Workspaces",
+    "suspended": "Suspended",
+    "detail": "{role} · {count, plural, one {# member} other {# members}}",
+    "loadFailed": "Couldn’t load your workspaces. Try again",
+    "none": "You aren’t in a workspace yet"
+  },
+  "create": {
+    "title": "Bring your team into Leo",
+    "intro": "A shared workspace for the work you do together. Personal stays yours: mail, calendar, notes and boards are private until you choose to share something.",
+    "value": {
+      "meetings": {
+        "title": "Shared meetings",
+        "text": "Share a recording from your Notes, or let notes go to the right people when a meeting ends. Meetings with guests stay private."
+      },
+      "work": {
+        "title": "Projects, tasks and decisions",
+        "text": "What was decided and who owes what, grouped by project. Your tasks also show up in your own Productivity and Kanban."
+      },
+      "knowledge": {
+        "title": "Team knowledge",
+        "text": "Share files from your File Manager, upload new ones, or connect a shared drive. Leo answers from them for whoever may see them."
+      }
+    },
+    "billing": "Billed per seat on the Team plan. <link>See pricing</link>",
+    "formHint": "You’ll be its owner. Invite people right after.",
+    "name": "Workspace name",
+    "namePlaceholder": "e.g. Acme",
+    "nameRequired": "Give the workspace a name.",
+    "seats": "Seats",
+    "fewerSeats": "Fewer seats",
+    "moreSeats": "More seats",
+    "seatsHint": "One per person, you included. {min, number}–{max, number}; change it any time.",
+    "submit": "Create workspace"
+  },
+  "toasts": {
+    "workspaceReady": "{name} is ready",
+    "workspaceReadyHint": "Invite your team to start sharing meetings.",
+    "createWorkspaceFailed": "Couldn’t create the workspace.",
+    "saveFailed": "Couldn’t save the change",
+    "workspaceDeleted": "{name} was deleted",
+    "deleteWorkspaceFailed": "Couldn’t delete the workspace",
+    "workspaceLeft": "You left {name}",
+    "leaveWorkspaceFailed": "Couldn’t leave the workspace",
+    "projectSaveFailed": "Couldn’t save the project",
+    "projectDeleted": "{name} was deleted",
+    "projectDeletedHint": "Its meetings and tasks are still here.",
+    "projectDeleteFailed": "Couldn’t delete the project",
+    "filesAdded": "{count, plural, one {Added {name}} other {Added # files}}",
+    "filesAddedHint": "{count, plural, one {Leo can answer from it once indexing finishes.} other {Leo can answer from them once indexing finishes.}}",
+    "sourceConnected": "Connected {name}",
+    "sourceConnectedHint": "Leo can answer from it after the first sync.",
+    "knowledgeChangeFailed": "Couldn’t change it",
+    "stoppedSharing": "Stopped sharing {name}",
+    "stoppedSharingHint": "It stays in its owner’s File Manager; Leo no longer answers from it here.",
+    "knowledgeRemoved": "Removed {name}",
+    "knowledgeRemovedHint": "Leo no longer answers from it.",
+    "knowledgeRemoveFailed": "Couldn’t remove it",
+    "fileStaysYours": "{count, plural, one {It stays in your File Manager and stays yours.} other {They stay in your File Manager and stay yours.}}",
+    "shareFileFailed": "Couldn’t share it",
+    "filesShared": "{count, plural, one {Shared {name}} other {Shared # files}}",
+    "stillInFileManager": "It’s still in your File Manager.",
+    "unshareFileFailed": "Couldn’t stop sharing it",
+    "meetingShareFailed": "Couldn’t share the meeting",
+    "meetingChangeFailed": "Couldn’t change the meeting",
+    "changeUndone": "Change undone",
+    "noLongerShared": "No longer shared",
+    "stillInYourNotes": "It’s still in your Notes.",
+    "stillInOwnerNotes": "It’s still in its owner’s Notes.",
+    "sharedAgain": "Shared again",
+    "unshareMeetingFailed": "Couldn’t stop sharing",
+    "taskUpdateFailed": "Couldn’t update the task",
+    "markedDone": "Marked as done",
+    "taskAdded": "Task added"
+  }
+}

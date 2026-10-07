@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo が受信トレイを読んでいます…",
+    "readingNew": "{count, plural, other {Leo が # 件の新着メールを読んでいます…}}",
+    "sorted": "{count, plural, other {Leo が # 件のメールを仕分けました}}",
+    "sortedWithDrafts": "{count, plural, other {Leo が # 件のメールを仕分けました}} · {drafts, plural, other {# 件の返信を下書きしました}}",
+    "sortFailed": "Leo は受信トレイを仕分けできませんでした"
+  },
+  "focus": {
+    "mostUrgentFirst": "緊急度の高い順（{count, number}）",
+    "setAside": "{count, plural, other {ほかの # 件のメールは今すぐ対応する必要はありません。}}",
+    "setAsideLow": "{count, plural, other {ほかの # 件のメールは今すぐ対応する必要はありません}}。{low, plural, other {そのうち # 件は優先度低です。}}",
+    "showAll": "すべてのメールを表示",
+    "archiveLow": "優先度低をアーカイブ",
+    "caughtUpTitle": "すべて確認済みです",
+    "caughtUpDescription": "対応待ちのものはありません。返信や判断が必要な新着メールは Leo がお知らせします。"
+  },
+  "triage": {
+    "needs_you": "要対応",
+    "fyi": "参考",
+    "low": "優先度低"
+  },
+  "triageHint": {
+    "needs_you": "返信または判断が必要です",
+    "fyi": "知っておくと役立つ内容で、対応は不要です",
+    "low": "後回しにするか、アーカイブできます"
+  },
+  "triageMenu": {
+    "trigger": "{triage} に仕分け済み。このメールの仕分けを変更",
+    "sortedByYou": "自分で仕分け",
+    "sortedByLeo": "Leo が仕分け",
+    "leosPick": "Leo の判断 · {hint}"
+  },
+  "replyBy": {
+    "overdue": "期限切れ",
+    "today": "今日中に返信",
+    "tomorrow": "明日までに返信",
+    "by": "{when} までに返信"
+  },
+  "tags": {
+    "reading": "Leo が読んでいます…",
+    "replied": "返信済み",
+    "needsYou": "要対応",
+    "draftReady": "下書きあり"
+  },
+  "card": {
+    "label": "Leo の要約",
+    "readingEmail": "Leo がこのメールを読んでいます…",
+    "readFailed": "Leo はこのメールを読み取れませんでした",
+    "readFailedHint": "しばらくしてからもう一度お試しください。",
+    "repliedAgo": "{ago} に返信済み",
+    "repliedOn": "{date} に返信済み",
+    "reviewDraft": "下書きを確認",
+    "noDraft": "下書きはありません。この返信には自分の考えが必要です。",
+    "archive": "アーカイブ"
+  },
+  "draft": {
+    "reviewLabel": "{name} への Leo の返信の下書きを確認",
+    "drafted": "Leo が返信を下書きしました",
+    "review": "確認",
+    "heading": "Leo の下書き · 送信前に確認してください",
+    "collapse": "下書きを折りたたむ",
+    "field": "{name} への返信",
+    "discard": "破棄",
+    "send": "送信",
+    "discarded": "下書きを破棄しました"
+  }
+}

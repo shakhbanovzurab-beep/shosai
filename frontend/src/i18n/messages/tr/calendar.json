@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "Takvim",
+    "description": "Toplantıları, etkinlikleri ve odak zamanını aya, haftaya veya güne göre planlayın."
+  },
+  "summary": "{days, plural, one {# gün} other {# gün}} · {events, plural, one {# etkinlik} other {# etkinlik}}",
+  "calendars": {
+    "label": "Takvim",
+    "all": "Tüm takvimler",
+    "work": "İş",
+    "personal": "Kişisel",
+    "team": "Ekip",
+    "focus": "Odak zamanı"
+  },
+  "views": {
+    "label": "Görünüm",
+    "dayGridMonth": "Ay",
+    "timeGridWeek": "Hafta",
+    "timeGridDay": "Gün"
+  },
+  "previous": "Önceki dönem",
+  "next": "Sonraki dönem",
+  "today": "Bugün",
+  "addEvent": "Etkinlik ekle",
+  "loading": "Takvim yükleniyor…",
+  "eventMenu": {
+    "reschedule": "Yeniden planla",
+    "dayEarlier": "Bir gün öne al",
+    "dayLater": "Bir gün ertele",
+    "nextWeek": "Gelecek haftaya taşı",
+    "moveToToday": "Bugüne taşı",
+    "copyDetails": "Ayrıntıları kopyala",
+    "delete": "Etkinliği sil"
+  },
+  "dayMenu": {
+    "newAllDay": "Yeni tüm gün etkinliği…",
+    "newAt": "Saat {time} için yeni etkinlik…",
+    "openDay": "Günü aç",
+    "openWeek": "Haftayı aç"
+  },
+  "renameTitle": "Etkinliği yeniden adlandır",
+  "newTitle": "Yeni etkinlik · {when}",
+  "copyName": "{title} (kopya)",
+  "details": "{title} — {when}",
+  "detailsCopied": "Etkinlik ayrıntıları kopyalandı",
+  "detailsCopyFailed": "Etkinlik ayrıntıları kopyalanamadı",
+  "deleted": "“{title}” silindi"
+}

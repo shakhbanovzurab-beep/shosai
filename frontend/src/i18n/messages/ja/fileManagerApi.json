@@ -1,0 +1,16 @@
+{
+  "fileGone": "このファイルは見つかりません。",
+  "folderGone": "このフォルダは見つかりません。",
+  "chooseFile": "ファイルを 1 件以上選択してください。",
+  "tooManyFiles": "一度にアップロードできるのは {max, number} 件までです。",
+  "tooLarge": "「{name}」は {size} を超えています。",
+  "overLeoLimit": "現在のプランで Leo が使用できるファイルは {limit} 件までです。先にいくつかの使用を停止してください。",
+  "notUsedByLeo": "Leo はこのファイルを使用していません。",
+  "shareFirst": "先にそのワークスペースでファイルを共有してください。",
+  "fileNameRequired": "ファイル名を入力してください。",
+  "folderNameRequired": "フォルダ名を入力してください。",
+  "nameTooLong": "名前は {max, number} 文字未満にしてください。",
+  "nameSlash": "名前に / や \\ は使用できません。",
+  "invalidRequest": "リクエストの内容に問題があります。ページを再読み込みして、もう一度お試しください。",
+  "copyName": "{name} のコピー"
+}

@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo is reading your inbox…",
+    "readingNew": "{count, plural, one {Leo is reading # new email…} other {Leo is reading # new emails…}}",
+    "sorted": "{count, plural, one {Leo sorted # email} other {Leo sorted # emails}}",
+    "sortedWithDrafts": "{count, plural, one {Leo sorted # email} other {Leo sorted # emails}} · {drafts, plural, one {# reply drafted} other {# replies drafted}}",
+    "sortFailed": "Leo couldn’t sort your inbox"
+  },
+  "focus": {
+    "mostUrgentFirst": "Most urgent first ({count, number})",
+    "setAside": "{count, plural, one {# other email doesn’t need you right now.} other {# other emails don’t need you right now.}}",
+    "setAsideLow": "{count, plural, one {# other email doesn’t need you right now} other {# other emails don’t need you right now}}, {low, plural, one {# of them is low priority.} other {# of them are low priority.}}",
+    "showAll": "Show all mail",
+    "archiveLow": "Archive low priority",
+    "caughtUpTitle": "You’re all caught up",
+    "caughtUpDescription": "Nothing is waiting on you. Leo will flag new emails that need a reply or a decision."
+  },
+  "triage": {
+    "needs_you": "Needs you",
+    "fyi": "FYI",
+    "low": "Low priority"
+  },
+  "triageHint": {
+    "needs_you": "Waiting on your reply or decision",
+    "fyi": "Worth knowing, nothing to do",
+    "low": "Can wait or be archived"
+  },
+  "triageMenu": {
+    "trigger": "Sorted as {triage}. Change how this email is sorted",
+    "sortedByYou": "Sorted by you",
+    "sortedByLeo": "Sorted by Leo",
+    "leosPick": "Leo’s pick · {hint}"
+  },
+  "replyBy": {
+    "overdue": "Overdue",
+    "today": "Reply today",
+    "tomorrow": "Reply tomorrow",
+    "by": "Reply by {when}"
+  },
+  "tags": {
+    "reading": "Leo is reading…",
+    "replied": "Replied",
+    "needsYou": "Needs you",
+    "draftReady": "Draft ready"
+  },
+  "card": {
+    "label": "Leo’s summary",
+    "readingEmail": "Leo is reading this email…",
+    "readFailed": "Leo couldn’t read this email",
+    "readFailedHint": "Try again in a moment.",
+    "repliedAgo": "Replied {ago}",
+    "repliedOn": "Replied on {date}",
+    "reviewDraft": "Review draft",
+    "noDraft": "No draft: this reply needs your own take.",
+    "archive": "Archive"
+  },
+  "draft": {
+    "reviewLabel": "Review Leo’s draft reply to {name}",
+    "drafted": "Leo drafted a reply",
+    "review": "Review",
+    "heading": "Leo’s draft · review before sending",
+    "collapse": "Collapse draft",
+    "field": "Reply to {name}",
+    "discard": "Discard",
+    "send": "Send",
+    "discarded": "Draft discarded"
+  }
+}

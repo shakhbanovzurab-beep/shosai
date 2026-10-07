@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Notas",
+    "description": "Reuniões transcritas com notas, próximos passos e mapas mentais."
+  },
+  "recency": {
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "thisWeek": "Nesta semana",
+    "earlier": "Anteriores"
+  },
+  "fields": {
+    "meeting": "Reunião",
+    "folder": "Pasta",
+    "people": "Pessoas",
+    "participants": "Participantes",
+    "duration": "Duração",
+    "date": "Data"
+  },
+  "views": {
+    "label": "Exibição",
+    "timeline": "Linha do tempo",
+    "grid": "Grade",
+    "list": "Lista"
+  },
+  "upload": {
+    "button": "Fazer upload de gravação",
+    "hint": "Ou solte um arquivo em qualquer lugar da página",
+    "dropTitle": "Solte as gravações para fazer upload",
+    "dropHint": "mp3, m4a, wav, mp4, webm e outros · até {size}",
+    "notMedia": "{name} não é um arquivo de áudio ou vídeo",
+    "tooLarge": "{name} é grande demais",
+    "sizeLimit": "As gravações podem ter até {size}."
+  },
+  "recordings": {
+    "uploading": "Fazendo upload",
+    "justNow": "Agora mesmo",
+    "transcribing": "Transcrevendo",
+    "transcribingNow": "Transcrevendo…",
+    "waiting": "Aguardando transcrição…",
+    "timelineStatus": "Transcrevendo… As notas, as decisões e um mapa mental vão aparecer aqui quando terminar."
+  },
+  "remove": "Remover {name}",
+  "folders": {
+    "label": "Pastas",
+    "all": "Todas as reuniões",
+    "new": "Nova pasta",
+    "newMenu": "Nova pasta…",
+    "newNamed": "Nova pasta “{name}”",
+    "defaultName": "Nova pasta",
+    "nameLabel": "Nome da pasta",
+    "none": "Sem pasta",
+    "add": "Adicionar à pasta",
+    "moveTo": "Mover para pasta",
+    "search": "Pesquisar pastas…",
+    "noMatch": "Nenhuma pasta encontrada.",
+    "movedTo": "Movida para {folder}",
+    "removedFrom": "Removida da pasta",
+    "emptyTitle": "Esta pasta está vazia",
+    "emptyDescription": "Clique com o botão direito em uma reunião e escolha “{action}” para adicioná-la aqui."
+  },
+  "card": {
+    "latest": "Última reunião",
+    "keyPoints": "Pontos principais",
+    "openNotes": "Abrir notas",
+    "openItems": "{count, plural, one {# em aberto} many {# em aberto} other {# em aberto}}"
+  },
+  "timeline": {
+    "decision": "Decisão:",
+    "openTasks": "{count, plural, one {# tarefa em aberto} many {# de tarefas em aberto} other {# tarefas em aberto}}"
+  },
+  "menu": {
+    "openInNewTab": "Abrir em nova aba",
+    "exportTranscript": "Exportar transcrição"
+  },
+  "exportFormats": {
+    "txt": "Texto simples",
+    "md": "Markdown",
+    "srt": "Legendas SubRip",
+    "vtt": "Legendas WebVTT",
+    "json": "Arquivo JSON"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "“{title}” excluída"
+}

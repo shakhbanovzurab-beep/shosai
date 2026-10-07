@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "프로젝트",
+    "project": "프로젝트"
+  },
+  "title": "프로젝트",
+  "description": "프로젝트는 하나의 일에 관한 회의, 결정 사항, 작업을 한곳에 모아요.",
+  "newProject": "새 프로젝트",
+  "filter": {
+    "label": "표시할 프로젝트",
+    "open": "진행 중",
+    "all": "전체"
+  },
+  "empty": {
+    "title": "아직 프로젝트가 없어요",
+    "text": "출시나 채용처럼 여러 회의에 걸친 일이라면 프로젝트를 시작해 보세요. 그런 다음 회의와 작업을 추가할 수 있어요."
+  },
+  "status": {
+    "planned": "예정",
+    "active": "진행 중",
+    "paused": "일시 중지",
+    "completed": "완료"
+  },
+  "ledBy": "{who, select, me {리더: 나} other {리더: {name}}}",
+  "noLead": "리더 없음",
+  "target": {
+    "none": "목표일 없음",
+    "overdue": "기한 지남 · {date}",
+    "today": "목표일: 오늘",
+    "tomorrow": "목표일: 내일",
+    "on": "목표일: {date}"
+  },
+  "progress": {
+    "label": "{total, plural, other {작업 #개 중 {done, number}개 완료}}",
+    "count": "{done, number}/{total, number}",
+    "none": "작업 없음"
+  },
+  "notFound": {
+    "title": "이 프로젝트는 더 이상 없어요",
+    "text": "삭제되었을 수 있어요. 프로젝트의 회의와 작업은 워크스페이스에 그대로 있어요.",
+    "action": "모든 프로젝트"
+  },
+  "sections": {
+    "tasks": "작업",
+    "addTask": "작업 추가",
+    "tasksEmpty": "아직 작업이 없어요. 작업을 추가하거나, 회의를 이 프로젝트에 공유해 그 회의의 작업을 가져와 보세요.",
+    "meetings": "회의",
+    "meetingsEmpty": "이 프로젝트에 공유된 회의가 여기에 표시돼요.",
+    "decisions": "결정 사항",
+    "files": "파일",
+    "filesLabel": "{project} 파일",
+    "filesEmpty": "이 프로젝트에 추가된 파일이 여기에 표시되고, Leo가 이 프로젝트에 활용해요."
+  },
+  "header": {
+    "edit": "프로젝트 편집",
+    "delete": "프로젝트 삭제",
+    "lead": "리더",
+    "team": "팀",
+    "target": "목표일",
+    "deleteTitle": "{name} 프로젝트를 삭제할까요?",
+    "deleteText": "프로젝트의 회의, 작업, 결정 사항은 워크스페이스에 그대로 남고, 프로젝트에만 속하지 않게 돼요."
+  },
+  "dialog": {
+    "newTitle": "새 프로젝트",
+    "editTitle": "{name} 편집",
+    "description": "하나의 일에 관한 회의, 결정 사항, 작업을 모아 두는 곳이에요.",
+    "nameRequired": "프로젝트 이름을 입력해 주세요.",
+    "namePlaceholder": "예: 모바일 앱 베타",
+    "purpose": "목적",
+    "lead": "리더",
+    "me": "{name}(나)",
+    "team": "팀",
+    "wholeWorkspace": "워크스페이스 전체",
+    "status": "상태",
+    "target": "목표일",
+    "create": "프로젝트 만들기",
+    "saved": "{name} 프로젝트를 저장했어요",
+    "created": "{name} 프로젝트를 만들었어요"
+  }
+}

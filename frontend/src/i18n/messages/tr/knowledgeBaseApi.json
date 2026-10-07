@@ -1,0 +1,6 @@
+{
+  "invalidSettings": "Ayarlar okunamadı. Sayfayı yenileyip tekrar deneyin.",
+  "unknownSource": "Bu kaynak mevcut değil.",
+  "notConnected": "Bu kaynak bağlı değil.",
+  "fieldRequired": "Şu alan zorunlu: {field}."
+}

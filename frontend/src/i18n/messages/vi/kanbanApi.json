@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "Không tìm thấy bảng.",
+  "taskNotFound": "Không tìm thấy công việc.",
+  "columnNotFound": "Không tìm thấy cột.",
+  "boardChanged": "Bảng đã thay đổi. Hãy tải lại bảng rồi thử lại.",
+  "managedInJira": "Bảng này được quản lý trong Jira. Hãy thực hiện thay đổi này trên Jira.",
+  "reconnectJira": "Hãy kết nối lại Jira trong Cài đặt › Trình kết nối để thực hiện thay đổi.",
+  "firstSync": "Hãy chờ lần đồng bộ đầu tiên với Jira hoàn tất.",
+  "jiraDisconnected": "Jira đã bị ngắt kết nối. Hãy kết nối lại trong Cài đặt › Trình kết nối để bảng này tiếp tục đồng bộ.",
+  "connectJiraFirst": "Hãy kết nối Jira trong Cài đặt › Trình kết nối trước.",
+  "jiraBoardUnavailable": "Tài khoản Jira của bạn không truy cập được bảng Jira đó.",
+  "jiraBoardSynced": "Bảng Jira này đã được đồng bộ.",
+  "notJiraBoard": "Chỉ có thể đồng bộ những bảng được đồng bộ với Jira.",
+  "jiraBoardWorkspaceTasks": "Bảng Jira chỉ hiển thị issue Jira. Hãy chọn một bảng được lưu trong ứng dụng.",
+  "workspaceTaskCopy": "Không thể nhân bản công việc từ không gian làm việc ở đây. Hãy thêm công việc trong không gian làm việc.",
+  "workspaceTaskDelete": "Công việc từ không gian làm việc sẽ rời khỏi bảng khi được hoàn thành hoặc giao cho người khác trong không gian làm việc.",
+  "boardNameRequired": "Hãy đặt tên cho bảng.",
+  "boardNameTooLong": "Tên này quá dài. Hãy dùng tên ngắn hơn.",
+  "taskTitleRequired": "Hãy đặt tiêu đề cho công việc.",
+  "invalidRequest": "Có gì đó trong yêu cầu chưa đúng. Hãy tải lại trang rồi thử lại."
+}

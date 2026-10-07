@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "Bord niet gevonden.",
+  "taskNotFound": "Taak niet gevonden.",
+  "columnNotFound": "Kolom niet gevonden.",
+  "boardChanged": "Het bord is gewijzigd. Vernieuw het en probeer het opnieuw.",
+  "managedInJira": "Dit bord wordt in Jira beheerd. Breng deze wijziging daar aan.",
+  "reconnectJira": "Koppel Jira opnieuw in Instellingen › Koppelingen om wijzigingen aan te brengen.",
+  "firstSync": "Wacht tot de eerste synchronisatie met Jira klaar is.",
+  "jiraDisconnected": "Jira is ontkoppeld. Koppel het opnieuw in Instellingen › Koppelingen om dit bord gesynchroniseerd te houden.",
+  "connectJiraFirst": "Koppel eerst Jira in Instellingen › Koppelingen.",
+  "jiraBoardUnavailable": "Dat Jira-bord is niet beschikbaar voor je Jira-account.",
+  "jiraBoardSynced": "Dit Jira-bord is al gesynchroniseerd.",
+  "notJiraBoard": "Alleen borden die met Jira zijn gesynchroniseerd, kunnen worden gesynchroniseerd.",
+  "jiraBoardWorkspaceTasks": "Jira-borden tonen alleen Jira-issues. Kies een bord dat alleen in de app staat.",
+  "workspaceTaskCopy": "Werkruimtetaken kun je hier niet dupliceren. Voeg in plaats daarvan een taak toe in de werkruimte.",
+  "workspaceTaskDelete": "Werkruimtetaken verdwijnen van het bord zodra ze in de werkruimte zijn afgerond of aan iemand anders zijn toegewezen.",
+  "boardNameRequired": "Geef het bord een naam.",
+  "boardNameTooLong": "Die naam is te lang. Kies een kortere.",
+  "taskTitleRequired": "Geef de taak een titel.",
+  "invalidRequest": "Er klopt iets niet aan het verzoek. Vernieuw de pagina en probeer het opnieuw."
+}

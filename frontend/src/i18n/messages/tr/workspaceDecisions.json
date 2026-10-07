@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Kararlar"
+  },
+  "title": "Kararlar",
+  "description": "Sizinle paylaşılan toplantılarda alınan tüm kararlar, en yeniden eskiye; her biri söylendiği yere bağlı.",
+  "searchLabel": "Kararlarda ara",
+  "loading": "Kararlar yükleniyor…",
+  "loadFailed": "Kararlar yüklenemedi",
+  "empty": {
+    "title": "Henüz karar yok",
+    "text": "Leo, paylaşılan toplantılarda alınan kararları seçer ve toplantıya bağlı olarak burada tutar.",
+    "action": "Toplantılara git"
+  },
+  "noMatch": {
+    "title": "Eşleşen karar yok",
+    "text": "Başka kelimeler veya başka bir ekip deneyin.",
+    "clear": "Filtreleri temizle"
+  },
+  "replaced": "Değiştirildi",
+  "replacedBy": "Yerini <link>“{decision}”</link> aldı · {meeting}",
+  "replacedHidden": "Sizinle paylaşılmayan bir toplantıda alınan daha yeni bir kararla değiştirildi.",
+  "day": {
+    "today": "Bugün",
+    "yesterday": "Dün",
+    "tomorrow": "Yarın"
+  }
+}

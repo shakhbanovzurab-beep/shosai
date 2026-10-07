@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Entscheidungen"
+  },
+  "title": "Entscheidungen",
+  "description": "Alles, was in mit dir geteilten Meetings entschieden wurde, neueste zuerst, jeweils mit Link zur Stelle, an der es gesagt wurde.",
+  "searchLabel": "Entscheidungen durchsuchen",
+  "loading": "Entscheidungen werden geladen…",
+  "loadFailed": "Entscheidungen konnten nicht geladen werden",
+  "empty": {
+    "title": "Noch keine Entscheidungen",
+    "text": "Leo erkennt, was in geteilten Meetings entschieden wurde, und sammelt es hier, verknüpft mit dem Meeting.",
+    "action": "Zu den Meetings"
+  },
+  "noMatch": {
+    "title": "Keine passenden Entscheidungen",
+    "text": "Versuche andere Begriffe oder ein anderes Team.",
+    "clear": "Filter zurücksetzen"
+  },
+  "replaced": "Ersetzt",
+  "replacedBy": "Ersetzt durch <link>„{decision}“</link> in {meeting}.",
+  "replacedHidden": "Ersetzt durch eine spätere Entscheidung in einem Meeting, das nicht mit dir geteilt ist.",
+  "day": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "tomorrow": "Morgen"
+  }
+}

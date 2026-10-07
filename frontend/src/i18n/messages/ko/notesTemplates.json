@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "AI 노트",
+    "description": "Leo가 회의에 맞는 구성을 골라요."
+  },
+  "sections": {
+    "summary": "요약",
+    "keyPoints": "핵심 내용",
+    "decisions": "결정 사항",
+    "actionItems": "후속 작업"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "근황 공유: 투자자",
+      "description": "투자자와의 정기 업데이트: 현재 상황과 도움받을 수 있는 부분."
+    },
+    "catchUpPortfolio": {
+      "name": "근황 공유: 포트폴리오 기업",
+      "description": "포트폴리오 기업과 지표, 리스크, 요청 사항을 점검해요."
+    },
+    "lpProspective": {
+      "name": "LP: 잠재 출자자",
+      "description": "잠재 유한책임출자자(LP)와의 첫 대화."
+    },
+    "vcBoardMeeting": {
+      "name": "VC: 이사회",
+      "description": "이사회 논의, 의결 사항, 담당자."
+    },
+    "vcPitch": {
+      "name": "VC: 피칭",
+      "description": "창업자 피칭: 눈에 띈 점, 평가, 진행할 실사."
+    },
+    "oneOnOne": {
+      "name": "1:1 면담",
+      "description": "1:1 면담: 근황, 논의 주제, 결정한 다음 단계."
+    },
+    "customerCall": {
+      "name": "고객 통화",
+      "description": "고객과의 탐색 또는 점검 회의: 불편 사항, 요청, 후속 작업."
+    },
+    "teamSync": {
+      "name": "팀 정기 회의",
+      "description": "정기 팀 회의: 진행 상황, 결정 사항, 역할 분담."
+    }
+  },
+  "headings": {
+    "whereWeAre": "현재 상황",
+    "updatesShared": "공유한 소식",
+    "whatWeAgreed": "결정한 내용",
+    "followUps": "후속 작업",
+    "companyUpdate": "회사 소식",
+    "metricsAndHighlights": "지표와 주요 성과",
+    "howWeCanHelp": "지원할 수 있는 부분",
+    "overview": "개요",
+    "theirInterests": "관심사",
+    "nextSteps": "다음 단계",
+    "boardSummary": "이사회 요약",
+    "discussion": "논의 내용",
+    "resolutions": "의결 사항",
+    "ownersAndDeadlines": "담당자와 마감일",
+    "thePitch": "피칭 내용",
+    "whatStoodOut": "눈에 띈 점",
+    "verdict": "평가",
+    "diligenceToDos": "실사 항목",
+    "howItsGoing": "근황",
+    "topics": "논의 주제",
+    "context": "배경",
+    "painsAndRequests": "불편 사항과 요청",
+    "outcome": "결과",
+    "updates": "진행 상황",
+    "decisions": "결정 사항",
+    "whoDoesWhat": "역할 분담"
+  },
+  "icons": {
+    "enhanced": "AI 노트",
+    "briefcase": "서류 가방",
+    "chart": "차트",
+    "handshake": "악수",
+    "landmark": "건물",
+    "lightbulb": "전구",
+    "magnet": "자석",
+    "phone": "전화",
+    "rocket": "로켓",
+    "calendar": "캘린더",
+    "users": "사람들"
+  },
+  "menu": {
+    "label": "AI 노트 템플릿",
+    "search": "템플릿 검색…",
+    "noMatch": "일치하는 템플릿이 없어요.",
+    "heading": "템플릿",
+    "regenerate": "노트 다시 생성",
+    "newTemplate": "새 템플릿…"
+  },
+  "rewritten": "“{template}” 템플릿으로 노트를 다시 작성했어요",
+  "regenerated": "AI 노트를 다시 생성했어요",
+  "created": "“{template}” 템플릿을 만들었어요",
+  "dialog": {
+    "title": "새 템플릿",
+    "description": "회의에서 Leo가 작성할 섹션과 각 섹션의 이름을 정해요.",
+    "namePlaceholder": "예: 영업 탐색 회의…",
+    "nameRequired": "템플릿 이름을 입력해 주세요.",
+    "descriptionLabel": "설명",
+    "descriptionPlaceholder": "언제 사용하나요…",
+    "ownDescription": "직접 만든 템플릿이에요.",
+    "icon": "아이콘",
+    "sections": "섹션",
+    "include": "{section} 포함",
+    "heading": "{section} 제목",
+    "sectionsRequired": "섹션을 하나 이상 남겨 주세요.",
+    "create": "템플릿 만들기"
+  }
+}

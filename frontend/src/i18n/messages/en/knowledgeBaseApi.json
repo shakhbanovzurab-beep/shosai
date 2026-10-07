@@ -1,0 +1,6 @@
+{
+  "invalidSettings": "The settings couldn’t be read. Reload the page and try again.",
+  "unknownSource": "This source doesn’t exist.",
+  "notConnected": "This source isn’t connected.",
+  "fieldRequired": "{field} is required."
+}

@@ -1,0 +1,53 @@
+{
+  "thread": {
+    "panelLabel": "Details",
+    "stages": "Stages",
+    "history": "How it went",
+    "summaryDecided": "{rounds, plural, one {Discussed # time — decided {date}.} other {Discussed # times — decided {date}.}}",
+    "summaryOpen": "{rounds, plural, one {Discussed # time — no decision.} other {Discussed # times — no decision.}}",
+    "blockers": "Each time it was: {quotes}.",
+    "round": "Round {index, number}",
+    "blocker": "What stood in the way",
+    "decision": "Decision",
+    "decisionChanged": "The decision changed",
+    "previous": "Before",
+    "current": "Now",
+    "decidedAt": "{date}, “{meeting}”",
+    "outcome": "How it turned out",
+    "outcomeUnknown": "the outcome isn’t known yet",
+    "links": {
+      "causes": "Holds up",
+      "blocked_by": "Held up by",
+      "outcome_of": "Follows from the decision"
+    },
+    "sources": "Sources",
+    "dismissals": "Dismissals",
+    "dismissedByYou": "Dismissed by you",
+    "disproved": "Disproved: {evidence}",
+    "dismissedUntil": "until {date}",
+    "returned": "the time ran out and it came back",
+    "owner": "Owner",
+    "noOwner": "not assigned",
+    "due": "Due",
+    "noDue": "no date",
+    "goneTitle": "This is no longer here",
+    "goneText": "The hub may have been deleted, or the meeting recording removed.",
+    "loadError": "Couldn’t load the details"
+  },
+  "why": {
+    "source": "Source",
+    "meeting": "meeting {date}, “{title}”",
+    "said": "Said by",
+    "moment": "Moment",
+    "jump": "Jump to the moment",
+    "signals": {
+      "series": "Meetings of this series are already here.",
+      "subject": "The conversation was about this hub.",
+      "title": "It’s in the meeting title.",
+      "entity": "The name came up in the conversation.",
+      "organisation": "The people are from this organisation.",
+      "human": "You put it here yourself."
+    },
+    "loadError": "Couldn’t load the source"
+  }
+}

@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "Borden",
+    "jiraBoards": "Gesynchroniseerd met Jira",
+    "newBoard": "Nieuw bord…",
+    "syncJiraBoard": "Jira-bord synchroniseren…",
+    "rename": "Bordnaam wijzigen…",
+    "showWorkspaceTasks": "Mijn werkruimtetaken hier tonen",
+    "changeIcon": "Pictogram wijzigen",
+    "delete": "Bord verwijderen…",
+    "stopSyncing": "Synchronisatie stoppen…"
+  },
+  "icons": {
+    "work": "Werk",
+    "home": "Thuis",
+    "personal": "Persoonlijk",
+    "health": "Gezondheid",
+    "study": "Studie",
+    "travel": "Reizen",
+    "shopping": "Winkelen",
+    "fitness": "Sport",
+    "project": "Project",
+    "reading": "Lezen"
+  },
+  "empty": {
+    "title": "Nog geen borden",
+    "description": "Maak een bord voor werk, thuis of iets anders, of haal een bord uit Jira binnen.",
+    "newBoard": "Nieuw bord",
+    "syncJiraBoard": "Jira-bord synchroniseren"
+  },
+  "newBoard": {
+    "title": "Nieuw bord",
+    "description": "Geef werk, thuis en al het andere elk een eigen bord.",
+    "namePlaceholder": "bijv. Thuis",
+    "icon": "Pictogram",
+    "columns": "Kolommen",
+    "create": "Bord maken"
+  },
+  "templates": {
+    "simple": "Eenvoudig",
+    "project": "Project"
+  },
+  "columnNames": {
+    "backlog": "Werkvoorraad",
+    "todo": "Te doen",
+    "inProgress": "Bezig",
+    "review": "Ter controle",
+    "done": "Afgerond"
+  },
+  "renameTitle": "Bordnaam wijzigen",
+  "delete": {
+    "title": "‘{board}’ verwijderen?",
+    "description": "{count, plural, =0 {Het bord wordt verwijderd. Dit kan niet ongedaan worden gemaakt.} one {Het bord en de taak erop worden verwijderd. Dit kan niet ongedaan worden gemaakt.} other {Het bord en alle # taken erop worden verwijderd. Dit kan niet ongedaan worden gemaakt.}}",
+    "confirm": "Bord verwijderen",
+    "stopTitle": "Synchronisatie van ‘{board}’ stoppen?",
+    "stopDescription": "Het bord verdwijnt hier. In Jira verandert er niets en je kunt het later opnieuw synchroniseren.",
+    "stopConfirm": "Synchronisatie stoppen"
+  },
+  "jira": {
+    "title": "Jira-bord synchroniseren",
+    "description": "Werk hier aan een Jira-bord; elke wijziging wordt in beide richtingen gesynchroniseerd.",
+    "connectTitle": "Koppel eerst Jira",
+    "connectDescription": "Log in bij Jira via Instellingen › Koppelingen en kom dan terug om een bord te kiezen.",
+    "openConnectors": "Koppelingen openen",
+    "connectedAs": "Gekoppeld als {account}.",
+    "connected": "Gekoppeld aan Jira.",
+    "noBoards": "Je Jira-account heeft nog geen borden.",
+    "boardList": "Jira-borden",
+    "alreadySynced": "Al gesynchroniseerd · openen",
+    "type": {
+      "kanban": "Kanbanbord",
+      "scrum": "Scrumbord"
+    },
+    "howColumns": "Kolommen en issues komen uit het Jira-bord.",
+    "howMoves": "Als je een kaart verplaatst, verandert de status van het issue in Jira; nieuwe taken worden Jira-issues.",
+    "howChanges": "Wijzigingen in Jira verschijnen hier vanzelf.",
+    "sync": "Bord synchroniseren"
+  },
+  "sync": {
+    "syncing": "Synchroniseren met Jira…",
+    "paused": "Synchronisatie gepauzeerd",
+    "synced": "Gesynchroniseerd met Jira",
+    "syncedAgo": "Gesynchroniseerd met Jira: {ago}",
+    "syncNow": "Nu synchroniseren",
+    "openBoard": "{board} openen in Jira",
+    "openHint": "Openen in Jira · {project} op {site}"
+  },
+  "banners": {
+    "syncStopped": "De synchronisatie met Jira is gestopt.",
+    "changesPaused": "Wijzigingen zijn gepauzeerd.",
+    "importing": "{board} wordt uit Jira geïmporteerd…",
+    "importingHint": "Kolommen en issues verschijnen hier zo.",
+    "offer": "{count, plural, one {Je hebt # openstaande taak in je werkruimtes. Wil je die op ‘{board}’ tonen?} other {Je hebt # openstaande taken in je werkruimtes. Wil je ze op ‘{board}’ tonen?}} Als je een kaart verplaatst, wordt de taak voor je team bijgewerkt.",
+    "notNow": "Niet nu",
+    "showHere": "{count, plural, one {Hier tonen} other {Hier tonen}}"
+  },
+  "toasts": {
+    "createFailed": "Kan het bord niet maken",
+    "connectFailed": "Kan het Jira-bord niet synchroniseren",
+    "updateFailed": "Kan het bord niet bijwerken",
+    "deleteFailed": "Kan het bord niet verwijderen",
+    "syncFailed": "Kan niet synchroniseren met Jira",
+    "deleted": "‘{board}’ verwijderd",
+    "stoppedSyncing": "Synchronisatie van ‘{board}’ gestopt",
+    "workspaceTasksOn": "Je werkruimtetaken staan nu op ‘{board}’",
+    "workspaceTasksOff": "Je werkruimtetaken staan niet meer op een bord",
+    "workspaceTasksHint": "Als je een kaart verplaatst, verandert de taak ook in de werkruimte.",
+    "workspaceTasksFailed": "Kan niet wijzigen waar werkruimtetaken worden getoond"
+  }
+}

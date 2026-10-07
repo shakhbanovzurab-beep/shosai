@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "Client email open source",
+    "description": "Un client email open source con navigazione della posta in arrivo, ricerca, lettura, risposta e archiviazione dei messaggi."
+  },
+  "preview": {
+    "title": "Anteprima della posta",
+    "description": "Questo riquadro mostra la schermata della posta autonoma. Aprila a schermo intero per vederla meglio.",
+    "openInNewTab": "Apri la posta in una nuova scheda"
+  },
+  "nav": {
+    "inbox": "Posta in arrivo",
+    "priority": "Priorità",
+    "drafts": "Bozze",
+    "sent": "Inviata",
+    "archive": "Archivio",
+    "trash": "Cestino",
+    "helpFeedback": "Aiuto e feedback",
+    "keyboardShortcuts": "Scorciatoie da tastiera"
+  },
+  "sidebar": {
+    "newEmail": "Nuova email",
+    "folders": "Cartelle"
+  },
+  "accounts": {
+    "switchTo": "Passa a {name}",
+    "menu": "Menu account",
+    "title": "Account",
+    "add": "Aggiungi account",
+    "manage": "Gestisci account",
+    "settings": "Impostazioni account",
+    "signOut": "Esci"
+  },
+  "inbox": {
+    "filter": "Filtra la posta",
+    "refresh": "Aggiorna la posta in arrivo",
+    "noSelection": "Nessuna email selezionata",
+    "needsYou": "Serve te",
+    "allMail": "Tutta la posta",
+    "pinnedGroup": "Fissate ({count, number})",
+    "inboxGroup": "Posta in arrivo ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "Email",
+    "drawerDescription": "Leggi l’email selezionata",
+    "to": "A: <names>{list}</names>",
+    "cc": "Cc: <names>{list}</names>",
+    "attachments": "Allegati ({count, number})"
+  },
+  "toolbar": {
+    "close": "Chiudi email",
+    "previous": "Email precedente",
+    "next": "Email successiva",
+    "pin": "Fissa conversazione",
+    "reply": "Rispondi",
+    "more": "Altre azioni",
+    "replyAll": "Rispondi a tutti",
+    "forward": "Inoltra",
+    "addLabel": "Aggiungi etichetta"
+  },
+  "menu": {
+    "markRead": "Segna come letta",
+    "markUnread": "Segna come non letta",
+    "pin": "Fissa in alto",
+    "unpin": "Non fissare più",
+    "markPriority": "Segna come prioritaria",
+    "removePriority": "Rimuovi da Priorità",
+    "labels": "Etichette",
+    "copySender": "Copia indirizzo del mittente",
+    "archive": "Archivia",
+    "trash": "Sposta nel cestino"
+  },
+  "replyBar": {
+    "placeholder": "Rispondi a {name}…",
+    "label": "Rispondi a {name}",
+    "addEmoji": "Aggiungi emoji",
+    "attachFile": "Allega file",
+    "send": "Invia"
+  },
+  "toasts": {
+    "senderCopied": "{email} copiato",
+    "senderCopyFailed": "Impossibile copiare l’indirizzo",
+    "replySent": "Risposta inviata a {name}",
+    "archived": "{count, plural, one {# email archiviata} many {# di email archiviate} other {# email archiviate}}",
+    "moved": "{folder, select, inbox {«{subject}» spostata in Posta in arrivo} drafts {«{subject}» spostata in Bozze} sent {«{subject}» spostata in Inviata} archive {«{subject}» spostata in Archivio} trash {«{subject}» spostata nel Cestino} other {«{subject}» spostata}}"
+  }
+}

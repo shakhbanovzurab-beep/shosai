@@ -1,0 +1,16 @@
+{
+  "fileGone": "Bu dosya artık mevcut değil.",
+  "folderGone": "Bu klasör artık mevcut değil.",
+  "chooseFile": "En az bir dosya seçin.",
+  "tooManyFiles": "Tek seferde en fazla {max, number} dosya yükleyin.",
+  "tooLarge": "“{name}”, {size} sınırından büyük.",
+  "overLeoLimit": "Planınızda Leo en fazla {limit} dosyanızı kullanabilir. Önce bazılarının kullanımını durdurun.",
+  "notUsedByLeo": "Leo bu dosyayı kullanmıyor.",
+  "shareFirst": "Önce dosyayı o çalışma alanında paylaşın.",
+  "fileNameRequired": "Bir dosya adı girin.",
+  "folderNameRequired": "Bir klasör adı girin.",
+  "nameTooLong": "Ad en fazla {max, number} karakter olabilir.",
+  "nameSlash": "Ad / veya \\ içeremez.",
+  "invalidRequest": "İstekte bir sorun var. Sayfayı yenileyip tekrar deneyin.",
+  "copyName": "{name} kopyası"
+}

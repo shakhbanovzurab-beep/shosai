@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} لكل مستخدم",
+    "from": "من {amount}",
+    "unlimited": "غير محدود"
+  },
+  "highlights": {
+    "unlimitedMeetings": "اجتماعات غير محدودة",
+    "meetingMinutes": "{minutes, plural, zero {# دقيقة اجتماعات} one {دقيقة اجتماعات واحدة} two {دقيقتا اجتماعات} few {# دقائق اجتماعات} many {# دقيقة اجتماعات} other {# دقيقة اجتماعات}} شهريًا",
+    "noMeetings": "الاجتماعات",
+    "fileManager": "مدير الملفات · {storage}",
+    "noFileManager": "مدير الملفات",
+    "knowledge": "المعرفة لـ Leo · {storage}",
+    "noKnowledge": "المعرفة لـ Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "مساحة عمل مشتركة للفريق",
+    "member_management": "إدارة المستخدمين",
+    "centralized_billing": "فوترة مركزية",
+    "billing_and_users": "فوترة مركزية وإدارة المستخدمين",
+    "admin_controls": "أمان على مستوى المؤسسات وأدوات تحكم للمشرفين",
+    "sso": "تسجيل الدخول الموحد (SSO)",
+    "priority_support": "دعم ذو أولوية",
+    "usage_analytics": "تحليلات الاستخدام"
+  },
+  "compare": {
+    "title": "مقارنة الخطط",
+    "feature": "الميزة",
+    "included": "مشمول",
+    "notIncluded": "غير مشمول",
+    "unlimited": "غير محدود",
+    "minutes": "{minutes, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتان} few {# دقائق} many {# دقيقة} other {# دقيقة}} / شهر",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "مخصص",
+    "rows": {
+      "meetings": "الاجتماعات",
+      "fileManager": "مدير الملفات",
+      "knowledge": "المعرفة لـ Leo",
+      "apps": "Leo، البريد الإلكتروني، التقويم، كانبان، الملاحظات",
+      "users": "المستخدمون",
+      "sharedWorkspace": "مساحة عمل مشتركة",
+      "billingAndUsers": "فوترة مركزية وإدارة المستخدمين",
+      "sso": "تسجيل الدخول الموحد (SSO)",
+      "adminControls": "الأمان وأدوات تحكم المشرفين",
+      "prioritySupport": "دعم ذو أولوية",
+      "usageAnalytics": "تحليلات الاستخدام"
+    }
+  }
+}

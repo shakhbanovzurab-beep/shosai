@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "add": "Ekle",
+    "cancel": "İptal",
+    "close": "Kapat",
+    "copyLink": "Bağlantıyı kopyala",
+    "create": "Oluştur",
+    "delete": "Sil",
+    "duplicate": "Kopyasını oluştur",
+    "open": "Aç",
+    "remove": "Kaldır",
+    "rename": "Yeniden adlandır",
+    "renameMenu": "Yeniden adlandır…",
+    "retry": "Tekrar dene",
+    "save": "Kaydet",
+    "undo": "Geri al"
+  },
+  "fields": {
+    "name": "Ad"
+  },
+  "feedback": {
+    "linkCopied": "Bağlantı kopyalandı",
+    "linkCopyFailed": "Bağlantı kopyalanamadı",
+    "loading": "Yükleniyor…"
+  },
+  "actionsFor": "{name} için işlemler",
+  "errors": {
+    "backendUnreachable": "Sunucuya ulaşılamadı. Birazdan tekrar deneyin."
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "生產力",
+    "description": "今天的任務、專案、專注計時器、行事曆和最近的筆記，還能一覽過去一年完成的工作。"
+  },
+  "greeting": "{period, select, morning {早安，{name}。} afternoon {午安，{name}。} other {晚安，{name}。}}",
+  "greetingAnyTime": "你好，{name}。",
+  "sidePanel": "行事曆、專注和筆記",
+  "tasks": {
+    "heading": "今天",
+    "progress": "已完成 {done, number} / {total, number}",
+    "newTask": "新任務",
+    "addTask": "新增任務"
+  },
+  "projects": {
+    "heading": "專案",
+    "status": {
+      "inProgress": "進行中",
+      "planning": "規劃中"
+    },
+    "progressOf": "{project} 的進度",
+    "due": "{date} 截止"
+  },
+  "notes": {
+    "heading": "最近的筆記",
+    "viewAll": "查看全部",
+    "today": "今天",
+    "yesterday": "昨天",
+    "empty": "還沒有筆記",
+    "emptyHint": "會議筆記會顯示在這裡。"
+  }
+}

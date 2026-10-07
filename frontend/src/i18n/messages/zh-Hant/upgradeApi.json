@@ -1,0 +1,13 @@
+{
+  "choosePlan": "請選擇方案。",
+  "planUnavailable": "這個方案目前無法使用。",
+  "salesOnly": "這個方案需透過我們的業務團隊安排。",
+  "alreadyOnPlan": "你已經在使用這個方案。",
+  "chooseUsers": "請選擇 {min, number}–{max, number} 位使用者。",
+  "chooseUsersOrMore": "請選擇 {min, plural, other {# 位以上的使用者}}。",
+  "singleUser": "這個方案僅限一位使用者。",
+  "paymentsNotConnected": "付款功能尚未啟用。帳單功能上線後，這裡會開啟付款服務商的安全結帳頁面。",
+  "invalidEmail": "請輸入有效的工作電子郵件地址。",
+  "companyRequired": "請輸入公司名稱。",
+  "checkForm": "請檢查表單內容。"
+}

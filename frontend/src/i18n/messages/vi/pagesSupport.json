@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "Hỗ trợ",
+    "description": "Nhờ đội ngũ của chúng tôi trợ giúp và theo dõi các yêu cầu hỗ trợ của bạn."
+  },
+  "categories": {
+    "billing": "Thanh toán",
+    "bug": "Báo lỗi",
+    "account": "Tài khoản",
+    "feature": "Đề xuất tính năng",
+    "other": "Khác"
+  },
+  "statuses": {
+    "open": "Đang chờ hỗ trợ",
+    "awaiting_you": "Đang chờ bạn",
+    "resolved": "Đã giải quyết"
+  },
+  "events": {
+    "acknowledged": "Chúng tôi đã nhận được tin nhắn của bạn. Chuyên viên thường trả lời trong vài giờ — chúng tôi sẽ thông báo cho bạn tại đây.",
+    "resolved": "Đã đánh dấu là đã giải quyết",
+    "reopened": "Đã mở lại"
+  },
+  "toolbar": {
+    "search": "Tìm kiếm yêu cầu",
+    "filter": "Lọc yêu cầu",
+    "all": "Tất cả",
+    "open": "Đang mở",
+    "resolved": "Đã giải quyết"
+  },
+  "newTicket": "Yêu cầu mới",
+  "table": {
+    "number": "№",
+    "subject": "Tiêu đề",
+    "status": "Trạng thái",
+    "topic": "Chủ đề",
+    "updated": "Cập nhật",
+    "unread": "Chưa đọc:"
+  },
+  "list": {
+    "loading": "Đang tải yêu cầu",
+    "loadError": "Không thể tải các yêu cầu của bạn",
+    "emptyTitle": "Chúng tôi có thể giúp gì?",
+    "emptyDescription": "Hãy gửi yêu cầu hỗ trợ, đội ngũ của chúng tôi sẽ trả lời tại đây, thường trong vài giờ.",
+    "noMatchesTitle": "Không tìm thấy yêu cầu nào",
+    "noMatchesDescription": "Hãy thử tìm kiếm hoặc bộ lọc khác."
+  },
+  "panel": {
+    "ticket": "Yêu cầu hỗ trợ",
+    "description": "Cuộc trò chuyện của bạn với bộ phận hỗ trợ"
+  },
+  "form": {
+    "title": "Chúng tôi có thể giúp gì?",
+    "subtitle": "Chúng tôi thường trả lời trong vài giờ.",
+    "topic": "Chủ đề",
+    "subject": "Tiêu đề",
+    "subjectPlaceholder": "Tóm tắt ngắn",
+    "body": "Chuyện gì đã xảy ra?",
+    "bodyPlaceholder": "Các bước, kết quả bạn mong đợi và những gì bạn thấy thay vào đó. Ảnh chụp màn hình sẽ giúp ích.",
+    "send": "Gửi"
+  },
+  "attach": {
+    "button": "Đính kèm tệp",
+    "list": "Tệp đính kèm",
+    "remove": "Gỡ {name}",
+    "tooBig": "{count, plural, other {{names} lớn hơn {size}}}",
+    "tooMany": "{max, plural, other {Chỉ đính kèm tối đa # tệp}}"
+  },
+  "composer": {
+    "message": "Tin nhắn",
+    "emoji": "Thêm biểu tượng cảm xúc",
+    "hint": "Enter để gửi · Shift+Enter để xuống dòng",
+    "send": "Gửi",
+    "reply": "Viết câu trả lời…",
+    "replyToReopen": "Trả lời để mở lại…"
+  },
+  "thread": {
+    "loading": "Đang tải yêu cầu",
+    "close": "Đóng yêu cầu",
+    "reopen": "Mở lại",
+    "resolve": "Đánh dấu là đã giải quyết",
+    "resolvedNote": "Đã giải quyết. Nếu vẫn cần trợ giúp, hãy trả lời bên dưới — yêu cầu sẽ được mở lại.",
+    "thanks": "Cảm ơn bạn đã góp ý.",
+    "rate": "Chúng tôi hỗ trợ thế nào?",
+    "good": "Tốt",
+    "bad": "Chưa tốt",
+    "you": "Bạn",
+    "support": "Hỗ trợ",
+    "supportAuthor": "{name} · Hỗ trợ",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "Đánh dấu là đã đọc",
+    "markUnread": "Đánh dấu là chưa đọc",
+    "copyNumber": "Sao chép số yêu cầu",
+    "copySubject": "Sao chép tiêu đề"
+  },
+  "toasts": {
+    "opened": "Đã gửi yêu cầu #{number}",
+    "openFailed": "Không thể gửi yêu cầu",
+    "updateFailed": "Không thể cập nhật yêu cầu",
+    "sendFailed": "Không thể gửi câu trả lời của bạn",
+    "markedRead": "Đã đánh dấu là đã đọc",
+    "markedUnread": "Đã đánh dấu là chưa đọc",
+    "reopened": "Đã mở lại yêu cầu",
+    "resolved": "Đã đánh dấu là đã giải quyết",
+    "numberCopied": "Đã sao chép số yêu cầu",
+    "subjectCopied": "Đã sao chép tiêu đề",
+    "numberCopyFailed": "Không thể sao chép số yêu cầu",
+    "subjectCopyFailed": "Không thể sao chép tiêu đề"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "ओपन सोर्स ईमेल क्लाइंट",
+    "description": "ओपन सोर्स ईमेल क्लाइंट, जिसमें इनबॉक्स नेविगेशन, मैसेज की खोज, पढ़ने, जवाब देने और आर्काइव करने की सुविधा है।"
+  },
+  "preview": {
+    "title": "मेल प्रीव्यू",
+    "description": "इस फ़्रेम में अलग मेल स्क्रीन दिखती है। बेहतर ढंग से देखने के लिए इसे फ़ुल स्क्रीन में खोलें।",
+    "openInNewTab": "मेल को नए टैब में खोलें"
+  },
+  "nav": {
+    "inbox": "इनबॉक्स",
+    "priority": "प्राथमिकता",
+    "drafts": "ड्राफ़्ट",
+    "sent": "भेजे गए",
+    "archive": "आर्काइव",
+    "trash": "ट्रैश",
+    "helpFeedback": "सहायता और फ़ीडबैक",
+    "keyboardShortcuts": "कीबोर्ड शॉर्टकट"
+  },
+  "sidebar": {
+    "newEmail": "नया ईमेल",
+    "folders": "फ़ोल्डर"
+  },
+  "accounts": {
+    "switchTo": "{name} पर स्विच करें",
+    "menu": "खाता मेन्यू",
+    "title": "खाते",
+    "add": "खाता जोड़ें",
+    "manage": "खाते मैनेज करें",
+    "settings": "खाते की सेटिंग",
+    "signOut": "साइन आउट करें"
+  },
+  "inbox": {
+    "filter": "मेल फ़िल्टर करें",
+    "refresh": "इनबॉक्स रीफ़्रेश करें",
+    "noSelection": "कोई ईमेल नहीं चुना गया",
+    "needsYou": "आपकी ज़रूरत है",
+    "allMail": "सभी मेल",
+    "pinnedGroup": "पिन किए गए ({count, number})",
+    "inboxGroup": "इनबॉक्स ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "ईमेल",
+    "drawerDescription": "चुना गया ईमेल पढ़ें",
+    "to": "प्रति: <names>{list}</names>",
+    "cc": "सीसी: <names>{list}</names>",
+    "attachments": "अटैचमेंट ({count, number})"
+  },
+  "toolbar": {
+    "close": "ईमेल बंद करें",
+    "previous": "पिछला ईमेल",
+    "next": "अगला ईमेल",
+    "pin": "थ्रेड पिन करें",
+    "reply": "जवाब दें",
+    "more": "और कार्रवाइयां",
+    "replyAll": "सभी को जवाब दें",
+    "forward": "फ़ॉरवर्ड करें",
+    "addLabel": "लेबल जोड़ें"
+  },
+  "menu": {
+    "markRead": "पढ़ा गया मार्क करें",
+    "markUnread": "नहीं पढ़ा गया मार्क करें",
+    "pin": "सबसे ऊपर पिन करें",
+    "unpin": "अनपिन करें",
+    "markPriority": "प्राथमिकता वाला मार्क करें",
+    "removePriority": "प्राथमिकता से हटाएं",
+    "labels": "लेबल",
+    "copySender": "भेजने वाले का पता कॉपी करें",
+    "archive": "आर्काइव करें",
+    "trash": "ट्रैश में डालें"
+  },
+  "replyBar": {
+    "placeholder": "{name} को जवाब दें…",
+    "label": "{name} को जवाब दें",
+    "addEmoji": "इमोजी जोड़ें",
+    "attachFile": "फ़ाइल अटैच करें",
+    "send": "भेजें"
+  },
+  "toasts": {
+    "senderCopied": "{email} कॉपी किया गया",
+    "senderCopyFailed": "पता कॉपी नहीं किया जा सका।",
+    "replySent": "{name} को जवाब भेजा गया",
+    "archived": "{count, plural, one {# ईमेल आर्काइव किया गया} other {# ईमेल आर्काइव किए गए}}",
+    "moved": "{folder, select, inbox {“{subject}” को इनबॉक्स में ले जाया गया} drafts {“{subject}” को ड्राफ़्ट में ले जाया गया} sent {“{subject}” को भेजे गए में ले जाया गया} archive {“{subject}” को आर्काइव में ले जाया गया} trash {“{subject}” को ट्रैश में ले जाया गया} other {“{subject}” को ले जाया गया}}"
+  }
+}

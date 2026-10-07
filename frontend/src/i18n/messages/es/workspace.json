@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "Espacios de trabajo",
+    "home": "Inicio del espacio de trabajo",
+    "new": "Nuevo espacio de trabajo",
+    "settings": "Configuración del espacio de trabajo",
+    "members": "Miembros",
+    "decisions": "Decisiones",
+    "projects": "Proyectos",
+    "tasks": "Tareas",
+    "knowledge": "Conocimiento del espacio de trabajo",
+    "meetings": "Reuniones del espacio de trabajo",
+    "project": "Proyecto",
+    "meeting": "Reunión"
+  },
+  "createWorkspace": "Crear un espacio de trabajo",
+  "roles": {
+    "owner": {
+      "label": "Propietario",
+      "description": "Todo, incluida la facturación y la eliminación del espacio de trabajo."
+    },
+    "admin": {
+      "label": "Administrador",
+      "description": "Administra personas, equipos, reglas para compartir y la configuración."
+    },
+    "member": {
+      "label": "Miembro",
+      "description": "Graba y comparte reuniones, y les da seguimiento."
+    }
+  },
+  "teams": {
+    "private": "Equipo privado"
+  },
+  "audience": {
+    "participants": "Participantes",
+    "everyone": "Todos en {workspace}",
+    "aTeam": "Un equipo",
+    "sharedWith": "{level, select, participants {Compartido con los participantes} workspace {Compartido con todos en {workspace}} other {Compartido con {team}}}",
+    "hint": "{level, select, participants {Miembros que estuvieron en la reunión.} other {Todos en el espacio de trabajo, ahora y en el futuro.}}",
+    "teamHint": "{private, select, true {Miembros de {team} (equipo privado), más los participantes.} other {Miembros de {team}, más los participantes.}}"
+  },
+  "people": {
+    "list": "Personas: {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name} (tú)"
+  },
+  "filters": {
+    "team": "Equipo",
+    "allTeams": "Todos los equipos",
+    "project": "Proyecto",
+    "allProjects": "Todos los proyectos",
+    "clearSearch": "Borrar búsqueda"
+  },
+  "blocks": {
+    "loading": {
+      "files": "Cargando los archivos…",
+      "tasks": "Cargando las tareas…",
+      "yourTasks": "Cargando tus tareas…",
+      "projects": "Cargando los proyectos…",
+      "meetings": "Cargando las reuniones…",
+      "upcomingMeetings": "Cargando las próximas reuniones…",
+      "decisions": "Cargando las decisiones…"
+    },
+    "failed": {
+      "files": "No se pudieron cargar los archivos.",
+      "tasks": "No se pudieron cargar las tareas.",
+      "yourTasks": "No se pudieron cargar tus tareas.",
+      "projects": "No se pudieron cargar los proyectos.",
+      "meetings": "No se pudieron cargar las reuniones.",
+      "upcomingMeetings": "No se pudieron cargar las próximas reuniones.",
+      "decisions": "No se pudieron cargar las decisiones."
+    }
+  },
+  "dates": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "tomorrow": "Mañana",
+    "targetOverdue": "Con retraso · {date}",
+    "targetToday": "Previsto para hoy",
+    "targetTomorrow": "Previsto para mañana",
+    "targetDay": "Previsto para el {day}",
+    "targetDate": "Previsto para el {date}",
+    "ago": "{days, plural, =0 {hoy} =1 {ayer} one {hace # día} many {hace # de días} other {hace # días}}",
+    "on": "el {date}",
+    "neverSignedIn": "Nunca inició sesión",
+    "activeNow": "Activo ahora",
+    "hoursAgo": "{count, plural, one {Hace # hora} many {Hace # de horas} other {Hace # horas}}",
+    "daysAgo": "{count, plural, =1 {Ayer} one {Hace # día} many {Hace # de días} other {Hace # días}}"
+  },
+  "gate": {
+    "loading": "Cargando el espacio de trabajo…",
+    "loadFailed": "No se pudo cargar el espacio de trabajo",
+    "listFailed": "No se pudieron cargar tus espacios de trabajo",
+    "unavailable": "Este espacio de trabajo no está disponible",
+    "unavailableHint": "No existe o no eres miembro. Pide a alguien que esté en él que te invite, o crea el tuyo.",
+    "backToPersonal": "Volver a Personal",
+    "suspended": "{name} está suspendido",
+    "suspendedOwnerHint": "El acceso está en pausa para todos sus miembros. Contacta con soporte para restablecerlo; no se eliminó nada del espacio de trabajo.",
+    "suspendedHint": "El acceso está en pausa para todos sus miembros. Su propietario puede contactar con soporte para restablecerlo. Tus notas, archivos y tableros de Personal no se ven afectados."
+  },
+  "switcher": {
+    "invite": "Invitar personas a {name}",
+    "settings": "Configuración del espacio de trabajo",
+    "current": "Actual",
+    "hint": "Cambia entre Personal y los espacios de trabajo",
+    "personal": "Personal",
+    "personalHint": "Tu correo, notas, tableros y tareas",
+    "workspaces": "Espacios de trabajo",
+    "suspended": "Suspendido",
+    "detail": "{role} · {count, plural, one {# miembro} many {# de miembros} other {# miembros}}",
+    "loadFailed": "No se pudieron cargar tus espacios de trabajo. Inténtalo de nuevo",
+    "none": "Aún no estás en ningún espacio de trabajo"
+  },
+  "create": {
+    "title": "Trae a tu equipo a Leo",
+    "intro": "Un espacio de trabajo compartido para lo que hacen juntos. Personal sigue siendo tuyo: el correo, el calendario, las notas y los tableros son privados hasta que decidas compartir algo.",
+    "value": {
+      "meetings": {
+        "title": "Reuniones compartidas",
+        "text": "Comparte una grabación desde tus Notas o deja que las notas lleguen a las personas indicadas al terminar una reunión. Las reuniones con invitados siguen siendo privadas."
+      },
+      "work": {
+        "title": "Proyectos, tareas y decisiones",
+        "text": "Lo que se decidió y quién debe qué, agrupado por proyecto. Tus tareas también aparecen en tu Productividad y tu Kanban."
+      },
+      "knowledge": {
+        "title": "Conocimiento del equipo",
+        "text": "Comparte archivos desde tu Administrador de archivos, sube otros nuevos o conecta una unidad compartida. Leo responde con ellos a quien tenga permiso para verlos."
+      }
+    },
+    "billing": "Se factura por licencia en el plan Team. <link>Ver precios</link>",
+    "formHint": "Serás su propietario. Invita a personas justo después.",
+    "name": "Nombre del espacio de trabajo",
+    "namePlaceholder": "p. ej., Acme",
+    "nameRequired": "Ponle un nombre al espacio de trabajo.",
+    "seats": "Licencias",
+    "fewerSeats": "Menos licencias",
+    "moreSeats": "Más licencias",
+    "seatsHint": "Una por persona, incluido tú. De {min, number} a {max, number}; puedes cambiarlo cuando quieras.",
+    "submit": "Crear espacio de trabajo"
+  },
+  "toasts": {
+    "workspaceReady": "{name} está listo",
+    "workspaceReadyHint": "Invita a tu equipo para empezar a compartir reuniones.",
+    "createWorkspaceFailed": "No se pudo crear el espacio de trabajo.",
+    "saveFailed": "No se pudo guardar el cambio",
+    "workspaceDeleted": "Se eliminó {name}",
+    "deleteWorkspaceFailed": "No se pudo eliminar el espacio de trabajo",
+    "workspaceLeft": "Saliste de {name}",
+    "leaveWorkspaceFailed": "No se pudo salir del espacio de trabajo",
+    "projectSaveFailed": "No se pudo guardar el proyecto",
+    "projectDeleted": "Se eliminó {name}",
+    "projectDeletedHint": "Sus reuniones y tareas siguen aquí.",
+    "projectDeleteFailed": "No se pudo eliminar el proyecto",
+    "filesAdded": "{count, plural, one {Se agregó {name}} many {Se agregaron # de archivos} other {Se agregaron # archivos}}",
+    "filesAddedHint": "{count, plural, one {Leo podrá responder con él cuando termine la indexación.} many {Leo podrá responder con ellos cuando termine la indexación.} other {Leo podrá responder con ellos cuando termine la indexación.}}",
+    "sourceConnected": "Se conectó {name}",
+    "sourceConnectedHint": "Leo podrá responder con ella después de la primera sincronización.",
+    "knowledgeChangeFailed": "No se pudo cambiar",
+    "stoppedSharing": "Se dejó de compartir {name}",
+    "stoppedSharingHint": "Sigue en el Administrador de archivos de su propietario; Leo ya no responde con él aquí.",
+    "knowledgeRemoved": "Se quitó {name}",
+    "knowledgeRemovedHint": "Leo ya no responde con esto.",
+    "knowledgeRemoveFailed": "No se pudo quitar",
+    "fileStaysYours": "{count, plural, one {Sigue en tu Administrador de archivos y sigue siendo tuyo.} many {Siguen en tu Administrador de archivos y siguen siendo tuyos.} other {Siguen en tu Administrador de archivos y siguen siendo tuyos.}}",
+    "shareFileFailed": "No se pudo compartir",
+    "filesShared": "{count, plural, one {Se compartió {name}} many {Se compartieron # de archivos} other {Se compartieron # archivos}}",
+    "stillInFileManager": "Sigue en tu Administrador de archivos.",
+    "unshareFileFailed": "No se pudo dejar de compartir",
+    "meetingShareFailed": "No se pudo compartir la reunión",
+    "meetingChangeFailed": "No se pudo cambiar la reunión",
+    "changeUndone": "Cambio deshecho",
+    "noLongerShared": "Ya no se comparte",
+    "stillInYourNotes": "Sigue en tus Notas.",
+    "stillInOwnerNotes": "Sigue en las Notas de su propietario.",
+    "sharedAgain": "Se volvió a compartir",
+    "unshareMeetingFailed": "No se pudo dejar de compartir",
+    "taskUpdateFailed": "No se pudo actualizar la tarea",
+    "markedDone": "Marcada como hecha",
+    "taskAdded": "Tarea agregada"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "memory": "Bellek",
+  "memoryHint": "Leo, sohbetlerinizden ve toplantılarınızdan yararlı bilgileri hatırlar ve sonraki yanıtlarında kullanır.",
+  "summary": {
+    "title": "Bellek özeti",
+    "description": "Leo’nun sizinle ilgili öğrendiklerine genel bir bakış atın. Her zaman dikkate alması gerekenleri <link>özel talimatlarınıza</link> ekleyin.",
+    "dialogDescription": "Leo’nun sizinle ilgili öğrendikleri.",
+    "updated": "Güncellendi: {ago}",
+    "actions": "Bellek özeti işlemleri",
+    "refresh": "Özeti yenile",
+    "refreshFailed": "Yenilenemedi",
+    "copy": "Metni kopyala",
+    "copied": "Özet kopyalandı",
+    "copyFailed": "Kopyalanamadı",
+    "learnMore": "Daha fazla bilgi"
+  },
+  "composer": {
+    "placeholder": "Soru sorun veya değişiklik isteyin",
+    "label": "Bellek özetiniz hakkında soru sorun veya Leo’ya neyi değiştirmesi gerektiğini söyleyin",
+    "send": "Gönder",
+    "sendFailed": "Gönderilemedi"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "Ein ausgefeiltes Open-Source-Admin-Dashboard auf Basis von shadcn/ui."
+  },
+  "actions": {
+    "goHome": "Zur Startseite",
+    "goBack": "Zurück"
+  },
+  "placeholder": {
+    "title": "{title} kommt bald",
+    "description": "Dieser Bereich wird gerade entwickelt und ist bald verfügbar.",
+    "badge": "In Entwicklung"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "Alle"
+  },
+  "emoji": {
+    "search": "Emoji suchen",
+    "empty": "Keine Emojis gefunden"
+  },
+  "notFound": {
+    "metaTitle": "Seite nicht gefunden",
+    "badge": "Fehler {code}",
+    "title": "Diese Seite hat sich verlaufen",
+    "description": "Der Link ist vielleicht fehlerhaft, oder die Seite wurde verschoben oder entfernt. Hier geht’s zurück.",
+    "popularPages": "Beliebte Seiten",
+    "jumpTo": "Oder springe zu"
+  },
+  "unauthorized": {
+    "metaTitle": "Kein Zugriff",
+    "title": "Du hast keinen Zugriff",
+    "description": "Du darfst diese Seite nicht ansehen. Wenn du das für einen Irrtum hältst, wende dich an deinen Admin."
+  }
+}

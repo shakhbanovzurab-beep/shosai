@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "與 Leo 對話",
+    "close": "關閉與 Leo 的對話",
+    "tooltipOpen": "詢問 Leo",
+    "tooltipClose": "關閉 Leo"
+  },
+  "panel": {
+    "label": "與 Leo 對話",
+    "subtitle": "AI 代理",
+    "working": "正在處理…",
+    "newChat": "新對話",
+    "fullScreen": "全螢幕",
+    "exitFullScreen": "結束全螢幕",
+    "close": "關閉",
+    "dropFiles": "放開即可附加檔案"
+  },
+  "place": {
+    "personal": "個人",
+    "workspace": "位於 {name}",
+    "hub": "位於「{name}」",
+    "scopePersonal": "我會運用你的郵件、行事曆、筆記、任務和你為我挑選的檔案，以及各工作空間與你共用的內容。只有你看得到這個對話。",
+    "scopeWorkspace": "我只會根據 {name} 與你共用的內容回答：會議、決策、專案和知識庫。這個對話會保留在 {name} 中。",
+    "scopeHub": "我只會根據「{name}」的內容回答：會議、決策和相關資料。這個對話會保留在這裡。",
+    "boundHub": "只回答「{name}」的相關問題"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {晚安} morning {早安} afternoon {午安} other {晚安}}",
+    "hi": "嗨",
+    "intro": "{greeting}，我是 Leo",
+    "howCanIHelp": "今天有什麼可以幫你的？",
+    "suggestionsLabel": "建議"
+  },
+  "suggestions": {
+    "default": {
+      "first": "幫我規劃今天",
+      "second": "幫我摘要需要留意的事",
+      "third": "你可以幫我做什麼？"
+    },
+    "hub": {
+      "first": "這件事卡在哪裡？",
+      "second": "上次會議有哪些改變？",
+      "third": "幫我準備下次會議"
+    },
+    "workspace": {
+      "first": "我們對定價做了什麼決定？",
+      "second": "這裡有哪些我負責的事已逾期？",
+      "third": "找出我們的資安政策"
+    },
+    "productivity": {
+      "first": "幫我規劃今天",
+      "second": "我該先處理什麼？",
+      "third": "幫我摘要這一週"
+    },
+    "mail": {
+      "first": "幫我摘要收件匣",
+      "second": "幫我草擬一封客氣的追蹤信",
+      "third": "哪些郵件很緊急？"
+    },
+    "calendar": {
+      "first": "我今天的行事曆有什麼？",
+      "second": "幫我找這週一小時的空檔",
+      "third": "幫我準備下一場會議"
+    },
+    "kanban": {
+      "first": "哪些任務已逾期？",
+      "second": "幫我摘要這個看板",
+      "third": "建議接下來該推進哪些任務"
+    },
+    "meetings": {
+      "first": "我今天有哪些會議？",
+      "second": "幫我安排與團隊的通話",
+      "third": "幫我準備下一場通話"
+    },
+    "notes": {
+      "first": "幫我摘要上次的會議",
+      "second": "列出我的待辦事項",
+      "third": "我們這週決定了哪些事？"
+    },
+    "fileManager": {
+      "first": "找出我最近的檔案",
+      "second": "哪些檔案最佔空間？",
+      "third": "幫我整理檔案"
+    },
+    "studio": {
+      "first": "幫我寫一則系統訊息",
+      "second": "比較可用的模型",
+      "third": "改善這個提示詞"
+    }
+  },
+  "composer": {
+    "placeholder": "問 Leo 任何問題",
+    "label": "傳訊息給 Leo",
+    "attach": "附加檔案",
+    "attachLimit": "最多可附加 {max, plural, other {# 個檔案}}",
+    "filesToSend": "要傳送的檔案",
+    "removeFile": "移除 {name}",
+    "disclaimer": "Leo 可能會出錯，請查證重要資訊。",
+    "stop": "停止 Leo",
+    "send": "傳送訊息",
+    "startVoice": "開啟語音模式",
+    "voiceMode": "語音模式"
+  },
+  "message": {
+    "copy": "複製",
+    "copied": "已複製",
+    "copyFailed": "無法複製到剪貼簿",
+    "regenerate": "重新產生",
+    "tryAgain": "重試",
+    "replyFailed": "Leo 無法完成回覆。請檢查網路連線，然後再試一次。",
+    "edit": "編輯",
+    "editMessage": "編輯訊息",
+    "attachedFiles": "附件"
+  },
+  "steps": {
+    "gettingStarted": "正在準備",
+    "doneIn": "已完成，耗時 {duration}",
+    "stoppedAfter": "已停止，耗時 {duration}",
+    "somethingWrong": "發生錯誤",
+    "label": "Leo 的動作",
+    "needsApproval": "待核准",
+    "detail": "「{detail}」",
+    "status": "{status, select, running {進行中} done {已完成} error {失敗} stopped {已停止} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} 太大",
+    "sizeLimit": "檔案大小上限為 {size}。",
+    "tooMany": "最多可附加 {max, plural, other {# 個檔案}}。"
+  },
+  "voice": {
+    "unavailable": "無法使用語音模式",
+    "listening": "正在聆聽…",
+    "thinking": "Leo 正在思考…",
+    "speaking": "Leo 正在說話…",
+    "micOff": "麥克風已關閉",
+    "turnMicOn": "開啟麥克風",
+    "turnMicOff": "關閉麥克風",
+    "end": "結束語音模式",
+    "micBlocked": "麥克風存取權已被封鎖",
+    "micBlockedHint": "允許使用麥克風，即可與 Leo 對話。",
+    "needsHttps": "語音模式需要安全連線（HTTPS）才能使用麥克風。",
+    "unsupported": "這個瀏覽器不支援語音模式。請改用最新版的 Chrome、Edge 或 Safari。"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "intro": "Die Anweisungen, nach denen dein Assistent seine Rollen ausführt. Fertige Skills aus dem Katalog, eigene aus deinem Repository.",
+  "role": "Rolle",
+  "skills": "Skills",
+  "search": {
+    "placeholder": "Nach Name suchen…",
+    "label": "Prompts nach Name suchen"
+  },
+  "loadFailed": "Prompts konnten nicht geladen werden",
+  "empty": {
+    "title": "Noch keine Prompts",
+    "description": "Erstelle einen Prompt für eine Rolle und hänge dann Skills an, um ihn zu erweitern."
+  },
+  "noMatches": {
+    "title": "Keine Treffer",
+    "description": "Versuche es mit einem anderen Namen oder einer anderen Rolle."
+  },
+  "copyName": "{name} (Kopie)",
+  "delete": {
+    "title": "„{name}“ löschen?",
+    "description": "Wenn eine Rolle ihn verwendet, nutzt sie wieder ihren integrierten Standard-Prompt."
+  },
+  "filter": {
+    "label": "Nach Rolle filtern",
+    "all": "Alle",
+    "allHelp": "Alle Prompts, unabhängig von der Rolle."
+  },
+  "table": {
+    "number": "Nr.",
+    "updated": "Aktualisiert",
+    "inUse": "Verwendet",
+    "deleteNamed": "{name} löschen"
+  },
+  "menu": {
+    "edit": "Bearbeiten…",
+    "stopUsing": "Nicht mehr verwenden",
+    "useFor": "Für {role} verwenden",
+    "duplicate": "Duplizieren…",
+    "delete": "Löschen…"
+  },
+  "editor": {
+    "editTitle": "Prompt bearbeiten",
+    "newTitle": "Neuer Prompt",
+    "description": "Anweisungen, denen der Assistent in der gewählten Rolle folgt, dazu alle Skills.",
+    "namePlaceholder": "KI-Fassung",
+    "instructions": "Anweisungen",
+    "instructionsPlaceholder": "Beschreibe, wie sich der Assistent in dieser Rolle verhalten soll. Markdown ist möglich.",
+    "noSkills": "Noch keine Skills installiert – füge welche über die Schaltfläche „Skills“ hinzu.",
+    "saveFailed": "Prompt konnte nicht gespeichert werden – schreib weiter, um es erneut zu versuchen",
+    "savesAutomatically": "Änderungen werden automatisch gespeichert",
+    "done": "Fertig"
+  },
+  "toasts": {
+    "deleted": "„{name}“ gelöscht",
+    "deleteFailed": "Der Prompt konnte nicht gelöscht werden",
+    "inUse": "{role} verwendet jetzt „{name}“",
+    "backToDefault": "{role} verwendet wieder den integrierten Prompt",
+    "changeFailed": "Der Prompt konnte nicht geändert werden",
+    "created": "„{name}“ erstellt",
+    "createFailed": "Der Prompt konnte nicht erstellt werden"
+  }
+}

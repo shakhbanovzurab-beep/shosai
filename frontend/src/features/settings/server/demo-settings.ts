@@ -1,0 +1,115 @@
+import type { Memory, MemorySummary } from "../domain/memory-contract";
+import type { SettingsPatch, UserSettings } from "../domain/settings-contract";
+
+/*
+ * In-memory stand-in for the settings backend, used when BACKEND_API_URL is unset. On globalThis so
+ * every route bundle shares it; resets when the server restarts. Billing and usage samples are in demo-billing.ts.
+ * Memories and the summary are what Leo wrote, so they stay as written in every interface language.
+ */
+
+type State = {
+  settings: UserSettings;
+  memories: Map<string, Memory>;
+  /** The summary Leo wrote, without the user's notes. */
+  summary: MemorySummary;
+  /** What the user told Leo through "Ask or update", oldest first. */
+  notes: string[];
+};
+
+const daysAgo = (days: number) => new Date(Date.now() - days * 86400000).toISOString();
+const memory = (id: string, text: string, days: number): Memory => ({ id, text, created_at: daysAgo(days) });
+const section = (title: string, body: string) => ({ title, body });
+
+const shared = globalThis as typeof globalThis & { settingsDemo?: State };
+shared.settingsDemo ??= {
+  settings: {
+    full_name: "Arham Khan",
+    display_name: "Arham",
+    email: "arham@lumen.so",
+    avatar_url: null,
+    work_role: "other",
+    improve_models: false,
+    share_location: true,
+    leo_model: "auto",
+    response_language: "auto",
+    response_length: "balanced",
+    web_search: true,
+    voice_mode: true,
+    knowledge_base_search: false,
+    connected_services_search: false,
+    memory_enabled: true,
+    hotkeys: {},
+  },
+  memories: new Map(
+    [
+      memory("m1", "Prefers concise answers with code in Python.", 2),
+      memory("m2", "Preparing for system design interviews at product companies.", 6),
+      memory("m3", "Works in a fintech team using FastAPI and PostgreSQL.", 14),
+    ].map((m) => [m.id, m]),
+  ),
+  summary: {
+    sections: [
+      section(
+        "Work",
+        "You work in a fintech team building backend services with FastAPI and PostgreSQL, and you care about reliable data flows and clear APIs.",
+      ),
+      section(
+        "Goals",
+        "You’re preparing for system design interviews at product companies and want to practise explaining trade-offs out loud.",
+      ),
+      section("How you like answers", "Concise and direct, with code in Python unless you say otherwise."),
+    ],
+    suggestions: [
+      "What should I focus on before my system design interviews?",
+      "Which of my projects best show my backend experience?",
+      "Summarise how my preferences shape Leo’s answers.",
+    ],
+    updated_at: new Date(Date.now() - 19 * 3600000).toISOString(),
+  },
+  notes: [],
+};
+const state = shared.settingsDemo;
+
+export const getSettings = () => state.settings;
+
+/** Settings › Leo › Response language, for the Leo agent: a language code or "auto". */
+export const responseLanguageSetting = () => state.settings.response_language;
+
+export function patchSettings(patch: SettingsPatch): UserSettings {
+  state.settings = { ...state.settings, ...patch };
+  return state.settings;
+}
+
+/** The demo keeps the scaled image inline as a data URL; the backend should store it and return a URL. */
+export function setAvatar(url: string | null): UserSettings {
+  state.settings = { ...state.settings, avatar_url: url };
+  return state.settings;
+}
+
+/**
+ * The summary as the user sees it: what Leo wrote, then the user's notes under `notesTitle`, which the
+ * route words in the request's interface language.
+ */
+export function getSummary(notesTitle: string): MemorySummary {
+  const { summary, notes } = state;
+  if (notes.length === 0) return summary;
+  return { ...summary, sections: [...summary.sections, section(notesTitle, notes.join("\n"))] };
+}
+
+/**
+ * The demo has no model to answer or rewrite the summary, so it records what the user said as a note;
+ * the backend should answer questions and fold updates into the text.
+ */
+export function addSummaryNote(message: string) {
+  state.notes = [...state.notes, message];
+  state.summary = { ...state.summary, updated_at: new Date().toISOString() };
+}
+
+export function refreshSummary() {
+  state.summary = { ...state.summary, updated_at: new Date().toISOString() };
+}
+
+export const listMemories = () =>
+  [...state.memories.values()].toSorted((a, b) => b.created_at.localeCompare(a.created_at));
+export const deleteMemory = (id: string) => state.memories.delete(id);
+export const clearMemories = () => state.memories.clear();

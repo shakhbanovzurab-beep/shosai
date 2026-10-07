@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Ясно",
+    "partly": "Переменная облачность",
+    "overcast": "Пасмурно",
+    "fog": "Туман",
+    "drizzle": "Морось",
+    "rain": "Дождь",
+    "snow": "Снег",
+    "storm": "Гроза",
+    "unknown": "Нет данных"
+  },
+  "fallbackPlace": "Москва",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, днём до {high}, ночью до {low}",
+  "summaryAt": "{condition}, {now}, днём до {high}, ночью до {low}, {place}"
+}

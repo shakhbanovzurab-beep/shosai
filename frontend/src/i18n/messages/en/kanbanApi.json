@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "Board not found.",
+  "taskNotFound": "Task not found.",
+  "columnNotFound": "Column not found.",
+  "boardChanged": "The board changed. Reload it and try again.",
+  "managedInJira": "This board is managed in Jira. Make this change there.",
+  "reconnectJira": "Reconnect Jira in Settings › Connectors to make changes.",
+  "firstSync": "Wait for the first sync with Jira to finish.",
+  "jiraDisconnected": "Jira is disconnected. Reconnect it in Settings › Connectors to keep this board in sync.",
+  "connectJiraFirst": "Connect Jira in Settings › Connectors first.",
+  "jiraBoardUnavailable": "That Jira board isn’t available to your Jira account.",
+  "jiraBoardSynced": "This Jira board is already synced.",
+  "notJiraBoard": "Only boards synced with Jira can be synced.",
+  "jiraBoardWorkspaceTasks": "Jira boards show Jira issues only. Pick a board kept in the app.",
+  "workspaceTaskCopy": "Workspace tasks can’t be duplicated here. Add a task in the workspace instead.",
+  "workspaceTaskDelete": "Workspace tasks leave the board when they’re done or reassigned in the workspace.",
+  "boardNameRequired": "Name the board.",
+  "boardNameTooLong": "That name is too long. Use a shorter one.",
+  "taskTitleRequired": "Give the task a title.",
+  "invalidRequest": "Something in the request isn’t right. Reload the page and try again."
+}

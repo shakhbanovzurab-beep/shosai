@@ -1,0 +1,26 @@
+{
+  "description": "Pintasan untuk aplikasi desktop. Pintasan berfungsi di mana saja di komputer Anda, bahkan saat aplikasi berjalan di latar belakang, dan disinkronkan ke semua perangkat Anda.",
+  "commands": {
+    "open_app": "Buka aplikasi",
+    "toggle_recording": "Mulai / jeda rekaman",
+    "toggle_overlay": "Tampilkan / sembunyikan overlay",
+    "open_settings": "Pengaturan",
+    "collapse_overlay": "Ciutkan overlay menjadi pil",
+    "close_app": "Tutup aplikasi",
+    "live_translation": "Terjemahan langsung",
+    "prompter": "Teleprompter"
+  },
+  "off": "Nonaktif",
+  "pressKeys": "Tekan tombol…",
+  "hint": "Esc untuk membatalkan · Backspace untuk menonaktifkan",
+  "reset": "Atur ulang {command} ke default",
+  "record": "Tekan pintasan baru untuk {command}",
+  "change": "{command}: {keys}. Ubah",
+  "changeOff": "{command}: nonaktif. Ubah",
+  "resetAll": "Atur ulang semua ke default",
+  "problems": {
+    "needsModifier": "Gunakan ⌘/Ctrl atau ⌥/Alt bersama tombol lain.",
+    "reserved": "Pintasan tersebut milik sistem.",
+    "taken": "Sudah dipakai untuk “{command}”."
+  }
+}

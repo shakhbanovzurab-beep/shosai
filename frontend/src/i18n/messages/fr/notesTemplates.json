@@ -1,0 +1,113 @@
+{
+  "enhanced": {
+    "name": "Notes enrichies",
+    "description": "Leo choisit la structure adaptée à la réunion."
+  },
+  "sections": {
+    "summary": "Résumé",
+    "keyPoints": "Points clés",
+    "decisions": "Décisions",
+    "actionItems": "Actions à mener"
+  },
+  "samples": {
+    "catchUpInvestor": {
+      "name": "Point : investisseur",
+      "description": "Point régulier avec un investisseur : où en sont les choses et en quoi il peut aider."
+    },
+    "catchUpPortfolio": {
+      "name": "Point : société du portefeuille",
+      "description": "Point avec une société du portefeuille sur les indicateurs, les risques et les demandes."
+    },
+    "lpProspective": {
+      "name": "LP : prospect",
+      "description": "Premiers échanges avec un commanditaire (LP) potentiel."
+    },
+    "vcBoardMeeting": {
+      "name": "VC : conseil d’administration",
+      "description": "Échanges du conseil, résolutions et responsables."
+    },
+    "vcPitch": {
+      "name": "VC : pitch",
+      "description": "Le pitch d’une startup : ce qui a retenu l’attention, la conclusion et les vérifications à mener."
+    },
+    "oneOnOne": {
+      "name": "Entretien individuel",
+      "description": "Un entretien individuel : comment ça va, les sujets abordés et les prochaines étapes convenues."
+    },
+    "customerCall": {
+      "name": "Appel client",
+      "description": "Découverte ou suivi avec un client : difficultés, demandes et suites à donner."
+    },
+    "teamSync": {
+      "name": "Point d’équipe",
+      "description": "Une réunion d’équipe récurrente : avancées, décisions et qui fait quoi."
+    }
+  },
+  "headings": {
+    "whereWeAre": "Où nous en sommes",
+    "updatesShared": "Nouvelles partagées",
+    "whatWeAgreed": "Ce que nous avons convenu",
+    "followUps": "Suites à donner",
+    "companyUpdate": "Actualités de l’entreprise",
+    "metricsAndHighlights": "Indicateurs et faits marquants",
+    "howWeCanHelp": "Comment nous pouvons aider",
+    "overview": "Vue d’ensemble",
+    "theirInterests": "Leurs centres d’intérêt",
+    "nextSteps": "Prochaines étapes",
+    "boardSummary": "Synthèse du conseil",
+    "discussion": "Échanges",
+    "resolutions": "Résolutions",
+    "ownersAndDeadlines": "Responsables et échéances",
+    "thePitch": "Le pitch",
+    "whatStoodOut": "Ce qui a retenu l’attention",
+    "verdict": "Conclusion",
+    "diligenceToDos": "Vérifications à mener",
+    "howItsGoing": "Comment ça va",
+    "topics": "Sujets",
+    "context": "Contexte",
+    "painsAndRequests": "Difficultés et demandes",
+    "outcome": "Résultat",
+    "updates": "Avancées",
+    "decisions": "Décisions",
+    "whoDoesWhat": "Qui fait quoi"
+  },
+  "icons": {
+    "enhanced": "Notes enrichies",
+    "briefcase": "Mallette",
+    "chart": "Graphique",
+    "handshake": "Poignée de main",
+    "landmark": "Monument",
+    "lightbulb": "Ampoule",
+    "magnet": "Aimant",
+    "phone": "Téléphone",
+    "rocket": "Fusée",
+    "calendar": "Calendrier",
+    "users": "Personnes"
+  },
+  "menu": {
+    "label": "Modèle de notes enrichies",
+    "search": "Rechercher un modèle…",
+    "noMatch": "Aucun modèle ne correspond.",
+    "heading": "Modèles",
+    "regenerate": "Régénérer les notes",
+    "newTemplate": "Nouveau modèle…"
+  },
+  "rewritten": "Notes réécrites avec le modèle « {template} »",
+  "regenerated": "Notes enrichies régénérées",
+  "created": "Modèle « {template} » créé",
+  "dialog": {
+    "title": "Nouveau modèle",
+    "description": "Choisissez les rubriques que Leo rédige pour une réunion et leur titre.",
+    "namePlaceholder": "p. ex. Découverte commerciale…",
+    "nameRequired": "Donnez un nom au modèle.",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Quand l’utiliser…",
+    "ownDescription": "Votre propre modèle.",
+    "icon": "Icône",
+    "sections": "Rubriques",
+    "include": "Inclure {section}",
+    "heading": "Titre de {section}",
+    "sectionsRequired": "Gardez au moins une rubrique.",
+    "create": "Créer le modèle"
+  }
+}

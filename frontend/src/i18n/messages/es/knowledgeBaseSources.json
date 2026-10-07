@@ -1,0 +1,85 @@
+{
+  "loadFailed": "No se pudieron cargar las fuentes",
+  "loading": "Cargando fuentes…",
+  "connectedCount": "{connected, number} de {total, plural, one {# fuente conectada} many {# de fuentes conectadas} other {# fuentes conectadas}}. El contenido nuevo y modificado se vuelve a indexar en cada sincronización.",
+  "status": {
+    "connecting": "Conectando",
+    "syncing": "Sincronizando",
+    "connected": "Conectado",
+    "error": "Error"
+  },
+  "card": {
+    "items": "{count, plural, one {# elemento} many {# de elementos} other {# elementos}}",
+    "synced": "Sincronizado {ago}",
+    "syncNow": "Sincronizar ahora",
+    "syncing": "Sincronizando…",
+    "settings": "Configuración…",
+    "disconnect": "Desconectar…",
+    "signIn": "Iniciar sesión con {provider}",
+    "public": "Páginas públicas, sin inicio de sesión",
+    "connect": "Conectar"
+  },
+  "dialog": {
+    "connectTitle": "Conectar {name}",
+    "settingsTitle": "Configuración de {name}",
+    "oauthNote": "Iniciarás sesión con {provider}, aprobarás el acceso de solo lectura (OAuth 2.0) y volverás aquí. En esta página no se escriben contraseñas ni tokens.",
+    "optional": "(opcional)",
+    "saveAndSync": "Guardar y sincronizar",
+    "continueWith": "Continuar con {provider}",
+    "connect": "Conectar",
+    "connectFailed": "No se pudo conectar."
+  },
+  "disconnect": {
+    "title": "¿Desconectar {name}?",
+    "description": "La sincronización se detiene y se eliminan sus credenciales guardadas. El contenido ya indexado desde esta fuente se quita del índice vectorial.",
+    "confirm": "Desconectar"
+  },
+  "toasts": {
+    "connected": "{name} conectado",
+    "firstSync": "Empezó la primera sincronización.",
+    "syncFailed": "No se pudo sincronizar {name}",
+    "disconnected": "{name} desconectado",
+    "disconnectFailed": "No se pudo desconectar {name}"
+  },
+  "website": "Sitio web",
+  "descriptions": {
+    "slack": "Mensajes e hilos de canales públicos.",
+    "confluence": "Páginas y entradas de blog de tus espacios.",
+    "notion": "Páginas y bases de datos que compartes al iniciar sesión.",
+    "obsidian": "Notas en Markdown de un vault sincronizado con GitHub.",
+    "jira": "Incidencias, descripciones y comentarios.",
+    "github": "README, documentación, issues y pull requests.",
+    "gitlab": "Repositorios, wikis, issues y merge requests.",
+    "google_drive": "Documentos, hojas de cálculo, presentaciones y PDF.",
+    "sharepoint": "Archivos y páginas de Microsoft 365.",
+    "dropbox": "Archivos y documentos de Paper de una carpeta.",
+    "yandex_disk": "Documentos de una carpeta de Yandex Disk.",
+    "website": "Páginas rastreadas de un sitio o portal de documentación."
+  },
+  "fields": {
+    "channels": "Canales",
+    "spaces": "Claves de espacio",
+    "repository": "Repositorio del vault",
+    "branch": "Rama",
+    "jql": "Filtro JQL",
+    "repositories": "Repositorios",
+    "base_url": "URL de la instancia",
+    "projects": "Proyectos",
+    "folder_id": "ID de carpeta",
+    "site_url": "Sitio de SharePoint",
+    "path": "Ruta de la carpeta",
+    "start_url": "URL inicial",
+    "max_depth": "Profundidad de rastreo",
+    "include": "Solo rutas que coincidan con"
+  },
+  "help": {
+    "channels": "Déjalo vacío para incluir todos los canales públicos.",
+    "spaces": "Déjalo vacío para incluir todos los espacios que puedes leer.",
+    "repositories": "Déjalo vacío para incluir todos los repositorios a los que des acceso.",
+    "base_url": "Solo para GitLab autoalojado.",
+    "projects": "Déjalo vacío para incluir todos los proyectos que puedes leer.",
+    "folder_id": "Déjalo vacío para indexar todo lo que puedes leer.",
+    "site_url": "Déjalo vacío para usar tu OneDrive.",
+    "max_depth": "Enlaces que se siguen desde la página inicial."
+  }
+}

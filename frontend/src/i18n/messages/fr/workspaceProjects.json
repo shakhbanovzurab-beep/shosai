@@ -1,0 +1,80 @@
+{
+  "meta": {
+    "title": "Projets",
+    "project": "Projet"
+  },
+  "title": "Projets",
+  "description": "Un projet réunit un chantier au même endroit : ses réunions, ses décisions et ses tâches.",
+  "newProject": "Nouveau projet",
+  "filter": {
+    "label": "Quels projets",
+    "open": "En cours",
+    "all": "Tous"
+  },
+  "empty": {
+    "title": "Aucun projet pour l’instant",
+    "text": "Créez-en un pour un travail qui s’étend sur plusieurs réunions, comme un lancement ou un recrutement. Vous pourrez ensuite y ajouter des réunions et des tâches."
+  },
+  "status": {
+    "planned": "Planifié",
+    "active": "Actif",
+    "paused": "En pause",
+    "completed": "Terminé"
+  },
+  "ledBy": "{who, select, me {Piloté par vous} other {Piloté par {name}}}",
+  "noLead": "Aucun pilote",
+  "target": {
+    "none": "Aucune date prévue",
+    "overdue": "En retard · {date}",
+    "today": "Prévu aujourd’hui",
+    "tomorrow": "Prévu demain",
+    "on": "Prévu le {date}"
+  },
+  "progress": {
+    "label": "{total, plural, one {{done, number} sur # tâche terminée} many {{done, number} sur # de tâches terminées} other {{done, number} sur # tâches terminées}}",
+    "count": "{done, number}/{total, number}",
+    "none": "Aucune tâche"
+  },
+  "notFound": {
+    "title": "Ce projet n’existe plus",
+    "text": "Il a peut-être été supprimé. Ses réunions et ses tâches sont toujours dans l’espace de travail.",
+    "action": "Tous les projets"
+  },
+  "sections": {
+    "tasks": "Tâches",
+    "addTask": "Ajouter une tâche",
+    "tasksEmpty": "Aucune tâche pour l’instant. Ajoutez-en une, ou partagez une réunion dans ce projet pour y apporter ses tâches.",
+    "meetings": "Réunions",
+    "meetingsEmpty": "Les réunions partagées dans ce projet apparaissent ici.",
+    "decisions": "Décisions",
+    "files": "Fichiers",
+    "filesLabel": "Fichiers de {project}",
+    "filesEmpty": "Les fichiers ajoutés à ce projet apparaissent ici, et Leo s’en sert pour ce projet."
+  },
+  "header": {
+    "edit": "Modifier le projet",
+    "delete": "Supprimer le projet",
+    "lead": "Pilote",
+    "team": "Équipe",
+    "target": "Date prévue",
+    "deleteTitle": "Supprimer {name} ?",
+    "deleteText": "Ses réunions, tâches et décisions restent dans l’espace de travail ; elles ne sont simplement plus rattachées à un projet."
+  },
+  "dialog": {
+    "newTitle": "Nouveau projet",
+    "editTitle": "Modifier {name}",
+    "description": "Un seul endroit pour un chantier : ses réunions, ses décisions et ses tâches.",
+    "nameRequired": "Donnez un nom au projet.",
+    "namePlaceholder": "p. ex. Bêta de l’application mobile",
+    "purpose": "Objectif",
+    "lead": "Pilote",
+    "me": "{name} (vous)",
+    "team": "Équipe",
+    "wholeWorkspace": "Tout l’espace de travail",
+    "status": "Statut",
+    "target": "Date prévue",
+    "create": "Créer le projet",
+    "saved": "Projet {name} enregistré",
+    "created": "Projet {name} créé"
+  }
+}

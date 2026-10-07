@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "title": "Klien email open source",
+    "description": "Klien email open source dengan navigasi kotak masuk, pencarian pesan, membaca, membalas, dan mengarsipkan."
+  },
+  "preview": {
+    "title": "Pratinjau email",
+    "description": "Bingkai ini menampilkan layar email mandiri. Buka dalam layar penuh agar lebih jelas.",
+    "openInNewTab": "Buka email di tab baru"
+  },
+  "nav": {
+    "inbox": "Kotak masuk",
+    "priority": "Prioritas",
+    "drafts": "Draf",
+    "sent": "Terkirim",
+    "archive": "Arsip",
+    "trash": "Sampah",
+    "helpFeedback": "Bantuan & masukan",
+    "keyboardShortcuts": "Pintasan keyboard"
+  },
+  "sidebar": {
+    "newEmail": "Email baru",
+    "folders": "Folder"
+  },
+  "accounts": {
+    "switchTo": "Beralih ke {name}",
+    "menu": "Menu akun",
+    "title": "Akun",
+    "add": "Tambahkan akun",
+    "manage": "Kelola akun",
+    "settings": "Pengaturan akun",
+    "signOut": "Keluar"
+  },
+  "inbox": {
+    "filter": "Filter email",
+    "refresh": "Muat ulang kotak masuk",
+    "noSelection": "Tidak ada email yang dipilih",
+    "needsYou": "Perlu Anda",
+    "allMail": "Semua email",
+    "pinnedGroup": "Disematkan ({count, number})",
+    "inboxGroup": "Kotak masuk ({count, number})"
+  },
+  "reader": {
+    "drawerTitle": "Email",
+    "drawerDescription": "Baca email yang dipilih",
+    "to": "Kepada: <names>{list}</names>",
+    "cc": "Cc: <names>{list}</names>",
+    "attachments": "Lampiran ({count, number})"
+  },
+  "toolbar": {
+    "close": "Tutup email",
+    "previous": "Email sebelumnya",
+    "next": "Email berikutnya",
+    "pin": "Sematkan percakapan",
+    "reply": "Balas",
+    "more": "Tindakan lainnya",
+    "replyAll": "Balas semua",
+    "forward": "Teruskan",
+    "addLabel": "Tambahkan label"
+  },
+  "menu": {
+    "markRead": "Tandai sudah dibaca",
+    "markUnread": "Tandai belum dibaca",
+    "pin": "Sematkan di atas",
+    "unpin": "Lepas sematan",
+    "markPriority": "Tandai sebagai prioritas",
+    "removePriority": "Hapus dari Prioritas",
+    "labels": "Label",
+    "copySender": "Salin alamat pengirim",
+    "archive": "Arsipkan",
+    "trash": "Pindahkan ke sampah"
+  },
+  "replyBar": {
+    "placeholder": "Balas ke {name}…",
+    "label": "Balas ke {name}",
+    "addEmoji": "Tambahkan emoji",
+    "attachFile": "Lampirkan file",
+    "send": "Kirim"
+  },
+  "toasts": {
+    "senderCopied": "{email} disalin",
+    "senderCopyFailed": "Tidak dapat menyalin alamat",
+    "replySent": "Balasan terkirim ke {name}",
+    "archived": "{count, plural, other {# email diarsipkan}}",
+    "moved": "{folder, select, inbox {“{subject}” dipindahkan ke Kotak masuk} drafts {“{subject}” dipindahkan ke Draf} sent {“{subject}” dipindahkan ke Terkirim} archive {“{subject}” dipindahkan ke Arsip} trash {“{subject}” dipindahkan ke Sampah} other {“{subject}” dipindahkan}}"
+  }
+}

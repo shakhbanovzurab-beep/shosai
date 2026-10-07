@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "close": "Close",
+    "copyLink": "Copy link",
+    "create": "Create",
+    "delete": "Delete",
+    "duplicate": "Duplicate",
+    "open": "Open",
+    "remove": "Remove",
+    "rename": "Rename",
+    "renameMenu": "Rename…",
+    "retry": "Try again",
+    "save": "Save",
+    "undo": "Undo"
+  },
+  "fields": {
+    "name": "Name"
+  },
+  "feedback": {
+    "linkCopied": "Link copied",
+    "linkCopyFailed": "Couldn’t copy the link",
+    "loading": "Loading…"
+  },
+  "actionsFor": "Actions for {name}",
+  "errors": {
+    "backendUnreachable": "Couldn’t reach the server. Try again in a moment."
+  }
+}

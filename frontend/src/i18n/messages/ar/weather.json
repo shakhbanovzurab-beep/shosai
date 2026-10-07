@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "صافٍ",
+    "partly": "غائم جزئيًا",
+    "overcast": "غائم",
+    "fog": "ضباب",
+    "drizzle": "رذاذ",
+    "rain": "مطر",
+    "snow": "ثلج",
+    "storm": "عاصفة رعدية",
+    "unknown": "غير معروف"
+  },
+  "fallbackPlace": "موسكو",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}، {now}، العظمى {high}، الصغرى {low}",
+  "summaryAt": "{condition}، {now}، العظمى {high}، الصغرى {low} في {place}"
+}

@@ -1,0 +1,74 @@
+{
+  "back": "すべてのノート",
+  "notFound": "ノートが見つかりません",
+  "participants": {
+    "count": "{count, plural, other {参加者 # 人}}",
+    "inMeeting": "{count, plural, other {この会議の参加者は # 人です。}}",
+    "you": "{name}（自分）",
+    "added": "{email} を会議に追加しました",
+    "addPlaceholder": "メールアドレスで追加…",
+    "addLabel": "メールアドレスで参加者を追加",
+    "invalid": "name@company.com のようなメールアドレスを入力してください。",
+    "duplicate": "この人はすでに会議に参加しています。"
+  },
+  "tabs": {
+    "notes": "ノート",
+    "enhanced": "AI 版",
+    "transcript": "文字起こし",
+    "mindMap": "マインドマップ"
+  },
+  "enhanced": {
+    "writtenBy": "会議の文字起こしと自分のノートをもとに Leo が作成しました。",
+    "writtenByTemplate": "会議の文字起こしと自分のノートをもとに、「{template}」のレイアウトで Leo が作成しました。",
+    "writing": "AI 版ノートを作成中…",
+    "nothingFor": "この会議には「{template}」のセクションに該当する内容がありません。"
+  },
+  "export": {
+    "button": "エクスポート",
+    "transcriptAs": "文字起こしの形式"
+  },
+  "myNotes": {
+    "loadFailed": "ノートを読み込めませんでした",
+    "saveFailed": "ノートを保存できませんでした"
+  },
+  "editor": {
+    "placeholder": "ノートを入力…",
+    "label": "自分のノート",
+    "toolbar": "書式",
+    "addLink": "リンクを追加",
+    "removeLink": "リンクを削除",
+    "bold": "太字",
+    "italic": "斜体",
+    "linkPlaceholder": "リンクを貼り付け…",
+    "linkAddress": "リンクのアドレス",
+    "link": "リンク",
+    "turnInto": "変換",
+    "blocks": {
+      "text": "テキスト",
+      "h1": "見出し 1",
+      "h2": "見出し 2",
+      "h3": "見出し 3",
+      "ordered": "番号付きリスト",
+      "bullet": "箇条書きリスト"
+    }
+  },
+  "transcript": {
+    "label": "文字起こし",
+    "search": "文字起こしを検索",
+    "searchPlaceholder": "文字起こしを検索…",
+    "matches": "{count, plural, =0 {一致なし} other {# 件一致}}",
+    "position": "{current, number} / {total, number}",
+    "previous": "前の一致",
+    "next": "次の一致",
+    "clear": "検索をクリア"
+  },
+  "speakers": {
+    "title": "発言者",
+    "share": "{speaker}：発言時間の {share}",
+    "lines": "{count, plural, other {# 件の発言}}"
+  },
+  "mindMap": {
+    "title": "マインドマップ：{topic}",
+    "caption": "会議の文字起こしから生成しました。"
+  }
+}

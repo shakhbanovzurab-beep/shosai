@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "title": "Decisioni"
+  },
+  "title": "Decisioni",
+  "description": "Tutto ciò che è stato deciso nelle riunioni condivise con te, dalle più recenti, ognuna collegata al punto in cui è stata presa.",
+  "searchLabel": "Cerca nelle decisioni",
+  "loading": "Caricamento delle decisioni…",
+  "loadFailed": "Impossibile caricare le decisioni",
+  "empty": {
+    "title": "Ancora nessuna decisione",
+    "text": "Leo individua cosa è stato deciso nelle riunioni condivise e lo raccoglie qui, collegato alla riunione.",
+    "action": "Vai alle riunioni"
+  },
+  "noMatch": {
+    "title": "Nessuna decisione corrispondente",
+    "text": "Prova con altre parole o un altro team.",
+    "clear": "Rimuovi i filtri"
+  },
+  "replaced": "Sostituita",
+  "replacedBy": "Sostituita da <link>«{decision}»</link> in {meeting}.",
+  "replacedHidden": "Sostituita da una decisione successiva in una riunione non condivisa con te.",
+  "day": {
+    "today": "Oggi",
+    "yesterday": "Ieri",
+    "tomorrow": "Domani"
+  }
+}

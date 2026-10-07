@@ -1,0 +1,144 @@
+{
+  "launcher": {
+    "open": "Leo とチャット",
+    "close": "Leo とのチャットを閉じる",
+    "tooltipOpen": "Leo に質問",
+    "tooltipClose": "Leo を閉じる"
+  },
+  "panel": {
+    "label": "Leo とのチャット",
+    "subtitle": "AI エージェント",
+    "working": "作業中…",
+    "newChat": "新しいチャット",
+    "fullScreen": "全画面表示",
+    "exitFullScreen": "全画面表示を終了",
+    "close": "閉じる",
+    "dropFiles": "ファイルをドロップして添付"
+  },
+  "place": {
+    "personal": "個人",
+    "workspace": "{name} 内",
+    "hub": "「{name}」内",
+    "scopePersonal": "メール、カレンダー、ノート、タスク、指定されたファイルに加えて、ワークスペースで共有されている内容も扱います。このチャットはほかの人には表示されません。",
+    "scopeWorkspace": "{name} で共有されている会議、決定事項、プロジェクト、ナレッジだけをもとに回答します。このチャットは {name} 内に保存されます。",
+    "scopeHub": "「{name}」の会議、決定事項、資料だけをもとに回答します。このチャットはここに保存されます。",
+    "boundHub": "「{name}」についてのみ回答します"
+  },
+  "welcome": {
+    "greeting": "{period, select, night {こんばんは} morning {おはようございます} afternoon {こんにちは} other {こんばんは}}",
+    "hi": "こんにちは",
+    "intro": "{greeting}、Leo です",
+    "howCanIHelp": "今日は何をお手伝いしましょうか？",
+    "suggestionsLabel": "おすすめの質問"
+  },
+  "suggestions": {
+    "default": {
+      "first": "今日の計画を立てて",
+      "second": "対応が必要なことをまとめて",
+      "third": "どんなことを手伝ってくれる？"
+    },
+    "hub": {
+      "first": "止まっている原因は？",
+      "second": "前回の会議で何が変わった？",
+      "third": "次の会議の準備を手伝って"
+    },
+    "workspace": {
+      "first": "価格設定について何が決まった？",
+      "second": "自分の担当で期限切れのものは？",
+      "third": "社内のセキュリティポリシーを探して"
+    },
+    "productivity": {
+      "first": "今日の計画を立てて",
+      "second": "まず何に集中すべき？",
+      "third": "今週をまとめて"
+    },
+    "mail": {
+      "first": "受信トレイを要約して",
+      "second": "丁寧なフォローアップメールを下書きして",
+      "third": "急ぎのメールはどれ？"
+    },
+    "calendar": {
+      "first": "今日の予定は？",
+      "second": "今週、1時間空いている枠を探して",
+      "third": "次の会議の準備を手伝って"
+    },
+    "kanban": {
+      "first": "期限切れのタスクは？",
+      "second": "このボードを要約して",
+      "third": "次に進めるタスクを提案して"
+    },
+    "meetings": {
+      "first": "今日はどんな会議がある？",
+      "second": "チームとの通話を設定して",
+      "third": "次の通話の準備を手伝って"
+    },
+    "notes": {
+      "first": "前回の会議を要約して",
+      "second": "自分のアクションアイテムを一覧にして",
+      "third": "今週は何が決まった？"
+    },
+    "fileManager": {
+      "first": "最近のファイルを探して",
+      "second": "一番容量を使っているのは？",
+      "third": "ファイルを整理して"
+    },
+    "studio": {
+      "first": "システムメッセージを書いて",
+      "second": "使えるモデルを比較して",
+      "third": "このプロンプトを改善して"
+    }
+  },
+  "composer": {
+    "placeholder": "Leo に何でも質問",
+    "label": "Leo へのメッセージ",
+    "attach": "ファイルを添付",
+    "attachLimit": "{max, plural, other {最大 # 件のファイルを添付}}",
+    "filesToSend": "送信するファイル",
+    "removeFile": "{name} を添付から削除",
+    "disclaimer": "Leo は間違えることがあります。重要な情報は確認してください。",
+    "stop": "Leo を停止",
+    "send": "メッセージを送信",
+    "startVoice": "音声モードを開始",
+    "voiceMode": "音声モード"
+  },
+  "message": {
+    "copy": "コピー",
+    "copied": "コピーしました",
+    "copyFailed": "クリップボードにコピーできませんでした",
+    "regenerate": "再生成",
+    "tryAgain": "再試行",
+    "replyFailed": "Leo は回答を完了できませんでした。接続を確認して、もう一度お試しください。",
+    "edit": "編集",
+    "editMessage": "メッセージを編集",
+    "attachedFiles": "添付ファイル"
+  },
+  "steps": {
+    "gettingStarted": "開始しています",
+    "doneIn": "{duration} で完了",
+    "stoppedAfter": "{duration} で停止",
+    "somethingWrong": "問題が発生しました",
+    "label": "Leo の作業内容",
+    "needsApproval": "承認待ち",
+    "detail": "「{detail}」",
+    "status": "{status, select, running {実行中} done {完了} error {失敗} stopped {停止} other {}}"
+  },
+  "attachments": {
+    "tooLarge": "{name} はサイズが大きすぎます",
+    "sizeLimit": "ファイルサイズの上限は {size} です。",
+    "tooMany": "{max, plural, other {添付できるファイルは最大 # 件です。}}"
+  },
+  "voice": {
+    "unavailable": "音声モードは利用できません",
+    "listening": "聞いています…",
+    "thinking": "Leo が考えています…",
+    "speaking": "Leo が話しています…",
+    "micOff": "マイクはオフです",
+    "turnMicOn": "マイクをオンにする",
+    "turnMicOff": "マイクをオフにする",
+    "end": "音声モードを終了",
+    "micBlocked": "マイクへのアクセスがブロックされています",
+    "micBlockedHint": "Leo と話すには、マイクへのアクセスを許可してください。",
+    "needsHttps": "音声モードでマイクを使うには、安全な接続（HTTPS）が必要です。",
+    "unsupported": "このブラウザは音声モードに対応していません。最新の Chrome、Edge、Safari をお試しください。"
+  }
+}

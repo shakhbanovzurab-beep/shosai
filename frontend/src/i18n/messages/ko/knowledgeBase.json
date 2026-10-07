@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "지식",
+    "description": "개인 공간에서 Leo가 답할 때 바탕으로 삼을 파일과 소스를 골라요."
+  },
+  "heading": "지식",
+  "intro": "개인 공간에서 질문하면 Leo는 파일 관리자에서 고른 파일, 연결한 소스, 워크스페이스에서 공유받은 자료를 바탕으로 답해요. 이 답변은 나만 볼 수 있어요.",
+  "tabs": {
+    "files": "파일",
+    "sources": "소스",
+    "workspaces": "워크스페이스에서"
+  },
+  "loadFailed": "파일을 불러오지 못했어요",
+  "leoFolders": {
+    "heading": "Leo가 읽는 폴더",
+    "stop": "{folder} 사용 중지"
+  },
+  "leoFiles": {
+    "heading": "Leo가 사용하는 파일",
+    "emptyTitle": "Leo가 아직 사용하는 파일이 없어요",
+    "emptyDescription": "파일 관리자에서 파일이나 폴더 전체를 고르거나, 위에서 새 파일을 업로드해 보세요."
+  },
+  "summary": {
+    "files": "파일",
+    "chunks": "청크",
+    "processing": "처리 중",
+    "embeddings": "임베딩",
+    "used": "{used} 사용",
+    "usedOfLimit": "현재 플랜 한도 {limit} 중 {used} 사용",
+    "failedUsage": "{failed, plural, other {#개 실패}} · {usage}",
+    "inIndex": "벡터 색인에 저장됨",
+    "busy": "분석 및 임베딩 중",
+    "caughtUp": "모두 처리됨",
+    "dimensions": "{dimensions, number}차원"
+  },
+  "dropzone": {
+    "label": "Leo용 파일 추가",
+    "title": "Leo가 사용할 파일을 여기에 끌어다 놓으세요",
+    "uploading": "{count, plural, other {파일 #개 업로드 중…}}",
+    "description": "파일 관리자의 내 파일에 저장돼요. {types}, 파일당 최대 {size}.",
+    "choose": "내 파일에서 선택",
+    "upload": "새로 업로드",
+    "skipped": "{count, plural, other {파일 #개를 건너뛰었어요}}",
+    "unreadable": "{name}: Leo가 읽을 수 없는 형식이나 크기예요",
+    "tooMany": "{name}: 한 번에 {max, number}개를 넘었어요"
+  },
+  "choose": {
+    "title": "내 파일에서 선택",
+    "description": "Leo가 선택한 파일을 읽고 개인 공간에서 이를 바탕으로 답해요. 폴더를 고르면 나중에 추가하는 파일도 포함돼요.",
+    "folders": "폴더 전체",
+    "files": "파일",
+    "alreadyUsed": "Leo가 이미 사용 중",
+    "submit": "Leo와 함께 사용",
+    "readingOne": "Leo가 지금 읽고 있어요",
+    "readingMany": "{count, plural, other {Leo가 지금 선택한 항목 #개를 읽고 있어요}}",
+    "readingDescription": "색인 생성이 끝나면 개인 공간에서 이를 바탕으로 답해요."
+  },
+  "table": {
+    "status": "상태",
+    "chunks": "청크",
+    "size": "크기",
+    "workspaces": "워크스페이스",
+    "actions": "옵션",
+    "wholeFolder": "<name>{folder}</name> · 폴더 전체"
+  },
+  "steps": {
+    "queued": "대기 중",
+    "parsing": "분석 중",
+    "chunking": "청크 분할 중",
+    "embedding": "임베딩 중",
+    "indexed": "색인됨",
+    "failed": "실패"
+  },
+  "status": {
+    "step": "{step, number}/{total, number}단계",
+    "progress": "{name}: {step}, {percent}"
+  },
+  "menu": {
+    "reindex": "색인 다시 생성",
+    "showInFileManager": "파일 관리자에서 보기",
+    "stopFolder": "“{folder}” 사용 중지",
+    "stopFile": "Leo와 사용 중지"
+  }
+}

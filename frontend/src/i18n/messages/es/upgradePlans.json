@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "{amount} por usuario",
+    "from": "desde {amount}",
+    "unlimited": "ilimitado"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Reuniones ilimitadas",
+    "meetingMinutes": "{minutes, plural, one {# minuto de reuniones} many {# de minutos de reuniones} other {# minutos de reuniones}} al mes",
+    "noMeetings": "Reuniones",
+    "fileManager": "Administrador de archivos · {storage}",
+    "noFileManager": "Administrador de archivos",
+    "knowledge": "Conocimiento para Leo · {storage}",
+    "noKnowledge": "Conocimiento para Leo"
+  },
+  "capabilities": {
+    "shared_workspace": "Espacio de trabajo compartido del equipo",
+    "member_management": "Administración de usuarios",
+    "centralized_billing": "Facturación centralizada",
+    "billing_and_users": "Facturación centralizada y administración de usuarios",
+    "admin_controls": "Seguridad y controles de administración de nivel empresarial",
+    "sso": "Inicio de sesión único (SSO)",
+    "priority_support": "Soporte prioritario",
+    "usage_analytics": "Análisis de uso"
+  },
+  "compare": {
+    "title": "Comparar planes",
+    "feature": "Función",
+    "included": "Incluido",
+    "notIncluded": "No incluido",
+    "unlimited": "Ilimitado",
+    "minutes": "{minutes, plural, one {# min} many {# min} other {# min}} / mes",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "A medida",
+    "rows": {
+      "meetings": "Reuniones",
+      "fileManager": "Administrador de archivos",
+      "knowledge": "Conocimiento para Leo",
+      "apps": "Leo, Correo, Calendario, Kanban, Notas",
+      "users": "Usuarios",
+      "sharedWorkspace": "Espacio de trabajo compartido",
+      "billingAndUsers": "Facturación centralizada y administración de usuarios",
+      "sso": "Inicio de sesión único (SSO)",
+      "adminControls": "Seguridad y controles de administración",
+      "prioritySupport": "Soporte prioritario",
+      "usageAnalytics": "Análisis de uso"
+    }
+  }
+}

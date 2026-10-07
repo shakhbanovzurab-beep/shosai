@@ -1,0 +1,107 @@
+{
+  "title": "Meetings",
+  "description": "Recordings members shared here, with Leo’s summary, decisions and tasks.",
+  "sharingRules": "Sharing rules",
+  "reviewSharingRules": "Review sharing rules",
+  "shareMeeting": "Share a meeting",
+  "searchMeetings": "Search meetings",
+  "loading": "Loading meetings…",
+  "loadFailed": "Couldn’t load meetings",
+  "empty": {
+    "title": "Nothing shared yet",
+    "text": "Meetings arrive when a member shares one of their recordings, or when a meeting with only {workspace} members ends and the sharing rules apply."
+  },
+  "noMatch": {
+    "title": "No meetings match",
+    "text": "Try other words, another team, or all meetings.",
+    "clear": "Clear filters"
+  },
+  "recency": {
+    "thisWeek": "This week",
+    "lastWeek": "Last week",
+    "earlier": "Earlier"
+  },
+  "scope": {
+    "label": "Which meetings",
+    "all": "All",
+    "mine": "I was in"
+  },
+  "when": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "tomorrow": "Tomorrow"
+  },
+  "row": {
+    "recordedByYou": "recorded by you",
+    "recordedBy": "recorded by {name}",
+    "withGuests": "with guests",
+    "decisions": "{count, plural, one {# decision} other {# decisions}}",
+    "tasks": "{count, plural, one {# task} other {# tasks}}"
+  },
+  "meeting": {
+    "back": "Meetings",
+    "loading": "Loading the meeting…",
+    "loadFailed": "Couldn’t load the meeting",
+    "date": "Date",
+    "duration": "Duration",
+    "participants": "Participants",
+    "participantsWithGuests": "{names} ({count, plural, one {# person from outside {workspace}} other {# people from outside {workspace}}})",
+    "project": "Project",
+    "recordedByYou": "Recorded by you. It’s also in your Notes; stop sharing any time and it stays there.",
+    "sharedBy": "Recorded and shared by {name}",
+    "summary": "Summary",
+    "transcript": "Transcript",
+    "keyPoints": "Key points",
+    "decisions": "Decisions",
+    "replacedLater": "Replaced later",
+    "tasks": "Tasks",
+    "transcriptPrivateTitle": "Only the summary is shared",
+    "transcriptPrivate": "{name} kept the transcript private. Ask them if you need the exact words.",
+    "transcriptPrivateUnknown": "The organizer kept the transcript private. Ask them if you need the exact words.",
+    "unavailableTitle": "This meeting isn’t available",
+    "unavailable": "It doesn’t exist, it hasn’t been shared with you, or its owner stopped sharing it.",
+    "backToMeetings": "Back to meetings"
+  },
+  "project": {
+    "label": "Project",
+    "none": "No project"
+  },
+  "audience": {
+    "participants": "Participants",
+    "workspace": "Everyone at {workspace}",
+    "unknownTeam": "A team",
+    "participantsHint": "Members who were in the meeting.",
+    "workspaceHint": "Everyone in the workspace, now and later.",
+    "teamHint": "Members of {team}, plus participants.",
+    "privateTeamHint": "Members of {team} (private team), plus participants.",
+    "sharedWith": "{level, select, participants {Shared with participants} workspace {Shared with everyone at {workspace}} other {Shared with {team}}}",
+    "sharedToast": "{level, select, participants {“{title}” is shared with participants in {workspace}} workspace {“{title}” is shared with everyone at {workspace}} other {“{title}” is shared with {team} in {workspace}}}"
+  },
+  "share": {
+    "lockedHint": "Only the person who shared it, or an admin, can change who sees it",
+    "change": "Change who sees this meeting",
+    "title": "Who sees this meeting",
+    "description": "The summary, decisions and tasks. Questions people ask Leo stay their own.",
+    "external": "People from outside {workspace} took part. Share only what they’d be comfortable with.",
+    "audienceLabel": "Shared with",
+    "includeTranscript": "Include the transcript",
+    "includeTranscriptHint": "Otherwise only the summary is shared.",
+    "transcriptShared": "The transcript is shared too",
+    "summaryOnly": "Only the summary is shared now",
+    "addedToProject": "Added to the project",
+    "removedFromProject": "Removed from the project",
+    "stopMine": "Stop sharing (keep it in my Notes)",
+    "takeOut": "Take it out of {workspace}"
+  },
+  "shareDialog": {
+    "allSharedTitle": "Everything is shared",
+    "allShared": "All your recordings are already in {workspace}.",
+    "title": "Share one of your meetings",
+    "description": "It stays yours and stays in your Notes; {workspace} sees it until you stop sharing.",
+    "meeting": "Meeting",
+    "movesFrom": "It’s shared in {workspace} now; sharing it here moves it.",
+    "audience": "Who sees it",
+    "audienceHint": "Its decisions and tasks come along; participants can always see it.",
+    "submit": "Share"
+  }
+}

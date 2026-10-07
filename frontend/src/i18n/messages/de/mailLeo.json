@@ -1,0 +1,68 @@
+{
+  "status": {
+    "readingInbox": "Leo liest deinen Posteingang…",
+    "readingNew": "{count, plural, one {Leo liest # neue E-Mail…} other {Leo liest # neue E-Mails…}}",
+    "sorted": "{count, plural, one {Leo hat # E-Mail sortiert} other {Leo hat # E-Mails sortiert}}",
+    "sortedWithDrafts": "{count, plural, one {Leo hat # E-Mail sortiert} other {Leo hat # E-Mails sortiert}} · {drafts, plural, one {# Antwort entworfen} other {# Antworten entworfen}}",
+    "sortFailed": "Leo konnte deinen Posteingang nicht sortieren"
+  },
+  "focus": {
+    "mostUrgentFirst": "Dringendste zuerst ({count, number})",
+    "setAside": "{count, plural, one {# weitere E-Mail braucht dich gerade nicht.} other {# weitere E-Mails brauchen dich gerade nicht.}}",
+    "setAsideLow": "{count, plural, one {# weitere E-Mail braucht dich gerade nicht} other {# weitere E-Mails brauchen dich gerade nicht}}, {low, plural, one {# davon hat niedrige Priorität.} other {# davon haben niedrige Priorität.}}",
+    "showAll": "Alle E-Mails anzeigen",
+    "archiveLow": "Niedrige Priorität archivieren",
+    "caughtUpTitle": "Du bist auf dem neuesten Stand",
+    "caughtUpDescription": "Nichts wartet auf dich. Leo markiert neue E-Mails, die eine Antwort oder Entscheidung brauchen."
+  },
+  "triage": {
+    "needs_you": "Braucht dich",
+    "fyi": "Zur Info",
+    "low": "Niedrige Priorität"
+  },
+  "triageHint": {
+    "needs_you": "Wartet auf deine Antwort oder Entscheidung",
+    "fyi": "Gut zu wissen, nichts zu tun",
+    "low": "Kann warten oder archiviert werden"
+  },
+  "triageMenu": {
+    "trigger": "Einsortiert als {triage}. Einsortierung dieser E-Mail ändern",
+    "sortedByYou": "Von dir einsortiert",
+    "sortedByLeo": "Von Leo einsortiert",
+    "leosPick": "Leos Wahl · {hint}"
+  },
+  "replyBy": {
+    "overdue": "Überfällig",
+    "today": "Heute antworten",
+    "tomorrow": "Morgen antworten",
+    "by": "Antworten bis {when}"
+  },
+  "tags": {
+    "reading": "Leo liest…",
+    "replied": "Beantwortet",
+    "needsYou": "Braucht dich",
+    "draftReady": "Entwurf bereit"
+  },
+  "card": {
+    "label": "Leos Zusammenfassung",
+    "readingEmail": "Leo liest diese E-Mail…",
+    "readFailed": "Leo konnte diese E-Mail nicht lesen",
+    "readFailedHint": "Versuche es gleich erneut.",
+    "repliedAgo": "Beantwortet {ago}",
+    "repliedOn": "Beantwortet am {date}",
+    "reviewDraft": "Entwurf prüfen",
+    "noDraft": "Kein Entwurf: Diese Antwort braucht deine eigene Sicht.",
+    "archive": "Archivieren"
+  },
+  "draft": {
+    "reviewLabel": "Leos Antwortentwurf an {name} prüfen",
+    "drafted": "Leo hat eine Antwort entworfen",
+    "review": "Prüfen",
+    "heading": "Leos Entwurf · vor dem Senden prüfen",
+    "collapse": "Entwurf einklappen",
+    "field": "Antwort an {name}",
+    "discard": "Verwerfen",
+    "send": "Senden",
+    "discarded": "Entwurf verworfen"
+  }
+}

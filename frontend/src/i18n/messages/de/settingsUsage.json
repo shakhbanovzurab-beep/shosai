@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, one {{amount} Token} other {{amount} Tokens}}",
+  "resets": "Die Limits werden jede Woche zurückgesetzt. Nächstes Zurücksetzen: {date}.",
+  "thisWeek": "Diese Woche",
+  "tiers": {
+    "standard": {
+      "title": "Standardmodelle",
+      "description": "In deinem Tarif enthalten. Wenn sie aufgebraucht sind, warte auf das wöchentliche Zurücksetzen."
+    },
+    "frontier": {
+      "title": "Spitzenmodelle",
+      "description": "Claude Opus, GPT Astra und andere Topmodelle. Danach werden deine zusätzlichen Tokens genutzt."
+    }
+  },
+  "used": "{count, plural, one {{used} von {limit} Token} other {{used} von {limit} Tokens}}",
+  "usedLabel": "{tier}: {percent} der Tokens dieser Woche genutzt",
+  "frontierThisWeek": "Spitzenmodelle diese Woche",
+  "topUp": {
+    "title": "Zusätzliche Tokens für Spitzenmodelle",
+    "description": "Werden genutzt, sobald die wöchentlichen Tokens für Spitzenmodelle aufgebraucht sind. Sie verfallen nicht und können nicht für Standardmodelle verwendet werden.",
+    "balance": "{count, plural, one {<big>{amount} Token</big> übrig} other {<big>{amount} Tokens</big> übrig}}",
+    "buyMore": "Mehr kaufen",
+    "buy": "Tokens kaufen",
+    "failed": "Der Kauf konnte nicht gestartet werden"
+  }
+}

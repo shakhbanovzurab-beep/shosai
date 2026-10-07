@@ -1,0 +1,35 @@
+{
+  "problems": {
+    "invalidRequest": "要求內容有誤。請重新載入頁面，然後再試一次。",
+    "nameRequired": "請輸入你的名稱。",
+    "hotkeyUnsupported": "不支援這個快速鍵。",
+    "modelNotOnPlan": "你的訂閱不包含這個模型。",
+    "emailMismatch": "這個電子郵件地址與你的帳號不符。",
+    "deletionUnavailable": "刪除帳號功能尚未啟用，因此沒有刪除任何內容。",
+    "avatarMissing": "請選擇要上傳的圖片。",
+    "avatarType": "請使用 WebP、JPEG 或 PNG 圖片。",
+    "paymentsUnavailable": "付款功能尚未啟用。帳單功能上線後，這裡會開啟服務供應商的安全付款頁面。",
+    "checkoutUnavailable": "付款功能尚未啟用。帳單功能上線後，這裡會開啟服務供應商的結帳頁面。",
+    "invoiceNotFound": "找不到發票。",
+    "connectorNotFound": "找不到連接器。",
+    "authorizationExpired": "授權已過期或已使用過。請再次嘗試連接。",
+    "dataKindUnknown": "無法辨識的資料類型。",
+    "dataItemNotFound": "這個項目已不存在。",
+    "mcpNameRequired": "請為伺服器命名。",
+    "mcpNameTooLong": "名稱太長，請改用較短的名稱。",
+    "mcpUrlInvalid": "請輸入伺服器的 http(s) 網址。",
+    "mcpServerNotFound": "找不到伺服器。",
+    "memoryNotFound": "找不到記憶。",
+    "summaryMessageRequired": "請輸入問題或要更新的內容。"
+  },
+  "avatarTooLarge": "圖片大於 {size}。",
+  "invoice": {
+    "title": "發票 {number}",
+    "date": "日期：{date}",
+    "description": "說明：{description}",
+    "amount": "金額：{amount}",
+    "status": "狀態：{status}",
+    "demoNote": "示範發票。實際發票會是由帳單後端產生的 PDF。"
+  },
+  "notesFromYou": "你的備註"
+}

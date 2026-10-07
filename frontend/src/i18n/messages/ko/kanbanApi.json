@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "보드를 찾을 수 없어요.",
+  "taskNotFound": "작업을 찾을 수 없어요.",
+  "columnNotFound": "열을 찾을 수 없어요.",
+  "boardChanged": "보드가 변경됐어요. 새로고침한 후 다시 시도해 주세요.",
+  "managedInJira": "이 보드는 Jira에서 관리돼요. Jira에서 변경해 주세요.",
+  "reconnectJira": "변경하려면 설정 › 커넥터에서 Jira를 다시 연결해 주세요.",
+  "firstSync": "Jira와의 첫 동기화가 끝날 때까지 기다려 주세요.",
+  "jiraDisconnected": "Jira 연결이 해제됐어요. 이 보드를 계속 동기화하려면 설정 › 커넥터에서 다시 연결해 주세요.",
+  "connectJiraFirst": "먼저 설정 › 커넥터에서 Jira를 연결해 주세요.",
+  "jiraBoardUnavailable": "이 Jira 계정으로는 해당 Jira 보드를 사용할 수 없어요.",
+  "jiraBoardSynced": "이 Jira 보드는 이미 동기화돼 있어요.",
+  "notJiraBoard": "Jira와 동기화된 보드만 동기화할 수 있어요.",
+  "jiraBoardWorkspaceTasks": "Jira 보드에는 Jira 이슈만 표시돼요. 앱에서 관리하는 보드를 선택해 주세요.",
+  "workspaceTaskCopy": "워크스페이스 작업은 여기서 복제할 수 없어요. 대신 워크스페이스에서 작업을 추가해 주세요.",
+  "workspaceTaskDelete": "워크스페이스 작업은 워크스페이스에서 완료되거나 담당자가 바뀌면 보드에서 사라져요.",
+  "boardNameRequired": "보드 이름을 입력해 주세요.",
+  "boardNameTooLong": "이름이 너무 길어요. 더 짧게 입력해 주세요.",
+  "taskTitleRequired": "작업 제목을 입력해 주세요.",
+  "invalidRequest": "요청에 문제가 있어요. 페이지를 새로고침한 후 다시 시도해 주세요."
+}

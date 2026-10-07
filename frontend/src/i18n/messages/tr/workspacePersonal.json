@@ -1,0 +1,51 @@
+{
+  "share": "Paylaş",
+  "sharedIn": "Paylaşıldığı yer: {workspace}",
+  "workspace": "Çalışma alanı",
+  "stopSharing": "Paylaşımı durdur",
+  "fileShare": {
+    "title": "Çalışma alanında paylaş",
+    "description": "Leo orada seçtiğiniz kişilere bu dosyadan yanıt verir. Dosya, Dosya yöneticinizde kalır ve size ait olmaya devam eder.",
+    "access": "Kimler kullanabilir",
+    "everyone": "{workspace} çalışma alanındaki herkes",
+    "sharedOption": "{workspace} · paylaşıldı",
+    "noWorkspace": "Henüz hiçbir çalışma alanında değilsiniz.",
+    "toast": "{level, select, workspace {“{file}”: artık {workspace} çalışma alanındaki herkes kullanabilir} other {“{file}”: artık {workspace} çalışma alanında şu ekip kullanabilir: {team}}}"
+  },
+  "recordingShare": {
+    "title": "Çalışma alanında paylaş",
+    "description": "Size ait kalır ve burada, Notlar’ınızda durur. Leo’ya bu kayıtla ilgili sorduğunuz sorular gizli kalır.",
+    "openIn": "{workspace} çalışma alanında aç",
+    "tabWorkspace": "Çalışma alanı",
+    "tabLink": "Bağlantı",
+    "loadFailed": "{workspace} yüklenemedi.",
+    "moveTo": "{workspace} çalışma alanına taşı",
+    "audienceHint": "Özeti, kararları ve görevleri. Katılımcılar her zaman görebilir.",
+    "sharedElsewhere": "Şu anda {workspace} çalışma alanında paylaşılıyor; bir toplantı aynı anda yalnızca bir çalışma alanında bulunabilir."
+  },
+  "myTasks": {
+    "title": "Çalışma alanlarınızdan",
+    "onKanban": "Kanban panonuzda",
+    "loadFailed": "Çalışma alanı görevleriniz yüklenemedi.",
+    "empty": "Çalışma alanlarınızda size atanan bir şey yok."
+  },
+  "actionItems": {
+    "tracked": "<link>{workspace}</link> çalışma alanında görev olarak takip ediliyor; burada yaptığınız değişiklikler orada da geçerli olur."
+  },
+  "sharedMeetings": {
+    "nav": "Sizinle paylaşılanlar",
+    "loadFailed": "Paylaşılan toplantılar yüklenemedi.",
+    "emptyTitle": "Burada henüz sizinle paylaşılan bir şey yok",
+    "empty": "Ekip arkadaşlarınızın sizinle veya bulunduğunuz bir ekiple paylaştığı toplantılar burada görünür.",
+    "intro": "<link>{workspace}</link> çalışma alanında sizinle paylaşıldı. Toplantılar orada bulunur; notlarını, kararlarını ve görevlerini görmek için birini açın."
+  },
+  "knowledge": {
+    "open": "Bilgilerini aç",
+    "summary": "Açabildiğiniz {meetings, plural, one {# toplantı} other {# toplantı}}, {decisions, plural, one {# karar} other {# karar}} ve {projects, plural, one {# proje} other {# proje}}, ayrıca kullanabildiğiniz {items, plural, one {# dosya veya kaynak} other {# dosya veya kaynak}}.",
+    "listLabel": "Çalışma alanı bilgileri: {workspace}",
+    "loadFailed": "Çalışma alanlarınızın bilgileri yüklenemedi",
+    "emptyTitle": "Henüz çalışma alanı yok",
+    "empty": "Bir çalışma alanına katıldığınızda Leo, sizinle paylaşılanlardan burada da yanıt verebilir.",
+    "intro": "Leo bunları Kişisel alanda soru sorduğunuzda ve yalnızca sizin için kullanır. Her yanıt hangi çalışma alanından geldiğini belirtir. Üyesi olmadığınız ekiplerin bilgileri dahil edilmez."
+  }
+}

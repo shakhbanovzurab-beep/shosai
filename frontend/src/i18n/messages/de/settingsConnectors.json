@@ -1,0 +1,54 @@
+{
+  "description": "Verbinde deine Apps, damit Leo darin suchen und handeln kann. Jede App meldet dich auf ihrer eigenen Seite über OAuth 2.0 an, sodass Leo dein Passwort nie sieht.",
+  "columns": {
+    "connector": "Konnektor",
+    "type": "Typ",
+    "status": "Status"
+  },
+  "categories": {
+    "mail": "E-Mail",
+    "files": "Dateien",
+    "notes": "Notizen",
+    "communication": "Kommunikation",
+    "tasks": "Aufgaben",
+    "crm": "CRM-System"
+  },
+  "connect": "Verbinden",
+  "connecting": "Wird verbunden…",
+  "connected": "Verbunden",
+  "options": "Optionen für {name}, verbunden",
+  "disconnect": "Trennen",
+  "toasts": {
+    "connected": "{name} verbunden",
+    "notConnected": "{name} wurde nicht verbunden",
+    "connectFailed": "{name} konnte nicht verbunden werden",
+    "disconnected": "{name} getrennt",
+    "disconnectFailed": "{name} konnte nicht getrennt werden"
+  },
+  "callback": {
+    "metaTitle": "Wird verbunden…",
+    "connected": {
+      "title": "Verbunden",
+      "body": "Du kannst dieses Fenster schließen und zum Dashboard zurückkehren."
+    },
+    "denied": {
+      "title": "Zugriff nicht erteilt",
+      "body": "Es wurde nichts verbunden. Du kannst dieses Fenster schließen."
+    },
+    "error": {
+      "title": "Verbindung konnte nicht hergestellt werden",
+      "body": "Beim Verbinden ist etwas schiefgelaufen. Versuche es in den Einstellungen erneut."
+    },
+    "back": "Zurück zum Dashboard"
+  },
+  "consent": {
+    "metaTitle": "Demo-Autorisierung",
+    "badge": "Demo · es wird kein echtes Konto verwendet",
+    "title": "{app} mit Leo verbinden?",
+    "titleUnknown": "Diese App mit Leo verbinden?",
+    "body": "Im Echtbetrieb ist dieser Schritt die Zustimmungsseite von {app}. Wenn du zustimmst, kann Leo in deinem {app}-Konto in deinem Namen lesen und handeln.",
+    "bodyUnknown": "Im Echtbetrieb ist dieser Schritt die Zustimmungsseite des Anbieters. Wenn du zustimmst, kann Leo in deinem Konto in deinem Namen lesen und handeln.",
+    "disconnectHint": "Du kannst die Verbindung jederzeit unter Einstellungen › Konnektoren trennen.",
+    "allow": "Erlauben"
+  }
+}

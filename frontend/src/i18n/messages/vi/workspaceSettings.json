@@ -1,0 +1,70 @@
+{
+  "title": "Cài đặt",
+  "description": "Cách {workspace} hoạt động cho mọi người trong đó. Thay đổi được lưu ngay.",
+  "adminsOnly": "Chỉ quản trị viên mới có thể thay đổi cài đặt không gian làm việc.",
+  "adminsOnlyAsk": "Chỉ quản trị viên mới có thể thay đổi cài đặt không gian làm việc. Hãy hỏi {name}.",
+  "general": {
+    "title": "Chung",
+    "name": "Tên không gian làm việc",
+    "nameHint": "Hiển thị trong trình chuyển đổi và trong lời mời.",
+    "renamed": "Đã đổi tên không gian làm việc",
+    "join": "Tham gia bằng email công ty",
+    "joinHint": "Cho phép đồng nghiệp tham gia mà không cần lời mời khi email của họ thuộc tên miền của bạn.",
+    "joinOn": "Bất kỳ ai có email @{domain} đều có thể tham gia với vai trò thành viên khi còn suất.",
+    "domain": "Tên miền email",
+    "joinEnabled": "Giờ đây người dùng email {domain} có thể tham gia",
+    "joinDisabled": "Đã tắt tham gia bằng tên miền email"
+  },
+  "sharing": {
+    "title": "Chia sẻ",
+    "description": "Cuộc họp có người ngoài {workspace} không bao giờ được chia sẻ tự động. Người tổ chức luôn có thể thay đổi ai được xem cuộc họp.",
+    "reviewTitle": "Xác nhận cách chia sẻ cuộc họp",
+    "reviewHint": "Đây là các quy tắc được đề xuất. Bạn có thể thay đổi bất kỳ quy tắc nào hoặc giữ nguyên.",
+    "keep": "Giữ các quy tắc này",
+    "confirmed": "Đã xác nhận quy tắc chia sẻ",
+    "defaultLevel": "Sau cuộc họp, chia sẻ ghi chú với",
+    "defaultLevelHint": "Áp dụng cho cuộc họp mà mọi người đều thuộc {workspace}.",
+    "levels": {
+      "private": "Chỉ người tổ chức",
+      "participants": "Người tham gia (đề xuất)",
+      "workspace": "Mọi người tại {workspace}"
+    },
+    "levelChanged": "Cuộc họp mới được gửi đến: {level}",
+    "transcripts": "Kèm bản chép lời",
+    "transcriptsHint": "Khi tắt: mọi người thấy tóm tắt, quyết định và công việc, không thấy bản chép lời từng chữ.",
+    "transcriptsOn": "Bản chép lời cũng được chia sẻ",
+    "transcriptsOff": "Chỉ chia sẻ bản tóm tắt",
+    "membersInvite": "Thành viên có thể mời người khác",
+    "membersInviteHint": "Khi tắt: chỉ quản trị viên mới có thể mời.",
+    "membersInviteOn": "Thành viên có thể mời người khác",
+    "membersInviteOff": "Giờ chỉ quản trị viên mới có thể mời"
+  },
+  "plan": {
+    "title": "Gói và mức sử dụng",
+    "description": "Tính phí cho không gian làm việc, tách biệt với gói cá nhân của mỗi người.",
+    "name": "Gói {plan}",
+    "seats": "{taken, number}/{total, number} suất",
+    "price": "{perSeat} mỗi suất mỗi tháng · tổng {total} · gia hạn {renews}",
+    "change": "Thay đổi số suất hoặc gói",
+    "ownerOnly": "Chỉ chủ sở hữu mới quản lý thanh toán.",
+    "usageFailed": "Không thể tải mức sử dụng.",
+    "usageIn": "Mức sử dụng trong {month}",
+    "idle": "{count, plural, other {# thành viên không hoạt động từ {days, number} ngày trở lên: bạn có thể dùng lại các suất này.}}",
+    "member": "Thành viên",
+    "meetings": "Cuộc họp",
+    "minutes": "Phút",
+    "lastActive": "Hoạt động gần nhất",
+    "inactive": "Không hoạt động"
+  },
+  "danger": {
+    "delete": "Xóa không gian làm việc",
+    "deleteHint": "Xóa không gian làm việc với mọi người và dừng tính phí.",
+    "deleteTitle": "Xóa {name}?",
+    "deleteDescription": "Mọi người sẽ mất các dự án, công việc, quyết định và tệp đã tải lên. Bản ghi và tệp mọi người đã chia sẻ vẫn thuộc về họ, trong Ghi chú và Trình quản lý tệp của họ. Không thể hoàn tác thao tác này.",
+    "leave": "Rời không gian làm việc",
+    "leaveHint": "Bạn có thể được mời lại sau; suất của bạn sẽ được giải phóng.",
+    "leaveTitle": "Rời {name}?",
+    "leaveDescription": "Cuộc họp và tệp bạn đã chia sẻ sẽ rời đi cùng bạn và vẫn nằm trong Ghi chú và Trình quản lý tệp của bạn. Tệp bạn đã chuyển cho không gian làm việc sẽ ở lại đây. Công việc vẫn ở lại với nhóm; những việc chưa xong của bạn sẽ không còn người được giao.",
+    "leaveConfirm": "Rời đi"
+  }
+}

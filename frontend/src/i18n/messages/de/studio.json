@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Lege fest, mit wem der Assistent spricht, wie er sich verhält und welche Modelle ihn antreiben."
+  },
+  "tabs": {
+    "context": "Kontext",
+    "prompts": "Prompts",
+    "models": "Modelle"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Live-Antworten",
+      "description": "Antworten des Assistenten: Overlay, Chat, Meeting",
+      "help": "Live-Antworten: das Overlay, der Chat und Antworten während eines Meetings. Der Prompt legt Ton, Länge und Format der Antworten fest."
+    },
+    "screenshots": {
+      "name": "Bildschirmfotos",
+      "description": "Bildschirm, Folien und Dokumente lesen",
+      "help": "Analyse von Bildschirmfotos: die Schaltfläche „Screenshot“ im Overlay und das Teilen des Bildschirms im Meeting. Der Prompt sagt dem Modell, wie es das Bild lesen und was es antworten soll."
+    },
+    "code": {
+      "name": "Code",
+      "description": "Fragen zu Code und Algorithmen",
+      "help": "Fragen zu Code und Algorithmen. Der Prompt legt die Programmiersprache fest, wie viel erklärt wird und ob Komplexität und Tests gezeigt werden."
+    },
+    "system_design": {
+      "name": "Systemdesign",
+      "description": "Architekturentwurf für Vorstellungsgespräche",
+      "help": "Architekturfragen in Vorstellungsgesprächen. Der Prompt legt den Aufbau der Erklärung fest: Anforderungen, Schätzungen, Entwurf und Abwägungen."
+    },
+    "notes": {
+      "name": "Notizen & Mindmaps",
+      "description": "KI-Fassung der Meeting-Notizen und die Mindmap",
+      "help": "Die KI-Fassung der Meeting-Notizen und die Mindmap. Der Prompt bestimmt, was festgehalten wird: Entscheidungen, To-dos, offene Fragen."
+    },
+    "transcript": {
+      "name": "Transkript",
+      "description": "Sprache in Text in Echtzeit",
+      "help": "Sprache in Text in Echtzeit. Läuft über ein Sprachmodell und nutzt keinen Prompt."
+    }
+  },
+  "autosave": {
+    "saving": "Wird gespeichert…"
+  },
+  "context": {
+    "intro": "Ein kurzer Text über dich – er wird bei jeder Modellanfrage als erste Systemnachricht eingefügt. Je genauer er ist, desto weniger Rückfragen bekommst du.",
+    "loadFailed": "Dein Kontext konnte nicht geladen werden",
+    "title": "Über dich",
+    "description": "Wer du bist, woran du arbeitest und wie du Antworten magst. Fakten sind besser als Adjektive.",
+    "example": "Rolle: Senior Backend Engineer, 6 Jahre, Fintech.\nStack: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nAktuell: Vorbereitung auf System-Design-Interviews bei Produktfirmen.\nAntworten: knapp, mit Abwägungen; Code in Python, sofern ich nichts anderes sage.\nVermeiden: allgemeine Ratschläge, lange Einleitungen.",
+    "count": "{count, number} / {max, plural, one {# Zeichen} other {# Zeichen}} · ~{tokens, plural, one {# Token} other {# Tokens}}",
+    "tooLong": "Kürze den Text, um zu speichern.",
+    "saveFailed": "Kontext konnte nicht gespeichert werden.",
+    "savedAgo": "Gespeichert {ago}",
+    "savesAutomatically": "Wird automatisch gespeichert"
+  },
+  "preview": {
+    "title": "So wird er gesendet",
+    "description": "Die gespeicherte Fassung steht am Anfang jeder Anfrage, vor dem Prompt der Rolle.",
+    "system": "System",
+    "user": "Nutzer",
+    "empty": "(leer – es wird nichts gesendet)",
+    "rolePrompt": "Rollen-Prompt aus Prompts",
+    "question": "deine Frage"
+  },
+  "models": {
+    "intro": "Wähle, welches Modell in jeder Rolle antwortet. Die Liste zeigt nur die Modelle aus deinem Abo.",
+    "loadFailed": "Modelle konnten nicht geladen werden",
+    "model": "Modell",
+    "temperature": "Temperatur",
+    "maxTokens": "Max. Tokens",
+    "reasoning": "Nachdenken",
+    "unsupported": "Nicht unterstützt",
+    "modelFor": "Modell für {role}",
+    "temperatureFor": "Temperatur für {role}",
+    "maxTokensRange": "Max. Tokens muss eine ganze Zahl von {min, number} bis {max, number} sein.",
+    "saveFailed": "Die Modelleinstellungen konnten nicht gespeichert werden"
+  },
+  "picker": {
+    "placeholder": "Modell auswählen…",
+    "search": "Modelle suchen…",
+    "empty": "Keine passenden Modelle.",
+    "frontier": "Spitzenmodell"
+  }
+}

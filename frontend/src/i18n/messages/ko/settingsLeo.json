@@ -1,0 +1,36 @@
+{
+  "answers": "답변",
+  "model": {
+    "title": "모델",
+    "description": "자동을 선택하면 작업마다 알맞은 모델을 골라요. 최상위 모델은 주간 최상위 모델 토큰을 사용해요(사용량 참고).",
+    "label": "Leo 모델",
+    "auto": "자동",
+    "autoHint": "Leo가 작업마다 선택"
+  },
+  "language": {
+    "title": "답변 언어",
+    "description": "자동을 선택하면 인터페이스 언어로 답변해요.",
+    "auto": "자동"
+  },
+  "length": {
+    "title": "답변 길이",
+    "description": "Leo가 기본적으로 얼마나 자세히 답변할지 정해요.",
+    "options": {
+      "concise": "간결하게",
+      "balanced": "보통",
+      "detailed": "자세하게"
+    }
+  },
+  "advanced": {
+    "title": "고급 설정",
+    "description": "Leo가 사용할 수 있는 기능이에요. 꺼 둔 기능은 제안하지도, 사용하지도 않아요.",
+    "webSearch": "웹 검색",
+    "webSearchHint": "Leo가 인터넷에서 자동으로 답을 찾아요.",
+    "voiceMode": "음성 모드",
+    "voiceModeHint": "Leo와 소리 내어 대화해요. 끄면 인터페이스에서 마이크가 사라져요.",
+    "knowledgeSearch": "지식 검색",
+    "knowledgeSearchHint": "Leo용으로 선택한 파일과 소스에서 답을 찾아요.",
+    "connectedSearch": "연결된 서비스 검색",
+    "connectedSearchHint": "Google Drive, Notion 등 연결된 서비스에서 검색해요."
+  }
+}

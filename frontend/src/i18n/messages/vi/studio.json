@@ -1,0 +1,86 @@
+{
+  "meta": {
+    "title": "Studio",
+    "description": "Điều chỉnh để trợ lý biết đang trò chuyện với ai, nên hành xử ra sao và dùng mô hình nào."
+  },
+  "tabs": {
+    "context": "Ngữ cảnh",
+    "prompts": "Câu lệnh",
+    "models": "Mô hình"
+  },
+  "roles": {
+    "live_answers": {
+      "name": "Trả lời trực tiếp",
+      "description": "Câu trả lời của trợ lý: lớp phủ, cuộc trò chuyện, cuộc họp",
+      "help": "Câu trả lời trực tiếp: lớp phủ, cuộc trò chuyện và câu trả lời trong cuộc họp. Câu lệnh quy định giọng điệu, độ dài và định dạng câu trả lời của trợ lý."
+    },
+    "screenshots": {
+      "name": "Ảnh chụp màn hình",
+      "description": "Đọc màn hình, trang trình chiếu, tài liệu",
+      "help": "Phân tích ảnh chụp màn hình: nút “Chụp màn hình” trong lớp phủ và tính năng chia sẻ màn hình trong cuộc họp. Câu lệnh cho mô hình biết cách đọc hình ảnh và cần trả lời gì."
+    },
+    "code": {
+      "name": "Lập trình",
+      "description": "Câu hỏi về mã và thuật toán",
+      "help": "Câu hỏi về mã và thuật toán. Câu lệnh quy định ngôn ngữ lập trình, mức độ giải thích và có trình bày độ phức tạp cùng kiểm thử hay không."
+    },
+    "system_design": {
+      "name": "Thiết kế hệ thống",
+      "description": "Thiết kế kiến trúc cho phỏng vấn",
+      "help": "Câu hỏi về kiến trúc trong phỏng vấn. Câu lệnh quy định cấu trúc phần trình bày: yêu cầu, ước tính, thiết kế và các đánh đổi."
+    },
+    "notes": {
+      "name": "Ghi chú và sơ đồ",
+      "description": "Phiên bản AI của ghi chú cuộc họp và sơ đồ tư duy",
+      "help": "Phiên bản AI của ghi chú cuộc họp và sơ đồ tư duy. Câu lệnh quyết định nội dung cần giữ lại: quyết định, việc cần làm, câu hỏi còn bỏ ngỏ."
+    },
+    "transcript": {
+      "name": "Bản chép lời",
+      "description": "Chuyển giọng nói thành văn bản theo thời gian thực",
+      "help": "Chuyển giọng nói thành văn bản theo thời gian thực. Chạy trên mô hình giọng nói và không dùng câu lệnh."
+    }
+  },
+  "autosave": {
+    "saving": "Đang lưu…"
+  },
+  "context": {
+    "intro": "Một đoạn ngắn về bạn — được chèn làm thông điệp hệ thống đầu tiên trong mọi yêu cầu gửi đến mô hình. Càng chính xác, bạn càng ít bị hỏi lại.",
+    "loadFailed": "Không thể tải ngữ cảnh của bạn",
+    "title": "Về bạn",
+    "description": "Bạn là ai, làm việc gì và thích câu trả lời như thế nào. Dữ kiện có giá trị hơn tính từ.",
+    "example": "Vai trò: Kỹ sư backend cấp cao, 6 năm kinh nghiệm, fintech.\nCông nghệ: Python, FastAPI, PostgreSQL, Kafka, Kubernetes.\nHiện tại: đang chuẩn bị phỏng vấn thiết kế hệ thống ở các công ty sản phẩm.\nCâu trả lời: ngắn gọn, có nêu đánh đổi; viết mã bằng Python trừ khi tôi yêu cầu khác.\nTránh: lời khuyên chung chung, phần mở đầu dài dòng.",
+    "count": "{count, number} / {max, plural, other {# ký tự}} · ~{tokens, plural, other {# token}}",
+    "tooLong": "Hãy rút ngắn để lưu.",
+    "saveFailed": "Không thể lưu.",
+    "savedAgo": "Đã lưu {ago}",
+    "savesAutomatically": "Tự động lưu"
+  },
+  "preview": {
+    "title": "Cách được gửi đi",
+    "description": "Phiên bản đã lưu được đặt ở đầu mọi yêu cầu, trước câu lệnh của vai trò.",
+    "system": "Hệ thống",
+    "user": "Người dùng",
+    "empty": "(trống — không gửi gì)",
+    "rolePrompt": "câu lệnh của vai trò từ mục Câu lệnh",
+    "question": "câu hỏi của bạn"
+  },
+  "models": {
+    "intro": "Chọn mô hình trả lời cho từng vai trò. Danh sách chỉ hiển thị các mô hình có trong gói đăng ký của bạn.",
+    "loadFailed": "Không thể tải mô hình",
+    "model": "Mô hình",
+    "temperature": "Nhiệt độ",
+    "maxTokens": "Số token tối đa",
+    "reasoning": "Suy luận",
+    "unsupported": "Không hỗ trợ",
+    "modelFor": "Mô hình cho {role}",
+    "temperatureFor": "Nhiệt độ cho {role}",
+    "maxTokensRange": "Số token tối đa phải là số nguyên từ {min, number} đến {max, number}.",
+    "saveFailed": "Không thể lưu cài đặt mô hình"
+  },
+  "picker": {
+    "placeholder": "Chọn mô hình…",
+    "search": "Tìm mô hình…",
+    "empty": "Không có mô hình nào phù hợp.",
+    "frontier": "Hàng đầu"
+  }
+}

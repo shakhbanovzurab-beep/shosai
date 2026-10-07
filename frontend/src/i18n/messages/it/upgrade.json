@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Esegui l’upgrade"
+  },
+  "title": "Passa a un piano superiore",
+  "subtitle": "Inizia gratis con {minutes, plural, one {# minuto di riunione} many {# di minuti di riunione} other {# minuti di riunione}} al mese. Esegui l’upgrade quando le tue riunioni richiedono di più.",
+  "loading": "Caricamento dei piani…",
+  "loadFailed": "Impossibile caricare i piani",
+  "seatNote": "La tua licenza in <b>{workspace}</b> include {plan}, quindi le tue riunioni, Gestione file e la conoscenza per Leo seguono i suoi limiti. Il tuo piano personale è separato.",
+  "pricesNote": "Prezzi in dollari USA, tasse escluse; Team viene fatturato per utente. I dati di pagamento si inseriscono solo nella pagina sicura del fornitore dei pagamenti.",
+  "audiences": {
+    "individual": "Individuale",
+    "team": "Team",
+    "enterprise": "Enterprise"
+  },
+  "seatRange": "({min, number}–{max, number} utenti)",
+  "seatRangeOpen": "({min, number}+ utenti)",
+  "card": {
+    "yourPlan": "Il tuo piano",
+    "recommended": "Consigliato",
+    "custom": "Personalizzato",
+    "tailored": "Su misura per la tua organizzazione",
+    "perMonth": "/ mese",
+    "perUserPerMonth": "per utente / mese",
+    "billedMonthly": "Fatturazione mensile, disdici quando vuoi",
+    "freeForever": "Gratis per sempre",
+    "seatsTotal": "{total} / mese per {seats, plural, one {# utente} many {# di utenti} other {# utenti}}",
+    "notIncluded": "Non incluso: {item}"
+  },
+  "seats": {
+    "label": "Utenti",
+    "fewer": "Meno utenti",
+    "more": "Più utenti"
+  },
+  "action": {
+    "current": "Piano attuale",
+    "upgradeTo": "Passa a {plan}",
+    "switchTo": "Scegli {plan}",
+    "upgradeFailed": "Impossibile avviare l’upgrade",
+    "switchFailed": "Impossibile cambiare piano"
+  },
+  "usage": {
+    "label": "Minuti di riunione di questo mese",
+    "title": "Minuti di riunione",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "Usati {used, number} su {limit, plural, one {# minuto} many {# di minuti} other {# minuti}}",
+    "left": "Restano {left, number} su {limit, plural, one {# minuto di riunione} many {# di minuti di riunione} other {# minuti di riunione}}",
+    "allUsed": "Hai usato tutti i tuoi minuti di riunione",
+    "resets": "Si azzera il {date}",
+    "leftShort": "{left, plural, one {# min rimasto} many {# min rimasti} other {# min rimasti}} · si azzera il {date}",
+    "recordingPaused": "Registrazione sospesa fino al {date}.",
+    "paused": "Le riunioni sono sospese fino al {date}.",
+    "pausedUpgrade": "Le riunioni sono sospese fino al {date}. Passa a {plan} per avere riunioni illimitate.",
+    "getUnlimited": "Ottieni riunioni illimitate"
+  },
+  "gate": {
+    "checking": "Verifica del piano…",
+    "seePlans": "Vedi i piani",
+    "comparePlans": "Confronta i piani",
+    "upgradeTo": "Passa a {plan}",
+    "offer": "{plan} include {unlimited, select, yes {spazio di archiviazione illimitato} other {{amount}}}.",
+    "offerPriced": "{plan} include {unlimited, select, yes {spazio di archiviazione illimitato} other {{amount}}} a {price} al mese.",
+    "file_manager": {
+      "partOf": "Gestione file fa parte di {plan}",
+      "notInPlan": "Gestione file non è incluso nel tuo piano",
+      "pitch": "Tieni i tuoi file in un unico posto, scegli quali usa Leo e condividili negli spazi di lavoro."
+    },
+    "knowledge_base": {
+      "partOf": "Conoscenza fa parte di {plan}",
+      "notInPlan": "Conoscenza non è inclusa nel tuo piano",
+      "pitch": "Scegli i file e collega le fonti in modo che Leo possa rispondere in base a questi."
+    }
+  },
+  "sales": {
+    "contact": "Contatta il commerciale",
+    "title": "Parla con il commerciale",
+    "description": "Raccontaci del tuo team: prepareremo un piano Enterprise su misura.",
+    "workEmail": "Email di lavoro",
+    "company": "Azienda",
+    "teamSize": "Dimensione del team",
+    "teamSizePlaceholder": "Scegli",
+    "teamSizeRange": "{min, number}–{max, number} persone",
+    "teamSizeOpen": "{min, number}+ persone",
+    "message": "Di cosa hai bisogno? <muted>(facoltativo)</muted>",
+    "messagePlaceholder": "Provider SSO, revisione di sicurezza, numero di licenze…",
+    "send": "Invia richiesta",
+    "chooseTeamSize": "Scegli la dimensione del team.",
+    "sendFailed": "Impossibile inviare la richiesta.",
+    "sentTitle": "Grazie, ti ricontatteremo presto",
+    "sentDescription": "Di solito il team commerciale risponde entro un giorno lavorativo.",
+    "done": "Fine"
+  }
+}

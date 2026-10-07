@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "title": "कैलेंडर",
+    "description": "मीटिंग, इवेंट और फ़ोकस टाइम को महीने, हफ़्ते या दिन के हिसाब से प्लान करें।"
+  },
+  "summary": "{days, plural, one {# दिन} other {# दिन}} · {events, plural, one {# इवेंट} other {# इवेंट}}",
+  "calendars": {
+    "label": "कैलेंडर",
+    "all": "सभी कैलेंडर",
+    "work": "काम",
+    "personal": "निजी",
+    "team": "टीम",
+    "focus": "फ़ोकस टाइम"
+  },
+  "views": {
+    "label": "व्यू",
+    "dayGridMonth": "महीना",
+    "timeGridWeek": "हफ़्ता",
+    "timeGridDay": "दिन"
+  },
+  "previous": "पिछली अवधि",
+  "next": "अगली अवधि",
+  "today": "आज",
+  "addEvent": "इवेंट जोड़ें",
+  "loading": "कैलेंडर लोड हो रहा है…",
+  "eventMenu": {
+    "reschedule": "समय बदलें",
+    "dayEarlier": "एक दिन पहले",
+    "dayLater": "एक दिन बाद",
+    "nextWeek": "अगले हफ़्ते",
+    "moveToToday": "आज पर ले जाएं",
+    "copyDetails": "जानकारी कॉपी करें",
+    "delete": "इवेंट मिटाएं"
+  },
+  "dayMenu": {
+    "newAllDay": "नया पूरे दिन का इवेंट…",
+    "newAt": "{time} पर नया इवेंट…",
+    "openDay": "दिन खोलें",
+    "openWeek": "हफ़्ता खोलें"
+  },
+  "renameTitle": "इवेंट का नाम बदलें",
+  "newTitle": "नया इवेंट · {when}",
+  "copyName": "{title} (कॉपी)",
+  "details": "{title} — {when}",
+  "detailsCopied": "इवेंट की जानकारी कॉपी की गई",
+  "detailsCopyFailed": "इवेंट की जानकारी कॉपी नहीं की जा सकी।",
+  "deleted": "“{title}” मिटाया गया"
+}

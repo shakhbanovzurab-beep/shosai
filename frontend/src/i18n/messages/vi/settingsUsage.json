@@ -1,0 +1,26 @@
+{
+  "tokens": "{count, plural, other {{amount} token}}",
+  "resets": "Giới hạn được đặt lại hằng tuần. Lần đặt lại tiếp theo: {date}.",
+  "thisWeek": "Tuần này",
+  "tiers": {
+    "standard": {
+      "title": "Mô hình tiêu chuẩn",
+      "description": "Đã có trong gói của bạn. Khi dùng hết, hãy chờ lần đặt lại hằng tuần."
+    },
+    "frontier": {
+      "title": "Mô hình hàng đầu",
+      "description": "Claude Opus, GPT Astra và các mô hình hàng đầu khác. Khi dùng hết phần này, token bổ sung của bạn sẽ được sử dụng."
+    }
+  },
+  "used": "{count, plural, other {{used} trên {limit} token}}",
+  "usedLabel": "{tier}: đã dùng {percent} số token của tuần này",
+  "frontierThisWeek": "Mô hình hàng đầu tuần này",
+  "topUp": {
+    "title": "Token bổ sung cho mô hình hàng đầu",
+    "description": "Được dùng khi phần token cho mô hình hàng đầu của tuần này đã hết. Token bổ sung không được đặt lại và không dùng được cho mô hình tiêu chuẩn.",
+    "balance": "{count, plural, other {Còn <big>{amount} token</big>}}",
+    "buyMore": "Mua thêm",
+    "buy": "Mua token",
+    "failed": "Không thể bắt đầu giao dịch mua"
+  }
+}

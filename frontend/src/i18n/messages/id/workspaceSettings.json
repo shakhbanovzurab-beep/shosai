@@ -1,0 +1,70 @@
+{
+  "title": "Pengaturan",
+  "description": "Cara kerja {workspace} untuk semua orang di dalamnya. Perubahan langsung disimpan.",
+  "adminsOnly": "Hanya admin yang dapat mengubah pengaturan ruang kerja.",
+  "adminsOnlyAsk": "Hanya admin yang dapat mengubah pengaturan ruang kerja. Tanyakan kepada {name}.",
+  "general": {
+    "title": "Umum",
+    "name": "Nama ruang kerja",
+    "nameHint": "Ditampilkan di pengalih ruang kerja dan di undangan.",
+    "renamed": "Nama ruang kerja diganti",
+    "join": "Bergabung dengan email perusahaan",
+    "joinHint": "Izinkan rekan kerja bergabung tanpa undangan jika email mereka menggunakan domain Anda.",
+    "joinOn": "Siapa pun dengan email @{domain} dapat bergabung sebagai anggota selama masih ada lisensi.",
+    "domain": "Domain email",
+    "joinEnabled": "Orang di {domain} kini dapat bergabung",
+    "joinDisabled": "Bergabung melalui domain email dinonaktifkan"
+  },
+  "sharing": {
+    "title": "Berbagi",
+    "description": "Rapat dengan orang dari luar {workspace} tidak pernah dibagikan secara otomatis. Penyelenggara selalu dapat mengubah siapa yang dapat melihat rapat.",
+    "reviewTitle": "Konfirmasi cara rapat dibagikan",
+    "reviewHint": "Ini adalah aturan yang disarankan. Ubah salah satunya, atau biarkan apa adanya.",
+    "keep": "Pertahankan aturan ini",
+    "confirmed": "Aturan berbagi dikonfirmasi",
+    "defaultLevel": "Setelah rapat, bagikan catatan kepada",
+    "defaultLevelHint": "Untuk rapat yang semua pesertanya ada di {workspace}.",
+    "levels": {
+      "private": "Hanya penyelenggara",
+      "participants": "Peserta (disarankan)",
+      "workspace": "Semua orang di {workspace}"
+    },
+    "levelChanged": "Rapat baru dikirim ke: {level}",
+    "transcripts": "Sertakan transkrip",
+    "transcriptsHint": "Nonaktif: orang melihat ringkasan, keputusan, dan tugas, bukan transkrip kata demi kata.",
+    "transcriptsOn": "Transkrip juga dibagikan",
+    "transcriptsOff": "Hanya ringkasan yang dibagikan",
+    "membersInvite": "Anggota dapat mengundang orang",
+    "membersInviteHint": "Nonaktif: hanya admin yang dapat mengundang.",
+    "membersInviteOn": "Anggota dapat mengundang orang",
+    "membersInviteOff": "Kini hanya admin yang dapat mengundang"
+  },
+  "plan": {
+    "title": "Paket dan penggunaan",
+    "description": "Ditagihkan ke ruang kerja, terpisah dari paket pribadi siapa pun.",
+    "name": "Paket {plan}",
+    "seats": "{taken, number} dari {total, number} lisensi",
+    "price": "{perSeat} per lisensi per bulan · total {total} · diperpanjang {renews}",
+    "change": "Ubah lisensi atau paket",
+    "ownerOnly": "Hanya pemilik yang mengelola tagihan.",
+    "usageFailed": "Tidak dapat memuat penggunaan.",
+    "usageIn": "Penggunaan pada {month}",
+    "idle": "{count, plural, other {# anggota tidak aktif selama {days, number}+ hari: lisensi yang dapat Anda gunakan kembali.}}",
+    "member": "Anggota",
+    "meetings": "Rapat",
+    "minutes": "Menit",
+    "lastActive": "Terakhir aktif",
+    "inactive": "Tidak aktif"
+  },
+  "danger": {
+    "delete": "Hapus ruang kerja",
+    "deleteHint": "Menghapus ruang kerja untuk semua orang dan menghentikan tagihannya.",
+    "deleteTitle": "Hapus {name}?",
+    "deleteDescription": "Semua orang kehilangan proyek, tugas, keputusan, dan unggahannya. Rekaman dan file yang dibagikan orang tetap milik mereka, di Catatan dan Pengelola file mereka sendiri. Tindakan ini tidak dapat diurungkan.",
+    "leave": "Keluar dari ruang kerja",
+    "leaveHint": "Anda dapat diundang kembali nanti; lisensi Anda menjadi kosong.",
+    "leaveTitle": "Keluar dari {name}?",
+    "leaveDescription": "Rapat dan file yang Anda bagikan ikut keluar bersama Anda dan tetap ada di Catatan dan Pengelola file Anda. File yang Anda pindahkan ke ruang kerja tetap ada di sini. Tugas tetap ada di tim; tugas Anda yang masih terbuka menjadi tanpa penerima tugas.",
+    "leaveConfirm": "Keluar"
+  }
+}

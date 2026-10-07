@@ -1,0 +1,26 @@
+{
+  "description": "Phím tắt cho ứng dụng máy tính. Phím tắt hoạt động ở mọi nơi trên máy tính, kể cả khi ứng dụng chạy nền, và được đồng bộ trên mọi thiết bị của bạn.",
+  "commands": {
+    "open_app": "Mở ứng dụng",
+    "toggle_recording": "Bắt đầu / tạm dừng ghi",
+    "toggle_overlay": "Hiện / ẩn lớp phủ",
+    "open_settings": "Cài đặt",
+    "collapse_overlay": "Thu gọn lớp phủ thành thanh nhỏ",
+    "close_app": "Đóng ứng dụng",
+    "live_translation": "Dịch trực tiếp",
+    "prompter": "Máy nhắc chữ"
+  },
+  "off": "Tắt",
+  "pressKeys": "Nhấn phím…",
+  "hint": "Esc để hủy · Backspace để tắt",
+  "reset": "Đặt lại {command} về mặc định",
+  "record": "Nhấn phím tắt mới cho {command}",
+  "change": "{command}: {keys}. Thay đổi",
+  "changeOff": "{command}: tắt. Thay đổi",
+  "resetAll": "Đặt lại tất cả về mặc định",
+  "problems": {
+    "needsModifier": "Hãy dùng ⌘/Ctrl hoặc ⌥/Alt cùng với một phím khác.",
+    "reserved": "Phím tắt này thuộc về hệ thống.",
+    "taken": "Đã được dùng cho “{command}”."
+  }
+}

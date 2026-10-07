@@ -1,0 +1,16 @@
+{
+  "fileGone": "Este arquivo não existe mais.",
+  "folderGone": "Esta pasta não existe mais.",
+  "chooseFile": "Escolha pelo menos um arquivo.",
+  "tooManyFiles": "Faça upload de no máximo {max, number} arquivos de uma vez.",
+  "tooLarge": "“{name}” é maior que {size}.",
+  "overLeoLimit": "No seu plano, o Leo pode usar até {limit} dos seus arquivos. Pare de usar alguns primeiro.",
+  "notUsedByLeo": "O Leo não usa este arquivo.",
+  "shareFirst": "Primeiro compartilhe o arquivo nesse espaço de trabalho.",
+  "fileNameRequired": "Digite um nome para o arquivo.",
+  "folderNameRequired": "Digite um nome para a pasta.",
+  "nameTooLong": "Use menos de {max, number} caracteres no nome.",
+  "nameSlash": "O nome não pode conter / nem \\.",
+  "invalidRequest": "Algo na solicitação não está certo. Recarregue a página e tente novamente.",
+  "copyName": "{name} (cópia)"
+}

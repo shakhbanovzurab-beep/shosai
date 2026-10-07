@@ -1,0 +1,53 @@
+{
+  "title": "Beceriler",
+  "tabs": {
+    "readyMade": "Hazır",
+    "repository": "Deponuz",
+    "mine": "Becerilerim ({count, number})"
+  },
+  "readyMade": {
+    "placeholder": "Beceri bulun: sistem tasarımı, kod incelemesi…",
+    "label": "Beceri ara",
+    "help": "skills.sh kataloğunda arayın",
+    "noMatches": "Eşleşen beceri yok. Başka kelimeler deneyin.",
+    "emptyTitle": "Hazır beceri kataloğu",
+    "emptyDescription": "Yazmaya başlayın. Beceri, bir isteme ekleyebileceğiniz hazır bir talimattır.",
+    "searchFailed": "skills.sh içinde arama yapılamadı. Tekrar deneyin."
+  },
+  "repository": {
+    "label": "GitHub deposu",
+    "placeholder": "owner/repo veya GitHub bağlantısı",
+    "find": "Beceri bul",
+    "help": "SKILL.md dosyası içeren herkese açık bir depo",
+    "emptyTitle": "GitHub’dan kendi beceriniz",
+    "emptyDescription": "İçindeki SKILL.md dosyalarını bulmak için herkese açık bir depo girin.",
+    "scanFailed": "Depo okunamadı."
+  },
+  "candidate": {
+    "installs": "{count, plural, one {# yükleme} other {# yükleme}}",
+    "installed": "Yüklü"
+  },
+  "mine": {
+    "extraFiles": "Betik veya başka dosyalar içeriyor; yalnızca SKILL.md içindeki talimatlar kullanılır.",
+    "update": "{name} becerisini güncelle",
+    "updateHint": "En son commit’e güncelle",
+    "remove": "{name} becerisini kaldır",
+    "emptyTitle": "Henüz beceri yok",
+    "emptyDescription": "Hazır sekmesinden veya deponuzdan bir beceri ekleyin."
+  },
+  "remove": {
+    "title": "{name} kaldırılsın mı?",
+    "titleUnnamed": "Bu beceri kaldırılsın mı?",
+    "description": "Bu beceriyi kullanan tüm istemlerden çıkarılır. Daha sonra tekrar ekleyebilirsiniz."
+  },
+  "toasts": {
+    "installed": "{name} yüklendi",
+    "installedHint": "İstem düzenleyicisinden bir isteme ekleyin.",
+    "installFailed": "Beceri yüklenemedi",
+    "upToDate": "{name} güncel",
+    "updated": "{name} güncellendi",
+    "updateFailed": "Beceri güncellenemedi",
+    "removed": "{name} kaldırıldı",
+    "removeFailed": "Beceri kaldırılamadı"
+  }
+}

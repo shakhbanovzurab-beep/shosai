@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "name": "{plan} 方案",
+    "current": "目前方案",
+    "price": "{interval, select, month {每月 {price}} year {每年 {price}} other {永久免費}}",
+    "renews": "{date} 續訂",
+    "upgrade": "升級方案"
+  },
+  "payment": {
+    "title": "付款",
+    "description": "訂閱續訂、額外用量和自動儲值都會從你的預設付款方式扣款。",
+    "add": "新增付款方式",
+    "empty": "還沒有付款方式。",
+    "default": "預設",
+    "unknownCard": "信用卡",
+    "endingIn": "末四碼為 {last4} 的 {card}",
+    "expires": "{date} 到期",
+    "update": "更新",
+    "updateCard": "更新末四碼為 {last4} 的 {card}",
+    "openFailed": "無法開啟付款頁面"
+  },
+  "history": {
+    "title": "帳單紀錄",
+    "description": "查看並下載過去的發票。",
+    "empty": "還沒有發票。首次付款後，發票就會顯示在這裡。",
+    "columns": {
+      "date": "日期",
+      "description": "說明",
+      "amount": "金額",
+      "status": "狀態",
+      "download": "下載"
+    },
+    "status": {
+      "paid": "已付款",
+      "pending": "處理中",
+      "failed": "失敗"
+    },
+    "download": "下載發票 {number}",
+    "notReady": "發票 {number} 尚未準備好"
+  }
+}

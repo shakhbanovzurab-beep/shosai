@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "kullanıcı başına {amount}",
+    "from": "{amount} ile başlayan",
+    "unlimited": "sınırsız"
+  },
+  "highlights": {
+    "unlimitedMeetings": "Sınırsız toplantı",
+    "meetingMinutes": "{minutes, plural, one {Ayda # dakika toplantı} other {Ayda # dakika toplantı}}",
+    "noMeetings": "Toplantılar",
+    "fileManager": "Dosya yöneticisi · {storage}",
+    "noFileManager": "Dosya yöneticisi",
+    "knowledge": "Leo için bilgi bankası · {storage}",
+    "noKnowledge": "Leo için bilgi bankası"
+  },
+  "capabilities": {
+    "shared_workspace": "Paylaşılan ekip çalışma alanı",
+    "member_management": "Kullanıcı yönetimi",
+    "centralized_billing": "Merkezi faturalandırma",
+    "billing_and_users": "Merkezi faturalandırma ve kullanıcı yönetimi",
+    "admin_controls": "Kurumsal düzeyde güvenlik ve yönetici denetimleri",
+    "sso": "Çoklu oturum açma (SSO)",
+    "priority_support": "Öncelikli destek",
+    "usage_analytics": "Kullanım analizleri"
+  },
+  "compare": {
+    "title": "Planları karşılaştır",
+    "feature": "Özellik",
+    "included": "Dahil",
+    "notIncluded": "Dahil değil",
+    "unlimited": "Sınırsız",
+    "minutes": "{minutes, plural, one {# dk} other {# dk}} / ay",
+    "users": "{min, number}–{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "Özel",
+    "rows": {
+      "meetings": "Toplantılar",
+      "fileManager": "Dosya yöneticisi",
+      "knowledge": "Leo için bilgi bankası",
+      "apps": "Leo, E-posta, Takvim, Kanban, Notlar",
+      "users": "Kullanıcılar",
+      "sharedWorkspace": "Paylaşılan çalışma alanı",
+      "billingAndUsers": "Merkezi faturalandırma ve kullanıcı yönetimi",
+      "sso": "Çoklu oturum açma (SSO)",
+      "adminControls": "Güvenlik ve yönetici denetimleri",
+      "prioritySupport": "Öncelikli destek",
+      "usageAnalytics": "Kullanım analizleri"
+    }
+  }
+}

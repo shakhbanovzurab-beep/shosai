@@ -1,0 +1,60 @@
+{
+  "title": "Meetings",
+  "loading": "Loading meetings…",
+  "loadFailed": "Couldn’t load meetings",
+  "loadFailedHint": "Check your connection and try again.",
+  "newMeeting": "New meeting",
+  "actions": {
+    "schedule": "Schedule in Calendar",
+    "upload": "Upload a recording"
+  },
+  "filters": "Meeting filters",
+  "views": {
+    "all": "All",
+    "upcoming": "Upcoming",
+    "live": "Live",
+    "past": "Past"
+  },
+  "recent": "Recent",
+  "viewAll": "View all",
+  "noMoreToday": "No more meetings today.",
+  "day": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "yesterday": "Yesterday"
+  },
+  "liveBadge": "Live",
+  "liveSince": "{minutes, plural, =0 {Just started · ends {end}} one {Started # min ago · ends {end}} other {Started # min ago · ends {end}}}",
+  "startsIn": "{minutes, plural, =0 {Starting now} one {In # min} other {In # min}}",
+  "join": "Join meeting",
+  "opensInNewTab": "(opens in a new tab)",
+  "source": {
+    "whisperer": "Whisperer room",
+    "in_person": "In person"
+  },
+  "participants": "Participants: {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "Notes aren’t ready yet.",
+    "tasks": "{count, plural, one {# task} other {# tasks}}",
+    "decisions": "{count, plural, one {# decision} other {# decisions}}"
+  },
+  "empty": {
+    "none": {
+      "title": "No meetings yet",
+      "description": "Schedule a meeting in Calendar, or upload a recording to get Leo’s notes."
+    },
+    "upcoming": {
+      "title": "Nothing scheduled",
+      "description": "Meetings you plan in Calendar appear here."
+    },
+    "live": {
+      "title": "No meeting in progress",
+      "description": "A meeting shows up here while it’s happening, so you can join it."
+    },
+    "past": {
+      "title": "No past meetings yet",
+      "description": "Recorded meetings appear here with Leo’s summary, tasks and decisions."
+    }
+  }
+}

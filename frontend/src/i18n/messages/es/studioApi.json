@@ -1,0 +1,22 @@
+{
+  "invalidRequest": "Algo en la solicitud no es correcto. Recarga la página e inténtalo de nuevo.",
+  "contextTooLong": "El contexto puede tener como máximo {max, plural, one {# carácter} many {# de caracteres} other {# caracteres}}. Acórtalo para guardarlo.",
+  "unknownRole": "Ese rol no existe.",
+  "modelNotOnPlan": "Ese modelo no está incluido en tu suscripción.",
+  "modelCantDoRole": "{model} no se puede usar para {role}.",
+  "maxTokensRange": "El máximo de tokens debe estar entre {min, number} y {max, number}.",
+  "promptNameRequired": "Ponle un nombre al prompt.",
+  "promptNameTooLong": "Ese nombre es demasiado largo. Usa como máximo {max, plural, one {# carácter} many {# de caracteres} other {# caracteres}}.",
+  "promptTooLong": "Las instrucciones son demasiado largas. Usa como máximo {max, plural, one {# carácter} many {# de caracteres} other {# caracteres}}.",
+  "tooManySkills": "Un prompt puede usar como máximo {max, plural, one {# habilidad} many {# de habilidades} other {# habilidades}}.",
+  "promptNotFound": "No se encontró el prompt.",
+  "promptForOtherRole": "Ese prompt está escrito para otro rol.",
+  "skillNotFound": "No se encontró la habilidad.",
+  "skillReferenceInvalid": "Usa propietario/repositorio/habilidad, o un enlace de skills.sh o GitHub a la habilidad.",
+  "skillFileEmpty": "El SKILL.md de esa habilidad está vacío.",
+  "skillMissing": "No se encontró {path} en {repository}.",
+  "repositoryInvalid": "Usa propietario/repositorio o un enlace de GitHub.",
+  "repositoryUnreadable": "No se pudo leer {repository}. ¿Es público?",
+  "repositoryNoSkills": "No hay archivos SKILL.md en {repository}.",
+  "directoryUnavailable": "El catálogo de skills.sh no responde en este momento. Inténtalo de nuevo en un momento."
+}

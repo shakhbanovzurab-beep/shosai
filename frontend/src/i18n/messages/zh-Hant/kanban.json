@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "看板",
+    "description": "用看板管理工作、居家和其他大小事，也包括與 Jira 同步的看板。"
+  },
+  "loadBoardsFailed": "無法載入你的看板",
+  "loadBoardFailed": "無法載入這個看板",
+  "addTask": "新增任務",
+  "taskCount": "{count, plural, other {# 項任務}}",
+  "progress": "進度",
+  "views": {
+    "label": "檢視",
+    "board": "看板",
+    "list": "清單",
+    "table": "表格"
+  },
+  "toolbar": {
+    "filter": "篩選",
+    "sort": "排序",
+    "moreWaysToAdd": "更多新增任務的方式",
+    "importCsv": "匯入 CSV",
+    "addFromTemplate": "從範本新增",
+    "createAutomation": "建立自動化規則"
+  },
+  "column": {
+    "drag": "拖曳「{column}」欄",
+    "addTask": "在「{column}」新增任務",
+    "empty": "「{column}」中沒有任務"
+  },
+  "columnMenu": {
+    "managedInJira": "各欄由 Jira 管理",
+    "rename": "重新命名欄…",
+    "sortByPriority": "依優先順序排序",
+    "moveEarlier": "往前移",
+    "moveLater": "往後移",
+    "clear": "清空此欄"
+  },
+  "taskMenu": {
+    "openInJira": "在 Jira 中開啟 {key}",
+    "openInWorkspace": "在 {workspace} 中開啟",
+    "moveTo": "移至",
+    "moveToTop": "移至最上方",
+    "moveToBottom": "移至最下方",
+    "delete": "刪除任務"
+  },
+  "priority": {
+    "label": "優先順序",
+    "high": "高",
+    "medium": "中",
+    "low": "低"
+  },
+  "card": {
+    "unassigned": "未指派",
+    "completed": "已完成",
+    "fromSource": "來自 {source}",
+    "jiraIssue": "{type}（在新分頁開啟 Jira）",
+    "workspaceTask": "這是工作空間中的任務。在這裡所做的變更也會同步到工作空間。",
+    "insights": {
+      "attachments": "{count, plural, other {# 個附件}}",
+      "comments": "{count, plural, other {# 則留言}}",
+      "documents": "{count, plural, other {# 份文件}}"
+    }
+  },
+  "table": {
+    "task": "任務",
+    "status": "狀態",
+    "owner": "擁有者",
+    "label": "標籤",
+    "due": "截止日期",
+    "actions": "動作",
+    "empty": "還沒有任務",
+    "progressOf": "「{task}」的進度"
+  },
+  "commands": {
+    "renameTask": "重新命名任務",
+    "renameColumn": "重新命名欄",
+    "newTaskIn": "在「{column}」新增任務",
+    "copyTitle": "{title} 的副本",
+    "deleted": "已刪除「{title}」",
+    "cleared": "{count, plural, other {已從「{column}」清除 # 項任務}}",
+    "jiraLinkCopied": "已複製 {key} 的連結"
+  },
+  "errors": {
+    "addTask": "無法新增任務",
+    "saveChange": "無法儲存變更",
+    "deleteTasks": "{count, plural, other {無法刪除任務}}",
+    "saveBoard": "無法儲存看板"
+  }
+}

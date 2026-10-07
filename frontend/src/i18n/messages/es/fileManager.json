@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Administrador de archivos",
+    "description": "Explora, organiza y sube tus archivos, y elige cuáles usa Leo.",
+    "folderTitle": "Carpeta · Administrador de archivos"
+  },
+  "myFiles": "Mis archivos",
+  "loading": "Cargando tus archivos…",
+  "loadFailed": "No se pudieron cargar tus archivos",
+  "allFiles": {
+    "heading": "Todos los archivos",
+    "emptyTitle": "Aún no hay archivos",
+    "emptyDescription": "Sube archivos o suéltalos aquí. Luego elige cuáles puede usar Leo."
+  },
+  "folders": {
+    "heading": "Carpetas",
+    "new": "Nueva carpeta",
+    "untitled": "Carpeta sin nombre",
+    "emptyTitle": "Aún no hay carpetas",
+    "emptyDescription": "Crea una carpeta para organizar tus archivos o para que Leo lea un conjunto completo de una vez.",
+    "fileCount": "{count, plural, one {# archivo} many {# de archivos} other {# archivos}}",
+    "dropHere": "Suelta para mover aquí",
+    "dropHereLeo": "Suelta para mover aquí. Leo lo usará.",
+    "updated": "Actualizada {ago}",
+    "leoReadsAll": "Leo usa todo lo que puede leer en esta carpeta"
+  },
+  "folder": {
+    "notFound": "No se encontró la carpeta",
+    "notFoundDescription": "Puede que se haya eliminado o se le haya cambiado el nombre en otra sesión.",
+    "backToMyFiles": "Volver a Mis archivos",
+    "back": "Volver",
+    "emptyTitle": "Esta carpeta está vacía",
+    "emptyLeo": "Sube o mueve archivos aquí y Leo los usará.",
+    "empty": "Sube archivos aquí, arrástralos a esta carpeta en Mis archivos o usa Mover a en el menú de un archivo."
+  },
+  "section": {
+    "label": "Archivos",
+    "view": "Vista de archivos",
+    "grid": "Cuadrícula",
+    "list": "Lista",
+    "noMatch": "Ningún archivo coincide",
+    "noMatchDescription": "Nada aquí coincide con este filtro.",
+    "clearFilters": "Borrar filtros"
+  },
+  "toolbar": {
+    "filterSort": "Filtrar y ordenar",
+    "show": "Mostrar",
+    "fileType": "Tipo de archivo",
+    "allTypes": "Todos los tipos",
+    "sortBy": "Ordenar por"
+  },
+  "show": {
+    "all": "Todos los archivos",
+    "starred": "Destacados",
+    "leo": "Usados por Leo",
+    "shared": "Compartidos en espacios de trabajo"
+  },
+  "sort": {
+    "modified": "Última modificación",
+    "name": "Nombre",
+    "size": "Tamaño del archivo"
+  },
+  "kinds": {
+    "archive": "Comprimido",
+    "design": "Diseño",
+    "document": "Documento",
+    "image": "Imagen",
+    "other": "Archivo",
+    "pdf": "PDF",
+    "presentation": "Presentación",
+    "spreadsheet": "Hoja de cálculo",
+    "text": "Texto"
+  },
+  "file": {
+    "star": "Destacar {name}",
+    "unstar": "Quitar {name} de destacados",
+    "modified": "Modificado {ago}",
+    "inFolderModified": "<hidden>En la carpeta </hidden><name>{folder}</name> · Modificado {ago}",
+    "inFolder": "<hidden>En la carpeta </hidden><name>{folder}</name>",
+    "sharedIn": "Compartido en {workspaces}",
+    "sharedInHidden": "<hidden>Compartido en </hidden><name>{workspaces}</name>"
+  },
+  "table": {
+    "modified": "Modificado",
+    "size": "Tamaño",
+    "actions": "Acciones"
+  },
+  "leo": {
+    "viaFile": "Leo usa este archivo porque lo elegiste",
+    "viaFolder": "Leo usa este archivo a través de su carpeta",
+    "reading": "Leo · leyendo",
+    "failed": "Leo no pudo leerlo",
+    "tooLarge": "Leo lee archivos de hasta {size}",
+    "extension": "Leo no puede leer archivos .{extension}",
+    "unknownType": "Leo no puede leer este tipo de archivo"
+  },
+  "menu": {
+    "addStar": "Destacar",
+    "removeStar": "Quitar de destacados",
+    "moveTo": "Mover a",
+    "useWithLeo": "Usar con Leo",
+    "usedThrough": "Se usa a través de «{folder}»",
+    "share": "Compartir en un espacio de trabajo…",
+    "sharing": "Compartido en espacios de trabajo…",
+    "transferTo": "Transferir a",
+    "transferWorkspace": "{workspace}…",
+    "deleteFolder": "Eliminar carpeta"
+  },
+  "dialogs": {
+    "renameFile": "Cambiar nombre del archivo",
+    "renameFolder": "Cambiar nombre de la carpeta",
+    "shareTitle": "Compartir «{name}»",
+    "shareDescription": "Leo responderá con él en el espacio de trabajo para quienes elijas. Se queda aquí, sigue siendo tuyo y sale del espacio de trabajo si lo eliminas o te vas.",
+    "transferTitle": "¿Transferir «{name}» a {workspace}?",
+    "transferDescription": "Sale de tus archivos y pasa a pertenecer a {workspace}: se queda allí cuando te vayas y lo administran sus administradores. Los demás espacios de trabajo en los que lo compartiste lo pierden. No se puede deshacer.",
+    "transfer": "Transferir"
+  },
+  "upload": {
+    "button": "Subir",
+    "uploading": "Subiendo {count, plural, one {# archivo} many {# de archivos} other {# archivos}}…",
+    "dropHere": "Suelta para subir aquí",
+    "skipped": "{count, plural, one {Se omitió # archivo} many {Se omitieron # de archivos} other {Se omitieron # archivos}}",
+    "skippedDescription": "Se omiten los archivos vacíos o de más de {size}, y se pueden subir como máximo {max, number} a la vez."
+  },
+  "picker": {
+    "search": "Buscar en tus archivos",
+    "noMatch": "Ningún archivo coincide.",
+    "noFiles": "Aún no hay archivos. Primero sube algunos en el Administrador de archivos.",
+    "yourFiles": "Tus archivos",
+    "alreadyShared": "Ya compartido aquí"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "data": "資料",
+  "improveModels": "協助改善模型",
+  "improveModelsHint": "允許使用你的對話和會議筆記來訓練及改善模型。預設為關閉。",
+  "shareLocation": "分享大概位置",
+  "shareLocationHint": "用於提供當地天氣和依時間調整的回答。只會分享所在區域，絕不會分享你的確切位置。",
+  "yourData": "你的資料",
+  "export": "匯出資料",
+  "exportHint": "下載你的設定、提示詞、記憶和活動紀錄副本。",
+  "kinds": {
+    "shared_chats": {
+      "title": "已共用的對話",
+      "description": "任何擁有連結的人都能查看的對話。停止共用後，連結就會失效。",
+      "removeItem": "停止共用 {title}",
+      "removeAll": "全部停止共用",
+      "confirmAll": "要停止共用所有對話嗎？",
+      "empty": "沒有已共用的對話"
+    },
+    "shared_artifacts": {
+      "title": "已共用的成品",
+      "description": "你從對話中發布的文件和頁面。",
+      "removeItem": "停止共用 {title}",
+      "removeAll": "全部停止共用",
+      "confirmAll": "要停止共用所有成品嗎？",
+      "empty": "沒有已共用的成品"
+    },
+    "uploaded_files": {
+      "title": "已上傳的檔案",
+      "description": "你在對話中附加的檔案。刪除檔案後，也會從那些對話中移除。",
+      "removeItem": "刪除 {title}",
+      "removeAll": "刪除所有檔案",
+      "confirmAll": "要刪除所有檔案嗎？",
+      "empty": "沒有已上傳的檔案"
+    },
+    "feedback": {
+      "title": "你的意見回饋",
+      "description": "你對 Leo 的回答留下的評分和意見。",
+      "removeItem": "刪除 {title}",
+      "removeAll": "刪除所有意見回饋",
+      "confirmAll": "要刪除所有意見回饋嗎？",
+      "empty": "還沒有意見回饋"
+    }
+  },
+  "nothingToManage": "這裡沒有需要管理的項目。",
+  "copyLinkTo": "複製 {title} 的連結",
+  "cantUndo": "這項操作無法復原。",
+  "removeFailed": "無法移除",
+  "removeAllFailed": "無法全部移除"
+}

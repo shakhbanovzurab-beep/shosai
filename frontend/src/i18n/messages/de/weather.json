@@ -1,0 +1,18 @@
+{
+  "conditions": {
+    "clear": "Klar",
+    "partly": "Teilweise bewölkt",
+    "overcast": "Bedeckt",
+    "fog": "Nebel",
+    "drizzle": "Nieselregen",
+    "rain": "Regen",
+    "snow": "Schnee",
+    "storm": "Gewitter",
+    "unknown": "Unbekannt"
+  },
+  "fallbackPlace": "Moskau",
+  "now": "{value, number, integer}°",
+  "range": "{high, number, integer}° / {low, number, integer}°",
+  "summary": "{condition}, {now}, Höchstwert {high}, Tiefstwert {low}",
+  "summaryAt": "{condition}, {now}, Höchstwert {high}, Tiefstwert {low} in {place}"
+}

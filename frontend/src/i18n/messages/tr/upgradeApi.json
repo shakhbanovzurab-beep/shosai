@@ -1,0 +1,13 @@
+{
+  "choosePlan": "Bir plan seçin.",
+  "planUnavailable": "Bu plan kullanılamıyor.",
+  "salesOnly": "Bu plan satış ekibimizle birlikte düzenlenir.",
+  "alreadyOnPlan": "Zaten bu plandasınız.",
+  "chooseUsers": "{min, number}–{max, number} arası kullanıcı seçin.",
+  "chooseUsersOrMore": "{min, plural, one {En az # kullanıcı seçin.} other {En az # kullanıcı seçin.}}",
+  "singleUser": "Bu plan tek kullanıcı içindir.",
+  "paymentsNotConnected": "Ödemeler henüz bağlanmadı. Faturalandırma devreye girdiğinde bu adım sağlayıcının güvenli ödeme sayfasını açacak.",
+  "invalidEmail": "Geçerli bir iş e-postası girin.",
+  "companyRequired": "Şirketinizin adını girin.",
+  "checkForm": "Formu kontrol edin."
+}

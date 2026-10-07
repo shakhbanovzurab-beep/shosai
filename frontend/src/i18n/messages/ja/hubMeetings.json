@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "ハブ",
+    "removeLabel": "会議を {hub} から外す",
+    "suggestion": "「{hub}」のようです",
+    "file": "追加",
+    "other": "別のハブ…",
+    "fileTo": "ハブに追加…",
+    "createFirst": "最初のハブを作成",
+    "noBoard": "ハブにボードがありません",
+    "archived": "ハブはアーカイブ済みです",
+    "filedToast": "このシリーズの次回以降の会議は自動的にここに追加されます",
+    "removedToast": "{hub} から外しました",
+    "pickerTitle": "ハブに追加",
+    "pickerSearch": "ハブを検索",
+    "pickerEmpty": "一致するハブはありません"
+  },
+  "brief": {
+    "title": "今日",
+    "empty": "今日は急ぎの案件はありません",
+    "prepTitle": "今後の予定",
+    "prepFor": "{date} の会議の前に",
+    "prepOpen": "このハブで未解決のもの",
+    "prepLast": "前回 · {date}",
+    "prepMaterials": "資料",
+    "signal": "{circles, plural, other {{subject} は # 回議論されましたが、決定していません。}}",
+    "blockers": "毎回の理由：{quotes}。"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Năng suất",
+    "description": "Công việc hôm nay, dự án, hẹn giờ tập trung, lịch và ghi chú gần đây, cùng tổng quan một năm công việc đã hoàn thành."
+  },
+  "greeting": "{period, select, morning {Chào buổi sáng, {name}.} afternoon {Chào buổi chiều, {name}.} other {Chào buổi tối, {name}.}}",
+  "greetingAnyTime": "Chào {name}.",
+  "sidePanel": "Lịch, tập trung và ghi chú",
+  "tasks": {
+    "heading": "Hôm nay",
+    "progress": "Đã xong {done, number} trên {total, number}",
+    "newTask": "Công việc mới",
+    "addTask": "Thêm công việc"
+  },
+  "projects": {
+    "heading": "Dự án",
+    "status": {
+      "inProgress": "Đang thực hiện",
+      "planning": "Đang lên kế hoạch"
+    },
+    "progressOf": "Tiến độ của {project}",
+    "due": "Hạn chót {date}"
+  },
+  "notes": {
+    "heading": "Ghi chú gần đây",
+    "viewAll": "Xem tất cả",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "empty": "Chưa có ghi chú nào",
+    "emptyHint": "Ghi chú từ các cuộc họp của bạn sẽ xuất hiện ở đây."
+  }
+}

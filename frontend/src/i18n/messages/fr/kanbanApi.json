@@ -1,0 +1,21 @@
+{
+  "boardNotFound": "Tableau introuvable.",
+  "taskNotFound": "Tâche introuvable.",
+  "columnNotFound": "Colonne introuvable.",
+  "boardChanged": "Le tableau a changé. Rechargez-le et réessayez.",
+  "managedInJira": "Ce tableau est géré dans Jira. Faites cette modification directement dans Jira.",
+  "reconnectJira": "Reconnectez Jira dans Paramètres › Connecteurs pour apporter des modifications.",
+  "firstSync": "Attendez la fin de la première synchronisation avec Jira.",
+  "jiraDisconnected": "Jira est déconnecté. Reconnectez-le dans Paramètres › Connecteurs pour garder ce tableau synchronisé.",
+  "connectJiraFirst": "Connectez d’abord Jira dans Paramètres › Connecteurs.",
+  "jiraBoardUnavailable": "Ce tableau Jira n’est pas accessible depuis votre compte Jira.",
+  "jiraBoardSynced": "Ce tableau Jira est déjà synchronisé.",
+  "notJiraBoard": "Seuls les tableaux synchronisés avec Jira peuvent être synchronisés.",
+  "jiraBoardWorkspaceTasks": "Les tableaux Jira n’affichent que des tickets Jira. Choisissez un tableau géré dans l’application.",
+  "workspaceTaskCopy": "Impossible de dupliquer ici une tâche d’espace de travail. Ajoutez plutôt une tâche dans l’espace de travail.",
+  "workspaceTaskDelete": "Les tâches des espaces de travail quittent le tableau une fois terminées ou réattribuées dans leur espace de travail.",
+  "boardNameRequired": "Donnez un nom au tableau.",
+  "boardNameTooLong": "Ce nom est trop long. Choisissez-en un plus court.",
+  "taskTitleRequired": "Donnez un titre à la tâche.",
+  "invalidRequest": "La demande contient une erreur. Rechargez la page et réessayez."
+}

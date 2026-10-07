@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "title": "الدعم",
+    "description": "طلب المساعدة من فريقنا ومتابعة طلبات الدعم."
+  },
+  "categories": {
+    "billing": "الفوترة",
+    "bug": "الإبلاغ عن خطأ",
+    "account": "الحساب",
+    "feature": "طلب ميزة",
+    "other": "أخرى"
+  },
+  "statuses": {
+    "open": "بانتظار الدعم",
+    "awaiting_you": "بانتظارك",
+    "resolved": "تم الحل"
+  },
+  "events": {
+    "acknowledged": "وصلتنا رسالتك. عادةً ما يرد أحد المختصين خلال بضع ساعات، وسيصلك إشعار هنا.",
+    "resolved": "تم التحديد كمحلول",
+    "reopened": "تمت إعادة الفتح"
+  },
+  "toolbar": {
+    "search": "البحث في الطلبات",
+    "filter": "تصفية الطلبات",
+    "all": "الكل",
+    "open": "مفتوحة",
+    "resolved": "محلولة"
+  },
+  "newTicket": "طلب جديد",
+  "table": {
+    "number": "الرقم",
+    "subject": "الموضوع",
+    "status": "الحالة",
+    "topic": "الفئة",
+    "updated": "آخر تحديث",
+    "unread": "غير مقروءة:"
+  },
+  "list": {
+    "loading": "جارٍ تحميل الطلبات",
+    "loadError": "تعذر تحميل الطلبات",
+    "emptyTitle": "كيف يمكننا المساعدة؟",
+    "emptyDescription": "يمكن فتح طلب دعم وسيرد فريقنا هنا، عادةً خلال بضع ساعات.",
+    "noMatchesTitle": "لا توجد طلبات مطابقة",
+    "noMatchesDescription": "يمكن تجربة بحث أو عامل تصفية آخر."
+  },
+  "panel": {
+    "ticket": "طلب الدعم",
+    "description": "مراسلاتك مع الدعم"
+  },
+  "form": {
+    "title": "كيف يمكننا المساعدة؟",
+    "subtitle": "نرد عادةً خلال بضع ساعات.",
+    "topic": "الفئة",
+    "subject": "الموضوع",
+    "subjectPlaceholder": "ملخص قصير",
+    "body": "ماذا حدث؟",
+    "bodyPlaceholder": "الخطوات، وما كان متوقعًا، وما ظهر بدلًا منه. لقطات الشاشة مفيدة.",
+    "send": "إرسال"
+  },
+  "attach": {
+    "button": "إرفاق ملفات",
+    "list": "الملفات المرفقة",
+    "remove": "إزالة {name}",
+    "tooBig": "{count, plural, zero {{names}: الحجم أكبر من {size}} one {حجم {names} أكبر من {size}} two {{names}: الحجم أكبر من {size}} few {{names}: الحجم أكبر من {size}} many {{names}: الحجم أكبر من {size}} other {{names}: الحجم أكبر من {size}}}",
+    "tooMany": "{max, plural, zero {يمكن إرفاق # ملف كحد أقصى} one {يمكن إرفاق ملف واحد كحد أقصى} two {يمكن إرفاق ملفين كحد أقصى} few {يمكن إرفاق # ملفات كحد أقصى} many {يمكن إرفاق # ملفًا كحد أقصى} other {يمكن إرفاق # ملف كحد أقصى}}"
+  },
+  "composer": {
+    "message": "الرسالة",
+    "emoji": "إضافة رمز تعبيري",
+    "hint": "Enter للإرسال · Shift+Enter لسطر جديد",
+    "send": "إرسال",
+    "reply": "كتابة رد…",
+    "replyToReopen": "الرد لإعادة فتح الطلب…"
+  },
+  "thread": {
+    "loading": "جارٍ تحميل الطلب",
+    "close": "إغلاق الطلب",
+    "reopen": "إعادة الفتح",
+    "resolve": "التحديد كمحلول",
+    "resolvedNote": "تم الحل. إذا كانت هناك حاجة إلى مساعدة إضافية، يمكن الرد أدناه وسيعاد فتح الطلب.",
+    "thanks": "شكرًا على ملاحظاتك.",
+    "rate": "كيف كانت تجربتك معنا؟",
+    "good": "جيدة",
+    "bad": "سيئة",
+    "you": "أنت",
+    "support": "الدعم",
+    "supportAuthor": "{name} · الدعم",
+    "event": "{event} · {date}"
+  },
+  "menu": {
+    "markRead": "التحديد كمقروء",
+    "markUnread": "التحديد كغير مقروء",
+    "copyNumber": "نسخ رقم الطلب",
+    "copySubject": "نسخ الموضوع"
+  },
+  "toasts": {
+    "opened": "تم فتح الطلب #{number}",
+    "openFailed": "تعذر فتح الطلب",
+    "updateFailed": "تعذر تحديث الطلب",
+    "sendFailed": "تعذر إرسال الرد",
+    "markedRead": "تم التحديد كمقروء",
+    "markedUnread": "تم التحديد كغير مقروء",
+    "reopened": "تمت إعادة فتح الطلب",
+    "resolved": "تم التحديد كمحلول",
+    "numberCopied": "تم نسخ رقم الطلب",
+    "subjectCopied": "تم نسخ الموضوع",
+    "numberCopyFailed": "تعذر نسخ رقم الطلب",
+    "subjectCopyFailed": "تعذر نسخ الموضوع"
+  }
+}

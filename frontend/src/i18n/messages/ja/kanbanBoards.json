@@ -1,0 +1,110 @@
+{
+  "switcher": {
+    "boards": "ボード",
+    "jiraBoards": "Jira と同期済み",
+    "newBoard": "新しいボード…",
+    "syncJiraBoard": "Jira ボードを同期…",
+    "rename": "ボードの名前を変更…",
+    "showWorkspaceTasks": "ワークスペースの自分のタスクをここに表示",
+    "changeIcon": "アイコンを変更",
+    "delete": "ボードを削除…",
+    "stopSyncing": "同期を停止…"
+  },
+  "icons": {
+    "work": "仕事",
+    "home": "家庭",
+    "personal": "個人",
+    "health": "健康",
+    "study": "勉強",
+    "travel": "旅行",
+    "shopping": "買い物",
+    "fitness": "フィットネス",
+    "project": "プロジェクト",
+    "reading": "読書"
+  },
+  "empty": {
+    "title": "ボードはまだありません",
+    "description": "仕事や家庭など、用途ごとにボードを作成できます。Jira からボードを取り込むこともできます。",
+    "newBoard": "新しいボード",
+    "syncJiraBoard": "Jira ボードを同期"
+  },
+  "newBoard": {
+    "title": "新しいボード",
+    "description": "仕事や家庭など、用途ごとにボードを分けて管理できます。",
+    "namePlaceholder": "例：家庭",
+    "icon": "アイコン",
+    "columns": "列",
+    "create": "ボードを作成"
+  },
+  "templates": {
+    "simple": "シンプル",
+    "project": "プロジェクト"
+  },
+  "columnNames": {
+    "backlog": "バックログ",
+    "todo": "未着手",
+    "inProgress": "進行中",
+    "review": "レビュー",
+    "done": "完了"
+  },
+  "renameTitle": "ボードの名前を変更",
+  "delete": {
+    "title": "「{board}」を削除しますか？",
+    "description": "{count, plural, =0 {ボードが削除されます。この操作は元に戻せません。} other {ボードとその中の # 件のタスクが削除されます。この操作は元に戻せません。}}",
+    "confirm": "ボードを削除",
+    "stopTitle": "「{board}」の同期を停止しますか？",
+    "stopDescription": "このボードはここから削除されます。Jira 側は何も変更されず、後でもう一度同期できます。",
+    "stopConfirm": "同期を停止"
+  },
+  "jira": {
+    "title": "Jira ボードを同期",
+    "description": "Jira のボードをここで操作できます。変更はすべて双方向で同期されます。",
+    "connectTitle": "先に Jira に接続してください",
+    "connectDescription": "「設定 › コネクタ」で Jira にログインしてから、ここに戻ってボードを選択してください。",
+    "openConnectors": "コネクタを開く",
+    "connectedAs": "{account} として接続しています。",
+    "connected": "Jira に接続しています。",
+    "noBoards": "この Jira アカウントにはボードがまだありません。",
+    "boardList": "Jira ボード",
+    "alreadySynced": "同期済み · 開く",
+    "type": {
+      "kanban": "かんばん",
+      "scrum": "スクラム"
+    },
+    "howColumns": "列と課題は Jira のボードから取り込まれます。",
+    "howMoves": "カードを移動すると、Jira の課題のステータスが変わります。新しいタスクは Jira の課題として作成されます。",
+    "howChanges": "Jira での変更は自動的にここに反映されます。",
+    "sync": "ボードを同期"
+  },
+  "sync": {
+    "syncing": "Jira と同期中…",
+    "paused": "同期を一時停止中",
+    "synced": "Jira と同期済み",
+    "syncedAgo": "Jira と同期済み（{ago}）",
+    "syncNow": "今すぐ同期",
+    "openBoard": "Jira で「{board}」を開く",
+    "openHint": "Jira で開く · {site} の {project}"
+  },
+  "banners": {
+    "syncStopped": "Jira との同期が停止しました。",
+    "changesPaused": "変更は一時停止されています。",
+    "importing": "Jira から「{board}」を取り込んでいます…",
+    "importingHint": "列と課題はまもなくここに表示されます。",
+    "offer": "{count, plural, other {ワークスペースに未完了のタスクが # 件あります。「{board}」に表示しますか？}}カードを移動すると、チームのタスクも更新されます。",
+    "notNow": "後で",
+    "showHere": "{count, plural, other {ここに表示}}"
+  },
+  "toasts": {
+    "createFailed": "ボードを作成できませんでした",
+    "connectFailed": "Jira ボードを同期できませんでした",
+    "updateFailed": "ボードを更新できませんでした",
+    "deleteFailed": "ボードを削除できませんでした",
+    "syncFailed": "Jira と同期できませんでした",
+    "deleted": "「{board}」を削除しました",
+    "stoppedSyncing": "「{board}」の同期を停止しました",
+    "workspaceTasksOn": "ワークスペースの自分のタスクが「{board}」に表示されるようになりました",
+    "workspaceTasksOff": "ワークスペースの自分のタスクはボードに表示されなくなりました",
+    "workspaceTasksHint": "カードを移動すると、元のワークスペースのタスクも変更されます。",
+    "workspaceTasksFailed": "ワークスペースのタスクの表示先を変更できませんでした"
+  }
+}

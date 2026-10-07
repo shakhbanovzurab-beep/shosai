@@ -1,0 +1,29 @@
+{
+  "chip": {
+    "label": "Hub",
+    "removeLabel": "Meeting aus {hub} herausnehmen",
+    "suggestion": "Sieht nach „{hub}“ aus",
+    "file": "Hinzufügen",
+    "other": "Anderer Hub…",
+    "fileTo": "Zu einem Hub hinzufügen…",
+    "createFirst": "Ersten erstellen",
+    "noBoard": "der Hub hat kein Board",
+    "archived": "der Hub ist archiviert",
+    "filedToast": "Die nächsten Meetings dieser Serie landen von selbst hier",
+    "removedToast": "Aus {hub} herausgenommen",
+    "pickerTitle": "Zu einem Hub hinzufügen",
+    "pickerSearch": "Hub suchen",
+    "pickerEmpty": "Keine passenden Hubs"
+  },
+  "brief": {
+    "title": "Heute",
+    "empty": "Heute brennt nichts",
+    "prepTitle": "Demnächst",
+    "prepFor": "Vor dem Meeting am {date}",
+    "prepOpen": "Offen in diesem Hub",
+    "prepLast": "Letztes Mal · {date}",
+    "prepMaterials": "Materialien",
+    "signal": "{circles, plural, =2 {{subject} wurde zweimal ohne Entscheidung besprochen.} =3 {{subject} wurde dreimal ohne Entscheidung besprochen.} =4 {{subject} wurde viermal ohne Entscheidung besprochen.} =5 {{subject} wurde fünfmal ohne Entscheidung besprochen.} one {{subject} wurde # Mal ohne Entscheidung besprochen.} other {{subject} wurde # Mal ohne Entscheidung besprochen.}}",
+    "blockers": "Jedes Mal hieß es: {quotes}."
+  }
+}

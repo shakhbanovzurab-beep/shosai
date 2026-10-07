@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Produtividade",
+    "description": "Tarefas do dia, projetos, timer de foco, calendário e notas recentes, com um panorama do trabalho concluído no último ano."
+  },
+  "greeting": "{period, select, morning {Bom dia, {name}.} afternoon {Boa tarde, {name}.} other {Boa noite, {name}.}}",
+  "greetingAnyTime": "Olá, {name}.",
+  "sidePanel": "Calendário, foco e notas",
+  "tasks": {
+    "heading": "Hoje",
+    "progress": "{done, number} de {total, number} concluídas",
+    "newTask": "Nova tarefa",
+    "addTask": "Adicionar tarefa"
+  },
+  "projects": {
+    "heading": "Projetos",
+    "status": {
+      "inProgress": "Em andamento",
+      "planning": "Planejamento"
+    },
+    "progressOf": "Progresso de {project}",
+    "due": "Prazo: {date}"
+  },
+  "notes": {
+    "heading": "Notas recentes",
+    "viewAll": "Ver todas",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "empty": "Nenhuma nota ainda",
+    "emptyHint": "As notas das suas reuniões aparecerão aqui."
+  }
+}

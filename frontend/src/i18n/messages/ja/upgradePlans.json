@@ -1,0 +1,50 @@
+{
+  "storage": {
+    "perUser": "ユーザーあたり {amount}",
+    "from": "{amount} から",
+    "unlimited": "無制限"
+  },
+  "highlights": {
+    "unlimitedMeetings": "会議が無制限",
+    "meetingMinutes": "毎月 {minutes, plural, other {# 分の会議時間}}",
+    "noMeetings": "会議",
+    "fileManager": "ファイル管理 · {storage}",
+    "noFileManager": "ファイル管理",
+    "knowledge": "Leo 用のナレッジ · {storage}",
+    "noKnowledge": "Leo 用のナレッジ"
+  },
+  "capabilities": {
+    "shared_workspace": "チームの共有ワークスペース",
+    "member_management": "ユーザー管理",
+    "centralized_billing": "請求の一元管理",
+    "billing_and_users": "請求とユーザーの一元管理",
+    "admin_controls": "エンタープライズ水準のセキュリティと管理機能",
+    "sso": "シングルサインオン（SSO）",
+    "priority_support": "優先サポート",
+    "usage_analytics": "使用状況の分析"
+  },
+  "compare": {
+    "title": "プランを比較",
+    "feature": "機能",
+    "included": "含まれる",
+    "notIncluded": "含まれない",
+    "unlimited": "無制限",
+    "minutes": "{minutes, plural, other {# 分}} / 月",
+    "users": "{min, number}～{max, number}",
+    "usersOpen": "{min, number}+",
+    "customUsers": "カスタム",
+    "rows": {
+      "meetings": "会議",
+      "fileManager": "ファイル管理",
+      "knowledge": "Leo 用のナレッジ",
+      "apps": "Leo、メール、カレンダー、かんばん、ノート",
+      "users": "ユーザー",
+      "sharedWorkspace": "共有ワークスペース",
+      "billingAndUsers": "請求とユーザーの一元管理",
+      "sso": "シングルサインオン（SSO）",
+      "adminControls": "セキュリティと管理機能",
+      "prioritySupport": "優先サポート",
+      "usageAnalytics": "使用状況の分析"
+    }
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "title": "Mitglieder",
+  "description": "Alle in {workspace}, ihre Rollen und die Teams, mit denen du teilst.",
+  "invitePeople": "Personen einladen",
+  "adminsInvite": "Nur Admins können Personen einladen.",
+  "adminsInviteAsk": "Nur Admins können Personen einladen. Frag {name}.",
+  "tabs": {
+    "members": "Mitglieder",
+    "teams": "Teams"
+  },
+  "search": "Personen suchen",
+  "pendingInvitations": "Offene Einladungen · {count, number}",
+  "membersCount": "Mitglieder · {count, number}",
+  "noMatches": "Keine Treffer",
+  "noMatchesHint": "Versuche einen Namen, eine E-Mail-Adresse oder eine Position.",
+  "clearSearch": "Suche löschen",
+  "seats": {
+    "label": "Lizenzen",
+    "taken": "{taken, number} von {total, number} Lizenzen belegt",
+    "breakdown": "· {members, plural, one {# Mitglied} other {# Mitglieder}}",
+    "breakdownPending": "· {members, plural, one {# Mitglied} other {# Mitglieder}}, {pending, plural, one {# offene Einladung} other {# offene Einladungen}}",
+    "left": "{count, plural, one {# Lizenz frei.} other {# Lizenzen frei.}} Offene Einladungen belegen eine Lizenz, bis sie angenommen oder widerrufen werden.",
+    "fullAdd": "Alle Lizenzen sind belegt. Füge Lizenzen hinzu, um weitere Personen einzuladen.",
+    "fullAsk": "Alle Lizenzen sind belegt. Bitte den Inhaber, Lizenzen hinzuzufügen.",
+    "change": "Lizenzen ändern"
+  },
+  "invitation": {
+    "by": "Eingeladen von {name} {ago}",
+    "byYou": "Von dir eingeladen {ago}",
+    "byFormerMember": "Von einem ehemaligen Mitglied eingeladen {ago}",
+    "resend": "Erneut senden",
+    "revoke": "Widerrufen",
+    "revokeFor": "Einladung für {email} widerrufen"
+  },
+  "member": {
+    "you": "Du",
+    "titleAndEmail": "{title} · {email}",
+    "idle": "{days, plural, one {Seit # Tag oder länger inaktiv} other {Seit # Tagen oder länger inaktiv}}",
+    "roleOf": "Rolle von {name}",
+    "remove": "Aus dem Workspace entfernen",
+    "removeTitle": "{name} aus {workspace} entfernen?",
+    "removeDescription": "Meetings und Dateien, die {name} aus den eigenen Notizen und dem eigenen Dateimanager geteilt hat, verschwinden mit. Aufgaben bleiben, offene werden nicht mehr zugewiesen. Die Lizenz wird frei.",
+    "joinedTeam": "{name} ist {team} beigetreten",
+    "leftTeam": "{name} hat {team} verlassen"
+  },
+  "teams": {
+    "new": "Neues Team",
+    "empty": "Noch keine Teams",
+    "emptyHint": "Teams sind optional. Erstelle sie, wenn du Meetings und Wissen mit einer Gruppe teilen möchtest, etwa Entwicklung oder Vertrieb.",
+    "intro": "Teile Meetings und Wissen mit einem Team statt mit einzelnen Personen.",
+    "deleteTitle": "{name} löschen?",
+    "deleteDescription": "Seine Meetings bleiben für die Teilnehmer sichtbar, und seine Mitglieder bleiben im Workspace. Verschiebe zuerst das Wissen des Teams; es darf nicht ohne Zielgruppe bleiben."
+  },
+  "team": {
+    "noDescription": "Noch keine Beschreibung.",
+    "edit": "Team bearbeiten",
+    "delete": "Team löschen",
+    "members": "{count, plural, one {# Mitglied} other {# Mitglieder}}",
+    "membersLedBy": "{count, plural, one {# Mitglied} other {# Mitglieder}} · Leitung: {name}",
+    "membersLedByYou": "{count, plural, one {# Mitglied} other {# Mitglieder}} · Leitung: du",
+    "join": "Team beitreten",
+    "leave": "Team verlassen",
+    "youJoined": "Du bist {team} beigetreten",
+    "youLeft": "Du hast {team} verlassen"
+  },
+  "teamForm": {
+    "editTitle": "{name} bearbeiten",
+    "description": "Teile Meetings und Wissen mit einer Gruppe statt einzeln.",
+    "nameRequired": "Gib dem Team einen Namen.",
+    "namePlaceholder": "z. B. Design",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Woran dieses Team arbeitet",
+    "color": "Farbe",
+    "colors": {
+      "blue": "Blau",
+      "green": "Grün",
+      "amber": "Bernstein",
+      "violet": "Violett",
+      "rose": "Rosa",
+      "sky": "Himmelblau"
+    },
+    "privateHint": "Nur seine Mitglieder und Admins sehen es und was damit geteilt wird.",
+    "create": "Team erstellen"
+  },
+  "invite": {
+    "title": "Personen zu {workspace} einladen",
+    "description": "Sie erhalten eine E-Mail mit einem Link zum Beitreten. Jede Person belegt eine Lizenz.",
+    "emails": "E-Mail-Adressen",
+    "hint": "Trenne Adressen mit Kommas oder Zeilenumbrüchen. {left, plural, one {# Lizenz frei.} other {# Lizenzen frei.}}",
+    "overSeats": "{count, plural, one {# Person} other {# Personen}}, aber {left, plural, one {nur # Lizenz frei.} other {nur # Lizenzen frei.}}",
+    "seatsAfter": "{count, plural, one {# Einladung} other {# Einladungen}} · {left, plural, one {danach # Lizenz frei.} other {danach # Lizenzen frei.}}",
+    "checkEmails": "Prüfe {emails}.",
+    "allExisting": "Sie sind bereits im Workspace oder eingeladen.",
+    "emailRequired": "Füge eine E-Mail-Adresse hinzu.",
+    "tooMany": "{count, plural, one {Lade höchstens # Person auf einmal ein.} other {Lade höchstens # Personen auf einmal ein.}}",
+    "skipped": "Bereits Mitglied oder eingeladen, übersprungen: {emails}.",
+    "role": "Rolle",
+    "teams": "Zu Teams hinzufügen (optional)",
+    "addSeats": "Lizenzen hinzufügen",
+    "send": "{count, plural, one {Einladung senden} other {# Einladungen senden}}"
+  },
+  "toasts": {
+    "invitationsSent": "{count, plural, one {Einladung an {email} gesendet} other {# Einladungen gesendet}}",
+    "inviteFailed": "Einladungen konnten nicht gesendet werden.",
+    "invitationRevoked": "Einladung für {email} widerrufen",
+    "revokeFailed": "Einladung konnte nicht widerrufen werden",
+    "invitationResent": "Einladung erneut an {email} gesendet",
+    "resendFailed": "Einladung konnte nicht erneut gesendet werden",
+    "roleChanged": "{role, select, admin {{name} ist jetzt Admin} other {{name} ist jetzt Mitglied}}",
+    "roleChangeFailed": "Rolle konnte nicht geändert werden",
+    "teamsUpdateFailed": "Teams konnten nicht aktualisiert werden",
+    "memberRemoved": "{name} wurde aus dem Workspace entfernt",
+    "removeMemberFailed": "Person konnte nicht entfernt werden",
+    "teamCreated": "{name} erstellt",
+    "teamSaved": "{name} gespeichert",
+    "teamSaveFailed": "Team konnte nicht gespeichert werden.",
+    "teamDeleted": "{name} wurde gelöscht",
+    "teamDeleteFailed": "Team konnte nicht gelöscht werden"
+  }
+}

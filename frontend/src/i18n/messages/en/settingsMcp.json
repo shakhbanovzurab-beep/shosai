@@ -1,0 +1,23 @@
+{
+  "description": "Connect Model Context Protocol servers to give Leo tools and data from other apps.",
+  "add": "Add server",
+  "empty": {
+    "title": "No MCP servers",
+    "description": "Add a remote server by its URL."
+  },
+  "hasAuth": "Has authorization",
+  "notReached": "Not reached yet",
+  "tools": "{count, plural, one {# tool} other {# tools}}",
+  "enable": "Enable {name}",
+  "disable": "Disable {name}",
+  "remove": "Remove {name}",
+  "removed": "Removed {name}",
+  "form": {
+    "transport": "Transport",
+    "url": "Server URL",
+    "auth": "Authorization header <optional>(optional)</optional>"
+  },
+  "addFailed": "Couldn’t add the server.",
+  "toggleFailed": "Couldn’t change the server",
+  "removeFailed": "Couldn’t remove the server"
+}

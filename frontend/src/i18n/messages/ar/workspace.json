@@ -1,0 +1,182 @@
+{
+  "meta": {
+    "workspaces": "مساحات العمل",
+    "home": "رئيسية مساحة العمل",
+    "new": "مساحة عمل جديدة",
+    "settings": "إعدادات مساحة العمل",
+    "members": "الأعضاء",
+    "decisions": "القرارات",
+    "projects": "المشاريع",
+    "tasks": "المهام",
+    "knowledge": "معرفة مساحة العمل",
+    "meetings": "اجتماعات مساحة العمل",
+    "project": "المشروع",
+    "meeting": "الاجتماع"
+  },
+  "createWorkspace": "إنشاء مساحة عمل",
+  "roles": {
+    "owner": {
+      "label": "مالك",
+      "description": "كل الصلاحيات، بما في ذلك الفوترة وحذف مساحة العمل."
+    },
+    "admin": {
+      "label": "مشرف",
+      "description": "يدير الأشخاص والفرق وقواعد المشاركة والإعدادات."
+    },
+    "member": {
+      "label": "عضو",
+      "description": "يسجل الاجتماعات ويشاركها ويتابع ما بعدها."
+    }
+  },
+  "teams": {
+    "private": "فريق خاص"
+  },
+  "audience": {
+    "participants": "المشاركون",
+    "everyone": "الجميع في {workspace}",
+    "aTeam": "فريق",
+    "sharedWith": "{level, select, participants {مشترك مع المشاركين} workspace {مشترك مع الجميع في {workspace}} other {مشترك مع {team}}}",
+    "hint": "{level, select, participants {الأعضاء الذين حضروا الاجتماع.} other {كل من في مساحة العمل، الآن ولاحقًا.}}",
+    "teamHint": "{private, select, true {أعضاء {team} (فريق خاص)، بالإضافة إلى المشاركين.} other {أعضاء {team}، بالإضافة إلى المشاركين.}}"
+  },
+  "people": {
+    "list": "الأشخاص: {names}",
+    "more": "+{count, number}",
+    "nameYou": "{name} (أنت)"
+  },
+  "filters": {
+    "team": "الفريق",
+    "allTeams": "كل الفرق",
+    "project": "المشروع",
+    "allProjects": "كل المشاريع",
+    "clearSearch": "مسح البحث"
+  },
+  "blocks": {
+    "loading": {
+      "files": "جارٍ تحميل الملفات…",
+      "tasks": "جارٍ تحميل المهام…",
+      "yourTasks": "جارٍ تحميل مهامك…",
+      "projects": "جارٍ تحميل المشاريع…",
+      "meetings": "جارٍ تحميل الاجتماعات…",
+      "upcomingMeetings": "جارٍ تحميل الاجتماعات القادمة…",
+      "decisions": "جارٍ تحميل القرارات…"
+    },
+    "failed": {
+      "files": "تعذر تحميل الملفات.",
+      "tasks": "تعذر تحميل المهام.",
+      "yourTasks": "تعذر تحميل مهامك.",
+      "projects": "تعذر تحميل المشاريع.",
+      "meetings": "تعذر تحميل الاجتماعات.",
+      "upcomingMeetings": "تعذر تحميل الاجتماعات القادمة.",
+      "decisions": "تعذر تحميل القرارات."
+    }
+  },
+  "dates": {
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "tomorrow": "غدًا",
+    "targetOverdue": "متأخر · {date}",
+    "targetToday": "الهدف: اليوم",
+    "targetTomorrow": "الهدف: غدًا",
+    "targetDay": "الهدف: {day}",
+    "targetDate": "الهدف: {date}",
+    "ago": "{days, plural, =0 {اليوم} =1 {أمس} zero {قبل # يوم} one {قبل يوم} two {قبل يومين} few {قبل # أيام} many {قبل # يومًا} other {قبل # يوم}}",
+    "on": "في {date}",
+    "neverSignedIn": "لم يسجل الدخول بعد",
+    "activeNow": "نشط الآن",
+    "hoursAgo": "{count, plural, zero {قبل # ساعة} one {قبل ساعة} two {قبل ساعتين} few {قبل # ساعات} many {قبل # ساعة} other {قبل # ساعة}}",
+    "daysAgo": "{count, plural, =1 {أمس} zero {قبل # يوم} one {قبل يوم} two {قبل يومين} few {قبل # أيام} many {قبل # يومًا} other {قبل # يوم}}"
+  },
+  "gate": {
+    "loading": "جارٍ تحميل مساحة العمل…",
+    "loadFailed": "تعذر تحميل مساحة العمل",
+    "listFailed": "تعذر تحميل مساحات العمل الخاصة بك",
+    "unavailable": "مساحة العمل هذه غير متاحة",
+    "unavailableHint": "إما أنها غير موجودة أو أنك لست عضوًا فيها. يمكن طلب دعوة من أحد أعضائها، أو إنشاء مساحة عمل خاصة بك.",
+    "backToPersonal": "العودة إلى المساحة الشخصية",
+    "suspended": "تم تعليق {name}",
+    "suspendedOwnerHint": "تم إيقاف الوصول مؤقتًا لكل أعضائها. يمكن التواصل مع الدعم لاستعادته، ولم يُحذف أي شيء من مساحة العمل.",
+    "suspendedHint": "تم إيقاف الوصول مؤقتًا لكل أعضائها. يمكن لمالكها التواصل مع الدعم لاستعادته. لا تتأثر ملاحظاتك وملفاتك ولوحاتك في المساحة الشخصية."
+  },
+  "switcher": {
+    "invite": "دعوة أشخاص إلى {name}",
+    "settings": "إعدادات مساحة العمل",
+    "current": "الحالية",
+    "hint": "التبديل بين المساحة الشخصية ومساحات العمل",
+    "personal": "شخصي",
+    "personalHint": "بريدك وملاحظاتك ولوحاتك ومهامك",
+    "workspaces": "مساحات العمل",
+    "suspended": "معلقة",
+    "detail": "{role} · {count, plural, zero {# عضو} one {عضو واحد} two {عضوان} few {# أعضاء} many {# عضوًا} other {# عضو}}",
+    "loadFailed": "تعذر تحميل مساحات العمل الخاصة بك. يرجى إعادة المحاولة",
+    "none": "لست عضوًا في أي مساحة عمل بعد"
+  },
+  "create": {
+    "title": "مساحة لفريقك في Leo",
+    "intro": "مساحة عمل مشتركة للعمل الذي تنجزونه معًا. تبقى المساحة الشخصية لك وحدك: البريد والتقويم والملاحظات واللوحات خاصة إلى أن تختار مشاركة شيء منها.",
+    "value": {
+      "meetings": {
+        "title": "اجتماعات مشتركة",
+        "text": "يمكن مشاركة تسجيل من الملاحظات، أو إرسال الملاحظات إلى الأشخاص المعنيين عند انتهاء الاجتماع. تبقى الاجتماعات التي يحضرها ضيوف خاصة."
+      },
+      "work": {
+        "title": "المشاريع والمهام والقرارات",
+        "text": "ما تقرر ومن عليه ماذا، مجمعًا حسب المشروع. تظهر مهامك أيضًا في الإنتاجية وكانبان لديك."
+      },
+      "knowledge": {
+        "title": "معرفة الفريق",
+        "text": "يمكن مشاركة ملفات من مدير الملفات، أو رفع ملفات جديدة، أو ربط محرك أقراص مشترك. يجيب Leo منها لكل من يحق له رؤيتها."
+      }
+    },
+    "billing": "تتم الفوترة لكل مقعد على خطة Team. <link>عرض الأسعار</link>",
+    "formHint": "ستكون مالكها، ويمكن دعوة الأشخاص بعد ذلك مباشرة.",
+    "name": "اسم مساحة العمل",
+    "namePlaceholder": "مثل Acme",
+    "nameRequired": "يرجى إدخال اسم لمساحة العمل.",
+    "seats": "المقاعد",
+    "fewerSeats": "مقاعد أقل",
+    "moreSeats": "مقاعد أكثر",
+    "seatsHint": "مقعد لكل شخص، بما في ذلك أنت. من {min, number} إلى {max, number}، ويمكن تغيير العدد في أي وقت.",
+    "submit": "إنشاء مساحة العمل"
+  },
+  "toasts": {
+    "workspaceReady": "{name} جاهزة",
+    "workspaceReadyHint": "يمكن الآن دعوة فريقك لبدء مشاركة الاجتماعات.",
+    "createWorkspaceFailed": "تعذر إنشاء مساحة العمل.",
+    "saveFailed": "تعذر حفظ التغيير",
+    "workspaceDeleted": "تم حذف {name}",
+    "deleteWorkspaceFailed": "تعذر حذف مساحة العمل",
+    "workspaceLeft": "تمت مغادرة {name}",
+    "leaveWorkspaceFailed": "تعذر مغادرة مساحة العمل",
+    "projectSaveFailed": "تعذر حفظ المشروع",
+    "projectDeleted": "تم حذف {name}",
+    "projectDeletedHint": "لا تزال اجتماعاته ومهامه هنا.",
+    "projectDeleteFailed": "تعذر حذف المشروع",
+    "filesAdded": "{count, plural, one {تمت إضافة {name}} zero {تمت إضافة # ملف} two {تمت إضافة ملفين} few {تمت إضافة # ملفات} many {تمت إضافة # ملفًا} other {تمت إضافة # ملف}}",
+    "filesAddedHint": "{count, plural, one {سيتمكن Leo من الإجابة منه بعد انتهاء الفهرسة.} two {سيتمكن Leo من الإجابة منهما بعد انتهاء الفهرسة.} zero {سيتمكن Leo من الإجابة منها بعد انتهاء الفهرسة.} few {سيتمكن Leo من الإجابة منها بعد انتهاء الفهرسة.} many {سيتمكن Leo من الإجابة منها بعد انتهاء الفهرسة.} other {سيتمكن Leo من الإجابة منها بعد انتهاء الفهرسة.}}",
+    "sourceConnected": "تم ربط {name}",
+    "sourceConnectedHint": "سيتمكن Leo من الإجابة منه بعد أول مزامنة.",
+    "knowledgeChangeFailed": "تعذر التغيير",
+    "stoppedSharing": "تم إيقاف مشاركة {name}",
+    "stoppedSharingHint": "يبقى في مدير الملفات لدى مالكه، ولم يعد Leo يجيب منه هنا.",
+    "knowledgeRemoved": "تمت إزالة {name}",
+    "knowledgeRemovedHint": "لم يعد Leo يجيب منه.",
+    "knowledgeRemoveFailed": "تعذر الإزالة",
+    "fileStaysYours": "{count, plural, one {يبقى في مدير الملفات لديك ويظل ملكك.} two {يبقيان في مدير الملفات لديك ويظلان ملكك.} zero {تبقى في مدير الملفات لديك وتظل ملكك.} few {تبقى في مدير الملفات لديك وتظل ملكك.} many {تبقى في مدير الملفات لديك وتظل ملكك.} other {تبقى في مدير الملفات لديك وتظل ملكك.}}",
+    "shareFileFailed": "تعذر المشاركة",
+    "filesShared": "{count, plural, one {تمت مشاركة {name}} zero {تمت مشاركة # ملف} two {تمت مشاركة ملفين} few {تمت مشاركة # ملفات} many {تمت مشاركة # ملفًا} other {تمت مشاركة # ملف}}",
+    "stillInFileManager": "لا يزال في مدير الملفات لديك.",
+    "unshareFileFailed": "تعذر إيقاف المشاركة",
+    "meetingShareFailed": "تعذر مشاركة الاجتماع",
+    "meetingChangeFailed": "تعذر تغيير الاجتماع",
+    "changeUndone": "تم التراجع عن التغيير",
+    "noLongerShared": "لم يعد مشتركًا",
+    "stillInYourNotes": "لا يزال في ملاحظاتك.",
+    "stillInOwnerNotes": "لا يزال في ملاحظات مالكه.",
+    "sharedAgain": "تمت المشاركة مجددًا",
+    "unshareMeetingFailed": "تعذر إيقاف المشاركة",
+    "taskUpdateFailed": "تعذر تحديث المهمة",
+    "markedDone": "تم التمييز كمكتملة",
+    "taskAdded": "تمت إضافة المهمة"
+  }
+}

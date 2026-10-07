@@ -1,0 +1,93 @@
+{
+  "meta": {
+    "title": "Tarif upgraden"
+  },
+  "title": "Tarif upgraden",
+  "subtitle": "Starte kostenlos mit {minutes, plural, one {# Meeting-Minute} other {# Meeting-Minuten}} pro Monat. Wechsle den Tarif, wenn deine Meetings mehr brauchen.",
+  "loading": "Tarife werden geladen…",
+  "loadFailed": "Tarife konnten nicht geladen werden",
+  "seatNote": "Deine Lizenz in <b>{workspace}</b> umfasst {plan}, daher gelten dessen Limits für deine eigenen Meetings, den Dateimanager und Leos Wissen. Dein persönlicher Tarif ist davon unabhängig.",
+  "pricesNote": "Preise in US-Dollar, zzgl. Steuern; Team wird pro Nutzer abgerechnet. Zahlungsdaten gibst du nur auf der sicheren Seite des Zahlungsanbieters ein.",
+  "audiences": {
+    "individual": "Einzelpersonen",
+    "team": "Team",
+    "enterprise": "Unternehmen"
+  },
+  "seatRange": "({min, number}–{max, number} Nutzer)",
+  "seatRangeOpen": "({min, number}+ Nutzer)",
+  "card": {
+    "yourPlan": "Dein Tarif",
+    "recommended": "Empfohlen",
+    "custom": "Individuell",
+    "tailored": "Auf dein Unternehmen zugeschnitten",
+    "perMonth": "/ Monat",
+    "perUserPerMonth": "pro Nutzer / Monat",
+    "billedMonthly": "Monatliche Abrechnung, jederzeit kündbar",
+    "freeForever": "Dauerhaft kostenlos",
+    "seatsTotal": "{total} / Monat für {seats, plural, one {# Nutzer} other {# Nutzer}}",
+    "notIncluded": "Nicht enthalten: {item}"
+  },
+  "seats": {
+    "label": "Nutzer",
+    "fewer": "Weniger Nutzer",
+    "more": "Mehr Nutzer"
+  },
+  "action": {
+    "current": "Aktueller Tarif",
+    "upgradeTo": "Auf {plan} upgraden",
+    "switchTo": "Zu {plan} wechseln",
+    "upgradeFailed": "Das Upgrade konnte nicht gestartet werden",
+    "switchFailed": "Der Tarif konnte nicht geändert werden"
+  },
+  "usage": {
+    "label": "Meeting-Minuten in diesem Monat",
+    "title": "Meeting-Minuten",
+    "ratio": "{used, number} / {limit, number}",
+    "used": "{used, number} von {limit, plural, one {# Minute} other {# Minuten}} genutzt",
+    "left": "{left, number} von {limit, plural, one {# Meeting-Minute} other {# Meeting-Minuten}} übrig",
+    "allUsed": "Du hast alle Meeting-Minuten aufgebraucht",
+    "resets": "Neue Minuten ab {date}",
+    "leftShort": "{left, plural, one {# Min.} other {# Min.}} übrig · neu ab {date}",
+    "recordingPaused": "Aufnahme bis {date} pausiert.",
+    "paused": "Meetings sind bis {date} pausiert.",
+    "pausedUpgrade": "Meetings sind bis {date} pausiert. Mit {plan} hast du unbegrenzt Meetings.",
+    "getUnlimited": "Unbegrenzte Meetings freischalten"
+  },
+  "gate": {
+    "checking": "Dein Tarif wird geprüft…",
+    "seePlans": "Tarife ansehen",
+    "comparePlans": "Tarife vergleichen",
+    "upgradeTo": "Auf {plan} upgraden",
+    "offer": "{plan} umfasst {unlimited, select, yes {unbegrenzten Speicher} other {{amount}}}.",
+    "offerPriced": "{plan} umfasst {unlimited, select, yes {unbegrenzten Speicher} other {{amount}}} für {price} im Monat.",
+    "file_manager": {
+      "partOf": "Der Dateimanager ist Teil von {plan}",
+      "notInPlan": "Der Dateimanager ist nicht in deinem Tarif enthalten",
+      "pitch": "Bewahre deine Dateien an einem Ort auf, wähle, welche Leo nutzt, und teile sie in Workspaces."
+    },
+    "knowledge_base": {
+      "partOf": "Wissen ist Teil von {plan}",
+      "notInPlan": "Wissen ist nicht in deinem Tarif enthalten",
+      "pitch": "Wähle Dateien aus und verbinde Quellen, damit Leo daraus antworten kann."
+    }
+  },
+  "sales": {
+    "contact": "Vertrieb kontaktieren",
+    "title": "Mit dem Vertrieb sprechen",
+    "description": "Beschreibe dein Team, und der Vertrieb stellt einen Enterprise-Tarif für dich zusammen.",
+    "workEmail": "Geschäftliche E-Mail-Adresse",
+    "company": "Unternehmen",
+    "teamSize": "Teamgröße",
+    "teamSizePlaceholder": "Auswählen",
+    "teamSizeRange": "{min, number}–{max, number} Personen",
+    "teamSizeOpen": "{min, number}+ Personen",
+    "message": "Was brauchst du? <muted>(optional)</muted>",
+    "messagePlaceholder": "SSO-Anbieter, Sicherheitsprüfung, Anzahl der Lizenzen…",
+    "send": "Anfrage senden",
+    "chooseTeamSize": "Wähle deine Teamgröße.",
+    "sendFailed": "Deine Anfrage konnte nicht gesendet werden.",
+    "sentTitle": "Danke – der Vertrieb meldet sich bei dir",
+    "sentDescription": "Eine Antwort kommt meist innerhalb eines Werktags.",
+    "done": "Fertig"
+  }
+}

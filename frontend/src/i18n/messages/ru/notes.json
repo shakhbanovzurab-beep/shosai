@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Заметки",
+    "description": "Расшифрованные встречи с заметками, задачами из встреч и интеллект-картами."
+  },
+  "recency": {
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "thisWeek": "На этой неделе",
+    "earlier": "Ранее"
+  },
+  "fields": {
+    "meeting": "Встреча",
+    "folder": "Папка",
+    "people": "Люди",
+    "participants": "Участники",
+    "duration": "Длительность",
+    "date": "Дата"
+  },
+  "views": {
+    "label": "Вид",
+    "timeline": "Лента",
+    "grid": "Сетка",
+    "list": "Список"
+  },
+  "upload": {
+    "button": "Загрузить запись",
+    "hint": "Или перетащите файл в любое место страницы",
+    "dropTitle": "Отпустите, чтобы загрузить записи",
+    "dropHint": "mp3, m4a, wav, mp4, webm и другие форматы · до {size}",
+    "notMedia": "{name} — не аудио- и не видеофайл",
+    "tooLarge": "Файл {name} слишком большой",
+    "sizeLimit": "Максимальный размер записи — {size}."
+  },
+  "recordings": {
+    "uploading": "Загрузка",
+    "justNow": "Только что",
+    "transcribing": "Расшифровка",
+    "transcribingNow": "Расшифровка…",
+    "waiting": "Ожидание расшифровки…",
+    "timelineStatus": "Расшифровка… Когда она закончится, здесь появятся заметки, решения и интеллект-карта."
+  },
+  "remove": "Убрать {name}",
+  "folders": {
+    "label": "Папки",
+    "all": "Все встречи",
+    "new": "Новая папка",
+    "newMenu": "Новая папка…",
+    "newNamed": "Новая папка «{name}»",
+    "defaultName": "Новая папка",
+    "nameLabel": "Название папки",
+    "none": "Без папки",
+    "add": "Добавить в папку",
+    "moveTo": "Переместить в папку",
+    "search": "Найти папку…",
+    "noMatch": "Подходящих папок нет.",
+    "movedTo": "Перемещено в папку «{folder}»",
+    "removedFrom": "Убрано из папки",
+    "emptyTitle": "Папка пуста",
+    "emptyDescription": "Щёлкните встречу правой кнопкой мыши и выберите «{action}», чтобы добавить её сюда."
+  },
+  "card": {
+    "latest": "Последняя встреча",
+    "keyPoints": "Ключевые моменты",
+    "openNotes": "Открыть заметки",
+    "openItems": "{count, plural, one {# в работе} few {# в работе} many {# в работе} other {# в работе}}"
+  },
+  "timeline": {
+    "decision": "Решение:",
+    "openTasks": "{count, plural, one {# незавершённая задача} few {# незавершённые задачи} many {# незавершённых задач} other {# незавершённой задачи}}"
+  },
+  "menu": {
+    "openInNewTab": "Открыть в новой вкладке",
+    "exportTranscript": "Экспортировать расшифровку"
+  },
+  "exportFormats": {
+    "txt": "Обычный текст",
+    "md": "Markdown",
+    "srt": "Субтитры SubRip",
+    "vtt": "Субтитры WebVTT",
+    "json": "Данные JSON"
+  },
+  "exportHeading": "{date} · {duration}",
+  "deleted": "Заметка «{title}» удалена"
+}

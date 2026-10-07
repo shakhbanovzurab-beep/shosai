@@ -1,0 +1,49 @@
+{
+  "data": "Données",
+  "improveModels": "Contribuer à l’amélioration des modèles",
+  "improveModelsHint": "Autorisez l’utilisation de vos conversations et notes de réunion pour entraîner et améliorer les modèles. Désactivé par défaut.",
+  "shareLocation": "Partager une position approximative",
+  "shareLocationHint": "Sert à la météo locale et aux réponses qui tiennent compte de l’heure. Seule la zone est partagée, jamais votre position exacte.",
+  "yourData": "Vos données",
+  "export": "Exporter les données",
+  "exportHint": "Téléchargez une copie de vos paramètres, de vos prompts, de votre mémoire et de votre activité.",
+  "kinds": {
+    "shared_chats": {
+      "title": "Conversations partagées",
+      "description": "Conversations visibles par toute personne disposant du lien. Arrêter le partage désactive le lien.",
+      "removeItem": "Arrêter de partager {title}",
+      "removeAll": "Arrêter tous les partages",
+      "confirmAll": "Arrêter le partage de toutes les conversations ?",
+      "empty": "Aucune conversation partagée"
+    },
+    "shared_artifacts": {
+      "title": "Artefacts partagés",
+      "description": "Documents et pages que vous avez publiés depuis vos conversations.",
+      "removeItem": "Arrêter de partager {title}",
+      "removeAll": "Arrêter tous les partages",
+      "confirmAll": "Arrêter le partage de tous les artefacts ?",
+      "empty": "Aucun artefact partagé"
+    },
+    "uploaded_files": {
+      "title": "Fichiers importés",
+      "description": "Fichiers que vous avez joints dans vos conversations. En supprimer un le retire aussi de ces conversations.",
+      "removeItem": "Supprimer {title}",
+      "removeAll": "Supprimer tous les fichiers",
+      "confirmAll": "Supprimer tous les fichiers ?",
+      "empty": "Aucun fichier importé"
+    },
+    "feedback": {
+      "title": "Vos avis",
+      "description": "Évaluations et commentaires que vous avez laissés sur les réponses de Leo.",
+      "removeItem": "Supprimer {title}",
+      "removeAll": "Supprimer tous les avis",
+      "confirmAll": "Supprimer tous les avis ?",
+      "empty": "Aucun avis pour l’instant"
+    }
+  },
+  "nothingToManage": "Rien à gérer ici.",
+  "copyLinkTo": "Copier le lien vers {title}",
+  "cantUndo": "Cette action est irréversible.",
+  "removeFailed": "Impossible de retirer cet élément",
+  "removeAllFailed": "Impossible de retirer ces éléments"
+}

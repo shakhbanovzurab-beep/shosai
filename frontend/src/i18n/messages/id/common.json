@@ -1,0 +1,30 @@
+{
+  "actions": {
+    "add": "Tambahkan",
+    "cancel": "Batal",
+    "close": "Tutup",
+    "copyLink": "Salin tautan",
+    "create": "Buat",
+    "delete": "Hapus",
+    "duplicate": "Duplikat",
+    "open": "Buka",
+    "remove": "Hapus",
+    "rename": "Ganti nama",
+    "renameMenu": "Ganti nama…",
+    "retry": "Coba lagi",
+    "save": "Simpan",
+    "undo": "Urungkan"
+  },
+  "fields": {
+    "name": "Nama"
+  },
+  "feedback": {
+    "linkCopied": "Tautan disalin",
+    "linkCopyFailed": "Tidak dapat menyalin tautan",
+    "loading": "Memuat…"
+  },
+  "actionsFor": "Tindakan untuk {name}",
+  "errors": {
+    "backendUnreachable": "Tidak dapat menghubungi server. Coba lagi sebentar lagi."
+  }
+}

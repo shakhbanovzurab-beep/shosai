@@ -1,0 +1,12 @@
+{
+  "notMultipart": "Envie a mensagem como multipart/form-data.",
+  "emptyMessage": "Escreva uma mensagem ou anexe um arquivo.",
+  "messageTooLong": "Use menos de {max, number} caracteres na mensagem.",
+  "tooManyFiles": "{max, plural, one {Anexe no máximo # arquivo.} many {Anexe no máximo # de arquivos.} other {Anexe no máximo # arquivos.}}",
+  "fileTooBig": "{name} é maior que {size}.",
+  "subjectRequired": "Dê um assunto curto ao chamado.",
+  "topicRequired": "Escolha um tópico.",
+  "detailsRequired": "Descreva o que aconteceu.",
+  "ticketNotFound": "Chamado não encontrado.",
+  "invalidUpdate": "Envie um status, uma avaliação ou o indicador de não lido."
+}

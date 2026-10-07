@@ -1,0 +1,50 @@
+{
+  "title": "집중",
+  "sound": {
+    "label": "세션이 끝나면 소리 알림",
+    "on": "소리 켬",
+    "off": "소리 끔"
+  },
+  "rhythm": "집중 리듬",
+  "presetLabel": "{name}: {hint}",
+  "presetTooltip": "<b>{name}.</b> {hint}",
+  "presets": {
+    "pomodoro": {
+      "name": "뽀모도로",
+      "hint": "{focus} 집중, {pause} 휴식, {every, plural, =1 {세션마다} other {#세션마다}} {longBreak} 긴 휴식. 처음 시작할 때나 바쁜 날에 좋아요."
+    },
+    "fifty": {
+      "name": "긴 집중",
+      "hint": "{focus} 집중, {pause} 휴식, {every, plural, =1 {세션마다} other {#세션마다}} {longBreak} 긴 휴식. 글쓰기와 디자인에 좋아요."
+    },
+    "fiftyTwo": {
+      "name": "{focus, number}/{pause, number} 리듬",
+      "hint": "{focus} 집중, {pause} 휴식 — DeskTime 연구에서 가장 생산적인 사람들이 일한 방식이에요."
+    },
+    "deepWork": {
+      "name": "딥 워크",
+      "hint": "{focus} 집중, {pause} 휴식 — 자연스러운 주의 집중 주기 한 번으로, 어려운 문제에 좋아요."
+    }
+  },
+  "phase": {
+    "focus": "집중",
+    "break": "짧은 휴식",
+    "long_break": "긴 휴식"
+  },
+  "start": "시작",
+  "pause": "일시정지",
+  "resume": "계속",
+  "restart": "이 단계 다시 시작",
+  "skipBreak": "휴식 건너뛰기",
+  "skipToBreak": "휴식으로 건너뛰기",
+  "cycle": "긴 휴식까지 {done, number}/{every, plural, other {#세션}}",
+  "doneToday": "{count, plural, other {오늘 #세션 완료}}",
+  "announce": "{phase}, {clock}",
+  "tabTitle": "{clock} · {phase}",
+  "ended": {
+    "focus": "집중 세션 완료 — 잠시 쉬어 가세요.",
+    "focusLong": "집중 세션 완료 — 길게 쉬어 가세요.",
+    "break": "휴식 끝 — 다시 집중해 볼까요?",
+    "next": "{preset} · 준비되면 시작을 눌러 주세요."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "upload": {
+    "title": "Fazer upload para {workspace}",
+    "description": "Os arquivos enviados por upload pertencem a {workspace}: eles ficam quando você sai, e os administradores os gerenciam. Para compartilhar um arquivo e mantê-lo como seu, compartilhe-o a partir dos seus arquivos.",
+    "dropZone": "Solte arquivos para adicionar",
+    "drop": "Solte os arquivos aqui",
+    "choose": "Escolher arquivos",
+    "formats": "PDF, Word, Excel, PowerPoint, Markdown ou texto · até {limit} cada",
+    "chosen": "Arquivos escolhidos",
+    "removeFile": "Remover {name}",
+    "tooBig": "{count, plural, one {{names} tem mais de {limit} e ficou de fora.} many {{names} têm mais de {limit} e ficaram de fora.} other {{names} têm mais de {limit} e ficaram de fora.}}",
+    "noFiles": "Escolha pelo menos um arquivo.",
+    "submit": "{count, plural, =0 {Fazer upload} one {Fazer upload} many {Fazer upload de # de arquivos} other {Fazer upload de # arquivos}}"
+  },
+  "connect": {
+    "title": "Conectar uma fonte",
+    "description": "Um drive, wiki ou site compartilhado onde {workspace} já guarda seus documentos. Ele fica sincronizado, pertence ao espaço de trabalho, e o Leo responde com base nele para quem você escolher.",
+    "source": "Fonte",
+    "link": "Link",
+    "linkHint": "A pasta, o espaço ou a página a manter sincronizada.",
+    "submit": "Conectar"
+  },
+  "share": {
+    "title": "Compartilhar dos meus arquivos",
+    "description": "O Leo responde com base neles em {workspace} para quem você escolher. Eles continuam no seu Gerenciador de arquivos, continuam sendo seus e saem com você.",
+    "submit": "{count, plural, =0 {Compartilhar} one {Compartilhar} many {Compartilhar # de arquivos} other {Compartilhar # arquivos}}"
+  }
+}

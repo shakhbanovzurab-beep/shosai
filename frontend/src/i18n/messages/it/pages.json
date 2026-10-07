@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "description": "Una dashboard di amministrazione open source curata, realizzata con shadcn/ui."
+  },
+  "actions": {
+    "goHome": "Vai alla home",
+    "goBack": "Torna indietro"
+  },
+  "placeholder": {
+    "title": "{title} è in arrivo",
+    "description": "Questa sezione è in fase di sviluppo e sarà presto disponibile.",
+    "badge": "In sviluppo"
+  },
+  "filter": {
+    "label": "{label}:",
+    "all": "Tutti"
+  },
+  "emoji": {
+    "search": "Cerca emoji",
+    "empty": "Nessuna emoji trovata"
+  },
+  "notFound": {
+    "metaTitle": "Pagina non trovata",
+    "badge": "Errore {code}",
+    "title": "Questa pagina si è persa",
+    "description": "Il link potrebbe non funzionare, oppure la pagina è stata spostata o rimossa. Da qui puoi ritrovare la strada.",
+    "popularPages": "Pagine più visitate",
+    "jumpTo": "Oppure vai a"
+  },
+  "unauthorized": {
+    "metaTitle": "Nessun accesso",
+    "title": "Non hai accesso",
+    "description": "Non hai l’autorizzazione per visualizzare questa pagina. Se pensi che sia un errore, contatta l’amministratore."
+  }
+}

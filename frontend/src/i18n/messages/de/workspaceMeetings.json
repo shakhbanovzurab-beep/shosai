@@ -1,0 +1,107 @@
+{
+  "title": "Meetings",
+  "description": "Aufnahmen, die Mitglieder hier geteilt haben, mit Leos Zusammenfassung, Entscheidungen und Aufgaben.",
+  "sharingRules": "Regeln zum Teilen",
+  "reviewSharingRules": "Regeln zum Teilen prüfen",
+  "shareMeeting": "Meeting teilen",
+  "searchMeetings": "Meetings durchsuchen",
+  "loading": "Meetings werden geladen…",
+  "loadFailed": "Meetings konnten nicht geladen werden",
+  "empty": {
+    "title": "Noch nichts geteilt",
+    "text": "Meetings erscheinen hier, wenn ein Mitglied eine seiner Aufnahmen teilt oder wenn ein Meeting nur mit Mitgliedern von {workspace} endet und die Regeln zum Teilen greifen."
+  },
+  "noMatch": {
+    "title": "Keine passenden Meetings",
+    "text": "Versuche andere Begriffe, ein anderes Team oder alle Meetings.",
+    "clear": "Filter zurücksetzen"
+  },
+  "recency": {
+    "thisWeek": "Diese Woche",
+    "lastWeek": "Letzte Woche",
+    "earlier": "Früher"
+  },
+  "scope": {
+    "label": "Welche Meetings",
+    "all": "Alle",
+    "mine": "Mit mir"
+  },
+  "when": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "tomorrow": "Morgen"
+  },
+  "row": {
+    "recordedByYou": "von dir aufgenommen",
+    "recordedBy": "von {name} aufgenommen",
+    "withGuests": "mit Gästen",
+    "decisions": "{count, plural, one {# Entscheidung} other {# Entscheidungen}}",
+    "tasks": "{count, plural, one {# Aufgabe} other {# Aufgaben}}"
+  },
+  "meeting": {
+    "back": "Meetings",
+    "loading": "Meeting wird geladen…",
+    "loadFailed": "Meeting konnte nicht geladen werden",
+    "date": "Datum",
+    "duration": "Dauer",
+    "participants": "Teilnehmer",
+    "participantsWithGuests": "{names} ({count, plural, one {# Person außerhalb von {workspace}} other {# Personen außerhalb von {workspace}}})",
+    "project": "Projekt",
+    "recordedByYou": "Von dir aufgenommen. Es ist auch in deinen Notizen; du kannst das Teilen jederzeit beenden, und es bleibt dort.",
+    "sharedBy": "Von {name} aufgenommen und geteilt",
+    "summary": "Zusammenfassung",
+    "transcript": "Transkript",
+    "keyPoints": "Kernpunkte",
+    "decisions": "Entscheidungen",
+    "replacedLater": "Später ersetzt",
+    "tasks": "Aufgaben",
+    "transcriptPrivateTitle": "Nur die Zusammenfassung ist geteilt",
+    "transcriptPrivate": "{name} hat das Transkript privat gehalten. Frag nach, wenn du den genauen Wortlaut brauchst.",
+    "transcriptPrivateUnknown": "Der Organisator hat das Transkript privat gehalten. Frag nach, wenn du den genauen Wortlaut brauchst.",
+    "unavailableTitle": "Dieses Meeting ist nicht verfügbar",
+    "unavailable": "Es existiert nicht, wurde nicht mit dir geteilt, oder der Inhaber teilt es nicht mehr.",
+    "backToMeetings": "Zurück zu den Meetings"
+  },
+  "project": {
+    "label": "Projekt",
+    "none": "Kein Projekt"
+  },
+  "audience": {
+    "participants": "Teilnehmer",
+    "workspace": "Alle in {workspace}",
+    "unknownTeam": "Ein Team",
+    "participantsHint": "Mitglieder, die am Meeting teilgenommen haben.",
+    "workspaceHint": "Alle im Workspace, jetzt und künftig.",
+    "teamHint": "Mitglieder von {team} sowie die Teilnehmer.",
+    "privateTeamHint": "Mitglieder von {team} (privates Team) sowie die Teilnehmer.",
+    "sharedWith": "{level, select, participants {Mit Teilnehmern geteilt} workspace {Mit allen in {workspace} geteilt} other {Mit {team} geteilt}}",
+    "sharedToast": "{level, select, participants {„{title}“ ist mit den Teilnehmern in {workspace} geteilt} workspace {„{title}“ ist mit allen in {workspace} geteilt} other {„{title}“ ist mit {team} in {workspace} geteilt}}"
+  },
+  "share": {
+    "lockedHint": "Nur die Person, die es geteilt hat, oder ein Admin kann ändern, wer es sieht",
+    "change": "Ändern, wer dieses Meeting sieht",
+    "title": "Wer dieses Meeting sieht",
+    "description": "Die Zusammenfassung, Entscheidungen und Aufgaben. Fragen, die Personen Leo stellen, bleiben privat.",
+    "external": "Personen außerhalb von {workspace} haben teilgenommen. Teile nur, was ihnen recht wäre.",
+    "audienceLabel": "Geteilt mit",
+    "includeTranscript": "Transkript einschließen",
+    "includeTranscriptHint": "Sonst wird nur die Zusammenfassung geteilt.",
+    "transcriptShared": "Das Transkript wird ebenfalls geteilt",
+    "summaryOnly": "Jetzt wird nur die Zusammenfassung geteilt",
+    "addedToProject": "Zum Projekt hinzugefügt",
+    "removedFromProject": "Aus dem Projekt entfernt",
+    "stopMine": "Nicht mehr teilen (in meinen Notizen behalten)",
+    "takeOut": "Aus {workspace} entfernen"
+  },
+  "shareDialog": {
+    "allSharedTitle": "Alles ist geteilt",
+    "allShared": "Alle deine Aufnahmen sind bereits in {workspace}.",
+    "title": "Teile eines deiner Meetings",
+    "description": "Es bleibt deins und bleibt in deinen Notizen; {workspace} sieht es, bis du das Teilen beendest.",
+    "meeting": "Meeting",
+    "movesFrom": "Es ist gerade in {workspace} geteilt; wenn du es hier teilst, wird es verschoben.",
+    "audience": "Wer es sieht",
+    "audienceHint": "Entscheidungen und Aufgaben kommen mit; Teilnehmer sehen es immer.",
+    "submit": "Teilen"
+  }
+}

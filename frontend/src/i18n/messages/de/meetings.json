@@ -1,0 +1,60 @@
+{
+  "title": "Meetings",
+  "loading": "Meetings werden geladen…",
+  "loadFailed": "Meetings konnten nicht geladen werden",
+  "loadFailedHint": "Prüfe deine Verbindung und versuche es erneut.",
+  "newMeeting": "Neues Meeting",
+  "actions": {
+    "schedule": "Im Kalender planen",
+    "upload": "Aufnahme hochladen"
+  },
+  "filters": "Meeting-Filter",
+  "views": {
+    "all": "Alle",
+    "upcoming": "Anstehend",
+    "live": "Live",
+    "past": "Vergangen"
+  },
+  "recent": "Kürzlich",
+  "viewAll": "Alle anzeigen",
+  "noMoreToday": "Heute keine weiteren Meetings.",
+  "day": {
+    "today": "Heute",
+    "tomorrow": "Morgen",
+    "yesterday": "Gestern"
+  },
+  "liveBadge": "Live",
+  "liveSince": "{minutes, plural, =0 {Gerade begonnen · endet um {end}} one {Vor # Min. begonnen · endet um {end}} other {Vor # Min. begonnen · endet um {end}}}",
+  "startsIn": "{minutes, plural, =0 {Beginnt jetzt} one {In # Min.} other {In # Min.}}",
+  "join": "Meeting beitreten",
+  "opensInNewTab": "(öffnet in neuem Tab)",
+  "source": {
+    "whisperer": "Whisperer-Raum",
+    "in_person": "Vor Ort"
+  },
+  "participants": "Teilnehmer: {names}",
+  "recap": {
+    "when": "{day} · {time} · {duration}",
+    "notReady": "Die Notizen sind noch nicht fertig.",
+    "tasks": "{count, plural, one {# Aufgabe} other {# Aufgaben}}",
+    "decisions": "{count, plural, one {# Entscheidung} other {# Entscheidungen}}"
+  },
+  "empty": {
+    "none": {
+      "title": "Noch keine Meetings",
+      "description": "Plane ein Meeting im Kalender oder lade eine Aufnahme hoch, um Notizen von Leo zu erhalten."
+    },
+    "upcoming": {
+      "title": "Nichts geplant",
+      "description": "Hier erscheinen Meetings, die du im Kalender planst."
+    },
+    "live": {
+      "title": "Kein laufendes Meeting",
+      "description": "Ein Meeting erscheint hier, solange es läuft, damit du beitreten kannst."
+    },
+    "past": {
+      "title": "Noch keine vergangenen Meetings",
+      "description": "Aufgenommene Meetings erscheinen hier mit der Zusammenfassung, den Aufgaben und Entscheidungen von Leo."
+    }
+  }
+}

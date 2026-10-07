@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "title": "معرفة مساحة العمل"
+  },
+  "title": "المعرفة",
+  "description": "ما يعرفه Leo في {workspace}. يجيب كل شخص فقط مما يحق له استخدامه: المعرفة المتاحة للجميع ومعرفة فرقه.",
+  "search": {
+    "placeholder": "البحث بالاسم",
+    "label": "البحث في المعرفة"
+  },
+  "loadFailed": "تعذر تحميل معرفة مساحة العمل",
+  "loading": "جارٍ تحميل المعرفة",
+  "alwaysIncluded": {
+    "text": "يجيب Leo أيضًا من الاجتماعات والقرارات والمشاريع التي يمكن لكل شخص فتحها هنا، دون الحاجة إلى إضافتها.",
+    "label": "مضمّنة دائمًا",
+    "meetings": "{count, plural, zero {# اجتماع} one {اجتماع واحد} two {اجتماعان} few {# اجتماعات} many {# اجتماعًا} other {# اجتماع}}",
+    "meetingsLoading": "الاجتماعات",
+    "decisions": "{count, plural, zero {# قرار} one {قرار واحد} two {قراران} few {# قرارات} many {# قرارًا} other {# قرار}}",
+    "decisionsLoading": "القرارات",
+    "projects": "{count, plural, zero {# مشروع} one {مشروع واحد} two {مشروعان} few {# مشاريع} many {# مشروعًا} other {# مشروع}}"
+  },
+  "empty": {
+    "title": "لا توجد ملفات أو مصادر بعد",
+    "text": "يمكن مشاركة ملفاتك (تبقى ملكك)، أو رفع ملفات تخص {workspace}، أو ربط محرك أقراص أو ويكي مشترك. يجيب Leo منها لكل من يحق له استخدامها."
+  },
+  "noMatch": {
+    "title": "لا توجد نتائج مطابقة",
+    "text": "يمكن تجربة اسم أو فريق آخر.",
+    "clear": "مسح عوامل التصفية"
+  },
+  "sections": {
+    "files": "الملفات · {count, number}",
+    "filesLabel": "الملفات",
+    "noFilesMatch": "لا توجد ملفات مطابقة.",
+    "sources": "المصادر المرتبطة · {count, number}",
+    "sourcesLabel": "المصادر المرتبطة",
+    "sourcesEmptyAdmin": "يمكن ربط محرك الأقراص أو الويكي الذي يستخدمه فريقك بالفعل، وسيواكب Leo تحديثاته.",
+    "sourcesEmpty": "يمكن للمشرفين ربط محرك الأقراص أو الويكي الذي يستخدمه فريقك بالفعل."
+  },
+  "kind": {
+    "pdf": "PDF",
+    "doc": "مستند",
+    "text": "نص",
+    "sheet": "جدول بيانات",
+    "slides": "عرض تقديمي",
+    "notion": "Notion",
+    "drive": "Google Drive",
+    "confluence": "Confluence",
+    "web": "موقع ويب"
+  },
+  "status": {
+    "syncing": "جارٍ المزامنة",
+    "indexing": "جارٍ الفهرسة",
+    "failed": "تعذر القراءة"
+  },
+  "pages": "{count, plural, zero {# صفحة} one {صفحة واحدة} two {صفحتان} few {# صفحات} many {# صفحة} other {# صفحة}}",
+  "origin": {
+    "personal": "{who, select, me {ملفك، مشترك} former {ملف عضو سابق، مشترك} other {ملف {name}، مشترك}}",
+    "connector": "{who, select, me {ربطته أنت} former {ربطه عضو سابق} other {ربطه {name}}}",
+    "upload": "{who, select, me {يخص {workspace} · أضفته أنت} former {يخص {workspace} · أضافه عضو سابق} other {يخص {workspace} · أضافه {name}}}"
+  },
+  "added": "{days, plural, =0 {اليوم} =1 {أمس} zero {قبل # يوم} one {قبل يوم} two {قبل يومين} few {قبل # أيام} many {قبل # يومًا} other {قبل # يوم}}",
+  "leaves": "{who, select, me {يغادر معك ما لم تنقله إلى مساحة العمل من مدير الملفات} former {يغادر مع مالكه ما لم ينقله إلى مساحة العمل} other {يغادر مع {name} ما لم ينقله إلى مساحة العمل}}",
+  "access": {
+    "label": "من يمكنه استخدامه",
+    "hint": "يجيب Leo منه لهم فقط. يمكن تغيير ذلك لاحقًا.",
+    "everyone": "الجميع في {workspace}",
+    "someTeam": "فريق"
+  },
+  "menu": {
+    "openIn": "فتح في {provider}",
+    "project": "المشروع",
+    "noProject": "بلا مشروع"
+  },
+  "remove": {
+    "stopSharing": "إيقاف المشاركة",
+    "stopSharingTitle": "إيقاف مشاركة {name}؟",
+    "stopSharingText": "{who, select, me {سيتوقف Leo عن الإجابة منه في {workspace}. يبقى في مدير الملفات لديك.} former {سيتوقف Leo عن الإجابة منه في {workspace}. يبقى في مدير الملفات لدى مالكه.} other {سيتوقف Leo عن الإجابة منه في {workspace}. يبقى في مدير الملفات لدى {name}.}}",
+    "disconnect": "إلغاء الربط",
+    "disconnectTitle": "إلغاء ربط {name}؟",
+    "disconnectText": "ستتوقف المزامنة وسيتوقف Leo عن الإجابة منه. لن يتغير شيء في {provider}.",
+    "removeTitle": "إزالة {name}؟",
+    "removeText": "سيُحذف من {workspace}، وسيتوقف Leo عن الإجابة منه للجميع."
+  },
+  "changed": {
+    "everyone": "أصبح بإمكان الجميع في {workspace} استخدامه",
+    "team": "أصبح بإمكان {team} استخدامه",
+    "addedToProject": "تمت الإضافة إلى {project}",
+    "noProject": "لم يعد ضمن مشروع"
+  },
+  "addMenu": {
+    "addFile": "إضافة ملف",
+    "addKnowledge": "إضافة معرفة",
+    "share": "مشاركة من ملفاتي",
+    "shareHint": "يبقى ملكك ويغادر معك",
+    "upload": "رفع إلى {workspace}",
+    "uploadHint": "يخص مساحة العمل",
+    "connect": "ربط مصدر",
+    "connectHint": "Drive أو Notion أو Confluence أو موقع"
+  }
+}
