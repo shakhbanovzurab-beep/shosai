@@ -4,13 +4,13 @@ import { useState } from "react";
 
 import { cn } from "cn";
 import { Plus } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { NameDialog, type NameRequest } from "@/components/name-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { MyWorkspaceTasks } from "@/features/workspace";
+import { MyWorkspaceTasks } from "@/features/workspace/ui/personal/my-workspace-tasks";
 
 import { type Task, tasks } from "../data/tasks";
 

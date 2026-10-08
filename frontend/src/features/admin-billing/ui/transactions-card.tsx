@@ -2,14 +2,13 @@
 
 import { useState } from "react";
 
-import { useSearchParams } from "next/navigation";
-
 import { ReceiptText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { usePollingResource } from "@/hooks/use-polling-resource";
+import { useSearchParams } from "@/lib/navigation";
 import { pluralizeRu } from "@/lib/plural";
 
 import type { Transaction, TransactionsQuery } from "../domain/contract";

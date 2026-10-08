@@ -1,4 +1,4 @@
-import { apiRequest, jsonBody } from "@/lib/api-client";
+import { apiRequest, jsonBody } from "@/lib/api/request";
 
 import type { MyNotesResponse } from "../domain/manual-notes";
 import type { SharedCommentsResponse, ShareLinkResponse, ShareLinkSettings } from "../domain/share-link";

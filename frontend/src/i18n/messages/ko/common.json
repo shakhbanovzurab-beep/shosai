@@ -25,6 +25,9 @@
   },
   "actionsFor": "{name} 옵션",
   "errors": {
-    "backendUnreachable": "서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요."
+    "backendUnreachable": "서버에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.",
+    "requestId": "요청 ID: {id}",
+    "copyRequestId": "요청 ID 복사",
+    "requestIdCopied": "요청 ID를 복사했어요"
   }
 }

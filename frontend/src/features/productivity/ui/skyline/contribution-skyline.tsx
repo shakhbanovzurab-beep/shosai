@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { cn } from "cn";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "use-intl";
 
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 

@@ -1,7 +1,8 @@
-import type { Evidence, GapKind, ThreadDetail, ThreadSummary, ThreadTransition } from "./contract";
+import { describe, it } from "vitest";
+
+import type { Evidence, GapKind, ThreadDetail, ThreadSummary, ThreadTransition } from "./contract-threads";
 import { circlesHint, dismissedBefore, historySummary, momentLabel, rhythmOf, rowStatus, whyEvidence } from "./phrases";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 const summary = (extra: Partial<ThreadSummary> = {}): ThreadSummary => ({
   id: "t",

@@ -1,6 +1,6 @@
 import { cn } from "cn";
 import { CircleAlert, Clock, Download } from "lucide-react";
-import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,8 +20,8 @@ type PlatformCardProps = {
   recommended: boolean;
 };
 
-async function Unavailable({ platform, error }: { platform: DesktopPlatform; error: boolean }) {
-  const t = await getTranslations("download");
+function Unavailable({ platform, error }: { platform: DesktopPlatform; error: boolean }) {
+  const t = useTranslations("download");
   const Icon = error ? CircleAlert : Clock;
   return (
     <div className="flex flex-col gap-3">
@@ -37,8 +37,10 @@ async function Unavailable({ platform, error }: { platform: DesktopPlatform; err
 }
 
 /** One platform: what it needs, the main download, other builds, and the checksum. */
-export async function PlatformCard({ platform, release, recommended }: PlatformCardProps) {
-  const [t, format, locale] = await Promise.all([getTranslations("download"), getFormatter(), getLocale()]);
+export function PlatformCard({ platform, release, recommended }: PlatformCardProps) {
+  const t = useTranslations("download");
+  const format = useFormatter();
+  const locale = useLocale();
   const name = PLATFORM_NAME[platform];
   const titleId = `download-${platform}`;
   const ready = release !== null && release !== "error" && release.files.length > 0 ? release : null;

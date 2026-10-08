@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 
 import { MoreVertical } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { contextKit, dropdownKit } from "@/components/menu-kit";
 import { Button } from "@/components/ui/button";

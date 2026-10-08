@@ -1,7 +1,6 @@
 import { toast } from "sonner";
 
 import {
-  type FileActionWords,
   type FileFolder,
   type FileItem,
   IN_PROGRESS,
@@ -9,9 +8,10 @@ import {
   isLeoReadable,
   type LeoUse,
   MAX_FILES_PER_UPLOAD,
-  setFileLeo,
-  setFolderLeo,
-} from "@/features/file-manager";
+} from "@/features/file-manager/domain/contract";
+import { setFileLeo } from "@/features/file-manager/model/file-actions";
+import { setFolderLeo } from "@/features/file-manager/model/folder-actions";
+import type { FileActionWords } from "@/features/file-manager/model/words";
 
 import type { KnowledgeWords } from "./words";
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { formatBytes } from "@/i18n/format-units";
 

@@ -2,16 +2,15 @@
 
 import { type ReactNode, useEffect } from "react";
 
-import Link from "next/link";
-
 import { CirclePause, ShieldQuestion } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { setClientCookie } from "@/lib/cookie.client";
+import { Link } from "@/lib/navigation";
 
 import { LAST_WORKSPACE_COOKIE, NEW_WORKSPACE_PATH } from "../../domain/paths";
 import { resourcesOf, useWorkspaces, workspacesResource } from "../../model/resources";

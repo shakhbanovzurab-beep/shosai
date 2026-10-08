@@ -2,14 +2,13 @@
 
 import { useState } from "react";
 
-import Link from "next/link";
-
 import { cn } from "cn";
 import { CornerDownRight } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/lib/navigation";
 
 import type { FeedFact, FeedMeeting } from "../../domain/contract";
 import { meetingPath } from "../../domain/paths";

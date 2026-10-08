@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { advance, choosePreset, formatClock, initialTimer, parseTimer, pause, remainingMs, start } from "./timer";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 const T0 = new Date(2026, 9, 7, 9, 0).getTime();
 const MIN = 60_000;

@@ -31,5 +31,10 @@
     "metaTitle": "Erişim yok",
     "title": "Erişiminiz yok",
     "description": "Bu sayfayı görüntüleme izniniz yok. Bunun bir yanlışlık olduğunu düşünüyorsanız yöneticinize başvurun."
+  },
+  "error": {
+    "title": "Bu sayfa yüklenmedi",
+    "description": "Bizim tarafımızda bir sorun oluştu. Sayfayı yeniden yükleyin veya biraz sonra tekrar deneyin.",
+    "reload": "Sayfayı yeniden yükle"
   }
 }

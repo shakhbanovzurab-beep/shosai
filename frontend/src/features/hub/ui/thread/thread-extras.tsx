@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 
-import Link from "next/link";
+import { useTranslations } from "use-intl";
 
-import { useTranslations } from "next-intl";
+import { Link } from "@/lib/navigation";
 
-import type { ThreadDetail, ThreadLinkKind } from "../../domain/contract";
+import type { ThreadDetail, ThreadLinkKind } from "../../domain/contract-threads";
 import { threadPath } from "../../domain/paths";
 import { useHubPhrases } from "../shared/phrases";
 import { GapIcon } from "../shared/urgency";

@@ -1,8 +1,8 @@
 "use client";
 
 import { Archive, Check, PenLine } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { ThinkingOrb } from "thinking-orbs";
+import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

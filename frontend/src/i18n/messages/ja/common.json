@@ -25,6 +25,9 @@
   },
   "actionsFor": "{name} の操作",
   "errors": {
-    "backendUnreachable": "サーバーに接続できませんでした。しばらくしてからもう一度お試しください。"
+    "backendUnreachable": "サーバーに接続できませんでした。しばらくしてからもう一度お試しください。",
+    "requestId": "リクエスト ID：{id}",
+    "copyRequestId": "リクエスト ID をコピー",
+    "requestIdCopied": "リクエスト ID をコピーしました"
   }
 }

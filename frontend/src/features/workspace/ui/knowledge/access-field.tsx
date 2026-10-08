@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Field } from "@/components/ui/field";
 import { FieldDescription, FieldLabel } from "@/components/ui/field-text";

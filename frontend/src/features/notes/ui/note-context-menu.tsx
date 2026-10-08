@@ -2,12 +2,10 @@
 
 import type * as React from "react";
 
-import { useRouter } from "next/navigation";
-
 import { cn } from "cn";
 import { Download, ExternalLink, FolderInput, FolderPlus, Link2, NotebookText, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useTranslations } from "use-intl";
 
 import {
   ContextMenu,
@@ -23,6 +21,7 @@ import {
 } from "@/components/ui/context-menu-items";
 import { ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger } from "@/components/ui/context-menu-sub";
 import { copyText } from "@/lib/copy-text";
+import { useRouter } from "@/lib/navigation";
 
 import { EXPORT_FORMATS } from "../domain/transcript-export";
 import type { MeetingNote, NoteFolder } from "../domain/types";

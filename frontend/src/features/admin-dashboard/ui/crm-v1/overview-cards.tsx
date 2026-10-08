@@ -1,21 +1,26 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { BadgeDollarSign, Wallet } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { lazyComponent } from "@/lib/lazy-component";
 
-const NewLeadsChart = dynamic(() => import("./overview-charts").then((chartModule) => chartModule.NewLeadsChart), {
-  loading: () => <Skeleton className="size-full min-h-24" />,
-});
+const NewLeadsChart = lazyComponent(
+  () => import("./overview-charts").then((chartModule) => chartModule.NewLeadsChart),
+  {
+    loading: () => <Skeleton className="size-full min-h-24" />,
+  },
+);
 
-const ProposalsChart = dynamic(() => import("./overview-charts").then((chartModule) => chartModule.ProposalsChart), {
-  loading: () => <Skeleton className="size-full min-h-24 rounded-none" />,
-});
+const ProposalsChart = lazyComponent(
+  () => import("./overview-charts").then((chartModule) => chartModule.ProposalsChart),
+  {
+    loading: () => <Skeleton className="size-full min-h-24 rounded-none" />,
+  },
+);
 
-const RevenueGrowthChart = dynamic(
+const RevenueGrowthChart = lazyComponent(
   () => import("./overview-charts").then((chartModule) => chartModule.RevenueGrowthChart),
   { loading: () => <Skeleton className="h-24 w-full" /> },
 );

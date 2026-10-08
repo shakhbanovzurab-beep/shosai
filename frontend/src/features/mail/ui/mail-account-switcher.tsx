@@ -4,7 +4,7 @@ import type * as React from "react";
 
 import { cn } from "cn";
 import { Check, EllipsisVertical, LogOut, Settings2, UserPlus, UsersRound } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { useDirection } from "@/components/ui/direction";

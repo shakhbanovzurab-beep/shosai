@@ -33,8 +33,6 @@
 
 import type { Gap, GapKind, ThreadSummary } from "./contract-threads";
 
-export type * from "./contract-threads";
-
 export type HubKind = "client" | "internal" | "pipeline";
 
 export interface Hub {

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { cn } from "cn";
 import { EllipsisVertical, UserMinus, Users } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { ConfirmDestructive } from "@/components/feedback";
 import { Badge } from "@/components/ui/badge";

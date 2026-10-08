@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 /*
  * The words the model's actions put in their toasts. Actions are plain functions, so the Client Component

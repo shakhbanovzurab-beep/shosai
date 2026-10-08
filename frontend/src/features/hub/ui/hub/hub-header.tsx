@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
-
 import { ArrowLeft, Kanban, TriangleAlert } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/lib/navigation";
 
 import type { Hub } from "../../domain/contract";
 import { boardPath, HUBS_PATH } from "../../domain/paths";

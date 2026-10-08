@@ -1,7 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
 import {
   ArrowDownToLine,
   ArrowUpToLine,
@@ -14,9 +12,10 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import type { MenuKit } from "@/components/menu-kit";
+import { useRouter } from "@/lib/navigation";
 
 import { TASK_PRIORITIES, type Task } from "../domain/board";
 import { useBoard } from "./board-store";

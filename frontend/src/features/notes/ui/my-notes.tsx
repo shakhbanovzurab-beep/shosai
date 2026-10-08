@@ -1,12 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAutosave } from "@/hooks/use-autosave";
+import { lazyComponent } from "@/lib/lazy-component";
 
 import type { ManualNotes } from "../domain/types";
 import { reportSaveFailure, retryMyNotes, saveMyNotes, useMyNotes } from "../model/my-notes";
@@ -21,8 +20,7 @@ const EditorSkeleton = () => (
 );
 
 // The editor is the heaviest part of the page, so it loads only once the Notes tab needs it.
-const NotesEditor = dynamic(() => import("./notes-editor").then((module) => module.NotesEditor), {
-  ssr: false,
+const NotesEditor = lazyComponent(() => import("./notes-editor").then((module) => module.NotesEditor), {
   loading: EditorSkeleton,
 });
 

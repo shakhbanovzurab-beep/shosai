@@ -7,7 +7,7 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { FieldDescription, FieldError, FieldLabel } from "@/components/ui/field-text";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
-import { useStudioModels } from "@/features/studio";
+import { useStudioModels } from "@/features/studio/model/studio-resources";
 
 import { OUTPUT_TOKENS_MAX, OUTPUT_TOKENS_MIN, TEMPERATURE_MAX, TEMPERATURE_MIN } from "../domain/contract";
 import { formatNumber } from "../domain/format";

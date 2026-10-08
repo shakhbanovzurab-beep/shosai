@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 
-import Link from "next/link";
-
 import { LayoutGrid, TriangleAlert, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { META_VALUE_BUTTON, MetaItem } from "@/components/meta-item";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Link } from "@/lib/navigation";
 
 import type { MeetingHub } from "../../domain/contract";
 import { hubPath } from "../../domain/paths";

@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { formatMeetingDuration, getRecencyGroup } from "./format";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 describe("formatMeetingDuration", () => {
   it("writes minutes, then hours and minutes, in the interface language", () => {

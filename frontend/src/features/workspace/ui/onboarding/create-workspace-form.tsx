@@ -2,10 +2,8 @@
 
 import { useActionState, useState } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { Minus, Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,6 +11,7 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { FieldDescription, FieldError, FieldLabel } from "@/components/ui/field-text";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { useRouter } from "@/lib/navigation";
 
 import { SEATS_MAX, SEATS_MIN, WORKSPACE_NAME_MAX } from "../../domain/contract";
 import { workspacePath } from "../../domain/paths";

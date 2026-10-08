@@ -1,5 +1,9 @@
 "use client";
 
+// Ложное срабатывание: модуль грузится только лениво (lazyComponent), recharts — в отдельном чанке.
+// react-doctor-disable-next-line react-doctor/prefer-dynamic-import
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer, ChartLegend, ChartTooltip } from "@/components/ui/chart";
 import { ChartLegendContent } from "@/components/ui/chart-legend";
@@ -8,7 +12,6 @@ import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 import { type Currency, type MonthRevenue, PAID_PLANS, type PaidPlanId } from "../domain/contract";
 import { formatMoney, formatMoneyCompact, formatMonthLong, formatMonthShort } from "../domain/format";
 import { PLAN_LABELS } from "../domain/labels";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "./chart-primitives";
 
 const chartConfig = {
   professional: { label: PLAN_LABELS.professional, color: "var(--chart-1)" },

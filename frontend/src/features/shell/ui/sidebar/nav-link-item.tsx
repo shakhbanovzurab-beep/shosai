@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
-
 import { cn } from "cn";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
+import { Link } from "@/lib/navigation";
 
 import type { NavBadge, NavMainLinkItem } from "../navigation";
 import { NavIcon, navButtonClass } from "./nav-icon";

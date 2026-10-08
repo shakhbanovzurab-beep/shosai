@@ -4,8 +4,8 @@ import type { ReactNode } from "react";
 
 import { cn } from "cn";
 import { ChevronDown } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { siFigma, siGoogledocs, siGooglephotos } from "simple-icons";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { SimpleIcon } from "@/components/simple-icon";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";

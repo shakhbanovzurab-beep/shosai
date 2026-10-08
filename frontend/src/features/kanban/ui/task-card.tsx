@@ -2,7 +2,7 @@
 
 import { cn } from "cn";
 import { BadgeCheck, CalendarDays, FileText, type LucideIcon, MessageSquare, Paperclip } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";

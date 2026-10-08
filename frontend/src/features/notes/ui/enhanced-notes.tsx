@@ -2,7 +2,7 @@ import type * as React from "react";
 
 import type { LucideIcon } from "lucide-react";
 import { Gavel, Lightbulb, ListChecks } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Skeleton } from "@/components/ui/skeleton";
 

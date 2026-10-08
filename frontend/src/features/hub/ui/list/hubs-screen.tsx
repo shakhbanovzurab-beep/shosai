@@ -2,16 +2,15 @@
 
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { LayoutGrid, Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useRouter } from "@/lib/navigation";
 
 import { isHubErrorCode } from "../../domain/errors";
 import { type HubsFilter, hubPath, hubsPath } from "../../domain/paths";

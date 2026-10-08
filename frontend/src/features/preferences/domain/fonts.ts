@@ -1,4 +1,4 @@
-/** The fonts a user can pick, in menu order. `ui/fonts.ts` loads each one with next/font. */
+/** The fonts a user can pick, in menu order. `src/styles/fonts.css` declares each one. */
 const FONT_LABELS = {
   geist: "Geist",
   inter: "Inter",

@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
-
 import { FileText, FileX, Link2, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
+import { Link } from "@/lib/navigation";
 
 import type { Material } from "../../domain/contract";
 import { removeMaterial } from "../../model/material-actions";

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Gavel, Lightbulb, ListChecks, type LucideIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 

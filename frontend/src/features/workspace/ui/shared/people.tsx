@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";

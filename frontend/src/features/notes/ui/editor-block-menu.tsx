@@ -5,7 +5,7 @@ import { type KeyboardEvent, useRef, useState } from "react";
 import type { Editor } from "@tiptap/core";
 import { cn } from "cn";
 import { Check, ChevronDown } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 

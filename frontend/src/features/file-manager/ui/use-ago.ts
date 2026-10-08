@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter, useNow } from "next-intl";
+import { useFormatter, useNow } from "use-intl";
 
 /**
  * "3 days ago" in the interface language, brought up to date once a minute. A time newer than the last

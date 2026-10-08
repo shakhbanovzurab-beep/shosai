@@ -1,0 +1,182 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Whisperer API",
+    "version": "2.0.0"
+  },
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Connectivity probe",
+        "description": "Answer 200 while the process serves HTTP; dependencies are not checked.",
+        "operationId": "health_check_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthStatus"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DetailValue": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      },
+      "ErrorDescription": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "params": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ErrorParam"
+            },
+            "type": "object",
+            "title": "Params"
+          },
+          "fields": {
+            "items": {
+              "$ref": "#/components/schemas/InvalidField"
+            },
+            "type": "array",
+            "title": "Fields"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "request_id"
+        ],
+        "title": "ErrorDescription",
+        "description": "The machine-readable error: a stable code, the request id and optional context."
+      },
+      "ErrorParam": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "ErrorResponse": {
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ErrorDescription"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/DetailValue"
+                },
+                "type": "object"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "error",
+          "detail"
+        ],
+        "title": "ErrorResponse",
+        "description": "Body of every error response of the HTTP API.\n\n`error.code` is the stable code a client turns into text; `error.request_id` equals\nthe `X-Request-ID` header. `detail` is kept for shipped clients: the code by default,\nthe draft's shape on routes whose draft contract had another one."
+      },
+      "HealthStatus": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "HealthStatus",
+        "description": "The process answers HTTP requests."
+      },
+      "InvalidField": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Loc"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "type"
+        ],
+        "title": "InvalidField",
+        "description": "Where a request failed validation and why; the submitted value is never echoed."
+      }
+    }
+  }
+}

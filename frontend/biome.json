@@ -36,9 +36,8 @@
       "!.github",
       "!.husky",
       "!node_modules",
-      "!.next",
       "!dist",
-      "!out",
+      "!src/lib/api/generated",
       "!src/components/ui",
       "!src/components/calendar"
     ]

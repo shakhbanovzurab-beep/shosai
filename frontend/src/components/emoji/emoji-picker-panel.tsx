@@ -1,7 +1,7 @@
 "use client";
 
 import { EmojiPicker, type EmojiPickerListCategoryHeaderProps, type EmojiPickerListEmojiProps } from "frimousse";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { useUiLanguage } from "@/hooks/use-ui-language";
 import type { LanguageCode } from "@/lib/language";

@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 
 import { Folder } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -16,7 +16,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
-import { FilePicker, useFileActionWords, useFiles, useLeoBlocker } from "@/features/file-manager";
+import { useFiles } from "@/features/file-manager/model/files-resource";
+import { useFileActionWords } from "@/features/file-manager/model/words";
+import { FilePicker } from "@/features/file-manager/ui/file-picker";
+import { useLeoBlocker } from "@/features/file-manager/ui/leo-blocker";
 
 import { chooseForLeo } from "../model/leo-files";
 

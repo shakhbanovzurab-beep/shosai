@@ -1,8 +1,6 @@
-"use client";
+import { useState } from "react";
 
-import { useOptimistic, useTransition } from "react";
-
-import { useRouter } from "next/navigation";
+import { useRevalidator } from "react-router";
 
 import { setClientCookie } from "@/lib/cookie.client";
 import { isLanguageCode, LANGUAGE_COOKIE, type LanguageCode } from "@/lib/language";
@@ -12,23 +10,21 @@ import { useUiLanguage } from "./use-ui-language";
 const YEAR_DAYS = 365;
 
 /**
- * The interface language and a way to switch it. The choice is a cookie the server reads, so refreshing the
- * route re-renders the page in the new language in place, without a reload. Meanwhile `language` already
- * shows the new choice, so a picker's tick moves at once.
+ * Язык интерфейса и способ его сменить. Выбор хранится в cookie; перепроверка маршрутов загружает новый каталог
+ * и перерисовывает страницу на месте, без перезагрузки. Пока это идёт, `language` уже показывает новый выбор,
+ * так что галочка в списке переключается сразу.
  */
 export function useSwitchLanguage() {
-  const router = useRouter();
-  const [, startTransition] = useTransition();
-  const [language, showLanguage] = useOptimistic<LanguageCode>(useUiLanguage());
+  const revalidator = useRevalidator();
+  const current = useUiLanguage();
+  const [chosen, setChosen] = useState<LanguageCode | null>(null);
 
   const switchLanguage = (code: string) => {
     if (!isLanguageCode(code)) return;
     setClientCookie(LANGUAGE_COOKIE, code, YEAR_DAYS);
-    startTransition(() => {
-      showLanguage(code);
-      router.refresh();
-    });
+    setChosen(code);
+    void revalidator.revalidate().finally(() => setChosen(null));
   };
 
-  return { language, switchLanguage };
+  return { language: chosen ?? current, switchLanguage };
 }

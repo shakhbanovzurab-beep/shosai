@@ -4,7 +4,7 @@ import { useActionState, useRef, useState } from "react";
 
 import { cn } from "cn";
 import { CloudUpload, X } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import {

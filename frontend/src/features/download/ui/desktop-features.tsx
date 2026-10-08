@@ -1,11 +1,13 @@
 "use client";
 
 import { Captions, Keyboard, Languages, type LucideIcon, Mic, PanelTop } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
-import { type HotkeyId, useDesktopShortcut, useOpenSettings } from "@/features/settings";
+import type { HotkeyId } from "@/features/settings/domain/hotkeys";
+import { useOpenSettings } from "@/features/settings/model/dialog-store";
+import { useDesktopShortcut } from "@/features/settings/model/settings-hooks";
 
 const FEATURES = [
   { id: "toggle_recording", icon: Mic },

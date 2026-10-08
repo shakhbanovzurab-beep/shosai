@@ -1,6 +1,4 @@
-"use client";
-
-import { useLocale } from "next-intl";
+import { useLocale } from "use-intl";
 
 import type { LanguageCode } from "@/lib/language";
 

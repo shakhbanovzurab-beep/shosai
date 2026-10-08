@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import type { MeetingShareRequest, ShareRecordingRequest, TeamMeetingDetail } from "../domain/content-contract";
 import { refreshShared, resourcesOf } from "./resources";
@@ -41,7 +41,7 @@ export async function shareRecording(
   } catch (error) {
     toast.error(
       words((t) => t("toasts.meetingShareFailed")),
-      { description: errorMessage(error) },
+      { description: apiErrorDescription(error) },
     );
     return false;
   }
@@ -66,7 +66,7 @@ export async function updateMeeting(
   } catch (error) {
     toast.error(
       words((t) => t("toasts.meetingChangeFailed")),
-      { description: errorMessage(error) },
+      { description: apiErrorDescription(error) },
     );
     return false;
   }
@@ -95,7 +95,7 @@ export async function unshareMeeting(ws: string, id: string, restore: ShareRecor
   } catch (error) {
     toast.error(
       words((t) => t("toasts.unshareMeetingFailed")),
-      { description: errorMessage(error) },
+      { description: apiErrorDescription(error) },
     );
     return false;
   }

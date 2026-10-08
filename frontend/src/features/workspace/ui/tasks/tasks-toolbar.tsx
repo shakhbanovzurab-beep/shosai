@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";

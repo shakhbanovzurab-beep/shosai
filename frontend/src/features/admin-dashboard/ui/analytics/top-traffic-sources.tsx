@@ -1,16 +1,15 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { Ellipsis } from "lucide-react";
 
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { lazyComponent } from "@/lib/lazy-component";
 
 import { campaignsData, referrersData, sourcesData } from "../../data/analytics/traffic-sources";
 
-const TrafficSourceBarChart = dynamic(
+const TrafficSourceBarChart = lazyComponent(
   () => import("./traffic-source-bar-chart").then((chartModule) => chartModule.TrafficSourceBarChart),
   { loading: () => <Skeleton className="h-64 w-full" /> },
 );

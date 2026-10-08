@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import { ArrowLeft, CirclePause, SearchX } from "lucide-react";
 
 import { LoadError } from "@/components/feedback";
@@ -9,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/lib/navigation";
 
 import { formatFullDateTime } from "../domain/format";
 import { useWorkspace, workspaceResource } from "../model/resources";

@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";

@@ -1,6 +1,6 @@
 import type * as React from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { useDirection } from "@/components/ui/direction";
 

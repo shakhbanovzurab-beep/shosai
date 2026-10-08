@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import type { StudioTab } from "../domain/studio-tabs";
 import { StudioTabs } from "./studio-tabs";

@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { platformPromptsApi } from "../api/platform-prompts-api";
 import type { PlatformPromptConfig, PlatformPromptsState, PlatformPromptVersion } from "../domain/contract";
@@ -26,7 +26,7 @@ export async function publishDraft(flush: () => Promise<boolean>, comment: strin
     toast.success("Версия опубликована", { description: "Новые настройки применяются ко всем пользователям." });
     return state;
   } catch (error) {
-    toast.error("Не удалось опубликовать", { description: errorMessage(error) });
+    toast.error("Не удалось опубликовать", { description: apiErrorDescription(error) });
     return null;
   }
 }
@@ -38,7 +38,7 @@ export async function restoreVersion(discard: () => Promise<void>, version: Plat
     toast.success(`Восстановлена версия ${version.number}`, { description: "Она опубликована как новая версия." });
     return state;
   } catch (error) {
-    toast.error("Не удалось откатить", { description: errorMessage(error) });
+    toast.error("Не удалось откатить", { description: apiErrorDescription(error) });
     return null;
   }
 }
@@ -52,7 +52,7 @@ export async function resetDraft(discard: () => Promise<void>, data: PlatformPro
     toast.success("Изменения отменены", { description: "Черновик совпадает с опубликованной версией." });
     return { ...data, draft };
   } catch (error) {
-    toast.error("Не удалось отменить изменения", { description: errorMessage(error) });
+    toast.error("Не удалось отменить изменения", { description: apiErrorDescription(error) });
     return null;
   }
 }

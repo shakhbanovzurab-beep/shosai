@@ -1,11 +1,14 @@
 "use client";
 
+// Ложное срабатывание: модуль грузится только лениво (lazyComponent), recharts — в отдельном чанке.
+// react-doctor-disable-next-line react-doctor/prefer-dynamic-import
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
 import { type ChartConfig, ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import type { DailySpend } from "../domain/contract";
 import { formatLongDate, formatShortDate, formatUsd } from "../domain/format";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "./chart-primitives";
 
 const chartConfig = {
   cost: { label: "Расход", color: "var(--chart-2)" },

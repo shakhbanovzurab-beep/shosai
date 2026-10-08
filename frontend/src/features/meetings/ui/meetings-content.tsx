@@ -1,10 +1,9 @@
 import { type ReactNode, useId } from "react";
 
-import Link from "next/link";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { ItemGroup } from "@/components/ui/item";
+import { Link } from "@/lib/navigation";
 
 import {
   groupByDay,

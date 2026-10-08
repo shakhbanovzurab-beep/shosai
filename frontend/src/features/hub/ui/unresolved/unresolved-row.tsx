@@ -1,11 +1,11 @@
 "use client";
 
 import { Check, CircleSlash } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 
-import type { ThreadSummary } from "../../domain/contract";
+import type { ThreadSummary } from "../../domain/contract-threads";
 import { threadPath } from "../../domain/paths";
 import { dismissedBefore } from "../../domain/phrases";
 import { showCircles } from "../../domain/urgency";

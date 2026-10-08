@@ -2,8 +2,8 @@
 
 import { toast } from "sonner";
 
-import { refreshFileShares } from "@/features/workspace";
-import { errorMessage } from "@/lib/errors";
+import { refreshFileShares } from "@/features/workspace/model/resources";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { filesApi } from "../api/files-api";
 import type { FileItem, FilesResponse, FileUpdate } from "../domain/contract";
@@ -29,7 +29,7 @@ async function patch(id: string, change: FileUpdate, failure: string) {
     replaceFile(next);
     return next;
   } catch (error) {
-    toast.error(failure, { description: errorMessage(error) });
+    toast.error(failure, { description: apiErrorDescription(error) });
     void filesResource.refresh();
     return null;
   }
@@ -56,7 +56,7 @@ export async function uploadFiles(
     toast.success(title, { description });
     return true;
   } catch (error) {
-    toast.error(t("uploadFailed"), { description: errorMessage(error) });
+    toast.error(t("uploadFailed"), { description: apiErrorDescription(error) });
     return false;
   }
 }
@@ -103,7 +103,7 @@ export async function duplicateFile(file: FileItem, { t }: FileActionWords) {
       return { ...data, files: data.files.toSpliced(index + 1, 0, copy) };
     });
   } catch (error) {
-    toast.error(t("duplicateFailed"), { description: errorMessage(error) });
+    toast.error(t("duplicateFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -112,7 +112,7 @@ export async function reindexFile(file: FileItem, { t }: FileActionWords) {
     replaceFile(await filesApi.reindex(file.id));
     toast.success(t("reindexed", { name: file.name }));
   } catch (error) {
-    toast.error(t("reindexFailed"), { description: errorMessage(error) });
+    toast.error(t("reindexFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -135,7 +135,7 @@ export function deleteFile(file: FileItem, sharedIn: string, words: FileActionWo
       },
       (error: unknown) => {
         pendingDeletes.files.delete(file.id);
-        toast.error(t("deleteFailed", { name: file.name }), { description: errorMessage(error) });
+        toast.error(t("deleteFailed", { name: file.name }), { description: apiErrorDescription(error) });
         void filesResource.refresh();
       },
     );
@@ -166,7 +166,7 @@ export async function transferFile(file: FileItem, workspace: { id: string; name
     });
     return true;
   } catch (error) {
-    toast.error(t("transferFailed"), { description: errorMessage(error) });
+    toast.error(t("transferFailed"), { description: apiErrorDescription(error) });
     return false;
   }
 }

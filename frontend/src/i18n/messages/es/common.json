@@ -25,6 +25,9 @@
   },
   "actionsFor": "Acciones de {name}",
   "errors": {
-    "backendUnreachable": "No se pudo conectar con el servidor. Inténtalo de nuevo en un momento."
+    "backendUnreachable": "No se pudo conectar con el servidor. Inténtalo de nuevo en un momento.",
+    "requestId": "ID de solicitud: {id}",
+    "copyRequestId": "Copiar el ID de solicitud",
+    "requestIdCopied": "ID de solicitud copiado"
   }
 }

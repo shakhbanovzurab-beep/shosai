@@ -1,9 +1,12 @@
 "use client";
 
+// Ложное срабатывание: модуль грузится только лениво (lazyComponent), recharts — в отдельном чанке.
+// react-doctor-disable-next-line react-doctor/prefer-dynamic-import
+import { Funnel, FunnelChart, LabelList } from "recharts";
+
 import { ChartContainer } from "@/components/ui/chart";
 
 import { salesPipelineChartData } from "../../data/crm-v1/charts";
-import { Funnel, FunnelChart, LabelList } from "../chart-primitives";
 import { salesPipelineChartConfig } from "./chart-configs";
 
 export function SalesPipelineChart() {

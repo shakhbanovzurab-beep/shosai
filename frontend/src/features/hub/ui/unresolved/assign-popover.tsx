@@ -3,14 +3,14 @@
 import { useId, useState } from "react";
 
 import { UserPlus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-import type { ThreadSummary } from "../../domain/contract";
+import type { ThreadSummary } from "../../domain/contract-threads";
 import { assignOwner } from "../../model/thread-actions";
 import { useHubWords } from "../../model/words";
 

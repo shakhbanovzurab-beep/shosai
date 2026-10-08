@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { useTranslations } from "use-intl";
 
-import { useTranslations } from "next-intl";
+import { Link } from "@/lib/navigation";
 
 import { openFor } from "../../domain/tasks";
 import { useDecisions, useMeetings, useResources, useTasks, useWorkspace } from "../../model/use-workspace";

@@ -1,8 +1,8 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
-import type { Gap, ThreadSummary } from "../../domain/contract";
+import type { Gap, ThreadSummary } from "../../domain/contract-threads";
 import { rhythmOf, rowStatus } from "../../domain/phrases";
 
 /*

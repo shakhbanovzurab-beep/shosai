@@ -31,5 +31,10 @@
     "metaTitle": "Sem acesso",
     "title": "Você não tem acesso",
     "description": "Você não tem permissão para ver esta página. Se acha que isso é um engano, fale com o administrador."
+  },
+  "error": {
+    "title": "Esta página não carregou",
+    "description": "Algo deu errado do nosso lado. Recarregue a página ou tente novamente em instantes.",
+    "reload": "Recarregar página"
   }
 }

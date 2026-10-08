@@ -1,0 +1,56 @@
+/* Шрифты, которые пользователь выбирает в настройках (features/preferences/domain/fonts.ts). Объявления
+ * @font-face всех семейств подключены, но файл шрифта браузер скачивает только для выбранного семейства и
+ * только нужные подмножества символов (unicode-range). Переменные --font-* читает styles/preferences.css. */
+
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/noto-sans";
+@import "@fontsource-variable/nunito-sans";
+@import "@fontsource-variable/figtree";
+@import "@fontsource-variable/raleway";
+@import "@fontsource-variable/dm-sans";
+@import "@fontsource-variable/public-sans";
+@import "@fontsource-variable/outfit";
+@import "@fontsource-variable/geist-mono";
+@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/noto-serif";
+@import "@fontsource-variable/roboto-slab";
+@import "@fontsource-variable/lora";
+@import "@fontsource-variable/playfair-display";
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/500.css";
+@import "@fontsource/roboto/700.css";
+@import "@fontsource/merriweather/400.css";
+@import "@fontsource/merriweather/700.css";
+
+@font-face {
+  font-family: "Geist Pixel Square";
+  src: url("./fonts/GeistPixel-Square.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+
+/* Переменные объявлены на body, как их ставил next/font: --font-sans, --font-mono и --font-heading
+ * из globals.css вычисляются на :root без них, и шрифт наследуется от body (F2 — перенос без визуальных
+ * изменений; то, что font-mono из-за этого показывает Geist, — находка для владельца, а не правка F2). */
+body {
+  --font-geist: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-inter: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-noto-sans: "Noto Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-nunito-sans: "Nunito Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-figtree: "Figtree Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-raleway: "Raleway Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-dm-sans: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-public-sans: "Public Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-outfit: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-geist-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-jetbrains-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-noto-serif: "Noto Serif Variable", ui-serif, Georgia, serif;
+  --font-roboto-slab: "Roboto Slab Variable", ui-serif, Georgia, serif;
+  --font-lora: "Lora Variable", ui-serif, Georgia, serif;
+  --font-playfair-display: "Playfair Display Variable", ui-serif, Georgia, serif;
+  --font-roboto: "Roboto", ui-sans-serif, system-ui, sans-serif;
+  --font-merriweather: "Merriweather", ui-serif, Georgia, serif;
+  --font-geist-pixel-square:
+    "Geist Pixel Square", "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+}

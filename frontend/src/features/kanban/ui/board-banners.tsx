@@ -1,11 +1,11 @@
 "use client";
 
 import { Building2, CircleAlert } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { useOpenSettings } from "@/features/settings";
+import { useOpenSettings } from "@/features/settings/model/dialog-store";
 
 import type { BoardSummary } from "../domain/board";
 import { chooseWorkspaceTasksBoard } from "../model/board-actions";

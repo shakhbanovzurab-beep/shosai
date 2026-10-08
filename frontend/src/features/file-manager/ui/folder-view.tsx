@@ -1,15 +1,14 @@
 "use client";
 
-import Link from "next/link";
-
 import { useDroppable } from "@dnd-kit/react";
 import { cn } from "cn";
 import { ArrowLeft, ChevronRight, FolderX } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Link } from "@/lib/navigation";
 
 import type { FileManagerView } from "../domain/files";
 import { rootHref } from "../domain/paths";

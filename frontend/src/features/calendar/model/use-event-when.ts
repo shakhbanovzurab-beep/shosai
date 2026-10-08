@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter } from "next-intl";
+import { useFormatter } from "use-intl";
 
 /*
  * Events live in the viewer's own time zone (FullCalendar's "local"), while next-intl formats in UTC. These

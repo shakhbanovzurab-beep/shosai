@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { settingsApi } from "../api/settings-api";
 import type { BillingPortalRequest } from "../domain/billing-contract";
@@ -14,7 +14,7 @@ export async function openPaymentPage(body: BillingPortalRequest, t: BillingWord
     const { url } = await settingsApi.billingPortal(body);
     window.location.assign(url);
   } catch (error) {
-    toast.error(t("payment.openFailed"), { description: errorMessage(error) });
+    toast.error(t("payment.openFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -24,6 +24,6 @@ export async function buyTokenPack(packId: string, t: UsageWords) {
     const { url } = await settingsApi.topUp({ pack_id: packId });
     window.location.assign(url);
   } catch (error) {
-    toast.error(t("topUp.failed"), { description: errorMessage(error) });
+    toast.error(t("topUp.failed"), { description: apiErrorDescription(error) });
   }
 }

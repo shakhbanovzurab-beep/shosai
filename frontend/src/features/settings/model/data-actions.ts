@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { settingsApi } from "../api/settings-api";
 import type { DataKind } from "../domain/data-contract";
@@ -15,7 +15,7 @@ export async function removeDataItem(kind: DataKind, id: string, t: PrivacyWords
     await settingsApi.deleteData(kind, id);
     dataResources[kind].update((data) => ({ items: data.items.filter((i) => i.id !== id) }));
   } catch (error) {
-    toast.error(t("removeFailed"), { description: errorMessage(error) });
+    toast.error(t("removeFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -25,6 +25,6 @@ export async function removeAllData(kind: DataKind, t: PrivacyWords) {
     await settingsApi.deleteAllData(kind);
     dataResources[kind].update(() => ({ items: [] }));
   } catch (error) {
-    toast.error(t("removeAllFailed"), { description: errorMessage(error) });
+    toast.error(t("removeAllFailed"), { description: apiErrorDescription(error) });
   }
 }

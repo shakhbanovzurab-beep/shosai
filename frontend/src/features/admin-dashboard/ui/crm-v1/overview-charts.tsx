@@ -1,10 +1,13 @@
 "use client";
 
+// Ложное срабатывание: модуль грузится только лениво (lazyComponent), recharts — в отдельном чанке.
+// react-doctor-disable-next-line react-doctor/prefer-dynamic-import
+import { Area, AreaChart, Bar, BarChart, Line, LineChart, XAxis } from "recharts";
+
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import { leadsChartData, proposalsChartData, revenueChartData } from "../../data/crm-v1/charts";
-import { Area, AreaChart, Bar, BarChart, Line, LineChart, XAxis } from "../chart-primitives";
 import { createTooltipFormatter } from "../chart-tooltip-formatter";
 import { leadsChartConfig, proposalsChartConfig, revenueChartConfig } from "./chart-configs";
 

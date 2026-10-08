@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, ArrowRight, ArrowUpDown, Columns3, Eraser, Pencil, Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import type { MenuKit } from "@/components/menu-kit";
 

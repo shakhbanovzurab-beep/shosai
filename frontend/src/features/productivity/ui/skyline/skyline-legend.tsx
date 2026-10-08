@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 /** The activity levels, from an empty day (0) to the busiest (4). */
 const LEVELS = ["none", "light", "moderate", "heavy", "heaviest"] as const;

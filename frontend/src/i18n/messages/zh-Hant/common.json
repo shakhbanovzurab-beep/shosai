@@ -25,6 +25,9 @@
   },
   "actionsFor": "{name} 的動作",
   "errors": {
-    "backendUnreachable": "無法連線到伺服器。請稍後再試一次。"
+    "backendUnreachable": "無法連線到伺服器。請稍後再試一次。",
+    "requestId": "請求 ID：{id}",
+    "copyRequestId": "複製請求 ID",
+    "requestIdCopied": "已複製請求 ID"
   }
 }

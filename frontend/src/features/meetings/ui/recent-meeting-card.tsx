@@ -1,9 +1,8 @@
-import Link from "next/link";
-
 import { ChevronRight, Gavel, ListChecks } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
-import { RecordingShareBadge } from "@/features/workspace";
+import { RecordingShareBadge } from "@/features/workspace/ui/personal/shared-meetings";
+import { Link } from "@/lib/navigation";
 
 import type { Meeting } from "../domain/meeting";
 import { MeetingParticipants, MeetingSourceLabel } from "./meeting-meta";

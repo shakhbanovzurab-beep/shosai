@@ -25,6 +25,9 @@
   },
   "actionsFor": "Azioni per {name}",
   "errors": {
-    "backendUnreachable": "Impossibile raggiungere il server. Riprova tra qualche istante."
+    "backendUnreachable": "Impossibile raggiungere il server. Riprova tra qualche istante.",
+    "requestId": "ID richiesta: {id}",
+    "copyRequestId": "Copia l’ID richiesta",
+    "requestIdCopied": "ID richiesta copiato"
   }
 }

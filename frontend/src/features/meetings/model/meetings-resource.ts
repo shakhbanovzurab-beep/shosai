@@ -2,7 +2,8 @@
 
 import { addMinutes } from "date-fns";
 
-import { type MeetingNote, meetingNotes } from "@/features/notes";
+import { meetingNotes } from "@/features/notes/data/meeting-notes";
+import type { MeetingNote } from "@/features/notes/domain/types";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource } from "@/lib/polling-resource";
 

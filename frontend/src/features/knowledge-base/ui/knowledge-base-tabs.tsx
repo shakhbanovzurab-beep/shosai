@@ -1,10 +1,11 @@
 "use client";
 
 import { Building2, FileStack, PlugZap } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useWorkspaces, WorkspaceKnowledgeForLeo } from "@/features/workspace";
+import { useWorkspaces } from "@/features/workspace/model/resources";
+import { WorkspaceKnowledgeForLeo } from "@/features/workspace/ui/personal/workspace-knowledge-for-leo";
 
 import { FilesTab } from "./files-tab";
 import { SourcesTab } from "./sources-tab";

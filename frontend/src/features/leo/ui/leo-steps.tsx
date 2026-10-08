@@ -4,8 +4,8 @@ import * as React from "react";
 
 import { cn } from "cn";
 import { Check, ChevronDown, Square, X } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
 import { ThinkingOrb } from "thinking-orbs";
+import { useLocale, useTranslations } from "use-intl";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Spinner } from "@/components/ui/spinner";

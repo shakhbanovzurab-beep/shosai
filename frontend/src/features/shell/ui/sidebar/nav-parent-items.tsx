@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import { ChevronRight } from "lucide-react";
 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -15,6 +13,7 @@ import {
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
 import { SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "@/components/ui/sidebar-menu-sub";
+import { Link } from "@/lib/navigation";
 
 import type { NavMainParentItem } from "../navigation";
 import { NavIcon, navButtonClass } from "./nav-icon";

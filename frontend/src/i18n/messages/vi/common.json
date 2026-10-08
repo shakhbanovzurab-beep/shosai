@@ -25,6 +25,9 @@
   },
   "actionsFor": "Thao tác với {name}",
   "errors": {
-    "backendUnreachable": "Không thể kết nối với máy chủ. Hãy thử lại sau giây lát."
+    "backendUnreachable": "Không thể kết nối với máy chủ. Hãy thử lại sau giây lát.",
+    "requestId": "Mã yêu cầu: {id}",
+    "copyRequestId": "Sao chép mã yêu cầu",
+    "requestIdCopied": "Đã sao chép mã yêu cầu"
   }
 }

@@ -3,7 +3,7 @@
 import type { KeyboardEvent } from "react";
 
 import { CircleCheck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Skeleton } from "@/components/ui/skeleton";
 

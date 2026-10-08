@@ -1,5 +1,5 @@
-import { useTranslations } from "next-intl";
 import { siJira } from "simple-icons";
+import { useTranslations } from "use-intl";
 
 import { SimpleIcon } from "@/components/simple-icon";
 

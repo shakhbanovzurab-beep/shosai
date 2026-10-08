@@ -672,9 +672,13 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Observability | Tempo | latest stable | Trace store, 7 days on local storage |
 | Observability | Grafana | latest stable | One pane for metrics, logs and traces |
 | Frontend | TanStack Query, React Router, Zustand | 5.104.0, 8.4.0, 5.0.15 | Data fetching, routing, state |
-| Frontend | use-intl (cabinet), next-intl (public site) | latest stable | 16 languages, ICU messages; replaces i18next ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) |
+| Frontend | use-intl (cabinet), next-intl (public site) | 4.14.8 (cabinet) | 16 languages, ICU messages; replaces i18next ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) |
+| Frontend | Vite, @vitejs/plugin-react with React Compiler | 8.3.1, 6.1.1 | Build and dev server of the cabinet |
+| Frontend | TypeScript (cabinet) | 5.9.3 | Type checking; 7.x waits for the tools that use the compiler's JavaScript API ([F2 plan](../plan/packages/F2-frontend-foundation.md) §5) |
+| Frontend | openapi-typescript, openapi-fetch | 7.13.0, 0.17.0 | Client types and calls generated from the backend's OpenAPI document |
+| Frontend | MSW | 3.0.1 | Mocks of the API in development and tests only |
 | Frontend | Tailwind CSS, Mermaid | 4.3.3, 12.0.0 | Styles; diagrams in answers |
-| Frontend | Vitest, react-doctor | 5.0.3, 0.9.14 | Tests; React code-health gate |
+| Frontend | Vitest, react-doctor | 5.0.3, 0.9.17 | Tests; React code-health gate |
 | Clients | macOS, iOS: Swift, SwiftUI, WhispererKit | Swift 6 | Apple desktop and mobile clients |
 | Clients | Linux: Swift, WhispererKit, GTK 4, PipeWire | Swift 6 | Linux desktop client |
 | Clients | Windows: C#, .NET, WPF, WebView2, CommunityToolkit.Mvvm, NAudio | .NET 10 | Windows desktop client |

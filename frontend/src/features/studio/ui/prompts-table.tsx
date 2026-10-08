@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, Copy, Pencil, Trash2, Zap, ZapOff } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { contextKit } from "@/components/menu-kit";
 import { Badge } from "@/components/ui/badge";

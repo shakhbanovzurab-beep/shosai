@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 
 import { accountApi } from "../api/workspace-api";
@@ -36,7 +37,7 @@ export async function updateWorkspace(ws: string, request: UpdateWorkspaceReques
     toast.success(message);
     return true;
   } catch (error) {
-    toast.error(t("toasts.saveFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.saveFailed"), { description: apiErrorDescription(error) });
     return false;
   }
 }
@@ -49,7 +50,7 @@ async function goAway(ws: string, call: () => Promise<void>, done: string, faile
     toast.success(done);
     return true;
   } catch (error) {
-    toast.error(failed, { description: errorMessage(error) });
+    toast.error(failed, { description: apiErrorDescription(error) });
     return false;
   }
 }

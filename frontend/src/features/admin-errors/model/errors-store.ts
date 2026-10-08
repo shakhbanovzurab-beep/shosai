@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
 
 import { errorsApi } from "../api/errors-api";
@@ -83,7 +83,7 @@ export async function updateIssue(id: string, patch: UpdateIssueRequest) {
     return saved;
   } catch (error) {
     if (before.status === "ready") resource.update(() => before.data);
-    toast.error("Не удалось сохранить", { description: errorMessage(error) });
+    toast.error("Не удалось сохранить", { description: apiErrorDescription(error) });
     throw error;
   }
 }

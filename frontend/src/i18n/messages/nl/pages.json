@@ -31,5 +31,10 @@
     "metaTitle": "Geen toegang",
     "title": "Je hebt geen toegang",
     "description": "Je hebt geen toestemming om deze pagina te bekijken. Denk je dat dit niet klopt, neem dan contact op met je beheerder."
+  },
+  "error": {
+    "title": "Deze pagina is niet geladen",
+    "description": "Er ging iets mis aan onze kant. Laad de pagina opnieuw of probeer het zo nog eens.",
+    "reload": "Pagina opnieuw laden"
   }
 }

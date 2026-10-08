@@ -1,16 +1,17 @@
-import Link from "next/link";
-
-import { getFormatter, getNow, getTranslations } from "next-intl/server";
+import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { meetingNotes } from "@/features/notes";
+import { meetingNotes } from "@/features/notes/data/meeting-notes";
+import { Link } from "@/lib/navigation";
 
 import { daysAgo } from "../domain/days";
 
 /** The four latest notes, each opening in Notes. */
-export async function RecentNotesCard() {
-  const [t, format, now] = await Promise.all([getTranslations("productivity"), getFormatter(), getNow()]);
+export function RecentNotesCard() {
+  const t = useTranslations("productivity");
+  const format = useFormatter();
+  const now = useNow();
   const recent = meetingNotes.toSorted((a, b) => b.startedAt.localeCompare(a.startedAt)).slice(0, 4);
 
   // The notes' times are UTC, like the formatter, so "Today" and the dates agree with each other.

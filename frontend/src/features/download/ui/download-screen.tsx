@@ -1,5 +1,5 @@
 import { Info } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "use-intl";
 
 import { DESKTOP_PLATFORMS, type DesktopDownloads, type DesktopPlatform } from "../domain/contract";
 import type { VisitorSystem } from "../domain/platform";
@@ -18,8 +18,8 @@ type DownloadScreenProps = { downloads: DesktopDownloads; system: VisitorSystem 
  * The desktop apps for macOS and Windows: the visitor's platform first and highlighted, then how to
  * install and what the app adds. Rendered on the server, so the right platform shows without a flash.
  */
-export async function DownloadScreen({ downloads, system }: DownloadScreenProps) {
-  const t = await getTranslations("download");
+export function DownloadScreen({ downloads, system }: DownloadScreenProps) {
+  const t = useTranslations("download");
   const detected: DesktopPlatform | null = system === "macos" || system === "windows" ? system : null;
   const order = detected ? [detected, ...DESKTOP_PLATFORMS.filter((p) => p !== detected)] : [...DESKTOP_PLATFORMS];
   const note = isNoted(system) ? t(`notes.${system}`) : null;

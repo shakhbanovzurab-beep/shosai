@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { checkLanguageGlossary, readLanguageGlossary, readStyleGuide, readTermList } from "./glossary";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 const GUIDE = `# Guide
 

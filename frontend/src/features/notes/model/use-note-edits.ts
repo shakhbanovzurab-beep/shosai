@@ -2,8 +2,8 @@
 
 import * as React from "react";
 
-import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useTranslations } from "use-intl";
 
 import type { NoteGroup } from "../domain/types";
 import { folderActions, folderIdAfterMoves, useFolderMoves } from "./folders-store";

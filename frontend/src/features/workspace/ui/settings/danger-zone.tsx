@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { ConfirmDestructive } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/lib/navigation";
 
 import { useWorkspace } from "../../model/use-workspace";
 import { deleteWorkspace, leaveWorkspace } from "../../model/workspace-actions";

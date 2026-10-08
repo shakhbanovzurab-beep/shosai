@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Progress } from "@/components/ui/progress";
 import { usePollingResource } from "@/hooks/use-polling-resource";

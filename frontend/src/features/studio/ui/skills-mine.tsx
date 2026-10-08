@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 
 import { Package, RefreshCw, Trash2, TriangleAlert } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { ConfirmDestructive } from "@/components/feedback";
 import { Button } from "@/components/ui/button";

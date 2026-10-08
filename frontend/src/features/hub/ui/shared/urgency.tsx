@@ -11,7 +11,7 @@ import {
   VolumeX,
 } from "lucide-react";
 
-import type { Gap, GapKind } from "../../domain/contract";
+import type { Gap, GapKind } from "../../domain/contract-threads";
 import { urgencyTier } from "../../domain/urgency";
 import { BAR, INK } from "./urgency-tones";
 

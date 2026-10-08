@@ -1,11 +1,12 @@
 "use client";
 
-import Link from "next/link";
-
 import { FileText } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
-import type { MeetingPrep, ThreadSummary } from "../../domain/contract";
+import { Link } from "@/lib/navigation";
+
+import type { MeetingPrep } from "../../domain/contract";
+import type { ThreadSummary } from "../../domain/contract-threads";
 import { hubPath, threadPath } from "../../domain/paths";
 import { retry, usePreps } from "../../model/hooks";
 import { Block, BlockError } from "../shared/block";

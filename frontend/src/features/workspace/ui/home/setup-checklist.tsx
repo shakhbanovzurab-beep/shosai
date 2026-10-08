@@ -1,14 +1,13 @@
 "use client";
 
-import Link from "next/link";
-
 import { cn } from "cn";
 import { Circle, CircleCheck, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useDismissed } from "@/hooks/use-dismissed";
+import { Link } from "@/lib/navigation";
 
 import type { SetupStep, SetupStepId } from "../../domain/setup";
 import { openInviteDialog } from "../../model/invite-dialog-store";

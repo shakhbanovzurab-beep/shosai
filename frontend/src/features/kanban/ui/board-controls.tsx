@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { ConfirmDestructive } from "@/components/feedback";
 import { NameDialog } from "@/components/name-dialog";
+import { useRouter } from "@/lib/navigation";
 
 import type { BoardSummary } from "../domain/board";
 import { deleteBoard, updateBoard } from "../model/board-actions";

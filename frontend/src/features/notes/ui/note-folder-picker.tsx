@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { cn } from "cn";
 import { Folder, FolderPlus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { META_VALUE_BUTTON, MetaItem } from "@/components/meta-item";
 import { Button } from "@/components/ui/button";

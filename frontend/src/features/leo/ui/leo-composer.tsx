@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { FileText, Plus, X } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "use-intl";
 
 import { Attachment, AttachmentContent, AttachmentMedia } from "@/components/ui/attachment";
 import {

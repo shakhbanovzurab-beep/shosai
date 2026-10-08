@@ -1,7 +1,7 @@
 "use client";
 
 import { differenceInCalendarDays, isSameYear, parseISO } from "date-fns";
-import type { useFormatter, useTranslations } from "next-intl";
+import type { useFormatter, useTranslations } from "use-intl";
 
 import type { Member, Team } from "../../domain/contract";
 import type { KnowledgeAccess, KnowledgeItem } from "../../domain/knowledge-contract";

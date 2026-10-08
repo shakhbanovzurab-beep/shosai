@@ -2,10 +2,10 @@
 
 import { Suspense, use } from "react";
 
-import Link from "next/link";
-
 import { Repeat } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
+
+import { Link } from "@/lib/navigation";
 
 import { threadPath } from "../../domain/paths";
 import { claimSignal } from "../../model/signal";

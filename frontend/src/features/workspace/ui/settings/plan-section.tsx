@@ -1,14 +1,13 @@
 "use client";
 
-import Link from "next/link";
-
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useNow } from "@/hooks/use-now";
+import { Link } from "@/lib/navigation";
 
 import { IDLE_DAYS, isIdle, lastActive, moneyAmount } from "../../domain/format";
 import { seatUsage } from "../../domain/people";

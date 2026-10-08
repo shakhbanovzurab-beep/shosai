@@ -2,10 +2,8 @@
 
 import { useState } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { CalendarClock, EllipsisVertical, Pencil, Trash2, UserRound } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { ConfirmDestructive } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
@@ -16,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
+import { useRouter } from "@/lib/navigation";
 
 import type { Project } from "../../domain/contract";
 import { canEditProject } from "../../domain/roles";

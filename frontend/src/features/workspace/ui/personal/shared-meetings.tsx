@@ -1,14 +1,13 @@
 "use client";
 
-import Link from "next/link";
-
 import { cn } from "cn";
 import { Share2, Users } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNow } from "@/hooks/use-now";
+import { Link } from "@/lib/navigation";
 
 import { meetingPath, workspacePath } from "../../domain/paths";
 import { useMyMeetings, useMyShares } from "../../model/resources";

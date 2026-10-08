@@ -2,12 +2,11 @@
 
 import * as React from "react";
 
-import Link from "next/link";
-
 import { CircleCheck, CircleX } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
+import { Link } from "@/lib/navigation";
 
 import { OAUTH_MESSAGE_TYPE, type OAuthResultMessage, type OAuthStatus } from "../../domain/connectors-contract";
 

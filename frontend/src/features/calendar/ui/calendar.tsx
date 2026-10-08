@@ -4,7 +4,7 @@ import { Suspense, useState } from "react";
 
 import { useCalendarController } from "@fullcalendar/react";
 import { addHours, differenceInCalendarDays, endOfMonth, startOfHour, startOfMonth } from "date-fns";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { NameDialog } from "@/components/name-dialog";
 import { Skeleton } from "@/components/ui/skeleton";

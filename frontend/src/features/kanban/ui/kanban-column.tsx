@@ -7,7 +7,7 @@ import { useDroppable } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
 import { cn } from "cn";
 import { GripVertical, Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 

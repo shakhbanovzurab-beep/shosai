@@ -31,5 +31,10 @@
     "metaTitle": "Accès refusé",
     "title": "Vous n’avez pas accès à cette page",
     "description": "Vous n’avez pas l’autorisation d’afficher cette page. Si vous pensez qu’il s’agit d’une erreur, contactez votre administrateur."
+  },
+  "error": {
+    "title": "Cette page ne s’est pas chargée",
+    "description": "Un problème est survenu de notre côté. Rechargez la page ou réessayez dans un instant.",
+    "reload": "Recharger la page"
   }
 }

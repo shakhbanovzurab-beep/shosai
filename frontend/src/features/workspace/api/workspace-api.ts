@@ -1,4 +1,5 @@
-import { apiRequest, isNotFound, jsonBody } from "@/lib/api-client";
+import { isNotFound } from "@/lib/api/errors";
+import { apiRequest, jsonBody } from "@/lib/api/request";
 
 import type {
   DecisionsResponse,

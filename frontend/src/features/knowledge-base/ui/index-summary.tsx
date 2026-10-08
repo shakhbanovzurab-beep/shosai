@@ -1,7 +1,7 @@
 "use client";
 
 import { Boxes, Cpu, FileStack, Loader } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatBytes } from "@/i18n/format-units";

@@ -3,8 +3,8 @@
 import { toast } from "sonner";
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { copyText } from "@/lib/copy-text";
-import { errorMessage } from "@/lib/errors";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
 
 import { notesApi } from "../api/notes-api";
@@ -42,7 +42,7 @@ export async function updateShareLink(noteId: string, settings: ShareLinkSetting
     resource.update(() => saved);
   } catch (error) {
     if (previous) resource.update(() => previous);
-    toast.error(t("panel.updateFailed"), { description: errorMessage(error) });
+    toast.error(t("panel.updateFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -54,7 +54,7 @@ export async function stopSharing(noteId: string, t: ShareWords) {
     toast.success(t("panel.turnedOff"));
   } catch (error) {
     void linkOf(noteId).refresh();
-    toast.error(t("panel.turnOffFailed"), { description: errorMessage(error) });
+    toast.error(t("panel.turnOffFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -74,7 +74,7 @@ export async function postSharedComment(token: string, author: string, text: str
     commentsOf(token).update(() => saved);
     return true;
   } catch (error) {
-    toast.error(t("comments.postFailed"), { description: errorMessage(error) });
+    toast.error(t("comments.postFailed"), { description: apiErrorDescription(error) });
     return false;
   }
 }

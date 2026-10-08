@@ -3,8 +3,8 @@
 import { type FormEvent, useId, useState } from "react";
 
 import { Users, X } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useTranslations } from "use-intl";
 
 import { META_VALUE_BUTTON, MetaItem } from "@/components/meta-item";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";

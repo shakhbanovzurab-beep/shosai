@@ -2,21 +2,20 @@
 
 import { useState } from "react";
 
-import dynamic from "next/dynamic";
-
 import { SearchX } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { useDirection } from "@/components/ui/direction";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
+import { lazyComponent } from "@/lib/lazy-component";
 
 import { retry, useThreadDetail } from "../../model/hooks";
 import { BlockError } from "../shared/block";
 import { rowAnchorId } from "../unresolved/row-anchor";
 
 // The history, decisions and sources load with the panel, not with the hub page.
-const ThreadView = dynamic(() => import("./thread-view").then((m) => m.ThreadView), {
+const ThreadView = lazyComponent(() => import("./thread-view").then((m) => m.ThreadView), {
   loading: () => <BodySkeleton />,
 });
 

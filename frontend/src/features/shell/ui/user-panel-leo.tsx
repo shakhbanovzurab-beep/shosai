@@ -1,10 +1,11 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-
-import { HubSignal, useHubFromPath } from "@/features/hub";
-import { LeoWidget } from "@/features/leo";
-import { useWorkspaces, workspaceSlugFromPath } from "@/features/workspace";
+import { useHubFromPath } from "@/features/hub/model/current-hub";
+import { HubSignal } from "@/features/hub/ui/meeting/hub-signal";
+import { LeoWidget } from "@/features/leo/ui/leo-widget";
+import { workspaceSlugFromPath } from "@/features/workspace/domain/paths";
+import { useWorkspaces } from "@/features/workspace/model/resources";
+import { usePathname } from "@/lib/navigation";
 
 /**
  * Leo in the user panel: inside a workspace it works in that workspace; on a hub's page only within

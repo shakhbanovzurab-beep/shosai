@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { filesApi } from "../api/files-api";
 import type { FileFolder, FolderUpdate } from "../domain/contract";
@@ -21,7 +21,7 @@ async function patch(folder: FileFolder, change: FolderUpdate, failure: string) 
     if (change.leo !== undefined) await filesResource.refresh();
     return next;
   } catch (error) {
-    toast.error(failure, { description: errorMessage(error) });
+    toast.error(failure, { description: apiErrorDescription(error) });
     return null;
   }
 }
@@ -31,7 +31,7 @@ export async function createFolder(name: string, { t }: FileActionWords) {
     const folder = await filesApi.createFolder(name);
     filesResource.update((data) => ({ ...data, folders: [...data.folders, folder] }));
   } catch (error) {
-    toast.error(t("folderCreateFailed"), { description: errorMessage(error) });
+    toast.error(t("folderCreateFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -73,7 +73,7 @@ export function deleteFolder(folder: FileFolder, fileCount: number, words: FileA
       },
       (error: unknown) => {
         pendingDeletes.folders.delete(folder.id);
-        toast.error(t("folderDeleteFailed", { name: folder.name }), { description: errorMessage(error) });
+        toast.error(t("folderDeleteFailed", { name: folder.name }), { description: apiErrorDescription(error) });
         void filesResource.refresh();
       },
     );

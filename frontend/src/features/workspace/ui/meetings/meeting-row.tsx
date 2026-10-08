@@ -1,7 +1,7 @@
-import Link from "next/link";
-
 import { ChevronRight, FolderKanban, Gavel, ListChecks } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
+
+import { Link } from "@/lib/navigation";
 
 import type { TeamMeeting } from "../../domain/content-contract";
 import type { Member, Project, Team } from "../../domain/contract";

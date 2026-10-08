@@ -1,16 +1,14 @@
 import type { ReactNode } from "react";
 
-import { cookies } from "next/headers";
-
 import { cn } from "cn";
-import { getLocale } from "next-intl/server";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SidebarInset } from "@/components/ui/sidebar-panel";
-import { LeoWidget } from "@/features/leo";
-import { LayoutControls, readSidebarPreferences } from "@/features/preferences";
-import { SettingsDialog } from "@/features/settings";
-import { LocaleGuard } from "@/i18n/locale-guard";
+import { LeoWidget } from "@/features/leo/ui/leo-widget";
+import { readSidebarPreferences } from "@/features/preferences/domain/sidebar-preferences";
+import { LayoutControls } from "@/features/preferences/ui/layout-controls";
+import { SettingsDialog } from "@/features/settings/ui/settings-dialog";
+import { readClientCookie } from "@/lib/cookie.client";
 
 import type { Panel } from "../domain/panel";
 import { HeaderSidebarTrigger } from "./header/header-sidebar-trigger";
@@ -18,10 +16,9 @@ import { HeaderToday } from "./header/header-today";
 import { AppSidebar } from "./sidebar/app-sidebar";
 import { UserPanelLeo } from "./user-panel-leo";
 
-export async function PanelLayout({ panel, children }: Readonly<{ panel: Panel; children: ReactNode }>) {
-  const [cookieStore, locale] = await Promise.all([cookies(), getLocale()]);
-  const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
-  const { variant, collapsible } = readSidebarPreferences(cookieStore);
+export function PanelLayout({ panel, children }: Readonly<{ panel: Panel; children: ReactNode }>) {
+  const defaultOpen = readClientCookie("sidebar_state") !== "false";
+  const { variant, collapsible } = readSidebarPreferences(readClientCookie);
 
   return (
     <SidebarProvider
@@ -40,7 +37,7 @@ export async function PanelLayout({ panel, children }: Readonly<{ panel: Panel; 
           "[html[data-content-layout=centered]_&>*]:max-w-screen-2xl",
           "peer-data-[variant=inset]:border",
           // i18n-ignore: SidebarInset (components/ui) sets physical margins for a left sidebar; this mirrors them.
-          "rtl:md:peer-data-[variant=inset]:mr-0 rtl:md:peer-data-[variant=inset]:ml-2 rtl:md:peer-data-[variant=inset]:peer-data-[state=collapsed]:mr-2",
+          "rtl:md:peer-data-[variant=inset]:peer-data-[state=collapsed]:mr-2 rtl:md:peer-data-[variant=inset]:mr-0 rtl:md:peer-data-[variant=inset]:ml-2",
           "[--dashboard-header-height:--spacing(12)]",
           "min-w-0 overflow-x-clip",
         )}
@@ -66,7 +63,6 @@ export async function PanelLayout({ panel, children }: Readonly<{ panel: Panel; 
         </header>
         {/* Pages can set data-content-padding="false" to render full-bleed app layouts. */}
         <div className="min-h-0 min-w-0 flex-1 overflow-x-hidden p-4 has-data-[content-padding=false]:p-0 md:p-6 md:has-data-[content-padding=false]:p-0">
-          <LocaleGuard locale={locale} />
           {children}
         </div>
       </SidebarInset>

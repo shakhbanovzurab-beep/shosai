@@ -1,9 +1,8 @@
-import Link from "next/link";
-
 import { cn } from "cn";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Progress } from "@/components/ui/progress";
+import { Link } from "@/lib/navigation";
 
 import type { WorkspaceState } from "../../domain/contract";
 import { seatUsage } from "../../domain/people";

@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { checkMessage, type LanguageRules } from "./message-rules";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 const rules = (language: string, extra: Partial<LanguageRules> = {}): LanguageRules => ({
   language,

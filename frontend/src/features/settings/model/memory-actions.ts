@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { settingsApi } from "../api/settings-api";
 import { memorySummaryResource } from "./settings-resources";
@@ -15,7 +15,7 @@ export async function sendSummaryMessage(message: string, t: MemoryWords) {
     memorySummaryResource.update(() => summary);
     return true;
   } catch (error) {
-    toast.error(t("composer.sendFailed"), { description: errorMessage(error) });
+    toast.error(t("composer.sendFailed"), { description: apiErrorDescription(error) });
     return false;
   }
 }
@@ -26,6 +26,6 @@ export async function refreshMemorySummary(t: MemoryWords) {
     const refreshed = await settingsApi.refreshSummary();
     memorySummaryResource.update(() => refreshed);
   } catch (error) {
-    toast.error(t("summary.refreshFailed"), { description: errorMessage(error) });
+    toast.error(t("summary.refreshFailed"), { description: apiErrorDescription(error) });
   }
 }

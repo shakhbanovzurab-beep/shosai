@@ -1,4 +1,4 @@
-import type { Gap, GapKind, ThreadStage, ThreadSummary } from "./contract";
+import type { Gap, GapKind, ThreadStage, ThreadSummary } from "./contract-threads";
 
 /*
  * Ordering what the server found. The server decides what is wrong; the client only sorts it and

@@ -1,7 +1,7 @@
-import Link from "next/link";
-
 import { BookOpen, Gavel, type LucideIcon, Video } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
+
+import { Link } from "@/lib/navigation";
 
 import { TeamPage } from "../shared/layout";
 import { CreateWorkspaceForm } from "./create-workspace-form";

@@ -1,8 +1,8 @@
 "use client";
 
 import { CircleAlert } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { ThinkingOrb } from "thinking-orbs";
+import { useTranslations } from "use-intl";
 
 import { Alert, AlertAction, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

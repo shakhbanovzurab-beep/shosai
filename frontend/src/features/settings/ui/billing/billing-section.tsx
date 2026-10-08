@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
-
 import { CircleArrowUp } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { usePollingResource } from "@/hooks/use-polling-resource";
+import { Link } from "@/lib/navigation";
 
 import type { Billing } from "../../domain/billing-contract";
 import { useSettingsDialog } from "../../model/dialog-store";

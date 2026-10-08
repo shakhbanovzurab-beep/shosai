@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 
 import { studioApi } from "../api/studio-api";
@@ -18,7 +19,7 @@ export async function installSkill(candidate: SkillCandidate, t: SkillWords) {
     }));
     toast.success(t("toasts.installed", { name: skill.name }), { description: t("toasts.installedHint") });
   } catch (error) {
-    toast.error(t("toasts.installFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.installFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -33,7 +34,7 @@ export async function updateSkill(skill: Skill, t: SkillWords) {
         : t("toasts.updated", { name: skill.name }),
     );
   } catch (error) {
-    toast.error(t("toasts.updateFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.updateFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -44,7 +45,7 @@ export async function uninstallSkill(skill: Skill, t: SkillWords) {
     void promptsResource.refresh();
     toast.success(t("toasts.removed", { name: skill.name }));
   } catch (error) {
-    toast.error(t("toasts.removeFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.removeFailed"), { description: apiErrorDescription(error) });
   }
 }
 

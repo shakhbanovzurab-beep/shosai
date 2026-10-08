@@ -25,6 +25,9 @@
   },
   "actionsFor": "إجراءات {name}",
   "errors": {
-    "backendUnreachable": "تعذر الاتصال بالخادم. يرجى إعادة المحاولة بعد قليل."
+    "backendUnreachable": "تعذر الاتصال بالخادم. يرجى إعادة المحاولة بعد قليل.",
+    "requestId": "معرّف الطلب: {id}",
+    "copyRequestId": "نسخ معرّف الطلب",
+    "requestIdCopied": "تم نسخ معرّف الطلب"
   }
 }

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { useDirection } from "@/components/ui/direction";
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from "@/components/ui/drawer";

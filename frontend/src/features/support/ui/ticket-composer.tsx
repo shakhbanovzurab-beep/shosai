@@ -3,7 +3,7 @@
 import { useRef, useState, useTransition } from "react";
 
 import { ArrowUp, Smile } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { EmojiButton } from "@/components/emoji/emoji-button";
 import { Button } from "@/components/ui/button";

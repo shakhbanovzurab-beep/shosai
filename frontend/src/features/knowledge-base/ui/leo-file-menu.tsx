@@ -2,27 +2,19 @@
 
 import type { ReactNode } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { FolderOpen, MoreVertical, RefreshCw, SquareX } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { contextKit, dropdownKit, type MenuKit } from "@/components/menu-kit";
 import { Button } from "@/components/ui/button";
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import {
-  type FileFolder,
-  type FileItem,
-  folderHref,
-  IN_PROGRESS,
-  type LeoUse,
-  reindexFile,
-  rootHref,
-  setFileLeo,
-  setFolderLeo,
-  useFileActionWords,
-} from "@/features/file-manager";
+import { type FileFolder, type FileItem, IN_PROGRESS, type LeoUse } from "@/features/file-manager/domain/contract";
+import { folderHref, rootHref } from "@/features/file-manager/domain/paths";
+import { reindexFile, setFileLeo } from "@/features/file-manager/model/file-actions";
+import { setFolderLeo } from "@/features/file-manager/model/folder-actions";
+import { useFileActionWords } from "@/features/file-manager/model/words";
+import { useRouter } from "@/lib/navigation";
 
 type LeoFile = FileItem & { leo: LeoUse };
 type MenuProps = { file: LeoFile; folder: FileFolder | undefined };

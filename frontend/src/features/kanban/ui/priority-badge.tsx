@@ -1,6 +1,6 @@
 import { cn } from "cn";
 import { ArrowUpRight, Flame, type LucideIcon, Minus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 

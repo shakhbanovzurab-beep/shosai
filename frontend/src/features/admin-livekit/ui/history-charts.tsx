@@ -1,5 +1,9 @@
 "use client";
 
+// Ложное срабатывание: модуль грузится только лениво (lazyComponent), recharts — в отдельном чанке.
+// react-doctor-disable-next-line react-doctor/prefer-dynamic-import
+import { Area, AreaChart, CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { type ChartConfig, ChartContainer, ChartLegend, ChartTooltip } from "@/components/ui/chart";
 import { ChartLegendContent } from "@/components/ui/chart-legend";
@@ -7,7 +11,6 @@ import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import type { LiveKitHistoryPoint } from "../domain/contract";
 import { formatInteger, formatMbps, formatTime } from "../domain/format";
-import { Area, AreaChart, CartesianGrid, Line, LineChart, XAxis, YAxis } from "./chart-primitives";
 
 const participantsConfig = {
   participants: { label: "Участники", color: "var(--chart-1)" },

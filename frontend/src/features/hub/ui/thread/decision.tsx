@@ -1,6 +1,6 @@
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
-import type { ThreadDecision, ThreadDetail } from "../../domain/contract";
+import type { ThreadDecision, ThreadDetail } from "../../domain/contract-threads";
 import { useHubPhrases } from "../shared/phrases";
 import { GapIcon } from "../shared/urgency";
 import { SaidQuote } from "../why/said-quote";

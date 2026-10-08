@@ -1,4 +1,4 @@
-import { getFormatter, getNow, getTranslations } from "next-intl/server";
+import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,8 +8,10 @@ import { projects } from "../data/projects";
 import { dayFromToday } from "../domain/days";
 
 /** Active projects: status, how far along, and when each is due. */
-export async function ProjectsSection() {
-  const [t, format, now] = await Promise.all([getTranslations("productivity"), getFormatter(), getNow()]);
+export function ProjectsSection() {
+  const t = useTranslations("productivity");
+  const format = useFormatter();
+  const now = useNow();
 
   return (
     <section aria-labelledby="projects" className="flex flex-col gap-2">

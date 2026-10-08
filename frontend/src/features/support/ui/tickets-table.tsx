@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import { useFormatter, useNow, useTranslations } from "next-intl";
+import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 

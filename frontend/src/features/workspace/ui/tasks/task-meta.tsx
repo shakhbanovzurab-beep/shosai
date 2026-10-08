@@ -1,9 +1,8 @@
-import Link from "next/link";
-
 import { FolderKanban, Video } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
+import { Link } from "@/lib/navigation";
 
 import type { Task } from "../../domain/content-contract";
 import type { Project, Team } from "../../domain/contract";

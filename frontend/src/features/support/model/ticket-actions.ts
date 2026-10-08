@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { supportApi } from "../api/support-api";
 import type { TicketCategory, UpdateTicketRequest } from "../domain/contract";
@@ -18,7 +18,7 @@ export function showTicket(t: SupportWords, id: string) {
     },
     (error: unknown) => {
       useSupport.setState({ loadingId: null });
-      toast.error(t("toasts.openFailed"), { description: errorMessage(error) });
+      toast.error(t("toasts.openFailed"), { description: apiErrorDescription(error) });
     },
   );
 }
@@ -37,7 +37,7 @@ export async function openTicket(
     showTicket(t, ticket.id);
     toast.success(t("toasts.opened", { number: String(ticket.number) }));
   } catch (error) {
-    toast.error(t("toasts.openFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.openFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -47,7 +47,7 @@ export async function updateTicket(t: SupportWords, id: string, patch: UpdateTic
     useSupport.getState().receive(await supportApi.update(id, patch));
     if (done) toast.success(done);
   } catch (error) {
-    toast.error(t("toasts.updateFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.updateFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -57,7 +57,7 @@ export async function replyToTicket(t: SupportWords, id: string, body: string, f
     useSupport.getState().receive(await supportApi.reply(id, body, files));
     return true;
   } catch (error) {
-    toast.error(t("toasts.sendFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.sendFailed"), { description: apiErrorDescription(error) });
     return false;
   }
 }

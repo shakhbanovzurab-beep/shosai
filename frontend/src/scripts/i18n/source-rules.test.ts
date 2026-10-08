@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { scanSource } from "./source-rules";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 const scan = (code: string) => scanSource("x.tsx", code).map((problem) => problem.message);
 

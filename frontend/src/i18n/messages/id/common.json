@@ -25,6 +25,9 @@
   },
   "actionsFor": "Tindakan untuk {name}",
   "errors": {
-    "backendUnreachable": "Tidak dapat menghubungi server. Coba lagi sebentar lagi."
+    "backendUnreachable": "Tidak dapat menghubungi server. Coba lagi sebentar lagi.",
+    "requestId": "ID permintaan: {id}",
+    "copyRequestId": "Salin ID permintaan",
+    "requestIdCopied": "ID permintaan disalin"
   }
 }

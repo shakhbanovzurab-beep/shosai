@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { CircleAlert } from "lucide-react";
-import { useFormatter, useNow, useTranslations } from "next-intl";
+import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";

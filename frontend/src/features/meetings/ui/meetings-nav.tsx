@@ -1,8 +1,8 @@
-import Link from "next/link";
-
 import { cn } from "cn";
 import { CalendarClock, History, LayoutList, Radio } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
+
+import { Link } from "@/lib/navigation";
 
 import { type MeetingsView, viewHref } from "../domain/meeting";
 

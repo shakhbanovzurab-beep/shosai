@@ -3,7 +3,7 @@
 import { useId, useState } from "react";
 
 import { Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";

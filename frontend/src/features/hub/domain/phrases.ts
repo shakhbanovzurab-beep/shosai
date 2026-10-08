@@ -1,4 +1,4 @@
-import type { Evidence, Gap, ThreadDetail, ThreadStage, ThreadSummary } from "./contract";
+import type { Evidence, Gap, ThreadDetail, ThreadStage, ThreadSummary } from "./contract-threads";
 import { showCircles } from "./urgency";
 
 /*

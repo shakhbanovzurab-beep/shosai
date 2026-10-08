@@ -1,10 +1,13 @@
 "use client";
 
+// Ложное срабатывание: модуль грузится только лениво (lazyComponent), recharts — в отдельном чанке.
+// react-doctor-disable-next-line react-doctor/prefer-dynamic-import
+import { Bar, BarChart, CartesianGrid, Label, LabelList, Pie, PieChart, XAxis, YAxis } from "recharts";
+
 import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import { leadsBySourceChartData, projectRevenueChartData } from "../../data/crm-v1/charts";
-import { Bar, BarChart, CartesianGrid, Label, LabelList, Pie, PieChart, XAxis, YAxis } from "../chart-primitives";
 import { createTooltipFormatter } from "../chart-tooltip-formatter";
 import { leadsBySourceChartConfig, projectRevenueChartConfig } from "./chart-configs";
 

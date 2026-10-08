@@ -2,12 +2,11 @@
 
 import * as React from "react";
 
-import { useRouter } from "next/navigation";
-
 import { Upload } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "use-intl";
 
 import { formatBytes } from "@/i18n/format-units";
+import { useRouter } from "@/lib/navigation";
 
 import { deriveLibrary } from "../domain/derive-library";
 import { buildNotesHref, type NotesView } from "../domain/notes-href";

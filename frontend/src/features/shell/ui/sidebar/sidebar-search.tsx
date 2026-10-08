@@ -2,10 +2,8 @@
 
 import * as React from "react";
 
-import { useRouter } from "next/navigation";
-
 import { Search } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import {
   Command,
@@ -19,6 +17,7 @@ import {
 } from "@/components/ui/command";
 import { Kbd } from "@/components/ui/kbd";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
+import { useRouter } from "@/lib/navigation";
 
 import type { Panel } from "../../domain/panel";
 import { adminSidebarItems } from "../admin-navigation";

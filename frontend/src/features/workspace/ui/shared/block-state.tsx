@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 
 import { cn } from "cn";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";

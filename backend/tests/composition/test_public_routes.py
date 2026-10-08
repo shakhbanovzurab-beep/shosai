@@ -1,18 +1,21 @@
 """The public surface of `api` and `ws` as composed from every listed slice (§10, §14 rule 12).
 
-Two CI gates over the apps the roles really build:
+Three CI gates over the apps the roles really build:
 
 - the route snapshot: a route added, moved or removed fails the test until
   `public_routes.json` is updated in the same commit, so the change is deliberate and
   reviewed;
 - the D1 gate: every draft route owned by F1 or a listed slice keeps its contract for the
-  shipped clients (`contracts/README.md`).
+  shipped clients (`contracts/README.md`);
+- the OpenAPI document: `backend/openapi.json` equals the api app's document, so the web
+  cabinet generates its client types from the contract the code serves (F2 plan §2.5).
 """
 
 import json
 from collections.abc import AsyncIterator
 from pathlib import Path
 
+import pytest
 import pytest_asyncio
 from fastapi import FastAPI
 from opentelemetry.sdk.trace import TracerProvider
@@ -32,6 +35,7 @@ from whisperer.core.config.loading import load_settings
 from whisperer.core.config.roles import ProcessRole
 
 SNAPSHOT = Path(__file__).with_name("public_routes.json")
+OPENAPI_DOCUMENT = Path(__file__).parents[2] / "openapi.json"
 
 
 @pytest_asyncio.fixture
@@ -75,3 +79,18 @@ def test_the_composed_apps_keep_the_draft_contract_of_every_slice(
     report = check(load_baseline(), candidate, scope)
 
     assert report.is_compatible, render_text(report, scope)
+
+
+def test_the_openapi_document_matches_the_api_app(
+    composed_apps: dict[str, FastAPI], request: pytest.FixtureRequest
+) -> None:
+    current = json.dumps(composed_apps["api"].openapi(), indent=2, ensure_ascii=False) + "\n"
+    if request.config.getoption("--update-openapi"):
+        OPENAPI_DOCUMENT.write_text(current, encoding="utf-8")
+
+    recorded = OPENAPI_DOCUMENT.read_text(encoding="utf-8")
+
+    assert current == recorded, (
+        f"OpenAPI api-приложения изменился; перепишите {OPENAPI_DOCUMENT.name} опцией "
+        "--update-openapi, затем в frontend/ выполните npm run api:types и закоммитьте оба файла"
+    )

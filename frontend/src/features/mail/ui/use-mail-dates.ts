@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter, useNow, useTranslations } from "next-intl";
+import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { isRecentMail, replyDue } from "../domain/mail-dates";
 

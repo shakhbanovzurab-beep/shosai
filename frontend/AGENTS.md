@@ -2,19 +2,10 @@
 
 ## Project overview
 
-Studio Admin is a responsive admin dashboard built with Next.js 16, React 19, TypeScript, Tailwind CSS v4, and shadcn/ui.
+The Whisperer cabinet: a Vite single-page app with React 19, TypeScript, React Router, TanStack Query,
+`use-intl`, Tailwind CSS v4 and shadcn/ui. See `README.md` and `docs/architecture.md`.
 
 This repository uses the shadcn `radix-nova` style. The shadcn CLI reports `base: "radix"`, which refers to Radix UI. Always inspect the local components in `src/components/ui/` because individual wrappers may use different primitives.
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
 
 ## shadcn skill
 
@@ -28,55 +19,41 @@ npx skills add shadcn/ui
 
 The skill contains the component, styling, composition, accessibility, and CLI rules. Do not duplicate those rules here. Always inspect the local component source before using it.
 
-Do not modify files inside `src/components/ui/` or `src/components/calendar/`. Keep these components intact and apply styling or customization where they are used.
+Keep the components inside `src/components/ui/` and `src/components/calendar/` as vendored: apply styling or customization where they are used. They follow the 200-line limit, so a long component is split into files by part (`sidebar.tsx`, `sidebar-menu.tsx`, …), imported by direct path.
 
 ## Setup
 
 This project uses npm.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Available commands:
-
-```bash
-npm run build
-npm run lint
-npm run format
-npm run check
-npm run check:fix
-npm run lint:architecture
-npm run typecheck
-npm run i18n:check
-npm run i18n:rtl-smoke -- --base http://localhost:3000
-npm run generate:presets
-npm test
-```
-
-`npm test` runs the unit tests (`src/**/*.test.ts`, Node's built-in test runner) for pure domain code. Run build, lint, check, tests or other validation commands only when the user explicitly requests that validation.
+Available commands: `npm run dev`, `dev:api`, `build`, `preview`, `typecheck`, `test`, `doctor`, `api:types`,
+`check`, `check:fix`, `i18n:check`, `i18n:rtl-smoke`, `generate:presets`. `npm test` runs the unit tests and the
+architecture, i18n and API-types checks.
 
 ## Feature-sliced structure
 
-The architecture is described in `docs/architecture.md`; `npm run lint:architecture` enforces it.
+The architecture is described in `docs/architecture.md`; `src/scripts/architecture.test.ts` enforces it.
 
-- Business code lives in vertical slices: `src/features/<slice>/` with `domain/`, `data/`, `api/`, `model/`, `ui/`, `server/` layers as needed.
-- A slice is used from outside only through `@/features/<slice>` (`index.ts`, client-safe) or `@/features/<slice>/server` (`server.ts`).
-- `src/app/` holds routing only: pages, layouts and route handlers that render or re-export a slice's public API.
-- User panel routes (URL `/app/<screen>`): `src/app/(main)/app/(panel)/<screen>/page.tsx`; admin routes (URL `/admin/<screen>`): `src/app/(main)/admin/<screen>/page.tsx`, backed by `admin-<screen>` slices.
-- Shared, business-agnostic code: `src/components/` (with shadcn in `src/components/ui/`), `src/hooks/`, `src/lib/`, `src/server/`.
+- Business code lives in vertical slices: `src/features/<slice>/` with `domain/`, `data/`, `api/`, `model/`, `ui/`, `mocks/` layers as needed.
+- No barrel files: there is no `index.ts`; import the module that defines a symbol by its path.
+- `src/app/` holds routing only: route tables (`routes/`), layouts, page modules (`pages/`) and error pages.
+- User panel pages (URL `/app/<screen>`): `src/app/pages/user/<screen>.tsx`; admin pages (URL `/admin/<screen>`): `src/app/pages/admin/<screen>.tsx`, backed by `admin-<screen>` slices. Register each in `src/app/routes/`.
+- Shared, business-agnostic code: `src/components/` (with shadcn in `src/components/ui/`), `src/hooks/`, `src/lib/`.
 - Theme presets: `src/styles/presets/`
 
-Keep code inside its slice until another slice needs it; then expose it through the owning slice's public API, or move it to the shared layer only if it carries no business knowledge.
+Keep code inside its slice until another slice needs it; then import it from the owning slice by path, or move it to the shared layer only if it carries no business knowledge.
 
 ## Creating or extending a screen
 
 1. Inspect the closest current slice before writing code. Studio, Knowledge base, and the admin Plans and Billing slices are useful references.
 2. When reproducing a UI from a screenshot or image, follow its visual direction closely, including layout, hierarchy, spacing, component structure, and important details. Implement it with the project's existing components and semantic theme tokens rather than copying raw color values. If the design needs a color that is not available through the existing theme tokens, or the user explicitly requests a non-theme color, use a named color from Tailwind's default palette. Do not use arbitrary hex, RGB, HSL, or OKLCH values.
 3. Reuse the existing dashboard shell, local components, layout controls, and theme tokens.
-4. Build the screen as a slice in `src/features/<slice>/`, split into focused components in its `ui/` layer. Keep `page.tsx` small: metadata, `searchParams` parsing and the slice's screen.
-5. Keep `page.tsx` as a Server Component by default. Move interactive or browser-dependent code into a dedicated Client Component.
+4. Build the screen as a slice in `src/features/<slice>/`, split into focused components in its `ui/` layer. Keep the page module small: `PageMeta`, query parsing and the slice's screen.
+5. Navigate only through `@/lib/navigation`; read data through the slice's `api/` (sample paths answered by `mocks/` until the backend has the endpoints).
 6. Add the screen to the navigation config in the `shell` slice when it should appear in the sidebar.
 7. Decide the information hierarchy before choosing widgets. Let the content determine the page structure.
 8. Keep the established visual rhythm where it fits: compact spacing, clear typography hierarchy, responsive action rows, and grids that collapse cleanly on smaller screens.
@@ -91,7 +68,7 @@ Keep code inside its slice until another slice needs it; then expose it through 
 - TypeScript strict mode is enabled. Use precise types and avoid `any`.
 - Use the existing `@/` import aliases.
 - Follow the Biome configuration: double quotes, semicolons, two-space indentation, sorted imports, and a 120-character line width.
-- User panel (`/app`) text goes through the `next-intl` catalogs, never hardcoded: follow `docs/i18n.md` and `src/i18n/GLOSSARY.md`, and run `npm run i18n:check`. The admin panel (`/admin`) is written in Russian only.
+- User panel (`/app`) text goes through the `use-intl` catalogs, never hardcoded: follow `docs/i18n.md` and `src/i18n/GLOSSARY.md`, and run `npm test`. The admin panel (`/admin`) is written in Russian only.
 - Avoid unnecessary dependencies.
 - Keep changes focused and do not refactor unrelated files.
 

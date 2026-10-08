@@ -3,8 +3,8 @@
 import { useState } from "react";
 
 import { Kanban as KanbanIcon, Plus } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { siJira } from "simple-icons";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { SimpleIcon } from "@/components/simple-icon";

@@ -1,9 +1,9 @@
-import { createTranslator } from "next-intl";
+import { createTranslator } from "use-intl";
+import { describe, it } from "vitest";
 
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, it } from "node:test";
 
 // The Hub's Russian wording comes from its specification, which keeps number phrases in one form ("4 дн.").
 const ru = JSON.parse(readFileSync(join(import.meta.dirname, "../../i18n/messages/ru/hub.json"), "utf8"));

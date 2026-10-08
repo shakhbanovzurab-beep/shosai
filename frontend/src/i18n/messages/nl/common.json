@@ -25,6 +25,9 @@
   },
   "actionsFor": "Acties voor {name}",
   "errors": {
-    "backendUnreachable": "Kan de server niet bereiken. Probeer het zo opnieuw."
+    "backendUnreachable": "Kan de server niet bereiken. Probeer het zo opnieuw.",
+    "requestId": "Verzoek-ID: {id}",
+    "copyRequestId": "Verzoek-ID kopiëren",
+    "requestIdCopied": "Verzoek-ID gekopieerd"
   }
 }

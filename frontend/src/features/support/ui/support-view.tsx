@@ -2,7 +2,7 @@
 
 import { type ReactNode, useDeferredValue, useState } from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { useDirection } from "@/components/ui/direction";

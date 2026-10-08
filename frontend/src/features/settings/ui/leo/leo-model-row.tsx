@@ -1,9 +1,10 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { ModelPicker, useStudioModels } from "@/features/studio";
+import { useStudioModels } from "@/features/studio/model/studio-resources";
+import { ModelPicker } from "@/features/studio/ui/model-picker";
 
 import type { UserSettings } from "../../domain/settings-contract";
 import { saveSettings } from "../../model/account-actions";

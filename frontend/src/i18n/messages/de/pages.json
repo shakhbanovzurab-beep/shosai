@@ -31,5 +31,10 @@
     "metaTitle": "Kein Zugriff",
     "title": "Du hast keinen Zugriff",
     "description": "Du darfst diese Seite nicht ansehen. Wenn du das für einen Irrtum hältst, wende dich an deinen Admin."
+  },
+  "error": {
+    "title": "Diese Seite wurde nicht geladen",
+    "description": "Bei uns ist etwas schiefgelaufen. Lade die Seite neu oder versuche es gleich noch einmal.",
+    "reload": "Seite neu laden"
   }
 }

@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { formatBytes, formatDuration } from "./format-units";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 describe("formatBytes", () => {
   it("steps through the units in the interface language", () => {

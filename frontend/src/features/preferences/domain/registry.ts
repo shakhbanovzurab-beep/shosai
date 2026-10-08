@@ -2,17 +2,16 @@
  * How each preference should be saved.
  *
  * "client-cookie"  → write cookie on the browser only.
- * "server-cookie"  → write cookie through a Server Action.
  * "localStorage"   → save only on the client (non-layout stuff).
  * "none"           → no saving, resets on reload.
  *
  * Layout-critical prefs (sidebar_variant / sidebar_collapsible)
- * must stay consistent during SSR → so they can’t use localStorage.
+ * are read by the panel's first render from a cookie → so they can’t use localStorage.
  * Others are flexible and can use any persistence.
  */
 
-import { THEME_MODE_VALUES, THEME_PRESET_VALUES } from "@/lib/preferences/theme";
-
+// Относительный путь: реестр читает и сборка (tooling/boot-script.ts), где алиаса @ ещё нет.
+import { THEME_MODE_VALUES, THEME_PRESET_VALUES } from "../../../lib/preferences/theme";
 import { fontKeys } from "./fonts";
 import {
   CONTENT_LAYOUT_VALUES,
@@ -21,7 +20,7 @@ import {
   SIDEBAR_VARIANT_VALUES,
 } from "./layout";
 
-export type PreferencePersistence = "none" | "client-cookie" | "server-cookie" | "localStorage";
+export type PreferencePersistence = "none" | "client-cookie" | "localStorage";
 
 type LayoutPersistence = Exclude<PreferencePersistence, "localStorage">;
 
@@ -136,11 +135,11 @@ export function parsePreference<K extends PreferenceKey>(
 /** How the server reads a preference: cookie-persisted ones from their cookie, the others at their default. */
 export function preferenceFromCookie<K extends PreferenceKey>(
   key: K,
-  cookieValue: string | undefined,
+  cookieValue: string | null | undefined,
 ): PreferenceValueMap[K] {
   const persistence = getPreferencePersistence(key);
 
-  if (persistence !== "client-cookie" && persistence !== "server-cookie") {
+  if (persistence !== "client-cookie") {
     return PREFERENCE_REGISTRY[key].defaultValue as PreferenceValueMap[K];
   }
 

@@ -25,6 +25,9 @@
   },
   "actionsFor": "Actions pour {name}",
   "errors": {
-    "backendUnreachable": "Impossible de joindre le serveur. Réessayez dans un instant."
+    "backendUnreachable": "Impossible de joindre le serveur. Réessayez dans un instant.",
+    "requestId": "Identifiant de requête : {id}",
+    "copyRequestId": "Copier l’identifiant de requête",
+    "requestIdCopied": "Identifiant de requête copié"
   }
 }

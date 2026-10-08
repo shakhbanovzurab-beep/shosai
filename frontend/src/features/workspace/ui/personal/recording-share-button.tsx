@@ -2,10 +2,8 @@
 
 import { type ReactNode, useState } from "react";
 
-import Link from "next/link";
-
 import { ArrowUpRight, ChevronDown, Share2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from "@/lib/navigation";
 
 import type { WorkspaceSummary } from "../../domain/contract";
 import { meetingPath } from "../../domain/paths";

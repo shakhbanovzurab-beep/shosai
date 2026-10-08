@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 
 import { kbApi } from "../api/kb-api";
@@ -40,7 +41,7 @@ export async function syncSource(definition: ConnectorDefinition, name: string, 
   try {
     replace(await kbApi.sync(definition.id));
   } catch (error) {
-    toast.error(t("toasts.syncFailed", { name }), { description: errorMessage(error) });
+    toast.error(t("toasts.syncFailed", { name }), { description: apiErrorDescription(error) });
   }
 }
 
@@ -49,7 +50,7 @@ export async function disconnectSource(definition: ConnectorDefinition, name: st
     await kbApi.disconnect(definition.id);
     toast.success(t("toasts.disconnected", { name }));
   } catch (error) {
-    toast.error(t("toasts.disconnectFailed", { name }), { description: errorMessage(error) });
+    toast.error(t("toasts.disconnectFailed", { name }), { description: apiErrorDescription(error) });
   } finally {
     void connectorsResource.refresh();
   }

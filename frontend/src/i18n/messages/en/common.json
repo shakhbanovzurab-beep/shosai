@@ -25,6 +25,9 @@
   },
   "actionsFor": "Actions for {name}",
   "errors": {
-    "backendUnreachable": "Couldn’t reach the server. Try again in a moment."
+    "backendUnreachable": "Couldn’t reach the server. Try again in a moment.",
+    "requestId": "Request ID: {id}",
+    "copyRequestId": "Copy request ID",
+    "requestIdCopied": "Request ID copied"
   }
 }

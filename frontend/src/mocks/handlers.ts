@@ -1,0 +1,48 @@
+import { handlers as adminAiModels } from "@/features/admin-ai-models/mocks/handlers";
+import { handlers as adminApps } from "@/features/admin-apps/mocks/handlers";
+import { handlers as adminBilling } from "@/features/admin-billing/mocks/handlers";
+import { handlers as adminErrors } from "@/features/admin-errors/mocks/handlers";
+import { handlers as adminLivekit } from "@/features/admin-livekit/mocks/handlers";
+import { handlers as adminPlans } from "@/features/admin-plans/mocks/handlers";
+import { handlers as adminPlatformPrompts } from "@/features/admin-platform-prompts/mocks/handlers";
+import { handlers as adminSupport } from "@/features/admin-support/mocks/handlers";
+import { handlers as adminWorkspaces } from "@/features/admin-workspaces/mocks/handlers";
+import { handlers as fileManager } from "@/features/file-manager/mocks/handlers";
+import { handlers as hub } from "@/features/hub/mocks/handlers";
+import { handlers as kanban } from "@/features/kanban/mocks/handlers";
+import { handlers as knowledgeBase } from "@/features/knowledge-base/mocks/handlers";
+import { handlers as leo } from "@/features/leo/mocks/handlers";
+import { handlers as mail } from "@/features/mail/mocks/handlers";
+import { handlers as notes } from "@/features/notes/mocks/handlers";
+import { handlers as settings } from "@/features/settings/mocks/handlers";
+import { handlers as studio } from "@/features/studio/mocks/handlers";
+import { handlers as support } from "@/features/support/mocks/handlers";
+import { handlers as upgrade } from "@/features/upgrade/mocks/handlers";
+import { handlers as workspace } from "@/features/workspace/mocks/handlers";
+
+import type { MockRoute } from "./routing";
+
+/** Примерные маршруты всех слайсов. Слайс убирает свою строку вместе с обработчиками, когда появляется его API. */
+export const mockRoutes: readonly MockRoute[] = [
+  ...adminAiModels,
+  ...adminApps,
+  ...adminBilling,
+  ...adminErrors,
+  ...adminLivekit,
+  ...adminPlans,
+  ...adminPlatformPrompts,
+  ...adminSupport,
+  ...adminWorkspaces,
+  ...fileManager,
+  ...hub,
+  ...kanban,
+  ...knowledgeBase,
+  ...leo,
+  ...mail,
+  ...notes,
+  ...settings,
+  ...studio,
+  ...support,
+  ...upgrade,
+  ...workspace,
+];

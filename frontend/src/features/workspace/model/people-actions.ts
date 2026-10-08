@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 
 import type { AssignableRole, Invitation, InviteRequest, Member, WorkspaceState } from "../domain/contract";
@@ -15,7 +16,7 @@ async function run(call: () => Promise<WorkspaceState>, success: string, failure
     toast.success(success);
     return true;
   } catch (error) {
-    toast.error(failure, { description: errorMessage(error) });
+    toast.error(failure, { description: apiErrorDescription(error) });
     return false;
   }
 }

@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
 
 import { livekitApi } from "../api/livekit-api";
@@ -38,7 +38,7 @@ async function attempt(task: () => Promise<void>, failure: string): Promise<bool
     await task();
     return true;
   } catch (error) {
-    toast.error(failure, { description: errorMessage(error) });
+    toast.error(failure, { description: apiErrorDescription(error) });
     return false;
   }
 }

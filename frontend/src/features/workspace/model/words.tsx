@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 /*
  * The catalogs the model's actions word their toasts with. Actions are plain functions, so the Client

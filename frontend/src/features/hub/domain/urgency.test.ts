@@ -1,7 +1,8 @@
-import type { Gap, GapKind, ThreadSummary } from "./contract";
+import { describe, it } from "vitest";
+
+import type { Gap, GapKind, ThreadSummary } from "./contract-threads";
 import { byUrgency, mostUrgentGap, showCircles, UNRESOLVED_LIMIT, unresolvedRows, urgencyTier } from "./urgency";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 const row = (id: string, gap: Gap | null, extra: Partial<ThreadSummary> = {}): ThreadSummary => ({
   id,

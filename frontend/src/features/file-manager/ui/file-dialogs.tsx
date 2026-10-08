@@ -1,10 +1,10 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { ConfirmDestructive } from "@/components/feedback";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ShareFileForm } from "@/features/workspace";
+import { ShareFileForm } from "@/features/workspace/ui/personal/share-file-form";
 
 import type { FileItem } from "../domain/contract";
 import { transferFile } from "../model/file-actions";

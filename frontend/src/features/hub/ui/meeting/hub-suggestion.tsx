@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { META_VALUE_BUTTON } from "@/components/meta-item";
 import { Button } from "@/components/ui/button";

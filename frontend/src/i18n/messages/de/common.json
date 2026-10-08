@@ -25,6 +25,9 @@
   },
   "actionsFor": "Aktionen für {name}",
   "errors": {
-    "backendUnreachable": "Der Server konnte nicht erreicht werden. Versuche es gleich erneut."
+    "backendUnreachable": "Der Server konnte nicht erreicht werden. Versuche es gleich erneut.",
+    "requestId": "Anfrage-ID: {id}",
+    "copyRequestId": "Anfrage-ID kopieren",
+    "requestIdCopied": "Anfrage-ID kopiert"
   }
 }

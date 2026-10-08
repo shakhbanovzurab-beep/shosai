@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 
-import Link from "next/link";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
+import { Link } from "@/lib/navigation";
 
 import { useSettingsDialog } from "../../model/dialog-store";
 import { SettingsRow } from "../settings-row";

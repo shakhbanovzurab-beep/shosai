@@ -31,5 +31,10 @@
     "metaTitle": "Không có quyền truy cập",
     "title": "Bạn không có quyền truy cập",
     "description": "Bạn không có quyền xem trang này. Nếu bạn nghĩ đây là nhầm lẫn, hãy liên hệ quản trị viên."
+  },
+  "error": {
+    "title": "Trang này chưa tải được",
+    "description": "Đã xảy ra lỗi từ phía chúng tôi. Hãy tải lại trang hoặc thử lại sau ít phút.",
+    "reload": "Tải lại trang"
   }
 }

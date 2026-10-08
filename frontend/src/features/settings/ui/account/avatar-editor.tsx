@@ -4,7 +4,7 @@ import { useRef, useState, useTransition } from "react";
 
 import { cn } from "cn";
 import { Camera } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "use-intl";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";

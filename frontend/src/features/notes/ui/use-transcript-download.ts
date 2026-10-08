@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { formatMeetingDuration } from "../domain/format";
 import type { ExportFormat } from "../domain/transcript-export";

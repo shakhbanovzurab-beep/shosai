@@ -2,7 +2,7 @@
 
 import { cn } from "cn";
 import { Building2, Lock, type LucideIcon, Users } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 

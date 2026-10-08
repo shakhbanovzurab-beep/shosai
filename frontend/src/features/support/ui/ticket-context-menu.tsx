@@ -3,8 +3,8 @@
 import type { ReactNode } from "react";
 
 import { CircleCheck, Hash, Mail, MailOpen, MessageSquareText, Plus, RotateCcw, Text } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useTranslations } from "use-intl";
 
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { ContextMenuItem, ContextMenuSeparator, ContextMenuShortcut } from "@/components/ui/context-menu-items";

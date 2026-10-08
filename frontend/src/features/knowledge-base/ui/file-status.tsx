@@ -1,12 +1,12 @@
 "use client";
 
 import { CircleAlert, CircleCheck } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
-import type { LeoUse } from "@/features/file-manager";
+import type { LeoUse } from "@/features/file-manager/domain/contract";
 
 import { PIPELINE, pipelineProgress } from "../model/leo-files";
 

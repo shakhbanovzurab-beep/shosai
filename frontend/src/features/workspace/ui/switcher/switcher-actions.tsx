@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
-
 import { Plus, Settings2, UserPlus } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { DropdownMenuGroup } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
 import { usePollingResource } from "@/hooks/use-polling-resource";
+import { Link } from "@/lib/navigation";
 
 import type { WorkspaceSummary } from "../../domain/contract";
 import { NEW_WORKSPACE_PATH, workspacePath } from "../../domain/paths";

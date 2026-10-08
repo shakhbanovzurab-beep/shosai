@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
-
 import { Check, ChevronsUpDown, Palette, Pencil, Plus, Trash2, Unlink } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
 import { siJira } from "simple-icons";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { SimpleIcon } from "@/components/simple-icon";
 import { Button } from "@/components/ui/button";
@@ -21,6 +19,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu-items";
 import { DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger } from "@/components/ui/dropdown-menu-sub";
+import { Link } from "@/lib/navigation";
 
 import { BOARD_ICONS, type BoardSummary, boardHref } from "../domain/board";
 import { chooseWorkspaceTasksBoard, updateBoard } from "../model/board-actions";

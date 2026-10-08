@@ -1,14 +1,13 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { lazyComponent } from "@/lib/lazy-component";
 import { pluralizeRu } from "@/lib/plural";
 
-const QualifiedLeadFlowChart = dynamic(
+const QualifiedLeadFlowChart = lazyComponent(
   () => import("./qualified-lead-flow-chart").then((chartModule) => chartModule.QualifiedLeadFlowChart),
   { loading: () => <Skeleton className="h-72 w-full" /> },
 );

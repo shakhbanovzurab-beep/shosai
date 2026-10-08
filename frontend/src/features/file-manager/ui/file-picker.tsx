@@ -3,13 +3,13 @@
 import { useState } from "react";
 
 import { Search } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useFileSelection } from "@/features/workspace";
+import { useFileSelection } from "@/features/workspace/ui/knowledge/file-selection";
 import { formatBytes } from "@/i18n/format-units";
 
 import type { FileItem } from "../domain/contract";

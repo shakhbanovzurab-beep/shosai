@@ -2,8 +2,6 @@
 
 import { useActionState, useState } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,6 +16,7 @@ import { FieldDescription, FieldError, FieldLabel } from "@/components/ui/field-
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "@/lib/navigation";
 
 import { type AdminWorkspaceDetail, SUSPEND_REASON_MAX } from "../domain/contract";
 import { removeWorkspace, suspend } from "../model/actions";

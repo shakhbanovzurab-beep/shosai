@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import type { UserSettings } from "../../domain/settings-contract";
 import { SettingSwitch } from "../setting-switch";

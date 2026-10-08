@@ -1,7 +1,7 @@
 "use client";
 
 import { CircleAlert, CircleCheck } from "lucide-react";
-import { useFormatter, useNow, useTranslations } from "next-intl";
+import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";

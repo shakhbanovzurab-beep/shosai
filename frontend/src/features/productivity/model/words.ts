@@ -1,4 +1,4 @@
-import type { useFormatter, useTranslations } from "next-intl";
+import type { useFormatter, useTranslations } from "use-intl";
 
 import type { FocusPreset } from "../domain/focus/timer";
 

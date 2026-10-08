@@ -19,14 +19,14 @@ import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
-const presetDir = path.resolve(__dirname, "../styles/presets");
+const presetDir = path.resolve(import.meta.dirname, "../styles/presets");
 
 if (!fs.existsSync(presetDir)) {
   console.error(`❌ Preset directory not found at: ${presetDir}`);
   process.exit(1);
 }
 
-const outputPath = path.resolve(__dirname, "../lib/preferences/theme.ts");
+const outputPath = path.resolve(import.meta.dirname, "../lib/preferences/theme.ts");
 
 const files = fs.readdirSync(presetDir).filter((file) => file.endsWith(".css"));
 
@@ -66,7 +66,7 @@ const presets = files.map((file) => {
   return { label, value, primary };
 });
 
-const globalStylesPath = path.resolve(__dirname, "../app/globals.css");
+const globalStylesPath = path.resolve(import.meta.dirname, "../app/globals.css");
 
 let globalContent = "";
 try {

@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { answerLanguage } from "./answer-language";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 describe("answerLanguage", () => {
   it("follows the interface language when the setting is auto", () => {

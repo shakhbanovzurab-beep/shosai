@@ -1,7 +1,5 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-
 import { useSidebar } from "@/components/ui/sidebar";
 import { SidebarMenu } from "@/components/ui/sidebar-menu";
 import {
@@ -10,6 +8,7 @@ import {
   SidebarGroupLabel,
   SidebarSeparator,
 } from "@/components/ui/sidebar-sections";
+import { usePathname } from "@/lib/navigation";
 
 import type { NavGroup, NavMainItem, NavMainParentItem } from "../navigation";
 import { NavLinkItem } from "./nav-link-item";

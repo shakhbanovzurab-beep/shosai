@@ -1,18 +1,28 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 
-import { NextIntlClientProvider } from "next-intl";
+import { IntlProvider } from "use-intl";
 
 import { DirectionProvider } from "@/components/ui/direction";
-import type { TextDirection } from "@/lib/language";
+import { type LanguageCode, languageDirection } from "@/lib/language";
+
+import { loadedCatalogue } from "./catalogues";
+import { TIME_ZONE } from "./config";
+import { formats } from "./formats";
 
 /**
- * The request's language for Client Components (messages, formats, time zone) and its text direction for
- * Radix primitives. Rendered once, by the root layout, next to the `<html lang dir>` it sets.
+ * Язык страницы для всех компонентов (сообщения, форматы, часовой пояс) и направление текста для примитивов
+ * Radix. Корневой маршрут загружает каталог до отрисовки, поэтому смена языка — выбор пользователя или переход
+ * между пользовательской и админ-панелью — никогда не показывает смесь двух языков.
  */
-export function I18nProvider({ dir, children }: Readonly<{ dir: TextDirection; children: ReactNode }>) {
+export function I18nProvider({ locale, children }: Readonly<{ locale: LanguageCode; children: ReactNode }>) {
+  const dir = languageDirection(locale);
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.documentElement.dir = dir;
+  }, [locale, dir]);
   return (
-    <NextIntlClientProvider>
+    <IntlProvider locale={locale} messages={loadedCatalogue(locale)} formats={formats} timeZone={TIME_ZONE}>
       <DirectionProvider dir={dir}>{children}</DirectionProvider>
-    </NextIntlClientProvider>
+    </IntlProvider>
   );
 }

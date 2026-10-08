@@ -1,13 +1,13 @@
 import type { LanguageCode } from "@/lib/language";
 
-/** Request header the proxy sets on admin pages, which are written in Russian only. */
-export const PANEL_HEADER = "x-studio-panel";
-export const ADMIN_PANEL = "admin";
+/** Админ-панель написана только по-русски, какой бы язык пользователь ни выбрал для /app. */
 export const ADMIN_LANGUAGE: LanguageCode = "ru";
 
+/** Принадлежит ли путь админ-панели. */
+export const isAdminPath = (pathname: string) => pathname === "/admin" || pathname.startsWith("/admin/");
+
 /**
- * The time zone `next-intl` formats in, on the server and in the browser alike, so server-rendered dates
- * hydrate unchanged. Demo data and the domain formatters are UTC; a component that shows the viewer's
- * wall-clock time (the header clock) formats it in the browser itself. See docs/i18n.md.
+ * Часовой пояс форматирования всех дат. Демо-данные и доменные форматтеры — в UTC; компонент, показывающий
+ * местное время зрителя (часы в шапке), форматирует его сам. См. docs/i18n.md.
  */
 export const TIME_ZONE = "UTC";

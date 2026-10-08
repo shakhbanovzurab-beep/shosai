@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Skeleton } from "@/components/ui/skeleton";

@@ -2,9 +2,8 @@
 
 import type * as React from "react";
 
-import { useRouter } from "next/navigation";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRouter } from "@/lib/navigation";
 
 import { DASHBOARD_TABS, type DashboardTab } from "../domain/dashboard-tabs";
 

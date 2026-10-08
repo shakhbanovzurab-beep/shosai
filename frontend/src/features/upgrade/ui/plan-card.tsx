@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { cn } from "cn";
 import { Check, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";

@@ -2,10 +2,10 @@
 
 import * as React from "react";
 
-import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useTranslations } from "use-intl";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { settingsApi } from "../api/settings-api";
 import { type Connector, OAUTH_MESSAGE_TYPE, type OAuthResultMessage } from "../domain/connectors-contract";
@@ -95,7 +95,7 @@ export function useConnectorOAuth() {
     } catch (error) {
       popup?.close();
       setPendingId(null);
-      toast.error(t("toasts.connectFailed", { name: connector.name }), { description: errorMessage(error) });
+      toast.error(t("toasts.connectFailed", { name: connector.name }), { description: apiErrorDescription(error) });
     }
   };
 
@@ -106,7 +106,7 @@ export function useConnectorOAuth() {
       toast.success(t("toasts.disconnected", { name: connector.name }));
     } catch (error) {
       replace(connector);
-      toast.error(t("toasts.disconnectFailed", { name: connector.name }), { description: errorMessage(error) });
+      toast.error(t("toasts.disconnectFailed", { name: connector.name }), { description: apiErrorDescription(error) });
     }
   };
 

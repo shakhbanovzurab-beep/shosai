@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import type { Task, TaskCreate, TaskUpdate } from "../domain/content-contract";
 import type { MyTask } from "../domain/personal-contract";
@@ -42,7 +42,7 @@ export async function updateTask(ws: string, task: Task, change: TaskUpdate, suc
     return true;
   } catch (error) {
     replaceEverywhere(ws, task);
-    toast.error(updateFailed(), { description: errorMessage(error) });
+    toast.error(updateFailed(), { description: apiErrorDescription(error) });
     return false;
   }
 }
@@ -91,7 +91,7 @@ export async function setTaskStatus(ws: string, taskId: string, status: Task["st
     void resourcesOf(ws).tasks.refresh();
     return true;
   } catch (error) {
-    toast.error(updateFailed(), { description: errorMessage(error) });
+    toast.error(updateFailed(), { description: apiErrorDescription(error) });
     return false;
   }
 }

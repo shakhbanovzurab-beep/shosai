@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { cn } from "cn";
 import { Ellipsis, RotateCcw, SlidersHorizontal } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { dropdownKit } from "@/components/menu-kit";
 import { Badge } from "@/components/ui/badge";

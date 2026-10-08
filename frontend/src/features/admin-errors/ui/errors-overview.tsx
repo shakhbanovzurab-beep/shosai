@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import dynamic from "next/dynamic";
-
 import { RefreshCw } from "lucide-react";
 
 import { LoadError } from "@/components/feedback";
@@ -11,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePollingResource } from "@/hooks/use-polling-resource";
+import { lazyComponent } from "@/lib/lazy-component";
 
 import type { IssuesResponse } from "../domain/contract";
 import { ERROR_PERIODS } from "../domain/dimensions";
@@ -21,7 +20,7 @@ import { ErrorsKpis } from "./errors-kpis";
 import { IssuesTable } from "./issues-table";
 
 // The chart library loads with the timeline, after the rest of the screen.
-const ErrorsTimeline = dynamic(() => import("./errors-timeline").then((module) => module.ErrorsTimeline), {
+const ErrorsTimeline = lazyComponent(() => import("./errors-timeline").then((module) => module.ErrorsTimeline), {
   loading: () => <Skeleton className="h-80 rounded-xl" />,
 });
 

@@ -2,12 +2,11 @@
 
 import { createContext, type ReactNode, use, useMemo, useState } from "react";
 
-import { useRouter } from "next/navigation";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { NameDialog, type NameRequest } from "@/components/name-dialog";
-import { useSharedFiles } from "@/features/workspace";
+import { useSharedFiles } from "@/features/workspace/ui/personal/file-share-control";
+import { useRouter } from "@/lib/navigation";
 
 import type { FileFolder, FileItem, FilesResponse } from "../domain/contract";
 import type { FileManagerView } from "../domain/files";

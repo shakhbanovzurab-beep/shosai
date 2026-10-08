@@ -2,9 +2,7 @@
 
 import { useActionState, useState } from "react";
 
-import Link from "next/link";
-
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -21,6 +19,7 @@ import { FieldDescription, FieldError, FieldLabel } from "@/components/ui/field-
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
+import { Link } from "@/lib/navigation";
 
 import { type AssignableRole, INVITES_PER_REQUEST } from "../../domain/contract";
 import { parseInviteEmails, seatUsage, visibleTeams } from "../../domain/people";

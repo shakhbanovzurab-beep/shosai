@@ -2,11 +2,9 @@
 
 import { useActionState, useState } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { cn } from "cn";
 import { ArrowRight } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
+import { useRouter } from "@/lib/navigation";
 
 import {
   BOARD_ICONS,

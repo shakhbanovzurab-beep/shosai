@@ -3,7 +3,7 @@
 import { type FormEvent, useRef, useState } from "react";
 
 import { Paperclip, Reply, Send, Smile } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { EmojiButton } from "@/components/emoji/emoji-button";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";

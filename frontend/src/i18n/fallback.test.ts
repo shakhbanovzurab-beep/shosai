@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { withFallback } from "./fallback";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 const english = { title: "Files", empty: { title: "No files yet", text: "Upload a file." } };
 

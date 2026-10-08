@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 
 import { upgradeApi } from "../api/upgrade-api";
@@ -18,7 +19,7 @@ export async function startCheckout(request: CheckoutRequest, failureTitle: stri
     const { url } = await upgradeApi.checkout(request);
     window.location.assign(url);
   } catch (error) {
-    toast.error(failureTitle, { description: errorMessage(error) });
+    toast.error(failureTitle, { description: apiErrorDescription(error) });
   }
 }
 

@@ -4,8 +4,8 @@ import { type ReactNode, useRef, useState } from "react";
 
 import { cn } from "cn";
 import { CloudUpload, Upload } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useLocale, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";

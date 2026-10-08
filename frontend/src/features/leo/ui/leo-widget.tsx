@@ -2,15 +2,14 @@
 
 import * as React from "react";
 
-import { usePathname } from "next/navigation";
-
 import { AnimatePresence, domMax, LazyMotion, MotionConfig, m, type Transition } from "framer-motion";
-import { useTranslations } from "next-intl";
 import { ThinkingOrb } from "thinking-orbs";
+import { useTranslations } from "use-intl";
 
 import { useDirection } from "@/components/ui/direction";
 import { Kbd } from "@/components/ui/kbd";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { usePathname } from "@/lib/navigation";
 
 import { type LeoContext, PERSONAL_CONTEXT } from "../domain/context";
 import { useLeoChat } from "../model/use-leo-chat";

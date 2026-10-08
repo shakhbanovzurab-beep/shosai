@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
-
 import { Sun } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/lib/navigation";
 
 import type { BriefItem } from "../../domain/contract";
 import { hubPath, threadPath } from "../../domain/paths";

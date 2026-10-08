@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Folder, Share2 } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 

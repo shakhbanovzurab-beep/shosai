@@ -13,7 +13,7 @@ import {
   Table2,
   Upload,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";

@@ -5,7 +5,7 @@ import type { ReactNode } from "react";
 import { useDraggable } from "@dnd-kit/react";
 import { cn } from "cn";
 import { Star } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

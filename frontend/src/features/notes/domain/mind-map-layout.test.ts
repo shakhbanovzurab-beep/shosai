@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { layoutMindMap, NODE_WIDTH } from "./mind-map-layout";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 describe("layoutMindMap", () => {
   const root = { label: "Root", children: [{ label: "A" }, { label: "B" }] };

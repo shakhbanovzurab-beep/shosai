@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 
 import type { ProjectInput, Team, TeamInput } from "../domain/contract";
@@ -34,7 +35,7 @@ export async function deleteTeam(ws: string, team: Team, t: MembersWords) {
     toast.success(t("toasts.teamDeleted", { name: team.name }));
     return true;
   } catch (error) {
-    toast.error(t("toasts.teamDeleteFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.teamDeleteFailed"), { description: apiErrorDescription(error) });
     return false;
   }
 }
@@ -78,7 +79,7 @@ export async function deleteProject(ws: string, projectId: string, name: string)
   } catch (error) {
     toast.error(
       words((t) => t("toasts.projectDeleteFailed")),
-      { description: errorMessage(error) },
+      { description: apiErrorDescription(error) },
     );
     return false;
   }

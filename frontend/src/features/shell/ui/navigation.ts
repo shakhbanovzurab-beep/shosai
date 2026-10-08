@@ -18,9 +18,9 @@ import {
   Users,
   Video,
 } from "lucide-react";
-import type { useTranslations } from "next-intl";
+import type { useTranslations } from "use-intl";
 
-import { workspacePath } from "@/features/workspace";
+import { workspacePath } from "@/features/workspace/domain/paths";
 
 /** The shell's translator, for building labelled navigation outside a component. */
 export type ShellT = ReturnType<typeof useTranslations<"shell">>;

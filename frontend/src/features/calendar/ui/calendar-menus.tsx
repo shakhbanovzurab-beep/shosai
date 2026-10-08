@@ -12,7 +12,7 @@ import {
   Trash2,
   Undo2,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { contextKit as K } from "@/components/menu-kit";
 import { ContextMenuLabel } from "@/components/ui/context-menu-items";

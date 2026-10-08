@@ -31,5 +31,10 @@
     "metaTitle": "No access",
     "title": "You don’t have access",
     "description": "You don’t have permission to view this page. If you think this is a mistake, contact your administrator."
+  },
+  "error": {
+    "title": "This page didn’t load",
+    "description": "Something went wrong on our side. Reload the page, or try again in a moment.",
+    "reload": "Reload page"
   }
 }

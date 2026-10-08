@@ -2,8 +2,8 @@
 
 import { cn } from "cn";
 import { CircleAlert } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { ThinkingOrb } from "thinking-orbs";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import type { ResourceState } from "@/lib/polling-resource";

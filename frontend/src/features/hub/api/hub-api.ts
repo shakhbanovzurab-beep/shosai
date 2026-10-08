@@ -3,7 +3,6 @@ import type {
   DailyBrief,
   Digest,
   FeedPage,
-  GapKind,
   Hub,
   HubsResponse,
   Loaded,
@@ -12,9 +11,8 @@ import type {
   MeetingPrep,
   PrepResponse,
   SignalResponse,
-  ThreadDetail,
-  ThreadSummary,
 } from "../domain/contract";
+import type { GapKind, ThreadDetail, ThreadSummary } from "../domain/contract-threads";
 import { hubRequest, json } from "./hub-request";
 
 /*

@@ -1,13 +1,12 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { RefreshCw } from "lucide-react";
 
 import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePollingResource } from "@/hooks/use-polling-resource";
+import { lazyComponent } from "@/lib/lazy-component";
 
 import { formatClock } from "../domain/format";
 import { overviewResource } from "../model/livekit-store";
@@ -25,7 +24,7 @@ const CHARTS_SKELETON = (
 );
 
 /** Recharts is heavy; the charts load after the rest of the dashboard. */
-const HistoryCharts = dynamic(() => import("./history-charts").then((module) => module.HistoryCharts), {
+const HistoryCharts = lazyComponent(() => import("./history-charts").then((module) => module.HistoryCharts), {
   loading: () => CHARTS_SKELETON,
 });
 

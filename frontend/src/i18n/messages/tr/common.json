@@ -25,6 +25,9 @@
   },
   "actionsFor": "{name} için işlemler",
   "errors": {
-    "backendUnreachable": "Sunucuya ulaşılamadı. Birazdan tekrar deneyin."
+    "backendUnreachable": "Sunucuya ulaşılamadı. Birazdan tekrar deneyin.",
+    "requestId": "İstek kimliği: {id}",
+    "copyRequestId": "İstek kimliğini kopyala",
+    "requestIdCopied": "İstek kimliği kopyalandı"
   }
 }

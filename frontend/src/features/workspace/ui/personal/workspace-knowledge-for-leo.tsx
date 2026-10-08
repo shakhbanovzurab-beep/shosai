@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
-
 import { ArrowUpRight, BookOpen } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/lib/navigation";
 
 import { workspacePath } from "../../domain/paths";
 import type { WorkspaceKnowledge } from "../../domain/personal-contract";

@@ -94,27 +94,27 @@ uv run --env-file ../.env whisperer api                # public API on 127.0.0.1
 
 ## Run the frontend
 
-The web cabinet in `frontend/` needs Node.js at the version in [`frontend/.nvmrc`](../frontend/.nvmrc) and npm 11; nothing else is installed on the host.
+The web cabinet in `frontend/` (a Vite SPA, [ADR 0021](adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) needs Node.js at the version in [`frontend/.nvmrc`](../frontend/.nvmrc) and npm 11; nothing else is installed on the host.
 
 ```bash
 cd frontend
 npm ci                  # once, and after every change of package-lock.json
-npm run dev             # dev server on http://127.0.0.1:5173/app/
+npm run dev             # http://localhost:3000/app/ with the sample API mocked in the browser (MSW)
+npm run dev:api         # the same against the local backend: /v1 is proxied to BACKEND_URL (default http://localhost:8000)
 ```
 
-The dev server also serves what the backend serves in the draft: the fonts at `/fonts/` from `frontend/fonts/` and the site root files (`/favicon.svg`, `/manifest.webmanifest` and the icons) from `frontend/public/`. No proxy to the backend is needed for them.
+The dev server also answers the cabinet's paths outside `/app/` (`/app`, `/admin/*`, `/oauth/callback`, `/unauthorized`) with `index.html`, as the edge does. The mocks exist only in `npm run dev` and in tests ([F2 plan](plan/packages/F2-frontend-foundation.md), F2-D1); `npm run build` fails if mock code reaches `dist/`.
 
 | Check | Command |
 |---|---|
 | Types | `npm run typecheck` |
-| Tests, the architecture rules included | `npm test` |
+| Tests: unit, architecture rules, i18n catalogues, OpenAPI types in sync | `npm test` |
 | Production bundle in `frontend/dist/` | `npm run build` |
 | Code-health gate, must print `100` | `npm run doctor -- --score` |
-| Font stylesheets equal the font catalogue (also part of `npm test`) | `npm run fonts -- --check` |
 
-After a change of the font catalogue (`src/core/theme/fontCatalogue.ts`) or of `fonts/faces.json`, rewrite the generated stylesheets with `npm run fonts` and commit them together with the change.
+After a change of the backend's HTTP surface, rewrite `backend/openapi.json` with `uv run --env-file <test env> pytest tests/composition/test_public_routes.py --update-openapi`, then run `npm run api:types` in `frontend/` and commit both files.
 
-`npm run doctor` needs network: react-doctor gets the score from its vendor's service ([ADR 0020](adr/0020-react-doctor-score-from-the-vendor-service.md)). [frontend/README.md](../frontend/README.md) describes the layout and the boundaries.
+`npm run doctor` needs network: react-doctor gets the score from its vendor's service ([ADR 0020](adr/0020-react-doctor-score-from-the-vendor-service.md)). [frontend/docs/architecture.md](../frontend/docs/architecture.md) describes the layout and the boundaries.
 
 ## Test databases
 

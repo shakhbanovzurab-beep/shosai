@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 import { pluralizeRu } from "@/lib/plural";
 
@@ -35,7 +36,7 @@ export async function setPlanActive(plan: Plan, is_active: boolean) {
     putPlan(await plansApi.updatePlan(plan.id, { is_active }));
   } catch (error) {
     putPlan(plan);
-    toast.error(`Не удалось изменить тариф «${plan.name}»`, { description: errorMessage(error) });
+    toast.error(`Не удалось изменить тариф «${plan.name}»`, { description: apiErrorDescription(error) });
   }
 }
 
@@ -46,7 +47,7 @@ export async function restorePlan(plan: Plan) {
       description: "Он выключен — включите его, чтобы открыть продажи.",
     });
   } catch (error) {
-    toast.error(`Не удалось восстановить тариф «${plan.name}»`, { description: errorMessage(error) });
+    toast.error(`Не удалось восстановить тариф «${plan.name}»`, { description: apiErrorDescription(error) });
   }
 }
 
@@ -71,7 +72,7 @@ export async function removePlan(plan: Plan): Promise<boolean> {
     }
     return true;
   } catch (error) {
-    toast.error(`Не удалось удалить тариф «${plan.name}»`, { description: errorMessage(error) });
+    toast.error(`Не удалось удалить тариф «${plan.name}»`, { description: apiErrorDescription(error) });
     return false;
   }
 }

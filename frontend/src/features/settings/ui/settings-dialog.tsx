@@ -2,8 +2,8 @@
 
 import { cn } from "cn";
 import { Blocks, Brain, CircleUser, CreditCard, Gauge, Keyboard, type LucideIcon, Plug, Shield } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { ThinkingOrb } from "thinking-orbs";
+import { useTranslations } from "use-intl";
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { usePollingResource } from "@/hooks/use-polling-resource";

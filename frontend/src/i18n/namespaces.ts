@@ -4,8 +4,6 @@
  * namespace. Adding one: create the English file and list it here and in `Messages` (messages-type.ts).
  */
 
-export type { Messages } from "./messages-type";
-
 export const NAMESPACES = [
   "calendar",
   "common",

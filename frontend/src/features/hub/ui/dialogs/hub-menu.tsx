@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
-
 import { Archive, ArchiveRestore, EllipsisVertical, FolderOpen, Kanban, Pencil, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
+import { Link } from "@/lib/navigation";
 
 import type { Hub } from "../../domain/contract";
 import { hubPath } from "../../domain/paths";

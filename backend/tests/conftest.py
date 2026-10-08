@@ -31,6 +31,15 @@ pytest_plugins = (
 )
 
 
+def pytest_addoption(parser: pytest.Parser) -> None:
+    """`--update-openapi` rewrites backend/openapi.json from the composed API app."""
+    parser.addoption(
+        "--update-openapi",
+        action="store_true",
+        help="rewrite backend/openapi.json from the composed api app",
+    )
+
+
 @pytest.fixture(scope="session")
 def harness_settings() -> HarnessSettings:
     """Settings from the TEST_* variables that passed the safety checks."""

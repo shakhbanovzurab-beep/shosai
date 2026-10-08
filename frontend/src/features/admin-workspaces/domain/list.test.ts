@@ -1,8 +1,9 @@
+import { describe, it } from "vitest";
+
 import type { AdminWorkspace } from "./contract";
 import { plural } from "./format";
 import { applyFilter, DEFAULT_FILTER, needsAttention, totals } from "./list";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 const NOW = Date.parse("2026-10-07T12:00:00Z");
 const daysAgo = (days: number) => new Date(NOW - days * 86_400_000).toISOString();

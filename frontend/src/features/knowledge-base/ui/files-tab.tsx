@@ -3,13 +3,15 @@
 import { useState } from "react";
 
 import { FileStack, Folder, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
-import { filesResource, setFolderLeo, useFileActionWords, useFiles } from "@/features/file-manager";
+import { filesResource, useFiles } from "@/features/file-manager/model/files-resource";
+import { setFolderLeo } from "@/features/file-manager/model/folder-actions";
+import { useFileActionWords } from "@/features/file-manager/model/words";
 
 import { useIndex } from "../model/kb-resources";
 import { indexTotals, leoFiles } from "../model/leo-files";

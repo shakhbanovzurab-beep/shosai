@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import type { Meeting } from "../domain/meeting";
 import { durationMinutes, minutesSinceStart, minutesUntilStart, nearDay } from "../domain/timing";

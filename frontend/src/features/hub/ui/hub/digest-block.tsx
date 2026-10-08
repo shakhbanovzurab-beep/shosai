@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/lib/navigation";
 
-import type { ThreadSummary } from "../../domain/contract";
+import type { ThreadSummary } from "../../domain/contract-threads";
 import { meetingPath, threadPath } from "../../domain/paths";
 import { retry, useDigest } from "../../model/hooks";
 import { Block, BlockError, PartialNote } from "../shared/block";

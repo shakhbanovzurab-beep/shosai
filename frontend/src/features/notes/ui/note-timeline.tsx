@@ -1,13 +1,12 @@
 import type * as React from "react";
 
-import Link from "next/link";
-
 import { cn } from "cn";
 import { Gavel, ListChecks, X } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/i18n/format-units";
+import { Link } from "@/lib/navigation";
 
 import { formatClock } from "../domain/format";
 import type { MeetingNote, NoteFolder, PendingRecording } from "../domain/types";

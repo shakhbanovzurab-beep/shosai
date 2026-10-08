@@ -1,11 +1,10 @@
-import Link from "next/link";
-
 import { cn } from "cn";
 import { differenceInCalendarDays, isSameYear, parseISO } from "date-fns";
 import { CornerDownRight, Gavel } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
+import { Link } from "@/lib/navigation";
 
 import type { Decision } from "../../domain/content-contract";
 import type { Team } from "../../domain/contract";

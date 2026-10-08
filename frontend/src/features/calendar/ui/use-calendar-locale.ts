@@ -3,7 +3,7 @@
 import { use } from "react";
 
 import type { LocaleInput } from "@fullcalendar/react";
-import { useLocale } from "next-intl";
+import { useLocale } from "use-intl";
 
 import type { LanguageCode } from "@/lib/language";
 

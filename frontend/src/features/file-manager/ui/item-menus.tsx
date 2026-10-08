@@ -13,7 +13,7 @@ import {
   StarOff,
   Trash2,
 } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import type { MenuKit } from "@/components/menu-kit";
 

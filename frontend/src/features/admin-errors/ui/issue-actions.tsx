@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
-
 import { ClipboardCopy, LifeBuoy } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { copyText } from "@/lib/copy-text";
+import { Link } from "@/lib/navigation";
 
 import type { IssueDetail } from "../domain/contract";
 import { developerSummary } from "../domain/developer-summary";

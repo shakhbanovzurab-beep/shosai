@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { kanbanApi } from "../api/kanban-api";
 import type { Task } from "../domain/board";
@@ -19,7 +19,7 @@ async function attempt<T>(title: string, run: () => Promise<T>): Promise<T | nul
   try {
     return await run();
   } catch (error) {
-    toast.error(title, { description: errorMessage(error) });
+    toast.error(title, { description: apiErrorDescription(error) });
     return null;
   }
 }

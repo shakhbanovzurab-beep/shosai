@@ -2,13 +2,12 @@
 
 import { useTransition } from "react";
 
-import { useRouter } from "next/navigation";
-
 import { RotateCcw } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { useRouter } from "@/lib/navigation";
 
 /** Reads the downloads again: the page is server-rendered, so a refresh re-runs the read. */
 export function RetryButton() {

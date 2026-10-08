@@ -1,7 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { cn } from "cn";
 import { Clock } from "lucide-react";
 
@@ -9,11 +7,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { lazyComponent } from "@/lib/lazy-component";
 import { pluralizeRu } from "@/lib/plural";
 
 import { actionItems, regionSalesData } from "../../data/crm-v1/operations";
 
-const SalesPipelineChart = dynamic(
+const SalesPipelineChart = lazyComponent(
   () => import("./sales-pipeline-chart").then((chartModule) => chartModule.SalesPipelineChart),
   { loading: () => <Skeleton className="size-full min-h-48" /> },
 );

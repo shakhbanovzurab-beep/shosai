@@ -1,13 +1,12 @@
-import Link from "next/link";
-
 import { ExternalLink } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
+import { Link } from "@/lib/navigation";
 
 /** The user panel's mail page: the standalone inbox embedded in an iframe, with a link to open it full screen. */
-export async function MailPreview() {
-  const t = await getTranslations("mail");
+export function MailPreview() {
+  const t = useTranslations("mail");
 
   return (
     <div className="flex h-full flex-col gap-2">

@@ -2,7 +2,7 @@
 
 import { Suspense, use, useDeferredValue } from "react";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Skeleton } from "@/components/ui/skeleton";
 

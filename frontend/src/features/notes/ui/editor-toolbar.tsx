@@ -5,7 +5,7 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 import type { Editor } from "@tiptap/core";
 import { useEditorState } from "@tiptap/react";
 import { Bold, Italic, Link2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Separator } from "@/components/ui/separator";

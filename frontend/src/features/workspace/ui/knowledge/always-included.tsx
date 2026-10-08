@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
-
 import { FolderKanban, Gavel, Video } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
+
+import { Link } from "@/lib/navigation";
 
 import { useDecisions, useMeetings, useWorkspace } from "../../model/use-workspace";
 

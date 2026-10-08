@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { createPollingResource } from "@/lib/polling-resource";
 
 import { aiModelsApi } from "../api/ai-models-api";
@@ -31,7 +31,7 @@ export async function patchModel(id: string, patch: AiModelPatch) {
     }));
   } catch (error) {
     if (before.status === "ready") aiModelsResource.update(() => before.data);
-    toast.error("Не удалось сохранить", { description: errorMessage(error) });
+    toast.error("Не удалось сохранить", { description: apiErrorDescription(error) });
   }
 }
 
@@ -44,7 +44,7 @@ export async function checkConnection(): Promise<ConnectionCheckResponse | null>
     void aiModelsResource.refresh();
     return result;
   } catch (error) {
-    toast.error("Не удалось проверить подключение", { description: errorMessage(error) });
+    toast.error("Не удалось проверить подключение", { description: apiErrorDescription(error) });
     return null;
   }
 }

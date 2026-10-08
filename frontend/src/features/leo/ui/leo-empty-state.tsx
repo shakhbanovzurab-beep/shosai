@@ -3,8 +3,8 @@
 import * as React from "react";
 
 import { ArrowUpRight } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { ThinkingOrb } from "thinking-orbs";
+import { useTranslations } from "use-intl";
 
 import { adminSuggestions, isAdminPath } from "../domain/admin-suggestions";
 import { dayPeriod, SUGGESTION_SLOTS, suggestionSet } from "../domain/suggestions";

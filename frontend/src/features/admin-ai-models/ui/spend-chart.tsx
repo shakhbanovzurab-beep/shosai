@@ -1,16 +1,18 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { lazyComponent } from "@/lib/lazy-component";
 
 import type { DailySpend } from "../domain/contract";
 import { formatLongDate, formatUsd } from "../domain/format";
 
-const SpendAreaChart = dynamic(() => import("./spend-area-chart").then((chartModule) => chartModule.SpendAreaChart), {
-  loading: () => <Skeleton className="h-64 w-full" />,
-});
+const SpendAreaChart = lazyComponent(
+  () => import("./spend-area-chart").then((chartModule) => chartModule.SpendAreaChart),
+  {
+    loading: () => <Skeleton className="h-64 w-full" />,
+  },
+);
 
 export function SpendChart({ daily }: { daily: DailySpend[] }) {
   const total = daily.reduce((sum, day) => sum + day.cost, 0);

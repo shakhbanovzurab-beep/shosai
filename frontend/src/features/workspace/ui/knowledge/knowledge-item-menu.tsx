@@ -3,7 +3,7 @@
 import { type ReactNode, useState } from "react";
 
 import { EllipsisVertical, ExternalLink, FolderKanban, Trash2, Undo2, Unplug, Users } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { ConfirmDestructive } from "@/components/feedback";
 import { Button } from "@/components/ui/button";

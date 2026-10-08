@@ -2,22 +2,18 @@
 
 import type { ReactNode } from "react";
 
-import { usePathname } from "next/navigation";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { useDirection } from "@/components/ui/direction";
 import { Sidebar } from "@/components/ui/sidebar-panel";
 import { SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar-sections";
 import { APP_CONFIG } from "@/config/app-config";
-import { useSidebarPreferences } from "@/features/preferences";
-import {
-  ScopeMark,
-  useWorkspaces,
-  WorkspaceSwitcher,
-  workspacePath,
-  workspaceSlugFromPath,
-} from "@/features/workspace";
+import { useSidebarPreferences } from "@/features/preferences/model/preferences-provider";
+import { workspacePath, workspaceSlugFromPath } from "@/features/workspace/domain/paths";
+import { useWorkspaces } from "@/features/workspace/model/resources";
+import { ScopeMark } from "@/features/workspace/ui/switcher/scope-mark";
+import { WorkspaceSwitcher } from "@/features/workspace/ui/switcher/workspace-switcher";
+import { usePathname } from "@/lib/navigation";
 
 import { type Panel, panelHomeUrls } from "../../domain/panel";
 import { adminSidebarItems } from "../admin-navigation";

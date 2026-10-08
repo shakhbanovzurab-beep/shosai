@@ -1,5 +1,5 @@
 import { Box, Grid2x2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 

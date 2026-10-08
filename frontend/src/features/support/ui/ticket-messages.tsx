@@ -1,7 +1,7 @@
 "use client";
 
 import { FileText } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble";

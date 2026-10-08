@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
-
 import { Check, ChevronsUpDown, RotateCw } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import {
   DropdownMenu,
@@ -14,6 +12,7 @@ import {
 import { DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
 import { SidebarMenuButton } from "@/components/ui/sidebar-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link } from "@/lib/navigation";
 
 import type { WorkspaceSummary } from "../../domain/contract";
 import { workspacePath } from "../../domain/paths";

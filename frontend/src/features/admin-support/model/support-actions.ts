@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { supportApi } from "../api/support-api";
 import type { AttachmentMeta, Conversation, MessageKind, UpdateConversationRequest } from "../domain/contract";
@@ -27,7 +27,7 @@ async function deliver(conversationId: string, item: OutboxItem) {
   } catch (error) {
     update({ status: "failed" });
     toast.error(item.kind === "note" ? "Не удалось сохранить заметку" : "Не удалось отправить ответ", {
-      description: errorMessage(error),
+      description: apiErrorDescription(error),
     });
   }
 }
@@ -77,6 +77,6 @@ export async function updateConversation(
     void listResource(filter, mine).refresh();
   } catch (error) {
     if (before.status === "ready") receive(before.data);
-    toast.error("Не удалось изменить разговор", { description: errorMessage(error) });
+    toast.error("Не удалось изменить разговор", { description: apiErrorDescription(error) });
   }
 }

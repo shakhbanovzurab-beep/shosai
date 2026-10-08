@@ -1,10 +1,9 @@
-import Link from "next/link";
-
 import { CalendarPlus, History, Upload, Video, VideoOff } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import { Link } from "@/lib/navigation";
 
 // Each state's title and description are `empty.<kind>` in the catalog; the action's text is `actions.<labelKey>`.
 const STATES = {

@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { kanbanApi } from "../api/kanban-api";
 import type { BoardSummary } from "../domain/board";
@@ -11,7 +11,7 @@ import { boardResource, boardsResource, receiveSummary } from "./boards-resource
 import type { BoardWords } from "./words";
 
 const failed = (title: string, error: unknown) => {
-  toast.error(title, { description: errorMessage(error) });
+  toast.error(title, { description: apiErrorDescription(error) });
   return null;
 };
 

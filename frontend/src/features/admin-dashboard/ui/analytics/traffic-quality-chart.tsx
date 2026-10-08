@@ -1,10 +1,13 @@
 "use client";
 
+// Ложное срабатывание: модуль грузится только лениво (lazyComponent), recharts — в отдельном чанке.
+// react-doctor-disable-next-line react-doctor/prefer-dynamic-import
+import { CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "recharts";
+
 import { type ChartConfig, ChartContainer, ChartTooltip } from "@/components/ui/chart";
 import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import { qualitySeries } from "../../data/analytics/traffic-quality";
-import { CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "../chart-primitives";
 import { createTooltipFormatter } from "../chart-tooltip-formatter";
 
 const chartConfig = {

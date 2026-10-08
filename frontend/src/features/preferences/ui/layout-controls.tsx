@@ -1,7 +1,7 @@
 "use client";
 
 import { Settings } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 import { useShallow } from "zustand/react/shallow";
 
 import { Button } from "@/components/ui/button";

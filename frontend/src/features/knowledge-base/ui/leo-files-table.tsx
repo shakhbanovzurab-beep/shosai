@@ -3,11 +3,12 @@
 import type { ReactNode } from "react";
 
 import { Folder } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { type FileFolder, type FileItem, fileIcons, type LeoUse } from "@/features/file-manager";
-import { FileShareControl } from "@/features/workspace";
+import type { FileFolder, FileItem, LeoUse } from "@/features/file-manager/domain/contract";
+import { fileIcons } from "@/features/file-manager/ui/file-icons";
+import { FileShareControl } from "@/features/workspace/ui/personal/file-share-control";
 import { formatBytes } from "@/i18n/format-units";
 
 import { fileExtension } from "../model/leo-files";

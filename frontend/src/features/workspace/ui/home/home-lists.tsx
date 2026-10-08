@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
-
 import { Gavel } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
+
+import { Link } from "@/lib/navigation";
 
 import type { Decision, Task } from "../../domain/content-contract";
 import type { Project, WorkspaceState } from "../../domain/contract";

@@ -4,7 +4,7 @@ import { type ReactNode, useRef } from "react";
 
 import { cn } from "cn";
 import { ChevronDown } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 import { TabsTrigger } from "@/components/ui/tabs";

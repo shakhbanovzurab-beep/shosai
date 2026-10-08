@@ -1,5 +1,5 @@
 import { Circle, CircleCheck, Link2Off, Users } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { MetaItem } from "@/components/meta-item";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-import { useLocale } from "next-intl";
+import { useLocale } from "use-intl";
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource } from "@/lib/polling-resource";

@@ -1,11 +1,10 @@
-import Link from "next/link";
-
 import { Play } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
+import { Link } from "@/lib/navigation";
 
-import type { Evidence } from "../../domain/contract";
+import type { Evidence } from "../../domain/contract-threads";
 import { meetingPath } from "../../domain/paths";
 import { momentLabel } from "../../domain/phrases";
 import { useHubPhrases } from "../shared/phrases";

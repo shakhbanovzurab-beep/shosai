@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";

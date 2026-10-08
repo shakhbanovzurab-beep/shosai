@@ -1,7 +1,7 @@
 "use client";
 
 import { Cpu, FileText, MessageSquareText } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

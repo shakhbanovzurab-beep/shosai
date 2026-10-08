@@ -2,9 +2,7 @@
 
 import { useActionState, useState } from "react";
 
-import { useRouter } from "next/navigation";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "@/lib/navigation";
 
 import { PROJECT_NAME_MAX, PROJECT_STATUSES, type Project, type ProjectStatus } from "../../domain/contract";
 import { saveProject } from "../../model/group-actions";

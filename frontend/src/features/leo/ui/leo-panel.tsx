@@ -5,13 +5,13 @@ import * as React from "react";
 import { cn } from "cn";
 import { AnimatePresence, m } from "framer-motion";
 import { Maximize, Minimize, Paperclip, Plus, X } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { ThinkingOrb } from "thinking-orbs";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { useVoiceModeEnabled } from "@/features/settings";
+import { useVoiceModeEnabled } from "@/features/settings/model/settings-hooks";
 
 import { useLeoAttachments } from "../model/use-leo-attachments";
 import type { useLeoChat } from "../model/use-leo-chat";

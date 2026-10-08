@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { studioApi } from "../api/studio-api";
 import type { Prompt, PromptDraft } from "../domain/contract";
@@ -14,7 +14,7 @@ export async function removePrompt(prompt: Prompt, t: PromptWords) {
     await studioApi.deletePrompt(prompt.id);
     toast.success(t("toasts.deleted", { name: prompt.name }));
   } catch (error) {
-    toast.error(t("toasts.deleteFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.deleteFailed"), { description: apiErrorDescription(error) });
   }
   refresh();
 }
@@ -27,7 +27,7 @@ export async function setPromptInUse(prompt: Prompt, use: boolean, t: PromptWord
     const role = studio(`roles.${prompt.role}.name`);
     toast.success(use ? t("toasts.inUse", { role, name: prompt.name }) : t("toasts.backToDefault", { role }));
   } catch (error) {
-    toast.error(t("toasts.changeFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.changeFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -39,7 +39,7 @@ export async function createPrompt(draft: PromptDraft, t: PromptWords) {
     toast.success(t("toasts.created", { name: draft.name }));
     return true;
   } catch (error) {
-    toast.error(t("toasts.createFailed"), { description: errorMessage(error) });
+    toast.error(t("toasts.createFailed"), { description: apiErrorDescription(error) });
     return false;
   }
 }

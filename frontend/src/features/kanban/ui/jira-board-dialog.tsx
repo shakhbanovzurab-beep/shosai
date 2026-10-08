@@ -2,13 +2,10 @@
 
 import { useState, useTransition } from "react";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-
 import { cn } from "cn";
 import { ArrowLeftRight, Plug } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { siJira } from "simple-icons";
+import { useTranslations } from "use-intl";
 
 import { SimpleIcon } from "@/components/simple-icon";
 import { Button } from "@/components/ui/button";
@@ -22,7 +19,8 @@ import {
 } from "@/components/ui/dialog";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
-import { useOpenSettings } from "@/features/settings";
+import { useOpenSettings } from "@/features/settings/model/dialog-store";
+import { Link, useRouter } from "@/lib/navigation";
 
 import { boardHref } from "../domain/board";
 import type { JiraBoard } from "../domain/contract";

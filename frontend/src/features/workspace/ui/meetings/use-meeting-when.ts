@@ -1,7 +1,7 @@
 "use client";
 
 import { differenceInCalendarDays, isSameYear, parseISO } from "date-fns";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 /*
  * A meeting's start reads in the viewer's own wall clock, as it always has. Every caller renders these

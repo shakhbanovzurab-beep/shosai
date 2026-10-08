@@ -3,8 +3,8 @@
 import { useState, useTransition } from "react";
 
 import { Copy, Inbox, Trash2 } from "lucide-react";
-import { useFormatter, useNow, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { ConfirmDestructive } from "@/components/feedback";
 import { Button } from "@/components/ui/button";

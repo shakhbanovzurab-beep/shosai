@@ -1,4 +1,4 @@
-import type { Formats } from "next-intl";
+import type { Formats } from "use-intl";
 
 /**
  * Named formats for `format.dateTime(value, "short")`, `format.number(value, "percent")` and ICU arguments

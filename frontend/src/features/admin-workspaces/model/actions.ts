@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 
 import { workspacesApi } from "../api/workspaces-api";
@@ -58,7 +59,7 @@ export async function removeWorkspace(id: string, name: string) {
     });
     return true;
   } catch (error) {
-    toast.error("Не удалось удалить пространство", { description: errorMessage(error) });
+    toast.error("Не удалось удалить пространство", { description: apiErrorDescription(error) });
     return false;
   }
 }

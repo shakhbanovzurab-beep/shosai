@@ -2,16 +2,15 @@
 
 import { useState } from "react";
 
-import Link from "next/link";
-
 import { differenceInCalendarDays, isSameYear, parseISO } from "date-fns";
 import { FolderKanban, Plus } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useNow } from "@/hooks/use-now";
+import { Link } from "@/lib/navigation";
 
 import type { Task } from "../../domain/content-contract";
 import type { Project } from "../../domain/contract";

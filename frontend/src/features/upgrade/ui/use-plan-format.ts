@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter } from "next-intl";
+import { useFormatter } from "use-intl";
 
 /** Prices and reset days in the interface language: 1500 cents in "USD" → "$15" / "15 $US"; cents only when the price has them. */
 export function usePlanFormat() {

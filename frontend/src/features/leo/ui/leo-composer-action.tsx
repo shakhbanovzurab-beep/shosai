@@ -2,7 +2,7 @@
 
 import { AnimatePresence, m } from "framer-motion";
 import { ArrowUp, AudioLines, Square } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { InputGroupButton } from "@/components/ui/input-group";
 

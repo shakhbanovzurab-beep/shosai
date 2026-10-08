@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
-
 import { ArrowLeft } from "lucide-react";
 
 import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePollingResource } from "@/hooks/use-polling-resource";
+import { Link } from "@/lib/navigation";
 
 import { formatFullDateTime, formatNumber, formatRelative } from "../domain/format";
 import { getLastListSearch, issueResource } from "../model/errors-store";

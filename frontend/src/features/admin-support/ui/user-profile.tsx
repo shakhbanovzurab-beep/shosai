@@ -2,13 +2,12 @@
 
 import type { ReactNode } from "react";
 
-import Link from "next/link";
-
 import { cn } from "cn";
 import { ArrowUpRight, Bug, Mail } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "@/lib/navigation";
 import { pluralizeRu } from "@/lib/plural";
 import { getInitials } from "@/lib/utils";
 

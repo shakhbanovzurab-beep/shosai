@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 
-import dynamic from "next/dynamic";
-
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePollingResource } from "@/hooks/use-polling-resource";
+import { lazyComponent } from "@/lib/lazy-component";
 
 import type { Currency } from "../domain/contract";
 import { overviewResource } from "../model/billing-store";
@@ -17,7 +16,7 @@ import { PaymentStatusCard } from "./payment-status-card";
 import { PayoutsCard } from "./payouts-card";
 
 // Recharts is heavy; load it after the KPIs, behind a placeholder of the same size.
-const RevenueChart = dynamic(() => import("./revenue-chart").then((module) => module.RevenueChart), {
+const RevenueChart = lazyComponent(() => import("./revenue-chart").then((module) => module.RevenueChart), {
   loading: () => <Skeleton className="h-96 rounded-xl" />,
 });
 

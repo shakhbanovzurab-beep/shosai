@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "use-intl";
 
 import { languageDirection } from "@/lib/language";
 

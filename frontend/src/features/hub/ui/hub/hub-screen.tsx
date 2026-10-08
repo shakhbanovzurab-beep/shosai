@@ -1,15 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-
 import { SearchX } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Link, useRouter, useSearchParams } from "@/lib/navigation";
 
 import { isHubErrorCode } from "../../domain/errors";
 import { HUBS_PATH, hubPath, OPEN_PARAM, threadPath } from "../../domain/paths";

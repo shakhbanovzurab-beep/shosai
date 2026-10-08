@@ -8,7 +8,7 @@ import { Markdown } from "@tiptap/markdown";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import { StarterKit } from "@tiptap/starter-kit";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { EditorToolbar } from "./editor-toolbar";
 

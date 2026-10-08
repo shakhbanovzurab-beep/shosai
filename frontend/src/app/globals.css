@@ -8,6 +8,8 @@
 @import "../styles/presets/tangerine.css";
 /* Preset shadows and the selected font, applied through data attributes on <html> */
 @import "../styles/preferences.css";
+/* The fonts a user can pick, self-hosted from pinned packages */
+@import "../styles/fonts.css";
 
 @custom-variant dark (&:is(.dark *));
 

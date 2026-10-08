@@ -1,5 +1,5 @@
 import { CalendarDays, Clock } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { MetaItem } from "@/components/meta-item";
 

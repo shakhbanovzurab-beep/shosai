@@ -25,6 +25,9 @@
   },
   "actionsFor": "{name} के लिए कार्रवाइयां",
   "errors": {
-    "backendUnreachable": "सर्वर से कनेक्ट नहीं किया जा सका। थोड़ी देर बाद फिर से कोशिश करें।"
+    "backendUnreachable": "सर्वर से कनेक्ट नहीं किया जा सका। थोड़ी देर बाद फिर से कोशिश करें।",
+    "requestId": "अनुरोध ID: {id}",
+    "copyRequestId": "अनुरोध ID कॉपी करें",
+    "requestIdCopied": "अनुरोध ID कॉपी हो गई"
   }
 }

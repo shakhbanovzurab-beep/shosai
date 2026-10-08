@@ -1,6 +1,7 @@
+import { describe, it } from "vitest";
+
 import { dayFromToday, dayPeriod, daysAgo } from "./days";
 import assert from "node:assert/strict";
-import { describe, it } from "node:test";
 
 const NOW = Date.UTC(2026, 9, 7, 23, 30);
 

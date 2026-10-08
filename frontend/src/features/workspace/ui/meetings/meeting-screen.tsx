@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import {
   ArrowLeft,
   CalendarDays,
@@ -12,14 +10,15 @@ import {
   ShieldQuestion,
   Users,
 } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { NoteTranscript } from "@/features/notes";
+import { NoteTranscript } from "@/features/notes/ui/note-transcript";
 import { useNow } from "@/hooks/use-now";
+import { Link } from "@/lib/navigation";
 
 import type { TeamMeetingDetail } from "../../domain/content-contract";
 import { projectPath } from "../../domain/paths";

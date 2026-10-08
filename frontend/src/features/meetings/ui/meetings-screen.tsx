@@ -2,12 +2,12 @@
 
 import type { ReactNode } from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MeetingAllowance } from "@/features/upgrade";
-import { SharedMeetingsList, SharedMeetingsNav } from "@/features/workspace";
+import { MeetingAllowance } from "@/features/upgrade/ui/meeting-allowance";
+import { SharedMeetingsList, SharedMeetingsNav } from "@/features/workspace/ui/personal/shared-meetings";
 import { useNow } from "@/hooks/use-now";
 
 import { bucketMeetings, type MeetingsView } from "../domain/meeting";

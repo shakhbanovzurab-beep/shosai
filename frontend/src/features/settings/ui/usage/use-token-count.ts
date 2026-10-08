@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 /** Token counts for people, in the interface language: "1.3M tokens", "1,3 млн токенов". */
 export function useTokenCount() {

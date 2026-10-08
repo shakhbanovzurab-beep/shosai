@@ -1,7 +1,8 @@
 "use client";
 
 import { useSidebar } from "@/components/ui/sidebar";
-import { type SidebarPreferences, useSidebarPreferences } from "@/features/preferences";
+import type { SidebarPreferences } from "@/features/preferences/domain/sidebar-preferences";
+import { useSidebarPreferences } from "@/features/preferences/model/preferences-provider";
 
 import { SidebarToggleButton } from "../sidebar/sidebar-toggle-button";
 

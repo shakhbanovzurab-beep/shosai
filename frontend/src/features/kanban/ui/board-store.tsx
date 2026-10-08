@@ -2,7 +2,7 @@
 
 import { createContext, type Dispatch, type ReactNode, type SetStateAction, use, useState } from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { NameDialog, type NameRequest } from "@/components/name-dialog";
 

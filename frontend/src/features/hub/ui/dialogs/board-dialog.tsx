@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 
-import Link from "next/link";
-
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +17,8 @@ import {
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useBoards } from "@/features/kanban";
+import { useBoards } from "@/features/kanban/model/boards-resource";
+import { Link } from "@/lib/navigation";
 
 import type { Hub } from "../../domain/contract";
 import { boardPath } from "../../domain/paths";

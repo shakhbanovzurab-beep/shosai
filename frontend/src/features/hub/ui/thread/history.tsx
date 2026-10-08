@@ -1,8 +1,8 @@
-import Link from "next/link";
+import { useTranslations } from "use-intl";
 
-import { useTranslations } from "next-intl";
+import { Link } from "@/lib/navigation";
 
-import type { ThreadDetail } from "../../domain/contract";
+import type { ThreadDetail } from "../../domain/contract-threads";
 import { meetingPath } from "../../domain/paths";
 import { historySummary, rounds } from "../../domain/phrases";
 import { useHubPhrases } from "../shared/phrases";

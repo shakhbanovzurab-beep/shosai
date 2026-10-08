@@ -2,15 +2,14 @@
 
 import { useState } from "react";
 
-import Link from "next/link";
-
 import { FilterX, Settings2, Share2, Video } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNow } from "@/hooks/use-now";
+import { Link } from "@/lib/navigation";
 
 import { filterMeetings, groupByRecency, type LibraryQuery, librarySearch } from "../../domain/library";
 import { visibleTeams } from "../../domain/people";

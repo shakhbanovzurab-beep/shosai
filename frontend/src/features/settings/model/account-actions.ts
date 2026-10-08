@@ -3,6 +3,7 @@
 import { toast } from "sonner";
 
 import { formatBytes } from "@/i18n/format-units";
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 
 import { settingsApi } from "../api/settings-api";
@@ -20,7 +21,7 @@ export async function saveSettings(patch: SettingsPatch, t: SettingsWords) {
     settingsResource.update(() => saved);
   } catch (error) {
     if (before.status === "ready") settingsResource.update(() => before.data);
-    toast.error(t("saveFailed"), { description: errorMessage(error) });
+    toast.error(t("saveFailed"), { description: apiErrorDescription(error) });
     throw error;
   }
 }
@@ -47,7 +48,7 @@ export async function removeAvatar(t: SettingsWords) {
     const saved = await settingsApi.removeAvatar();
     settingsResource.update(() => saved);
   } catch (error) {
-    toast.error(t("avatar.removeFailed"), { description: errorMessage(error) });
+    toast.error(t("avatar.removeFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -58,6 +59,6 @@ export async function deleteAccount(confirmEmail: string, t: SettingsWords) {
     toast.success(t("deleteAccount.deleted"));
     window.location.assign("/");
   } catch (error) {
-    toast.error(t("deleteAccount.failed"), { description: errorMessage(error) });
+    toast.error(t("deleteAccount.failed"), { description: apiErrorDescription(error) });
   }
 }

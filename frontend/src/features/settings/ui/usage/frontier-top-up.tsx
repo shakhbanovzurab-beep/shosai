@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 
 import { cn } from "cn";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";

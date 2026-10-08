@@ -1,4 +1,4 @@
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "use-intl";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -14,7 +14,7 @@ function installerType(platform: DesktopPlatform, downloads: DesktopDownloads) {
   return fileType(orderBuilds(platform, release.files).primary.file_name) || fallback;
 }
 
-type Words = Awaited<ReturnType<typeof getTranslations<"download">>>;
+type Words = ReturnType<typeof useTranslations<"download">>;
 
 function steps(t: Words, platform: DesktopPlatform, type: string) {
   if (platform === "macos")
@@ -23,8 +23,8 @@ function steps(t: Words, platform: DesktopPlatform, type: string) {
 }
 
 /** Three steps from download to the first meeting, for the visitor's platform first. */
-export async function InstallSteps({ downloads, initial }: { downloads: DesktopDownloads; initial: DesktopPlatform }) {
-  const t = await getTranslations("download");
+export function InstallSteps({ downloads, initial }: { downloads: DesktopDownloads; initial: DesktopPlatform }) {
+  const t = useTranslations("download");
   return (
     <section aria-labelledby="install-steps" className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">

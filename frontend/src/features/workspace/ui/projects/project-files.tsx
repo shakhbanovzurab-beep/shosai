@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import type { Project } from "../../domain/contract";
 import { useKnowledge, useResources, useWorkspace } from "../../model/use-workspace";

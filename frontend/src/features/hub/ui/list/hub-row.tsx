@@ -1,9 +1,8 @@
-import Link from "next/link";
-
 import { CircleCheck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
+import { Link } from "@/lib/navigation";
 
 import type { Hub } from "../../domain/contract";
 import { hubPath } from "../../domain/paths";

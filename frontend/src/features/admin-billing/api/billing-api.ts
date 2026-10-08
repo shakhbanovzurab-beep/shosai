@@ -1,4 +1,4 @@
-import { apiRequest, jsonBody } from "@/lib/api-client";
+import { apiRequest, jsonBody } from "@/lib/api/request";
 
 import type { BillingOverview, RefundRequest, RefundResponse, TransactionsResponse } from "../domain/contract";
 

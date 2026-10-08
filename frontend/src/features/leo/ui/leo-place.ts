@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import type { useTranslations } from "next-intl";
+import type { useTranslations } from "use-intl";
 
 import type { LeoContext } from "../domain/context";
 

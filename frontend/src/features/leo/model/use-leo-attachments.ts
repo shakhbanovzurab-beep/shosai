@@ -2,8 +2,8 @@
 
 import * as React from "react";
 
-import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useLocale, useTranslations } from "use-intl";
 
 import { formatBytes } from "@/i18n/format-units";
 

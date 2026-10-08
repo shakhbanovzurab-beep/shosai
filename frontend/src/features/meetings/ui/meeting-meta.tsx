@@ -1,7 +1,7 @@
 import { cn } from "cn";
 import { Command, MapPin, Users, Video } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
 import { siGooglemeet } from "simple-icons";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { SimpleIcon } from "@/components/simple-icon";
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@/components/ui/avatar";

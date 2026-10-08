@@ -16,7 +16,7 @@ import {
   Tag,
   Trash2,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { contextKit, type MenuKit } from "@/components/menu-kit";
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from "@/components/ui/context-menu";

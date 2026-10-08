@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
 
 import { notesApi } from "../api/notes-api";
@@ -41,7 +41,7 @@ export function reportSaveFailure(
 ) {
   toast.error(t("myNotes.saveFailed"), {
     id: `my-notes-${noteId}`,
-    description: errorMessage(error),
+    description: apiErrorDescription(error),
     action: { label: common("actions.retry"), onClick: retry },
   });
 }

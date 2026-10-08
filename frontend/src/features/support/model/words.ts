@@ -1,4 +1,4 @@
-import type { useTranslations } from "next-intl";
+import type { useTranslations } from "use-intl";
 
 /*
  * The catalog the model's actions word their toasts with. Actions are plain functions, so the Client

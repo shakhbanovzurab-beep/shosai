@@ -4,18 +4,14 @@ import { useRef, useState } from "react";
 
 import { cn } from "cn";
 import { CloudUpload, FolderSearch } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  LEO_EXTENSIONS,
-  LEO_MAX_FILE_BYTES,
-  MAX_FILES_PER_UPLOAD,
-  uploadFiles,
-  useFileActionWords,
-} from "@/features/file-manager";
+import { LEO_EXTENSIONS, LEO_MAX_FILE_BYTES, MAX_FILES_PER_UPLOAD } from "@/features/file-manager/domain/contract";
+import { uploadFiles } from "@/features/file-manager/model/file-actions";
+import { useFileActionWords } from "@/features/file-manager/model/words";
 import { formatBytes } from "@/i18n/format-units";
 
 import { triage } from "../model/leo-files";

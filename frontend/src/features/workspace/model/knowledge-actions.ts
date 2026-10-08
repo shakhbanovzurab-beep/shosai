@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import type {
   ConnectSourceRequest,
@@ -74,7 +74,7 @@ export async function changeKnowledge(ws: string, item: KnowledgeItem, update: K
   } catch (error) {
     toast.error(
       words((t) => t("toasts.knowledgeChangeFailed")),
-      { description: errorMessage(error) },
+      { description: apiErrorDescription(error) },
     );
     return false;
   }
@@ -97,7 +97,7 @@ export async function removeKnowledge(ws: string, item: KnowledgeItem) {
   } catch (error) {
     toast.error(
       words((t) => t("toasts.knowledgeRemoveFailed")),
-      { description: errorMessage(error) },
+      { description: apiErrorDescription(error) },
     );
     return false;
   }
@@ -114,7 +114,7 @@ export async function shareFile(ws: string, request: ShareFileRequest, phrase: R
   } catch (error) {
     toast.error(
       words((t) => t("toasts.shareFileFailed")),
-      { description: errorMessage(error) },
+      { description: apiErrorDescription(error) },
     );
     return false;
   }
@@ -156,7 +156,7 @@ export async function unshareFile(ws: string, itemId: string, name: string) {
   } catch (error) {
     toast.error(
       words((t) => t("toasts.unshareFileFailed")),
-      { description: errorMessage(error) },
+      { description: apiErrorDescription(error) },
     );
     return false;
   }

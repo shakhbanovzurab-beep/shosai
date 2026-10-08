@@ -1,10 +1,9 @@
-import Link from "next/link";
-
 import { cn } from "cn";
 import { ArrowRight, Clock, ListChecks } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@/components/ui/avatar";
+import { Link } from "@/lib/navigation";
 import { getInitials } from "@/lib/utils";
 
 import { formatClock } from "../domain/format";

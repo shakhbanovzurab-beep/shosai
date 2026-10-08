@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
-
 import { Building2, CircleAlert, FolderKanban, UserRoundMinus } from "lucide-react";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { formatBytes } from "@/i18n/format-units";
+import { Link } from "@/lib/navigation";
 
 import type { Member, Project, Team } from "../../domain/contract";
 import type { KnowledgeItem } from "../../domain/knowledge-contract";

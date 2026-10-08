@@ -1,6 +1,6 @@
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { studioApi } from "../api/studio-api";
 import type { RoleModelSettings } from "../domain/contract";
@@ -23,6 +23,6 @@ export async function saveRoleSettings(next: RoleModelSettings, previous: RoleMo
     swap(await studioApi.updateRole(role, body));
   } catch (error) {
     swap(previous);
-    toast.error(t("models.saveFailed"), { description: errorMessage(error) });
+    toast.error(t("models.saveFailed"), { description: apiErrorDescription(error) });
   }
 }

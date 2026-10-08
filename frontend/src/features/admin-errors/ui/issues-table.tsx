@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
-
 import { ArrowDown, ArrowUp, ArrowUpDown, ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Link } from "@/lib/navigation";
 
 import type { ErrorIssue } from "../domain/contract";
 import type { IssueSort } from "../domain/dimensions";

@@ -1,13 +1,12 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { Ellipsis } from "lucide-react";
 
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { lazyComponent } from "@/lib/lazy-component";
 
-const RealtimeVisitorsChart = dynamic(
+const RealtimeVisitorsChart = lazyComponent(
   () => import("./realtime-visitors-chart").then((chartModule) => chartModule.RealtimeVisitorsChart),
   { loading: () => <Skeleton className="h-36 w-full" /> },
 );

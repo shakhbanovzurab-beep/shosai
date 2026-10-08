@@ -1,13 +1,12 @@
 "use client";
 
-import Link from "next/link";
-
 import { CalendarPlus, ChevronDown, Plus, Upload } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
+import { Link } from "@/lib/navigation";
 
 /**
  * Meetings are planned in Calendar and recordings are added in Notes, so the primary action hands off

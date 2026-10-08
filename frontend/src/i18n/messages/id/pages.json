@@ -31,5 +31,10 @@
     "metaTitle": "Tidak ada akses",
     "title": "Anda tidak memiliki akses",
     "description": "Anda tidak memiliki izin untuk melihat halaman ini. Jika menurut Anda ini keliru, hubungi administrator Anda."
+  },
+  "error": {
+    "title": "Halaman ini tidak termuat",
+    "description": "Terjadi masalah di pihak kami. Muat ulang halaman atau coba lagi sebentar lagi.",
+    "reload": "Muat ulang halaman"
   }
 }

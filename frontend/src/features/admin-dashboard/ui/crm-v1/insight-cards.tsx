@@ -1,20 +1,19 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { lazyComponent } from "@/lib/lazy-component";
 
 import { leadsBySourceChartData } from "../../data/crm-v1/charts";
 import { leadsBySourceChartConfig } from "./chart-configs";
 
-const LeadsBySourceChart = dynamic(
+const LeadsBySourceChart = lazyComponent(
   () => import("./insight-charts").then((chartModule) => chartModule.LeadsBySourceChart),
   { loading: () => <Skeleton className="mx-auto aspect-square max-h-48 flex-1 rounded-full" /> },
 );
 
-const ProjectRevenueChart = dynamic(
+const ProjectRevenueChart = lazyComponent(
   () => import("./insight-charts").then((chartModule) => chartModule.ProjectRevenueChart),
   { loading: () => <Skeleton className="size-full min-h-40" /> },
 );

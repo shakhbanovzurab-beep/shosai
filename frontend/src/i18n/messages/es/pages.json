@@ -31,5 +31,10 @@
     "metaTitle": "Sin acceso",
     "title": "No tienes acceso",
     "description": "No tienes permiso para ver esta página. Si crees que es un error, contacta a tu administrador."
+  },
+  "error": {
+    "title": "Esta página no se cargó",
+    "description": "Algo salió mal por nuestra parte. Vuelve a cargar la página o inténtalo de nuevo en un momento.",
+    "reload": "Volver a cargar"
   }
 }

@@ -3,8 +3,8 @@
 import { useState, useTransition } from "react";
 
 import { Copy, CornerDownRight, Ellipsis, RefreshCw } from "lucide-react";
-import { useFormatter, useNow, useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";

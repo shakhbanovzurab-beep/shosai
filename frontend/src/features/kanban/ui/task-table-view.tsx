@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "cn";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";

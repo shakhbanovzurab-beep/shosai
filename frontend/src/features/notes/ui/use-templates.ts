@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { useCreatedTemplates } from "../model/templates-store";
 import { enhancedTemplate, sampleTemplates } from "./template-words";

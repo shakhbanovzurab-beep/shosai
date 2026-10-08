@@ -2,13 +2,11 @@
 
 import { type ReactElement, useState } from "react";
 
-import dynamic from "next/dynamic";
-
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
+import { lazyComponent } from "@/lib/lazy-component";
 
-const EmojiPickerPanel = dynamic(() => import("./emoji-picker-panel"), {
-  ssr: false,
+const EmojiPickerPanel = lazyComponent(() => import("./emoji-picker-panel"), {
   loading: () => <Skeleton className="h-80 w-[17rem]" />,
 });
 

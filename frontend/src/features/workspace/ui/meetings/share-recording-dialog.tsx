@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,7 +17,7 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { FieldDescription, FieldLabel } from "@/components/ui/field-text";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
-import { meetingNotes } from "@/features/notes";
+import { meetingNotes } from "@/features/notes/data/meeting-notes";
 
 import { parseVisibilityKey, visibilityKey } from "../../domain/visibility";
 import { shareRecording } from "../../model/meeting-actions";

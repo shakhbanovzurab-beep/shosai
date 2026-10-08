@@ -4,7 +4,8 @@ import { toast } from "sonner";
 
 import { hubApi } from "../api/hub-api";
 import { errorCode } from "../api/hub-request";
-import { DISMISS_DAYS, type Loaded, type ThreadSummary } from "../domain/contract";
+import { DISMISS_DAYS, type Loaded } from "../domain/contract";
+import type { ThreadSummary } from "../domain/contract-threads";
 import { hubThreads, refreshAfterThreadChange, threadDetails } from "./resources";
 import { type ActionWords, errorText } from "./words";
 

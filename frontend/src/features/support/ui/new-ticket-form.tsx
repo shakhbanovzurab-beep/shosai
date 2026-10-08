@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 
 import { X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

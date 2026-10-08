@@ -1,15 +1,14 @@
 "use client";
 
-import Link from "next/link";
-
 import { useDroppable } from "@dnd-kit/react";
 import { cn } from "cn";
 import { Clock, Folder, FolderOpen } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatBytes } from "@/i18n/format-units";
+import { Link } from "@/lib/navigation";
 
 import type { FileFolder } from "../domain/contract";
 import type { FileManagerView } from "../domain/files";

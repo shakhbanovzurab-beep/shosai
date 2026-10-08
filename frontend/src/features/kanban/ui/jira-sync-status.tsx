@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 
 import { CircleAlert, ExternalLink, RefreshCw } from "lucide-react";
-import { useFormatter, useNow, useTranslations } from "next-intl";
+import { useFormatter, useNow, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";

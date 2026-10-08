@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "@/lib/navigation";
 
 import { type IssuesQuery, issuesQueryToParams, parseIssuesQuery } from "../domain/query";
 

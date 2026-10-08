@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
-
 import { CircleArrowUp, Download, EllipsisVertical, Languages, LifeBuoy, LogOut, Settings } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -21,9 +19,11 @@ import {
 } from "@/components/ui/dropdown-menu-items";
 import { DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger } from "@/components/ui/dropdown-menu-sub";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
-import { useAccountProfile, useOpenSettings } from "@/features/settings";
+import { useOpenSettings } from "@/features/settings/model/dialog-store";
+import { useAccountProfile } from "@/features/settings/model/settings-hooks";
 import { useSwitchLanguage } from "@/hooks/use-switch-language";
 import { LANGUAGES } from "@/lib/language";
+import { Link } from "@/lib/navigation";
 import { getInitials } from "@/lib/utils";
 
 import type { Panel } from "../../domain/panel";

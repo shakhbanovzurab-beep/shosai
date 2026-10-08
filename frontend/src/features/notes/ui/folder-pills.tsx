@@ -2,14 +2,13 @@
 
 import * as React from "react";
 
-import Link from "next/link";
-
 import { cn } from "cn";
 import { Pencil, Plus, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { ContextMenuItem } from "@/components/ui/context-menu-items";
+import { Link } from "@/lib/navigation";
 
 import { buildNotesHref, type NotesView } from "../domain/notes-href";
 import type { NoteFolder } from "../domain/types";

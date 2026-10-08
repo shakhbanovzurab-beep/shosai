@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 
 import { Link2, Search, Upload } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";

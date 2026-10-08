@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { plansApi } from "../api/plans-api";
 import { type PromoCode, type PromoCodeDraft, promoStatus, todayIso } from "../domain/contract";
@@ -29,7 +29,7 @@ export async function setPromoActive(promo: PromoCode, is_active: boolean) {
     toast.success(is_active ? `Промокод ${promo.code} включён` : `Промокод ${promo.code} отключён`);
   } catch (error) {
     putPromo(promo);
-    toast.error(`Не удалось изменить промокод ${promo.code}`, { description: errorMessage(error) });
+    toast.error(`Не удалось изменить промокод ${promo.code}`, { description: apiErrorDescription(error) });
   }
 }
 
@@ -41,7 +41,7 @@ export async function removePromo(promo: PromoCode): Promise<boolean> {
     toast.success(`Промокод ${promo.code} удалён`);
     return true;
   } catch (error) {
-    toast.error(`Не удалось удалить промокод ${promo.code}`, { description: errorMessage(error) });
+    toast.error(`Не удалось удалить промокод ${promo.code}`, { description: apiErrorDescription(error) });
     return false;
   }
 }

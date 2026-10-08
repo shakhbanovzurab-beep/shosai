@@ -1,10 +1,9 @@
-import Link from "next/link";
-
 import { X } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/i18n/format-units";
+import { Link } from "@/lib/navigation";
 
 import type { MeetingNote, NoteFolder, PendingRecording } from "../domain/types";
 import { Duration, FolderBadge, MeetingStart, OpenItems, Participants } from "./note-card";

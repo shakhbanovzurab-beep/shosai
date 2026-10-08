@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { Input } from "@/components/ui/input";
 import { useAutosave } from "@/hooks/use-autosave";

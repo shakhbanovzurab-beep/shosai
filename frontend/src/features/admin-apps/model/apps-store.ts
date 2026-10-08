@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
-import { errorMessage } from "@/lib/errors";
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { createPollingResource, type ResourceState } from "@/lib/polling-resource";
 
 import { appsApi } from "../api/apps-api";
@@ -31,7 +31,7 @@ async function patch(release: AppRelease, change: ReleasePatch, success: string,
     toast.success(success);
     return true;
   } catch (error) {
-    toast.error(failure, { description: errorMessage(error) });
+    toast.error(failure, { description: apiErrorDescription(error) });
     return false;
   }
 }
@@ -56,6 +56,6 @@ export async function deleteDraft(release: AppRelease) {
     releasesResource.update((data) => ({ ...data, releases: data.releases.filter((r) => r.id !== release.id) }));
     toast.success(`Черновик ${release.version} удалён`);
   } catch (error) {
-    toast.error("Не удалось удалить черновик", { description: errorMessage(error) });
+    toast.error("Не удалось удалить черновик", { description: apiErrorDescription(error) });
   }
 }

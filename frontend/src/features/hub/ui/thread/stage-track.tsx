@@ -1,8 +1,8 @@
 import { cn } from "cn";
 import { Check } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
-import type { ThreadStage, ThreadTransition } from "../../domain/contract";
+import type { ThreadStage, ThreadTransition } from "../../domain/contract-threads";
 import { STAGE_PATH } from "../../domain/urgency";
 import { useHubPhrases } from "../shared/phrases";
 

@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 
+import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
 
 import { settingsApi } from "../api/settings-api";
@@ -29,7 +30,7 @@ export async function toggleMcpServer(server: McpServer, enabled: boolean, t: Mc
     replace(await settingsApi.setMcpEnabled(server.id, enabled));
   } catch (error) {
     replace(server);
-    toast.error(t("toggleFailed"), { description: errorMessage(error) });
+    toast.error(t("toggleFailed"), { description: apiErrorDescription(error) });
   }
 }
 
@@ -39,6 +40,6 @@ export async function removeMcpServer(server: McpServer, t: McpWords) {
     mcpResource.update((data) => ({ servers: data.servers.filter((s) => s.id !== server.id) }));
     toast.success(t("removed", { name: server.name }));
   } catch (error) {
-    toast.error(t("removeFailed"), { description: errorMessage(error) });
+    toast.error(t("removeFailed"), { description: apiErrorDescription(error) });
   }
 }

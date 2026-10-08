@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import type { Visibility } from "../../domain/content-contract";
 import type { Member, Team } from "../../domain/contract";

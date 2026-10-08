@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 interface FolderNameInputProps {
   readonly initialName: string;

@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
-
 import { SearchX } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Link } from "@/lib/navigation";
 
 import type { AdminWorkspace } from "../domain/contract";
 import { formatFullDateTime, formatMoney, formatNumber, formatRelative } from "../domain/format";

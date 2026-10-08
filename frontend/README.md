@@ -1,121 +1,47 @@
-# Next.js Admin Template with TypeScript & Shadcn UI
+# Whisperer cabinet
 
-**Studio Admin** - Includes multiple dashboards, authentication layouts, customizable theme presets, and more.
+The signed-in web application of Whisperer: the user panel (`/app/*`) and the admin panel (`/admin/*`). A Vite
+single-page app and installable PWA; the public site lives in `site/` ([ADR 0021](../docs/adr/0021-public-site-on-nextjs-cabinet-on-vite.md)).
+The backend is the FastAPI API in `backend/`; the cabinet owns no API.
 
-Most admin templates I found, free or paid, felt cluttered, outdated, or too rigid. I built this as a cleaner alternative with features often missing in others, such as theme toggling and layout controls, while keeping the design modern, minimal, and flexible.
+## Stack
 
-## Features
+React 19.3 with React Compiler, TypeScript, Vite, React Router, TanStack Query, Zustand, `use-intl` (16
+languages), Tailwind CSS v4 and shadcn/ui, MSW for development mocks, Vitest, Biome. Versions are pinned in
+`package-lock.json`; `.npmrc` takes only releases at least 7 days old.
 
-- Built with Next.js 16, TypeScript, Tailwind CSS v4, and Shadcn UI  
-- Responsive and mobile-friendly  
-- Customizable theme presets (light/dark modes with color schemes like Tangerine, Brutalist, and more)  
-- Flexible layouts (collapsible sidebar, variable content widths)  
-- Authentication flows and screens  
-- Prebuilt dashboards (Default, CRM, Finance, Analytics, Productivity) plus legacy variants  
-- Role-Based Access Control (RBAC) with config-driven UI and multi-tenant support *(planned)*  
+## Run locally
 
-> [!NOTE]
-> The default dashboard uses the **shadcn neutral** theme.  
-> It also includes additional color presets inspired by [Tweakcn](https://tweakcn.com):  
->
-> - Tangerine  
-> - Neo Brutalism  
-> - Soft Pop  
->
-> You can create more presets by following the same structure as the existing ones.
-
-## Tech Stack
-
-- **Framework**: Next.js 16 (App Router), TypeScript, Tailwind CSS v4  
-- **UI Components**: Shadcn UI  
-- **Validation**: Zod  
-- **Forms & State Management**: React Hook Form, Zustand  
-- **Tables & Data Handling**: TanStack Table  
-- **Tooling & DX**: Biome, Husky  
-
-## Screens
-
-### Available
-- Default Dashboard  
-- CRM Dashboard  
-- Finance Dashboard  
-- Analytics Dashboard  
-- Productivity Dashboard  
-- E-commerce Dashboard  
-- Academy Dashboard  
-- Logistics Dashboard  
-- Infrastructure Dashboard  
-- File Manager  
-- Patient Monitoring  
-- Chat Page  
-- Email Page  
-- Profile  
-- Users Management  
-- Roles Management  
-- Kanban Board  
-- Tasks Page  
-- Invoice Page  
-- Calendar Page  
-- Authentication (4 screens)  
-- Legacy: Default v1, CRM v1, Finance v1, Analytics v1
-
-### Planned
-I’ve added all the planned screens. Feel free to open an issue for requesting something specific.
-
-## Feature-Sliced Architecture
-
-Business code is organised by capability, not by technical layer: each feature is a vertical slice in
-`src/features/<slice>/` with its own domain logic, data access, state, UI and route handlers, layered by
-Clean Architecture rules. `src/app/` only routes to slices, and shared UI, hooks and utilities that know
-nothing about the business live at the top level.
-
-See [docs/architecture.md](docs/architecture.md) for the rules; `npm run lint:architecture` checks them.
-
-## Getting Started
-
-### Run locally
-
-From the project root:
-
-1. **Install dependencies**
-   ```bash
-    npm install
-   ```
-
-2. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-Your app will be running at [http://localhost:3000](http://localhost:3000)
-
-### Site address
-
-Set `SITE_URL` to the site's public address, for example in `.env.production.local`:
+Node.js from `.nvmrc`.
 
 ```bash
-SITE_URL=https://example.com
+npm ci
+npm run dev        # http://localhost:3000/app/ — the sample API answered by mocks in the browser
+npm run dev:api    # the same, calling the local backend (BACKEND_URL, default http://localhost:8000) instead
 ```
 
-It is read at build time for the sitemap, the `Sitemap` line in robots.txt and absolute Open Graph image URLs.
-Without it the sitemap is empty, robots.txt has no `Sitemap` line and Open Graph images point to `localhost`.
+The admin panel opens at `/admin/dashboard`. Mocks never reach a production build.
 
-### Formatting and Linting
+## Scripts
 
-Format, lint, and organize imports
-```bash
-npx @biomejs/biome check --write
-```
-> For more information on available rules, fixes, and CLI options, refer to the [Biome documentation](https://biomejs.dev/).
+| Script | What it does |
+|---|---|
+| `typecheck` | Generates the message types, then `tsc --noEmit` |
+| `test` | Vitest: unit tests, the architecture check, the i18n check, OpenAPI types in sync |
+| `build` | `vite build` into `dist/`, then the bundle check (no mocks, no source maps, CSP hashes present) |
+| `doctor` | react-doctor; the CI gate is `npm run doctor -- --score` = 100 |
+| `api:types` | Generates `src/lib/api/generated/schema.d.ts` from `../backend/openapi.json` |
+| `i18n:check`, `i18n:rtl-smoke` | The i18n check alone; the right-to-left smoke run against a running cabinet |
+| `check`, `check:fix` | Biome lint and format |
 
----
+## Deploying
 
-> [!IMPORTANT]  
-> This project is updated frequently. If you’re working from a fork or an older clone, pull the latest changes before syncing. Some updates may include breaking changes.
+`dist/` is static: the edge serves it under `/app/` and answers `index.html` for the cabinet's paths
+(`tooling/cabinet-paths.ts`), with `X-Robots-Tag: noindex`, long-lived caching of `/app/assets/*` and a CSP that
+allows the inline boot scripts by the hashes in `dist/csp-hashes.json`.
 
----
+## Documentation
 
-Contributions are welcome. Feel free to open issues, feature requests, or start a discussion.
-
-
-**Happy Vibe Coding!**
+- [docs/architecture.md](docs/architecture.md) — structure, slices, routing, data, the checks that enforce them
+- [docs/i18n.md](docs/i18n.md) and [src/i18n/GLOSSARY.md](src/i18n/GLOSSARY.md) — languages and wording
+- `docs/<slice>-api.md` — the sample API each slice calls until its backend endpoints exist

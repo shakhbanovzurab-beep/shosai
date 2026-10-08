@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { HUB_NAME_MAX, HUB_NAME_MIN } from "../domain/contract";
 import type { HubErrorCode } from "../domain/errors";

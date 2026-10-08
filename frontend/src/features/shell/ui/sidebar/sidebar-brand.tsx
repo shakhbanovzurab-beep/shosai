@@ -2,14 +2,13 @@
 
 import type { ReactNode } from "react";
 
-import Link from "next/link";
-
 import { Command } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "use-intl";
 
 import { useSidebar } from "@/components/ui/sidebar";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
 import { APP_CONFIG } from "@/config/app-config";
+import { Link } from "@/lib/navigation";
 
 import { SidebarToggleButton } from "./sidebar-toggle-button";
 import { SidebarToggleIcon } from "./sidebar-toggle-icon";

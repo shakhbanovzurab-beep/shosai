@@ -3,8 +3,8 @@
 import { useState } from "react";
 
 import { addHours, differenceInCalendarDays, startOfDay } from "date-fns";
-import { useTranslations } from "next-intl";
 import { toast } from "sonner";
+import { useTranslations } from "use-intl";
 
 import { demoEvents } from "../data/demo-events";
 import { type CalendarEvent, type EventSlot, shiftEvent } from "../domain/calendar-event";
