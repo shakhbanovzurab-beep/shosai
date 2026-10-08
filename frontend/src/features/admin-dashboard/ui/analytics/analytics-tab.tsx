@@ -8,7 +8,7 @@ import { TopTrafficSources } from "./top-traffic-sources";
 import { TrafficQuality } from "./traffic-quality";
 
 // Import this stylesheet in any page or component that renders country flag classes.
-import "@/styles/flag-icons/flags.css";
+import "country-flag-icons/3x2/flags.css";
 
 const COMING_SOON = [
   { value: "audience", label: "Аудитория" },

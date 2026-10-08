@@ -1,6 +1,7 @@
 "use client";
 
-import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
+import { Field, FieldContent } from "@/components/ui/field";
+import { FieldDescription, FieldError, FieldLabel } from "@/components/ui/field-text";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";

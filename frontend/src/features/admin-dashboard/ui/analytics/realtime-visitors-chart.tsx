@@ -1,6 +1,7 @@
 "use client";
 
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { type ChartConfig, ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import { realtimeData } from "../../data/analytics/realtime-visitors";
 import { Bar, BarChart, type BarShapeProps, XAxis, YAxis } from "../chart-primitives";

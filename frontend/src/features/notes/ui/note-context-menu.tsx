@@ -12,16 +12,16 @@ import { toast } from "sonner";
 import {
   ContextMenu,
   ContextMenuContent,
-  ContextMenuItem,
   ContextMenuRadioGroup,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import {
+  ContextMenuItem,
   ContextMenuRadioItem,
   ContextMenuSeparator,
   ContextMenuShortcut,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu";
+} from "@/components/ui/context-menu-items";
+import { ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger } from "@/components/ui/context-menu-sub";
 import { copyText } from "@/lib/copy-text";
 
 import { EXPORT_FORMATS } from "../domain/transcript-export";

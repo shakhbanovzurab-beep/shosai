@@ -7,7 +7,8 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { useDirection } from "@/components/ui/direction";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar";
+import { Sidebar } from "@/components/ui/sidebar-panel";
+import { SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar-sections";
 import { APP_CONFIG } from "@/config/app-config";
 import { useSidebarPreferences } from "@/features/preferences";
 import {

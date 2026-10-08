@@ -9,12 +9,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SidebarMenuButton } from "@/components/ui/sidebar";
+import { DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
+import { SidebarMenuButton } from "@/components/ui/sidebar-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import type { WorkspaceSummary } from "../../domain/contract";

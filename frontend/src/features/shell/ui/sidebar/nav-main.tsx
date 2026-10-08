@@ -2,14 +2,14 @@
 
 import { usePathname } from "next/navigation";
 
+import { useSidebar } from "@/components/ui/sidebar";
+import { SidebarMenu } from "@/components/ui/sidebar-menu";
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarMenu,
   SidebarSeparator,
-  useSidebar,
-} from "@/components/ui/sidebar";
+} from "@/components/ui/sidebar-sections";
 
 import type { NavGroup, NavMainItem, NavMainParentItem } from "../navigation";
 import { NavLinkItem } from "./nav-link-item";

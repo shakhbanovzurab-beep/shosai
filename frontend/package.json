@@ -20,7 +20,7 @@
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./src/scripts/test-hooks.mjs --test \"src/**/*.test.ts\"",
     "prepare": "husky",
     "generate:presets": "ts-node -P tsconfig.scripts.json src/scripts/generate-theme-presets.ts",
-    "doctor": "react-doctor --verbose"
+    "doctor": "REACT_DOCTOR_NO_TELEMETRY=1 react-doctor --verbose"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
@@ -28,7 +28,6 @@
     ]
   },
   "dependencies": {
-    "@base-ui/react": "^1.8.0",
     "@dnd-kit/abstract": "^0.5.0",
     "@dnd-kit/helpers": "^0.5.0",
     "@dnd-kit/react": "^0.5.0",
@@ -45,8 +44,8 @@
     "class-variance-authority": "^0.7.1",
     "cmdk": "^1.1.1",
     "cn": "^0.4.0",
+    "country-flag-icons": "1.6.20",
     "date-fns": "^4.4.0",
-    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^14.0.0",
     "frimousse": "^0.4.0",
     "geist": "^1.7.2",

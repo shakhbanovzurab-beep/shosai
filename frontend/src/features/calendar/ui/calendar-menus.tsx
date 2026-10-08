@@ -15,7 +15,7 @@ import {
 import { useTranslations } from "next-intl";
 
 import { contextKit as K } from "@/components/menu-kit";
-import { ContextMenuLabel } from "@/components/ui/context-menu";
+import { ContextMenuLabel } from "@/components/ui/context-menu-items";
 
 import type { CalendarEvent, EventSlot } from "../domain/calendar-event";
 import type { CalendarActions } from "../model/use-calendar-events";

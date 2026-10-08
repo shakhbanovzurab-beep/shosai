@@ -5,16 +5,14 @@ import * as React from "react";
 import { FileText, Plus, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
+import { Attachment, AttachmentContent, AttachmentMedia } from "@/components/ui/attachment";
 import {
-  Attachment,
   AttachmentAction,
   AttachmentActions,
-  AttachmentContent,
   AttachmentDescription,
   AttachmentGroup,
-  AttachmentMedia,
   AttachmentTitle,
-} from "@/components/ui/attachment";
+} from "@/components/ui/attachment-parts";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from "@/components/ui/input-group";
 import { formatBytes } from "@/i18n/format-units";
 

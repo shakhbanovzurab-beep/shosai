@@ -6,7 +6,8 @@ import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
+import { Field } from "@/components/ui/field";
+import { FieldDescription, FieldError, FieldLabel } from "@/components/ui/field-text";
 import { Input } from "@/components/ui/input";
 
 import { HUB_NAME_MAX, HUB_NAME_MIN, type Hub } from "../../domain/contract";

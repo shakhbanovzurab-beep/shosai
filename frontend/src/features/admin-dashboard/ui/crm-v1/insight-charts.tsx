@@ -1,6 +1,7 @@
 "use client";
 
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import { leadsBySourceChartData, projectRevenueChartData } from "../../data/crm-v1/charts";
 import { Bar, BarChart, CartesianGrid, Label, LabelList, Pie, PieChart, XAxis, YAxis } from "../chart-primitives";

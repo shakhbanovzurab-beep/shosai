@@ -5,7 +5,8 @@ import { type FormEvent, useId, useState, useSyncExternalStore } from "react";
 import { Info } from "lucide-react";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldGroup } from "@/components/ui/field";
+import { FieldError, FieldLabel } from "@/components/ui/field-text";
 
 import { type AppPlatform, type AppRelease, ARCHS_BY_PLATFORM } from "../domain/contract";
 import { platformForFile } from "../domain/release-rules";

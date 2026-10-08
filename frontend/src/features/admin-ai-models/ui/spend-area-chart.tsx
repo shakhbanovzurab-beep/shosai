@@ -1,6 +1,7 @@
 "use client";
 
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { type ChartConfig, ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import type { DailySpend } from "../domain/contract";
 import { formatLongDate, formatShortDate, formatUsd } from "../domain/format";

@@ -1,6 +1,7 @@
 "use client";
 
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field } from "@/components/ui/field";
+import { FieldLabel } from "@/components/ui/field-text";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 type ChoiceProps<T extends string> = {

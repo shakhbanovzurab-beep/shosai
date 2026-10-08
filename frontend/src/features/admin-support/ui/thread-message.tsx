@@ -4,15 +4,13 @@ import type { ReactNode } from "react";
 
 import { Check, CheckCheck, CircleAlert, FileText, ImageIcon, Lock } from "lucide-react";
 
+import { Attachment, AttachmentContent, AttachmentMedia } from "@/components/ui/attachment";
 import {
-  Attachment,
-  AttachmentContent,
   AttachmentDescription,
   AttachmentGroup,
-  AttachmentMedia,
   AttachmentTitle,
   AttachmentTrigger,
-} from "@/components/ui/attachment";
+} from "@/components/ui/attachment-parts";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble";
 import { Button } from "@/components/ui/button";

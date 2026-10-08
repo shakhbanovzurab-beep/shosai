@@ -6,13 +6,8 @@ import { cn } from "cn";
 import { Braces } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem, DropdownMenuLabel } from "@/components/ui/dropdown-menu-items";
 import { Textarea } from "@/components/ui/textarea";
 
 import { PLACEHOLDERS } from "../domain/contract";

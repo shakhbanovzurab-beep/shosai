@@ -1,6 +1,7 @@
 "use client";
 
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import { leadsChartData, proposalsChartData, revenueChartData } from "../../data/crm-v1/charts";
 import { Area, AreaChart, Bar, BarChart, Line, LineChart, XAxis } from "../chart-primitives";

@@ -1,23 +1,11 @@
 import type { ComponentType, ReactNode } from "react";
 
-import {
-  ContextMenuCheckboxItem,
-  ContextMenuGroup,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
-} from "@/components/ui/context-menu";
-import {
-  DropdownMenuCheckboxItem,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ContextMenuGroup } from "@/components/ui/context-menu";
+import { ContextMenuCheckboxItem, ContextMenuItem, ContextMenuSeparator } from "@/components/ui/context-menu-items";
+import { ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger } from "@/components/ui/context-menu-sub";
+import { DropdownMenuGroup } from "@/components/ui/dropdown-menu";
+import { DropdownMenuCheckboxItem, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
+import { DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger } from "@/components/ui/dropdown-menu-sub";
 
 type WithChildren = { children?: ReactNode };
 

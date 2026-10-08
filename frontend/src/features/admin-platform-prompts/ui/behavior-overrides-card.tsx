@@ -2,15 +2,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-  FieldTitle,
-} from "@/components/ui/field";
+import { Field, FieldContent, FieldLegend, FieldSet } from "@/components/ui/field";
+import { FieldDescription, FieldLabel, FieldTitle } from "@/components/ui/field-text";
 
 import { OVERRIDABLE_SETTINGS } from "../domain/contract";
 import { useBehavior } from "../model/use-behavior";

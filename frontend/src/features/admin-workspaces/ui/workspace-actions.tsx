@@ -9,9 +9,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
 
 import type { AdminWorkspaceDetail } from "../domain/contract";
 import { formatNumber } from "../domain/format";

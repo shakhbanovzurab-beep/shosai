@@ -10,9 +10,9 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
 
 import { useWorkspace } from "../../model/use-workspace";
 import { AddKnowledgeDialog } from "./add-knowledge-dialog";

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { cn } from "cn";
 import { useTranslations } from "next-intl";
 
-import { SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
 
 import type { NavBadge, NavMainLinkItem } from "../navigation";
 import { NavIcon, navButtonClass } from "./nav-icon";

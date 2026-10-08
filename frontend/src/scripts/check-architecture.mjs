@@ -20,7 +20,7 @@ const INNER = {
 const FRAMEWORK = /^(react|react-dom|next|zustand|sonner|lucide-react|framer-motion|recharts|radix-ui|cmdk|vaul)(\/|$)/;
 const PURE_BANNED = /^@\/(components|hooks|server)\/|^@\/lib\/(api-client|polling-resource|copy-text|.*\.client)$/;
 // Vendored code, and the message-catalog type declarations next-intl generates (src/i18n/messages/en/*.d.json.ts).
-const LENGTH_EXEMPT = [/^src\/components\/(ui|calendar)\//, /^src\/styles\/flag-icons\//, /\.d\.json\.ts$/];
+const LENGTH_EXEMPT = [/\.d\.json\.ts$/];
 const SOURCE = /\.(ts|tsx|mjs|css)$/;
 const IMPORT =
   /(?:^|[\s;{}])(?:import|export)\s[^'"`;]*?from\s*["']([^"']+)["']|import\s*\(\s*["']([^"']+)["']\s*\)|^\s*import\s*["']([^"']+)["']/gm;

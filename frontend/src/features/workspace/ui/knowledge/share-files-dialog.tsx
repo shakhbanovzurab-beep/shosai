@@ -13,7 +13,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FieldError, FieldGroup } from "@/components/ui/field";
+import { FieldGroup } from "@/components/ui/field";
+import { FieldError } from "@/components/ui/field-text";
 import { Spinner } from "@/components/ui/spinner";
 
 import { parseAccessKey } from "../../domain/visibility";

@@ -7,7 +7,8 @@ import Link from "next/link";
 import { Command } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import { useSidebar } from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
 import { APP_CONFIG } from "@/config/app-config";
 
 import { SidebarToggleButton } from "./sidebar-toggle-button";

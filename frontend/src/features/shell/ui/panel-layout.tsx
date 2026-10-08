@@ -5,7 +5,8 @@ import { cookies } from "next/headers";
 import { cn } from "cn";
 import { getLocale } from "next-intl/server";
 
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarInset } from "@/components/ui/sidebar-panel";
 import { LeoWidget } from "@/features/leo";
 import { LayoutControls, readSidebarPreferences } from "@/features/preferences";
 import { SettingsDialog } from "@/features/settings";

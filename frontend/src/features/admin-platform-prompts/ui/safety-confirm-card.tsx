@@ -2,7 +2,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Field, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field";
+import { Field, FieldLegend, FieldSet } from "@/components/ui/field";
+import { FieldLabel } from "@/components/ui/field-text";
 
 import { CONFIRM_ACTIONS } from "../domain/contract";
 import { useSafety } from "../model/use-safety";

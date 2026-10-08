@@ -1,14 +1,9 @@
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { type ChartConfig, ChartContainer, ChartLegend, ChartTooltip } from "@/components/ui/chart";
+import { ChartLegendContent } from "@/components/ui/chart-legend";
+import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import type { LiveKitHistoryPoint } from "../domain/contract";
 import { formatInteger, formatMbps, formatTime } from "../domain/format";

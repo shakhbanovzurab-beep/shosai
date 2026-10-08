@@ -5,15 +5,13 @@ import { useRef } from "react";
 import { cn } from "cn";
 import { FileArchive, Upload, X } from "lucide-react";
 
+import { Attachment, AttachmentContent, AttachmentMedia } from "@/components/ui/attachment";
 import {
-  Attachment,
   AttachmentAction,
   AttachmentActions,
-  AttachmentContent,
   AttachmentDescription,
-  AttachmentMedia,
   AttachmentTitle,
-} from "@/components/ui/attachment";
+} from "@/components/ui/attachment-parts";
 import { Button } from "@/components/ui/button";
 
 import { formatBytes } from "../domain/format";

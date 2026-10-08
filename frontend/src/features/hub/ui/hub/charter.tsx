@@ -6,7 +6,8 @@ import { Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import { Field } from "@/components/ui/field";
+import { FieldDescription, FieldLabel } from "@/components/ui/field-text";
 import { Textarea } from "@/components/ui/textarea";
 
 import { CHARTER_MAX, type Hub } from "../../domain/contract";

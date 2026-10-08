@@ -10,16 +10,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
+import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
+import { SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem } from "@/components/ui/sidebar-menu-sub";
 
 import type { NavMainParentItem } from "../navigation";
 import { NavIcon, navButtonClass } from "./nav-icon";

@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Plus, Settings2, UserPlus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { DropdownMenuGroup } from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 
 import type { WorkspaceSummary } from "../../domain/contract";

@@ -1,6 +1,7 @@
 "use client";
 
-import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { type ChartConfig, ChartContainer, ChartTooltip } from "@/components/ui/chart";
+import { ChartTooltipContent } from "@/components/ui/chart-tooltip";
 
 import { qualitySeries } from "../../data/analytics/traffic-quality";
 import { CartesianGrid, ComposedChart, Line, XAxis, YAxis } from "../chart-primitives";

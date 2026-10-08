@@ -8,7 +8,8 @@ import { cn } from "cn";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@/components/ui/context-menu";
+import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from "@/components/ui/context-menu";
+import { ContextMenuItem } from "@/components/ui/context-menu-items";
 
 import { buildNotesHref, type NotesView } from "../domain/notes-href";
 import type { NoteFolder } from "../domain/types";

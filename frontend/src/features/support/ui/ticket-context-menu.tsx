@@ -6,14 +6,8 @@ import { CircleCheck, Hash, Mail, MailOpen, MessageSquareText, Plus, RotateCcw, 
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuShortcut,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu";
+import { ContextMenu, ContextMenuContent, ContextMenuTrigger } from "@/components/ui/context-menu";
+import { ContextMenuItem, ContextMenuSeparator, ContextMenuShortcut } from "@/components/ui/context-menu-items";
 import { copyText } from "@/lib/copy-text";
 
 import type { Ticket, UpdateTicketRequest } from "../domain/contract";

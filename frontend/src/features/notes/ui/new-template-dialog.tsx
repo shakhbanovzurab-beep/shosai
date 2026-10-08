@@ -15,7 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Field } from "@/components/ui/field";
+import { FieldError, FieldLabel } from "@/components/ui/field-text";
 import { Input } from "@/components/ui/input";
 
 import { type NoteTemplate, SECTION_KINDS, TEMPLATE_ICONS, type TemplateIcon } from "../domain/templates";

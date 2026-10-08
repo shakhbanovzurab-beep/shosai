@@ -5,16 +5,14 @@ import { useRef, useState } from "react";
 import { cn } from "cn";
 import { ArrowUp, FileText, Paperclip, X } from "lucide-react";
 
+import { Attachment, AttachmentContent, AttachmentMedia } from "@/components/ui/attachment";
 import {
-  Attachment,
   AttachmentAction,
   AttachmentActions,
-  AttachmentContent,
   AttachmentDescription,
   AttachmentGroup,
-  AttachmentMedia,
   AttachmentTitle,
-} from "@/components/ui/attachment";
+} from "@/components/ui/attachment-parts";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupTextarea } from "@/components/ui/input-group";
 import { Kbd } from "@/components/ui/kbd";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";

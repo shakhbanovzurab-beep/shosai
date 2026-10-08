@@ -2,7 +2,8 @@
 
 import { Fragment } from "react";
 
-import { FieldDescription, FieldError, FieldLegend, FieldSet } from "@/components/ui/field";
+import { FieldLegend, FieldSet } from "@/components/ui/field";
+import { FieldDescription, FieldError } from "@/components/ui/field-text";
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/components/ui/input-group";
 
 import { CURRENCIES, CURRENCY_NAME, CURRENCY_SYMBOL, type Currency } from "../domain/contract";

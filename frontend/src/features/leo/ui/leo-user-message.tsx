@@ -5,14 +5,8 @@ import * as React from "react";
 import { FileText, Pencil } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
-import {
-  Attachment,
-  AttachmentContent,
-  AttachmentDescription,
-  AttachmentGroup,
-  AttachmentMedia,
-  AttachmentTitle,
-} from "@/components/ui/attachment";
+import { Attachment, AttachmentContent, AttachmentMedia } from "@/components/ui/attachment";
+import { AttachmentDescription, AttachmentGroup, AttachmentTitle } from "@/components/ui/attachment-parts";
 import { Bubble, BubbleContent, BubbleGroup } from "@/components/ui/bubble";
 import { Button } from "@/components/ui/button";
 import { InputGroup, InputGroupAddon, InputGroupTextarea } from "@/components/ui/input-group";

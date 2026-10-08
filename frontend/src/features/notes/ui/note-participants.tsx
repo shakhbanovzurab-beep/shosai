@@ -9,7 +9,8 @@ import { toast } from "sonner";
 import { META_VALUE_BUTTON, MetaItem } from "@/components/meta-item";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Field, FieldError } from "@/components/ui/field";
+import { Field } from "@/components/ui/field";
+import { FieldError } from "@/components/ui/field-text";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import {
   Popover,

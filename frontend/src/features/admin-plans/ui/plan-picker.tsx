@@ -2,7 +2,8 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Field } from "@/components/ui/field";
+import { FieldError, FieldLabel } from "@/components/ui/field-text";
 
 import type { Plan } from "../domain/contract";
 
