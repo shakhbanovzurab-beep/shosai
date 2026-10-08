@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leo Agent Architecture</title>
+  <!-- Self-contained rendering: system monospace stack, no web-font fetch.
+       The two scripts below are OPTIONAL and power only the PNG/PDF export
+       buttons; the diagram renders fully offline without them. -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" integrity="sha384-en/ztfPSRkGfME4KIm05joYXynqzUgbsG5nMrj/xEFAHXkeZfO3yMK8QQ+mP7p1/" crossorigin="anonymous"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+      background: #020617;
+      min-height: 100vh;
+      padding: 2rem;
+      color: white;
+    }
+
+    .container { max-width: 1280px; margin: 0 auto; }
+    .header { margin-bottom: 2rem; }
+    .header-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+
+    .pulse-dot {
+      width: 12px; height: 12px; background: #22d3ee; border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @media (prefers-reduced-motion: reduce) { .pulse-dot { animation: none; } }
+
+    h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+    h2 { font-size: 0.95rem; font-weight: 600; margin: 2.25rem 0 0.75rem; color: #e2e8f0; }
+    h2 span { color: #64748b; font-weight: 400; }
+    .subtitle { color: #94a3b8; font-size: 0.875rem; margin-left: 1.75rem; }
+
+    .diagram-container {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 1rem;
+      border: 1px solid #1e293b;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+
+    svg { width: 100%; min-width: 900px; display: block; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 0.75rem;
+      border: 1px solid #1e293b;
+      padding: 1.25rem;
+    }
+    .card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .card-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .card-dot.cyan { background: #22d3ee; }
+    .card-dot.emerald { background: #34d399; }
+    .card-dot.violet { background: #a78bfa; }
+    .card-dot.amber { background: #fbbf24; }
+    .card-dot.rose { background: #fb7185; }
+    .card h3 { font-size: 0.875rem; font-weight: 600; }
+    .card ul { list-style: none; color: #94a3b8; font-size: 0.75rem; }
+    .card li { margin-bottom: 0.375rem; }
+
+    .footer { text-align: center; margin-top: 1.5rem; color: #475569; font-size: 0.75rem; }
+
+    .toolbar { display: flex; gap: 0.5rem; margin-left: auto; flex-shrink: 0; align-items: center; }
+    .toolbar-toggle {
+      background: transparent; border: none; color: #475569; cursor: pointer;
+      font-size: 1.25rem; line-height: 1; padding: 0.25rem 0.5rem; border-radius: 0.375rem;
+      transition: color 0.2s, background 0.2s;
+    }
+    .toolbar-toggle:hover { color: #94a3b8; background: rgba(30, 41, 59, 0.5); }
+    .toolbar-actions { display: none; gap: 0.5rem; }
+    .toolbar.expanded .toolbar-actions { display: flex; }
+    .toolbar-actions button {
+      background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; color: #94a3b8;
+      padding: 0.375rem 0.75rem; border-radius: 0.375rem; font-family: inherit;
+      font-size: 0.75rem; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .toolbar-actions button:hover { background: rgba(51, 65, 85, 0.8); color: white; border-color: #475569; }
+
+    @media (max-width: 640px) { body { padding: 1rem; } .subtitle { margin-left: 0; } }
+    @media print {
+      body { background: #020617; padding: 1rem; }
+      .toolbar { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="report-container">
+    <!-- Заголовок -->
+    <div class="header">
+      <div class="header-row">
+        <div class="pulse-dot"></div>
+        <h1>Leo — Agent Architecture</h1>
+        <div class="toolbar">
+          <div class="toolbar-actions">
+            <button onclick="copyAsImage(this)">📋 Copy</button>
+            <button onclick="downloadPNG(this)">🖼️ PNG</button>
+            <button onclick="downloadPDF(this)">📄 PDF</button>
+          </div>
+          <button class="toolbar-toggle" onclick="this.parentElement.classList.toggle('expanded')" title="Export options" aria-label="Export options">⋯</button>
+        </div>
+      </div>
+      <p class="subtitle">Proposed target design (2026-10-08) · six separated layers · Jev as the Decision Layer · every write through the Action Gateway · see ARCHITECTURE.md and ADR 0023–0032</p>
+    </div>
+
+    <!-- ================= Диаграмма 1: компоненты и слои ================= -->
+    <h2>1. Components and layers <span>— who owns what, and how they talk</span></h2>
+    <div class="diagram-container">
+      <svg viewBox="0 0 1280 1040" role="img" aria-label="Leo agent architecture: channels, agent core, proactive engine, decision layer, memory and context, tools and skills, domain slices, infrastructure, data homes and external providers">
+        <defs>
+          <marker id="ah" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/></marker>
+          <marker id="ah-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/></marker>
+          <marker id="ah-emerald" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#34d399"/></marker>
+          <marker id="ah-rose" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#fb7185"/></marker>
+          <marker id="ah-amber" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/></marker>
+          <marker id="ah-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#fb923c"/></marker>
+          <marker id="ah-violet" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/></marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <rect width="100%" height="100%" fill="url(#grid)"/>
+
+        <!-- Границы регионов -->
+        <rect x="30" y="118" width="920" height="684" rx="12" fill="rgba(251, 191, 36, 0.04)" stroke="#fbbf24" stroke-width="1" stroke-dasharray="8,4"/>
+        <text x="42" y="136" fill="#fbbf24" font-size="10" font-weight="600">EU COMPUTE PLANE</text>
+        <text x="938" y="136" fill="#fbbf24" font-size="9" text-anchor="end">one image · api · workers · scheduler</text>
+
+        <rect x="972" y="232" width="290" height="570" rx="12" fill="transparent" stroke="#94a3b8" stroke-width="1" stroke-dasharray="8,4"/>
+        <text x="984" y="250" fill="#94a3b8" font-size="10" font-weight="600">EXTERNAL PROVIDERS</text>
+
+        <rect x="30" y="828" width="920" height="150" rx="12" fill="rgba(167, 139, 250, 0.04)" stroke="#a78bfa" stroke-width="1" stroke-dasharray="8,4"/>
+        <text x="42" y="846" fill="#a78bfa" font-size="10" font-weight="600">DATA HOMES</text>
+
+        <!-- ===== Стрелки (до блоков, чтобы лежали под ними) ===== -->
+        <!-- клиенты → приложение -->
+        <line x1="180" y1="96" x2="180" y2="146" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ah-cyan)"/>
+        <text x="188" y="111" fill="#94a3b8" font-size="9">HTTPS · SSE</text>
+        <line x1="450" y1="96" x2="450" y2="146" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ah-cyan)"/>
+        <text x="458" y="111" fill="#94a3b8" font-size="9">ws/user · native routes</text>
+        <line x1="715" y1="96" x2="715" y2="146" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#ah-cyan)"/>
+        <text x="723" y="111" fill="#94a3b8" font-size="9">MCP (pending_approval)</text>
+
+        <!-- приложение ↔ ядро и проактивность -->
+        <line x1="230" y1="206" x2="230" y2="248" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-emerald)"/>
+        <text x="222" y="231" fill="#94a3b8" font-size="8" text-anchor="end">TurnCommand · approve</text>
+        <line x1="330" y1="248" x2="330" y2="208" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-cyan)"/>
+        <text x="338" y="231" fill="#94a3b8" font-size="8">SSE events (id, resume)</text>
+        <line x1="720" y1="248" x2="720" y2="208" stroke="#34d399" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-emerald)"/>
+        <text x="728" y="231" fill="#94a3b8" font-size="8">deliver: ws/user frames · seen</text>
+
+        <!-- проактивность → ядро -->
+        <line x1="508" y1="290" x2="472" y2="290" stroke="#34d399" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-emerald)"/>
+        <text x="490" y="282" fill="#94a3b8" font-size="7" text-anchor="middle">A2 runs</text>
+        <line x1="508" y1="372" x2="452" y2="372" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-rose)"/>
+        <text x="490" y="365" fill="#94a3b8" font-size="7" text-anchor="middle">cards</text>
+
+        <!-- ядро → слои -->
+        <line x1="185" y1="422" x2="185" y2="464" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-emerald)"/>
+        <text x="193" y="447" fill="#94a3b8" font-size="8">context</text>
+        <line x1="420" y1="422" x2="420" y2="464" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-emerald)"/>
+        <text x="412" y="447" fill="#94a3b8" font-size="8" text-anchor="end">read · egress calls</text>
+        <path d="M 455 422 L 455 440 L 660 440 L 660 464" fill="none" stroke="#fb7185" stroke-width="1.5" marker-end="url(#ah-rose)"/>
+        <text x="560" y="434" fill="#94a3b8" font-size="8" text-anchor="middle">turn.route · action.friction</text>
+        <line x1="860" y1="422" x2="860" y2="464" stroke="#fb7185" stroke-width="1.5" marker-end="url(#ah-rose)"/>
+        <text x="866" y="447" fill="#94a3b8" font-size="8">value · moment</text>
+
+        <!-- инструменты и шлюз → доменные срезы -->
+        <line x1="475" y1="590" x2="475" y2="630" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-emerald)"/>
+        <text x="483" y="614" fill="#94a3b8" font-size="8">ToolSpec · contracts</text>
+        <line x1="330" y1="408" x2="330" y2="630" stroke="#fb7185" stroke-width="1.5" marker-end="url(#ah-rose)"/>
+        <text x="322" y="614" fill="#fb7185" font-size="8" text-anchor="end">execute once (key)</text>
+
+        <!-- доменные события → проактивность -->
+        <path d="M 730 660 L 942 660 L 942 300 L 932 300" fill="none" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-orange)"/>
+        <text x="740" y="654" fill="#fb923c" font-size="8">domain events (outbox)</text>
+
+        <!-- ядро → Valkey -->
+        <path d="M 50 392 L 40 392 L 40 759 L 48 759" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-amber)"/>
+        <text transform="rotate(-90 37 640)" x="37" y="640" fill="#94a3b8" font-size="8" text-anchor="middle">lease · checkpoint · events</text>
+
+        <!-- решения → порт провайдера → внешние -->
+        <line x1="860" y1="590" x2="860" y2="726" stroke="#fb7185" stroke-width="1.5" marker-end="url(#ah-rose)"/>
+        <text x="854" y="712" fill="#94a3b8" font-size="8" text-anchor="end">decide()</text>
+        <path d="M 930 744 L 960 744 L 960 642 L 983 642" fill="none" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#ah-amber)"/>
+        <line x1="930" y1="770" x2="983" y2="770" stroke="#fb7185" stroke-width="1.5" marker-end="url(#ah-rose)"/>
+
+        <!-- проактивность → Web Push -->
+        <line x1="930" y1="282" x2="983" y2="282" stroke="#34d399" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah-emerald)"/>
+
+        <!-- плоскость → домашние БД -->
+        <line x1="265" y1="802" x2="265" y2="854" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ah-violet)"/>
+        <line x1="715" y1="802" x2="715" y2="854" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ah-violet)"/>
+        <text x="273" y="820" fill="#94a3b8" font-size="8">home-aware transactions · SET LOCAL + RLS · commit before stream</text>
+
+        <!-- ===== Блоки ===== -->
+        <!-- Клиенты -->
+        <rect x="60" y="40" width="240" height="56" rx="6" fill="#0f172a"/>
+        <rect x="60" y="40" width="240" height="56" rx="6" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="180" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">Cabinet — Vite SPA, PWA</text>
+        <text x="180" y="80" fill="#94a3b8" font-size="9" text-anchor="middle">Leo panel · approvals · feed · chips</text>
+
+        <rect x="340" y="40" width="220" height="56" rx="6" fill="#0f172a"/>
+        <rect x="340" y="40" width="220" height="56" rx="6" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="450" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">Native clients</text>
+        <text x="450" y="80" fill="#94a3b8" font-size="9" text-anchor="middle">macOS · Windows · contract kept</text>
+
+        <rect x="600" y="40" width="230" height="56" rx="6" fill="#0f172a"/>
+        <rect x="600" y="40" width="230" height="56" rx="6" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="715" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">External MCP clients</text>
+        <text x="715" y="80" fill="#94a3b8" font-size="9" text-anchor="middle">desktop and IDE agents</text>
+
+        <!-- Слой приложения -->
+        <rect x="50" y="148" width="880" height="58" rx="6" fill="#0f172a"/>
+        <rect x="50" y="148" width="880" height="58" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="490" y="167" fill="white" font-size="11" font-weight="600" text-anchor="middle">Application layer — channel adapters</text>
+        <text x="490" y="183" fill="#94a3b8" font-size="9" text-anchor="middle">HTTP /v1/agent/* + resumable SSE · WS /v1/ws/user · voice port (S05) · MCP projection (S10) · native routes</text>
+        <text x="490" y="198" fill="#fb7185" font-size="8" text-anchor="middle">one PrincipalFactory · admission: GCRA, quota, spend reservation, one run per thread (lease)</text>
+
+        <!-- Ядро агента -->
+        <rect x="50" y="250" width="420" height="172" rx="8" fill="#0f172a"/>
+        <rect x="50" y="250" width="420" height="172" rx="8" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="260" y="272" fill="white" font-size="12" font-weight="600" text-anchor="middle">Agent Core</text>
+        <text x="260" y="290" fill="#94a3b8" font-size="9" text-anchor="middle">run lifecycle · thread lease · deadlines · cancel</text>
+        <text x="260" y="304" fill="#94a3b8" font-size="9" text-anchor="middle">LangGraph run graph (infrastructure, thin)</text>
+        <text x="260" y="318" fill="#94a3b8" font-size="9" text-anchor="middle">context → model ⇄ read tools → propose → interrupt</text>
+
+        <rect x="70" y="334" width="380" height="72" rx="6" fill="#0f172a"/>
+        <rect x="70" y="334" width="380" height="72" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="260" y="353" fill="white" font-size="11" font-weight="600" text-anchor="middle">Action Gateway — the only write path</text>
+        <text x="260" y="369" fill="#94a3b8" font-size="8" text-anchor="middle">plan (frozen targets) → preview → approve (single winner)</text>
+        <text x="260" y="383" fill="#94a3b8" font-size="8" text-anchor="middle">→ execute once (idempotency key) · outcome_unknown, no retry</text>
+        <text x="260" y="398" fill="#fbbf24" font-size="8" text-anchor="middle">agent_actions in the home DB · inv-12</text>
+
+        <!-- Проактивность -->
+        <rect x="510" y="250" width="420" height="172" rx="8" fill="#0f172a"/>
+        <rect x="510" y="250" width="420" height="172" rx="8" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="720" y="272" fill="white" font-size="12" font-weight="600" text-anchor="middle">Proactive Engine</text>
+        <text x="720" y="290" fill="#94a3b8" font-size="9" text-anchor="middle">signals: outbox events · trigger rows · state changes</text>
+        <text x="720" y="304" fill="#94a3b8" font-size="9" text-anchor="middle">candidate → hard rules → value → prepare → moment</text>
+        <text x="720" y="318" fill="#94a3b8" font-size="9" text-anchor="middle">→ deliver (seen-based) → feedback → calibration</text>
+
+        <rect x="530" y="334" width="185" height="72" rx="6" fill="#0f172a"/>
+        <rect x="530" y="334" width="185" height="72" rx="6" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="622" y="353" fill="white" font-size="10" font-weight="600" text-anchor="middle">Suggestions</text>
+        <text x="622" y="369" fill="#94a3b8" font-size="8" text-anchor="middle">chip · feed · thread</text>
+        <text x="622" y="383" fill="#94a3b8" font-size="8" text-anchor="middle">push if unseen 3 min</text>
+        <text x="622" y="398" fill="#fbbf24" font-size="8" text-anchor="middle">≤ 6 / day · quiet hours</text>
+
+        <rect x="730" y="334" width="180" height="72" rx="6" fill="#0f172a"/>
+        <rect x="730" y="334" width="180" height="72" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="820" y="353" fill="white" font-size="10" font-weight="600" text-anchor="middle">Errands (S11)</text>
+        <text x="820" y="369" fill="#94a3b8" font-size="8" text-anchor="middle">re-validate at run time</text>
+        <text x="820" y="383" fill="#94a3b8" font-size="8" text-anchor="middle">late or changed →</text>
+        <text x="820" y="398" fill="#94a3b8" font-size="8" text-anchor="middle">new proposal</text>
+
+        <!-- Память и контекст -->
+        <rect x="50" y="466" width="270" height="124" rx="8" fill="#0f172a"/>
+        <rect x="50" y="466" width="270" height="124" rx="8" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="185" y="486" fill="white" font-size="11" font-weight="600" text-anchor="middle">Memory &amp; Context</text>
+        <text x="185" y="503" fill="#94a3b8" font-size="8" text-anchor="middle">Context Builder: 8 budgeted segments</text>
+        <text x="185" y="516" fill="#94a3b8" font-size="8" text-anchor="middle">cache-stable prefix · ≈ 10–12K tokens</text>
+        <text x="185" y="529" fill="#94a3b8" font-size="8" text-anchor="middle">memory_facts: admit · supersede · source</text>
+        <text x="185" y="542" fill="#94a3b8" font-size="8" text-anchor="middle">untrusted wrapper v2 · run taint</text>
+        <text x="185" y="555" fill="#94a3b8" font-size="8" text-anchor="middle">user state in Valkey (attention)</text>
+        <text x="185" y="576" fill="#a78bfa" font-size="7" text-anchor="middle">vectors: pgvector or Qdrant — open Q-1</text>
+
+        <!-- Инструменты и навыки -->
+        <rect x="340" y="466" width="270" height="124" rx="8" fill="#0f172a"/>
+        <rect x="340" y="466" width="270" height="124" rx="8" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="475" y="486" fill="white" font-size="11" font-weight="600" text-anchor="middle">Tools &amp; Skills</text>
+        <text x="475" y="503" fill="#94a3b8" font-size="8" text-anchor="middle">ToolSpec registry, built from slices</text>
+        <text x="475" y="516" fill="#94a3b8" font-size="8" text-anchor="middle">≈ 14 toolsets + core toolset</text>
+        <text x="475" y="529" fill="#94a3b8" font-size="8" text-anchor="middle">routing · load_toolset fallback</text>
+        <text x="475" y="542" fill="#94a3b8" font-size="8" text-anchor="middle">egress confirmed when tainted</text>
+        <text x="475" y="555" fill="#94a3b8" font-size="8" text-anchor="middle">skills: platform + user SKILL.md</text>
+        <text x="475" y="576" fill="#fbbf24" font-size="7" text-anchor="middle">skills never grant rights</text>
+
+        <!-- Слой решений -->
+        <rect x="630" y="466" width="300" height="124" rx="8" fill="#0f172a"/>
+        <rect x="630" y="466" width="300" height="124" rx="8" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="780" y="486" fill="white" font-size="11" font-weight="600" text-anchor="middle">Decision Layer — slice `decisions`</text>
+        <text x="780" y="503" fill="#94a3b8" font-size="8" text-anchor="middle">policy@version · hard rules before and after</text>
+        <text x="780" y="516" fill="#94a3b8" font-size="8" text-anchor="middle">Jev probabilities → calibrated bands → outcome</text>
+        <text x="780" y="529" fill="#94a3b8" font-size="8" text-anchor="middle">fallback rule on timeout or no consent</text>
+        <text x="780" y="542" fill="#94a3b8" font-size="8" text-anchor="middle">records · shadow · 16-language gate</text>
+        <text x="780" y="561" fill="#fbbf24" font-size="7" text-anchor="middle">turn.route · action.friction · content.injection</text>
+        <text x="780" y="574" fill="#fbbf24" font-size="7" text-anchor="middle">memory.admit · proactive.value · proactive.moment</text>
+        <text x="780" y="584" fill="#fbbf24" font-size="7" text-anchor="middle">mail.triage (S12)</text>
+
+        <!-- Доменные срезы -->
+        <rect x="50" y="632" width="680" height="58" rx="6" fill="#0f172a"/>
+        <rect x="50" y="632" width="680" height="58" rx="6" fill="rgba(6, 78, 59, 0.25)" stroke="#34d399" stroke-width="1.5" stroke-dasharray="2,2"/>
+        <text x="390" y="651" fill="white" font-size="11" font-weight="600" text-anchor="middle">Domain slices — own their data, tools and events</text>
+        <text x="390" y="667" fill="#94a3b8" font-size="9" text-anchor="middle">meetings S04 · knowledge S07 · files S08 · mail &amp; calendar S12 · tasks S13 · support S15 · hubs S16</text>
+        <text x="390" y="682" fill="#fb7185" font-size="8" text-anchor="middle">access policy + RLS inside each slice · plan · preview · idempotent execute · inv-14</text>
+
+        <!-- Инфраструктура -->
+        <rect x="50" y="728" width="170" height="62" rx="6" fill="#0f172a"/>
+        <rect x="50" y="728" width="170" height="62" rx="6" fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="135" y="746" fill="white" font-size="10" font-weight="600" text-anchor="middle">Valkey (managed, EU)</text>
+        <text x="135" y="762" fill="#94a3b8" font-size="8" text-anchor="middle">leases · in-flight checkpoints</text>
+        <text x="135" y="776" fill="#94a3b8" font-size="8" text-anchor="middle">run events · user state · ≤ 24 h</text>
+
+        <rect x="235" y="728" width="130" height="62" rx="6" fill="#0f172a"/>
+        <rect x="235" y="728" width="130" height="62" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="300" y="746" fill="white" font-size="10" font-weight="600" text-anchor="middle">Qdrant</text>
+        <text x="300" y="762" fill="#94a3b8" font-size="8" text-anchor="middle">knowledge · meetings</text>
+        <text x="300" y="776" fill="#94a3b8" font-size="8" text-anchor="middle">hits re-checked in DB</text>
+
+        <rect x="380" y="728" width="180" height="62" rx="6" fill="#0f172a"/>
+        <rect x="380" y="728" width="180" height="62" rx="6" fill="rgba(251, 146, 60, 0.3)" stroke="#fb923c" stroke-width="1.5"/>
+        <text x="470" y="746" fill="white" font-size="10" font-weight="600" text-anchor="middle">Outbox → TaskIQ</text>
+        <text x="470" y="762" fill="#94a3b8" font-size="8" text-anchor="middle">Valkey streams · leases</text>
+        <text x="470" y="776" fill="#94a3b8" font-size="8" text-anchor="middle">bg runs · memory · audit</text>
+
+        <rect x="575" y="728" width="150" height="62" rx="6" fill="#0f172a"/>
+        <rect x="575" y="728" width="150" height="62" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="650" y="746" fill="white" font-size="10" font-weight="600" text-anchor="middle">Scheduler</text>
+        <text x="650" y="762" fill="#94a3b8" font-size="8" text-anchor="middle">due errands, triggers</text>
+        <text x="650" y="776" fill="#94a3b8" font-size="8" text-anchor="middle">only enqueues</text>
+
+        <rect x="740" y="728" width="190" height="62" rx="6" fill="#0f172a"/>
+        <rect x="740" y="728" width="190" height="62" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="835" y="746" fill="white" font-size="10" font-weight="600" text-anchor="middle">Provider port (F6)</text>
+        <text x="835" y="762" fill="#94a3b8" font-size="8" text-anchor="middle">every model call: cost row</text>
+        <text x="835" y="776" fill="#94a3b8" font-size="8" text-anchor="middle">spend guard · breaker per model</text>
+
+        <!-- Внешние провайдеры -->
+        <rect x="985" y="262" width="265" height="52" rx="6" fill="#0f172a"/>
+        <rect x="985" y="262" width="265" height="52" rx="6" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="1117" y="283" fill="white" font-size="11" font-weight="600" text-anchor="middle">Web Push (VAPID)</text>
+        <text x="1117" y="300" fill="#94a3b8" font-size="9" text-anchor="middle">PWA notifications</text>
+
+        <rect x="985" y="612" width="265" height="60" rx="6" fill="#0f172a"/>
+        <rect x="985" y="612" width="265" height="60" rx="6" fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="1117" y="634" fill="white" font-size="11" font-weight="600" text-anchor="middle">OpenRouter</text>
+        <text x="1117" y="651" fill="#94a3b8" font-size="9" text-anchor="middle">chat · embeddings · rerank · web</text>
+        <text x="1117" y="664" fill="#94a3b8" font-size="8" text-anchor="middle">fallback model per tier</text>
+
+        <rect x="985" y="700" width="265" height="88" rx="6" fill="#0f172a"/>
+        <rect x="985" y="700" width="265" height="88" rx="6" fill="rgba(120, 53, 15, 0.3)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="1117" y="721" fill="white" font-size="11" font-weight="600" text-anchor="middle">Jev — TypeSafe AI</text>
+        <text x="1117" y="738" fill="#94a3b8" font-size="9" text-anchor="middle">OpenRouter Decisions API (alpha)</text>
+        <text x="1117" y="752" fill="#94a3b8" font-size="8" text-anchor="middle">typesafe/jev-1.13, pinned</text>
+        <text x="1117" y="766" fill="#94a3b8" font-size="8" text-anchor="middle">choice · score · noul → probabilities</text>
+        <text x="1117" y="780" fill="#fbbf24" font-size="7" text-anchor="middle">legal review before personal data (Q-3)</text>
+
+        <!-- Домашние БД -->
+        <rect x="50" y="856" width="430" height="108" rx="6" fill="#0f172a"/>
+        <rect x="50" y="856" width="430" height="108" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="265" y="876" fill="white" font-size="11" font-weight="600" text-anchor="middle">PostgreSQL — Russian home</text>
+        <text x="265" y="892" fill="#94a3b8" font-size="9" text-anchor="middle">St Petersburg · 45 ms from the plane</text>
+        <text x="265" y="910" fill="#94a3b8" font-size="8" text-anchor="middle">agent_threads · agent_messages · agent_runs</text>
+        <text x="265" y="923" fill="#94a3b8" font-size="8" text-anchor="middle">agent_actions · agent_audit · memory_facts</text>
+        <text x="265" y="936" fill="#94a3b8" font-size="8" text-anchor="middle">agent_suggestions · proactive_triggers · errands</text>
+        <text x="265" y="952" fill="#a78bfa" font-size="8" text-anchor="middle">agent_decisions: ids and probabilities, no text</text>
+
+        <rect x="500" y="856" width="430" height="108" rx="6" fill="#0f172a"/>
+        <rect x="500" y="856" width="430" height="108" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="715" y="876" fill="white" font-size="11" font-weight="600" text-anchor="middle">PostgreSQL — EU home</text>
+        <text x="715" y="892" fill="#94a3b8" font-size="9" text-anchor="middle">Netherlands · &lt; 2 ms · directory and platform data</text>
+        <text x="715" y="910" fill="#94a3b8" font-size="8" text-anchor="middle">the same Leo tables for EU users and companies</text>
+        <text x="715" y="923" fill="#94a3b8" font-size="8" text-anchor="middle">platform: prompts · skills catalogue · model registry</text>
+        <text x="715" y="936" fill="#94a3b8" font-size="8" text-anchor="middle">decision_policies · decision_thresholds (versioned)</text>
+        <text x="715" y="952" fill="#a78bfa" font-size="8" text-anchor="middle">conversations stay in their home (ADR 0024)</text>
+
+        <!-- Легенда (вне границ) -->
+        <text x="50" y="1004" fill="white" font-size="10" font-weight="600">Legend</text>
+        <rect x="110" y="995" width="16" height="10" rx="2" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+        <text x="132" y="1003" fill="#94a3b8" font-size="8">Client / surface</text>
+        <rect x="225" y="995" width="16" height="10" rx="2" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1"/>
+        <text x="247" y="1003" fill="#94a3b8" font-size="8">Service</text>
+        <rect x="300" y="995" width="16" height="10" rx="2" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1"/>
+        <text x="322" y="1003" fill="#94a3b8" font-size="8">Gate / decision</text>
+        <rect x="415" y="995" width="16" height="10" rx="2" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1"/>
+        <text x="437" y="1003" fill="#94a3b8" font-size="8">Store</text>
+        <rect x="480" y="995" width="16" height="10" rx="2" fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1"/>
+        <text x="502" y="1003" fill="#94a3b8" font-size="8">Managed / provider</text>
+        <rect x="610" y="995" width="16" height="10" rx="2" fill="rgba(251, 146, 60, 0.3)" stroke="#fb923c" stroke-width="1"/>
+        <text x="632" y="1003" fill="#94a3b8" font-size="8">Queue / events</text>
+        <rect x="725" y="995" width="16" height="10" rx="2" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1"/>
+        <text x="747" y="1003" fill="#94a3b8" font-size="8">External</text>
+        <line x1="810" y1="1000" x2="834" y2="1000" stroke="#64748b" stroke-width="1.5"/>
+        <text x="840" y="1003" fill="#94a3b8" font-size="8">sync call</text>
+        <line x1="900" y1="1000" x2="924" y2="1000" stroke="#64748b" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <text x="930" y="1003" fill="#94a3b8" font-size="8">async / event / delivery</text>
+        <rect x="1060" y="995" width="16" height="10" rx="2" fill="transparent" stroke="#fbbf24" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="1082" y="1003" fill="#94a3b8" font-size="8">Region boundary</text>
+      </svg>
+    </div>
+
+    <!-- ================= Диаграмма 2: ход и подтверждение ================= -->
+    <h2>2. Interactive turn and approval <span>— the critical path and the write path</span></h2>
+    <div class="diagram-container">
+      <svg viewBox="0 0 1200 250" role="img" aria-label="Interactive turn: admit, persist, parallel context, model and tools, propose, approve, execute once, finish">
+        <defs>
+          <marker id="ah2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/></marker>
+          <pattern id="grid2" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid2)"/>
+
+        <!-- стрелки между шагами -->
+        <line x1="150" y1="85" x2="162" y2="85" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah2)"/>
+        <line x1="294" y1="85" x2="306" y2="85" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah2)"/>
+        <line x1="438" y1="85" x2="450" y2="85" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah2)"/>
+        <line x1="582" y1="85" x2="594" y2="85" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah2)"/>
+        <line x1="726" y1="85" x2="738" y2="85" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#ah2)"/>
+        <line x1="870" y1="85" x2="882" y2="85" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah2)"/>
+        <line x1="1014" y1="85" x2="1026" y2="85" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah2)"/>
+        <!-- петля model ⇄ tools -->
+        <path d="M 540 40 L 540 26 L 490 26 L 490 38" fill="none" stroke="#34d399" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#ah2)"/>
+        <text x="515" y="20" fill="#34d399" font-size="7" text-anchor="middle">≤ 10 rounds</text>
+
+        <!-- 1 -->
+        <rect x="20" y="40" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="20" y="40" width="130" height="90" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="85" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">① Admit</text>
+        <text x="85" y="82" fill="#94a3b8" font-size="8" text-anchor="middle">principal · limits</text>
+        <text x="85" y="96" fill="#94a3b8" font-size="8" text-anchor="middle">spend reserve</text>
+        <text x="85" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">thread lease</text>
+        <text x="85" y="150" fill="#22d3ee" font-size="8" text-anchor="middle">409 thread_busy</text>
+        <text x="85" y="166" fill="#fbbf24" font-size="8" text-anchor="middle">≈ 15 ms</text>
+
+        <!-- 2 -->
+        <rect x="164" y="40" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="164" y="40" width="130" height="90" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="229" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">② Persist</text>
+        <text x="229" y="82" fill="#94a3b8" font-size="8" text-anchor="middle">user message</text>
+        <text x="229" y="96" fill="#94a3b8" font-size="8" text-anchor="middle">+ agent_runs row</text>
+        <text x="229" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">commit, then stream</text>
+        <text x="229" y="150" fill="#22d3ee" font-size="8" text-anchor="middle">run.started</text>
+        <text x="229" y="166" fill="#fbbf24" font-size="8" text-anchor="middle">≈ 10 ms (EU)</text>
+
+        <!-- 3 -->
+        <rect x="308" y="40" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="308" y="40" width="130" height="90" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="373" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">③ Context ‖</text>
+        <text x="373" y="82" fill="#94a3b8" font-size="8" text-anchor="middle">embedding ‖ memory</text>
+        <text x="373" y="96" fill="#94a3b8" font-size="8" text-anchor="middle">‖ Jev turn.route</text>
+        <text x="373" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">‖ subject digests</text>
+        <text x="373" y="150" fill="#22d3ee" font-size="8" text-anchor="middle">8 budgeted segments</text>
+        <text x="373" y="166" fill="#fbbf24" font-size="8" text-anchor="middle">≈ 300 ms, parallel</text>
+
+        <!-- 4 -->
+        <rect x="452" y="40" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="452" y="40" width="130" height="90" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="517" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">④ Model ⇄ tools</text>
+        <text x="517" y="82" fill="#94a3b8" font-size="8" text-anchor="middle">stream via port</text>
+        <text x="517" y="96" fill="#94a3b8" font-size="8" text-anchor="middle">reads in parallel</text>
+        <text x="517" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">digests + result_ref</text>
+        <text x="517" y="150" fill="#22d3ee" font-size="8" text-anchor="middle">text.delta · step.*</text>
+        <text x="517" y="166" fill="#fbbf24" font-size="8" text-anchor="middle">provider time</text>
+
+        <!-- 5 -->
+        <rect x="596" y="40" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="596" y="40" width="130" height="90" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="661" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">⑤ Propose</text>
+        <text x="661" y="82" fill="#94a3b8" font-size="8" text-anchor="middle">plan · preview</text>
+        <text x="661" y="96" fill="#94a3b8" font-size="8" text-anchor="middle">action.friction</text>
+        <text x="661" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">agent_actions row</text>
+        <text x="661" y="150" fill="#22d3ee" font-size="8" text-anchor="middle">action.proposed</text>
+        <text x="661" y="166" fill="#22d3ee" font-size="8" text-anchor="middle">run.paused</text>
+
+        <!-- 6 -->
+        <rect x="740" y="40" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="740" y="40" width="130" height="90" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="805" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">⑥ Approve</text>
+        <text x="805" y="82" fill="#94a3b8" font-size="8" text-anchor="middle">card · inbox · voice*</text>
+        <text x="805" y="96" fill="#94a3b8" font-size="8" text-anchor="middle">single-winner UPDATE</text>
+        <text x="805" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">nonce · secret vault</text>
+        <text x="805" y="150" fill="#22d3ee" font-size="8" text-anchor="middle">reject / expire → done</text>
+        <text x="805" y="166" fill="#fbbf24" font-size="8" text-anchor="middle">expires in 1 h</text>
+
+        <!-- 7 -->
+        <rect x="884" y="40" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="884" y="40" width="130" height="90" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="949" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">⑦ Execute once</text>
+        <text x="949" y="82" fill="#94a3b8" font-size="8" text-anchor="middle">slice transaction</text>
+        <text x="949" y="96" fill="#94a3b8" font-size="8" text-anchor="middle">idempotency key</text>
+        <text x="949" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">+ outbox audit event</text>
+        <text x="949" y="150" fill="#22d3ee" font-size="8" text-anchor="middle">action.updated</text>
+        <text x="949" y="166" fill="#fb7185" font-size="8" text-anchor="middle">crash → outcome_unknown</text>
+
+        <!-- 8 -->
+        <rect x="1028" y="40" width="150" height="90" rx="6" fill="#0f172a"/>
+        <rect x="1028" y="40" width="150" height="90" rx="6" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+        <text x="1103" y="62" fill="white" font-size="11" font-weight="600" text-anchor="middle">⑧ Finish</text>
+        <text x="1103" y="82" fill="#94a3b8" font-size="8" text-anchor="middle">answer + usage</text>
+        <text x="1103" y="96" fill="#94a3b8" font-size="8" text-anchor="middle">release lease</text>
+        <text x="1103" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">drop checkpoint</text>
+        <text x="1103" y="150" fill="#22d3ee" font-size="8" text-anchor="middle">run.completed</text>
+        <text x="1103" y="166" fill="#fbbf24" font-size="8" text-anchor="middle">bg: memory · compaction</text>
+
+        <text x="600" y="206" fill="#94a3b8" font-size="9" text-anchor="middle">Platform overhead ≈ 350 ms for EU users (target ≤ 500 ms p95) · a dropped stream resumes with Last-Event-ID · the run continues if the client leaves</text>
+        <text x="600" y="224" fill="#94a3b8" font-size="9" text-anchor="middle">* voice approves only reversible actions, by the server transcript and the same action id; irreversible actions and secrets go to the screen</text>
+      </svg>
+    </div>
+
+    <!-- ================= Диаграмма 3: проактивность ================= -->
+    <h2>3. Proactive pipeline <span>— when Leo speaks first</span></h2>
+    <div class="diagram-container">
+      <svg viewBox="0 0 1200 250" role="img" aria-label="Proactive pipeline: signals, candidate, hard rules, value decision, preparation, moment decision, delivery, feedback with calibration loop">
+        <defs>
+          <marker id="ah3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/></marker>
+          <marker id="ah3-amber" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto"><polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/></marker>
+          <pattern id="grid3" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid3)"/>
+
+        <line x1="150" y1="75" x2="162" y2="75" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah3)"/>
+        <line x1="294" y1="75" x2="306" y2="75" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah3)"/>
+        <line x1="438" y1="75" x2="450" y2="75" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah3)"/>
+        <line x1="582" y1="75" x2="594" y2="75" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah3)"/>
+        <line x1="726" y1="75" x2="738" y2="75" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah3)"/>
+        <line x1="870" y1="75" x2="882" y2="75" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah3)"/>
+        <line x1="1014" y1="75" x2="1026" y2="75" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah3)"/>
+
+        <!-- петля калибровки -->
+        <path d="M 1103 120 L 1103 190 L 557 190 L 557 122" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah3-amber)"/>
+        <path d="M 845 190 L 845 122" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#ah3-amber)"/>
+        <text x="975" y="205" fill="#fbbf24" font-size="8" text-anchor="middle">calibration of value and moment — ids and probabilities only</text>
+
+        <!-- 1 -->
+        <rect x="20" y="30" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="20" y="30" width="130" height="90" rx="6" fill="rgba(251, 146, 60, 0.3)" stroke="#fb923c" stroke-width="1.5"/>
+        <text x="85" y="52" fill="white" font-size="11" font-weight="600" text-anchor="middle">① Signal</text>
+        <text x="85" y="72" fill="#94a3b8" font-size="8" text-anchor="middle">outbox events</text>
+        <text x="85" y="86" fill="#94a3b8" font-size="8" text-anchor="middle">trigger rows (time)</text>
+        <text x="85" y="100" fill="#94a3b8" font-size="8" text-anchor="middle">state transitions</text>
+        <text x="85" y="140" fill="#fbbf24" font-size="8" text-anchor="middle">no global scans</text>
+
+        <!-- 2 -->
+        <rect x="164" y="30" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="164" y="30" width="130" height="90" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="229" y="52" fill="white" font-size="11" font-weight="600" text-anchor="middle">② Candidate</text>
+        <text x="229" y="72" fill="#94a3b8" font-size="8" text-anchor="middle">pure generator</text>
+        <text x="229" y="86" fill="#94a3b8" font-size="8" text-anchor="middle">per kind</text>
+        <text x="229" y="100" fill="#94a3b8" font-size="8" text-anchor="middle">features in code</text>
+        <text x="229" y="140" fill="#94a3b8" font-size="8" text-anchor="middle">withdrawn by events</text>
+
+        <!-- 3 -->
+        <rect x="308" y="30" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="308" y="30" width="130" height="90" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="373" y="52" fill="white" font-size="11" font-weight="600" text-anchor="middle">③ Hard rules</text>
+        <text x="373" y="72" fill="#94a3b8" font-size="8" text-anchor="middle">settings · consent</text>
+        <text x="373" y="86" fill="#94a3b8" font-size="8" text-anchor="middle">muted kind · dedup</text>
+        <text x="373" y="100" fill="#94a3b8" font-size="8" text-anchor="middle">fatigue · budgets</text>
+        <text x="373" y="140" fill="#94a3b8" font-size="8" text-anchor="middle">refusal + reason code</text>
+
+        <!-- 4 -->
+        <rect x="452" y="30" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="452" y="30" width="130" height="90" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="517" y="52" fill="white" font-size="11" font-weight="600" text-anchor="middle">④ Value</text>
+        <text x="517" y="72" fill="#94a3b8" font-size="8" text-anchor="middle">Jev proactive.value</text>
+        <text x="517" y="86" fill="#94a3b8" font-size="8" text-anchor="middle">value · urgency</text>
+        <text x="517" y="100" fill="#94a3b8" font-size="8" text-anchor="middle">already known?</text>
+        <text x="500" y="140" fill="#94a3b8" font-size="8" text-anchor="middle">keep or drop</text>
+
+        <!-- 5 -->
+        <rect x="596" y="30" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="596" y="30" width="130" height="90" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="661" y="52" fill="white" font-size="11" font-weight="600" text-anchor="middle">⑤ Prepare</text>
+        <text x="661" y="72" fill="#94a3b8" font-size="8" text-anchor="middle">background run (A2)</text>
+        <text x="661" y="86" fill="#94a3b8" font-size="8" text-anchor="middle">read tools · skill</text>
+        <text x="661" y="100" fill="#94a3b8" font-size="8" text-anchor="middle">budget per user</text>
+        <text x="661" y="140" fill="#fbbf24" font-size="8" text-anchor="middle">only if kept</text>
+
+        <!-- 6 -->
+        <rect x="740" y="30" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="740" y="30" width="130" height="90" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="805" y="52" fill="white" font-size="11" font-weight="600" text-anchor="middle">⑥ Moment</text>
+        <text x="805" y="72" fill="#94a3b8" font-size="8" text-anchor="middle">Jev proactive.moment</text>
+        <text x="805" y="86" fill="#94a3b8" font-size="8" text-anchor="middle">now · next break</text>
+        <text x="805" y="100" fill="#94a3b8" font-size="8" text-anchor="middle">next session · digest</text>
+        <text x="790" y="140" fill="#94a3b8" font-size="8" text-anchor="middle">defer, never drop</text>
+
+        <!-- 7 -->
+        <rect x="884" y="30" width="130" height="90" rx="6" fill="#0f172a"/>
+        <rect x="884" y="30" width="130" height="90" rx="6" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="949" y="52" fill="white" font-size="11" font-weight="600" text-anchor="middle">⑦ Deliver</text>
+        <text x="949" y="72" fill="#94a3b8" font-size="8" text-anchor="middle">chip · feed · thread</text>
+        <text x="949" y="86" fill="#94a3b8" font-size="8" text-anchor="middle">seen, not presence</text>
+        <text x="949" y="100" fill="#94a3b8" font-size="8" text-anchor="middle">push if unseen 3 min</text>
+        <text x="949" y="140" fill="#94a3b8" font-size="8" text-anchor="middle">replay on hello</text>
+
+        <!-- 8 -->
+        <rect x="1028" y="30" width="150" height="90" rx="6" fill="#0f172a"/>
+        <rect x="1028" y="30" width="150" height="90" rx="6" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="1103" y="52" fill="white" font-size="11" font-weight="600" text-anchor="middle">⑧ Feedback</text>
+        <text x="1103" y="72" fill="#94a3b8" font-size="8" text-anchor="middle">act · approve</text>
+        <text x="1103" y="86" fill="#94a3b8" font-size="8" text-anchor="middle">dismiss (reason)</text>
+        <text x="1103" y="100" fill="#94a3b8" font-size="8" text-anchor="middle">snooze · mute kind</text>
+        <text x="1060" y="140" fill="#94a3b8" font-size="8" text-anchor="middle">3 dismissals →</text>
+        <text x="1060" y="152" fill="#94a3b8" font-size="8" text-anchor="middle">quieter 14 days</text>
+
+        <text x="600" y="232" fill="#94a3b8" font-size="9" text-anchor="middle">explicit reminders skip budgets and quiet hours · initiative ≤ 6 deliveries and ≤ 2 interruptions per day · no autonomy level writes before approval (A0–A4)</text>
+      </svg>
+    </div>
+
+    <!-- Карточки -->
+    <div class="cards">
+      <div class="card">
+        <div class="card-header"><div class="card-dot emerald"></div><h3>Separated layers (ADR 0023, 0029)</h3></div>
+        <ul>
+          <li>• Application: who asks, through which channel</li>
+          <li>• Agent Core: what happens next in the run</li>
+          <li>• Decision Layer: should it happen, when, how strongly</li>
+          <li>• Memory &amp; Context: what the model needs, within budget</li>
+          <li>• Tools &amp; Skills: owned by domain slices, routed per turn</li>
+          <li>• Proactive Engine: is it worth the user's attention</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-dot rose"></div><h3>Confirm-before-write (ADR 0025)</h3></div>
+        <ul>
+          <li>• One Action Gateway for every channel, MCP and errands included</li>
+          <li>• Frozen plan → server preview → single-winner approval</li>
+          <li>• Idempotent execute; crash → outcome_unknown, never retried</li>
+          <li>• Taint from external text: egress and voice need the screen</li>
+          <li>• Audit per item through the outbox, no content</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-dot amber"></div><h3>Decision Layer on Jev (ADR 0026)</h3></div>
+        <ul>
+          <li>• Versioned policies; features computed in code</li>
+          <li>• Hard rules before and after: only more conservative</li>
+          <li>• Bands from calibration; shadow before promotion</li>
+          <li>• Fallback on timeout, error or missing consent</li>
+          <li>• Never decides confirmation, access or text</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-dot violet"></div><h3>State and residency (ADR 0024, 0030)</h3></div>
+        <ul>
+          <li>• Conversations authoritative in the user's home DB</li>
+          <li>• Valkey: only active and paused runs, ≤ 24 h</li>
+          <li>• Memory facts with source, supersession, candidates</li>
+          <li>• Switches respected on every writer</li>
+          <li>• Decision records: ids and probabilities, no text</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-dot cyan"></div><h3>Context and protocol (ADR 0031, 0032)</h3></div>
+        <ul>
+          <li>• 8 segments, static first; ≈ 10–12K tokens vs ≈ 30K</li>
+          <li>• Tool results as digests + read_result</li>
+          <li>• /v1/agent/* with SSE ids and resume</li>
+          <li>• Native routes and reminder.* frames unchanged</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-dot amber"></div><h3>Status and open questions</h3></div>
+        <ul>
+          <li>• Proposed; amendments to ARCHITECTURE.md listed in §16</li>
+          <li>• Q-1 memory vectors: pgvector or Qdrant</li>
+          <li>• Q-2 streaming Markdown library</li>
+          <li>• Q-3 Jev legal review and alpha API</li>
+          <li>• Q-4 standing approvals — not designed</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer">Leo (Shosai) · agent architecture · proposed 2026-10-08 · docs/design/leo/ARCHITECTURE.md · ADR 0023–0032</p>
+  </div>
+
+  <script>
+    async function copyAsImage(btn) {
+      const orig = btn.textContent;
+      try {
+        const el = document.getElementById('report-container');
+        const r = el.getBoundingClientRect();
+        const pad = 32;
+        const canvas = await html2canvas(document.body, { backgroundColor: '#020617', scale: 2, useCORS: true, ignoreElements: (e) => e.classList && e.classList.contains('toolbar'), x: r.left + window.scrollX - pad, y: r.top + window.scrollY - pad, width: r.width + pad * 2, height: r.height + pad * 2 });
+        const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+        btn.textContent = '✓ Copied!';
+      } catch (e) {
+        btn.textContent = '✗ Failed';
+      }
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+
+    async function downloadPNG(btn) {
+      const orig = btn.textContent;
+      btn.textContent = '⏳ ...';
+      try {
+        const el = document.getElementById('report-container');
+        const r = el.getBoundingClientRect();
+        const pad = 32;
+        const canvas = await html2canvas(document.body, { backgroundColor: '#020617', scale: 2, useCORS: true, ignoreElements: (e) => e.classList && e.classList.contains('toolbar'), x: r.left + window.scrollX - pad, y: r.top + window.scrollY - pad, width: r.width + pad * 2, height: r.height + pad * 2 });
+        const link = document.createElement('a');
+        link.download = 'leo-architecture.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        btn.textContent = '✓ Done!';
+      } catch (e) {
+        btn.textContent = '✗ Failed';
+      }
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+
+    async function downloadPDF(btn) {
+      const orig = btn.textContent;
+      btn.textContent = '⏳ ...';
+      try {
+        const el = document.getElementById('report-container');
+        const r = el.getBoundingClientRect();
+        const pad = 32;
+        const canvas = await html2canvas(document.body, { backgroundColor: '#020617', scale: 2, useCORS: true, ignoreElements: (e) => e.classList && e.classList.contains('toolbar'), x: r.left + window.scrollX - pad, y: r.top + window.scrollY - pad, width: r.width + pad * 2, height: r.height + pad * 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        const orientation = canvas.width > canvas.height ? 'landscape' : 'portrait';
+        const pdf = new jsPDF({ orientation, unit: 'px', format: [canvas.width, canvas.height], hotfixes: ['px_scaling'] });
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+        pdf.save('leo-architecture.pdf');
+        btn.textContent = '✓ Done!';
+      } catch (e) {
+        btn.textContent = '✗ Failed';
+      }
+      setTimeout(() => btn.textContent = orig, 2000);
+    }
+  </script>
+</body>
+</html>
