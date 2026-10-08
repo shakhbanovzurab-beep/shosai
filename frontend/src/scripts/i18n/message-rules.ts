@@ -24,6 +24,8 @@ const GENITIVE_S = new Set(["de", "nl"]);
  * count as touching it, so particles written straight after it in other scripts are fine ("Leoに", "Leo에게").
  */
 export const containsName = (text: string, name: string) =>
+  // Имя экранировано (escapeRegExp), выражение строится из списка глоссария, а не из ввода пользователя.
+  // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
   new RegExp(`(?<![\\p{Script=Latin}\\p{N}])${escapeRegExp(name)}(?![\\p{Script=Latin}\\p{N}])`, "u").test(text);
 
 const difference = (a: Iterable<string>, b: Iterable<string>) => {

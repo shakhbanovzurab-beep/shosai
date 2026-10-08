@@ -23,7 +23,8 @@ function cueClock(seconds: number, separator: "," | ".") {
 }
 
 /** WebVTT cue text may not hold raw "&", "<" or ">". */
-const vttEscape = (text: string) => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+const VTT_ENTITIES: Readonly<Record<string, string>> = { "&": "&amp;", "<": "&lt;", ">": "&gt;" };
+const vttEscape = (text: string) => text.replace(/[&<>]/g, (character) => VTT_ENTITIES[character] ?? character);
 
 /**
  * The transcript as a file's contents in the given format. What was said stays as said; `heading` (the date

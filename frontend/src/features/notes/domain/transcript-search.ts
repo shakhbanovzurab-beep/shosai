@@ -25,6 +25,8 @@ export function markTranscript(lines: TranscriptLine[], query: string): { lines:
     return { lines: lines.map((line) => ({ line, segments: [{ start: 0, text: line.text, match: null }] })), total: 0 };
   }
 
+  // Запрос экранирован целиком (REGEXP_SPECIALS), поэтому выражение — буквальная строка без ReDoS.
+  // nosemgrep: javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp
   const pattern = new RegExp(needle.replace(REGEXP_SPECIALS, "\\$&"), "giu");
   let total = 0;
   const marked = lines.map((line) => {
