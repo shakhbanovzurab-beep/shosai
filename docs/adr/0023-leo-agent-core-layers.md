@@ -1,6 +1,6 @@
 # ADR 0023 — Leo is one agent in six separated layers; LangGraph is infrastructure
 
-- **Status:** proposed on 2026-10-08; awaits the owner.
+- **Status:** accepted by the owner on 2026-10-08.
 - **Packages:** S09 (agent, decisions, memory, proactive), S11, S05, S10.
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §3–§5; [Leo audit](../design/leo/AUDIT.md) C4, C10; [ARCHITECTURE.md](../design/ARCHITECTURE.md) §5, §18.1.
 

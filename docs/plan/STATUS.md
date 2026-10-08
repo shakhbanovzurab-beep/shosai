@@ -15,7 +15,7 @@ Statuses: `todo` · `planned` (package plan written, approved) · `in progress` 
 | F3 | Local environment | — | done | — | `compose.dev.yaml`: two PostgreSQL 18 homes behind transaction-mode PgBouncer, Valkey, Redis cache, Qdrant, SeaweedFS; [development.md](../development.md); [ADR 0001](../adr/0001-local-environment.md) |
 | F4 | Delivery to staging | F1; F2 for the last step | todo | — | Needs server, DNS and registry from the user; steps 1–5 need only F1 |
 | F5 | Observability | F1; F4 for the last step | todo | — | Steps 1–6 run locally; step 7 needs staging |
-| F6 | Platform services | F1 | todo | — | Added by D4 (FM-4): AI provider port with cost rows, spend and abuse control; email; periodic-job registry |
+| F6 | Platform services | F1 | todo | — | Added by D4 (FM-4): AI provider port with cost rows, spend and abuse control; email; periodic-job registry. The Leo architecture adds Jev `decide` with a breaker per model and the agent tool contract ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md), [ADR 0029](../adr/0029-leo-tools-owned-by-domain-slices.md)) |
 | S01 | Identity | F1, F2, F3, F6, D1, D2 | todo | — | |
 | S02 | Organizations | S01 | todo | — | New in v2 |
 | S03 | Billing | S01 | todo | — | |
@@ -24,9 +24,9 @@ Statuses: `todo` · `planned` (package plan written, approved) · `in progress` 
 | S06 | Rooms | S01 | todo | — | Includes broadcasts, the room whiteboard and the room AI panel (D4) |
 | S07 | Knowledge and search | S01 | todo | — | |
 | S08 | Storage | S01 | todo | — | |
-| S09 | Agent (Leo) | S01 | todo | — | |
+| S09 | Agent (Leo) | S01 | todo | — | Architecture accepted on 2026-10-08: [Leo architecture](../design/leo/ARCHITECTURE.md), [audit](../design/leo/AUDIT.md), ADR 0023–0033; also needs S02 and one domain slice with read tools (S04 or S07) |
 | S10 | MCP | S01 | todo | — | |
-| S11 | Errands | S01 | todo | — | Periodic jobs moved to F6 by D4 |
+| S11 | Errands | S01 | todo | — | Periodic jobs moved to F6 by D4; errands run through Leo's Action Gateway ([ADR 0025](../adr/0025-leo-action-gateway.md)) |
 | S12 | Connectors and calendar | S01 | todo | — | |
 | S13 | Tracker | S01 | todo | — | |
 | S14 | Analytics | S01 | todo | — | |

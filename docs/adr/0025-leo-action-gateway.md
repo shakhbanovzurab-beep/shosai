@@ -1,6 +1,6 @@
 # ADR 0025 — One Action Gateway for every write, with durable proposals and single execution
 
-- **Status:** proposed on 2026-10-08; awaits the owner. **Amends** the "writing action guarded by a one-time key" clause of [ARCHITECTURE.md](../design/ARCHITECTURE.md) §8.1; implements inv-12.
+- **Status:** accepted by the owner on 2026-10-08. **Amended** the "writing action guarded by a one-time key" clause of [ARCHITECTURE.md](../design/ARCHITECTURE.md) §8.1; implements inv-12.
 - **Packages:** S09 (`agent`), S11, S10, S05, and every slice that ships write tools.
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §8.1, §8.4; [Leo audit](../design/leo/AUDIT.md) A1–A3, A8, A9, P4; ARCHITECTURE.md inv-12, §14 rule 1.
 

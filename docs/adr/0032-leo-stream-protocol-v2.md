@@ -1,6 +1,6 @@
 # ADR 0032 — `/v1/agent/*` with resumable SSE runs; native routes kept
 
-- **Status:** proposed on 2026-10-08; awaits the owner.
+- **Status:** accepted by the owner on 2026-10-08.
 - **Packages:** S09 (`agent`, `proactive`), F2 (cabinet client).
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §13.2; [Leo audit](../design/leo/AUDIT.md) C1, C5, W1, W2; ARCHITECTURE.md §10 contract rules, nfr-12; [ADR 0022](0022-new-web-design-replaces-draft-parity.md); D1 `contracts/draft/consumers.json`.
 

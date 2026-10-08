@@ -1,6 +1,6 @@
 # ADR 0028 — Autonomy levels without writes before approval; skills as versioned packages that grant no rights
 
-- **Status:** proposed on 2026-10-08; awaits the owner.
+- **Status:** accepted by the owner on 2026-10-08.
 - **Packages:** S09 (`agent`, `proactive`).
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §8.5, §9.2; [Leo audit](../design/leo/AUDIT.md) M6, A3; ARCHITECTURE.md fr-4, inv-12.
 

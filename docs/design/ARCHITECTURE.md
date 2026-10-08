@@ -1,6 +1,6 @@
 # Whisperer v2 — Target Architecture
 
-- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
+- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
 - **Diagram:** [architecture.html](architecture.html).
 - **Scope:** B2C and B2B (small and mid-size companies, 5–200 seats) on one platform.
 - **Placement:** one compute plane in the EU; two data homes — Russia and the EU.
@@ -97,8 +97,8 @@
 | API | plane | FastAPI: cabinet, Leo, billing, companies and access policy, administration, presigned uploads, acquirer webhooks | N processes; one pool per database |
 | WS gateway | plane | Live capture, voice, translation, subtitles, ingest of room participant tracks from LiveKit egress. Meeting resume state lives in Redis; any process can resume any meeting | 250 meetings per process; 11–13 processes |
 | Workers | plane | TaskIQ on Redis Streams, queues `critical`, `default`, `bulk`, `meeting`: outbox relay, transcript queue drain, post-meeting pipeline, indexing, bank statement reconciliation | processes per queue; one pool per database |
-| Scheduler | plane | One process: periodic jobs from `schedule_runs`, due rows from `errands`. Only enqueues tasks | 1 |
-| Valkey (managed) | EU | Task streams, transcript queue, locks, WS slots, meeting resume state, Leo checkpoints, circuit-breaker state. AOF every second, replica, `noeviction` | managed |
+| Scheduler | plane | One process: periodic jobs from `schedule_runs`, due rows from `errands` and `proactive_triggers`. Only enqueues tasks | 1 |
+| Valkey (managed) | EU | Task streams, transcript queue, locks, WS slots, meeting resume state, Leo run state (active and paused runs, run event logs, thread leases), circuit-breaker state. AOF every second, replica, `noeviction` | managed |
 | Redis cache | plane | LRU cache only; losing it is harmless | container |
 | Qdrant | plane | Vector index: knowledge chunks and per-minute meeting windows. Payload: tenant, owner, access level, grantees. Derived; rebuilt from sources | 1 node |
 | LiveKit | plane | SFU, egress (room recording, per-participant audio tracks to the WS gateway), coturn | pinned versions |
@@ -106,7 +106,7 @@
 | PostgreSQL RU | Russia | Source of truth of the Russian home | managed, PgBouncer |
 | PostgreSQL EU | EU | Source of truth of the EU home; directory tables; platform tables and telemetry without an account (§6) | managed, PgBouncer |
 | S3 | Russia | One bucket for both homes and the platform: files, recordings, exports, knowledge sources; lifecycle rules ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) | — |
-| AI providers | external | OpenRouter, OpenAI Realtime, Google Gemini Live, Deepgram, pyannote, Mistral OCR — reached directly from the plane | quotas per contract |
+| AI providers | external | OpenRouter (including Jev decisions by TypeSafe AI), OpenAI Realtime, Google Gemini Live, Deepgram, pyannote, Mistral OCR — reached directly from the plane | quotas per contract |
 | Payments | external | TBank, CloudPayments, lava.top (cards); bank statement API (invoices) | — |
 | Observability | plane + outside | Grafana stack: Prometheus (metrics), Loki (logs), Tempo (traces), Grafana (one pane); OpenTelemetry Collector; Alertmanager (Telegram); node exporter; uptime probes run outside the plane | single nodes, local disks with size caps |
 | Delivery | GitHub | GitHub Actions builds the image from a green commit into a registry; `scripts/release.sh` deploys to staging, then to the plane | — |
@@ -152,6 +152,9 @@
   - `knowledge` — sources, indexing, search;
   - `agent` — Leo;
   - `errands` — delayed Leo actions;
+  - `decisions` — Leo's Decision Layer: versioned policies over Jev, also used by other domains;
+  - `memory` — Leo's long-term memory and personalization;
+  - `proactive` — Leo's initiative: signals, suggestions, delivery, Web Push;
   - `connectors` — Nango;
   - `analytics`, `alerting`.
 
@@ -175,7 +178,7 @@
   - processes cache directory entries for 60 s;
   - account transfer bumps `token_version`.
 - **Files in one bucket in Russia — accepted exception to nfr-4** ([ADR 0014](../adr/0014-one-object-store-in-russia.md)): the objects of both homes and of the platform live in one bucket in Russia; the pointer rows stay in the owner's home database. Keys do not name the home, so an account transfer moves no bytes. Files of people and companies of the EU home are subject to the legal review in §22.
-- **Derived copies in the EU — accepted exception to nfr-4:** meeting resume state, Leo checkpoints (Redis), task payloads, vector index points of Russian users and companies. Retention ≤ 24 h in Redis; index points live as long as their source.
+- **Derived copies in the EU — accepted exception to nfr-4:** meeting resume state, the run state of Leo's active and paused runs (Valkey), task payloads, vector index points of Russian users and companies. Retention ≤ 24 h in Redis; index points live as long as their source.
 - **Cross-border AI:**
   - personal user — consent in the product;
   - company — consent in the contract as data operator; Whisperer processes on its behalf.
@@ -227,8 +230,13 @@
 | Cost | `provider_costs` (monthly partitions), credit ledger | UUID + effect key (run:stage:call or request id) | home DB; subscription row lock on debit | same effect key → no second row or debit | written by the provider port with the call result; live capture batched every minute | never deleted; partitions > 24 months dropped |
 | Vector | Qdrant point | UUIDv5(source, window, build) | none — derived | overwrite by point id; tenant and access from request scope | commit of the source | with the source; full rebuild by cursor |
 | File | S3 object + `storage_files` | UUID; key prefixed by owner (objects migrated from the draft keep their keys, [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md)) | home DB: pointer after upload completes; the object in the one bucket in Russia (ADR 0014) | objects immutable | multipart complete, then pointer commit | row, then object; orphans by lifecycle rules |
-| Leo state | checkpoints in Redis, TTL 24 h | thread `user_id:session_id` | Redis; writing action guarded by a one-time key | last checkpoint wins | Redis AOF; loss restarts the dialogue | TTL |
-| Errand and schedule | `errands`, `schedule_runs` in the home DB | UUID; job name | `FOR UPDATE SKIP LOCKED`; the scheduler walks both homes | errand runs only from `scheduled`; a job runs only if `last_run_at` is older than its interval | commit | finished errands after 24 h |
+| Leo conversation | `agent_threads`, `agent_messages` (monthly partitions) in the home DB | UUIDv7; one thread per scope (personal, workspace, hub) | one active run per thread (Valkey lease) | a second turn gets 409 or supersedes the running one | user message committed before streaming; answer committed at the end | until the user deletes the thread; tool payloads 30 days |
+| Leo run state | LangGraph checkpoint and run event log in Valkey | run id | the run's lease holder | last checkpoint wins | Valkey AOF; loss fails the in-flight run, the conversation and pending actions survive in the DB | deleted at run end; ≤ 24 h |
+| Leo action | `agent_actions` in the home DB | UUIDv7; item key `action_id:index` | one conditional status update wins | `proposed → approved → executing → terminal`; a replayed item key returns the stored result | commit of each transition; an external effect sits between two commits, a crash leaves `outcome_unknown`, never retried | 30 days after a terminal state |
+| Leo memory | `memory_facts` with a pgvector embedding in the home DB ([ADR 0033](../adr/0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md)) | UUIDv7 | home DB | a newer fact supersedes the older one | commit | decay and user controls; forgotten facts purged after 180 days |
+| Leo suggestion | `agent_suggestions`, `suggestion_deliveries`, `suggestion_feedback`; `proactive_triggers` | UUIDv7; dedup key per subject | home DB; triggers taken with `FOR UPDATE SKIP LOCKED` | one delivery per (suggestion, channel) | commit | suggestions 90 days; feedback 12 months |
+| Leo records | `agent_runs`, `agent_decisions` (monthly partitions) | UUIDv7 | home DB | append-only; ids, numbers and codes, no text | commit, off the hot path | 90 days |
+| Errand and schedule | `errands`, `schedule_runs` in the home DB | UUID; job name | `FOR UPDATE SKIP LOCKED`; the scheduler walks both homes | errand runs only from `scheduled`; a job runs only if `last_run_at` is older than its interval | commit | finished errands after 24 h; failed errands kept 30 days, visible to the user |
 | Event | `outbox_messages`, `processed_events` | event UUID = dedup key; (consumer, event_id) unique | home DB | per-subscriber task; mark in the subscriber's transaction | commit with the effect | published rows after 7 days |
 | Audit event | `org_audit_events`, monthly partitions | UUIDv7 | commit order | append-only | same transaction as the action | 12 months, longer by contract |
 
@@ -240,7 +248,7 @@
   - search and analytics — derived, may lag.
 - No cross-home write conflicts by construction.
 - High-volume tables:
-  - UUIDv7 keys and monthly partitions: `transcript_segments`, `provider_costs`, `prompt_executions`, `usage_events`, `login_events`, `error_logs`, `client_errors`, `agent_audit`, `org_audit_events`;
+  - UUIDv7 keys and monthly partitions: `transcript_segments`, `provider_costs`, `prompt_executions`, `usage_events`, `login_events`, `error_logs`, `client_errors`, `agent_audit`, `agent_messages`, `agent_runs`, `agent_decisions`, `org_audit_events`;
   - retention by dropping partitions, except `usage_events`: its tombstones count toward the lifetime Free quota and live as long as the account ([ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md)).
 - Every store is declared authoritative (with acknowledgement point, RPO, RTO) or derived (with source and cursor).
 - Derived stores are rebuildable:
@@ -282,6 +290,7 @@
 | Share inside a company | `PUT /v1/{resource}/{id}/access {level, members[]}` | set-state | 300 ms | new access + audit event; 403 without right; revocation immediate |
 | Company invoice | `POST /v1/orgs/{id}/invoices {seats, period, payer}` → number + PDF | invoice number; statement payment matched once | 2 s; seats active by the next business day | `paid`, `issued` or unmatched payment → operator alert after 24 h |
 | Room transcription | LiveKit track egress → WSS to the WS gateway, one participant per stream | (session_id, seq) | line on screen ≤ 2 s | transcript per participant in the room owner's meeting with company access; egress failure → whole-room recording analysed after the meeting |
+| Leo turn and approval | `POST /v1/agent/threads/{id}/turns` → SSE with event ids; resume `GET /v1/agent/runs/{id}/events`; `POST /v1/agent/actions/{id}/approve` | `Idempotency-Key` per user message; approval by one conditional status update; item key `action_id:index` | platform overhead ≤ 500 ms (EU) | exactly one terminal event per run; 409 `thread_busy`; a write executes once or ends `outcome_unknown` ([ADR 0025](../adr/0025-leo-action-gateway.md), [ADR 0032](../adr/0032-leo-stream-protocol-v2.md)) |
 | Account transfer | internal `POST /internal/transfers {user_id, to_home}`; saga steps as tasks | transfer id; each step checks journal and manifest | minutes per user | SUCCEEDED after manifest check and source purge; CANCELLED before the directory switch; RECONCILING if the target did not confirm |
 
 **API contract rules:**
@@ -340,6 +349,7 @@
   - the subscriber writes `processed_events (consumer, event_id)` in its own transaction, so redelivery is harmless;
   - events carry no personal data.
 - **Delayed actions (errands):** a row with `run_at`; the scheduler enqueues due rows (`FOR UPDATE SKIP LOCKED`) and records the run.
+- **Proactive time triggers:** `proactive_triggers` rows with `run_at`, enqueued by the scheduler the same way. Otherwise Leo's initiative starts from outbox events and user-state transitions, never from scans over all users ([ADR 0027](../adr/0027-leo-event-driven-proactivity.md)).
 - **Periodic jobs:** `schedule_runs.last_run_at`. A missed interval runs once on start, not as a backlog.
 - **Provider-wide concurrency:** a semaphore in Redis per provider, not per process.
 - **Revisit triggers:**
@@ -491,6 +501,9 @@ Alerts page on error-budget burn (fast and slow windows), not on causes.
 | Payment | webhooks answered 2xx after commit; checkout success | 100%; 99.9% |
 | Cabinet API | read latency per home | p95 ≤ 300 ms (EU); RU tracked, not paged (§20) |
 | Leo | platform overhead per turn | ≤ 500 ms (EU) |
+| Leo | runs failed for platform reasons | < 1% |
+| Leo | approved actions executed, or failed with a code, within 30 s | ≥ 99% |
+| Leo | proactive precision: acted on or rated useful ÷ delivered | tracked, not paged |
 
 ### 16.4 Invariant monitors
 
@@ -506,6 +519,9 @@ Each of these counters must stay at zero; any non-zero value pages.
 | Dead-letter entries | inv-8 |
 | Leftovers found by the post-deletion check of an account or company | nfr-13 |
 | Access-policy decisions that disagree with RLS in the isolation self-test | inv-14 |
+| A Leo action item executed twice, or executed without approval | inv-12 |
+| An initiative suggestion delivered inside quiet hours | [ADR 0027](../adr/0027-leo-event-driven-proactivity.md) |
+| Leo memory written for a user with memory switched off | [ADR 0030](../adr/0030-leo-memory-v2.md) |
 
 ### 16.5 Dashboards
 
@@ -613,7 +629,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | Uvicorn | 0.54.0 | ASGI server, one process per container |
 | Backend | uvloop | 0.23.0 | Event loop of every backend process |
 | Backend | psycopg (`psycopg[binary]`) | 3.3.6 | PostgreSQL driver; statements unprepared, one round trip each behind PgBouncer in transaction mode ([ADR 0013](../adr/0013-psycopg-driver-behind-pgbouncer.md)) |
-| Backend | pgvector | 0.5.0 | Vectors in PostgreSQL |
+| Backend | pgvector | 0.5.0 | Vectors of Leo's memory in the home database; knowledge and meeting windows stay in Qdrant ([ADR 0033](../adr/0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md)) |
 | Backend | Own task broker on TaskIQ's `AsyncBroker`, streams in Valkey through redis-py | — | One stream per queue holding only unfinished tasks: enqueue within 50 ms or 503, lease renewal, retries as delayed redeliveries, at most 5 deliveries, dead letter; replaces taskiq-redis, whose broker built its own pool, had no deadline or delivery limit and trimmed unfinished tasks ([ADR 0016](../adr/0016-own-task-broker-on-valkey-streams.md)) |
 | Backend | websockets | 17.1 | Streaming connections to AI providers |
 | Backend | google-genai | 2.25.0 | Gemini Live client |
@@ -630,7 +646,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Data | PostgreSQL, managed (EU) | 18 | EU data home and the directory |
 | Data | PgBouncer | transaction mode | Connection pooler in front of each database |
 | Data | PostgreSQL row-level security | — | Second line of tenant isolation for companies |
-| Data | Valkey, managed (Netherlands) | 9.1 | The managed Redis-compatible service: task queues, transcript queue, locks, meeting state, Leo checkpoints |
+| Data | Valkey, managed (Netherlands) | 9.1 | The managed Redis-compatible service: task queues, transcript queue, locks, meeting state, Leo run state |
 | Data | Redis, container | 8.10.2 | Local LRU cache |
 | Data | S3 Timeweb ru-1 | — | One bucket: files of both data homes and the platform ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) |
 | Realtime and integrations | LiveKit server, egress, coturn | pinned | Video rooms, recording, per-participant tracks to the ws gateway, TURN |
@@ -639,6 +655,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Realtime and integrations | SMTP | — | Email |
 | Realtime and integrations | Yandex SmartCaptcha | — | Form protection |
 | AI providers | OpenRouter | — | Chat, vision, embeddings, rerank, web search |
+| AI providers | Jev (TypeSafe AI) through OpenRouter's Decisions API | `typesafe/jev-1.13`, pinned | Leo's Decision Layer: typed, calibrated decisions behind versioned policies with deterministic fallbacks ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)) |
 | AI providers | OpenAI Realtime | — | Streaming speech recognition and translation |
 | AI providers | Google Gemini Live | — | Voice assistant |
 | AI providers | Deepgram, pyannote, Mistral OCR | — | Speech recognition, speaker diarization, document OCR |
@@ -690,6 +707,10 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | One OpenTelemetry Collector for logs and traces | the application is independent of the stores; tail sampling in one place | one more process to run | never |
 | One S3 bucket in Russia for both homes ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) | object storage exists only in Russia; the draft's bucket is kept (ADR 0006); an account transfer moves no bytes | files of the EU home outside the EU (legal review, §22); one bucket is a single point of failure for files | the legal review rules it inadmissible, a company contract requires EU storage, or an EU bucket becomes available → a bucket per home, objects of the EU home copied with identical keys |
 | Public site on Next.js, cabinet on a Vite SPA, backend only on FastAPI ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | public pages need server rendering and real `404` (SEO); the cabinet needs none and stays static; one API for every client | one more process role and frontend project; two translation entry points over one message format | the cabinet needs server rendering for a measured reason, or the site's server becomes a bottleneck → static generation |
+| Leo conversations in the home DB; Valkey only for in-flight runs ([ADR 0024](../adr/0024-leo-threads-in-the-home-database.md)) | continuity across devices; conversations stay in their home; Valkey is no longer the only copy | two home-DB transactions per turn (≈ 90–135 ms for Russian users) | thread rows exceed 5 GB/month in a home |
+| One Action Gateway for every Leo write ([ADR 0025](../adr/0025-leo-action-gateway.md)) | inv-12 becomes provable: one winner, a frozen plan, idempotent execution | every write tool implements plan, preview and idempotent execute; `outcome_unknown` is a product state | the owner decides on standing approvals |
+| Leo's Decision Layer on Jev with deterministic rules and fallbacks ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)) | measurable, calibrated, cheap decisions for initiative, tool routing, memory and risk | a new external provider; an evaluation in 16 languages per policy | Jev unavailable, or worse than a policy's fallback for 4 weeks |
+| Leo's initiative from events and trigger rows ([ADR 0027](../adr/0027-leo-event-driven-proactivity.md)) | load follows activity; no scans over all users | producer slices emit events | sustained > 20 events/s |
 | Presigned uploads directly to the bucket; lifecycle rules | no DB session or API process held by file transfer | two-step upload; abandoned uploads removed by bucket rules | the storage provider lacks presigned multipart or lifecycle rules |
 
 ## 20. Accepted trade-offs
@@ -719,6 +740,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 |---|---|---|
 | Legal review: email HMAC outside Russia; derived copies in the EU; telemetry without an account in the EU home (ADR 0005); data of people outside Russia kept in the Russian home until their transfer (ADR 0004); files of the EU home in the bucket in Russia (ADR 0014); cross-border transfer to AI providers; processor agreement (152-FZ) and DPA (GDPR) with the list of subprocessors | owner, lawyer | first transfer of accounts; first company contract |
 | Tax, closing documents, document exchange for Russian legal entities | owner, accountant | first invoice |
+| Legal review of Jev (TypeSafe AI) as a subprocessor: retention, DPA, coverage by cross-border consent | owner, lawyer | enabling Jev on personal data |
 | Provider of the EU PostgreSQL; bank for statement API | owner | building the EU home; first invoice |
 | Provider quotas for 2 600 concurrent recognition and voice sessions | owner | 1 000 concurrent meetings |
 | Seat price ≥ recognition cost ($7.92–15.84 per seat per month) plus models | owner | announcing prices |

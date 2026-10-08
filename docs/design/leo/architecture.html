@@ -110,7 +110,7 @@
           <button class="toolbar-toggle" onclick="this.parentElement.classList.toggle('expanded')" title="Export options" aria-label="Export options">⋯</button>
         </div>
       </div>
-      <p class="subtitle">Proposed target design (2026-10-08) · six separated layers · Jev as the Decision Layer · every write through the Action Gateway · see ARCHITECTURE.md and ADR 0023–0032</p>
+      <p class="subtitle">Accepted design (2026-10-08) · six separated layers · Jev as the Decision Layer · every write through the Action Gateway · see ARCHITECTURE.md and ADR 0023–0032</p>
     </div>
 
     <!-- ================= Диаграмма 1: компоненты и слои ================= -->
@@ -274,7 +274,7 @@
         <text x="185" y="529" fill="#94a3b8" font-size="8" text-anchor="middle">memory_facts: admit · supersede · source</text>
         <text x="185" y="542" fill="#94a3b8" font-size="8" text-anchor="middle">untrusted wrapper v2 · run taint</text>
         <text x="185" y="555" fill="#94a3b8" font-size="8" text-anchor="middle">user state in Valkey (attention)</text>
-        <text x="185" y="576" fill="#a78bfa" font-size="7" text-anchor="middle">vectors: pgvector or Qdrant — open Q-1</text>
+        <text x="185" y="576" fill="#a78bfa" font-size="7" text-anchor="middle">vectors: pgvector in the home DB (ADR 0033)</text>
 
         <!-- Инструменты и навыки -->
         <rect x="340" y="466" width="270" height="124" rx="8" fill="#0f172a"/>
@@ -668,8 +668,8 @@
       <div class="card">
         <div class="card-header"><div class="card-dot amber"></div><h3>Status and open questions</h3></div>
         <ul>
-          <li>• Proposed; amendments to ARCHITECTURE.md listed in §16</li>
-          <li>• Q-1 memory vectors: pgvector or Qdrant</li>
+          <li>• Accepted 2026-10-08; §16 applied to ARCHITECTURE.md</li>
+          <li>• Q-1 decided: pgvector for memory, Qdrant for knowledge (ADR 0033)</li>
           <li>• Q-2 streaming Markdown library</li>
           <li>• Q-3 Jev legal review and alpha API</li>
           <li>• Q-4 standing approvals — not designed</li>
@@ -677,7 +677,7 @@
       </div>
     </div>
 
-    <p class="footer">Leo (Shosai) · agent architecture · proposed 2026-10-08 · docs/design/leo/ARCHITECTURE.md · ADR 0023–0032</p>
+    <p class="footer">Leo (Shosai) · agent architecture · accepted 2026-10-08 · docs/design/leo/ARCHITECTURE.md · ADR 0023–0032</p>
   </div>
 
   <script>

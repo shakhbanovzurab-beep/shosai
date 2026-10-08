@@ -1,6 +1,6 @@
 # ADR 0026 — A Decision Layer of versioned policies over Jev, with deterministic rules and fallbacks
 
-- **Status:** proposed on 2026-10-08; awaits the owner. **Adds** a provider to [ARCHITECTURE.md](../design/ARCHITECTURE.md) §4.2 and §18.2 and a legal item to §22.
+- **Status:** accepted by the owner on 2026-10-08. **Added** a provider to [ARCHITECTURE.md](../design/ARCHITECTURE.md) §4.2 and §18.2 and a legal item to §22.
 - **Packages:** S09 (new slice `decisions`); F6 (provider port gains `decide`); used by S09 `agent`, `memory`, `proactive`, and by S12 (mail triage).
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §6; [Leo audit](../design/leo/AUDIT.md) P1, P2, M5, T1; ARCHITECTURE.md nfr-7, nfr-14, inv-9, §14 rule 4.
 

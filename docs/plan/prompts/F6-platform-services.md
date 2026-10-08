@@ -18,7 +18,7 @@ The services that many slices need from their first step, so that no slice waits
 
 ## Read first
 
-- CLAUDE.md in full; target architecture §4.3 (rows "API, Workers → AI" and "Scheduler → Valkey"), §8.1 (entities "Cost" and "Errand and schedule"), §9 (inv-9, inv-13), §12, §13.2, §14 rules 4, 9, 10 and 14, §16.4, §18.2.
+- CLAUDE.md in full; target architecture §4.3 (rows "API, Workers → AI" and "Scheduler → Valkey"), §8.1 (entities "Cost", "Errand and schedule" and the Leo rows), §9 (inv-9, inv-13), §12, §13.2, §14 rules 4, 9, 10 and 14, §16.4, §18.2.
 - `docs/plan/FEATURE_MAP.md`: the F6 row of section 1, sections 2.5 and 8.
 - The draft, for behaviour and lessons only: `services/llm/` (provider clients, `cost_tracker`, `spend_guard`, `spend_policy`, `voice_metering`, `provider_breaker`, `live_capacity`, `premium_limits`, `abuse/`), `core/llm/`, `api/ai/ws_metering.py`, `api/admin/costs.py`, `api/admin/abuse.py`, `tasks/recompute_abuse.py`, `services/email/`, `tasks/send_email.py`, `entrypoints/scheduler_loops.py`; specifications 002, 008, 012, 016 and 028; `docs/SPEND_CONTROL.md`.
 
@@ -32,6 +32,12 @@ The services that many slices need from their first step, so that no slice waits
 6. **Periodic-job registry:** a slice declares a job (name, interval, task); the scheduler process enqueues due jobs from `schedule_runs` in both homes; a missed interval runs once on start, not as a backlog (§12); scheduler loops are off outside the scheduler process (§14 rule 10).
 7. **Telemetry:** per-provider metrics (latency, errors, session pool, cost per hour, §16.5) and the invariant monitor "provider calls without a cost row" (§16.4).
 8. **Test doubles** of the provider port and the email port, so slices test without network access.
+9. **Requirements from the [Leo architecture](../../design/leo/ARCHITECTURE.md)** (accepted on 2026-10-08):
+   - the port serves **Jev decisions** (`decide`) through OpenRouter's Decisions API: pinned model `typesafe/jev-1.13`, a contract test on the response shape, one cost row per request priced by input tokens, deadlines set per call by the caller ([ADR 0026](../../adr/0026-leo-decision-layer-on-jev.md)); the Decision Layer itself (policies, thresholds, records) belongs to S09;
+   - **breakers per (provider, model)**, not per provider, with a fallback model of the same tier from the registry (Leo architecture §11.1); this refines item 2;
+   - spend reservation for a Leo turn and a separate daily budget for background runs, so initiative cannot exhaust a user's interactive quota (§5.4);
+   - the **agent tool contract** in `core/agent_tools` (`ToolSpec`, `ToolContext`, `EffectClass`, `PlannedEffect`, `Preview`, `ToolResult`) and the field `FeatureParts.agent_tools`, framework-light like the kernel, so that slices can ship their tools before S09 ([ADR 0029](../../adr/0029-leo-tools-owned-by-domain-slices.md));
+   - the periodic-job registry also lets a slice declare **due-row sources** walked by the scheduler, for `errands` and `proactive_triggers` (§12).
 
 ## Decisions to record as ADRs, confirmed by the user
 

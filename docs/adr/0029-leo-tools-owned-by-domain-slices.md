@@ -1,6 +1,6 @@
 # ADR 0029 — Tools are `ToolSpec`s owned by domain slices; toolsets are routed per turn
 
-- **Status:** proposed on 2026-10-08; awaits the owner.
+- **Status:** accepted by the owner on 2026-10-08.
 - **Packages:** S09 (`agent`); core (`core/agent_tools`, `FeatureParts`); every slice that exposes capabilities to Leo.
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §8.1–§8.3; [Leo audit](../design/leo/AUDIT.md) T1, T3–T5, C10, A7, A8; ARCHITECTURE.md §5, inv-14.
 

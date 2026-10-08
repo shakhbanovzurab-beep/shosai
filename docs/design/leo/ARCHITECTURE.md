@@ -1,6 +1,6 @@
 # Leo — agent architecture
 
-- **Status:** proposed, 2026-10-08. Not accepted by the owner. Where it needs a change of the [target architecture](../ARCHITECTURE.md), the change is listed in [§16](#16-proposed-amendments-to-the-target-architecture) and nothing here overrides that document until the owner accepts it.
+- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md).
 - **Scope:** Leo, the proactive AI agent at the centre of the workspace (brand Whisperer → Shosai, tentative). Package S09 with S11 (errands) and the agent-facing parts of S05 (voice), S10 (MCP) and S12 (connectors).
 - **Inputs:** [AUDIT.md](AUDIT.md) (the draft's Leo); target architecture §1–§22; the new cabinet design in `frontend/src/features/leo`; the D1 contract (`contracts/draft/`); [Jev](#6-decision-layer-and-jev) public documentation as of 2026-10-08.
 - **Diagram:** [architecture.html](architecture.html) — components and layers, the turn and approval path, the proactive pipeline.
@@ -722,7 +722,7 @@ If any check fails, the errand becomes a **new proposal** delivered to the user,
 | home PostgreSQL | `agent_runs` (partitions) | authoritative telemetry: ids, model, tokens, cost, latencies, outcome, policy versions | home | 90 d | — |
 | home PostgreSQL | `agent_actions` | authoritative | home | 30 d after a terminal state; audit stays 12 months | — |
 | home PostgreSQL | `agent_audit` (partitions) | authoritative, append-only | home | 12 months | — |
-| home PostgreSQL | `memory_facts` (+ vectors, see Q-1) | authoritative | home | user controls; forgotten → purge 180 d | — |
+| home PostgreSQL | `memory_facts` with pgvector embeddings (ADR 0033) | authoritative | home | user controls; forgotten → purge 180 d | — |
 | home PostgreSQL | `agent_suggestions`, `suggestion_deliveries`, `suggestion_feedback`, `proactive_triggers`, `proactive_settings`, `push_subscriptions` | authoritative | home | suggestions 90 d; feedback 12 months | — |
 | home PostgreSQL | `errands` | authoritative | home | finished 24 h, failed 30 d | — |
 | home PostgreSQL | `agent_decisions` (partitions) | telemetry | home | 90 d | — |
@@ -758,7 +758,7 @@ This is below the transcript tables (1.9 TB/year) and needs no new store.
 | Jev slow, down or contract changed | Each policy's fallback; `decision_fallback_total{point,reason}`; contract test failure blocks the release |
 | Valkey down | New interactive runs refused, 503 `agent_unavailable` (expensive AI fails closed, §13.2); approvals still execute (DB); proactive defers delivery |
 | Link to the Russian DB lost | Leo 503 for Russian users (§11 flow 8); EU unaffected |
-| Qdrant down | Knowledge search falls back to PostgreSQL keyword search (§4.3); memory unaffected if on pgvector (Q-1) |
+| Qdrant down | Knowledge search falls back to PostgreSQL keyword search (§4.3); memory unaffected (pgvector in the home DB, ADR 0033) |
 | A domain slice's tool fails | Typed error result to the model; writes record the item `failed` with a code |
 | API process dies mid-run | Lease expires (30 s); the run is marked `failed{process_lost}` by a sweep; the user message is already persisted, so "retry" re-runs; paused actions are unaffected |
 | Process dies mid-execution of an approved action | The item stays `executing` past its lease → `outcome_unknown`; the user is told; never auto-retried (§8.4) |
@@ -1015,7 +1015,7 @@ Phases follow dependencies, not calendar dates. **P0** is needed for a usable Le
 
 | Phase | Priority | Content | Depends on | Exit criteria |
 |---|---|---|---|---|
-| 0. Decisions | P0 | Owner review of this document, ADRs 0023–0032, amendments (§16), open questions (§17); OpenAPI for `/v1/agent/*`; SSE event schema; `ToolSpec` contract | — | ADRs accepted; contract files committed |
+| 0. Decisions | P0 | Done 2026-10-08: this document, ADRs 0023–0033 and the amendments (§16) accepted. Left: OpenAPI for `/v1/agent/*`, SSE event schema (S09 plan); `ToolSpec` contract (F6) | — | contract files committed |
 | 1. Prerequisites | P0 | F6 provider port with `decide`, cost rows, spend reserve/settle, breaker per model; S01 identity; F2 cabinet on Vite with MSW mocks of `/v1/agent/*` | F1 (done) | F6 and S01 done |
 | 2. Core | P0 | `agent` slice: threads, messages, runs; lease; run graph (model ⇄ reads); `PrincipalFactory`; context builder v1 (segments 1, 2, 4, 6–8); core toolset; SSE with resume; spans, metrics, `agent_runs`; eval harness with the trajectory and budget suites; model-facing registration. Cabinet: panel on the real API | 1 | turn works end to end on one slice's read tools (the first ready slice, e.g. S04); platform overhead measured ≤ 500 ms EU |
 | 3. Action Gateway | P0 | `agent_actions`, plan/preview/execute contract, approvals, expiry, vault, outbox audit; action card and approvals inbox; property tests for inv-12 | 2 | invariant suite green; 0 double executions under fault injection |
@@ -1034,7 +1034,7 @@ Phases follow dependencies, not calendar dates. **P0** is needed for a usable Le
 
 ## 16. Proposed amendments to the target architecture
 
-These change normative text, so they wait for the owner. Nothing is implemented against them before acceptance.
+Accepted by the owner on 2026-10-08 and applied to [ARCHITECTURE.md](../ARCHITECTURE.md) in the same change.
 
 | § | Today | Proposed |
 |---|---|---|
@@ -1055,7 +1055,7 @@ These change normative text, so they wait for the owner. Nothing is implemented 
 
 | # | Question | Recommendation | Blocks |
 |---|---|---|---|
-| Q-1 | Where do memory vectors live: pgvector in the home DB or Qdrant? (CLAUDE.md "Undecided") | pgvector in the home DB: per-user and small (≤ thousands of rows), transactional with the fact (supersession and deletion in one transaction), residency stays in the home, and Qdrant stays the index for knowledge and meeting windows | phase 5 |
+| Q-1 | Where do memory vectors live: pgvector in the home DB or Qdrant? | **Decided 2026-10-08:** pgvector in the home DB for memory; Qdrant for knowledge and meetings ([ADR 0033](../../adr/0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md)) | — |
 | Q-2 | Streaming Markdown in the cabinet: `streamdown`, another library, or our own incremental renderer? (CLAUDE.md "Undecided") | decide by a measured prototype on a long answer (INP, CPU per frame) in phase 2 | phase 2 UI |
 | Q-3 | Jev legal and contract: TypeSafe's retention and DPA are not published on the pages read; the endpoint is `alpha` | until resolved, Jev runs only on synthetic data and in shadow over features without text; every policy runs on its fallback | phase 4 activation |
 | Q-4 | Standing approvals (a confirmation given once for a class of writes)? | not now; revisit with acceptance data from phase 7, as an explicit amendment of inv-12 if ever | — |

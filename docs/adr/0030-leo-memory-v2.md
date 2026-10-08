@@ -1,6 +1,6 @@
 # ADR 0030 — Memory v2: admitted facts with provenance and supersession, rendered as untrusted
 
-- **Status:** proposed on 2026-10-08; awaits the owner. The vector store for memory is an open question ([architecture](../design/leo/ARCHITECTURE.md) §17 Q-1, CLAUDE.md "Undecided").
+- **Status:** accepted by the owner on 2026-10-08. Memory vectors live in pgvector in the home DB ([ADR 0033](0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md), accepted).
 - **Packages:** S09 (`memory`); S04 (memory port); S05 (user-context port).
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §7.1, §7.2, §7.4; [Leo audit](../design/leo/AUDIT.md) M1–M5, A6; ARCHITECTURE.md fr-8, nfr-13, nfr-14.
 
@@ -65,7 +65,7 @@ Its mechanics fail:
 - Leo can answer "why do you think that" from provenance. Contradictions resolve to the newer fact.
 - One more cheap model call and one Jev request per turn with candidate text, both in the background.
 - The meeting pipeline (S04) writes through the memory port only, with the switches enforced there.
-- The vector store decision (Q-1) changes only the infrastructure adapter.
+- Memory vectors are in pgvector next to their facts ([ADR 0033](0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md)): supersession, forgetting and deletion act on the fact and its vector in one transaction.
 
 ## Revisit when
 

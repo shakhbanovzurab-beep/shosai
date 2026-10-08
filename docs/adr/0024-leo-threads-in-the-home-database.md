@@ -1,6 +1,6 @@
 # ADR 0024 — Leo's conversations live in the home database; Valkey keeps only in-flight runs
 
-- **Status:** proposed on 2026-10-08; awaits the owner. **Amends** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §8.1 "Leo state" (see the architecture §16).
+- **Status:** accepted by the owner on 2026-10-08. **Amended** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §8.1 "Leo state" (see the Leo architecture §16).
 - **Packages:** S09 (`agent`).
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §5, §10; [Leo audit](../design/leo/AUDIT.md) C1, C2, C8; ARCHITECTURE.md §6, §8.1, §14 rule 1.
 

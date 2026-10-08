@@ -1,6 +1,6 @@
 # ADR 0027 — Proactivity from events, trigger rows and state transitions, judged per candidate
 
-- **Status:** proposed on 2026-10-08; awaits the owner. **Extends** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §12 (time triggers as rows run by the scheduler).
+- **Status:** accepted by the owner on 2026-10-08. **Extended** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §12 (time triggers as rows run by the scheduler).
 - **Packages:** S09 (`proactive`), S11; event producers S04, S07, S12, S13, S16.
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §9; [Leo audit](../design/leo/AUDIT.md) P1–P8, A5; ARCHITECTURE.md §8.1 (events, errands), §12.
 

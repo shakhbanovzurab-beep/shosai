@@ -828,6 +828,8 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 
 ### 5.7 S09 — Agent (Leo)
 
+> **Leo architecture, accepted on 2026-10-08** ([docs/design/leo/ARCHITECTURE.md](../design/leo/ARCHITECTURE.md) §10, ADR 0023–0033). The S09 slice plan revises the targets below: `memory_items` → `memory_facts` with a pgvector embedding (ADR 0030, ADR 0033); `proactive_nudges` → `agent_suggestions` with `suggestion_deliveries` and `suggestion_feedback` (ADR 0027); new tables without a draft source: `agent_threads`, `agent_messages`, `agent_runs`, `agent_actions`, `agent_decisions`, `proactive_triggers`, and the platform tables `decision_policies`, `decision_thresholds` (EU home). The Redis `agent:ckpt:*` keys stay dropped (U-5).
+
 #### `user_contexts` → `user_contexts` · **moved**
 
 - **Owner → home:** own `user_id`.

@@ -1,6 +1,6 @@
 # ADR 0031 — Budgeted, cache-stable context with result digests and background compaction
 
-- **Status:** proposed on 2026-10-08; awaits the owner.
+- **Status:** accepted by the owner on 2026-10-08.
 - **Packages:** S09 (`agent`, `memory`).
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §7.3, §7.4, §12; [Leo audit](../design/leo/AUDIT.md) T1, T2, C6, A4, A5; ARCHITECTURE.md nfr-7.
 
