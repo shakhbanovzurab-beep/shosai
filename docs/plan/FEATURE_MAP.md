@@ -486,6 +486,17 @@ Derived from the draft's imports between modules of different v2 owners. In v2 e
 
 ---
 
+### 3.3 Screens of the new web UI without a draft feature
+
+The new web UI ([ADR 0022](../adr/0022-new-web-design-replaces-draft-parity.md)) has two screens no draft feature covers. Assigned by the owner on 2026-10-08 (F2-D6, [F2 plan](packages/F2-frontend-foundation.md) §3):
+
+| Frontend slice | Screen | v2 |
+|---|---|---|
+| `mail` | `/app/inbox`: mailbox with Leo's insights | S12 (mail is read through connectors) |
+| `productivity` | `/app/productivity`: the user panel's home — today's brief, tasks, meetings, shares | S16 |
+
+---
+
 ## 9. Changes to the plan made by D4
 
 - `features/stream` and the frontend `streams` move from S05 to S06: broadcasts run on LiveKit passes, the SFU data channel and egress, like rooms.

@@ -92,7 +92,7 @@
 | Component | Where | Responsibility | Scaling |
 |---|---|---|---|
 | Clients | user devices | Web cabinet (Vite SPA, PWA); public site in the browser; macOS, iOS, Linux, Windows apps; external MCP clients. One base URL `whisperer.one`. Desktop clients buffer up to 30 s of unsent audio | — |
-| Edge | plane | NGINX ×2: TLS, static assets, rate limits; `/v1/ws/*` → WS gateway (least_conn), `/v1/*` → API; cabinet paths (`/app/*`, `/admin/*`, OAuth callback) → the cabinet's static files; every other path → public site; handshake closed with 1013 when the plane is full | 2 nodes |
+| Edge | plane | NGINX ×2: TLS, static assets, rate limits; `/v1/ws/*` → WS gateway (least_conn), `/v1/*` → API; cabinet paths (`/app/*`, `/admin/*`, OAuth callback, `/unauthorized`) → the cabinet's static files; every other path → public site; handshake closed with 1013 when the plane is full | 2 nodes |
 | Public site | plane | Next.js: server-rendered and statically generated public pages — landing, pricing, documentation, blog, legal, help centre, shared-link pages with previews; real `404`; `sitemap.xml`, `robots.txt`. Reads data only from the API; holds no business logic, database connection or queue ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | N stateless processes |
 | API | plane | FastAPI: cabinet, Leo, billing, companies and access policy, administration, presigned uploads, acquirer webhooks | N processes; one pool per database |
 | WS gateway | plane | Live capture, voice, translation, subtitles, ingest of room participant tracks from LiveKit egress. Meeting resume state lives in Redis; any process can resume any meeting | 250 meetings per process; 11–13 processes |

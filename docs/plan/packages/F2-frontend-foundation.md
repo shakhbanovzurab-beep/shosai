@@ -1,267 +1,180 @@
 # F2 — Frontend foundation: package plan
 
-> **Superseded on 2026-10-07** by [ADR 0021](../../adr/0021-public-site-on-nextjs-cabinet-on-vite.md) and [ADR 0022](../../adr/0022-new-web-design-replaces-draft-parity.md). This plan builds the cabinet as a copy of the draft for visual parity; the cabinet is now the new web UI moved to Vite. The next F2 session replaces this plan ([prompt](../prompts/F2-frontend-foundation.md)). Steps 1–2 below were done and their code was replaced in `f4f8430`.
+Prompt: [prompts/F2-frontend-foundation.md](../prompts/F2-frontend-foundation.md). Status: [STATUS.md](../STATUS.md). Written on 2026-10-07; it replaces the plan of 2026-10-02, which built the cabinet as a copy of the draft for visual parity and was superseded by [ADR 0021](../../adr/0021-public-site-on-nextjs-cabinet-on-vite.md) and [ADR 0022](../../adr/0022-new-web-design-replaces-draft-parity.md) (the old text is in git history before this commit). Records that stay: [ADR 0008](../../adr/0008-error-envelope-with-compatible-detail.md) amended (where `request_id` shows), [ADR 0019](../../adr/0019-no-session-replay-in-the-cabinet.md) (no session replay), [ADR 0020](../../adr/0020-react-doctor-score-from-the-vendor-service.md) (react-doctor score).
 
-Prompt: [prompts/F2-frontend-foundation.md](../prompts/F2-frontend-foundation.md). Status: [STATUS.md](../STATUS.md). Decision records: [ADR 0017](../../adr/0017-parity-stand-ins-and-pending-regions.md) (stand-ins and pending regions, CI comparison), [ADR 0018](../../adr/0018-draft-fonts-vendored-in-the-frontend.md) (fonts), [ADR 0019](../../adr/0019-no-session-replay-in-the-cabinet.md) (no session replay), [ADR 0008](../../adr/0008-error-envelope-with-compatible-detail.md) amended (where `request_id` shows), [ADR 0020](../../adr/0020-react-doctor-score-from-the-vendor-service.md) (react-doctor score).
-
-The package builds the `frontend/` project every slice builds its screens into: the Vite and React project, the visual foundation (tokens, Tailwind theme, fonts, icons, themes), the base UI kit, i18n in 16 languages, the data layer with the error envelope and the session, the router with the registration point for slices, the app shell, the analytics bootstrap, and the wiring of the D2 parity harness. It contains no feature screens.
+The package moves the cabinet in `frontend/` — the new web UI committed in `f4f8430` on Next.js 16 — to a Vite single-page app, with no visible change, and makes it the project every slice builds its screens into: React Router routes with lazy loading, `use-intl` in 16 languages, a data layer generated from the backend's OpenAPI contract with the ADR 0008 error envelope, development mocks in place of the sample backend, and the npm scripts CI runs. It adds no screens.
 
 ## 1. Facts this plan rests on
 
-### 1.1 Inputs from other packages
+### 1.1 The project as committed (`89af1e3`, measured 2026-10-07)
 
-| Source | Fact |
+| Fact | Source |
 |---|---|
-| D2, [parity/README.md](../../../parity/README.md), [D2 plan](D2-visual-parity.md) §3.8 | v2 must keep: the SPA under `/app/` with the same paths and query parameters; `wh-auth` (`{state:{csrfToken,user},version:0}`), `wh.theme`, `wh.lang`, `wh.appearance`; fonts at `/fonts/`; texts, roles, `aria-label`s and `data-onboarding` anchors used by states; `prefers-reduced-motion` where the draft honours it; random choices through `Math.random`; `.rise` and `toast-bar` named as in [page-setup.ts](../../../parity/src/determinism/page-setup.ts) or added there. `compare` serves `frontend/dist` and `frontend/dist/fonts` ([parity.config.json](../../../parity/parity.config.json)) and needs only this repository. Replay is strict: a request v2 makes that the draft did not record fails the state; an unexpected `[role=alert]` fails it too |
-| D2 baseline | The shell states are `boot.spinner`, `shell.user`, `shell.paid`, `shell.admin`, `shell.desktop-rail`, `shell.mobile-drawer-open`, `shell.connection-lost`, `shell.connection-restored` (plus `shell.support-badge` and `shell.palette.*`, which show S15's badge and S07's palette). Every in-shell screenshot also shows pixels of other slices: the 28 menu entries of 18 draft features, the Leo button (S09), and the page content — `/analytics` (S14) for users, `/download` (S16) for the administrator. Not-found has no baseline: the draft's `*` route leaves the SPA |
-| D1, [contracts/README.md](../../../contracts/README.md) | Recorded error bodies are the draft's: `{"detail": "<code or sentence>"}`, `{"detail": {"code": …}}`, `{"error": {...}}`. `web` routes may change together with the v2 frontend. `GET /v1/health` is the connectivity probe. The draft OpenAPI types the shell's endpoints (`UserMeResponse`, `CabinetOut`, `AppBuildOut`, `CostsSummary`, `TokenResponse`, `DetectResponse`) except `/v1/ticker` and `PATCH /v1/me/profile`, which return untyped objects |
-| F1, [ADR 0008](../../adr/0008-error-envelope-with-compatible-detail.md) | Errors are `{"error": {code, request_id, params?, fields?}, "detail": …}` with `X-Request-ID` on every response. F2 reads `error.code`, keeps the draft's texts through `errors:<code>` and shows `request_id` for support (§16.2) |
-| D4, [FEATURE_MAP.md](../FEATURE_MAP.md) §3.2, §4 | F2 owns the draft's `app/` (router, registry, shell, analytics and i18n bootstrap), `shared/` (api, auth, hooks, i18n, lib, navigation, pwa, query, stores, styles, theme, types, ui, markdown) and `locales/`; F2 hosts `shared/analytics` (catalogue follows S14), `shared/entitlements` (reads S03's contract) and `shared/uploads` (S08's contract); the PWA manifest and icons; draft specs 005, 007, 032, 033, 036, 077, 084. The ticker's backend is S16's |
-| CLAUDE.md, [ci.yml](../../../.github/workflows/ci.yml), [check_repository.py](../../../scripts/ci/check_repository.py) | The `frontend` CI job already exists: `npm ci`, `typecheck`, `test`, `build`, `doctor -- --score` = 100, Node from `frontend/.nvmrc`. The 200-line limit covers `.ts`, `.tsx`, `.js`, `.mjs`, `.cjs` and **`.css`** in `frontend/`; a file is exempt under `generated/` or with `@generated` in its first five lines |
-| REWRITE_PLAN §2 | Node.js 26.10.0, npm 11 on the host; the harness container runs Node 24.20.0 |
+| 2 748 tracked files; 50 pages and 6 layouts under `src/app/`, two panels: the user panel `/app/*` (`PanelLayout panel="dashboard"`) and the admin panel `/admin/*` (Russian only); plus `/unauthorized`, `/oauth/callback`, `/oauth/demo-authorize`, `/s/[token]`, `not-found`, `sitemap.ts`, `robots.ts`, Open Graph and Twitter images | `git ls-files src/app` |
+| 36 slices in `src/features/` with the layers `domain`, `data`, `api`, `model`, `ui`, `server` and a public `index.ts`; shared code in `components/` (shadcn `ui/`, vendored `calendar/`), `hooks/`, `lib/`, `i18n/`, `config/`, `styles/` | [frontend/docs/architecture.md](../../../frontend/docs/architecture.md), `src/scripts/check-architecture.mjs` |
+| The sample backend: 142 route handlers in `src/app/api/`, `src/server/backend-proxy.ts`, 178 files in `features/*/server/` — 14 603 lines of in-memory stores, seeds and handlers. Its HTTP surface is documented per slice in `frontend/docs/*-api.md`. Client gateways (`features/*/api/`, 23 files, and `lib/api-client.ts`) call `/api/*` paths and read FastAPI's `{detail}` | `git ls-files`, `lib/api-client.ts` |
+| 35 pages and layouts read data on the server (`features/*/server`, `headers()`, `cookies()`, `find…()`) and pass it to screens as props; `notes/[id]` and the catch-alls call `notFound()`, `/app/w` calls `redirect()` | grep of `src/app` |
+| Next.js imports outside `src/app/api`: `next/link` in 76 files, `next/navigation` in 31 (42 `useRouter`, 8 `usePathname`, 8 `useSearchParams`), `next/dynamic` in 19, `next/font` in 2 (17 Google families + Geist Pixel), `next/image` in 1, `next/headers` in 7, `next-themes` in 1 (`components/ui/sonner.tsx`), one Server Action (`preferences/server/preference-actions.ts`, sidebar cookies), `next-intl` in 366 client files, `next-intl/server` in 62 files (pages, route handlers and 4 async UI components: productivity, download, mail preview, shell `PanelLayout`) | grep of `src/` |
+| `next.config.mjs`: React Compiler on, `console` removed in production, 15 redirects — in-cabinet ones (`/app`, `/admin`, `/admin/analytics`, `/admin/crm*`, `/app/studio/*`, `/app/team*`) and top-level ones (`/`, `/dashboard*`, `/mail`) | `next.config.mjs` |
+| i18n: 16 languages (`lib/language.ts`), 65 namespaces × 16 = 1 040 JSON catalogues, 45 488 messages, ICU; English is the source and the fallback, merged per request (`i18n/fallback.ts`); the language comes from the `ui_language` cookie, `/admin/*` is always `ru` (`src/proxy.ts` sets a header); time zone `UTC` for every format. Ten `*Api` namespaces (12 KB) are the sample backend's error texts. One language is 149 KB raw / 40 KB gzip (en), 236 / 53 KB (ru); `NextIntlClientProvider` ships the whole merged catalogue in every page's payload | `src/i18n/`, `du`, `gzip -9` |
+| Preferences (theme mode and preset, layout, navbar, sidebar, font) are `data-*` attributes on `<html>` set before paint by an inline boot script built from `PREFERENCE_REGISTRY`; some persist in localStorage, some in cookies the server read for the sidebar | `features/preferences/` |
+| The shell calls Open-Meteo from the browser with the user's coordinates for the header weather | `features/shell/api/weather-api.ts` |
+| No PWA manifest, no service worker, no analytics counter in the new UI | grep of `src/` |
+| Checks today: `typecheck` (`next typegen && tsc`) passes; `npm test` (node `--test`, 15 files) — 95 pass; `lint:architecture` and `i18n:check` pass but are not in `npm test`; `npm run doctor -- --score` prints `100`. The `doctor` script lacks `REACT_DOCTOR_NO_TELEMETRY=1`, which ADR 0020 requires. `doctor.config.json` ignores `components/ui/**` and `components/calendar/**` | local runs, Node 24.21 |
+| Build baseline (`next build`, Turbopack): 67 s wall time; client JavaScript 6.9 MB raw / 2.1 MB gzip in 173 files; the shared root bundle 128 KB gzip; CSS 105 KB gzip | local run |
+| Versions in `package.json`: React 19.3.0, Next 16.3.8, next-intl 4.14.9, Zustand 5.0.15, Tailwind 4 through PostCSS, TypeScript ^5.9.3, react-doctor ^0.9.17; React Router and TanStack Query (§18.2) are absent; `.nvmrc` is 26.10.0 | `package.json` |
 
-### 1.2 The draft, for lessons
+### 1.2 Repository, CI and contracts
 
-Read in `/root/whisperer/frontend` at the pinned commit `589917e8`. `app/` is 1 900 lines, `shared/` 9 500, plus 3 shared namespaces (`auth`, `common`, `errors`) and one catalogue per feature, each in 16 languages. Stack: React 18.3, react-router-dom 7, TanStack Query 5, zustand 5, i18next 26, Tailwind 4.3.2 without preflight, RetroUI vendored over radix-ui 1.6.2, axios, Vite 6.
-
-| Draft fact | Rule in v2 |
+| Fact | Source |
 |---|---|
-| Features declare routes, menu entries, prefetch, analytics key and shell slots in one `feature.ts` manifest; one registry lists them; the router builder gives every route its own error boundary and `Suspense` | Kept as the registration point (§3.3) |
-| The shell imports feature internals: the onboarding store and launcher, the support unread API, the search palette opener, the meetings route helper, the billing cabinet query (`AppShell.tsx:7-17`, `Sidebar.tsx:6-24`, `TopBar.tsx:6-17`) | The shell knows no slice; slices contribute through the manifest and two shell-state contracts (§3.4); the architecture test forbids the import |
-| Architecture (15 rules) and i18n checks exist but are not in CI; CI runs Node 20 while the image builds on Node 24 | Both checks are unit tests inside `npm test`; one `.nvmrc` for CI and builds |
-| `localeOf` falls back to `zh` (`locales.ts:50`) | Unknown codes fall back to `en` |
-| `index.html` repeats the font-role list and the `zh → zh-Hant` map by hand | The pre-paint script is generated from the catalogue, or a test keeps it equal |
-| `IconName` is `string`; an unknown name renders nothing | Icon names are a closed union; an unknown name is a type error |
-| `Button loading` looks disabled but stays clickable (a known bug kept on purpose); `IconButton` and `Input` keep hover and focus in React state; `Select.tsx` holds a literal NUL byte | `loading` disables the button; hover and focus are CSS; no control characters in sources. The look stays the same |
-| Two toast entry points (`toast`, `useToastStore`), two `Section`s, two `CardHeader`s, three toggles | One entry point and one name per thing |
-| The ticker ignores `prefers-reduced-motion` (`globals.css:517-540`); the collapsed search tooltip hard-codes ⌘ | Fixed in v2 (owner rule: on-screen defects are fixed, not baselined); the screenshots do not change |
-| The route warm-up fetches `/v1/admin/prompts` for every user | A prefetch query carries the route's access rule; no request a screen would not make |
-| Yandex Metrika is inline in `index.html` with session replay (webvisor) on; GA4; the edge CSP is report-only with `'unsafe-inline'` | Decision F2-D5; no inline script except the pre-paint one, whose hash F4 can pin |
-| 1 603 vendored woff2 slices and 80 generated role stylesheets in `backend/static/webfonts` (59.7 MB), 42 built woff2 in `backend/static/landing/fonts` (1 MB), served at `/fonts/` | Decision F2-D2 |
-| `public/onboarding/ru/*.mp3` (3.6 MB), the Excalidraw font plugin, `pwa/sw.js` (push only) | Belong to S01, S06 and S09; not carried by F2 |
-| `vite:preloadError` reloads once per 10 s (`main.tsx:17-31`); public entry screens are static, the rest lazy (spec 033) | Kept |
+| **CI on `main` is red now:** the repository-rules job reports 13 files over the 200-line limit, all vendored — 11 shadcn components (`sidebar.tsx` 702 lines, `chart.tsx` 372, …), `components/calendar/event-calendar-views.tsx` (497) and `styles/flag-icons/flags.css` (1 068). The rule exempts only generated code | `python3 scripts/ci/check_repository.py`, CLAUDE.md "CI" |
+| The `frontend` job runs `npm ci`, `typecheck`, `test`, `build`, `doctor -- --score` = 100 on Node from `frontend/.nvmrc`. There is no `parity-compare` job to remove; the `parity` harness job stays (ADR 0022 keeps `parity/` as a record) | `.github/workflows/ci.yml` |
+| The backend (F1) composes no feature yet: its route snapshot is `GET /v1/health`; `/openapi.json` is closed by default (`WebSettings`); every operation documents `default` → `ErrorResponse` (`{error: {code, request_id, params?, fields?}, detail}`) | `backend/tests/composition/public_routes.json`, `backend/tests/core/web/test_openapi.py` |
+| `web` routes (383) change with the new frontend. Shipped native clients open cabinet URLs: `/app/connect?state=…` (desktop sign-in on macOS, Linux, Windows, iOS), `/app/support`, `/app/settings/integrations`, `/app/tracker`, and top-level `/cabinet/leo?reminder=…`, `/knowledge-base`, `/models`, which the draft redirected into `/app/…` | [contracts/README.md](../../../contracts/README.md) "Legacy paths", `contracts/draft/consumers.json` |
+| Edge routing (ADR 0021, §4.2): `/v1/*` → API; `/app/*`, `/admin/*` and the OAuth callback → the cabinet's static files with its `index.html` as fallback; every other path → the public site, which answers `404` for unknown paths | ADR 0021 §3 |
 
-### 1.3 Versions and tool checks (2026-10-02)
+### 1.3 Versions on 2026-10-07
 
-Versions from §18.2 are pinned as listed; other packages take the latest stable release on the day a step adds them, then stay pinned in `package-lock.json`.
+`npm view`: vite 8.3.3, @vitejs/plugin-react 6.1.2 (peer: @rolldown/plugin-babel ^0.2, babel-plugin-react-compiler ^1.0), @rolldown/plugin-babel 0.2.4, babel-plugin-react-compiler 1.0.0, react-router 8.4.0, @tanstack/react-query 5.104.1 (§18.2 pins 5.104.0), use-intl 4.14.9, msw 3.0.2, openapi-typescript 7.13.0, openapi-fetch 0.17.0, vitest 5.0.3, jsdom 30.1.2, @testing-library/react 16.3.3, tailwindcss and @tailwindcss/vite 4.3.3, typescript 7.0.2, react-doctor 0.9.17. Versions of §18.2 are taken as listed; the others are the latest stable on the day a step adds them and are then pinned in `package-lock.json`. TypeScript 7 is the native compiler without the JavaScript API; the step that upgrades it checks every tool that reads TypeScript first.
 
-| Package | Version | Package | Version |
-|---|---|---|---|
-| react, react-dom | 19.3.0 | vite / @vitejs/plugin-react | 8.3.2 / 6.1.1 |
-| react-router | 8.4.0 | typescript | 7.0.2 |
-| @tanstack/react-query | 5.104.0 (§18.2; 5.104.1 exists) | vitest / jsdom / @testing-library/react | 5.0.3 / 30.1.1 / 16.3.3 |
-| zustand | 5.0.15 | react-doctor | 0.9.14 |
-| i18next / react-i18next | 26.4.2 / 17.0.15 | radix-ui / class-variance-authority / clsx / tailwind-merge | 1.6.7 / 0.7.1 / 2.1.1 / 3.7.0 |
-| tailwindcss / @tailwindcss/vite | 4.3.3 | openapi-typescript / openapi-fetch | 7.13.0 / 0.17.0 |
+## 2. Design
 
-Checked in the packages:
-- React 19.3.0 exports `ViewTransition`, `Activity` and `useEffectEvent` from the stable build.
-- react-router 8.4.0 requires Node ≥ 22.22 and React ≥ 19.2.7.
-- react-doctor 0.9.14 brings its own TypeScript (`<6`), oxlint 1.81 and `@sentry/node`; step 1 checks that it runs offline and sends nothing in CI. **Step 1 result:** it does not — the score comes only from the vendor's service, which receives the findings, the repository name and the commit; the supply-chain scan asks Socket.dev about every dependency; telemetry goes to Axiom and Sentry. Decision F2-D7.
-- TypeScript 7 is the native compiler. Tools that need the TypeScript JavaScript API are checked against it in step 1 before they are adopted (the architecture test's parser, §3.2). **Step 1 result:** TypeScript 7.0.2 exports only `unstable/*` API entry points, and dependency-cruiser 18.5.0 finds no module in TypeScript sources with it; Vite 8.3.2 exports the oxc parser (`parseSync`, `Visitor`), which reads TSX with UTF-16 offsets and lists static, type-only and dynamic imports.
-- Vite 8 bundles with Rolldown; the draft's `manualChunks` does not carry over as is. Step 7 sets chunking from a measurement.
+### 2.1 Layout of `frontend/` after F2
 
-## 2. Decisions
-
-Confirmed by the owner on 2026-10-02 as proposed below; F2-D7 was decided in step 1 against the proposal (the offline gate). Records: F2-D1 and F2-D6 → ADR 0017; F2-D2 → ADR 0018; F2-D3 → ADR 0008 amended; F2-D4 → this plan §3.9 and [FEATURE_MAP.md](../FEATURE_MAP.md) §3.2; F2-D5 → ADR 0019; F2-D7 → ADR 0020.
-
-| ID | Question | Proposal | Trade-off and alternatives |
-|---|---|---|---|
-| F2-D1 | How is the shell proven before the slices exist, and how does any slice compare before the others? Every in-shell baseline screenshot contains the menu entries of all slices, the Leo button and a slice's page | **Stand-ins and pending regions** (§3.11). A test-only composition in `frontend/parity-build/` adds, for every draft feature no slice has registered yet, its menu entries and routes, and marks its pixels — the page content area, the Leo button — as *pending*. In `compare` the harness masks pending boxes identically in the baseline image and the v2 screenshot. A slice deletes its stand-in when it registers; when the last one is gone the comparison is complete with no masks | Test code of ≈ 200 lines and a harness change of ≈ 100 lines; masks become automatic for pending regions, which narrows D2's rule "every mask has a written reason" to non-pending regions. **Alternative A:** new F2-only states with the slice pixels removed from the DOM in both targets; needs a new baseline upload, and every slice still cannot compare until all others exist. **Alternative B:** prove the shell only after all slices; the prompt's definition of done is not met |
-| F2-D2 | Where do the fonts live? Pixel parity needs byte-identical font files | **Vendor the draft's files** that the stylesheets reference (at most 61 MB: ≈ 1 645 woff2 and 80 generated stylesheets; step 2 vendors only the files the stylesheets reference) into `frontend/fonts/`, carry over the role-stylesheet generator, copy them to `dist/fonts/` at build; S17 serves the same directory for the public site | 61 MB of binaries in git history. **Alternative:** `@fontsource/*` packages pinned in the lock file — no binaries in git, but other files and subsets than the draft's, so glyphs may differ by pixels, and Pretendard, D2Coding and Kawkab Mono are not all there. **Alternative:** download at build from the bucket — the build depends on the network and secrets |
-| F2-D3 | Where does the user see `request_id`? New UI required by ADR 0008 and §16.2; the draft shows none | In the **error toast** raised by the data layer, as a second muted monospace line «Код запроса: 0199a3c2…» with the full 32-character id; a click copies it. Shown for 5xx and for codes without a translation (the generic message); not for validation, known domain codes or network failures (no response, no id). Two new keys in `errors` in 16 languages, translated by the agent | Draft fixtures carry no id, so parity is unaffected. **Alternative:** on every error toast; noisier for expected errors such as a wrong password |
-| F2-D4 | Which draft `shared/` modules does F2 build? D4 placed all of `shared/` with F2 | F2 builds what the shell needs and every module that **two or more slices** import (§3.9 table). A module used by one slice moves into that slice. **Markdown** (react-markdown, Mermaid, MathJax, CodeMirror, lowlight; 2 300 lines; S04, S09, S15) and **uploads** (S07, S08) are built in `core/` by the first slice that needs them, under this plan's rules (spec 032's rules are kept in §3.9) | F2 stays at nine steps and its definition of done needs neither module. **Alternative:** two more F2 steps (markdown, uploads) before any slice can start |
-| F2-D5 | Third-party analytics in the cabinet: Yandex Metrika with **session replay** (webvisor records the screen, including meeting text and notes, and sends it to Yandex) and GA4 | Keep the Metrika counter, its goals and the GA4 funnel events as in the draft; **turn webvisor and click maps off** in the SPA; load Metrika from a module instead of an inline snippet | Webvisor is the only part that ships user content to a third party (§14 rule 13, §16.8, nfr-14); the owner loses session recordings of the cabinet. **Alternative:** keep webvisor as in the draft, pending the legal review of §22 |
-| F2-D7 | The react-doctor gate: step 1 found that 0.9.14 computes the score only on the vendor's service (decided 2026-10-02, [ADR 0020](../../adr/0020-react-doctor-score-from-the-vendor-service.md)) | **The vendor's score stays the gate** (`--score` prints `100`); the Socket.dev supply-chain scan stays on; telemetry is off through `REACT_DOCTOR_NO_TELEMETRY=1` in the `doctor` script | Every run sends the findings, the repository name and the commit to react.doctor, and the gate needs network. **Alternative:** offline gate with `--no-score --no-supply-chain`, passing on zero findings; nothing leaves the machine, but CLAUDE.md "Checks" changes |
-| F2-D6 | Visual comparison in CI | A `parity-compare` job on every push: build the parity composition, run `compare` in the pinned container for the state ids listed in `parity/compare.json` (F2 adds the shell's; each slice adds its own). Reads the baseline with the repository secrets `PARITY_S3_ENDPOINT`, `PARITY_S3_REGION`, `PARITY_S3_BUCKET`, `PARITY_S3_ACCESS_KEY_ID`, `PARITY_S3_SECRET_ACCESS_KEY` — a read-only key limited to `parity-baseline/`, which the owner creates; images cached by manifest hash. **Until the secrets exist, the job reports that it was skipped and passes** (owner, 2026-10-02). Sharded once a run exceeds 10 minutes. The new `route.not-found` baseline (step 8) is uploaded with the credentials D2 used | Until the secrets exist, `compare` is a local check reported by each step |
-
-Design choices made in this plan, accepted by the owner on 2026-10-02:
-
-| ID | Choice | Why |
-|---|---|---|
-| F2-C1 | Top-level layout mirrors the backend: `entrypoints/`, `composition/`, `shell/`, `features/`, `core/` (the draft's `app/` and `shared/`) | One vocabulary across both projects; `shell/` is a peer of the features, not part of composition, so neither can import the other |
-| F2-C2 | Step order differs from the prompt's split: i18n and the data layer come before the shell, the UI kit takes two steps, the parity proof comes with the shell (§4) | The shell renders texts, the session user and four queries; a shell built first could not be compared |
-| F2-C3 | `fetch` through openapi-fetch; response types generated by openapi-typescript from the endpoint owner's OpenAPI: the D1 baseline until the owning slice publishes its v2 schema. The first slice with v2 web routes adds the v2 export and moves its modules to it. Untyped draft responses (`/v1/ticker`) get a consumer type next to the call | Contract first (CLAUDE.md); no hand-written copies of server types; axios (13 kB) is not needed for the shell. Upload progress (XHR) is S08's |
-| F2-C4 | Server state in TanStack Query, client state in zustand stores in `core/`; query keys only in `keys` modules | §18.2; the draft's rule, now enforced by the architecture test |
-| F2-C5 | Data router (`createBrowserRouter`, basename `/app`) with `lazy` routes; a route's loader starts its first query without awaiting it | Chunk and data load in parallel (no waterfall), while navigation still shows the draft's spinner and the screen's own loading state instead of waiting on the old page |
-| F2-C6 | No view transitions | The draft has none; an animation users did not have is a visible difference. A slice may propose one to the owner |
-| F2-C7 | Not-found keeps the draft's behaviour: a blank screen, then `location.replace` to the public site's `/404/` (`/<lang>/404/` outside ru) with `from`; the page itself is S17's | No visual difference; one not-found page for the site and the cabinet, as the owner decided for the draft |
-| F2-C8 | Tailwind without preflight, `dark` variant on `html[data-theme="dark"]`, tokens as CSS custom properties bridged by `@theme inline` | The draft's foundation (spec 077); preflight would change every control's look |
-| F2-C9 | The frontend package is `private`, `"license": "UNLICENSED"`, no copy of `LICENSE` | Nothing is published from it; the copy rule applies to packaging metadata |
-
-## 3. Design
-
-### 3.1 Layout
-
-```text
-frontend/
-  package.json, package-lock.json, .nvmrc (26.10.0), tsconfig*.json, vite.config.ts, vitest.config.ts
-  doctor.config.json         react-doctor rules; only design rules may be off, each with a reason (spec 005)
-  index.html                 pre-paint script: theme, font role, language (one inline script)
-  public/                    favicon, icons, web manifest (root files of the site)
-  fonts/                     vendored woff2 and generated roles-<lang>-<role>.css (F2-D2) → dist/fonts
-  scripts/                   font stylesheet generator (--check), draft-nav extractor for the parity tests
-  README.md                  how a slice registers, its folder template, checks
-  src/
-    entrypoints/main.tsx     preload-error reload, i18n init, render
-    composition/             registry (explicit slice list), router assembly, providers, boot gate
-    shell/                   app frame: layout, sidebar, top bar, ticker, connection overlay, not-found, fallbacks
-    features/<slice>/        none in F2; public surface: feature.ts (manifest) and contracts.ts
-    core/
-      feature/               manifest types and pure selectors (nav groups, slots, analytics segments)
-      api/                   client, error envelope, generated types, endpoint modules the shell needs
-      session/               wh-auth store, refresh, sign-out, forced logout
-      query/                 query client and defaults
-      i18n/                  locales, detection, catalogue loading, document locale
-      theme/                 theme and appearance stores, font catalogue, apply
-      styles/                tokens, Tailwind bridge, base, motion, component classes (≤ 200 lines each)
-      ui/                    the kit (§3.9)
-      hooks/, lib/           shared hooks and pure helpers
-      connection/            backend reachability store
-      entitlements/          paid state, quota query, premium banner
-      shell-state/           contracts the shell and slices share (§3.4)
-      analytics/             GA4, Metrika, product analytics SDK
-    locales/<lang>/{common,errors}.json
-  parity-build/              test-only composition for the harness (§3.11); built to dist-parity/, never deployed
-  tests/                     vitest: unit, component, architecture, i18n, fonts
+```
+index.html            noindex, pre-paint boot script (generated from PREFERENCE_REGISTRY), #root
+vite.config.ts        React + React Compiler, Tailwind, `base: "/app/"`, dev proxy /v1 → backend, catalogue plugin
+public/               favicon, web app manifest and icons
+src/
+  main.tsx            resolves the language, starts the catalogue fetch and the first route chunk together, renders
+  app/                routing only: route tables per panel, layouts, legacy redirects, not-found, error boundary
+  features/<slice>/   domain · data · api · model · ui · mocks — imported by direct path (F2-D4)
+  components/ hooks/ lib/ i18n/ config/ styles/   shared, as today
+  lib/api/            generated/ (OpenAPI types), client, error envelope, query client
+  mocks/              mock worker bootstrap and the registry of slice handlers (development and tests)
+  scripts/            architecture, i18n, bundle checks — run as Vitest tests
 ```
 
-### 3.2 Boundaries
+Nothing named `api/` routes, `server/` or `proxy.ts` remains; the architecture test forbids `next`, `next-intl`, `next-themes` imports and any request handler in `src/`.
 
-An architecture test in `npm test` enforces, with zero allowed violations:
+### 2.2 Routing
 
-| Rule | Meaning |
+- React Router 8 in data mode (`createBrowserRouter`), no framework plugin: the cabinet has no server rendering.
+- `src/app/routes/` holds one table per area — user panel, workspace (`/app/w/*`), admin panel, standalone pages (`/oauth/callback`, `/unauthorized`) — each under 200 lines; a slice adds its routes there with a small, additive edit. Paths and query parameters are those of `src/app/` today.
+- Every page is lazy. A route uses the object form of `lazy` (`{ loader, Component }`), so the page chunk and its data start loading in parallel: the loader calls `queryClient.ensureQueryData` with the slice's query options, the page reads them with `useSuspenseQuery`. No request waits for a chunk and no chunk waits for a request.
+- Layouts become layout routes with `<Outlet />`: root (providers), panel (`PanelLayout`), workspace (`WorkspaceGate`), knowledge base and file manager.
+- `notFound()` → the route's error element for a `404` response thrown by the loader; `redirect()` → a loader redirect; the catch-alls `/app/*` and `/admin/*` render the panel's not-found screen inside the panel, as today.
+- In-cabinet redirects of `next.config.mjs` become loader redirects that keep the query string. Top-level redirects (`/`, `/dashboard*`, `/mail`) and the draft's legacy top-level paths are not cabinet paths; they go to S17's redirect table (§2.9).
+- `src/lib/navigation.ts` is the one adapter the slices use: `Link`, `useNavigate`, `usePathname`, `useSearchParams`, `useParams`. Step 2 introduces it over Next.js, step 5 switches its implementation to React Router; no call site changes twice.
+- `vite:preloadError` (a stale chunk after a release) reloads the page once per 10 s.
+- Route transitions use no view transitions in F2: the screens have none today, and a slice that wants one adds it per the `vercel-react-view-transitions` skill.
+
+### 2.3 Translations
+
+- `use-intl` (`IntlProvider`, `useTranslations`, `useFormatter`, `useLocale`, `createTranslator`) with the same ICU messages, namespaces, keys, `formats` and the `UTC` time zone. `next-intl` client imports are the same hooks under another package name; step 2 switches them while Next.js still runs, as `next-intl` wraps the same `use-intl` context.
+- The language is resolved in the browser by the rule of `src/proxy.ts` and `resolve-locale.ts`: `/admin/*` → `ru`; otherwise the `ui_language` cookie if it names a platform language; otherwise `en`. `<html lang dir>` follows it.
+- Catalogues: a Vite plugin emits one file per language with all namespaces and the English fallback already merged (`withFallback` at build time), named by content hash. The browser downloads one file of 40–53 KB gzip, cached as immutable, instead of the whole catalogue in every page. `main.tsx` starts that fetch and the first route chunk together.
+- Switching the language sets the cookie, loads the new file and swaps the provider in a transition, without a reload. Moving between panels with different languages (`/app` ↔ `/admin`) swaps the same way; `LocaleGuard`'s reload is no longer needed.
+- Message types come from `messages-type.ts` through use-intl's `AppConfig` declaration, instead of the generated `*.d.json.ts`; `t("key", args)` stays checked against the English catalogue.
+- The i18n check (16 languages, every key, ICU arguments, localized sources) runs inside `npm test`.
+
+### 2.4 Page metadata
+
+Each page renders React 19 `<title>` and `<meta name="description">` from the same messages its `generateMetadata` used; a `PageMeta` component in `src/app/` keeps them uniform. `index.html` carries `<meta name="robots" content="noindex, nofollow">`; the edge adds `X-Robots-Tag: noindex` (F4). `canonical`, Open Graph and Twitter fields are dropped: they serve indexing, which the cabinet does not want.
+
+### 2.5 Data layer
+
+- **Contract.** The backend writes its OpenAPI document to `backend/openapi.json` from the composed API app; a backend test fails when the file is stale. `npm run api:types` turns it into `src/lib/api/generated/schema.d.ts` with openapi-typescript (exempt from the length limit as generated); a frontend test fails when the types are stale. A slice that adds endpoints regenerates both in its commit.
+- **Client.** openapi-fetch over the generated paths, same origin, `credentials: "same-origin"`, `Accept-Language` = the interface language (the admin panel sends `ru`). Middlewares are registered, not hard-coded: S01 registers CSRF and session refresh, as it owns the cookie names.
+- **Errors.** `ApiError` carries `status`, `code`, `request_id`, `params` and `fields` from the ADR 0008 envelope, and reads a bare `{detail}` too (native-compatible routes and the mocks). Messages come from `errors.<code>` in the user's language; per ADR 0008 amended the error toast shows `request_id` as a muted, copyable second line for 5xx and for codes without a translation.
+- **Server state.** One TanStack Query client: retries only for network failures and 5xx on queries, never on mutations; query options live in each slice's `api/`; the global mutation error toast goes through the query cache, not through each screen.
+- **Existing gateways** keep their function signatures; their bodies move from `apiRequest("/api/…")` to the shared client. Their paths and shapes stay the sample ones documented in `frontend/docs/*-api.md` until the owning slice replaces them with `/v1` endpoints from the generated types.
+
+### 2.6 Mocks in place of the sample backend (decision F2-D1)
+
+- The sample stores, seeds and handlers move from `features/*/server/` and `src/app/api/` to `features/*/mocks/` as MSW 3 handlers on the same `/api/*` paths and shapes. Route handlers are already `Request → Response` functions; `NextResponse.json` becomes `Response.json`, `next-intl/server` becomes `createTranslator` over the `*Api` catalogues.
+- `src/mocks/` starts the worker and lists the slices' handlers. It runs in `npm run dev`, in tests (`msw/node`) and — if F2-D2 allows — in a demo build. The production build has none: the architecture test forbids importing `mocks/` outside `src/mocks` and tests, and a build check fails if `msw` or a handler reaches `dist/`.
+- The mock-only page `/oauth/demo-authorize` (the sample's fake consent screen) is registered by `src/mocks/`, not by the route tables.
+- A slice removes its handlers, its `docs/*-api.md` and its sample paths when it publishes its endpoints. Owners (FEATURE_MAP and REWRITE_PLAN §3):
+
+| Frontend slice | Removed by |
 |---|---|
-| Layers | `entrypoints` → `composition` → (`shell` ∥ `features`) → `core`; `parity-build/` may import `composition` |
-| Slices meet through contracts | `features/a` imports `features/b` only through `features/b/contracts.ts`; nothing imports a slice's `feature.ts` except `composition/registry.ts` |
-| Shell knows no slice | `shell` imports only `core` |
-| Pure model | a slice's `model/` imports no React, router, query or HTTP module |
-| UI without HTTP | `core/ui` and a slice's `ui/` import no `api/` module |
-| No raw HTTP | `fetch` only in `core/api` (and the connectivity probe); no axios |
-| Keys and lazy | query keys only in `keys` modules; `lazy()` only in manifests |
-| No barrels, no cycles | no `index.ts` re-export files; no import cycles |
+| notes, meetings | S04 |
+| workspace, admin-workspaces | S02 |
+| settings (account, data, memories, usage) | S01; billing parts S03; connectors S12; MCP S10 |
+| upgrade, admin-billing, admin-plans | S03 |
+| leo, studio, admin-ai-models, admin-platform-prompts | S09 |
+| knowledge-base | S07 |
+| file-manager | S08 |
+| calendar | S12 |
+| kanban | S13 |
+| admin-errors | S14 |
+| support, admin-support, admin-users, admin-roles, admin-dashboard, admin-profile | S15 |
+| hub, download, admin-apps | S16 |
+| admin-livekit | S06 |
+| mail (`/app/inbox`) | S12 (F2-D6) |
+| productivity (`brief/today`, `me/*`) | S16 (F2-D6) |
 
-The parser is chosen in step 1: dependency-cruiser if it reads TypeScript 7 sources, otherwise the test reads imports with oxc-parser. Chosen: the oxc parser that Vite exports (`parseSync` from `vite`), no new dependency (§1.3). Slice folder template (README): `feature.ts`, `contracts.ts`, `model/`, `api/`, `state/`, `hooks/`, `ui/` (presentational), `screens/` (route containers), `locales/<namespace>/<lang>.json`.
+### 2.7 Preferences, fonts, theme
 
-### 3.3 Registration point
+- The boot script stays the only inline script. A Vite `transformIndexHtml` hook generates it from `PREFERENCE_REGISTRY`, so the registry is not repeated by hand; a test records its SHA-256 for the CSP that F4 sets at the edge.
+- Preferences the server read from cookies (sidebar state, variant, collapsible) are read by the boot script and the store from the same cookies, so existing choices survive; the Server Action goes.
+- `next/font/google` → pinned `@fontsource` packages for the 17 families (latin subset, as now) and Geist Pixel from the `geist` package, with the same CSS variables (`--font-inter`, …). Font files load only for the selected font, as now.
+- `next-themes` in `sonner.tsx` → the theme mode of the preferences store.
+- `next/image` → `<img>` with `width`, `height`, `loading` and `decoding`; the download page detects the system from `navigator` instead of request headers.
 
-A slice adds one line to `composition/registry.ts` and declares in its manifest:
+### 2.8 Build, tests, scripts
 
-- `name` and the i18n `namespaces` it owns (each namespace belongs to one slice; `boot` ones load at start);
-- `routes`: path, screen (lazy loader that also loads the screen's namespaces), `access` (`public` · `auth` · `user` · `admin`), `outsideShell`, `redirectTo`/`keepSearch`, children, `prefetch` (query + the same access condition), and **layout hints**: `sidebar: "rail"` (document mode), `padding: "none"`, `bottom: "tight"`, `crumbs` (keys of `common`);
-- `modalRoutes` (the cabinet over a background page);
-- `nav` entries: path, label key, icon, number, group, order, audience, `tag`, optional `badge` hook; the `data-onboarding` anchor is derived from the path (`nav-<path>`), as in the draft;
-- `slots`: `root` (above everything), `shell` (inside the signed-in shell), `sidebar-footer`; explicit order, the tour last;
-- `analyticsKey` and segments.
-
-Group order, the home route by role, `*`, redirects of composition and the menu numbering check belong to composition. Tests: every route renders inside a boundary and `Suspense`; the menu has no duplicate number, path or anchor.
-
-### 3.4 Shell and its extension points
-
-`shell/` rebuilds `AppShell`, `Sidebar` (full 260 px, rail 66 px, mobile drawer ≤ 860 px, tablet rail 861–1024 px), `TopBar` (ticker, mobile bar with crumbs and profile button), `ConnectionOverlay` and its parts, the full-screen and content spinners, the error fallback, not-found, the theme shortcut Ctrl/Cmd+Shift+L and `--app-content-left`. Draft cross-imports become contracts:
-
-| Draft import | v2 contract |
+| Script | Command |
 |---|---|
-| `openPalette` (search) | `core/shell-state`: `paletteOpen`; the sidebar button sets it, the search slot reads it |
-| onboarding `wantsSidebar`, `phase` | `core/shell-state`: `drawerRequest`; the tour sets it, the shell follows |
-| `isMeetingDocPath`, `TIGHT_BOTTOM_ROUTES`, `/calendar` padding, `CRUMBS` | route layout hints (§3.3) |
-| support unread queries | `badge` hook on the nav entry |
-| `OnboardingLauncher` | `sidebar-footer` slot |
-| billing cabinet query (ticker minutes) | `core/entitlements` quota query, shared with S03 by key |
+| `dev` | `vite` with mocks; `dev:api` proxies `/v1` to the local backend (`compose.dev.yaml`) without mocks |
+| `typecheck` | `tsc --noEmit` (TypeScript 7 from step 5 on, after its tool check) |
+| `test` | `vitest run`: unit tests, the architecture check, the i18n check, OpenAPI types in sync |
+| `build` | `vite build`, then the bundle check (no mocks, no source maps published, no chunk above the budget fixed in step 6) |
+| `doctor` | `REACT_DOCTOR_NO_TELEMETRY=1 react-doctor --verbose` (ADR 0020) |
 
-The ticker is the shell's: date, weather, holiday and totals (`/v1/ticker`), minutes left (quota), a tip (`common:ticker.tips`, `Math.random` once per mount), build (`/v1/app/builds`), and for the administrator the rate (`/v1/admin/costs/summary`).
+React Compiler stays on (`@vitejs/plugin-react` with `@rolldown/plugin-babel` and `babel-plugin-react-compiler`). `console` calls are dropped from production by the bundler, as `removeConsole` did. Biome stays the formatter and linter.
 
-### 3.5 Visual foundation
+### 2.9 What leaves `frontend/` and where it goes
 
-- **Tokens and Tailwind.** The draft's palette for light and dark, radius scale, `@theme inline` bridge, `@custom-variant dark`, layers imported one by one without preflight, `source()` scan root (spec 077). `globals.css` (947 lines) splits into files of ≤ 200 lines: tokens light, tokens dark, theme bridge, base, typography (`.display`, `.upper`), motion (`.rise`, `.pop`, `.spin`, `.pulse-y`, `.theme-anim`, `toast-bar`, `conn-*`, `.ticker` with `ticker-rtl`), controls (`.btn-press`), RTL (`.rtl-mirror`). Every animation has a reduced-motion rule. RECIPE lessons kept: `text-[Npx]`, logical properties, no bracketed utilities in comments.
-- **Fonts (spec 084).** Five roles (`whisperer`, `sans`, `serif`, `native`, `mono`) × 16 languages; the catalogue generates `core/styles/generated/font-roles.css` and `fonts/roles-<hreflang>-<role>.css` (`@generated`); `--check` runs in `npm test`. A test resolves every `url()` to a vendored file. Dev server serves `/fonts/` from `fonts/`; `.woff2` never inlined.
-- **Theme.** `wh.theme` = `light` (default) · `dark` · `system` (follows `prefers-color-scheme` live) on `html[data-theme]`; `wh.appearance.font` on `html[data-font]` (default role removes the attribute), adopted from the profile unless edited locally within 5 s; `theme-anim` 400 ms on a switch. The pre-paint script sets theme, font role, `lang` and the role stylesheet before React.
-- **Icons.** The draft's 90 inline SVG icons (24 × 24, stroke 1.8, size in em), split into files of ≤ 200 lines; `IconName` a closed union; `MIRRORED_IN_RTL` = chevron, chevronLeft, arrowLeft, send, logout. Logo and sidebar glyphs.
+| Item | Goes to |
+|---|---|
+| `sitemap.ts`, `robots.ts`, Open Graph and Twitter images | Deleted; the public site owns them (S17) |
+| `/s/[token]` (shared meeting page) | Deleted; S17 builds it on the public site with S04's endpoint; its UI (`SharedNoteScreen`, `SharedLinkGone`) stays in `features/notes` until S17 moves it to `site/` |
+| Top-level redirects `/`, `/dashboard*`, `/mail`; the draft's `/cabinet/*`, `/knowledge-base`, `/models`, `/studio/{id}`, `/rooms/{id}`, `/meetings/{id}` | S17's redirect table (public site), listed in its plan; `/cabinet/leo?reminder=` is a native contract (nfr-12) |
+| `/app/connect`, `/app/login` and other draft cabinet paths that natives open | Cabinet routes of their owning slice (S01 for sign-in); F2 provides `src/app/routes/legacy-redirects.ts` for old `/app/*` paths that only move |
+| `X-Robots-Tag`, SPA fallback for `/app/*`, `/admin/*`, `/oauth/callback`, `/unauthorized`, CSP with the boot-script hash, immutable caching of `/app/assets/*` | F4 (edge) |
 
-### 3.6 i18n
+## 3. Decisions
 
-- 16 locales from one registry (`code`, `hreflang`, endonym, `ogLocale`, `rtl`; `zh` = `zh-Hant`); source `ru`, fallback `en` (never a raw key).
-- Detection: `wh.lang` → `navigator.languages` → `GET /v1/i18n/detect` (1.5 s) → `en`; the profile language wins after sign-in; an empty profile takes the local choice by `PATCH /v1/me/profile`. Render waits for the boot namespaces only.
-- `html[lang]` and `dir` (`ar` is RTL); a language switch reloads the font role stylesheet.
-- Catalogues: F2 carries `common` and `errors` from `src/locales/<lang>/` unchanged (keys stable). `auth` goes to S01, each feature catalogue to its slice under `features/<slice>/locales/<namespace>/<lang>.json`, namespace names as in the draft. Catalogues load with their chunk, one file per language and namespace.
-- The i18n test (fail-closed): same keys as `ru` in every language and namespace, no empty values, same `{{placeholders}}`, 2-space JSON with a final newline (specs 007, 036). Dates and numbers through `Intl` with the active locale.
+Decided by the owner on 2026-10-08. Records: F2-D5 amends [ADR 0021](../../adr/0021-public-site-on-nextjs-cabinet-on-vite.md) §3; F2-D6 updates [FEATURE_MAP.md](../FEATURE_MAP.md); the others are recorded here and in the code checks that enforce them.
 
-### 3.7 Data layer, errors and session
-
-- **Client.** `fetch` with `credentials: "include"`, base `/v1`; Bearer from the session store; `X-CSRF-Token` from the `meetassist_csrf` cookie (store copy as fallback) on `/auth/` calls; every call takes an `AbortSignal`.
-- **Errors.** One `ApiError {status, code, requestId, params, fields}`: `error.code` and `error.request_id` from the v2 envelope (`X-Request-ID` as fallback); for draft-shaped bodies (the harness's fixtures) the code comes from `detail` with the draft's aliases (`Invalid email or password` → `invalid_credentials`, …). Message order as the draft: no response → «Соединение прервано»; `errors:<code>`; 429; 422; 5xx; the caller's fallback. F2-D3 adds the request id line.
-- **Session.** Access token in memory only; `wh-auth` persists `{csrfToken, user}` (zustand persist, version 0). Refresh under the Web Lock `wh-auth-refresh`, broadcast on `wh-auth`, one shared refresh per tab, one retry on a CSRF mismatch; a 401 on refresh or a 403 without the cookie ends the session; other failures keep it. A 401 elsewhere refreshes once and retries once. 403 `account_banned` · `account_frozen` · `account_disabled` → error toast, session cleared, `/login`. Sign-out clears the store, the query cache and session-scoped storage.
-- **Boot.** `BootGate`: persisted user without a token → full-screen spinner → refresh → routes; then `GET /v1/auth/me` replaces the user without blocking, timezone and appearance follow.
-- **Queries.** No retry on 4xx except 408 and 429, one retry otherwise, `staleTime` 30 s, no refetch on focus. A network error starts the `/v1/health` probe (6 s timeout, backoff 1, 2, 4, 8, 15 s); success invalidates all queries and toasts «Соединение восстановлено».
-
-### 3.8 Router
-
-React Router 8 data router under `/app`. Routes outside the shell render with the full-screen spinner, inside it with the content spinner, each in its own boundary and `Suspense`. Access gates: no session → `/login` (replace); `admin` routes → `/analytics` for users; `user` routes → `/dashboard` for the administrator; `/` → home by role. Modal routes render over `backgroundLocation`; the content key ignores cabinet tabs (`contentKey`). Idle warm-up of route chunks one per idle slot, hover and focus preload. `vite:preloadError` reloads at most once per 10 s. Bundle budgets are set from the step 7 measurement and checked by a test on the build manifest (spec 033: entry ≈ 200 kB, no chunk over 500 kB).
-
-### 3.9 UI kit and where the draft's `shared/` goes
-
-Wrappers keep the draft's API and look; the RetroUI primitives stay internal to `core/ui`; refs are props (React 19, no `forwardRef`); variants through explicit maps or cva; no boolean-prop modes where a variant or composition fits.
-
-| Draft module | v2 place | Step |
-|---|---|---|
-| `lib` (`cn`, format, platform, timezone, money, wav), hooks (media query, latest ref, modal dialog, autosave, debounced value) | `core/lib`, `core/hooks` | 3 |
-| Button, IconButton, Spinner, Tag, Kbd, Card, Input, Textarea, Checkbox, Switch, SegmentedToggle, Tabs, PageHeader, EmptyState, settings sections and tokens | `core/ui` | 4 |
-| Modal, Popover (+ pointer anchor), ConfirmModal, PromptModal, ContextMenu, HelpTip, Select, Toaster and `toast`, ProviderMark and brand marks, PlatformMark | `core/ui` | 5 |
-| api client, session, query, connection, entitlements (paid state, quota, PremiumBanner, PremiumLocked), app version, cabinet paths | `core/*` | 6 |
-| feature manifest, lazy screen, analytics | `core/feature`, `core/analytics` | 7, 9 |
-| Logo, sidebar glyph, Icon, theme, styles | `core/ui`, `core/theme`, `core/styles` | 2 |
-| Markdown, uploads (F2-D4) | `core/`, built by the first slice that needs them | — |
-| BarChart → S14; FileGlyph, clipboard → S08; BrandMark → S07; YouTube, service worker → S09; LanguageSwitcher, DesktopDownload, desktop build, Metrika goal helper → S01; retroui calendar → S12 | the slice | — |
-
-Spec 032's rules for whoever builds markdown: no raw HTML (`rehype-raw` never), links `target="_blank" rel="noopener noreferrer nofollow"`, images become links, MathJax SVG through DOMPurify with the SVG profiles, Mermaid with `securityLevel: "strict"`, file previews through DOMPurify.
-
-### 3.10 Analytics
-
-GA4: `page_view` on each navigation, user properties (`auth_state`, plan, locale). Metrika: counter and goals per F2-D5. Product analytics SDK: anonymous id, session, event queue, flush every 5 s, `sendBeacon` on page hide to `POST /v1/analytics/collect`, feature tracking from the manifests' `analyticsKey`; the event catalogue file is carried as generated and owned by S14. Every send fails silently into a counted log, never into the UI.
-
-### 3.11 Parity
-
-- **Stand-ins (F2-D1).** `frontend/parity-build/` reproduces, as data, the 28 menu entries of the draft's 18 manifests (14 user, 14 administrator) for features no slice has registered, with a route per entry whose screen marks the content area (the `main` scroll box) as pending, and a pending box at the Leo button's place (measured on the draft per viewport). Its entry composes the production registry with the stand-ins; `npm run build:parity` builds `dist-parity/` with the production config; `parity.config.json` points `v2` there. Tests: a registered slice has no stand-in; production and stand-in menus together equal `parity-build/draft-nav.json`, extracted once from the draft at the pinned commit.
-- **Pending regions.** `data-parity-pending="<slice>"` marks a box of pixels owned by a slice that does not exist yet. In `compare`, after the page settles, the harness takes the visible pending boxes, paints them in the mask colour on a copy of the expected image and masks them in the actual screenshot. A draft widget larger than its box fails the state, so boxes stay honest. `baseline` and `verify` render the draft and never see the attribute.
-- **Compare set for F2:** `boot.spinner`, `shell.user`, `shell.paid`, `shell.admin`, `shell.desktop-rail`, `shell.mobile-drawer-open`, `shell.connection-lost`, `shell.connection-restored`, in the cells their baseline has (the full-scope ones: both themes, both viewports, `ru` and `en`). New state `route.not-found`: an unknown deep path; both targets must end on the public site's not-found URL with `from` (a new `expectUrl` field of the state DSL); baseline captured from the draft. `shell.support-badge`, `shell.palette.*` and `route.error-fallback` pass with S15, S07 and S05.
-- **CI** per F2-D6: the job checks for the secrets first and passes with a skip notice without them. The harness README gains the stand-in and pending rules.
-
-### 3.12 Performance and security
-
-- Only the active language's catalogues and the boot namespaces load at start; screens, their catalogues and heavy modules load with their route. Static values hoisted; no `useMemo`/`useCallback` without a profile. Polling as the draft (quota 15 s, unread 60 s) pauses in hidden tabs.
-- Measured in steps 7 and 8 against the draft's build: entry and route chunk sizes, LCP, CLS and INP of the shell on `vite preview` (targets LCP ≤ 2.5 s, CLS ≤ 0.1, INP ≤ 200 ms), with numbers before and after.
-- No token in `localStorage`; no secret in the bundle; one inline script; third-party hosts limited to the analytics of F2-D5; `noindex` on the SPA.
-
-### 3.13 Not in F2
-
-Feature screens, the login and registration screens, the cabinet (S01); markdown and uploads (F2-D4); the service worker and Web Push (S09); NGINX, caching headers, CSP and the image (F4); the public site and its not-found page (S17).
+| ID | Question | Decision | Trade-off accepted |
+|---|---|---|---|
+| F2-D1 | How do screens get data before their slice publishes endpoints? | **Mocks** (§2.6): the sample backend becomes MSW handlers on the same paths, **in local development and tests only**; each slice deletes its handlers when it delivers its API | 14 600 lines move instead of being deleted and stay until the last slice; screens exercise the real HTTP path and error handling |
+| F2-D2 | What runs on https://one.whisperer.one before the slices exist? | **The production build only**, without mocks; no demo flavour | Until S01 the staging cabinet shows error states |
+| F2-D3 | 13 vendored files over 200 lines make CI red | **Split them** and import flag icons from the pinned `country-flag-icons` package (`3x2/flags.css`) instead of the vendored copy; done first, as a separate fix | Vendored shadcn code differs from upstream in file layout; an update through `shadcn add` is re-split by hand |
+| F2-D4 | CLAUDE.md forbids barrel files; every slice had a public `index.ts` re-exporting its contract | **Strict direct paths, no exception.** Every `index.ts` barrel is removed; code imports the module that defines a symbol. The architecture test forbids (a) any file that only re-exports, (b) a dependency cycle between slices, (c) importing another slice's `mocks/`, `data/` or `server/`, or its files from `src/app/` other than through route modules | A slice's public surface is no longer one file; the architecture test, not a facade, keeps internals and cycles out |
+| F2-D5 | `/unauthorized` is a top-level cabinet page; the edge sends top-level paths to the public site | **Kept**; the edge serves it from the cabinet (ADR 0021 §3 amended) | One more edge rule for F4 |
+| F2-D6 | `mail` (`/app/inbox`) and `productivity` (`/app/productivity`) had no owning slice | **Mail → S12, productivity → S16** (FEATURE_MAP updated) | — |
 
 ## 4. Steps
 
-Each step is one session, ends with the frontend gates green (typecheck, tests, build, react-doctor 100) and CI green after «Принято».
+Each step fits one session, leaves the project building and running with every screen as before, and ends with the zone's checks and the frontend gate (`npm run doctor -- --score` = 100), then a commit after «Принято».
 
 | Step | Content | Skills | Done when |
 |---|---|---|---|
-| 1 | **Project skeleton.** `frontend/` with Vite 8, React 19.3, TypeScript 7, the pinned libraries the foundation needs, `.nvmrc` 26.10.0; scripts `dev`, `typecheck`, `test` (single run), `build`, `doctor` (react-doctor 0.9.14 pinned; its telemetry checked); vitest with jsdom; the layout of §3.1; the architecture test (§3.2) with fixture trees proving each rule fires; an entry that renders an empty root; README stub; `.gitignore`; `docs/development.md` "Run the frontend"<br>Done: React 19.3.0, Vite 8.3.2, TypeScript 7.0.2 (`tsc -b` over app, tests and configs), Vitest 5.0.3 with jsdom 30.1.1, react-doctor 0.9.14 — only what the step uses; later steps add their libraries at the §1.3 versions. Architecture test of ten rules on the oxc parser Vite exports, 30 fixture trees, each firing exactly its rule, and a tree of every allowed edge with none; entry test; build target `es2020` as the draft; empty bundle 219.8 kB (68.7 kB gzip). react-doctor scores 100 on the vendor's service, telemetry off (F2-D7, ADR 0020) | the four frontend skills, react-doctor | CI `frontend` job green on the empty project; the architecture test fails on each fixture violation |
-| 2 | **Visual foundation.** Tokens, Tailwind bridge, CSS files of §3.5, motion with reduced-motion rules, fonts vendored per F2-D2 with the generator and its `--check`, theme and appearance stores, pre-paint script and its sync test, icons, logo, sidebar glyphs, `public/` root files<br>Done: Tailwind 4.3.3, zustand 5.0.15, clsx 2.1.1, tailwind-merge 3.7.0; the transitive `enhanced-resolve` held at 5.25.1 in the lock (5.26.0 was 3 days old, `.npmrc` asks 7). `globals.css` split into 11 files of ≤ 90 lines; the built CSS matches the draft's token for token in `:root` and both themes and rule for rule in the components layer, except what was moved or dropped on purpose: `.md-content` and `.quiet-msg-action` go with markdown, `.quiet-reveal` to S16, `.stripes` to S01, `vroom-rec-pulse` to S06; `.serif`, `.tag-y`, `.rule-thick`, `.rule-bottom`, `.rule-soft`, `.rule-dotted` and the `--ui-scale` reset are dead in the draft (no reference in `src/`; nothing sets `--ui-scale` since `f98eae7ca`). Reduced-motion rules for every animation except `.spin` and the toast countdown, which carry state; measured in the pinned Chromium under the harness's freezing: same pixels with and without them. `build.cssTarget` set to Tailwind v4's baseline: Vite 8's lightningcss minifier with the `es2020` target emptied `@keyframes conn-packet`. 1 644 woff2 copied byte for byte (57.8 MB; a shallow checkout grows from 3.9 MB by ≈ 55 MB), `fonts/faces.json`, generator `scripts/fonts/` whose 81 outputs equal the draft's except the `@generated` header; `public/` and `fonts/` served and copied by a Vite plugin at the draft's root URLs. Theme store started explicitly by `startTheme()`; pre-paint script moved into `<head>`; 90 icons (glyph data identical to the draft), `IconName` a closed union. Pulled forward from step 3: the locale registry (data only) and `cn`, which the generator and `Icon` need. 183 tests | the four frontend skills, react-doctor | every font `url()` resolves; tokens defined for both themes; the generator check passes; a render test of every icon |
-| 3 | **i18n and core utilities.** Locale registry, detection chain, lazy catalogues, document locale, profile sync hook point, `common` and `errors` in 16 languages, the i18n test; `core/lib` and `core/hooks` of §3.9 | the four frontend skills, react-doctor | the i18n test passes on all 16 languages and fails on a planted missing key and placeholder; detection order covered by tests |
-| 4 | **UI kit A: controls and layout** (§3.9 step 4) | the four frontend skills, react-doctor | component tests for roles, labels, keyboard, disabled state and RTL; class strings carried from the draft file by file. The kit's pixels are proven through the shell (step 8) and each slice's compare |
-| 5 | **UI kit B: overlays and feedback** (§3.9 step 5); focus trap, Escape and scroll lock as the draft's `tools/perf/a11y.mjs` checks | the four frontend skills, react-doctor | component tests incl. focus return and portals; toast de-duplication, limit 4, durations |
-| 6 | **Data layer and session** (§3.7): client, error envelope with draft compatibility, request id line (F2-D3), query client, session store, refresh, forced logout, sign-out, boot gate, connection store and probe, entitlements, app version, ticker and costs queries, generated API types | the four frontend skills, react-doctor | tests: refresh races (two tabs, CSRF mismatch, dead session, network), 401 retry once, envelope and draft bodies, message order, probe backoff; no token persisted |
-| 7 | **Router, registration point, parity composition** (§3.3, §3.8, §3.11): manifest types, registry, router builder, gates, redirects, modal routes, boundaries, prefetch and warm-up, layout hints, not-found, nav model; stand-ins, `build:parity`, pending regions and `expectUrl` in the harness; bundle budgets from a measurement | the four frontend skills, react-doctor, Docker ×4 | route tests (access, redirects, modal background, boundaries); stand-in tests; harness unit tests; budgets recorded |
-| 8 | **App shell and parity proof** (§3.4): layout, sidebar in three modes, top bar and ticker, connection overlay, theme shortcut; `route.not-found` baselined from the draft; `compare` of the F2 set; the `parity-compare` CI job (F2-D6); shell vitals measured | the four frontend skills, react-doctor, Docker ×4 | **`compare` shows no difference** for the F2 set in both themes and viewports; `route.not-found` passes on both targets; CI green |
-| 9 | **Analytics and close** (§3.10): GA4, Metrika per F2-D5, product analytics SDK and feature tracking; frontend README for slices (manifest, namespaces, stand-in removal, compare list); harness README; STATUS `done` | the four frontend skills, react-doctor | the F2 compare set still passes with analytics on (no new request without a recorded or default answer, no error toast); events queued and flushed in tests; the prompt's definition of done holds |
-
-"The four frontend skills": `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions`, `web-design-guidelines`. "Docker ×4": the Docker zone skills, for runs of the harness container.
+| 1 | **Green CI and the test runner, still on Next.js.** Split the 12 oversized vendored components (F2-D3), flags from `country-flag-icons`; Vitest 5 replaces `node --test`; the architecture and i18n checks become tests inside `npm test`; `doctor` script gets `REACT_DOCTOR_NO_TELEMETRY=1` | the four frontend skills, `react-doctor` | `check_repository.py` passes; `typecheck`, `test` (with architecture and i18n), `build`, doctor 100; CI green on `main` |
+| 2 | **Adapters and direct paths, still on Next.js.** Every slice `index.ts` barrel removed and imports rewritten to the defining modules (F2-D4); `src/lib/navigation.ts` over Next.js and every `next/link` / `next/navigation` call site through it; client `next-intl` imports → `use-intl`; `next/dynamic` → `lazy` + `Suspense`; `next-themes` → preferences store; the 4 async server UI components become client components; `next/image` → `<img>` | as step 1 | No `next/link`, `next/navigation`, `next/dynamic`, `next-themes` or `next-intl` (client) import outside `src/app/` and `src/lib/navigation.ts` — the architecture test enforces it; every screen unchanged (spot check both themes, desktop and mobile, `en`, `ru`, `ar`) |
+| 3 | **Data layer and mocks I — infrastructure and user panel.** `backend/openapi.json` with its backend test; `src/lib/api/` (generated types, client, envelope errors, query client, request-id toast); MSW in dev and tests; the user-panel and workspace slices' sample routes → `features/*/mocks/`; their pages read through queries; their `src/app/api/*` and `features/*/server/` deleted | frontend skills, `react-doctor`, `fastapi`, `python-doctor` | Backend gate passes; the user panel works on `npm run dev` with mocks; tests cover the client, error envelope parsing, retries and the toast; no user-panel route handler left |
+| 4 | **Data layer and mocks II — admin panel and the rest.** The remaining sample routes → mocks; `src/app/api/`, `src/server/`, every `features/*/server/` and the Server Action deleted; `/oauth/demo-authorize` mock-only; the architecture test forbids request handlers and server code in `src/` | frontend skills, `react-doctor` | No API code in `frontend/`; every screen renders on mocks as before |
+| 5 | **The switch to Vite.** `vite.config.ts`, `index.html` with the generated boot script and `noindex`; React Router route tables with `lazy` loaders and layout routes; in-cabinet redirects and `legacy-redirects.ts`; not-found and error elements; `PageMeta`; `use-intl` provider with browser language resolution and per-language catalogue files; fonts from `@fontsource`; React Compiler; `navigation.ts` switched to React Router; TypeScript 7 after the tool check; public pages and every Next.js file and dependency removed; npm scripts of §2.8. Visual check: the step-4 commit built from `git archive` and the Vite build, both on mocks with a frozen clock and blocked third-party requests, screenshotted by Playwright for every route, both themes, 1440 px and 390 px, in all 16 languages, compared pixel by pixel; differences fixed or explained | frontend skills, `react-doctor` | No Next.js dependency or file in `frontend/`; `typecheck`, `test`, `build`, doctor 100; the screenshot comparison reports no unexplained difference; build time and bundle sizes measured against §1.1 |
+| 6 | **Production readiness.** Web app manifest and icons (installable PWA, no offline cache); `vite:preloadError` reload; chunking and the bundle budget set from a measurement; the bundle check (no mocks, no source maps in `dist/`); boot-script hash and the edge rules of §2.9 written down for F4; `frontend/docs/architecture.md`, `frontend/README.md`, `docs/development.md` and ARCHITECTURE §18.2 versions updated; STATUS `done` | frontend skills, `react-doctor` | CI frontend job green after push; first-load JavaScript and LCP on `/app/productivity` measured and not worse than the Next.js baseline; definition of done of the prompt met |
 
 ## 5. Risks
 
-| Risk | Mitigation |
-|---|---|
-| React 19, Tailwind 4.3.3 or Vite 8 render the draft's design a few pixels differently | Found by `compare` in step 8 per state; fixed in CSS, or a per-state tolerance with a written reason; never a global increase |
-| react-doctor 0.9.14 flags patterns the draft relied on, or crashes on TypeScript 7 sources | Its own TypeScript is bundled; findings are fixed in code; only design rules may be switched off, each with a reason (spec 005) |
-| The pending boxes hide a shell defect under them | Boxes cover only pixels of absent slices; each slice's own compare removes them; the last slice removes the mechanism |
-| A stand-in drifts from the draft's menu | `draft-nav.json` test (§3.11) |
-| Without the `PARITY_S3_*` secrets CI cannot compare | The job skips and passes (F2-D6); each step reports a local `compare` from the cached baseline meanwhile |
-| A slice needs a kit component F2 left out | It adds the component to `core/ui` under this plan's rules in its own step |
-| 61 MB of fonts slow `npm ci` caches and clones | Fonts are outside `node_modules`; CI caches only npm; the checkout cost is measured in step 2 |
+- **TypeScript 7 and the tools.** If a tool the project needs reads the TypeScript API, step 5 keeps TypeScript 5.9 for it and records why; the upgrade does not block the switch.
+- **React Compiler on Rolldown.** If the Babel pass makes the build slower than the Next.js baseline by more than the measured gain elsewhere, step 5 reports the numbers and asks before turning it off.
+- **Mock determinism.** Seeds that read the clock or `Math.random` make screenshots differ; step 5 freezes both in the capture, not in the seeds.
+- **Third-party request.** The header weather calls Open-Meteo with the user's coordinates; behaviour is unchanged by F2, and the CSP of F4 must allow it or the owner drops it.
