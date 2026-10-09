@@ -5,23 +5,23 @@ from datetime import timedelta
 import pytest
 from prometheus_client import CollectorRegistry
 
+from shosai.core.events.metrics import EventMetrics
+from shosai.core.events.monitor import OutboxMonitor
+from shosai.core.kernel.homes import Home
 from tests.core.db.tcp_proxy import CountingProxy, Upstream, through
 from tests.core.events.bench import insert_raw_event
 from tests.core.kv.outages import closed_port
 from tests.core.observability.capture import captured_logs
 from tests.harness.database_access import DatabaseAccess, open_database_access, slot_urls
 from tests.harness.run_slot import RunSlot
-from whisperer.core.events.metrics import EventMetrics
-from whisperer.core.events.monitor import OutboxMonitor
-from whisperer.core.kernel.homes import Home
 
 
 def gauges(registry: CollectorRegistry, home: Home) -> tuple[float | None, float | None]:
     """Pending events and the oldest one's age of a home."""
     labels = {"home": home.value}
     return (
-        registry.get_sample_value("whisperer_outbox_pending", labels),
-        registry.get_sample_value("whisperer_outbox_oldest_age_seconds", labels),
+        registry.get_sample_value("shosai_outbox_pending", labels),
+        registry.get_sample_value("shosai_outbox_oldest_age_seconds", labels),
     )
 
 

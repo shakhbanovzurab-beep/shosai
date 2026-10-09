@@ -10,17 +10,17 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 from starlette.types import ASGIApp
 
-from tests.core.web.asgi import asgi_scope, call
-from tests.core.web.metric_samples import requests_total
-from tests.core.web.probe_app import build_probe_app, probe_router
-from whisperer.core.web.health import build_health_router
-from whisperer.core.web.http_metrics import (
+from shosai.core.web.health import build_health_router
+from shosai.core.web.http_metrics import (
     KNOWN_METHODS,
     OTHER_METHOD,
     UNMATCHED_HANDLER,
     content_length,
     status_class,
 )
+from tests.core.web.asgi import asgi_scope, call
+from tests.core.web.metric_samples import requests_total
+from tests.core.web.probe_app import build_probe_app, probe_router
 
 STATUS_CLASSES = {"1xx", "2xx", "3xx", "4xx", "5xx"}
 

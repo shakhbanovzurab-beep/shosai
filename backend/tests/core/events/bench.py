@@ -19,19 +19,19 @@ from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.events.catalog import EventCatalog
+from shosai.core.events.domain_event import DomainEvent, EventCode
+from shosai.core.events.metrics import EventMetrics
+from shosai.core.events.outbox import EventOutbox
+from shosai.core.events.relay_limits import RelayLimits
+from shosai.core.events.resources import EventResources
+from shosai.core.events.subscriptions import EventSubscription, ReceivedEvent
+from shosai.core.events.system import event_task_handlers
+from shosai.core.tasks.queues import TaskQueue
 from tests.core.db.probe_table import probe_records
 from tests.core.tasks.workbench import Check, Workbench, bound_workbench
 from tests.harness.connections import Connection, fetch_rows
 from tests.harness.database_access import DatabaseAccess
-from whisperer.core.events.catalog import EventCatalog
-from whisperer.core.events.domain_event import DomainEvent, EventCode
-from whisperer.core.events.metrics import EventMetrics
-from whisperer.core.events.outbox import EventOutbox
-from whisperer.core.events.relay_limits import RelayLimits
-from whisperer.core.events.resources import EventResources
-from whisperer.core.events.subscriptions import EventSubscription, ReceivedEvent
-from whisperer.core.events.system import event_task_handlers
-from whisperer.core.tasks.queues import TaskQueue
 
 DEADLINE = timedelta(seconds=10)
 
@@ -148,7 +148,7 @@ def runs(bench: EventBench, queue: TaskQueue, task: str, outcome: str, at_least:
 
     async def check() -> bool:
         sample = bench.sample(
-            "whisperer_task_runs_total", queue=queue.value, task=task, outcome=outcome
+            "shosai_task_runs_total", queue=queue.value, task=task, outcome=outcome
         )
         return sample >= at_least
 

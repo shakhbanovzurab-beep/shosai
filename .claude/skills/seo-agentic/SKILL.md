@@ -41,19 +41,19 @@ only ChatGPT desktop calls tools by default).
 Run the steps in this order and keep every tool's JSON for the report.
 
 1. **Lighthouse fraction.**
-   `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run lighthouse_agentic.py <url> --strategy both --json`.
+   `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run lighthouse_agentic.py <url> --strategy both --json`.
    Uses PSI v5 (`category=AGENTIC_BROWSING`); a Google API key avoids the
    shared anonymous quota. With a saved report use `--from-json <file>`.
    Report the fraction as `X/N` exactly as computed. Never convert it to a
    percentage and never assume N: it is at most 6, and N/A and informative
    audits drop out. Read `references/lighthouse-agentic-category.md` before explaining it.
 2. **HTTP and markup checks.**
-   `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run agentic_check.py <url> --json`.
+   `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run agentic_check.py <url> --json`.
    Covers server-rendered content, robots.txt groups per AI agent and
    Content-Signal, llms.txt, Markdown delivery, ai-catalog.json, `/.well-known`
    documents, and WebMCP markup.
 3. **Accessibility tree.**
-   `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run agent_ux_check.py <url> --json`.
+   `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run agent_ux_check.py <url> --json`.
    A local 0-100 heuristic; present it separately from the Lighthouse fraction.
    Page-level criteria: `references/agent-friendly-pages.md`.
 4. **WAF behaviour (only with authorization).** Add `--ua-matrix` to step 2
@@ -117,10 +117,10 @@ are listed as options either way.
 Drafts go to stdout for review; nothing is deployed and no file is overwritten.
 
 ```bash
-"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run agentic_fix.py robots <url> --signal "search=yes, ai-input=yes, ai-train=no"
-"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run agentic_fix.py llms <url>
-"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run agentic_fix.py ai-catalog --publisher example.com --entry "Name|media type|url"
-"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run agentic_fix.py webmcp <url> --json
+"/root/shosai/.claude/skills/seo/scripts/claude-seo" run agentic_fix.py robots <url> --signal "search=yes, ai-input=yes, ai-train=no"
+"/root/shosai/.claude/skills/seo/scripts/claude-seo" run agentic_fix.py llms <url>
+"/root/shosai/.claude/skills/seo/scripts/claude-seo" run agentic_fix.py ai-catalog --publisher example.com --entry "Name|media type|url"
+"/root/shosai/.claude/skills/seo/scripts/claude-seo" run agentic_fix.py webmcp <url> --json
 ```
 
 - `robots` adds Content-Signal to each group and never changes Allow or

@@ -8,9 +8,9 @@ never reaches the process, so it can meet no runtime address.
 
 import socket
 
+from shosai.core.kernel.homes import Home
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
-from whisperer.core.kernel.homes import Home
 
 LOOPBACK = "127.0.0.1"
 

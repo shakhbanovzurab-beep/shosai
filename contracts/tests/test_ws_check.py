@@ -2,9 +2,9 @@
 
 import pytest
 
-from whisperer_contracts.jsonvalue import ContractInputError, Json, JsonObject, as_list, as_object
-from whisperer_contracts.ws_catalogue import CATALOGUE_FORMAT, Endpoint, parse_catalogue
-from whisperer_contracts.ws_check import compare_connection, compare_frame
+from shosai_contracts.jsonvalue import ContractInputError, Json, JsonObject, as_list, as_object
+from shosai_contracts.ws_catalogue import CATALOGUE_FORMAT, Endpoint, parse_catalogue
+from shosai_contracts.ws_check import compare_connection, compare_frame
 
 
 def endpoint(**overrides: Json) -> JsonObject:

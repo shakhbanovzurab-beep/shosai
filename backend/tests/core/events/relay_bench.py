@@ -6,15 +6,15 @@ from dataclasses import dataclass, field
 
 from sqlalchemy.pool import QueuePool
 
+from shosai.core.db.engines import HomeDatabases
+from shosai.core.db.transactions import HomeTransactions
+from shosai.core.events.delivery import EventDeliveryPayload
+from shosai.core.events.outbox import EventOutbox
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.tasks.declaration import TaskDeclaration
+from shosai.core.tasks.payloads import TaskPayload
 from tests.core.events.bench import NoteState, NoteWritten
-from whisperer.core.db.engines import HomeDatabases
-from whisperer.core.db.transactions import HomeTransactions
-from whisperer.core.events.delivery import EventDeliveryPayload
-from whisperer.core.events.outbox import EventOutbox
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
-from whisperer.core.tasks.declaration import TaskDeclaration
-from whisperer.core.tasks.payloads import TaskPayload
 
 
 def connections_in_use(databases: HomeDatabases) -> int:

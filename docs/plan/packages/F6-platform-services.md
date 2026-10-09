@@ -92,7 +92,7 @@ Design choices made in this plan, open to objection at plan review:
 ### 3.1 Layout
 
 ```text
-backend/src/whisperer/
+backend/src/shosai/
   core/
     ai/
       calls.py            CallContext, Payer, PlatformAccount, CallClass, EffectKey, ModelRoute, ModelRef
@@ -126,7 +126,7 @@ Module names are indicative; each file stays under 300 lines.
 
 ### 3.2 Boundaries
 
-- New import-linter contracts: **provider SDKs only in `core.ai`** (`forbidden`: `google.genai`, `openai`, `deepgram`, `mistralai`, `websockets` from every package except `whisperer.core.ai`); **light contracts** (`forbidden`: `core.agent_tools` and the value modules of `core.ai` import no FastAPI, Starlette, SQLAlchemy, redis, HTTPX, provider SDK).
+- New import-linter contracts: **provider SDKs only in `core.ai`** (`forbidden`: `google.genai`, `openai`, `deepgram`, `mistralai`, `websockets` from every package except `shosai.core.ai`); **light contracts** (`forbidden`: `core.agent_tools` and the value modules of `core.ai` import no FastAPI, Starlette, SQLAlchemy, redis, HTTPX, provider SDK).
 - A source test fails when a provider host (`openrouter.ai`, `api.openai.com`, `generativelanguage.googleapis.com`, `api.deepgram.com`, `api.pyannote.ai`, `api.mistral.ai`) appears outside `core/ai`.
 - `CoreServices` gains `ai: AiProviders`, `email: EmailPort`, `exchange_rates: ExchangeRates`. `FeatureParts` gains `periodic_jobs`, `due_sources`, `agent_tools`, `cost_settlements`.
 - Core's own tasks and jobs (cost deferral, price sync, rate fetch, abuse recompute, email relay and send, purges) are registered by composition like the outbox relay.
@@ -207,7 +207,7 @@ One call goes through: validate → consent → price check (ADR 0035) → abuse
 ### 3.11 Telemetry
 
 - Per provider: call count and latency histogram by `kind` and `outcome`, time to first byte, retries and retry-budget refusals, breaker state and transitions per (provider, model), semaphore occupancy and refusals, session pool occupancy, cost in µUSD by `provider` and `call_class` (cost per hour in Grafana).
-- Invariant monitor (§16.4): counters `whisperer_ai_calls_billed_total` and `whisperer_ai_cost_rows_recorded_total` (rows written directly or by the deferred task, live rows count their calls) and `whisperer_ai_calls_without_cost_row_total`; a reconciliation job compares billed calls per hour per home (Valkey counters) with rows in `provider_costs` and sets the monitor gauge. The alert rules are handed to F5.
+- Invariant monitor (§16.4): counters `shosai_ai_calls_billed_total` and `shosai_ai_cost_rows_recorded_total` (rows written directly or by the deferred task, live rows count their calls) and `shosai_ai_calls_without_cost_row_total`; a reconciliation job compares billed calls per hour per home (Valkey counters) with rows in `provider_costs` and sets the monitor gauge. The alert rules are handed to F5.
 - Spans per call with provider, kind, model, outcome; no prompt, text, audio or email address in spans or logs (§16.8).
 
 ### 3.12 Settings

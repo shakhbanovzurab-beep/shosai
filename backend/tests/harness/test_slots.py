@@ -9,6 +9,7 @@ import secrets
 
 import pytest
 
+from shosai.core.kernel.homes import Home
 from tests.harness.connections import (
     Connection,
     connect,
@@ -19,7 +20,6 @@ from tests.harness.connections import (
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessConfigurationError, HarnessSettings
 from tests.harness.slots import NoFreeSlotError, claim_slot, release_all
-from whisperer.core.kernel.homes import Home
 
 HOME_LABELS = {Home.RU: "of the Russian home", Home.EU: "of the EU home"}
 HELD_SLOT_LOCKS_SQL = (
@@ -50,7 +50,7 @@ async def test_a_run_holds_one_slot_on_each_home_server(run_slot: RunSlot) -> No
         database = await fetch_value(connection, "SELECT current_database()")
         comment = await fetch_value(connection, DATABASE_COMMENT_SQL)
 
-        assert database == f"whisperer_test_{run_slot.claimed.number}"
+        assert database == f"shosai_test_{run_slot.claimed.number}"
         assert isinstance(comment, str)
         assert HOME_LABELS[home] in comment
         assert await fetch_value(connection, HELD_SLOT_LOCKS_SQL) == 1
@@ -124,7 +124,7 @@ async def test_application_role_reaches_the_slot_through_pgbouncer(run_slot: Run
         finally:
             await release_all([connection])
 
-        assert (row["database"], row["role"]) == (target.database, "whisperer_app")
+        assert (row["database"], row["role"]) == (target.database, "shosai_app")
         assert not row["rolsuper"]
         assert not row["rolbypassrls"]
 
@@ -143,7 +143,7 @@ async def test_a_slot_beyond_the_prepared_databases_is_named(
 ) -> None:
     target = harness_settings.homes[Home.RU].migration.for_slot(99)
 
-    with pytest.raises(HarnessConfigurationError, match="нет базы whisperer_test_99") as raised:
+    with pytest.raises(HarnessConfigurationError, match="нет базы shosai_test_99") as raised:
         await connect(target)
 
     assert "LOCAL_TEST_DATABASE_COUNT" in str(raised.value)

@@ -6,8 +6,8 @@ import time
 
 from prometheus_client import CollectorRegistry
 
-from whisperer.core.observability.loop_lag import watch_event_loop_lag
-from whisperer.core.observability.metrics import ObservabilityMetrics, build_metrics_registry
+from shosai.core.observability.loop_lag import watch_event_loop_lag
+from shosai.core.observability.metrics import ObservabilityMetrics, build_metrics_registry
 
 BLOCKING_SECONDS = 0.2
 
@@ -25,13 +25,13 @@ async def test_a_blocking_call_shows_as_loop_lag() -> None:
     with contextlib.suppress(asyncio.CancelledError):
         await watcher
 
-    total_lag = registry.get_sample_value("whisperer_event_loop_lag_seconds_sum")
+    total_lag = registry.get_sample_value("shosai_event_loop_lag_seconds_sum")
     assert total_lag is not None
     assert total_lag >= BLOCKING_SECONDS * 0.75
     largest_normal = registry.get_sample_value(
-        "whisperer_event_loop_lag_seconds_bucket", {"le": "0.1"}
+        "shosai_event_loop_lag_seconds_bucket", {"le": "0.1"}
     )
-    observed = registry.get_sample_value("whisperer_event_loop_lag_seconds_count")
+    observed = registry.get_sample_value("shosai_event_loop_lag_seconds_count")
     assert largest_normal is not None
     assert observed is not None
     assert observed - largest_normal >= 1

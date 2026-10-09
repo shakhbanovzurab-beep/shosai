@@ -7,15 +7,15 @@ import pytest
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.events.metrics import EventMetrics
+from shosai.core.events.purge import OutboxPurge, PurgeResult, Retention
+from shosai.core.events.system import PURGE_OUTBOX, event_task_handlers
+from shosai.core.kernel.homes import Home
+from shosai.core.tasks.payloads import HomeTaskPayload
 from tests.core.events.bench import event_bench, insert_raw_event
 from tests.harness.connections import Connection, fetch_rows, fetch_value
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
-from whisperer.core.events.metrics import EventMetrics
-from whisperer.core.events.purge import OutboxPurge, PurgeResult, Retention
-from whisperer.core.events.system import PURGE_OUTBOX, event_task_handlers
-from whisperer.core.kernel.homes import Home
-from whisperer.core.tasks.payloads import HomeTaskPayload
 
 DAY = timedelta(days=1)
 
@@ -65,7 +65,7 @@ async def test_expired_rows_go_and_everything_else_stays(
     assert [row["event_id"] for row in marks] == [kept_mark]
     for table, count in (("outbox_messages", 3), ("processed_events", 2)):
         sample = registry.get_sample_value(
-            "whisperer_outbox_purged_rows_total", {"home": home.value, "table": table}
+            "shosai_outbox_purged_rows_total", {"home": home.value, "table": table}
         )
         assert sample == count
 

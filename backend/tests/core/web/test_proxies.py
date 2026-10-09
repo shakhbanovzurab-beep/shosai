@@ -12,9 +12,9 @@ from starlette.types import ASGIApp
 from uvicorn._types import ASGI3Application
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
+from shosai.core.config.sections import WebSettings
+from shosai.core.web.app import forwarded_allow_ips
 from tests.core.web.probe_app import build_probe_app
-from whisperer.core.config.sections import WebSettings
-from whisperer.core.web.app import forwarded_allow_ips
 
 EDGE = "10.20.0.7"
 FORWARDED_HTTPS = {"X-Forwarded-Proto": "https", "X-Forwarded-For": "203.0.113.9"}

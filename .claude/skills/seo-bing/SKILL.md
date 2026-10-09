@@ -24,11 +24,11 @@ specifically for **Amazon/Bing/Naver/Seznam.cz/Yandex/Yep indexing** and
 
 | Command | Underlying script |
 |---|---|
-| `/seo bing links <url>` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run bing_webmaster.py links <url>` |
-| `/seo bing compare <urlA> <urlB>` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run bing_webmaster.py compare <urlA> <urlB>`; both properties must be registered to the API account |
-| `/seo bing submit <url>` (single URL) | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run indexnow_submit.py --host ... --urls <url>` |
-| `/seo bing submit-batch <file>` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run indexnow_submit.py --host ... --urls-file <file>` |
-| `/seo bing verify-indexnow` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run indexnow_submit.py --host ... --verify-only` |
+| `/seo bing links <url>` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run bing_webmaster.py links <url>` |
+| `/seo bing compare <urlA> <urlB>` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run bing_webmaster.py compare <urlA> <urlB>`; both properties must be registered to the API account |
+| `/seo bing submit <url>` (single URL) | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run indexnow_submit.py --host ... --urls <url>` |
+| `/seo bing submit-batch <file>` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run indexnow_submit.py --host ... --urls-file <file>` |
+| `/seo bing verify-indexnow` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run indexnow_submit.py --host ... --verify-only` |
 
 ## When this skill applies
 

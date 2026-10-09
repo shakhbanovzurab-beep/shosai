@@ -16,14 +16,14 @@ from uuid import UUID
 from fastapi import APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from whisperer.core.events.domain_event import DomainEvent
-from whisperer.core.events.subscriptions import EventSubscription, ReceivedEvent
-from whisperer.core.features import CoreServices, FeatureModule, FeatureParts
-from whisperer.core.health.probes import DependencyProbe
-from whisperer.core.runtime.loops import ScheduledLoop
-from whisperer.core.tasks.declaration import NO_RETRY, TaskDeclaration, TaskHandler
-from whisperer.core.tasks.payloads import TaskPayload
-from whisperer.core.tasks.queues import TaskQueue
+from shosai.core.events.domain_event import DomainEvent
+from shosai.core.events.subscriptions import EventSubscription, ReceivedEvent
+from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.core.health.probes import DependencyProbe
+from shosai.core.runtime.loops import ScheduledLoop
+from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration, TaskHandler
+from shosai.core.tasks.payloads import TaskPayload
+from shosai.core.tasks.queues import TaskQueue
 
 NOTES_ROUTE = "/v1/fixture-notes"
 DIGEST_ROUTE = "/v1/ws/fixture-digest/status"

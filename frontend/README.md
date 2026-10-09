@@ -1,6 +1,6 @@
-# Whisperer cabinet
+# Shosai cabinet
 
-The signed-in web application of Whisperer: the user panel (`/app/*`) and the admin panel (`/admin/*`). A Vite
+The signed-in web application of Shosai: the user panel (`/app/*`) and the admin panel (`/admin/*`). A Vite
 single-page app and installable PWA; the public site lives in `site/` ([ADR 0021](../docs/adr/0021-public-site-on-nextjs-cabinet-on-vite.md)).
 The backend is the FastAPI API in `backend/`; the cabinet owns no API.
 

@@ -11,12 +11,12 @@ from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
 from prometheus_client import CollectorRegistry
 from pydantic import HttpUrl
 
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.config.sections import ObservabilitySettings
-from whisperer.core.config.values import Environment
-from whisperer.core.observability import tracing
-from whisperer.core.observability.metrics import ObservabilityMetrics
-from whisperer.core.observability.tracing import (
+from shosai.core.config.roles import ProcessRole
+from shosai.core.config.sections import ObservabilitySettings
+from shosai.core.config.values import Environment
+from shosai.core.observability import tracing
+from shosai.core.observability.metrics import ObservabilityMetrics
+from shosai.core.observability.tracing import (
     BoundedSpanProcessor,
     build_tracer_provider,
     traces_endpoint,
@@ -44,7 +44,7 @@ class GatedExporter(SpanExporter):
 
 def dropped(registry: CollectorRegistry, reason: str) -> float:
     value = registry.get_sample_value(
-        "whisperer_telemetry_dropped_total", {"signal": "traces", "reason": reason}
+        "shosai_telemetry_dropped_total", {"signal": "traces", "reason": reason}
     )
     return value or 0.0
 
@@ -114,16 +114,16 @@ def test_the_traces_path_is_added_to_the_collector_address(base: str) -> None:
 
 def test_the_provider_describes_the_process() -> None:
     provider = build_tracer_provider(
-        ObservabilitySettings(otel_service_name="whisperer-staging"),
+        ObservabilitySettings(otel_service_name="shosai-staging"),
         Environment.STAGING,
         ProcessRole.SCHEDULER,
         ObservabilityMetrics(CollectorRegistry()),
     )
 
     attributes = provider.resource.attributes
-    assert attributes["service.name"] == "whisperer-staging"
+    assert attributes["service.name"] == "shosai-staging"
     assert attributes["deployment.environment.name"] == "staging"
-    assert attributes["whisperer.role"] == "scheduler"
+    assert attributes["shosai.role"] == "scheduler"
     assert attributes["service.version"]
 
 

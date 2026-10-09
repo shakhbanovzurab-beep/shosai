@@ -96,7 +96,7 @@ export const lumenMeetings: MeetingSeed[] = [
     transcript_shared: true,
     summary:
       "Two engineering hires and one account executive for Q4. The senior frontend role is first; the interview loop gets a paid take-home instead of live coding.",
-    key_points: ["Budget covers three hires this quarter.", "Interviews run in Whisperer rooms so notes are shared."],
+    key_points: ["Budget covers three hires this quarter.", "Interviews run in Shosai rooms so notes are shared."],
     decisions: ["Open the senior frontend role first.", "Replace live coding with a paid take-home task."],
     actions: [
       action("Write the senior frontend job post", "Arham Khan", "todo", 4),

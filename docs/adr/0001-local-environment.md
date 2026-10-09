@@ -27,8 +27,8 @@ The target architecture places data in two homes — a managed PostgreSQL cluste
    - No official PgBouncer image exists. `edoburu/pgbouncer` is the widely used community image. It is configured here by committed files and a start script, not by its environment-driven entrypoint.
 
 3. **Two database roles besides the superuser**, created by the init script on both servers:
-   - `whisperer_migrator` owns the databases and schema;
-   - `whisperer_app` has no `SUPERUSER` and no `BYPASSRLS`.
+   - `shosai_migrator` owns the databases and schema;
+   - `shosai_app` has no `SUPERUSER` and no `BYPASSRLS`.
 
    §7 relies on row-level security, which a superuser or the table owner bypasses silently. Tests and development must run the application under the role production will use. Migrations grant table rights to the application role.
 
@@ -37,7 +37,7 @@ The target architecture places data in two homes — a managed PostgreSQL cluste
 - Backend code must turn asyncpg's statement cache off. The default cache fails behind the local PgBouncer with `prepared statement "__asyncpg_stmt_N__" does not exist`; this was observed during verification. (Superseded by [ADR 0013](0013-psycopg-driver-behind-pgbouncer.md) on 2026-10-02: the backend uses psycopg 3 without server-side prepared statements.)
 - Session `SET`, session advisory locks and `LISTEN` are unavailable to the application; `SET LOCAL` per transaction is the pattern (§7).
 - Two third-party images that are not Docker official images (SeaweedFS, edoburu/pgbouncer) are pinned by tag in a development-only file. They never run in staging or production.
-- Both buckets share one local store and one key pair; per-home storage configuration in code is still separate. (Superseded by [ADR 0014](0014-one-object-store-in-russia.md) on 2026-10-02: the local store keeps one bucket, `whisperer`, as production keeps one bucket in Russia; the code has one storage configuration, `S3_*`.)
+- Both buckets share one local store and one key pair; per-home storage configuration in code is still separate. (Superseded by [ADR 0014](0014-one-object-store-in-russia.md) on 2026-10-02: the local store keeps one bucket, `shosai`, as production keeps one bucket in Russia; the code has one storage configuration, `S3_*`.)
 
 ## Revisit when
 

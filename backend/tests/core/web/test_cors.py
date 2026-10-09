@@ -1,8 +1,8 @@
 """CORS answers only the origins listed in `CORS_ALLOWED_ORIGINS`; by default nobody."""
 
+from shosai.core.config.sections import WebSettings
+from shosai.core.web.request_ids import REQUEST_ID_HEADER
 from tests.core.web.probe_app import build_probe_app, client_of
-from whisperer.core.config.sections import WebSettings
-from whisperer.core.web.request_ids import REQUEST_ID_HEADER
 
 ADMIN = "https://admin.whisperer.one"
 PREFLIGHT = {"Origin": ADMIN, "Access-Control-Request-Method": "POST"}

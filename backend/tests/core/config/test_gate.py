@@ -4,19 +4,19 @@ from collections.abc import Iterator
 
 import pytest
 
+from shosai.core.config.gate import (
+    GateViolation,
+    UnsafeConfigurationError,
+    enforce_production_gate,
+)
+from shosai.core.config.loading import ConfigurationError, Settings, load_settings
+from shosai.core.kernel.homes import Home
 from tests.core.config.sample_environ import (
     SAMPLE_SECRET,
     local_environ,
     production_database_url,
     production_environ,
 )
-from whisperer.core.config.gate import (
-    GateViolation,
-    UnsafeConfigurationError,
-    enforce_production_gate,
-)
-from whisperer.core.config.loading import ConfigurationError, Settings, load_settings
-from whisperer.core.kernel.homes import Home
 
 
 def refusal(environ: dict[str, str]) -> str:
@@ -68,15 +68,14 @@ def test_outside_production_the_gate_does_not_apply() -> None:
         ),
         (
             production_environ(
-                HOME_EU_DATABASE_URL=f"postgresql://whisperer_app:{SAMPLE_SECRET}@db.eu/whisperer"
+                HOME_EU_DATABASE_URL=f"postgresql://shosai_app:{SAMPLE_SECRET}@db.eu/shosai"
             ),
             "HOME_EU_DATABASE_URL",
         ),
         (
             production_environ(
                 HOME_EU_MIGRATION_DATABASE_URL=(
-                    f"postgresql://whisperer_migrator:{SAMPLE_SECRET}@db.eu/whisperer"
-                    "?sslmode=prefer"
+                    f"postgresql://shosai_migrator:{SAMPLE_SECRET}@db.eu/shosai?sslmode=prefer"
                 )
             ),
             "HOME_EU_MIGRATION_DATABASE_URL",
@@ -94,7 +93,7 @@ def test_each_unsafe_setting_refuses_start_and_is_named(
 
 def test_a_migration_address_with_verified_tls_passes() -> None:
     environ = production_environ(
-        HOME_RU_MIGRATION_DATABASE_URL=production_database_url(Home.RU, role="whisperer_migrator")
+        HOME_RU_MIGRATION_DATABASE_URL=production_database_url(Home.RU, role="shosai_migrator")
     )
 
     enforce_production_gate(load_settings(environ))

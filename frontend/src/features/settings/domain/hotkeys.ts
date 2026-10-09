@@ -1,5 +1,5 @@
 /*
- * Global shortcuts of the Whisperer desktop app. They are edited in Settings › Hotkeys, saved with the
+ * Global shortcuts of the Shosai desktop app. They are edited in Settings › Hotkeys, saved with the
  * user's settings and read by the desktop app, where they work even when it is in the background.
  *
  * A combo is "Mod+Alt+Z": modifiers in the order Mod, Alt, Shift, then one key. "Mod" is ⌘ on macOS

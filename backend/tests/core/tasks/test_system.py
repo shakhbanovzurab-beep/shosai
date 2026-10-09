@@ -5,9 +5,9 @@ import sys
 import pytest
 from redis.asyncio import Redis
 
+from shosai.core.tasks import handlers
+from shosai.core.tasks.queues import TaskQueue
 from tests.core.tasks.workbench import Runs, declare, workbench
-from whisperer.core.tasks import handlers
-from whisperer.core.tasks.queues import TaskQueue
 
 RUNS = Runs()
 

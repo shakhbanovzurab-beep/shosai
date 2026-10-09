@@ -29,7 +29,7 @@
   "join": "加入會議",
   "opensInNewTab": "（在新分頁中開啟）",
   "source": {
-    "whisperer": "Whisperer 會議室",
+    "shosai": "Shosai 會議室",
     "in_person": "實體會議"
   },
   "participants": "參與者：{names}",

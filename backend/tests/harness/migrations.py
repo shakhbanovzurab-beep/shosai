@@ -7,12 +7,12 @@ the production one, so every run also proves that each revision downgrades.
 
 from psycopg import sql
 
+from shosai.composition.metadata import application_metadata
+from shosai.core.db.migrations import MigrationTarget, downgrade, upgrade
+from shosai.core.db.model_base import is_seeded_by_migration, metadata_for_home
+from shosai.core.kernel.homes import Home
 from tests.harness.connections import Connection, fetch_value
 from tests.harness.slots import ClaimedSlot
-from whisperer.composition.metadata import application_metadata
-from whisperer.core.db.migrations import MigrationTarget, downgrade, upgrade
-from whisperer.core.db.model_base import is_seeded_by_migration, metadata_for_home
-from whisperer.core.kernel.homes import Home
 
 BASE_REVISION = "base"
 VERSION_TABLE = "alembic_version"

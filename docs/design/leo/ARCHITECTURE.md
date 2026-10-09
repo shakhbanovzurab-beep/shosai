@@ -1,7 +1,7 @@
 # Leo — agent architecture
 
 - **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md).
-- **Scope:** Leo, the proactive AI agent at the centre of the workspace (brand Whisperer → Shosai, tentative). Package S09 with S11 (errands) and the agent-facing parts of S05 (voice), S10 (MCP) and S12 (connectors).
+- **Scope:** Leo, the proactive AI agent at the centre of the workspace (brand Shosai). Package S09 with S11 (errands) and the agent-facing parts of S05 (voice), S10 (MCP) and S12 (connectors).
 - **Inputs:** [AUDIT.md](AUDIT.md) (the draft's Leo); target architecture §1–§22; the new cabinet design in `frontend/src/features/leo`; the D1 contract (`contracts/draft/`); [Jev](#6-decision-layer-and-jev) public documentation as of 2026-10-08.
 - **Diagram:** [architecture.html](architecture.html) — components and layers, the turn and approval path, the proactive pipeline.
 - **Decisions:** [ADR 0023](../../adr/0023-leo-agent-core-layers.md) – [ADR 0032](../../adr/0032-leo-stream-protocol-v2.md), index in [§14](#14-architecture-decision-records).

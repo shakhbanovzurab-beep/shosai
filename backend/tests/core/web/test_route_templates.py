@@ -14,7 +14,7 @@ from starlette.responses import PlainTextResponse, Response
 from starlette.routing import Host, Mount, Route, Router
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from whisperer.core.web.route_templates import RouteLayoutError, RouteTemplates
+from shosai.core.web.route_templates import RouteLayoutError, RouteTemplates
 
 CONVERTER = re.compile(r"\{(\w+):\w+\}")
 

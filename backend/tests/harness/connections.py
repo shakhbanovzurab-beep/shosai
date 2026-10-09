@@ -15,7 +15,7 @@ type Connection = psycopg.AsyncConnection[DictRow]
 type QueryParams = tuple[object, ...]
 
 CONNECT_TIMEOUT_SECONDS: Final = 5
-APPLICATION_NAME: Final = "whisperer-tests"
+APPLICATION_NAME: Final = "shosai-tests"
 SQL_DIRECTORY: Final = Path(__file__).parent
 MAINTENANCE_DATABASE: Final = "postgres"
 DATABASE_EXISTS_SQL: Final = "SELECT EXISTS (SELECT 1 FROM pg_database WHERE datname = %s)"

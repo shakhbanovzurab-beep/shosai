@@ -2,12 +2,12 @@
 
 from urllib.parse import unquote, urlsplit
 
+from shosai.core.kernel.homes import Home
 from tests.harness.connections import fetch_value
 from tests.harness.migrations import clear_tables, cleared_tables
 from tests.harness.run_slot import RunSlot
 from tests.harness.sample_environ import sample_environ
 from tests.harness.settings import HarnessSettings, parse_database_url
-from whisperer.core.kernel.homes import Home
 
 PROBE_TABLE = "harness_rows"
 CREATE_PROBE = "CREATE TABLE harness_rows (id integer)"
@@ -17,7 +17,7 @@ DROP_PROBE = "DROP TABLE harness_rows"
 
 
 def test_a_slot_address_round_trips_in_the_application_format() -> None:
-    url = "postgresql://who%40ever:p%2Fss%3A@[::1]:16432/whisperer_test"
+    url = "postgresql://who%40ever:p%2Fss%3A@[::1]:16432/shosai_test"
     target = (
         HarnessSettings.from_environ(sample_environ(TEST_HOME_RU_DATABASE_URL=url))
         .homes[Home.RU]
@@ -33,7 +33,7 @@ def test_a_slot_address_round_trips_in_the_application_format() -> None:
         "::1",
         16432,
     )
-    assert unquote(urlsplit(address).path) == "/whisperer_test_4"
+    assert unquote(urlsplit(address).path) == "/shosai_test_4"
 
 
 def test_tests_clear_every_application_table_but_the_seeded_ones() -> None:

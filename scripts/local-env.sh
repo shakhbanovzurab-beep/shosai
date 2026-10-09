@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Локальное окружение Whisperer v2 (compose.dev.yaml): запуск, остановка, сброс.
+# Локальное окружение Shosai (compose.dev.yaml): запуск, остановка, сброс.
 # Подробности и соответствие домов серверам — docs/development.md.
 #
 #   scripts/local-env.sh up            запустить и дождаться готовности всех сервисов
@@ -12,7 +12,7 @@ REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 readonly REPOSITORY_ROOT
 readonly COMPOSE_FILE="${REPOSITORY_ROOT}/compose.dev.yaml"
 # Совпадает с `name:` в compose.dev.yaml; по нему отбираются тома для сброса.
-readonly PROJECT_NAME="whisperer-v2-local"
+readonly PROJECT_NAME="shosai-local"
 readonly WAIT_TIMEOUT_SECONDS=180
 
 compose() {

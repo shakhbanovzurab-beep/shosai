@@ -1,11 +1,11 @@
-# Whisperer Search Strategy: SEO, GEO and AIO
+# Shosai Search Strategy: SEO, GEO and AIO
 
-This document defines how Whisperer becomes visible, correctly understood and
+This document defines how Shosai becomes visible, correctly understood and
 cited in search engines and AI answer systems, and how that visibility turns
-into activation and revenue. It describes the target state for `whisperer-v2`.
+into activation and revenue. It describes the target state for `shosai`.
 
 - **Audience:** engineers and coding agents who build or change any public
-  Whisperer page, and whoever plans content.
+  Shosai page, and whoever plans content.
 - **Tooling:** the `claude-seo` skills installed in `.claude/skills/`. Section 17
   maps every part of this strategy to the skill that executes or checks it.
 - **Canonical domain:** `whisperer.one`. The production origin
@@ -20,23 +20,23 @@ strategy draft that the text comes from. Appendix A lists them all.
 
 ## 1. Goal and principle
 
-**Goal.** Make Whisperer the most visible and most trusted source for its target
+**Goal.** Make Shosai the most visible and most trusted source for its target
 search and AI queries: error-free indexing, dominant topical coverage, a strong
 entity graph, high citation rates in AI systems, and the highest possible
 conversion of organic demand into activation and revenue.
 
 **Principle.** Do not optimize the site for search engines. Optimize the
-**Whisperer knowledge system** so that a search engine, an AI system and a person
+**Shosai knowledge system** so that a search engine, an AI system and a person
 all get the same precise answer to six questions:
 
-1. What is Whisperer?
+1. What is Shosai?
 2. What problem does it solve?
 3. Who is it for?
 4. How does it work?
 5. How is it different, and what are its limits?
 6. Where is that proven?
 
-Whisperer should not try to rank first by gaming an algorithm. It should be so
+Shosai should not try to rank first by gaming an algorithm. It should be so
 useful, specific, original, trusted, well structured, well linked, well
 understood, well cited and technically accessible that choosing it as the
 relevant source is the easiest option for a search engine or an AI system. `[S114]`
@@ -50,15 +50,15 @@ relevant source is the easiest option for a search engine or an AI system. `[S11
 | Layer | What it is responsible for |
 |---|---|
 | **SEO** | Pages are discovered and ranked. |
-| **GEO** (generative engine optimization) | Whisperer's information is likely to appear in generated answers. |
+| **GEO** (generative engine optimization) | Shosai's information is likely to appear in generated answers. |
 | **AIO** (AI optimization) | Presence in AI-powered search. AIO = SEO + GEO + entity + citation + AI search monitoring. `[S37]` |
-| **Entity SEO** | Whisperer is one unambiguous entity. |
+| **Entity SEO** | Shosai is one unambiguous entity. |
 | **CRO** (conversion rate optimization) | Organic attention becomes installs, activation and money. |
 
 ### 2.2 The funnel `[S0, S54, S97]`
 
 ```text
-Query → SERP or AI answer → Whisperer citation or mention
+Query → SERP or AI answer → Shosai citation or mention
       → landing page, article or documentation → understanding
       → download → install → signup → first useful action
       → subscription → retention
@@ -108,7 +108,7 @@ Consequences of phasing:
 ### 5.1 One entity `[S18, S104]`
 
 ```text
-Whisperer
+Shosai
   type:   AI Workspace / SoftwareApplication
   domain: whisperer.one
 ```
@@ -126,10 +126,10 @@ profiles, directories, reviews, articles and press: brand name, official URL,
 product category, description, founder, launch information, features, pricing,
 screenshots, links to social profiles, GitHub and documentation.
 
-Do not let these read as four different products: "Whisperer AI",
-"Whisperer.one", "Whisperer Workspace", "Whisperer Meeting Assistant".
+Do not let these read as four different products: "Shosai AI",
+"Shosai.one", "Shosai Workspace", "Shosai Meeting Assistant".
 
-If one source says "Whisperer is a meeting bot" and another says "Whisperer is a
+If one source says "Shosai is a meeting bot" and another says "Shosai is a
 local AI workspace", entity ambiguity grows and AI answers get worse.
 
 **Fact registry (P0).** The facts above live in one versioned registry in the
@@ -145,7 +145,7 @@ External profiles and listings are compared with it every quarter (14).
 ### 5.3 The main differentiator: no-bot architecture
 
 AI systems comparing meeting assistants usually sort them into two groups: bots
-that join the call, and tools that capture audio locally. Whisperer states its
+that join the call, and tools that capture audio locally. Shosai states its
 group explicitly in every short definition on the site (the citation units in
 9.3), so that it is placed in the privacy-first, bot-free category.
 
@@ -155,7 +155,7 @@ product changes.
 
 ### 5.4 Knowledge graph `[S74]`
 
-Build one graph in which Whisperer links to: SoftwareApplication, AI Workspace,
+Build one graph in which Shosai links to: SoftwareApplication, AI Workspace,
 Leo, Meeting Assistant, Transcription, Translation, MCP, Founder, GitHub,
 Documentation, social profiles and external references. The same entity always
 has the same identifier and the same description.
@@ -164,8 +164,8 @@ The capabilities in the graph follow the product scope of the target
 architecture (§1), not marketing wording:
 
 ```text
-Organization ── publishes ──▶ Whisperer (SoftwareApplication, AI Workspace)
-Whisperer ── has ──▶ Leo (AI agent)
+Organization ── publishes ──▶ Shosai (SoftwareApplication, AI Workspace)
+Shosai ── has ──▶ Leo (AI agent)
           ── has ──▶ Meetings (capture, transcription, translation, notes)
           ── has ──▶ Knowledge (knowledge base, search)
           ── has ──▶ Tasks (tracker)
@@ -180,12 +180,12 @@ SoftwareApplication are defined on the homepage
 capability on its own canonical page; the founder on the About page (8.13).
 Every other page references these `@id`s and never defines the entity again. The
 `@id`s and names are the same in every locale; only descriptions are localized.
-Brand and product names (Whisperer, Leo) are never translated.
+Brand and product names (Shosai, Leo) are never translated.
 
 ### 5.5 Founder entity `[S84]`
 
 Maintain one consistent public founder profile that connects
-Founder → Whisperer → GitHub → technical writing → research → interviews. This
+Founder → Shosai → GitHub → technical writing → research → interviews. This
 strengthens the link between person, product, research and company.
 
 ---
@@ -566,11 +566,11 @@ itself starts with `https://whisperer.one/`:
 | Where | Fields |
 |---|---|
 | HTML `<head>` | canonical, hreflang `href`, `og:url`, `og:image` |
-| JSON-LD | `@id`, `url`, `logo`, `image` and every other value that names a Whisperer page or file |
+| JSON-LD | `@id`, `url`, `logo`, `image` and every other value that names a Shosai page or file |
 | `robots.txt` | `Sitemap:` |
 | Sitemaps | `<loc>`, alternate `href`, `image:loc` |
 | IndexNow | `keyLocation`, `urlList`; `host` is `whisperer.one` |
-| `llms.txt`, `llms-full.txt` | links to Whisperer pages |
+| `llms.txt`, `llms-full.txt` | links to Shosai pages |
 
 These fields are absolute, never relative. A production response that has
 `localhost`, a loopback or private address, a port, `http://`,
@@ -752,7 +752,7 @@ published.
 
 ### 8.8 Cannibalization `[S47]`
 
-Detect automatically when one query ranks several Whisperer URLs. When that
+Detect automatically when one query ranks several Shosai URLs. When that
 happens, choose one of: merge, redirect, canonicalize, differentiate the intent,
 or change the internal link architecture.
 
@@ -819,8 +819,8 @@ pages.
 |---|---|
 | **Documentation** `[S85]` | Indexable where appropriate, canonical, hreflang, searchable, internally linked, versioned, dated, technically accurate. Documentation is especially valuable for AI systems because it contains concrete facts rather than marketing claims. |
 | **Help center** `[S86]` | Each article: problem, answer, steps, examples, limitations, related articles. No thin FAQ pages. |
-| **Glossary** `[S87]` | Authoritative definitions of terms such as AI meeting assistant, meeting transcription, speaker diarization, real-time translation, AI workspace, MCP, AI agent, meeting protocol, action item. Each entry: definition, examples, related concepts, and how Whisperer implements it where relevant. |
-| **Comparison** `[S88]` | Whisperer versus Granola, Otter, Fireflies, Fathom. Factual, current, sourced, date-stamped, feature by feature. Never a page whose only purpose is to say Whisperer is better. |
+| **Glossary** `[S87]` | Authoritative definitions of terms such as AI meeting assistant, meeting transcription, speaker diarization, real-time translation, AI workspace, MCP, AI agent, meeting protocol, action item. Each entry: definition, examples, related concepts, and how Shosai implements it where relevant. |
+| **Comparison** `[S88]` | Shosai versus Granola, Otter, Fireflies, Fathom. Factual, current, sourced, date-stamped, feature by feature. Never a page whose only purpose is to say Shosai is better. |
 | **Alternatives** `[S89]` | "Granola alternatives" and similar. Each page explains who needs an alternative, which dimensions matter, how the products differ and which workflow fits each product. |
 | **Templates** `[S53]` | Indexable templates: meeting agenda, notes, protocol, interview notes, action items, one-on-one, retrospective, product meeting, sales meeting. Each one really works and has a downloadable version, an example, an explanation, FAQ, a call to action and internal links. |
 | **Images** `[S61]` | Descriptive filenames, alt text, dimensions, compression, WebP and AVIF, responsive images, lazy loading, image sitemap where useful, captions, surrounding context. Create original screenshots, product UI, diagrams, architecture and benchmark charts. |
@@ -846,7 +846,7 @@ canonical, entity references, duplicate entities, stale data. Pipeline:
 generate → validate → build → deploy → crawl smoke test.
 
 **Site name (P1).** The homepage defines the `WebSite` entity with `name`
-"Whisperer" and `url` `https://whisperer.one/`, from the fact registry (5.2).
+"Shosai" and `url` `https://whisperer.one/`, from the fact registry (5.2).
 Every page has `og:site_name` with the same name, and title suffixes use it too.
 `alternateName` is set only if the registry defines one. Google chooses the site
 name shown in results from these signals.
@@ -857,7 +857,7 @@ the URL hierarchy.
 
 ### 8.13 Trust pages and authorship `[S92]`
 
-**Trust pages (P1).** The site has an About page (what Whisperer is, the company,
+**Trust pages (P1).** The site has an About page (what Shosai is, the company,
 the founder), Contact (working channels that get answers), Pricing, Privacy
 policy, Terms, Security and data residency, and a Changelog. Each is indexable,
 in the sitemap and linked from the footer of every public page. Their facts come
@@ -901,7 +901,7 @@ Google Discover and large image previews in results need both.
 **Attribution (P2).** Original screenshots, diagrams and benchmark charts carry
 IPTC or XMP creator, credit and copyright. Images meant for reuse (benchmark
 charts) also carry `ImageObject` `creator`, `copyrightNotice` and `license`, so
-reuse credits Whisperer.
+reuse credits Shosai.
 
 Visual search (Lens, Circle to Search, AI Mode) uses the same signals: original
 images, descriptive context and alt text. No separate lever is assumed.
@@ -910,13 +910,13 @@ images, descriptive context and alt text. No separate lever is assumed.
 
 ## 9. GEO: being cited by AI systems
 
-GEO is not "writing text for ChatGPT". The task is to make Whisperer's
+GEO is not "writing text for ChatGPT". The task is to make Shosai's
 information understandable, verifiable, citable and unambiguously tied to the
-Whisperer entity. `[S22]`
+Shosai entity. `[S22]`
 
 ### 9.1 Direct answers `[S23]`
 
-The first screen of every key page quickly answers: what is Whisperer, who is it
+The first screen of every key page quickly answers: what is Shosai, who is it
 for, what does it do, how does it work, what makes it different.
 
 Use concise definitions, factual claims, structured lists, tables, dates,
@@ -926,8 +926,8 @@ numbers, explicit entities and explicit relationships.
 
 Write claims as: claim + entity + specific fact + context + date + evidence.
 
-- **Weak:** "Whisperer makes meetings smarter."
-- **Strong:** "Whisperer records the microphone and system audio on the user's
+- **Weak:** "Shosai makes meetings smarter."
+- **Strong:** "Shosai records the microphone and system audio on the user's
   device without a meeting bot. After the meeting, Leo can extract decisions,
   commitments, risks and open questions."
 
@@ -952,7 +952,7 @@ fact inside five paragraphs of marketing copy.
 
 ### 9.4 Original research and benchmarks `[S27, S28]`
 
-Whisperer becomes a source of data, not only a product. Publish: transcription
+Shosai becomes a source of data, not only a product. Publish: transcription
 benchmarks, translation latency tests, meeting-AI benchmarks, model evaluations,
 multilingual evaluations, meeting workflow experiments, AI assistant benchmarks,
 productivity experiments, cost comparisons.
@@ -971,7 +971,7 @@ previous version stays available.
 
 ### 9.5 Machine-readable layer `[S35]`
 
-Whisperer may serve `/llms.txt` and `/llms-full.txt`. Treat them as an
+Shosai may serve `/llms.txt` and `/llms-full.txt`. Treat them as an
 additional machine-readable interface, not as a proven ranking factor (P3).
 
 The layer covers product, features, pricing, documentation, security,
@@ -984,7 +984,7 @@ Run an automated audit: expected fact → AI answer → diff → correct, missin
 incorrect. Check: name, category, features, pricing, languages, platforms,
 privacy, bot or no bot, Leo, MCP, limitations.
 
-When an AI system describes Whisperer wrongly:
+When an AI system describes Shosai wrongly:
 
 1. Identify the wrong claim.
 2. Find the authoritative source.
@@ -1002,9 +1002,9 @@ Never try to correct hallucinations with SEO spam.
 
 ### 10.1 Brand search `[S38, S39]`
 
-Brand query set: `whisperer`, `whisperer ai`, `whisperer.one`,
-`whisperer workspace`, `whisperer meetings`, `whisperer leo`,
-`whisperer transcription`, `whisperer translation`, `whisperer mcp`.
+Brand query set: `shosai`, `shosai ai`, `whisperer.one`,
+`shosai workspace`, `shosai meetings`, `shosai leo`,
+`shosai transcription`, `shosai translation`, `shosai mcp`.
 
 Monitor: SERP, sitelinks, knowledge and entity signals, branded snippets, AI
 mentions, incorrect descriptions, competitors intercepting brand queries.
@@ -1016,7 +1016,7 @@ interviews, Product Hunt, G2, AlternativeTo, StackShare and relevant communities
 ### 10.2 Links `[S40, S41, S42, S43]`
 
 Principle: do not buy many links. Build a network of independent confirmations
-that Whisperer exists and is authoritative.
+that Shosai exists and is authoritative.
 
 Priority order for a link: topical relevance, editorial placement, trust,
 traffic, uniqueness, authority.
@@ -1030,8 +1030,8 @@ Linkable assets to create: benchmarks, datasets, calculators, templates,
 reports, original research, statistics, engineering articles, open-source tools,
 documentation, glossaries, comparison databases.
 
-Unlinked mentions: search regularly for "Whisperer", "whisperer.one" and
-"Whisperer AI"; for each mention check context, authority and whether a link
+Unlinked mentions: search regularly for "Shosai", "whisperer.one" and
+"Shosai AI"; for each mention check context, authority and whether a link
 exists. A mention without a link is an outreach candidate.
 
 ### 10.3 Digital PR and community `[S82, S83]`
@@ -1050,7 +1050,7 @@ Rule: usefulness first, the link second.
 Collect authentic reviews and record source, date, product version, user context
 and verified status where applicable. Never generate fake reviews.
 
-Monitor "Whisperer", "Whisperer AI", "whisperer.one" and "Leo" across search, AI
+Monitor "Shosai", "Shosai AI", "whisperer.one" and "Leo" across search, AI
 systems, Reddit, GitHub, directories and review platforms. Correct errors through
 authoritative sources.
 
@@ -1061,10 +1061,10 @@ authoritative sources.
 ### 11.1 Bridge from search to product `[S76, S79]`
 
 Every SEO asset has a logical bridge: search problem → useful solution →
-Whisperer → download → activation. An article that ends at a generic homepage is
+Shosai → download → activation. An article that ends at a generic homepage is
 not acceptable.
 
-Examples: meeting protocol template → download → Whisperer; meeting
+Examples: meeting protocol template → download → Shosai; meeting
 transcription → product explanation → install; AI meeting assistant → product →
 client download.
 
@@ -1080,7 +1080,7 @@ functionality is a pattern Google calls out as a problem.
 
 Free assets: DOCX, PDF, Markdown, Notion and Google Docs templates, checklists,
 meeting frameworks, interview frameworks. Where possible: no signup → immediate
-value → optional Whisperer call to action.
+value → optional Shosai call to action.
 
 ### 11.3 Revenue attribution `[S55, S97]`
 
@@ -1145,7 +1145,7 @@ This loop is the moat. It is far stronger than ten thousand SEO pages.
 
 Track presence on: Google Search, Google AI Overviews, Google AI Mode, Google
 Discover, Bing, Copilot, ChatGPT Search, Perplexity, Gemini, YouTube, Reddit,
-GitHub and product directories. Whisperer should be present wherever discovery
+GitHub and product directories. Shosai should be present wherever discovery
 actually happens.
 
 For each AI platform keep a record of: surface, crawler, index source, citation
@@ -1186,7 +1186,7 @@ answer, extract mentions and citations, compare with the previous run, and store
 the result with history.
 
 Record per observation: query, country, language, date, engine, model or
-surface, whether Whisperer was mentioned, whether it was cited, citation URL,
+surface, whether Shosai was mentioned, whether it was cited, citation URL,
 citation position, whether it was recommended (offered as a choice for the
 user's need) and at what rank, competitors, features attributed, errors,
 sentiment and context.
@@ -1207,7 +1207,7 @@ Minimum query matrix:
 |---|---|
 | Generic | best AI meeting assistant, AI meeting assistant, meeting transcription software, AI meeting notes, AI meeting summary |
 | Differentiation | AI meeting assistant without bot, meeting assistant without Zoom bot, local meeting transcription, privacy-focused meeting assistant |
-| Product | Whisperer AI, Whisperer AI Workspace, Whisperer Leo, Whisperer meeting assistant |
+| Product | Shosai AI, Shosai AI Workspace, Shosai Leo, Shosai meeting assistant |
 | Comparison | Granola alternatives, Otter alternatives, AI meeting assistant alternatives |
 | Use case | AI for interviews, for meetings, for sales meetings, for product meetings, for developers |
 | Translation | real-time meeting translation, AI call translation, meeting translator, live speech translation |
@@ -1220,7 +1220,7 @@ AI-assisted conversion.
 
 An AI citation is a visibility signal. It is not a click and not a conversion.
 
-"ChatGPT mentioned Whisperer" is not a measurement. A measurement combines
+"ChatGPT mentioned Shosai" is not a measurement. A measurement combines
 mention, citation, correctness, query relevance, competitor context and
 conversion.
 
@@ -1228,9 +1228,9 @@ conversion.
 
 | Metric | Definition |
 |---|---|
-| Mention rate | answers that name Whisperer ÷ answers |
+| Mention rate | answers that name Shosai ÷ answers |
 | Citation rate | answers that link a `whisperer.one` URL ÷ answers |
-| Recommendation rate | answers that recommend Whisperer for the asked need ÷ answers |
+| Recommendation rate | answers that recommend Shosai for the asked need ÷ answers |
 | Citation share | links to `whisperer.one` ÷ all links in the answers |
 | Query coverage | queries with at least one mention ÷ queries |
 | Entity accuracy | facts stated correctly ÷ facts stated, checked against the fact registry (5.2) |
@@ -1247,7 +1247,7 @@ SEO penalty.
 
 ### 12.6 Share of voice and competitors `[S58, S59, S60]`
 
-For each priority cluster: Whisperer visibility divided by total relevant
+For each priority cluster: Shosai visibility divided by total relevant
 visibility, counted separately for Google, Bing, AI search, branded and
 non-branded queries.
 
@@ -1258,7 +1258,7 @@ entities, backlinks, topics, features, citations, AI mentions and content gaps.
 Competitor share in AI answers uses the same answers and definitions (12.3,
 12.4): each competitor's mention, citation and recommendation rates.
 
-For each priority query compare Whisperer with the top 10 on: content depth,
+For each priority query compare Shosai with the top 10 on: content depth,
 unique information, backlinks, domain authority, entities, freshness, UX, intent
 satisfaction, structured data, internal links and AI citations.
 
@@ -1476,7 +1476,7 @@ and revenue together.
 
 **Strategic objective.** `[S118]`
 
-| When someone… | Whisperer… |
+| When someone… | Shosai… |
 |---|---|
 | searches | appears |
 | asks an AI system | is considered |
@@ -1488,7 +1488,7 @@ and revenue together.
 | converts | generates revenue |
 
 This system as a whole, not a collection of SEO tricks, is the target search
-architecture for Whisperer.
+architecture for Shosai.
 
 ---
 
@@ -1540,7 +1540,7 @@ an API key. Each covers a part of section 12 that the core skills cannot.
 | `seo-matomo` | Self-hosted analytics as an alternative to GA4 | 12.2 |
 | `seo-image-gen` | Open Graph and hero images | 8.3, 8.11 |
 
-Not applicable to Whisperer: `seo-local`, `seo-maps` (no physical locations) and
+Not applicable to Shosai: `seo-local`, `seo-maps` (no physical locations) and
 `seo-ecommerce` (no product catalog).
 
 ### 17.3 When to run what
@@ -1563,7 +1563,7 @@ Not applicable to Whisperer: `seo-local`, `seo-maps` (no physical locations) and
   skill reads Yandex Webmaster. That data needs a separate source.
 - **Business metrics are outside `claude-seo`.** Revenue attribution (11.3), the
   search data store (12.8) and conversion tracking are product analytics and must
-  be built in Whisperer itself.
+  be built in Shosai itself.
 - **CI gates are not provided.** The skills audit on demand. The hard and soft
   gates in 13.2 must be implemented as checks in the project's CI pipeline.
 - **Audit output is evidence, not a verdict.** A skill's score is an input to the
@@ -1617,11 +1617,11 @@ public methodology. If "closed" meant something else, it must be reconciled with
 The phase 2 recommendation speaks of seeding discussions on Reddit and Hacker
 News. Section 10.3 requires usefulness first, and 15.3 forbids automated spam.
 This document words phase 2 as participation. Coordinated posting that hides its
-connection to Whisperer would break both rules and both communities' own rules.
+connection to Shosai would break both rules and both communities' own rules.
 
 ### 18.5 "Always first" cannot be a requirement
 
-The no-bot recommendation aims for Whisperer to always be listed first in the
+The no-bot recommendation aims for Shosai to always be listed first in the
 bot-free category. Placement in an AI answer cannot be guaranteed, and section 1
 rejects ranking by gaming. Section 5.3 sets the controllable requirement: state
 the differentiator consistently and truthfully everywhere.
@@ -1629,7 +1629,7 @@ the differentiator consistently and truthfully everywhere.
 ### 18.6 The differentiator must match the rewritten product
 
 Sections 5.3 and 9.2 describe local capture of microphone and system audio
-without a meeting bot. `whisperer-v2` is a rewrite. The claim is published only
+without a meeting bot. `shosai` is a rewrite. The claim is published only
 after the rewritten product is confirmed to work this way.
 
 ### 18.7 Product category: workspace or meeting assistant

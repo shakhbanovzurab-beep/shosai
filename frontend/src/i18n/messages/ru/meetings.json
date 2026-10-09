@@ -29,7 +29,7 @@
   "join": "Присоединиться",
   "opensInNewTab": "(откроется в новой вкладке)",
   "source": {
-    "whisperer": "Комната Whisperer",
+    "shosai": "Комната Shosai",
     "in_person": "Очно"
   },
   "participants": "Участники: {names}",

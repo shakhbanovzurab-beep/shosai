@@ -70,7 +70,7 @@ export function i18nCatalogues(messagesDir: string): Plugin {
   let command: "build" | "serve" = "serve";
   const references = new Map<LanguageCode, string>();
   return {
-    name: "whisperer:i18n-catalogues",
+    name: "shosai:i18n-catalogues",
     configResolved(config) {
       command = config.command;
     },

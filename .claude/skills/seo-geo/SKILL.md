@@ -331,7 +331,7 @@ Google added many AI citation/source surfaces across AI Overviews **and** AI Mod
 
 For AI Overviews or AI Mode visibility changes, check the dated product and
 core-update entries first:
-`"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run seo_updates.py --kind product --kind core --json`.
+`"/root/shosai/.claude/skills/seo/scripts/claude-seo" run seo_updates.py --kind product --kind core --json`.
 Treat a stale ledger (`freshness.stale`) as incomplete.
 
 ## Output

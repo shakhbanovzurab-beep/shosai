@@ -5,11 +5,11 @@ import uuid
 import pytest
 import sqlalchemy as sa
 
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
 from tests.harness.connections import fetch_value
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
 
 OTHER_HOME = {Home.RU: Home.EU, Home.EU: Home.RU}
 

@@ -5,6 +5,13 @@ from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.events.relay import OutboxRelay, RelayPass
+from shosai.core.events.system import event_task_handlers
+from shosai.core.kernel.homes import Home
+from shosai.core.kv.connection import connect_redis
+from shosai.core.tasks.errors import TaskQueueUnavailableError
+from shosai.core.tasks.queues import TaskQueue
+from shosai.core.tasks.system import build_task_system
 from tests.core.events.bench import Applied, event_bench, insert_raw_event, outbox_rows, recording
 from tests.core.events.relay_bench import RecordingSender, write_notes
 from tests.core.kv.outages import closed_port, redis_url
@@ -12,13 +19,6 @@ from tests.core.observability.capture import captured_logs
 from tests.core.tasks.workbench import workbench
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
-from whisperer.core.events.relay import OutboxRelay, RelayPass
-from whisperer.core.events.system import event_task_handlers
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kv.connection import connect_redis
-from whisperer.core.tasks.errors import TaskQueueUnavailableError
-from whisperer.core.tasks.queues import TaskQueue
-from whisperer.core.tasks.system import build_task_system
 
 # Пауза после сбоя отсчитывается от начала транзакции отметки: проверка допускает её длительность.
 SETTLE_SLACK_SECONDS = 0.5
@@ -53,9 +53,7 @@ async def test_an_outage_holds_back_the_event_and_releases_the_rest_of_the_pass(
     assert rows[untried]["due_in"] <= 0
     assert retry == RelayPass(published=[untried])
     assert last == RelayPass(published=[failed])
-    held_back = bench.sample(
-        "whisperer_outbox_held_back_total", home="eu", reason="queue_unavailable"
-    )
+    held_back = bench.sample("shosai_outbox_held_back_total", home="eu", reason="queue_unavailable")
     assert held_back == 1
 
 
@@ -89,7 +87,7 @@ async def test_a_silent_valkey_holds_events_back_through_the_real_sender(
 ) -> None:
     bench = event_bench(valkey, homes, [recording("mail.welcome", Applied())])
     await write_notes(homes.transactions, bench.outbox, Home.RU, 2)
-    stopped = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    stopped = connect_redis(redis_url(closed_port()), "shosai-tests")
     try:
         tasks = build_task_system(stopped, CollectorRegistry(), TracerProvider())
         tasks.register(event_task_handlers(bench.resources, tasks.sender))
@@ -121,7 +119,7 @@ async def test_an_event_type_this_image_does_not_know_waits_for_one_that_does(
     assert line["event_type"] == "billing.invoice.paid"
     assert line["event_id"] == str(unknown)
     held_back = bench.sample(
-        "whisperer_outbox_held_back_total", home="ru", reason="unknown_event_type"
+        "shosai_outbox_held_back_total", home="ru", reason="unknown_event_type"
     )
     assert held_back == 1
 
@@ -140,6 +138,6 @@ async def test_a_delivery_task_missing_from_the_process_holds_the_event_back(
     [line] = [line for line in logs.lines() if line["level"] == "error"]
     assert "UnregisteredTaskError" in line["exception"]
     held_back = bench.sample(
-        "whisperer_outbox_held_back_total", home="eu", reason="unregistered_delivery"
+        "shosai_outbox_held_back_total", home="eu", reason="unregistered_delivery"
     )
     assert held_back == 1

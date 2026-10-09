@@ -50,7 +50,7 @@ English text contains one, the translation must contain it too). Grammar around 
 - `WhatsApp`
 - `LiveKit`
 - `DeskTime`
-- `Whisperer`
+- `Shosai`
 - `skills.sh`
 - `SKILL.md`
 - `MCP`

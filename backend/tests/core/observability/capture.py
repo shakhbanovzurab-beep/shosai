@@ -9,11 +9,11 @@ from typing import Any
 
 from prometheus_client import CollectorRegistry
 
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.config.sections import ObservabilitySettings
-from whisperer.core.config.values import LogLevel
-from whisperer.core.observability.logs import configure_logging
-from whisperer.core.observability.metrics import ObservabilityMetrics
+from shosai.core.config.roles import ProcessRole
+from shosai.core.config.sections import ObservabilitySettings
+from shosai.core.config.values import LogLevel
+from shosai.core.observability.logs import configure_logging
+from shosai.core.observability.metrics import ObservabilityMetrics
 
 
 @dataclass(frozen=True, slots=True)

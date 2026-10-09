@@ -6,6 +6,11 @@ from datetime import timedelta
 from redis.asyncio import Redis
 from redis.exceptions import ResponseError
 
+from shosai.core.kv.connection import connect_redis
+from shosai.core.tasks.declaration import RETRY_TRANSIENT, TaskKind
+from shosai.core.tasks.queues import CONSUMER_GROUP, TaskQueue, stream_key
+from shosai.core.tasks.stream import TaskStream, as_text
+from shosai.core.tasks.worker import consume_queue
 from tests.core.kv.outages import closed_port, redis_url
 from tests.core.observability.capture import captured_logs
 from tests.core.tasks.workbench import (
@@ -20,11 +25,6 @@ from tests.core.tasks.workbench import (
     stream_entries_of,
     workbench,
 )
-from whisperer.core.kv.connection import connect_redis
-from whisperer.core.tasks.declaration import RETRY_TRANSIENT, TaskKind
-from whisperer.core.tasks.queues import CONSUMER_GROUP, TaskQueue, stream_key
-from whisperer.core.tasks.stream import TaskStream, as_text
-from whisperer.core.tasks.worker import consume_queue
 
 LEASE_SECONDS = FAST.lease.total_seconds()
 QUEUE_KEY = stream_key(TaskQueue.DEFAULT)
@@ -64,7 +64,7 @@ async def test_a_long_task_is_not_redelivered_while_its_lease_is_renewed(valkey:
     assert runs.notes == ["долго"]
     assert (
         second.sample(
-            "whisperer_task_runs_total", queue="default", task=task.name, outcome="succeeded"
+            "shosai_task_runs_total", queue="default", task=task.name, outcome="succeeded"
         )
         == 0
     )
@@ -98,7 +98,7 @@ async def test_a_task_without_retries_abandoned_once_goes_to_the_dead_letter(
 
     async with running(bench.broker()):
         await eventually(
-            counted(bench, "whisperer_task_dead_letters_total", queue="default", reason="abandoned")
+            counted(bench, "shosai_task_dead_letters_total", queue="default", reason="abandoned")
         )
 
     assert runs.notes == []
@@ -136,20 +136,20 @@ async def test_a_lease_taken_by_another_worker_is_reported_and_success_still_set
         [(stream_id, _)] = await stream_entries_of(valkey, QUEUE_KEY)
         await valkey.xclaim(QUEUE_KEY, CONSUMER_GROUP, "worker-other", 0, [stream_id])
         await bench.broker().renew_leases()
-        assert bench.sample("whisperer_task_leases_lost_total", queue="default") == 1
+        assert bench.sample("shosai_task_leases_lost_total", queue="default") == 1
         await eventually(settled(bench, task.name, "succeeded"))
 
     assert await bench.depth() == 0
 
 
 async def test_a_worker_waits_out_a_valkey_outage_without_stopping() -> None:
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
     bench = workbench(client, [])
     stop = asyncio.Event()
     worker = asyncio.create_task(consume_queue(bench.broker(), stop))
 
     await eventually(
-        counted(bench, "whisperer_task_valkey_failures_total", queue="default", operation="prune")
+        counted(bench, "shosai_task_valkey_failures_total", queue="default", operation="prune")
     )
     await asyncio.sleep(FAST.outage_pause.total_seconds() * 3)
     assert not worker.done()
@@ -184,9 +184,7 @@ async def test_stopping_waits_for_the_running_task(valkey: Redis) -> None:
         stop.set()
 
     assert (
-        bench.sample(
-            "whisperer_task_runs_total", queue="default", task=task.name, outcome="succeeded"
-        )
+        bench.sample("shosai_task_runs_total", queue="default", task=task.name, outcome="succeeded")
         == 1
     )
     assert await bench.depth() == 0

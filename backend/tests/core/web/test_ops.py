@@ -6,9 +6,9 @@ from contextlib import asynccontextmanager
 import httpx
 from prometheus_client import CollectorRegistry, Counter
 
-from whisperer.core.health.probes import DependencyProbe
-from whisperer.core.health.readiness import Readiness
-from whisperer.core.web.ops import build_ops_app
+from shosai.core.health.probes import DependencyProbe
+from shosai.core.health.readiness import Readiness
+from shosai.core.web.ops import build_ops_app
 
 OPENMETRICS = "application/openmetrics-text"
 
@@ -60,14 +60,14 @@ async def test_readiness_follows_the_phase_of_the_process() -> None:
 
 async def test_metrics_come_from_the_process_registry_in_the_asked_format() -> None:
     registry = CollectorRegistry()
-    Counter("whisperer_probe_events", "Пробные события", registry=registry).inc()
+    Counter("shosai_probe_events", "Пробные события", registry=registry).inc()
 
     async with ops_client(Readiness(), registry) as client:
         text = await client.get("/metrics")
         openmetrics = await client.get("/metrics", headers={"Accept": OPENMETRICS})
 
     assert text.headers["content-type"].startswith("text/plain")
-    assert "whisperer_probe_events_total 1.0" in text.text
+    assert "shosai_probe_events_total 1.0" in text.text
     assert openmetrics.headers["content-type"].startswith(OPENMETRICS)
     assert openmetrics.text.endswith("# EOF\n")
 

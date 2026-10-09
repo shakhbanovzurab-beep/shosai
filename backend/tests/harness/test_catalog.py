@@ -2,12 +2,12 @@
 
 import pytest
 
+from shosai.core.kernel.homes import Home
 from tests.harness.catalog import CatalogFingerprint, restore_prepared_state
 from tests.harness.connections import Connection
 from tests.harness.run_slot import RunSlot, prepare_run_slot
 from tests.harness.settings import HarnessSettings
 from tests.harness.slots import claim_slot
-from whisperer.core.kernel.homes import Home
 
 PROBE_TABLE = "CREATE TABLE harness_probe (id integer PRIMARY KEY);"
 LEFTOVERS_OF_A_CRASHED_RUN = """
@@ -18,12 +18,12 @@ CREATE TABLE harness_leftover (id bigint GENERATED ALWAYS AS IDENTITY, mood harn
 CREATE VIEW harness_view AS SELECT id FROM harness_leftover;
 CREATE FUNCTION harness_answer() RETURNS integer LANGUAGE sql AS 'SELECT 42';
 CREATE TYPE harness_span AS RANGE (subtype = bigint);
-ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO whisperer_app;
+ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO shosai_app;
 ALTER DEFAULT PRIVILEGES REVOKE EXECUTE ON FUNCTIONS FROM PUBLIC;
-GRANT CREATE ON SCHEMA public TO whisperer_app, PUBLIC;
+GRANT CREATE ON SCHEMA public TO shosai_app, PUBLIC;
 DO $$
 BEGIN
-    EXECUTE format('GRANT CREATE ON DATABASE %I TO whisperer_app', current_database());
+    EXECUTE format('GRANT CREATE ON DATABASE %I TO shosai_app', current_database());
     EXECUTE format('GRANT CONNECT ON DATABASE %I TO PUBLIC', current_database());
     EXECUTE format('ALTER DATABASE %I SET work_mem = ''8MB''', current_database());
 END
@@ -37,8 +37,8 @@ EXPECTED_RESTORATION = (
     "- relation harness_view",
     "- routine harness_answer()",
     "- type harness_span",
-    "- default privileges whisperer_migrator * r",
-    "- default privileges whisperer_migrator * f",
+    "- default privileges shosai_migrator * r",
+    "- default privileges shosai_migrator * f",
     "+ schema public",
     "+ database current",
 )
@@ -77,11 +77,11 @@ async def changes_inside_rolled_back(connection: Connection, ddl: str) -> list[s
             "FOR EACH ROW EXECUTE FUNCTION harness_touch();",
             "+ trigger harness_touched on harness_probe",
         ),
-        (PROBE_TABLE + "GRANT SELECT ON harness_probe TO whisperer_app;", "whisperer_app=r/"),
-        ("GRANT CREATE ON SCHEMA public TO whisperer_app", "+ schema public: owner="),
+        (PROBE_TABLE + "GRANT SELECT ON harness_probe TO shosai_app;", "shosai_app=r/"),
+        ("GRANT CREATE ON SCHEMA public TO shosai_app", "+ schema public: owner="),
         (
-            "ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO whisperer_app",
-            "+ default privileges whisperer_migrator * r",
+            "ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO shosai_app",
+            "+ default privileges shosai_migrator * r",
         ),
         ("CREATE SCHEMA harness_extra", "+ schema harness_extra"),
         ("CREATE TEXT SEARCH CONFIGURATION harness_ts (COPY = simple)", "+ object text search"),

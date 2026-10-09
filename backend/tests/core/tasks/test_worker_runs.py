@@ -5,6 +5,8 @@ from datetime import timedelta
 from pydantic import SecretStr
 from redis.asyncio import Redis
 
+from shosai.core.tasks.declaration import MAX_DELIVERIES, RETRY_TRANSIENT, TaskKind
+from shosai.core.tasks.queues import stream_key, tick_key
 from tests.core.observability.capture import captured_logs
 from tests.core.tasks.workbench import (
     Probe,
@@ -17,11 +19,9 @@ from tests.core.tasks.workbench import (
     settled,
     workbench,
 )
-from whisperer.core.tasks.declaration import MAX_DELIVERIES, RETRY_TRANSIENT, TaskKind
-from whisperer.core.tasks.queues import stream_key, tick_key
 
 LINK = "https://whisperer.one/reset?token=very-secret"
-RUNS_TOTAL = "whisperer_task_runs_total"
+RUNS_TOTAL = "shosai_task_runs_total"
 
 
 async def test_a_finished_task_runs_once_and_leaves_the_queue(valkey: Redis) -> None:
@@ -62,7 +62,7 @@ async def test_the_fifth_failed_delivery_lands_in_the_dead_letter_with_secrets_h
     assert entry["error_type"] == "builtins.ConnectionError"
     assert entry["payload"] == {"note": "сброс", "link": "***"}
     assert entry["payload_masked"] is True
-    assert bench.sample("whisperer_task_dead_letters_total", queue="default", reason="failed") == 1
+    assert bench.sample("shosai_task_dead_letters_total", queue="default", reason="failed") == 1
     assert await bench.depth() == 0
     assert "very-secret" not in logs.text()
     failures = [line for line in logs.lines() if line.get("task_name") == task.name]
@@ -105,7 +105,7 @@ async def test_a_payload_that_does_not_match_is_dead_lettered_without_its_values
 
     assert runs.notes == []
     [entry] = await bench.dead_letters()
-    assert entry["error_type"] == "whisperer.core.tasks.errors.InvalidTaskPayloadError"
+    assert entry["error_type"] == "shosai.core.tasks.errors.InvalidTaskPayloadError"
     assert entry["error"] == "данные задачи probe.strict не прошли проверку: note: missing"
     assert entry["payload"] is None
 
@@ -129,16 +129,14 @@ async def test_an_unknown_task_is_dead_lettered_andcounted(valkey: Redis) -> Non
     await producer.system.sender.send(task, Probe(note="user@example.com"))
 
     async with running(worker.broker()):
-        await eventually(counted(worker, "whisperer_task_unknown_total", queue="default"))
+        await eventually(counted(worker, "shosai_task_unknown_total", queue="default"))
 
     [entry] = await worker.dead_letters()
     assert entry["reason"] == "unknown_task"
     assert entry["task"] == task.name
     assert entry["payload"] is None
     assert "user@example.com" not in str(entry)
-    dead = worker.sample(
-        "whisperer_task_dead_letters_total", queue="default", reason="unknown_task"
-    )
+    dead = worker.sample("shosai_task_dead_letters_total", queue="default", reason="unknown_task")
     assert dead == 1
     assert await worker.depth() == 0
 
@@ -149,9 +147,7 @@ async def test_a_message_that_is_not_a_task_is_dead_lettered(valkey: Redis) -> N
 
     async with running(bench.broker()):
         await eventually(
-            counted(
-                bench, "whisperer_task_dead_letters_total", queue="default", reason="unparseable"
-            )
+            counted(bench, "shosai_task_dead_letters_total", queue="default", reason="unparseable")
         )
 
     [entry] = await bench.dead_letters()

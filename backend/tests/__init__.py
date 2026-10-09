@@ -1,1 +1,1 @@
-"""Tests of the Whisperer backend."""
+"""Tests of the Shosai backend."""

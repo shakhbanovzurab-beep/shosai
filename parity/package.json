@@ -1,5 +1,5 @@
 {
-  "name": "whisperer-parity",
+  "name": "shosai-parity",
   "private": true,
   "type": "module",
   "description": "Visual parity harness: renders the draft and v2 frontends from recorded API data and compares screenshots",

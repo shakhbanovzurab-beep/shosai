@@ -3,11 +3,11 @@
 import httpx
 import pytest
 
+from shosai.core.storage.errors import ObjectNotFoundError, StorageRejectedError
+from shosai.core.storage.port import MultipartUpload, UploadedPart
+from shosai.core.storage.s3_multipart import check_part_number
 from tests.core.storage.adapters import SlotStorage, slot_storage
 from tests.harness.shared_services import SlotBucket
-from whisperer.core.storage.errors import ObjectNotFoundError, StorageRejectedError
-from whisperer.core.storage.port import MultipartUpload, UploadedPart
-from whisperer.core.storage.s3_multipart import check_part_number
 
 RECORDING = "u-7/meetings/m-1/audio.webm"
 # S3 принимает части от 5 МиБ, кроме последней.

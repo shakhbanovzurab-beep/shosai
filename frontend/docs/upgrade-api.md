@@ -50,7 +50,7 @@ The backend enforces every limit, against the effective plan. The frontend only 
 - **File Manager** and **Knowledge** (`/app/file-manager/**`, `/app/knowledge-base`) show an
   upgrade screen instead of their content when the effective plan's limit is `0`.
 - **Meetings** (`/app/meetings`) shows the month's minutes when the plan has an allowance. Once
-  `usage.used_minutes` reaches `usage.limit_minutes`, Whisperer stops capturing meetings until
+  `usage.used_minutes` reaches `usage.limit_minutes`, Shosai stops capturing meetings until
   `usage.resets_at` (the first day of next month, UTC); the page, joining calls and past meetings
   with their notes stay available.
 - If `GET /billing/plans` fails, the screens are shown as usual; the API still refuses what the plan

@@ -9,7 +9,7 @@ import httpx
 import pytest
 from fastapi import FastAPI
 
-from whisperer.core.runtime.servers import EDGE_KEEP_ALIVE, HttpServer, server_config
+from shosai.core.runtime.servers import EDGE_KEEP_ALIVE, HttpServer, server_config
 
 LOOPBACK = "127.0.0.1"
 DRAIN = timedelta(seconds=5)

@@ -6,7 +6,7 @@ import signal
 
 import pytest
 
-from whisperer.core.runtime.signals import stop_on_signals
+from shosai.core.runtime.signals import stop_on_signals
 
 
 @pytest.mark.parametrize("stop_signal", [signal.SIGTERM, signal.SIGINT])

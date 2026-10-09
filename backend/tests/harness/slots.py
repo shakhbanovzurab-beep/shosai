@@ -1,6 +1,6 @@
 """Claiming a test database slot with an advisory lock (ADR 0009, item 3).
 
-Slot `N` is the database `whisperer_test_<N>` in every home. A run holds a direct
+Slot `N` is the database `shosai_test_<N>` in every home. A run holds a direct
 migration-role connection to each of them with a session lock on it; a crashed run
 loses its connections and PostgreSQL releases its locks by itself.
 """
@@ -10,10 +10,10 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from typing import Final
 
+from shosai.core.kernel.homes import Home
 from tests.harness.connections import Connection, connect, fetch_value
 from tests.harness.guards import ensure_prepared_test_database
 from tests.harness.settings import DatabaseTarget, HarnessSettings, HomeTargets
-from whisperer.core.kernel.homes import Home
 
 # Один ключ у всех прогонов: блокировку слота видят все, кто его ищет.
 SLOT_LOCK_KEY: Final = 0x5768_6973_7065_7254

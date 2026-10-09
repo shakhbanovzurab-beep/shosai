@@ -8,15 +8,15 @@ import pytest
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.kv.connection import connect_redis
+from shosai.core.tasks.broker import ValkeyStreamBroker, new_consumer_name
+from shosai.core.tasks.deliveries import Delivery
+from shosai.core.tasks.metrics import TaskMetrics
+from shosai.core.tasks.queues import TaskQueue
+from shosai.core.tasks.stream import TaskStream
 from tests.core.kv.outages import closed_port, redis_url
 from tests.core.observability.capture import captured_logs
 from tests.core.tasks.workbench import FAST, Probe, Runs, declare, eventually, workbench
-from whisperer.core.kv.connection import connect_redis
-from whisperer.core.tasks.broker import ValkeyStreamBroker, new_consumer_name
-from whisperer.core.tasks.deliveries import Delivery
-from whisperer.core.tasks.metrics import TaskMetrics
-from whisperer.core.tasks.queues import TaskQueue
-from whisperer.core.tasks.stream import TaskStream
 
 TASK = declare("probe.brokered")
 
@@ -53,21 +53,19 @@ async def test_a_delivery_held_past_its_limit_loses_its_lease(valkey: Redis) -> 
         await broker.renew_leases()
 
     assert not delivery.renewing
-    assert (
-        registry.get_sample_value("whisperer_task_leases_capped_total", {"queue": "default"}) == 1
-    )
+    assert registry.get_sample_value("shosai_task_leases_capped_total", {"queue": "default"}) == 1
     assert [line["level"] for line in logs.lines()] == ["error"]
 
 
 async def test_a_renewal_valkey_does_not_take_is_counted() -> None:
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
     broker, registry = broker_over(client, [0.0])
     broker.held.take(Delivery("1-0", "t-1", TASK, 1, taken_at=0.0))
 
     await broker.renew_leases()
 
     failures = registry.get_sample_value(
-        "whisperer_task_valkey_failures_total", {"queue": "default", "operation": "renew"}
+        "shosai_task_valkey_failures_total", {"queue": "default", "operation": "renew"}
     )
     assert failures == 1
     await client.aclose()

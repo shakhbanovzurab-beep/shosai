@@ -29,7 +29,7 @@
   "join": "Entrar na reunião",
   "opensInNewTab": "(abre em uma nova aba)",
   "source": {
-    "whisperer": "Sala do Whisperer",
+    "shosai": "Sala do Shosai",
     "in_person": "Presencial"
   },
   "participants": "Participantes: {names}",

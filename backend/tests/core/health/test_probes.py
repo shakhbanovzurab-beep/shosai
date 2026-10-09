@@ -6,12 +6,12 @@ from datetime import timedelta
 import pytest
 from redis.asyncio import Redis
 
+from shosai.core.health.dependencies import redis_probe, storage_probe
+from shosai.core.health.probes import DependencyProbe, probe_dependencies
+from shosai.core.kv.connection import connect_redis
 from tests.core.kv.outages import closed_port, redis_url, silent_server
 from tests.core.storage.adapters import slot_storage
 from tests.harness.shared_services import SlotBucket
-from whisperer.core.health.dependencies import redis_probe, storage_probe
-from whisperer.core.health.probes import DependencyProbe, probe_dependencies
-from whisperer.core.kv.connection import connect_redis
 
 QUICK = timedelta(milliseconds=200)
 
@@ -29,10 +29,10 @@ async def test_live_services_are_ok(
 
 
 async def test_silent_and_stopped_services_are_down_within_the_bound() -> None:
-    stopped = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    stopped = connect_redis(redis_url(closed_port()), "shosai-tests")
     async with silent_server() as port:
-        silent = connect_redis(redis_url(port), "whisperer-tests")
-        other_silent = connect_redis(redis_url(port), "whisperer-tests")
+        silent = connect_redis(redis_url(port), "shosai-tests")
+        other_silent = connect_redis(redis_url(port), "shosai-tests")
         started = time.monotonic()
 
         statuses = await probe_dependencies(

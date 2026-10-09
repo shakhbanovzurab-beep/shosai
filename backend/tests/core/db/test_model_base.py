@@ -3,16 +3,16 @@
 import pytest
 from sqlalchemy import CheckConstraint, Column, Integer, MetaData, Table, Text, UniqueConstraint
 
-from whisperer.composition.metadata import application_metadata, application_models
-from whisperer.core.db.home_identity import HomeIdentity
-from whisperer.core.db.model_base import (
+from shosai.composition.metadata import application_metadata, application_models
+from shosai.core.db.home_identity import HomeIdentity
+from shosai.core.db.model_base import (
     NAMING_CONVENTION,
     is_seeded_by_migration,
     metadata_for_home,
     table_homes,
     table_info,
 )
-from whisperer.core.kernel.homes import Home
+from shosai.core.kernel.homes import Home
 
 
 def sample_metadata() -> MetaData:

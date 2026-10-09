@@ -6,6 +6,12 @@ import pytest
 import sqlalchemy as sa
 from redis.asyncio import Redis
 
+from shosai.core.events.relay import OutboxRelay
+from shosai.core.events.system import RELAY_OUTBOX
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.tasks.payloads import HomeTaskPayload
+from shosai.core.tasks.queues import TaskQueue
 from tests.core.events.bench import (
     Applied,
     EventBench,
@@ -23,12 +29,6 @@ from tests.core.tasks.workbench import eventually, running
 from tests.harness.connections import fetch_rows, fetch_value
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
-from whisperer.core.events.relay import OutboxRelay
-from whisperer.core.events.system import RELAY_OUTBOX
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
-from whisperer.core.tasks.payloads import HomeTaskPayload
-from whisperer.core.tasks.queues import TaskQueue
 
 USER_ID = uuid.UUID("0190f0f0-0000-7000-8000-00000000000a")
 ORG_ID = uuid.UUID("0190f0f0-0000-7000-8000-00000000000b")
@@ -113,7 +113,7 @@ async def test_a_redelivered_event_does_not_run_the_handler_again(
     assert applied.consumers() == [INDEX]
     assert await fetch_value(connection, "SELECT count(*) FROM processed_events") == 1
     assert await fetch_value(connection, "SELECT count(*) FROM probe_records") == 2
-    assert bench.sample("whisperer_event_duplicate_deliveries_total", consumer=INDEX) == 1
+    assert bench.sample("shosai_event_duplicate_deliveries_total", consumer=INDEX) == 1
     [skipped] = [line for line in logs.lines() if line["message"].startswith("Событие уже")]
     assert (skipped["consumer"], skipped["event_id"]) == (INDEX, str(payload.event_id))
 
@@ -134,7 +134,7 @@ async def test_a_failed_handler_applies_nothing_and_its_retry_applies_the_event_
     assert applied.consumers() == [INDEX, INDEX]
     assert (
         bench.sample(
-            "whisperer_task_runs_total", queue="default", task=flaky.task_name, outcome="retried"
+            "shosai_task_runs_total", queue="default", task=flaky.task_name, outcome="retried"
         )
         == 1
     )

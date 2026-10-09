@@ -6,7 +6,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from whisperer.core.tasks.timing import Backoff, StreamTiming
+from shosai.core.tasks.timing import Backoff, StreamTiming
 
 MILLISECONDS = st.integers(min_value=1, max_value=600_000)
 

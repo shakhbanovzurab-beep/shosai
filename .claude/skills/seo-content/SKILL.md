@@ -36,7 +36,7 @@ merged into core during the March 2024 update).
 
 ## E-E-A-T Framework (updated Sept 2025 QRG)
 
-Read `/root/whisperer-v2/.claude/skills/seo/references/eeat-framework.md` for full criteria and `/root/whisperer-v2/.claude/skills/seo/references/eeat-scoring-guide.md` for score bands.
+Read `/root/shosai/.claude/skills/seo/references/eeat-framework.md` for full criteria and `/root/shosai/.claude/skills/seo/references/eeat-scoring-guide.md` for score bands.
 
 ### Experience (first-hand signals)
 - Original research, case studies, before/after results
@@ -143,8 +143,8 @@ For "humanize this", "remove watermarks", or "clean up this draft", run the
 bundled cleanup script on the user's own content:
 
 ```bash
-"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run content_humanize.py draft.md -o cleaned.md
-cat draft.md | "/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run content_humanize.py --json
+"/root/shosai/.claude/skills/seo/scripts/claude-seo" run content_humanize.py draft.md -o cleaned.md
+cat draft.md | "/root/shosai/.claude/skills/seo/scripts/claude-seo" run content_humanize.py --json
 ```
 
 Two deterministic passes, both logged in the JSON output:
@@ -187,7 +187,7 @@ Optimize for AI search engines (ChatGPT, Perplexity, Google AI Overviews):
 - **Multi-platform tracking:** Monitor visibility across Google AI Overviews, AI Mode, ChatGPT, Perplexity, and Bing Copilot, not just traditional rankings. Treat AI citation as a standalone KPI alongside organic rankings and traffic.
 
 **Generative Engine Optimization (GEO):**
-Per Google's AI optimization guide, "optimizing for generative AI search is optimizing for the search experience, and thus still SEO": AI Overviews and AI Mode are grounded in the same ranking and quality systems as classic Search. The optimization signals that matter (quotability, attribution, heading hierarchy, freshness) are SEO fundamentals applied to AI-search surfaces, not a separate discipline. Cross-reference the `seo-geo` skill for detailed workflows; both surfaces share the primary-source synthesis in `/root/whisperer-v2/.claude/skills/seo-geo/references/google-ai-optimization-guide.md`.
+Per Google's AI optimization guide, "optimizing for generative AI search is optimizing for the search experience, and thus still SEO": AI Overviews and AI Mode are grounded in the same ranking and quality systems as classic Search. The optimization signals that matter (quotability, attribution, heading hierarchy, freshness) are SEO fundamentals applied to AI-search surfaces, not a separate discipline. Cross-reference the `seo-geo` skill for detailed workflows; both surfaces share the primary-source synthesis in `/root/shosai/.claude/skills/seo-geo/references/google-ai-optimization-guide.md`.
 
 ## Content Freshness
 
@@ -201,7 +201,7 @@ Before attributing a traffic or ranking change to anything, list the confirmed
 Google updates in that window from the primary-source ledger:
 
 ```bash
-"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run seo_updates.py --since <yyyy-mm> --json
+"/root/shosai/.claude/skills/seo/scripts/claude-seo" run seo_updates.py --since <yyyy-mm> --json
 ```
 
 Every entry cites a Google-owned URL. If `freshness.stale` is true, say the

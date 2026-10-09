@@ -29,7 +29,7 @@
   "join": "Deelnemen",
   "opensInNewTab": "(opent in een nieuw tabblad)",
   "source": {
-    "whisperer": "Whisperer-ruimte",
+    "shosai": "Shosai-ruimte",
     "in_person": "Op locatie"
   },
   "participants": "Deelnemers: {names}",

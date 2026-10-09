@@ -3,10 +3,10 @@
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
+from shosai.core.kernel.homes import Home
 from tests.harness.catalog import CatalogFingerprint, restore_prepared_state
 from tests.harness.settings import HarnessSettings
 from tests.harness.slots import ClaimedSlot, claim_slot
-from whisperer.core.kernel.homes import Home
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,7 +29,7 @@ class RunSlot:
 
     def summary(self) -> list[str]:
         """Lines for the pytest summary: the slot number and what a crashed run had left."""
-        lines = [f"слот тестовых баз: whisperer_test_{self.claimed.number} во всех домах"]
+        lines = [f"слот тестовых баз: shosai_test_{self.claimed.number} во всех домах"]
         lines.extend(
             f"восстановлено после упавшего прогона, {home}: {change}"
             for home, changes in self.restored.items()

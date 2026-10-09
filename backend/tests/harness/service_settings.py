@@ -13,7 +13,7 @@ from urllib.parse import urlsplit
 
 from pydantic import SecretStr, ValidationError
 
-from whisperer.core.config.sections import StorageSettings
+from shosai.core.config.sections import StorageSettings
 
 VALKEY_VARIABLE: Final = "TEST_VALKEY_URL"
 REDIS_CACHE_VARIABLE: Final = "TEST_REDIS_CACHE_URL"

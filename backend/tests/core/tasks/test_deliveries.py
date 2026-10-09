@@ -6,9 +6,8 @@ from datetime import timedelta
 import pytest
 from taskiq import TaskiqMessage
 
-from tests.core.tasks.workbench import Probe, declare
-from whisperer.core.tasks.declaration import RETRY_TRANSIENT, TaskDeclaration, TaskKind
-from whisperer.core.tasks.deliveries import (
+from shosai.core.tasks.declaration import RETRY_TRANSIENT, TaskDeclaration, TaskKind
+from shosai.core.tasks.deliveries import (
     Acknowledge,
     Delivery,
     HeldDeliveries,
@@ -17,7 +16,8 @@ from whisperer.core.tasks.deliveries import (
     RetryLater,
     decide,
 )
-from whisperer.core.tasks.timing import Backoff
+from shosai.core.tasks.timing import Backoff
+from tests.core.tasks.workbench import Probe, declare
 
 RETRIED = declare("probe.retried", retry=RETRY_TRANSIENT)
 ONCE = declare("probe.once")

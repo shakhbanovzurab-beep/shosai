@@ -2,11 +2,11 @@
 
 import pytest
 
-from whisperer_contracts.check import check
-from whisperer_contracts.inputs import Baseline, BaselineOperation, Candidate, Scope, parse_routes
-from whisperer_contracts.jsonvalue import ContractInputError, JsonObject
-from whisperer_contracts.model import CompatClass, Severity
-from whisperer_contracts.ws_catalogue import CATALOGUE_FORMAT, parse_catalogue
+from shosai_contracts.check import check
+from shosai_contracts.inputs import Baseline, BaselineOperation, Candidate, Scope, parse_routes
+from shosai_contracts.jsonvalue import ContractInputError, JsonObject
+from shosai_contracts.model import CompatClass, Severity
+from shosai_contracts.ws_catalogue import CATALOGUE_FORMAT, parse_catalogue
 
 ITEM: JsonObject = {"type": "object", "properties": {"id": {"type": "string"}}, "required": ["id"]}
 EMPTY: JsonObject = {"type": "object", "properties": {}}

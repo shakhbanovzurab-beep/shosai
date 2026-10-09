@@ -16,7 +16,7 @@ metadata:
 
 ## Detection
 
-1. Extract JSON-LD with `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run parse_html.py --url <url> --json`
+1. Extract JSON-LD with `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run parse_html.py --url <url> --json`
    (or scan `<script type="application/ld+json">` in the page source). Flag any
    block without `@context` or `@type`: Google cannot attach it to an entity (a
    rating in such a block does not reach the Product).

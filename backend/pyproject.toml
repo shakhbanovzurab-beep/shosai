@@ -1,12 +1,12 @@
 [project]
-name = "whisperer"
+name = "shosai"
 version = "2.0.0"
-description = "Whisperer backend: one modular monolith with the api, ws, workers and scheduler roles"
+description = "Shosai backend: one modular monolith with the api, ws, workers and scheduler roles"
 readme = "README.md"
 requires-python = ">=3.14"
 # Коммерческая лицензия проекта; канонический текст — LICENSE в корне репозитория,
 # копию здесь требует упаковка (PEP 639 не допускает путей вне проекта).
-license = "LicenseRef-Whisperer-Commercial"
+license = "LicenseRef-Shosai-Commercial"
 license-files = ["LICENSE"]
 # Рантайм-зависимости добавляет шаг плана F1, которому они нужны
 # (docs/plan/packages/F1-backend-foundation.md, раздел 4).
@@ -33,7 +33,7 @@ dependencies = [
 
 # Одна консольная команда образа: роль процесса — подкоманда (README, «Process roles»).
 [project.scripts]
-whisperer = "whisperer.entrypoints.cli:main"
+shosai = "shosai.entrypoints.cli:main"
 
 [dependency-groups]
 dev = [
@@ -51,7 +51,7 @@ dev = [
     "ruff>=0.16.10",
     # Харнесс D1: тесты сверяют маршруты слайса с контрактом черновика (contracts/README.md).
     "types-aiobotocore[s3]>=3.9.2",
-    "whisperer-contracts",
+    "shosai-contracts",
 ]
 
 [build-system]
@@ -78,7 +78,7 @@ ignore = ["PLR2004", "RUF001", "RUF003"]
 "tests/architecture/**" = ["S603"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["whisperer", "tests"]
+known-first-party = ["shosai", "tests"]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
@@ -120,7 +120,7 @@ asyncio_default_fixture_loop_scope = "session"
 asyncio_default_test_loop_scope = "session"
 
 [tool.coverage.run]
-source = ["whisperer"]
+source = ["shosai"]
 branch = true
 
 [tool.coverage.report]
@@ -130,14 +130,14 @@ exclude_also = ["if TYPE_CHECKING:"]
 
 # Границы архитектуры (target architecture §5, §14 правило 12); проверка — `uv run lint-imports`.
 [tool.importlinter]
-root_package = "whisperer"
+root_package = "shosai"
 include_external_packages = true
 
 [[tool.importlinter.contracts]]
 id = "layers"
 name = "Layers: entrypoints -> composition -> features -> core"
 type = "layers"
-containers = ["whisperer"]
+containers = ["shosai"]
 layers = ["entrypoints", "composition", "features", "core"]
 exhaustive = true
 
@@ -145,8 +145,8 @@ exhaustive = true
 id = "features-meet-through-contracts"
 name = "Features meet through contracts"
 type = "independence"
-modules = ["whisperer.features.*"]
-ignore_imports = ["whisperer.features.** -> whisperer.features.*.contracts"]
+modules = ["shosai.features.*"]
+ignore_imports = ["shosai.features.** -> shosai.features.*.contracts"]
 # Пока слайсов нет, исключению не с чем совпасть; это не ошибка конфигурации.
 unmatched_ignore_imports_alerting = "none"
 broken_contract_guidance = "A slice imports another slice only through its contracts module."
@@ -155,7 +155,7 @@ broken_contract_guidance = "A slice imports another slice only through its contr
 id = "pure-kernel"
 name = "Pure kernel"
 type = "forbidden"
-source_modules = ["whisperer.core.kernel"]
+source_modules = ["shosai.core.kernel"]
 forbidden_modules = [
     "aioboto3", "aiobotocore", "alembic", "botocore", "fastapi", "httpx", "opentelemetry",
     "prometheus_client", "psycopg", "redis", "sqlalchemy", "starlette", "structlog", "taskiq",
@@ -164,10 +164,10 @@ forbidden_modules = [
 broken_contract_guidance = "core.kernel stays framework-free; move the adapter to its core package."
 
 # Только для `uv run alembic revision -m "…"`: новая ревизия по шаблону с applies_to.
-# Применяет миграции не CLI Alembic, а раннер whisperer.core.db.migrations (ADR 0010).
+# Применяет миграции не CLI Alembic, а раннер shosai.core.db.migrations (ADR 0010).
 [tool.alembic]
-script_location = "%(here)s/src/whisperer/migrations"
+script_location = "%(here)s/src/shosai/migrations"
 file_template = "%%(year)d_%%(month).2d_%%(day).2d_%%(rev)s_%%(slug)s"
 
 [tool.uv.sources]
-whisperer-contracts = { path = "../contracts", editable = true }
+shosai-contracts = { path = "../contracts", editable = true }

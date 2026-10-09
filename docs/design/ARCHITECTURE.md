@@ -1,4 +1,4 @@
-# Whisperer v2 — Target Architecture
+# Shosai — Target Architecture
 
 - **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
 - **Diagram:** [architecture.html](architecture.html).
@@ -26,7 +26,7 @@
 | fr-13 | Access inside a company: meeting, note, folder and knowledge collection visible to the owner, selected members or the whole company; search and Leo see only what the user may see | core |
 | fr-14 | Company administration: seats, members and roles, default access level, meeting retention, audit log, export and deletion of company data | core |
 | fr-15 | Company billing per seat, monthly or yearly: invoice and closing documents for Russian legal entities; card or invoice for foreign companies | core |
-| fr-16 | Server-side transcription of Whisperer video rooms per participant track; the speaker is known without diarization | core |
+| fr-16 | Server-side transcription of Shosai video rooms per participant track; the speaker is known without diarization | core |
 | fr-17 | Enterprise sign-in (SAML, OIDC) and SCIM provisioning | next step |
 
 ## 2. Non-functional targets
@@ -181,7 +181,7 @@
 - **Derived copies in the EU — accepted exception to nfr-4:** meeting resume state, the run state of Leo's active and paused runs (Valkey), task payloads, vector index points of Russian users and companies. Retention ≤ 24 h in Redis; index points live as long as their source.
 - **Cross-border AI:**
   - personal user — consent in the product;
-  - company — consent in the contract as data operator; Whisperer processes on its behalf.
+  - company — consent in the contract as data operator; Shosai processes on its behalf.
 - **Account transfer between homes:** a saga with a step journal (`home_transfers`): freeze writes → export by the table registry → import → verify manifest → switch directory → bump token version → purge source. Each step is idempotent; purge is last.
 
 ## 7. Tenancy and access control
@@ -601,7 +601,7 @@ Each of these counters must stay at zero; any non-zero value pages.
 | Data | Redis | latest stable | Cache, locks, rate limits, ephemeral state |
 | Data | S3-compatible storage | — | Files, recordings, documents |
 | Async work | TaskIQ | latest stable | Background jobs and workers |
-| AI | Leo | — | Whisperer's AI agent |
+| AI | Leo | — | Shosai's AI agent |
 | AI | LangGraph | latest stable | Agent orchestration, stateful workflows |
 | AI | MCP | latest spec | Tool and external-agent integration |
 | Observability | structlog | latest stable | Structured logging |

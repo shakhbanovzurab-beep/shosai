@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import type { Meeting } from "../domain/meeting";
 
 /**
- * Opens the call in a new tab: Google Meet, Zoom or Teams, or the LiveKit Meeting Room for a Whisperer
+ * Opens the call in a new tab: Google Meet, Zoom or Teams, or the LiveKit Meeting Room for a Shosai
  * room. The call itself never runs on this page.
  */
 export function JoinButton({

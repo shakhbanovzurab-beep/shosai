@@ -2,7 +2,7 @@ import { addDays, differenceInMinutes, isSameDay, startOfDay } from "date-fns";
 
 /* A meeting as the Meetings page sees it: scheduled, in progress or over, wherever it takes place. */
 
-export const MEETING_SOURCES = ["google_meet", "zoom", "teams", "whisperer", "in_person"] as const;
+export const MEETING_SOURCES = ["google_meet", "zoom", "teams", "shosai", "in_person"] as const;
 export type MeetingSource = (typeof MEETING_SOURCES)[number];
 
 /** What Leo made of a recorded meeting; the full notes live in Notes. */
@@ -15,7 +15,7 @@ export type Meeting = {
   start: string;
   end: string;
   source: MeetingSource;
-  /** The call's link; null for a meeting in person. A Whisperer room opens the LiveKit Meeting Room. */
+  /** The call's link; null for a meeting in person. A Shosai room opens the LiveKit Meeting Room. */
   joinUrl: string | null;
   location: string | null;
   participants: { name: string }[];

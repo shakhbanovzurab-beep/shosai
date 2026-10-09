@@ -1,14 +1,14 @@
 """Comparison of HTTP operations: path matching, parameters, body, response."""
 
-from whisperer_contracts.http_check import (
+from shosai_contracts.http_check import (
     compare_operation,
     normalize_path,
     operations,
     response_is_untyped,
 )
-from whisperer_contracts.jsonvalue import JsonObject
-from whisperer_contracts.schema_compare import DocumentPair
-from whisperer_contracts.schema_shape import SchemaDocument
+from shosai_contracts.jsonvalue import JsonObject
+from shosai_contracts.schema_compare import DocumentPair
+from shosai_contracts.schema_shape import SchemaDocument
 
 
 def document(path: str, method: str, operation: JsonObject) -> JsonObject:

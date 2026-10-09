@@ -20,7 +20,7 @@ export function bootScripts(): Plugin {
   let config: ResolvedConfig;
   const hashes = new Set<string>();
   return {
-    name: "whisperer:boot-scripts",
+    name: "shosai:boot-scripts",
     enforce: "post",
     configResolved(resolved) {
       config = resolved;

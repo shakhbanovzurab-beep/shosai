@@ -7,9 +7,8 @@ from datetime import timedelta
 import pytest
 from redis.asyncio import Redis
 
-from tests.core.tasks.workbench import FAST, stream_entries_of
-from whisperer.core.tasks.queues import CONSUMER_GROUP, TaskQueue, dead_letter_key, stream_key
-from whisperer.core.tasks.stream import (
+from shosai.core.tasks.queues import CONSUMER_GROUP, TaskQueue, dead_letter_key, stream_key
+from shosai.core.tasks.stream import (
     ConsumerGroupMissingError,
     QueueFullError,
     StreamEntry,
@@ -17,6 +16,7 @@ from whisperer.core.tasks.stream import (
     as_text,
     stream_entries,
 )
+from tests.core.tasks.workbench import FAST, stream_entries_of
 
 QUEUE = TaskQueue.BULK
 LEASE_SECONDS = FAST.lease.total_seconds()
@@ -163,8 +163,8 @@ async def test_only_finished_consumers_without_pending_messages_are_forgotten(
 @pytest.mark.parametrize(
     "reply",
     [
-        [[b"whisperer:tasks:bulk", [(b"1-0", {b"data": b"x"})]]],
-        {b"whisperer:tasks:bulk": [[(b"1-0", {b"data": b"x"})]]},
+        [[b"shosai:tasks:bulk", [(b"1-0", {b"data": b"x"})]]],
+        {b"shosai:tasks:bulk": [[(b"1-0", {b"data": b"x"})]]},
         [(b"1-0", {b"data": b"x"})],
     ],
 )

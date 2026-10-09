@@ -1,15 +1,15 @@
-"""`whisperer migrate` applies and reads the one history in both homes, RU first (ADR 0010).
+"""`shosai migrate` applies and reads the one history in both homes, RU first (ADR 0010).
 
 The run's slot is already at the head, so `upgrade` must change nothing and succeed.
 """
 
 from pathlib import Path
 
+from shosai.core.db.migrations import MigrationHistory
 from tests.composition.role_process import run_command
 from tests.harness.process_environ import slot_environ
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
-from whisperer.core.db.migrations import MigrationHistory
 
 REVISION_LINE = "Ревизия базы дома"
 

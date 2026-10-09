@@ -16,17 +16,17 @@ import pytest
 import pytest_asyncio
 from redis.asyncio import Redis
 
+from shosai.core.kv.connection import connect_redis
+from shosai.core.storage.s3_client import open_s3_client
 from tests.harness.run_slot import RunSlot
 from tests.harness.service_settings import RedisTarget
 from tests.harness.settings import HarnessSettings
-from whisperer.core.kv.connection import connect_redis
-from whisperer.core.storage.s3_client import open_s3_client
 
 if TYPE_CHECKING:
     from types_aiobotocore_s3 import S3Client
     from types_aiobotocore_s3.type_defs import ObjectIdentifierTypeDef
 
-CLIENT_NAME: Final = "whisperer-tests"
+CLIENT_NAME: Final = "shosai-tests"
 
 
 @dataclass(frozen=True, slots=True)

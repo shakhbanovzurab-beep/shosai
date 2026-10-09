@@ -8,14 +8,14 @@ import pytest
 from starlette.requests import Request
 from starlette.responses import Response
 
-from tests.core.observability.capture import captured_logs
-from tests.core.web.probe_app import SECRET, build_probe_app, client_of
-from whisperer.core.web.error_handlers import (
+from shosai.core.web.error_handlers import (
     render_app_error,
     render_http_exception,
     render_validation_error,
 )
-from whisperer.core.web.request_ids import REQUEST_ID_HEADER
+from shosai.core.web.request_ids import REQUEST_ID_HEADER
+from tests.core.observability.capture import captured_logs
+from tests.core.web.probe_app import SECRET, build_probe_app, client_of
 
 ERROR_PATHS = [
     ("GET", "/v1/probe/domain-error", 409),

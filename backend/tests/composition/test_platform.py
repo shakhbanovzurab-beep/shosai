@@ -5,6 +5,12 @@ import uuid
 import pytest
 from sqlalchemy import func, select
 
+from shosai.composition.startup import StartFailedError
+from shosai.core.events.records import OutboxMessage
+from shosai.core.health.probes import probe_dependencies
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.tasks.queues import TaskQueue
 from tests.composition.fixture_features import (
     TIDY_NOTES,
     Lifecycle,
@@ -17,12 +23,6 @@ from tests.composition.platform_bench import platform_over_slot
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
-from whisperer.composition.startup import StartFailedError
-from whisperer.core.events.records import OutboxMessage
-from whisperer.core.health.probes import probe_dependencies
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
-from whisperer.core.tasks.queues import TaskQueue
 
 CORE_PROBES = ["homes.ru", "homes.eu", "valkey", "cache", "storage"]
 

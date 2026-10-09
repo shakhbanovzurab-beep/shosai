@@ -6,8 +6,7 @@ from typing import Any
 from pydantic import SecretStr
 from taskiq import TaskiqMessage
 
-from tests.core.tasks.workbench import Probe, declare
-from whisperer.core.tasks.dead_letter import (
+from shosai.core.tasks.dead_letter import (
     ENTRY_LIMIT_BYTES,
     ERROR_TEXT_LIMIT,
     DeadLetterReason,
@@ -15,10 +14,11 @@ from whisperer.core.tasks.dead_letter import (
     unknown_entry,
     unparseable_entry,
 )
-from whisperer.core.tasks.declaration import NO_RETRY, TaskDeclaration
-from whisperer.core.tasks.messages import REQUEST_ID_LABEL, TRACEPARENT_LABEL
-from whisperer.core.tasks.payloads import TaskPayload
-from whisperer.core.tasks.queues import TaskQueue
+from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration
+from shosai.core.tasks.messages import REQUEST_ID_LABEL, TRACEPARENT_LABEL
+from shosai.core.tasks.payloads import TaskPayload
+from shosai.core.tasks.queues import TaskQueue
+from tests.core.tasks.workbench import Probe, declare
 
 TASK = declare("probe.dead_letter")
 

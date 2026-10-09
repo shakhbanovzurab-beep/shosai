@@ -14,11 +14,11 @@ Work package D1 produced it. See [docs/plan/REWRITE_PLAN.md](../docs/plan/REWRIT
 | [draft/consumers.md](draft/consumers.md) | Readable view of `consumers.json` | rendered |
 | [draft/websocket.json](draft/websocket.json) | Every WebSocket endpoint: authentication, handshake, close codes, every frame in both directions with fields, and which clients use each frame | curated |
 | [draft/websocket.md](draft/websocket.md) | Readable view of `websocket.json` | rendered |
-| `src/whisperer_contracts/` | The harness (Python 3.14, no runtime dependencies) | code |
+| `src/shosai_contracts/` | The harness (Python 3.14, no runtime dependencies) | code |
 | `tools/generate_draft_baseline.py` | Regenerates `openapi.json` and `routes.json` from the draft | code |
 | `LICENSE` | Copy of the repository's commercial license, required by package metadata; a test keeps it identical to [../LICENSE](../LICENSE) | copy |
 
-The draft was captured at commit `589917e84` of `github.com/shakhbanov/whisperer` on 2026-10-01. The two `.md` files are rendered from the JSON. Edit the JSON and run `uv run whisperer-contracts render`; a test fails if they drift apart.
+The draft was captured at commit `589917e84` of `github.com/shakhbanov/whisperer` on 2026-10-01. The two `.md` files are rendered from the JSON. Edit the JSON and run `uv run shosai-contracts render`; a test fails if they drift apart.
 
 ## What the baseline says
 
@@ -104,7 +104,7 @@ Any of the three can be left out; that part of the check is then skipped, and th
 ### Run it from the command line
 
 ```bash
-uv run --project contracts whisperer-contracts check \
+uv run --project contracts shosai-contracts check \
     --openapi build/openapi.json --routes build/routes.json --websocket build/websocket.json \
     --slice S04
 ```
@@ -117,15 +117,15 @@ Add the harness as a development dependency of `backend/`:
 
 ```toml
 [dependency-groups]
-dev = ["whisperer-contracts"]
+dev = ["shosai-contracts"]
 
 [tool.uv.sources]
-whisperer-contracts = { path = "../contracts", editable = true }
+shosai-contracts = { path = "../contracts", editable = true }
 ```
 
 ```python
 from fastapi import FastAPI
-from whisperer_contracts import Candidate, Scope, check, load_baseline, render_text
+from shosai_contracts import Candidate, Scope, check, load_baseline, render_text
 
 
 def test_meetings_slice_keeps_the_draft_contract(app: FastAPI) -> None:
@@ -221,7 +221,7 @@ The draft keeps serving production until cutover (M2), so it can still change. T
    ```
 
 3. Classify every new route in `draft/consumers.json`, and catalogue every new frame in `draft/websocket.json`. Set the class and slice, give a reason for `external` and `excluded`, and list the call sites.
-4. In `contracts/`, run `uv run whisperer-contracts render`, then `uv run pytest`. The tests fail if a route is unclassified, if a route used by a shipped app is not `native`, or if a document is stale.
+4. In `contracts/`, run `uv run shosai-contracts render`, then `uv run pytest`. The tests fail if a route is unclassified, if a route used by a shipped app is not `native`, or if a document is stale.
 
 ## Limits
 

@@ -4,7 +4,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from whisperer.core.storage.keys import check_object_key, check_prefix, check_root
+from shosai.core.storage.keys import check_object_key, check_prefix, check_root
 
 SEGMENTS = st.text(st.characters(codec="utf-8", exclude_categories=("Cs", "Cc")), min_size=1)
 
@@ -13,7 +13,7 @@ SEGMENTS = st.text(st.characters(codec="utf-8", exclude_categories=("Cs", "Cc"))
     "key",
     [
         "u-0f3a2b1c/5b6e8a7d-1c2d-4e5f-8a9b-0c1d2e3f4a5b/%D0%BE%D1%82%D1%87%D1%91%D1%82.pdf",
-        "platform/builds/whisperer-1.4.5.dmg",
+        "platform/builds/shosai-1.4.5.dmg",
         "o-7/meetings/2026/10/audio.webm",
         "отчёт за октябрь.pdf",
     ],

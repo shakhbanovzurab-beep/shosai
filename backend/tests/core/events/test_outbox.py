@@ -9,20 +9,20 @@ from opentelemetry.sdk.trace import TracerProvider
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from tests.core.events.bench import NoteArchived, NoteState, NoteWritten, event_bench
-from tests.harness.connections import fetch_rows, fetch_value
-from tests.harness.database_access import DatabaseAccess
-from tests.harness.run_slot import RunSlot
-from whisperer.core.db.transactions import NotAHomeTransactionError, transaction_info
-from whisperer.core.events.catalog import EventCatalog
-from whisperer.core.events.outbox import (
+from shosai.core.db.transactions import NotAHomeTransactionError, transaction_info
+from shosai.core.events.catalog import EventCatalog
+from shosai.core.events.outbox import (
     EventOutbox,
     ReadOnlyEventTransactionError,
     UnlistedEventError,
 )
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
-from whisperer.core.observability.log_context import log_context
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.observability.log_context import log_context
+from tests.core.events.bench import NoteArchived, NoteState, NoteWritten, event_bench
+from tests.harness.connections import fetch_rows, fetch_value
+from tests.harness.database_access import DatabaseAccess
+from tests.harness.run_slot import RunSlot
 
 USER_ID = uuid.UUID("0190f0f0-0000-7000-8000-000000000001")
 ORG_ID = uuid.UUID("0190f0f0-0000-7000-8000-000000000002")

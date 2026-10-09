@@ -22,7 +22,7 @@ An empty copy turns a routing mistake into a silent wrong answer: code that read
    - A revision this code does not know is newer: a later release applied it, and migrations only expand the schema (§17), so the previous image starts. A rollback of the image is a redeploy (§13.3), never a downgrade. The process logs a warning.
    - No revision, or a revision of this code's history other than the head: the schema is behind; the process refuses to start.
    - A database that names another home in `home_identity`: the addresses are swapped; the process refuses to start.
-   - A home out of reach does not stop the start, so an outage of one home does not stop the other (§13.2). Its transactions are refused with 503 until the check passes; the check is repeated before a transaction in that home, at most once per 5 s. If it then finds another home or a schema behind the code, the home stays closed until restart and the process logs a critical line and reports `whisperer_db_home_state`.
+   - A home out of reach does not stop the start, so an outage of one home does not stop the other (§13.2). Its transactions are refused with 503 until the check passes; the check is repeated before a transaction in that home, at most once per 5 s. If it then finds another home or a schema behind the code, the home stays closed until restart and the process logs a critical line and reports `shosai_db_home_state`.
 
 ## Consequences
 

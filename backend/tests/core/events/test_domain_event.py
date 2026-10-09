@@ -12,8 +12,8 @@ from hypothesis import given
 from hypothesis import strategies as st
 from pydantic import BaseModel, StringConstraints, ValidationError
 
+from shosai.core.events.domain_event import DomainEvent, EventCode, EventDeclarationError
 from tests.core.events.bench import NoteState, NoteWritten
-from whisperer.core.events.domain_event import DomainEvent, EventCode, EventDeclarationError
 
 CODE_ALPHABET = re.compile(r"[a-z0-9_.:-]{1,64}")
 

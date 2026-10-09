@@ -6,7 +6,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from whisperer.core.kernel.errors import PARAM_TEXT, AppError
+from shosai.core.kernel.errors import PARAM_TEXT, AppError
 
 
 def test_an_error_keeps_its_code_status_params_and_detail() -> None:

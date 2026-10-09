@@ -11,10 +11,10 @@ from hypothesis import strategies as st
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.kv.connection import connect_redis
+from shosai.core.kv.metrics import KeyValueMetrics
+from shosai.core.kv.rate_limits import RateLimit, RateLimiter, subject_key
 from tests.core.kv.outages import closed_port, redis_url, silent_server
-from whisperer.core.kv.connection import connect_redis
-from whisperer.core.kv.metrics import KeyValueMetrics
-from whisperer.core.kv.rate_limits import RateLimit, RateLimiter, subject_key
 
 HOUR = timedelta(hours=1)
 VALKEY_PROPERTY = settings(
@@ -38,7 +38,7 @@ def build_limiter(client: Redis) -> tuple[RateLimiter, CollectorRegistry]:
 
 def decisions(registry: CollectorRegistry, limit: str, decision: str) -> float:
     labels = {"limit": limit, "decision": decision}
-    return registry.get_sample_value("whisperer_rate_limit_decisions_total", labels) or 0.0
+    return registry.get_sample_value("shosai_rate_limit_decisions_total", labels) or 0.0
 
 
 @VALKEY_PROPERTY
@@ -105,8 +105,8 @@ async def test_no_subject_appears_in_valkey_keys(valkey: Redis) -> None:
 
     await limiter.check(limit, "198.51.100.7")
 
-    [key] = [as_text(key) for key in await valkey.keys("whisperer:rate:*")]
-    assert key.startswith("whisperer:rate:sign_in:")
+    [key] = [as_text(key) for key in await valkey.keys("shosai:rate:*")]
+    assert key.startswith("shosai:rate:sign_in:")
     assert "198.51.100.7" not in key
 
 
@@ -123,7 +123,7 @@ async def test_decisions_are_counted_per_limit(valkey: Redis) -> None:
 
 async def test_a_silent_valkey_lets_requests_through_within_the_deadline() -> None:
     async with silent_server() as port:
-        client = connect_redis(redis_url(port), "whisperer-tests")
+        client = connect_redis(redis_url(port), "shosai-tests")
         limiter, registry = build_limiter(client)
         limit = RateLimit("sign_in", rate=5, period=timedelta(minutes=1), burst=5)
         started = time.monotonic()
@@ -137,7 +137,7 @@ async def test_a_silent_valkey_lets_requests_through_within_the_deadline() -> No
 
 
 async def test_a_stopped_valkey_lets_requests_through() -> None:
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
     limiter, registry = build_limiter(client)
     limit = RateLimit("sign_in", rate=5, period=timedelta(minutes=1), burst=5)
 

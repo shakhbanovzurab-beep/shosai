@@ -11,16 +11,16 @@ import re
 import sys
 from pathlib import Path
 
+from shosai.core.kernel.homes import Home
 from tests.harness.connections import fetch_value
 from tests.harness.run_slot import prepare_run_slot
 from tests.harness.settings import HarnessSettings
 from tests.harness.slots import NoFreeSlotError, claim_slot
-from whisperer.core.kernel.homes import Home
 
 BACKEND = Path(__file__).resolve().parents[2]
 INNER_CONFTEST = "from tests.conftest import harness_settings, pytest_terminal_summary, run_slot\n"
 INNER_TEST = """
-from whisperer.core.kernel.homes import Home
+from shosai.core.kernel.homes import Home
 
 
 async def test_forgets_a_table(run_slot):
@@ -38,7 +38,7 @@ INNER_OPTIONS = (
     "asyncio_default_test_loop_scope=session",
 )
 FORGOTTEN_TABLE_SQL = "SELECT to_regclass('public.harness_forgotten')"
-SLOT_LINE = re.compile(r"слот тестовых баз: whisperer_test_(\d+)")
+SLOT_LINE = re.compile(r"слот тестовых баз: shosai_test_(\d+)")
 
 
 async def run_inner_pytest(directory: Path) -> tuple[int, str]:

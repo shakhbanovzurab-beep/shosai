@@ -109,7 +109,7 @@ Draft models (`models/`, 4 300 lines, 69 files) follow the owner of each table; 
 | `prompts.py` | 4 under `/v1/prompts` | Legacy prompt library and `execute` | dropped (FM-5) | unused 4 |
 | `me_models.py` | 3 under `/v1/me/models` | User model per role | S09 | web 3 |
 | `me_skills.py` | 7 under `/v1/me/skills` | Skills library (SKILL.md, skills.sh) | S09 | web 6 · unused 1 |
-| `mcp_transport.py` | `POST`, `GET /mcp` | Whisperer as an MCP server (JSON-RPC, Streamable HTTP) | S10 | external 2 |
+| `mcp_transport.py` | `POST`, `GET /mcp` | Shosai as an MCP server (JSON-RPC, Streamable HTTP) | S10 | external 2 |
 | `mcp_oauth.py` | 12: `/.well-known/oauth-*`, `/v1/mcp/oauth/*` | OAuth 2.1 of the MCP server | S10 | external 10 · unused 2 |
 | `me_mcp.py` | 9 under `/v1/me/mcp` | MCP tokens, exposed resources, client connections | S10 | web 9 |
 | `me_calendar.py` | 9 under `/v1/me/calendar` | Calendar events | S12 | web 7 · unused 2 |

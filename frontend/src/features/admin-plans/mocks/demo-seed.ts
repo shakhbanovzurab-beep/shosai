@@ -65,7 +65,7 @@ export const seedPlans = (): Plan[] => [
     id: "plan_basic",
     name: "Basic",
     slug: "basic",
-    description: "Try Whisperer on your own meetings.",
+    description: "Try Shosai on your own meetings.",
     price_monthly: FREE,
     price_yearly: FREE,
     limits: { meeting_minutes_per_month: 120, file_manager_gb: 0, knowledge_base_mb: 0 },

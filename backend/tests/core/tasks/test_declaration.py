@@ -6,10 +6,9 @@ from uuid import UUID
 import pytest
 from pydantic import SecretStr, ValidationError
 
-from tests.core.tasks.workbench import HomeProbe, Probe, declare
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
-from whisperer.core.tasks.declaration import (
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.tasks.declaration import (
     HOLD_GRACE,
     MAX_DELIVERIES,
     NO_RETRY,
@@ -18,8 +17,9 @@ from whisperer.core.tasks.declaration import (
     TaskDeclaration,
     TaskKind,
 )
-from whisperer.core.tasks.payloads import MASK_SECRETS
-from whisperer.core.tasks.queues import TaskQueue
+from shosai.core.tasks.payloads import MASK_SECRETS
+from shosai.core.tasks.queues import TaskQueue
+from tests.core.tasks.workbench import HomeProbe, Probe, declare
 
 USER_ID = UUID("01920000-0000-7000-8000-000000000001")
 ORG_ID = UUID("01920000-0000-7000-8000-000000000002")

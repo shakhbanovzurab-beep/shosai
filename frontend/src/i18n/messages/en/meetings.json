@@ -29,7 +29,7 @@
   "join": "Join meeting",
   "opensInNewTab": "(opens in a new tab)",
   "source": {
-    "whisperer": "Whisperer room",
+    "shosai": "Shosai room",
     "in_person": "In person"
   },
   "participants": "Participants: {names}",

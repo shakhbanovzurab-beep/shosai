@@ -8,16 +8,16 @@ from fastapi import FastAPI
 from prometheus_client import CollectorRegistry
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from tests.core.observability.capture import captured_logs
-from tests.core.web.probe_app import ITEM_ROUTE, build_probe_app, client_of
-from whisperer.core.web.boundary import RequestBoundary
-from whisperer.core.web.http_metrics import HttpMetrics
-from whisperer.core.web.request_ids import (
+from shosai.core.web.boundary import RequestBoundary
+from shosai.core.web.http_metrics import HttpMetrics
+from shosai.core.web.request_ids import (
     REQUEST_ID_HEADER,
     RequestIdMissingError,
     request_id_of,
 )
-from whisperer.core.web.route_templates import RouteTemplates
+from shosai.core.web.route_templates import RouteTemplates
+from tests.core.observability.capture import captured_logs
+from tests.core.web.probe_app import ITEM_ROUTE, build_probe_app, client_of
 
 log = structlog.stdlib.get_logger("tests.boundary")
 

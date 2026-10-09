@@ -44,7 +44,7 @@ const scheduled = (now: Date): Draft[] => {
     draft("m-candidate", "Interview: Senior frontend engineer", {
       start: addMinutes(liveStart, 240),
       minutes: 60,
-      source: "whisperer",
+      source: "shosai",
       joinUrl: "https://whisperer.one/room/fe-interview-7q2",
       participants: people("Noah Kim", "Arham Khan", "Elena Petrova"),
     }),
@@ -91,10 +91,10 @@ export function demoMeetings(now = new Date()): Meeting[] {
   }));
 }
 
-/** Where each recorded meeting in Notes took place; Whisperer captured them on the user's device either way. */
+/** Where each recorded meeting in Notes took place; Shosai captured them on the user's device either way. */
 export const NOTE_SOURCES: Record<string, MeetingSource> = {
   "customer-interview-northwind": "zoom",
   "weekly-engineering-sync": "google_meet",
-  "one-on-one-maya": "whisperer",
+  "one-on-one-maya": "shosai",
   "pricing-workshop": "in_person",
 };

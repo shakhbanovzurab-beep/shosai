@@ -10,8 +10,8 @@ from tests.harness.shared_services import SlotBucket, slot_database
 
 async def leave_two_keys(target: RedisTarget, slot: int) -> None:
     async with slot_database(target, slot) as client:
-        await client.set("whisperer:probe:left", "1")
-        await client.set("whisperer:probe:also", "1")
+        await client.set("shosai:probe:left", "1")
+        await client.set("shosai:probe:also", "1")
 
 
 async def test_a_slot_database_left_with_keys_fails_the_run(

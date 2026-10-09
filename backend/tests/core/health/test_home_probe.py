@@ -2,6 +2,11 @@
 
 import pytest
 
+from shosai.core.db.home_checks import HomeMisconfiguredError
+from shosai.core.db.migrations import MigrationHistory
+from shosai.core.health.dependencies import home_probe
+from shosai.core.health.probes import probe_dependencies
+from shosai.core.kernel.homes import Home
 from tests.core.db.tcp_proxy import CountingProxy, through
 from tests.harness.database_access import (
     DatabaseAccess,
@@ -10,11 +15,6 @@ from tests.harness.database_access import (
     slot_urls,
 )
 from tests.harness.run_slot import RunSlot
-from whisperer.core.db.home_checks import HomeMisconfiguredError
-from whisperer.core.db.migrations import MigrationHistory
-from whisperer.core.health.dependencies import home_probe
-from whisperer.core.health.probes import probe_dependencies
-from whisperer.core.kernel.homes import Home
 
 FUTURE_REVISION = "f1f1f1f1f1f1"
 

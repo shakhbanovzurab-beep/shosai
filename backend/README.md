@@ -1,6 +1,6 @@
-# Whisperer backend
+# Shosai backend
 
-One modular monolith, one image, four process roles (`api`, `ws`, `workers`, `scheduler`), built feature-first: `core/`, `features/<slice>/`, `composition/`, `entrypoints/` under `src/whisperer/` ([target architecture](../docs/design/ARCHITECTURE.md) §5). [F1](../docs/plan/packages/F1-backend-foundation.md) built the foundation described here; each slice adds its own README in its package.
+One modular monolith, one image, four process roles (`api`, `ws`, `workers`, `scheduler`), built feature-first: `core/`, `features/<slice>/`, `composition/`, `entrypoints/` under `src/shosai/` ([target architecture](../docs/design/ARCHITECTURE.md) §5). [F1](../docs/plan/packages/F1-backend-foundation.md) built the foundation described here; each slice adds its own README in its package.
 
 ## Boundaries
 
@@ -27,8 +27,8 @@ import-linter contracts in `pyproject.toml` (`uv run lint-imports`):
 - Log with `structlog.stdlib.get_logger(__name__)`: the message in Russian, fields as English keyword arguments. Standard-library loggers go through the same renderer: one JSON line per event on stdout with `timestamp`, `level`, `logger`, `role`, `service`, and inside a span `trace_id` and `span_id`.
 - `log_context(request_id=…, home=…, org_id=…, user_id=…, session_id=…, task_name=…, task_id=…)` adds the ids of a unit of work to every line inside the block.
 - Values under sensitive keys, `SecretStr` values and passwords inside URLs are replaced by `***`; never log request bodies, headers, query strings, personal data or meeting text.
-- Lines and spans leave through bounded queues and never block the event loop; what does not fit is dropped and counted in `whisperer_telemetry_dropped_total{signal, reason}`. Without `OTEL_EXPORTER_OTLP_ENDPOINT` spans are recorded for the log correlation but not exported.
-- Metrics register in the process registry passed in (`build_metrics_registry`), never in the global one; labels stay bounded (§16.7). `watch_event_loop_lag` feeds `whisperer_event_loop_lag_seconds`.
+- Lines and spans leave through bounded queues and never block the event loop; what does not fit is dropped and counted in `shosai_telemetry_dropped_total{signal, reason}`. Without `OTEL_EXPORTER_OTLP_ENDPOINT` spans are recorded for the log correlation but not exported.
+- Metrics register in the process registry passed in (`build_metrics_registry`), never in the global one; labels stay bounded (§16.7). `watch_event_loop_lag` feeds `shosai_event_loop_lag_seconds`.
 
 ## HTTP shell
 
@@ -49,15 +49,15 @@ import-linter contracts in `pyproject.toml` (`uv run lint-imports`):
 
 - **Engines:** `HomeDatabases.create(urls, role, tracer_provider=…)` builds one engine per home from the application-role addresses. Limits per role come from §4.3: pool 10 / 5 / 2 / 2 for `api` / `workers` / `ws` / `scheduler`, no overflow, pool wait 2 s, statement timeout 10 s (60 s for `workers`), recycle after 600 s, no pre-ping, TCP keepalives. Bound values never reach an exception text or a log.
 - **Transactions:** a slice receives `HomeTransactions` and writes `async with transactions.begin(TenancyScope(home, user_id, org_id), read_only=…) as session:`. The first statement sets, for this transaction only, the statement timeout, read-only mode and `app.user_id` / `app.org_id`; the block commits on exit and rolls back on error. There is no request-wide session: commit before answering, and call external services between transactions, never inside one. A scoped read costs four round trips (`BEGIN`, scope, statement, `COMMIT`).
-- **A home out of reach** answers 503 `home_unavailable` with `Retry-After`, for its users only (§13.2): an exhausted pool or a refused connection is counted in `whisperer_db_unavailable_total{home, reason}`.
-- **Home check:** `HomeGate.verify_at_start()` reads `home_identity` and the revision of each home. Another home's database or a schema behind the code stops the start; a newer schema (an image rolled back) passes with a warning; a home out of reach does not stop the start and is checked again before its first transaction ([ADR 0010](../docs/adr/0010-home-scoped-revisions-in-one-alembic-history.md), item 6). `whisperer_db_home_state{home}` reports the result.
+- **A home out of reach** answers 503 `home_unavailable` with `Retry-After`, for its users only (§13.2): an exhausted pool or a refused connection is counted in `shosai_db_unavailable_total{home, reason}`.
+- **Home check:** `HomeGate.verify_at_start()` reads `home_identity` and the revision of each home. Another home's database or a schema behind the code stops the start; a newer schema (an image rolled back) passes with a warning; a home out of reach does not stop the start and is checked again before its first transaction ([ADR 0010](../docs/adr/0010-home-scoped-revisions-in-one-alembic-history.md), item 6). `shosai_db_home_state{home}` reports the result.
 - **Models:** declare tables on `ModelBase` and list the model in `composition/metadata.py`. A table that exists only in the EU home declares `__table_args__ = {"info": table_info(homes=(Home.EU,))}`; code that reads it names `Home.EU` explicitly. Constraint names follow `NAMING_CONVENTION`.
 - **Row-level security:** `app_user_id()` and `app_org_id()` read the scope of the transaction. `enable_company_isolation(table)` in a revision makes a table with `org_id` show a company's rows only within that company's scope.
-- **Telemetry:** one client span per statement under the current span, with the parametrised SQL text, never the values; pool occupancy per home in `whisperer_db_pool_connections{home, state}` and `whisperer_db_pool_capacity{home}` (`register_pool_occupancy`).
+- **Telemetry:** one client span per statement under the current span, with the parametrised SQL text, never the values; pool occupancy per home in `shosai_db_pool_connections{home, state}` and `shosai_db_pool_capacity{home}` (`register_pool_occupancy`).
 
 ## Migrations
 
-One Alembic history in `src/whisperer/migrations/` for both homes, applied home by home by `core/db/migrations.py` under the migration role over a direct connection ([ADR 0010](../docs/adr/0010-home-scoped-revisions-in-one-alembic-history.md)).
+One Alembic history in `src/shosai/migrations/` for both homes, applied home by home by `core/db/migrations.py` under the migration role over a direct connection ([ADR 0010](../docs/adr/0010-home-scoped-revisions-in-one-alembic-history.md)).
 
 - `uv run alembic revision -m "…"` writes a revision from the template. A revision declares `applies_to` (`EVERY_HOME` or a subset) and wraps `upgrade(scope)` and `downgrade(scope)` with `runs_in(applies_to)`; in another home the step is skipped and the revision is still stamped. A revision is either for every home or for one set, never both.
 - Changes only expand the schema (§17), and every revision has a working downgrade: each test run executes it.
@@ -68,10 +68,10 @@ One Alembic history in `src/whisperer/migrations/` for both homes, applied home 
 
 Slices receive these clients from composition by injection; none is a global.
 
-- **Clients:** `connect_redis(url, client_name, tracer_provider)` gives one client with a bounded pool (64 connections) per Redis-protocol server per process: Valkey (`VALKEY_URL`) and the LRU cache (`REDIS_CACHE_URL`). The client never retries by itself: every call waits at most its own deadline (`asyncio.timeout`), and the caller decides what a failure means. Commands become client spans with their arguments replaced by `?`. Keys are `whisperer:<purpose>:<part>…` (`build_key`), parts from `[A-Za-z0-9_.-]`, so no free text becomes a key.
+- **Clients:** `connect_redis(url, client_name, tracer_provider)` gives one client with a bounded pool (64 connections) per Redis-protocol server per process: Valkey (`VALKEY_URL`) and the LRU cache (`REDIS_CACHE_URL`). The client never retries by itself: every call waits at most its own deadline (`asyncio.timeout`), and the caller decides what a failure means. Commands become client spans with their arguments replaced by `?`. Keys are `shosai:<purpose>:<part>…` (`build_key`), parts from `[A-Za-z0-9_.-]`, so no free text becomes a key.
 - **Locks:** `async with locks.hold(name, ttl=…, outage=LockOutagePolicy.FAIL_CLOSED) as lease:` — `lease` is None while another process holds the lock; extend long work with `await lease.extend(ttl)`, which is False once the lock was lost. Every caller states what happens when Valkey does not answer within 50 ms: fail closed raises `LockUnavailableError`, fail open runs the work unguarded. Release and extension compare the holder's token in Lua.
-- **Rate limits** ([ADR 0011](../docs/adr/0011-rate-limits-gcra-in-valkey.md)): declare `RateLimit("sign_in", rate=5, period=timedelta(minutes=1), burst=5)` and put `Depends(rate_limited(limiter, limit))` on the route; the subject is the client address by default or any dependency returning a key, such as the user id; `detail=` keeps a native route's draft `detail`. Over the limit: 429 `rate_limited` with `Retry-After`. Valkey out or slower than 50 ms: the request passes, counted in `whisperer_rate_limit_decisions_total{limit, decision="failed_open"}`.
-- **Cache:** the port `Cache` (`get`, `get_many`, `set` with a TTL, `delete`), adapter `RedisCache`. Keys are `CacheKey(namespace, name)`; the namespace is a fixed code with the version of the value's shape (`directory.v1`). Every entry has a TTL, shortened by up to 10% at random; a call waits at most 20 ms; any failure is a miss, counted in `whisperer_cache_operations_total{namespace, operation, result}`. Never cache access rights (§7).
+- **Rate limits** ([ADR 0011](../docs/adr/0011-rate-limits-gcra-in-valkey.md)): declare `RateLimit("sign_in", rate=5, period=timedelta(minutes=1), burst=5)` and put `Depends(rate_limited(limiter, limit))` on the route; the subject is the client address by default or any dependency returning a key, such as the user id; `detail=` keeps a native route's draft `detail`. Over the limit: 429 `rate_limited` with `Retry-After`. Valkey out or slower than 50 ms: the request passes, counted in `shosai_rate_limit_decisions_total{limit, decision="failed_open"}`.
+- **Cache:** the port `Cache` (`get`, `get_many`, `set` with a TTL, `delete`), adapter `RedisCache`. Keys are `CacheKey(namespace, name)`; the namespace is a fixed code with the version of the value's shape (`directory.v1`). Every entry has a TTL, shortened by up to 10% at random; a call waits at most 20 ms; any failure is a miss, counted in `shosai_cache_operations_total{namespace, operation, result}`. Never cache access rights (§7).
 - **Object storage** ([ADR 0014](../docs/adr/0014-one-object-store-in-russia.md), [ADR 0015](../docs/adr/0015-aiobotocore-instead-of-aioboto3.md)): the ports `ObjectStorage` and `MultipartUploads`, adapters `S3ObjectStorage` and `S3MultipartUploads` over one aiobotocore client of the one bucket (`open_s3_client(settings.storage)`): connect 2 s, read 20 s, at most 3 attempts. Clients upload and download with presigned requests valid 15 minutes; an upload link is signed for one content type and one length, a download link can pin the content type. The bucket out of reach is 503 `storage_unavailable` with `Retry-After`; a missing object is `ObjectNotFoundError`, a refused request `StorageRejectedError(code)`. Keys may contain file names, so they never enter logs, spans or metrics. No database transaction is open across a storage call (§14 rule 8).
 - **Outages** of these dependencies are logged at most once per 10 s per operation (`OutageLog`), with the number of failures held back; every failure is counted.
 - **Readiness:** `probe_dependencies([redis_probe("valkey", …), redis_probe("cache", …), storage_probe(objects)])` checks every dependency at once, each within 2 s, and reports `ok` or `down`; only the failures a probe declares mean `down`.
@@ -85,8 +85,8 @@ Slices receive these clients from composition by injection; none is a global.
 - **Bind** it in the slice's build: `TaskHandler(SEND_DIGEST, digests.send)` in `FeatureParts.task_handlers`. `build_task_system(valkey, registry, tracer_provider)` makes the brokers and the `TaskSender` first, so a handler built with `services.tasks` can queue further work; composition then registers every handler of every slice in every role (`TaskSystem.register`), and a name declared twice stops the start.
 - **Send:** `await sender.send(SEND_DIGEST, SendDigest(...))` within 50 ms, or `TaskQueueUnavailableError` (503 `queue_unavailable` with `Retry-After`) when Valkey is silent or the stream holds 500 000 tasks. Work that must not be lost — money, email — goes through the outbox. A periodic task (`kind=TaskKind.TICK`) goes through `send_tick(task, payload, *marker)`, which skips the tick while the previous one with the same marker is in flight; a failed tick is dropped, the next one does its work.
 - **Run:** `consume_queue(broker, stop)` runs one queue's tasks in a worker process (`critical` 16 at once, `default` 5, `bulk` 3, `meeting` 3) and drains for up to 20 s when `stop` is set. The handler runs within its declared deadline. A worker renews the lease of every message it holds; a message idle 120 s belongs to a dead worker and is delivered again.
-- **Dead letter** (`whisperer:dead-letter:<queue>`, 7 days): the last failed delivery, a failure the policy does not retry, a task abandoned on its last delivery, a message of an unknown task or one that is not a task. An entry keeps the task, deliveries, error type and text, trace and request ids and the payload with secrets masked; it is counted in `whisperer_task_dead_letters_total{queue, reason}`, unknown tasks also in `whisperer_task_unknown_total{queue}` (§16.4).
-- **Observability:** one log line per run with its outcome, delivery and duration, the stack on failure; `task_name`, `task_id`, `request_id` and the payload's ids on every line of the run; one consumer span per run continuing the sender's trace, with the error type only; `whisperer_task_runs_total{queue, task, outcome}`, run and wait histograms, send failures, skipped ticks, leases lost or capped, Valkey failures. `QueueMonitor.refresh()` sets the depth, oldest-task age and dead-letter gauges; one process (the scheduler) runs it.
+- **Dead letter** (`shosai:dead-letter:<queue>`, 7 days): the last failed delivery, a failure the policy does not retry, a task abandoned on its last delivery, a message of an unknown task or one that is not a task. An entry keeps the task, deliveries, error type and text, trace and request ids and the payload with secrets masked; it is counted in `shosai_task_dead_letters_total{queue, reason}`, unknown tasks also in `shosai_task_unknown_total{queue}` (§16.4).
+- **Observability:** one log line per run with its outcome, delivery and duration, the stack on failure; `task_name`, `task_id`, `request_id` and the payload's ids on every line of the run; one consumer span per run continuing the sender's trace, with the error type only; `shosai_task_runs_total{queue, task, outcome}`, run and wait histograms, send failures, skipped ticks, leases lost or capped, Valkey failures. `QueueMonitor.refresh()` sets the depth, oldest-task age and dead-letter gauges; one process (the scheduler) runs it.
 
 ## Events
 
@@ -99,34 +99,34 @@ Slices receive these clients from composition by injection; none is a global.
 - **Relay** (`events.relay_outbox`, `critical`, a tick per home every 5 s): claims up to 100 due rows for 30 s (`FOR UPDATE SKIP LOCKED`) and commits, queues one delivery per subscriber outside any transaction, then marks them published. A row whose deliveries were not queued — Valkey out, a delivery task missing from the process, an event type a newer image wrote — waits `min(2^attempts, 300)` s and comes back; it is never dropped. Each home relays on its own, so an outage of one never stops the other. The relay opens a producer span per event as the child of the producer's trace, so the delivery continues that trace and carries its `request_id`.
 - **Delivery:** a consumer this process does not know is an unknown task and is dead-lettered and counted; a payload its class cannot read is dead-lettered without running; failures of the home, the bucket, Valkey or the network get up to 5 deliveries.
 - **Purge** (`events.purge_outbox`, `bulk`, daily per home): published events after 7 days, delivery marks after 14, in batches of 5 000; unpublished events stay.
-- **Observability:** `whisperer_outbox_published_total{home}`, `whisperer_outbox_held_back_total{home, reason}`, `whisperer_outbox_purged_rows_total{home, table}`, `whisperer_event_duplicate_deliveries_total{consumer}`; `OutboxMonitor.refresh()` sets `whisperer_outbox_pending{home}` and `whisperer_outbox_oldest_age_seconds{home}` (the "outbox events older than 5 min" monitor, §16.4); the scheduler runs it. Task metrics of the deliveries carry the task `events.<consumer>`.
+- **Observability:** `shosai_outbox_published_total{home}`, `shosai_outbox_held_back_total{home, reason}`, `shosai_outbox_purged_rows_total{home, table}`, `shosai_event_duplicate_deliveries_total{consumer}`; `OutboxMonitor.refresh()` sets `shosai_outbox_pending{home}` and `shosai_outbox_oldest_age_seconds{home}` (the "outbox events older than 5 min" monitor, §16.4); the scheduler runs it. Task metrics of the deliveries carry the task `events.<consumer>`.
 
 ## Process roles
 
-One console command, `whisperer`, runs one role per process on one uvloop event loop (§5). Composition (`composition/`) builds what the role needs; `entrypoints/cli.py` only parses the command line.
+One console command, `shosai`, runs one role per process on one uvloop event loop (§5). Composition (`composition/`) builds what the role needs; `entrypoints/cli.py` only parses the command line.
 
 | Command | Serves | Runs |
 |---|---|---|
-| `whisperer api` | the public app on `HTTP_PORT`: every slice's HTTP routes and `GET /v1/health` | — |
-| `whisperer ws` | the public app of the WS gateway on `HTTP_PORT`: every slice's WebSocket routes and `GET /v1/health` | — |
-| `whisperer workers --queue Q` | — | TaskIQ's receiver of queue `Q` (`critical`, `default`, `bulk`, `meeting`) |
-| `whisperer scheduler` | — | the loops: the outbox relay of each home every 5 s, its purge daily, the queue and outbox gauges every 15 s, every slice's loops |
-| `whisperer migrate upgrade` / `current` | — | Alembic for both homes, RU first; logs each home's revision |
+| `shosai api` | the public app on `HTTP_PORT`: every slice's HTTP routes and `GET /v1/health` | — |
+| `shosai ws` | the public app of the WS gateway on `HTTP_PORT`: every slice's WebSocket routes and `GET /v1/health` | — |
+| `shosai workers --queue Q` | — | TaskIQ's receiver of queue `Q` (`critical`, `default`, `bulk`, `meeting`) |
+| `shosai scheduler` | — | the loops: the outbox relay of each home every 5 s, its purge daily, the queue and outbox gauges every 15 s, every slice's loops |
+| `shosai migrate upgrade` / `current` | — | Alembic for both homes, RU first; logs each home's revision |
 
 - **Ops port.** Every long-running role also serves `OPS_PORT`, which the edge never proxies: `GET /livez` (200 while the event loop runs; checks nothing else), `GET /readyz` (200 while the process takes work, 503 while it starts or drains; the body names `homes.ru`, `homes.eu`, `valkey`, `cache`, `storage` and each slice's probes `ok` or `down`, each within 2 s) and `GET /metrics` (the process registry; OpenMetrics when asked, for exemplars). A dependency that is down never fails readiness (F1-C2): it is alerted through metrics.
 - **Start**, each step named in the one critical line when it fails, exit code 1: settings and the production gate → logs, metrics, traces → the ops server → `features` (no slice listed twice) → `databases` (one engine per home; another home's database or a schema behind the code stops the start, a home out of reach does not) → `shared_services` → `tasks` → `feature:<name>` for each slice → `events` (catalog, every task registered) → `probes` (each name once) → the role. Valkey, the cache and the bucket are not contacted at start, so their outage never stops it (§13.2).
 - **Stop** on SIGTERM or SIGINT: readiness turns 503 at once → the role drains (in-flight requests up to 20 s, running tasks up to 20 s — the rest return to their queue after the lease — and the loops' current iteration) → the slices, the clients and the engines close → the ops server stops → spans are exported within 5 s and the log queue written out. The stop fits a 30 s container grace period (F4 sets `stop_grace_period: 30s`). The public server keeps an idle connection 75 s, so the edge's idle upstream connections (NGINX: 60 s by default) must stay shorter. A server or worker that ends by itself stops the process with exit code 1, so the orchestrator restarts it.
-- **Loops** (`core/runtime/loops.py`) run at start and then once per interval, never as a backlog; an iteration has a deadline (10 s by default), a failing one is logged with its stack and counted in `whisperer_loop_failures_total{loop}`, and the loop goes on. `whisperer_loop_last_success_timestamp{loop}` and `whisperer_loop_interval_seconds{loop}` let an alert tell a stuck loop from a slow one. A loop only queues tasks or reads gauges; workers do the work (§4.2).
+- **Loops** (`core/runtime/loops.py`) run at start and then once per interval, never as a backlog; an iteration has a deadline (10 s by default), a failing one is logged with its stack and counted in `shosai_loop_failures_total{loop}`, and the loop goes on. `shosai_loop_last_success_timestamp{loop}` and `shosai_loop_interval_seconds{loop}` let an alert tell a stuck loop from a slow one. A loop only queues tasks or reads gauges; workers do the work (§4.2).
 
 ### Run locally
 
 With the local environment up ([docs/development.md](../docs/development.md), "Run the backend"):
 
 ```bash
-uv run --env-file ../.env whisperer migrate upgrade
-uv run --env-file ../.env whisperer api
-OPS_PORT=9101 uv run --env-file ../.env whisperer scheduler
-OPS_PORT=9102 uv run --env-file ../.env whisperer workers --queue critical
+uv run --env-file ../.env shosai migrate upgrade
+uv run --env-file ../.env shosai api
+OPS_PORT=9101 uv run --env-file ../.env shosai scheduler
+OPS_PORT=9102 uv run --env-file ../.env shosai workers --queue critical
 ```
 
 Several roles on one machine need different ports; in containers each process has its own.
@@ -152,8 +152,8 @@ cp -n ../.env.example ../.env      # once
 uv run --env-file ../.env pytest
 ```
 
-- The session fixture `run_slot` claims a free prepared slot `whisperer_test_<N>` in both homes with an advisory lock, so parallel runs never share one, and gives a direct migration-role connection per home. A crashed run's lock is released with its connections. The pytest summary names the slot.
-- The harness refuses to start if a host is not loopback (the bucket's endpoint included), a database name is not `whisperer_test`, the claimed database is not a prepared test database, or a database, Valkey or cache `TEST_` URL equals a runtime URL.
+- The session fixture `run_slot` claims a free prepared slot `shosai_test_<N>` in both homes with an advisory lock, so parallel runs never share one, and gives a direct migration-role connection per home. A crashed run's lock is released with its connections. The pytest summary names the slot.
+- The harness refuses to start if a host is not loopback (the bucket's endpoint included), a database name is not `shosai_test`, the claimed database is not a prepared test database, or a database, Valkey or cache `TEST_` URL equals a runtime URL.
 - On claim the harness returns the slot to the state F3 prepares — it drops a crashed run's objects and the extensions the migration role created, and restores default privileges, rights on the `public` schema and on the database, and database settings. At the end it fails the run, naming the objects, if the catalog of either home differs.
 - After the claim both homes are upgraded to the head with the production runner; at the end they are downgraded to the base, the version table is dropped, and only then are the catalogs compared.
 - The slot is also database `N` of Valkey and of the cache and the prefix `tests/slot-<N>/` of the bucket. A test that writes there takes `valkey`, `redis_cache` or `bucket` (`tests/harness/shared_services.py`), which empty the slot's part after it; a run that ends with keys or objects left fails.

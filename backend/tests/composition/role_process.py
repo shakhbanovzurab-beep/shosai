@@ -1,6 +1,6 @@
 """A backend role started as its own process, the way a container runs it.
 
-The console script `whisperer` of this environment runs with exactly the variables the
+The console script `shosai` of this environment runs with exactly the variables the
 test gives and real signals; its JSON lines go to a file the test reads. Every wait is
 bounded, and a process still running when the test ends is killed.
 """
@@ -21,7 +21,7 @@ import pytest
 
 from tests.harness.process_environ import LOOPBACK
 
-WHISPERER = Path(sys.executable).with_name("whisperer")
+SHOSAI = Path(sys.executable).with_name("shosai")
 READY_WAIT_SECONDS = 30.0
 POLL_SECONDS = 0.1
 # Меньше отсрочки остановки контейнера (composition/process.py): слив обязан в неё уложиться.
@@ -98,10 +98,10 @@ def messages(lines: Sequence[dict[str, Any]]) -> list[str]:
 async def role_process(
     arguments: Sequence[str], environ: Mapping[str, str], log_path: Path
 ) -> AsyncIterator[RoleProcess]:
-    """`whisperer <arguments>` with exactly `environ`; killed if still running after the block."""
+    """`shosai <arguments>` with exactly `environ`; killed if still running after the block."""
     with log_path.open("wb") as log_file:
         process = await asyncio.create_subprocess_exec(
-            WHISPERER, *arguments, env=dict(environ), stdout=log_file, stderr=log_file
+            SHOSAI, *arguments, env=dict(environ), stdout=log_file, stderr=log_file
         )
     try:
         yield RoleProcess(process, log_path, environ)

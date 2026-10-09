@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-architecture": {
+      "source": "eshwarvijay/agent-architecture",
+      "sourceType": "github",
+      "skillPath": "skills/agent-architecture/SKILL.md",
+      "computedHash": "fae127b98fa52533a58ab71d31eb678cd06b885ae7524389df859aca143ced09"
+    }
+  }
+}

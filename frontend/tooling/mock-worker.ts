@@ -10,7 +10,7 @@ import { createRequire } from "node:module";
 export function mockWorker(): Plugin {
   const require = createRequire(import.meta.url);
   return {
-    name: "whisperer:mock-worker",
+    name: "shosai:mock-worker",
     apply: "serve",
     configureServer(server) {
       server.middlewares.use("/mockServiceWorker.js", (_request, response) => {

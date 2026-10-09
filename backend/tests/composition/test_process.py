@@ -5,22 +5,22 @@ from datetime import timedelta
 
 import pytest
 
-from whisperer.composition.features import check_features, contract_slices, feature_checks
-from whisperer.composition.process import (
+from shosai.composition.features import check_features, contract_slices, feature_checks
+from shosai.composition.process import (
     EXIT_FAILED,
     EXIT_OK,
     OPS_DRAIN,
     STOP_GRACE_PERIOD,
     serve_until_stopped,
 )
-from whisperer.composition.roles import PUBLIC_DRAIN
-from whisperer.composition.startup import StartFailedError, start_step
-from whisperer.core.config.gate import GateViolation
-from whisperer.core.config.loading import Settings
-from whisperer.core.features import FeatureModule
-from whisperer.core.health.readiness import ProcessPhase, Readiness
-from whisperer.core.observability.tracing import SHUTDOWN_BUDGET_SECONDS
-from whisperer.core.tasks.worker import DRAIN_TIMEOUT
+from shosai.composition.roles import PUBLIC_DRAIN
+from shosai.composition.startup import StartFailedError, start_step
+from shosai.core.config.gate import GateViolation
+from shosai.core.config.loading import Settings
+from shosai.core.features import FeatureModule
+from shosai.core.health.readiness import ProcessPhase, Readiness
+from shosai.core.observability.tracing import SHUTDOWN_BUDGET_SECONDS
+from shosai.core.tasks.worker import DRAIN_TIMEOUT
 
 
 async def runs_until_cancelled() -> None:

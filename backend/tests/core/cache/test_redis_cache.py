@@ -9,11 +9,11 @@ from hypothesis import strategies as st
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.cache.metrics import CacheMetrics
+from shosai.core.cache.port import Cache, CacheKey
+from shosai.core.cache.redis_cache import RedisCache, jittered_milliseconds
+from shosai.core.kv.connection import connect_redis
 from tests.core.kv.outages import closed_port, redis_url, silent_server
-from whisperer.core.cache.metrics import CacheMetrics
-from whisperer.core.cache.port import Cache, CacheKey
-from whisperer.core.cache.redis_cache import RedisCache, jittered_milliseconds
-from whisperer.core.kv.connection import connect_redis
 
 MINUTE = timedelta(minutes=1)
 PROFILE = CacheKey("profile.v1", "7f3a")
@@ -27,7 +27,7 @@ def build_cache(client: Redis) -> tuple[Cache, CollectorRegistry]:
 
 def operations(registry: CollectorRegistry, namespace: str, operation: str, result: str) -> float:
     labels = {"namespace": namespace, "operation": operation, "result": result}
-    return registry.get_sample_value("whisperer_cache_operations_total", labels) or 0.0
+    return registry.get_sample_value("shosai_cache_operations_total", labels) or 0.0
 
 
 async def test_a_stored_value_is_read_back_until_deleted(redis_cache: Redis) -> None:
@@ -76,7 +76,7 @@ def test_jitter_only_shortens_the_ttl_by_at_most_a_tenth(milliseconds: int) -> N
 
 async def test_a_silent_cache_is_a_miss_within_its_deadline() -> None:
     async with silent_server() as port:
-        client = connect_redis(redis_url(port), "whisperer-tests")
+        client = connect_redis(redis_url(port), "shosai-tests")
         cache, registry = build_cache(client)
         started = time.monotonic()
 
@@ -92,7 +92,7 @@ async def test_a_silent_cache_is_a_miss_within_its_deadline() -> None:
 
 
 async def test_a_stopped_cache_is_a_miss() -> None:
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
     cache, registry = build_cache(client)
 
     assert await cache.get_many([PROFILE, RATES]) == [None, None]

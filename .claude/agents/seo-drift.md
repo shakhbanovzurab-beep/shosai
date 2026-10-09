@@ -17,10 +17,10 @@ elements by comparing current page state against stored baselines.
 ## Tools
 
 All page fetching goes through the project's existing scripts with SSRF protection:
-- `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run drift_baseline.py <url>` -- capture a new baseline
-- `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run drift_compare.py <url>` -- compare current state to baseline
-- `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run drift_history.py <url>` -- show change history
-- `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run drift_report.py <file> --output report.html` -- generate HTML report
+- `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run drift_baseline.py <url>` -- capture a new baseline
+- `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run drift_compare.py <url>` -- compare current state to baseline
+- `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run drift_history.py <url>` -- show change history
+- `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run drift_report.py <file> --output report.html` -- generate HTML report
 
 Never use curl, wget, or raw HTTP requests. All fetching is handled by
 the bundled `fetch_page.py` module internally, which validates URLs against private/loopback

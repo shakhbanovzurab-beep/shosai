@@ -29,8 +29,8 @@ pip install playwright && playwright install chromium
 Use the managed screenshot and renderer commands for browser automation:
 
 ```bash
-"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run capture_screenshot.py URL --all --output screenshots/
-"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run render_page.py URL --mode auto --a11y-tree --json
+"/root/shosai/.claude/skills/seo/scripts/claude-seo" run capture_screenshot.py URL --all --output screenshots/
+"/root/shosai/.claude/skills/seo/scripts/claude-seo" run render_page.py URL --mode auto --a11y-tree --json
 ```
 
 ## Security Rules

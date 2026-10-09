@@ -24,13 +24,13 @@ against Matomo Cloud and self-hosted instances.
 
 | Command | Underlying script |
 |---|---|
-| `/seo matomo check` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_auth.py --check` |
-| `/seo matomo organic [site-id]` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py organic --site-id <id>` |
-| `/seo matomo top-pages` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py top-pages` |
-| `/seo matomo device` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py device` |
-| `/seo matomo country` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py country` |
-| `/seo matomo referrers` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py referrers` |
-| `/seo matomo keywords` | `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py keywords` |
+| `/seo matomo check` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_auth.py --check` |
+| `/seo matomo organic [site-id]` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py organic --site-id <id>` |
+| `/seo matomo top-pages` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py top-pages` |
+| `/seo matomo device` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py device` |
+| `/seo matomo country` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py country` |
+| `/seo matomo referrers` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py referrers` |
+| `/seo matomo keywords` | `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py keywords` |
 
 All commands accept `--days` (default 28), `--limit`, `--site-id`, and
 `--json`. The site ID falls back to `MATOMO_SITE_ID` from settings.
@@ -55,7 +55,7 @@ All commands accept `--days` (default 28), `--limit`, `--site-id`, and
 - For AI Overview / GEO citability work, route to `seo-geo`. Matomo
   offers no LLM-specific signals.
 - During `/seo audit`, the orchestrator spawns the `seo-matomo` agent
-  (analogous to `seo-google`) whenever `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_auth.py
+  (analogous to `seo-google`) whenever `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_auth.py
   --check` succeeds. Both agents can be active simultaneously when the
   user has both GA4 and Matomo configured.
 
@@ -90,7 +90,7 @@ the allowlist is the supported route. Details in
   Ask the user for the URL their instance actually serves the API from.
 - Missing credentials: report which env vars / config keys are unset and
   remind the user to run `extensions/matomo/install.sh` or
-  `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_auth.py --setup`.
+  `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_auth.py --setup`.
 - HTTP 401/403 from Matomo: the token lacks view access for the given
   site. Verify the token scope in Matomo Administration -> Personal ->
   Security -> API Tokens. The skill never logs the token.

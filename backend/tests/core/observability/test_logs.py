@@ -10,13 +10,13 @@ import structlog
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 
+from shosai.core.config.roles import ProcessRole
+from shosai.core.config.values import LogLevel
+from shosai.core.kernel.homes import Home
+from shosai.core.observability.log_context import log_context
+from shosai.core.observability.logs import DroppingQueueHandler
+from shosai.core.observability.metrics import ObservabilityMetrics
 from tests.core.observability.capture import captured_logs
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.config.values import LogLevel
-from whisperer.core.kernel.homes import Home
-from whisperer.core.observability.log_context import log_context
-from whisperer.core.observability.logs import DroppingQueueHandler
-from whisperer.core.observability.metrics import ObservabilityMetrics
 
 USER_ID = UUID("01920000-0000-7000-8000-000000000001")
 log = structlog.stdlib.get_logger("tests.observability")
@@ -31,7 +31,7 @@ def test_an_event_becomes_one_json_line_with_the_process_fields() -> None:
     assert line["level"] == "info"
     assert line["logger"] == "tests.observability"
     assert line["role"] == "workers"
-    assert line["service"] == "whisperer"
+    assert line["service"] == "shosai"
     assert line["queue"] == "default"
     assert line["attempts"] == 2
     assert line["timestamp"].endswith("Z")
@@ -143,7 +143,7 @@ def test_a_full_queue_drops_the_line_and_counts_it() -> None:
         handler.enqueue(record)
 
     dropped = registry.get_sample_value(
-        "whisperer_telemetry_dropped_total", {"signal": "logs", "reason": "queue_full"}
+        "shosai_telemetry_dropped_total", {"signal": "logs", "reason": "queue_full"}
     )
     assert dropped == 3
 

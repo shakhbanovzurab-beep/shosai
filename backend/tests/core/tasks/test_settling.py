@@ -6,12 +6,9 @@ import pytest
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
-from tests.core.kv.outages import closed_port, redis_url
-from tests.core.observability.capture import captured_logs
-from tests.core.tasks.workbench import FAST, declare
-from whisperer.core.kv.connection import connect_redis
-from whisperer.core.tasks.dead_letter import unparseable_entry
-from whisperer.core.tasks.deliveries import (
+from shosai.core.kv.connection import connect_redis
+from shosai.core.tasks.dead_letter import unparseable_entry
+from shosai.core.tasks.deliveries import (
     Acknowledge,
     Delivery,
     LeavePending,
@@ -19,10 +16,13 @@ from whisperer.core.tasks.deliveries import (
     RetryLater,
     Settlement,
 )
-from whisperer.core.tasks.metrics import TaskMetrics
-from whisperer.core.tasks.queues import TaskQueue
-from whisperer.core.tasks.settling import DeliverySettler, QueueFailures
-from whisperer.core.tasks.stream import TaskStream
+from shosai.core.tasks.metrics import TaskMetrics
+from shosai.core.tasks.queues import TaskQueue
+from shosai.core.tasks.settling import DeliverySettler, QueueFailures
+from shosai.core.tasks.stream import TaskStream
+from tests.core.kv.outages import closed_port, redis_url
+from tests.core.observability.capture import captured_logs
+from tests.core.tasks.workbench import FAST, declare
 
 TASK = declare("probe.settled")
 RETRY = RetryLater(timedelta(milliseconds=100))
@@ -47,27 +47,27 @@ def delivery_settled_as(settlement: Settlement | None) -> Delivery:
 async def test_a_settlement_valkey_does_not_take_is_counted_not_raised(
     settlement: Settlement, operation: str
 ) -> None:
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
     settler, registry = settler_over(client)
 
     await settler.settle(delivery_settled_as(settlement))
 
     failures = registry.get_sample_value(
-        "whisperer_task_valkey_failures_total", {"queue": "default", "operation": operation}
+        "shosai_task_valkey_failures_total", {"queue": "default", "operation": operation}
     )
     assert failures == 1
     await client.aclose()
 
 
 async def test_an_interrupted_run_is_left_for_another_worker_without_a_call() -> None:
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
     settler, registry = settler_over(client)
 
     await settler.settle(delivery_settled_as(LeavePending()))
 
     assert (
         registry.get_sample_value(
-            "whisperer_task_valkey_failures_total", {"queue": "default", "operation": "acknowledge"}
+            "shosai_task_valkey_failures_total", {"queue": "default", "operation": "acknowledge"}
         )
         is None
     )

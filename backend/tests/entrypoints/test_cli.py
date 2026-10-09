@@ -1,9 +1,9 @@
-"""The `whisperer` command line: one subcommand per role, a queue for a worker."""
+"""The `shosai` command line: one subcommand per role, a queue for a worker."""
 
 import pytest
 
-from whisperer.core.tasks.queues import TaskQueue
-from whisperer.entrypoints.cli import build_parser, command
+from shosai.core.tasks.queues import TaskQueue
+from shosai.entrypoints.cli import build_parser, command
 
 USAGE_ERROR = 2
 

@@ -12,6 +12,10 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 from opentelemetry.trace import SpanKind, StatusCode
 from sqlalchemy import exc
 
+from shosai.core.db.tracing import operation_name
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.observability.span_privacy import PrivateAttributesSampler
 from tests.harness.database_access import (
     DatabaseAccess,
     ProcessShape,
@@ -19,10 +23,6 @@ from tests.harness.database_access import (
     slot_urls,
 )
 from tests.harness.run_slot import RunSlot
-from whisperer.core.db.tracing import operation_name
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
-from whisperer.core.observability.span_privacy import PrivateAttributesSampler
 
 SECRET_NOTE = "a-value-that-must-not-reach-a-span"
 
@@ -60,8 +60,8 @@ async def test_each_statement_is_a_client_span_under_the_current_one(
         assert span.parent is not None
         assert span.parent.span_id == request.get_span_context().span_id
         assert attributes["db.system.name"] == "postgresql"
-        assert attributes["whisperer.home"] == "ru"
-        assert str(attributes["db.namespace"]).startswith("whisperer_test_")
+        assert attributes["shosai.home"] == "ru"
+        assert str(attributes["db.namespace"]).startswith("shosai_test_")
         assert SECRET_NOTE not in str(attributes)
         assert str(scope.user_id) not in str(attributes)
 

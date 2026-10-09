@@ -10,6 +10,10 @@ from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
+from shosai.composition.telemetry import ProcessTelemetry
+from shosai.core.config.roles import ProcessRole
+from shosai.core.tasks.queues import TaskQueue
 from tests.composition.fixture_features import (
     DIGEST_ROUTE,
     NOTES_ROUTE,
@@ -23,13 +27,9 @@ from tests.composition.platform_bench import PlatformBench, platform_over_slot
 from tests.harness.process_environ import LOOPBACK
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
-from whisperer.composition.roles import api_role, scheduler_role, workers_role, ws_role
-from whisperer.composition.telemetry import ProcessTelemetry
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.tasks.queues import TaskQueue
 
 WAIT_SECONDS = 10.0
-LOOP_SUCCESS = "whisperer_loop_last_success_timestamp"
+LOOP_SUCCESS = "shosai_loop_last_success_timestamp"
 
 
 async def get(bench: PlatformBench, path: str) -> httpx.Response:
@@ -93,7 +93,7 @@ async def test_the_scheduler_runs_the_core_loops_and_the_slices_loops(
         async with scheduler_role(bench.platform, bench.telemetry) as tasks:
             await eventually(lambda: all(bench.sample(LOOP_SUCCESS, loop=loop) for loop in core))
             await eventually(lambda: "notes:sweep" in lifecycle.events)
-        relay_ticks = int(await valkey.xlen("whisperer:tasks:critical"))
+        relay_ticks = int(await valkey.xlen("shosai:tasks:critical"))
 
     assert {task.get_name() for task in tasks} >= {"loop:notes.sweep", "loop:events.outbox_monitor"}
     assert all(task.done() for task in tasks)

@@ -5,11 +5,11 @@ from dataclasses import dataclass
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 
+from shosai.core.storage.metrics import StorageMetrics
+from shosai.core.storage.s3_client import S3Calls
+from shosai.core.storage.s3_multipart import S3MultipartUploads
+from shosai.core.storage.s3_objects import S3ObjectStorage
 from tests.harness.shared_services import SlotBucket
-from whisperer.core.storage.metrics import StorageMetrics
-from whisperer.core.storage.s3_client import S3Calls
-from whisperer.core.storage.s3_multipart import S3MultipartUploads
-from whisperer.core.storage.s3_objects import S3ObjectStorage
 
 
 @dataclass(frozen=True, slots=True)
@@ -23,7 +23,7 @@ class SlotStorage:
     def requests(self, operation: str, outcome: str) -> float:
         """How many requests of an operation ended with an outcome."""
         labels = {"operation": operation, "outcome": outcome}
-        return self.registry.get_sample_value("whisperer_storage_requests_total", labels) or 0.0
+        return self.registry.get_sample_value("shosai_storage_requests_total", labels) or 0.0
 
 
 def slot_storage(bucket: SlotBucket, tracer_provider: TracerProvider | None = None) -> SlotStorage:

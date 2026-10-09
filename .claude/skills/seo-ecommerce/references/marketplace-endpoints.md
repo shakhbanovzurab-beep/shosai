@@ -110,10 +110,10 @@ When consuming responses, normalize:
 | Rating | Integer or float | Float rounded to 1 decimal |
 | Reviews | String or int | Integer |
 
-Use `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run dataforseo_normalize.py --module merchant` for automatic normalization.
+Use `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run dataforseo_normalize.py --module merchant` for automatic normalization.
 
 ## Cost Reference
 
-See `/root/whisperer-v2/.claude/skills/seo-dataforseo/references/cost-tiers.md` for the full pricing table,
+See `/root/shosai/.claude/skills/seo-dataforseo/references/cost-tiers.md` for the full pricing table,
 budget presets, and cost reduction tips. All Merchant endpoints are $0.02/call
 on standard queue.

@@ -1,6 +1,6 @@
 """The import-linter contracts catch boundary violations (target architecture §5, §14 rule 12).
 
-While there are no slices, the contracts run on a temporary `whisperer` tree with two
+While there are no slices, the contracts run on a temporary `shosai` tree with two
 features. The configuration is the backend's real pyproject.toml, not a copy of the rules.
 """
 
@@ -20,13 +20,13 @@ FEATURES = "Features meet through contracts"
 PURE_KERNEL = "Pure kernel"
 CONTRACT_COUNT = 3
 BASE_TREE = {
-    "whisperer.core.kernel.homes": "",
-    "whisperer.features.alpha.service": "",
+    "shosai.core.kernel.homes": "",
+    "shosai.features.alpha.service": "",
     # Контракт фичи вправе опираться на её внутренности: цепочка через контракт законна.
-    "whisperer.features.alpha.contracts": "import whisperer.features.alpha.service\n",
-    "whisperer.features.beta.service": "import whisperer.features.alpha.contracts\n",
-    "whisperer.composition.roles": "import whisperer.features.beta.service\n",
-    "whisperer.entrypoints.cli": "import whisperer.composition.roles\n",
+    "shosai.features.alpha.contracts": "import shosai.features.alpha.service\n",
+    "shosai.features.beta.service": "import shosai.features.alpha.contracts\n",
+    "shosai.composition.roles": "import shosai.features.beta.service\n",
+    "shosai.entrypoints.cli": "import shosai.composition.roles\n",
 }
 
 
@@ -69,13 +69,13 @@ def test_the_layered_tree_keeps_every_contract(tmp_path: Path) -> None:
 @pytest.mark.parametrize(
     ("module", "source", "broken"),
     [
-        ("whisperer.features.beta.audit", "import whisperer.features.alpha.service\n", FEATURES),
-        ("whisperer.features.alpha.listener", "import whisperer.features.beta.service\n", FEATURES),
-        ("whisperer.core.kernel.clock", "import whisperer.features.alpha.contracts\n", LAYERS),
-        ("whisperer.features.beta.cli", "import whisperer.entrypoints.cli\n", LAYERS),
-        ("whisperer.shared.helpers", "", LAYERS),
-        ("whisperer.core.kernel.clock", "import sqlalchemy\n", PURE_KERNEL),
-        ("whisperer.core.kernel.clock", "from fastapi import FastAPI\n", PURE_KERNEL),
+        ("shosai.features.beta.audit", "import shosai.features.alpha.service\n", FEATURES),
+        ("shosai.features.alpha.listener", "import shosai.features.beta.service\n", FEATURES),
+        ("shosai.core.kernel.clock", "import shosai.features.alpha.contracts\n", LAYERS),
+        ("shosai.features.beta.cli", "import shosai.entrypoints.cli\n", LAYERS),
+        ("shosai.shared.helpers", "", LAYERS),
+        ("shosai.core.kernel.clock", "import sqlalchemy\n", PURE_KERNEL),
+        ("shosai.core.kernel.clock", "from fastapi import FastAPI\n", PURE_KERNEL),
     ],
 )
 def test_a_boundary_violation_breaks_its_contract(

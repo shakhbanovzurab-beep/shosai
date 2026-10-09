@@ -7,16 +7,16 @@ from datetime import UTC, datetime
 import pytest
 from redis.asyncio import Redis
 
+from shosai.core.events.delivery import EventDeliveryPayload, received_event
+from shosai.core.events.relay import OutboxRelay
+from shosai.core.kernel.homes import Home
+from shosai.core.tasks.errors import InvalidTaskPayloadError
+from shosai.core.tasks.queues import TaskQueue
 from tests.core.events.bench import Applied, event_bench, insert_raw_event, recording, runs
 from tests.core.tasks.workbench import counted, eventually, running
 from tests.harness.connections import fetch_value
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
-from whisperer.core.events.delivery import EventDeliveryPayload, received_event
-from whisperer.core.events.relay import OutboxRelay
-from whisperer.core.kernel.homes import Home
-from whisperer.core.tasks.errors import InvalidTaskPayloadError
-from whisperer.core.tasks.queues import TaskQueue
 
 INDEX = "search.index_note"
 
@@ -31,7 +31,7 @@ async def test_a_consumer_this_worker_does_not_know_is_dead_lettered_and_counted
 
     await OutboxRelay(producer.resources, producer.tasks.system.sender).relay(Home.RU)
     async with running(worker.tasks.broker()):
-        await eventually(counted(worker.tasks, "whisperer_task_unknown_total", queue="default"))
+        await eventually(counted(worker.tasks, "shosai_task_unknown_total", queue="default"))
 
     [entry] = await worker.tasks.dead_letters()
     assert (entry["reason"], entry["task"]) == ("unknown_task", f"events.{INDEX}")
@@ -56,7 +56,7 @@ async def test_an_event_its_consumer_cannot_read_is_dead_lettered_without_runnin
 
     [entry] = await bench.tasks.dead_letters()
     assert entry["reason"] == "failed"
-    assert entry["error_type"] == "whisperer.core.tasks.errors.InvalidTaskPayloadError"
+    assert entry["error_type"] == "shosai.core.tasks.errors.InvalidTaskPayloadError"
     assert "event.record_id: missing" in entry["error"]
     assert applied.events == []
     assert await fetch_value(connection, "SELECT count(*) FROM processed_events") == 0

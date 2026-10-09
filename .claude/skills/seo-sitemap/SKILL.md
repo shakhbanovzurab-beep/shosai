@@ -20,7 +20,7 @@ metadata:
 Discover candidates before reporting a sitemap missing:
 
 ```bash
-"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run sitemap_discovery.py <url> --json
+"/root/shosai/.claude/skills/seo/scripts/claude-seo" run sitemap_discovery.py <url> --json
 ```
 
 The helper reads every bounded `Sitemap:` declaration in robots.txt, validates

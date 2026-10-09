@@ -16,14 +16,10 @@ from alembic.script import ScriptDirectory
 from sqlalchemy import Connection, NullPool, make_url
 from sqlalchemy.ext.asyncio import create_async_engine
 
-from tests.core.db.operations import run_step
-from tests.harness.connections import fetch_value
-from tests.harness.migrations import migration_targets
-from tests.harness.run_slot import RunSlot
-from whisperer.composition.metadata import application_metadata
-from whisperer.core.db.engines import DRIVER
-from whisperer.core.db.migration_scope import MigrationScope, ScopedStep, runs_in
-from whisperer.core.db.migrations import (
+from shosai.composition.metadata import application_metadata
+from shosai.core.db.engines import DRIVER
+from shosai.core.db.migration_scope import MigrationScope, ScopedStep, runs_in
+from shosai.core.db.migrations import (
     MIGRATION_LOCK_KEY,
     MigrationHistory,
     RevisionState,
@@ -31,8 +27,12 @@ from whisperer.core.db.migrations import (
     current_revision,
     upgrade,
 )
-from whisperer.core.db.model_base import metadata_for_home
-from whisperer.core.kernel.homes import Home
+from shosai.core.db.model_base import metadata_for_home
+from shosai.core.kernel.homes import Home
+from tests.core.db.operations import run_step
+from tests.harness.connections import fetch_value
+from tests.harness.migrations import migration_targets
+from tests.harness.run_slot import RunSlot
 
 EU_ONLY_TABLE = "probe_eu_only"
 TABLE_EXISTS_SQL = "SELECT to_regclass(%s) IS NOT NULL"
@@ -97,7 +97,7 @@ def test_a_scoped_step_runs_only_in_its_homes() -> None:
         ran_in.append(scope.home)
 
     for home in Home:
-        step(MigrationScope(home=home, application_role="whisperer_app"))
+        step(MigrationScope(home=home, application_role="shosai_app"))
 
     assert ran_in == [Home.EU]
 

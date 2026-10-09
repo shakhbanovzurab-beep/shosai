@@ -1,18 +1,18 @@
 [project]
-name = "whisperer-contracts"
+name = "shosai-contracts"
 version = "1.0.0"
 description = "Draft API and WebSocket contract baseline and the compatibility harness for v2 slices"
 requires-python = ">=3.14"
 # Коммерческая лицензия проекта; канонический текст — LICENSE в корне репозитория,
 # копию здесь требует упаковка (PEP 639 не допускает путей вне проекта).
-license = "LicenseRef-Whisperer-Commercial"
+license = "LicenseRef-Shosai-Commercial"
 license-files = ["LICENSE"]
 # Рантайм намеренно без зависимостей: харнесс подключается к backend v2
 # path-зависимостью и не должен тянуть в него свои версии библиотек.
 dependencies = []
 
 [project.scripts]
-whisperer-contracts = "whisperer_contracts.cli:main"
+shosai-contracts = "shosai_contracts.cli:main"
 
 [dependency-groups]
 dev = [

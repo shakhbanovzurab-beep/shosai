@@ -5,9 +5,9 @@ from datetime import timedelta
 import pytest
 from fastapi import APIRouter
 
-from whisperer.core.features import FeatureModule, FeatureParts, combine_parts
-from whisperer.core.health.probes import DependencyProbe
-from whisperer.core.runtime.loops import ScheduledLoop
+from shosai.core.features import FeatureModule, FeatureParts, combine_parts
+from shosai.core.health.probes import DependencyProbe
+from shosai.core.runtime.loops import ScheduledLoop
 
 
 async def nothing() -> None:

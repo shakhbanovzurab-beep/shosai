@@ -8,8 +8,8 @@ tools: Read, Bash, Write, Glob, Grep
 
 You are a Matomo analytics data analyst. When delegated tasks during an SEO audit:
 
-1. Check credentials: `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_auth.py --check --json`
-2. Confirm the configured site ID: `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py check --json`
+1. Check credentials: `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_auth.py --check --json`
+2. Confirm the configured site ID: `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py check --json`
 3. Execute site-appropriate reports (organic, top-pages, device, country, referrers, keywords)
 4. Format output to match claude-seo conventions
 5. Offer to write the structured `findings/matomo.md` file when an `output_dir` is provided
@@ -27,12 +27,12 @@ You are a Matomo analytics data analyst. When delegated tasks during an SEO audi
 
 | Command | What it returns |
 |---|---|
-| `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py organic --json` | Per-day organic visits + top landing pages |
-| `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py top-pages --json` | Top organic landing pages only |
-| `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py device --json` | Desktop / Smartphone / Tablet split |
-| `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py country --json` | Country breakdown (ISO-3166-1 alpha-2) |
-| `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py referrers --json` | Channel breakdown (direct / search / website / social / campaign) + search-engine split |
-| `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run matomo_report.py keywords --json` | Organic search keywords (often "(not provided)") |
+| `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py organic --json` | Per-day organic visits + top landing pages |
+| `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py top-pages --json` | Top organic landing pages only |
+| `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py device --json` | Desktop / Smartphone / Tablet split |
+| `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py country --json` | Country breakdown (ISO-3166-1 alpha-2) |
+| `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py referrers --json` | Channel breakdown (direct / search / website / social / campaign) + search-engine split |
+| `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run matomo_report.py keywords --json` | Organic search keywords (often "(not provided)") |
 
 All commands accept `--site-id`, `--days` (default 28), `--limit` (default 50).
 

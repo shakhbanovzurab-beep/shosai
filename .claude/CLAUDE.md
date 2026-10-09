@@ -1,17 +1,17 @@
-# Whisperer
+# Shosai
 
-Whisperer is an AI workspace. It brings a person's knowledge, meetings, documents, tasks, calendar, communications and AI into one system, so they can keep what they know, understand information and automate routine work.
+Shosai is an AI workspace. It brings a person's knowledge, meetings, documents, tasks, calendar, communications and AI into one system, so they can keep what they know, understand information and automate routine work.
 
 **Design it as a Swiss army knife.** Every new capability is another blade of one tool, not a separate tool. Features share the user's context and strengthen each other. They integrate through contracts, events and shared context, never through one feature reaching into another's internals.
 
-`whisperer-v2` is a full, rethought rewrite of the earlier `whisperer` project. Rules below describe the target state. Carry over behaviour and lessons from the old code; do not assume its file or function names exist here.
+`shosai` is a full, rethought rewrite of the earlier `whisperer` project. The product was renamed from Whisperer to Shosai ([ADR 0037](../docs/adr/0037-rebrand-whisperer-to-shosai.md)); the draft keeps its old name and path. Rules below describe the target state. Carry over behaviour and lessons from the old code; do not assume its file or function names exist here.
 
 ## Rewrite from the draft
 
 | Directory | Role |
 |---|---|
 | `/root/whisperer` | **The draft.** The old working project. A reference only: read it to learn behaviour, UI, API and WebSocket contracts, and lessons. Do not modify it. |
-| `/root/whisperer-v2` | **The final version.** All work happens here. |
+| `/root/shosai` | **The final version.** All work happens here. |
 
 **Scope.** Only the draft's `backend/` and `frontend/` and the files tied to them: Dockerfiles, Compose files, `deploy/` configuration, CI workflows, and `specs/` and `docs/` as a source of requirements. Out of scope: the macOS, iOS, Linux and Windows clients, `pwa-app/`, `shared/` (the Swift `WhispererKit`), `hubspot-app/`, `content-factory/`, `article/`. Never decrypt or read `secrets/`.
 
@@ -70,7 +70,7 @@ Do not write comments in English because this file is in English. A test in each
 
 ## Production by default
 
-All code written for Whisperer is production code. Every change must be ready to run in production once its checks pass.
+All code written for Shosai is production code. Every change must be ready to run in production once its checks pass.
 
 Not allowed: temporary solutions, a `TODO` instead of an implementation, "fix later", demo or MVP shortcuts, technical debt without a stated reason, experimental architecture without need.
 
@@ -136,7 +136,7 @@ This table is the base. The complete stack — drivers, managed services, AI pro
 | | Redis | latest stable | Cache, locks, rate limits, ephemeral state |
 | | S3-compatible storage | — | Files, recordings, documents |
 | **Async work** | TaskIQ | latest stable | Background jobs and workers |
-| **AI** | Leo | — | Whisperer's AI agent |
+| **AI** | Leo | — | Shosai's AI agent |
 | | LangGraph | latest stable | Agent orchestration, stateful workflows |
 | | MCP | latest spec | Tool and external-agent integration |
 | **Observability** | structlog | latest stable | Structured logging |
@@ -236,7 +236,7 @@ Bundle size, re-renders, memory, network requests, lazy loading, code splitting,
 
 ## Performance
 
-Whisperer is designed for 10 000 DAU, verified by calculation up to 100 000 DAU (the design point in §3 of the [target architecture](#target-architecture)). It runs as one compute plane on Docker Compose with managed services. Performance is an architectural requirement, not a later optimization phase.
+Shosai is designed for 10 000 DAU, verified by calculation up to 100 000 DAU (the design point in §3 of the [target architecture](#target-architecture)). It runs as one compute plane on Docker Compose with managed services. Performance is an architectural requirement, not a later optimization phase.
 
 **Bottleneck audit is always on.** While building any feature, look for the places that will not hold under load and remove them.
 
@@ -391,7 +391,7 @@ What the projects must provide for CI to pass:
 
 - **Backend:** `uv.lock`; dev dependencies `ruff`, `mypy`, `import-linter`, `pytest`, `pytest-cov`, `python-doctor`, `pip-audit`; import-linter contracts. Tests read databases and services only from `TEST_*` variables (ADR 0009) — CI provides the `compose.dev.yaml` services there.
 - **Frontend:** `package-lock.json`; `.nvmrc` with the Node version; npm scripts `typecheck`, `test` (single run, not watch mode), `build` and `doctor`.
-- **Contracts:** after a change under `contracts/`, run `uv run whisperer-contracts render` if `draft/*.json` changed, then `uv run pytest` and `uv run python-doctor . --score` there.
+- **Contracts:** after a change under `contracts/`, run `uv run shosai-contracts render` if `draft/*.json` changed, then `uv run pytest` and `uv run python-doctor . --score` there.
 
 For the file length limit, generated code is exempt: files under a `generated/` or `__generated__/` directory, Alembic migrations (`alembic/versions/`, `migrations/versions/`), and files with an `@generated` marker in their first five lines.
 
@@ -455,7 +455,7 @@ These points are open. Do not assume an answer; check the old `whisperer` codeba
 - **AI interface libraries.** `ai-elements`, `streamdown` and the Vercel AI SDK were considered. The target architecture adopts Tailwind CSS but none of these three.
 
 <!-- REPOWISE:START — Do not edit below this line. Auto-generated by Repowise. -->
-## Codebase Intelligence for whisperer-v2 (Repowise)
+## Codebase Intelligence for shosai (Repowise)
 
 Indexed by [Repowise](https://repowise.dev). Last indexed: 2026-09-30 (commit 01ddcba). Confidence: 100%.Scope: standard index · template content · full Git. Missing or unavailable evidence is not a negative finding. Run `repowise update --full` to continue the model-backed upgrade (cost is previewed before generation).Machine-readable scope: `{"analysis": {"skipped": [], "unavailable": []}, "content_provenance": "template", "dropped_files": {"generated": {"count": 0, "paths": [], "truncated": false}}, "file_pages": {"configured_cap": null, "effective_cap": null, "eligible": 0, "generated": 0, "omitted": 0}, "git_commit_cap": 500, "git_history_coverage": {"complete_through_depth": 5, "deep_commits": 0, "deep_files": 0, "eligible_files": 0, "fallback_files": 0, "files_with_history": 0, "global_commits": 5, "per_file_limit": 500, "recent_files": 0, "retained_commits": 0, "unavailable_files": 0, "workers": 1}, "git_tier": "full", "provider": {"embedder": "mock", "model": null, "model_cost_possible": false, "name": null, "reused": false}, "run_mode": "standard", "search": {"full_text": "available", "next_command": "repowise reindex", "semantic": "unavailable"}, "upgrade": {"completed_stages": [], "next_stage": "generation", "retryable": true, "status": "pending"}, "version": 1}`
 
@@ -484,7 +484,7 @@ Indexed by [Repowise](https://repowise.dev). Last indexed: 2026-09-30 (commit 01
 
 ### Architecture
 **Files:** 4 | **Lines:** 3465
-whisperer-v2 is a markdown codebase of 4 files. ---
+shosai is a markdown codebase of 4 files. ---
 *Built from the code's structure. It states what is there, not why it is that
 way. The explanatory prose is a separate, model-written layer.*
 

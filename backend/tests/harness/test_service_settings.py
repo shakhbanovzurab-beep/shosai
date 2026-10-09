@@ -28,7 +28,7 @@ def test_the_slot_number_is_the_database_index() -> None:
         f"redis://:{SAMPLE_PASSWORD}@127.0.0.1:16379/3"
     )
     assert services.cache.for_slot(15).get_secret_value().endswith("@127.0.0.1:16380/15")
-    assert services.storage.s3_bucket == "whisperer"
+    assert services.storage.s3_bucket == "shosai"
 
 
 def test_every_service_variable_is_required_and_runtime_ones_are_never_read() -> None:
@@ -37,7 +37,7 @@ def test_every_service_variable_is_required_and_runtime_ones_are_never_read() ->
         del environ[variable]
     environ |= {
         "VALKEY_URL": f"redis://:{SAMPLE_PASSWORD}@127.0.0.1:16379/0",
-        "S3_BUCKET": "whisperer",
+        "S3_BUCKET": "shosai",
     }
 
     with pytest.raises(HarnessConfigurationError) as raised:

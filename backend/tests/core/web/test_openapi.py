@@ -4,8 +4,8 @@ from typing import Any
 
 import pytest
 
+from shosai.core.config.sections import WebSettings
 from tests.core.web.probe_app import build_probe_app, client_of
-from whisperer.core.config.sections import WebSettings
 
 ERROR_RESPONSE_REF = "#/components/schemas/ErrorResponse"
 DOCS_PATHS = ["/openapi.json", "/docs", "/redoc"]

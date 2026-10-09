@@ -9,7 +9,7 @@
 # Пароль базы и секрет JWT ниже — локальные значения по умолчанию для
 # одноразового стенда; переопределяются переменными окружения.
 
-name: whisperer-parity
+name: shosai-parity
 
 x-hardening: &hardening
   security_opt:
@@ -98,7 +98,7 @@ services:
       dockerfile: api.Dockerfile
       additional_contexts:
         draft: .cache/draft/current/backend
-    image: whisperer-parity/draft-api:local
+    image: shosai-parity/draft-api:local
     environment:
       ENVIRONMENT: dev
       PROCESS_ROLE: api

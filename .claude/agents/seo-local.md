@@ -53,12 +53,12 @@ You are a Local SEO specialist. When given a URL:
 
 ## Industry-Specific Checks
 
-Load `/root/whisperer-v2/.claude/skills/seo/references/local-schema-types.md` for:
+Load `/root/shosai/.claude/skills/seo/references/local-schema-types.md` for:
 - Correct schema subtype per vertical (e.g., `Restaurant` not `LocalBusiness`, `LegalService` not deprecated `Attorney`)
 - Industry-specific citation source recommendations
 - Schema pattern templates (Menu for restaurants, Physician for healthcare, etc.)
 
-Load `/root/whisperer-v2/.claude/skills/seo/references/local-schema-multilocation.md` for multi-location
+Load `/root/shosai/.claude/skills/seo/references/local-schema-multilocation.md` for multi-location
 `@id`/`branchOf` patterns and the deprecated or invalid local types to flag.
 
 ## DataForSEO Integration (Optional)
@@ -82,7 +82,7 @@ Provide a structured report with:
 
 ## Fetching pages (v2.0.0)
 
-Use `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run render_page.py <URL> --mode auto --json` for page HTML. `auto` does a raw fetch and only spins up Playwright when an SPA shell is detected; use `--mode always` to force a render or `--mode never` to skip Playwright entirely. The JSON exposes full `raw_content`, `content`, `extracted_text`, `is_spa`, and `publication_date`; use `--max-text` only when explicit bounded output is needed. SSRF and DNS-rebinding protection live in the bundled `url_safety.py` module, never call `requests.get` directly on user-supplied URLs.
+Use `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run render_page.py <URL> --mode auto --json` for page HTML. `auto` does a raw fetch and only spins up Playwright when an SPA shell is detected; use `--mode always` to force a render or `--mode never` to skip Playwright entirely. The JSON exposes full `raw_content`, `content`, `extracted_text`, `is_spa`, and `publication_date`; use `--max-text` only when explicit bounded output is needed. SSRF and DNS-rebinding protection live in the bundled `url_safety.py` module, never call `requests.get` directly on user-supplied URLs.
 
 Map embeds, GBP widgets, and review carousels are commonly injected client-side. When auditing local pages on JS-heavy sites prefer `--mode always` so the audit reflects what users (and Google's crawler) actually see post-render.
 

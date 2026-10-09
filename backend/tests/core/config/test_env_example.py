@@ -2,9 +2,9 @@
 
 from pathlib import Path
 
-from whisperer.core.config.loading import load_settings
-from whisperer.core.config.sections import HomeSettings, SettingsSection, home_prefix
-from whisperer.core.kernel.homes import Home
+from shosai.core.config.loading import load_settings
+from shosai.core.config.sections import HomeSettings, SettingsSection, home_prefix
+from shosai.core.kernel.homes import Home
 
 ENV_EXAMPLE = Path(__file__).resolve().parents[4] / ".env.example"
 SECTION_TWO = "# 2. "

@@ -2,7 +2,7 @@
 
 ## Project overview
 
-The Whisperer cabinet: a Vite single-page app with React 19, TypeScript, React Router, TanStack Query,
+The Shosai cabinet: a Vite single-page app with React 19, TypeScript, React Router, TanStack Query,
 `use-intl`, Tailwind CSS v4 and shadcn/ui. See `README.md` and `docs/architecture.md`.
 
 This repository uses the shadcn `radix-nova` style. The shadcn CLI reports `base: "radix"`, which refers to Radix UI. Always inspect the local components in `src/components/ui/` because individual wrappers may use different primitives.

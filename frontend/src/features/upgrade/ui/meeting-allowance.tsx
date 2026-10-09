@@ -12,7 +12,7 @@ import { usePlanFormat } from "./use-plan-format";
 
 /**
  * The plan's monthly meeting minutes, for plans that have a limit (Basic). Once they're used,
- * Whisperer stops capturing meetings until the reset; the meetings and their notes stay available.
+ * Shosai stops capturing meetings until the reset; the meetings and their notes stay available.
  */
 export function MeetingAllowance() {
   const t = useTranslations("upgrade");

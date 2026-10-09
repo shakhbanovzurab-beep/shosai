@@ -6,9 +6,9 @@ these tests run the HTTP metrics and the native tracing together on every run.
 
 from opentelemetry.trace import SpanKind, StatusCode
 
+from shosai.core.observability.span_privacy import PRIVATE_SPAN_ATTRIBUTES
 from tests.core.observability.capture import captured_logs
 from tests.core.web.probe_app import ITEM_ROUTE, build_probe_app, client_of
-from whisperer.core.observability.span_privacy import PRIVATE_SPAN_ATTRIBUTES
 
 PARENT_TRACE_ID = "0af7651916cd43dd8448eb211c80319c"
 TRACEPARENT = f"00-{PARENT_TRACE_ID}-b7ad6b7169203331-01"

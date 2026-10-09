@@ -54,13 +54,13 @@ You are a Maps Intelligence specialist. When delegated tasks during an SEO audit
 ## Reference Files
 
 Load on-demand:
-- `/root/whisperer-v2/.claude/skills/seo/references/maps-api-endpoints.md`: DataForSEO endpoint details and costs
-- `/root/whisperer-v2/.claude/skills/seo/references/maps-free-apis.md`: Overpass, Geoapify, Nominatim query templates
-- `/root/whisperer-v2/.claude/skills/seo/references/maps-geo-grid.md`: Grid algorithm, SoLV calculation, heatmap rendering
-- `/root/whisperer-v2/.claude/skills/seo/references/maps-gbp-checklist.md`: 25-field GBP audit checklist with industry weights
-- `/root/whisperer-v2/.claude/skills/seo/references/local-seo-signals.md`: Ranking factors, review benchmarks (shared with seo-local)
-- `/root/whisperer-v2/.claude/skills/seo/references/local-schema-types.md`: LocalBusiness subtypes by industry (shared with seo-local)
-- `/root/whisperer-v2/.claude/skills/seo/references/local-schema-multilocation.md`: Multi-location schema pattern (shared with seo-local)
+- `/root/shosai/.claude/skills/seo/references/maps-api-endpoints.md`: DataForSEO endpoint details and costs
+- `/root/shosai/.claude/skills/seo/references/maps-free-apis.md`: Overpass, Geoapify, Nominatim query templates
+- `/root/shosai/.claude/skills/seo/references/maps-geo-grid.md`: Grid algorithm, SoLV calculation, heatmap rendering
+- `/root/shosai/.claude/skills/seo/references/maps-gbp-checklist.md`: 25-field GBP audit checklist with industry weights
+- `/root/shosai/.claude/skills/seo/references/local-seo-signals.md`: Ranking factors, review benchmarks (shared with seo-local)
+- `/root/shosai/.claude/skills/seo/references/local-schema-types.md`: LocalBusiness subtypes by industry (shared with seo-local)
+- `/root/shosai/.claude/skills/seo/references/local-schema-multilocation.md`: Multi-location schema pattern (shared with seo-local)
 
 ## Cross-Skill Delegation
 

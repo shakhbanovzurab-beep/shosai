@@ -10,9 +10,9 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 from opentelemetry.trace import SpanKind, StatusCode
 from redis.asyncio import Redis
 
+from shosai.core.observability.span_privacy import PrivateAttributesSampler
+from shosai.core.tasks.declaration import TaskHandler
 from tests.core.tasks.workbench import Probe, Runs, declare, eventually, running, settled, workbench
-from whisperer.core.observability.span_privacy import PrivateAttributesSampler
-from whisperer.core.tasks.declaration import TaskHandler
 
 SECRET_TEXT = "user@example.com was not found"
 
@@ -61,7 +61,7 @@ async def test_the_run_continues_the_trace_of_the_sender(
         "messaging.operation.type": "process",
         "messaging.destination.name": "default",
         "messaging.message.id": task_id,
-        "whisperer.task.name": task.name,
+        "shosai.task.name": task.name,
     }
 
 

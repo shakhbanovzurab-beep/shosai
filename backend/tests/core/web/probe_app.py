@@ -15,10 +15,10 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 from prometheus_client import CollectorRegistry
 from pydantic import BaseModel, Field
 
-from whisperer.core.config.sections import WebSettings
-from whisperer.core.kernel.errors import AppError
-from whisperer.core.observability.span_privacy import PrivateAttributesSampler
-from whisperer.core.web.app import HttpTelemetry, build_http_app
+from shosai.core.config.sections import WebSettings
+from shosai.core.kernel.errors import AppError
+from shosai.core.observability.span_privacy import PrivateAttributesSampler
+from shosai.core.web.app import HttpTelemetry, build_http_app
 
 ITEM_ROUTE = "/v1/probe/items/{item_id}"
 SECRET = "s3cr3t-value-from-the-request"

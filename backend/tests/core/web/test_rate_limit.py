@@ -11,13 +11,13 @@ from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.config.sections import WebSettings
+from shosai.core.kv.connection import connect_redis
+from shosai.core.kv.metrics import KeyValueMetrics
+from shosai.core.kv.rate_limits import RateLimit, RateLimiter
+from shosai.core.web.app import HttpTelemetry, build_http_app
+from shosai.core.web.rate_limit import rate_limited
 from tests.core.kv.outages import closed_port, redis_url
-from whisperer.core.config.sections import WebSettings
-from whisperer.core.kv.connection import connect_redis
-from whisperer.core.kv.metrics import KeyValueMetrics
-from whisperer.core.kv.rate_limits import RateLimit, RateLimiter
-from whisperer.core.web.app import HttpTelemetry, build_http_app
-from whisperer.core.web.rate_limit import rate_limited
 
 SIGN_IN = RateLimit("sign_in", rate=5, period=timedelta(minutes=1), burst=2)
 
@@ -96,7 +96,7 @@ async def test_the_subject_can_be_the_user_instead_of_the_address(valkey: Redis)
 
 
 async def test_without_valkey_requests_pass() -> None:
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
     async with limited_app(client) as http:
         responses = [await http.post("/v1/probe/sign-in") for _ in range(4)]
     await client.aclose()

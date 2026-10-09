@@ -6,12 +6,12 @@ import pytest
 from fastapi import APIRouter
 from starlette.types import Message
 
+from shosai.core.config.sections import WebSettings
+from shosai.core.web.http_metrics import OTHER_METHOD, UNMATCHED_HANDLER
 from tests.core.observability.capture import captured_logs
 from tests.core.web.asgi import asgi_scope, call
 from tests.core.web.metric_samples import requests_total, samples
 from tests.core.web.probe_app import ITEM_ROUTE, build_probe_app, client_of
-from whisperer.core.config.sections import WebSettings
-from whisperer.core.web.http_metrics import OTHER_METHOD, UNMATCHED_HANDLER
 
 # Контракт prometheus-fastapi-instrumentator 8.1.0, metrics.default() (ADR 0012): на нём
 # стоят дашборды и алерты, поэтому он зафиксирован здесь дословно.

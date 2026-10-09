@@ -9,21 +9,21 @@ import pytest
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
-from tests.core.db.tcp_proxy import CountingProxy
-from tests.core.kv.outages import closed_port, redis_url, silent_server, through, upstream_of
-from whisperer.core.kv.connection import connect_redis
-from whisperer.core.kv.locks import (
+from shosai.core.kv.connection import connect_redis
+from shosai.core.kv.locks import (
     DistributedLocks,
     LockOutagePolicy,
     LockUnavailableError,
     lock_milliseconds,
 )
-from whisperer.core.kv.metrics import KeyValueMetrics
+from shosai.core.kv.metrics import KeyValueMetrics
+from tests.core.db.tcp_proxy import CountingProxy
+from tests.core.kv.outages import closed_port, redis_url, silent_server, through, upstream_of
 
 CLOSED = LockOutagePolicy.FAIL_CLOSED
 OPEN = LockOutagePolicy.FAIL_OPEN
 LONG = timedelta(seconds=30)
-LOCK_KEY = "whisperer:lock:relay.ru"
+LOCK_KEY = "shosai:lock:relay.ru"
 
 
 def build_locks(client: Redis) -> tuple[DistributedLocks, CollectorRegistry]:
@@ -32,7 +32,7 @@ def build_locks(client: Redis) -> tuple[DistributedLocks, CollectorRegistry]:
 
 
 def outages(registry: CollectorRegistry, policy: LockOutagePolicy) -> float:
-    value = registry.get_sample_value("whisperer_lock_outages_total", {"policy": policy.value})
+    value = registry.get_sample_value("shosai_lock_outages_total", {"policy": policy.value})
     return value or 0.0
 
 
@@ -94,7 +94,7 @@ async def test_extension_prolongs_the_lock(valkey: Redis) -> None:
 
 async def test_fail_closed_stops_the_work_within_the_deadline() -> None:
     async with silent_server() as port:
-        client = connect_redis(redis_url(port), "whisperer-tests")
+        client = connect_redis(redis_url(port), "shosai-tests")
         locks, registry = build_locks(client)
         started = time.monotonic()
 
@@ -108,7 +108,7 @@ async def test_fail_closed_stops_the_work_within_the_deadline() -> None:
 
 
 async def test_fail_open_runs_the_work_unguarded() -> None:
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
     locks, registry = build_locks(client)
 
     async with locks.hold("relay.ru", ttl=LONG, outage=OPEN) as lease:
@@ -122,7 +122,7 @@ async def test_fail_open_runs_the_work_unguarded() -> None:
 
 async def test_a_lost_valkey_keeps_fail_open_work_going(valkey: Redis) -> None:
     proxy = CountingProxy(upstream_of(valkey))
-    client = connect_redis(through(valkey, await proxy.start()), "whisperer-tests")
+    client = connect_redis(through(valkey, await proxy.start()), "shosai-tests")
     locks, registry = build_locks(client)
 
     async with locks.hold("relay.ru", ttl=LONG, outage=OPEN) as lease:
@@ -137,7 +137,7 @@ async def test_a_lost_valkey_keeps_fail_open_work_going(valkey: Redis) -> None:
 
 async def test_a_lost_valkey_ends_an_extension_under_fail_closed(valkey: Redis) -> None:
     proxy = CountingProxy(upstream_of(valkey))
-    client = connect_redis(through(valkey, await proxy.start()), "whisperer-tests")
+    client = connect_redis(through(valkey, await proxy.start()), "shosai-tests")
     locks, registry = build_locks(client)
 
     async with locks.hold("relay.ru", ttl=LONG, outage=CLOSED) as lease:
@@ -159,7 +159,7 @@ def test_a_ttl_under_one_millisecond_is_refused(ttl: timedelta) -> None:
 
 
 async def test_a_lock_name_is_a_code_not_free_text() -> None:
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
     locks, _ = build_locks(client)
 
     with pytest.raises(ValueError, match="часть ключа"):

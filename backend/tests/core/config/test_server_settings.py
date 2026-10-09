@@ -4,8 +4,8 @@ from ipaddress import IPv4Address, IPv6Address
 
 import pytest
 
+from shosai.core.config.loading import ConfigurationError, load_settings
 from tests.core.config.sample_environ import local_environ
-from whisperer.core.config.loading import ConfigurationError, load_settings
 
 
 def test_by_default_a_process_listens_on_loopback() -> None:

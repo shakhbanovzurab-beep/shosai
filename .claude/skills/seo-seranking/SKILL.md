@@ -42,7 +42,7 @@ Report each as a percentage with a confidence note based on sample size.
 ## Cost guardrails
 
 SE Ranking API uses unit accounting. Single AI visibility query is
-~5 units (1 per platform). Use `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run dataforseo_costs.py` to log
+~5 units (1 per platform). Use `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run dataforseo_costs.py` to log
 spend across vendors.
 
 ## Cross-skill delegation

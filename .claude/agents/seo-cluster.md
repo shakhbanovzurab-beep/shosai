@@ -47,7 +47,7 @@ Provide a structured JSON cluster plan with all data. Include:
 ## Output Format
 
 Your primary output is a `cluster-plan.json` file matching the schema defined in
-`/root/whisperer-v2/.claude/skills/seo-cluster/references/hub-spoke-architecture.md`. Also produce a
+`/root/shosai/.claude/skills/seo-cluster/references/hub-spoke-architecture.md`. Also produce a
 human-readable `cluster-plan.md` summary.
 
 If `output_dir` is provided by the audit orchestrator, write a partial findings
@@ -59,9 +59,9 @@ before finishing, so a turn-budget stop never loses completed work:
 ## Reference Files
 
 Load on demand when you need detailed methodology:
-- `/root/whisperer-v2/.claude/skills/seo-cluster/references/serp-overlap-methodology.md`, Scoring algorithm and thresholds
-- `/root/whisperer-v2/.claude/skills/seo-cluster/references/hub-spoke-architecture.md`, Cluster structure and templates
-- `/root/whisperer-v2/.claude/skills/seo-cluster/references/execution-workflow.md`, Priority ordering and context injection
+- `/root/shosai/.claude/skills/seo-cluster/references/serp-overlap-methodology.md`, Scoring algorithm and thresholds
+- `/root/shosai/.claude/skills/seo-cluster/references/hub-spoke-architecture.md`, Cluster structure and templates
+- `/root/shosai/.claude/skills/seo-cluster/references/execution-workflow.md`, Priority ordering and context injection
 
 ## Cross-Skill Awareness
 

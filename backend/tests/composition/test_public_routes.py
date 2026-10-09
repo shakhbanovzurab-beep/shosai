@@ -20,19 +20,19 @@ import pytest_asyncio
 from fastapi import FastAPI
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
-from whisperer_contracts import Candidate, Scope, check, load_baseline, parse_routes, render_text
-from whisperer_contracts.jsonvalue import Json
+from shosai_contracts import Candidate, Scope, check, load_baseline, parse_routes, render_text
+from shosai_contracts.jsonvalue import Json
 
+from shosai.composition.features import FEATURES, contract_slices
+from shosai.composition.platform import open_platform
+from shosai.composition.roles import public_app
+from shosai.composition.telemetry import ProcessTelemetry
+from shosai.core.config.loading import load_settings
+from shosai.core.config.roles import ProcessRole
 from tests.composition.public_routes import route_snapshot
 from tests.harness.process_environ import slot_environ
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
-from whisperer.composition.features import FEATURES, contract_slices
-from whisperer.composition.platform import open_platform
-from whisperer.composition.roles import public_app
-from whisperer.composition.telemetry import ProcessTelemetry
-from whisperer.core.config.loading import load_settings
-from whisperer.core.config.roles import ProcessRole
 
 SNAPSHOT = Path(__file__).with_name("public_routes.json")
 OPENAPI_DOCUMENT = Path(__file__).parents[2] / "openapi.json"

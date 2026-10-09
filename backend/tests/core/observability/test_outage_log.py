@@ -4,7 +4,7 @@ from datetime import timedelta
 
 from structlog.testing import capture_logs
 
-from whisperer.core.observability.outage_log import OutageLog
+from shosai.core.observability.outage_log import OutageLog
 
 
 class ManualClock:

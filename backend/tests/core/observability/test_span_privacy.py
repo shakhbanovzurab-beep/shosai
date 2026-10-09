@@ -5,15 +5,15 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 from opentelemetry.sdk.trace.sampling import Decision
 from prometheus_client import CollectorRegistry
 
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.config.sections import ObservabilitySettings
-from whisperer.core.config.values import Environment
-from whisperer.core.observability.metrics import ObservabilityMetrics
-from whisperer.core.observability.span_privacy import (
+from shosai.core.config.roles import ProcessRole
+from shosai.core.config.sections import ObservabilitySettings
+from shosai.core.config.values import Environment
+from shosai.core.observability.metrics import ObservabilityMetrics
+from shosai.core.observability.span_privacy import (
     PRIVATE_SPAN_ATTRIBUTES,
     PrivateAttributesSampler,
 )
-from whisperer.core.observability.tracing import build_tracer_provider
+from shosai.core.observability.tracing import build_tracer_provider
 
 START_ATTRIBUTES = {
     "http.request.method": "GET",

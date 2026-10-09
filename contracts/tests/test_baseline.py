@@ -5,11 +5,11 @@ from pathlib import Path
 
 import pytest
 
-from whisperer_contracts.check import check
-from whisperer_contracts.inputs import DEFAULT_BASELINE, Candidate, load_baseline, parse_routes
-from whisperer_contracts.jsonvalue import Json, JsonObject, as_list, as_object, load_json
-from whisperer_contracts.model import CompatClass
-from whisperer_contracts.render_docs import render_baseline_documents
+from shosai_contracts.check import check
+from shosai_contracts.inputs import DEFAULT_BASELINE, Candidate, load_baseline, parse_routes
+from shosai_contracts.jsonvalue import Json, JsonObject, as_list, as_object, load_json
+from shosai_contracts.model import CompatClass
+from shosai_contracts.render_docs import render_baseline_documents
 
 # Рабочие клиенты по решению владельца (2026-10-01): Linux 0.1.0 заморожен, iOS не выпущен.
 SHIPPED_APPS = frozenset({"macos", "windows"})
@@ -126,7 +126,7 @@ def test_baseline_is_compatible_with_itself(routes: list[JsonObject]) -> None:
 def test_markdown_documents_are_rendered_from_the_json() -> None:
     for name, content in render_baseline_documents(DEFAULT_BASELINE).items():
         committed = (DEFAULT_BASELINE / name).read_text(encoding="utf-8")
-        assert committed == content, f"{name} is stale: run `uv run whisperer-contracts render`"
+        assert committed == content, f"{name} is stale: run `uv run shosai-contracts render`"
 
 
 def test_openapi_is_stored_in_canonical_form() -> None:

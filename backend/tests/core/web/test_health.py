@@ -3,13 +3,13 @@
 from fastapi import FastAPI
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
-from whisperer_contracts import Candidate, Scope, check, load_baseline, parse_routes, render_text
-from whisperer_contracts.jsonvalue import Json
+from shosai_contracts import Candidate, Scope, check, load_baseline, parse_routes, render_text
+from shosai_contracts.jsonvalue import Json
 
+from shosai.core.config.sections import WebSettings
+from shosai.core.web.app import HttpTelemetry, build_http_app
 from tests.composition.public_routes import route_snapshot
 from tests.core.web.probe_app import client_of
-from whisperer.core.config.sections import WebSettings
-from whisperer.core.web.app import HttpTelemetry, build_http_app
 
 F1_SCOPE = Scope(slices=frozenset({"F1"}))
 

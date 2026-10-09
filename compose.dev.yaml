@@ -1,4 +1,4 @@
-# Локальное окружение Whisperer v2: замена управляемых сервисов, которых у
+# Локальное окружение Shosai: замена управляемых сервисов, которых у
 # хостинга пока нет (CLAUDE.md, «Hosting constraints now»). Топология повторяет
 # target architecture §4: два дома данных — два отдельных сервера PostgreSQL,
 # каждый за своим PgBouncer, один бакет S3 на оба дома (ADR 0014), плюс общие
@@ -8,7 +8,7 @@
 # Все порты слушают только 127.0.0.1. Пароли ниже — локальные значения по
 # умолчанию, только для этой машины; переопределяются в .env (см. .env.example).
 
-name: whisperer-v2-local
+name: shosai-local
 
 x-service-defaults: &service-defaults
   restart: unless-stopped
@@ -26,9 +26,9 @@ x-postgres-environment: &postgres-environment
   POSTGRES_USER: postgres
   POSTGRES_DB: postgres
   POSTGRES_PASSWORD: ${LOCAL_POSTGRES_PASSWORD:-local-postgres}
-  WHISPERER_MIGRATOR_PASSWORD: ${LOCAL_MIGRATOR_PASSWORD:-local-migrator}
-  WHISPERER_APP_PASSWORD: ${LOCAL_APP_PASSWORD:-local-app}
-  WHISPERER_TEST_DATABASE_COUNT: ${LOCAL_TEST_DATABASE_COUNT:-8}
+  SHOSAI_MIGRATOR_PASSWORD: ${LOCAL_MIGRATOR_PASSWORD:-local-migrator}
+  SHOSAI_APP_PASSWORD: ${LOCAL_APP_PASSWORD:-local-app}
+  SHOSAI_TEST_DATABASE_COUNT: ${LOCAL_TEST_DATABASE_COUNT:-8}
 
 x-postgres: &postgres
   <<: *service-defaults
@@ -59,12 +59,12 @@ x-pgbouncer: &pgbouncer
   entrypoint: ["/bin/sh", "/etc/pgbouncer/start.sh"]
   command: []
   environment:
-    PGBOUNCER_APP_USER: whisperer_app
+    PGBOUNCER_APP_USER: shosai_app
     PGBOUNCER_APP_PASSWORD: ${LOCAL_APP_PASSWORD:-local-app}
   tmpfs:
     - /run/pgbouncer:uid=70,gid=70,mode=0700
   healthcheck:
-    test: ["CMD", "pg_isready", "--host=127.0.0.1", "--port=6432", "--username=whisperer_app", "--dbname=whisperer"]
+    test: ["CMD", "pg_isready", "--host=127.0.0.1", "--port=6432", "--username=shosai_app", "--dbname=shosai"]
     interval: 30s
     timeout: 3s
     retries: 3
@@ -81,7 +81,7 @@ services:
     <<: *postgres
     environment:
       <<: *postgres-environment
-      WHISPERER_HOME: ru
+      SHOSAI_HOME: ru
     volumes:
       - postgres-ru-data:/var/lib/postgresql
       - ./deploy/local/postgres/init-home.sh:/docker-entrypoint-initdb.d/10-init-home.sh:ro
@@ -93,7 +93,7 @@ services:
     <<: *postgres
     environment:
       <<: *postgres-environment
-      WHISPERER_HOME: eu
+      SHOSAI_HOME: eu
     volumes:
       - postgres-eu-data:/var/lib/postgresql
       - ./deploy/local/postgres/init-home.sh:/docker-entrypoint-initdb.d/10-init-home.sh:ro
@@ -245,7 +245,7 @@ services:
     command:
       - mini
       - -dir=/data
-      - -bucket=whisperer
+      - -bucket=shosai
       - -s3.autoCreateBucket=false
       - -webdav=false
       - -admin.ui=false
@@ -267,7 +267,7 @@ services:
         - CMD-SHELL
         - >-
           curl -fsS -o /dev/null http://127.0.0.1:8333/healthz &&
-          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/whisperer/
+          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/shosai/
       interval: 30s
       timeout: 3s
       retries: 3

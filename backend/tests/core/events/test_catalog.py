@@ -7,6 +7,12 @@ from uuid import UUID
 import pytest
 from redis.asyncio import Redis
 
+from shosai.core.events.catalog import EventCatalog, EventTypes
+from shosai.core.events.domain_event import DomainEvent
+from shosai.core.events.subscriptions import EventSubscription, ReceivedEvent
+from shosai.core.events.system import PURGE_OUTBOX, RELAY_OUTBOX
+from shosai.core.tasks.declaration import RETRY_TRANSIENT
+from shosai.core.tasks.queues import TaskQueue
 from tests.core.events.bench import (
     Applied,
     NoteArchived,
@@ -16,12 +22,6 @@ from tests.core.events.bench import (
     recording,
 )
 from tests.harness.database_access import DatabaseAccess
-from whisperer.core.events.catalog import EventCatalog, EventTypes
-from whisperer.core.events.domain_event import DomainEvent
-from whisperer.core.events.subscriptions import EventSubscription, ReceivedEvent
-from whisperer.core.events.system import PURGE_OUTBOX, RELAY_OUTBOX
-from whisperer.core.tasks.declaration import RETRY_TRANSIENT
-from whisperer.core.tasks.queues import TaskQueue
 
 APPLIED = Applied()
 

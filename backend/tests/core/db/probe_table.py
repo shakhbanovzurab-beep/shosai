@@ -9,14 +9,14 @@ import pytest_asyncio
 import sqlalchemy as sa
 from alembic import op
 
-from tests.core.db.operations import run_step_everywhere
-from tests.harness.run_slot import RunSlot
-from whisperer.core.db.migration_scope import (
+from shosai.core.db.migration_scope import (
     MigrationScope,
     disable_company_isolation,
     enable_company_isolation,
     grant_to_application,
 )
+from tests.core.db.operations import run_step_everywhere
+from tests.harness.run_slot import RunSlot
 
 PROBE_TABLE = "probe_records"
 probe_records = sa.table(

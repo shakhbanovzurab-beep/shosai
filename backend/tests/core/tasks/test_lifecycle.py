@@ -6,6 +6,11 @@ from redis.asyncio import Redis
 from structlog.contextvars import clear_contextvars, get_contextvars
 from taskiq import TaskiqMessage, TaskiqResult
 
+from shosai.core.tasks.declaration import TaskKind
+from shosai.core.tasks.deliveries import Delivery, LeavePending
+from shosai.core.tasks.lifecycle import TaskLifecycle
+from shosai.core.tasks.queues import tick_key
+from shosai.core.tasks.ticks import TickMarkers
 from tests.core.observability.capture import captured_logs
 from tests.core.tasks.workbench import (
     Probe,
@@ -17,11 +22,6 @@ from tests.core.tasks.workbench import (
     settled,
     workbench,
 )
-from whisperer.core.tasks.declaration import TaskKind
-from whisperer.core.tasks.deliveries import Delivery, LeavePending
-from whisperer.core.tasks.lifecycle import TaskLifecycle
-from whisperer.core.tasks.queues import tick_key
-from whisperer.core.tasks.ticks import TickMarkers
 
 TASK = declare("probe.lifecycle")
 
@@ -66,7 +66,7 @@ async def test_an_interrupted_run_stays_pending_and_is_reported(valkey: Redis) -
 
     assert delivery.settlement == LeavePending()
     runs = bench.sample(
-        "whisperer_task_runs_total", queue="default", task=TASK.name, outcome="interrupted"
+        "shosai_task_runs_total", queue="default", task=TASK.name, outcome="interrupted"
     )
     assert runs == 1
     [line] = logs.lines()

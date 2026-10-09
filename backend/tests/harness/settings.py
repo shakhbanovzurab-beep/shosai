@@ -11,11 +11,11 @@ from urllib.parse import quote, unquote, urlsplit
 
 from pydantic import SecretStr
 
+from shosai.core.kernel.homes import Home
 from tests.harness.service_settings import ServiceTargets
-from whisperer.core.kernel.homes import Home
 
 DATABASE_URL_SCHEME = "postgresql"
-TEST_DATABASE_NAME = "whisperer_test"
+TEST_DATABASE_NAME = "shosai_test"
 DATABASE_SLOTS_VARIABLE = "TEST_DATABASE_SLOTS"
 # Valkey держит 16 логических баз, база 0 — у разработки: слотов не больше 15.
 MAX_DATABASE_SLOTS = 15
@@ -52,7 +52,7 @@ class DatabaseTarget:
     database: str
 
     def for_slot(self, slot: int) -> Self:
-        """The same database with the slot number: `whisperer_test` → `whisperer_test_<slot>`."""
+        """The same database with the slot number: `shosai_test` → `shosai_test_<slot>`."""
         return type(self)(
             variable=self.variable,
             host=self.host,

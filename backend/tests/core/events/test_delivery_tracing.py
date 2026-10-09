@@ -10,17 +10,17 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 from opentelemetry.trace import SpanKind
 from redis.asyncio import Redis
 
+from shosai.core.events.system import RELAY_OUTBOX
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.observability.log_context import log_context
+from shosai.core.observability.span_privacy import PrivateAttributesSampler
+from shosai.core.tasks.payloads import HomeTaskPayload
+from shosai.core.tasks.queues import TaskQueue
 from tests.core.events.bench import Applied, NoteState, NoteWritten, event_bench, recording, runs
 from tests.core.observability.capture import captured_logs
 from tests.core.tasks.workbench import eventually, running
 from tests.harness.database_access import DatabaseAccess
-from whisperer.core.events.system import RELAY_OUTBOX
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
-from whisperer.core.observability.log_context import log_context
-from whisperer.core.observability.span_privacy import PrivateAttributesSampler
-from whisperer.core.tasks.payloads import HomeTaskPayload
-from whisperer.core.tasks.queues import TaskQueue
 
 INDEX = "search.index_note"
 
@@ -73,7 +73,7 @@ async def test_the_delivery_joins_the_producers_trace_and_request(
     assert publish.attributes == {
         "messaging.operation.type": "send",
         "messaging.message.id": str(event_id),
-        "whisperer.event.type": "probe.note.written",
+        "shosai.event.type": "probe.note.written",
     }
     assert delivery.parent is not None
     assert delivery.parent.span_id == publish.context.span_id

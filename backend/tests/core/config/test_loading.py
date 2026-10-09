@@ -8,15 +8,15 @@ from hypothesis import given
 from hypothesis import strategies as st
 from pydantic_settings import BaseSettings
 
+from shosai.core.config.loading import ConfigurationError, _SectionReader, load_settings
+from shosai.core.config.values import Environment, LogLevel
+from shosai.core.kernel.homes import Home
 from tests.core.config.sample_environ import (
     REQUIRED_VARIABLES,
     SAMPLE_FERNET_KEY,
     SAMPLE_SECRET,
     local_environ,
 )
-from whisperer.core.config.loading import ConfigurationError, _SectionReader, load_settings
-from whisperer.core.config.values import Environment, LogLevel
-from whisperer.core.kernel.homes import Home
 
 SECRET_VARIABLES = (
     "HOME_RU_DATABASE_URL",
@@ -44,8 +44,8 @@ def test_reads_every_section_of_a_local_environment() -> None:
     assert settings.environment is Environment.DEVELOPMENT
     assert set(settings.homes) == set(Home)
     ru = settings.homes[Home.RU]
-    assert ru.database_url.get_secret_value().endswith("@127.0.0.1:16432/whisperer")
-    assert settings.storage.s3_bucket == "whisperer"
+    assert ru.database_url.get_secret_value().endswith("@127.0.0.1:16432/shosai")
+    assert settings.storage.s3_bucket == "shosai"
     assert settings.storage.s3_region == "local"
     assert settings.shared_services.valkey_url.get_secret_value().endswith(":16379/0")
     assert settings.web.api_docs_enabled is False
@@ -121,10 +121,10 @@ def test_lists_are_comma_separated_and_normalized() -> None:
     ("variable", "value"),
     [
         ("ENVIRONMENT", "prod"),
-        ("HOME_RU_DATABASE_URL", "postgresql+asyncpg://whisperer_app:x@127.0.0.1/whisperer"),
-        ("HOME_EU_DATABASE_URL", "postgresql://whisperer_app:x@127.0.0.1"),
-        ("HOME_EU_DATABASE_URL", "postgresql://u:x@127.0.0.1/whisperer?application_name=x"),
-        ("HOME_RU_MIGRATION_DATABASE_URL", "postgresql://u:x@127.0.0.1/whisperer#fragment"),
+        ("HOME_RU_DATABASE_URL", "postgresql+asyncpg://shosai_app:x@127.0.0.1/shosai"),
+        ("HOME_EU_DATABASE_URL", "postgresql://shosai_app:x@127.0.0.1"),
+        ("HOME_EU_DATABASE_URL", "postgresql://u:x@127.0.0.1/shosai?application_name=x"),
+        ("HOME_RU_MIGRATION_DATABASE_URL", "postgresql://u:x@127.0.0.1/shosai#fragment"),
         ("S3_ENDPOINT_URL", "s3.example"),
         ("VALKEY_URL", "http://127.0.0.1:16379"),
         ("CORS_ALLOWED_ORIGINS", "*"),

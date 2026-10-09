@@ -4,10 +4,10 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from whisperer_contracts.jsonvalue import Json, JsonObject
-from whisperer_contracts.schema_compare import DocumentPair
-from whisperer_contracts.schema_rules import Direction
-from whisperer_contracts.schema_shape import SchemaDocument
+from shosai_contracts.jsonvalue import Json, JsonObject
+from shosai_contracts.schema_compare import DocumentPair
+from shosai_contracts.schema_rules import Direction
+from shosai_contracts.schema_shape import SchemaDocument
 
 REQUEST = Direction.REQUEST
 RESPONSE = Direction.RESPONSE
@@ -163,7 +163,7 @@ def test_untyped_draft_response_is_not_compared_and_untyped_candidate_is_risky()
 
 
 def test_unknown_reference_is_an_input_error() -> None:
-    from whisperer_contracts.jsonvalue import ContractInputError  # noqa: PLC0415
+    from shosai_contracts.jsonvalue import ContractInputError  # noqa: PLC0415
 
     with pytest.raises(ContractInputError, match="unresolvable reference"):
         rules({"$ref": "#/components/schemas/Missing"}, STRING, RESPONSE)

@@ -30,7 +30,7 @@ export function writeMessageTypes(englishDir: string): number {
 /** Поддерживает объявления в актуальном состоянии при сборке и при правке английских каталогов. */
 export function messageTypes(englishDir: string): Plugin {
   return {
-    name: "whisperer:message-types",
+    name: "shosai:message-types",
     buildStart() {
       writeMessageTypes(englishDir);
     },

@@ -6,11 +6,11 @@ from urllib.parse import parse_qs, urlsplit
 import httpx
 import pytest
 
+from shosai.core.storage.errors import ObjectNotFoundError
+from shosai.core.storage.port import Disposition
+from shosai.core.storage.s3_objects import content_disposition
 from tests.core.storage.adapters import slot_storage
 from tests.harness.shared_services import SlotBucket
-from whisperer.core.storage.errors import ObjectNotFoundError
-from whisperer.core.storage.port import Disposition
-from whisperer.core.storage.s3_objects import content_disposition
 
 REPORT = "u-7/files/report.pdf"
 BODY = b"%PDF-1.7 " + bytes(range(256)) * 64

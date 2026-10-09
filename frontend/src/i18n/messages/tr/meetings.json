@@ -29,7 +29,7 @@
   "join": "Toplantıya katıl",
   "opensInNewTab": "(yeni sekmede açılır)",
   "source": {
-    "whisperer": "Whisperer odası",
+    "shosai": "Shosai odası",
     "in_person": "Yüz yüze"
   },
   "participants": "Katılımcılar: {names}",

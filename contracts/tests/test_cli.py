@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from whisperer_contracts.cli import EXIT_FAILED, EXIT_INPUT, EXIT_OK, main
-from whisperer_contracts.inputs import DEFAULT_BASELINE
-from whisperer_contracts.jsonvalue import JsonObject, as_object, load_json
+from shosai_contracts.cli import EXIT_FAILED, EXIT_INPUT, EXIT_OK, main
+from shosai_contracts.inputs import DEFAULT_BASELINE
+from shosai_contracts.jsonvalue import JsonObject, as_object, load_json
 
 
 @pytest.fixture

@@ -19,8 +19,8 @@ then comparing that against the target page.
 
 ### 1. Fetch and Parse Target Page
 
-- Fetch the target URL using `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run render_page.py "<url>" --mode auto --json` (SPA-aware SSRF-protected renderer)
-- Parse with `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run parse_html.py --url "<url>"` to extract SEO elements
+- Fetch the target URL using `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run render_page.py "<url>" --mode auto --json` (SPA-aware SSRF-protected renderer)
+- Parse with `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run parse_html.py --url "<url>"` to extract SEO elements
 - Identify: page type, title, H1, meta description, headings, word count, schema, CTAs, media
 - If no keyword was provided, derive primary keyword from title + H1 overlap
 
@@ -28,7 +28,7 @@ then comparing that against the target page.
 
 - Search Google for the target keyword using WebSearch
 - Analyze the top 10 organic results:
-  - Classify each result's page type using `/root/whisperer-v2/.claude/skills/seo-sxo/references/page-type-taxonomy.md`
+  - Classify each result's page type using `/root/shosai/.claude/skills/seo-sxo/references/page-type-taxonomy.md`
   - Record content format, estimated depth, schema signals, media presence
 - Record SERP features: featured snippets, PAA questions, ads, related searches, AI Overview
 - Calculate SERP consensus: dominant page type and confidence percentage
@@ -42,7 +42,7 @@ then comparing that against the target page.
 
 ### 4. User Story Derivation
 
-- Read `/root/whisperer-v2/.claude/skills/seo-sxo/references/user-story-framework.md`
+- Read `/root/shosai/.claude/skills/seo-sxo/references/user-story-framework.md`
 - Derive 3-5 user stories from observed SERP signals
 - Every story must cite the specific signal that generated it
 - Cover at least 2 journey stages (awareness, consideration, decision)
@@ -56,14 +56,14 @@ Score the target page across 7 dimensions (100 points total):
 
 ### 6. Persona Scoring
 
-- Read `/root/whisperer-v2/.claude/skills/seo-sxo/references/persona-scoring.md`
+- Read `/root/shosai/.claude/skills/seo-sxo/references/persona-scoring.md`
 - Derive 4-7 personas from SERP signals
 - Score each persona on: Relevance, Clarity, Trust, Action (25 pts each)
 - Sort recommendations by weakest persona first
 
 ### 7. Wireframe (Only if requested)
 
-- Read `/root/whisperer-v2/.claude/skills/seo-sxo/references/wireframe-templates.md`
+- Read `/root/shosai/.claude/skills/seo-sxo/references/wireframe-templates.md`
 - Generate IST (current) wireframe from parsed page
 - Generate SOLL (recommended) wireframe matching SERP expectations
 - Use ultra-concrete placeholders with actual section names, CTA text, and link targets
@@ -85,7 +85,7 @@ Score the target page across 7 dimensions (100 points total):
 ## Pre-Delivery Checklist
 
 Before presenting results, verify:
-- [ ] URL was fetched via `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run render_page.py --mode auto` (not raw curl)
+- [ ] URL was fetched via `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run render_page.py --mode auto` (not raw curl)
 - [ ] At least 5 SERP results were analyzed
 - [ ] Page type classification uses the taxonomy reference
 - [ ] User stories cite specific SERP signals
@@ -95,7 +95,7 @@ Before presenting results, verify:
 
 ## Fetching pages (v2.0.0)
 
-Use `"/root/whisperer-v2/.claude/skills/seo/scripts/claude-seo" run render_page.py <URL> --mode auto --json` for page HTML. `auto` does a raw fetch and only spins up Playwright when an SPA shell is detected; use `--mode always` to force a render or `--mode never` to skip Playwright entirely. The JSON exposes `raw_content` (pre-JS), `content` (post-JS), `is_spa`, `extracted_text` (boilerplate-stripped via trafilatura), and `publication_date` (htmldate). SSRF and DNS-rebinding protection live in the bundled `url_safety.py` module, never call `requests.get` directly on user-supplied URLs.
+Use `"/root/shosai/.claude/skills/seo/scripts/claude-seo" run render_page.py <URL> --mode auto --json` for page HTML. `auto` does a raw fetch and only spins up Playwright when an SPA shell is detected; use `--mode always` to force a render or `--mode never` to skip Playwright entirely. The JSON exposes `raw_content` (pre-JS), `content` (post-JS), `is_spa`, `extracted_text` (boilerplate-stripped via trafilatura), and `publication_date` (htmldate). SSRF and DNS-rebinding protection live in the bundled `url_safety.py` module, never call `requests.get` directly on user-supplied URLs.
 
 Search experience scoring needs the *rendered* DOM because users see what JS produces. Prefer `--mode always` so above-the-fold analysis matches what the persona actually encounters.
 

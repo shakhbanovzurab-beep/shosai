@@ -7,14 +7,14 @@ from dataclasses import dataclass
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 
+from shosai.composition.platform import Platform, open_platform
+from shosai.composition.telemetry import ProcessTelemetry
+from shosai.core.config.loading import Settings, load_settings
+from shosai.core.config.roles import ProcessRole
+from shosai.core.features import FeatureModule
 from tests.harness.process_environ import slot_environ
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
-from whisperer.composition.platform import Platform, open_platform
-from whisperer.composition.telemetry import ProcessTelemetry
-from whisperer.core.config.loading import Settings, load_settings
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.features import FeatureModule
 
 
 @dataclass(frozen=True, slots=True)

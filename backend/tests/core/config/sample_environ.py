@@ -2,7 +2,7 @@
 
 from cryptography.fernet import Fernet
 
-from whisperer.core.kernel.homes import Home
+from shosai.core.kernel.homes import Home
 
 SAMPLE_SECRET = "sample-secret-value"
 SAMPLE_FERNET_KEY = Fernet.generate_key().decode()
@@ -28,7 +28,7 @@ def local_environ(**overrides: str) -> dict[str, str]:
         "REDIS_CACHE_URL": f"redis://:{SAMPLE_SECRET}@127.0.0.1:16380/0",
         "S3_ENDPOINT_URL": "http://127.0.0.1:18333",
         "S3_REGION": "local",
-        "S3_BUCKET": "whisperer",
+        "S3_BUCKET": "shosai",
         "S3_ACCESS_KEY_ID": "local-s3-access",
         "S3_SECRET_ACCESS_KEY": SAMPLE_SECRET,
     }
@@ -36,11 +36,10 @@ def local_environ(**overrides: str) -> dict[str, str]:
         prefix = f"HOME_{home.name}_"
         environ |= {
             f"{prefix}DATABASE_URL": (
-                f"postgresql://whisperer_app:{SAMPLE_SECRET}@127.0.0.1:{application_port}/whisperer"
+                f"postgresql://shosai_app:{SAMPLE_SECRET}@127.0.0.1:{application_port}/shosai"
             ),
             f"{prefix}MIGRATION_DATABASE_URL": (
-                f"postgresql://whisperer_migrator:{SAMPLE_SECRET}@127.0.0.1:"
-                f"{migration_port}/whisperer"
+                f"postgresql://shosai_migrator:{SAMPLE_SECRET}@127.0.0.1:{migration_port}/shosai"
             ),
         }
     environ.update(overrides)
@@ -63,9 +62,9 @@ def production_environ(**overrides: str) -> dict[str, str]:
     return environ
 
 
-def production_database_url(home: Home, *, role: str = "whisperer_app") -> str:
+def production_database_url(home: Home, *, role: str = "shosai_app") -> str:
     """A production-like address of a home's database: TLS with certificate and host checks."""
     return (
-        f"postgresql://{role}:{SAMPLE_SECRET}@db.{home.value}.example:6432/whisperer"
+        f"postgresql://{role}:{SAMPLE_SECRET}@db.{home.value}.example:6432/shosai"
         "?sslmode=verify-full&sslrootcert=system"
     )

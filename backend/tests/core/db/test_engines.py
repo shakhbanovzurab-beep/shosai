@@ -6,8 +6,8 @@ import pytest
 from pydantic import SecretStr
 from sqlalchemy.pool import QueuePool
 
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.db.engines import (
+from shosai.core.config.roles import ProcessRole
+from shosai.core.db.engines import (
     DRIVER,
     POOL_RECYCLE_SECONDS,
     DatabaseProfile,
@@ -16,10 +16,10 @@ from whisperer.core.db.engines import (
     database_profile,
     engine_options,
 )
-from whisperer.core.kernel.homes import Home
+from shosai.core.kernel.homes import Home
 
 URL = SecretStr(
-    "postgresql://whisperer_app:sample-secret@db.ru.example:6432/whisperer"
+    "postgresql://shosai_app:sample-secret@db.ru.example:6432/shosai"
     "?sslmode=verify-full&sslrootcert=system"
 )
 
@@ -61,7 +61,7 @@ def test_a_pool_is_bounded_fails_fast_and_prepares_nothing() -> None:
     assert options["connect_args"] == {
         "prepare_threshold": None,
         "connect_timeout": 5,
-        "application_name": "whisperer-workers",
+        "application_name": "shosai-workers",
         "keepalives": 1,
         "keepalives_idle": 30,
         "keepalives_interval": 10,

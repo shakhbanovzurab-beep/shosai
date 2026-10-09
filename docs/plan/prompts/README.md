@@ -1,6 +1,6 @@
 # Agent prompts
 
-One file per work package of [the rewrite plan](../REWRITE_PLAN.md). Start a new session in `/root/whisperer-v2` with `claude --add-dir /root/whisperer` and paste the package's launch line from the plan, section 6.
+One file per work package of [the rewrite plan](../REWRITE_PLAN.md). Start a new session in `/root/shosai` with `claude --add-dir /root/whisperer` and paste the package's launch line from the plan, section 6.
 
 Every prompt relies on:
 

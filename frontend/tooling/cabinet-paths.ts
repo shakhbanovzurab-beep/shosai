@@ -26,7 +26,7 @@ const fallback =
 export function cabinetPaths(): Plugin {
   let base = "/";
   return {
-    name: "whisperer:cabinet-paths",
+    name: "shosai:cabinet-paths",
     configResolved(config) {
       base = config.base;
     },

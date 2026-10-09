@@ -29,7 +29,7 @@
   "join": "会議に参加",
   "opensInNewTab": "（新しいタブで開きます）",
   "source": {
-    "whisperer": "Whisperer ルーム",
+    "shosai": "Shosai ルーム",
     "in_person": "対面"
   },
   "participants": "参加者：{names}",

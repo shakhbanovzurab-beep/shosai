@@ -29,7 +29,7 @@
   "join": "Partecipa alla riunione",
   "opensInNewTab": "(si apre in una nuova scheda)",
   "source": {
-    "whisperer": "Stanza Whisperer",
+    "shosai": "Stanza Shosai",
     "in_person": "Di persona"
   },
   "participants": "Partecipanti: {names}",

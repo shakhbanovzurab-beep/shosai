@@ -5,12 +5,12 @@ import time
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.kv.connection import connect_redis
+from shosai.core.tasks.metrics import TaskMetrics
+from shosai.core.tasks.monitor import QueueMonitor
+from shosai.core.tasks.queues import TaskQueue, dead_letter_key
 from tests.core.kv.outages import closed_port, redis_url
 from tests.core.tasks.workbench import Probe, Runs, declare, workbench
-from whisperer.core.kv.connection import connect_redis
-from whisperer.core.tasks.metrics import TaskMetrics
-from whisperer.core.tasks.monitor import QueueMonitor
-from whisperer.core.tasks.queues import TaskQueue, dead_letter_key
 
 TASK = declare("probe.monitored", queue=TaskQueue.BULK)
 
@@ -30,27 +30,27 @@ async def test_gauges_show_the_backlog_and_the_dead_letter(valkey: Redis) -> Non
     assert await monitor.refresh()
 
     registry = bench.registry
-    assert gauge(registry, "whisperer_task_queue_depth", "bulk") == 2
-    age = gauge(registry, "whisperer_task_queue_oldest_age_seconds", "bulk") or 0
+    assert gauge(registry, "shosai_task_queue_depth", "bulk") == 2
+    age = gauge(registry, "shosai_task_queue_oldest_age_seconds", "bulk") or 0
     assert 29 < age < 31
-    assert gauge(registry, "whisperer_task_dead_letter_entries", "bulk") == 1
-    newest = gauge(registry, "whisperer_task_dead_letter_newest_timestamp_seconds", "bulk") or 0
+    assert gauge(registry, "shosai_task_dead_letter_entries", "bulk") == 1
+    newest = gauge(registry, "shosai_task_dead_letter_newest_timestamp_seconds", "bulk") or 0
     assert now - 1 < newest <= now + 1
-    assert gauge(registry, "whisperer_task_queue_depth", "critical") == 0
-    assert gauge(registry, "whisperer_task_queue_oldest_age_seconds", "critical") == 0
-    assert gauge(registry, "whisperer_task_dead_letter_newest_timestamp_seconds", "critical") == 0
+    assert gauge(registry, "shosai_task_queue_depth", "critical") == 0
+    assert gauge(registry, "shosai_task_queue_oldest_age_seconds", "critical") == 0
+    assert gauge(registry, "shosai_task_dead_letter_newest_timestamp_seconds", "critical") == 0
 
 
 async def test_a_silent_valkey_leaves_the_gauges_and_is_counted() -> None:
     registry = CollectorRegistry()
     metrics = TaskMetrics(registry)
-    client = connect_redis(redis_url(closed_port()), "whisperer-tests")
+    client = connect_redis(redis_url(closed_port()), "shosai-tests")
 
     assert not await QueueMonitor(client, metrics).refresh()
 
-    assert gauge(registry, "whisperer_task_queue_depth", "default") is None
+    assert gauge(registry, "shosai_task_queue_depth", "default") is None
     failures = registry.get_sample_value(
-        "whisperer_task_valkey_failures_total", {"queue": "default", "operation": "monitor"}
+        "shosai_task_valkey_failures_total", {"queue": "default", "operation": "monitor"}
     )
     assert failures == 1
     await client.aclose()

@@ -1,6 +1,6 @@
-# Rewrite plan: draft → whisperer-v2
+# Rewrite plan: draft → shosai
 
-How the draft (`/root/whisperer`) is rewritten into the final version (`/root/whisperer-v2`). The rules are in [.claude/CLAUDE.md](../../.claude/CLAUDE.md) ("Rewrite from the draft" and everything else) and the architecture in [docs/design/ARCHITECTURE.md](../design/ARCHITECTURE.md). This plan does not repeat them; it orders the work.
+How the draft (`/root/whisperer`) is rewritten into the final version (`/root/shosai`). The rules are in [.claude/CLAUDE.md](../../.claude/CLAUDE.md) ("Rewrite from the draft" and everything else) and the architecture in [docs/design/ARCHITECTURE.md](../design/ARCHITECTURE.md). This plan does not repeat them; it orders the work.
 
 - **Status of every work package:** [STATUS.md](STATUS.md).
 - **Prompts to start an agent:** [prompts/](prompts/).
@@ -9,10 +9,10 @@ How the draft (`/root/whisperer`) is rewritten into the final version (`/root/wh
 
 ## 1. How the work runs
 
-1. The user starts **one agent per work package, each in a new session**, opened in `/root/whisperer-v2` with read access to the draft:
+1. The user starts **one agent per work package, each in a new session**, opened in `/root/shosai` with read access to the draft:
 
    ```bash
-   cd /root/whisperer-v2 && claude --add-dir /root/whisperer
+   cd /root/shosai && claude --add-dir /root/whisperer
    ```
 
 2. The first message of the session is the package's launch line from [section 6](#6-launch-lines). It points the agent to its prompt file in [prompts/](prompts/).
@@ -25,7 +25,7 @@ How the draft (`/root/whisperer`) is rewritten into the final version (`/root/wh
 | Fact | Value |
 |---|---|
 | Draft | `/root/whisperer` — read only. Production today runs the draft at `whisperer.one`. |
-| Final version | `/root/whisperer-v2` — the only place that changes. |
+| Final version | `/root/shosai` — the only place that changes. |
 | Test domain of v2 | **https://one.whisperer.one** — staging for v2. Separate from production: its own database, storage and secrets. |
 | Hosting now | RU/EU data homes and EU Valkey are not available yet. Develop and test on local containers; the code stays home-aware (CLAUDE.md, "Hosting constraints now"). |
 | Local tooling | uv 0.12.21, Python 3.14.7 (uv-managed), Node.js 26.10.0, npm 11, Docker 29.8 with Compose 5.5, ffmpeg. |
@@ -78,7 +78,7 @@ Each slice is a vertical piece: backend slice, frontend slice, tests, contract c
 | S07 | Knowledge and search: sources, indexing, Qdrant, keyword search, context graph; the legacy notes merged in (FM-2) | `features/knowledge`, `features/knowledge_engine`, `features/context_graph`, the legacy notes behind `services/rag_pipeline.py`, `api/me_search.py`, `services/global_search.py` | `knowledge`, `search` |
 | S08 | Storage: files, presigned uploads, quotas, public links | `services/storage`, `api/me_storage.py`, `api/storage_public.py` | `storage` |
 | S09 | Agent (Leo) by the [Leo architecture](../design/leo/ARCHITECTURE.md) (ADR 0023–0033), as slices `agent` (core, Action Gateway, threads, runs, context, tool registry, skills), `decisions` (Jev), `memory`, `proactive` (signals, suggestions, Web Push, `/v1/ws/user`) and `models`: chat, tools, skills, memory, personalization, proactivity, personal context, model catalogue and selection, prompts | `services/agent`, `services/skills`, model catalogue and registry in `services/llm`, `features/memory`, `features/personalization`, `features/proactive`, `api/ai/agent.py`, `api/ai/proxy.py`, `api/ai/dictate.py`, `api/me_models.py`, `api/me_skills.py`, `api/admin/{models,prompts,context}.py` | `leo`, `prompts`, `models`, `context` |
-| S10 | MCP: Whisperer as an MCP server, MCP OAuth, MCP client | `api/mcp_*.py`, `api/me_mcp.py`, `services/mcp*`, `services/llm/mcp_*` | `mcp` |
+| S10 | MCP: Shosai as an MCP server, MCP OAuth, MCP client | `api/mcp_*.py`, `api/me_mcp.py`, `services/mcp*`, `services/llm/mcp_*` | `mcp` |
 | S11 | Errands: delayed Leo actions on the Action Gateway, re-validated at run time ([ADR 0025](../adr/0025-leo-action-gateway.md)); periodic jobs moved to F6 | `features/errands` | — (panel inside `leo`) |
 | S12 | Connectors and calendar: Nango, calendar sync, Jira, meeting-result push to Notion, Slack and CRM, OAuth integrations ([ADR 0002](../adr/0002-oauth-grants-outside-nango.md)) | `features/connectors`, `features/jira`, `services/calendar`, `services/oauth_providers`, `services/oauth*.py`, `services/integration*.py`, `api/calendar_*.py`, `api/me_calendar*.py`, `api/me_integrations.py`, `api/oauth_integrations.py` | `calendar` |
 | S13 | Tracker | `api/me_tracker.py`, `services/tracker.py` | `tracker` |

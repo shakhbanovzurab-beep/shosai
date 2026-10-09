@@ -4,7 +4,7 @@ import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from whisperer.core.i18n.locales import (
+from shosai.core.i18n.locales import (
     LOCALES,
     SUPPORTED_LANGUAGES,
     normalize_language,

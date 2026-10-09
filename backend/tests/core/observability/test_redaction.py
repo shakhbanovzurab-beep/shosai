@@ -8,10 +8,8 @@ from hypothesis import given
 from hypothesis import strategies as st
 from pydantic import SecretStr
 
-from tests.core.config.sample_environ import SAMPLE_FERNET_KEY, SAMPLE_SECRET, production_environ
-from tests.core.observability.capture import captured_logs
-from whisperer.core.config.loading import load_settings
-from whisperer.core.observability.redaction import (
+from shosai.core.config.loading import load_settings
+from shosai.core.observability.redaction import (
     MAX_DEPTH,
     REDACTED,
     SENSITIVE_KEYS,
@@ -20,6 +18,8 @@ from whisperer.core.observability.redaction import (
     is_sensitive_key,
     redact_value,
 )
+from tests.core.config.sample_environ import SAMPLE_FERNET_KEY, SAMPLE_SECRET, production_environ
+from tests.core.observability.capture import captured_logs
 
 log = structlog.stdlib.get_logger("tests.redaction")
 secrets = st.text(alphabet="abcdefghijklmnopqrstuvwxyz0123456789", min_size=12, max_size=32).map(
@@ -81,7 +81,7 @@ def test_a_secret_string_never_reaches_a_line_under_any_key(
 
 @given(key=plain_keys, password=secrets)
 def test_a_password_inside_a_url_never_reaches_a_line(key: str, password: str) -> None:
-    url = f"postgresql://whisperer_app:{password}@db.ru.example:6432/whisperer"
+    url = f"postgresql://shosai_app:{password}@db.ru.example:6432/shosai"
 
     # Адрес внутри самого сообщения: так его пишут, когда текст ошибки собран заранее.
     message = f"Нет соединения с {url}"
@@ -94,7 +94,7 @@ def test_a_password_inside_a_url_never_reaches_a_line(key: str, password: str) -
             log.exception("Сбой подключения")
 
     assert password not in captured.text()
-    assert "postgresql://whisperer_app:***@db.ru.example:6432/whisperer" in captured.text()
+    assert "postgresql://shosai_app:***@db.ru.example:6432/shosai" in captured.text()
 
 
 def test_logging_the_settings_reveals_no_secret() -> None:

@@ -49,7 +49,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Scan
-        # .claude/ holds third-party agent skills, not Whisperer code.
+        # .claude/ holds third-party agent skills, not Shosai code.
         run: semgrep scan --config p/default --error --metrics=off --exclude .claude
 
   contracts:
@@ -137,16 +137,16 @@ jobs:
     env:
       # Tests read only TEST_* variables (ADR 0009). The values are the throwaway
       # local defaults of compose.dev.yaml, the same as .env.example section 3.
-      TEST_HOME_RU_DATABASE_URL: postgresql://whisperer_app:local-app@127.0.0.1:16432/whisperer_test
-      TEST_HOME_EU_DATABASE_URL: postgresql://whisperer_app:local-app@127.0.0.1:16433/whisperer_test
-      TEST_HOME_RU_MIGRATION_DATABASE_URL: postgresql://whisperer_migrator:local-migrator@127.0.0.1:15432/whisperer_test
-      TEST_HOME_EU_MIGRATION_DATABASE_URL: postgresql://whisperer_migrator:local-migrator@127.0.0.1:15433/whisperer_test
+      TEST_HOME_RU_DATABASE_URL: postgresql://shosai_app:local-app@127.0.0.1:16432/shosai_test
+      TEST_HOME_EU_DATABASE_URL: postgresql://shosai_app:local-app@127.0.0.1:16433/shosai_test
+      TEST_HOME_RU_MIGRATION_DATABASE_URL: postgresql://shosai_migrator:local-migrator@127.0.0.1:15432/shosai_test
+      TEST_HOME_EU_MIGRATION_DATABASE_URL: postgresql://shosai_migrator:local-migrator@127.0.0.1:15433/shosai_test
       TEST_DATABASE_SLOTS: "8"
       TEST_VALKEY_URL: redis://:local-valkey@127.0.0.1:16379
       TEST_REDIS_CACHE_URL: redis://:local-redis-cache@127.0.0.1:16380
       TEST_S3_ENDPOINT_URL: http://127.0.0.1:18333
       TEST_S3_REGION: local
-      TEST_S3_BUCKET: whisperer
+      TEST_S3_BUCKET: shosai
       TEST_S3_ACCESS_KEY_ID: local-s3-access
       TEST_S3_SECRET_ACCESS_KEY: local-s3-secret
     steps:

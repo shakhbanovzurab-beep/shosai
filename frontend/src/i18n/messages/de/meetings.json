@@ -29,7 +29,7 @@
   "join": "Meeting beitreten",
   "opensInNewTab": "(öffnet in neuem Tab)",
   "source": {
-    "whisperer": "Whisperer-Raum",
+    "shosai": "Shosai-Raum",
     "in_person": "Vor Ort"
   },
   "participants": "Teilnehmer: {names}",

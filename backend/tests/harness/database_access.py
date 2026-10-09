@@ -15,15 +15,15 @@ from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from pydantic import SecretStr
 
+from shosai.core.config.roles import ProcessRole
+from shosai.core.db.engines import DatabaseProfile, HomeDatabases
+from shosai.core.db.home_checks import HomeGate
+from shosai.core.db.metrics import DatabaseMetrics
+from shosai.core.db.migrations import MigrationHistory
+from shosai.core.db.transactions import HomeTransactions
+from shosai.core.kernel.homes import Home
 from tests.harness.migrations import clear_homes
 from tests.harness.run_slot import RunSlot
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.db.engines import DatabaseProfile, HomeDatabases
-from whisperer.core.db.home_checks import HomeGate
-from whisperer.core.db.metrics import DatabaseMetrics
-from whisperer.core.db.migrations import MigrationHistory
-from whisperer.core.db.transactions import HomeTransactions
-from whisperer.core.kernel.homes import Home
 
 
 @dataclass(frozen=True, slots=True)

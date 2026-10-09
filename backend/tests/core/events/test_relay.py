@@ -9,6 +9,13 @@ from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.db.errors import HomeUnavailableError
+from shosai.core.events.metrics import EventMetrics
+from shosai.core.events.relay import OutboxRelay, RelayPass
+from shosai.core.events.relay_limits import RelayLimits
+from shosai.core.events.resources import EventResources
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
 from tests.core.db.tcp_proxy import through
 from tests.core.events.bench import (
     Applied,
@@ -21,13 +28,6 @@ from tests.core.events.relay_bench import RecordingSender, write_notes
 from tests.core.kv.outages import closed_port
 from tests.harness.database_access import DatabaseAccess, open_database_access, slot_urls
 from tests.harness.run_slot import RunSlot
-from whisperer.core.db.errors import HomeUnavailableError
-from whisperer.core.events.metrics import EventMetrics
-from whisperer.core.events.relay import OutboxRelay, RelayPass
-from whisperer.core.events.relay_limits import RelayLimits
-from whisperer.core.events.resources import EventResources
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
 
 
 class RelayStoppedError(Exception):
@@ -57,7 +57,7 @@ async def test_a_pass_queues_one_delivery_per_subscriber_outside_any_transaction
     assert sender.held_connections == [0] * 6
     rows = await outbox_rows(run_slot.claimed.connections[Home.RU])
     assert [(row["published"], row["attempts"]) for row in rows] == [(True, 0)] * 3
-    assert bench.sample("whisperer_outbox_published_total", home="ru") == 3
+    assert bench.sample("shosai_outbox_published_total", home="ru") == 3
 
 
 async def test_an_event_nobody_subscribes_to_is_published_without_deliveries(

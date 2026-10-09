@@ -9,6 +9,11 @@ import pytest
 import sqlalchemy as sa
 from pydantic import SecretStr
 
+from shosai.core.db.errors import RETRY_AFTER_SECONDS, HomeUnavailableError
+from shosai.core.db.home_checks import HomeMisconfiguredError, HomeState
+from shosai.core.db.migrations import MigrationHistory
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
 from tests.core.db.tcp_proxy import CountingProxy, Upstream, through
 from tests.core.observability.capture import captured_logs
 from tests.harness.database_access import (
@@ -20,15 +25,10 @@ from tests.harness.database_access import (
 from tests.harness.run_slot import RunSlot, prepare_run_slot
 from tests.harness.settings import HarnessSettings
 from tests.harness.slots import claim_slot
-from whisperer.core.db.errors import RETRY_AFTER_SECONDS, HomeUnavailableError
-from whisperer.core.db.home_checks import HomeMisconfiguredError, HomeState
-from whisperer.core.db.migrations import MigrationHistory
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
 
 FUTURE_REVISION = "f0f0f0f0f0f0"
 WRONG_PASSWORD = "not-the-application-password"
-HOME_STATE = "whisperer_db_home_state"
+HOME_STATE = "shosai_db_home_state"
 
 
 class ManualClock:

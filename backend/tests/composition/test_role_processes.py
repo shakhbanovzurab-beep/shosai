@@ -14,12 +14,12 @@ from typing import Any
 import pytest
 from redis.asyncio import Redis
 
+from shosai.core.kernel.homes import Home
 from tests.composition.role_process import RoleProcess, messages, role_process
 from tests.core.db.tcp_proxy import CountingProxy, Upstream, through
 from tests.harness.process_environ import slot_environ
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
-from whisperer.core.kernel.homes import Home
 
 ROLES = {
     "api": ("api",),
@@ -67,7 +67,7 @@ async def test_each_role_starts_answers_its_probes_and_drains_on_sigterm(
     assert live.json() == {"status": "ok"}
     if health is not None:
         assert (health.status_code, health.json()) == (200, {"status": "ok"})
-    assert "whisperer_event_loop_lag_seconds_bucket" in metrics.text
+    assert "shosai_event_loop_lag_seconds_bucket" in metrics.text
     assert code == 0
     assert {line["role"] for line in lines} == {role}
     assert [line for line in lines if line["level"] in FAILURE_LEVELS] == []

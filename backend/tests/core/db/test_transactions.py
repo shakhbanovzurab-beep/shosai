@@ -6,6 +6,9 @@ import pytest
 import sqlalchemy as sa
 from sqlalchemy import exc
 
+from shosai.core.config.roles import ProcessRole
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
 from tests.harness.database_access import (
     DatabaseAccess,
     ProcessShape,
@@ -13,9 +16,6 @@ from tests.harness.database_access import (
     slot_urls,
 )
 from tests.harness.run_slot import RunSlot
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
 
 SCOPE_SETTINGS = sa.text(
     "SELECT current_setting('statement_timeout') AS statement_timeout, "

@@ -2,8 +2,8 @@
 
 import pytest
 
-from whisperer.core.health.probes import DependencyProbe
-from whisperer.core.health.readiness import ProcessPhase, Readiness
+from shosai.core.health.probes import DependencyProbe
+from shosai.core.health.readiness import ProcessPhase, Readiness
 
 
 class ProbeFailedError(Exception):

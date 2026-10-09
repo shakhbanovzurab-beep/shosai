@@ -4,8 +4,8 @@ import pytest
 from cryptography.fernet import Fernet
 from pydantic import SecretStr
 
-from whisperer.core.config.sections import CryptoSettings
-from whisperer.core.crypto.key_ring import (
+from shosai.core.config.sections import CryptoSettings
+from shosai.core.crypto.key_ring import (
     EncryptionKeyMissingError,
     FernetKeyRing,
     UndecryptableCiphertextError,

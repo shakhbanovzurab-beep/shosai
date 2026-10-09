@@ -8,8 +8,8 @@ from datetime import timedelta
 import pytest
 from prometheus_client import CollectorRegistry
 
+from shosai.core.runtime.loops import LoopMetrics, LoopRunner, ScheduledLoop
 from tests.core.observability.capture import captured_logs
-from whisperer.core.runtime.loops import LoopMetrics, LoopRunner, ScheduledLoop
 
 QUICK = timedelta(milliseconds=30)
 WAIT_SECONDS = 5.0
@@ -58,8 +58,8 @@ async def test_a_loop_runs_at_start_then_once_per_interval() -> None:
     await runner.stop()
 
     assert first_after < QUICK.total_seconds()
-    assert sample(registry, "whisperer_loop_interval_seconds", "probe.often") == 0.03
-    assert sample(registry, "whisperer_loop_last_success_timestamp", "probe.often") > 0
+    assert sample(registry, "shosai_loop_interval_seconds", "probe.often") == 0.03
+    assert sample(registry, "shosai_loop_last_success_timestamp", "probe.often") > 0
 
 
 async def test_a_failed_iteration_is_logged_with_its_stack_counted_and_survived() -> None:
@@ -74,8 +74,8 @@ async def test_a_failed_iteration_is_logged_with_its_stack_counted_and_survived(
     failures = [line for line in captured.lines() if line.get("loop") == "probe.flaky"]
     assert len(failures) == 2
     assert all("RuntimeError: итерация сломана нарочно" in line["exception"] for line in failures)
-    assert sample(registry, "whisperer_loop_failures_total", "probe.flaky") == 2
-    assert sample(registry, "whisperer_loop_last_success_timestamp", "probe.flaky") > 0
+    assert sample(registry, "shosai_loop_failures_total", "probe.flaky") == 2
+    assert sample(registry, "shosai_loop_last_success_timestamp", "probe.flaky") > 0
 
 
 async def test_an_iteration_past_its_deadline_fails_and_the_loop_goes_on() -> None:
@@ -87,7 +87,7 @@ async def test_an_iteration_past_its_deadline_fails_and_the_loop_goes_on() -> No
     await eventually(lambda: calls.count >= 2)
     await runner.stop()
 
-    assert sample(registry, "whisperer_loop_failures_total", "probe.stuck") == 1
+    assert sample(registry, "shosai_loop_failures_total", "probe.stuck") == 1
 
 
 async def test_stop_waits_for_the_iteration_in_progress_and_ends_every_loop() -> None:

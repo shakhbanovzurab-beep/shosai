@@ -11,10 +11,10 @@ from alembic.runtime.migration import MigrationContext
 from sqlalchemy import Connection, NullPool, make_url
 from sqlalchemy.ext.asyncio import create_async_engine
 
+from shosai.core.db.engines import DRIVER
+from shosai.core.db.migration_scope import MigrationScope
+from shosai.core.kernel.homes import Home
 from tests.harness.run_slot import RunSlot
-from whisperer.core.db.engines import DRIVER
-from whisperer.core.db.migration_scope import MigrationScope
-from whisperer.core.kernel.homes import Home
 
 type SchemaStep = Callable[[MigrationScope], None]
 

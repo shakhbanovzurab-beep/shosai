@@ -7,30 +7,30 @@
 # сброс окружения (`scripts/local-env.sh reset`).
 #
 # Создаёт то, что на управляемом сервере делает провайдер или администратор:
-#   - роль миграций `whisperer_migrator` — владелец баз и схемы, без SUPERUSER и
+#   - роль миграций `shosai_migrator` — владелец баз и схемы, без SUPERUSER и
 #     BYPASSRLS, ходит в PostgreSQL напрямую;
-#   - роль приложения `whisperer_app` — без SUPERUSER и BYPASSRLS, ходит через
+#   - роль приложения `shosai_app` — без SUPERUSER и BYPASSRLS, ходит через
 #     PgBouncer; под ней RLS действует по-настоящему (§7);
-#   - базу дома `whisperer` и подготовленные тестовые базы `whisperer_test_<N>`
+#   - базу дома `shosai` и подготовленные тестовые базы `shosai_test_<N>`
 #     для параллельных прогонов (CLAUDE.md, «Test database»);
 #   - расширение `vector` в каждой базе: оно не trusted, и роль миграций создать
 #     его не может.
 # Права на таблицы роли приложения выдают миграции, а не этот скрипт.
 set -Eeuo pipefail
 
-readonly MIGRATOR_ROLE="whisperer_migrator"
-readonly APP_ROLE="whisperer_app"
-readonly HOME_DATABASE="whisperer"
-readonly TEST_DATABASE_PREFIX="whisperer_test_"
+readonly MIGRATOR_ROLE="shosai_migrator"
+readonly APP_ROLE="shosai_app"
+readonly HOME_DATABASE="shosai"
+readonly TEST_DATABASE_PREFIX="shosai_test_"
 readonly MAX_TEST_DATABASES=64
 
 : "${POSTGRES_USER:?POSTGRES_USER не задан}"
-: "${WHISPERER_HOME:?WHISPERER_HOME не задан: ожидается ru или eu}"
-: "${WHISPERER_MIGRATOR_PASSWORD:?WHISPERER_MIGRATOR_PASSWORD не задан}"
-: "${WHISPERER_APP_PASSWORD:?WHISPERER_APP_PASSWORD не задан}"
-: "${WHISPERER_TEST_DATABASE_COUNT:?WHISPERER_TEST_DATABASE_COUNT не задан}"
+: "${SHOSAI_HOME:?SHOSAI_HOME не задан: ожидается ru или eu}"
+: "${SHOSAI_MIGRATOR_PASSWORD:?SHOSAI_MIGRATOR_PASSWORD не задан}"
+: "${SHOSAI_APP_PASSWORD:?SHOSAI_APP_PASSWORD не задан}"
+: "${SHOSAI_TEST_DATABASE_COUNT:?SHOSAI_TEST_DATABASE_COUNT не задан}"
 
-case "${WHISPERER_HOME}" in
+case "${SHOSAI_HOME}" in
   ru)
     home_label="Russian home"
     home_description="Russian home"
@@ -40,14 +40,14 @@ case "${WHISPERER_HOME}" in
     home_description="EU home; also holds the directory"
     ;;
   *)
-    echo "init-home: неизвестный дом '${WHISPERER_HOME}', ожидается ru или eu" >&2
+    echo "init-home: неизвестный дом '${SHOSAI_HOME}', ожидается ru или eu" >&2
     exit 1
     ;;
 esac
 
-if ! [[ "${WHISPERER_TEST_DATABASE_COUNT}" =~ ^[0-9]+$ ]] \
-  || (( WHISPERER_TEST_DATABASE_COUNT < 1 || WHISPERER_TEST_DATABASE_COUNT > MAX_TEST_DATABASES )); then
-  echo "init-home: WHISPERER_TEST_DATABASE_COUNT должен быть целым от 1 до ${MAX_TEST_DATABASES}" >&2
+if ! [[ "${SHOSAI_TEST_DATABASE_COUNT}" =~ ^[0-9]+$ ]] \
+  || (( SHOSAI_TEST_DATABASE_COUNT < 1 || SHOSAI_TEST_DATABASE_COUNT > MAX_TEST_DATABASES )); then
+  echo "init-home: SHOSAI_TEST_DATABASE_COUNT должен быть целым от 1 до ${MAX_TEST_DATABASES}" >&2
   exit 1
 fi
 
@@ -64,8 +64,8 @@ create_roles() {
   run_sql postgres \
     --set=migrator_role="${MIGRATOR_ROLE}" \
     --set=app_role="${APP_ROLE}" \
-    --set=migrator_password="${WHISPERER_MIGRATOR_PASSWORD}" \
-    --set=app_password="${WHISPERER_APP_PASSWORD}" <<'SQL'
+    --set=migrator_password="${SHOSAI_MIGRATOR_PASSWORD}" \
+    --set=app_password="${SHOSAI_APP_PASSWORD}" <<'SQL'
 CREATE ROLE :"migrator_role" LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS
   PASSWORD :'migrator_password';
 CREATE ROLE :"app_role" LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS
@@ -91,10 +91,10 @@ SQL
 }
 
 create_roles
-create_database "${HOME_DATABASE}" "Whisperer ${home_description} (local)"
-for (( slot = 1; slot <= WHISPERER_TEST_DATABASE_COUNT; slot++ )); do
+create_database "${HOME_DATABASE}" "Shosai ${home_description} (local)"
+for (( slot = 1; slot <= SHOSAI_TEST_DATABASE_COUNT; slot++ )); do
   create_database "${TEST_DATABASE_PREFIX}${slot}" \
     "Prepared test database ${slot} of the ${home_label} (local)"
 done
 
-echo "init-home: дом ${WHISPERER_HOME} готов, тестовых баз: ${WHISPERER_TEST_DATABASE_COUNT}"
+echo "init-home: дом ${SHOSAI_HOME} готов, тестовых баз: ${SHOSAI_TEST_DATABASE_COUNT}"

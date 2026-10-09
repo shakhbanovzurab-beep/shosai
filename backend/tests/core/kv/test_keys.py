@@ -1,15 +1,15 @@
-"""Key layout: `whisperer:<purpose>:<part>…`, parts from a closed alphabet."""
+"""Key layout: `shosai:<purpose>:<part>…`, parts from a closed alphabet."""
 
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
 
-from whisperer.core.kv.keys import KEY_PART, build_key
+from shosai.core.kv.keys import KEY_PART, build_key
 
 
 def test_parts_join_under_the_project_prefix() -> None:
-    assert build_key("lock", "relay.ru") == "whisperer:lock:relay.ru"
-    assert build_key("rate", "sign_in", "0f3a") == "whisperer:rate:sign_in:0f3a"
+    assert build_key("lock", "relay.ru") == "shosai:lock:relay.ru"
+    assert build_key("rate", "sign_in", "0f3a") == "shosai:rate:sign_in:0f3a"
 
 
 @given(st.text(max_size=140).filter(lambda part: not KEY_PART.fullmatch(part)))

@@ -20,21 +20,21 @@ from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
-from whisperer.core.tasks.broker import ValkeyStreamBroker
-from whisperer.core.tasks.declaration import (
+from shosai.core.tasks.broker import ValkeyStreamBroker
+from shosai.core.tasks.declaration import (
     NO_RETRY,
     RetryPolicy,
     TaskDeclaration,
     TaskHandler,
     TaskKind,
 )
-from whisperer.core.tasks.payloads import HomeTaskPayload, TaskPayload, TaskSecret
-from whisperer.core.tasks.queues import STREAM_CAPACITY, TaskQueue, dead_letter_key, stream_key
-from whisperer.core.tasks.sender import TaskSender
-from whisperer.core.tasks.stream import as_text
-from whisperer.core.tasks.system import StreamOptions, TaskSystem, build_task_system
-from whisperer.core.tasks.timing import Backoff, StreamTiming
-from whisperer.core.tasks.worker import consume_queue
+from shosai.core.tasks.payloads import HomeTaskPayload, TaskPayload, TaskSecret
+from shosai.core.tasks.queues import STREAM_CAPACITY, TaskQueue, dead_letter_key, stream_key
+from shosai.core.tasks.sender import TaskSender
+from shosai.core.tasks.stream import as_text
+from shosai.core.tasks.system import StreamOptions, TaskSystem, build_task_system
+from shosai.core.tasks.timing import Backoff, StreamTiming
+from shosai.core.tasks.worker import consume_queue
 
 WAIT_SECONDS = 10.0
 POLL_SECONDS = 0.02
@@ -195,9 +195,7 @@ def settled(bench: Workbench, task: str, outcome: str, at_least: int = 1) -> Che
     """Holds once `at_least` runs of the default-queue task ended with `outcome`."""
 
     async def check() -> bool:
-        runs = bench.sample(
-            "whisperer_task_runs_total", queue="default", task=task, outcome=outcome
-        )
+        runs = bench.sample("shosai_task_runs_total", queue="default", task=task, outcome=outcome)
         return runs >= at_least
 
     return check

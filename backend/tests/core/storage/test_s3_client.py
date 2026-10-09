@@ -12,20 +12,20 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanE
 from opentelemetry.trace import SpanKind, StatusCode
 from prometheus_client import CollectorRegistry
 
-from tests.core.db.tcp_proxy import LOOPBACK
-from tests.core.storage.adapters import slot_storage
-from tests.harness.settings import HarnessSettings
-from tests.harness.shared_services import SlotBucket
-from whisperer.core.config.sections import StorageSettings
-from whisperer.core.storage.errors import (
+from shosai.core.config.sections import StorageSettings
+from shosai.core.storage.errors import (
     ObjectNotFoundError,
     ObjectsNotDeletedError,
     StorageRejectedError,
     StorageUnavailableError,
 )
-from whisperer.core.storage.metrics import StorageMetrics
-from whisperer.core.storage.s3_client import MAX_ATTEMPTS, S3Calls, open_s3_client, translate
-from whisperer.core.storage.s3_objects import S3ObjectStorage
+from shosai.core.storage.metrics import StorageMetrics
+from shosai.core.storage.s3_client import MAX_ATTEMPTS, S3Calls, open_s3_client, translate
+from shosai.core.storage.s3_objects import S3ObjectStorage
+from tests.core.db.tcp_proxy import LOOPBACK
+from tests.core.storage.adapters import slot_storage
+from tests.harness.settings import HarnessSettings
+from tests.harness.shared_services import SlotBucket
 
 if TYPE_CHECKING:
     from types_aiobotocore_s3 import S3Client
@@ -141,7 +141,7 @@ async def test_a_failing_bucket_is_tried_a_bounded_number_of_times(
 
     assert requests == MAX_ATTEMPTS
     outcome = {"operation": "HeadBucket", "outcome": "unavailable"}
-    assert registry.get_sample_value("whisperer_storage_requests_total", outcome) == 1
+    assert registry.get_sample_value("shosai_storage_requests_total", outcome) == 1
 
 
 async def test_wrong_credentials_are_refused_not_unavailable(
@@ -170,14 +170,14 @@ def elsewhere(settings: StorageSettings, **changes: str) -> StorageSettings:
 
 async def test_a_connection_failure_is_an_outage() -> None:
     registry = CollectorRegistry()
-    calls = S3Calls("whisperer", StorageMetrics(registry), None)
+    calls = S3Calls("shosai", StorageMetrics(registry), None)
 
     with pytest.raises(StorageUnavailableError):
         async with calls.call("HeadBucket"):
             raise EndpointConnectionError(endpoint_url="http://127.0.0.1:1")
 
     outcome = {"operation": "HeadBucket", "outcome": "unavailable"}
-    assert registry.get_sample_value("whisperer_storage_requests_total", outcome) == 1
+    assert registry.get_sample_value("shosai_storage_requests_total", outcome) == 1
 
 
 class RefusingBatchClient:
@@ -189,7 +189,7 @@ class RefusingBatchClient:
 
 
 async def test_objects_left_by_a_batch_are_named_for_a_retry() -> None:
-    calls = S3Calls("whisperer", StorageMetrics(CollectorRegistry()), None)
+    calls = S3Calls("shosai", StorageMetrics(CollectorRegistry()), None)
     storage = S3ObjectStorage(cast("S3Client", RefusingBatchClient()), calls, "tests/slot-9/")
 
     with pytest.raises(ObjectsNotDeletedError, match="AccessDenied") as raised:

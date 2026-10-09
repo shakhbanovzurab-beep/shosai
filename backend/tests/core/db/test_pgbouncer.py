@@ -14,6 +14,10 @@ import pytest
 import pytest_asyncio
 import sqlalchemy as sa
 
+from shosai.core.config.roles import ProcessRole
+from shosai.core.db.engines import DatabaseProfile
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
 from tests.core.db.tcp_proxy import CountingProxy, Upstream, through
 from tests.harness.database_access import (
     DatabaseAccess,
@@ -22,10 +26,6 @@ from tests.harness.database_access import (
     slot_urls,
 )
 from tests.harness.run_slot import RunSlot
-from whisperer.core.config.roles import ProcessRole
-from whisperer.core.db.engines import DatabaseProfile
-from whisperer.core.kernel.homes import Home
-from whisperer.core.kernel.tenancy import TenancyScope
 
 SINGLE_CONNECTION = DatabaseProfile(pool_size=1, statement_timeout=timedelta(seconds=10))
 SERVER_AND_SCOPE = sa.text(

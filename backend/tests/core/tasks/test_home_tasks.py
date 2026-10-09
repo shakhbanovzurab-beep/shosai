@@ -7,14 +7,14 @@ import pytest
 import sqlalchemy as sa
 from redis.asyncio import Redis
 
+from shosai.core.kernel.homes import Home
+from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration, TaskHandler
+from shosai.core.tasks.queues import TaskQueue
 from tests.core.observability.capture import captured_logs
 from tests.core.tasks.workbench import HomeProbe, eventually, running, settled, workbench
 from tests.harness.connections import fetch_value
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
-from whisperer.core.kernel.homes import Home
-from whisperer.core.tasks.declaration import NO_RETRY, TaskDeclaration, TaskHandler
-from whisperer.core.tasks.queues import TaskQueue
 
 OTHER_HOME = {Home.RU: Home.EU, Home.EU: Home.RU}
 WRITE_NOTE = TaskDeclaration(
