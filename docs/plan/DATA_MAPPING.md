@@ -270,12 +270,12 @@ Anonymous telemetry has no owner either: `analytics_events` and `client_error_lo
 
 These start empty: `directory_domains`, `organizations`, `memberships`, `resource_grants`, `org_invoices`, `org_audit_events`, `home_transfers`, `processed_events`, `schedule_runs`. A missed periodic interval runs once on start (§12).
 
-**Per slice.** S02 (organizations), S05 (realtime) and S17 (public site) receive no draft tables. Following D4, the broadcast and whiteboard tables belong to S06, and the provider cost, metering and abuse tables to F6 (FM-4).
+**Per slice.** S02 (organizations), S05 (realtime) and S17 (public site) receive no draft tables. Following D4, the broadcast and whiteboard tables belong to S06, and the provider cost, metering and abuse tables to F6 (FM-4); `exchange_rates`, mapped in 5.2, belongs to F6 since [ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md).
 
 | Slice | Tables | moved | transformed | derived | dropped |
 |---|---|---|---|---|---|
 | S01 Identity | 9 | 2 | 5 | 0 | 2 |
-| S03 Billing | 17 | 16 | 1 | 0 | 0 |
+| S03 Billing | 16 | 15 | 1 | 0 | 0 |
 | S04 Meetings | 17 | 12 | 4 | 1 | 0 |
 | S06 Rooms | 10 | 8 | 0 | 0 | 2 |
 | S07 Knowledge and search | 15 | 5 | 4 | 4 | 2 |
@@ -289,7 +289,7 @@ These start empty: `directory_domains`, `organizations`, `memberships`, `resourc
 | S15 Administration and support | 5 | 3 | 2 | 0 | 0 |
 | S16 Hub, downloads and remaining modules | 5 | 4 | 1 | 0 | 0 |
 | F1 Backend foundation (platform tables) | 1 | 0 | 0 | 0 | 1 |
-| F6 Platform services (FM-4) | 5 | 2 | 3 | 0 | 0 |
+| F6 Platform services (FM-4) | 6 | 3 | 3 | 0 | 0 |
 | **Total** | **131** | **86** | **30** | **5** | **10** |
 
 Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dropped (columns of derived and dropped tables are counted with their table).
@@ -486,7 +486,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 
 #### `exchange_rates` → `exchange_rates` · **moved**
 
-- **Owner → home:** platform catalog (R12).
+- **Owner → home:** platform catalog (R12). Owned by F6 ([ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md)).
 - **Columns:** all 5 move unchanged.
 - Append-only CBR history; money rows already snapshot the rate they used.
 

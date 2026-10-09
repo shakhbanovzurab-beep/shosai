@@ -175,7 +175,7 @@ Every other file in `services/` is named in a section 1 row.
 |---|---|---|
 | F1 | `messaging.relay_outbox`, `messaging.purge_outbox` | queue depth, stream trim, Redis health (15 s); outbox relay and purge |
 | S01 | `account.export` | — |
-| S03 | `billing.reconcile_payments`, `billing.notify_expiring`, `billing.auto_renew_sweep`, `billing.resolve_in_flight_charges`, `billing.reconcile_cards`, `billing.reconcile_acquirer_subscriptions`, `billing.refresh_rates` | `billing_reconcile_payments`, `billing_notify_expiring`; auto-renew loop; rates every 6 h; billing metrics |
+| S03 | `billing.reconcile_payments`, `billing.notify_expiring`, `billing.auto_renew_sweep`, `billing.resolve_in_flight_charges`, `billing.reconcile_cards`, `billing.reconcile_acquirer_subscriptions` | `billing_reconcile_payments`, `billing_notify_expiring`; auto-renew loop; billing metrics |
 | S04 | `meetings.run_stage`, `meetings.start_processing`, `meetings.recover`, `meetings.index_live`, `meetings.index_session`, `meetings.sweep_audio`, `meetings.close_idle_sessions`, `meetings.salvage_understanding`, `meetings.extract_map` | `meetings_recover`, `meetings_index_live`, `meetings_idle_sessions`, `meetings_salvage_understanding`, `meetings_sweep_audio` |
 | S06 | `rooms.idle_sweep` | rooms cleanup (300 s) |
 | S07 | `knowledge.purge_expired`, `knowledge.reconcile_usage`, `knowledge_engine.sweep_stalled`, `knowledge_engine.reindex_stale`, `context_graph.project_meeting`; legacy `knowledge.embed_chunks`, `knowledge.rebuild_graph` (FM-2) | `knowledge_purge_expired`, `knowledge_reconcile_usage`, `knowledge_engine_sweep_stalled`, `knowledge_engine_reindex_stale` |
@@ -187,7 +187,7 @@ Every other file in `services/` is named in a section 1 row.
 | S14 | `analytics.maintain_partitions`, `analytics.check_alerts`, `analytics.weekly_digest` | `analytics_partitions`, `analytics_alerts`, `analytics_digest` |
 | S15 | `tickets.sweep_orphan_attachments`, `notifications.send_broadcast`, `notifications.send_broadcast_batch` | daily within storage maintenance |
 | S16 | `app.notify_release` | — |
-| F6 (FM-4) | `abuse.recompute_scores`, `notifications.send_email`, `notifications.send_bulk_email` | abuse recompute (300 s) |
+| F6 (FM-4) | `abuse.recompute_scores`, `notifications.send_email`, `notifications.send_bulk_email`; `billing.refresh_rates` (moved from S03 by [ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md)) | abuse recompute (300 s); rates every 6 h |
 
 In the draft, feature schedules are `ScheduleDefinition`s run by `entrypoints/scheduler_loops.py` under Redis leader locks. In v2 they are rows of `schedule_runs` (§12); F6 provides the periodic-job registry (FM-4), and each slice declares its own jobs.
 

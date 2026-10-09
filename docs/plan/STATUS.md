@@ -15,7 +15,7 @@ Statuses: `todo` · `planned` (package plan written, approved) · `in progress` 
 | F3 | Local environment | — | done | — | `compose.dev.yaml`: two PostgreSQL 18 homes behind transaction-mode PgBouncer, Valkey, Redis cache, Qdrant, SeaweedFS; [development.md](../development.md); [ADR 0001](../adr/0001-local-environment.md) |
 | F4 | Delivery to staging | F1; F2 for the last step | todo | — | Needs server, DNS and registry from the user; steps 1–5 need only F1 |
 | F5 | Observability | F1; F4 for the last step | todo | — | Steps 1–6 run locally; step 7 needs staging |
-| F6 | Platform services | F1 | todo | — | Added by D4 (FM-4): AI provider port with cost rows, spend and abuse control; email; periodic-job registry. The Leo architecture adds Jev `decide` with a breaker per model and the agent tool contract ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md), [ADR 0029](../adr/0029-leo-tools-owned-by-domain-slices.md)) |
+| F6 | Platform services | F1; S01 for the last step | planned | [F6-platform-services.md](packages/F6-platform-services.md) | Plan approved on 2026-10-09 (10 steps): the owner decided F6-D1…D4 — platform services in `core` passed through `CoreServices`, admin API a thin slice `features/ai_control` ([ADR 0034](../adr/0034-platform-services-in-core.md)); cost = the provider's reported cost, else units × a versioned platform price, no call without a price ([ADR 0035](../adr/0035-provider-cost-from-reported-usage-and-price-table.md)); admin HTTP routes as the last step after S01; the USD/RUB rate owned by F6 ([ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md)) |
 | S01 | Identity | F1, F2, F3, F6, D1, D2 | todo | — | |
 | S02 | Organizations | S01 | todo | — | New in v2 |
 | S03 | Billing | S01 | todo | — | |
