@@ -3,10 +3,13 @@
 from enum import StrEnum
 from http import HTTPStatus
 from types import MappingProxyType
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
-from shosai.core.ai.results import Usage
 from shosai.core.kernel.errors import AppError
+
+if TYPE_CHECKING:
+    # Только для аннотации: результаты сами ссылаются на коды отказа.
+    from shosai.core.ai.results import Usage
 
 
 class AiFailure(StrEnum):

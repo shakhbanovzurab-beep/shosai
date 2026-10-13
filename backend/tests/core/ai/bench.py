@@ -10,6 +10,8 @@ import sqlalchemy as sa
 from prometheus_client import CollectorRegistry
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.ai.adapters.gemini_live import GeminiLive
+from shosai.core.ai.adapters.openai_realtime import OpenAiRealtime
 from shosai.core.ai.adapters.openrouter import OpenRouter
 from shosai.core.ai.adapters.pyannote import JobPolling, Pyannote
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRef, ModelRoute, Provider
@@ -21,6 +23,7 @@ from shosai.core.ai.pricing.prices import PriceBook
 from shosai.core.ai.pricing.records import ProviderPrice
 from shosai.core.ai.recording import CallRecorder
 from shosai.core.ai.results import Unit
+from shosai.core.ai.sessions.live import LiveSessions
 from shosai.core.ai.sessions.minutes import MinuteRows
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.exchange_rates.rates import ExchangeRates
@@ -123,11 +126,23 @@ class AiBench:
         return self.registry.get_sample_value(name, labels) or 0.0
 
 
+@dataclass(frozen=True)
+class LiveAdapters:
+    """Live adapters pointed at a local server; absent ones are disabled providers."""
+
+    realtime: OpenAiRealtime | None = None
+    gemini: GeminiLive | None = None
+
+
+NO_LIVE = LiveAdapters()
+
+
 def ai_bench(
     transactions: HomeTransactions,
     *,
     enabled: bool = True,
     client: httpx.AsyncClient | None = None,
+    live: LiveAdapters = NO_LIVE,
 ) -> AiBench:
     """The port over the given homes; without a key when `enabled` is False.
 
@@ -152,8 +167,11 @@ def ai_bench(
         pyannote=(
             Pyannote(diarizer.api_client(), diarizer.upload_client(), polling) if enabled else None
         ),
+        openai_realtime=live.realtime,
+        gemini_live=live.gemini,
     )
-    providers = AiProviders(clients, PriceBook(transactions), recorder, minutes, metrics)
+    sessions = LiveSessions(minutes, connect_timeout=5.0)
+    providers = AiProviders(clients, PriceBook(transactions), recorder, sessions, metrics)
     return AiBench(
         providers, scripted, diarizer, minutes, clock, settlement, sender, writer, registry
     )

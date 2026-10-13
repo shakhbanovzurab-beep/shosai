@@ -7,7 +7,7 @@ a dotenv file: `env_file` is off, and an empty variable counts as unset.
 from ipaddress import IPv4Address
 from typing import Self
 
-from pydantic import HttpUrl, IPvAnyAddress, SecretStr, model_validator
+from pydantic import HttpUrl, IPvAnyAddress, SecretStr, WebsocketUrl, model_validator
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
 from shosai.core.config.values import (
@@ -146,6 +146,12 @@ class AiSettings(SettingsSection):
     # Разметка говорящих в записях встреч; без ключа вызовы diarize отклоняются.
     pyannote_api_key: SecretStr | None = None
     pyannote_base_url: HttpUrl | None = None
+    # Потоковая расшифровка живой встречи моделями OpenAI Realtime.
+    openai_api_key: SecretStr | None = None
+    openai_realtime_url: WebsocketUrl | None = None
+    # Gemini Live: синхронный перевод и голосовой ассистент.
+    google_live_api_key: SecretStr | None = None
+    google_live_base_url: HttpUrl | None = None
 
 
 class ExchangeRateSettings(SettingsSection):

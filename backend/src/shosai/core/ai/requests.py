@@ -170,3 +170,54 @@ class DiarizationRequest:
         if self.speakers is not None and self.speakers < 1:
             message = "говорящих — хотя бы один"
             raise ValueError(message)
+
+
+@dataclass(frozen=True, slots=True)
+class LiveTranscriptionSetup:
+    """A streaming transcription: the speech's languages, if known, and the end-of-phrase pause.
+
+    The stream takes PCM16 mono at the session's input rate; a phrase ends after
+    `silence_ms` of silence, or when the caller ends the turn.
+    """
+
+    languages: tuple[str, ...] = ()
+    silence_ms: int = 500
+
+    def __post_init__(self) -> None:
+        if not 200 <= self.silence_ms <= 2000:
+            message = "пауза конца фразы — от 200 до 2000 мс"
+            raise ValueError(message)
+
+
+@dataclass(frozen=True, slots=True)
+class NativeTranslationSetup:
+    """Speech-to-speech translation by a model made for it, into one language (BCP-47).
+
+    `echo_target_language` repeats speech already in the target language; otherwise the
+    model stays silent for it. Such a model takes no instruction and no voice.
+    """
+
+    target_language: str
+    echo_target_language: bool = False
+
+
+@dataclass(frozen=True, slots=True)
+class VoiceSetup:
+    """A spoken session with a conversational model: an interpreter or the voice assistant.
+
+    `instruction` and the tools' descriptions are model-facing English text the caller owns
+    and registers; `voice` is a prebuilt voice of the provider.
+    """
+
+    instruction: str
+    voice: str
+    tools: tuple[ToolSchema, ...] = field(default=())
+    silence_ms: int = 200
+
+    def __post_init__(self) -> None:
+        if not self.instruction.strip() or not self.voice:
+            message = "голосовой сессии нужны инструкция и голос"
+            raise ValueError(message)
+        if not 100 <= self.silence_ms <= 2000:
+            message = "пауза конца реплики — от 100 до 2000 мс"
+            raise ValueError(message)

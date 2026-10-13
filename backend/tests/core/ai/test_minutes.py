@@ -9,7 +9,9 @@ import pytest
 from shosai.core.ai.calls import ModelRef, Provider
 from shosai.core.ai.costs.entries import CostEntry
 from shosai.core.ai.costs.writer import RECORD_COST
+from shosai.core.ai.recording import MeteredCall
 from shosai.core.ai.results import Unit, Usage
+from shosai.core.ai.sessions.minutes import SessionMeter
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from tests.core.ai.bench import ORG_ID, USER_ID, AiBench, ai_bench, context, set_prices
@@ -39,6 +41,12 @@ async def live_bench(homes: DatabaseAccess) -> AiBench:
     return ai_bench(homes.transactions)
 
 
+def open_meter(bench: AiBench, key: str) -> SessionMeter:
+    """A meter of a live transcription priced per second, as the port opens it."""
+    prices = {Unit.AUDIO_SECOND: Decimal("0.0001")}
+    return bench.minutes.open(MeteredCall(context(key), LIVE_MODEL, "live_transcription", prices))
+
+
 def entry(home: Home, key: str, org: UUID = ORG_ID) -> CostEntry:
     """A minute row of a session in the home."""
     return CostEntry(
@@ -53,12 +61,12 @@ async def test_a_three_minute_stream_writes_one_row_per_minute(
     homes: DatabaseAccess, run_slot: RunSlot
 ) -> None:
     bench = await live_bench(homes)
-    meter = await bench.providers.open_meter(context("stream:s1"), LIVE_MODEL, "live_transcription")
+    meter = open_meter(bench, "stream:s1")
     for _ in range(3):
         meter.add(MINUTE_OF_AUDIO)
         bench.clock.now += 60
 
-    await bench.providers.close_meter(meter)
+    await bench.minutes.close(meter)
 
     rows = await minute_rows(run_slot)
     assert [row["effect_key"] for row in rows] == ["stream:s1:0", "stream:s1:1", "stream:s1:2"]
@@ -75,12 +83,12 @@ async def test_usage_within_a_minute_adds_up_to_one_row(
     homes: DatabaseAccess, run_slot: RunSlot
 ) -> None:
     bench = await live_bench(homes)
-    meter = await bench.providers.open_meter(context("stream:s2"), LIVE_MODEL, "live_transcription")
+    meter = open_meter(bench, "stream:s2")
     meter.add(Usage(input_tokens=100, output_tokens=10))
     bench.clock.now += 30
     meter.add(Usage(input_tokens=50, units=Decimal(30), unit=Unit.AUDIO_SECOND))
 
-    await bench.providers.close_meter(meter)
+    await bench.minutes.close(meter)
 
     [row] = await minute_rows(run_slot)
     assert (row["effect_key"], row["units"]) == ("stream:s2:0", Decimal("30.000"))
@@ -90,14 +98,14 @@ async def test_a_flush_writes_the_ended_minutes_and_keeps_the_running_one(
     homes: DatabaseAccess, run_slot: RunSlot
 ) -> None:
     bench = await live_bench(homes)
-    meter = await bench.providers.open_meter(context("stream:s3"), LIVE_MODEL, "live_transcription")
+    meter = open_meter(bench, "stream:s3")
     meter.add(MINUTE_OF_AUDIO)
     bench.clock.now += 61
     meter.add(MINUTE_OF_AUDIO)
 
     await bench.minutes.flush()
     after_flush = [row["effect_key"] for row in await minute_rows(run_slot)]
-    await bench.providers.close_meter(meter)
+    await bench.minutes.close(meter)
 
     assert after_flush == ["stream:s3:0"]
     assert [row["effect_key"] for row in await minute_rows(run_slot)] == [
@@ -151,9 +159,7 @@ async def test_open_sessions_are_written_when_the_process_stops(
     bench = await live_bench(homes)
 
     async with bench.minutes.running():
-        meter = await bench.providers.open_meter(
-            context("stream:s5"), LIVE_MODEL, "live_transcription"
-        )
+        meter = open_meter(bench, "stream:s5")
         meter.add(MINUTE_OF_AUDIO)
 
     assert [row["effect_key"] for row in await minute_rows(run_slot)] == ["stream:s5:0"]
@@ -163,4 +169,4 @@ async def test_a_session_key_leaves_room_for_the_minute(homes: DatabaseAccess) -
     bench = await live_bench(homes)
 
     with pytest.raises(ValueError, match="минуты"):
-        await bench.providers.open_meter(context("s" * 195), LIVE_MODEL, "live_transcription")
+        open_meter(bench, "s" * 195)

@@ -52,6 +52,10 @@ class Provider(StrEnum):
     # Чат, картинки, эмбеддинги и расшифровка записей; разметку говорящих делает pyannote.
     OPENROUTER = "openrouter"
     PYANNOTE = "pyannote"
+    # Потоковая расшифровка живой встречи моделями Realtime (ADR 0043).
+    OPENAI = "openai"
+    # Gemini Live: синхронный перевод и голосовой ассистент.
+    GOOGLE = "google"
 
 
 @dataclass(frozen=True, slots=True)

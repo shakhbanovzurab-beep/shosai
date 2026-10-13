@@ -9,12 +9,14 @@ F6 steps 5 and 6; this step calls the route's primary model.
 """
 
 import asyncio
-from collections.abc import AsyncGenerator, Awaitable, Callable
-from contextlib import AbstractAsyncContextManager, nullcontext
+from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable
+from contextlib import AbstractAsyncContextManager, asynccontextmanager, nullcontext
 from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Final
 
+from shosai.core.ai.adapters.gemini_live import GeminiLive
+from shosai.core.ai.adapters.openai_realtime import OpenAiRealtime
 from shosai.core.ai.adapters.openrouter import OpenRouter
 from shosai.core.ai.adapters.pyannote import Pyannote
 from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute, Provider
@@ -28,8 +30,11 @@ from shosai.core.ai.requests import (
     DiarizationRequest,
     EmbeddingRequest,
     ImageRequest,
+    LiveTranscriptionSetup,
+    NativeTranslationSetup,
     RerankRequest,
     TranscriptionRequest,
+    VoiceSetup,
 )
 from shosai.core.ai.results import (
     ChatDelta,
@@ -41,11 +46,12 @@ from shosai.core.ai.results import (
     Transcript,
     Unit,
 )
-from shosai.core.ai.sessions.minutes import MinuteRows, SessionMeter
+from shosai.core.ai.sessions.live import LiveConnection, LiveSession, LiveSessions
 from shosai.core.kernel.homes import Home
 
 TOKENS: Final = frozenset({Unit.INPUT, Unit.OUTPUT})
 SECONDS: Final = frozenset({Unit.AUDIO_SECOND})
+SPOKEN: Final = frozenset({Unit.INPUT_AUDIO, Unit.OUTPUT_AUDIO})
 # Наборы единиц, без цены хотя бы одного из которых вызов этого вида не уходит:
 # речь у одних моделей тарифицируется токенами, у других — секундами.
 NEEDED_UNITS: Final = MappingProxyType(
@@ -56,9 +62,9 @@ NEEDED_UNITS: Final = MappingProxyType(
         "image": (frozenset({Unit.IMAGE}),),
         "transcribe": (TOKENS, SECONDS),
         "diarize": (SECONDS,),
-        "live_transcription": (SECONDS, TOKENS),
-        "live_translation": (SECONDS, TOKENS),
-        "voice": (TOKENS,),
+        "live_transcription": (SECONDS, TOKENS, frozenset({Unit.INPUT_AUDIO, Unit.OUTPUT})),
+        "live_translation": (SECONDS, SPOKEN),
+        "voice": (SPOKEN | TOKENS,),
     }
 )
 
@@ -69,6 +75,8 @@ class AiClients:
 
     openrouter: OpenRouter | None
     pyannote: Pyannote | None
+    openai_realtime: OpenAiRealtime | None
+    gemini_live: GeminiLive | None
 
 
 class AiProviders:
@@ -79,13 +87,13 @@ class AiProviders:
         clients: AiClients,
         prices: PriceBook,
         recorder: CallRecorder,
-        minutes: MinuteRows,
+        sessions: LiveSessions,
         metrics: AiMetrics,
     ) -> None:
         self._clients = clients
         self._prices = prices
         self._recorder = recorder
-        self._minutes = minutes
+        self._sessions = sessions
         self._metrics = metrics
 
     async def chat(
@@ -172,14 +180,51 @@ class AiProviders:
         await self._recorder.record(call, result.usage)
         return result
 
-    async def open_meter(self, context: CallContext, model: ModelRef, kind: str) -> SessionMeter:
-        """A minute meter for a live session the caller opens with the provider (F6-C5)."""
-        call = await self._admit(context, ModelRoute(model), kind)
-        return self._minutes.open(call)
+    def open_transcription_stream(
+        self, context: CallContext, model: ModelRef, setup: LiveTranscriptionSetup
+    ) -> AbstractAsyncContextManager[LiveSession]:
+        """A meeting's speech streamed to text by an OpenAI Realtime model."""
+        client = self._clients.openai_realtime
+        if client is None or model.provider is not Provider.OPENAI:
+            raise self._refuse("live_transcription", AiFailure.MODEL_UNAVAILABLE)
+        return self._live(
+            context, model, "live_transcription", lambda: client.connect(model, setup)
+        )
 
-    async def close_meter(self, meter: SessionMeter) -> None:
-        """Stop a session's meter and write its minutes."""
-        await self._minutes.close(meter)
+    def open_translation_stream(
+        self,
+        context: CallContext,
+        model: ModelRef,
+        setup: NativeTranslationSetup | VoiceSetup,
+    ) -> AbstractAsyncContextManager[LiveSession]:
+        """Speech translated as it is spoken, by a translation model or an interpreter."""
+        client = self._gemini(model, "live_translation")
+        return self._live(context, model, "live_translation", lambda: client.connect(model, setup))
+
+    def open_voice_session(
+        self, context: CallContext, model: ModelRef, setup: VoiceSetup
+    ) -> AbstractAsyncContextManager[LiveSession]:
+        """A spoken conversation with a model that may call tools."""
+        client = self._gemini(model, "voice")
+        return self._live(context, model, "voice", lambda: client.connect(model, setup))
+
+    @asynccontextmanager
+    async def _live(
+        self,
+        context: CallContext,
+        model: ModelRef,
+        kind: str,
+        connect: Callable[[], Awaitable[LiveConnection]],
+    ) -> AsyncIterator[LiveSession]:
+        call = await self._admit(context, ModelRoute(model), kind)
+        async with self._sessions.run(call, connect) as session:
+            yield session
+
+    def _gemini(self, model: ModelRef, kind: str) -> GeminiLive:
+        client = self._clients.gemini_live
+        if client is None or model.provider is not Provider.GOOGLE:
+            raise self._refuse(kind, AiFailure.MODEL_UNAVAILABLE)
+        return client
 
     def _openrouter(self, route: ModelRoute, kind: str) -> OpenRouter:
         client = self._clients.openrouter

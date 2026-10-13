@@ -15,6 +15,8 @@ dependencies = [
     "alembic>=1.20.0",
     "cryptography>=50.0.2",
     "fastapi>=0.142.2",
+    # Клиент Gemini Live: синхронный перевод и голос (F6, §18.2); держит websockets ниже 17.
+    "google-genai>=2.30.1",
     # Исходящие вызовы: OpenRouter, pyannote и другие провайдеры ИИ, курс ЦБ (F6, ADR 0034).
     "httpx>=0.28.1",
     "opentelemetry-api>=1.45.0",
@@ -31,6 +33,8 @@ dependencies = [
     "taskiq>=0.13.0",
     "uvicorn>=0.54.0",
     "uvloop>=0.23.0",
+    # Потоковая расшифровка через OpenAI Realtime (F6 шаг 3b).
+    "websockets>=16.1.1",
 ]
 
 # Одна консольная команда образа: роль процесса — подкоманда (README, «Process roles»).
@@ -111,7 +115,12 @@ warn_required_dynamic_aliases = true
 testpaths = ["tests"]
 addopts = ["-q", "--strict-markers", "--strict-config"]
 xfail_strict = true
-filterwarnings = ["error"]
+# Предупреждения — ошибки. Исключение: google-genai 2.30 при импорте сравнивает
+# устаревший `_UnionGenericAlias` Python 3.14; это его код, не наш, и он не влияет на работу.
+filterwarnings = [
+    "error",
+    "ignore:'_UnionGenericAlias' is deprecated:DeprecationWarning:google\\.genai",
+]
 # Слот тестовых баз захватывается один раз на прогон и держит соединения в одном
 # цикле событий (ADR 0009), поэтому и фикстуры, и тесты живут в цикле сессии.
 asyncio_mode = "auto"

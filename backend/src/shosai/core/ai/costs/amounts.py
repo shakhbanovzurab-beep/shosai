@@ -30,6 +30,8 @@ def cost_of(usage: Usage, prices: ModelPrices) -> tuple[Decimal, CostSource]:
         fresh_input * prices.get(Unit.INPUT, Decimal(0))
         + usage.cached_tokens * cached_price
         + usage.output_tokens * prices.get(Unit.OUTPUT, Decimal(0))
+        + usage.input_audio_tokens * prices.get(Unit.INPUT_AUDIO, Decimal(0))
+        + usage.output_audio_tokens * prices.get(Unit.OUTPUT_AUDIO, Decimal(0))
     )
     if usage.unit is not None:
         total += usage.units * prices.get(usage.unit, Decimal(0))

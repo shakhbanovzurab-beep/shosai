@@ -85,6 +85,8 @@ def test_staging_without_trusted_proxies_refuses_start() -> None:
         (without(production_environ(), "FERNET_KEY"), "FERNET_KEY"),
         (without(production_environ(), "OPENROUTER_API_KEY"), "OPENROUTER_API_KEY"),
         (without(production_environ(), "PYANNOTE_API_KEY"), "PYANNOTE_API_KEY"),
+        (without(production_environ(), "OPENAI_API_KEY"), "OPENAI_API_KEY"),
+        (without(production_environ(), "GOOGLE_LIVE_API_KEY"), "GOOGLE_LIVE_API_KEY"),
         (production_environ(CORS_ALLOWED_ORIGINS="*"), "CORS_ALLOWED_ORIGINS"),
         (without(production_environ(), "HOME_RU_DATABASE_URL"), "HOME_RU_DATABASE_URL"),
         (without(production_environ(), "HOME_EU_DATABASE_URL"), "HOME_EU_DATABASE_URL"),

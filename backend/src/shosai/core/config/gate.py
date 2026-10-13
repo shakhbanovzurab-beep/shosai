@@ -136,6 +136,10 @@ def ai_provider_keys_present(settings: Settings) -> Iterator[GateViolation]:
         yield GateViolation("OPENROUTER_API_KEY", "без ключа OpenRouter модели недоступны")
     if settings.ai.pyannote_api_key is None:
         yield GateViolation("PYANNOTE_API_KEY", "без ключа pyannote записи встреч без говорящих")
+    if settings.ai.openai_api_key is None:
+        yield GateViolation("OPENAI_API_KEY", "без ключа OpenAI нет потоковой расшифровки")
+    if settings.ai.google_live_api_key is None:
+        yield GateViolation("GOOGLE_LIVE_API_KEY", "без ключа Gemini нет перевода и голоса")
 
 
 def databases_over_tls(settings: Settings) -> Iterator[GateViolation]:

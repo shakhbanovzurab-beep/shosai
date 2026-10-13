@@ -56,6 +56,8 @@ def production_environ(**overrides: str) -> dict[str, str]:
         FERNET_KEY=SAMPLE_FERNET_KEY,
         OPENROUTER_API_KEY=SAMPLE_SECRET,
         PYANNOTE_API_KEY=SAMPLE_SECRET,
+        OPENAI_API_KEY=SAMPLE_SECRET,
+        GOOGLE_LIVE_API_KEY=SAMPLE_SECRET,
     )
     for home in Home:
         del environ[f"HOME_{home.name}_MIGRATION_DATABASE_URL"]

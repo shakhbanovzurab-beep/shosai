@@ -35,6 +35,8 @@ def merged(total: Usage, more: Usage) -> Usage:
         input_tokens=total.input_tokens + more.input_tokens,
         cached_tokens=total.cached_tokens + more.cached_tokens,
         output_tokens=total.output_tokens + more.output_tokens,
+        input_audio_tokens=total.input_audio_tokens + more.input_audio_tokens,
+        output_audio_tokens=total.output_audio_tokens + more.output_audio_tokens,
         units=total.units + more.units,
         unit=total.unit or more.unit,
         reported_cost_usd=reported,

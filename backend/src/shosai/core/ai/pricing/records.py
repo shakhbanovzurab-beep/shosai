@@ -16,9 +16,10 @@ from sqlalchemy.orm import Mapped, mapped_column
 from shosai.core.db.model_base import ModelBase, table_info
 from shosai.core.kernel.homes import Home
 
+# Аудиотокены живых моделей добавил шаг 3b F6 (миграция c3d8f1a0b6e4).
 UNITS_CHECK = (
-    "unit IN ('input_token', 'cached_input_token', 'output_token', 'audio_second', 'page', "
-    "'document', 'request', 'image')"
+    "unit IN ('input_token', 'cached_input_token', 'output_token', 'input_audio_token', "
+    "'output_audio_token', 'audio_second', 'page', 'document', 'request', 'image')"
 )
 
 

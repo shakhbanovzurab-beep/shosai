@@ -28,6 +28,8 @@ class CostEntry(HomeTaskPayload):
     input_tokens: int = 0
     cached_tokens: int = 0
     output_tokens: int = 0
+    input_audio_tokens: int = 0
+    output_audio_tokens: int = 0
     units: Decimal = Decimal(0)
     unit: str | None = None
     cost_usd: Decimal

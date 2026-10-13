@@ -111,6 +111,8 @@ class CallRecorder:
             input_tokens=usage.input_tokens,
             cached_tokens=usage.cached_tokens,
             output_tokens=usage.output_tokens,
+            input_audio_tokens=usage.input_audio_tokens,
+            output_audio_tokens=usage.output_audio_tokens,
             units=usage.units,
             unit=usage.unit.value if usage.unit else None,
             cost_usd=amount,

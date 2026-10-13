@@ -648,8 +648,8 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | psycopg (`psycopg[binary]`) | 3.3.6 | PostgreSQL driver; statements unprepared, one round trip each behind PgBouncer in transaction mode ([ADR 0013](../adr/0013-psycopg-driver-behind-pgbouncer.md)) |
 | Backend | pgvector | 0.5.0 | Vectors of Leo's memory in the home database; knowledge and meeting windows stay in Qdrant ([ADR 0033](../adr/0033-vectors-pgvector-for-memory-qdrant-for-knowledge-and-meetings.md)) |
 | Backend | Own task broker on TaskIQ's `AsyncBroker`, streams in Valkey through redis-py | — | One stream per queue holding only unfinished tasks: enqueue within 50 ms or 503, lease renewal, retries as delayed redeliveries, at most 5 deliveries, dead letter; replaces taskiq-redis, whose broker built its own pool, had no deadline or delivery limit and trimmed unfinished tasks ([ADR 0016](../adr/0016-own-task-broker-on-valkey-streams.md)) |
-| Backend | websockets | 17.1 | Streaming connections to AI providers |
-| Backend | google-genai | 2.25.0 | Gemini Live client |
+| Backend | websockets | 16.1.1 | Streaming connections to AI providers; held below 17 by google-genai |
+| Backend | google-genai | 2.30.1 | Gemini Live client |
 | Backend | aiobotocore | 3.9.2 | S3 client; one bucket for both homes; replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
 | Backend | Own HTTP metric on prometheus-client, recorded by the request boundary under OpenTelemetry's HTTP semantic conventions | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |
@@ -673,8 +673,8 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Realtime and integrations | Yandex SmartCaptcha | — | Form protection |
 | AI providers | OpenRouter | — | Chat, vision, embeddings, rerank, web search, transcription of recordings ([ADR 0043](../adr/0043-speech-providers-by-task.md)) |
 | AI providers | Jev (TypeSafe AI) through OpenRouter's Decisions API | `typesafe/jev-1.13`, pinned | Leo's Decision Layer: typed, calibrated decisions behind versioned policies with deterministic fallbacks ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)) |
-| AI providers | OpenAI Realtime | — | Streaming speech recognition |
-| AI providers | Google Gemini Live | — | Simultaneous translation, voice assistant |
+| AI providers | OpenAI Realtime | — | Streaming speech recognition of live meetings (gpt-live-transcribe, gpt-realtime-whisper) |
+| AI providers | Google Gemini Live | — | Simultaneous translation (gemini-3.5-live-translate-preview, gemini-3.8-live as interpreter), voice assistant |
 | AI providers | pyannote, Mistral OCR | — | Speaker diarization of recordings, document OCR |
 | Payments | TBank, CloudPayments, lava.top | — | Card acquiring in RUB and foreign currency, incl. PayPal |
 | Payments | Bank statement API | — | Reconciliation of company invoices; bank not chosen |
