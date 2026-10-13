@@ -472,7 +472,7 @@
 - RLS on company-scoped tables.
 - The application role cannot modify the audit log.
 - Secrets only from the environment. Tokens, passwords and keys are never logged.
-- Connections leaving the plane are encrypted: each home's database with `sslmode=verify-full`, the bucket over HTTPS, the managed Valkey over TLS (`rediss://`); production refuses to start otherwise. The Redis cache stays inside the plane.
+- Connections leaving the plane are encrypted: each home's database with `sslmode=verify-full`, the bucket over HTTPS, the managed Valkey over TLS (`rediss://`); staging and production refuse to start otherwise, under one gate that also keeps the API docs off (F1 audit OD-7). The Redis cache stays inside the plane.
 - Recording and transcription are visible to all participants (indicator; consent at room entry).
 - Signatures of acquirer webhooks are checked before parsing the body.
 - Directory HMAC secret is stored outside the database.
@@ -485,7 +485,7 @@ Goal: for every user journey, answer "what is happening now and why" within minu
 
 | Signal | Source | Transport | Store | Retention |
 |---|---|---|---|---|
-| Metrics | HTTP RED metrics recorded by the request boundary from the route FastAPI has already matched, under the names and labels of prometheus-fastapi-instrumentator 8.1.0 ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)); application metrics (RED per route template, queues, pools, WS slots, provider sessions); node, nginx and blackbox exporters | scrape | Prometheus | 30 days, size cap |
+| Metrics | HTTP RED metrics recorded by the request boundary from the route FastAPI has already matched, under the OpenTelemetry semantic conventions for HTTP servers: `http_server_request_duration_seconds{http_request_method, http_route, http_response_status_code, url_scheme, error_type}` ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)); scheduler loops under OpenTelemetry's naming rules; application metrics (RED per route template, queues, pools, WS slots, provider sessions); node, nginx and blackbox exporters | scrape | Prometheus | 30 days, size cap |
 | Logs | structlog JSON on stdout | OpenTelemetry Collector (filelog → OTLP/HTTP) | Loki, single binary, local filesystem | 14 days, size cap |
 | Traces | OpenTelemetry SDK: FastAPI, SQLAlchemy/psycopg, HTTPX, Redis, TaskIQ, WS sessions | OTLP → OpenTelemetry Collector (tail sampling) | Tempo, single binary, local storage | 7 days |
 | Client telemetry | web and desktop errors, Web Vitals, WS reconnects | API endpoint → logs | Loki | 14 days |
@@ -650,7 +650,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | google-genai | 2.25.0 | Gemini Live client |
 | Backend | aiobotocore | 3.9.2 | S3 client; one bucket for both homes; replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
-| Backend | Own HTTP metrics on prometheus-client, recorded by the request boundary | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |
+| Backend | Own HTTP metric on prometheus-client, recorded by the request boundary under OpenTelemetry's HTTP semantic conventions | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |
 | Backend | Own GCRA limiter on redis-py, state in Valkey | — | Request rate limits; replaces slowapi, whose storage is synchronous ([ADR 0011](../adr/0011-rate-limits-gcra-in-valkey.md)) |
 | Backend | bcrypt, PyJWT, cryptography | 5.0.0, 2.15.1, 50.0.2 | Passwords and tokens; the token carries the data home |
 | Backend | pypdf, python-docx, openpyxl, python-pptx, striprtf | — | Knowledge-base document parsing |

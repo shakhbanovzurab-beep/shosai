@@ -1,4 +1,4 @@
-"""A production process refuses to start on an unsafe configuration and names the setting."""
+"""A staging or production process refuses to start on an unsafe configuration and names it."""
 
 from collections.abc import Iterator
 
@@ -34,10 +34,47 @@ def test_a_safe_production_configuration_starts() -> None:
     enforce_production_gate(load_settings(production_environ()))
 
 
-def test_outside_production_the_gate_does_not_apply() -> None:
-    environ = local_environ(API_DOCS_ENABLED="true", LOG_LEVEL="DEBUG", ENVIRONMENT="staging")
+def test_in_development_the_gate_does_not_apply() -> None:
+    environ = local_environ(API_DOCS_ENABLED="true", LOG_LEVEL="DEBUG")
 
     enforce_production_gate(load_settings(environ))
+
+
+def test_a_safe_staging_configuration_starts() -> None:
+    enforce_production_gate(load_settings(production_environ(ENVIRONMENT="staging")))
+
+
+@pytest.mark.parametrize(
+    ("unsafe", "setting"),
+    [
+        ({"API_DOCS_ENABLED": "true"}, "API_DOCS_ENABLED"),
+        ({"LOG_LEVEL": "DEBUG"}, "LOG_LEVEL"),
+        ({"S3_ENDPOINT_URL": "http://s3.ru.example"}, "S3_ENDPOINT_URL"),
+        ({"VALKEY_URL": f"redis://:{SAMPLE_SECRET}@valkey.eu.example:6379/0"}, "VALKEY_URL"),
+        (
+            {"HOME_RU_DATABASE_URL": f"postgresql://shosai_app:{SAMPLE_SECRET}@db.ru/shosai"},
+            "HOME_RU_DATABASE_URL",
+        ),
+    ],
+)
+def test_staging_runs_under_the_same_gate_and_names_the_setting(
+    unsafe: dict[str, str], setting: str
+) -> None:
+    environ = production_environ(ENVIRONMENT="staging", **unsafe)
+
+    with pytest.raises(UnsafeConfigurationError) as raised:
+        enforce_production_gate(load_settings(environ))
+
+    message = str(raised.value)
+    assert message.startswith("Среда staging не запускается")
+    assert f"\n{setting}: " in message
+    assert SAMPLE_SECRET not in message
+
+
+def test_staging_without_trusted_proxies_refuses_start() -> None:
+    environ = without(production_environ(ENVIRONMENT="staging"), "TRUSTED_PROXY_ADDRESSES")
+
+    assert "\nTRUSTED_PROXY_ADDRESSES: " in refusal(environ)
 
 
 @pytest.mark.parametrize(

@@ -6,9 +6,14 @@ gauge; workers do the work. A loop runs at start and then once per interval, nev
 backlog: an iteration that took longer than the interval is followed by the next at once.
 
 A failing iteration is logged with its stack and counted, and the loop goes on: one bad
-iteration must not stop delivery for good (draft spec 013). Each success sets
-`shosai_loop_last_success_timestamp{loop}`; with `shosai_loop_interval_seconds` it
-lets an alert tell a stuck loop from a slow one, whatever its interval.
+iteration must not stop delivery for good (draft spec 013).
+
+The metrics follow the OpenTelemetry naming rules as its Prometheus exporter writes them
+(F1 audit OD-3): the unit as a suffix, the loop as the namespaced attribute
+`shosai_loop_name`, failures as the `error_type` of the iteration duration — the exception's
+class, empty on success. Each success sets `shosai_loop_last_success_timestamp_seconds`;
+with `shosai_loop_interval_seconds` it lets an alert tell a stuck loop from a slow one,
+whatever its interval.
 """
 
 import asyncio
@@ -20,11 +25,18 @@ from datetime import timedelta
 from typing import Final
 
 import structlog
-from prometheus_client import CollectorRegistry, Counter, Gauge
+from prometheus_client import CollectorRegistry, Gauge, Histogram
 
 # Итерация цикла только ставит задачи или читает замеры; дольше — значит, зависла.
 DEFAULT_DEADLINE: Final = timedelta(seconds=10)
 LOOP_NAME: Final = re.compile(r"[a-z][a-z0-9_]*(\.[a-z0-9_]+)+")
+LOOP_LABEL: Final = "shosai_loop_name"
+ERROR_LABEL: Final = "error_type"
+NO_ERROR: Final = ""
+# Итерация укладывается в срок до 10 с; корзины — те же, что у длительности HTTP.
+ITERATION_BUCKETS: Final = (
+    0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, float("inf"),
+)  # fmt: skip
 log = structlog.stdlib.get_logger(__name__)
 
 
@@ -47,39 +59,41 @@ class ScheduledLoop:
 
 
 class LoopMetrics:
-    """The declared interval, the last success and the failures of every loop."""
+    """The declared interval, the last success and the iterations of every loop."""
 
     def __init__(self, registry: CollectorRegistry) -> None:
         self._interval = Gauge(
             "shosai_loop_interval_seconds",
             "Объявленный интервал цикла планировщика",
-            ("loop",),
+            (LOOP_LABEL,),
             registry=registry,
         )
         self._last_success = Gauge(
-            "shosai_loop_last_success_timestamp",
+            "shosai_loop_last_success_timestamp_seconds",
             "Unix-время последней успешной итерации цикла планировщика",
-            ("loop",),
+            (LOOP_LABEL,),
             registry=registry,
         )
-        self._failures = Counter(
-            "shosai_loop_failures",
-            "Итерации цикла планировщика, завершившиеся ошибкой",
-            ("loop",),
+        self._iterations = Histogram(
+            "shosai_loop_iteration_duration_seconds",
+            "Длительность итераций цикла планировщика; error_type — класс ошибки итерации",
+            (LOOP_LABEL, ERROR_LABEL),
+            buckets=ITERATION_BUCKETS,
             registry=registry,
         )
 
     def declare(self, loop: ScheduledLoop) -> None:
         """Publish the interval before the first iteration, whatever its outcome."""
-        self._interval.labels(loop=loop.name).set(loop.every.total_seconds())
+        self._interval.labels(loop.name).set(loop.every.total_seconds())
 
-    def succeeded(self, loop: ScheduledLoop) -> None:
-        """Record a successful iteration now."""
-        self._last_success.labels(loop=loop.name).set(time.time())
+    def succeeded(self, loop: ScheduledLoop, duration_seconds: float) -> None:
+        """Record a successful iteration that ended now."""
+        self._iterations.labels(loop.name, NO_ERROR).observe(duration_seconds)
+        self._last_success.labels(loop.name).set(time.time())
 
-    def failed(self, loop: ScheduledLoop) -> None:
-        """Count a failed iteration."""
-        self._failures.labels(loop=loop.name).inc()
+    def failed(self, loop: ScheduledLoop, duration_seconds: float, error: Exception) -> None:
+        """Record a failed iteration under the class of its error."""
+        self._iterations.labels(loop.name, error_type(error)).observe(duration_seconds)
 
 
 class LoopRunner:
@@ -121,15 +135,16 @@ class LoopRunner:
                 await self._sleep(pause)
 
     async def _iterate(self, loop: ScheduledLoop) -> None:
+        started = time.perf_counter()
         try:
             async with asyncio.timeout(loop.deadline.total_seconds()):
                 await loop.run()
         # Итерацию роняет любая ошибка её работы; цикл обязан её пережить (урок черновика).
-        except Exception:
-            self._metrics.failed(loop)
+        except Exception as error:
+            self._metrics.failed(loop, time.perf_counter() - started, error)
             log.exception("Итерация цикла завершилась ошибкой", loop=loop.name)
         else:
-            self._metrics.succeeded(loop)
+            self._metrics.succeeded(loop, time.perf_counter() - started)
 
     async def _sleep(self, seconds: float) -> None:
         try:
@@ -137,3 +152,11 @@ class LoopRunner:
                 await self._stop.wait()
         except TimeoutError:
             return
+
+
+def error_type(error: Exception) -> str:
+    """The error's class, qualified by its module unless built in: a closed set set by code."""
+    kind = type(error)
+    if kind.__module__ == "builtins":
+        return kind.__qualname__
+    return f"{kind.__module__}.{kind.__qualname__}"

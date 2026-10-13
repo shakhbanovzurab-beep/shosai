@@ -1,7 +1,9 @@
-"""Production gate: a production process refuses to start on an unsafe configuration.
+"""Production gate: a staging or production process refuses to start on an unsafe configuration.
 
 The draft once ran production with `ENVIRONMENT` unset and every safety check silently off;
 here `ENVIRONMENT` is required and the gate names each unsafe setting, never its value.
+Staging runs under the same gate, API docs included: it is reachable from the internet and
+holds real-shaped data (F1 audit OD-7). Only development, local and in tests, is exempt.
 A slice adds its own checks (for example, billing dev mode) through `extra_checks`.
 """
 
@@ -34,31 +36,34 @@ type ProductionCheck = Callable[[Settings], Iterable[GateViolation]]
 
 
 class UnsafeConfigurationError(Exception):
-    """A production process would start with an unsafe configuration."""
+    """A staging or production process would start with an unsafe configuration."""
 
-    def __init__(self, violations: Sequence[GateViolation]) -> None:
+    def __init__(self, environment: Environment, violations: Sequence[GateViolation]) -> None:
+        self.environment = environment
         self.violations = tuple(violations)
         lines = [f"{violation.setting}: {violation.reason}" for violation in violations]
-        super().__init__("Production не запускается с такими настройками:\n" + "\n".join(lines))
+        super().__init__(
+            f"Среда {environment.value} не запускается с такими настройками:\n" + "\n".join(lines)
+        )
 
 
 def enforce_production_gate(
     settings: Settings, extra_checks: Sequence[ProductionCheck] = ()
 ) -> None:
-    """Raise `UnsafeConfigurationError` listing every violation; outside production, do nothing."""
-    if settings.environment is not Environment.PRODUCTION:
+    """Raise `UnsafeConfigurationError` listing every violation; in development, do nothing."""
+    if not settings.environment.is_gated:
         return
     violations = [
         violation for check in (*CORE_CHECKS, *extra_checks) for violation in check(settings)
     ]
     if violations:
-        raise UnsafeConfigurationError(violations)
+        raise UnsafeConfigurationError(settings.environment, violations)
 
 
 def api_docs_closed(settings: Settings) -> Iterator[GateViolation]:
     """API docs reveal the whole admin and billing schema."""
     if settings.web.api_docs_enabled:
-        yield GateViolation("API_DOCS_ENABLED", "документация API в production выключена")
+        yield GateViolation("API_DOCS_ENABLED", "документация API выключена вне разработки")
 
 
 def proxies_trusted(settings: Settings) -> Iterator[GateViolation]:
@@ -79,13 +84,13 @@ def encryption_key_present(settings: Settings) -> Iterator[GateViolation]:
 def debug_logs_off(settings: Settings) -> Iterator[GateViolation]:
     """DEBUG is switched on only for one company or user for a limited time (§16.7)."""
     if settings.observability.log_level is LogLevel.DEBUG:
-        yield GateViolation("LOG_LEVEL", "DEBUG для всего процесса в production запрещён")
+        yield GateViolation("LOG_LEVEL", "DEBUG для всего процесса вне разработки запрещён")
 
 
 def storage_over_tls(settings: Settings) -> Iterator[GateViolation]:
     """Files and their signed links travel to the one bucket only over TLS (ADR 0014)."""
     if settings.storage.s3_endpoint_url.scheme != SECURE_STORAGE_SCHEME:
-        yield GateViolation("S3_ENDPOINT_URL", "к хранилищу в production — только https")
+        yield GateViolation("S3_ENDPOINT_URL", "к хранилищу вне разработки — только https")
 
 
 def valkey_over_tls(settings: Settings) -> Iterator[GateViolation]:
@@ -93,7 +98,7 @@ def valkey_over_tls(settings: Settings) -> Iterator[GateViolation]:
     url = settings.shared_services.valkey_url.get_secret_value()
     if urlsplit(url).scheme != SECURE_VALKEY_SCHEME:
         yield GateViolation(
-            "VALKEY_URL", f"к Valkey в production — только {SECURE_VALKEY_SCHEME}://"
+            "VALKEY_URL", f"к Valkey вне разработки — только {SECURE_VALKEY_SCHEME}://"
         )
 
 
@@ -110,7 +115,7 @@ def databases_over_tls(settings: Settings) -> Iterator[GateViolation]:
             if database_url_parameter(url, "sslmode") != SECURE_DATABASE_SSLMODE:
                 yield GateViolation(
                     f"{home_prefix(home)}{name}",
-                    f"к базе дома в production — только sslmode={SECURE_DATABASE_SSLMODE}",
+                    f"к базе дома вне разработки — только sslmode={SECURE_DATABASE_SSLMODE}",
                 )
 
 

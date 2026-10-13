@@ -41,9 +41,38 @@ async def eventually(holds: Callable[[], bool]) -> None:
         await asyncio.sleep(0.01)
 
 
-def sample(registry: CollectorRegistry, name: str, loop: str) -> float:
+def sample(registry: CollectorRegistry, name: str, loop: str, **labels: str) -> float:
     """A loop metric, 0 when never recorded."""
-    return registry.get_sample_value(name, {"loop": loop}) or 0.0
+    return registry.get_sample_value(name, {"shosai_loop_name": loop, **labels}) or 0.0
+
+
+def iterations(registry: CollectorRegistry, loop: str, error: str) -> float:
+    """Iterations of the loop that ended with the error type (empty: success)."""
+    name = "shosai_loop_iteration_duration_seconds_count"
+    return sample(registry, name, loop, error_type=error)
+
+
+async def test_the_loop_metrics_follow_the_opentelemetry_naming_rules() -> None:
+    registry, calls = CollectorRegistry(), Calls()
+    runner = LoopRunner([ScheduledLoop("probe.named", QUICK, calls)], LoopMetrics(registry))
+
+    runner.start()
+    await eventually(lambda: calls.count >= 1)
+    await runner.stop()
+
+    recorded = {
+        sample.name: set(sample.labels) - {"le"}
+        for family in registry.collect()
+        for sample in family.samples
+        if not sample.name.endswith("_created")
+    }
+    assert recorded == {
+        "shosai_loop_interval_seconds": {"shosai_loop_name"},
+        "shosai_loop_last_success_timestamp_seconds": {"shosai_loop_name"},
+        "shosai_loop_iteration_duration_seconds_bucket": {"shosai_loop_name", "error_type"},
+        "shosai_loop_iteration_duration_seconds_count": {"shosai_loop_name", "error_type"},
+        "shosai_loop_iteration_duration_seconds_sum": {"shosai_loop_name", "error_type"},
+    }
 
 
 async def test_a_loop_runs_at_start_then_once_per_interval() -> None:
@@ -59,7 +88,8 @@ async def test_a_loop_runs_at_start_then_once_per_interval() -> None:
 
     assert first_after < QUICK.total_seconds()
     assert sample(registry, "shosai_loop_interval_seconds", "probe.often") == 0.03
-    assert sample(registry, "shosai_loop_last_success_timestamp", "probe.often") > 0
+    assert sample(registry, "shosai_loop_last_success_timestamp_seconds", "probe.often") > 0
+    assert iterations(registry, "probe.often", "") >= 4
 
 
 async def test_a_failed_iteration_is_logged_with_its_stack_counted_and_survived() -> None:
@@ -74,8 +104,8 @@ async def test_a_failed_iteration_is_logged_with_its_stack_counted_and_survived(
     failures = [line for line in captured.lines() if line.get("loop") == "probe.flaky"]
     assert len(failures) == 2
     assert all("RuntimeError: итерация сломана нарочно" in line["exception"] for line in failures)
-    assert sample(registry, "shosai_loop_failures_total", "probe.flaky") == 2
-    assert sample(registry, "shosai_loop_last_success_timestamp", "probe.flaky") > 0
+    assert iterations(registry, "probe.flaky", "RuntimeError") == 2
+    assert sample(registry, "shosai_loop_last_success_timestamp_seconds", "probe.flaky") > 0
 
 
 async def test_an_iteration_past_its_deadline_fails_and_the_loop_goes_on() -> None:
@@ -87,7 +117,7 @@ async def test_an_iteration_past_its_deadline_fails_and_the_loop_goes_on() -> No
     await eventually(lambda: calls.count >= 2)
     await runner.stop()
 
-    assert sample(registry, "shosai_loop_failures_total", "probe.stuck") == 1
+    assert iterations(registry, "probe.stuck", "TimeoutError") == 1
 
 
 async def test_stop_waits_for_the_iteration_in_progress_and_ends_every_loop() -> None:

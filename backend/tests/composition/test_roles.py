@@ -29,7 +29,7 @@ from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
 
 WAIT_SECONDS = 10.0
-LOOP_SUCCESS = "shosai_loop_last_success_timestamp"
+LOOP_SUCCESS = "shosai_loop_last_success_timestamp_seconds"
 
 
 async def get(bench: PlatformBench, path: str) -> httpx.Response:
@@ -91,7 +91,9 @@ async def test_the_scheduler_runs_the_core_loops_and_the_slices_loops(
         run_slot, harness_settings, (notes_feature(lifecycle),), ProcessRole.SCHEDULER
     ) as bench:
         async with scheduler_role(bench.platform, bench.telemetry) as tasks:
-            await eventually(lambda: all(bench.sample(LOOP_SUCCESS, loop=loop) for loop in core))
+            await eventually(
+                lambda: all(bench.sample(LOOP_SUCCESS, shosai_loop_name=loop) for loop in core)
+            )
             await eventually(lambda: "notes:sweep" in lifecycle.events)
         relay_ticks = int(await valkey.xlen("shosai:tasks:critical"))
 

@@ -24,7 +24,7 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 from shosai.core.observability.log_context import log_context
 from shosai.core.web.envelope import error_body, error_response
 from shosai.core.web.error_handlers import status_code
-from shosai.core.web.http_metrics import CompletedRequest, HttpMetrics, content_length
+from shosai.core.web.http_metrics import CompletedRequest, HttpMetrics
 from shosai.core.web.request_ids import REQUEST_ID_HEADER, assign_request_id
 from shosai.core.web.route_templates import RouteTemplates
 
@@ -81,14 +81,12 @@ class _HttpExchange:
         self._request_id = request_id
         self._templates = templates
         self._status: int | None = None
-        self._response_bytes = 0
         self._started = time.perf_counter()
 
     async def run(self, receive: Receive, send: Send) -> None:
         async def send_with_headers(message: Message) -> None:
             if message["type"] == "http.response.start":
                 self._status = int(message["status"])
-                self._response_bytes = content_length(message.get("headers", ()))
                 self._add_headers(MutableHeaders(scope=message))
             await send(message)
 
@@ -114,14 +112,13 @@ class _HttpExchange:
             log.info("Запрос обработан", **self._outcome())
 
     def completed(self) -> CompletedRequest:
-        """The outcome for the HTTP metrics; a request left without an answer counts as 500."""
+        """The outcome for the HTTP metrics; `status` stays None when no response started."""
         return CompletedRequest(
             method=str(self._scope.get("method", "")),
-            handler=self._templates.of(self._scope),
-            status=self._status or SERVER_ERROR_STATUS,
+            route=self._templates.of(self._scope),
+            status=self._status,
+            scheme=str(self._scope.get("scheme", "")),
             duration_seconds=time.perf_counter() - self._started,
-            request_bytes=content_length(self._scope.get("headers", ())),
-            response_bytes=self._response_bytes,
         )
 
     async def _answer_internal_error(self, receive: Receive, send: Send) -> None:

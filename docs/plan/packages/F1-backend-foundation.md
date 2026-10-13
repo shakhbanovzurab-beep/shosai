@@ -204,7 +204,7 @@ With no features yet, a test runs `lint-imports` on a fixture tree with two feat
 - Redaction by key (exact names and suffixes, as in the draft); request bodies, headers and query strings are never logged (§16.8).
 - One access line per request: method, route template, status, duration.
 - Traces: our own `TracerProvider` with a bounded batch queue and a short export timeout; no exporter when `OTEL_EXPORTER_OTLP_ENDPOINT` is unset; dropped spans are counted (§16.1). FastAPI's native tracing with `auto_configure`, `metrics` and `logs` off; instrumentation of HTTPX, redis and TaskIQ. SQLAlchemy statements get our own client spans (`core/db/tracing.py`, step 4): the official instrumentor patches `create_engine` globally and its per-engine class is untyped.
-- Metrics: HTTP RED metrics recorded by the request boundary from the route FastAPI has already matched, under the instrumentator's contract (ADR 0012); `prometheus_client` for the rest: event-loop lag (a histogram, so a spike between two scrapes is seen), pool occupancy per home, task and outbox metrics, telemetry drops. One registry per process, passed in; labels stay bounded (§16.7).
+- Metrics: HTTP RED metrics recorded by the request boundary from the route FastAPI has already matched, under the instrumentator's contract (ADR 0012; since 2026-10-13 under OpenTelemetry's HTTP semantic conventions, F1 audit OD-3); `prometheus_client` for the rest: event-loop lag (a histogram, so a spike between two scrapes is seen), pool occupancy per home, task and outbox metrics, telemetry drops. One registry per process, passed in; labels stay bounded (§16.7).
 - Logs leave through a bounded queue to a writer thread, rendered in the caller's thread; a full queue drops the line and counts it (§16.1).
 - The fastapi skill prefers FastAPI's native metrics and logs; §16.1 keeps the HTTP metrics under the instrumentator's names and labels (ADR 0012) and logs through structlog, so those two are off.
 
@@ -277,7 +277,7 @@ With no features yet, a test runs `lint-imports` on a fixture tree with two feat
 - Readiness is 200 after start and 503 while starting or draining. The body reports each dependency (`homes.ru`, `homes.eu`, `valkey`, `cache`, `storage`) as `ok` or `down`, each checked with a 2 s timeout. Dependencies do not fail readiness (F1-C2); they are alerted through metrics.
 - Start: settings and gate → logging and telemetry → engines, home identity and head check → Valkey, cache, storage → brokers → the role. A failed step exits non-zero with a log line naming it.
 - Stop on `SIGTERM`: readiness 503 → stop accepting work → drain (in-flight requests; running tasks within their deadline, the rest are redelivered after the lease; loops stop) → close clients → dispose engines → flush telemetry. Each step logs its failures; none is suppressed.
-- Loops: a failing iteration is logged with its stack and the loop continues; each success updates `shosai_loop_last_success_timestamp{loop}` (spec 013).
+- Loops: a failing iteration is logged with its stack and the loop continues; each success updates `shosai_loop_last_success_timestamp_seconds{shosai_loop_name}` (spec 013; renamed by F1 audit OD-3).
 
 ### 3.12 Model-facing English test
 

@@ -11,18 +11,13 @@ from hypothesis import strategies as st
 from starlette.types import ASGIApp
 
 from shosai.core.web.health import build_health_router
-from shosai.core.web.http_metrics import (
-    KNOWN_METHODS,
-    OTHER_METHOD,
-    UNMATCHED_HANDLER,
-    content_length,
-    status_class,
-)
+from shosai.core.web.http_metrics import ABSENT, KNOWN_METHODS, OTHER, status_labels
 from tests.core.web.asgi import asgi_scope, call
-from tests.core.web.metric_samples import requests_total
+from tests.core.web.metric_samples import requests_counted
 from tests.core.web.probe_app import build_probe_app, probe_router
 
-STATUS_CLASSES = {"1xx", "2xx", "3xx", "4xx", "5xx"}
+# Коды, которые оболочка и пробное приложение способны ответить на любой запрос.
+SHELL_STATUSES = {"200", "307", "404", "405", "422", "429", "500", "503"}
 
 PATHS = st.text(st.characters(codec="utf-8", exclude_categories=("Cs", "Cc")), max_size=60)
 
@@ -44,10 +39,14 @@ async def test_no_label_value_ever_comes_from_the_request(
     await call(probe.app, scope)
 
     served = {context.path for context in iter_route_contexts(probe.app.routes)}
-    [(seen_method, seen_status, seen_handler)] = requests_total(probe.registry)
-    assert seen_handler in served | {UNMATCHED_HANDLER}
-    assert seen_method in KNOWN_METHODS | {OTHER_METHOD}
-    assert seen_status in STATUS_CLASSES
+    [(seen_method, seen_route, seen_status, seen_scheme, seen_error)] = requests_counted(
+        probe.registry
+    )
+    assert seen_route in served | {ABSENT}
+    assert seen_method in KNOWN_METHODS | {OTHER}
+    assert seen_status in SHELL_STATUSES
+    assert seen_scheme == "http"
+    assert seen_error in {ABSENT, seen_status}
 
 
 async def test_distinct_paths_do_not_grow_the_series() -> None:
@@ -57,21 +56,25 @@ async def test_distinct_paths_do_not_grow_the_series() -> None:
             await call(probe.app, asgi_scope(method, f"/v1/probe/items/user-{index}@example.com/"))
             await call(probe.app, asgi_scope(method, f"/v1/nothing/{index}"))
 
-    assert len(requests_total(probe.registry)) <= 3 * 2
+    assert len(requests_counted(probe.registry)) <= 3 * 2
 
 
 @pytest.mark.parametrize(
-    ("status", "label"),
-    [(200, "2xx"), (304, "3xx"), (499, "4xx"), (599, "5xx"), (99, "5xx"), (999, "5xx")],
+    ("status", "labels"),
+    [
+        (200, ("200", ABSENT)),
+        (304, ("304", ABSENT)),
+        (499, ("499", ABSENT)),
+        (503, ("503", "503")),
+        (99, ("500", "500")),
+        (999, ("500", "500")),
+        (None, (ABSENT, OTHER)),
+    ],
 )
-def test_a_status_maps_to_one_of_five_classes(status: int, label: str) -> None:
-    assert status_class(status) == label
-
-
-def test_content_length_reads_only_a_decimal_header() -> None:
-    assert content_length([(b"Content-Length", b"42"), (b"content-length", b"1")]) == 42
-    assert content_length([(b"host", b"t")]) == 0
-    assert content_length([(b"content-length", b"4" * 30)]) == int("4" * 30)
+def test_a_status_gives_a_code_and_an_error_type(
+    status: int | None, labels: tuple[str, str]
+) -> None:
+    assert status_labels(status) == labels
 
 
 @pytest.mark.parametrize("path", ["/v1/health", "/v1/probe/items/7", "/v1/none/x/"])

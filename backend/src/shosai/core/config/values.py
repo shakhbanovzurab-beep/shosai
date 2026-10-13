@@ -28,11 +28,16 @@ FERNET_KEY_BYTES = 32
 
 
 class Environment(StrEnum):
-    """Where the process runs; production turns the safety gate on."""
+    """Where the process runs; every environment but development is behind the safety gate."""
 
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
+
+    @property
+    def is_gated(self) -> bool:
+        """Staging is reachable from the internet with real-shaped data, so it is gated too."""
+        return self is not Environment.DEVELOPMENT
 
 
 class LogLevel(StrEnum):

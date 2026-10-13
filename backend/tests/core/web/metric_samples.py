@@ -2,6 +2,10 @@
 
 from prometheus_client import CollectorRegistry
 
+from shosai.core.web.http_metrics import DURATION_METRIC, LABELS
+
+type RequestLabels = tuple[str, str, str, str, str]
+
 
 def samples(registry: CollectorRegistry) -> list[tuple[str, dict[str, str], float]]:
     """Every HTTP sample except the `_created` timestamps."""
@@ -14,10 +18,11 @@ def samples(registry: CollectorRegistry) -> list[tuple[str, dict[str, str], floa
     ]
 
 
-def requests_total(registry: CollectorRegistry) -> dict[tuple[str, str, str], float]:
-    """`http_requests_total` by (method, status, handler)."""
-    return {
-        (labels["method"], labels["status"], labels["handler"]): value
-        for name, labels, value in samples(registry)
-        if name == "http_requests_total"
-    }
+def requests_counted(registry: CollectorRegistry) -> dict[RequestLabels, float]:
+    """Requests by (method, route, status code, scheme, error type): the histogram's count."""
+    counted: dict[RequestLabels, float] = {}
+    for name, labels, value in samples(registry):
+        if name == f"{DURATION_METRIC}_count":
+            method, route, status, scheme, error = (labels[label] for label in LABELS)
+            counted[method, route, status, scheme, error] = value
+    return counted

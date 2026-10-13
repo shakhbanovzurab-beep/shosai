@@ -1,106 +1,88 @@
-"""HTTP RED metrics of a public app, recorded by the request boundary (§16.1, §16.7).
+"""HTTP RED metric of a public app, recorded by the request boundary (§16.1, §16.7).
 
-Names, types, help texts, label names and buckets are those of
-prometheus-fastapi-instrumentator 8.1.0 (`metrics.default()`), which the project used
-before (ADR 0012), so dashboards and alerts keep working. The boundary passes the
-template of the route FastAPI has already matched; nothing is matched again. Every label
-value comes from a closed set: a served route template or `none`, a known method or
-`_OTHER`, a status class.
+One histogram under the OpenTelemetry semantic conventions for HTTP servers, as the
+Prometheus exporter of the OpenTelemetry SDK names it: `http.server.request.duration` →
+`http_server_request_duration_seconds`, its attributes with dots as underscores, its
+advisory buckets (ADR 0012, amended by F1 audit OD-3). Rate, errors and duration all come
+from it. The boundary passes the template of the route FastAPI has already matched;
+nothing is matched again. Every label value comes from a closed set: a served route
+template or empty, a known method or `_OTHER`, a status code the application chose, a
+scheme of two values, an error type derived from the status.
 """
 
-from collections.abc import Iterable
 from dataclasses import dataclass
 
-from prometheus_client import CollectorRegistry, Counter, Histogram, Summary
+from prometheus_client import CollectorRegistry, Histogram
 
-UNMATCHED_HANDLER = "none"
-OTHER_METHOD = "_OTHER"
+DURATION_METRIC = "http_server_request_duration_seconds"
+DURATION_HELP = "Duration of HTTP server requests."
+METHOD_LABEL = "http_request_method"
+ROUTE_LABEL = "http_route"
+STATUS_LABEL = "http_response_status_code"
+SCHEME_LABEL = "url_scheme"
+ERROR_LABEL = "error_type"
+LABELS = (METHOD_LABEL, ROUTE_LABEL, STATUS_LABEL, SCHEME_LABEL, ERROR_LABEL)
+# Атрибут, которого нет, в Prometheus — пустая метка: так экспортёр OpenTelemetry пишет
+# запрос без маршрута, без ответа или без ошибки.
+ABSENT = ""
+OTHER = "_OTHER"
 # Методы RFC 9110 и QUERY — тот же набор, что у FastAPI и OpenTelemetry. Любой другой
 # токен метода выбирает клиент; в метке он размножил бы временные ряды.
 KNOWN_METHODS = frozenset(
     {"CONNECT", "DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT", "QUERY", "TRACE"}
 )
-# Корзины и тексты — дословно из metrics.default() инструментатора 8.1.0.
-LATENCY_HIGHR_BUCKETS = (
-    0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 7.5,
-    10, 30, 60, float("inf"),
+HTTPS_SCHEME = "https"
+HTTP_SCHEME = "http"
+SERVER_ERROR_STATUS = 500
+# Рекомендованные корзины семантических соглашений для http.server.request.duration.
+DURATION_BUCKETS = (
+    0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, float("inf"),
 )  # fmt: skip
-LATENCY_LOWR_BUCKETS = (0.1, 0.5, 1, float("inf"))
-SIZE_HELP_TAIL = "Only value of header is respected. Otherwise ignored. No percentile calculated. "
 
 
 @dataclass(frozen=True, slots=True)
 class CompletedRequest:
-    """What the boundary knows once the response is done; `handler` is None when unmatched."""
+    """What the boundary knows once the request is done.
+
+    `route` is None when routing matched nothing; `status` is None when no response
+    started, because the task was cancelled or the application sent nothing.
+    """
 
     method: str
-    handler: str | None
-    status: int
+    route: str | None
+    status: int | None
+    scheme: str
     duration_seconds: float
-    request_bytes: int
-    response_bytes: int
 
 
 class HttpMetrics:
-    """The five HTTP metrics of the process registry."""
+    """The HTTP server duration histogram of the process registry."""
 
     def __init__(self, registry: CollectorRegistry) -> None:
-        self._requests = Counter(
-            "http_requests_total",
-            "Total number of requests by method, status and handler.",
-            ("method", "status", "handler"),
-            registry=registry,
-        )
-        self._request_size = Summary(
-            "http_request_size_bytes",
-            "Content length of incoming requests by handler. " + SIZE_HELP_TAIL,
-            ("handler",),
-            registry=registry,
-        )
-        self._response_size = Summary(
-            "http_response_size_bytes",
-            "Content length of outgoing responses by handler. " + SIZE_HELP_TAIL,
-            ("handler",),
-            registry=registry,
-        )
-        self._latency_highr = Histogram(
-            "http_request_duration_highr_seconds",
-            "Latency with many buckets but no API specific labels. "
-            "Made for more accurate percentile calculations. ",
-            buckets=LATENCY_HIGHR_BUCKETS,
-            registry=registry,
-        )
-        self._latency = Histogram(
-            "http_request_duration_seconds",
-            "Latency with only few buckets by handler. "
-            "Made to be only used if aggregation by handler is important. ",
-            ("method", "handler"),
-            buckets=LATENCY_LOWR_BUCKETS,
-            registry=registry,
+        self._duration = Histogram(
+            DURATION_METRIC, DURATION_HELP, LABELS, buckets=DURATION_BUCKETS, registry=registry
         )
 
     def observe(self, request: CompletedRequest) -> None:
         """Record one request; labels never carry the path, the query or a client's method."""
-        handler = request.handler or UNMATCHED_HANDLER
-        method = request.method if request.method in KNOWN_METHODS else OTHER_METHOD
-        status = status_class(request.status)
-        self._requests.labels(method, status, handler).inc()
-        self._request_size.labels(handler).observe(request.request_bytes)
-        self._response_size.labels(handler).observe(request.response_bytes)
-        self._latency_highr.observe(request.duration_seconds)
-        self._latency.labels(method, handler).observe(request.duration_seconds)
+        status, error = status_labels(request.status)
+        self._duration.labels(
+            request.method if request.method in KNOWN_METHODS else OTHER,
+            request.route or ABSENT,
+            status,
+            HTTPS_SCHEME if request.scheme == HTTPS_SCHEME else HTTP_SCHEME,
+            error,
+        ).observe(request.duration_seconds)
 
 
-def status_class(status: int) -> str:
-    """`2xx` for 200…299; a status outside 100…599 is a server error, `5xx`."""
-    return f"{status // 100}xx" if 100 <= status <= 599 else "5xx"
+def status_labels(status: int | None) -> tuple[str, str]:
+    """The status code and error type labels.
 
-
-def content_length(headers: Iterable[tuple[bytes, bytes]]) -> int:
-    """The `Content-Length` of raw ASGI headers, 0 when absent or malformed; never raises."""
-    for name, value in headers:
-        if name.lower() == b"content-length":
-            # bytes.isdigit признаёт только ASCII-цифры; у str «¹» тоже цифра, а int() падает.
-            digits = value.strip()
-            return int(digits) if digits.isdigit() else 0
-    return 0
+    A 5xx response is an error typed by its code, as the conventions say; a request with
+    no response has no code and the error type `_OTHER`. A status outside 100…599 cannot
+    be a valid response and counts as 500.
+    """
+    if status is None:
+        return ABSENT, OTHER
+    code = status if 100 <= status <= 599 else SERVER_ERROR_STATUS
+    return str(code), str(code) if code >= SERVER_ERROR_STATUS else ABSENT
