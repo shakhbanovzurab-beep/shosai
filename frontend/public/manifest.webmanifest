@@ -1,6 +1,6 @@
 {
-  "name": "Studio Admin",
-  "short_name": "Studio",
+  "name": "Shosai",
+  "short_name": "Shosai",
   "id": "/app/",
   "start_url": "/app/productivity",
   "scope": "/",

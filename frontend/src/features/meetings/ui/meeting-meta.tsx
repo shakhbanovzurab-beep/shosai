@@ -1,8 +1,9 @@
 import { cn } from "cn";
-import { Command, MapPin, Users, Video } from "lucide-react";
+import { MapPin, Users, Video } from "lucide-react";
 import { siGooglemeet } from "simple-icons";
 import { useFormatter, useTranslations } from "use-intl";
 
+import { ShosaiMark } from "@/components/shosai-mark";
 import { SimpleIcon } from "@/components/simple-icon";
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +29,7 @@ function SourceIcon({ source }: { source: MeetingSource }) {
     return <SimpleIcon icon={siGooglemeet} aria-hidden="true" className={cn(className, "fill-current")} />;
   if (source === "zoom") return <Video className={className} aria-hidden="true" />;
   if (source === "teams") return <Users className={className} aria-hidden="true" />;
-  if (source === "shosai") return <Command className={className} aria-hidden="true" />;
+  if (source === "shosai") return <ShosaiMark className={className} />;
   return <MapPin className={className} aria-hidden="true" />;
 }
 

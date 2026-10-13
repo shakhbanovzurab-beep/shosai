@@ -101,7 +101,7 @@ export function WorkspaceSwitcher({ slug, appName }: { slug: string | null; appN
         <DropdownMenuGroup>
           <ScopeOption href="/app/productivity" active={slug === null}>
             <span className="grid size-7 shrink-0 place-items-center rounded-md border">
-              <PersonalTile />
+              <PersonalTile className="size-4!" />
             </span>
             <OptionText title={t("switcher.personal")} detail={t("switcher.personalHint")} />
           </ScopeOption>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Shosai">
+  <title>Shosai</title>
+  <rect width="512" height="512" fill="#0A0A0A"/>
+  <g fill="#FAFAFA" transform="translate(112 112) scale(4.5)">
+    <path d="M12 5H26.86A10 10 0 0 0 24 12V52A10 10 0 0 0 26.86 59H12A7 7 0 0 1 5 52V12A7 7 0 0 1 12 5Z"/>
+    <path d="M34 5H52A7 7 0 0 1 59 12V52A7 7 0 0 1 52 59H34A7 7 0 0 1 27 52V12A7 7 0 0 1 34 5Z"/>
+  </g>
+</svg>

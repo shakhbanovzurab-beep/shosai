@@ -1,5 +1,6 @@
 import { cn } from "cn";
-import { Command } from "lucide-react";
+
+import { ShosaiMark } from "@/components/shosai-mark";
 
 /** The workspace's mark: its first letter on the primary colour, like an app icon. */
 export function WorkspaceTile({ name, className }: { name: string; className?: string }) {
@@ -16,7 +17,7 @@ export function WorkspaceTile({ name, className }: { name: string; className?: s
   );
 }
 
-/** The personal scope's mark: the app's own logo. */
+/** The personal scope's mark: the app's own logo, a little larger than a workspace tile, so it reads as the brand. */
 export function PersonalTile({ className }: { className?: string }) {
-  return <Command aria-hidden="true" className={cn("size-4 shrink-0", className)} />;
+  return <ShosaiMark className={cn("size-6!", className)} />;
 }

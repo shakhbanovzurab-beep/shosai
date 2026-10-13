@@ -8,5 +8,6 @@ export function ScopeMark({ slug }: { slug: string | null }) {
   const workspaces = useWorkspaces();
   const name =
     slug && workspaces.status === "ready" ? workspaces.data.workspaces.find((w) => w.slug === slug)?.name : undefined;
-  return name ? <WorkspaceTile name={name} /> : <PersonalTile />;
+  // Знак шире поля кнопки рельса (16 px), почти во всю кнопку: отрицательный отступ держит его в центре.
+  return name ? <WorkspaceTile name={name} /> : <PersonalTile className="-m-1.5 size-7!" />;
 }

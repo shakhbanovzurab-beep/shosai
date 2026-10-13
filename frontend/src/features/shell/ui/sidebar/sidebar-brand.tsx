@@ -2,9 +2,9 @@
 
 import type { ReactNode } from "react";
 
-import { Command } from "lucide-react";
 import { useTranslations } from "use-intl";
 
+import { ShosaiMark } from "@/components/shosai-mark";
 import { useSidebar } from "@/components/ui/sidebar";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
 import { APP_CONFIG } from "@/config/app-config";
@@ -40,7 +40,7 @@ export function SidebarBrand({ homeUrl, switcher, mark }: SidebarBrandProps) {
             className="group/brand"
           >
             <span className="flex group-hover/brand:hidden group-focus-visible/brand:hidden">
-              {mark ?? <Command aria-hidden="true" />}
+              {mark ?? <ShosaiMark className="size-6!" />}
             </span>
             <SidebarToggleIcon
               direction="open"
@@ -58,7 +58,7 @@ export function SidebarBrand({ homeUrl, switcher, mark }: SidebarBrandProps) {
         {switcher ?? (
           <SidebarMenuButton asChild className="min-w-0 flex-1">
             <Link prefetch={false} href={homeUrl}>
-              <Command />
+              <ShosaiMark className="size-6!" />
               <span className="font-semibold text-base">{APP_CONFIG.name}</span>
             </Link>
           </SidebarMenuButton>

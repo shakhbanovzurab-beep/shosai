@@ -1,7 +1,8 @@
-import { CalendarDays, Command, Home, KanbanSquare, LifeBuoy, Mail } from "lucide-react";
+import { CalendarDays, Home, KanbanSquare, LifeBuoy, Mail } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import { PageMeta } from "@/app/root/page-meta";
+import { ShosaiMark } from "@/components/shosai-mark";
 import { Button } from "@/components/ui/button";
 import { APP_CONFIG } from "@/config/app-config";
 import { Link } from "@/lib/navigation";
@@ -41,7 +42,7 @@ export function NotFoundPage() {
           prefetch={false}
           className="flex items-center gap-2 rounded-md font-semibold outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <Command className="size-5" aria-hidden="true" />
+          <ShosaiMark className="size-5" />
           {APP_CONFIG.name}
         </Link>
       </header>
