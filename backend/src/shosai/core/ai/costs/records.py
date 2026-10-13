@@ -31,10 +31,11 @@ from shosai.core.ai.pricing.records import UNITS_CHECK
 from shosai.core.db.model_base import ModelBase
 from shosai.core.db.partitions.policy import monthly_partition_range
 
-# Виды вызовов: речь и живые сессии добавил шаг 3 F6 (миграция a1c4e9d27b53).
+# Виды вызовов: речь и живые сессии добавил шаг 3 F6 (a1c4e9d27b53), решения и OCR — шаг 4
+# (e7a1c4d9b2f6).
 KINDS_CHECK = (
     "kind IN ('chat', 'embed', 'rerank', 'image', 'transcribe', 'diarize', "
-    "'live_transcription', 'live_translation', 'voice')"
+    "'live_transcription', 'live_translation', 'voice', 'decide', 'ocr')"
 )
 
 

@@ -268,12 +268,12 @@ Jev is a **decision model** by TypeSafe AI, released on 2026-09-15. It is not a 
 
 - `model`, pinned to `typesafe/jev-1.13`, never the alias `~typesafe/jev-latest`;
 - `state`, as text or JSON;
-- `questions`, a map of typed questions:
-  - `choice`: one of up to 255 named options, with `probabilities` and `confidence`;
-  - `score`: an ordered scale of 2–10 levels, returning the expected level, `probabilities` and `confidence`;
-  - `noul`: the probability that a proposition is true.
+- `questions`, a map of named questions, each with `type`, English `instructions` and `criteria`:
+  - `choice`: up to 255 options as a map of option name to description; the answer is the `choice`, its `confidence` and a probability per option;
+  - `score`: an ordered scale of 2–10 levels, the lowest first; the answer is the expected level as a number (0 is the first level), its `confidence` and a probability per level keyed `"0"`, `"1"`…;
+  - `noul`: optional `true` and `false` descriptions; the answer is `noul`, the probability that the proposition is true.
 
-**Response.** It carries `answers`, `usage.cost`, the dated `model` snapshot and an `id`.
+**Response.** It carries `answers`, `usage` (`input_tokens`, `output_tokens`, `cost`), the dated `model` snapshot (`typesafe/jev-1.13-20260917`) and an `id` (OpenRouter's API reference and Jev tutorial, read on 2026-10-13; the port's contract test holds a recorded answer).
 
 **Properties that shape the design:**
 

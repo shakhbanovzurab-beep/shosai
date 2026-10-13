@@ -210,7 +210,10 @@ broken_contract_guidance = "Call models through CoreServices.ai; provider client
 id = "light-ai-values"
 name = "Light AI value types"
 type = "forbidden"
-source_modules = ["shosai.core.ai.calls", "shosai.core.ai.requests", "shosai.core.ai.results"]
+source_modules = [
+    "shosai.core.ai.calls", "shosai.core.ai.decisions", "shosai.core.ai.documents",
+    "shosai.core.ai.requests", "shosai.core.ai.results",
+]
 forbidden_modules = [
     "aiobotocore", "fastapi", "google", "httpx", "openai", "psycopg", "redis", "sqlalchemy",
     "starlette", "structlog", "taskiq", "websockets",

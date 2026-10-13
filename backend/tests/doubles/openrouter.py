@@ -40,7 +40,8 @@ class ScriptedOpenRouter:
         return [body for sent, body in self.requests if sent == path]
 
     def _handle(self, request: httpx.Request) -> httpx.Response:
-        path = request.url.path.removeprefix("/api/v1/")
+        # Пути от /api/v1/ и от /api/: chat/completions, alpha/decisions.
+        path = request.url.path.removeprefix("/api/").removeprefix("v1/")
         self.requests.append((path, json.loads(request.content or b"{}")))
         queued = self.answers.get(path)
         if not queued:

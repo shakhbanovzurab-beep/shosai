@@ -28,6 +28,8 @@ BASE_TREE = {
     "shosai.core.ai.calls": "import shosai.core.kernel.homes\n",
     "shosai.core.ai.requests": "",
     "shosai.core.ai.results": "import shosai.core.ai.calls\n",
+    "shosai.core.ai.decisions": "import shosai.core.ai.results\n",
+    "shosai.core.ai.documents": "import shosai.core.ai.results\n",
     "shosai.core.ai.adapters.live": "import websockets\nimport shosai.core.ai.results\n",
     # Домен опирается на ядро без фреймворков и на pydantic; адаптер среза — на домен.
     "shosai.features.alpha.domain.rules": "import pydantic\nimport shosai.core.kernel.homes\n",

@@ -11,14 +11,16 @@ from prometheus_client import CollectorRegistry
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ai.adapters.gemini_live import GeminiLive
+from shosai.core.ai.adapters.mistral_ocr import MistralOcr
 from shosai.core.ai.adapters.openai_realtime import OpenAiRealtime
 from shosai.core.ai.adapters.openrouter import OpenRouter
 from shosai.core.ai.adapters.pyannote import JobPolling, Pyannote
+from shosai.core.ai.admission import Admission, AiClients
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRef, ModelRoute, Provider
 from shosai.core.ai.costs.settlement import CostSettlements, SettledCost
 from shosai.core.ai.costs.writer import CostWriter
 from shosai.core.ai.metrics import AiMetrics
-from shosai.core.ai.port import AiClients, AiProviders
+from shosai.core.ai.port import AiProviders
 from shosai.core.ai.pricing.prices import PriceBook
 from shosai.core.ai.pricing.records import ProviderPrice
 from shosai.core.ai.recording import CallRecorder
@@ -143,6 +145,7 @@ def ai_bench(
     enabled: bool = True,
     client: httpx.AsyncClient | None = None,
     live: LiveAdapters = NO_LIVE,
+    mistral_ocr: httpx.AsyncClient | None = None,
 ) -> AiBench:
     """The port over the given homes; without a key when `enabled` is False.
 
@@ -169,9 +172,11 @@ def ai_bench(
         ),
         openai_realtime=live.realtime,
         gemini_live=live.gemini,
+        mistral=MistralOcr(mistral_ocr) if enabled and mistral_ocr is not None else None,
     )
     sessions = LiveSessions(minutes, connect_timeout=5.0)
-    providers = AiProviders(clients, PriceBook(transactions), recorder, sessions, metrics)
+    admission = Admission(PriceBook(transactions), metrics)
+    providers = AiProviders(clients, admission, recorder, sessions, metrics)
     return AiBench(
         providers, scripted, diarizer, minutes, clock, settlement, sender, writer, registry
     )

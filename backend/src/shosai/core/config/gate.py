@@ -140,6 +140,8 @@ def ai_provider_keys_present(settings: Settings) -> Iterator[GateViolation]:
         yield GateViolation("OPENAI_API_KEY", "без ключа OpenAI нет потоковой расшифровки")
     if settings.ai.google_live_api_key is None:
         yield GateViolation("GOOGLE_LIVE_API_KEY", "без ключа Gemini нет перевода и голоса")
+    if settings.ai.mistral_api_key is None:
+        yield GateViolation("MISTRAL_API_KEY", "без ключа Mistral сканы документов не читаются")
 
 
 def databases_over_tls(settings: Settings) -> Iterator[GateViolation]:

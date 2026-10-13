@@ -1,5 +1,5 @@
 """The OpenRouter client: chat, streaming, vision, web search, embeddings, rerank, images,
-and transcription of recordings.
+transcription of recordings and Jev decisions.
 
 One HTTPX client per process, built by composition with the key and the limits (draft
 lesson: seven router call sites leaked two pools each). Deadlines of §4.3: connect 10 s,
@@ -21,6 +21,12 @@ from shosai.core.ai.adapters.openrouter_audio import (
     transcription_body,
     transcription_usage,
 )
+from shosai.core.ai.adapters.openrouter_decisions import (
+    DECISIONS_PATH,
+    decision_body,
+    decision_of,
+    decision_usage,
+)
 from shosai.core.ai.adapters.openrouter_wire import (
     chat_body,
     data_url,
@@ -31,7 +37,8 @@ from shosai.core.ai.adapters.openrouter_wire import (
     usage_of,
 )
 from shosai.core.ai.calls import ModelRef, Provider
-from shosai.core.ai.errors import AiCallError, AiFailure
+from shosai.core.ai.decisions import Decision, DecisionRequest
+from shosai.core.ai.errors import AiCallError, AiFailure, PaidCallError
 from shosai.core.ai.requests import (
     ChatRequest,
     EmbeddingRequest,
@@ -180,6 +187,19 @@ class OpenRouter:
             model=model,
             usage=transcription_usage(answer.get("usage")),
         )
+
+    async def decide(self, model: ModelRef, request: DecisionRequest) -> Decision:
+        """Typed answers to the questions about the state; one round trip."""
+        url = self._client.base_url.join(DECISIONS_PATH)
+        built = self._client.build_request("POST", url, json=decision_body(model.model, request))
+        answer = await call_json(self._client, Provider.OPENROUTER, built)
+        usage = decision_usage(answer.get("usage"))
+        try:
+            return decision_of(answer, model, request)
+        except AiCallError as broken:
+            # Ответ оплачен, но вне контракта альфа-API: строку пишем, решение — нет.
+            log.error("Ответ Decisions API вне контракта", snapshot=str(answer.get("model")))
+            raise PaidCallError(broken.failure, usage) from None
 
     async def _post(self, path: str, body: Json) -> Json:
         request = self._client.build_request("POST", path, json=body)

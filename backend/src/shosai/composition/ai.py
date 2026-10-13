@@ -18,6 +18,7 @@ from prometheus_client import CollectorRegistry
 from pydantic import HttpUrl, SecretStr
 
 from shosai.core.ai.adapters.gemini_live import GEMINI_API, GeminiLive, gemini_client
+from shosai.core.ai.adapters.mistral_ocr import MISTRAL_API, MistralOcr, mistral_client
 from shosai.core.ai.adapters.openai_realtime import OPENAI_REALTIME, OpenAiRealtime
 from shosai.core.ai.adapters.openrouter import OPENROUTER_API, OpenRouter, openrouter_client
 from shosai.core.ai.adapters.pyannote import (
@@ -27,11 +28,13 @@ from shosai.core.ai.adapters.pyannote import (
     pyannote_client,
     upload_client,
 )
+from shosai.core.ai.admission import Admission, AiClients
 from shosai.core.ai.costs.settlement import CostSettlements
 from shosai.core.ai.costs.writer import CostWriter, WorkSender, record_cost_handler
 from shosai.core.ai.metrics import AiMetrics
-from shosai.core.ai.port import AiClients, AiProviders
+from shosai.core.ai.port import AiProviders
 from shosai.core.ai.pricing.prices import PriceBook
+from shosai.core.ai.pricing.sync import price_sync_handler
 from shosai.core.ai.recording import CallRecorder
 from shosai.core.ai.sessions.live import LiveSessions
 from shosai.core.ai.sessions.minutes import MinuteRows
@@ -59,12 +62,14 @@ class PlatformAi:
     transactions: HomeTransactions
     outbound: httpx.AsyncClient
     cbr_url: str
+    openrouter_url: str
 
     def task_handlers(self) -> list[TaskHandler[Any]]:
-        """The deferred cost record and the rate fetch, registered in every role."""
+        """The deferred cost record, the rate fetch and the price sync, in every role."""
         return [
             record_cost_handler(self.writer),
             rate_fetch_handler(self.transactions, self.outbound, self.cbr_url),
+            price_sync_handler(self.transactions, self.outbound, self.openrouter_url),
         ]
 
 
@@ -113,6 +118,9 @@ def open_clients(settings: Settings, stack: AsyncExitStack) -> AiClients:
         (PYANNOTE_API, pyannote_client),
         stack,
     )
+    mistral = provider_client(
+        "mistral", ai.mistral_api_key, ai.mistral_base_url, (MISTRAL_API, mistral_client), stack
+    )
     diarizer = None
     if pyannote is not None:
         uploads = upload_client()
@@ -123,6 +131,7 @@ def open_clients(settings: Settings, stack: AsyncExitStack) -> AiClients:
         pyannote=diarizer,
         openai_realtime=realtime_client(ai),
         gemini_live=gemini_live(ai, stack),
+        mistral=MistralOcr(mistral) if mistral is not None else None,
     )
 
 
@@ -168,9 +177,8 @@ async def open_ai(
     recorder = CallRecorder(writer, rates, metrics)
     minutes = MinuteRows(recorder)
     await stack.enter_async_context(minutes.running())
-    providers = AiProviders(
-        clients, PriceBook(transactions), recorder, LiveSessions(minutes), metrics
-    )
+    admission = Admission(PriceBook(transactions), metrics)
+    providers = AiProviders(clients, admission, recorder, LiveSessions(minutes), metrics)
     return PlatformAi(
         providers=providers,
         rates=rates,
@@ -179,4 +187,9 @@ async def open_ai(
         transactions=transactions,
         outbound=outbound,
         cbr_url=str(settings.exchange_rates.cbr_daily_url),
+        openrouter_url=(
+            OPENROUTER_API
+            if settings.ai.openrouter_base_url is None
+            else str(settings.ai.openrouter_base_url)
+        ),
     )

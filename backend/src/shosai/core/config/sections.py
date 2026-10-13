@@ -152,6 +152,9 @@ class AiSettings(SettingsSection):
     # Gemini Live: синхронный перевод и голосовой ассистент.
     google_live_api_key: SecretStr | None = None
     google_live_base_url: HttpUrl | None = None
+    # Mistral OCR: сканы и картинки документов.
+    mistral_api_key: SecretStr | None = None
+    mistral_base_url: HttpUrl | None = None
 
 
 class ExchangeRateSettings(SettingsSection):

@@ -56,6 +56,8 @@ class Provider(StrEnum):
     OPENAI = "openai"
     # Gemini Live: синхронный перевод и голосовой ассистент.
     GOOGLE = "google"
+    # Распознавание сканов и картинок документов (OCR).
+    MISTRAL = "mistral"
 
 
 @dataclass(frozen=True, slots=True)
