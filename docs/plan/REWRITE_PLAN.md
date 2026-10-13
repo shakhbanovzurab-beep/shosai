@@ -1,8 +1,9 @@
 # Rewrite plan: draft → shosai
 
-How the draft (`/root/whisperer`) is rewritten into the final version (`/root/shosai`). The rules are in [.claude/CLAUDE.md](../../.claude/CLAUDE.md) ("Rewrite from the draft" and everything else) and the architecture in [docs/design/ARCHITECTURE.md](../design/ARCHITECTURE.md). This plan does not repeat them; it orders the work.
+How Shosai is built in `/root/shosai`, with the draft (`/root/whisperer`) as a reference. The rules are in [.claude/CLAUDE.md](../../.claude/CLAUDE.md) ("Rewrite from the draft" and everything else) and the architecture in [docs/design/ARCHITECTURE.md](../design/ARCHITECTURE.md). This plan does not repeat them; it orders the work.
 
 - **Status of every work package:** [STATUS.md](STATUS.md).
+- **The feature slices, their scope, data, routes, dependencies and build order:** [SLICE_MAP.md](SLICE_MAP.md) ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md)).
 - **Prompts to start an agent:** [prompts/](prompts/).
 
 ---
@@ -35,7 +36,7 @@ How the draft (`/root/whisperer`) is rewritten into the final version (`/root/sh
 
 - The package's own definition of done (in its prompt) holds.
 - Every check in CLAUDE.md passes: stage checks, tests, gates 100/100, mypy strict, CI green after push.
-- Behaviour matches the draft; any difference is either demanded by CLAUDE.md or the target architecture, or approved by the user.
+- Behaviour follows the product — the new web UI, the philosophy, the target and Leo architectures (CLAUDE.md "Goal"); the native routes and frames of shipped clients stay compatible.
 - [STATUS.md](STATUS.md) is updated in the same commit.
 - Decisions that CLAUDE.md or the target architecture leave open are recorded as ADRs in `docs/adr/`, and the user has confirmed them.
 
@@ -50,7 +51,7 @@ These packages read the draft and produce the references that every later packag
 | D1 | API and WebSocket contract baseline | `contracts/draft/`: the draft's OpenAPI, the WebSocket frame catalogue, and the list of endpoints and frames the shipped native clients use |
 | D2 | Visual baseline and parity harness | A route inventory, recorded API fixtures, and a Playwright harness that screenshots the draft and v2 frontends against the same fixtures and compares them. Since 2026-10-07 a record of the draft's screens and a coverage list, not a gate ([ADR 0022](../adr/0022-new-web-design-replaces-draft-parity.md)) |
 | D3 | Data inventory and mapping | `docs/plan/DATA_MAPPING.md`: every draft table and bucket prefix mapped to its v2 place, including the home and company model |
-| D4 | Feature map | `docs/plan/FEATURE_MAP.md`: every draft backend module and frontend feature mapped to a v2 slice; anything proposed for removal listed for the user's decision |
+| D4 | Feature map | `docs/plan/FEATURE_MAP.md`: every draft backend module and frontend feature mapped to a v2 slice; anything proposed for removal listed for the user's decision. Since 2026-10-13 the inventory of the draft, a reference: [SLICE_MAP.md](SLICE_MAP.md) replaced its cut as the plan of record |
 
 ### Phase 1 — Foundation
 
@@ -65,27 +66,37 @@ These packages read the draft and produce the references that every later packag
 
 ### Phase 2 — Feature slices
 
-Each slice is a vertical piece: backend slice, frontend slice, tests, contract compatibility with D1, the slice's screens of the new web UI working on the API ([ADR 0022](../adr/0022-new-web-design-replaces-draft-parity.md)). The table below is the summary as D4 left it; the module-by-module map, the decisions FM-1…FM-5 (including the routes dropped for lack of any consumer) and the dependencies between slices are in [FEATURE_MAP.md](FEATURE_MAP.md).
+Each slice is a vertical piece of one business capability, built from scratch: backend slice and frontend slice with the same name, tests, compatibility of the native routes and frames it owns with D1, its screens of the new web UI working on the API ([ADR 0022](../adr/0022-new-web-design-replaces-draft-parity.md)). The cut was derived from the cabinet and the philosophy, not from the draft's modules ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md)). Each slice's card in [SLICE_MAP.md](SLICE_MAP.md) §4.2 holds its scope, owned data, native and external routes, dependencies, events and Leo tools; the inventory row of every screen is in §2. The ID of a slice is its name; its plan is `docs/plan/slices/<name>.md`.
 
-| ID | Slice | Draft sources (backend) | Draft sources (frontend) |
-|---|---|---|---|
-| S01 | Identity: accounts, sign-in, sessions, devices, email verification, social login, token rotation, directory and home routing, data export and deletion | `features/identity`, `services/auth_service.py`, `refresh_session_service.py`, `desktop_auth_service.py`, `pending_registration.py`, `account_data.py`, `onboarding.py`, `api/auth.py`, `api/me.py`, `api/me_data.py`, `api/me_onboarding.py` | `auth`, `account`, `onboarding` |
-| S02 | Organizations: companies, members, roles, seats, access policy, RLS, audit — **new in v2** | none; target architecture §7 | new screens in the draft's visual language |
-| S03 | Billing: tariffs, subscriptions, credits, acquirers, auto-renewal, reconciliation, referral and affiliate, company invoices | `features/billing`, `services/payment`, `billing_service.py`, `auto_renew*`, `tariff_service.py`, `card_binding_service.py`, `affiliate_service.py`, `api/me_billing.py`, `api/billing_webhook.py`, `api/tariffs.py`, `api/admin/{tariffs,finance,payments,promocodes,affiliates}.py` | `billing`, `referral` |
-| S04 | Meetings: sessions, transcripts, notes, folders and tags, templates, import, recordings, mind map, sharing, post-meeting pipeline | `features/meetings`, `api/sessions.py`, `api/me_sessions*`, `api/me_notes.py`, `api/me_templates.py`, `api/me_mindmap.py`, `api/me_meeting_org.py`, `services/session_manager.py`, `services/meeting_*`, `services/mindmap_*`, `notes_enhancer.py`, `web_meeting_result.py` | `meetings` |
-| S05 | Realtime: live capture, voice assistant, call translation, subtitles, hotkeys | `features/realtime`, `features/subtitles`, `api/realtime*.py`, `api/websocket.py`, `api/ai/voice*.py`, `services/hotkey_service.py` | `hotkeys`; the live page of `meetings` |
-| S06 | Rooms: LiveKit rooms, recording, per-participant track transcription, broadcasts, room whiteboard and AI panel | `services/livekit`, `room_*.py`, `api/me_rooms.py`, `api/rooms_public.py`, `api/livekit_webhooks.py`, `features/stream`, `features/whiteboard`, `features/meeting_assistant`, `web_meeting.py`, `web_stream.py` | `rooms`, `streams` |
-| S07 | Knowledge and search: sources, indexing, Qdrant, keyword search, context graph; the legacy notes merged in (FM-2) | `features/knowledge`, `features/knowledge_engine`, `features/context_graph`, the legacy notes behind `services/rag_pipeline.py`, `api/me_search.py`, `services/global_search.py` | `knowledge`, `search` |
-| S08 | Storage: files, presigned uploads, quotas, public links | `services/storage`, `api/me_storage.py`, `api/storage_public.py` | `storage` |
-| S09 | Agent (Leo) by the [Leo architecture](../design/leo/ARCHITECTURE.md) (ADR 0023–0033), as slices `agent` (core, Action Gateway, threads, runs, context, tool registry, skills), `decisions` (Jev), `memory`, `proactive` (signals, suggestions, Web Push, `/v1/ws/user`) and `models`: chat, tools, skills, memory, personalization, proactivity, personal context, model catalogue and selection, prompts | `services/agent`, `services/skills`, model catalogue and registry in `services/llm`, `features/memory`, `features/personalization`, `features/proactive`, `api/ai/agent.py`, `api/ai/proxy.py`, `api/ai/dictate.py`, `api/me_models.py`, `api/me_skills.py`, `api/admin/{models,prompts,context}.py` | `leo`, `prompts`, `models`, `context` |
-| S10 | MCP: Shosai as an MCP server, MCP OAuth, MCP client | `api/mcp_*.py`, `api/me_mcp.py`, `services/mcp*`, `services/llm/mcp_*` | `mcp` |
-| S11 | Errands: delayed Leo actions on the Action Gateway, re-validated at run time ([ADR 0025](../adr/0025-leo-action-gateway.md)); periodic jobs moved to F6 | `features/errands` | — (panel inside `leo`) |
-| S12 | Connectors and calendar: Nango, calendar sync, Jira, meeting-result push to Notion, Slack and CRM, OAuth integrations ([ADR 0002](../adr/0002-oauth-grants-outside-nango.md)) | `features/connectors`, `features/jira`, `services/calendar`, `services/oauth_providers`, `services/oauth*.py`, `services/integration*.py`, `api/calendar_*.py`, `api/me_calendar*.py`, `api/me_integrations.py`, `api/oauth_integrations.py` | `calendar` |
-| S13 | Tracker | `api/me_tracker.py`, `services/tracker.py` | `tracker` |
-| S14 | Analytics: product analytics, personal usage, satisfaction, client errors | `features/analytics`, `features/satisfaction`, `api/client_errors.py`, `api/admin/{analytics,client_errors}.py` | `analytics`, `product-analytics`, `satisfaction` |
-| S15 | Administration and support: admin screens, users, dashboard, monitoring, tickets, newsletters | `api/admin/{users,dashboard,monitoring,tickets,broadcasts}.py`, `api/tickets.py`, `api/unsubscribe.py`, `services/ticket*_service.py`, `services/broadcast_service.py` | `platform-admin`, `support` |
-| S16 | Hub, downloads and remaining modules: hubs (FM-1), client downloads, top-bar ticker | `features/hub`, `features/desktop`, `api/app_builds.py`, `api/admin/app_builds.py`, `api/ticker.py` | `hub`, `downloads` |
-| S17 | Public site in `site/` on Next.js ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)): landing with its live demo, pricing, documentation, legal, help centre with its assistant, blog in 16 languages, public pages of shared links, SEO per [docs/seo/STRATEGY.md](../seo/STRATEGY.md) | `web_static.py`, `web_landing*.py`, `web_share.py`, `legal.py`, `features/demo`, `features/docs_assistant` (FM-1), `static/landing/`, `static/docs/` | — |
+| ID | What it does for the user | Wave |
+|---|---|---|
+| `identity` | One login for web and desktop; profile and privacy; export and deletion of everything; operator accounts and roles | 1 |
+| `workspaces` | Shared team space: members, teams, roles, seats, projects, sharing; the access policy and audit for every slice (its core first, its screens in wave 3) | 1, 3 |
+| `billing` | Plans, entitlements, usage meters, payments, seats, company invoices (entitlements first, payments in wave 3) | 1, 3 |
+| `files` | The user's files, uploads and quota — the one path for bytes | 1 |
+| `meetings` | Every recorded meeting becomes notes, transcript, map and facts; share links | 1 |
+| `capture` | Live capture, live answers and live translation on the desktop | 1 |
+| `agent` | Leo: threads, runs, tools, Action Gateway, skills, the native model proxy | 1 |
+| `tasks` | One task list: boards, meeting action items, workspace tasks, Jira | 2 |
+| `connectors` | One registry of connected services and their grants | 2 |
+| `calendar` | One calendar over connected calendars, with meetings and focus time | 2 |
+| `knowledge` | Indexing and search over files, notes, sources and meetings | 2 |
+| `commitments` | People, decisions, promises and open topics across all meetings | 2 |
+| `hubs` | One place per client or piece of work that watches what is unresolved | 2 |
+| `decisions` | Leo's Decision Layer over Jev, also used by mail and hubs | 2 |
+| `memory` | What Leo knows about the user, visible and correctable | 2 |
+| `proactive` | Leo's initiative: signals, suggestions, the Today feed, push | 3 |
+| `errands` | Delayed Leo actions and reminders | 3 |
+| `mail` | Leo reads the inbox, says what needs the user and drafts replies | 3 |
+| `studio` | How Shosai's AI behaves: models, prompts, personal context | 3 |
+| `mcp` | Shosai as an MCP server; external MCP servers for Leo | 3 |
+| `support` | Tickets and newsletters between operators and users | 4 |
+| `releases` | Desktop builds, staged rollout, downloads | 4 |
+| `telemetry` | Client errors as issues; product events; the satisfaction survey | 4 |
+| `rooms` | Shosai video rooms with per-speaker transcription, broadcasts and the room whiteboard | 4 |
+| `site` | The public site in `site/` on Next.js ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) and the public pages of shared links, SEO per [docs/seo/STRATEGY.md](../seo/STRATEGY.md) | any time after F6 |
+
+The home screen, the Meetings overview, the Settings dialog and the admin dashboard are composition screens: each widget calls its owner's API; no backend slice aggregates them.
 
 ### Phase 3 — Data migration and cutover
 
@@ -97,18 +108,27 @@ Each slice is a vertical piece: backend slice, frontend slice, tests, contract c
 ## 4. Dependencies and parallelism
 
 ```text
-D1 D2 D3 D4          (parallel, any time)
-F3 ── F1 ── F6 ── S01 ── S02..S16   (slices in any order, in parallel)
-      F2 ───────┘
-F1 F2 F6 ── S17
-F1 F2 ── F4 ── F5 (steps 1–5 of F4 and 1–6 of F5 need only F1)
-all S + D3 ── M1 ── M2
+D1 D2 D3 D4                       (done; references)
+F3 ── F1 (per the F1 audit) ── F6 (steps 1–9) ── wave 1 ── wave 2 ── wave 3 ── wave 4
+      F2 ──────────────────────────────────────┘
+F1 F2 F6 ── site                  (any time, in parallel)
+F1 F2 ── F4 ── F5                 (steps 1–5 of F4 and 1–6 of F5 need only F1)
+identity ── F6 step 10
+all slices + D3 ── M1 ── M2
 ```
 
-- The user chose no feature order. The only fixed dependencies are technical:
-  - F1, F2, F3 and F6 come before any slice;
-  - S01 (identity) comes before the other slices, because every other slice needs an authenticated user;
-  - D1 must exist before a slice can prove contract compatibility.
+The waves, from [SLICE_MAP.md](SLICE_MAP.md) §5 — each gives the user a working Shosai one step larger:
+
+| Wave | Goal for the user | Slices, in default order | Exit |
+|---|---|---|---|
+| 1. Record, remember, ask | A person signs in on the web and on the desktop, records or uploads a meeting, reads its notes and asks Leo about it | identity → workspaces (core: access policy, RLS, audit) → billing (entitlements, minutes meter) → files → meetings → capture → agent (core, Action Gateway) | the shipped desktop clients run end to end on v2 staging: sign-in, capture, upload, notes; Leo answers over meetings and files with SSE and approvals |
+| 2. Track and connect | The home screen is real: tasks, calendar, recent notes, hubs that watch what is unresolved | tasks → connectors → calendar → knowledge → commitments → hubs; decisions and memory in parallel | action items are tasks on one board; meetings join calendar events; search and Leo cover knowledge; hubs fill themselves |
+| 3. Team and initiative | Workspaces work together; Leo speaks first when it is worth it | workspaces (screens) → billing (payments, seats, invoices) → proactive → errands → mail → studio → mcp | invite, share, pay per seat; Today feed and reminders; the inbox triaged |
+| 4. Operations and cutover readiness | Operators run the platform; every native and external route answers | support → releases → telemetry → rooms | the D1 gate passes on every native and external route |
+
+- The fixed dependencies are technical: F1 (as the F1 audit decides), F2, F3 and F6 steps 1–9 come before any slice; `identity` comes first, because every other slice needs an authenticated user; `workspaces` core comes before any slice with shareable resources, so they are written against the access policy from their first step (nfr-15, inv-14).
+- Within a wave, a later slice may start when the contracts it needs are published; the order above is the default path of [prompts/BACKEND-next-step.md](prompts/BACKEND-next-step.md), which prefers the slice that unblocks the most others. A step of a slice that needs a later slice's contract waits for it; STATUS.md names those steps.
+- `telemetry` may be pulled into wave 1 when the desktop clients move to staging, so their crash reports are not lost.
 - Slices run in parallel. Each touches only its own paths. Shared registration points (router, composition root, navigation, locale bundles) take small, additive edits, committed with explicit paths.
 - F4 is needed before a slice can be checked on https://one.whisperer.one; until then slices are verified locally.
 
@@ -118,16 +138,17 @@ all S + D3 ── M1 ── M2
 |---|---|
 | F4 | The server for https://one.whisperer.one, SSH access for deployment, the DNS record, and the image registry (GHCR is proposed) |
 | F4 | Whether deploys to staging run automatically after green CI and production deploys are manual with approval (proposed) |
-| D4, S16 | Which draft modules without a place in the target architecture are kept, merged or dropped — **decided 2026-10-01**, [FEATURE_MAP.md](FEATURE_MAP.md) section 7 |
-| S03 | Sandbox credentials of the acquirers (TBank, CloudPayments, lava.top) for staging |
-| S09, S05 | API keys of AI providers for staging |
+| D4 | Which draft modules without a place in the target architecture are kept, merged or dropped — **decided 2026-10-01**, [FEATURE_MAP.md](FEATURE_MAP.md) section 7 |
+| Slice map | The cut of the slices and its decisions SM-1…SM-15 — **decided 2026-10-13**, [SLICE_MAP.md](SLICE_MAP.md) §8.1 |
+| billing | Sandbox credentials of the acquirers (TBank, CloudPayments, lava.top) for staging |
+| agent, capture, meetings | API keys of AI providers for staging |
 | M1, M2 | Read access to a copy of the production database and storage, and the cutover date |
 
 Agents stop and ask when they reach one of these.
 
 ## 6. Launch lines
 
-Paste one line as the first message of a new session. Replace `<ID>` where shown.
+Paste one line as the first message of a new session. Replace `<name>` where shown.
 
 | Package | Launch line |
 |---|---|
@@ -141,6 +162,9 @@ Paste one line as the first message of a new session. Replace `<ID>` where shown
 | F4 | `Execute work package F4 from docs/plan/prompts/F4-delivery-staging.md.` |
 | F5 | `Execute work package F5 from docs/plan/prompts/F5-observability.md.` |
 | F6 | `Execute work package F6 from docs/plan/prompts/F6-platform-services.md.` |
-| S01–S17 | `Execute feature slice <ID> from docs/plan/prompts/S-feature-slice.md.` |
+| Slices | `Execute feature slice <name> from docs/plan/prompts/S-feature-slice.md.` — `<name>` is a slice of §3 Phase 2, for example `identity` |
+| F1 audit | `Execute the F1 audit from docs/plan/prompts/F1-audit.md.` — one session before the backend path; the owner decides keep, fix or rebuild |
+| Slice map | `Execute the slice map from docs/plan/prompts/SLICE-MAP.md.` — derived the slices from the cabinet and the philosophy; done 2026-10-13 |
+| Backend, next step | `Execute the next backend step from docs/plan/prompts/BACKEND-next-step.md.` — the same line every session; the prompt picks the step: foundation per the F1 audit, then F6, then the slices of SLICE_MAP.md |
 | M1 | `Execute work package M1 from docs/plan/prompts/M1-data-migration.md.` |
 | M2 | `Execute work package M2 from docs/plan/prompts/M2-cutover.md.` |

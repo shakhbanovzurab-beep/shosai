@@ -1,9 +1,9 @@
 # Data inventory and mapping: draft → v2
 
 - **Package:** D3 of [the rewrite plan](REWRITE_PLAN.md). Prompt: [prompts/D3-data-mapping.md](prompts/D3-data-mapping.md).
-- **Readers:** every slice that designs tables (S01–S17) and M1, which moves production data.
+- **Readers:** every slice that designs tables (the slices of [SLICE_MAP.md](SLICE_MAP.md)) and M1, which moves production data.
 - **State of the draft:** `/root/whisperer` at Alembic head `167` (166 migrations), read on 2026-10-01.
-- **Status:** complete. The owner took the decisions of [section 10](#10-decisions-for-the-user) on 2026-10-01; those that change the architecture are recorded in [ADR 0004](../adr/0004-migrated-accounts-start-in-russian-home.md), [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md), [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md) and [ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md), and the target architecture is updated accordingly.
+- **Status:** complete. The owner took the decisions of [section 10](#10-decisions-for-the-user) on 2026-10-01; those that change the architecture are recorded in [ADR 0004](../adr/0004-migrated-accounts-start-in-russian-home.md), [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md), [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md) and [ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md), and the target architecture is updated accordingly. On 2026-10-13 section 5 was regrouped by the slices of the [slice map](SLICE_MAP.md) §7.2 ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md)), and `meeting_integrations` became a drop by its decision SM-11.
 - `§` numbers refer to the [target architecture](../design/ARCHITECTURE.md). "Section N" refers to this document.
 
 **How this was built.** No production system was touched.
@@ -28,7 +28,7 @@ To reproduce step 1, run `alembic upgrade head` from a copy of the draft's `back
 | Redis / Valkey | 13 key families with durable or in-flight state; the rest are locks, limits and caches |
 | Other stateful services | Nango schema, Temporal, NATS JetStream, Qdrant |
 
-**Mapping.** Of 131 tables, 86 move unchanged, 30 are transformed, 5 are derived (rebuilt by v2) and 10 are dropped. Of the 1 458 columns, 1 317 move unchanged, 14 are transformed, and 89 belong to dropped tables or are dropped individually. The other 38 belong to derived tables or are derived individually. Section 5 has every table; Appendix A has every column with its type.
+**Mapping.** Of 131 tables, 85 move unchanged, 30 are transformed, 5 are derived (rebuilt by v2) and 11 are dropped. Of the 1 458 columns, 1 305 move unchanged, 14 are transformed, and 101 belong to dropped tables or are dropped individually. The other 38 belong to derived tables or are derived individually. Section 5 has every table; Appendix A has every column with its type.
 
 **Facts that shape the migration.**
 
@@ -146,7 +146,7 @@ These rules apply to every table unless its entry in section 5 says otherwise.
 | Column | Value |
 |---|---|
 | `org_id` | NULL |
-| `access` | The personal default that S02 defines, on resources with company access (§7: meetings, notes, folders, knowledge collections) |
+| `access` | The personal default that `workspaces` defines, on resources with company access (§7: meetings, notes, folders, knowledge collections) |
 | `resource_grants`, `organizations`, `memberships`, `directory_domains`, `org_invoices`, `org_audit_events` | No rows |
 
 `users.org_id` is NULL, because no work accounts exist.
@@ -155,7 +155,7 @@ These rules apply to every table unless its entry in section 5 says otherwise.
 
 | Field | Value |
 |---|---|
-| `email_hmac` | HMAC of the normalised email under the v2 directory secret. The draft stores emails lowercased; the v2 normalisation (S01) is applied to them |
+| `email_hmac` | HMAC of the normalised email under the v2 directory secret. The draft stores emails lowercased; the v2 normalisation (`identity`) is applied to them |
 | `user_id` | `users.id` |
 | `home` | From R2 |
 | `state` | From `users.status` (`active`, `frozen`, `banned`) |
@@ -179,7 +179,7 @@ Two accounts whose emails normalise to the same value block the run (S-2).
 | VAPID key pair | `proactive_push_subscriptions` | Every browser push subscription dies |
 | OAuth app credentials and redirect URIs (Google, Microsoft, Jira, Yandex, VK, Nango callback) | Refresh of existing grants | Re-consent |
 
-Draft access tokens carry no home claim. For their remaining life (≤ 30 minutes), S01 resolves the home of such a token through the directory, and the next refresh issues a v2 token.
+Draft access tokens carry no home claim. For their remaining life (≤ 30 minutes), `identity` resolves the home of such a token through the directory, and the next refresh issues a v2 token.
 
 **R7. Derived stores are rebuilt, not copied** (§8.2, inv-10):
 
@@ -235,7 +235,7 @@ The model and dimension change in v2 (§3: 512-dim windows), so copied vectors w
 - `tariffs`, `promo_codes`, `payment_routes`, `exchange_rates`;
 - `models_registry`, `model_defaults`;
 - `mcp_registered_clients`, `broadcasts`, `error_logs`, `app_builds`;
-- the `user_id IS NULL` rows of `prompt_templates` and `notes` (S07 decides the fate of the notes ones, FM-2).
+- the `user_id IS NULL` rows of `prompt_templates` and `notes` (`knowledge` decides the fate of the notes ones, FM-2).
 
 *Decided (U-2, [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md)):* they live in the **EU home**, next to the directory, with one writer. Home tables reference them by id without a foreign key, and platform ids are never deleted, only retired.
 
@@ -270,31 +270,38 @@ Anonymous telemetry has no owner either: `analytics_events` and `client_error_lo
 
 These start empty: `directory_domains`, `organizations`, `memberships`, `resource_grants`, `org_invoices`, `org_audit_events`, `home_transfers`, `processed_events`, `schedule_runs`. A missed periodic interval runs once on start (§12).
 
-**Per slice.** S02 (organizations), S05 (realtime) and S17 (public site) receive no draft tables. Following D4, the broadcast and whiteboard tables belong to S06, and the provider cost, metering and abuse tables to F6 (FM-4); `exchange_rates`, mapped in 5.2, belongs to F6 since [ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md).
+**Per slice.** Owners follow the [slice map](SLICE_MAP.md) §4.2 and §7.2. `workspaces`, `capture`, `decisions` and `site` receive no draft tables. The broadcast and whiteboard tables belong to `rooms` (FM-1c, kept by the owner's SM-8), the admin mailings (`broadcasts`) to `support`, the satisfaction survey to `telemetry` (SM-10), action items and Jira links to `tasks` (SM-3), the context graph to `commitments`; the provider cost, metering, abuse and provider error tables to F6 (FM-4), and `exchange_rates` too since [ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md).
 
 | Slice | Tables | moved | transformed | derived | dropped |
 |---|---|---|---|---|---|
-| S01 Identity | 9 | 2 | 5 | 0 | 2 |
-| S03 Billing | 16 | 15 | 1 | 0 | 0 |
-| S04 Meetings | 17 | 12 | 4 | 1 | 0 |
-| S06 Rooms | 10 | 8 | 0 | 0 | 2 |
-| S07 Knowledge and search | 15 | 5 | 4 | 4 | 2 |
-| S08 Storage | 1 | 1 | 0 | 0 | 0 |
-| S09 Agent (Leo) | 18 | 12 | 4 | 0 | 2 |
-| S10 MCP | 5 | 4 | 1 | 0 | 0 |
-| S11 Errands | 1 | 0 | 1 | 0 | 0 |
-| S12 Connectors and calendar | 13 | 11 | 1 | 0 | 1 |
-| S13 Tracker | 5 | 5 | 0 | 0 | 0 |
-| S14 Analytics | 4 | 1 | 3 | 0 | 0 |
-| S15 Administration and support | 5 | 3 | 2 | 0 | 0 |
-| S16 Hub, downloads and remaining modules | 5 | 4 | 1 | 0 | 0 |
-| F1 Backend foundation (platform tables) | 1 | 0 | 0 | 0 | 1 |
-| F6 Platform services (FM-4) | 6 | 3 | 3 | 0 | 0 |
-| **Total** | **131** | **86** | **30** | **5** | **10** |
+| `identity` | 9 | 2 | 5 | 0 | 2 |
+| `billing` | 16 | 15 | 1 | 0 | 0 |
+| `files` | 1 | 1 | 0 | 0 | 0 |
+| `meetings` | 16 | 11 | 4 | 1 | 0 |
+| `knowledge` | 12 | 2 | 4 | 4 | 2 |
+| `commitments` | 3 | 3 | 0 | 0 | 0 |
+| `hubs` | 4 | 4 | 0 | 0 | 0 |
+| `tasks` | 8 | 8 | 0 | 0 | 0 |
+| `calendar` | 8 | 6 | 1 | 0 | 1 |
+| `mail` | 2 | 2 | 0 | 0 | 0 |
+| `connectors` | 3 | 2 | 0 | 0 | 1 |
+| `agent` | 3 | 2 | 1 | 0 | 0 |
+| `memory` | 2 | 1 | 1 | 0 | 0 |
+| `proactive` | 4 | 2 | 1 | 0 | 1 |
+| `errands` | 1 | 0 | 1 | 0 | 0 |
+| `studio` | 7 | 5 | 1 | 0 | 1 |
+| `mcp` | 5 | 4 | 1 | 0 | 0 |
+| `support` | 4 | 3 | 1 | 0 | 0 |
+| `releases` | 1 | 0 | 1 | 0 | 0 |
+| `telemetry` | 4 | 1 | 3 | 0 | 0 |
+| `rooms` | 10 | 8 | 0 | 0 | 2 |
+| F1 — Backend foundation (platform tables) | 1 | 0 | 0 | 0 | 1 |
+| F6 — Platform services | 7 | 3 | 4 | 0 | 0 |
+| **Total** | **131** | **85** | **30** | **5** | **11** |
 
-Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dropped (columns of derived and dropped tables are counted with their table).
+Columns: 1458 in mapped tables — 1305 moved, 14 transformed, 38 derived, 101 dropped (columns of derived and dropped tables are counted with their table).
 
-### 5.1 S01 — Identity
+### 5.1 `identity`
 
 #### `users` → `users` · **transformed**
 
@@ -363,6 +370,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 
 - **Owner → home:** own `user_id`.
 - **Columns:** all 13 move unchanged.
+- The onboarding tour has no screen in the new cabinet (slice map SM-10). If identity's plan confirms that no tour returns, this becomes a drop.
 
 #### `data_export_jobs` → `data_export_jobs` · **transformed**
 
@@ -372,7 +380,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
   - `s3_key` — *transformed*. Rewritten if the archive is copied to a new key (section 6).
   - `error` — *moved*. User-facing text.
 
-### 5.2 S03 — Billing
+### 5.2 `billing`
 
 #### `tariffs` → `tariffs` · **moved**
 
@@ -466,7 +474,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 
 #### `affiliate_commissions` → `affiliate_commissions` · **moved**
 
-- **Owner → home:** via `partner_id` → `affiliate_partners.user_id` (the balance owner; proposed, S03 confirms).
+- **Owner → home:** via `partner_id` → `affiliate_partners.user_id` (the balance owner; proposed, `billing` confirms).
 - **Columns:** 7 of 8 move unchanged; exceptions:
   - `buyer_user_id` — *moved*. Soft reference when the buyer lives in another home.
 
@@ -484,12 +492,6 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
   - `updated_by` — *moved*. Admin column, soft reference.
 - Production rows decide which acquirers are live; the seed enables `tbank`, `lava`, `lava_paypal` and disables `cloudpayments`.
 
-#### `exchange_rates` → `exchange_rates` · **moved**
-
-- **Owner → home:** platform catalog (R12). Owned by F6 ([ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md)).
-- **Columns:** all 5 move unchanged.
-- Append-only CBR history; money rows already snapshot the rate they used.
-
 #### `usage_events` → `usage_events` · **transformed**
 
 - **Owner → home:** own `user_id`.
@@ -498,7 +500,18 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
   - `session_id` — *moved*. Soft reference, unique: one tombstone per deleted meeting.
 - Tombstones of deleted meetings; they feed the lifetime Free quota. Dropping a partition would re-open spent minutes, so the table is exempt from partition-drop retention (U-10, ADR 0007).
 
-### 5.3 S04 — Meetings
+### 5.3 `files`
+
+#### `storage_files` → `storage_files` · **moved**
+
+- **Owner → home:** own `owner_id`.
+- **Columns:** 10 of 14 move unchanged; exceptions:
+  - `s3_key` — *moved*. Verbatim; `u-{owner_id[:8]}/{file_id}/{name}` (section 6, O1, O2).
+  - `share_token` — *moved*. Verbatim: plaintext secret in public file links.
+  - `share_password_hash` — *moved*. Bcrypt, verbatim.
+  - `parent_id` — *moved*. Folder tree; parents load before children.
+
+### 5.4 `meetings`
 
 #### `sessions` → `sessions` · **transformed**
 
@@ -510,7 +523,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
   - `ephemeral` — *moved*. No-logs meetings carry no transcript; leftover content is a defect to report.
   - `client_device_id` — *moved*. Patterns `import-<uuid>`, `video-meeting`, `room-<id>` are kept.
 - **New in v2:** `org_id` — NULL (R3).
-- **New in v2:** `access` — The personal default defined by S02 (R3).
+- **New in v2:** `access` — The personal default defined by `workspaces` (R3).
 - **New in v2:** `indexed_upto_seq` — 0, so the v2 indexer rebuilds the meeting windows (R7).
 
 #### `transcript_segments` → `transcript_segments` · **transformed**
@@ -543,13 +556,6 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
   - `enhanced_markdown` — *moved*. AI output; copied, never regenerated (costly and non-deterministic).
   - `template_id` — *moved*. String: a built-in key or a `meeting_templates.id`.
 
-#### `meeting_note_action_items` → `meeting_note_action_items` · **moved**
-
-- **Owner → home:** via `note_id` → `meeting_notes` → `sessions.user_id`.
-- **Columns:** 6 of 8 move unchanged; exceptions:
-  - `done` — *moved*. User decision on AI output.
-  - `source_segment_id` — *moved*. Soft reference, may dangle.
-
 #### `meeting_map_nodes` → `meeting_map_nodes` · **moved**
 
 - **Owner → home:** via `session_id` → `sessions.user_id`.
@@ -564,7 +570,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 - **Owner → home:** own `user_id`.
 - **Columns:** all 10 move unchanged.
 - **New in v2:** `org_id` — NULL (R3).
-- **New in v2:** `access` — The personal default defined by S02 (R3).
+- **New in v2:** `access` — The personal default defined by `workspaces` (R3).
 
 #### `meeting_tags` → `meeting_tags` · **moved**
 
@@ -624,7 +630,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 
 - **Owner → home:** own `user_id`.
 - **Columns:** all 9 move unchanged.
-- A legacy projection of the run state that the import screen still reads; S04 may fold it into runs, then this becomes a transformation.
+- A legacy projection of the run state that the import screen still reads; `meetings` may fold it into runs, then this becomes a transformation.
 
 #### `prompt_executions` → `prompt_executions` · **transformed**
 
@@ -635,72 +641,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
   - `prompt_id` — *moved*. FK to `prompt_templates`; a platform prompt in the EU home makes it a soft reference.
 - Assistant answers inside a meeting (the meeting's model executions, §10). The FK to `sessions` has no ON DELETE.
 
-### 5.4 S06 — Rooms
-
-#### `streams` → `streams` · **moved**
-
-- **Owner → home:** own `owner_id`.
-- **Columns:** all 19 move unchanged.
-- Broadcasts (stream as an entity); owned by S06 since D4. Live fields (`status=live`, `pinned_principal`) are reset by M2 if a stream is live at freeze.
-
-#### `stream_members` → `stream_members` · **moved**
-
-- **Owner → home:** via `stream_id` → `streams.owner_id`.
-- **Columns:** all 9 move unchanged.
-
-#### `stream_bans` → `stream_bans` · **moved**
-
-- **Owner → home:** via `stream_id` → `streams.owner_id`.
-- **Columns:** all 6 move unchanged.
-
-#### `stream_chat_messages` → `stream_chat_messages` · **moved**
-
-- **Owner → home:** via `stream_id` → `streams.owner_id`.
-- **Columns:** 9 of 10 move unchanged; exceptions:
-  - `deleted_at` — *moved*. Soft delete, kept.
-- Viewers' messages, kept only when the stream has `save_chat`.
-
-#### `stream_admissions` → `stream_admissions` · **dropped**
-
-- **Owner → home:** via `stream_id` → `streams.owner_id`.
-- **Columns:** 9, none copied.
-- Waiting-room knocks with a 10-minute life; nothing survives the window.
-
-#### `stream_requests` → `stream_requests` · **dropped**
-
-- **Owner → home:** via `stream_id` → `streams.owner_id`.
-- **Columns:** 9, none copied.
-- Raised hands with a 20-minute life; nothing survives the window.
-
-#### `rooms` → `rooms` · **moved**
-
-- **Owner → home:** own `owner_id`.
-- **Columns:** 12 of 14 move unchanged; exceptions:
-  - `invite_token` — *moved*. Verbatim: plaintext secret in invitation links.
-  - `lk_room_name` — *moved*. Verbatim: LiveKit room name `r-<hex>`.
-
-#### `room_recordings` → `room_recordings` · **moved**
-
-- **Owner → home:** own `owner_id`.
-- **Columns:** 11 of 13 move unchanged; exceptions:
-  - `s3_key` — *moved*. Verbatim; the same object is also pointed to by `storage_files.s3_key` (section 6, prefix O2).
-  - `egress_id` — *moved*. Verbatim: dedup key of the LiveKit egress.
-
-#### `video_admin_actions` → `video_admin_actions` · **moved**
-
-- **Owner → home:** own `owner_id`.
-- **Columns:** 10 of 12 move unchanged; exceptions:
-  - `admin_email` — *moved*. Denormalised admin address, personal data.
-  - `target_identity` — *moved*. LiveKit identity = a user id as text, no FK.
-- Append-only audit of platform admins acting on rooms.
-
-#### `room_whiteboards` → `room_whiteboards` · **moved**
-
-- **Owner → home:** via `room_id` → `rooms.owner_id`.
-- **Columns:** 7 of 8 move unchanged; exceptions:
-  - `files` — *moved*. Embedded images as JSONB in the row (≤ 8 MB), not in object storage.
-
-### 5.5 S07 — Knowledge and search
+### 5.5 `knowledge`
 
 #### `knowledge_space` → `knowledge_space` · **transformed**
 
@@ -717,7 +658,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
   - `push_token_sha256` — *moved*. Verbatim: the raw Obsidian push token is not recoverable.
   - `config` — *moved*. `integration` is a soft reference to a Nango integration key.
 - **New in v2:** `org_id` — NULL (R3).
-- **New in v2:** `access` — The personal default defined by S02, if S07 makes sources the company-shared collections (R3).
+- **New in v2:** `access` — The personal default defined by `workspaces`, if `knowledge` makes sources the company-shared collections (R3).
 
 #### `knowledge_document` → `knowledge_document` · **transformed**
 
@@ -760,16 +701,16 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 - **Columns:** 8, none copied.
 - Debug trace of searches (query hash, timings) meant to live days; no retention exists in the draft. No user-visible value.
 
-#### `notes` → knowledge-base items of source `note` (S07 designs the table) · **transformed**
+#### `notes` → knowledge-base items of source `note` (`knowledge` designs the table) · **transformed**
 
-- **Owner → home:** own `user_id`; NULL = platform baseline note, whose fate S07 decides (FM-2), until then R12.
+- **Owner → home:** own `user_id`; NULL = platform baseline note, whose fate `knowledge` decides (FM-2), until then R12.
 - **Columns:** 4 of 8 move unchanged; exceptions:
   - `content` — *transformed*. The authoritative text; stored as the item's original (O6 layout, keyed by its sha-256) and indexed by the v2 knowledge pipeline (R7).
   - `title` — *moved*. The item's name.
   - `file_path` — *transformed*. Kept as the item's external path; `/v1/kb*` and the server-folder watcher that used it are dropped (FM-2).
   - `tags` — *moved*. Kept as item metadata.
 - **New in v2:** `org_id` — NULL (R3).
-- **New in v2:** `access` — The personal default defined by S02 (R3).
+- **New in v2:** `access` — The personal default defined by `workspaces` (R3).
 - FM-2: notes become one source of the knowledge base on Qdrant; Leo keeps saving notes and live answers keep finding them. `id` is kept, so references from Leo stay valid.
 - The only copy of the notes' text. Not `meeting_notes`.
 
@@ -790,6 +731,8 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 - **Owner → home:** via `source_note_id` → `notes.user_id` (no FK).
 - **Columns:** 5, none copied.
 - Wikilink graph of legacy notes. FM-2 drops the notes link graph: no screen and no shipped client uses it. Derived from `notes`, so no user content is lost.
+
+### 5.6 `commitments`
 
 #### `pcg_entities` → `pcg_entities` · **moved**
 
@@ -815,189 +758,82 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
   - `refuted_reason` — *moved*. Refutation group is a user decision; CHECK pairs it with `refuted_evidence`.
 - Unique `(user_id, source_kind, source_id, dedup_key)` is the extraction idempotency anchor.
 
-### 5.6 S08 — Storage
+### 5.7 `hubs`
 
-#### `storage_files` → `storage_files` · **moved**
-
-- **Owner → home:** own `owner_id`.
-- **Columns:** 10 of 14 move unchanged; exceptions:
-  - `s3_key` — *moved*. Verbatim; `u-{owner_id[:8]}/{file_id}/{name}` (section 6, O1, O2).
-  - `share_token` — *moved*. Verbatim: plaintext secret in public file links.
-  - `share_password_hash` — *moved*. Bcrypt, verbatim.
-  - `parent_id` — *moved*. Folder tree; parents load before children.
-
-### 5.7 S09 — Agent (Leo)
-
-> **Leo architecture, accepted on 2026-10-08** ([docs/design/leo/ARCHITECTURE.md](../design/leo/ARCHITECTURE.md) §10, ADR 0023–0033). The S09 slice plan revises the targets below: `memory_items` → `memory_facts` with a pgvector embedding (ADR 0030, ADR 0033); `proactive_nudges` → `agent_suggestions` with `suggestion_deliveries` and `suggestion_feedback` (ADR 0027); new tables without a draft source: `agent_threads`, `agent_messages`, `agent_runs`, `agent_actions`, `agent_decisions`, `proactive_triggers`, and the platform tables `decision_policies`, `decision_thresholds` (EU home). The Redis `agent:ckpt:*` keys stay dropped (U-5).
-
-#### `user_contexts` → `user_contexts` · **moved**
-
-- **Owner → home:** own `user_id`.
-- **Columns:** all 6 move unchanged.
-- Personal context text injected into Leo's system prompt.
-
-#### `user_context_files` → `user_context_files` · **transformed**
-
-- **Owner → home:** via `user_context_id` → `user_contexts.user_id`.
-- **Columns:** 7 of 9 move unchanged; exceptions:
-  - `storage_path` — *transformed*. Local-disk path → object in the bucket (ADR 0014); the column becomes `s3_key` (section 6, L2).
-  - `extracted_text` — *moved*. Personal text.
-
-#### `leo_personalization` → `leo_personalization` · **moved**
+#### `hubs` → `hubs` · **moved**
 
 - **Owner → home:** own `user_id` (no FK).
-- **Columns:** all 11 move unchanged.
+- **Columns:** 9 of 11 move unchanged; exceptions:
+  - `organisation_id` — *moved*. Soft reference to `pcg_entities`.
+  - `tracker_project_id` — *moved*. Soft reference to `tracker_projects`.
+- Kept or dropped with the hub module by the D4 decision; dropping is a user-data decision.
 
-#### `memory_items` → `memory_items` · **transformed**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** 10 of 12 move unchanged; exceptions:
-  - `embedding` — *derived*. `vector(384)`, rebuilt from `text` by the v2 indexer (R7).
-  - `text` — *moved*. The authoritative memory text.
-
-#### `agent_audit_log` → `agent_audit` · **transformed**
-
-- **Owner → home:** own `user_id`.
-- **Columns:** 13 of 14 move unchanged; exceptions:
-  - `created_at` — *transformed*. Partition key: monthly partitions; table renamed `agent_audit` per §8.2.
-- Append-only audit of agent write actions; `args` is redacted.
-
-#### `agent_skills` → `agent_skills` · **moved**
-
-- **Owner → home:** own `user_id`.
-- **Columns:** all 13 move unchanged.
-- Installed skills pinned to a commit; `body` is kept, not re-fetched.
-
-#### `prompt_templates` → `prompt_templates` · **moved**
-
-- **Owner → home:** own `user_id`; NULL = platform prompt (R12).
-- **Columns:** all 14 move unchanged.
-- Platform rows (`user_id IS NULL`) stay platform rows; they are never attributed to an admin.
-
-#### `prompt_role_bindings` → no v2 table · **dropped**
-
-- **Owner → home:** platform.
-- **Columns:** 6, none copied.
-- Dead: no reader or writer in the draft; roles resolve through `prompt_templates.role`. Platform configuration, no user data.
-
-#### `prompt_skills` → `prompt_skills` · **moved**
-
-- **Owner → home:** via `prompt_id` → `prompt_templates.user_id`.
-- **Columns:** all 7 move unchanged.
-- Links a prompt to skills; a platform prompt with an admin's skill crosses homes and becomes a soft reference.
-
-#### `models_registry` → `models_registry` · **moved**
-
-- **Owner → home:** platform catalog (R12).
-- **Columns:** 20 of 22 move unchanged; exceptions:
-  - `openrouter_model_id` — *moved*. Verbatim: referenced softly by costs, defaults and user choices.
-  - `tier` — *moved*. Decides premium gating.
-
-#### `model_defaults` → `model_defaults` · **moved**
-
-- **Owner → home:** platform catalog (R12).
-- **Columns:** all 6 move unchanged.
-
-#### `model_role_assignments` → `model_role_assignments` · **moved**
-
-- **Owner → home:** own `user_id`.
-- **Columns:** 9 of 10 move unchanged; exceptions:
-  - `reasoning_enabled` — *moved*. NULL means the user never chose; never coerced to false.
-
-#### `proactive_nudges` → `proactive_nudges` · **transformed**
+#### `hub_meetings` → `hub_meetings` · **moved**
 
 - **Owner → home:** own `user_id` (no FK).
-- **Rows:** only rows younger than the 90-day retention at cutover.
-- **Columns:** 12 of 14 move unchanged; exceptions:
-  - `feedback` — *moved*. User decision; negative feedback suppresses the kind.
-  - `dedup_key` — *moved*. Verbatim, so old signals are not announced again.
+- **Columns:** 8 of 9 move unchanged; exceptions:
+  - `addressed_by` — *moved*. `human` is a user decision a re-addressing must not overwrite.
 
-#### `proactive_deliveries` → no v2 table · **dropped**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** 10, none copied.
-- Per-channel delivery log that the draft never purges; in-flight deliveries expire and the feed keeps the nudge. No user-visible value.
-
-#### `proactive_push_subscriptions` → `proactive_push_subscriptions` · **moved**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** 7 of 9 move unchanged; exceptions:
-  - `auth` — *moved*. Verbatim; valid only with the same VAPID key pair (R6).
-  - `p256dh` — *moved*. Verbatim.
-
-#### `proactive_mail_cursors` → `proactive_mail_cursors` · **moved**
+#### `hub_rules` → `hub_rules` · **moved**
 
 - **Owner → home:** own `user_id` (no FK).
 - **Columns:** all 7 move unchanged.
-- Moving it avoids one re-scan of every connected mailbox.
+- Remembered user corrections.
 
-#### `proactive_mail_watches` → `proactive_mail_watches` · **moved**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** all 6 move unchanged.
-
-#### `proactive_settings` → `proactive_settings` · **moved**
+#### `hub_materials` → `hub_materials` · **moved**
 
 - **Owner → home:** own `user_id` (no FK).
-- **Columns:** all 11 move unchanged.
+- **Rows:** rows whose `hub_id` no longer exists are orphans of the draft's `delete_hub` and go to the orphan report (R11).
+- **Columns:** 8 of 9 move unchanged; exceptions:
+  - `ref_id` — *moved*. String soft reference to a knowledge document or a storage file.
 
-### 5.8 S10 — MCP
+### 5.8 `tasks`
 
-#### `mcp_client_connections` → `mcp_client_connections` · **transformed**
+#### `meeting_note_action_items` → `meeting_note_action_items` · **moved**
 
-- **Owner → home:** own `user_id`.
-- **Columns:** 23 of 29 move unchanged; exceptions:
-  - `token_ciphertext` — *moved*. Byte-for-byte; Fernet ring (R6).
-  - `oauth_access_ciphertext` — *moved*. Byte-for-byte.
-  - `oauth_refresh_ciphertext` — *moved*. Byte-for-byte.
-  - `stdio_env_ciphertext` — *moved*. Byte-for-byte.
-  - `tools_digest` — *dropped*. No reader or writer in the draft.
-  - `tools_cached_at` — *dropped*. No reader or writer in the draft.
+- **Owner → home:** via `note_id` → `meeting_notes` → `sessions.user_id`.
+- **Columns:** 6 of 8 move unchanged; exceptions:
+  - `done` — *moved*. User decision on AI output.
+  - `source_segment_id` — *moved*. Soft reference, may dangle.
 
-#### `mcp_exposed_resources` → `mcp_exposed_resources` · **moved**
+#### `tracker_projects` → `tracker_projects` · **moved**
 
 - **Owner → home:** own `user_id`.
-- **Columns:** all 6 move unchanged.
+- **Columns:** all 9 move unchanged.
 
-#### `mcp_oauth_clients` → `mcp_oauth_clients` · **moved**
+#### `tracker_statuses` → `tracker_statuses` · **moved**
 
-- **Owner → home:** own `user_id`.
-- **Columns:** 11 of 12 move unchanged; exceptions:
-  - `client_id` — *moved*. CIMD URL or soft reference to `mcp_registered_clients.client_id`.
-
-#### `mcp_registered_clients` → `mcp_registered_clients` · **moved**
-
-- **Owner → home:** platform (R12).
+- **Owner → home:** via `project_id` → `tracker_projects.user_id`.
 - **Columns:** all 8 move unchanged.
-- Dynamic client registrations kept by external clients in their own configuration; losing them breaks those clients.
+- Load before `tracker_tasks` (FK RESTRICT).
 
-#### `mcp_tokens` → `mcp_tokens` · **moved**
+#### `tracker_tasks` → `tracker_tasks` · **moved**
 
-- **Owner → home:** own `user_id`.
-- **Columns:** 11 of 13 move unchanged; exceptions:
-  - `token_hash` — *moved*. Sha-256, verbatim: raw tokens cannot be re-issued.
-  - `parent_token_id` — *moved*. Soft reference.
+- **Owner → home:** via `project_id` → `tracker_projects.user_id`.
+- **Columns:** all 10 move unchanged.
 
-### 5.9 S11 — Errands
+#### `tracker_labels` → `tracker_labels` · **moved**
 
-#### `errands` → `errands` · **transformed**
+- **Owner → home:** via `project_id` → `tracker_projects.user_id`.
+- **Columns:** all 6 move unchanged.
 
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** 10 of 12 move unchanged; exceptions:
-  - `workflow_id` — *dropped*. Temporal id; v2 runs errands from the row (§12), Temporal is not carried (section 7.3).
-  - `payload` — *moved*. `remind {text}` or `send_email {to, subject, body, provider?}`.
-- `scheduled` rows are the user's open orders; overdue ones fire right after cutover.
+#### `tracker_task_labels` → `tracker_task_labels` · **moved**
 
-### 5.10 S12 — Connectors and calendar
+- **Owner → home:** via `task_id` → `tracker_tasks`.
+- **Columns:** all 2 move unchanged.
 
-#### `oauth_accounts` → `oauth_accounts` · **moved**
+#### `jira_links` → `jira_links` · **moved**
 
 - **Owner → home:** own `user_id`.
-- **Columns:** 15 of 18 move unchanged; exceptions:
-  - `access_token_enc` — *moved*. Byte-for-byte; Fernet `fernet_key` without the previous-key ring (R6).
-  - `refresh_token_enc` — *moved*. Byte-for-byte.
-  - `id` — *moved*. Verbatim: `calendar_integrations` and `jira_links` reference it.
-- Integration grants (Google, Microsoft, Jira), not sign-in identities.
+- **Columns:** 17 of 18 move unchanged; exceptions:
+  - `id` — *moved*. Verbatim: the Jira webhook URL carries it and is its only authentication.
+
+#### `jira_issue_links` → `jira_issue_links` · **moved**
+
+- **Owner → home:** via `link_id` → `jira_links.user_id`.
+- **Columns:** all 9 move unchanged.
+
+### 5.9 `calendar`
 
 #### `calendar_events` → `calendar_events` · **moved**
 
@@ -1052,60 +888,235 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 - **Columns:** all 11 move unchanged.
 - Identity map local ↔ external events with tombstones; losing it duplicates events on the next sync.
 
+### 5.10 `mail`
+
+#### `proactive_mail_cursors` → `proactive_mail_cursors` · **moved**
+
+- **Owner → home:** own `user_id` (no FK).
+- **Columns:** all 7 move unchanged.
+- Moving it avoids one re-scan of every connected mailbox.
+
+#### `proactive_mail_watches` → `proactive_mail_watches` · **moved**
+
+- **Owner → home:** own `user_id` (no FK).
+- **Columns:** all 6 move unchanged.
+
+### 5.11 `connectors`
+
+#### `oauth_accounts` → `oauth_accounts` · **moved**
+
+- **Owner → home:** own `user_id`.
+- **Columns:** 15 of 18 move unchanged; exceptions:
+  - `access_token_enc` — *moved*. Byte-for-byte; Fernet `fernet_key` without the previous-key ring (R6).
+  - `refresh_token_enc` — *moved*. Byte-for-byte.
+  - `id` — *moved*. Verbatim: `calendar_integrations` and `jira_links` reference it.
+- Integration grants (Google, Microsoft, Jira), not sign-in identities.
+
 #### `connector_connections` → `connector_connections` · **moved**
 
 - **Owner → home:** own `user_id` (no FK).
 - **Columns:** 7 of 8 move unchanged; exceptions:
   - `connection_id` — *moved*. Verbatim: id inside the Nango schema (section 7.4).
 
-#### `meeting_integrations` → `meeting_integrations` · **moved**
+#### `meeting_integrations` → no v2 table · **dropped**
 
 - **Owner → home:** own `user_id`.
+- Push of notes and action items to Slack, Zapier, Notion through own OAuth apps. Dropped by the owner's decision SM-11 of the [slice map](SLICE_MAP.md) on 2026-10-13: the push becomes Leo and meeting actions over `connectors` (Nango), with approval; users who set up a push reconnect once. The rows and their ciphertexts are not carried.
+
+### 5.12 `agent`
+
+> **Leo architecture, accepted on 2026-10-08** ([docs/design/leo/ARCHITECTURE.md](../design/leo/ARCHITECTURE.md) §10, ADR 0023–0033). The plans of the Leo slices (`agent`, `memory`, `proactive`) revise the targets in 5.12–5.14: `memory_items` → `memory_facts` with a pgvector embedding (ADR 0030, ADR 0033); `proactive_nudges` → `agent_suggestions` with `suggestion_deliveries` and `suggestion_feedback` (ADR 0027); new tables without a draft source: `agent_threads`, `agent_messages`, `agent_runs`, `agent_actions`, `agent_decisions`, `proactive_triggers`, and the platform tables `decision_policies`, `decision_thresholds` (EU home). The Redis `agent:ckpt:*` keys stay dropped (U-5).
+
+#### `agent_audit_log` → `agent_audit` · **transformed**
+
+- **Owner → home:** own `user_id`.
+- **Columns:** 13 of 14 move unchanged; exceptions:
+  - `created_at` — *transformed*. Partition key: monthly partitions; table renamed `agent_audit` per §8.2.
+- Append-only audit of agent write actions; `args` is redacted.
+
+#### `agent_skills` → `agent_skills` · **moved**
+
+- **Owner → home:** own `user_id`.
+- **Columns:** all 13 move unchanged.
+- Installed skills pinned to a commit; `body` is kept, not re-fetched.
+
+#### `prompt_skills` → `prompt_skills` · **moved**
+
+- **Owner → home:** via `prompt_id` → `prompt_templates.user_id`.
+- **Columns:** all 7 move unchanged.
+- Links a prompt to skills; a platform prompt with an admin's skill crosses homes and becomes a soft reference.
+
+### 5.13 `memory`
+
+#### `leo_personalization` → `leo_personalization` · **moved**
+
+- **Owner → home:** own `user_id` (no FK).
+- **Columns:** all 11 move unchanged.
+
+#### `memory_items` → `memory_items` · **transformed**
+
+- **Owner → home:** own `user_id` (no FK).
 - **Columns:** 10 of 12 move unchanged; exceptions:
-  - `credential_ciphertext` — *moved*. Byte-for-byte; Fernet ring (R6).
-  - `refresh_token_ciphertext` — *moved*. Byte-for-byte.
-- Push of notes and action items to Slack, Zapier, Notion.
+  - `embedding` — *derived*. `vector(384)`, rebuilt from `text` by the v2 indexer (R7).
+  - `text` — *moved*. The authoritative memory text.
 
-#### `jira_links` → `jira_links` · **moved**
+### 5.14 `proactive`
 
-- **Owner → home:** own `user_id`.
-- **Columns:** 17 of 18 move unchanged; exceptions:
-  - `id` — *moved*. Verbatim: the Jira webhook URL carries it and is its only authentication.
+#### `proactive_nudges` → `proactive_nudges` · **transformed**
 
-#### `jira_issue_links` → `jira_issue_links` · **moved**
+- **Owner → home:** own `user_id` (no FK).
+- **Rows:** only rows younger than the 90-day retention at cutover.
+- **Columns:** 12 of 14 move unchanged; exceptions:
+  - `feedback` — *moved*. User decision; negative feedback suppresses the kind.
+  - `dedup_key` — *moved*. Verbatim, so old signals are not announced again.
 
-- **Owner → home:** via `link_id` → `jira_links.user_id`.
-- **Columns:** all 9 move unchanged.
+#### `proactive_deliveries` → no v2 table · **dropped**
 
-### 5.11 S13 — Tracker
+- **Owner → home:** own `user_id` (no FK).
+- **Columns:** 10, none copied.
+- Per-channel delivery log that the draft never purges; in-flight deliveries expire and the feed keeps the nudge. No user-visible value.
 
-#### `tracker_projects` → `tracker_projects` · **moved**
+#### `proactive_push_subscriptions` → `proactive_push_subscriptions` · **moved**
 
-- **Owner → home:** own `user_id`.
-- **Columns:** all 9 move unchanged.
+- **Owner → home:** own `user_id` (no FK).
+- **Columns:** 7 of 9 move unchanged; exceptions:
+  - `auth` — *moved*. Verbatim; valid only with the same VAPID key pair (R6).
+  - `p256dh` — *moved*. Verbatim.
 
-#### `tracker_statuses` → `tracker_statuses` · **moved**
+#### `proactive_settings` → `proactive_settings` · **moved**
 
-- **Owner → home:** via `project_id` → `tracker_projects.user_id`.
-- **Columns:** all 8 move unchanged.
-- Load before `tracker_tasks` (FK RESTRICT).
+- **Owner → home:** own `user_id` (no FK).
+- **Columns:** all 11 move unchanged.
 
-#### `tracker_tasks` → `tracker_tasks` · **moved**
+### 5.15 `errands`
 
-- **Owner → home:** via `project_id` → `tracker_projects.user_id`.
-- **Columns:** all 10 move unchanged.
+#### `errands` → `errands` · **transformed**
 
-#### `tracker_labels` → `tracker_labels` · **moved**
+- **Owner → home:** own `user_id` (no FK).
+- **Columns:** 10 of 12 move unchanged; exceptions:
+  - `workflow_id` — *dropped*. Temporal id; v2 runs errands from the row (§12), Temporal is not carried (section 7.3).
+  - `payload` — *moved*. `remind {text}` or `send_email {to, subject, body, provider?}`.
+- `scheduled` rows are the user's open orders; overdue ones fire right after cutover.
 
-- **Owner → home:** via `project_id` → `tracker_projects.user_id`.
+### 5.16 `studio`
+
+#### `models_registry` → `models_registry` · **moved**
+
+- **Owner → home:** platform catalog (R12).
+- **Columns:** 20 of 22 move unchanged; exceptions:
+  - `openrouter_model_id` — *moved*. Verbatim: referenced softly by costs, defaults and user choices.
+  - `tier` — *moved*. Decides premium gating.
+
+#### `model_defaults` → `model_defaults` · **moved**
+
+- **Owner → home:** platform catalog (R12).
 - **Columns:** all 6 move unchanged.
 
-#### `tracker_task_labels` → `tracker_task_labels` · **moved**
+#### `model_role_assignments` → `model_role_assignments` · **moved**
 
-- **Owner → home:** via `task_id` → `tracker_tasks`.
-- **Columns:** all 2 move unchanged.
+- **Owner → home:** own `user_id`.
+- **Columns:** 9 of 10 move unchanged; exceptions:
+  - `reasoning_enabled` — *moved*. NULL means the user never chose; never coerced to false.
 
-### 5.12 S14 — Analytics
+#### `prompt_templates` → `prompt_templates` · **moved**
+
+- **Owner → home:** own `user_id`; NULL = platform prompt (R12).
+- **Columns:** all 14 move unchanged.
+- Platform rows (`user_id IS NULL`) stay platform rows; they are never attributed to an admin.
+
+#### `prompt_role_bindings` → no v2 table · **dropped**
+
+- **Owner → home:** platform.
+- **Columns:** 6, none copied.
+- Dead: no reader or writer in the draft; roles resolve through `prompt_templates.role`. Platform configuration, no user data.
+
+#### `user_contexts` → `user_contexts` · **moved**
+
+- **Owner → home:** own `user_id`.
+- **Columns:** all 6 move unchanged.
+- Personal context text injected into Leo's system prompt.
+
+#### `user_context_files` → `user_context_files` · **transformed**
+
+- **Owner → home:** via `user_context_id` → `user_contexts.user_id`.
+- **Columns:** 7 of 9 move unchanged; exceptions:
+  - `storage_path` — *transformed*. Local-disk path → object in the bucket (ADR 0014); the column becomes `s3_key` (section 6, L2).
+  - `extracted_text` — *moved*. Personal text.
+
+### 5.17 `mcp`
+
+#### `mcp_client_connections` → `mcp_client_connections` · **transformed**
+
+- **Owner → home:** own `user_id`.
+- **Columns:** 23 of 29 move unchanged; exceptions:
+  - `token_ciphertext` — *moved*. Byte-for-byte; Fernet ring (R6).
+  - `oauth_access_ciphertext` — *moved*. Byte-for-byte.
+  - `oauth_refresh_ciphertext` — *moved*. Byte-for-byte.
+  - `stdio_env_ciphertext` — *moved*. Byte-for-byte.
+  - `tools_digest` — *dropped*. No reader or writer in the draft.
+  - `tools_cached_at` — *dropped*. No reader or writer in the draft.
+
+#### `mcp_exposed_resources` → `mcp_exposed_resources` · **moved**
+
+- **Owner → home:** own `user_id`.
+- **Columns:** all 6 move unchanged.
+
+#### `mcp_oauth_clients` → `mcp_oauth_clients` · **moved**
+
+- **Owner → home:** own `user_id`.
+- **Columns:** 11 of 12 move unchanged; exceptions:
+  - `client_id` — *moved*. CIMD URL or soft reference to `mcp_registered_clients.client_id`.
+
+#### `mcp_registered_clients` → `mcp_registered_clients` · **moved**
+
+- **Owner → home:** platform (R12).
+- **Columns:** all 8 move unchanged.
+- Dynamic client registrations kept by external clients in their own configuration; losing them breaks those clients.
+
+#### `mcp_tokens` → `mcp_tokens` · **moved**
+
+- **Owner → home:** own `user_id`.
+- **Columns:** 11 of 13 move unchanged; exceptions:
+  - `token_hash` — *moved*. Sha-256, verbatim: raw tokens cannot be re-issued.
+  - `parent_token_id` — *moved*. Soft reference.
+
+### 5.18 `support`
+
+#### `tickets` → `tickets` · **moved**
+
+- **Owner → home:** own `user_id`.
+- **Columns:** 8 of 9 move unchanged; exceptions:
+  - `number` — *moved*. Verbatim; the home sequence continues after the highest number (U-7).
+
+#### `ticket_messages` → `ticket_messages` · **transformed**
+
+- **Owner → home:** via `ticket_id` → `tickets.user_id`.
+- **Columns:** 4 of 5 move unchanged; exceptions:
+  - `author_user_id` — *moved*. Soft reference when the author (staff) lives in another home.
+- **New in v2:** `author_kind` — `staff` if the author's `users.role` is `admin` at migration time, else `user`; the draft derives it by a join that breaks after anonymisation.
+
+#### `ticket_attachments` → `ticket_attachments` · **moved**
+
+- **Owner → home:** via `message_id` → `ticket_messages` → `tickets.user_id`.
+- **Columns:** 7 of 8 move unchanged; exceptions:
+  - `s3_key` — *moved*. Verbatim; the key holds no owner (section 6, O8).
+
+#### `broadcasts` → `broadcasts` · **moved**
+
+- **Owner → home:** platform (R12).
+- **Columns:** all 12 move unchanged.
+- Admin mass email (newsletters, kept by the owner's SM-10), not the room broadcasts. `channel='telegram'` is a placeholder never sent.
+
+### 5.19 `releases`
+
+#### `app_builds` → `app_builds` · **transformed**
+
+- **Owner → home:** platform (R12).
+- **Columns:** 11 of 12 move unchanged; exceptions:
+  - `storage_name` — *transformed*. Local-disk file name → object in the bucket under `platform/` (ADR 0014); the column becomes the object key (section 6, L1).
+- Desktop installers uploaded by admins; the compute plane is stateless in v2 (§13.3), so no local disk.
+
+### 5.20 `telemetry`
 
 #### `analytics_events` → `analytics_events` · **transformed**
 
@@ -1134,77 +1145,72 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
   - `ip` — *moved*. Personal data.
   - `device_id` — *moved*. Stable device identifier.
 
-### 5.13 S15 — Administration and support
+### 5.21 `rooms`
 
-#### `tickets` → `tickets` · **moved**
+#### `rooms` → `rooms` · **moved**
 
-- **Owner → home:** own `user_id`.
-- **Columns:** 8 of 9 move unchanged; exceptions:
-  - `number` — *moved*. Verbatim; the home sequence continues after the highest number (U-7).
+- **Owner → home:** own `owner_id`.
+- **Columns:** 12 of 14 move unchanged; exceptions:
+  - `invite_token` — *moved*. Verbatim: plaintext secret in invitation links.
+  - `lk_room_name` — *moved*. Verbatim: LiveKit room name `r-<hex>`.
 
-#### `ticket_messages` → `ticket_messages` · **transformed**
+#### `room_recordings` → `room_recordings` · **moved**
 
-- **Owner → home:** via `ticket_id` → `tickets.user_id`.
-- **Columns:** 4 of 5 move unchanged; exceptions:
-  - `author_user_id` — *moved*. Soft reference when the author (staff) lives in another home.
-- **New in v2:** `author_kind` — `staff` if the author's `users.role` is `admin` at migration time, else `user`; the draft derives it by a join that breaks after anonymisation.
+- **Owner → home:** own `owner_id`.
+- **Columns:** 11 of 13 move unchanged; exceptions:
+  - `s3_key` — *moved*. Verbatim; the same object is also pointed to by `storage_files.s3_key` (section 6, prefix O2).
+  - `egress_id` — *moved*. Verbatim: dedup key of the LiveKit egress.
 
-#### `ticket_attachments` → `ticket_attachments` · **moved**
+#### `video_admin_actions` → `video_admin_actions` · **moved**
 
-- **Owner → home:** via `message_id` → `ticket_messages` → `tickets.user_id`.
+- **Owner → home:** own `owner_id`.
+- **Columns:** 10 of 12 move unchanged; exceptions:
+  - `admin_email` — *moved*. Denormalised admin address, personal data.
+  - `target_identity` — *moved*. LiveKit identity = a user id as text, no FK.
+- Append-only audit of platform admins acting on rooms.
+
+#### `streams` → `streams` · **moved**
+
+- **Owner → home:** own `owner_id`.
+- **Columns:** all 19 move unchanged.
+- Broadcasts (stream as an entity); owned by `rooms` since D4, kept by the owner's SM-8. Live fields (`status=live`, `pinned_principal`) are reset by M2 if a stream is live at freeze.
+
+#### `stream_members` → `stream_members` · **moved**
+
+- **Owner → home:** via `stream_id` → `streams.owner_id`.
+- **Columns:** all 9 move unchanged.
+
+#### `stream_bans` → `stream_bans` · **moved**
+
+- **Owner → home:** via `stream_id` → `streams.owner_id`.
+- **Columns:** all 6 move unchanged.
+
+#### `stream_chat_messages` → `stream_chat_messages` · **moved**
+
+- **Owner → home:** via `stream_id` → `streams.owner_id`.
+- **Columns:** 9 of 10 move unchanged; exceptions:
+  - `deleted_at` — *moved*. Soft delete, kept.
+- Viewers' messages, kept only when the stream has `save_chat`.
+
+#### `stream_admissions` → `stream_admissions` · **dropped**
+
+- **Owner → home:** via `stream_id` → `streams.owner_id`.
+- **Columns:** 9, none copied.
+- Waiting-room knocks with a 10-minute life; nothing survives the window.
+
+#### `stream_requests` → `stream_requests` · **dropped**
+
+- **Owner → home:** via `stream_id` → `streams.owner_id`.
+- **Columns:** 9, none copied.
+- Raised hands with a 20-minute life; nothing survives the window.
+
+#### `room_whiteboards` → `room_whiteboards` · **moved**
+
+- **Owner → home:** via `room_id` → `rooms.owner_id`.
 - **Columns:** 7 of 8 move unchanged; exceptions:
-  - `s3_key` — *moved*. Verbatim; the key holds no owner (section 6, O8).
+  - `files` — *moved*. Embedded images as JSONB in the row (≤ 8 MB), not in object storage.
 
-#### `broadcasts` → `broadcasts` · **moved**
-
-- **Owner → home:** platform (R12).
-- **Columns:** all 12 move unchanged.
-- Admin mass email, not the S05 broadcasts. `channel='telegram'` is a placeholder never sent.
-
-#### `error_logs` → `error_logs` · **transformed**
-
-- **Owner → home:** platform (R12).
-- **Columns:** 6 of 7 move unchanged; exceptions:
-  - `created_at` — *transformed*. Partition key: monthly partitions per §8.2.
-- Upstream provider errors for the admin monitoring page; no user column.
-
-### 5.14 S16 — Hub, downloads and remaining modules
-
-#### `hubs` → `hubs` · **moved**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** 9 of 11 move unchanged; exceptions:
-  - `organisation_id` — *moved*. Soft reference to `pcg_entities`.
-  - `tracker_project_id` — *moved*. Soft reference to `tracker_projects`.
-- Kept or dropped with the hub module by the D4 decision; dropping is a user-data decision.
-
-#### `hub_meetings` → `hub_meetings` · **moved**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** 8 of 9 move unchanged; exceptions:
-  - `addressed_by` — *moved*. `human` is a user decision a re-addressing must not overwrite.
-
-#### `hub_rules` → `hub_rules` · **moved**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Columns:** all 7 move unchanged.
-- Remembered user corrections.
-
-#### `hub_materials` → `hub_materials` · **moved**
-
-- **Owner → home:** own `user_id` (no FK).
-- **Rows:** rows whose `hub_id` no longer exists are orphans of the draft's `delete_hub` and go to the orphan report (R11).
-- **Columns:** 8 of 9 move unchanged; exceptions:
-  - `ref_id` — *moved*. String soft reference to a knowledge document or a storage file.
-
-#### `app_builds` → `app_builds` · **transformed**
-
-- **Owner → home:** platform (R12).
-- **Columns:** 11 of 12 move unchanged; exceptions:
-  - `storage_name` — *transformed*. Local-disk file name → object in the bucket under `platform/` (ADR 0014); the column becomes the object key (section 6, L1).
-- Desktop installers uploaded by admins; the compute plane is stateless in v2 (§13.3), so no local disk.
-
-### 5.15 F1 — Backend foundation (platform tables)
+### 5.22 F1 — Backend foundation (platform tables)
 
 #### `outbox_messages` → `outbox_messages` · **dropped**
 
@@ -1213,7 +1219,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 - **Columns:** 12, none copied.
 - v2 starts with an empty outbox and an empty `processed_events`. Payloads of `billing.payment.succeeded` carry email and name; they are not copied.
 
-### 5.16 F6 — Platform services (FM-4)
+### 5.23 F6 — Platform services
 
 #### `voice_sessions` → `voice_sessions` · **transformed**
 
@@ -1257,6 +1263,19 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 
 ---
 
+#### `exchange_rates` → `exchange_rates` · **moved**
+
+- **Owner → home:** platform catalog (R12). Owned by F6 ([ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md)).
+- **Columns:** all 5 move unchanged.
+- Append-only CBR history; money rows already snapshot the rate they used.
+
+#### `error_logs` → `error_logs` · **transformed**
+
+- **Owner → home:** platform (R12).
+- **Columns:** 6 of 7 move unchanged; exceptions:
+  - `created_at` — *transformed*. Partition key: monthly partitions per §8.2.
+- Upstream provider errors; no user column. Owned by F6 with the provider port since the slice map: the new admin panel has no monitoring page, so F6's step 10 confirms an operational use or this becomes a drop.
+
 ## 6. Object storage
 
 ### 6.1 The draft
@@ -1298,7 +1317,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 
 - **One bucket for both homes** ([ADR 0014](../adr/0014-one-object-store-in-russia.md), §4.1, §8.1): the draft's bucket on Timeweb `ru-1`. Keys do not name the home; the pointer row in the owner's home database does. Platform objects (L1) go under `platform/`. (The first version of this section had a bucket per home; changed by the owner on 2026-10-02.)
 - **The pointer is the truth.** Every object is reachable from exactly one pointer column that stores the full key. The deletion registry (§14 rule 7) walks the pointers, so legacy keys need no owner prefix to be deletable.
-- **Proposed layout for objects v2 writes** (S08 confirms it with an ADR):
+- **Proposed layout for objects v2 writes** (`files` confirms it with an ADR):
 
   | Key | Content |
   |---|---|
@@ -1336,7 +1355,7 @@ Columns: 1458 in mapped tables — 1317 moved, 14 transformed, 38 derived, 89 dr
 | `spend:{user}:d*`, `spend:{user}:m*`, `spend:global:d*`, `spend:global:h*` | Daily and monthly spend counters that enforce ceilings | Re-seeded in v2 from `provider_costs` for the current day, hour and month (E-3) |
 | `ocr:pages:{user}:{YYYYMM}` | Monthly OCR page ceiling | Re-seeded from the OCR rows of `provider_costs` (E-3) |
 | `spend:global:kill` | Admin emergency stop of AI spend | Value carried: v2 starts engaged if it was engaged |
-| `whisperer:billing:expiry_notified:{sub}:{until}` | Dedup of subscription-expiry emails (400 days) | Carried, in the form S03 chooses (a database table is recommended). Otherwise every expiring subscriber is emailed again |
+| `whisperer:billing:expiry_notified:{sub}:{until}` | Dedup of subscription-expiry emails (400 days) | Carried, in the form `billing` chooses (a database table is recommended). Otherwise every expiring subscriber is emailed again |
 | `mail:campaign:{campaign}:{hash}` | Per-recipient dedup of admin mailings (7 days) | Dropped; no mailing may run across `T0` |
 | `state:analytics:alert:*`, `state:analytics:digest:*` | Alert state and the weekly digest marker | Carried; otherwise accept one repeated digest |
 | `abuse:{user}:*`, `memory:summary:*`, breakers, slots, presence, pub/sub, locks, rate limits, caches | Signal windows, derived summaries, coordination state | Dropped. Durable abuse state is in `abuse_states`; summaries are rebuilt nightly (R7) |
@@ -1367,7 +1386,7 @@ The `nango` schema in the production database holds the OAuth tokens and integra
 
 - The schema is copied unchanged into the RU home database. The RU Nango gets the same encryption key and the same public URL and callback (`https://whisperer.one/nango/oauth/callback`).
 - The EU Nango starts empty.
-- Moving an account RU → EU must move its Nango connections as a step of the transfer saga (S01, S12). Otherwise transferred users re-consent.
+- Moving an account RU → EU must move its Nango connections as a step of the transfer saga (`identity`, `connectors`). Otherwise transferred users re-consent.
 
 ### 7.5 Qdrant
 
@@ -1511,7 +1530,7 @@ The owner accepted every proposal on 2026-10-01. The decisions that change the a
 | U-6 | Analytics events of deleted accounts | Clear `user_id` on events of anonymised accounts during migration | Keeps aggregates and honours deletion (nfr-13). The draft deliberately keeps the id, so this changes draft behaviour |
 | U-7 | Ticket numbers across homes | Keep numbers; the RU home continues the draft sequence; the EU sequence starts in a separate range (for example 900000) | Numbers stay unique and human-readable. The alternative is a home prefix in the number shown, a visible change |
 | U-8 | Home of anonymous telemetry (R12) | EU home: `analytics_events` and `client_errors` rows without a user | It cannot be attributed to a person. It may still contain IP or device ids of Russian users, which is an accepted derived copy only if the legal review (§22) agrees |
-| U-9 | Data of draft modules without a place in the architecture | **Decided by D4 on 2026-10-01** (FM-1, FM-2): hubs (S16), the whiteboard and broadcasts (S06) are kept and their data moves; legacy notes merge into the knowledge base (S07), and their link graph is dropped. Left to S07: the platform notes with an empty `user_id` | — |
+| U-9 | Data of draft modules without a place in the architecture | **Decided by D4 on 2026-10-01** (FM-1, FM-2): hubs (`hubs`), the whiteboard and broadcasts (`rooms`) are kept and their data moves; legacy notes merge into the knowledge base (`knowledge`), and their link graph is dropped. Left to `knowledge`: the platform notes with an empty `user_id` | — |
 | U-10 | Retention of `usage_events` | Keep tombstones for the life of the account, exempt from the partition-drop retention of §8.2 | The Free quota is lifetime minutes; dropping old tombstones would give deleted minutes back. §8.2 now states the exemption |
 | U-11 | Knowledge documents whose content exists nowhere (T-4) | Keep each row as a document that needs re-uploading: its name stays in the knowledge list, and it is not indexed | Users see what is missing and can restore it. Dropping the rows would silently shrink their knowledge list. The counts come from M1 before the decision is applied |
 

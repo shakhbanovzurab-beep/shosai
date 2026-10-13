@@ -1,6 +1,6 @@
 # Shosai — Target Architecture
 
-- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
+- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033); domains and workspaces amended on 2026-10-13 by the slice map ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md), [ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
 - **Diagram:** [architecture.html](architecture.html).
 - **Scope:** B2C and B2B (small and mid-size companies, 5–200 seats) on one platform.
 - **Placement:** one compute plane in the EU; two data homes — Russia and the EU.
@@ -20,11 +20,11 @@
 | fr-7 | Residency: data home chosen by country at registration; account transfer between homes | core |
 | fr-8 | Export and full deletion of account data, including revocation of external grants | core |
 | fr-9 | Voice assistant and simultaneous call translation | core |
-| fr-10 | Video rooms and recordings (LiveKit), broadcasts, subtitles | stretch |
+| fr-10 | Video rooms and recordings (LiveKit), broadcasts, room whiteboard | core |
 | fr-11 | Public site (landing, pricing, documentation, help centre, blog) and public pages of shared links, in 16 languages; server-rendered ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | stretch |
-| fr-12 | Company: creation, invitations by link and email, joining by verified email domain; roles owner, admin, member, guest | core |
-| fr-13 | Access inside a company: meeting, note, folder and knowledge collection visible to the owner, selected members or the whole company; search and Leo see only what the user may see | core |
-| fr-14 | Company administration: seats, members and roles, default access level, meeting retention, audit log, export and deletion of company data | core |
+| fr-12 | Workspace (a company's shared space): creation, invitations by link and email, joining by verified email domain; roles owner, admin, member, guest; teams | core |
+| fr-13 | Access inside a workspace: meeting, note, folder, file and knowledge item visible to the owner, selected members or teams, or the whole workspace; search and Leo see only what the user may see | core |
+| fr-14 | Workspace administration: seats, members and roles, default access level, meeting retention, audit log, export and deletion of company data | core |
 | fr-15 | Company billing per seat, monthly or yearly: invoice and closing documents for Russian legal entities; card or invoice for foreign companies | core |
 | fr-16 | Server-side transcription of Shosai video rooms per participant track; the speaker is known without diarization | core |
 | fr-17 | Enterprise sign-in (SAML, OIDC) and SCIM provisioning | next step |
@@ -84,8 +84,8 @@
 2. Data lives in **two homes**. Each home = one managed PostgreSQL cluster (primary + standby, WAL archive, PITR) behind PgBouncer. Files of both homes live in **one S3 bucket in Russia** ([ADR 0014](../adr/0014-one-object-store-in-russia.md)).
    - Russian home: St Petersburg, 45 ms from the plane.
    - EU home: Netherlands, < 2 ms from the plane. It also holds the directory and the data without an owning account (§6).
-3. A request opens its database session **in the home named by the access token** (user home, or the company's home for a work account). Workers take the home from the task payload.
-4. No cross-home writes. A user or company belongs to exactly one home.
+3. A request opens its database session **in the home named by the access token** (the person's home; a workspace request runs in the workspace's home, which at launch is always the person's own, §6). Workers take the home from the task payload.
+4. No cross-home writes. A person or workspace belongs to exactly one home.
 
 ### 4.2 Components
 
@@ -95,7 +95,7 @@
 | Edge | plane | NGINX ×2: TLS, static assets, rate limits; `/v1/ws/*` → WS gateway (least_conn), `/v1/*` → API; cabinet paths (`/app/*`, `/admin/*`, OAuth callback, `/unauthorized`) → the cabinet's static files; every other path → public site; handshake closed with 1013 when the plane is full | 2 nodes |
 | Public site | plane | Next.js: server-rendered and statically generated public pages — landing, pricing, documentation, blog, legal, help centre, shared-link pages with previews; real `404`; `sitemap.xml`, `robots.txt`. Reads data only from the API; holds no business logic, database connection or queue ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | N stateless processes |
 | API | plane | FastAPI: cabinet, Leo, billing, companies and access policy, administration, presigned uploads, acquirer webhooks | N processes; one pool per database |
-| WS gateway | plane | Live capture, voice, translation, subtitles, ingest of room participant tracks from LiveKit egress. Meeting resume state lives in Redis; any process can resume any meeting | 250 meetings per process; 11–13 processes |
+| WS gateway | plane | Live capture, voice, translation, ingest of room participant tracks from LiveKit egress. Meeting resume state lives in Redis; any process can resume any meeting | 250 meetings per process; 11–13 processes |
 | Workers | plane | TaskIQ on Redis Streams, queues `critical`, `default`, `bulk`, `meeting`: outbox relay, transcript queue drain, post-meeting pipeline, indexing, bank statement reconciliation | processes per queue; one pool per database |
 | Scheduler | plane | One process: periodic jobs from `schedule_runs`, due rows from `errands` and `proactive_triggers`. Only enqueues tasks | 1 |
 | Valkey (managed) | EU | Task streams, transcript queue, locks, WS slots, meeting resume state, Leo run state (active and paused runs, run event logs, thread leases), circuit-breaker state. AOF every second, replica, `noeviction` | managed |
@@ -143,30 +143,42 @@
 - **Two web applications** beside it ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)): the cabinet in `frontend/` (Vite SPA, static files served by the edge) and the public site in `site/` (Next.js, its own image and process). Both follow the same feature-first layout; neither owns an API — the backend is FastAPI only.
 - **Feature First** (vertical slices): `core/`, `features/<domain>/`, `composition/`, `entrypoints/`. A feature owns its data, application services, channels (HTTP, WS, tasks, consumers) and its README.
 - A feature depends on another only through its `contracts`. Boundaries are enforced by import-linter contracts in CI.
-- Domains this design places responsibilities on:
-  - `identity` — accounts, sessions, directory, home routing;
-  - `organizations` — companies, memberships, roles, seats, access policy, audit;
-  - `billing` — tariffs, subscriptions, acquirers, company invoices;
-  - `meetings` and `realtime` — capture, transcript, pipeline;
-  - `rooms` — LiveKit rooms, recording, track ingest;
+- Domains this design places responsibilities on. Each is one feature slice, named for what it does in Shosai; its scope, owned data, routes, dependencies and Leo tools are in the [slice map](../plan/SLICE_MAP.md) §4 ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md)):
+  - `identity` — accounts, sessions, directory, home routing, operator accounts, the export and deletion registry;
+  - `workspaces` — workspaces (a company's shared space), memberships, teams, roles, seats, projects, share records, access policy, audit;
+  - `billing` — plans, entitlements, usage meters, subscriptions, acquirers, seats, company invoices;
+  - `files` — files and folders, uploads, storage quota: the one path for bytes;
+  - `meetings` — sessions, transcript storage, post-meeting pipeline, notes, share links;
+  - `capture` — live capture, in-meeting answers, voice translation (the WS gateway role);
+  - `rooms` — LiveKit rooms, recording, track ingest, broadcasts, room whiteboard;
   - `knowledge` — sources, indexing, search;
+  - `commitments` — people, decisions, promises and open topics across meetings;
+  - `hubs` — personal containers per client or piece of work that watch what is unresolved;
+  - `tasks` — the one task store: boards, action items, workspace tasks, Jira;
+  - `calendar` — calendars and events, two-way sync;
+  - `mail` — mailboxes over connectors, Leo's triage and drafts;
+  - `connectors` — the registry of connected services: Nango and own OAuth grants;
   - `agent` — Leo;
   - `errands` — delayed Leo actions;
   - `decisions` — Leo's Decision Layer: versioned policies over Jev, also used by other domains;
   - `memory` — Leo's long-term memory and personalization;
   - `proactive` — Leo's initiative: signals, suggestions, delivery, Web Push;
-  - `connectors` — Nango;
-  - `analytics`, `alerting`.
+  - `studio` — model catalogue, defaults and role assignments, platform and user prompts, personal context;
+  - `mcp` — Shosai as an MCP server; external MCP servers for Leo;
+  - `support` — tickets and newsletters between operators and users;
+  - `releases` — desktop builds, staged rollout, downloads;
+  - `telemetry` — client errors, product events, satisfaction survey;
+  - `alerting`.
 
 ## 6. Data placement and residency
 
 - **Home of an entity:**
-  - personal account → home chosen by country at registration;
-  - company → home fixed by contract;
-  - work account → home of its company;
+  - person → one account, home chosen by country at registration;
+  - workspace → home fixed at creation: the home of the person who creates it, or the home a company contract names;
+  - membership → the workspace's home; it references the person's global user id;
   - account migrated from the draft → Russian home; it moves to the EU home by account transfer once the person confirms a country outside Russia ([ADR 0004](../adr/0004-migrated-accounts-start-in-russian-home.md)).
-  A person with a personal and a work space has two accounts.
-- **Directory** (EU home): `email_hmac`, `user_id`, `home`, `state`, `version`. `directory_domains` maps a verified company email domain to the company and its home. No other personal data outside a home.
+  A person has one account: Personal and every workspace they belong to are spaces of that account ([ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)). At launch a person joins only workspaces of their own home; an invitation or a domain join across homes is refused with an explicit error. Cross-home membership and sharing wait for the legal review (§22); the data model leaves room for them.
+- **Directory** (EU home): `email_hmac`, `user_id`, `home`, `state`, `version`. `directory_domains` maps a verified company email domain to the workspace and its home. No other personal data outside a home.
 - **Data without an owning account** (EU home, one copy, one writer; [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md)):
   - platform tables: tariffs, promo codes, payment routes, exchange rates, the model registry and defaults, platform prompts and notes, MCP client registrations, admin mailings, provider error logs, desktop builds;
   - home tables reference them by id without a foreign key; a platform id is retired, never deleted;
@@ -181,18 +193,20 @@
 - **Derived copies in the EU — accepted exception to nfr-4:** meeting resume state, the run state of Leo's active and paused runs (Valkey), task payloads, vector index points of Russian users and companies. Retention ≤ 24 h in Redis; index points live as long as their source.
 - **Cross-border AI:**
   - personal user — consent in the product;
-  - company — consent in the contract as data operator; Shosai processes on its behalf.
+  - workspace of a company customer — consent in the contract as data operator; Shosai processes on its behalf.
 - **Account transfer between homes:** a saga with a step journal (`home_transfers`): freeze writes → export by the table registry → import → verify manifest → switch directory → bump token version → purge source. Each step is idempotent; purge is last.
 
 ## 7. Tenancy and access control
 
 - **Owner of a resource:**
   - personal resources — `user_id`, `org_id` empty;
-  - company resources — `org_id` plus an access level: `owner | selected | organization`;
-  - selected members — rows in `resource_grants`.
-- Resources with company access: meetings, notes, folders, knowledge collections.
+  - workspace resources — `org_id` plus an access level: `owner | selected | organization`;
+  - selected — rows in `resource_grants`; a grantee is a member or a team.
+  The cabinet's audiences map onto the levels: participants → `selected` (the meeting's participants who are members), team → `selected` with the team as grantee, workspace → `organization`.
+- Resources with workspace access: meetings, notes, folders, files, knowledge items.
+- **Sharing a personal item.** A person shares a personal meeting or file into a workspace through a share record owned by `workspaces`; the item is not copied, because at launch both live in the same home. Removing the share or leaving the workspace ends the workspace's access to it.
 - The public link visibility (`private | shared | public`) is independent of company access: a private link does not resolve, a shared link hides the title in previews and may carry a password, a public link shows the title.
-- **One access policy** (feature `organizations`) decides every read and write. Domains call it; they never compare owners themselves. The access check runs in the same query that reads the resource.
+- **One access policy** (feature `workspaces`) decides every read and write. Domains call it; they never compare owners themselves. The access check runs in the same query that reads the resource.
 - **Access rights are never cached.** Content may be cached; the right to see it is checked on every access.
 - **Row-level security** is the second line:
   - each transaction starts with `SET LOCAL app.org_id` (and `app.user_id`);
@@ -200,15 +214,16 @@
   - migrations and sweeps use a dedicated role.
 - **Search and Leo:**
   - Qdrant filters by tenant (`o_<id>` or `u_<id>`) and by the requester's access;
-  - every hit is re-checked against PostgreSQL before it is returned, because index payload lags access changes by seconds.
+  - every hit is re-checked against PostgreSQL before it is returned, because index payload lags access changes by seconds;
+  - **Leo is one per person** ([ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)): it reads everything the person may access, in Personal and in every workspace they belong to; each read passes the access policy; every answer names its sources and the space each comes from; losing membership removes that workspace from Leo at once.
 - **Roles:**
   - owner — everything, including billing and deletion;
   - admin — members, seats, settings, audit;
   - member — own and shared resources;
-  - guest — only explicitly granted resources.
-  The last owner cannot leave.
+  - guest — only explicitly granted resources (in the model; no screen yet).
+  The last owner cannot leave. Teams group members; a private team is visible only to its members and the admins.
 - **Joining:** invitation token, or a verified email domain (DNS TXT). A join above paid seats returns 402 and notifies the admins.
-- **Member removal:** membership → `removed`, `token_version` bumped (sessions die within 1 min), created content stays with the company, ownership transferred to an admin.
+- **Member removal:** membership → `removed`; the workspace's access ends at the next request, because membership is checked in every reading query and the token carries no workspace roles; the person's sessions and Personal stay untouched; created content stays with the workspace, ownership transferred to an admin.
 - **Audit:** every administrative action and access change writes `org_audit_events` in the same transaction. The application role has no UPDATE or DELETE on that table.
 - **Enterprise sign-in** (SAML, OIDC, SCIM): not built now. The data model leaves room for a per-company identity provider.
 
@@ -220,11 +235,11 @@
 |---|---|---|---|---|---|---|
 | Account | `users` in its home | UUID, global | home primary | all writes go to one home; writes frozen during transfer | commit before response | anonymised on deletion; directory row kept 30 days |
 | Directory entry | `directory_entries` in the EU home | `email_hmac` PK; `user_id` unique | EU primary | unique index: first registration wins | commit | 30 days after deletion |
-| Company | `organizations` | UUID | company home; seats and plan under a row lock | one writer | commit + audit event | after contract end and export, deletion saga |
-| Membership | `memberships` | (org_id, user_id); a work account has one company | company home | only admins change roles; last owner stays | commit + audit event; removal bumps token version | row kept as `removed` |
-| Access | `org_id`, `access` columns + `resource_grants` | (resource type, resource id, member id) | company home | last write wins; revocation immediate | commit + audit; index updated via outbox | with the resource |
+| Workspace | `organizations` | UUID | workspace home; seats and plan under a row lock | one writer | commit + audit event | after contract end and export, deletion saga |
+| Membership | `memberships` | (org_id, user_id); a person may belong to several workspaces of their home | workspace home | only admins change roles; last owner stays | commit + audit event; removal ends access at the next request | row kept as `removed` |
+| Access | `org_id`, `access` columns + `resource_grants` | (resource type, resource id, grantee: member or team) | workspace home | last write wins; revocation immediate | commit + audit; index updated via outbox | with the resource |
 | Payment | `transactions`, `auto_charge_attempts`; outbox in the same transaction | UUID; acquirer order id; period key `subscription:date` | home: transaction row and subscription row locks | webhook replay stops at the lock and status | commit before acquirer ack and before the charge call; unknown outcome stays `charging` until reconciliation | never deleted |
-| Company invoice | `org_invoices`; PDF in the bucket | invoice number from a home sequence | company home | payment matched once by invoice number; unmatched → operator queue | payment, seats and audit in one transaction | never deleted |
+| Company invoice | `org_invoices`; PDF in the bucket | invoice number from a home sequence | workspace home | payment matched once by invoice number; unmatched → operator queue | payment, seats and audit in one transaction | never deleted |
 | Transcript line | `transcript_segments`, monthly partitions | (session_id, seq); seq assigned by the server at phrase intake; `started_at` = phrase start | the WS process leading the meeting | replay of (session_id, seq) ignored; equal text is not a conflict | Redis transcript queue (AOF) before the frame is sent; home DB in 500 ms batches, `ON CONFLICT DO NOTHING` | with the meeting; partitions > 12 months exported to S3 |
 | Pipeline run | `meeting_processing_runs`, stage state in JSONB | UUID; idempotency (session_id, source) | home DB; stage executed by the message lease holder | finished stages skipped; results upserted by natural keys | stage commit; the queue may be lost, the sweep restores from DB | with the meeting; audio ≤ 72 h |
 | Cost | `provider_costs` (monthly partitions), credit ledger | UUID + effect key (run:stage:call or request id) | home DB; subscription row lock on debit | same effect key → no second row or debit | written by the provider port with the call result; live capture batched every minute | never deleted; partitions > 24 months dropped |
@@ -273,7 +288,7 @@
 | inv-12 | A writing agent action runs at most once and only after confirmation |
 | inv-13 | No money ceiling stops a meeting or standard transcription (unlimited-meetings promise) |
 | inv-14 | A company resource opens only for its members at the resource's access level; checked on every access, never cached; search and Leo obey the same rule |
-| inv-15 | All data of a company and the work accounts of its members live in the company's home |
+| inv-15 | All data of a workspace lives in the workspace's home; until cross-home membership is allowed (§22), every member's account lives there too |
 | inv-16 | Active members ≤ paid seats |
 | inv-17 | An administrative action or access change does not happen without an audit event in the same transaction |
 
@@ -286,9 +301,9 @@
 | End meeting | `POST /v1/me/sessions/{id}/end` → 202 `{run_id}`; `GET /v1/me/runs/{run_id}` | (session_id, source) returns the same run | 300 ms; notes p95 ≤ 10 min | PENDING → SUCCEEDED, PARTIALLY_COMPLETED or FAILED; silent meetings closed after 5 min of silence |
 | Acquirer webhook | `POST /v1/billing/webhook/{provider}` | `external_id` unique | answer within 5 s, after commit | 2xx only after commit; 5xx → acquirer retries; reconciliation every minute |
 | Upload | `POST /v1/me/uploads` → presigned part URLs; PUT to S3; `POST …/complete` | upload id; part replay overwrites | 300 ms for URLs; 15-min signature | READY with run id; REJECTED over size; abandoned uploads removed by lifecycle after 24 h |
-| Invite and join | `POST /v1/orgs/{id}/invites`; `POST /v1/orgs/join {token}`; domain join at registration | one-time token; repeat returns the same membership | 300 ms | membership; 402 no seats; 409 address already in another company |
+| Invite and join | `POST /v1/workspaces/{id}/invitations`; `POST /v1/workspaces/join {token}`; domain join at registration or later | one-time token; repeat returns the same membership | 300 ms | membership; 402 no seats; 409 the person's home differs from the workspace's (until §22) |
 | Share inside a company | `PUT /v1/{resource}/{id}/access {level, members[]}` | set-state | 300 ms | new access + audit event; 403 without right; revocation immediate |
-| Company invoice | `POST /v1/orgs/{id}/invoices {seats, period, payer}` → number + PDF | invoice number; statement payment matched once | 2 s; seats active by the next business day | `paid`, `issued` or unmatched payment → operator alert after 24 h |
+| Company invoice | `POST /v1/billing/workspaces/{id}/invoices {seats, period, payer}` → number + PDF | invoice number; statement payment matched once | 2 s; seats active by the next business day | `paid`, `issued` or unmatched payment → operator alert after 24 h |
 | Room transcription | LiveKit track egress → WSS to the WS gateway, one participant per stream | (session_id, seq) | line on screen ≤ 2 s | transcript per participant in the room owner's meeting with company access; egress failure → whole-room recording analysed after the meeting |
 | Leo turn and approval | `POST /v1/agent/threads/{id}/turns` → SSE with event ids; resume `GET /v1/agent/runs/{id}/events`; `POST /v1/agent/actions/{id}/approve` | `Idempotency-Key` per user message; approval by one conditional status update; item key `action_id:index` | platform overhead ≤ 500 ms (EU) | exactly one terminal event per run; 409 `thread_busy`; a write executes once or ends `outcome_unknown` ([ADR 0025](../adr/0025-leo-action-gateway.md), [ADR 0032](../adr/0032-leo-stream-protocol-v2.md)) |
 | Account transfer | internal `POST /internal/transfers {user_id, to_home}`; saga steps as tasks | transfer id; each step checks journal and manifest | minutes per user | SUCCEEDED after manifest check and source purge; CANCELLED before the directory switch; RECONCILING if the target did not confirm |
@@ -698,7 +713,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Delayed actions as `errands` rows run by the scheduler | "wait, then act once" needs no extra cluster | multi-step waiting scenarios are hand-written | see §12 |
 | Company = new ownership level (`org_id` + access level) | shared team space without copying data | every read path of shared domains changes | < 5% of company resources shared after six months → freeze sharing, keep seats and billing |
 | One access policy, no caching of rights, RLS as second line | nfr-15, inv-14 | `SET LOCAL` per transaction; separate role for migrations and sweeps | RLS overhead > 10% of query time and isolation tests cover every read path |
-| Work account in the company home, personal account separate | all company data in one home | two accounts for one person | users widely demand one identity for both spaces |
+| One account per person; workspaces of the person's home only, at launch ([ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)) | one sign-in and one Leo across Personal and workspaces, as the cabinet shows; all data of a workspace in one home | a workspace has members of one home only; cross-home sharing will need a copy flow | the legal review allows cross-home membership, or a company customer needs members in both homes |
 | Search and Leo re-check hits in the DB | index payload lags access changes | one extra DB query per search | never |
 | Room transcription via LiveKit track egress | exact speaker, live transcript; a component already in the stack | egress joins the live path; one provider stream per track | egress cannot hold the needed tracks per process → revisit the track ingest path |
 | Invoices matched by bank statement | legal entities pay without an acquirer | closing documents, tax, manual queue for unmatched | < 20 invoices a month → manual reconciliation |
@@ -743,6 +758,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Item | Owner | Needed before |
 |---|---|---|
 | Legal review: email HMAC outside Russia; derived copies in the EU; telemetry without an account in the EU home (ADR 0005); data of people outside Russia kept in the Russian home until their transfer (ADR 0004); files of the EU home in the bucket in Russia (ADR 0014); cross-border transfer to AI providers; processor agreement (152-FZ) and DPA (GDPR) with the list of subprocessors | owner, lawyer | first transfer of accounts; first company contract |
+| Cross-home workspace membership and sharing ([ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)): the legal basis for a member's profile copy in the workspace's home and for copying a shared item across homes; the account transfer of a person who belongs to workspaces | owner, lawyer | the first workspace with members of both homes; the first transfer of a workspace member |
 | Tax, closing documents, document exchange for Russian legal entities | owner, accountant | first invoice |
 | Legal review of Jev (TypeSafe AI) as a subprocessor: retention, DPA, coverage by cross-border consent | owner, lawyer | enabling Jev on personal data |
 | Provider of the EU PostgreSQL; bank for statement API | owner | building the EU home; first invoice |

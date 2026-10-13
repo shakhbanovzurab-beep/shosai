@@ -1,6 +1,7 @@
 # ADR 0023 — Leo is one agent in six separated layers; LangGraph is infrastructure
 
 - **Status:** accepted by the owner on 2026-10-08.
+- **Amended** on 2026-10-13 by [ADR 0038](0038-feature-slices-derived-from-the-product.md) (slice map SM-5): the `models` slice is absorbed by `studio`, which also owns platform and user prompts and the personal context; the agent reads them through studio's contracts.
 - **Packages:** S09 (agent, decisions, memory, proactive), S11, S05, S10.
 - **Context documents:** [Leo architecture](../design/leo/ARCHITECTURE.md) §3–§5; [Leo audit](../design/leo/AUDIT.md) C4, C10; [ARCHITECTURE.md](../design/ARCHITECTURE.md) §5, §18.1.
 

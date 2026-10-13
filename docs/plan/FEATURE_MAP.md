@@ -1,5 +1,7 @@
 # Feature map: draft → v2
 
+> **Superseded as the plan of record on 2026-10-13.** This is the inventory of the draft: a reference for what the draft had, where it lived and what D4 decided about it. The feature slices of Shosai are cut from the product in [SLICE_MAP.md](SLICE_MAP.md) ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md)); its §6.1 maps every S01–S17 of this document to the new slices, and its §8.1 keeps FM-1c (the whiteboard) and the broadcasts, drops the room AI panel and subtitles (SM-8), and re-decides FM-3 for meeting-result push, which moves to `connectors` over Nango (SM-11). The IDs S01–S17 below are the old cut and are not used by the plan any more.
+
 Package D4 of the [rewrite plan](REWRITE_PLAN.md). Every capability of the draft has an owner in v2 here. The owner's keep, merge and drop decisions are in [section 7](#7-decisions-keep-merge-drop).
 
 - **Built:** 2026-10-01 from the draft at commit `589917e84`.

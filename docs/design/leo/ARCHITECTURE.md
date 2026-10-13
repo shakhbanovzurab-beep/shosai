@@ -1,7 +1,7 @@
 # Leo — agent architecture
 
-- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md).
-- **Scope:** Leo, the proactive AI agent at the centre of the workspace (brand Shosai). Package S09 with S11 (errands) and the agent-facing parts of S05 (voice), S10 (MCP) and S12 (connectors).
+- **Status:** accepted by the owner on 2026-10-08, with ADR 0023–0033. The amendments of [§16](#16-proposed-amendments-to-the-target-architecture) are applied to the [target architecture](../ARCHITECTURE.md). Amended on 2026-10-13 by the [slice map](../../plan/SLICE_MAP.md): the `models` slice is absorbed by `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)); Leo is one per person across Personal and every workspace ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)); package ids S01–S17 are replaced by slice names.
+- **Scope:** Leo, the proactive AI agent at the centre of the workspace (brand Shosai). The slices `agent`, `decisions`, `memory`, `proactive` and `errands`, and the agent-facing parts of `capture` (voice), `mcp`, `connectors` and `studio` (models and prompts).
 - **Inputs:** [AUDIT.md](AUDIT.md) (the draft's Leo); target architecture §1–§22; the new cabinet design in `frontend/src/features/leo`; the D1 contract (`contracts/draft/`); [Jev](#6-decision-layer-and-jev) public documentation as of 2026-10-08.
 - **Diagram:** [architecture.html](architecture.html) — components and layers, the turn and approval path, the proactive pipeline.
 - **Decisions:** [ADR 0023](../../adr/0023-leo-agent-core-layers.md) – [ADR 0032](../../adr/0032-leo-stream-protocol-v2.md), index in [§14](#14-architecture-decision-records).
@@ -38,11 +38,11 @@ Leo is the single agent of the workspace. It answers, acts with the user's confi
 | L-1 | Conversational turns in text and voice, in one thread per scope, persistent and continuous across devices | fr-4, fr-9, C1 |
 | L-2 | Tools over every domain the user can access, under the same access policy as the UI | fr-4, fr-13, inv-14 |
 | L-3 | A write runs at most once and only after the user's confirmation, on any channel (web, voice, native, MCP, errand) | inv-12 |
-| L-4 | Proactive suggestions grounded in workspace events, delivered at a good moment, rated by the user, budgeted | S09 scope, P1–P5 |
-| L-5 | Long-term memory the user can see, correct and switch off; provenance for every fact | S09, M1–M4 |
-| L-6 | Skills: platform playbooks and user-installed SKILL.md packages that shape behaviour without granting rights | S09, M6 |
-| L-7 | Delayed actions (errands) re-validated at run time | S11, P4 |
-| L-8 | Exposure of Leo's tools to external MCP clients under the same confirmation rule | S10, A3 |
+| L-4 | Proactive suggestions grounded in workspace events, delivered at a good moment, rated by the user, budgeted | slice `proactive`, P1–P5 |
+| L-5 | Long-term memory the user can see, correct and switch off; provenance for every fact | slice `memory`, M1–M4 |
+| L-6 | Skills: platform playbooks and user-installed SKILL.md packages that shape behaviour without granting rights | slice `agent`, M6 |
+| L-7 | Delayed actions (errands) re-validated at run time | slice `errands`, P4 |
+| L-8 | Exposure of Leo's tools to external MCP clients under the same confirmation rule | slice `mcp`, A3 |
 | L-9 | Answers in the user's chosen language; every model-facing text in English | CLAUDE.md, §14 rule 14 |
 
 **Out of scope here:** model training and fine-tuning, multi-company collaboration (target architecture §21), autonomous writes without confirmation (§9.2 Q-4).
@@ -86,8 +86,8 @@ The design must hold the right-hand column without a structural change.
 
 ```
                        ┌──────────────────── Application layer (channels) ─────────────────────┐
-  Cabinet (Vite SPA) ──┤ HTTP /v1/agent/* + SSE │ WS /v1/ws/user │ voice port (S05) │ MCP (S10)  │
-  Native clients ──────┤ native compat routes   │ errand runner (S11)  │ proactive delivery      │
+  Cabinet (Vite SPA) ──┤ HTTP /v1/agent/* + SSE │ WS /v1/ws/user │ voice (capture)  │ MCP (mcp)  │
+  Native clients ──────┤ native compat routes   │ errand runner        │ proactive delivery      │
                        └──────────────┬──────────────────────────────────────────┬──────────────┘
                                       │ TurnCommand / ApproveCommand              │ Suggestion
                        ┌──────────────▼───────────────┐            ┌─────────────▼──────────────┐
@@ -99,7 +99,7 @@ The design must hold the right-hand column without a structural change.
                           │           │           │                       │              │
               ┌───────────▼──┐ ┌──────▼──────┐ ┌──▼─────────────┐  ┌──────▼──────┐ ┌─────▼──────┐
               │ Memory &     │ │ Tools &     │ │ Decision Layer │◄─┤ (same port) │ │ Errands    │
-              │ Context      │ │ Skills      │ │ policies + Jev │  └─────────────┘ │ (S11)      │
+              │ Context      │ │ Skills      │ │ policies + Jev │  └─────────────┘ │ (errands)  │
               │ builder,     │ │ registry,   │ │ + fallbacks,   │                  └────────────┘
               │ memory, user │ │ toolsets,   │ │ decision       │
               │ state        │ │ playbooks   │ │ records        │
@@ -144,16 +144,16 @@ That layer can then use a cheap calibrated model (Jev) without polluting the age
 
 Feature-first, as the target architecture §5 and CLAUDE.md require. Leo is a set of slices, not a monolith inside one slice:
 
-| Slice | Owns | Package |
-|---|---|---|
-| `agent` | Agent Core, Action Gateway, threads, runs, context builder, tool registry and skills runtime, HTTP/SSE channels | S09 |
-| `decisions` | Decision Layer: policy registry, Jev adapter, thresholds, fallbacks, decision records. Platform-wide: also used by mail triage (S12) and others | S09 (new slice) |
-| `memory` | long-term memory, admission, retrieval, user profile core, personalization | S09 |
-| `proactive` | signals, triggers, candidates, suggestions, delivery (`/v1/ws/user`, Web Push), feedback | S09 |
-| `errands` | delayed actions | S11 |
-| `models` | model registry, defaults, role assignments (platform tables) | S09 |
-| domain slices | their own tools, as `ToolSpec`s in their contracts | S04, S07, S08, S12, S13, S15, S16 … |
+| Slice | Owns |
+|---|---|
+| `agent` | Agent Core, Action Gateway, threads, runs, context builder, tool registry and skills runtime, HTTP/SSE channels; the native model proxy and the skills store |
+| `decisions` | Decision Layer: policy registry, Jev adapter, thresholds, fallbacks, decision records. Platform-wide: also used by mail triage (`mail`), the hub signal (`hubs`) and others |
+| `memory` | long-term memory, admission, retrieval, user profile core, personalization; Settings › Memory |
+| `proactive` | signals, triggers, candidates, suggestions, delivery (`/v1/ws/user`, Web Push), feedback; the Today feed |
+| `errands` | delayed actions; the native reminder routes |
+| domain slices | their own tools, as `ToolSpec`s in their contracts: `meetings`, `knowledge`, `files`, `commitments`, `hubs`, `tasks`, `calendar`, `mail`, `workspaces`, `support`, `studio` … |
 
+- **Models and prompts are not a Leo slice.** The model registry, defaults and role assignments (platform tables), platform and user prompts and the personal context belong to `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md), slice map SM-5). The agent reads them through studio's `ModelRoutes` and `PromptResolver` contracts, as `capture`, `meetings` and `memory` do. The build order of all slices is in the [slice map](../../plan/SLICE_MAP.md) §5.
 - **Tool contract in core.** `core/agent_tools` holds the framework-light tool contract: `ToolSpec`, `ToolContext`, `EffectClass`, `PlannedEffect`, `Preview`, `ToolResult`. `FeatureParts` gains `agent_tools`, and composition hands every slice's specs to `agent`. The agent imports no domain slice. No domain slice imports the agent. This is the fix for C10 ([ADR 0029](../../adr/0029-leo-tools-owned-by-domain-slices.md)).
 - **Clean Architecture inside `agent`:**
   - `domain/` holds the run state machine, action lifecycle, budgets and taint rules. It is pure.
@@ -171,7 +171,7 @@ Feature-first, as the target architecture §5 and CLAUDE.md require. Leo is a se
 | Component | Slice | Responsibility | State it owns |
 |---|---|---|---|
 | Channel adapters | agent, proactive | Authenticate; build `TurnCommand` through the one `PrincipalFactory`; map events to SSE or WS frames; native compatibility routes | none |
-| `PrincipalFactory` | agent | The only builder of the run principal: user, home, org, roles, entitlements snapshot, switches, thread scope (personal / workspace / hub), consent flags. Fixes C4 | none |
+| `PrincipalFactory` | agent | The only builder of the run principal: user, home, org, roles, entitlements snapshot, switches, thread scope (personal / workspace / hub), the person's active memberships, consent flags. Fixes C4 | none |
 | Admission | agent | Rate limit (GCRA), quota, abuse guard, spend reservation through the provider port, per-thread lease | Valkey lease |
 | Run Orchestrator | agent | Run lifecycle (§5), deadlines, cancellation, post-turn work | `agent_runs` row; checkpoint while active or paused |
 | Run graph | agent | LangGraph: `context → model ⇄ tools → propose → (interrupt) → respond`; a thin graph over application services | checkpoint (Valkey) |
@@ -321,7 +321,7 @@ caller ──decide(point, subject, features, snippets)──► Decision Servic
 | `memory.admit` | Memory, after a turn (background) | `choice` kind (preference, fact, relationship, goal, none); `noul` durable beyond a week; `noul` sensitive personal data; `noul` updates an existing fact (with neighbours in state) | store · ask the user · supersede · skip | 2 s | store only explicit requests made through the memory UI or the memory tool; skip the rest |
 | `proactive.value` | Proactive, per candidate | `score` value to the user (5 levels); `score` urgency (4); `noul` the user already knows; `noul` actionable now | keep (with value, urgency) · drop | 2 s | the kind's static urgency, the draft's rules (`restraint.decide`) |
 | `proactive.moment` | Proactive, at delivery time | `choice` now · next break · next session · digest · drop; inputs include the user-state features | deliver now · defer to moment · add to digest · drop | 1 s | defer to next session; quiet hours respected |
-| `mail.triage` | S12, per new message | `choice` needs_you · fyi · low | triage label | 2 s | `importance.decide` rules from the draft |
+| `mail.triage` | `mail`, per new message | `choice` needs_you · fyi · low | triage label | 2 s | `importance.decide` rules from the draft |
 
 `turn.route` replaces sending 130 schemas every round. Its miss rate is measured, and the model can recover a missed toolset with the meta-tool `load_toolset` (§8.2).
 
@@ -369,9 +369,9 @@ The cost row is written by the provider port (inv-9), like any model call.
 | Long-term memory | Facts, preferences, relationships, goals, procedures about the user | home DB `memory_facts` | yes | decay plus supersession; user controls |
 | Profile core | Pinned facts, preferences, personalization, locale, timezone, answer language | derived from the above | derived | cached 10 min, invalidated on change |
 | User state | Presence, surface, in-meeting, focus, local time, budgets | Valkey | derived | minutes |
-| Knowledge | Meetings, notes, files, knowledge collections, context graph | owner slices (S04, S07, S08) | not Leo's | owner's rules |
+| Knowledge | Meetings, notes, files, knowledge collections, context graph | owner slices (`meetings`, `knowledge`, `files`, `commitments`) | not Leo's | owner's rules |
 
-**Knowledge is not memory.** Mail, web pages and documents are searched, never memorised: memory holds what the user said and what was confirmed about them. Decisions and commitments with a lifecycle stay in the context graph (S07), as the draft rightly decided (`recollection.py:3-13`).
+**Knowledge is not memory.** Mail, web pages and documents are searched, never memorised: memory holds what the user said and what was confirmed about them. Decisions and commitments with a lifecycle stay in the context graph (`commitments`), as the draft rightly decided (`recollection.py:3-13`).
 
 ### 7.2 Long-term memory
 
@@ -394,7 +394,7 @@ The cost row is written by the provider port (inv-9), like any model call.
 4. *Ask when unsure.* Sensitive facts, and facts in the middle band, become `candidate`: shown as "Should I remember…?" in the panel or the memory page. Candidates are not used for answers.
 5. *Respect the switches.* With `memory_enabled=false` or `no_logs`, nothing is extracted or stored, **on every path**: the meeting memory port, consolidation, extraction. This fixes M1, and an isolation test covers each writer.
 
-Meeting recollections (S04 memory port) enter with `source_kind=meeting`. They are third-party speech, so they are always rendered as untrusted, with their source.
+Meeting recollections (the memory port called by `meetings`) enter with `source_kind=meeting`. They are third-party speech, so they are always rendered as untrusted, with their source.
 
 **Retrieval:**
 
@@ -521,7 +521,7 @@ If the model needs more, `load_toolset(name)` adds the schemas for the next roun
   - soft limit 4: after it, reasoning is forced on and the planner prompt asks to conclude;
   - hard limit 10: the last round has no tools.
 - **`finish_reason=length`** is detected. Text is marked truncated; a tool call with truncated JSON is rejected with an error result instead of being executed with `{}` (fixes C6).
-- **External MCP tools** (S10 client side):
+- **External MCP tools** (`mcp`, client side):
   - namespaced `mcp.<server>.<tool>`;
   - descriptions sanitised: control characters stripped, capped at 500 characters, shown to the user at connect time;
   - input schemas capped at 4 KB;
@@ -651,11 +651,11 @@ state changes ─┘   (ids)     (pure, features)        drop → record        
 **Signals are event-driven,** never global scans (fixes P3). Inputs:
 
 - outbox subscriptions:
-  - `meetings.notes_ready`, `meetings.ended` (S04);
-  - `mail.received` (S12, from connector sync);
-  - `calendar.event_changed`, `tasks.due_changed` (S13);
-  - `graph.commitment_due` (S07);
-  - `connectors.broken`, `hubs.topic_looped` (S16), `errands.failed`;
+  - `meetings.notes_ready`, `meetings.ended` (`meetings`);
+  - `mail.received` (`mail`, from connector sync);
+  - `calendar.event_changed` (`calendar`), `tasks.due_changed`, `tasks.assigned` (`tasks`);
+  - `commitments.due`, `commitments.topic_looped` (`commitments`);
+  - `connectors.broken` (`connectors`), `hubs.topic_looped` (`hubs`), `support.replied` (`support`), `errands.failed`;
 - **time triggers** as rows in `proactive_triggers` (`run_at`, kind, subject), run by the scheduler with `FOR UPDATE SKIP LOCKED`, the same way as errands (§12). Calendar changes upsert the pre-meeting triggers; the morning brief is one row per user per day;
 - **user-state transitions** from Valkey — meeting ended, came online, focus ended — open a *moment*: the user's deferred queue is evaluated.
 
@@ -729,7 +729,7 @@ If any check fails, the errand becomes a **new proposal** delivered to the user,
 | home PostgreSQL | `agent_skills` (user-installed) | authoritative | home | with the user | — |
 | EU home (platform) | prompts, skills catalogue, model registry, `decision_policies`, `decision_thresholds` | platform data without owner (§6) | EU | versions retired, not deleted | — |
 | Valkey | thread leases; run checkpoints of **active and paused runs only**; run event logs (stream per run, ≤ 2 000 events, TTL 1 h); vault; user state; "has memories" bits | derived, ≤ 24 h | EU (accepted exception, §6) | TTL | in-flight runs fail; paused actions survive in the DB |
-| Qdrant | knowledge and meeting windows (S07, S04) | derived | EU | — | rebuild |
+| Qdrant | knowledge and meeting windows (`knowledge`, `meetings`) | derived | EU | — | rebuild |
 
 **What changes against §8.1 "Leo state"** ([ADR 0024](../../adr/0024-leo-threads-in-the-home-database.md)):
 
@@ -769,7 +769,7 @@ This is below the transcript tables (1.9 TB/year) and needs no new store.
 
 | Layer | Mechanism |
 |---|---|
-| Who | One `PrincipalFactory`; principal in the runtime context, never in model-controlled state; thread scope (personal / workspace / hub) applied by `ToolContext` to **every** tool, reads and writes (fixes A10) |
+| Who | One `PrincipalFactory`; principal in the runtime context, never in model-controlled state; thread scope (personal / workspace / hub) applied by `ToolContext` to **every** tool (fixes A10): reads cover every space the person may access, each checked by the access policy, and every result carries its space; the scope ranks its own space first and is the default target of writes; a write into another space names that space in its preview ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)) |
 | What data | Each slice's access policy and RLS in `execute`; search hits re-checked in PostgreSQL (inv-14, §7) |
 | What actions | Effect class decides confirmation; Action Gateway is the only write path; single winner; idempotency |
 | Which text is trusted | Wrapper v2 with provenance; taint level per run; memory and skills untrusted; server-written thread entries structured |
@@ -900,17 +900,18 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 
 | Direction | Port | Owner | Use |
 |---|---|---|---|
+| uses | model routes and prompts: `ModelRoutes`, `PromptResolver` | `studio` | model choice per role, fallbacks, system and feature prompts |
 | uses | provider port: `stream_chat`, `complete`, `embed`, `rerank`, **`decide`** (Jev), with effect key, spend reservation | F6 | every model and decision call (inv-9, §14 rule 4); fixes C3 |
-| uses | identity: token → principal claims | S01 | `PrincipalFactory` |
-| uses | entitlements, spend balance | S03 | admission, tool gates |
-| uses | access policy, inside each slice's `execute` and read services | organizations | inv-14 |
-| uses | `ToolSpec`s and event types | S04, S07, S08, S12, S13, S15, S16, S11 | tools, signals |
-| uses | search and context graph | S07 | `workspace.search`, knowledge, people and commitments |
-| provides | memory port: `record_recollections(meeting)` | memory → S04 | meeting facts with provenance |
-| provides | agent port: `run_voice_turn`, `confirm_by_voice` | agent → S05 | one thread for text and voice |
-| provides | decision port: `decide(point, …)` | decisions → any slice | mail triage (S12), hub signal (S16) |
-| provides | registry projection for MCP | agent → S10 | external MCP tools under the same gateway |
-| provides | user-context port for live answers | memory → S05 | profile core for `/v1/ws/realtime` `ask` |
+| uses | identity: token → principal claims | `identity` | `PrincipalFactory` |
+| uses | entitlements, spend balance | `billing` | admission, tool gates |
+| uses | access policy, inside each slice's `execute` and read services | `workspaces` | inv-14 |
+| uses | `ToolSpec`s and event types | the domain slices of §3.3, `errands` | tools, signals |
+| uses | search; people and commitments | `knowledge`; `commitments` | `workspace.search`, knowledge, people and commitments |
+| provides | memory port: `record_recollections(meeting)` | memory → `meetings` | meeting facts with provenance |
+| provides | agent port: `run_voice_turn`, `confirm_by_voice` | agent → `capture` | one thread for text and voice |
+| provides | decision port: `decide(point, …)` | decisions → any slice | mail triage (`mail`), hub signal (`hubs`) |
+| provides | registry projection for MCP | agent → `mcp` | external MCP tools under the same gateway |
+| provides | user-context port for live answers | memory → `capture` | profile core for `/v1/ws/realtime` `ask` |
 
 ### 13.2 Wire contract
 
@@ -946,7 +947,7 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 
 **Native, unchanged** (D1 `native` class; nfr-12):
 
-- `/v1/ai/chat/stream` and `/v1/ai/vision/analyze`: the raw model proxy. It is not Leo, but it is served by S09 through the provider port.
+- `/v1/ai/chat/stream` and `/v1/ai/vision/analyze`: the raw model proxy. It is not Leo, but it is served by `agent` through the provider port.
 - `POST /v1/proactive/reminders/{errand_id}/done`, `POST /v1/errands/{errand_id}/snooze`.
 - `WS /v1/ws/user`:
   - `hello`, `ping`/`pong`, `ack`;
@@ -1011,21 +1012,21 @@ This design turns that into a real client and adds what is missing. The frontend
 
 ## 15. Implementation plan
 
-Phases follow dependencies, not calendar dates. **P0** is needed for a usable Leo, **P1** for the target experience, **P2** follows. Each phase is a set of steps of package S09 (or of the named package) under the slice prompt in `docs/plan/prompts/S-feature-slice.md`. Each step ends with its gates, tests and evals.
+Phases follow dependencies, not calendar dates. **P0** is needed for a usable Leo, **P1** for the target experience, **P2** follows. Each phase is a set of steps of the named Leo slice (or of the named slice) under the slice prompt in `docs/plan/prompts/S-feature-slice.md`. Each step ends with its gates, tests and evals.
 
 | Phase | Priority | Content | Depends on | Exit criteria |
 |---|---|---|---|---|
-| 0. Decisions | P0 | Done 2026-10-08: this document, ADRs 0023–0033 and the amendments (§16) accepted. Left: OpenAPI for `/v1/agent/*`, SSE event schema (S09 plan); `ToolSpec` contract (F6) | — | contract files committed |
-| 1. Prerequisites | P0 | F6 provider port with `decide`, cost rows, spend reserve/settle, breaker per model; S01 identity; F2 cabinet on Vite with MSW mocks of `/v1/agent/*` | F1 (done) | F6 and S01 done |
-| 2. Core | P0 | `agent` slice: threads, messages, runs; lease; run graph (model ⇄ reads); `PrincipalFactory`; context builder v1 (segments 1, 2, 4, 6–8); core toolset; SSE with resume; spans, metrics, `agent_runs`; eval harness with the trajectory and budget suites; model-facing registration. Cabinet: panel on the real API | 1 | turn works end to end on one slice's read tools (the first ready slice, e.g. S04); platform overhead measured ≤ 500 ms EU |
+| 0. Decisions | P0 | Done 2026-10-08: this document, ADRs 0023–0033 and the amendments (§16) accepted. Left: OpenAPI for `/v1/agent/*`, SSE event schema (`agent` plan); `ToolSpec` contract (F6) | — | contract files committed |
+| 1. Prerequisites | P0 | F6 provider port with `decide`, cost rows, spend reserve/settle, breaker per model; `identity`; F2 cabinet on Vite with MSW mocks of `/v1/agent/*` | F1 (done) | F6 and `identity` done |
+| 2. Core | P0 | `agent` slice: threads, messages, runs; lease; run graph (model ⇄ reads); `PrincipalFactory`; context builder v1 (segments 1, 2, 4, 6–8); core toolset; SSE with resume; spans, metrics, `agent_runs`; eval harness with the trajectory and budget suites; model-facing registration. Cabinet: panel on the real API | 1 | turn works end to end on one slice's read tools (the first ready slice, e.g. `meetings`); platform overhead measured ≤ 500 ms EU |
 | 3. Action Gateway | P0 | `agent_actions`, plan/preview/execute contract, approvals, expiry, vault, outbox audit; action card and approvals inbox; property tests for inv-12 | 2 | invariant suite green; 0 double executions under fault injection |
 | 4. Decision Layer | P0 (parallel to 3) | `decisions` slice: policies, Jev adapter, thresholds, fallbacks, records, shadow; synthetic 16-language sets; `turn.route` and `action.friction` in shadow, then active | 1; legal Q-3 before personal data reaches Jev | calibration gates pass; routing miss (`load_toolset`) ≤ 5% |
-| 5. Memory v2 | P1 | `memory` slice: facts, admission, supersession, retrieval, profile core; compaction; memory page; S04 memory port | 2, 4 | switches proven on every writer; safety suite green for memory |
-| 6. Tool coverage | P0→P1 | Each domain slice ships its toolset with its own package (S04, S07, S08, S12, S13, S15, S16); the agent provides the contract and evals | 2, 3 and the slice | trajectory suite per toolset |
+| 5. Memory v2 | P1 | `memory` slice: facts, admission, supersession, retrieval, profile core; compaction; memory page; the memory port for `meetings` | 2, 4 | switches proven on every writer; safety suite green for memory |
+| 6. Tool coverage | P0→P1 | Each domain slice ships its toolset in its own plan (§3.3); the agent provides the contract and evals | 2, 3 and the slice | trajectory suite per toolset |
 | 7. Proactivity | P1 | `proactive` slice: signals from outbox, trigger rows, candidates, `proactive.value` and `proactive.moment`, suggestions, delivery via `/v1/ws/user` (native frames kept) and Web Push, seen-based arbitration, feedback; feed and chips; `daily_brief` and `meeting_prep` skills | 4, 5, 6; F6 scheduler | precision and dismissal measured; budgets and quiet hours proven by tests |
-| 8. Errands | P1 | S11 on the Action Gateway; re-validation; native reminder routes | 3, 7 | late or changed errands become proposals in tests |
+| 8. Errands | P1 | `errands` on the Action Gateway; re-validation; native reminder routes | 3, 7 | late or changed errands become proposals in tests |
 | 9. Skills | P1 | Platform playbooks; SKILL.md import with install scan; routing by `turn.route` | 4, 6 | per-skill eval suites |
-| 10. Voice and MCP | P1 | S05 agent port with voice confirmation rules; S10 registry projection with pending approvals | 3, 4 | A2 and A3 regressions covered by tests |
+| 10. Voice and MCP | P1 | the agent port for `capture` with voice confirmation rules; the `mcp` registry projection with pending approvals | 3, 4 | A2 and A3 regressions covered by tests |
 | 11. Hardening | P2 | Load test to the 100 K column; chaos (Valkey, Jev, provider, RU link); cost dashboards; calibration review cadence; standing approvals if the owner decides Q-4 | all | SLOs met under load |
 
 **Critical path:** F6 → core → Action Gateway → tool coverage. The Decision Layer and the cabinet run in parallel. Proactivity is the largest P1 block and the most dependent one.
