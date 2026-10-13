@@ -28,6 +28,7 @@ from shosai.core.db.migrations import (
     upgrade,
 )
 from shosai.core.db.model_base import metadata_for_home
+from shosai.core.db.partitions.policy import is_model_table
 from shosai.core.kernel.homes import Home
 from tests.core.db.operations import run_step
 from tests.harness.connections import fetch_value
@@ -64,7 +65,8 @@ async def test_the_models_match_the_migrated_schema_of_each_home(
     expected = metadata_for_home(application_metadata(), home)
 
     def differences(connection: Connection) -> list[object]:
-        context = MigrationContext.configure(connection, opts={"compare_server_default": True})
+        opts = {"compare_server_default": True, "include_name": is_model_table}
+        context = MigrationContext.configure(connection, opts=opts)
         return list(compare_metadata(context, expected))
 
     try:

@@ -16,6 +16,7 @@ from shosai.core.db.migrations import (
     MigrationTarget,
 )
 from shosai.core.db.model_base import metadata_for_home
+from shosai.core.db.partitions.policy import is_model_table
 
 
 def run_home_migrations() -> None:
@@ -32,6 +33,8 @@ def run_home_migrations() -> None:
         target_metadata=metadata_for_home(metadata, target.home),
         transaction_per_migration=True,
         compare_server_default=True,
+        # Помесячные партиции — не таблицы моделей: автогенерация их не трогает.
+        include_name=is_model_table,
     )
     with context.begin_transaction():
         context.run_migrations(

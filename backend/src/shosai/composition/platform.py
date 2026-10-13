@@ -35,6 +35,8 @@ from shosai.core.db.engines import HomeDatabases
 from shosai.core.db.home_checks import HomeGate, HomeState
 from shosai.core.db.metrics import DatabaseMetrics, register_pool_occupancy
 from shosai.core.db.migrations import MigrationHistory
+from shosai.core.db.partitions.system import partition_task_handlers
+from shosai.core.db.partitions.upkeep import PartitionMetrics
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.catalog import EventCatalog, EventTypes
 from shosai.core.events.metrics import EventMetrics
@@ -139,6 +141,9 @@ async def open_platform(
                 [
                     *event_task_handlers(events, tasks.sender),
                     *effect_key_task_handlers(homes.transactions, effect_keys),
+                    *partition_task_handlers(
+                        homes.transactions, PartitionMetrics(telemetry.registry)
+                    ),
                     *parts.task_handlers,
                 ]
             )

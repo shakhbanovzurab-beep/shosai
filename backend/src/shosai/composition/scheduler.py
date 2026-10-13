@@ -1,10 +1,10 @@
-"""The loops of core in the scheduler: outbox relay and purges per home, queue and outbox gauges.
+"""The loops of core in the scheduler: relay, purges and upkeep per home, queue and outbox gauges.
 
-The relay of each home is queued every 5 s (§12: a tick drains the due events), the purges
-of the outbox and of the effect keys once a day; each is a tick, skipped while the previous
-one of its home runs (`send_tick`), so a slow or unreachable home never piles up work or
-delays the other. The gauges are set by
-this one process: depth and age are properties of a queue and of a home, not of a worker.
+The relay of each home is queued every 5 s (§12: a tick drains the due events); the purges
+of the outbox and of the effect keys and the partition upkeep once a day. Each is a tick,
+skipped while the previous one of its home runs (`send_tick`), so a slow or unreachable
+home never piles up work or delays the other. The gauges are set by this one process:
+depth and age are properties of a queue and of a home, not of a worker.
 """
 
 from collections.abc import Awaitable, Callable
@@ -12,6 +12,7 @@ from datetime import timedelta
 from typing import Final
 
 from shosai.composition.platform import Platform
+from shosai.core.db.partitions.system import MAINTAIN_EVERY, MAINTAIN_PARTITIONS
 from shosai.core.events.monitor import OutboxMonitor
 from shosai.core.events.system import PURGE_EVERY, PURGE_OUTBOX, RELAY_EVERY, RELAY_OUTBOX
 from shosai.core.idempotency.system import PURGE_EFFECT_KEYS, PURGE_KEYS_EVERY
@@ -64,6 +65,14 @@ def core_loops(platform: Platform) -> tuple[ScheduledLoop, ...]:
                 f"idempotency.purge_keys.{home.value}",
                 PURGE_KEYS_EVERY,
                 home_tick(sender, PURGE_EFFECT_KEYS, home),
+            )
+            for home in Home
+        ),
+        *(
+            ScheduledLoop(
+                f"db.maintain_partitions.{home.value}",
+                MAINTAIN_EVERY,
+                home_tick(sender, MAINTAIN_PARTITIONS, home),
             )
             for home in Home
         ),

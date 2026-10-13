@@ -264,6 +264,7 @@
 - No cross-home write conflicts by construction.
 - High-volume tables:
   - UUIDv7 keys and monthly partitions: `transcript_segments`, `provider_costs`, `prompt_executions`, `usage_events`, `login_events`, `error_logs`, `client_errors`, `agent_audit`, `agent_messages`, `agent_runs`, `agent_decisions`, `org_audit_events`;
+  - partitions are kept by core (`core/db/partitions`): each parent's migration registers its policy (months ahead, months kept) in `partition_policies`, and a daily tick per home creates partitions two months ahead and drops expired ones through a function owned by the migration role;
   - retention by dropping partitions, except `usage_events`: its tombstones count toward the lifetime Free quota and live as long as the account ([ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md)).
 - Every store is declared authoritative (with acknowledgement point, RPO, RTO) or derived (with source and cursor).
 - Derived stores are rebuildable:

@@ -12,6 +12,7 @@ from sqlalchemy import MetaData, Table
 from shosai.composition.features import FEATURES
 from shosai.core.db.home_identity import HomeIdentity
 from shosai.core.db.model_base import NAMING_CONVENTION, ModelBase
+from shosai.core.db.partitions.records import PartitionPolicy
 from shosai.core.events.records import OutboxMessage, ProcessedEvent
 from shosai.core.features import FeatureModule
 from shosai.core.idempotency.records import EffectKeyRecord
@@ -22,6 +23,7 @@ CORE_MODELS: tuple[type[ModelBase], ...] = (
     OutboxMessage,
     ProcessedEvent,
     EffectKeyRecord,
+    PartitionPolicy,
 )
 
 
