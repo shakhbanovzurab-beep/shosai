@@ -3,7 +3,7 @@
 - **Package:** D3 of [the rewrite plan](REWRITE_PLAN.md). Prompt: [prompts/D3-data-mapping.md](prompts/D3-data-mapping.md).
 - **Readers:** every slice that designs tables (the slices of [SLICE_MAP.md](SLICE_MAP.md)) and M1, which moves production data.
 - **State of the draft:** `/root/whisperer` at Alembic head `167` (166 migrations), read on 2026-10-01.
-- **Status:** complete. The owner took the decisions of [section 10](#10-decisions-for-the-user) on 2026-10-01; those that change the architecture are recorded in [ADR 0004](../adr/0004-migrated-accounts-start-in-russian-home.md), [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md), [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md) and [ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md), and the target architecture is updated accordingly. On 2026-10-13 section 5 was regrouped by the slices of the [slice map](SLICE_MAP.md) §7.2 ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md)), and `meeting_integrations` became a drop by its decision SM-11.
+- **Status:** complete. The owner took the decisions of [section 10](#10-decisions-for-the-user) on 2026-10-01; those that change the architecture are recorded in [ADR 0004](../adr/0004-migrated-accounts-start-in-russian-home.md), [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md), [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md) and [ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md), and the target architecture is updated accordingly. On 2026-10-13 section 5 was regrouped by the slices of the [slice map](SLICE_MAP.md) §7.2 ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md)), and `meeting_integrations` became a drop by its decision SM-11. The same day [ADR 0041](../adr/0041-platform-services-replanned-from-the-product.md) (F6-D8) folded `voice_sessions` and `translation_session` into `provider_costs`, dropped `abuse_states`, `abuse_events` and `error_logs`, set the retention of `provider_costs` to 5 years and replaced the carried spend keys by a rebuild.
 - `§` numbers refer to the [target architecture](../design/ARCHITECTURE.md). "Section N" refers to this document.
 
 **How this was built.** No production system was touched.
@@ -204,7 +204,6 @@ The model and dimension change in v2 (§3: 512-dim windows), so copied vectors w
 | `prompt_executions` | `prompt_executions` | `created_at` |
 | `usage_events` | `usage_events` | `created_at` |
 | `login_events` | `login_events` | `created_at` |
-| `error_logs` | `error_logs` | `created_at` |
 | `client_errors` | `client_error_logs` | `created_at` |
 | `agent_audit` | `agent_audit_log` | `created_at` |
 | `analytics_events` | `analytics_events` | `ts` (as in the draft) |
@@ -234,7 +233,7 @@ The model and dimension change in v2 (§3: 512-dim windows), so copied vectors w
 
 - `tariffs`, `promo_codes`, `payment_routes`, `exchange_rates`;
 - `models_registry`, `model_defaults`;
-- `mcp_registered_clients`, `broadcasts`, `error_logs`, `app_builds`;
+- `mcp_registered_clients`, `broadcasts`, `app_builds`;
 - the `user_id IS NULL` rows of `prompt_templates` and `notes` (`knowledge` decides the fate of the notes ones, FM-2).
 
 *Decided (U-2, [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md)):* they live in the **EU home**, next to the directory, with one writer. Home tables reference them by id without a foreign key, and platform ids are never deleted, only retired.
@@ -270,7 +269,7 @@ Anonymous telemetry has no owner either: `analytics_events` and `client_error_lo
 
 These start empty: `directory_domains`, `organizations`, `memberships`, `resource_grants`, `org_invoices`, `org_audit_events`, `home_transfers`, `processed_events`, `schedule_runs`. A missed periodic interval runs once on start (§12).
 
-**Per slice.** Owners follow the [slice map](SLICE_MAP.md) §4.2 and §7.2. `workspaces`, `capture`, `decisions` and `site` receive no draft tables. The broadcast and whiteboard tables belong to `rooms` (FM-1c, kept by the owner's SM-8), the admin mailings (`broadcasts`) to `support`, the satisfaction survey to `telemetry` (SM-10), action items and Jira links to `tasks` (SM-3), the context graph to `commitments`; the provider cost, metering, abuse and provider error tables to F6 (FM-4), and `exchange_rates` too since [ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md).
+**Per slice.** Owners follow the [slice map](SLICE_MAP.md) §4.2 and §7.2. `workspaces`, `capture`, `decisions` and `site` receive no draft tables. The broadcast and whiteboard tables belong to `rooms` (FM-1c, kept by the owner's SM-8), the admin mailings (`broadcasts`) to `support`, the satisfaction survey to `telemetry` (SM-10), action items and Jira links to `tasks` (SM-3), the context graph to `commitments`; the provider cost, metering, abuse and provider error tables to F6 (FM-4), and `exchange_rates` too since [ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md); [ADR 0041](../adr/0041-platform-services-replanned-from-the-product.md) folds the metering tables into `provider_costs` and drops the abuse and provider error tables.
 
 | Slice | Tables | moved | transformed | derived | dropped |
 |---|---|---|---|---|---|
@@ -296,10 +295,10 @@ These start empty: `directory_domains`, `organizations`, `memberships`, `resourc
 | `telemetry` | 4 | 1 | 3 | 0 | 0 |
 | `rooms` | 10 | 8 | 0 | 0 | 2 |
 | F1 — Backend foundation (platform tables) | 1 | 0 | 0 | 0 | 1 |
-| F6 — Platform services | 7 | 3 | 4 | 0 | 0 |
-| **Total** | **131** | **85** | **30** | **5** | **11** |
+| F6 — Platform services | 7 | 1 | 3 | 0 | 3 |
+| **Total** | **131** | **83** | **29** | **5** | **14** |
 
-Columns: 1458 in mapped tables — 1305 moved, 14 transformed, 38 derived, 101 dropped (columns of derived and dropped tables are counted with their table).
+Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 dropped (columns of derived and dropped tables are counted with their table; the columns of `voice_sessions` and `translation_session`, folded into cost rows, count as transformed).
 
 ### 5.1 `identity`
 
@@ -1221,34 +1220,29 @@ Columns: 1458 in mapped tables — 1305 moved, 14 transformed, 38 derived, 101 d
 
 ### 5.23 F6 — Platform services
 
-#### `voice_sessions` → `voice_sessions` · **transformed**
+#### `voice_sessions` → `provider_costs` · **transformed**
 
 - **Owner → home:** own `user_id`.
-- **Columns:** 11 of 13 move unchanged; exceptions:
-  - `resume_of` — *dropped*. No reader or writer in the draft.
-  - `provider_cost_id` — *dropped*. No reader or writer in the draft.
-- Usage record per Gemini Live session, settled by voice metering (F6, FM-4); no audio or text.
+- **Rows:** a session without a cost row of its own becomes one `provider_costs` row with its settled cost, `cost_source = 'draft_session'` and effect key `draft:voice_sessions:<id>`; the table itself is not carried ([ADR 0041](../adr/0041-platform-services-replanned-from-the-product.md), F6-D8).
+- Usage record per Gemini Live session, settled by voice metering in the draft; no audio or text. v2 records live sessions as minute rows of `provider_costs` (F6-C5).
 
-#### `translation_session` → `translation_session` · **transformed**
+#### `translation_session` → `provider_costs` · **transformed**
 
 - **Owner → home:** own `user_id`.
-- **Columns:** 16 of 18 move unchanged; exceptions:
-  - `resume_of` — *dropped*. No reader or writer in the draft.
-  - `provider_cost_id` — *dropped*. No reader or writer in the draft.
-- Usage record per translated call direction, settled by voice metering (F6, FM-4); no audio or text.
+- **Rows:** as `voice_sessions`: a session without a cost row of its own becomes one `provider_costs` row, effect key `draft:translation_session:<id>`; the table is not carried (ADR 0041).
+- Usage record per translated call direction in the draft; no audio or text.
 
-#### `abuse_events` → `abuse_events` · **moved**
+#### `abuse_events` → no v2 table · **dropped**
 
 - **Owner → home:** own `user_id`.
-- **Columns:** 9 of 10 move unchanged; exceptions:
-  - `note` — *moved*. Free text; holds the user's appeal.
-- Append-only audit of LLM anti-abuse transitions.
+- **Columns:** 10, none copied.
+- Audit of the draft's abuse-guard transitions. v2 has no abuse scoring at launch (ADR 0041, F6-D6), so the transitions, the appeal notes and their scores have no reader.
 
-#### `abuse_states` → `abuse_states` · **moved**
+#### `abuse_states` → no v2 table · **dropped**
 
 - **Owner → home:** own `user_id`.
-- **Columns:** 6 of 7 move unchanged; exceptions:
-  - `whitelisted` — *moved*. Admin decision, not derivable.
+- **Columns:** 7, none copied.
+- The draft guard's state and whitelist per user; without scoring (ADR 0041) neither has a use.
 
 #### `provider_costs` → `provider_costs` · **transformed**
 
@@ -1259,7 +1253,7 @@ Columns: 1458 in mapped tables — 1305 moved, 14 transformed, 38 derived, 101 d
   - `model_name` — *moved*. Soft reference to `models_registry.openrouter_model_id`; the weekly premium filter depends on it.
   - `cost_usd` — *moved*. Numeric(12,6).
   - `cost_rub` — *moved*. Numeric(12,2) at the snapshotted `exchange_rate_used`.
-- One row per paid provider call; never deleted. The last 7 days decide the weekly premium budget (E-3).
+- One row per paid provider call; kept 5 years (402-FZ, [ADR 0041](../adr/0041-platform-services-replanned-from-the-product.md)), then dropped with its monthly partition. M1 moves the rows of the last 5 years. The last 7 days decide the weekly premium budget (E-3).
 
 ---
 
@@ -1269,12 +1263,11 @@ Columns: 1458 in mapped tables — 1305 moved, 14 transformed, 38 derived, 101 d
 - **Columns:** all 5 move unchanged.
 - Append-only CBR history; money rows already snapshot the rate they used.
 
-#### `error_logs` → `error_logs` · **transformed**
+#### `error_logs` → no v2 table · **dropped**
 
 - **Owner → home:** platform (R12).
-- **Columns:** 6 of 7 move unchanged; exceptions:
-  - `created_at` — *transformed*. Partition key: monthly partitions per §8.2.
-- Upstream provider errors; no user column. Owned by F6 with the provider port since the slice map: the new admin panel has no monitoring page, so F6's step 10 confirms an operational use or this becomes a drop.
+- **Columns:** 7, none copied.
+- Upstream provider errors without a user. v2 records provider failures in logs and metrics (F6 telemetry); no screen or job reads this history (ADR 0041, F6-D8).
 
 ## 6. Object storage
 
@@ -1352,13 +1345,13 @@ Columns: 1458 in mapped tables — 1305 moved, 14 transformed, 38 derived, 101 d
 | `agent:secret:*`, `agent:act:claim:*` | One-shot credentials and claims of confirmed actions (60 s) | Dropped; R14 guarantees nothing is in flight |
 | `rt:roll:{session_id}` | Transcript mirror for resuming a live meeting; the only copy for private meetings | None at `T0` if no meeting is live (R14) |
 | `ticket_upload:{user_id}` | Attachments staged before a ticket message is sent (6 h) | Lost; the objects are swept (U-5) |
-| `spend:{user}:d*`, `spend:{user}:m*`, `spend:global:d*`, `spend:global:h*` | Daily and monthly spend counters that enforce ceilings | Re-seeded in v2 from `provider_costs` for the current day, hour and month (E-3) |
-| `ocr:pages:{user}:{YYYYMM}` | Monthly OCR page ceiling | Re-seeded from the OCR rows of `provider_costs` (E-3) |
-| `spend:global:kill` | Admin emergency stop of AI spend | Value carried: v2 starts engaged if it was engaged |
+| `spend:{user}:d*`, `spend:{user}:m*`, `spend:global:d*`, `spend:global:h*` | Daily and monthly spend counters that enforce ceilings | Not carried: `shosai ai rebuild-spend-counters` rebuilds v2's counters from the migrated `provider_costs` for the current day, hour and month (E-3, ADR 0041) |
+| `ocr:pages:{user}:{YYYYMM}` | Monthly OCR page ceiling | Rebuilt by the same command from the OCR rows of `provider_costs` (E-3) |
+| `spend:global:kill` | Admin emergency stop of AI spend | Not carried. M2's runbook checks it before `T0` and, if engaged, engages v2's with `shosai ai kill-switch engage` (ADR 0041) |
 | `whisperer:billing:expiry_notified:{sub}:{until}` | Dedup of subscription-expiry emails (400 days) | Carried, in the form `billing` chooses (a database table is recommended). Otherwise every expiring subscriber is emailed again |
 | `mail:campaign:{campaign}:{hash}` | Per-recipient dedup of admin mailings (7 days) | Dropped; no mailing may run across `T0` |
 | `state:analytics:alert:*`, `state:analytics:digest:*` | Alert state and the weekly digest marker | Carried; otherwise accept one repeated digest |
-| `abuse:{user}:*`, `memory:summary:*`, breakers, slots, presence, pub/sub, locks, rate limits, caches | Signal windows, derived summaries, coordination state | Dropped. Durable abuse state is in `abuse_states`; summaries are rebuilt nightly (R7) |
+| `abuse:{user}:*`, `memory:summary:*`, breakers, slots, presence, pub/sub, locks, rate limits, caches | Signal windows, derived summaries, coordination state | Dropped. v2 has no abuse scoring (ADR 0041); summaries are rebuilt nightly (R7) |
 
 ### 7.2 NATS JetStream
 
@@ -1447,7 +1440,7 @@ Every risky item names a check. M1 runs it on every rehearsal and on the real ru
 
 | ID | What can go wrong | Verification |
 |---|---|---|
-| A-1 | An append-only record is lost or altered | For `agent_audit_log`, `abuse_events`, `video_admin_actions` and `login_events`: equal id sets, `id` unique across partitions, and per owner equal first and last timestamps. The company audit (`org_audit_events`) has no draft source and starts empty |
+| A-1 | An append-only record is lost or altered | For `agent_audit_log`, `video_admin_actions` and `login_events`: equal id sets, `id` unique across partitions, and per owner equal first and last timestamps. The company audit (`org_audit_events`) has no draft source and starts empty |
 
 ### 8.5 Deletion state
 

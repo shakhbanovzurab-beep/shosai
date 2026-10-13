@@ -1,5 +1,7 @@
 # F6 — Platform services
 
+> **Planned and re-planned.** The package plan (`docs/plan/packages/F6-platform-services.md`), re-planned on 2026-10-13 per [ADR 0041](../../adr/0041-platform-services-replanned-from-the-product.md), governs where it differs from this prompt: no admin HTTP route (item 4's admin API), ceilings and caps instead of the abuse guard's scoring (item 4), the email layout from the design system (item 5), and five-year retention of AI cost rows.
+
 Follow the common protocol in `docs/plan/prompts/README.md`. Load the `fastapi` skill before reading the draft or designing anything; load `resilience-failure` and `task-scheduling` for items 2 and 6.
 
 **This package is multi-session.** Work in the session mode described in `docs/plan/prompts/README.md`; the package plan is `docs/plan/packages/F6-platform-services.md`. The planning session settles both ADR decisions below with the user first, because every step depends on them. A split that fits the work below — adjust it in the plan if the design needs another order:

@@ -62,7 +62,7 @@ These packages read the draft and produce the references that every later packag
 | F3 | Local environment | `compose.dev.yaml`: PostgreSQL 18 with pgvector as **two databases standing in for the RU and EU homes**, Valkey, Redis cache, Qdrant, and later LiveKit; prepared test databases; one command to start and one to reset |
 | F4 | Delivery to staging | Dockerfile (one image, four roles), production Compose, NGINX, TLS, image registry, `scripts/release.sh`, CI build and deploy to https://shosai.tech |
 | F5 | Observability | OpenTelemetry Collector, Prometheus, Alertmanager, Loki, Tempo, Grafana configuration per target architecture §16, including the `alerting` domain |
-| F6 | Platform services | The AI provider port that writes a cost row for every call, with spend control and the abuse guard; the email port; the periodic-job registry on `schedule_runs`; Jev decisions (`decide`) through the same port with a breaker per model ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)); the agent tool contract `core/agent_tools` through which every slice exposes tools to Leo ([ADR 0029](../adr/0029-leo-tools-owned-by-domain-slices.md)). Added by D4 (decision FM-4) because most slices need them from their first step |
+| F6 | Platform services | The AI provider port that writes a cost row for every call, with spend control and per-user guards (ADR 0041); the email port; the periodic-job registry on `schedule_runs`; Jev decisions (`decide`) through the same port with a breaker per model ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)); the agent tool contract `core/agent_tools` through which every slice exposes tools to Leo ([ADR 0029](../adr/0029-leo-tools-owned-by-domain-slices.md)). Added by D4 (decision FM-4) because most slices need them from their first step |
 
 ### Phase 2 — Feature slices
 
@@ -109,11 +109,10 @@ The home screen, the Meetings overview, the Settings dialog and the admin dashbo
 
 ```text
 D1 D2 D3 D4                       (done; references)
-F3 ── F1 (per the F1 audit) ── F6 (steps 1–9) ── wave 1 ── wave 2 ── wave 3 ── wave 4
+F3 ── F1 (per the F1 audit) ── F6 ── wave 1 ── wave 2 ── wave 3 ── wave 4
       F2 ──────────────────────────────────────┘
 F1 F2 F6 ── site                  (any time, in parallel)
 F1 F2 ── F4 ── F5                 (steps 1–5 of F4 and 1–6 of F5 need only F1)
-identity ── F6 step 10
 all slices + D3 ── M1 ── M2
 ```
 
@@ -126,7 +125,7 @@ The waves, from [SLICE_MAP.md](SLICE_MAP.md) §5 — each gives the user a worki
 | 3. Team and initiative | Workspaces work together; Leo speaks first when it is worth it | workspaces (screens) → billing (payments, seats, invoices) → proactive → errands → mail → studio → mcp | invite, share, pay per seat; Today feed and reminders; the inbox triaged |
 | 4. Operations and cutover readiness | Operators run the platform; every native and external route answers | support → releases → telemetry → rooms | the D1 gate passes and lists no native route as not served (`backend/tests/composition/native_routes_not_served.json` is empty; external routes are each slice's own design, F1 audit OD-2) |
 
-- The fixed dependencies are technical: F1 (as the F1 audit decides), F2, F3 and F6 steps 1–9 come before any slice; `identity` comes first, because every other slice needs an authenticated user; `workspaces` core comes before any slice with shareable resources, so they are written against the access policy from their first step (nfr-15, inv-14).
+- The fixed dependencies are technical: F1 (as the F1 audit decides), F2, F3 and F6 come before any slice; `identity` comes first, because every other slice needs an authenticated user; `workspaces` core comes before any slice with shareable resources, so they are written against the access policy from their first step (nfr-15, inv-14).
 - Within a wave, a later slice may start when the contracts it needs are published; the order above is the default path of [prompts/BACKEND-next-step.md](prompts/BACKEND-next-step.md), which prefers the slice that unblocks the most others. A step of a slice that needs a later slice's contract waits for it; STATUS.md names those steps.
 - `telemetry` may be pulled into wave 1 when the desktop clients move to staging, so their crash reports are not lost.
 - Slices run in parallel. Each touches only its own paths. Shared registration points (router, composition root, navigation, locale bundles) take small, additive edits, committed with explicit paths.

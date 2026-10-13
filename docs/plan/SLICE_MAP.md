@@ -151,7 +151,7 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 | Screen | Needs | Owner |
 |---|---|---|
 | Dashboard (Analytics, CRM, CRM v1) | All static template data; CRM and CRM v1 duplicate each other and are unrelated to Shosai | composition (§8 SM-12) |
-| Users | Static template; needed: search, account card, block, ban with refund (F6 abuse review) | identity |
+| Users | Static template; needed: search, account card with the user's AI spend (F6 report), block, ban with refund | identity |
 | Roles | Static template of 12 generic roles; nothing maps to the admin screens; the frontend guards nothing | identity (operator roles, §8 SM-12) |
 | Profile | An HR employee template | dropped (§8 SM-12) |
 | Workspaces | List with KPIs, detail with members, events, content counts; seats, owner transfer, suspend, resume, delete | workspaces |
@@ -298,7 +298,7 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 
 #### 6. capture
 - **Scope:** the WS gateway role: live transcription with server `seq` and the durable Redis queue before display (inv-6, nfr-9), resume and gap replay, `transcription.busy`, `server.shutdown`, 1013 when full; in-meeting `ask`, `vision`, answers; the phone-to-Mac relay; simultaneous voice translation sessions; the desktop hotkey layout; ingest of LiveKit participant tracks (with rooms).
-- **Owns:** hotkey layouts; Valkey resume state; the transcript queue (drained into meetings). F6 owns `voice_sessions` and `translation_session` cost records (DATA_MAPPING §5.23).
+- **Owns:** hotkey layouts; Valkey resume state; the transcript queue (drained into meetings). F6 records live sessions as minute rows of `provider_costs`; the draft's `voice_sessions` and `translation_session` are folded into them (ADR 0041).
 - **Routes:** N per §3. No `/v1/ws/voice` and no subtitles (web class, no consumer; §8 SM-8).
 - **Depends on:** meetings (transcript port, start run on end), agent (`run_voice_turn` for answers), memory and studio (user context, role prompts and models), knowledge (live retrieval), F6 (realtime streams, minute cost rows), billing (entitlements, inv-13: no money ceiling stops capture), rooms (track egress).
 - **Emits:** none of its own; meetings emits on end.
@@ -437,7 +437,7 @@ The mirror rule needs these renames, each made in the owning slice's first front
 ### 5.1 Dependency graph
 
 ```text
-F1 (per the F1 audit) ── F6 (steps 1–9) ─┐
+F1 (per the F1 audit) ── F6 ─────────────┐
                                         ▼
 identity ── workspaces·core ── billing·entitlements ── files ── meetings ── capture
                                                          │         │
@@ -454,7 +454,7 @@ identity ── workspaces·core ── billing·entitlements ── files ─�
 
 - **workspaces·core** is the first step group of `workspaces`: the access policy contract, `org_id` and `access` columns, `resource_grants`, RLS and the audit table. It comes before any slice with shareable resources, so meetings, files and knowledge are written against it from their first step instead of being retrofitted (nfr-15, inv-14). Its design waits for §8 SM-1.
 - **billing·entitlements** is the first step group of `billing`: catalogue, the free plan, the `Entitlements` port and the minutes meter. Payments come later.
-- F6 step 10 (admin HTTP) follows identity, as its plan says.
+- F6 has no admin HTTP route (ADR 0041): `studio` and `identity` serve its reports and the kill switch from their own admin routers.
 - `site` needs F1, F2 and F6 only and runs in parallel at any time.
 
 ### 5.2 Build order
@@ -510,13 +510,13 @@ identity ── workspaces·core ── billing·entitlements ── files ─�
 
 ### 7.1 F6
 
-The F6 plan already provides the provider port, cost rows, spend control, the abuse guard, email, periodic jobs and due rows, `decide`, `core/agent_tools` and the exchange rate. The new cut adds:
+The F6 plan already provides the provider port, cost rows, spend control and per-user guards (the abuse guard until ADR 0041), email, periodic jobs and due rows, `decide`, `core/agent_tools` and the exchange rate. The new cut adds:
 
 | Need | Why | F6 change |
 |---|---|---|
 | Unsubscribe and suppression list, `GET/POST /v1/unsubscribe`, `/email/{name}` images | E routes of S15 and S17; newsletters (kept, SM-10, in `support`) and transactional email both need suppression | email port gains a suppression list and the two routes |
 | Spend reports per model: today, month, forecast, tokens, daily series; OpenRouter credits | the admin AI models screen (studio) | reports already planned in §3.6; add credits and the forecast; studio reads them |
-| Step 10 trimmed to what a screen or operations uses | the new admin panel has no cost-timeline or abuse-review screen | keep guard and kill switch (FM-5), the abuse review API (used by identity's admin users screen for ban with refund); drop the unused cost timeline routes |
+| No admin HTTP route in F6 (ADR 0041, F6-D5; supersedes the trimmed step 10) | the new admin panel has no cost, abuse or kill-switch screen | F6's reports, one user's spend and the kill switch are services; studio's AI models screen and identity's account card serve them; a CLI engages the kill switch until then. Earlier text: keep guard and kill switch (FM-5), the abuse review API (used by identity's admin users screen for ban with refund); drop the unused cost timeline routes |
 | Due-row sources from new owners | commitments (topic due dates), calendar (sync windows, pre-meeting triggers), knowledge (re-crawl), mail (cursor pulls), telemetry (rollups) | no change: `DueRowSource` covers them; none may scan all users (ADR 0027) |
 | Consent flags in `CallContext` | nfr-14 | no change; identity and workspaces supply them |
 
