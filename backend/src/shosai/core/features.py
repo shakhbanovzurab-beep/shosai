@@ -33,6 +33,7 @@ from shosai.core.events.domain_event import DomainEvent
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.events.subscriptions import EventSubscription
 from shosai.core.health.probes import DependencyProbe
+from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.runtime.loops import ScheduledLoop
@@ -52,6 +53,7 @@ class CoreServices:
     transactions: HomeTransactions
     tasks: TaskSender
     outbox: EventOutbox
+    effects: EffectLedger
     cache: Cache
     objects: ObjectStorage
     uploads: MultipartUploads

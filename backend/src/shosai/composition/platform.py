@@ -44,6 +44,9 @@ from shosai.core.events.system import event_task_handlers
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, combine_parts
 from shosai.core.health.dependencies import home_probe, redis_probe, storage_probe
 from shosai.core.health.probes import DependencyProbe
+from shosai.core.idempotency.ledger import EffectLedger
+from shosai.core.idempotency.metrics import EffectKeyMetrics
+from shosai.core.idempotency.system import effect_key_task_handlers
 from shosai.core.kernel.homes import Home
 from shosai.core.kv.connection import connect_redis
 from shosai.core.kv.locks import DistributedLocks
@@ -84,6 +87,13 @@ class _Homes:
 
 
 @dataclass(frozen=True, slots=True)
+class _Writers:
+    tasks: TaskSystem
+    outbox: EventOutbox
+    effects: EffectLedger
+
+
+@dataclass(frozen=True, slots=True)
 class _Clients:
     valkey: Redis
     cache: Redis
@@ -110,7 +120,9 @@ async def open_platform(
         with start_step("tasks"):
             tasks = build_task_system(clients.valkey, telemetry.registry, telemetry.tracer_provider)
             outbox = EventOutbox(EventTypes(feature_events(features)))
-        services = _core_services(process, homes, clients, tasks, outbox)
+            effect_keys = EffectKeyMetrics(telemetry.registry)
+        writers = _Writers(tasks, outbox, EffectLedger(effect_keys))
+        services = _core_services(process, homes, clients, writers)
         built: list[FeatureParts] = []
         for feature in features:
             with start_step(f"feature:{feature.name}"):
@@ -123,7 +135,13 @@ async def open_platform(
                 metrics=EventMetrics(telemetry.registry),
                 tracer_provider=telemetry.tracer_provider,
             )
-            tasks.register([*event_task_handlers(events, tasks.sender), *parts.task_handlers])
+            tasks.register(
+                [
+                    *event_task_handlers(events, tasks.sender),
+                    *effect_key_task_handlers(homes.transactions, effect_keys),
+                    *parts.task_handlers,
+                ]
+            )
         with start_step("probes"):
             probes = (*_core_probes(homes, clients), *parts.probes)
             check_probe_names(probes)
@@ -176,7 +194,7 @@ async def _open_clients(process: _Process, stack: AsyncExitStack) -> _Clients:
 
 
 def _core_services(
-    process: _Process, homes: _Homes, clients: _Clients, tasks: TaskSystem, outbox: EventOutbox
+    process: _Process, homes: _Homes, clients: _Clients, writers: _Writers
 ) -> CoreServices:
     telemetry = process.telemetry
     kv_metrics = KeyValueMetrics(telemetry.registry)
@@ -184,8 +202,9 @@ def _core_services(
         settings=process.settings,
         role=process.role,
         transactions=homes.transactions,
-        tasks=tasks.sender,
-        outbox=outbox,
+        tasks=writers.tasks.sender,
+        outbox=writers.outbox,
+        effects=writers.effects,
         cache=RedisCache(clients.cache, CacheMetrics(telemetry.registry)),
         objects=clients.objects,
         uploads=clients.uploads,

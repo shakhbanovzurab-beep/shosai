@@ -1,8 +1,9 @@
-"""The loops of core in the scheduler: outbox relay and purge per home, queue and outbox gauges.
+"""The loops of core in the scheduler: outbox relay and purges per home, queue and outbox gauges.
 
-The relay of each home is queued every 5 s (§12: 100 events per 5 s), the purge once a
-day; each is a tick, skipped while the previous one of its home runs (`send_tick`), so a
-slow or unreachable home never piles up work or delays the other. The gauges are set by
+The relay of each home is queued every 5 s (§12: a tick drains the due events), the purges
+of the outbox and of the effect keys once a day; each is a tick, skipped while the previous
+one of its home runs (`send_tick`), so a slow or unreachable home never piles up work or
+delays the other. The gauges are set by
 this one process: depth and age are properties of a queue and of a home, not of a worker.
 """
 
@@ -13,6 +14,7 @@ from typing import Final
 from shosai.composition.platform import Platform
 from shosai.core.events.monitor import OutboxMonitor
 from shosai.core.events.system import PURGE_EVERY, PURGE_OUTBOX, RELAY_EVERY, RELAY_OUTBOX
+from shosai.core.idempotency.system import PURGE_EFFECT_KEYS, PURGE_KEYS_EVERY
 from shosai.core.kernel.homes import Home
 from shosai.core.runtime.loops import ScheduledLoop
 from shosai.core.tasks.declaration import TaskDeclaration
@@ -54,6 +56,14 @@ def core_loops(platform: Platform) -> tuple[ScheduledLoop, ...]:
                 f"events.purge_outbox.{home.value}",
                 PURGE_EVERY,
                 home_tick(sender, PURGE_OUTBOX, home),
+            )
+            for home in Home
+        ),
+        *(
+            ScheduledLoop(
+                f"idempotency.purge_keys.{home.value}",
+                PURGE_KEYS_EVERY,
+                home_tick(sender, PURGE_EFFECT_KEYS, home),
             )
             for home in Home
         ),

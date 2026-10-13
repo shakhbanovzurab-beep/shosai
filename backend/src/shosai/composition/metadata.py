@@ -14,9 +14,15 @@ from shosai.core.db.home_identity import HomeIdentity
 from shosai.core.db.model_base import NAMING_CONVENTION, ModelBase
 from shosai.core.events.records import OutboxMessage, ProcessedEvent
 from shosai.core.features import FeatureModule
+from shosai.core.idempotency.records import EffectKeyRecord
 
 # Модели ядра; модели среза перечисляет его FeatureModule (composition/features.py).
-CORE_MODELS: tuple[type[ModelBase], ...] = (HomeIdentity, OutboxMessage, ProcessedEvent)
+CORE_MODELS: tuple[type[ModelBase], ...] = (
+    HomeIdentity,
+    OutboxMessage,
+    ProcessedEvent,
+    EffectKeyRecord,
+)
 
 
 def application_models(

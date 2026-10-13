@@ -311,7 +311,8 @@
 **API contract rules:**
 - OpenAPI 3.x is the contract between backend, web and native clients.
 - Changes are additive only; unknown fields and frame types are ignored by clients.
-- Collections use cursor pagination with a maximum page size. This includes meeting transcript, map and model executions.
+- Collections use cursor pagination with a maximum page size. This includes meeting transcript, map and model executions. One page shape everywhere: `{items, next_cursor}`; an opaque cursor per collection over a keyset sort key; `limit` 1–100, default 50, unless the collection declares other bounds; a limit outside them or a foreign cursor is 422.
+- An unsafe write that a client may retry takes an `Idempotency-Key`; the key, bound to the account, and the request's fingerprint go into the effect-key ledger (`effect_keys`, every home) in the effect's transaction. A retry returns the stored outcome and writes nothing; the same key with another request is 422. Item keys of Leo actions and effect keys of provider costs use the same ledger.
 - One error envelope everywhere: `{"error": {code, request_id, …}, "detail": …}`, where `detail` keeps the shape shipped clients read ([ADR 0008](../adr/0008-error-envelope-with-compatible-detail.md)).
 - A snapshot test covers public routes and the full set of WebSocket frame types.
 
