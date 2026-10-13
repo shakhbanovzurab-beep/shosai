@@ -18,7 +18,7 @@ from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
 from shosai.core.tasks.broker import ValkeyStreamBroker, new_consumer_name
-from shosai.core.tasks.declaration import TaskHandler
+from shosai.core.tasks.declaration import TaskDeclaration, TaskHandler
 from shosai.core.tasks.lifecycle import TaskLifecycle
 from shosai.core.tasks.metrics import TaskMetrics
 from shosai.core.tasks.queues import STREAM_CAPACITY, TaskQueue
@@ -45,6 +45,10 @@ class TaskSystem:
                 message = f"задача {name} объявлена дважды"
                 raise ValueError(message)
             self.brokers[handler.task.queue].register(handler)
+
+    def declares(self, task: TaskDeclaration[Any]) -> bool:
+        """Whether this process registered the task on the broker of its queue."""
+        return self.brokers[task.queue].declaration(task.name) is not None
 
 
 @dataclass(frozen=True, slots=True)

@@ -41,3 +41,4 @@ def test_parts_combine_in_the_listed_order() -> None:
     assert combined.http_routers == (first, second)
     assert (combined.loops, combined.probes) == ((loop,), (probe,))
     assert (combined.ws_routers, combined.task_handlers, combined.subscriptions) == ((), (), ())
+    assert (combined.periodic_jobs, combined.due_sources) == ((), ())

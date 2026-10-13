@@ -97,6 +97,12 @@ async def test_the_scheduler_runs_the_core_loops_and_the_slices_loops(
             await eventually(lambda: "notes:sweep" in lifecycle.events)
         relay_ticks = int(await valkey.xlen("shosai:tasks:critical"))
 
-    assert {task.get_name() for task in tasks} >= {"loop:notes.sweep", "loop:events.outbox_monitor"}
+    assert {task.get_name() for task in tasks} >= {
+        "loop:notes.sweep",
+        "loop:events.outbox_monitor",
+        "loop:schedule.walk.ru",
+        "loop:schedule.walk.eu",
+    }
+    assert not {task.get_name() for task in tasks} & {"loop:events.purge_outbox.ru"}
     assert all(task.done() for task in tasks)
     assert relay_ticks == 2

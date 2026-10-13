@@ -37,6 +37,7 @@ from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.runtime.loops import ScheduledLoop
+from shosai.core.schedule.jobs import DueRowSource, PeriodicJob
 from shosai.core.storage.port import MultipartUploads, ObjectStorage
 from shosai.core.tasks.declaration import TaskHandler
 from shosai.core.tasks.sender import TaskSender
@@ -75,18 +76,26 @@ class FeatureParts:
     subscriptions: tuple[EventSubscription[Any], ...] = ()
     loops: tuple[ScheduledLoop, ...] = ()
     probes: tuple[DependencyProbe, ...] = ()
+    periodic_jobs: tuple[PeriodicJob, ...] = ()
+    due_sources: tuple[DueRowSource, ...] = ()
 
 
 def combine_parts(parts: Sequence[FeatureParts]) -> FeatureParts:
     """The parts of every slice of the process, in the listed order."""
-    return FeatureParts(
-        http_routers=tuple(router for part in parts for router in part.http_routers),
-        ws_routers=tuple(router for part in parts for router in part.ws_routers),
-        task_handlers=tuple(handler for part in parts for handler in part.task_handlers),
-        subscriptions=tuple(item for part in parts for item in part.subscriptions),
-        loops=tuple(loop for part in parts for loop in part.loops),
-        probes=tuple(probe for part in parts for probe in part.probes),
-    )
+    combined = FeatureParts()
+    # Срезов десятки: один цикл со сложением кортежей проще генератора на каждое поле.
+    for part in parts:
+        combined = FeatureParts(
+            http_routers=combined.http_routers + part.http_routers,
+            ws_routers=combined.ws_routers + part.ws_routers,
+            task_handlers=combined.task_handlers + part.task_handlers,
+            subscriptions=combined.subscriptions + part.subscriptions,
+            loops=combined.loops + part.loops,
+            probes=combined.probes + part.probes,
+            periodic_jobs=combined.periodic_jobs + part.periodic_jobs,
+            due_sources=combined.due_sources + part.due_sources,
+        )
+    return combined
 
 
 type FeatureBuilder = Callable[[CoreServices], AbstractAsyncContextManager[FeatureParts]]

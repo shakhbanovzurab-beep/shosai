@@ -16,6 +16,7 @@ from shosai.core.db.partitions.records import PartitionPolicy
 from shosai.core.events.records import OutboxMessage, ProcessedEvent
 from shosai.core.features import FeatureModule
 from shosai.core.idempotency.records import EffectKeyRecord
+from shosai.core.schedule.records import ScheduleRun
 
 # Модели ядра; модели среза перечисляет его FeatureModule (composition/features.py).
 CORE_MODELS: tuple[type[ModelBase], ...] = (
@@ -24,6 +25,7 @@ CORE_MODELS: tuple[type[ModelBase], ...] = (
     ProcessedEvent,
     EffectKeyRecord,
     PartitionPolicy,
+    ScheduleRun,
 )
 
 

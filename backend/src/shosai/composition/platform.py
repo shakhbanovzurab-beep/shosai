@@ -11,7 +11,9 @@ Steps, in order, each named when it fails (§3.11):
 4. `tasks` — the brokers, the sender and the outbox of the listed event classes;
 5. `feature:<name>` — each slice built from the core services, in the listed order;
 6. `events` — the catalog with every subscription, and every task registered;
-7. `probes` — the readiness probes of core and of every slice, each name once.
+7. `schedule` — core's and every slice's periodic jobs and due-row sources, each named once
+   and each with its task registered;
+8. `probes` — the readiness probes of core and of every slice, each name once.
 
 Everything opened is closed in reverse order when the block ends: slices first, then the
 clients, then the engines.
@@ -25,6 +27,7 @@ import structlog
 from redis.asyncio import Redis
 
 from shosai.composition.features import check_features, feature_events
+from shosai.composition.schedule import scheduled_jobs
 from shosai.composition.startup import start_step
 from shosai.composition.telemetry import ProcessTelemetry
 from shosai.core.cache.metrics import CacheMetrics
@@ -54,6 +57,7 @@ from shosai.core.kv.connection import connect_redis
 from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.metrics import KeyValueMetrics
 from shosai.core.kv.rate_limits import RateLimiter
+from shosai.core.schedule.jobs import PeriodicJob
 from shosai.core.storage.metrics import StorageMetrics
 from shosai.core.storage.s3_client import S3Calls, open_s3_client
 from shosai.core.storage.s3_multipart import S3MultipartUploads
@@ -72,6 +76,7 @@ class Platform:
     events: EventResources
     parts: FeatureParts
     probes: tuple[DependencyProbe, ...]
+    jobs: tuple[PeriodicJob, ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -147,10 +152,12 @@ async def open_platform(
                     *parts.task_handlers,
                 ]
             )
+        with start_step("schedule"):
+            jobs = scheduled_jobs(parts, tasks)
         with start_step("probes"):
             probes = (*_core_probes(homes, clients), *parts.probes)
             check_probe_names(probes)
-        yield Platform(services, tasks, events, parts, probes)
+        yield Platform(services, tasks, events, parts, probes, jobs)
 
 
 def check_probe_names(probes: Sequence[DependencyProbe]) -> None:
