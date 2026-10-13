@@ -11,29 +11,64 @@ F6 steps 5 and 6; this step calls the route's primary model.
 import asyncio
 from collections.abc import AsyncGenerator, Awaitable, Callable
 from contextlib import AbstractAsyncContextManager, nullcontext
+from dataclasses import dataclass
 from types import MappingProxyType
 from typing import Final
 
 from shosai.core.ai.adapters.openrouter import OpenRouter
-from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute
+from shosai.core.ai.adapters.pyannote import Pyannote
+from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute, Provider
 from shosai.core.ai.costs.amounts import is_priced
-from shosai.core.ai.errors import AiCallError, AiFailure
+from shosai.core.ai.errors import AiCallError, AiFailure, PaidCallError
 from shosai.core.ai.metrics import AiMetrics
-from shosai.core.ai.pricing.prices import ModelPrices, PriceBook
-from shosai.core.ai.recording import CallRecorder
-from shosai.core.ai.requests import ChatRequest, EmbeddingRequest, ImageRequest, RerankRequest
-from shosai.core.ai.results import ChatDelta, ChatResult, Embeddings, GeneratedImage, Ranking, Unit
+from shosai.core.ai.pricing.prices import PriceBook
+from shosai.core.ai.recording import CallOutcome, CallRecorder, MeteredCall
+from shosai.core.ai.requests import (
+    ChatRequest,
+    DiarizationRequest,
+    EmbeddingRequest,
+    ImageRequest,
+    RerankRequest,
+    TranscriptionRequest,
+)
+from shosai.core.ai.results import (
+    ChatDelta,
+    ChatResult,
+    Diarization,
+    Embeddings,
+    GeneratedImage,
+    Ranking,
+    Transcript,
+    Unit,
+)
+from shosai.core.ai.sessions.minutes import MinuteRows, SessionMeter
 from shosai.core.kernel.homes import Home
 
-# Единицы, без цены которых вызов этого вида не уходит.
+TOKENS: Final = frozenset({Unit.INPUT, Unit.OUTPUT})
+SECONDS: Final = frozenset({Unit.AUDIO_SECOND})
+# Наборы единиц, без цены хотя бы одного из которых вызов этого вида не уходит:
+# речь у одних моделей тарифицируется токенами, у других — секундами.
 NEEDED_UNITS: Final = MappingProxyType(
     {
-        "chat": frozenset({Unit.INPUT, Unit.OUTPUT}),
-        "embed": frozenset({Unit.INPUT}),
-        "rerank": frozenset({Unit.REQUEST}),
-        "image": frozenset({Unit.IMAGE}),
+        "chat": (TOKENS,),
+        "embed": (frozenset({Unit.INPUT}),),
+        "rerank": (frozenset({Unit.REQUEST}),),
+        "image": (frozenset({Unit.IMAGE}),),
+        "transcribe": (TOKENS, SECONDS),
+        "diarize": (SECONDS,),
+        "live_transcription": (SECONDS, TOKENS),
+        "live_translation": (SECONDS, TOKENS),
+        "voice": (TOKENS,),
     }
 )
+
+
+@dataclass(frozen=True, slots=True)
+class AiClients:
+    """The provider clients of the process; None when the provider has no key."""
+
+    openrouter: OpenRouter | None
+    pyannote: Pyannote | None
 
 
 class AiProviders:
@@ -41,38 +76,38 @@ class AiProviders:
 
     def __init__(
         self,
-        openrouter: OpenRouter | None,
+        clients: AiClients,
         prices: PriceBook,
         recorder: CallRecorder,
+        minutes: MinuteRows,
         metrics: AiMetrics,
     ) -> None:
-        self._openrouter = openrouter
+        self._clients = clients
         self._prices = prices
         self._recorder = recorder
+        self._minutes = minutes
         self._metrics = metrics
 
     async def chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
     ) -> ChatResult:
         """A model's answer to a conversation."""
-        client, prices = await self._admit(context, route.primary, "chat")
-        result = await self._within(context, lambda: client.chat(route.primary, request))
-        await self._recorder.record(context, route.primary, "chat", result.usage, prices)
+        client, call = self._openrouter(route, "chat"), await self._admit(context, route, "chat")
+        result = await self._within(context, lambda: client.chat(call.model, request))
+        await self._recorder.record(call, result.usage)
         return result
 
     async def stream_chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
     ) -> AsyncGenerator[ChatDelta]:
         """A model's answer as it is written; the cost is recorded when the usage arrives."""
-        client, prices = await self._admit(context, route.primary, "chat")
+        client, call = self._openrouter(route, "chat"), await self._admit(context, route, "chat")
         started = recorded = False
         try:
             async with self._deadline(context):
-                async for delta in client.stream_chat(route.primary, request):
+                async for delta in client.stream_chat(call.model, request):
                     if delta.usage is not None and not recorded:
-                        await self._recorder.record(
-                            context, route.primary, "chat", delta.usage, prices
-                        )
+                        await self._recorder.record(call, delta.usage)
                         recorded = True
                     started = True
                     yield delta
@@ -87,42 +122,86 @@ class AiProviders:
         self, context: CallContext, route: ModelRoute, request: EmbeddingRequest
     ) -> Embeddings:
         """Vectors of texts."""
-        client, prices = await self._admit(context, route.primary, "embed")
-        result = await self._within(context, lambda: client.embed(route.primary, request))
-        await self._recorder.record(context, route.primary, "embed", result.usage, prices)
+        client, call = self._openrouter(route, "embed"), await self._admit(context, route, "embed")
+        result = await self._within(context, lambda: client.embed(call.model, request))
+        await self._recorder.record(call, result.usage)
         return result
 
     async def rerank(
         self, context: CallContext, route: ModelRoute, request: RerankRequest
     ) -> Ranking:
         """Documents ordered by relevance to a query."""
-        client, prices = await self._admit(context, route.primary, "rerank")
-        result = await self._within(context, lambda: client.rerank(route.primary, request))
-        await self._recorder.record(context, route.primary, "rerank", result.usage, prices)
+        client = self._openrouter(route, "rerank")
+        call = await self._admit(context, route, "rerank")
+        result = await self._within(context, lambda: client.rerank(call.model, request))
+        await self._recorder.record(call, result.usage)
         return result
 
     async def generate_image(
         self, context: CallContext, route: ModelRoute, request: ImageRequest
     ) -> GeneratedImage:
         """A picture from a prompt."""
-        client, prices = await self._admit(context, route.primary, "image")
-        result = await self._within(context, lambda: client.generate_image(route.primary, request))
-        await self._recorder.record(context, route.primary, "image", result.usage, prices)
+        client, call = self._openrouter(route, "image"), await self._admit(context, route, "image")
+        result = await self._within(context, lambda: client.generate_image(call.model, request))
+        await self._recorder.record(call, result.usage)
         return result
 
-    async def _admit(
-        self, context: CallContext, model: ModelRef, kind: str
-    ) -> tuple[OpenRouter, ModelPrices]:
-        """The client and prices of a call that may be sent; `AiCallError` otherwise."""
-        if self._openrouter is None:
+    async def transcribe(
+        self, context: CallContext, route: ModelRoute, request: TranscriptionRequest
+    ) -> Transcript:
+        """The text of a recording."""
+        client = self._openrouter(route, "transcribe")
+        call = await self._admit(context, route, "transcribe")
+        result = await self._within(context, lambda: client.transcribe(call.model, request))
+        await self._recorder.record(call, result.usage)
+        return result
+
+    async def diarize(
+        self, context: CallContext, route: ModelRoute, request: DiarizationRequest
+    ) -> Diarization:
+        """Who spoke when; a job that failed after it was charged is recorded, then refused."""
+        client = self._pyannote(route)
+        call = await self._admit(context, route, "diarize")
+        try:
+            # Срок вызова соблюдает сам адаптер: оборвать его ожидание значило бы потерять
+            # строку уже оплаченного задания.
+            result = await client.diarize(call.model, request, context.deadline)
+        except PaidCallError as paid:
+            await self._recorder.record(call, paid.usage, CallOutcome.FAILED)
+            raise AiCallError(paid.failure) from None
+        await self._recorder.record(call, result.usage)
+        return result
+
+    async def open_meter(self, context: CallContext, model: ModelRef, kind: str) -> SessionMeter:
+        """A minute meter for a live session the caller opens with the provider (F6-C5)."""
+        call = await self._admit(context, ModelRoute(model), kind)
+        return self._minutes.open(call)
+
+    async def close_meter(self, meter: SessionMeter) -> None:
+        """Stop a session's meter and write its minutes."""
+        await self._minutes.close(meter)
+
+    def _openrouter(self, route: ModelRoute, kind: str) -> OpenRouter:
+        client = self._clients.openrouter
+        if client is None or route.primary.provider is not Provider.OPENROUTER:
             raise self._refuse(kind, AiFailure.MODEL_UNAVAILABLE)
+        return client
+
+    def _pyannote(self, route: ModelRoute) -> Pyannote:
+        client = self._clients.pyannote
+        if client is None or route.primary.provider is not Provider.PYANNOTE:
+            raise self._refuse("diarize", AiFailure.MODEL_UNAVAILABLE)
+        return client
+
+    async def _admit(self, context: CallContext, route: ModelRoute, kind: str) -> MeteredCall:
+        """The call that may be sent, with its prices; `AiCallError` otherwise."""
         scope = context.scope
         if scope is not None and scope.home is Home.RU and not context.cross_border_consent:
             raise self._refuse(kind, AiFailure.CONSENT_REQUIRED)
-        prices = await self._prices.prices_of(model)
+        prices = await self._prices.prices_of(route.primary)
         if not is_priced(prices, NEEDED_UNITS[kind]):
             raise self._refuse(kind, AiFailure.MODEL_UNPRICED)
-        return self._openrouter, prices
+        return MeteredCall(context, route.primary, kind, prices)
 
     def _refuse(self, kind: str, failure: AiFailure) -> AiCallError:
         self._metrics.refused(kind, failure.value)

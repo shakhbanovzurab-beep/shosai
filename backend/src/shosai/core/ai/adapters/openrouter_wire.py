@@ -17,8 +17,9 @@ import binascii
 import json
 import re
 from decimal import Decimal, InvalidOperation
-from typing import Any, Final
+from typing import Final
 
+from shosai.core.ai.adapters.http_calls import Json
 from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.requests import (
     ChatMessage,
@@ -30,19 +31,8 @@ from shosai.core.ai.requests import (
 )
 from shosai.core.ai.results import Unit, Usage
 
-type Json = dict[str, Any]
-
 DATA_URL: Final = re.compile(r"data:([\w.+-]+/[\w.+-]+);base64,(.*)", re.DOTALL)
 WEB_SEARCH_TOOL: Final = "openrouter:web_search"
-# Статусы провайдера → закрытый набор кодов вызова; всё прочее — provider_error.
-STATUS_FAILURES: Final = {
-    404: AiFailure.MODEL_UNAVAILABLE,
-    408: AiFailure.DEADLINE_EXCEEDED,
-    429: AiFailure.RATE_LIMITED,
-    504: AiFailure.DEADLINE_EXCEEDED,
-}
-CONTEXT_MARKERS: Final = ("context length", "context_length", "maximum context")
-MODERATION_MARKERS: Final = ("moderation", "flagged")
 
 
 def data_url(image: ImagePart) -> str:
@@ -162,16 +152,6 @@ def image_of(message: Json) -> tuple[bytes, str]:
     if not data:
         raise AiCallError(AiFailure.PROVIDER_ERROR)
     return data, match.group(1).lower()
-
-
-def failure_of(status: int, text: str) -> AiFailure:
-    """The call failure an error answer means."""
-    lowered = text.lower()
-    if status == 400 and any(marker in lowered for marker in CONTEXT_MARKERS):
-        return AiFailure.CONTEXT_LENGTH_EXCEEDED
-    if status == 403 and any(marker in lowered for marker in MODERATION_MARKERS):
-        return AiFailure.CONTENT_REFUSED
-    return STATUS_FAILURES.get(status, AiFailure.PROVIDER_ERROR)
 
 
 def stream_chunk(line: str) -> Json | None:

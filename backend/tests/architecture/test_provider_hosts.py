@@ -13,7 +13,6 @@ PROVIDER_HOSTS: Final = (
     "openrouter.ai",
     "api.openai.com",
     "generativelanguage.googleapis.com",
-    "api.deepgram.com",
     "api.pyannote.ai",
     "api.mistral.ai",
 )

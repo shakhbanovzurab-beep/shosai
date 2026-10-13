@@ -106,7 +106,7 @@
 | PostgreSQL RU | Russia | Source of truth of the Russian home | managed, PgBouncer |
 | PostgreSQL EU | EU | Source of truth of the EU home; directory tables; platform tables and telemetry without an account (§6) | managed, PgBouncer |
 | S3 | Russia | One bucket for both homes and the platform: files, recordings, exports, knowledge sources; lifecycle rules ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) | — |
-| AI providers | external | OpenRouter (including Jev decisions by TypeSafe AI), OpenAI Realtime, Google Gemini Live, Deepgram, pyannote, Mistral OCR — reached directly from the plane | quotas per contract |
+| AI providers | external | OpenRouter (including Jev decisions by TypeSafe AI and transcription of recordings), OpenAI Realtime, Google Gemini Live, pyannote, Mistral OCR — reached directly from the plane ([ADR 0043](../adr/0043-speech-providers-by-task.md)) | quotas per contract |
 | Payments | external | TBank, CloudPayments, lava.top (cards); bank statement API (invoices) | — |
 | Observability | plane + outside | Grafana stack: Prometheus (metrics), Loki (logs), Tempo (traces), Grafana (one pane); OpenTelemetry Collector; Alertmanager (Telegram); node exporter; uptime probes run outside the plane | single nodes, local disks with size caps |
 | Delivery | GitHub | GitHub Actions builds the image from a green commit into a registry; `scripts/release.sh` deploys to staging, then to the plane | — |
@@ -671,11 +671,11 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Realtime and integrations | Web Push (VAPID) | — | PWA notifications |
 | Realtime and integrations | SMTP | — | Email |
 | Realtime and integrations | Yandex SmartCaptcha | — | Form protection |
-| AI providers | OpenRouter | — | Chat, vision, embeddings, rerank, web search |
+| AI providers | OpenRouter | — | Chat, vision, embeddings, rerank, web search, transcription of recordings ([ADR 0043](../adr/0043-speech-providers-by-task.md)) |
 | AI providers | Jev (TypeSafe AI) through OpenRouter's Decisions API | `typesafe/jev-1.13`, pinned | Leo's Decision Layer: typed, calibrated decisions behind versioned policies with deterministic fallbacks ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)) |
-| AI providers | OpenAI Realtime | — | Streaming speech recognition and translation |
-| AI providers | Google Gemini Live | — | Voice assistant |
-| AI providers | Deepgram, pyannote, Mistral OCR | — | Speech recognition, speaker diarization, document OCR |
+| AI providers | OpenAI Realtime | — | Streaming speech recognition |
+| AI providers | Google Gemini Live | — | Simultaneous translation, voice assistant |
+| AI providers | pyannote, Mistral OCR | — | Speaker diarization of recordings, document OCR |
 | Payments | TBank, CloudPayments, lava.top | — | Card acquiring in RUB and foreign currency, incl. PayPal |
 | Payments | Bank statement API | — | Reconciliation of company invoices; bank not chosen |
 | Payments | Invoices, acts, UPD | — | Closing documents for Russian legal entities |

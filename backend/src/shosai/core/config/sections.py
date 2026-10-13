@@ -143,6 +143,9 @@ class AiSettings(SettingsSection):
     openrouter_api_key: SecretStr | None = None
     # Пусто — адрес провайдера из адаптера: хосты провайдеров названы только в core/ai.
     openrouter_base_url: HttpUrl | None = None
+    # Разметка говорящих в записях встреч; без ключа вызовы diarize отклоняются.
+    pyannote_api_key: SecretStr | None = None
+    pyannote_base_url: HttpUrl | None = None
 
 
 class ExchangeRateSettings(SettingsSection):

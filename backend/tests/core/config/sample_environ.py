@@ -55,6 +55,7 @@ def production_environ(**overrides: str) -> dict[str, str]:
         TRUSTED_PROXY_ADDRESSES="10.0.0.0/24",
         FERNET_KEY=SAMPLE_FERNET_KEY,
         OPENROUTER_API_KEY=SAMPLE_SECRET,
+        PYANNOTE_API_KEY=SAMPLE_SECRET,
     )
     for home in Home:
         del environ[f"HOME_{home.name}_MIGRATION_DATABASE_URL"]

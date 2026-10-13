@@ -49,7 +49,9 @@ class PlatformAccount(StrEnum):
 class Provider(StrEnum):
     """The AI providers the port reaches (§18.2)."""
 
+    # Чат, картинки, эмбеддинги и расшифровка записей; разметку говорящих делает pyannote.
     OPENROUTER = "openrouter"
+    PYANNOTE = "pyannote"
 
 
 @dataclass(frozen=True, slots=True)

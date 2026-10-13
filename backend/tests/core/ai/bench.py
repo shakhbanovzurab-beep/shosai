@@ -1,4 +1,4 @@
-"""The provider port over the run's slot and the scripted OpenRouter, for the AI tests."""
+"""The provider port over the run's slot and the scripted providers, for the AI tests."""
 
 import uuid
 from dataclasses import dataclass, field
@@ -11,18 +11,21 @@ from prometheus_client import CollectorRegistry
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ai.adapters.openrouter import OpenRouter
+from shosai.core.ai.adapters.pyannote import JobPolling, Pyannote
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRef, ModelRoute, Provider
 from shosai.core.ai.costs.settlement import CostSettlements, SettledCost
 from shosai.core.ai.costs.writer import CostWriter
 from shosai.core.ai.metrics import AiMetrics
-from shosai.core.ai.port import AiProviders
+from shosai.core.ai.port import AiClients, AiProviders
 from shosai.core.ai.pricing.prices import PriceBook
 from shosai.core.ai.pricing.records import ProviderPrice
 from shosai.core.ai.recording import CallRecorder
 from shosai.core.ai.results import Unit
+from shosai.core.ai.sessions.minutes import MinuteRows
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.exchange_rates.rates import ExchangeRates
 from shosai.core.exchange_rates.records import ExchangeRate
+from shosai.core.idempotency.batch import EffectBatch
 from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.kernel.homes import Home
@@ -31,6 +34,7 @@ from shosai.core.tasks.declaration import TaskDeclaration
 from shosai.core.tasks.errors import TaskQueueUnavailableError
 from shosai.core.tasks.payloads import TaskPayload
 from tests.doubles.openrouter import ScriptedOpenRouter
+from tests.doubles.pyannote import ScriptedPyannote
 
 USER_ID = uuid.UUID("0190f0f0-0000-7000-8000-0000000000a1")
 ORG_ID = uuid.UUID("0190f0f0-0000-7000-8000-0000000000b1")
@@ -86,11 +90,29 @@ class RecordingSender:
 
 
 @dataclass
+class ManualClock:
+    """Monotonic time a test moves by hand; its sleep moves it instead of waiting."""
+
+    now: float = 1000.0
+
+    def __call__(self) -> float:
+        """The current reading."""
+        return self.now
+
+    async def sleep(self, seconds: float) -> None:
+        """Pass the time at once."""
+        self.now += seconds
+
+
+@dataclass
 class AiBench:
     """The port and what a test inspects around it."""
 
     providers: AiProviders
     openrouter: ScriptedOpenRouter
+    pyannote: ScriptedPyannote
+    minutes: MinuteRows
+    clock: ManualClock
     settlement: RecordingSettlement
     sender: RecordingSender
     writer: CostWriter
@@ -117,17 +139,24 @@ def ai_bench(
     settlements = CostSettlements()
     settlements.install([settlement])
     sender = RecordingSender()
-    effects = EffectLedger(EffectKeyMetrics(registry))
+    effect_keys = EffectKeyMetrics(registry)
+    effects = (EffectLedger(effect_keys), EffectBatch(effect_keys))
     writer = CostWriter(transactions, effects, settlements, sender, metrics)
-    rates = ExchangeRates(transactions, registry)
-    scripted = ScriptedOpenRouter()
-    providers = AiProviders(
-        OpenRouter(client or scripted.client()) if enabled else None,
-        PriceBook(transactions),
-        CallRecorder(writer, rates, metrics),
-        metrics,
+    recorder = CallRecorder(writer, ExchangeRates(transactions, registry), metrics)
+    clock = ManualClock()
+    minutes = MinuteRows(recorder, clock=clock)
+    scripted, diarizer = ScriptedOpenRouter(), ScriptedPyannote()
+    polling = JobPolling(patience=120.0, clock=clock, sleep=clock.sleep)
+    clients = AiClients(
+        openrouter=OpenRouter(client or scripted.client()) if enabled else None,
+        pyannote=(
+            Pyannote(diarizer.api_client(), diarizer.upload_client(), polling) if enabled else None
+        ),
     )
-    return AiBench(providers, scripted, settlement, sender, writer, registry)
+    providers = AiProviders(clients, PriceBook(transactions), recorder, minutes, metrics)
+    return AiBench(
+        providers, scripted, diarizer, minutes, clock, settlement, sender, writer, registry
+    )
 
 
 async def set_prices(transactions: HomeTransactions, model: ModelRef, **prices: str) -> None:

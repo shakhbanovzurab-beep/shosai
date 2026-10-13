@@ -14,9 +14,9 @@ class CostSource(StrEnum):
     PRICED = "priced"
 
 
-def is_priced(prices: ModelPrices, needed: frozenset[Unit]) -> bool:
-    """Whether every unit the call's kind is charged in has a price in force."""
-    return needed <= prices.keys()
+def is_priced(prices: ModelPrices, alternatives: tuple[frozenset[Unit], ...]) -> bool:
+    """Whether every unit of at least one way the call's kind is charged has a price in force."""
+    return any(needed <= prices.keys() for needed in alternatives)
 
 
 def cost_of(usage: Usage, prices: ModelPrices) -> tuple[Decimal, CostSource]:

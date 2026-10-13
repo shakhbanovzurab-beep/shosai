@@ -89,3 +89,42 @@ class GeneratedImage:
     media_type: str
     model: ModelRef
     usage: Usage
+
+
+@dataclass(frozen=True, slots=True)
+class TranscriptSegment:
+    """A stretch of speech: its time in the recording, its text and its speaker if known."""
+
+    start_ms: int
+    end_ms: int
+    text: str
+    speaker: int | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Transcript:
+    """The text of a recording, in segments when the provider gives them."""
+
+    text: str
+    segments: tuple[TranscriptSegment, ...]
+    language: str | None
+    model: ModelRef
+    usage: Usage
+
+
+@dataclass(frozen=True, slots=True)
+class SpeakerTurn:
+    """When one speaker spoke; speakers are numbered 0..N-1 in order of first appearance."""
+
+    start_ms: int
+    end_ms: int
+    speaker: int
+
+
+@dataclass(frozen=True, slots=True)
+class Diarization:
+    """Who spoke when."""
+
+    turns: tuple[SpeakerTurn, ...]
+    model: ModelRef
+    usage: Usage

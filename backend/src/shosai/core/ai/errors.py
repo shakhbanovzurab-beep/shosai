@@ -5,6 +5,7 @@ from http import HTTPStatus
 from types import MappingProxyType
 from typing import Final
 
+from shosai.core.ai.results import Usage
 from shosai.core.kernel.errors import AppError
 
 
@@ -41,3 +42,16 @@ class AiCallError(AppError):
     def __init__(self, failure: AiFailure) -> None:
         super().__init__(failure.value, STATUSES[failure])
         self.failure = failure
+
+
+class PaidCallError(Exception):
+    """A call that failed after the provider began to charge for it: its usage is recorded.
+
+    pyannote bills a job once it starts, whatever its end; the port writes the row with the
+    outcome `failed`, then raises `AiCallError` with the failure.
+    """
+
+    def __init__(self, failure: AiFailure, usage: Usage) -> None:
+        super().__init__(failure.value)
+        self.failure = failure
+        self.usage = usage

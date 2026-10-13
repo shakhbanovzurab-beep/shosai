@@ -51,6 +51,7 @@ from shosai.core.events.system import event_task_handlers
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, combine_parts
 from shosai.core.health.dependencies import home_probe, redis_probe, storage_probe
 from shosai.core.health.probes import DependencyProbe
+from shosai.core.idempotency.batch import EffectBatch
 from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.idempotency.system import effect_key_task_handlers
@@ -134,7 +135,11 @@ async def open_platform(
             effects = EffectLedger(effect_keys)
         with start_step("ai"):
             dependencies = AiDependencies(
-                homes.transactions, tasks.sender, effects, telemetry.registry
+                homes.transactions,
+                tasks.sender,
+                effects,
+                EffectBatch(effect_keys),
+                telemetry.registry,
             )
             ai = await open_ai(settings, dependencies, stack)
         writers = _Writers(tasks, outbox, effects, ai)

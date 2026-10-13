@@ -6,15 +6,21 @@ runs the settlements. A replayed key returns the stored row id and changes nothi
 the home does not take the write, the row goes to the deferred-record task, which writes it
 later with the same key; when the task cannot be queued either, the row is lost, logged and
 counted, and the monitor of §16.4 shows it.
+
+Minute rows of live sessions (F6-C5) are written in batches: one transaction per home and
+company claims every key of the batch at once, inserts the new rows with one statement and
+skips the keys already written, so a replayed flush writes nothing.
 """
 
+from collections.abc import Sequence
 from datetime import timedelta
-from typing import Final, Protocol
+from typing import Any, Final, Protocol
 from uuid import UUID
 
 import structlog
 from pydantic import BaseModel
 from sqlalchemy import insert
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ai.costs.entries import CostEntry
@@ -23,7 +29,9 @@ from shosai.core.ai.costs.settlement import CostSettlements, SettledCost
 from shosai.core.ai.metrics import AiMetrics
 from shosai.core.db.errors import HomeUnavailableError
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.idempotency.batch import BatchKey, EffectBatch
 from shosai.core.idempotency.ledger import EffectKey, EffectLedger, EffectScope
+from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.tasks.declaration import RETRY_TRANSIENT, TaskDeclaration, TaskHandler
 from shosai.core.tasks.errors import TaskQueueUnavailableError
 from shosai.core.tasks.payloads import TaskPayload
@@ -61,13 +69,13 @@ class CostWriter:
     def __init__(
         self,
         transactions: HomeTransactions,
-        effects: EffectLedger,
+        effects: tuple[EffectLedger, EffectBatch],
         settlements: CostSettlements,
         sender: WorkSender,
         metrics: AiMetrics,
     ) -> None:
         self._transactions = transactions
-        self._effects = effects
+        self._effects, self._batch = effects
         self._settlements = settlements
         self._sender = sender
         self._metrics = metrics
@@ -94,10 +102,50 @@ class CostWriter:
                 self._metrics.without_rate()
         return result.outcome.cost_id
 
+    async def record_many(self, entries: Sequence[CostEntry]) -> None:
+        """Write rows in one transaction per home and company; defer a group whose home is down."""
+        groups: dict[TenancyScope, dict[str, CostEntry]] = {}
+        for entry in entries:
+            # Совпавший ключ в одной пачке — одна строка: первая побеждает, как и в реестре.
+            group = groups.setdefault(TenancyScope(entry.home, org_id=entry.org_id), {})
+            group.setdefault(entry.effect_key, entry)
+        for scope, group in groups.items():
+            try:
+                await self._write_group(scope, list(group.values()))
+            except HomeUnavailableError:
+                for entry in group.values():
+                    await self._defer(entry)
+            except SQLAlchemyError:
+                # Пачка одной компании не должна останавливать пачки остальных.
+                for _ in group:
+                    self._metrics.lost()
+                log.exception(
+                    "Пачка строк стоимости не записана", home=scope.home.value, rows=len(group)
+                )
+
+    async def _write_group(self, scope: TenancyScope, entries: list[CostEntry]) -> None:
+        keys = [BatchKey(entry.effect_key, entry.user_id, entry.org_id) for entry in entries]
+        async with self._transactions.begin(scope) as session:
+            claimed = await self._batch.claim(session, AI_COST, keys)
+            fresh = [entry for entry in entries if entry.effect_key in claimed]
+            if not fresh:
+                return
+            await session.execute(insert(ProviderCost).values([row_of(e) for e in fresh]))
+            for entry in fresh:
+                await self._settle(session, entry)
+            outcomes = {entry.effect_key: RecordedCost(cost_id=entry.cost_id) for entry in fresh}
+            await self._batch.complete(session, AI_COST, outcomes)
+        for entry in fresh:
+            self._metrics.recorded(entry.cost_source)
+            if entry.cost_rub is None:
+                self._metrics.without_rate()
+
     async def _insert(self, session: AsyncSession, entry: CostEntry) -> RecordedCost:
-        values = entry.model_dump(exclude={"home", "cost_id"})
-        values["payer"] = "platform" if entry.platform_account else "user"
-        await session.execute(insert(ProviderCost).values(id=entry.cost_id, **values))
+        await session.execute(insert(ProviderCost).values(row_of(entry)))
+        await self._settle(session, entry)
+        return RecordedCost(cost_id=entry.cost_id)
+
+    async def _settle(self, session: AsyncSession, entry: CostEntry) -> None:
         settled = SettledCost(
             cost_id=entry.cost_id,
             user_id=entry.user_id,
@@ -111,7 +159,6 @@ class CostWriter:
         )
         for settlement in self._settlements.all():
             await settlement.settle(session, settled)
-        return RecordedCost(cost_id=entry.cost_id)
 
     async def _defer(self, entry: CostEntry) -> None:
         try:
@@ -128,6 +175,14 @@ class CostWriter:
             return
         self._metrics.deferred()
         log.warning("Стоимость вызова отложена в задачу", home=entry.home.value)
+
+
+def row_of(entry: CostEntry) -> dict[str, Any]:
+    """The column values of an entry's row."""
+    values = entry.model_dump(exclude={"home", "cost_id"})
+    values["id"] = entry.cost_id
+    values["payer"] = "platform" if entry.platform_account else "user"
+    return values
 
 
 def record_cost_handler(writer: CostWriter) -> TaskHandler[CostEntry]:

@@ -31,6 +31,12 @@ from shosai.core.ai.pricing.records import UNITS_CHECK
 from shosai.core.db.model_base import ModelBase
 from shosai.core.db.partitions.policy import monthly_partition_range
 
+# Виды вызовов: речь и живые сессии добавил шаг 3 F6 (миграция a1c4e9d27b53).
+KINDS_CHECK = (
+    "kind IN ('chat', 'embed', 'rerank', 'image', 'transcribe', 'diarize', "
+    "'live_transcription', 'live_translation', 'voice')"
+)
+
 
 class ProviderCost(ModelBase):
     """What one model call cost, who pays for it and why it was made."""
@@ -49,7 +55,7 @@ class ProviderCost(ModelBase):
         ),
         CheckConstraint("call_class IN ('essential', 'standard', 'expensive')", name="class_known"),
         CheckConstraint("origin IN ('interactive', 'background', 'system')", name="origin_known"),
-        CheckConstraint("kind IN ('chat', 'embed', 'rerank', 'image')", name="kind_known"),
+        CheckConstraint(KINDS_CHECK, name="kind_known"),
         CheckConstraint("outcome IN ('ok', 'failed')", name="outcome_known"),
         CheckConstraint(
             "cost_source IN ('reported', 'priced', 'draft_session')", name="source_known"

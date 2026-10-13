@@ -127,3 +127,46 @@ class ImageRequest:
 
     prompt: str
     references: tuple[ImagePart, ...] = field(default=())
+
+
+@dataclass(frozen=True, slots=True)
+class AudioFile:
+    """A recording as bytes, its media type and its length."""
+
+    data: bytes
+    media_type: str
+    duration_seconds: float
+
+    def __post_init__(self) -> None:
+        if not self.data or not self.media_type.startswith(("audio/", "video/")):
+            message = "запись — непустые байты с типом audio/* или video/*"
+            raise ValueError(message)
+        if self.duration_seconds <= 0:
+            message = "длительность записи больше нуля"
+            raise ValueError(message)
+
+
+@dataclass(frozen=True, slots=True)
+class TranscriptionRequest:
+    """A recording to turn into text.
+
+    `language` None lets the model detect it. `timestamps` asks for timed segments, which
+    only some models give (whisper-1 does, gpt-4o-transcribe answers 400).
+    """
+
+    audio: AudioFile
+    language: str | None = None
+    timestamps: bool = False
+
+
+@dataclass(frozen=True, slots=True)
+class DiarizationRequest:
+    """A recording to split into speaker turns; `speakers` None lets the model count them."""
+
+    audio: AudioFile
+    speakers: int | None = None
+
+    def __post_init__(self) -> None:
+        if self.speakers is not None and self.speakers < 1:
+            message = "говорящих — хотя бы один"
+            raise ValueError(message)

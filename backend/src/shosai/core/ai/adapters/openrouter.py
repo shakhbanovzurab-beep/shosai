@@ -1,4 +1,5 @@
-"""The OpenRouter client: chat, streaming, vision, web search, embeddings, rerank, images.
+"""The OpenRouter client: chat, streaming, vision, web search, embeddings, rerank, images,
+and transcription of recordings.
 
 One HTTPX client per process, built by composition with the key and the limits (draft
 lesson: seven router call sites leaked two pools each). Deadlines of §4.3: connect 10 s,
@@ -13,11 +14,16 @@ from typing import Final
 import httpx
 import structlog
 
+from shosai.core.ai.adapters.http_calls import Json, call_json, failed
+from shosai.core.ai.adapters.openrouter_audio import (
+    segments_of,
+    transcript_text,
+    transcription_body,
+    transcription_usage,
+)
 from shosai.core.ai.adapters.openrouter_wire import (
-    Json,
     chat_body,
     data_url,
-    failure_of,
     first_choice,
     image_of,
     stream_chunk,
@@ -26,7 +32,13 @@ from shosai.core.ai.adapters.openrouter_wire import (
 )
 from shosai.core.ai.calls import ModelRef, Provider
 from shosai.core.ai.errors import AiCallError, AiFailure
-from shosai.core.ai.requests import ChatRequest, EmbeddingRequest, ImageRequest, RerankRequest
+from shosai.core.ai.requests import (
+    ChatRequest,
+    EmbeddingRequest,
+    ImageRequest,
+    RerankRequest,
+    TranscriptionRequest,
+)
 from shosai.core.ai.results import (
     ChatDelta,
     ChatResult,
@@ -34,6 +46,7 @@ from shosai.core.ai.results import (
     GeneratedImage,
     RankedDocument,
     Ranking,
+    Transcript,
     Unit,
 )
 
@@ -84,7 +97,7 @@ class OpenRouter:
             ) as response:
                 if response.status_code != httpx.codes.OK:
                     text = (await response.aread()).decode(errors="replace")
-                    raise self._failed(response.status_code, text)
+                    raise failed(Provider.OPENROUTER, response.status_code, text)
                 async for line in response.aiter_lines():
                     chunk = stream_chunk(line)
                     if chunk is not None:
@@ -156,31 +169,21 @@ class OpenRouter:
         usage = usage_of(answer.get("usage"), unit=Unit.IMAGE, units_field="")
         return GeneratedImage(data=data, media_type=media_type, model=model, usage=usage)
 
-    async def _post(self, path: str, body: Json) -> Json:
-        try:
-            response = await self._client.post(path, json=body)
-        except httpx.TimeoutException:
-            raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
-        except httpx.TransportError:
-            raise AiCallError(AiFailure.PROVIDER_ERROR) from None
-        if response.status_code != httpx.codes.OK:
-            raise self._failed(response.status_code, response.text)
-        try:
-            answer = response.json()
-        except ValueError:
-            raise AiCallError(AiFailure.PROVIDER_ERROR) from None
-        if not isinstance(answer, dict) or "error" in answer:
-            raise AiCallError(AiFailure.PROVIDER_ERROR)
-        return answer
+    async def transcribe(self, model: ModelRef, request: TranscriptionRequest) -> Transcript:
+        """The text of a recording, with timed segments when the request asks for them."""
+        answer = await self._post("audio/transcriptions", transcription_body(model.model, request))
+        language = answer.get("language")
+        return Transcript(
+            text=transcript_text(answer),
+            segments=segments_of(answer.get("segments")) if request.timestamps else (),
+            language=language if isinstance(language, str) else request.language,
+            model=model,
+            usage=transcription_usage(answer.get("usage")),
+        )
 
-    def _failed(self, status: int, text: str) -> AiCallError:
-        failure = failure_of(status, text)
-        # Текст ответа может содержать отрывок запроса: в журнал — только статус и длина.
-        log.warning(
-            "OpenRouter ответил ошибкой", provider=Provider.OPENROUTER.value, status=status,
-            failure=failure.value, length=len(text),
-        )  # fmt: skip
-        return AiCallError(failure)
+    async def _post(self, path: str, body: Json) -> Json:
+        request = self._client.build_request("POST", path, json=body)
+        return await call_json(self._client, Provider.OPENROUTER, request)
 
     @staticmethod
     def _delta(chunk: Json) -> ChatDelta:
