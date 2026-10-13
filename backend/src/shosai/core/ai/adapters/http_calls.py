@@ -21,6 +21,8 @@ STATUS_FAILURES: Final = {
     429: AiFailure.RATE_LIMITED,
     504: AiFailure.DEADLINE_EXCEEDED,
 }
+# Ответ без тела успеха, после которого тот же запрос можно отправить ещё раз (F6-C15).
+RETRYABLE_STATUSES: Final = frozenset({429, 502, 503, 504})
 CONTEXT_MARKERS: Final = ("context length", "context_length", "maximum context")
 MODERATION_MARKERS: Final = ("moderation", "flagged")
 log = structlog.stdlib.get_logger(__name__)
@@ -43,13 +45,16 @@ def failed(provider: Provider, status: int, text: str) -> AiCallError:
         "Провайдер ИИ ответил ошибкой", provider=provider.value, status=status,
         failure=failure.value, length=len(text),
     )  # fmt: skip
-    return AiCallError(failure)
+    return AiCallError(failure, retryable=status in RETRYABLE_STATUSES)
 
 
 async def call_json(client: httpx.AsyncClient, provider: Provider, request: httpx.Request) -> Json:
     """Send the request; the answer as a JSON object, or `AiCallError`."""
     try:
         response = await client.send(request)
+    except httpx.ConnectError, httpx.ConnectTimeout, httpx.PoolTimeout:
+        # Запрос не ушёл: повтор безопасен.
+        raise AiCallError(AiFailure.PROVIDER_ERROR, retryable=True) from None
     except httpx.TimeoutException:
         raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
     except httpx.TransportError:

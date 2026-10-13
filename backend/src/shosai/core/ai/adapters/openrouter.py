@@ -109,6 +109,8 @@ class OpenRouter:
                     chunk = stream_chunk(line)
                     if chunk is not None:
                         yield self._delta(chunk)
+        except httpx.ConnectError, httpx.ConnectTimeout, httpx.PoolTimeout:
+            raise AiCallError(AiFailure.PROVIDER_ERROR, retryable=True) from None
         except httpx.TimeoutException:
             raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
         except httpx.TransportError:

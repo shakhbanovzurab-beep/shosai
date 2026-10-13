@@ -16,6 +16,7 @@ import httpx
 import structlog
 from prometheus_client import CollectorRegistry
 from pydantic import HttpUrl, SecretStr
+from redis.asyncio import Redis
 
 from shosai.core.ai.adapters.gemini_live import GEMINI_API, GeminiLive, gemini_client
 from shosai.core.ai.adapters.mistral_ocr import MISTRAL_API, MistralOcr, mistral_client
@@ -29,6 +30,7 @@ from shosai.core.ai.adapters.pyannote import (
     upload_client,
 )
 from shosai.core.ai.admission import Admission, AiClients
+from shosai.core.ai.calls import Provider
 from shosai.core.ai.costs.settlement import CostSettlements
 from shosai.core.ai.costs.writer import CostWriter, WorkSender, record_cost_handler
 from shosai.core.ai.metrics import AiMetrics
@@ -36,6 +38,11 @@ from shosai.core.ai.port import AiProviders
 from shosai.core.ai.pricing.prices import PriceBook
 from shosai.core.ai.pricing.sync import price_sync_handler
 from shosai.core.ai.recording import CallRecorder
+from shosai.core.ai.resilience.breakers import Breakers
+from shosai.core.ai.resilience.metrics import ResilienceMetrics
+from shosai.core.ai.resilience.retries import RetryBudget
+from shosai.core.ai.resilience.routing import Resilience, RouteRunner
+from shosai.core.ai.resilience.slots import ProviderSlots
 from shosai.core.ai.sessions.live import LiveSessions
 from shosai.core.ai.sessions.minutes import MinuteRows
 from shosai.core.config.loading import Settings
@@ -81,7 +88,26 @@ class AiDependencies:
     sender: WorkSender
     effects: EffectLedger
     batch: EffectBatch
+    valkey: Redis
     registry: CollectorRegistry
+
+
+def resilience(ai: AiSettings, dependencies: AiDependencies) -> Resilience:
+    """Breakers and slots in Valkey, the retry budget of the process."""
+    metrics = ResilienceMetrics(dependencies.registry)
+    limits = {
+        Provider.OPENROUTER: ai.openrouter_slots,
+        Provider.PYANNOTE: ai.pyannote_slots,
+        Provider.MISTRAL: ai.mistral_slots,
+        Provider.OPENAI: ai.openai_realtime_slots,
+        Provider.GOOGLE: ai.google_live_slots,
+    }
+    return Resilience(
+        breakers=Breakers(dependencies.valkey, metrics),
+        slots=ProviderSlots(dependencies.valkey, limits, metrics),
+        retries=RetryBudget(metrics),
+        metrics=metrics,
+    )
 
 
 def provider_client(
@@ -178,7 +204,8 @@ async def open_ai(
     minutes = MinuteRows(recorder)
     await stack.enter_async_context(minutes.running())
     admission = Admission(PriceBook(transactions), metrics)
-    providers = AiProviders(clients, admission, recorder, LiveSessions(minutes), metrics)
+    runner = RouteRunner(admission, recorder, resilience(settings.ai, dependencies), metrics)
+    providers = AiProviders(clients, runner, LiveSessions(minutes))
     return PlatformAi(
         providers=providers,
         rates=rates,

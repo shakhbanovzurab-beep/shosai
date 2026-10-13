@@ -23,6 +23,8 @@ class AiFailure(StrEnum):
     CONTENT_REFUSED = "content_refused"
     DEADLINE_EXCEEDED = "deadline_exceeded"
     PROVIDER_ERROR = "provider_error"
+    # Провайдер занят до предела или защита недоступна: повторить позже.
+    RETRY_LATER = "retry_later"
 
 
 STATUSES: Final = MappingProxyType(
@@ -35,16 +37,22 @@ STATUSES: Final = MappingProxyType(
         AiFailure.CONTENT_REFUSED: HTTPStatus.UNPROCESSABLE_ENTITY,
         AiFailure.DEADLINE_EXCEEDED: HTTPStatus.GATEWAY_TIMEOUT,
         AiFailure.PROVIDER_ERROR: HTTPStatus.BAD_GATEWAY,
+        AiFailure.RETRY_LATER: HTTPStatus.SERVICE_UNAVAILABLE,
     }
 )
 
 
 class AiCallError(AppError):
-    """A model call failed or was refused before it was sent; the code says which."""
+    """A model call failed or was refused before it was sent; the code says which.
 
-    def __init__(self, failure: AiFailure) -> None:
+    `retryable` marks a failure before any byte of an answer (a refused connection, or 429,
+    502, 503, 504): the same request may be sent once more (F6-C15).
+    """
+
+    def __init__(self, failure: AiFailure, *, retryable: bool = False) -> None:
         super().__init__(failure.value, STATUSES[failure])
         self.failure = failure
+        self.retryable = retryable
 
 
 class PaidCallError(Exception):

@@ -1,6 +1,7 @@
 """Streaming, embeddings, images and failures through the port, against the scripted OpenRouter."""
 
 import asyncio
+from dataclasses import dataclass
 from datetime import timedelta
 
 import httpx
@@ -18,7 +19,7 @@ from shosai.core.ai.requests import (
     ToolSchema,
 )
 from shosai.core.kernel.homes import Home
-from tests.core.ai.bench import CHAT_MODEL, ROUTE, AiBench, ai_bench, context, set_prices
+from tests.core.ai.bench import CHAT_MODEL, ROUTE, AiBench, Doubles, ai_bench, context, set_prices
 from tests.doubles.openrouter import (
     chat_answer,
     embeddings_answer,
@@ -137,32 +138,46 @@ async def test_an_image_comes_back_as_bytes_of_an_image_type(
     assert await rows(run_slot) == 1
 
 
+@dataclass(frozen=True)
+class Refusal:
+    """A provider's error answer, what the caller sees, and how many times it was sent."""
+
+    status: int
+    text: str
+    failure: AiFailure
+    sent: int
+
+
 @pytest.mark.parametrize(
-    ("status", "text", "failure"),
+    "refusal",
     [
-        (429, "Rate limit exceeded", AiFailure.RATE_LIMITED),
-        (
+        Refusal(429, "Rate limit exceeded", AiFailure.RATE_LIMITED, 2),
+        Refusal(
             400,
             "This model's maximum context length is 8192 tokens",
             AiFailure.CONTEXT_LENGTH_EXCEEDED,
+            1,
         ),
-        (403, "Input was flagged by moderation", AiFailure.CONTENT_REFUSED),
-        (404, "No endpoints found", AiFailure.MODEL_UNAVAILABLE),
-        (502, "Bad gateway", AiFailure.PROVIDER_ERROR),
+        Refusal(403, "Input was flagged by moderation", AiFailure.CONTENT_REFUSED, 1),
+        Refusal(404, "No endpoints found", AiFailure.MODEL_UNAVAILABLE, 1),
+        Refusal(500, "Internal error", AiFailure.PROVIDER_ERROR, 1),
+        Refusal(502, "Bad gateway", AiFailure.PROVIDER_ERROR, 2),
     ],
 )
-async def test_a_failed_call_says_why_and_writes_no_row(
-    homes: DatabaseAccess, run_slot: RunSlot, status: int, text: str, failure: AiFailure
+async def test_a_failed_call_says_why_is_retried_only_before_an_answer_and_writes_no_row(
+    homes: DatabaseAccess, run_slot: RunSlot, refusal: Refusal
 ) -> None:
     bench = await priced_bench(homes)
-    bench.openrouter.answer(
-        "chat/completions", httpx.Response(status, json={"error": {"message": text}})
-    )
+    answer = {"error": {"message": refusal.text}}
+    for _ in range(2):
+        bench.openrouter.answer("chat/completions", httpx.Response(refusal.status, json=answer))
 
     with pytest.raises(AiCallError) as raised:
         await bench.providers.chat(context(), ROUTE, QUESTION)
 
-    assert raised.value.failure is failure
+    assert raised.value.failure is refusal.failure
+    # 429, 502, 503 и 504 пришли без ответа: запрос повторён один раз (F6-C15).
+    assert len(bench.openrouter.bodies("chat/completions")) == refusal.sent
     assert await rows(run_slot) == 0
 
 
@@ -174,7 +189,7 @@ async def test_a_call_past_its_deadline_is_cut_and_writes_no_row(
         base_url="https://openrouter.ai/api/v1/",
         transport=httpx.MockTransport(SlowAnswers(seconds=1.0).handle),
     )
-    bench = ai_bench(homes.transactions, client=slow)
+    bench = ai_bench(homes.transactions, doubles=Doubles(openrouter=slow))
 
     with pytest.raises(AiCallError) as raised:
         await bench.providers.chat(context(deadline=timedelta(milliseconds=50)), ROUTE, QUESTION)

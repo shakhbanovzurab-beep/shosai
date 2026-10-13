@@ -80,6 +80,11 @@ class ModelRoute:
     primary: ModelRef
     fallbacks: tuple[ModelRef, ...] = ()
 
+    @property
+    def models(self) -> tuple[ModelRef, ...]:
+        """The models in the order they are tried."""
+        return (self.primary, *self.fallbacks)
+
 
 @dataclass(frozen=True, slots=True)
 class CallContext:

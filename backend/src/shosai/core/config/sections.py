@@ -7,7 +7,14 @@ a dotenv file: `env_file` is off, and an empty variable counts as unset.
 from ipaddress import IPv4Address
 from typing import Self
 
-from pydantic import HttpUrl, IPvAnyAddress, SecretStr, WebsocketUrl, model_validator
+from pydantic import (
+    HttpUrl,
+    IPvAnyAddress,
+    PositiveInt,
+    SecretStr,
+    WebsocketUrl,
+    model_validator,
+)
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
 from shosai.core.config.values import (
@@ -155,6 +162,12 @@ class AiSettings(SettingsSection):
     # Mistral OCR: сканы и картинки документов.
     mistral_api_key: SecretStr | None = None
     mistral_base_url: HttpUrl | None = None
+    # Вызовы и сессии в полёте на провайдера по всему плану (§3.5): ниже его квоты.
+    openrouter_slots: PositiveInt = 292
+    pyannote_slots: PositiveInt = 16
+    mistral_slots: PositiveInt = 16
+    openai_realtime_slots: PositiveInt = 1000
+    google_live_slots: PositiveInt = 1000
 
 
 class ExchangeRateSettings(SettingsSection):

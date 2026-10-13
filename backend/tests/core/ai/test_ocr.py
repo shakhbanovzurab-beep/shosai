@@ -12,7 +12,7 @@ from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
 from shosai.core.ai.documents import OcrRequest
 from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.kernel.homes import Home
-from tests.core.ai.bench import AiBench, ai_bench, context, set_prices
+from tests.core.ai.bench import AiBench, Doubles, ai_bench, context, set_prices
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
@@ -52,7 +52,7 @@ class Mistral:
 async def reading(homes: DatabaseAccess, mistral: Mistral) -> AiBench:
     """A bench with OCR priced per page."""
     await set_prices(homes.transactions, OCR, page="0.004")
-    return ai_bench(homes.transactions, mistral_ocr=mistral.client())
+    return ai_bench(homes.transactions, doubles=Doubles(mistral=mistral.client()))
 
 
 async def test_a_scan_is_read_page_by_page_and_billed_per_page(

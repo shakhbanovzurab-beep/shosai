@@ -8,6 +8,7 @@ from decimal import Decimal
 import httpx
 import sqlalchemy as sa
 from prometheus_client import CollectorRegistry
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ai.adapters.gemini_live import GeminiLive
@@ -24,6 +25,11 @@ from shosai.core.ai.port import AiProviders
 from shosai.core.ai.pricing.prices import PriceBook
 from shosai.core.ai.pricing.records import ProviderPrice
 from shosai.core.ai.recording import CallRecorder
+from shosai.core.ai.resilience.breakers import Breakers
+from shosai.core.ai.resilience.metrics import ResilienceMetrics
+from shosai.core.ai.resilience.retries import RetryBudget
+from shosai.core.ai.resilience.routing import Resilience, RouteRunner
+from shosai.core.ai.resilience.slots import ProviderSlots
 from shosai.core.ai.results import Unit
 from shosai.core.ai.sessions.live import LiveSessions
 from shosai.core.ai.sessions.minutes import MinuteRows
@@ -38,6 +44,7 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.tasks.declaration import TaskDeclaration
 from shosai.core.tasks.errors import TaskQueueUnavailableError
 from shosai.core.tasks.payloads import TaskPayload
+from tests.core.kv.outages import closed_port, redis_url
 from tests.doubles.openrouter import ScriptedOpenRouter
 from tests.doubles.pyannote import ScriptedPyannote
 
@@ -129,28 +136,45 @@ class AiBench:
 
 
 @dataclass(frozen=True)
-class LiveAdapters:
-    """Live adapters pointed at a local server; absent ones are disabled providers."""
+class Doubles:
+    """Provider clients and Valkey for a bench; an absent provider is disabled.
 
+    `openrouter` replaces the scripted OpenRouter's client, for a provider with other habits.
+    Without `valkey` the bench meets a Valkey that refuses every connection: standard calls
+    go on unguarded and breakers stay in the process, as during a Valkey outage.
+    """
+
+    openrouter: httpx.AsyncClient | None = None
     realtime: OpenAiRealtime | None = None
     gemini: GeminiLive | None = None
+    mistral: httpx.AsyncClient | None = None
+    valkey: Redis | None = None
 
 
-NO_LIVE = LiveAdapters()
+NO_DOUBLES = Doubles()
+
+
+def unreachable_valkey() -> Redis:
+    """A Valkey client whose every connection is refused at once."""
+    return Redis.from_url(redis_url(closed_port()).get_secret_value())
+
+
+def guards(valkey: Redis, registry: CollectorRegistry) -> Resilience:
+    """Breakers, slots and the retry budget over the given Valkey; small slot limits."""
+    metrics = ResilienceMetrics(registry)
+    limits = dict.fromkeys(Provider, 4)
+    return Resilience(
+        breakers=Breakers(valkey, metrics),
+        slots=ProviderSlots(valkey, limits, metrics, call_wait=0.2),
+        retries=RetryBudget(metrics),
+        metrics=metrics,
+    )
 
 
 def ai_bench(
-    transactions: HomeTransactions,
-    *,
-    enabled: bool = True,
-    client: httpx.AsyncClient | None = None,
-    live: LiveAdapters = NO_LIVE,
-    mistral_ocr: httpx.AsyncClient | None = None,
+    transactions: HomeTransactions, *, enabled: bool = True, doubles: Doubles = NO_DOUBLES
 ) -> AiBench:
-    """The port over the given homes; without a key when `enabled` is False.
-
-    `client` replaces the scripted OpenRouter's client, for a provider with other habits.
-    """
+    """The port over the given homes; without a key when `enabled` is False."""
     registry = CollectorRegistry()
     metrics = AiMetrics(registry)
     settlement = RecordingSettlement()
@@ -166,17 +190,19 @@ def ai_bench(
     scripted, diarizer = ScriptedOpenRouter(), ScriptedPyannote()
     polling = JobPolling(patience=120.0, clock=clock, sleep=clock.sleep)
     clients = AiClients(
-        openrouter=OpenRouter(client or scripted.client()) if enabled else None,
+        openrouter=OpenRouter(doubles.openrouter or scripted.client()) if enabled else None,
         pyannote=(
             Pyannote(diarizer.api_client(), diarizer.upload_client(), polling) if enabled else None
         ),
-        openai_realtime=live.realtime,
-        gemini_live=live.gemini,
-        mistral=MistralOcr(mistral_ocr) if enabled and mistral_ocr is not None else None,
+        openai_realtime=doubles.realtime,
+        gemini_live=doubles.gemini,
+        mistral=MistralOcr(doubles.mistral) if enabled and doubles.mistral else None,
     )
-    sessions = LiveSessions(minutes, connect_timeout=5.0)
-    admission = Admission(PriceBook(transactions), metrics)
-    providers = AiProviders(clients, admission, recorder, sessions, metrics)
+    valkey = doubles.valkey or unreachable_valkey()
+    runner = RouteRunner(
+        Admission(PriceBook(transactions), metrics), recorder, guards(valkey, registry), metrics
+    )
+    providers = AiProviders(clients, runner, LiveSessions(minutes, connect_timeout=5.0))
     return AiBench(
         providers, scripted, diarizer, minutes, clock, settlement, sender, writer, registry
     )

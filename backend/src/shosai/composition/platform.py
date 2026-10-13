@@ -139,6 +139,7 @@ async def open_platform(
                 tasks.sender,
                 effects,
                 EffectBatch(effect_keys),
+                clients.valkey,
                 telemetry.registry,
             )
             ai = await open_ai(settings, dependencies, stack)

@@ -25,7 +25,7 @@ from shosai.core.ai.decisions import (
 )
 from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.kernel.homes import Home
-from tests.core.ai.bench import AiBench, ai_bench, context, set_prices
+from tests.core.ai.bench import AiBench, Doubles, ai_bench, context, set_prices
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
@@ -209,7 +209,7 @@ async def test_a_decision_past_its_deadline_is_cut_without_a_late_row(
     slow = httpx.AsyncClient(
         base_url="https://openrouter.ai/api/v1/", transport=httpx.MockTransport(late)
     )
-    bench = ai_bench(homes.transactions, client=slow)
+    bench = ai_bench(homes.transactions, doubles=Doubles(openrouter=slow))
 
     with pytest.raises(AiCallError) as cut:
         await bench.providers.decide(

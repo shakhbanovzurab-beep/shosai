@@ -24,7 +24,7 @@ from shosai.core.ai.results import (
     LiveToolCall,
 )
 from shosai.core.kernel.homes import Home
-from tests.core.ai.bench import AiBench, LiveAdapters, ai_bench, context, set_prices
+from tests.core.ai.bench import AiBench, Doubles, ai_bench, context, set_prices
 from tests.core.ai.live_scenarios import Reader, gemini_scenario, openai_scenario
 from tests.doubles.live_server import LiveServer, client_tls, live_server
 from tests.harness.connections import fetch_rows
@@ -62,7 +62,7 @@ async def transcribing(homes: DatabaseAccess, server: LiveServer) -> AiBench:
     """A bench with OpenAI Realtime at the local server and the model priced per second."""
     await set_prices(homes.transactions, TRANSCRIBER, audio_second="0.000283333333")
     realtime = OpenAiRealtime("probe-key", server.url + "/v1/realtime", tls=client_tls())
-    return ai_bench(homes.transactions, live=LiveAdapters(realtime=realtime))
+    return ai_bench(homes.transactions, doubles=Doubles(realtime=realtime))
 
 
 async def speaking(homes: DatabaseAccess, server: LiveServer) -> AiBench:
@@ -77,7 +77,7 @@ async def speaking(homes: DatabaseAccess, server: LiveServer) -> AiBench:
     )  # fmt: skip
     base_url = server.url.replace("wss://", "https://")
     gemini = GeminiLive(gemini_client("probe-key", base_url, tls=client_tls()))
-    return ai_bench(homes.transactions, live=LiveAdapters(gemini=gemini))
+    return ai_bench(homes.transactions, doubles=Doubles(gemini=gemini))
 
 
 async def test_a_three_minute_transcription_writes_a_row_per_minute(

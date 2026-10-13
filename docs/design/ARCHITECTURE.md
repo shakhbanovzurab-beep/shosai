@@ -129,7 +129,7 @@
 | Scheduler → Valkey | ticks | 50 ms | next tick | one tick per job in flight |
 | Valkey → Workers | task stream | task deadline; lease 120 s with extension | broker: 5 deliveries, then dead-letter with alert | provider semaphore: 292 runs in flight |
 | Workers → PostgreSQL (home) | SQL | statement 60 s | sweep of unfinished runs; ≤ 3 attempts per stage on every path | pool 5 per process per database |
-| API, Workers → AI | chat, Leo, search, analysis | connect 10 s; stream stall 45 s; 120 s per analysis call | one retry before the first byte; breaker per call kind; stage ≤ 3 attempts with effect key | provider-wide semaphore in Redis; retry budget 20% |
+| API, Workers → AI | chat, Leo, search, analysis | connect 10 s; stream stall 45 s; 120 s per analysis call | one retry before the first byte; breaker per (provider, model) with fallback along the caller's route (F6-C16); stage ≤ 3 attempts with effect key | provider-wide semaphore in Redis; retry budget 20% |
 | API, Workers → Qdrant | search, indexing | search 2 s; write 60 s | search: none (fallback to PostgreSQL keyword search); indexing: cursor sweep | 32 queries per process, 4 per tenant |
 | Clients → S3 | presigned upload and download | signature valid 15 min | client | size limit in the signature |
 | API → Payments | checkout, charge | 20 s, outside any transaction | reconciliation every minute by order id | intent committed before the call |

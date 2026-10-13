@@ -1,5 +1,6 @@
 """Turning a finished call into its cost row: amount, rubles, payer (ADR 0035, ADR 0036)."""
 
+import hashlib
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -9,7 +10,7 @@ from typing import Final
 
 import structlog
 
-from shosai.core.ai.calls import CallContext, ModelRef
+from shosai.core.ai.calls import EFFECT_KEY_MAX_LENGTH, CallContext, ModelRef
 from shosai.core.ai.costs.amounts import CostSource, cost_of
 from shosai.core.ai.costs.entries import CostEntry
 from shosai.core.ai.costs.writer import CostWriter
@@ -23,6 +24,14 @@ from shosai.core.kernel.ids import new_id
 KOPECK: Final = Decimal("0.01")
 REPORTING_PROVIDERS: Final = frozenset({"openrouter"})
 log = structlog.stdlib.get_logger(__name__)
+
+
+def attempt_key(effect_key: str, attempt: int) -> str:
+    """The key of a failed attempt: the same for every replay of the route, within 200."""
+    suffix = f":failed:{attempt}"
+    if len(effect_key) + len(suffix) > EFFECT_KEY_MAX_LENGTH:
+        effect_key = hashlib.sha256(effect_key.encode()).hexdigest()
+    return effect_key + suffix
 
 
 class CallOutcome(StrEnum):
@@ -67,6 +76,14 @@ class CallRecorder:
         rate = await self._rate()
         usage_record = UsageRecord(call, call.context.effect_key, datetime.now(UTC), usage)
         await self._writer.record(self._entry(usage_record, outcome, rate))
+
+    async def record_failed(self, call: MeteredCall, usage: Usage, attempt: int) -> None:
+        """Record a paid failure under a key of its own, so the answer that follows on the
+        route is still recorded under the context's key."""
+        rate = await self._rate()
+        key = attempt_key(call.context.effect_key, attempt)
+        usage_record = UsageRecord(call, key, datetime.now(UTC), usage)
+        await self._writer.record(self._entry(usage_record, CallOutcome.FAILED, rate))
 
     async def record_many(self, records: Sequence[UsageRecord]) -> None:
         """Record many usages at once, each once per its own effect key (F6-C5)."""

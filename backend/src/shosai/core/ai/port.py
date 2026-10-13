@@ -1,27 +1,27 @@
 """`AiProviders`: the one facade slices call models through (F6 plan §3.3, ADR 0034).
 
-Every operation takes a `CallContext` and goes through the same steps: admission (enabled
-provider, cross-border consent, prices in force), the call within the context's deadline,
-and its cost recorded once per effect key. A call the provider charged for although it
-failed is recorded too, with the outcome `failed`. A live session is admitted the same way
-and then metered: one row per minute (F6-C5). Admission against spend ceilings, retries,
-breakers and fallbacks along the route come with F6 steps 5 and 6; this step calls the
-route's primary model.
+Every operation takes a `CallContext` and runs along its route (§3.5): each model admitted
+(enabled provider, cross-border consent, prices in force), let through by its breaker, given
+a slot of its provider and retried once before the first byte; a failing model hands the
+call to the next one. The deadline of the context covers the whole route. The cost of the
+answer is recorded once per effect key; a call the provider charged for although it failed
+is recorded too, with the outcome `failed`. A live session is admitted the same way, holds a
+slot for its whole length and is metered one row per minute (F6-C5). Spend ceilings come
+with F6 step 6.
 """
 
 import asyncio
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable
 from contextlib import AbstractAsyncContextManager, asynccontextmanager, nullcontext
-from typing import Protocol
 
+from shosai.core.ai.adapters.mistral_ocr import MistralOcr
 from shosai.core.ai.adapters.openrouter import OpenRouter
-from shosai.core.ai.admission import Admission, AiClients
+from shosai.core.ai.adapters.pyannote import Pyannote
+from shosai.core.ai.admission import AiClients
 from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute, Provider
 from shosai.core.ai.decisions import Decision, DecisionRequest
 from shosai.core.ai.documents import OcrPages, OcrRequest
-from shosai.core.ai.errors import AiCallError, AiFailure, PaidCallError
-from shosai.core.ai.metrics import AiMetrics
-from shosai.core.ai.recording import CallOutcome, CallRecorder, MeteredCall
+from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.requests import (
     ChatRequest,
     DiarizationRequest,
@@ -33,6 +33,8 @@ from shosai.core.ai.requests import (
     TranscriptionRequest,
     VoiceSetup,
 )
+from shosai.core.ai.resilience.breakers import Gate
+from shosai.core.ai.resilience.routing import Metered, RouteRunner
 from shosai.core.ai.results import (
     ChatDelta,
     ChatResult,
@@ -41,92 +43,73 @@ from shosai.core.ai.results import (
     GeneratedImage,
     Ranking,
     Transcript,
-    Usage,
 )
 from shosai.core.ai.sessions.live import LiveConnection, LiveSession, LiveSessions
-
-
-class Metered(Protocol):
-    """A result that carries the usage of its call."""
-
-    @property
-    def usage(self) -> Usage:
-        """What the call consumed."""
-        ...
 
 
 class AiProviders:
     """Calls models for slices and records what each call cost; built once per process."""
 
-    def __init__(
-        self,
-        clients: AiClients,
-        admission: Admission,
-        recorder: CallRecorder,
-        sessions: LiveSessions,
-        metrics: AiMetrics,
-    ) -> None:
+    def __init__(self, clients: AiClients, runner: RouteRunner, sessions: LiveSessions) -> None:
         self._clients = clients
-        self._admission = admission
-        self._recorder = recorder
+        self._runner = runner
         self._sessions = sessions
-        self._metrics = metrics
 
     async def chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
     ) -> ChatResult:
         """A model's answer to a conversation."""
-        client, call = await self._openrouter(context, route, "chat")
-        return await self._recorded(call, lambda: client.chat(call.model, request))
+        return await self._routed(
+            context, route, "chat", self._openrouter, lambda c, m: c.chat(m, request)
+        )
 
     async def stream_chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
     ) -> AsyncGenerator[ChatDelta]:
         """A model's answer as it is written; the cost is recorded when the usage arrives."""
-        client, call = await self._openrouter(context, route, "chat")
-        started = recorded = False
+        stream = self._runner.stream(
+            context, route, self._openrouter("chat"), lambda c, m: c.stream_chat(m, request)
+        )
         try:
             async with deadline_of(context):
-                async for delta in client.stream_chat(call.model, request):
-                    if delta.usage is not None and not recorded:
-                        await self._recorder.record(call, delta.usage)
-                        recorded = True
-                    started = True
+                async for delta in stream:
                     yield delta
         except TimeoutError:
             raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
         finally:
-            if started and not recorded:
-                # Провайдер берёт деньги и за оборванный поток, а расход без usage не узнать.
-                self._metrics.lost()
+            await stream.aclose()
 
     async def embed(
         self, context: CallContext, route: ModelRoute, request: EmbeddingRequest
     ) -> Embeddings:
         """Vectors of texts."""
-        client, call = await self._openrouter(context, route, "embed")
-        return await self._recorded(call, lambda: client.embed(call.model, request))
+        return await self._routed(
+            context, route, "embed", self._openrouter, lambda c, m: c.embed(m, request)
+        )
 
     async def rerank(
         self, context: CallContext, route: ModelRoute, request: RerankRequest
     ) -> Ranking:
         """Documents ordered by relevance to a query."""
-        client, call = await self._openrouter(context, route, "rerank")
-        return await self._recorded(call, lambda: client.rerank(call.model, request))
+        return await self._routed(
+            context, route, "rerank", self._openrouter, lambda c, m: c.rerank(m, request)
+        )
 
     async def generate_image(
         self, context: CallContext, route: ModelRoute, request: ImageRequest
     ) -> GeneratedImage:
         """A picture from a prompt."""
-        client, call = await self._openrouter(context, route, "image")
-        return await self._recorded(call, lambda: client.generate_image(call.model, request))
+        return await self._routed(
+            context, route, "image", self._openrouter, lambda c, m: c.generate_image(m, request)
+        )
 
     async def transcribe(
         self, context: CallContext, route: ModelRoute, request: TranscriptionRequest
     ) -> Transcript:
         """The text of a recording."""
-        client, call = await self._openrouter(context, route, "transcribe")
-        return await self._recorded(call, lambda: client.transcribe(call.model, request))
+        return await self._routed(
+            context, route, "transcribe", self._openrouter, lambda c, m: c.transcribe(m, request)
+        )
 
     async def decide(
         self, context: CallContext, route: ModelRoute, request: DecisionRequest
@@ -135,41 +118,38 @@ class AiProviders:
         if context.deadline is None:
             message = "решение всегда со своим сроком (Leo §6.3)"
             raise ValueError(message)
-        client, call = await self._openrouter(context, route, "decide")
-        return await self._recorded(call, lambda: client.decide(call.model, request))
+        return await self._routed(
+            context, route, "decide", self._openrouter, lambda c, m: c.decide(m, request)
+        )
 
     async def ocr(self, context: CallContext, route: ModelRoute, request: OcrRequest) -> OcrPages:
         """A scanned document or an image read to Markdown, page by page."""
-        client = self._admission.client(
-            self._clients.mistral, Provider.MISTRAL, route.primary, "ocr"
+        return await self._routed(
+            context, route, "ocr", self._mistral, lambda c, m: c.ocr(m, request)
         )
-        call = await self._admission.admit(context, route, "ocr")
-        return await self._recorded(call, lambda: client.ocr(call.model, request))
 
     async def diarize(
         self, context: CallContext, route: ModelRoute, request: DiarizationRequest
     ) -> Diarization:
         """Who spoke when; a job that failed after it was charged is recorded, then refused."""
-        client = self._admission.client(
-            self._clients.pyannote, Provider.PYANNOTE, route.primary, "diarize"
+        # Срок вызова соблюдает сам адаптер: оборвать его ожидание значило бы потерять
+        # строку уже оплаченного задания.
+        return await self._runner.call(
+            context,
+            route,
+            "diarize",
+            self._pyannote("diarize"),
+            lambda c, m: c.diarize(m, request, context.deadline),
         )
-        call = await self._admission.admit(context, route, "diarize")
-        try:
-            # Срок вызова соблюдает сам адаптер: оборвать его ожидание значило бы потерять
-            # строку уже оплаченного задания.
-            result = await client.diarize(call.model, request, context.deadline)
-        except PaidCallError as paid:
-            await self._recorder.record(call, paid.usage, CallOutcome.FAILED)
-            raise AiCallError(paid.failure) from None
-        await self._recorder.record(call, result.usage)
-        return result
 
     def open_transcription_stream(
         self, context: CallContext, model: ModelRef, setup: LiveTranscriptionSetup
     ) -> AbstractAsyncContextManager[LiveSession]:
         """A meeting's speech streamed to text by an OpenAI Realtime model."""
         kind = "live_transcription"
-        client = self._admission.client(self._clients.openai_realtime, Provider.OPENAI, model, kind)
+        client = self._runner.admission.client(
+            self._clients.openai_realtime, Provider.OPENAI, model, kind
+        )
         return self._live(context, model, kind, lambda: client.connect(model, setup))
 
     def open_translation_stream(
@@ -180,14 +160,18 @@ class AiProviders:
     ) -> AbstractAsyncContextManager[LiveSession]:
         """Speech translated as it is spoken, by a translation model or an interpreter."""
         kind = "live_translation"
-        client = self._admission.client(self._clients.gemini_live, Provider.GOOGLE, model, kind)
+        client = self._runner.admission.client(
+            self._clients.gemini_live, Provider.GOOGLE, model, kind
+        )
         return self._live(context, model, kind, lambda: client.connect(model, setup))
 
     def open_voice_session(
         self, context: CallContext, model: ModelRef, setup: VoiceSetup
     ) -> AbstractAsyncContextManager[LiveSession]:
         """A spoken conversation with a model that may call tools."""
-        client = self._admission.client(self._clients.gemini_live, Provider.GOOGLE, model, "voice")
+        client = self._runner.admission.client(
+            self._clients.gemini_live, Provider.GOOGLE, model, "voice"
+        )
         return self._live(context, model, "voice", lambda: client.connect(model, setup))
 
     @asynccontextmanager
@@ -198,30 +182,58 @@ class AiProviders:
         kind: str,
         connect: Callable[[], Awaitable[LiveConnection]],
     ) -> AsyncIterator[LiveSession]:
-        call = await self._admission.admit(context, ModelRoute(model), kind)
-        async with self._sessions.run(call, connect) as session:
+        """An admitted session holding a slot of its provider, its breaker told how it opened."""
+        call = await self._runner.admission.admit(context, ModelRoute(model), kind)
+        breakers = self._runner.guards.breakers
+        gate = await breakers.allow(model)
+        if gate is Gate.OPEN:
+            raise AiCallError(AiFailure.RETRY_LATER)
+
+        async def guarded() -> LiveConnection:
+            try:
+                connection = await connect()
+            except AiCallError:
+                await breakers.failed(model)
+                raise
+            await breakers.succeeded(model, gate)
+            return connection
+
+        slots = self._runner.guards.slots
+        async with (
+            slots.held(model.provider, context.call_class, session=True),
+            self._sessions.run(call, guarded) as session,
+        ):
             yield session
 
-    async def _openrouter(
-        self, context: CallContext, route: ModelRoute, kind: str
-    ) -> tuple[OpenRouter, MeteredCall]:
-        client = self._admission.client(
-            self._clients.openrouter, Provider.OPENROUTER, route.primary, kind
-        )
-        return client, await self._admission.admit(context, route, kind)
-
-    async def _recorded[R: Metered](self, call: MeteredCall, send: Callable[[], Awaitable[R]]) -> R:
-        """Send within the deadline and record the cost; a paid failure is recorded too."""
+    async def _routed[C, R: Metered](
+        self,
+        context: CallContext,
+        route: ModelRoute,
+        kind: str,
+        client_of: Callable[[str], Callable[[ModelRef], C]],
+        send: Callable[[C, ModelRef], Awaitable[R]],
+    ) -> R:
+        """The call along its route within the context's deadline."""
         try:
-            async with deadline_of(call.context):
-                result = await send()
+            async with deadline_of(context):
+                return await self._runner.call(context, route, kind, client_of(kind), send)
         except TimeoutError:
             raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
-        except PaidCallError as paid:
-            await self._recorder.record(call, paid.usage, CallOutcome.FAILED)
-            raise AiCallError(paid.failure) from None
-        await self._recorder.record(call, result.usage)
-        return result
+
+    def _openrouter(self, kind: str) -> Callable[[ModelRef], OpenRouter]:
+        return lambda model: self._runner.admission.client(
+            self._clients.openrouter, Provider.OPENROUTER, model, kind
+        )
+
+    def _pyannote(self, kind: str) -> Callable[[ModelRef], Pyannote]:
+        return lambda model: self._runner.admission.client(
+            self._clients.pyannote, Provider.PYANNOTE, model, kind
+        )
+
+    def _mistral(self, kind: str) -> Callable[[ModelRef], MistralOcr]:
+        return lambda model: self._runner.admission.client(
+            self._clients.mistral, Provider.MISTRAL, model, kind
+        )
 
 
 def deadline_of(context: CallContext) -> AbstractAsyncContextManager[object]:
