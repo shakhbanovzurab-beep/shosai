@@ -9,6 +9,8 @@ A slice adds its own checks (for example, billing dev mode) through `extra_check
 
 from collections.abc import Callable, Iterable, Iterator, Sequence
 from dataclasses import dataclass
+from ipaddress import ip_address, ip_network
+from typing import Final
 from urllib.parse import urlsplit
 
 from shosai.core.config.loading import Settings
@@ -19,6 +21,12 @@ SECURE_STORAGE_SCHEME = "https"
 # Управляемый Valkey стоит вне контейнеров плоскости: задачи, строки транскрипта и
 # состояние встреч идут к нему по сети провайдера (решение владельца F1-D12).
 SECURE_VALKEY_SCHEME = "rediss"
+# Управляемый Valkey в Timeweb не даёт TLS (ADR 0042): открытый протокол допустим только к
+# IP-адресу приватной сети. Имя хоста не годится — куда оно разрешится, при старте не проверить.
+PLAIN_VALKEY_SCHEME = "redis"
+PRIVATE_NETWORKS: Final = tuple(
+    ip_network(network) for network in ("10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fc00::/7")
+)
 # Дом RU — в другой юрисдикции и за 45 мс по сети (§4.1): без проверки сертификата и
 # имени сервера соединение можно перехватить на пути.
 SECURE_DATABASE_SSLMODE = "verify-full"
@@ -93,13 +101,33 @@ def storage_over_tls(settings: Settings) -> Iterator[GateViolation]:
         yield GateViolation("S3_ENDPOINT_URL", "к хранилищу вне разработки — только https")
 
 
-def valkey_over_tls(settings: Settings) -> Iterator[GateViolation]:
-    """Task payloads, transcript lines and meeting state reach the managed Valkey over TLS."""
-    url = settings.shared_services.valkey_url.get_secret_value()
-    if urlsplit(url).scheme != SECURE_VALKEY_SCHEME:
-        yield GateViolation(
-            "VALKEY_URL", f"к Valkey вне разработки — только {SECURE_VALKEY_SCHEME}://"
-        )
+def valkey_link_protected(settings: Settings) -> Iterator[GateViolation]:
+    """Valkey is reached over TLS, or in plain text only at a private-network address (ADR 0042).
+
+    Task payloads, transcript lines and meeting state travel this link; outside the private
+    network nothing but TLS protects them.
+    """
+    parts = urlsplit(settings.shared_services.valkey_url.get_secret_value())
+    if parts.scheme == SECURE_VALKEY_SCHEME:
+        return
+    if parts.scheme == PLAIN_VALKEY_SCHEME and is_private_address(parts.hostname):
+        return
+    yield GateViolation(
+        "VALKEY_URL",
+        f"к Valkey вне разработки — {SECURE_VALKEY_SCHEME}:// "
+        f"или {PLAIN_VALKEY_SCHEME}:// на IP-адрес приватной сети",
+    )
+
+
+def is_private_address(host: str | None) -> bool:
+    """Whether the host is an IP literal of a private network (RFC 1918, RFC 4193)."""
+    if host is None:
+        return False
+    try:
+        address = ip_address(host)
+    except ValueError:
+        return False
+    return any(address in network for network in PRIVATE_NETWORKS)
 
 
 def databases_over_tls(settings: Settings) -> Iterator[GateViolation]:
@@ -125,6 +153,6 @@ CORE_CHECKS: tuple[ProductionCheck, ...] = (
     encryption_key_present,
     debug_logs_off,
     storage_over_tls,
-    valkey_over_tls,
+    valkey_link_protected,
     databases_over_tls,
 )

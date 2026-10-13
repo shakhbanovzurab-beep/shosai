@@ -128,6 +128,30 @@ def test_each_unsafe_setting_refuses_start_and_is_named(
     assert SAMPLE_SECRET not in message
 
 
+@pytest.mark.parametrize("environment", ["staging", "production"])
+@pytest.mark.parametrize(
+    "host", ["192.168.0.8", "10.20.30.40", "172.16.5.6", "172.31.255.1", "[fd12:3456::8]"]
+)
+def test_valkey_without_tls_passes_only_at_a_private_address(environment: str, host: str) -> None:
+    environ = production_environ(
+        ENVIRONMENT=environment, VALKEY_URL=f"redis://default:{SAMPLE_SECRET}@{host}:6379/0"
+    )
+
+    enforce_production_gate(load_settings(environ))
+
+
+@pytest.mark.parametrize(
+    "host", ["valkey.internal", "8.8.8.8", "127.0.0.1", "172.32.0.1", "[2001:db8::1]"]
+)
+def test_valkey_without_tls_at_any_other_address_refuses_start(host: str) -> None:
+    environ = production_environ(VALKEY_URL=f"redis://default:{SAMPLE_SECRET}@{host}:6379/0")
+
+    message = refusal(environ)
+
+    assert "\nVALKEY_URL: " in message
+    assert SAMPLE_SECRET not in message
+
+
 def test_a_migration_address_with_verified_tls_passes() -> None:
     environ = production_environ(
         HOME_RU_MIGRATION_DATABASE_URL=production_database_url(Home.RU, role="shosai_migrator")

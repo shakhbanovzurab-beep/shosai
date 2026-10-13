@@ -178,7 +178,7 @@ L4 (streaming responses in the request boundary) is done with S09's first SSE ro
 | OD-3 | OpenTelemetry semantic-convention names for HTTP and loop metrics; ADR 0012 amended. |
 | OD-4 | Relay drains while its batch is full; §12's revisit trigger stays; Leo §12 amended as proposed. |
 | OD-5 | RLS for personal rows is decided in the `workspaces` plan. |
-| OD-6 | **Valkey runs in the EU only, on its own machine, reached from the production server over a private network; the EU home's PostgreSQL is reached over the private network too.** Not a cluster, so A4 needs no hash tags. TLS stays required on these links (OD-7). Valkey is managed by Timeweb Cloud in the EU **with a replica**, as ARCHITECTURE §4.2 assumes. |
+| OD-6 | **Valkey runs in the EU only, on its own machine, reached from the production server over a private network; the EU home's PostgreSQL is reached over the private network too.** Not a cluster, so A4 needs no hash tags. TLS stays required on these links (OD-7). *Amended on 2026-10-13 by [ADR 0042](../../adr/0042-valkey-without-tls-inside-the-private-network.md): Timeweb's managed Valkey offers no TLS, so the Valkey link may be plain text at a private-network IP address; the databases keep TLS.* Valkey is managed by Timeweb Cloud in the EU **with a replica**, as ARCHITECTURE §4.2 assumes. |
 | OD-7 | **Staging runs under the full production gate**, API docs included: the gate applies to every environment except `local` and `test`. |
 | OD-8 | Re-plan F6-1 … F6-5 and F6-7 after SLICE-MAP is approved; the other F6 steps keep their content. |
 

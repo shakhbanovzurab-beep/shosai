@@ -18,7 +18,7 @@ import-linter contracts in `pyproject.toml` (`uv run lint-imports`):
 `core/config` reads the settings once per process from environment variables and passes them in; nothing reads a `.env` file or keeps a cached global. Every variable is documented with its purpose in section 2 of [`.env.example`](../.env.example), and a test keeps that section in step with the settings sections. Locally uv passes the file: `uv run --env-file ../.env …`.
 
 - `load_settings(os.environ)` reports every invalid or missing variable at once, by name, never by value.
-- `ENVIRONMENT` is required. With `staging` or `production` — every environment but `development` (F1 audit OD-7) — `enforce_production_gate` refuses to start, naming the setting, when the API docs are on, `TRUSTED_PROXY_ADDRESSES` or `FERNET_KEY` is missing, `LOG_LEVEL` is `DEBUG`, the bucket's endpoint is not `https`, `VALKEY_URL` is not `rediss://` or a home's database address lacks `sslmode=verify-full`. A slice adds its own checks through `extra_checks`.
+- `ENVIRONMENT` is required. With `staging` or `production` — every environment but `development` (F1 audit OD-7) — `enforce_production_gate` refuses to start, naming the setting, when the API docs are on, `TRUSTED_PROXY_ADDRESSES` or `FERNET_KEY` is missing, `LOG_LEVEL` is `DEBUG`, the bucket's endpoint is not `https`, `VALKEY_URL` is neither `rediss://` nor `redis://` at a private-network IP address (ADR 0042) or a home's database address lacks `sslmode=verify-full`. A slice adds its own checks through `extra_checks`.
 - A slice declares its own section as a subclass of `SettingsSection` and documents its variables in section 2.
 
 ## Logs, traces, metrics

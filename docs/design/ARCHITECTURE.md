@@ -474,7 +474,7 @@
 - RLS on company-scoped tables.
 - The application role cannot modify the audit log.
 - Secrets only from the environment. Tokens, passwords and keys are never logged.
-- Connections leaving the plane are encrypted: each home's database with `sslmode=verify-full`, the bucket over HTTPS, the managed Valkey over TLS (`rediss://`); staging and production refuse to start otherwise, under one gate that also keeps the API docs off (F1 audit OD-7). The Redis cache stays inside the plane.
+- Connections leaving the plane are encrypted: each home's database with `sslmode=verify-full`, the bucket over HTTPS, the managed Valkey over TLS (`rediss://`), or in plain text only at a private-network IP address while Timeweb offers no TLS ([ADR 0042](../adr/0042-valkey-without-tls-inside-the-private-network.md)); staging and production refuse to start otherwise, under one gate that also keeps the API docs off (F1 audit OD-7). The Redis cache stays inside the plane.
 - Recording and transcription are visible to all participants (indicator; consent at room entry).
 - Signatures of acquirer webhooks are checked before parsing the body.
 - Directory HMAC secret is stored outside the database.

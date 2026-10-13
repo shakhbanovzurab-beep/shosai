@@ -32,7 +32,7 @@ Shared services of the compute plane:
 
 | Service | Stands in for | Port | Notes |
 |---|---|---|---|
-| `valkey` | managed Valkey (EU) | `127.0.0.1:16379` | Task streams, transcript queue, locks, rate limits, meeting state. AOF every second, `noeviction`, password required. Production reaches it only over TLS (`rediss://`). |
+| `valkey` | managed Valkey (EU) | `127.0.0.1:16379` | Task streams, transcript queue, locks, rate limits, meeting state. AOF every second, `noeviction`, password required. Staging and production reach it over TLS (`rediss://`) or, while Timeweb offers no TLS, in plain text at a private-network IP address only ([ADR 0042](adr/0042-valkey-without-tls-inside-the-private-network.md)). |
 | `redis-cache` | Redis cache container | `127.0.0.1:16380` | LRU cache only (`allkeys-lru`, 256 MB). No persistence: a restart gives a cold cache, as in production. |
 | `qdrant` | Qdrant | `127.0.0.1:16333` (HTTP), `16334` (gRPC) | API key required; telemetry off. |
 | `s3` | the one bucket in Russia | `127.0.0.1:18333` | Bucket `shosai` exists from the start; uploading to a missing bucket fails, as on real S3. |

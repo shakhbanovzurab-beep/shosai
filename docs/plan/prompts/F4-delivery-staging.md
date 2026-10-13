@@ -6,7 +6,7 @@ Follow the common protocol in `docs/plan/prompts/README.md`. Load the four Docke
 
 1. Backend image: multi-stage Dockerfile with the four roles, non-root user, `.dockerignore`; built and started locally against F3 (item 1, backend part).
 2. Staging server: production Compose for the compute plane, parameterised for staging; NGINX with TLS from certbot, rate limits, `/v1/ws/*` with `least_conn` and 1013 when full (items 2, 3, 4). Needs the server and the DNS record.
-3. Staging data stores and secrets: staging's own databases for both homes, object store and Valkey — the managed services the owner provides, or what the user decides while they are missing (CLAUDE.md "Hosting constraints now"); secrets only in the CI environment (item 7).
+3. Staging data stores and secrets: staging's own databases for both homes, object store and Valkey — the managed services the owner provides, or what the user decides while they are missing (CLAUDE.md "Hosting constraints now"); secrets only in the CI environment (item 7). Valkey is reached at its private-network IP address without TLS ([ADR 0042](../../adr/0042-valkey-without-tls-inside-the-private-network.md)): its public access is off in Timeweb's panel and the backend connects as its own ACL user with only the commands it uses, not as `default`.
 4. CI: build the image only from a green commit, push it to the registry, deploy to staging (item 5).
 5. `scripts/release.sh` with the migration and drain order of §17, keeping the previous image; the rollback command rehearsed once (item 6, definition of done).
 6. Frontend: the built frontend in the image, served by NGINX (item 1, frontend part).
