@@ -6,17 +6,24 @@ from datetime import timedelta
 
 @dataclass(frozen=True, slots=True)
 class RelayLimits:
-    """Rows per pass, the lease of a claim and the longest pause before a retry.
+    """Rows per pass, the drain budget of a tick, the lease of a claim, the longest pause.
 
-    100 rows every 5 seconds is the relay's designed limit of 20 events per second (§12);
-    a lasting load above it is the revisit trigger of the outbox design.
+    A tick runs passes of 100 rows while each claims a full batch, and starts no pass once
+    15 s have gone: the last pass then ends before the relay task's deadline (25 s), and
+    every pass before the lease of its rows (30 s) ends. A tick cut by the budget means a
+    load above what the relay drains, the revisit trigger of the outbox design (§12).
     """
 
     batch: int = 100
+    drain_budget: timedelta = timedelta(seconds=15)
     lease: timedelta = timedelta(seconds=30)
     longest_pause: timedelta = timedelta(seconds=300)
 
     def __post_init__(self) -> None:
-        if self.batch < 1 or self.lease <= timedelta(0) or self.longest_pause <= timedelta(0):
-            message = "relay: пачка от одной строки, аренда и пауза больше нуля"
+        positive = (self.drain_budget, self.lease, self.longest_pause)
+        if self.batch < 1 or any(value <= timedelta(0) for value in positive):
+            message = "relay: пачка от одной строки, бюджет, аренда и пауза больше нуля"
+            raise ValueError(message)
+        if self.drain_budget >= self.lease:
+            message = "relay: бюджет тика короче аренды строк"
             raise ValueError(message)

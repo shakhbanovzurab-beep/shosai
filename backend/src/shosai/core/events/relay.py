@@ -1,8 +1,11 @@
 """The outbox relay of one home: claim due events, queue their deliveries, mark them.
 
-One pass runs as a periodic task per home (`events.relay_outbox`), so an outage of one
-home never stops the other (§13.2). A pass takes three steps and holds no transaction
-while it talks to Valkey (§14 rule 1):
+A tick runs as a periodic task per home (`events.relay_outbox`), so an outage of one home
+never stops the other (§13.2). A tick drains: it runs pass after pass while each pass
+claimed a full batch, until the home has no due rows, Valkey stops answering or the drain
+budget runs out (F1 audit OD-4). A tick cut by the budget is counted: a lasting load above
+what a tick drains is the revisit trigger of §12. A pass takes three steps and holds no
+transaction while it talks to Valkey (§14 rule 1):
 
 1. claim up to 100 due rows with a 30 s lease (`FOR UPDATE SKIP LOCKED`) and commit, so
    a concurrent pass skips them and a pass that dies releases them when the lease ends;
@@ -17,6 +20,7 @@ reached the queue but was not marked is passed on again; the delivery marks make
 harmless (at-least-once).
 """
 
+import time
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -82,11 +86,22 @@ class ClaimedEvent:
 
 @dataclass(slots=True)
 class RelayPass:
-    """What one pass did with the rows it claimed."""
+    """What a pass, or every pass of a tick, did with the rows it claimed."""
 
     published: list[UUID] = field(default_factory=list)
     held_back: list[UUID] = field(default_factory=list)
     released: list[UUID] = field(default_factory=list)
+
+    def add(self, other: RelayPass) -> None:
+        """Add the rows of a later pass of the same tick."""
+        self.published += other.published
+        self.held_back += other.held_back
+        self.released += other.released
+
+    @property
+    def rows(self) -> int:
+        """Every row the passes claimed."""
+        return len(self.published) + len(self.held_back) + len(self.released)
 
 
 class OutboxRelay:
@@ -101,22 +116,38 @@ class OutboxRelay:
         self._sender = sender
 
     async def relay(self, home: Home) -> RelayPass:
-        """One pass over the home's due events."""
-        claimed = await self._claim(home)
-        if not claimed:
-            return RelayPass()
-        result = await self._pass_on(home, claimed)
-        await self._settle(home, result)
-        if result.published:
-            self._metrics.count_published(home, len(result.published))
+        """One tick over the home's due events: passes while each claims a full batch."""
+        started = time.monotonic()
+        tick, passes = RelayPass(), 0
+        while claimed := await self._claim(home):
+            passes += 1
+            result, queue_down = await self._pass_on(home, claimed)
+            await self._settle(home, result)
+            tick.add(result)
+            if queue_down or len(claimed) < self._limits.batch:
+                break
+            if time.monotonic() - started >= self._limits.drain_budget.total_seconds():
+                self._metrics.count_budget_exhausted(home)
+                log.warning(
+                    "Relay исчерпал бюджет тика: в outbox остались готовые события",
+                    home=home.value,
+                    passes=passes,
+                )
+                break
+        self._metrics.observe_tick(home, passes, tick.rows)
+        if not passes:
+            return tick
+        if tick.published:
+            self._metrics.count_published(home, len(tick.published))
         log.info(
             "Relay передал события outbox",
             home=home.value,
-            published=len(result.published),
-            held_back=len(result.held_back),
-            released=len(result.released),
+            passes=passes,
+            published=len(tick.published),
+            held_back=len(tick.held_back),
+            released=len(tick.released),
         )
-        return result
+        return tick
 
     async def _claim(self, home: Home) -> list[ClaimedEvent]:
         due = (
@@ -148,7 +179,8 @@ class OutboxRelay:
         # UUIDv7 растёт со временем: события передаются в порядке записи.
         return sorted((ClaimedEvent(*row) for row in rows), key=lambda event: event.id)
 
-    async def _pass_on(self, home: Home, claimed: Sequence[ClaimedEvent]) -> RelayPass:
+    async def _pass_on(self, home: Home, claimed: Sequence[ClaimedEvent]) -> tuple[RelayPass, bool]:
+        """Queue the deliveries; True as well when Valkey stopped answering mid-pass."""
         result = RelayPass()
         for index, event in enumerate(claimed):
             routes = self._catalog.routes_of(event.event_type)
@@ -168,7 +200,7 @@ class OutboxRelay:
                 self._metrics.count_held_back(home, "queue_unavailable")
                 result.held_back.append(event.id)
                 result.released.extend(rest.id for rest in claimed[index + 1 :])
-                break
+                return result, True
             except UnregisteredTaskError:
                 self._metrics.count_held_back(home, "unregistered_delivery")
                 log.exception(
@@ -180,7 +212,7 @@ class OutboxRelay:
                 result.held_back.append(event.id)
                 continue
             result.published.append(event.id)
-        return result
+        return result, False
 
     async def _send(self, home: Home, event: ClaimedEvent, routes: Sequence[DeliveryRoute]) -> None:
         if not routes:

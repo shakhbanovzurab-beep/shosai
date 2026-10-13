@@ -1,7 +1,8 @@
 """The event tasks of a process: the relay and the purge of each home, and every delivery.
 
 Every role registers them all, like every other task (§14 rule 9). The scheduler queues
-a relay tick per home every 5 seconds (§12: up to 100 events per 5 s) and a purge tick
+a relay tick per home every 5 seconds — a tick drains the home's due events in passes of
+100 within its budget (§12) — and a purge tick
 per home once a day; a tick is skipped while the previous one of its home runs. Each
 home has its own tick marker, so a slow or unreachable home never delays the other.
 """

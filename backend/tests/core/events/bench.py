@@ -27,6 +27,7 @@ from shosai.core.events.relay_limits import RelayLimits
 from shosai.core.events.resources import EventResources
 from shosai.core.events.subscriptions import EventSubscription, ReceivedEvent
 from shosai.core.events.system import event_task_handlers
+from shosai.core.kernel.homes import Home
 from shosai.core.tasks.queues import TaskQueue
 from tests.core.db.probe_table import probe_records
 from tests.core.tasks.workbench import Check, Workbench, bound_workbench
@@ -85,8 +86,12 @@ def recording(
     *,
     queue: TaskQueue = TaskQueue.DEFAULT,
     failures: list[Exception] | None = None,
+    home: Home | None = None,
 ) -> EventSubscription[NoteWritten]:
-    """A consumer that writes its probe row; it raises the given failures first, one per run."""
+    """A consumer that writes its probe row; it raises the given failures first, one per run.
+
+    With `home`, the row and the delivery mark go to that home whatever the event's home.
+    """
     pending = failures if failures is not None else []
 
     async def handle(session: AsyncSession, received: ReceivedEvent[NoteWritten]) -> None:
@@ -100,7 +105,12 @@ def recording(
             raise pending.pop(0)
 
     return EventSubscription(
-        consumer=consumer, event=NoteWritten, queue=queue, deadline=DEADLINE, handle=handle
+        consumer=consumer,
+        event=NoteWritten,
+        queue=queue,
+        deadline=DEADLINE,
+        handle=handle,
+        home=home,
     )
 
 

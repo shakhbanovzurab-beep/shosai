@@ -3,9 +3,10 @@
 The relay queues the event to the task of each subscriber; the task carries the event
 itself, so the delivery reads nothing back from the outbox (one round trip less to the
 Russian home), and the event's home and tenancy, so the delivery opens its transaction
-where the effect was committed. In that transaction it first writes the delivery mark
-`(consumer, event_id)`: a mark that already exists means the event was applied, and the
-handler does not run again. Mark and effect commit together or not at all.
+where the effect was committed — or in the home the subscription names for its effect.
+In that transaction it first writes the delivery mark `(consumer, event_id)`: a mark that
+already exists means the event was applied, and the handler does not run again. Mark and
+effect commit together or not at all, in whichever home the effect lives.
 
 A consumer this process does not know is a task this process does not know: the broker
 dead-letters and counts it (§14 rule 9). A payload the consumer's event class cannot read
@@ -110,7 +111,7 @@ def delivery_handler[E: DomainEvent](
 
     async def deliver(payload: EventDeliveryPayload) -> None:
         received = received_event(subscription, payload)
-        async with transactions.begin(received.scope) as session:
+        async with transactions.begin(subscription.effect_scope(received.scope)) as session:
             if not await mark_processed(session, subscription.consumer, received.event_id):
                 metrics.count_duplicate(subscription.consumer)
                 log.info(

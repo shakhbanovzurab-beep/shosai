@@ -4,14 +4,19 @@ A subscription names its consumer once and for ever: the name is the key of the 
 marks and of the delivery task, so a renamed consumer would apply every recent event
 again. The handler receives the session of the delivery's transaction and writes its
 effect there; the mark is written in the same transaction, so a redelivered event
-changes nothing. The transaction runs in the event's home and tenancy scope. Like every
-transaction, it holds no external call (§14 rule 1): work that calls outside goes to a
-task or a row the slice processes later.
+changes nothing. Like every transaction, it holds no external call (§14 rule 1): work that
+calls outside goes to a task or a row the slice processes later.
+
+The transaction runs in the event's home, unless the subscription names the home its
+effect lives in — the EU home for the directory and the platform's own tables (ADR 0005,
+F1 audit A7). Then the mark is written there too, beside the effect, so the two still
+commit together; the event's account and company stay in the scope. Nothing personal
+crosses homes: an event carries ids, numbers, flags, times and codes only.
 """
 
 import re
 from collections.abc import Awaitable, Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timedelta
 from typing import Final
 from uuid import UUID
@@ -19,6 +24,7 @@ from uuid import UUID
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.events.domain_event import DomainEvent
+from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.tasks.declaration import TASK_NAME_MAX_LENGTH
 from shosai.core.tasks.queues import TaskQueue
@@ -31,7 +37,11 @@ CONSUMER_NAME_MAX_LENGTH: Final = TASK_NAME_MAX_LENGTH - len(DELIVERY_TASK_PREFI
 
 @dataclass(frozen=True, slots=True)
 class ReceivedEvent[E: DomainEvent]:
-    """An event as its consumer receives it: the fact, its id, version, time and scope."""
+    """An event as its consumer receives it: the fact, its id, version, time and scope.
+
+    `scope` is the event's own: its home is where the event was written, which differs
+    from the transaction's home for a subscription that names another one.
+    """
 
     event: E
     event_id: UUID
@@ -46,13 +56,17 @@ type EventHandler[E: DomainEvent] = Callable[[AsyncSession, ReceivedEvent[E]], A
 
 @dataclass(frozen=True, slots=True)
 class EventSubscription[E: DomainEvent]:
-    """A consumer of one event type: its stable name, queue, deadline and handler."""
+    """A consumer of one event type: its stable name, queue, deadline, handler and home.
+
+    `home` is where the effect and its delivery mark live; None means the event's home.
+    """
 
     consumer: str
     event: type[E]
     queue: TaskQueue
     deadline: timedelta
     handle: EventHandler[E]
+    home: Home | None = None
 
     def __post_init__(self) -> None:
         if len(self.consumer) > CONSUMER_NAME_MAX_LENGTH or not CONSUMER_NAME.fullmatch(
@@ -63,6 +77,12 @@ class EventSubscription[E: DomainEvent]:
                 f"не длиннее {CONSUMER_NAME_MAX_LENGTH} символов"
             )
             raise ValueError(message)
+
+    def effect_scope(self, event_scope: TenancyScope) -> TenancyScope:
+        """The scope of the delivery's transaction: the event's, moved to the effect's home."""
+        if self.home is None:
+            return event_scope
+        return replace(event_scope, home=self.home)
 
     @property
     def task_name(self) -> str:

@@ -1,5 +1,7 @@
 """The relay passes each event to every subscriber once, home by home (§12, §14 rule 1)."""
 
+import asyncio
+import time
 import uuid
 from datetime import timedelta
 from typing import Any
@@ -14,8 +16,11 @@ from shosai.core.events.metrics import EventMetrics
 from shosai.core.events.relay import OutboxRelay, RelayPass
 from shosai.core.events.relay_limits import RelayLimits
 from shosai.core.events.resources import EventResources
+from shosai.core.events.system import RELAY_OUTBOX
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.tasks.errors import TaskQueueUnavailableError
+from shosai.core.tasks.queues import TaskQueue
 from tests.core.db.tcp_proxy import through
 from tests.core.events.bench import (
     Applied,
@@ -97,7 +102,10 @@ async def test_rows_of_a_pass_that_died_return_when_the_lease_ends(
 ) -> None:
     lease = timedelta(milliseconds=300)
     bench = event_bench(
-        valkey, homes, [recording("mail.welcome", Applied())], relay_limits=RelayLimits(lease=lease)
+        valkey,
+        homes,
+        [recording("mail.welcome", Applied())],
+        relay_limits=RelayLimits(lease=lease, drain_budget=lease / 2),
     )
     [event_id] = await write_notes(homes.transactions, bench.outbox, Home.RU, 1)
     dying = RecordingSender(homes.databases, failures={1: RelayStoppedError()})
@@ -158,9 +166,72 @@ async def test_a_home_out_of_reach_stops_only_its_own_relay(
     assert eu_pass == RelayPass(published=eu_ids)
 
 
+async def test_a_tick_drains_a_thousand_due_rows_within_its_deadline(
+    valkey: Redis, homes: DatabaseAccess, run_slot: RunSlot
+) -> None:
+    bench = event_bench(valkey, homes, [recording("mail.welcome", Applied())])
+    ids = await write_notes(homes.transactions, bench.outbox, Home.RU, 1000)
+    relay = OutboxRelay(bench.resources, bench.tasks.system.sender)
+
+    started = time.monotonic()
+    async with asyncio.timeout(RELAY_OUTBOX.deadline.total_seconds()):
+        tick = await relay.relay(Home.RU)
+    elapsed = time.monotonic() - started
+
+    assert tick == RelayPass(published=ids)
+    assert elapsed < RelayLimits().drain_budget.total_seconds()
+    assert await bench.tasks.depth(TaskQueue.DEFAULT) == 1000
+    rows = await outbox_rows(run_slot.claimed.connections[Home.RU])
+    assert all(row["published"] for row in rows)
+    assert bench.sample("shosai_outbox_relay_tick_passes_sum", home="ru") == 10
+    assert bench.sample("shosai_outbox_relay_tick_rows_sum", home="ru") == 1000
+    assert bench.sample("shosai_outbox_relay_budget_exhausted_total", home="ru") == 0
+
+
+async def test_a_tick_stops_at_its_budget_and_the_next_one_goes_on(
+    valkey: Redis, homes: DatabaseAccess
+) -> None:
+    limits = RelayLimits(batch=2, drain_budget=timedelta(microseconds=1))
+    bench = event_bench(valkey, homes, [recording("mail.welcome", Applied())], relay_limits=limits)
+    ids = await write_notes(homes.transactions, bench.outbox, Home.EU, 5)
+    relay = OutboxRelay(bench.resources, RecordingSender(homes.databases))
+
+    first = await relay.relay(Home.EU)
+    second = await relay.relay(Home.EU)
+
+    assert first == RelayPass(published=ids[:2])
+    assert second == RelayPass(published=ids[2:4])
+    assert bench.sample("shosai_outbox_relay_budget_exhausted_total", home="eu") == 2
+
+
+async def test_a_queue_outage_ends_the_tick_after_its_pass(
+    valkey: Redis, homes: DatabaseAccess, run_slot: RunSlot
+) -> None:
+    bench = event_bench(
+        valkey, homes, [recording("mail.welcome", Applied())], relay_limits=RelayLimits(batch=2)
+    )
+    ids = await write_notes(homes.transactions, bench.outbox, Home.RU, 4)
+    sender = RecordingSender(
+        homes.databases, failures={1: TaskQueueUnavailableError(TaskQueue.DEFAULT)}
+    )
+
+    tick = await OutboxRelay(bench.resources, sender).relay(Home.RU)
+
+    assert tick == RelayPass(held_back=ids[:1], released=ids[1:2])
+    rows = await outbox_rows(run_slot.claimed.connections[Home.RU])
+    assert [(row["published"], row["attempts"]) for row in rows] == [(False, 1)] + [(False, 0)] * 3
+    assert bench.sample("shosai_outbox_relay_tick_passes_sum", home="ru") == 1
+
+
 @pytest.mark.parametrize(
     "limits",
-    [{"batch": 0}, {"lease": timedelta(0)}, {"longest_pause": timedelta(seconds=-1)}],
+    [
+        {"batch": 0},
+        {"lease": timedelta(0)},
+        {"longest_pause": timedelta(seconds=-1)},
+        {"drain_budget": timedelta(0)},
+        {"drain_budget": timedelta(seconds=30)},
+    ],
 )
 def test_relay_limits_are_positive(limits: dict[str, Any]) -> None:
     with pytest.raises(ValueError, match="relay"):

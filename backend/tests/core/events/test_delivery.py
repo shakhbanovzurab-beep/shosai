@@ -34,6 +34,8 @@ USER_ID = uuid.UUID("0190f0f0-0000-7000-8000-00000000000a")
 ORG_ID = uuid.UUID("0190f0f0-0000-7000-8000-00000000000b")
 MAIL = "mail.welcome"
 INDEX = "search.index_note"
+# Потребитель с эффектом в доме EU: справочник и таблицы платформы живут там (ADR 0005).
+DIRECTORY = "directory.note_seen"
 
 
 async def write_note_with_effect(
@@ -116,6 +118,37 @@ async def test_a_redelivered_event_does_not_run_the_handler_again(
     assert bench.sample("shosai_event_duplicate_deliveries_total", consumer=INDEX) == 1
     [skipped] = [line for line in logs.lines() if line["message"].startswith("Событие уже")]
     assert (skipped["consumer"], skipped["event_id"]) == (INDEX, str(payload.event_id))
+
+
+async def test_an_event_of_one_home_applies_its_effect_once_in_the_home_its_consumer_names(
+    valkey: Redis, homes: DatabaseAccess, probe_table: sa.TableClause, run_slot: RunSlot
+) -> None:
+    applied = Applied()
+    bench = event_bench(valkey, homes, [recording(DIRECTORY, applied, home=Home.EU)])
+    event_id = await write_note_with_effect(bench, homes, probe_table, Home.RU)
+    captured = RecordingSender(homes.databases)
+    await OutboxRelay(bench.resources, captured).relay(Home.RU)
+    [(_, payload)] = captured.sent
+    [route] = bench.resources.catalog.all_routes()
+
+    async with running(bench.tasks.broker()):
+        for _ in range(2):
+            await bench.tasks.system.sender.send(route.task, payload)
+        await eventually(runs(bench, TaskQueue.DEFAULT, route.task.name, "succeeded", 2))
+
+    ru, eu = (run_slot.claimed.connections[home] for home in (Home.RU, Home.EU))
+    assert payload.home is Home.RU
+    [(_, received)] = applied.events
+    assert received.scope == TenancyScope(Home.RU, USER_ID, ORG_ID)
+    marks = await fetch_rows(eu, "SELECT consumer, event_id FROM processed_events")
+    assert [(mark["consumer"], mark["event_id"]) for mark in marks] == [(DIRECTORY, event_id)]
+    effects = await fetch_rows(eu, "SELECT id, org_id FROM probe_records")
+    assert [(row["id"], row["org_id"]) for row in effects] == [
+        (effect_id(received, DIRECTORY), ORG_ID)
+    ]
+    assert await fetch_value(ru, "SELECT count(*) FROM processed_events") == 0
+    assert await fetch_value(ru, "SELECT count(*) FROM probe_records WHERE note <> 'note'") == 0
+    assert bench.sample("shosai_event_duplicate_deliveries_total", consumer=DIRECTORY) == 1
 
 
 async def test_a_failed_handler_applies_nothing_and_its_retry_applies_the_event_once(

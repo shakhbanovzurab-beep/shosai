@@ -870,6 +870,7 @@ At 29 turns/s (100 K DAU) that is ≈ 60 tx/s on the hot path, against the RU ho
 **Proactive:**
 
 - ≈ 400 000 signals/day at 10 K DAU ≈ 5/s average, 25/s peak. Event volume scales with activity, not with the number of users × the scan frequency (P3).
+- Only the outbox subscriptions of §9 pass the outbox (meeting, mail, calendar, task, commitment, connector, hub, support and errand events); time triggers and user-state transitions do not. The relay drains each home's outbox in passes of 100 within a 15 s budget per tick, so a peak is absorbed without a structural change; a sustained > 20 events/s per home, or ticks cut by the budget, is the revisit trigger of the target architecture §12, decided on measurements (F1 audit OD-4).
 - Time triggers are rows that fall due; the scheduler enqueues only due ones.
 
 **Cost model** (assumptions: default tier input $0.30/M and output $1.20/M tokens, 50% of the prefix cached at a 75% discount; these are placeholders until F6 sets prices):
