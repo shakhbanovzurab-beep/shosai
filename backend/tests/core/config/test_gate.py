@@ -83,6 +83,7 @@ def test_staging_without_trusted_proxies_refuses_start() -> None:
         (production_environ(API_DOCS_ENABLED="true"), "API_DOCS_ENABLED"),
         (without(production_environ(), "TRUSTED_PROXY_ADDRESSES"), "TRUSTED_PROXY_ADDRESSES"),
         (without(production_environ(), "FERNET_KEY"), "FERNET_KEY"),
+        (without(production_environ(), "OPENROUTER_API_KEY"), "OPENROUTER_API_KEY"),
         (production_environ(CORS_ALLOWED_ORIGINS="*"), "CORS_ALLOWED_ORIGINS"),
         (without(production_environ(), "HOME_RU_DATABASE_URL"), "HOME_RU_DATABASE_URL"),
         (without(production_environ(), "HOME_EU_DATABASE_URL"), "HOME_EU_DATABASE_URL"),

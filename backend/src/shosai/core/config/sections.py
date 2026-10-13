@@ -134,3 +134,18 @@ class CryptoSettings(SettingsSection):
 
     fernet_key: FernetKey | None = None
     fernet_keys_previous: FernetKeys = ()
+
+
+class AiSettings(SettingsSection):
+    """The AI providers: credentials and addresses of each (F6 plan §3.12)."""
+
+    # Без ключа провайдер выключен явно: вызов отклоняется, вне разработки гейт не пускает.
+    openrouter_api_key: SecretStr | None = None
+    # Пусто — адрес провайдера из адаптера: хосты провайдеров названы только в core/ai.
+    openrouter_base_url: HttpUrl | None = None
+
+
+class ExchangeRateSettings(SettingsSection):
+    """Where the Central Bank's daily rates are read (ADR 0036)."""
+
+    cbr_daily_url: HttpUrl = HttpUrl("https://www.cbr-xml-daily.ru/daily_json.js")

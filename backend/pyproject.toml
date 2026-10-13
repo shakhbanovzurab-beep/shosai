@@ -15,6 +15,8 @@ dependencies = [
     "alembic>=1.20.0",
     "cryptography>=50.0.2",
     "fastapi>=0.142.2",
+    # Исходящие вызовы: OpenRouter и другие провайдеры ИИ, курс ЦБ (F6, ADR 0034).
+    "httpx>=0.28.1",
     "opentelemetry-api>=1.45.0",
     "opentelemetry-exporter-otlp-proto-http>=1.45.0",
     "opentelemetry-instrumentation-redis>=0.66b0",
@@ -37,9 +39,6 @@ shosai = "shosai.entrypoints.cli:main"
 
 [dependency-groups]
 dev = [
-    # Харнесс тестовых баз (ADR 0009) держит прямые соединения роли миграций.
-    # Тесты HTTP-оболочки ходят в приложение через ASGI-транспорт HTTPX.
-    "httpx>=0.28.1",
     "hypothesis>=6.168.3",
     "import-linter>=2.15",
     "mypy>=2.4.0",
@@ -178,6 +177,37 @@ forbidden_modules = [
     "uvicorn", "websockets",
 ]
 broken_contract_guidance = "A slice's domain is pure; put the adapter in its infrastructure or channels."
+
+# SDK провайдеров ИИ — только в порте (ADR 0034 п. 3): прямой импорт где-либо ещё запрещён.
+# Косвенный путь через порт законен: так срезы и вызывают модели.
+[[tool.importlinter.contracts]]
+id = "provider-sdks-in-the-port"
+name = "Provider SDKs only in core.ai"
+type = "forbidden"
+source_modules = ["shosai"]
+forbidden_modules = ["google", "openai", "deepgram", "mistralai", "websockets"]
+ignore_imports = [
+    "shosai.core.ai.** -> google",
+    "shosai.core.ai.** -> openai",
+    "shosai.core.ai.** -> deepgram",
+    "shosai.core.ai.** -> mistralai",
+    "shosai.core.ai.** -> websockets",
+]
+allow_indirect_imports = true
+unmatched_ignore_imports_alerting = "none"
+broken_contract_guidance = "Call models through CoreServices.ai; provider clients live in core.ai."
+
+# Типы-значения порта лёгкие, как ядро (ADR 0034 п. 4): их импортируют контракты срезов.
+[[tool.importlinter.contracts]]
+id = "light-ai-values"
+name = "Light AI value types"
+type = "forbidden"
+source_modules = ["shosai.core.ai.calls", "shosai.core.ai.requests", "shosai.core.ai.results"]
+forbidden_modules = [
+    "aiobotocore", "fastapi", "google", "httpx", "openai", "psycopg", "redis", "sqlalchemy",
+    "starlette", "structlog", "taskiq", "websockets",
+]
+broken_contract_guidance = "core.ai value types stay framework-free; move the code to an adapter."
 
 # Только для `uv run alembic revision -m "…"`: новая ревизия по шаблону с applies_to.
 # Применяет миграции не CLI Alembic, а раннер shosai.core.db.migrations (ADR 0010).

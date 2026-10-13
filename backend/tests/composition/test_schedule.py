@@ -36,11 +36,12 @@ def task_system(valkey: Redis, *registered: str) -> TaskSystem:
     return tasks
 
 
-def test_core_runs_its_daily_purges_and_upkeep_as_periodic_jobs() -> None:
+def test_core_runs_its_purges_upkeep_and_rate_fetch_as_periodic_jobs() -> None:
     assert {job.name: job.every for job in CORE_JOBS} == {
         "events.purge_outbox": timedelta(days=1),
         "idempotency.purge_keys": timedelta(days=1),
         "db.maintain_partitions": timedelta(days=1),
+        "exchange_rates.fetch": timedelta(hours=6),
     }
 
 

@@ -26,7 +26,7 @@ from shosai.core.db.partitions.policy import (
     register_monthly_partitions,
     unregister_monthly_partitions,
 )
-from shosai.core.db.partitions.upkeep import PartitionMetrics, PartitionUpkeep
+from shosai.core.db.partitions.upkeep import PartitionMetrics, PartitionUpkeep, TableUpkeep
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from tests.core.db.operations import run_step, run_step_everywhere
@@ -104,6 +104,12 @@ async def months_from_now(connection: Connection, *offsets: int) -> list[str]:
     return names
 
 
+def of_table(results: list[TableUpkeep], table: str = TABLE) -> TableUpkeep:
+    """The upkeep of one table among those a tick served (core's own tables are registered too)."""
+    [result] = [result for result in results if result.table == table]
+    return result
+
+
 def upkeep(homes: DatabaseAccess) -> tuple[PartitionUpkeep, CollectorRegistry]:
     """The upkeep as a worker runs it, with its own metrics."""
     registry = CollectorRegistry()
@@ -117,8 +123,8 @@ async def test_a_tick_creates_this_month_and_the_next_two(
     connection = run_slot.claimed.connections[home]
     runner, registry = upkeep(homes)
 
-    [first] = await runner.maintain(home)
-    [second] = await runner.maintain(home)
+    first = of_table(await runner.maintain(home))
+    second = of_table(await runner.maintain(home))
 
     expected = await months_from_now(connection, 0, 1, 2)
     assert await partitions(connection) == expected
@@ -140,7 +146,7 @@ async def test_an_expired_partition_is_dropped_with_its_rows_and_recent_ones_sta
         )
     runner, _ = upkeep(homes)
 
-    [result] = await runner.maintain(Home.EU)
+    result = of_table(await runner.maintain(Home.EU))
 
     connection = run_slot.claimed.connections[Home.EU]
     assert result.dropped == (OLD_PARTITION,)
@@ -158,10 +164,10 @@ async def test_a_partition_a_reader_holds_is_deferred_not_waited_for(
     try:
         async with reader.transaction():
             await reader.execute(f"LOCK TABLE {TABLE} IN ACCESS SHARE MODE")
-            [held] = await runner.maintain(Home.RU)
+            held = of_table(await runner.maintain(Home.RU))
     finally:
         await reader.close()
-    [freed] = await runner.maintain(Home.RU)
+    freed = of_table(await runner.maintain(Home.RU))
 
     assert (held.deferred, held.dropped, len(held.created)) == ((OLD_PARTITION,), (), 3)
     assert freed.dropped == (OLD_PARTITION,)
@@ -171,7 +177,7 @@ async def test_the_application_can_neither_change_a_policy_nor_drop_a_partition(
     homes: DatabaseAccess, events_table: str
 ) -> None:
     runner, _ = upkeep(homes)
-    [result] = await runner.maintain(Home.RU)
+    result = of_table(await runner.maintain(Home.RU))
     forbidden: list[sa.Executable] = [
         sa.text(f"DROP TABLE {result.created[0]}"),
         sa.update(policies).values(keep_months=1),

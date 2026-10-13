@@ -130,6 +130,12 @@ def is_private_address(host: str | None) -> bool:
     return any(address in network for network in PRIVATE_NETWORKS)
 
 
+def ai_provider_keys_present(settings: Settings) -> Iterator[GateViolation]:
+    """Every AI provider the product needs has its key; presence of a key is not a decision."""
+    if settings.ai.openrouter_api_key is None:
+        yield GateViolation("OPENROUTER_API_KEY", "без ключа OpenRouter модели недоступны")
+
+
 def databases_over_tls(settings: Settings) -> Iterator[GateViolation]:
     """Each home's database is reached over TLS that checks the certificate and the host."""
     for home, home_settings in settings.homes.items():
@@ -155,4 +161,5 @@ CORE_CHECKS: tuple[ProductionCheck, ...] = (
     storage_over_tls,
     valkey_link_protected,
     databases_over_tls,
+    ai_provider_keys_present,
 )

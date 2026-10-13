@@ -19,9 +19,16 @@ LAYERS = "Layers: entrypoints -> composition -> features -> core"
 FEATURES = "Features meet through contracts"
 PURE_KERNEL = "Pure kernel"
 PURE_DOMAIN = "Pure slice domain"
-CONTRACT_COUNT = 4
+PROVIDER_SDKS = "Provider SDKs only in core.ai"
+LIGHT_AI = "Light AI value types"
+CONTRACT_COUNT = 6
 BASE_TREE = {
     "shosai.core.kernel.homes": "",
+    # Порт ИИ: типы-значения лёгкие, SDK провайдера — в его адаптере, и это законно.
+    "shosai.core.ai.calls": "import shosai.core.kernel.homes\n",
+    "shosai.core.ai.requests": "",
+    "shosai.core.ai.results": "import shosai.core.ai.calls\n",
+    "shosai.core.ai.adapters.live": "import websockets\nimport shosai.core.ai.results\n",
     # Домен опирается на ядро без фреймворков и на pydantic; адаптер среза — на домен.
     "shosai.features.alpha.domain.rules": "import pydantic\nimport shosai.core.kernel.homes\n",
     "shosai.features.alpha.service": (
@@ -89,6 +96,10 @@ def test_the_layered_tree_keeps_every_contract(tmp_path: Path) -> None:
             "import shosai.features.alpha.service\n",
             PURE_DOMAIN,
         ),
+        ("shosai.features.beta.speech", "import openai\n", PROVIDER_SDKS),
+        ("shosai.composition.voice", "from google import genai\n", PROVIDER_SDKS),
+        ("shosai.core.ai.requests", "import sqlalchemy\n", LIGHT_AI),
+        ("shosai.core.ai.calls", "import httpx\n", LIGHT_AI),
     ],
 )
 def test_a_boundary_violation_breaks_its_contract(

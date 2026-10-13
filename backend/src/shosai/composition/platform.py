@@ -9,6 +9,7 @@ Steps, in order, each named when it fails (§3.11):
 3. `shared_services` — Valkey, the cache and the bucket; none is contacted here, so an
    outage of one never stops the start (§13.2);
 4. `tasks` — the brokers, the sender and the outbox of the listed event classes;
+   `ai` — the AI provider port and the exchange rates, with their HTTP clients;
 5. `feature:<name>` — each slice built from the core services, in the listed order;
 6. `events` — the catalog with every subscription, and every task registered;
 7. `schedule` — core's and every slice's periodic jobs and due-row sources, each named once
@@ -26,6 +27,7 @@ from dataclasses import dataclass
 import structlog
 from redis.asyncio import Redis
 
+from shosai.composition.ai import AiDependencies, PlatformAi, open_ai
 from shosai.composition.features import check_features, feature_events
 from shosai.composition.schedule import scheduled_jobs
 from shosai.composition.startup import start_step
@@ -98,6 +100,7 @@ class _Writers:
     tasks: TaskSystem
     outbox: EventOutbox
     effects: EffectLedger
+    ai: PlatformAi
 
 
 @dataclass(frozen=True, slots=True)
@@ -128,7 +131,13 @@ async def open_platform(
             tasks = build_task_system(clients.valkey, telemetry.registry, telemetry.tracer_provider)
             outbox = EventOutbox(EventTypes(feature_events(features)))
             effect_keys = EffectKeyMetrics(telemetry.registry)
-        writers = _Writers(tasks, outbox, EffectLedger(effect_keys))
+            effects = EffectLedger(effect_keys)
+        with start_step("ai"):
+            dependencies = AiDependencies(
+                homes.transactions, tasks.sender, effects, telemetry.registry
+            )
+            ai = await open_ai(settings, dependencies, stack)
+        writers = _Writers(tasks, outbox, effects, ai)
         services = _core_services(process, homes, clients, writers)
         built: list[FeatureParts] = []
         for feature in features:
@@ -149,9 +158,11 @@ async def open_platform(
                     *partition_task_handlers(
                         homes.transactions, PartitionMetrics(telemetry.registry)
                     ),
+                    *writers.ai.task_handlers(),
                     *parts.task_handlers,
                 ]
             )
+            writers.ai.settlements.install(parts.cost_settlements)
         with start_step("schedule"):
             jobs = scheduled_jobs(parts, tasks)
         with start_step("probes"):
@@ -217,6 +228,8 @@ def _core_services(
         tasks=writers.tasks.sender,
         outbox=writers.outbox,
         effects=writers.effects,
+        ai=writers.ai.providers,
+        exchange_rates=writers.ai.rates,
         cache=RedisCache(clients.cache, CacheMetrics(telemetry.registry)),
         objects=clients.objects,
         uploads=clients.uploads,

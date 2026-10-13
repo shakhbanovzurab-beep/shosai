@@ -10,10 +10,13 @@ from collections.abc import Sequence
 from sqlalchemy import MetaData, Table
 
 from shosai.composition.features import FEATURES
+from shosai.core.ai.costs.records import ProviderCost
+from shosai.core.ai.pricing.records import ProviderPrice
 from shosai.core.db.home_identity import HomeIdentity
 from shosai.core.db.model_base import NAMING_CONVENTION, ModelBase
 from shosai.core.db.partitions.records import PartitionPolicy
 from shosai.core.events.records import OutboxMessage, ProcessedEvent
+from shosai.core.exchange_rates.records import ExchangeRate
 from shosai.core.features import FeatureModule
 from shosai.core.idempotency.records import EffectKeyRecord
 from shosai.core.schedule.records import ScheduleRun
@@ -26,6 +29,9 @@ CORE_MODELS: tuple[type[ModelBase], ...] = (
     EffectKeyRecord,
     PartitionPolicy,
     ScheduleRun,
+    ProviderPrice,
+    ExchangeRate,
+    ProviderCost,
 )
 
 
