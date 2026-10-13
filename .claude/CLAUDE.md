@@ -6,6 +6,46 @@ Shosai is an AI workspace. It brings a person's knowledge, meetings, documents, 
 
 `shosai` is a full, rethought rewrite of the earlier `whisperer` project. The product was renamed from Whisperer to Shosai ([ADR 0037](../docs/adr/0037-rebrand-whisperer-to-shosai.md)); the draft keeps its old name and path. Rules below describe the target state. Carry over behaviour and lessons from the old code; do not assume its file or function names exist here.
 
+## Philosophy
+
+Whisperer → Shosai is not a rebrand. It rethinks the whole platform: its philosophy, its user experience and its architecture.
+
+Shosai is a digital Japanese study — 書斎 (*shosai*), a room for focused work, reflection and solitude, where a person does not have to hold the whole operational side of their life in their head.
+
+> **Shosai is a personal workspace with memory and initiative. It takes on the operational load so the person can focus on what truly needs their thinking.**
+
+This principle decides product, interface, architecture and priorities. When a choice is unclear, choose what lowers the user's operational load and protects their attention.
+
+### The core idea
+
+The person thinks. Shosai remembers, connects and helps act.
+
+Shosai relieves the user of having to:
+
+- **Remember** — agreements, promises, ideas, facts, deadlines and the context of conversations.
+- **Track** — unfinished tasks, commitments, changes and next steps.
+- **Connect** — information from meetings, emails, documents, notes, knowledge and projects.
+- **Watch** — what needs attention, what is blocked, what was forgotten, what is due.
+- **Organise** — turn scattered information into one coherent system of work.
+- **Coordinate** — move from thought to decision, from decision to action, from action to result.
+
+Shosai must not turn the user's life into endless management of Shosai itself. Less manual organising, less re-entering data, fewer switches between tools and less reminding the AI of context — each of these is a measure of success.
+
+### The user experience
+
+1. **A quiet space.** No visual noise, no stream of notifications, no interface that has to be tended. The user opens Shosai to work, not to organise work.
+2. **Memory that works by itself.** Shosai keeps context, extracts what matters and links it to its sources. The user never has to explain again what was discussed and why it matters.
+3. **One whole picture.** Meetings, tasks, knowledge, email and projects are not separate apps but parts of one system. The links between them are what let Shosai understand a situation rather than merely store data.
+4. **Action without micromanagement.** The AI does safe routine work on its own, proposes the actions that are needed and asks for confirmation only where confirmation truly matters.
+
+### Leo
+
+Leo is not a chatbot or an on-demand assistant. Leo is the intelligent core of Shosai: it understands context, notices unfinished commitments, connects events and helps carry work through to a result. Its initiative always comes with reliability, transparency and user control — the user can see what Leo did and why, and can correct or stop it.
+
+### Give attention back
+
+Shosai does not try to automate every second of the user's life. Its job is not to take attention but to give it back. A feature that demands attention without returning more of it does not belong in Shosai.
+
 ## Rewrite from the draft
 
 | Directory | Role |
@@ -397,7 +437,7 @@ For the file length limit, generated code is exempt: files under a `generated/` 
 
 ## Self-review
 
-Before finishing an implementation, review your own change for: architecture, performance, security, readability, typing, error handling, duplication, feature-first structure, compliance with this file, and compliance with the mandatory skills.
+Before finishing an implementation, review your own change for: fit with the [philosophy](#philosophy) (does it lower the user's operational load and give attention back?), architecture, performance, security, readability, typing, error handling, duplication, feature-first structure, compliance with this file, and compliance with the mandatory skills.
 
 ## Git workflow
 
