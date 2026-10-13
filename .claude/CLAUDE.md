@@ -55,9 +55,11 @@ Shosai does not try to automate every second of the user's life. Its job is not 
 
 **Scope.** Only the draft's `backend/` and `frontend/` and the files tied to them: Dockerfiles, Compose files, `deploy/` configuration, CI workflows, and `specs/` and `docs/` as a source of requirements. Out of scope: the macOS, iOS, Linux and Windows clients, `pwa-app/`, `shared/` (the Swift `WhispererKit`), `hubspot-app/`, `content-factory/`, `article/`. Never decrypt or read `secrets/`.
 
-**Goal.** Rewrite the draft into the final version with the **new web design** in `frontend/` as the visual reference: the draft supplies behaviour, business rules and the API contract, not the look ([ADR 0022](../docs/adr/0022-new-web-design-replaces-draft-parity.md)). Visual parity with the draft is not a goal. The final version meets every rule in this file and every target in the [target architecture](#target-architecture). Native clients that are already shipped keep working without an update (nfr-12), so the HTTP and WebSocket contract they use is preserved even though their code is out of scope.
+**Goal.** Build Shosai from scratch to the [philosophy](#philosophy), this file, the [target architecture](#target-architecture) and the [Leo architecture](../docs/design/leo/ARCHITECTURE.md), with the **new web design** in `frontend/` as the product and visual reference ([ADR 0022](../docs/adr/0022-new-web-design-replaces-draft-parity.md)). Parity with the draft is not a goal, neither in looks nor in behaviour: a feature is designed from what Shosai's user needs, not from what the draft did.
 
-**It is a rewrite, not a port.** Take behaviour from the draft; take structure, boundaries, data model and rules from this file and the target architecture. Do not copy draft code that breaks them.
+**The draft is a reference, not a specification.** Consult it when it helps: business rules worth keeping, edge cases it already solved, lessons from its bugs, provider quirks. Do not copy its code, structure or data model, and do not keep a behaviour only because the draft had it.
+
+**One exception: shipped native clients.** The macOS and Windows clients already shipped keep working without an update (nfr-12), so the HTTP and WebSocket contract they use (the native routes in [contracts/](../contracts/README.md)) is preserved, if need be through a thin compatibility layer over the new design.
 
 **Versions.** Use the versions in the [stack table](#technology-stack). Anything not listed there gets the latest stable version at the moment it is added. The draft's versions are outdated and are never carried over.
 
