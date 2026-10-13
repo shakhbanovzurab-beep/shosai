@@ -1,5 +1,7 @@
 # D2 — Visual baseline and parity harness: package plan
 
+> **Archived on 2026-10-13.** A historical record of finished work, superseded by [ADR 0022](../../adr/0022-new-web-design-replaces-draft-parity.md): parity with the draft is not a goal. Not an instruction: do not follow this plan.
+
 Prompt: [prompts/D2-visual-parity.md](../prompts/D2-visual-parity.md). Status: [STATUS.md](../STATUS.md). Decision record: [ADR 0003](../../adr/0003-playwright-visual-parity-harness.md).
 
 The harness proves that a v2 screen looks like the draft screen. It renders the draft and v2 from identical recorded API data, in a pinned browser, and compares the screenshots per route and state.

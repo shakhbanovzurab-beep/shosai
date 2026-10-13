@@ -8,8 +8,8 @@ into activation and revenue. It describes the target state for `shosai`.
   Shosai page, and whoever plans content.
 - **Tooling:** the `claude-seo` skills installed in `.claude/skills/`. Section 17
   maps every part of this strategy to the skill that executes or checks it.
-- **Canonical domain:** `whisperer.one`. The production origin
-  `https://whisperer.one` is the only indexable host (6.12).
+- **Canonical domain:** `shosai.tech`. The production origin
+  `https://shosai.tech` is the only indexable host (6.12).
 - **Status:** strategy, not implementation. Section 18 lists the decisions that
   must be made before it can be built; section 19 sums up what is covered.
 
@@ -110,7 +110,7 @@ Consequences of phasing:
 ```text
 Shosai
   type:   AI Workspace / SoftwareApplication
-  domain: whisperer.one
+  domain: shosai.tech
 ```
 
 One product, one canonical domain, one consistent identity, many corroborating
@@ -176,7 +176,7 @@ Founder (Person) ── founder of ──▶ Organization
 **Identifiers (P0).** Each entity has one `@id` on the production origin, kept
 in the fact registry (5.2) and never changed. The Organization, WebSite and
 SoftwareApplication are defined on the homepage
-(`https://whisperer.one/#organization`, `#website`, `#software`); Leo and each
+(`https://shosai.tech/#organization`, `#website`, `#software`); Leo and each
 capability on its own canonical page; the founder on the About page (8.13).
 Every other page references these `@id`s and never defines the entity again. The
 `@id`s and names are the same in every locale; only descriptions are localized.
@@ -235,7 +235,7 @@ or trivial text changes. Google treats mass creation of low-value pages,
 including with AI, as scaled content abuse.
 
 **Path URLs only; no fragment routing.** Every public indexable page has its own
-path URL, such as `https://whisperer.one/pricing`. A fragment never identifies a
+path URL, such as `https://shosai.tech/pricing`. A fragment never identifies a
 public page: no `/#/pricing`, no `/#!/pricing` (Google deprecated its `#!`
 crawling scheme in 2015). The browser does not send the part after `#` to the
 server, so the server cannot return a status, canonical or content for that
@@ -248,7 +248,7 @@ page. Search engines treat every fragment of a URL as one page.
   `href="javascript:…"` are not links for a crawler.
 - Allowed: an in-page anchor on a page that already has its own path URL
   (`/docs/install#linux`), and a JSON-LD `@id` such as
-  `https://whisperer.one/#organization`, which is an identifier, not a route.
+  `https://shosai.tech/#organization`, which is an identifier, not a route.
 - The rule covers the public URL space. Routes of the signed-in application are
   outside the indexable inventory (6.12).
 
@@ -385,7 +385,7 @@ Production `robots.txt`:
 - never disallows a URL of the indexable inventory (6.12) for a crawler with
   search access;
 - names the sitemap index in one line,
-  `Sitemap: https://whisperer.one/sitemap.xml`.
+  `Sitemap: https://shosai.tech/sitemap.xml`.
 
 Non-production `robots.txt` follows 6.12.
 
@@ -398,7 +398,7 @@ Check: URL count, duplicates, `3xx`, `4xx`, `5xx`, `noindex`, canonical mismatch
 hreflang mismatch, stale `lastmod`.
 
 **Production only.** Only production serves a sitemap (6.12). Every `<loc>` and
-every alternate `href` in it starts with `https://whisperer.one/`.
+every alternate `href` in it starts with `https://shosai.tech/`.
 
 **Complete inventory.** The sitemap is generated from the list of public pages
 the site serves. CI compares the two: a public indexable page missing from the
@@ -432,7 +432,7 @@ For a deletion: return `404` or `410`, remove the URL from the sitemap, then
 submit the URL explicitly.
 
 **Production only** (6.12). The submitter refuses to run unless the configured
-origin is `https://whisperer.one`, and refuses any URL on another host. It runs
+origin is `https://shosai.tech`, and refuses any URL on another host. It runs
 only after every production gate in 13.2 has passed. A non-production
 environment submits nothing, neither production URLs nor its own, and serves no
 IndexNow key file.
@@ -548,11 +548,11 @@ checks in 6.3 bind every security layer.
 
 ### 6.12 Production and non-production environments `[S2, S7]`
 
-**Production** is one origin: `https://whisperer.one`. The `http://` and `www.`
+**Production** is one origin: `https://shosai.tech` ([ADR 0040](../adr/0040-shosai-tech-is-the-domain.md)). Until production exists, `shosai.tech` runs the test environment and is treated as non-production: `noindex`, out of every sitemap and search property. The `http://` and `www.`
 variants, where they answer at all, redirect permanently in one hop to the same
 path on it (6.2). Every other host is **non-production**: local development
 (`localhost`, loopback and private addresses, container host names), staging
-(today `https://one.whisperer.one`, the v2 test domain) and any preview or
+(`shosai.tech` until production, then a subdomain of it) and any preview or
 temporary host.
 
 **The origin comes from configuration.** Each environment sets its origin in
@@ -561,7 +561,7 @@ the request's `Host` or `X-Forwarded-Host` header, from the build machine, or
 from a default in code.
 
 **Absolute URLs on production.** Every absolute URL that the site emits about
-itself starts with `https://whisperer.one/`:
+itself starts with `https://shosai.tech/`:
 
 | Where | Fields |
 |---|---|
@@ -569,12 +569,12 @@ itself starts with `https://whisperer.one/`:
 | JSON-LD | `@id`, `url`, `logo`, `image` and every other value that names a Shosai page or file |
 | `robots.txt` | `Sitemap:` |
 | Sitemaps | `<loc>`, alternate `href`, `image:loc` |
-| IndexNow | `keyLocation`, `urlList`; `host` is `whisperer.one` |
+| IndexNow | `keyLocation`, `urlList`; `host` is `shosai.tech` |
 | `llms.txt`, `llms-full.txt` | links to Shosai pages |
 
 These fields are absolute, never relative. A production response that has
 `localhost`, a loopback or private address, a port, `http://`,
-`one.whisperer.one`, `www.whisperer.one` or any other non-production host in
+a staging subdomain, `www.shosai.tech` or any other non-production host in
 one of them fails the gate (13.2). Links to other sites (`sameAs`, cited
 sources) are not affected.
 
@@ -846,7 +846,7 @@ canonical, entity references, duplicate entities, stale data. Pipeline:
 generate → validate → build → deploy → crawl smoke test.
 
 **Site name (P1).** The homepage defines the `WebSite` entity with `name`
-"Shosai" and `url` `https://whisperer.one/`, from the fact registry (5.2).
+"Shosai" and `url` `https://shosai.tech/`, from the fact registry (5.2).
 Every page has `og:site_name` with the same name, and title suffixes use it too.
 `alternateName` is set only if the registry defines one. Google chooses the site
 name shown in results from these signals.
@@ -1002,7 +1002,7 @@ Never try to correct hallucinations with SEO spam.
 
 ### 10.1 Brand search `[S38, S39]`
 
-Brand query set: `shosai`, `shosai ai`, `whisperer.one`,
+Brand query set: `shosai`, `shosai ai`, `shosai.tech`, `whisperer.one`,
 `shosai workspace`, `shosai meetings`, `shosai leo`,
 `shosai transcription`, `shosai translation`, `shosai mcp`.
 
@@ -1030,7 +1030,7 @@ Linkable assets to create: benchmarks, datasets, calculators, templates,
 reports, original research, statistics, engineering articles, open-source tools,
 documentation, glossaries, comparison databases.
 
-Unlinked mentions: search regularly for "Shosai", "whisperer.one" and
+Unlinked mentions: search regularly for "Shosai", "shosai.tech", "whisperer.one" and
 "Shosai AI"; for each mention check context, authority and whether a link
 exists. A mention without a link is an outreach candidate.
 
@@ -1050,7 +1050,7 @@ Rule: usefulness first, the link second.
 Collect authentic reviews and record source, date, product version, user context
 and verified status where applicable. Never generate fake reviews.
 
-Monitor "Shosai", "Shosai AI", "whisperer.one" and "Leo" across search, AI
+Monitor "Shosai", "Shosai AI", "shosai.tech", "whisperer.one" and "Leo" across search, AI
 systems, Reddit, GitHub, directories and review platforms. Correct errors through
 authoritative sources.
 
@@ -1167,8 +1167,8 @@ Monitor Search Console automatically for: coverage changes, indexing errors,
 manual actions, security issues, crawl anomalies, performance drops, query
 shifts.
 
-**Properties (P0).** Search Console holds a Domain property for `whisperer.one`,
-verified through DNS. It also covers `one.whisperer.one`, so an indexed staging
+**Properties (P0).** Search Console holds a Domain property for `shosai.tech`,
+verified through DNS. It also covers its subdomains, so an indexed staging
 URL shows up there. Bing Webmaster Tools verifies the same domain (P0), and so
 does Yandex Webmaster for the Russian market (P1). Every property has at least
 two owners from the company, never one person's account alone. The production
@@ -1229,9 +1229,9 @@ conversion.
 | Metric | Definition |
 |---|---|
 | Mention rate | answers that name Shosai ÷ answers |
-| Citation rate | answers that link a `whisperer.one` URL ÷ answers |
+| Citation rate | answers that link a `shosai.tech` URL ÷ answers |
 | Recommendation rate | answers that recommend Shosai for the asked need ÷ answers |
-| Citation share | links to `whisperer.one` ÷ all links in the answers |
+| Citation share | links to `shosai.tech` ÷ all links in the answers |
 | Query coverage | queries with at least one mention ÷ queries |
 | Entity accuracy | facts stated correctly ÷ facts stated, checked against the fact registry (5.2) |
 
@@ -1335,7 +1335,7 @@ Each gate runs at the earliest stage that can see the error:
 | Dates | JSON-LD `dateModified` differs from the sitemap `<lastmod>` (8.10) | build |
 | Images | a content `<img>` without an `alt` attribute (8.14) | build |
 | Fragment routing | a canonical, hreflang `href`, sitemap `<loc>`, `og:url` or JSON-LD `url` contains `#`; a link between public pages has an `href` starting with `#/`, `#!` or `javascript:` (6.2) | build |
-| Production origin | a field listed in 6.12 is relative or does not start with `https://whisperer.one/`; the IndexNow `host` is not `whisperer.one` | build, production |
+| Production origin | a field listed in 6.12 is relative or does not start with `https://shosai.tech/`; the IndexNow `host` is not `shosai.tech` | build, production |
 | Non-production exposure | a staging response without `X-Robots-Tag: noindex`; a `/sitemap*.xml` path that does not return `404`; a `Sitemap:` line or a `Disallow` of pages in `robots.txt`; a served IndexNow key file; an IndexNow submitter that does not refuse a non-production origin or a URL on another host (6.6, 6.12) | build (submitter), staging |
 | Crawler access | for the smoke set, `robots.txt`, the sitemap index and one `og:image`, a request with an allowed crawler's user agent, sent from outside the plane and from a United States address, gets a different status, robots directives or canonical than a browser request, a `403`, `429` or `503`, or a challenge (6.3) | staging, production |
 

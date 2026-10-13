@@ -20,7 +20,7 @@ from tests.core.tasks.workbench import (
     workbench,
 )
 
-LINK = "https://whisperer.one/reset?token=very-secret"
+LINK = "https://shosai.tech/reset?token=very-secret"
 RUNS_TOTAL = "shosai_task_runs_total"
 
 

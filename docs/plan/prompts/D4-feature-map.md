@@ -1,5 +1,7 @@
 # D4 — Feature map
 
+> **Archived on 2026-10-13.** A historical record of finished work, superseded by [SLICE_MAP.md](../SLICE_MAP.md) ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md)). Not an instruction: do not follow this prompt.
+
 Follow the common protocol in `docs/plan/prompts/README.md`. Load the skill `service-decomposition` before assigning modules: it is the method for deciding where a boundary belongs.
 
 ## Goal

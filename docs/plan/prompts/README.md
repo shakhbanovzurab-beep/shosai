@@ -2,6 +2,16 @@
 
 One file per work package of [the rewrite plan](../REWRITE_PLAN.md). Start a new session in `/root/shosai` with `claude --add-dir /root/whisperer` and paste the package's launch line from the plan, section 6.
 
+## Which prompts are live
+
+| Use | Prompts |
+|---|---|
+| **Live** — start sessions with these | `BACKEND-next-step.md` (every backend session), `S-feature-slice.md` (slice plans and steps, used through the backend prompt), `F4-delivery-staging.md`, `F5-observability.md`, `F6-platform-services.md`, `M1-data-migration.md`, `M2-cutover.md` |
+| **Done** — the record of finished work; do not run again | `D1-contracts.md`, `D3-data-mapping.md`, `F1-backend-foundation.md` (its fixes run from the F1 audit through `BACKEND-next-step.md`), `F2-frontend-foundation.md`, `F3-local-environment.md`, `F1-audit.md`, `SLICE-MAP.md` |
+| **Archived** — superseded; never follow | `D2-visual-parity.md`, `D4-feature-map.md` |
+
+Shosai's domain is `shosai.tech` (today the test environment); `whisperer.one` is the draft's production server and the address of the shipped native clients ([ADR 0040](../../adr/0040-shosai-tech-is-the-domain.md)). A prompt written before 2026-10-13 that disagrees with CLAUDE.md, SLICE_MAP.md or ADR 0038–0040 is wrong where it disagrees; the session says so and follows those documents.
+
 Every prompt relies on:
 
 - `.claude/CLAUDE.md` — loaded automatically in every session;

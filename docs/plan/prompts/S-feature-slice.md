@@ -46,7 +46,7 @@ A slice is too large for one session. Check STATUS.md and `docs/plan/slices/<nam
    - CLAUDE.md checks for the zones you changed, including the 100/100 gates;
    - contract compatibility with `contracts/draft/` for the endpoints and frames of this step — anything a native client uses must stay compatible;
    - the screens of this step look and behave as in the new web UI, now on real data;
-   - on https://one.whisperer.one once F4 is done.
+   - on https://shosai.tech once F4 is done.
 5. Tick the step off in the slice plan, update STATUS.md (`in progress`, or `done` after the last step), report and wait for «Принято».
 
 ## Definition of done for the whole slice

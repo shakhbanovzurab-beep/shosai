@@ -38,7 +38,7 @@ CREDENTIALS = TaskDeclaration(
     retry=NO_RETRY,
 )
 TRACE_ID = "4bf92f3577b34da6a3ce929d0e0e4736"
-LINK = "https://whisperer.one/reset?token=very-secret"
+LINK = "https://shosai.tech/reset?token=very-secret"
 
 
 def message(payload: object, task_name: str = TASK.name, **labels: str) -> TaskiqMessage:

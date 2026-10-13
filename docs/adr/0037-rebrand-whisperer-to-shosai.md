@@ -28,7 +28,7 @@
    | Variables `WHISPERER_*` of the local init script | `SHOSAI_*` |
 
 3. **Names that stay `whisperer`**, because changing them breaks something outside this repository or rewrites a record:
-   - the domain `whisperer.one` and its subdomains (`one.whisperer.one` stays the test domain): shipped clients call it and pin its certificate chain;
+   - the domain `whisperer.one` and its subdomains (the test domain moved to `shosai.tech`, [ADR 0040](0040-shosai-tech-is-the-domain.md)): shipped clients call it and pin its certificate chain;
    - the WebSocket subprotocols `whisperer-bearer` and `whisperer-room-pass`, the `whisperer://` scheme, `WhispererKit`, installer and client file names: the contract of shipped clients;
    - the draft: its path `/root/whisperer`, its repository, and everything captured from it — `contracts/draft/*.json`, `parity/` fixtures, inventory and seeds, and draft facts quoted in the plan (NATS streams `WHISPERER_EVENTS`, `WHISPERER_DLQ`, keys `whisperer:taskiq:…`, `whisperer:dlq:…`, `whisperer:billing:…`);
    - the file-format identifiers `whisperer-draft-consumers/1`, `whisperer-websocket-catalogue/1` and `whisperer-contract-acceptances/1`, which the captured baseline carries.
@@ -40,6 +40,10 @@
 - A local `.env` copied from the old `.env.example` must be updated to the new database, role and bucket names.
 - The brand and the canonical domain differ until a Shosai domain exists. SEO entity work (fact registry, `sameAs`, structured data) states the brand as Shosai and the official URL as `whisperer.one`.
 - Native clients are unaffected.
+
+## Revisited
+
+- 2026-10-13: the owner acquired `shosai.tech` — [ADR 0040](0040-shosai-tech-is-the-domain.md). Point 3's domain item now reads: `whisperer.one` stays the draft's production server and, after cutover, the address of the shipped native clients; `one.whisperer.one` is no longer the test domain.
 
 ## Revisit when
 

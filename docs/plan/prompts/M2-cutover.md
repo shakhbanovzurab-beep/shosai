@@ -4,7 +4,7 @@ Follow the common protocol in `docs/plan/prompts/README.md`. Load the four Docke
 
 ## Goal
 
-Switch `whisperer.one` from the draft to v2 in one night-time maintenance window of at most 30 minutes (nfr-12), with a tested way back.
+Move Shosai's users from the draft to v2 in one night-time maintenance window of at most 30 minutes (nfr-12), with a tested way back: v2 serves production on `shosai.tech`, and the API and WebSocket paths of `whisperer.one` are pointed at v2 so the shipped native clients keep working (ADR 0040).
 
 ## Before starting — ask the user
 
@@ -18,7 +18,7 @@ Switch `whisperer.one` from the draft to v2 in one night-time maintenance window
 
 ## Work
 
-1. A step-by-step runbook in `docs/runbooks/cutover.md`: announcement, write freeze on the draft, final incremental migration, verification, DNS or edge switch of `whisperer.one` to v2, smoke tests, unfreeze.
+1. A step-by-step runbook in `docs/runbooks/cutover.md`: announcement, write freeze on the draft, final incremental migration, verification, edge switch of `whisperer.one`'s API and WebSocket paths to v2, smoke tests, unfreeze.
 2. Go/no-go criteria at each step, and the rollback procedure back to the draft with its time limit.
 3. Checks that shipped native clients work against v2 in production: sign-in, live capture, meeting end, payment webhook, uploads.
 4. A full rehearsal on staging with the same steps and timings.

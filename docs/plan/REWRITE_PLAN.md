@@ -27,7 +27,7 @@ How Shosai is built in `/root/shosai`, with the draft (`/root/whisperer`) as a r
 |---|---|
 | Draft | `/root/whisperer` — read only. Production today runs the draft at `whisperer.one`. |
 | Final version | `/root/shosai` — the only place that changes. |
-| Test domain of v2 | **https://one.whisperer.one** — staging for v2. Separate from production: its own database, storage and secrets. |
+| Domain of v2 | **https://shosai.tech** — today the test environment (staging): its own databases, storage and secrets, separate from the draft's production on `whisperer.one` ([ADR 0040](../adr/0040-shosai-tech-is-the-domain.md)). |
 | Hosting now | RU/EU data homes and EU Valkey are not available yet. Develop and test on local containers; the code stays home-aware (CLAUDE.md, "Hosting constraints now"). |
 | Local tooling | uv 0.12.21, Python 3.14.7 (uv-managed), Node.js 26.10.0, npm 11, Docker 29.8 with Compose 5.5, ffmpeg. |
 | Production data | Never read or write the draft's production database or storage. `backend/.env` of v2 holds production values of the draft — do not use them. |
@@ -60,7 +60,7 @@ These packages read the draft and produce the references that every later packag
 | F1 | Backend foundation | `backend/` project: `core/`, `composition/`, `entrypoints/` for `api`, `ws`, `workers`, `scheduler`; configuration; home-aware database sessions; Valkey, Redis cache and S3 clients; structured logging and telemetry; the error envelope; the model-facing-English test; import-linter contracts; test-database claiming; health endpoints |
 | F2 | Frontend foundation | The cabinet in `frontend/`: the new web UI moved from Next.js to a Vite SPA without visual change — React Router, TanStack Query, `use-intl` with 16 locales, a data layer generated from the OpenAPI contract, the sample API removed, npm scripts required by CI ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) |
 | F3 | Local environment | `compose.dev.yaml`: PostgreSQL 18 with pgvector as **two databases standing in for the RU and EU homes**, Valkey, Redis cache, Qdrant, and later LiveKit; prepared test databases; one command to start and one to reset |
-| F4 | Delivery to staging | Dockerfile (one image, four roles), production Compose, NGINX, TLS, image registry, `scripts/release.sh`, CI build and deploy to https://one.whisperer.one |
+| F4 | Delivery to staging | Dockerfile (one image, four roles), production Compose, NGINX, TLS, image registry, `scripts/release.sh`, CI build and deploy to https://shosai.tech |
 | F5 | Observability | OpenTelemetry Collector, Prometheus, Alertmanager, Loki, Tempo, Grafana configuration per target architecture §16, including the `alerting` domain |
 | F6 | Platform services | The AI provider port that writes a cost row for every call, with spend control and the abuse guard; the email port; the periodic-job registry on `schedule_runs`; Jev decisions (`decide`) through the same port with a breaker per model ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)); the agent tool contract `core/agent_tools` through which every slice exposes tools to Leo ([ADR 0029](../adr/0029-leo-tools-owned-by-domain-slices.md)). Added by D4 (decision FM-4) because most slices need them from their first step |
 
@@ -103,7 +103,7 @@ The home screen, the Meetings overview, the Settings dialog and the admin dashbo
 | ID | Package | Output |
 |---|---|---|
 | M1 | Data migration | Tooling that moves the draft's production data into the v2 schema per D3, rehearsed on a copy, with verification of counts, invariants and money |
-| M2 | Cutover | Runbook and rehearsal: maintenance window ≤ 30 min (nfr-12), `whisperer.one` switched to v2, rollback path, native clients verified against production |
+| M2 | Cutover | Runbook and rehearsal: maintenance window ≤ 30 min (nfr-12), v2 in production on `shosai.tech`, the native clients' `whisperer.one` API pointed at v2, rollback path, native clients verified against production |
 
 ## 4. Dependencies and parallelism
 
@@ -124,19 +124,19 @@ The waves, from [SLICE_MAP.md](SLICE_MAP.md) §5 — each gives the user a worki
 | 1. Record, remember, ask | A person signs in on the web and on the desktop, records or uploads a meeting, reads its notes and asks Leo about it | identity → workspaces (core: access policy, RLS, audit) → billing (entitlements, minutes meter) → files → meetings → capture → agent (core, Action Gateway) | the shipped desktop clients run end to end on v2 staging: sign-in, capture, upload, notes; Leo answers over meetings and files with SSE and approvals |
 | 2. Track and connect | The home screen is real: tasks, calendar, recent notes, hubs that watch what is unresolved | tasks → connectors → calendar → knowledge → commitments → hubs; decisions and memory in parallel | action items are tasks on one board; meetings join calendar events; search and Leo cover knowledge; hubs fill themselves |
 | 3. Team and initiative | Workspaces work together; Leo speaks first when it is worth it | workspaces (screens) → billing (payments, seats, invoices) → proactive → errands → mail → studio → mcp | invite, share, pay per seat; Today feed and reminders; the inbox triaged |
-| 4. Operations and cutover readiness | Operators run the platform; every native and external route answers | support → releases → telemetry → rooms | the D1 gate passes on every native and external route |
+| 4. Operations and cutover readiness | Operators run the platform; every native and external route answers | support → releases → telemetry → rooms | the D1 gate passes and lists no native route as not served (`backend/tests/composition/native_routes_not_served.json` is empty; external routes are each slice's own design, F1 audit OD-2) |
 
 - The fixed dependencies are technical: F1 (as the F1 audit decides), F2, F3 and F6 steps 1–9 come before any slice; `identity` comes first, because every other slice needs an authenticated user; `workspaces` core comes before any slice with shareable resources, so they are written against the access policy from their first step (nfr-15, inv-14).
 - Within a wave, a later slice may start when the contracts it needs are published; the order above is the default path of [prompts/BACKEND-next-step.md](prompts/BACKEND-next-step.md), which prefers the slice that unblocks the most others. A step of a slice that needs a later slice's contract waits for it; STATUS.md names those steps.
 - `telemetry` may be pulled into wave 1 when the desktop clients move to staging, so their crash reports are not lost.
 - Slices run in parallel. Each touches only its own paths. Shared registration points (router, composition root, navigation, locale bundles) take small, additive edits, committed with explicit paths.
-- F4 is needed before a slice can be checked on https://one.whisperer.one; until then slices are verified locally.
+- F4 is needed before a slice can be checked on https://shosai.tech; until then slices are verified locally.
 
 ## 5. Decisions the user must provide
 
 | Needed by | Decision |
 |---|---|
-| F4 | The server for https://one.whisperer.one, SSH access for deployment, the DNS record, and the image registry (GHCR is proposed) |
+| F4 | The server for https://shosai.tech, SSH access for deployment, the DNS record, and the image registry (GHCR is proposed) |
 | F4 | Whether deploys to staging run automatically after green CI and production deploys are manual with approval (proposed) |
 | D4 | Which draft modules without a place in the target architecture are kept, merged or dropped — **decided 2026-10-01**, [FEATURE_MAP.md](FEATURE_MAP.md) section 7 |
 | Slice map | The cut of the slices and its decisions SM-1…SM-15 — **decided 2026-10-13**, [SLICE_MAP.md](SLICE_MAP.md) §8.1 |

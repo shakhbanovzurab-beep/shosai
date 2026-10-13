@@ -19,7 +19,7 @@ START_ATTRIBUTES = {
     "http.request.method": "GET",
     "url.path": "/s/share-token-123",
     "url.query": "q=someone@example.com",
-    "url.full": "https://whisperer.one/s/share-token-123",
+    "url.full": "https://shosai.tech/s/share-token-123",
     "client.address": "203.0.113.9",
 }
 

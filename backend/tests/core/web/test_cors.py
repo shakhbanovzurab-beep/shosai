@@ -4,7 +4,7 @@ from shosai.core.config.sections import WebSettings
 from shosai.core.web.request_ids import REQUEST_ID_HEADER
 from tests.core.web.probe_app import build_probe_app, client_of
 
-ADMIN = "https://admin.whisperer.one"
+ADMIN = "https://admin.shosai.tech"
 PREFLIGHT = {"Origin": ADMIN, "Access-Control-Request-Method": "POST"}
 
 

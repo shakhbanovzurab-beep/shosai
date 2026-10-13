@@ -111,12 +111,12 @@ def test_a_home_payload_gives_the_scope_and_the_log_fields() -> None:
 
 
 def test_a_task_secret_travels_in_clear_and_is_masked_for_diagnosis() -> None:
-    payload = Probe(note="сброс", link=SecretStr("https://whisperer.one/reset?t=abc"))
+    payload = Probe(note="сброс", link=SecretStr("https://shosai.tech/reset?t=abc"))
 
     sent = payload.model_dump(mode="json")
     kept = payload.model_dump(mode="json", context={MASK_SECRETS: True})
 
-    assert sent["link"] == "https://whisperer.one/reset?t=abc"
+    assert sent["link"] == "https://shosai.tech/reset?t=abc"
     assert kept["link"] == "***"
-    assert Probe.model_validate(sent).link == SecretStr("https://whisperer.one/reset?t=abc")
+    assert Probe.model_validate(sent).link == SecretStr("https://shosai.tech/reset?t=abc")
     assert "abc" not in repr(payload)

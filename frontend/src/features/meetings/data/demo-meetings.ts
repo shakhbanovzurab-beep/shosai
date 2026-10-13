@@ -45,7 +45,7 @@ const scheduled = (now: Date): Draft[] => {
       start: addMinutes(liveStart, 240),
       minutes: 60,
       source: "shosai",
-      joinUrl: "https://whisperer.one/room/fe-interview-7q2",
+      joinUrl: "https://shosai.tech/room/fe-interview-7q2",
       participants: people("Noah Kim", "Arham Khan", "Elena Petrova"),
     }),
     draft("m-sprint-planning", "Sprint planning", {

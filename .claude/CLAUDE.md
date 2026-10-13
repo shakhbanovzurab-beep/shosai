@@ -65,7 +65,7 @@ Shosai does not try to automate every second of the user's life. Its job is not 
 
 **Order.** Features can be rewritten in any order; there is no required sequence.
 
-**Plan and status.** The work is split into packages in [docs/plan/REWRITE_PLAN.md](../docs/plan/REWRITE_PLAN.md); each package's state is in [docs/plan/STATUS.md](../docs/plan/STATUS.md); each package has a launch prompt in [docs/plan/prompts/](../docs/plan/prompts/). The v2 test domain is **https://one.whisperer.one**.
+**Plan and status.** The work is split into packages in [docs/plan/REWRITE_PLAN.md](../docs/plan/REWRITE_PLAN.md); each package's state is in [docs/plan/STATUS.md](../docs/plan/STATUS.md); each package has a launch prompt in [docs/plan/prompts/](../docs/plan/prompts/). Shosai's domain is **https://shosai.tech**; today it runs the test environment ([ADR 0040](../docs/adr/0040-shosai-tech-is-the-domain.md)). `whisperer.one` is the draft's production server on a separate machine: v2 work does not touch it, and it matters only as the address the shipped native clients call.
 
 ### Hosting constraints now
 
