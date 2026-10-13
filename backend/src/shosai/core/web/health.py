@@ -1,6 +1,8 @@
-"""`GET /v1/health`: the public connectivity probe (D1, the web client reads `res.ok`).
+"""`GET /v1/health`: the public connectivity probe of the cabinet, which reads `res.ok`.
 
-It answers for the process only. Dependency state is reported by the readiness probe on
+It is not a route of the native clients, so the native-contract gate does not cover it;
+the route stays because the cabinet's generated client calls it. It answers for the
+process only. Dependency state is reported by the readiness probe on
 the internal ops port, never through the edge (F1 plan, F1-C3).
 """
 

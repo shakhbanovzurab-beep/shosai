@@ -5,9 +5,10 @@ The id reaches every log line of the request, the `X-Request-ID` response header
 """
 
 import re
-import uuid
 from collections.abc import MutableMapping
 from typing import Any
+
+from shosai.core.kernel.ids import new_id
 
 REQUEST_ID_HEADER = "X-Request-ID"
 _REQUEST_ID_HEADER_KEY = REQUEST_ID_HEADER.lower().encode("ascii")
@@ -25,7 +26,7 @@ class RequestIdMissingError(Exception):
 
 def assign_request_id(scope: Scope) -> str:
     """Keep the client's `X-Request-ID` if it is safe, else a new UUIDv7; store it in the scope."""
-    request_id = _incoming_request_id(scope) or uuid.uuid7().hex
+    request_id = _incoming_request_id(scope) or new_id().hex
     scope[_SCOPE_KEY] = request_id
     return request_id
 

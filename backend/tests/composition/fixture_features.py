@@ -4,6 +4,8 @@ start hooks nothing called).
 `notes` declares an event, an HTTP route, a task, a scheduler loop and a readiness probe;
 `digest` subscribes to the event of `notes` and serves a WebSocket-gateway route. Both
 record when their build is entered and left, so a test sees the lifecycle in order.
+`native_breaking_feature` serves a route of the shipped native clients in a shape they
+cannot decode, for the native-contract gate.
 """
 
 from collections.abc import AsyncIterator
@@ -26,6 +28,8 @@ from shosai.core.tasks.payloads import TaskPayload
 from shosai.core.tasks.queues import TaskQueue
 
 NOTES_ROUTE = "/v1/fixture-notes"
+# Нативный маршрут macOS и Windows 1.4.5 (contracts/draft/consumers.json).
+NATIVE_ROUTE = "/v1/auth/me"
 DIGEST_ROUTE = "/v1/ws/fixture-digest/status"
 
 
@@ -90,7 +94,7 @@ def notes_feature(lifecycle: Lifecycle, *, probe_name: str = "notes.index") -> F
         finally:
             lifecycle.events.append("notes:close")
 
-    return FeatureModule(name="notes", contract_slice="S07", build=build, events=(NoteWritten,))
+    return FeatureModule(name="notes", build=build, events=(NoteWritten,))
 
 
 def digest_feature(lifecycle: Lifecycle) -> FeatureModule:
@@ -121,7 +125,7 @@ def digest_feature(lifecycle: Lifecycle) -> FeatureModule:
         finally:
             lifecycle.events.append("digest:close")
 
-    return FeatureModule(name="digest", contract_slice="S14", build=build)
+    return FeatureModule(name="digest", build=build)
 
 
 def broken_feature(lifecycle: Lifecycle) -> FeatureModule:
@@ -133,7 +137,24 @@ def broken_feature(lifecycle: Lifecycle) -> FeatureModule:
         await open_client()
         yield FeatureParts()
 
-    return FeatureModule(name="broken", contract_slice="S15", build=build)
+    return FeatureModule(name="broken", build=build)
+
+
+def native_breaking_feature(name: str) -> FeatureModule:
+    """A slice serving a native route with a response the shipped clients cannot decode."""
+
+    @asynccontextmanager
+    async def build(_services: CoreServices) -> AsyncIterator[FeatureParts]:
+        router = APIRouter(prefix=NATIVE_ROUTE)
+
+        @router.get("")
+        async def read_account() -> dict[str, str]:
+            """A response without the fields the native clients read."""
+            return {"nickname": "fixture"}
+
+        yield FeatureParts(http_routers=(router,))
+
+    return FeatureModule(name=name, build=build)
 
 
 async def open_client() -> None:

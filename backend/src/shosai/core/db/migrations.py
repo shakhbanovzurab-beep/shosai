@@ -26,8 +26,8 @@ SCRIPT_LOCATION: Final = "shosai:migrations"
 TARGET_ATTRIBUTE: Final = "shosai.target"
 METADATA_ATTRIBUTE: Final = "shosai.metadata"
 CONNECTION_ATTRIBUTE: Final = "connection"
-# «WhisperM»: один ключ у всех запусков миграций одного дома.
-MIGRATION_LOCK_KEY: Final = 0x5768_6973_7065_724D
+# «ShosaiMg» в ASCII: один ключ у всех запусков миграций одного дома.
+MIGRATION_LOCK_KEY: Final = 0x5368_6F73_6169_4D67
 LOCK_TIMEOUT: Final = "5s"
 APPLICATION_NAME: Final = "shosai-migrate"
 

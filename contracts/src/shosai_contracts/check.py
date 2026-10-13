@@ -2,7 +2,9 @@
 
 The check starts from the baseline: every draft endpoint and frame within the scope
 must be found in v2 in a compatible form. New v2 endpoints are not checked:
-an addition is compatible by definition (§10: changes are additive only).
+an addition is compatible by definition (§10: changes are additive only). A scope with
+`served_only` holds only the endpoints v2 serves to the contract and lists the others as
+not served yet.
 """
 
 from dataclasses import dataclass, field
@@ -13,7 +15,7 @@ from shosai_contracts.http_check import (
     operations,
     response_is_untyped,
 )
-from shosai_contracts.inputs import Baseline, BaselineOperation, Candidate, Scope
+from shosai_contracts.inputs import Baseline, BaselineOperation, Candidate, RouteKey, Scope
 from shosai_contracts.jsonvalue import ContractInputError, JsonObject
 from shosai_contracts.model import (
     CompatClass,
@@ -39,7 +41,9 @@ from shosai_contracts.ws_check import (
 class _Run:
     """Accumulator of one check run."""
 
+    served_only: bool
     findings: list[Finding] = field(default_factory=list)
+    unserved: list[str] = field(default_factory=list)
     operations: int = 0
     routes: int = 0
     endpoints: int = 0
@@ -55,6 +59,13 @@ class _Run:
     ) -> None:
         self.findings += [locate(item, subject, compat_class, slice_id) for item in differences]
 
+    def is_skipped(self, subject: str, *, served: bool) -> bool:
+        """An endpoint v2 does not serve is skipped in served-only mode and listed instead."""
+        if served or not self.served_only:
+            return False
+        self.unserved.append(subject)
+        return True
+
 
 def check(
     baseline: Baseline,
@@ -64,19 +75,24 @@ def check(
 ) -> Report:
     """Compare v2 artifacts with the draft baseline within the given scope."""
     area = scope or Scope()
-    run = _Run()
+    run = _Run(served_only=area.served_only)
     in_scope = [
         item
         for item in baseline.operations
-        if item.compat_class is not CompatClass.EXCLUDED and area.includes(item.slice_id, item.path)
+        if item.compat_class is not CompatClass.EXCLUDED
+        and area.includes(item.slice_id, item.compat_class, item.path)
     ]
     if candidate.openapi is not None:
         _check_operations(baseline, candidate, candidate.openapi, in_scope, run)
     if candidate.routes is not None:
         _check_routes(candidate.routes, candidate.openapi, in_scope, run)
-    if candidate.websocket is not None:
-        endpoints = [item for item in baseline.websocket if area.includes(item.slice_id, item.path)]
-        _check_websocket(endpoints, candidate.websocket, run)
+    if candidate.websocket is not None or candidate.routes is not None:
+        endpoints = [
+            item
+            for item in baseline.websocket
+            if area.includes(item.slice_id, _endpoint_class(item), item.path)
+        ]
+        _check_websocket(endpoints, candidate, run)
     return _apply_acceptances(run, acceptances or {})
 
 
@@ -97,12 +113,15 @@ def _check_operations(
         draft = draft_operations.get(item.key)
         if draft is None:
             raise ContractInputError(f"baseline lists {item.subject} as in OpenAPI, but it is not")
+        current = candidate_operations.get(item.key)
+        routed = candidate.routes is not None and item.key in candidate.routes
+        if run.is_skipped(item.subject, served=current is not None or routed):
+            continue
         run.operations += 1
         run.untyped += response_is_untyped(documents.draft, draft)
-        current = candidate_operations.get(item.key)
         if current is not None:
             differences = compare_operation(documents, draft, current)
-        elif candidate.routes is not None and item.key in candidate.routes:
+        elif routed:
             differences = [_NOT_IN_OPENAPI]
         else:
             differences = [_MISSING]
@@ -129,8 +148,11 @@ def _check_routes(
     for item in in_scope:
         if item.in_openapi:
             continue
+        served = item.key in routes or item.key in documented
+        if run.is_skipped(item.subject, served=served):
+            continue
         run.routes += 1
-        if item.key not in routes and item.key not in documented:
+        if not served:
             run.add(
                 [Difference("route.missing", Impact.BREAKING, "", "v2 does not serve this route")],
                 item.subject,
@@ -139,28 +161,37 @@ def _check_routes(
             )
 
 
-def _check_websocket(endpoints: list[Endpoint], candidate: tuple[Endpoint, ...], run: _Run) -> None:
-    """Draft WebSocket endpoints and frames against the v2 catalogue."""
-    candidate_endpoints = {normalize_path(item.path): item for item in candidate}
+def _endpoint_class(endpoint: Endpoint) -> CompatClass:
+    return endpoint.compat_class or CompatClass.UNUSED
+
+
+_WS_MISSING = Difference(
+    "ws.endpoint_missing", Impact.BREAKING, "", "v2 does not serve this WebSocket"
+)
+_WS_NOT_IN_CATALOGUE = Difference(
+    "ws.not_in_catalogue",
+    Impact.RISKY,
+    "",
+    "v2 serves this WebSocket but its catalogue does not describe it, so its frames "
+    "cannot be verified",
+)
+
+
+def _check_websocket(endpoints: list[Endpoint], candidate: Candidate, run: _Run) -> None:
+    """Draft WebSocket endpoints and frames against the v2 catalogue and route snapshot."""
+    catalogued = {normalize_path(item.path): item for item in candidate.websocket or ()}
+    routes: frozenset[RouteKey] = candidate.routes or frozenset()
     for draft in endpoints:
-        run.endpoints += 1
-        endpoint_class = draft.compat_class or CompatClass.UNUSED
+        endpoint_class = _endpoint_class(draft)
         subject = f"WS {draft.path}"
-        current = candidate_endpoints.get(normalize_path(draft.path))
+        current = catalogued.get(normalize_path(draft.path))
+        routed = ("WS", normalize_path(draft.path)) in routes
+        if run.is_skipped(subject, served=current is not None or routed):
+            continue
+        run.endpoints += 1
         if current is None:
-            run.add(
-                [
-                    Difference(
-                        "ws.endpoint_missing",
-                        Impact.BREAKING,
-                        "",
-                        "v2 does not serve this WebSocket",
-                    )
-                ],
-                subject,
-                endpoint_class,
-                draft.slice_id,
-            )
+            missing = _WS_NOT_IN_CATALOGUE if routed else _WS_MISSING
+            run.add([missing], subject, endpoint_class, draft.slice_id)
             continue
         run.add(compare_connection(draft, current), subject, endpoint_class, draft.slice_id)
         current_frames = {frame.key: frame for frame in current.frames}
@@ -195,4 +226,5 @@ def _apply_acceptances(run: _Run, acceptances: dict[str, str]) -> Report:
             untyped_responses=run.untyped,
         ),
         unused_acceptances=tuple(sorted(set(acceptances) - used)),
+        unserved=tuple(sorted(run.unserved)),
     )

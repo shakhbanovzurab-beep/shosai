@@ -71,14 +71,24 @@ class Candidate:
 
 @dataclass(frozen=True, slots=True)
 class Scope:
-    """Which endpoints to check: owning slices and path prefixes (empty means all)."""
+    """Which endpoints to check: owning slices, consumer classes, path prefixes (empty: all).
+
+    With `served_only`, a draft endpoint the candidate does not serve is not a finding: the
+    report lists it as not served yet. A gate over an application that is still being
+    rebuilt uses it, so the routes it serves are held to the contract and the rest are
+    counted until they arrive.
+    """
 
     slices: frozenset[str] = frozenset()
+    classes: frozenset[CompatClass] = frozenset()
     path_prefixes: tuple[str, ...] = ()
+    served_only: bool = False
 
-    def includes(self, slice_id: str, path: str) -> bool:
+    def includes(self, slice_id: str, compat_class: CompatClass, path: str) -> bool:
         """Whether the endpoint is within the scope of the check."""
         if self.slices and slice_id not in self.slices:
+            return False
+        if self.classes and compat_class not in self.classes:
             return False
         return not self.path_prefixes or path.startswith(self.path_prefixes)
 

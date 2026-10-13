@@ -18,10 +18,15 @@ LINT_IMPORTS = Path(sys.executable).with_name("lint-imports")
 LAYERS = "Layers: entrypoints -> composition -> features -> core"
 FEATURES = "Features meet through contracts"
 PURE_KERNEL = "Pure kernel"
-CONTRACT_COUNT = 3
+PURE_DOMAIN = "Pure slice domain"
+CONTRACT_COUNT = 4
 BASE_TREE = {
     "shosai.core.kernel.homes": "",
-    "shosai.features.alpha.service": "",
+    # Домен опирается на ядро без фреймворков и на pydantic; адаптер среза — на домен.
+    "shosai.features.alpha.domain.rules": "import pydantic\nimport shosai.core.kernel.homes\n",
+    "shosai.features.alpha.service": (
+        "import sqlalchemy\nimport shosai.features.alpha.domain.rules\n"
+    ),
     # Контракт фичи вправе опираться на её внутренности: цепочка через контракт законна.
     "shosai.features.alpha.contracts": "import shosai.features.alpha.service\n",
     "shosai.features.beta.service": "import shosai.features.alpha.contracts\n",
@@ -76,6 +81,14 @@ def test_the_layered_tree_keeps_every_contract(tmp_path: Path) -> None:
         ("shosai.shared.helpers", "", LAYERS),
         ("shosai.core.kernel.clock", "import sqlalchemy\n", PURE_KERNEL),
         ("shosai.core.kernel.clock", "from fastapi import FastAPI\n", PURE_KERNEL),
+        ("shosai.features.beta.domain.sessions", "import sqlalchemy\n", PURE_DOMAIN),
+        ("shosai.features.beta.domain", "from langgraph.graph import StateGraph\n", PURE_DOMAIN),
+        # Косвенный путь тоже ломает контракт: домен → адаптер среза → SQLAlchemy.
+        (
+            "shosai.features.alpha.domain.plans",
+            "import shosai.features.alpha.service\n",
+            PURE_DOMAIN,
+        ),
     ],
 )
 def test_a_boundary_violation_breaks_its_contract(

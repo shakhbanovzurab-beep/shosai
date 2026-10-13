@@ -1,8 +1,8 @@
 """The slices of the backend, listed explicitly: nothing is found by importing modules.
 
 A new slice adds its `FeatureModule` here; every role then builds it, registers its
-tasks, routes its events, and the route snapshot and the D1 gate check its routes
-(backend README, "Adding a slice").
+tasks, routes its events, and the route snapshot and the native-contract gate check its
+routes (backend README, "Adding a slice").
 """
 
 from collections.abc import Sequence
@@ -31,8 +31,3 @@ def feature_events(features: Sequence[FeatureModule]) -> list[type[DomainEvent]]
 def feature_checks(features: Sequence[FeatureModule]) -> list[ProductionCheck]:
     """Every production check the slices add to the gate."""
     return [check for feature in features for check in feature.production_checks]
-
-
-def contract_slices(features: Sequence[FeatureModule]) -> frozenset[str]:
-    """The D1 slices whose draft routes the composed apps must keep: F1 and every slice."""
-    return frozenset({"F1", *(feature.contract_slice for feature in features)})

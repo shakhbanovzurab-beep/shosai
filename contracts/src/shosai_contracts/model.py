@@ -127,6 +127,8 @@ class Report:
     findings: tuple[Finding, ...]
     coverage: Coverage = field(default_factory=Coverage)
     unused_acceptances: tuple[str, ...] = ()
+    # Эндпоинты черновика в охвате, которых v2 ещё не обслуживает (только при served_only).
+    unserved: tuple[str, ...] = ()
 
     def count(self, severity: Severity) -> int:
         """Number of findings with the given severity."""

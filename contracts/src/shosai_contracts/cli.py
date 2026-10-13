@@ -18,7 +18,7 @@ from shosai_contracts.inputs import (
     parse_acceptances,
 )
 from shosai_contracts.jsonvalue import ContractInputError, load_json
-from shosai_contracts.model import Severity
+from shosai_contracts.model import CompatClass, Severity
 from shosai_contracts.render_docs import render_baseline_documents
 from shosai_contracts.render_report import render_json, render_text
 
@@ -50,6 +50,19 @@ def _parser() -> argparse.ArgumentParser:
         action="append",
         default=[],
         help="limit to operations owned by this slice, e.g. S04 (repeatable)",
+    )
+    run.add_argument(
+        "--class",
+        dest="classes",
+        action="append",
+        default=[],
+        choices=[item.value for item in CompatClass],
+        help="limit to operations of this consumer class, e.g. native (repeatable)",
+    )
+    run.add_argument(
+        "--served-only",
+        action="store_true",
+        help="check only the endpoints v2 serves; list the others as not served yet",
     )
     run.add_argument(
         "--path-prefix",
@@ -86,7 +99,12 @@ def _run_check(arguments: argparse.Namespace) -> int:
         if arguments.accept is None
         else parse_acceptances(load_json(arguments.accept), str(arguments.accept))
     )
-    scope = Scope(slices=frozenset(arguments.slices), path_prefixes=tuple(arguments.prefixes))
+    scope = Scope(
+        slices=frozenset(arguments.slices),
+        classes=frozenset(CompatClass(item) for item in arguments.classes),
+        path_prefixes=tuple(arguments.prefixes),
+        served_only=arguments.served_only,
+    )
     report = check(baseline, candidate, scope, acceptances)
     minimum = Severity(arguments.min_severity)
     render = render_json if arguments.format == "json" else render_text

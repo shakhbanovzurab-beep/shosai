@@ -17,13 +17,13 @@ import os
 import secrets
 import socket
 import time
-import uuid
 from collections.abc import AsyncGenerator, Callable
 from typing import Any
 
 import structlog
 from taskiq import AckableMessage, AsyncBroker, BrokerMessage, TaskiqMessage
 
+from shosai.core.kernel.ids import new_id
 from shosai.core.kv.connection import REDIS_FAILURES
 from shosai.core.observability.outage_log import OutageLog
 from shosai.core.tasks.dead_letter import (
@@ -50,7 +50,7 @@ log = structlog.stdlib.get_logger(__name__)
 
 def new_task_id() -> str:
     """A time-ordered task id: UUIDv7 in hex."""
-    return uuid.uuid7().hex
+    return new_id().hex
 
 
 def new_consumer_name() -> str:

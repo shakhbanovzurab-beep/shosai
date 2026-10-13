@@ -2,10 +2,9 @@
 
 Composition lists the modules explicitly (`composition/features.py`) and wires them into
 every role; nothing is found by importing modules. A module declares statically what
-must be known before any client exists — its tables, its event classes, its production
-checks and its slice in the D1 contract — and builds the rest from the core services when
-the process starts: HTTP and WebSocket routers, task handlers, event subscriptions,
-scheduler loops and readiness probes.
+must be known before any client exists — its tables, its event classes and its production
+checks — and builds the rest from the core services when the process starts: HTTP and
+WebSocket routers, task handlers, event subscriptions, scheduler loops and readiness probes.
 
 `build` is an async context manager entered at start in every role and left at stop, so
 a slice opens and closes its own clients with the process (draft lesson: feature start
@@ -42,8 +41,6 @@ from shosai.core.tasks.declaration import TaskHandler
 from shosai.core.tasks.sender import TaskSender
 
 FEATURE_NAME: Final = re.compile(r"[a-z][a-z0-9_]*")
-# Идентификатор среза в плане и в контракте D1 (contracts/draft/consumers.json): S04, F6.
-CONTRACT_SLICE: Final = re.compile(r"[SF][0-9]{1,2}")
 
 
 @dataclass(frozen=True, slots=True)
@@ -105,7 +102,6 @@ class FeatureModule:
 
     # Имя пакета среза в features/; уникально в бэкенде.
     name: str
-    contract_slice: str
     build: FeatureBuilder = no_parts
     models: tuple[type[ModelBase], ...] = ()
     events: tuple[type[DomainEvent], ...] = ()
@@ -114,7 +110,4 @@ class FeatureModule:
     def __post_init__(self) -> None:
         if not FEATURE_NAME.fullmatch(self.name):
             message = f"имя среза {self.name!r} — имя его пакета в snake_case"
-            raise ValueError(message)
-        if not CONTRACT_SLICE.fullmatch(self.contract_slice):
-            message = f"срез {self.name}: идентификатор в контракте D1 вида S04 или F6"
             raise ValueError(message)

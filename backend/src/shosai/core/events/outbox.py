@@ -11,7 +11,6 @@ and keeps the trace context and the request id of the unit of work, so the deliv
 continue the producer's trace and log lines (§16.2).
 """
 
-import uuid
 from typing import Protocol
 from uuid import UUID
 
@@ -22,6 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.db.transactions import transaction_info
 from shosai.core.events.domain_event import DomainEvent
 from shosai.core.events.records import OutboxMessage
+from shosai.core.kernel.ids import new_id
 from shosai.core.observability.log_context import bound_request_id
 
 TRACEPARENT = "traceparent"
@@ -69,7 +69,7 @@ class EventOutbox:
         transaction = transaction_info(session)
         if transaction.read_only:
             raise ReadOnlyEventTransactionError(event.event_type)
-        event_id = uuid.uuid7()
+        event_id = new_id()
         await session.execute(
             insert(OutboxMessage).values(
                 id=event_id,

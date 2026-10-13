@@ -98,3 +98,24 @@ def test_render_check_detects_stale_documents(tmp_path: Path) -> None:
     assert main(["--baseline", str(baseline), "render", "--check"]) == EXIT_FAILED
     assert main(["--baseline", str(baseline), "render"]) == EXIT_OK
     assert main(["--baseline", str(baseline), "render", "--check"]) == EXIT_OK
+
+
+def test_served_only_check_of_native_routes_names_the_unserved_ones(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    routes = tmp_path / "routes.json"
+    routes.write_text(json.dumps(["GET /v1/health"]), encoding="utf-8")
+    openapi = tmp_path / "openapi.json"
+    openapi.write_text(json.dumps({"openapi": "3.1.0", "paths": {}}), encoding="utf-8")
+    arguments = ["check", "--openapi", str(openapi), "--routes", str(routes)]
+    arguments += ["--class", "native", "--served-only"]
+
+    code = main([*arguments, "--format", "json"])
+
+    assert code == EXIT_OK
+    report = json.loads(capsys.readouterr().out)
+    assert report["scope"]["classes"] == ["native"]
+    assert "GET /v1/auth/me" in report["unserved"]
+    assert "WS /v1/ws/realtime" in report["unserved"]
+    assert main(arguments) == EXIT_OK
+    assert "Not served by v2 yet:" in capsys.readouterr().out

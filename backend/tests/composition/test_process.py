@@ -5,7 +5,7 @@ from datetime import timedelta
 
 import pytest
 
-from shosai.composition.features import check_features, contract_slices, feature_checks
+from shosai.composition.features import check_features, feature_checks
 from shosai.composition.process import (
     EXIT_FAILED,
     EXIT_OK,
@@ -92,15 +92,12 @@ def test_the_drain_and_the_close_fit_the_stop_grace_period() -> None:
     assert longest_drain + close < STOP_GRACE_PERIOD
 
 
-def test_the_slices_add_their_checks_and_their_contract_slices() -> None:
+def test_the_slices_add_their_checks_and_are_listed_once() -> None:
     def billing_dev_mode_off(_settings: Settings) -> list[GateViolation]:
         return []
 
-    billing = FeatureModule(
-        name="billing", contract_slice="S03", production_checks=(billing_dev_mode_off,)
-    )
+    billing = FeatureModule(name="billing", production_checks=(billing_dev_mode_off,))
 
     assert feature_checks([billing]) == [billing_dev_mode_off]
-    assert contract_slices([billing]) == {"F1", "S03"}
     with pytest.raises(ValueError, match="billing"):
         check_features([billing, billing])

@@ -163,6 +163,22 @@ forbidden_modules = [
 ]
 broken_contract_guidance = "core.kernel stays framework-free; move the adapter to its core package."
 
+# Домен среза не знает ни фреймворка, ни базы, ни транспорта, ни агентного рантайма, ни SDK
+# провайдеров (CLAUDE.md «Architecture»; Leo ARCHITECTURE §3.3); косвенные импорты тоже.
+# `google` — пространство google-genai: подпакет внешнего пакета import-linter не принимает.
+[[tool.importlinter.contracts]]
+id = "pure-slice-domain"
+name = "Pure slice domain"
+type = "forbidden"
+source_modules = ["shosai.features.*.domain"]
+forbidden_modules = [
+    "aioboto3", "aiobotocore", "alembic", "botocore", "fastapi", "google", "httpx",
+    "langchain_core", "langgraph", "livekit", "openai", "opentelemetry", "prometheus_client",
+    "psycopg", "redis", "sqlalchemy", "starlette", "structlog", "taskiq", "taskiq_redis",
+    "uvicorn", "websockets",
+]
+broken_contract_guidance = "A slice's domain is pure; put the adapter in its infrastructure or channels."
+
 # Только для `uv run alembic revision -m "…"`: новая ревизия по шаблону с applies_to.
 # Применяет миграции не CLI Alembic, а раннер shosai.core.db.migrations (ADR 0010).
 [tool.alembic]

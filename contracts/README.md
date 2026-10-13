@@ -89,7 +89,9 @@ Some client calls match no route (full list in [draft/consumers.md](draft/consum
 
 ## Using the harness in a slice
 
-The harness compares v2 artifacts with the baseline, limited to the routes a slice owns. It starts from the draft: every draft route and frame in scope must exist in v2 in a compatible form. New v2 routes are never findings.
+The harness compares v2 artifacts with the baseline within a scope: owning slices, consumer classes and path prefixes. It starts from the draft: every draft route and frame in scope must exist in v2 in a compatible form. New v2 routes are never findings.
+
+The backend's gate checks the `native` class only, whatever slice serves the route, with `--served-only`: a native route v2 serves must keep its contract, and a native route not served yet is listed in the report instead of failing (owner's decision OD-2 of the [F1 audit](../docs/plan/audits/F1-audit.md)). The backend records that list in `backend/tests/composition/native_routes_not_served.json`; it must be empty before cutover (M2). External callbacks are not gated: each slice designs its own and re-registers the URL with the provider.
 
 ### Produce the v2 artifacts
 
@@ -106,10 +108,10 @@ Any of the three can be left out; that part of the check is then skipped, and th
 ```bash
 uv run --project contracts shosai-contracts check \
     --openapi build/openapi.json --routes build/routes.json --websocket build/websocket.json \
-    --slice S04
+    --class native --served-only
 ```
 
-`--slice` (repeatable) limits the check to routes owned by the slice; ownership is the `slice` field in `draft/consumers.json`, and D4 may move it. `--path-prefix` limits by path. `--format json` gives a machine-readable report, and `--min-severity warning` hides info lines. The exit code is 0 when there are no errors, 1 when there are, and 2 when the input is invalid.
+`--slice` (repeatable) limits the check to routes owned by the slice; ownership is the `slice` field in `draft/consumers.json`, the draft-era cut of D4. `--class` (repeatable) limits it to a consumer class, `--path-prefix` by path. `--served-only` checks only the endpoints the candidate serves and lists the others as not served yet. A WebSocket endpoint found in the route snapshot but missing from the WebSocket catalogue is reported as `ws.not_in_catalogue`: its frames cannot be verified until the slice exports its catalogue. `--format json` gives a machine-readable report, and `--min-severity warning` hides info lines. The exit code is 0 when there are no errors, 1 when there are, and 2 when the input is invalid.
 
 ### Run it from a v2 test
 
@@ -125,11 +127,11 @@ shosai-contracts = { path = "../contracts", editable = true }
 
 ```python
 from fastapi import FastAPI
-from shosai_contracts import Candidate, Scope, check, load_baseline, render_text
+from shosai_contracts import Candidate, CompatClass, Scope, check, load_baseline, render_text
 
 
-def test_meetings_slice_keeps_the_draft_contract(app: FastAPI) -> None:
-    scope = Scope(slices=frozenset({"S04"}))
+def test_the_app_keeps_the_native_contract(app: FastAPI) -> None:
+    scope = Scope(classes=frozenset({CompatClass.NATIVE}), served_only=True)
     report = check(load_baseline(), Candidate(openapi=app.openapi()), scope)
     assert report.is_compatible, render_text(report, scope)
 ```

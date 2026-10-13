@@ -157,3 +157,34 @@ def test_baseline_inconsistency_is_reported_not_skipped() -> None:
 def test_route_snapshot_rejects_malformed_entries() -> None:
     with pytest.raises(ContractInputError, match="METHOD /path"):
         parse_routes(["/v1/me"], "routes")
+
+
+def test_scope_limits_by_consumer_class() -> None:
+    native = Scope(classes=frozenset({CompatClass.NATIVE}))
+    assert severities(Candidate(openapi=BROKEN), native) == {
+        "GET /v1/auth/me response.property_removed": "error"
+    }
+    report = check(BASELINE, Candidate(websocket=()), Scope(classes=frozenset({CompatClass.WEB})))
+    assert report.coverage.websocket_endpoints == 0
+
+
+def test_served_only_lists_what_v2_does_not_serve_instead_of_failing() -> None:
+    served_only = Scope(classes=frozenset({CompatClass.NATIVE}), served_only=True)
+    report = check(BASELINE, Candidate(openapi=spec(), routes=frozenset()), served_only)
+    assert report.is_compatible
+    assert report.unserved == ("GET /v1/auth/me", "WS /v1/ws/user")
+    assert report.coverage.operations == 0
+
+    broken = check(BASELINE, Candidate(openapi=BROKEN, routes=frozenset()), served_only)
+    assert not broken.is_compatible
+    assert broken.unserved == ("WS /v1/ws/user",)
+    assert broken.coverage.operations == 1
+
+
+def test_a_websocket_in_the_route_snapshot_without_a_catalogue_is_unverified() -> None:
+    routes = parse_routes(["WS /v1/ws/user"], "routes")
+    found = severities(Candidate(routes=routes), Scope(slices=frozenset({"S09"})))
+    assert found == {"WS /v1/ws/user ws.not_in_catalogue": "warning"}
+    assert severities(Candidate(routes=frozenset()), Scope(slices=frozenset({"S09"}))) == {
+        "WS /v1/ws/user ws.endpoint_missing": "error"
+    }

@@ -12,32 +12,30 @@ WILDCARD = "*"
 
 @dataclass(frozen=True, slots=True)
 class Locale:
-    """A supported language: its code, BCP 47 tag, endonym, Open Graph locale and direction."""
+    """A supported language: its code, endonym and direction."""
 
     code: str
-    hreflang: str
     endonym: str
-    og_locale: str
     rtl: bool = False
 
 
 LOCALES: tuple[Locale, ...] = (
-    Locale("en", "en", "English", "en_US"),
-    Locale("zh", "zh-Hant", "中文（繁體）", "zh_TW"),
-    Locale("es", "es", "Español", "es_ES"),
-    Locale("ru", "ru", "Русский", "ru_RU"),
-    Locale("hi", "hi", "हिन्दी", "hi_IN"),
-    Locale("ar", "ar", "العربية", "ar_AR", rtl=True),
-    Locale("pt", "pt", "Português", "pt_BR"),
-    Locale("fr", "fr", "Français", "fr_FR"),
-    Locale("it", "it", "Italiano", "it_IT"),
-    Locale("de", "de", "Deutsch", "de_DE"),
-    Locale("ja", "ja", "日本語", "ja_JP"),
-    Locale("ko", "ko", "한국어", "ko_KR"),
-    Locale("id", "id", "Bahasa Indonesia", "id_ID"),
-    Locale("tr", "tr", "Türkçe", "tr_TR"),
-    Locale("vi", "vi", "Tiếng Việt", "vi_VN"),
-    Locale("th", "th", "ไทย", "th_TH"),
+    Locale("en", "English"),
+    Locale("zh", "中文（繁體）"),
+    Locale("es", "Español"),
+    Locale("ru", "Русский"),
+    Locale("hi", "हिन्दी"),
+    Locale("ar", "العربية", rtl=True),
+    Locale("pt", "Português"),
+    Locale("fr", "Français"),
+    Locale("it", "Italiano"),
+    Locale("de", "Deutsch"),
+    Locale("ja", "日本語"),
+    Locale("ko", "한국어"),
+    Locale("id", "Bahasa Indonesia"),
+    Locale("tr", "Türkçe"),
+    Locale("vi", "Tiếng Việt"),
+    Locale("th", "ไทย"),
 )
 LOCALE_BY_CODE = {locale.code: locale for locale in LOCALES}
 SUPPORTED_LANGUAGES = tuple(LOCALE_BY_CODE)
