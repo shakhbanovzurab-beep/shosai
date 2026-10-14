@@ -181,6 +181,10 @@ class SpendGuard:
                 answer = int(await self._reserve(keys=keys, args=args))
         except REDIS_FAILURES as error:
             self._outages.failed(error, operation="reserve")
+            if isinstance(error, TimeoutError):
+                # Скрипт мог зарезервировать, а ответ — опоздать: без снятия резерв без владельца
+                # держал бы потолок всю аренду.
+                await self._shrunk(Hold(reservation, tuple(c.held for c, _ in limited)), 0)
             if expensive:
                 self._metrics.decided(context.call_class, "paused")
                 raise AiCallError(AiFailure.EXPENSIVE_PAUSED) from None

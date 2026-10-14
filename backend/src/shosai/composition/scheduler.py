@@ -19,10 +19,12 @@ from shosai.core.email.system import EMAIL_SWEEP_SOURCE
 from shosai.core.events.monitor import OutboxMonitor
 from shosai.core.events.system import RELAY_EVERY, RELAY_OUTBOX
 from shosai.core.kernel.homes import Home
+from shosai.core.observability.outage_log import OutageLog
 from shosai.core.runtime.loops import ScheduledLoop
 from shosai.core.schedule.metrics import ScheduleMetrics
 from shosai.core.schedule.walker import ScheduleWalker
 from shosai.core.tasks.declaration import TaskDeclaration
+from shosai.core.tasks.errors import TaskQueueUnavailableError
 from shosai.core.tasks.monitor import QueueMonitor
 from shosai.core.tasks.payloads import HomeTaskPayload
 from shosai.core.tasks.sender import TaskSender
@@ -36,10 +38,21 @@ WALK_EVERY: Final = timedelta(seconds=5)
 def home_tick(
     sender: TaskSender, task: TaskDeclaration[HomeTaskPayload], home: Home
 ) -> Callable[[], Awaitable[bool]]:
-    """Queue the task's tick for one home, with the home as its marker."""
+    """Queue the task's tick for one home, with the home as its marker.
+
+    Valkey that does not answer within the tick's 50 ms is an outage the sender already
+    counted (`shosai_task_send_failures_total`), not a broken iteration: it is logged once
+    per interval and the next tick tries again, as the job walk does. A stalled relay still
+    shows in the outbox age.
+    """
+    outages = OutageLog("Такт не поставлен: очередь недоступна, следующий попробует снова")
 
     async def tick() -> bool:
-        return await sender.send_tick(task, HomeTaskPayload(home=home), home.value)
+        try:
+            return await sender.send_tick(task, HomeTaskPayload(home=home), home.value)
+        except TaskQueueUnavailableError as unavailable:
+            outages.failed(unavailable, task_name=task.name, home=home.value)
+            return False
 
     return tick
 

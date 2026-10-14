@@ -12,7 +12,7 @@ from shosai.core.observability.log_context import log_context
 from shosai.core.tasks.declaration import TaskKind
 from shosai.core.tasks.errors import TaskQueueUnavailableError, UnregisteredTaskError
 from shosai.core.tasks.queues import TaskQueue, stream_key, tick_key
-from tests.core.kv.outages import closed_port, redis_url, silent_server
+from tests.core.kv.outages import LateAnswerValkey, closed_port, redis_url, silent_server
 from tests.core.tasks.workbench import Probe, Runs, declare, stream_entries_of, workbench
 
 REPORT = declare("probe.report", queue=TaskQueue.CRITICAL)
@@ -137,3 +137,15 @@ async def test_a_tick_that_could_not_be_queued_does_not_block_the_next(valkey: R
         await bench.system.sender.send_tick(SWEEP, Probe(note="x"), "ru")
 
     assert await valkey.exists(tick_key(SWEEP.name, "ru")) == 0
+
+
+async def test_a_marker_set_after_the_deadline_is_taken_back(valkey: Redis) -> None:
+    late = LateAnswerValkey(connection_pool=valkey.connection_pool)
+    bench = workbench(late, HANDLERS)
+
+    with pytest.raises(TaskQueueUnavailableError):
+        await bench.system.sender.send_tick(SWEEP, Probe(note="x"), "ru")
+
+    # Иначе маркер без такта держал бы следующие такты весь срок удержания.
+    assert await valkey.exists(tick_key(SWEEP.name, "ru")) == 0
+    assert await workbench(valkey, HANDLERS).system.sender.send_tick(SWEEP, Probe(note="y"), "ru")

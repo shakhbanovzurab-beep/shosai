@@ -4,7 +4,9 @@ The scheduler sets the marker when it queues a tick, and the worker removes it w
 tick's run ends, whatever the outcome. While the marker exists the next tick is skipped,
 so slow ticks during an outage never pile up and exhaust the database pool (draft
 lesson: 176 overlapping relay ticks). A marker holds the tick's task id and is removed
-only by that tick; if the worker dies, the marker expires with the task's hold limit.
+only by that tick; if the worker dies, the marker expires with the task's hold limit. A
+mark whose answer came too late may still have been applied, so the sender takes its own
+marker back before it reports the queue unavailable.
 """
 
 import asyncio

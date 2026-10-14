@@ -64,6 +64,10 @@ class TaskSender:
         try:
             marked = await self._ticks.mark(key, task_id, task.hold_limit)
         except REDIS_FAILURES as error:
+            if isinstance(error, TimeoutError):
+                # Тайм-аут не отменяет SET: маркер мог встать, а ответ — опоздать. Маркер без
+                # такта держал бы следующие такты весь срок удержания; снимаем свой.
+                await self._ticks.release(key, task_id)
             self._metrics.count_send_failure(task.queue, "unavailable")
             raise TaskQueueUnavailableError(task.queue) from error
         if not marked:

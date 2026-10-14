@@ -1,6 +1,7 @@
 """Distributed locks: one holder, safe release and extension, a stated outage policy."""
 
 import asyncio
+import contextlib
 import time
 from contextlib import AsyncExitStack
 from datetime import timedelta
@@ -18,7 +19,14 @@ from shosai.core.kv.locks import (
 )
 from shosai.core.kv.metrics import KeyValueMetrics
 from tests.core.db.tcp_proxy import CountingProxy
-from tests.core.kv.outages import closed_port, redis_url, silent_server, through, upstream_of
+from tests.core.kv.outages import (
+    LateAnswerValkey,
+    closed_port,
+    redis_url,
+    silent_server,
+    through,
+    upstream_of,
+)
 
 CLOSED = LockOutagePolicy.FAIL_CLOSED
 OPEN = LockOutagePolicy.FAIL_OPEN
@@ -166,3 +174,18 @@ async def test_a_lock_name_is_a_code_not_free_text() -> None:
         async with locks.hold("user anna@example.com", ttl=LONG, outage=CLOSED):
             pytest.fail("блокировка с таким именем не берётся")
     await client.aclose()
+
+
+@pytest.mark.parametrize("policy", [OPEN, CLOSED])
+async def test_a_lock_set_after_the_deadline_is_taken_back(
+    valkey: Redis, policy: LockOutagePolicy
+) -> None:
+    locks, _ = build_locks(LateAnswerValkey(connection_pool=valkey.connection_pool))
+
+    with contextlib.suppress(LockUnavailableError):
+        async with locks.hold("relay.ru", ttl=LONG, outage=policy) as lease:
+            assert lease is not None
+            assert not lease.guarded
+
+    # Иначе замок без держателя стоял бы весь TTL, и остальные пропускали бы работу.
+    assert await valkey.exists(LOCK_KEY) == 0

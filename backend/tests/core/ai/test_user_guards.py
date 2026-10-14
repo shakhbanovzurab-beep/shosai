@@ -1,5 +1,6 @@
 """Per-user guards: two interactive streams at once, input caps, one spend alert a day."""
 
+from collections.abc import Sequence
 from contextlib import AsyncExitStack
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
@@ -8,6 +9,7 @@ import pytest
 from redis.asyncio import Redis
 
 from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRoute
+from shosai.core.ai.costs.entries import CostEntry
 from shosai.core.ai.decisions import DecisionRequest, NoulQuestion
 from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.events import UserSpendExceeded
@@ -29,6 +31,7 @@ from tests.core.ai.bench import (
     unreachable_valkey,
 )
 from tests.core.ai.test_spend_reports import OTHER_USER, row
+from tests.core.kv.outages import LateAnswerValkey
 from tests.doubles.openrouter import stream_answer, usage
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
@@ -154,3 +157,42 @@ async def test_a_user_passing_the_threshold_yields_one_alert_a_day(
         "user_id": str(USER_ID), "day": now.date().isoformat(),
         "spend_micro_usd": 550_000, "threshold_micro_usd": 500_000,
     }  # fmt: skip
+
+
+async def test_an_alert_marker_set_after_the_deadline_is_taken_back(
+    homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis
+) -> None:
+    outbox = EventOutbox(EventTypes([UserSpendExceeded]))
+    alerts = [
+        SpendAlert(client, homes.transactions, outbox, threshold_micro=500_000)
+        for client in (LateAnswerValkey(connection_pool=valkey.connection_pool), valkey)
+    ]
+    writer = ai_bench(homes.transactions, doubles=Doubles(valkey=valkey)).writer
+
+    async def current_alert(entries: Sequence[CostEntry]) -> None:
+        await alerts[0].observe(entries)
+
+    writer.observe(current_alert)
+    now = datetime.now(UTC)
+
+    for cost in ("0.30", "0.25"):
+        await writer.write(row(Home.EU, now, cost))
+    # Тревога первого порога потерялась с ответом; её пометка не должна съесть сутки.
+    alerts.pop(0)
+    await writer.write(row(Home.EU, now, "0.40"))
+
+    events = await fetch_rows(
+        run_slot.claimed.connections[Home.EU],
+        "SELECT payload FROM outbox_messages WHERE event_type = 'ai.user_spend.exceeded'",
+    )
+    assert [event["payload"]["spend_micro_usd"] for event in events] == [950_000]
+
+
+async def test_a_stream_place_taken_after_the_deadline_is_given_back(valkey: Redis) -> None:
+    late = StreamCap(LateAnswerValkey(connection_pool=valkey.connection_pool), cap=1)
+
+    async with late.held(of(CallClass.STANDARD)):
+        in_flight = await valkey.zcard(build_key("ai", "streams", USER_ID.hex))
+
+    # Иначе место без потока 120 с отказывало бы человеку в единственном разрешённом потоке.
+    assert in_flight == 0

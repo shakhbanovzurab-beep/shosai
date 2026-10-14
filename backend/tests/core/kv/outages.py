@@ -10,6 +10,7 @@ import contextlib
 import socket
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Any
 
 from pydantic import SecretStr
 from redis.asyncio import Redis
@@ -63,3 +64,21 @@ def through(client: Redis, port: int) -> SecretStr:
     """The same server, password and database index, reached through a loopback proxy."""
     kwargs = client.connection_pool.connection_kwargs
     return SecretStr(f"redis://:{kwargs['password']}@{LOOPBACK}:{port}/{kwargs['db']}")
+
+
+class LateAnswerValkey(Redis):
+    """Valkey whose SET and scripts are applied but answered too late: the client times out.
+
+    A client-side deadline does not cancel a command the server already took; this plays
+    that outage for code that sets a key under a deadline (tick markers, locks).
+    """
+
+    async def set(self, *args: Any, **kwargs: Any) -> Any:  # noqa: ANN401
+        """Apply the SET, then lose its answer."""
+        await super().set(*args, **kwargs)
+        raise TimeoutError
+
+    async def evalsha(self, *args: Any, **kwargs: Any) -> Any:  # noqa: ANN401
+        """Run the script, then lose its answer."""
+        await super().evalsha(*args, **kwargs)
+        raise TimeoutError

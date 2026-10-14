@@ -7,10 +7,13 @@ the next holder. A lock lives only for its TTL: long work extends it in time or 
 When Valkey does not answer within 50 ms (§4.3), the caller's policy decides, and the
 caller must state it (draft lesson: a fail-open leader lock risked double charges):
 fail closed — `LockUnavailableError`, the guarded work does not run; fail open — the work
-runs unguarded, for jobs where a second concurrent run is harmless.
+runs unguarded, for jobs where a second concurrent run is harmless. A deadline does not
+cancel a command Valkey already took: after a timed-out `SET` the caller takes its own
+token's lock back, or a lock without a holder would stand for its whole TTL.
 """
 
 import asyncio
+import contextlib
 import secrets
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -136,9 +139,19 @@ class DistributedLocks:
             async with asyncio.timeout(LOCK_DEADLINE.total_seconds()):
                 taken = await self._client.set(key, token, nx=True, px=lock_milliseconds(ttl))
         except REDIS_FAILURES as error:
+            if isinstance(error, TimeoutError):
+                # Тайм-аут не отменяет SET: замок мог встать, а ответ — опоздать. Без снятия
+                # он стоял бы без держателя весь TTL, и остальные пропускали бы работу.
+                await self._take_back(key, token)
             self._outage(error, outage, "acquire")
             return None
         return taken is True
+
+    async def _take_back(self, key: str, token: str) -> None:
+        """Remove this token's lock if a late SET left it; the outage is counted already."""
+        with contextlib.suppress(*REDIS_FAILURES):
+            async with asyncio.timeout(LOCK_DEADLINE.total_seconds()):
+                await self._release_script(keys=[key], args=[token])
 
     async def _release(self, key: str, token: str, outage: LockOutagePolicy) -> None:
         """Release the lock; when Valkey is out, it expires by its TTL instead."""

@@ -1,6 +1,7 @@
 """Spend control: ceilings never stop essential calls, reservations hold, the kill switch."""
 
 import asyncio
+from collections import Counter
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
@@ -38,6 +39,7 @@ from tests.core.ai.bench import (
     ai_bench,
     set_prices,
 )
+from tests.core.kv.outages import LateAnswerValkey
 from tests.doubles.openrouter import chat_answer, usage
 from tests.harness.database_access import DatabaseAccess
 
@@ -163,16 +165,33 @@ async def test_concurrent_reservations_never_pass_a_ceiling(valkey: Redis) -> No
     # Потолок дня — 7000 мкр$, оценка вызова — 2000: проходят ровно три из десяти.
     context = call(CallClass.STANDARD, limits=(SpendLimit(SpendPeriod.DAY, 7000),))
 
-    async def reserve() -> bool:
+    async def reserve() -> str:
         try:
-            await guard.reserve(metered(context), ESTIMATE)
+            hold = await guard.reserve(metered(context), ESTIMATE)
         except AiCallError:
-            return False
-        return True
+            return "refused"
+        return "held" if hold is not None else "unguarded"
 
-    taken = await asyncio.gather(*(reserve() for _ in range(10)))
+    outcomes = Counter(await asyncio.gather(*(reserve() for _ in range(10))))
 
-    assert sum(taken) == 3
+    # Ответ, опоздавший за 50 мс, пускает standard-вызов без резерва (fail open, F6 §3.6);
+    # резервов же не больше потолка никогда, а без опозданий их ровно три.
+    assert outcomes["held"] <= 3
+    assert outcomes["held"] == 3 or outcomes["unguarded"]
+    assert outcomes.total() == 10
+
+
+async def test_a_reservation_applied_after_the_deadline_is_taken_back(valkey: Redis) -> None:
+    late = guard_over(LateAnswerValkey(connection_pool=valkey.connection_pool), OPEN_CEILINGS)
+    guard = guard_over(valkey, OPEN_CEILINGS)
+    context = call(CallClass.STANDARD, limits=(SpendLimit(SpendPeriod.DAY, 7000),))
+
+    unguarded = await late.reserve(metered(context), ESTIMATE)
+    holds = [await guard.reserve(metered(context), ESTIMATE) for _ in range(3)]
+
+    # Иначе резерв без владельца держал бы 2000 из 7000 до конца аренды.
+    assert unguarded is None
+    assert all(hold is not None for hold in holds)
 
 
 async def test_an_expired_reservation_frees_its_amount(valkey: Redis) -> None:

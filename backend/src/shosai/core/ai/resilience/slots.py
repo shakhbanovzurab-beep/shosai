@@ -82,6 +82,9 @@ class ProviderSlots:
             )
         except REDIS_FAILURES as error:
             self._outages.failed(error, operation="take", provider=provider.value)
+            if isinstance(error, TimeoutError):
+                # Скрипт мог занять слот, а ответ — опоздать: слот без владельца жил бы 120 с.
+                await self._release(key, member)
             if call_class is CallClass.EXPENSIVE:
                 self._metrics.slot(provider.value, "refused")
                 raise AiCallError(AiFailure.EXPENSIVE_PAUSED) from None

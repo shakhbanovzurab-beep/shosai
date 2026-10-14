@@ -74,6 +74,9 @@ class StreamCap:
                 joined = int(await self._join(keys=[key], args=args)) == 1
         except REDIS_FAILURES as error:
             self._outages.failed(error, operation="join")
+            if isinstance(error, TimeoutError):
+                # Скрипт мог принять поток, а ответ — опоздать: место без потока жило бы 120 с.
+                await self._leave(key, member)
             yield
             return
         if not joined:
@@ -85,12 +88,15 @@ class StreamCap:
             beating.cancel()
             with contextlib.suppress(asyncio.CancelledError):
                 await beating
-            try:
-                async with asyncio.timeout(VALKEY_DEADLINE):
-                    await self._client.zrem(key, member)
-            except REDIS_FAILURES as error:
-                # Не ушёл — уйдёт сам через 120 с без пульса.
-                self._outages.failed(error, operation="leave")
+            await self._leave(key, member)
+
+    async def _leave(self, key: str, member: str) -> None:
+        """Leave the user's streams; when Valkey is out, the member goes in 120 s unbeaten."""
+        try:
+            async with asyncio.timeout(VALKEY_DEADLINE):
+                await self._client.zrem(key, member)
+        except REDIS_FAILURES as error:
+            self._outages.failed(error, operation="leave")
 
     async def _keep(self, key: str, member: str) -> None:
         while True:

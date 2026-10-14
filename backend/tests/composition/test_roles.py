@@ -31,6 +31,8 @@ from tests.harness.process_environ import LOOPBACK
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
 
+# Один тик на дом у relay и у развёртки почты: повторные отметки тика не ставят.
+EXPECTED_TICKS = Counter({"events.relay_outbox": 2, "email.sweep": 2})
 WAIT_SECONDS = 10.0
 LOOP_SUCCESS = "shosai_loop_last_success_timestamp_seconds"
 
@@ -48,6 +50,19 @@ async def eventually(holds: Callable[[], bool]) -> None:
         if time.monotonic() > deadline:
             pytest.fail(f"условие не выполнилось за {WAIT_SECONDS} с", pytrace=False)
         await asyncio.sleep(0.02)
+
+
+async def critical_ticks(valkey: Redis, until: Counter[str]) -> Counter[str]:
+    """The ticks queued on `critical` by task name, once they reach `until` or time runs out."""
+    deadline = time.monotonic() + WAIT_SECONDS
+    while True:
+        queued = await stream_entries_of(valkey, "shosai:tasks:critical")
+        ticks = Counter(
+            TaskiqMessage.model_validate_json(fields[b"data"]).task_name for _, fields in queued
+        )
+        if ticks >= until or time.monotonic() > deadline:
+            return ticks
+        await asyncio.sleep(0.05)
 
 
 async def test_the_api_and_the_gateway_each_serve_their_own_routes(
@@ -90,18 +105,19 @@ async def test_the_scheduler_runs_the_core_loops_and_the_slices_loops(
     lifecycle = Lifecycle()
     core = ("events.relay_outbox.ru", "events.relay_outbox.eu", "tasks.queue_monitor")
 
-    async with platform_over_slot(
-        run_slot, harness_settings, (notes_feature(lifecycle),), ProcessRole.SCHEDULER
-    ) as bench:
-        async with scheduler_role(bench.platform, bench.telemetry) as tasks:
-            await eventually(
-                lambda: all(bench.sample(LOOP_SUCCESS, shosai_loop_name=loop) for loop in core)
-            )
-            await eventually(lambda: "notes:sweep" in lifecycle.events)
-        queued = await stream_entries_of(valkey, "shosai:tasks:critical")
-    ticks = Counter(
-        TaskiqMessage.model_validate_json(fields[b"data"]).task_name for _, fields in queued
-    )
+    async with (
+        platform_over_slot(
+            run_slot, harness_settings, (notes_feature(lifecycle),), ProcessRole.SCHEDULER
+        ) as bench,
+        scheduler_role(bench.platform, bench.telemetry) as tasks,
+    ):
+        await eventually(
+            lambda: all(bench.sample(LOOP_SUCCESS, shosai_loop_name=loop) for loop in core)
+        )
+        await eventually(lambda: "notes:sweep" in lifecycle.events)
+        # Под нагрузкой маркер такта может не уложиться в 50 мс: такт ставит следующая
+        # итерация, поэтому ждём сами такты, а не успех итераций.
+        ticks = await critical_ticks(valkey, until=EXPECTED_TICKS)
 
     assert {task.get_name() for task in tasks} >= {
         "loop:notes.sweep",
@@ -111,5 +127,4 @@ async def test_the_scheduler_runs_the_core_loops_and_the_slices_loops(
     }
     assert not {task.get_name() for task in tasks} & {"loop:events.purge_outbox.ru"}
     assert all(task.done() for task in tasks)
-    # Один тик на дом у relay и у развёртки почты: повторные отметки тика не ставят.
-    assert ticks == {"events.relay_outbox": 2, "email.sweep": 2}
+    assert ticks == EXPECTED_TICKS

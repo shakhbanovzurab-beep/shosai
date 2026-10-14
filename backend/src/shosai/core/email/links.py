@@ -84,6 +84,9 @@ class UnsubscribeLinks:
 
     def read(self, token: str) -> Unsubscription | None:
         """What the token asks, or None for anything not signed by us."""
+        # Оба вида токенов — ASCII; иное, вплоть до одиночного суррогата, — не наш токен.
+        if not token.isascii():
+            return None
         if token.startswith(f"{V2}."):
             return self._read_v2(token)
         return self._read_draft(token)

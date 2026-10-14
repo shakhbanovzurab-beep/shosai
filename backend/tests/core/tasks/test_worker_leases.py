@@ -15,8 +15,10 @@ from tests.core.kv.outages import closed_port, redis_url
 from tests.core.observability.capture import captured_logs
 from tests.core.tasks.workbench import (
     FAST,
+    Check,
     Probe,
     Runs,
+    Workbench,
     counted,
     declare,
     eventually,
@@ -54,21 +56,38 @@ async def test_a_long_task_is_not_redelivered_while_its_lease_is_renewed(valkey:
     first = workbench(valkey, [handler], consumer="worker-a")
     second = workbench(valkey, [handler], consumer="worker-b")
 
+    benches = (first, second)
     async with running(first.broker()), running(second.broker()):
         await first.system.sender.send(task, Probe(note="долго"))
         await eventually(lambda: _has_pending(valkey))
         await asyncio.sleep(LEASE_SECONDS * 2)
         assert [count for _, count in await deliveries_of(valkey)] == [1]
-        await eventually(settled(first, task.name, "succeeded"), within=LEASE_SECONDS * 4)
+        # Сообщение читает тот воркер, чей XREADGROUP успел первым: ждём любого из двух.
+        await eventually(settled_by_one_of(benches, task.name), within=LEASE_SECONDS * 4)
 
+    succeeded = [
+        bench.sample("shosai_task_runs_total", queue="default", task=task.name, outcome="succeeded")
+        for bench in benches
+    ]
     assert runs.notes == ["долго"]
-    assert (
-        second.sample(
-            "shosai_task_runs_total", queue="default", task=task.name, outcome="succeeded"
-        )
-        == 0
-    )
+    assert sorted(succeeded) == [0, 1]
+    assert [
+        bench.sample("shosai_task_leases_lost_total", queue="default") for bench in benches
+    ] == [
+        0,
+        0,
+    ]
     assert await first.depth() == 0
+
+
+def settled_by_one_of(benches: tuple[Workbench, ...], task: str) -> Check:
+    """Holds once any of the workers finished the task."""
+    checks = [settled(bench, task, "succeeded") for bench in benches]
+
+    async def check() -> bool:
+        return any([await each() for each in checks])
+
+    return check
 
 
 async def test_a_dead_workers_task_is_run_again_by_another_worker(valkey: Redis) -> None:

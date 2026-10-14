@@ -5,10 +5,13 @@ is compared with `AI_USER_DAILY_ALERT_USD`. The first time it passes, an atomic 
 marker that lives to the end of the UTC day decides the one alert of that user and day, and
 the event `ai.user_spend.exceeded` is written to the outbox in its own small transaction in
 the user's home — not in the cost row's transaction, which makes no external call (§14
-rule 1). If that write fails, the marker is lifted and the next row tries again.
+rule 1). If that write fails, the marker is lifted and the next row tries again. The
+marker holds this attempt's id, so the same holds when the check's answer came too late
+to be read: only the attempt's own marker is lifted, never an earlier alert's.
 """
 
 import asyncio
+import secrets
 from collections.abc import Sequence
 from datetime import UTC, datetime, timedelta
 from typing import Final
@@ -27,14 +30,16 @@ from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.kv.connection import REDIS_FAILURES
 from shosai.core.kv.keys import build_key
+from shosai.core.kv.locks import RELEASE_SCRIPT
 from shosai.core.observability.outage_log import OutageLog
 
 VALKEY_DEADLINE: Final = 0.05
-# KEYS: траты за день, метка. ARGV: порог, срок метки. Ответ: траты, если тревога — эта.
+# KEYS: траты за день, метка. ARGV: порог, срок метки, id попытки. Ответ: траты, если
+# тревога — эта.
 ALERT_SCRIPT: Final = """
 local total = tonumber(redis.call('GET', KEYS[1]) or '0')
 if total < tonumber(ARGV[1]) then return 0 end
-if redis.call('SET', KEYS[2], '1', 'NX', 'PX', ARGV[2]) then return total end
+if redis.call('SET', KEYS[2], ARGV[3], 'NX', 'PX', ARGV[2]) then return total end
 return 0
 """
 log = structlog.stdlib.get_logger(__name__)
@@ -52,6 +57,7 @@ class SpendAlert:
     ) -> None:
         self._valkey = valkey
         self._check = valkey.register_script(ALERT_SCRIPT)
+        self._lift = valkey.register_script(RELEASE_SCRIPT)
         self._transactions = transactions
         self._outbox = outbox
         self._threshold = threshold_micro
@@ -71,11 +77,16 @@ class SpendAlert:
         marker = build_key("ai", "spend", "alerted", user_id.hex, f"{now:%Y%m%d}")
         day_end = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
         ttl = int((day_end - now).total_seconds() * 1000) + 1
+        attempt = secrets.token_hex(8)
         try:
             async with asyncio.timeout(VALKEY_DEADLINE):
-                spend = int(await self._check(keys=[total, marker], args=[self._threshold, ttl]))
+                args: list[str | int] = [self._threshold, ttl, attempt]
+                spend = int(await self._check(keys=[total, marker], args=args))
         except REDIS_FAILURES as error:
             self._outages.failed(error, operation="check")
+            if isinstance(error, TimeoutError):
+                # Скрипт мог отработать, а ответ — опоздать: метка без события съела бы сутки.
+                await self._lifted(marker, attempt)
             return
         if not spend:
             return
@@ -89,15 +100,15 @@ class SpendAlert:
                 await self._outbox.add(session, event)
         except HomeUnavailableError:
             log.warning("Событие о тратах не записано: дом недоступен", home=entry.home.value)
-            await self._lifted(marker)
+            await self._lifted(marker, attempt)
             return
         log.info("Траты пользователя за сутки превысили порог", user_id=str(user_id))
 
-    async def _lifted(self, marker: str) -> None:
-        """Lift the marker so the next row tries again."""
+    async def _lifted(self, marker: str, attempt: str) -> None:
+        """Lift this attempt's marker so the next row tries again."""
         try:
             async with asyncio.timeout(VALKEY_DEADLINE):
-                await self._valkey.delete(marker)
+                await self._lift(keys=[marker], args=[attempt])
         except REDIS_FAILURES as error:
             # Метка доживёт до конца суток: тревоги за эти сутки не будет, это видно в логе.
             self._outages.failed(error, operation="lift")

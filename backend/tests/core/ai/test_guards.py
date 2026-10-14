@@ -22,6 +22,7 @@ from shosai.core.ai.resilience.retries import RetryBudget
 from shosai.core.ai.resilience.slots import ProviderSlots
 from shosai.core.kv.keys import build_key
 from tests.core.ai.bench import unreachable_valkey
+from tests.core.kv.outages import LateAnswerValkey
 
 MODEL = ModelRef(Provider.OPENROUTER, "probe/chat:free")
 
@@ -240,3 +241,14 @@ async def test_without_valkey_only_expensive_calls_are_refused(
         )
         == 1
     )
+
+
+async def test_a_slot_taken_after_the_deadline_is_given_back(valkey: Redis) -> None:
+    late = LateAnswerValkey(connection_pool=valkey.connection_pool)
+    slots = ProviderSlots(late, dict.fromkeys(Provider, 1), ResilienceMetrics(CollectorRegistry()))
+
+    async with slots.held(Provider.OPENROUTER, CallClass.STANDARD, session=False):
+        taken = await valkey.zcard(build_key("ai", "slots", Provider.OPENROUTER.value))
+
+    # Иначе слот без вызова 120 с отнимал бы у провайдера единственное место.
+    assert taken == 0
