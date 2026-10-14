@@ -187,10 +187,194 @@
           }
         }
       }
+    },
+    "/v1/auth/register": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Register",
+        "description": "Mail a 6-digit code to the address; the answer is the same for a taken address.",
+        "operationId": "register_v1_auth_register_post",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationStartedResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/register/verify": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Verify",
+        "description": "Create the account when the code is right; five wrong codes end the registration.",
+        "operationId": "verify_v1_auth_register_verify_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountCreatedResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/register/resend": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Resend",
+        "description": "Mail a new code: three at most, a minute apart; earlier codes stop working.",
+        "operationId": "resend_v1_auth_register_resend_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationStartedResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AccountCreatedResponse": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "title": "AccountCreatedResponse",
+        "description": "The account the confirmed registration created."
+      },
+      "Consents": {
+        "properties": {
+          "personal_data": {
+            "type": "boolean",
+            "title": "Personal Data"
+          },
+          "cross_border": {
+            "type": "boolean",
+            "title": "Cross Border",
+            "default": false
+          },
+          "marketing": {
+            "type": "boolean",
+            "title": "Marketing",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "personal_data"
+        ],
+        "title": "Consents",
+        "description": "The consents of the registration form; personal data is required."
+      },
       "DetailValue": {
         "anyOf": [
           {
@@ -328,6 +512,104 @@
         "title": "InvalidField",
         "description": "Where a request failed validation and why; the submitted value is never echoed."
       },
+      "RegistrationRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "minLength": 3,
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Password"
+          },
+          "full_name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Full Name"
+          },
+          "country": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$",
+            "title": "Country",
+            "description": "ISO 3166-1 alpha-2."
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "title": "Language"
+          },
+          "consents": {
+            "$ref": "#/components/schemas/Consents"
+          },
+          "captcha_token": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4096
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Captcha Token"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "email",
+          "password",
+          "full_name",
+          "country",
+          "language",
+          "consents"
+        ],
+        "title": "RegistrationRequest",
+        "description": "A new account: the address, a password, the name and where the person lives."
+      },
+      "RegistrationStartedResponse": {
+        "properties": {
+          "registration_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Registration Id"
+          },
+          "resend_after_seconds": {
+            "type": "integer",
+            "title": "Resend After Seconds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "registration_id",
+          "resend_after_seconds"
+        ],
+        "title": "RegistrationStartedResponse",
+        "description": "The id to confirm the code with, and when another code may be asked for."
+      },
+      "ResendRequest": {
+        "properties": {
+          "registration_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Registration Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "registration_id"
+        ],
+        "title": "ResendRequest",
+        "description": "The registration to mail a new code for."
+      },
       "UnsubscribeAnswer": {
         "properties": {
           "unsubscribed": {
@@ -341,6 +623,28 @@
         ],
         "title": "UnsubscribeAnswer",
         "description": "The same answer for every token: nothing about the account behind it."
+      },
+      "VerifyRequest": {
+        "properties": {
+          "registration_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Registration Id"
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^[0-9]{6}$",
+            "title": "Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "registration_id",
+          "code"
+        ],
+        "title": "VerifyRequest",
+        "description": "The code mailed to the address, with the id of the registration it belongs to."
       }
     }
   }

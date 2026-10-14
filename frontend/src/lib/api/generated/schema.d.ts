@@ -48,10 +48,99 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Register
+         * @description Mail a 6-digit code to the address; the answer is the same for a taken address.
+         */
+        post: operations["register_v1_auth_register_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/register/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify
+         * @description Create the account when the code is right; five wrong codes end the registration.
+         */
+        post: operations["verify_v1_auth_register_verify_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/register/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Resend
+         * @description Mail a new code: three at most, a minute apart; earlier codes stop working.
+         */
+        post: operations["resend_v1_auth_register_resend_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /**
+         * AccountCreatedResponse
+         * @description The account the confirmed registration created.
+         */
+        AccountCreatedResponse: {
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+        };
+        /**
+         * Consents
+         * @description The consents of the registration form; personal data is required.
+         */
+        Consents: {
+            /** Personal Data */
+            personal_data: boolean;
+            /**
+             * Cross Border
+             * @default false
+             */
+            cross_border: boolean;
+            /**
+             * Marketing
+             * @default false
+             */
+            marketing: boolean;
+        };
         DetailValue: string | number | boolean;
         /**
          * ErrorDescription
@@ -107,12 +196,71 @@ export interface components {
             type: string;
         };
         /**
+         * RegistrationRequest
+         * @description A new account: the address, a password, the name and where the person lives.
+         */
+        RegistrationRequest: {
+            /** Email */
+            email: string;
+            /** Password */
+            password: string;
+            /** Full Name */
+            full_name: string;
+            /**
+             * Country
+             * @description ISO 3166-1 alpha-2.
+             */
+            country: string;
+            /** Language */
+            language: string;
+            consents: components["schemas"]["Consents"];
+            /** Captcha Token */
+            captcha_token?: string | null;
+        };
+        /**
+         * RegistrationStartedResponse
+         * @description The id to confirm the code with, and when another code may be asked for.
+         */
+        RegistrationStartedResponse: {
+            /**
+             * Registration Id
+             * Format: uuid
+             */
+            registration_id: string;
+            /** Resend After Seconds */
+            resend_after_seconds: number;
+        };
+        /**
+         * ResendRequest
+         * @description The registration to mail a new code for.
+         */
+        ResendRequest: {
+            /**
+             * Registration Id
+             * Format: uuid
+             */
+            registration_id: string;
+        };
+        /**
          * UnsubscribeAnswer
          * @description The same answer for every token: nothing about the account behind it.
          */
         UnsubscribeAnswer: {
             /** Unsubscribed */
             unsubscribed: boolean;
+        };
+        /**
+         * VerifyRequest
+         * @description The code mailed to the address, with the id of the registration it belongs to.
+         */
+        VerifyRequest: {
+            /**
+             * Registration Id
+             * Format: uuid
+             */
+            registration_id: string;
+            /** Code */
+            code: string;
         };
     };
     responses: never;
@@ -222,6 +370,107 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    register_v1_auth_register_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegistrationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationStartedResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    verify_v1_auth_register_verify_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountCreatedResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    resend_v1_auth_register_resend_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResendRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RegistrationStartedResponse"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

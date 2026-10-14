@@ -77,6 +77,10 @@ class IdentitySettings(SettingsSection):
     identity_directory_hmac_key: Annotated[SecretStr, AfterValidator(check_directory_key)]
     # Стоимость bcrypt: 12 вне разработки (≈ 250 мс), в тестах меньше ради скорости.
     identity_password_hash_rounds: int = Field(default=PRODUCTION_HASH_ROUNDS, ge=4, le=15)
+    # Cloudflare Turnstile (ADR 0045 п. 4): ключ сайта — в кабинет, секрет — только серверу.
+    # Без секрета капча выключена; вне разработки секрет обязателен.
+    identity_turnstile_site_key: str | None = None
+    identity_turnstile_secret_key: SecretStr | None = None
 
     def token_keys(self) -> tuple[TokenKey, ...]:
         """The signing ring in order: the first key signs, every key verifies."""
@@ -91,6 +95,10 @@ def identity_secrets_safe(settings: Settings) -> Iterator[GateViolation]:
             yield GateViolation("IDENTITY_TOKEN_KEYS", f"ключ разработки {key.key_id} вне неё")
     if identity.identity_directory_hmac_key.get_secret_value().startswith(DEVELOPMENT_MARK):
         yield GateViolation("IDENTITY_DIRECTORY_HMAC_KEY", "ключ каталога разработки вне неё")
+    if identity.identity_turnstile_secret_key is None or not identity.identity_turnstile_site_key:
+        yield GateViolation(
+            "IDENTITY_TURNSTILE_SECRET_KEY", "без Turnstile регистрация не защищена"
+        )
     if identity.identity_password_hash_rounds < PRODUCTION_HASH_ROUNDS:
         yield GateViolation(
             "IDENTITY_PASSWORD_HASH_ROUNDS",
