@@ -29,10 +29,11 @@ from types import MappingProxyType
 import structlog
 from redis.asyncio import Redis
 
+from shosai.composition.account_data import check_account_handlers, core_account_data_bindings
 from shosai.composition.agent_tools import install_agent_tools
 from shosai.composition.ai import AiDependencies, PlatformAi, open_ai
 from shosai.composition.email import PlatformEmail, open_email
-from shosai.composition.features import check_features, platform_events
+from shosai.composition.features import account_data_specs, check_features, platform_events
 from shosai.composition.ports import install_ports
 from shosai.composition.schedule import scheduled_jobs
 from shosai.composition.startup import start_step
@@ -189,7 +190,10 @@ async def open_platform(
             writers.ai.settlements.install(parts.cost_settlements)
             email.install(parts.email_templates)
             install_agent_tools(features, built, services.agent_tools)
-            install_ports(features, built, services.ports)
+            install_ports(
+                features, built, services.ports, core_account_data_bindings(homes.transactions)
+            )
+            check_account_handlers(account_data_specs(features), services.ports)
         with start_step("schedule"):
             jobs = scheduled_jobs(parts, tasks)
         with start_step("probes"):

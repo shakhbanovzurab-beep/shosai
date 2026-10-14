@@ -20,6 +20,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.identity.application import native_errors
+from shosai.features.identity.application.deletion import DeletionWindow
 from shosai.features.identity.application.native_errors import RefreshErrors
 from shosai.features.identity.application.registration import ClientFacts
 from shosai.features.identity.domain.accounts import AccountState, sign_in_refusal
@@ -75,16 +76,22 @@ class Sessions:
         directory: Directory,
         codec: TokenCodec,
         id_key: bytes,
+        window: DeletionWindow,
     ) -> None:
         self._transactions = transactions
         self._directory = directory
         self._codec = codec
         self._id_key = id_key
+        self._window = window
 
     async def open(
         self, session: AsyncSession, user: User, home: Home, kind: ClientKind, client: ClientFacts
     ) -> IssuedTokens:
-        """A new family for a proven person, written in the caller's transaction."""
+        """A new family for a proven person, written in the caller's transaction.
+
+        A sign-in during the deletion window cancels the deletion first (ID-D5).
+        """
+        await self._window.cancel_if_scheduled(session, user)
         now = datetime.now(UTC)
         family_id = new_id()
         current = token_id(self._id_key, family_id, 0)

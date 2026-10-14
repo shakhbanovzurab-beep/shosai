@@ -13,8 +13,9 @@ from typing import Final
 from fastapi import APIRouter
 
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
-from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.core.features import CoreServices, FeatureModule, FeatureParts, combine_parts
 from shosai.features.identity.application.authentication import TokenAuthenticator
+from shosai.features.identity.application.deletion import DeletionWindow
 from shosai.features.identity.application.desktop import DesktopSignIn
 from shosai.features.identity.application.devices import Devices
 from shosai.features.identity.application.native_me import NativeMe
@@ -39,12 +40,14 @@ from shosai.features.identity.contracts import (
     CONSENT_READER,
     IDENTITY_EVENTS,
 )
+from shosai.features.identity.deletion_wiring import deletion_parts
 from shosai.features.identity.emails.password_reset import RESET_LINK_MAIL
 from shosai.features.identity.emails.registration_attempt import REGISTRATION_ATTEMPT
 from shosai.features.identity.emails.registration_code import REGISTRATION_CODE
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.captcha import open_captcha
 from shosai.features.identity.infrastructure.consents import ConsentJournal
+from shosai.features.identity.infrastructure.deletion_records import DELETION_MODELS
 from shosai.features.identity.infrastructure.desktop_codes import DesktopCodes
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
@@ -72,6 +75,8 @@ IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
         TableCoverage("login_events", Treatment.ERASE),
         TableCoverage("password_reset_tokens", Treatment.ERASE),
         TableCoverage("user_identities", Treatment.ERASE),
+        # Журнал удаления уходит в последней транзакции саги.
+        TableCoverage("account_deletions", Treatment.ERASE),
     ),
     prefixes=(AVATAR_PREFIX,),
 )
@@ -89,8 +94,9 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     cookies = CookiePolicy(settings.identity_cookie_secure, settings.identity_cookie_domain)
     routes = RegistrationRoutes(services.valkey)
     sessions = Sessions(
-        services.transactions, directory, codec, keys[0].secret.get_secret_value().encode()
-    )
+        services.transactions, directory, codec, keys[0].secret.get_secret_value().encode(),
+        DeletionWindow(services.outbox),
+    )  # fmt: skip
     try:
         async with (
             open_captcha(settings.identity_turnstile_secret_key) as captcha,
@@ -122,7 +128,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     + RESET_PAGE,
                 )
             )  # fmt: skip
-            yield FeatureParts(
+            main = FeatureParts(
                 http_routers=(
                     build_registration_router(
                         Registration(registration_services),
@@ -146,6 +152,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     ACCOUNT_PROFILE_READER.bind(profiles),
                 ),
             )
+            yield combine_parts([main, deletion_parts(services, directory, markers, cookies)])
     finally:
         hasher.close()
 
@@ -189,7 +196,7 @@ def _account_routers(services: CoreServices, routing: _AccountRouting) -> tuple[
 IDENTITY: Final = FeatureModule(
     name="identity",
     build=build,
-    models=(*IDENTITY_MODELS, *SESSION_MODELS),
+    models=(*IDENTITY_MODELS, *SESSION_MODELS, *DELETION_MODELS),
     events=IDENTITY_EVENTS,
     production_checks=(identity_secrets_safe,),
     settings=(IdentitySettings,),

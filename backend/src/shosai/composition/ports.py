@@ -6,14 +6,20 @@ single-implementation port bound twice, stops the start (ADR 0045 point 11).
 """
 
 from collections.abc import Sequence
+from typing import Any
 
 from shosai.core.features import FeatureModule, FeatureParts
 from shosai.core.ports.directory import PortDirectory
+from shosai.core.ports.keys import PortBinding
 
 
 def install_ports(
-    features: Sequence[FeatureModule], built: Sequence[FeatureParts], directory: PortDirectory
+    features: Sequence[FeatureModule],
+    built: Sequence[FeatureParts],
+    directory: PortDirectory,
+    core: Sequence[PortBinding[Any]] = (),
 ) -> None:
-    """Install every slice's bindings after checking the requirements of every slice."""
+    """Install core's and every slice's bindings after checking every slice's requirements."""
     required = [key for feature in features for key in feature.requires]
-    directory.install((binding for parts in built for binding in parts.provides), required)
+    slices = (binding for parts in built for binding in parts.provides)
+    directory.install([*core, *slices], required)

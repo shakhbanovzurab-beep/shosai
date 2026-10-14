@@ -7,10 +7,16 @@ slice cannot add personal rows that deletion would miss (ADR 0045 point 7).
 """
 
 from collections.abc import Sequence
+from typing import Any
 
 from sqlalchemy import MetaData, Table
 
+from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS, handler_problems
 from shosai.core.account_data.spec import AccountDataSpec
+from shosai.core.db.transactions import HomeTransactions
+from shosai.core.email.account_data import CoreAccountData
+from shosai.core.ports.directory import PortDirectory
+from shosai.core.ports.keys import PortBinding
 
 PERSON_COLUMN = "user_id"
 ACCOUNTS_TABLE = "users"
@@ -40,3 +46,16 @@ def holds_person(table: Table) -> bool:
     return PERSON_COLUMN in table.columns or any(
         key.target_fullname.split(".")[0] == ACCOUNTS_TABLE for key in table.foreign_keys
     )
+
+
+def core_account_data_bindings(transactions: HomeTransactions) -> tuple[PortBinding[Any], ...]:
+    """Core's own erasure handler, bound beside the slices' ones."""
+    return (ACCOUNT_DATA_HANDLERS.bind(CoreAccountData(transactions)),)
+
+
+def check_account_handlers(specs: Sequence[AccountDataSpec], ports: PortDirectory) -> None:
+    """Refuse to start when an owner that erases data has no handler, or two."""
+    problems = handler_problems(specs, ports.all(ACCOUNT_DATA_HANDLERS))
+    if problems:
+        message = "реестр стирания: " + "; ".join(problems)
+        raise RuntimeError(message)

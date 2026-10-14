@@ -44,7 +44,9 @@ class TokenAuthenticator:
         home = claims.home or await self._home_of(claims.user_id)
         reading = await self._markers.read(claims.user_id, claims.family_id)
         marker = reading.account
-        if marker is not None:
+        # Метка описывает аккаунт на своей версии: токен новее неё выпущен после следующей
+        # перемены (отмены удаления), и метка его не касается.
+        if marker is not None and claims.token_version <= marker.token_version:
             if marker.state in REFUSED_STATES:
                 raise native_errors.refused(REFUSED_STATES[marker.state])
             if claims.token_version < marker.token_version or marker.state in REVOKED_STATES:

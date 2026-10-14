@@ -1,11 +1,17 @@
 """Every table with a person's rows is declared once in the deletion registry (§14 rule 7)."""
 
+import pytest
 from sqlalchemy import Column, ForeignKey, MetaData, Table, Uuid
 
-from shosai.composition.account_data import account_data_problems
+from shosai.composition.account_data import (
+    account_data_problems,
+    check_account_handlers,
+)
 from shosai.composition.features import FEATURES, account_data_specs
 from shosai.composition.metadata import application_metadata
+from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS, AccountRef, handler_problems
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
+from shosai.core.ports.directory import PortDirectory
 
 
 def fixture_metadata() -> MetaData:
@@ -49,3 +55,45 @@ def test_a_table_declared_twice_or_missing_is_found() -> None:
         "ghosts: объявлена archive, но такой таблицы нет",
         "notes: объявлена несколькими владельцами ['archive', 'notes']",
     ]
+
+
+class Handler:
+    """An erasure handler of one owner that erases nothing."""
+
+    def __init__(self, owner: str) -> None:
+        self._owner = owner
+
+    @property
+    def owner(self) -> str:
+        return self._owner
+
+    async def erase(self, account: AccountRef) -> None:
+        del account
+
+
+def test_every_owner_that_erases_has_one_handler_and_every_handler_an_owner() -> None:
+    erasing = AccountDataSpec("notes", tables=(TableCoverage("notes", Treatment.ERASE),))
+    kept = AccountDataSpec("money", tables=(TableCoverage("payments", Treatment.KEEP_BY_LAW),))
+    files = AccountDataSpec("files", prefixes=("files/",))
+
+    complete = handler_problems([erasing, kept, files], [Handler("notes"), Handler("files")])
+    broken = handler_problems(
+        [erasing, kept, files], [Handler("notes"), Handler("notes"), Handler("ghost")]
+    )
+
+    assert complete == []
+    assert broken == [
+        "files: стирает данные человека, но обработчиков 0, а не один",
+        "ghost: обработчик стирания без объявления в реестре",
+        "notes: стирает данные человека, но обработчиков 2, а не один",
+    ]
+
+
+def test_core_and_every_slice_of_the_platform_need_exactly_their_handlers() -> None:
+    bound, missing = PortDirectory(), PortDirectory()
+    bound.install([ACCOUNT_DATA_HANDLERS.bind(Handler(owner)) for owner in ("core", "identity")])
+    missing.install([ACCOUNT_DATA_HANDLERS.bind(Handler("core"))])
+
+    check_account_handlers(account_data_specs(FEATURES), bound)
+    with pytest.raises(RuntimeError, match="identity"):
+        check_account_handlers(account_data_specs(FEATURES), missing)

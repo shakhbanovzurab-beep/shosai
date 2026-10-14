@@ -41,6 +41,10 @@ class DirectoryState(StrEnum):
     DELETED = "deleted"
 
 
+# Строки каталога, за которыми нет аккаунта: заявка ещё не записана или аккаунт стёрт.
+NOT_ACCOUNTS: Final = frozenset({DirectoryState.CLAIMED, DirectoryState.DELETED})
+
+
 class ConsentKind(StrEnum):
     """What a person consented to; each change is a row of the consent journal."""
 

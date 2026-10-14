@@ -27,7 +27,7 @@ from shosai.features.identity.domain.accounts import AccountState, sign_in_refus
 from shosai.features.identity.domain.directory import email_hmac
 from shosai.features.identity.domain.emails import InvalidEmailError, normalize_email
 from shosai.features.identity.domain.pkce import challenge_of
-from shosai.features.identity.domain.registration import DirectoryState
+from shosai.features.identity.domain.registration import NOT_ACCOUNTS, DirectoryState
 from shosai.features.identity.domain.social import (
     Provider,
     SocialIdentity,
@@ -196,7 +196,7 @@ class SocialSignIn:
         record = await self._services.directory.find_fresh(
             email_hmac(self._services.directory_key, address)
         )
-        if record is None or record.state is DirectoryState.CLAIMED:
+        if record is None or record.state in NOT_ACCOUNTS:
             return None
         if record.state is not DirectoryState.ACTIVE:
             raise SocialRefusedError("account_unavailable")

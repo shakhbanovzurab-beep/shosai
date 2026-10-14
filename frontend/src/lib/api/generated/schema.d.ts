@@ -497,6 +497,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me/deletion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Request Deletion
+         * @description Hide the account and erase it in 7 days; needs a sign-in in the last 15 minutes.
+         *
+         *     400 `confirmation_mismatch` when the address differs from the account's; 403
+         *     `reauthentication_required` when the session is older.
+         */
+        post: operations["request_deletion_v1_me_deletion_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -580,6 +603,25 @@ export interface components {
             improve_models?: boolean | null;
             /** Share Location */
             share_location?: boolean | null;
+        };
+        /**
+         * DeletionRequest
+         * @description The account's address, typed again to confirm.
+         */
+        DeletionRequest: {
+            /** Confirm Email */
+            confirm_email: string;
+        };
+        /**
+         * DeletionScheduled
+         * @description When the hidden account is erased unless the person signs in before.
+         */
+        DeletionScheduled: {
+            /**
+             * Erase At
+             * Format: date-time
+             */
+            erase_at: string;
         };
         /**
          * DesktopCodeRequest
@@ -2098,6 +2140,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SocialSession"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    request_deletion_v1_me_deletion_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeletionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DeletionScheduled"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

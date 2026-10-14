@@ -50,7 +50,7 @@ from shosai.features.identity.infrastructure.registration_routes import Registra
 # Не больше трёх регистраций одного адреса в час: защита чужого ящика от потока писем.
 PER_ADDRESS: Final = RateLimit("identity.register_address", 3, timedelta(hours=1), 3)
 # Владельцу занятого адреса предупреждение не шлём, если вход в аккаунт закрыт навсегда.
-SILENT_STATES: Final = frozenset({DirectoryState.BANNED, DirectoryState.DELETED})
+SILENT_STATES: Final = frozenset({DirectoryState.BANNED})
 
 
 @dataclass(frozen=True, slots=True)
@@ -126,7 +126,8 @@ class Registration:
         # Хеш считается и для занятого адреса: время ответа его не выдаёт.
         password_hash = await services.hasher.hash(form.password)
         registration_id = new_id()
-        if holder is not None:
+        # Адрес стёртого аккаунта свободен: заявка заменит его строку каталога.
+        if holder is not None and holder.state is not DirectoryState.DELETED:
             if holder.state not in SILENT_STATES:
                 await self._warn_owner(email.value, holder.home, holder.user_id, language)
             return RegistrationStarted(registration_id, RESEND_INTERVAL)

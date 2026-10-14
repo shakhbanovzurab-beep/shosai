@@ -9,17 +9,21 @@ from shosai.core.email.messages import EmailKind, EmailParam
 from shosai.core.email.page_texts import PAGE_TEXTS
 from shosai.core.email.templates import EmailRenderer, EmailTemplate, EmailTemplates
 from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
+from shosai.features.identity.emails.deletion_scheduled import DELETION_SCHEDULED
 from shosai.features.identity.emails.password_reset import RESET_LINK_MAIL
 from shosai.features.identity.emails.registration_attempt import REGISTRATION_ATTEMPT
 from shosai.features.identity.emails.registration_code import REGISTRATION_CODE
 
-TEMPLATES = (MAIL_CHECK, REGISTRATION_CODE, REGISTRATION_ATTEMPT, RESET_LINK_MAIL)
+TEMPLATES = (
+    MAIL_CHECK, REGISTRATION_CODE, REGISTRATION_ATTEMPT, RESET_LINK_MAIL, DELETION_SCHEDULED,
+)  # fmt: skip
 VALUES: dict[str, EmailParam] = {
     "minutes": 15,
     "code": "482 913",
     "sample_code": "123 456",
     "link": "https://shosai.example/app/reset-password#token",
     "url": "https://shosai.example/app/",
+    "date": "2026-10-21",
 }
 
 

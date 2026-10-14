@@ -24,7 +24,7 @@ from shosai.features.identity.application.sessions import IssuedTokens, Sessions
 from shosai.features.identity.domain.accounts import AccountState, sign_in_refusal
 from shosai.features.identity.domain.directory import email_hmac
 from shosai.features.identity.domain.emails import InvalidEmailError, normalize_email
-from shosai.features.identity.domain.registration import DirectoryState
+from shosai.features.identity.domain.registration import NOT_ACCOUNTS
 from shosai.features.identity.domain.sessions import ClientKind
 from shosai.features.identity.infrastructure.captcha import Captcha
 from shosai.features.identity.infrastructure.directory import Directory, DirectoryRecord
@@ -115,8 +115,8 @@ class SignIn:
         return tokens
 
     async def _account(self, record: DirectoryRecord | None) -> User | None:
-        # Заявка каталога без записанного аккаунта — ещё не аккаунт.
-        if record is None or record.state is DirectoryState.CLAIMED:
+        # Заявка без записанного аккаунта — ещё не аккаунт, стёртый — уже не аккаунт.
+        if record is None or record.state in NOT_ACCOUNTS:
             return None
         scope = TenancyScope(record.home, record.user_id)
         async with self._services.transactions.begin(scope, read_only=True) as session:

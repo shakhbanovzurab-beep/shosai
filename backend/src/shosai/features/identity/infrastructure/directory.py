@@ -16,6 +16,7 @@ from uuid import UUID
 import structlog
 from sqlalchemy import delete, exc, select, update
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.cache.port import Cache, CacheKey
 from shosai.core.db.errors import HomeUnavailableError
@@ -183,6 +184,61 @@ class Directory:
                 .limit(limit)
             )
             return list(rows)
+
+    async def erase(self, user_id: UUID) -> None:
+        """Free an erased account's address: the row stays `deleted` 30 days, then goes."""
+        now = datetime.now(UTC)
+        async with self._transactions.begin(DIRECTORY_SCOPE) as session:
+            freed = await session.scalar(
+                update(DirectoryEntry)
+                .where(
+                    DirectoryEntry.user_id == user_id,
+                    DirectoryEntry.state != DirectoryState.DELETED.value,
+                )
+                .values(
+                    state=DirectoryState.DELETED.value, deleted_at=now, updated_at=now,
+                    version=DirectoryEntry.version + 1,
+                )
+                .returning(DirectoryEntry.email_hmac)
+            )  # fmt: skip
+        if freed is not None:
+            await self._cache.delete(CacheKey(CACHE_NAMESPACE, freed.hex()))
+
+    async def purge_deleted(self, older_than: datetime) -> int:
+        """Drop the rows of addresses freed before `older_than`; how many went."""
+        async with self._transactions.begin(DIRECTORY_SCOPE) as session:
+            purged = await session.scalars(
+                delete(DirectoryEntry)
+                .where(
+                    DirectoryEntry.state == DirectoryState.DELETED.value,
+                    DirectoryEntry.deleted_at < older_than,
+                )
+                .returning(DirectoryEntry.user_id)
+            )
+            return len(purged.all())
+
+
+async def follow_account(
+    session: AsyncSession,
+    user_id: UUID,
+    change: tuple[DirectoryState, DirectoryState],
+    at: datetime,
+) -> None:
+    """Mirror an account's state change of time `at`, in the caller's EU transaction.
+
+    The change applies only from the state it expects and only if the row was not changed
+    later, so events delivered out of order or twice leave the newest state.
+    """
+    before, after = change
+    await session.execute(
+        update(DirectoryEntry)
+        .where(
+            DirectoryEntry.user_id == user_id,
+            DirectoryEntry.state == before.value,
+            DirectoryEntry.updated_at < at,
+        )
+        .values(state=after.value, updated_at=at, version=DirectoryEntry.version + 1)
+    )
 
 
 def _record(row: DirectoryEntry) -> DirectoryRecord:

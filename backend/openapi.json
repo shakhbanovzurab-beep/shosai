@@ -1547,6 +1547,66 @@
           }
         }
       }
+    },
+    "/v1/me/deletion": {
+      "post": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Request Deletion",
+        "description": "Hide the account and erase it in 7 days; needs a sign-in in the last 15 minutes.\n\n400 `confirmation_mismatch` when the address differs from the account's; 403\n`reauthentication_required` when the session is older.",
+        "operationId": "request_deletion_v1_me_deletion_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeletionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeletionScheduled"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1725,6 +1785,38 @@
         "type": "object",
         "title": "ConsentsPatch",
         "description": "The consents to change; personal data is not among them."
+      },
+      "DeletionRequest": {
+        "properties": {
+          "confirm_email": {
+            "type": "string",
+            "maxLength": 254,
+            "minLength": 3,
+            "title": "Confirm Email"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "confirm_email"
+        ],
+        "title": "DeletionRequest",
+        "description": "The account's address, typed again to confirm."
+      },
+      "DeletionScheduled": {
+        "properties": {
+          "erase_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Erase At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "erase_at"
+        ],
+        "title": "DeletionScheduled",
+        "description": "When the hidden account is erased unless the person signs in before."
       },
       "DesktopCodeRequest": {
         "properties": {

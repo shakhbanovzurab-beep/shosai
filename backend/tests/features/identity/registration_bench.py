@@ -30,6 +30,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.core.storage.port import ObjectStorage
 from shosai.core.web.app import HttpTelemetry, build_http_app
 from shosai.features.identity.application.authentication import TokenAuthenticator
+from shosai.features.identity.application.deletion import Deletions, DeletionWindow
 from shosai.features.identity.application.desktop import DesktopSignIn
 from shosai.features.identity.application.devices import Devices
 from shosai.features.identity.application.native_me import NativeMe
@@ -45,6 +46,7 @@ from shosai.features.identity.application.social_accounts import (
 )
 from shosai.features.identity.application.verification import Verification
 from shosai.features.identity.channels.http.cookies import CookiePolicy
+from shosai.features.identity.channels.http.deletion import build_deletion_router
 from shosai.features.identity.channels.http.desktop import build_desktop_router
 from shosai.features.identity.channels.http.devices import build_devices_router
 from shosai.features.identity.channels.http.me import build_me_router
@@ -147,8 +149,9 @@ async def registration_bench(
     outbox = EventOutbox(EventTypes(list(IDENTITY_EVENTS)))
     codec = TokenCodec(SIGNING_KEYS)
     sessions = Sessions(
-        transactions, services.directory, codec, SIGNING_KEYS[0].secret.get_secret_value().encode()
-    )
+        transactions, services.directory, codec,
+        SIGNING_KEYS[0].secret.get_secret_value().encode(), DeletionWindow(outbox),
+    )  # fmt: skip
     markers = AccountMarkers(valkey)
     ports = PortDirectory()
     ports.install([AUTHENTICATOR.bind(TokenAuthenticator(codec, services.directory, markers))])
@@ -184,6 +187,9 @@ async def registration_bench(
             DesktopSignIn(transactions, DesktopCodes(valkey), sessions), ports, limiter
         ),
         build_devices_router(Devices(transactions, markers, outbox), ports),
+        build_deletion_router(
+            Deletions(transactions, markers, outbox, mail.port), ports, limiter, COOKIES
+        ),
         *social_routers_of(transactions, valkey, services.directory, sessions, chosen.providers),
     ]  # fmt: skip
     telemetry = HttpTelemetry(registry, TracerProvider(shutdown_on_exit=False))
