@@ -8,7 +8,7 @@ on loopback; database, Valkey and cache addresses must differ from every runtime
 from collections.abc import Mapping
 from ipaddress import ip_address
 
-from tests.harness.service_settings import ServiceTargets, storage_variable
+from tests.harness.service_settings import ServiceTargets
 from tests.harness.settings import TEST_DATABASE_NAME, DatabaseTarget, HarnessSettings
 
 TEST_VARIABLE_PREFIX = "TEST_"
@@ -73,7 +73,7 @@ def _service_problems(services: ServiceTargets) -> list[str]:
     hosts = {
         services.valkey.variable: services.valkey.host,
         services.cache.variable: services.cache.host,
-        storage_variable("s3_endpoint_url"): services.storage_host(),
+        **services.storage_hosts(),
     }
     return [
         f"{variable}: хост {host} не петлевой адрес"

@@ -868,8 +868,8 @@ requires (18.11).
 **Claims match the system (P0).** What the Security, Privacy and residency pages,
 or any other copy, say about where data lives, who processes it and how it is
 protected matches the target architecture, including its accepted exceptions.
-For example, files of the EU home are stored in Russia
-([ADR 0014](../adr/0014-one-object-store-in-russia.md)), and a claim that depends
+For example, the files of the EU home stay in Russia until its bucket moves to
+the EU ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)), and a claim that depends
 on the legal review in §22 of the target architecture waits for its result. A
 claim the architecture does not support is not published. A change of residency
 or of a provider updates these pages in the same release.

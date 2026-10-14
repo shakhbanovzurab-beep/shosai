@@ -1,6 +1,7 @@
 """Dependency probes: concurrent, bounded in time, `down` only for the declared failures."""
 
 import time
+from collections.abc import Mapping
 from datetime import timedelta
 
 import pytest
@@ -8,6 +9,7 @@ from redis.asyncio import Redis
 
 from shosai.core.health.dependencies import redis_probe, storage_probe
 from shosai.core.health.probes import DependencyProbe, probe_dependencies
+from shosai.core.kernel.homes import Home
 from shosai.core.kv.connection import connect_redis
 from tests.core.kv.outages import closed_port, redis_url, silent_server
 from tests.core.storage.adapters import slot_storage
@@ -17,15 +19,20 @@ QUICK = timedelta(milliseconds=200)
 
 
 async def test_live_services_are_ok(
-    valkey_server: Redis, cache_server: Redis, slot_bucket: SlotBucket
+    valkey_server: Redis, cache_server: Redis, slot_buckets: Mapping[Home, SlotBucket]
 ) -> None:
     probes = [
         redis_probe("valkey", valkey_server),
         redis_probe("cache", cache_server),
-        storage_probe(slot_storage(slot_bucket).objects),
+        *(
+            storage_probe(home, slot_storage(bucket).objects)
+            for home, bucket in slot_buckets.items()
+        ),
     ]
 
-    assert await probe_dependencies(probes) == {"valkey": "ok", "cache": "ok", "storage": "ok"}
+    assert await probe_dependencies(probes) == {
+        "valkey": "ok", "cache": "ok", "storage.ru": "ok", "storage.eu": "ok",
+    }  # fmt: skip
 
 
 async def test_silent_and_stopped_services_are_down_within_the_bound() -> None:

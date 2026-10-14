@@ -1,4 +1,4 @@
-"""Object keys of the one bucket: refused when they could escape their prefix or break a URL.
+"""Object keys of a home's bucket: refused when they could escape their prefix or break a URL.
 
 Keys are prefixed by their owner (§8.1); S08 decides the layout and the draft's keys are
 kept as they are (ADR 0006), so the check refuses only what is dangerous anywhere: an

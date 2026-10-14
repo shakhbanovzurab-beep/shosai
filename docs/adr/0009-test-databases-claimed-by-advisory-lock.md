@@ -1,6 +1,6 @@
 # ADR 0009 — Test databases claimed by advisory lock; tests read only `TEST_*` variables
 
-- **Status:** accepted by the owner on 2026-10-01 (F1 planning, decision F1-D2).
+- **Status:** accepted by the owner on 2026-10-01 (F1 planning, decision F1-D2). Amended by [ADR 0044](0044-a-bucket-per-data-home.md) (2026-10-14): `TEST_HOME_<RU|EU>_S3_*` replace `TEST_S3_*`, and tests write only under `tests/slot-<N>/` of each home's bucket.
 - **Package:** F1, backend foundation; used by every backend test run.
 - **Context documents:** [CLAUDE.md](../../.claude/CLAUDE.md) "Test database", "Clean up after every run", "CI"; [ADR 0001](0001-local-environment.md); [development.md](../development.md) "Test databases"; [F1 plan](../plan/packages/F1-backend-foundation.md).
 

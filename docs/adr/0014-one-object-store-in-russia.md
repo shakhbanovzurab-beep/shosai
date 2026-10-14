@@ -1,6 +1,6 @@
 # ADR 0014 — One object store in Russia for both homes
 
-- **Status:** one bucket in Russia accepted by the owner on 2026-10-02; the key layout, configuration and revisit path (items 2–5) proposed with this ADR and open to objection.
+- **Status:** superseded on 2026-10-14 by [ADR 0044](0044-a-bucket-per-data-home.md), which takes the way back of item 5. Before that: one bucket in Russia accepted by the owner on 2026-10-02.
 - **Package:** architecture change; implemented by F1 step 5 (storage client and settings), F3 (local bucket), S08 (storage), M1 (migration) and every slice that keeps objects.
 - **Context documents:** [ARCHITECTURE.md](../design/ARCHITECTURE.md) nfr-4, §4.1, §6, §8.1, §9 (inv-2, inv-11), §13.1, §20, §22; [ADR 0005](0005-data-without-owner-in-eu-home.md); [ADR 0006](0006-draft-bucket-becomes-russian-home-bucket.md); [DATA_MAPPING.md](../plan/DATA_MAPPING.md) section 6.
 

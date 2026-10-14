@@ -1,6 +1,6 @@
 # ADR 0001 — Local stand-ins for the managed data services
 
-- **Status:** proposed. The owner confirmed SeaweedFS and a PgBouncer per home on 2026-10-01; `max_prepared_statements = 0` and the two roles await confirmation.
+- **Status:** proposed. The owner confirmed SeaweedFS and a PgBouncer per home on 2026-10-01; `max_prepared_statements = 0` and the two roles await confirmation. Since [ADR 0044](0044-a-bucket-per-data-home.md) (2026-10-14) the store serves a bucket per home again: `shosai-ru` and `shosai-eu`.
 - **Package:** F3, local environment
 - **Context documents:** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §4.1, §6, §7, §14 rule 2, §19; [CLAUDE.md](../../.claude/CLAUDE.md) "Hosting constraints now"
 

@@ -28,7 +28,7 @@ ROLES = {
     "scheduler": ("scheduler",),
 }
 PUBLIC_ROLES = frozenset({"api", "ws"})
-CORE_DEPENDENCIES = ("homes.ru", "homes.eu", "valkey", "cache", "storage")
+CORE_DEPENDENCIES = ("homes.ru", "homes.eu", "valkey", "cache", "storage.ru", "storage.eu")
 FAILURE_LEVELS = frozenset({"error", "critical"})
 WAIT_SECONDS = 15.0
 

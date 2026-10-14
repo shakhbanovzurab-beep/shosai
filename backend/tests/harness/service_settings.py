@@ -1,9 +1,9 @@
-"""Test settings of the shared services: Valkey, the Redis cache and the bucket (ADR 0009).
+"""Test settings of the shared services: Valkey, the Redis cache, the homes' buckets (ADR 0009).
 
 A run's slot `N` is the database index `N` of Valkey and of the cache — development uses
 0, so the addresses are given without an index and the harness adds it — and the prefix
-`tests/slot-<N>/` of the one bucket. The bucket may be the development one: tests write
-only under their prefix and empty it after every test (ADR 0009, item 2 as amended).
+`tests/slot-<N>/` of each home's bucket (ADR 0044). The buckets may be the development
+ones: tests write only under their prefix and empty it after every test.
 """
 
 from collections.abc import Mapping
@@ -13,7 +13,8 @@ from urllib.parse import urlsplit
 
 from pydantic import SecretStr, ValidationError
 
-from shosai.core.config.sections import StorageSettings
+from shosai.core.config.sections import StorageSettings, home_prefix
+from shosai.core.kernel.homes import Home
 
 VALKEY_VARIABLE: Final = "TEST_VALKEY_URL"
 REDIS_CACHE_VARIABLE: Final = "TEST_REDIS_CACHE_URL"
@@ -23,9 +24,9 @@ REDIS_SCHEMES: Final = frozenset({"redis", "rediss"})
 MISSING_ERROR_TYPE: Final = "missing"
 
 
-def storage_variable(name: str) -> str:
-    """`s3_bucket` → `TEST_S3_BUCKET`."""
-    return f"{STORAGE_PREFIX}{name.upper()}"
+def storage_variable(home: Home, name: str) -> str:
+    """`(Home.RU, "s3_bucket")` → `TEST_HOME_RU_S3_BUCKET`."""
+    return f"{STORAGE_PREFIX}{home_prefix(home)}{name.upper()}"
 
 
 @dataclass(frozen=True, slots=True)
@@ -43,26 +44,34 @@ class RedisTarget:
 
 @dataclass(frozen=True, slots=True)
 class ServiceTargets:
-    """Valkey, the cache and the bucket of the test runs."""
+    """Valkey, the cache and the homes' buckets of the test runs."""
 
     valkey: RedisTarget
     cache: RedisTarget
-    storage: StorageSettings
+    storage: Mapping[Home, StorageSettings]
 
     @classmethod
     def read(cls, environ: Mapping[str, str], problems: list[str]) -> Self | None:
         """The targets, or None with every problem appended to `problems`."""
         valkey = _read_redis(environ, VALKEY_VARIABLE, problems)
         cache = _read_redis(environ, REDIS_CACHE_VARIABLE, problems)
-        storage = _read_storage(environ, problems)
-        if valkey is None or cache is None or storage is None:
+        storage = {home: _read_storage(environ, home, problems) for home in Home}
+        if valkey is None or cache is None:
             return None
-        return cls(valkey=valkey, cache=cache, storage=storage)
+        found = {home: section for home, section in storage.items() if section is not None}
+        if len(found) != len(storage):
+            return None
+        return cls(valkey=valkey, cache=cache, storage=found)
 
-    def storage_host(self) -> str:
-        """The host of the bucket's endpoint, for the loopback guard."""
+    def storage_hosts(self) -> dict[str, str]:
+        """The host of each bucket's endpoint by its variable, for the loopback guard."""
         # Адрес IPv6 pydantic отдаёт в скобках, как в URL.
-        return (self.storage.s3_endpoint_url.host or "").strip("[]")
+        return {
+            storage_variable(home, "s3_endpoint_url"): (section.s3_endpoint_url.host or "").strip(
+                "[]"
+            )
+            for home, section in self.storage.items()
+        }
 
 
 def _read_redis(
@@ -82,11 +91,13 @@ def _read_redis(
     return RedisTarget(variable=variable, host=parts.hostname, url=url)
 
 
-def _read_storage(environ: Mapping[str, str], problems: list[str]) -> StorageSettings | None:
+def _read_storage(
+    environ: Mapping[str, str], home: Home, problems: list[str]
+) -> StorageSettings | None:
     values = {
-        name: environ[storage_variable(name)]
+        name: environ[storage_variable(home, name)]
         for name in STORAGE_FIELDS
-        if environ.get(storage_variable(name))
+        if environ.get(storage_variable(home, name))
     }
     try:
         return StorageSettings.model_validate(values)
@@ -94,5 +105,5 @@ def _read_storage(environ: Mapping[str, str], problems: list[str]) -> StorageSet
         for item in error.errors(include_url=False, include_input=False, include_context=False):
             name = str(item["loc"][0]) if item["loc"] else ""
             reason = "не задана" if item["type"] == MISSING_ERROR_TYPE else item["msg"]
-            problems.append(f"{storage_variable(name)}: {reason}")
+            problems.append(f"{storage_variable(home, name)}: {reason}")
         return None

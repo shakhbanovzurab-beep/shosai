@@ -8,8 +8,8 @@ class Home(StrEnum):
 
     The value is the short code carried by the access token and by task payloads.
     The directory and data without an owner live in the EU home (ADR 0005, ADR 0010).
-    Files of both homes share one bucket in Russia; the home is not part of an object
-    key (ADR 0014).
+    Each home has its own bucket; the home is not part of an object key: an object lives
+    in the bucket of its pointer's home (ADR 0044).
     """
 
     RU = "ru"

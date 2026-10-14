@@ -69,7 +69,7 @@ Shosai does not try to automate every second of the user's life. Its job is not 
 
 ### Hosting constraints now
 
-The target architecture places data in two homes: PostgreSQL in Russia and in the EU, one S3 bucket in Russia for both homes ([ADR 0014](../docs/adr/0014-one-object-store-in-russia.md)), plus a managed Redis-compatible store (Valkey) in the EU. **The owner is adding these resources; until F4 connects them, they are not available to development.**
+The target architecture places data in two homes: PostgreSQL in Russia and in the EU, an S3 bucket per home ([ADR 0044](../docs/adr/0044-a-bucket-per-data-home.md); the EU home's bucket is in Russia until the owner moves it before launch), plus a managed Redis-compatible store (Valkey) in the EU. **The owner is adding these resources; until F4 connects them, they are not available to development.**
 
 - Code implements the target architecture as written, including home-aware data access. Do not simplify the design to fit today's hosting.
 - Develop and test against local containers.

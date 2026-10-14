@@ -3,7 +3,12 @@
 from pathlib import Path
 
 from shosai.core.config.loading import load_settings
-from shosai.core.config.sections import HomeSettings, SettingsSection, home_prefix
+from shosai.core.config.sections import (
+    HomeSettings,
+    SettingsSection,
+    StorageSettings,
+    home_prefix,
+)
 from shosai.core.kernel.homes import Home
 
 ENV_EXAMPLE = Path(__file__).resolve().parents[4] / ".env.example"
@@ -24,7 +29,9 @@ def section_two() -> dict[str, str]:
 def settings_variables() -> set[str]:
     variables: set[str] = set()
     for section in SettingsSection.__subclasses__():
-        prefixes = [home_prefix(home) for home in Home] if section is HomeSettings else [""]
+        # Разделы дома читаются с префиксом HOME_<RU|EU>_: база и бакет (ADR 0044).
+        per_home = section in {HomeSettings, StorageSettings}
+        prefixes = [home_prefix(home) for home in Home] if per_home else [""]
         variables |= {
             f"{prefix}{field}".upper() for prefix in prefixes for field in section.model_fields
         }

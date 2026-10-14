@@ -26,7 +26,6 @@ def slot_environ(run_slot: RunSlot, settings: HarnessSettings, **overrides: str)
     """A development process over the slot; `overrides` replaces or adds variables."""
     slot = run_slot.claimed.number
     services = settings.services
-    storage = services.storage
     environ = {
         "ENVIRONMENT": "development",
         "BIND_HOST": LOOPBACK,
@@ -34,16 +33,19 @@ def slot_environ(run_slot: RunSlot, settings: HarnessSettings, **overrides: str)
         "OPS_PORT": str(free_port()),
         "VALKEY_URL": services.valkey.for_slot(slot).get_secret_value(),
         "REDIS_CACHE_URL": services.cache.for_slot(slot).get_secret_value(),
-        "S3_ENDPOINT_URL": str(storage.s3_endpoint_url),
-        "S3_REGION": storage.s3_region,
-        "S3_BUCKET": storage.s3_bucket,
-        "S3_ACCESS_KEY_ID": storage.s3_access_key_id,
-        "S3_SECRET_ACCESS_KEY": storage.s3_secret_access_key.get_secret_value(),
     }
     for home in Home:
         targets = run_slot.claimed.targets(home)
         prefix = f"HOME_{home.name}_"
         environ[f"{prefix}DATABASE_URL"] = targets.application.url().get_secret_value()
         environ[f"{prefix}MIGRATION_DATABASE_URL"] = targets.migration.url().get_secret_value()
+        storage = services.storage[home]
+        environ |= {
+            f"{prefix}S3_ENDPOINT_URL": str(storage.s3_endpoint_url),
+            f"{prefix}S3_REGION": storage.s3_region,
+            f"{prefix}S3_BUCKET": storage.s3_bucket,
+            f"{prefix}S3_ACCESS_KEY_ID": storage.s3_access_key_id,
+            f"{prefix}S3_SECRET_ACCESS_KEY": storage.s3_secret_access_key.get_secret_value(),
+        }
     environ.update(overrides)
     return environ

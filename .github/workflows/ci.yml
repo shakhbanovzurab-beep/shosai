@@ -144,11 +144,16 @@ jobs:
       TEST_DATABASE_SLOTS: "8"
       TEST_VALKEY_URL: redis://:local-valkey@127.0.0.1:16379
       TEST_REDIS_CACHE_URL: redis://:local-redis-cache@127.0.0.1:16380
-      TEST_S3_ENDPOINT_URL: http://127.0.0.1:18333
-      TEST_S3_REGION: local
-      TEST_S3_BUCKET: shosai
-      TEST_S3_ACCESS_KEY_ID: local-s3-access
-      TEST_S3_SECRET_ACCESS_KEY: local-s3-secret
+      TEST_HOME_RU_S3_ENDPOINT_URL: http://127.0.0.1:18333
+      TEST_HOME_RU_S3_REGION: local
+      TEST_HOME_RU_S3_BUCKET: shosai-ru
+      TEST_HOME_RU_S3_ACCESS_KEY_ID: local-s3-access
+      TEST_HOME_RU_S3_SECRET_ACCESS_KEY: local-s3-secret
+      TEST_HOME_EU_S3_ENDPOINT_URL: http://127.0.0.1:18333
+      TEST_HOME_EU_S3_REGION: local
+      TEST_HOME_EU_S3_BUCKET: shosai-eu
+      TEST_HOME_EU_S3_ACCESS_KEY_ID: local-s3-access
+      TEST_HOME_EU_S3_SECRET_ACCESS_KEY: local-s3-secret
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

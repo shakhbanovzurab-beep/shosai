@@ -1,4 +1,4 @@
-"""`ObjectStorage` over the one S3 bucket (ADR 0014).
+"""`ObjectStorage` over one home's S3 bucket (ADR 0044).
 
 The adapter may work under a root prefix of the bucket: keys given and returned are
 relative to it, so a test run confined to `tests/slot-<N>/` cannot touch anything else.

@@ -1039,7 +1039,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 - **Owner → home:** via `user_context_id` → `user_contexts.user_id`.
 - **Columns:** 7 of 9 move unchanged; exceptions:
-  - `storage_path` — *transformed*. Local-disk path → object in the bucket (ADR 0014); the column becomes `s3_key` (section 6, L2).
+  - `storage_path` — *transformed*. Local-disk path → object in the owner's home bucket (ADR 0044); the column becomes `s3_key` (section 6, L2).
   - `extracted_text` — *moved*. Personal text.
 
 ### 5.17 `mcp`
@@ -1112,7 +1112,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 - **Owner → home:** platform (R12).
 - **Columns:** 11 of 12 move unchanged; exceptions:
-  - `storage_name` — *transformed*. Local-disk file name → object in the bucket under `platform/` (ADR 0014); the column becomes the object key (section 6, L1).
+  - `storage_name` — *transformed*. Local-disk file name → object under `platform/` in the EU home's bucket (ADR 0044); the column becomes the object key (section 6, L1).
 - Desktop installers uploaded by admins; the compute plane is stateless in v2 (§13.3), so no local disk.
 
 ### 5.20 `telemetry`
@@ -1288,27 +1288,27 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 | ID | Key template | Pointer | Content and life | Deleted with the account? | v2 destination |
 |---|---|---|---|---|---|
-| O1 | `u-{owner_id[:8]}/{file_id}/{name}` | `storage_files.s3_key` | Personal files, any type, ≤ 5 GB; immutable except text files edited in place; quota grace sweep | Yes | The bucket (ADR 0014); moved |
-| O2 | `u-{owner_id[:8]}/rec-{recording_id.hex}/{lk_room}.mp4` | `room_recordings.s3_key` **and** `storage_files.s3_key` (same object) | Room recordings written by LiveKit egress; large; immutable | Yes | The bucket (ADR 0014); moved once, both pointers kept |
+| O1 | `u-{owner_id[:8]}/{file_id}/{name}` | `storage_files.s3_key` | Personal files, any type, ≤ 5 GB; immutable except text files edited in place; quota grace sweep | Yes | The owner's home bucket (ADR 0044); moved |
+| O2 | `u-{owner_id[:8]}/rec-{recording_id.hex}/{lk_room}.mp4` | `room_recordings.s3_key` **and** `storage_files.s3_key` (same object) | Room recordings written by LiveKit egress; large; immutable | Yes | The owner's home bucket (ADR 0044); moved once, both pointers kept |
 | O3 | `meetings/u-{user_id[:8]}/{run_id}/{name}` | `meeting_processing_runs.audio_key` (`audio_owned`) | Imported and desktop audio; deleted after the result commits, at most 72 h | **No** | Moved only for unfinished runs at `T0` (T-3) |
 | O4 | `meetings/raw/{user_id[:8]}/{run_id}/transcript.json` | `meeting_processing_runs.raw_transcript_key` | Raw recognition output; same life as O3 | **No** | Same as O3 |
 | O5 | `meetings/diarization/{user_id[:8]}/{run_id}/turns.json` | None; derived from user and run ids | Diarizer turns; same life as O3 | **No** | Same as O3; v2 stores an explicit pointer |
-| O6 | `knowledge-originals/{user_id.hex}/{content_sha256}` | Computed from `knowledge_document.content_sha256` when `original_retained_at IS NOT NULL`; stored in `knowledge_document_version.s3_key` | Originals of documents and notes, and canonical meeting transcripts; content-addressed, immutable | Partly: transcript originals are not | The bucket (ADR 0014); moved; the pointer becomes the column `knowledge_document.original_s3_key`. Documents without bytes: T-4 |
-| O7 | `knowledge-engine/{user_id.hex}/{version_id.hex}/{name}` | `knowledge_document_version.s3_key` | Uploads of the new knowledge engine; immutable | **No** | The bucket (ADR 0014); moved |
-| O8 | `tickets/{file_id}/u-{file_id[:8]}/{file_id}/{name}` | `ticket_attachments.s3_key` | Support attachments ≤ 10 MB; orphan sweep after 24 h | Yes | The bucket (ADR 0014); moved |
+| O6 | `knowledge-originals/{user_id.hex}/{content_sha256}` | Computed from `knowledge_document.content_sha256` when `original_retained_at IS NOT NULL`; stored in `knowledge_document_version.s3_key` | Originals of documents and notes, and canonical meeting transcripts; content-addressed, immutable | Partly: transcript originals are not | The owner's home bucket (ADR 0044); moved; the pointer becomes the column `knowledge_document.original_s3_key`. Documents without bytes: T-4 |
+| O7 | `knowledge-engine/{user_id.hex}/{version_id.hex}/{name}` | `knowledge_document_version.s3_key` | Uploads of the new knowledge engine; immutable | **No** | The owner's home bucket (ADR 0044); moved |
+| O8 | `tickets/{file_id}/u-{file_id[:8]}/{file_id}/{name}` | `ticket_attachments.s3_key` | Support attachments ≤ 10 MB; orphan sweep after 24 h | Yes | The owner's home bucket (ADR 0044); moved |
 | O9 | `exports/{user_id}/{YYYYMMDD-HHMMSS}.zip` | `data_export_jobs.s3_key` | Data-export archives; the link expires after 24 h, but the object is never deleted | **No** | Only archives still valid at `T0` move (D-4) |
 
 **Local disk.** The v2 compute plane is stateless (§13.3), so none of these stay on disk.
 
 | ID | Location | Pointer | Content | v2 destination |
 |---|---|---|---|---|
-| L1 | `builds_dir` (default `./data/builds`, volume `app_data`) / `{uuid}{ext}` | `app_builds.storage_name` | Desktop installers ≤ 500 MB, uploaded by admins | The bucket (ADR 0014), `platform/app-builds/{id}{ext}`; pointer rewritten |
-| L2 | `user_context_dir` (default `./data/user_context`) / `{user_id}/{file_id}_{name}` | `user_context_files.storage_path` (absolute path) | Personal context files; not removed on account deletion | The bucket (ADR 0014); pointer becomes `s3_key` |
+| L1 | `builds_dir` (default `./data/builds`, volume `app_data`) / `{uuid}{ext}` | `app_builds.storage_name` | Desktop installers ≤ 500 MB, uploaded by admins | The EU home's bucket (ADR 0044), `platform/app-builds/{id}{ext}`; pointer rewritten |
+| L2 | `user_context_dir` (default `./data/user_context`) / `{user_id}/{file_id}_{name}` | `user_context_files.storage_path` (absolute path) | Personal context files; not removed on account deletion | The owner's home bucket (ADR 0044); pointer becomes `s3_key` |
 | L3 | `kb_dir` (volume `app_kb`, `/app/knowledge_base`) | None | Watched by a log-only handler; no code writes there | Dropped once M1 confirms it is empty on the copy; anything found is reported (U-4) |
 
 ### 6.2 v2 bucket and key layout
 
-- **One bucket for both homes** ([ADR 0014](../adr/0014-one-object-store-in-russia.md), §4.1, §8.1): the draft's bucket on Timeweb `ru-1`. Keys do not name the home; the pointer row in the owner's home database does. Platform objects (L1) go under `platform/`. (The first version of this section had a bucket per home; changed by the owner on 2026-10-02.)
+- **A bucket per home** ([ADR 0044](../adr/0044-a-bucket-per-data-home.md), §4.1, §8.1): the draft's objects go to the Russian home's bucket, where every migrated account starts (ADR 0004). Keys do not name the home; the pointer row in the owner's home database does. Platform objects (L1) go under `platform/` in the EU home's bucket. (The first version of this section had a bucket per home; ADR 0014 made it one bucket on 2026-10-02; ADR 0044 restored a bucket per home on 2026-10-14.)
 - **The pointer is the truth.** Every object is reachable from exactly one pointer column that stores the full key. The deletion registry (§14 rule 7) walks the pointers, so legacy keys need no owner prefix to be deletable.
 - **Proposed layout for objects v2 writes** (`files` confirms it with an ADR):
 
@@ -1323,7 +1323,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 ### 6.3 How objects migrate
 
 1. **Keys stay as they are.** *Decided (U-3, [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md)):* migrated objects keep their draft keys. Re-keying gives users nothing, needs a copy and a pointer rewrite for every object, and risks loss.
-2. **The draft's bucket is kept.** *Decided (U-3, [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md)):* the v2 bucket — one for both homes since ADR 0014 — is the draft's bucket itself, since both are Timeweb `ru-1`, so no object moves at all. If a new bucket is used instead, objects are copied with identical keys and metadata. The copy runs before the window and catches up by `LastModified` inside it.
+2. **The draft's bucket is kept.** *Decided (U-3, [ADR 0006](../adr/0006-draft-bucket-becomes-russian-home-bucket.md)):* the Russian home's bucket (a bucket per home since ADR 0044) is the draft's bucket itself, since both are Timeweb `ru-1`, so no object moves at all. If a new bucket is used instead — the owner rented one for the Russian home on 2026-10-14, and whether it replaces the draft's is open — objects are copied with identical keys and metadata. The copy runs before the window and catches up by `LastModified` inside it.
 3. **Only referenced objects move.** An object is migrated only if a migrated pointer references it. Objects without a pointer are not carried. They come from failed writes, deletions that did not clean up (O3–O5, O7, O9), the knowledge "prefix cleanup" that does not exist, and staged ticket uploads. M1 lists them by prefix with counts and sizes (D-2, U-4).
 4. **Transient prefixes are mostly empty.** O3–O5 move only for runs unfinished at `T0`. An open multipart upload cannot continue against a new system: its run is failed and the client re-uploads (T-3).
 

@@ -10,11 +10,17 @@ SAMPLE_LINK_SECRET = "sample-link-secret-at-least-32-characters"
 REQUIRED_VARIABLES = (
     "ENVIRONMENT",
     *(f"HOME_{home.name}_DATABASE_URL" for home in Home),
-    "S3_ENDPOINT_URL",
-    "S3_REGION",
-    "S3_BUCKET",
-    "S3_ACCESS_KEY_ID",
-    "S3_SECRET_ACCESS_KEY",
+    *(
+        f"HOME_{home.name}_{name}"
+        for home in Home
+        for name in (
+            "S3_ENDPOINT_URL",
+            "S3_REGION",
+            "S3_BUCKET",
+            "S3_ACCESS_KEY_ID",
+            "S3_SECRET_ACCESS_KEY",
+        )
+    ),
     "VALKEY_URL",
     "REDIS_CACHE_URL",
 )
@@ -27,11 +33,6 @@ def local_environ(**overrides: str) -> dict[str, str]:
         "ENVIRONMENT": "development",
         "VALKEY_URL": f"redis://:{SAMPLE_SECRET}@127.0.0.1:16379/0",
         "REDIS_CACHE_URL": f"redis://:{SAMPLE_SECRET}@127.0.0.1:16380/0",
-        "S3_ENDPOINT_URL": "http://127.0.0.1:18333",
-        "S3_REGION": "local",
-        "S3_BUCKET": "shosai",
-        "S3_ACCESS_KEY_ID": "local-s3-access",
-        "S3_SECRET_ACCESS_KEY": SAMPLE_SECRET,
     }
     for home, (application_port, migration_port) in ports.items():
         prefix = f"HOME_{home.name}_"
@@ -42,6 +43,11 @@ def local_environ(**overrides: str) -> dict[str, str]:
             f"{prefix}MIGRATION_DATABASE_URL": (
                 f"postgresql://shosai_migrator:{SAMPLE_SECRET}@127.0.0.1:{migration_port}/shosai"
             ),
+            f"{prefix}S3_ENDPOINT_URL": "http://127.0.0.1:18333",
+            f"{prefix}S3_REGION": "local",
+            f"{prefix}S3_BUCKET": f"shosai-{home.value}",
+            f"{prefix}S3_ACCESS_KEY_ID": "local-s3-access",
+            f"{prefix}S3_SECRET_ACCESS_KEY": SAMPLE_SECRET,
         }
     environ.update(overrides)
     return environ
@@ -51,7 +57,8 @@ def production_environ(**overrides: str) -> dict[str, str]:
     """A production environment that passes the gate; `overrides` replaces or adds variables."""
     environ = local_environ(
         ENVIRONMENT="production",
-        S3_ENDPOINT_URL="https://s3.ru.example",
+        HOME_RU_S3_ENDPOINT_URL="https://s3.ru.example",
+        HOME_EU_S3_ENDPOINT_URL="https://s3.eu.example",
         VALKEY_URL=f"rediss://:{SAMPLE_SECRET}@valkey.eu.example:6380/0",
         TRUSTED_PROXY_ADDRESSES="10.0.0.0/24",
         FERNET_KEY=SAMPLE_FERNET_KEY,

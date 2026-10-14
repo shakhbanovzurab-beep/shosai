@@ -13,6 +13,7 @@ from opentelemetry.trace import SpanKind, StatusCode
 from prometheus_client import CollectorRegistry
 
 from shosai.core.config.sections import StorageSettings
+from shosai.core.kernel.homes import Home
 from shosai.core.storage.errors import (
     ObjectNotFoundError,
     ObjectsNotDeletedError,
@@ -129,28 +130,30 @@ async def test_a_failing_bucket_is_tried_a_bounded_number_of_times(
     server = await asyncio.start_server(unavailable, LOOPBACK, 0)
     port = int(server.sockets[0].getsockname()[1])
     settings = elsewhere(
-        harness_settings.services.storage, s3_endpoint_url=f"http://{LOOPBACK}:{port}"
+        harness_settings.services.storage[Home.RU], s3_endpoint_url=f"http://{LOOPBACK}:{port}"
     )
     registry = CollectorRegistry()
     async with open_s3_client(settings) as client:
-        calls = S3Calls(settings.s3_bucket, StorageMetrics(registry), None)
+        calls = S3Calls(Home.RU, settings.s3_bucket, StorageMetrics(registry), None)
         with pytest.raises(StorageUnavailableError):
             await S3ObjectStorage(client, calls).ping()
     server.close()
     await server.wait_closed()
 
     assert requests == MAX_ATTEMPTS
-    outcome = {"operation": "HeadBucket", "outcome": "unavailable"}
+    outcome = {"home": "ru", "operation": "HeadBucket", "outcome": "unavailable"}
     assert registry.get_sample_value("shosai_storage_requests_total", outcome) == 1
 
 
 async def test_wrong_credentials_are_refused_not_unavailable(
     harness_settings: HarnessSettings,
 ) -> None:
-    settings = elsewhere(harness_settings.services.storage, s3_secret_access_key="wrong-secret")
+    settings = elsewhere(
+        harness_settings.services.storage[Home.RU], s3_secret_access_key="wrong-secret"
+    )
     async with open_s3_client(settings) as client:
         storage = S3ObjectStorage(
-            client, S3Calls(settings.s3_bucket, StorageMetrics(CollectorRegistry()), None)
+            client, S3Calls(Home.RU, settings.s3_bucket, StorageMetrics(CollectorRegistry()), None)
         )
         with pytest.raises(StorageRejectedError):
             await storage.ping()
@@ -170,13 +173,13 @@ def elsewhere(settings: StorageSettings, **changes: str) -> StorageSettings:
 
 async def test_a_connection_failure_is_an_outage() -> None:
     registry = CollectorRegistry()
-    calls = S3Calls("shosai", StorageMetrics(registry), None)
+    calls = S3Calls(Home.RU, "shosai-ru", StorageMetrics(registry), None)
 
     with pytest.raises(StorageUnavailableError):
         async with calls.call("HeadBucket"):
             raise EndpointConnectionError(endpoint_url="http://127.0.0.1:1")
 
-    outcome = {"operation": "HeadBucket", "outcome": "unavailable"}
+    outcome = {"home": "ru", "operation": "HeadBucket", "outcome": "unavailable"}
     assert registry.get_sample_value("shosai_storage_requests_total", outcome) == 1
 
 
@@ -189,7 +192,7 @@ class RefusingBatchClient:
 
 
 async def test_objects_left_by_a_batch_are_named_for_a_retry() -> None:
-    calls = S3Calls("shosai", StorageMetrics(CollectorRegistry()), None)
+    calls = S3Calls(Home.RU, "shosai-ru", StorageMetrics(CollectorRegistry()), None)
     storage = S3ObjectStorage(cast("S3Client", RefusingBatchClient()), calls, "tests/slot-9/")
 
     with pytest.raises(ObjectsNotDeletedError, match="AccessDenied") as raised:

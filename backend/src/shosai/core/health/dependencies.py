@@ -1,4 +1,4 @@
-"""Probes of the dependencies of a process: each home's database, Valkey, the cache, the bucket."""
+"""Probes of the dependencies of a process: each home's database and bucket, Valkey, the cache."""
 
 from typing import Final
 
@@ -47,10 +47,10 @@ def redis_probe(name: str, client: Redis) -> DependencyProbe:
     return DependencyProbe(name=name, check=client.ping, failures=REDIS_FAILURES)
 
 
-def storage_probe(storage: ObjectStorage) -> DependencyProbe:
-    """`HeadBucket` on the one bucket: reachable, and the credentials still open it."""
+def storage_probe(home: Home, storage: ObjectStorage) -> DependencyProbe:
+    """`HeadBucket` on a home's bucket: reachable, and the credentials still open it."""
     return DependencyProbe(
-        name="storage",
+        name=f"storage.{home.value}",
         check=storage.ping,
         failures=(StorageUnavailableError, StorageRejectedError),
     )

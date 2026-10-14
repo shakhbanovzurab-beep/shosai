@@ -18,13 +18,16 @@ def sample_environ(**overrides: str) -> dict[str, str]:
         "TEST_DATABASE_SLOTS": "8",
         "TEST_VALKEY_URL": f"redis://:{SAMPLE_PASSWORD}@127.0.0.1:16379",
         "TEST_REDIS_CACHE_URL": f"redis://:{SAMPLE_PASSWORD}@127.0.0.1:16380",
-        "TEST_S3_ENDPOINT_URL": "http://127.0.0.1:18333",
-        "TEST_S3_REGION": "local",
-        "TEST_S3_BUCKET": "shosai",
-        "TEST_S3_ACCESS_KEY_ID": "local-s3-access",
-        "TEST_S3_SECRET_ACCESS_KEY": SAMPLE_PASSWORD,
     }
     for home, (application_port, migration_port) in ports.items():
+        prefix = f"TEST_HOME_{home.name}_"
+        environ |= {
+            f"{prefix}S3_ENDPOINT_URL": "http://127.0.0.1:18333",
+            f"{prefix}S3_REGION": "local",
+            f"{prefix}S3_BUCKET": f"shosai-{home.value}",
+            f"{prefix}S3_ACCESS_KEY_ID": "local-s3-access",
+            f"{prefix}S3_SECRET_ACCESS_KEY": SAMPLE_PASSWORD,
+        }
         environ[f"TEST_HOME_{home.name}_DATABASE_URL"] = sample_url("shosai_app", application_port)
         environ[f"TEST_HOME_{home.name}_MIGRATION_DATABASE_URL"] = sample_url(
             "shosai_migrator", migration_port

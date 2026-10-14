@@ -20,9 +20,10 @@ Everything opened is closed in reverse order when the block ends: slices first, 
 clients, then the engines.
 """
 
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncIterator, Mapping, Sequence
 from contextlib import AsyncExitStack, asynccontextmanager
 from dataclasses import dataclass
+from types import MappingProxyType
 
 import structlog
 from redis.asyncio import Redis
@@ -66,6 +67,7 @@ from shosai.core.kv.metrics import KeyValueMetrics
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.schedule.jobs import PeriodicJob
 from shosai.core.storage.metrics import StorageMetrics
+from shosai.core.storage.port import MultipartUploads, ObjectStorage
 from shosai.core.storage.s3_client import S3Calls, open_s3_client
 from shosai.core.storage.s3_multipart import S3MultipartUploads
 from shosai.core.storage.s3_objects import S3ObjectStorage
@@ -113,8 +115,8 @@ class _Writers:
 class _Clients:
     valkey: Redis
     cache: Redis
-    objects: S3ObjectStorage
-    uploads: S3MultipartUploads
+    objects: Mapping[Home, ObjectStorage]
+    uploads: Mapping[Home, MultipartUploads]
 
 
 @asynccontextmanager
@@ -227,13 +229,20 @@ async def _open_clients(process: _Process, stack: AsyncExitStack) -> _Clients:
     stack.push_async_callback(valkey.aclose)
     cache = connect_redis(settings.shared_services.redis_cache_url, client_name, tracer)
     stack.push_async_callback(cache.aclose)
-    s3 = await stack.enter_async_context(open_s3_client(settings.storage))
-    calls = S3Calls(settings.storage.s3_bucket, StorageMetrics(telemetry.registry), tracer)
+    # Бакет у каждого дома свой, и провайдеры могут различаться: клиент на дом (ADR 0044).
+    metrics = StorageMetrics(telemetry.registry)
+    objects: dict[Home, ObjectStorage] = {}
+    uploads: dict[Home, MultipartUploads] = {}
+    for home, storage in settings.storage.items():
+        s3 = await stack.enter_async_context(open_s3_client(storage))
+        calls = S3Calls(home, storage.s3_bucket, metrics, tracer)
+        objects[home] = S3ObjectStorage(s3, calls)
+        uploads[home] = S3MultipartUploads(s3, calls)
     return _Clients(
         valkey=valkey,
         cache=cache,
-        objects=S3ObjectStorage(s3, calls),
-        uploads=S3MultipartUploads(s3, calls),
+        objects=MappingProxyType(objects),
+        uploads=MappingProxyType(uploads),
     )
 
 
@@ -270,5 +279,5 @@ def _core_probes(homes: _Homes, clients: _Clients) -> tuple[DependencyProbe, ...
         *(home_probe(home, homes.databases, homes.gate) for home in Home),
         redis_probe("valkey", clients.valkey),
         redis_probe("cache", clients.cache),
-        storage_probe(clients.objects),
+        *(storage_probe(home, clients.objects[home]) for home in Home),
     )

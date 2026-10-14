@@ -14,7 +14,7 @@ task (§14 rule 9), and each part is used only by the role it belongs to.
 """
 
 import re
-from collections.abc import AsyncIterator, Callable, Sequence
+from collections.abc import AsyncIterator, Callable, Mapping, Sequence
 from contextlib import AbstractAsyncContextManager, asynccontextmanager
 from dataclasses import dataclass
 from typing import Any, Final
@@ -44,6 +44,7 @@ from shosai.core.events.subscriptions import EventSubscription
 from shosai.core.exchange_rates.rates import ExchangeRates
 from shosai.core.health.probes import DependencyProbe
 from shosai.core.idempotency.ledger import EffectLedger
+from shosai.core.kernel.homes import Home
 from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.runtime.loops import ScheduledLoop
@@ -74,8 +75,9 @@ class CoreServices:
     agent_tools: AgentToolCatalog
     exchange_rates: ExchangeRates
     cache: Cache
-    objects: ObjectStorage
-    uploads: MultipartUploads
+    # Бакет у каждого дома свой (ADR 0044): срез берёт хранилище дома из скоупа, как транзакцию.
+    objects: Mapping[Home, ObjectStorage]
+    uploads: Mapping[Home, MultipartUploads]
     locks: DistributedLocks
     rate_limiter: RateLimiter
     # Сам клиент Valkey — для собственных структур среза: очереди транскрипта, состояния встреч.

@@ -66,7 +66,7 @@ class Settings:
 
     environment: Environment
     homes: Mapping[Home, HomeSettings]
-    storage: StorageSettings
+    storage: Mapping[Home, StorageSettings]
     shared_services: SharedServicesSettings
     web: WebSettings
     server: ServerSettings
@@ -84,7 +84,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
     reader = _SectionReader(environ)
     runtime = reader.read(RuntimeSettings, "")
     homes = {home: reader.read(HomeSettings, home_prefix(home)) for home in Home}
-    storage = reader.read(StorageSettings, "")
+    storage = {home: reader.read(StorageSettings, home_prefix(home)) for home in Home}
     shared_services = reader.read(SharedServicesSettings, "")
     web = reader.read(WebSettings, "")
     server = reader.read(ServerSettings, "")
@@ -100,7 +100,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
     return Settings(
         environment=_present(runtime).environment,
         homes=MappingProxyType({home: _present(section) for home, section in homes.items()}),
-        storage=_present(storage),
+        storage=MappingProxyType({home: _present(section) for home, section in storage.items()}),
         shared_services=_present(shared_services),
         web=_present(web),
         server=_present(server),

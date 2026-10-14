@@ -1,15 +1,16 @@
-"""The aiobotocore client of the one bucket and how one request to it runs (ADR 0014, 0015).
+"""The aiobotocore client of a home's bucket and how one request to it runs (ADR 0044, 0015).
 
-One client per process. Timeouts are explicit and retries bounded (§14 rule 8): connect
-2 s, each socket read 20 s, the standard retry mode with at most 3 attempts, which backs
-off with jitter and repeats only throttling and transient failures. Path addressing works
-with every S3-compatible endpoint. Checksums are added only where the S3 API requires
-them: a presigned upload would otherwise demand a checksum header the client cannot know
-in advance, and providers other than AWS do not all accept the newer default checksums.
+One client per home's bucket and process: the homes may sit at different providers. Timeouts
+are explicit and retries bounded (§14 rule 8): connect 2 s, each socket read 20 s, the
+standard retry mode with at most 3 attempts, which backs off with jitter and repeats only
+throttling and transient failures. Path addressing works with every S3-compatible endpoint.
+Checksums are added only where the S3 API requires them: a presigned upload would otherwise
+demand a checksum header the client cannot know in advance, and providers other than AWS do
+not all accept the newer default checksums.
 
-Each request gets a client span and a metric; a failure is translated at this boundary,
-so slices see the storage errors of `errors.py`, never botocore's. Keys may contain file
-names, so they never enter a span, a metric or a log line.
+Each request gets a client span and a metric; a failure is translated at this boundary, so
+slices see the storage errors of `errors.py`, never botocore's. Keys may contain file names,
+so they never enter a span, a metric or a log line.
 """
 
 import time
@@ -25,6 +26,7 @@ from opentelemetry.semconv.attributes import error_attributes
 from opentelemetry.trace import NoOpTracerProvider, SpanKind, Status, StatusCode
 
 from shosai.core.config.sections import StorageSettings
+from shosai.core.kernel.homes import Home
 from shosai.core.observability.outage_log import OutageLog
 from shosai.core.storage.errors import (
     ObjectNotFoundError,
@@ -66,7 +68,7 @@ def client_config() -> AioConfig:
 
 @asynccontextmanager
 async def open_s3_client(settings: StorageSettings) -> AsyncIterator[S3Client]:
-    """The process's client of the bucket's endpoint; its connections close on exit."""
+    """The process's client of a home's bucket endpoint; its connections close on exit."""
     session = get_session()
     async with session.create_client(
         "s3",
@@ -83,8 +85,13 @@ class S3Calls:
     """Runs requests to one bucket: a client span, a metric and the error translation."""
 
     def __init__(
-        self, bucket: str, metrics: StorageMetrics, tracer_provider: TracerProvider | None
+        self,
+        home: Home,
+        bucket: str,
+        metrics: StorageMetrics,
+        tracer_provider: TracerProvider | None,
     ) -> None:
+        self.home = home
         self.bucket = bucket
         self._metrics = metrics
         self._tracer = (tracer_provider or NoOpTracerProvider()).get_tracer(__name__)
@@ -103,6 +110,7 @@ class S3Calls:
                 "rpc.service": "S3",
                 "rpc.method": operation,
                 "aws.s3.bucket": self.bucket,
+                "shosai.home": self.home.value,
             },
             # Текст ошибки хранилища может назвать ключ, а в ключе бывает имя файла.
             record_exception=False,
@@ -125,7 +133,7 @@ class S3Calls:
                 self._outages.failed(error, operation=operation)
                 raise StorageUnavailableError from error
             finally:
-                self._metrics.record(operation, outcome, time.perf_counter() - started)
+                self._metrics.record(self.home, operation, outcome, time.perf_counter() - started)
 
 
 def translate(error: ClientError) -> tuple[StorageOutcome, Exception, str]:

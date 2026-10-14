@@ -1,9 +1,10 @@
-"""The ports of object storage: what a slice may ask of the one bucket (ADR 0014).
+"""The ports of object storage: what a slice may ask of its home's bucket (ADR 0044).
 
-Bytes live in the bucket, the pointer — the full key — in the owner's home database
-(inv-11). Clients upload and download directly with presigned requests valid 15 minutes
-(§4.3), so no API process carries the bytes; a server-side `put` is for what the server
-makes itself. No database transaction is held across any of these calls (§14 rule 8).
+Bytes live in the bucket of the home that holds the pointer — the full key — in its
+database (inv-11); a slice takes `services.objects[home]` with the home of its scope.
+Clients upload and download directly with presigned requests valid 15 minutes (§4.3), so
+no API process carries the bytes; a server-side `put` is for what the server makes itself.
+No database transaction is held across any of these calls (§14 rule 8).
 """
 
 from collections.abc import AsyncIterator, Mapping, Sequence
@@ -75,7 +76,7 @@ class ObjectStream(Protocol):
 
 
 class ObjectStorage(Protocol):
-    """Objects of the one bucket; slices receive it by injection."""
+    """Objects of one home's bucket; slices receive one per home by injection."""
 
     async def put(self, key: str, body: bytes, *, content_type: str) -> ObjectInfo:
         """Store bytes the server made itself under `key`, replacing nothing else."""

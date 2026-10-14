@@ -24,7 +24,7 @@ from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
 
-CORE_PROBES = ["homes.ru", "homes.eu", "valkey", "cache", "storage"]
+CORE_PROBES = ["homes.ru", "homes.eu", "valkey", "cache", "storage.ru", "storage.eu"]
 
 
 async def test_every_part_of_every_slice_is_wired_and_closed_in_reverse(

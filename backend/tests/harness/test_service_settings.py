@@ -1,4 +1,4 @@
-"""Valkey, the cache and the bucket of the tests come only from TEST_* and stay on loopback."""
+"""Valkey, the cache and the homes' buckets of the tests come only from TEST_* and stay local."""
 
 import pytest
 
@@ -9,11 +9,17 @@ from tests.harness.settings import HarnessConfigurationError, HarnessSettings
 SERVICE_VARIABLES = [
     "TEST_VALKEY_URL",
     "TEST_REDIS_CACHE_URL",
-    "TEST_S3_ENDPOINT_URL",
-    "TEST_S3_REGION",
-    "TEST_S3_BUCKET",
-    "TEST_S3_ACCESS_KEY_ID",
-    "TEST_S3_SECRET_ACCESS_KEY",
+    *(
+        f"TEST_HOME_{home}_{name}"
+        for home in ("RU", "EU")
+        for name in (
+            "S3_ENDPOINT_URL",
+            "S3_REGION",
+            "S3_BUCKET",
+            "S3_ACCESS_KEY_ID",
+            "S3_SECRET_ACCESS_KEY",
+        )
+    ),
 ]
 
 
@@ -28,7 +34,10 @@ def test_the_slot_number_is_the_database_index() -> None:
         f"redis://:{SAMPLE_PASSWORD}@127.0.0.1:16379/3"
     )
     assert services.cache.for_slot(15).get_secret_value().endswith("@127.0.0.1:16380/15")
-    assert services.storage.s3_bucket == "shosai"
+    assert [section.s3_bucket for section in services.storage.values()] == [
+        "shosai-ru",
+        "shosai-eu",
+    ]
 
 
 def test_every_service_variable_is_required_and_runtime_ones_are_never_read() -> None:
@@ -37,7 +46,7 @@ def test_every_service_variable_is_required_and_runtime_ones_are_never_read() ->
         del environ[variable]
     environ |= {
         "VALKEY_URL": f"redis://:{SAMPLE_PASSWORD}@127.0.0.1:16379/0",
-        "S3_BUCKET": "shosai",
+        "HOME_RU_S3_BUCKET": "shosai-ru",
     }
 
     with pytest.raises(HarnessConfigurationError) as raised:
@@ -70,7 +79,8 @@ def test_a_redis_address_carries_no_database_index(url: str) -> None:
     [
         ("TEST_VALKEY_URL", f"redis://:{SAMPLE_PASSWORD}@valkey.eu.example:6379"),
         ("TEST_REDIS_CACHE_URL", f"rediss://:{SAMPLE_PASSWORD}@10.0.0.7:6379"),
-        ("TEST_S3_ENDPOINT_URL", "https://s3.ru.example"),
+        ("TEST_HOME_RU_S3_ENDPOINT_URL", "https://s3.ru.example"),
+        ("TEST_HOME_EU_S3_ENDPOINT_URL", "https://s3.eu.example"),
     ],
 )
 def test_refuses_a_service_that_is_not_on_loopback(variable: str, value: str) -> None:
@@ -80,7 +90,7 @@ def test_refuses_a_service_that_is_not_on_loopback(variable: str, value: str) ->
 
 def test_accepts_the_development_bucket_endpoint() -> None:
     environ = sample_environ()
-    environ["S3_ENDPOINT_URL"] = environ["TEST_S3_ENDPOINT_URL"]
+    environ["HOME_RU_S3_ENDPOINT_URL"] = environ["TEST_HOME_RU_S3_ENDPOINT_URL"]
 
     check(environ)
 
@@ -94,4 +104,4 @@ def test_refuses_valkey_equal_to_the_runtime_address() -> None:
 
 
 def test_reads_an_ipv6_loopback_endpoint() -> None:
-    check(sample_environ(TEST_S3_ENDPOINT_URL="http://[::1]:18333"))
+    check(sample_environ(TEST_HOME_EU_S3_ENDPOINT_URL="http://[::1]:18333"))

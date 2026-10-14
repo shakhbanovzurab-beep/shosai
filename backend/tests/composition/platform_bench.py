@@ -1,6 +1,6 @@
 """The platform of a process built in this test process over the run's slot."""
 
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncIterator, Mapping, Sequence
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
@@ -36,9 +36,11 @@ async def platform_over_slot(
     harness_settings: HarnessSettings,
     features: Sequence[FeatureModule],
     role: ProcessRole = ProcessRole.API,
+    overrides: Mapping[str, str] | None = None,
 ) -> AsyncIterator[PlatformBench]:
-    """The platform a process of the role builds with the slices, closed after the block."""
-    settings = load_settings(slot_environ(run_slot, harness_settings))
+    """The platform a process of the role builds with the slices, closed after the block;
+    `overrides` replaces variables of the slot's environment."""
+    settings = load_settings(slot_environ(run_slot, harness_settings, **(overrides or {})))
     telemetry = ProcessTelemetry(CollectorRegistry(), TracerProvider(shutdown_on_exit=False))
     async with open_platform(settings, role, telemetry, features) as platform:
         yield PlatformBench(platform, settings, telemetry)

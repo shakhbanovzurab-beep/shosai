@@ -1,4 +1,4 @@
-"""The storage adapters over the run's prefix of the bucket, each with its own metrics."""
+"""The storage adapters over the run's prefix of a home's bucket, each with its own metrics."""
 
 from dataclasses import dataclass
 
@@ -19,19 +19,21 @@ class SlotStorage:
     objects: S3ObjectStorage
     uploads: S3MultipartUploads
     registry: CollectorRegistry
+    home: str
 
     def requests(self, operation: str, outcome: str) -> float:
         """How many requests of an operation ended with an outcome."""
-        labels = {"operation": operation, "outcome": outcome}
+        labels = {"home": self.home, "operation": operation, "outcome": outcome}
         return self.registry.get_sample_value("shosai_storage_requests_total", labels) or 0.0
 
 
 def slot_storage(bucket: SlotBucket, tracer_provider: TracerProvider | None = None) -> SlotStorage:
     """Adapters as a process builds them, under the run's root prefix."""
     registry = CollectorRegistry()
-    calls = S3Calls(bucket.bucket, StorageMetrics(registry), tracer_provider)
+    calls = S3Calls(bucket.home, bucket.bucket, StorageMetrics(registry), tracer_provider)
     return SlotStorage(
         objects=S3ObjectStorage(bucket.client, calls, bucket.root),
         uploads=S3MultipartUploads(bucket.client, calls, bucket.root),
         registry=registry,
+        home=bucket.home.value,
     )

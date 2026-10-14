@@ -36,7 +36,7 @@
 | nfr-1 | Availability | 99.9% per month for sign-in, meeting capture and payment. Third-party AI outages are excluded and must degrade, not stop capture |
 | nfr-2 | RPO | ≤ 5 min on database node loss; no acknowledged payment is lost on ordinary failover |
 | nfr-3 | RTO | ≤ 1 h on server or database node loss; ≤ 4 h for data corruption or operator error (restore from backup) |
-| nfr-4 | Residency | Primary data of Russian users and Russian companies stays in Russia, of others in the EU. Outside a home only the email HMAC, user id and home id exist. Derived copies and the files of the EU home, kept in the one bucket in Russia (see §6), are accepted exceptions |
+| nfr-4 | Residency | Primary data of Russian users and Russian companies stays in Russia, of others in the EU. Outside a home only the email HMAC, user id and home id exist. Derived copies are an accepted exception; so are the files of the EU home while its bucket is in Russia during development (see §6) |
 | nfr-5 | Scale | 10 000 DAU, of which 3 000 company seats = 2 600 concurrent meetings; verified by calculation up to 100 000 DAU |
 | nfr-6 | Live latency | Transcript line on screen p95 ≤ 2 s after the end of the phrase; platform share ≤ 300 ms |
 | nfr-7 | API latency | Cabinet reads p95 ≤ 300 ms; platform overhead of a Leo turn ≤ 500 ms. Not met for Russian users by this placement (accepted, §20) |
@@ -81,7 +81,7 @@
 ### 4.1 Placement rules
 
 1. All application processes run as **one deployment in the EU** (the compute plane), next to the AI providers. AI providers are not reachable from Russian addresses.
-2. Data lives in **two homes**. Each home = one managed PostgreSQL cluster (primary + standby, WAL archive, PITR) behind PgBouncer. Files of both homes live in **one S3 bucket in Russia** ([ADR 0014](../adr/0014-one-object-store-in-russia.md)).
+2. Data lives in **two homes**. Each home = one managed PostgreSQL cluster (primary + standby, WAL archive, PITR) behind PgBouncer. Each home has **its own S3 bucket** for its files ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)).
    - Russian home: St Petersburg, 45 ms from the plane.
    - EU home: Netherlands, < 2 ms from the plane. It also holds the directory and the data without an owning account (§6).
 3. A request opens its database session **in the home named by the access token** (the person's home; a workspace request runs in the workspace's home, which at launch is always the person's own, §6). Workers take the home from the task payload.
@@ -105,7 +105,7 @@
 | Nango | plane | OAuth proxy for connectors; one instance per home, state in its home database | pinned versions |
 | PostgreSQL RU | Russia | Source of truth of the Russian home | managed, PgBouncer |
 | PostgreSQL EU | EU | Source of truth of the EU home; directory tables; platform tables and telemetry without an account (§6) | managed, PgBouncer |
-| S3 | Russia | One bucket for both homes and the platform: files, recordings, exports, knowledge sources; lifecycle rules ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) | — |
+| S3 | per home | A bucket per home: files, recordings, exports, knowledge sources of that home; the platform's in the EU home's; lifecycle rules ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)). The EU home's bucket is in Russia (Timeweb `ru-1`) until the owner moves it to the EU before launch | — |
 | AI providers | external | OpenRouter (including Jev decisions by TypeSafe AI and transcription of recordings), OpenAI Realtime, Google Gemini Live, pyannote, Mistral OCR — reached directly from the plane ([ADR 0043](../adr/0043-speech-providers-by-task.md)) | quotas per contract |
 | Payments | external | TBank, CloudPayments, lava.top (cards); bank statement API (invoices) | — |
 | Observability | plane + outside | Grafana stack: Prometheus (metrics), Loki (logs), Tempo (traces), Grafana (one pane); OpenTelemetry Collector; Alertmanager (Telegram); node exporter; uptime probes run outside the plane | single nodes, local disks with size caps |
@@ -189,7 +189,7 @@
   - later requests use the token and do not consult the directory;
   - processes cache directory entries for 60 s;
   - account transfer bumps `token_version`.
-- **Files in one bucket in Russia — accepted exception to nfr-4** ([ADR 0014](../adr/0014-one-object-store-in-russia.md)): the objects of both homes and of the platform live in one bucket in Russia; the pointer rows stay in the owner's home database. Keys do not name the home, so an account transfer moves no bytes. Files of people and companies of the EU home are subject to the legal review in §22.
+- **Files in the bucket of their home** ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)): an object's bytes live in the bucket of the home that holds its pointer row; the platform's objects in the EU home's. Keys do not name the home; an account transfer copies the account's objects to the target bucket with identical keys before it switches the pointers. While the EU home's bucket is in Russia during development, the files of the EU home stay subject to the legal review in §22.
 - **Derived copies in the EU — accepted exception to nfr-4:** meeting resume state, the run state of Leo's active and paused runs (Valkey), task payloads, vector index points of Russian users and companies. Retention ≤ 24 h in Redis; index points live as long as their source.
 - **Cross-border AI:**
   - personal user — consent in the product;
@@ -285,7 +285,7 @@
 | inv-8 | A pipeline stage counts once; a retry creates no duplicate results |
 | inv-9 | One external model call produces one cost row and at most one credit debit |
 | inv-10 | A vector index is derived and rebuildable; a query never returns data the requester may not see |
-| inv-11 | Bytes live only in the one bucket in Russia, reachable only through a pointer in the owner's home; the storage quota is not exceeded |
+| inv-11 | Bytes live only in the bucket of their pointer's home, reachable only through that pointer; the storage quota is not exceeded |
 | inv-12 | A writing agent action runs at most once and only after confirmation |
 | inv-13 | No money ceiling stops a meeting or standard transcription (unlimited-meetings promise) |
 | inv-14 | A company resource opens only for its members at the resource's access level; checked on every access, never cached; search and Leo obey the same rule |
@@ -652,7 +652,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | google-genai | 2.30.1 | Gemini Live client |
 | Backend | aiosmtplib | 5.1.3 | SMTP client of the mail relay: implicit TLS or STARTTLS with certificate checks, one login per mailbox |
 | Backend | Jinja2 | 3.1.6 | Mail templates: HTML with autoescape and a plain-text part from one body, strict undefined values |
-| Backend | aiobotocore | 3.9.2 | S3 client; one bucket for both homes; replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |
+| Backend | aiobotocore | 3.9.2 | S3 client; one per home's bucket ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)); replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
 | Backend | Own HTTP metric on prometheus-client, recorded by the request boundary under OpenTelemetry's HTTP semantic conventions | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |
 | Backend | Own GCRA limiter on redis-py, state in Valkey | — | Request rate limits; replaces slowapi, whose storage is synchronous ([ADR 0011](../adr/0011-rate-limits-gcra-in-valkey.md)) |
@@ -668,7 +668,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Data | PostgreSQL row-level security | — | Second line of tenant isolation for companies |
 | Data | Valkey, managed (Netherlands) | 9.1 | The managed Redis-compatible service: task queues, transcript queue, locks, meeting state, Leo run state |
 | Data | Redis, container | 8.10.2 | Local LRU cache |
-| Data | S3 Timeweb ru-1 | — | One bucket: files of both data homes and the platform ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) |
+| Data | S3 Timeweb ru-1 | — | A bucket per data home; the EU home's moves to an EU provider before launch ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)) |
 | Realtime and integrations | LiveKit server, egress, coturn | pinned | Video rooms, recording, per-participant tracks to the ws gateway, TURN |
 | Realtime and integrations | Nango | pinned | OAuth proxy for connectors, one per data home |
 | Realtime and integrations | Web Push (VAPID) | — | PWA notifications |
@@ -729,7 +729,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Grafana stack for observability: Prometheus, Loki, Tempo, Grafana | one ecosystem: native links metric → trace → logs; log alerts through the Loki ruler into the same Alertmanager; S3 storage available for Loki and Tempo when needed | label discipline in Loki; ad-hoc search by a high-cardinality field scans lines within the time range | ad-hoc searches by user or company over long periods become routine, or logs grow far beyond ≈ 1.5 GB/day stored → revisit the log store |
 | Tempo for traces, 7 days on local storage | native Grafana integration: TraceQL, trace → logs in Loki, exemplars from Prometheus | one more store; tail sampling needed | trace volume outgrows the local disk → Tempo on S3 |
 | One OpenTelemetry Collector for logs and traces | the application is independent of the stores; tail sampling in one place | one more process to run | never |
-| One S3 bucket in Russia for both homes ([ADR 0014](../adr/0014-one-object-store-in-russia.md)) | object storage exists only in Russia; the draft's bucket is kept (ADR 0006); an account transfer moves no bytes | files of the EU home outside the EU (legal review, §22); one bucket is a single point of failure for files | the legal review rules it inadmissible, a company contract requires EU storage, or an EU bucket becomes available → a bucket per home, objects of the EU home copied with identical keys |
+| A bucket per data home ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)) | the files of a home live with its data; a bucket out of reach stops the file operations of its home only | an account transfer copies bytes; until the EU home's bucket moves to the EU, its files are in Russia (legal review, §22) | the owner rents an EU S3 store → update `HOME_EU_S3_*` and copy the bucket's objects with identical keys |
 | Public site on Next.js, cabinet on a Vite SPA, backend only on FastAPI ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) | public pages need server rendering and real `404` (SEO); the cabinet needs none and stays static; one API for every client | one more process role and frontend project; two translation entry points over one message format | the cabinet needs server rendering for a measured reason, or the site's server becomes a bottleneck → static generation |
 | Leo conversations in the home DB; Valkey only for in-flight runs ([ADR 0024](../adr/0024-leo-threads-in-the-home-database.md)) | continuity across devices; conversations stay in their home; Valkey is no longer the only copy | two home-DB transactions per turn (≈ 90–135 ms for Russian users) | thread rows exceed 5 GB/month in a home |
 | One Action Gateway for every Leo write ([ADR 0025](../adr/0025-leo-action-gateway.md)) | inv-12 becomes provable: one winner, a frozen plan, idempotent execution | every write tool implements plan, preview and idempotent execute; `outcome_unknown` is a product state | the owner decides on standing approvals |
@@ -741,7 +741,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 
 - Russian users: cabinet and Leo latency bound by 45 ms per DB round trip. nfr-7 is not met for them.
 - Derived copies of Russian users' and companies' data live in the EU (§6).
-- Files of people and companies of the EU home live in Russia, in the one bucket (§6, ADR 0014).
+- Files of people and companies of the EU home live in Russia while the EU home's bucket is in Timeweb `ru-1` during development (§6, ADR 0044).
 - Availability for Russian users = plane × link to the Russian DB.
 - A Redis failover can lose up to 1 s of transcript lines.
 - 99.9% of meeting capture excludes the AI provider; its outage degrades capture.
@@ -762,7 +762,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 
 | Item | Owner | Needed before |
 |---|---|---|
-| Legal review: email HMAC outside Russia; derived copies in the EU; telemetry without an account in the EU home (ADR 0005); data of people outside Russia kept in the Russian home until their transfer (ADR 0004); files of the EU home in the bucket in Russia (ADR 0014); cross-border transfer to AI providers; processor agreement (152-FZ) and DPA (GDPR) with the list of subprocessors | owner, lawyer | first transfer of accounts; first company contract |
+| Legal review: email HMAC outside Russia; derived copies in the EU; telemetry without an account in the EU home (ADR 0005); data of people outside Russia kept in the Russian home until their transfer (ADR 0004); files of the EU home while its bucket is in Russia (ADR 0044); cross-border transfer to AI providers; processor agreement (152-FZ) and DPA (GDPR) with the list of subprocessors | owner, lawyer | first transfer of accounts; first company contract |
 | Cross-home workspace membership and sharing ([ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)): the legal basis for a member's profile copy in the workspace's home and for copying a shared item across homes; the account transfer of a person who belongs to workspaces | owner, lawyer | the first workspace with members of both homes; the first transfer of a workspace member |
 | Tax, closing documents, document exchange for Russian legal entities | owner, accountant | first invoice |
 | Legal review of Jev (TypeSafe AI) as a subprocessor: retention, DPA, coverage by cross-border consent | owner, lawyer | enabling Jev on personal data |

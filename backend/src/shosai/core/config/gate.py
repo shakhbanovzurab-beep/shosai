@@ -97,9 +97,12 @@ def debug_logs_off(settings: Settings) -> Iterator[GateViolation]:
 
 
 def storage_over_tls(settings: Settings) -> Iterator[GateViolation]:
-    """Files and their signed links travel to the one bucket only over TLS (ADR 0014)."""
-    if settings.storage.s3_endpoint_url.scheme != SECURE_STORAGE_SCHEME:
-        yield GateViolation("S3_ENDPOINT_URL", "к хранилищу вне разработки — только https")
+    """Files and their signed links travel to each home's bucket only over TLS (ADR 0044)."""
+    for home, storage in settings.storage.items():
+        if storage.s3_endpoint_url.scheme != SECURE_STORAGE_SCHEME:
+            yield GateViolation(
+                f"{home_prefix(home)}S3_ENDPOINT_URL", "к хранилищу вне разработки — только https"
+            )
 
 
 def valkey_link_protected(settings: Settings) -> Iterator[GateViolation]:

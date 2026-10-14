@@ -1,6 +1,6 @@
 # ADR 0015 — The S3 client is aiobotocore, not aioboto3
 
-- **Status:** accepted by the owner on 2026-10-02 (F1 step 5, decision F1-D10).
+- **Status:** accepted by the owner on 2026-10-02 (F1 step 5, decision F1-D10). Since [ADR 0044](0044-a-bucket-per-data-home.md) (2026-10-14) a process holds one client per home's bucket.
 - **Package:** F1, backend foundation (`core/storage`); used by S08 and every slice that keeps objects.
 - **Context documents:** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §14 rule 8, §18.2; [ADR 0014](0014-one-object-store-in-russia.md); [CLAUDE.md](../../.claude/CLAUDE.md) "Dependencies"; [F1 plan](../plan/packages/F1-backend-foundation.md).
 

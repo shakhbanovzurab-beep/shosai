@@ -1,7 +1,7 @@
 # Локальное окружение Shosai: замена управляемых сервисов, которых у
 # хостинга пока нет (CLAUDE.md, «Hosting constraints now»). Топология повторяет
 # target architecture §4: два дома данных — два отдельных сервера PostgreSQL,
-# каждый за своим PgBouncer, один бакет S3 на оба дома (ADR 0014), плюс общие
+# каждый за своим PgBouncer, и бакет S3 у каждого дома (ADR 0044), плюс общие
 # для плоскости Valkey, кэш Redis и Qdrant; Mailpit вместо SMTP-сервера.
 #
 # Запуск, остановка, сброс и соответствие домов серверам — docs/development.md.
@@ -233,11 +233,11 @@ services:
         limits:
           memory: 1g
 
-  # S3-совместимое хранилище: один бакет для обоих домов, как бакет в России
-  # (§4.1, ADR 0014). SeaweedFS выбран вместо MinIO, чьи образы больше не
-  # публикуются (ADR 0001). Бакет создаётся при старте; автосоздание бакетов при
+  # S3-совместимое хранилище: бакет у каждого дома свой — shosai-ru и shosai-eu
+  # (§4.1, ADR 0044). SeaweedFS выбран вместо MinIO, чьи образы больше не
+  # публикуются (ADR 0001). Бакеты создаются при старте; автосоздание бакетов при
   # загрузке выключено, как у настоящего S3. Тесты пишут только под
-  # tests/slot-<N>/ этого же бакета (ADR 0009).
+  # tests/slot-<N>/ каждого бакета (ADR 0009).
   s3:
     <<: *service-defaults
     image: chrislusf/seaweedfs:4.48
@@ -245,7 +245,7 @@ services:
     command:
       - mini
       - -dir=/data
-      - -bucket=shosai
+      - -bucket=shosai-ru,shosai-eu
       - -s3.autoCreateBucket=false
       - -webdav=false
       - -admin.ui=false
@@ -267,7 +267,8 @@ services:
         - CMD-SHELL
         - >-
           curl -fsS -o /dev/null http://127.0.0.1:8333/healthz &&
-          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/shosai/
+          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/shosai-ru/ &&
+          curl -fsS -o /dev/null http://127.0.0.1:8888/buckets/shosai-eu/
       interval: 30s
       timeout: 3s
       retries: 3

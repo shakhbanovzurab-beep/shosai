@@ -86,7 +86,9 @@ class HomeSettings(SettingsSection):
 
 
 class StorageSettings(SettingsSection):
-    """The one S3 bucket in Russia: files of both homes and of the platform (ADR 0014)."""
+    """One data home's S3 bucket (`HOME_<RU|EU>_S3_*`, ADR 0044): its files; the EU home's
+    also the platform's. Endpoint and keys are per home: the homes may use other providers.
+    """
 
     s3_endpoint_url: HttpUrl
     s3_region: NonEmptyText

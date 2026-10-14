@@ -1,6 +1,6 @@
 # Local development environment
 
-The managed services of the target architecture — PostgreSQL in the Russian and EU data homes, the one S3 bucket in Russia, managed Valkey in the EU — are not available from the hosting provider yet ([CLAUDE.md](../.claude/CLAUDE.md), "Hosting constraints now"). [`compose.dev.yaml`](../compose.dev.yaml) runs local stand-ins with the same topology, so home-aware code is developed and tested for real: two homes are two separate PostgreSQL servers, each behind its own PgBouncer, and the files of both homes live in one bucket ([ADR 0014](adr/0014-one-object-store-in-russia.md)).
+The managed services of the target architecture — PostgreSQL in the Russian and EU data homes, an S3 bucket per home, managed Valkey in the EU — are not available from the hosting provider yet ([CLAUDE.md](../.claude/CLAUDE.md), "Hosting constraints now"). [`compose.dev.yaml`](../compose.dev.yaml) runs local stand-ins with the same topology, so home-aware code is developed and tested for real: two homes are two separate PostgreSQL servers, each behind its own PgBouncer, and the files of both homes live in one bucket ([ADR 0014](adr/0014-one-object-store-in-russia.md)).
 
 Requirements: Docker 29.8 or later with Compose 5.5 or later. Nothing else is installed on the host.
 
@@ -26,7 +26,7 @@ Reset touches only the volumes labelled with this Compose project (`shosai-local
 
 - Each server holds the home database `shosai`. The database comment names its home (`\l+` in `psql`), so a misrouted connection is visible at a glance.
 - The directory (target architecture §6) is a set of tables in the EU home database, not a separate server or database.
-- The files of both homes and of the platform live in one bucket, `shosai`, in the local S3 store (SeaweedFS, `127.0.0.1:18333`), as production keeps one bucket in Russia (ADR 0014). The code has one storage configuration, `S3_*`; the home is not part of an object key.
+- Each home keeps its files in its own bucket in the local S3 store (SeaweedFS, `127.0.0.1:18333`): `shosai-ru` and `shosai-eu`, the platform's in `shosai-eu`, as production gives each home its bucket ([ADR 0044](adr/0044-a-bucket-per-data-home.md)). The code reads `HOME_RU_S3_*` and `HOME_EU_S3_*`; a slice takes `services.objects[home]` with the home of its scope, and the home is not part of an object key.
 
 Shared services of the compute plane:
 
@@ -35,7 +35,7 @@ Shared services of the compute plane:
 | `valkey` | managed Valkey (EU) | `127.0.0.1:16379` | Task streams, transcript queue, locks, rate limits, meeting state. AOF every second, `noeviction`, password required. Staging and production reach it over TLS (`rediss://`) or, while Timeweb offers no TLS, in plain text at a private-network IP address only ([ADR 0042](adr/0042-valkey-without-tls-inside-the-private-network.md)). |
 | `redis-cache` | Redis cache container | `127.0.0.1:16380` | LRU cache only (`allkeys-lru`, 256 MB). No persistence: a restart gives a cold cache, as in production. |
 | `qdrant` | Qdrant | `127.0.0.1:16333` (HTTP), `16334` (gRPC) | API key required; telemetry off. |
-| `s3` | the one bucket in Russia | `127.0.0.1:18333` | Bucket `shosai` exists from the start; uploading to a missing bucket fails, as on real S3. |
+| `s3` | each home's bucket | `127.0.0.1:18333` | Buckets `shosai-ru` and `shosai-eu` exist from the start; uploading to a missing bucket fails, as on real S3. |
 | `mailpit` | the SMTP server (Timeweb) | `127.0.0.1:1025` (SMTP), `8025` (web) | Accepts every mail without login or TLS and sends nothing out; read the mail at `http://127.0.0.1:8025`. Mail lives in memory: a restart empties it. |
 
 Every port listens on `127.0.0.1` only. Connection strings for all of them are in [`.env.example`](../.env.example).
@@ -165,7 +165,7 @@ The slot also names the run's share of the shared services: database `N` of Valk
 
 ## Lifecycle notes
 
-- A volume created before ADR 0014 still holds the empty buckets `whisperer-ru` and `whisperer-eu`. Nothing reads them; `scripts/local-env.sh reset` removes them with the rest of the data.
+- A volume created before ADR 0044 still holds the bucket `shosai` of ADR 0014, and one older than ADR 0014 the empty buckets `whisperer-ru` and `whisperer-eu`. Nothing reads them; `scripts/local-env.sh reset` removes them with the rest of the data.
 - Mailpit keeps no volume: its mail is gone after a restart, by design.
 - Data persists in the named volumes `postgres-ru-data`, `postgres-eu-data`, `valkey-data`, `qdrant-storage`, `qdrant-snapshots` and `s3-data` (prefixed with `shosai-local_`). The Redis cache has no volume by design.
 - Every container runs with a read-only root filesystem and `no-new-privileges`, has a memory limit and rotates its logs (10 MB × 3, target architecture §14 rule 11).

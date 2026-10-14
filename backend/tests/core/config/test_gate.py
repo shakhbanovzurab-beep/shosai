@@ -49,7 +49,8 @@ def test_a_safe_staging_configuration_starts() -> None:
     [
         ({"API_DOCS_ENABLED": "true"}, "API_DOCS_ENABLED"),
         ({"LOG_LEVEL": "DEBUG"}, "LOG_LEVEL"),
-        ({"S3_ENDPOINT_URL": "http://s3.ru.example"}, "S3_ENDPOINT_URL"),
+        ({"HOME_RU_S3_ENDPOINT_URL": "http://s3.ru.example"}, "HOME_RU_S3_ENDPOINT_URL"),
+        ({"HOME_EU_S3_ENDPOINT_URL": "http://s3.eu.example"}, "HOME_EU_S3_ENDPOINT_URL"),
         ({"VALKEY_URL": f"redis://:{SAMPLE_SECRET}@valkey.eu.example:6379/0"}, "VALKEY_URL"),
         (
             {"HOME_RU_DATABASE_URL": f"postgresql://shosai_app:{SAMPLE_SECRET}@db.ru/shosai"},
@@ -96,10 +97,14 @@ def test_staging_without_trusted_proxies_refuses_start() -> None:
         (production_environ(CORS_ALLOWED_ORIGINS="*"), "CORS_ALLOWED_ORIGINS"),
         (without(production_environ(), "HOME_RU_DATABASE_URL"), "HOME_RU_DATABASE_URL"),
         (without(production_environ(), "HOME_EU_DATABASE_URL"), "HOME_EU_DATABASE_URL"),
-        (without(production_environ(), "S3_BUCKET"), "S3_BUCKET"),
+        (without(production_environ(), "HOME_RU_S3_BUCKET"), "HOME_RU_S3_BUCKET"),
+        (without(production_environ(), "HOME_EU_S3_BUCKET"), "HOME_EU_S3_BUCKET"),
         (without(production_environ(), "VALKEY_URL"), "VALKEY_URL"),
         (production_environ(LOG_LEVEL="debug"), "LOG_LEVEL"),
-        (production_environ(S3_ENDPOINT_URL="http://s3.ru.example"), "S3_ENDPOINT_URL"),
+        (
+            production_environ(HOME_EU_S3_ENDPOINT_URL="http://s3.eu.example"),
+            "HOME_EU_S3_ENDPOINT_URL",
+        ),
         (
             production_environ(VALKEY_URL=f"redis://:{SAMPLE_SECRET}@valkey.eu.example:6379/0"),
             "VALKEY_URL",
