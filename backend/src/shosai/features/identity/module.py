@@ -41,15 +41,18 @@ from shosai.features.identity.contracts import (
     IDENTITY_EVENTS,
 )
 from shosai.features.identity.deletion_wiring import deletion_parts
+from shosai.features.identity.domain.export import EXPORT_PREFIX
 from shosai.features.identity.emails.password_reset import RESET_LINK_MAIL
 from shosai.features.identity.emails.registration_attempt import REGISTRATION_ATTEMPT
 from shosai.features.identity.emails.registration_code import REGISTRATION_CODE
+from shosai.features.identity.export_wiring import export_parts
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.captcha import open_captcha
 from shosai.features.identity.infrastructure.consents import ConsentJournal
 from shosai.features.identity.infrastructure.deletion_records import DELETION_MODELS
 from shosai.features.identity.infrastructure.desktop_codes import DesktopCodes
 from shosai.features.identity.infrastructure.directory import Directory
+from shosai.features.identity.infrastructure.export_records import EXPORT_MODELS
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
 from shosai.features.identity.infrastructure.records import IDENTITY_MODELS
 from shosai.features.identity.infrastructure.registration_routes import RegistrationRoutes
@@ -77,8 +80,9 @@ IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
         TableCoverage("user_identities", Treatment.ERASE),
         # Журнал удаления уходит в последней транзакции саги.
         TableCoverage("account_deletions", Treatment.ERASE),
+        TableCoverage("data_export_jobs", Treatment.ERASE),
     ),
-    prefixes=(AVATAR_PREFIX,),
+    prefixes=(AVATAR_PREFIX, EXPORT_PREFIX),
 )
 
 
@@ -152,7 +156,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     ACCOUNT_PROFILE_READER.bind(profiles),
                 ),
             )
-            yield combine_parts([main, deletion_parts(services, directory, markers, cookies)])
+            deletion = deletion_parts(services, directory, markers, cookies)
+            yield combine_parts([main, deletion, export_parts(services)])
     finally:
         hasher.close()
 
@@ -196,7 +201,7 @@ def _account_routers(services: CoreServices, routing: _AccountRouting) -> tuple[
 IDENTITY: Final = FeatureModule(
     name="identity",
     build=build,
-    models=(*IDENTITY_MODELS, *SESSION_MODELS, *DELETION_MODELS),
+    models=(*IDENTITY_MODELS, *SESSION_MODELS, *DELETION_MODELS, *EXPORT_MODELS),
     events=IDENTITY_EVENTS,
     production_checks=(identity_secrets_safe,),
     settings=(IdentitySettings,),

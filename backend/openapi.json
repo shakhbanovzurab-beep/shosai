@@ -1607,6 +1607,106 @@
           }
         }
       }
+    },
+    "/v1/me/exports": {
+      "post": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Request Export",
+        "description": "Queue an archive, or return the one being made; 429 `export_limit` after 3 a day.",
+        "operationId": "request_export_v1_me_exports_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/exports/latest": {
+      "get": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Latest Export",
+        "description": "The newest archive; while it is kept, a download link valid for 15 minutes.",
+        "operationId": "latest_export_v1_me_exports_latest_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportJob"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2094,6 +2194,105 @@
         ],
         "title": "ErrorResponse",
         "description": "Body of every error response of the HTTP API.\n\n`error.code` is the stable code a client turns into text; `error.request_id` equals\nthe `X-Request-ID` header. `detail` is kept for shipped clients: the code by default,\nthe draft's shape on routes whose draft contract had another one."
+      },
+      "ExportJob": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "state": {
+            "$ref": "#/components/schemas/ExportState"
+          },
+          "requested_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Requested At"
+          },
+          "ready_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ready At"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "size_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size Bytes"
+          },
+          "download_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Download Url"
+          },
+          "download_expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Download Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "state",
+          "requested_at",
+          "ready_at",
+          "expires_at",
+          "size_bytes",
+          "download_url",
+          "download_expires_at"
+        ],
+        "title": "ExportJob",
+        "description": "An archive of everything Shosai keeps about the person, and where it is."
+      },
+      "ExportState": {
+        "type": "string",
+        "enum": [
+          "queued",
+          "running",
+          "ready",
+          "failed"
+        ],
+        "title": "ExportState",
+        "description": "Where an export job is."
       },
       "FeaturesOut": {
         "properties": {

@@ -1,0 +1,74 @@
+"""A person's rows of one table as JSON Lines, page by page, for the export archive.
+
+Each page is read in its own short transaction, ordered by a unique key, so no transaction
+stays open while the archive goes to storage (§14 rule 1) and a table of any size never
+sits whole in memory. Only the listed columns leave the table: hashes, secrets and
+ciphertexts are never listed.
+"""
+
+import json
+from collections.abc import AsyncIterator, Mapping, Sequence
+from dataclasses import dataclass
+from datetime import date, datetime
+from typing import Any, Final
+from uuid import UUID
+
+from sqlalchemy import Table, select
+
+from shosai.core.db.transactions import HomeTransactions
+from shosai.core.kernel.tenancy import TenancyScope
+
+PAGE_ROWS: Final = 1000
+PERSON_COLUMN: Final = "user_id"
+
+
+@dataclass(frozen=True, slots=True)
+class PersonRows:
+    """What of a table goes into the archive: the columns and the unique key to page by."""
+
+    table: Table
+    columns: tuple[str, ...]
+    key: str
+    # Колонка с идентификатором человека; у таблицы аккаунтов это её ключ.
+    person: str = PERSON_COLUMN
+
+    def __post_init__(self) -> None:
+        unknown = {*self.columns, self.key, self.person} - set(self.table.columns.keys())
+        if unknown:
+            message = f"выгрузка {self.table.name}: нет колонок {sorted(unknown)}"
+            raise ValueError(message)
+
+
+async def person_lines(
+    transactions: HomeTransactions, scope: TenancyScope, rows: PersonRows, user_id: UUID
+) -> AsyncIterator[bytes]:
+    """The person's rows of the table, one JSON object per line, a page per chunk."""
+    table, key = rows.table, rows.table.c[rows.key]
+    last: object = None
+    while True:
+        query = select(*(table.c[name] for name in rows.columns), key.label("_page_key"))
+        query = query.where(table.c[rows.person] == user_id)
+        if last is not None:
+            query = query.where(key > last)
+        async with transactions.begin(scope, read_only=True) as session:
+            page = (await session.execute(query.order_by(key).limit(PAGE_ROWS))).mappings().all()
+        if not page:
+            return
+        yield json_lines([{name: row[name] for name in rows.columns} for row in page])
+        if len(page) < PAGE_ROWS:
+            return
+        last = page[-1]["_page_key"]
+
+
+def json_lines(records: Sequence[Mapping[str, Any]]) -> bytes:
+    """Records as UTF-8 JSON Lines; times in ISO 8601, ids and addresses as text."""
+    return "".join(
+        json.dumps(record, ensure_ascii=False, default=_plain, sort_keys=True) + "\n"
+        for record in records
+    ).encode()
+
+
+def _plain(value: object) -> str:
+    if isinstance(value, datetime | date):
+        return value.isoformat()
+    return str(value)

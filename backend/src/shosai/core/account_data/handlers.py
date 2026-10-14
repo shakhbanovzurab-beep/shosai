@@ -1,15 +1,17 @@
-"""Erasing a person's data owner by owner: the handlers identity's deletion saga runs.
+"""Exporting and erasing a person's data owner by owner: the handlers identity runs.
 
 An owner whose declaration erases something — a table with `ERASE`, an object prefix, an
 external grant — binds one handler to `ACCOUNT_DATA_HANDLERS`, and composition refuses to
 start when such an owner has no handler or two, or a handler has no declaration (ADR 0045
-point 7). A handler is idempotent: the saga runs it again after a failure, and a run that
-finds nothing left succeeds. It opens its own transactions in the account's home and
-calls storage outside them (§14 rule 1).
+point 7). Erasure is idempotent: the saga runs it again after a failure, and a run that
+finds nothing left succeeds. Export yields the owner's files of the archive, one after
+another; the runner writes each into the ZIP before asking for the next. A handler opens
+its own short transactions in the account's home and calls storage outside them (§14
+rule 1).
 """
 
 from collections import Counter
-from collections.abc import Sequence
+from collections.abc import AsyncIterator, Sequence
 from dataclasses import dataclass
 from typing import Final, Protocol
 from uuid import UUID
@@ -21,18 +23,31 @@ from shosai.core.ports.keys import Cardinality, PortKey
 
 @dataclass(frozen=True, slots=True)
 class AccountRef:
-    """The account whose data is erased, and the home it lives in."""
+    """The account whose data is exported or erased, and the home it lives in."""
 
     user_id: UUID
     home: Home
 
 
+@dataclass(frozen=True, slots=True)
+class ExportFile:
+    """One file of the export archive: its name in the owner's folder and its bytes."""
+
+    # Имя таблицы с `.jsonl` или путь объекта; папка владельца добавляется при записи.
+    name: str
+    chunks: AsyncIterator[bytes]
+
+
 class AccountDataHandler(Protocol):
-    """Erases what one owner holds of a person."""
+    """Exports and erases what one owner holds of a person."""
 
     @property
     def owner(self) -> str:
         """The owner of the declaration this handler serves: a slice's name or `core`."""
+        ...
+
+    def export(self, account: AccountRef) -> AsyncIterator[ExportFile]:
+        """The owner's files of the account: one JSON Lines file per table, then objects."""
         ...
 
     async def erase(self, account: AccountRef) -> None:

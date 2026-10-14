@@ -520,6 +520,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me/exports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Request Export
+         * @description Queue an archive, or return the one being made; 429 `export_limit` after 3 a day.
+         */
+        post: operations["request_export_v1_me_exports_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/exports/latest": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Latest Export
+         * @description The newest archive; while it is kept, a download link valid for 15 minutes.
+         */
+        get: operations["latest_export_v1_me_exports_latest_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -740,6 +780,39 @@ export interface components {
                 [key: string]: components["schemas"]["DetailValue"];
             };
         };
+        /**
+         * ExportJob
+         * @description An archive of everything Shosai keeps about the person, and where it is.
+         */
+        ExportJob: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            state: components["schemas"]["ExportState"];
+            /**
+             * Requested At
+             * Format: date-time
+             */
+            requested_at: string;
+            /** Ready At */
+            ready_at: string | null;
+            /** Expires At */
+            expires_at: string | null;
+            /** Size Bytes */
+            size_bytes: number | null;
+            /** Download Url */
+            download_url: string | null;
+            /** Download Expires At */
+            download_expires_at: string | null;
+        };
+        /**
+         * ExportState
+         * @description Where an export job is.
+         * @enum {string}
+         */
+        ExportState: "queued" | "running" | "ready" | "failed";
         /**
          * FeaturesOut
          * @description Capabilities of the plan; the draft's defaults until billing contributes.
@@ -2175,6 +2248,68 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DeletionScheduled"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    request_export_v1_me_exports_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportJob"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    latest_export_v1_me_exports_latest_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportJob"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

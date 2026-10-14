@@ -1,4 +1,4 @@
-"""`MultipartUploads` over the one S3 bucket: resumable uploads sent by the client part by part.
+"""`MultipartUploads` over the one S3 bucket: large objects sent part by part.
 
 The state of an upload lives in the bucket, not in a table: `list_parts` answers where a
 resumed upload continues, because only the bucket knows for sure which parts it accepted
@@ -66,6 +66,19 @@ class S3MultipartUploads:
         )
         headers = {"Content-Length": str(content_length)}
         return PresignedRequest(method="PUT", url=url, headers=headers, expires_at=expires_at)
+
+    async def upload_part(self, upload: MultipartUpload, number: int, body: bytes) -> UploadedPart:
+        """Send part `number` of the upload; the bucket answers its ETag."""
+        async with self._calls.call("UploadPart"):
+            reply = await self._client.upload_part(
+                Bucket=self._bucket,
+                Key=self._full(upload.key),
+                UploadId=upload.upload_id,
+                PartNumber=check_part_number(number),
+                Body=body,
+                ContentLength=len(body),
+            )
+        return UploadedPart(number=number, etag=reply["ETag"], size=len(body))
 
     async def list_parts(self, upload: MultipartUpload) -> list[UploadedPart]:
         """Parts the bucket has accepted, by number; `ObjectNotFoundError` for no such upload."""

@@ -1,4 +1,4 @@
-"""Multipart uploads sent part by part with presigned requests: resume, complete, abort."""
+"""Multipart uploads by presigned parts or by the server: resume, complete, abort."""
 
 import httpx
 import pytest
@@ -84,3 +84,19 @@ async def test_a_part_sent_with_another_length_is_refused(bucket: SlotBucket) ->
 def test_parts_are_numbered_from_1_to_10000(number: int) -> None:
     with pytest.raises(ValueError, match="номер части"):
         check_part_number(number)
+
+
+async def test_the_server_sends_its_own_parts_and_assembles_them(bucket: SlotBucket) -> None:
+    storage = slot_storage(bucket)
+    upload = await storage.uploads.create(RECORDING, content_type="application/zip")
+
+    parts = [
+        await storage.uploads.upload_part(upload, 1, FIRST_PART),
+        await storage.uploads.upload_part(upload, 2, LAST_PART),
+    ]
+    await storage.uploads.complete(upload, parts)
+
+    async with storage.objects.open(RECORDING) as stream:
+        stored = b"".join([chunk async for chunk in stream.chunks(1 << 20)])
+    assert stored == FIRST_PART + LAST_PART
+    assert [part.size for part in parts] == [len(FIRST_PART), len(LAST_PART)]

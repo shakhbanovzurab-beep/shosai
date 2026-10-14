@@ -27,9 +27,11 @@ EMAIL = "signin@example.com"
 PASSWORD = "correct horse battery"
 
 
-async def account(bench: RegistrationBench, run_slot: RunSlot, home: Home = Home.RU) -> UUID:
+async def account(
+    bench: RegistrationBench, run_slot: RunSlot, home: Home = Home.RU, email: str = EMAIL
+) -> UUID:
     """A registered and confirmed account; its cookies are dropped."""
-    registration_id = await register(bench.http, form(EMAIL, "RU" if home is Home.RU else "DE"))
+    registration_id = await register(bench.http, form(email, "RU" if home is Home.RU else "DE"))
     code = (await mailed_codes(run_slot, bench.key_ring, home))[-1]
     verified = await bench.http.post(
         "/v1/auth/register/verify", json={"registration_id": str(registration_id), "code": code}

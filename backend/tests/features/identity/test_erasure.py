@@ -1,6 +1,6 @@
 """The erasure saga after the window: nothing of the person remains (ID-D5, step 7a)."""
 
-from collections.abc import Mapping
+from collections.abc import AsyncIterator, Mapping
 from uuid import UUID
 
 import pytest
@@ -8,14 +8,19 @@ from prometheus_client import CollectorRegistry
 from psycopg import sql
 from redis.asyncio import Redis
 
-from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS, AccountDataHandler, AccountRef
+from shosai.core.account_data.handlers import (
+    ACCOUNT_DATA_HANDLERS,
+    AccountDataHandler,
+    AccountRef,
+    ExportFile,
+)
 from shosai.core.email.account_data import CoreAccountData
 from shosai.core.events.catalog import EventTypes
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.storage.port import ObjectStorage
-from shosai.features.identity.application.account_erasure import IdentityAccountData
+from shosai.features.identity.application.account_data import IdentityAccountData
 from shosai.features.identity.application.erasure import Erasure
 from shosai.features.identity.contracts import IDENTITY_EVENTS
 from shosai.features.identity.infrastructure.deletion_metrics import DeletionMetrics
@@ -50,6 +55,9 @@ class Flaky:
     @property
     def owner(self) -> str:
         return self._inner.owner
+
+    def export(self, account: AccountRef) -> AsyncIterator[ExportFile]:
+        return self._inner.export(account)
 
     async def erase(self, account: AccountRef) -> None:
         self.calls += 1
@@ -102,6 +110,8 @@ async def test_on_day_8_nothing_of_the_person_remains_and_the_address_is_free(
     options = BenchOptions(objects=objects)
     async with registration_bench(homes.transactions, valkey, redis_cache, options) as bench:
         erased = await due_deletion(bench, run_slot)
+        archive = f"exports/{erased}/archive.zip"
+        await objects[Home.RU].put(archive, b"PK", content_type="application/zip")
         erasure = erasure_of(bench, homes, objects)
         due = await erasure.start_due(Home.RU)
         for user_id in due:
@@ -109,6 +119,7 @@ async def test_on_day_8_nothing_of_the_person_remains_and_the_address_is_free(
         stale = await bench.http.post("/v1/auth/login", json={"email": EMAIL, "password": PASSWORD})
         again = await account(bench, run_slot)
         avatars = [item async for item in objects[Home.RU].list_objects("avatars/")]
+        archives = [item async for item in objects[Home.RU].list_objects("exports/")]
 
     connection = run_slot.claimed.connections[Home.RU]
     rows_of = sql.SQL("SELECT 1 FROM {} WHERE user_id = %s")
@@ -129,6 +140,7 @@ async def test_on_day_8_nothing_of_the_person_remains_and_the_address_is_free(
         "email": f"deleted-{erased.hex}@deleted.invalid", "password_hash": None, "state": "deleted",
     }  # fmt: skip
     assert avatars == []
+    assert archives == []
     assert [(row["user_id"], row["state"]) for row in directory] == [(again, "active")]
     assert "identity.account.deleted" in await events(run_slot)
 

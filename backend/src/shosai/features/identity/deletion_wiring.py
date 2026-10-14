@@ -2,7 +2,7 @@
 
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureParts
-from shosai.features.identity.application.account_erasure import IdentityAccountData
+from shosai.features.identity.application.account_data import IdentityAccountData
 from shosai.features.identity.application.deletion import Deletions
 from shosai.features.identity.application.erasure import Erasure
 from shosai.features.identity.channels.deletion_tasks import (

@@ -19,6 +19,7 @@ type StorageOperation = Literal[
     "ListObjectsV2",
     "HeadBucket",
     "CreateMultipartUpload",
+    "UploadPart",
     "ListParts",
     "CompleteMultipartUpload",
     "AbortMultipartUpload",

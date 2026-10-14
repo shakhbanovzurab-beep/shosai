@@ -11,6 +11,7 @@
     "GET /v1/health",
     "GET /v1/me",
     "GET /v1/me/devices",
+    "GET /v1/me/exports/latest",
     "GET /v1/unsubscribe",
     "PATCH /v1/me",
     "POST /v1/auth/desktop/code",
@@ -29,6 +30,7 @@
     "POST /v1/auth/social/{provider}/widget-token",
     "POST /v1/me/deletion",
     "POST /v1/me/devices/sign-out-others",
+    "POST /v1/me/exports",
     "POST /v1/me/password",
     "POST /v1/unsubscribe",
     "PUT /v1/me/avatar"

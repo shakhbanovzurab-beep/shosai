@@ -13,9 +13,11 @@ One sign-in for the web and the desktop in the person's data home; profile and p
 
 identity binds each port in the step of the plan that builds it.
 
-## Deletion
+## Export and deletion
 
 identity runs the account data registry (`core/account_data`). Every owner that erases something binds one handler to `core.account_data_handlers`; composition refuses to start otherwise. `POST /v1/me/deletion` hides the account for 7 days, and a sign-in in that window cancels it. After the window, the `identity.erase_due` sweep starts the saga, and `identity.erase_account` runs the handlers with identity's last, journalled in `account_deletions`. An access token is refused by an account marker only when the token is not newer than the marker.
+
+`POST /v1/me/exports` queues an archive; the `identity.export_due` sweep and `identity.make_export` stream every handler's files into one ZIP in the home's bucket under `exports/<user_id>/`, kept 7 days.
 
 ## Layout
 
@@ -29,4 +31,4 @@ identity runs the account data registry (`core/account_data`). Every owner that 
   - `token_codec.py` — HS256 with a `kid` ring; a token without `kid` is checked with the draft key `d`;
   - `password_hasher.py` — bcrypt in a bounded thread pool, with a decoy check for unknown addresses.
 - `settings.py` — `IDENTITY_TOKEN_KEYS`, `IDENTITY_DIRECTORY_HMAC_KEY`, `IDENTITY_PASSWORD_HASH_ROUNDS`, documented in `.env.example` section 2, and the production check of their values.
-- `module.py` — the `FeatureModule` listed in `composition/features.py`; `social_wiring.py` and `deletion_wiring.py` build their parts of it.
+- `module.py` — the `FeatureModule` listed in `composition/features.py`; `social_wiring.py`, `deletion_wiring.py` and `export_wiring.py` build their parts of it.

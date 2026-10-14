@@ -125,7 +125,7 @@ class ObjectStorage(Protocol):
 
 
 class MultipartUploads(Protocol):
-    """Resumable uploads of large objects by parts, each part sent by the client directly."""
+    """Uploads of large objects by parts: sent by the client by link, or by the server itself."""
 
     async def create(self, key: str, *, content_type: str) -> MultipartUpload:
         """Start an upload; the bucket's lifecycle rule removes it if it is abandoned."""
@@ -135,6 +135,10 @@ class MultipartUploads(Protocol):
         self, upload: MultipartUpload, number: int, *, content_length: int
     ) -> PresignedRequest:
         """An upload link for part `number` (1 to 10 000) of exactly `content_length` bytes."""
+        ...
+
+    async def upload_part(self, upload: MultipartUpload, number: int, body: bytes) -> UploadedPart:
+        """Send part `number` the server made itself; every part but the last is 5 MiB or more."""
         ...
 
     async def list_parts(self, upload: MultipartUpload) -> list[UploadedPart]:

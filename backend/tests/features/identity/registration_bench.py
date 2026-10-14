@@ -33,6 +33,7 @@ from shosai.features.identity.application.authentication import TokenAuthenticat
 from shosai.features.identity.application.deletion import Deletions, DeletionWindow
 from shosai.features.identity.application.desktop import DesktopSignIn
 from shosai.features.identity.application.devices import Devices
+from shosai.features.identity.application.exports import Exports
 from shosai.features.identity.application.native_me import NativeMe
 from shosai.features.identity.application.passwords import Passwords, PasswordServices
 from shosai.features.identity.application.profile import Profiles
@@ -49,6 +50,7 @@ from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.channels.http.deletion import build_deletion_router
 from shosai.features.identity.channels.http.desktop import build_desktop_router
 from shosai.features.identity.channels.http.devices import build_devices_router
+from shosai.features.identity.channels.http.exports import build_export_router
 from shosai.features.identity.channels.http.me import build_me_router
 from shosai.features.identity.channels.http.passwords import build_password_router
 from shosai.features.identity.channels.http.registration import build_registration_router
@@ -187,6 +189,7 @@ async def registration_bench(
             DesktopSignIn(transactions, DesktopCodes(valkey), sessions), ports, limiter
         ),
         build_devices_router(Devices(transactions, markers, outbox), ports),
+        build_export_router(Exports(transactions, chosen.objects), ports, limiter),
         build_deletion_router(
             Deletions(transactions, markers, outbox, mail.port), ports, limiter, COOKIES
         ),

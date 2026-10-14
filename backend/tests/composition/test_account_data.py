@@ -1,5 +1,7 @@
 """Every table with a person's rows is declared once in the deletion registry (§14 rule 7)."""
 
+from collections.abc import AsyncIterator
+
 import pytest
 from sqlalchemy import Column, ForeignKey, MetaData, Table, Uuid
 
@@ -9,7 +11,12 @@ from shosai.composition.account_data import (
 )
 from shosai.composition.features import FEATURES, account_data_specs
 from shosai.composition.metadata import application_metadata
-from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS, AccountRef, handler_problems
+from shosai.core.account_data.handlers import (
+    ACCOUNT_DATA_HANDLERS,
+    AccountRef,
+    ExportFile,
+    handler_problems,
+)
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
 from shosai.core.ports.directory import PortDirectory
 
@@ -67,8 +74,15 @@ class Handler:
     def owner(self) -> str:
         return self._owner
 
+    async def export(self, account: AccountRef) -> AsyncIterator[ExportFile]:
+        yield ExportFile(f"{account.user_id}.jsonl", _empty())
+
     async def erase(self, account: AccountRef) -> None:
         del account
+
+
+async def _empty() -> AsyncIterator[bytes]:
+    yield b""
 
 
 def test_every_owner_that_erases_has_one_handler_and_every_handler_an_owner() -> None:
