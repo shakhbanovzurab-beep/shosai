@@ -27,12 +27,14 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.kv.metrics import KeyValueMetrics
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.ports.directory import PortDirectory
+from shosai.core.storage.port import ObjectStorage
 from shosai.core.web.app import HttpTelemetry, build_http_app
 from shosai.features.identity.application.authentication import TokenAuthenticator
 from shosai.features.identity.application.desktop import DesktopSignIn
 from shosai.features.identity.application.devices import Devices
 from shosai.features.identity.application.native_me import NativeMe
 from shosai.features.identity.application.passwords import Passwords, PasswordServices
+from shosai.features.identity.application.profile import Profiles
 from shosai.features.identity.application.registration import Registration, RegistrationServices
 from shosai.features.identity.application.sessions import Sessions
 from shosai.features.identity.application.sign_in import SignIn, SignInServices
@@ -45,6 +47,7 @@ from shosai.features.identity.application.verification import Verification
 from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.channels.http.desktop import build_desktop_router
 from shosai.features.identity.channels.http.devices import build_devices_router
+from shosai.features.identity.channels.http.me import build_me_router
 from shosai.features.identity.channels.http.passwords import build_password_router
 from shosai.features.identity.channels.http.registration import build_registration_router
 from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
@@ -54,6 +57,7 @@ from shosai.features.identity.contracts import AUTHENTICATOR, IDENTITY_EVENTS
 from shosai.features.identity.domain.social import Provider
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.captcha import Captcha, CaptchaOff
+from shosai.features.identity.infrastructure.consents import ConsentJournal
 from shosai.features.identity.infrastructure.desktop_codes import DesktopCodes
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
@@ -110,6 +114,7 @@ class BenchOptions:
     directory_transactions: Callable[[HomeTransactions], HomeTransactions] | None = None
     captcha: Captcha | None = None
     providers: Mapping[Provider, SocialProvider] = field(default_factory=dict)
+    objects: Mapping[Home, ObjectStorage] = field(default_factory=dict)
 
 
 @asynccontextmanager
@@ -162,13 +167,15 @@ async def registration_bench(
             reset_page="https://shosai.example/app/reset",
         )
     )  # fmt: skip
+    profiles = Profiles(transactions, ConsentJournal(), chosen.objects)
     routers = [
+        build_me_router(profiles, ports),
         build_registration_router(
             Registration(services), Verification(services, outbox, sessions), limiter, COOKIES
         ),
         build_session_router(
             SessionRoutes(
-                sign_in=sign_in, sessions=sessions, me=NativeMe(transactions, ports),
+                sign_in=sign_in, sessions=sessions, me=NativeMe(transactions, ports, profiles),
                 ports=ports, limiter=limiter, cookies=COOKIES,
             )
         ),

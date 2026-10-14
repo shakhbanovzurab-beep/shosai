@@ -15,6 +15,7 @@ from sqlalchemy import select
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.application import native_errors
+from shosai.features.identity.application.profile import Profiles
 from shosai.features.identity.contracts import ME_CONTRIBUTIONS, Principal
 from shosai.features.identity.domain.accounts import AccountState
 from shosai.features.identity.domain.registration import ConsentKind
@@ -41,9 +42,12 @@ DRAFT_STATUS: Final = {AccountState.FROZEN: "frozen", AccountState.BANNED: "bann
 class NativeMe:
     """Builds the fields of `UserMeResponse` for a person."""
 
-    def __init__(self, transactions: HomeTransactions, ports: PortDirectory) -> None:
+    def __init__(
+        self, transactions: HomeTransactions, ports: PortDirectory, profiles: Profiles
+    ) -> None:
         self._transactions = transactions
         self._ports = ports
+        self._profiles = profiles
 
     async def fields(self, principal: Principal) -> dict[str, object]:
         """Every field of the response, identity's and the contributed ones."""
@@ -67,7 +71,7 @@ class NativeMe:
             "email": user.email,
             "username": user.display_name or user.full_name,
             "phone": None,
-            "avatar_url": None,
+            "avatar_url": await self._profiles.avatar_url(principal.home, user),
             # Роли операторов — шаг 8; до них каждый — пользователь.
             "role": "user",
             "status": DRAFT_STATUS.get(state, "active"),

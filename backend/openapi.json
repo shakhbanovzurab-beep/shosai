@@ -545,6 +545,251 @@
         }
       }
     },
+    "/v1/me": {
+      "get": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Read Me",
+        "description": "The profile, the consents and a 15-minute link to the avatar.",
+        "operationId": "read_me_v1_me_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Change Me",
+        "description": "Change names, role, language, time zone or consents.",
+        "operationId": "change_me_v1_me_patch",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MePatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/avatar": {
+      "put": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Set Avatar",
+        "description": "Replace the avatar with the image in the body.",
+        "operationId": "set_avatar_v1_me_avatar_put",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "image/png": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/jpeg": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "image/webp": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "me"
+        ],
+        "summary": "Remove Avatar",
+        "description": "Remove the avatar.",
+        "operationId": "remove_avatar_v1_me_avatar_delete",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/auth/password/forgot": {
       "post": {
         "tags": [
@@ -1370,7 +1615,7 @@
         "title": "ChangeRequest",
         "description": "The current password (none for an account without one) and the new one."
       },
-      "Consents": {
+      "Consents-Input": {
         "properties": {
           "personal_data": {
             "type": "boolean",
@@ -1394,6 +1639,92 @@
         ],
         "title": "Consents",
         "description": "The consents of the registration form; personal data is required."
+      },
+      "Consents-Output": {
+        "properties": {
+          "personal_data": {
+            "type": "boolean",
+            "title": "Personal Data"
+          },
+          "cross_border": {
+            "type": "boolean",
+            "title": "Cross Border"
+          },
+          "marketing": {
+            "type": "boolean",
+            "title": "Marketing"
+          },
+          "improve_models": {
+            "type": "boolean",
+            "title": "Improve Models"
+          },
+          "share_location": {
+            "type": "boolean",
+            "title": "Share Location"
+          }
+        },
+        "type": "object",
+        "required": [
+          "personal_data",
+          "cross_border",
+          "marketing",
+          "improve_models",
+          "share_location"
+        ],
+        "title": "Consents",
+        "description": "The person's consents; personal data is withdrawn only by deleting the account."
+      },
+      "ConsentsPatch": {
+        "properties": {
+          "cross_border": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cross Border"
+          },
+          "marketing": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marketing"
+          },
+          "improve_models": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Improve Models"
+          },
+          "share_location": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Share Location"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ConsentsPatch",
+        "description": "The consents to change; personal data is not among them."
       },
       "DesktopCodeRequest": {
         "properties": {
@@ -1846,6 +2177,194 @@
         "title": "LogoutRequest",
         "description": "The refresh token of a client that keeps it outside the cookie jar (optional)."
       },
+      "Me": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "full_name": {
+            "type": "string",
+            "title": "Full Name"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "work_role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Role"
+          },
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "home": {
+            "type": "string",
+            "title": "Home"
+          },
+          "consents": {
+            "$ref": "#/components/schemas/Consents-Output"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "full_name",
+          "display_name",
+          "work_role",
+          "avatar_url",
+          "language",
+          "timezone",
+          "country",
+          "home",
+          "consents",
+          "created_at"
+        ],
+        "title": "Me",
+        "description": "The signed-in person as Settings shows them."
+      },
+      "MePatch": {
+        "properties": {
+          "full_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Full Name"
+          },
+          "display_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 80
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display Name"
+          },
+          "work_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Work Role"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "consents": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConsentsPatch"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cross_border_warning_confirmed": {
+            "type": "boolean",
+            "title": "Cross Border Warning Confirmed",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "MePatch",
+        "description": "The fields to change; a field left out keeps its value, `null` clears it."
+      },
       "Page_DeviceView_": {
         "properties": {
           "items": {
@@ -2020,7 +2539,7 @@
             "title": "Language"
           },
           "consents": {
-            "$ref": "#/components/schemas/Consents"
+            "$ref": "#/components/schemas/Consents-Input"
           },
           "captcha_token": {
             "anyOf": [
@@ -2142,7 +2661,7 @@
             "title": "Language"
           },
           "consents": {
-            "$ref": "#/components/schemas/Consents"
+            "$ref": "#/components/schemas/Consents-Input"
           }
         },
         "additionalProperties": false,

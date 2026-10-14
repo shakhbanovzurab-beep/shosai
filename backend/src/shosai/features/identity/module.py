@@ -7,6 +7,7 @@ process.
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from typing import Final
 
 from fastapi import APIRouter
@@ -18,23 +19,32 @@ from shosai.features.identity.application.desktop import DesktopSignIn
 from shosai.features.identity.application.devices import Devices
 from shosai.features.identity.application.native_me import NativeMe
 from shosai.features.identity.application.passwords import Passwords, PasswordServices
+from shosai.features.identity.application.profile import AVATAR_PREFIX, Profiles
 from shosai.features.identity.application.registration import Registration, RegistrationServices
 from shosai.features.identity.application.sessions import Sessions
 from shosai.features.identity.application.sign_in import SignIn, SignInServices
 from shosai.features.identity.application.verification import Verification
+from shosai.features.identity.channels.agent_tools import ACCOUNT_TOOLS, account_tools
 from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.channels.http.desktop import build_desktop_router
 from shosai.features.identity.channels.http.devices import build_devices_router
+from shosai.features.identity.channels.http.me import build_me_router
 from shosai.features.identity.channels.http.passwords import build_password_router
 from shosai.features.identity.channels.http.registration import build_registration_router
 from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
 from shosai.features.identity.channels.tasks import PERIODIC_JOBS, task_handlers
-from shosai.features.identity.contracts import AUTHENTICATOR, IDENTITY_EVENTS
+from shosai.features.identity.contracts import (
+    ACCOUNT_PROFILE_READER,
+    AUTHENTICATOR,
+    CONSENT_READER,
+    IDENTITY_EVENTS,
+)
 from shosai.features.identity.emails.password_reset import RESET_LINK_MAIL
 from shosai.features.identity.emails.registration_attempt import REGISTRATION_ATTEMPT
 from shosai.features.identity.emails.registration_code import REGISTRATION_CODE
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.captcha import open_captcha
+from shosai.features.identity.infrastructure.consents import ConsentJournal
 from shosai.features.identity.infrastructure.desktop_codes import DesktopCodes
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
@@ -63,6 +73,7 @@ IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
         TableCoverage("password_reset_tokens", Treatment.ERASE),
         TableCoverage("user_identities", Treatment.ERASE),
     ),
+    prefixes=(AVATAR_PREFIX,),
 )
 
 
@@ -99,6 +110,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             )  # fmt: skip
             markers = AccountMarkers(services.valkey)
             authenticator = TokenAuthenticator(codec, directory, markers)
+            journal = ConsentJournal()
+            profiles = Profiles(services.transactions, journal, services.objects)
             passwords = Passwords(
                 PasswordServices(
                     transactions=services.transactions, directory=directory, hasher=hasher,
@@ -117,42 +130,59 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                         services.rate_limiter,
                         cookies,
                     ),
-                    build_session_router(
-                        SessionRoutes(
-                            sign_in=sign_in,
-                            sessions=sessions,
-                            me=NativeMe(services.transactions, services.ports),
-                            ports=services.ports,
-                            limiter=services.rate_limiter,
-                            cookies=cookies,
-                        )
+                    *_account_routers(
+                        services,
+                        _AccountRouting(sign_in, passwords, sessions, markers, cookies, profiles),
                     ),
-                    *_account_routers(services, passwords, sessions, markers, cookies),
                     *social,
                 ),
                 task_handlers=task_handlers(services.transactions, directory),
                 periodic_jobs=PERIODIC_JOBS,
                 email_templates=(REGISTRATION_CODE, REGISTRATION_ATTEMPT, RESET_LINK_MAIL),
-                provides=(AUTHENTICATOR.bind(authenticator),),
+                agent_tools=account_tools(services.transactions, profiles),
+                provides=(
+                    AUTHENTICATOR.bind(authenticator),
+                    CONSENT_READER.bind(journal),
+                    ACCOUNT_PROFILE_READER.bind(profiles),
+                ),
             )
     finally:
         hasher.close()
 
 
-def _account_routers(
-    services: CoreServices,
-    passwords: Passwords,
-    sessions: Sessions,
-    markers: AccountMarkers,
-    cookies: CookiePolicy,
-) -> tuple[APIRouter, ...]:
-    """The routes of passwords, desktop sign-in and devices."""
-    desktop = DesktopSignIn(services.transactions, DesktopCodes(services.valkey), sessions)
-    devices = Devices(services.transactions, markers, services.outbox)
+@dataclass(frozen=True, slots=True)
+class _AccountRouting:
+    """What the account routes share."""
+
+    sign_in: SignIn
+    passwords: Passwords
+    sessions: Sessions
+    markers: AccountMarkers
+    cookies: CookiePolicy
+    profiles: Profiles
+
+
+def _account_routers(services: CoreServices, routing: _AccountRouting) -> tuple[APIRouter, ...]:
+    """The routes of sign-in, the profile, passwords, desktop sign-in and devices."""
+    desktop = DesktopSignIn(services.transactions, DesktopCodes(services.valkey), routing.sessions)
+    devices = Devices(services.transactions, routing.markers, services.outbox)
+    limiter, ports = services.rate_limiter, services.ports
+    native_me = NativeMe(services.transactions, ports, routing.profiles)
     return (
-        build_password_router(passwords, services.ports, services.rate_limiter, cookies),
-        build_desktop_router(desktop, services.ports, services.rate_limiter),
-        build_devices_router(devices, services.ports),
+        build_session_router(
+            SessionRoutes(
+                sign_in=routing.sign_in,
+                sessions=routing.sessions,
+                me=native_me,
+                ports=ports,
+                limiter=limiter,
+                cookies=routing.cookies,
+            )
+        ),
+        build_me_router(routing.profiles, ports),
+        build_password_router(routing.passwords, ports, limiter, routing.cookies),
+        build_desktop_router(desktop, ports, limiter),
+        build_devices_router(devices, ports),
     )
 
 
@@ -164,4 +194,5 @@ IDENTITY: Final = FeatureModule(
     production_checks=(identity_secrets_safe,),
     settings=(IdentitySettings,),
     account_data=(IDENTITY_ACCOUNT_DATA,),
+    agent_tools=ACCOUNT_TOOLS,
 )

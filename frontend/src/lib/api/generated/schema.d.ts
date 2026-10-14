@@ -189,6 +189,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Me
+         * @description The profile, the consents and a 15-minute link to the avatar.
+         */
+        get: operations["read_me_v1_me_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Change Me
+         * @description Change names, role, language, time zone or consents.
+         */
+        patch: operations["change_me_v1_me_patch"];
+        trace?: never;
+    };
+    "/v1/me/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set Avatar
+         * @description Replace the avatar with the image in the body.
+         */
+        put: operations["set_avatar_v1_me_avatar_put"];
+        post?: never;
+        /**
+         * Remove Avatar
+         * @description Remove the avatar.
+         */
+        delete: operations["remove_avatar_v1_me_avatar_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/auth/password/forgot": {
         parameters: {
             query?: never;
@@ -489,7 +537,7 @@ export interface components {
          * Consents
          * @description The consents of the registration form; personal data is required.
          */
-        Consents: {
+        "Consents-Input": {
             /** Personal Data */
             personal_data: boolean;
             /**
@@ -502,6 +550,36 @@ export interface components {
              * @default false
              */
             marketing: boolean;
+        };
+        /**
+         * Consents
+         * @description The person's consents; personal data is withdrawn only by deleting the account.
+         */
+        "Consents-Output": {
+            /** Personal Data */
+            personal_data: boolean;
+            /** Cross Border */
+            cross_border: boolean;
+            /** Marketing */
+            marketing: boolean;
+            /** Improve Models */
+            improve_models: boolean;
+            /** Share Location */
+            share_location: boolean;
+        };
+        /**
+         * ConsentsPatch
+         * @description The consents to change; personal data is not among them.
+         */
+        ConsentsPatch: {
+            /** Cross Border */
+            cross_border?: boolean | null;
+            /** Marketing */
+            marketing?: boolean | null;
+            /** Improve Models */
+            improve_models?: boolean | null;
+            /** Share Location */
+            share_location?: boolean | null;
         };
         /**
          * DesktopCodeRequest
@@ -709,6 +787,63 @@ export interface components {
             /** Refresh Token */
             refresh_token?: string | null;
         };
+        /**
+         * Me
+         * @description The signed-in person as Settings shows them.
+         */
+        Me: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Email */
+            email: string;
+            /** Full Name */
+            full_name: string;
+            /** Display Name */
+            display_name: string | null;
+            /** Work Role */
+            work_role: string | null;
+            /** Avatar Url */
+            avatar_url: string | null;
+            /** Language */
+            language: string;
+            /** Timezone */
+            timezone: string | null;
+            /** Country */
+            country: string | null;
+            /** Home */
+            home: string;
+            consents: components["schemas"]["Consents-Output"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * MePatch
+         * @description The fields to change; a field left out keeps its value, `null` clears it.
+         */
+        MePatch: {
+            /** Full Name */
+            full_name?: string | null;
+            /** Display Name */
+            display_name?: string | null;
+            /** Work Role */
+            work_role?: string | null;
+            /** Language */
+            language?: string | null;
+            /** Timezone */
+            timezone?: string | null;
+            consents?: components["schemas"]["ConsentsPatch"] | null;
+            /**
+             * Cross Border Warning Confirmed
+             * @default false
+             */
+            cross_border_warning_confirmed: boolean;
+        };
         /** Page[DeviceView] */
         Page_DeviceView_: {
             /** Items */
@@ -770,7 +905,7 @@ export interface components {
             country: string;
             /** Language */
             language: string;
-            consents: components["schemas"]["Consents"];
+            consents: components["schemas"]["Consents-Input"];
             /** Captcha Token */
             captcha_token?: string | null;
         };
@@ -827,7 +962,7 @@ export interface components {
             country: string;
             /** Language */
             language: string;
-            consents: components["schemas"]["Consents"];
+            consents: components["schemas"]["Consents-Input"];
         };
         /**
          * SocialSession
@@ -1387,6 +1522,141 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserMeResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_me_v1_me_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_me_v1_me_patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MePatch"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    set_avatar_v1_me_avatar_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "image/png": string;
+                "image/jpeg": string;
+                "image/webp": string;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    remove_avatar_v1_me_avatar_delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Me"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

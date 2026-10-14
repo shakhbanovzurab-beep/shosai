@@ -1,5 +1,6 @@
 {
   "api": [
+    "DELETE /v1/me/avatar",
     "DELETE /v1/me/devices/{device_id}",
     "GET /email/{name}",
     "GET /v1/auth/me",
@@ -8,8 +9,10 @@
     "GET /v1/auth/social/{provider}/callback",
     "GET /v1/auth/social/{provider}/start",
     "GET /v1/health",
+    "GET /v1/me",
     "GET /v1/me/devices",
     "GET /v1/unsubscribe",
+    "PATCH /v1/me",
     "POST /v1/auth/desktop/code",
     "POST /v1/auth/desktop/exchange",
     "POST /v1/auth/desktop/refresh",
@@ -26,7 +29,8 @@
     "POST /v1/auth/social/{provider}/widget-token",
     "POST /v1/me/devices/sign-out-others",
     "POST /v1/me/password",
-    "POST /v1/unsubscribe"
+    "POST /v1/unsubscribe",
+    "PUT /v1/me/avatar"
   ],
   "ws": [
     "GET /v1/health"
