@@ -12,6 +12,7 @@ with F6 step 6.
 
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable
 from contextlib import AbstractAsyncContextManager, asynccontextmanager
+from dataclasses import dataclass
 from decimal import Decimal
 
 from shosai.core.ai.adapters.mistral_ocr import MistralOcr
@@ -22,6 +23,7 @@ from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute, Provider
 from shosai.core.ai.decisions import Decision, DecisionRequest
 from shosai.core.ai.documents import OcrPages, OcrRequest
 from shosai.core.ai.errors import AiCallError, AiFailure
+from shosai.core.ai.limits import InputCaps
 from shosai.core.ai.requests import (
     ChatRequest,
     DiarizationRequest,
@@ -38,11 +40,9 @@ from shosai.core.ai.resilience.operations import (
     Metered,
     Operation,
     StreamOperation,
-    as_standard,
-    deadline_of,
-    standard_of,
 )
 from shosai.core.ai.resilience.routing import RouteRunner
+from shosai.core.ai.resilience.streams import StreamCap
 from shosai.core.ai.results import (
     ChatDelta,
     ChatResult,
@@ -64,18 +64,30 @@ from shosai.core.ai.spend.estimates import (
 )
 
 
+@dataclass(frozen=True, slots=True)
+class UserGuards:
+    """What one user's call may carry, and how many interactive streams at once (§3.7)."""
+
+    caps: InputCaps
+    streams: StreamCap
+
+
 class AiProviders:
     """Calls models for slices and records what each call cost; built once per process."""
 
-    def __init__(self, clients: AiClients, runner: RouteRunner, sessions: LiveSessions) -> None:
+    def __init__(
+        self, clients: AiClients, runner: RouteRunner, sessions: LiveSessions, guards: UserGuards
+    ) -> None:
         self._clients = clients
         self._runner = runner
         self._sessions = sessions
+        self._guards = guards
 
     async def chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
     ) -> ChatResult:
         """A model's answer to a conversation."""
+        self._guards.caps.check_chat(request)
         operation = Operation(
             "chat", self._openrouter("chat"), lambda c, m: c.chat(m, request),
             chat_estimate(request),
@@ -90,27 +102,16 @@ class AiProviders:
             self._openrouter("chat"), lambda c, m: c.stream_chat(m, request),
             chat_estimate(request),
         )  # fmt: skip
-        started = False
-        try:
-            async with deadline_of(context):
-                try:
-                    async for delta in self._runner.stream(context, route, operation):
-                        started = True
-                        yield delta
-                except AiCallError as paused:
-                    if started or standard_of(route, paused) is None:
-                        raise
-                    async for delta in self._runner.stream(
-                        as_standard(context), standard_of(route, paused) or route, operation
-                    ):
-                        yield delta
-        except TimeoutError:
-            raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
+        self._guards.caps.check_chat(request)
+        async with self._guards.streams.held(context):
+            async for delta in self._runner.answer_stream(context, route, operation):
+                yield delta
 
     async def embed(
         self, context: CallContext, route: ModelRoute, request: EmbeddingRequest
     ) -> Embeddings:
         """Vectors of texts."""
+        self._guards.caps.check_embedding(request)
         operation = Operation(
             "embed", self._openrouter("embed"), lambda c, m: c.embed(m, request),
             embedding_estimate(request),
@@ -154,6 +155,7 @@ class AiProviders:
         if context.deadline is None:
             message = "решение всегда со своим сроком (Leo §6.3)"
             raise ValueError(message)
+        self._guards.caps.check_decision(request)
         operation = Operation(
             "decide", self._openrouter("decide"), lambda c, m: c.decide(m, request),
             decision_estimate(request),
@@ -237,6 +239,7 @@ class AiProviders:
 
         slots = self._runner.guards.slots
         async with (
+            self._guards.streams.held(context),
             slots.held(model.provider, context.call_class, session=True),
             self._sessions.run(call, guarded) as session,
         ):
@@ -251,19 +254,7 @@ class AiProviders:
     async def _routed[C, R: Metered](
         self, context: CallContext, route: ModelRoute, operation: Operation[C, R]
     ) -> R:
-        """The call along its route within the context's deadline; the route's standard model
-        answers an expensive call while the kill switch pauses it."""
-        try:
-            async with deadline_of(context):
-                try:
-                    return await self._runner.call(context, route, operation)
-                except AiCallError as paused:
-                    standard = standard_of(route, paused)
-                    if standard is None:
-                        raise
-                return await self._runner.call(as_standard(context), standard, operation)
-        except TimeoutError:
-            raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
+        return await self._runner.answer(context, route, operation)
 
     def _openrouter(self, kind: str) -> Callable[[ModelRef], OpenRouter]:
         return lambda model: self._runner.admission.client(

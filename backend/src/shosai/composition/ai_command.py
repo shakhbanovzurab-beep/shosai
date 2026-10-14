@@ -16,7 +16,7 @@ from typing import Final
 
 import structlog
 
-from shosai.composition.ai import kill_switch
+from shosai.composition.ai_spend import kill_switch
 from shosai.composition.features import FEATURES, feature_checks
 from shosai.composition.startup import load_process_settings
 from shosai.core.ai.spend.kill_switch import KillSwitch

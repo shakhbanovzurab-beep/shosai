@@ -13,6 +13,7 @@ from pydantic import ValidationError
 from pydantic_settings import BaseSettings, EnvSettingsSource, SettingsError
 
 from shosai.core.config.sections import (
+    AiGuardSettings,
     AiSettings,
     CryptoSettings,
     ExchangeRateSettings,
@@ -72,6 +73,7 @@ class Settings:
     crypto: CryptoSettings
     ai: AiSettings
     spend: SpendSettings
+    ai_guards: AiGuardSettings
     exchange_rates: ExchangeRateSettings
 
 
@@ -88,6 +90,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
     crypto = reader.read(CryptoSettings, "")
     ai = reader.read(AiSettings, "")
     spend = reader.read(SpendSettings, "")
+    ai_guards = reader.read(AiGuardSettings, "")
     exchange_rates = reader.read(ExchangeRateSettings, "")
     if reader.problems:
         raise ConfigurationError(reader.problems)
@@ -102,6 +105,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
         crypto=_present(crypto),
         ai=_present(ai),
         spend=_present(spend),
+        ai_guards=_present(ai_guards),
         exchange_rates=_present(exchange_rates),
     )
 

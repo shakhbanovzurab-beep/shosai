@@ -28,7 +28,7 @@ import structlog
 from redis.asyncio import Redis
 
 from shosai.composition.ai import AiDependencies, PlatformAi, open_ai
-from shosai.composition.features import check_features, feature_events
+from shosai.composition.features import check_features, platform_events
 from shosai.composition.schedule import scheduled_jobs
 from shosai.composition.startup import start_step
 from shosai.composition.telemetry import ProcessTelemetry
@@ -130,7 +130,7 @@ async def open_platform(
             clients = await _open_clients(process, stack)
         with start_step("tasks"):
             tasks = build_task_system(clients.valkey, telemetry.registry, telemetry.tracer_provider)
-            outbox = EventOutbox(EventTypes(feature_events(features)))
+            outbox = EventOutbox(EventTypes(platform_events(features)))
             effect_keys = EffectKeyMetrics(telemetry.registry)
             effects = EffectLedger(effect_keys)
         with start_step("ai"):
@@ -140,6 +140,7 @@ async def open_platform(
                 effects,
                 EffectBatch(effect_keys),
                 clients.valkey,
+                outbox,
                 telemetry.registry,
             )
             ai = await open_ai(settings, dependencies, stack)
@@ -152,7 +153,7 @@ async def open_platform(
         parts = combine_parts(built)
         with start_step("events"):
             events = EventResources(
-                catalog=EventCatalog(feature_events(features), parts.subscriptions),
+                catalog=EventCatalog(platform_events(features), parts.subscriptions),
                 transactions=homes.transactions,
                 metrics=EventMetrics(telemetry.registry),
                 tracer_provider=telemetry.tracer_provider,

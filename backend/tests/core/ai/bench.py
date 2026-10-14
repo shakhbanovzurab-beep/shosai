@@ -28,16 +28,19 @@ from shosai.core.ai.calls import (
 )
 from shosai.core.ai.costs.settlement import CostSettlements, SettledCost
 from shosai.core.ai.costs.writer import CostWriter
+from shosai.core.ai.limits import MEGABYTE, InputCaps
 from shosai.core.ai.metrics import AiMetrics
-from shosai.core.ai.port import AiProviders
+from shosai.core.ai.port import AiProviders, UserGuards
 from shosai.core.ai.pricing.prices import PriceBook
 from shosai.core.ai.pricing.records import ProviderPrice
 from shosai.core.ai.recording import CallRecorder
 from shosai.core.ai.resilience.breakers import Breakers
 from shosai.core.ai.resilience.metrics import ResilienceMetrics
+from shosai.core.ai.resilience.operations import Resilience
 from shosai.core.ai.resilience.retries import RetryBudget
-from shosai.core.ai.resilience.routing import Resilience, RouteRunner
+from shosai.core.ai.resilience.routing import RouteRunner
 from shosai.core.ai.resilience.slots import ProviderSlots
+from shosai.core.ai.resilience.streams import StreamCap
 from shosai.core.ai.results import Unit
 from shosai.core.ai.sessions.live import LiveSessions
 from shosai.core.ai.sessions.minutes import MinuteRows
@@ -226,7 +229,11 @@ def ai_bench(
         metrics,
     )  # fmt: skip
     sessions = LiveSessions(minutes, spend, connect_timeout=5.0, renew_every=0.2)
-    providers = AiProviders(clients, runner, sessions)
+    limits = UserGuards(
+        InputCaps(context_tokens=32_000, images=6, image_bytes=8 * MEGABYTE),
+        StreamCap(valkey, cap=2),
+    )
+    providers = AiProviders(clients, runner, sessions, limits)
     return AiBench(
         providers, scripted, diarizer, minutes, clock, settlement, sender, writer, registry
     )

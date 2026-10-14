@@ -14,6 +14,8 @@ never instructions.
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
 
+from shosai.core.ai.errors import MODEL_TEXTS
+
 
 @dataclass(frozen=True, slots=True)
 class ModelFacingSource:
@@ -25,4 +27,11 @@ class ModelFacingSource:
     allowed_literals: frozenset[str] = field(default_factory=frozenset)
 
 
-MODEL_FACING_SOURCES: tuple[ModelFacingSource, ...] = ()
+def ai_failure_texts() -> Iterable[object]:
+    """What a model reads when its call through the AI port failed."""
+    return MODEL_TEXTS.values()
+
+
+MODEL_FACING_SOURCES: tuple[ModelFacingSource, ...] = (
+    ModelFacingSource(owner="core.ai", name="failure texts", collect=ai_failure_texts),
+)

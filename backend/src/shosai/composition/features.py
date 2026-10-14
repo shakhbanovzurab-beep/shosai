@@ -7,6 +7,7 @@ routes (backend README, "Adding a slice").
 
 from collections.abc import Sequence
 
+from shosai.core.ai.events import UserSpendExceeded
 from shosai.core.config.gate import ProductionCheck
 from shosai.core.events.domain_event import DomainEvent
 from shosai.core.features import FeatureModule
@@ -23,9 +24,18 @@ def check_features(features: Sequence[FeatureModule]) -> None:
         raise ValueError(message)
 
 
+# События ядра: их, как и события срезов, знают outbox и каталог подписок.
+CORE_EVENTS: tuple[type[DomainEvent], ...] = (UserSpendExceeded,)
+
+
 def feature_events(features: Sequence[FeatureModule]) -> list[type[DomainEvent]]:
     """Every event class the slices declare."""
     return [event for feature in features for event in feature.events]
+
+
+def platform_events(features: Sequence[FeatureModule]) -> list[type[DomainEvent]]:
+    """Core's events and the slices' ones."""
+    return [*CORE_EVENTS, *feature_events(features)]
 
 
 def feature_checks(features: Sequence[FeatureModule]) -> list[ProductionCheck]:

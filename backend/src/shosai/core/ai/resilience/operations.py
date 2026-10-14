@@ -8,6 +8,11 @@ from typing import Protocol
 
 from shosai.core.ai.calls import CallClass, CallContext, ModelRef, ModelRoute
 from shosai.core.ai.errors import AiCallError, AiFailure
+from shosai.core.ai.recording import MeteredCall
+from shosai.core.ai.resilience.breakers import Breakers, Gate
+from shosai.core.ai.resilience.metrics import ResilienceMetrics
+from shosai.core.ai.resilience.retries import RetryBudget
+from shosai.core.ai.resilience.slots import ProviderSlots
 from shosai.core.ai.results import ChatDelta, Usage
 
 
@@ -56,3 +61,34 @@ def deadline_of(context: CallContext) -> AbstractAsyncContextManager[object]:
     if context.deadline is None:
         return nullcontext()
     return asyncio.timeout(context.deadline.total_seconds())
+
+
+@dataclass(frozen=True, slots=True)
+class Resilience:
+    """The guards of every call: breakers, provider slots, the retry budget, their metrics."""
+
+    breakers: Breakers
+    slots: ProviderSlots
+    retries: RetryBudget
+    metrics: ResilienceMetrics
+
+
+@dataclass(frozen=True, slots=True)
+class Attempt[C]:
+    """One model of the route, admitted and let through by its breaker."""
+
+    index: int
+    client: C
+    call: MeteredCall
+    gate: Gate
+
+
+async def replay(
+    first: ChatDelta | None, rest: AsyncGenerator[ChatDelta] | None
+) -> AsyncGenerator[ChatDelta]:
+    """The first piece again, then the rest of the stream."""
+    if first is None or rest is None:
+        return
+    yield first
+    async for delta in rest:
+        yield delta

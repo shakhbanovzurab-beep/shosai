@@ -10,7 +10,9 @@ the hour, the day and the month of the call. Whose counters a call fills:
 - a user's interactive call that is not essential: the user's hour, day and month, and the
   expensive month when it is expensive (F6-D6: only interactive calls count toward the
   user's caps, and meetings never fill them, inv-13);
-- a user's background call: the user's background day (Leo §5.4).
+- a user's background call: the user's background day (Leo §5.4);
+- every call of a user: the user's total day, which no ceiling caps — it raises the
+  operator's alert (F6-D6).
 """
 
 import json
@@ -156,9 +158,14 @@ def counters_of(payer: Payer) -> list[Counter]:
                     TTLS[p], f"platform_{p}", p)
             for p in ("hour", "day")
         ]  # fmt: skip
-    if payer.user_id is None or payer.call_class is CallClass.ESSENTIAL:
+    if payer.user_id is None:
         return found
     user = ("ai", "spend", "user", payer.user_id.hex)
+    # Все траты человека за день, любого класса и происхождения: по ним — событие оператору.
+    found.append(Counter(build_key(*user, "total", when["day"]), TTLS["day"], "user_total_day",
+                         "day"))  # fmt: skip
+    if payer.call_class is CallClass.ESSENTIAL:
+        return found
     if payer.origin is CallOrigin.BACKGROUND:
         found.append(Counter(build_key(*user, "background", when["day"]), TTLS["day"],
                              SpendPeriod.BACKGROUND_DAY, "day"))  # fmt: skip

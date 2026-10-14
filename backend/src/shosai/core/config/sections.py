@@ -194,6 +194,18 @@ class SpendSettings(SettingsSection):
     ai_kill_switch: bool = False
     # Резерв, не снятый вовремя (процесс умер), освобождается по окончании аренды.
     ai_reservation_lease_seconds: PositiveInt = 300
+    # Траты пользователя за сутки, после которых оператор получает событие; 0 — не следить.
+    ai_user_daily_alert_usd: Decimal = Field(default=Decimal(20), ge=0)
+
+
+class AiGuardSettings(SettingsSection):
+    """Per-user guards that need no calibration (F6-D6, §3.7)."""
+
+    # Интерактивных потоков и сессий одного пользователя одновременно (F6-C20).
+    ai_interactive_streams: PositiveInt = 2
+    ai_max_context_tokens: PositiveInt = 32_000
+    ai_max_images: PositiveInt = 6
+    ai_max_image_mb: PositiveInt = 8
 
 
 class ExchangeRateSettings(SettingsSection):

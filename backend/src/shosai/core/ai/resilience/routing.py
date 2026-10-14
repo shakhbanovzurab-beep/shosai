@@ -13,19 +13,25 @@ caller, a failure ends the stream.
 
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable
 from contextlib import AsyncExitStack, asynccontextmanager
-from dataclasses import dataclass
 from typing import Final
 
 from shosai.core.ai.admission import Admission
 from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute
 from shosai.core.ai.errors import AiCallError, AiFailure, PaidCallError
 from shosai.core.ai.metrics import AiMetrics
-from shosai.core.ai.recording import CallRecorder, MeteredCall
-from shosai.core.ai.resilience.breakers import Breakers, Gate
-from shosai.core.ai.resilience.metrics import ResilienceMetrics
-from shosai.core.ai.resilience.operations import Metered, Operation, StreamOperation
-from shosai.core.ai.resilience.retries import RetryBudget
-from shosai.core.ai.resilience.slots import ProviderSlots
+from shosai.core.ai.recording import CallRecorder
+from shosai.core.ai.resilience.breakers import Gate
+from shosai.core.ai.resilience.operations import (
+    Attempt,
+    Metered,
+    Operation,
+    Resilience,
+    StreamOperation,
+    as_standard,
+    deadline_of,
+    replay,
+    standard_of,
+)
 from shosai.core.ai.results import ChatDelta
 from shosai.core.ai.spend.guard import SpendGuard
 
@@ -39,26 +45,6 @@ NEXT_MODEL: Final = PROVIDER_FAILURES | {
     AiFailure.MODEL_UNPRICED,
     AiFailure.RETRY_LATER,
 }
-
-
-@dataclass(frozen=True, slots=True)
-class Resilience:
-    """The guards of every call: breakers, provider slots, the retry budget, their metrics."""
-
-    breakers: Breakers
-    slots: ProviderSlots
-    retries: RetryBudget
-    metrics: ResilienceMetrics
-
-
-@dataclass(frozen=True, slots=True)
-class Attempt[C]:
-    """One model of the route, admitted and let through by its breaker."""
-
-    index: int
-    client: C
-    call: MeteredCall
-    gate: Gate
 
 
 class RouteRunner:
@@ -146,6 +132,43 @@ class RouteRunner:
             finally:
                 await self._spend.release(hold)
         raise last or AiCallError(AiFailure.MODEL_UNAVAILABLE)
+
+    async def answer[C, R: Metered](
+        self, context: CallContext, route: ModelRoute, operation: Operation[C, R]
+    ) -> R:
+        """The call within the context's deadline; the route's standard model answers an
+        expensive call the kill switch paused."""
+        try:
+            async with deadline_of(context):
+                try:
+                    return await self.call(context, route, operation)
+                except AiCallError as paused:
+                    standard = standard_of(route, paused)
+                    if standard is None:
+                        raise
+                return await self.call(as_standard(context), standard, operation)
+        except TimeoutError:
+            raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
+
+    async def answer_stream[C](
+        self, context: CallContext, route: ModelRoute, operation: StreamOperation[C]
+    ) -> AsyncGenerator[ChatDelta]:
+        """The stream within the deadline; the standard model takes a paused expensive one."""
+        started = False
+        try:
+            async with deadline_of(context):
+                try:
+                    async for delta in self.stream(context, route, operation):
+                        started = True
+                        yield delta
+                except AiCallError as paused:
+                    standard = standard_of(route, paused)
+                    if started or standard is None:
+                        raise
+                    async for delta in self.stream(as_standard(context), standard, operation):
+                        yield delta
+        except TimeoutError:
+            raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
 
     async def _attempts[C](
         self,
@@ -246,14 +269,3 @@ class RouteRunner:
         await self._guards.breakers.succeeded(attempt.call.model, attempt.gate)
         if attempt.index:
             self._guards.metrics.fell_back(attempt.call.model.provider.value, kind)
-
-
-async def replay(
-    first: ChatDelta | None, rest: AsyncGenerator[ChatDelta] | None
-) -> AsyncGenerator[ChatDelta]:
-    """The first piece again, then the rest of the stream."""
-    if first is None or rest is None:
-        return
-    yield first
-    async for delta in rest:
-        yield delta
