@@ -14,11 +14,13 @@ WITH user_namespaces AS (
 ),
 -- Члены расширений не трогаются; внутренние объекты (массивы, мультидиапазоны,
 -- конструкторы диапазонов, последовательности identity) уходят с владельцем,
--- а отдельный DROP для них — ошибка.
+-- а отдельный DROP для них — ошибка. Внутренняя зависимость объекта от самого
+-- себя (секционированная таблица и её ключ секционирования) владельца не делает.
 bound_members AS (
     SELECT d.classid, d.objid
     FROM pg_depend AS d
-    WHERE d.deptype IN ('e', 'i')
+    WHERE d.deptype = 'e'
+       OR (d.deptype = 'i' AND (d.refclassid, d.refobjid) <> (d.classid, d.objid))
 ),
 candidates AS (
     SELECT 1 AS stage, 'pg_namespace'::regclass AS classid, n.oid AS objid

@@ -16,6 +16,9 @@ CREATE EXTENSION citext;
 CREATE TYPE harness_mood AS ENUM ('calm', 'busy');
 CREATE TABLE harness_leftover (id bigint GENERATED ALWAYS AS IDENTITY, mood harness_mood);
 CREATE VIEW harness_view AS SELECT id FROM harness_leftover;
+CREATE TABLE harness_parted (id bigint, at date) PARTITION BY RANGE (at);
+CREATE TABLE harness_parted_2026_01 PARTITION OF harness_parted
+    FOR VALUES FROM ('2026-01-01') TO ('2026-02-01');
 CREATE FUNCTION harness_answer() RETURNS integer LANGUAGE sql AS 'SELECT 42';
 CREATE TYPE harness_span AS RANGE (subtype = bigint);
 ALTER DEFAULT PRIVILEGES GRANT SELECT ON TABLES TO shosai_app;
@@ -35,6 +38,7 @@ EXPECTED_RESTORATION = (
     "- type harness_mood",
     "- relation harness_leftover",
     "- relation harness_view",
+    "- relation harness_parted",
     "- routine harness_answer()",
     "- type harness_span",
     "- default privileges shosai_migrator * r",
