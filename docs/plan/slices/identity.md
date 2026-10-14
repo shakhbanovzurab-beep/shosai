@@ -1,0 +1,377 @@
+# identity — slice plan
+
+Prompt: [prompts/S-feature-slice.md](../prompts/S-feature-slice.md), launched through [BACKEND-next-step.md](../prompts/BACKEND-next-step.md). Status: [STATUS.md](../STATUS.md). Slice card: [SLICE_MAP.md §4.2.1](../SLICE_MAP.md#1-identity).
+
+`identity` is the first feature slice of Shosai. It gives every person one sign-in for the web and the desktop, in the data home of their country. It also keeps the profile and privacy choices, exports and deletes everything the person has, and gives operators their accounts and roles. Every other slice receives an authenticated person from it, so this plan also builds two platform mechanisms that no slice has needed yet: settings owned by a slice and ports between slices.
+
+- **Status:** written on 2026-10-14; the owner decided ID-D1…ID-D10 the same day (§2), recorded in [ADR 0045](../../adr/0045-identity-sessions-registration-and-deletion.md) and [ADR 0046](../../adr/0046-platform-languages-follow-the-cabinet.md).
+- **Philosophy check:** one login across both homes and every device; nothing to re-enter; Leo knows the name it should use; the person can take everything out or erase it in one action. The slice adds no notification or screen that asks for attention.
+
+---
+
+## 1. Facts this plan rests on
+
+### 1.1 Inputs
+
+| Source | Fact |
+|---|---|
+| [SLICE_MAP](../SLICE_MAP.md) §4.2.1, §2.1, §2.10, §3, §8.1 | Scope: registration, email verification, password, social sign-in, cookie sessions with CSRF and rotation, desktop browser sign-in, devices and sessions, `GET /v1/me`, logout; directory by `HMAC(email)` and home routing; the account transfer saga; profile, avatar, privacy switches, interface language; cross-border consent (nfr-14); the export and deletion registry; operator accounts and roles; the admin users screen. Owns `users`, `directory_entries`, `refresh_sessions`, `password_reset_tokens`, `login_events`, `user_identities`, `data_export_jobs`, `home_transfers` and operator roles. Emits account deleted, account transferred, session revoked. Leo toolset `account`. SM-7: sign-in screens are cabinet standalone routes `/app/login`, `/app/register`, `/app/reset`, `/app/connect`. SM-10: the onboarding tour is dropped. SM-12: six fixed operator roles (owner, support, finance, platform, releases, read-only) checked on every `/v1/admin/*` router; users screen = search, account card with AI spend, block, ban with refund |
+| Target architecture | fr-6, fr-7, fr-8, fr-17 (later); nfr-4, nfr-12, nfr-13, nfr-14, nfr-16, nfr-17. §4.1 rule 3: a request opens its session in the home named by the access token. §4.3: API → directory 300 ms, cached 60 s, used only by sign-in, registration, transfer and deletion. §6: directory `email_hmac, user_id, home, state, version` in the EU home; sign-in finds the home by HMAC; transfer bumps `token_version`; the transfer saga with a step journal. §8.1: account anonymised on deletion, directory row kept 30 days; directory PK `email_hmac`, first registration wins. §8.2: `login_events` monthly partitions. §10: sign-in 300 ms of directory and home check; directory down → sign-in by cache, registration 503; account transfer interface. §13.2: directory unavailable. §14 rule 7: one deletion registry covers every table, prefix and external grant; the event carries ids only. §15: token claims, revocation by version bump, HMAC secret outside the database. §18: bcrypt 5.0.0, PyJWT 2.15.1, cryptography; Yandex SmartCaptcha (replaced by Cloudflare Turnstile, owner 2026-10-14). §22: legal review before the first account transfer |
+| [ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md) | One account per person; the token carries no workspace roles; membership is checked per query |
+| [DATA_MAPPING](../DATA_MAPPING.md) §5.1, R4–R6 | Migrated accounts keep their bcrypt hashes, `token_version`, refresh families (`fid` = `refresh_sessions.id`, `current_jti`, `prev_jti`, 10 s grace) and the draft's `jwt_secret` (HS256, claims `sub typ tv fid jti`), so no user and no desktop client is signed out at cutover. Draft access tokens have no home claim: for their ≤ 30 min, identity resolves their home through the directory. M1 writes one directory row per non-anonymised account; anonymised accounts get none. `desktop_auth_codes` and `email_verification_codes` are dropped; `user_onboarding` becomes a drop if no tour returns |
+| [contracts/](../../contracts/README.md), `backend/tests/composition/` | Native routes owed by identity, now listed in `native_routes_not_served.json`: `POST /v1/auth/login`, `/refresh`, `/logout`, `GET /v1/auth/me`, `POST /v1/auth/desktop/exchange`, `/desktop/refresh`. The gate compares every 2xx property, its requiredness and type with the draft OpenAPI; the success status must match; error bodies are each slice's own test (ADR 0008). `GET /v1/auth/me` (`UserMeResponse`) has 23 required properties, including `subscription`, `quota` and `features` of billing, `no_logs` and `meeting_auto_tasks` of meetings, `memory_enabled` of memory and four `leo_*` switches of agent. External: `GET /v1/auth/social/{provider}/callback` and `GET /v1/auth/social/yandex/token-page` (not gated, OD-2). `/v1/me*`, `/v1/auth/sessions*` and `/v1/admin/users*` are `web` or `unused`: free to redesign |
+| Native clients (macOS 1.4.5 through WhispererKit, Windows 1.4.5) | Read `{"detail": "<string>"}` on sign-in errors and branch on 401, 403 `email_not_verified`, 429. Password sign-in sends `X-Client-Kind: desktop` and no captcha, keeps the refresh token in the cookie jar (`meetassist_refresh`, `path=/v1/auth`) and refreshes with `X-CSRF-Token` equal to the `meetassist_csrf` cookie. Browser sign-in opens `/app/connect?state=` (macOS adds `code_challenge`, `code_challenge_method=S256` and later sends `code_verifier`; Windows sends neither), receives `whisperer://auth?code&state`, exchanges the code in the body and refreshes with the refresh token in the body. Both require `email` and `role` in `/v1/auth/me` and read `subscription`, `quota`, `language`, `features`, `no_logs` |
+| Cabinet ([frontend/](../../../frontend)) | No sign-in route, no auth guard, no app-level API client; `lib/api/client.ts` leaves CSRF and refresh to this slice. The shell shows `DEMO_USER`; Log out has no handler; the language switch writes the `ui_language` cookie only. Settings › Account: full name and display name (1–80), read-only email, work role (20 codes), avatar (256 px, ≤ 1 MiB, webp, jpeg, png), delete account with the email re-typed. Settings › Privacy: `improve_models`, `share_location`, export archive, per-kind data lists (shared chats, artifacts, uploaded files, feedback). One settings resource mixes the fields of identity, agent, memory and capture. Admin users and roles are static templates |
+| Core (F1, F6) | `CoreServices`, `FeatureParts`, `FeatureModule` (`core/features.py`); `TenancyScope(home, user_id, org_id)`; `HomeTransactions.begin`; home-scoped revisions with `applies_to`; `register_monthly_partitions`; outbox events with ids only and three-segment names (`slice.object.happened`); `EventSubscription.home`; tasks, periodic jobs, due-row sources; `EffectLedger.once` and `IdempotencyKeyHeader`; `Page[T]`, `CursorCodec`, `Keyset`; GCRA `rate_limited(limiter, limit, subject)`; `AppError` with `detail` for native shapes; `EmailPort.enqueue` with `EmailKind.ACCOUNT` and encrypted `secrets`; `ObjectStorage` per home with presigned GET and PUT; `ToolSpec`/`ReadTool`; `CallContext.cross_border_consent` (the port refuses a RU call without it, F6-C7); `SpendOperator.reports.user_spend` for the account card (F6-D5). **Missing:** settings sections owned by a slice (the `Settings` dataclass knows core sections only, and `build` never sees the environment); a way for one slice to use a service another slice builds at runtime; anything about accounts, tokens, cookies, CSRF or password hashing |
+
+### 1.2 The draft, for lessons
+
+Read in `/root/whisperer/backend/src/meetassist/` (`api/auth.py`, `features/identity/`, `services/{auth_service,pending_registration,refresh_session_service,desktop_auth_service,captcha}.py`, `core/jwt_utils.py`, `core/security/passwords.py`, `api/{me,me_data}.py`, `services/account_data.py`, `api/admin/users.py`), the native clients and `specs/001`, `021`, `022`, `031`, `052`. Each lesson becomes a rule here.
+
+| Draft fact or incident | Rule in v2 |
+|---|---|
+| Nothing is written to `users` before the email is verified; a pending registration lives in Redis `pending_reg:<email>` with the password hash, for 15 min (`pending_registration.py`) | Kept: no account and no directory entry before verification. But a pending registration holds an email and a name, so it lives in the **home database the person chose**: Valkey is in the EU, and 152-FZ requires Russian users' personal data to be collected and recorded in a database in Russia first, while nfr-4 allows only the email HMAC, ids and the home outside the home. The routing to that row — `email_hmac`, registration id, home — has no personal data and lives in Valkey with the same 15-minute TTL (§3.5) |
+| Registering again overwrites the pending entry with a new password; the victim then types the code from their own mailbox and gets an account with the attacker's password | Every registration is its own pending row with its own id, returned only to the browser that sent it; verification needs (registration id, code); the directory is claimed at verification, first verification wins |
+| Resend resets the attempt counter, so 5 attempts are per code, not per registration | 5 wrong codes per registration, whatever the resends; at most 3 resends per registration and a limit per `email_hmac` (mail bombing) |
+| bcrypt 12 in a thread pool sized to half the cores, with a decoy hash for unknown emails; `bcrypt>=4.2` unpinned while passwords may be 256 characters (bcrypt 5 raises above 72 bytes) | bcrypt 5.0.0 pinned (§18), cost 12, a bounded thread pool, a decoy check on every miss; the input is the password's first 72 UTF-8 bytes, exactly what the draft's hashes were computed over, so they keep verifying |
+| No account lockout, no per-email throttle, failed sign-ins never recorded; the captcha is skipped for any request that sends `X-Client-Kind: desktop`, a header anyone can send | Failed attempts counted per `email_hmac` and per client address in Valkey; `login_events` records failures of existing accounts; captcha only when an address or an account shows failures, for every client (ID-D1) |
+| Captcha: Cloudflare Turnstile since 2026-08-05; Yandex SmartCaptcha removed on 2026-09-07. The widget once hung without an error and locked the form silently; the server checks `siteverify` fail-closed, retries only connection errors (a token is single-use), pins IPv4 to `challenges.cloudflare.com` | Turnstile only (owner, 2026-10-14; ID-D1). Server check fail-closed with the draft's retry rule; the cabinet's loader always ends (success, error or a 9 s timer) and tells the person why the form is blocked |
+| JWT HS256 with one secret, no `kid`, `iss` or `aud`; claims `sub typ tv iat exp`, refresh adds `fid jti` | Same algorithm and claims, so draft tokens stay valid (R6); a `kid` header selects the signing key, a missing `kid` means the draft's key; new claim `home`; `typ` checked both ways |
+| Refresh families with rotation, a 10 s grace for the previous jti, reuse revokes the family, and the revocation is committed before the 401 so the theft signal survives the rollback (`refresh_session_service.py:73-120`) | Kept as written; jti stored as SHA-256 per spec 022 (the draft stored it raw, M1 hashes the two columns) |
+| The CSRF token rotated on every refresh and caused random logouts across tabs; any refresh failure, even 5xx or 429, ended the web session (commit 18ab7bf67) | The CSRF value lives as long as the refresh cookie and is not rotated by refresh; only a 401 from refresh ends a session; the cabinet serialises refreshes across tabs (Web Lock and BroadcastChannel) |
+| Logout revokes only the family named by the cookie; a client that signed in through the browser cannot revoke its refresh token | Logout revokes the family of the cookie or of a refresh token in the body |
+| Desktop code: `token_urlsafe(32)`, SHA-256, 120 s, single use, but read and then marked used without a lock; the macOS PKCE is ignored by the server; the connect page issues a code without asking | Codes consumed atomically; a code issued with a challenge requires its verifier, a code without one does not (Windows 1.4.5 keeps working); the connect page asks "Sign in to the Shosai app as …?" (ID-D7) |
+| One resolver for HTTP and a second copy for WebSocket drifted, and a shared device key acted as the bootstrap admin (AUTH-01) | One authenticator for HTTP and WebSocket, in identity; no device key exists |
+| Banned or frozen accounts get 403 `account_banned` / `account_frozen` mid-session; the SPA, macOS, Windows and the Obsidian plugin branch on these strings | Kept, without a database read per request (§3.8, ID-D6) |
+| Ban and freeze from two code paths, no `tv` bump, one of them without an audit row | One account-state service bumps `tv`, revokes sessions and writes the operator audit row in the same transaction |
+| Deletion: re-typed email, `users` anonymised because money rows reference it for 5 years (402-FZ), a registry plus a test over foreign keys to `users`; but S3 prefixes and Nango grants were missed and the deletion event carried the email and name | The registry covers tables, object prefixes and external grants of every slice and of core, checked by a test over the metadata; the event carries ids only |
+| Avatar as a base64 data URL in `users`, type taken from the client's `Content-Type`, returned on every `/auth/me` | Avatar bytes in the home's bucket after a signature check (ID-D4); `/v1/auth/me` returns a URL |
+| Social sign-in: Yandex and VK for Russia, Google and GitHub for the rest, never shown together, visibility decided on the server by country (406-FZ); `state` signed with a hyphen separator because VK strips dots; the callback never returns tokens, it redirects with a one-time ticket; VK and Yandex hard-code `email_verified=True`, which makes linking by email a takeover path | Providers and visibility kept (ID-D8); a provider's email links to an existing account only when that provider proves verification, otherwise the person signs in to the existing account first and links from Settings |
+| No cross-border consent anywhere; the draft stores only the personal-data consent (`consent_version` 2026-07-10, time, IP, user agent) and an optional marketing consent | A consent journal per account; cross-border consent per ID-D2 |
+
+### 1.3 Versions (2026-10-14)
+
+| Package | Version | Source |
+|---|---|---|
+| bcrypt | 5.0.0 | §18.2 (pinned there) |
+| PyJWT | 2.15.1 | §18.2 |
+| cryptography | already in the lock through core | — |
+| python-multipart | latest stable, if FastAPI's form parsing for the avatar upload needs it | added in step 6 after a changelog check |
+
+Each implementation session checks that the pinned version is still the latest stable and reads the changelog before adding it (CLAUDE.md "Dependencies").
+
+---
+
+## 2. Decisions
+
+Decided by the owner on 2026-10-14: ID-D1, D3, D4, D6, D7, D8, D9 as proposed; ID-D2 as proposed with a warning before withdrawal; ID-D5 changed to a 7-day window; ID-D10 by the owner's own choice. Recorded in ADR 0045 (identity) and ADR 0046 (languages). The table keeps the question, the decision and its trade-off.
+
+| ID | Question | Decision | Trade-off | Step |
+|---|---|---|---|---|
+| **ID-D1** | **When the captcha is shown.** *Provider decided by the owner on 2026-10-14: Cloudflare Turnstile only* (§18 is amended from Yandex SmartCaptcha). The draft skips the captcha for any request that claims to be a desktop client | **Shown only when needed:** always on registration and on the reset request; on sign-in only after failures from that address or for that account (3 in 15 min), for every client. A desktop client that hits the captcha gets 400 `captcha_failed` with a hint to sign in through the browser, which the native apps already offer | Fewer captchas for real people and no spoofable exemption. A desktop client under attack cannot sign in by password until the window passes, but browser sign-in still works. A person whose network blocks Cloudflare cannot register (accepted by the draft and by the owner's choice) | step 2 |
+| **ID-D2** | **Cross-border consent (nfr-14).** Every AI call of a Russian-home user is refused without it (F6-C7), and every AI provider is abroad. The draft never asked for it. If migrated Russian accounts have no consent, live capture on the shipped desktop clients stops at cutover | **New Russian-home accounts:** a separate, required consent at registration, versioned and stored in the consent journal; without it the account cannot be created, because no Shosai function works without AI. **Migrated accounts:** the lawyer checks whether the personal-data consent of 2026-07-10 covers transfer to the providers. If it does, M1 records it as the cross-border consent with that version. If not, the cabinet asks once at the next sign-in, and until then calls return `consent_required` (capture included). **Withdrawal** in Settings › Privacy stops AI features for that person at once. *Owner, 2026-10-14:* before the switch turns off, the person is told explicitly and in advance what stops, naming meeting transcription (live and recorded) along with Leo, notes and search over meetings; the withdrawal takes effect only after they confirm that warning | One more checkbox at registration and a legal check before M1. The alternative of a lazy prompt at first AI use is easier at registration but breaks a meeting in progress |
+| **ID-D3** | **Interface languages differ.** The cabinet has `nl`, `pt-BR` and `zh-Hant` and no Thai. Core (`core/i18n/locales.py`, used by the 16-language email texts), the draft and both native clients have `th`, `pt` and `zh` and no Dutch | **The cabinet's set is the platform's set** (the new web design is the product reference, ADR 0022), stored as the cabinet's codes. `GET /v1/auth/me.language` maps `pt-BR` → `pt`, `zh-Hant` → `zh` and `nl` → `null`, which the native clients read as "use the system language". Core's `LOCALES` changes `th` to `nl` in this slice's step 6, with Dutch email texts and no Thai ones | One language set everywhere, chosen by the product. Thai readers of the draft fall back to English; native clients in Dutch use their system language. The alternative is Thai added to the cabinet's 65 namespaces and Dutch dropped |
+| **ID-D4** | **Who owns avatar bytes.** `files` is "the one path for bytes" but is built after identity and counts quota | **identity stores the avatar itself:** one object per account in the home's bucket (`avatars/<user_id>/<content hash>.webp`), uploaded through the API (≤ 1 MiB, signature checked, re-encoded size checked), not counted against storage quota, served by a 15-minute presigned URL in `/v1/me` and `/v1/auth/me` | Two byte paths in the platform. Avatars are tiny, fixed, and needed before `files` exists. Routing them through `files` later would add quota and folder concepts a profile picture does not need |
+| **ID-D5** | **Deletion timing.** The draft deletes at once after the re-typed email | *Changed by the owner on 2026-10-14:* **a 7-day window.** On confirmation (re-typed email and a session younger than 15 minutes) the account is hidden and its sign-in blocked at once: every session ends, the person's data stops being served anywhere (shared items, public links, workspace views, Leo and background work for them), and an email names the date of final erasure. Signing in during the 7 days cancels the deletion and restores everything as it was. After 7 days the deletion saga erases the data of every slice and frees the email | Protects against a mistaken or coerced deletion; keeps the data, hidden, for 7 days after the request, and the email stays taken until erasure. Every slice that serves data to others honours the hidden state (§3.6) |
+| **ID-D6** | **Mid-session revocation without a database read per request.** The draft read the user row on every request (403 `account_banned` mid-session is a native contract). For Russian users a read costs 4 × 45 ms | **Account-state markers in Valkey:** a ban, freeze, deletion, password change, "sign out everywhere" or transfer writes `identity:account:<user_id> = {tv, state}` with a TTL equal to the access-token lifetime (30 min); the authenticator checks the marker (≈ 1 ms in the EU) after verifying the signature. If Valkey does not answer within 20 ms, the request passes on the signature alone | No database round trip per request. During a Valkey outage, a revoked access token keeps working until it expires (≤ 30 min); refresh still fails because refresh reads the home |
+| **ID-D7** | **The desktop connect page issues a code without asking**, so any page that opens `/app/connect` in a signed-in browser starts a desktop sign-in | **One confirmation click**: "Sign in to the Shosai app as {email}?" with Continue and Cancel; then the code (with the macOS PKCE challenge stored) and the redirect to the app's scheme (§3.6, ID-D10) | One extra click per desktop sign-in; closes a session-fixation path |
+| **ID-D8** | **Social providers.** The draft offers Yandex and VK to Russia and unknown countries, Google and GitHub elsewhere, never both sets, to comply with 406-FZ | **Keep the four providers and the draft's visibility rule**; no Apple sign-in. The callback path stays `/v1/auth/social/{provider}/callback`, so no provider registration changes | No new provider work; Apple users sign in by email |
+| **ID-D9** | **§15 says the access token carries "company".** Since ADR 0039 a person has one account across many workspaces and the token carries no workspace roles | **Amend §15:** the access token carries user id, home, `token_version`, type and key id; no company claim. Workspace membership is checked per query (ADR 0039) | A documentation fix; no behaviour lost |
+| **ID-D10** | **Desktop scheme** | *Decided by the owner on 2026-10-14:* **only `shosai://auth`.** The connect page always redirects to `shosai://auth?code&state`; the macOS and Windows clients move to `shosai://` in a later release. Until then the shipped 1.4.5 builds cannot finish a browser sign-in on v2 (their password sign-in and every other native route keep working). This is a stated exception to nfr-12, to be closed by the client release before cutover (M2) | — | step 4 |
+
+These questions are settled by documents already and need no decision: tokens stay HS256 with the draft's key (DATA_MAPPING R6); bcrypt (§18); one account per person (ADR 0039); operator roles (SM-12); the onboarding tour is dropped (SM-10).
+
+---
+
+## 3. Design
+
+### 3.1 Layout
+
+```
+backend/src/shosai/features/identity/
+  README.md
+  contracts.py            # the public surface for other slices: ports, events, value types
+  settings.py             # IdentitySettings (IDENTITY_* variables)
+  module.py               # FeatureModule: models, events, checks, tool specs, build()
+  domain/                 # pure: email normalisation, home by country, password rules,
+                          #   token claims, refresh family rules, account states, consents
+  application/            # use cases: register, verify, sign in, refresh, desktop codes,
+                          #   social, profile, export, deletion, transfer, operators
+  infrastructure/         # SQLAlchemy models and repositories, bcrypt pool, JWT codec,
+                          #   directory with cache, Valkey markers and desktop codes,
+                          #   captcha client, social provider clients
+  channels/
+    http/                 # routers: auth, desktop, social, me, sessions, data, admin
+    tasks.py              # task handlers: export, deletion steps, transfer steps, sweeps
+    agent_tools.py        # the account toolset
+  emails.py               # templates: verification code, reset, welcome, export ready, deleted
+```
+
+Dependencies point inward: `channels` → `application` → `domain`; `infrastructure` implements the ports `domain` and `application` declare. Every file stays under 300 lines.
+
+### 3.2 Platform mechanisms this slice adds (step 1)
+
+**Slice settings.** `FeatureModule.settings: tuple[type[SettingsSection], ...]`. `load_settings` loads them from the same environment mapping, and `CoreServices.settings.feature(IdentitySettings)` returns the instance. Production checks receive them. `.env.example` section 2 documents the variables, and the env test checks every slice section. This closes the gap in `backend/README.md:22`.
+
+**Ports between slices.** A slice publishes a service by declaring a port type in its `contracts.py`. Others reach that service through it; they never import the slice's internals.
+- `FeatureParts.provides` binds instances to port types.
+- `CoreServices.ports.get(PortType)` resolves a port lazily, after all slices are built.
+- `FeatureModule.requires` names the ports a slice needs. Composition refuses to start if a required port has no binding, or if a port has two bindings where one is expected.
+- Multi-bindings (`ports.all(PortType)`) serve registries such as the `/v1/auth/me` contributions.
+
+This is the mechanism the Leo architecture's §13.1 ports need too.
+
+**Account data registry in core.** Core's own tables hold personal data too: `email_messages`, `email_suppressions`, `effect_keys`, `provider_costs`, `outbox_messages`. Core cannot import a slice, so the registry contract lives in `core/account_data`, the same way `core/agent_tools` holds the tool contract (ADR 0029).
+- An `AccountDataSpec` declares the tables, object prefixes and external grants it covers.
+- An `AccountDataHandler` implements `export`, `erase` and, for transfers, `copy` and `purge`.
+- Slices contribute both through `FeatureParts.account_data`; core declares its own.
+- identity runs the registry. A metadata test fails when any table with a `user_id` column, or a foreign key to `users`, is covered by no spec or by two, or is not listed as kept by law (`provider_costs` and money tables, 5 years).
+
+### 3.3 Public surface (`identity.contracts`)
+
+| Item | Kind | Used by |
+|---|---|---|
+| `Principal(user_id, home, session_id, token_kind)` and `PrincipalDep`, `OptionalPrincipalDep` | value and FastAPI dependencies, resolved through the `Authenticator` port | every slice's HTTP and WS routes |
+| `principal_scope(principal) -> TenancyScope` | function | every slice opening a transaction for the person |
+| `OperatorRole` (owner, support, finance, platform, releases, read_only) and `require_operator(*roles)` | enum and router dependency | every `/v1/admin/*` router (SM-12) |
+| `ConsentReader.cross_border(session, user_id) -> bool` | port, read inside the caller's transaction | every slice building a `CallContext` (F6-C7) |
+| `AccountProfileReader.profile(session, user_id) -> AccountProfile(display_name, language, timezone)` | port | agent (`PrincipalFactory`), email senders of other slices |
+| `MeContribution` | multi-port: a slice adds its part of `/v1/auth/me` (billing: `subscription`, `quota`, `features`; meetings: `no_logs`, `meeting_auto_tasks`; memory: `memory_enabled`; agent: `leo_*`) | the native `GET /v1/auth/me` |
+| `AccountRegistered`, `AccountDeletionScheduled`, `AccountDeletionCancelled`, `AccountDeleted`, `AccountTransferred`, `AccountBlocked`, `SessionsRevoked` | outbox events `identity.account.registered`, `identity.account.deletion_scheduled`, `identity.account.deletion_cancelled`, `identity.account.deleted`, `identity.account.transferred`, `identity.account.blocked`, `identity.sessions.revoked`, ids only | billing (free plan on registration; renewals paused while deletion is scheduled), every slice that serves data to others (hide on `deletion_scheduled`, show again on `deletion_cancelled`, erase through the registry), workspaces (membership on deletion), proactive (`/v1/ws/user` close on revocation) |
+
+The slice map's two-part event names (`identity.account_deleted`) do not pass core's three-part rule. The names above replace them, and SLICE_MAP §4.2.1 is corrected on approval.
+
+Until `billing`, `meetings`, `memory` and `agent` contribute, `/v1/auth/me` returns the draft's defaults:
+- `subscription`, `quota`: null;
+- `features`: defaults;
+- `no_logs`, `meeting_auto_tasks`: false;
+- `memory_enabled` and the four `leo_*` switches: true.
+
+The draft schema allows these values, so the D1 gate passes. Wave 1's exit, the shipped clients running end to end on staging, comes after those slices.
+
+### 3.4 HTTP interface
+
+Class N is native: its shape is frozen by the D1 gate and its `detail` strings by identity's tests. E is external; W is the cabinet's, designed here. Every unsafe write a client may retry takes an `Idempotency-Key`. Collections use `{items, next_cursor}`.
+
+| Route | Class | Request → result | Limits and errors |
+|---|---|---|---|
+| `POST /v1/auth/register` | W | `{email, password (8–256), full_name (1–80), country, language, consents{personal_data:true, cross_border, marketing}, captcha_token}` → 202 `{registration_id, resend_after}`; the code is mailed | 5/min per address, 3/h per `email_hmac`; 409 `email_registered` only after the code is checked (no enumeration at this step) |
+| `POST /v1/auth/register/verify` | W | `{registration_id, code}` → session (as login) | 5 wrong codes per registration; 400 `invalid_code`; 409 `email_registered` if another registration won |
+| `POST /v1/auth/register/resend` | W | `{registration_id}` → 202 | 3 per registration, 60 s apart |
+| `POST /v1/auth/login` | N | `LoginRequest` → `TokenResponse` and both cookies | captcha per ID-D1; 401 `Invalid email or password`; 403 `email_not_verified` (only with the right password of a pending registration), `account_banned`, `account_frozen`, `account_disabled`; 400 `captcha_failed`; 429 |
+| `POST /v1/auth/refresh` | N | cookie `meetassist_refresh` + `X-CSRF-Token` = cookie `meetassist_csrf` → `TokenResponse`, refresh cookie rotated, CSRF kept | 401 `Missing refresh cookie`, `Refresh token expired`, `Invalid refresh token`, `User not found`, `Token revoked`; 403 `CSRF mismatch` |
+| `POST /v1/auth/logout` | N | cookie, or `{refresh_token}` in the body (additive) → `{"ok": true}`, cookies cleared | always 200 |
+| `GET /v1/auth/me` | N | Bearer → `UserMeResponse`, 23 properties, `role` = `admin` for an operator, else `user`; `language` mapped per ID-D3 | 401; 403 `account_banned` / `account_frozen` |
+| `POST /v1/auth/desktop/code` | W | Bearer, `{code_challenge?, code_challenge_method?: "S256"}` → `{code, expires_in: 120}` | 10/min per account |
+| `POST /v1/auth/desktop/exchange` | N | `{code}` (8–256), plus the `code_verifier` macOS already sends → `DesktopTokenResponse` | 10/min per address; 401 `invalid_or_expired_code` (also for a missing or wrong verifier) |
+| `POST /v1/auth/desktop/refresh` | N | `{refresh_token}` → rotated pair | 30/min per address; 401 `refresh_expired`, `invalid_refresh`, `user_not_found`, `token_revoked` |
+| `POST /v1/auth/password/forgot` | W | `{email, captcha_token}` → 202 always | 3/h per `email_hmac` |
+| `POST /v1/auth/password/reset` | W | `{token, password}` → 204; `tv` bumped, every session ends | 400 `invalid_token` |
+| `GET /v1/auth/social/providers` | W | → providers visible for the request's country and language | — |
+| `GET /v1/auth/social/{provider}/start` | W | → 302 to the provider with signed `state` (`nonce-hmac`) | 20/min per address |
+| `GET /v1/auth/social/{provider}/callback`, `GET /v1/auth/social/yandex/token-page` | E | → 302 `/app/login?social=<ticket>` / `?social_consent=<ticket>` / `?social_error=<code>`; the static relay page | never JSON |
+| `POST /v1/auth/social/complete` | W | `{ticket}` → session | ticket single use, 120 s |
+| `POST /v1/auth/social/register` | W | `{ticket, country, language, consents}` → session | as registration |
+| `GET /v1/me` | W | → `{id, email, full_name, display_name, work_role, avatar_url, language, timezone, country, home, consents{…}, operator_roles, created_at}` | — |
+| `PATCH /v1/me` | W | partial: names, work role, language, timezone, `consents{improve_models, share_location, marketing, cross_border}` → `/v1/me`; withdrawing `cross_border` also needs `cross_border_warning_confirmed: true`, sent after the cabinet showed what stops (ID-D2) | 422 per field; 422 `consent_warning_required`; a consent change writes the journal |
+| `PUT /v1/me/avatar`, `DELETE /v1/me/avatar` | W | multipart `file` (webp, jpeg, png by signature, ≤ 1 MiB, ≤ 1024 px) → `/v1/me` | 413, 422 `avatar_type` |
+| `POST /v1/me/password` | W | `{current_password?, new_password}` → 204; other sessions end | 403 `wrong_password` |
+| `GET /v1/me/sessions`, `DELETE /v1/me/sessions/{id}`, `POST /v1/me/sessions/sign-out-others` | W | the devices: label, approximate place from the address, created, last used, current | 404 `session_not_found` for another person's id |
+| `POST /v1/me/exports`, `GET /v1/me/exports/latest` | W | → 202 job; job with `download_url` (15 min) when ready | one running job; 3 per day |
+| `POST /v1/me/deletion` | W | `{confirm_email}` → 202 `{erase_at}`; signed out everywhere | 400 `confirmation_mismatch`; 403 `reauthentication_required` (ID-D5) |
+| `GET /v1/admin/users`, `GET /v1/admin/users/{id}` | W | search by exact email (directory → home) or by name (both homes in parallel, trigram index) → page; the card: profile, state, sessions, recent sign-ins, AI spend today, week and month (F6), operator roles | operator roles: owner, support, read_only |
+| `POST /v1/admin/users/{id}/block`, `/unblock`, `/ban` | W | `{reason_code}` → card; `tv` bumped, audit row | owner, support |
+| `GET /v1/admin/operators`, `PUT /v1/admin/operators/{user_id}`, `DELETE …` | W | operator roles | owner only; the last owner cannot be removed |
+| `POST /v1/admin/users/{id}/transfers`, `GET /v1/admin/transfers/{id}` | W | `{to_home}` → 202 transfer; journal | owner, platform; refused before the legal review (§22) is recorded as done |
+
+"Ban with refund" (SM-12) is completed by `billing`'s admin step. identity bans; billing adds the refund to the same screen.
+
+### 3.5 Data model
+
+Every table is created in a home-scoped revision. EU-only tables are platform-level and hold no personal data.
+
+| Table | Homes | Key and columns | Notes |
+|---|---|---|---|
+| `users` | every | `id` UUID (global); `email` (normalised), `password_hash` (nullable: social-only), `full_name`, `display_name`, `work_role`, `country`, `language`, `timezone`, `avatar_key`, `state` (`active`, `frozen`, `banned`, `deletion_scheduled`, `deleting`, `transferring`, `deleted`), `token_version`, `email_verified_at`, `last_login_at`, `created_at`, `updated_at` | Unique `email` per home; check constraints on states and lengths. Anonymised on deletion (email `deleted-<id>@deleted.invalid`). Draft columns that other slices own (minutes, storage, `no_logs`, …) are created by those slices in their own tables |
+| `user_consents` | every | `(user_id, kind, version)`, `granted`, `at`, `ip`, `user_agent`, `source` | Kinds: `personal_data`, `cross_border`, `marketing`, `improve_models`, `share_location`. Append-only journal; the current value is the latest row per kind |
+| `pending_registrations` | every | `id` UUID (the registration id), `email`, `email_hmac`, `password_hash`, `full_name`, `country`, `language`, consents, `code_hash`, `attempts`, `resends`, `expires_at` (15 min) | Swept by a due-row source after expiry |
+| `directory_entries` | EU | `email_hmac` PK, `user_id` unique, `home`, `state` (`active`, `frozen`, `banned`, `deletion_scheduled`, `transferring`, `deleted`), `version`, `deleted_at` | §6. Deleted rows purged after 30 days |
+| `refresh_sessions` | every | `id` UUID (the family, claim `fid`), `user_id`, `current_jti_hash`, `prev_jti_hash`, `rotated_at`, `expires_at` (sliding 7 days), `revoked_at`, `revoke_reason`, `client_kind` (`web`, `desktop`), `device_label`, `ip`, `user_agent`, `created_at`, `last_used_at` | Expired and revoked rows purged after 30 days |
+| `password_reset_tokens` | every | `token_hash` PK, `user_id`, `expires_at` (60 min), `used_at` | Consumed by one conditional update; a new token invalidates older ones |
+| `user_identities` | every | `(provider, subject)` unique, `(user_id, provider)` unique, `email_verified_by_provider`, `linked_at` | No provider tokens |
+| `login_events` | every | UUIDv7, `user_id`, `outcome` (`success`, `wrong_password`, `blocked`, `captcha`), `client_kind`, `ip`, `user_agent`, `created_at` | Monthly partitions, kept 12 months |
+| `operator_roles` | every | `(user_id, role)`, `granted_by`, `granted_at` | Read on every admin request (rights are not cached, §7) |
+| `operator_audit_events` | EU | UUIDv7, `operator_id`, `target_user_id`, `target_home`, `action`, `reason_code`, `created_at` | Ids and codes only; monthly partitions, 12 months (nfr-17); the application role has no UPDATE or DELETE |
+| `data_export_jobs` | every | `id`, `user_id`, `state`, `object_key`, `size`, `requested_at`, `ready_at`, `expires_at` (7 days), `error_code` | Archive in the home's bucket under `exports/<user_id>/` |
+| `account_deletions` | every | `user_id` PK, `requested_at`, `erase_at` (+7 days), `cancelled_at`, per-handler step states, `finished_at` | The deletion window and the saga's journal; due rows by `erase_at` |
+| `home_transfers` | every | `id`, `user_id`, `from_home`, `to_home`, `state`, step journal, manifest checksum, timestamps | The transfer saga's journal, in both homes |
+
+**Row-level security.** The F1 audit's OD-5 leaves RLS for personal rows to the `workspaces` plan. identity's tables are personal and are read only through identity's repositories with the person's scope. They get RLS when `workspaces` defines the personal policy.
+
+**Valkey keys** (the one managed Valkey in the EU). Everything short-lived without personal data lives here, not in a table; none of these keys holds personal data.
+- Pending registrations' routing: `identity:registration:<id>` → `{email_hmac, home}` and `identity:pending:<email_hmac>` → the set of live registration ids, both with the registration's 15-minute TTL. Verification finds the home through it; sign-in answers `email_not_verified` through it. Without Valkey, registration answers 503, and sign-in answers a pending email with the ordinary 401.
+- Desktop codes: `identity:desktop_code:<sha256>` → `{user_id, home, challenge}`, 120 s, consumed with `GETDEL`. No `desktop_auth_codes` table.
+- Account-state markers (ID-D6).
+- Failed-attempt counters per `email_hmac` and per address.
+
+Social flow state lives in an encrypted, signed ticket, not on the server. That ticket's pending profile (email and name from the provider) goes to the browser only as Fernet ciphertext.
+
+### 3.6 Flows
+
+**Registration**
+1. Normalise the email (trim, lower-case, IDNA domain) and compute `email_hmac`.
+2. A directory hit returns 202 like any other request, and mails the account owner "someone tried to register with your address" instead of a code. This avoids enumeration.
+3. Choose the home from `country`: Russia → `ru`, otherwise `eu`.
+4. In that home, insert `pending_registrations` with the bcrypt hash computed outside the transaction, and enqueue the code email with the code as a secret. After the commit, write the registration's routing keys to Valkey.
+5. Verify: find the home by `registration_id` in Valkey and check the code in the home. Then claim `directory_entries` in an EU transaction; the primary key means first verification wins. Then create `users`, the consents, a refresh session and `AccountRegistered` in a home transaction.
+6. If the home transaction fails after the claim, a sweep finds an `active` directory row without a user (by the row's `version` and age) and releases it.
+7. Writes never span two homes in one transaction (§4.1 rule 4). Each step is idempotent by the registration id.
+
+**Sign-in**
+1. `email_hmac` → directory. The cache holds 60 s; on a failed lookup the cache is used (§13.2).
+2. In the home, read the account (read-only transaction).
+3. Verify bcrypt outside any transaction, in the bounded pool.
+4. Write the refresh session, the login event and `last_login_at` in one write transaction.
+5. Issue a 30-minute access token with `home` and a refresh token with `fid` and `jti`.
+
+An unknown email checks a decoy hash and answers 401 in the same time. Expected Russian latency: about 9 round trips × 45 ms plus about 250 ms of bcrypt ≈ 0.65 s, against 0.26 s in the EU. §10's 300 ms covers the directory and the home check only. Step 3 measures both numbers and records them here.
+
+**Refresh** reads the family in the home named by the refresh token, then rotates it with one conditional update. The 10 s grace and family revocation on reuse follow the draft, and the revocation commits before the 401.
+
+**Desktop sign-in**
+1. `/app/connect?state=…[&code_challenge=…]`: without a session, go to `/app/login?next=…`.
+2. Ask for confirmation (ID-D7).
+3. `POST /v1/auth/desktop/code` with the challenge.
+4. Hard navigation to `shosai://auth?code&state` (ID-D10).
+5. Exchange: `GETDEL` the code, check the verifier if a challenge was stored, start a desktop family.
+
+**Deletion** (ID-D5)
+1. Confirm: re-typed email and a session younger than 15 minutes.
+2. One home transaction sets `state=deletion_scheduled`, bumps `tv`, revokes every family, writes `account_deletions` with `erase_at` = now + 7 days and `AccountDeletionScheduled`, and enqueues the email that names the date. After the commit, the Valkey marker rejects every live access token. The directory row goes to `deletion_scheduled` in the EU, so the email stays taken.
+3. While scheduled, the account is hidden. Every slice that serves the person's data to anyone else (shared items, public links, workspace views, search) stops serving it on the event. Background work for the person (Leo's initiative, errands, syncs) skips them, and billing pauses renewals. Data is hidden, not changed, so a cancel shows it again unchanged.
+4. **Cancel by signing in.** A correct sign-in during the window, by password, social or desktop, cancels the deletion in one home transaction: `state=active`, `cancelled_at`, `AccountDeletionCancelled`. The directory row returns to `active`. The cabinet tells the person that the deletion was cancelled.
+5. **Erase.** After `erase_at`, a due-row source starts the saga: `state=deleting`, then the directory row goes to `deleted` (EU subscription; the email can register again; the row is purged after 30 days). Each registry handler erases its part as a task; handlers are idempotent, retried up to 5 deliveries, and alert on failure. identity anonymises `users` last, marks the journal finished and emits `AccountDeleted`.
+
+The external grants (Nango) are erased by `connectors`' handler when that slice registers it. The registry test makes that slice's step fail until it does.
+
+**Export**
+1. A job row is written.
+2. A worker streams every handler's records as JSON Lines into a multipart ZIP upload in the home's bucket. No transaction is open across a storage call.
+3. The job is marked ready, and the "export ready" email links to the cabinet. The download URL is presigned for 15 min on each `GET`; the archive expires after 7 days by lifecycle and sweep.
+
+**Transfer**
+- Steps (§6): freeze → copy per handler into the target home, including objects with the same keys → verify the manifest → switch the directory (EU) → bump `tv` → purge the source.
+- Each step is a task that checks the journal. The saga cancels before the directory switch and reconciles after it.
+- It is only callable by an operator, and is refused while §22 is open or the person has workspace memberships (a `workspaces` port later).
+
+### 3.7 Cookies, CSRF and the cabinet session
+
+- **Cookie names and attributes are the draft's.** The native clients read them:
+  - `meetassist_refresh`: httpOnly, `Secure`, `SameSite=Lax`, `path=/v1/auth`, 7 days;
+  - `meetassist_csrf`: readable by scripts, `path=/`.
+- **Access tokens:** the cabinet keeps its access token in memory only and sends it as `Authorization: Bearer`. Bearer-only routes need no CSRF; only cookie refresh does.
+- **CSRF value:** created at sign-in and kept by refresh.
+- **Cabinet client middleware** (frontend step), on the client in `lib/api/client.ts`:
+  - adds the bearer;
+  - on a 401, makes one refresh serialised across tabs, then replays the request;
+  - a refresh 401 sends the user to `/app/login?next=`;
+  - 5xx, 429 and network errors never sign out.
+
+### 3.8 Authenticator
+
+One implementation serves HTTP and WebSocket. It reads the bearer from the header (or the WebSocket subprotocol, as capture's contract says), then:
+1. checks the signature against the key ring (`kid`; no `kid` = the draft's key);
+2. checks `typ=access`;
+3. takes the home from the `home` claim, or for a draft token without one from the directory (cached 60 s; R6, only until cutover + 30 min);
+4. checks the account-state marker (ID-D6);
+5. builds the `Principal`.
+
+There is no database read on the request path. The authenticator rejects a token whose `tv` is older than the marker's with 401 `Token revoked`, and a frozen or banned state with 403 and the draft's string.
+
+### 3.9 Security
+
+- **Secrets.** `IDENTITY_TOKEN_KEYS` holds `kid:secret` pairs, the first one active, with the draft's `jwt_secret` under the reserved `kid` `d`. `IDENTITY_DIRECTORY_HMAC_KEY` is 32 bytes or more. `IDENTITY_SOCIAL_*` and `IDENTITY_CAPTCHA_SECRET` hold the provider credentials. The production gate checks their lengths and refuses a known development value.
+- **Not logged:** tokens, codes, passwords, emails and names (logs carry `user_id` and `email_hmac` prefixes only); §14 rule 13.
+- **Constant-time comparisons** for codes, CSRF values and the HMAC.
+- **Single use is enforced by conditional updates or `GETDEL`**, never by a read followed by a write.
+- **`next` parameters** accept only a single-slash path inside `/app`.
+- **Social linking by email** only with a provider-proven verification (lesson above).
+
+### 3.10 Telemetry
+
+- **Metrics, per outcome code:**
+  - `shosai_identity_sign_ins_total{client_kind, outcome}`;
+  - `shosai_identity_refreshes_total{client_kind, outcome}`, including reuse detections;
+  - `shosai_identity_registrations_total{stage}`;
+  - `shosai_identity_password_hash_seconds`;
+  - `shosai_identity_directory_lookups_total{source=db|cache|cache_fallback}`;
+  - `shosai_identity_deletion_steps_total{handler, outcome}`;
+  - `shosai_identity_transfer_steps_total{step, outcome}`.
+- **Spans:** sign-in, refresh, registration and each saga step.
+- **Alerts:**
+  - a deletion saga not finished after 1 h;
+  - refresh-reuse revocations above their baseline;
+  - the directory served from cache for more than 5 min.
+- §16.4 gains the invariant monitor "directory entries without an account in their home, older than 10 min" (inv-1).
+
+### 3.11 Not in identity
+
+- Workspace roles, membership checks and RLS policies: `workspaces`.
+- Plans, quota and the refund part of "ban with refund": `billing`.
+- The hotkeys of Settings: `capture`.
+- Leo's settings: `agent`.
+- Memory: `memory`.
+- The per-kind data lists of Settings › Privacy (shared chats, artifacts, uploaded files, feedback): their owners, through the account data registry's listing; the frontend shows a kind only once its owner serves it.
+- Enterprise sign-in (fr-17).
+- The country-confirmation prompt that starts transfers of migrated users: after the legal review (§22).
+
+---
+
+## 4. Steps
+
+Each step is one session, leaves the project working and ends with the backend gates (and the frontend gate where it touches `frontend/`). "Docker ×4" means the four Docker skills, loaded when the step migrates or runs the compose services.
+
+| Step | Content | Skills | Done when |
+|---|---|---|---|
+| 1 | **Frame and platform mechanisms.** Slice settings in core (§3.2); ports between slices with start-time checks; `core/account_data` contract with core's own specs; `features/identity` skeleton with `contracts.py` (§3.3), `IdentitySettings`, production checks; domain: email normalisation, `email_hmac`, home by country, password rules (8–256, 72-byte bcrypt input), account states, token claims; infrastructure: JWT codec with a `kid` ring and the draft key, bcrypt pool with decoy; `IdentitySettings` documented in `.env.example`; bcrypt and PyJWT added | fastapi, python-doctor, api-design | A draft-signed access and refresh token decodes, a refresh token is refused as access and vice versa (Hypothesis round trips); a draft bcrypt hash verifies, a 256-character password hashes; a slice with an unbound required port fails start; a fixture table with `user_id` and no account-data spec fails the registry test; `lint-imports` passes with the pure domain |
+| 2 | **Accounts, directory and registration.** Tables `users`, `user_consents`, `pending_registrations`, `directory_entries` (revisions per home); registration routing keys in Valkey; directory service with the 60 s cache and fallback; `POST /v1/auth/register`, `/register/verify`, `/register/resend`; verification-code and "someone tried to register" emails in 16 languages; `AccountRegistered`; pending and orphan sweeps; Turnstile client, fail-closed (ID-D1) | fastapi, python-doctor, api-design, data-storage, consistency-coordination, Docker ×4 | Two concurrent verifications of one email in different homes: exactly one account, the other 409; a second registration of the same email cannot take over the first; a RU registration leaves only `email_hmac`, ids and home in the EU tables (test reads every EU table); 5 wrong codes lock the registration whatever the resends; directory down → registration 503 |
+| 3 | **Sign-in and sessions.** `refresh_sessions`, `login_events` (partitioned), `password_reset_tokens`; `POST /v1/auth/login`, `/refresh`, `/logout`, `GET /v1/auth/me` with `MeContribution` defaults; the authenticator and `PrincipalDep`; account-state markers; cookies and CSRF; adaptive captcha and failure counters; password forgot and reset; `POST /v1/me/password`; sign-in latency measured for RU and EU and recorded in §3.6 | fastapi, python-doctor, api-design, resilience-failure, caching, Docker ×4 | The four native routes leave `native_routes_not_served.json` and pass the D1 gate; every `detail` string of §3.4 is pinned by a test; refresh reuse revokes the family and survives the rollback; the double-refresh grace works; a ban mid-session gives 403 `account_banned` on the next request; Valkey down → requests pass on the signature, refresh still checks the home; directory down → sign-in by cache |
+| 4 | **Desktop sign-in and devices.** `POST /v1/auth/desktop/code`, `/exchange`, `/refresh` with Valkey codes and optional PKCE; logout with a body token; `GET/DELETE /v1/me/sessions`, sign out others; `SessionsRevoked` | fastapi, python-doctor, api-design, Docker ×4 | The two native routes leave the not-served list and pass the gate; a code is accepted once under 20 concurrent exchanges; a code with a challenge needs the right verifier, a code without one does not (Windows 1.4.5 request replayed from `contracts/`); the connect page ends at `shosai://auth` (ID-D10); a person cannot revoke another's session (404) |
+| 5 | **Social sign-in.** Providers Yandex, VK, Google, GitHub (ID-D8) with visibility by country and language; signed `state`; callback and token page; encrypted tickets; `complete` and `register`; `user_identities`; linking rules | fastapi, python-doctor, api-design, resilience-failure | Provider doubles drive every path: new account after consent, existing account by subject, existing account by a provider-verified email, refused link without verification; a token issued to another client id is refused; a ticket works once; the callback never returns JSON |
+| 6 | **Profile, consents, avatar, language, Leo account tools.** `GET/PATCH /v1/me`, avatar upload and removal (ID-D4), the consent journal and `ConsentReader`, `AccountProfileReader`; core `LOCALES` per ID-D3 with its email texts; `/v1/auth/me.language` mapping; toolset `account` (`account.get_profile`, read: display name, language, timezone, plan summary when billing contributes) registered for the model-facing test | fastapi, python-doctor, api-design, agent-architecture | A consent change writes one journal row and is seen by the next `CallContext`; withdrawing cross-border consent without the confirmed warning is refused (422); an avatar with a PNG name but a script body is refused; the tool spec passes the model-facing English test and its handler reads only the caller's account |
+| 7 | **Export and deletion.** `data_export_jobs`, `account_deletions`; the registry runner; identity's and core's handlers; export ZIP to the home's bucket with the ready email; `POST /v1/me/deletion` (ID-D5): the 7-day window with the hidden state, cancellation by sign-in, the erasure saga after `erase_at`, directory release in the EU, anonymisation; the deletion events; the warning-confirmed withdrawal of cross-border consent is already in step 6; sweeps | fastapi, python-doctor, data-storage, task-scheduling, messaging-streaming, Docker ×4 | A scheduled account cannot use any session and its data is served to nobody; a sign-in on day 6 restores everything unchanged; on day 8 (test clock) no row with the account's id remains in any covered table except those kept by law, no object under its prefixes, the email registers again; a handler failing twice and then succeeding leaves one result; the export archive contains every covered table of the account and nothing of another account |
+| 8 | **Operators.** `operator_roles`, `operator_audit_events` (EU, partitioned, no UPDATE or DELETE for the application role); `require_operator`; `shosai identity grant-operator` CLI for the first owner; `/v1/admin/users*` search and card with F6 spend; block, unblock, ban through the account-state service; `/v1/admin/operators*` | fastapi, python-doctor, api-design, Docker ×4 | A request without the role is 403 on every admin route (parametrised over the router); every action writes one audit row in its transaction, and an UPDATE on the audit table fails for the application role; search by email reaches the right home, by name merges both; the last owner cannot be removed |
+| 9 | **Account transfer saga.** `home_transfers`; copy, verify, switch, bump, purge per handler, objects copied between the homes' buckets with identical keys; `AccountTransferred`; operator routes; refusal while §22 is open | fastapi, python-doctor, consistency-coordination, task-scheduling, resilience-failure, Docker ×4 | A transfer RU → EU and back leaves identical data by manifest; a crash injected after every step resumes to the same end state; a cancel before the directory switch leaves the source untouched; old tokens stop working after the switch |
+| 10 | **Cabinet: sign-in screens and session.** Standalone routes `/app/login`, `/app/register` (with code entry), `/app/reset`, `/app/connect` (ID-D7), social completion, designed in the cabinet's visual language and shown to the owner as screenshots before merge (SM-7); the API client composition with bearer, refresh and 401 handling across tabs; an auth guard for both panels; shell user menu with the real person and Log out; the `ui_language` cookie synced with `PATCH /v1/me`; `features/identity` on the cabinet side | vercel-react-best-practices, vercel-composition-patterns, vercel-react-view-transitions, web-design-guidelines, react-doctor | Sign-in, registration with code, reset and the desktop connect flow work against the local backend in both themes and 16 languages; no request waterfall on boot (session and `/v1/me` in parallel); a refresh racing in two tabs signs neither out; frontend gate 100 |
+| 11 | **Cabinet: Settings › Account and Privacy, devices.** The settings resource split by owner; account fields, avatar, consents, devices, export and deletion on `/v1/me*`; identity's mocks and `docs/settings-api.md` sections retired; data-list kinds shown only when their owner serves them | the four frontend skills, react-doctor | No mock left for identity's fields; the dialog's loading, error and retry states work on the API; delete account ends at `/app/login`; frontend gate 100 |
+| 12 | **Admin: users and operator roles.** `features/identity/admin` replaces the admin-users and admin-roles templates: search, card with AI spend, block, unblock, ban; operator roles; the admin panel guarded by operator role; the operator directory reused by errors and support later | the four frontend skills, react-doctor | The screens run on the API with an operator account and refuse a person without a role; frontend gate 100 |
+| 13 | **Contract verification and staging.** The macOS and Windows request sequences of `contracts/` replayed against the composed app: password sign-in with cookie refresh, browser sign-in with and without PKCE, `/auth/me`; staging check on `shosai.tech` once F4 is done | fastapi, python-doctor | Both replays pass end to end; the D1 gate lists no identity route as not served; staging sign-in on web and desktop works (or is recorded as waiting for F4) |
+
+Steps 2–9 each add their tables in their own revision with a working downgrade. Steps 10–12 may run after step 4 in parallel with backend steps, since their API is published by then.
+
+---
+
+## 5. Documents to update on approval
+
+- STATUS.md: identity `planned`, plan link.
+- SLICE_MAP §4.2.1: three-part event names; `desktop_auth_codes` → Valkey; operator audit in the EU home.
+- DATA_MAPPING §5.1:
+  - `users` gets new columns, and the draft `username` maps to `full_name` and `display_name`;
+  - `refresh_sessions` jti columns are hashed by M1;
+  - `desktop_auth_codes` has no v2 table;
+  - `user_onboarding` is dropped;
+  - consents per ID-D2.
+- ARCHITECTURE §15 per ID-D9, §18 (Cloudflare Turnstile instead of Yandex SmartCaptcha, owner 2026-10-14), §16.4 per §3.10.
+- `contracts/draft/` stays the record of the draft (its notes say `/app/connect` must keep `whisperer://`); ADR 0045 overrides that note: browser sign-in redirects to `shosai://auth` (ID-D10), and the macOS and Windows releases that register `shosai://` are a prerequisite of M2 (STATUS).
+- ADR 0045 (identity: tokens, sessions, registration across homes, consent, deletion window, captcha, desktop scheme, slice settings and ports) and ADR 0046 (platform languages) — written with this plan.
+
+## 6. Risks
+
+| Risk | Mitigation |
+|---|---|
+| Russian sign-in at ≈ 0.65 s exceeds the spirit of nfr-7 | Measured in step 3; bcrypt cost is the only lever inside the platform, and lowering it needs the owner's consent |
+| Legal answers (ID-D2, §22) arrive late | Registration with consent and deletion do not wait; only migrated-account consent and transfers do |
+| Shipped 1.4.5 desktop builds cannot finish a browser sign-in until their release with `shosai://` (ID-D10) | Password sign-in keeps working; M2 lists the client release as a prerequisite |
+| The `/v1/auth/me` defaults hide that billing is missing | The native gate checks shape only; wave 1's exit (desktop clients end to end on staging) is judged after billing contributes |
+| Valkey outage widens the revocation window to 30 min | ID-D6 states it; refresh still checks the home |
+| Ports and slice settings are new platform mechanisms built inside a slice step | Step 1 builds them with fixture slices first, like F1 built `FeatureParts`, and the README's "Adding a slice" is updated |

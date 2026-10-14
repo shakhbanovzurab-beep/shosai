@@ -1,6 +1,6 @@
 # Shosai — Target Architecture
 
-- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033); domains and workspaces amended on 2026-10-13 by the slice map ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md), [ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
+- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033); domains and workspaces amended on 2026-10-13 by the slice map ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md), [ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)); identity amended on 2026-10-14 ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md), [ADR 0046](../adr/0046-platform-languages-follow-the-cabinet.md)). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
 - **Diagram:** [architecture.html](architecture.html).
 - **Scope:** B2C and B2B (small and mid-size companies, 5–200 seats) on one platform.
 - **Placement:** one compute plane in the EU; two data homes — Russia and the EU.
@@ -233,7 +233,7 @@
 
 | Entity | Representation | Identity | Ordering authority | Conflict rule | Durability point | Retention |
 |---|---|---|---|---|---|---|
-| Account | `users` in its home | UUID, global | home primary | all writes go to one home; writes frozen during transfer | commit before response | anonymised on deletion; directory row kept 30 days |
+| Account | `users` in its home | UUID, global | home primary | all writes go to one home; writes frozen during transfer | commit before response | deletion request: hidden and sign-in closed at once, a sign-in within 7 days cancels; then erased through the registry and anonymised; directory row kept 30 days after erasure ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)) |
 | Directory entry | `directory_entries` in the EU home | `email_hmac` PK; `user_id` unique | EU primary | unique index: first registration wins | commit | 30 days after deletion |
 | Workspace | `organizations` | UUID | workspace home; seats and plan under a row lock | one writer | commit + audit event | after contract end and export, deletion saga |
 | Membership | `memberships` | (org_id, user_id); a person may belong to several workspaces of their home | workspace home | only admins change roles; last owner stays | commit + audit event; removal ends access at the next request | row kept as `removed` |
@@ -468,7 +468,7 @@
 
 ## 15. Security
 
-- Access token: user id, home, company, `token_version`.
+- Access token: user id, home, `token_version`, token type and key id; no company or workspace claim (ADR 0039, [ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)). Bans and revocations reach live access tokens through account-state markers in Valkey, not a database read per request.
 - Refresh sessions are revocable by version bump.
 - Rights are not cached.
 - RLS on company-scoped tables.
@@ -535,6 +535,7 @@ Each of these counters must stay at zero; any non-zero value pages.
 | Outbox events older than 5 min | events delivered |
 | Dead-letter entries | inv-8 |
 | Leftovers found by the post-deletion check of an account or company | nfr-13 |
+| Directory entries without an account in their home, older than 10 min | inv-1 |
 | Access-policy decisions that disagree with RLS in the isolation self-test | inv-14 |
 | A Leo action item executed twice, or executed without approval | inv-12 |
 | An initiative suggestion delivered inside quiet hours | [ADR 0027](../adr/0027-leo-event-driven-proactivity.md) |
@@ -673,7 +674,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Realtime and integrations | Nango | pinned | OAuth proxy for connectors, one per data home |
 | Realtime and integrations | Web Push (VAPID) | — | PWA notifications |
 | Realtime and integrations | SMTP (Timeweb), two mailboxes | — | Email: account mail from one mailbox, notifications and newsletters from the other; Mailpit 1.31.5 stands in locally |
-| Realtime and integrations | Yandex SmartCaptcha | — | Form protection |
+| Realtime and integrations | Cloudflare Turnstile | — | Form protection: registration, password reset, sign-in after failures ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)) |
 | AI providers | OpenRouter | — | Chat, vision, embeddings, rerank, web search, transcription of recordings ([ADR 0043](../adr/0043-speech-providers-by-task.md)) |
 | AI providers | Jev (TypeSafe AI) through OpenRouter's Decisions API | `typesafe/jev-1.13`, pinned | Leo's Decision Layer: typed, calibrated decisions behind versioned policies with deterministic fallbacks ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)) |
 | AI providers | OpenAI Realtime | — | Streaming speech recognition of live meetings (gpt-live-transcribe, gpt-realtime-whisper) |

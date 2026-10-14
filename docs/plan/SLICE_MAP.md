@@ -258,10 +258,10 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 
 #### 1. identity
 - **Scope:** registration, email verification, password, social sign-in, cookie sessions with CSRF and rotation, desktop browser sign-in, devices and sessions (FM-5 kept), `GET /v1/me`, logout; directory by `HMAC(email)` and home routing; account transfer saga; profile, avatar, privacy switches, interface language; cross-border consent (nfr-14); the export and deletion registry every slice registers in (§14 rule 7); operator accounts and operator roles; admin users screen.
-- **Owns:** `users`, `directory_entries`, `refresh_sessions`, `password_reset_tokens`, `login_events`, `user_identities`, `user_onboarding` (only if a tour returns; §8 SM-10), `data_export_jobs` (O9), `home_transfers`, operator roles.
+- **Owns:** `users`, `directory_entries`, `refresh_sessions`, `password_reset_tokens`, `login_events`, `user_identities`, `user_consents`, `pending_registrations`, `data_export_jobs` (O9), `account_deletions`, `home_transfers`, `operator_roles`, `operator_audit_events` (EU home); desktop codes and registration routing in Valkey; `user_onboarding` dropped (SM-10). Plan: [slices/identity.md](slices/identity.md).
 - **Routes:** N and E per §3; `/v1/auth/*`, `/v1/me*`, `/v1/admin/users*`. Sign-in screens per §8 SM-7.
 - **Depends on:** F6 (email, consent flag in `CallContext`), billing (entitlements in `/me`).
-- **Emits:** `identity.account_deleted`, `identity.account_transferred`, `identity.session_revoked`.
+- **Emits:** `identity.account.registered`, `identity.account.deletion_scheduled`, `identity.account.deletion_cancelled`, `identity.account.deleted`, `identity.account.transferred`, `identity.account.blocked`, `identity.sessions.revoked` (three-part names, core's event rule; [ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)).
 - **Leo tools:** `account` toolset (read profile and plan summary with billing; `navigate` is core).
 
 #### 2. workspaces

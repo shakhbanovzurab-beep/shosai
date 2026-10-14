@@ -273,7 +273,7 @@ These start empty: `directory_domains`, `organizations`, `memberships`, `resourc
 
 | Slice | Tables | moved | transformed | derived | dropped |
 |---|---|---|---|---|---|
-| `identity` | 9 | 2 | 5 | 0 | 2 |
+| `identity` | 9 | 1 | 5 | 0 | 3 |
 | `billing` | 16 | 15 | 1 | 0 | 0 |
 | `files` | 1 | 1 | 0 | 0 | 0 |
 | `meetings` | 16 | 11 | 4 | 1 | 0 |
@@ -296,7 +296,7 @@ These start empty: `directory_domains`, `organizations`, `memberships`, `resourc
 | `rooms` | 10 | 8 | 0 | 0 | 2 |
 | F1 — Backend foundation (platform tables) | 1 | 0 | 0 | 0 | 1 |
 | F6 — Platform services | 7 | 1 | 3 | 0 | 3 |
-| **Total** | **131** | **83** | **29** | **5** | **14** |
+| **Total** | **131** | **82** | **29** | **5** | **15** |
 
 Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 dropped (columns of derived and dropped tables are counted with their table; the columns of `voice_sessions` and `translation_session`, folded into cost rows, count as transformed).
 
@@ -317,6 +317,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `avatar_url` — *moved*. Inline base64 data URL, kept in the row.
 - **New in v2:** `home` — `ru` or `eu` by rule R2.
 - **New in v2:** `org_id` — NULL: the draft has no work accounts (R3).
+- **identity plan ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)), 2026-10-14:** v2 adds `full_name` and `display_name` (both from the draft's `username`), `work_role` (NULL), `country` (NULL until the person confirms it), `avatar_key` and `state` (from `status`). The draft's `avatar_url` data URL is decoded, signature-checked and written to the RU bucket as the avatar object; `consent_*` columns become `user_consents` rows (`personal_data`, `marketing`), and the cross-border row follows the lawyer's answer (ADR 0045 point 5). Columns owned by other slices (minutes, storage, switches) move with those slices' mappings.
 - `email_verified` is always true in the draft; moved as is.
 - Anonymised accounts (R5) are moved because the money tables reference them.
 
@@ -325,8 +326,8 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **Owner → home:** own `user_id`.
 - **Rows:** only live families: `revoked_at IS NULL AND expires_at > cutover`; the rest are dropped (dead sessions, no use).
 - **Columns:** 9 of 13 move unchanged; exceptions:
-  - `current_jti` — *moved*. Verbatim; `id` is the `fid` claim, so live refresh tokens keep rotating (R6).
-  - `prev_jti` — *moved*. Verbatim (10-second double-refresh grace).
+  - `current_jti` — *transformed*. Stored as SHA-256 in `current_jti_hash` ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)); `id` is the `fid` claim, so live refresh tokens keep rotating (R6).
+  - `prev_jti` — *transformed*. SHA-256 in `prev_jti_hash` (10-second double-refresh grace).
   - `ip` — *moved*. Personal data, lives in the owner's home.
   - `user_agent` — *moved*. Personal data.
 - No sweep exists in the draft; expired rows are the bulk of the table.
@@ -341,7 +342,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 - **Owner → home:** own `user_id`.
 - **Columns:** 7, none copied.
-- One-time browser→desktop codes with a 120-second life; none survives a maintenance window and used ones have no further use. The v2 table starts empty.
+- One-time browser→desktop codes with a 120-second life; none survives a maintenance window and used ones have no further use. v2 keeps the codes in Valkey and has no such table (ADR 0045).
 
 #### `email_verification_codes` → no v2 table · **dropped**
 
@@ -365,11 +366,11 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `user_agent` — *moved*. Personal data.
 - `outcome` is always `success` in practice (no writer of `failed`).
 
-#### `user_onboarding` → `user_onboarding` · **moved**
+#### `user_onboarding` → no v2 table · **dropped**
 
 - **Owner → home:** own `user_id`.
 - **Columns:** all 13 move unchanged.
-- The onboarding tour has no screen in the new cabinet (slice map SM-10). If identity's plan confirms that no tour returns, this becomes a drop.
+- The onboarding tour has no screen in the new cabinet (slice map SM-10). **Dropped:** identity's plan confirms that no tour returns (2026-10-14); no v2 table.
 
 #### `data_export_jobs` → `data_export_jobs` · **transformed**
 
