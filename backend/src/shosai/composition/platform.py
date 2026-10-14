@@ -155,7 +155,10 @@ async def open_platform(
         for feature in features:
             with start_step(f"feature:{feature.name}"):
                 built.append(await stack.enter_async_context(feature.build(services)))
-        parts = combine_parts(built)
+        # Маршруты ссылок из писем — ядра, но api обслуживает их вместе с маршрутами срезов.
+        parts = combine_parts(
+            [FeatureParts(http_routers=(email.router(services.rate_limiter),)), *built]
+        )
         with start_step("events"):
             events = EventResources(
                 catalog=EventCatalog(platform_events(features), parts.subscriptions),

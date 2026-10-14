@@ -191,7 +191,7 @@ async def test_a_newsletter_carries_one_click_unsubscribe_and_leaves_the_notific
     news = OutgoingEmail(
         recipient="person@example.org", kind=EmailKind.NEWSLETTER, template="core.mail_check",
         locale="ar", params={"sample_code": "1", "url": "https://shosai.example"},
-        user_id=USER_ID, unsubscribe_url="https://shosai.example/v1/unsubscribe?t=abc",
+        user_id=USER_ID,
     )  # fmt: skip
     with captured_email() as captured:
         bench = mail_bench(homes.transactions, captured.port)
@@ -203,7 +203,9 @@ async def test_a_newsletter_carries_one_click_unsubscribe_and_leaves_the_notific
     html = message.get_body(preferencelist=("html",))
     assert html is not None
     assert sender == NOTIFICATIONS_MAILBOX
-    assert message["List-Unsubscribe"] == "<https://shosai.example/v1/unsubscribe?t=abc>"
+    assert message["List-Unsubscribe"].startswith(
+        "<https://shosai.example/v1/unsubscribe?t=v2.eu.newsletter."
+    )
     assert message["List-Unsubscribe-Post"] == "List-Unsubscribe=One-Click"
     assert 'dir="rtl"' in str(html.get_content())
 

@@ -6,6 +6,7 @@ from shosai.core.kernel.homes import Home
 
 SAMPLE_SECRET = "sample-secret-value"
 SAMPLE_FERNET_KEY = Fernet.generate_key().decode()
+SAMPLE_LINK_SECRET = "sample-link-secret-at-least-32-characters"
 REQUIRED_VARIABLES = (
     "ENVIRONMENT",
     *(f"HOME_{home.name}_DATABASE_URL" for home in Home),
@@ -64,6 +65,7 @@ def production_environ(**overrides: str) -> dict[str, str]:
         SMTP_ACCOUNT_PASSWORD=SAMPLE_SECRET,
         SMTP_NOTIFICATIONS_USER="info@shosai.example",
         SMTP_NOTIFICATIONS_PASSWORD=SAMPLE_SECRET,
+        EMAIL_LINK_SECRET=SAMPLE_LINK_SECRET,
     )
     for home in Home:
         del environ[f"HOME_{home.name}_MIGRATION_DATABASE_URL"]

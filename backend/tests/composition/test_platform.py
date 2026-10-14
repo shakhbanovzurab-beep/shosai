@@ -48,7 +48,8 @@ async def test_every_part_of_every_slice_is_wired_and_closed_in_reverse(
     assert [probe.name for probe in platform.probes] == [*CORE_PROBES, "notes.index"]
     assert set(statuses.values()) == {"ok"}
     assert [loop.name for loop in platform.parts.loops] == ["notes.sweep"]
-    assert (len(platform.parts.http_routers), len(platform.parts.ws_routers)) == (1, 1)
+    # HTTP: маршруты ссылок из писем (ядро) и маршрутизатор среза.
+    assert (len(platform.parts.http_routers), len(platform.parts.ws_routers)) == (2, 1)
 
 
 async def test_a_slice_writes_its_listed_events_through_the_outbox(

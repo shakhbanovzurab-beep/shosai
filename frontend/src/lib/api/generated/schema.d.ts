@@ -24,6 +24,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/unsubscribe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Unsubscribe Page
+         * @description Ask before unsubscribing; after the form, say it is done.
+         */
+        get: operations["unsubscribe_page_v1_unsubscribe_get"];
+        put?: never;
+        /**
+         * Unsubscribe
+         * @description Unsubscribe the person the token names from its kind of mail.
+         */
+        post: operations["unsubscribe_v1_unsubscribe_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -82,6 +106,14 @@ export interface components {
             /** Type */
             type: string;
         };
+        /**
+         * UnsubscribeAnswer
+         * @description The same answer for every token: nothing about the account behind it.
+         */
+        UnsubscribeAnswer: {
+            /** Unsubscribed */
+            unsubscribed: boolean;
+        };
     };
     responses: never;
     parameters: never;
@@ -108,6 +140,88 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["HealthStatus"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    unsubscribe_page_v1_unsubscribe_get: {
+        parameters: {
+            query?: {
+                t?: string;
+                done?: boolean;
+            };
+            header?: {
+                "accept-language"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/html": string;
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    unsubscribe_v1_unsubscribe_post: {
+        parameters: {
+            query?: {
+                t?: string;
+            };
+            header?: {
+                accept?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/x-www-form-urlencoded": {
+                    token?: string;
+                    /** @enum {string} */
+                    "List-Unsubscribe"?: "One-Click";
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UnsubscribeAnswer"];
+                };
+            };
+            /** @description A browser goes to the done page. */
+            303: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

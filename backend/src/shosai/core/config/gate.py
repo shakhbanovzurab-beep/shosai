@@ -24,6 +24,7 @@ SECURE_VALKEY_SCHEME = "rediss"
 # Управляемый Valkey в Timeweb не даёт TLS (ADR 0042): открытый протокол допустим только к
 # IP-адресу приватной сети. Имя хоста не годится — куда оно разрешится, при старте не проверить.
 PLAIN_VALKEY_SCHEME = "redis"
+MIN_LINK_SECRET_LENGTH: Final = 32
 PRIVATE_NETWORKS: Final = tuple(
     ip_network(network) for network in ("10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "fc00::/7")
 )
@@ -155,6 +156,11 @@ def mail_over_tls(settings: Settings) -> Iterator[GateViolation]:
     ):
         if not user or password is None:
             yield GateViolation(f"{prefix}_USER", "без ящика и пароля письма этого вида не уйдут")
+    secret = email.email_link_secret
+    if secret is None or len(secret.get_secret_value()) < MIN_LINK_SECRET_LENGTH:
+        yield GateViolation(
+            "EMAIL_LINK_SECRET", "ссылки отписки подписываются секретом не короче 32 символов"
+        )
 
 
 def databases_over_tls(settings: Settings) -> Iterator[GateViolation]:

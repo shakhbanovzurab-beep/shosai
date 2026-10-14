@@ -3,13 +3,14 @@
 `enqueue` writes the row with the effect that causes it, so a rolled-back transaction sends
 nothing and a committed one is sent once by the relay. A `notification` or `newsletter` to
 a person who left that kind is skipped and counted, never written; `account` mail is never
-skipped. Secret parameters are encrypted with the Fernet key ring before they reach the row.
+skipped. A mail of those kinds to a person carries their signed unsubscribe link
+(F6-C21), naming the home of the transaction. Secret parameters are encrypted with the
+Fernet key ring before they reach the row.
 A campaign key already used for the recipient writes nothing: a repeated batch sends once.
 """
 
 import json
 from collections.abc import Mapping
-from typing import Final
 from uuid import UUID
 
 from prometheus_client import CollectorRegistry, Counter
@@ -19,11 +20,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.crypto.key_ring import EncryptionKeyMissingError, FernetKeyRing
 from shosai.core.db.transactions import transaction_info
-from shosai.core.email.messages import EmailKind, OutgoingEmail
+from shosai.core.email.links import UnsubscribeLinks
+from shosai.core.email.messages import SUPPRESSIBLE, EmailKind, OutgoingEmail
 from shosai.core.email.records import EmailMessage, EmailSuppression
+from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
-
-SUPPRESSIBLE: Final = frozenset({EmailKind.NOTIFICATION, EmailKind.NEWSLETTER})
 
 
 class ReadOnlyEmailTransactionError(Exception):
@@ -53,15 +54,18 @@ class EmailPort:
         self,
         key_ring: FernetKeyRing | None,
         domains: Mapping[EmailKind, str],
+        links: UnsubscribeLinks,
         metrics: EmailMetrics,
     ) -> None:
         self._key_ring = key_ring
+        self._links = links
         self._domains = domains
         self._metrics = metrics
 
     async def enqueue(self, session: AsyncSession, email: OutgoingEmail) -> UUID | None:
         """Write the mail in the session's transaction; None when it is not to be sent."""
-        if transaction_info(session).read_only:
+        info = transaction_info(session)
+        if info.read_only:
             raise ReadOnlyEmailTransactionError
         if email.kind in SUPPRESSIBLE and email.user_id is not None:
             left = await session.scalar(
@@ -80,8 +84,8 @@ class EmailPort:
             "id": mail_id, "user_id": email.user_id, "recipient": email.recipient,
             "locale": email.locale, "kind": email.kind.value, "template": email.template,
             "params": dict(email.params), "secrets": self._sealed(email.secrets),
-            "reply_to": email.reply_to, "unsubscribe_url": email.unsubscribe_url,
-            "campaign_key": email.campaign_key,
+            "reply_to": email.reply_to, "campaign_key": email.campaign_key,
+            "unsubscribe_url": self._unsubscribe_url(info.scope.home, email),
             "message_id": f"<{mail_id.hex}@{self._domains[email.kind]}>",
         }  # fmt: skip
         written = await session.scalar(
@@ -95,6 +99,11 @@ class EmailPort:
         )
         self._metrics.counted(email.kind, "queued" if written else "repeated")
         return written
+
+    def _unsubscribe_url(self, home: Home, email: OutgoingEmail) -> str | None:
+        if email.user_id is None:
+            return None
+        return self._links.url(home, email.user_id, email.kind)
 
     def _sealed(self, secrets: Mapping[str, str]) -> bytes | None:
         if not secrets:

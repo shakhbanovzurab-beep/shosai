@@ -27,13 +27,18 @@ class EmailKind(StrEnum):
     NEWSLETTER = "newsletter"
 
 
+# Виды, от которых человек может отписаться: у их писем ссылка и List-Unsubscribe.
+SUPPRESSIBLE: Final = frozenset({EmailKind.NOTIFICATION, EmailKind.NEWSLETTER})
+
+
 @dataclass(frozen=True, slots=True)
 class OutgoingEmail:
     """One mail to one person: the template, its language and parameters.
 
     `secrets` hold what must never be logged — codes, reset links; they are encrypted in the
-    row. `user_id` names the person whose unsubscriptions apply; a mail to an address alone
-    (an invitation to someone without an account) has none, and a newsletter always has one.
+    row. `user_id` names the person whose unsubscriptions apply, and a notification or
+    newsletter to them gets their unsubscribe link; a mail to an address alone (an
+    invitation to someone without an account) has none, and a newsletter always has one.
     """
 
     recipient: str
@@ -44,7 +49,6 @@ class OutgoingEmail:
     secrets: Mapping[str, str] = field(default_factory=dict)
     user_id: UUID | None = None
     reply_to: str | None = None
-    unsubscribe_url: str | None = None
     campaign_key: str | None = None
 
     def __post_init__(self) -> None:

@@ -227,6 +227,11 @@ class EmailSettings(SettingsSection):
     # Адреса в письмах: ссылки на сайт и кабинет, картинки макета, отписка.
     public_base_url: HttpUrl = HttpUrl("https://shosai.tech")
     support_email: str = "support@shosai.tech"
+    # Подпись ссылок отписки v2 (F6-C21): без неё в разработке письма уходят без ссылки.
+    email_link_secret: SecretStr | None = None
+    # Секрет JWT черновика: только для проверки ссылок отписки из уже отправленных писем,
+    # 24 месяца после переезда; пусто — такие ссылки ничего не меняют.
+    draft_unsubscribe_secret: SecretStr | None = None
 
 
 class AiGuardSettings(SettingsSection):

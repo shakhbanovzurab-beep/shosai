@@ -103,6 +103,8 @@ uv run --env-file ../.env shosai email check --to you@example.org --locale ru
 
 Mail with a secret (a code, a sign-in link) is written only with `FERNET_KEY` set: without it the feature's write fails loudly instead of losing the code. Generate a local key once with `uv run python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`.
 
+Notifications and newsletters to a person carry a signed unsubscribe link once `EMAIL_LINK_SECRET` is set (without it they go without one). The link opens `http://127.0.0.1:8000/v1/unsubscribe?t=…` on the local API: the page asks first, the button applies it, and the person's row appears in `email_suppressions` of the home the link names. The layout's images are served at `/email/{name}`.
+
 `shosai email check` needs no worker and no database: it sends one check mail of each kind (account, notification, newsletter) straight to the SMTP server from its mailbox, logs whether the server took each one, and exits with 1 if any was refused. The same command against the production mailboxes proves SMTP, TLS and both logins. The mails use every block of the layout, so they also show how mail looks in a client, light and dark.
 
 ## Run the frontend

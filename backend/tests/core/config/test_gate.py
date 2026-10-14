@@ -91,6 +91,8 @@ def test_staging_without_trusted_proxies_refuses_start() -> None:
         (production_environ(SMTP_SECURITY="none"), "SMTP_SECURITY"),
         (without(production_environ(), "SMTP_ACCOUNT_PASSWORD"), "SMTP_ACCOUNT_USER"),
         (without(production_environ(), "SMTP_NOTIFICATIONS_USER"), "SMTP_NOTIFICATIONS_USER"),
+        (without(production_environ(), "EMAIL_LINK_SECRET"), "EMAIL_LINK_SECRET"),
+        (production_environ(EMAIL_LINK_SECRET="short-secret"), "EMAIL_LINK_SECRET"),
         (production_environ(CORS_ALLOWED_ORIGINS="*"), "CORS_ALLOWED_ORIGINS"),
         (without(production_environ(), "HOME_RU_DATABASE_URL"), "HOME_RU_DATABASE_URL"),
         (without(production_environ(), "HOME_EU_DATABASE_URL"), "HOME_EU_DATABASE_URL"),

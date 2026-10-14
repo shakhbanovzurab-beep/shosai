@@ -26,11 +26,10 @@ import structlog
 from pydantic import SecretStr
 
 from shosai.core.config.sections import EmailSettings, SmtpSecurity
-from shosai.core.email.messages import EmailKind
+from shosai.core.email.messages import SUPPRESSIBLE, EmailKind
 from shosai.core.email.templates import RenderedEmail
 
 SMTP_TIMEOUT: Final = 20.0
-LIST_UNSUBSCRIBED: Final = frozenset({EmailKind.NOTIFICATION, EmailKind.NEWSLETTER})
 log = structlog.stdlib.get_logger(__name__)
 
 
@@ -115,7 +114,7 @@ class SmtpSender:
         message["Auto-Submitted"] = "auto-generated"
         if envelope.reply_to:
             message["Reply-To"] = envelope.reply_to
-        if envelope.unsubscribe_url and envelope.kind in LIST_UNSUBSCRIBED:
+        if envelope.unsubscribe_url and envelope.kind in SUPPRESSIBLE:
             message["List-Unsubscribe"] = f"<{one_line(envelope.unsubscribe_url)}>"
             message["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
         message.set_content(rendered.text)

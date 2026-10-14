@@ -36,6 +36,157 @@
           }
         }
       }
+    },
+    "/v1/unsubscribe": {
+      "get": {
+        "tags": [
+          "email"
+        ],
+        "summary": "Unsubscribe Page",
+        "description": "Ask before unsubscribing; after the form, say it is done.",
+        "operationId": "unsubscribe_page_v1_unsubscribe_get",
+        "parameters": [
+          {
+            "name": "t",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "default": "",
+              "title": "T"
+            }
+          },
+          {
+            "name": "done",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Done"
+            }
+          },
+          {
+            "name": "accept-language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Accept-Language"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "email"
+        ],
+        "summary": "Unsubscribe",
+        "description": "Unsubscribe the person the token names from its kind of mail.",
+        "operationId": "unsubscribe_v1_unsubscribe_post",
+        "parameters": [
+          {
+            "name": "t",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 512,
+              "default": "",
+              "title": "T"
+            }
+          },
+          {
+            "name": "accept",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 1024,
+              "default": "",
+              "title": "Accept"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnsubscribeAnswer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "303": {
+            "description": "A browser goes to the done page."
+          }
+        },
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "maxLength": 512
+                  },
+                  "List-Unsubscribe": {
+                    "type": "string",
+                    "enum": [
+                      "One-Click"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -176,6 +327,20 @@
         ],
         "title": "InvalidField",
         "description": "Where a request failed validation and why; the submitted value is never echoed."
+      },
+      "UnsubscribeAnswer": {
+        "properties": {
+          "unsubscribed": {
+            "type": "boolean",
+            "title": "Unsubscribed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "unsubscribed"
+        ],
+        "title": "UnsubscribeAnswer",
+        "description": "The same answer for every token: nothing about the account behind it."
       }
     }
   }
