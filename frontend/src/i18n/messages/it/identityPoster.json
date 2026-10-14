@@ -1,0 +1,67 @@
+{
+  "tagline": "Spazio di lavoro con IA",
+  "rails": {
+    "meeting": "01 · Riunione",
+    "speakers": "02 · Chi ha detto cosa",
+    "facts": "03 · Fatti",
+    "leo": "04 · Leo"
+  },
+  "cast": {
+    "first": "Giulia",
+    "second": "Marco",
+    "third": "Elena",
+    "fourth": "Luca"
+  },
+  "talk": {
+    "line01": "Passiamo alla release. Al cliente abbiamo promesso venerdì.",
+    "line02": "Il backend è pronto, ma Apple Pay non ha ancora superato i test.",
+    "line03": "Da me si rompe sui rimborsi — ieri ho mandato il log.",
+    "line04": "Ho visto il log. È un timeout della banca, non il nostro codice.",
+    "line05": "Il cliente chiede se la demo è ancora martedì.",
+    "line06": "Demo martedì, se chiudiamo i rimborsi entro lunedì.",
+    "line07": "Lunedì non è realistico, la regressione richiede un giorno in più.",
+    "line08": "Posso rilasciare senza rimborsi, dietro un flag.",
+    "line09": "Allora fissiamo: release venerdì, rimborsi nello sprint successivo.",
+    "line10": "Avviso il cliente che i rimborsi arrivano dopo.",
+    "line11": "E qualcuno deve aggiornare la documentazione dei webhook.",
+    "line12": "Marco, prendi tu la documentazione?",
+    "line13": "La prendo, ma non prima di mercoledì.",
+    "line14": "Le note le mando oggi."
+  },
+  "facts": {
+    "deadline": {
+      "label": "Scadenza",
+      "value": "Release venerdì, demo martedì"
+    },
+    "decision": {
+      "label": "Decisione",
+      "value": "Rimborsi nello sprint successivo, dietro un flag"
+    },
+    "promise": {
+      "label": "Impegno",
+      "value": "Documentazione webhook — Marco, da mercoledì"
+    }
+  },
+  "leo": {
+    "note1": {
+      "when": "Leo · oggi, {time}",
+      "body": "Marco ha promesso la documentazione dei webhook da mercoledì. È domani — glielo ricordo?"
+    },
+    "note2": {
+      "when": "Leo · oggi, {time}",
+      "body": "Luca doveva mandare le note oggi. Non sono ancora partite."
+    },
+    "note3": {
+      "when": "Leo · domani, {time}",
+      "body": "Elena ha chiesto un giorno in più per la regressione, ma la release resta venerdì. Ne parlo allo standup?"
+    },
+    "note4": {
+      "when": "Leo · oggi, {time}",
+      "body": "Il cliente non sa ancora che i rimborsi slittano. Lo ricordo a Luca?"
+    }
+  },
+  "ask": {
+    "placeholder": "Chiedi della riunione…",
+    "button": "Chiedi"
+  }
+}

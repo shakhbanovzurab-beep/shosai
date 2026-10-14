@@ -1,0 +1,13 @@
+{
+  "metaTitle": "連接電腦版應用程式",
+  "title": "連接電腦版應用程式",
+  "description": "你電腦上的 Shosai 應用程式要求以 {email} 登入。",
+  "submit": "連接",
+  "cancel": "稍後再說",
+  "opening": "正在開啟應用程式…",
+  "doneTitle": "應用程式已連接",
+  "done": "請回到 Shosai 應用程式。你可以關閉這個分頁。",
+  "openAgain": "再次開啟應用程式",
+  "invalidTitle": "這個連結不完整",
+  "invalid": "請從 Shosai 應用程式重新開始連接。"
+}

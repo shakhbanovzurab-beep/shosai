@@ -19,9 +19,10 @@ import {
 } from "@/components/ui/dropdown-menu-items";
 import { DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger } from "@/components/ui/dropdown-menu-sub";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
+import { useMe } from "@/features/identity/model/session-store";
+import { useAccountLanguage } from "@/features/identity/model/use-account-language";
+import { useSignOut } from "@/features/identity/model/use-sign-out";
 import { useOpenSettings } from "@/features/settings/model/dialog-store";
-import { useAccountProfile } from "@/features/settings/model/settings-hooks";
-import { useSwitchLanguage } from "@/hooks/use-switch-language";
 import { LANGUAGES } from "@/lib/language";
 import { Link } from "@/lib/navigation";
 import { getInitials } from "@/lib/utils";
@@ -31,8 +32,12 @@ import { downloadAppItem } from "../navigation";
 
 export function NavUser({ panel }: { readonly panel: Panel }) {
   const t = useTranslations("shell");
-  // Once settings load, the photo and name the user set there; until then, the demo account's.
-  const { name, email, avatar } = useAccountProfile();
+  const signOut = useSignOut();
+  // The signed-in person; the panel's guard has loaded them before the shell renders.
+  const me = useMe();
+  const name = me?.display_name || me?.full_name || "";
+  const email = me?.email ?? "";
+  const avatar = me?.avatar_url ?? "";
 
   return (
     <SidebarMenu>
@@ -74,7 +79,7 @@ export function NavUser({ panel }: { readonly panel: Panel }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {panel === "dashboard" ? <UserPanelItems /> : null}
-            <DropdownMenuItem>
+            <DropdownMenuItem onSelect={signOut}>
               <LogOut className="rtl:-scale-x-100" />
               {t("userMenu.logOut")}
             </DropdownMenuItem>
@@ -89,7 +94,7 @@ export function NavUser({ panel }: { readonly panel: Panel }) {
 function UserPanelItems() {
   const t = useTranslations("shell");
   const openSettings = useOpenSettings();
-  const { language, switchLanguage } = useSwitchLanguage();
+  const { language, switchLanguage } = useAccountLanguage();
 
   return (
     <>

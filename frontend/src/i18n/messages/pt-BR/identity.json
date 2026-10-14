@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "Idioma da interface",
+    "or": "ou"
+  },
+  "signIn": {
+    "metaTitle": "Entrar",
+    "title": "Que bom ter você de volta",
+    "description": "Entre no seu espaço de trabalho do Shosai.",
+    "email": "E-mail",
+    "password": "Senha",
+    "submit": "Entrar",
+    "forgot": "Esqueceu sua senha?",
+    "noAccount": "Primeira vez no Shosai?",
+    "register": "Criar conta"
+  },
+  "social": {
+    "continueWith": "Continuar com {provider}",
+    "consentMetaTitle": "Concluir cadastro",
+    "consentTitle": "Só mais um passo",
+    "consentDescription": "Este é seu primeiro acesso com {provider}. Confirme seu país e seus consentimentos uma única vez, e sua conta estará pronta.",
+    "consentSubmit": "Continuar",
+    "back": "Voltar ao login"
+  },
+  "problems": {
+    "invalid_credentials": "E-mail ou senha incorretos.",
+    "captcha_failed": "Conclua a verificação abaixo e tente novamente.",
+    "email_not_verified": "Este e-mail ainda não foi confirmado. Termine o cadastro com o código do e-mail.",
+    "account_banned": "Esta conta está encerrada.",
+    "account_frozen": "Esta conta está pausada. Fale com o suporte para saber o motivo.",
+    "account_disabled": "Esta conta não pode ser usada agora.",
+    "account_unavailable": "Esta conta não pode entrar. Fale com o suporte.",
+    "rate_limited": "Muitas tentativas. Aguarde um minuto e tente novamente.",
+    "invalid_email": "Verifique o endereço de e-mail.",
+    "invalid_country": "Escolha seu país na lista.",
+    "email_registered": "Já existe uma conta com este e-mail. Entre nela.",
+    "password_too_short": "A senha precisa ter pelo menos 8 caracteres.",
+    "password_too_long": "A senha é longa demais. Use até 256 caracteres.",
+    "personal_data_consent_required": "Para criar uma conta, aceite os termos e o tratamento dos seus dados pessoais.",
+    "cross_border_consent_required": "Para uma conta na Rússia, concorde com a transferência internacional dos seus dados.",
+    "invalid_code": "O código está errado ou expirou. Verifique o e-mail ou peça um novo código.",
+    "registration_locked": "Muitos códigos errados. Comece o cadastro de novo.",
+    "registration_unavailable": "O cadastro está indisponível por um instante. Tente novamente em alguns segundos.",
+    "resend_too_soon": "Um novo código foi enviado há pouco. Aguarde um pouco antes de pedir outro.",
+    "too_many_resends": "Não é possível enviar mais códigos para este cadastro. Comece de novo mais tarde.",
+    "invalid_token": "Este link não é mais válido. Peça um novo.",
+    "social_login_cancelled": "O acesso foi cancelado.",
+    "social_email_required": "O serviço não compartilhou seu e-mail. Cadastre-se com seu e-mail.",
+    "social_provider_disabled": "Esta forma de entrar não está disponível agora.",
+    "social_provider_failed": "O serviço não respondeu. Tente novamente.",
+    "social_state_invalid": "O acesso demorou demais. Comece de novo.",
+    "social_link_requires_sign_in": "Este e-mail já tem uma conta Shosai. Entre primeiro com sua senha.",
+    "social_unavailable": "Entrar com serviços está indisponível por um instante. Use seu e-mail ou tente mais tarde.",
+    "unknown": "Algo deu errado. Tente novamente em instantes.",
+    "requestId": "ID da solicitação para o suporte: {id}"
+  },
+  "captcha": {
+    "label": "Verificação de segurança",
+    "loading": "Carregando a verificação…",
+    "failed": "A verificação não carregou. Verifique sua conexão ou permita esta página no seu bloqueador e tente novamente.",
+    "unavailable": "A verificação não está disponível agora. Tente mais tarde.",
+    "retry": "Recarregar a verificação"
+  },
+  "session": {
+    "languageNotSaved": "O idioma mudou neste dispositivo, mas não foi salvo na sua conta.",
+    "signOutUnconfirmed": "Você saiu neste dispositivo, mas o servidor não confirmou. Quando estiver online, entre e saia de novo."
+  }
+}

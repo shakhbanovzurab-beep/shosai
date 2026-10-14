@@ -1,0 +1,13 @@
+{
+  "metaTitle": "Masaüstü uygulamasını bağla",
+  "title": "Masaüstü uygulamasını bağla",
+  "description": "Bilgisayarınızdaki Shosai uygulaması {email} olarak giriş yapmak istiyor.",
+  "submit": "Bağla",
+  "cancel": "Şimdi değil",
+  "opening": "Uygulama açılıyor…",
+  "doneTitle": "Uygulama bağlandı",
+  "done": "Shosai uygulamasına dönün. Bu sekmeyi kapatabilirsiniz.",
+  "openAgain": "Uygulamayı yeniden aç",
+  "invalidTitle": "Bu bağlantı eksik",
+  "invalid": "Bağlantıyı Shosai uygulamasından yeniden başlatın."
+}

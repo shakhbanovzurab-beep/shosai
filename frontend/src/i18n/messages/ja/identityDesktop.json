@@ -1,0 +1,13 @@
+{
+  "metaTitle": "デスクトップアプリを接続",
+  "title": "デスクトップアプリを接続",
+  "description": "パソコンの Shosai アプリが {email} としてログインしようとしています。",
+  "submit": "接続",
+  "cancel": "後で",
+  "opening": "アプリを開いています…",
+  "doneTitle": "アプリを接続しました",
+  "done": "Shosai アプリに戻ってください。このタブは閉じてかまいません。",
+  "openAgain": "アプリをもう一度開く",
+  "invalidTitle": "このリンクは不完全です",
+  "invalid": "Shosai アプリから接続をやり直してください。"
+}

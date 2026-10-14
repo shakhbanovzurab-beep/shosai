@@ -1,0 +1,67 @@
+{
+  "tagline": "AI-werkruimte",
+  "rails": {
+    "meeting": "01 · Vergadering",
+    "speakers": "02 · Wie zei wat",
+    "facts": "03 · Feiten",
+    "leo": "04 · Leo"
+  },
+  "cast": {
+    "first": "Sanne",
+    "second": "Daan",
+    "third": "Lotte",
+    "fourth": "Bram"
+  },
+  "talk": {
+    "line01": "Even over de release. We hebben de klant vrijdag beloofd.",
+    "line02": "De backend is klaar, maar Apple Pay is nog niet door de tests.",
+    "line03": "Bij mij gaat het mis bij terugbetalingen — ik heb gisteren de log gestuurd.",
+    "line04": "Log gezien. Dat is een time-out van de bank, niet onze code.",
+    "line05": "De klant vraagt of de demo nog steeds dinsdag is.",
+    "line06": "Demo op dinsdag, als we de terugbetalingen maandag afronden.",
+    "line07": "Maandag is niet realistisch, de regressietest heeft nog een dag nodig.",
+    "line08": "Ik kan zonder terugbetalingen releasen, achter een flag.",
+    "line09": "Dan leggen we het vast: release vrijdag, terugbetalingen volgende sprint.",
+    "line10": "Ik laat de klant weten dat de terugbetalingen later komen.",
+    "line11": "En iemand moet de webhook-docs bijwerken.",
+    "line12": "Daan, neem jij de docs?",
+    "line13": "Doe ik, maar niet voor woensdag.",
+    "line14": "Ik stuur de notities vandaag rond."
+  },
+  "facts": {
+    "deadline": {
+      "label": "Deadline",
+      "value": "Release vrijdag, demo dinsdag"
+    },
+    "decision": {
+      "label": "Besluit",
+      "value": "Terugbetalingen volgende sprint, achter een flag"
+    },
+    "promise": {
+      "label": "Afspraak",
+      "value": "Webhook-docs — Daan, vanaf woensdag"
+    }
+  },
+  "leo": {
+    "note1": {
+      "when": "Leo · vandaag, {time}",
+      "body": "Daan heeft de webhook-docs vanaf woensdag beloofd. Dat is morgen — zal ik hem eraan herinneren?"
+    },
+    "note2": {
+      "when": "Leo · vandaag, {time}",
+      "body": "Bram zou de notities vandaag rondsturen. Ze zijn nog niet verstuurd."
+    },
+    "note3": {
+      "when": "Leo · morgen, {time}",
+      "body": "Lotte vroeg om een extra dag voor de regressietest, maar de release staat nog steeds op vrijdag. Aankaarten bij de stand-up?"
+    },
+    "note4": {
+      "when": "Leo · vandaag, {time}",
+      "body": "De klant weet nog steeds niet dat de terugbetalingen later komen. Bram eraan herinneren?"
+    }
+  },
+  "ask": {
+    "placeholder": "Vraag iets over de vergadering…",
+    "button": "Vragen"
+  }
+}

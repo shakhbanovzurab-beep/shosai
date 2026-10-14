@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "Arayüz dili",
+    "or": "veya"
+  },
+  "signIn": {
+    "metaTitle": "Giriş yap",
+    "title": "Tekrar hoş geldiniz",
+    "description": "Shosai çalışma alanınıza giriş yapın.",
+    "email": "E-posta",
+    "password": "Şifre",
+    "submit": "Giriş yap",
+    "forgot": "Şifrenizi mi unuttunuz?",
+    "noAccount": "Shosai hesabınız yok mu?",
+    "register": "Hesap oluştur"
+  },
+  "social": {
+    "continueWith": "{provider} ile devam et",
+    "consentMetaTitle": "Kaydı tamamla",
+    "consentTitle": "Bir adım kaldı",
+    "consentDescription": "{provider} ile ilk kez giriş yapıyorsunuz. Ülkenizi ve onaylarınızı bir kez doğrulayın, hesabınız hazır olsun.",
+    "consentSubmit": "Devam et",
+    "back": "Girişe dön"
+  },
+  "problems": {
+    "invalid_credentials": "E-posta veya şifre yanlış.",
+    "captcha_failed": "Aşağıdaki doğrulamayı tamamlayın, sonra tekrar deneyin.",
+    "email_not_verified": "Bu e-posta henüz onaylanmadı. Kaydı e-postadaki kodla tamamlayın.",
+    "account_banned": "Bu hesap kapatıldı.",
+    "account_frozen": "Bu hesap duraklatıldı. Nedenini öğrenmek için Destek’e yazın.",
+    "account_disabled": "Bu hesap şu anda kullanılamıyor.",
+    "account_unavailable": "Bu hesapla giriş yapılamıyor. Destek’e yazın.",
+    "rate_limited": "Çok fazla deneme. Bir dakika bekleyip tekrar deneyin.",
+    "invalid_email": "E-posta adresini kontrol edin.",
+    "invalid_country": "Listeden ülkenizi seçin.",
+    "email_registered": "Bu e-postayla zaten bir hesap var. Bunun yerine giriş yapın.",
+    "password_too_short": "Şifre en az 8 karakter olmalı.",
+    "password_too_long": "Şifre çok uzun. En fazla 256 karakter kullanın.",
+    "personal_data_consent_required": "Hesap oluşturmak için koşulları ve kişisel verilerinizin işlenmesini kabul edin.",
+    "cross_border_consent_required": "Rusya’daki bir hesap için verilerinizin yurt dışına aktarılmasını onaylayın.",
+    "invalid_code": "Kod yanlış veya süresi dolmuş. E-postayı kontrol edin ya da yeni kod isteyin.",
+    "registration_locked": "Çok fazla yanlış kod girildi. Kaydı yeniden başlatın.",
+    "registration_unavailable": "Kayıt kısa bir süre için kullanılamıyor. Birkaç saniye sonra tekrar deneyin.",
+    "resend_too_soon": "Az önce yeni bir kod gönderildi. Tekrar istemeden önce biraz bekleyin.",
+    "too_many_resends": "Bu kayıt için daha fazla kod gönderilemez. Daha sonra yeniden başlayın.",
+    "invalid_token": "Bu bağlantı artık geçerli değil. Yenisini isteyin.",
+    "social_login_cancelled": "Giriş iptal edildi.",
+    "social_email_required": "Hizmet e-posta adresinizi paylaşmadı. Bunun yerine e-postanızla kaydolun.",
+    "social_provider_disabled": "Bu giriş yöntemi şu anda kullanılamıyor.",
+    "social_provider_failed": "Hizmet yanıt vermedi. Tekrar deneyin.",
+    "social_state_invalid": "Giriş çok uzun sürdü. Yeniden başlayın.",
+    "social_link_requires_sign_in": "Bu e-postanın zaten bir Shosai hesabı var. Önce şifrenizle giriş yapın.",
+    "social_unavailable": "Hizmetlerle giriş kısa bir süre için kullanılamıyor. E-postanızı kullanın veya daha sonra tekrar deneyin.",
+    "unknown": "Bir şeyler ters gitti. Biraz sonra tekrar deneyin.",
+    "requestId": "Destek için istek kimliği: {id}"
+  },
+  "captcha": {
+    "label": "Güvenlik doğrulaması",
+    "loading": "Doğrulama yükleniyor…",
+    "failed": "Doğrulama yüklenmedi. Bağlantınızı kontrol edin veya engelleyicinizde bu sayfaya izin verin, sonra tekrar deneyin.",
+    "unavailable": "Doğrulama şu anda kullanılamıyor. Daha sonra tekrar deneyin.",
+    "retry": "Doğrulamayı yeniden yükle"
+  },
+  "session": {
+    "languageNotSaved": "Dil bu cihazda değişti ama hesabınıza kaydedilmedi.",
+    "signOutUnconfirmed": "Bu cihazda çıkış yaptınız ama sunucu bunu onaylamadı. Bağlantı geldiğinde tekrar giriş yapıp çıkış yapın."
+  }
+}

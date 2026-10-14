@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "介面語言",
+    "or": "或"
+  },
+  "signIn": {
+    "metaTitle": "登入",
+    "title": "歡迎回來",
+    "description": "登入你的 Shosai 工作空間。",
+    "email": "電子郵件",
+    "password": "密碼",
+    "submit": "登入",
+    "forgot": "忘記密碼？",
+    "noAccount": "第一次使用 Shosai？",
+    "register": "建立帳號"
+  },
+  "social": {
+    "continueWith": "使用 {provider} 繼續",
+    "consentMetaTitle": "完成註冊",
+    "consentTitle": "只差一步",
+    "consentDescription": "這是你第一次使用 {provider} 登入。確認一次國家和同意事項，帳號就準備好了。",
+    "consentSubmit": "繼續",
+    "back": "返回登入"
+  },
+  "problems": {
+    "invalid_credentials": "電子郵件或密碼不正確。",
+    "captcha_failed": "請完成下方的驗證，再重新登入。",
+    "email_not_verified": "這個電子郵件尚未確認。請用郵件中的驗證碼完成註冊。",
+    "account_banned": "這個帳號已關閉。",
+    "account_frozen": "這個帳號已暫停。請聯絡支援了解原因。",
+    "account_disabled": "目前無法使用這個帳號。",
+    "account_unavailable": "這個帳號無法登入。請聯絡支援。",
+    "rate_limited": "嘗試次數過多。請等一分鐘再試。",
+    "invalid_email": "請檢查電子郵件地址。",
+    "invalid_country": "請從清單中選擇你的國家。",
+    "email_registered": "已有使用這個電子郵件的帳號。請直接登入。",
+    "password_too_short": "密碼至少需要 8 個字元。",
+    "password_too_long": "密碼太長。最多 256 個字元。",
+    "personal_data_consent_required": "如要建立帳號，請接受條款並同意處理你的個人資料。",
+    "cross_border_consent_required": "如要建立俄羅斯帳號，請同意跨境傳輸你的資料。",
+    "invalid_code": "驗證碼錯誤或已過期。請檢查郵件，或索取新的驗證碼。",
+    "registration_locked": "輸入錯誤驗證碼的次數過多。請重新開始註冊。",
+    "registration_unavailable": "暫時無法註冊。請過幾秒再試一次。",
+    "resend_too_soon": "剛剛已寄出新的驗證碼。請稍等一下再索取。",
+    "too_many_resends": "這次註冊無法再寄送更多驗證碼。請稍後重新開始。",
+    "invalid_token": "這個連結已失效。請索取新的連結。",
+    "social_login_cancelled": "已取消登入。",
+    "social_email_required": "該服務沒有提供你的電子郵件。請改用電子郵件註冊。",
+    "social_provider_disabled": "目前無法使用這個登入方式。",
+    "social_provider_failed": "服務沒有回應。請再試一次。",
+    "social_state_invalid": "登入時間過長。請重新開始。",
+    "social_link_requires_sign_in": "這個電子郵件已有 Shosai 帳號。請先用密碼登入。",
+    "social_unavailable": "暫時無法透過外部服務登入。請使用電子郵件，或稍後再試一次。",
+    "unknown": "發生錯誤。請稍後再試一次。",
+    "requestId": "提供給支援的請求 ID：{id}"
+  },
+  "captcha": {
+    "label": "安全驗證",
+    "loading": "正在載入驗證…",
+    "failed": "無法載入驗證。請檢查網路連線，或在封鎖工具中允許這個頁面，然後再試一次。",
+    "unavailable": "目前無法使用驗證。請稍後再試。",
+    "retry": "重新載入驗證"
+  },
+  "session": {
+    "languageNotSaved": "此裝置的語言已變更，但尚未儲存到你的帳號。",
+    "signOutUnconfirmed": "你已在這個裝置上登出，但伺服器尚未確認。重新連線後，請登入再登出一次。"
+  }
+}

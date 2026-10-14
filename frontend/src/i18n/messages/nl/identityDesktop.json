@@ -1,0 +1,13 @@
+{
+  "metaTitle": "Desktopapp koppelen",
+  "title": "Desktopapp koppelen",
+  "description": "De Shosai-app op je computer vraagt om in te loggen als {email}.",
+  "submit": "Koppelen",
+  "cancel": "Niet nu",
+  "opening": "App openen…",
+  "doneTitle": "De app is gekoppeld",
+  "done": "Ga terug naar de Shosai-app. Je kunt dit tabblad sluiten.",
+  "openAgain": "App opnieuw openen",
+  "invalidTitle": "Deze link is onvolledig",
+  "invalid": "Start het koppelen opnieuw vanuit de Shosai-app."
+}

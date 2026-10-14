@@ -1,0 +1,67 @@
+{
+  "tagline": "Espacio de trabajo con IA",
+  "rails": {
+    "meeting": "01 · Reunión",
+    "speakers": "02 · Quién dijo qué",
+    "facts": "03 · Hechos",
+    "leo": "04 · Leo"
+  },
+  "cast": {
+    "first": "Lucía",
+    "second": "Javier",
+    "third": "Marta",
+    "fourth": "Diego"
+  },
+  "talk": {
+    "line01": "Vamos con el lanzamiento. Al cliente le prometimos el viernes.",
+    "line02": "El backend está listo, pero Apple Pay aún no ha pasado las pruebas.",
+    "line03": "En mi equipo falla en las devoluciones — ayer envié el log.",
+    "line04": "Vi el log. Es un timeout del banco, no nuestro código.",
+    "line05": "El cliente pregunta si la demo sigue siendo el martes.",
+    "line06": "Demo el martes, si cerramos las devoluciones el lunes.",
+    "line07": "El lunes no es realista, la regresión necesita un día más.",
+    "line08": "Puedo publicar sin devoluciones, detrás de un flag.",
+    "line09": "Entonces lo fijamos: lanzamiento el viernes, devoluciones el próximo sprint.",
+    "line10": "Aviso al cliente de que las devoluciones llegan más tarde.",
+    "line11": "Y alguien tiene que actualizar la documentación de webhooks.",
+    "line12": "Javier, ¿te encargas de la documentación?",
+    "line13": "Me encargo, pero no antes del miércoles.",
+    "line14": "Hoy envío las notas."
+  },
+  "facts": {
+    "deadline": {
+      "label": "Plazo",
+      "value": "Lanzamiento el viernes, demo el martes"
+    },
+    "decision": {
+      "label": "Decisión",
+      "value": "Devoluciones el próximo sprint, detrás de un flag"
+    },
+    "promise": {
+      "label": "Compromiso",
+      "value": "Documentación de webhooks — Javier, desde el miércoles"
+    }
+  },
+  "leo": {
+    "note1": {
+      "when": "Leo · hoy, {time}",
+      "body": "Javier prometió la documentación de webhooks desde el miércoles. Es mañana — ¿se lo recuerdo?"
+    },
+    "note2": {
+      "when": "Leo · hoy, {time}",
+      "body": "Diego iba a enviar las notas hoy. Aún no han salido."
+    },
+    "note3": {
+      "when": "Leo · mañana, {time}",
+      "body": "Marta pidió un día más de regresión, pero el lanzamiento sigue siendo el viernes. ¿Lo planteo en la daily?"
+    },
+    "note4": {
+      "when": "Leo · hoy, {time}",
+      "body": "El cliente aún no sabe que las devoluciones se retrasan. ¿Se lo recuerdo a Diego?"
+    }
+  },
+  "ask": {
+    "placeholder": "Pregunta sobre la reunión…",
+    "button": "Preguntar"
+  }
+}

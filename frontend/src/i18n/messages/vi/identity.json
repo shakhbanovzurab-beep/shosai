@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "Ngôn ngữ giao diện",
+    "or": "hoặc"
+  },
+  "signIn": {
+    "metaTitle": "Đăng nhập",
+    "title": "Chào mừng bạn trở lại",
+    "description": "Đăng nhập vào không gian làm việc Shosai của bạn.",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "submit": "Đăng nhập",
+    "forgot": "Quên mật khẩu?",
+    "noAccount": "Lần đầu dùng Shosai?",
+    "register": "Tạo tài khoản"
+  },
+  "social": {
+    "continueWith": "Tiếp tục với {provider}",
+    "consentMetaTitle": "Hoàn tất đăng ký",
+    "consentTitle": "Thêm một bước nữa",
+    "consentDescription": "Đây là lần đầu bạn đăng nhập bằng {provider}. Hãy xác nhận quốc gia và các mục đồng ý một lần, rồi tài khoản của bạn sẽ sẵn sàng.",
+    "consentSubmit": "Tiếp tục",
+    "back": "Quay lại đăng nhập"
+  },
+  "problems": {
+    "invalid_credentials": "Email hoặc mật khẩu không đúng.",
+    "captcha_failed": "Hãy hoàn tất bước kiểm tra bên dưới rồi thử lại.",
+    "email_not_verified": "Email này chưa được xác nhận. Hãy hoàn tất đăng ký bằng mã trong email.",
+    "account_banned": "Tài khoản này đã bị đóng.",
+    "account_frozen": "Tài khoản này đang bị tạm dừng. Hãy liên hệ Hỗ trợ để biết lý do.",
+    "account_disabled": "Hiện không thể dùng tài khoản này.",
+    "account_unavailable": "Tài khoản này không thể đăng nhập. Hãy liên hệ Hỗ trợ.",
+    "rate_limited": "Bạn đã thử quá nhiều lần. Hãy đợi một phút rồi thử lại.",
+    "invalid_email": "Hãy kiểm tra địa chỉ email.",
+    "invalid_country": "Hãy chọn quốc gia của bạn trong danh sách.",
+    "email_registered": "Đã có tài khoản dùng email này. Hãy đăng nhập.",
+    "password_too_short": "Mật khẩu cần ít nhất 8 ký tự.",
+    "password_too_long": "Mật khẩu quá dài. Hãy dùng tối đa 256 ký tự.",
+    "personal_data_consent_required": "Để tạo tài khoản, hãy chấp nhận điều khoản và việc xử lý dữ liệu cá nhân của bạn.",
+    "cross_border_consent_required": "Với tài khoản ở Nga, hãy đồng ý chuyển dữ liệu của bạn ra nước ngoài.",
+    "invalid_code": "Mã không đúng hoặc đã hết hạn. Hãy kiểm tra email hoặc yêu cầu mã mới.",
+    "registration_locked": "Bạn đã nhập sai mã quá nhiều lần. Hãy bắt đầu đăng ký lại.",
+    "registration_unavailable": "Tạm thời chưa thể đăng ký. Hãy thử lại sau vài giây.",
+    "resend_too_soon": "Mã mới vừa được gửi. Hãy đợi một chút trước khi yêu cầu lại.",
+    "too_many_resends": "Không thể gửi thêm mã cho lần đăng ký này. Hãy bắt đầu lại sau.",
+    "invalid_token": "Liên kết này không còn hợp lệ. Hãy yêu cầu liên kết mới.",
+    "social_login_cancelled": "Đã hủy đăng nhập.",
+    "social_email_required": "Dịch vụ không chia sẻ email của bạn. Hãy đăng ký bằng email.",
+    "social_provider_disabled": "Cách đăng nhập này hiện không khả dụng.",
+    "social_provider_failed": "Dịch vụ không phản hồi. Hãy thử lại.",
+    "social_state_invalid": "Đăng nhập mất quá nhiều thời gian. Hãy bắt đầu lại.",
+    "social_link_requires_sign_in": "Email này đã có tài khoản Shosai. Hãy đăng nhập bằng mật khẩu trước.",
+    "social_unavailable": "Tạm thời chưa thể đăng nhập qua dịch vụ. Hãy dùng email hoặc thử lại sau.",
+    "unknown": "Đã xảy ra sự cố. Hãy thử lại sau giây lát.",
+    "requestId": "Mã yêu cầu để gửi Hỗ trợ: {id}"
+  },
+  "captcha": {
+    "label": "Kiểm tra bảo mật",
+    "loading": "Đang tải bước kiểm tra…",
+    "failed": "Không tải được bước kiểm tra. Hãy kiểm tra kết nối hoặc cho phép trang này trong trình chặn rồi thử lại.",
+    "unavailable": "Bước kiểm tra hiện không khả dụng. Hãy thử lại sau.",
+    "retry": "Tải lại bước kiểm tra"
+  },
+  "session": {
+    "languageNotSaved": "Ngôn ngữ đã đổi trên thiết bị này nhưng chưa được lưu vào tài khoản của bạn.",
+    "signOutUnconfirmed": "Bạn đã đăng xuất trên thiết bị này nhưng máy chủ chưa xác nhận. Khi có kết nối, hãy đăng nhập rồi đăng xuất lại."
+  }
+}

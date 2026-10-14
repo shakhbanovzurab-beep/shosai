@@ -20,6 +20,7 @@ export const LOCALIZED_SOURCES = [
   "src/features/notes/",
   "src/features/meetings/",
   "src/features/hub/",
+  "src/features/identity/",
   "src/features/workspace/domain/",
   "src/features/workspace/api/",
   "src/features/workspace/model/",

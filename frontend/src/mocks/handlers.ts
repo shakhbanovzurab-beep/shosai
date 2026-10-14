@@ -9,6 +9,7 @@ import { handlers as adminSupport } from "@/features/admin-support/mocks/handler
 import { handlers as adminWorkspaces } from "@/features/admin-workspaces/mocks/handlers";
 import { handlers as fileManager } from "@/features/file-manager/mocks/handlers";
 import { handlers as hub } from "@/features/hub/mocks/handlers";
+import { handlers as identity } from "@/features/identity/mocks/handlers";
 import { handlers as kanban } from "@/features/kanban/mocks/handlers";
 import { handlers as knowledgeBase } from "@/features/knowledge-base/mocks/handlers";
 import { handlers as leo } from "@/features/leo/mocks/handlers";
@@ -35,6 +36,7 @@ export const mockRoutes: readonly MockRoute[] = [
   ...adminWorkspaces,
   ...fileManager,
   ...hub,
+  ...identity,
   ...kanban,
   ...knowledgeBase,
   ...leo,

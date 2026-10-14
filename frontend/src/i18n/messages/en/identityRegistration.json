@@ -1,0 +1,44 @@
+{
+  "metaTitle": "Create an account",
+  "title": "Let’s get you set up",
+  "description": "Create a Shosai account. Your workspace is ready in a minute.",
+  "name": "Name",
+  "email": "Email",
+  "password": "Password",
+  "country": "Country",
+  "countryPlaceholder": "Choose your country",
+  "countryHint": "Decides where your data is stored. You can’t change it later without moving your account.",
+  "submit": "Create account",
+  "haveAccount": "Already have an account?",
+  "signIn": "Sign in",
+  "consents": {
+    "personalData": "I accept the <terms>Terms of Use</terms> and the <privacy>Privacy Policy</privacy> and agree to the processing of my personal data",
+    "crossBorder": "I agree to the cross-border transfer of my personal data so that Shosai can process it in the EU",
+    "marketing": "Send me occasional news about Shosai"
+  },
+  "strength": {
+    "label": "Password strength: {level}",
+    "levels": {
+      "weak": "weak",
+      "fair": "fair",
+      "good": "good",
+      "strong": "strong"
+    },
+    "rules": {
+      "length": "8 or more characters",
+      "case": "Upper and lower case",
+      "number": "A number",
+      "symbol": "A symbol"
+    }
+  },
+  "verify": {
+    "title": "Check your email",
+    "description": "We sent a 6-digit code to {email}. Enter it to finish.",
+    "code": "Code from the email",
+    "submit": "Confirm",
+    "resend": "Send a new code",
+    "resendIn": "You can ask for a new code in {time}",
+    "resent": "We sent a new code.",
+    "back": "Use a different email"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "tagline": "Không gian làm việc AI",
+  "rails": {
+    "meeting": "01 · Cuộc họp",
+    "speakers": "02 · Ai nói gì",
+    "facts": "03 · Dữ kiện",
+    "leo": "04 · Leo"
+  },
+  "cast": {
+    "first": "Linh",
+    "second": "Minh",
+    "third": "Thảo",
+    "fourth": "Hùng"
+  },
+  "talk": {
+    "line01": "Ta chốt phát hành nhé. Đã hứa với khách là thứ Sáu.",
+    "line02": "Backend xong rồi, nhưng Apple Pay chưa qua kiểm thử.",
+    "line03": "Trên máy tôi nó lỗi ở bước hoàn tiền — hôm qua tôi gửi log rồi.",
+    "line04": "Tôi xem log rồi. Đó là timeout phía ngân hàng, không phải code mình.",
+    "line05": "Khách hỏi demo có còn vào thứ Ba không.",
+    "line06": "Demo thứ Ba, nếu thứ Hai xong phần hoàn tiền.",
+    "line07": "Thứ Hai không thực tế, kiểm thử hồi quy cần thêm một ngày.",
+    "line08": "Tôi có thể phát hành không kèm hoàn tiền, ẩn sau flag.",
+    "line09": "Vậy chốt: phát hành thứ Sáu, hoàn tiền sang sprint sau.",
+    "line10": "Tôi sẽ báo khách là hoàn tiền có sau.",
+    "line11": "Và phải có người cập nhật tài liệu webhook.",
+    "line12": "Minh, anh nhận phần tài liệu nhé?",
+    "line13": "Tôi nhận, nhưng sớm nhất là thứ Tư.",
+    "line14": "Hôm nay tôi gửi ghi chú."
+  },
+  "facts": {
+    "deadline": {
+      "label": "Hạn chót",
+      "value": "Phát hành thứ Sáu, demo thứ Ba"
+    },
+    "decision": {
+      "label": "Quyết định",
+      "value": "Hoàn tiền sang sprint sau, ẩn sau flag"
+    },
+    "promise": {
+      "label": "Cam kết",
+      "value": "Tài liệu webhook — Minh, từ thứ Tư"
+    }
+  },
+  "leo": {
+    "note1": {
+      "when": "Leo · hôm nay, {time}",
+      "body": "Minh đã hứa làm tài liệu webhook từ thứ Tư. Đó là ngày mai — nhắc anh ấy nhé?"
+    },
+    "note2": {
+      "when": "Leo · hôm nay, {time}",
+      "body": "Hùng định gửi ghi chú hôm nay. Vẫn chưa gửi."
+    },
+    "note3": {
+      "when": "Leo · ngày mai, {time}",
+      "body": "Thảo xin thêm một ngày kiểm thử hồi quy, nhưng phát hành vẫn là thứ Sáu. Nêu ở buổi standup nhé?"
+    },
+    "note4": {
+      "when": "Leo · hôm nay, {time}",
+      "body": "Khách vẫn chưa biết hoàn tiền bị lùi. Nhắc Hùng nhé?"
+    }
+  },
+  "ask": {
+    "placeholder": "Hỏi về cuộc họp…",
+    "button": "Hỏi"
+  }
+}

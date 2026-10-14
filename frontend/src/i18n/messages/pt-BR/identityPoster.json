@@ -1,0 +1,67 @@
+{
+  "tagline": "Espaço de trabalho com IA",
+  "rails": {
+    "meeting": "01 · Reunião",
+    "speakers": "02 · Quem disse o quê",
+    "facts": "03 · Fatos",
+    "leo": "04 · Leo"
+  },
+  "cast": {
+    "first": "Ana",
+    "second": "Bruno",
+    "third": "Camila",
+    "fourth": "Rafael"
+  },
+  "talk": {
+    "line01": "Vamos ao lançamento. Prometemos sexta ao cliente.",
+    "line02": "O backend está pronto, mas o Apple Pay ainda não passou nos testes.",
+    "line03": "Na minha máquina quebra nos estornos — mandei o log ontem.",
+    "line04": "Vi o log. É timeout do banco, não é o nosso código.",
+    "line05": "O cliente pergunta se a demo continua na terça.",
+    "line06": "Demo na terça, se fecharmos os estornos até segunda.",
+    "line07": "Segunda não é realista, o regressivo precisa de mais um dia.",
+    "line08": "Posso lançar sem estornos, atrás de uma flag.",
+    "line09": "Então fica assim: lançamento sexta, estornos no próximo sprint.",
+    "line10": "Aviso o cliente que os estornos ficam para depois.",
+    "line11": "E alguém precisa atualizar a documentação dos webhooks.",
+    "line12": "Bruno, você pega a documentação?",
+    "line13": "Pego, mas não antes de quarta.",
+    "line14": "Mando as notas hoje."
+  },
+  "facts": {
+    "deadline": {
+      "label": "Prazo",
+      "value": "Lançamento sexta, demo terça"
+    },
+    "decision": {
+      "label": "Decisão",
+      "value": "Estornos no próximo sprint, atrás de flag"
+    },
+    "promise": {
+      "label": "Promessa",
+      "value": "Documentação dos webhooks — Bruno, a partir de quarta"
+    }
+  },
+  "leo": {
+    "note1": {
+      "when": "Leo · hoje, {time}",
+      "body": "Bruno prometeu a documentação dos webhooks a partir de quarta. É amanhã — quer que eu o lembre?"
+    },
+    "note2": {
+      "when": "Leo · hoje, {time}",
+      "body": "Rafael ia mandar as notas hoje. Elas ainda não foram enviadas."
+    },
+    "note3": {
+      "when": "Leo · amanhã, {time}",
+      "body": "Camila pediu mais um dia de regressivo, mas o lançamento continua na sexta. Levanto isso na daily?"
+    },
+    "note4": {
+      "when": "Leo · hoje, {time}",
+      "body": "O cliente ainda não sabe que os estornos vão atrasar. Lembro o Rafael?"
+    }
+  },
+  "ask": {
+    "placeholder": "Pergunte sobre a reunião…",
+    "button": "Perguntar"
+  }
+}

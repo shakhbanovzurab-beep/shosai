@@ -1,0 +1,13 @@
+{
+  "metaTitle": "Conectar o app para computador",
+  "title": "Conectar o app para computador",
+  "description": "O app do Shosai no seu computador pede para entrar como {email}.",
+  "submit": "Conectar",
+  "cancel": "Agora não",
+  "opening": "Abrindo o app…",
+  "doneTitle": "O app está conectado",
+  "done": "Volte ao app do Shosai. Você pode fechar esta aba.",
+  "openAgain": "Abrir o app de novo",
+  "invalidTitle": "Este link está incompleto",
+  "invalid": "Comece a conexão de novo pelo app do Shosai."
+}

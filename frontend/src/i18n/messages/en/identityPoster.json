@@ -1,0 +1,67 @@
+{
+  "tagline": "AI workspace",
+  "rails": {
+    "meeting": "01 · Meeting",
+    "speakers": "02 · Who said what",
+    "facts": "03 · Facts",
+    "leo": "04 · Leo"
+  },
+  "cast": {
+    "first": "Emma",
+    "second": "James",
+    "third": "Olivia",
+    "fourth": "Daniel"
+  },
+  "talk": {
+    "line01": "Let’s do the release. We promised the client Friday.",
+    "line02": "Backend is ready, but Apple Pay hasn’t passed tests yet.",
+    "line03": "On my machine it fails on refunds — I sent the log yesterday.",
+    "line04": "Saw the log. That’s a bank timeout, not our code.",
+    "line05": "The client is asking whether the demo is still Tuesday.",
+    "line06": "Demo on Tuesday, if we close refunds by Monday.",
+    "line07": "Monday isn’t realistic, regression needs one more day.",
+    "line08": "I can ship without refunds, behind a flag.",
+    "line09": "Then we lock it: release Friday, refunds next sprint.",
+    "line10": "I’ll warn the client that refunds come later.",
+    "line11": "And somebody has to update the webhook docs.",
+    "line12": "James, will you take the docs?",
+    "line13": "I will, but not before Wednesday.",
+    "line14": "I’ll send the notes out today."
+  },
+  "facts": {
+    "deadline": {
+      "label": "Deadline",
+      "value": "Release Friday, demo Tuesday"
+    },
+    "decision": {
+      "label": "Decision",
+      "value": "Refunds next sprint, behind a flag"
+    },
+    "promise": {
+      "label": "Promise",
+      "value": "Webhook docs — James, from Wednesday"
+    }
+  },
+  "leo": {
+    "note1": {
+      "when": "Leo · today, {time}",
+      "body": "James promised the webhook docs from Wednesday. That’s tomorrow — remind him?"
+    },
+    "note2": {
+      "when": "Leo · today, {time}",
+      "body": "Daniel meant to send the notes out today. They haven’t gone out."
+    },
+    "note3": {
+      "when": "Leo · tomorrow, {time}",
+      "body": "Olivia asked for an extra regression day, but the release is still Friday. Raise it at standup?"
+    },
+    "note4": {
+      "when": "Leo · today, {time}",
+      "body": "The client still hasn’t heard that refunds are slipping. Remind Daniel?"
+    }
+  },
+  "ask": {
+    "placeholder": "Ask about the meeting…",
+    "button": "Ask"
+  }
+}

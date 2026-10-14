@@ -1,0 +1,67 @@
+{
+  "tagline": "Ruang kerja AI",
+  "rails": {
+    "meeting": "01 · Rapat",
+    "speakers": "02 · Siapa bilang apa",
+    "facts": "03 · Fakta",
+    "leo": "04 · Leo"
+  },
+  "cast": {
+    "first": "Putri",
+    "second": "Budi",
+    "third": "Sari",
+    "fourth": "Andi"
+  },
+  "talk": {
+    "line01": "Ayo kita rilis. Kita sudah janji ke klien hari Jumat.",
+    "line02": "Backend siap, tapi Apple Pay belum lolos pengujian.",
+    "line03": "Di komputer saya, refund bermasalah — lognya sudah saya kirim kemarin.",
+    "line04": "Lognya sudah saya lihat. Itu timeout bank, bukan kode kita.",
+    "line05": "Klien menanyakan apakah demo tetap hari Selasa.",
+    "line06": "Demo Selasa, kalau refund selesai hari Senin.",
+    "line07": "Senin tidak realistis, regresi butuh satu hari lagi.",
+    "line08": "Saya bisa rilis tanpa refund, pakai flag.",
+    "line09": "Kalau begitu kita kunci: rilis Jumat, refund sprint berikutnya.",
+    "line10": "Saya kabari klien bahwa refund menyusul.",
+    "line11": "Dan dokumentasi webhook harus ada yang memperbarui.",
+    "line12": "Budi, bisa ambil dokumentasinya?",
+    "line13": "Bisa, tapi paling cepat Rabu.",
+    "line14": "Catatan rapat saya kirim hari ini."
+  },
+  "facts": {
+    "deadline": {
+      "label": "Tenggat",
+      "value": "Rilis Jumat, demo Selasa"
+    },
+    "decision": {
+      "label": "Keputusan",
+      "value": "Refund sprint berikutnya, pakai flag"
+    },
+    "promise": {
+      "label": "Janji",
+      "value": "Dokumentasi webhook — Budi, mulai Rabu"
+    }
+  },
+  "leo": {
+    "note1": {
+      "when": "Leo · hari ini, {time}",
+      "body": "Budi berjanji mengerjakan dokumentasi webhook mulai Rabu. Itu besok — saya ingatkan dia?"
+    },
+    "note2": {
+      "when": "Leo · hari ini, {time}",
+      "body": "Andi berniat mengirim catatan hari ini. Catatannya belum terkirim."
+    },
+    "note3": {
+      "when": "Leo · besok, {time}",
+      "body": "Sari minta tambahan satu hari untuk regresi, tapi rilis tetap Jumat. Saya angkat di standup?"
+    },
+    "note4": {
+      "when": "Leo · hari ini, {time}",
+      "body": "Klien belum diberi tahu bahwa refund mundur. Ingatkan Andi?"
+    }
+  },
+  "ask": {
+    "placeholder": "Tanyakan tentang rapat…",
+    "button": "Tanya"
+  }
+}

@@ -3,16 +3,18 @@ import { createBrowserRouter, type RouteObject } from "react-router";
 import { NotFoundPage } from "./errors/not-found-page";
 import { RootError } from "./errors/root-error";
 import { RouteError } from "./errors/route-error";
+import { SignedInLayout } from "./layouts/signed-in";
 import { RootLayout } from "./root/root-layout";
 import { revalidateRoot, rootLoader } from "./root/root-loader";
 import { adminPanelRoutes } from "./routes/admin-panel";
+import { operatorGuard, signedInGuard } from "./routes/guards";
 import { legacyRedirects } from "./routes/redirects";
 import { standaloneRoutes } from "./routes/standalone";
 import { userPanelRoutes } from "./routes/user-panel";
 
 /**
  * Маршруты кабинета: корень загружает язык страницы, маршрут без пути ловит ошибки страниц внутри провайдеров,
- * таблицы панелей держат страницы. `extraRoutes` — страницы только для разработки, их регистрируют моки
+ * охрана пускает в панели только вошедшего (в админку — оператора), таблицы панелей держат страницы. `extraRoutes` — страницы только для разработки, их регистрируют моки
  * (src/mocks); в production-сборку они не попадают.
  */
 export function createRouter(extraRoutes: RouteObject[] = []) {
@@ -29,8 +31,8 @@ export function createRouter(extraRoutes: RouteObject[] = []) {
         {
           ErrorBoundary: RouteError,
           children: [
-            ...userPanelRoutes,
-            ...adminPanelRoutes,
+            { loader: signedInGuard, Component: SignedInLayout, children: userPanelRoutes },
+            { loader: operatorGuard, Component: SignedInLayout, children: adminPanelRoutes },
             ...standaloneRoutes,
             ...legacyRedirects,
             ...extraRoutes,

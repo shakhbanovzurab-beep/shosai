@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "Interfacetaal",
+    "or": "of"
+  },
+  "signIn": {
+    "metaTitle": "Inloggen",
+    "title": "Welkom terug",
+    "description": "Log in bij je Shosai-werkruimte.",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "submit": "Inloggen",
+    "forgot": "Wachtwoord vergeten?",
+    "noAccount": "Nieuw bij Shosai?",
+    "register": "Account maken"
+  },
+  "social": {
+    "continueWith": "Doorgaan met {provider}",
+    "consentMetaTitle": "Registratie afronden",
+    "consentTitle": "Nog één stap",
+    "consentDescription": "Je logt voor het eerst in met {provider}. Bevestig eenmalig je land en toestemmingen, dan is je account klaar.",
+    "consentSubmit": "Doorgaan",
+    "back": "Terug naar inloggen"
+  },
+  "problems": {
+    "invalid_credentials": "Onjuist e-mailadres of wachtwoord.",
+    "captcha_failed": "Voltooi de controle hieronder en probeer het opnieuw.",
+    "email_not_verified": "Dit e-mailadres is nog niet bevestigd. Rond de registratie af met de code uit de e-mail.",
+    "account_banned": "Dit account is gesloten.",
+    "account_frozen": "Dit account is gepauzeerd. Neem contact op met Ondersteuning om te weten waarom.",
+    "account_disabled": "Dit account kan nu niet worden gebruikt.",
+    "account_unavailable": "Met dit account kun je niet inloggen. Neem contact op met Ondersteuning.",
+    "rate_limited": "Te veel pogingen. Wacht een minuut en probeer het opnieuw.",
+    "invalid_email": "Controleer het e-mailadres.",
+    "invalid_country": "Kies je land uit de lijst.",
+    "email_registered": "Er is al een account met dit e-mailadres. Log daarmee in.",
+    "password_too_short": "Het wachtwoord moet minstens 8 tekens hebben.",
+    "password_too_long": "Het wachtwoord is te lang. Gebruik maximaal 256 tekens.",
+    "personal_data_consent_required": "Accepteer de voorwaarden en de verwerking van je persoonsgegevens om een account te maken.",
+    "cross_border_consent_required": "Ga voor een account in Rusland akkoord met de grensoverschrijdende doorgifte van je gegevens.",
+    "invalid_code": "De code is onjuist of verlopen. Controleer de e-mail of vraag een nieuwe code aan.",
+    "registration_locked": "Te veel onjuiste codes. Begin opnieuw met registreren.",
+    "registration_unavailable": "Registreren is even niet mogelijk. Probeer het over een paar seconden opnieuw.",
+    "resend_too_soon": "Er is net een nieuwe code verstuurd. Wacht even voordat je er weer een aanvraagt.",
+    "too_many_resends": "Voor deze registratie kunnen geen codes meer worden verstuurd. Begin later opnieuw.",
+    "invalid_token": "Deze link is niet meer geldig. Vraag een nieuwe aan.",
+    "social_login_cancelled": "Inloggen is geannuleerd.",
+    "social_email_required": "De dienst heeft je e-mailadres niet gedeeld. Registreer je in plaats daarvan met je e-mailadres.",
+    "social_provider_disabled": "Deze inlogmethode is nu niet beschikbaar.",
+    "social_provider_failed": "De dienst reageerde niet. Probeer het opnieuw.",
+    "social_state_invalid": "Het inloggen duurde te lang. Begin opnieuw.",
+    "social_link_requires_sign_in": "Dit e-mailadres heeft al een Shosai-account. Log eerst in met je wachtwoord.",
+    "social_unavailable": "Inloggen via diensten is even niet beschikbaar. Gebruik je e-mailadres of probeer het later opnieuw.",
+    "unknown": "Er ging iets mis. Probeer het zo opnieuw.",
+    "requestId": "Aanvraag-ID voor Ondersteuning: {id}"
+  },
+  "captcha": {
+    "label": "Beveiligingscontrole",
+    "loading": "Controle laden…",
+    "failed": "De controle is niet geladen. Controleer je verbinding of sta deze pagina toe in je blocker en probeer het opnieuw.",
+    "unavailable": "De controle is nu niet beschikbaar. Probeer het later opnieuw.",
+    "retry": "Controle opnieuw laden"
+  },
+  "session": {
+    "languageNotSaved": "De taal is op dit apparaat gewijzigd, maar niet in je account opgeslagen.",
+    "signOutUnconfirmed": "Je bent op dit apparaat uitgelogd, maar de server heeft het niet bevestigd. Log opnieuw in en weer uit zodra je online bent."
+  }
+}

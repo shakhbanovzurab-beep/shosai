@@ -1,0 +1,44 @@
+{
+  "metaTitle": "Criar conta",
+  "title": "Vamos preparar tudo",
+  "description": "Crie uma conta Shosai. Seu espaço de trabalho fica pronto em um minuto.",
+  "name": "Nome",
+  "email": "E-mail",
+  "password": "Senha",
+  "country": "País",
+  "countryPlaceholder": "Escolha seu país",
+  "countryHint": "Define onde seus dados ficam armazenados. Não é possível mudar depois sem transferir sua conta.",
+  "submit": "Criar conta",
+  "haveAccount": "Já tem uma conta?",
+  "signIn": "Entrar",
+  "consents": {
+    "personalData": "Aceito os <terms>Termos de Uso</terms> e a <privacy>Política de Privacidade</privacy> e concordo com o tratamento dos meus dados pessoais",
+    "crossBorder": "Concordo com a transferência internacional dos meus dados pessoais para que o Shosai possa tratá-los na UE",
+    "marketing": "Quero receber novidades ocasionais sobre o Shosai"
+  },
+  "strength": {
+    "label": "Força da senha: {level}",
+    "levels": {
+      "weak": "fraca",
+      "fair": "razoável",
+      "good": "boa",
+      "strong": "forte"
+    },
+    "rules": {
+      "length": "8 caracteres ou mais",
+      "case": "Maiúsculas e minúsculas",
+      "number": "Um número",
+      "symbol": "Um símbolo"
+    }
+  },
+  "verify": {
+    "title": "Confira seu e-mail",
+    "description": "Enviamos um código de 6 dígitos para {email}. Digite-o para concluir.",
+    "code": "Código do e-mail",
+    "submit": "Confirmar",
+    "resend": "Enviar novo código",
+    "resendIn": "Você pode pedir um novo código em {time}",
+    "resent": "Enviamos um novo código.",
+    "back": "Usar outro e-mail"
+  }
+}

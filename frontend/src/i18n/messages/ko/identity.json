@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "인터페이스 언어",
+    "or": "또는"
+  },
+  "signIn": {
+    "metaTitle": "로그인",
+    "title": "다시 오신 것을 환영해요",
+    "description": "Shosai 워크스페이스에 로그인하세요.",
+    "email": "이메일",
+    "password": "비밀번호",
+    "submit": "로그인",
+    "forgot": "비밀번호를 잊으셨나요?",
+    "noAccount": "Shosai가 처음이신가요?",
+    "register": "계정 만들기"
+  },
+  "social": {
+    "continueWith": "{provider} 계정으로 계속하기",
+    "consentMetaTitle": "가입 마치기",
+    "consentTitle": "한 단계만 더",
+    "consentDescription": "{provider} 계정으로 처음 로그인했어요. 국가와 동의 항목을 한 번만 확인하면 계정이 준비돼요.",
+    "consentSubmit": "계속",
+    "back": "로그인으로 돌아가기"
+  },
+  "problems": {
+    "invalid_credentials": "이메일 또는 비밀번호가 올바르지 않아요.",
+    "captcha_failed": "아래 확인을 완료한 뒤 다시 로그인하세요.",
+    "email_not_verified": "아직 확인되지 않은 이메일이에요. 이메일로 받은 코드로 가입을 마치세요.",
+    "account_banned": "닫힌 계정이에요.",
+    "account_frozen": "일시 정지된 계정이에요. 이유를 알아보려면 고객 지원에 문의하세요.",
+    "account_disabled": "지금은 이 계정을 사용할 수 없어요.",
+    "account_unavailable": "이 계정으로는 로그인할 수 없어요. 고객 지원에 문의하세요.",
+    "rate_limited": "시도 횟수가 너무 많아요. 1분 뒤 다시 시도하세요.",
+    "invalid_email": "이메일 주소를 확인하세요.",
+    "invalid_country": "목록에서 국가를 선택하세요.",
+    "email_registered": "이 이메일로 만든 계정이 이미 있어요. 대신 로그인하세요.",
+    "password_too_short": "비밀번호는 8자 이상이어야 해요.",
+    "password_too_long": "비밀번호가 너무 길어요. 256자 이하로 입력하세요.",
+    "personal_data_consent_required": "계정을 만들려면 약관과 개인정보 처리에 동의하세요.",
+    "cross_border_consent_required": "러시아 계정을 만들려면 데이터의 국외 이전에 동의하세요.",
+    "invalid_code": "코드가 올바르지 않거나 만료됐어요. 이메일을 확인하거나 새 코드를 요청하세요.",
+    "registration_locked": "잘못된 코드를 너무 많이 입력했어요. 가입을 처음부터 다시 시작하세요.",
+    "registration_unavailable": "지금은 잠시 가입할 수 없어요. 몇 초 후 다시 시도하세요.",
+    "resend_too_soon": "방금 새 코드를 보냈어요. 잠시 후 다시 요청하세요.",
+    "too_many_resends": "이 가입에는 더 이상 코드를 보낼 수 없어요. 나중에 다시 시작하세요.",
+    "invalid_token": "더 이상 유효하지 않은 링크예요. 새 링크를 요청하세요.",
+    "social_login_cancelled": "로그인이 취소됐어요.",
+    "social_email_required": "서비스에서 이메일을 공유하지 않았어요. 대신 이메일로 가입하세요.",
+    "social_provider_disabled": "지금은 이 로그인 방법을 사용할 수 없어요.",
+    "social_provider_failed": "서비스가 응답하지 않았어요. 다시 시도하세요.",
+    "social_state_invalid": "로그인 시간이 너무 오래 걸렸어요. 처음부터 다시 시작하세요.",
+    "social_link_requires_sign_in": "이 이메일로 만든 Shosai 계정이 이미 있어요. 먼저 비밀번호로 로그인하세요.",
+    "social_unavailable": "지금은 잠시 외부 서비스로 로그인할 수 없어요. 이메일을 사용하거나 나중에 다시 시도하세요.",
+    "unknown": "문제가 생겼어요. 잠시 후 다시 시도하세요.",
+    "requestId": "고객 지원용 요청 ID: {id}"
+  },
+  "captcha": {
+    "label": "보안 확인",
+    "loading": "확인을 불러오는 중…",
+    "failed": "확인을 불러오지 못했어요. 연결을 확인하거나 차단 프로그램에서 이 페이지를 허용한 뒤 다시 시도하세요.",
+    "unavailable": "지금은 확인을 사용할 수 없어요. 나중에 다시 시도하세요.",
+    "retry": "확인 다시 불러오기"
+  },
+  "session": {
+    "languageNotSaved": "이 기기에서는 언어가 바뀌었지만 계정에는 저장되지 않았어요.",
+    "signOutUnconfirmed": "이 기기에서는 로그아웃했지만 서버가 확인하지 않았어요. 다시 연결되면 로그인한 뒤 다시 로그아웃하세요."
+  }
+}

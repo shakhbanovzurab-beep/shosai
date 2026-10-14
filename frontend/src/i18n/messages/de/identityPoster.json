@@ -1,0 +1,67 @@
+{
+  "tagline": "KI-Workspace",
+  "rails": {
+    "meeting": "01 · Im Meeting",
+    "speakers": "02 · Wer hat was gesagt",
+    "facts": "03 · Fakten",
+    "leo": "04 · Leo"
+  },
+  "cast": {
+    "first": "Lena",
+    "second": "Jonas",
+    "third": "Anke",
+    "fourth": "Matthias"
+  },
+  "talk": {
+    "line01": "Zum Release. Dem Kunden haben wir Freitag zugesagt.",
+    "line02": "Das Backend steht, aber Apple Pay hat die Tests noch nicht bestanden.",
+    "line03": "Bei mir bricht es bei Rückerstattungen ab — das Log habe ich gestern geschickt.",
+    "line04": "Log gesehen. Das ist ein Bank-Timeout, nicht unser Code.",
+    "line05": "Der Kunde fragt, ob die Demo noch am Dienstag ist.",
+    "line06": "Demo am Dienstag, wenn wir die Rückerstattungen bis Montag schließen.",
+    "line07": "Montag ist unrealistisch, die Regression braucht einen Tag mehr.",
+    "line08": "Ich kann ohne Rückerstattungen ausliefern, hinter einem Flag.",
+    "line09": "Dann halten wir fest: Release Freitag, Rückerstattungen im nächsten Sprint.",
+    "line10": "Ich sage dem Kunden, dass die Rückerstattungen später kommen.",
+    "line11": "Und jemand muss die Webhook-Doku aktualisieren.",
+    "line12": "Jonas, übernimmst du die Doku?",
+    "line13": "Mache ich, aber nicht vor Mittwoch.",
+    "line14": "Die Notizen verschicke ich heute."
+  },
+  "facts": {
+    "deadline": {
+      "label": "Frist",
+      "value": "Release Freitag, Demo Dienstag"
+    },
+    "decision": {
+      "label": "Entscheidung",
+      "value": "Rückerstattungen im nächsten Sprint, hinter einem Flag"
+    },
+    "promise": {
+      "label": "Zusage",
+      "value": "Webhook-Doku — Jonas, ab Mittwoch"
+    }
+  },
+  "leo": {
+    "note1": {
+      "when": "Leo · heute, {time}",
+      "body": "Jonas hat die Webhook-Doku ab Mittwoch zugesagt. Das ist morgen — soll ich ihn erinnern?"
+    },
+    "note2": {
+      "when": "Leo · heute, {time}",
+      "body": "Matthias wollte die Notizen heute verschicken. Sie sind noch nicht raus."
+    },
+    "note3": {
+      "when": "Leo · morgen, {time}",
+      "body": "Anke wollte einen Tag mehr für die Regression, aber der Release steht weiter auf Freitag. Im Standup ansprechen?"
+    },
+    "note4": {
+      "when": "Leo · heute, {time}",
+      "body": "Der Kunde weiß noch nicht, dass sich die Rückerstattungen verschieben. Matthias erinnern?"
+    }
+  },
+  "ask": {
+    "placeholder": "Frag zum Meeting…",
+    "button": "Fragen"
+  }
+}

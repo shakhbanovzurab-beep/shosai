@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "Lingua dell’interfaccia",
+    "or": "oppure"
+  },
+  "signIn": {
+    "metaTitle": "Accedi",
+    "title": "Ciao di nuovo",
+    "description": "Accedi al tuo spazio di lavoro Shosai.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Accedi",
+    "forgot": "Password dimenticata?",
+    "noAccount": "Prima volta su Shosai?",
+    "register": "Crea un account"
+  },
+  "social": {
+    "continueWith": "Continua con {provider}",
+    "consentMetaTitle": "Completa la registrazione",
+    "consentTitle": "Ancora un passaggio",
+    "consentDescription": "È il tuo primo accesso con {provider}. Conferma una sola volta il paese e i consensi, e il tuo account è pronto.",
+    "consentSubmit": "Continua",
+    "back": "Torna all’accesso"
+  },
+  "problems": {
+    "invalid_credentials": "Email o password errata.",
+    "captcha_failed": "Completa la verifica qui sotto, poi riprova.",
+    "email_not_verified": "Questa email non è ancora confermata. Completa la registrazione con il codice ricevuto via email.",
+    "account_banned": "Questo account è chiuso.",
+    "account_frozen": "Questo account è sospeso. Scrivi all’assistenza per sapere il motivo.",
+    "account_disabled": "Questo account non può essere usato ora.",
+    "account_unavailable": "Con questo account non è possibile accedere. Scrivi all’assistenza.",
+    "rate_limited": "Troppi tentativi. Attendi un minuto e riprova.",
+    "invalid_email": "Controlla l’indirizzo email.",
+    "invalid_country": "Scegli il tuo paese dall’elenco.",
+    "email_registered": "Esiste già un account con questa email. Accedi.",
+    "password_too_short": "La password deve avere almeno 8 caratteri.",
+    "password_too_long": "La password è troppo lunga. Usa al massimo 256 caratteri.",
+    "personal_data_consent_required": "Per creare un account, accetta i termini e il trattamento dei tuoi dati personali.",
+    "cross_border_consent_required": "Per un account in Russia, acconsenti al trasferimento transfrontaliero dei tuoi dati.",
+    "invalid_code": "Il codice è errato o scaduto. Controlla l’email o chiedi un nuovo codice.",
+    "registration_locked": "Troppi codici errati. Ricomincia la registrazione.",
+    "registration_unavailable": "La registrazione è momentaneamente non disponibile. Riprova tra qualche secondo.",
+    "resend_too_soon": "Un nuovo codice è appena stato inviato. Attendi un po’ prima di chiederne un altro.",
+    "too_many_resends": "Per questa registrazione non è possibile inviare altri codici. Ricomincia più tardi.",
+    "invalid_token": "Questo link non è più valido. Chiedine uno nuovo.",
+    "social_login_cancelled": "Accesso annullato.",
+    "social_email_required": "Il servizio non ha condiviso la tua email. Registrati invece con la tua email.",
+    "social_provider_disabled": "Questo metodo di accesso non è disponibile al momento.",
+    "social_provider_failed": "Il servizio non ha risposto. Riprova.",
+    "social_state_invalid": "L’accesso ha richiesto troppo tempo. Ricomincia.",
+    "social_link_requires_sign_in": "Questa email ha già un account Shosai. Accedi prima con la tua password.",
+    "social_unavailable": "L’accesso tramite servizi è momentaneamente non disponibile. Usa la tua email o riprova più tardi.",
+    "unknown": "Qualcosa è andato storto. Riprova tra poco.",
+    "requestId": "ID richiesta per l’assistenza: {id}"
+  },
+  "captcha": {
+    "label": "Verifica di sicurezza",
+    "loading": "Caricamento della verifica…",
+    "failed": "La verifica non si è caricata. Controlla la connessione o consenti questa pagina nel blocco contenuti, poi riprova.",
+    "unavailable": "La verifica non è disponibile al momento. Riprova più tardi.",
+    "retry": "Ricarica la verifica"
+  },
+  "session": {
+    "languageNotSaved": "La lingua è cambiata su questo dispositivo, ma non è stata salvata nel tuo account.",
+    "signOutUnconfirmed": "Sei uscito su questo dispositivo, ma il server non l’ha confermato. Quando sei di nuovo online, accedi ed esci di nuovo."
+  }
+}

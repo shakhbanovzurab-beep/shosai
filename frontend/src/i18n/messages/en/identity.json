@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "Interface language",
+    "or": "or"
+  },
+  "signIn": {
+    "metaTitle": "Sign in",
+    "title": "Welcome back",
+    "description": "Sign in to your Shosai workspace.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "forgot": "Forgot your password?",
+    "noAccount": "New to Shosai?",
+    "register": "Create an account"
+  },
+  "social": {
+    "continueWith": "Continue with {provider}",
+    "consentMetaTitle": "Finish signing up",
+    "consentTitle": "One more step",
+    "consentDescription": "This is your first sign-in with {provider}. Confirm your country and consents once, and your account is ready.",
+    "consentSubmit": "Continue",
+    "back": "Back to sign in"
+  },
+  "problems": {
+    "invalid_credentials": "Wrong email or password.",
+    "captcha_failed": "Complete the check below, then try again.",
+    "email_not_verified": "This email isn’t confirmed yet. Finish the registration with the code from the email.",
+    "account_banned": "This account is closed.",
+    "account_frozen": "This account is paused. Write to support to find out why.",
+    "account_disabled": "This account can’t be used right now.",
+    "account_unavailable": "This account can’t sign in. Write to support.",
+    "rate_limited": "Too many attempts. Wait a minute and try again.",
+    "invalid_email": "Check the email address.",
+    "invalid_country": "Choose your country from the list.",
+    "email_registered": "An account with this email already exists. Sign in instead.",
+    "password_too_short": "The password needs at least 8 characters.",
+    "password_too_long": "The password is too long. Use up to 256 characters.",
+    "personal_data_consent_required": "To create an account, accept the terms and the processing of your personal data.",
+    "cross_border_consent_required": "For an account in Russia, agree to the cross-border transfer of your data.",
+    "invalid_code": "The code is wrong or has expired. Check the email or ask for a new code.",
+    "registration_locked": "Too many wrong codes. Start the registration again.",
+    "registration_unavailable": "Registration is briefly unavailable. Try again in a few seconds.",
+    "resend_too_soon": "A new code was sent a moment ago. Wait a little before asking again.",
+    "too_many_resends": "No more codes can be sent for this registration. Start again later.",
+    "invalid_token": "This link is no longer valid. Ask for a new one.",
+    "social_login_cancelled": "Sign-in was cancelled.",
+    "social_email_required": "The service didn’t share your email. Sign up with your email instead.",
+    "social_provider_disabled": "This sign-in method isn’t available right now.",
+    "social_provider_failed": "The service didn’t respond. Try again.",
+    "social_state_invalid": "The sign-in took too long. Start again.",
+    "social_link_requires_sign_in": "This email already has a Shosai account. Sign in with your password first.",
+    "social_unavailable": "Sign-in with services is briefly unavailable. Use your email or try again later.",
+    "unknown": "Something went wrong. Try again in a moment.",
+    "requestId": "Request ID for support: {id}"
+  },
+  "captcha": {
+    "label": "Security check",
+    "loading": "Loading the check…",
+    "failed": "The check didn’t load. Check your connection or allow this page in your blocker, then try again.",
+    "unavailable": "The check isn’t available right now. Try again later.",
+    "retry": "Load the check again"
+  },
+  "session": {
+    "languageNotSaved": "The language changed on this device but wasn’t saved to your account.",
+    "signOutUnconfirmed": "You’re signed out on this device, but the server didn’t confirm it. Sign in and out again when you’re back online."
+  }
+}

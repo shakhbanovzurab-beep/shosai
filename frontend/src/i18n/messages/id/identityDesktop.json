@@ -1,0 +1,13 @@
+{
+  "metaTitle": "Hubungkan aplikasi desktop",
+  "title": "Hubungkan aplikasi desktop",
+  "description": "Aplikasi Shosai di komputer Anda meminta masuk sebagai {email}.",
+  "submit": "Hubungkan",
+  "cancel": "Nanti saja",
+  "opening": "Membuka aplikasi…",
+  "doneTitle": "Aplikasi terhubung",
+  "done": "Kembali ke aplikasi Shosai. Anda dapat menutup tab ini.",
+  "openAgain": "Buka aplikasi lagi",
+  "invalidTitle": "Tautan ini tidak lengkap",
+  "invalid": "Mulai koneksi lagi dari aplikasi Shosai."
+}

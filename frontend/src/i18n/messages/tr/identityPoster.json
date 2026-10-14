@@ -1,0 +1,67 @@
+{
+  "tagline": "Yapay zekâ çalışma alanı",
+  "rails": {
+    "meeting": "01 · Toplantı",
+    "speakers": "02 · Kim ne dedi",
+    "facts": "03 · Bilgiler",
+    "leo": "04 · Leo"
+  },
+  "cast": {
+    "first": "Elif",
+    "second": "Mehmet",
+    "third": "Zeynep",
+    "fourth": "Kerem"
+  },
+  "talk": {
+    "line01": "Sürüme geçelim. Müşteriye cumayı söz verdik.",
+    "line02": "Backend hazır ama Apple Pay henüz testleri geçmedi.",
+    "line03": "Bende iadelerde düşüyor — logu dün attım.",
+    "line04": "Logu gördüm. Banka timeout’u, bizim kod değil.",
+    "line05": "Müşteri demo hâlâ salı mı diye soruyor.",
+    "line06": "İadeleri pazartesiye kadar kapatırsak demo salı.",
+    "line07": "Pazartesi gerçekçi değil, regresyon bir gün daha istiyor.",
+    "line08": "İadeler olmadan, flag arkasında çıkabilirim.",
+    "line09": "O zaman sabitliyoruz: sürüm cuma, iadeler sonraki sprint.",
+    "line10": "Müşteriye iadelerin sonra geleceğini söylerim.",
+    "line11": "Bir de birinin webhook belgelerini güncellemesi lazım.",
+    "line12": "Mehmet, belgeleri sen alır mısın?",
+    "line13": "Alırım ama çarşambadan önce olmaz.",
+    "line14": "Notları bugün gönderirim."
+  },
+  "facts": {
+    "deadline": {
+      "label": "Son tarih",
+      "value": "Sürüm cuma, demo salı"
+    },
+    "decision": {
+      "label": "Karar",
+      "value": "İadeler sonraki sprint, flag arkasında"
+    },
+    "promise": {
+      "label": "Taahhüt",
+      "value": "Webhook belgeleri — Mehmet, çarşambadan itibaren"
+    }
+  },
+  "leo": {
+    "note1": {
+      "when": "Leo · bugün, {time}",
+      "body": "Mehmet webhook belgeleri için çarşambadan itibaren söz verdi. O gün yarın — hatırlatayım mı?"
+    },
+    "note2": {
+      "when": "Leo · bugün, {time}",
+      "body": "Kerem notları bugün gönderecekti. Henüz gönderilmedi."
+    },
+    "note3": {
+      "when": "Leo · yarın, {time}",
+      "body": "Zeynep regresyon için bir gün daha istedi ama sürüm hâlâ cuma. Standup’ta gündeme getireyim mi?"
+    },
+    "note4": {
+      "when": "Leo · bugün, {time}",
+      "body": "Müşteriye iadelerin gecikeceği hâlâ söylenmedi. Kerem’e hatırlatayım mı?"
+    }
+  },
+  "ask": {
+    "placeholder": "Toplantı hakkında sorun…",
+    "button": "Sor"
+  }
+}

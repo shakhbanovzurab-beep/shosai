@@ -1,0 +1,44 @@
+{
+  "metaTitle": "建立帳號",
+  "title": "一起開始吧",
+  "description": "建立 Shosai 帳號。工作空間一分鐘內就能準備好。",
+  "name": "姓名",
+  "email": "電子郵件",
+  "password": "密碼",
+  "country": "國家",
+  "countryPlaceholder": "選擇你的國家",
+  "countryHint": "決定你的資料儲存位置。之後除非搬移帳號，否則無法變更。",
+  "submit": "建立帳號",
+  "haveAccount": "已經有帳號了？",
+  "signIn": "登入",
+  "consents": {
+    "personalData": "我接受<terms>使用條款</terms>和<privacy>隱私權政策</privacy>，並同意處理我的個人資料",
+    "crossBorder": "我同意跨境傳輸我的個人資料，讓 Shosai 能在歐盟處理",
+    "marketing": "偶爾寄送 Shosai 最新動態給我"
+  },
+  "strength": {
+    "label": "密碼強度：{level}",
+    "levels": {
+      "weak": "弱",
+      "fair": "普通",
+      "good": "良好",
+      "strong": "強"
+    },
+    "rules": {
+      "length": "8 個字元以上",
+      "case": "大寫和小寫字母",
+      "number": "數字",
+      "symbol": "符號"
+    }
+  },
+  "verify": {
+    "title": "查看你的電子郵件",
+    "description": "我們已將 6 位數驗證碼寄到 {email}。輸入驗證碼即可完成。",
+    "code": "郵件中的驗證碼",
+    "submit": "確認",
+    "resend": "寄送新的驗證碼",
+    "resendIn": "{time} 後可以索取新的驗證碼",
+    "resent": "已寄出新的驗證碼。",
+    "back": "使用其他電子郵件"
+  }
+}

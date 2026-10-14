@@ -1,0 +1,13 @@
+{
+  "metaTitle": "Conectar la app de escritorio",
+  "title": "Conectar la app de escritorio",
+  "description": "La app de Shosai en tu equipo pide iniciar sesión como {email}.",
+  "submit": "Conectar",
+  "cancel": "Ahora no",
+  "opening": "Abriendo la app…",
+  "doneTitle": "La app está conectada",
+  "done": "Vuelve a la app de Shosai. Puedes cerrar esta pestaña.",
+  "openAgain": "Abrir la app de nuevo",
+  "invalidTitle": "Este enlace está incompleto",
+  "invalid": "Vuelve a iniciar la conexión desde la app de Shosai."
+}

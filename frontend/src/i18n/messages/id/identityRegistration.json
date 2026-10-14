@@ -1,0 +1,44 @@
+{
+  "metaTitle": "Buat akun",
+  "title": "Mari kita siapkan",
+  "description": "Buat akun Shosai. Ruang kerja Anda siap dalam satu menit.",
+  "name": "Nama",
+  "email": "Email",
+  "password": "Kata sandi",
+  "country": "Negara",
+  "countryPlaceholder": "Pilih negara Anda",
+  "countryHint": "Menentukan tempat data Anda disimpan. Anda tidak dapat mengubahnya nanti tanpa memindahkan akun.",
+  "submit": "Buat akun",
+  "haveAccount": "Sudah punya akun?",
+  "signIn": "Masuk",
+  "consents": {
+    "personalData": "Saya menerima <terms>Ketentuan Penggunaan</terms> dan <privacy>Kebijakan Privasi</privacy> serta menyetujui pemrosesan data pribadi saya",
+    "crossBorder": "Saya menyetujui transfer data pribadi saya ke luar negeri agar Shosai dapat memprosesnya di UE",
+    "marketing": "Kirimi saya kabar sesekali tentang Shosai"
+  },
+  "strength": {
+    "label": "Kekuatan kata sandi: {level}",
+    "levels": {
+      "weak": "lemah",
+      "fair": "cukup",
+      "good": "baik",
+      "strong": "kuat"
+    },
+    "rules": {
+      "length": "8 karakter atau lebih",
+      "case": "Huruf besar dan kecil",
+      "number": "Satu angka",
+      "symbol": "Satu simbol"
+    }
+  },
+  "verify": {
+    "title": "Periksa email Anda",
+    "description": "Kami mengirim kode 6 digit ke {email}. Masukkan kode untuk menyelesaikan.",
+    "code": "Kode dari email",
+    "submit": "Konfirmasi",
+    "resend": "Kirim kode baru",
+    "resendIn": "Anda dapat meminta kode baru dalam {time}",
+    "resent": "Kami telah mengirim kode baru.",
+    "back": "Gunakan email lain"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "forgot": {
+    "metaTitle": "Wachtwoord opnieuw instellen",
+    "title": "Wachtwoord opnieuw instellen",
+    "description": "Vul het e-mailadres van je account in, dan sturen we je een link om een nieuw wachtwoord in te stellen.",
+    "email": "E-mailadres",
+    "submit": "Link sturen",
+    "sentTitle": "Check je e-mail",
+    "sent": "Als er een account met {email} bestaat, is er een link onderweg om een nieuw wachtwoord in te stellen. Die werkt een uur.",
+    "back": "Terug naar inloggen"
+  },
+  "reset": {
+    "metaTitle": "Nieuw wachtwoord",
+    "title": "Nieuw wachtwoord instellen",
+    "description": "Je wordt uitgelogd op je andere apparaten.",
+    "password": "Nieuw wachtwoord",
+    "confirm": "Wachtwoord herhalen",
+    "mismatch": "De wachtwoorden komen niet overeen.",
+    "submit": "Wachtwoord opslaan",
+    "doneTitle": "Wachtwoord bijgewerkt",
+    "done": "Log in met je nieuwe wachtwoord.",
+    "signIn": "Inloggen",
+    "missingToken": "Deze link is onvolledig. Open hem opnieuw vanuit de e-mail of vraag een nieuwe aan.",
+    "requestNew": "Nieuwe link aanvragen"
+  }
+}

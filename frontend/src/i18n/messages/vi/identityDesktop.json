@@ -1,0 +1,13 @@
+{
+  "metaTitle": "Kết nối ứng dụng máy tính",
+  "title": "Kết nối ứng dụng máy tính",
+  "description": "Ứng dụng Shosai trên máy tính của bạn yêu cầu đăng nhập bằng {email}.",
+  "submit": "Kết nối",
+  "cancel": "Để sau",
+  "opening": "Đang mở ứng dụng…",
+  "doneTitle": "Đã kết nối ứng dụng",
+  "done": "Hãy quay lại ứng dụng Shosai. Bạn có thể đóng tab này.",
+  "openAgain": "Mở lại ứng dụng",
+  "invalidTitle": "Liên kết này chưa đầy đủ",
+  "invalid": "Hãy bắt đầu kết nối lại từ ứng dụng Shosai."
+}

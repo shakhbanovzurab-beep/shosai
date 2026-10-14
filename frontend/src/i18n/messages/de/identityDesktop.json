@@ -1,0 +1,13 @@
+{
+  "metaTitle": "Desktop-App verbinden",
+  "title": "Desktop-App verbinden",
+  "description": "Die Shosai-App auf deinem Computer möchte sich als {email} anmelden.",
+  "submit": "Verbinden",
+  "cancel": "Nicht jetzt",
+  "opening": "App wird geöffnet…",
+  "doneTitle": "Die App ist verbunden",
+  "done": "Kehr zur Shosai-App zurück. Du kannst diesen Tab schließen.",
+  "openAgain": "App erneut öffnen",
+  "invalidTitle": "Dieser Link ist unvollständig",
+  "invalid": "Starte die Verbindung erneut aus der Shosai-App."
+}

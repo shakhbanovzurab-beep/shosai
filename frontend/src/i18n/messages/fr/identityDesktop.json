@@ -1,0 +1,13 @@
+{
+  "metaTitle": "Connecter l’application de bureau",
+  "title": "Connecter l’application de bureau",
+  "description": "L’application Shosai de votre ordinateur demande à se connecter en tant que {email}.",
+  "submit": "Connecter",
+  "cancel": "Plus tard",
+  "opening": "Ouverture de l’application…",
+  "doneTitle": "L’application est connectée",
+  "done": "Revenez à l’application Shosai. Vous pouvez fermer cet onglet.",
+  "openAgain": "Rouvrir l’application",
+  "invalidTitle": "Ce lien est incomplet",
+  "invalid": "Relancez la connexion depuis l’application Shosai."
+}

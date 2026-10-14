@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "Bahasa antarmuka",
+    "or": "atau"
+  },
+  "signIn": {
+    "metaTitle": "Masuk",
+    "title": "Selamat datang kembali",
+    "description": "Masuk ke ruang kerja Shosai Anda.",
+    "email": "Email",
+    "password": "Kata sandi",
+    "submit": "Masuk",
+    "forgot": "Lupa kata sandi?",
+    "noAccount": "Baru di Shosai?",
+    "register": "Buat akun"
+  },
+  "social": {
+    "continueWith": "Lanjutkan dengan {provider}",
+    "consentMetaTitle": "Selesaikan pendaftaran",
+    "consentTitle": "Satu langkah lagi",
+    "consentDescription": "Ini pertama kalinya Anda masuk dengan {provider}. Konfirmasi negara dan persetujuan Anda sekali saja, dan akun Anda siap.",
+    "consentSubmit": "Lanjutkan",
+    "back": "Kembali ke halaman masuk"
+  },
+  "problems": {
+    "invalid_credentials": "Email atau kata sandi salah.",
+    "captcha_failed": "Selesaikan pemeriksaan di bawah, lalu coba lagi.",
+    "email_not_verified": "Email ini belum dikonfirmasi. Selesaikan pendaftaran dengan kode dari email.",
+    "account_banned": "Akun ini ditutup.",
+    "account_frozen": "Akun ini dijeda. Hubungi Dukungan untuk mengetahui alasannya.",
+    "account_disabled": "Akun ini tidak dapat digunakan saat ini.",
+    "account_unavailable": "Akun ini tidak dapat masuk. Hubungi Dukungan.",
+    "rate_limited": "Terlalu banyak percobaan. Tunggu satu menit, lalu coba lagi.",
+    "invalid_email": "Periksa alamat email.",
+    "invalid_country": "Pilih negara Anda dari daftar.",
+    "email_registered": "Akun dengan email ini sudah ada. Masuk saja.",
+    "password_too_short": "Kata sandi minimal 8 karakter.",
+    "password_too_long": "Kata sandi terlalu panjang. Gunakan maksimal 256 karakter.",
+    "personal_data_consent_required": "Untuk membuat akun, setujui ketentuan dan pemrosesan data pribadi Anda.",
+    "cross_border_consent_required": "Untuk akun di Rusia, setujui transfer data Anda ke luar negeri.",
+    "invalid_code": "Kode salah atau sudah kedaluwarsa. Periksa email atau minta kode baru.",
+    "registration_locked": "Terlalu banyak kode yang salah. Mulai pendaftaran lagi.",
+    "registration_unavailable": "Pendaftaran tidak tersedia untuk sementara. Coba lagi dalam beberapa detik.",
+    "resend_too_soon": "Kode baru saja dikirim. Tunggu sebentar sebelum meminta lagi.",
+    "too_many_resends": "Tidak ada lagi kode yang dapat dikirim untuk pendaftaran ini. Mulai lagi nanti.",
+    "invalid_token": "Tautan ini sudah tidak berlaku. Minta tautan baru.",
+    "social_login_cancelled": "Proses masuk dibatalkan.",
+    "social_email_required": "Layanan tidak membagikan email Anda. Daftar dengan email Anda saja.",
+    "social_provider_disabled": "Metode masuk ini tidak tersedia saat ini.",
+    "social_provider_failed": "Layanan tidak merespons. Coba lagi.",
+    "social_state_invalid": "Proses masuk terlalu lama. Mulai lagi.",
+    "social_link_requires_sign_in": "Email ini sudah memiliki akun Shosai. Masuk dulu dengan kata sandi Anda.",
+    "social_unavailable": "Masuk dengan layanan tidak tersedia untuk sementara. Gunakan email Anda atau coba lagi nanti.",
+    "unknown": "Terjadi kesalahan. Coba lagi sebentar lagi.",
+    "requestId": "ID permintaan untuk Dukungan: {id}"
+  },
+  "captcha": {
+    "label": "Pemeriksaan keamanan",
+    "loading": "Memuat pemeriksaan…",
+    "failed": "Pemeriksaan tidak termuat. Periksa koneksi Anda atau izinkan halaman ini di pemblokir, lalu coba lagi.",
+    "unavailable": "Pemeriksaan tidak tersedia saat ini. Coba lagi nanti.",
+    "retry": "Muat ulang pemeriksaan"
+  },
+  "session": {
+    "languageNotSaved": "Bahasa berubah di perangkat ini, tetapi tidak tersimpan di akun Anda.",
+    "signOutUnconfirmed": "Anda sudah keluar di perangkat ini, tetapi server belum mengonfirmasinya. Saat kembali online, masuk lalu keluar lagi."
+  }
+}

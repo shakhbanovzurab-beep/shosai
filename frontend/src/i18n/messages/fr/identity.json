@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "Langue de l’interface",
+    "or": "ou"
+  },
+  "signIn": {
+    "metaTitle": "Connexion",
+    "title": "Content de vous revoir",
+    "description": "Connectez-vous à votre espace de travail Shosai.",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "submit": "Se connecter",
+    "forgot": "Mot de passe oublié ?",
+    "noAccount": "Nouveau sur Shosai ?",
+    "register": "Créer un compte"
+  },
+  "social": {
+    "continueWith": "Continuer avec {provider}",
+    "consentMetaTitle": "Finaliser l’inscription",
+    "consentTitle": "Encore une étape",
+    "consentDescription": "C’est votre première connexion avec {provider}. Confirmez une fois votre pays et vos consentements, et votre compte est prêt.",
+    "consentSubmit": "Continuer",
+    "back": "Retour à la connexion"
+  },
+  "problems": {
+    "invalid_credentials": "E-mail ou mot de passe incorrect.",
+    "captcha_failed": "Effectuez la vérification ci-dessous, puis réessayez.",
+    "email_not_verified": "Cet e-mail n’est pas encore confirmé. Terminez l’inscription avec le code reçu par e-mail.",
+    "account_banned": "Ce compte est fermé.",
+    "account_frozen": "Ce compte est suspendu. Contactez l’assistance pour en connaître la raison.",
+    "account_disabled": "Ce compte ne peut pas être utilisé pour l’instant.",
+    "account_unavailable": "Ce compte ne peut pas se connecter. Contactez l’assistance.",
+    "rate_limited": "Trop de tentatives. Patientez une minute, puis réessayez.",
+    "invalid_email": "Vérifiez l’adresse e-mail.",
+    "invalid_country": "Choisissez votre pays dans la liste.",
+    "email_registered": "Un compte existe déjà avec cet e-mail. Connectez-vous plutôt.",
+    "password_too_short": "Le mot de passe doit contenir au moins 8 caractères.",
+    "password_too_long": "Le mot de passe est trop long. Utilisez 256 caractères au maximum.",
+    "personal_data_consent_required": "Pour créer un compte, acceptez les conditions et le traitement de vos données personnelles.",
+    "cross_border_consent_required": "Pour un compte en Russie, acceptez le transfert transfrontalier de vos données.",
+    "invalid_code": "Le code est incorrect ou a expiré. Vérifiez l’e-mail ou demandez un nouveau code.",
+    "registration_locked": "Trop de codes incorrects. Recommencez l’inscription.",
+    "registration_unavailable": "L’inscription est brièvement indisponible. Réessayez dans quelques secondes.",
+    "resend_too_soon": "Un nouveau code vient d’être envoyé. Patientez un peu avant d’en demander un autre.",
+    "too_many_resends": "Plus aucun code ne peut être envoyé pour cette inscription. Recommencez plus tard.",
+    "invalid_token": "Ce lien n’est plus valide. Demandez-en un nouveau.",
+    "social_login_cancelled": "La connexion a été annulée.",
+    "social_email_required": "Le service n’a pas partagé votre e-mail. Inscrivez-vous plutôt avec votre e-mail.",
+    "social_provider_disabled": "Ce mode de connexion n’est pas disponible pour l’instant.",
+    "social_provider_failed": "Le service n’a pas répondu. Réessayez.",
+    "social_state_invalid": "La connexion a pris trop de temps. Recommencez.",
+    "social_link_requires_sign_in": "Cet e-mail a déjà un compte Shosai. Connectez-vous d’abord avec votre mot de passe.",
+    "social_unavailable": "La connexion via des services est brièvement indisponible. Utilisez votre e-mail ou réessayez plus tard.",
+    "unknown": "Une erreur s’est produite. Réessayez dans un instant.",
+    "requestId": "ID de la demande pour l’assistance : {id}"
+  },
+  "captcha": {
+    "label": "Vérification de sécurité",
+    "loading": "Chargement de la vérification…",
+    "failed": "La vérification ne s’est pas chargée. Vérifiez votre connexion ou autorisez cette page dans votre bloqueur, puis réessayez.",
+    "unavailable": "La vérification n’est pas disponible pour l’instant. Réessayez plus tard.",
+    "retry": "Recharger la vérification"
+  },
+  "session": {
+    "languageNotSaved": "La langue a changé sur cet appareil, mais n’a pas été enregistrée dans votre compte.",
+    "signOutUnconfirmed": "Vous êtes déconnecté sur cet appareil, mais le serveur ne l’a pas confirmé. Reconnectez-vous puis déconnectez-vous une fois en ligne."
+  }
+}

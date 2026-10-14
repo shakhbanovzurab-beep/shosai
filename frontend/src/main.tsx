@@ -8,6 +8,8 @@ import { type RouteObject, RouterProvider } from "react-router";
 import { createRouter } from "./app/router";
 import { reloadOnStaleChunk } from "./app/stale-chunk-reload";
 import { startTagManagerWhenIdle } from "./features/consent/model/consent-store";
+import { accessToken, renewSession, startSession } from "./features/identity/model/session";
+import { attachSession } from "./lib/api/app-client";
 
 // Моки API включаются только в `npm run dev` (F2-D1); в production-сборке этой ветки нет.
 async function mockRoutes(): Promise<RouteObject[]> {
@@ -18,9 +20,14 @@ async function mockRoutes(): Promise<RouteObject[]> {
 
 async function start() {
   reloadOnStaleChunk();
+  attachSession({ accessToken, renew: renewSession });
   const root = document.getElementById("root");
   if (!root) throw new Error("index.html has no #root");
-  const router = createRouter(await mockRoutes());
+  const extraRoutes = await mockRoutes();
+  // Сессия начинает обновляться до роутера: охрана панелей ждёт уже идущий запрос, а не начинает его. Её
+  // отказ (сеть, 5xx) получает та же охрана и показывает страницу ошибки; здесь он только не всплывает дважды.
+  startSession().catch(() => undefined);
+  const router = createRouter(extraRoutes);
   createRoot(root).render(
     <StrictMode>
       <RouterProvider router={router} />

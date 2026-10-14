@@ -1,0 +1,26 @@
+{
+  "forgot": {
+    "metaTitle": "Passwort zurücksetzen",
+    "title": "Passwort zurücksetzen",
+    "description": "Gib die E-Mail-Adresse deines Kontos ein. Du bekommst einen Link, mit dem du ein neues Passwort festlegst.",
+    "email": "E-Mail",
+    "submit": "Link senden",
+    "sentTitle": "Prüfe deine E-Mails",
+    "sent": "Wenn ein Konto {email} nutzt, ist ein Link zum Festlegen eines neuen Passworts unterwegs. Er ist eine Stunde gültig.",
+    "back": "Zurück zur Anmeldung"
+  },
+  "reset": {
+    "metaTitle": "Neues Passwort",
+    "title": "Neues Passwort festlegen",
+    "description": "Auf deinen anderen Geräten wirst du abgemeldet.",
+    "password": "Neues Passwort",
+    "confirm": "Passwort wiederholen",
+    "mismatch": "Die Passwörter stimmen nicht überein.",
+    "submit": "Passwort speichern",
+    "doneTitle": "Passwort aktualisiert",
+    "done": "Melde dich mit deinem neuen Passwort an.",
+    "signIn": "Anmelden",
+    "missingToken": "Dieser Link ist unvollständig. Öffne ihn erneut aus der E-Mail oder fordere einen neuen an.",
+    "requestNew": "Neuen Link anfordern"
+  }
+}

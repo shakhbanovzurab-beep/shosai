@@ -1,0 +1,13 @@
+{
+  "metaTitle": "Collega l’app desktop",
+  "title": "Collega l’app desktop",
+  "description": "L’app Shosai sul tuo computer chiede di accedere come {email}.",
+  "submit": "Collega",
+  "cancel": "Non ora",
+  "opening": "Apertura dell’app…",
+  "doneTitle": "L’app è collegata",
+  "done": "Torna all’app Shosai. Puoi chiudere questa scheda.",
+  "openAgain": "Riapri l’app",
+  "invalidTitle": "Questo link è incompleto",
+  "invalid": "Avvia di nuovo il collegamento dall’app Shosai."
+}

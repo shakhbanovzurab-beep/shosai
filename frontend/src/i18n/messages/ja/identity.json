@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "表示言語",
+    "or": "または"
+  },
+  "signIn": {
+    "metaTitle": "ログイン",
+    "title": "おかえりなさい",
+    "description": "Shosai のワークスペースにログインしてください。",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "submit": "ログイン",
+    "forgot": "パスワードをお忘れですか？",
+    "noAccount": "Shosai を初めてお使いですか？",
+    "register": "アカウントを作成"
+  },
+  "social": {
+    "continueWith": "{provider} で続ける",
+    "consentMetaTitle": "登録を完了",
+    "consentTitle": "あと一歩です",
+    "consentDescription": "{provider} での初めてのログインです。国と同意事項を一度確認すれば、アカウントの準備が整います。",
+    "consentSubmit": "続ける",
+    "back": "ログインに戻る"
+  },
+  "problems": {
+    "invalid_credentials": "メールアドレスまたはパスワードが正しくありません。",
+    "captcha_failed": "下の確認を完了してから、もう一度ログインしてください。",
+    "email_not_verified": "このメールアドレスはまだ確認されていません。メールに届いたコードで登録を完了してください。",
+    "account_banned": "このアカウントは閉鎖されています。",
+    "account_frozen": "このアカウントは一時停止中です。理由はサポートにお問い合わせください。",
+    "account_disabled": "このアカウントは現在使用できません。",
+    "account_unavailable": "このアカウントではログインできません。サポートにお問い合わせください。",
+    "rate_limited": "試行回数が多すぎます。1 分待ってからもう一度お試しください。",
+    "invalid_email": "メールアドレスを確認してください。",
+    "invalid_country": "リストから国を選択してください。",
+    "email_registered": "このメールアドレスのアカウントはすでに存在します。ログインしてください。",
+    "password_too_short": "パスワードは 8 文字以上にしてください。",
+    "password_too_long": "パスワードが長すぎます。256 文字以内にしてください。",
+    "personal_data_consent_required": "アカウントを作成するには、利用規約と個人データの処理に同意してください。",
+    "cross_border_consent_required": "ロシアのアカウントでは、データの国外移転に同意してください。",
+    "invalid_code": "コードが正しくないか、有効期限が切れています。メールを確認するか、新しいコードをリクエストしてください。",
+    "registration_locked": "誤ったコードの入力が多すぎます。登録を最初からやり直してください。",
+    "registration_unavailable": "現在、一時的に登録できません。数秒後にもう一度お試しください。",
+    "resend_too_soon": "新しいコードを送信したばかりです。少し待ってからリクエストしてください。",
+    "too_many_resends": "この登録ではこれ以上コードを送信できません。後で最初からやり直してください。",
+    "invalid_token": "このリンクは無効になりました。新しいリンクをリクエストしてください。",
+    "social_login_cancelled": "ログインがキャンセルされました。",
+    "social_email_required": "サービスからメールアドレスが共有されませんでした。メールアドレスで登録してください。",
+    "social_provider_disabled": "このログイン方法は現在ご利用いただけません。",
+    "social_provider_failed": "サービスから応答がありませんでした。もう一度お試しください。",
+    "social_state_invalid": "ログインに時間がかかりすぎました。最初からやり直してください。",
+    "social_link_requires_sign_in": "このメールアドレスにはすでに Shosai のアカウントがあります。先にパスワードでログインしてください。",
+    "social_unavailable": "現在、外部サービスでのログインを一時的にご利用いただけません。メールアドレスを使うか、後でもう一度お試しください。",
+    "unknown": "問題が発生しました。しばらくしてからもう一度お試しください。",
+    "requestId": "サポート用のリクエスト ID：{id}"
+  },
+  "captcha": {
+    "label": "セキュリティ確認",
+    "loading": "確認を読み込んでいます…",
+    "failed": "確認を読み込めませんでした。接続を確認するか、ブロッカーでこのページを許可してから、もう一度お試しください。",
+    "unavailable": "現在、確認を利用できません。後でもう一度お試しください。",
+    "retry": "確認を再読み込み"
+  },
+  "session": {
+    "languageNotSaved": "このデバイスでは言語が変わりましたが、アカウントには保存されていません。",
+    "signOutUnconfirmed": "このデバイスではログアウトしましたが、サーバーで確認できませんでした。オンラインに戻ったら、もう一度ログインしてからログアウトしてください。"
+  }
+}

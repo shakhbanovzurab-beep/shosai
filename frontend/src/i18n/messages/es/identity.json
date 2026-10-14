@@ -1,0 +1,68 @@
+{
+  "screen": {
+    "language": "Idioma de la interfaz",
+    "or": "o"
+  },
+  "signIn": {
+    "metaTitle": "Iniciar sesión",
+    "title": "Hola de nuevo",
+    "description": "Inicia sesión en tu espacio de trabajo de Shosai.",
+    "email": "Correo",
+    "password": "Contraseña",
+    "submit": "Iniciar sesión",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿Primera vez en Shosai?",
+    "register": "Crear una cuenta"
+  },
+  "social": {
+    "continueWith": "Continuar con {provider}",
+    "consentMetaTitle": "Termina el registro",
+    "consentTitle": "Un paso más",
+    "consentDescription": "Es tu primer inicio de sesión con {provider}. Confirma tu país y tus consentimientos una sola vez y tu cuenta estará lista.",
+    "consentSubmit": "Continuar",
+    "back": "Volver al inicio de sesión"
+  },
+  "problems": {
+    "invalid_credentials": "Correo o contraseña incorrectos.",
+    "captcha_failed": "Completa la verificación de abajo e inténtalo de nuevo.",
+    "email_not_verified": "Este correo aún no está confirmado. Termina el registro con el código del correo.",
+    "account_banned": "Esta cuenta está cerrada.",
+    "account_frozen": "Esta cuenta está pausada. Escribe a soporte para saber el motivo.",
+    "account_disabled": "Esta cuenta no se puede usar ahora.",
+    "account_unavailable": "Esta cuenta no puede iniciar sesión. Escribe a soporte.",
+    "rate_limited": "Demasiados intentos. Espera un minuto e inténtalo de nuevo.",
+    "invalid_email": "Revisa la dirección de correo.",
+    "invalid_country": "Elige tu país de la lista.",
+    "email_registered": "Ya existe una cuenta con este correo. Inicia sesión.",
+    "password_too_short": "La contraseña necesita al menos 8 caracteres.",
+    "password_too_long": "La contraseña es demasiado larga. Usa hasta 256 caracteres.",
+    "personal_data_consent_required": "Para crear una cuenta, acepta las condiciones y el tratamiento de tus datos personales.",
+    "cross_border_consent_required": "Para una cuenta en Rusia, acepta la transferencia transfronteriza de tus datos.",
+    "invalid_code": "El código es incorrecto o caducó. Revisa el correo o pide un código nuevo.",
+    "registration_locked": "Demasiados códigos incorrectos. Empieza el registro de nuevo.",
+    "registration_unavailable": "El registro no está disponible por un momento. Inténtalo de nuevo en unos segundos.",
+    "resend_too_soon": "Se envió un código nuevo hace un momento. Espera un poco antes de pedir otro.",
+    "too_many_resends": "No se pueden enviar más códigos para este registro. Empieza de nuevo más tarde.",
+    "invalid_token": "Este enlace ya no es válido. Pide uno nuevo.",
+    "social_login_cancelled": "Se canceló el inicio de sesión.",
+    "social_email_required": "El servicio no compartió tu correo. Regístrate con tu correo.",
+    "social_provider_disabled": "Este método de inicio de sesión no está disponible ahora.",
+    "social_provider_failed": "El servicio no respondió. Inténtalo de nuevo.",
+    "social_state_invalid": "El inicio de sesión tardó demasiado. Empieza de nuevo.",
+    "social_link_requires_sign_in": "Este correo ya tiene una cuenta de Shosai. Primero inicia sesión con tu contraseña.",
+    "social_unavailable": "El inicio de sesión con servicios no está disponible por un momento. Usa tu correo o inténtalo más tarde.",
+    "unknown": "Algo salió mal. Inténtalo de nuevo en un momento.",
+    "requestId": "ID de solicitud para soporte: {id}"
+  },
+  "captcha": {
+    "label": "Verificación de seguridad",
+    "loading": "Cargando la verificación…",
+    "failed": "La verificación no se cargó. Revisa tu conexión o permite esta página en tu bloqueador e inténtalo de nuevo.",
+    "unavailable": "La verificación no está disponible ahora. Inténtalo más tarde.",
+    "retry": "Volver a cargar la verificación"
+  },
+  "session": {
+    "languageNotSaved": "El idioma cambió en este dispositivo, pero no se guardó en tu cuenta.",
+    "signOutUnconfirmed": "Cerraste sesión en este dispositivo, pero el servidor no lo confirmó. Cuando vuelvas a tener conexión, inicia y cierra sesión otra vez."
+  }
+}

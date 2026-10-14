@@ -1,0 +1,26 @@
+{
+  "forgot": {
+    "metaTitle": "Atur ulang kata sandi",
+    "title": "Atur ulang kata sandi",
+    "description": "Masukkan email akun Anda dan kami akan mengirim tautan untuk membuat kata sandi baru.",
+    "email": "Email",
+    "submit": "Kirim tautan",
+    "sentTitle": "Periksa email Anda",
+    "sent": "Jika ada akun yang memakai {email}, tautan untuk membuat kata sandi baru sedang dikirim. Tautan berlaku selama satu jam.",
+    "back": "Kembali ke halaman masuk"
+  },
+  "reset": {
+    "metaTitle": "Kata sandi baru",
+    "title": "Buat kata sandi baru",
+    "description": "Anda akan dikeluarkan dari perangkat lain.",
+    "password": "Kata sandi baru",
+    "confirm": "Ulangi kata sandi",
+    "mismatch": "Kata sandi tidak cocok.",
+    "submit": "Simpan kata sandi",
+    "doneTitle": "Kata sandi diperbarui",
+    "done": "Masuk dengan kata sandi baru Anda.",
+    "signIn": "Masuk",
+    "missingToken": "Tautan ini tidak lengkap. Buka lagi dari email atau minta tautan baru.",
+    "requestNew": "Minta tautan baru"
+  }
+}

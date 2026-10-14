@@ -1,0 +1,26 @@
+{
+  "forgot": {
+    "metaTitle": "Restablecer la contraseña",
+    "title": "Restablecer la contraseña",
+    "description": "Escribe el correo de tu cuenta y te enviaremos un enlace para crear una contraseña nueva.",
+    "email": "Correo",
+    "submit": "Enviar el enlace",
+    "sentTitle": "Revisa tu correo",
+    "sent": "Si hay una cuenta con {email}, te llegará un enlace para crear una contraseña nueva. Funciona durante una hora.",
+    "back": "Volver al inicio de sesión"
+  },
+  "reset": {
+    "metaTitle": "Contraseña nueva",
+    "title": "Crea una contraseña nueva",
+    "description": "Se cerrará tu sesión en tus otros dispositivos.",
+    "password": "Contraseña nueva",
+    "confirm": "Repite la contraseña",
+    "mismatch": "Las contraseñas no coinciden.",
+    "submit": "Guardar contraseña",
+    "doneTitle": "Contraseña actualizada",
+    "done": "Inicia sesión con tu contraseña nueva.",
+    "signIn": "Iniciar sesión",
+    "missingToken": "Este enlace está incompleto. Ábrelo de nuevo desde el correo o pide uno nuevo.",
+    "requestNew": "Pedir un enlace nuevo"
+  }
+}
