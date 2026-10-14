@@ -29,3 +29,9 @@ def verifier_matches(challenge: str, verifier: str | None) -> bool:
     digest = hashlib.sha256(verifier.encode("ascii")).digest()
     expected = urlsafe_b64encode(digest).rstrip(b"=")
     return secrets.compare_digest(expected, challenge.encode("ascii"))
+
+
+def challenge_of(verifier: str) -> str:
+    """The S256 challenge of a verifier: base64url of its SHA-256, without padding."""
+    digest = hashlib.sha256(verifier.encode("ascii")).digest()
+    return urlsafe_b64encode(digest).rstrip(b"=").decode("ascii")

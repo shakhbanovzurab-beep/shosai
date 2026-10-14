@@ -158,4 +158,26 @@ class DirectoryEntry(ModelBase):
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
-IDENTITY_MODELS = (User, UserConsent, PendingRegistration, DirectoryEntry)
+class UserIdentity(ModelBase):
+    """A social account linked to the person: the provider and its stable user id."""
+
+    __tablename__ = "user_identities"
+    __table_args__ = (
+        CheckConstraint("provider IN ('yandex', 'vk', 'google', 'github')", name="provider_known"),
+        CheckConstraint("length(subject) BETWEEN 1 AND 256", name="subject_length"),
+        Index("uq_user_identities_subject", "provider", "subject", unique=True),
+        Index("uq_user_identities_user", "user_id", "provider", unique=True),
+    )
+
+    id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
+    user_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("users.id", ondelete="CASCADE"))
+    provider: Mapped[str] = mapped_column(Text)
+    subject: Mapped[str] = mapped_column(Text)
+    email_verified_by_provider: Mapped[bool] = mapped_column(Boolean)
+    linked_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    last_used_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+
+
+IDENTITY_MODELS = (User, UserConsent, PendingRegistration, DirectoryEntry, UserIdentity)

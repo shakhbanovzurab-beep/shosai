@@ -81,6 +81,16 @@ class IdentitySettings(SettingsSection):
     # Без секрета капча выключена; вне разработки секрет обязателен.
     identity_turnstile_site_key: str | None = None
     identity_turnstile_secret_key: SecretStr | None = None
+    # Вход через соцсети (ID-D8): провайдер включён, когда задан его client id (у VK ID —
+    # без секрета, обмен кода идёт по PKCE). Адрес возврата — {PUBLIC_BASE_URL}/v1/auth/social/
+    # {провайдер}/callback, у Яндекса ещё …/yandex/token-page для виджета.
+    identity_yandex_client_id: str | None = None
+    identity_yandex_client_secret: SecretStr | None = None
+    identity_vk_client_id: str | None = None
+    identity_google_client_id: str | None = None
+    identity_google_client_secret: SecretStr | None = None
+    identity_github_client_id: str | None = None
+    identity_github_client_secret: SecretStr | None = None
     # Cookie сессии: Secure вне локальной разработки по HTTP; домен — пусто, cookie хоста.
     identity_cookie_secure: bool = True
     identity_cookie_domain: str | None = None

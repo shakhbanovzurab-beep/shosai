@@ -11,6 +11,7 @@ from shosai.features.identity.domain.accounts import AccountState
 from shosai.features.identity.infrastructure import directory as directory_module
 from shosai.features.identity.infrastructure.account_markers import AccountMarker
 from tests.features.identity.registration_bench import (
+    BenchOptions,
     RegistrationBench,
     eu_unreachable,
     form,
@@ -288,7 +289,7 @@ async def test_sign_in_uses_the_last_directory_copy_when_the_eu_home_is_down(
         await login(bench)
     monkeypatch.setattr(directory_module, "FRESH_FOR", directory_module.FRESH_FOR * 0)
     async with registration_bench(
-        homes.transactions, valkey, redis_cache, directory_transactions=eu_unreachable
+        homes.transactions, valkey, redis_cache, BenchOptions(directory_transactions=eu_unreachable)
     ) as outage:
         answer = await outage.http.post(
             "/v1/auth/login", json={"email": EMAIL, "password": PASSWORD}

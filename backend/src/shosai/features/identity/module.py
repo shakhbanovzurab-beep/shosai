@@ -44,6 +44,7 @@ from shosai.features.identity.infrastructure.session_records import SESSION_MODE
 from shosai.features.identity.infrastructure.sign_in_failures import SignInFailures
 from shosai.features.identity.infrastructure.token_codec import TokenCodec
 from shosai.features.identity.settings import IdentitySettings, identity_secrets_safe
+from shosai.features.identity.social_wiring import social_routers
 
 # Страница кабинета, на которую ведёт ссылка сброса пароля (SM-7).
 RESET_PAGE: Final = "/app/reset"
@@ -60,6 +61,7 @@ IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
         TableCoverage("refresh_sessions", Treatment.ERASE),
         TableCoverage("login_events", Treatment.ERASE),
         TableCoverage("password_reset_tokens", Treatment.ERASE),
+        TableCoverage("user_identities", Treatment.ERASE),
     ),
 )
 
@@ -79,7 +81,10 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         services.transactions, directory, codec, keys[0].secret.get_secret_value().encode()
     )
     try:
-        async with open_captcha(settings.identity_turnstile_secret_key) as captcha:
+        async with (
+            open_captcha(settings.identity_turnstile_secret_key) as captcha,
+            social_routers(services, settings, directory, sessions, cookies) as social,
+        ):
             registration_services = RegistrationServices(
                 transactions=services.transactions, directory=directory, routes=routes,
                 hasher=hasher, email=services.email, captcha=captcha,
@@ -123,6 +128,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                         )
                     ),
                     *_account_routers(services, passwords, sessions, markers, cookies),
+                    *social,
                 ),
                 task_handlers=task_handlers(services.transactions, directory),
                 periodic_jobs=PERIODIC_JOBS,

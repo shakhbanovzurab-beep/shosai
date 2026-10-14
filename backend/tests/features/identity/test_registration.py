@@ -9,6 +9,7 @@ from redis.asyncio import Redis
 from shosai.core.kernel.homes import Home
 from shosai.features.identity.domain.registration import MAX_CODE_ATTEMPTS
 from tests.features.identity.registration_bench import (
+    BenchOptions,
     eu_unreachable,
     form,
     mailed_codes,
@@ -206,7 +207,7 @@ async def test_without_the_directory_registration_answers_503(
     homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
 ) -> None:
     async with registration_bench(
-        homes.transactions, valkey, redis_cache, directory_transactions=eu_unreachable
+        homes.transactions, valkey, redis_cache, BenchOptions(directory_transactions=eu_unreachable)
     ) as bench:
         answer = await bench.http.post("/v1/auth/register", json=form(EMAIL))
 

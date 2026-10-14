@@ -1,13 +1,14 @@
 """Registration over the run's slot: the routes in an HTTP shell, the codes read from mail."""
 
 import json
-from collections.abc import AsyncIterator, Callable
+from collections.abc import AsyncIterator, Callable, Mapping
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import cast
 from uuid import UUID
 
 import httpx
+from fastapi import APIRouter
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from pydantic import SecretStr
@@ -35,6 +36,11 @@ from shosai.features.identity.application.passwords import Passwords, PasswordSe
 from shosai.features.identity.application.registration import Registration, RegistrationServices
 from shosai.features.identity.application.sessions import Sessions
 from shosai.features.identity.application.sign_in import SignIn, SignInServices
+from shosai.features.identity.application.social import SocialServices, SocialSignIn
+from shosai.features.identity.application.social_accounts import (
+    SocialAccounts,
+    SocialAccountServices,
+)
 from shosai.features.identity.application.verification import Verification
 from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.channels.http.desktop import build_desktop_router
@@ -42,7 +48,10 @@ from shosai.features.identity.channels.http.devices import build_devices_router
 from shosai.features.identity.channels.http.passwords import build_password_router
 from shosai.features.identity.channels.http.registration import build_registration_router
 from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
+from shosai.features.identity.channels.http.social import build_social_router
+from shosai.features.identity.channels.http.social_finish import build_social_finish_router
 from shosai.features.identity.contracts import AUTHENTICATOR, IDENTITY_EVENTS
+from shosai.features.identity.domain.social import Provider
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.captcha import Captcha, CaptchaOff
 from shosai.features.identity.infrastructure.desktop_codes import DesktopCodes
@@ -50,6 +59,9 @@ from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
 from shosai.features.identity.infrastructure.registration_routes import RegistrationRoutes
 from shosai.features.identity.infrastructure.sign_in_failures import SignInFailures
+from shosai.features.identity.infrastructure.social.base import SocialProvider
+from shosai.features.identity.infrastructure.social.consent_tickets import ConsentTickets
+from shosai.features.identity.infrastructure.social.flows import SocialStates
 from shosai.features.identity.infrastructure.token_codec import TokenCodec
 from shosai.features.identity.settings import TokenKey
 from tests.core.email.bench import mail_bench
@@ -91,15 +103,25 @@ class EuUnreachable:
         return self._transactions.begin(scope, read_only=read_only)
 
 
+@dataclass(frozen=True, slots=True)
+class BenchOptions:
+    """What a test changes in the bench: an EU outage, a captcha, provider doubles."""
+
+    directory_transactions: Callable[[HomeTransactions], HomeTransactions] | None = None
+    captcha: Captcha | None = None
+    providers: Mapping[Provider, SocialProvider] = field(default_factory=dict)
+
+
 @asynccontextmanager
 async def registration_bench(
     transactions: HomeTransactions,
     valkey: Redis,
     cache: Redis,
-    directory_transactions: Callable[[HomeTransactions], HomeTransactions] | None = None,
-    captcha: Captcha | None = None,
+    options: BenchOptions | None = None,
 ) -> AsyncIterator[RegistrationBench]:
-    """The registration routes over the slot, with the captcha off and cheap hashing."""
+    """Identity's routes over the slot, with the captcha off and cheap hashing by default."""
+    chosen = options or BenchOptions()
+    directory_transactions, captcha = chosen.directory_transactions, chosen.captcha
     registry = CollectorRegistry()
     mail = mail_bench(transactions, UNUSED_SMTP_PORT)
     directory_access = (
@@ -155,6 +177,7 @@ async def registration_bench(
             DesktopSignIn(transactions, DesktopCodes(valkey), sessions), ports, limiter
         ),
         build_devices_router(Devices(transactions, markers, outbox), ports),
+        *social_routers_of(transactions, valkey, services.directory, sessions, chosen.providers),
     ]  # fmt: skip
     telemetry = HttpTelemetry(registry, TracerProvider(shutdown_on_exit=False))
     app = build_http_app(WebSettings.model_validate({}), telemetry, routers)
@@ -200,3 +223,35 @@ async def register(http: httpx.AsyncClient, body: dict[str, object]) -> UUID:
     response = await http.post("/v1/auth/register", json=body)
     assert response.status_code == 202, response.text
     return UUID(response.json()["registration_id"])
+
+
+def social_routers_of(
+    transactions: HomeTransactions,
+    valkey: Redis,
+    directory: Directory,
+    sessions: Sessions,
+    providers: Mapping[Provider, SocialProvider],
+) -> tuple[APIRouter, ...]:
+    """Social sign-in over the slot with the given provider doubles."""
+    states = SocialStates(valkey)
+    consent = ConsentTickets(SIGNING_KEYS[0].secret.get_secret_value().encode())
+    limiter = RateLimiter(valkey, KeyValueMetrics(CollectorRegistry()))
+    social = SocialSignIn(
+        SocialServices(
+            transactions=transactions, directory=directory, states=states, consent=consent,
+            providers=dict(providers), state_key=b"social-state-key-of-the-tests-32b",
+            directory_key=DIRECTORY_KEY, base_url="https://shosai.example",
+        )
+    )  # fmt: skip
+    accounts = SocialAccounts(
+        SocialAccountServices(
+            transactions=transactions, directory=directory, states=states, consent=consent,
+            sessions=sessions, outbox=EventOutbox(EventTypes(list(IDENTITY_EVENTS))),
+            directory_key=DIRECTORY_KEY,
+        )
+    )  # fmt: skip
+    widget_ids = {Provider.YANDEX: "yandex-client", Provider.GOOGLE: "google-client"}
+    return (
+        build_social_router(social, limiter, widget_ids),
+        build_social_finish_router(social, accounts, limiter, COOKIES),
+    )

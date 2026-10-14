@@ -369,6 +369,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/social/providers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Providers
+         * @description The providers shown to this visitor; never both sets (406-FZ).
+         */
+        get: operations["providers_v1_auth_social_providers_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/social/{provider}/widget-token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Widget Token
+         * @description Resolve the person behind a Yandex or Google widget token.
+         */
+        post: operations["widget_token_v1_auth_social__provider__widget_token_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/social/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Complete
+         * @description The session of a known person; the ticket works once, for two minutes.
+         */
+        post: operations["complete_v1_auth_social_complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/social/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Register
+         * @description A new account for the person the provider introduced, after their consent.
+         */
+        post: operations["register_v1_auth_social_register_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -637,6 +717,24 @@ export interface components {
             next_cursor: string | null;
         };
         /**
+         * Provider
+         * @description The social sign-in providers.
+         * @enum {string}
+         */
+        Provider: "yandex" | "vk" | "google" | "github";
+        /**
+         * ProvidersAnswer
+         * @description The providers this visitor sees, and what their widgets need.
+         */
+        ProvidersAnswer: {
+            /** Providers */
+            providers: components["schemas"]["Provider"][];
+            /** Yandex Client Id */
+            yandex_client_id: string | null;
+            /** Google Client Id */
+            google_client_id: string | null;
+        };
+        /**
          * QuotaSnapshot
          * @description Recording minutes left; billing fills it.
          */
@@ -719,6 +817,50 @@ export interface components {
             ended: number;
         };
         /**
+         * SocialRegisterRequest
+         * @description The consent screen: the ticket, the country, the language and the consents.
+         */
+        SocialRegisterRequest: {
+            /** Ticket */
+            ticket: string;
+            /** Country */
+            country: string;
+            /** Language */
+            language: string;
+            consents: components["schemas"]["Consents"];
+        };
+        /**
+         * SocialSession
+         * @description The session the cabinet keeps, and where to go next.
+         */
+        SocialSession: {
+            /** Access Token */
+            access_token: string;
+            /** Expires In */
+            expires_in: number;
+            /**
+             * Token Type
+             * @default Bearer
+             */
+            token_type: string;
+            /** Csrf Token */
+            csrf_token: string;
+            /** Next */
+            next: string;
+        };
+        /**
+         * SocialTickets
+         * @description `social` for a known person (then `complete`), `social_consent` for a new one.
+         */
+        SocialTickets: {
+            /** Social */
+            social: string | null;
+            /** Social Consent */
+            social_consent: string | null;
+            /** Next */
+            next: string;
+        };
+        /**
          * SubscriptionCardDTO
          * @description The person's subscription; billing fills it.
          */
@@ -789,6 +931,14 @@ export interface components {
             price_usd: number;
             /** Storage Limit Bytes */
             storage_limit_bytes?: number | null;
+        };
+        /**
+         * TicketRequest
+         * @description A session ticket from the redirect or the widget.
+         */
+        TicketRequest: {
+            /** Ticket */
+            ticket: string;
         };
         /**
          * TokenResponse
@@ -881,6 +1031,21 @@ export interface components {
             registration_id: string;
             /** Code */
             code: string;
+        };
+        /**
+         * WidgetTokenRequest
+         * @description A token the provider's widget handed the browser.
+         */
+        WidgetTokenRequest: {
+            /** Token */
+            token: string;
+            /** Next */
+            next?: string | null;
+            /**
+             * Language
+             * @default en
+             */
+            language: string;
         };
     };
     responses: never;
@@ -1525,6 +1690,144 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SignedOutElsewhere"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    providers_v1_auth_social_providers_get: {
+        parameters: {
+            query?: {
+                language?: string;
+            };
+            header?: {
+                "X-Country-Code"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProvidersAnswer"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    widget_token_v1_auth_social__provider__widget_token_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: components["schemas"]["Provider"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WidgetTokenRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialTickets"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    complete_v1_auth_social_complete_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TicketRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialSession"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    register_v1_auth_social_register_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SocialRegisterRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialSession"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

@@ -20,6 +20,7 @@ from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.token_codec import TokenCodec
 from shosai.features.identity.settings import TokenKey
 from tests.features.identity.registration_bench import (
+    BenchOptions,
     RegistrationBench,
     form,
     mailed_codes,
@@ -103,7 +104,7 @@ async def test_three_failures_bring_the_captcha_for_every_client(
     homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
 ) -> None:
     async with registration_bench(
-        homes.transactions, valkey, redis_cache, captcha=OnlyOk()
+        homes.transactions, valkey, redis_cache, BenchOptions(captcha=OnlyOk())
     ) as bench:
         registration = {**form(EMAIL), "captcha_token": "ok"}
         await bench.http.post("/v1/auth/register", json=registration)
