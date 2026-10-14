@@ -223,6 +223,20 @@ forbidden_modules = [
 ]
 broken_contract_guidance = "core.ai value types stay framework-free; move the code to an adapter."
 
+# Контракт инструментов агента лёгкий, как ядро (ADR 0029): его импортируют контракты всех
+# срезов и агент; ни фреймворка, ни базы, ни Valkey, ни SDK провайдеров, ни агентного рантайма.
+[[tool.importlinter.contracts]]
+id = "light-agent-tools"
+name = "Light agent tool contract"
+type = "forbidden"
+source_modules = ["shosai.core.agent_tools"]
+forbidden_modules = [
+    "aiobotocore", "alembic", "fastapi", "google", "httpx", "langchain_core", "langgraph",
+    "openai", "opentelemetry", "prometheus_client", "psycopg", "redis", "sqlalchemy",
+    "starlette", "structlog", "taskiq", "uvicorn", "websockets",
+]
+broken_contract_guidance = "core.agent_tools stays framework-free; bind handlers in the slice."
+
 # Только для `uv run alembic revision -m "…"`: новая ревизия по шаблону с applies_to.
 # Применяет миграции не CLI Alembic, а раннер shosai.core.db.migrations (ADR 0010).
 [tool.alembic]

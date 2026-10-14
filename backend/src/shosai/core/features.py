@@ -2,9 +2,10 @@
 
 Composition lists the modules explicitly (`composition/features.py`) and wires them into
 every role; nothing is found by importing modules. A module declares statically what
-must be known before any client exists — its tables, its event classes and its production
-checks — and builds the rest from the core services when the process starts: HTTP and
-WebSocket routers, task handlers, event subscriptions, scheduler loops and readiness probes.
+must be known before any client exists — its tables, its event classes, its production
+checks and the specs of its agent tools — and builds the rest from the core services when
+the process starts: HTTP and WebSocket routers, task handlers, event subscriptions,
+scheduler loops, readiness probes and the handlers bound to its agent tools.
 
 `build` is an async context manager entered at start in every role and left at stop, so
 a slice opens and closes its own clients with the process (draft lesson: feature start
@@ -23,6 +24,9 @@ from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.agent_tools.bindings import AgentTool
+from shosai.core.agent_tools.catalog import AgentToolCatalog
+from shosai.core.agent_tools.spec import ToolSpec
 from shosai.core.ai.costs.settlement import CostSettlement
 from shosai.core.ai.port import AiProviders
 from shosai.core.ai.spend.operator import SpendOperator
@@ -66,6 +70,8 @@ class CoreServices:
     ai_spend: SpendOperator
     # Письма пишутся в транзакции вызывающего; отправляет их обход дома (F6-C10).
     email: EmailPort
+    # Инструменты всех срезов для агента: каталог заполняется, когда срезы собраны (ADR 0029).
+    agent_tools: AgentToolCatalog
     exchange_rates: ExchangeRates
     cache: Cache
     objects: ObjectStorage
@@ -92,6 +98,7 @@ class FeatureParts:
     due_sources: tuple[DueRowSource, ...] = ()
     cost_settlements: tuple[CostSettlement, ...] = ()
     email_templates: tuple[EmailTemplate, ...] = ()
+    agent_tools: tuple[AgentTool, ...] = ()
 
 
 def combine_parts(parts: Sequence[FeatureParts]) -> FeatureParts:
@@ -110,6 +117,7 @@ def combine_parts(parts: Sequence[FeatureParts]) -> FeatureParts:
             due_sources=combined.due_sources + part.due_sources,
             cost_settlements=combined.cost_settlements + part.cost_settlements,
             email_templates=combined.email_templates + part.email_templates,
+            agent_tools=combined.agent_tools + part.agent_tools,
         )
     return combined
 
@@ -133,6 +141,8 @@ class FeatureModule:
     models: tuple[type[ModelBase], ...] = ()
     events: tuple[type[DomainEvent], ...] = ()
     production_checks: tuple[ProductionCheck, ...] = ()
+    # Объявления инструментов агента: статичны, как события, — их читает тест model-facing.
+    agent_tools: tuple[ToolSpec[Any, Any], ...] = ()
 
     def __post_init__(self) -> None:
         if not FEATURE_NAME.fullmatch(self.name):

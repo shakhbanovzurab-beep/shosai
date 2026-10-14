@@ -13,7 +13,12 @@ never instructions.
 
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
+from functools import partial
+from typing import Any
 
+from shosai.composition.features import FEATURES
+from shosai.core.agent_tools.results import TOOL_ERROR_TEXTS, ToolErrorCode
+from shosai.core.agent_tools.spec import ToolSpec
 from shosai.core.ai.errors import MODEL_TEXTS
 
 
@@ -32,6 +37,33 @@ def ai_failure_texts() -> Iterable[object]:
     return MODEL_TEXTS.values()
 
 
+def tool_error_texts() -> Iterable[object]:
+    """What a model reads when a tool call failed: the codes and their texts."""
+    return [ToolErrorCode, *TOOL_ERROR_TEXTS.values()]
+
+
+def tool_spec_texts(specs: Iterable[ToolSpec[Any, Any]]) -> Iterable[object]:
+    """What a model reads of each tool: name, description, and both schemas with their
+    field descriptions and enum values (a model class stands for its JSON schema)."""
+    for spec in specs:
+        yield from (spec.name, spec.description, spec.input, spec.output)
+
+
+def slice_tool_sources() -> tuple[ModelFacingSource, ...]:
+    """The agent tools every listed slice declares, one source per slice."""
+    return tuple(
+        ModelFacingSource(
+            owner=feature.name,
+            name="agent tools",
+            collect=partial(tool_spec_texts, feature.agent_tools),
+        )
+        for feature in FEATURES
+        if feature.agent_tools
+    )
+
+
 MODEL_FACING_SOURCES: tuple[ModelFacingSource, ...] = (
     ModelFacingSource(owner="core.ai", name="failure texts", collect=ai_failure_texts),
+    ModelFacingSource(owner="core.agent_tools", name="error texts", collect=tool_error_texts),
+    *slice_tool_sources(),
 )

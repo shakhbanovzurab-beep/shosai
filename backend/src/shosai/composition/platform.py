@@ -27,12 +27,14 @@ from dataclasses import dataclass
 import structlog
 from redis.asyncio import Redis
 
+from shosai.composition.agent_tools import install_agent_tools
 from shosai.composition.ai import AiDependencies, PlatformAi, open_ai
 from shosai.composition.email import PlatformEmail, open_email
 from shosai.composition.features import check_features, platform_events
 from shosai.composition.schedule import scheduled_jobs
 from shosai.composition.startup import start_step
 from shosai.composition.telemetry import ProcessTelemetry
+from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.cache.metrics import CacheMetrics
 from shosai.core.cache.redis_cache import RedisCache
 from shosai.core.config.loading import Settings
@@ -180,6 +182,7 @@ async def open_platform(
             )
             writers.ai.settlements.install(parts.cost_settlements)
             email.install(parts.email_templates)
+            install_agent_tools(features, built, services.agent_tools)
         with start_step("schedule"):
             jobs = scheduled_jobs(parts, tasks)
         with start_step("probes"):
@@ -248,6 +251,7 @@ def _core_services(
         ai=writers.ai.providers,
         ai_spend=writers.ai.operator,
         email=writers.email.port,
+        agent_tools=AgentToolCatalog(),
         exchange_rates=writers.ai.rates,
         cache=RedisCache(clients.cache, CacheMetrics(telemetry.registry)),
         objects=clients.objects,
