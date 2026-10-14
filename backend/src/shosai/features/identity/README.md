@@ -20,6 +20,10 @@ identity runs the account data registry (`core/account_data`). Every owner that 
 
 `POST /v1/me/exports` queues an archive; the `identity.export_due` sweep and `identity.make_export` stream every handler's files into one ZIP in the home's bucket under `exports/<user_id>/`, kept 7 days.
 
+## Transfer between homes
+
+An operator moves an account to the other home with `POST /v1/admin/users/{id}/transfers` once `IDENTITY_TRANSFERS_ALLOWED` is true (after the legal review, §22). The saga `TransferSaga` journals its steps in `home_transfers` of the source home: freeze, copy every owner's part, verify the manifests of both homes, switch the EU directory, bump the token version in the target, purge the source. A cancel works until the switch. Rows kept by law stay in the home that wrote them.
+
 ## Operators
 
 Roles live in the person's home and are read on every admin request. An owner changes them under one platform-wide lock, and the last owner keeps the role. Each action writes `identity.operator.acted`, and its EU delivery appends one row to `operator_audit_events`, which the application can never update or delete. The first owner comes from `shosai identity grant-operator --email ADDRESS --role owner`.
@@ -38,4 +42,4 @@ Support finds accounts at `/v1/admin/users` and acts on them through `AccountSta
   - `token_codec.py` — HS256 with a `kid` ring; a token without `kid` is checked with the draft key `d`;
   - `password_hasher.py` — bcrypt in a bounded thread pool, with a decoy check for unknown addresses.
 - `settings.py` — `IDENTITY_TOKEN_KEYS`, `IDENTITY_DIRECTORY_HMAC_KEY`, `IDENTITY_PASSWORD_HASH_ROUNDS`, documented in `.env.example` section 2, and the production check of their values.
-- `module.py` — the `FeatureModule` listed in `composition/features.py`; `social_wiring.py`, `deletion_wiring.py`, `export_wiring.py` and `operator_wiring.py` build their parts of it.
+- `module.py` — the `FeatureModule` listed in `composition/features.py`; `social_wiring.py`, `deletion_wiring.py`, `export_wiring.py`, `operator_wiring.py` and `transfer_wiring.py` build their parts of it.

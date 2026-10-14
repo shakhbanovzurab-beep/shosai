@@ -94,6 +94,9 @@ class IdentitySettings(SettingsSection):
     # Cookie сессии: Secure вне локальной разработки по HTTP; домен — пусто, cookie хоста.
     identity_cookie_secure: bool = True
     identity_cookie_domain: str | None = None
+    # Перенос аккаунта между домами закрыт, пока юридическая проверка (§22) не пройдена;
+    # владелец открывает его, когда юрист ответил.
+    identity_transfers_allowed: bool = False
 
     def token_keys(self) -> tuple[TokenKey, ...]:
         """The signing ring in order: the first key signs, every key verifies."""

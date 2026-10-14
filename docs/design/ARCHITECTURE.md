@@ -194,7 +194,7 @@
 - **Cross-border AI:**
   - personal user — consent in the product;
   - workspace of a company customer — consent in the contract as data operator; Shosai processes on its behalf.
-- **Account transfer between homes:** a saga with a step journal (`home_transfers`): freeze writes → export by the table registry → import → verify manifest → switch directory → bump token version → purge source. Each step is idempotent; purge is last.
+- **Account transfer between homes:** a saga with a step journal (`home_transfers`): freeze writes → export by the table registry → import → verify manifest → switch directory → bump token version → purge source. Each step is idempotent; purge is last. Rows kept by law (accounting records such as `provider_costs`) are append-only and stay in the home that wrote them; reports that need a person's history read both homes.
 
 ## 7. Tenancy and access control
 

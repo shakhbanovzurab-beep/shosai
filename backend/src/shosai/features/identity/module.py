@@ -61,9 +61,11 @@ from shosai.features.identity.infrastructure.registration_routes import Registra
 from shosai.features.identity.infrastructure.session_records import SESSION_MODELS
 from shosai.features.identity.infrastructure.sign_in_failures import SignInFailures
 from shosai.features.identity.infrastructure.token_codec import TokenCodec
+from shosai.features.identity.infrastructure.transfer_records import TRANSFER_MODELS
 from shosai.features.identity.operator_wiring import operator_parts
 from shosai.features.identity.settings import IdentitySettings, identity_secrets_safe
 from shosai.features.identity.social_wiring import social_routers
+from shosai.features.identity.transfer_wiring import transfer_parts
 
 # Страница кабинета, на которую ведёт ссылка сброса пароля (SM-7).
 RESET_PAGE: Final = "/app/reset"
@@ -85,6 +87,8 @@ IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
         TableCoverage("account_deletions", Treatment.ERASE),
         TableCoverage("data_export_jobs", Treatment.ERASE),
         TableCoverage("operator_roles", Treatment.ERASE),
+        # Журнал переноса — запись о нём; уходит через 30 дней после конца.
+        TableCoverage("home_transfers", Treatment.EXPIRES),
     ),
     prefixes=(AVATAR_PREFIX, EXPORT_PREFIX),
 )
@@ -161,12 +165,26 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     ACCOUNT_PROFILE_READER.bind(profiles),
                 ),
             )
-            deletion = deletion_parts(services, directory, markers, cookies)
-            operators = operator_parts(services, (directory, directory_key), markers)
-            parts = [main, deletion, export_parts(services), operators]
-            yield combine_parts(parts)
+            extra = _account_data_parts(services, (directory, directory_key), markers, cookies)
+            yield combine_parts([main, *extra])
     finally:
         hasher.close()
+
+
+def _account_data_parts(
+    services: CoreServices,
+    directory: tuple[Directory, bytes],
+    markers: AccountMarkers,
+    cookies: CookiePolicy,
+) -> list[FeatureParts]:
+    """Deletion, export, operators and transfers: the parts built on the account data."""
+    lookup = directory[0]
+    return [
+        deletion_parts(services, lookup, markers, cookies),
+        export_parts(services),
+        operator_parts(services, directory, markers),
+        transfer_parts(services, lookup, markers),
+    ]
 
 
 @dataclass(frozen=True, slots=True)
@@ -214,6 +232,7 @@ IDENTITY: Final = FeatureModule(
         *DELETION_MODELS,
         *EXPORT_MODELS,
         *OPERATOR_MODELS,
+        *TRANSFER_MODELS,
     ),
     events=IDENTITY_EVENTS,
     production_checks=(identity_secrets_safe,),

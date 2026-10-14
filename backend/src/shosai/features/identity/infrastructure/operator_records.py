@@ -25,7 +25,10 @@ from shosai.core.db.partitions.policy import monthly_partition_range
 from shosai.core.kernel.homes import Home
 
 ROLES = "'owner', 'support', 'finance', 'platform', 'releases', 'read_only'"
-ACTIONS = "'operator_roles_changed', 'account_blocked', 'account_unblocked', 'account_banned'"
+ACTIONS = (
+    "'operator_roles_changed', 'account_blocked', 'account_unblocked', 'account_banned', "
+    "'account_transfer_requested', 'account_transfer_cancelled'"
+)
 
 
 class OperatorRoleGrant(ModelBase):

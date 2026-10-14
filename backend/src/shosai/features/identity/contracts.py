@@ -74,6 +74,8 @@ class OperatorAction(StrEnum):
     ACCOUNT_BLOCKED = "account_blocked"
     ACCOUNT_UNBLOCKED = "account_unblocked"
     ACCOUNT_BANNED = "account_banned"
+    ACCOUNT_TRANSFER_REQUESTED = "account_transfer_requested"
+    ACCOUNT_TRANSFER_CANCELLED = "account_transfer_cancelled"
 
 
 class Authenticator(Protocol):

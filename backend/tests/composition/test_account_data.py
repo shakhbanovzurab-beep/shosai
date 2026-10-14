@@ -1,6 +1,6 @@
 """Every table with a person's rows is declared once in the deletion registry (§14 rule 7)."""
 
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 
 import pytest
 from sqlalchemy import Column, ForeignKey, MetaData, Table, Uuid
@@ -18,6 +18,7 @@ from shosai.core.account_data.handlers import (
     handler_problems,
 )
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
+from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
 
 
@@ -78,6 +79,15 @@ class Handler:
         yield ExportFile(f"{account.user_id}.jsonl", _empty())
 
     async def erase(self, account: AccountRef) -> None:
+        del account
+
+    async def copy(self, account: AccountRef, to_home: Home) -> None:
+        del account, to_home
+
+    async def manifest(self, account: AccountRef) -> Mapping[str, str]:
+        return {str(account.user_id): ""}
+
+    async def purge(self, account: AccountRef) -> None:
         del account
 
 

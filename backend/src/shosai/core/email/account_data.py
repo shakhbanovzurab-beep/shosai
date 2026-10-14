@@ -2,11 +2,12 @@
 
 Export gives the mail without its encrypted secrets, the unsubscriptions and the cost rows
 of the person's AI calls. Erasure deletes every mail row of the account, whatever its
-status, and the unsubscriptions; cost rows are kept by law, and core's other tables expire
-on their own (`CORE_ACCOUNT_DATA`).
+status, and the unsubscriptions. A transfer moves mail and unsubscriptions; cost rows are
+accounting records kept by law where they were written, append-only for the application,
+so they are neither moved nor purged. Core's other tables expire on their own.
 """
 
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Mapping
 from typing import Final
 
 from sqlalchemy import delete
@@ -14,9 +15,16 @@ from sqlalchemy import delete
 from shosai.core.account_data.handlers import AccountRef, ExportFile
 from shosai.core.account_data.spec import CORE_ACCOUNT_DATA
 from shosai.core.ai.costs.records import ProviderCost
-from shosai.core.db.person_rows import PersonRows, person_lines
+from shosai.core.db.person_rows import (
+    PersonRows,
+    copy_person_rows,
+    person_digest,
+    person_lines,
+    whole_rows,
+)
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.email.records import EmailMessage, EmailSuppression
+from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 
 # Модели импортированы явно: их таблицы есть в метаданных до первого обращения.
@@ -40,6 +48,12 @@ EXPORTED: Final = (
     ),
 )  # fmt: skip
 
+# Что переносится между домами: письма и отписки, целыми строками.
+MOVED: Final = (
+    whole_rows(TABLES["email_messages"], key="id"),
+    whole_rows(TABLES["email_suppressions"], key="kind"),
+)
+
 
 class CoreAccountData:
     """The `core.account_data_handlers` binding of core's own tables."""
@@ -61,6 +75,25 @@ class CoreAccountData:
 
     async def erase(self, account: AccountRef) -> None:
         """Delete the account's mail and unsubscriptions in its home."""
+        await self.purge(account)
+
+    async def copy(self, account: AccountRef, to_home: Home) -> None:
+        """Copy the account's mail and unsubscriptions to the other home."""
+        for rows in MOVED:
+            await copy_person_rows(
+                self._transactions, rows, account.user_id, (account.home, to_home)
+            )
+
+    async def manifest(self, account: AccountRef) -> Mapping[str, str]:
+        """A digest of each moved table in the account's home."""
+        scope = TenancyScope(account.home, account.user_id)
+        return {
+            rows.table.name: await person_digest(self._transactions, scope, rows, account.user_id)
+            for rows in MOVED
+        }
+
+    async def purge(self, account: AccountRef) -> None:
+        """Delete the account's mail and unsubscriptions in `account.home`."""
         scope = TenancyScope(account.home, account.user_id)
         async with self._transactions.begin(scope) as session:
             await session.execute(

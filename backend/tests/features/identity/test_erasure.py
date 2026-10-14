@@ -59,6 +59,15 @@ class Flaky:
     def export(self, account: AccountRef) -> AsyncIterator[ExportFile]:
         return self._inner.export(account)
 
+    async def copy(self, account: AccountRef, to_home: Home) -> None:
+        await self._inner.copy(account, to_home)
+
+    async def manifest(self, account: AccountRef) -> Mapping[str, str]:
+        return await self._inner.manifest(account)
+
+    async def purge(self, account: AccountRef) -> None:
+        await self._inner.purge(account)
+
     async def erase(self, account: AccountRef) -> None:
         self.calls += 1
         if self.calls <= self._failures:
@@ -72,7 +81,7 @@ def erasure_of(
     core: AccountDataHandler | None = None,
 ) -> Erasure:  # fmt: skip
     transactions = homes.transactions
-    identity = IdentityAccountData(transactions, bench.services.directory, objects)
+    identity = IdentityAccountData(transactions, bench.services.directory, (objects, {}))
     ports = PortDirectory()
     ports.install(
         [

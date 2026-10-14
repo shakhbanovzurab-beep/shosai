@@ -1,11 +1,13 @@
-"""A person's rows of one table as JSON Lines, page by page, for the export archive.
+"""A person's rows of one table, page by page: as JSON Lines for export, or copied to a home.
 
 Each page is read in its own short transaction, ordered by a unique key, so no transaction
-stays open while the archive goes to storage (§14 rule 1) and a table of any size never
-sits whole in memory. Only the listed columns leave the table: hashes, secrets and
-ciphertexts are never listed.
+stays open while the archive goes to storage or across both homes (§14 rule 1), and a
+table of any size never sits whole in memory. Export takes only the listed columns:
+hashes, secrets and ciphertexts are never listed. A copy takes whole rows and inserts
+them in the other home, skipping the ones already there, so a repeat adds nothing.
 """
 
+import hashlib
 import json
 from collections.abc import AsyncIterator, Mapping, Sequence
 from dataclasses import dataclass
@@ -14,8 +16,10 @@ from typing import Any, Final
 from uuid import UUID
 
 from sqlalchemy import Table, select
+from sqlalchemy.dialects.postgresql import insert
 
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 
 PAGE_ROWS: Final = 1000
@@ -58,6 +62,47 @@ async def person_lines(
         if len(page) < PAGE_ROWS:
             return
         last = page[-1]["_page_key"]
+
+
+def whole_rows(table: Table, key: str, person: str = PERSON_COLUMN) -> PersonRows:
+    """Every column of the table: what a copy between homes moves."""
+    return PersonRows(table, tuple(table.columns.keys()), key=key, person=person)
+
+
+async def copy_person_rows(
+    transactions: HomeTransactions, rows: PersonRows, user_id: UUID, homes: tuple[Home, Home]
+) -> int:
+    """Copy the person's rows from the first home to the second; how many were read."""
+    source, target = homes
+    table, key = rows.table, rows.table.c[rows.key]
+    last: object = None
+    copied = 0
+    while True:
+        query = select(*(table.c[name] for name in rows.columns), key.label("_page_key"))
+        query = query.where(table.c[rows.person] == user_id)
+        if last is not None:
+            query = query.where(key > last)
+        async with transactions.begin(TenancyScope(source, user_id), read_only=True) as session:
+            page = (await session.execute(query.order_by(key).limit(PAGE_ROWS))).mappings().all()
+        if not page:
+            return copied
+        values = [{name: row[name] for name in rows.columns} for row in page]
+        async with transactions.begin(TenancyScope(target, user_id)) as session:
+            await session.execute(insert(table).values(values).on_conflict_do_nothing())
+        copied += len(page)
+        if len(page) < PAGE_ROWS:
+            return copied
+        last = page[-1]["_page_key"]
+
+
+async def person_digest(
+    transactions: HomeTransactions, scope: TenancyScope, rows: PersonRows, user_id: UUID
+) -> str:
+    """The SHA-256 of the person's rows of the table in the scope's home, in key order."""
+    digest = hashlib.sha256()
+    async for chunk in person_lines(transactions, scope, rows, user_id):
+        digest.update(chunk)
+    return digest.hexdigest()
 
 
 def json_lines(records: Sequence[Mapping[str, Any]]) -> bytes:

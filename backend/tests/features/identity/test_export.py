@@ -38,7 +38,7 @@ def runner_of(
     storages = {home: slot_storage(bucket) for home, bucket in buckets.items()}
     objects = {home: storage.objects for home, storage in storages.items()}
     uploads = {home: storage.uploads for home, storage in storages.items()}
-    identity = IdentityAccountData(homes.transactions, bench.services.directory, objects)
+    identity = IdentityAccountData(homes.transactions, bench.services.directory, (objects, uploads))
     ports = PortDirectory()
     ports.install(
         [

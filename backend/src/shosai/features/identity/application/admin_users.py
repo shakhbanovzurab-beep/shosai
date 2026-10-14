@@ -4,7 +4,7 @@ By exact email the directory names the one home to read. By name both homes are 
 parallel and merged, newest account first: each home pages by id after the cursor, the
 merge keeps the first `limit + 1`, so a page is the same whichever home holds the rows.
 The card adds the live sessions, the latest sign-ins, the AI spend of today, the week and
-the month (F6) and the operator roles.
+the month over both homes (F6; cost rows stay where they were written) and the roles.
 """
 
 import asyncio
@@ -18,7 +18,7 @@ from uuid import UUID
 from pydantic import BaseModel
 from sqlalchemy import Row, Select, Table, or_, select
 
-from shosai.core.ai.spend.reports import SpendReports, UserSpend
+from shosai.core.ai.spend.reports import ZERO, SpendReports, UserSpend
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
@@ -148,7 +148,16 @@ class AdminUsers:
                 )
             ).all()
             roles = await held_roles(session, user_id)
-        spend = await self._reports.user_spend(home, user_id, datetime.now(UTC))
+        at = datetime.now(UTC)
+        # Строки расходов остаются в доме, где записаны: после переноса их два.
+        homes_spend = await asyncio.gather(
+            *(self._reports.user_spend(each, user_id, at) for each in Home)
+        )
+        spend = UserSpend(
+            sum((part.today_usd for part in homes_spend), ZERO),
+            sum((part.week_usd for part in homes_spend), ZERO),
+            sum((part.month_usd for part in homes_spend), ZERO),
+        )
         summary = UserSummary(
             user.id, home, user.email, user.full_name, user.display_name,
             AccountState(user.state), user.created_at, user.last_login_at,

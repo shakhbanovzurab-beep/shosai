@@ -1,17 +1,16 @@
-"""Exporting and erasing a person's data owner by owner: the handlers identity runs.
+"""Exporting, erasing and moving a person's data owner by owner: the handlers identity runs.
 
 An owner whose declaration erases something — a table with `ERASE`, an object prefix, an
 external grant — binds one handler to `ACCOUNT_DATA_HANDLERS`, and composition refuses to
 start when such an owner has no handler or two, or a handler has no declaration (ADR 0045
-point 7). Erasure is idempotent: the saga runs it again after a failure, and a run that
-finds nothing left succeeds. Export yields the owner's files of the archive, one after
-another; the runner writes each into the ZIP before asking for the next. A handler opens
-its own short transactions in the account's home and calls storage outside them (§14
-rule 1).
+point 7). Erasure, copy and purge are idempotent: a saga runs them again after a failure,
+and a repeat adds or removes nothing more. Export yields the owner's files of the archive,
+one after another. Copy and purge serve the account transfer between homes (§6). A
+handler opens its own short transactions and calls storage outside them (§14 rule 1).
 """
 
 from collections import Counter
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncIterator, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Final, Protocol
 from uuid import UUID
@@ -39,7 +38,7 @@ class ExportFile:
 
 
 class AccountDataHandler(Protocol):
-    """Exports and erases what one owner holds of a person."""
+    """Exports, erases, copies and purges what one owner holds of a person."""
 
     @property
     def owner(self) -> str:
@@ -52,6 +51,29 @@ class AccountDataHandler(Protocol):
 
     async def erase(self, account: AccountRef) -> None:
         """Erase the owner's rows, objects and grants of the account; a repeat changes nothing."""
+        ...
+
+    async def copy(self, account: AccountRef, to_home: Home) -> None:
+        """Copy the owner's rows and objects of the account to another home; a repeat adds nothing.
+
+        Objects keep their keys in the other home's bucket. The rows of the source stay.
+        """
+        ...
+
+    async def manifest(self, account: AccountRef) -> Mapping[str, str]:
+        """A digest per moved table and object prefix of the account in `account.home`.
+
+        The transfer compares the source's with the target's before it switches homes;
+        rows kept by law where they were written are not moved and not in it.
+        """
+        ...
+
+    async def purge(self, account: AccountRef) -> None:
+        """Remove the owner's rows and objects of the account from `account.home` only.
+
+        The transfer purges the source after the switch, or the target on a cancel; unlike
+        erasure nothing is anonymised and the directory is not touched.
+        """
         ...
 
 

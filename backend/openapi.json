@@ -2266,6 +2266,196 @@
           }
         }
       }
+    },
+    "/v1/admin/users/{user_id}/transfers": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Request Transfer",
+        "description": "Queue the account's move to the other home; one open transfer per account.",
+        "operationId": "request_transfer_v1_admin_users__user_id__transfers_post",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transfer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/transfers/{transfer_id}": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Read Transfer",
+        "description": "The transfer and the step it is at.",
+        "operationId": "read_transfer_v1_admin_transfers__transfer_id__get",
+        "parameters": [
+          {
+            "name": "transfer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transfer Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transfer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/transfers/{transfer_id}/cancel": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Cancel Transfer",
+        "description": "Cancel before the directory switch; 409 `transfer_not_cancellable` after it.",
+        "operationId": "cancel_transfer_v1_admin_transfers__transfer_id__cancel_post",
+        "parameters": [
+          {
+            "name": "transfer_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Transfer Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transfer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3254,6 +3444,15 @@
         ],
         "title": "HealthStatus",
         "description": "The process answers HTTP requests."
+      },
+      "Home": {
+        "type": "string",
+        "enum": [
+          "ru",
+          "eu"
+        ],
+        "title": "Home",
+        "description": "A data home: a separate PostgreSQL cluster in its own jurisdiction.\n\nThe value is the short code carried by the access token and by task payloads.\nThe directory and data without an owner live in the EU home (ADR 0005, ADR 0010).\nEach home has its own bucket; the home is not part of an object key: an object lives\nin the bucket of its pointer's home (ADR 0044)."
       },
       "InvalidField": {
         "properties": {
@@ -4257,6 +4456,100 @@
         ],
         "title": "TokenResponse",
         "description": "A session: the access token, its lifetime in seconds and the CSRF value for refresh."
+      },
+      "Transfer": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "from_home": {
+            "$ref": "#/components/schemas/Home"
+          },
+          "to_home": {
+            "$ref": "#/components/schemas/Home"
+          },
+          "step": {
+            "$ref": "#/components/schemas/TransferStep"
+          },
+          "requested_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Requested At"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "from_home",
+          "to_home",
+          "step",
+          "requested_at",
+          "finished_at",
+          "error_code"
+        ],
+        "title": "Transfer",
+        "description": "A transfer and the step it is at."
+      },
+      "TransferRequest": {
+        "properties": {
+          "to_home": {
+            "$ref": "#/components/schemas/Home"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "to_home"
+        ],
+        "title": "TransferRequest",
+        "description": "The home the account moves to."
+      },
+      "TransferStep": {
+        "type": "string",
+        "enum": [
+          "freeze",
+          "copy",
+          "verify",
+          "switch",
+          "bump",
+          "purge",
+          "cancelling",
+          "done",
+          "cancelled"
+        ],
+        "title": "TransferStep",
+        "description": "The next step of a transfer, or how it ended."
       },
       "UnsubscribeAnswer": {
         "properties": {

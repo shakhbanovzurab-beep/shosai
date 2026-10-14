@@ -26,7 +26,8 @@ def deletion_parts(
     erasure = Erasure(
         services.transactions, services.ports, services.outbox, DeletionMetrics(services.registry)
     )
-    handler = IdentityAccountData(services.transactions, directory, services.objects)
+    storage = (services.objects, services.uploads)
+    handler = IdentityAccountData(services.transactions, directory, storage)
     return FeatureParts(
         http_routers=(
             build_deletion_router(deletions, services.ports, services.rate_limiter, cookies),

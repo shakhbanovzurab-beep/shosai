@@ -1,24 +1,34 @@
-"""Identity's handler of a person's data: export, and the last step of erasure (ADR 0045 p. 7).
+"""Identity's handler of a person's data: export, erasure's last step, transfer (ADR 0045 p. 7).
 
 Export gives every identity table of the person as JSON Lines — never a hash, a secret or
 a token — then the avatar objects. Erasure removes the avatar and export objects, then, in
 one home transaction, every identity row of the person and the personal fields of the
 account row. The row itself stays, anonymised and `deleted`, because money rows keep
 referencing it for 5 years (402-FZ). Only then does the directory free the address, so a
-new account with it never meets the old row's email.
+new account with it never meets the old row's email. A transfer copies the account row
+first and every identity table after it, objects under their keys; purge removes them
+from one home, the account row included, and leaves the directory to the saga.
 """
 
+import hashlib
 from collections.abc import AsyncIterator, Mapping
 from typing import Any, Final
 
 from sqlalchemy import Delete, delete
 
 from shosai.core.account_data.handlers import AccountRef, ExportFile
-from shosai.core.db.person_rows import PersonRows, person_lines
+from shosai.core.db.person_rows import (
+    PersonRows,
+    copy_person_rows,
+    person_digest,
+    person_lines,
+    whole_rows,
+)
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
-from shosai.core.storage.port import ObjectStorage
+from shosai.core.storage.copy import copy_objects
+from shosai.core.storage.port import MultipartUploads, ObjectStorage
 from shosai.features.identity.application.profile import AVATAR_PREFIX
 from shosai.features.identity.domain.accounts import AccountState
 from shosai.features.identity.domain.deletion import ERASED_NAME, IDENTITY_OWNER, erased_email
@@ -92,6 +102,19 @@ HOME_ROWS: Final = (
         ("id", "state", "requested_at", "ready_at", "expires_at", "size_bytes"), key="id",
     ),
 )  # fmt: skip
+# Что переносится между домами, целыми строками; аккаунт — первым, на него ссылаются.
+MOVED: Final = (
+    whole_rows(User.metadata.tables["users"], key="id", person="id"),
+    *(
+        whole_rows(model.metadata.tables[model.__tablename__], key=key)
+        for model, key in (
+            (UserConsent, "id"), (UserIdentity, "id"), (PasswordResetToken, "token_hash"),
+            (RefreshSession, "id"), (LoginEvent, "id"), (AccountDeletion, "user_id"),
+            (DataExportJob, "id"), (OperatorRoleGrant, "role"),
+        )
+    ),
+)  # fmt: skip
+OBJECT_PREFIXES: Final = (AVATAR_PREFIX, EXPORT_PREFIX)
 # Каталог живёт в доме ЕС: из него — только дом и состояние, без HMAC адреса.
 DIRECTORY_ROWS: Final = PersonRows(
     DirectoryEntry.metadata.tables["directory_entries"],
@@ -107,11 +130,11 @@ class IdentityAccountData:
         self,
         transactions: HomeTransactions,
         directory: Directory,
-        objects: Mapping[Home, ObjectStorage],
+        storage: tuple[Mapping[Home, ObjectStorage], Mapping[Home, MultipartUploads]],
     ) -> None:
         self._transactions = transactions
         self._directory = directory
-        self._objects = objects
+        self._objects, self._uploads = storage
 
     @property
     def owner(self) -> str:
@@ -135,11 +158,7 @@ class IdentityAccountData:
 
     async def erase(self, account: AccountRef) -> None:
         """Avatars, archives, identity's rows and the account's personal fields; the address."""
-        storage = self._objects[account.home]
-        for prefix in (AVATAR_PREFIX, EXPORT_PREFIX):
-            keys = [item.key async for item in storage.list_objects(f"{prefix}{account.user_id}/")]
-            if keys:
-                await storage.delete_many(keys)
+        await self._delete_objects(account)
         async with self._transactions.begin(TenancyScope(account.home, account.user_id)) as session:
             for statement in _erasures(account):
                 await session.execute(statement)
@@ -147,6 +166,47 @@ class IdentityAccountData:
             if user is not None:
                 _anonymise(user)
         await self._directory.erase(account.user_id)
+
+    async def copy(self, account: AccountRef, to_home: Home) -> None:
+        """The account row, then every identity table, then the objects under their keys."""
+        for rows in MOVED:
+            await copy_person_rows(
+                self._transactions, rows, account.user_id, (account.home, to_home)
+            )
+        for prefix in OBJECT_PREFIXES:
+            await copy_objects(
+                self._objects[account.home], self._uploads[to_home], f"{prefix}{account.user_id}/"
+            )
+
+    async def manifest(self, account: AccountRef) -> Mapping[str, str]:
+        """A digest of each moved table and of each object prefix's keys and sizes."""
+        scope = TenancyScope(account.home, account.user_id)
+        digests = {
+            rows.table.name: await person_digest(self._transactions, scope, rows, account.user_id)
+            for rows in MOVED
+        }
+        storage = self._objects[account.home]
+        for prefix in OBJECT_PREFIXES:
+            listing = hashlib.sha256()
+            async for item in storage.list_objects(f"{prefix}{account.user_id}/"):
+                listing.update(f"{item.key}:{item.size}\n".encode())
+            digests[prefix] = listing.hexdigest()
+        return digests
+
+    async def purge(self, account: AccountRef) -> None:
+        """Every identity row and object of the account in `account.home`, the account last."""
+        await self._delete_objects(account)
+        async with self._transactions.begin(TenancyScope(account.home, account.user_id)) as session:
+            for statement in _erasures(account):
+                await session.execute(statement)
+            await session.execute(delete(User).where(User.id == account.user_id))
+
+    async def _delete_objects(self, account: AccountRef) -> None:
+        storage = self._objects[account.home]
+        for prefix in OBJECT_PREFIXES:
+            keys = [item.key async for item in storage.list_objects(f"{prefix}{account.user_id}/")]
+            if keys:
+                await storage.delete_many(keys)
 
 
 async def _object_chunks(storage: ObjectStorage, key: str) -> AsyncIterator[bytes]:

@@ -21,8 +21,14 @@ REFUSED_STATES = {
     AccountState.BANNED: SignInRefusal.BANNED,
     AccountState.FROZEN: SignInRefusal.FROZEN,
 }
+# Перенос между домами замораживает записи: токены не действуют до его конца (§6).
 REVOKED_STATES = frozenset(
-    {AccountState.DELETION_SCHEDULED, AccountState.DELETING, AccountState.DELETED}
+    {
+        AccountState.DELETION_SCHEDULED,
+        AccountState.DELETING,
+        AccountState.DELETED,
+        AccountState.TRANSFERRING,
+    }
 )
 
 

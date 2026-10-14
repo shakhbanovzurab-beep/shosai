@@ -704,6 +704,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/users/{user_id}/transfers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Request Transfer
+         * @description Queue the account's move to the other home; one open transfer per account.
+         */
+        post: operations["request_transfer_v1_admin_users__user_id__transfers_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/transfers/{transfer_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Transfer
+         * @description The transfer and the step it is at.
+         */
+        get: operations["read_transfer_v1_admin_transfers__transfer_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/transfers/{transfer_id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel Transfer
+         * @description Cancel before the directory switch; 409 `transfer_not_cancellable` after it.
+         */
+        post: operations["cancel_transfer_v1_admin_transfers__transfer_id__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1138,6 +1198,17 @@ export interface components {
             status: "ok";
         };
         /**
+         * Home
+         * @description A data home: a separate PostgreSQL cluster in its own jurisdiction.
+         *
+         *     The value is the short code carried by the access token and by task payloads.
+         *     The directory and data without an owner live in the EU home (ADR 0005, ADR 0010).
+         *     Each home has its own bucket; the home is not part of an object key: an object lives
+         *     in the bucket of its pointer's home (ADR 0044).
+         * @enum {string}
+         */
+        Home: "ru" | "eu";
+        /**
          * InvalidField
          * @description Where a request failed validation and why; the submitted value is never echoed.
          */
@@ -1522,6 +1593,47 @@ export interface components {
             /** Csrf Token */
             csrf_token?: string | null;
         };
+        /**
+         * Transfer
+         * @description A transfer and the step it is at.
+         */
+        Transfer: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+            from_home: components["schemas"]["Home"];
+            to_home: components["schemas"]["Home"];
+            step: components["schemas"]["TransferStep"];
+            /**
+             * Requested At
+             * Format: date-time
+             */
+            requested_at: string;
+            /** Finished At */
+            finished_at: string | null;
+            /** Error Code */
+            error_code: string | null;
+        };
+        /**
+         * TransferRequest
+         * @description The home the account moves to.
+         */
+        TransferRequest: {
+            to_home: components["schemas"]["Home"];
+        };
+        /**
+         * TransferStep
+         * @description The next step of a transfer, or how it ended.
+         * @enum {string}
+         */
+        TransferStep: "freeze" | "copy" | "verify" | "switch" | "bump" | "purge" | "cancelling" | "done" | "cancelled";
         /**
          * UnsubscribeAnswer
          * @description The same answer for every token: nothing about the account behind it.
@@ -2906,6 +3018,109 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AdminUserCard"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    request_transfer_v1_admin_users__user_id__transfers_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TransferRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Transfer"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_transfer_v1_admin_transfers__transfer_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                transfer_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Transfer"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    cancel_transfer_v1_admin_transfers__transfer_id__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                transfer_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Transfer"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

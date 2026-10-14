@@ -204,6 +204,22 @@ class Directory:
         if freed is not None:
             await self._cache.delete(CacheKey(CACHE_NAMESPACE, freed.hex()))
 
+    async def move(self, user_id: UUID, home: Home) -> None:
+        """Point the account's address at its new home; a repeat changes nothing."""
+        async with self._transactions.begin(DIRECTORY_SCOPE) as session:
+            moved = await session.scalar(
+                update(DirectoryEntry)
+                .where(DirectoryEntry.user_id == user_id, DirectoryEntry.home != home.value)
+                .values(
+                    home=home.value, updated_at=datetime.now(UTC),
+                    version=DirectoryEntry.version + 1,
+                )
+                .returning(DirectoryEntry.email_hmac)
+            )  # fmt: skip
+        if moved is not None:
+            await self._cache.delete(CacheKey(CACHE_NAMESPACE, moved.hex()))
+        await self._cache.delete(CacheKey(USER_NAMESPACE, user_id.hex))
+
     async def purge_deleted(self, older_than: datetime) -> int:
         """Drop the rows of addresses freed before `older_than`; how many went."""
         async with self._transactions.begin(DIRECTORY_SCOPE) as session:
