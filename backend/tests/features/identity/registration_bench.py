@@ -76,6 +76,7 @@ from shosai.features.identity.infrastructure.social.flows import SocialStates
 from shosai.features.identity.infrastructure.token_codec import TokenCodec
 from shosai.features.identity.settings import TokenKey
 from tests.core.email.bench import mail_bench
+from tests.features.identity.admin_bench import admin_users_router
 from tests.harness.connections import fetch_rows
 from tests.harness.run_slot import RunSlot
 
@@ -204,6 +205,9 @@ async def registration_bench(
         build_devices_router(Devices(transactions, markers, outbox), ports),
         build_export_router(Exports(transactions, chosen.objects), ports, limiter),
         build_admin_operators_router(operators, ports),
+        admin_users_router(
+            transactions, (services.directory, DIRECTORY_KEY), (markers, outbox), ports
+        ),
         build_deletion_router(
             Deletions(transactions, markers, outbox, mail.port), ports, limiter, COOKIES
         ),

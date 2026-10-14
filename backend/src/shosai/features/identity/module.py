@@ -162,7 +162,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 ),
             )
             deletion = deletion_parts(services, directory, markers, cookies)
-            parts = [main, deletion, export_parts(services), operator_parts(services, directory)]
+            operators = operator_parts(services, (directory, directory_key), markers)
+            parts = [main, deletion, export_parts(services), operators]
             yield combine_parts(parts)
     finally:
         hasher.close()

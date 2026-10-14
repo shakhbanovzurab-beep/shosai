@@ -24,6 +24,8 @@ identity runs the account data registry (`core/account_data`). Every owner that 
 
 Roles live in the person's home and are read on every admin request. An owner changes them under one platform-wide lock, and the last owner keeps the role. Each action writes `identity.operator.acted`, and its EU delivery appends one row to `operator_audit_events`, which the application can never update or delete. The first owner comes from `shosai identity grant-operator --email ADDRESS --role owner`.
 
+Support finds accounts at `/v1/admin/users` and acts on them through `AccountStates`, the one place that blocks, unblocks and bans: the state, the token version, the sessions, the events and the audit event change in one home transaction, and the Valkey marker then refuses live tokens with the native 403.
+
 ## Layout
 
 - `domain/` — pure rules:

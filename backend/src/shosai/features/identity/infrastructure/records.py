@@ -54,6 +54,19 @@ class User(ModelBase):
         CheckConstraint(f"language IN ({LANGUAGES})", name="language_known"),
         CheckConstraint("token_version >= 0", name="token_version_not_negative"),
         Index("uq_users_email", "email", unique=True),
+        # Поиск оператора по имени: ILIKE '%…%' по триграммам (шаг 8b).
+        Index(
+            "ix_users_full_name_trgm",
+            "full_name",
+            postgresql_using="gin",
+            postgresql_ops={"full_name": "gin_trgm_ops"},
+        ),
+        Index(
+            "ix_users_display_name_trgm",
+            "display_name",
+            postgresql_using="gin",
+            postgresql_ops={"display_name": "gin_trgm_ops"},
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)

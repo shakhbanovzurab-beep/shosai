@@ -221,12 +221,12 @@ class Directory:
 async def follow_account(
     session: AsyncSession,
     user_id: UUID,
-    change: tuple[DirectoryState, DirectoryState],
+    change: tuple[frozenset[DirectoryState], DirectoryState],
     at: datetime,
 ) -> None:
     """Mirror an account's state change of time `at`, in the caller's EU transaction.
 
-    The change applies only from the state it expects and only if the row was not changed
+    The change applies only from the states it expects and only if the row was not changed
     later, so events delivered out of order or twice leave the newest state.
     """
     before, after = change
@@ -234,7 +234,7 @@ async def follow_account(
         update(DirectoryEntry)
         .where(
             DirectoryEntry.user_id == user_id,
-            DirectoryEntry.state == before.value,
+            DirectoryEntry.state.in_([state.value for state in before]),
             DirectoryEntry.updated_at < at,
         )
         .values(state=after.value, updated_at=at, version=DirectoryEntry.version + 1)

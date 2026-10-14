@@ -215,6 +215,16 @@ class AccountBlocked(DomainEvent):
     event_type: ClassVar[str] = "identity.account.blocked"
     version: ClassVar[int] = 1
     user_id: UUID
+    # Бан: вход закрыт навсегда, разблокировки не будет.
+    permanent: bool = False
+
+
+class AccountUnblocked(DomainEvent):
+    """An operator returned a frozen account; it signs in again, its data is shown again."""
+
+    event_type: ClassVar[str] = "identity.account.unblocked"
+    version: ClassVar[int] = 1
+    user_id: UUID
 
 
 class SessionsRevoked(DomainEvent):
@@ -245,6 +255,7 @@ IDENTITY_EVENTS: Final[tuple[type[DomainEvent], ...]] = (
     AccountDeleted,
     AccountTransferred,
     AccountBlocked,
+    AccountUnblocked,
     SessionsRevoked,
     OperatorActed,
 )

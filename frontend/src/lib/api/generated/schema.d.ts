@@ -604,6 +604,106 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Search Users
+         * @description By exact email, or by a part of the full or display name in both homes.
+         */
+        get: operations["search_users_v1_admin_users_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/users/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read User
+         * @description The card: profile, state, sessions, sign-ins, AI spend and operator roles.
+         */
+        get: operations["read_user_v1_admin_users__user_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/users/{user_id}/block": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Block User
+         * @description Freeze the account: every session ends, sign-in is refused until unblocked.
+         */
+        post: operations["block_user_v1_admin_users__user_id__block_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/users/{user_id}/unblock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Unblock User
+         * @description Return a frozen account; a banned one stays banned (409).
+         */
+        post: operations["unblock_user_v1_admin_users__user_id__unblock_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/users/{user_id}/ban": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ban User
+         * @description Close the account for good: every session ends, the address cannot register again.
+         */
+        post: operations["ban_user_v1_admin_users__user_id__ban_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -629,6 +729,127 @@ export interface components {
             token_type: string;
             /** Csrf Token */
             csrf_token: string;
+        };
+        /**
+         * AccountState
+         * @description Where an account is in its life; the directory mirrors it in the EU home.
+         * @enum {string}
+         */
+        AccountState: "active" | "frozen" | "banned" | "deletion_scheduled" | "deleting" | "transferring" | "deleted";
+        /**
+         * ActionReason
+         * @description Why the operator acts, as a code the audit log keeps.
+         */
+        ActionReason: {
+            /** Reason Code */
+            reason_code: string;
+        };
+        /**
+         * AdminSession
+         * @description A live session of the account.
+         */
+        AdminSession: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Client Kind */
+            client_kind: string;
+            /** Device Label */
+            device_label: string | null;
+            /** Ip */
+            ip: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Last Used At
+             * Format: date-time
+             */
+            last_used_at: string;
+        };
+        /**
+         * AdminSignIn
+         * @description A sign-in attempt and how it ended.
+         */
+        AdminSignIn: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Outcome */
+            outcome: string;
+            /** Client Kind */
+            client_kind: string;
+            /** Ip */
+            ip: string | null;
+        };
+        /**
+         * AdminSpend
+         * @description The account's AI spend in USD, UTC periods.
+         */
+        AdminSpend: {
+            /** Today Usd */
+            today_usd: string;
+            /** Week Usd */
+            week_usd: string;
+            /** Month Usd */
+            month_usd: string;
+        };
+        /**
+         * AdminUser
+         * @description A found account and the home it lives in.
+         */
+        AdminUser: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Home */
+            home: string;
+            /** Email */
+            email: string;
+            /** Full Name */
+            full_name: string;
+            /** Display Name */
+            display_name: string | null;
+            state: components["schemas"]["AccountState"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Last Login At */
+            last_login_at: string | null;
+        };
+        /**
+         * AdminUserCard
+         * @description What support sees of one account.
+         */
+        AdminUserCard: {
+            user: components["schemas"]["AdminUser"];
+            /** Work Role */
+            work_role: string | null;
+            /** Country */
+            country: string | null;
+            /** Language */
+            language: string;
+            /** Timezone */
+            timezone: string | null;
+            /** Email Verified At */
+            email_verified_at: string | null;
+            /** Sessions */
+            sessions: components["schemas"]["AdminSession"][];
+            /** Sign Ins */
+            sign_ins: components["schemas"]["AdminSignIn"][];
+            spend: components["schemas"]["AdminSpend"];
+            /** Operator Roles */
+            operator_roles: components["schemas"]["OperatorRole"][];
         };
         /**
          * ChangeRequest
@@ -1038,6 +1259,13 @@ export interface components {
          * @enum {string}
          */
         OperatorRole: "owner" | "support" | "finance" | "platform" | "releases" | "read_only";
+        /** Page[AdminUser] */
+        Page_AdminUser_: {
+            /** Items */
+            items: components["schemas"]["AdminUser"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
         /** Page[DeviceView] */
         Page_DeviceView_: {
             /** Items */
@@ -2497,6 +2725,188 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    search_users_v1_admin_users_get: {
+        parameters: {
+            query?: {
+                email?: string | null;
+                name?: string | null;
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_AdminUser_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_user_v1_admin_users__user_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserCard"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    block_user_v1_admin_users__user_id__block_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActionReason"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserCard"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    unblock_user_v1_admin_users__user_id__unblock_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActionReason"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserCard"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    ban_user_v1_admin_users__user_id__ban_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ActionReason"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserCard"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {
