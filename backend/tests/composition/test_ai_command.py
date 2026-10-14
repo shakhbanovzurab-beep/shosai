@@ -1,12 +1,19 @@
 """`shosai ai kill-switch`: the operator engages, reads and releases the kill switch (F6-D5)."""
 
 import json
+from datetime import UTC, datetime
+from decimal import Decimal
 from pathlib import Path
 
 from redis.asyncio import Redis
 
+from shosai.core.ai.costs.entries import CostEntry
 from shosai.core.ai.spend.kill_switch import KILL_SWITCH_KEY
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.ids import new_id
 from tests.composition.role_process import run_command
+from tests.core.ai.bench import ORG_ID, USER_ID, ai_bench
+from tests.harness.database_access import DatabaseAccess
 from tests.harness.process_environ import slot_environ
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
@@ -52,3 +59,29 @@ async def test_engaging_without_a_reason_is_refused(
     assert code == 1
     assert any(line["message"] == "Команда выключателя отклонена" for line in lines)
     assert await valkey.get(KILL_SWITCH_KEY) is None
+
+
+async def test_the_cli_rebuilds_the_spend_counters_from_the_cost_rows(
+    run_slot: RunSlot,
+    harness_settings: HarnessSettings,
+    homes: DatabaseAccess,
+    valkey: Redis,
+    tmp_path: Path,
+) -> None:
+    now = datetime.now(UTC)
+    entry = CostEntry(
+        home=Home.EU, user_id=USER_ID, org_id=ORG_ID, cost_id=new_id(), created_at=now,
+        effect_key="cli:rebuild", provider="openrouter", model="probe/chat", kind="chat",
+        feature="probe.chat", call_class="standard", origin="interactive", outcome="ok",
+        cost_usd=Decimal("0.42"), cost_source="reported",
+    )  # fmt: skip
+    await ai_bench(homes.transactions).writer.write(entry)
+
+    code, lines = await run_command(
+        ["ai", "rebuild-spend-counters"], slot_environ(run_slot, harness_settings),
+        tmp_path / "rebuild.log",
+    )  # fmt: skip
+
+    assert code == 0
+    assert any(line["message"].startswith("Счётчики расходов пересобраны") for line in lines)
+    assert await valkey.get(f"shosai:ai:spend:global:day:{now:%Y%m%d}") == b"420000"

@@ -235,6 +235,7 @@ def _core_services(
         outbox=writers.outbox,
         effects=writers.effects,
         ai=writers.ai.providers,
+        ai_spend=writers.ai.operator,
         exchange_rates=writers.ai.rates,
         cache=RedisCache(clients.cache, CacheMetrics(telemetry.registry)),
         objects=clients.objects,

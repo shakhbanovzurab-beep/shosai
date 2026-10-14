@@ -13,6 +13,7 @@ the hour, the day and the month of the call. Whose counters a call fills:
 - a user's background call: the user's background day (Leo §5.4).
 """
 
+import json
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from decimal import ROUND_CEILING, Decimal
@@ -75,11 +76,31 @@ for i = 1, #KEYS do
 end
 return 1
 """
-# KEYS: счётчики. ARGV: сумма, затем срок жизни каждого в мс.
+REBUILD_MARK: Final = build_key("ai", "spend", "rebuild", "mark")
+REBUILD_PENDING: Final = build_key("ai", "spend", "rebuild", "pending")
+# KEYS: метка пересборки, список ожидания, затем счётчики. ARGV: id пересборки, сколько
+# ожидающих строк она учла, затем значения и сроки жизни в мс.
+# Ответ: n — записано; -1 — пришли новые строки, перечитать; -2 — метка не её.
+REBUILD_SCRIPT: Final = """
+if redis.call('GET', KEYS[1]) ~= ARGV[1] then return -2 end
+if redis.call('HLEN', KEYS[2]) ~= tonumber(ARGV[2]) then return -1 end
+local n = #KEYS - 2
+for i = 1, n do
+  redis.call('SET', KEYS[i + 2], ARGV[i + 2], 'PX', ARGV[n + i + 2])
+end
+redis.call('DEL', KEYS[1], KEYS[2])
+return n
+"""
+# KEYS: метка пересборки, список ожидания, затем счётчики. ARGV: сумма, id строки, её
+# описание для пересборки, затем срок жизни каждого счётчика в мс. Пока идёт пересборка,
+# строка ещё и ждёт в списке: пересборка решит, была ли она в её снимке базы.
 COUNT_SCRIPT: Final = """
-for i = 1, #KEYS do
+for i = 3, #KEYS do
   redis.call('INCRBY', KEYS[i], ARGV[1])
   redis.call('PEXPIRE', KEYS[i], ARGV[i + 1])
+end
+if redis.call('EXISTS', KEYS[1]) == 1 then
+  redis.call('HSET', KEYS[2], ARGV[2], ARGV[3])
 end
 return 1
 """
@@ -97,6 +118,8 @@ class Counter:
     key: str
     ttl: timedelta
     limit: SpendPeriod | str
+    # Период ключа: hour, day или month — по нему пересборка узнаёт текущие счётчики.
+    period: str
 
     @property
     def held(self) -> str:
@@ -125,12 +148,12 @@ class Payer:
 def counters_of(payer: Payer) -> list[Counter]:
     """The counters a call fills, each with the limit that may cap it."""
     when = periods(payer.at)
-    found = [Counter(build_key("ai", "spend", "global", p, when[p]), TTLS[p], f"global_{p}")
+    found = [Counter(build_key("ai", "spend", "global", p, when[p]), TTLS[p], f"global_{p}", p)
              for p in ("hour", "day")]  # fmt: skip
     if payer.platform_account is not None:
         found += [
             Counter(build_key("ai", "spend", "platform", payer.platform_account, p, when[p]),
-                    TTLS[p], f"platform_{p}")
+                    TTLS[p], f"platform_{p}", p)
             for p in ("hour", "day")
         ]  # fmt: skip
     if payer.user_id is None or payer.call_class is CallClass.ESSENTIAL:
@@ -138,11 +161,32 @@ def counters_of(payer: Payer) -> list[Counter]:
     user = ("ai", "spend", "user", payer.user_id.hex)
     if payer.origin is CallOrigin.BACKGROUND:
         found.append(Counter(build_key(*user, "background", when["day"]), TTLS["day"],
-                             SpendPeriod.BACKGROUND_DAY))  # fmt: skip
+                             SpendPeriod.BACKGROUND_DAY, "day"))  # fmt: skip
     elif payer.origin is CallOrigin.INTERACTIVE:
-        found += [Counter(build_key(*user, p, when[p]), TTLS[p], SpendPeriod(p))
+        found += [Counter(build_key(*user, p, when[p]), TTLS[p], SpendPeriod(p), p)
                   for p in ("hour", "day", "month")]  # fmt: skip
         if payer.call_class is CallClass.EXPENSIVE:
             found.append(Counter(build_key(*user, "expensive", when["month"]), TTLS["month"],
-                                 SpendPeriod.EXPENSIVE_MONTH))  # fmt: skip
+                                 SpendPeriod.EXPENSIVE_MONTH, "month"))  # fmt: skip
     return found
+
+
+def pending_entry(payer: Payer, amount: int) -> str:
+    """What the rebuild needs of a row counted while it runs: the payer and the amount."""
+    return json.dumps({
+        "amount": amount,
+        "user": payer.user_id.hex if payer.user_id else None,
+        "account": payer.platform_account,
+        "origin": payer.origin.value,
+        "class": payer.call_class.value,
+        "at": payer.at.isoformat(),
+    })  # fmt: skip
+
+
+def pending_payer(raw: str | bytes) -> tuple[Payer, int]:
+    """The payer and amount of a row in the rebuild's waiting list."""
+    held = json.loads(raw)
+    user = UUID(held["user"]) if held["user"] else None
+    payer = Payer(user, held["account"], CallOrigin(held["origin"]),
+                  CallClass(held["class"]), datetime.fromisoformat(held["at"]))  # fmt: skip
+    return payer, int(held["amount"])

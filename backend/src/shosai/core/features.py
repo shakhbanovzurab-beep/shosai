@@ -25,6 +25,7 @@ from redis.asyncio import Redis
 
 from shosai.core.ai.costs.settlement import CostSettlement
 from shosai.core.ai.port import AiProviders
+from shosai.core.ai.spend.operator import SpendOperator
 from shosai.core.cache.port import Cache
 from shosai.core.config.gate import ProductionCheck
 from shosai.core.config.loading import Settings
@@ -59,6 +60,8 @@ class CoreServices:
     outbox: EventOutbox
     effects: EffectLedger
     ai: AiProviders
+    # Отчёты о расходах, баланс OpenRouter и аварийный выключатель — для экранов оператора.
+    ai_spend: SpendOperator
     exchange_rates: ExchangeRates
     cache: Cache
     objects: ObjectStorage

@@ -152,6 +152,8 @@ class AiSettings(SettingsSection):
     openrouter_api_key: SecretStr | None = None
     # Пусто — адрес провайдера из адаптера: хосты провайдеров названы только в core/ai.
     openrouter_base_url: HttpUrl | None = None
+    # Ключ управления OpenRouter: только для отчёта о балансе; без него баланс неизвестен.
+    openrouter_management_key: SecretStr | None = None
     # Разметка говорящих в записях встреч; без ключа вызовы diarize отклоняются.
     pyannote_api_key: SecretStr | None = None
     pyannote_base_url: HttpUrl | None = None

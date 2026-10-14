@@ -49,6 +49,9 @@ from shosai.core.ai.sessions.minutes import MinuteRows
 from shosai.core.ai.spend.counters import micro_usd
 from shosai.core.ai.spend.guard import Ceilings, SpendGuard, SpendMetrics
 from shosai.core.ai.spend.kill_switch import KillSwitch
+from shosai.core.ai.spend.operator import SpendOperator
+from shosai.core.ai.spend.reports import SpendReports
+from shosai.core.ai.spend.standing import OpenRouterCredits, SpendStanding, management_client
 from shosai.core.config.loading import Settings
 from shosai.core.config.sections import AiSettings, SpendSettings
 from shosai.core.db.transactions import HomeTransactions
@@ -67,6 +70,7 @@ class PlatformAi:
     """The port, the rates, the settlement hook and what core's AI tasks need."""
 
     providers: AiProviders
+    operator: SpendOperator
     rates: ExchangeRates
     settlements: CostSettlements
     writer: CostWriter
@@ -119,8 +123,8 @@ def kill_switch(settings: SpendSettings, valkey: Redis) -> KillSwitch:
     return KillSwitch(valkey, forced=settings.ai_kill_switch)
 
 
-def spend_guard(settings: SpendSettings, dependencies: AiDependencies) -> SpendGuard:
-    """Spend control with the platform's ceilings in micro-USD."""
+def ceilings_of(settings: SpendSettings) -> Ceilings:
+    """The platform's ceilings in micro-USD."""
     platform = {
         PlatformAccount.LANDING_DEMO.value: (
             settings.ai_landing_demo_hourly_usd, settings.ai_landing_demo_daily_usd,
@@ -130,7 +134,7 @@ def spend_guard(settings: SpendSettings, dependencies: AiDependencies) -> SpendG
         ),
         PlatformAccount.SYSTEM.value: (settings.ai_system_hourly_usd, settings.ai_system_daily_usd),
     }  # fmt: skip
-    ceilings = Ceilings(
+    return Ceilings(
         global_hour=micro_usd(settings.ai_global_hourly_usd),
         global_day=micro_usd(settings.ai_global_daily_usd),
         platform={
@@ -138,12 +142,16 @@ def spend_guard(settings: SpendSettings, dependencies: AiDependencies) -> SpendG
         },
         lease=timedelta(seconds=settings.ai_reservation_lease_seconds),
     )
-    return SpendGuard(
-        dependencies.valkey,
-        ceilings,
-        kill_switch(settings, dependencies.valkey),
-        SpendMetrics(dependencies.registry),
-    )
+
+
+def credits_client(ai: AiSettings, stack: AsyncExitStack) -> httpx.AsyncClient | None:
+    """OpenRouter's management client for the balance; None without its key."""
+    if ai.openrouter_management_key is None:
+        return None
+    base_url = OPENROUTER_API if ai.openrouter_base_url is None else str(ai.openrouter_base_url)
+    client = management_client(ai.openrouter_management_key.get_secret_value(), base_url)
+    stack.push_async_callback(client.aclose)
+    return client
 
 
 def provider_client(
@@ -239,13 +247,26 @@ async def open_ai(
     recorder = CallRecorder(writer, rates, metrics)
     minutes = MinuteRows(recorder)
     await stack.enter_async_context(minutes.running())
-    spend = spend_guard(settings.spend, dependencies)
+    switch = kill_switch(settings.spend, dependencies.valkey)
+    spend = SpendGuard(
+        dependencies.valkey,
+        ceilings_of(settings.spend),
+        switch,
+        SpendMetrics(dependencies.registry),
+    )
     writer.observe(spend.count)
     admission = Admission(PriceBook(transactions), metrics)
     runner = RouteRunner(admission, recorder, resilience(settings.ai, dependencies), spend, metrics)
     providers = AiProviders(clients, runner, LiveSessions(minutes, spend))
+    operator = SpendOperator(
+        reports=SpendReports(transactions),
+        standing=SpendStanding(dependencies.valkey, ceilings_of(settings.spend), switch),
+        credits=OpenRouterCredits(credits_client(settings.ai, stack)),
+        kill_switch=switch,
+    )
     return PlatformAi(
         providers=providers,
+        operator=operator,
         rates=rates,
         settlements=settlements,
         writer=writer,

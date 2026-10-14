@@ -7,6 +7,7 @@
     shosai migrate upgrade         apply migrations to both homes, RU first
     shosai migrate current         log each home's revision
     shosai ai kill-switch ACTION   engage, release or report the AI kill switch
+    shosai ai rebuild-spend-counters   sum the AI spend counters again from the cost rows
 
 Every long-running role also serves `/livez`, `/readyz` and `/metrics` on OPS_PORT. The
 settings come from the environment only (`.env.example`, section 2). One process runs
@@ -21,6 +22,7 @@ from typing import Any
 import uvloop
 
 from shosai.composition.ai_command import KillSwitchAction, KillSwitchCommand, run_kill_switch
+from shosai.composition.ai_rebuild import run_rebuild
 from shosai.composition.migrate import MigrateAction, run_migrate
 from shosai.composition.process import run_process
 from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
@@ -53,6 +55,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     switch.add_argument("--reason", help="why, for engage; written to the log")
     switch.add_argument("--hours", type=float, default=24.0, help="how long engage holds")
+    tools.add_parser("rebuild-spend-counters", help="sum the spend counters from the cost rows")
     return parser
 
 
@@ -71,10 +74,19 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
         case ProcessRole.MIGRATE:
             return run_migrate(environ, MigrateAction(arguments.action))
         case ProcessRole.AI:
-            command = KillSwitchCommand(
-                KillSwitchAction(arguments.action), arguments.reason, arguments.hours
-            )
-            return run_kill_switch(environ, command)
+            return ai_command(arguments, environ)
+
+
+def ai_command(
+    arguments: argparse.Namespace, environ: Mapping[str, str]
+) -> Coroutine[Any, Any, int]:
+    """The coroutine of an operator's AI command."""
+    if arguments.tool == "rebuild-spend-counters":
+        return run_rebuild(environ)
+    command = KillSwitchCommand(
+        KillSwitchAction(arguments.action), arguments.reason, arguments.hours
+    )
+    return run_kill_switch(environ, command)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

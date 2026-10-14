@@ -36,12 +36,15 @@ from shosai.core.ai.recording import MeteredCall
 from shosai.core.ai.results import Usage
 from shosai.core.ai.spend.counters import (
     COUNT_SCRIPT,
+    REBUILD_MARK,
+    REBUILD_PENDING,
     RESERVE_SCRIPT,
     SHRINK_SCRIPT,
     Counter,
     Payer,
     counters_of,
     micro_usd,
+    pending_entry,
 )
 from shosai.core.ai.spend.kill_switch import KILL_SWITCH_KEY, KillSwitch
 from shosai.core.kv.connection import REDIS_FAILURES
@@ -148,10 +151,15 @@ class SpendGuard:
                 CallClass(entry.call_class), entry.created_at,
             )  # fmt: skip
             found = counters_of(payer)
-            args = [micro_usd(entry.cost_usd), *(int(c.ttl.total_seconds() * 1000) for c in found)]
+            amount = micro_usd(entry.cost_usd)
+            args: list[str | int] = [
+                amount, entry.cost_id.hex, pending_entry(payer, amount),
+                *(int(c.ttl.total_seconds() * 1000) for c in found),
+            ]  # fmt: skip
+            keys = [REBUILD_MARK, REBUILD_PENDING, *(c.key for c in found)]
             try:
                 async with asyncio.timeout(VALKEY_DEADLINE):
-                    await self._count(keys=[c.key for c in found], args=args)
+                    await self._count(keys=keys, args=args)
             except REDIS_FAILURES as error:
                 self._metrics.missed()
                 self._outages.failed(error, operation="count")

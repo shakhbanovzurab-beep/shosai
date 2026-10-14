@@ -56,6 +56,8 @@ DATABASE_PROFILES: Final[Mapping[ProcessRole, DatabaseProfile]] = MappingProxyTy
         ProcessRole.SCHEDULER: DatabaseProfile(
             pool_size=2, statement_timeout=timedelta(seconds=10)
         ),
+        # Разовые команды ИИ: пересборка читает суммы месяца по обоим домам.
+        ProcessRole.AI: DatabaseProfile(pool_size=1, statement_timeout=timedelta(seconds=60)),
     }
 )
 
