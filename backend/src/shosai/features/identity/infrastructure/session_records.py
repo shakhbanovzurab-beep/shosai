@@ -1,4 +1,4 @@
-"""Sessions and sign-in events, in the account's home (identity plan §3.5; §8.2).
+"""Sessions, sign-in events and reset links, in the account's home (identity plan §3.5).
 
 A refresh family is one signed-in device. The sign-in log is a high-volume table with
 monthly partitions kept 12 months; failures of existing accounts are recorded too (the
@@ -94,4 +94,21 @@ class LoginEvent(ModelBase):
     user_agent: Mapped[str | None] = mapped_column(Text)
 
 
-SESSION_MODELS = (RefreshSession, LoginEvent)
+class PasswordResetToken(ModelBase):
+    """A reset link sent to an account: its secret's hash, its life and its single use."""
+
+    __tablename__ = "password_reset_tokens"
+    __table_args__ = (
+        CheckConstraint("length(token_hash) = 32", name="token_hash_length"),
+        Index("ix_password_reset_tokens_user", "user_id"),
+        Index("ix_password_reset_tokens_expires", "expires_at"),
+    )
+
+    token_hash: Mapped[bytes] = mapped_column(LargeBinary, primary_key=True)
+    user_id: Mapped[UUID] = mapped_column(Uuid, ForeignKey("users.id", ondelete="CASCADE"))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+SESSION_MODELS = (RefreshSession, LoginEvent, PasswordResetToken)

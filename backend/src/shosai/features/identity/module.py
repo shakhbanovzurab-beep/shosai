@@ -13,15 +13,18 @@ from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatm
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.identity.application.authentication import TokenAuthenticator
 from shosai.features.identity.application.native_me import NativeMe
+from shosai.features.identity.application.passwords import Passwords, PasswordServices
 from shosai.features.identity.application.registration import Registration, RegistrationServices
 from shosai.features.identity.application.sessions import Sessions
 from shosai.features.identity.application.sign_in import SignIn, SignInServices
 from shosai.features.identity.application.verification import Verification
 from shosai.features.identity.channels.http.cookies import CookiePolicy
+from shosai.features.identity.channels.http.passwords import build_password_router
 from shosai.features.identity.channels.http.registration import build_registration_router
 from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
 from shosai.features.identity.channels.tasks import PERIODIC_JOBS, task_handlers
 from shosai.features.identity.contracts import AUTHENTICATOR, IDENTITY_EVENTS
+from shosai.features.identity.emails.password_reset import RESET_LINK_MAIL
 from shosai.features.identity.emails.registration_attempt import REGISTRATION_ATTEMPT
 from shosai.features.identity.emails.registration_code import REGISTRATION_CODE
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
@@ -35,6 +38,8 @@ from shosai.features.identity.infrastructure.sign_in_failures import SignInFailu
 from shosai.features.identity.infrastructure.token_codec import TokenCodec
 from shosai.features.identity.settings import IdentitySettings, identity_secrets_safe
 
+# Страница кабинета, на которую ведёт ссылка сброса пароля (SM-7).
+RESET_PAGE: Final = "/app/reset"
 # Что identity хранит о человеке и что с этим делает стирание (§14 п. 7, ADR 0045 п. 7).
 IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
     owner="identity",
@@ -47,6 +52,7 @@ IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
         TableCoverage("directory_entries", Treatment.ERASE),
         TableCoverage("refresh_sessions", Treatment.ERASE),
         TableCoverage("login_events", Treatment.ERASE),
+        TableCoverage("password_reset_tokens", Treatment.ERASE),
     ),
 )
 
@@ -79,7 +85,18 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     sessions=sessions, directory_key=directory_key,
                 )
             )  # fmt: skip
-            authenticator = TokenAuthenticator(codec, directory, AccountMarkers(services.valkey))
+            markers = AccountMarkers(services.valkey)
+            authenticator = TokenAuthenticator(codec, directory, markers)
+            passwords = Passwords(
+                PasswordServices(
+                    transactions=services.transactions, directory=directory, hasher=hasher,
+                    email=services.email, captcha=captcha, limiter=services.rate_limiter,
+                    markers=markers, outbox=services.outbox, sessions=sessions,
+                    directory_key=directory_key,
+                    reset_page=str(services.settings.email.public_base_url).rstrip("/")
+                    + RESET_PAGE,
+                )
+            )  # fmt: skip
             yield FeatureParts(
                 http_routers=(
                     build_registration_router(
@@ -98,10 +115,13 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                             cookies=cookies,
                         )
                     ),
+                    build_password_router(
+                        passwords, services.ports, services.rate_limiter, cookies
+                    ),
                 ),
                 task_handlers=task_handlers(services.transactions, directory),
                 periodic_jobs=PERIODIC_JOBS,
-                email_templates=(REGISTRATION_CODE, REGISTRATION_ATTEMPT),
+                email_templates=(REGISTRATION_CODE, REGISTRATION_ATTEMPT, RESET_LINK_MAIL),
                 provides=(AUTHENTICATOR.bind(authenticator),),
             )
     finally:

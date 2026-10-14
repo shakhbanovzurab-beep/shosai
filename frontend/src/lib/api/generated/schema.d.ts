@@ -189,6 +189,66 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/password/forgot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Forgot
+         * @description Mail a reset link if an active account has the address; the answer is the same.
+         */
+        post: operations["forgot_v1_auth_password_forgot_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/password/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reset
+         * @description Set the new password by the link, once; every session of the account ends.
+         */
+        post: operations["reset_v1_auth_password_reset_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Change
+         * @description Change the password; other sessions end, this one continues with new tokens.
+         */
+        post: operations["change_v1_me_password_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -214,6 +274,16 @@ export interface components {
             token_type: string;
             /** Csrf Token */
             csrf_token: string;
+        };
+        /**
+         * ChangeRequest
+         * @description The current password (none for an account without one) and the new one.
+         */
+        ChangeRequest: {
+            /** Current Password */
+            current_password?: string | null;
+            /** New Password */
+            new_password: string;
         };
         /**
          * Consents
@@ -303,6 +373,16 @@ export interface components {
              * @default 0
              */
             premium_credit_amount: number;
+        };
+        /**
+         * ForgotRequest
+         * @description The address to mail a reset link to; the captcha is always shown here.
+         */
+        ForgotRequest: {
+            /** Email */
+            email: string;
+            /** Captcha Token */
+            captcha_token?: string | null;
         };
         /**
          * HealthStatus
@@ -408,6 +488,16 @@ export interface components {
              * Format: uuid
              */
             registration_id: string;
+        };
+        /**
+         * ResetRequest
+         * @description The token of the link and the new password.
+         */
+        ResetRequest: {
+            /** Token */
+            token: string;
+            /** Password */
+            password: string;
         };
         /**
          * SubscriptionCardDTO
@@ -904,6 +994,108 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UserMeResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    forgot_v1_auth_password_forgot_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForgotRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    reset_v1_auth_password_reset_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResetRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_v1_me_password_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TokenResponse"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

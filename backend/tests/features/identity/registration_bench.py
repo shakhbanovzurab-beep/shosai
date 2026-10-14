@@ -29,11 +29,13 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.core.web.app import HttpTelemetry, build_http_app
 from shosai.features.identity.application.authentication import TokenAuthenticator
 from shosai.features.identity.application.native_me import NativeMe
+from shosai.features.identity.application.passwords import Passwords, PasswordServices
 from shosai.features.identity.application.registration import Registration, RegistrationServices
 from shosai.features.identity.application.sessions import Sessions
 from shosai.features.identity.application.sign_in import SignIn, SignInServices
 from shosai.features.identity.application.verification import Verification
 from shosai.features.identity.channels.http.cookies import CookiePolicy
+from shosai.features.identity.channels.http.passwords import build_password_router
 from shosai.features.identity.channels.http.registration import build_registration_router
 from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
 from shosai.features.identity.contracts import AUTHENTICATOR, IDENTITY_EVENTS
@@ -125,6 +127,14 @@ async def registration_bench(
             sessions=sessions, directory_key=DIRECTORY_KEY,
         )
     )  # fmt: skip
+    passwords = Passwords(
+        PasswordServices(
+            transactions=transactions, directory=services.directory, hasher=hasher,
+            email=mail.port, captcha=captcha or CaptchaOff(), limiter=limiter, markers=markers,
+            outbox=outbox, sessions=sessions, directory_key=DIRECTORY_KEY,
+            reset_page="https://shosai.example/app/reset",
+        )
+    )  # fmt: skip
     routers = [
         build_registration_router(
             Registration(services), Verification(services, outbox, sessions), limiter, COOKIES
@@ -135,6 +145,7 @@ async def registration_bench(
                 ports=ports, limiter=limiter, cookies=COOKIES,
             )
         ),
+        build_password_router(passwords, ports, limiter, COOKIES),
     ]  # fmt: skip
     telemetry = HttpTelemetry(registry, TracerProvider(shutdown_on_exit=False))
     app = build_http_app(WebSettings.model_validate({}), telemetry, routers)
