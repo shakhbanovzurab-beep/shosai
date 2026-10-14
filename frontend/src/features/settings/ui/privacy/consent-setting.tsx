@@ -5,7 +5,7 @@ import { decideConsent, tagManagerConfigured, useConsent } from "@/features/cons
 
 import { SettingsGroup, SettingsRow } from "../settings-row";
 
-/** Согласие на cookie аналитики и маркетинга: отозвать его так же просто, как дать (ADR 0045). */
+/** Согласие на cookie аналитики и маркетинга: отозвать его так же просто, как дать (ADR 0047). */
 export function ConsentSetting() {
   const choice = useConsent();
   const t = useTranslations("consent");

@@ -26,7 +26,7 @@ async function start() {
       <RouterProvider router={router} />
     </StrictMode>,
   );
-  // GTM — после первого кадра, на простое браузера; без контейнера в сборке не делает ничего (ADR 0045).
+  // GTM — после первого кадра, на простое браузера; без контейнера в сборке не делает ничего (ADR 0047).
   startTagManagerWhenIdle();
 }
 

@@ -1,4 +1,4 @@
-# ADR 0045 — Google Tag Manager in the cabinet, behind consent
+# ADR 0047 — Google Tag Manager in the cabinet, behind consent
 
 - **Status:** accepted by the owner on 2026-10-14 (placement: the cabinet now, the public site when it exists; consent: Consent Mode v2; no cookie banner inside the cabinet — the owner, the same day).
 - **Package:** cabinet (`frontend/`, slice `consent`); F4 passes the container id to the production build and opens the Content-Security-Policy for it; `site/` loads the same container when it is built.
