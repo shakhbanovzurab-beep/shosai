@@ -27,7 +27,7 @@ class UnsubscribeMetrics:
     def __init__(self, registry: CollectorRegistry) -> None:
         self._links = Counter(
             "shosai_email_unsubscribes",
-            "Unsubscribe links followed, by token source and outcome.",
+            "Переходы по ссылкам отписки по источнику токена и исходу",
             ("source", "outcome"),
             registry=registry,
         )

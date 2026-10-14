@@ -14,6 +14,7 @@ from typing import Any, Final
 
 import httpx
 import structlog
+from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from pydantic import HttpUrl, SecretStr
 from redis.asyncio import Redis
@@ -32,6 +33,8 @@ from shosai.core.ai.adapters.pyannote import (
 )
 from shosai.core.ai.admission import Admission, AiClients
 from shosai.core.ai.calls import Provider
+from shosai.core.ai.costs.billing import BillingMarks
+from shosai.core.ai.costs.reconciliation import CostReconciliation, reconcile_costs_handler
 from shosai.core.ai.costs.settlement import CostSettlements
 from shosai.core.ai.costs.writer import CostWriter, WorkSender, record_cost_handler
 from shosai.core.ai.metrics import AiMetrics
@@ -50,6 +53,7 @@ from shosai.core.ai.sessions.minutes import MinuteRows
 from shosai.core.ai.spend.alert import SpendAlert
 from shosai.core.ai.spend.counters import micro_usd
 from shosai.core.ai.spend.operator import SpendOperator
+from shosai.core.ai.telemetry import CallTelemetry
 from shosai.core.config.loading import Settings
 from shosai.core.config.sections import AiSettings, SpendSettings
 from shosai.core.db.transactions import HomeTransactions
@@ -77,11 +81,13 @@ class PlatformAi:
     outbound: httpx.AsyncClient
     cbr_url: str
     openrouter_url: str
+    reconciliation: CostReconciliation
 
     def task_handlers(self) -> list[TaskHandler[Any]]:
-        """The deferred cost record, the rate fetch and the price sync, in every role."""
+        """The deferred cost record, the reconciliation, the rate fetch and the price sync."""
         return [
             record_cost_handler(self.writer),
+            reconcile_costs_handler(self.reconciliation),
             rate_fetch_handler(self.transactions, self.outbound, self.cbr_url),
             price_sync_handler(self.transactions, self.outbound, self.openrouter_url),
         ]
@@ -98,6 +104,7 @@ class AiDependencies:
     valkey: Redis
     outbox: EventOutbox
     registry: CollectorRegistry
+    tracer_provider: TracerProvider
 
 
 def resilience(ai: AiSettings, dependencies: AiDependencies) -> Resilience:
@@ -209,6 +216,7 @@ async def open_ai(
     stack.push_async_callback(outbound.aclose)
     clients = open_clients(settings, stack)
     metrics = AiMetrics(registry)
+    marks = BillingMarks(dependencies.valkey, registry)
     rates = ExchangeRates(transactions, registry)
     settlements = CostSettlements()
     writer = CostWriter(
@@ -216,9 +224,9 @@ async def open_ai(
         (dependencies.effects, dependencies.batch),
         settlements,
         dependencies.sender,
-        metrics,
+        (metrics, marks),
     )
-    recorder = CallRecorder(writer, rates, metrics)
+    recorder = CallRecorder(writer, rates, metrics, marks)
     minutes = MinuteRows(recorder)
     await stack.enter_async_context(minutes.running())
     spend, operator = spend_control(
@@ -227,7 +235,10 @@ async def open_ai(
     writer.observe(spend.count)
     writer.observe(spend_alert(settings.spend, dependencies, transactions).observe)
     admission = Admission(PriceBook(transactions), metrics)
-    runner = RouteRunner(admission, recorder, resilience(settings.ai, dependencies), spend, metrics)
+    telemetry = CallTelemetry(registry, dependencies.tracer_provider)
+    runner = RouteRunner(
+        admission, recorder, resilience(settings.ai, dependencies), spend, telemetry
+    )
     guards = user_guards(settings.ai_guards, dependencies.valkey)
     providers = AiProviders(clients, runner, LiveSessions(minutes, spend), guards)
     return PlatformAi(
@@ -244,4 +255,5 @@ async def open_ai(
             if settings.ai.openrouter_base_url is None
             else str(settings.ai.openrouter_base_url)
         ),
+        reconciliation=CostReconciliation(transactions, marks, registry),
     )

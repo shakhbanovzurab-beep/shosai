@@ -7,6 +7,9 @@ from decimal import Decimal
 
 import httpx
 import sqlalchemy as sa
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,6 +29,7 @@ from shosai.core.ai.calls import (
     PlatformAccount,
     Provider,
 )
+from shosai.core.ai.costs.billing import BillingMarks
 from shosai.core.ai.costs.settlement import CostSettlements, SettledCost
 from shosai.core.ai.costs.writer import CostWriter
 from shosai.core.ai.limits import MEGABYTE, InputCaps
@@ -46,6 +50,7 @@ from shosai.core.ai.sessions.live import LiveSessions
 from shosai.core.ai.sessions.minutes import MinuteRows
 from shosai.core.ai.spend.guard import Ceilings, SpendGuard, SpendMetrics
 from shosai.core.ai.spend.kill_switch import KillSwitch
+from shosai.core.ai.telemetry import CallTelemetry
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.exchange_rates.rates import ExchangeRates
 from shosai.core.exchange_rates.records import ExchangeRate
@@ -142,6 +147,8 @@ class AiBench:
     sender: RecordingSender
     writer: CostWriter
     registry: CollectorRegistry
+    # Спаны вызовов провайдера: тест проверяет, что в них нет текста.
+    spans: InMemorySpanExporter
 
     def sample(self, name: str, **labels: str) -> float:
         """A metric sample, 0 when never recorded."""
@@ -203,8 +210,10 @@ def ai_bench(
     sender = RecordingSender()
     effect_keys = EffectKeyMetrics(registry)
     effects = (EffectLedger(effect_keys), EffectBatch(effect_keys))
-    writer = CostWriter(transactions, effects, settlements, sender, metrics)
-    recorder = CallRecorder(writer, ExchangeRates(transactions, registry), metrics)
+    valkey = doubles.valkey or unreachable_valkey()
+    marks = BillingMarks(valkey, registry)
+    writer = CostWriter(transactions, effects, settlements, sender, (metrics, marks))
+    recorder = CallRecorder(writer, ExchangeRates(transactions, registry), metrics, marks)
     clock = ManualClock()
     minutes = MinuteRows(recorder, clock=clock)
     scripted, diarizer = ScriptedOpenRouter(), ScriptedPyannote()
@@ -218,15 +227,17 @@ def ai_bench(
         gemini_live=doubles.gemini,
         mistral=MistralOcr(doubles.mistral) if enabled and doubles.mistral else None,
     )
-    valkey = doubles.valkey or unreachable_valkey()
     spend = SpendGuard(
         valkey, doubles.ceilings or OPEN_CEILINGS,
         KillSwitch(valkey, forced=doubles.kill_switch), SpendMetrics(registry),
     )  # fmt: skip
     writer.observe(spend.count)
+    spans = InMemorySpanExporter()
+    tracing = TracerProvider(shutdown_on_exit=False)
+    tracing.add_span_processor(SimpleSpanProcessor(spans))
     runner = RouteRunner(
         Admission(PriceBook(transactions), metrics), recorder, guards(valkey, registry), spend,
-        metrics,
+        CallTelemetry(registry, tracing),
     )  # fmt: skip
     sessions = LiveSessions(minutes, spend, connect_timeout=5.0, renew_every=0.2)
     limits = UserGuards(
@@ -235,7 +246,7 @@ def ai_bench(
     )
     providers = AiProviders(clients, runner, sessions, limits)
     return AiBench(
-        providers, scripted, diarizer, minutes, clock, settlement, sender, writer, registry
+        providers, scripted, diarizer, minutes, clock, settlement, sender, writer, registry, spans
     )
 
 

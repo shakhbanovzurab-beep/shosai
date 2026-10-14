@@ -8,6 +8,7 @@ not register stops the start: the walk would queue a task no worker can run.
 
 from typing import Final
 
+from shosai.core.ai.costs.reconciliation import RECONCILE_COSTS_JOB
 from shosai.core.ai.pricing.sync import SYNC_PRICES_JOB
 from shosai.core.db.partitions.system import MAINTAIN_EVERY, MAINTAIN_PARTITIONS
 from shosai.core.email.system import PURGE_EMAIL_JOB
@@ -26,6 +27,7 @@ CORE_JOBS: Final = (
     FETCH_RATES_JOB,
     SYNC_PRICES_JOB,
     PURGE_EMAIL_JOB,
+    RECONCILE_COSTS_JOB,
 )
 
 

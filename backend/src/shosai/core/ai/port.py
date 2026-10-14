@@ -11,7 +11,7 @@ with F6 step 6.
 """
 
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable
-from contextlib import AbstractAsyncContextManager, asynccontextmanager
+from contextlib import AbstractAsyncContextManager, aclosing, asynccontextmanager
 from dataclasses import dataclass
 from decimal import Decimal
 
@@ -103,8 +103,11 @@ class AiProviders:
             chat_estimate(request),
         )  # fmt: skip
         self._guards.caps.check_chat(request)
-        async with self._guards.streams.held(context):
-            async for delta in self._runner.answer_stream(context, route, operation):
+        async with (
+            self._guards.streams.held(context),
+            aclosing(self._runner.answer_stream(context, route, operation)) as pieces,
+        ):
+            async for delta in pieces:
                 yield delta
 
     async def embed(

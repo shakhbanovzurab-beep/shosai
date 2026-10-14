@@ -23,6 +23,7 @@ from sqlalchemy import insert
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.ai.costs.billing import BillingMarks
 from shosai.core.ai.costs.entries import CostEntry
 from shosai.core.ai.costs.records import ProviderCost
 from shosai.core.ai.costs.settlement import CostSettlements, SettledCost
@@ -75,13 +76,14 @@ class CostWriter:
         effects: tuple[EffectLedger, EffectBatch],
         settlements: CostSettlements,
         sender: WorkSender,
-        metrics: AiMetrics,
+        accounting: tuple[AiMetrics, BillingMarks],
     ) -> None:
         self._transactions = transactions
         self._effects, self._batch = effects
         self._settlements = settlements
         self._sender = sender
-        self._metrics = metrics
+        # Счётчики процесса и пометки часа в Valkey: по ним сверяются строки (§16.4).
+        self._metrics, self._marks = accounting
         self._observers: list[CostObserver] = []
 
     def observe(self, observer: CostObserver) -> None:
@@ -90,7 +92,7 @@ class CostWriter:
 
     async def _inserted(self, entries: Sequence[CostEntry]) -> None:
         for entry in entries:
-            self._metrics.recorded(entry.cost_source)
+            self._metrics.recorded(entry)
             if entry.cost_rub is None:
                 self._metrics.without_rate()
         for observer in self._observers:
@@ -112,17 +114,26 @@ class CostWriter:
                 RecordedCost,
                 lambda: self._insert(session, entry),
             )
-        if not result.replayed:
+        if result.replayed:
+            await self._repeated([entry])
+        else:
             await self._inserted([entry])
         return result.outcome.cost_id
+
+    async def _repeated(self, entries: Sequence[CostEntry]) -> None:
+        """Rows whose effect key was already written: billed again, kept once (inv-9)."""
+        await self._marks.mark("repeated", ((entry.home, entry.created_at) for entry in entries))
 
     async def record_many(self, entries: Sequence[CostEntry]) -> None:
         """Write rows in one transaction per home and company; defer a group whose home is down."""
         groups: dict[TenancyScope, dict[str, CostEntry]] = {}
+        doubles: list[CostEntry] = []
         for entry in entries:
             # Совпавший ключ в одной пачке — одна строка: первая побеждает, как и в реестре.
             group = groups.setdefault(TenancyScope(entry.home, org_id=entry.org_id), {})
-            group.setdefault(entry.effect_key, entry)
+            if group.setdefault(entry.effect_key, entry) is not entry:
+                doubles.append(entry)
+        await self._repeated(doubles)
         for scope, group in groups.items():
             try:
                 await self._write_group(scope, list(group.values()))
@@ -142,14 +153,16 @@ class CostWriter:
         async with self._transactions.begin(scope) as session:
             claimed = await self._batch.claim(session, AI_COST, keys)
             fresh = [entry for entry in entries if entry.effect_key in claimed]
-            if not fresh:
-                return
-            await session.execute(insert(ProviderCost).values([row_of(e) for e in fresh]))
-            for entry in fresh:
-                await self._settle(session, entry)
-            outcomes = {entry.effect_key: RecordedCost(cost_id=entry.cost_id) for entry in fresh}
-            await self._batch.complete(session, AI_COST, outcomes)
-        await self._inserted(fresh)
+            if fresh:
+                await session.execute(insert(ProviderCost).values([row_of(e) for e in fresh]))
+                for entry in fresh:
+                    await self._settle(session, entry)
+                outcomes = {e.effect_key: RecordedCost(cost_id=e.cost_id) for e in fresh}
+                await self._batch.complete(session, AI_COST, outcomes)
+        # Пометки в Valkey — после коммита: в транзакции внешних вызовов нет (§14 правило 1).
+        await self._repeated([entry for entry in entries if entry.effect_key not in claimed])
+        if fresh:
+            await self._inserted(fresh)
 
     async def _insert(self, session: AsyncSession, entry: CostEntry) -> RecordedCost:
         await session.execute(insert(ProviderCost).values(row_of(entry)))

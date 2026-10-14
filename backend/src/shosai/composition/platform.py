@@ -147,6 +147,7 @@ async def open_platform(
                 clients.valkey,
                 outbox,
                 telemetry.registry,
+                telemetry.tracer_provider,
             )
             ai = await open_ai(settings, dependencies, stack)
         with start_step("email"):

@@ -2,7 +2,7 @@
 
 import asyncio
 from collections.abc import AsyncGenerator, Awaitable, Callable
-from contextlib import AbstractAsyncContextManager, nullcontext
+from contextlib import AbstractAsyncContextManager, aclosing, nullcontext
 from dataclasses import dataclass, replace
 from typing import Protocol
 
@@ -90,5 +90,6 @@ async def replay(
     if first is None or rest is None:
         return
     yield first
-    async for delta in rest:
-        yield delta
+    async with aclosing(rest):
+        async for delta in rest:
+            yield delta

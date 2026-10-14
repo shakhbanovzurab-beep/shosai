@@ -77,6 +77,13 @@ class ProviderCost(ModelBase):
         CheckConstraint("length(effect_key) BETWEEN 1 AND 200", name="effect_key_length"),
         Index("ix_provider_costs_user", "user_id", "created_at"),
         Index("ix_provider_costs_model", "provider", "model", "created_at"),
+        # Сверка считает строки часа дома: BRIN по времени вместо скана партиции месяца.
+        Index(
+            "ix_provider_costs_created_brin",
+            "created_at",
+            postgresql_using="brin",
+            postgresql_with={"autosummarize": "on"},
+        ),
         {"postgresql_partition_by": monthly_partition_range("created_at")},
     )
 

@@ -12,6 +12,7 @@ import structlog
 
 from shosai.core.ai.calls import EFFECT_KEY_MAX_LENGTH, CallContext, ModelRef
 from shosai.core.ai.costs.amounts import CostSource, cost_of
+from shosai.core.ai.costs.billing import BillingMarks
 from shosai.core.ai.costs.entries import CostEntry
 from shosai.core.ai.costs.writer import CostWriter
 from shosai.core.ai.metrics import AiMetrics
@@ -64,10 +65,13 @@ class UsageRecord:
 class CallRecorder:
     """Builds the cost rows of calls and hands them to the writer."""
 
-    def __init__(self, writer: CostWriter, rates: ExchangeRates, metrics: AiMetrics) -> None:
+    def __init__(
+        self, writer: CostWriter, rates: ExchangeRates, metrics: AiMetrics, marks: BillingMarks
+    ) -> None:
         self._writer = writer
         self._rates = rates
         self._metrics = metrics
+        self._marks = marks
 
     async def record(
         self, call: MeteredCall, usage: Usage, outcome: CallOutcome = CallOutcome.OK
@@ -75,7 +79,9 @@ class CallRecorder:
         """Record what the call cost, once per the context's effect key."""
         rate = await self._rate()
         usage_record = UsageRecord(call, call.context.effect_key, datetime.now(UTC), usage)
-        await self._writer.record(self._entry(usage_record, outcome, rate))
+        entry = self._entry(usage_record, outcome, rate)
+        await self._billed([entry])
+        await self._writer.record(entry)
 
     async def record_failed(self, call: MeteredCall, usage: Usage, attempt: int) -> None:
         """Record a paid failure under a key of its own, so the answer that follows on the
@@ -83,16 +89,31 @@ class CallRecorder:
         rate = await self._rate()
         key = attempt_key(call.context.effect_key, attempt)
         usage_record = UsageRecord(call, key, datetime.now(UTC), usage)
-        await self._writer.record(self._entry(usage_record, CallOutcome.FAILED, rate))
+        entry = self._entry(usage_record, CallOutcome.FAILED, rate)
+        await self._billed([entry])
+        await self._writer.record(entry)
 
     async def record_many(self, records: Sequence[UsageRecord]) -> None:
         """Record many usages at once, each once per its own effect key (F6-C5)."""
         if not records:
             return
         rate = await self._rate()
-        await self._writer.record_many(
-            [self._entry(item, CallOutcome.OK, rate) for item in records]
-        )
+        entries = [self._entry(item, CallOutcome.OK, rate) for item in records]
+        await self._billed(entries)
+        await self._writer.record_many(entries)
+
+    async def lost(self, call: MeteredCall) -> None:
+        """A paid stream closed before its usage arrived: billed, and no row can say so."""
+        self._metrics.lost()
+        context = call.context
+        self._metrics.billed(call.model.provider.value, call.kind, context.call_class.value)
+        await self._marks.mark("billed", [(context.payer_scope.home, datetime.now(UTC))])
+
+    async def _billed(self, entries: Sequence[CostEntry]) -> None:
+        """Mark each row-to-be in its home's hour before the writer tries it."""
+        for entry in entries:
+            self._metrics.billed(entry.provider, entry.kind, entry.call_class)
+        await self._marks.mark("billed", ((entry.home, entry.created_at) for entry in entries))
 
     async def _rate(self) -> Rate | None:
         """The rate for the rubles; a row without them beats a row lost with the EU home."""
