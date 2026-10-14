@@ -26,6 +26,7 @@ from shosai.features.identity.domain.export import EXPORT_PREFIX
 from shosai.features.identity.infrastructure.deletion_records import AccountDeletion
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.export_records import DataExportJob
+from shosai.features.identity.infrastructure.operator_records import OperatorRoleGrant
 from shosai.features.identity.infrastructure.records import (
     DirectoryEntry,
     User,
@@ -47,6 +48,7 @@ ERASED_TABLES: Final[tuple[Any, ...]] = (
     RefreshSession,
     LoginEvent,
     DataExportJob,
+    OperatorRoleGrant,
 )
 HOME_ROWS: Final = (
     PersonRows(
@@ -81,6 +83,9 @@ HOME_ROWS: Final = (
     PersonRows(
         AccountDeletion.metadata.tables["account_deletions"],
         ("state", "requested_at", "erase_at", "cancelled_at"), key="user_id",
+    ),
+    PersonRows(
+        OperatorRoleGrant.metadata.tables["operator_roles"], ("role", "granted_at"), key="role",
     ),
     PersonRows(
         DataExportJob.metadata.tables["data_export_jobs"],

@@ -24,8 +24,9 @@ from shosai.core.kernel.homes import Home
 from shosai.core.storage.errors import StorageRejectedError, StorageUnavailableError
 from shosai.core.storage.port import Disposition, ObjectStorage
 from shosai.features.identity.application import registration_errors as errors
+from shosai.features.identity.application.operators import held_roles
 from shosai.features.identity.application.registration import ClientFacts
-from shosai.features.identity.contracts import AccountProfile, Principal
+from shosai.features.identity.contracts import AccountProfile, OperatorRole, Principal
 from shosai.features.identity.domain.avatars import AvatarProblem, check_avatar
 from shosai.features.identity.domain.profile import (
     SWITCHABLE,
@@ -52,6 +53,7 @@ class ProfileView:
     home: Home
     consents: dict[ConsentKind, bool]
     avatar_url: str | None
+    operator_roles: frozenset[OperatorRole]
 
 
 @dataclass(frozen=True, slots=True)
@@ -86,9 +88,9 @@ class Profiles:
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
             user = await _user(session, principal.user_id)
             consents = await self._journal.current(session, user.id)
-        return ProfileView(
-            user, principal.home, consents, await self.avatar_url(principal.home, user)
-        )
+            roles = await held_roles(session, user.id)
+        avatar = await self.avatar_url(principal.home, user)
+        return ProfileView(user, principal.home, consents, avatar, roles)
 
     async def change(
         self, principal: Principal, change: ProfileChange, client: ClientFacts
@@ -98,6 +100,7 @@ class Profiles:
             user = await _user(session, principal.user_id, lock=True)
             _apply_fields(user, change)
             consents = await self._journal.current(session, user.id)
+            roles = await held_roles(session, user.id)
             changed = {
                 kind: wanted
                 for kind, wanted in change.consents.items()
@@ -111,9 +114,8 @@ class Profiles:
                 raise errors.invalid(ProfileProblem.CONSENT_WARNING_REQUIRED.value)
             self._journal.record(session, user.id, changed, (client.ip, client.user_agent))
             consents.update(changed)
-        return ProfileView(
-            user, principal.home, consents, await self.avatar_url(principal.home, user)
-        )
+        avatar = await self.avatar_url(principal.home, user)
+        return ProfileView(user, principal.home, consents, avatar, roles)
 
     async def set_avatar(self, principal: Principal, data: bytes) -> ProfileView:
         """Store a checked image as the person's avatar."""
@@ -158,15 +160,15 @@ class Profiles:
             user = await _user(session, principal.user_id, lock=True)
             previous, user.avatar_key = user.avatar_key, key
             consents = await self._journal.current(session, user.id)
+            roles = await held_roles(session, user.id)
         if previous is not None and previous != key:
             try:
                 await self._objects[principal.home].delete(previous)
             except STORAGE_FAILURES:
                 # Сирота в бакете безвредна: её подберёт стирание по префиксу аккаунта.
                 log.warning("Прежний аватар не удалён", user_id=str(principal.user_id))
-        return ProfileView(
-            user, principal.home, consents, await self.avatar_url(principal.home, user)
-        )
+        avatar = await self.avatar_url(principal.home, user)
+        return ProfileView(user, principal.home, consents, avatar, roles)
 
 
 async def _user(session: AsyncSession, user_id: UUID, *, lock: bool = False) -> User:

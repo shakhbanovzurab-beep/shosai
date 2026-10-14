@@ -1,8 +1,10 @@
 {
   "api": [
+    "DELETE /v1/admin/operators/{user_id}",
     "DELETE /v1/me/avatar",
     "DELETE /v1/me/devices/{device_id}",
     "GET /email/{name}",
+    "GET /v1/admin/operators",
     "GET /v1/auth/me",
     "GET /v1/auth/social/providers",
     "GET /v1/auth/social/yandex/token-page",
@@ -33,6 +35,7 @@
     "POST /v1/me/exports",
     "POST /v1/me/password",
     "POST /v1/unsubscribe",
+    "PUT /v1/admin/operators/{user_id}",
     "PUT /v1/me/avatar"
   ],
   "ws": [

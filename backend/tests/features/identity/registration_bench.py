@@ -8,7 +8,7 @@ from typing import cast
 from uuid import UUID
 
 import httpx
-from fastapi import APIRouter
+from fastapi import APIRouter, FastAPI
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from pydantic import SecretStr
@@ -24,6 +24,7 @@ from shosai.core.events.catalog import EventTypes
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.metrics import KeyValueMetrics
 from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.ports.directory import PortDirectory
@@ -35,6 +36,7 @@ from shosai.features.identity.application.desktop import DesktopSignIn
 from shosai.features.identity.application.devices import Devices
 from shosai.features.identity.application.exports import Exports
 from shosai.features.identity.application.native_me import NativeMe
+from shosai.features.identity.application.operators import OperatorRoles, Operators
 from shosai.features.identity.application.passwords import Passwords, PasswordServices
 from shosai.features.identity.application.profile import Profiles
 from shosai.features.identity.application.registration import Registration, RegistrationServices
@@ -46,6 +48,7 @@ from shosai.features.identity.application.social_accounts import (
     SocialAccountServices,
 )
 from shosai.features.identity.application.verification import Verification
+from shosai.features.identity.channels.http.admin_operators import build_admin_operators_router
 from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.channels.http.deletion import build_deletion_router
 from shosai.features.identity.channels.http.desktop import build_desktop_router
@@ -57,7 +60,7 @@ from shosai.features.identity.channels.http.registration import build_registrati
 from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
 from shosai.features.identity.channels.http.social import build_social_router
 from shosai.features.identity.channels.http.social_finish import build_social_finish_router
-from shosai.features.identity.contracts import AUTHENTICATOR, IDENTITY_EVENTS
+from shosai.features.identity.contracts import AUTHENTICATOR, IDENTITY_EVENTS, OPERATOR_ROLES
 from shosai.features.identity.domain.social import Provider
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.captcha import Captcha, CaptchaOff
@@ -96,6 +99,8 @@ class RegistrationBench:
     sessions: Sessions
     codec: TokenCodec
     markers: AccountMarkers
+    operators: Operators
+    app: FastAPI
 
 
 class EuUnreachable:
@@ -136,7 +141,8 @@ async def registration_bench(
     directory_access = (
         directory_transactions(transactions) if directory_transactions else transactions
     )
-    limiter = RateLimiter(valkey, KeyValueMetrics(registry))
+    kv_metrics = KeyValueMetrics(registry)
+    limiter = RateLimiter(valkey, kv_metrics)
     hasher = PasswordHasher(TEST_ROUNDS, workers=2)
     services = RegistrationServices(
         transactions=transactions,
@@ -156,7 +162,14 @@ async def registration_bench(
     )  # fmt: skip
     markers = AccountMarkers(valkey)
     ports = PortDirectory()
-    ports.install([AUTHENTICATOR.bind(TokenAuthenticator(codec, services.directory, markers))])
+    ports.install(
+        [
+            AUTHENTICATOR.bind(TokenAuthenticator(codec, services.directory, markers)),
+            OPERATOR_ROLES.bind(OperatorRoles(transactions)),
+        ]
+    )
+    locks = DistributedLocks(valkey, kv_metrics)
+    operators = Operators(transactions, services.directory, outbox, locks)
     sign_in = SignIn(
         SignInServices(
             transactions=transactions, directory=services.directory, routes=services.routes,
@@ -190,6 +203,7 @@ async def registration_bench(
         ),
         build_devices_router(Devices(transactions, markers, outbox), ports),
         build_export_router(Exports(transactions, chosen.objects), ports, limiter),
+        build_admin_operators_router(operators, ports),
         build_deletion_router(
             Deletions(transactions, markers, outbox, mail.port), ports, limiter, COOKIES
         ),
@@ -202,7 +216,9 @@ async def registration_bench(
         async with httpx.AsyncClient(
             transport=transport, base_url="https://shosai.example"
         ) as http:
-            yield RegistrationBench(http, services, mail.key_ring, sessions, codec, markers)
+            yield RegistrationBench(
+                http, services, mail.key_ring, sessions, codec, markers, operators, app
+            )
     finally:
         hasher.close()
 

@@ -20,3 +20,5 @@ class ProcessRole(StrEnum):
     AI = "ai"
     # Разовая проверка почты: письмо каждого вида через SMTP.
     EMAIL = "email"
+    # Разовые команды оператора над аккаунтами: первая роль владельца.
+    IDENTITY = "identity"

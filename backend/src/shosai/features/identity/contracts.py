@@ -14,10 +14,10 @@ from http import HTTPStatus
 from typing import Annotated, ClassVar, Final, Protocol
 from uuid import UUID
 
-from fastapi import Header
+from fastapi import Depends, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from shosai.core.events.domain_event import DomainEvent
+from shosai.core.events.domain_event import DomainEvent, EventCode
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
@@ -49,6 +49,31 @@ class OperatorRole(StrEnum):
     PLATFORM = "platform"
     RELEASES = "releases"
     READ_ONLY = "read_only"
+
+
+@dataclass(frozen=True, slots=True)
+class Operator:
+    """An operator behind an admin route: the person and the roles they hold right now."""
+
+    principal: Principal
+    roles: frozenset[OperatorRole]
+
+
+class OperatorRoleReader(Protocol):
+    """Reads a person's operator roles on every admin request: rights are not cached (§7)."""
+
+    async def roles_of(self, principal: Principal) -> frozenset[OperatorRole]:
+        """The roles the person holds now, in their home; empty for everyone else."""
+        ...
+
+
+class OperatorAction(StrEnum):
+    """What an operator did; the audit log keeps it for 12 months (nfr-17)."""
+
+    ROLES_CHANGED = "operator_roles_changed"
+    ACCOUNT_BLOCKED = "account_blocked"
+    ACCOUNT_UNBLOCKED = "account_unblocked"
+    ACCOUNT_BANNED = "account_banned"
 
 
 class Authenticator(Protocol):
@@ -100,6 +125,7 @@ AUTHENTICATOR: Final = PortKey[Authenticator]("identity.authenticator")
 ME_CONTRIBUTIONS: Final = PortKey[MeContribution]("identity.me_contribution", Cardinality.MANY)
 CONSENT_READER: Final = PortKey[ConsentReader]("identity.consent_reader")
 ACCOUNT_PROFILE_READER: Final = PortKey[AccountProfileReader]("identity.account_profile_reader")
+OPERATOR_ROLES: Final = PortKey[OperatorRoleReader]("identity.operator_roles")
 BEARER: Final = "Bearer "
 
 
@@ -116,6 +142,28 @@ def bearer_principal(ports: PortDirectory) -> Callable[..., Awaitable[Principal]
         return await ports.get(AUTHENTICATOR).principal(authorization.removeprefix(BEARER))
 
     return authenticated
+
+
+def require_operator(
+    ports: PortDirectory, *admitted: OperatorRole
+) -> Callable[..., Awaitable[Operator]]:
+    """A route dependency: a signed-in operator holding one of `admitted` (SM-12).
+
+    Anyone else is 403 `operator_role_required`; the roles are read on every request.
+    """
+    if not admitted:
+        message = "маршрут оператора должен назвать допущенные роли"
+        raise ValueError(message)
+    roles = frozenset(admitted)
+    signed_in = bearer_principal(ports)
+
+    async def operator(principal: Annotated[Principal, Depends(signed_in)]) -> Operator:
+        held = await ports.get(OPERATOR_ROLES).roles_of(principal)
+        if not held & roles:
+            raise AppError("operator_role_required", HTTPStatus.FORBIDDEN)
+        return Operator(principal, held)
+
+    return operator
 
 
 class AccountRegistered(DomainEvent):
@@ -177,6 +225,19 @@ class SessionsRevoked(DomainEvent):
     user_id: UUID
 
 
+class OperatorActed(DomainEvent):
+    """An operator changed an account or operator roles; the EU audit log records it."""
+
+    event_type: ClassVar[str] = "identity.operator.acted"
+    version: ClassVar[int] = 1
+    # Пусто у первой роли владельца, выданной командой `shosai identity grant-operator`.
+    operator_id: UUID | None
+    target_user_id: UUID
+    target_home: Home
+    action: OperatorAction
+    reason_code: EventCode | None = None
+
+
 IDENTITY_EVENTS: Final[tuple[type[DomainEvent], ...]] = (
     AccountRegistered,
     AccountDeletionScheduled,
@@ -185,4 +246,5 @@ IDENTITY_EVENTS: Final[tuple[type[DomainEvent], ...]] = (
     AccountTransferred,
     AccountBlocked,
     SessionsRevoked,
+    OperatorActed,
 )

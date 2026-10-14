@@ -560,6 +560,50 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/operators": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Operators
+         * @description Every operator and their roles.
+         */
+        get: operations["list_operators_v1_admin_operators_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/operators/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Set Operator Roles
+         * @description Give the person exactly these roles; 409 `last_owner` for the last owner.
+         */
+        put: operations["set_operator_roles_v1_admin_operators__user_id__put"];
+        post?: never;
+        /**
+         * Remove Operator
+         * @description Take every role away; 409 `last_owner` for the last owner.
+         */
+        delete: operations["remove_operator_v1_admin_operators__user_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -931,6 +975,8 @@ export interface components {
             /** Home */
             home: string;
             consents: components["schemas"]["Consents-Output"];
+            /** Operator Roles */
+            operator_roles: components["schemas"]["OperatorRole"][];
             /**
              * Created At
              * Format: date-time
@@ -959,6 +1005,39 @@ export interface components {
              */
             cross_border_warning_confirmed: boolean;
         };
+        /**
+         * OperatorEntry
+         * @description An operator, their home and roles.
+         */
+        OperatorEntry: {
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+            /** Home */
+            home: string;
+            /** Email */
+            email: string;
+            /** Full Name */
+            full_name: string;
+            /** Roles */
+            roles: components["schemas"]["OperatorRole"][];
+        };
+        /**
+         * OperatorList
+         * @description Every operator of both homes, by name.
+         */
+        OperatorList: {
+            /** Items */
+            items: components["schemas"]["OperatorEntry"][];
+        };
+        /**
+         * OperatorRole
+         * @description The fixed operator roles; each `/v1/admin/*` router names the ones it admits (SM-12).
+         * @enum {string}
+         */
+        OperatorRole: "owner" | "support" | "finance" | "platform" | "releases" | "read_only";
         /** Page[DeviceView] */
         Page_DeviceView_: {
             /** Items */
@@ -1057,6 +1136,14 @@ export interface components {
             token: string;
             /** Password */
             password: string;
+        };
+        /**
+         * RolesChange
+         * @description The whole set of roles the person holds after the change.
+         */
+        RolesChange: {
+            /** Roles */
+            roles: components["schemas"]["OperatorRole"][];
         };
         /**
          * SignedOutElsewhere
@@ -2311,6 +2398,105 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["ExportJob"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_operators_v1_admin_operators_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperatorList"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    set_operator_roles_v1_admin_operators__user_id__put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RolesChange"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperatorEntry"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    remove_operator_v1_admin_operators__user_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                user_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

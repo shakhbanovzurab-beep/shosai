@@ -107,6 +107,16 @@ Notifications and newsletters to a person carry a signed unsubscribe link once `
 
 `shosai email check` needs no worker and no database: it sends one check mail of each kind (account, notification, newsletter) straight to the SMTP server from its mailbox, logs whether the server took each one, and exits with 1 if any was refused. The same command against the production mailboxes proves SMTP, TLS and both logins. The mails use every block of the layout, so they also show how mail looks in a client, light and dark.
 
+### The first operator
+
+The admin routes need an operator, and only an owner gives roles over the API. Give the first owner role to your local account once it is registered and confirmed:
+
+```bash
+uv run --env-file ../.env shosai identity grant-operator --email you@example.org --role owner
+```
+
+The command checks both homes, adds the role in the account's home and exits with 1 if no active account has the address. The audit row reaches `operator_audit_events` in the EU home once a worker delivers the event.
+
 ## Run the frontend
 
 The web cabinet in `frontend/` (a Vite SPA, [ADR 0021](adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) needs Node.js at the version in [`frontend/.nvmrc`](../frontend/.nvmrc) and npm 11; nothing else is installed on the host.

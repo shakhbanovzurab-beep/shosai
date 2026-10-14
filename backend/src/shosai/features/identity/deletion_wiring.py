@@ -12,7 +12,6 @@ from shosai.features.identity.channels.deletion_tasks import (
 )
 from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.channels.http.deletion import build_deletion_router
-from shosai.features.identity.channels.subscriptions import SUBSCRIPTIONS
 from shosai.features.identity.emails.deletion_scheduled import DELETION_SCHEDULED
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.deletion_metrics import DeletionMetrics
@@ -33,7 +32,6 @@ def deletion_parts(
             build_deletion_router(deletions, services.ports, services.rate_limiter, cookies),
         ),
         task_handlers=deletion_task_handlers(erasure, directory, services.tasks),
-        subscriptions=SUBSCRIPTIONS,
         due_sources=DUE_SOURCES,
         periodic_jobs=DELETION_JOBS,
         email_templates=(DELETION_SCHEDULED,),

@@ -9,6 +9,7 @@
     shosai ai kill-switch ACTION   engage, release or report the AI kill switch
     shosai ai rebuild-spend-counters   sum the AI spend counters again from the cost rows
     shosai email check --to ADDRESS    send a check mail of each kind through SMTP
+    shosai identity grant-operator --email ADDRESS --role ROLE   give an operator role
 
 Every long-running role also serves `/livez`, `/readyz` and `/metrics` on OPS_PORT. The
 settings come from the environment only (`.env.example`, section 2). One process runs
@@ -25,12 +26,14 @@ import uvloop
 from shosai.composition.ai_command import KillSwitchAction, KillSwitchCommand, run_kill_switch
 from shosai.composition.ai_rebuild import run_rebuild
 from shosai.composition.email_command import MailCheckCommand, run_mail_check
+from shosai.composition.identity_command import GrantOperatorCommand, run_grant_operator
 from shosai.composition.migrate import MigrateAction, run_migrate
 from shosai.composition.process import run_process
 from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
 from shosai.core.config.roles import ProcessRole
 from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
 from shosai.core.tasks.queues import TaskQueue
+from shosai.features.identity.contracts import OperatorRole
 
 PROGRAM = "shosai"
 
@@ -66,6 +69,18 @@ def build_parser() -> argparse.ArgumentParser:
     check.add_argument(
         "--locale", default="en", choices=SUPPORTED_LANGUAGES, help="language of the mail"
     )
+    identity = roles.add_parser(ProcessRole.IDENTITY.value, help="operator commands of accounts")
+    account_tools = identity.add_subparsers(dest="tool", required=True, metavar="TOOL")
+    grant = account_tools.add_parser("grant-operator", help="give an account an operator role")
+    grant.add_argument("--email", required=True, help="the address of an active account")
+    # Не `role`: так называется подкоманда процесса.
+    grant.add_argument(
+        "--role",
+        required=True,
+        dest="operator_role",
+        choices=[role.value for role in OperatorRole],
+        help="the role",
+    )
     return parser
 
 
@@ -81,18 +96,21 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
             return run_process(role, environ, workers_role(TaskQueue(arguments.queue)))
         case ProcessRole.SCHEDULER:
             return run_process(role, environ, scheduler_role)
-        case ProcessRole.MIGRATE | ProcessRole.AI | ProcessRole.EMAIL:
+        case ProcessRole.MIGRATE | ProcessRole.AI | ProcessRole.EMAIL | ProcessRole.IDENTITY:
             return one_shot(role, arguments, environ)
 
 
 def one_shot(
     role: ProcessRole, arguments: argparse.Namespace, environ: Mapping[str, str]
 ) -> Coroutine[Any, Any, int]:
-    """The coroutine of a one-shot command: migrations, an AI or a mail command."""
+    """The coroutine of a one-shot command: migrations, an AI, a mail or an account command."""
     if role is ProcessRole.MIGRATE:
         return run_migrate(environ, MigrateAction(arguments.action))
     if role is ProcessRole.EMAIL:
         return run_mail_check(environ, MailCheckCommand(arguments.recipient, arguments.locale))
+    if role is ProcessRole.IDENTITY:
+        grant = GrantOperatorCommand(arguments.email, OperatorRole(arguments.operator_role))
+        return run_grant_operator(environ, grant)
     return ai_command(arguments, environ)
 
 

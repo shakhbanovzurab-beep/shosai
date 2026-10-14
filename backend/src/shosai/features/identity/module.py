@@ -33,6 +33,7 @@ from shosai.features.identity.channels.http.me import build_me_router
 from shosai.features.identity.channels.http.passwords import build_password_router
 from shosai.features.identity.channels.http.registration import build_registration_router
 from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
+from shosai.features.identity.channels.subscriptions import SUBSCRIPTIONS
 from shosai.features.identity.channels.tasks import PERIODIC_JOBS, task_handlers
 from shosai.features.identity.contracts import (
     ACCOUNT_PROFILE_READER,
@@ -53,12 +54,14 @@ from shosai.features.identity.infrastructure.deletion_records import DELETION_MO
 from shosai.features.identity.infrastructure.desktop_codes import DesktopCodes
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.export_records import EXPORT_MODELS
+from shosai.features.identity.infrastructure.operator_records import OPERATOR_MODELS
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
 from shosai.features.identity.infrastructure.records import IDENTITY_MODELS
 from shosai.features.identity.infrastructure.registration_routes import RegistrationRoutes
 from shosai.features.identity.infrastructure.session_records import SESSION_MODELS
 from shosai.features.identity.infrastructure.sign_in_failures import SignInFailures
 from shosai.features.identity.infrastructure.token_codec import TokenCodec
+from shosai.features.identity.operator_wiring import operator_parts
 from shosai.features.identity.settings import IdentitySettings, identity_secrets_safe
 from shosai.features.identity.social_wiring import social_routers
 
@@ -81,6 +84,7 @@ IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
         # Журнал удаления уходит в последней транзакции саги.
         TableCoverage("account_deletions", Treatment.ERASE),
         TableCoverage("data_export_jobs", Treatment.ERASE),
+        TableCoverage("operator_roles", Treatment.ERASE),
     ),
     prefixes=(AVATAR_PREFIX, EXPORT_PREFIX),
 )
@@ -147,6 +151,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     *social,
                 ),
                 task_handlers=task_handlers(services.transactions, directory),
+                subscriptions=SUBSCRIPTIONS,
                 periodic_jobs=PERIODIC_JOBS,
                 email_templates=(REGISTRATION_CODE, REGISTRATION_ATTEMPT, RESET_LINK_MAIL),
                 agent_tools=account_tools(services.transactions, profiles),
@@ -157,7 +162,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 ),
             )
             deletion = deletion_parts(services, directory, markers, cookies)
-            yield combine_parts([main, deletion, export_parts(services)])
+            parts = [main, deletion, export_parts(services), operator_parts(services, directory)]
+            yield combine_parts(parts)
     finally:
         hasher.close()
 
@@ -201,7 +207,13 @@ def _account_routers(services: CoreServices, routing: _AccountRouting) -> tuple[
 IDENTITY: Final = FeatureModule(
     name="identity",
     build=build,
-    models=(*IDENTITY_MODELS, *SESSION_MODELS, *DELETION_MODELS, *EXPORT_MODELS),
+    models=(
+        *IDENTITY_MODELS,
+        *SESSION_MODELS,
+        *DELETION_MODELS,
+        *EXPORT_MODELS,
+        *OPERATOR_MODELS,
+    ),
     events=IDENTITY_EVENTS,
     production_checks=(identity_secrets_safe,),
     settings=(IdentitySettings,),

@@ -58,6 +58,8 @@ DATABASE_PROFILES: Final[Mapping[ProcessRole, DatabaseProfile]] = MappingProxyTy
         ),
         # Разовые команды ИИ: пересборка читает суммы месяца по обоим домам.
         ProcessRole.AI: DatabaseProfile(pool_size=1, statement_timeout=timedelta(seconds=60)),
+        # Разовые команды аккаунтов: несколько коротких запросов к каждому дому.
+        ProcessRole.IDENTITY: DatabaseProfile(pool_size=1, statement_timeout=timedelta(seconds=10)),
     }
 )
 

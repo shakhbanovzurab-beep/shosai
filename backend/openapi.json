@@ -1707,6 +1707,177 @@
           }
         }
       }
+    },
+    "/v1/admin/operators": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "List Operators",
+        "description": "Every operator and their roles.",
+        "operationId": "list_operators_v1_admin_operators_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperatorList"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/operators/{user_id}": {
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Set Operator Roles",
+        "description": "Give the person exactly these roles; 409 `last_owner` for the last owner.",
+        "operationId": "set_operator_roles_v1_admin_operators__user_id__put",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RolesChange"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperatorEntry"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Remove Operator",
+        "description": "Take every role away; 409 `last_owner` for the last owner.",
+        "operationId": "remove_operator_v1_admin_operators__user_id__delete",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2549,6 +2720,13 @@
           "consents": {
             "$ref": "#/components/schemas/Consents-Output"
           },
+          "operator_roles": {
+            "items": {
+              "$ref": "#/components/schemas/OperatorRole"
+            },
+            "type": "array",
+            "title": "Operator Roles"
+          },
           "created_at": {
             "type": "string",
             "format": "date-time",
@@ -2568,6 +2746,7 @@
           "country",
           "home",
           "consents",
+          "operator_roles",
           "created_at"
         ],
         "title": "Me",
@@ -2655,6 +2834,74 @@
         "type": "object",
         "title": "MePatch",
         "description": "The fields to change; a field left out keeps its value, `null` clears it."
+      },
+      "OperatorEntry": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "home": {
+            "type": "string",
+            "title": "Home"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "full_name": {
+            "type": "string",
+            "title": "Full Name"
+          },
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/OperatorRole"
+            },
+            "type": "array",
+            "title": "Roles"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "home",
+          "email",
+          "full_name",
+          "roles"
+        ],
+        "title": "OperatorEntry",
+        "description": "An operator, their home and roles."
+      },
+      "OperatorList": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/OperatorEntry"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "OperatorList",
+        "description": "Every operator of both homes, by name."
+      },
+      "OperatorRole": {
+        "type": "string",
+        "enum": [
+          "owner",
+          "support",
+          "finance",
+          "platform",
+          "releases",
+          "read_only"
+        ],
+        "title": "OperatorRole",
+        "description": "The fixed operator roles; each `/v1/admin/*` router names the ones it admits (SM-12)."
       },
       "Page_DeviceView_": {
         "properties": {
@@ -2917,6 +3164,26 @@
         ],
         "title": "ResetRequest",
         "description": "The token of the link and the new password."
+      },
+      "RolesChange": {
+        "properties": {
+          "roles": {
+            "items": {
+              "$ref": "#/components/schemas/OperatorRole"
+            },
+            "type": "array",
+            "maxItems": 6,
+            "minItems": 1,
+            "title": "Roles"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "roles"
+        ],
+        "title": "RolesChange",
+        "description": "The whole set of roles the person holds after the change."
       },
       "SignedOutElsewhere": {
         "properties": {
