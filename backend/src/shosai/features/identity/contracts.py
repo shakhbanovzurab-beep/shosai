@@ -32,6 +32,8 @@ class Principal:
     user_id: UUID
     home: Home
     token_version: int
+    # Сессия (семейство refresh) устройства; None у токенов черновика.
+    family_id: UUID | None = None
 
     def scope(self) -> TenancyScope:
         """The tenancy scope of the person's own transactions, in their home."""

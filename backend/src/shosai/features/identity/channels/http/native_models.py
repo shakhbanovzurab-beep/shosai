@@ -8,6 +8,7 @@ unknown fields, as the draft did: refusing one would break a client that sends i
 
 from datetime import datetime
 from typing import Annotated
+from uuid import UUID
 
 from pydantic import BaseModel, Field
 
@@ -32,7 +33,7 @@ class TokenResponse(BaseModel):
 class TariffDTO(BaseModel):
     """A plan of the catalogue, as the draft described it; billing fills it."""
 
-    id: str
+    id: UUID
     code: str
     name: str
     price_rub: int
@@ -55,7 +56,7 @@ class SubscriptionCardDTO(BaseModel):
 
     status: str
     tariff: TariffDTO | None
-    started_at: str
+    started_at: datetime
     expires_at: datetime | None
     days_left: int | None
     bonus_minutes: int
@@ -88,7 +89,7 @@ class FeaturesOut(BaseModel):
 class UserMeResponse(BaseModel):
     """The signed-in person as the desktop clients read it; all 23 fields are present."""
 
-    id: str
+    id: UUID
     email: str
     username: str | None
     phone: str | None

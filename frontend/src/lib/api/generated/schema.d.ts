@@ -249,6 +249,126 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/desktop/code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Issue Code
+         * @description A one-time code for the desktop app, after the person confirmed on the page.
+         */
+        post: operations["issue_code_v1_auth_desktop_code_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/desktop/exchange": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Exchange
+         * @description The app's own session for the code; the code works once, for 120 seconds.
+         */
+        post: operations["exchange_v1_auth_desktop_exchange_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/desktop/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Refresh
+         * @description Rotate the app's session; a replayed old token ends it.
+         */
+        post: operations["refresh_v1_auth_desktop_refresh_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/devices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Devices
+         * @description The live sessions, newest first; the current one is marked.
+         */
+        get: operations["list_devices_v1_me_devices_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/devices/{device_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * End Device
+         * @description End one session; its device is signed out on its next request.
+         */
+        delete: operations["end_device_v1_me_devices__device_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/devices/sign-out-others": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * End Other Devices
+         * @description End every session except this one.
+         */
+        post: operations["end_other_devices_v1_me_devices_sign_out_others_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -303,7 +423,91 @@ export interface components {
              */
             marketing: boolean;
         };
+        /**
+         * DesktopCodeRequest
+         * @description The app's PKCE challenge, passed on by the connect page when the app sent one.
+         */
+        DesktopCodeRequest: {
+            /** Code Challenge */
+            code_challenge?: string | null;
+            /** Code Challenge Method */
+            code_challenge_method?: string | null;
+        };
+        /**
+         * DesktopCodeResponse
+         * @description The one-time code for `shosai://auth` and its lifetime in seconds.
+         */
+        DesktopCodeResponse: {
+            /** Code */
+            code: string;
+            /** Expires In */
+            expires_in: number;
+        };
+        /**
+         * DesktopExchangeRequest
+         * @description The code from `shosai://auth`, and the PKCE verifier if the app sent a challenge.
+         */
+        DesktopExchangeRequest: {
+            /** Code */
+            code: string;
+            /** Code Verifier */
+            code_verifier?: string | null;
+        };
+        /**
+         * DesktopRefreshRequest
+         * @description The app's current refresh token.
+         */
+        DesktopRefreshRequest: {
+            /** Refresh Token */
+            refresh_token: string;
+        };
+        /**
+         * DesktopTokenResponse
+         * @description The app's tokens: it keeps the refresh token in the system's key store.
+         */
+        DesktopTokenResponse: {
+            /** Access Token */
+            access_token: string;
+            /** Refresh Token */
+            refresh_token: string;
+            /** Expires In */
+            expires_in: number;
+            /**
+             * Token Type
+             * @default Bearer
+             */
+            token_type: string;
+        };
         DetailValue: string | number | boolean;
+        /**
+         * DeviceView
+         * @description A signed-in device: where it signed in and when it was last used.
+         */
+        DeviceView: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Client Kind */
+            client_kind: string;
+            /** Device Label */
+            device_label: string | null;
+            /** Ip */
+            ip: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Last Used At
+             * Format: date-time
+             */
+            last_used_at: string;
+            /** Current */
+            current: boolean;
+        };
         /**
          * ErrorDescription
          * @description The machine-readable error: a stable code, the request id and optional context.
@@ -425,6 +629,13 @@ export interface components {
             /** Refresh Token */
             refresh_token?: string | null;
         };
+        /** Page[DeviceView] */
+        Page_DeviceView_: {
+            /** Items */
+            items: components["schemas"]["DeviceView"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
         /**
          * QuotaSnapshot
          * @description Recording minutes left; billing fills it.
@@ -500,6 +711,14 @@ export interface components {
             password: string;
         };
         /**
+         * SignedOutElsewhere
+         * @description How many other sessions ended.
+         */
+        SignedOutElsewhere: {
+            /** Ended */
+            ended: number;
+        };
+        /**
          * SubscriptionCardDTO
          * @description The person's subscription; billing fills it.
          */
@@ -507,7 +726,10 @@ export interface components {
             /** Status */
             status: string;
             tariff: components["schemas"]["TariffDTO"] | null;
-            /** Started At */
+            /**
+             * Started At
+             * Format: date-time
+             */
             started_at: string;
             /** Expires At */
             expires_at: string | null;
@@ -523,7 +745,10 @@ export interface components {
          * @description A plan of the catalogue, as the draft described it; billing fills it.
          */
         TariffDTO: {
-            /** Id */
+            /**
+             * Id
+             * Format: uuid
+             */
             id: string;
             /** Code */
             code: string;
@@ -595,7 +820,10 @@ export interface components {
          * @description The signed-in person as the desktop clients read it; all 23 fields are present.
          */
         UserMeResponse: {
-            /** Id */
+            /**
+             * Id
+             * Format: uuid
+             */
             id: string;
             /** Email */
             email: string;
@@ -1096,6 +1324,207 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TokenResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    issue_code_v1_auth_desktop_code_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["DesktopCodeRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DesktopCodeResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    exchange_v1_auth_desktop_exchange_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DesktopExchangeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DesktopTokenResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    refresh_v1_auth_desktop_refresh_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DesktopRefreshRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DesktopTokenResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_devices_v1_me_devices_get: {
+        parameters: {
+            query?: {
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_DeviceView_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    end_device_v1_me_devices__device_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                device_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    end_other_devices_v1_me_devices_sign_out_others_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SignedOutElsewhere"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

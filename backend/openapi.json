@@ -713,6 +713,361 @@
           }
         }
       }
+    },
+    "/v1/auth/desktop/code": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Issue Code",
+        "description": "A one-time code for the desktop app, after the person confirmed on the page.",
+        "operationId": "issue_code_v1_auth_desktop_code_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/DesktopCodeRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DesktopCodeResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/desktop/exchange": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Exchange",
+        "description": "The app's own session for the code; the code works once, for 120 seconds.",
+        "operationId": "exchange_v1_auth_desktop_exchange_post",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DesktopExchangeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DesktopTokenResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/desktop/refresh": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Refresh",
+        "description": "Rotate the app's session; a replayed old token ends it.",
+        "operationId": "refresh_v1_auth_desktop_refresh_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DesktopRefreshRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DesktopTokenResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/devices": {
+      "get": {
+        "tags": [
+          "me"
+        ],
+        "summary": "List Devices",
+        "description": "The live sessions, newest first; the current one is marked.",
+        "operationId": "list_devices_v1_me_devices_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page, at most the maximum.",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page, at most the maximum."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The next_cursor of the previous page; absent for the first page.",
+              "title": "Cursor"
+            },
+            "description": "The next_cursor of the previous page; absent for the first page."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_DeviceView_"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/devices/{device_id}": {
+      "delete": {
+        "tags": [
+          "me"
+        ],
+        "summary": "End Device",
+        "description": "End one session; its device is signed out on its next request.",
+        "operationId": "end_device_v1_me_devices__device_id__delete",
+        "parameters": [
+          {
+            "name": "device_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Device Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/devices/sign-out-others": {
+      "post": {
+        "tags": [
+          "me"
+        ],
+        "summary": "End Other Devices",
+        "description": "End every session except this one.",
+        "operationId": "end_other_devices_v1_me_devices_sign_out_others_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignedOutElsewhere"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -806,6 +1161,129 @@
         "title": "Consents",
         "description": "The consents of the registration form; personal data is required."
       },
+      "DesktopCodeRequest": {
+        "properties": {
+          "code_challenge": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code Challenge"
+          },
+          "code_challenge_method": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code Challenge Method"
+          }
+        },
+        "type": "object",
+        "title": "DesktopCodeRequest",
+        "description": "The app's PKCE challenge, passed on by the connect page when the app sent one."
+      },
+      "DesktopCodeResponse": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "expires_in": {
+            "type": "integer",
+            "title": "Expires In"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "expires_in"
+        ],
+        "title": "DesktopCodeResponse",
+        "description": "The one-time code for `shosai://auth` and its lifetime in seconds."
+      },
+      "DesktopExchangeRequest": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 8,
+            "title": "Code"
+          },
+          "code_verifier": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code Verifier"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "title": "DesktopExchangeRequest",
+        "description": "The code from `shosai://auth`, and the PKCE verifier if the app sent a challenge."
+      },
+      "DesktopRefreshRequest": {
+        "properties": {
+          "refresh_token": {
+            "type": "string",
+            "maxLength": 4096,
+            "minLength": 8,
+            "title": "Refresh Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "refresh_token"
+        ],
+        "title": "DesktopRefreshRequest",
+        "description": "The app's current refresh token."
+      },
+      "DesktopTokenResponse": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "title": "Refresh Token"
+          },
+          "expires_in": {
+            "type": "integer",
+            "title": "Expires In"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "Bearer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "refresh_token",
+          "expires_in"
+        ],
+        "title": "DesktopTokenResponse",
+        "description": "The app's tokens: it keeps the refresh token in the system's key store."
+      },
       "DetailValue": {
         "anyOf": [
           {
@@ -821,6 +1299,67 @@
             "type": "boolean"
           }
         ]
+      },
+      "DeviceView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "client_kind": {
+            "type": "string",
+            "title": "Client Kind"
+          },
+          "device_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device Label"
+          },
+          "ip": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ip"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "last_used_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Last Used At"
+          },
+          "current": {
+            "type": "boolean",
+            "title": "Current"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "client_kind",
+          "device_label",
+          "ip",
+          "created_at",
+          "last_used_at",
+          "current"
+        ],
+        "title": "DeviceView",
+        "description": "A signed-in device: where it signed in and when it was last used."
       },
       "ErrorDescription": {
         "properties": {
@@ -1073,6 +1612,34 @@
         "title": "LogoutRequest",
         "description": "The refresh token of a client that keeps it outside the cookie jar (optional)."
       },
+      "Page_DeviceView_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DeviceView"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "Page[DeviceView]"
+      },
       "QuotaSnapshot": {
         "properties": {
           "unlimited": {
@@ -1255,6 +1822,20 @@
         "title": "ResetRequest",
         "description": "The token of the link and the new password."
       },
+      "SignedOutElsewhere": {
+        "properties": {
+          "ended": {
+            "type": "integer",
+            "title": "Ended"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ended"
+        ],
+        "title": "SignedOutElsewhere",
+        "description": "How many other sessions ended."
+      },
       "SubscriptionCardDTO": {
         "properties": {
           "status": {
@@ -1273,6 +1854,7 @@
           },
           "started_at": {
             "type": "string",
+            "format": "date-time",
             "title": "Started At"
           },
           "expires_at": {
@@ -1324,6 +1906,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "title": "Id"
           },
           "code": {
@@ -1481,6 +2064,7 @@
         "properties": {
           "id": {
             "type": "string",
+            "format": "uuid",
             "title": "Id"
           },
           "email": {

@@ -9,6 +9,7 @@ until it expires, while refresh still reads the home (ADR 0045 point 2).
 """
 
 import asyncio
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import timedelta
 from typing import Final
@@ -25,6 +26,12 @@ from shosai.features.identity.domain.tokens import ACCESS_TOKEN_LIFETIME
 READ_DEADLINE: Final = timedelta(milliseconds=20)
 WRITE_DEADLINE: Final = timedelta(milliseconds=200)
 SEPARATOR: Final = ":"
+REVOKE_FAMILIES: Final = """
+for _, key in ipairs(KEYS) do
+    redis.call('SET', key, '1', 'EX', ARGV[1])
+end
+return #KEYS
+"""
 log = structlog.stdlib.get_logger(__name__)
 
 
@@ -54,20 +61,51 @@ class AccountMarkers:
             return False
         return True
 
-    async def read(self, user_id: UUID) -> AccountMarker | None:
-        """The account's marker, or None when there is none or Valkey is silent."""
+    async def revoke_families(self, family_ids: Sequence[UUID]) -> bool:
+        """Mark single sessions ended after their commit, so their access tokens stop too."""
+        if not family_ids:
+            return True
+        seconds = int(ACCESS_TOKEN_LIFETIME.total_seconds())
+        try:
+            async with asyncio.timeout(WRITE_DEADLINE.total_seconds()):
+                await self._valkey.eval(
+                    REVOKE_FAMILIES, len(family_ids), *map(_family_key, family_ids), str(seconds)
+                )
+        except REDIS_FAILURES:
+            log.warning("Метки сессий не записаны: отзыв дойдёт с истечением токенов")
+            return False
+        return True
+
+    async def read(self, user_id: UUID, family_id: UUID | None) -> MarkerReading:
+        """The account's marker and whether the session ended; nothing when Valkey is silent."""
+        keys = [_key(user_id)] + ([_family_key(family_id)] if family_id else [])
         try:
             async with asyncio.timeout(READ_DEADLINE.total_seconds()):
-                value = await self._valkey.get(_key(user_id))
+                values = await self._valkey.mget(keys)
         except REDIS_FAILURES:
             log.warning("Метка аккаунта не прочитана: запрос проходит по подписи")
-            return None
-        if value is None:
-            return None
-        text = value.decode("ascii") if isinstance(value, bytes) else str(value)
+            return MarkerReading(None, family_revoked=False)
+        family_revoked = len(values) > 1 and values[1] is not None
+        if values[0] is None:
+            return MarkerReading(None, family_revoked=family_revoked)
+        raw = values[0]
+        text = raw.decode("ascii") if isinstance(raw, bytes) else str(raw)
         version, _, state = text.partition(SEPARATOR)
-        return AccountMarker(int(version), AccountState(state))
+        marker = AccountMarker(int(version), AccountState(state))
+        return MarkerReading(marker, family_revoked=family_revoked)
+
+
+@dataclass(frozen=True, slots=True)
+class MarkerReading:
+    """What Valkey says about a token's account and its session."""
+
+    account: AccountMarker | None
+    family_revoked: bool
 
 
 def _key(user_id: UUID) -> str:
     return build_key("identity", "account", user_id.hex)
+
+
+def _family_key(family_id: UUID) -> str:
+    return build_key("identity", "family_revoked", family_id.hex)

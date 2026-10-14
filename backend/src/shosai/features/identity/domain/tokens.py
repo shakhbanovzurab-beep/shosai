@@ -46,6 +46,8 @@ class AccessClaims:
     token_version: int
     issued_at: datetime
     expires_at: datetime
+    # Семейство сессии, выпустившей токен (v2): по нему видно текущее устройство и его отзыв.
+    family_id: UUID | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -63,7 +65,10 @@ class RefreshClaims:
 
 def access_payload(claims: AccessClaims) -> dict[str, object]:
     """The JWT payload of an access token."""
-    return _common_payload(TokenKind.ACCESS, claims)
+    payload = _common_payload(TokenKind.ACCESS, claims)
+    if claims.family_id is not None:
+        payload["fid"] = str(claims.family_id)
+    return payload
 
 
 def refresh_payload(claims: RefreshClaims) -> dict[str, object]:
@@ -83,6 +88,7 @@ def access_claims(payload: Mapping[str, object]) -> AccessClaims:
         token_version=_token_version(payload),
         issued_at=_time(payload, "iat"),
         expires_at=_time(payload, "exp"),
+        family_id=_uuid(payload, "fid") if "fid" in payload else None,
     )
 
 

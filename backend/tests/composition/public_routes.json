@@ -1,9 +1,14 @@
 {
   "api": [
+    "DELETE /v1/me/devices/{device_id}",
     "GET /email/{name}",
     "GET /v1/auth/me",
     "GET /v1/health",
+    "GET /v1/me/devices",
     "GET /v1/unsubscribe",
+    "POST /v1/auth/desktop/code",
+    "POST /v1/auth/desktop/exchange",
+    "POST /v1/auth/desktop/refresh",
     "POST /v1/auth/login",
     "POST /v1/auth/logout",
     "POST /v1/auth/password/forgot",
@@ -12,6 +17,7 @@
     "POST /v1/auth/register",
     "POST /v1/auth/register/resend",
     "POST /v1/auth/register/verify",
+    "POST /v1/me/devices/sign-out-others",
     "POST /v1/me/password",
     "POST /v1/unsubscribe"
   ],

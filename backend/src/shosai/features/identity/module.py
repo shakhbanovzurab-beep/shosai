@@ -9,9 +9,13 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Final
 
+from fastapi import APIRouter
+
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.identity.application.authentication import TokenAuthenticator
+from shosai.features.identity.application.desktop import DesktopSignIn
+from shosai.features.identity.application.devices import Devices
 from shosai.features.identity.application.native_me import NativeMe
 from shosai.features.identity.application.passwords import Passwords, PasswordServices
 from shosai.features.identity.application.registration import Registration, RegistrationServices
@@ -19,6 +23,8 @@ from shosai.features.identity.application.sessions import Sessions
 from shosai.features.identity.application.sign_in import SignIn, SignInServices
 from shosai.features.identity.application.verification import Verification
 from shosai.features.identity.channels.http.cookies import CookiePolicy
+from shosai.features.identity.channels.http.desktop import build_desktop_router
+from shosai.features.identity.channels.http.devices import build_devices_router
 from shosai.features.identity.channels.http.passwords import build_password_router
 from shosai.features.identity.channels.http.registration import build_registration_router
 from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
@@ -29,6 +35,7 @@ from shosai.features.identity.emails.registration_attempt import REGISTRATION_AT
 from shosai.features.identity.emails.registration_code import REGISTRATION_CODE
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.captcha import open_captcha
+from shosai.features.identity.infrastructure.desktop_codes import DesktopCodes
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
 from shosai.features.identity.infrastructure.records import IDENTITY_MODELS
@@ -115,9 +122,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                             cookies=cookies,
                         )
                     ),
-                    build_password_router(
-                        passwords, services.ports, services.rate_limiter, cookies
-                    ),
+                    *_account_routers(services, passwords, sessions, markers, cookies),
                 ),
                 task_handlers=task_handlers(services.transactions, directory),
                 periodic_jobs=PERIODIC_JOBS,
@@ -126,6 +131,23 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             )
     finally:
         hasher.close()
+
+
+def _account_routers(
+    services: CoreServices,
+    passwords: Passwords,
+    sessions: Sessions,
+    markers: AccountMarkers,
+    cookies: CookiePolicy,
+) -> tuple[APIRouter, ...]:
+    """The routes of passwords, desktop sign-in and devices."""
+    desktop = DesktopSignIn(services.transactions, DesktopCodes(services.valkey), sessions)
+    devices = Devices(services.transactions, markers, services.outbox)
+    return (
+        build_password_router(passwords, services.ports, services.rate_limiter, cookies),
+        build_desktop_router(desktop, services.ports, services.rate_limiter),
+        build_devices_router(devices, services.ports),
+    )
 
 
 IDENTITY: Final = FeatureModule(

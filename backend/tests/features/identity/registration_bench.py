@@ -28,6 +28,8 @@ from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.web.app import HttpTelemetry, build_http_app
 from shosai.features.identity.application.authentication import TokenAuthenticator
+from shosai.features.identity.application.desktop import DesktopSignIn
+from shosai.features.identity.application.devices import Devices
 from shosai.features.identity.application.native_me import NativeMe
 from shosai.features.identity.application.passwords import Passwords, PasswordServices
 from shosai.features.identity.application.registration import Registration, RegistrationServices
@@ -35,12 +37,15 @@ from shosai.features.identity.application.sessions import Sessions
 from shosai.features.identity.application.sign_in import SignIn, SignInServices
 from shosai.features.identity.application.verification import Verification
 from shosai.features.identity.channels.http.cookies import CookiePolicy
+from shosai.features.identity.channels.http.desktop import build_desktop_router
+from shosai.features.identity.channels.http.devices import build_devices_router
 from shosai.features.identity.channels.http.passwords import build_password_router
 from shosai.features.identity.channels.http.registration import build_registration_router
 from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
 from shosai.features.identity.contracts import AUTHENTICATOR, IDENTITY_EVENTS
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.captcha import Captcha, CaptchaOff
+from shosai.features.identity.infrastructure.desktop_codes import DesktopCodes
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
 from shosai.features.identity.infrastructure.registration_routes import RegistrationRoutes
@@ -146,6 +151,10 @@ async def registration_bench(
             )
         ),
         build_password_router(passwords, ports, limiter, COOKIES),
+        build_desktop_router(
+            DesktopSignIn(transactions, DesktopCodes(valkey), sessions), ports, limiter
+        ),
+        build_devices_router(Devices(transactions, markers, outbox), ports),
     ]  # fmt: skip
     telemetry = HttpTelemetry(registry, TracerProvider(shutdown_on_exit=False))
     app = build_http_app(WebSettings.model_validate({}), telemetry, routers)

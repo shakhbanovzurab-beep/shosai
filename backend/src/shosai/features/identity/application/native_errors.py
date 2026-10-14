@@ -5,6 +5,7 @@ these exact strings (ADR 0008: the envelope keeps the draft's `detail`). Each ha
 code for v2's clients; tests pin every pair.
 """
 
+from collections.abc import Callable
 from http import HTTPStatus
 from typing import Final
 
@@ -26,9 +27,34 @@ UNAUTHORIZED: Final = dict(
 )
 
 
+# Те же причины в словаре desktop-обновления черновика (`/v1/auth/desktop/refresh`).
+DESKTOP_REFRESH: Final = dict(
+    (
+        ("refresh_expired", "refresh_expired"),
+        ("refresh_invalid", "invalid_refresh"),
+        ("user_not_found", "user_not_found"),
+        ("token_revoked", "token_revoked"),
+    )
+)
+
+type RefreshErrors = Callable[[str], AppError]
+
+
 def unauthorized(code: str) -> AppError:
     """401 with the draft's `detail` for the code."""
     return AppError(code, HTTPStatus.UNAUTHORIZED, detail=UNAUTHORIZED[code])
+
+
+def desktop_unauthorized(code: str) -> AppError:
+    """401 with the desktop refresh's `detail` for the code."""
+    return AppError(code, HTTPStatus.UNAUTHORIZED, detail=DESKTOP_REFRESH[code])
+
+
+def invalid_desktop_code() -> AppError:
+    """401 `invalid_or_expired_code`: the code is unknown, used, expired or its verifier wrong."""
+    return AppError(
+        "invalid_or_expired_code", HTTPStatus.UNAUTHORIZED, detail="invalid_or_expired_code"
+    )
 
 
 def refused(refusal: SignInRefusal) -> AppError:

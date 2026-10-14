@@ -42,13 +42,16 @@ class TokenAuthenticator:
             code = "token_expired" if error.reason == "expired" else "token_invalid"
             raise native_errors.unauthorized(code) from error
         home = claims.home or await self._home_of(claims.user_id)
-        marker = await self._markers.read(claims.user_id)
+        reading = await self._markers.read(claims.user_id, claims.family_id)
+        marker = reading.account
         if marker is not None:
             if marker.state in REFUSED_STATES:
                 raise native_errors.refused(REFUSED_STATES[marker.state])
             if claims.token_version < marker.token_version or marker.state in REVOKED_STATES:
                 raise native_errors.unauthorized("token_revoked")
-        return Principal(claims.user_id, home, claims.token_version)
+        if reading.family_revoked:
+            raise native_errors.unauthorized("token_revoked")
+        return Principal(claims.user_id, home, claims.token_version, claims.family_id)
 
     async def _home_of(self, user_id: UUID) -> Home:
         home = await self._directory.home_of(user_id)
