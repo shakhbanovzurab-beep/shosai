@@ -1668,7 +1668,10 @@ and legal review before any such data is published, even aggregated.
 Web analytics and attribution on public pages (11.3: funnel events, the first
 touch carried into the client, the AI channel) need the same review: consent,
 cookies and cross-border transfer under the law of each market. So do the legal
-details on the trust pages (8.13).
+details on the trust pages (8.13). The site loads the cabinet's Google Tag Manager
+container under the same rules: Consent Mode v2 denied until the visitor
+accepts, the site's banner as the one place that asks (the cabinet does not),
+one consent cookie shared with the cabinet, and only the tags its list allows ([ADR 0045](../adr/0045-google-tag-manager-behind-consent.md)).
 
 ### 18.12 Visual parity with the draft versus new page rules
 

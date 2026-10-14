@@ -7,6 +7,7 @@
 export const NAMESPACES = [
   "calendar",
   "common",
+  "consent",
   "download",
   "fileManager",
   "fileManagerActions",

@@ -1,5 +1,6 @@
 import type calendar from "./messages/en/calendar.json";
 import type common from "./messages/en/common.json";
+import type consent from "./messages/en/consent.json";
 import type download from "./messages/en/download.json";
 import type fileManager from "./messages/en/fileManager.json";
 import type fileManagerActions from "./messages/en/fileManagerActions.json";
@@ -68,6 +69,7 @@ import type workspaceTasks from "./messages/en/workspaceTasks.json";
 export type Messages = {
   calendar: typeof calendar;
   common: typeof common;
+  consent: typeof consent;
   download: typeof download;
   fileManager: typeof fileManager;
   fileManagerActions: typeof fileManagerActions;

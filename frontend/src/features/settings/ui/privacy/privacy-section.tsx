@@ -3,6 +3,7 @@ import { useTranslations } from "use-intl";
 import type { UserSettings } from "../../domain/settings-contract";
 import { SettingSwitch } from "../setting-switch";
 import { SettingsGroup } from "../settings-row";
+import { ConsentSetting } from "./consent-setting";
 import { YourData } from "./your-data";
 
 export function PrivacySection({ settings }: { settings: UserSettings }) {
@@ -23,6 +24,7 @@ export function PrivacySection({ settings }: { settings: UserSettings }) {
           description={t("shareLocationHint")}
         />
       </SettingsGroup>
+      <ConsentSetting />
       <YourData />
     </div>
   );

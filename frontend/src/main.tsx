@@ -7,6 +7,7 @@ import { type RouteObject, RouterProvider } from "react-router";
 
 import { createRouter } from "./app/router";
 import { reloadOnStaleChunk } from "./app/stale-chunk-reload";
+import { startTagManagerWhenIdle } from "./features/consent/model/consent-store";
 
 // Моки API включаются только в `npm run dev` (F2-D1); в production-сборке этой ветки нет.
 async function mockRoutes(): Promise<RouteObject[]> {
@@ -25,6 +26,8 @@ async function start() {
       <RouterProvider router={router} />
     </StrictMode>,
   );
+  // GTM — после первого кадра, на простое браузера; без контейнера в сборке не делает ничего (ADR 0045).
+  startTagManagerWhenIdle();
 }
 
 void start();
