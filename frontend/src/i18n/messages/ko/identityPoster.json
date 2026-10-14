@@ -1,5 +1,4 @@
 {
-  "tagline": "AI 워크스페이스",
   "rails": {
     "meeting": "01 · 회의",
     "speakers": "02 · 누가 무엇을 말했나",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "회의에 대해 질문…",
-    "button": "질문"
+    "placeholder": "회의에 대해 질문…"
   }
 }

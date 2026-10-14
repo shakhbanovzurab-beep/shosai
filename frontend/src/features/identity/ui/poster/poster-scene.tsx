@@ -11,8 +11,7 @@ import { PosterTranscript } from "./poster-transcript";
 import { useChaosField } from "./use-chaos-field";
 import { useLeoNote } from "./use-leo-note";
 
-const RAIL =
-  "mb-[0.5em] font-bold font-mono text-[clamp(9px,1.07cqi,13px)] text-muted-foreground/70 uppercase tracking-[0.14em]";
+const RAIL = "mb-[0.6em] font-medium text-[clamp(10px,1.07cqi,13px)] text-muted-foreground";
 
 /**
  * Сцена афиши: сумбурная планёрка → Shosai поверх встречи → лента расшифровки по говорящим → факты → напоминание
@@ -29,14 +28,16 @@ export function PosterScene() {
     tone: SPEAKER_TEXT[speaker],
     text: t(`talk.${line}`),
   }));
-  const ask = { placeholder: t("ask.placeholder"), button: t("ask.button") };
   useChaosField(chaos, lines, voices.heard);
 
   return (
     <div className="mt-[2.4cqi] flex min-h-0 flex-1 flex-col">
       <div className={RAIL}>{t("rails.meeting")}</div>
-      <div ref={chaos} className="relative min-h-[11cqi] flex-auto overflow-hidden" />
-      <PosterPill voices={voices} answer={t(`leo.${note[0]}.body`)} ask={ask} />
+      <div
+        ref={chaos}
+        className="mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] relative min-h-[11cqi] flex-auto overflow-hidden"
+      />
+      <PosterPill voices={voices} answer={t(`leo.${note[0]}.body`)} ask={t("ask.placeholder")} />
       <div className={RAIL}>{t("rails.speakers")}</div>
       <PosterCast />
       <PosterTranscript rows={rows} />

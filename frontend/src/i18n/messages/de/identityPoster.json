@@ -1,5 +1,4 @@
 {
-  "tagline": "KI-Workspace",
   "rails": {
     "meeting": "01 · Im Meeting",
     "speakers": "02 · Wer hat was gesagt",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "Frag zum Meeting…",
-    "button": "Fragen"
+    "placeholder": "Frag zum Meeting…"
   }
 }

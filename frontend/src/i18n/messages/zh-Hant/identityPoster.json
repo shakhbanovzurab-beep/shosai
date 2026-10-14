@@ -1,5 +1,4 @@
 {
-  "tagline": "AI 工作空間",
   "rails": {
     "meeting": "01 · 會議",
     "speakers": "02 · 誰說了什麼",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "詢問這場會議…",
-    "button": "詢問"
+    "placeholder": "詢問這場會議…"
   }
 }

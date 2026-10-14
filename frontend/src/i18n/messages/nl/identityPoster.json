@@ -1,5 +1,4 @@
 {
-  "tagline": "AI-werkruimte",
   "rails": {
     "meeting": "01 · Vergadering",
     "speakers": "02 · Wie zei wat",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "Vraag iets over de vergadering…",
-    "button": "Vragen"
+    "placeholder": "Vraag iets over de vergadering…"
   }
 }

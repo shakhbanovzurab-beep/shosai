@@ -1,5 +1,4 @@
 {
-  "tagline": "Yapay zekâ çalışma alanı",
   "rails": {
     "meeting": "01 · Toplantı",
     "speakers": "02 · Kim ne dedi",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "Toplantı hakkında sorun…",
-    "button": "Sor"
+    "placeholder": "Toplantı hakkında sorun…"
   }
 }

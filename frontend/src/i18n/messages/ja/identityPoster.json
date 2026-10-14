@@ -1,5 +1,4 @@
 {
-  "tagline": "AI ワークスペース",
   "rails": {
     "meeting": "01 · 会議",
     "speakers": "02 · 誰が何を言ったか",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "会議について質問…",
-    "button": "質問"
+    "placeholder": "会議について質問…"
   }
 }

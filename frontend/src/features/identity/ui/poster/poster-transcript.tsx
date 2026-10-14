@@ -12,10 +12,10 @@ export interface TranscriptRow {
 const SPEED = 16;
 const ROW_CLASS = "flex h-(--transcript-row) items-start gap-[0.7em]";
 const CLOCK_CLASS =
-  "w-[4.4em] flex-none pt-[0.7em] font-bold font-mono text-[clamp(8px,1.12cqi,13px)] text-muted-foreground/70 tabular-nums";
-const NAME_CLASS = "w-[10.3cqi] flex-none truncate pt-[0.35em] font-semibold text-[clamp(10px,1.34cqi,16px)]";
+  "w-[4.4em] flex-none pt-[0.7em] font-mono text-[clamp(8px,1.12cqi,13px)] text-muted-foreground/70 tabular-nums";
+const NAME_CLASS = "w-[10.3cqi] flex-none truncate pt-[0.35em] font-medium text-[clamp(10px,1.34cqi,16px)]";
 const TEXT_CLASS =
-  "min-w-0 flex-1 truncate pt-[0.15em] text-[clamp(11px,1.55cqi,19px)] text-foreground/90 leading-[1.4]";
+  "min-w-0 flex-1 truncate pt-[0.15em] text-[clamp(11px,1.55cqi,19px)] text-foreground/80 leading-[1.4]";
 
 function rowElement(row: TranscriptRow, clock: number): HTMLDivElement {
   const element = document.createElement("div");

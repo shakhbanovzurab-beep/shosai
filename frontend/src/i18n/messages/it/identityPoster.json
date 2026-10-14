@@ -1,5 +1,4 @@
 {
-  "tagline": "Spazio di lavoro con IA",
   "rails": {
     "meeting": "01 · Riunione",
     "speakers": "02 · Chi ha detto cosa",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "Chiedi della riunione…",
-    "button": "Chiedi"
+    "placeholder": "Chiedi della riunione…"
   }
 }

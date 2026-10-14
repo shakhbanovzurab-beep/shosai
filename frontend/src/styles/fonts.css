@@ -22,6 +22,8 @@
 @import "@fontsource/roboto/700.css";
 @import "@fontsource/merriweather/400.css";
 @import "@fontsource/merriweather/700.css";
+/* Не выбор пользователя, а шрифт знака «SHOSAI» на афише входа: только латиница, файл скачивается там, где он нужен. */
+@import "@fontsource/bebas-neue/latin-400.css";
 
 @font-face {
   font-family: "Geist Pixel Square";
@@ -35,6 +37,7 @@
  * изменений; то, что font-mono из-за этого показывает Geist, — находка для владельца, а не правка F2). */
 body {
   --font-geist: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-wordmark: "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
   --font-inter: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-noto-sans: "Noto Sans Variable", ui-sans-serif, system-ui, sans-serif;
   --font-nunito-sans: "Nunito Sans Variable", ui-sans-serif, system-ui, sans-serif;

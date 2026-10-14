@@ -1,5 +1,4 @@
 {
-  "tagline": "AI workspace",
   "rails": {
     "meeting": "01 · Meeting",
     "speakers": "02 · Who said what",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "Ask about the meeting…",
-    "button": "Ask"
+    "placeholder": "Ask about the meeting…"
   }
 }

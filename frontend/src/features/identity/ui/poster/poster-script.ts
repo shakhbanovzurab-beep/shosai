@@ -30,20 +30,16 @@ export type TalkLine = (typeof TALK)[number][0];
 /** Доля времени говорящего — итог разметки по голосам. */
 export const SHARE: Record<Speaker, number> = { first: 0.34, second: 0.27, third: 0.22, fourth: 0.17 };
 
-/** Цвет говорящего: жёлтый, кремовый, мятный, коралловый — на тёмной афише в любой теме. */
+/** Цвет имени говорящего: приглушённые холодные тона, различимые на тёмной афише в любой теме. */
 export const SPEAKER_TEXT: Record<Speaker, string> = {
-  first: "text-yellow-300",
-  second: "text-stone-200",
-  third: "text-teal-200",
+  first: "text-indigo-300",
+  second: "text-sky-300",
+  third: "text-emerald-300",
   fourth: "text-rose-300",
 };
 
-export const SPEAKER_CHIP: Record<Speaker, string> = {
-  first: "bg-yellow-300",
-  second: "bg-stone-200",
-  third: "bg-teal-200",
-  fourth: "bg-rose-300",
-};
+/** Буква в кружке — того же тона, что имя в ленте. */
+export const SPEAKER_CHIP: Record<Speaker, string> = SPEAKER_TEXT;
 
 /** Факт и секунда встречи, на которой он прозвучал. */
 export const FACTS = [

@@ -3,8 +3,8 @@ import { type RefObject, useEffect, useEffectEvent } from "react";
 import { prefersReducedMotion, seededRandom } from "./poster-script";
 
 /** Одновременно живущих реплик; если свободной реплики нет, место ждёт — одна фраза дважды читается повтором. */
-const SLOTS = 20;
-const FRAGMENT_CLASS = "absolute whitespace-nowrap font-bold font-mono text-foreground opacity-0";
+const SLOTS = 12;
+const FRAGMENT_CLASS = "absolute whitespace-nowrap font-medium text-foreground opacity-0";
 
 /**
  * Поле сумбура: каждая реплика живёт своим сроком и возвращается уже другой и в другом месте, поэтому у поля
@@ -54,7 +54,7 @@ export function useChaosField(
         node.style.insetInlineStart = `${(-8 + random() * 96).toFixed(1)}%`;
         node.style.top = `${(random() * 88).toFixed(1)}%`;
         node.style.rotate = `${(-4 + random() * 8).toFixed(1)}deg`;
-        return { index, peak: 0.18 + random() * 0.62 };
+        return { index, peak: 0.1 + random() * 0.35 };
       };
 
       if (reduced) {

@@ -1,46 +1,40 @@
 import { useSyncExternalStore } from "react";
 
-import { Sparkles } from "lucide-react";
+import { ArrowUp } from "lucide-react";
+import { ThinkingOrb } from "thinking-orbs";
 
 import type { PosterVoices } from "../../model/poster-voices";
 
-const BUBBLE =
-  "m-0 max-w-[calc(100%-40px)] rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-[0.84375rem] text-white leading-normal";
+const BUBBLE = "m-0 rounded-2xl border bg-card px-3 py-2 text-sm leading-relaxed";
 
 /**
- * Панель над пилюлей — так выглядит Shosai поверх встречи: то, что звучит прямо сейчас, и ответ Leo. Видна по
+ * Панель Leo над кнопкой — как в кабинете: заголовок со сферой, то, что звучит прямо сейчас, и ответ Leo. Видна по
  * наведению; вся афиша — декорация, поэтому здесь нет ни полей, ни кнопок, только их вид.
  */
-export function PosterPeek({
-  voices,
-  answer,
-  ask,
-}: {
-  voices: PosterVoices;
-  answer: string;
-  ask: { placeholder: string; button: string };
-}) {
+export function PosterPeek({ voices, answer, ask }: { voices: PosterVoices; answer: string; ask: string }) {
   const recent = useSyncExternalStore(voices.subscribe, voices.recent);
   return (
-    <div className="absolute end-[calc(100%+11px)] -top-px z-10 hidden w-[min(400px,42cqi)] flex-col gap-2.5 rounded-[20px] border border-white/10 bg-zinc-950/90 p-3 text-start shadow-2xl group-hover/pill:flex">
+    <div className="absolute end-[calc(100%+12px)] top-1/2 z-10 hidden w-[min(380px,42cqi)] -translate-y-1/2 flex-col gap-3 rounded-2xl border bg-background p-3 text-start shadow-2xl group-hover/pill:flex">
+      <div className="flex items-center justify-center gap-2 pt-0.5">
+        <span className="flex [&_canvas]:size-6!">
+          <ThinkingOrb state="breathing" size={32} />
+        </span>
+        <span className="font-medium text-sm">Leo</span>
+      </div>
+      {/* Расшифровка того, что звучит прямо сейчас: реплики разных людей по разные стороны, как в ленте встречи. */}
       <div className="flex flex-col gap-2">
         {recent.map(({ id, line }, position) => (
           <div key={id} className={position === 1 ? "flex justify-end" : "flex"}>
-            <p className={BUBBLE}>{line}</p>
+            <p className={`${BUBBLE} max-w-[calc(100%-40px)] bg-card/40 text-foreground/80`}>{line}</p>
           </div>
         ))}
-        <div className="flex">
-          <p className={`${BUBBLE} border-amber-400/35 bg-amber-400/10`}>{answer}</p>
-        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <div className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-white/5 px-3 py-2 text-[0.84375rem] text-white/40">
-          {ask.placeholder}
-        </div>
-        <div className="flex flex-none items-center gap-1.5 rounded-full border border-white/10 bg-white/15 px-3 py-2.5 font-semibold text-[0.78125rem] text-white">
-          <Sparkles className="size-3.5" />
-          {ask.button}
-        </div>
+      <p className={BUBBLE}>{answer}</p>
+      <div className="flex items-center gap-2 rounded-xl border bg-card/40 py-1.5 ps-3 pe-1.5">
+        <span className="min-w-0 flex-1 truncate text-muted-foreground text-sm">{ask}</span>
+        <span className="grid size-7 flex-none place-items-center rounded-full bg-primary text-primary-foreground">
+          <ArrowUp className="size-4" />
+        </span>
       </div>
     </div>
   );

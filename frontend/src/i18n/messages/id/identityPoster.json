@@ -1,5 +1,4 @@
 {
-  "tagline": "Ruang kerja AI",
   "rails": {
     "meeting": "01 · Rapat",
     "speakers": "02 · Siapa bilang apa",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "Tanyakan tentang rapat…",
-    "button": "Tanya"
+    "placeholder": "Tanyakan tentang rapat…"
   }
 }

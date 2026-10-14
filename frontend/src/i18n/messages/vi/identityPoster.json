@@ -1,5 +1,4 @@
 {
-  "tagline": "Không gian làm việc AI",
   "rails": {
     "meeting": "01 · Cuộc họp",
     "speakers": "02 · Ai nói gì",
@@ -61,7 +60,6 @@
     }
   },
   "ask": {
-    "placeholder": "Hỏi về cuộc họp…",
-    "button": "Hỏi"
+    "placeholder": "Hỏi về cuộc họp…"
   }
 }

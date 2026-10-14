@@ -16,12 +16,12 @@ export function PosterCast() {
             className="flex items-center gap-[0.55em] text-[clamp(11px,1.39cqi,17px)] text-foreground/80"
           >
             <span
-              className={`grid size-[2em] flex-none place-items-center rounded-full font-extrabold text-[clamp(9px,1.18cqi,14px)] text-zinc-950 ${SPEAKER_CHIP[speaker]}`}
+              className={`grid size-[1.9em] flex-none place-items-center rounded-full border border-white/10 bg-white/5 font-medium text-[clamp(9px,1.12cqi,13px)] ${SPEAKER_CHIP[speaker]}`}
             >
               {Array.from(name)[0]}
             </span>
             {name}
-            <span className="font-bold font-mono text-[clamp(9px,1.18cqi,14px)] text-muted-foreground tabular-nums">
+            <span className="font-mono text-[clamp(9px,1.12cqi,13px)] text-muted-foreground tabular-nums">
               {format.number(SHARE[speaker], { style: "percent" })}
             </span>
           </div>
