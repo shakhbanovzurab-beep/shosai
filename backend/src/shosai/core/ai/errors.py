@@ -25,6 +25,10 @@ class AiFailure(StrEnum):
     PROVIDER_ERROR = "provider_error"
     # Провайдер занят до предела или защита недоступна: повторить позже.
     RETRY_LATER = "retry_later"
+    # Достигнут потолок расходов: пользователя, аккаунта платформы или общий.
+    SPEND_LIMIT = "spend_limit"
+    # Дорогие вызовы приостановлены аварийным выключателем или без Valkey (§13.2).
+    EXPENSIVE_PAUSED = "expensive_paused"
 
 
 STATUSES: Final = MappingProxyType(
@@ -38,6 +42,8 @@ STATUSES: Final = MappingProxyType(
         AiFailure.DEADLINE_EXCEEDED: HTTPStatus.GATEWAY_TIMEOUT,
         AiFailure.PROVIDER_ERROR: HTTPStatus.BAD_GATEWAY,
         AiFailure.RETRY_LATER: HTTPStatus.SERVICE_UNAVAILABLE,
+        AiFailure.SPEND_LIMIT: HTTPStatus.PAYMENT_REQUIRED,
+        AiFailure.EXPENSIVE_PAUSED: HTTPStatus.SERVICE_UNAVAILABLE,
     }
 )
 

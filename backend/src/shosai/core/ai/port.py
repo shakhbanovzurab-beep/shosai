@@ -10,9 +10,9 @@ slot for its whole length and is metered one row per minute (F6-C5). Spend ceili
 with F6 step 6.
 """
 
-import asyncio
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable
-from contextlib import AbstractAsyncContextManager, asynccontextmanager, nullcontext
+from contextlib import AbstractAsyncContextManager, asynccontextmanager
+from decimal import Decimal
 
 from shosai.core.ai.adapters.mistral_ocr import MistralOcr
 from shosai.core.ai.adapters.openrouter import OpenRouter
@@ -34,7 +34,15 @@ from shosai.core.ai.requests import (
     VoiceSetup,
 )
 from shosai.core.ai.resilience.breakers import Gate
-from shosai.core.ai.resilience.routing import Metered, RouteRunner
+from shosai.core.ai.resilience.operations import (
+    Metered,
+    Operation,
+    StreamOperation,
+    as_standard,
+    deadline_of,
+    standard_of,
+)
+from shosai.core.ai.resilience.routing import RouteRunner
 from shosai.core.ai.results import (
     ChatDelta,
     ChatResult,
@@ -43,8 +51,17 @@ from shosai.core.ai.results import (
     GeneratedImage,
     Ranking,
     Transcript,
+    Unit,
 )
 from shosai.core.ai.sessions.live import LiveConnection, LiveSession, LiveSessions
+from shosai.core.ai.spend.estimates import (
+    chat_estimate,
+    decision_estimate,
+    embedding_estimate,
+    ocr_estimate,
+    per_item,
+    speech_estimate,
+)
 
 
 class AiProviders:
@@ -59,57 +76,76 @@ class AiProviders:
         self, context: CallContext, route: ModelRoute, request: ChatRequest
     ) -> ChatResult:
         """A model's answer to a conversation."""
-        return await self._routed(
-            context, route, "chat", self._openrouter, lambda c, m: c.chat(m, request)
-        )
+        operation = Operation(
+            "chat", self._openrouter("chat"), lambda c, m: c.chat(m, request),
+            chat_estimate(request),
+        )  # fmt: skip
+        return await self._routed(context, route, operation)
 
     async def stream_chat(
         self, context: CallContext, route: ModelRoute, request: ChatRequest
     ) -> AsyncGenerator[ChatDelta]:
         """A model's answer as it is written; the cost is recorded when the usage arrives."""
-        stream = self._runner.stream(
-            context, route, self._openrouter("chat"), lambda c, m: c.stream_chat(m, request)
-        )
+        operation = StreamOperation(
+            self._openrouter("chat"), lambda c, m: c.stream_chat(m, request),
+            chat_estimate(request),
+        )  # fmt: skip
+        started = False
         try:
             async with deadline_of(context):
-                async for delta in stream:
-                    yield delta
+                try:
+                    async for delta in self._runner.stream(context, route, operation):
+                        started = True
+                        yield delta
+                except AiCallError as paused:
+                    if started or standard_of(route, paused) is None:
+                        raise
+                    async for delta in self._runner.stream(
+                        as_standard(context), standard_of(route, paused) or route, operation
+                    ):
+                        yield delta
         except TimeoutError:
             raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
-        finally:
-            await stream.aclose()
 
     async def embed(
         self, context: CallContext, route: ModelRoute, request: EmbeddingRequest
     ) -> Embeddings:
         """Vectors of texts."""
-        return await self._routed(
-            context, route, "embed", self._openrouter, lambda c, m: c.embed(m, request)
-        )
+        operation = Operation(
+            "embed", self._openrouter("embed"), lambda c, m: c.embed(m, request),
+            embedding_estimate(request),
+        )  # fmt: skip
+        return await self._routed(context, route, operation)
 
     async def rerank(
         self, context: CallContext, route: ModelRoute, request: RerankRequest
     ) -> Ranking:
         """Documents ordered by relevance to a query."""
-        return await self._routed(
-            context, route, "rerank", self._openrouter, lambda c, m: c.rerank(m, request)
-        )
+        operation = Operation(
+            "rerank", self._openrouter("rerank"), lambda c, m: c.rerank(m, request),
+            per_item(Unit.REQUEST),
+        )  # fmt: skip
+        return await self._routed(context, route, operation)
 
     async def generate_image(
         self, context: CallContext, route: ModelRoute, request: ImageRequest
     ) -> GeneratedImage:
         """A picture from a prompt."""
-        return await self._routed(
-            context, route, "image", self._openrouter, lambda c, m: c.generate_image(m, request)
-        )
+        operation = Operation(
+            "image", self._openrouter("image"), lambda c, m: c.generate_image(m, request),
+            per_item(Unit.IMAGE),
+        )  # fmt: skip
+        return await self._routed(context, route, operation)
 
     async def transcribe(
         self, context: CallContext, route: ModelRoute, request: TranscriptionRequest
     ) -> Transcript:
         """The text of a recording."""
-        return await self._routed(
-            context, route, "transcribe", self._openrouter, lambda c, m: c.transcribe(m, request)
-        )
+        operation = Operation(
+            "transcribe", self._openrouter("transcribe"), lambda c, m: c.transcribe(m, request),
+            speech_estimate(request.audio),
+        )  # fmt: skip
+        return await self._routed(context, route, operation)
 
     async def decide(
         self, context: CallContext, route: ModelRoute, request: DecisionRequest
@@ -118,15 +154,18 @@ class AiProviders:
         if context.deadline is None:
             message = "решение всегда со своим сроком (Leo §6.3)"
             raise ValueError(message)
-        return await self._routed(
-            context, route, "decide", self._openrouter, lambda c, m: c.decide(m, request)
-        )
+        operation = Operation(
+            "decide", self._openrouter("decide"), lambda c, m: c.decide(m, request),
+            decision_estimate(request),
+        )  # fmt: skip
+        return await self._routed(context, route, operation)
 
     async def ocr(self, context: CallContext, route: ModelRoute, request: OcrRequest) -> OcrPages:
         """A scanned document or an image read to Markdown, page by page."""
-        return await self._routed(
-            context, route, "ocr", self._mistral, lambda c, m: c.ocr(m, request)
+        operation = Operation(
+            "ocr", self._mistral("ocr"), lambda c, m: c.ocr(m, request), ocr_estimate(request)
         )
+        return await self._routed(context, route, operation)
 
     async def diarize(
         self, context: CallContext, route: ModelRoute, request: DiarizationRequest
@@ -134,13 +173,11 @@ class AiProviders:
         """Who spoke when; a job that failed after it was charged is recorded, then refused."""
         # Срок вызова соблюдает сам адаптер: оборвать его ожидание значило бы потерять
         # строку уже оплаченного задания.
-        return await self._runner.call(
-            context,
-            route,
-            "diarize",
-            self._pyannote("diarize"),
-            lambda c, m: c.diarize(m, request, context.deadline),
-        )
+        operation = Operation(
+            "diarize", self._pyannote("diarize"),
+            lambda c, m: c.diarize(m, request, context.deadline), speech_estimate(request.audio),
+        )  # fmt: skip
+        return await self._runner.call(context, route, operation)
 
     def open_transcription_stream(
         self, context: CallContext, model: ModelRef, setup: LiveTranscriptionSetup
@@ -205,18 +242,26 @@ class AiProviders:
         ):
             yield session
 
+    def turn(
+        self, context: CallContext, estimate_usd: Decimal
+    ) -> AbstractAsyncContextManager[CallContext]:
+        """A Leo turn's reservation: the context it yields makes every call draw on it."""
+        return self._runner.spend.turn(context, estimate_usd)
+
     async def _routed[C, R: Metered](
-        self,
-        context: CallContext,
-        route: ModelRoute,
-        kind: str,
-        client_of: Callable[[str], Callable[[ModelRef], C]],
-        send: Callable[[C, ModelRef], Awaitable[R]],
+        self, context: CallContext, route: ModelRoute, operation: Operation[C, R]
     ) -> R:
-        """The call along its route within the context's deadline."""
+        """The call along its route within the context's deadline; the route's standard model
+        answers an expensive call while the kill switch pauses it."""
         try:
             async with deadline_of(context):
-                return await self._runner.call(context, route, kind, client_of(kind), send)
+                try:
+                    return await self._runner.call(context, route, operation)
+                except AiCallError as paused:
+                    standard = standard_of(route, paused)
+                    if standard is None:
+                        raise
+                return await self._runner.call(as_standard(context), standard, operation)
         except TimeoutError:
             raise AiCallError(AiFailure.DEADLINE_EXCEEDED) from None
 
@@ -234,10 +279,3 @@ class AiProviders:
         return lambda model: self._runner.admission.client(
             self._clients.mistral, Provider.MISTRAL, model, kind
         )
-
-
-def deadline_of(context: CallContext) -> AbstractAsyncContextManager[object]:
-    """The context's deadline, or none."""
-    if context.deadline is None:
-        return nullcontext()
-    return asyncio.timeout(context.deadline.total_seconds())

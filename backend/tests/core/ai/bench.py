@@ -17,7 +17,15 @@ from shosai.core.ai.adapters.openai_realtime import OpenAiRealtime
 from shosai.core.ai.adapters.openrouter import OpenRouter
 from shosai.core.ai.adapters.pyannote import JobPolling, Pyannote
 from shosai.core.ai.admission import Admission, AiClients
-from shosai.core.ai.calls import CallClass, CallContext, CallOrigin, ModelRef, ModelRoute, Provider
+from shosai.core.ai.calls import (
+    CallClass,
+    CallContext,
+    CallOrigin,
+    ModelRef,
+    ModelRoute,
+    PlatformAccount,
+    Provider,
+)
 from shosai.core.ai.costs.settlement import CostSettlements, SettledCost
 from shosai.core.ai.costs.writer import CostWriter
 from shosai.core.ai.metrics import AiMetrics
@@ -33,6 +41,8 @@ from shosai.core.ai.resilience.slots import ProviderSlots
 from shosai.core.ai.results import Unit
 from shosai.core.ai.sessions.live import LiveSessions
 from shosai.core.ai.sessions.minutes import MinuteRows
+from shosai.core.ai.spend.guard import Ceilings, SpendGuard, SpendMetrics
+from shosai.core.ai.spend.kill_switch import KillSwitch
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.exchange_rates.rates import ExchangeRates
 from shosai.core.exchange_rates.records import ExchangeRate
@@ -149,9 +159,16 @@ class Doubles:
     gemini: GeminiLive | None = None
     mistral: httpx.AsyncClient | None = None
     valkey: Redis | None = None
+    ceilings: Ceilings | None = None
+    kill_switch: bool = False
 
 
 NO_DOUBLES = Doubles()
+# Потолки стенда настолько высоки, что не мешают тестам, которые проверяют не деньги.
+OPEN_CEILINGS = Ceilings(
+    global_hour=10**12, global_day=10**12,
+    platform={account.value: (10**12, 10**12) for account in PlatformAccount},
+)  # fmt: skip
 
 
 def unreachable_valkey() -> Redis:
@@ -199,10 +216,17 @@ def ai_bench(
         mistral=MistralOcr(doubles.mistral) if enabled and doubles.mistral else None,
     )
     valkey = doubles.valkey or unreachable_valkey()
+    spend = SpendGuard(
+        valkey, doubles.ceilings or OPEN_CEILINGS,
+        KillSwitch(valkey, forced=doubles.kill_switch), SpendMetrics(registry),
+    )  # fmt: skip
+    writer.observe(spend.count)
     runner = RouteRunner(
-        Admission(PriceBook(transactions), metrics), recorder, guards(valkey, registry), metrics
-    )
-    providers = AiProviders(clients, runner, LiveSessions(minutes, connect_timeout=5.0))
+        Admission(PriceBook(transactions), metrics), recorder, guards(valkey, registry), spend,
+        metrics,
+    )  # fmt: skip
+    sessions = LiveSessions(minutes, spend, connect_timeout=5.0, renew_every=0.2)
+    providers = AiProviders(clients, runner, sessions)
     return AiBench(
         providers, scripted, diarizer, minutes, clock, settlement, sender, writer, registry
     )

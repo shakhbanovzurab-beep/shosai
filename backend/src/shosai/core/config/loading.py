@@ -21,6 +21,7 @@ from shosai.core.config.sections import (
     RuntimeSettings,
     ServerSettings,
     SharedServicesSettings,
+    SpendSettings,
     StorageSettings,
     WebSettings,
     home_prefix,
@@ -70,6 +71,7 @@ class Settings:
     observability: ObservabilitySettings
     crypto: CryptoSettings
     ai: AiSettings
+    spend: SpendSettings
     exchange_rates: ExchangeRateSettings
 
 
@@ -85,6 +87,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
     observability = reader.read(ObservabilitySettings, "")
     crypto = reader.read(CryptoSettings, "")
     ai = reader.read(AiSettings, "")
+    spend = reader.read(SpendSettings, "")
     exchange_rates = reader.read(ExchangeRateSettings, "")
     if reader.problems:
         raise ConfigurationError(reader.problems)
@@ -98,6 +101,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
         observability=_present(observability),
         crypto=_present(crypto),
         ai=_present(ai),
+        spend=_present(spend),
         exchange_rates=_present(exchange_rates),
     )
 

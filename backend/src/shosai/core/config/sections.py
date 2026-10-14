@@ -4,10 +4,12 @@
 a dotenv file: `env_file` is off, and an empty variable counts as unset.
 """
 
+from decimal import Decimal
 from ipaddress import IPv4Address
 from typing import Self
 
 from pydantic import (
+    Field,
     HttpUrl,
     IPvAnyAddress,
     PositiveInt,
@@ -168,6 +170,28 @@ class AiSettings(SettingsSection):
     mistral_slots: PositiveInt = 16
     openai_realtime_slots: PositiveInt = 1000
     google_live_slots: PositiveInt = 1000
+
+
+class SpendSettings(SettingsSection):
+    """The platform's own spend ceilings and the kill switch (§3.6, F6-C19).
+
+    The user's ceilings come from the caller with each call (the plan's limits); these are
+    the platform's: global per hour and day, and per platform account. None stops an
+    essential call (inv-13).
+    """
+
+    ai_global_hourly_usd: Decimal = Field(default=Decimal(400), ge=0)
+    ai_global_daily_usd: Decimal = Field(default=Decimal(4000), ge=0)
+    ai_landing_demo_hourly_usd: Decimal = Field(default=Decimal(5), ge=0)
+    ai_landing_demo_daily_usd: Decimal = Field(default=Decimal(20), ge=0)
+    ai_help_assistant_hourly_usd: Decimal = Field(default=Decimal(5), ge=0)
+    ai_help_assistant_daily_usd: Decimal = Field(default=Decimal(20), ge=0)
+    ai_system_hourly_usd: Decimal = Field(default=Decimal(10), ge=0)
+    ai_system_daily_usd: Decimal = Field(default=Decimal(50), ge=0)
+    # Включён настройкой — дорогие вызовы стоят, что бы ни лежало в Valkey.
+    ai_kill_switch: bool = False
+    # Резерв, не снятый вовремя (процесс умер), освобождается по окончании аренды.
+    ai_reservation_lease_seconds: PositiveInt = 300
 
 
 class ExchangeRateSettings(SettingsSection):

@@ -8,7 +8,7 @@ limits come from settings, below each provider's quota (OpenRouter 292 at the de
 Over the limit a call waits a little, then is refused with `rate_limited`; a session is
 refused at once with `retry_later`. When Valkey does not answer within 50 ms, the call class
 decides (§13.2): essential and standard calls go on without a slot and are counted, expensive
-ones are refused with `retry_later`.
+ones are refused with `expensive_paused`.
 """
 
 import asyncio
@@ -84,7 +84,7 @@ class ProviderSlots:
             self._outages.failed(error, operation="take", provider=provider.value)
             if call_class is CallClass.EXPENSIVE:
                 self._metrics.slot(provider.value, "refused")
-                raise AiCallError(AiFailure.RETRY_LATER) from None
+                raise AiCallError(AiFailure.EXPENSIVE_PAUSED) from None
             self._metrics.slot(provider.value, "unguarded")
             yield
             return

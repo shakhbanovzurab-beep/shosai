@@ -233,7 +233,7 @@ async def test_without_valkey_only_expensive_calls_are_refused(
     finally:
         await client.aclose()
 
-    assert went is (None if decision == "unguarded" else AiFailure.RETRY_LATER)
+    assert went is (None if decision == "unguarded" else AiFailure.EXPENSIVE_PAUSED)
     assert (
         registry.get_sample_value(
             "shosai_ai_provider_slots_total", {"provider": "openrouter", "decision": decision}

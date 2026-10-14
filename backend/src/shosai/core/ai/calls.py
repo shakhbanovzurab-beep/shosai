@@ -75,15 +75,46 @@ class ModelRef:
 
 @dataclass(frozen=True, slots=True)
 class ModelRoute:
-    """The model a caller chose and its same-tier fallbacks, in order (§11.1 of the Leo design)."""
+    """The model a caller chose and its same-tier fallbacks, in order (§11.1 of the Leo design).
+
+    `standard` is the model an expensive call takes while the kill switch is engaged, as a
+    standard call; without it the expensive call is refused (§3.6).
+    """
 
     primary: ModelRef
     fallbacks: tuple[ModelRef, ...] = ()
+    standard: ModelRef | None = None
 
     @property
     def models(self) -> tuple[ModelRef, ...]:
         """The models in the order they are tried."""
         return (self.primary, *self.fallbacks)
+
+
+class SpendPeriod(StrEnum):
+    """What a caller's spend limit counts: the person's own calls or their Leo's initiative."""
+
+    # Только интерактивные вызовы пользователя (F6-D6); фон Leo считается отдельно (Leo §5.4).
+    HOUR = "hour"
+    DAY = "day"
+    MONTH = "month"
+    # Премиальные (expensive) вызовы за месяц: допуск тарифа.
+    EXPENSIVE_MONTH = "expensive_month"
+    # Фоновая работа Leo за день: инициатива не съедает интерактивную квоту.
+    BACKGROUND_DAY = "background_day"
+
+
+@dataclass(frozen=True, slots=True)
+class SpendLimit:
+    """A ceiling the caller sets for the user, in micro-USD, from the user's plan."""
+
+    period: SpendPeriod
+    micro_usd: int
+
+    def __post_init__(self) -> None:
+        if self.micro_usd < 0:
+            message = "потолок расходов не отрицателен"
+            raise ValueError(message)
 
 
 @dataclass(frozen=True, slots=True)
@@ -99,6 +130,10 @@ class CallContext:
     # Согласие на передачу данных за границу: без него вызов из дома RU не уходит (nfr-14).
     cross_border_consent: bool = False
     deadline: timedelta | None = None
+    # Потолки пользователя от вызывающего (тариф из billing); платформенные потолки — в настройках.
+    spend_limits: tuple[SpendLimit, ...] = ()
+    # Открытый резерв хода Leo: вызовы хода списываются с него, а не резервируют каждый свой.
+    reservation: str | None = None
 
     def __post_init__(self) -> None:
         if not 1 <= len(self.effect_key) <= EFFECT_KEY_MAX_LENGTH:

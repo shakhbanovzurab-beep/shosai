@@ -9,11 +9,15 @@ so a session never costs nothing (the draft's wall-clock backstop).
 Opening waits at most 3 s and is tried once more on a transient failure (§4.3); a session
 that breaks later ends with `LiveEnd` and a closed code, and the caller decides whether to
 open another.
+
+A session reserves its next minute before it opens and every minute after (§3.6): a
+standard or expensive session that reaches a ceiling, or meets the kill switch, is closed
+and ends with that code; an essential one reserves nothing and is never stopped (inv-13).
 """
 
 import asyncio
 from collections.abc import AsyncIterator, Awaitable, Callable
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 from decimal import Decimal
 from typing import Final, Protocol
 
@@ -23,8 +27,11 @@ from shosai.core.ai.errors import AiCallError, AiFailure
 from shosai.core.ai.recording import MeteredCall
 from shosai.core.ai.results import LiveEnd, LiveEvent, LiveToolCall, LiveUsage, Usage
 from shosai.core.ai.sessions.minutes import MinuteRows, SessionMeter, merged
+from shosai.core.ai.spend.estimates import live_minute
+from shosai.core.ai.spend.guard import Hold, SpendGuard
 
 CONNECT_TIMEOUT: Final = 3.0
+RENEW_EVERY: Final = 60.0
 TRANSIENT: Final = frozenset({AiFailure.PROVIDER_ERROR, AiFailure.DEADLINE_EXCEEDED})
 PCM_SAMPLE_BYTES: Final = 2
 log = structlog.stdlib.get_logger(__name__)
@@ -84,6 +91,7 @@ class LiveSession:
         self._meter = meter
         self._reported = Usage()
         self._sent_bytes = 0
+        self._stopped: AiFailure | None = None
 
     @property
     def input_rate(self) -> int:
@@ -113,9 +121,15 @@ class LiveSession:
                 self._reported = merged(self._reported, event.usage)
                 self._meter.add(event.usage)
                 continue
-            yield event
             if isinstance(event, LiveEnd):
+                yield LiveEnd(self._stopped or event.failure)
                 return
+            yield event
+
+    async def stop(self, failure: AiFailure) -> None:
+        """End the session from the platform's side, for the reason given."""
+        self._stopped = failure
+        await self._connection.close()
 
     def settle(self) -> None:
         """Bill the audio the provider did not report, at the floor of its model."""
@@ -129,24 +143,57 @@ class LiveSession:
 class LiveSessions:
     """Opens live sessions within their deadline and meters them until they close."""
 
-    def __init__(self, minutes: MinuteRows, connect_timeout: float = CONNECT_TIMEOUT) -> None:
+    def __init__(
+        self,
+        minutes: MinuteRows,
+        spend: SpendGuard,
+        connect_timeout: float = CONNECT_TIMEOUT,
+        renew_every: float = RENEW_EVERY,
+    ) -> None:
         self._minutes = minutes
+        self._spend = spend
         self._connect_timeout = connect_timeout
+        self._renew_every = renew_every
 
     @asynccontextmanager
     async def run(
         self, call: MeteredCall, connect: Callable[[], Awaitable[LiveConnection]]
     ) -> AsyncIterator[LiveSession]:
         """A metered session; its minutes are written when it closes, however it ends."""
-        connection = await self._connected(connect)
+        holds = [await self._spend.reserve(call, live_minute())]
+        try:
+            connection = await self._connected(connect)
+        except AiCallError:
+            await self._spend.release(holds[0])
+            raise
         meter = self._minutes.open(call)
         session = LiveSession(connection, meter)
+        renewing = asyncio.create_task(self._renew(call, session, holds), name="ai.live_spend")
         try:
             yield session
         finally:
+            renewing.cancel()
+            with suppress(asyncio.CancelledError):
+                await renewing
             session.settle()
             await connection.close()
             await self._minutes.close(meter)
+            await self._spend.release(holds[0])
+
+    async def _renew(
+        self, call: MeteredCall, session: LiveSession, holds: list[Hold | None]
+    ) -> None:
+        """Reserve the next minute every minute; a refusal ends the session with its code."""
+        while True:
+            await asyncio.sleep(self._renew_every)
+            try:
+                fresh = await self._spend.reserve(call, live_minute())
+            except AiCallError as refused:
+                log.warning("Живая сессия остановлена контролем расходов", failure=refused.code)
+                await session.stop(refused.failure)
+                return
+            previous, holds[0] = holds[0], fresh
+            await self._spend.release(previous)
 
     async def _connected(self, connect: Callable[[], Awaitable[LiveConnection]]) -> LiveConnection:
         try:

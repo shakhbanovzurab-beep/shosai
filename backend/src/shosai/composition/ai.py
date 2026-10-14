@@ -10,6 +10,7 @@ runs and once more at stop, before the databases close.
 from collections.abc import Callable
 from contextlib import AsyncExitStack
 from dataclasses import dataclass
+from datetime import timedelta
 from typing import Any, Final
 
 import httpx
@@ -30,7 +31,7 @@ from shosai.core.ai.adapters.pyannote import (
     upload_client,
 )
 from shosai.core.ai.admission import Admission, AiClients
-from shosai.core.ai.calls import Provider
+from shosai.core.ai.calls import PlatformAccount, Provider
 from shosai.core.ai.costs.settlement import CostSettlements
 from shosai.core.ai.costs.writer import CostWriter, WorkSender, record_cost_handler
 from shosai.core.ai.metrics import AiMetrics
@@ -45,8 +46,11 @@ from shosai.core.ai.resilience.routing import Resilience, RouteRunner
 from shosai.core.ai.resilience.slots import ProviderSlots
 from shosai.core.ai.sessions.live import LiveSessions
 from shosai.core.ai.sessions.minutes import MinuteRows
+from shosai.core.ai.spend.counters import micro_usd
+from shosai.core.ai.spend.guard import Ceilings, SpendGuard, SpendMetrics
+from shosai.core.ai.spend.kill_switch import KillSwitch
 from shosai.core.config.loading import Settings
-from shosai.core.config.sections import AiSettings
+from shosai.core.config.sections import AiSettings, SpendSettings
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.exchange_rates.fetch import rate_fetch_handler
 from shosai.core.exchange_rates.rates import ExchangeRates
@@ -107,6 +111,38 @@ def resilience(ai: AiSettings, dependencies: AiDependencies) -> Resilience:
         slots=ProviderSlots(dependencies.valkey, limits, metrics),
         retries=RetryBudget(metrics),
         metrics=metrics,
+    )
+
+
+def kill_switch(settings: SpendSettings, valkey: Redis) -> KillSwitch:
+    """The kill switch over Valkey, engaged outright by the setting."""
+    return KillSwitch(valkey, forced=settings.ai_kill_switch)
+
+
+def spend_guard(settings: SpendSettings, dependencies: AiDependencies) -> SpendGuard:
+    """Spend control with the platform's ceilings in micro-USD."""
+    platform = {
+        PlatformAccount.LANDING_DEMO.value: (
+            settings.ai_landing_demo_hourly_usd, settings.ai_landing_demo_daily_usd,
+        ),
+        PlatformAccount.HELP_ASSISTANT.value: (
+            settings.ai_help_assistant_hourly_usd, settings.ai_help_assistant_daily_usd,
+        ),
+        PlatformAccount.SYSTEM.value: (settings.ai_system_hourly_usd, settings.ai_system_daily_usd),
+    }  # fmt: skip
+    ceilings = Ceilings(
+        global_hour=micro_usd(settings.ai_global_hourly_usd),
+        global_day=micro_usd(settings.ai_global_daily_usd),
+        platform={
+            name: (micro_usd(hour), micro_usd(day)) for name, (hour, day) in platform.items()
+        },
+        lease=timedelta(seconds=settings.ai_reservation_lease_seconds),
+    )
+    return SpendGuard(
+        dependencies.valkey,
+        ceilings,
+        kill_switch(settings, dependencies.valkey),
+        SpendMetrics(dependencies.registry),
     )
 
 
@@ -203,9 +239,11 @@ async def open_ai(
     recorder = CallRecorder(writer, rates, metrics)
     minutes = MinuteRows(recorder)
     await stack.enter_async_context(minutes.running())
+    spend = spend_guard(settings.spend, dependencies)
+    writer.observe(spend.count)
     admission = Admission(PriceBook(transactions), metrics)
-    runner = RouteRunner(admission, recorder, resilience(settings.ai, dependencies), metrics)
-    providers = AiProviders(clients, runner, LiveSessions(minutes))
+    runner = RouteRunner(admission, recorder, resilience(settings.ai, dependencies), spend, metrics)
+    providers = AiProviders(clients, runner, LiveSessions(minutes, spend))
     return PlatformAi(
         providers=providers,
         rates=rates,

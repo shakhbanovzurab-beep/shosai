@@ -14,7 +14,7 @@ caller, a failure ends the stream.
 from collections.abc import AsyncGenerator, AsyncIterator, Awaitable, Callable
 from contextlib import AsyncExitStack, asynccontextmanager
 from dataclasses import dataclass
-from typing import Final, Protocol
+from typing import Final
 
 from shosai.core.ai.admission import Admission
 from shosai.core.ai.calls import CallContext, ModelRef, ModelRoute
@@ -23,9 +23,11 @@ from shosai.core.ai.metrics import AiMetrics
 from shosai.core.ai.recording import CallRecorder, MeteredCall
 from shosai.core.ai.resilience.breakers import Breakers, Gate
 from shosai.core.ai.resilience.metrics import ResilienceMetrics
+from shosai.core.ai.resilience.operations import Metered, Operation, StreamOperation
 from shosai.core.ai.resilience.retries import RetryBudget
 from shosai.core.ai.resilience.slots import ProviderSlots
-from shosai.core.ai.results import ChatDelta, Usage
+from shosai.core.ai.results import ChatDelta
+from shosai.core.ai.spend.guard import SpendGuard
 
 # Сбои провайдера: их считает выключатель модели.
 PROVIDER_FAILURES: Final = frozenset(
@@ -37,15 +39,6 @@ NEXT_MODEL: Final = PROVIDER_FAILURES | {
     AiFailure.MODEL_UNPRICED,
     AiFailure.RETRY_LATER,
 }
-
-
-class Metered(Protocol):
-    """A result that carries the usage of its call."""
-
-    @property
-    def usage(self) -> Usage:
-        """What the call consumed."""
-        ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -76,11 +69,13 @@ class RouteRunner:
         admission: Admission,
         recorder: CallRecorder,
         resilience: Resilience,
+        spend: SpendGuard,
         metrics: AiMetrics,
     ) -> None:
         self._admission = admission
         self._recorder = recorder
         self._guards = resilience
+        self._spend = spend
         self._metrics = metrics
 
     @property
@@ -93,57 +88,63 @@ class RouteRunner:
         """Breakers and slots, for the port's live sessions."""
         return self._guards
 
+    @property
+    def spend(self) -> SpendGuard:
+        """Spend control, for the port's turns and live sessions."""
+        return self._spend
+
     async def call[C, R: Metered](
-        self,
-        context: CallContext,
-        route: ModelRoute,
-        kind: str,
-        client_of: Callable[[ModelRef], C],
-        send: Callable[[C, ModelRef], Awaitable[R]],
+        self, context: CallContext, route: ModelRoute, operation: Operation[C, R]
     ) -> R:
         """The answer of the first model of the route that gives one."""
         last: AiCallError | None = None
-        async for attempt in self._attempts(context, route, kind, client_of):
+        async for attempt in self._attempts(context, route, operation.kind, operation.client_of):
             if isinstance(attempt, AiCallError):
                 last = attempt
                 continue
-            model = attempt.call.model
+            hold = await self._spend.reserve(attempt.call, operation.estimate)
             try:
-                result = await self._sent(attempt, context, send)
+                result = await self._sent(attempt, context, operation.send)
             except PaidCallError as paid:
                 await self._recorder.record_failed(attempt.call, paid.usage, attempt.index)
-                last = await self._failed(model, AiCallError(paid.failure))
+                last = await self._failed(attempt.call.model, AiCallError(paid.failure))
                 continue
             except AiCallError as error:
-                last = await self._failed(model, error)
+                last = await self._failed(attempt.call.model, error)
                 continue
-            await self._answered(attempt, kind)
-            await self._recorder.record(attempt.call, result.usage)
-            return result
+            else:
+                await self._answered(attempt, operation.kind)
+                await self._recorder.record(attempt.call, result.usage)
+                await self._spend.consume(context, result.usage, attempt.call)
+                return result
+            finally:
+                await self._spend.release(hold)
         raise last or AiCallError(AiFailure.MODEL_UNAVAILABLE)
 
     async def stream[C](
         self,
         context: CallContext,
         route: ModelRoute,
-        client_of: Callable[[ModelRef], C],
-        open_stream: Callable[[C, ModelRef], AsyncGenerator[ChatDelta]],
+        operation: StreamOperation[C],
     ) -> AsyncGenerator[ChatDelta]:
         """The pieces of the first model that starts answering; usage recorded once."""
         last: AiCallError | None = None
-        async for attempt in self._attempts(context, route, "chat", client_of):
+        async for attempt in self._attempts(context, route, "chat", operation.client_of):
             if isinstance(attempt, AiCallError):
                 last = attempt
                 continue
-            model = attempt.call.model
-            async with self._started(attempt, context, open_stream) as opened:
-                if isinstance(opened, AiCallError):
-                    last = await self._failed(model, opened)
-                    continue
-                await self._answered(attempt, "chat")
-                async for delta in self._recorded(attempt, opened):
-                    yield delta
-                return
+            hold = await self._spend.reserve(attempt.call, operation.estimate)
+            try:
+                async with self._started(attempt, context, operation.open) as opened:
+                    if isinstance(opened, AiCallError):
+                        last = await self._failed(attempt.call.model, opened)
+                        continue
+                    await self._answered(attempt, "chat")
+                    async for delta in self._recorded(attempt, opened):
+                        yield delta
+                    return
+            finally:
+                await self._spend.release(hold)
         raise last or AiCallError(AiFailure.MODEL_UNAVAILABLE)
 
     async def _attempts[C](
@@ -221,6 +222,7 @@ class RouteRunner:
             async for delta in pieces:
                 if delta.usage is not None and not recorded:
                     await self._recorder.record(attempt.call, delta.usage)
+                    await self._spend.consume(attempt.call.context, delta.usage, attempt.call)
                     recorded = True
                 yield delta
         except AiCallError as broken:

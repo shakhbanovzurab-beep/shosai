@@ -204,6 +204,6 @@ async def test_without_valkey_an_expensive_call_is_refused_and_a_standard_one_go
         await bench.providers.chat(expensive, ModelRoute(PRIMARY), QUESTION)
 
     assert standard.text == "Fine."
-    assert refused.value.failure is AiFailure.RETRY_LATER
+    assert refused.value.failure is AiFailure.EXPENSIVE_PAUSED
     assert models_asked(bench) == ["probe/primary"]
     assert bench.sample("shosai_ai_calls_without_cost_row_total") == Decimal(0)

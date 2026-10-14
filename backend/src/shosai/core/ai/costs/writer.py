@@ -12,7 +12,7 @@ company claims every key of the batch at once, inserts the new rows with one sta
 skips the keys already written, so a replayed flush writes nothing.
 """
 
-from collections.abc import Sequence
+from collections.abc import Awaitable, Callable, Sequence
 from datetime import timedelta
 from typing import Any, Final, Protocol
 from uuid import UUID
@@ -57,6 +57,9 @@ class WorkSender(Protocol):
         ...
 
 
+type CostObserver = Callable[[Sequence[CostEntry]], Awaitable[None]]
+
+
 class RecordedCost(BaseModel):
     """What the ledger keeps for a recorded call: its row id."""
 
@@ -79,6 +82,19 @@ class CostWriter:
         self._settlements = settlements
         self._sender = sender
         self._metrics = metrics
+        self._observers: list[CostObserver] = []
+
+    def observe(self, observer: CostObserver) -> None:
+        """Call `observer` with the rows each commit inserted, after it — never on a replay."""
+        self._observers.append(observer)
+
+    async def _inserted(self, entries: Sequence[CostEntry]) -> None:
+        for entry in entries:
+            self._metrics.recorded(entry.cost_source)
+            if entry.cost_rub is None:
+                self._metrics.without_rate()
+        for observer in self._observers:
+            await observer(entries)
 
     async def record(self, entry: CostEntry) -> None:
         """Write the row now, or hand it to the deferred task when its home does not answer."""
@@ -97,9 +113,7 @@ class CostWriter:
                 lambda: self._insert(session, entry),
             )
         if not result.replayed:
-            self._metrics.recorded(entry.cost_source)
-            if entry.cost_rub is None:
-                self._metrics.without_rate()
+            await self._inserted([entry])
         return result.outcome.cost_id
 
     async def record_many(self, entries: Sequence[CostEntry]) -> None:
@@ -135,10 +149,7 @@ class CostWriter:
                 await self._settle(session, entry)
             outcomes = {entry.effect_key: RecordedCost(cost_id=entry.cost_id) for entry in fresh}
             await self._batch.complete(session, AI_COST, outcomes)
-        for entry in fresh:
-            self._metrics.recorded(entry.cost_source)
-            if entry.cost_rub is None:
-                self._metrics.without_rate()
+        await self._inserted(fresh)
 
     async def _insert(self, session: AsyncSession, entry: CostEntry) -> RecordedCost:
         await session.execute(insert(ProviderCost).values(row_of(entry)))

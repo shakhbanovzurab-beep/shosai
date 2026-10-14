@@ -6,6 +6,7 @@
     shosai scheduler               scheduled loops
     shosai migrate upgrade         apply migrations to both homes, RU first
     shosai migrate current         log each home's revision
+    shosai ai kill-switch ACTION   engage, release or report the AI kill switch
 
 Every long-running role also serves `/livez`, `/readyz` and `/metrics` on OPS_PORT. The
 settings come from the environment only (`.env.example`, section 2). One process runs
@@ -19,6 +20,7 @@ from typing import Any
 
 import uvloop
 
+from shosai.composition.ai_command import KillSwitchAction, KillSwitchCommand, run_kill_switch
 from shosai.composition.migrate import MigrateAction, run_migrate
 from shosai.composition.process import run_process
 from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
@@ -43,6 +45,14 @@ def build_parser() -> argparse.ArgumentParser:
     migrate.add_argument(
         "action", choices=[action.value for action in MigrateAction], help="what to do"
     )
+    ai = roles.add_parser(ProcessRole.AI.value, help="operator commands of the AI port")
+    tools = ai.add_subparsers(dest="tool", required=True, metavar="TOOL")
+    switch = tools.add_parser("kill-switch", help="pause or resume expensive AI calls")
+    switch.add_argument(
+        "action", choices=[action.value for action in KillSwitchAction], help="what to do"
+    )
+    switch.add_argument("--reason", help="why, for engage; written to the log")
+    switch.add_argument("--hours", type=float, default=24.0, help="how long engage holds")
     return parser
 
 
@@ -60,6 +70,11 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
             return run_process(role, environ, scheduler_role)
         case ProcessRole.MIGRATE:
             return run_migrate(environ, MigrateAction(arguments.action))
+        case ProcessRole.AI:
+            command = KillSwitchCommand(
+                KillSwitchAction(arguments.action), arguments.reason, arguments.hours
+            )
+            return run_kill_switch(environ, command)
 
 
 def main(argv: Sequence[str] | None = None) -> int:
