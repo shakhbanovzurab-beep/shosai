@@ -7,6 +7,16 @@ from shosai.core.kernel.homes import Home
 SAMPLE_SECRET = "sample-secret-value"
 SAMPLE_FERNET_KEY = Fernet.generate_key().decode()
 SAMPLE_LINK_SECRET = "sample-link-secret-at-least-32-characters"
+# Ключи identity: разработки — для local_environ, «настоящие» — для production_environ.
+SAMPLE_SIGNING_KEY = "sample-signing-key-at-least-32-bytes-long"
+DEVELOPMENT_IDENTITY = {
+    "IDENTITY_TOKEN_KEYS": f"dev:{SAMPLE_SIGNING_KEY}",
+    "IDENTITY_DIRECTORY_HMAC_KEY": "dev-sample-directory-key-at-least-32-bytes",
+}
+PRODUCTION_IDENTITY = {
+    "IDENTITY_TOKEN_KEYS": f"k1:{SAMPLE_SIGNING_KEY}",
+    "IDENTITY_DIRECTORY_HMAC_KEY": "sample-directory-key-at-least-32-bytes-long",
+}
 REQUIRED_VARIABLES = (
     "ENVIRONMENT",
     *(f"HOME_{home.name}_DATABASE_URL" for home in Home),
@@ -33,6 +43,7 @@ def local_environ(**overrides: str) -> dict[str, str]:
         "ENVIRONMENT": "development",
         "VALKEY_URL": f"redis://:{SAMPLE_SECRET}@127.0.0.1:16379/0",
         "REDIS_CACHE_URL": f"redis://:{SAMPLE_SECRET}@127.0.0.1:16380/0",
+        **DEVELOPMENT_IDENTITY,
     }
     for home, (application_port, migration_port) in ports.items():
         prefix = f"HOME_{home.name}_"
@@ -73,6 +84,7 @@ def production_environ(**overrides: str) -> dict[str, str]:
         SMTP_NOTIFICATIONS_USER="info@shosai.example",
         SMTP_NOTIFICATIONS_PASSWORD=SAMPLE_SECRET,
         EMAIL_LINK_SECRET=SAMPLE_LINK_SECRET,
+        **PRODUCTION_IDENTITY,
     )
     for home in Home:
         del environ[f"HOME_{home.name}_MIGRATION_DATABASE_URL"]

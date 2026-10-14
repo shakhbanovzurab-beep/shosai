@@ -12,7 +12,7 @@ from typing import Final
 import structlog
 
 from shosai.composition.email import renderer_of
-from shosai.composition.features import FEATURES, feature_checks
+from shosai.composition.features import FEATURES
 from shosai.composition.startup import load_process_settings
 from shosai.core.config.loading import Settings
 from shosai.core.config.roles import ProcessRole
@@ -41,7 +41,7 @@ class MailCheckCommand:
 async def run_mail_check(environ: Mapping[str, str], command: MailCheckCommand) -> int:
     """Send the check mail of each kind; return the exit code."""
     role = ProcessRole.EMAIL
-    settings = load_process_settings(environ, role, feature_checks(FEATURES))
+    settings = load_process_settings(environ, role, FEATURES)
     if settings is None:
         return EXIT_FAILED
     pipeline = configure_logging(

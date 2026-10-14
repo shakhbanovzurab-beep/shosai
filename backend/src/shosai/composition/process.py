@@ -23,7 +23,7 @@ from typing import Final
 
 import structlog
 
-from shosai.composition.features import FEATURES, feature_checks
+from shosai.composition.features import FEATURES
 from shosai.composition.platform import open_platform
 from shosai.composition.roles import Role
 from shosai.composition.startup import (
@@ -58,7 +58,7 @@ async def run_process(
     features: Sequence[FeatureModule] = FEATURES,
 ) -> int:
     """Run one long-running role until a stop signal; return the exit code."""
-    settings = load_process_settings(environ, role, feature_checks(features))
+    settings = load_process_settings(environ, role, features)
     if settings is None:
         return EXIT_FAILED
     async with open_telemetry(settings, role) as telemetry:

@@ -33,6 +33,10 @@ def slot_environ(run_slot: RunSlot, settings: HarnessSettings, **overrides: str)
         "OPS_PORT": str(free_port()),
         "VALKEY_URL": services.valkey.for_slot(slot).get_secret_value(),
         "REDIS_CACHE_URL": services.cache.for_slot(slot).get_secret_value(),
+        # Ключи identity разработки; дешёвый bcrypt ради скорости тестов.
+        "IDENTITY_TOKEN_KEYS": "dev:development-signing-key-for-tests-only",
+        "IDENTITY_DIRECTORY_HMAC_KEY": "dev-directory-hmac-key-for-tests-only-0000",
+        "IDENTITY_PASSWORD_HASH_ROUNDS": "4",
     }
     for home in Home:
         targets = run_slot.claimed.targets(home)

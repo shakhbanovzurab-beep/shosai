@@ -10,14 +10,12 @@ from contextlib import contextmanager
 import structlog
 from prometheus_client import CollectorRegistry
 
-from shosai.core.config.gate import (
-    ProductionCheck,
-    UnsafeConfigurationError,
-    enforce_production_gate,
-)
+from shosai.composition.features import feature_checks, feature_settings_sections
+from shosai.core.config.gate import UnsafeConfigurationError, enforce_production_gate
 from shosai.core.config.loading import ConfigurationError, Settings, load_settings
 from shosai.core.config.roles import ProcessRole
 from shosai.core.config.sections import ObservabilitySettings
+from shosai.core.features import FeatureModule
 from shosai.core.observability.logs import configure_logging
 from shosai.core.observability.metrics import ObservabilityMetrics
 
@@ -50,12 +48,12 @@ def report_start_failure(error: StartFailedError) -> None:
 
 
 def load_process_settings(
-    environ: Mapping[str, str], role: ProcessRole, checks: Sequence[ProductionCheck]
+    environ: Mapping[str, str], role: ProcessRole, features: Sequence[FeatureModule]
 ) -> Settings | None:
-    """The settings that passed the production gate, or None after one line naming why."""
+    """Core's and the slices' settings that passed the gate, or None after one line naming why."""
     try:
-        settings = load_settings(environ)
-        enforce_production_gate(settings, checks)
+        settings = load_settings(environ, feature_settings_sections(features))
+        enforce_production_gate(settings, feature_checks(features))
     except (ConfigurationError, UnsafeConfigurationError) as error:
         with _default_logging(role):
             # Текст ошибки называет переменные и причины, но не значения.

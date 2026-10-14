@@ -14,6 +14,8 @@ dependencies = [
     "aiobotocore>=3.9.2",
     "aiosmtplib>=5.1.3",
     "alembic>=1.20.0",
+    # Хеши паролей: хеши черновика переносятся как есть (§18.2, DATA_MAPPING §5.1).
+    "bcrypt>=5.0.0",
     "cryptography>=50.0.2",
     "fastapi>=0.142.2",
     # Клиент Gemini Live: синхронный перевод и голос (F6, §18.2); держит websockets ниже 17.
@@ -29,6 +31,8 @@ dependencies = [
     "psycopg[binary]>=3.3.6",
     "pydantic>=2.13.5",
     "pydantic-settings>=2.15.0",
+    # Токены доступа и обновления, совместимые с черновиком: HS256 (§18.2, ADR 0045).
+    "pyjwt>=2.15.1",
     "redis>=8.1.0",
     "sqlalchemy[asyncio]>=2.1.2",
     "structlog>=26.1.0",
@@ -158,7 +162,7 @@ name = "Features meet through contracts"
 type = "independence"
 modules = ["shosai.features.*"]
 ignore_imports = ["shosai.features.** -> shosai.features.*.contracts"]
-# Пока слайсов нет, исключению не с чем совпасть; это не ошибка конфигурации.
+# Пока один срез, исключению не с чем совпасть; это не ошибка конфигурации.
 unmatched_ignore_imports_alerting = "none"
 broken_contract_guidance = "A slice imports another slice only through its contracts module."
 
@@ -183,10 +187,10 @@ name = "Pure slice domain"
 type = "forbidden"
 source_modules = ["shosai.features.*.domain"]
 forbidden_modules = [
-    "aioboto3", "aiobotocore", "alembic", "botocore", "fastapi", "google", "httpx",
-    "langchain_core", "langgraph", "livekit", "openai", "opentelemetry", "prometheus_client",
-    "psycopg", "redis", "sqlalchemy", "starlette", "structlog", "taskiq", "taskiq_redis",
-    "uvicorn", "websockets",
+    "aioboto3", "aiobotocore", "alembic", "bcrypt", "botocore", "fastapi", "google", "httpx",
+    "jwt", "langchain_core", "langgraph", "livekit", "openai", "opentelemetry",
+    "prometheus_client", "psycopg", "redis", "sqlalchemy", "starlette", "structlog", "taskiq",
+    "taskiq_redis", "uvicorn", "websockets",
 ]
 broken_contract_guidance = "A slice's domain is pure; put the adapter in its infrastructure or channels."
 
@@ -236,6 +240,20 @@ forbidden_modules = [
     "starlette", "structlog", "taskiq", "uvicorn", "websockets",
 ]
 broken_contract_guidance = "core.agent_tools stays framework-free; bind handlers in the slice."
+
+# Порты между срезами и реестр данных человека — контракты, как инструменты агента:
+# только значения и ключи, реализации у срезов (ADR 0045 п. 7, 11).
+[[tool.importlinter.contracts]]
+id = "light-slice-contracts"
+name = "Light slice contracts"
+type = "forbidden"
+source_modules = ["shosai.core.ports", "shosai.core.account_data"]
+forbidden_modules = [
+    "aiobotocore", "alembic", "fastapi", "google", "httpx", "openai", "opentelemetry",
+    "prometheus_client", "psycopg", "redis", "sqlalchemy", "starlette", "structlog", "taskiq",
+    "uvicorn", "websockets",
+]
+broken_contract_guidance = "core.ports and core.account_data hold values only; implement in the slice."
 
 # Только для `uv run alembic revision -m "…"`: новая ревизия по шаблону с applies_to.
 # Применяет миграции не CLI Alembic, а раннер shosai.core.db.migrations (ADR 0010).

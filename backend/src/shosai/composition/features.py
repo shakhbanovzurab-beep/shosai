@@ -7,12 +7,15 @@ routes (backend README, "Adding a slice").
 
 from collections.abc import Sequence
 
+from shosai.core.account_data.spec import CORE_ACCOUNT_DATA, AccountDataSpec
 from shosai.core.ai.events import UserSpendExceeded
 from shosai.core.config.gate import ProductionCheck
+from shosai.core.config.sections import SettingsSection
 from shosai.core.events.domain_event import DomainEvent
 from shosai.core.features import FeatureModule
+from shosai.features.identity.module import IDENTITY
 
-FEATURES: tuple[FeatureModule, ...] = ()
+FEATURES: tuple[FeatureModule, ...] = (IDENTITY,)
 
 
 def check_features(features: Sequence[FeatureModule]) -> None:
@@ -41,3 +44,13 @@ def platform_events(features: Sequence[FeatureModule]) -> list[type[DomainEvent]
 def feature_checks(features: Sequence[FeatureModule]) -> list[ProductionCheck]:
     """Every production check the slices add to the gate."""
     return [check for feature in features for check in feature.production_checks]
+
+
+def feature_settings_sections(features: Sequence[FeatureModule]) -> list[type[SettingsSection]]:
+    """Every settings section the slices declare, read with core's at start."""
+    return [section for feature in features for section in feature.settings]
+
+
+def account_data_specs(features: Sequence[FeatureModule]) -> list[AccountDataSpec]:
+    """What core and every slice hold of a person: the registry identity runs."""
+    return [CORE_ACCOUNT_DATA, *(spec for feature in features for spec in feature.account_data)]

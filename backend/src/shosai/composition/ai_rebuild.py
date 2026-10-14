@@ -12,7 +12,7 @@ from typing import Final
 
 import structlog
 
-from shosai.composition.features import FEATURES, feature_checks
+from shosai.composition.features import FEATURES
 from shosai.composition.startup import load_process_settings
 from shosai.core.ai.spend.rebuild import (
     RebuildBusyError,
@@ -40,7 +40,7 @@ log = structlog.stdlib.get_logger(__name__)
 async def run_rebuild(environ: Mapping[str, str]) -> int:
     """Rebuild the counters; return the exit code."""
     role = ProcessRole.AI
-    settings = load_process_settings(environ, role, feature_checks(FEATURES))
+    settings = load_process_settings(environ, role, FEATURES)
     if settings is None:
         return EXIT_FAILED
     registry = build_metrics_registry()

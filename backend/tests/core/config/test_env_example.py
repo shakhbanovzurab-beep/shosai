@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+from shosai.composition.features import FEATURES, feature_settings_sections
 from shosai.core.config.loading import load_settings
 from shosai.core.config.sections import (
     HomeSettings,
@@ -28,7 +29,8 @@ def section_two() -> dict[str, str]:
 
 def settings_variables() -> set[str]:
     variables: set[str] = set()
-    for section in SettingsSection.__subclasses__():
+    # Разделы срезов импортирует список FEATURES; ядро — свои модули.
+    for section in {*SettingsSection.__subclasses__(), *feature_settings_sections(FEATURES)}:
         # Разделы дома читаются с префиксом HOME_<RU|EU>_: база и бакет (ADR 0044).
         per_home = section in {HomeSettings, StorageSettings}
         prefixes = [home_prefix(home) for home in Home] if per_home else [""]
@@ -43,4 +45,4 @@ def test_every_setting_is_documented_and_nothing_stale_is() -> None:
 
 
 def test_the_documented_values_start_a_development_process() -> None:
-    load_settings(section_two())
+    load_settings(section_two(), feature_settings_sections(FEATURES))

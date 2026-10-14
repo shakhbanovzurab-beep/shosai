@@ -17,7 +17,7 @@ from typing import Final
 import structlog
 
 from shosai.composition.ai_spend import kill_switch
-from shosai.composition.features import FEATURES, feature_checks
+from shosai.composition.features import FEATURES
 from shosai.composition.startup import load_process_settings
 from shosai.core.ai.spend.kill_switch import KillSwitch
 from shosai.core.config.roles import ProcessRole
@@ -51,7 +51,7 @@ class KillSwitchCommand:
 async def run_kill_switch(environ: Mapping[str, str], command: KillSwitchCommand) -> int:
     """Run the command; return the exit code."""
     role = ProcessRole.AI
-    settings = load_process_settings(environ, role, feature_checks(FEATURES))
+    settings = load_process_settings(environ, role, FEATURES)
     if settings is None:
         return EXIT_FAILED
     pipeline = configure_logging(

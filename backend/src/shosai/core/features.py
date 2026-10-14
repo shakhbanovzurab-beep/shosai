@@ -24,6 +24,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.account_data.spec import AccountDataSpec
 from shosai.core.agent_tools.bindings import AgentTool
 from shosai.core.agent_tools.catalog import AgentToolCatalog
 from shosai.core.agent_tools.spec import ToolSpec
@@ -34,6 +35,7 @@ from shosai.core.cache.port import Cache
 from shosai.core.config.gate import ProductionCheck
 from shosai.core.config.loading import Settings
 from shosai.core.config.roles import ProcessRole
+from shosai.core.config.sections import SettingsSection
 from shosai.core.db.model_base import ModelBase
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.email.port import EmailPort
@@ -47,6 +49,8 @@ from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.kernel.homes import Home
 from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.rate_limits import RateLimiter
+from shosai.core.ports.directory import PortDirectory
+from shosai.core.ports.keys import PortBinding, PortKey
 from shosai.core.runtime.loops import ScheduledLoop
 from shosai.core.schedule.jobs import DueRowSource, PeriodicJob
 from shosai.core.storage.port import MultipartUploads, ObjectStorage
@@ -80,6 +84,8 @@ class CoreServices:
     uploads: Mapping[Home, MultipartUploads]
     locks: DistributedLocks
     rate_limiter: RateLimiter
+    # Порты срезов: заполняются, когда собраны все срезы; читаются при запросе или задаче.
+    ports: PortDirectory
     # Сам клиент Valkey — для собственных структур среза: очереди транскрипта, состояния встреч.
     valkey: Redis
     registry: CollectorRegistry
@@ -101,6 +107,8 @@ class FeatureParts:
     cost_settlements: tuple[CostSettlement, ...] = ()
     email_templates: tuple[EmailTemplate, ...] = ()
     agent_tools: tuple[AgentTool, ...] = ()
+    # Реализации портов, которые срез предлагает другим срезам.
+    provides: tuple[PortBinding[Any], ...] = ()
 
 
 def combine_parts(parts: Sequence[FeatureParts]) -> FeatureParts:
@@ -120,6 +128,7 @@ def combine_parts(parts: Sequence[FeatureParts]) -> FeatureParts:
             cost_settlements=combined.cost_settlements + part.cost_settlements,
             email_templates=combined.email_templates + part.email_templates,
             agent_tools=combined.agent_tools + part.agent_tools,
+            provides=combined.provides + part.provides,
         )
     return combined
 
@@ -145,6 +154,12 @@ class FeatureModule:
     production_checks: tuple[ProductionCheck, ...] = ()
     # Объявления инструментов агента: статичны, как события, — их читает тест model-facing.
     agent_tools: tuple[ToolSpec[Any, Any], ...] = ()
+    # Разделы настроек среза: читаются вместе с разделами ядра и проходят гейт.
+    settings: tuple[type[SettingsSection], ...] = ()
+    # Порты с одной реализацией, без которых срез не работает: без привязки старт стоит.
+    requires: tuple[PortKey[Any], ...] = ()
+    # Что срез хранит о человеке: таблицы, префиксы, внешние гранты (реестр удаления).
+    account_data: tuple[AccountDataSpec, ...] = ()
 
     def __post_init__(self) -> None:
         if not FEATURE_NAME.fullmatch(self.name):

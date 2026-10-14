@@ -36,7 +36,7 @@ from shosai_contracts import (
 )
 from shosai_contracts.jsonvalue import Json
 
-from shosai.composition.features import FEATURES
+from shosai.composition.features import FEATURES, feature_settings_sections
 from shosai.composition.platform import open_platform
 from shosai.composition.roles import public_app
 from shosai.composition.telemetry import ProcessTelemetry
@@ -61,7 +61,9 @@ async def compose(
     run_slot: RunSlot, harness_settings: HarnessSettings, features: Sequence[FeatureModule]
 ) -> AsyncIterator[dict[str, FastAPI]]:
     """The public apps of `api` and `ws` with the given slices."""
-    settings = load_settings(slot_environ(run_slot, harness_settings))
+    settings = load_settings(
+        slot_environ(run_slot, harness_settings), feature_settings_sections(features)
+    )
     async with open_platform(settings, ProcessRole.API, own_telemetry(), features) as platform:
         # Каждая роль — свой процесс со своим реестром метрик; здесь оба приложения в одном.
         yield {
@@ -123,7 +125,8 @@ def test_the_native_routes_not_served_yet_are_recorded(
 async def test_a_slice_breaking_a_native_route_fails_the_gate_whatever_its_name(
     run_slot: RunSlot, harness_settings: HarnessSettings, name: str
 ) -> None:
-    features = (*FEATURES, native_breaking_feature(name))
+    # Срез-нарушитель занимает место настоящего среза с тем же именем.
+    features = (*(f for f in FEATURES if f.name != name), native_breaking_feature(name))
     async with compose(run_slot, harness_settings, features) as apps:
         report = native_contract(apps)
 

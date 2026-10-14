@@ -5,13 +5,14 @@ collected and reported at once by variable name; a value never enters a message,
 original `ValidationError` (whose text contains the input) is never chained.
 """
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from types import MappingProxyType
 
 from pydantic import ValidationError
 from pydantic_settings import BaseSettings, EnvSettingsSource, SettingsError
 
+from shosai.core.config.feature_settings import FeatureSettings
 from shosai.core.config.sections import (
     AiGuardSettings,
     AiSettings,
@@ -22,6 +23,7 @@ from shosai.core.config.sections import (
     ObservabilitySettings,
     RuntimeSettings,
     ServerSettings,
+    SettingsSection,
     SharedServicesSettings,
     SpendSettings,
     StorageSettings,
@@ -77,10 +79,17 @@ class Settings:
     ai_guards: AiGuardSettings
     email: EmailSettings
     exchange_rates: ExchangeRateSettings
+    # Разделы, которые объявили срезы (FeatureModule.settings), по классу раздела.
+    features: FeatureSettings
 
 
-def load_settings(environ: Mapping[str, str]) -> Settings:
-    """Build the settings from environment variables or raise `ConfigurationError`."""
+def load_settings(
+    environ: Mapping[str, str], feature_sections: Sequence[type[SettingsSection]] = ()
+) -> Settings:
+    """Build core's and the slices' settings from environment variables.
+
+    Raises `ConfigurationError` naming every rejected variable of every section.
+    """
     reader = _SectionReader(environ)
     runtime = reader.read(RuntimeSettings, "")
     homes = {home: reader.read(HomeSettings, home_prefix(home)) for home in Home}
@@ -95,6 +104,8 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
     ai_guards = reader.read(AiGuardSettings, "")
     email = reader.read(EmailSettings, "")
     exchange_rates = reader.read(ExchangeRateSettings, "")
+    # Переменные срезов несут префикс среза в имени поля (IDENTITY_…), отдельный префикс не нужен.
+    features = [reader.read(section, "") for section in feature_sections]
     if reader.problems:
         raise ConfigurationError(reader.problems)
     return Settings(
@@ -111,6 +122,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
         ai_guards=_present(ai_guards),
         email=_present(email),
         exchange_rates=_present(exchange_rates),
+        features=FeatureSettings(_present(section) for section in features),
     )
 
 

@@ -12,10 +12,13 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.tasks.queues import TaskQueue
 from tests.composition.fixture_features import (
+    CLOCK,
     TIDY_NOTES,
     Lifecycle,
     NoteWritten,
     broken_feature,
+    clock_feature,
+    clock_reader_feature,
     digest_feature,
     notes_feature,
 )
@@ -108,3 +111,25 @@ async def test_two_probes_with_one_name_stop_the_start(
 
     assert raised.value.step == "probes"
     assert lifecycle.events[-1] == "notes:close"
+
+
+async def test_a_port_bound_by_a_later_slice_is_resolved_for_an_earlier_one(
+    run_slot: RunSlot, harness_settings: HarnessSettings
+) -> None:
+    features = (clock_reader_feature(), clock_feature())
+
+    async with platform_over_slot(run_slot, harness_settings, features) as bench:
+        answer = bench.platform.services.ports.get(CLOCK).now()
+
+    assert answer == "fixture-now"
+
+
+async def test_a_required_port_nobody_binds_stops_the_start(
+    run_slot: RunSlot, harness_settings: HarnessSettings
+) -> None:
+    with pytest.raises(StartFailedError) as raised:
+        async with platform_over_slot(run_slot, harness_settings, (clock_reader_feature(),)):
+            pytest.fail("срез без привязанного обязательного порта не должен собраться")
+
+    assert raised.value.step == "events"
+    assert CLOCK.name in str(raised.value.__cause__)

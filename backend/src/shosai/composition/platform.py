@@ -11,7 +11,8 @@ Steps, in order, each named when it fails (§3.11):
 4. `tasks` — the brokers, the sender and the outbox of the listed event classes;
    `ai` — the AI provider port and the exchange rates, with their HTTP clients;
 5. `feature:<name>` — each slice built from the core services, in the listed order;
-6. `events` — the catalog with every subscription, and every task registered;
+6. `events` — the catalog with every subscription, every task registered, the agent tools
+   and the ports between slices installed;
 7. `schedule` — core's and every slice's periodic jobs and due-row sources, each named once
    and each with its task registered;
 8. `probes` — the readiness probes of core and of every slice, each name once.
@@ -32,6 +33,7 @@ from shosai.composition.agent_tools import install_agent_tools
 from shosai.composition.ai import AiDependencies, PlatformAi, open_ai
 from shosai.composition.email import PlatformEmail, open_email
 from shosai.composition.features import check_features, platform_events
+from shosai.composition.ports import install_ports
 from shosai.composition.schedule import scheduled_jobs
 from shosai.composition.startup import start_step
 from shosai.composition.telemetry import ProcessTelemetry
@@ -65,6 +67,7 @@ from shosai.core.kv.connection import connect_redis
 from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.metrics import KeyValueMetrics
 from shosai.core.kv.rate_limits import RateLimiter
+from shosai.core.ports.directory import PortDirectory
 from shosai.core.schedule.jobs import PeriodicJob
 from shosai.core.storage.metrics import StorageMetrics
 from shosai.core.storage.port import MultipartUploads, ObjectStorage
@@ -186,6 +189,7 @@ async def open_platform(
             writers.ai.settlements.install(parts.cost_settlements)
             email.install(parts.email_templates)
             install_agent_tools(features, built, services.agent_tools)
+            install_ports(features, built, services.ports)
         with start_step("schedule"):
             jobs = scheduled_jobs(parts, tasks)
         with start_step("probes"):
@@ -268,6 +272,7 @@ def _core_services(
         uploads=clients.uploads,
         locks=DistributedLocks(clients.valkey, kv_metrics),
         rate_limiter=RateLimiter(clients.valkey, kv_metrics),
+        ports=PortDirectory(),
         valkey=clients.valkey,
         registry=telemetry.registry,
         tracer_provider=telemetry.tracer_provider,

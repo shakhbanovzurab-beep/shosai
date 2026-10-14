@@ -22,6 +22,7 @@ from shosai.core.events.domain_event import DomainEvent
 from shosai.core.events.subscriptions import EventSubscription, ReceivedEvent
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.core.health.probes import DependencyProbe
+from shosai.core.ports.keys import PortKey
 from shosai.core.runtime.loops import ScheduledLoop
 from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration, TaskHandler
 from shosai.core.tasks.payloads import TaskPayload
@@ -155,6 +156,32 @@ def native_breaking_feature(name: str) -> FeatureModule:
         yield FeatureParts(http_routers=(router,))
 
     return FeatureModule(name=name, build=build)
+
+
+class Clock:
+    """The service the fixture port offers."""
+
+    def now(self) -> str:
+        """A fixed answer."""
+        return "fixture-now"
+
+
+CLOCK = PortKey[Clock]("clocks.clock")
+
+
+def clock_feature() -> FeatureModule:
+    """A slice that binds the fixture port."""
+
+    @asynccontextmanager
+    async def build(_services: CoreServices) -> AsyncIterator[FeatureParts]:
+        yield FeatureParts(provides=(CLOCK.bind(Clock()),))
+
+    return FeatureModule(name="clocks", build=build)
+
+
+def clock_reader_feature() -> FeatureModule:
+    """A slice that requires the fixture port, listed before the slice that binds it."""
+    return FeatureModule(name="reader", requires=(CLOCK,))
 
 
 async def open_client() -> None:

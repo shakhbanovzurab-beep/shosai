@@ -1,7 +1,8 @@
 """The import-linter contracts catch boundary violations (target architecture §5, §14 rule 12).
 
-While there are no slices, the contracts run on a temporary `shosai` tree with two
-features. The configuration is the backend's real pyproject.toml, not a copy of the rules.
+The contracts run on a temporary `shosai` tree with two fixture features, so each rule
+is proven on a violation the real tree does not contain. The configuration is the
+backend's real pyproject.toml, not a copy of the rules.
 """
 
 import os
@@ -22,7 +23,8 @@ PURE_DOMAIN = "Pure slice domain"
 PROVIDER_SDKS = "Provider SDKs only in core.ai"
 LIGHT_AI = "Light AI value types"
 LIGHT_TOOLS = "Light agent tool contract"
-CONTRACT_COUNT = 7
+LIGHT_CONTRACTS = "Light slice contracts"
+CONTRACT_COUNT = 8
 BASE_TREE = {
     "shosai.core.kernel.homes": "",
     # Порт ИИ: типы-значения лёгкие, SDK провайдера — в его адаптере, и это законно.
@@ -34,6 +36,9 @@ BASE_TREE = {
     "shosai.core.ai.adapters.live": "import websockets\nimport shosai.core.ai.results\n",
     # Контракт инструментов агента: pydantic и ядро без фреймворков — законно.
     "shosai.core.agent_tools.spec": "import pydantic\nimport shosai.core.kernel.homes\n",
+    # Порты и реестр данных человека — значения без фреймворков (ADR 0045).
+    "shosai.core.ports.keys": "",
+    "shosai.core.account_data.spec": "",
     # Домен опирается на ядро без фреймворков и на pydantic; адаптер среза — на домен.
     "shosai.features.alpha.domain.rules": "import pydantic\nimport shosai.core.kernel.homes\n",
     "shosai.features.alpha.service": (
@@ -101,6 +106,8 @@ def test_the_layered_tree_keeps_every_contract(tmp_path: Path) -> None:
             "import shosai.features.alpha.service\n",
             PURE_DOMAIN,
         ),
+        ("shosai.features.beta.domain.tokens", "import jwt\n", PURE_DOMAIN),
+        ("shosai.features.beta.domain.passwords", "import bcrypt\n", PURE_DOMAIN),
         ("shosai.features.beta.speech", "import openai\n", PROVIDER_SDKS),
         ("shosai.composition.voice", "from google import genai\n", PROVIDER_SDKS),
         ("shosai.core.ai.requests", "import sqlalchemy\n", LIGHT_AI),
@@ -113,6 +120,8 @@ def test_the_layered_tree_keeps_every_contract(tmp_path: Path) -> None:
             "from langgraph.graph import StateGraph\n",
             LIGHT_TOOLS,
         ),
+        ("shosai.core.ports.directory", "import sqlalchemy\n", LIGHT_CONTRACTS),
+        ("shosai.core.account_data.spec", "from fastapi import Depends\n", LIGHT_CONTRACTS),
     ],
 )
 def test_a_boundary_violation_breaks_its_contract(

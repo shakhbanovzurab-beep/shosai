@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 
+from shosai.composition.features import feature_settings_sections
 from shosai.composition.platform import Platform, open_platform
 from shosai.composition.telemetry import ProcessTelemetry
 from shosai.core.config.loading import Settings, load_settings
@@ -40,7 +41,8 @@ async def platform_over_slot(
 ) -> AsyncIterator[PlatformBench]:
     """The platform a process of the role builds with the slices, closed after the block;
     `overrides` replaces variables of the slot's environment."""
-    settings = load_settings(slot_environ(run_slot, harness_settings, **(overrides or {})))
+    environ = slot_environ(run_slot, harness_settings, **(overrides or {}))
+    settings = load_settings(environ, feature_settings_sections(features))
     telemetry = ProcessTelemetry(CollectorRegistry(), TracerProvider(shutdown_on_exit=False))
     async with open_platform(settings, role, telemetry, features) as platform:
         yield PlatformBench(platform, settings, telemetry)
