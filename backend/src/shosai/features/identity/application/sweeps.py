@@ -20,9 +20,12 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.records import PendingRegistration, User
+from shosai.features.identity.infrastructure.session_records import RefreshSession
 
 CLAIM_GRACE: Final = timedelta(minutes=10)
 CLAIMS_PER_SWEEP: Final = 200
+# Закончившиеся сессии видны в списке устройств ещё 30 дней, потом удаляются.
+ENDED_SESSIONS_KEPT: Final = timedelta(days=30)
 log = structlog.stdlib.get_logger(__name__)
 
 
@@ -63,3 +66,15 @@ async def settle_claims(transactions: HomeTransactions, directory: Directory) ->
             released=len(claims) - len(written),
         )
     return len(claims)
+
+
+async def purge_sessions(transactions: HomeTransactions, home: Home) -> int:
+    """Delete families that expired or were revoked more than 30 days ago."""
+    cutoff = datetime.now(UTC) - ENDED_SESSIONS_KEPT
+    async with transactions.begin(TenancyScope(home)) as session:
+        deleted = await session.scalars(
+            delete(RefreshSession)
+            .where((RefreshSession.expires_at < cutoff) | (RefreshSession.revoked_at < cutoff))
+            .returning(RefreshSession.id)
+        )
+        return len(deleted.all())

@@ -254,17 +254,35 @@
           "auth"
         ],
         "summary": "Verify",
-        "description": "Create the account when the code is right; five wrong codes end the registration.",
+        "description": "Create the account and sign it in when the code is right; five wrong codes end\nthe registration.",
         "operationId": "verify_v1_auth_register_verify_post",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          }
+        ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/VerifyRequest"
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "201": {
@@ -331,6 +349,201 @@
           }
         }
       }
+    },
+    "/v1/auth/login": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Login",
+        "description": "Sign in with the address and password; set the refresh and CSRF cookies.",
+        "operationId": "login_v1_auth_login_post",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/refresh": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Refresh",
+        "description": "Rotate the session of the refresh cookie; the CSRF header repeats its cookie.",
+        "operationId": "refresh_v1_auth_refresh_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Logout",
+        "description": "End the session of the cookie, or of a refresh token in the body; always ok.",
+        "operationId": "logout_v1_auth_logout_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/LogoutRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "boolean"
+                  },
+                  "type": "object",
+                  "title": "Response Logout V1 Auth Logout Post"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/me": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Read Me",
+        "description": "The signed-in person with their plan, minutes and switches.",
+        "operationId": "read_me_v1_auth_me_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserMeResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -341,14 +554,34 @@
             "type": "string",
             "format": "uuid",
             "title": "User Id"
+          },
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "expires_in": {
+            "type": "integer",
+            "title": "Expires In"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "Bearer"
+          },
+          "csrf_token": {
+            "type": "string",
+            "title": "Csrf Token"
           }
         },
         "type": "object",
         "required": [
-          "user_id"
+          "user_id",
+          "access_token",
+          "expires_in",
+          "csrf_token"
         ],
         "title": "AccountCreatedResponse",
-        "description": "The account the confirmed registration created."
+        "description": "The account the confirmed registration created, signed in as at sign-in."
       },
       "Consents": {
         "properties": {
@@ -468,6 +701,54 @@
         "title": "ErrorResponse",
         "description": "Body of every error response of the HTTP API.\n\n`error.code` is the stable code a client turns into text; `error.request_id` equals\nthe `X-Request-ID` header. `detail` is kept for shipped clients: the code by default,\nthe draft's shape on routes whose draft contract had another one."
       },
+      "FeaturesOut": {
+        "properties": {
+          "voice_translation": {
+            "type": "boolean",
+            "title": "Voice Translation",
+            "default": false
+          },
+          "voice": {
+            "type": "boolean",
+            "title": "Voice",
+            "default": false
+          },
+          "teleprompter": {
+            "type": "boolean",
+            "title": "Teleprompter",
+            "default": false
+          },
+          "premium_weekly_remaining_pct": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Premium Weekly Remaining Pct"
+          },
+          "premium_credit_usd": {
+            "type": "number",
+            "title": "Premium Credit Usd",
+            "default": 0.0
+          },
+          "premium_credit_currency": {
+            "type": "string",
+            "title": "Premium Credit Currency",
+            "default": "USD"
+          },
+          "premium_credit_amount": {
+            "type": "number",
+            "title": "Premium Credit Amount",
+            "default": 0.0
+          }
+        },
+        "type": "object",
+        "title": "FeaturesOut",
+        "description": "Capabilities of the plan; the draft's defaults until billing contributes."
+      },
       "HealthStatus": {
         "properties": {
           "status": {
@@ -511,6 +792,119 @@
         ],
         "title": "InvalidField",
         "description": "Where a request failed validation and why; the submitted value is never echoed."
+      },
+      "LoginRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "minLength": 3,
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Password"
+          },
+          "captcha_token": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4096
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Captcha Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginRequest",
+        "description": "Address and password; the captcha token when the sign-in page shows one."
+      },
+      "LogoutRequest": {
+        "properties": {
+          "refresh_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refresh Token"
+          }
+        },
+        "type": "object",
+        "title": "LogoutRequest",
+        "description": "The refresh token of a client that keeps it outside the cookie jar (optional)."
+      },
+      "QuotaSnapshot": {
+        "properties": {
+          "unlimited": {
+            "type": "boolean",
+            "title": "Unlimited"
+          },
+          "limit_minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limit Minutes"
+          },
+          "bonus_minutes": {
+            "type": "integer",
+            "title": "Bonus Minutes"
+          },
+          "used_minutes": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Used Minutes"
+          },
+          "remaining_minutes": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remaining Minutes"
+          },
+          "exhausted": {
+            "type": "boolean",
+            "title": "Exhausted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "unlimited",
+          "limit_minutes",
+          "bonus_minutes",
+          "used_minutes",
+          "remaining_minutes",
+          "exhausted"
+        ],
+        "title": "QuotaSnapshot",
+        "description": "Recording minutes left; billing fills it."
       },
       "RegistrationRequest": {
         "properties": {
@@ -610,6 +1004,214 @@
         "title": "ResendRequest",
         "description": "The registration to mail a new code for."
       },
+      "SubscriptionCardDTO": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "tariff": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TariffDTO"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "started_at": {
+            "type": "string",
+            "title": "Started At"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At"
+          },
+          "days_left": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Days Left"
+          },
+          "bonus_minutes": {
+            "type": "integer",
+            "title": "Bonus Minutes"
+          },
+          "credits": {
+            "type": "number",
+            "title": "Credits"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "tariff",
+          "started_at",
+          "expires_at",
+          "days_left",
+          "bonus_minutes",
+          "credits"
+        ],
+        "title": "SubscriptionCardDTO",
+        "description": "The person's subscription; billing fills it."
+      },
+      "TariffDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "price_rub": {
+            "type": "integer",
+            "title": "Price Rub"
+          },
+          "period_days": {
+            "type": "integer",
+            "title": "Period Days"
+          },
+          "minutes_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Minutes Limit"
+          },
+          "allow_knowledge_base": {
+            "type": "boolean",
+            "title": "Allow Knowledge Base"
+          },
+          "allow_multiscreenshot": {
+            "type": "boolean",
+            "title": "Allow Multiscreenshot"
+          },
+          "allow_system_design": {
+            "type": "boolean",
+            "title": "Allow System Design"
+          },
+          "allow_frontier_models": {
+            "type": "boolean",
+            "title": "Allow Frontier Models"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "default": "RUB"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "price_eur": {
+            "type": "number",
+            "title": "Price Eur",
+            "default": 0.0
+          },
+          "price_usd": {
+            "type": "number",
+            "title": "Price Usd",
+            "default": 0.0
+          },
+          "storage_limit_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Storage Limit Bytes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "code",
+          "name",
+          "price_rub",
+          "period_days",
+          "minutes_limit",
+          "allow_knowledge_base",
+          "allow_multiscreenshot",
+          "allow_system_design",
+          "allow_frontier_models",
+          "is_active"
+        ],
+        "title": "TariffDTO",
+        "description": "A plan of the catalogue, as the draft described it; billing fills it."
+      },
+      "TokenResponse": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "expires_in": {
+            "type": "integer",
+            "title": "Expires In"
+          },
+          "token_type": {
+            "type": "string",
+            "title": "Token Type",
+            "default": "Bearer"
+          },
+          "csrf_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csrf Token"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token",
+          "expires_in"
+        ],
+        "title": "TokenResponse",
+        "description": "A session: the access token, its lifetime in seconds and the CSRF value for refresh."
+      },
       "UnsubscribeAnswer": {
         "properties": {
           "unsubscribed": {
@@ -623,6 +1225,185 @@
         ],
         "title": "UnsubscribeAnswer",
         "description": "The same answer for every token: nothing about the account behind it."
+      },
+      "UserMeResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Username"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          },
+          "last_login_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Login At"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone"
+          },
+          "no_logs": {
+            "type": "boolean",
+            "title": "No Logs"
+          },
+          "meeting_auto_tasks": {
+            "type": "boolean",
+            "title": "Meeting Auto Tasks"
+          },
+          "memory_enabled": {
+            "type": "boolean",
+            "title": "Memory Enabled"
+          },
+          "leo_voice_enabled": {
+            "type": "boolean",
+            "title": "Leo Voice Enabled"
+          },
+          "leo_web_search_enabled": {
+            "type": "boolean",
+            "title": "Leo Web Search Enabled"
+          },
+          "leo_kb_search_enabled": {
+            "type": "boolean",
+            "title": "Leo Kb Search Enabled"
+          },
+          "leo_connector_search_enabled": {
+            "type": "boolean",
+            "title": "Leo Connector Search Enabled"
+          },
+          "marketing_consent": {
+            "type": "boolean",
+            "title": "Marketing Consent"
+          },
+          "appearance": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Appearance"
+          },
+          "subscription": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubscriptionCardDTO"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "quota": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/QuotaSnapshot"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "features": {
+            "$ref": "#/components/schemas/FeaturesOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "username",
+          "phone",
+          "avatar_url",
+          "role",
+          "status",
+          "is_active",
+          "last_login_at",
+          "language",
+          "timezone",
+          "no_logs",
+          "meeting_auto_tasks",
+          "memory_enabled",
+          "leo_voice_enabled",
+          "leo_web_search_enabled",
+          "leo_kb_search_enabled",
+          "leo_connector_search_enabled",
+          "marketing_consent",
+          "appearance",
+          "subscription",
+          "quota",
+          "features"
+        ],
+        "title": "UserMeResponse",
+        "description": "The signed-in person as the desktop clients read it; all 23 fields are present."
       },
       "VerifyRequest": {
         "properties": {

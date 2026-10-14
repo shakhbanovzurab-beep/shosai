@@ -28,8 +28,9 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.identity.application import registration_errors as errors
-from shosai.features.identity.application.registration import RegistrationServices
+from shosai.features.identity.application.registration import ClientFacts, RegistrationServices
 from shosai.features.identity.application.routing import route_of
+from shosai.features.identity.application.sessions import IssuedTokens, Sessions
 from shosai.features.identity.contracts import AccountRegistered
 from shosai.features.identity.domain.registration import (
     CONSENT_VERSION,
@@ -37,6 +38,7 @@ from shosai.features.identity.domain.registration import (
     ConsentKind,
     code_matches,
 )
+from shosai.features.identity.domain.sessions import ClientKind
 from shosai.features.identity.infrastructure.directory import ClaimOutcome
 from shosai.features.identity.infrastructure.records import (
     PendingRegistration,
@@ -52,20 +54,24 @@ log = structlog.stdlib.get_logger(__name__)
 
 @dataclass(frozen=True, slots=True)
 class Verified:
-    """The account the confirmed registration created."""
+    """The account the confirmed registration created, signed in on the confirming client."""
 
     user_id: UUID
     home: Home
+    tokens: IssuedTokens
 
 
 class Verification:
     """Confirm a registration's code."""
 
-    def __init__(self, services: RegistrationServices, outbox: EventOutbox) -> None:
+    def __init__(
+        self, services: RegistrationServices, outbox: EventOutbox, sessions: Sessions
+    ) -> None:
         self._services = services
         self._outbox = outbox
+        self._sessions = sessions
 
-    async def confirm(self, registration_id: UUID, code: str) -> Verified:
+    async def confirm(self, registration_id: UUID, code: str, client: ClientFacts) -> Verified:
         """Create the account of a registration whose code is right."""
         route = await route_of(self._services.routes, registration_id)
         if route is None:
@@ -77,9 +83,10 @@ class Verification:
             await self._drop(home, registration_id, address_hmac)
             raise errors.email_registered()
         async with self._services.transactions.begin(TenancyScope(home, user_id)) as session:
-            await self._create_account(session, registration_id, user_id)
+            user = await self._create_account(session, registration_id, user_id)
+            tokens = await self._sessions.open(session, user, home, ClientKind.WEB, client)
         await self._settle(address_hmac, user_id, registration_id)
-        return Verified(user_id, home)
+        return Verified(user_id, home, tokens)
 
     async def _check_code(self, home: Home, registration_id: UUID, code: str) -> UUID:
         refusal: Exception | None = None
@@ -103,21 +110,18 @@ class Verification:
 
     async def _create_account(
         self, session: AsyncSession, registration_id: UUID, user_id: UUID
-    ) -> None:
+    ) -> User:
         pending = await session.get(PendingRegistration, registration_id, with_for_update=True)
         if pending is None:
-            # Повтор после успешного шага 3: аккаунт уже записан.
-            if await session.get(User, user_id) is None:
-                raise errors.invalid_code()
-            return
+            # Параллельное подтверждение уже записало аккаунт и открыло свою сессию.
+            raise errors.invalid_code()
         now = datetime.now(UTC)
-        session.add(
-            User(
-                id=user_id, email=pending.email, password_hash=pending.password_hash,
-                full_name=pending.full_name, country=pending.country, language=pending.language,
-                email_verified_at=now,
-            )
+        user = User(
+            id=user_id, email=pending.email, password_hash=pending.password_hash,
+            full_name=pending.full_name, country=pending.country, language=pending.language,
+            email_verified_at=now,
         )  # fmt: skip
+        session.add(user)
         await session.flush()
         granted = {
             ConsentKind.PERSONAL_DATA: True,
@@ -134,6 +138,7 @@ class Verification:
             )  # fmt: skip
         await session.delete(pending)
         await self._outbox.add(session, AccountRegistered(user_id=user_id))
+        return user
 
     async def _settle(self, address_hmac: bytes, user_id: UUID, registration_id: UUID) -> None:
         # Аккаунт уже записан: сбой здесь не отменяет регистрацию, хвост доделает обход.

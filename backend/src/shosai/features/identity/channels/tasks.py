@@ -9,7 +9,11 @@ from shosai.core.schedule.jobs import PeriodicJob
 from shosai.core.tasks.declaration import NO_RETRY, TaskDeclaration, TaskHandler, TaskKind
 from shosai.core.tasks.payloads import HomeTaskPayload
 from shosai.core.tasks.queues import TaskQueue
-from shosai.features.identity.application.sweeps import purge_pending, settle_claims
+from shosai.features.identity.application.sweeps import (
+    purge_pending,
+    purge_sessions,
+    settle_claims,
+)
 from shosai.features.identity.infrastructure.directory import Directory
 
 PURGE_PENDING: Final = TaskDeclaration(
@@ -28,10 +32,19 @@ SETTLE_CLAIMS: Final = TaskDeclaration(
     retry=NO_RETRY,
     kind=TaskKind.TICK,
 )
+PURGE_SESSIONS: Final = TaskDeclaration(
+    name="identity.purge_sessions",
+    queue=TaskQueue.BULK,
+    payload=HomeTaskPayload,
+    deadline=timedelta(minutes=5),
+    retry=NO_RETRY,
+    kind=TaskKind.TICK,
+)
 # Каталог живёт в доме ЕС: обход заявок идёт оттуда и заглядывает в оба дома.
 PERIODIC_JOBS: Final = (
     PeriodicJob(PURGE_PENDING, every=timedelta(minutes=10)),
     PeriodicJob(SETTLE_CLAIMS, every=timedelta(minutes=5), homes=(Home.EU,)),
+    PeriodicJob(PURGE_SESSIONS, every=timedelta(days=1)),
 )
 
 
@@ -46,4 +59,11 @@ def task_handlers(
     async def settle(_payload: HomeTaskPayload) -> None:
         await settle_claims(transactions, directory)
 
-    return (TaskHandler(PURGE_PENDING, purge), TaskHandler(SETTLE_CLAIMS, settle))
+    async def purge_ended(payload: HomeTaskPayload) -> None:
+        await purge_sessions(transactions, payload.home)
+
+    return (
+        TaskHandler(PURGE_PENDING, purge),
+        TaskHandler(SETTLE_CLAIMS, settle),
+        TaskHandler(PURGE_SESSIONS, purge_ended),
+    )

@@ -10,6 +10,7 @@ from uuid import UUID
 import httpx
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
+from pydantic import SecretStr
 from redis.asyncio import Redis
 
 from shosai.core.cache.metrics import CacheMetrics
@@ -24,21 +25,34 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.kv.metrics import KeyValueMetrics
 from shosai.core.kv.rate_limits import RateLimiter
+from shosai.core.ports.directory import PortDirectory
 from shosai.core.web.app import HttpTelemetry, build_http_app
+from shosai.features.identity.application.authentication import TokenAuthenticator
+from shosai.features.identity.application.native_me import NativeMe
 from shosai.features.identity.application.registration import Registration, RegistrationServices
+from shosai.features.identity.application.sessions import Sessions
+from shosai.features.identity.application.sign_in import SignIn, SignInServices
 from shosai.features.identity.application.verification import Verification
+from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.channels.http.registration import build_registration_router
-from shosai.features.identity.contracts import IDENTITY_EVENTS
-from shosai.features.identity.infrastructure.captcha import CaptchaOff
+from shosai.features.identity.channels.http.sessions import SessionRoutes, build_session_router
+from shosai.features.identity.contracts import AUTHENTICATOR, IDENTITY_EVENTS
+from shosai.features.identity.infrastructure.account_markers import AccountMarkers
+from shosai.features.identity.infrastructure.captcha import Captcha, CaptchaOff
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
 from shosai.features.identity.infrastructure.registration_routes import RegistrationRoutes
+from shosai.features.identity.infrastructure.sign_in_failures import SignInFailures
+from shosai.features.identity.infrastructure.token_codec import TokenCodec
+from shosai.features.identity.settings import TokenKey
 from tests.core.email.bench import mail_bench
 from tests.harness.connections import fetch_rows
 from tests.harness.run_slot import RunSlot
 
 DIRECTORY_KEY = b"directory-key-of-the-tests-32-bytes!"
 TEST_ROUNDS = 4
+SIGNING_KEYS = (TokenKey("k1", SecretStr("signing-key-of-the-identity-tests-32b")),)
+COOKIES = CookiePolicy(secure=True, domain=None)
 # Пароль формы по умолчанию: проходит правило длины.
 SAMPLE_WORDS = "correct horse battery"
 # Почтовый сервер тестам не нужен: письма только пишутся в базу и читаются оттуда.
@@ -47,11 +61,14 @@ UNUSED_SMTP_PORT = 9
 
 @dataclass(frozen=True, slots=True)
 class RegistrationBench:
-    """The HTTP client of the registration routes and what tests inspect."""
+    """The HTTP client of identity's routes and what tests inspect."""
 
     http: httpx.AsyncClient
     services: RegistrationServices
     key_ring: FernetKeyRing
+    sessions: Sessions
+    codec: TokenCodec
+    markers: AccountMarkers
 
 
 class EuUnreachable:
@@ -73,6 +90,7 @@ async def registration_bench(
     valkey: Redis,
     cache: Redis,
     directory_transactions: Callable[[HomeTransactions], HomeTransactions] | None = None,
+    captcha: Captcha | None = None,
 ) -> AsyncIterator[RegistrationBench]:
     """The registration routes over the slot, with the captcha off and cheap hashing."""
     registry = CollectorRegistry()
@@ -88,22 +106,44 @@ async def registration_bench(
         routes=RegistrationRoutes(valkey),
         hasher=hasher,
         email=mail.port,
-        captcha=CaptchaOff(),
+        captcha=captcha or CaptchaOff(),
         limiter=limiter,
         directory_key=DIRECTORY_KEY,
     )
     outbox = EventOutbox(EventTypes(list(IDENTITY_EVENTS)))
-    router = build_registration_router(
-        Registration(services), Verification(services, outbox), limiter
+    codec = TokenCodec(SIGNING_KEYS)
+    sessions = Sessions(
+        transactions, services.directory, codec, SIGNING_KEYS[0].secret.get_secret_value().encode()
     )
+    markers = AccountMarkers(valkey)
+    ports = PortDirectory()
+    ports.install([AUTHENTICATOR.bind(TokenAuthenticator(codec, services.directory, markers))])
+    sign_in = SignIn(
+        SignInServices(
+            transactions=transactions, directory=services.directory, routes=services.routes,
+            hasher=hasher, captcha=captcha or CaptchaOff(), failures=SignInFailures(valkey),
+            sessions=sessions, directory_key=DIRECTORY_KEY,
+        )
+    )  # fmt: skip
+    routers = [
+        build_registration_router(
+            Registration(services), Verification(services, outbox, sessions), limiter, COOKIES
+        ),
+        build_session_router(
+            SessionRoutes(
+                sign_in=sign_in, sessions=sessions, me=NativeMe(transactions, ports),
+                ports=ports, limiter=limiter, cookies=COOKIES,
+            )
+        ),
+    ]  # fmt: skip
     telemetry = HttpTelemetry(registry, TracerProvider(shutdown_on_exit=False))
-    app = build_http_app(WebSettings.model_validate({}), telemetry, [router])
+    app = build_http_app(WebSettings.model_validate({}), telemetry, routers)
     transport = httpx.ASGITransport(app=app)
     try:
         async with httpx.AsyncClient(
             transport=transport, base_url="https://shosai.example"
         ) as http:
-            yield RegistrationBench(http, services, mail.key_ring)
+            yield RegistrationBench(http, services, mail.key_ring, sessions, codec, markers)
     finally:
         hasher.close()
 

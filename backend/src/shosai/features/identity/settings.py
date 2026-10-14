@@ -81,6 +81,9 @@ class IdentitySettings(SettingsSection):
     # Без секрета капча выключена; вне разработки секрет обязателен.
     identity_turnstile_site_key: str | None = None
     identity_turnstile_secret_key: SecretStr | None = None
+    # Cookie сессии: Secure вне локальной разработки по HTTP; домен — пусто, cookie хоста.
+    identity_cookie_secure: bool = True
+    identity_cookie_domain: str | None = None
 
     def token_keys(self) -> tuple[TokenKey, ...]:
         """The signing ring in order: the first key signs, every key verifies."""
@@ -98,6 +101,10 @@ def identity_secrets_safe(settings: Settings) -> Iterator[GateViolation]:
     if identity.identity_turnstile_secret_key is None or not identity.identity_turnstile_site_key:
         yield GateViolation(
             "IDENTITY_TURNSTILE_SECRET_KEY", "без Turnstile регистрация не защищена"
+        )
+    if not identity.identity_cookie_secure:
+        yield GateViolation(
+            "IDENTITY_COOKIE_SECURE", "cookie сессии вне разработки — только Secure"
         )
     if identity.identity_password_hash_rounds < PRODUCTION_HASH_ROUNDS:
         yield GateViolation(

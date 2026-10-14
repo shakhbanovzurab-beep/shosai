@@ -1,0 +1,82 @@
+"""The native `GET /v1/auth/me`: the person, with the parts other slices own (§3.3).
+
+identity owns the account fields. The rest belong to slices built later — the plan and
+minutes (billing), recording switches (meetings), memory (memory), Leo's switches
+(agent) — and arrive through the `identity.me_contribution` port; until a slice
+contributes, its fields keep the draft's defaults, which the desktop clients read as "no
+subscription data yet" rather than an error.
+"""
+
+from collections.abc import Mapping
+from typing import Final
+
+from sqlalchemy import select
+
+from shosai.core.db.transactions import HomeTransactions
+from shosai.core.ports.directory import PortDirectory
+from shosai.features.identity.application import native_errors
+from shosai.features.identity.contracts import ME_CONTRIBUTIONS, Principal
+from shosai.features.identity.domain.accounts import AccountState
+from shosai.features.identity.domain.registration import ConsentKind
+from shosai.features.identity.infrastructure.records import User, UserConsent
+
+# Значения черновика для полей других срезов, пока те не дают своих.
+DEFAULTS: Final[Mapping[str, object]] = {
+    "no_logs": False,
+    "meeting_auto_tasks": False,
+    "memory_enabled": True,
+    "leo_voice_enabled": True,
+    "leo_web_search_enabled": True,
+    "leo_kb_search_enabled": True,
+    "leo_connector_search_enabled": True,
+    "appearance": {},
+    "subscription": None,
+    "quota": None,
+    "features": {},
+}
+# Статусы черновика: клиенты знают только эти три.
+DRAFT_STATUS: Final = {AccountState.FROZEN: "frozen", AccountState.BANNED: "banned"}
+
+
+class NativeMe:
+    """Builds the fields of `UserMeResponse` for a person."""
+
+    def __init__(self, transactions: HomeTransactions, ports: PortDirectory) -> None:
+        self._transactions = transactions
+        self._ports = ports
+
+    async def fields(self, principal: Principal) -> dict[str, object]:
+        """Every field of the response, identity's and the contributed ones."""
+        async with self._transactions.begin(principal.scope(), read_only=True) as session:
+            user = await session.get(User, principal.user_id)
+            marketing = await session.scalar(
+                select(UserConsent.granted)
+                .where(
+                    UserConsent.user_id == principal.user_id,
+                    UserConsent.kind == ConsentKind.MARKETING.value,
+                )
+                .order_by(UserConsent.recorded_at.desc())
+                .limit(1)
+            )
+        if user is None:
+            raise native_errors.unauthorized("user_not_found")
+        state = AccountState(user.state)
+        fields: dict[str, object] = {
+            **DEFAULTS,
+            "id": str(user.id),
+            "email": user.email,
+            "username": user.display_name or user.full_name,
+            "phone": None,
+            "avatar_url": None,
+            # Роли операторов — шаг 8; до них каждый — пользователь.
+            "role": "user",
+            "status": DRAFT_STATUS.get(state, "active"),
+            "is_active": state is AccountState.ACTIVE,
+            "last_login_at": user.last_login_at,
+            "language": user.language,
+            "timezone": user.timezone,
+            "marketing_consent": bool(marketing),
+        }
+        for contribution in self._ports.all(ME_CONTRIBUTIONS):
+            fields.update(await contribution.native_me(principal))
+        return fields

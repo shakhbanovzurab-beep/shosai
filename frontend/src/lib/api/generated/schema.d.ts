@@ -79,7 +79,8 @@ export interface paths {
         put?: never;
         /**
          * Verify
-         * @description Create the account when the code is right; five wrong codes end the registration.
+         * @description Create the account and sign it in when the code is right; five wrong codes end
+         *     the registration.
          */
         post: operations["verify_v1_auth_register_verify_post"];
         delete?: never;
@@ -108,13 +109,93 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Login
+         * @description Sign in with the address and password; set the refresh and CSRF cookies.
+         */
+        post: operations["login_v1_auth_login_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Refresh
+         * @description Rotate the session of the refresh cookie; the CSRF header repeats its cookie.
+         */
+        post: operations["refresh_v1_auth_refresh_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Logout
+         * @description End the session of the cookie, or of a refresh token in the body; always ok.
+         */
+        post: operations["logout_v1_auth_logout_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Me
+         * @description The signed-in person with their plan, minutes and switches.
+         */
+        get: operations["read_me_v1_auth_me_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         /**
          * AccountCreatedResponse
-         * @description The account the confirmed registration created.
+         * @description The account the confirmed registration created, signed in as at sign-in.
          */
         AccountCreatedResponse: {
             /**
@@ -122,6 +203,17 @@ export interface components {
              * Format: uuid
              */
             user_id: string;
+            /** Access Token */
+            access_token: string;
+            /** Expires In */
+            expires_in: number;
+            /**
+             * Token Type
+             * @default Bearer
+             */
+            token_type: string;
+            /** Csrf Token */
+            csrf_token: string;
         };
         /**
          * Consents
@@ -175,6 +267,44 @@ export interface components {
             };
         };
         /**
+         * FeaturesOut
+         * @description Capabilities of the plan; the draft's defaults until billing contributes.
+         */
+        FeaturesOut: {
+            /**
+             * Voice Translation
+             * @default false
+             */
+            voice_translation: boolean;
+            /**
+             * Voice
+             * @default false
+             */
+            voice: boolean;
+            /**
+             * Teleprompter
+             * @default false
+             */
+            teleprompter: boolean;
+            /** Premium Weekly Remaining Pct */
+            premium_weekly_remaining_pct?: number | null;
+            /**
+             * Premium Credit Usd
+             * @default 0
+             */
+            premium_credit_usd: number;
+            /**
+             * Premium Credit Currency
+             * @default USD
+             */
+            premium_credit_currency: string;
+            /**
+             * Premium Credit Amount
+             * @default 0
+             */
+            premium_credit_amount: number;
+        };
+        /**
          * HealthStatus
          * @description The process answers HTTP requests.
          */
@@ -194,6 +324,44 @@ export interface components {
             loc: (string | number)[];
             /** Type */
             type: string;
+        };
+        /**
+         * LoginRequest
+         * @description Address and password; the captcha token when the sign-in page shows one.
+         */
+        LoginRequest: {
+            /** Email */
+            email: string;
+            /** Password */
+            password: string;
+            /** Captcha Token */
+            captcha_token?: string | null;
+        };
+        /**
+         * LogoutRequest
+         * @description The refresh token of a client that keeps it outside the cookie jar (optional).
+         */
+        LogoutRequest: {
+            /** Refresh Token */
+            refresh_token?: string | null;
+        };
+        /**
+         * QuotaSnapshot
+         * @description Recording minutes left; billing fills it.
+         */
+        QuotaSnapshot: {
+            /** Unlimited */
+            unlimited: boolean;
+            /** Limit Minutes */
+            limit_minutes: number | null;
+            /** Bonus Minutes */
+            bonus_minutes: number;
+            /** Used Minutes */
+            used_minutes: number | null;
+            /** Remaining Minutes */
+            remaining_minutes: number | null;
+            /** Exhausted */
+            exhausted: boolean;
         };
         /**
          * RegistrationRequest
@@ -242,12 +410,146 @@ export interface components {
             registration_id: string;
         };
         /**
+         * SubscriptionCardDTO
+         * @description The person's subscription; billing fills it.
+         */
+        SubscriptionCardDTO: {
+            /** Status */
+            status: string;
+            tariff: components["schemas"]["TariffDTO"] | null;
+            /** Started At */
+            started_at: string;
+            /** Expires At */
+            expires_at: string | null;
+            /** Days Left */
+            days_left: number | null;
+            /** Bonus Minutes */
+            bonus_minutes: number;
+            /** Credits */
+            credits: number;
+        };
+        /**
+         * TariffDTO
+         * @description A plan of the catalogue, as the draft described it; billing fills it.
+         */
+        TariffDTO: {
+            /** Id */
+            id: string;
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Price Rub */
+            price_rub: number;
+            /** Period Days */
+            period_days: number;
+            /** Minutes Limit */
+            minutes_limit: number | null;
+            /** Allow Knowledge Base */
+            allow_knowledge_base: boolean;
+            /** Allow Multiscreenshot */
+            allow_multiscreenshot: boolean;
+            /** Allow System Design */
+            allow_system_design: boolean;
+            /** Allow Frontier Models */
+            allow_frontier_models: boolean;
+            /** Is Active */
+            is_active: boolean;
+            /**
+             * Currency
+             * @default RUB
+             */
+            currency: string;
+            /** Price */
+            price?: number | null;
+            /**
+             * Price Eur
+             * @default 0
+             */
+            price_eur: number;
+            /**
+             * Price Usd
+             * @default 0
+             */
+            price_usd: number;
+            /** Storage Limit Bytes */
+            storage_limit_bytes?: number | null;
+        };
+        /**
+         * TokenResponse
+         * @description A session: the access token, its lifetime in seconds and the CSRF value for refresh.
+         */
+        TokenResponse: {
+            /** Access Token */
+            access_token: string;
+            /** Expires In */
+            expires_in: number;
+            /**
+             * Token Type
+             * @default Bearer
+             */
+            token_type: string;
+            /** Csrf Token */
+            csrf_token?: string | null;
+        };
+        /**
          * UnsubscribeAnswer
          * @description The same answer for every token: nothing about the account behind it.
          */
         UnsubscribeAnswer: {
             /** Unsubscribed */
             unsubscribed: boolean;
+        };
+        /**
+         * UserMeResponse
+         * @description The signed-in person as the desktop clients read it; all 23 fields are present.
+         */
+        UserMeResponse: {
+            /** Id */
+            id: string;
+            /** Email */
+            email: string;
+            /** Username */
+            username: string | null;
+            /** Phone */
+            phone: string | null;
+            /** Avatar Url */
+            avatar_url: string | null;
+            /** Role */
+            role: string;
+            /** Status */
+            status: string;
+            /** Is Active */
+            is_active: boolean;
+            /** Last Login At */
+            last_login_at: string | null;
+            /** Language */
+            language: string | null;
+            /** Timezone */
+            timezone: string | null;
+            /** No Logs */
+            no_logs: boolean;
+            /** Meeting Auto Tasks */
+            meeting_auto_tasks: boolean;
+            /** Memory Enabled */
+            memory_enabled: boolean;
+            /** Leo Voice Enabled */
+            leo_voice_enabled: boolean;
+            /** Leo Web Search Enabled */
+            leo_web_search_enabled: boolean;
+            /** Leo Kb Search Enabled */
+            leo_kb_search_enabled: boolean;
+            /** Leo Connector Search Enabled */
+            leo_connector_search_enabled: boolean;
+            /** Marketing Consent */
+            marketing_consent: boolean;
+            /** Appearance */
+            appearance: {
+                [key: string]: unknown;
+            };
+            subscription: components["schemas"]["SubscriptionCardDTO"] | null;
+            quota: components["schemas"]["QuotaSnapshot"] | null;
+            features: components["schemas"]["FeaturesOut"];
         };
         /**
          * VerifyRequest
@@ -420,7 +722,9 @@ export interface operations {
     verify_v1_auth_register_verify_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "user-agent"?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -470,6 +774,136 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RegistrationStartedResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    login_v1_auth_login_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TokenResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    refresh_v1_auth_refresh_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TokenResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    logout_v1_auth_logout_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["LogoutRequest"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: boolean;
+                    };
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_me_v1_auth_me_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserMeResponse"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

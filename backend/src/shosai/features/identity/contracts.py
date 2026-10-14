@@ -6,18 +6,23 @@ in the steps that build them: the authenticator with sign-in, consents and the p
 with Settings. Events carry ids only (§12).
 """
 
+from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
-from typing import ClassVar, Final, Protocol
+from http import HTTPStatus
+from typing import Annotated, ClassVar, Final, Protocol
 from uuid import UUID
 
+from fastapi import Header
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.events.domain_event import DomainEvent
+from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
-from shosai.core.ports.keys import PortKey
+from shosai.core.ports.directory import PortDirectory
+from shosai.core.ports.keys import Cardinality, PortKey
 
 
 @dataclass(frozen=True, slots=True)
@@ -77,9 +82,38 @@ class AccountProfileReader(Protocol):
         ...
 
 
+class MeContribution(Protocol):
+    """A slice's part of the native `GET /v1/auth/me` (billing, meetings, memory, agent).
+
+    Each returns the fields it owns, by the names and shapes of the draft contract; fields
+    no slice contributes keep the draft's defaults (identity plan §3.3).
+    """
+
+    async def native_me(self, principal: Principal) -> Mapping[str, object]:
+        """The fields of `UserMeResponse` this slice owns, for the person."""
+        ...
+
+
 AUTHENTICATOR: Final = PortKey[Authenticator]("identity.authenticator")
+ME_CONTRIBUTIONS: Final = PortKey[MeContribution]("identity.me_contribution", Cardinality.MANY)
 CONSENT_READER: Final = PortKey[ConsentReader]("identity.consent_reader")
 ACCOUNT_PROFILE_READER: Final = PortKey[AccountProfileReader]("identity.account_profile_reader")
+BEARER: Final = "Bearer "
+
+
+def bearer_principal(ports: PortDirectory) -> Callable[..., Awaitable[Principal]]:
+    """A route dependency: the person of the request's bearer token, through identity.
+
+    Missing or malformed, the header is 401 `Missing Bearer token`, the draft's `detail`
+    that native clients read; everything else is the authenticator's answer.
+    """
+
+    async def authenticated(authorization: Annotated[str | None, Header()] = None) -> Principal:
+        if not authorization or not authorization.startswith(BEARER):
+            raise AppError("unauthorized", HTTPStatus.UNAUTHORIZED, detail="Missing Bearer token")
+        return await ports.get(AUTHENTICATOR).principal(authorization.removeprefix(BEARER))
+
+    return authenticated
 
 
 class AccountRegistered(DomainEvent):

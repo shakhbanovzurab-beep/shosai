@@ -8,6 +8,7 @@ its code mailed in the same transaction; Valkey learns only the route to that ro
 
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
+from ipaddress import ip_address
 from typing import Final
 from uuid import UUID
 
@@ -54,10 +55,18 @@ SILENT_STATES: Final = frozenset({DirectoryState.BANNED, DirectoryState.DELETED}
 
 @dataclass(frozen=True, slots=True)
 class ClientFacts:
-    """Who sent the form, for the consent journal and the captcha."""
+    """Who sent the request, for the consent journal, the sign-in log and the captcha."""
 
     address: str
     user_agent: str | None
+
+    @property
+    def ip(self) -> str | None:
+        """The address when it is an IP address; None for a client without one."""
+        try:
+            return str(ip_address(self.address))
+        except ValueError:
+            return None
 
 
 @dataclass(frozen=True, slots=True)
@@ -131,7 +140,7 @@ class Registration:
                     password_hash=password_hash, full_name=form.full_name.strip(),
                     country=form.country, language=language,
                     consent_cross_border=form.consents.cross_border,
-                    consent_marketing=form.consents.marketing, consent_ip=client.address,
+                    consent_marketing=form.consents.marketing, consent_ip=client.ip,
                     consent_user_agent=client.user_agent,
                     code_hash=code_hash(registration_id, code),
                     last_sent_at=now, expires_at=now + PENDING_LIFETIME,

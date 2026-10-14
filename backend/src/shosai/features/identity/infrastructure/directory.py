@@ -26,6 +26,7 @@ from shosai.features.identity.domain.registration import DirectoryState
 from shosai.features.identity.infrastructure.records import DirectoryEntry
 
 CACHE_NAMESPACE: Final = "directory.v1"
+USER_NAMESPACE: Final = "directory_user.v1"
 FRESH_FOR: Final = timedelta(seconds=60)
 # Запасная копия на случай недоступного каталога: сутки, а свежей она считается 60 с.
 KEPT_FOR: Final = timedelta(days=1)
@@ -85,6 +86,28 @@ class Directory:
         except exc.OperationalError as error:
             raise HomeUnavailableError(Home.EU) from error
         return None if row is None else _record(row)
+
+    async def home_of(self, user_id: UUID) -> Home | None:
+        """The home of an account by its id, for tokens issued by the draft without one.
+
+        Cached like sign-in's reads; such access tokens live 30 minutes after the cutover,
+        such refresh tokens until their first refresh (DATA_MAPPING R6).
+        """
+        key = CacheKey(USER_NAMESPACE, user_id.hex)
+        cached = await self._cache.get(key)
+        if cached is not None and cached.decode("ascii") in Home:
+            return Home(cached.decode("ascii"))
+        try:
+            async with self._transactions.begin(DIRECTORY_SCOPE, read_only=True) as session:
+                home = await session.scalar(
+                    select(DirectoryEntry.home).where(DirectoryEntry.user_id == user_id)
+                )
+        except exc.OperationalError as error:
+            raise HomeUnavailableError(Home.EU) from error
+        if home is None:
+            return None
+        await self._cache.set(key, home.encode("ascii"), FRESH_FOR)
+        return Home(home)
 
     async def claim(self, email_hmac: bytes, user_id: UUID, home: Home) -> ClaimOutcome:
         """Take a free address for the account; an erased account's address is free again."""
