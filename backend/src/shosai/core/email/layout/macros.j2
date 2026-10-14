@@ -1,0 +1,47 @@
+{#- Строительные блоки тела письма: каждый пишет себя в HTML или в текст (format).
+    Кнопка и код — таблица во всю ширину с выравниванием в ячейке: таблица с align
+    обтекается, как float, и блоки встают в ряд. -#}
+{%- macro heading(text) -%}
+{%- if format == "html" -%}
+<h1 class="ink" style="margin:0 0 16px;font-family:{{ font }};font-size:24px;line-height:1.25;font-weight:600;letter-spacing:-0.02em;color:#0A0A0A;text-align:{{ start }};">{{ text }}</h1>
+{%- else -%}
+{{ text }}
+
+{% endif -%}
+{%- endmacro -%}
+
+{%- macro paragraph() -%}
+{%- if format == "html" -%}
+<p class="ink" style="margin:0 0 16px;font-family:{{ font }};font-size:15px;line-height:1.6;color:#0A0A0A;text-align:{{ start }};">{{ caller() }}</p>
+{%- else -%}
+{{ caller() }}
+
+{% endif -%}
+{%- endmacro -%}
+
+{%- macro note() -%}
+{%- if format == "html" -%}
+<p class="muted" style="margin:0 0 16px;font-family:{{ font }};font-size:13px;line-height:1.55;color:#737373;text-align:{{ start }};">{{ caller() }}</p>
+{%- else -%}
+{{ caller() }}
+
+{% endif -%}
+{%- endmacro -%}
+
+{%- macro button(url, label) -%}
+{%- if format == "html" -%}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 24px;"><tr><td align="{{ start }}"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td class="button" bgcolor="#171717" style="border-radius:10px;background:#171717;"><a class="button-text" href="{{ url }}" style="display:inline-block;padding:12px 22px;font-family:{{ font }};font-size:15px;line-height:1.2;font-weight:500;color:#FAFAFA;text-decoration:none;border-radius:10px;">{{ label }}</a></td></tr></table></td></tr></table>
+{%- else -%}
+{{ label }}: {{ url }}
+
+{% endif -%}
+{%- endmacro -%}
+
+{%- macro code(value) -%}
+{%- if format == "html" -%}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:4px 0 20px;"><tr><td align="{{ start }}"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td class="ink tile" bgcolor="#F5F5F5" dir="ltr" style="border-radius:10px;background:#F5F5F5;padding:14px 22px;font-family:Geist Mono,SFMono-Regular,Menlo,Consolas,monospace;font-size:30px;line-height:1.2;font-weight:600;letter-spacing:0.24em;color:#0A0A0A;">{{ value }}</td></tr></table></td></tr></table>
+{%- else -%}
+    {{ value }}
+
+{% endif -%}
+{%- endmacro -%}

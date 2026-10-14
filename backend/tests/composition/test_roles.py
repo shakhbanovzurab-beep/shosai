@@ -2,6 +2,7 @@
 
 import asyncio
 import time
+from collections import Counter
 from collections.abc import Callable
 
 import httpx
@@ -9,6 +10,7 @@ import pytest
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
+from taskiq import TaskiqMessage
 
 from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
 from shosai.composition.telemetry import ProcessTelemetry
@@ -24,6 +26,7 @@ from tests.composition.fixture_features import (
     notes_feature,
 )
 from tests.composition.platform_bench import PlatformBench, platform_over_slot
+from tests.core.tasks.workbench import stream_entries_of
 from tests.harness.process_environ import LOOPBACK
 from tests.harness.run_slot import RunSlot
 from tests.harness.settings import HarnessSettings
@@ -95,7 +98,10 @@ async def test_the_scheduler_runs_the_core_loops_and_the_slices_loops(
                 lambda: all(bench.sample(LOOP_SUCCESS, shosai_loop_name=loop) for loop in core)
             )
             await eventually(lambda: "notes:sweep" in lifecycle.events)
-        relay_ticks = int(await valkey.xlen("shosai:tasks:critical"))
+        queued = await stream_entries_of(valkey, "shosai:tasks:critical")
+    ticks = Counter(
+        TaskiqMessage.model_validate_json(fields[b"data"]).task_name for _, fields in queued
+    )
 
     assert {task.get_name() for task in tasks} >= {
         "loop:notes.sweep",
@@ -105,4 +111,5 @@ async def test_the_scheduler_runs_the_core_loops_and_the_slices_loops(
     }
     assert not {task.get_name() for task in tasks} & {"loop:events.purge_outbox.ru"}
     assert all(task.done() for task in tasks)
-    assert relay_ticks == 2
+    # Один тик на дом у relay и у развёртки почты: повторные отметки тика не ставят.
+    assert ticks == {"events.relay_outbox": 2, "email.sweep": 2}

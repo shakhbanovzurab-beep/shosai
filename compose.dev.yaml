@@ -2,7 +2,7 @@
 # хостинга пока нет (CLAUDE.md, «Hosting constraints now»). Топология повторяет
 # target architecture §4: два дома данных — два отдельных сервера PostgreSQL,
 # каждый за своим PgBouncer, один бакет S3 на оба дома (ADR 0014), плюс общие
-# для плоскости Valkey, кэш Redis и Qdrant.
+# для плоскости Valkey, кэш Redis и Qdrant; Mailpit вместо SMTP-сервера.
 #
 # Запуск, остановка, сброс и соответствие домов серверам — docs/development.md.
 # Все порты слушают только 127.0.0.1. Пароли ниже — локальные значения по
@@ -277,6 +277,35 @@ services:
       resources:
         limits:
           memory: 512m
+
+  # Почтовый сервер для разработки: принимает письма платформы по SMTP без
+  # входа и показывает их в веб-интерфейсе, наружу ничего не отправляет (F6-C11).
+  # Письма живут только во временном каталоге контейнера.
+  mailpit:
+    <<: *service-defaults
+    image: axllent/mailpit:v1.31.5
+    environment:
+      MP_MAX_MESSAGES: "500"
+      MP_SMTP_AUTH_ACCEPT_ANY: "false"
+      MP_DISABLE_VERSION_CHECK: "true"
+      # Защита от DNS rebinding: чужая страница в браузере не читает письма.
+      MP_ALLOWED_HOSTS: "localhost:${LOCAL_MAILPIT_UI_PORT:-8025},127.0.0.1:${LOCAL_MAILPIT_UI_PORT:-8025}"
+    tmpfs:
+      - /tmp
+    ports:
+      - "127.0.0.1:${LOCAL_MAILPIT_SMTP_PORT:-1025}:1025"
+      - "127.0.0.1:${LOCAL_MAILPIT_UI_PORT:-8025}:8025"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 128m
 
 volumes:
   postgres-ru-data:

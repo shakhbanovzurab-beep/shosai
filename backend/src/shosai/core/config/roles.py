@@ -18,3 +18,5 @@ class ProcessRole(StrEnum):
     MIGRATE = "migrate"
     # Разовые команды оператора над ИИ: аварийный выключатель (F6-D5).
     AI = "ai"
+    # Разовая проверка почты: письмо каждого вида через SMTP.
+    EMAIL = "email"

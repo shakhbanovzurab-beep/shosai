@@ -15,6 +15,7 @@ from functools import partial
 from typing import Final
 
 from shosai.composition.platform import Platform
+from shosai.core.email.system import EMAIL_SWEEP_SOURCE
 from shosai.core.events.monitor import OutboxMonitor
 from shosai.core.events.system import RELAY_EVERY, RELAY_OUTBOX
 from shosai.core.kernel.homes import Home
@@ -71,7 +72,7 @@ def core_loops(platform: Platform) -> tuple[ScheduledLoop, ...]:
             ScheduledLoop(
                 f"{source.name}.{home.value}", source.every, home_tick(sender, source.sweep, home)
             )
-            for source in platform.parts.due_sources
+            for source in (EMAIL_SWEEP_SOURCE, *platform.parts.due_sources)
             for home in source.homes
         ),
         ScheduledLoop("tasks.queue_monitor", MONITOR_EVERY, queues.refresh),

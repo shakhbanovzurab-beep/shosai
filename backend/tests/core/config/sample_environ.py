@@ -59,6 +59,11 @@ def production_environ(**overrides: str) -> dict[str, str]:
         OPENAI_API_KEY=SAMPLE_SECRET,
         GOOGLE_LIVE_API_KEY=SAMPLE_SECRET,
         MISTRAL_API_KEY=SAMPLE_SECRET,
+        SMTP_SECURITY="tls",
+        SMTP_ACCOUNT_USER="account@shosai.example",
+        SMTP_ACCOUNT_PASSWORD=SAMPLE_SECRET,
+        SMTP_NOTIFICATIONS_USER="info@shosai.example",
+        SMTP_NOTIFICATIONS_PASSWORD=SAMPLE_SECRET,
     )
     for home in Home:
         del environ[f"HOME_{home.name}_MIGRATION_DATABASE_URL"]

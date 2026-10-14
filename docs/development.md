@@ -36,6 +36,7 @@ Shared services of the compute plane:
 | `redis-cache` | Redis cache container | `127.0.0.1:16380` | LRU cache only (`allkeys-lru`, 256 MB). No persistence: a restart gives a cold cache, as in production. |
 | `qdrant` | Qdrant | `127.0.0.1:16333` (HTTP), `16334` (gRPC) | API key required; telemetry off. |
 | `s3` | the one bucket in Russia | `127.0.0.1:18333` | Bucket `shosai` exists from the start; uploading to a missing bucket fails, as on real S3. |
+| `mailpit` | the SMTP server (Timeweb) | `127.0.0.1:1025` (SMTP), `8025` (web) | Accepts every mail without login or TLS and sends nothing out; read the mail at `http://127.0.0.1:8025`. Mail lives in memory: a restart empties it. |
 
 Every port listens on `127.0.0.1` only. Connection strings for all of them are in [`.env.example`](../.env.example).
 
@@ -91,6 +92,18 @@ uv run --env-file ../.env shosai api                # public API on 127.0.0.1:80
 - A role refuses to start while a home's schema is behind the code: run `shosai migrate upgrade` first. A home that is down does not stop the start: its requests get 503 until it answers again, and `/readyz` reports it `down`.
 - `Ctrl+C` or `SIGTERM` stops a role cleanly: it stops taking work, finishes what is in flight, then closes. Logs are JSON lines on stdout.
 - Locally every role listens on `127.0.0.1` only (`BIND_HOST`); the image binds `0.0.0.0` inside its container.
+
+### Mail
+
+The platform's mail goes to Mailpit with the `.env.example` defaults (`SMTP_HOST=127.0.0.1`, `SMTP_PORT=1025`, `SMTP_SECURITY=none`, no mailbox passwords). The scheduler sweeps queued mail every 2 s and a `critical` worker sends it (a `bulk` worker sends newsletters), so both must run for mail written by a feature to arrive.
+
+```bash
+uv run --env-file ../.env shosai email check --to you@example.org --locale ru
+```
+
+Mail with a secret (a code, a sign-in link) is written only with `FERNET_KEY` set: without it the feature's write fails loudly instead of losing the code. Generate a local key once with `uv run python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"`.
+
+`shosai email check` needs no worker and no database: it sends one check mail of each kind (account, notification, newsletter) straight to the SMTP server from its mailbox, logs whether the server took each one, and exits with 1 if any was refused. The same command against the production mailboxes proves SMTP, TLS and both logins. The mails use every block of the layout, so they also show how mail looks in a client, light and dark.
 
 ## Run the frontend
 
@@ -151,6 +164,7 @@ The slot also names the run's share of the shared services: database `N` of Valk
 ## Lifecycle notes
 
 - A volume created before ADR 0014 still holds the empty buckets `whisperer-ru` and `whisperer-eu`. Nothing reads them; `scripts/local-env.sh reset` removes them with the rest of the data.
+- Mailpit keeps no volume: its mail is gone after a restart, by design.
 - Data persists in the named volumes `postgres-ru-data`, `postgres-eu-data`, `valkey-data`, `qdrant-storage`, `qdrant-snapshots` and `s3-data` (prefixed with `shosai-local_`). The Redis cache has no volume by design.
 - Every container runs with a read-only root filesystem and `no-new-privileges`, has a memory limit and rotates its logs (10 MB × 3, target architecture §14 rule 11).
 - Image versions are pinned in `compose.dev.yaml` and change only through a deliberate upgrade (CLAUDE.md, "Dependencies"). Decisions behind the stand-ins are in [ADR 0001](adr/0001-local-environment.md).

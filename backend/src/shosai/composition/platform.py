@@ -28,6 +28,7 @@ import structlog
 from redis.asyncio import Redis
 
 from shosai.composition.ai import AiDependencies, PlatformAi, open_ai
+from shosai.composition.email import PlatformEmail, open_email
 from shosai.composition.features import check_features, platform_events
 from shosai.composition.schedule import scheduled_jobs
 from shosai.composition.startup import start_step
@@ -43,6 +44,7 @@ from shosai.core.db.migrations import MigrationHistory
 from shosai.core.db.partitions.system import partition_task_handlers
 from shosai.core.db.partitions.upkeep import PartitionMetrics
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.email.system import email_task_handlers
 from shosai.core.events.catalog import EventCatalog, EventTypes
 from shosai.core.events.metrics import EventMetrics
 from shosai.core.events.outbox import EventOutbox
@@ -102,6 +104,7 @@ class _Writers:
     outbox: EventOutbox
     effects: EffectLedger
     ai: PlatformAi
+    email: PlatformEmail
 
 
 @dataclass(frozen=True, slots=True)
@@ -144,7 +147,9 @@ async def open_platform(
                 telemetry.registry,
             )
             ai = await open_ai(settings, dependencies, stack)
-        writers = _Writers(tasks, outbox, effects, ai)
+        with start_step("email"):
+            email = open_email(settings, homes.transactions, telemetry.registry)
+        writers = _Writers(tasks, outbox, effects, ai, email)
         services = _core_services(process, homes, clients, writers)
         built: list[FeatureParts] = []
         for feature in features:
@@ -166,10 +171,12 @@ async def open_platform(
                         homes.transactions, PartitionMetrics(telemetry.registry)
                     ),
                     *writers.ai.task_handlers(),
+                    *email_task_handlers(email.delivery, tasks.sender),
                     *parts.task_handlers,
                 ]
             )
             writers.ai.settlements.install(parts.cost_settlements)
+            email.install(parts.email_templates)
         with start_step("schedule"):
             jobs = scheduled_jobs(parts, tasks)
         with start_step("probes"):
@@ -237,6 +244,7 @@ def _core_services(
         effects=writers.effects,
         ai=writers.ai.providers,
         ai_spend=writers.ai.operator,
+        email=writers.email.port,
         exchange_rates=writers.ai.rates,
         cache=RedisCache(clients.cache, CacheMetrics(telemetry.registry)),
         objects=clients.objects,

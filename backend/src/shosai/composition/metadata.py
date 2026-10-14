@@ -15,6 +15,7 @@ from shosai.core.ai.pricing.records import ProviderPrice
 from shosai.core.db.home_identity import HomeIdentity
 from shosai.core.db.model_base import NAMING_CONVENTION, ModelBase
 from shosai.core.db.partitions.records import PartitionPolicy
+from shosai.core.email.records import EmailMessage, EmailSuppression
 from shosai.core.events.records import OutboxMessage, ProcessedEvent
 from shosai.core.exchange_rates.records import ExchangeRate
 from shosai.core.features import FeatureModule
@@ -32,6 +33,8 @@ CORE_MODELS: tuple[type[ModelBase], ...] = (
     ProviderPrice,
     ExchangeRate,
     ProviderCost,
+    EmailMessage,
+    EmailSuppression,
 )
 
 

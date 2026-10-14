@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="{{ lang }}" dir="{{ dir }}" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+{#- Без этих двух строк Gmail и Outlook сами инвертируют цвета тёмной темы. -#}
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>{{ subject }}</title>
+<style>
+  :root { color-scheme: light dark; supported-color-schemes: light dark; }
+  body { margin:0; padding:0; -webkit-text-size-adjust:100%; }
+  a { color:inherit; }
+  @media (max-width:620px) {
+    .card { width:100% !important; }
+    .card-cell { padding:24px 20px !important; }
+  }
+  @media (prefers-color-scheme: dark) {
+    .canvas, body { background:#0A0A0A !important; }
+    .card-cell { background:#171717 !important; border-color:#262626 !important; }
+    .ink { color:#FAFAFA !important; }
+    .muted { color:#A3A3A3 !important; }
+    .button { background:#E5E5E5 !important; }
+    .button-text { color:#171717 !important; }
+    .tile { background:#262626 !important; }
+    .rule { border-color:#262626 !important; }
+  }
+  [data-ogsc] .ink { color:#FAFAFA !important; }
+  [data-ogsc] .muted { color:#A3A3A3 !important; }
+</style>
+</head>
+<body class="canvas" style="margin:0;padding:0;background:#FAFAFA;">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#FAFAFA;">{{ preheader }}&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;&#847;&zwnj;&nbsp;</div>
+<table role="presentation" class="canvas" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FAFAFA" style="background:#FAFAFA;">
+<tr><td align="center" style="padding:36px 16px;">
+  <table role="presentation" class="card" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;">
+  <tr><td class="card-cell" bgcolor="#FFFFFF" dir="{{ dir }}" style="background:#FFFFFF;border:1px solid #E5E5E5;border-radius:14px;padding:32px 36px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 28px;"><tr><td align="{{ start }}">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td style="padding-{{ end }}:12px;vertical-align:middle;"><img src="{{ base_url }}/email/shosai-icon.png" width="36" height="36" alt="" style="display:block;border:0;border-radius:8px;"></td>
+        <td class="ink" style="vertical-align:middle;font-family:{{ font }};font-size:20px;line-height:1;font-weight:600;letter-spacing:-0.01em;color:#0A0A0A;">Shosai</td>
+      </tr></table>
+    </td></tr></table>
+    {% include body %}
+  </td></tr>
+  <tr><td dir="{{ dir }}" style="padding:20px 12px 0;font-family:{{ font }};font-size:12px;line-height:1.6;color:#737373;text-align:center;" class="muted">
+    {{ footer.reason }}
+    {%- if unsubscribe_url %}<br><a class="muted" href="{{ unsubscribe_url }}" style="color:#737373;text-decoration:underline;">{{ footer.unsubscribe }}</a>{% endif %}
+    <br>{{ footer.questions }} <a class="muted" href="mailto:{{ support }}" style="color:#737373;text-decoration:underline;">{{ support }}</a>
+  </td></tr>
+  </table>
+</td></tr>
+</table>
+</body>
+</html>

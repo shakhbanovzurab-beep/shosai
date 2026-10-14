@@ -32,6 +32,8 @@ from shosai.core.config.loading import Settings
 from shosai.core.config.roles import ProcessRole
 from shosai.core.db.model_base import ModelBase
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.email.port import EmailPort
+from shosai.core.email.templates import EmailTemplate
 from shosai.core.events.domain_event import DomainEvent
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.events.subscriptions import EventSubscription
@@ -62,6 +64,8 @@ class CoreServices:
     ai: AiProviders
     # Отчёты о расходах, баланс OpenRouter и аварийный выключатель — для экранов оператора.
     ai_spend: SpendOperator
+    # Письма пишутся в транзакции вызывающего; отправляет их обход дома (F6-C10).
+    email: EmailPort
     exchange_rates: ExchangeRates
     cache: Cache
     objects: ObjectStorage
@@ -87,6 +91,7 @@ class FeatureParts:
     periodic_jobs: tuple[PeriodicJob, ...] = ()
     due_sources: tuple[DueRowSource, ...] = ()
     cost_settlements: tuple[CostSettlement, ...] = ()
+    email_templates: tuple[EmailTemplate, ...] = ()
 
 
 def combine_parts(parts: Sequence[FeatureParts]) -> FeatureParts:
@@ -104,6 +109,7 @@ def combine_parts(parts: Sequence[FeatureParts]) -> FeatureParts:
             periodic_jobs=combined.periodic_jobs + part.periodic_jobs,
             due_sources=combined.due_sources + part.due_sources,
             cost_settlements=combined.cost_settlements + part.cost_settlements,
+            email_templates=combined.email_templates + part.email_templates,
         )
     return combined
 

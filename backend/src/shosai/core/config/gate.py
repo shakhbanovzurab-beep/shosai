@@ -14,7 +14,7 @@ from typing import Final
 from urllib.parse import urlsplit
 
 from shosai.core.config.loading import Settings
-from shosai.core.config.sections import home_prefix
+from shosai.core.config.sections import SmtpSecurity, home_prefix
 from shosai.core.config.values import Environment, LogLevel, database_url_parameter
 
 SECURE_STORAGE_SCHEME = "https"
@@ -144,6 +144,19 @@ def ai_provider_keys_present(settings: Settings) -> Iterator[GateViolation]:
         yield GateViolation("MISTRAL_API_KEY", "без ключа Mistral сканы документов не читаются")
 
 
+def mail_over_tls(settings: Settings) -> Iterator[GateViolation]:
+    """Mail leaves over TLS from both authenticated mailboxes (F6 plan §3.8)."""
+    email = settings.email
+    if email.smtp_security is SmtpSecurity.NONE:
+        yield GateViolation("SMTP_SECURITY", "вне разработки почта уходит только по TLS")
+    for prefix, user, password in (
+        ("SMTP_ACCOUNT", email.smtp_account_user, email.smtp_account_password),
+        ("SMTP_NOTIFICATIONS", email.smtp_notifications_user, email.smtp_notifications_password),
+    ):
+        if not user or password is None:
+            yield GateViolation(f"{prefix}_USER", "без ящика и пароля письма этого вида не уйдут")
+
+
 def databases_over_tls(settings: Settings) -> Iterator[GateViolation]:
     """Each home's database is reached over TLS that checks the certificate and the host."""
     for home, home_settings in settings.homes.items():
@@ -170,4 +183,5 @@ CORE_CHECKS: tuple[ProductionCheck, ...] = (
     valkey_link_protected,
     databases_over_tls,
     ai_provider_keys_present,
+    mail_over_tls,
 )

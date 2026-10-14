@@ -16,6 +16,7 @@ from shosai.core.config.sections import (
     AiGuardSettings,
     AiSettings,
     CryptoSettings,
+    EmailSettings,
     ExchangeRateSettings,
     HomeSettings,
     ObservabilitySettings,
@@ -74,6 +75,7 @@ class Settings:
     ai: AiSettings
     spend: SpendSettings
     ai_guards: AiGuardSettings
+    email: EmailSettings
     exchange_rates: ExchangeRateSettings
 
 
@@ -91,6 +93,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
     ai = reader.read(AiSettings, "")
     spend = reader.read(SpendSettings, "")
     ai_guards = reader.read(AiGuardSettings, "")
+    email = reader.read(EmailSettings, "")
     exchange_rates = reader.read(ExchangeRateSettings, "")
     if reader.problems:
         raise ConfigurationError(reader.problems)
@@ -106,6 +109,7 @@ def load_settings(environ: Mapping[str, str]) -> Settings:
         ai=_present(ai),
         spend=_present(spend),
         ai_guards=_present(ai_guards),
+        email=_present(email),
         exchange_rates=_present(exchange_rates),
     )
 

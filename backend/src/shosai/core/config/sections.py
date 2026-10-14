@@ -5,6 +5,7 @@ a dotenv file: `env_file` is off, and an empty variable counts as unset.
 """
 
 from decimal import Decimal
+from enum import StrEnum
 from ipaddress import IPv4Address
 from typing import Self
 
@@ -196,6 +197,36 @@ class SpendSettings(SettingsSection):
     ai_reservation_lease_seconds: PositiveInt = 300
     # Траты пользователя за сутки, после которых оператор получает событие; 0 — не следить.
     ai_user_daily_alert_usd: Decimal = Field(default=Decimal(20), ge=0)
+
+
+class SmtpSecurity(StrEnum):
+    """How the SMTP connection is protected: implicit TLS (465), STARTTLS (587), or none."""
+
+    TLS = "tls"
+    STARTTLS = "starttls"
+    # Только для разработки: Mailpit на 127.0.0.1. Гейт вне разработки не пускает.
+    NONE = "none"
+
+
+class EmailSettings(SettingsSection):
+    """Outgoing mail (F6 plan §3.8): one SMTP server, two mailboxes by message kind (F6-C11).
+
+    Timeweb wants `From` to be the mailbox's own login, so each mailbox is its address and
+    password; account mail (codes, resets, welcome) leaves from one, everything else from the
+    other. Without a mailbox user, development sends to Mailpit without authentication.
+    """
+
+    smtp_host: str = "127.0.0.1"
+    smtp_port: PositiveInt = 1025
+    smtp_security: SmtpSecurity = SmtpSecurity.NONE
+    smtp_account_user: str | None = None
+    smtp_account_password: SecretStr | None = None
+    smtp_notifications_user: str | None = None
+    smtp_notifications_password: SecretStr | None = None
+    email_sender_name: str = "Shosai"
+    # Адреса в письмах: ссылки на сайт и кабинет, картинки макета, отписка.
+    public_base_url: HttpUrl = HttpUrl("https://shosai.tech")
+    support_email: str = "support@shosai.tech"
 
 
 class AiGuardSettings(SettingsSection):

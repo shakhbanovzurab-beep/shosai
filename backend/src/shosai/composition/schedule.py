@@ -10,6 +10,7 @@ from typing import Final
 
 from shosai.core.ai.pricing.sync import SYNC_PRICES_JOB
 from shosai.core.db.partitions.system import MAINTAIN_EVERY, MAINTAIN_PARTITIONS
+from shosai.core.email.system import PURGE_EMAIL_JOB
 from shosai.core.events.system import PURGE_EVERY, PURGE_OUTBOX
 from shosai.core.exchange_rates.fetch import FETCH_RATES_JOB
 from shosai.core.features import FeatureParts
@@ -24,6 +25,7 @@ CORE_JOBS: Final = (
     PeriodicJob(MAINTAIN_PARTITIONS, MAINTAIN_EVERY),
     FETCH_RATES_JOB,
     SYNC_PRICES_JOB,
+    PURGE_EMAIL_JOB,
 )
 
 

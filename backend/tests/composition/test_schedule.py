@@ -43,6 +43,7 @@ def test_core_runs_its_purges_upkeep_rate_fetch_and_price_sync_as_periodic_jobs(
         "db.maintain_partitions": timedelta(days=1),
         "exchange_rates.fetch": timedelta(hours=6),
         "ai.sync_prices": timedelta(days=1),
+        "email.purge": timedelta(days=1),
     }
 
 

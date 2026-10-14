@@ -8,6 +8,7 @@
     shosai migrate current         log each home's revision
     shosai ai kill-switch ACTION   engage, release or report the AI kill switch
     shosai ai rebuild-spend-counters   sum the AI spend counters again from the cost rows
+    shosai email check --to ADDRESS    send a check mail of each kind through SMTP
 
 Every long-running role also serves `/livez`, `/readyz` and `/metrics` on OPS_PORT. The
 settings come from the environment only (`.env.example`, section 2). One process runs
@@ -23,10 +24,12 @@ import uvloop
 
 from shosai.composition.ai_command import KillSwitchAction, KillSwitchCommand, run_kill_switch
 from shosai.composition.ai_rebuild import run_rebuild
+from shosai.composition.email_command import MailCheckCommand, run_mail_check
 from shosai.composition.migrate import MigrateAction, run_migrate
 from shosai.composition.process import run_process
 from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
 from shosai.core.config.roles import ProcessRole
+from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
 from shosai.core.tasks.queues import TaskQueue
 
 PROGRAM = "shosai"
@@ -56,6 +59,13 @@ def build_parser() -> argparse.ArgumentParser:
     switch.add_argument("--reason", help="why, for engage; written to the log")
     switch.add_argument("--hours", type=float, default=24.0, help="how long engage holds")
     tools.add_parser("rebuild-spend-counters", help="sum the spend counters from the cost rows")
+    email = roles.add_parser(ProcessRole.EMAIL.value, help="operator commands of the mail")
+    mail_tools = email.add_subparsers(dest="tool", required=True, metavar="TOOL")
+    check = mail_tools.add_parser("check", help="send a check mail of each kind")
+    check.add_argument("--to", required=True, dest="recipient", help="where the check mail goes")
+    check.add_argument(
+        "--locale", default="en", choices=SUPPORTED_LANGUAGES, help="language of the mail"
+    )
     return parser
 
 
@@ -71,10 +81,19 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
             return run_process(role, environ, workers_role(TaskQueue(arguments.queue)))
         case ProcessRole.SCHEDULER:
             return run_process(role, environ, scheduler_role)
-        case ProcessRole.MIGRATE:
-            return run_migrate(environ, MigrateAction(arguments.action))
-        case ProcessRole.AI:
-            return ai_command(arguments, environ)
+        case ProcessRole.MIGRATE | ProcessRole.AI | ProcessRole.EMAIL:
+            return one_shot(role, arguments, environ)
+
+
+def one_shot(
+    role: ProcessRole, arguments: argparse.Namespace, environ: Mapping[str, str]
+) -> Coroutine[Any, Any, int]:
+    """The coroutine of a one-shot command: migrations, an AI or a mail command."""
+    if role is ProcessRole.MIGRATE:
+        return run_migrate(environ, MigrateAction(arguments.action))
+    if role is ProcessRole.EMAIL:
+        return run_mail_check(environ, MailCheckCommand(arguments.recipient, arguments.locale))
+    return ai_command(arguments, environ)
 
 
 def ai_command(

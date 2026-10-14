@@ -650,6 +650,8 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | Own task broker on TaskIQ's `AsyncBroker`, streams in Valkey through redis-py | — | One stream per queue holding only unfinished tasks: enqueue within 50 ms or 503, lease renewal, retries as delayed redeliveries, at most 5 deliveries, dead letter; replaces taskiq-redis, whose broker built its own pool, had no deadline or delivery limit and trimmed unfinished tasks ([ADR 0016](../adr/0016-own-task-broker-on-valkey-streams.md)) |
 | Backend | websockets | 16.1.1 | Streaming connections to AI providers; held below 17 by google-genai |
 | Backend | google-genai | 2.30.1 | Gemini Live client |
+| Backend | aiosmtplib | 5.1.3 | SMTP client of the mail relay: implicit TLS or STARTTLS with certificate checks, one login per mailbox |
+| Backend | Jinja2 | 3.1.6 | Mail templates: HTML with autoescape and a plain-text part from one body, strict undefined values |
 | Backend | aiobotocore | 3.9.2 | S3 client; one bucket for both homes; replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
 | Backend | Own HTTP metric on prometheus-client, recorded by the request boundary under OpenTelemetry's HTTP semantic conventions | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |
@@ -658,6 +660,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | pypdf, python-docx, openpyxl, python-pptx, striprtf | — | Knowledge-base document parsing |
 | Backend | tiktoken, rank-bm25, networkx | — | Token counting, keyword search, context graph |
 | Testing | pytest-asyncio | 1.4.0 | Async tests |
+| Testing | aiosmtpd | 1.4.6 | SMTP server inside the test process: keeps received mail, answers with scripted codes |
 | Code quality | python-doctor | — | Backend code-health gate |
 | Data | PostgreSQL, managed (Timeweb, St Petersburg) | 18.4 | Russian data home |
 | Data | PostgreSQL, managed (EU) | 18 | EU data home and the directory |
@@ -669,7 +672,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Realtime and integrations | LiveKit server, egress, coturn | pinned | Video rooms, recording, per-participant tracks to the ws gateway, TURN |
 | Realtime and integrations | Nango | pinned | OAuth proxy for connectors, one per data home |
 | Realtime and integrations | Web Push (VAPID) | — | PWA notifications |
-| Realtime and integrations | SMTP | — | Email |
+| Realtime and integrations | SMTP (Timeweb), two mailboxes | — | Email: account mail from one mailbox, notifications and newsletters from the other; Mailpit 1.31.5 stands in locally |
 | Realtime and integrations | Yandex SmartCaptcha | — | Form protection |
 | AI providers | OpenRouter | — | Chat, vision, embeddings, rerank, web search, transcription of recordings ([ADR 0043](../adr/0043-speech-providers-by-task.md)) |
 | AI providers | Jev (TypeSafe AI) through OpenRouter's Decisions API | `typesafe/jev-1.13`, pinned | Leo's Decision Layer: typed, calibrated decisions behind versioned policies with deterministic fallbacks ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)) |
