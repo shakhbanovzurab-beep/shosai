@@ -25,7 +25,7 @@ _TEXTS: Final = {
         "button": "Set a new password",
         "note": "If you did not ask to reset your password, ignore this email: nothing changes.",
     },
-    "zh": {
+    "zh-Hant": {
         "subject": "重設您的 Shosai 密碼",
         "preheader": "此連結僅能使用一次，{minutes} 分鐘內有效。",
         "heading": "設定新密碼",
@@ -73,7 +73,7 @@ _TEXTS: Final = {
         "button": "تعيين كلمة مرور جديدة",
         "note": "إذا لم تطلب إعادة تعيين كلمة المرور، فتجاهل هذه الرسالة: لن يتغير شيء.",
     },
-    "pt": {
+    "pt-BR": {
         "subject": "Redefina sua senha do Shosai",
         "preheader": "O link funciona uma vez, por {minutes} minutos.",
         "heading": "Defina uma nova senha",
@@ -188,13 +188,19 @@ _TEXTS: Final = {
             "Nếu bạn không yêu cầu đặt lại mật khẩu, hãy bỏ qua email này: không có gì thay đổi."
         ),
     },
-    "th": {
-        "subject": "รีเซ็ตรหัสผ่าน Shosai ของคุณ",
-        "preheader": "ลิงก์ใช้ได้ครั้งเดียว ภายใน {minutes} นาที",
-        "heading": "ตั้งรหัสผ่านใหม่",
-        "lead": "เปิดลิงก์เพื่อเลือกรหัสผ่านใหม่ ลิงก์ใช้ได้ครั้งเดียว ภายใน {minutes} นาที",
-        "button": "ตั้งรหัสผ่านใหม่",
-        "note": "หากคุณไม่ได้ขอรีเซ็ตรหัสผ่าน โปรดเพิกเฉยต่ออีเมลนี้ จะไม่มีอะไรเปลี่ยนแปลง",
+    "nl": {
+        "subject": "Stel je Shosai-wachtwoord opnieuw in",
+        "preheader": "De link werkt één keer, {minutes} minuten lang.",
+        "heading": "Kies een nieuw wachtwoord",
+        "lead": (
+            "Volg de link om een nieuw wachtwoord te kiezen. Hij werkt één keer, {minutes} minuten "
+            "lang."
+        ),
+        "button": "Nieuw wachtwoord kiezen",
+        "note": (
+            "Heb je niet gevraagd om je wachtwoord opnieuw in te stellen? Negeer dan deze e-mail: "
+            "er verandert niets."
+        ),
     },
 }
 

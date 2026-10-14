@@ -18,7 +18,7 @@ _TEXTS: Final = {
         "unsubscribe": "Unsubscribe",
         "questions": "Questions? Write to",
     },
-    "zh": {
+    "zh-Hant": {
         "account": "您收到這封郵件，是因為它與您的 Shosai 帳戶有關。",
         "notification": "您收到這封郵件，是因為您在 Shosai 設定中開啟了通知。",
         "newsletter": "您收到這封郵件，是因為您訂閱了 Shosai 的消息。",
@@ -58,7 +58,7 @@ _TEXTS: Final = {
         "unsubscribe": "إلغاء الاشتراك",
         "questions": "لديك أسئلة؟ راسلنا على",
     },
-    "pt": {
+    "pt-BR": {
         "account": "Você recebeu este e-mail porque ele diz respeito à sua conta Shosai.",
         "notification": (
             "Você recebeu este e-mail porque as notificações estão ativadas nas "
@@ -137,12 +137,14 @@ _TEXTS: Final = {
         "unsubscribe": "Hủy đăng ký",
         "questions": "Có câu hỏi? Hãy viết đến",
     },
-    "th": {
-        "account": "คุณได้รับอีเมลนี้เนื่องจากเกี่ยวข้องกับบัญชี Shosai ของคุณ",
-        "notification": "คุณได้รับอีเมลนี้เนื่องจากเปิดการแจ้งเตือนไว้ในการตั้งค่า Shosai",
-        "newsletter": "คุณได้รับอีเมลนี้เนื่องจากสมัครรับข่าวสารจาก Shosai",
-        "unsubscribe": "ยกเลิกการรับข่าวสาร",
-        "questions": "มีคำถาม? เขียนถึง",
+    "nl": {
+        "account": "Je ontvangt deze e-mail omdat hij over je Shosai-account gaat.",
+        "notification": (
+            "Je ontvangt deze e-mail omdat meldingen aanstaan in je Shosai-instellingen."
+        ),
+        "newsletter": "Je ontvangt deze e-mail omdat je je hebt aangemeld voor nieuws van Shosai.",
+        "unsubscribe": "Uitschrijven",
+        "questions": "Vragen? Schrijf naar",
     },
 }
 LAYOUT_TEXTS: Final = MappingProxyType(

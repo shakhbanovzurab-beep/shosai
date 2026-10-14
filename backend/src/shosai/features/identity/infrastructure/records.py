@@ -25,6 +25,7 @@ from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shosai.core.db.model_base import ModelBase, table_info
+from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
 from shosai.core.kernel.homes import Home
 
 ACCOUNT_STATES = (
@@ -34,6 +35,7 @@ DIRECTORY_STATES = (
     "'claimed', 'active', 'frozen', 'banned', 'deletion_scheduled', 'transferring', 'deleted'"
 )
 CONSENT_KINDS = "'personal_data', 'cross_border', 'marketing', 'improve_models', 'share_location'"
+LANGUAGES = ", ".join(f"'{code}'" for code in SUPPORTED_LANGUAGES)
 
 
 class User(ModelBase):
@@ -49,6 +51,7 @@ class User(ModelBase):
             name="display_name_length",
         ),
         CheckConstraint("country IS NULL OR country ~ '^[A-Z]{2}$'", name="country_code"),
+        CheckConstraint(f"language IN ({LANGUAGES})", name="language_known"),
         CheckConstraint("token_version >= 0", name="token_version_not_negative"),
         Index("uq_users_email", "email", unique=True),
     )
@@ -108,6 +111,7 @@ class PendingRegistration(ModelBase):
         CheckConstraint("length(email_hmac) = 32", name="email_hmac_length"),
         CheckConstraint("country ~ '^[A-Z]{2}$'", name="country_code"),
         CheckConstraint("length(full_name) BETWEEN 1 AND 80", name="full_name_length"),
+        CheckConstraint(f"language IN ({LANGUAGES})", name="language_known"),
         Index("ix_pending_registrations_expires", "expires_at"),
     )
 

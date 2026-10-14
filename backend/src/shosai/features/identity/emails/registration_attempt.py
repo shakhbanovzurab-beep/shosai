@@ -33,7 +33,7 @@ _TEXTS: Final = {
             "ignore this email: your account is safe."
         ),
     },
-    "zh": {
+    "zh-Hant": {
         "subject": "有人嘗試用您的電子郵件註冊",
         "preheader": "您已經擁有 Shosai 帳戶，因此沒有建立任何新帳戶。",
         "heading": "您已經有帳戶了",
@@ -102,7 +102,7 @@ _TEXTS: Final = {
             "أنت، فتجاهل هذه الرسالة: حسابك آمن."
         ),
     },
-    "pt": {
+    "pt-BR": {
         "subject": "Alguém tentou se cadastrar com seu e-mail",
         "preheader": "Você já tem uma conta no Shosai, então nada foi criado.",
         "heading": "Você já tem uma conta",
@@ -230,15 +230,18 @@ _TEXTS: Final = {
             "bạn có thể bỏ qua email này: tài khoản của bạn vẫn an toàn."
         ),
     },
-    "th": {
-        "subject": "มีคนพยายามสมัครด้วยอีเมลของคุณ",
-        "preheader": "คุณมีบัญชี Shosai อยู่แล้ว จึงไม่มีการสร้างบัญชีใหม่",
-        "heading": "คุณมีบัญชีอยู่แล้ว",
-        "lead": "เมื่อสักครู่มีคนพยายามสร้างบัญชี Shosai ด้วยอีเมลนี้ คุณมีบัญชีอยู่แล้ว จึงไม่มีการสร้างสิ่งใด",
-        "button": "เข้าสู่ระบบ Shosai",
+    "nl": {
+        "subject": "Iemand probeerde zich aan te melden met je e-mailadres",
+        "preheader": "Je hebt al een Shosai-account, dus er is niets aangemaakt.",
+        "heading": "Je hebt al een account",
+        "lead": (
+            "Iemand probeerde zojuist een Shosai-account aan te maken met dit e-mailadres. Je hebt "
+            "er al een, dus er is niets aangemaakt."
+        ),
+        "button": "Inloggen bij Shosai",
         "note": (
-            "หากเป็นคุณ โปรดเข้าสู่ระบบหรือรีเซ็ตรหัสผ่านในหน้าเข้าสู่ระบบ หากไม่ใช่ คุณสามารถเพิกเฉยต่ออีเมลนี้ได้ "
-            "บัญชีของคุณปลอดภัย"
+            "Was jij het? Log dan in, of stel je wachtwoord opnieuw in op de inlogpagina. Zo niet, "
+            "dan kun je deze e-mail negeren: je account is veilig."
         ),
     },
 }

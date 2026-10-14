@@ -19,34 +19,40 @@ class Locale:
     rtl: bool = False
 
 
+# Порядок и коды — как в меню кабинета (frontend/src/lib/language.ts, ADR 0046).
 LOCALES: tuple[Locale, ...] = (
     Locale("en", "English"),
-    Locale("zh", "中文（繁體）"),
-    Locale("es", "Español"),
-    Locale("ru", "Русский"),
-    Locale("hi", "हिन्दी"),
-    Locale("ar", "العربية", rtl=True),
-    Locale("pt", "Português"),
     Locale("fr", "Français"),
-    Locale("it", "Italiano"),
     Locale("de", "Deutsch"),
-    Locale("ja", "日本語"),
-    Locale("ko", "한국어"),
-    Locale("id", "Bahasa Indonesia"),
+    Locale("ru", "Русский"),
+    Locale("nl", "Nederlands"),
+    Locale("it", "Italiano"),
+    Locale("es", "Español"),
+    Locale("pt-BR", "Português (Brasil)"),
+    Locale("ar", "العربية", rtl=True),
     Locale("tr", "Türkçe"),
+    Locale("ko", "한국어"),
+    Locale("hi", "हिन्दी"),
     Locale("vi", "Tiếng Việt"),
-    Locale("th", "ไทย"),
+    Locale("zh-Hant", "繁體中文"),
+    Locale("ja", "日本語"),
+    Locale("id", "Bahasa Indonesia"),
 )
 LOCALE_BY_CODE = {locale.code: locale for locale in LOCALES}
 SUPPORTED_LANGUAGES = tuple(LOCALE_BY_CODE)
+# У каждого языка платформы один вариант, поэтому любой тег языка сводится к нему по основе.
+_CODE_BY_BASE = {locale.code.split("-", 1)[0].lower(): locale.code for locale in LOCALES}
 
 
 def normalize_language(value: str | None) -> str | None:
-    """`pt-BR` → `pt`, `zh_Hant` → `zh`; a language outside the 16 → None."""
+    """The platform code of a language tag: `pt`, `pt_br` → `pt-BR`; `zh-TW` → `zh-Hant`.
+
+    A language outside the 16 → None.
+    """
     if not value:
         return None
     base = value.strip().lower().replace("_", "-").split("-", 1)[0]
-    return base if base in LOCALE_BY_CODE else None
+    return _CODE_BY_BASE.get(base)
 
 
 def parse_accept_language(header: str | None) -> str | None:

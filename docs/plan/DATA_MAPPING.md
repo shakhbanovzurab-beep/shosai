@@ -315,6 +315,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `ai_minutes_used` — *moved*. Verbatim: lifetime quota input (E-2).
   - `referred_by_user_id` — *moved*. Becomes a soft reference when referrer and referred end up in different homes.
   - `avatar_url` — *moved*. Inline base64 data URL, kept in the row.
+  - `language` — *transformed*. To the cabinet's codes ([ADR 0046](../adr/0046-platform-languages-follow-the-cabinet.md)): `pt` → `pt-BR`, `zh` → `zh-Hant`, `th` → `en`; v2 accepts only the 16 codes. A NULL (the draft's "system language" for the desktop apps) has no v2 value yet: open, decided before the migration package.
 - **New in v2:** `home` — `ru` or `eu` by rule R2.
 - **New in v2:** `org_id` — NULL: the draft has no work accounts (R3).
 - **identity plan ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)), 2026-10-14:** v2 adds `full_name` and `display_name` (both from the draft's `username`), `work_role` (NULL), `country` (NULL until the person confirms it), `avatar_key` and `state` (from `status`). The draft's `avatar_url` data URL is decoded, signature-checked and written to the RU bucket as the avatar object; `consent_*` columns become `user_consents` rows (`personal_data`, `marketing`), and the cross-border row follows the lawyer's answer (ADR 0045 point 5). Columns owned by other slices (minutes, storage, switches) move with those slices' mappings.

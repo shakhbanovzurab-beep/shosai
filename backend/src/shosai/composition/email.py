@@ -4,7 +4,7 @@ The templates are installed once the slices are built: core's check mail and eve
 Without `FERNET_KEY` (development) the port refuses only mail that carries a secret.
 """
 
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
 import structlog
@@ -41,8 +41,10 @@ class PlatformEmail:
     images: Mapping[str, EmailImage]
 
     def install(self, templates: tuple[EmailTemplate, ...]) -> None:
-        """Register core's templates and the slices'."""
-        self.templates.install((MAIL_CHECK, *templates))
+        """Register core's templates and the slices'; each speaks all 16 platform languages."""
+        every = (MAIL_CHECK, *templates)
+        require_every_language(every)
+        self.templates.install(every)
 
     def router(self, limiter: RateLimiter) -> APIRouter:
         """`/v1/unsubscribe` and `/email/{name}`, served by the api role."""
@@ -94,3 +96,12 @@ def open_email(
         unsubscribes=Unsubscribes(transactions, links, UnsubscribeMetrics(registry)),
         images=load_email_images(),
     )
+
+
+def require_every_language(templates: Iterable[EmailTemplate]) -> None:
+    """Refuse a template without texts in one of the 16 platform languages (ADR 0046)."""
+    for template in templates:
+        if template.missing_languages:
+            missing = ", ".join(sorted(template.missing_languages))
+            message = f"шаблон письма {template.key} без текстов на {missing} (ADR 0046)"
+            raise ValueError(message)

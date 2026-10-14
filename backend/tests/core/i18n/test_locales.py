@@ -1,5 +1,8 @@
 """The 16 platform languages and the language a request prefers."""
 
+import re
+from pathlib import Path
+
 import pytest
 from hypothesis import given
 from hypothesis import strategies as st
@@ -11,21 +14,33 @@ from shosai.core.i18n.locales import (
     parse_accept_language,
 )
 
+CABINET_LANGUAGES = Path(__file__).resolve().parents[4] / "frontend/src/lib/language.ts"
+
 
 def test_sixteen_languages_with_unique_codes() -> None:
     assert len(LOCALES) == 16
     assert len(set(SUPPORTED_LANGUAGES)) == 16
-    assert SUPPORTED_LANGUAGES[:4] == ("en", "zh", "es", "ru")
     assert [locale.code for locale in LOCALES if locale.rtl] == ["ar"]
+
+
+def test_the_platform_speaks_the_cabinets_languages_with_its_codes() -> None:
+    cabinet = re.findall(r'\{ code: "([^"]+)"', CABINET_LANGUAGES.read_text(encoding="utf-8"))
+
+    assert tuple(cabinet) == SUPPORTED_LANGUAGES
 
 
 @pytest.mark.parametrize(
     ("value", "expected"),
     [
         ("ru", "ru"),
-        ("pt-BR", "pt"),
-        ("zh_Hant", "zh"),
+        ("pt-BR", "pt-BR"),
+        ("pt", "pt-BR"),
+        ("pt_br", "pt-BR"),
+        ("zh_Hant", "zh-Hant"),
+        ("zh-TW", "zh-Hant"),
+        ("nl-BE", "nl"),
         (" DE ", "de"),
+        ("th", None),
         ("xx", None),
         ("", None),
         (None, None),
@@ -44,7 +59,8 @@ def test_normalize_language(value: str | None, expected: str | None) -> None:
         ("es;q=0.8, it;q=0.8", "es"),
         ("ru;q=0, en", "en"),
         ("ja;q=abc, ko;q=0.2", "ko"),
-        ("vi;q=1.5, th;q=0.3", "th"),
+        ("vi;q=1.5, nl;q=0.3", "nl"),
+        ("th-TH, pt-PT;q=0.5", "pt-BR"),
         ("*", None),
         ("xx, yy", None),
         ("", None),

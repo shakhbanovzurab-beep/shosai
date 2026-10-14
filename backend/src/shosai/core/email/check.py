@@ -32,7 +32,7 @@ _TEXTS: Final = {
             "works. The code above is a sample."
         ),
     },
-    "zh": {
+    "zh-Hant": {
         "subject": "Shosai 郵件檢查",
         "preheader": "如果您能看到這封郵件，代表 Shosai 的郵件可以送達。",
         "heading": "郵件運作正常",
@@ -92,7 +92,7 @@ _TEXTS: Final = {
         "button": "افتح Shosai",
         "note": ("لا حاجة لأي إجراء: هذه الرسالة تتحقق فقط من عمل البريد. الرمز أعلاه مجرد مثال."),
     },
-    "pt": {
+    "pt-BR": {
         "subject": "Verificação de e-mail do Shosai",
         "preheader": "Se você consegue ler isto, o e-mail do Shosai chega até você.",
         "heading": "O e-mail está funcionando",
@@ -225,13 +225,19 @@ _TEXTS: Final = {
             "động. Mã ở trên chỉ là ví dụ."
         ),
     },
-    "th": {
-        "subject": "ตรวจสอบอีเมล Shosai",
-        "preheader": "หากคุณอ่านข้อความนี้ได้ แสดงว่าอีเมลจาก Shosai ส่งถึงคุณแล้ว",
-        "heading": "อีเมลใช้งานได้",
-        "lead": ("นี่คือข้อความตรวจสอบจาก Shosai หากคุณอ่านได้ แสดงว่าอีเมลของเราส่งถึงคุณและแสดงผลได้ถูกต้อง"),
-        "button": "เปิด Shosai",
-        "note": ("คุณไม่ต้องทำอะไร ข้อความนี้ใช้ตรวจสอบเพียงว่าอีเมลใช้งานได้ รหัสด้านบนเป็นเพียงตัวอย่าง"),
+    "nl": {
+        "subject": "Mailcontrole van Shosai",
+        "preheader": "Kun je dit lezen, dan bereikt mail van Shosai je.",
+        "heading": "Mail werkt",
+        "lead": (
+            "Dit is een controlebericht van Shosai. Kun je het lezen, dan bereikt onze mail je en "
+            "ziet die er goed uit."
+        ),
+        "button": "Shosai openen",
+        "note": (
+            "Je hoeft niets te doen: dit bericht controleert alleen of mail werkt. De code "
+            "hierboven is een voorbeeld."
+        ),
     },
 }
 

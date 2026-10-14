@@ -37,6 +37,9 @@ DEFAULTS: Final[Mapping[str, object]] = {
 }
 # Статусы черновика: клиенты знают только эти три.
 DRAFT_STATUS: Final = {AccountState.FROZEN: "frozen", AccountState.BANNED: "banned"}
+# Коды черновика у выпущенных клиентов (ADR 0046): нидерландского они не знают, а null
+# читают как «язык системы».
+NATIVE_LANGUAGES: Final[Mapping[str, str | None]] = {"pt-BR": "pt", "zh-Hant": "zh", "nl": None}
 
 
 class NativeMe:
@@ -77,7 +80,7 @@ class NativeMe:
             "status": DRAFT_STATUS.get(state, "active"),
             "is_active": state is AccountState.ACTIVE,
             "last_login_at": user.last_login_at,
-            "language": user.language,
+            "language": NATIVE_LANGUAGES.get(user.language, user.language),
             "timezone": user.timezone,
             "marketing_consent": bool(marketing),
         }

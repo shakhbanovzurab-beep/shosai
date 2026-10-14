@@ -2,8 +2,9 @@
 
 A slice registers an `EmailTemplate`: a key, a body in Jinja2 written with the layout's
 blocks — `e.heading`, `e.paragraph`, `e.note`, `e.button`, `e.code` — and its texts in the
-16 languages, English required; a missing language falls back to English. Texts may hold
-`{name}` fields filled from the mail's parameters and secrets.
+16 languages, English required. The platform installs a template only with all 16 (ADR
+0046); a language missing elsewhere falls back to English. Texts may hold `{name}` fields
+filled from the mail's parameters and secrets.
 
 The body is rendered twice from the same source: once as HTML with autoescape, once as
 text, the blocks writing themselves in each format — the text part is never HTML stripped
@@ -58,6 +59,11 @@ class EmailTemplate:
             if locale not in LOCALE_BY_CODE or texts.keys() != english.keys():
                 message = f"шаблон {self.key}: тексты {locale} — язык платформы, ключи как у en"
                 raise ValueError(message)
+
+    @property
+    def missing_languages(self) -> frozenset[str]:
+        """The platform languages this template has no texts for."""
+        return frozenset(LOCALE_BY_CODE) - self.texts.keys()
 
 
 @dataclass(frozen=True, slots=True)

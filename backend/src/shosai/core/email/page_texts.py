@@ -20,7 +20,7 @@ PAGE_TEXTS: Final[dict[str, dict[str, str]]] = {
             "settings."
         ),
     },
-    "zh": {
+    "zh-Hant": {
         "confirm_title": "退订此类邮件？",
         "confirm_lead": (
             "你将不再收到 Shosai 的此类邮件。账户邮件——登录验证码、密码重置和收据——仍会照常发送。"
@@ -72,7 +72,7 @@ PAGE_TEXTS: Final[dict[str, dict[str, str]]] = {
         "done_title": "تم إلغاء اشتراكك",
         "done_lead": "لن تصلك رسائل من هذا النوع بعد الآن. يمكنك إعادة تفعيلها من إعدادات Shosai.",
     },
-    "pt": {
+    "pt-BR": {
         "confirm_title": "Cancelar a inscrição nestes e-mails?",
         "confirm_lead": (
             "Você deixará de receber e-mails deste tipo do Shosai. Os e-mails da conta — códigos "
@@ -187,14 +187,17 @@ PAGE_TEXTS: Final[dict[str, dict[str, str]]] = {
             "Shosai."
         ),
     },
-    "th": {
-        "confirm_title": "ยกเลิกการรับอีเมลเหล่านี้หรือไม่",
+    "nl": {
+        "confirm_title": "Uitschrijven voor deze e-mails?",
         "confirm_lead": (
-            "คุณจะไม่ได้รับอีเมลประเภทนี้จาก Shosai อีก ส่วนอีเมลเกี่ยวกับบัญชี เช่น "
-            "รหัสเข้าสู่ระบบ การรีเซ็ตรหัสผ่าน และใบเสร็จ จะยังส่งถึงคุณตามปกติ"
+            "Je ontvangt geen e-mails van deze soort meer van Shosai. Accountmails — inlogcodes, "
+            "wachtwoordherstel, betaalbewijzen — blijven wel komen."
         ),
-        "button": "ยกเลิกการรับ",
-        "done_title": "ยกเลิกการรับแล้ว",
-        "done_lead": ("คุณจะไม่ได้รับอีเมลประเภทนี้อีก และสามารถเปิดรับใหม่ได้ในการตั้งค่าของ Shosai"),
+        "button": "Uitschrijven",
+        "done_title": "Je bent uitgeschreven",
+        "done_lead": (
+            "E-mails van deze soort komen niet meer. Je kunt ze weer aanzetten in de instellingen "
+            "van Shosai."
+        ),
     },
 }

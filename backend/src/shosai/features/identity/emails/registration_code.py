@@ -28,7 +28,7 @@ _TEXTS: Final = {
         ),
         "note": "If you did not sign up for Shosai, ignore this email: no account will be created.",
     },
-    "zh": {
+    "zh-Hant": {
         "subject": "確認您在 Shosai 的電子郵件",
         "preheader": "確認碼在郵件中，{minutes} 分鐘內有效。",
         "heading": "確認您的電子郵件",
@@ -74,7 +74,7 @@ _TEXTS: Final = {
         "lead": "أدخل هذا الرمز في Shosai لإكمال إنشاء حسابك. الرمز صالح لمدة {minutes} دقيقة.",
         "note": "إذا لم تسجّل في Shosai، فتجاهل هذه الرسالة: لن يُنشأ أي حساب.",
     },
-    "pt": {
+    "pt-BR": {
         "subject": "Confirme seu e-mail no Shosai",
         "preheader": "Seu código de confirmação está aqui. Ele vale por {minutes} minutos.",
         "heading": "Confirme seu e-mail",
@@ -185,12 +185,18 @@ _TEXTS: Final = {
             "tạo."
         ),
     },
-    "th": {
-        "subject": "ยืนยันอีเมลของคุณสำหรับ Shosai",
-        "preheader": "รหัสยืนยันอยู่ด้านใน ใช้ได้ {minutes} นาที",
-        "heading": "ยืนยันอีเมลของคุณ",
-        "lead": "ป้อนรหัสนี้ใน Shosai เพื่อสร้างบัญชีให้เสร็จ รหัสใช้ได้ {minutes} นาที",
-        "note": "หากคุณไม่ได้สมัคร Shosai โปรดเพิกเฉยต่ออีเมลนี้ จะไม่มีการสร้างบัญชีใด ๆ",
+    "nl": {
+        "subject": "Bevestig je e-mailadres voor Shosai",
+        "preheader": "Je bevestigingscode staat erin. De code werkt {minutes} minuten.",
+        "heading": "Bevestig je e-mailadres",
+        "lead": (
+            "Voer deze code in Shosai in om het aanmaken van je account af te ronden. De code "
+            "werkt {minutes} minuten."
+        ),
+        "note": (
+            "Heb je je niet aangemeld bij Shosai? Negeer dan deze e-mail: er wordt geen account "
+            "aangemaakt."
+        ),
     },
 }
 
