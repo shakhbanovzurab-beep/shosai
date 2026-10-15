@@ -32,11 +32,12 @@ jobs:
         run: uv run --no-project --python 3.14 scripts/ci/check_repository.py
       - name: Mandatory-skills hook tests
         run: uv run --no-project --python 3.14 --with pytest==9.1.1 pytest -q .claude/hooks
-      - name: Local environment definition
+      - name: Local environment definition and deploy scripts
         run: |
           docker compose --file compose.dev.yaml config --quiet
           docker run --rm -v "$PWD:/mnt:ro" -w /mnt koalaman/shellcheck:v0.11.0 --severity=style \
-            scripts/local-env.sh deploy/local/postgres/init-home.sh deploy/local/pgbouncer/start.sh
+            scripts/local-env.sh deploy/local/postgres/init-home.sh deploy/local/pgbouncer/start.sh \
+            deploy/staging/*.sh deploy/staging/pgbouncer/start.sh deploy/staging/nginx/entrypoint/*.sh
 
   semgrep:
     name: Semgrep

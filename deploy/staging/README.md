@@ -1,6 +1,6 @@
 # Staging delivery
 
-How Shosai reaches **https://shosai.tech** (F4, [plan](../../docs/plan/packages/F4-delivery-staging.md)). This directory grows step by step: the images (steps 1–2), the staging host (step 3), the release from CI, the release script and runbook in steps 4–5.
+How Shosai reaches **https://shosai.tech** (F4, [plan](../../docs/plan/packages/F4-delivery-staging.md)). This directory grows step by step: the images (steps 1–2), the staging host (step 3), the release from CI (step 4), the rollback rehearsal and runbook (step 5).
 
 ## Images
 
@@ -54,6 +54,8 @@ Staging runs on the development machine (F4-D1) as the Compose project `shosai-s
 | `secrets/` | the migrator's addresses, PgBouncer's users, Qdrant's key, Valkey and cache ACLs, the cabinet's build variables, and the secrets generated once for staging | `render-env.py` |
 | `tls/shared/` | Timeweb's root, the internal CA and PgBouncer's certificate | `internal-tls.sh` |
 | `tls/edge/`, `letsencrypt/`, `acme/` | the edge's certificate, certbot's state, ACME challenges | `certificate.sh` |
+| `deploy/release.sh` | the deploy key's only command (owner root) | `release.sh` here |
+| `releases/` | the previous images, the release history, the release lock | `release.sh` |
 
 What runs: edge; `api`, `ws`, workers of the four queues and `scheduler` (384 MB each); PgBouncer of each home; Valkey (F4-D2: AOF, `noeviction`, ACL user, the fixed address 172.30.42.10 the gate admits); the cache; Qdrant. On 2026-10-15 the plane used about 1.5 GB. The network has IPv6 for the Russian home, whose cluster has a public IPv6 address only; dynamic addresses come from 172.30.42.128/25, so the fixed ones (edge .2, Valkey .10) stay free.
 
@@ -69,6 +71,7 @@ install -o deploy -g deploy -m 640 $R/compose.yaml /srv/shosai/compose.yaml
 install -d -o deploy -g deploy /srv/shosai/deploy/pgbouncer
 install -o deploy -g deploy $R/pgbouncer/* /srv/shosai/deploy/pgbouncer/
 install -m 755 $R/certificate.sh /srv/shosai/deploy/certificate.sh
+install -m 755 $R/release.sh /srv/shosai/deploy/release.sh
 python3 $R/render-env.py /root/shosai/.env /srv/shosai   # generated secrets are kept
 sh $R/internal-tls.sh /srv/shosai
 sh /srv/shosai/deploy/certificate.sh issue /srv/shosai   # once, before the edge listens on 80
@@ -77,5 +80,24 @@ docker compose --profile migrate run --rm migrate upgrade
 docker compose up -d
 ```
 
-The certificate renews through `shosai-certificate.timer` (twice a day, `certificate.sh renew`), which copies it to `tls/edge` and reloads the edge. The images are built from the repository with the cabinet's variables from `secrets/cabinet.env` and named in `/srv/shosai/.env`; step 4 moves this to CI.
+The certificate renews through `shosai-certificate.timer` (twice a day, `certificate.sh renew`), which copies it to `tls/edge` and reloads the edge.
+
+## Release from CI
+
+[ADR 0050](../../docs/adr/0050-staging-release-from-ci.md). When CI passes on a push to `main` and the commit is still the head of `main`, [release.yml](../../.github/workflows/release.yml) builds both images, pushes them to GHCR as `ghcr.io/shakhbanovzurab-beep/shosai-<backend|edge>:<commit>` and calls the host over SSH. Releases queue; none is cancelled midway.
+
+The application's secrets never leave the host: `render-env.py` stays their only source. The GitHub environment `staging` holds only:
+
+| Name | Kind | What |
+|---|---|---|
+| `STAGING_SSH_KEY` | secret | the deploy key's private part |
+| `CABINET_ENV` | secret | the cabinet's build variables, the same lines as `secrets/cabinet.env` |
+| `STAGING_SSH_HOST` | variable | `shosai.tech` |
+| `STAGING_SSH_KNOWN_HOSTS` | variable | `shosai.tech ssh-ed25519 …`, the host's public key |
+
+The key's line in `/home/deploy/.ssh/authorized_keys` is `restrict,command="/srv/shosai/deploy/release.sh" ssh-ed25519 …`: the key runs nothing but [release.sh](release.sh). The script accepts only `release <actor> <backend image> <edge image>` — images of this repository's GHCR namespace with a commit tag and a digest, both from one commit — and reads the job's registry token from stdin; the token pulls the two images from a temporary Docker config and expires with the job.
+
+`release.sh` follows §17: migrations of both homes, then the task consumers and the scheduler, `api`, `ws` and the edge, each waiting until healthy, then `/v1/health` through the edge. A failed step puts the previous images back and fails the job; migrations stay (expand-only). In `/srv/shosai/releases`: `previous.env` (the images before the last release), `history.log` (one line per release: time, result, images). GHCR images other than the current and the previous release are removed from the host.
+
+To redeploy a commit, re-run its Release workflow in GitHub. Changing an application secret: edit `/root/shosai/.env`, run `render-env.py`, then `docker compose up -d` in `/srv/shosai`. Changing the cabinet's build variables: update `CABINET_ENV` and release.
 
