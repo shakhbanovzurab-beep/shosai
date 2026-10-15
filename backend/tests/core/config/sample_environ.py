@@ -9,6 +9,8 @@ SAMPLE_FERNET_KEY = Fernet.generate_key().decode()
 SAMPLE_LINK_SECRET = "sample-link-secret-at-least-32-characters"
 # Ключи identity: разработки — для local_environ, «настоящие» — для production_environ.
 SAMPLE_SIGNING_KEY = "sample-signing-key-at-least-32-bytes-long"
+# bcrypt стоимости 4 от «sample admin password»: форма хэша, а не настоящий пароль.
+SAMPLE_ADMIN_PASSWORD_HASH = "$2b$04$PjpmDhkbnOxT8BsaEzFPUuxiyzztdBZIXBnoFC.wZbSoxprAlyyhi"
 DEVELOPMENT_IDENTITY = {
     "IDENTITY_TOKEN_KEYS": f"dev:{SAMPLE_SIGNING_KEY}",
     "IDENTITY_DIRECTORY_HMAC_KEY": "dev-sample-directory-key-at-least-32-bytes",
@@ -18,6 +20,8 @@ PRODUCTION_IDENTITY = {
     "IDENTITY_DIRECTORY_HMAC_KEY": "sample-directory-key-at-least-32-bytes-long",
     "IDENTITY_TURNSTILE_SITE_KEY": "sample-site-key",
     "IDENTITY_TURNSTILE_SECRET_KEY": SAMPLE_SECRET,
+    "IDENTITY_ADMIN_USERNAME": "admin",
+    "IDENTITY_ADMIN_PASSWORD_HASH": SAMPLE_ADMIN_PASSWORD_HASH,
 }
 REQUIRED_VARIABLES = (
     "ENVIRONMENT",

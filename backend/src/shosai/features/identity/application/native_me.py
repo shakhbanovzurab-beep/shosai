@@ -15,7 +15,6 @@ from sqlalchemy import select
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.application import native_errors
-from shosai.features.identity.application.operators import held_roles
 from shosai.features.identity.application.profile import Profiles
 from shosai.features.identity.contracts import ME_CONTRIBUTIONS, Principal
 from shosai.features.identity.domain.accounts import AccountState
@@ -57,7 +56,6 @@ class NativeMe:
         """Every field of the response, identity's and the contributed ones."""
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
             user = await session.get(User, principal.user_id)
-            roles = await held_roles(session, principal.user_id)
             marketing = await session.scalar(
                 select(UserConsent.granted)
                 .where(
@@ -77,8 +75,8 @@ class NativeMe:
             "username": user.display_name or user.full_name,
             "phone": None,
             "avatar_url": await self._profiles.avatar_url(principal.home, user),
-            # Выпущенные клиенты знают две роли: оператор у них — «admin».
-            "role": "admin" if roles else "user",
+            # Выпущенные клиенты знают роли «user» и «admin»; админ теперь не аккаунт (ADR 0049).
+            "role": "user",
             "status": DRAFT_STATUS.get(state, "active"),
             "is_active": state is AccountState.ACTIVE,
             "last_login_at": user.last_login_at,

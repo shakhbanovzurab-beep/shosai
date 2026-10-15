@@ -17,10 +17,11 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.application.account_data import IdentityAccountData
 from shosai.features.identity.application.transfer_saga import SagaServices, TransferSaga
 from shosai.features.identity.application.transfers import Transfers
-from shosai.features.identity.contracts import IDENTITY_EVENTS, Operator, OperatorRole, Principal
+from shosai.features.identity.contracts import IDENTITY_EVENTS
 from shosai.features.identity.domain.transfer import FINISHED, TransferStep
 from shosai.features.identity.infrastructure.transfer_metrics import TransferMetrics
 from tests.core.storage.adapters import slot_storage
+from tests.features.identity.admin_bench import sign_in_admin
 from tests.features.identity.registration_bench import (
     BenchOptions,
     RegistrationBench,
@@ -33,13 +34,9 @@ from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
 from tests.harness.shared_services import SlotBucket
 
-OWNER = Operator(
-    Principal(UUID(int=1), Home.EU, 0), frozenset({OperatorRole.OWNER, OperatorRole.PLATFORM})
-)
-
 
 class Mover:
-    """The saga and the operator's service over both homes of the slot."""
+    """The saga and the admin's service over both homes of the slot."""
 
     def __init__(
         self, bench: RegistrationBench, homes: DatabaseAccess, buckets: Mapping[Home, SlotBucket]
@@ -106,12 +103,12 @@ async def test_a_transfer_there_and_back_leaves_the_same_data_and_ends_old_token
         mover = Mover(bench, homes, buckets)
         user_id, old = await prepared(bench, run_slot)
         before = await mover.manifest(user_id, Home.RU)
-        there = await mover.transfers.request(OWNER, user_id, Home.EU)
+        there = await mover.transfers.request(user_id, Home.EU)
         await mover.saga.run(Home.RU, there.id)
         away = (await mover.transfers.view(there.id), await mover.avatars(Home.EU))
         moved_rows = (await row_count(run_slot, Home.RU, user_id), await mover.avatars(Home.RU))
         stale = await bench.http.get("/v1/me", headers=old)
-        back = await mover.transfers.request(OWNER, user_id, Home.RU)
+        back = await mover.transfers.request(user_id, Home.RU)
         await mover.saga.run(Home.EU, back.id)
         after = await mover.manifest(user_id, Home.RU)
 
@@ -139,7 +136,7 @@ async def test_a_crash_after_every_step_resumes_to_the_same_end(
         user_id, _ = await prepared(bench, run_slot)
         [user] = await fetch_rows(connection, "SELECT token_version FROM users")
         before = await mover.manifest(user_id, Home.RU)
-        transfer = await mover.transfers.request(OWNER, user_id, Home.EU)
+        transfer = await mover.transfers.request(user_id, Home.EU)
         steps = []
         while (current := (await mover.transfers.view(transfer.id)).step) not in FINISHED:
             steps.append(current)
@@ -179,20 +176,20 @@ async def test_a_cancel_before_the_switch_leaves_the_source_untouched(
         mover = Mover(bench, homes, buckets)
         user_id, headers = await prepared(bench, run_slot)
         before = await mover.manifest(user_id, Home.RU)
-        transfer = await mover.transfers.request(OWNER, user_id, Home.EU)
+        transfer = await mover.transfers.request(user_id, Home.EU)
         for _ in range(2):
             await mover.saga.step(Home.RU, transfer.id)
         copied = await row_count(run_slot, Home.EU, user_id)
-        await mover.transfers.cancel(OWNER, transfer.id)
+        await mover.transfers.cancel(transfer.id)
         await mover.saga.run(Home.RU, transfer.id)
         ended = await mover.transfers.view(transfer.id)
         me = await bench.http.get("/v1/me", headers=headers)
         after = await mover.manifest(user_id, Home.RU)
-        late = await mover.transfers.request(OWNER, user_id, Home.EU)
+        late = await mover.transfers.request(user_id, Home.EU)
         while (await mover.transfers.view(late.id)).step is not TransferStep.BUMP:
             await mover.saga.step(Home.RU, late.id)
         with pytest.raises(AppError, match="transfer_not_cancellable"):
-            await mover.transfers.cancel(OWNER, late.id)
+            await mover.transfers.cancel(late.id)
         avatars_eu_after_cancel = len(await mover.avatars(Home.EU))
 
     assert copied == 1
@@ -207,12 +204,11 @@ async def test_transfers_stay_closed_until_the_legal_review(
 ) -> None:
     async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
         user_id = await account(bench, run_slot)
-        await bench.operators.set_roles(None, user_id, frozenset({OperatorRole.OWNER}))
-        headers = bearer((await login(bench))["access_token"])
+        await sign_in_admin(bench.http)
         closed = await bench.http.post(
-            f"/v1/admin/users/{user_id}/transfers", json={"to_home": "eu"}, headers=headers
+            f"/v1/admin/users/{user_id}/transfers", json={"to_home": "eu"}
         )
-        missing = await bench.http.get(f"/v1/admin/transfers/{UUID(int=7)}", headers=headers)
+        missing = await bench.http.get(f"/v1/admin/transfers/{UUID(int=7)}")
 
     assert (closed.status_code, closed.json()["error"]["code"]) == (409, "transfers_closed")
     assert (missing.status_code, missing.json()["error"]["code"]) == (404, "transfer_not_found")

@@ -14,6 +14,7 @@ from fastapi import APIRouter
 
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts, combine_parts
+from shosai.features.identity.admin_wiring import admin_parts
 from shosai.features.identity.application.authentication import TokenAuthenticator
 from shosai.features.identity.application.deletion import DeletionWindow
 from shosai.features.identity.application.desktop import DesktopSignIn
@@ -63,7 +64,6 @@ from shosai.features.identity.infrastructure.session_records import SESSION_MODE
 from shosai.features.identity.infrastructure.sign_in_failures import SignInFailures
 from shosai.features.identity.infrastructure.token_codec import TokenCodec
 from shosai.features.identity.infrastructure.transfer_records import TRANSFER_MODELS
-from shosai.features.identity.operator_wiring import operator_parts
 from shosai.features.identity.settings import IdentitySettings, identity_secrets_safe
 from shosai.features.identity.social_wiring import social_routers
 from shosai.features.identity.transfer_wiring import transfer_parts
@@ -87,7 +87,6 @@ IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
         # Журнал удаления уходит в последней транзакции саги.
         TableCoverage("account_deletions", Treatment.ERASE),
         TableCoverage("data_export_jobs", Treatment.ERASE),
-        TableCoverage("operator_roles", Treatment.ERASE),
         # Журнал переноса — запись о нём; уходит через 30 дней после конца.
         TableCoverage("home_transfers", Treatment.EXPIRES),
     ),
@@ -170,7 +169,9 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     ACCOUNT_PROFILE_READER.bind(profiles),
                 ),
             )
-            extra = _account_data_parts(services, (directory, directory_key), markers, cookies)
+            extra = _account_data_parts(
+                services, (directory, directory_key), markers, (hasher, cookies)
+            )
             yield combine_parts([main, *extra])
     finally:
         hasher.close()
@@ -180,14 +181,14 @@ def _account_data_parts(
     services: CoreServices,
     directory: tuple[Directory, bytes],
     markers: AccountMarkers,
-    cookies: CookiePolicy,
+    access: tuple[PasswordHasher, CookiePolicy],
 ) -> list[FeatureParts]:
-    """Deletion, export, operators and transfers: the parts built on the account data."""
+    """Deletion, export, the admin and transfers: the parts built on the account data."""
     lookup = directory[0]
     return [
-        deletion_parts(services, lookup, markers, cookies),
+        deletion_parts(services, lookup, markers, access[1]),
         export_parts(services),
-        operator_parts(services, directory, markers),
+        admin_parts(services, directory, markers, access),
         transfer_parts(services, lookup, markers),
     ]
 

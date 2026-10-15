@@ -58,3 +58,23 @@ export const meRoute = {
     return Response.json(applyPatch((await request.json()) as Parameters<typeof applyPatch>[0]));
   },
 };
+
+// Админка в `npm run dev`: администратор вошёл, пока не вышел (ADR 0049); любой логин и пароль подходят.
+let adminSignedIn = true;
+const noContent = () => new Response(null, { status: 204 });
+
+export const adminSessionRoute = {
+  GET() {
+    return adminSignedIn
+      ? noContent()
+      : Response.json({ error: { code: "admin_sign_in_required", request_id: "mock-request" } }, { status: 401 });
+  },
+  POST() {
+    adminSignedIn = true;
+    return noContent();
+  },
+  DELETE() {
+    adminSignedIn = false;
+    return noContent();
+  },
+};

@@ -16,6 +16,10 @@ from shosai.core.config.gate import GateViolation
 from shosai.core.config.loading import Settings
 from shosai.core.config.sections import SettingsSection
 from shosai.core.config.values import split_commas
+from shosai.features.identity.domain.admin_credentials import (
+    MAX_ADMIN_USERNAME_LENGTH,
+    is_bcrypt_hash,
+)
 from shosai.features.identity.domain.directory import DIRECTORY_KEY_MIN_BYTES
 
 KEY_ID: Final = re.compile(r"[a-z0-9-]{1,16}")
@@ -59,6 +63,16 @@ def check_directory_key(key: SecretStr) -> SecretStr:
     return key
 
 
+def check_admin_password_hash(value: SecretStr | None) -> SecretStr | None:
+    """The admin's password is given as a bcrypt hash, never in the clear (ADR 0049)."""
+    if value is not None and not is_bcrypt_hash(value.get_secret_value()):
+        message = (
+            "IDENTITY_ADMIN_PASSWORD_HASH — хэш bcrypt из `shosai identity admin-password-hash`"
+        )
+        raise ValueError(message)
+    return value
+
+
 TokenKeyEntries = Annotated[
     tuple[SecretStr, ...],
     NoDecode,
@@ -97,6 +111,13 @@ class IdentitySettings(SettingsSection):
     # Перенос аккаунта между домами закрыт, пока юридическая проверка (§22) не пройдена;
     # владелец открывает его, когда юрист ответил.
     identity_transfers_allowed: bool = False
+    # Единственный администратор (ADR 0049): логин и bcrypt-хэш пароля; без них админка закрыта.
+    identity_admin_username: Annotated[
+        str | None, Field(min_length=1, max_length=MAX_ADMIN_USERNAME_LENGTH)
+    ] = None
+    identity_admin_password_hash: Annotated[
+        SecretStr | None, AfterValidator(check_admin_password_hash)
+    ] = None
 
     def token_keys(self) -> tuple[TokenKey, ...]:
         """The signing ring in order: the first key signs, every key verifies."""
@@ -118,6 +139,11 @@ def identity_secrets_safe(settings: Settings) -> Iterator[GateViolation]:
     if not identity.identity_cookie_secure:
         yield GateViolation(
             "IDENTITY_COOKIE_SECURE", "cookie сессии вне разработки — только Secure"
+        )
+    if not identity.identity_admin_username or identity.identity_admin_password_hash is None:
+        yield GateViolation(
+            "IDENTITY_ADMIN_PASSWORD_HASH",
+            "без логина и хэша пароля администратора админка закрыта",
         )
     if identity.identity_password_hash_rounds < PRODUCTION_HASH_ROUNDS:
         yield GateViolation(

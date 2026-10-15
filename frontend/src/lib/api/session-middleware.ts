@@ -13,14 +13,17 @@ export interface SessionPort {
 // Маршруты, которые сами открывают или закрывают сессию: их 401 — ответ, а не истёкший токен, и обновлять сессию
 // ради них нечего. Остальные пути /v1/auth (код для десктоп-приложения) требуют входа, как любой другой.
 const SIGN_IN_PATH = /^\/v1\/auth\/(login|refresh|logout|register|password|social|desktop\/(exchange|refresh))(\/|$)/;
+// Админка входит своей cookie (ADR 0049): токен человека ей не нужен, а её 401 — не истёкший токен.
+const ADMIN_PATH = /^\/v1\/admin(\/|$)/;
 
 interface SentRequest {
   replay: Request;
   token: string | null;
 }
 
-function isSignIn(request: Request): boolean {
-  return SIGN_IN_PATH.test(new URL(request.url).pathname);
+function outsidePersonSession(request: Request): boolean {
+  const path = new URL(request.url).pathname;
+  return SIGN_IN_PATH.test(path) || ADMIN_PATH.test(path);
 }
 
 /**
@@ -32,7 +35,7 @@ export function sessionMiddleware(port: SessionPort): Middleware {
   const sent = new Map<string, SentRequest>();
   return {
     onRequest({ request, id }) {
-      if (isSignIn(request)) return request;
+      if (outsidePersonSession(request)) return request;
       const token = port.accessToken();
       if (token !== null && !request.headers.has("authorization")) {
         request.headers.set("authorization", `Bearer ${token}`);

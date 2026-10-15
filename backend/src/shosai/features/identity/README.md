@@ -1,15 +1,14 @@
 # identity
 
-One sign-in for the web and the desktop in the person's data home; profile and privacy; export and deletion of everything; operator accounts. Plan: [docs/plan/slices/identity.md](../../../../../docs/plan/slices/identity.md); decisions: [ADR 0045](../../../../../docs/adr/0045-identity-sessions-registration-and-deletion.md), [ADR 0046](../../../../../docs/adr/0046-platform-languages-follow-the-cabinet.md), [ADR 0048](../../../../../docs/adr/0048-web-sign-in-by-email-code.md).
+One sign-in for the web and the desktop in the person's data home; profile and privacy; export and deletion of everything; the one admin's sign-in. Plan: [docs/plan/slices/identity.md](../../../../../docs/plan/slices/identity.md); decisions: [ADR 0045](../../../../../docs/adr/0045-identity-sessions-registration-and-deletion.md), [ADR 0046](../../../../../docs/adr/0046-platform-languages-follow-the-cabinet.md), [ADR 0048](../../../../../docs/adr/0048-web-sign-in-by-email-code.md), [ADR 0049](../../../../../docs/adr/0049-one-admin-signed-in-by-env-credentials.md).
 
 ## Public surface
 
 `contracts.py` is the only module other slices import:
 
 - `Principal` and its tenancy scope;
-- `OperatorRole`;
-- the port keys `AUTHENTICATOR`, `CONSENT_READER`, `ACCOUNT_PROFILE_READER` and `OPERATOR_ROLES`, with their protocols;
-- `require_operator(ports, *roles)`, the dependency of every `/v1/admin/*` route;
+- the port keys `AUTHENTICATOR`, `CONSENT_READER`, `ACCOUNT_PROFILE_READER` and `ADMIN_GATE`, with their protocols;
+- `require_admin(ports)`, the dependency of every `/v1/admin/*` route;
 - the events `identity.account.*` and `identity.sessions.revoked`, which carry ids only.
 
 identity binds each port in the step of the plan that builds it.
@@ -26,13 +25,13 @@ identity runs the account data registry (`core/account_data`). Every owner that 
 
 ## Transfer between homes
 
-An operator moves an account to the other home with `POST /v1/admin/users/{id}/transfers` once `IDENTITY_TRANSFERS_ALLOWED` is true (after the legal review, §22). The saga `TransferSaga` journals its steps in `home_transfers` of the source home: freeze, copy every owner's part, verify the manifests of both homes, switch the EU directory, bump the token version in the target, purge the source. A cancel works until the switch. Rows kept by law stay in the home that wrote them.
+The admin moves an account to the other home with `POST /v1/admin/users/{id}/transfers` once `IDENTITY_TRANSFERS_ALLOWED` is true (after the legal review, §22). The saga `TransferSaga` journals its steps in `home_transfers` of the source home: freeze, copy every owner's part, verify the manifests of both homes, switch the EU directory, bump the token version in the target, purge the source. A cancel works until the switch. Rows kept by law stay in the home that wrote them.
 
-## Operators
+## The admin
 
-Roles live in the person's home and are read on every admin request. An owner changes them under one platform-wide lock, and the last owner keeps the role. Each action writes `identity.operator.acted`, and its EU delivery appends one row to `operator_audit_events`, which the application can never update or delete. The first owner comes from `shosai identity grant-operator --email ADDRESS --role owner`.
+Shosai has one admin, and the admin is not a person's account (ADR 0049). `POST /v1/admin/session` checks the login and the bcrypt hash from `IDENTITY_ADMIN_USERNAME` and `IDENTITY_ADMIN_PASSWORD_HASH` — a wrong login still spends a bcrypt check — with attempts limited per address and for the login as a whole. It sets the cookie `shosai_admin` (HttpOnly, SameSite=Strict, path `/v1/admin`, 8 hours): a signed nonce whose hash Valkey keeps, so `DELETE /v1/admin/session` ends the session at once. `require_admin` checks it on every admin route. `shosai identity admin-password-hash` prints the hash of a password typed without echo.
 
-Support finds accounts at `/v1/admin/users` and acts on them through `AccountStates`, the one place that blocks, unblocks and bans: the state, the token version, the sessions, the events and the audit event change in one home transaction, and the Valkey marker then refuses live tokens with the native 403.
+The admin finds accounts at `/v1/admin/users` and acts on them through `AccountStates`, the one place that blocks and unblocks: the state, the token version, the sessions, the events and the audit event change in one home transaction, and the Valkey marker then refuses live tokens with the native 403. Each action writes `identity.operator.acted` with no operator id, and its EU delivery appends one row to `operator_audit_events`, which the application can never update or delete.
 
 ## Layout
 
@@ -46,4 +45,4 @@ Support finds accounts at `/v1/admin/users` and acts on them through `AccountSta
   - `token_codec.py` — HS256 with a `kid` ring; a token without `kid` is checked with the draft key `d`;
   - `password_hasher.py` — bcrypt in a bounded thread pool, with a decoy check for unknown addresses.
 - `settings.py` — `IDENTITY_TOKEN_KEYS`, `IDENTITY_DIRECTORY_HMAC_KEY`, `IDENTITY_PASSWORD_HASH_ROUNDS`, documented in `.env.example` section 2, and the production check of their values.
-- `module.py` — the `FeatureModule` listed in `composition/features.py`; `social_wiring.py` (social and email-code sign-in), `deletion_wiring.py`, `export_wiring.py`, `operator_wiring.py` and `transfer_wiring.py` build their parts of it.
+- `module.py` — the `FeatureModule` listed in `composition/features.py`; `social_wiring.py` (social and email-code sign-in), `deletion_wiring.py`, `export_wiring.py`, `admin_wiring.py` and `transfer_wiring.py` build their parts of it.

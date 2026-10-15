@@ -4,7 +4,7 @@ By exact email the directory names the one home to read. By name both homes are 
 parallel and merged, newest account first: each home pages by id after the cursor, the
 merge keeps the first `limit + 1`, so a page is the same whichever home holds the rows.
 The card adds the live sessions, the latest sign-ins, the AI spend of today, the week and
-the month over both homes (F6; cost rows stay where they were written) and the roles.
+the month over both homes (F6; cost rows stay where they were written).
 """
 
 import asyncio
@@ -26,8 +26,6 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.pagination.cursor import CursorCodec
 from shosai.core.pagination.keyset import Keyset
 from shosai.core.pagination.page import Page, PageRequest, page_of
-from shosai.features.identity.application.operators import held_roles
-from shosai.features.identity.contracts import OperatorRole
 from shosai.features.identity.domain.accounts import AccountState
 from shosai.features.identity.domain.directory import email_hmac
 from shosai.features.identity.domain.emails import InvalidEmailError, normalize_email
@@ -77,7 +75,6 @@ class UserCard:
     sessions: Sequence[RefreshSession]
     sign_ins: Sequence[LoginEvent]
     spend: UserSpend
-    operator_roles: frozenset[OperatorRole]
 
 
 class AdminUsers:
@@ -123,7 +120,7 @@ class AdminUsers:
         )  # fmt: skip
 
     async def card(self, user_id: UUID) -> UserCard:
-        """The account, its sessions, sign-ins, AI spend and operator roles."""
+        """The account, its sessions, sign-ins and AI spend."""
         home = await self._directory.home_of(user_id)
         if home is None:
             raise AppError("user_not_found", HTTPStatus.NOT_FOUND)
@@ -147,7 +144,6 @@ class AdminUsers:
                     .limit(CARD_ROWS)
                 )
             ).all()
-            roles = await held_roles(session, user_id)
         at = datetime.now(UTC)
         # Строки расходов остаются в доме, где записаны: после переноса их два.
         homes_spend = await asyncio.gather(
@@ -162,7 +158,7 @@ class AdminUsers:
             user.id, home, user.email, user.full_name, user.display_name,
             AccountState(user.state), user.created_at, user.last_login_at,
         )  # fmt: skip
-        return UserCard(summary, user, sessions, sign_ins, spend, roles)
+        return UserCard(summary, user, sessions, sign_ins, spend)
 
     async def _named_in(
         self, home: Home, pattern: str, after: tuple[UUID] | None, limit: int

@@ -18,7 +18,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.application.profile import ProfileChange, Profiles, ProfileView
 from shosai.features.identity.application.registration import ClientFacts
 from shosai.features.identity.channels.http.registration import client_facts
-from shosai.features.identity.contracts import OperatorRole, Principal, bearer_principal
+from shosai.features.identity.contracts import Principal, bearer_principal
 from shosai.features.identity.domain.avatars import MAX_AVATAR_BYTES
 from shosai.features.identity.domain.registration import ConsentKind
 
@@ -57,8 +57,6 @@ class Me(BaseModel):
     country: str | None
     home: str
     consents: Consents
-    # Роли оператора; пусто у всех, кто не оператор.
-    operator_roles: list[OperatorRole]
     created_at: datetime
 
 
@@ -96,8 +94,7 @@ def me_of(view: ProfileView) -> Me:
         id=user.id, email=user.email, full_name=user.full_name, display_name=user.display_name,
         work_role=user.work_role, avatar_url=view.avatar_url, language=user.language,
         timezone=user.timezone, country=user.country, home=view.home.value,
-        consents=Consents.model_validate(consents), operator_roles=sorted(view.operator_roles),
-        created_at=user.created_at,
+        consents=Consents.model_validate(consents), created_at=user.created_at,
     )  # fmt: skip
 
 

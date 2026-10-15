@@ -620,7 +620,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/admin/operators": {
+    "/v1/admin/session": {
         parameters: {
             query?: never;
             header?: never;
@@ -628,37 +628,21 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List Operators
-         * @description Every operator and their roles.
+         * Read Admin Session
+         * @description 204 while the admin is signed in; 401 `admin_sign_in_required` otherwise.
          */
-        get: operations["list_operators_v1_admin_operators_get"];
+        get: operations["read_admin_session_v1_admin_session_get"];
         put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/admin/operators/{user_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
         /**
-         * Set Operator Roles
-         * @description Give the person exactly these roles; 409 `last_owner` for the last owner.
+         * Sign In Admin
+         * @description Open an admin session; 401 `invalid_credentials` for a wrong login or password.
          */
-        put: operations["set_operator_roles_v1_admin_operators__user_id__put"];
-        post?: never;
+        post: operations["sign_in_admin_v1_admin_session_post"];
         /**
-         * Remove Operator
-         * @description Take every role away; 409 `last_owner` for the last owner.
+         * Sign Out Admin
+         * @description End the admin session; repeating it changes nothing.
          */
-        delete: operations["remove_operator_v1_admin_operators__user_id__delete"];
+        delete: operations["sign_out_admin_v1_admin_session_delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -693,7 +677,7 @@ export interface paths {
         };
         /**
          * Read User
-         * @description The card: profile, state, sessions, sign-ins, AI spend and operator roles.
+         * @description The card: profile, state, sessions, sign-ins and AI spend.
          */
         get: operations["read_user_v1_admin_users__user_id__get"];
         put?: never;
@@ -735,29 +719,9 @@ export interface paths {
         put?: never;
         /**
          * Unblock User
-         * @description Return a frozen account; a banned one stays banned (409).
+         * @description Return a frozen account; one banned before ADR 0049 stays closed (409).
          */
         post: operations["unblock_user_v1_admin_users__user_id__unblock_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/v1/admin/users/{user_id}/ban": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Ban User
-         * @description Close the account for good: every session ends, the address cannot register again.
-         */
-        post: operations["ban_user_v1_admin_users__user_id__ban_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -858,7 +822,7 @@ export interface components {
         AccountState: "active" | "frozen" | "banned" | "deletion_scheduled" | "deleting" | "transferring" | "deleted";
         /**
          * ActionReason
-         * @description Why the operator acts, as a code the audit log keeps.
+         * @description Why the admin acts, as a code the audit log keeps.
          */
         ActionReason: {
             /** Reason Code */
@@ -909,6 +873,16 @@ export interface components {
             ip: string | null;
         };
         /**
+         * AdminSignInRequest
+         * @description The admin's login and password.
+         */
+        AdminSignInRequest: {
+            /** Username */
+            username: string;
+            /** Password */
+            password: string;
+        };
+        /**
          * AdminSpend
          * @description The account's AI spend in USD, UTC periods.
          */
@@ -949,7 +923,7 @@ export interface components {
         };
         /**
          * AdminUserCard
-         * @description What support sees of one account.
+         * @description What the admin sees of one account.
          */
         AdminUserCard: {
             user: components["schemas"]["AdminUser"];
@@ -968,8 +942,6 @@ export interface components {
             /** Sign Ins */
             sign_ins: components["schemas"]["AdminSignIn"][];
             spend: components["schemas"]["AdminSpend"];
-            /** Operator Roles */
-            operator_roles: components["schemas"]["OperatorRole"][];
         };
         /**
          * ChallengeRequest
@@ -1386,8 +1358,6 @@ export interface components {
             /** Home */
             home: string;
             consents: components["schemas"]["Consents-Output"];
-            /** Operator Roles */
-            operator_roles: components["schemas"]["OperatorRole"][];
             /**
              * Created At
              * Format: date-time
@@ -1416,39 +1386,6 @@ export interface components {
              */
             cross_border_warning_confirmed: boolean;
         };
-        /**
-         * OperatorEntry
-         * @description An operator, their home and roles.
-         */
-        OperatorEntry: {
-            /**
-             * User Id
-             * Format: uuid
-             */
-            user_id: string;
-            /** Home */
-            home: string;
-            /** Email */
-            email: string;
-            /** Full Name */
-            full_name: string;
-            /** Roles */
-            roles: components["schemas"]["OperatorRole"][];
-        };
-        /**
-         * OperatorList
-         * @description Every operator of both homes, by name.
-         */
-        OperatorList: {
-            /** Items */
-            items: components["schemas"]["OperatorEntry"][];
-        };
-        /**
-         * OperatorRole
-         * @description The fixed operator roles; each `/v1/admin/*` router names the ones it admits (SM-12).
-         * @enum {string}
-         */
-        OperatorRole: "owner" | "support" | "finance" | "platform" | "releases" | "read_only";
         /** Page[AdminUser] */
         Page_AdminUser_: {
             /** Items */
@@ -1554,14 +1491,6 @@ export interface components {
             token: string;
             /** Password */
             password: string;
-        };
-        /**
-         * RolesChange
-         * @description The whole set of roles the person holds after the change.
-         */
-        RolesChange: {
-            /** Roles */
-            roles: components["schemas"]["OperatorRole"][];
         };
         /**
          * SignedOutElsewhere
@@ -2973,25 +2902,23 @@ export interface operations {
             };
         };
     };
-    list_operators_v1_admin_operators_get: {
+    read_admin_session_v1_admin_session_get: {
         parameters: {
             query?: never;
-            header?: {
-                authorization?: string | null;
-            };
+            header?: never;
             path?: never;
-            cookie?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
         };
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            200: {
+            204: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["OperatorList"];
-                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {
@@ -3004,31 +2931,25 @@ export interface operations {
             };
         };
     };
-    set_operator_roles_v1_admin_operators__user_id__put: {
+    sign_in_admin_v1_admin_session_post: {
         parameters: {
             query?: never;
-            header?: {
-                authorization?: string | null;
-            };
-            path: {
-                user_id: string;
-            };
+            header?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RolesChange"];
+                "application/json": components["schemas"]["AdminSignInRequest"];
             };
         };
         responses: {
             /** @description Successful Response */
-            200: {
+            204: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["OperatorEntry"];
-                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {
@@ -3041,16 +2962,14 @@ export interface operations {
             };
         };
     };
-    remove_operator_v1_admin_operators__user_id__delete: {
+    sign_out_admin_v1_admin_session_delete: {
         parameters: {
             query?: never;
-            header?: {
-                authorization?: string | null;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
             };
-            path: {
-                user_id: string;
-            };
-            cookie?: never;
         };
         requestBody?: never;
         responses: {
@@ -3082,11 +3001,11 @@ export interface operations {
                 /** @description The next_cursor of the previous page; absent for the first page. */
                 cursor?: string | null;
             };
-            header?: {
-                authorization?: string | null;
-            };
+            header?: never;
             path?: never;
-            cookie?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
         };
         requestBody?: never;
         responses: {
@@ -3113,13 +3032,13 @@ export interface operations {
     read_user_v1_admin_users__user_id__get: {
         parameters: {
             query?: never;
-            header?: {
-                authorization?: string | null;
-            };
+            header?: never;
             path: {
                 user_id: string;
             };
-            cookie?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
         };
         requestBody?: never;
         responses: {
@@ -3146,13 +3065,13 @@ export interface operations {
     block_user_v1_admin_users__user_id__block_post: {
         parameters: {
             query?: never;
-            header?: {
-                authorization?: string | null;
-            };
+            header?: never;
             path: {
                 user_id: string;
             };
-            cookie?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
         };
         requestBody: {
             content: {
@@ -3183,50 +3102,13 @@ export interface operations {
     unblock_user_v1_admin_users__user_id__unblock_post: {
         parameters: {
             query?: never;
-            header?: {
-                authorization?: string | null;
-            };
+            header?: never;
             path: {
                 user_id: string;
             };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ActionReason"];
+            cookie?: {
+                shosai_admin?: string | null;
             };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AdminUserCard"];
-                };
-            };
-            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
-    ban_user_v1_admin_users__user_id__ban_post: {
-        parameters: {
-            query?: never;
-            header?: {
-                authorization?: string | null;
-            };
-            path: {
-                user_id: string;
-            };
-            cookie?: never;
         };
         requestBody: {
             content: {
@@ -3257,13 +3139,13 @@ export interface operations {
     request_transfer_v1_admin_users__user_id__transfers_post: {
         parameters: {
             query?: never;
-            header?: {
-                authorization?: string | null;
-            };
+            header?: never;
             path: {
                 user_id: string;
             };
-            cookie?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
         };
         requestBody: {
             content: {
@@ -3294,13 +3176,13 @@ export interface operations {
     read_transfer_v1_admin_transfers__transfer_id__get: {
         parameters: {
             query?: never;
-            header?: {
-                authorization?: string | null;
-            };
+            header?: never;
             path: {
                 transfer_id: string;
             };
-            cookie?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
         };
         requestBody?: never;
         responses: {
@@ -3327,13 +3209,13 @@ export interface operations {
     cancel_transfer_v1_admin_transfers__transfer_id__cancel_post: {
         parameters: {
             query?: never;
-            header?: {
-                authorization?: string | null;
-            };
+            header?: never;
             path: {
                 transfer_id: string;
             };
-            cookie?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
         };
         requestBody?: never;
         responses: {

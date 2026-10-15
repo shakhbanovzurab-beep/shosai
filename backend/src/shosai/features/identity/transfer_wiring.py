@@ -1,4 +1,4 @@
-"""Building transfers for the process: the saga, its tasks and the operators' routes."""
+"""Building transfers for the process: the saga, its tasks and the admin's routes."""
 
 from shosai.core.features import CoreServices, FeatureParts
 from shosai.features.identity.application.transfer_saga import SagaServices, TransferSaga

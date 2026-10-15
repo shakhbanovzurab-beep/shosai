@@ -21,7 +21,6 @@ let person: Omit<Me, "language"> = {
   country: "NL",
   home: "eu",
   consents: { personal_data: true, cross_border: true, marketing: false, improve_models: false, share_location: false },
-  operator_roles: ["owner"],
   created_at: "2026-01-01T00:00:00Z",
 };
 

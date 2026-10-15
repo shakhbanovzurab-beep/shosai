@@ -1,5 +1,6 @@
 import { type LoaderFunctionArgs, redirect } from "react-router";
 
+import { adminSignedIn } from "@/features/identity/api/admin-session-api";
 import { loginPathFor } from "@/features/identity/domain/next-path";
 import type { Me } from "@/features/identity/domain/session";
 import { startSession } from "@/features/identity/model/session";
@@ -37,9 +38,8 @@ export async function signedInGuard({ request }: LoaderFunctionArgs): Promise<nu
   return null;
 }
 
-/** Админ-панель /admin: только для оператора; остальным — страница «нет доступа». */
-export async function operatorGuard({ request }: LoaderFunctionArgs): Promise<null> {
-  const me = await signedInPerson(request);
-  if (me.operator_roles.length === 0) throw redirect("/unauthorized");
+/** Админ-панель /admin: только для вошедшего администратора (ADR 0049); остальным — «нет доступа». */
+export async function adminGuard(): Promise<null> {
+  if (!(await adminSignedIn())) throw redirect("/unauthorized");
   return null;
 }

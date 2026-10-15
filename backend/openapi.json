@@ -1887,42 +1887,27 @@
         }
       }
     },
-    "/v1/admin/operators": {
-      "get": {
+    "/v1/admin/session": {
+      "post": {
         "tags": [
           "admin"
         ],
-        "summary": "List Operators",
-        "description": "Every operator and their roles.",
-        "operationId": "list_operators_v1_admin_operators_get",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OperatorList"
-                }
+        "summary": "Sign In Admin",
+        "description": "Open an admin session; 401 `invalid_credentials` for a wrong login or password.",
+        "operationId": "sign_in_admin_v1_admin_session_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminSignInRequest"
               }
             }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
           },
           "default": {
             "description": "Error. The body is the error envelope; see `ErrorResponse`.",
@@ -1935,64 +1920,36 @@
             }
           }
         }
-      }
-    },
-    "/v1/admin/operators/{user_id}": {
-      "put": {
+      },
+      "get": {
         "tags": [
           "admin"
         ],
-        "summary": "Set Operator Roles",
-        "description": "Give the person exactly these roles; 409 `last_owner` for the last owner.",
-        "operationId": "set_operator_roles_v1_admin_operators__user_id__put",
+        "summary": "Read Admin Session",
+        "description": "204 while the admin is signed in; 401 `admin_sign_in_required` otherwise.",
+        "operationId": "read_admin_session_v1_admin_session_get",
         "parameters": [
           {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "User Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
+            "name": "shosai_admin",
+            "in": "cookie",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 256
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Authorization"
+              "title": "Shosai Admin"
             }
           }
         ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RolesChange"
-              }
-            }
-          }
-        },
         "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OperatorEntry"
-                }
-              }
-            }
+          "204": {
+            "description": "Successful Response"
           },
           "default": {
             "description": "Error. The body is the error envelope; see `ErrorResponse`.",
@@ -2010,34 +1967,25 @@
         "tags": [
           "admin"
         ],
-        "summary": "Remove Operator",
-        "description": "Take every role away; 409 `last_owner` for the last owner.",
-        "operationId": "remove_operator_v1_admin_operators__user_id__delete",
+        "summary": "Sign Out Admin",
+        "description": "End the admin session; repeating it changes nothing.",
+        "operationId": "sign_out_admin_v1_admin_session_delete",
         "parameters": [
           {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "User Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
+            "name": "shosai_admin",
+            "in": "cookie",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 256
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Authorization"
+              "title": "Shosai Admin"
             }
           }
         ],
@@ -2136,19 +2084,20 @@
             "description": "The next_cursor of the previous page; absent for the first page."
           },
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "shosai_admin",
+            "in": "cookie",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 256
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Authorization"
+              "title": "Shosai Admin"
             }
           }
         ],
@@ -2182,7 +2131,7 @@
           "admin"
         ],
         "summary": "Read User",
-        "description": "The card: profile, state, sessions, sign-ins, AI spend and operator roles.",
+        "description": "The card: profile, state, sessions, sign-ins and AI spend.",
         "operationId": "read_user_v1_admin_users__user_id__get",
         "parameters": [
           {
@@ -2196,19 +2145,20 @@
             }
           },
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "shosai_admin",
+            "in": "cookie",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 256
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Authorization"
+              "title": "Shosai Admin"
             }
           }
         ],
@@ -2256,19 +2206,20 @@
             }
           },
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "shosai_admin",
+            "in": "cookie",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 256
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Authorization"
+              "title": "Shosai Admin"
             }
           }
         ],
@@ -2312,7 +2263,7 @@
           "admin"
         ],
         "summary": "Unblock User",
-        "description": "Return a frozen account; a banned one stays banned (409).",
+        "description": "Return a frozen account; one banned before ADR 0049 stays closed (409).",
         "operationId": "unblock_user_v1_admin_users__user_id__unblock_post",
         "parameters": [
           {
@@ -2326,89 +2277,20 @@
             }
           },
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "shosai_admin",
+            "in": "cookie",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 256
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Authorization"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ActionReason"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AdminUserCard"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/v1/admin/users/{user_id}/ban": {
-      "post": {
-        "tags": [
-          "admin"
-        ],
-        "summary": "Ban User",
-        "description": "Close the account for good: every session ends, the address cannot register again.",
-        "operationId": "ban_user_v1_admin_users__user_id__ban_post",
-        "parameters": [
-          {
-            "name": "user_id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "title": "User Id"
-            }
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Authorization"
+              "title": "Shosai Admin"
             }
           }
         ],
@@ -2466,19 +2348,20 @@
             }
           },
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "shosai_admin",
+            "in": "cookie",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 256
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Authorization"
+              "title": "Shosai Admin"
             }
           }
         ],
@@ -2536,19 +2419,20 @@
             }
           },
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "shosai_admin",
+            "in": "cookie",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 256
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Authorization"
+              "title": "Shosai Admin"
             }
           }
         ],
@@ -2596,19 +2480,20 @@
             }
           },
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "shosai_admin",
+            "in": "cookie",
             "required": false,
             "schema": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "type": "string",
+                  "maxLength": 256
                 },
                 {
                   "type": "null"
                 }
               ],
-              "title": "Authorization"
+              "title": "Shosai Admin"
             }
           }
         ],
@@ -2702,7 +2587,7 @@
           "reason_code"
         ],
         "title": "ActionReason",
-        "description": "Why the operator acts, as a code the audit log keeps."
+        "description": "Why the admin acts, as a code the audit log keeps."
       },
       "AdminSession": {
         "properties": {
@@ -2796,6 +2681,30 @@
         ],
         "title": "AdminSignIn",
         "description": "A sign-in attempt and how it ended."
+      },
+      "AdminSignInRequest": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Password"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "AdminSignInRequest",
+        "description": "The admin's login and password."
       },
       "AdminSpend": {
         "properties": {
@@ -2959,13 +2868,6 @@
           },
           "spend": {
             "$ref": "#/components/schemas/AdminSpend"
-          },
-          "operator_roles": {
-            "items": {
-              "$ref": "#/components/schemas/OperatorRole"
-            },
-            "type": "array",
-            "title": "Operator Roles"
           }
         },
         "type": "object",
@@ -2978,11 +2880,10 @@
           "email_verified_at",
           "sessions",
           "sign_ins",
-          "spend",
-          "operator_roles"
+          "spend"
         ],
         "title": "AdminUserCard",
-        "description": "What support sees of one account."
+        "description": "What the admin sees of one account."
       },
       "ChallengeRequest": {
         "properties": {
@@ -3934,13 +3835,6 @@
           "consents": {
             "$ref": "#/components/schemas/Consents-Output"
           },
-          "operator_roles": {
-            "items": {
-              "$ref": "#/components/schemas/OperatorRole"
-            },
-            "type": "array",
-            "title": "Operator Roles"
-          },
           "created_at": {
             "type": "string",
             "format": "date-time",
@@ -3960,7 +3854,6 @@
           "country",
           "home",
           "consents",
-          "operator_roles",
           "created_at"
         ],
         "title": "Me",
@@ -4048,74 +3941,6 @@
         "type": "object",
         "title": "MePatch",
         "description": "The fields to change; a field left out keeps its value, `null` clears it."
-      },
-      "OperatorEntry": {
-        "properties": {
-          "user_id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "User Id"
-          },
-          "home": {
-            "type": "string",
-            "title": "Home"
-          },
-          "email": {
-            "type": "string",
-            "title": "Email"
-          },
-          "full_name": {
-            "type": "string",
-            "title": "Full Name"
-          },
-          "roles": {
-            "items": {
-              "$ref": "#/components/schemas/OperatorRole"
-            },
-            "type": "array",
-            "title": "Roles"
-          }
-        },
-        "type": "object",
-        "required": [
-          "user_id",
-          "home",
-          "email",
-          "full_name",
-          "roles"
-        ],
-        "title": "OperatorEntry",
-        "description": "An operator, their home and roles."
-      },
-      "OperatorList": {
-        "properties": {
-          "items": {
-            "items": {
-              "$ref": "#/components/schemas/OperatorEntry"
-            },
-            "type": "array",
-            "title": "Items"
-          }
-        },
-        "type": "object",
-        "required": [
-          "items"
-        ],
-        "title": "OperatorList",
-        "description": "Every operator of both homes, by name."
-      },
-      "OperatorRole": {
-        "type": "string",
-        "enum": [
-          "owner",
-          "support",
-          "finance",
-          "platform",
-          "releases",
-          "read_only"
-        ],
-        "title": "OperatorRole",
-        "description": "The fixed operator roles; each `/v1/admin/*` router names the ones it admits (SM-12)."
       },
       "Page_AdminUser_": {
         "properties": {
@@ -4406,26 +4231,6 @@
         ],
         "title": "ResetRequest",
         "description": "The token of the link and the new password."
-      },
-      "RolesChange": {
-        "properties": {
-          "roles": {
-            "items": {
-              "$ref": "#/components/schemas/OperatorRole"
-            },
-            "type": "array",
-            "maxItems": 6,
-            "minItems": 1,
-            "title": "Roles"
-          }
-        },
-        "additionalProperties": false,
-        "type": "object",
-        "required": [
-          "roles"
-        ],
-        "title": "RolesChange",
-        "description": "The whole set of roles the person holds after the change."
       },
       "SignedOutElsewhere": {
         "properties": {

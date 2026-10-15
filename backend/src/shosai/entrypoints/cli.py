@@ -9,7 +9,7 @@
     shosai ai kill-switch ACTION   engage, release or report the AI kill switch
     shosai ai rebuild-spend-counters   sum the AI spend counters again from the cost rows
     shosai email check --to ADDRESS    send a check mail of each kind through SMTP
-    shosai identity grant-operator --email ADDRESS --role ROLE   give an operator role
+    shosai identity admin-password-hash   print the bcrypt hash of the admin's password
 
 Every long-running role also serves `/livez`, `/readyz` and `/metrics` on OPS_PORT. The
 settings come from the environment only (`.env.example`, section 2). One process runs
@@ -26,14 +26,13 @@ import uvloop
 from shosai.composition.ai_command import KillSwitchAction, KillSwitchCommand, run_kill_switch
 from shosai.composition.ai_rebuild import run_rebuild
 from shosai.composition.email_command import MailCheckCommand, run_mail_check
-from shosai.composition.identity_command import GrantOperatorCommand, run_grant_operator
+from shosai.composition.identity_command import run_admin_password_hash
 from shosai.composition.migrate import MigrateAction, run_migrate
 from shosai.composition.process import run_process
 from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
 from shosai.core.config.roles import ProcessRole
 from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
 from shosai.core.tasks.queues import TaskQueue
-from shosai.features.identity.contracts import OperatorRole
 
 PROGRAM = "shosai"
 
@@ -71,15 +70,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     identity = roles.add_parser(ProcessRole.IDENTITY.value, help="operator commands of accounts")
     account_tools = identity.add_subparsers(dest="tool", required=True, metavar="TOOL")
-    grant = account_tools.add_parser("grant-operator", help="give an account an operator role")
-    grant.add_argument("--email", required=True, help="the address of an active account")
-    # Не `role`: так называется подкоманда процесса.
-    grant.add_argument(
-        "--role",
-        required=True,
-        dest="operator_role",
-        choices=[role.value for role in OperatorRole],
-        help="the role",
+    account_tools.add_parser(
+        "admin-password-hash", help="print the bcrypt hash of the admin's password"
     )
     return parser
 
@@ -109,8 +101,7 @@ def one_shot(
     if role is ProcessRole.EMAIL:
         return run_mail_check(environ, MailCheckCommand(arguments.recipient, arguments.locale))
     if role is ProcessRole.IDENTITY:
-        grant = GrantOperatorCommand(arguments.email, OperatorRole(arguments.operator_role))
-        return run_grant_operator(environ, grant)
+        return run_admin_password_hash()
     return ai_command(arguments, environ)
 
 

@@ -1,8 +1,8 @@
-"""What an operator may do to an account, and from which states (SM-12, ID-D6).
+"""What the admin may do to an account, and from which states (SM-12, ADR 0049).
 
-Block freezes an active account, unblock returns a frozen one, ban closes an active or
-frozen one for good. An account already in the target state stays as it is and the
-action writes nothing; one being deleted, erased or moved is not touched.
+Block freezes an active account, unblock returns a frozen one. An account already in the
+target state stays as it is and the action writes nothing; one banned before ADR 0049,
+being deleted, erased or moved is not touched.
 """
 
 from dataclasses import dataclass
@@ -14,11 +14,10 @@ from shosai.features.identity.domain.registration import DirectoryState
 
 
 class AccountAction(StrEnum):
-    """An operator's action on an account."""
+    """The admin's action on an account."""
 
     BLOCK = "block"
     UNBLOCK = "unblock"
-    BAN = "ban"
 
 
 @dataclass(frozen=True, slots=True)
@@ -27,7 +26,7 @@ class Transition:
 
     allowed_from: frozenset[AccountState]
     target: AccountState
-    # Блокировка и бан завершают все сессии; разблокировка их не возвращает.
+    # Блокировка завершает все сессии; разблокировка их не возвращает.
     ends_sessions: bool
 
 
@@ -38,18 +37,10 @@ TRANSITIONS: Final = {
     AccountAction.UNBLOCK: Transition(
         frozenset({AccountState.FROZEN}), AccountState.ACTIVE, ends_sessions=False
     ),
-    AccountAction.BAN: Transition(
-        frozenset({AccountState.ACTIVE, AccountState.FROZEN}), AccountState.BANNED,
-        ends_sessions=True,
-    ),
-}  # fmt: skip
+}
 
 # Как действие меняет строку каталога в ЕС: из каких состояний и в какое.
 DIRECTORY_CHANGES: Final = {
     AccountAction.BLOCK: (frozenset({DirectoryState.ACTIVE}), DirectoryState.FROZEN),
     AccountAction.UNBLOCK: (frozenset({DirectoryState.FROZEN}), DirectoryState.ACTIVE),
-    AccountAction.BAN: (
-        frozenset({DirectoryState.ACTIVE, DirectoryState.FROZEN}),
-        DirectoryState.BANNED,
-    ),
 }

@@ -107,15 +107,15 @@ Notifications and newsletters to a person carry a signed unsubscribe link once `
 
 `shosai email check` needs no worker and no database: it sends one check mail of each kind (account, notification, newsletter) straight to the SMTP server from its mailbox, logs whether the server took each one, and exits with 1 if any was refused. The same command against the production mailboxes proves SMTP, TLS and both logins. The mails use every block of the layout, so they also show how mail looks in a client, light and dark.
 
-### The first operator
+### The admin
 
-The admin routes need an operator, and only an owner gives roles over the API. Give the first owner role to your local account once it is registered and confirmed:
+The admin panel has one admin who signs in with a login and password from the environment ([ADR 0049](adr/0049-one-admin-signed-in-by-env-credentials.md)). Print the hash of a password (at least 16 characters, typed twice without echo):
 
 ```bash
-uv run --env-file ../.env shosai identity grant-operator --email you@example.org --role owner
+uv run shosai identity admin-password-hash
 ```
 
-The command checks both homes, adds the role in the account's home and exits with 1 if no active account has the address. The audit row reaches `operator_audit_events` in the EU home once a worker delivers the event.
+Put the printed line, single quotes included, and `IDENTITY_ADMIN_USERNAME` into `.env`, then restart the API. The cabinet's sign-in page of the admin is at `VITE_ADMIN_LOGIN_PATH`. Each block or unblock leaves one row in `operator_audit_events` in the EU home once a worker delivers the event.
 
 ## Run the frontend
 

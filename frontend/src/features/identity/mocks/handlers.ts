@@ -18,7 +18,7 @@ import {
   socialProvidersRoute,
   socialSessionRoute,
 } from "./flow-routes";
-import { loginRoute, logoutRoute, meRoute, refreshRoute } from "./session-route";
+import { adminSessionRoute, loginRoute, logoutRoute, meRoute, refreshRoute } from "./session-route";
 
 export const handlers: MockRoute[] = [
   mockRoute("/v1/auth/login", loginRoute, ["POST"]),
@@ -40,4 +40,5 @@ export const handlers: MockRoute[] = [
   mockRoute("/v1/me/exports", exportsRoute, ["POST"]),
   mockRoute("/v1/me/exports/latest", latestExportRoute, ["GET"]),
   mockRoute("/v1/me/deletion", deletionRoute, ["POST"]),
+  mockRoute("/v1/admin/session", adminSessionRoute, ["GET", "POST", "DELETE"]),
 ];

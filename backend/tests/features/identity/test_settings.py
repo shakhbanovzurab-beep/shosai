@@ -33,6 +33,8 @@ def test_the_ring_keeps_its_order_and_the_first_key_signs() -> None:
         ("IDENTITY_TOKEN_KEYS", "k1:short"),
         ("IDENTITY_DIRECTORY_HMAC_KEY", "short"),
         ("IDENTITY_PASSWORD_HASH_ROUNDS", "3"),
+        ("IDENTITY_ADMIN_PASSWORD_HASH", LONG),
+        ("IDENTITY_ADMIN_USERNAME", LONG * 2),
     ],
 )
 def test_a_broken_value_is_refused_by_name_without_its_value(variable: str, value: str) -> None:
@@ -53,12 +55,13 @@ def test_a_missing_section_variable_stops_the_load() -> None:
         load_settings(environ, [IdentitySettings])
 
 
-def test_production_refuses_development_keys_and_cheap_hashing() -> None:
+def test_production_refuses_development_keys_cheap_hashing_and_no_admin() -> None:
     environ = production_environ(
         IDENTITY_TOKEN_KEYS=f"dev:{LONG}",
         IDENTITY_DIRECTORY_HMAC_KEY="dev-" + "h" * 40,
         IDENTITY_PASSWORD_HASH_ROUNDS="10",
     )
+    del environ["IDENTITY_ADMIN_USERNAME"]
 
     with pytest.raises(UnsafeConfigurationError) as raised:
         enforce_production_gate(load_settings(environ, [IdentitySettings]), [identity_secrets_safe])
@@ -67,6 +70,7 @@ def test_production_refuses_development_keys_and_cheap_hashing() -> None:
         "IDENTITY_TOKEN_KEYS",
         "IDENTITY_DIRECTORY_HMAC_KEY",
         "IDENTITY_PASSWORD_HASH_ROUNDS",
+        "IDENTITY_ADMIN_PASSWORD_HASH",
     }
 
 

@@ -2,7 +2,7 @@
 
 The account changes in its home; the directory in the EU learns of it from the event, in
 an EU transaction with its delivery mark, since no transaction spans two homes. The
-erasure itself frees the address directly, as a step of the saga. An operator's action
+erasure itself frees the address directly, as a step of the saga. The admin's action
 reaches the EU audit log the same way (SM-12).
 """
 
@@ -26,7 +26,7 @@ from shosai.features.identity.infrastructure.directory import follow_account
 from shosai.features.identity.infrastructure.operator_audit import record_action
 
 DEADLINE: Final = timedelta(seconds=30)
-# Какое действие над аккаунтом стоит за записью аудита; у смены ролей — никакого.
+# Какое действие над аккаунтом стоит за записью аудита; у переноса — никакого.
 ACCOUNT_ACTIONS: Final = {audit: action for action, audit in AUDITED.items()}
 
 
@@ -49,7 +49,7 @@ async def show_in_directory(
 async def audit_operator_action(
     session: AsyncSession, received: ReceivedEvent[OperatorActed]
 ) -> None:
-    """One row of the operators' audit log per action; the directory follows a block or ban."""
+    """One row of the admin's audit log per action; the directory follows a block or unblock."""
     event = received.event
     await record_action(session, received.event_id, received.occurred_at, event)
     action = ACCOUNT_ACTIONS.get(event.action)

@@ -14,7 +14,7 @@ from http import HTTPStatus
 from typing import Annotated, ClassVar, Final, Protocol
 from uuid import UUID
 
-from fastapi import Depends, Header
+from fastapi import Cookie, Header
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.events.domain_event import DomainEvent, EventCode
@@ -40,40 +40,19 @@ class Principal:
         return TenancyScope(home=self.home, user_id=self.user_id)
 
 
-class OperatorRole(StrEnum):
-    """The fixed operator roles; each `/v1/admin/*` router names the ones it admits (SM-12)."""
+class AdminGate(Protocol):
+    """Checks the admin's session cookie on every admin request (ADR 0049)."""
 
-    OWNER = "owner"
-    SUPPORT = "support"
-    FINANCE = "finance"
-    PLATFORM = "platform"
-    RELEASES = "releases"
-    READ_ONLY = "read_only"
-
-
-@dataclass(frozen=True, slots=True)
-class Operator:
-    """An operator behind an admin route: the person and the roles they hold right now."""
-
-    principal: Principal
-    roles: frozenset[OperatorRole]
-
-
-class OperatorRoleReader(Protocol):
-    """Reads a person's operator roles on every admin request: rights are not cached (§7)."""
-
-    async def roles_of(self, principal: Principal) -> frozenset[OperatorRole]:
-        """The roles the person holds now, in their home; empty for everyone else."""
+    async def admitted(self, cookie: str | None) -> bool:
+        """Whether the cookie belongs to a live admin session."""
         ...
 
 
 class OperatorAction(StrEnum):
-    """What an operator did; the audit log keeps it for 12 months (nfr-17)."""
+    """What the admin did; the audit log keeps it for 12 months (nfr-17)."""
 
-    ROLES_CHANGED = "operator_roles_changed"
     ACCOUNT_BLOCKED = "account_blocked"
     ACCOUNT_UNBLOCKED = "account_unblocked"
-    ACCOUNT_BANNED = "account_banned"
     ACCOUNT_TRANSFER_REQUESTED = "account_transfer_requested"
     ACCOUNT_TRANSFER_CANCELLED = "account_transfer_cancelled"
 
@@ -127,8 +106,10 @@ AUTHENTICATOR: Final = PortKey[Authenticator]("identity.authenticator")
 ME_CONTRIBUTIONS: Final = PortKey[MeContribution]("identity.me_contribution", Cardinality.MANY)
 CONSENT_READER: Final = PortKey[ConsentReader]("identity.consent_reader")
 ACCOUNT_PROFILE_READER: Final = PortKey[AccountProfileReader]("identity.account_profile_reader")
-OPERATOR_ROLES: Final = PortKey[OperatorRoleReader]("identity.operator_roles")
+ADMIN_GATE: Final = PortKey[AdminGate]("identity.admin_gate")
 BEARER: Final = "Bearer "
+ADMIN_COOKIE: Final = "shosai_admin"
+ADMIN_COOKIE_LENGTH: Final = 256
 
 
 def bearer_principal(ports: PortDirectory) -> Callable[..., Awaitable[Principal]]:
@@ -146,26 +127,22 @@ def bearer_principal(ports: PortDirectory) -> Callable[..., Awaitable[Principal]
     return authenticated
 
 
-def require_operator(
-    ports: PortDirectory, *admitted: OperatorRole
-) -> Callable[..., Awaitable[Operator]]:
-    """A route dependency: a signed-in operator holding one of `admitted` (SM-12).
+def require_admin(ports: PortDirectory) -> Callable[..., Awaitable[None]]:
+    """A route dependency: the admin's live session, from its cookie (ADR 0049).
 
-    Anyone else is 403 `operator_role_required`; the roles are read on every request.
+    Unrelated to people's accounts and tokens; without the session the answer is 401
+    `admin_sign_in_required`.
     """
-    if not admitted:
-        message = "маршрут оператора должен назвать допущенные роли"
-        raise ValueError(message)
-    roles = frozenset(admitted)
-    signed_in = bearer_principal(ports)
 
-    async def operator(principal: Annotated[Principal, Depends(signed_in)]) -> Operator:
-        held = await ports.get(OPERATOR_ROLES).roles_of(principal)
-        if not held & roles:
-            raise AppError("operator_role_required", HTTPStatus.FORBIDDEN)
-        return Operator(principal, held)
+    async def admin(
+        cookie: Annotated[
+            str | None, Cookie(alias=ADMIN_COOKIE, max_length=ADMIN_COOKIE_LENGTH)
+        ] = None,
+    ) -> None:
+        if not await ports.get(ADMIN_GATE).admitted(cookie):
+            raise AppError("admin_sign_in_required", HTTPStatus.UNAUTHORIZED)
 
-    return operator
+    return admin
 
 
 class AccountRegistered(DomainEvent):
@@ -212,17 +189,15 @@ class AccountTransferred(DomainEvent):
 
 
 class AccountBlocked(DomainEvent):
-    """An operator froze or banned the account; its sessions ended."""
+    """The admin froze the account; its sessions ended."""
 
     event_type: ClassVar[str] = "identity.account.blocked"
     version: ClassVar[int] = 1
     user_id: UUID
-    # Бан: вход закрыт навсегда, разблокировки не будет.
-    permanent: bool = False
 
 
 class AccountUnblocked(DomainEvent):
-    """An operator returned a frozen account; it signs in again, its data is shown again."""
+    """The admin returned a frozen account; it signs in again, its data is shown again."""
 
     event_type: ClassVar[str] = "identity.account.unblocked"
     version: ClassVar[int] = 1
@@ -238,12 +213,13 @@ class SessionsRevoked(DomainEvent):
 
 
 class OperatorActed(DomainEvent):
-    """An operator changed an account or operator roles; the EU audit log records it."""
+    """The admin changed an account; the EU audit log records it."""
 
     event_type: ClassVar[str] = "identity.operator.acted"
     version: ClassVar[int] = 1
-    # Пусто у первой роли владельца, выданной командой `shosai identity grant-operator`.
-    operator_id: UUID | None
+    # Пусто: админ один и входит не аккаунтом человека (ADR 0049). Поле остаётся ради строк
+    # журнала, записанных до этого решения.
+    operator_id: UUID | None = None
     target_user_id: UUID
     target_home: Home
     action: OperatorAction

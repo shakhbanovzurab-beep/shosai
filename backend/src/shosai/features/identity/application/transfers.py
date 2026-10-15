@@ -1,6 +1,6 @@
 """Asking for an account transfer, cancelling it, reading it (identity plan §3.4, §6).
 
-Only an operator asks, and only while the owner has opened transfers after the legal
+Only the admin asks, and only while the owner has opened transfers after the legal
 review (§22). One transfer of an account is open at a time; a cancel is accepted until the
 directory switch, after which the saga only goes forward. Each request and cancel leaves
 an audit event in the transaction that records it.
@@ -22,7 +22,7 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from shosai.core.kernel.tenancy import TenancyScope
-from shosai.features.identity.contracts import Operator, OperatorActed, OperatorAction
+from shosai.features.identity.contracts import OperatorActed, OperatorAction
 from shosai.features.identity.domain.accounts import AccountState
 from shosai.features.identity.domain.transfer import CANCELLABLE, MOVABLE, TransferStep
 from shosai.features.identity.infrastructure.directory import Directory
@@ -32,7 +32,7 @@ from shosai.features.identity.infrastructure.transfer_records import OPEN, HomeT
 
 @dataclass(frozen=True, slots=True)
 class TransferView:
-    """A transfer as an operator reads it."""
+    """A transfer as the admin reads it."""
 
     id: UUID
     user_id: UUID
@@ -45,7 +45,7 @@ class TransferView:
 
 
 class Transfers:
-    """Operators' requests and cancels of transfers."""
+    """The admin's requests and cancels of transfers."""
 
     def __init__(
         self,
@@ -60,7 +60,7 @@ class Transfers:
         self._outbox = outbox
         self._allowed = allowed
 
-    async def request(self, actor: Operator, user_id: UUID, to_home: Home) -> TransferView:
+    async def request(self, user_id: UUID, to_home: Home) -> TransferView:
         """Queue the transfer of the account to the other home."""
         if not self._allowed:
             raise AppError("transfers_closed", HTTPStatus.CONFLICT)
@@ -80,8 +80,7 @@ class Transfers:
                 insert(HomeTransfer)
                 .values(
                     id=transfer_id, user_id=user_id, from_home=source.value, to_home=to_home.value,
-                    step=TransferStep.FREEZE.value, requested_by=actor.principal.user_id,
-                    run_at=datetime.now(UTC),
+                    step=TransferStep.FREEZE.value, run_at=datetime.now(UTC),
                 )
                 .on_conflict_do_nothing(
                     index_elements=[HomeTransfer.user_id], index_where=text(OPEN)
@@ -91,10 +90,10 @@ class Transfers:
             if queued is None:
                 raise AppError("transfer_in_progress", HTTPStatus.CONFLICT)
             requested = OperatorAction.ACCOUNT_TRANSFER_REQUESTED
-            await self._audit(session, actor, user_id, source, requested)
+            await self._audit(session, user_id, source, requested)
         return await self.view(transfer_id)
 
-    async def cancel(self, actor: Operator, transfer_id: UUID) -> TransferView:
+    async def cancel(self, transfer_id: UUID) -> TransferView:
         """Cancel a transfer that has not switched the directory yet."""
         found = await self.view(transfer_id)
         async with self._transactions.begin(TenancyScope(found.from_home)) as session:
@@ -110,7 +109,7 @@ class Transfers:
             if cancelled is None:
                 raise AppError("transfer_not_cancellable", HTTPStatus.CONFLICT)
             action = OperatorAction.ACCOUNT_TRANSFER_CANCELLED
-            await self._audit(session, actor, cancelled, found.from_home, action)
+            await self._audit(session, cancelled, found.from_home, action)
         return await self.view(transfer_id)
 
     async def view(self, transfer_id: UUID) -> TransferView:
@@ -132,15 +131,7 @@ class Transfers:
         )  # fmt: skip
 
     async def _audit(
-        self,
-        session: AsyncSession,
-        actor: Operator,
-        user_id: UUID,
-        home: Home,
-        action: OperatorAction,
+        self, session: AsyncSession, user_id: UUID, home: Home, action: OperatorAction
     ) -> None:
-        event = OperatorActed(
-            operator_id=actor.principal.user_id, target_user_id=user_id, target_home=home,
-            action=action,
-        )  # fmt: skip
+        event = OperatorActed(target_user_id=user_id, target_home=home, action=action)
         await self._outbox.add(session, event)

@@ -82,6 +82,20 @@ describe("sessionMiddleware", () => {
     expect(port.renewals).toBe(0);
   });
 
+  it("leaves the admin panel's own session alone", async () => {
+    let bearer: string | null = "unset";
+    server.use(
+      http.get(`${BASE}/v1/admin/session`, ({ request }) => {
+        bearer = request.headers.get("authorization");
+        return HttpResponse.json({ error: { code: "admin_sign_in_required" } }, { status: 401 });
+      }),
+    );
+    const port = session();
+    expect((await client(port).GET("/v1/admin/session")).response.status).toBe(401);
+    expect(bearer).toBeNull();
+    expect(port.renewals).toBe(0);
+  });
+
   it("signs the routes of /v1/auth that need a session", async () => {
     let bearer: string | null = null;
     server.use(

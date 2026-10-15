@@ -1,4 +1,4 @@
-"""Support's search, the card and the account actions (identity step 8b, SM-12)."""
+"""The admin's search, the card and the account actions (identity steps 8b and 12a, ADR 0049)."""
 
 from datetime import UTC, datetime
 from uuid import UUID
@@ -11,19 +11,18 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.identity.channels.subscriptions import audit_operator_action
-from shosai.features.identity.contracts import OperatorActed, OperatorAction, OperatorRole
+from shosai.features.identity.contracts import OperatorActed, OperatorAction
+from tests.features.identity.admin_bench import sign_in_admin
 from tests.features.identity.registration_bench import RegistrationBench, registration_bench
 from tests.features.identity.test_deletion import events
-from tests.features.identity.test_operators import owner
 from tests.features.identity.test_profile import bearer
-from tests.features.identity.test_sign_in import PASSWORD, account, login
+from tests.features.identity.test_sign_in import PASSWORD, account
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
 
 RUSSIAN = "ivan.petrov@example.com"
 EUROPEAN = "ivan.sidorov@example.com"
-SUPPORT = "support@example.com"
 
 
 async def named(run_slot: RunSlot, home: Home, user_id: UUID, name: str) -> None:
@@ -44,12 +43,10 @@ async def test_search_by_email_reaches_its_home_and_by_name_merges_both(
         european = await account(bench, run_slot, Home.EU, email=EUROPEAN)
         await named(run_slot, Home.RU, russian, "Ivan Petrov")
         await named(run_slot, Home.EU, european, "Ivan Sidorov")
-        await account(bench, run_slot)
-        await owner(bench)
-        headers = bearer((await login(bench))["access_token"])
+        await sign_in_admin(bench.http)
 
         async def search(**params: str | int | None) -> httpx.Response:
-            return await bench.http.get("/v1/admin/users", params=params, headers=headers)
+            return await bench.http.get("/v1/admin/users", params=params)
 
         by_email = (await search(email=EUROPEAN.upper())).json()
         first = (await search(name="IVAN", limit=1)).json()
@@ -66,20 +63,17 @@ async def test_search_by_email_reaches_its_home_and_by_name_merges_both(
     assert {answer.json()["error"]["code"] for answer in refused} == {"search_needs_email_or_name"}
 
 
-async def test_block_unblock_and_ban_end_sessions_at_once_and_leave_one_audit_event_each(
+async def test_block_and_unblock_end_sessions_at_once_and_leave_one_audit_event_each(
     homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
 ) -> None:
     async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
         target = await account(bench, run_slot, email=RUSSIAN)
-        me = await account(bench, run_slot)
-        await owner(bench)
-        headers = bearer((await login(bench))["access_token"])
+        await sign_in_admin(bench.http)
         live = bearer((await sign_in(bench, RUSSIAN)).json()["access_token"])
         reason = {"reason_code": "abuse"}
 
-        async def act(action: str, user_id: UUID = target) -> httpx.Response:
-            path = f"/v1/admin/users/{user_id}/{action}"
-            return await bench.http.post(path, json=reason, headers=headers)
+        async def act(action: str) -> httpx.Response:
+            return await bench.http.post(f"/v1/admin/users/{target}/{action}", json=reason)
 
         blocked = await act("block")
         refused_live = await bench.http.get("/v1/auth/me", headers=live)
@@ -87,70 +81,56 @@ async def test_block_unblock_and_ban_end_sessions_at_once_and_leave_one_audit_ev
         again = await act("block")
         unblocked = await act("unblock")
         back = await sign_in(bench, RUSSIAN)
-        banned = await act("ban")
-        stays_banned = await act("unblock")
-        banned_sign_in = await sign_in(bench, RUSSIAN)
-        myself = await act("block", me)
-        card = (await bench.http.get(f"/v1/admin/users/{target}", headers=headers)).json()
+        ban = await bench.http.post(f"/v1/admin/users/{target}/ban", json=reason)
+        card = (await bench.http.get(f"/v1/admin/users/{target}")).json()
 
     assert blocked.json()["user"]["state"] == "frozen"
     assert (refused_live.status_code, refused_live.json()["detail"]) == (403, "account_frozen")
     assert refused_sign_in.json()["detail"] == "account_frozen"
     assert (again.status_code, back.status_code) == (200, 200)
     assert unblocked.json()["user"]["state"] == "active"
-    assert banned.json()["user"]["state"] == "banned"
-    assert banned_sign_in.json()["detail"] == "account_banned"
-    assert (stays_banned.status_code, stays_banned.json()["error"]["code"]) == (
-        409, "account_state_conflict",
-    )  # fmt: skip
-    assert (myself.status_code, myself.json()["error"]["code"]) == (409, "self_action")
-    assert card["sessions"] == []
+    assert ban.status_code in {404, 405}
+    assert "operator_roles" not in card
+    assert len(card["sessions"]) == 1
     assert card["spend"] == {"today_usd": "0", "week_usd": "0", "month_usd": "0"}
     names = await events(run_slot)
-    assert names.count("identity.operator.acted") == 4
-    assert names.count("identity.account.blocked") == 2
+    assert names.count("identity.operator.acted") == 2
+    assert names.count("identity.account.blocked") == 1
     assert names.count("identity.account.unblocked") == 1
 
 
-async def test_only_an_owner_acts_on_an_operator_and_read_only_cannot_act(
+async def test_an_account_banned_before_stays_closed(
     homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
 ) -> None:
     async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
-        support = await account(bench, run_slot, email=SUPPORT)
-        me = await account(bench, run_slot)
-        await owner(bench)
-        await bench.operators.set_roles(None, support, frozenset({OperatorRole.SUPPORT}))
-        token = (await sign_in(bench, SUPPORT)).json()["access_token"]
-        protected = await bench.http.post(
-            f"/v1/admin/users/{me}/block", json={"reason_code": "test"}, headers=bearer(token)
+        target = await account(bench, run_slot, email=RUSSIAN)
+        await run_slot.claimed.connections[Home.RU].execute(
+            "UPDATE users SET state = 'banned' WHERE id = %s", (target,)
         )
-        await bench.operators.set_roles(None, support, frozenset({OperatorRole.READ_ONLY}))
-        read = await bench.http.get(f"/v1/admin/users/{me}", headers=bearer(token))
-        act = await bench.http.post(
-            f"/v1/admin/users/{me}/block", json={"reason_code": "test"}, headers=bearer(token)
+        await sign_in_admin(bench.http)
+        unblocked = await bench.http.post(
+            f"/v1/admin/users/{target}/unblock", json={"reason_code": "appeal"}
         )
 
-    assert (protected.status_code, protected.json()["error"]["code"]) == (
-        403, "operator_protected",
+    assert (unblocked.status_code, unblocked.json()["error"]["code"]) == (
+        409, "account_state_conflict",
     )  # fmt: skip
-    assert read.json()["operator_roles"] == ["owner"]
-    assert (act.status_code, act.json()["error"]["code"]) == (403, "operator_role_required")
 
 
-async def test_the_directory_follows_a_ban(
+async def test_the_directory_follows_a_block_and_the_audit_names_no_operator(
     homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
 ) -> None:
     async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
         target = await account(bench, run_slot)
     event = OperatorActed(
-        operator_id=new_id(), target_user_id=target, target_home=Home.RU,
-        action=OperatorAction.ACCOUNT_BANNED, reason_code="abuse",
+        target_user_id=target, target_home=Home.RU, action=OperatorAction.ACCOUNT_BLOCKED,
+        reason_code="abuse",
     )  # fmt: skip
     received = ReceivedEvent(event, new_id(), 1, datetime.now(UTC), TenancyScope(Home.RU, target))
     async with homes.transactions.begin(TenancyScope(Home.EU)) as session:
         await audit_operator_action(session, received)
 
-    [entry] = await fetch_rows(
-        run_slot.claimed.connections[Home.EU], "SELECT state FROM directory_entries"
-    )
-    assert entry["state"] == "banned"
+    eu = run_slot.claimed.connections[Home.EU]
+    [entry] = await fetch_rows(eu, "SELECT state FROM directory_entries")
+    [audit] = await fetch_rows(eu, "SELECT operator_id FROM operator_audit_events")
+    assert (entry["state"], audit["operator_id"]) == ("frozen", None)
