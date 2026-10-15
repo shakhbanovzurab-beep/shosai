@@ -58,11 +58,15 @@ NATIVE_GATE = Scope(classes=frozenset({CompatClass.NATIVE}), served_only=True)
 
 @asynccontextmanager
 async def compose(
-    run_slot: RunSlot, harness_settings: HarnessSettings, features: Sequence[FeatureModule]
+    run_slot: RunSlot,
+    harness_settings: HarnessSettings,
+    features: Sequence[FeatureModule],
+    overrides: Mapping[str, str] | None = None,
 ) -> AsyncIterator[dict[str, FastAPI]]:
-    """The public apps of `api` and `ws` with the given slices."""
+    """The public apps of `api` and `ws` with the given slices; `overrides` changes variables."""
     settings = load_settings(
-        slot_environ(run_slot, harness_settings), feature_settings_sections(features)
+        slot_environ(run_slot, harness_settings, **(overrides or {})),
+        feature_settings_sections(features),
     )
     async with open_platform(settings, ProcessRole.API, own_telemetry(), features) as platform:
         # Каждая роль — свой процесс со своим реестром метрик; здесь оба приложения в одном.
