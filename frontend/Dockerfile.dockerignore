@@ -1,0 +1,13 @@
+# Контекст образа edge — корень репозитория; в него попадают только кабинет и конфигурация edge.
+*
+!frontend/
+!deploy/staging/nginx/
+frontend/node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/.vite/
+frontend/test-results/
+**/.env
+**/.env.*
+!frontend/.env.example
+**/*.log

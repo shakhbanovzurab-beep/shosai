@@ -1,0 +1,137 @@
+# Серверы edge. Переменные SHOSAI_* подставляет entrypoint образа при старте (envsubst):
+#   SHOSAI_SERVER_NAME           домен (staging: shosai.tech);
+#   SHOSAI_API_UPSTREAM          адрес api, host:port;
+#   SHOSAI_WS_UPSTREAM           адрес шлюза ws, host:port;
+#   SHOSAI_TLS_CERTIFICATE       цепочка сертификата; SHOSAI_TLS_CERTIFICATE_KEY — его ключ;
+#   SHOSAI_CSP_STORAGE_ORIGINS   origin-ы бакетов домов через пробел (аватары, выгрузки);
+#   SHOSAI_ROBOTS_TAG            X-Robots-Tag (staging: "noindex, nofollow").
+
+upstream shosai_api {
+    server ${SHOSAI_API_UPSTREAM};
+    keepalive 32;
+    # Короче простоя сервера api (75 с): edge закрывает соединение первым.
+    keepalive_timeout 60s;
+}
+
+upstream shosai_ws {
+    least_conn;
+    server ${SHOSAI_WS_UPSTREAM};
+}
+
+# HTTP: только проверки ACME для certbot (F4-D7) и переход на HTTPS.
+server {
+    listen 8080 default_server;
+    listen [::]:8080 default_server;
+    server_name _;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/acme;
+    }
+
+    location / {
+        return 308 https://${SHOSAI_SERVER_NAME}$request_uri;
+    }
+}
+
+# Проверка здоровья контейнера: только изнутри.
+server {
+    listen 127.0.0.1:8081;
+    access_log off;
+
+    location = /health {
+        default_type text/plain;
+        return 200 "ok\n";
+    }
+}
+
+server {
+    listen 8443 ssl default_server;
+    listen [::]:8443 ssl default_server;
+    http2 on;
+    server_name ${SHOSAI_SERVER_NAME};
+
+    ssl_certificate ${SHOSAI_TLS_CERTIFICATE};
+    ssl_certificate_key ${SHOSAI_TLS_CERTIFICATE_KEY};
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_session_cache shared:shosai_tls:10m;
+    ssl_session_timeout 1d;
+    ssl_session_tickets off;
+
+    include /etc/nginx/shosai/csp-hashes.conf;
+    include /tmp/nginx/shosai/security-headers.conf;
+
+    limit_req zone=shosai_per_ip burst=100 nodelay;
+    limit_conn shosai_conn_per_ip 1000;
+
+    root /usr/share/nginx/html;
+
+    # Публичного сайта ещё нет (F4-D5): корень ведёт на вход в кабинет.
+    location = / {
+        return 302 /app/login;
+    }
+
+    # Файлы сборки с хешем в имени не меняются никогда.
+    location ^~ /app/assets/ {
+        include /tmp/nginx/shosai/security-headers.conf;
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
+        try_files $uri =404;
+    }
+
+    location ^~ /app/ {
+        include /tmp/nginx/shosai/security-headers.conf;
+        add_header Cache-Control "no-cache" always;
+        try_files $uri /app/index.html;
+    }
+
+    # Пути кабинета вне /app/ (ADR 0021 §3; frontend/tooling/cabinet-paths.ts): его index.html.
+    # Префиксы /app/ выше помечены ^~, поэтому сюда не попадают.
+    location ~ ^/(app|admin|oauth/callback|unauthorized)(/|$) {
+        include /tmp/nginx/shosai/security-headers.conf;
+        add_header Cache-Control "no-cache" always;
+        try_files /app/index.html =404;
+    }
+
+    # WebSocket: шлюз ws, наименее загруженный процесс; рукопожатие — 5 с (§4.3).
+    location /v1/ws/ {
+        proxy_pass http://shosai_ws;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $shosai_connection_upgrade;
+        include /etc/nginx/shosai/proxy-headers.conf;
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 3600s;
+        proxy_buffering off;
+    }
+
+    # API: подключение 2 с, ответ 30 с, один повтор только для идемпотентных методов (§4.3).
+    # Часть записи встречи — до 32 МБ: слайс встреч задаёт размер части не больше.
+    location /v1/ {
+        proxy_pass http://shosai_api;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        include /etc/nginx/shosai/proxy-headers.conf;
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 30s;
+        proxy_send_timeout 30s;
+        proxy_next_upstream error timeout;
+        proxy_next_upstream_tries 2;
+        client_max_body_size 32m;
+    }
+
+    # Картинки, на которые ссылаются письма.
+    location /email/ {
+        proxy_pass http://shosai_api;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        include /etc/nginx/shosai/proxy-headers.conf;
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 30s;
+    }
+
+    # Остальные пути — публичного сайта, которого ещё нет.
+    location / {
+        return 404;
+    }
+}
