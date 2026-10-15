@@ -172,6 +172,18 @@ OPS_PORT=9102 uv run --env-file ../.env shosai workers --queue critical
 
 Several roles on one machine need different ports; in containers each process has its own.
 
+### Container image
+
+`Dockerfile` builds one image for every role from the context `backend/` (F4 step 1). CI builds it; no server ever builds it (§17). The build stage installs the project with uv 0.12.21 into `/app/.venv` without development dependencies, the runtime stage on `python:3.14.7-slim-trixie` carries only that environment: no uv, no compiler, user `1001:1001`. The role is the command: the entrypoint is `shosai`, the default command `api`.
+
+```bash
+docker buildx build -t shosai-backend .
+docker run --rm --env-file ../.env shosai-backend workers --queue default
+docker run --rm --env-file ../.env shosai-backend migrate upgrade
+```
+
+The image sets `BIND_HOST=0.0.0.0`; every other setting comes from the environment as for a local process. It runs with a read-only root filesystem and a `tmpfs` at `/tmp`. On 2026-10-15 the image was 464 MB uncompressed, each role used about 190 MiB idle, and every role answered `/readyz` against the local stack and stopped with exit code 0 within 2 s of SIGTERM.
+
 ## Adding a slice
 
 A slice is a package `features/<name>/` whose public surface is `contracts.py` (the import-linter contract "Features meet through contracts"). Inside, `channels` (HTTP, WS, tasks, consumers) → `application` → `domain`, with `infrastructure` implementing the domain's ports; the domain imports no framework (the "Pure slice domain" contract).

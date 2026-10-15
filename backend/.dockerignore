@@ -1,0 +1,12 @@
+# Контекст образа бэкенда — только то, что нужно сборке: pyproject.toml, uv.lock, README.md,
+# LICENSE и src/. Всё остальное, в первую очередь секреты и локальные окружения, не попадает.
+*
+!pyproject.toml
+!uv.lock
+!README.md
+!LICENSE
+!src/
+**/__pycache__/
+**/*.py[cod]
+**/.env
+**/.env.*
