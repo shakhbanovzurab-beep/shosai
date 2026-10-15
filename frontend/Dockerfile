@@ -45,6 +45,7 @@ ENV NGINX_ENVSUBST_OUTPUT_DIR=/tmp/nginx \
     NGINX_ENVSUBST_FILTER=^SHOSAI_ \
     SHOSAI_API_UPSTREAM=api:8000 \
     SHOSAI_WS_UPSTREAM=ws:8000 \
+    SHOSAI_RESOLVER=127.0.0.11 \
     SHOSAI_CSP_STORAGE_ORIGINS="" \
     SHOSAI_ROBOTS_TAG="noindex, nofollow"
 # Пользователь nginx базового образа, без root: порты выше 1024, запись только в /tmp.

@@ -1,0 +1,283 @@
+# Staging Shosai на shosai.tech (F4, docs/plan/packages/F4-delivery-staging.md).
+#
+# Одна плоскость на машине разработки (F4-D1): edge, роли бэкенда, Valkey (F4-D2), кэш, Qdrant
+# и PgBouncer каждого дома перед управляемым PostgreSQL Timeweb (F4-D3). Каталог проекта —
+# /srv/shosai, владелец — пользователь deploy; секреты рендерит deploy/staging/render-env.py,
+# внутренний TLS — deploy/staging/internal-tls.sh. Снаружи открыты только 80 и 443 у edge.
+#
+#   cd /srv/shosai && docker compose up -d                      # плоскость
+#   docker compose --profile migrate run --rm migrate upgrade   # миграции обоих домов
+
+name: shosai-staging
+
+x-service-defaults: &service-defaults
+  restart: unless-stopped
+  read_only: true
+  security_opt:
+    - no-new-privileges:true
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "5"
+  networks:
+    - plane
+
+x-backend: &backend
+  <<: *service-defaults
+  image: ${SHOSAI_BACKEND_IMAGE:?образ бэкенда не задан}
+  env_file:
+    - path: .env.staging
+  tmpfs:
+    - /tmp
+  volumes:
+    - ./tls/shared:/run/shosai-tls:ro
+  # Роль успевает дослить запросы и задачи за 20 с (backend README, «Stop»).
+  stop_grace_period: 30s
+  healthcheck:
+    test:
+      - CMD
+      - python
+      - -c
+      - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9100/readyz', timeout=2)"
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_interval: 2s
+    start_period: 30s
+  depends_on:
+    valkey:
+      condition: service_healthy
+    redis-cache:
+      condition: service_healthy
+    pgbouncer-ru:
+      condition: service_healthy
+    pgbouncer-eu:
+      condition: service_healthy
+  deploy:
+    resources:
+      limits:
+        memory: 384m
+
+x-pgbouncer: &pgbouncer
+  <<: *service-defaults
+  image: edoburu/pgbouncer:v1.26.0-p0
+  entrypoint: ["/bin/sh", "/etc/pgbouncer/start.sh"]
+  command: []
+  tmpfs:
+    - /run/pgbouncer:uid=70,gid=70,mode=0700
+  volumes:
+    - ./deploy/pgbouncer/start.sh:/etc/pgbouncer/start.sh:ro
+    - ./deploy/pgbouncer/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro
+    - ./tls/shared:/run/shosai-tls:ro
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready --host=127.0.0.1 --port=6432 --username=\"$$PGBOUNCER_APP_USER\" --dbname=\"$$PGBOUNCER_SERVER_DATABASE\""]
+    interval: 30s
+    timeout: 3s
+    retries: 3
+    start_interval: 1s
+    start_period: 10s
+  deploy:
+    resources:
+      limits:
+        memory: 64m
+
+services:
+  edge:
+    <<: *service-defaults
+    image: ${SHOSAI_EDGE_IMAGE:?образ edge не задан}
+    environment:
+      SHOSAI_SERVER_NAME: ${SHOSAI_SERVER_NAME:?домен не задан}
+      SHOSAI_TLS_CERTIFICATE: /run/shosai-edge-tls/fullchain.pem
+      SHOSAI_TLS_CERTIFICATE_KEY: /run/shosai-edge-tls/privkey.pem
+      SHOSAI_CSP_STORAGE_ORIGINS: ${SHOSAI_CSP_STORAGE_ORIGINS:-}
+      SHOSAI_ROBOTS_TAG: "noindex, nofollow"
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./tls/edge:/run/shosai-edge-tls:ro
+      - ./acme:/var/www/acme:ro
+    ports:
+      - "80:8080"
+      - "443:8443"
+    ulimits:
+      nofile:
+        soft: 8192
+        hard: 8192
+    networks:
+      plane:
+        # Единственный адрес, которому бэкенд верит в X-Forwarded-For (TRUSTED_PROXY_ADDRESSES).
+        ipv4_address: 172.30.42.2
+    depends_on:
+      api:
+        condition: service_healthy
+      ws:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
+  api:
+    <<: *backend
+    command: ["api"]
+
+  ws:
+    <<: *backend
+    command: ["ws"]
+
+  workers-critical:
+    <<: *backend
+    command: ["workers", "--queue", "critical"]
+
+  workers-default:
+    <<: *backend
+    command: ["workers", "--queue", "default"]
+
+  workers-bulk:
+    <<: *backend
+    command: ["workers", "--queue", "bulk"]
+
+  workers-meeting:
+    <<: *backend
+    command: ["workers", "--queue", "meeting"]
+
+  scheduler:
+    <<: *backend
+    command: ["scheduler"]
+
+  # Миграции — по команде, не постоянно: пароль владельца схемы не живёт в процессах приложения.
+  migrate:
+    <<: *backend
+    restart: "no"
+    profiles: ["migrate"]
+    env_file:
+      - path: .env.staging
+      - path: secrets/migrate.env
+    entrypoint: ["shosai", "migrate"]
+    command: ["current"]
+    healthcheck:
+      disable: true
+    depends_on: {}
+
+  pgbouncer-ru:
+    <<: *pgbouncer
+    env_file:
+      - path: secrets/pgbouncer-ru.env
+
+  pgbouncer-eu:
+    <<: *pgbouncer
+    env_file:
+      - path: secrets/pgbouncer-eu.env
+
+  # Замена управляемого Valkey до его появления (F4-D2): AOF, без вытеснения, ACL-пользователь.
+  valkey:
+    <<: *service-defaults
+    image: valkey/valkey:9.1.2-alpine
+    command:
+      - valkey-server
+      - --appendonly
+      - "yes"
+      - --appendfsync
+      - everysec
+      - --maxmemory
+      - 192mb
+      - --maxmemory-policy
+      - noeviction
+      - --aclfile
+      - /run/shosai-acl/users.acl
+    volumes:
+      - valkey-data:/data
+      - ./secrets/valkey.acl:/run/shosai-acl/users.acl:ro
+    networks:
+      plane:
+        # Гейт пускает redis:// только на IP частной сети (ADR 0042).
+        ipv4_address: 172.30.42.10
+    healthcheck:
+      test: ["CMD-SHELL", "valkey-cli --user healthcheck --pass '' --no-auth-warning ping | grep -qx PONG"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 320m
+
+  redis-cache:
+    <<: *service-defaults
+    image: redis:8.10.2-alpine
+    command:
+      - redis-server
+      - --maxmemory
+      - 128mb
+      - --maxmemory-policy
+      - allkeys-lru
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      - --aclfile
+      - /run/shosai-acl/users.acl
+    tmpfs:
+      - /data
+    volumes:
+      - ./secrets/redis-cache.acl:/run/shosai-acl/users.acl:ro
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli --user healthcheck --pass '' --no-auth-warning ping | grep -qx PONG"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 192m
+
+  qdrant:
+    <<: *service-defaults
+    image: qdrant/qdrant:v1.19.1-unprivileged
+    env_file:
+      - path: secrets/qdrant.env
+    environment:
+      QDRANT__TELEMETRY_DISABLED: "true"
+      QDRANT__STORAGE__SNAPSHOTS_PATH: /qdrant/snapshots
+      QDRANT_INIT_FILE_PATH: /qdrant/storage/.qdrant-initialized
+    volumes:
+      - qdrant-storage:/qdrant/storage
+      - qdrant-snapshots:/qdrant/snapshots
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test:
+        - CMD
+        - bash
+        - -c
+        - exec 3<>/dev/tcp/127.0.0.1/6333 && printf 'GET /readyz HTTP/1.0\r\n\r\n' >&3 && head -n 1 <&3 | grep -q ' 200 '
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_interval: 1s
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+networks:
+  plane:
+    # IPv6 нужен PgBouncer дома RU: у его кластера только публичный IPv6.
+    enable_ipv6: true
+    ipam:
+      config:
+        # Динамические адреса — только из верхней половины: нижняя закреплена за edge и Valkey.
+        - subnet: 172.30.42.0/24
+          ip_range: 172.30.42.128/25
+        - subnet: fd42:5a05:a1:42::/64
+
+volumes:
+  valkey-data:
+  qdrant-storage:
+  qdrant-snapshots:

@@ -4,18 +4,25 @@
 #   SHOSAI_WS_UPSTREAM           адрес шлюза ws, host:port;
 #   SHOSAI_TLS_CERTIFICATE       цепочка сертификата; SHOSAI_TLS_CERTIFICATE_KEY — его ключ;
 #   SHOSAI_CSP_STORAGE_ORIGINS   origin-ы бакетов домов через пробел (аватары, выгрузки);
-#   SHOSAI_ROBOTS_TAG            X-Robots-Tag (staging: "noindex, nofollow").
+#   SHOSAI_ROBOTS_TAG            X-Robots-Tag (staging: "noindex, nofollow");
+#   SHOSAI_RESOLVER              DNS, у которого edge переспрашивает адреса api и ws (Docker: 127.0.0.11).
+
+# Процессы плоскости пересоздаются при выкладке и получают новые адреса: edge переспрашивает их у DNS, а не
+# держит адрес, полученный при старте (иначе после выкладки бэкенда — 502).
+resolver ${SHOSAI_RESOLVER} valid=10s ipv6=off;
 
 upstream shosai_api {
-    server ${SHOSAI_API_UPSTREAM};
+    zone shosai_api 64k;
+    server ${SHOSAI_API_UPSTREAM} resolve;
     keepalive 32;
     # Короче простоя сервера api (75 с): edge закрывает соединение первым.
     keepalive_timeout 60s;
 }
 
 upstream shosai_ws {
+    zone shosai_ws 64k;
     least_conn;
-    server ${SHOSAI_WS_UPSTREAM};
+    server ${SHOSAI_WS_UPSTREAM} resolve;
 }
 
 # HTTP: только проверки ACME для certbot (F4-D7) и переход на HTTPS.

@@ -1,6 +1,6 @@
 # Staging delivery
 
-How Shosai reaches **https://shosai.tech** (F4, [plan](../../docs/plan/packages/F4-delivery-staging.md)). This directory grows step by step: the edge configuration now (step 2), the staging Compose file, release script and runbook in steps 3–5.
+How Shosai reaches **https://shosai.tech** (F4, [plan](../../docs/plan/packages/F4-delivery-staging.md)). This directory grows step by step: the images (steps 1–2), the staging host (step 3), the release from CI, the release script and runbook in steps 4–5.
 
 ## Images
 
@@ -41,3 +41,41 @@ What it serves:
 - the client address replaces `X-Forwarded-For`, and `X-Request-ID` carries the edge's request id to the backend; the access log is JSON without query strings, which may hold tokens.
 
 `127.0.0.1:8081/health` inside the container answers the image's health check.
+
+## The staging host
+
+Staging runs on the development machine (F4-D1) as the Compose project `shosai-staging` in `/srv/shosai`, owned by the user `deploy` (no password, member of `docker`). Only the edge publishes ports: 80 and 443.
+
+| Path in `/srv/shosai` | What | From |
+|---|---|---|
+| `compose.yaml`, `deploy/pgbouncer/` | the plane | `compose.yaml`, `pgbouncer/` here |
+| `.env` | images and the edge's public settings (Compose interpolation) | `render-env.py`, then the release |
+| `.env.staging` | every long-running backend role's settings | `render-env.py` |
+| `secrets/` | the migrator's addresses, PgBouncer's users, Qdrant's key, Valkey and cache ACLs, the cabinet's build variables, and the secrets generated once for staging | `render-env.py` |
+| `tls/shared/` | Timeweb's root, the internal CA and PgBouncer's certificate | `internal-tls.sh` |
+| `tls/edge/`, `letsencrypt/`, `acme/` | the edge's certificate, certbot's state, ACME challenges | `certificate.sh` |
+
+What runs: edge; `api`, `ws`, workers of the four queues and `scheduler` (384 MB each); PgBouncer of each home; Valkey (F4-D2: AOF, `noeviction`, ACL user, the fixed address 172.30.42.10 the gate admits); the cache; Qdrant. On 2026-10-15 the plane used about 1.5 GB. The network has IPv6 for the Russian home, whose cluster has a public IPv6 address only; dynamic addresses come from 172.30.42.128/25, so the fixed ones (edge .2, Valkey .10) stay free.
+
+**Databases.** Each home's managed PostgreSQL (Timeweb) holds the database `shosai` with a migrator and an application role, created in Timeweb's panel. The application reaches PgBouncer over TLS with `sslmode=verify-full` against the internal CA; PgBouncer and the migrator reach the cluster with `verify-full` against Timeweb's root `CN=managed-service.timeweb.cloud` (`tls/timeweb-ca.crt`, SHA-256 `17:17:9B:AD:B9:92:FE:B0:38:42:6F:F3:1B:A6:6A:B7:FA:71:1F:09:2C:A2:27:05:BD:72:51:F3:01:1A:12:4D`, valid to 2040; both clusters present it). Migrations run on demand, so the migrator's password never lives in a long-running process.
+
+**Visitor's country.** The edge removes `X-Country-Code` from every request: only the edge may name the country (ADR 0048), and it does not look the country up yet. The backend therefore sees no country — the interface language picks the sign-in buttons, and the first mail of an unknown visitor is written in the Russian home.
+
+### Set up or refresh, as root
+
+```bash
+R=/root/shosai/deploy/staging
+install -o deploy -g deploy -m 640 $R/compose.yaml /srv/shosai/compose.yaml
+install -d -o deploy -g deploy /srv/shosai/deploy/pgbouncer
+install -o deploy -g deploy $R/pgbouncer/* /srv/shosai/deploy/pgbouncer/
+install -m 755 $R/certificate.sh /srv/shosai/deploy/certificate.sh
+python3 $R/render-env.py /root/shosai/.env /srv/shosai   # generated secrets are kept
+sh $R/internal-tls.sh /srv/shosai
+sh /srv/shosai/deploy/certificate.sh issue /srv/shosai   # once, before the edge listens on 80
+cd /srv/shosai
+docker compose --profile migrate run --rm migrate upgrade
+docker compose up -d
+```
+
+The certificate renews through `shosai-certificate.timer` (twice a day, `certificate.sh renew`), which copies it to `tls/edge` and reloads the edge. The images are built from the repository with the cabinet's variables from `secrets/cabinet.env` and named in `/srv/shosai/.env`; step 4 moves this to CI.
+

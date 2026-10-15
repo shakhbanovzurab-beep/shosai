@@ -1,0 +1,11 @@
+# Продление сертификата edge staging (F4-D7); запускается таймером shosai-certificate.timer.
+[Unit]
+Description=Renew the TLS certificate of the Shosai staging edge
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+# Зависший certbot (бывает при регистрации у Let's Encrypt) не держит службу дольше 20 минут.
+TimeoutStartSec=20min
+ExecStart=/bin/sh /srv/shosai/deploy/certificate.sh renew /srv/shosai
