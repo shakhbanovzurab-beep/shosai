@@ -42,8 +42,28 @@ const VK_LANGUAGES: Record<string, number> = {
 const VK_ENGLISH = 3;
 
 /**
+ * Состояние виджета SDK пишет в атрибут `data-state` своего корня, а наружу не сообщает: `loaded` — фрейм с кнопкой
+ * «Продолжить как …» нарисован; `not_loaded` — человек не вошёл в VK или виджет не загрузился, и SDK кладёт на
+ * её место свою кнопку «Войти с VK ID», которая открывает окно VK ID. В обоих случаях виджет готов: наблюдатель
+ * отписывается и зовёт `onReady`. Возвращает функцию отписки.
+ */
+function watchWidgetState(container: HTMLElement, onReady: () => void): () => void {
+  const observer = new MutationObserver(() => report());
+  const report = () => {
+    const state = container.querySelector("[data-state]")?.getAttribute("data-state");
+    if (state !== "loaded" && state !== "not_loaded") return;
+    observer.disconnect();
+    onReady();
+  };
+  observer.observe(container, { subtree: true, childList: true, attributes: true, attributeFilter: ["data-state"] });
+  report();
+  return () => observer.disconnect();
+}
+
+/**
  * Кнопка VK ID OneTap в `container`. Поток начинает сервер (`widget-start`): verifier PKCE остаётся у него, виджет
- * получает state и хеш. SDK грузится отдельным чанком только здесь — на экране, где есть кнопка VK. Возвращает
+ * получает state и хеш. SDK грузится отдельным чанком только здесь — на экране, где есть кнопка VK. `onShown` —
+ * виджет нарисовал свою кнопку: «Продолжить как …» или, если человек не вошёл в VK, «Войти с VK ID». Возвращает
  * функцию, закрывающую виджет; отказ — SDK не загрузился или сервер не открыл поток.
  */
 export async function mountVkOneTap(
@@ -69,7 +89,6 @@ export async function mountVkOneTap(
       styles: { height: 44, borderRadius: 8 },
       showAlternativeLogin: false,
     })
-    .on(vkid.WidgetEvents.LOAD, events.onShown)
     .on(vkid.WidgetEvents.ERROR, events.onFailed)
     .on(vkid.OneTapInternalEvents.LOGIN_SUCCESS, (payload: LoginSuccess) => {
       const { code, state, device_id: deviceId } = payload;
@@ -79,5 +98,9 @@ export async function mountVkOneTap(
         events.onFailed();
       }
     });
-  return () => oneTap.close();
+  const unwatch = watchWidgetState(container, events.onShown);
+  return () => {
+    unwatch();
+    oneTap.close();
+  };
 }
