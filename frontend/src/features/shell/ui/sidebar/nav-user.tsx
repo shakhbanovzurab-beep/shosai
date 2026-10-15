@@ -27,10 +27,10 @@ import { LANGUAGES } from "@/lib/language";
 import { Link } from "@/lib/navigation";
 import { getInitials } from "@/lib/utils";
 
-import type { Panel } from "../../domain/panel";
 import { downloadAppItem } from "../navigation";
 
-export function NavUser({ panel }: { readonly panel: Panel }) {
+/** Человек в низу панели /app: настройки, язык, тариф, поддержка и выход. */
+export function NavUser() {
   const t = useTranslations("shell");
   const signOut = useSignOut();
   // The signed-in person; the panel's guard has loaded them before the shell renders.
@@ -78,7 +78,7 @@ export function NavUser({ panel }: { readonly panel: Panel }) {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {panel === "dashboard" ? <UserPanelItems /> : null}
+            <UserPanelItems />
             <DropdownMenuItem onSelect={signOut}>
               <LogOut className="rtl:-scale-x-100" />
               {t("userMenu.logOut")}
@@ -90,7 +90,7 @@ export function NavUser({ panel }: { readonly panel: Panel }) {
   );
 }
 
-/** Account items of the user panel; the admin panel's menu only lets the admin sign out. */
+/** Account items of the user panel. */
 function UserPanelItems() {
   const t = useTranslations("shell");
   const openSettings = useOpenSettings();

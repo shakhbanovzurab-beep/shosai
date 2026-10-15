@@ -13,7 +13,7 @@
 ## Decision
 
 1. **One admin, credentials in the environment.** `IDENTITY_ADMIN_USERNAME` and `IDENTITY_ADMIN_PASSWORD_HASH` (a bcrypt hash, printed by `shosai identity admin-password-hash`; the password itself never sits in a file). Production refuses to start without them.
-2. **A separate address.** The cabinet's admin sign-in page lives at a path chosen at build time (`VITE_ADMIN_LOGIN_PATH`); the admin panel's routes are not linked from the user's cabinet.
+2. **A separate address.** The cabinet's admin sign-in page lives at a path chosen at build time (`VITE_ADMIN_LOGIN_PATH`, `/admin/<segment of at least 8 characters>`), so the edge already serves it to the cabinet and needs no secret of its own. Without the admin session every `/admin/*` page answers "not found" — it neither redirects to the sign-in page nor says the panel exists — and the panel is not linked from the user's cabinet.
 3. **Its own session.** `POST /v1/admin/session` checks the credentials (rate-limited per address and for the login; a wrong attempt is logged, the password never) and sets the cookie `shosai_admin`: HttpOnly, Secure, SameSite=Strict, path `/v1/admin`, 8 hours. The cookie carries a nonce signed with a key derived from the token signing key; Valkey keeps the nonce's hash for the session's life, so `DELETE /v1/admin/session` ends it at once. `GET /v1/admin/session` tells the cabinet whether the admin is signed in.
 4. **`require_admin` replaces `require_operator`.** Every `/v1/admin/*` route depends on it; it is unrelated to people's accounts and tokens.
 5. **Block and unblock only.** The ban action, its route and its audit action go. Accounts already in the banned state (migrated from the draft) stay closed.

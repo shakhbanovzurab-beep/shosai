@@ -1,6 +1,7 @@
-import { type LoaderFunctionArgs, redirect } from "react-router";
+import { data, type LoaderFunctionArgs, redirect } from "react-router";
 
-import { adminSignedIn } from "@/features/identity/api/admin-session-api";
+import { adminSignedIn } from "@/features/admin-sign-in/api/admin-session-api";
+import { ADMIN_HOME } from "@/features/admin-sign-in/domain/login-path";
 import { loginPathFor } from "@/features/identity/domain/next-path";
 import type { Me } from "@/features/identity/domain/session";
 import { startSession } from "@/features/identity/model/session";
@@ -38,8 +39,17 @@ export async function signedInGuard({ request }: LoaderFunctionArgs): Promise<nu
   return null;
 }
 
-/** Админ-панель /admin: только для вошедшего администратора (ADR 0049); остальным — «нет доступа». */
+/**
+ * Админ-панель /admin: только для вошедшего администратора (ADR 0049). Остальным — «не найдено», а не переход
+ * на вход: адрес страницы входа отдельный и нигде не показан.
+ */
 export async function adminGuard(): Promise<null> {
-  if (!(await adminSignedIn())) throw redirect("/unauthorized");
+  if (!(await adminSignedIn())) throw data(null, { status: 404 });
+  return null;
+}
+
+/** Страница входа в админку: вошедшего администратора сразу ведёт в админку. */
+export async function adminSignInGuard(): Promise<null> {
+  if (await adminSignedIn()) throw redirect(ADMIN_HOME);
   return null;
 }

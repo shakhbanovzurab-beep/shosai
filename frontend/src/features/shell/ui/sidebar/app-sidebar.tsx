@@ -8,6 +8,7 @@ import { useDirection } from "@/components/ui/direction";
 import { Sidebar } from "@/components/ui/sidebar-panel";
 import { SidebarContent, SidebarFooter, SidebarHeader } from "@/components/ui/sidebar-sections";
 import { APP_CONFIG } from "@/config/app-config";
+import { AdminMenu } from "@/features/admin-sign-in/ui/admin-menu";
 import { useSidebarPreferences } from "@/features/preferences/model/preferences-provider";
 import { workspacePath, workspaceSlugFromPath } from "@/features/workspace/domain/paths";
 import { useWorkspaces } from "@/features/workspace/model/resources";
@@ -30,9 +31,11 @@ type SidebarPartsProps = {
   searchGroups?: NavGroup[];
   switcher?: ReactNode;
   mark?: ReactNode;
+  /** Низ панели: человек со своим меню в панели /app, администратор с выходом в админке. */
+  footer: ReactNode;
 };
 
-function SidebarParts({ panel, homeUrl, items, searchGroups, switcher, mark }: SidebarPartsProps) {
+function SidebarParts({ panel, homeUrl, items, searchGroups, switcher, mark, footer }: SidebarPartsProps) {
   return (
     <>
       <SidebarHeader>
@@ -42,9 +45,7 @@ function SidebarParts({ panel, homeUrl, items, searchGroups, switcher, mark }: S
       <SidebarContent>
         <NavMain items={items} homeUrl={homeUrl} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser panel={panel} />
-      </SidebarFooter>
+      <SidebarFooter>{footer}</SidebarFooter>
     </>
   );
 }
@@ -80,6 +81,7 @@ function UserPanelParts() {
       }
       switcher={<WorkspaceSwitcher slug={slug} appName={APP_CONFIG.name} />}
       mark={<ScopeMark slug={slug} />}
+      footer={<NavUser />}
     />
   );
 }
@@ -96,7 +98,7 @@ export function AppSidebar({ panel, ...props }: React.ComponentProps<typeof Side
       {panel === "dashboard" ? (
         <UserPanelParts />
       ) : (
-        <SidebarParts panel={panel} homeUrl={panelHomeUrls[panel]} items={adminSidebarItems} />
+        <SidebarParts panel={panel} homeUrl={panelHomeUrls[panel]} items={adminSidebarItems} footer={<AdminMenu />} />
       )}
     </Sidebar>
   );

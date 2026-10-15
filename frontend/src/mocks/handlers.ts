@@ -6,6 +6,7 @@ import { handlers as adminLivekit } from "@/features/admin-livekit/mocks/handler
 import { handlers as adminPlans } from "@/features/admin-plans/mocks/handlers";
 import { handlers as adminPlatformPrompts } from "@/features/admin-platform-prompts/mocks/handlers";
 import { handlers as adminSupport } from "@/features/admin-support/mocks/handlers";
+import { handlers as adminUsers } from "@/features/admin-users/mocks/handlers";
 import { handlers as adminWorkspaces } from "@/features/admin-workspaces/mocks/handlers";
 import { handlers as fileManager } from "@/features/file-manager/mocks/handlers";
 import { handlers as hub } from "@/features/hub/mocks/handlers";
@@ -33,6 +34,7 @@ export const mockRoutes: readonly MockRoute[] = [
   ...adminPlans,
   ...adminPlatformPrompts,
   ...adminSupport,
+  ...adminUsers,
   ...adminWorkspaces,
   ...fileManager,
   ...hub,

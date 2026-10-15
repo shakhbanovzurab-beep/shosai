@@ -4,7 +4,6 @@ import {
   Cpu,
   LayoutDashboard,
   LifeBuoy,
-  Lock,
   MonitorDown,
   ScrollText,
   TicketPercent,
@@ -28,7 +27,6 @@ export const adminSidebarItems: NavGroup[] = [
     items: [
       { id: "users", title: "Пользователи", url: "/admin/users", icon: Users },
       { id: "workspaces", title: "Пространства", url: "/admin/workspaces", icon: Building2 },
-      { id: "roles", title: "Роли", url: "/admin/roles", icon: Lock },
     ],
   },
   {
