@@ -22,12 +22,13 @@
   "profile": {
     "title": "個人資料",
     "email": "電子郵件",
-    "emailHint": "你會透過服務供應商以這個地址登入。",
+    "emailHint": "你使用這個地址登入，一次性驗證碼會寄到這裡。",
     "fullName": "全名",
     "displayName": "Leo 該怎麼稱呼你？",
     "displayNameHint": "Leo 向你打招呼和回答時會用到。",
     "workRole": "哪一項最符合你的工作？",
-    "workRoleHint": "Leo 會據此挑選貼近你領域的範例和用語。"
+    "workRoleHint": "Leo 會據此挑選貼近你領域的範例和用語。",
+    "workRolePlaceholder": "選擇…"
   },
   "workRoles": {
     "product_management": "產品管理",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "危險區域",
     "title": "刪除帳號",
-    "description": "永久刪除你的帳號和其中所有內容：對話、筆記、檔案、提示詞和設定。",
+    "description": "刪除你的帳號和其中所有內容。你有 7 天的時間可以改變心意。",
     "confirmTitle": "要刪除你的帳號嗎？",
-    "confirmDescription": "這項操作無法復原。你的對話、筆記、檔案、提示詞、記憶和設定都會刪除，所有訂閱也會取消。",
+    "confirmDescription": "你的帳號將在 7 天後刪除，包括對話、筆記、檔案、提示詞、記憶和設定，所有訂閱也會取消。在此之前登入即可取消刪除。",
     "confirmLabel": "輸入 <address>{email}</address> 以確認",
-    "deleted": "已刪除你的帳號",
-    "failed": "無法刪除你的帳號"
+    "failed": "無法刪除你的帳號",
+    "scheduled": "你的帳號將於 {date} 刪除。在此之前登入即可保留帳號。",
+    "mismatch": "這不是你帳號的電子郵件。",
+    "reauthenticate": "為了確認是你本人，請輸入我們寄到 {email} 的驗證碼。"
+  },
+  "devices": {
+    "title": "裝置",
+    "description": "已登入你帳號的裝置。",
+    "thisDevice": "這個裝置",
+    "lastActive": "上次活動：{time}",
+    "signOut": "登出",
+    "signOutOthers": "登出所有其他裝置",
+    "signedOutOthers": "{count, plural, =0 {沒有其他已登入的裝置} other {已登出 # 個裝置}}",
+    "signOutFailed": "無法登出該裝置",
+    "loadFailed": "無法載入你的裝置。",
+    "more": "顯示更多",
+    "kinds": {
+      "web": "瀏覽器",
+      "desktop": "電腦版應用程式"
+    }
   }
 }

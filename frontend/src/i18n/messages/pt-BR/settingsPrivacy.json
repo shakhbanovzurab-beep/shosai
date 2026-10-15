@@ -4,46 +4,20 @@
   "improveModelsHint": "Permita que seus chats e notas de reuniões sejam usados para treinar e melhorar modelos. Desativado por padrão.",
   "shareLocation": "Compartilhar localização aproximada",
   "shareLocationHint": "Usada para o clima local e para respostas que dependem do horário. Só a região é compartilhada, nunca sua posição exata.",
+  "marketing": "Novidades do Shosai",
+  "marketingHint": "E-mails ocasionais sobre novos recursos. Os e-mails da conta chegam de qualquer forma.",
+  "crossBorder": "Tratamento na UE",
+  "crossBorderHint": "Seus dados ficam na Rússia, e o Leo os trata na UE. Sem este consentimento, o Leo e os outros recursos de IA param de funcionar.",
+  "crossBorderWarningTitle": "Revogar o consentimento para o tratamento na UE?",
+  "crossBorderWarning": "O Leo, a transcrição e todos os outros recursos de IA param de funcionar na sua conta até você dar o consentimento de novo. Seus dados ficam onde estão.",
+  "crossBorderWithdraw": "Revogar",
   "yourData": "Seus dados",
   "export": "Exportar dados",
-  "exportHint": "Baixe uma cópia das suas configurações, prompts, memória e atividade.",
-  "kinds": {
-    "shared_chats": {
-      "title": "Chats compartilhados",
-      "description": "Chats que qualquer pessoa com o link pode ver. Ao parar de compartilhar, o link é desativado.",
-      "removeItem": "Parar de compartilhar {title}",
-      "removeAll": "Parar de compartilhar todos",
-      "confirmAll": "Parar de compartilhar todos os chats?",
-      "empty": "Nenhum chat compartilhado"
-    },
-    "shared_artifacts": {
-      "title": "Artefatos compartilhados",
-      "description": "Documentos e páginas que você publicou a partir de chats.",
-      "removeItem": "Parar de compartilhar {title}",
-      "removeAll": "Parar de compartilhar todos",
-      "confirmAll": "Parar de compartilhar todos os artefatos?",
-      "empty": "Nenhum artefato compartilhado"
-    },
-    "uploaded_files": {
-      "title": "Arquivos enviados",
-      "description": "Arquivos que você anexou em chats. Ao excluir um arquivo, ele também sai desses chats.",
-      "removeItem": "Excluir {title}",
-      "removeAll": "Excluir todos os arquivos",
-      "confirmAll": "Excluir todos os arquivos?",
-      "empty": "Nenhum arquivo enviado"
-    },
-    "feedback": {
-      "title": "Seu feedback",
-      "description": "Avaliações e comentários que você deixou nas respostas do Leo.",
-      "removeItem": "Excluir {title}",
-      "removeAll": "Excluir todo o feedback",
-      "confirmAll": "Excluir todo o feedback?",
-      "empty": "Nenhum feedback ainda"
-    }
-  },
-  "nothingToManage": "Nada para gerenciar aqui.",
-  "copyLinkTo": "Copiar link de {title}",
-  "cantUndo": "Esta ação não pode ser desfeita.",
-  "removeFailed": "Não foi possível remover",
-  "removeAllFailed": "Não foi possível remover os itens"
+  "exportHint": "Uma cópia de tudo o que o Shosai mantém sobre você, em um único arquivo compactado. Quando ficar pronto, ele também é enviado para seu e-mail.",
+  "exportStart": "Preparar arquivo",
+  "exportPreparing": "Preparando seu arquivo…",
+  "exportReady": "Pronto: {size}. O link funciona até {date}.",
+  "exportDownload": "Baixar",
+  "exportFailed": "Não foi possível preparar o arquivo. Tente novamente.",
+  "exportAgain": "Preparar um novo"
 }

@@ -22,12 +22,13 @@
   "profile": {
     "title": "Profiel",
     "email": "E-mail",
-    "emailHint": "Met dit adres log je in via je provider.",
+    "emailHint": "Met dit adres log je in. Je ontvangt er een eenmalige code op.",
     "fullName": "Volledige naam",
     "displayName": "Hoe moet Leo je noemen?",
     "displayNameHint": "Leo gebruikt dit om je te begroeten en in antwoorden.",
     "workRole": "Wat beschrijft je werk het best?",
-    "workRoleHint": "Leo stemt voorbeelden en termen hiermee af op jouw vakgebied."
+    "workRoleHint": "Leo stemt voorbeelden en termen hiermee af op jouw vakgebied.",
+    "workRolePlaceholder": "Kiezen…"
   },
   "workRoles": {
     "product_management": "Productmanagement",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Gevarenzone",
     "title": "Account verwijderen",
-    "description": "Verwijder je account en alles erin definitief: chats, notities, bestanden, prompts en instellingen.",
+    "description": "Verwijder je account en alles erin. Je hebt 7 dagen om je te bedenken.",
     "confirmTitle": "Je account verwijderen?",
-    "confirmDescription": "Dit kan niet ongedaan worden gemaakt. Je chats, notities, bestanden, prompts, geheugen en instellingen worden verwijderd en een eventueel abonnement wordt opgezegd.",
+    "confirmDescription": "Je account wordt over 7 dagen verwijderd: chats, notities, bestanden, prompts, geheugen en instellingen, en een eventueel abonnement wordt opgezegd. Log vóór die tijd in om dit te annuleren.",
     "confirmLabel": "Typ <address>{email}</address> om te bevestigen",
-    "deleted": "Je account is verwijderd",
-    "failed": "Kan je account niet verwijderen"
+    "failed": "Kan je account niet verwijderen",
+    "scheduled": "Je account wordt op {date} verwijderd. Log vóór die datum in om het te behouden.",
+    "mismatch": "Dat is niet het e-mailadres van je account.",
+    "reauthenticate": "Vul de code in die we naar {email} hebben gestuurd om te bevestigen dat jij het bent."
+  },
+  "devices": {
+    "title": "Apparaten",
+    "description": "Waar je met je account bent ingelogd.",
+    "thisDevice": "Dit apparaat",
+    "lastActive": "Actief {time}",
+    "signOut": "Uitloggen",
+    "signOutOthers": "Uitloggen op alle andere apparaten",
+    "signedOutOthers": "{count, plural, =0 {Je was op geen enkel ander apparaat ingelogd} one {Uitgelogd op # apparaat} other {Uitgelogd op # apparaten}}",
+    "signOutFailed": "Kan niet uitloggen op dat apparaat",
+    "loadFailed": "Kan je apparaten niet laden.",
+    "more": "Meer tonen",
+    "kinds": {
+      "web": "Browser",
+      "desktop": "Desktopapp"
+    }
   }
 }

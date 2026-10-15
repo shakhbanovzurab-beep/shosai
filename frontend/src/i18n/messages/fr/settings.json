@@ -22,12 +22,13 @@
   "profile": {
     "title": "Profil",
     "email": "E-mail",
-    "emailHint": "Vous vous connectez avec cette adresse via votre fournisseur.",
+    "emailHint": "Vous vous connectez avec cette adresse : un code à usage unique y est envoyé.",
     "fullName": "Nom complet",
     "displayName": "Comment Leo doit-il vous appeler ?",
     "displayNameHint": "Utilisé quand Leo vous salue et dans ses réponses.",
     "workRole": "Qu’est-ce qui décrit le mieux votre travail ?",
-    "workRoleHint": "Leo s’en sert pour adapter ses exemples et son vocabulaire à votre domaine."
+    "workRoleHint": "Leo s’en sert pour adapter ses exemples et son vocabulaire à votre domaine.",
+    "workRolePlaceholder": "Choisir…"
   },
   "workRoles": {
     "product_management": "Gestion de produit",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Zone de danger",
     "title": "Supprimer le compte",
-    "description": "Supprimez définitivement votre compte et tout son contenu : conversations, notes, fichiers, prompts et paramètres.",
+    "description": "Supprimez votre compte et tout son contenu. Vous avez 7 jours pour changer d’avis.",
     "confirmTitle": "Supprimer votre compte ?",
-    "confirmDescription": "Cette action est irréversible. Vos conversations, notes, fichiers, prompts, votre mémoire et vos paramètres seront supprimés, et tout abonnement en cours sera résilié.",
+    "confirmDescription": "Votre compte sera supprimé dans 7 jours : conversations, notes, fichiers, prompts, mémoire et paramètres, et tout abonnement en cours sera résilié. Connectez-vous d’ici là pour annuler.",
     "confirmLabel": "Saisissez <address>{email}</address> pour confirmer",
-    "deleted": "Votre compte a été supprimé",
-    "failed": "Impossible de supprimer votre compte"
+    "failed": "Impossible de supprimer votre compte",
+    "scheduled": "Votre compte sera supprimé le {date}. Connectez-vous d’ici là pour le conserver.",
+    "mismatch": "Ce n’est pas l’e-mail de votre compte.",
+    "reauthenticate": "Pour confirmer qu’il s’agit bien de vous, saisissez le code envoyé à {email}."
+  },
+  "devices": {
+    "title": "Appareils",
+    "description": "Les appareils sur lesquels votre compte est connecté.",
+    "thisDevice": "Cet appareil",
+    "lastActive": "Actif {time}",
+    "signOut": "Se déconnecter",
+    "signOutOthers": "Se déconnecter de tous les autres appareils",
+    "signedOutOthers": "{count, plural, =0 {Aucun autre appareil n’était connecté} one {# appareil déconnecté} many {# d’appareils déconnectés} other {# appareils déconnectés}}",
+    "signOutFailed": "Impossible de déconnecter cet appareil",
+    "loadFailed": "Impossible de charger vos appareils.",
+    "more": "Afficher plus",
+    "kinds": {
+      "web": "Navigateur",
+      "desktop": "Application de bureau"
+    }
   }
 }

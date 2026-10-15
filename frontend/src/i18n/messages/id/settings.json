@@ -22,12 +22,13 @@
   "profile": {
     "title": "Profil",
     "email": "Email",
-    "emailHint": "Anda masuk dengan alamat ini melalui penyedia Anda.",
+    "emailHint": "Anda masuk dengan alamat ini: kode sekali pakai dikirim ke alamat ini.",
     "fullName": "Nama lengkap",
     "displayName": "Leo sebaiknya memanggil Anda apa?",
     "displayNameHint": "Dipakai saat Leo menyapa Anda dan dalam jawabannya.",
     "workRole": "Apa yang paling menggambarkan pekerjaan Anda?",
-    "workRoleHint": "Leo memakainya untuk menyesuaikan contoh dan istilah dengan bidang Anda."
+    "workRoleHint": "Leo memakainya untuk menyesuaikan contoh dan istilah dengan bidang Anda.",
+    "workRolePlaceholder": "Pilih…"
   },
   "workRoles": {
     "product_management": "Manajemen produk",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Zona berbahaya",
     "title": "Hapus akun",
-    "description": "Hapus akun Anda secara permanen beserta seluruh isinya: chat, catatan, file, prompt, dan pengaturan.",
+    "description": "Hapus akun Anda beserta seluruh isinya. Anda punya waktu 7 hari untuk berubah pikiran.",
     "confirmTitle": "Hapus akun Anda?",
-    "confirmDescription": "Tindakan ini tidak dapat dibatalkan. Chat, catatan, file, prompt, memori, dan pengaturan Anda akan dihapus, dan langganan apa pun akan dibatalkan.",
+    "confirmDescription": "Akun Anda akan dihapus dalam 7 hari: chat, catatan, file, prompt, memori, dan pengaturan, dan langganan apa pun akan dibatalkan. Masuk sebelum itu untuk membatalkan penghapusan.",
     "confirmLabel": "Ketik <address>{email}</address> untuk mengonfirmasi",
-    "deleted": "Akun Anda telah dihapus",
-    "failed": "Tidak dapat menghapus akun Anda"
+    "failed": "Tidak dapat menghapus akun Anda",
+    "scheduled": "Akun Anda akan dihapus pada {date}. Masuk sebelum tanggal itu untuk mempertahankannya.",
+    "mismatch": "Itu bukan email akun Anda.",
+    "reauthenticate": "Untuk memastikan ini Anda, masukkan kode yang kami kirim ke {email}."
+  },
+  "devices": {
+    "title": "Perangkat",
+    "description": "Perangkat tempat akun Anda sedang masuk.",
+    "thisDevice": "Perangkat ini",
+    "lastActive": "Aktif {time}",
+    "signOut": "Keluar",
+    "signOutOthers": "Keluar dari semua perangkat lain",
+    "signedOutOthers": "{count, plural, =0 {Akun Anda tidak masuk di perangkat lain} other {Keluar dari # perangkat}}",
+    "signOutFailed": "Tidak dapat keluar dari perangkat itu",
+    "loadFailed": "Tidak dapat memuat perangkat Anda.",
+    "more": "Tampilkan lainnya",
+    "kinds": {
+      "web": "Browser",
+      "desktop": "Aplikasi desktop"
+    }
   }
 }

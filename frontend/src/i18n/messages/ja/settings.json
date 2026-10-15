@@ -22,12 +22,13 @@
   "profile": {
     "title": "プロフィール",
     "email": "メールアドレス",
-    "emailHint": "このアドレスでプロバイダ経由でログインします。",
+    "emailHint": "このアドレスでログインします。ワンタイムコードがこのアドレスに届きます。",
     "fullName": "氏名",
     "displayName": "Leo からの呼び名",
     "displayNameHint": "Leo のあいさつや回答で使われます。",
     "workRole": "職種",
-    "workRoleHint": "Leo が分野に合った例や用語を選ぶのに使います。"
+    "workRoleHint": "Leo が分野に合った例や用語を選ぶのに使います。",
+    "workRolePlaceholder": "選択…"
   },
   "workRoles": {
     "product_management": "プロダクトマネジメント",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "危険な操作",
     "title": "アカウントを削除",
-    "description": "アカウントとその中のすべて（チャット、ノート、ファイル、プロンプト、設定）を完全に削除します。",
+    "description": "アカウントとその中のすべてを削除します。7 日以内なら取り消せます。",
     "confirmTitle": "アカウントを削除しますか？",
-    "confirmDescription": "この操作は元に戻せません。チャット、ノート、ファイル、プロンプト、メモリ、設定が削除され、サブスクリプションも解約されます。",
+    "confirmDescription": "アカウントは 7 日後に削除されます。チャット、ノート、ファイル、プロンプト、メモリ、設定が削除され、サブスクリプションも解約されます。取り消すには、それまでにログインしてください。",
     "confirmLabel": "確認のため <address>{email}</address> と入力してください",
-    "deleted": "アカウントを削除しました",
-    "failed": "アカウントを削除できませんでした"
+    "failed": "アカウントを削除できませんでした",
+    "scheduled": "アカウントは {date} に削除されます。残すには、それまでにログインしてください。",
+    "mismatch": "アカウントのメールアドレスと一致しません。",
+    "reauthenticate": "本人確認のため、{email} に送信したコードを入力してください。"
+  },
+  "devices": {
+    "title": "デバイス",
+    "description": "アカウントにログインしているデバイスです。",
+    "thisDevice": "このデバイス",
+    "lastActive": "最終アクティビティ：{time}",
+    "signOut": "ログアウト",
+    "signOutOthers": "他のすべてのデバイスからログアウト",
+    "signedOutOthers": "{count, plural, =0 {ログインしている他のデバイスはありません} other {# 台のデバイスからログアウトしました}}",
+    "signOutFailed": "そのデバイスからログアウトできませんでした",
+    "loadFailed": "デバイスを読み込めませんでした。",
+    "more": "さらに表示",
+    "kinds": {
+      "web": "ブラウザ",
+      "desktop": "デスクトップアプリ"
+    }
   }
 }

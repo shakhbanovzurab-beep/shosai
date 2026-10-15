@@ -22,12 +22,13 @@
   "profile": {
     "title": "Hồ sơ",
     "email": "Email",
-    "emailHint": "Bạn đăng nhập bằng địa chỉ này qua nhà cung cấp của mình.",
+    "emailHint": "Bạn đăng nhập bằng địa chỉ này: mã dùng một lần sẽ được gửi đến đây.",
     "fullName": "Họ và tên",
     "displayName": "Leo nên gọi bạn là gì?",
     "displayNameHint": "Dùng khi Leo chào bạn và trong các câu trả lời.",
     "workRole": "Điều gì mô tả đúng nhất công việc của bạn?",
-    "workRoleHint": "Leo dùng thông tin này để chọn ví dụ và thuật ngữ sát với lĩnh vực của bạn."
+    "workRoleHint": "Leo dùng thông tin này để chọn ví dụ và thuật ngữ sát với lĩnh vực của bạn.",
+    "workRolePlaceholder": "Chọn…"
   },
   "workRoles": {
     "product_management": "Quản lý sản phẩm",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Vùng nguy hiểm",
     "title": "Xóa tài khoản",
-    "description": "Xóa vĩnh viễn tài khoản của bạn cùng mọi thứ trong đó: cuộc trò chuyện, ghi chú, tệp, câu lệnh và cài đặt.",
+    "description": "Xóa tài khoản của bạn cùng mọi thứ trong đó. Bạn có 7 ngày để đổi ý.",
     "confirmTitle": "Xóa tài khoản của bạn?",
-    "confirmDescription": "Không thể hoàn tác thao tác này. Cuộc trò chuyện, ghi chú, tệp, câu lệnh, bộ nhớ và cài đặt của bạn sẽ bị xóa, mọi gói đăng ký cũng sẽ bị hủy.",
+    "confirmDescription": "Tài khoản của bạn sẽ bị xóa sau 7 ngày: cuộc trò chuyện, ghi chú, tệp, câu lệnh, bộ nhớ và cài đặt, mọi gói đăng ký cũng sẽ bị hủy. Hãy đăng nhập trước thời điểm đó để hủy việc xóa.",
     "confirmLabel": "Nhập <address>{email}</address> để xác nhận",
-    "deleted": "Đã xóa tài khoản của bạn",
-    "failed": "Không thể xóa tài khoản của bạn"
+    "failed": "Không thể xóa tài khoản của bạn",
+    "scheduled": "Tài khoản của bạn sẽ bị xóa vào {date}. Hãy đăng nhập trước ngày đó để giữ lại tài khoản.",
+    "mismatch": "Đó không phải email tài khoản của bạn.",
+    "reauthenticate": "Để xác nhận đó là bạn, hãy nhập mã chúng tôi đã gửi đến {email}."
+  },
+  "devices": {
+    "title": "Thiết bị",
+    "description": "Những nơi tài khoản của bạn đang đăng nhập.",
+    "thisDevice": "Thiết bị này",
+    "lastActive": "Hoạt động {time}",
+    "signOut": "Đăng xuất",
+    "signOutOthers": "Đăng xuất khỏi mọi thiết bị khác",
+    "signedOutOthers": "{count, plural, =0 {Không có thiết bị nào khác đang đăng nhập} other {Đã đăng xuất khỏi # thiết bị}}",
+    "signOutFailed": "Không thể đăng xuất khỏi thiết bị đó",
+    "loadFailed": "Không thể tải thiết bị của bạn.",
+    "more": "Hiện thêm",
+    "kinds": {
+      "web": "Trình duyệt",
+      "desktop": "Ứng dụng máy tính"
+    }
   }
 }

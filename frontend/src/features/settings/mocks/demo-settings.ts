@@ -23,13 +23,6 @@ const section = (title: string, body: string) => ({ title, body });
 const shared = globalThis as typeof globalThis & { settingsDemo?: State };
 shared.settingsDemo ??= {
   settings: {
-    full_name: "Arham Khan",
-    display_name: "Arham",
-    email: "arham@lumen.so",
-    avatar_url: null,
-    work_role: "other",
-    improve_models: false,
-    share_location: true,
     leo_model: "auto",
     response_language: "auto",
     response_length: "balanced",
@@ -77,12 +70,6 @@ export const responseLanguageSetting = () => state.settings.response_language;
 
 export function patchSettings(patch: SettingsPatch): UserSettings {
   state.settings = { ...state.settings, ...patch };
-  return state.settings;
-}
-
-/** The demo keeps the scaled image inline as a data URL; the backend should store it and return a URL. */
-export function setAvatar(url: string | null): UserSettings {
-  state.settings = { ...state.settings, avatar_url: url };
   return state.settings;
 }
 

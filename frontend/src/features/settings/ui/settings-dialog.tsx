@@ -6,6 +6,8 @@ import { ThinkingOrb } from "thinking-orbs";
 import { useTranslations } from "use-intl";
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
+import { useMe } from "@/features/identity/model/session-store";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 
 import type { SettingsSection } from "../domain/sections";
@@ -42,9 +44,17 @@ const SECTIONS: { id: SettingsSection; icon: LucideIcon | null }[] = [
   { id: "hotkeys", icon: Keyboard },
 ];
 
-/** Sections backed by the user's preferences wait for them; the rest load their own data. */
+/**
+ * Account и Privacy — данные identity, уже загруженные с сессией; разделы на предпочтениях ждут их, остальные
+ * загружают своё сами.
+ */
 function SectionBody({ section }: { section: SettingsSection }) {
   const settings = usePollingResource(settingsResource);
+  const me = useMe();
+  if (section === "account" || section === "privacy") {
+    if (me === null) return <Spinner className="mx-auto my-10" />;
+    return section === "account" ? <AccountSection me={me} /> : <PrivacySection me={me} />;
+  }
   if (section === "billing") return <BillingSection />;
   if (section === "usage") return <UsageSection />;
   if (section === "mcp") return <McpSection />;
@@ -52,8 +62,6 @@ function SectionBody({ section }: { section: SettingsSection }) {
   return (
     <SectionState state={settings} onRetry={() => void settingsResource.refresh()}>
       {(data) => {
-        if (section === "account") return <AccountSection settings={data} />;
-        if (section === "privacy") return <PrivacySection settings={data} />;
         if (section === "leo") return <LeoSection settings={data} />;
         if (section === "hotkeys") return <HotkeysSection settings={data} />;
         return <MemorySection settings={data} />;

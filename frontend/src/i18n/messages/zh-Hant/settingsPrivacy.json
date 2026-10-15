@@ -4,46 +4,20 @@
   "improveModelsHint": "允許使用你的對話和會議筆記來訓練及改善模型。預設為關閉。",
   "shareLocation": "分享大概位置",
   "shareLocationHint": "用於提供當地天氣和依時間調整的回答。只會分享所在區域，絕不會分享你的確切位置。",
+  "marketing": "Shosai 最新動態",
+  "marketingHint": "偶爾寄送新功能相關的電子郵件。帳號相關郵件不受此設定影響，仍會照常寄送。",
+  "crossBorder": "在歐盟處理",
+  "crossBorderHint": "你的資料存放在俄羅斯，由 Leo 在歐盟處理。如果不同意，Leo 和其他 AI 功能將停止運作。",
+  "crossBorderWarningTitle": "要撤回在歐盟處理的同意嗎？",
+  "crossBorderWarning": "在你重新同意之前，你帳號的 Leo、轉錄和其他所有 AI 功能都會停止運作。你的資料會留在原處。",
+  "crossBorderWithdraw": "撤回",
   "yourData": "你的資料",
   "export": "匯出資料",
-  "exportHint": "下載你的設定、提示詞、記憶和活動紀錄副本。",
-  "kinds": {
-    "shared_chats": {
-      "title": "已共用的對話",
-      "description": "任何擁有連結的人都能查看的對話。停止共用後，連結就會失效。",
-      "removeItem": "停止共用 {title}",
-      "removeAll": "全部停止共用",
-      "confirmAll": "要停止共用所有對話嗎？",
-      "empty": "沒有已共用的對話"
-    },
-    "shared_artifacts": {
-      "title": "已共用的成品",
-      "description": "你從對話中發布的文件和頁面。",
-      "removeItem": "停止共用 {title}",
-      "removeAll": "全部停止共用",
-      "confirmAll": "要停止共用所有成品嗎？",
-      "empty": "沒有已共用的成品"
-    },
-    "uploaded_files": {
-      "title": "已上傳的檔案",
-      "description": "你在對話中附加的檔案。刪除檔案後，也會從那些對話中移除。",
-      "removeItem": "刪除 {title}",
-      "removeAll": "刪除所有檔案",
-      "confirmAll": "要刪除所有檔案嗎？",
-      "empty": "沒有已上傳的檔案"
-    },
-    "feedback": {
-      "title": "你的意見回饋",
-      "description": "你對 Leo 的回答留下的評分和意見。",
-      "removeItem": "刪除 {title}",
-      "removeAll": "刪除所有意見回饋",
-      "confirmAll": "要刪除所有意見回饋嗎？",
-      "empty": "還沒有意見回饋"
-    }
-  },
-  "nothingToManage": "這裡沒有需要管理的項目。",
-  "copyLinkTo": "複製 {title} 的連結",
-  "cantUndo": "這項操作無法復原。",
-  "removeFailed": "無法移除",
-  "removeAllFailed": "無法全部移除"
+  "exportHint": "將 Shosai 保存的所有你的資料打包成一個壓縮檔。準備好後也會寄到你的電子郵件。",
+  "exportStart": "準備壓縮檔",
+  "exportPreparing": "正在準備壓縮檔…",
+  "exportReady": "已準備好：{size}。連結有效期限至 {date}。",
+  "exportDownload": "下載",
+  "exportFailed": "無法準備壓縮檔。請再試一次。",
+  "exportAgain": "重新準備"
 }

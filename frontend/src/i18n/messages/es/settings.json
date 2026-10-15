@@ -22,12 +22,13 @@
   "profile": {
     "title": "Perfil",
     "email": "Correo electrónico",
-    "emailHint": "Inicias sesión con esta dirección a través de tu proveedor.",
+    "emailHint": "Inicias sesión con esta dirección: a ella te llega un código de un solo uso.",
     "fullName": "Nombre completo",
     "displayName": "¿Cómo quieres que te llame Leo?",
     "displayNameHint": "Leo lo usa al saludarte y en sus respuestas.",
     "workRole": "¿Qué describe mejor tu trabajo?",
-    "workRoleHint": "Leo lo usa para adaptar los ejemplos y los términos a tu campo."
+    "workRoleHint": "Leo lo usa para adaptar los ejemplos y los términos a tu campo.",
+    "workRolePlaceholder": "Elige…"
   },
   "workRoles": {
     "product_management": "Gestión de producto",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Zona de peligro",
     "title": "Eliminar cuenta",
-    "description": "Elimina para siempre tu cuenta y todo lo que contiene: chats, notas, archivos, prompts y configuración.",
+    "description": "Elimina tu cuenta y todo lo que contiene. Tienes 7 días para cambiar de opinión.",
     "confirmTitle": "¿Eliminar tu cuenta?",
-    "confirmDescription": "Esta acción no se puede deshacer. Se eliminarán tus chats, notas, archivos, prompts, memoria y configuración, y se cancelará cualquier suscripción.",
+    "confirmDescription": "Tu cuenta se eliminará en 7 días: chats, notas, archivos, prompts, memoria y configuración, y se cancelará cualquier suscripción. Inicia sesión antes de esa fecha para cancelar la eliminación.",
     "confirmLabel": "Escribe <address>{email}</address> para confirmar",
-    "deleted": "Se eliminó tu cuenta",
-    "failed": "No se pudo eliminar tu cuenta"
+    "failed": "No se pudo eliminar tu cuenta",
+    "scheduled": "Tu cuenta se eliminará el {date}. Inicia sesión antes de esa fecha para conservarla.",
+    "mismatch": "Ese no es el correo de tu cuenta.",
+    "reauthenticate": "Para confirmar que eres tú, escribe el código que enviamos a {email}."
+  },
+  "devices": {
+    "title": "Dispositivos",
+    "description": "Dispositivos con sesión iniciada en tu cuenta.",
+    "thisDevice": "Este dispositivo",
+    "lastActive": "Activo {time}",
+    "signOut": "Cerrar sesión",
+    "signOutOthers": "Cerrar sesión en todos los demás dispositivos",
+    "signedOutOthers": "{count, plural, =0 {No había sesión iniciada en otros dispositivos} one {Se cerró sesión en # dispositivo} many {Se cerró sesión en # de dispositivos} other {Se cerró sesión en # dispositivos}}",
+    "signOutFailed": "No se pudo cerrar sesión en ese dispositivo",
+    "loadFailed": "No se pudieron cargar tus dispositivos.",
+    "more": "Mostrar más",
+    "kinds": {
+      "web": "Navegador",
+      "desktop": "App de escritorio"
+    }
   }
 }

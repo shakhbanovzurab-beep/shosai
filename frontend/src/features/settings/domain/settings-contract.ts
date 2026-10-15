@@ -1,9 +1,8 @@
 /**
- * Settings API contract, shared by the settings dialog and the route handlers in
- * `src/features/settings/server` (served under `/api/settings`). They proxy to
- * `${BACKEND_API_URL}/v1/settings/*` when it is set and fall back to an in-memory demo otherwise.
- * snake_case to match Pydantic; errors are FastAPI's `{ "detail": string }`. See docs/settings-api.md.
- * Billing and usage, MCP, your data, memory and connectors have their own contract files beside this one.
+ * Settings API contract for the preferences other slices still own (Leo, memory, hotkeys), served under
+ * `/api/settings` by the development mocks until their owners publish routes. snake_case to match Pydantic.
+ * See docs/settings-api.md. The account, avatar, consents, devices, export and deletion belong to identity
+ * (`/v1/me*`). Billing and usage, MCP, memory and connectors have their own contract files beside this one.
  */
 
 import type { HotkeyBindings } from "./hotkeys";
@@ -15,19 +14,6 @@ export const RESPONSE_LENGTHS = ["concise", "balanced", "detailed"] as const;
 export type ResponseLength = (typeof RESPONSE_LENGTHS)[number];
 
 export type UserSettings = {
-  /* Account */
-  full_name: string;
-  /** What Leo calls the user. */
-  display_name: string;
-  /** Read-only here; changed through the identity provider. */
-  email: string;
-  /** Set with PUT /settings/avatar, cleared with DELETE; null shows initials. */
-  avatar_url: string | null;
-  /** One of WORK_ROLES; helps Leo pitch answers to the user's field. */
-  work_role: WorkRole;
-  /* Privacy */
-  improve_models: boolean;
-  share_location: boolean;
   /* Leo */
   /** "auto" lets Leo pick per task; otherwise a text model id from GET /studio/models (the subscription's list). */
   leo_model: string;
@@ -51,16 +37,9 @@ export type UserSettings = {
   hotkeys: HotkeyBindings;
 };
 
-export type SettingsPatch = Partial<Omit<UserSettings, "email" | "avatar_url">>;
+export type SettingsPatch = Partial<UserSettings>;
 
-/* ---------- Account deletion: POST /settings/account/delete ---------- */
-
-/** The user retypes their email to confirm; the backend checks it matches before deleting anything. */
-export type DeleteAccountRequest = { confirm_email: string };
-/** Deletion starts at once; afterwards the session is signed out. */
-export type DeleteAccountResponse = { deleted: true };
-
-/* ---------- Avatar: PUT /settings/avatar (multipart, field "file"), DELETE /settings/avatar ---------- */
+/* ---------- Avatar: prepared here, saved through identity's PUT /v1/me/avatar ---------- */
 
 /** The browser crops to a square and scales to this many pixels a side before uploading. */
 export const AVATAR_SIZE = 256;

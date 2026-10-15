@@ -1,11 +1,7 @@
 // Сессия разработки (`npm run dev` без бэкенда): демо-человек вошёл сразу, вход принимает любой пароль, кроме
 // «wrong», выход закрывает сессию до следующего входа — и после перезагрузки вкладки, как настоящая refresh-cookie.
 // В production-сборку моки не попадают.
-import { DEMO_USER } from "@/features/settings/data/demo-user";
-import type { components } from "@/lib/api/generated/schema";
-import { LANGUAGE_COOKIE } from "@/lib/language";
-
-type Me = components["schemas"]["Me"];
+import { applyPatch, demoMe } from "./demo-person";
 
 const DEMO_TOKEN = "demo-access-token";
 const REJECTED_PASSWORD = "wrong";
@@ -19,35 +15,6 @@ function isSignedIn(): boolean {
 function setSignedIn(value: boolean): void {
   if (value) sessionStorage.removeItem(SIGNED_OUT_KEY);
   else sessionStorage.setItem(SIGNED_OUT_KEY, "1");
-}
-
-function interfaceLanguage(): string {
-  const entry = document.cookie.split("; ").find((part) => part.startsWith(`${LANGUAGE_COOKIE}=`));
-  return entry ? decodeURIComponent(entry.slice(LANGUAGE_COOKIE.length + 1)) : "en";
-}
-
-function demoMe(): Me {
-  return {
-    id: "00000000-0000-7000-8000-000000000001",
-    email: DEMO_USER.email,
-    full_name: DEMO_USER.name,
-    display_name: null,
-    work_role: null,
-    avatar_url: null,
-    language: interfaceLanguage(),
-    timezone: "Europe/Amsterdam",
-    country: "NL",
-    home: "eu",
-    consents: {
-      personal_data: true,
-      cross_border: true,
-      marketing: false,
-      improve_models: false,
-      share_location: false,
-    },
-    operator_roles: ["owner"],
-    created_at: "2026-01-01T00:00:00Z",
-  };
 }
 
 const unauthorized = (code: string) => Response.json({ error: { code }, detail: code }, { status: 401 });
@@ -88,7 +55,6 @@ export const meRoute = {
       : unauthorized("token_invalid");
   },
   async PATCH(request: Request) {
-    const change = (await request.json()) as { language?: string };
-    return Response.json({ ...demoMe(), ...(change.language ? { language: change.language } : {}) });
+    return Response.json(applyPatch((await request.json()) as Parameters<typeof applyPatch>[0]));
   },
 };

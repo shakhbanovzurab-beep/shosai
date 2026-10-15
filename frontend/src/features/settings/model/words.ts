@@ -6,7 +6,6 @@ import type { useTranslations } from "use-intl";
  */
 
 export type SettingsWords = ReturnType<typeof useTranslations<"settings">>;
-export type PrivacyWords = ReturnType<typeof useTranslations<"settingsPrivacy">>;
 export type BillingWords = ReturnType<typeof useTranslations<"settingsBilling">>;
 export type UsageWords = ReturnType<typeof useTranslations<"settingsUsage">>;
 export type McpWords = ReturnType<typeof useTranslations<"settingsMcp">>;

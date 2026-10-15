@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 
+import { clearAvatar, saveProfile, setAvatar } from "@/features/identity/model/profile";
 import { formatBytes } from "@/i18n/format-units";
 import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
@@ -33,11 +34,20 @@ function avatarProblem(error: unknown, t: SettingsWords, locale: string) {
   return t(`avatar.${error.problem}`);
 }
 
+/** Профиль из Settings › Account (identity, `PATCH /v1/me`): показан сразу, при отказе возвращается прежний. */
+export async function saveProfileField(change: Parameters<typeof saveProfile>[0], t: SettingsWords) {
+  try {
+    await saveProfile(change);
+  } catch (error) {
+    toast.error(t("saveFailed"), { description: apiErrorDescription(error) });
+    throw error;
+  }
+}
+
 /** Crops and scales the photo in the browser, uploads it and shows the saved one. */
 export async function uploadAvatar(file: File, t: SettingsWords, locale: string) {
   try {
-    const saved = await settingsApi.uploadAvatar(await scaleAvatar(file));
-    settingsResource.update(() => saved);
+    await setAvatar(await scaleAvatar(file));
   } catch (error) {
     toast.error(t("avatar.updateFailed"), { description: avatarProblem(error, t, locale) });
   }
@@ -45,20 +55,8 @@ export async function uploadAvatar(file: File, t: SettingsWords, locale: string)
 
 export async function removeAvatar(t: SettingsWords) {
   try {
-    const saved = await settingsApi.removeAvatar();
-    settingsResource.update(() => saved);
+    await clearAvatar();
   } catch (error) {
     toast.error(t("avatar.removeFailed"), { description: apiErrorDescription(error) });
-  }
-}
-
-/** Deletes the account (the server checks the retyped email first), then leaves for the home page. */
-export async function deleteAccount(confirmEmail: string, t: SettingsWords) {
-  try {
-    await settingsApi.deleteAccount({ confirm_email: confirmEmail });
-    toast.success(t("deleteAccount.deleted"));
-    window.location.assign("/");
-  } catch (error) {
-    toast.error(t("deleteAccount.failed"), { description: apiErrorDescription(error) });
   }
 }

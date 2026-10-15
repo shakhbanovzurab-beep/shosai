@@ -22,12 +22,13 @@
   "profile": {
     "title": "Profile",
     "email": "Email",
-    "emailHint": "You sign in with this address through your provider.",
+    "emailHint": "You sign in with this address: a one-time code comes to it.",
     "fullName": "Full name",
     "displayName": "What should Leo call you?",
     "displayNameHint": "Used when Leo greets you and in answers.",
     "workRole": "What best describes your work?",
-    "workRoleHint": "Leo uses it to pitch examples and terms to your field."
+    "workRoleHint": "Leo uses it to pitch examples and terms to your field.",
+    "workRolePlaceholder": "Choose…"
   },
   "workRoles": {
     "product_management": "Product management",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Danger zone",
     "title": "Delete account",
-    "description": "Permanently delete your account and everything in it: chats, notes, files, prompts and settings.",
+    "description": "Delete your account and everything in it. You have 7 days to change your mind.",
     "confirmTitle": "Delete your account?",
-    "confirmDescription": "This can’t be undone. Your chats, notes, files, prompts, memory and settings are deleted, and any subscription is cancelled.",
+    "confirmDescription": "Your account is deleted in 7 days: chats, notes, files, prompts, memory and settings, and any subscription is cancelled. Sign in before then to cancel.",
     "confirmLabel": "Type <address>{email}</address> to confirm",
-    "deleted": "Your account was deleted",
-    "failed": "Couldn’t delete your account"
+    "failed": "Couldn’t delete your account",
+    "scheduled": "Your account will be deleted on {date}. Sign in before then to keep it.",
+    "mismatch": "That’s not your account’s email.",
+    "reauthenticate": "To confirm it’s you, enter the code we sent to {email}."
+  },
+  "devices": {
+    "title": "Devices",
+    "description": "Where your account is signed in.",
+    "thisDevice": "This device",
+    "lastActive": "Active {time}",
+    "signOut": "Sign out",
+    "signOutOthers": "Sign out of all other devices",
+    "signedOutOthers": "{count, plural, =0 {No other devices were signed in} one {Signed out of # device} other {Signed out of # devices}}",
+    "signOutFailed": "Couldn’t sign out of that device",
+    "loadFailed": "Couldn’t load your devices.",
+    "more": "Show more",
+    "kinds": {
+      "web": "Browser",
+      "desktop": "Desktop app"
+    }
   }
 }

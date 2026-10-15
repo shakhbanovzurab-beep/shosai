@@ -5,27 +5,18 @@ import { LANGUAGES } from "@/lib/language";
 import { JsonResponse } from "@/mocks/runtime";
 
 import { comboProblem, effectiveBindings, HOTKEY_IDS, type HotkeyBindings, isValidCombo } from "../domain/hotkeys";
-import { NAME_MAX, RESPONSE_LENGTHS, type UserSettings, WORK_ROLES } from "../domain/settings-contract";
+import { RESPONSE_LENGTHS, type UserSettings } from "../domain/settings-contract";
 import { getSettings, patchSettings } from "./demo-settings";
 import { firstIssue, type Problem, readJson, refuse, refuseCombo } from "./problems";
 
 const languages = ["auto", ...LANGUAGES.map((l) => l.code)] as [string, ...string[]];
 
 // Messages are problem codes, worded for the request when it is refused (see ./problems).
-const FIXABLE = ["nameRequired", "hotkeyUnsupported"] as const satisfies Problem[];
+const FIXABLE = ["hotkeyUnsupported"] as const satisfies Problem[];
 type Fixable = (typeof FIXABLE)[number];
 
 const patchSchema = z
   .object({
-    full_name: z
-      .string()
-      .trim()
-      .min(1, "nameRequired" satisfies Fixable)
-      .max(NAME_MAX),
-    display_name: z.string().trim().max(NAME_MAX),
-    work_role: z.enum(WORK_ROLES),
-    improve_models: z.boolean(),
-    share_location: z.boolean(),
     leo_model: z.string().max(200),
     response_language: z.enum(languages),
     response_length: z.enum(RESPONSE_LENGTHS),

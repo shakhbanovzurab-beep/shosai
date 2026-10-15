@@ -9,15 +9,9 @@ import type {
   Usage,
 } from "../domain/billing-contract";
 import type { ConnectorsResponse, ConnectorUpdateResponse } from "../domain/connectors-contract";
-import type { DataItemsResponse, DataKind } from "../domain/data-contract";
 import type { McpServer, McpServerDraft, McpServersResponse } from "../domain/mcp-contract";
 import type { MemorySummary } from "../domain/memory-contract";
-import type {
-  DeleteAccountRequest,
-  DeleteAccountResponse,
-  SettingsPatch,
-  UserSettings,
-} from "../domain/settings-contract";
+import type { SettingsPatch, UserSettings } from "../domain/settings-contract";
 
 const request = <T>(path: string, init?: RequestInit) => apiRequest<T>(`/api/settings${path}`, init);
 const at = (base: string, id: string) => `${base}/${encodeURIComponent(id)}`;
@@ -25,17 +19,6 @@ const at = (base: string, id: string) => `${base}/${encodeURIComponent(id)}`;
 export const settingsApi = {
   get: () => request<UserSettings>(""),
   patch: (patch: SettingsPatch) => request<UserSettings>("", jsonBody("PATCH", patch)),
-  uploadAvatar: (image: Blob) => {
-    const form = new FormData();
-    form.append("file", image, "avatar");
-    return request<UserSettings>("/avatar", { method: "PUT", body: form });
-  },
-  removeAvatar: () => request<UserSettings>("/avatar", { method: "DELETE" }),
-  deleteAccount: (body: DeleteAccountRequest) =>
-    request<DeleteAccountResponse>("/account/delete", jsonBody("POST", body)),
-  listData: (kind: DataKind) => request<DataItemsResponse>(at("/data", kind)),
-  deleteData: (kind: DataKind, id: string) => request<void>(at(at("/data", kind), id), { method: "DELETE" }),
-  deleteAllData: (kind: DataKind) => request<void>(at("/data", kind), { method: "DELETE" }),
   billing: () => request<Billing>("/billing"),
   billingPortal: (body: BillingPortalRequest) =>
     request<BillingPortalResponse>("/billing/portal", jsonBody("POST", body)),

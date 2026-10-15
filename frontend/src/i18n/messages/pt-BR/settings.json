@@ -22,12 +22,13 @@
   "profile": {
     "title": "Perfil",
     "email": "E-mail",
-    "emailHint": "Você entra com este endereço pelo seu provedor.",
+    "emailHint": "Você entra com este endereço: um código de uso único é enviado para ele.",
     "fullName": "Nome completo",
     "displayName": "Como o Leo deve chamar você?",
     "displayNameHint": "Usado quando o Leo cumprimenta você e nas respostas.",
     "workRole": "O que melhor descreve seu trabalho?",
-    "workRoleHint": "O Leo usa isso para adaptar exemplos e termos à sua área."
+    "workRoleHint": "O Leo usa isso para adaptar exemplos e termos à sua área.",
+    "workRolePlaceholder": "Escolha…"
   },
   "workRoles": {
     "product_management": "Gestão de produto",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Zona de perigo",
     "title": "Excluir conta",
-    "description": "Exclua para sempre sua conta e tudo o que há nela: chats, notas, arquivos, prompts e configurações.",
+    "description": "Exclua sua conta e tudo o que há nela. Você tem 7 dias para mudar de ideia.",
     "confirmTitle": "Excluir sua conta?",
-    "confirmDescription": "Esta ação não pode ser desfeita. Seus chats, notas, arquivos, prompts, memória e configurações serão excluídos, e qualquer assinatura será cancelada.",
+    "confirmDescription": "Sua conta será excluída em 7 dias: chats, notas, arquivos, prompts, memória e configurações, e qualquer assinatura será cancelada. Entre antes disso para cancelar a exclusão.",
     "confirmLabel": "Digite <address>{email}</address> para confirmar",
-    "deleted": "Sua conta foi excluída",
-    "failed": "Não foi possível excluir sua conta"
+    "failed": "Não foi possível excluir sua conta",
+    "scheduled": "Sua conta será excluída em {date}. Entre antes disso para mantê-la.",
+    "mismatch": "Esse não é o e-mail da sua conta.",
+    "reauthenticate": "Para confirmar que é você, digite o código que enviamos para {email}."
+  },
+  "devices": {
+    "title": "Dispositivos",
+    "description": "Onde você entrou na sua conta.",
+    "thisDevice": "Este dispositivo",
+    "lastActive": "Ativo {time}",
+    "signOut": "Sair",
+    "signOutOthers": "Sair de todos os outros dispositivos",
+    "signedOutOthers": "{count, plural, =0 {Sua conta não estava aberta em outros dispositivos} one {Você saiu de # dispositivo} many {Você saiu de # de dispositivos} other {Você saiu de # dispositivos}}",
+    "signOutFailed": "Não foi possível sair desse dispositivo",
+    "loadFailed": "Não foi possível carregar seus dispositivos.",
+    "more": "Mostrar mais",
+    "kinds": {
+      "web": "Navegador",
+      "desktop": "App para computador"
+    }
   }
 }

@@ -4,46 +4,20 @@
   "improveModelsHint": "チャットと会議ノートをモデルのトレーニングと改善に使用することを許可します。初期設定はオフです。",
   "shareLocation": "おおよその位置情報を共有",
   "shareLocationHint": "地域の天気や時刻に応じた回答に使われます。共有されるのは地域だけで、正確な位置は共有されません。",
+  "marketing": "Shosai からのお知らせ",
+  "marketingHint": "新機能についてのメールをときどきお送りします。アカウントに関するメールはこの設定にかかわらず届きます。",
+  "crossBorder": "EU でのデータ処理",
+  "crossBorderHint": "データはロシアに保存され、Leo が EU で処理します。この同意がないと、Leo やその他の AI 機能は動作しません。",
+  "crossBorderWarningTitle": "EU でのデータ処理への同意を撤回しますか？",
+  "crossBorderWarning": "再び同意するまで、このアカウントでは Leo、文字起こし、その他すべての AI 機能が動作しなくなります。データは今の場所に残ります。",
+  "crossBorderWithdraw": "撤回",
   "yourData": "自分のデータ",
   "export": "データをエクスポート",
-  "exportHint": "設定、プロンプト、メモリ、アクティビティのコピーをダウンロードします。",
-  "kinds": {
-    "shared_chats": {
-      "title": "共有したチャット",
-      "description": "リンクを知っている人なら誰でも閲覧できるチャットです。共有を解除するとリンクは無効になります。",
-      "removeItem": "{title} の共有を解除",
-      "removeAll": "すべての共有を解除",
-      "confirmAll": "すべてのチャットの共有を解除しますか？",
-      "empty": "共有したチャットはありません"
-    },
-    "shared_artifacts": {
-      "title": "共有したアーティファクト",
-      "description": "チャットから公開したドキュメントやページです。",
-      "removeItem": "{title} の共有を解除",
-      "removeAll": "すべての共有を解除",
-      "confirmAll": "すべてのアーティファクトの共有を解除しますか？",
-      "empty": "共有したアーティファクトはありません"
-    },
-    "uploaded_files": {
-      "title": "アップロードしたファイル",
-      "description": "チャットに添付したファイルです。削除すると、そのチャットからも削除されます。",
-      "removeItem": "{title} を削除",
-      "removeAll": "すべてのファイルを削除",
-      "confirmAll": "すべてのファイルを削除しますか？",
-      "empty": "アップロードしたファイルはありません"
-    },
-    "feedback": {
-      "title": "自分のフィードバック",
-      "description": "Leo の回答に付けた評価とコメントです。",
-      "removeItem": "{title} を削除",
-      "removeAll": "すべてのフィードバックを削除",
-      "confirmAll": "すべてのフィードバックを削除しますか？",
-      "empty": "フィードバックはまだありません"
-    }
-  },
-  "nothingToManage": "管理する項目はありません。",
-  "copyLinkTo": "{title} のリンクをコピー",
-  "cantUndo": "この操作は元に戻せません。",
-  "removeFailed": "削除できませんでした",
-  "removeAllFailed": "削除できませんでした"
+  "exportHint": "Shosai が保存している自分のデータすべてのコピーを、1 つのアーカイブにまとめます。準備ができたらメールでもお送りします。",
+  "exportStart": "アーカイブを作成",
+  "exportPreparing": "アーカイブを作成中…",
+  "exportReady": "準備ができました（{size}）。リンクは {date} まで有効です。",
+  "exportDownload": "ダウンロード",
+  "exportFailed": "アーカイブを作成できませんでした。もう一度お試しください。",
+  "exportAgain": "新しく作成"
 }

@@ -1,6 +1,15 @@
 import { type MockRoute, mockRoute } from "@/mocks/routing";
 
 import {
+  avatarRoute,
+  deletionRoute,
+  deviceRoute,
+  devicesRoute,
+  exportsRoute,
+  latestExportRoute,
+  otherDevicesRoute,
+} from "./account-routes";
+import {
   desktopCodeRoute,
   emailResendRoute,
   emailStartRoute,
@@ -24,4 +33,11 @@ export const handlers: MockRoute[] = [
   mockRoute("/v1/auth/social/register", socialSessionRoute, ["POST"]),
   mockRoute("/v1/auth/desktop/code", desktopCodeRoute, ["POST"]),
   mockRoute("/v1/me", meRoute, ["GET", "PATCH"]),
+  mockRoute("/v1/me/avatar", avatarRoute, ["PUT", "DELETE"]),
+  mockRoute("/v1/me/devices", devicesRoute, ["GET"]),
+  mockRoute("/v1/me/devices/sign-out-others", otherDevicesRoute, ["POST"]),
+  mockRoute("/v1/me/devices/:device_id", deviceRoute, ["DELETE"]),
+  mockRoute("/v1/me/exports", exportsRoute, ["POST"]),
+  mockRoute("/v1/me/exports/latest", latestExportRoute, ["GET"]),
+  mockRoute("/v1/me/deletion", deletionRoute, ["POST"]),
 ];

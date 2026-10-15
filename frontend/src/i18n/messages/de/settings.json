@@ -22,12 +22,13 @@
   "profile": {
     "title": "Profil",
     "email": "E-Mail",
-    "emailHint": "Mit dieser Adresse meldest du dich über deinen Anbieter an.",
+    "emailHint": "Mit dieser Adresse meldest du dich an. An sie wird ein Einmalcode gesendet.",
     "fullName": "Vollständiger Name",
     "displayName": "Wie soll Leo dich nennen?",
     "displayNameHint": "Leo nutzt den Namen zur Begrüßung und in Antworten.",
     "workRole": "Was beschreibt deine Arbeit am besten?",
-    "workRoleHint": "Leo passt Beispiele und Begriffe daran an dein Fachgebiet an."
+    "workRoleHint": "Leo passt Beispiele und Begriffe daran an dein Fachgebiet an.",
+    "workRolePlaceholder": "Auswählen…"
   },
   "workRoles": {
     "product_management": "Produktmanagement",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Gefahrenbereich",
     "title": "Konto löschen",
-    "description": "Lösche dein Konto und alle Inhalte dauerhaft: Chats, Notizen, Dateien, Prompts und Einstellungen.",
+    "description": "Lösche dein Konto und alle Inhalte. Du hast 7 Tage Zeit, es dir anders zu überlegen.",
     "confirmTitle": "Dein Konto löschen?",
-    "confirmDescription": "Das kann nicht rückgängig gemacht werden. Deine Chats, Notizen, Dateien, Prompts, das Gedächtnis und die Einstellungen werden gelöscht, und ein bestehendes Abo wird gekündigt.",
+    "confirmDescription": "Dein Konto wird in 7 Tagen gelöscht: Chats, Notizen, Dateien, Prompts, Gedächtnis und Einstellungen, und ein bestehendes Abo wird gekündigt. Melde dich vorher an, um das Löschen abzubrechen.",
     "confirmLabel": "Gib zur Bestätigung <address>{email}</address> ein",
-    "deleted": "Dein Konto wurde gelöscht",
-    "failed": "Dein Konto konnte nicht gelöscht werden"
+    "failed": "Dein Konto konnte nicht gelöscht werden",
+    "scheduled": "Dein Konto wird am {date} gelöscht. Melde dich vorher an, um es zu behalten.",
+    "mismatch": "Das ist nicht die E-Mail-Adresse deines Kontos.",
+    "reauthenticate": "Um zu bestätigen, dass du es bist, gib den Code ein, den wir an {email} gesendet haben."
+  },
+  "devices": {
+    "title": "Geräte",
+    "description": "Wo du mit deinem Konto angemeldet bist.",
+    "thisDevice": "Dieses Gerät",
+    "lastActive": "Aktiv {time}",
+    "signOut": "Abmelden",
+    "signOutOthers": "Auf allen anderen Geräten abmelden",
+    "signedOutOthers": "{count, plural, =0 {Du warst auf keinem anderen Gerät angemeldet} one {Auf # Gerät abgemeldet} other {Auf # Geräten abgemeldet}}",
+    "signOutFailed": "Das Gerät konnte nicht abgemeldet werden",
+    "loadFailed": "Deine Geräte konnten nicht geladen werden.",
+    "more": "Mehr anzeigen",
+    "kinds": {
+      "web": "Browser",
+      "desktop": "Desktop-App"
+    }
   }
 }

@@ -9,13 +9,13 @@ import { useLocale, useTranslations } from "use-intl";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import type { Me } from "@/features/identity/domain/session";
 import { getInitials } from "@/lib/utils";
 
-import type { UserSettings } from "../../domain/settings-contract";
 import { removeAvatar, uploadAvatar } from "../../model/account-actions";
 
 /** Profile photo: pick or drop any image; it's cropped square and scaled down before upload. */
-export function AvatarEditor({ settings }: { settings: UserSettings }) {
+export function AvatarEditor({ me }: { me: Me }) {
   const t = useTranslations("settings");
   const common = useTranslations("common");
   const locale = useLocale();
@@ -52,8 +52,8 @@ export function AvatarEditor({ settings }: { settings: UserSettings }) {
         )}
       >
         <Avatar className="size-16 rounded-xl">
-          {settings.avatar_url ? <AvatarImage src={settings.avatar_url} alt="" className="object-cover" /> : null}
-          <AvatarFallback className="rounded-xl text-lg">{getInitials(settings.full_name || "?")}</AvatarFallback>
+          {me.avatar_url ? <AvatarImage src={me.avatar_url} alt="" className="object-cover" /> : null}
+          <AvatarFallback className="rounded-xl text-lg">{getInitials(me.full_name || "?")}</AvatarFallback>
         </Avatar>
         <span
           className={cn(
@@ -68,7 +68,7 @@ export function AvatarEditor({ settings }: { settings: UserSettings }) {
       <div className="flex min-w-0 flex-col gap-2">
         <div className="flex min-w-0 flex-col">
           <span dir="auto" className="truncate font-medium">
-            {settings.full_name}
+            {me.full_name}
           </span>
           <span className="text-muted-foreground text-xs">{t("avatar.hint")}</span>
         </div>
@@ -76,7 +76,7 @@ export function AvatarEditor({ settings }: { settings: UserSettings }) {
           <Button size="sm" variant="outline" disabled={pending} onClick={() => inputRef.current?.click()}>
             {t("avatar.upload")}
           </Button>
-          {settings.avatar_url ? (
+          {me.avatar_url ? (
             <Button size="sm" variant="ghost" disabled={pending} onClick={remove}>
               {common("actions.remove")}
             </Button>

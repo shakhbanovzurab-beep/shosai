@@ -4,46 +4,20 @@
   "improveModelsHint": "Sta toe dat je chats en vergadernotities worden gebruikt om modellen te trainen en te verbeteren. Standaard uit.",
   "shareLocation": "Globale locatie delen",
   "shareLocationHint": "Voor het lokale weer en antwoorden die rekening houden met je lokale tijd. Alleen de regio wordt gedeeld, nooit je precieze locatie.",
+  "marketing": "Nieuws over Shosai",
+  "marketingHint": "Af en toe e-mails over nieuwe functies. E-mails over je account krijg je hoe dan ook.",
+  "crossBorder": "Verwerking in de EU",
+  "crossBorderHint": "Je gegevens blijven in Rusland en Leo verwerkt ze in de EU. Zonder deze toestemming werken Leo en de andere AI-functies niet meer.",
+  "crossBorderWarningTitle": "Toestemming voor verwerking in de EU intrekken?",
+  "crossBorderWarning": "Leo, transcriptie en alle andere AI-functies werken niet meer voor je account tot je opnieuw toestemming geeft. Je gegevens blijven waar ze zijn.",
+  "crossBorderWithdraw": "Intrekken",
   "yourData": "Je gegevens",
   "export": "Gegevens exporteren",
-  "exportHint": "Download een kopie van je instellingen, prompts, geheugen en activiteit.",
-  "kinds": {
-    "shared_chats": {
-      "title": "Gedeelde chats",
-      "description": "Chats die iedereen met de link kan bekijken. Als je stopt met delen, werkt de link niet meer.",
-      "removeItem": "{title} niet meer delen",
-      "removeAll": "Alles niet meer delen",
-      "confirmAll": "Alle chats niet meer delen?",
-      "empty": "Geen gedeelde chats"
-    },
-    "shared_artifacts": {
-      "title": "Gedeelde artefacten",
-      "description": "Documenten en pagina’s die je vanuit chats hebt gepubliceerd.",
-      "removeItem": "{title} niet meer delen",
-      "removeAll": "Alles niet meer delen",
-      "confirmAll": "Alle artefacten niet meer delen?",
-      "empty": "Geen gedeelde artefacten"
-    },
-    "uploaded_files": {
-      "title": "Geüploade bestanden",
-      "description": "Bestanden die je in chats hebt bijgevoegd. Als je er een verwijdert, verdwijnt het ook uit die chats.",
-      "removeItem": "{title} verwijderen",
-      "removeAll": "Alle bestanden verwijderen",
-      "confirmAll": "Alle bestanden verwijderen?",
-      "empty": "Geen geüploade bestanden"
-    },
-    "feedback": {
-      "title": "Je feedback",
-      "description": "Beoordelingen en opmerkingen die je bij Leo’s antwoorden hebt achtergelaten.",
-      "removeItem": "{title} verwijderen",
-      "removeAll": "Alle feedback verwijderen",
-      "confirmAll": "Alle feedback verwijderen?",
-      "empty": "Nog geen feedback"
-    }
-  },
-  "nothingToManage": "Hier valt niets te beheren.",
-  "copyLinkTo": "Link naar {title} kopiëren",
-  "cantUndo": "Dit kan niet ongedaan worden gemaakt.",
-  "removeFailed": "Kan dit niet verwijderen",
-  "removeAllFailed": "Kan ze niet verwijderen"
+  "exportHint": "Een kopie van alles wat Shosai over je bewaart, in één archief. Zodra het klaar is, krijg je het ook per e-mail.",
+  "exportStart": "Archief voorbereiden",
+  "exportPreparing": "Archief voorbereiden…",
+  "exportReady": "Klaar: {size}. De link werkt tot {date}.",
+  "exportDownload": "Downloaden",
+  "exportFailed": "Kan het archief niet voorbereiden. Probeer het opnieuw.",
+  "exportAgain": "Nieuw archief voorbereiden"
 }

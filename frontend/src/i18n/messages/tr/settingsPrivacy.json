@@ -4,46 +4,20 @@
   "improveModelsHint": "Sohbetlerinizin ve toplantı notlarınızın modelleri eğitmek ve geliştirmek için kullanılmasına izin verin. Varsayılan olarak kapalıdır.",
   "shareLocation": "Yaklaşık konumu paylaş",
   "shareLocationHint": "Yerel hava durumu ve saate uygun yanıtlar için kullanılır. Yalnızca bölge paylaşılır, tam konumunuz asla paylaşılmaz.",
+  "marketing": "Shosai haberleri",
+  "marketingHint": "Yeni özellikler hakkında ara sıra e-postalar. Hesapla ilgili e-postalar her durumda gelir.",
+  "crossBorder": "AB’de işleme",
+  "crossBorderHint": "Verileriniz Rusya’da kalır, Leo bunları AB’de işler. Bu onay olmadan Leo ve diğer yapay zekâ özellikleri çalışmaz.",
+  "crossBorderWarningTitle": "AB’de işleme onayı geri çekilsin mi?",
+  "crossBorderWarning": "Onayı yeniden verene kadar Leo, transkript oluşturma ve diğer tüm yapay zekâ özellikleri hesabınızda çalışmaz. Verileriniz olduğu yerde kalır.",
+  "crossBorderWithdraw": "Geri çek",
   "yourData": "Verileriniz",
   "export": "Verileri dışa aktar",
-  "exportHint": "Ayarlarınızın, istemlerinizin, belleğinizin ve etkinliğinizin bir kopyasını indirin.",
-  "kinds": {
-    "shared_chats": {
-      "title": "Paylaşılan sohbetler",
-      "description": "Bağlantıya sahip herkesin görüntüleyebileceği sohbetler. Paylaşımı kaldırmak bağlantıyı devre dışı bırakır.",
-      "removeItem": "{title} paylaşımını kaldır",
-      "removeAll": "Tüm paylaşımları kaldır",
-      "confirmAll": "Tüm sohbetlerin paylaşımı kaldırılsın mı?",
-      "empty": "Paylaşılan sohbet yok"
-    },
-    "shared_artifacts": {
-      "title": "Paylaşılan yapıtlar",
-      "description": "Sohbetlerden yayımladığınız belgeler ve sayfalar.",
-      "removeItem": "{title} paylaşımını kaldır",
-      "removeAll": "Tüm paylaşımları kaldır",
-      "confirmAll": "Tüm yapıtların paylaşımı kaldırılsın mı?",
-      "empty": "Paylaşılan yapıt yok"
-    },
-    "uploaded_files": {
-      "title": "Yüklenen dosyalar",
-      "description": "Sohbetlere eklediğiniz dosyalar. Bir dosyayı silmek onu bu sohbetlerden de kaldırır.",
-      "removeItem": "{title} dosyasını sil",
-      "removeAll": "Tüm dosyaları sil",
-      "confirmAll": "Tüm dosyalar silinsin mi?",
-      "empty": "Yüklenen dosya yok"
-    },
-    "feedback": {
-      "title": "Geri bildirimleriniz",
-      "description": "Leo’nun yanıtlarına bıraktığınız puanlar ve yorumlar.",
-      "removeItem": "{title} geri bildirimini sil",
-      "removeAll": "Tüm geri bildirimleri sil",
-      "confirmAll": "Tüm geri bildirimler silinsin mi?",
-      "empty": "Henüz geri bildirim yok"
-    }
-  },
-  "nothingToManage": "Burada yönetilecek bir şey yok.",
-  "copyLinkTo": "{title} bağlantısını kopyala",
-  "cantUndo": "Bu işlem geri alınamaz.",
-  "removeFailed": "Kaldırılamadı",
-  "removeAllFailed": "Öğeler kaldırılamadı"
+  "exportHint": "Shosai’nin sizinle ilgili tuttuğu her şeyin tek bir arşivdeki kopyası. Hazır olduğunda e-postayla da gönderilir.",
+  "exportStart": "Arşivi hazırla",
+  "exportPreparing": "Arşiviniz hazırlanıyor…",
+  "exportReady": "Hazır: {size}. Bağlantı {date} tarihine kadar geçerli.",
+  "exportDownload": "İndir",
+  "exportFailed": "Arşiv hazırlanamadı. Tekrar deneyin.",
+  "exportAgain": "Yeni arşiv hazırla"
 }

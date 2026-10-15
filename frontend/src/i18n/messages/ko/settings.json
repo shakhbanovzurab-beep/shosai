@@ -22,12 +22,13 @@
   "profile": {
     "title": "프로필",
     "email": "이메일",
-    "emailHint": "이 주소로 로그인 서비스를 통해 로그인해요.",
+    "emailHint": "이 주소로 로그인해요. 일회용 코드가 이 주소로 전송돼요.",
     "fullName": "이름",
     "displayName": "Leo가 뭐라고 부르면 될까요?",
     "displayNameHint": "Leo가 인사하거나 답변할 때 사용해요.",
     "workRole": "어떤 일을 하시나요?",
-    "workRoleHint": "Leo가 하시는 분야에 맞는 예시와 용어를 사용해요."
+    "workRoleHint": "Leo가 하시는 분야에 맞는 예시와 용어를 사용해요.",
+    "workRolePlaceholder": "선택…"
   },
   "workRoles": {
     "product_management": "제품 관리",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "위험 구역",
     "title": "계정 삭제",
-    "description": "계정과 그 안의 모든 데이터(채팅, 노트, 파일, 프롬프트, 설정)를 영구적으로 삭제해요.",
+    "description": "계정과 그 안의 모든 데이터를 삭제해요. 7일 안에는 마음을 바꿀 수 있어요.",
     "confirmTitle": "계정을 삭제할까요?",
-    "confirmDescription": "되돌릴 수 없어요. 채팅, 노트, 파일, 프롬프트, 메모리, 설정이 삭제되고 구독도 모두 해지돼요.",
+    "confirmDescription": "7일 후 계정이 삭제돼요. 채팅, 노트, 파일, 프롬프트, 메모리, 설정이 함께 삭제되고 구독도 모두 해지돼요. 취소하려면 그 전에 로그인해 주세요.",
     "confirmLabel": "확인하려면 <address>{email}</address>을(를) 입력해 주세요",
-    "deleted": "계정을 삭제했어요",
-    "failed": "계정을 삭제하지 못했어요"
+    "failed": "계정을 삭제하지 못했어요",
+    "scheduled": "{date}에 계정이 삭제돼요. 계정을 유지하려면 그 전에 로그인해 주세요.",
+    "mismatch": "계정 이메일과 일치하지 않아요.",
+    "reauthenticate": "본인 확인을 위해 {email}(으)로 보낸 코드를 입력해 주세요."
+  },
+  "devices": {
+    "title": "기기",
+    "description": "계정에 로그인된 기기예요.",
+    "thisDevice": "이 기기",
+    "lastActive": "마지막 활동: {time}",
+    "signOut": "로그아웃",
+    "signOutOthers": "다른 모든 기기에서 로그아웃",
+    "signedOutOthers": "{count, plural, =0 {로그인된 다른 기기가 없어요} other {기기 #대에서 로그아웃했어요}}",
+    "signOutFailed": "해당 기기에서 로그아웃하지 못했어요",
+    "loadFailed": "기기 목록을 불러오지 못했어요.",
+    "more": "더 보기",
+    "kinds": {
+      "web": "브라우저",
+      "desktop": "데스크톱 앱"
+    }
   }
 }

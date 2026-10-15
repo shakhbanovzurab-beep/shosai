@@ -22,12 +22,13 @@
   "profile": {
     "title": "Profil",
     "email": "E-posta",
-    "emailHint": "Bu adresle sağlayıcınız üzerinden giriş yaparsınız.",
+    "emailHint": "Bu adresle giriş yaparsınız: tek kullanımlık kod bu adrese gelir.",
     "fullName": "Ad soyad",
     "displayName": "Leo size nasıl hitap etsin?",
     "displayNameHint": "Leo sizi selamlarken ve yanıtlarında bu adı kullanır.",
     "workRole": "İşinizi en iyi ne tanımlıyor?",
-    "workRoleHint": "Leo, örnekleri ve terimleri alanınıza göre seçmek için bunu kullanır."
+    "workRoleHint": "Leo, örnekleri ve terimleri alanınıza göre seçmek için bunu kullanır.",
+    "workRolePlaceholder": "Seçin…"
   },
   "workRoles": {
     "product_management": "Ürün yönetimi",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Tehlikeli bölge",
     "title": "Hesabı sil",
-    "description": "Hesabınızı ve içindeki her şeyi kalıcı olarak silin: sohbetler, notlar, dosyalar, istemler ve ayarlar.",
+    "description": "Hesabınızı ve içindeki her şeyi silin. Fikrinizi değiştirmek için 7 gününüz var.",
     "confirmTitle": "Hesabınız silinsin mi?",
-    "confirmDescription": "Bu işlem geri alınamaz. Sohbetleriniz, notlarınız, dosyalarınız, istemleriniz, belleğiniz ve ayarlarınız silinir; varsa aboneliğiniz iptal edilir.",
+    "confirmDescription": "Hesabınız 7 gün sonra silinir: sohbetler, notlar, dosyalar, istemler, bellek ve ayarlar; varsa aboneliğiniz iptal edilir. Silmeyi iptal etmek için bu süre dolmadan giriş yapın.",
     "confirmLabel": "Onaylamak için <address>{email}</address> yazın",
-    "deleted": "Hesabınız silindi",
-    "failed": "Hesabınız silinemedi"
+    "failed": "Hesabınız silinemedi",
+    "scheduled": "Hesabınız {date} tarihinde silinecek. Hesabınızı korumak için bu tarihten önce giriş yapın.",
+    "mismatch": "Bu, hesabınızın e-posta adresi değil.",
+    "reauthenticate": "Siz olduğunuzu doğrulamak için {email} adresine gönderdiğimiz kodu girin."
+  },
+  "devices": {
+    "title": "Cihazlar",
+    "description": "Hesabınızla giriş yapılmış cihazlar.",
+    "thisDevice": "Bu cihaz",
+    "lastActive": "Son etkinlik: {time}",
+    "signOut": "Çıkış yap",
+    "signOutOthers": "Diğer tüm cihazlardan çıkış yap",
+    "signedOutOthers": "{count, plural, =0 {Başka cihazda açık oturum yoktu} one {# cihazdan çıkış yapıldı} other {# cihazdan çıkış yapıldı}}",
+    "signOutFailed": "O cihazdan çıkış yapılamadı",
+    "loadFailed": "Cihazlarınız yüklenemedi.",
+    "more": "Daha fazla göster",
+    "kinds": {
+      "web": "Tarayıcı",
+      "desktop": "Masaüstü uygulaması"
+    }
   }
 }

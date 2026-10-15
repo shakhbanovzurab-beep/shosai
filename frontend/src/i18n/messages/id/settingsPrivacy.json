@@ -4,46 +4,20 @@
   "improveModelsHint": "Izinkan chat dan catatan rapat Anda dipakai untuk melatih dan meningkatkan model. Nonaktif secara default.",
   "shareLocation": "Bagikan perkiraan lokasi",
   "shareLocationHint": "Dipakai untuk cuaca setempat dan jawaban yang memperhitungkan waktu. Hanya area yang dibagikan, tidak pernah posisi persis Anda.",
+  "marketing": "Kabar tentang Shosai",
+  "marketingHint": "Email sesekali tentang fitur baru. Email terkait akun tetap dikirim.",
+  "crossBorder": "Pemrosesan di UE",
+  "crossBorderHint": "Data Anda tetap di Rusia, dan Leo memprosesnya di UE. Tanpa persetujuan ini, Leo dan fitur AI lainnya berhenti berfungsi.",
+  "crossBorderWarningTitle": "Tarik persetujuan pemrosesan di UE?",
+  "crossBorderWarning": "Leo, pembuatan transkrip, dan semua fitur AI lainnya berhenti berfungsi untuk akun Anda sampai Anda menyetujuinya lagi. Data Anda tetap di tempatnya.",
+  "crossBorderWithdraw": "Tarik",
   "yourData": "Data Anda",
   "export": "Ekspor data",
-  "exportHint": "Unduh salinan pengaturan, prompt, memori, dan aktivitas Anda.",
-  "kinds": {
-    "shared_chats": {
-      "title": "Chat yang dibagikan",
-      "description": "Chat yang bisa dilihat siapa pun yang memiliki tautannya. Berhenti membagikan akan menonaktifkan tautan.",
-      "removeItem": "Berhenti membagikan {title}",
-      "removeAll": "Berhenti membagikan semua",
-      "confirmAll": "Berhenti membagikan semua chat?",
-      "empty": "Tidak ada chat yang dibagikan"
-    },
-    "shared_artifacts": {
-      "title": "Artefak yang dibagikan",
-      "description": "Dokumen dan halaman yang Anda publikasikan dari chat.",
-      "removeItem": "Berhenti membagikan {title}",
-      "removeAll": "Berhenti membagikan semua",
-      "confirmAll": "Berhenti membagikan semua artefak?",
-      "empty": "Tidak ada artefak yang dibagikan"
-    },
-    "uploaded_files": {
-      "title": "File yang diunggah",
-      "description": "File yang Anda lampirkan di chat. Menghapus file juga akan menghapusnya dari chat tersebut.",
-      "removeItem": "Hapus {title}",
-      "removeAll": "Hapus semua file",
-      "confirmAll": "Hapus semua file?",
-      "empty": "Tidak ada file yang diunggah"
-    },
-    "feedback": {
-      "title": "Masukan Anda",
-      "description": "Penilaian dan komentar yang Anda tinggalkan pada jawaban Leo.",
-      "removeItem": "Hapus {title}",
-      "removeAll": "Hapus semua masukan",
-      "confirmAll": "Hapus semua masukan?",
-      "empty": "Belum ada masukan"
-    }
-  },
-  "nothingToManage": "Tidak ada yang perlu dikelola di sini.",
-  "copyLinkTo": "Salin tautan ke {title}",
-  "cantUndo": "Tindakan ini tidak dapat dibatalkan.",
-  "removeFailed": "Tidak dapat menghapusnya",
-  "removeAllFailed": "Tidak dapat menghapus semuanya"
+  "exportHint": "Salinan semua yang disimpan Shosai tentang Anda, dalam satu arsip. Setelah siap, arsip ini juga dikirim ke email Anda.",
+  "exportStart": "Siapkan arsip",
+  "exportPreparing": "Menyiapkan arsip Anda…",
+  "exportReady": "Siap: {size}. Tautan berlaku hingga {date}.",
+  "exportDownload": "Unduh",
+  "exportFailed": "Tidak dapat menyiapkan arsip. Coba lagi.",
+  "exportAgain": "Siapkan yang baru"
 }

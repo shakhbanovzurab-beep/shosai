@@ -7,8 +7,8 @@ import { useTranslations } from "use-intl";
 import { Input } from "@/components/ui/input";
 import { useAutosave } from "@/hooks/use-autosave";
 
-import { NAME_MAX, type SettingsPatch } from "../../domain/settings-contract";
-import { saveSettings } from "../../model/account-actions";
+import { NAME_MAX } from "../../domain/settings-contract";
+import { saveProfileField } from "../../model/account-actions";
 
 type TextField = "full_name" | "display_name";
 
@@ -16,7 +16,7 @@ type TextField = "full_name" | "display_name";
 export function AutosaveInput({ id, field, initialValue }: { id: string; field: TextField; initialValue: string }) {
   const t = useTranslations("settings");
   const [value, setValue] = useState(initialValue);
-  const autosave = useAutosave((next) => saveSettings({ [field]: next } as SettingsPatch, t));
+  const autosave = useAutosave((next) => saveProfileField({ [field]: next }, t));
 
   return (
     <div className="flex flex-col gap-1">

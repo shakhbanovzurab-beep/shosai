@@ -2,22 +2,17 @@
 // path. The slice deletes this file when it publishes its API (F2-D1).
 import { type MockRoute, mockRoute } from "@/mocks/routing";
 
-import { avatarRoute, deleteAccountRoute } from "./account-route";
 import { billingPortalRoute, billingRoute, invoiceRoute, topUpRoute, usageRoute } from "./billing-route";
 import { connectorCallbackRoute, connectorRoute, connectorsRoute } from "./connectors-route";
-import { dataExportRoute, dataItemRoute, dataKindRoute } from "./data-route";
 import { mcpServerRoute, mcpServersRoute } from "./mcp-route";
 import { memoriesRoute, memoryRoute, memorySummaryRefreshRoute, memorySummaryRoute } from "./memory-route";
 import { settingsRoute } from "./settings-route";
 
 export const handlers: MockRoute[] = [
   mockRoute("/api/settings", settingsRoute, ["GET", "PATCH"]),
-  mockRoute("/api/settings/account/delete", deleteAccountRoute, ["POST"]),
-  mockRoute("/api/settings/avatar", avatarRoute, ["PUT", "DELETE"]),
   mockRoute("/api/settings/billing", billingRoute, ["GET"]),
   mockRoute("/api/settings/billing/portal", billingPortalRoute, ["POST"]),
   mockRoute("/api/settings/connectors", connectorsRoute, ["GET"]),
-  mockRoute("/api/settings/data/export", dataExportRoute, ["GET"]),
   mockRoute("/api/settings/mcp", mcpServersRoute, ["GET", "POST"]),
   mockRoute("/api/settings/memories", memoriesRoute, ["GET", "DELETE"]),
   mockRoute("/api/settings/memories/summary", memorySummaryRoute, ["GET", "POST"]),
@@ -27,8 +22,6 @@ export const handlers: MockRoute[] = [
   mockRoute("/api/settings/billing/invoices/:id", invoiceRoute, ["GET"]),
   mockRoute("/api/settings/connectors/:id", connectorRoute, ["PATCH"]),
   mockRoute("/api/settings/connectors/:id/callback", connectorCallbackRoute, ["GET"]),
-  mockRoute("/api/settings/data/:kind", dataKindRoute, ["GET", "DELETE"]),
   mockRoute("/api/settings/mcp/:id", mcpServerRoute, ["PATCH", "DELETE"]),
   mockRoute("/api/settings/memories/:id", memoryRoute, ["DELETE"]),
-  mockRoute("/api/settings/data/:kind/:id", dataItemRoute, ["DELETE"]),
 ];

@@ -1,25 +1,23 @@
 # Settings API
 
-The contract between the Settings dialog (opened from the user menu) and the FastAPI backend. The
-TypeScript types in `src/features/settings/domain/*-contract.ts` are the source of truth; Pydantic
-models should mirror them (snake_case). The browser calls `/api/settings/*` route handlers (in
-`src/features/settings/server/`), which forward to `${BACKEND_API_URL}/v1/settings/*` when
-`BACKEND_API_URL` is set and otherwise answer from an in-memory demo in `src/features/settings/server/`.
-Errors use `{"detail": "message"}`.
+The contract between the Settings dialog (opened from the user menu) and the preferences that other
+slices still own. The TypeScript types in `src/features/settings/domain/*-contract.ts` are the source of
+truth; the development mocks in `src/features/settings/mocks/` answer `/api/settings/*` until each owner
+publishes its routes. Errors use `{"detail": "message"}`.
+
+**Account and Privacy are identity's** and run on the real API (identity step 11): the profile, avatar and
+consents on `GET/PATCH /v1/me` and `PUT/DELETE /v1/me/avatar`; devices on `/v1/me/devices*`; the data
+export on `POST /v1/me/exports` and `GET /v1/me/exports/latest`; account deletion on `POST /v1/me/deletion`
+(7-day window, a fresh sign-in within 15 minutes, re-verified by an emailed code in the dialog). See the
+backend's OpenAPI and `docs/plan/slices/identity.md`. The per-kind data lists of Privacy (shared chats,
+artifacts, uploaded files, feedback) return when their owners serve them.
 
 ## Endpoints (prefix `/v1/settings`)
 
 | Method   | Path              | Body                                        | Response               |
 | -------- | ----------------- | ------------------------------------------- | ---------------------- |
 | `GET`    | ``                | —                                           | `UserSettings`         |
-| `PATCH`  | ``                | any subset of `UserSettings` except `email` | `UserSettings`         |
-| `POST`   | `/account/delete` | `{"confirm_email": str}`                    | `{"deleted": true}`    |
-| `PUT`    | `/avatar`         | multipart, image in `file` (≤ 1 MB)         | `UserSettings`         |
-| `DELETE` | `/avatar`         | —                                           | `UserSettings`         |
-| `GET`    | `/data/export`    | —                                           | archive download       |
-| `GET`    | `/data/{kind}`    | —                                           | `DataItemsResponse`    |
-| `DELETE` | `/data/{kind}`    | —                                           | `204` (all of the kind)|
-| `DELETE` | `/data/{kind}/{id}` | —                                         | `204`                  |
+| `PATCH`  | ``                | any subset of `UserSettings`                | `UserSettings`         |
 | `GET`    | `/billing`        | —                                           | `Billing`              |
 | `GET`    | `/billing/invoices/{id}` | —                                    | the invoice PDF        |
 | `POST`   | `/usage/top-up`   | `{"pack_id": str}`                          | `{"url": str}`         |
@@ -41,19 +39,6 @@ Errors use `{"detail": "message"}`.
 - **Everything saves as it changes.** Switches and selects send a one-field `PATCH`; name fields
   send theirs a moment after typing stops. The UI shows the change at once and rolls back if the
   request fails, so return the full saved `UserSettings`.
-- **Account.** `full_name` must not be empty. `email` is read-only (sign-in is OAuth 2.0 with a
-  provider). `display_name` is what Leo calls the user. `work_role` is an id from `WORK_ROLES`
-  ("What best describes your work?").
-- **Deleting the account** needs the account's email retyped as `confirm_email`; reject a mismatch
-  (422) before touching anything. Delete chats, notes, knowledge base, prompts, memory and settings,
-  cancel any subscription, then end the session; the UI sends the browser to `/`. The demo checks
-  the email and answers 501 without deleting.
-- **Avatar.** The browser crops the photo to its centre square, applies EXIF rotation and scales it
-  to 256×256 (`AVATAR_SIZE`) as WebP (JPEG where WebP can't be encoded) before uploading, so the
-  backend receives small images. Still validate type (`AVATAR_TYPES`) and size, store the file and
-  return its URL in `avatar_url`; the demo inlines it as a data URL.
-- **Privacy.** `improve_models` defaults to false. `share_location` gates the approximate location
-  used for weather and time-aware answers.
 - **Leo.** `leo_model` is `"auto"` (Leo picks per task) or the id of a text model from the
   subscription's list (`GET /v1/studio/models`, where models now carry `tier: standard | frontier`);
   reject anything else (422). Frontier models draw on the weekly frontier allowance.
@@ -62,11 +47,6 @@ Errors use `{"detail": "message"}`.
   Advanced switches say what Leo may use — `web_search`, `voice_mode` (off also hides the
   microphone), `knowledge_base_search`, `connected_services_search`; anything off is neither
   offered nor used.
-- **Your data (Privacy).** `kind` is `shared_chats | shared_artifacts | uploaded_files | feedback`;
-  every item has the same shape (`DataItem`) so one list shows them all. Deleting a shared chat or
-  artifact turns its public link off; deleting a file removes it from the chats it was attached to.
-  `GET /data/export` downloads everything held about the user as one file (never including secrets
-  such as MCP auth headers); the demo exports its in-memory state as JSON.
 - **Billing / Usage** are read-only. Invoices carry a human-facing `number`, a `description` and a
   `status` of `paid | pending | failed`; `download_url` points at the PDF (null until issued).
   `payment_methods` lists saved cards (exactly one `is_default`). Adding or updating a card never

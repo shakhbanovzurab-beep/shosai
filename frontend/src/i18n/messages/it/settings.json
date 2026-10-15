@@ -22,12 +22,13 @@
   "profile": {
     "title": "Profilo",
     "email": "Email",
-    "emailHint": "Accedi con questo indirizzo tramite il tuo provider.",
+    "emailHint": "Accedi con questo indirizzo: ti arriva un codice monouso.",
     "fullName": "Nome completo",
     "displayName": "Come deve chiamarti Leo?",
     "displayNameHint": "Leo lo usa per salutarti e nelle risposte.",
     "workRole": "Cosa descrive meglio il tuo lavoro?",
-    "workRoleHint": "Leo lo usa per adattare esempi e termini al tuo settore."
+    "workRoleHint": "Leo lo usa per adattare esempi e termini al tuo settore.",
+    "workRolePlaceholder": "Scegli…"
   },
   "workRoles": {
     "product_management": "Gestione del prodotto",
@@ -64,11 +65,29 @@
   "deleteAccount": {
     "group": "Zona pericolosa",
     "title": "Elimina account",
-    "description": "Elimina definitivamente il tuo account e tutto ciò che contiene: chat, note, file, prompt e impostazioni.",
+    "description": "Elimina il tuo account e tutto ciò che contiene. Hai 7 giorni per cambiare idea.",
     "confirmTitle": "Eliminare il tuo account?",
-    "confirmDescription": "Questa azione è irreversibile. Chat, note, file, prompt, memoria e impostazioni vengono eliminati e l’eventuale abbonamento viene disdetto.",
+    "confirmDescription": "Il tuo account verrà eliminato tra 7 giorni: chat, note, file, prompt, memoria e impostazioni, e l’eventuale abbonamento verrà disdetto. Accedi prima di allora per annullare.",
     "confirmLabel": "Digita <address>{email}</address> per confermare",
-    "deleted": "Il tuo account è stato eliminato",
-    "failed": "Impossibile eliminare il tuo account"
+    "failed": "Impossibile eliminare il tuo account",
+    "scheduled": "Il tuo account verrà eliminato il {date}. Accedi prima di allora per mantenerlo.",
+    "mismatch": "Questa non è l’email del tuo account.",
+    "reauthenticate": "Per confermare che sei tu, inserisci il codice inviato a {email}."
+  },
+  "devices": {
+    "title": "Dispositivi",
+    "description": "Dove hai effettuato l’accesso al tuo account.",
+    "thisDevice": "Questo dispositivo",
+    "lastActive": "Attivo {time}",
+    "signOut": "Esci",
+    "signOutOthers": "Esci da tutti gli altri dispositivi",
+    "signedOutOthers": "{count, plural, =0 {Nessun altro dispositivo aveva un accesso attivo} one {Uscita effettuata da # dispositivo} many {Uscita effettuata da # di dispositivi} other {Uscita effettuata da # dispositivi}}",
+    "signOutFailed": "Impossibile uscire da quel dispositivo",
+    "loadFailed": "Impossibile caricare i tuoi dispositivi.",
+    "more": "Mostra altro",
+    "kinds": {
+      "web": "Browser",
+      "desktop": "App desktop"
+    }
   }
 }

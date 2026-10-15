@@ -4,46 +4,20 @@
   "improveModelsHint": "Allow your chats and meeting notes to be used to train and improve models. Off by default.",
   "shareLocation": "Share approximate location",
   "shareLocationHint": "Used for local weather and time-aware answers. Only the area is shared, never your exact position.",
+  "marketing": "News about Shosai",
+  "marketingHint": "Occasional emails about new features. Account emails come anyway.",
+  "crossBorder": "Processing in the EU",
+  "crossBorderHint": "Your data stays in Russia, and Leo processes it in the EU. Without this consent Leo and the other AI features stop working.",
+  "crossBorderWarningTitle": "Withdraw consent to processing in the EU?",
+  "crossBorderWarning": "Leo, transcription and every other AI feature stop working for your account until you give it again. Your data stays where it is.",
+  "crossBorderWithdraw": "Withdraw",
   "yourData": "Your data",
   "export": "Export data",
-  "exportHint": "Download a copy of your settings, prompts, memory and activity.",
-  "kinds": {
-    "shared_chats": {
-      "title": "Shared chats",
-      "description": "Chats anyone with the link can view. Unsharing turns the link off.",
-      "removeItem": "Unshare {title}",
-      "removeAll": "Unshare all",
-      "confirmAll": "Unshare all chats?",
-      "empty": "No shared chats"
-    },
-    "shared_artifacts": {
-      "title": "Shared artifacts",
-      "description": "Documents and pages you published from chats.",
-      "removeItem": "Unshare {title}",
-      "removeAll": "Unshare all",
-      "confirmAll": "Unshare all artifacts?",
-      "empty": "No shared artifacts"
-    },
-    "uploaded_files": {
-      "title": "Uploaded files",
-      "description": "Files you attached in chats. Deleting one removes it from those chats too.",
-      "removeItem": "Delete {title}",
-      "removeAll": "Delete all files",
-      "confirmAll": "Delete all files?",
-      "empty": "No uploaded files"
-    },
-    "feedback": {
-      "title": "Your feedback",
-      "description": "Ratings and comments you left on Leo’s answers.",
-      "removeItem": "Delete {title}",
-      "removeAll": "Delete all feedback",
-      "confirmAll": "Delete all feedback?",
-      "empty": "No feedback yet"
-    }
-  },
-  "nothingToManage": "Nothing to manage here.",
-  "copyLinkTo": "Copy link to {title}",
-  "cantUndo": "This can’t be undone.",
-  "removeFailed": "Couldn’t remove it",
-  "removeAllFailed": "Couldn’t remove them"
+  "exportHint": "A copy of everything Shosai keeps about you, as one archive. It’s also emailed to you when ready.",
+  "exportStart": "Prepare archive",
+  "exportPreparing": "Preparing your archive…",
+  "exportReady": "Ready: {size}. The link works until {date}.",
+  "exportDownload": "Download",
+  "exportFailed": "Couldn’t prepare the archive. Try again.",
+  "exportAgain": "Prepare a new one"
 }
