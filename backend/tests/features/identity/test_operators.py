@@ -17,11 +17,8 @@ from shosai.features.identity.contracts import OperatorActed, OperatorAction, Op
 from shosai.features.identity.domain.directory import email_hmac
 from shosai.features.identity.domain.emails import normalize_email
 from tests.composition.public_routes import route_snapshot
-from tests.features.identity.registration_bench import (
-    DIRECTORY_KEY,
-    RegistrationBench,
-    registration_bench,
-)
+from tests.features.identity.passwordless_bench import DIRECTORY_KEY
+from tests.features.identity.registration_bench import RegistrationBench, registration_bench
 from tests.features.identity.test_deletion import events
 from tests.features.identity.test_profile import bearer
 from tests.features.identity.test_sign_in import EMAIL, account, login

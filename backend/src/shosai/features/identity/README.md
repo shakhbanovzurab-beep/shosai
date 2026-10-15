@@ -1,6 +1,6 @@
 # identity
 
-One sign-in for the web and the desktop in the person's data home; profile and privacy; export and deletion of everything; operator accounts. Plan: [docs/plan/slices/identity.md](../../../../../docs/plan/slices/identity.md); decisions: [ADR 0045](../../../../../docs/adr/0045-identity-sessions-registration-and-deletion.md), [ADR 0046](../../../../../docs/adr/0046-platform-languages-follow-the-cabinet.md).
+One sign-in for the web and the desktop in the person's data home; profile and privacy; export and deletion of everything; operator accounts. Plan: [docs/plan/slices/identity.md](../../../../../docs/plan/slices/identity.md); decisions: [ADR 0045](../../../../../docs/adr/0045-identity-sessions-registration-and-deletion.md), [ADR 0046](../../../../../docs/adr/0046-platform-languages-follow-the-cabinet.md), [ADR 0048](../../../../../docs/adr/0048-web-sign-in-by-email-code.md).
 
 ## Public surface
 
@@ -13,6 +13,10 @@ One sign-in for the web and the desktop in the person's data home; profile and p
 - the events `identity.account.*` and `identity.sessions.revoked`, which carry ids only.
 
 identity binds each port in the step of the plan that builds it.
+
+## Sign-in without a password
+
+The cabinet signs in by an emailed code (`/v1/auth/email/*`, ADR 0048) or through a provider (`/v1/auth/social/*`). Both hand a new person a consent ticket that `POST /v1/auth/social/register` turns into an account in the home of the country they confirm. The code's challenge is sealed for the browser (the address travels inside, encrypted); Valkey keeps only the code's hash and the counters. The mail to an address without an account is written in the visitor's home: Russia, an unknown country or a Russian interface give the Russian home. The password routes stay for the shipped desktop clients.
 
 ## Export and deletion
 
@@ -42,4 +46,4 @@ Support finds accounts at `/v1/admin/users` and acts on them through `AccountSta
   - `token_codec.py` — HS256 with a `kid` ring; a token without `kid` is checked with the draft key `d`;
   - `password_hasher.py` — bcrypt in a bounded thread pool, with a decoy check for unknown addresses.
 - `settings.py` — `IDENTITY_TOKEN_KEYS`, `IDENTITY_DIRECTORY_HMAC_KEY`, `IDENTITY_PASSWORD_HASH_ROUNDS`, documented in `.env.example` section 2, and the production check of their values.
-- `module.py` — the `FeatureModule` listed in `composition/features.py`; `social_wiring.py`, `deletion_wiring.py`, `export_wiring.py`, `operator_wiring.py` and `transfer_wiring.py` build their parts of it.
+- `module.py` — the `FeatureModule` listed in `composition/features.py`; `social_wiring.py` (social and email-code sign-in), `deletion_wiring.py`, `export_wiring.py`, `operator_wiring.py` and `transfer_wiring.py` build their parts of it.

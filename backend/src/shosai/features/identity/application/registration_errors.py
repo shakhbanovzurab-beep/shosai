@@ -46,3 +46,17 @@ def registration_unavailable() -> AppError:
         HTTPStatus.SERVICE_UNAVAILABLE,
         params={"retry_after_seconds": 5},
     )
+
+
+def code_locked() -> AppError:
+    """400: five wrong codes ended this sign-in by email; the person asks for a new code."""
+    return AppError("code_locked", HTTPStatus.BAD_REQUEST)
+
+
+def sign_in_unavailable() -> AppError:
+    """503: Valkey, which counts the codes of sign-in by email, did not answer."""
+    return AppError(
+        "sign_in_unavailable",
+        HTTPStatus.SERVICE_UNAVAILABLE,
+        params={"retry_after_seconds": 5},
+    )

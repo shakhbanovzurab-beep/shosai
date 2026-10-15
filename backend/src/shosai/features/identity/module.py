@@ -46,6 +46,7 @@ from shosai.features.identity.domain.export import EXPORT_PREFIX
 from shosai.features.identity.emails.password_reset import RESET_LINK_MAIL
 from shosai.features.identity.emails.registration_attempt import REGISTRATION_ATTEMPT
 from shosai.features.identity.emails.registration_code import REGISTRATION_CODE
+from shosai.features.identity.emails.sign_in_code import SIGN_IN_CODE
 from shosai.features.identity.export_wiring import export_parts
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.captcha import open_captcha
@@ -94,6 +95,10 @@ IDENTITY_ACCOUNT_DATA: Final = AccountDataSpec(
 )
 
 
+# Письма identity: код регистрации, попытка регистрации занятого адреса, сброс пароля, код входа.
+EMAIL_TEMPLATES: Final = (REGISTRATION_CODE, REGISTRATION_ATTEMPT, RESET_LINK_MAIL, SIGN_IN_CODE)
+
+
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """Open the password pool and the captcha; build the routes, the sweeps and the ports."""
@@ -112,7 +117,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     try:
         async with (
             open_captcha(settings.identity_turnstile_secret_key) as captcha,
-            social_routers(services, settings, directory, sessions, cookies) as social,
+            social_routers(services, settings, directory, sessions, (cookies, captcha)) as social,
         ):
             registration_services = RegistrationServices(
                 transactions=services.transactions, directory=directory, routes=routes,
@@ -157,7 +162,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 task_handlers=task_handlers(services.transactions, directory),
                 subscriptions=SUBSCRIPTIONS,
                 periodic_jobs=PERIODIC_JOBS,
-                email_templates=(REGISTRATION_CODE, REGISTRATION_ATTEMPT, RESET_LINK_MAIL),
+                email_templates=EMAIL_TEMPLATES,
                 agent_tools=account_tools(services.transactions, profiles),
                 provides=(
                     AUTHENTICATOR.bind(authenticator),

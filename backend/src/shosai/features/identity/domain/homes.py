@@ -29,3 +29,14 @@ class CountryCode:
 def home_for_country(country: CountryCode) -> Home:
     """Russia's accounts live in the Russian home, every other country's in the EU home."""
     return Home.RU if country.value == RUSSIA else Home.EU
+
+
+def russian_visitor(country: str | None, language: str | None) -> bool:
+    """Russia, a country the edge did not name, or a Russian interface (406-FZ, ADR 0048)."""
+    russian_interface = (language or "").lower().startswith("ru")
+    return country is None or country.upper() == RUSSIA or russian_interface
+
+
+def home_for_visitor(country: str | None, language: str | None) -> Home:
+    """The home that first records a visitor's data before they name their country."""
+    return Home.RU if russian_visitor(country, language) else Home.EU

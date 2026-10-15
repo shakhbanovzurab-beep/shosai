@@ -1,9 +1,9 @@
 """Finishing social sign-in in the cabinet: a session ticket, or a new account by consent.
 
 `complete` turns a session ticket into the browser's session. `register` creates the
-account of a person a provider introduced, after they accepted the terms on the consent
-screen: the same consents, the same directory claim and the same home by country as a
-registration by address, with no password (a reset sets one later). An address the
+account of a person a provider or an emailed code introduced (ADR 0048), after they
+accepted the terms on the consent screen: the same consents, the same directory claim and
+the same home by country as a registration by address, with no password. An address the
 provider did not prove (VK) gives an account whose address is not yet verified.
 """
 
@@ -40,6 +40,7 @@ from shosai.features.identity.infrastructure.records import User, UserConsent, U
 from shosai.features.identity.infrastructure.session_records import LoginEvent
 from shosai.features.identity.infrastructure.social.consent_tickets import (
     CONSENT_LIFETIME,
+    ConsentClaim,
     ConsentTickets,
 )
 from shosai.features.identity.infrastructure.social.flows import SocialStates
@@ -96,15 +97,17 @@ class SocialAccounts:
             )
         return tokens, found.next_path
 
-    async def register(self, form: SocialRegistration, client: ClientFacts) -> IssuedTokens:
-        """A new account for a person a provider introduced, signed in at once."""
+    async def register(
+        self, form: SocialRegistration, client: ClientFacts
+    ) -> tuple[IssuedTokens, str]:
+        """A new account for a person a provider or a code introduced, signed in at once."""
         services = self._services
         claim = services.consent.open(form.ticket)
-        if claim is None or claim.identity.email is None:
+        if claim is None or claim.email is None:
             raise AppError("social_state_invalid", HTTPStatus.BAD_REQUEST)
         home, language = _checked(form)
         try:
-            address = normalize_email(claim.identity.email)
+            address = normalize_email(claim.email)
         except InvalidEmailError as error:
             raise errors.invalid("invalid_email") from error
         if not await services.states.spend(form.ticket, CONSENT_LIFETIME):
@@ -114,17 +117,18 @@ class SocialAccounts:
         if await services.directory.claim(address_hmac, user_id, home) is ClaimOutcome.TAKEN:
             raise errors.email_registered()
         async with services.transactions.begin(TenancyScope(home, user_id)) as session:
-            user = _new_user(user_id, address.value, claim.identity, form.country, language)
+            user = _new_user(user_id, address.value, claim, form.country, language)
             session.add(user)
             await session.flush()
             for consent in _consents(user_id, form.consents, client):
                 session.add(consent)
-            session.add(_identity(user_id, claim.identity))
+            if claim.identity is not None:
+                session.add(_identity(user_id, claim.identity))
             session.add(_login(user_id, client))
             await services.outbox.add(session, AccountRegistered(user_id=user_id))
             tokens = await services.sessions.open(session, user, home, ClientKind.WEB, client)
         await services.directory.activate(address_hmac, user_id)
-        return tokens
+        return tokens, claim.next_path
 
 
 def _checked(form: SocialRegistration) -> tuple[Home, str]:
@@ -141,11 +145,9 @@ def _checked(form: SocialRegistration) -> tuple[Home, str]:
     return home, language
 
 
-def _new_user(
-    user_id: UUID, email: str, identity: SocialIdentity, country: str, language: str
-) -> User:
-    name = (identity.display_name or email.partition("@")[0])[:NAME_LENGTH]
-    verified_at = datetime.now(UTC) if identity.email_verified else None
+def _new_user(user_id: UUID, email: str, claim: ConsentClaim, country: str, language: str) -> User:
+    name = (claim.display_name or email.partition("@")[0])[:NAME_LENGTH]
+    verified_at = datetime.now(UTC) if claim.email_verified else None
     return User(
         id=user_id, email=email, password_hash=None, full_name=name, country=country,
         language=language, email_verified_at=verified_at,

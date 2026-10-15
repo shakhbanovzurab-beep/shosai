@@ -121,7 +121,7 @@ def build_social_finish_router(
         response: Response,
         client: Annotated[ClientFacts, Depends(client_facts)],
     ) -> SocialSession:
-        """A new account for the person the provider introduced, after their consent."""
+        """A new account for the person a provider or a code introduced, after their consent."""
         form = SocialRegistration(
             ticket=body.ticket,
             country=body.country,
@@ -132,7 +132,7 @@ def build_social_finish_router(
                 marketing=body.consents.marketing,
             ),
         )
-        tokens = await accounts.register(form, client)
-        return session(response, tokens, "")
+        tokens, next_path = await accounts.register(form, client)
+        return session(response, tokens, next_path)
 
     return router

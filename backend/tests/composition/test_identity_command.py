@@ -8,7 +8,8 @@ from redis.asyncio import Redis
 
 from shosai.core.kernel.homes import Home
 from tests.composition.role_process import run_command
-from tests.features.identity.registration_bench import DIRECTORY_KEY, registration_bench
+from tests.features.identity.passwordless_bench import DIRECTORY_KEY
+from tests.features.identity.registration_bench import registration_bench
 from tests.features.identity.test_sign_in import EMAIL, account
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess

@@ -1494,7 +1494,7 @@
           "auth"
         ],
         "summary": "Register",
-        "description": "A new account for the person the provider introduced, after their consent.",
+        "description": "A new account for the person a provider or a code introduced, after their consent.",
         "operationId": "register_v1_auth_social_register_post",
         "parameters": [
           {
@@ -1531,6 +1531,185 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SocialSession"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/email/start": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Start",
+        "description": "Mail a 6-digit code; the answer is the same whether or not an account exists.",
+        "operationId": "start_v1_auth_email_start_post",
+        "parameters": [
+          {
+            "name": "X-Country-Code",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 2
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Country-Code"
+            }
+          },
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailStartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailChallenge"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/email/resend": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Resend",
+        "description": "Mail a new code: three at most, a minute apart; earlier codes stop working.",
+        "operationId": "resend_v1_auth_email_resend_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChallengeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailChallenge"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/email/verify": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Verify",
+        "description": "Sign in with the code, or get a consent ticket; five wrong codes end the challenge.",
+        "operationId": "verify_v1_auth_email_verify_post",
+        "parameters": [
+          {
+            "name": "user-agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailVerifyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmailVerified"
                 }
               }
             }
@@ -2805,6 +2984,23 @@
         "title": "AdminUserCard",
         "description": "What support sees of one account."
       },
+      "ChallengeRequest": {
+        "properties": {
+          "challenge": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 16,
+            "title": "Challenge"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "challenge"
+        ],
+        "title": "ChallengeRequest",
+        "description": "A challenge, for a new code."
+      },
       "ChangeRequest": {
         "properties": {
           "current_password": {
@@ -3176,6 +3372,127 @@
         ],
         "title": "DeviceView",
         "description": "A signed-in device: where it signed in and when it was last used."
+      },
+      "EmailChallenge": {
+        "properties": {
+          "challenge": {
+            "type": "string",
+            "title": "Challenge"
+          },
+          "resend_after_seconds": {
+            "type": "integer",
+            "title": "Resend After Seconds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "challenge",
+          "resend_after_seconds"
+        ],
+        "title": "EmailChallenge",
+        "description": "The sealed challenge the browser keeps, and when it may ask for another code."
+      },
+      "EmailStartRequest": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "minLength": 3,
+            "title": "Email"
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "title": "Language",
+            "default": "en"
+          },
+          "next": {
+            "type": "string",
+            "maxLength": 256,
+            "title": "Next",
+            "default": ""
+          },
+          "captcha_token": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 4096
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Captcha Token"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "title": "EmailStartRequest",
+        "description": "The address a person typed on the sign-in screen."
+      },
+      "EmailVerified": {
+        "properties": {
+          "session": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SocialSession"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "consent_ticket": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Consent Ticket"
+          },
+          "next": {
+            "type": "string",
+            "title": "Next"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session",
+          "consent_ticket",
+          "next"
+        ],
+        "title": "EmailVerified",
+        "description": "`session` for a known person; `consent_ticket` for a new one, for the consent screen."
+      },
+      "EmailVerifyRequest": {
+        "properties": {
+          "challenge": {
+            "type": "string",
+            "maxLength": 2048,
+            "minLength": 16,
+            "title": "Challenge"
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^\\d{6}$",
+            "title": "Code"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "challenge",
+          "code"
+        ],
+        "title": "EmailVerifyRequest",
+        "description": "The challenge and the code from the mail."
       },
       "ErrorDescription": {
         "properties": {

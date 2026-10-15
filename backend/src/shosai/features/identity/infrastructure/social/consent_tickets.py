@@ -1,7 +1,8 @@
-"""The consent ticket: who a new person is, until they accept the terms (ADR 0045).
+"""The consent ticket: who a new person is, until they accept the terms (ADR 0045, 0048).
 
-A person unknown to Shosai signs in at a provider, then sees the consent screen. What the
-provider said — the address, the name, the provider's user id — must wait for them, but
+A person unknown to Shosai signs in at a provider or confirms an address by an emailed
+code, then sees the consent screen. What is known of them — the address, the name, the
+provider's user id — must wait for them, but
 must not wait in Valkey in the EU (personal data of Russian users). It travels in the
 URL as a Fernet token under a key derived from the signing key: encrypted, signed and
 expiring in 10 minutes; Valkey only marks its hash spent, so it opens one account once.
@@ -24,11 +25,28 @@ DERIVATION: Final = b"shosai.identity.social_consent.v1"
 
 @dataclass(frozen=True, slots=True)
 class ConsentClaim:
-    """The provider's identity of a new person and where they were going."""
+    """A new person: the provider's identity, or the address they proved by a code."""
 
-    identity: SocialIdentity
+    identity: SocialIdentity | None
     next_path: str
     language: str
+    # Адрес, подтверждённый кодом из письма; у входа через сервис адрес — в identity.
+    proven_email: str | None = None
+
+    @property
+    def email(self) -> str | None:
+        """The address the account is created with."""
+        return self.identity.email if self.identity is not None else self.proven_email
+
+    @property
+    def email_verified(self) -> bool:
+        """Whether the address is proven: by the code, or by a provider that vouches for it."""
+        return self.identity.email_verified if self.identity is not None else True
+
+    @property
+    def display_name(self) -> str | None:
+        """The name the provider gave, if any."""
+        return self.identity.display_name if self.identity is not None else None
 
 
 class ConsentTickets:
@@ -42,9 +60,10 @@ class ConsentTickets:
         """The ticket the consent screen carries."""
         identity = claim.identity
         payload = {
-            "provider": identity.provider.value, "subject": identity.subject,
-            "email": identity.email, "verified": identity.email_verified,
-            "name": identity.display_name, "next": claim.next_path, "language": claim.language,
+            "provider": identity.provider.value if identity else None,
+            "subject": identity.subject if identity else None,
+            "email": claim.email, "verified": claim.email_verified, "name": claim.display_name,
+            "next": claim.next_path, "language": claim.language,
         }  # fmt: skip
         return self._fernet.encrypt(json.dumps(payload).encode("utf-8")).decode("ascii")
 
@@ -57,6 +76,8 @@ class ConsentTickets:
         except InvalidToken, UnicodeEncodeError:
             return None
         payload = json.loads(raw)
+        if payload["provider"] is None:
+            return ConsentClaim(None, payload["next"], payload["language"], payload["email"])
         identity = SocialIdentity(
             provider=Provider(payload["provider"]),
             subject=payload["subject"],

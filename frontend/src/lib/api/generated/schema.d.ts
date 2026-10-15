@@ -488,9 +488,69 @@ export interface paths {
         put?: never;
         /**
          * Register
-         * @description A new account for the person the provider introduced, after their consent.
+         * @description A new account for the person a provider or a code introduced, after their consent.
          */
         post: operations["register_v1_auth_social_register_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/email/start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Start
+         * @description Mail a 6-digit code; the answer is the same whether or not an account exists.
+         */
+        post: operations["start_v1_auth_email_start_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/email/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Resend
+         * @description Mail a new code: three at most, a minute apart; earlier codes stop working.
+         */
+        post: operations["resend_v1_auth_email_resend_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/email/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify
+         * @description Sign in with the code, or get a consent ticket; five wrong codes end the challenge.
+         */
+        post: operations["verify_v1_auth_email_verify_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -912,6 +972,14 @@ export interface components {
             operator_roles: components["schemas"]["OperatorRole"][];
         };
         /**
+         * ChallengeRequest
+         * @description A challenge, for a new code.
+         */
+        ChallengeRequest: {
+            /** Challenge */
+            challenge: string;
+        };
+        /**
          * ChangeRequest
          * @description The current password (none for an account without one) and the new one.
          */
@@ -1072,6 +1140,57 @@ export interface components {
             last_used_at: string;
             /** Current */
             current: boolean;
+        };
+        /**
+         * EmailChallenge
+         * @description The sealed challenge the browser keeps, and when it may ask for another code.
+         */
+        EmailChallenge: {
+            /** Challenge */
+            challenge: string;
+            /** Resend After Seconds */
+            resend_after_seconds: number;
+        };
+        /**
+         * EmailStartRequest
+         * @description The address a person typed on the sign-in screen.
+         */
+        EmailStartRequest: {
+            /** Email */
+            email: string;
+            /**
+             * Language
+             * @default en
+             */
+            language: string;
+            /**
+             * Next
+             * @default
+             */
+            next: string;
+            /** Captcha Token */
+            captcha_token?: string | null;
+        };
+        /**
+         * EmailVerified
+         * @description `session` for a known person; `consent_ticket` for a new one, for the consent screen.
+         */
+        EmailVerified: {
+            session: components["schemas"]["SocialSession"] | null;
+            /** Consent Ticket */
+            consent_ticket: string | null;
+            /** Next */
+            next: string;
+        };
+        /**
+         * EmailVerifyRequest
+         * @description The challenge and the code from the mail.
+         */
+        EmailVerifyRequest: {
+            /** Challenge */
+            challenge: string;
+            /** Code */
+            code: string;
         };
         /**
          * ErrorDescription
@@ -2640,6 +2759,110 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SocialSession"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    start_v1_auth_email_start_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Country-Code"?: string | null;
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailStartRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailChallenge"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    resend_v1_auth_email_resend_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChallengeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailChallenge"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    verify_v1_auth_email_verify_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "user-agent"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EmailVerifyRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EmailVerified"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

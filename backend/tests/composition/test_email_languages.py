@@ -14,10 +14,11 @@ from shosai.features.identity.emails.export_ready import EXPORT_READY
 from shosai.features.identity.emails.password_reset import RESET_LINK_MAIL
 from shosai.features.identity.emails.registration_attempt import REGISTRATION_ATTEMPT
 from shosai.features.identity.emails.registration_code import REGISTRATION_CODE
+from shosai.features.identity.emails.sign_in_code import SIGN_IN_CODE
 
 TEMPLATES = (
     MAIL_CHECK, REGISTRATION_CODE, REGISTRATION_ATTEMPT, RESET_LINK_MAIL, DELETION_SCHEDULED,
-    EXPORT_READY,
+    EXPORT_READY, SIGN_IN_CODE,
 )  # fmt: skip
 VALUES: dict[str, EmailParam] = {
     "minutes": 15,

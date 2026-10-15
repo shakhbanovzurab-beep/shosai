@@ -14,6 +14,8 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import Final
 
+from shosai.features.identity.domain.homes import russian_visitor
+
 STATE_SEPARATOR: Final = "-"  # VK вырезает точки из state (урок черновика).
 NONCE_BYTES: Final = 16
 MAX_NEXT_LENGTH: Final = 256
@@ -45,10 +47,7 @@ class SocialIdentity:
 
 def visible_providers(country: str | None, language: str | None) -> tuple[Provider, ...]:
     """The set a visitor sees: Russian for Russia, an unknown country or a Russian interface."""
-    russian_interface = (language or "").lower().startswith("ru")
-    if country is None or country.upper() == "RU" or russian_interface:
-        return RUSSIAN_SET
-    return WORLD_SET
+    return RUSSIAN_SET if russian_visitor(country, language) else WORLD_SET
 
 
 def sign_state(key: bytes) -> tuple[str, str]:
