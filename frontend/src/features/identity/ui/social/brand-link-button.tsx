@@ -5,6 +5,7 @@ import { siGithub, siVk } from "simple-icons";
 import { useLocale, useTranslations } from "use-intl";
 
 import { providerName, type SocialProvider, socialStartUrl } from "../../domain/social-providers";
+import { GOOGLE_BUTTON_FILL } from "../../model/brand-widgets";
 
 // Знак Google — официальные четыре цвета; простой одноцветной иконки Google по правилам бренда недостаточно.
 function GoogleMark() {
@@ -51,12 +52,19 @@ function YandexMark() {
 }
 
 // Цвета брендов VK и GitHub берутся из данных их знаков (simple-icons), а не набираются руками.
-const BRANDS: Record<SocialProvider, { className: string; style?: CSSProperties; mark: ReactNode }> = {
-  yandex: { className: "bg-black text-white dark:border-white/20", mark: <YandexMark /> },
+// `markAtStart` — знак у начала кнопки, текст по центру: так рисуют свои кнопки виджеты Яндекса и Google, и ссылка,
+// стоящая на их месте, пока виджет грузится, сменяется им без скачка.
+const BRANDS: Record<
+  SocialProvider,
+  { className: string; style?: CSSProperties; mark: ReactNode; markAtStart?: boolean }
+> = {
+  yandex: { className: "bg-black text-white dark:border-white/20", mark: <YandexMark />, markAtStart: true },
   vk: { className: "text-white", style: { backgroundColor: `#${siVk.hex}` }, mark: <SimpleMark path={siVk.path} /> },
   google: {
-    className: "border-zinc-300 bg-white text-zinc-900 dark:border-white/20",
+    className: "border-zinc-300 bg-white text-zinc-900 dark:border-white/20 dark:bg-(--google-fill) dark:text-white",
+    style: { "--google-fill": GOOGLE_BUTTON_FILL } as CSSProperties,
     mark: <GoogleMark />,
+    markAtStart: true,
   },
   github: {
     className: "text-white dark:border-white/20",
@@ -78,11 +86,11 @@ export function BrandLinkButton({ provider, next }: { provider: SocialProvider; 
       href={socialStartUrl(provider, next, language)}
       style={brand.style}
       className={cn(
-        "flex h-11 w-full items-center justify-center gap-2.5 rounded-lg border border-transparent font-medium text-sm outline-none transition-opacity hover:opacity-90 focus-visible:ring-3 focus-visible:ring-ring/50",
+        "relative flex h-11 w-full items-center justify-center gap-2.5 rounded-lg border border-transparent font-medium text-sm outline-none transition-opacity hover:opacity-90 focus-visible:ring-3 focus-visible:ring-ring/50",
         brand.className,
       )}
     >
-      {brand.mark}
+      {brand.markAtStart ? <span className="absolute start-3 flex">{brand.mark}</span> : brand.mark}
       {t("social.continueWith", { provider: providerName(provider, language) })}
     </a>
   );

@@ -1,19 +1,16 @@
-"""Finishing social sign-in from the cabinet: a widget's token, a ticket, the consent screen."""
+"""Finishing social sign-in from the cabinet: a ticket and the consent screen."""
 
 from datetime import timedelta
-from http import HTTPStatus
 from typing import Annotated, Final
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, ConfigDict, Field
 from starlette.responses import Response
 
-from shosai.core.kernel.errors import AppError
 from shosai.core.kv.rate_limits import RateLimit, RateLimiter
 from shosai.core.web.rate_limit import rate_limited
 from shosai.features.identity.application.registration import ClientFacts
 from shosai.features.identity.application.sessions import IssuedTokens
-from shosai.features.identity.application.social import SocialRefusedError, SocialSignIn
 from shosai.features.identity.application.social_accounts import (
     SocialAccounts,
     SocialRegistration,
@@ -22,28 +19,8 @@ from shosai.features.identity.channels.http.cookies import CookiePolicy, set_ses
 from shosai.features.identity.channels.http.registration import Consents, client_facts
 from shosai.features.identity.domain.registration import RegistrationConsents
 from shosai.features.identity.domain.sessions import new_csrf_token
-from shosai.features.identity.domain.social import Provider
-from shosai.features.identity.infrastructure.social.base import SocialProviderFailedError
 
 FINISH_LIMIT: Final = RateLimit("identity.social_finish", 20, timedelta(minutes=1), 20)
-
-
-class WidgetTokenRequest(BaseModel):
-    """A token the provider's widget handed the browser."""
-
-    model_config = ConfigDict(extra="forbid")
-
-    token: Annotated[str, Field(min_length=1, max_length=4096)]
-    next: Annotated[str | None, Field(max_length=256)] = None
-    language: Annotated[str, Field(min_length=2, max_length=16)] = "en"
-
-
-class SocialTickets(BaseModel):
-    """`social` for a known person (then `complete`), `social_consent` for a new one."""
-
-    social: str | None
-    social_consent: str | None
-    next: str
 
 
 class TicketRequest(BaseModel):
@@ -76,7 +53,7 @@ class SocialSession(BaseModel):
 
 
 def build_social_finish_router(
-    social: SocialSignIn, accounts: SocialAccounts, limiter: RateLimiter, cookies: CookiePolicy
+    accounts: SocialAccounts, limiter: RateLimiter, cookies: CookiePolicy
 ) -> APIRouter:
     """The cabinet's side of social sign-in."""
     router = APIRouter(prefix="/v1/auth/social", tags=["auth"])
@@ -89,21 +66,6 @@ def build_social_finish_router(
             access_token=tokens.access_token, expires_in=tokens.expires_in,
             csrf_token=csrf_token, next=next_path,
         )  # fmt: skip
-
-    @router.post("/{provider}/widget-token", dependencies=limited)
-    async def widget_token(provider: Provider, body: WidgetTokenRequest) -> SocialTickets:
-        """Resolve the person behind a Yandex or Google widget token."""
-        try:
-            outcome = await social.widget(provider, body.token, body.next, body.language)
-        except SocialRefusedError as refused:
-            raise AppError(refused.code, HTTPStatus.UNAUTHORIZED) from refused
-        except SocialProviderFailedError as failed:
-            raise AppError("social_provider_failed", HTTPStatus.UNAUTHORIZED) from failed
-        return SocialTickets(
-            social=outcome.session_ticket,
-            social_consent=outcome.consent_ticket,
-            next=outcome.next_path,
-        )
 
     @router.post("/complete", dependencies=limited)
     async def complete(

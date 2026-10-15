@@ -54,6 +54,8 @@ class ProvidersAnswer(BaseModel):
     providers: list[Provider]
     yandex_client_id: str | None
     google_client_id: str | None
+    # Приложение VK ID для виджета OneTap; его вход начинается с widget-start.
+    vk_client_id: str | None = None
 
 
 def build_social_router(
@@ -74,6 +76,7 @@ def build_social_router(
             providers=shown,
             yandex_client_id=widget_ids.get(Provider.YANDEX),
             google_client_id=widget_ids.get(Provider.GOOGLE),
+            vk_client_id=widget_ids.get(Provider.VK),
         )
 
     @router.get("/yandex/token-page", include_in_schema=False)
@@ -126,6 +129,8 @@ async def _resolved(
     try:
         outcome = await social.callback(provider, code, state, device_id)
     except SocialRefusedError as refused:
+        # Ожидаемый отказ — не сбой, но без строки в журнале причину неудачного входа не найти.
+        log.info("Вход через соцсеть отклонён", provider=provider.value, code=refused.code)
         return social.redirect(None, refused.code, provider)
     except SocialProviderFailedError:
         log.warning("Провайдер не подтвердил вход", provider=provider.value)

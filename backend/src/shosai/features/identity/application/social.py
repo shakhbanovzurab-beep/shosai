@@ -57,6 +57,18 @@ class SocialRefusedError(Exception):
 
 
 @dataclass(frozen=True, slots=True)
+class WidgetFlow:
+    """What a provider's code widget (VK ID OneTap) needs to start.
+
+    The signed state, the PKCE challenge and the redirect URI the provider checks in the exchange.
+    """
+
+    state: str
+    code_challenge: str
+    redirect_uri: str
+
+
+@dataclass(frozen=True, slots=True)
 class Outcome:
     """Exactly one of a session ticket, a consent ticket, with the return path."""
 
@@ -94,6 +106,21 @@ class SocialSignIn:
             nonce, Flow(provider, verifier, safe_next(next_path), language)
         )
         return client.authorize_url(state, challenge_of(verifier))
+
+    async def widget_flow(
+        self, provider: Provider, next_path: str | None, language: str
+    ) -> WidgetFlow:
+        """A flow for a code widget: the verifier stays here, the widget gets its hash."""
+        client = self._client(provider)
+        redirect_uri = getattr(client, "widget_redirect_uri", None)
+        if not isinstance(redirect_uri, str):
+            raise SocialRefusedError("social_provider_disabled")
+        nonce, state = sign_state(self._services.state_key)
+        verifier = secrets.token_urlsafe(48)
+        await self._services.states.open_flow(
+            nonce, Flow(provider, verifier, safe_next(next_path), language)
+        )
+        return WidgetFlow(state, challenge_of(verifier), redirect_uri)
 
     async def callback(
         self, provider: Provider, code: str, state: str, device_id: str | None

@@ -1,9 +1,10 @@
 import { type EmailStartForm, resendEmailCode, startEmailSignIn, verifyEmailCode } from "../api/email-sign-in-api";
-import { exchangeWidgetToken } from "../api/social-api";
+import { exchangeVkCode, exchangeWidgetToken, type SocialTickets } from "../api/social-api";
 import { safeNext } from "../domain/next-path";
 import { attempt, type Outcome } from "./outcome";
 import { signedIn } from "./session";
 import { finishSocialSignIn } from "./social-sign-in";
+import type { VkCode } from "./vk-widget";
 
 /** Чем кончается вход без пароля: человек вошёл — куда ему дальше; новый человек — билет экрана согласий. */
 export type Arrival = { kind: "signed-in"; next: string } | { kind: "consent"; ticket: string };
@@ -44,6 +45,16 @@ export function confirmCode(challenge: string, code: string): Promise<Outcome<Ar
 
 const UNANSWERED: Outcome<Arrival> = { kind: "refused", problem: "unknown", requestId: null, retryAfterSeconds: null };
 
+/** Билеты сервера после виджета: известный человек входит, новый получает экран согласий. */
+async function settle(exchanged: Outcome<SocialTickets>): Promise<Outcome<Arrival>> {
+  if (exchanged.kind === "refused") return exchanged;
+  const { social, social_consent: consent } = exchanged.value;
+  if (consent) return { kind: "done", value: { kind: "consent", ticket: consent } };
+  if (!social) return UNANSWERED;
+  const finished = await finishSocialSignIn(social);
+  return finished.kind === "done" ? { kind: "done", value: { kind: "signed-in", next: finished.value } } : finished;
+}
+
 /** Токен фирменного виджета Яндекса или Google: сервер сверяет его у провайдера и отдаёт билет. */
 export async function arriveByWidget(
   provider: "yandex" | "google",
@@ -51,11 +62,10 @@ export async function arriveByWidget(
   next: string,
   language: string,
 ): Promise<Outcome<Arrival>> {
-  const exchanged = await attempt(() => exchangeWidgetToken(provider, token, next, language));
-  if (exchanged.kind === "refused") return exchanged;
-  const { social, social_consent: consent } = exchanged.value;
-  if (consent) return { kind: "done", value: { kind: "consent", ticket: consent } };
-  if (!social) return UNANSWERED;
-  const finished = await finishSocialSignIn(social);
-  return finished.kind === "done" ? { kind: "done", value: { kind: "signed-in", next: finished.value } } : finished;
+  return settle(await attempt(() => exchangeWidgetToken(provider, token, next, language)));
+}
+
+/** Код VK ID OneTap: сервер меняет его у VK ID тем verifier, которым начинал вход. */
+export async function arriveByVkCode(answer: VkCode): Promise<Outcome<Arrival>> {
+  return settle(await attempt(() => exchangeVkCode(answer.code, answer.state, answer.deviceId)));
 }

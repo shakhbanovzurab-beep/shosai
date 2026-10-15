@@ -13,8 +13,9 @@ interface YandexIdButtonProps {
 }
 
 /**
- * Кнопка «Войти с Яндекс ID», нарисованная SDK Яндекса. Закрытое окно Яндекса ставит кнопку заново; если SDK не
- * загрузился, вместо неё — фирменная ссылка входа (`fallback`).
+ * Кнопка «Войти с Яндекс ID», нарисованная SDK Яндекса. Пока SDK грузится (это секунды), на её месте —
+ * фирменная ссылка входа (`fallback`), а не пустое место; она же остаётся, если SDK не загрузился. Закрытое
+ * окно Яндекса ставит кнопку заново.
  */
 export function YandexIdButton(props: YandexIdButtonProps) {
   const [round, setRound] = useState(0);
@@ -33,9 +34,11 @@ export function YandexIdButton(props: YandexIdButtonProps) {
 function YandexWidget({
   clientId,
   onToken,
+  fallback,
   onCancel,
   onUnavailable,
 }: YandexIdButtonProps & { onCancel: () => void; onUnavailable: () => void }) {
+  const [shown, setShown] = useState(false);
   const containerId = `yandex-id-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   const theme = usePreferencesStore((state) => state.resolvedThemeMode);
   const locale = useLocale();
@@ -45,7 +48,9 @@ function YandexWidget({
 
   useEffect(() => {
     let alive = true;
-    mountYandexButton(containerId, clientId, { theme, russian: locale === "ru" })
+    mountYandexButton(containerId, clientId, { theme, russian: locale === "ru" }, () => {
+      if (alive) setShown(true);
+    })
       .then((token) => {
         if (alive) tokenArrived(token);
       })
@@ -58,5 +63,12 @@ function YandexWidget({
     };
   }, [containerId, clientId, theme, locale]);
 
-  return <div id={containerId} className="h-11 w-full overflow-hidden rounded-lg" />;
+  // Кнопка SDK рисуется под ссылкой и открывается, когда готова: ни пустого места, ни скачка высоты.
+  return (
+    // isolate: SDK ставит своему фрейму z-index, и без своего слоя наложения он перекрывал бы меню страницы.
+    <div className="relative isolate h-11 w-full">
+      <div id={containerId} className="h-11 w-full overflow-hidden rounded-lg" aria-hidden={!shown} />
+      {shown ? null : <div className="absolute inset-0">{fallback}</div>}
+    </div>
+  );
 }

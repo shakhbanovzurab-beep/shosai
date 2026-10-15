@@ -7,7 +7,7 @@
 ## Context
 
 - Step 10 shipped the draft's set of screens: sign-in by password, registration with a code, password reset, social sign-in.
-- The owner wants one quiet screen: quick sign-in buttons, then "or use your email" → a one-time code. Russian visitors see Yandex and VK, everyone else Google and GitHub. The server already chooses that set by country and language (`visible_providers`, 406-FZ).
+- The owner wants one quiet screen: quick sign-in buttons, then "or use your email" → a one-time code. Russian visitors see Yandex and VK, everyone else Google and GitHub. The server already chooses that set by country and language (`visible_providers`, 406-FZ). *Amended by the owner on 2026-10-15:* Yandex and VK are shown for Russia or a Russian interface only; a country the edge did not name no longer counts as Russia for the buttons — the interface language decides.
 - 152-FZ needs a separate, explicit consent to personal data processing, and for an account in the Russian home a separate consent to cross-border transfer (ADR 0045 point 5). A "by continuing you agree" line covers the terms of use, not these consents.
 
 ## Decision
@@ -19,7 +19,7 @@
    - `POST /v1/auth/email/verify` `{challenge, code}` → `{session}` for a known person (refresh cookie set, address marked verified), or `{consent_ticket}` for a new one — the encrypted consent ticket of social sign-in, carrying the proven address. Five wrong codes end the challenge (`code_locked`); a code works once.
    - `POST /v1/auth/email/resend` `{challenge}`, with the registration code's pacing: a minute apart, three at most.
    - A new person finishes through the existing `POST /v1/auth/social/register` path, generalised to any consent ticket: country, language and the consents create the account in its home.
-4. **The home of the first mail.** The code mail to an address with an account is written in the account's home. To an address without one it is written before the person names a country, in the visitor's home: Russia, a country the edge did not name, or a Russian interface give the Russian home; any other country the EU home — the rule that already picks the providers' set (406-FZ). The account itself is created in the home of the country confirmed on the consent step.
+4. **The home of the first mail.** The code mail to an address with an account is written in the account's home. To an address without one it is written before the person names a country, in the visitor's home: Russia, a country the edge did not name, or a Russian interface give the Russian home; any other country the EU home (152-FZ). Since 2026-10-15 this rule picks only the home, not the buttons (point 1). The account itself is created in the home of the country confirmed on the consent step.
 5. **Consents once, only for a new person.** After the code or after a provider, a person without an account sees one step: country, the personal-data consent with links to the documents, the cross-border consent when the country is Russia, and the optional newsletter. A known person goes straight in. The screen's footer says that continuing accepts the terms of use and the privacy policy.
 
 ## Consequences

@@ -22,6 +22,7 @@ from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.channels.http.email_sign_in import build_email_sign_in_router
 from shosai.features.identity.channels.http.social import build_social_router
 from shosai.features.identity.channels.http.social_finish import build_social_finish_router
+from shosai.features.identity.channels.http.social_widgets import build_social_widgets_router
 from shosai.features.identity.domain.social import Provider
 from shosai.features.identity.infrastructure.captcha import Captcha
 from shosai.features.identity.infrastructure.directory import Directory
@@ -75,6 +76,7 @@ async def social_routers(
             for provider, client_id in (
                 (Provider.YANDEX, settings.identity_yandex_client_id),
                 (Provider.GOOGLE, settings.identity_google_client_id),
+                (Provider.VK, settings.identity_vk_client_id),
             )
             if client_id and social.enabled(provider)
         }
@@ -89,6 +91,7 @@ async def social_routers(
         )  # fmt: skip
         yield (
             build_social_router(social, services.rate_limiter, widget_ids),
-            build_social_finish_router(social, accounts, services.rate_limiter, cookies),
+            build_social_finish_router(accounts, services.rate_limiter, cookies),
+            build_social_widgets_router(social, services.rate_limiter),
             build_email_sign_in_router(by_code, services.rate_limiter, cookies),
         )

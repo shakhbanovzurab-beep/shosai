@@ -48,3 +48,25 @@ export function exchangeWidgetToken(
     }),
   );
 }
+
+export type VkWidgetFlow = components["schemas"]["WidgetStart"];
+
+/** Начать вход через VK ID OneTap: сервер хранит verifier PKCE, виджет получает state и хеш. */
+export function startVkWidget(next: string, language: string): Promise<VkWidgetFlow> {
+  return dataOf(
+    apiClient.POST("/v1/auth/social/{provider}/widget-start", {
+      params: { path: { provider: "vk" } },
+      body: { next, language },
+    }),
+  );
+}
+
+/** Код, state и device_id, которые отдал OneTap: сервер меняет код у VK ID и отдаёт билет. */
+export function exchangeVkCode(code: string, state: string, deviceId: string): Promise<SocialTickets> {
+  return dataOf(
+    apiClient.POST("/v1/auth/social/{provider}/widget-code", {
+      params: { path: { provider: "vk" } },
+      body: { code, state, device_id: deviceId },
+    }),
+  );
+}

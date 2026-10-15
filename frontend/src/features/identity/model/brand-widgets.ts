@@ -8,6 +8,10 @@ const YANDEX_TOKEN_PAGE = "/v1/auth/social/yandex/token-page";
 
 export type WidgetTheme = "light" | "dark";
 
+// Заливка тёмной кнопки Google Identity (filled_black): ею же в тёмной теме закрашены рамка вокруг кнопки и
+// запасная ссылка.
+export const GOOGLE_BUTTON_FILL = "#202124";
+
 interface YandexSuggest {
   init(
     oauth: { client_id: string; response_type: "token"; redirect_uri: string },
@@ -28,13 +32,23 @@ interface GoogleIdentity {
 type BrandWindow = Window & { YaAuthSuggest?: YandexSuggest; google?: { accounts: { id: GoogleIdentity } } };
 
 /**
- * Кнопка «Войти с Яндекс ID» SDK Яндекса в элементе с `containerId`; промис отдаёт токен, когда человек
- * разрешил вход. Отказ — SDK не загрузился или человек закрыл окно.
+ * SDK Яндекса заранее: на русском экране входа кнопка Яндекса будет почти наверняка, а цепочка загрузок SDK
+ * длинная (скрипт, версия, клиент, фрейм кнопки), — начинать её стоит до ответа со списком провайдеров.
+ * Неудача здесь ничего не ломает: кнопка повторит загрузку сама и при отказе покажет обычную ссылку входа.
+ */
+export function preloadYandexSdk(): void {
+  loadSdk(YANDEX_SDK).catch(() => undefined);
+}
+
+/**
+ * Кнопка «Войти с Яндекс ID» SDK Яндекса в элементе с `containerId`; `onShown` — когда SDK её нарисовал,
+ * промис отдаёт токен, когда человек разрешил вход. Отказ — SDK не загрузился или человек закрыл окно.
  */
 export async function mountYandexButton(
   containerId: string,
   clientId: string,
   look: { theme: WidgetTheme; russian: boolean },
+  onShown: () => void,
 ): Promise<string> {
   await loadSdk(YANDEX_SDK);
   const sdk = (window as BrandWindow).YaAuthSuggest;
@@ -54,6 +68,7 @@ export async function mountYandexButton(
     },
   );
   if (widget.status !== "ok" || widget.handler === undefined) throw new Error(`Yandex ID: ${widget.code ?? "error"}`);
+  onShown();
   const answer = await widget.handler();
   if (!answer.access_token) throw new Error("Yandex ID answered no token");
   return answer.access_token;
@@ -78,6 +93,7 @@ export async function mountGoogleButton(
   });
   identity.renderButton(element, {
     type: "standard",
+    // Светлая кнопка в светлой теме, тёмная — в тёмной; высоту 44 px добирает рамка вокруг (GoogleButton).
     theme: look.theme === "dark" ? "filled_black" : "outline",
     size: "large",
     text: "continue_with",
@@ -86,4 +102,31 @@ export async function mountGoogleButton(
     locale: look.locale,
     width: Math.min(400, Math.round(look.width)),
   });
+}
+
+/**
+ * Позвать `onShown`, когда кнопка Google в `element` готова: её фрейм получил размер. До этого Google показывает
+ * временную HTML-кнопку на своём языке и со своим текстом, поэтому кабинет держит на её месте свою. Возвращает
+ * отписку.
+ */
+export function watchGoogleFrame(element: HTMLElement, onShown: () => void): () => void {
+  const sized = new ResizeObserver((entries) => {
+    if (entries.some((entry) => entry.contentRect.width > 0)) {
+      stop();
+      onShown();
+    }
+  });
+  const added = new MutationObserver(() => {
+    const frame = element.querySelector("iframe");
+    if (frame !== null) {
+      added.disconnect();
+      sized.observe(frame);
+    }
+  });
+  const stop = () => {
+    added.disconnect();
+    sized.disconnect();
+  };
+  added.observe(element, { childList: true, subtree: true });
+  return stop;
 }

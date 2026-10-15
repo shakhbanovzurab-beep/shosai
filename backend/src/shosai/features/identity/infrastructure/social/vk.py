@@ -33,6 +33,11 @@ class Vk:
         self._client_id = client_id
         self._redirect_uri = redirect_uri
 
+    @property
+    def widget_redirect_uri(self) -> str:
+        """The redirect URI OneTap must name: the registered one, used in the exchange."""
+        return self._redirect_uri
+
     def authorize_url(self, state: str, challenge: str) -> str:
         """The VK ID page with the PKCE challenge and the email scope."""
         query = {

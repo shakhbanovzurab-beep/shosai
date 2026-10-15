@@ -24,6 +24,7 @@ from shosai.features.identity.channels.http.cookies import CookiePolicy
 from shosai.features.identity.channels.http.email_sign_in import build_email_sign_in_router
 from shosai.features.identity.channels.http.social import build_social_router
 from shosai.features.identity.channels.http.social_finish import build_social_finish_router
+from shosai.features.identity.channels.http.social_widgets import build_social_widgets_router
 from shosai.features.identity.contracts import IDENTITY_EVENTS
 from shosai.features.identity.domain.social import Provider
 from shosai.features.identity.infrastructure.captcha import Captcha
@@ -81,6 +82,7 @@ def passwordless_routers(
     widget_ids = {Provider.YANDEX: "yandex-client", Provider.GOOGLE: "google-client"}
     return (
         build_social_router(social, limiter, widget_ids),
-        build_social_finish_router(social, accounts, limiter, COOKIES),
+        build_social_finish_router(accounts, limiter, COOKIES),
+        build_social_widgets_router(social, limiter),
         build_email_sign_in_router(by_code, limiter, COOKIES),
     )

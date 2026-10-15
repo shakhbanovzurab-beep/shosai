@@ -32,7 +32,11 @@ def home_for_country(country: CountryCode) -> Home:
 
 
 def russian_visitor(country: str | None, language: str | None) -> bool:
-    """Russia, a country the edge did not name, or a Russian interface (406-FZ, ADR 0048)."""
+    """Whose first data the Russian home records: Russia, an unknown country or a Russian interface.
+
+    Only the home of a first mail follows it (152-FZ, ADR 0048); the sign-in buttons follow
+    `social.visible_providers`.
+    """
     russian_interface = (language or "").lower().startswith("ru")
     return country is None or country.upper() == RUSSIA or russian_interface
 

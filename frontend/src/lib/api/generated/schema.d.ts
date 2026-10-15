@@ -437,26 +437,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/auth/social/{provider}/widget-token": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Widget Token
-         * @description Resolve the person behind a Yandex or Google widget token.
-         */
-        post: operations["widget_token_v1_auth_social__provider__widget_token_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/v1/auth/social/complete": {
         parameters: {
             query?: never;
@@ -491,6 +471,66 @@ export interface paths {
          * @description A new account for the person a provider or a code introduced, after their consent.
          */
         post: operations["register_v1_auth_social_register_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/social/{provider}/widget-token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Widget Token
+         * @description Resolve the person behind a Yandex or Google widget token.
+         */
+        post: operations["widget_token_v1_auth_social__provider__widget_token_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/social/{provider}/widget-start": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Widget Start
+         * @description Open a flow for VK ID OneTap; the PKCE verifier stays on the server.
+         */
+        post: operations["widget_start_v1_auth_social__provider__widget_start_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth/social/{provider}/widget-code": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Widget Code
+         * @description Resolve the person behind the code VK ID OneTap handed the browser.
+         */
+        post: operations["widget_code_v1_auth_social__provider__widget_code_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1417,6 +1457,8 @@ export interface components {
             yandex_client_id: string | null;
             /** Google Client Id */
             google_client_id: string | null;
+            /** Vk Client Id */
+            vk_client_id?: string | null;
         };
         /**
          * QuotaSnapshot
@@ -1756,6 +1798,43 @@ export interface components {
             registration_id: string;
             /** Code */
             code: string;
+        };
+        /**
+         * WidgetCodeRequest
+         * @description What the code widget handed the browser after the person allowed sign-in.
+         */
+        WidgetCodeRequest: {
+            /** Code */
+            code: string;
+            /** State */
+            state: string;
+            /** Device Id */
+            device_id: string;
+        };
+        /**
+         * WidgetStart
+         * @description What VK ID OneTap is configured with: its `state`, `codeChallenge` and `redirectUrl`.
+         */
+        WidgetStart: {
+            /** State */
+            state: string;
+            /** Code Challenge */
+            code_challenge: string;
+            /** Redirect Url */
+            redirect_url: string;
+        };
+        /**
+         * WidgetStartRequest
+         * @description Where to return after sign-in through a code widget, and the interface language.
+         */
+        WidgetStartRequest: {
+            /** Next */
+            next?: string | null;
+            /**
+             * Language
+             * @default en
+             */
+            language: string;
         };
         /**
          * WidgetTokenRequest
@@ -2596,41 +2675,6 @@ export interface operations {
             };
         };
     };
-    widget_token_v1_auth_social__provider__widget_token_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                provider: components["schemas"]["Provider"];
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["WidgetTokenRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SocialTickets"];
-                };
-            };
-            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
     complete_v1_auth_social_complete_post: {
         parameters: {
             query?: never;
@@ -2688,6 +2732,113 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SocialSession"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    widget_token_v1_auth_social__provider__widget_token_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: components["schemas"]["Provider"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WidgetTokenRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialTickets"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    widget_start_v1_auth_social__provider__widget_start_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Country-Code"?: string | null;
+            };
+            path: {
+                provider: components["schemas"]["Provider"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WidgetStartRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WidgetStart"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    widget_code_v1_auth_social__provider__widget_code_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                provider: components["schemas"]["Provider"];
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["WidgetCodeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SocialTickets"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

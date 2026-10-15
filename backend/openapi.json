@@ -1376,58 +1376,6 @@
         }
       }
     },
-    "/v1/auth/social/{provider}/widget-token": {
-      "post": {
-        "tags": [
-          "auth"
-        ],
-        "summary": "Widget Token",
-        "description": "Resolve the person behind a Yandex or Google widget token.",
-        "operationId": "widget_token_v1_auth_social__provider__widget_token_post",
-        "parameters": [
-          {
-            "name": "provider",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/Provider"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/WidgetTokenRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SocialTickets"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/v1/auth/social/complete": {
       "post": {
         "tags": [
@@ -1531,6 +1479,179 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/SocialSession"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/social/{provider}/widget-token": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Widget Token",
+        "description": "Resolve the person behind a Yandex or Google widget token.",
+        "operationId": "widget_token_v1_auth_social__provider__widget_token_post",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Provider"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WidgetTokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SocialTickets"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/social/{provider}/widget-start": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Widget Start",
+        "description": "Open a flow for VK ID OneTap; the PKCE verifier stays on the server.",
+        "operationId": "widget_start_v1_auth_social__provider__widget_start_post",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Provider"
+            }
+          },
+          {
+            "name": "X-Country-Code",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 2
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Country-Code"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WidgetStartRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WidgetStart"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/auth/social/{provider}/widget-code": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Widget Code",
+        "description": "Resolve the person behind the code VK ID OneTap handed the browser.",
+        "operationId": "widget_code_v1_auth_social__provider__widget_code_post",
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Provider"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WidgetCodeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SocialTickets"
                 }
               }
             }
@@ -4039,6 +4160,17 @@
               }
             ],
             "title": "Google Client Id"
+          },
+          "vk_client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vk Client Id"
           }
         },
         "type": "object",
@@ -4888,6 +5020,88 @@
         ],
         "title": "VerifyRequest",
         "description": "The code mailed to the address, with the id of the registration it belongs to."
+      },
+      "WidgetCodeRequest": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 1024,
+            "minLength": 1,
+            "title": "Code"
+          },
+          "state": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "State"
+          },
+          "device_id": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 1,
+            "title": "Device Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "state",
+          "device_id"
+        ],
+        "title": "WidgetCodeRequest",
+        "description": "What the code widget handed the browser after the person allowed sign-in."
+      },
+      "WidgetStart": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "code_challenge": {
+            "type": "string",
+            "title": "Code Challenge"
+          },
+          "redirect_url": {
+            "type": "string",
+            "title": "Redirect Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "code_challenge",
+          "redirect_url"
+        ],
+        "title": "WidgetStart",
+        "description": "What VK ID OneTap is configured with: its `state`, `codeChallenge` and `redirectUrl`."
+      },
+      "WidgetStartRequest": {
+        "properties": {
+          "next": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next"
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "title": "Language",
+            "default": "en"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "WidgetStartRequest",
+        "description": "Where to return after sign-in through a code widget, and the interface language."
       },
       "WidgetTokenRequest": {
         "properties": {

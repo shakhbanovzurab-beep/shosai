@@ -8,6 +8,7 @@ from typing import Final
 from urllib.parse import urlencode
 
 import httpx
+import structlog
 from pydantic import SecretStr
 
 from shosai.features.identity.domain.social import Provider, SocialIdentity
@@ -22,6 +23,7 @@ AUTHORIZE_URL: Final = "https://github.com/login/oauth/authorize"
 EXCHANGE_URL: Final = "https://github.com/login/oauth/access_token"
 USER_URL: Final = "https://api.github.com/user"
 EMAILS_URL: Final = "https://api.github.com/user/emails"
+log = structlog.stdlib.get_logger(__name__)
 NO_REPLY: Final = "@users.noreply.github.com"
 
 
@@ -65,6 +67,9 @@ class GitHub:
         except httpx.HTTPError as error:
             message = "github: обмен кода не удался"
             raise SocialProviderFailedError(message) from error
+        if emails.status_code != httpx.codes.OK:
+            # GitHub App без разрешения «Email addresses: Read-only» отвечает 403.
+            log.warning("GitHub не отдал адреса почты", status=emails.status_code)
         email = _verified_email(emails)
         return SocialIdentity(
             provider=self.key,

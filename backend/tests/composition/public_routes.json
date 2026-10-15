@@ -40,6 +40,8 @@
     "POST /v1/auth/register/verify",
     "POST /v1/auth/social/complete",
     "POST /v1/auth/social/register",
+    "POST /v1/auth/social/{provider}/widget-code",
+    "POST /v1/auth/social/{provider}/widget-start",
     "POST /v1/auth/social/{provider}/widget-token",
     "POST /v1/me/deletion",
     "POST /v1/me/devices/sign-out-others",

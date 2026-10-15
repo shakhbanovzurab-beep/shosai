@@ -9,9 +9,10 @@ export interface SocialShowcase {
   providers: SocialProvider[];
   yandexClientId: string | null;
   googleClientId: string | null;
+  vkClientId: string | null;
 }
 
-const NONE: SocialShowcase = { providers: [], yandexClientId: null, googleClientId: null };
+const NONE: SocialShowcase = { providers: [], yandexClientId: null, googleClientId: null, vkClientId: null };
 
 /**
  * Сервисы быстрого входа для этого посетителя. Состав зависит от страны и за визит не меняется. Любой сбой —
@@ -30,5 +31,6 @@ export function useSocialShowcase(): SocialShowcase {
     providers: orderedProviders(data.providers),
     yandexClientId: data.yandex_client_id,
     googleClientId: data.google_client_id,
+    vkClientId: data.vk_client_id ?? null,
   };
 }

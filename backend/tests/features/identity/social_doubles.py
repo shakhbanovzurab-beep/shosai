@@ -7,6 +7,7 @@ from shosai.features.identity.domain.social import Provider, SocialIdentity
 from shosai.features.identity.infrastructure.social.base import SocialProviderFailedError
 
 PROVIDER_PAGE: Final = "https://provider.example/authorize"
+WIDGET_REDIRECT: Final = "https://shosai.example/v1/auth/social/vk/callback"
 
 
 class ProviderDouble:
@@ -16,11 +17,17 @@ class ProviderDouble:
         self._key = key
         self._codes = codes
         self.verifiers: list[str] = []
+        self.device_ids: list[str | None] = []
 
     @property
     def key(self) -> Provider:
         """The provider this double plays."""
         return self._key
+
+    @property
+    def widget_redirect_uri(self) -> str | None:
+        """Only VK ID has a code widget (OneTap); the others answer with nothing."""
+        return WIDGET_REDIRECT if self._key is Provider.VK else None
 
     def authorize_url(self, state: str, challenge: str) -> str:
         """A fake consent page carrying the state."""
@@ -28,8 +35,8 @@ class ProviderDouble:
 
     async def identify(self, code: str, verifier: str, device_id: str | None) -> SocialIdentity:
         """The identity of a known code."""
-        del device_id
         self.verifiers.append(verifier)
+        self.device_ids.append(device_id)
         return self._known(code)
 
     async def identify_token(self, token: str) -> SocialIdentity:

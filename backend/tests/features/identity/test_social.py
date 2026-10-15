@@ -26,6 +26,7 @@ DOUBLES = {
     Provider.VK: ProviderDouble(Provider.VK, {"existing": VK_EXISTING}),
 }
 WORLD = {"X-Country-Code": "DE"}
+RUSSIA = {"X-Country-Code": "RU"}
 CONSENTS = {"personal_data": True, "cross_border": False, "marketing": False}
 
 
@@ -35,7 +36,7 @@ def query_of(location: str) -> dict[str, str]:
 
 async def come_back(bench: RegistrationBench, provider: Provider, code: str) -> dict[str, str]:
     """Start at the provider, come back with the code; the query of the sign-in page."""
-    headers = WORLD if provider in {Provider.GOOGLE, Provider.GITHUB} else {}
+    headers = WORLD if provider in {Provider.GOOGLE, Provider.GITHUB} else RUSSIA
     started = await bench.http.get(
         f"/v1/auth/social/{provider.value}/start", params={"next": "/app/notes"}, headers=headers
     )
@@ -146,7 +147,7 @@ async def test_every_failure_is_a_redirect_with_its_reason(
             "/v1/auth/social/google/callback", params={"error": "denied"}
         )
         unknown = await bench.http.get("/v1/auth/social/myspace/callback", params={"code": "x"})
-        hidden = await bench.http.get("/v1/auth/social/google/start")
+        hidden = await bench.http.get("/v1/auth/social/google/start", headers=RUSSIA)
 
     assert refused == {"social_error": "social_provider_failed"}
     assert crashed == {"social_error": "social_failed"}
@@ -175,7 +176,14 @@ async def test_the_two_sets_of_providers_are_never_shown_together(
 ) -> None:
     async with registration_bench(homes.transactions, valkey, redis_cache, options()) as bench:
         world = await bench.http.get("/v1/auth/social/providers", headers=WORLD)
-        russia = await bench.http.get("/v1/auth/social/providers")
+        russia = await bench.http.get("/v1/auth/social/providers", headers=RUSSIA)
+        # Страну edge не назвал: решает язык интерфейса, а не «по умолчанию Россия».
+        unknown_english = await bench.http.get(
+            "/v1/auth/social/providers", params={"language": "en"}
+        )
+        unknown_russian = await bench.http.get(
+            "/v1/auth/social/providers", params={"language": "ru"}
+        )
         russian_reader = await bench.http.get(
             "/v1/auth/social/providers", params={"language": "ru"}, headers=WORLD
         )
@@ -184,5 +192,7 @@ async def test_the_two_sets_of_providers_are_never_shown_together(
     assert world.json()["providers"] == ["google"]
     assert russia.json()["providers"] == ["yandex", "vk"]
     assert russian_reader.json()["providers"] == ["yandex", "vk"]
+    assert unknown_english.json()["providers"] == ["google"]
+    assert unknown_russian.json()["providers"] == ["yandex", "vk"]
     assert page.text.count("<script") == 2
     assert "frame-ancestors 'none'" in page.headers["content-security-policy"]
