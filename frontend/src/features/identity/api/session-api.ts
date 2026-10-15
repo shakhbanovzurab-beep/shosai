@@ -6,17 +6,6 @@ import type { Me, Tokens } from "../domain/session";
 
 const CSRF_HEADER = "X-CSRF-Token";
 
-export interface Credentials {
-  email: string;
-  password: string;
-  captchaToken: string | null;
-}
-
-/** Вход паролем; refresh приходит в httpOnly cookie, CSRF — в cookie, доступной странице. */
-export function signInWithPassword({ email, password, captchaToken }: Credentials): Promise<Tokens> {
-  return dataOf(apiClient.POST("/v1/auth/login", { body: { email, password, captcha_token: captchaToken } }));
-}
-
 /** Новый токен доступа по refresh-cookie; CSRF-значение — из cookie этой же сессии, если она есть. */
 export function refreshSession(csrf: string | null): Promise<Tokens> {
   const headers = csrf === null ? {} : { [CSRF_HEADER]: csrf };

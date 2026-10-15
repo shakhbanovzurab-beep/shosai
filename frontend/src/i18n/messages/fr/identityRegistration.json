@@ -1,16 +1,7 @@
 {
-  "metaTitle": "Créer un compte",
-  "title": "Commençons",
-  "description": "Créez un compte Shosai. Votre espace de travail est prêt en une minute.",
-  "name": "Nom",
-  "email": "E-mail",
-  "password": "Mot de passe",
   "country": "Pays",
   "countryPlaceholder": "Choisissez votre pays",
   "countryHint": "Détermine où vos données sont stockées. Vous ne pourrez pas le modifier plus tard sans déplacer votre compte.",
-  "submit": "Créer le compte",
-  "haveAccount": "Vous avez déjà un compte ?",
-  "signIn": "Se connecter",
   "consents": {
     "personalData": "J’accepte les <terms>Conditions d’utilisation</terms> et la <privacy>Politique de confidentialité</privacy> et je consens au traitement de mes données personnelles",
     "crossBorder": "J’accepte le transfert transfrontalier de mes données personnelles afin que Shosai puisse les traiter dans l’UE",
@@ -30,15 +21,5 @@
       "number": "Un chiffre",
       "symbol": "Un symbole"
     }
-  },
-  "verify": {
-    "title": "Consultez vos e-mails",
-    "description": "Nous avons envoyé un code à 6 chiffres à {email}. Saisissez-le pour terminer.",
-    "code": "Code reçu par e-mail",
-    "submit": "Confirmer",
-    "resend": "Envoyer un nouveau code",
-    "resendIn": "Vous pourrez demander un nouveau code dans {time}",
-    "resent": "Nous avons envoyé un nouveau code.",
-    "back": "Utiliser un autre e-mail"
   }
 }

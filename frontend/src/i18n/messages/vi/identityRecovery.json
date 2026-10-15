@@ -1,14 +1,4 @@
 {
-  "forgot": {
-    "metaTitle": "Đặt lại mật khẩu",
-    "title": "Đặt lại mật khẩu",
-    "description": "Nhập email của tài khoản, chúng tôi sẽ gửi liên kết để bạn đặt mật khẩu mới.",
-    "email": "Email",
-    "submit": "Gửi liên kết",
-    "sentTitle": "Kiểm tra email",
-    "sent": "Nếu có tài khoản dùng {email}, liên kết đặt mật khẩu mới đang được gửi tới. Liên kết có hiệu lực trong một giờ.",
-    "back": "Quay lại đăng nhập"
-  },
   "reset": {
     "metaTitle": "Mật khẩu mới",
     "title": "Đặt mật khẩu mới",
@@ -20,7 +10,6 @@
     "doneTitle": "Đã cập nhật mật khẩu",
     "done": "Hãy đăng nhập bằng mật khẩu mới.",
     "signIn": "Đăng nhập",
-    "missingToken": "Liên kết này chưa đầy đủ. Hãy mở lại từ email hoặc yêu cầu liên kết mới.",
-    "requestNew": "Yêu cầu liên kết mới"
+    "missingToken": "Liên kết này chưa đầy đủ. Hãy mở lại từ email hoặc đăng nhập bằng mã."
   }
 }

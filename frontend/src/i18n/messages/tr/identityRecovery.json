@@ -1,14 +1,4 @@
 {
-  "forgot": {
-    "metaTitle": "Şifrenizi sıfırlayın",
-    "title": "Şifrenizi sıfırlayın",
-    "description": "Hesabınızın e-posta adresini girin, yeni şifre belirlemeniz için size bir bağlantı gönderelim.",
-    "email": "E-posta",
-    "submit": "Bağlantıyı gönder",
-    "sentTitle": "E-postanızı kontrol edin",
-    "sent": "{email} adresini kullanan bir hesap varsa yeni şifre belirleme bağlantısı yolda. Bağlantı bir saat geçerli.",
-    "back": "Girişe dön"
-  },
   "reset": {
     "metaTitle": "Yeni şifre",
     "title": "Yeni şifre belirleyin",
@@ -20,7 +10,6 @@
     "doneTitle": "Şifre güncellendi",
     "done": "Yeni şifrenizle giriş yapın.",
     "signIn": "Giriş yap",
-    "missingToken": "Bu bağlantı eksik. E-postadan yeniden açın veya yeni bir bağlantı isteyin.",
-    "requestNew": "Yeni bağlantı iste"
+    "missingToken": "Bu bağlantı eksik. E-postadan yeniden açın veya kodla giriş yapın."
   }
 }

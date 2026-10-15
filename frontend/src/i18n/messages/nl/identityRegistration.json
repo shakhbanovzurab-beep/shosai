@@ -1,16 +1,7 @@
 {
-  "metaTitle": "Account maken",
-  "title": "Laten we beginnen",
-  "description": "Maak een Shosai-account. Je werkruimte is binnen een minuut klaar.",
-  "name": "Naam",
-  "email": "E-mailadres",
-  "password": "Wachtwoord",
   "country": "Land",
   "countryPlaceholder": "Kies je land",
   "countryHint": "Bepaalt waar je gegevens worden opgeslagen. Je kunt dit later alleen wijzigen door je account te verhuizen.",
-  "submit": "Account maken",
-  "haveAccount": "Heb je al een account?",
-  "signIn": "Inloggen",
   "consents": {
     "personalData": "Ik accepteer de <terms>Gebruiksvoorwaarden</terms> en het <privacy>Privacybeleid</privacy> en ga akkoord met de verwerking van mijn persoonsgegevens",
     "crossBorder": "Ik ga akkoord met de grensoverschrijdende doorgifte van mijn persoonsgegevens, zodat Shosai ze in de EU kan verwerken",
@@ -30,15 +21,5 @@
       "number": "Een cijfer",
       "symbol": "Een symbool"
     }
-  },
-  "verify": {
-    "title": "Check je e-mail",
-    "description": "We hebben een 6-cijferige code naar {email} gestuurd. Vul die in om af te ronden.",
-    "code": "Code uit de e-mail",
-    "submit": "Bevestigen",
-    "resend": "Nieuwe code sturen",
-    "resendIn": "Je kunt over {time} een nieuwe code aanvragen",
-    "resent": "We hebben een nieuwe code gestuurd.",
-    "back": "Ander e-mailadres gebruiken"
   }
 }

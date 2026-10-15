@@ -13,21 +13,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Эквалайзер голоса на афише входа: полосы масштабируются, поэтому анимация остаётся на компоновщике. */
-@theme {
-  --animate-equalizer: equalizer 1.1s ease-in-out infinite;
-
-  @keyframes equalizer {
-    0%,
-    100% {
-      transform: scaleY(0.2);
-    }
-    50% {
-      transform: scaleY(1);
-    }
-  }
-}
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

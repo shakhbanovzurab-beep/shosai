@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Arayüz dili",
-    "or": "veya"
+    "motto": "Hiçbir şey unutulmaz.",
+    "language": "Arayüz dili"
   },
   "signIn": {
     "metaTitle": "Giriş yap",
-    "title": "Tekrar hoş geldiniz",
-    "description": "Shosai çalışma alanınıza giriş yapın.",
     "email": "E-posta",
-    "password": "Şifre",
-    "submit": "Giriş yap",
-    "forgot": "Şifrenizi mi unuttunuz?",
-    "noAccount": "Shosai hesabınız yok mu?",
-    "register": "Hesap oluştur"
+    "emailPlaceholder": "E-posta adresinizi girin",
+    "continueWithEmail": "E-postayla devam et",
+    "orEmail": "veya e-postanızı kullanın",
+    "terms": "Devam ederek <terms>Koşullarımızı</terms> ve <privacy>Gizlilik Politikamızı</privacy> kabul etmiş olursunuz."
+  },
+  "code": {
+    "title": "E-postanızı kontrol edin",
+    "description": "{email} adresine 6 haneli bir kod gönderdik.",
+    "label": "E-postadaki kod",
+    "submit": "Devam et",
+    "resend": "Yeni kod gönder",
+    "resendIn": "{time} sonra yeni bir kod isteyebilirsiniz",
+    "resent": "Yeni bir kod gönderdik.",
+    "back": "Başka bir e-posta kullan"
   },
   "social": {
     "continueWith": "{provider} ile devam et",
     "consentMetaTitle": "Kaydı tamamla",
     "consentTitle": "Bir adım kaldı",
     "consentDescription": "{provider} ile ilk kez giriş yapıyorsunuz. Ülkenizi ve onaylarınızı bir kez doğrulayın, hesabınız hazır olsun.",
+    "consentDescriptionEmail": "İlk kez giriş yapıyorsunuz. Ülkenizi ve onaylarınızı bir kez doğrulayın, hesabınız hazır olsun.",
     "consentSubmit": "Devam et",
     "back": "Girişe dön"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "Giriş çok uzun sürdü. Yeniden başlayın.",
     "social_link_requires_sign_in": "Bu e-postanın zaten bir Shosai hesabı var. Önce şifrenizle giriş yapın.",
     "social_unavailable": "Hizmetlerle giriş kısa bir süre için kullanılamıyor. E-postanızı kullanın veya daha sonra tekrar deneyin.",
+    "code_locked": "Çok fazla yanlış kod girildi. Yeni bir kod isteyin.",
+    "sign_in_unavailable": "Giriş kısa bir süre için kullanılamıyor. Birkaç saniye sonra tekrar deneyin.",
+    "too_many_codes": "Bu e-postaya çok fazla kod gönderildi. Daha sonra tekrar deneyin.",
     "unknown": "Bir şeyler ters gitti. Biraz sonra tekrar deneyin.",
     "requestId": "Destek için istek kimliği: {id}"
   },

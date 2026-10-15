@@ -3,8 +3,8 @@ import { useTranslations } from "use-intl";
 
 import { PageMeta } from "@/app/root/page-meta";
 import { safeNext } from "@/features/identity/domain/next-path";
+import { ConsentPanel } from "@/features/identity/ui/consent-panel";
 import { LoginPanel } from "@/features/identity/ui/login-panel";
-import { SocialConsentPanel } from "@/features/identity/ui/social-consent-panel";
 import { useSearchParams } from "@/lib/navigation";
 
 import type { LoginEntry } from "./login-loader";
@@ -17,7 +17,7 @@ export function Component() {
     return (
       <>
         <PageMeta title={t("social.consentMetaTitle")} />
-        <SocialConsentPanel ticket={entry.ticket} provider={entry.provider} />
+        <ConsentPanel ticket={entry.ticket} via={entry.provider} />
       </>
     );
   }

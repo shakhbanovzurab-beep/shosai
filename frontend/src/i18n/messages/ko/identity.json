@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "인터페이스 언어",
-    "or": "또는"
+    "motto": "아무것도 잊히지 않아요.",
+    "language": "인터페이스 언어"
   },
   "signIn": {
     "metaTitle": "로그인",
-    "title": "다시 오신 것을 환영해요",
-    "description": "Shosai 워크스페이스에 로그인하세요.",
     "email": "이메일",
-    "password": "비밀번호",
-    "submit": "로그인",
-    "forgot": "비밀번호를 잊으셨나요?",
-    "noAccount": "Shosai가 처음이신가요?",
-    "register": "계정 만들기"
+    "emailPlaceholder": "이메일 입력",
+    "continueWithEmail": "이메일로 계속하기",
+    "orEmail": "또는 이메일 사용",
+    "terms": "계속하면 <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하게 돼요."
+  },
+  "code": {
+    "title": "이메일을 확인하세요",
+    "description": "{email}(으)로 6자리 코드를 보냈어요.",
+    "label": "이메일로 받은 코드",
+    "submit": "계속",
+    "resend": "새 코드 보내기",
+    "resendIn": "{time} 후에 새 코드를 요청할 수 있어요",
+    "resent": "새 코드를 보냈어요.",
+    "back": "다른 이메일 사용"
   },
   "social": {
     "continueWith": "{provider} 계정으로 계속하기",
     "consentMetaTitle": "가입 마치기",
     "consentTitle": "한 단계만 더",
     "consentDescription": "{provider} 계정으로 처음 로그인했어요. 국가와 동의 항목을 한 번만 확인하면 계정이 준비돼요.",
+    "consentDescriptionEmail": "처음 로그인했어요. 국가와 동의 항목을 한 번만 확인하면 계정이 준비돼요.",
     "consentSubmit": "계속",
     "back": "로그인으로 돌아가기"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "로그인 시간이 너무 오래 걸렸어요. 처음부터 다시 시작하세요.",
     "social_link_requires_sign_in": "이 이메일로 만든 Shosai 계정이 이미 있어요. 먼저 비밀번호로 로그인하세요.",
     "social_unavailable": "지금은 잠시 외부 서비스로 로그인할 수 없어요. 이메일을 사용하거나 나중에 다시 시도하세요.",
+    "code_locked": "잘못된 코드를 너무 많이 입력했어요. 새 코드를 요청하세요.",
+    "sign_in_unavailable": "지금은 잠시 로그인할 수 없어요. 몇 초 후 다시 시도하세요.",
+    "too_many_codes": "이 이메일로 코드를 너무 많이 보냈어요. 나중에 다시 시도하세요.",
     "unknown": "문제가 생겼어요. 잠시 후 다시 시도하세요.",
     "requestId": "고객 지원용 요청 ID: {id}"
   },

@@ -1,5 +1,5 @@
-// Регистрация, сброс пароля, вход через сервис и десктоп в `npm run dev` без бэкенда. Код из письма — 123456,
-// ссылка сброса принимает любой токен, кроме «expired»; сервисы входа видны все четыре.
+// Вход по коду, сброс пароля, вход через сервис и десктоп в `npm run dev` без бэкенда. Код из письма — 123456,
+// ссылка сброса принимает любой токен, кроме «expired».
 import { demoSession } from "./session-route";
 
 const DEMO_CODE = "123456";
@@ -8,38 +8,42 @@ const RESEND_AFTER_SECONDS = 30;
 const refused = (code: string, status: number, params: Record<string, number> = {}) =>
   Response.json({ error: { code, request_id: "mock-request", params }, detail: code }, { status });
 
-export const registerRoute = {
+// Вход по коду: адрес, начинающийся с «new», — новый человек (экран согласий), остальные входят сразу.
+const NEWCOMER_PREFIX = "new";
+
+function challengeOf(email: string): string {
+  return `mock-challenge.${btoa(encodeURIComponent(email))}`;
+}
+
+function emailOf(challenge: string): string {
+  return decodeURIComponent(atob(challenge.replace("mock-challenge.", "")));
+}
+
+export const emailStartRoute = {
   async POST(request: Request) {
-    const body = (await request.json()) as { email?: string; consents?: { personal_data?: boolean } };
-    if (body.email?.startsWith("taken@")) return refused("email_registered", 409);
-    if (body.consents?.personal_data !== true) return refused("personal_data_consent_required", 422);
+    const body = (await request.json()) as { email?: string };
     return Response.json(
-      { registration_id: crypto.randomUUID(), resend_after_seconds: RESEND_AFTER_SECONDS },
+      { challenge: challengeOf(body.email ?? ""), resend_after_seconds: RESEND_AFTER_SECONDS },
       { status: 202 },
     );
   },
 };
 
-export const verifyRoute = {
+export const emailVerifyRoute = {
   async POST(request: Request) {
-    const body = (await request.json()) as { code?: string };
+    const body = (await request.json()) as { challenge?: string; code?: string };
     if (body.code !== DEMO_CODE) return refused("invalid_code", 400);
-    return Response.json({ user_id: "00000000-0000-7000-8000-000000000001", ...demoSession() }, { status: 201 });
+    if (emailOf(body.challenge ?? "").startsWith(NEWCOMER_PREFIX)) {
+      return Response.json({ session: null, consent_ticket: "mock-consent-ticket", next: "/app" });
+    }
+    return Response.json({ session: { ...demoSession(), next: "/app" }, consent_ticket: null, next: "/app" });
   },
 };
 
-export const resendRoute = {
-  POST() {
-    return Response.json(
-      { registration_id: crypto.randomUUID(), resend_after_seconds: RESEND_AFTER_SECONDS },
-      { status: 202 },
-    );
-  },
-};
-
-export const forgotRoute = {
-  POST() {
-    return new Response(null, { status: 202 });
+export const emailResendRoute = {
+  async POST(request: Request) {
+    const body = (await request.json()) as { challenge?: string };
+    return Response.json({ challenge: body.challenge, resend_after_seconds: RESEND_AFTER_SECONDS }, { status: 202 });
   },
 };
 
@@ -50,13 +54,12 @@ export const resetRoute = {
   },
 };
 
+// Как на сервере: русский интерфейс видит Яндекс и VK, остальной мир — Google и GitHub (406-ФЗ).
 export const socialProvidersRoute = {
-  GET() {
-    return Response.json({
-      providers: ["yandex", "vk", "google", "github"],
-      yandex_client_id: null,
-      google_client_id: null,
-    });
+  GET(request: Request) {
+    const russian = new URL(request.url).searchParams.get("language") === "ru";
+    const providers = russian ? ["yandex", "vk"] : ["google", "github"];
+    return Response.json({ providers, yandex_client_id: null, google_client_id: null });
   },
 };
 

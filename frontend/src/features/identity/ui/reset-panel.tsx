@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import { Link } from "@/lib/navigation";
 
-import { FORGOT_PATH, LOGIN_PATH } from "../domain/next-path";
+import { LOGIN_PATH } from "../domain/next-path";
 import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "../domain/password-rules";
 import type { Refusal } from "../model/outcome";
 import { saveNewPassword } from "../model/password-recovery";
@@ -32,8 +32,8 @@ export function ResetPanel({ token }: { token: string | null }) {
     return (
       <>
         <AuthHeading title={t("reset.title")}>{t("reset.missingToken")}</AuthHeading>
-        <Link href={FORGOT_PATH} className={LINK}>
-          {t("reset.requestNew")}
+        <Link href={LOGIN_PATH} className={LINK}>
+          {t("reset.signIn")}
         </Link>
       </>
     );
@@ -98,8 +98,8 @@ export function ResetPanel({ token }: { token: string | null }) {
         </div>
         {refusal === null ? null : <ProblemMessage refusal={refusal} />}
         {refusal?.problem === "invalid_token" ? (
-          <Link href={FORGOT_PATH} className={LINK}>
-            {t("reset.requestNew")}
+          <Link href={LOGIN_PATH} className={LINK}>
+            {t("reset.signIn")}
           </Link>
         ) : null}
         <Button type="submit" size="lg" disabled={pending || mismatch}>

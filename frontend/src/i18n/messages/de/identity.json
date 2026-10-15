@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Sprache der Oberfläche",
-    "or": "oder"
+    "motto": "Nichts vergessen.",
+    "language": "Sprache der Oberfläche"
   },
   "signIn": {
     "metaTitle": "Anmelden",
-    "title": "Willkommen zurück",
-    "description": "Melde dich in deinem Shosai-Workspace an.",
     "email": "E-Mail",
-    "password": "Passwort",
-    "submit": "Anmelden",
-    "forgot": "Passwort vergessen?",
-    "noAccount": "Neu bei Shosai?",
-    "register": "Konto erstellen"
+    "emailPlaceholder": "E-Mail-Adresse eingeben",
+    "continueWithEmail": "Weiter mit E-Mail",
+    "orEmail": "oder nutze deine E-Mail-Adresse",
+    "terms": "Wenn du fortfährst, stimmst du unseren <terms>Nutzungsbedingungen</terms> und der <privacy>Datenschutzerklärung</privacy> zu."
+  },
+  "code": {
+    "title": "Prüfe deine E-Mails",
+    "description": "Wir haben einen 6-stelligen Code an {email} gesendet.",
+    "label": "Code aus der E-Mail",
+    "submit": "Weiter",
+    "resend": "Neuen Code senden",
+    "resendIn": "Einen neuen Code kannst du in {time} anfordern",
+    "resent": "Wir haben einen neuen Code gesendet.",
+    "back": "Andere E-Mail-Adresse verwenden"
   },
   "social": {
     "continueWith": "Weiter mit {provider}",
     "consentMetaTitle": "Registrierung abschließen",
     "consentTitle": "Noch ein Schritt",
     "consentDescription": "Du meldest dich zum ersten Mal mit {provider} an. Bestätige einmal dein Land und deine Einwilligungen, dann ist dein Konto bereit.",
+    "consentDescriptionEmail": "Du meldest dich zum ersten Mal an. Bestätige einmal dein Land und deine Einwilligungen, dann ist dein Konto bereit.",
     "consentSubmit": "Weiter",
     "back": "Zurück zur Anmeldung"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "Die Anmeldung hat zu lange gedauert. Starte neu.",
     "social_link_requires_sign_in": "Für diese E-Mail-Adresse gibt es bereits ein Shosai-Konto. Melde dich zuerst mit deinem Passwort an.",
     "social_unavailable": "Die Anmeldung über Dienste ist kurz nicht verfügbar. Nutze deine E-Mail-Adresse oder versuche es später erneut.",
+    "code_locked": "Zu viele falsche Codes. Fordere einen neuen Code an.",
+    "sign_in_unavailable": "Die Anmeldung ist kurz nicht verfügbar. Versuche es in ein paar Sekunden erneut.",
+    "too_many_codes": "An diese E-Mail-Adresse wurden zu viele Codes gesendet. Versuche es später erneut.",
     "unknown": "Etwas ist schiefgelaufen. Versuche es gleich erneut.",
     "requestId": "Anfrage-ID für den Support: {id}"
   },

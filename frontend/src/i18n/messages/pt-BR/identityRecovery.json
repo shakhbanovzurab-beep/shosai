@@ -1,14 +1,4 @@
 {
-  "forgot": {
-    "metaTitle": "Redefinir sua senha",
-    "title": "Redefinir sua senha",
-    "description": "Digite o e-mail da sua conta e enviaremos um link para criar uma nova senha.",
-    "email": "E-mail",
-    "submit": "Enviar o link",
-    "sentTitle": "Confira seu e-mail",
-    "sent": "Se houver uma conta com {email}, um link para criar uma nova senha está a caminho. Ele vale por uma hora.",
-    "back": "Voltar ao login"
-  },
   "reset": {
     "metaTitle": "Nova senha",
     "title": "Crie uma nova senha",
@@ -20,7 +10,6 @@
     "doneTitle": "Senha atualizada",
     "done": "Entre com sua nova senha.",
     "signIn": "Entrar",
-    "missingToken": "Este link está incompleto. Abra-o de novo pelo e-mail ou peça um novo.",
-    "requestNew": "Pedir um novo link"
+    "missingToken": "Este link está incompleto. Abra-o de novo pelo e-mail ou entre com um código."
   }
 }

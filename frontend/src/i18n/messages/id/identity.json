@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Bahasa antarmuka",
-    "or": "atau"
+    "motto": "Tak ada yang terlupa.",
+    "language": "Bahasa antarmuka"
   },
   "signIn": {
     "metaTitle": "Masuk",
-    "title": "Selamat datang kembali",
-    "description": "Masuk ke ruang kerja Shosai Anda.",
     "email": "Email",
-    "password": "Kata sandi",
-    "submit": "Masuk",
-    "forgot": "Lupa kata sandi?",
-    "noAccount": "Baru di Shosai?",
-    "register": "Buat akun"
+    "emailPlaceholder": "Masukkan email Anda",
+    "continueWithEmail": "Lanjutkan dengan email",
+    "orEmail": "atau gunakan email Anda",
+    "terms": "Dengan melanjutkan, Anda menyetujui <terms>Ketentuan</terms> dan <privacy>Kebijakan Privasi</privacy> kami."
+  },
+  "code": {
+    "title": "Periksa email Anda",
+    "description": "Kami telah mengirim kode 6 digit ke {email}.",
+    "label": "Kode dari email",
+    "submit": "Lanjutkan",
+    "resend": "Kirim kode baru",
+    "resendIn": "Anda dapat meminta kode baru dalam {time}",
+    "resent": "Kami telah mengirim kode baru.",
+    "back": "Gunakan email lain"
   },
   "social": {
     "continueWith": "Lanjutkan dengan {provider}",
     "consentMetaTitle": "Selesaikan pendaftaran",
     "consentTitle": "Satu langkah lagi",
     "consentDescription": "Ini pertama kalinya Anda masuk dengan {provider}. Konfirmasi negara dan persetujuan Anda sekali saja, dan akun Anda siap.",
+    "consentDescriptionEmail": "Ini pertama kalinya Anda masuk. Konfirmasi negara dan persetujuan Anda sekali saja, dan akun Anda siap.",
     "consentSubmit": "Lanjutkan",
     "back": "Kembali ke halaman masuk"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "Proses masuk terlalu lama. Mulai lagi.",
     "social_link_requires_sign_in": "Email ini sudah memiliki akun Shosai. Masuk dulu dengan kata sandi Anda.",
     "social_unavailable": "Masuk dengan layanan tidak tersedia untuk sementara. Gunakan email Anda atau coba lagi nanti.",
+    "code_locked": "Terlalu banyak kode yang salah. Minta kode baru.",
+    "sign_in_unavailable": "Proses masuk tidak tersedia untuk sementara. Coba lagi dalam beberapa detik.",
+    "too_many_codes": "Terlalu banyak kode yang dikirim ke email ini. Coba lagi nanti.",
     "unknown": "Terjadi kesalahan. Coba lagi sebentar lagi.",
     "requestId": "ID permintaan untuk Dukungan: {id}"
   },

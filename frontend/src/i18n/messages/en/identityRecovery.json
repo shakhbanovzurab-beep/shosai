@@ -1,14 +1,4 @@
 {
-  "forgot": {
-    "metaTitle": "Reset your password",
-    "title": "Reset your password",
-    "description": "Enter the email of your account and we’ll send you a link to set a new password.",
-    "email": "Email",
-    "submit": "Send the link",
-    "sentTitle": "Check your email",
-    "sent": "If an account uses {email}, a link to set a new password is on its way. It works for one hour.",
-    "back": "Back to sign in"
-  },
   "reset": {
     "metaTitle": "New password",
     "title": "Set a new password",
@@ -20,7 +10,6 @@
     "doneTitle": "Password updated",
     "done": "Sign in with your new password.",
     "signIn": "Sign in",
-    "missingToken": "This link is incomplete. Open it again from the email or ask for a new one.",
-    "requestNew": "Ask for a new link"
+    "missingToken": "This link is incomplete. Open it again from the email, or sign in with a code."
   }
 }

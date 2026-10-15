@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Interfacetaal",
-    "or": "of"
+    "motto": "Niets vergeten.",
+    "language": "Interfacetaal"
   },
   "signIn": {
     "metaTitle": "Inloggen",
-    "title": "Welkom terug",
-    "description": "Log in bij je Shosai-werkruimte.",
     "email": "E-mailadres",
-    "password": "Wachtwoord",
-    "submit": "Inloggen",
-    "forgot": "Wachtwoord vergeten?",
-    "noAccount": "Nieuw bij Shosai?",
-    "register": "Account maken"
+    "emailPlaceholder": "Vul je e-mailadres in",
+    "continueWithEmail": "Doorgaan met e-mail",
+    "orEmail": "of gebruik je e-mailadres",
+    "terms": "Door verder te gaan, ga je akkoord met onze <terms>Gebruiksvoorwaarden</terms> en ons <privacy>Privacybeleid</privacy>."
+  },
+  "code": {
+    "title": "Check je e-mail",
+    "description": "We hebben een 6-cijferige code naar {email} gestuurd.",
+    "label": "Code uit de e-mail",
+    "submit": "Doorgaan",
+    "resend": "Nieuwe code sturen",
+    "resendIn": "Je kunt over {time} een nieuwe code aanvragen",
+    "resent": "We hebben een nieuwe code gestuurd.",
+    "back": "Ander e-mailadres gebruiken"
   },
   "social": {
     "continueWith": "Doorgaan met {provider}",
     "consentMetaTitle": "Registratie afronden",
     "consentTitle": "Nog één stap",
     "consentDescription": "Je logt voor het eerst in met {provider}. Bevestig eenmalig je land en toestemmingen, dan is je account klaar.",
+    "consentDescriptionEmail": "Je logt voor het eerst in. Bevestig eenmalig je land en toestemmingen, dan is je account klaar.",
     "consentSubmit": "Doorgaan",
     "back": "Terug naar inloggen"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "Het inloggen duurde te lang. Begin opnieuw.",
     "social_link_requires_sign_in": "Dit e-mailadres heeft al een Shosai-account. Log eerst in met je wachtwoord.",
     "social_unavailable": "Inloggen via diensten is even niet beschikbaar. Gebruik je e-mailadres of probeer het later opnieuw.",
+    "code_locked": "Te veel onjuiste codes. Vraag een nieuwe code aan.",
+    "sign_in_unavailable": "Inloggen is even niet mogelijk. Probeer het over een paar seconden opnieuw.",
+    "too_many_codes": "Er zijn te veel codes naar dit e-mailadres gestuurd. Probeer het later opnieuw.",
     "unknown": "Er ging iets mis. Probeer het zo opnieuw.",
     "requestId": "Aanvraag-ID voor Ondersteuning: {id}"
   },

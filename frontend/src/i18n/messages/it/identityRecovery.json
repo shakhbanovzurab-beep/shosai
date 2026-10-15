@@ -1,14 +1,4 @@
 {
-  "forgot": {
-    "metaTitle": "Reimposta la password",
-    "title": "Reimposta la password",
-    "description": "Inserisci l’email del tuo account: riceverai un link per impostare una nuova password.",
-    "email": "Email",
-    "submit": "Invia il link",
-    "sentTitle": "Controlla la tua email",
-    "sent": "Se un account usa {email}, è in arrivo un link per impostare una nuova password. Vale per un’ora.",
-    "back": "Torna all’accesso"
-  },
   "reset": {
     "metaTitle": "Nuova password",
     "title": "Imposta una nuova password",
@@ -20,7 +10,6 @@
     "doneTitle": "Password aggiornata",
     "done": "Accedi con la tua nuova password.",
     "signIn": "Accedi",
-    "missingToken": "Questo link è incompleto. Riaprilo dall’email o chiedine uno nuovo.",
-    "requestNew": "Chiedi un nuovo link"
+    "missingToken": "Questo link è incompleto. Riaprilo dall’email o accedi con un codice."
   }
 }

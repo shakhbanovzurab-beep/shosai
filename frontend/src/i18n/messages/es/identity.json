@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Idioma de la interfaz",
-    "or": "o"
+    "motto": "Nada olvidado.",
+    "language": "Idioma de la interfaz"
   },
   "signIn": {
     "metaTitle": "Iniciar sesión",
-    "title": "Hola de nuevo",
-    "description": "Inicia sesión en tu espacio de trabajo de Shosai.",
     "email": "Correo",
-    "password": "Contraseña",
-    "submit": "Iniciar sesión",
-    "forgot": "¿Olvidaste tu contraseña?",
-    "noAccount": "¿Primera vez en Shosai?",
-    "register": "Crear una cuenta"
+    "emailPlaceholder": "Escribe tu correo",
+    "continueWithEmail": "Continuar con correo",
+    "orEmail": "o usa tu correo",
+    "terms": "Al continuar, aceptas nuestros <terms>Términos</terms> y nuestra <privacy>Política de privacidad</privacy>."
+  },
+  "code": {
+    "title": "Revisa tu correo",
+    "description": "Enviamos un código de 6 dígitos a {email}.",
+    "label": "Código del correo",
+    "submit": "Continuar",
+    "resend": "Enviar un código nuevo",
+    "resendIn": "Puedes pedir un código nuevo en {time}",
+    "resent": "Enviamos un código nuevo.",
+    "back": "Usar otro correo"
   },
   "social": {
     "continueWith": "Continuar con {provider}",
     "consentMetaTitle": "Termina el registro",
     "consentTitle": "Un paso más",
     "consentDescription": "Es tu primer inicio de sesión con {provider}. Confirma tu país y tus consentimientos una sola vez y tu cuenta estará lista.",
+    "consentDescriptionEmail": "Es tu primer inicio de sesión. Confirma tu país y tus consentimientos una sola vez y tu cuenta estará lista.",
     "consentSubmit": "Continuar",
     "back": "Volver al inicio de sesión"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "El inicio de sesión tardó demasiado. Empieza de nuevo.",
     "social_link_requires_sign_in": "Este correo ya tiene una cuenta de Shosai. Primero inicia sesión con tu contraseña.",
     "social_unavailable": "El inicio de sesión con servicios no está disponible por un momento. Usa tu correo o inténtalo más tarde.",
+    "code_locked": "Demasiados códigos incorrectos. Pide un código nuevo.",
+    "sign_in_unavailable": "El inicio de sesión no está disponible por un momento. Inténtalo de nuevo en unos segundos.",
+    "too_many_codes": "Se enviaron demasiados códigos a este correo. Inténtalo más tarde.",
     "unknown": "Algo salió mal. Inténtalo de nuevo en un momento.",
     "requestId": "ID de solicitud para soporte: {id}"
   },

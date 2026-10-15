@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { authPathFor, HOME_PATH, loginPathFor, REGISTER_PATH, safeNext } from "./next-path";
+import { HOME_PATH, loginPathFor, safeNext } from "./next-path";
 
 describe("safeNext", () => {
   it("keeps a page of either panel", () => {
@@ -30,12 +30,5 @@ describe("loginPathFor", () => {
   it("carries the page to return to", () => {
     expect(loginPathFor("/app/kanban")).toBe("/app/login?next=%2Fapp%2Fkanban");
     expect(loginPathFor("/app")).toBe("/app/login");
-  });
-});
-
-describe("authPathFor", () => {
-  it("carries the page to any sign-in page", () => {
-    expect(authPathFor(REGISTER_PATH, "/app/connect?state=s")).toBe("/app/register?next=%2Fapp%2Fconnect%3Fstate%3Ds");
-    expect(authPathFor(REGISTER_PATH, "/app/register")).toBe(REGISTER_PATH);
   });
 });

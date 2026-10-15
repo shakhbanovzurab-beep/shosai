@@ -1,16 +1,7 @@
 {
-  "metaTitle": "Tạo tài khoản",
-  "title": "Cùng thiết lập nào",
-  "description": "Tạo tài khoản Shosai. Không gian làm việc của bạn sẵn sàng trong một phút.",
-  "name": "Tên",
-  "email": "Email",
-  "password": "Mật khẩu",
   "country": "Quốc gia",
   "countryPlaceholder": "Chọn quốc gia",
   "countryHint": "Quyết định nơi lưu dữ liệu của bạn. Sau này bạn không thể đổi nếu không chuyển tài khoản.",
-  "submit": "Tạo tài khoản",
-  "haveAccount": "Đã có tài khoản?",
-  "signIn": "Đăng nhập",
   "consents": {
     "personalData": "Tôi chấp nhận <terms>Điều khoản sử dụng</terms> và <privacy>Chính sách quyền riêng tư</privacy>, đồng thời đồng ý cho xử lý dữ liệu cá nhân của tôi",
     "crossBorder": "Tôi đồng ý chuyển dữ liệu cá nhân của mình ra nước ngoài để Shosai có thể xử lý tại EU",
@@ -30,15 +21,5 @@
       "number": "Một chữ số",
       "symbol": "Một ký hiệu"
     }
-  },
-  "verify": {
-    "title": "Kiểm tra email",
-    "description": "Chúng tôi đã gửi mã 6 chữ số tới {email}. Hãy nhập mã để hoàn tất.",
-    "code": "Mã trong email",
-    "submit": "Xác nhận",
-    "resend": "Gửi mã mới",
-    "resendIn": "Bạn có thể yêu cầu mã mới sau {time}",
-    "resent": "Chúng tôi đã gửi mã mới.",
-    "back": "Dùng email khác"
   }
 }

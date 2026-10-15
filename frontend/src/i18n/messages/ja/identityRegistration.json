@@ -1,16 +1,7 @@
 {
-  "metaTitle": "アカウントを作成",
-  "title": "さっそく始めましょう",
-  "description": "Shosai のアカウントを作成します。ワークスペースは 1 分で準備できます。",
-  "name": "名前",
-  "email": "メールアドレス",
-  "password": "パスワード",
   "country": "国",
   "countryPlaceholder": "国を選択",
   "countryHint": "データの保存場所が決まります。後から変更するには、アカウントの移行が必要です。",
-  "submit": "アカウントを作成",
-  "haveAccount": "アカウントをお持ちですか？",
-  "signIn": "ログイン",
   "consents": {
     "personalData": "<terms>利用規約</terms>と<privacy>プライバシーポリシー</privacy>を承諾し、個人データの処理に同意します",
     "crossBorder": "Shosai が EU で処理できるよう、個人データの国外移転に同意します",
@@ -30,15 +21,5 @@
       "number": "数字",
       "symbol": "記号"
     }
-  },
-  "verify": {
-    "title": "メールを確認してください",
-    "description": "{email} に 6 桁のコードを送信しました。コードを入力して登録を完了してください。",
-    "code": "メールに届いたコード",
-    "submit": "確認",
-    "resend": "新しいコードを送信",
-    "resendIn": "{time} 後に新しいコードをリクエストできます",
-    "resent": "新しいコードを送信しました。",
-    "back": "別のメールアドレスを使う"
   }
 }

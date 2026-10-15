@@ -5,6 +5,7 @@ import type { components } from "@/lib/api/generated/schema";
 export type SocialShowcase = components["schemas"]["ProvidersAnswer"];
 export type SocialSession = components["schemas"]["SocialSession"];
 export type SocialConsents = components["schemas"]["Consents-Input"];
+export type SocialTickets = components["schemas"]["SocialTickets"];
 
 /** Сервисы быстрого входа для этого посетителя; их набор зависит от страны (406-ФЗ). */
 export function readSocialShowcase(language: string): Promise<SocialShowcase> {
@@ -31,4 +32,19 @@ export function registerWithSocial({
   consents,
 }: SocialRegistration): Promise<SocialSession> {
   return dataOf(apiClient.POST("/v1/auth/social/register", { body: { ticket, country, language, consents } }));
+}
+
+/** Токен фирменного виджета Яндекса или Google — сервер сверяет его у провайдера и отдаёт билет. */
+export function exchangeWidgetToken(
+  provider: "yandex" | "google",
+  token: string,
+  next: string,
+  language: string,
+): Promise<SocialTickets> {
+  return dataOf(
+    apiClient.POST("/v1/auth/social/{provider}/widget-token", {
+      params: { path: { provider } },
+      body: { token, next, language },
+    }),
+  );
 }

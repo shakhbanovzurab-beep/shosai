@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Lingua dell’interfaccia",
-    "or": "oppure"
+    "motto": "Niente dimenticato.",
+    "language": "Lingua dell’interfaccia"
   },
   "signIn": {
     "metaTitle": "Accedi",
-    "title": "Ciao di nuovo",
-    "description": "Accedi al tuo spazio di lavoro Shosai.",
     "email": "Email",
-    "password": "Password",
-    "submit": "Accedi",
-    "forgot": "Password dimenticata?",
-    "noAccount": "Prima volta su Shosai?",
-    "register": "Crea un account"
+    "emailPlaceholder": "Inserisci la tua email",
+    "continueWithEmail": "Continua con l’email",
+    "orEmail": "oppure usa la tua email",
+    "terms": "Continuando, accetti i nostri <terms>Termini di utilizzo</terms> e l’<privacy>Informativa sulla privacy</privacy>."
+  },
+  "code": {
+    "title": "Controlla la tua email",
+    "description": "Abbiamo inviato un codice di 6 cifre a {email}.",
+    "label": "Codice dall’email",
+    "submit": "Continua",
+    "resend": "Invia un nuovo codice",
+    "resendIn": "Potrai chiedere un nuovo codice tra {time}",
+    "resent": "Abbiamo inviato un nuovo codice.",
+    "back": "Usa un’altra email"
   },
   "social": {
     "continueWith": "Continua con {provider}",
     "consentMetaTitle": "Completa la registrazione",
     "consentTitle": "Ancora un passaggio",
     "consentDescription": "È il tuo primo accesso con {provider}. Conferma una sola volta il paese e i consensi, e il tuo account è pronto.",
+    "consentDescriptionEmail": "È il tuo primo accesso. Conferma una sola volta il paese e i consensi, e il tuo account è pronto.",
     "consentSubmit": "Continua",
     "back": "Torna all’accesso"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "L’accesso ha richiesto troppo tempo. Ricomincia.",
     "social_link_requires_sign_in": "Questa email ha già un account Shosai. Accedi prima con la tua password.",
     "social_unavailable": "L’accesso tramite servizi è momentaneamente non disponibile. Usa la tua email o riprova più tardi.",
+    "code_locked": "Troppi codici errati. Chiedi un nuovo codice.",
+    "sign_in_unavailable": "L’accesso è momentaneamente non disponibile. Riprova tra qualche secondo.",
+    "too_many_codes": "Sono stati inviati troppi codici a questa email. Riprova più tardi.",
     "unknown": "Qualcosa è andato storto. Riprova tra poco.",
     "requestId": "ID richiesta per l’assistenza: {id}"
   },

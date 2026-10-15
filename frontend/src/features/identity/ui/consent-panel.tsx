@@ -9,7 +9,7 @@ import { Link, useRouter } from "@/lib/navigation";
 import { consentsBody, consentsComplete, NO_CONSENTS } from "../domain/consents";
 import { type CountryCode, countryFromLanguages, needsCrossBorderConsent } from "../domain/countries";
 import { LOGIN_PATH } from "../domain/next-path";
-import { SOCIAL_PROVIDER_NAMES, type SocialProvider } from "../domain/social-providers";
+import { providerName, type SocialProvider } from "../domain/social-providers";
 import type { Refusal } from "../model/outcome";
 import { registerThroughSocial } from "../model/social-sign-in";
 import { AuthHeading } from "./auth-heading";
@@ -18,10 +18,19 @@ import { CountryField } from "./country-field";
 import { ProblemMessage } from "./problem-message";
 
 /**
- * Первый вход через сервис: сервис человека узнал, но аккаунта ещё нет. Страна и согласия — те же, что при
- * регистрации почтой; аккаунт появляется только после этого экрана.
+ * Первый вход — через сервис или кодом из письма (ADR 0048): аккаунта ещё нет. Страна и согласия спрашиваются
+ * один раз; аккаунт появляется в доме выбранной страны только после этого экрана. `onBack` — вернуться к началу
+ * входа на той же странице; без него — ссылка на страницу входа.
  */
-export function SocialConsentPanel({ ticket, provider }: { ticket: string; provider: SocialProvider }) {
+export function ConsentPanel({
+  ticket,
+  via,
+  onBack,
+}: {
+  ticket: string;
+  via: SocialProvider | "email";
+  onBack?: () => void;
+}) {
   const t = useTranslations("identity");
   const language = useLocale();
   const router = useRouter();
@@ -50,7 +59,9 @@ export function SocialConsentPanel({ ticket, provider }: { ticket: string; provi
   return (
     <>
       <AuthHeading title={t("social.consentTitle")}>
-        {t("social.consentDescription", { provider: SOCIAL_PROVIDER_NAMES[provider] })}
+        {via === "email"
+          ? t("social.consentDescriptionEmail")
+          : t("social.consentDescription", { provider: providerName(via, language) })}
       </AuthHeading>
       <form onSubmit={submit} className="flex flex-col gap-4">
         <CountryField id={`${id}-country`} value={country} onChange={setCountry} />
@@ -64,9 +75,15 @@ export function SocialConsentPanel({ ticket, provider }: { ticket: string; provi
           {pending ? <Spinner data-icon="inline-start" /> : null}
           {t("social.consentSubmit")}
         </Button>
-        <Link href={LOGIN_PATH} className="text-center font-medium text-sm underline-offset-4 hover:underline">
-          {t("social.back")}
-        </Link>
+        {onBack ? (
+          <Button type="button" variant="link" onClick={onBack}>
+            {t("social.back")}
+          </Button>
+        ) : (
+          <Link href={LOGIN_PATH} className="text-center font-medium text-sm underline-offset-4 hover:underline">
+            {t("social.back")}
+          </Link>
+        )}
       </form>
     </>
   );

@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Idioma da interface",
-    "or": "ou"
+    "motto": "Nada esquecido.",
+    "language": "Idioma da interface"
   },
   "signIn": {
     "metaTitle": "Entrar",
-    "title": "Que bom ter você de volta",
-    "description": "Entre no seu espaço de trabalho do Shosai.",
     "email": "E-mail",
-    "password": "Senha",
-    "submit": "Entrar",
-    "forgot": "Esqueceu sua senha?",
-    "noAccount": "Primeira vez no Shosai?",
-    "register": "Criar conta"
+    "emailPlaceholder": "Digite seu e-mail",
+    "continueWithEmail": "Continuar com e-mail",
+    "orEmail": "ou use seu e-mail",
+    "terms": "Ao continuar, você concorda com nossos <terms>Termos</terms> e nossa <privacy>Política de Privacidade</privacy>."
+  },
+  "code": {
+    "title": "Confira seu e-mail",
+    "description": "Enviamos um código de 6 dígitos para {email}.",
+    "label": "Código do e-mail",
+    "submit": "Continuar",
+    "resend": "Enviar novo código",
+    "resendIn": "Você pode pedir um novo código em {time}",
+    "resent": "Enviamos um novo código.",
+    "back": "Usar outro e-mail"
   },
   "social": {
     "continueWith": "Continuar com {provider}",
     "consentMetaTitle": "Concluir cadastro",
     "consentTitle": "Só mais um passo",
     "consentDescription": "Este é seu primeiro acesso com {provider}. Confirme seu país e seus consentimentos uma única vez, e sua conta estará pronta.",
+    "consentDescriptionEmail": "Este é seu primeiro acesso. Confirme seu país e seus consentimentos uma única vez, e sua conta estará pronta.",
     "consentSubmit": "Continuar",
     "back": "Voltar ao login"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "O acesso demorou demais. Comece de novo.",
     "social_link_requires_sign_in": "Este e-mail já tem uma conta Shosai. Entre primeiro com sua senha.",
     "social_unavailable": "Entrar com serviços está indisponível por um instante. Use seu e-mail ou tente mais tarde.",
+    "code_locked": "Muitos códigos errados. Peça um novo código.",
+    "sign_in_unavailable": "O acesso está indisponível por um instante. Tente novamente em alguns segundos.",
+    "too_many_codes": "Muitos códigos foram enviados para este e-mail. Tente mais tarde.",
     "unknown": "Algo deu errado. Tente novamente em instantes.",
     "requestId": "ID da solicitação para o suporte: {id}"
   },

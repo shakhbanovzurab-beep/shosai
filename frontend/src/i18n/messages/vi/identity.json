@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Ngôn ngữ giao diện",
-    "or": "hoặc"
+    "motto": "Không điều gì bị lãng quên.",
+    "language": "Ngôn ngữ giao diện"
   },
   "signIn": {
     "metaTitle": "Đăng nhập",
-    "title": "Chào mừng bạn trở lại",
-    "description": "Đăng nhập vào không gian làm việc Shosai của bạn.",
     "email": "Email",
-    "password": "Mật khẩu",
-    "submit": "Đăng nhập",
-    "forgot": "Quên mật khẩu?",
-    "noAccount": "Lần đầu dùng Shosai?",
-    "register": "Tạo tài khoản"
+    "emailPlaceholder": "Nhập email của bạn",
+    "continueWithEmail": "Tiếp tục với email",
+    "orEmail": "hoặc dùng email của bạn",
+    "terms": "Khi tiếp tục, bạn đồng ý với <terms>Điều khoản</terms> và <privacy>Chính sách quyền riêng tư</privacy> của chúng tôi."
+  },
+  "code": {
+    "title": "Kiểm tra email của bạn",
+    "description": "Chúng tôi đã gửi mã gồm 6 chữ số đến {email}.",
+    "label": "Mã trong email",
+    "submit": "Tiếp tục",
+    "resend": "Gửi mã mới",
+    "resendIn": "Bạn có thể yêu cầu mã mới sau {time}",
+    "resent": "Chúng tôi đã gửi mã mới.",
+    "back": "Dùng email khác"
   },
   "social": {
     "continueWith": "Tiếp tục với {provider}",
     "consentMetaTitle": "Hoàn tất đăng ký",
     "consentTitle": "Thêm một bước nữa",
     "consentDescription": "Đây là lần đầu bạn đăng nhập bằng {provider}. Hãy xác nhận quốc gia và các mục đồng ý một lần, rồi tài khoản của bạn sẽ sẵn sàng.",
+    "consentDescriptionEmail": "Đây là lần đầu bạn đăng nhập. Hãy xác nhận quốc gia và các mục đồng ý một lần, rồi tài khoản của bạn sẽ sẵn sàng.",
     "consentSubmit": "Tiếp tục",
     "back": "Quay lại đăng nhập"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "Đăng nhập mất quá nhiều thời gian. Hãy bắt đầu lại.",
     "social_link_requires_sign_in": "Email này đã có tài khoản Shosai. Hãy đăng nhập bằng mật khẩu trước.",
     "social_unavailable": "Tạm thời chưa thể đăng nhập qua dịch vụ. Hãy dùng email hoặc thử lại sau.",
+    "code_locked": "Bạn đã nhập sai mã quá nhiều lần. Hãy yêu cầu mã mới.",
+    "sign_in_unavailable": "Tạm thời chưa thể đăng nhập. Hãy thử lại sau vài giây.",
+    "too_many_codes": "Đã gửi quá nhiều mã đến email này. Hãy thử lại sau.",
     "unknown": "Đã xảy ra sự cố. Hãy thử lại sau giây lát.",
     "requestId": "Mã yêu cầu để gửi Hỗ trợ: {id}"
   },

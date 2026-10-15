@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Interface language",
-    "or": "or"
+    "motto": "Nothing forgotten.",
+    "language": "Interface language"
   },
   "signIn": {
     "metaTitle": "Sign in",
-    "title": "Welcome back",
-    "description": "Sign in to your Shosai workspace.",
     "email": "Email",
-    "password": "Password",
-    "submit": "Sign in",
-    "forgot": "Forgot your password?",
-    "noAccount": "New to Shosai?",
-    "register": "Create an account"
+    "emailPlaceholder": "Enter your email",
+    "continueWithEmail": "Continue with email",
+    "orEmail": "or use your email",
+    "terms": "By continuing, you agree to our <terms>Terms</terms> and <privacy>Privacy Policy</privacy>."
+  },
+  "code": {
+    "title": "Check your email",
+    "description": "We sent a 6-digit code to {email}.",
+    "label": "Code from the email",
+    "submit": "Continue",
+    "resend": "Send a new code",
+    "resendIn": "You can ask for a new code in {time}",
+    "resent": "We sent a new code.",
+    "back": "Use a different email"
   },
   "social": {
     "continueWith": "Continue with {provider}",
     "consentMetaTitle": "Finish signing up",
     "consentTitle": "One more step",
     "consentDescription": "This is your first sign-in with {provider}. Confirm your country and consents once, and your account is ready.",
+    "consentDescriptionEmail": "This is your first sign-in. Confirm your country and consents once, and your account is ready.",
     "consentSubmit": "Continue",
     "back": "Back to sign in"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "The sign-in took too long. Start again.",
     "social_link_requires_sign_in": "This email already has a Shosai account. Sign in with your password first.",
     "social_unavailable": "Sign-in with services is briefly unavailable. Use your email or try again later.",
+    "code_locked": "Too many wrong codes. Ask for a new code.",
+    "sign_in_unavailable": "Sign-in is briefly unavailable. Try again in a few seconds.",
+    "too_many_codes": "Too many codes were sent to this email. Try again later.",
     "unknown": "Something went wrong. Try again in a moment.",
     "requestId": "Request ID for support: {id}"
   },

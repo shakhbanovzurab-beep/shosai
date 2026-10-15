@@ -13,6 +13,13 @@ export const SOCIAL_PROVIDER_NAMES: Record<SocialProvider, string> = {
   github: "GitHub",
 };
 
+/** Название сервиса так, как он сам называет себя в этом языке: по-русски Яндекс пишется кириллицей. */
+export function providerName(provider: SocialProvider, language: string): string {
+  // i18n-ignore: собственное русское имя сервиса из его брендбука, не текст интерфейса
+  if (provider === "yandex" && language === "ru") return "Яндекс ID";
+  return SOCIAL_PROVIDER_NAMES[provider];
+}
+
 export const isSocialProvider = (value: string): value is SocialProvider =>
   (SOCIAL_PROVIDERS as readonly string[]).includes(value);
 

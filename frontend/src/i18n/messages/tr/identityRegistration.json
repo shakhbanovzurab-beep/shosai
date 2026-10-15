@@ -1,16 +1,7 @@
 {
-  "metaTitle": "Hesap oluştur",
-  "title": "Hadi başlayalım",
-  "description": "Bir Shosai hesabı oluşturun. Çalışma alanınız bir dakikada hazır.",
-  "name": "Ad",
-  "email": "E-posta",
-  "password": "Şifre",
   "country": "Ülke",
   "countryPlaceholder": "Ülkenizi seçin",
   "countryHint": "Verilerinizin nerede saklanacağını belirler. Hesabınızı taşımadan daha sonra değiştiremezsiniz.",
-  "submit": "Hesap oluştur",
-  "haveAccount": "Zaten hesabınız var mı?",
-  "signIn": "Giriş yap",
   "consents": {
     "personalData": "<terms>Kullanım Koşullarını</terms> ve <privacy>Gizlilik Politikasını</privacy> kabul ediyor, kişisel verilerimin işlenmesine onay veriyorum",
     "crossBorder": "Shosai verilerimi AB’de işleyebilsin diye kişisel verilerimin yurt dışına aktarılmasına onay veriyorum",
@@ -30,15 +21,5 @@
       "number": "Bir rakam",
       "symbol": "Bir sembol"
     }
-  },
-  "verify": {
-    "title": "E-postanızı kontrol edin",
-    "description": "{email} adresine 6 haneli bir kod gönderdik. Tamamlamak için kodu girin.",
-    "code": "E-postadaki kod",
-    "submit": "Onayla",
-    "resend": "Yeni kod gönder",
-    "resendIn": "{time} sonra yeni kod isteyebilirsiniz",
-    "resent": "Yeni bir kod gönderdik.",
-    "back": "Başka bir e-posta kullan"
   }
 }

@@ -5,8 +5,6 @@ const currentYear = new Date().getFullYear();
 
 export const APP_CONFIG = {
   name: "Shosai",
-  /** What Shosai is, said the same way in every language: a product name, not a translated phrase. */
-  tagline: "AI Workspace",
   version,
   copyright: `© ${currentYear}, Shosai.`,
   meta: {

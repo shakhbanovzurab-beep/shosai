@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "Langue de l’interface",
-    "or": "ou"
+    "motto": "Rien n’est oublié.",
+    "language": "Langue de l’interface"
   },
   "signIn": {
     "metaTitle": "Connexion",
-    "title": "Content de vous revoir",
-    "description": "Connectez-vous à votre espace de travail Shosai.",
     "email": "E-mail",
-    "password": "Mot de passe",
-    "submit": "Se connecter",
-    "forgot": "Mot de passe oublié ?",
-    "noAccount": "Nouveau sur Shosai ?",
-    "register": "Créer un compte"
+    "emailPlaceholder": "Saisissez votre e-mail",
+    "continueWithEmail": "Continuer par e-mail",
+    "orEmail": "ou utilisez votre e-mail",
+    "terms": "En continuant, vous acceptez nos <terms>Conditions d’utilisation</terms> et notre <privacy>Politique de confidentialité</privacy>."
+  },
+  "code": {
+    "title": "Consultez vos e-mails",
+    "description": "Nous avons envoyé un code à 6 chiffres à {email}.",
+    "label": "Code reçu par e-mail",
+    "submit": "Continuer",
+    "resend": "Envoyer un nouveau code",
+    "resendIn": "Vous pourrez demander un nouveau code dans {time}",
+    "resent": "Nous avons envoyé un nouveau code.",
+    "back": "Utiliser un autre e-mail"
   },
   "social": {
     "continueWith": "Continuer avec {provider}",
     "consentMetaTitle": "Finaliser l’inscription",
     "consentTitle": "Encore une étape",
     "consentDescription": "C’est votre première connexion avec {provider}. Confirmez une fois votre pays et vos consentements, et votre compte est prêt.",
+    "consentDescriptionEmail": "C’est votre première connexion. Confirmez une fois votre pays et vos consentements, et votre compte est prêt.",
     "consentSubmit": "Continuer",
     "back": "Retour à la connexion"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "La connexion a pris trop de temps. Recommencez.",
     "social_link_requires_sign_in": "Cet e-mail a déjà un compte Shosai. Connectez-vous d’abord avec votre mot de passe.",
     "social_unavailable": "La connexion via des services est brièvement indisponible. Utilisez votre e-mail ou réessayez plus tard.",
+    "code_locked": "Trop de codes incorrects. Demandez un nouveau code.",
+    "sign_in_unavailable": "La connexion est brièvement indisponible. Réessayez dans quelques secondes.",
+    "too_many_codes": "Trop de codes ont été envoyés à cet e-mail. Réessayez plus tard.",
     "unknown": "Une erreur s’est produite. Réessayez dans un instant.",
     "requestId": "ID de la demande pour l’assistance : {id}"
   },

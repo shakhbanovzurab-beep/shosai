@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "介面語言",
-    "or": "或"
+    "motto": "什麼都不會忘記。",
+    "language": "介面語言"
   },
   "signIn": {
     "metaTitle": "登入",
-    "title": "歡迎回來",
-    "description": "登入你的 Shosai 工作空間。",
     "email": "電子郵件",
-    "password": "密碼",
-    "submit": "登入",
-    "forgot": "忘記密碼？",
-    "noAccount": "第一次使用 Shosai？",
-    "register": "建立帳號"
+    "emailPlaceholder": "輸入你的電子郵件",
+    "continueWithEmail": "使用電子郵件繼續",
+    "orEmail": "或使用電子郵件",
+    "terms": "繼續即表示你同意我們的<terms>條款</terms>和<privacy>隱私權政策</privacy>。"
+  },
+  "code": {
+    "title": "請查看你的電子郵件",
+    "description": "我們已將 6 位數驗證碼寄到 {email}。",
+    "label": "郵件中的驗證碼",
+    "submit": "繼續",
+    "resend": "寄送新的驗證碼",
+    "resendIn": "{time} 後可索取新的驗證碼",
+    "resent": "已寄出新的驗證碼。",
+    "back": "改用其他電子郵件"
   },
   "social": {
     "continueWith": "使用 {provider} 繼續",
     "consentMetaTitle": "完成註冊",
     "consentTitle": "只差一步",
     "consentDescription": "這是你第一次使用 {provider} 登入。確認一次國家和同意事項，帳號就準備好了。",
+    "consentDescriptionEmail": "這是你第一次登入。確認一次國家和同意事項，帳號就準備好了。",
     "consentSubmit": "繼續",
     "back": "返回登入"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "登入時間過長。請重新開始。",
     "social_link_requires_sign_in": "這個電子郵件已有 Shosai 帳號。請先用密碼登入。",
     "social_unavailable": "暫時無法透過外部服務登入。請使用電子郵件，或稍後再試一次。",
+    "code_locked": "輸入錯誤驗證碼的次數過多。請索取新的驗證碼。",
+    "sign_in_unavailable": "暫時無法登入。請過幾秒再試一次。",
+    "too_many_codes": "寄到這個電子郵件的驗證碼過多。請稍後再試。",
     "unknown": "發生錯誤。請稍後再試一次。",
     "requestId": "提供給支援的請求 ID：{id}"
   },

@@ -1,24 +1,32 @@
 {
   "screen": {
-    "language": "表示言語",
-    "or": "または"
+    "motto": "何も忘れない。",
+    "language": "表示言語"
   },
   "signIn": {
     "metaTitle": "ログイン",
-    "title": "おかえりなさい",
-    "description": "Shosai のワークスペースにログインしてください。",
     "email": "メールアドレス",
-    "password": "パスワード",
-    "submit": "ログイン",
-    "forgot": "パスワードをお忘れですか？",
-    "noAccount": "Shosai を初めてお使いですか？",
-    "register": "アカウントを作成"
+    "emailPlaceholder": "メールアドレスを入力",
+    "continueWithEmail": "メールアドレスで続ける",
+    "orEmail": "またはメールアドレスを使用",
+    "terms": "続行すると、<terms>利用規約</terms>と<privacy>プライバシーポリシー</privacy>に同意したものとみなされます。"
+  },
+  "code": {
+    "title": "メールを確認してください",
+    "description": "6 桁のコードを {email} に送信しました。",
+    "label": "メールに届いたコード",
+    "submit": "続ける",
+    "resend": "新しいコードを送信",
+    "resendIn": "{time} 後に新しいコードをリクエストできます",
+    "resent": "新しいコードを送信しました。",
+    "back": "別のメールアドレスを使う"
   },
   "social": {
     "continueWith": "{provider} で続ける",
     "consentMetaTitle": "登録を完了",
     "consentTitle": "あと一歩です",
     "consentDescription": "{provider} での初めてのログインです。国と同意事項を一度確認すれば、アカウントの準備が整います。",
+    "consentDescriptionEmail": "初めてのログインです。国と同意事項を一度確認すれば、アカウントの準備が整います。",
     "consentSubmit": "続ける",
     "back": "ログインに戻る"
   },
@@ -51,6 +59,9 @@
     "social_state_invalid": "ログインに時間がかかりすぎました。最初からやり直してください。",
     "social_link_requires_sign_in": "このメールアドレスにはすでに Shosai のアカウントがあります。先にパスワードでログインしてください。",
     "social_unavailable": "現在、外部サービスでのログインを一時的にご利用いただけません。メールアドレスを使うか、後でもう一度お試しください。",
+    "code_locked": "誤ったコードの入力が多すぎます。新しいコードをリクエストしてください。",
+    "sign_in_unavailable": "現在、一時的にログインできません。数秒後にもう一度お試しください。",
+    "too_many_codes": "このメールアドレスに送信したコードが多すぎます。後でもう一度お試しください。",
     "unknown": "問題が発生しました。しばらくしてからもう一度お試しください。",
     "requestId": "サポート用のリクエスト ID：{id}"
   },

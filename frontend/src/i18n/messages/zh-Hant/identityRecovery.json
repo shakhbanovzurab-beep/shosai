@@ -1,14 +1,4 @@
 {
-  "forgot": {
-    "metaTitle": "重設密碼",
-    "title": "重設密碼",
-    "description": "輸入帳號的電子郵件，我們會寄送設定新密碼的連結給你。",
-    "email": "電子郵件",
-    "submit": "寄送連結",
-    "sentTitle": "查看你的電子郵件",
-    "sent": "如果有帳號使用 {email}，設定新密碼的連結已寄出。連結在一小時內有效。",
-    "back": "返回登入"
-  },
   "reset": {
     "metaTitle": "新密碼",
     "title": "設定新密碼",
@@ -20,7 +10,6 @@
     "doneTitle": "密碼已更新",
     "done": "請使用新密碼登入。",
     "signIn": "登入",
-    "missingToken": "這個連結不完整。請從郵件中重新開啟，或索取新的連結。",
-    "requestNew": "索取新的連結"
+    "missingToken": "這個連結不完整。請從郵件中重新開啟，或使用驗證碼登入。"
   }
 }
