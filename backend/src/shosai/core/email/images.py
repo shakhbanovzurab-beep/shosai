@@ -9,7 +9,7 @@ ever built from a request. Files are read once at start; the ETag is their conte
 import hashlib
 from collections.abc import Mapping
 from dataclasses import dataclass
-from importlib.resources import files
+from importlib.resources import files  # nosemgrep
 from types import MappingProxyType
 from typing import Final
 

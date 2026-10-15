@@ -139,9 +139,9 @@ async def claim_open(transactions: HomeTransactions, home: Home) -> tuple[list[U
 async def purge_finished(transactions: HomeTransactions, home: Home, older_than: datetime) -> int:
     """Drop the journals of transfers that finished before `older_than`; how many went."""
     async with transactions.begin(TenancyScope(home)) as session:
-        purged = await session.scalars(
-            delete(HomeTransfer)
-            .where(HomeTransfer.finished_at < older_than)
-            .returning(HomeTransfer.id)
+        # Через соединение: оператор ядра, и известно число удалённых строк без RETURNING.
+        connection = await session.connection()
+        purged = await connection.execute(
+            delete(HomeTransfer).where(HomeTransfer.finished_at < older_than)
         )
-        return len(purged.all())
+        return purged.rowcount

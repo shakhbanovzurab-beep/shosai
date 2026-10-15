@@ -223,15 +223,15 @@ class Directory:
     async def purge_deleted(self, older_than: datetime) -> int:
         """Drop the rows of addresses freed before `older_than`; how many went."""
         async with self._transactions.begin(DIRECTORY_SCOPE) as session:
-            purged = await session.scalars(
-                delete(DirectoryEntry)
-                .where(
+            # Через соединение: оператор ядра, и известно число удалённых строк без RETURNING.
+            connection = await session.connection()
+            purged = await connection.execute(
+                delete(DirectoryEntry).where(
                     DirectoryEntry.state == DirectoryState.DELETED.value,
                     DirectoryEntry.deleted_at < older_than,
                 )
-                .returning(DirectoryEntry.user_id)
             )
-            return len(purged.all())
+            return purged.rowcount
 
 
 async def follow_account(

@@ -32,12 +32,12 @@ log = structlog.stdlib.get_logger(__name__)
 async def purge_pending(transactions: HomeTransactions, home: Home) -> int:
     """Delete the home's expired pending registrations; the number deleted."""
     async with transactions.begin(TenancyScope(home)) as session:
-        deleted = await session.scalars(
-            delete(PendingRegistration)
-            .where(PendingRegistration.expires_at < datetime.now(UTC))
-            .returning(PendingRegistration.id)
+        # Через соединение: оператор ядра, и известно число удалённых строк без RETURNING.
+        connection = await session.connection()
+        deleted = await connection.execute(
+            delete(PendingRegistration).where(PendingRegistration.expires_at < datetime.now(UTC))
         )
-        count = len(deleted.all())
+        count = deleted.rowcount
     if count:
         log.info("Просроченные регистрации удалены", home=home.value, count=count)
     return count
@@ -72,9 +72,11 @@ async def purge_sessions(transactions: HomeTransactions, home: Home) -> int:
     """Delete families that expired or were revoked more than 30 days ago."""
     cutoff = datetime.now(UTC) - ENDED_SESSIONS_KEPT
     async with transactions.begin(TenancyScope(home)) as session:
-        deleted = await session.scalars(
-            delete(RefreshSession)
-            .where((RefreshSession.expires_at < cutoff) | (RefreshSession.revoked_at < cutoff))
-            .returning(RefreshSession.id)
+        # Через соединение: оператор ядра, и известно число удалённых строк без RETURNING.
+        connection = await session.connection()
+        deleted = await connection.execute(
+            delete(RefreshSession).where(
+                (RefreshSession.expires_at < cutoff) | (RefreshSession.revoked_at < cutoff)
+            )
         )
-        return len(deleted.all())
+        return deleted.rowcount

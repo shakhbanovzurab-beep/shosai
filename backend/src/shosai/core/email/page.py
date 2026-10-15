@@ -29,7 +29,8 @@ class UnsubscribePage:
     """Renders the confirmation and the done page in the visitor's language."""
 
     def __init__(self) -> None:
-        self._template = Environment(
+        # Semgrep принимает это за Flask: окружение jinja2 своё, HTML экранируется (autoescape).
+        self._template = Environment(  # nosemgrep
             loader=PackageLoader("shosai.core.email", "layout"),
             autoescape=True,
             undefined=StrictUndefined,

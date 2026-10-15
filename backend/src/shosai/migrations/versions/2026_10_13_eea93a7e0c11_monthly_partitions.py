@@ -119,7 +119,9 @@ def upgrade(scope: MigrationScope) -> None:
     # Политику пишут только миграции; приложение лишь читает, какие таблицы обслуживать.
     grant_to_application(scope, "partition_policies", ("SELECT",))
     schema = op.get_bind().execute(sa.text("SELECT current_schema()")).scalar_one()
-    op.execute(MAINTAIN_FUNCTION.format(schema=quote(schema)))
+    # Ввода пользователя здесь нет: схема — current_schema() в кавычках идентификатора, а DDL
+    # не параметризуется. run_ddl не подходит: в теле PL/pgSQL свои знаки %.
+    op.execute(MAINTAIN_FUNCTION.format(schema=quote(schema)))  # nosemgrep
     run_ddl(REVOKE_FROM_PUBLIC, function=FUNCTION)
     run_ddl(GRANT_EXECUTE, function=FUNCTION, role=scope.application_role)
 

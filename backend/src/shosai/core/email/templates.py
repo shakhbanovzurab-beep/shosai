@@ -118,12 +118,13 @@ class EmailRenderer:
         self._base_url = base_url.rstrip("/")
         self._support = support
         loader = PackageLoader("shosai.core.email", "layout")
-        self._html = Environment(
+        # Semgrep принимает это за Flask: окружения jinja2 свои, HTML экранируется (autoescape).
+        self._html = Environment(  # nosemgrep
             loader=loader, autoescape=True, undefined=StrictUndefined,
             trim_blocks=True, lstrip_blocks=True,
         )  # fmt: skip
         # Текстовая часть уходит как text/plain: экранировать в ней HTML нечего.
-        self._text = Environment(
+        self._text = Environment(  # nosemgrep
             loader=loader,
             autoescape=select_autoescape(enabled_extensions=(), default_for_string=False),
             undefined=StrictUndefined,

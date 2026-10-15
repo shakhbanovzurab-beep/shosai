@@ -22,7 +22,11 @@ from shosai.features.identity.infrastructure.directory import (
     Directory,
     DirectoryRecord,
 )
-from shosai.features.identity.infrastructure.records import PendingRegistration, User
+from shosai.features.identity.infrastructure.records import (
+    DirectoryEntry,
+    PendingRegistration,
+    User,
+)
 from tests.features.identity.registration_bench import EuUnreachable
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
@@ -135,3 +139,21 @@ async def test_expired_pending_registrations_are_purged(homes: DatabaseAccess) -
 
     assert await purge_pending(homes.transactions, Home.EU) == 1
     assert await purge_pending(homes.transactions, Home.EU) == 0
+
+
+async def test_freed_addresses_are_purged_after_the_window(
+    homes: DatabaseAccess, redis_cache: Redis
+) -> None:
+    now = datetime.now(UTC)
+    async with homes.transactions.begin(TenancyScope(Home.EU)) as session:
+        for marker, deleted_at in ((1, now - timedelta(days=40)), (2, now - timedelta(days=1))):
+            session.add(
+                DirectoryEntry(
+                    email_hmac=bytes([marker]) * 32, user_id=new_id(), home=Home.RU.value,
+                    state=DirectoryState.DELETED.value, deleted_at=deleted_at,
+                )
+            )  # fmt: skip
+    store = directory(homes.transactions, redis_cache)
+
+    assert await store.purge_deleted(now - timedelta(days=30)) == 1
+    assert await store.purge_deleted(now - timedelta(days=30)) == 0
