@@ -43,6 +43,7 @@ Statuses: `todo` · `planned` (package plan written, approved) · `in progress` 
 | releases | Releases: desktop builds, rollout, downloads | identity, files | todo | — | Wave 4 |
 | telemetry | Telemetry: client errors, product events, satisfaction survey | identity | todo | — | Wave 4, may move into wave 1 for the desktop clients' crash reports; survey kept with a new screen (SM-10) |
 | rooms | Rooms: LiveKit rooms, track transcription, broadcasts, whiteboard | capture, meetings, files, workspaces (core) | todo | — | Wave 4; mandatory; broadcasts and the whiteboard kept, subtitles and the room AI panel dropped (SM-8); their screens are designed before their frontend steps |
+| leads | Leads: new users in the owner's Telegram, enriched by Clay, with consent | identity, F6 | todo | — | Right after `identity`; off by default; legal review deferred by the owner ([ADR 0051](../adr/0051-new-user-leads-to-telegram-with-clay-enrichment.md)) |
 | site | Public site and public pages of shared links | F1, F2, F6 | todo | — | Any time after F6; `site/` on Next.js ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); includes the landing demo and the help-centre assistant (D4) and the shared-note page `/s/{token}` |
 | M1 | Data migration | all slices, D3 | todo | — | Needs a copy of production data |
 | M2 | Cutover | M1, F4, F5 | todo | — | Needs the macOS and Windows releases that register `shosai://auth` (identity ID-D10): the shipped 1.4.5 builds cannot finish a browser sign-in on v2 |

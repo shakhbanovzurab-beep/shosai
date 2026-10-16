@@ -178,7 +178,7 @@
   - membership → the workspace's home; it references the person's global user id;
   - account migrated from the draft → Russian home; it moves to the EU home by account transfer once the person confirms a country outside Russia ([ADR 0004](../adr/0004-migrated-accounts-start-in-russian-home.md)).
   A person has one account: Personal and every workspace they belong to are spaces of that account ([ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)). At launch a person joins only workspaces of their own home; an invitation or a domain join across homes is refused with an explicit error. Cross-home membership and sharing wait for the legal review (§22); the data model leaves room for them.
-- **Directory** (EU home): `email_hmac`, `user_id`, `home`, `state`, `version`. `directory_domains` maps a verified company email domain to the workspace and its home. No other personal data outside a home.
+- **Directory** (EU home): `email_hmac`, `user_id`, `home`, `state`, `version`. `directory_domains` maps a verified company email domain to the workspace and its home. No other personal data outside a home, except the new-user leads of [ADR 0051](../adr/0051-new-user-leads-to-telegram-with-clay-enrichment.md): with the person's consent, name, email and country go to Clay and to the owner's Telegram.
 - **Data without an owning account** (EU home, one copy, one writer; [ADR 0005](../adr/0005-data-without-owner-in-eu-home.md)):
   - platform tables: tariffs, promo codes, payment routes, exchange rates, the model registry and defaults, platform prompts and notes, MCP client registrations, admin mailings, provider error logs, desktop builds;
   - home tables reference them by id without a foreign key; a platform id is retired, never deleted;

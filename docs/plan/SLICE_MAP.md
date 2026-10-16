@@ -249,6 +249,7 @@ Rules the harness cannot check stay with their owners: TLS chain and base URL (F
 | 23 | `telemetry` | Client errors as issues; product events; the satisfaction survey | analytics (renamed) |
 | 24 | `rooms` | Shosai video rooms with per-speaker transcription, broadcasts and the room whiteboard | rooms |
 | 25 | `site` | The public site and public pages of shared links (S17) | — |
+| 26 | `leads` | New users reach the owner in Telegram, enriched by Clay, with the person's consent ([ADR 0051](../adr/0051-new-user-leads-to-telegram-with-clay-enrichment.md)) | — |
 
 The home screen, the Meetings overview, the Settings dialog and the admin dashboard are composition screens (§1 rule 4).
 
@@ -410,6 +411,13 @@ Scope, data and routes as the [Leo architecture](../design/leo/ARCHITECTURE.md) 
 
 #### 25. site
 Scope as S17 today ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md), FM-1a, FM-1b), plus the public pages of shared links: the shared note `/s/{token}` with comments and the meeting result `/r/{token}`, served by the meetings API.
+
+#### 26. leads
+- **Scope:** consume `identity.account.registered`; for people who gave the sales-tools consent, enrich through Clay and post name, email, country, sign-up source and the enrichment to the owner's sales chat in Telegram; for the others post country, source and the account-card link only. Off by default (`LEADS_ENABLED`). [ADR 0051](../adr/0051-new-user-leads-to-telegram-with-clay-enrichment.md).
+- **Owns:** `lead_enrichments` (in the user's home, in `identity`'s deletion and export registry).
+- **Routes:** the Clay result callback, if Clay answers asynchronously; no `/v1` route for clients.
+- **Depends on:** identity (event, profile contract, the consent in `user_consents`, the registration checkbox), F6 (outbox delivery, periodic jobs).
+- **Leo tools:** none.
 
 ### 4.3 Frontend names
 
@@ -577,6 +585,8 @@ Each decision states the proposal first. "Blocks" names the first step that cann
 - **SM-10 — changed.** **The satisfaction survey and newsletters are kept**; they need screens in the new design (the survey for users, newsletters in the admin panel). The onboarding tour and the top-bar ticker backend are dropped as proposed. Unsubscribe and suppression move to F6 as proposed and serve newsletters too.
 
 Every decision of §8 is settled; §9 can run.
+
+- **2026-10-16 — new slice `leads`** (ADR 0051): new users in the owner's Telegram with Clay enrichment, behind a separate registration consent; built right after `identity`, which adds the consent checkbox and its record.
 
 ---
 
