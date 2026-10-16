@@ -10,6 +10,7 @@ from shosai.core.observability.objectives import (
     AlertClass,
     EventRatio,
     InvariantMonitor,
+    Journey,
     LatencyRatio,
     NeverIncreases,
     ServiceLevelObjective,
@@ -23,7 +24,7 @@ ERRORS = EventRatio(total='requests_total{route="/x"}', bad='requests_total{rout
 
 BASE = ServiceLevelObjective(
     name="reads_latency",
-    journey="cabinet_api",
+    journey=Journey("cabinet_api", "Кабинет"),
     summary="Медленно",
     promise="страницы открываются быстро",
     target=0.95,
@@ -35,7 +36,7 @@ BASE = ServiceLevelObjective(
     "malformed",
     [
         lambda: replace(BASE, name="Reads"),
-        lambda: replace(BASE, journey="cabinet-api"),
+        lambda: replace(BASE, journey=Journey("cabinet-api", "Кабинет")),
         lambda: replace(BASE, target=1.0),
         lambda: replace(BASE, target=0.4),
     ],

@@ -1,0 +1,13 @@
+# Дашборды Shosai — код бэкенда (F5 шаг 7): рендерятся из объявлений и ядра, правка — только в коде,
+# затем pytest tests/composition/test_observability_rules.py --update-rules. В интерфейсе не меняются.
+apiVersion: 1
+
+providers:
+  - name: shosai
+    type: file
+    folder: Shosai
+    disableDeletion: true
+    allowUiUpdates: false
+    updateIntervalSeconds: 60
+    options:
+      path: /etc/grafana/dashboards

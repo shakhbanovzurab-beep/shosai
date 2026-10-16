@@ -239,6 +239,8 @@ services:
       GF_SECURITY_COOKIE_SECURE: "true"
       GF_SECURITY_DISABLE_GRAVATAR: "true"
       GF_USERS_ALLOW_SIGN_UP: "false"
+      # Интерфейс по-русски: подписи таблиц значений, «нет данных», выбор периода.
+      GF_USERS_DEFAULT_LANGUAGE: ru-RU
       GF_AUTH_ANONYMOUS_ENABLED: "false"
       GF_UNIFIED_ALERTING_ENABLED: "false"
       GF_SNAPSHOTS_EXTERNAL_ENABLED: "false"
@@ -255,6 +257,7 @@ services:
       - /tmp
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards/generated:/etc/grafana/dashboards:ro
       - grafana-data:/var/lib/grafana
       - ${GRAFANA_SECRETS_DIR:-/srv/shosai/secrets/grafana}:/run/shosai-grafana:ro
     healthcheck:

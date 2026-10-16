@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from shosai.core.observability.objectives import (
     AlertClass,
     InvariantMonitor,
+    Journey,
     NeverIncreases,
     ServiceLevelObjective,
 )
@@ -82,8 +83,13 @@ def recorded(slo: ServiceLevelObjective, window: str) -> str:
     return f"slo:{slo.name}:bad_ratio:rate{window}"
 
 
+def journey_uid(journey: Journey) -> str:
+    """The Grafana uid of a journey's dashboard: `sign_in` → `journey-sign-in`."""
+    return "journey-" + journey.name.replace("_", "-")
+
+
 def slo_labels(slo: ServiceLevelObjective) -> dict[str, str]:
-    return {"slo": slo.name, "journey": slo.journey}
+    return {"slo": slo.name, "journey": slo.journey.name}
 
 
 def series_of(name: str, labels: Mapping[str, str]) -> str:
@@ -109,7 +115,7 @@ def burn_annotations(slo: ServiceLevelObjective, burn: Burn) -> dict[str, str]:
         "summary": slo.summary,
         "description": f"Мы обещаем, что {slo.promise}. {burn.pace}.",
         "runbook": f"{RUNBOOK}#slo-budget-burn",
-        "dashboard": f"/d/journey-{slo.journey.replace('_', '-')}",
+        "dashboard": f"/d/{journey_uid(slo.journey)}",
     }
 
 

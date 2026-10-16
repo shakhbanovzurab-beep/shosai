@@ -36,6 +36,23 @@ The stack of target architecture §16, built step by step by [F5](../../docs/pla
 - **Log → trace:** `trace_id` in a line's structured metadata is a link to the trace.
 - The admin's password comes from the file `admin-password` in `GRAFANA_SECRETS_DIR` (staging); locally it is `local-grafana` unless `LOCAL_GRAFANA_PASSWORD` says otherwise. `GOMEMLIMIT` keeps Grafana's heap under its 384 MB limit: at 192 MB Grafana 13 was killed for memory as soon as its UI was used.
 
+## Dashboards
+
+The owner reads them, so everything a person sees is plain Russian: titles, descriptions, axis labels, legends and units; Grafana's own interface is Russian too (`GF_USERS_DEFAULT_LANGUAGE=ru-RU`). They are built in code and provisioned read-only into the folder "Shosai" from [grafana/dashboards/generated](grafana/dashboards/generated): never edited by hand or in the UI; the same `--update-rules` run that rewrites the alert rules rewrites them, and the same test fails while they differ from the code and checks that every backend metric they name is exported by some role.
+
+| Dashboard | Uid | From |
+|---|---|---|
+| One per journey: «Вход в аккаунт», «Кабинет: скорость открытия страниц» | `journey-<name>` | each SLO a slice or core declares |
+| «Правила, которые не должны нарушаться» | `invariant-monitors` | each invariant monitor |
+| «Процессы сервера» | `process-roles` | `backend/src/shosai/composition/dashboards.py` |
+| «Базы данных в России и в ЕС» | `data-homes` | same |
+| «Провайдеры ИИ» | `ai-providers` | `backend/src/shosai/composition/ai_dashboard.py` |
+
+- A journey shows each promise under a heading that states it: whether it holds over 3 days (a tile with its trend), the share of failures over 1 h and 5 min against the share the promise allows, events per minute and, for a latency promise, the time 95% of events stay under, where a point is a single slow or failed request that opens its trace. The alerts link to these uids.
+- Every chart: at most four lines in fixed validated colors, a legend from two lines, one shared crosshair per dashboard and a tooltip with every line's value. A promise or a ticket's limit is a dashed line over a faint red zone the axis always keeps in view.
+- A tile without data says «нет данных» on a neutral background: no data is not a verdict. A status tile says «нет ✓» or «да ✗» in words.
+- The building blocks are in `backend/src/shosai/core/observability/grafana.py`; a slice's objectives and monitors bring their dashboards with them.
+
 ## The edge's log
 
 One JSON line per request without personal data: no client address, no user agent, no path or query — a 404's path is whatever the client typed. It carries the request id, the trace id (traced locations only), the method, the path's class by its first segment (`/v1`, `/app`, `/admin`, `/email`, `/`, `other`), the status, sizes and times, and `level` from the status. The API's line with the same `request_id` and `trace_id` has the route template. NGINX's own `error_log` lines are text with the client's address and the raw request; the collector replaces `client`, `request`, `upstream` and `referrer` in them with `<hidden>`.

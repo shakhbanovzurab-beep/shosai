@@ -8,6 +8,7 @@ home's is measured separately as a ticket.
 from shosai.core.observability.objectives import (
     AlertClass,
     EventRatio,
+    Journey,
     LatencyRatio,
     ServiceLevelObjective,
 )
@@ -17,12 +18,13 @@ SIGN_IN_ROUTES = (
     "/v1/auth/login|/v1/auth/email/verify|/v1/auth/social/complete|/v1/auth/desktop/exchange"
 )
 SIGN_IN = f'http_route=~"{SIGN_IN_ROUTES}"'
+SIGN_IN_JOURNEY = Journey("sign_in", "Вход в аккаунт")
 LATENCY_THRESHOLD = "0.3"
 
 SIGN_IN_OBJECTIVES = (
     ServiceLevelObjective(
         name="sign_in_availability",
-        journey="sign_in",
+        journey=SIGN_IN_JOURNEY,
         summary="Люди не могут войти в аккаунт: вход заканчивается ошибкой",
         promise="вход в аккаунт срабатывает без ошибки с нашей стороны в 99,9 % случаев",
         target=0.999,
@@ -33,7 +35,7 @@ SIGN_IN_OBJECTIVES = (
     ),
     ServiceLevelObjective(
         name="sign_in_latency_eu",
-        journey="sign_in",
+        journey=SIGN_IN_JOURNEY,
         summary="Вход в аккаунт работает медленно у людей, чьи данные хранятся в ЕС",
         promise="у людей, чьи данные хранятся в ЕС, 95 % входов занимают меньше 0,3 секунды",
         target=0.95,
@@ -41,7 +43,7 @@ SIGN_IN_OBJECTIVES = (
     ),
     ServiceLevelObjective(
         name="sign_in_latency_ru",
-        journey="sign_in",
+        journey=SIGN_IN_JOURNEY,
         summary="Вход в аккаунт работает медленно у людей, чьи данные хранятся в России",
         promise="у людей, чьи данные хранятся в России, 95 % входов занимают меньше 0,3 секунды",
         target=0.95,

@@ -41,6 +41,9 @@ x-backend: &backend
     SMTP_PORT: "1025"
     BIND_HOST: 0.0.0.0
     OTEL_EXPORTER_OTLP_ENDPOINT: http://collector:4318
+    # Письма с кодами (регистрация, вход) пишутся только с ключом; по умолчанию его нет, как в
+    # .env.example. Для проверки с аккаунтами: LOCAL_FERNET_KEY=<ключ> перед up.
+    FERNET_KEY: ${LOCAL_FERNET_KEY:-}
   # Ротация (§14 правило 11) и метки Compose в каждой строке: по ним коллектор узнаёт службу.
   logging:
     driver: json-file

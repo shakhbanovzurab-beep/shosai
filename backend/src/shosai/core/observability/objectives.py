@@ -71,6 +71,18 @@ type Indicator = EventRatio | LatencyRatio
 
 
 @dataclass(frozen=True, slots=True)
+class Journey:
+    """A user journey of §16.3: `name` for labels and links, `title` for the owner, in Russian."""
+
+    name: str
+    title: str
+
+    def __post_init__(self) -> None:
+        if not (NAME.fullmatch(self.name) is not None):
+            raise ValueError(f"путь {self.name!r} — snake_case")
+
+
+@dataclass(frozen=True, slots=True)
 class ServiceLevelObjective:
     """A journey's objective (§16.3): `target` of its events are good over 30 days.
 
@@ -80,7 +92,7 @@ class ServiceLevelObjective:
     """
 
     name: str
-    journey: str
+    journey: Journey
     summary: str
     promise: str
     target: float
@@ -90,8 +102,6 @@ class ServiceLevelObjective:
     def __post_init__(self) -> None:
         if not (NAME.fullmatch(self.name) is not None):
             raise ValueError(f"имя SLO {self.name!r} — snake_case")
-        if not (NAME.fullmatch(self.journey) is not None):
-            raise ValueError(f"путь {self.journey!r} — snake_case")
         if not (0.5 < self.target < 1):
             raise ValueError(f"цель {self.name}: {self.target} вне (0.5, 1)")
 

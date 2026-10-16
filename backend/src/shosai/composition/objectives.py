@@ -11,6 +11,7 @@ from shosai.core.features import FeatureModule
 from shosai.core.observability.objectives import (
     AlertClass,
     InvariantMonitor,
+    Journey,
     LatencyRatio,
     NeverIncreases,
     ServiceLevelObjective,
@@ -20,6 +21,7 @@ from shosai.core.observability.rule_files import OwnerRules
 from shosai.core.web.http_metrics import DURATION_METRIC
 
 CORE = "core"
+CABINET_API = Journey("cabinet_api", "Кабинет: скорость открытия страниц")
 # Порог цели задержки §16.3 — граница корзины HTTP-гистограммы (core/web/http_metrics.py).
 LATENCY_THRESHOLD = "0.3"
 # Чтения кабинета — GET человека, вошедшего в свой дом: у анонимных запросов home пуст.
@@ -28,7 +30,7 @@ CABINET_READS = 'http_request_method="GET",home="{home}"'
 CORE_OBJECTIVES: tuple[ServiceLevelObjective, ...] = (
     ServiceLevelObjective(
         name="cabinet_reads_latency_eu",
-        journey="cabinet_api",
+        journey=CABINET_API,
         summary="Кабинет открывается медленно у людей, чьи данные хранятся в ЕС",
         promise="у людей, чьи данные хранятся в ЕС, 95 % страниц и данных кабинета загружаются "
         "быстрее 0,3 секунды",
@@ -38,7 +40,7 @@ CORE_OBJECTIVES: tuple[ServiceLevelObjective, ...] = (
     # Российский дом — отслеживается, не будит (§16.3, §20): данные в 180 мс от плоскости.
     ServiceLevelObjective(
         name="cabinet_reads_latency_ru",
-        journey="cabinet_api",
+        journey=CABINET_API,
         summary="Кабинет открывается медленно у людей, чьи данные хранятся в России",
         promise="у людей, чьи данные хранятся в России, 95 % страниц и данных кабинета "
         "загружаются быстрее 0,3 секунды",
