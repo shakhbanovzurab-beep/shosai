@@ -141,8 +141,11 @@ def broken_feature(lifecycle: Lifecycle) -> FeatureModule:
     return FeatureModule(name="broken", build=build)
 
 
-def native_breaking_feature(name: str) -> FeatureModule:
-    """A slice serving a native route with a response the shipped clients cannot decode."""
+def native_breaking_feature(name: str, events: tuple[type[DomainEvent], ...] = ()) -> FeatureModule:
+    """A slice serving a native route with a response the shipped clients cannot decode.
+
+    It declares the `events` of the slice it replaces: other slices subscribe to them.
+    """
 
     @asynccontextmanager
     async def build(_services: CoreServices) -> AsyncIterator[FeatureParts]:
@@ -155,7 +158,7 @@ def native_breaking_feature(name: str) -> FeatureModule:
 
         yield FeatureParts(http_routers=(router,))
 
-    return FeatureModule(name=name, build=build)
+    return FeatureModule(name=name, build=build, events=events)
 
 
 class Clock:

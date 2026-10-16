@@ -168,7 +168,7 @@
   - `support` — tickets and newsletters between operators and users;
   - `releases` — desktop builds, staged rollout, downloads;
   - `telemetry` — client errors, product events, satisfaction survey;
-  - `alerting`.
+  - `alerting` — business events to the monitoring chat through Alertmanager, without personal data ([ADR 0052](../adr/0052-business-events-to-the-monitoring-chat-through-alertmanager.md)).
 
 ## 6. Data placement and residency
 

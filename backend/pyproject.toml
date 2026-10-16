@@ -162,8 +162,6 @@ name = "Features meet through contracts"
 type = "independence"
 modules = ["shosai.features.*"]
 ignore_imports = ["shosai.features.** -> shosai.features.*.contracts"]
-# Пока один срез, исключению не с чем совпасть; это не ошибка конфигурации.
-unmatched_ignore_imports_alerting = "none"
 broken_contract_guidance = "A slice imports another slice only through its contracts module."
 
 [[tool.importlinter.contracts]]

@@ -102,13 +102,14 @@ One bot, one chat (F5-D4); [alertmanager/alertmanager.yml](alertmanager/alertman
 |---|---|---|---|
 | `page` | SLO burn, invariant monitors | with sound, and a "resolved" message | hourly while firing |
 | `ticket` | §16.6, the edge's log rules | silent, no "resolved" | daily |
-| `notice` | the `alerting` domain (step 8) | silent, batched per `kind` for 5 min | — |
+| `ticket`, `notice` | the backend's `alerting` slice ([ADR 0052](../../docs/adr/0052-business-events-to-the-monitoring-chat-through-alertmanager.md)): an AI spend over the day's threshold is a ticket, a completed deletion a notice | silent; notices batched per `kind` for 5 min | never: one alert per event (`event_id` label), ending 30 min after it is posted |
 | `heartbeat` | `Watchdog`, always firing | never; a webhook renews the external heartbeat every minute (F5-D2) | every minute |
 
 - **Inhibition:** a home out of reach (`HomeUnreachableFromApp`, `HomeDatabaseUnreachable`) mutes the tickets of the same `home`; a burning SLO's page mutes the ticket of the same `slo`.
 - **Messages** ([telegram.tmpl](alertmanager/telegram.tmpl)) are written for the owner, in plain Russian without SRE terms: what kind of message and from where («тестовый сайт shosai.tech», «🧪 проверка на компьютере разработчика»), the headline (`summary` — what people experience), the explanation (`description` — for an SLO, what Shosai promises and when the promise breaks at this pace; for a monitor, what broke and what it threatens), the start in Moscow time, «Что делать» ([docs/runbooks/alerts.md](../../docs/runbooks/alerts.md)) and «Графики в Grafana» (not from the developer's machine, where Grafana is not reachable). No technical label or alert name. A batch lists up to eight headlines. Every value is HTML-escaped; a message never exceeds Telegram's limit by being cut inside a tag. Every alert rule therefore carries a plain `summary` and `description`; slices write them through `ServiceLevelObjective.summary`/`promise` and `InvariantMonitor.summary`/`explanation`.
 - **Secrets** are files in `ALERTMANAGER_SECRETS_DIR`, never in Git: `telegram-bot-token`, `telegram-chat-id`, `heartbeat-url`. [start.sh](alertmanager/start.sh) copies them into the container's tmpfs and renders the config; without the Telegram files the alerts are accepted and sent nowhere, without `heartbeat-url` the Watchdog pings nothing. Locally both are absent, so the local stack writes to nobody; `deploy/local/alertmanager-secrets.sh` lends it the bot and the chat from `.env` for a delivery check, `--remove` takes them back. The heartbeat is pinged only by staging.
 - Prometheus and Loki's ruler both send to it; Loki's alerts carry the same `environment` label.
+- The backend's roles post business alerts to its v2 API (`ALERTING_ALERTMANAGER_URL`, `http://alertmanager:9093` on the Compose network). Their `admin_card` annotation is the account's card in the admin panel: one alert shows «Карточка в админке», a batch a link per item.
 
 ## Variables
 

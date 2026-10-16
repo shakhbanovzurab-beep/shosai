@@ -13,9 +13,10 @@ from shosai.core.config.gate import ProductionCheck
 from shosai.core.config.sections import SettingsSection
 from shosai.core.events.domain_event import DomainEvent
 from shosai.core.features import FeatureModule
+from shosai.features.alerting.module import ALERTING
 from shosai.features.identity.module import IDENTITY
 
-FEATURES: tuple[FeatureModule, ...] = (IDENTITY,)
+FEATURES: tuple[FeatureModule, ...] = (IDENTITY, ALERTING)
 
 
 def check_features(features: Sequence[FeatureModule]) -> None:

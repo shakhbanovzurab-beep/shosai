@@ -5,6 +5,8 @@
   Всё из аннотаций экранируется: значение с «<» или «&» иначе сделало бы сообщение невалидным.
   В пачке — не больше восьми случаев: лимит Telegram 4096 символов, а обрезка посреди тега ломала
   разметку (урок черновика). __GRAFANA_URL__ и __RUNBOOK_URL__ подставляет start.sh.
+  Оповещения домена alerting несут admin_card — ссылку на карточку аккаунта в админке: у одного
+  случая она в строке ссылок, в пачке — у каждого пункта. Имени и почты в них нет (F5-D5).
 */}}
 
 {{ define "shosai.class" -}}
@@ -26,6 +28,7 @@
 {{/* Графики — только там, где Grafana доступна снаружи: с компьютера разработчика ссылка не откроется. */}}
 {{ define "shosai.links" -}}
 {{- $alert := index .Alerts 0 -}}
+{{- if eq (len .Alerts) 1 }}{{ with $alert.Annotations.admin_card }}👤 <a href="{{ . | html }}">Карточка в админке</a> · {{ end }}{{ end -}}
 {{- with $alert.Annotations.runbook }}📖 <a href="__RUNBOOK_URL__/{{ . | html }}">Что делать</a>{{ end -}}
 {{- if ne .CommonLabels.environment "local" -}}
 {{- with $alert.Annotations.dashboard }} · 📈 <a href="__GRAFANA_URL__{{ . | html }}">Графики в Grafana</a>{{ end -}}
@@ -40,7 +43,7 @@
 {{- else -}}
 <b>Случаев: {{ len .Alerts }}</b>
 {{- range $index, $each := .Alerts }}{{ if lt $index 8 }}
-• {{ $each.Annotations.summary | html }}{{ end }}{{ end }}
+• {{ $each.Annotations.summary | html }}{{ with $each.Annotations.admin_card }} — <a href="{{ . | html }}">карточка</a>{{ end }}{{ end }}{{ end }}
 {{- if gt (len .Alerts) 8 }}
 …и ещё {{ len .Alerts }} всего, показаны первые 8{{ end }}
 {{- end }}

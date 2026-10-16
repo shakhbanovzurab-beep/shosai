@@ -175,6 +175,26 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** One address hammering the API — expected protection; a legitimate client — its retry logic; many addresses — an attack, the provider's firewall.
 
+## Business events (F5-D5)
+
+The slice `alerting` posts these to Alertmanager from events, not from Prometheus rules ([backend/src/shosai/features/alerting](../../backend/src/shosai/features/alerting)). A message carries ids, amounts and a link to the account's card in the admin panel — never a name, an address or a person's text. One event is one alert: its id is a label, so a redelivered event does not repeat the message.
+
+<a id="user-spend-exceeded"></a>
+### UserSpendExceeded — `ai.user_spend.exceeded`, ticket
+
+**Means.** One person's AI spend for a UTC day passed `AI_USER_DAILY_ALERT_USD` (F6-D6; 20 $ by default). At most one message per person and day.
+
+**Look.** The card in the admin panel (the link in the message): spend by day and by feature, sign-ins, devices. A steady climb over the day suggests a loop in a client or an agent; a burst from a new account suggests abuse.
+
+**Fix.** Abuse → block the account on its card: its sessions end at once. A loop of ours → the feature's logs by `user_id` in Loki, then a fix. Legitimate heavy use → nothing; raise the threshold if this repeats for many people.
+
+<a id="account-deleted"></a>
+### AccountDeleted — `identity.account.deleted`, notice
+
+**Means.** The erasure saga finished: a week after the person asked, every owner erased their data and the account is anonymised (identity, ADR 0045). Several deletions within 5 minutes arrive as one message.
+
+**Fix.** Nothing to do. A deletion that does not finish is a separate alert of identity's monitors.
+
 ## Heartbeat
 
 <a id="watchdog"></a>
