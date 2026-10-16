@@ -1,0 +1,180 @@
+# F5 — Observability: package plan
+
+Goal (prompt `docs/plan/prompts/F5-observability.md`): the observability stack of target architecture §16 runs next to
+staging, so every slice ships with its metrics, logs, traces, SLOs and invariant monitors from the start. Planning
+session of 2026-10-15; no application code is written in it. **The owner approved the plan and F5-D1…D6 on 2026-10-16**
+with the refinements recorded in §2.
+
+## 1. Facts this plan rests on
+
+### 1.1 Inputs
+
+| Fact | Source |
+|---|---|
+| §16 fixes the signals and stores: Prometheus 30 days, Loki 14 days, Tempo 7 days, each with a size cap; logs as structlog JSON on stdout → OpenTelemetry Collector (filelog → OTLP) → Loki; traces OTLP → collector with tail sampling (100% errors and slow, 5% of the rest) → Tempo; one Grafana with exemplars, trace → logs and log → trace; Loki ruler and Prometheus into one Alertmanager; pages only on SLO burn and invariant monitors, tickets for the rest; Loki labels `service`, `role`, `level`, `home` only, ids in structured metadata; no personal data, meeting text or tokens in labels, spans or logs | ARCHITECTURE.md §16.1–16.8, §14 rule 13 |
+| Pinned versions: Prometheus 3.15.0, Alertmanager 0.34.1, blackbox exporter 0.28.0, nginx exporter 1.5.3; collector (contrib), Loki, Tempo, Grafana and node exporter "latest stable", pinned when added | §18.2 |
+| Uptime probes run outside the plane; the stack is single nodes on local disks with size caps | §4.2 "Observability" |
+| F1 already ships the process side: JSON lines through a bounded queue that drops and counts (`shosai_telemetry_dropped{signal,reason}`), secrets redacted by key and in URLs, every line with `role`, `service`, `trace_id`, `span_id` and the ids of `LogFields` (`request_id`, `home`, `org_id`, `user_id`, `session_id`, `task_*`, `event_id`); every span recorded and sent through a bounded OTLP/HTTP exporter when `OTEL_EXPORTER_OTLP_ENDPOINT` is set; raw path, query, client address and user agent removed from spans by the sampler; `/metrics` on `OPS_PORT` (9100) of every role in OpenMetrics when asked | `core/observability/*`, `core/web/ops.py` |
+| 77 metric families exist (`http_server_request_duration_seconds`, `shosai_task_*`, `shosai_outbox_*`, `shosai_ai_*`, `shosai_db_pool_*`, `shosai_loop_*`, `shosai_identity_*`…). No metric carries an exemplar yet; the HTTP metric has no `home` label | `grep` of `backend/src` |
+| Slices declare static parts on `FeatureModule` (events, agent tools, settings, account data) that tests read | `core/features.py` |
+| `ai.user_spend.exceeded` (F6-D6) is published once per user and day and waits for F5 to turn it into an alert; identity publishes `AccountRegistered`, `AccountDeleted` and seven more events | `core/ai/events.py`, `features/identity/contracts.py` |
+| Staging (F4): one Compose project `shosai-staging` in `/srv/shosai`, json-file logs 10 MB × 5 per container, the edge's access log is JSON with `request_id` passed to the API as `X-Request-ID`; `compose.yaml` and configs are installed by hand, `release.sh` accepts only the backend and edge images of one commit | `deploy/staging/*`, ADR 0050 |
+| The edge access log carries `remote_addr`, `user_agent` and the raw `$uri` — personal data and, on some paths, tokens: §16.8 forbids it once the log reaches Loki | `deploy/staging/nginx/nginx.conf` |
+| The host (Amsterdam, 4 vCPU, 7.8 GiB, no swap) has **≈ 2.4 GiB available** with staging and the development stack running, and **50 GB free disk**. The design-point caps of §16.7 (20 + 30 + 10 GB) do not fit beside everything else | `free -h`, `df -h` on 2026-10-15 |
+| Docker Engine 29.8.2 and Compose 5.5.1: image mounts (`type: image`) and `include:` are available | `docker version` |
+| `shosai.tech` resolves; no subdomain did on 2026-10-15. The owner added `grafana.shosai.tech` → 129.101.125.250 on 2026-10-16 | `getent hosts` |
+| A 4 GB swap file is on since 2026-10-16 (`/swapfile`, in `/etc/fstab`); the owner is growing the host to 16 GB RAM | owner, F5-D3 |
+| UptimeRobot (free plan): 50 monitors, 5-minute interval, SSL errors checked; certificate-expiry reminders are a paid feature and refused by the API. The owner's monitors `https://shosai.tech` and `https://shosai.tech/admin` existed before F5; the only alert contact is email | UptimeRobot API v3, 2026-10-16 |
+| New users with name, email and Clay's enrichment go to a separate sales chat through the slice `leads` ([ADR 0051](../../adr/0051-new-user-leads-to-telegram-with-clay-enrichment.md)), not through F5 | ADR 0051 |
+
+### 1.2 The draft, for lessons
+
+The draft ran Prometheus, Alertmanager (native `telegram_configs`), blackbox and nginx exporters; no Grafana, Loki, Tempo or collector; its tracing was never switched on. `features/alerting` sent the owner Telegram messages on registration, deletion, payment, support ticket and abuse flag, straight to the Bot API.
+
+| Lesson | Keep as |
+|---|---|
+| 16 rules sat in a directory that was never mounted; later rules were mounted but Prometheus was never reloaded (12 of 28 loaded) | Rules ship with the release that changes the metrics, Prometheus is reloaded by the release, and the release checks the number of loaded rule groups (§3.9) |
+| Alerts on metrics of processes nobody scraped could never fire | A test fails when a rule or dashboard names a metric no process registers (§3.8) |
+| An "age" gauge defaulted to 0 and read as healthy forever; a gauge registered on import added a 0 series that fired forever; `delta()` over a gauge reset fired on every deploy | Timestamps instead of ages, `absent()` for "no data", aggregation chosen per rule, promtool unit tests for every rule |
+| One 12 h threshold for every loop made daily loops "stall" after each deploy | Thresholds from each loop's own published interval (F1 already publishes `shosai_loop_interval_seconds`) |
+| All probes ran on the host they watched; no Watchdog | External probe and an external heartbeat for the alerting path (F5-D2) |
+| No inhibition; the Telegram template showed no runbook and did not escape HTML | Inhibition by root cause, a runbook and a Grafana link in every message, escaped text (§3.10) |
+| No edge 5xx/429 alerts because no logs were collected | Loki ruler on the edge's log (§3.8) |
+| A separate Compose file for monitoring left a worker on stale images | One Compose project: staging `include`s the stack (§3.1) |
+| `alerting` cut an HTML message at 4096 characters inside a tag; the event went to the dead letter | Notices carry ids and a link only; no free text, nothing to cut (§3.11) |
+| During a release two containers answer one service name and a scrape flips between them | Scrape every container behind a role by DNS; aggregate across instances deliberately (§3.7) |
+
+## 2. Decisions for the owner
+
+All six approved by the owner on 2026-10-16; each answer opens with the approval and what the owner changed or added. Each becomes an ADR in the step that first depends on it.
+
+| # | Decision | Proposed answer | Trade-off |
+|---|---|---|---|
+| F5-D1 | **Where Grafana is reachable** | **Approved; the A record exists since 2026-10-16.** `grafana.shosai.tech` through the edge (its own `server` block, TLS from the same certbot, rate limit on the login), Grafana's own login with one admin from the environment (as [ADR 0049](../../adr/0049-one-admin-signed-in-by-env-credentials.md)), anonymous access and sign-up off. Needs an A record for the subdomain | A public login page. The alternative — an SSH tunnel only — exposes nothing, but a page's Grafana link would not open from a phone. A sub-path of `shosai.tech` would put Grafana on the cabinet's origin, so a flaw in Grafana could read the cabinet's storage: not proposed |
+| F5-D2 | **Probes from outside the plane** (§4.2, §16.6 "Uptime") | **Approved with Cronitor instead of Healthchecks.io:** UptimeRobot checks `https://shosai.tech/v1/health` over HTTPS every 5 min, 2xx only, no redirects, SSL errors on — monitor `shosai.tech API health`, created through the API with `UPTIMEROBOT_API_KEY` on 2026-10-16. The free plan has no certificate-expiry reminder, so the warning before expiry is the internal blackbox ticket (21 and 7 days); UptimeRobot catches a certificate already broken. The heartbeat is the Cronitor monitor `shosai-alerting`: Alertmanager's always-firing `Watchdog` calls `HEARTBEAT_PING_URL` once a minute; Cronitor creates the monitor at the first ping and the owner then sets "every minute, alert after 10 min without a ping" in its interface | A new third-party provider (sees only the public URL and a heartbeat). The alternative without one — a scheduled GitHub Actions job — runs late by 5–30 min under load and cannot receive a heartbeat |
+| F5-D3 | **Memory and disk on the shared host** | **Approved; a 4 GB swap file added on 2026-10-16 and the host grows to 16 GB RAM.** Limits: collector 256 MB, Loki 320, Tempo 320, Prometheus 384, Grafana 192, Alertmanager 64, node exporter 48, nginx exporter 32, blackbox 32 — ≈ 1.6 GB of limits, ≈ 0.9 GB expected in use. Staging caps: Prometheus 5 GB, Loki 5 GB, Tempo 3 GB; the time retentions of §16.1 stay and the cap ends them sooner if reached. Production gets the caps of §16.7 | Fits today's ≈ 2.4 GiB available with little margin: a heavy development session (test databases, builds) can push the host into the OOM killer, which takes the largest process. The way out is more RAM on the host, not a smaller stack |
+| F5-D4 | **Alert classes in Telegram** | **Approved.** One bot, one chat. Pages (SLO burn, invariant monitors, external probe) arrive with sound and repeat every hour while firing; tickets (§16.6) and notices (F5-D5) arrive silently (`disable_notifications`), tickets repeat every 24 h, notices are batched per kind for 5 min. Resolved messages only for pages. The bot token and chat id are needed before step 6 | One chat keeps one place to look; silence keeps tickets from training the owner to ignore the sound. The alternative — a chat or forum topic per class — separates them fully at the cost of three places |
+| F5-D5 | **The `alerting` domain** (business notices from the draft) | **Approved: no personal data in the monitoring chat. New users are not F5's — the slice `leads` posts them to a separate sales chat ([ADR 0051](../../adr/0051-new-user-leads-to-telegram-with-clay-enrichment.md)).** The slice `features/alerting` subscribes to events through the outbox and posts to Alertmanager's API, not to Telegram: `ai.user_spend.exceeded` as a ticket and completed deletions as notices (batched). A message carries ids, counts and a link to the admin card — no email, name or ticket text. Payments, support tickets and releases add their kinds with their slices | Telegram learns nothing personal, and batching, silences and the one token come from Alertmanager. The owner sees "3 registrations" with links instead of names. The alternative — the draft's direct Bot API — is a second Telegram integration with no batching; dropping notices altogether leaves early sign-ups to the admin's Leo analytics |
+| F5-D6 | **How rules, dashboards and configs reach staging** | **Approved.** CI builds a third image of each commit, `shosai-observability:<commit>`, holding `deploy/observability/` with the generated rules; the stack mounts it read-only (`type: image`). `release.sh` accepts it beside the backend and edge images (an extension of [ADR 0050](../../adr/0050-staging-release-from-ci.md)), recreates what reads it, reloads Prometheus, Alertmanager and the Loki ruler, and fails the release if the loaded rule groups differ from the image's | Rules never drift from the metrics of the code that runs, and rollback returns both. The CI key's single command accepts one more image of the same commit. The alternative — copying configs by hand — repeats the draft's never-loaded rules |
+
+## 3. Design
+
+### 3.1 Layout
+
+```
+deploy/observability/
+  compose.yaml              collector, loki, tempo, prometheus, alertmanager, grafana,
+                            node-exporter, nginx-exporter, blackbox; each read-only, non-root
+                            (the collector: uid 0 with only DAC_READ_SEARCH, to read container logs),
+                            healthcheck, mem limit (F5-D3), json-file rotation (§14 rule 11)
+  compose.local.yaml        local overlay: the shosai-local network, Grafana on 127.0.0.1:3000
+  collector/config.yaml     receivers filelog + otlp; processors memory_limiter, privacy, tail_sampling, batch
+  loki/loki.yaml            single binary, filesystem, retention 14 d, label limits, ruler → Alertmanager
+  loki/rules/               log-based rules (edge 5xx and 429)
+  tempo/tempo.yaml          single binary, local storage, block retention 7 d
+  prometheus/prometheus.yml scrape config, exemplar storage, retention flags in compose
+  prometheus/rules/         tickets.yml (hand-written), generated/ (from backend declarations), tests/ (promtool)
+  alertmanager/             alertmanager.yml, telegram.tmpl
+  blackbox/blackbox.yml     internal probes: health through the edge, certificate expiry, TCP to each home's DB
+  grafana/provisioning/     data sources with their links; dashboard providers
+  grafana/dashboards/       journeys/, roles/, homes/, providers/ (JSON)
+  checks/privacy-canary.sh  the end-to-end privacy check (§3.12)
+deploy/local/compose.app.yaml  backend roles and edge from local images on shosai-local: the same log path as staging
+deploy/staging/compose.yaml    `include:` of deploy/observability/compose.yaml — one project, one release
+backend/src/shosai/core/observability/objectives.py   SLO and invariant-monitor declarations, rule renderer
+backend/src/shosai/features/alerting/                 notices (F5-D5)
+docs/observability.md, docs/runbooks/alerts.md
+```
+
+### 3.2 Logs
+
+- Containers keep the json-file driver; its `labels` option adds `com.docker.compose.service` to every line. The collector's `filelog` receiver reads `/var/lib/docker/containers/*/*-json.log` read-only, keeps offsets in `file_storage` (a restart re-ships nothing) and takes `service` from that attribute. No Docker socket is mounted.
+- A JSON line of the backend is parsed: `level`, `role`, `home` become the Loki labels with `service`; `trace_id`, `span_id`, `request_id`, `user_id`, `org_id`, `session_id`, `task_id`, `event_id` go to structured metadata; the rest stays in the body. Lines of other services (PgBouncer, Valkey) keep their text body with `service` and `level` only.
+- Export to Loki's native OTLP endpoint with an explicit list of index labels; Loki limits the label names per stream, so a new label is refused, not stored.
+- The edge's log line loses `remote_addr` and `user_agent`; the path is logged through a `map` that keeps cabinet and API paths and masks the token segment of tokenized paths (unsubscribe, shared links); it gains `trace_id`.
+
+### 3.3 Traces
+
+- The edge NGINX runs the official `-otel` image variant: it opens the root span for `/v1/` and `/email/` (not for static files), with `otel_trace_context inject` — a client's `traceparent` never chooses our trace ids — and exports to the collector.
+- The backend keeps F1's export. The collector's `tail_sampling` keeps every trace with an error, every trace slower than its threshold (300 ms by default — the cabinet API's p95 objective; per-route thresholds come from SLO declarations), and 5% of the rest. `decision_wait` 10 s, `num_traces` bounded; late spans of a kept trace are kept through the decision cache.
+- Bounded buffers: `memory_limiter` first, then bounded in-memory sending queues per exporter. A full queue drops and the collector counts it (`otelcol_exporter_enqueue_failed_*`, `otelcol_processor_refused_*`); with `shosai_telemetry_dropped` they feed the "Telemetry drops > 0" ticket.
+
+### 3.4 Size caps (§16.7, F5-D3)
+
+Prometheus has a native size cap (`--storage.tsdb.retention.size`). Loki and Tempo only delete by time, so on staging each gets its own filesystem of the cap's size — an image file mounted by a systemd mount unit under `/srv/shosai/telemetry/` — and the per-tenant ingestion limits bound the rate. The node exporter sees each as a filesystem, so the 80% disk ticket covers the caps. Locally, plain volumes.
+
+### 3.5 Grafana
+
+One pane with Prometheus, Loki and Tempo provisioned read-only from the repository: exemplars on Prometheus link to Tempo; Tempo's trace → logs queries Loki by `trace_id` within the trace's time range; a Loki derived field on `trace_id` opens the trace. Grafana's own alerting is off — Alertmanager is the one alert path. Its SQLite state lives on a volume; dashboards are provisioned and not editable in the UI.
+
+### 3.6 Exemplars
+
+The HTTP metric attaches `trace_id` as an exemplar only to requests the tail sampler is certain to keep — 5xx or slower than the threshold — so an exemplar never points to a dropped trace. Prometheus runs with `--enable-feature=exemplar-storage` and scrapes OpenMetrics.
+
+### 3.7 Metrics
+
+- Prometheus scrapes each role by `dns_sd_configs` on its Compose service name (`api`, `ws`, `workers-<queue>`, `scheduler`) at `:9100`, so both containers of a release hand-over are scraped; `job` is the role. Rules aggregate across instances explicitly (`sum` for counters, `max` for ages and timestamps).
+- Also scraped: the collector, Loki, Tempo, Alertmanager, Grafana, Prometheus itself, node exporter, nginx exporter (from the edge's `stub_status` on an internal port not published), blackbox.
+- Internal blackbox probes: `/v1/health` through the edge, certificate expiry, TCP connect to each home's database host for the Russian link's latency (§16.6). The external probe is F5-D2.
+- §16.7 bounds labels: the HTTP metric gains `home` (`ru`, `eu`, none — [ADR 0012](../../adr/0012-http-metrics-in-the-request-boundary.md) amended in step 5) for the per-home cabinet SLO.
+
+### 3.8 Rules as code
+
+- A slice declares its SLOs and invariant monitors on `FeatureModule` (`objectives`, `monitors`), next to the metrics it owns; core declares its own (unknown tasks, outbox older than 5 min, dead letters, calls without a cost row) in composition.
+- `shosai observability rules` renders them into `prometheus/rules/generated/`: per SLO, recording rules and multi-window multi-burn-rate alerts (page at 14.4× over 1 h/5 min and 6× over 6 h/30 min; ticket at 1× over 3 d/6 h); per monitor, a page when the counter's increase or the gauge is above zero. Each generated alert carries `severity`, `runbook` and a Grafana panel link.
+- Backend tests: the generated files equal a fresh render; every metric named in a rule or a dashboard is registered by some process of the composed app.
+- Tickets of §16.6 and the edge's log rules are hand-written YAML; promtool unit tests cover every rule, generated or not.
+- Available now: SLOs for sign-in and cabinet API (from the HTTP metric) and the four core monitors; every other journey and monitor of §16.3 and §16.4 arrives with its slice through the same declarations.
+
+### 3.9 Delivery (F5-D6)
+
+The config image `shosai-observability:<commit>` (`FROM scratch`, files only) is built by `release.yml` with the other two. The stack's services mount it with `type: image`. The CI job "Observability" validates every config before any release: `promtool check config` and `test rules`, `amtool check-config`, `otelcol validate`, `loki -verify-config`, Tempo's config check, Grafana provisioning parse.
+
+### 3.10 Alertmanager
+
+Routes by `severity`: `page`, `ticket`, `notice` (F5-D4). `group_by: [alertname, home]`. Inhibition: the external probe and `home_unavailable` mute the alerts downstream of them. `Watchdog` is always firing; its own route sends it to a webhook receiver whose address is read from a file (`url_file`, the Cronitor ping URL is a secret) with `group_interval` and `repeat_interval` of 1 min, so the heartbeat is renewed every minute and stops when Prometheus, Alertmanager or the host stops. The heartbeat is pinged only by staging's Alertmanager: a local one would stop with the development stack and raise false alarms. The token is read from a file (`bot_token_file`), never written into a config in Git. The template escapes HTML and prints the summary, the runbook link and the Grafana link; annotations are written in Russian, like log messages, for the operator.
+
+### 3.11 The `alerting` slice (F5-D5)
+
+Kinds now: `ai.user_spend.exceeded` (ticket) and `identity.account.deleted` (notice). Registrations belong to `leads` (ADR 0051). No tables and no HTTP routes. One delivery task per subscribed event (F1's outbox delivery, `processed_events`) posts one alert to Alertmanager's v2 API with labels `alertname`, `severity`, `kind` and `event_id` — Alertmanager deduplicates a redelivered event — and annotations with the ids and the admin card's link; Alertmanager down → the task retries and then dead-letters, which pages. A switch `ALERTING_ENABLED` and the Alertmanager address come from settings.
+
+### 3.12 Privacy (§16.8)
+
+Three layers:
+
+1. **Process** (F1): redaction by key and in URLs, private span attributes dropped, `LogFields` ids only.
+2. **Collector**: a `redaction`/`transform` stage deletes the known private attribute names and masks values that look like an email, a JWT, a bearer token or a URL password, in logs and spans — defence in depth.
+3. **Test**: a backend test drives the identity flows with canary values (email, name, password, codes, tokens) through the composed app with in-memory exporters and fails if a canary appears in a log line, a span attribute or a metric label; `checks/privacy-canary.sh` does the same end to end through the edge and then searches Loki, Tempo and Prometheus for the canaries — locally and on staging.
+
+### 3.13 Debug switch (§16.7)
+
+`shosai observability debug --user <id> | --org <id> --minutes N` (N ≤ 60) writes a Valkey key with that TTL and logs who set it. Each process refreshes the active switches every 15 s; only while one is active does the root logger go to DEBUG, and a filter lets a DEBUG line through only when its `user_id` or `org_id` matches.
+
+### 3.14 Not in F5
+
+Client telemetry (`telemetry` slice), product facts (analytics), SLOs and monitors of slices not yet built (each brings its own), production (needs its host).
+
+## 4. Steps
+
+Steps 1–9 run against the local environment; step 10 needs staging. The prompt's seven steps are split differently: logs and traces come with their stores so step 1 ends with something visible, and privacy, the `alerting` slice and the debug switch get their own sessions.
+
+| Step | Content | Skills | Done when |
+|---|---|---|---|
+| 1 | **Logs and traces pipeline.** Collector, Loki, Tempo in `deploy/observability/compose.yaml`; `deploy/local/compose.app.yaml` runs the backend roles from the local image; filelog by Compose service label, OTLP in, tail sampling, bounded queues, retention and label limits | 4 Docker skills, observability, distributed-logging | Locally: a backend line is in Loki with exactly the labels `service`, `role`, `level`, `home` and its ids in structured metadata; an error trace is always in Tempo, OK traces at ≈ 5% over 200 requests; with Loki stopped the collector drops and counts while the API's p95 does not change |
+| 2 | **Metrics.** Prometheus 3.15.0 with retention and size cap; node, nginx (edge `stub_status`) and blackbox exporters; DNS scraping of every role; self-metrics of the stack | 4 Docker skills, observability | Every target `up` locally, including both containers of a role started twice; series count measured and stated; internal probes green |
+| 3 | **Grafana and the links.** Grafana with three data sources linked; the edge on the `-otel` image with `inject`, its log line without address, agent and tokens; exemplars on slow and failed requests | 4 Docker skills, 4 Vercel skills (edge image in `frontend/`), fastapi, python-doctor, observability | Locally, one slow request: exemplar on the latency panel → trace edge → api → database → its log lines → back to the trace; backend and frontend gates pass |
+| 4 | **Privacy.** Collector redaction stage; backend canary test in CI; `checks/privacy-canary.sh` | fastapi, python-doctor, 4 Docker skills | No canary in Loki, Tempo or Prometheus after the identity flows; the test fails when a leak is planted on purpose (checked once, then removed) |
+| 5 | **Rules as code.** `objectives` and `monitors` on `FeatureModule`, the renderer and its CLI; sign-in and cabinet API SLOs, the four core monitors; `home` on the HTTP metric (ADR 0012 amended); ticket rules of §16.6 that have their metrics; Loki ruler for the edge; promtool tests; CI job "Observability" | fastapi, python-doctor, observability, 4 Docker skills | CI green; promtool tests show each alert firing and resolving; the catalog test fails on a rule naming an unknown metric |
+| 6 | **Alertmanager to Telegram** (ask for the bot and chat first). Routing of F5-D4, inhibition, `Watchdog`, escaped template with runbook and Grafana links; `docs/runbooks/alerts.md` with an entry per alert | 4 Docker skills, observability | Locally, one test alert of each class reaches the chat as F5-D4 says; an inhibited alert does not; an HTML-looking value arrives escaped |
+| 7 | **Dashboards as code** (§16.5): per journey that exists (sign-in, cabinet API), per process role, per home, per AI provider | 4 Docker skills, observability, dataviz | Each dashboard loads with data locally; the catalog test covers dashboard queries |
+| 8 | **The `alerting` slice** (F5-D5): `ai.user_spend.exceeded` and completed deletions | fastapi, python-doctor | A spend event yields one silent ticket and a completed deletion one batched silent notice, each with the admin link and no personal data; a redelivered event yields no second notice; Alertmanager down → retries, then dead letter |
+| 9 | **Debug switch and the guide.** §3.13; `docs/observability.md`: how a slice adds a metric, a span, an SLO, an invariant monitor, a dashboard panel and a runbook entry | fastapi, python-doctor | A switched user's DEBUG lines appear and stop at the TTL; another user's do not; with no switch the root level stays INFO |
+| 10 | **Staging.** The stack `include`d into staging's project; size-capped filesystems (§3.4); `grafana.shosai.tech` (F5-D1); the config image in `release.yml` and `release.sh` (F5-D6); the `Watchdog` heartbeat to Cronitor (F5-D2) — the owner is told when the first ping has passed, to set the monitor's schedule; runbook update | 4 Docker skills, observability | Definition of done: in Grafana one request is traced from NGINX through the API to the database with its logs; a test alert reaches Telegram; the UptimeRobot monitor goes down when the edge is stopped and Cronitor alerts when Alertmanager is stopped for 10 min; `privacy-canary.sh` passes on staging; memory in use measured against F5-D3 |
+
+## 5. Needed from the owner
+
+- ~~Decisions F5-D1…D6~~ — approved 2026-10-16; ~~the A record of `grafana.shosai.tech`~~ — added; ~~the UptimeRobot key and the Cronitor ping URL~~ — in the server's `.env`; ~~swap~~ — added.
+- Before step 6: a Telegram bot token and the chat id of the monitoring chat (to the server's `.env`, as for F4).
+- Optional, any time: a Telegram alert contact in UptimeRobot's interface (it cannot be created through the API) and assigned to `shosai.tech API health`; until then UptimeRobot alerts by email.
+- In step 10: the schedule of the Cronitor monitor `shosai-alerting` once its first ping has passed.
+- The host's growth to 16 GB RAM (F5-D3).
