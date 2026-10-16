@@ -1,5 +1,6 @@
 # Release to staging (F4 step 4, target architecture §17, ADR 0050). After CI passes on a push to
-# main, this workflow builds the backend and edge images of that commit, pushes them to GHCR and
+# main, this workflow builds the backend, edge and observability configuration (F5-D6) images of
+# that commit, pushes them to GHCR and
 # deploys them to https://shosai.tech over SSH. The SSH key may run only deploy/staging/release.sh;
 # the application's secrets stay on the host, so GitHub holds the key, the host's public key and
 # the cabinet's build variables only.
@@ -38,6 +39,7 @@ jobs:
     outputs:
       backend: ${{ steps.names.outputs.backend }}@${{ steps.backend.outputs.digest }}
       edge: ${{ steps.names.outputs.edge }}@${{ steps.edge.outputs.digest }}
+      observability: ${{ steps.names.outputs.observability }}@${{ steps.observability.outputs.digest }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -47,6 +49,7 @@ jobs:
           registry="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}"
           echo "backend=$registry/shosai-backend:$GITHUB_SHA" >> "$GITHUB_OUTPUT"
           echo "edge=$registry/shosai-edge:$GITHUB_SHA" >> "$GITHUB_OUTPUT"
+          echo "observability=$registry/shosai-observability:$GITHUB_SHA" >> "$GITHUB_OUTPUT"
       - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
       - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
@@ -83,6 +86,14 @@ jobs:
           secret-files: cabinet_env=${{ runner.temp }}/cabinet.env
           cache-from: type=gha,scope=edge
           cache-to: type=gha,mode=max,scope=edge
+      # Files only: the configs, rules and dashboards the observability stack mounts (F5-D6).
+      - name: Observability configuration image
+        id: observability
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: deploy/observability
+          push: true
+          tags: ${{ steps.names.outputs.observability }}
 
   deploy:
     name: Deploy to staging
@@ -104,6 +115,7 @@ jobs:
           REGISTRY_TOKEN: ${{ github.token }}
           BACKEND_IMAGE: ${{ needs.images.outputs.backend }}
           EDGE_IMAGE: ${{ needs.images.outputs.edge }}
+          OBSERVABILITY_IMAGE: ${{ needs.images.outputs.observability }}
         run: |
           umask 077
           ssh_dir="$RUNNER_TEMP/ssh"
@@ -113,4 +125,4 @@ jobs:
           printf '%s\n' "$REGISTRY_TOKEN" | ssh -i "$ssh_dir/key" \
             -o IdentitiesOnly=yes -o BatchMode=yes -o StrictHostKeyChecking=yes \
             -o UserKnownHostsFile="$ssh_dir/known_hosts" -o ServerAliveInterval=30 \
-            "deploy@$SSH_HOST" release "$GITHUB_ACTOR" "$BACKEND_IMAGE" "$EDGE_IMAGE"
+            "deploy@$SSH_HOST" release "$GITHUB_ACTOR" "$BACKEND_IMAGE" "$EDGE_IMAGE" "$OBSERVABILITY_IMAGE"

@@ -1,0 +1,81 @@
+# Стек наблюдаемости на staging (F5 шаг 10): отдельный проект Compose рядом с плоскостью, в
+# /srv/shosai/observability. Перезапуск или сбой плоскости не гасит мониторинг, который о нём сообщает.
+#
+#   cd /srv/shosai/observability && docker compose up -d     # COMPOSE_FILE и образ — в .env рядом
+#
+# Конфигурации, правила и дашборды — из образа конфигурации коммита (SHOSAI_OBSERVABILITY_IMAGE,
+# F5-D6), не с диска: release.sh меняет образ вместе с образами бэкенда и edge. Данные Loki и Tempo —
+# на своих файловых системах заданного размера (deploy/staging/telemetry-disks.sh, план F5 §3.4).
+
+name: shosai-staging-observability
+
+x-config: &config
+  type: image
+  source: ${SHOSAI_OBSERVABILITY_IMAGE:?образ конфигурации наблюдаемости не задан}
+
+services:
+  telemetry-volumes:
+    volumes:
+      - type: bind
+        source: /srv/shosai/telemetry/loki
+        target: /loki
+      - type: bind
+        source: /srv/shosai/telemetry/tempo
+        target: /tempo
+
+  collector:
+    volumes:
+      - <<: *config
+        target: /etc/otelcol/config.yaml
+        image: {subpath: collector/config.yaml}
+
+  loki:
+    volumes:
+      - <<: *config
+        target: /etc/loki/loki.yaml
+        image: {subpath: loki/loki.yaml}
+      - <<: *config
+        target: /etc/loki/rules/fake
+        image: {subpath: loki/rules}
+      - type: bind
+        source: /srv/shosai/telemetry/loki
+        target: /loki
+
+  tempo:
+    volumes:
+      - <<: *config
+        target: /etc/tempo/tempo.yaml
+        image: {subpath: tempo/tempo.yaml}
+      - type: bind
+        source: /srv/shosai/telemetry/tempo
+        target: /var/tempo
+
+  prometheus:
+    volumes:
+      - <<: *config
+        target: /etc/prometheus/prometheus.yml
+        image: {subpath: prometheus/prometheus.yml}
+      - <<: *config
+        target: /etc/prometheus/rules
+        image: {subpath: prometheus/rules}
+
+  blackbox:
+    volumes:
+      - <<: *config
+        target: /etc/blackbox/blackbox.yml
+        image: {subpath: blackbox/blackbox.yml}
+
+  alertmanager:
+    volumes:
+      - <<: *config
+        target: /etc/alertmanager/shosai
+        image: {subpath: alertmanager}
+
+  grafana:
+    volumes:
+      - <<: *config
+        target: /etc/grafana/provisioning
+        image: {subpath: grafana/provisioning}
+      - <<: *config
+        target: /etc/grafana/dashboards
+        image: {subpath: grafana/dashboards/generated}

@@ -7,7 +7,7 @@ What to do when staging needs a hand. How staging is built: [deploy/staging/READ
 ```bash
 cd /srv/shosai
 grep IMAGE .env                      # the images of the running release
-tail -n 5 releases/history.log       # time, result (released, rolled-back, failed), backend, edge
+tail -n 5 releases/history.log       # time, result (released, rolled-back, failed), backend, edge, observability
 docker compose ps                    # every service and its health
 curl -fsS https://shosai.tech/v1/health
 ```
@@ -76,6 +76,23 @@ Do it while no release runs (`flock -n /srv/shosai/releases/.lock true` succeeds
 ## TLS certificate
 
 `shosai-certificate.timer` renews it twice a day. Check: `systemctl list-timers shosai-certificate.timer` and `journalctl -u shosai-certificate.service`. Renew by hand: `sh /srv/shosai/deploy/certificate.sh renew /srv/shosai`.
+
+## Observability
+
+The observability stack is its own Compose project in `/srv/shosai/observability` (`shosai-staging-observability`), so a restart of the plane does not stop the monitoring that reports it. Its configs, rules and dashboards come from the release's configuration image (`SHOSAI_OBSERVABILITY_IMAGE` in its `.env`); its secrets are files under `/srv/shosai/secrets/{alertmanager,grafana}` rendered by `render-env.py`.
+
+```bash
+cd /srv/shosai/observability
+sudo -u deploy docker compose ps                 # every service and its health
+sudo cat /srv/shosai/secrets/grafana/admin-password   # Grafana's admin password, https://grafana.shosai.tech
+df -h /srv/shosai/telemetry/loki /srv/shosai/telemetry/tempo   # the size caps of Loki and Tempo
+```
+
+- **A release failed at «стек наблюдаемости».** Either a service did not become healthy (`docker compose logs --tail 100 <service>`) or the rules Prometheus or Loki loaded differ from the image's (the job log names the counts). The release put the previous configuration back.
+- **DEBUG lines of one person:** `sudo -u deploy docker compose -f /srv/shosai/compose.yaml exec api shosai observability debug --user <id> --minutes 15 --reason "…"` ([docs/observability.md](../observability.md)).
+- **Cronitor alerts that the heartbeat stopped** (`shosai-alerting`): Prometheus, Alertmanager or the host is down — start with `docker compose ps` here.
+- **UptimeRobot alerts** (`shosai.tech API health`): `https://shosai.tech/v1/health` failed from outside — the edge, the API or the network; see «What is running».
+- The Telegram bot, the chat and the heartbeat address come from `/root/shosai/.env` (`MONITORING_TELEGRAM_*`, `HEARTBEAT_PING_URL`): after a change run `render-env.py`, then `sudo -u deploy docker compose up -d --force-recreate alertmanager` here.
 
 ## Disk
 

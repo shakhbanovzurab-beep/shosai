@@ -92,4 +92,21 @@ if [ "$loaded" -ne "$expected" ]; then
   exit 1
 fi
 echo "Loki загрузил правил: $loaded из $expected"
+
+echo "== staging: образ конфигурации и подмена файлов (F5-D6)"
+image="shosai-observability:check-$$"
+docker build -q -t "$image" "$root" >/dev/null
+trap 'docker rm -f "$name" >/dev/null 2>&1 || true; docker image rm "$image" >/dev/null 2>&1 || true' EXIT
+staging=$(SHOSAI_OBSERVABILITY_IMAGE="$image" docker compose -f "$root/compose.yaml" \
+  -f "$root/compose.staging.yaml" config)
+# Ни один файл стека не монтируется с диска: всё — из образа конфигурации коммита.
+if printf '%s\n' "$staging" | grep -q "source: $root/"; then
+  echo "на staging с диска монтируются файлы репозитория:"
+  printf '%s\n' "$staging" | grep "source: $root/"
+  exit 1
+fi
+for subpath in $(printf '%s\n' "$staging" | sed -n 's/^ *subpath: //p' | sort -u); do
+  docker run --rm --network none --mount "type=image,source=$image,target=/c,image-subpath=$subpath" \
+    busybox:1.37.0 true || { echo "в образе конфигурации нет $subpath"; exit 1; }
+done
 echo "конфигурация стека в порядке"

@@ -82,9 +82,26 @@ docker compose up -d
 
 The certificate renews through `shosai-certificate.timer` (twice a day, `certificate.sh renew`), which copies it to `tls/edge` and reloads the edge.
 
+## Observability
+
+F5 ([plan](../../docs/plan/packages/F5-observability.md), step 10): the stack of [deploy/observability](../observability/README.md) runs as its own Compose project `shosai-staging-observability` in `/srv/shosai/observability`, on the plane's network, so a restart or failure of the plane does not stop the monitoring that reports it.
+
+| Path | What | From |
+|---|---|---|
+| `observability/compose.yaml`, `observability/compose.staging.yaml` | the stack; the staging file takes every config, rule and dashboard from the configuration image | `deploy/observability/` |
+| `observability/.env` | `COMPOSE_FILE` and `SHOSAI_OBSERVABILITY_IMAGE` | `render-env.py`, then the release |
+| `secrets/alertmanager/` | the monitoring bot, chat and heartbeat address (uid 65534) | `render-env.py` from `MONITORING_TELEGRAM_*`, `HEARTBEAT_PING_URL` |
+| `secrets/grafana/admin-password` | Grafana's admin password, generated once (uid 472) | `render-env.py` |
+| `telemetry/probe-targets/probes.yml` | the health probe through the edge and TCP to each home's database | `render-env.py` |
+| `telemetry/loki`, `telemetry/tempo` | 5 GB and 3 GB file systems (image files, systemd mount units): Loki and Tempo delete only by time, the file system caps their size | `telemetry-disks.sh` |
+
+- The plane's services log with the Compose labels, so the collector ships their lines; the roles send traces to `collector:4318`, the edge its root spans to `collector:4317`, and business alerts go to `alertmanager:9093` (`ALERTING_ENABLED=true`).
+- `grafana.shosai.tech` is a server of the edge with the same certificate (its second name, `certificate.sh expand`), proxied to `grafana:3000`, sign-in attempts limited to 10 a minute per address. The edge leaves the server out when `SHOSAI_GRAFANA_SERVER_NAME` is empty, as locally.
+- Set up, as root, after the plane: `sh $R/telemetry-disks.sh /srv/shosai`, then `install -d -o deploy -g deploy /srv/shosai/observability && install -o deploy -g deploy -m 640 /root/shosai/deploy/observability/compose.yaml /root/shosai/deploy/observability/compose.staging.yaml /srv/shosai/observability/`, `render-env.py` as above, `sh /srv/shosai/deploy/certificate.sh expand /srv/shosai`. The next release brings the configuration image and starts the stack.
+
 ## Release from CI
 
-[ADR 0050](../../docs/adr/0050-staging-release-from-ci.md). When CI passes on a push to `main` and the commit is still the head of `main`, [release.yml](../../.github/workflows/release.yml) builds both images, pushes them to GHCR as `ghcr.io/shakhbanovzurab-beep/shosai-<backend|edge>:<commit>` and calls the host over SSH. Releases queue; none is cancelled midway.
+[ADR 0050](../../docs/adr/0050-staging-release-from-ci.md). When CI passes on a push to `main` and the commit is still the head of `main`, [release.yml](../../.github/workflows/release.yml) builds the three images, pushes them to GHCR as `ghcr.io/shakhbanovzurab-beep/shosai-<backend|edge|observability>:<commit>` and calls the host over SSH. The observability image holds files only — the stack's configs, rules and dashboards (F5-D6). Releases queue; none is cancelled midway.
 
 The application's secrets never leave the host: `render-env.py` stays their only source. The GitHub environment `staging` holds only:
 
@@ -95,9 +112,9 @@ The application's secrets never leave the host: `render-env.py` stays their only
 | `STAGING_SSH_HOST` | variable | `shosai.tech` |
 | `STAGING_SSH_KNOWN_HOSTS` | variable | `shosai.tech ssh-ed25519 …`, the host's public key |
 
-The key's line in `/home/deploy/.ssh/authorized_keys` is `restrict,command="/srv/shosai/deploy/release.sh" ssh-ed25519 …`: the key runs nothing but [release.sh](release.sh). The script accepts only `release <actor> <backend image> <edge image>` — images of this repository's GHCR namespace with a commit tag and a digest, both from one commit — and reads the job's registry token from stdin; the token pulls the two images from a temporary Docker config and expires with the job.
+The key's line in `/home/deploy/.ssh/authorized_keys` is `restrict,command="/srv/shosai/deploy/release.sh" ssh-ed25519 …`: the key runs nothing but [release.sh](release.sh). The script accepts only `release <actor> <backend image> <edge image> [<observability image>]` — images of this repository's GHCR namespace with a commit tag and a digest, all from one commit — and reads the job's registry token from stdin; the token pulls the images from a temporary Docker config and expires with the job.
 
-`release.sh` follows §17: migrations of both homes, then the task consumers and the scheduler, `api`, `ws` and the edge, each waiting until healthy, then `/v1/health` through the edge. `api` and `ws` are handed over with no downtime: a second container with the new image starts next to the old one, becomes healthy, the edge learns its address (it re-resolves every 10 s), and only then the old one gets SIGTERM; a request that did not reach it is retried on the new one. The edge is recreated in place when its image changes (every cabinet change): its fixed address and host ports allow one container, so connections are refused for about a second (0.7–0.9 s measured on 2026-10-16). A failed step puts the previous images back and fails the job; migrations stay (expand-only). In `/srv/shosai/releases`: `previous.env` (the images before the last release), `history.log` (one line per release: time, result, images). GHCR images other than the current and the previous release are removed from the host.
+`release.sh` follows §17: the observability stack with the commit's configuration image — the release fails unless Prometheus and Loki load exactly the rules the image holds — then migrations of both homes, then the task consumers and the scheduler, `api`, `ws` and the edge, each waiting until healthy, then `/v1/health` through the edge. `api` and `ws` are handed over with no downtime: a second container with the new image starts next to the old one, becomes healthy, the edge learns its address (it re-resolves every 10 s), and only then the old one gets SIGTERM; a request that did not reach it is retried on the new one. The edge is recreated in place when its image changes (every cabinet change): its fixed address and host ports allow one container, so connections are refused for about a second (0.7–0.9 s measured on 2026-10-16). A failed step puts the previous images back and fails the job; migrations stay (expand-only). In `/srv/shosai/releases`: `previous.env` (the images before the last release), `history.log` (one line per release: time, result, images). GHCR images other than the current and the previous release are removed from the host.
 
 `sudo -u deploy /srv/shosai/deploy/release.sh rollback` returns to `previous.env` the same way, without migrations; the CI key cannot run it. What to do when something goes wrong: [the staging runbook](../../docs/runbooks/staging.md).
 

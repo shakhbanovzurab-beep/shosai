@@ -1,0 +1,14 @@
+# Файловая система данных Loki или Tempo на staging (deploy/staging/telemetry-disks.sh подставляет
+# файл-образ и точку монтирования; имя юнита — путь точки монтирования).
+[Unit]
+Description=Shosai telemetry data (size cap)
+Before=docker.service
+
+[Mount]
+What=__IMAGE__
+Where=__WHERE__
+Type=ext4
+Options=loop,noatime,nodev,nosuid,noexec
+
+[Install]
+WantedBy=multi-user.target

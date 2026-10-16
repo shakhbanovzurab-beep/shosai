@@ -8,7 +8,10 @@ Usage, as root on the staging host:
 The owner's file keeps some draft-era names (`SMTP_USER`, `SMTP_TLS_MODE`, the `*_INFO`
 mailbox); this script maps them to the settings of `.env.example`, builds the database
 addresses with `sslmode=verify-full`, and generates the secrets that only staging uses
-(Valkey, the cache, Qdrant, unsubscribe links, the admin sign-in address). Generated secrets
+(Valkey, the cache, Qdrant, unsubscribe links, the admin sign-in address, Grafana's admin
+password). It also writes the observability stack's files (F5 step 10): Alertmanager's bot,
+chat and heartbeat address, Grafana's password, the probe targets and the stack's `.env`.
+Generated secrets
 are kept in `secrets/generated.env` and reused on every later run, so rendering again never
 rotates them. No value is ever printed. Every written file is mode 600, owned by `deploy`.
 """
@@ -35,7 +38,12 @@ GENERATED = (
     "QDRANT_API_KEY",
     "EMAIL_LINK_SECRET",
     "ADMIN_LOGIN_SEGMENT",
+    "GRAFANA_ADMIN_PASSWORD",
 )
+# Пользователи процессов стека наблюдаемости в их образах: Alertmanager и Prometheus — nobody.
+NOBODY = (65534, 65534)
+GRAFANA = (472, 0)
+OBSERVABILITY_FILES = "compose.yaml:compose.staging.yaml"
 # Переменные, которые переходят из файла владельца как есть.
 COPIED = (
     "FERNET_KEY",
@@ -160,6 +168,10 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
         f"{quote(generated['REDIS_CACHE_PASSWORD'], safe='')}@redis-cache:6379/0",
         "QDRANT_URL": "http://qdrant:6333",
         "QDRANT_API_KEY": generated["QDRANT_API_KEY"],
+        # Трейсы ролей — в коллектор стека наблюдаемости (F5); оповещения о бизнес-событиях — в его
+        # Alertmanager (ADR 0052).
+        "OTEL_EXPORTER_OTLP_ENDPOINT": "http://collector:4318",
+        "ALERTING_ENABLED": "true",
     }
     env |= {key: source[key] for key in COPIED if source.get(key)}
     for home in ("RU", "EU"):
@@ -168,6 +180,55 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
             f"pgbouncer-{home.lower()}", "6432", INTERNAL_CA,
         )  # fmt: skip
     return env
+
+
+def probe_targets(source: dict[str, str], domain: str) -> str:
+    """Prometheus file_sd targets: health through the edge and each home's database."""
+    lines = [
+        "# Пробы staging (render-env.py): здоровье через edge и TCP к базе дома.",
+        f'- targets: ["https://{domain}/v1/health"]',
+        "  labels: {module: https_health, probe: edge_health}",
+    ]
+    for home in ("RU", "EU"):
+        host = source[f"HOME_{home}_DATABASE_HOST"]
+        port = source.get(f"HOME_{home}_DATABASE_PORT", "5432")
+        address = f"[{host}]:{port}" if ":" in host else f"{host}:{port}"
+        lines += [
+            f'- targets: ["{address}"]',
+            f"  labels: {{module: tcp_connect, probe: home_database, home: {home.lower()}}}",
+        ]
+    return "\n".join(lines) + "\n"
+
+
+def write_observability(source: dict[str, str], generated: dict[str, str], target: Path,
+                        owner: tuple[int, int]) -> None:  # fmt: skip
+    """The stack's secrets, probe targets and `.env`; nothing is written without its source."""
+    alertmanager = target / "secrets" / "alertmanager"
+    alertmanager.mkdir(parents=True, exist_ok=True)
+    for name, key in (
+        ("telegram-bot-token", "MONITORING_TELEGRAM_BOT_TOKEN"),
+        ("telegram-chat-id", "MONITORING_TELEGRAM_CHAT_ID"),
+        ("heartbeat-url", "HEARTBEAT_PING_URL"),
+    ):
+        if source.get(key):
+            # Без перевода строки: Alertmanager читает файл целиком (как alertmanager-secrets.sh).
+            write_private(alertmanager / name, source[key], NOBODY)
+    alertmanager.chmod(0o700)
+    os.chown(alertmanager, *NOBODY)
+    grafana = target / "secrets" / "grafana"
+    write_private(grafana / "admin-password", generated["GRAFANA_ADMIN_PASSWORD"], GRAFANA)
+    grafana.chmod(0o700)
+    os.chown(grafana, *GRAFANA)
+    write_private(target / "telemetry" / "probe-targets" / "probes.yml",
+                  probe_targets(source, "shosai.tech"), NOBODY, 0o644)  # fmt: skip
+    stack = target / "observability" / ".env"
+    images = read_env(stack) if stack.exists() else {}
+    write_private(stack, render({
+        "COMPOSE_FILE": OBSERVABILITY_FILES,
+        "SHOSAI_OBSERVABILITY_IMAGE": images.get(
+            "SHOSAI_OBSERVABILITY_IMAGE", "shosai-observability:staging"
+        ),
+    }), owner)  # fmt: skip
 
 
 def main(source_path: Path, target: Path) -> None:
@@ -234,6 +295,7 @@ def main(source_path: Path, target: Path) -> None:
         }),
         owner,
     )  # fmt: skip
+    write_observability(source, generated, target, owner)
 
 
 if __name__ == "__main__":

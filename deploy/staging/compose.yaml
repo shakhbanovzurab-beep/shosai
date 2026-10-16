@@ -15,11 +15,14 @@ x-service-defaults: &service-defaults
   read_only: true
   security_opt:
     - no-new-privileges:true
+  # Метки Compose в каждой строке журнала: по ним коллектор стека наблюдаемости узнаёт проект и
+  # службу (deploy/observability/README.md, «Logs»).
   logging:
     driver: json-file
     options:
       max-size: "10m"
       max-file: "5"
+      labels: "com.docker.compose.project,com.docker.compose.service"
   networks:
     - plane
 
@@ -92,6 +95,10 @@ services:
       SHOSAI_TLS_CERTIFICATE_KEY: /run/shosai-edge-tls/privkey.pem
       SHOSAI_CSP_STORAGE_ORIGINS: ${SHOSAI_CSP_STORAGE_ORIGINS:-}
       SHOSAI_ROBOTS_TAG: "noindex, nofollow"
+      # Корневой span каждого запроса — в коллектор стека наблюдаемости (F5); Grafana — на своём адресе
+      # с тем же сертификатом (F5-D1).
+      SHOSAI_OTEL_TRACE: "on"
+      SHOSAI_GRAFANA_SERVER_NAME: grafana.${SHOSAI_SERVER_NAME}
     tmpfs:
       - /tmp
     volumes:

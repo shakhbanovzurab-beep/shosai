@@ -1,0 +1,68 @@
+# Grafana стека наблюдаемости на своём адресе (F5-D1): тот же сертификат, что у shosai.tech (имя
+# Grafana в нём вторым), вход в Grafana — не чаще 10 попыток в минуту с адреса. Блок есть, только
+# когда задан SHOSAI_GRAFANA_SERVER_NAME: без него entrypoint (25-shosai-optional-servers.sh) удаляет
+# этот файл, и локальный edge работает как раньше.
+#   SHOSAI_GRAFANA_SERVER_NAME   адрес Grafana (staging: grafana.shosai.tech);
+#   SHOSAI_GRAFANA_UPSTREAM      Grafana, host:port в сети плоскости (grafana:3000).
+
+limit_req_zone $binary_remote_addr zone=shosai_grafana_login:1m rate=10r/m;
+
+# Стек наблюдаемости — отдельный проект Compose: Grafana может не работать, когда edge стартует.
+upstream shosai_grafana {
+    zone shosai_grafana 64k;
+    server ${SHOSAI_GRAFANA_UPSTREAM} resolve;
+    keepalive 8;
+}
+
+server {
+    listen 8443 ssl;
+    listen [::]:8443 ssl;
+    http2 on;
+    server_name ${SHOSAI_GRAFANA_SERVER_NAME};
+
+    ssl_certificate ${SHOSAI_TLS_CERTIFICATE};
+    ssl_certificate_key ${SHOSAI_TLS_CERTIFICATE_KEY};
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_session_tickets off;
+
+    limit_req zone=shosai_per_ip burst=100 nodelay;
+    limit_conn shosai_conn_per_ip 100;
+
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header X-Robots-Tag "noindex, nofollow" always;
+
+    # Попытки входа: перебор пароля упирается в 10 в минуту с адреса, сверх — 429.
+    location = /login {
+        limit_req zone=shosai_grafana_login burst=5 nodelay;
+        proxy_pass http://shosai_grafana;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        include /etc/nginx/shosai/proxy-headers.conf;
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 30s;
+    }
+
+    # Живые обновления панелей Grafana идут через WebSocket.
+    location /api/live/ {
+        proxy_pass http://shosai_grafana;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $shosai_connection_upgrade;
+        include /etc/nginx/shosai/proxy-headers.conf;
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 3600s;
+    }
+
+    location / {
+        proxy_pass http://shosai_grafana;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        include /etc/nginx/shosai/proxy-headers.conf;
+        proxy_connect_timeout 2s;
+        # Тяжёлые запросы панелей за 30 дней идут дольше запросов кабинета.
+        proxy_read_timeout 120s;
+    }
+}

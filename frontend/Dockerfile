@@ -40,6 +40,7 @@ COPY --link deploy/staging/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --link deploy/staging/nginx/templates/ /etc/nginx/templates/
 COPY --link deploy/staging/nginx/shosai/ /etc/nginx/shosai/
 COPY --link --chmod=755 deploy/staging/nginx/entrypoint/05-shosai-rendered-dir.sh /docker-entrypoint.d/
+COPY --link --chmod=755 deploy/staging/nginx/entrypoint/25-shosai-optional-servers.sh /docker-entrypoint.d/
 COPY --link --from=build /out/csp-hashes.conf /etc/nginx/shosai/csp-hashes.conf
 COPY --link --from=build /src/frontend/dist/ /usr/share/nginx/html/app/
 ENV NGINX_ENVSUBST_OUTPUT_DIR=/tmp/nginx \
@@ -49,6 +50,8 @@ ENV NGINX_ENVSUBST_OUTPUT_DIR=/tmp/nginx \
     SHOSAI_RESOLVER=127.0.0.11 \
     SHOSAI_OTEL_ENDPOINT=collector:4317 \
     SHOSAI_OTEL_TRACE=off \
+    SHOSAI_GRAFANA_SERVER_NAME="" \
+    SHOSAI_GRAFANA_UPSTREAM=grafana:3000 \
     SHOSAI_CSP_STORAGE_ORIGINS="" \
     SHOSAI_ROBOTS_TAG="noindex, nofollow"
 # Пользователь nginx базового образа, без root: порты выше 1024, запись только в /tmp.

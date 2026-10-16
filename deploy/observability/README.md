@@ -1,6 +1,6 @@
 # Observability stack
 
-The stack of target architecture §16, built step by step by [F5](../../docs/plan/packages/F5-observability.md). One definition serves the local environment (with [compose.local.yaml](compose.local.yaml), see [docs/development.md](../../docs/development.md), "Observability") and staging (step 10 of the plan).
+The stack of target architecture §16, built step by step by [F5](../../docs/plan/packages/F5-observability.md). One definition serves the local environment (with [compose.local.yaml](compose.local.yaml), see [docs/development.md](../../docs/development.md), "Observability") and staging, where it is its own Compose project `shosai-staging-observability` next to the plane and takes every config, rule and dashboard from the release's configuration image ([compose.staging.yaml](compose.staging.yaml), [deploy/staging/README.md](../staging/README.md#observability)).
 
 | Service | Image | Role |
 |---|---|---|

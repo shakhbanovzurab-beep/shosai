@@ -53,7 +53,7 @@ services:
       - DAC_READ_SEARCH
     command: ["--config=/etc/otelcol/config.yaml"]
     environment:
-      SHOSAI_LOG_PROJECTS: ${SHOSAI_LOG_PROJECTS:-^shosai-staging$$}
+      SHOSAI_LOG_PROJECTS: ${SHOSAI_LOG_PROJECTS:-^shosai-staging(-observability)?$$}
     volumes:
       - ./collector/config.yaml:/etc/otelcol/config.yaml:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro

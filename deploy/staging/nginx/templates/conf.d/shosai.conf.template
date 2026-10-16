@@ -8,6 +8,7 @@
 #   SHOSAI_RESOLVER              DNS, у которого edge переспрашивает адреса api и ws (Docker: 127.0.0.11);
 #   SHOSAI_OTEL_ENDPOINT         коллектор OpenTelemetry, host:port его OTLP/gRPC (otel.conf.template);
 #   SHOSAI_OTEL_TRACE            on — трейсы edge в коллектор, off — без трейсов (otel.conf.template).
+#   SHOSAI_GRAFANA_SERVER_NAME, SHOSAI_GRAFANA_UPSTREAM — адрес Grafana и её процесс (grafana.conf.template).
 
 # Процессы плоскости пересоздаются при выкладке и получают новые адреса: edge переспрашивает их у DNS, а не
 # держит адрес, полученный при старте (иначе после выкладки бэкенда — 502).
