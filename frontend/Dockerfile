@@ -50,7 +50,8 @@ ENV NGINX_ENVSUBST_OUTPUT_DIR=/tmp/nginx \
     SHOSAI_ROBOTS_TAG="noindex, nofollow"
 # Пользователь nginx базового образа, без root: порты выше 1024, запись только в /tmp.
 USER 101:101
-# 8080 — HTTP (ACME и переход на HTTPS), 8443 — HTTPS; 8081 на 127.0.0.1 — проверка здоровья.
+# 8080 — HTTP (ACME и переход на HTTPS), 8443 — HTTPS; 8081 на 127.0.0.1 — проверка здоровья;
+# 8082 — stub_status для nginx-экспортёра, только изнутри плоскости.
 EXPOSE 8080 8443
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
     CMD ["wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8081/health"]

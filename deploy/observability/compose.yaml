@@ -4,8 +4,8 @@
 # Стек подключается к сети плоскости, имя которой задаёт SHOSAI_TELEMETRY_NETWORK; журналы каких
 # проектов Compose отправлять, задаёт SHOSAI_LOG_PROJECTS (README рядом).
 #
-# Образы без оболочки: у Loki и коллектора нет команды проверки здоровья, их живость видит
-# Prometheus по `up` (шаг 2); у Tempo она есть (`-health`).
+# У Loki, коллектора и nginx-экспортёра в образах нет ни оболочки, ни команды проверки здоровья:
+# их живость Prometheus видит по `up`. У Tempo проверка своя (`-health`), у остальных — wget образа.
 
 x-telemetry-defaults: &telemetry-defaults
   restart: unless-stopped
@@ -109,10 +109,97 @@ services:
         limits:
           memory: 320m
 
+  prometheus:
+    <<: *telemetry-defaults
+    image: prom/prometheus:v3.15.0
+    # Хранение — 30 дней или до потолка размера, что наступит раньше (§16.1, F5-D3).
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=30d
+      - --storage.tsdb.retention.size=${PROMETHEUS_RETENTION_SIZE:-5GB}
+      - --enable-feature=exemplar-storage
+    environment:
+      SHOSAI_ENVIRONMENT: ${SHOSAI_ENVIRONMENT:-staging}
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ${SHOSAI_PROBE_TARGETS_DIR:-/srv/shosai/telemetry/probe-targets}:/etc/prometheus/targets:ro
+      - prometheus-data:/prometheus
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:9090/-/ready"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_interval: 2s
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 384m
+
+  # Хост: диски, память, процессор (тикет диска на 80% — §14 правило 11). Корень хоста — только
+  # на чтение. Сетевые счётчики выключены: в сети контейнера они показывали бы только её.
+  node-exporter:
+    <<: *telemetry-defaults
+    image: prom/node-exporter:v1.12.1
+    command:
+      - --path.rootfs=/host
+      - --collector.filesystem.mount-points-exclude=^/(dev|proc|run|sys|var/lib/docker/.+|var/lib/containerd/.+)($$|/)
+      - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|nsfs|overlay|proc|pstore|securityfs|squashfs|sysfs|tracefs|tmpfs)$$
+      - --no-collector.netdev
+      - --no-collector.netstat
+      - --no-collector.netclass
+      - --no-collector.sockstat
+      - --no-collector.arp
+    volumes:
+      - /:/host:ro,rslave
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:9100/metrics"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_interval: 2s
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 48m
+
+  # Соединения edge из stub_status на внутреннем порту 8082. Оболочки в образе нет.
+  nginx-exporter:
+    <<: *telemetry-defaults
+    image: nginx/nginx-prometheus-exporter:1.5.3
+    command: ["--nginx.scrape-uri=http://edge:8082/stub_status"]
+    deploy:
+      resources:
+        limits:
+          memory: 32m
+
+  blackbox:
+    <<: *telemetry-defaults
+    image: prom/blackbox-exporter:v0.28.0
+    # Образ по умолчанию запускается от root; пробам HTTP и TCP права не нужны.
+    user: "65534:65534"
+    command: ["--config.file=/etc/blackbox/blackbox.yml"]
+    volumes:
+      - ./blackbox/blackbox.yml:/etc/blackbox/blackbox.yml:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:9115/-/healthy"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_interval: 2s
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 32m
+
 volumes:
   collector-storage:
   loki-data:
   tempo-data:
+  prometheus-data:
 
 networks:
   telemetry:

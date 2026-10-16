@@ -5,8 +5,10 @@
 # Для обычной разработки роли по-прежнему запускаются через uv.
 #
 # Настройки — локальные значения из .env.example; адреса служб заменены именами в сети
-# shosai-local_default. По умолчанию поднимается только api; остальные роли — профиль all-roles.
+# shosai-local_default. По умолчанию поднимаются api и edge; остальные роли — профиль all-roles.
+# Edge нужен свой самоподписанный сертификат: один раз deploy/local/edge-certificate.sh.
 #
+#   deploy/local/edge-certificate.sh
 #   docker compose -f deploy/local/compose.app.yaml up -d --build
 #   docker compose -f deploy/local/compose.app.yaml --profile all-roles up -d
 
@@ -103,6 +105,45 @@ services:
     <<: *backend
     profiles: ["all-roles"]
     command: ["scheduler"]
+
+  # Edge staging с кабинетом, собранный из frontend/Dockerfile; HTTPS на 127.0.0.1:18443.
+  edge:
+    image: ${SHOSAI_EDGE_IMAGE:-shosai-edge:local}
+    build:
+      context: ../..
+      dockerfile: frontend/Dockerfile
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    tmpfs:
+      - /tmp
+    environment:
+      SHOSAI_SERVER_NAME: localhost
+      SHOSAI_TLS_CERTIFICATE: /run/shosai-edge-tls/edge.crt
+      SHOSAI_TLS_CERTIFICATE_KEY: /run/shosai-edge-tls/edge.key
+      SHOSAI_ROBOTS_TAG: "noindex, nofollow"
+    volumes:
+      - ./tls:/run/shosai-edge-tls:ro
+    ports:
+      - "127.0.0.1:18443:8443"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+        labels: "com.docker.compose.project,com.docker.compose.service"
+    networks:
+      - local
+    depends_on:
+      api:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 128m
 
 networks:
   local:

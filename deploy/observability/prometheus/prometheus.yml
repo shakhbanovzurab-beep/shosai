@@ -1,0 +1,106 @@
+# Prometheus Shosai (target architecture §16.1, §16.7; план F5 §3.7).
+#
+# Метки ограничены: роль, очередь, дом, проба. Пользователи, компании и сессии в метки не попадают.
+# Каждую роль бэкенда Prometheus находит по DNS Docker: во время передачи выкладки за именем службы
+# стоят два контейнера, и опрашиваются оба. Правила (шаг 5) агрегируют по экземплярам явно.
+# Конфигурация перечитывается по SIGHUP; HTTP-API жизненного цикла выключен.
+
+global:
+  scrape_interval: 15s
+  scrape_timeout: 10s
+  evaluation_interval: 15s
+  external_labels:
+    environment: ${SHOSAI_ENVIRONMENT}
+
+scrape_configs:
+  # --- Роли бэкенда: служебный порт OPS_PORT каждой роли (core/web/ops.py) ---
+  - job_name: api
+    dns_sd_configs:
+      - names: [api]
+        type: A
+        port: 9100
+        refresh_interval: 15s
+    relabel_configs:
+      - target_label: role
+        replacement: api
+
+  - job_name: ws
+    dns_sd_configs:
+      - names: [ws]
+        type: A
+        port: 9100
+        refresh_interval: 15s
+    relabel_configs:
+      - target_label: role
+        replacement: ws
+
+  - job_name: workers
+    dns_sd_configs:
+      - names: [workers-critical, workers-default, workers-bulk, workers-meeting]
+        type: A
+        port: 9100
+        refresh_interval: 15s
+    relabel_configs:
+      - target_label: role
+        replacement: workers
+      - source_labels: [__meta_dns_name]
+        regex: workers-(.+)
+        target_label: queue
+
+  - job_name: scheduler
+    dns_sd_configs:
+      - names: [scheduler]
+        type: A
+        port: 9100
+        refresh_interval: 15s
+    relabel_configs:
+      - target_label: role
+        replacement: scheduler
+
+  # --- Сам стек ---
+  - job_name: prometheus
+    static_configs:
+      - targets: [localhost:9090]
+
+  - job_name: collector
+    static_configs:
+      - targets: [collector:8888]
+
+  - job_name: loki
+    static_configs:
+      - targets: [loki:3100]
+
+  - job_name: tempo
+    static_configs:
+      - targets: [tempo:3200]
+
+  - job_name: blackbox
+    static_configs:
+      - targets: [blackbox:9115]
+
+  # --- Хост и edge ---
+  - job_name: node
+    static_configs:
+      - targets: [node-exporter:9100]
+
+  - job_name: nginx
+    static_configs:
+      - targets: [nginx-exporter:9113]
+
+  # --- Пробы изнутри плоскости; внешние пробы — UptimeRobot (F5-D2) ---
+  # Цели и модули — в файлах каталога targets: локальные лежат в репозитории, цели staging
+  # (адреса баз домов) рендерятся на хосте.
+  - job_name: probes
+    metrics_path: /probe
+    scrape_interval: 30s
+    file_sd_configs:
+      - files: [/etc/prometheus/targets/*.yml]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [module]
+        target_label: __param_module
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox:9115

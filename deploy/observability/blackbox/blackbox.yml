@@ -1,0 +1,36 @@
+# Модули blackbox exporter Shosai (target architecture §16.6; план F5 §3.7).
+#
+# https_health — /v1/health через edge с действующим сертификатом: проба заодно публикует срок
+# сертификата (probe_ssl_earliest_cert_expiry), по которому тикет приходит за 21 и за 7 дней.
+# tcp_connect — время соединения с базой дома; для российского дома это задержка канала (§16.6).
+# local_https_health — то же, что https_health, для локального edge с самоподписанным сертификатом;
+# на staging не используется.
+
+modules:
+  https_health:
+    prober: http
+    timeout: 5s
+    http:
+      method: GET
+      valid_status_codes: [200]
+      fail_if_not_ssl: true
+      follow_redirects: false
+      preferred_ip_protocol: ip4
+
+  local_https_health:
+    prober: http
+    timeout: 5s
+    http:
+      method: GET
+      valid_status_codes: [200]
+      fail_if_not_ssl: true
+      follow_redirects: false
+      preferred_ip_protocol: ip4
+      tls_config:
+        insecure_skip_verify: true
+
+  tcp_connect:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: ip4

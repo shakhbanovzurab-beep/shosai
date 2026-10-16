@@ -2,6 +2,8 @@
 .env
 .env.*
 !.env.example
+# Self-signed certificate of the local edge (deploy/local/edge-certificate.sh)
+deploy/local/tls/
 
 # Generated tool state
 .repowise/

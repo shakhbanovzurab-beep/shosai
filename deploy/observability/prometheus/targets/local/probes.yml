@@ -1,0 +1,17 @@
+# Пробы локального окружения: edge из deploy/local/compose.app.yaml и серверы домов compose.dev.yaml.
+- targets: ["https://edge:8443/v1/health"]
+  labels:
+    module: local_https_health
+    probe: edge_health
+
+- targets: ["postgres-ru:5432"]
+  labels:
+    module: tcp_connect
+    probe: home_database
+    home: ru
+
+- targets: ["postgres-eu:5432"]
+  labels:
+    module: tcp_connect
+    probe: home_database
+    home: eu

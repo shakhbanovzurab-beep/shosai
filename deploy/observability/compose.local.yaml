@@ -2,7 +2,7 @@
 #
 # Стек входит в сеть локального окружения; отправляются журналы проектов shosai-local и
 # shosai-local-*. Порты — только на 127.0.0.1: OTLP для процессов, запущенных через uv,
-# и API Loki и Tempo для проверок.
+# и API Loki, Tempo и Prometheus для проверок. Цели проб — локальные (prometheus/targets/local).
 
 services:
   collector:
@@ -19,6 +19,14 @@ services:
   tempo:
     ports:
       - "127.0.0.1:3200:3200"
+
+  prometheus:
+    environment:
+      SHOSAI_ENVIRONMENT: local
+    volumes:
+      - ./prometheus/targets/local:/etc/prometheus/targets:ro
+    ports:
+      - "127.0.0.1:9090:9090"
 
 networks:
   telemetry:

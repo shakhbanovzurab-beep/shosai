@@ -123,14 +123,17 @@ The stack of target architecture §16 ([F5 plan](plan/packages/F5-observability.
 
 ```bash
 docker compose -f deploy/observability/compose.yaml -f deploy/observability/compose.local.yaml \
-  -p shosai-local-observability up -d                                   # collector, Loki, Tempo
-docker compose -f deploy/local/compose.app.yaml up -d --build           # the api role from a local image
+  -p shosai-local-observability up -d                                   # the stack
+deploy/local/edge-certificate.sh                                        # once: the local edge's certificate
+docker compose -f deploy/local/compose.app.yaml up -d --build           # api and edge from local images
 docker compose -f deploy/local/compose.app.yaml --profile all-roles up -d   # every role
 ```
 
 - Logs reach Loki the way they do on staging: a container's stdout → json-file → the collector. Only containers of the projects `shosai-local` and `shosai-local-*` whose log options carry the Compose labels are shipped — [deploy/local/compose.app.yaml](../deploy/local/compose.app.yaml) runs the backend roles that way, on `127.0.0.1:18000`, with the local values of `.env.example`.
 - A role run with uv sends its traces to the collector with `OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:4318`; its logs stay in the terminal.
-- Loki answers on `127.0.0.1:3100`, Tempo on `127.0.0.1:3200`, the collector's own metrics on `collector:8888` inside the network. Grafana comes with F5 step 3.
+- The edge of staging, built with the cabinet from `frontend/Dockerfile`, answers on `https://127.0.0.1:18443` with a self-signed certificate (`deploy/local/tls/`, ignored by Git).
+- Loki answers on `127.0.0.1:3100`, Tempo on `127.0.0.1:3200`, Prometheus on `127.0.0.1:9090` (targets at `/targets`); the collector's own metrics are on `collector:8888` inside the network. Grafana comes with F5 step 3.
+- Prometheus finds the roles by their service names: a role that is not running has no target, and Prometheus logs a DNS error for it every 15 s.
 - Stop with `docker compose -p shosai-local-observability down` and `docker compose -p shosai-local-app down`; the stored telemetry stays in the project's volumes.
 
 ## Run the frontend
