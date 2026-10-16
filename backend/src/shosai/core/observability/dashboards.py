@@ -20,8 +20,6 @@ from shosai.core.observability.grafana import (
     Series,
     dashboard,
     row,
-    share,
-    status,
 )
 from shosai.core.observability.objectives import (
     EventRatio,
@@ -31,6 +29,7 @@ from shosai.core.observability.objectives import (
     ServiceLevelObjective,
 )
 from shosai.core.observability.rule_files import INVARIANTS_DASHBOARD, journey_uid, recorded
+from shosai.core.observability.tiles import share, status
 
 RATE_WINDOW = "5m"
 # По две плитки в ряд: название правила — целое предложение и не должно обрезаться.

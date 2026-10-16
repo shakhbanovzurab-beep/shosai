@@ -26,8 +26,8 @@ from shosai.core.observability.grafana import (
     Series,
     dashboard,
     row,
-    status,
 )
+from shosai.core.observability.tiles import status
 
 HTTP = "http_server_request_duration_seconds"
 ROLES = {

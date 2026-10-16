@@ -3,8 +3,8 @@
 The owner reads them, so everything a person sees is plain Russian: titles, descriptions,
 axis labels, legends, units. Series take four validated categorical colors in fixed order —
 they pass the colour-blindness, lightness and contrast checks on Grafana's light and dark
-surfaces — one query per series and at most four series per chart. A status tile says its
-state in words with a sign (Russian "no ✓", "yes ✗"); its color only reinforces the words.
+surfaces — one query per series and at most four series per chart. Single-number tiles
+are in `tiles.py`.
 
 Hovering a chart lists every line's value at that moment, highest first, and the charts of a
 dashboard share one crosshair. A promise is a dashed line over a faint red zone that the
@@ -26,15 +26,10 @@ REF_IDS = "ABCD"
 GRID_WIDTH = 24
 # Ширина и высота панелей в клетках сетки Grafana (24 в строке, клетка ~30 px высотой).
 CHART = (12, 9)
-SHARE_TILE = (6, 9)
-SMALL_TILE = (8, 5)
 # Ось держит в виду и пунктир обещания, и запас над ним.
 LIMIT_HEADROOM = 1.25
 ROW_HEIGHT = 1
 NO_DATA = "нет данных"
-NEVER = 1e15
-# Цвет без данных: фон панели. Пороги начинаются с -NEVER, поэтому ему достаётся только пустота.
-UNKNOWN = "transparent"
 
 type Panel = dict[str, Any]
 
@@ -151,111 +146,6 @@ def chart_panel(spec: Chart) -> Panel:
             "tooltip": {"mode": "multi", "sort": "desc"},
         },
     }
-
-
-@dataclass(frozen=True, slots=True)
-class Tile:
-    """A single-number tile; `options` set its unit, thresholds and mappings.
-
-    `trend` draws the value over the dashboard's range under the number. Without data the
-    tile says so in words and takes no status color: no data is not a verdict.
-    """
-
-    title: str
-    description: str
-    expr: str
-    options: dict[str, Any]
-    size: tuple[int, int] = SMALL_TILE
-    trend: bool = False
-
-    @property
-    def verdict(self) -> bool:
-        """Whether the tile's color judges the value (thresholds) rather than names it."""
-        return bool(self.options.get("color", {}).get("mode") == "thresholds")
-
-    def panel(self) -> Panel:
-        """The tile as a Grafana stat panel."""
-        query: dict[str, Any] = {"refId": "A", "datasource": PROMETHEUS, "expr": self.expr}
-        query |= {"range": True} if self.trend else {"instant": True}
-        return {
-            "type": "stat",
-            "gridPos": {"w": self.size[0], "h": self.size[1]},
-            "title": self.title,
-            "description": self.description,
-            "datasource": PROMETHEUS,
-            "targets": [query],
-            "fieldConfig": {"defaults": {"noValue": NO_DATA, **self.options}, "overrides": []},
-            "options": {
-                # Фон красит только вердикт по порогам; просто число окрашено, но не залито.
-                "colorMode": "background" if self.verdict else "value",
-                "graphMode": "area" if self.trend else "none",
-                "textMode": "value",
-                "justifyMode": "center",
-                "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": False},
-            },
-        }
-
-
-def text_range(low: float, high: float, text: str) -> dict[str, Any]:
-    """A value mapping: values from `low` to `high` read as `text`."""
-    return {"type": "range", "options": {"from": low, "to": high, "result": {"text": text}}}
-
-
-def status(
-    title: str,
-    description: str,
-    expr: str,
-    *,
-    healthy_at_most: float = 0,
-    size: tuple[int, int] = SMALL_TILE,
-) -> Panel:
-    """A green "no" tile while `expr` stays at or under `healthy_at_most`, a red "yes" above."""
-    above = healthy_at_most + 1e-9
-    return Tile(
-        title,
-        description,
-        expr,
-        {
-            "color": {"mode": "thresholds"},
-            "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                    {"color": UNKNOWN, "value": None},
-                    {"color": GOOD, "value": -NEVER},
-                    {"color": CRITICAL, "value": above},
-                ],
-            },
-            "mappings": [
-                text_range(-NEVER, healthy_at_most, "нет ✓"),
-                text_range(above, NEVER, "да ✗"),
-            ],
-        },
-        size,
-    ).panel()
-
-
-def share(title: str, description: str, expr: str, *, target: float) -> Panel:
-    """A share in percent with its trend: green at or above `target`, red under it."""
-    return Tile(
-        title,
-        description,
-        expr,
-        {
-            "unit": "percentunit",
-            "decimals": 2,
-            "color": {"mode": "thresholds"},
-            "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                    {"color": UNKNOWN, "value": None},
-                    {"color": CRITICAL, "value": -NEVER},
-                    {"color": GOOD, "value": target},
-                ],
-            },
-        },
-        SHARE_TILE,
-        trend=True,
-    ).panel()
 
 
 def row(title: str) -> Panel:

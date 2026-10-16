@@ -14,10 +14,10 @@ from shosai.core.observability.grafana import (
     Chart,
     Panel,
     Series,
-    Tile,
     dashboard,
     row,
 )
+from shosai.core.observability.tiles import Tile
 
 OTHER_PROVIDERS = {
     "openai": "OpenAI",
