@@ -30,6 +30,7 @@ import-linter contracts in `pyproject.toml` (`uv run lint-imports`):
 - Values under sensitive keys, `SecretStr` values and passwords inside URLs are replaced by `***`; never log request bodies, headers, query strings, personal data or meeting text.
 - Lines and spans leave through bounded queues and never block the event loop; what does not fit is dropped and counted in `shosai_telemetry_dropped_total{signal, reason}`. Without `OTEL_EXPORTER_OTLP_ENDPOINT` spans are recorded for the log correlation but not exported.
 - Metrics register in the process registry passed in (`build_metrics_registry`), never in the global one; labels stay bounded (§16.7). `watch_event_loop_lag` feeds `shosai_event_loop_lag_seconds`.
+- **Debug switch** (§16.7, `core/observability/debug_logs.py`, `debug_switches.py`): `shosai observability debug --user|--org ID --minutes N --reason …` (N ≤ 60) opens one account's or company's DEBUG lines; every long-running process follows the switches in Valkey every 15 s, raises only the `shosai.*` loggers and lets a line under the configured level through only for a switched target until its end. Core writes DEBUG lines for each committed transaction, task queued, event written and paid model call. The guide for slices is [docs/observability.md](../docs/observability.md).
 
 ## HTTP shell
 
@@ -153,6 +154,7 @@ One console command, `shosai`, runs one role per process on one uvloop event loo
 | `shosai workers --queue Q` | — | TaskIQ's receiver of queue `Q` (`critical`, `default`, `bulk`, `meeting`) |
 | `shosai scheduler` | — | the loops: the outbox relay of each home every 5 s, the walk of periodic jobs of each home every 5 s, every slice's due-row sources, the queue and outbox gauges every 15 s, every slice's loops |
 | `shosai migrate upgrade` / `current` | — | Alembic for both homes, RU first; logs each home's revision |
+| `shosai observability debug` | — | one-shot: switches DEBUG lines of one account or company on or off, lists the switches that are on |
 
 - **Objectives and monitors** (§16.3, §16.4): a slice declares its `ServiceLevelObjective`s and `InvariantMonitor`s on its `FeatureModule` (`objectives`, `monitors`; `core/observability/objectives.py`), core its own in `composition/objectives.py`; `core/observability/rule_files.py` renders them into Prometheus rules and promtool tests under `deploy/observability/prometheus/rules/generated/`. `tests/composition/test_observability_rules.py` keeps the files in step (`--update-rules` rewrites them) and checks every metric a rule names against what the four roles export.
 - **Ops port.** Every long-running role also serves `OPS_PORT`, which the edge never proxies: `GET /livez` (200 while the event loop runs; checks nothing else), `GET /readyz` (200 while the process takes work, 503 while it starts or drains; the body names `homes.ru`, `homes.eu`, `valkey`, `cache`, `storage` and each slice's probes `ok` or `down`, each within 2 s) and `GET /metrics` (the process registry; OpenMetrics when asked, for exemplars). A dependency that is down never fails readiness (F1-C2): it is alerted through metrics.

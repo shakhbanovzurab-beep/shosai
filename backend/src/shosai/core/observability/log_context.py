@@ -46,6 +46,11 @@ def bind_log_fields(**fields: Unpack[LogFields]) -> None:
     bind_contextvars(**{key: str(value) for key, value in fields.items()})
 
 
+def id_fields(**ids: UUID | None) -> dict[str, str]:
+    """The ids that are known, as text: a line names an id the way the bound fields do."""
+    return {key: str(value) for key, value in ids.items() if value is not None}
+
+
 def bound_request_id() -> str | None:
     """The `request_id` of the unit of work in progress, if it has one."""
     value = get_contextvars().get("request_id")
@@ -71,10 +76,14 @@ def late_log_fields(source: FieldSource) -> Iterator[None]:
         _LATE_FIELDS.reset(token)
 
 
+def late_fields() -> LogFields:
+    """The late fields of the unit of work in progress, if it has a source of them."""
+    source = _LATE_FIELDS.get()
+    return {} if source is None else source()
+
+
 def merge_late_fields(_logger: WrappedLogger, _method: str, event_dict: EventDict) -> EventDict:
     """structlog processor: add the late fields the line does not already carry."""
-    source = _LATE_FIELDS.get()
-    if source is not None:
-        for key, value in source().items():
-            event_dict.setdefault(key, str(value))
+    for key, value in late_fields().items():
+        event_dict.setdefault(key, str(value))
     return event_dict

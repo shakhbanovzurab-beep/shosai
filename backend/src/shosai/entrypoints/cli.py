@@ -10,6 +10,7 @@
     shosai ai rebuild-spend-counters   sum the AI spend counters again from the cost rows
     shosai email check --to ADDRESS    send a check mail of each kind through SMTP
     shosai identity admin-password-hash   print the bcrypt hash of the admin's password
+    shosai observability debug --user ID --reason TEXT   DEBUG lines of one account for a while
 
 Every long-running role also serves `/livez`, `/readyz` and `/metrics` on OPS_PORT. The
 settings come from the environment only (`.env.example`, section 2). One process runs
@@ -20,6 +21,7 @@ import argparse
 import os
 from collections.abc import Coroutine, Mapping, Sequence
 from typing import Any
+from uuid import UUID
 
 import uvloop
 
@@ -28,10 +30,13 @@ from shosai.composition.ai_rebuild import run_rebuild
 from shosai.composition.email_command import MailCheckCommand, run_mail_check
 from shosai.composition.identity_command import run_admin_password_hash
 from shosai.composition.migrate import MigrateAction, run_migrate
+from shosai.composition.observability_command import DebugCommand, run_debug_switch
 from shosai.composition.process import run_process
 from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
 from shosai.core.config.roles import ProcessRole
 from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
+from shosai.core.observability.debug_logs import DebugScope
+from shosai.core.observability.debug_switches import LONGEST
 from shosai.core.tasks.queues import TaskQueue
 
 PROGRAM = "shosai"
@@ -73,7 +78,38 @@ def build_parser() -> argparse.ArgumentParser:
     account_tools.add_parser(
         "admin-password-hash", help="print the bcrypt hash of the admin's password"
     )
+    add_observability(roles)
     return parser
+
+
+def add_observability(roles: argparse._SubParsersAction[argparse.ArgumentParser]) -> None:
+    """`shosai observability debug`: DEBUG lines of one account or company for a while."""
+    observability = roles.add_parser(
+        ProcessRole.OBSERVABILITY.value, help="operator commands of logs and telemetry"
+    )
+    tools = observability.add_subparsers(dest="tool", required=True, metavar="TOOL")
+    debug = tools.add_parser("debug", help="DEBUG lines of one account or company for a while")
+    target = debug.add_mutually_exclusive_group()
+    target.add_argument("--user", type=UUID, help="the account's id")
+    target.add_argument("--org", type=UUID, help="the company's id")
+    longest = int(LONGEST.total_seconds() // 60)
+    debug.add_argument(
+        "--minutes", type=int, default=15, choices=range(1, longest + 1), metavar=f"1..{longest}",
+        help="how long the switch holds",
+    )  # fmt: skip
+    debug.add_argument("--reason", help="why, for switching on; written to the log")
+    debug.add_argument("--off", action="store_true", help="end the switch now")
+
+
+def debug_command(arguments: argparse.Namespace) -> DebugCommand:
+    """The debug switch command from the parsed arguments."""
+    if arguments.user is not None:
+        scope, target = DebugScope.USER, arguments.user
+    elif arguments.org is not None:
+        scope, target = DebugScope.ORG, arguments.org
+    else:
+        scope, target = None, None
+    return DebugCommand(scope, target, arguments.minutes, arguments.reason, off=arguments.off)
 
 
 def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Coroutine[Any, Any, int]:
@@ -88,6 +124,8 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
             return run_process(role, environ, workers_role(TaskQueue(arguments.queue)))
         case ProcessRole.SCHEDULER:
             return run_process(role, environ, scheduler_role)
+        case ProcessRole.OBSERVABILITY:
+            return run_debug_switch(environ, debug_command(arguments))
         case ProcessRole.MIGRATE | ProcessRole.AI | ProcessRole.EMAIL | ProcessRole.IDENTITY:
             return one_shot(role, arguments, environ)
 

@@ -22,3 +22,5 @@ class ProcessRole(StrEnum):
     EMAIL = "email"
     # Разовые команды оператора над аккаунтами: первая роль владельца.
     IDENTITY = "identity"
+    # Разовая команда оператора: отладочные журналы одного аккаунта или компании (§16.7).
+    OBSERVABILITY = "observability"

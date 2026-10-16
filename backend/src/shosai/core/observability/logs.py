@@ -22,6 +22,7 @@ from structlog.typing import EventDict, Processor, WrappedLogger
 
 from shosai.core.config.roles import ProcessRole
 from shosai.core.config.sections import ObservabilitySettings
+from shosai.core.observability.debug_logs import DebugLogGate
 from shosai.core.observability.log_context import merge_late_fields
 from shosai.core.observability.metrics import ObservabilityMetrics
 from shosai.core.observability.redaction import redact_event
@@ -86,9 +87,12 @@ class LoggingPipeline:
     handler: DroppingQueueHandler
     listener: QueueListener
     previous_root_level: int
+    # Отладочные строки одного пользователя или компании (§16.7): переключатели — в Valkey.
+    debug_logs: DebugLogGate
 
     def close(self) -> None:
         """Write out the queued lines, detach from the root logger and reset structlog."""
+        self.debug_logs.close()
         root = logging.getLogger()
         root.removeHandler(self.handler)
         root.setLevel(self.previous_root_level)
@@ -106,6 +110,8 @@ def configure_logging(
     log_queue: queue.Queue[logging.LogRecord] = queue.Queue(LOG_QUEUE_CAPACITY)
     handler = DroppingQueueHandler(log_queue, metrics)
     handler.addFilter(DuplicateLibraryLines())
+    debug_logs = DebugLogGate(logging.getLevelNamesMapping()[settings.log_level.value])
+    handler.addFilter(debug_logs)
     handler.setFormatter(
         structlog.stdlib.ProcessorFormatter(processors=line_processors(settings, role))
     )
@@ -131,7 +137,7 @@ def configure_logging(
         cache_logger_on_first_use=False,
     )
     listener.start()
-    return LoggingPipeline(handler, listener, previous_root_level)
+    return LoggingPipeline(handler, listener, previous_root_level, debug_logs)
 
 
 def line_processors(settings: ObservabilitySettings, role: ProcessRole) -> list[Processor]:

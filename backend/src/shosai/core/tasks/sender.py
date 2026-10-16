@@ -105,4 +105,6 @@ class TaskSender:
             # Брокер уже посчитал отказ и записал его в лог.
             raise TaskQueueUnavailableError(task.queue) from error
         self._metrics.count_sent(task.queue, task.name)
+        log.debug("Задача поставлена в очередь", task_name=task.name, queue=task.queue.value,
+                  task_id=task_id)  # fmt: skip
         return task_id

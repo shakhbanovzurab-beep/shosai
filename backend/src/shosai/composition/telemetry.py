@@ -8,13 +8,14 @@ written out last, so the lines of the stop itself are not lost.
 import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 
 from shosai.core.config.loading import Settings
 from shosai.core.config.roles import ProcessRole
+from shosai.core.observability.debug_logs import DebugLogGate
 from shosai.core.observability.logs import configure_logging
 from shosai.core.observability.loop_lag import watch_event_loop_lag
 from shosai.core.observability.metrics import ObservabilityMetrics, build_metrics_registry
@@ -27,6 +28,8 @@ class ProcessTelemetry:
 
     registry: CollectorRegistry
     tracer_provider: TracerProvider
+    # Фильтр журналов процесса; без конвейера (в тестах) — свой, ни к чему не подключённый.
+    debug_logs: DebugLogGate = field(default_factory=DebugLogGate)
 
 
 @asynccontextmanager
@@ -41,7 +44,7 @@ async def open_telemetry(settings: Settings, role: ProcessRole) -> AsyncIterator
         )
         lag = asyncio.create_task(watch_event_loop_lag(metrics.event_loop_lag), name="loop-lag")
         try:
-            yield ProcessTelemetry(registry=registry, tracer_provider=provider)
+            yield ProcessTelemetry(registry, provider, logging_pipeline.debug_logs)
         finally:
             lag.cancel()
             # Ждать конца наблюдателя, не поднимая его отмену: внешнюю отмену это не глотает.

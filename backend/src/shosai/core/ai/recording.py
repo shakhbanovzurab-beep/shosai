@@ -21,6 +21,7 @@ from shosai.core.ai.results import Usage
 from shosai.core.db.errors import HomeUnavailableError
 from shosai.core.exchange_rates.rates import CurrencyPair, ExchangeRates, Rate
 from shosai.core.kernel.ids import new_id
+from shosai.core.observability.log_context import id_fields
 
 KOPECK: Final = Decimal("0.01")
 REPORTING_PROVIDERS: Final = frozenset({"openrouter"})
@@ -113,6 +114,13 @@ class CallRecorder:
         """Mark each row-to-be in its home's hour before the writer tries it."""
         for entry in entries:
             self._metrics.billed(entry.provider, entry.kind, entry.call_class)
+            log.debug(
+                "Вызов модели оплачен", provider=entry.provider, model=entry.model,
+                kind=entry.kind, feature=entry.feature, outcome=entry.outcome,
+                input_tokens=entry.input_tokens, output_tokens=entry.output_tokens,
+                cost_usd=str(entry.cost_usd),
+                **id_fields(user_id=entry.user_id, org_id=entry.org_id),
+            )  # fmt: skip
         await self._marks.mark("billed", ((entry.home, entry.created_at) for entry in entries))
 
     async def _rate(self) -> Rate | None:

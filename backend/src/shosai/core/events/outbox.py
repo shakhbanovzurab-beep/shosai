@@ -14,6 +14,7 @@ continue the producer's trace and log lines (§16.2).
 from typing import Protocol
 from uuid import UUID
 
+import structlog
 from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -22,9 +23,10 @@ from shosai.core.db.transactions import transaction_info
 from shosai.core.events.domain_event import DomainEvent
 from shosai.core.events.records import OutboxMessage
 from shosai.core.kernel.ids import new_id
-from shosai.core.observability.log_context import bound_request_id
+from shosai.core.observability.log_context import bound_request_id, id_fields
 
 TRACEPARENT = "traceparent"
+log = structlog.stdlib.get_logger(__name__)
 
 
 class UnlistedEventError(Exception):
@@ -82,4 +84,8 @@ class EventOutbox:
                 request_id=bound_request_id(),
             )
         )
+        log.debug(
+            "Событие записано в транзакцию", event_type=event.event_type, event_id=str(event_id),
+            **id_fields(user_id=transaction.scope.user_id, org_id=transaction.scope.org_id),
+        )  # fmt: skip
         return event_id

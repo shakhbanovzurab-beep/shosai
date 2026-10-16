@@ -15,6 +15,7 @@ work written into the caller's transaction — an outbox event — takes the tra
 own tenancy instead of a second copy the caller could get wrong.
 """
 
+import time
 from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
@@ -30,6 +31,7 @@ from shosai.core.db.home_checks import HomeGate
 from shosai.core.db.metrics import DatabaseMetrics, UnavailableReason
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.observability.log_context import id_fields
 
 # Один оператор — один обмен с сервером; пустая строка означает «нет» для app_*_id().
 SCOPE_STATEMENT: Final = text(
@@ -80,11 +82,17 @@ class HomeTransactions:
         """A session in a transaction of the scope's home; commit on exit, rollback on error."""
         await self._gate.ensure_open(scope.home)
         factory = self._databases.sessions(scope.home)
+        started = time.perf_counter()
         async with factory() as session, session.begin():
             await self._acquire(session, scope.home)
             await session.execute(SCOPE_STATEMENT, self._scope_values(scope, read_only=read_only))
             session.info[TRANSACTION_INFO_KEY] = TransactionInfo(scope, read_only=read_only)
             yield session
+        log.debug(
+            "Транзакция зафиксирована", home=scope.home.value, read_only=read_only,
+            duration_ms=round((time.perf_counter() - started) * 1000, 1),
+            **id_fields(user_id=scope.user_id, org_id=scope.org_id),
+        )  # fmt: skip
 
     async def _acquire(self, session: AsyncSession, home: Home) -> None:
         """Take a pooled connection; a home out of reach becomes 503, not a stuck request."""

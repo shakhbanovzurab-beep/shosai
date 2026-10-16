@@ -17,6 +17,7 @@ The stack of target architecture §16, built step by step by [F5](../../docs/pla
 
 ## Logs
 
+- INFO by default; DEBUG of one account or company for up to an hour through `shosai observability debug` ([docs/observability.md](../../docs/observability.md#the-debug-switch-167)), found with `{level="debug"} | user_id="…"`.
 - A container is shipped when its json-file log options carry `labels: "com.docker.compose.project,com.docker.compose.service"` and its project matches `SHOSAI_LOG_PROJECTS`. The collector reads `/var/lib/docker/containers` read-only as root with only `DAC_READ_SEARCH`; the Docker socket is not mounted. Offsets live in the `collector-storage` volume, so a restart ships nothing twice.
 - `service` is the Compose service (`api`, `workers-critical`, `tempo`…). For a backend JSON line the collector adds `role`, `level` and `home` from the line; those four are the only Loki labels, and Loki refuses a fifth (`max_label_names_per_series: 4`).
 - `trace_id`, `span_id`, `request_id`, `user_id`, `org_id`, `session_id`, `task_id`, `event_id` go to structured metadata. The body is the line exactly as the process wrote it.

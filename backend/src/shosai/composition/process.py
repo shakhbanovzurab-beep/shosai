@@ -38,6 +38,7 @@ from shosai.core.config.roles import ProcessRole
 from shosai.core.features import FeatureModule
 from shosai.core.health.probes import DependencyProbe
 from shosai.core.health.readiness import Readiness
+from shosai.core.observability.debug_switches import following_debug_switches
 from shosai.core.runtime.servers import HttpServer, server_config
 from shosai.core.runtime.signals import stop_on_signals
 from shosai.core.web.ops import build_ops_app
@@ -101,10 +102,13 @@ class LongRunningProcess:
                 platform = await stack.enter_async_context(
                     open_platform(self._settings, self._role, self._telemetry, self._features)
                 )
+                debug = await stack.enter_async_context(
+                    following_debug_switches(platform.services.valkey, self._telemetry.debug_logs)
+                )
                 with start_step("role"):
                     tasks = await stack.enter_async_context(work(platform, self._telemetry))
                 return await serve_until_stopped(
-                    self.readiness, self.stop, platform.probes, (*tasks, ops.task)
+                    self.readiness, self.stop, platform.probes, (*tasks, ops.task, debug)
                 )
         except StartFailedError as error:
             report_start_failure(error)
