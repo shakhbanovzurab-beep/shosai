@@ -37,8 +37,12 @@ fail() {
 }
 
 compose() { docker compose --project-directory "$STAGING" "$@"; }
-# Стек наблюдаемости — свой проект: файлы и образ конфигурации — в .env его каталога.
-telemetry() { docker compose --project-directory "$OBSERVABILITY" "$@"; }
+# Стек наблюдаемости — свой проект; образ конфигурации — в .env его каталога. Файлы названы явно:
+# COMPOSE_FILE из .env Compose отсчитывает от текущего каталога, а не от каталога проекта.
+telemetry() {
+  docker compose --project-directory "$OBSERVABILITY" \
+    -f "$OBSERVABILITY/compose.yaml" -f "$OBSERVABILITY/compose.staging.yaml" "$@"
+}
 
 plane_setting() { sed -n "s/^$1='\(.*\)'$/\1/p" "$STAGING/.env"; }
 
@@ -158,8 +162,12 @@ roll_forward() {
 restore() {
   log "сбой — возвращаю прежние образы: $previous_backend, $previous_edge"
   write_images "$previous_backend" "$previous_edge"
-  if [[ -n $observability && -n $previous_observability && $previous_observability != "$observability" ]]; then
-    start_observability "$previous_observability" || log "прежняя конфигурация наблюдаемости не поднялась"
+  if [[ -n $observability && $previous_observability != "$observability" ]]; then
+    if docker image inspect "$previous_observability" >/dev/null 2>&1; then
+      start_observability "$previous_observability" || log "прежняя конфигурация наблюдаемости не поднялась"
+    else
+      log "прежней конфигурации наблюдаемости нет: стек остаётся как есть"
+    fi
   fi
   if start "${CONSUMERS[@]}" api ws edge && edge_health; then
     log "прежние образы снова работают"
