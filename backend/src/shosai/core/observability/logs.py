@@ -14,7 +14,7 @@ import queue
 import sys
 from dataclasses import dataclass
 from logging.handlers import QueueHandler, QueueListener
-from typing import TextIO
+from typing import Any, TextIO
 
 import structlog
 from opentelemetry import trace
@@ -87,17 +87,20 @@ class LoggingPipeline:
     handler: DroppingQueueHandler
     listener: QueueListener
     previous_root_level: int
+    # Настройка structlog до конвейера: закрытие возвращает её, а не умолчания structlog, которые
+    # пишут и DEBUG тяжёлым цветным форматом.
+    previous_structlog: dict[str, Any]
     # Отладочные строки одного пользователя или компании (§16.7): переключатели — в Valkey.
     debug_logs: DebugLogGate
 
     def close(self) -> None:
-        """Write out the queued lines, detach from the root logger and reset structlog."""
+        """Write out the queued lines, detach from the root logger, restore structlog's setup."""
         self.debug_logs.close()
         root = logging.getLogger()
         root.removeHandler(self.handler)
         root.setLevel(self.previous_root_level)
         self.listener.stop()
-        structlog.reset_defaults()
+        structlog.configure(**self.previous_structlog)
 
 
 def configure_logging(
@@ -121,6 +124,7 @@ def configure_logging(
 
     root = logging.getLogger()
     previous_root_level = root.level
+    previous_structlog = structlog.get_config()
     root.setLevel(settings.log_level.value)
     root.addHandler(handler)
     for name in QUIET_LIBRARY_LOGGERS:
@@ -137,7 +141,7 @@ def configure_logging(
         cache_logger_on_first_use=False,
     )
     listener.start()
-    return LoggingPipeline(handler, listener, previous_root_level, debug_logs)
+    return LoggingPipeline(handler, listener, previous_root_level, previous_structlog, debug_logs)
 
 
 def line_processors(settings: ObservabilitySettings, role: ProcessRole) -> list[Processor]:

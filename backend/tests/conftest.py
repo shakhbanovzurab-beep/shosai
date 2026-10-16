@@ -15,6 +15,7 @@ from collections.abc import AsyncIterator, Iterator
 
 import pytest
 import pytest_asyncio
+import structlog
 
 from tests.harness.guards import UnsafeTestTargetError, ensure_safe_targets
 from tests.harness.migrations import migrate_slot, unmigrate_slot
@@ -29,6 +30,28 @@ pytest_plugins = (
     "tests.harness.shared_services",
     "tests.core.db.probe_table",
 )
+
+
+def pytest_configure(config: pytest.Config) -> None:
+    """Lines of a test without its own logging pipeline: INFO and up, plain tracebacks.
+
+    structlog's defaults write DEBUG too, with colored tracebacks that take tens of
+    milliseconds to render on the event loop; a test with a 50 ms deadline then fails on
+    the rendering of another task's lines. Processes always configure their pipeline, at
+    INFO unless `LOG_LEVEL` says otherwise.
+    """
+    del config
+    structlog.configure(
+        wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
+        processors=[
+            structlog.processors.add_log_level,
+            structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S", utc=True),
+            structlog.dev.ConsoleRenderer(
+                colors=False, exception_formatter=structlog.dev.plain_traceback
+            ),
+        ],
+        cache_logger_on_first_use=False,
+    )
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
