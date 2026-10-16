@@ -1,0 +1,25 @@
+# Трейсы edge (F5, target architecture §16.1, §16.2). Корневой span запросов к /v1/ и /email/: edge
+# начинает трейс сам (otel_trace_context inject) и передаёт его api и ws в traceparent, а traceparent
+# клиента перезаписывает — идентификаторы трейсов и решение о выборке не выбирает тот, кто шлёт
+# запрос. Выборку делает коллектор, хвостом. Экспорт не ждёт: пачки сверх batch_count модуль
+# отбрасывает. Атрибуты по умолчанию с адресом клиента, user agent и сырым URI коллектор удаляет
+# (deploy/observability/collector/config.yaml).
+#
+# SHOSAI_OTEL_TRACE (on|off) включает трассировку там, где рядом есть коллектор: без него модуль
+# каждые 5 с писал бы ошибку экспорта. Выключено — образ по умолчанию.
+otel_exporter {
+    endpoint ${SHOSAI_OTEL_ENDPOINT};
+}
+otel_service_name edge;
+
+map "${SHOSAI_OTEL_TRACE}" $shosai_otel_trace {
+    on      on;
+    default off;
+}
+
+# Модуль заполняет $otel_trace_id и там, где трассировки нет: в журнал он идёт только для
+# трассируемых запросов, иначе строка вела бы к трейсу, которого нет.
+map "${SHOSAI_OTEL_TRACE}:$uri" $shosai_log_trace_id {
+    ~^on:/(v1|email)/  $otel_trace_id;
+    default            "";
+}

@@ -10,6 +10,7 @@ The stack of target architecture §16, built step by step by [F5](../../docs/pla
 | `prometheus` | `prom/prometheus:v3.15.0` | Metrics, 30 days or `PROMETHEUS_RETENTION_SIZE`, whichever ends first; exemplar storage on |
 | `node-exporter` | `prom/node-exporter:v1.12.1` | The host's disks, memory and CPU; the host's root read-only at `/host` |
 | `nginx-exporter` | `nginx/nginx-prometheus-exporter:1.5.3` | The edge's connections from `stub_status` on its internal port 8082 |
+| `grafana` | `grafana/grafana:13.2.4` | One pane with the three data sources linked; one admin, no sign-up, no anonymous access, its own alerting off |
 | `blackbox` | `prom/blackbox-exporter:v0.28.0` | Probes from inside the plane: health through the edge with its certificate's expiry, TCP to each home's database |
 | `telemetry-volumes` | `busybox:1.37.0` | Runs once: gives the Loki and Tempo volumes to uid 10001 (their images have no shell) |
 
@@ -22,7 +23,21 @@ The stack of target architecture §16, built step by step by [F5](../../docs/pla
 
 ## Traces
 
-Kept: every trace with an error, every trace with an HTTP server span slower than 300 ms, 5% of the rest. A trace's spans wait 10 s for the decision; late spans follow it.
+- The edge opens the root span of every request to `/v1/`, `/v1/ws/` and `/email/` (`ngx_otel_module` of the `-otel` NGINX image) with `otel_trace_context inject`: a client's `traceparent` is overwritten, so no caller chooses our trace ids or sampling. Tracing is on where a collector runs next to the edge: `SHOSAI_OTEL_TRACE=on` (the image's default is `off`, because without a collector the module logs an export error every 5 s); the address is `SHOSAI_OTEL_ENDPOINT` (`collector:4317`). A collector the edge cannot reach does not stop it from starting or serving; its spans are dropped.
+- The collector deletes span attributes that may carry a person's input — client address and port, user agent, raw URL, path and query — whatever service sent them; the backend never writes them, the edge does by default.
+- Kept: every trace with an error, every trace with an HTTP server span slower than 300 ms, 5% of the rest. A trace's spans wait 10 s for the decision; late spans follow it. The threshold is the backend's `SLOW_REQUEST_SECONDS` too: they change together.
+
+## Grafana
+
+- Data sources are provisioned read-only from [grafana/provisioning/datasources](grafana/provisioning/datasources/datasources.yaml): Prometheus (default), Loki, Tempo.
+- **Metric → trace:** the backend's HTTP histogram carries `trace_id` exemplars on server errors and requests slower than 300 ms — exactly the traces the collector keeps; Prometheus stores them (`exemplar-storage`) and Grafana opens them in Tempo.
+- **Trace → logs:** a span's "Related logs" runs `{service=~".+"} | trace_id="…"` over the trace's time range ± 5 min.
+- **Log → trace:** `trace_id` in a line's structured metadata is a link to the trace.
+- The admin's password comes from the file `admin-password` in `GRAFANA_SECRETS_DIR` (staging); locally it is `local-grafana` unless `LOCAL_GRAFANA_PASSWORD` says otherwise. `GOMEMLIMIT` keeps Grafana's heap under its 384 MB limit: at 192 MB Grafana 13 was killed for memory as soon as its UI was used.
+
+## The edge's log
+
+One JSON line per request without personal data: no client address, no user agent, no path or query — a 404's path is whatever the client typed. It carries the request id, the trace id (traced locations only), the method, the path's class by its first segment (`/v1`, `/app`, `/admin`, `/email`, `/`, `other`), the status, sizes and times, and `level` from the status. The API's line with the same `request_id` and `trace_id` has the route template. NGINX's own `error_log` lines are text with the client's address and the raw request; the collector replaces `client`, `request`, `upstream` and `referrer` in them with `<hidden>`.
 
 ## Limits and loss
 
@@ -45,6 +60,9 @@ Kept: every trace with an error, every trace with an HTTP server span slower tha
 | `SHOSAI_LOG_PROJECTS` | `^shosai-staging$` | Regular expression of the Compose projects whose containers are shipped; locally `^shosai-local(-[a-z]+)?$` |
 | `SHOSAI_ENVIRONMENT` | `staging` | The `environment` external label of every series and alert; locally `local` |
 | `PROMETHEUS_RETENTION_SIZE` | `5GB` | Prometheus's size cap (F5-D3); the time limit is 30 days |
+| `GRAFANA_ROOT_URL` | `https://grafana.shosai.tech` | Grafana's public address, for its links (F5-D1); locally `http://127.0.0.1:3000` |
+| `GRAFANA_ADMIN_USER` | `admin` | The one Grafana admin's login |
+| `GRAFANA_SECRETS_DIR` | `/srv/shosai/secrets/grafana` | Host directory with the file `admin-password`, readable by Grafana's uid 472; locally a tmpfs replaces it |
 | `SHOSAI_PROBE_TARGETS_DIR` | `/srv/shosai/telemetry/probe-targets` | Host directory of the probe target files; locally `compose.local.yaml` mounts `prometheus/targets/local` |
 
 ## Checking a config

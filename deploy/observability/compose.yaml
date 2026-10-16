@@ -195,7 +195,57 @@ services:
         limits:
           memory: 32m
 
+  # Одно окно на метрики, логи и трейсы (§16.1). Вход — один администратор (F5-D1), пароль из файла
+  # на хосте; регистрация, анонимный доступ и своё оповещение Grafana выключены: оповещает Alertmanager.
+  grafana:
+    <<: *telemetry-defaults
+    image: grafana/grafana:13.2.4
+    environment:
+      GF_SERVER_ROOT_URL: ${GRAFANA_ROOT_URL:-https://grafana.shosai.tech}
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/shosai-grafana/admin-password
+      GF_SECURITY_COOKIE_SECURE: "true"
+      GF_SECURITY_DISABLE_GRAVATAR: "true"
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_UNIFIED_ALERTING_ENABLED: "false"
+      GF_SNAPSHOTS_EXTERNAL_ENABLED: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_ANALYTICS_CHECK_FOR_PLUGIN_UPDATES: "false"
+      GF_NEWS_NEWS_FEED_ENABLED: "false"
+      GF_PLUGINS_PREINSTALL_DISABLED: "true"
+      GF_LOG_MODE: console
+      GF_LOG_CONSOLE_FORMAT: json
+      # Сборщик мусора Go держит кучу ниже лимита контейнера: при 192 МБ Grafana 13 убивал OOM.
+      GOMEMLIMIT: 300MiB
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana-data:/var/lib/grafana
+      - ${GRAFANA_SECRETS_DIR:-/srv/shosai/secrets/grafana}:/run/shosai-grafana:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_interval: 2s
+      start_period: 60s
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      tempo:
+        condition: service_healthy
+      loki:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 384m
+
 volumes:
+  grafana-data:
   collector-storage:
   loki-data:
   tempo-data:

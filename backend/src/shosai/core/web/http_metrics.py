@@ -8,6 +8,11 @@ from it. The boundary passes the template of the route FastAPI has already match
 nothing is matched again. Every label value comes from a closed set: a served route
 template or empty, a known method or `_OTHER`, a status code the application chose, a
 scheme of two values, an error type derived from the status.
+
+A request the collector's tail sampling always keeps — a server error, no response, or
+slower than `SLOW_REQUEST_SECONDS` — carries its `trace_id` as an exemplar, so a latency
+panel leads to a trace that exists (§16.1, F5 plan §3.6). Other requests carry none: 95%
+of their traces are dropped.
 """
 
 from dataclasses import dataclass
@@ -34,6 +39,11 @@ KNOWN_METHODS = frozenset(
 HTTPS_SCHEME = "https"
 HTTP_SCHEME = "http"
 SERVER_ERROR_STATUS = 500
+# Порог медленного запроса — тот же, что у хвостовой выборки коллектора (политика
+# slow-http-requests в deploy/observability/collector/config.yaml): трейс такого запроса
+# сохраняется всегда, и exemplar на него ведёт. Меняются только вместе.
+SLOW_REQUEST_SECONDS = 0.3
+EXEMPLAR_TRACE_ID = "trace_id"
 # Рекомендованные корзины семантических соглашений для http.server.request.duration.
 DURATION_BUCKETS = (
     0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, float("inf"),
@@ -45,7 +55,8 @@ class CompletedRequest:
     """What the boundary knows once the request is done.
 
     `route` is None when routing matched nothing; `status` is None when no response
-    started, because the task was cancelled or the application sent nothing.
+    started, because the task was cancelled or the application sent nothing; `trace_id`
+    is None outside a recorded span.
     """
 
     method: str
@@ -53,6 +64,7 @@ class CompletedRequest:
     status: int | None
     scheme: str
     duration_seconds: float
+    trace_id: str | None
 
 
 class HttpMetrics:
@@ -72,7 +84,16 @@ class HttpMetrics:
             status,
             HTTPS_SCHEME if request.scheme == HTTPS_SCHEME else HTTP_SCHEME,
             error,
-        ).observe(request.duration_seconds)
+        ).observe(request.duration_seconds, exemplar_of(request, failed=error != ABSENT))
+
+
+def exemplar_of(request: CompletedRequest, *, failed: bool) -> dict[str, str] | None:
+    """The trace of a request whose trace is always kept; None for every other request."""
+    if request.trace_id is None:
+        return None
+    if failed or request.duration_seconds > SLOW_REQUEST_SECONDS:
+        return {EXEMPLAR_TRACE_ID: request.trace_id}
+    return None
 
 
 def status_labels(status: int | None) -> tuple[str, str]:

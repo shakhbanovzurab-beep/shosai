@@ -125,6 +125,8 @@ services:
       SHOSAI_TLS_CERTIFICATE: /run/shosai-edge-tls/edge.crt
       SHOSAI_TLS_CERTIFICATE_KEY: /run/shosai-edge-tls/edge.key
       SHOSAI_ROBOTS_TAG: "noindex, nofollow"
+      # Коллектор локального стека наблюдаемости (deploy/observability).
+      SHOSAI_OTEL_TRACE: "on"
     volumes:
       - ./tls:/run/shosai-edge-tls:ro
     ports:

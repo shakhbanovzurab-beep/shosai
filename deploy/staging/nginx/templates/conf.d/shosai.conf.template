@@ -5,7 +5,9 @@
 #   SHOSAI_TLS_CERTIFICATE       цепочка сертификата; SHOSAI_TLS_CERTIFICATE_KEY — его ключ;
 #   SHOSAI_CSP_STORAGE_ORIGINS   origin-ы бакетов домов через пробел (аватары, выгрузки);
 #   SHOSAI_ROBOTS_TAG            X-Robots-Tag (staging: "noindex, nofollow");
-#   SHOSAI_RESOLVER              DNS, у которого edge переспрашивает адреса api и ws (Docker: 127.0.0.11).
+#   SHOSAI_RESOLVER              DNS, у которого edge переспрашивает адреса api и ws (Docker: 127.0.0.11);
+#   SHOSAI_OTEL_ENDPOINT         коллектор OpenTelemetry, host:port его OTLP/gRPC (otel.conf.template);
+#   SHOSAI_OTEL_TRACE            on — трейсы edge в коллектор, off — без трейсов (otel.conf.template).
 
 # Процессы плоскости пересоздаются при выкладке и получают новые адреса: edge переспрашивает их у DNS, а не
 # держит адрес, полученный при старте (иначе после выкладки бэкенда — 502).
@@ -121,6 +123,8 @@ server {
 
     # WebSocket: шлюз ws, наименее загруженный процесс; рукопожатие — 5 с (§4.3).
     location /v1/ws/ {
+        otel_trace $shosai_otel_trace;
+        otel_trace_context inject;
         proxy_pass http://shosai_ws;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
@@ -135,6 +139,8 @@ server {
     # API: подключение 2 с, ответ 30 с, один повтор только для идемпотентных методов (§4.3).
     # Часть записи встречи — до 32 МБ: слайс встреч задаёт размер части не больше.
     location /v1/ {
+        otel_trace $shosai_otel_trace;
+        otel_trace_context inject;
         proxy_pass http://shosai_api;
         proxy_http_version 1.1;
         proxy_set_header Connection "";
@@ -149,6 +155,8 @@ server {
 
     # Картинки, на которые ссылаются письма.
     location /email/ {
+        otel_trace $shosai_otel_trace;
+        otel_trace_context inject;
         proxy_pass http://shosai_api;
         proxy_http_version 1.1;
         proxy_set_header Connection "";

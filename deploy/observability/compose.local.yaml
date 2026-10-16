@@ -28,6 +28,20 @@ services:
     ports:
       - "127.0.0.1:9090:9090"
 
+  # Локально — пароль по умолчанию, только для этой машины (как пароли compose.dev.yaml); файла с
+  # хоста нет, вместо его каталога — пустой tmpfs.
+  grafana:
+    environment:
+      GF_SERVER_ROOT_URL: http://127.0.0.1:3000
+      GF_SECURITY_COOKIE_SECURE: "false"
+      GF_SECURITY_ADMIN_PASSWORD__FILE: ""
+      GF_SECURITY_ADMIN_PASSWORD: ${LOCAL_GRAFANA_PASSWORD:-local-grafana}
+    volumes:
+      - type: tmpfs
+        target: /run/shosai-grafana
+    ports:
+      - "127.0.0.1:3000:3000"
+
 networks:
   telemetry:
     name: shosai-local_default

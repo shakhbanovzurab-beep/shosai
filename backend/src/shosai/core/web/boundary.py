@@ -18,6 +18,7 @@ import time
 from collections.abc import Mapping
 
 import structlog
+from opentelemetry import trace
 from starlette.datastructures import MutableHeaders
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
@@ -119,6 +120,7 @@ class _HttpExchange:
             status=self._status,
             scheme=str(self._scope.get("scheme", "")),
             duration_seconds=time.perf_counter() - self._started,
+            trace_id=current_trace_id(),
         )
 
     async def _answer_internal_error(self, receive: Receive, send: Send) -> None:
@@ -140,3 +142,9 @@ class _HttpExchange:
             "status": self._status,
             "duration_ms": round((time.perf_counter() - self._started) * 1000, 3),
         }
+
+
+def current_trace_id() -> str | None:
+    """The trace of the request's server span, in the hex form logs and Tempo use."""
+    context = trace.get_current_span().get_span_context()
+    return format(context.trace_id, "032x") if context.is_valid else None

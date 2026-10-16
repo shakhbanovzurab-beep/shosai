@@ -10,7 +10,8 @@
 # Turnstile, GTM и входа в админку.
 
 ARG NODE_IMAGE=node:26.10.0-trixie-slim
-ARG NGINX_IMAGE=nginxinc/nginx-unprivileged:1.30.6-alpine
+# Вариант -otel несёт модуль ngx_otel_module: корневой span каждого запроса к API (F5).
+ARG NGINX_IMAGE=nginxinc/nginx-unprivileged:1.30.6-alpine-otel
 
 FROM ${NODE_IMAGE} AS build
 WORKDIR /src/frontend
@@ -46,6 +47,8 @@ ENV NGINX_ENVSUBST_OUTPUT_DIR=/tmp/nginx \
     SHOSAI_API_UPSTREAM=api:8000 \
     SHOSAI_WS_UPSTREAM=ws:8000 \
     SHOSAI_RESOLVER=127.0.0.11 \
+    SHOSAI_OTEL_ENDPOINT=collector:4317 \
+    SHOSAI_OTEL_TRACE=off \
     SHOSAI_CSP_STORAGE_ORIGINS="" \
     SHOSAI_ROBOTS_TAG="noindex, nofollow"
 # Пользователь nginx базового образа, без root: порты выше 1024, запись только в /tmp.

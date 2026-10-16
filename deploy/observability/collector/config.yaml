@@ -80,8 +80,14 @@ processors:
           - set(log.severity_number, SEVERITY_NUMBER_WARN) where log.cache["level"] == "warning"
           - set(log.severity_number, SEVERITY_NUMBER_ERROR) where log.cache["level"] == "error"
           - set(log.severity_number, SEVERITY_NUMBER_FATAL) where log.cache["level"] == "critical"
-          - set(log.trace_id.string, log.cache["trace_id"]) where log.cache["trace_id"] != nil
-          - set(log.span_id.string, log.cache["span_id"]) where log.cache["span_id"] != nil
+          # У нетрассируемых локаций edge trace_id пустой.
+          - set(log.trace_id.string, log.cache["trace_id"]) where log.cache["trace_id"] != nil and log.cache["trace_id"] != ""
+          - set(log.span_id.string, log.cache["span_id"]) where log.cache["span_id"] != nil and log.cache["span_id"] != ""
+          # error_log NGINX — текст с адресом клиента и сырым запросом, параметры включительно (§16.8).
+          - 'replace_pattern(log.body, "client: [^,]+", "client: <hidden>") where log.attributes["service"] == "edge"'
+          - 'replace_pattern(log.body, "request: \"[^\"]*\"", "request: <hidden>") where log.attributes["service"] == "edge"'
+          - 'replace_pattern(log.body, "upstream: \"[^\"]*\"", "upstream: <hidden>") where log.attributes["service"] == "edge"'
+          - 'replace_pattern(log.body, "referrer: \"[^\"]*\"", "referrer: <hidden>") where log.attributes["service"] == "edge"'
           - set(log.attributes["request_id"], log.cache["request_id"]) where log.cache["request_id"] != nil
           - set(log.attributes["user_id"], log.cache["user_id"]) where log.cache["user_id"] != nil
           - set(log.attributes["org_id"], log.cache["org_id"]) where log.cache["org_id"] != nil
@@ -99,6 +105,14 @@ processors:
       - level
       - home
 
+  # Атрибуты, в которых бывает ввод пользователя: адрес клиента, его user agent, сырые путь и запрос
+  # (§16.8). Бэкенд их не пишет (core/observability/span_privacy.py); edge NGINX пишет по умолчанию.
+  transform/private_span_attributes:
+    error_mode: ignore
+    trace_statements:
+      - statements:
+          - delete_matching_keys(span.attributes, "^(url\\.(full|path|query)|http\\.(url|target|user_agent|client_ip)|client\\.(address|port)|net\\.(peer\\.(ip|port)|sock\\.peer\\.(addr|port))|user_agent\\.original)$")
+
   tail_sampling:
     decision_wait: 10s
     num_traces: 20000
@@ -112,7 +126,8 @@ processors:
         type: status_code
         status_code:
           status_codes: [ERROR]
-      # Порог — цель p95 API кабинета (§16.3); пороги по маршрутам приходят с объявлениями SLO (шаг 5).
+      # Порог — цель p95 API кабинета (§16.3); тот же, что SLOW_REQUEST_SECONDS у exemplars HTTP-метрики
+      # (backend core/web/http_metrics.py): меняются только вместе. Пороги по маршрутам — с SLO (шаг 5).
       - name: slow-http-requests
         type: ottl_condition
         ottl_condition:
@@ -181,5 +196,5 @@ service:
       exporters: [otlp_http/loki]
     traces:
       receivers: [otlp]
-      processors: [memory_limiter, tail_sampling, batch]
+      processors: [memory_limiter, transform/private_span_attributes, tail_sampling, batch]
       exporters: [otlp_grpc/tempo]
