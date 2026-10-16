@@ -1,0 +1,26 @@
+# Локальный запуск стека наблюдаемости рядом с compose.dev.yaml (docs/development.md, «Observability»).
+#
+# Стек входит в сеть локального окружения; отправляются журналы проектов shosai-local и
+# shosai-local-*. Порты — только на 127.0.0.1: OTLP для процессов, запущенных через uv,
+# и API Loki и Tempo для проверок.
+
+services:
+  collector:
+    environment:
+      SHOSAI_LOG_PROJECTS: ^shosai-local(-[a-z]+)?$$
+    ports:
+      - "127.0.0.1:4317:4317"
+      - "127.0.0.1:4318:4318"
+
+  loki:
+    ports:
+      - "127.0.0.1:3100:3100"
+
+  tempo:
+    ports:
+      - "127.0.0.1:3200:3200"
+
+networks:
+  telemetry:
+    name: shosai-local_default
+    external: true

@@ -1,0 +1,120 @@
+# Стек наблюдаемости Shosai (target architecture §16, план F5 docs/plan/packages/F5-observability.md).
+#
+# Один и тот же файл служит локально (с compose.local.yaml) и на staging (план F5 §3.1, шаг 10).
+# Стек подключается к сети плоскости, имя которой задаёт SHOSAI_TELEMETRY_NETWORK; журналы каких
+# проектов Compose отправлять, задаёт SHOSAI_LOG_PROJECTS (README рядом).
+#
+# Образы без оболочки: у Loki и коллектора нет команды проверки здоровья, их живость видит
+# Prometheus по `up` (шаг 2); у Tempo она есть (`-health`).
+
+x-telemetry-defaults: &telemetry-defaults
+  restart: unless-stopped
+  read_only: true
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  # Ротация (§14 правило 11) и метки Compose в каждой строке: по ним коллектор узнаёт службу.
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+      labels: "com.docker.compose.project,com.docker.compose.service"
+  networks:
+    - telemetry
+
+services:
+  # Тома Loki и Tempo создаются владельцем root, а оба процесса работают от 10001; оболочки в их
+  # образах нет. Один запуск отдаёт тома процессам и завершается.
+  telemetry-volumes:
+    image: busybox:1.37.0
+    restart: "no"
+    read_only: true
+    network_mode: none
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+    command: ["chown", "10001:10001", "/loki", "/tempo"]
+    volumes:
+      - loki-data:/loki
+      - tempo-data:/tempo
+
+  collector:
+    <<: *telemetry-defaults
+    image: otel/opentelemetry-collector-contrib:0.162.0
+    # Журналы контейнеров принадлежат root: процесс — root без единой возможности, кроме чтения
+    # чужих файлов (DAC_READ_SEARCH); сокет Docker не монтируется.
+    user: "0:0"
+    cap_add:
+      - DAC_READ_SEARCH
+    command: ["--config=/etc/otelcol/config.yaml"]
+    environment:
+      SHOSAI_LOG_PROJECTS: ${SHOSAI_LOG_PROJECTS:-^shosai-staging$$}
+    volumes:
+      - ./collector/config.yaml:/etc/otelcol/config.yaml:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - collector-storage:/var/lib/otelcol/file_storage
+    depends_on:
+      loki:
+        condition: service_started
+      tempo:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  loki:
+    <<: *telemetry-defaults
+    image: grafana/loki:3.7.8
+    command: ["-config.file=/etc/loki/loki.yaml"]
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./loki/loki.yaml:/etc/loki/loki.yaml:ro
+      - loki-data:/loki
+    depends_on:
+      telemetry-volumes:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          memory: 320m
+
+  tempo:
+    <<: *telemetry-defaults
+    image: grafana/tempo:3.1.0
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    healthcheck:
+      test: ["CMD", "/tempo", "-health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_interval: 2s
+      start_period: 60s
+    depends_on:
+      telemetry-volumes:
+        condition: service_completed_successfully
+    deploy:
+      resources:
+        limits:
+          memory: 320m
+
+volumes:
+  collector-storage:
+  loki-data:
+  tempo-data:
+
+networks:
+  telemetry:
+    name: ${SHOSAI_TELEMETRY_NETWORK:-shosai-staging_plane}
+    external: true

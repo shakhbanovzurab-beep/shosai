@@ -117,6 +117,22 @@ uv run shosai identity admin-password-hash
 
 Put the printed line, single quotes included, and `IDENTITY_ADMIN_USERNAME` into `.env`, then restart the API. The cabinet's sign-in page of the admin is at `VITE_ADMIN_LOGIN_PATH`. Each block or unblock leaves one row in `operator_audit_events` in the EU home once a worker delivers the event.
 
+## Observability
+
+The stack of target architecture §16 ([F5 plan](plan/packages/F5-observability.md)) runs next to `compose.dev.yaml` as its own Compose project on the same network; [deploy/observability/README.md](../deploy/observability/README.md) describes it. The local environment must be up first.
+
+```bash
+docker compose -f deploy/observability/compose.yaml -f deploy/observability/compose.local.yaml \
+  -p shosai-local-observability up -d                                   # collector, Loki, Tempo
+docker compose -f deploy/local/compose.app.yaml up -d --build           # the api role from a local image
+docker compose -f deploy/local/compose.app.yaml --profile all-roles up -d   # every role
+```
+
+- Logs reach Loki the way they do on staging: a container's stdout → json-file → the collector. Only containers of the projects `shosai-local` and `shosai-local-*` whose log options carry the Compose labels are shipped — [deploy/local/compose.app.yaml](../deploy/local/compose.app.yaml) runs the backend roles that way, on `127.0.0.1:18000`, with the local values of `.env.example`.
+- A role run with uv sends its traces to the collector with `OTEL_EXPORTER_OTLP_ENDPOINT=http://127.0.0.1:4318`; its logs stay in the terminal.
+- Loki answers on `127.0.0.1:3100`, Tempo on `127.0.0.1:3200`, the collector's own metrics on `collector:8888` inside the network. Grafana comes with F5 step 3.
+- Stop with `docker compose -p shosai-local-observability down` and `docker compose -p shosai-local-app down`; the stored telemetry stays in the project's volumes.
+
 ## Run the frontend
 
 The web cabinet in `frontend/` (a Vite SPA, [ADR 0021](adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) needs Node.js at the version in [`frontend/.nvmrc`](../frontend/.nvmrc) and npm 11; nothing else is installed on the host.

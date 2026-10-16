@@ -1,0 +1,55 @@
+# Tempo Shosai: один бинарник, локальное хранилище (target architecture §16.1; план F5 §3.3).
+#
+# Трейсы приходят только от коллектора, уже после хвостовой выборки. Хранение — 7 дней; ограничение
+# размера на staging — своя файловая система тома (план F5 §3.4) и лимиты приёма ниже.
+# Генератор метрик выключен: RED-метрики пишет сам процесс (ADR 0012).
+
+stream_over_http_enabled: true
+
+server:
+  http_listen_port: 3200
+  grpc_listen_port: 9095
+  log_level: info
+  log_format: json
+
+# Go видит лимит памяти контейнера и чистит кучу раньше, чем придёт OOM.
+memory:
+  automemlimit_enabled: true
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+
+storage:
+  trace:
+    backend: local
+    wal:
+      path: /var/tempo/wal
+    local:
+      path: /var/tempo/blocks
+
+# В Tempo 3 хранение блоков ведут планировщик и исполнитель фоновых работ.
+backend_scheduler:
+  provider:
+    compaction:
+      compaction:
+        block_retention: 168h
+
+backend_worker:
+  compaction:
+    block_retention: 168h
+
+overrides:
+  defaults:
+    ingestion:
+      rate_limit_bytes: 5000000
+      burst_size_bytes: 10000000
+      max_traces_per_user: 20000
+    global:
+      max_bytes_per_trace: 5000000
+
+usage_report:
+  reporting_enabled: false

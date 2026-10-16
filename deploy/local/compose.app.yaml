@@ -1,0 +1,110 @@
+# Роли бэкенда из локального образа рядом с compose.dev.yaml (docs/development.md, «Observability»).
+#
+# Нужен там, где важен путь, которым идёт телеметрия на staging: строки уходят в stdout контейнера,
+# json-file Docker кладёт их на диск, коллектор читает их оттуда; трейсы идут в коллектор по OTLP.
+# Для обычной разработки роли по-прежнему запускаются через uv.
+#
+# Настройки — локальные значения из .env.example; адреса служб заменены именами в сети
+# shosai-local_default. По умолчанию поднимается только api; остальные роли — профиль all-roles.
+#
+#   docker compose -f deploy/local/compose.app.yaml up -d --build
+#   docker compose -f deploy/local/compose.app.yaml --profile all-roles up -d
+
+name: shosai-local-app
+
+x-backend: &backend
+  image: ${SHOSAI_BACKEND_IMAGE:-shosai-backend:local}
+  restart: unless-stopped
+  read_only: true
+  security_opt:
+    - no-new-privileges:true
+  cap_drop:
+    - ALL
+  tmpfs:
+    - /tmp
+  env_file:
+    - path: ../../.env.example
+  environment:
+    HOME_RU_DATABASE_URL: postgresql://shosai_app:${LOCAL_APP_PASSWORD:-local-app}@pgbouncer-ru:6432/shosai
+    HOME_RU_MIGRATION_DATABASE_URL: postgresql://shosai_migrator:${LOCAL_MIGRATOR_PASSWORD:-local-migrator}@postgres-ru:5432/shosai
+    HOME_EU_DATABASE_URL: postgresql://shosai_app:${LOCAL_APP_PASSWORD:-local-app}@pgbouncer-eu:6432/shosai
+    HOME_EU_MIGRATION_DATABASE_URL: postgresql://shosai_migrator:${LOCAL_MIGRATOR_PASSWORD:-local-migrator}@postgres-eu:5432/shosai
+    HOME_RU_S3_ENDPOINT_URL: http://s3:8333
+    HOME_EU_S3_ENDPOINT_URL: http://s3:8333
+    VALKEY_URL: redis://:${LOCAL_VALKEY_PASSWORD:-local-valkey}@valkey:6379/0
+    REDIS_CACHE_URL: redis://:${LOCAL_REDIS_CACHE_PASSWORD:-local-redis-cache}@redis-cache:6379/0
+    QDRANT_URL: http://qdrant:6333
+    QDRANT_API_KEY: ${LOCAL_QDRANT_API_KEY:-local-qdrant}
+    SMTP_HOST: mailpit
+    SMTP_PORT: "1025"
+    BIND_HOST: 0.0.0.0
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://collector:4318
+  # Ротация (§14 правило 11) и метки Compose в каждой строке: по ним коллектор узнаёт службу.
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+      labels: "com.docker.compose.project,com.docker.compose.service"
+  stop_grace_period: 30s
+  healthcheck:
+    test:
+      - CMD
+      - python
+      - -c
+      - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9100/readyz', timeout=2)"
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_interval: 2s
+    start_period: 30s
+  networks:
+    - local
+  deploy:
+    resources:
+      limits:
+        memory: 384m
+
+services:
+  api:
+    <<: *backend
+    build:
+      context: ../../backend
+    command: ["api"]
+    ports:
+      - "127.0.0.1:18000:8000"
+
+  ws:
+    <<: *backend
+    profiles: ["all-roles"]
+    command: ["ws"]
+
+  workers-critical:
+    <<: *backend
+    profiles: ["all-roles"]
+    command: ["workers", "--queue", "critical"]
+
+  workers-default:
+    <<: *backend
+    profiles: ["all-roles"]
+    command: ["workers", "--queue", "default"]
+
+  workers-bulk:
+    <<: *backend
+    profiles: ["all-roles"]
+    command: ["workers", "--queue", "bulk"]
+
+  workers-meeting:
+    <<: *backend
+    profiles: ["all-roles"]
+    command: ["workers", "--queue", "meeting"]
+
+  scheduler:
+    <<: *backend
+    profiles: ["all-roles"]
+    command: ["scheduler"]
+
+networks:
+  local:
+    name: shosai-local_default
+    external: true

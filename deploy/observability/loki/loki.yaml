@@ -1,0 +1,85 @@
+# Loki Shosai: один бинарник, локальная файловая система (target architecture §16.1, §16.7; план F5 §3.2).
+#
+# Метки потока — только service, role, level, home: их задаёт коллектор как атрибуты ресурса, и только
+# они становятся индексными метками. Идентификаторы (trace_id, request_id, user_id…) приходят
+# атрибутами записи и хранятся в структурированных метаданных. Хранение — 14 дней; ограничение
+# размера на staging — своя файловая система тома (план F5 §3.4) и лимиты приёма ниже.
+
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+  grpc_listen_port: 9095
+  log_level: info
+  log_format: json
+
+common:
+  instance_addr: 127.0.0.1
+  path_prefix: /loki
+  storage:
+    filesystem:
+      chunks_directory: /loki/chunks
+      rules_directory: /loki/rules
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+schema_config:
+  configs:
+    - from: 2026-10-01
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+compactor:
+  working_directory: /loki/compactor
+  compaction_interval: 10m
+  retention_enabled: true
+  retention_delete_delay: 2h
+  delete_request_store: filesystem
+
+limits_config:
+  retention_period: 336h
+  allow_structured_metadata: true
+  max_structured_metadata_entries_count: 16
+  # Четыре метки §16.7 и ни одной сверх: новая метка отклоняется, а не множит потоки.
+  max_label_names_per_series: 4
+  # Ни service_name, ни detected_level: метки и уровень задаёт коллектор.
+  discover_service_name: []
+  discover_log_levels: false
+  ingestion_rate_mb: 4
+  ingestion_burst_size_mb: 8
+  per_stream_rate_limit: 2MB
+  per_stream_rate_limit_burst: 4MB
+  max_line_size: 256KB
+  reject_old_samples: true
+  reject_old_samples_max_age: 168h
+  # Поиск по идентификатору ограничен временем — обычно временем трейса, из которого он пришёл.
+  max_query_length: 721h
+  otlp_config:
+    resource_attributes:
+      ignore_defaults: true
+      attributes_config:
+        - action: index_label
+          attributes:
+            - service
+            - role
+            - level
+            - home
+
+query_range:
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 64
+
+pattern_ingester:
+  enabled: false
+
+analytics:
+  reporting_enabled: false
