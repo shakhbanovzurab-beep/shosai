@@ -4,6 +4,8 @@
 !.env.example
 # Self-signed certificate of the local edge (deploy/local/edge-certificate.sh)
 deploy/local/tls/
+# Local copies of the monitoring bot's secrets for a delivery check (deploy/local/alertmanager-secrets.sh)
+deploy/local/secrets/
 
 # Generated tool state
 .repowise/

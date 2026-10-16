@@ -22,7 +22,12 @@ ERRORS = EventRatio(total='requests_total{route="/x"}', bad='requests_total{rout
 
 
 BASE = ServiceLevelObjective(
-    name="reads_latency", journey="cabinet_api", summary="Медленно", target=0.95, indicator=LATENCY
+    name="reads_latency",
+    journey="cabinet_api",
+    summary="Медленно",
+    promise="страницы открываются быстро",
+    target=0.95,
+    indicator=LATENCY,
 )
 
 
@@ -43,7 +48,7 @@ def test_a_malformed_objective_is_refused(malformed: Callable[[], ServiceLevelOb
 
 def test_malformed_monitors_are_refused() -> None:
     with pytest.raises(ValueError, match="монитор"):
-        InvariantMonitor("Dead letters", "inv-8", "x", StaysAtMost("m"))
+        InvariantMonitor("Dead letters", "inv-8", "x", "y", StaysAtMost("m"))
     with pytest.raises(ValueError, match="окно"):
         NeverIncreases("m_total", "15 minutes")
     with pytest.raises(ValueError, match="датчик"):
@@ -63,7 +68,7 @@ def test_indicators_read_rates_of_counters() -> None:
 
 def test_each_owner_gets_its_files_and_the_burn_limits_follow_the_budget() -> None:
     tracked = replace(BASE, name="reads_latency_ru", alerting=AlertClass.TICKET)
-    monitor = InvariantMonitor("dead_letter_present", "inv-8", "Есть", StaysAtMost("dead"))
+    monitor = InvariantMonitor("dead_letter_present", "inv-8", "Есть", "Плохо", StaysAtMost("dead"))
     files = render({"core": OwnerRules((BASE, tracked), (monitor,)), "empty": OwnerRules()})
 
     assert sorted(files) == ["core.alerts.json", "core.alerts.test.json", "core.recording.json"]
@@ -81,3 +86,7 @@ def test_each_owner_gets_its_files_and_the_burn_limits_follow_the_budget() -> No
     assert rules["ReadsLatencyRuBudgetBurnFast"]["labels"]["severity"] == "ticket"
     assert rules["DeadLetterPresent"]["expr"] == "max(dead) > 0"
     assert rules["DeadLetterPresent"]["labels"] == {"severity": "page", "invariant": "inv-8"}
+    assert rules["DeadLetterPresent"]["annotations"]["description"] == "Плохо"
+    assert fast["annotations"]["description"].startswith(
+        "Мы обещаем, что страницы открываются быстро."
+    )

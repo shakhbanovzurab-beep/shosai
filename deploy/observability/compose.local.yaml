@@ -13,6 +13,8 @@ services:
       - "127.0.0.1:4318:4318"
 
   loki:
+    environment:
+      SHOSAI_ENVIRONMENT: local
     ports:
       - "127.0.0.1:3100:3100"
 
@@ -41,6 +43,17 @@ services:
         target: /run/shosai-grafana
     ports:
       - "127.0.0.1:3000:3000"
+
+  # Локально секретов нет — Alertmanager никому не пишет. Для проверки доставки
+  # deploy/local/alertmanager-secrets.sh кладёт в deploy/local/secrets/alertmanager бот и чат из .env
+  # (никогда не heartbeat: его пингует только staging); после проверки каталог удаляется.
+  alertmanager:
+    environment:
+      GRAFANA_ROOT_URL: http://127.0.0.1:3000
+    volumes:
+      - ${ALERTMANAGER_SECRETS_DIR:-../local/secrets/alertmanager}:/run/shosai-alertmanager:ro
+    ports:
+      - "127.0.0.1:9093:9093"
 
 networks:
   telemetry:

@@ -16,7 +16,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Файловая система {{ $labels.mountpoint }} занята больше чем на 80%"
+          summary: 'Место на сервере заканчивается'
+          description: 'Диск {{ $labels.mountpoint }} заполнен больше чем на 80 %. Когда место кончится, сервис перестанет сохранять данные.'
           runbook: docs/runbooks/alerts.md#host-disk-filling
 
   - name: tickets-backend
@@ -31,7 +32,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Пул соединений дома {{ $labels.home }} занят больше чем на 70%"
+          summary: 'База данных {{ if eq $labels.home "ru" }}в России{{ else }}в ЕС{{ end }} перегружена подключениями'
+          description: 'Сервер держит занятыми больше 70 % подключений к базе. Если они кончатся, запросы людей начнут ждать и падать.'
           runbook: docs/runbooks/alerts.md#database-pool-busy
 
       - alert: ProviderSlotsExhausted
@@ -39,7 +41,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "У провайдера {{ $labels.provider }} кончаются слоты: вызовы ждут или отказаны"
+          summary: 'Провайдер ИИ {{ $labels.provider }} не успевает отвечать'
+          description: 'Все разрешённые одновременные запросы к нему заняты, новые ждут очереди или получают отказ. Люди ждут ответов ИИ дольше обычного.'
           runbook: docs/runbooks/alerts.md#provider-slots-exhausted
 
       - alert: TaskQueueOld
@@ -48,7 +51,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Самая старая задача очереди {{ $labels.queue }} ждёт дольше 10 минут"
+          summary: 'Фоновые задачи выполняются с задержкой больше 10 минут'
+          description: 'В очереди «{{ $labels.queue }}» задача ждёт выполнения дольше 10 минут: письма, обработка и другая фоновая работа запаздывают.'
           runbook: docs/runbooks/alerts.md#task-queue-old
 
       - alert: SchedulerLoopStalled
@@ -59,7 +63,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Цикл планировщика не завершался успешно дольше трёх своих интервалов"
+          summary: 'Регулярная внутренняя работа сервера остановилась'
+          description: 'Повторяющаяся задача «{{ $labels.shosai_loop_name }}» давно не завершалась успешно. То, что она делает (рассылки, очистка, синхронизация), сейчас не происходит.'
           runbook: docs/runbooks/alerts.md#scheduler-loop-stalled
 
       - alert: HomeUnreachableFromApp
@@ -68,7 +73,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Дом {{ $labels.home }} недоступен процессам приложения"
+          summary: 'Сервер не может связаться с базой данных {{ if eq $labels.home "ru" }}в России{{ else }}в ЕС{{ end }}'
+          description: 'Люди, чьи данные хранятся в этой базе, сейчас получают ошибку при каждом действии.'
           runbook: docs/runbooks/alerts.md#home-unreachable-from-app
 
       - alert: TelemetryDropped
@@ -79,7 +85,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Часть логов или спанов потеряна по дороге в хранилище"
+          summary: 'Часть записей мониторинга потеряна'
+          description: 'Журналы или трассировки не дошли до хранилища — на графиках и в журналах могут быть пробелы. На работу сервиса для людей это не влияет.'
           runbook: docs/runbooks/alerts.md#telemetry-dropped
 
   - name: tickets-targets
@@ -90,7 +97,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Prometheus не может опросить {{ $labels.job }} ({{ $labels.instance }})"
+          summary: 'Мониторинг не может опросить службу {{ if $labels.service }}{{ $labels.service }}{{ else }}{{ $labels.job }}{{ end }}'
+          description: 'Служба 5 минут не отвечает на запросы мониторинга: она остановилась или зависла.'
           runbook: docs/runbooks/alerts.md#scrape-target-down
 
       # Роли нет совсем — нет и цели: up == 0 этого не видит.
@@ -103,7 +111,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Нет ни одного процесса службы {{ $labels.service }}"
+          summary: 'Служба {{ $labels.service }} не запущена'
+          description: 'Ни одного процесса этой службы нет уже 10 минут — её часть работы сервиса не выполняется.'
           runbook: docs/runbooks/alerts.md#role-missing
 
   - name: tickets-probes
@@ -114,7 +123,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "/v1/health через edge не отвечает изнутри плоскости"
+          summary: 'Сайт не отвечает'
+          description: 'Проверка изнутри сервера 3 минуты не получает ответа от сайта. Если внешняя проверка UptimeRobot тоже прислала тревогу — люди не могут пользоваться сервисом.'
           runbook: docs/runbooks/alerts.md#edge-health-failing
 
       - alert: CertificateExpiresSoon
@@ -122,7 +132,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Сертификат {{ $labels.instance }} истекает меньше чем через 21 день"
+          summary: 'Сертификат HTTPS сайта скоро истечёт'
+          description: 'До конца сертификата меньше 21 дня, а автоматическое продление его не обновило. После истечения браузеры покажут предупреждение, что сайт небезопасен.'
           runbook: docs/runbooks/alerts.md#certificate-expires-soon
 
       - alert: HomeDatabaseUnreachable
@@ -131,7 +142,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "База дома {{ $labels.home }} не принимает TCP-соединения из плоскости"
+          summary: 'База данных {{ if eq $labels.home "ru" }}в России{{ else }}в ЕС{{ end }} не отвечает'
+          description: 'Сервер 5 минут не может даже установить с ней соединение.'
           runbook: docs/runbooks/alerts.md#home-database-unreachable
 
       - alert: RussianHomeLinkSlow
@@ -140,5 +152,6 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Соединение с базой российского дома дольше 250 мс"
+          summary: 'Связь с базой данных в России медленная'
+          description: 'Соединение с ней 15 минут занимает больше 0,25 секунды, поэтому у людей, чьи данные хранятся в России, всё работает медленнее.'
           runbook: docs/runbooks/alerts.md#russian-home-link-slow

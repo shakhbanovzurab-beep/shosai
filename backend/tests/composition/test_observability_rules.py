@@ -28,8 +28,8 @@ from tests.harness.settings import HarnessSettings
 RULES = Path(__file__).parents[3] / "deploy" / "observability" / "prometheus" / "rules"
 GENERATED = RULES / "generated"
 # Метрики бэкенда; node_, probe_, otelcol_ и другие экспортёры к каталогу ролей не относятся.
-# Имя метки (после «{» или «,», перед «=», «!», «~» или «:») метрикой не считается.
-BACKEND_METRIC = re.compile(r"(?<![\w:{,])(?:shosai|http_server)_[a-z0-9_]+(?![\w]|\s*[=!~:])")
+# Имя метки (после «{», «,» или «.» как в $labels.x, перед «=», «!», «~» или «:») — не метрика.
+BACKEND_METRIC = re.compile(r"(?<![\w:{,.])(?:shosai|http_server)_[a-z0-9_]+(?![\w]|\s*[=!~:])")
 TYPE_LINE = re.compile(r"^# TYPE (\S+) (\S+)$", re.MULTILINE)
 SAMPLE_LABELS = re.compile(r"^[a-z_][a-z0-9_]*\{([^}]*)\}", re.MULTILINE)
 LABEL_NAME = re.compile(r'([a-z_][a-z0-9_]*)="')

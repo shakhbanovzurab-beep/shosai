@@ -10,6 +10,7 @@ The stack of target architecture §16, built step by step by [F5](../../docs/pla
 | `prometheus` | `prom/prometheus:v3.15.0` | Metrics, 30 days or `PROMETHEUS_RETENTION_SIZE`, whichever ends first; exemplar storage on |
 | `node-exporter` | `prom/node-exporter:v1.12.1` | The host's disks, memory and CPU; the host's root read-only at `/host` |
 | `nginx-exporter` | `nginx/nginx-prometheus-exporter:1.5.3` | The edge's connections from `stub_status` on its internal port 8082 |
+| `alertmanager` | `prom/alertmanager:v0.34.1` | Routes alerts to Telegram (pages, tickets, notices) and renews the external heartbeat |
 | `grafana` | `grafana/grafana:13.2.4` | One pane with the three data sources linked; one admin, no sign-up, no anonymous access, its own alerting off |
 | `blackbox` | `prom/blackbox-exporter:v0.28.0` | Probes from inside the plane: health through the edge with its certificate's expiry, TCP to each home's database |
 | `telemetry-volumes` | `busybox:1.37.0` | Runs once: gives the Loki and Tempo volumes to uid 10001 (their images have no shell) |
@@ -66,15 +67,31 @@ No personal data, meeting text, secret or client trace reaches a label, a span o
 
 ## Alert rules
 
-Pages come only from SLO burn and invariant monitors (§16.3, §16.4); everything else is a ticket (§16.6). Every alert carries `severity` (`page` or `ticket`), a summary in Russian for the operator and a `runbook` anchor in `docs/runbooks/alerts.md` (written in F5 step 6).
+Pages come only from SLO burn and invariant monitors (§16.3, §16.4); everything else is a ticket (§16.6). Every alert carries `severity` (`page` or `ticket`), a summary in Russian for the operator and a `runbook` anchor in [docs/runbooks/alerts.md](../../docs/runbooks/alerts.md).
 
 - **Generated** — [prometheus/rules/generated](prometheus/rules/generated): the backend renders them from the objectives and monitors each slice declares on its `FeatureModule` and core declares in `backend/src/shosai/composition/objectives.py`. Per owner: `<owner>.recording.json` (each SLO's share of bad events over 5 m, 30 m, 1 h, 6 h and 3 d), `<owner>.alerts.json` (fast burn 14.4× over 1 h and 5 m, slow burn 6× over 6 h and 30 m — pages, or tickets for an SLO tracked, not paged; 1× over 3 d and 6 h — always a ticket; one page per monitor) and `<owner>.alerts.test.json`. Never edited by hand: `uv run --env-file ../.env.example pytest tests/composition/test_observability_rules.py --update-rules` in `backend/` rewrites them, and the same test fails while they differ from the code. Its second test starts the four roles and fails on any backend metric a rule names that no role exports.
 - **Tickets** — [prometheus/rules/tickets.yml](prometheus/rules/tickets.yml), by hand: disk, pools, provider slots, queue age, stalled scheduler loops, a home unreachable, telemetry drops, scrape targets down or missing, probes and the certificate.
 - **Logs** — [loki/rules](loki/rules): the edge's 5xx and 429, evaluated by Loki's ruler (mounted for the tenant `fake`).
 - **Tests** — [prometheus/rules/tests](prometheus/rules/tests): every ticket fires and resolves; the rendered sign-in recordings compute the shares they should from raw HTTP series. With the generated tests, every alert has a promtool test.
-- **Checks** — [checks/validate-configs.sh](checks/validate-configs.sh), the CI job "Observability": each component validates its config, promtool checks and tests every rule, Loki starts with its rules and must load them all.
+- **Checks** — [checks/validate-configs.sh](checks/validate-configs.sh), the CI job "Observability": each component validates its config, promtool checks and tests every rule, Alertmanager's config is checked with and without its secrets and each class must reach its receiver, every rule's runbook anchor must exist in `docs/runbooks/alerts.md`, Loki starts with its rules and must load them all.
 
 Today's objectives: sign-in availability 99.9% and sign-in latency (≤ 300 ms for 95%) per home, cabinet reads latency per home — the EU's page, the Russian home's are tickets (§16.3, §20). Monitors: unknown tasks, outbox older than 5 min, dead letters, provider calls without a cost row, billed calls without one. The other journeys and monitors of §16.3–16.4 come with their slices.
+
+## Alertmanager
+
+One bot, one chat (F5-D4); [alertmanager/alertmanager.yml](alertmanager/alertmanager.yml) routes by `severity`:
+
+| Class | From | In the chat | Repeats |
+|---|---|---|---|
+| `page` | SLO burn, invariant monitors | with sound, and a "resolved" message | hourly while firing |
+| `ticket` | §16.6, the edge's log rules | silent, no "resolved" | daily |
+| `notice` | the `alerting` domain (step 8) | silent, batched per `kind` for 5 min | — |
+| `heartbeat` | `Watchdog`, always firing | never; a webhook renews the external heartbeat every minute (F5-D2) | every minute |
+
+- **Inhibition:** a home out of reach (`HomeUnreachableFromApp`, `HomeDatabaseUnreachable`) mutes the tickets of the same `home`; a burning SLO's page mutes the ticket of the same `slo`.
+- **Messages** ([telegram.tmpl](alertmanager/telegram.tmpl)) are written for the owner, in plain Russian without SRE terms: what kind of message and from where («тестовый сайт shosai.tech», «🧪 проверка на компьютере разработчика»), the headline (`summary` — what people experience), the explanation (`description` — for an SLO, what Shosai promises and when the promise breaks at this pace; for a monitor, what broke and what it threatens), the start in Moscow time, «Что делать» ([docs/runbooks/alerts.md](../../docs/runbooks/alerts.md)) and «Графики в Grafana» (not from the developer's machine, where Grafana is not reachable). No technical label or alert name. A batch lists up to eight headlines. Every value is HTML-escaped; a message never exceeds Telegram's limit by being cut inside a tag. Every alert rule therefore carries a plain `summary` and `description`; slices write them through `ServiceLevelObjective.summary`/`promise` and `InvariantMonitor.summary`/`explanation`.
+- **Secrets** are files in `ALERTMANAGER_SECRETS_DIR`, never in Git: `telegram-bot-token`, `telegram-chat-id`, `heartbeat-url`. [start.sh](alertmanager/start.sh) copies them into the container's tmpfs and renders the config; without the Telegram files the alerts are accepted and sent nowhere, without `heartbeat-url` the Watchdog pings nothing. Locally both are absent, so the local stack writes to nobody; `deploy/local/alertmanager-secrets.sh` lends it the bot and the chat from `.env` for a delivery check, `--remove` takes them back. The heartbeat is pinged only by staging.
+- Prometheus and Loki's ruler both send to it; Loki's alerts carry the same `environment` label.
 
 ## Variables
 
@@ -87,6 +104,8 @@ Today's objectives: sign-in availability 99.9% and sign-in latency (≤ 300 ms f
 | `GRAFANA_ROOT_URL` | `https://grafana.shosai.tech` | Grafana's public address, for its links (F5-D1); locally `http://127.0.0.1:3000` |
 | `GRAFANA_ADMIN_USER` | `admin` | The one Grafana admin's login |
 | `GRAFANA_SECRETS_DIR` | `/srv/shosai/secrets/grafana` | Host directory with the file `admin-password`, readable by Grafana's uid 472; locally a tmpfs replaces it |
+| `ALERTMANAGER_SECRETS_DIR` | `/srv/shosai/secrets/alertmanager` | Host directory with `telegram-bot-token`, `telegram-chat-id` and `heartbeat-url`, readable by uid 65534; locally `deploy/local/secrets/alertmanager` |
+| `SHOSAI_RUNBOOK_URL` | `https://github.com/shakhbanovzurab-beep/shosai/blob/main` | Base of the runbook links in alert messages |
 | `SHOSAI_PROBE_TARGETS_DIR` | `/srv/shosai/telemetry/probe-targets` | Host directory of the probe target files; locally `compose.local.yaml` mounts `prometheus/targets/local` |
 
 ## Checking a config

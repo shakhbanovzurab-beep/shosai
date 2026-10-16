@@ -9,7 +9,8 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Edge отдал больше 10 ответов 5xx за 5 минут"
+          summary: "Сайт отдаёт ошибки"
+          description: "За 5 минут сайт больше 10 раз ответил ошибкой сервера — часть действий людей не выполняется."
           runbook: docs/runbooks/alerts.md#edge-server-errors
 
       - alert: EdgeRateLimiting
@@ -18,5 +19,6 @@ groups:
         labels:
           severity: ticket
         annotations:
-          summary: "Edge отказал по лимиту запросов больше 50 раз за 5 минут"
+          summary: "Сайт отбивает слишком частые запросы"
+          description: "За 5 минут сайт больше 50 раз отказал из-за лимита на частоту запросов с одного адреса. Это может быть атака или неисправное приложение."
           runbook: docs/runbooks/alerts.md#edge-rate-limiting

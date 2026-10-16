@@ -29,7 +29,9 @@ CORE_OBJECTIVES: tuple[ServiceLevelObjective, ...] = (
     ServiceLevelObjective(
         name="cabinet_reads_latency_eu",
         journey="cabinet_api",
-        summary="Чтения кабинета в доме ЕС дольше 300 мс чаще, чем позволяет цель",
+        summary="Кабинет открывается медленно у людей, чьи данные хранятся в ЕС",
+        promise="у людей, чьи данные хранятся в ЕС, 95 % страниц и данных кабинета загружаются "
+        "быстрее 0,3 секунды",
         target=0.95,
         indicator=LatencyRatio(DURATION_METRIC, CABINET_READS.format(home="eu"), LATENCY_THRESHOLD),
     ),
@@ -37,7 +39,9 @@ CORE_OBJECTIVES: tuple[ServiceLevelObjective, ...] = (
     ServiceLevelObjective(
         name="cabinet_reads_latency_ru",
         journey="cabinet_api",
-        summary="Чтения кабинета в российском доме дольше 300 мс чаще, чем позволяет цель",
+        summary="Кабинет открывается медленно у людей, чьи данные хранятся в России",
+        promise="у людей, чьи данные хранятся в России, 95 % страниц и данных кабинета "
+        "загружаются быстрее 0,3 секунды",
         target=0.95,
         indicator=LatencyRatio(DURATION_METRIC, CABINET_READS.format(home="ru"), LATENCY_THRESHOLD),
         alerting=AlertClass.TICKET,
@@ -48,31 +52,54 @@ CORE_MONITORS: tuple[InvariantMonitor, ...] = (
     InvariantMonitor(
         name="unknown_task_dropped",
         invariant="§14 rule 9",
-        summary="Воркер получил задачу с неизвестным именем",
+        summary="Фоновая работа потерялась: сервер получил задачу, которую не умеет выполнять",
+        explanation=(
+            "Сервер выбросил фоновую задачу, потому что ни один обработчик её не знает. "
+            "Обычно так бывает, когда новая версия выложена в неправильном порядке. Работа "
+            "этой задачи — письмо, обработка, синхронизация — не выполнена."
+        ),
         condition=NeverIncreases("shosai_task_unknown_total"),
     ),
     InvariantMonitor(
         name="outbox_event_stale",
         invariant="events delivered",
-        summary="Событие ждёт в outbox дольше 5 минут",
+        summary="Внутренние сообщения сервиса застряли больше чем на 5 минут",
+        explanation=(
+            "Когда в сервисе что-то происходит (например, человек зарегистрировался), об этом"
+            " рассылается внутреннее сообщение, и по нему выполняется связанная работа. "
+            "Сейчас такое сообщение ждёт отправки дольше 5 минут — связанная работа не "
+            "происходит."
+        ),
         condition=StaysAtMost("shosai_outbox_oldest_age_seconds", 300),
     ),
     InvariantMonitor(
         name="dead_letter_present",
         invariant="inv-8",
-        summary="В dead letter лежат задачи",
+        summary="Фоновые задачи не выполнились и отложены до ручного разбора",
+        explanation=(
+            "Задача пять раз подряд закончилась ошибкой, и сервер перестал её повторять. Сама"
+            " она уже не выполнится: её нужно разобрать и перезапустить вручную."
+        ),
         condition=StaysAtMost("shosai_task_dead_letter_entries"),
     ),
     InvariantMonitor(
         name="provider_call_without_cost_row",
         invariant="inv-9",
-        summary="Вызов провайдера ИИ завершился без строки стоимости",
+        summary="Запрос к ИИ прошёл, но его стоимость не записалась",
+        explanation=(
+            "Сервис обратился к провайдеру ИИ, а запись о стоимости этого обращения не "
+            "сохранилась. Наши расходы на ИИ сейчас занижены."
+        ),
         condition=NeverIncreases("shosai_ai_calls_without_cost_row_total"),
     ),
     InvariantMonitor(
         name="billed_call_without_cost_row",
         invariant="inv-9",
-        summary="Сверка нашла оплаченные вызовы провайдера без строк стоимости",
+        summary="Провайдер ИИ насчитал запросы, которых нет в наших расходах",
+        explanation=(
+            "Ежечасная сверка нашла обращения к ИИ, за которые провайдер берёт деньги, а у "
+            "нас о них нет записей. Наши расходы на ИИ занижены."
+        ),
         condition=StaysAtMost("shosai_ai_cost_rows_missing"),
     ),
 )

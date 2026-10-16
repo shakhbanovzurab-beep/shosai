@@ -74,12 +74,15 @@ type Indicator = EventRatio | LatencyRatio
 class ServiceLevelObjective:
     """A journey's objective (§16.3): `target` of its events are good over 30 days.
 
-    `summary` is the operator's text of the alert, in Russian like log messages.
+    The owner reads the alert, so its texts are plain Russian without SRE terms: `summary` —
+    what people experience, as a headline; `promise` — what Shosai promises them, a clause
+    the message puts after its Russian "we promise that".
     """
 
     name: str
     journey: str
     summary: str
+    promise: str
     target: float
     indicator: Indicator
     alerting: AlertClass = AlertClass.PAGE
@@ -139,12 +142,15 @@ type Condition = NeverIncreases | StaysAtMost
 class InvariantMonitor:
     """A monitor of §16.4: zero is the only healthy value, anything else pages.
 
-    `invariant` names what it guards (`inv-8`, `§14 rule 9`); `summary` is in Russian.
+    `invariant` names what it guards (`inv-8`, `§14 rule 9`) for the runbook; the owner reads
+    `summary` — what broke, as a headline — and `explanation` — what it means and what it
+    threatens — in plain Russian.
     """
 
     name: str
     invariant: str
     summary: str
+    explanation: str
     condition: Condition
 
     def __post_init__(self) -> None:

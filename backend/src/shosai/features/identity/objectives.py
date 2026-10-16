@@ -23,7 +23,8 @@ SIGN_IN_OBJECTIVES = (
     ServiceLevelObjective(
         name="sign_in_availability",
         journey="sign_in",
-        summary="Входы завершаются ошибкой сервера чаще, чем позволяет цель",
+        summary="Люди не могут войти в аккаунт: вход заканчивается ошибкой",
+        promise="вход в аккаунт срабатывает без ошибки с нашей стороны в 99,9 % случаев",
         target=0.999,
         indicator=EventRatio(
             total=f"{DURATION_METRIC}_count{{{SIGN_IN}}}",
@@ -33,14 +34,16 @@ SIGN_IN_OBJECTIVES = (
     ServiceLevelObjective(
         name="sign_in_latency_eu",
         journey="sign_in",
-        summary="Входы в доме ЕС дольше 300 мс чаще, чем позволяет цель",
+        summary="Вход в аккаунт работает медленно у людей, чьи данные хранятся в ЕС",
+        promise="у людей, чьи данные хранятся в ЕС, 95 % входов занимают меньше 0,3 секунды",
         target=0.95,
         indicator=LatencyRatio(DURATION_METRIC, f'{SIGN_IN},home="eu"', LATENCY_THRESHOLD),
     ),
     ServiceLevelObjective(
         name="sign_in_latency_ru",
         journey="sign_in",
-        summary="Входы в российском доме дольше 300 мс чаще, чем позволяет цель",
+        summary="Вход в аккаунт работает медленно у людей, чьи данные хранятся в России",
+        promise="у людей, чьи данные хранятся в России, 95 % входов занимают меньше 0,3 секунды",
         target=0.95,
         indicator=LatencyRatio(DURATION_METRIC, f'{SIGN_IN},home="ru"', LATENCY_THRESHOLD),
         alerting=AlertClass.TICKET,

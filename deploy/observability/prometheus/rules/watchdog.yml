@@ -1,0 +1,12 @@
+# Watchdog горит всегда: Alertmanager раз в минуту отправляет его во внешний heartbeat (F5-D2). Тишина
+# heartbeat значит, что Prometheus, Alertmanager или хост остановились — то, что изнутри не увидеть.
+groups:
+  - name: watchdog
+    rules:
+      - alert: Watchdog
+        expr: vector(1)
+        labels:
+          severity: heartbeat
+        annotations:
+          summary: "Конвейер оповещений жив"
+          runbook: docs/runbooks/alerts.md#watchdog

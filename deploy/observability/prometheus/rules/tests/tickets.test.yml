@@ -16,7 +16,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, fstype: ext4, mountpoint: /}
             exp_annotations:
-              summary: "Файловая система / занята больше чем на 80%"
+              summary: "Место на сервере заканчивается"
+              description: "Диск / заполнен больше чем на 80 %. Когда место кончится, сервис перестанет сохранять данные."
               runbook: docs/runbooks/alerts.md#host-disk-filling
       - eval_time: 40m
         alertname: HostDiskFilling
@@ -34,7 +35,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, home: ru}
             exp_annotations:
-              summary: "Пул соединений дома ru занят больше чем на 70%"
+              summary: "База данных в России перегружена подключениями"
+              description: "Сервер держит занятыми больше 70 % подключений к базе. Если они кончатся, запросы людей начнут ждать и падать."
               runbook: docs/runbooks/alerts.md#database-pool-busy
       - eval_time: 40m
         alertname: DatabasePoolBusy
@@ -50,7 +52,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, provider: openrouter}
             exp_annotations:
-              summary: "У провайдера openrouter кончаются слоты: вызовы ждут или отказаны"
+              summary: "Провайдер ИИ openrouter не успевает отвечать"
+              description: "Все разрешённые одновременные запросы к нему заняты, новые ждут очереди или получают отказ. Люди ждут ответов ИИ дольше обычного."
               runbook: docs/runbooks/alerts.md#provider-slots-exhausted
       - eval_time: 40m
         alertname: ProviderSlotsExhausted
@@ -66,7 +69,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, queue: default}
             exp_annotations:
-              summary: "Самая старая задача очереди default ждёт дольше 10 минут"
+              summary: "Фоновые задачи выполняются с задержкой больше 10 минут"
+              description: "В очереди «default» задача ждёт выполнения дольше 10 минут: письма, обработка и другая фоновая работа запаздывают."
               runbook: docs/runbooks/alerts.md#task-queue-old
       - eval_time: 40m
         alertname: TaskQueueOld
@@ -85,7 +89,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, shosai_loop_name: email.sweep.ru}
             exp_annotations:
-              summary: "Цикл планировщика не завершался успешно дольше трёх своих интервалов"
+              summary: "Регулярная внутренняя работа сервера остановилась"
+              description: "Повторяющаяся задача «email.sweep.ru» давно не завершалась успешно. То, что она делает (рассылки, очистка, синхронизация), сейчас не происходит."
               runbook: docs/runbooks/alerts.md#scheduler-loop-stalled
       - eval_time: 40m
         alertname: SchedulerLoopStalled
@@ -101,7 +106,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, home: ru}
             exp_annotations:
-              summary: "Дом ru недоступен процессам приложения"
+              summary: "Сервер не может связаться с базой данных в России"
+              description: "Люди, чьи данные хранятся в этой базе, сейчас получают ошибку при каждом действии."
               runbook: docs/runbooks/alerts.md#home-unreachable-from-app
       - eval_time: 30m
         alertname: HomeUnreachableFromApp
@@ -117,7 +123,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket}
             exp_annotations:
-              summary: "Часть логов или спанов потеряна по дороге в хранилище"
+              summary: "Часть записей мониторинга потеряна"
+              description: "Журналы или трассировки не дошли до хранилища — на графиках и в журналах могут быть пробелы. На работу сервиса для людей это не влияет."
               runbook: docs/runbooks/alerts.md#telemetry-dropped
       - eval_time: 40m
         alertname: TelemetryDropped
@@ -133,7 +140,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket}
             exp_annotations:
-              summary: "Часть логов или спанов потеряна по дороге в хранилище"
+              summary: "Часть записей мониторинга потеряна"
+              description: "Журналы или трассировки не дошли до хранилища — на графиках и в журналах могут быть пробелы. На работу сервиса для людей это не влияет."
               runbook: docs/runbooks/alerts.md#telemetry-dropped
       - eval_time: 40m
         alertname: TelemetryDropped
@@ -149,7 +157,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, job: api, instance: "a:9100"}
             exp_annotations:
-              summary: "Prometheus не может опросить api (a:9100)"
+              summary: "Мониторинг не может опросить службу api"
+              description: "Служба 5 минут не отвечает на запросы мониторинга: она остановилась или зависла."
               runbook: docs/runbooks/alerts.md#scrape-target-down
       - eval_time: 30m
         alertname: ScrapeTargetDown
@@ -178,7 +187,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, service: ws}
             exp_annotations:
-              summary: "Нет ни одного процесса службы ws"
+              summary: "Служба ws не запущена"
+              description: "Ни одного процесса этой службы нет уже 10 минут — её часть работы сервиса не выполняется."
               runbook: docs/runbooks/alerts.md#role-missing
       - eval_time: 35m
         alertname: RoleMissing
@@ -200,7 +210,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, probe: edge_health, instance: "https://edge"}
             exp_annotations:
-              summary: "/v1/health через edge не отвечает изнутри плоскости"
+              summary: "Сайт не отвечает"
+              description: "Проверка изнутри сервера 3 минуты не получает ответа от сайта. Если внешняя проверка UptimeRobot тоже прислала тревогу — люди не могут пользоваться сервисом."
               runbook: docs/runbooks/alerts.md#edge-health-failing
       - eval_time: 30m
         alertname: EdgeHealthFailing
@@ -210,7 +221,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, probe: edge_health, instance: "https://edge"}
             exp_annotations:
-              summary: "Сертификат https://edge истекает меньше чем через 21 день"
+              summary: "Сертификат HTTPS сайта скоро истечёт"
+              description: "До конца сертификата меньше 21 дня, а автоматическое продление его не обновило. После истечения браузеры покажут предупреждение, что сайт небезопасен."
               runbook: docs/runbooks/alerts.md#certificate-expires-soon
       - eval_time: 30m
         alertname: CertificateExpiresSoon
@@ -220,7 +232,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, probe: home_database, home: eu, instance: "db:5432"}
             exp_annotations:
-              summary: "База дома eu не принимает TCP-соединения из плоскости"
+              summary: "База данных в ЕС не отвечает"
+              description: "Сервер 5 минут не может даже установить с ней соединение."
               runbook: docs/runbooks/alerts.md#home-database-unreachable
       - eval_time: 30m
         alertname: HomeDatabaseUnreachable
@@ -230,7 +243,8 @@ tests:
         exp_alerts:
           - exp_labels: {severity: ticket, probe: home_database, home: ru, instance: "db:5432"}
             exp_annotations:
-              summary: "Соединение с базой российского дома дольше 250 мс"
+              summary: "Связь с базой данных в России медленная"
+              description: "Соединение с ней 15 минут занимает больше 0,25 секунды, поэтому у людей, чьи данные хранятся в России, всё работает медленнее."
               runbook: docs/runbooks/alerts.md#russian-home-link-slow
       - eval_time: 40m
         alertname: RussianHomeLinkSlow

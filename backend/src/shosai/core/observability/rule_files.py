@@ -20,13 +20,18 @@ from shosai.core.observability.objectives import (
 )
 
 RUNBOOK = "docs/runbooks/alerts.md"
+# Дашборд всех мониторов инвариантов (F5 шаг 7): у каждого пейджа — ссылка на панель и runbook.
+INVARIANTS_DASHBOARD = "/d/invariant-monitors"
 WINDOWS = ("5m", "30m", "1h", "6h", "3d")
 TEST_INTERVAL = "1m"
 
 
 @dataclass(frozen=True, slots=True)
 class Burn:
-    """One burn-rate alert: both windows above `factor` times the error budget for `wait`."""
+    """One burn-rate alert: both windows above `factor` times the error budget for `wait`.
+
+    `pace` tells the operator, in Russian, how fast the budget goes.
+    """
 
     suffix: str
     long: str
@@ -34,15 +39,29 @@ class Burn:
     factor: float
     wait: str
     always_ticket: bool
+    pace: str
 
 
 # Окна и множители — из книги Google SRE (multiwindow, multi-burn-rate alerts): быстрый
-# расход съедает 2% бюджета за час, медленный — 5% за 6 часов, тикет — 10% за 3 дня.
+# расход съедает 2% месячного запаса на сбои за час, медленный — 5% за 6 часов, тикет — 10% за
+# 3 дня. Оператору — без терминов: когда при таком темпе обещание будет нарушено.
 BURNS = (
-    Burn("BudgetBurnFast", "1h", "5m", 14.4, "2m", always_ticket=False),
-    Burn("BudgetBurnSlow", "6h", "30m", 6, "15m", always_ticket=False),
-    Burn("BudgetBurnTicket", "3d", "6h", 1, "1h", always_ticket=True),
-)
+    Burn(
+        "BudgetBurnFast", "1h", "5m", 14.4, "2m", always_ticket=False,
+        pace="Сбоев сейчас очень много: если так продолжится, обещание на этот месяц будет "
+        "нарушено примерно через 2 дня",
+    ),
+    Burn(
+        "BudgetBurnSlow", "6h", "30m", 6, "15m", always_ticket=False,
+        pace="Сбоев больше нормы уже несколько часов: если так продолжится, обещание на этот "
+        "месяц будет нарушено примерно через 5 дней",
+    ),
+    Burn(
+        "BudgetBurnTicket", "3d", "6h", 1, "1h", always_ticket=True,
+        pace="Сбоев понемногу больше нормы уже три дня: если ничего не делать, обещание будет "
+        "нарушено до конца месяца",
+    ),
+)  # fmt: skip
 
 
 @dataclass(frozen=True, slots=True)
@@ -85,8 +104,10 @@ def burn_alert(slo: ServiceLevelObjective, burn: Burn) -> dict[str, object]:
 
 
 def burn_annotations(slo: ServiceLevelObjective, burn: Burn) -> dict[str, str]:
+    """`summary` — what people experience; `description` — the promise and how soon it breaks."""
     return {
-        "summary": f"{slo.summary} (цель {slo.target:.4g}, окна {burn.long} и {burn.short})",
+        "summary": slo.summary,
+        "description": f"Мы обещаем, что {slo.promise}. {burn.pace}.",
         "runbook": f"{RUNBOOK}#slo-budget-burn",
         "dashboard": f"/d/journey-{slo.journey.replace('_', '-')}",
     }
@@ -103,8 +124,10 @@ def monitor_alert(monitor: InvariantMonitor) -> dict[str, object]:
 
 def monitor_annotations(monitor: InvariantMonitor) -> dict[str, str]:
     return {
-        "summary": f"{monitor.summary} ({monitor.invariant})",
+        "summary": monitor.summary,
+        "description": monitor.explanation,
         "runbook": f"{RUNBOOK}#{monitor.name.replace('_', '-')}",
+        "dashboard": INVARIANTS_DASHBOARD,
     }
 
 

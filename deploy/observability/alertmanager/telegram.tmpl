@@ -1,0 +1,64 @@
+{{/*
+  Сообщения Telegram для владельца (parse_mode HTML) — простым языком, без терминов: что за сообщение
+  и откуда, что случилось, что это значит, когда началось, где инструкция и графики. Технические
+  метки и имя алерта в сообщение не попадают: их видно в Grafana и в runbook.
+  Всё из аннотаций экранируется: значение с «<» или «&» иначе сделало бы сообщение невалидным.
+  В пачке — не больше восьми случаев: лимит Telegram 4096 символов, а обрезка посреди тега ломала
+  разметку (урок черновика). __GRAFANA_URL__ и __RUNBOOK_URL__ подставляет start.sh.
+*/}}
+
+{{ define "shosai.class" -}}
+{{- if eq .Status "resolved" }}✅ Всё снова в порядке
+{{- else if eq .CommonLabels.severity "page" }}🔴 Срочно
+{{- else if eq .CommonLabels.severity "notice" }}🔔 Событие
+{{- else }}🟡 Нужно разобраться, не срочно{{ end -}}
+{{- end }}
+
+{{ define "shosai.where" -}}
+{{- if eq . "staging" }}тестовый сайт shosai.tech
+{{- else if eq . "production" }}рабочий сайт
+{{- else if eq . "local" }}🧪 проверка на компьютере разработчика, не настоящий сайт
+{{- else }}{{ . | html }}{{ end -}}
+{{- end }}
+
+{{ define "shosai.moscow" }}{{ (. | tz "Europe/Moscow").Format "02.01 в 15:04" }}{{ end }}
+
+{{/* Графики — только там, где Grafana доступна снаружи: с компьютера разработчика ссылка не откроется. */}}
+{{ define "shosai.links" -}}
+{{- $alert := index .Alerts 0 -}}
+{{- with $alert.Annotations.runbook }}📖 <a href="__RUNBOOK_URL__/{{ . | html }}">Что делать</a>{{ end -}}
+{{- if ne .CommonLabels.environment "local" -}}
+{{- with $alert.Annotations.dashboard }} · 📈 <a href="__GRAFANA_URL__{{ . | html }}">Графики в Grafana</a>{{ end -}}
+{{- end -}}
+{{- end }}
+
+{{ define "shosai.firing" -}}
+{{- $alert := index .Alerts 0 -}}
+{{ template "shosai.class" . }} — {{ template "shosai.where" .CommonLabels.environment }}
+{{ if eq (len .Alerts) 1 -}}
+<b>{{ $alert.Annotations.summary | html }}</b>
+{{- else -}}
+<b>Случаев: {{ len .Alerts }}</b>
+{{- range $index, $each := .Alerts }}{{ if lt $index 8 }}
+• {{ $each.Annotations.summary | html }}{{ end }}{{ end }}
+{{- if gt (len .Alerts) 8 }}
+…и ещё {{ len .Alerts }} всего, показаны первые 8{{ end }}
+{{- end }}
+{{ with $alert.Annotations.description }}
+{{ . | html }}
+{{ end }}
+Началось {{ template "shosai.moscow" $alert.StartsAt }} по Москве.
+
+{{ template "shosai.links" . }}
+{{- end }}
+
+{{ define "shosai.resolved" -}}
+{{- $alert := index .Alerts 0 -}}
+{{ template "shosai.class" . }} — {{ template "shosai.where" .CommonLabels.environment }}
+Было: <b>{{ $alert.Annotations.summary | html }}</b>
+Длилось с {{ template "shosai.moscow" $alert.StartsAt }} до {{ ($alert.EndsAt | tz "Europe/Moscow").Format "15:04" }} по Москве.
+{{- end }}
+
+{{ define "shosai.telegram" -}}
+{{- if eq .Status "resolved" }}{{ template "shosai.resolved" . }}{{ else }}{{ template "shosai.firing" . }}{{ end -}}
+{{- end }}

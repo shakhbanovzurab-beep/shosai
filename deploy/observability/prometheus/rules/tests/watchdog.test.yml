@@ -1,0 +1,22 @@
+# Watchdog горит всегда.
+rule_files:
+  - ../watchdog.yml
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: Watchdog
+        exp_alerts:
+          - exp_labels: {severity: heartbeat}
+            exp_annotations:
+              summary: "Конвейер оповещений жив"
+              runbook: docs/runbooks/alerts.md#watchdog
+      - eval_time: 600m
+        alertname: Watchdog
+        exp_alerts:
+          - exp_labels: {severity: heartbeat}
+            exp_annotations:
+              summary: "Конвейер оповещений жив"
+              runbook: docs/runbooks/alerts.md#watchdog

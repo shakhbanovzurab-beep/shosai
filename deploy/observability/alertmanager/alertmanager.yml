@@ -1,0 +1,96 @@
+# Alertmanager Shosai: один бот, один чат (F5-D4; target architecture §16.6).
+#
+#   page    — расход бюджета SLO и мониторы инвариантов: со звуком, с сообщением о снятии, повтор раз в час;
+#   ticket  — причины §16.6: без звука, без сообщения о снятии, повтор раз в сутки;
+#   notice  — уведомления домена alerting (F5-D5): без звука, пачкой по виду за 5 минут;
+#   Watchdog — всегда горит и раз в минуту обновляет внешний heartbeat (F5-D2): тишина значит, что
+#              Prometheus, Alertmanager или хост остановились.
+#
+# start.sh подставляет __TELEGRAM__ (telegram, или blackhole без токена и чата — так локальный стек никому
+# не пишет) и __HEARTBEAT__ (heartbeat, или blackhole без адреса — heartbeat пингует только staging),
+# и кладёт секреты в /tmp/alertmanager: в git их нет.
+
+global:
+  resolve_timeout: 5m
+
+templates:
+  - /tmp/alertmanager/telegram.tmpl
+
+route:
+  receiver: __TELEGRAM__-ticket
+  group_by: [alertname, home]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 24h
+  routes:
+    - matchers: [alertname="Watchdog"]
+      receiver: __HEARTBEAT__
+      group_by: [alertname]
+      group_wait: 0s
+      group_interval: 1m
+      repeat_interval: 1m
+    - matchers: [severity="page"]
+      receiver: __TELEGRAM__-page
+      group_wait: 10s
+      repeat_interval: 1h
+    - matchers: [severity="notice"]
+      receiver: __TELEGRAM__-notice
+      group_by: [kind]
+      group_wait: 5m
+      # Уведомление живёт минуты (домен alerting ставит ему конец); повтор — не раньше, чем через
+      # 4 дня, в пределах срока хранения журнала уведомлений Alertmanager (120 ч).
+      repeat_interval: 96h
+    - matchers: [severity="ticket"]
+      receiver: __TELEGRAM__-ticket
+
+inhibit_rules:
+  # Дом недоступен — молчат тикеты того же дома, которые из этого следуют (пулы, задержка канала).
+  - source_matchers: [alertname=~"HomeUnreachableFromApp|HomeDatabaseUnreachable"]
+    target_matchers:
+      - severity="ticket"
+      - alertname!~"HomeUnreachableFromApp|HomeDatabaseUnreachable"
+    equal: [home]
+  # Расход бюджета будит — тикет медленного расхода того же SLO лишний.
+  - source_matchers: [severity="page", slo=~".+"]
+    target_matchers: [severity="ticket", slo=~".+"]
+    equal: [slo]
+
+receivers:
+  - name: telegram-page
+    telegram_configs:
+      - bot_token_file: /tmp/alertmanager/telegram-bot-token
+        chat_id_file: /tmp/alertmanager/telegram-chat-id
+        parse_mode: HTML
+        send_resolved: true
+        disable_notifications: false
+        message: '{{ template "shosai.telegram" . }}'
+
+  - name: telegram-ticket
+    telegram_configs:
+      - bot_token_file: /tmp/alertmanager/telegram-bot-token
+        chat_id_file: /tmp/alertmanager/telegram-chat-id
+        parse_mode: HTML
+        send_resolved: false
+        disable_notifications: true
+        message: '{{ template "shosai.telegram" . }}'
+
+  - name: telegram-notice
+    telegram_configs:
+      - bot_token_file: /tmp/alertmanager/telegram-bot-token
+        chat_id_file: /tmp/alertmanager/telegram-chat-id
+        parse_mode: HTML
+        send_resolved: false
+        disable_notifications: true
+        message: '{{ template "shosai.telegram" . }}'
+
+  - name: heartbeat
+    webhook_configs:
+      - url_file: /tmp/alertmanager/heartbeat-url
+        send_resolved: false
+        timeout: 10s
+
+  # Без токена и чата или без адреса heartbeat: оповещения принимаются, но никуда не уходят.
+  - name: blackhole
+  - name: blackhole-page
+  - name: blackhole-ticket
+  - name: blackhole-notice
