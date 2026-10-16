@@ -1,6 +1,6 @@
 # ADR 0012 — HTTP metrics recorded by the request boundary
 
-- **Status:** accepted by the owner on 2026-10-02 (F1 open item F1-O1); implemented after F1 step 3. **Amended 2026-10-13** by the owner's decision OD-3 of the [F1 audit](../plan/audits/F1-audit.md): names and labels follow the OpenTelemetry semantic conventions (see "Amendment"); decisions 1, 3 and 5 stand.
+- **Status:** accepted by the owner on 2026-10-02 (F1 open item F1-O1); implemented after F1 step 3. **Amended 2026-10-13** by the owner's decision OD-3 of the [F1 audit](../plan/audits/F1-audit.md): names and labels follow the OpenTelemetry semantic conventions (see "Amendment"); decisions 1, 3 and 5 stand. **Amended 2026-10-16** by F5 step 5 (see "Amendment (F5)"): the label `home` (approved with the F5 plan, §3.7) and the bucket 0.3 s (proposed in step 5, awaiting the owner's confirmation).
 - **Package:** F1, backend foundation; every slice's routes are measured by it.
 - **Context documents:** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §3, §16.1, §16.7, §16.8, §18.2; [ADR 0008](0008-error-envelope-with-compatible-detail.md); [F1 plan](../plan/packages/F1-backend-foundation.md) (F1-O1); [CLAUDE.md](../../.claude/CLAUDE.md) "Performance", "Dependencies".
 
@@ -59,6 +59,12 @@ Decision 2 kept the instrumentator's names for the draft's dashboards and alerts
 4. **Series — the cost of this choice.** Per process: routes that answer × the codes each answers × 17 samples (15 buckets, sum, count). Upper bound with every one of 600 templates answering two codes over one scheme behind the edge: ≈ 20 400 series per API process, against ≈ 7 200 for the instrumentator's five metrics on the same table — about three times more. For three API processes, scraped every 30 s at ≈ 1.3 bytes a sample, that is ≈ 0.23 GB a day, ≈ 7 GB over the 30 days of §16.1, inside the 20 GB cap of §16.7. Real traffic touches far fewer templates; F5 measures it.
 
 The scheduler loops follow OpenTelemetry's naming rules as well: `shosai_loop_interval_seconds`, `shosai_loop_last_success_timestamp_seconds`, and `shosai_loop_iteration_duration_seconds{shosai_loop_name, error_type}`, whose `error_type` (the exception's class, empty on success) replaces the failure counter (`core/runtime/loops.py`).
+
+## Amendment (2026-10-16, F5 step 5)
+
+- **Label `home`** — `ru`, `eu`, or empty for an anonymous request: the caller's data home, which the dependency that authenticates the request records (`core/web/request_facts.py`, `note_caller`) and the boundary reads. It feeds the per-home objectives of §16.3 (cabinet reads, sign-in latency) and keeps §16.7's bound: three values. The same record puts `home` and `user_id` on the request's span and on every log line written after authentication (§16.2). Approved with the F5 plan (§3.7).
+- **Bucket 0.3 s** between 0.25 and 0.5. §16.3's latency objectives are "p95 ≤ 300 ms"; their burn-rate alerts count the share of requests slower than 300 ms, which a classic histogram gives only at a bucket boundary. Without it the indicator would read 250 ms — a stricter objective than the architecture's — or 500 ms — a looser one. Cost: one series more per label set (+7%). **Proposed in F5 step 5; awaiting the owner's confirmation.**
+- The pinned contract test (`tests/core/web/test_http_metrics.py`) now lists both.
 
 ## Alternatives considered
 

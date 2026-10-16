@@ -81,5 +81,18 @@ query_range:
 pattern_ingester:
   enabled: false
 
+# Правила по логам (§16.1): файлы rules/ репозитория под арендатором fake (auth_enabled: false).
+# Адрес Alertmanager появляется с ним (F5 шаг 6); до того ruler только вычисляет правила.
+ruler:
+  storage:
+    type: local
+    local:
+      directory: /etc/loki/rules
+  rule_path: /loki/ruler
+  ring:
+    kvstore:
+      store: inmemory
+  enable_api: true
+
 analytics:
   reporting_enabled: false

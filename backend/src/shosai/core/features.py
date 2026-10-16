@@ -49,6 +49,7 @@ from shosai.core.idempotency.ledger import EffectLedger
 from shosai.core.kernel.homes import Home
 from shosai.core.kv.locks import DistributedLocks
 from shosai.core.kv.rate_limits import RateLimiter
+from shosai.core.observability.objectives import InvariantMonitor, ServiceLevelObjective
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.ports.keys import PortBinding, PortKey
 from shosai.core.runtime.loops import ScheduledLoop
@@ -160,6 +161,9 @@ class FeatureModule:
     requires: tuple[PortKey[Any], ...] = ()
     # Что срез хранит о человеке: таблицы, префиксы, внешние гранты (реестр удаления).
     account_data: tuple[AccountDataSpec, ...] = ()
+    # Цели путей и мониторы инвариантов среза (§16.3, §16.4): из них рендерятся правила Prometheus.
+    objectives: tuple[ServiceLevelObjective, ...] = ()
+    monitors: tuple[InvariantMonitor, ...] = ()
 
     def __post_init__(self) -> None:
         if not FEATURE_NAME.fullmatch(self.name):

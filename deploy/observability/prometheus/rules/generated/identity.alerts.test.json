@@ -1,0 +1,296 @@
+{
+  "rule_files": [
+    "identity.alerts.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "slo:sign_in_availability:bad_ratio:rate5m{slo=\"sign_in_availability\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_availability:bad_ratio:rate30m{slo=\"sign_in_availability\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_availability:bad_ratio:rate1h{slo=\"sign_in_availability\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_availability:bad_ratio:rate6h{slo=\"sign_in_availability\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_availability:bad_ratio:rate3d{slo=\"sign_in_availability\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "SignInAvailabilityBudgetBurnFast",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "sign_in_availability",
+                "journey": "sign_in"
+              },
+              "exp_annotations": {
+                "summary": "Входы завершаются ошибкой сервера чаще, чем позволяет цель (цель 0.999, окна 1h и 5m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-sign-in"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "SignInAvailabilityBudgetBurnSlow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "sign_in_availability",
+                "journey": "sign_in"
+              },
+              "exp_annotations": {
+                "summary": "Входы завершаются ошибкой сервера чаще, чем позволяет цель (цель 0.999, окна 6h и 30m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-sign-in"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "SignInAvailabilityBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "sign_in_availability",
+                "journey": "sign_in"
+              },
+              "exp_annotations": {
+                "summary": "Входы завершаются ошибкой сервера чаще, чем позволяет цель (цель 0.999, окна 3d и 6h)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-sign-in"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "SignInAvailabilityBudgetBurnFast",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "SignInAvailabilityBudgetBurnSlow",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "SignInAvailabilityBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "slo:sign_in_latency_eu:bad_ratio:rate5m{slo=\"sign_in_latency_eu\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_latency_eu:bad_ratio:rate30m{slo=\"sign_in_latency_eu\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_latency_eu:bad_ratio:rate1h{slo=\"sign_in_latency_eu\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_latency_eu:bad_ratio:rate6h{slo=\"sign_in_latency_eu\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_latency_eu:bad_ratio:rate3d{slo=\"sign_in_latency_eu\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "SignInLatencyEuBudgetBurnFast",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "sign_in_latency_eu",
+                "journey": "sign_in"
+              },
+              "exp_annotations": {
+                "summary": "Входы в доме ЕС дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 1h и 5m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-sign-in"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "SignInLatencyEuBudgetBurnSlow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "sign_in_latency_eu",
+                "journey": "sign_in"
+              },
+              "exp_annotations": {
+                "summary": "Входы в доме ЕС дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 6h и 30m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-sign-in"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "SignInLatencyEuBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "sign_in_latency_eu",
+                "journey": "sign_in"
+              },
+              "exp_annotations": {
+                "summary": "Входы в доме ЕС дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 3d и 6h)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-sign-in"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "SignInLatencyEuBudgetBurnFast",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "SignInLatencyEuBudgetBurnSlow",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "SignInLatencyEuBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "slo:sign_in_latency_ru:bad_ratio:rate5m{slo=\"sign_in_latency_ru\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_latency_ru:bad_ratio:rate30m{slo=\"sign_in_latency_ru\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_latency_ru:bad_ratio:rate1h{slo=\"sign_in_latency_ru\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_latency_ru:bad_ratio:rate6h{slo=\"sign_in_latency_ru\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:sign_in_latency_ru:bad_ratio:rate3d{slo=\"sign_in_latency_ru\",journey=\"sign_in\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "SignInLatencyRuBudgetBurnFast",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "sign_in_latency_ru",
+                "journey": "sign_in"
+              },
+              "exp_annotations": {
+                "summary": "Входы в российском доме дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 1h и 5m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-sign-in"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "SignInLatencyRuBudgetBurnSlow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "sign_in_latency_ru",
+                "journey": "sign_in"
+              },
+              "exp_annotations": {
+                "summary": "Входы в российском доме дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 6h и 30m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-sign-in"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "SignInLatencyRuBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "sign_in_latency_ru",
+                "journey": "sign_in"
+              },
+              "exp_annotations": {
+                "summary": "Входы в российском доме дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 3d и 6h)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-sign-in"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "SignInLatencyRuBudgetBurnFast",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "SignInLatencyRuBudgetBurnSlow",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "SignInLatencyRuBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    }
+  ]
+}

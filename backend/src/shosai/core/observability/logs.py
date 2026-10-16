@@ -22,6 +22,7 @@ from structlog.typing import EventDict, Processor, WrappedLogger
 
 from shosai.core.config.roles import ProcessRole
 from shosai.core.config.sections import ObservabilitySettings
+from shosai.core.observability.log_context import merge_late_fields
 from shosai.core.observability.metrics import ObservabilityMetrics
 from shosai.core.observability.redaction import redact_event
 
@@ -137,6 +138,7 @@ def line_processors(settings: ObservabilitySettings, role: ProcessRole) -> list[
     """The processors that turn an event of either logging API into one JSON line."""
     return [
         structlog.contextvars.merge_contextvars,
+        merge_late_fields,
         structlog.stdlib.add_log_level,
         structlog.stdlib.add_logger_name,
         structlog.processors.TimeStamper(fmt="iso", utc=True, key="timestamp"),

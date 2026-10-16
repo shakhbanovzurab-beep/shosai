@@ -1,0 +1,360 @@
+{
+  "rule_files": [
+    "core.alerts.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "slo:cabinet_reads_latency_eu:bad_ratio:rate5m{slo=\"cabinet_reads_latency_eu\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:cabinet_reads_latency_eu:bad_ratio:rate30m{slo=\"cabinet_reads_latency_eu\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:cabinet_reads_latency_eu:bad_ratio:rate1h{slo=\"cabinet_reads_latency_eu\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:cabinet_reads_latency_eu:bad_ratio:rate6h{slo=\"cabinet_reads_latency_eu\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:cabinet_reads_latency_eu:bad_ratio:rate3d{slo=\"cabinet_reads_latency_eu\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "CabinetReadsLatencyEuBudgetBurnFast",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "cabinet_reads_latency_eu",
+                "journey": "cabinet_api"
+              },
+              "exp_annotations": {
+                "summary": "Чтения кабинета в доме ЕС дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 1h и 5m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-cabinet-api"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "CabinetReadsLatencyEuBudgetBurnSlow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "cabinet_reads_latency_eu",
+                "journey": "cabinet_api"
+              },
+              "exp_annotations": {
+                "summary": "Чтения кабинета в доме ЕС дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 6h и 30m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-cabinet-api"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "CabinetReadsLatencyEuBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "cabinet_reads_latency_eu",
+                "journey": "cabinet_api"
+              },
+              "exp_annotations": {
+                "summary": "Чтения кабинета в доме ЕС дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 3d и 6h)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-cabinet-api"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "CabinetReadsLatencyEuBudgetBurnFast",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "CabinetReadsLatencyEuBudgetBurnSlow",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "CabinetReadsLatencyEuBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "slo:cabinet_reads_latency_ru:bad_ratio:rate5m{slo=\"cabinet_reads_latency_ru\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:cabinet_reads_latency_ru:bad_ratio:rate30m{slo=\"cabinet_reads_latency_ru\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:cabinet_reads_latency_ru:bad_ratio:rate1h{slo=\"cabinet_reads_latency_ru\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:cabinet_reads_latency_ru:bad_ratio:rate6h{slo=\"cabinet_reads_latency_ru\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:cabinet_reads_latency_ru:bad_ratio:rate3d{slo=\"cabinet_reads_latency_ru\",journey=\"cabinet_api\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "CabinetReadsLatencyRuBudgetBurnFast",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "cabinet_reads_latency_ru",
+                "journey": "cabinet_api"
+              },
+              "exp_annotations": {
+                "summary": "Чтения кабинета в российском доме дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 1h и 5m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-cabinet-api"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "CabinetReadsLatencyRuBudgetBurnSlow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "cabinet_reads_latency_ru",
+                "journey": "cabinet_api"
+              },
+              "exp_annotations": {
+                "summary": "Чтения кабинета в российском доме дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 6h и 30m)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-cabinet-api"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "CabinetReadsLatencyRuBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "cabinet_reads_latency_ru",
+                "journey": "cabinet_api"
+              },
+              "exp_annotations": {
+                "summary": "Чтения кабинета в российском доме дольше 300 мс чаще, чем позволяет цель (цель 0.95, окна 3d и 6h)",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-cabinet-api"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "CabinetReadsLatencyRuBudgetBurnFast",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "CabinetReadsLatencyRuBudgetBurnSlow",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "CabinetReadsLatencyRuBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_task_unknown_total",
+          "values": "0x10 1x50"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "UnknownTaskDropped",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "§14 rule 9"
+              },
+              "exp_annotations": {
+                "summary": "Воркер получил задачу с неизвестным именем (§14 rule 9)",
+                "runbook": "docs/runbooks/alerts.md#unknown-task-dropped"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "UnknownTaskDropped",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_outbox_oldest_age_seconds",
+          "values": "0x10 301x10 0x40"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "OutboxEventStale",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "events delivered"
+              },
+              "exp_annotations": {
+                "summary": "Событие ждёт в outbox дольше 5 минут (events delivered)",
+                "runbook": "docs/runbooks/alerts.md#outbox-event-stale"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "OutboxEventStale",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_task_dead_letter_entries",
+          "values": "0x10 1x10 0x40"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "DeadLetterPresent",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "inv-8"
+              },
+              "exp_annotations": {
+                "summary": "В dead letter лежат задачи (inv-8)",
+                "runbook": "docs/runbooks/alerts.md#dead-letter-present"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "DeadLetterPresent",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_ai_calls_without_cost_row_total",
+          "values": "0x10 1x50"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "ProviderCallWithoutCostRow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "inv-9"
+              },
+              "exp_annotations": {
+                "summary": "Вызов провайдера ИИ завершился без строки стоимости (inv-9)",
+                "runbook": "docs/runbooks/alerts.md#provider-call-without-cost-row"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "ProviderCallWithoutCostRow",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_ai_cost_rows_missing",
+          "values": "0x10 1x10 0x40"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "BilledCallWithoutCostRow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "inv-9"
+              },
+              "exp_annotations": {
+                "summary": "Сверка нашла оплаченные вызовы провайдера без строк стоимости (inv-9)",
+                "runbook": "docs/runbooks/alerts.md#billed-call-without-cost-row"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "BilledCallWithoutCostRow",
+          "exp_alerts": []
+        }
+      ]
+    }
+  ]
+}

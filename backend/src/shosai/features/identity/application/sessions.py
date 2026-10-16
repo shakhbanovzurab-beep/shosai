@@ -50,12 +50,14 @@ DEVICE_LABEL_LENGTH: Final = 128
 
 @dataclass(frozen=True, slots=True)
 class IssuedTokens:
-    """An access token, its lifetime in seconds, and the family's current refresh token."""
+    """Tokens issued to one person in their home: access token, lifetime, family's refresh token."""
 
     access_token: str
     expires_in: int
     refresh_token: str
     family_id: UUID
+    user_id: UUID
+    home: Home
 
 
 @dataclass(frozen=True, slots=True)
@@ -197,6 +199,8 @@ class Sessions:
             expires_in=ACCESS_SECONDS,
             refresh_token=self._codec.encode_refresh(refresh),
             family_id=token.family_id,
+            user_id=user.id,
+            home=home,
         )
 
     def _claims(self, refresh_token: str, errors: RefreshErrors) -> RefreshClaims:

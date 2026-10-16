@@ -2,7 +2,17 @@
 
 from prometheus_client import CollectorRegistry
 
-from shosai.core.web.http_metrics import DURATION_METRIC, LABELS
+from shosai.core.web.http_metrics import (
+    DURATION_METRIC,
+    ERROR_LABEL,
+    METHOD_LABEL,
+    ROUTE_LABEL,
+    SCHEME_LABEL,
+    STATUS_LABEL,
+)
+
+# Метки исхода запроса; home проверяет свой тест (test_request_facts.py).
+OUTCOME_LABELS = (METHOD_LABEL, ROUTE_LABEL, STATUS_LABEL, SCHEME_LABEL, ERROR_LABEL)
 
 type RequestLabels = tuple[str, str, str, str, str]
 
@@ -23,6 +33,8 @@ def requests_counted(registry: CollectorRegistry) -> dict[RequestLabels, float]:
     counted: dict[RequestLabels, float] = {}
     for name, labels, value in samples(registry):
         if name == f"{DURATION_METRIC}_count":
-            method, route, status, scheme, error = (labels[label] for label in LABELS)
-            counted[method, route, status, scheme, error] = value
+            method, route, status, scheme, error = (labels[label] for label in OUTCOME_LABELS)
+            counted[method, route, status, scheme, error] = (
+                counted.get((method, route, status, scheme, error), 0) + value
+            )
     return counted

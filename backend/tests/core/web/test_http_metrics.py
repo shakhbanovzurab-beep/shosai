@@ -24,13 +24,14 @@ REQUEST_LABELS = {
     "http_response_status_code",
     "url_scheme",
     "error_type",
+    "home",
 }
 LABELS = {
     "http_server_request_duration_seconds_bucket": REQUEST_LABELS | {"le"},
     "http_server_request_duration_seconds_count": REQUEST_LABELS,
     "http_server_request_duration_seconds_sum": REQUEST_LABELS,
 }
-BUCKETS = ["0.005", "0.01", "0.025", "0.05", "0.075", "0.1", "0.25", "0.5", "0.75", "1.0",
+BUCKETS = ["0.005", "0.01", "0.025", "0.05", "0.075", "0.1", "0.25", "0.3", "0.5", "0.75", "1.0",
            "2.5", "5.0", "7.5", "10.0", "+Inf"]  # fmt: skip
 
 

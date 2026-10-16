@@ -1,0 +1,44 @@
+# Записи SLO, отрендеренные из кода, считают долю плохих событий из сырых HTTP-рядов как задумано:
+# доступность входа — доля ответов с error_type, задержка — доля медленнее корзины 0,3 с. Значения
+# округлены: экстраполяция rate() даёт хвосты в последних знаках.
+rule_files:
+  - ../generated/identity.recording.json
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      # 48 удачных и 16 упавших входов в минуту: доля плохих — 0,25.
+      - series: 'http_server_request_duration_seconds_count{http_route="/v1/auth/login",error_type="",home="eu"}'
+        values: "0+48x10"
+      - series: 'http_server_request_duration_seconds_count{http_route="/v1/auth/login",error_type="500",home=""}'
+        values: "0+16x10"
+      # Из 48 входов дома ЕС 36 уложились в 0,3 с: доля медленных — 0,25.
+      - series: 'http_server_request_duration_seconds_bucket{http_route="/v1/auth/login",error_type="",home="eu",le="0.3"}'
+        values: "0+36x10"
+      # Чужой маршрут в индикатор входа не попадает.
+      - series: 'http_server_request_duration_seconds_count{http_route="/v1/me",error_type="500",home="eu"}'
+        values: "0+100x10"
+    promql_expr_test:
+      - expr: round(slo:sign_in_availability:bad_ratio:rate5m, 0.001)
+        eval_time: 10m
+        exp_samples:
+          - labels: '{journey="sign_in",slo="sign_in_availability"}'
+            value: 0.25
+      - expr: round(slo:sign_in_latency_eu:bad_ratio:rate5m, 0.001)
+        eval_time: 10m
+        exp_samples:
+          - labels: '{journey="sign_in",slo="sign_in_latency_eu"}'
+            value: 0.25
+
+  # Ошибок не было вовсе — ряда ошибок нет, а доля плохих всё равно записана нулём.
+  - interval: 1m
+    input_series:
+      - series: 'http_server_request_duration_seconds_count{http_route="/v1/auth/login",error_type="",home="eu"}'
+        values: "0+48x10"
+    promql_expr_test:
+      - expr: slo:sign_in_availability:bad_ratio:rate5m
+        eval_time: 10m
+        exp_samples:
+          - labels: 'slo:sign_in_availability:bad_ratio:rate5m{journey="sign_in",slo="sign_in_availability"}'
+            value: 0

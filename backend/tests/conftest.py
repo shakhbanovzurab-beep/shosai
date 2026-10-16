@@ -32,11 +32,16 @@ pytest_plugins = (
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:
-    """`--update-openapi` rewrites backend/openapi.json from the composed API app."""
+    """`--update-openapi` and `--update-rules` rewrite the files generated from the code."""
     parser.addoption(
         "--update-openapi",
         action="store_true",
         help="rewrite backend/openapi.json from the composed api app",
+    )
+    parser.addoption(
+        "--update-rules",
+        action="store_true",
+        help="rewrite the generated Prometheus rules from the declared objectives and monitors",
     )
 
 

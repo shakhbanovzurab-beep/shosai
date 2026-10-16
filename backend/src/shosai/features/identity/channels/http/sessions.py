@@ -17,6 +17,7 @@ from starlette.responses import Response
 from shosai.core.kv.rate_limits import RateLimit, RateLimiter
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.web.rate_limit import rate_limited
+from shosai.core.web.request_facts import note_caller
 from shosai.features.identity.application import native_errors
 from shosai.features.identity.application.native_me import NativeMe
 from shosai.features.identity.application.registration import ClientFacts
@@ -92,6 +93,8 @@ def build_session_router(routes: SessionRoutes) -> APIRouter:
             client=client,
         )
         tokens = await sign_in.sign_in(attempt)
+        # Вход знает дом человека: задержка входа считается по домам (§16.3).
+        note_caller(request, tokens.home, tokens.user_id)
         csrf_token = new_csrf_token()
         set_session_cookies(response, cookies, tokens.refresh_token, csrf_token)
         return token_response(tokens, csrf_token)
@@ -106,6 +109,7 @@ def build_session_router(routes: SessionRoutes) -> APIRouter:
         if not csrf_matches(csrf_token, request.headers.get(CSRF_HEADER)):
             raise native_errors.csrf_mismatch()
         tokens = await sessions.refresh(refresh_token)
+        note_caller(request, tokens.home, tokens.user_id)
         set_session_cookies(response, cookies, tokens.refresh_token, str(csrf_token))
         return token_response(tokens, csrf_token)
 

@@ -5,12 +5,14 @@ values never leak into a concurrent request or the next task a worker takes. Onl
 fields of `LogFields` exist, so the set of log keys stays known and bounded.
 """
 
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from contextlib import contextmanager
+from contextvars import ContextVar
 from typing import TypedDict, Unpack
 from uuid import UUID
 
 from structlog.contextvars import bind_contextvars, bound_contextvars, get_contextvars
+from structlog.typing import EventDict, WrappedLogger
 
 from shosai.core.kernel.homes import Home
 
@@ -48,3 +50,31 @@ def bound_request_id() -> str | None:
     """The `request_id` of the unit of work in progress, if it has one."""
     value = get_contextvars().get("request_id")
     return value if isinstance(value, str) else None
+
+
+type FieldSource = Callable[[], LogFields]
+
+_LATE_FIELDS: ContextVar[FieldSource | None] = ContextVar("shosai_late_log_fields", default=None)
+
+
+@contextmanager
+def late_log_fields(source: FieldSource) -> Iterator[None]:
+    """Lines inside the block carry the fields `source` returns when each line is written.
+
+    For ids a unit of work learns midway — a request's caller after authentication — so the
+    lines written after that carry them, and nothing outlives the block.
+    """
+    token = _LATE_FIELDS.set(source)
+    try:
+        yield
+    finally:
+        _LATE_FIELDS.reset(token)
+
+
+def merge_late_fields(_logger: WrappedLogger, _method: str, event_dict: EventDict) -> EventDict:
+    """structlog processor: add the late fields the line does not already carry."""
+    source = _LATE_FIELDS.get()
+    if source is not None:
+        for key, value in source().items():
+            event_dict.setdefault(key, str(value))
+    return event_dict

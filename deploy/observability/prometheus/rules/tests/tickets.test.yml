@@ -1,0 +1,237 @@
+# Каждый тикет tickets.yml срабатывает и снимается (promtool test rules).
+rule_files:
+  - ../tickets.yml
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'node_filesystem_avail_bytes{fstype="ext4",mountpoint="/"}'
+        values: "50x5 10x20 50x20"
+      - series: 'node_filesystem_size_bytes{fstype="ext4",mountpoint="/"}'
+        values: "100x45"
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: HostDiskFilling
+        exp_alerts:
+          - exp_labels: {severity: ticket, fstype: ext4, mountpoint: /}
+            exp_annotations:
+              summary: "Файловая система / занята больше чем на 80%"
+              runbook: docs/runbooks/alerts.md#host-disk-filling
+      - eval_time: 40m
+        alertname: HostDiskFilling
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'shosai_db_pool_connections{state="in_use",home="ru",instance="a"}'
+        values: "1x5 8x20 1x20"
+      - series: 'shosai_db_pool_capacity{home="ru",instance="a"}'
+        values: "10x45"
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: DatabasePoolBusy
+        exp_alerts:
+          - exp_labels: {severity: ticket, home: ru}
+            exp_annotations:
+              summary: "Пул соединений дома ru занят больше чем на 70%"
+              runbook: docs/runbooks/alerts.md#database-pool-busy
+      - eval_time: 40m
+        alertname: DatabasePoolBusy
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'shosai_ai_provider_slots_total{provider="openrouter",decision="full"}'
+        values: "0x5 1x40"
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: ProviderSlotsExhausted
+        exp_alerts:
+          - exp_labels: {severity: ticket, provider: openrouter}
+            exp_annotations:
+              summary: "У провайдера openrouter кончаются слоты: вызовы ждут или отказаны"
+              runbook: docs/runbooks/alerts.md#provider-slots-exhausted
+      - eval_time: 40m
+        alertname: ProviderSlotsExhausted
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'shosai_task_queue_oldest_age_seconds{queue="default"}'
+        values: "0x5 900x20 0x20"
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: TaskQueueOld
+        exp_alerts:
+          - exp_labels: {severity: ticket, queue: default}
+            exp_annotations:
+              summary: "Самая старая задача очереди default ждёт дольше 10 минут"
+              runbook: docs/runbooks/alerts.md#task-queue-old
+      - eval_time: 40m
+        alertname: TaskQueueOld
+        exp_alerts: []
+
+  # Отметка успеха идёт вровень со временем, с 6-й минуты стоит на 300 с, с 32-й снова идёт.
+  - interval: 1m
+    input_series:
+      - series: 'shosai_loop_last_success_timestamp_seconds{shosai_loop_name="email.sweep.ru"}'
+        values: "0+60x5 300x25 1920+60x20"
+      - series: 'shosai_loop_interval_seconds{shosai_loop_name="email.sweep.ru"}'
+        values: "5x52"
+    alert_rule_test:
+      - eval_time: 25m
+        alertname: SchedulerLoopStalled
+        exp_alerts:
+          - exp_labels: {severity: ticket, shosai_loop_name: email.sweep.ru}
+            exp_annotations:
+              summary: "Цикл планировщика не завершался успешно дольше трёх своих интервалов"
+              runbook: docs/runbooks/alerts.md#scheduler-loop-stalled
+      - eval_time: 40m
+        alertname: SchedulerLoopStalled
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'shosai_db_home_state{home="ru",shosai_db_home_state="unreachable"}'
+        values: "0x5 1x10 0x20"
+    alert_rule_test:
+      - eval_time: 14m
+        alertname: HomeUnreachableFromApp
+        exp_alerts:
+          - exp_labels: {severity: ticket, home: ru}
+            exp_annotations:
+              summary: "Дом ru недоступен процессам приложения"
+              runbook: docs/runbooks/alerts.md#home-unreachable-from-app
+      - eval_time: 30m
+        alertname: HomeUnreachableFromApp
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'shosai_telemetry_dropped_total{signal="logs",reason="queue_full"}'
+        values: "0x5 3x40"
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: TelemetryDropped
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "Часть логов или спанов потеряна по дороге в хранилище"
+              runbook: docs/runbooks/alerts.md#telemetry-dropped
+      - eval_time: 40m
+        alertname: TelemetryDropped
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'otelcol_exporter_send_failed_log_records{exporter="otlp_http/loki"}'
+        values: "0x5 10x40"
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: TelemetryDropped
+        exp_alerts:
+          - exp_labels: {severity: ticket}
+            exp_annotations:
+              summary: "Часть логов или спанов потеряна по дороге в хранилище"
+              runbook: docs/runbooks/alerts.md#telemetry-dropped
+      - eval_time: 40m
+        alertname: TelemetryDropped
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'up{job="api",instance="a:9100"}'
+        values: "1x5 0x10 1x20"
+    alert_rule_test:
+      - eval_time: 14m
+        alertname: ScrapeTargetDown
+        exp_alerts:
+          - exp_labels: {severity: ticket, job: api, instance: "a:9100"}
+            exp_annotations:
+              summary: "Prometheus не может опросить api (a:9100)"
+              runbook: docs/runbooks/alerts.md#scrape-target-down
+      - eval_time: 30m
+        alertname: ScrapeTargetDown
+        exp_alerts: []
+
+  # Роли ws нет первые 20 минут, остальные есть всё время.
+  - interval: 1m
+    input_series:
+      - series: 'up{job="api",service="api",instance="a"}'
+        values: "1x40"
+      - series: 'up{job="ws",service="ws",instance="w"}'
+        values: "_x20 1x20"
+      - series: 'up{job="scheduler",service="scheduler",instance="s"}'
+        values: "1x40"
+      - series: 'up{job="workers",service="workers-critical",instance="c"}'
+        values: "1x40"
+      - series: 'up{job="workers",service="workers-default",instance="d"}'
+        values: "1x40"
+      - series: 'up{job="workers",service="workers-bulk",instance="b"}'
+        values: "1x40"
+      - series: 'up{job="workers",service="workers-meeting",instance="m"}'
+        values: "1x40"
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: RoleMissing
+        exp_alerts:
+          - exp_labels: {severity: ticket, service: ws}
+            exp_annotations:
+              summary: "Нет ни одного процесса службы ws"
+              runbook: docs/runbooks/alerts.md#role-missing
+      - eval_time: 35m
+        alertname: RoleMissing
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'probe_success{probe="edge_health",instance="https://edge"}'
+        values: "1x5 0x10 1x20"
+      - series: 'probe_ssl_earliest_cert_expiry{probe="edge_health",instance="https://edge"}'
+        values: "2592000x5 864000x15 2592000x20"
+      - series: 'probe_success{probe="home_database",home="eu",instance="db:5432"}'
+        values: "1x5 0x10 1x20"
+      - series: 'probe_duration_seconds{probe="home_database",home="ru",instance="db:5432"}'
+        values: "0.05x5 0.4x20 0.05x20"
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: EdgeHealthFailing
+        exp_alerts:
+          - exp_labels: {severity: ticket, probe: edge_health, instance: "https://edge"}
+            exp_annotations:
+              summary: "/v1/health через edge не отвечает изнутри плоскости"
+              runbook: docs/runbooks/alerts.md#edge-health-failing
+      - eval_time: 30m
+        alertname: EdgeHealthFailing
+        exp_alerts: []
+      - eval_time: 10m
+        alertname: CertificateExpiresSoon
+        exp_alerts:
+          - exp_labels: {severity: ticket, probe: edge_health, instance: "https://edge"}
+            exp_annotations:
+              summary: "Сертификат https://edge истекает меньше чем через 21 день"
+              runbook: docs/runbooks/alerts.md#certificate-expires-soon
+      - eval_time: 30m
+        alertname: CertificateExpiresSoon
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: HomeDatabaseUnreachable
+        exp_alerts:
+          - exp_labels: {severity: ticket, probe: home_database, home: eu, instance: "db:5432"}
+            exp_annotations:
+              summary: "База дома eu не принимает TCP-соединения из плоскости"
+              runbook: docs/runbooks/alerts.md#home-database-unreachable
+      - eval_time: 30m
+        alertname: HomeDatabaseUnreachable
+        exp_alerts: []
+      - eval_time: 22m
+        alertname: RussianHomeLinkSlow
+        exp_alerts:
+          - exp_labels: {severity: ticket, probe: home_database, home: ru, instance: "db:5432"}
+            exp_annotations:
+              summary: "Соединение с базой российского дома дольше 250 мс"
+              runbook: docs/runbooks/alerts.md#russian-home-link-slow
+      - eval_time: 40m
+        alertname: RussianHomeLinkSlow
+        exp_alerts: []

@@ -7,7 +7,8 @@ advisory buckets (ADR 0012, amended by F1 audit OD-3). Rate, errors and duration
 from it. The boundary passes the template of the route FastAPI has already matched;
 nothing is matched again. Every label value comes from a closed set: a served route
 template or empty, a known method or `_OTHER`, a status code the application chose, a
-scheme of two values, an error type derived from the status.
+scheme of two values, an error type derived from the status, and `home` — the caller's data
+home (`ru`, `eu`) or empty for an anonymous request (§16.7; ADR 0012 amended by F5).
 
 A request the collector's tail sampling always keeps — a server error, no response, or
 slower than `SLOW_REQUEST_SECONDS` — carries its `trace_id` as an exemplar, so a latency
@@ -19,6 +20,8 @@ from dataclasses import dataclass
 
 from prometheus_client import CollectorRegistry, Histogram
 
+from shosai.core.kernel.homes import Home
+
 DURATION_METRIC = "http_server_request_duration_seconds"
 DURATION_HELP = "Duration of HTTP server requests."
 METHOD_LABEL = "http_request_method"
@@ -26,7 +29,8 @@ ROUTE_LABEL = "http_route"
 STATUS_LABEL = "http_response_status_code"
 SCHEME_LABEL = "url_scheme"
 ERROR_LABEL = "error_type"
-LABELS = (METHOD_LABEL, ROUTE_LABEL, STATUS_LABEL, SCHEME_LABEL, ERROR_LABEL)
+HOME_LABEL = "home"
+LABELS = (METHOD_LABEL, ROUTE_LABEL, STATUS_LABEL, SCHEME_LABEL, ERROR_LABEL, HOME_LABEL)
 # Атрибут, которого нет, в Prometheus — пустая метка: так экспортёр OpenTelemetry пишет
 # запрос без маршрута, без ответа или без ошибки.
 ABSENT = ""
@@ -44,9 +48,11 @@ SERVER_ERROR_STATUS = 500
 # сохраняется всегда, и exemplar на него ведёт. Меняются только вместе.
 SLOW_REQUEST_SECONDS = 0.3
 EXEMPLAR_TRACE_ID = "trace_id"
-# Рекомендованные корзины семантических соглашений для http.server.request.duration.
+# Рекомендованные корзины семантических соглашений для http.server.request.duration и
+# корзина на пороге цели задержки §16.3 (300 мс): SLI задержки — доля запросов не дольше
+# порога, а её читают только по границе корзины (ADR 0012, поправка F5).
 DURATION_BUCKETS = (
-    0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, float("inf"),
+    0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.3, 0.5, 0.75, 1, 2.5, 5, 7.5, 10, float("inf"),
 )  # fmt: skip
 
 
@@ -65,6 +71,7 @@ class CompletedRequest:
     scheme: str
     duration_seconds: float
     trace_id: str | None
+    home: Home | None = None
 
 
 class HttpMetrics:
@@ -84,6 +91,7 @@ class HttpMetrics:
             status,
             HTTPS_SCHEME if request.scheme == HTTPS_SCHEME else HTTP_SCHEME,
             error,
+            request.home.value if request.home is not None else ABSENT,
         ).observe(request.duration_seconds, exemplar_of(request, failed=error != ABSENT))
 
 

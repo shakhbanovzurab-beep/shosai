@@ -58,11 +58,23 @@ No personal data, meeting text, secret or client trace reaches a label, a span o
 
 ## Metrics
 
-- Each backend role is found by Docker DNS on its Compose service name at `:9100` (`OPS_PORT`): while a release hands over, both containers behind a name are scraped. `job` and `role` name the role; workers carry `queue` from the service name. `instance` is the container's address and changes with each release.
+- Each backend role is found by Docker DNS on its Compose service name at `:9100` (`OPS_PORT`): while a release hands over, both containers behind a name are scraped. `job` and `role` name the role, `service` the Compose service (`workers-critical`…), as the label `service` does in Loki. No backend metric may use these four label names: Prometheus would rename it `exported_*`, and the catalog test refuses it. `instance` is the container's address and changes with each release.
 - A role that is not running has no target at all, so no `up` series exists for it and Prometheus logs a DNS error every 15 s: rules (step 5) watch roles with `absent()` as well as `up == 0`.
 - Probe targets live in a directory of `file_sd` files: locally [prometheus/targets/local](prometheus/targets/local); on staging the files are rendered on the host, because they name the managed databases (`SHOSAI_PROBE_TARGETS_DIR`). Each target names its blackbox `module` and a `probe` label (`edge_health`, `home_database` with `home`).
 - The node exporter runs in the stack's network, so its network counters would describe the container only: those collectors are off. Disks, memory, CPU and load describe the host.
 - The external label `environment` comes from `SHOSAI_ENVIRONMENT`. Prometheus re-reads its configuration on `SIGHUP` (`docker compose kill -s HUP prometheus`); its lifecycle HTTP API stays off, so nothing on the network can stop it.
+
+## Alert rules
+
+Pages come only from SLO burn and invariant monitors (§16.3, §16.4); everything else is a ticket (§16.6). Every alert carries `severity` (`page` or `ticket`), a summary in Russian for the operator and a `runbook` anchor in `docs/runbooks/alerts.md` (written in F5 step 6).
+
+- **Generated** — [prometheus/rules/generated](prometheus/rules/generated): the backend renders them from the objectives and monitors each slice declares on its `FeatureModule` and core declares in `backend/src/shosai/composition/objectives.py`. Per owner: `<owner>.recording.json` (each SLO's share of bad events over 5 m, 30 m, 1 h, 6 h and 3 d), `<owner>.alerts.json` (fast burn 14.4× over 1 h and 5 m, slow burn 6× over 6 h and 30 m — pages, or tickets for an SLO tracked, not paged; 1× over 3 d and 6 h — always a ticket; one page per monitor) and `<owner>.alerts.test.json`. Never edited by hand: `uv run --env-file ../.env.example pytest tests/composition/test_observability_rules.py --update-rules` in `backend/` rewrites them, and the same test fails while they differ from the code. Its second test starts the four roles and fails on any backend metric a rule names that no role exports.
+- **Tickets** — [prometheus/rules/tickets.yml](prometheus/rules/tickets.yml), by hand: disk, pools, provider slots, queue age, stalled scheduler loops, a home unreachable, telemetry drops, scrape targets down or missing, probes and the certificate.
+- **Logs** — [loki/rules](loki/rules): the edge's 5xx and 429, evaluated by Loki's ruler (mounted for the tenant `fake`).
+- **Tests** — [prometheus/rules/tests](prometheus/rules/tests): every ticket fires and resolves; the rendered sign-in recordings compute the shares they should from raw HTTP series. With the generated tests, every alert has a promtool test.
+- **Checks** — [checks/validate-configs.sh](checks/validate-configs.sh), the CI job "Observability": each component validates its config, promtool checks and tests every rule, Loki starts with its rules and must load them all.
+
+Today's objectives: sign-in availability 99.9% and sign-in latency (≤ 300 ms for 95%) per home, cabinet reads latency per home — the EU's page, the Russian home's are tickets (§16.3, §20). Monitors: unknown tasks, outbox older than 5 min, dead letters, provider calls without a cost row, billed calls without one. The other journeys and monitors of §16.3–16.4 come with their slices.
 
 ## Variables
 

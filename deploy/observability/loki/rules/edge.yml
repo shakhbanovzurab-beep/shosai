@@ -1,0 +1,22 @@
+# Тикеты по журналу edge (§16.1: правила по логам — в ruler Loki, оповещение — тот же Alertmanager).
+# Метрик статусов у edge нет — nginx-экспортёр знает только соединения, а строки журнала знают статус.
+groups:
+  - name: tickets-edge
+    rules:
+      - alert: EdgeServerErrors
+        expr: sum(count_over_time({service="edge"} | json | status >= 500 [5m])) > 10
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Edge отдал больше 10 ответов 5xx за 5 минут"
+          runbook: docs/runbooks/alerts.md#edge-server-errors
+
+      - alert: EdgeRateLimiting
+        expr: sum(count_over_time({service="edge"} | json | status = 429 [5m])) > 50
+        for: 2m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Edge отказал по лимиту запросов больше 50 раз за 5 минут"
+          runbook: docs/runbooks/alerts.md#edge-rate-limiting

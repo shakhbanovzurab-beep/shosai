@@ -22,10 +22,11 @@ from opentelemetry import trace
 from starlette.datastructures import MutableHeaders
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from shosai.core.observability.log_context import log_context
+from shosai.core.observability.log_context import late_log_fields, log_context
 from shosai.core.web.envelope import error_body, error_response
 from shosai.core.web.error_handlers import status_code
 from shosai.core.web.http_metrics import CompletedRequest, HttpMetrics
+from shosai.core.web.request_facts import RequestFacts, attach_facts
 from shosai.core.web.request_ids import REQUEST_ID_HEADER, assign_request_id
 from shosai.core.web.route_templates import RouteTemplates
 
@@ -58,9 +59,10 @@ class RequestBoundary:
             await self.app(scope, receive, send)
             return
         request_id = assign_request_id(scope)
-        with log_context(request_id=request_id):
+        facts = attach_facts(scope)
+        with log_context(request_id=request_id), late_log_fields(facts.log_fields):
             if scope["type"] == "http":
-                exchange = _HttpExchange(self.app, scope, request_id, self._templates)
+                exchange = _HttpExchange(self.app, scope, request_id, self._templates, facts)
                 try:
                     await exchange.run(receive, send)
                 finally:
@@ -75,12 +77,18 @@ class _HttpExchange:
     """One HTTP request passing the boundary: its response status, size and timing."""
 
     def __init__(
-        self, app: ASGIApp, scope: Scope, request_id: str, templates: RouteTemplates
+        self,
+        app: ASGIApp,
+        scope: Scope,
+        request_id: str,
+        templates: RouteTemplates,
+        facts: RequestFacts,
     ) -> None:
         self._app = app
         self._scope = scope
         self._request_id = request_id
         self._templates = templates
+        self._facts = facts
         self._status: int | None = None
         self._started = time.perf_counter()
 
@@ -121,6 +129,7 @@ class _HttpExchange:
             scheme=str(self._scope.get("scheme", "")),
             duration_seconds=time.perf_counter() - self._started,
             trace_id=current_trace_id(),
+            home=self._facts.home,
         )
 
     async def _answer_internal_error(self, receive: Receive, send: Send) -> None:

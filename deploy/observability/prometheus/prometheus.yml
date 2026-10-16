@@ -3,6 +3,8 @@
 # Метки ограничены: роль, очередь, дом, проба. Пользователи, компании и сессии в метки не попадают.
 # Каждую роль бэкенда Prometheus находит по DNS Docker: во время передачи выкладки за именем службы
 # стоят два контейнера, и опрашиваются оба. Правила (шаг 5) агрегируют по экземплярам явно.
+# Метки цели — job, instance, role, service (служба Compose, как метка service в Loki); у метрик
+# бэкенда таких меток нет, иначе Prometheus переименует их в exported_* (тест каталога это ловит).
 # Конфигурация перечитывается по SIGHUP; HTTP-API жизненного цикла выключен.
 
 global:
@@ -11,6 +13,13 @@ global:
   evaluation_interval: 15s
   external_labels:
     environment: ${SHOSAI_ENVIRONMENT}
+
+# Тикеты пишутся руками (rules/tickets.yml), цели и мониторы рендерятся из кода бэкенда
+# (rules/generated, F5 план §3.8); тесты promtool лежат рядом и правилами не загружаются.
+rule_files:
+  - /etc/prometheus/rules/*.yml
+  - /etc/prometheus/rules/generated/*.recording.json
+  - /etc/prometheus/rules/generated/*.alerts.json
 
 scrape_configs:
   # --- Роли бэкенда: служебный порт OPS_PORT каждой роли (core/web/ops.py) ---
@@ -23,6 +32,8 @@ scrape_configs:
     relabel_configs:
       - target_label: role
         replacement: api
+      - source_labels: [__meta_dns_name]
+        target_label: service
 
   - job_name: ws
     dns_sd_configs:
@@ -33,6 +44,8 @@ scrape_configs:
     relabel_configs:
       - target_label: role
         replacement: ws
+      - source_labels: [__meta_dns_name]
+        target_label: service
 
   - job_name: workers
     dns_sd_configs:
@@ -44,8 +57,7 @@ scrape_configs:
       - target_label: role
         replacement: workers
       - source_labels: [__meta_dns_name]
-        regex: workers-(.+)
-        target_label: queue
+        target_label: service
 
   - job_name: scheduler
     dns_sd_configs:
@@ -56,6 +68,8 @@ scrape_configs:
     relabel_configs:
       - target_label: role
         replacement: scheduler
+      - source_labels: [__meta_dns_name]
+        target_label: service
 
   # --- Сам стек ---
   - job_name: prometheus

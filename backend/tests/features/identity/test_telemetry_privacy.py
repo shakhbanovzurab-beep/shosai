@@ -24,6 +24,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kv.connection import connect_redis
 from shosai.core.observability.span_privacy import PrivateAttributesSampler
 from shosai.core.web.app import HttpTelemetry
+from shosai.core.web.http_metrics import DURATION_METRIC
 from tests.core.observability.capture import captured_logs
 from tests.core.observability.telemetry_canaries import leaks
 from tests.features.identity.registration_bench import (
@@ -162,3 +163,23 @@ async def test_identity_flows_leave_no_personal_data_in_telemetry(
     assert {span.name for span in spans} >= {"POST /v1/auth/login", "SELECT", "EVALSHA"}
     registries = [registry, traced.homes.registry, logs.registry]
     assert leaks({**canaries, **secrets}, logs.text(), spans, registries) == {}
+
+
+async def test_signed_in_requests_carry_the_callers_home(traced: Traced, run_slot: RunSlot) -> None:
+    registry = CollectorRegistry()
+    options = BenchOptions(telemetry=HttpTelemetry(registry, traced.provider))
+    async with registration_bench(
+        traced.homes.transactions, traced.valkey, traced.cache, options
+    ) as bench:
+        await drive_identity(bench, run_slot, canary_values())
+
+    homes = {
+        (sample.labels["http_route"], sample.labels["home"])
+        for family in registry.collect()
+        if family.name == DURATION_METRIC
+        for sample in family.samples
+        if sample.name.endswith("_count")
+    }
+    # Вход узнаёт дом человека, запросы с токеном несут его; анонимные — без дома.
+    assert {("/v1/auth/login", "ru"), ("/v1/auth/me", "ru"), ("/v1/me", "ru")} <= homes
+    assert ("/v1/auth/register", "") in homes

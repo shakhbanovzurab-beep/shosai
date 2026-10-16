@@ -1,0 +1,144 @@
+# Тикеты §16.6: причины, а не симптомы — приходят беззвучно (F5-D4), не будят. Будят только расход
+# бюджета SLO и мониторы инвариантов: их правила рендерятся из кода (generated/, F5 план §3.8).
+#
+# Уроки черновика: «нет данных» — тоже плохо (absent для ролей); пороги циклов — от их собственного
+# интервала; возраст очереди — по самому старому элементу, а не по глубине. Каждое правило проверяет
+# tests/tickets.test.yml: срабатывание и снятие.
+
+groups:
+  - name: tickets-host
+    rules:
+      - alert: HostDiskFilling
+        expr: |
+          1 - node_filesystem_avail_bytes{fstype!~"tmpfs|overlay|squashfs"}
+            / node_filesystem_size_bytes{fstype!~"tmpfs|overlay|squashfs"} > 0.8
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Файловая система {{ $labels.mountpoint }} занята больше чем на 80%"
+          runbook: docs/runbooks/alerts.md#host-disk-filling
+
+  - name: tickets-backend
+    rules:
+      - alert: DatabasePoolBusy
+        expr: |
+          max by (home) (
+            sum by (home, instance) (shosai_db_pool_connections{state="in_use"})
+              / sum by (home, instance) (shosai_db_pool_capacity)
+          ) > 0.7
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Пул соединений дома {{ $labels.home }} занят больше чем на 70%"
+          runbook: docs/runbooks/alerts.md#database-pool-busy
+
+      - alert: ProviderSlotsExhausted
+        expr: sum by (provider) (increase(shosai_ai_provider_slots_total{decision=~"full|refused"}[15m])) > 0
+        labels:
+          severity: ticket
+        annotations:
+          summary: "У провайдера {{ $labels.provider }} кончаются слоты: вызовы ждут или отказаны"
+          runbook: docs/runbooks/alerts.md#provider-slots-exhausted
+
+      - alert: TaskQueueOld
+        expr: max by (queue) (shosai_task_queue_oldest_age_seconds) > 600
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Самая старая задача очереди {{ $labels.queue }} ждёт дольше 10 минут"
+          runbook: docs/runbooks/alerts.md#task-queue-old
+
+      - alert: SchedulerLoopStalled
+        expr: |
+          time() - shosai_loop_last_success_timestamp_seconds
+            > clamp_min(3 * shosai_loop_interval_seconds, 120)
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Цикл планировщика не завершался успешно дольше трёх своих интервалов"
+          runbook: docs/runbooks/alerts.md#scheduler-loop-stalled
+
+      - alert: HomeUnreachableFromApp
+        expr: max by (home) (shosai_db_home_state{shosai_db_home_state="unreachable"}) == 1
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Дом {{ $labels.home }} недоступен процессам приложения"
+          runbook: docs/runbooks/alerts.md#home-unreachable-from-app
+
+      - alert: TelemetryDropped
+        expr: |
+          sum(increase(shosai_telemetry_dropped_total[15m])) > 0
+          or
+          sum(increase({__name__=~"otelcol_exporter_(send|enqueue)_failed_(log_records|spans)|otelcol_receiver_refused_(log_records|spans)|otelcol_processor_tail_sampling_sampling_trace_dropped_too_early|tempo_receiver_refused_spans"}[15m])) > 0
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Часть логов или спанов потеряна по дороге в хранилище"
+          runbook: docs/runbooks/alerts.md#telemetry-dropped
+
+  - name: tickets-targets
+    rules:
+      - alert: ScrapeTargetDown
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Prometheus не может опросить {{ $labels.job }} ({{ $labels.instance }})"
+          runbook: docs/runbooks/alerts.md#scrape-target-down
+
+      # Роли нет совсем — нет и цели: up == 0 этого не видит.
+      - alert: RoleMissing
+        expr: |
+          absent(up{service="api"}) or absent(up{service="ws"}) or absent(up{service="scheduler"})
+          or absent(up{service="workers-critical"}) or absent(up{service="workers-default"})
+          or absent(up{service="workers-bulk"}) or absent(up{service="workers-meeting"})
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Нет ни одного процесса службы {{ $labels.service }}"
+          runbook: docs/runbooks/alerts.md#role-missing
+
+  - name: tickets-probes
+    rules:
+      - alert: EdgeHealthFailing
+        expr: probe_success{probe="edge_health"} == 0
+        for: 3m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "/v1/health через edge не отвечает изнутри плоскости"
+          runbook: docs/runbooks/alerts.md#edge-health-failing
+
+      - alert: CertificateExpiresSoon
+        expr: (probe_ssl_earliest_cert_expiry{probe="edge_health"} - time()) / 86400 < 21
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Сертификат {{ $labels.instance }} истекает меньше чем через 21 день"
+          runbook: docs/runbooks/alerts.md#certificate-expires-soon
+
+      - alert: HomeDatabaseUnreachable
+        expr: probe_success{probe="home_database"} == 0
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "База дома {{ $labels.home }} не принимает TCP-соединения из плоскости"
+          runbook: docs/runbooks/alerts.md#home-database-unreachable
+
+      - alert: RussianHomeLinkSlow
+        expr: probe_duration_seconds{probe="home_database",home="ru"} > 0.25
+        for: 15m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "Соединение с базой российского дома дольше 250 мс"
+          runbook: docs/runbooks/alerts.md#russian-home-link-slow

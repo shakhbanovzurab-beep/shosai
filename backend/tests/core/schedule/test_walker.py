@@ -86,7 +86,7 @@ async def test_a_job_that_could_not_be_queued_gives_its_claim_back(
     assert failed == WalkResult(queued=[DAILY_EU.name], failed=[HOURLY.name])
     assert unclaimed == {HOURLY.name: False, DAILY_EU.name: True}
     assert retried == WalkResult(queued=[HOURLY.name])
-    labels = {"job": HOURLY.name, "home": "eu", "outcome": "failed"}
+    labels = {"schedule": HOURLY.name, "home": "eu", "outcome": "failed"}
     assert registry.get_sample_value("shosai_periodic_job_runs_total", labels) == 1
 
 

@@ -14,7 +14,7 @@ from http import HTTPStatus
 from typing import Annotated, ClassVar, Final, Protocol
 from uuid import UUID
 
-from fastapi import Cookie, Header
+from fastapi import Cookie, Header, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.events.domain_event import DomainEvent, EventCode
@@ -23,6 +23,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.ports.keys import Cardinality, PortKey
+from shosai.core.web.request_facts import note_caller
 
 
 @dataclass(frozen=True, slots=True)
@@ -116,13 +117,19 @@ def bearer_principal(ports: PortDirectory) -> Callable[..., Awaitable[Principal]
     """A route dependency: the person of the request's bearer token, through identity.
 
     Missing or malformed, the header is 401 `Missing Bearer token`, the draft's `detail`
-    that native clients read; everything else is the authenticator's answer.
+    that native clients read; everything else is the authenticator's answer. The person's
+    home and id go to the request's metrics, span and log lines (`note_caller`).
     """
 
-    async def authenticated(authorization: Annotated[str | None, Header()] = None) -> Principal:
+    async def authenticated(
+        request: Request, authorization: Annotated[str | None, Header()] = None
+    ) -> Principal:
         if not authorization or not authorization.startswith(BEARER):
             raise AppError("unauthorized", HTTPStatus.UNAUTHORIZED, detail="Missing Bearer token")
-        return await ports.get(AUTHENTICATOR).principal(authorization.removeprefix(BEARER))
+        principal = await ports.get(AUTHENTICATOR).principal(authorization.removeprefix(BEARER))
+        # Дом и человек запроса — метке home HTTP-метрики, строке доступа и логам (§16.2).
+        note_caller(request, principal.home, principal.user_id)
+        return principal
 
     return authenticated
 

@@ -76,6 +76,7 @@ services:
       - /tmp
     volumes:
       - ./loki/loki.yaml:/etc/loki/loki.yaml:ro
+      - ./loki/rules:/etc/loki/rules/fake:ro
       - loki-data:/loki
     depends_on:
       telemetry-volumes:
@@ -123,6 +124,7 @@ services:
       SHOSAI_ENVIRONMENT: ${SHOSAI_ENVIRONMENT:-staging}
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/rules:/etc/prometheus/rules:ro
       - ${SHOSAI_PROBE_TARGETS_DIR:-/srv/shosai/telemetry/probe-targets}:/etc/prometheus/targets:ro
       - prometheus-data:/prometheus
     healthcheck:
