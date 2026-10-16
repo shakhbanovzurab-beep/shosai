@@ -44,6 +44,18 @@ One JSON line per request without personal data: no client address, no user agen
 - `memory_limiter` refuses data before the collector reaches 80% of its memory limit.
 - Each exporter has a queue of 20 000 records or spans and retries for 60 s; a full queue or an expired retry drops the data. Every loss is counted on the collector's `:8888/metrics`: `otelcol_exporter_enqueue_failed_*` (queue full), `otelcol_exporter_send_failed_*` (retries expired), `otelcol_receiver_refused_*` (memory limit), `otelcol_processor_tail_sampling_sampling_trace_dropped_too_early` (more traces in flight than `num_traces`). The exporter counters appear once they are non-zero. No process ever waits on telemetry.
 
+## Privacy (§16.8)
+
+No personal data, meeting text, secret or client trace reaches a label, a span or a log line. Three layers keep it so:
+
+1. **Sources.** The backend logs ids only (`LogFields`), redacts secrets by key and inside URLs, drops the request's private span attributes before a span exists, and keeps metric labels in closed sets. The edge logs no address, agent, path or query.
+2. **Collector.** It deletes span attributes that carry a client's address, agent or raw URL, hides `client`, `request`, `upstream` and `referrer` in NGINX's text error lines, and — the last line — masks anything shaped like an email address, a JWT, a bearer token or a password inside a URL in log lines, log attributes, span names, span attributes and span events (`<email>`, `<jwt>`, `Bearer <token>`, `://<credentials>@`). Operators' own queries logged by Loki and Tempo are masked the same way.
+3. **Checks.**
+   - `backend/tests/features/identity/test_telemetry_privacy.py` runs identity's flows — registration with its mailed code, sign-in, the token on `/v1/auth/me`, a new name, failed sign-ins, a reset request, a stranger's path and query, from a canary client address and agent — through the real logging pipeline at DEBUG, every span of the app, both homes and Valkey without sampling, and every metric registry; no canary may appear. `tests/core/observability/telemetry_canaries.py` is the search every slice reuses for its own flows.
+   - [checks/privacy-canary.sh](checks/privacy-canary.sh) does the same end to end: requests that store nothing go through the edge with canaries, then the canaries are searched in Loki, in every trace of the window in Tempo, and in every series and exemplar of Prometheus. It fails when it finds one, and when the requests' own lines are missing from Loki or, for a sign-in slower than the sampling threshold, its trace from Tempo.
+
+   Both were checked once with a leak planted on purpose — a log line and a span attribute — and failed as they should.
+
 ## Metrics
 
 - Each backend role is found by Docker DNS on its Compose service name at `:9100` (`OPS_PORT`): while a release hands over, both containers behind a name are scraped. `job` and `role` name the role; workers carry `queue` from the service name. `instance` is the container's address and changes with each release.

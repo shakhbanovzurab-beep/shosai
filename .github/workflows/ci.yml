@@ -39,6 +39,7 @@ jobs:
           docker compose --file deploy/observability/compose.yaml --file deploy/observability/compose.local.yaml config --quiet
           docker run --rm -v "$PWD:/mnt:ro" -w /mnt koalaman/shellcheck:v0.11.0 --severity=style \
             scripts/local-env.sh deploy/local/postgres/init-home.sh deploy/local/pgbouncer/start.sh deploy/local/edge-certificate.sh \
+            deploy/observability/checks/privacy-canary.sh \
             deploy/staging/*.sh deploy/staging/pgbouncer/start.sh deploy/staging/nginx/entrypoint/*.sh
 
   semgrep:

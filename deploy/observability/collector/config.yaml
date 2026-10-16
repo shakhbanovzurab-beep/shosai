@@ -80,22 +80,56 @@ processors:
           - set(log.severity_number, SEVERITY_NUMBER_WARN) where log.cache["level"] == "warning"
           - set(log.severity_number, SEVERITY_NUMBER_ERROR) where log.cache["level"] == "error"
           - set(log.severity_number, SEVERITY_NUMBER_FATAL) where log.cache["level"] == "critical"
-          # У нетрассируемых локаций edge trace_id пустой.
-          - set(log.trace_id.string, log.cache["trace_id"]) where log.cache["trace_id"] != nil and log.cache["trace_id"] != ""
-          - set(log.span_id.string, log.cache["span_id"]) where log.cache["span_id"] != nil and log.cache["span_id"] != ""
+          # Идентификаторы — только из строк бэкенда (есть role) и edge (есть path_class): у Loki, Tempo
+          # и Grafana в JSON бывают поля с теми же именами и другим смыслом. У нетрассируемых локаций
+          # edge trace_id пустой.
+          - set(log.trace_id.string, log.cache["trace_id"]) where log.cache["trace_id"] != nil and (log.cache["role"] != nil or log.cache["path_class"] != nil) and log.cache["trace_id"] != ""
+          - set(log.span_id.string, log.cache["span_id"]) where log.cache["span_id"] != nil and (log.cache["role"] != nil or log.cache["path_class"] != nil) and log.cache["span_id"] != ""
           # error_log NGINX — текст с адресом клиента и сырым запросом, параметры включительно (§16.8).
           - 'replace_pattern(log.body, "client: [^,]+", "client: <hidden>") where log.attributes["service"] == "edge"'
           - 'replace_pattern(log.body, "request: \"[^\"]*\"", "request: <hidden>") where log.attributes["service"] == "edge"'
           - 'replace_pattern(log.body, "upstream: \"[^\"]*\"", "upstream: <hidden>") where log.attributes["service"] == "edge"'
           - 'replace_pattern(log.body, "referrer: \"[^\"]*\"", "referrer: <hidden>") where log.attributes["service"] == "edge"'
-          - set(log.attributes["request_id"], log.cache["request_id"]) where log.cache["request_id"] != nil
-          - set(log.attributes["user_id"], log.cache["user_id"]) where log.cache["user_id"] != nil
-          - set(log.attributes["org_id"], log.cache["org_id"]) where log.cache["org_id"] != nil
-          - set(log.attributes["session_id"], log.cache["session_id"]) where log.cache["session_id"] != nil
-          - set(log.attributes["task_id"], log.cache["task_id"]) where log.cache["task_id"] != nil
-          - set(log.attributes["event_id"], log.cache["event_id"]) where log.cache["event_id"] != nil
+          - set(log.attributes["request_id"], log.cache["request_id"]) where log.cache["request_id"] != nil and (log.cache["role"] != nil or log.cache["path_class"] != nil)
+          - set(log.attributes["user_id"], log.cache["user_id"]) where log.cache["user_id"] != nil and (log.cache["role"] != nil or log.cache["path_class"] != nil)
+          - set(log.attributes["org_id"], log.cache["org_id"]) where log.cache["org_id"] != nil and (log.cache["role"] != nil or log.cache["path_class"] != nil)
+          - set(log.attributes["session_id"], log.cache["session_id"]) where log.cache["session_id"] != nil and (log.cache["role"] != nil or log.cache["path_class"] != nil)
+          - set(log.attributes["task_id"], log.cache["task_id"]) where log.cache["task_id"] != nil and (log.cache["role"] != nil or log.cache["path_class"] != nil)
+          - set(log.attributes["event_id"], log.cache["event_id"]) where log.cache["event_id"] != nil and (log.cache["role"] != nil or log.cache["path_class"] != nil)
           # Закрытый список: метки и идентификаторы; всё прочее остаётся только в теле строки.
           - keep_keys(log.attributes, ["service", "role", "level", "home", "request_id", "user_id", "org_id", "session_id", "task_id", "event_id"])
+
+  # Последний рубеж (§16.8): значения вида адреса почты, JWT, bearer-токена и пароля в адресе
+  # маскируются в строках, атрибутах, именах и событиях спанов, какой бы процесс их ни написал.
+  # Источники их не пишут — это проверяют тест приватности бэкенда (tests/features/identity/
+  # test_telemetry_privacy.py) и checks/privacy-canary.sh; здесь — на случай, если источник ошибся.
+  transform/mask_personal_values:
+    error_mode: ignore
+    log_statements:
+      - statements:
+          - 'replace_pattern(log.body, "[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}", "<email>")'
+          - 'replace_pattern(log.body, "eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}", "<jwt>")'
+          - 'replace_pattern(log.body, "(?i)bearer\\s+[A-Za-z0-9._~+/=-]{8,}", "Bearer <token>")'
+          - 'replace_pattern(log.body, "://[^:/@\\s\"]+:[^@\\s/\"]+@", "://<credentials>@")'
+          - 'replace_all_patterns(log.attributes, "value", "[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}", "<email>")'
+          - 'replace_all_patterns(log.attributes, "value", "eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}", "<jwt>")'
+          - 'replace_all_patterns(log.attributes, "value", "(?i)bearer\\s+[A-Za-z0-9._~+/=-]{8,}", "Bearer <token>")'
+          - 'replace_all_patterns(log.attributes, "value", "://[^:/@\\s\"]+:[^@\\s/\"]+@", "://<credentials>@")'
+    trace_statements:
+      - statements:
+          - 'replace_pattern(span.name, "[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}", "<email>")'
+          - 'replace_pattern(span.name, "eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}", "<jwt>")'
+          - 'replace_pattern(span.name, "(?i)bearer\\s+[A-Za-z0-9._~+/=-]{8,}", "Bearer <token>")'
+          - 'replace_pattern(span.name, "://[^:/@\\s\"]+:[^@\\s/\"]+@", "://<credentials>@")'
+          - 'replace_all_patterns(span.attributes, "value", "[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}", "<email>")'
+          - 'replace_all_patterns(span.attributes, "value", "eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}", "<jwt>")'
+          - 'replace_all_patterns(span.attributes, "value", "(?i)bearer\\s+[A-Za-z0-9._~+/=-]{8,}", "Bearer <token>")'
+          - 'replace_all_patterns(span.attributes, "value", "://[^:/@\\s\"]+:[^@\\s/\"]+@", "://<credentials>@")'
+      - statements:
+          - 'replace_all_patterns(spanevent.attributes, "value", "[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}", "<email>")'
+          - 'replace_all_patterns(spanevent.attributes, "value", "eyJ[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]{8,}", "<jwt>")'
+          - 'replace_all_patterns(spanevent.attributes, "value", "(?i)bearer\\s+[A-Za-z0-9._~+/=-]{8,}", "Bearer <token>")'
+          - 'replace_all_patterns(spanevent.attributes, "value", "://[^:/@\\s\"]+:[^@\\s/\"]+@", "://<credentials>@")'
 
   # Метки Loki переезжают в ресурс: строки группируются по service, role, level, home.
   groupbyattrs/loki_labels:
@@ -192,9 +226,9 @@ service:
   pipelines:
     logs:
       receivers: [file_log/containers]
-      processors: [memory_limiter, filter/projects, transform/container_lines, groupbyattrs/loki_labels, batch]
+      processors: [memory_limiter, filter/projects, transform/container_lines, transform/mask_personal_values, groupbyattrs/loki_labels, batch]
       exporters: [otlp_http/loki]
     traces:
       receivers: [otlp]
-      processors: [memory_limiter, transform/private_span_attributes, tail_sampling, batch]
+      processors: [memory_limiter, transform/private_span_attributes, transform/mask_personal_values, tail_sampling, batch]
       exporters: [otlp_grpc/tempo]

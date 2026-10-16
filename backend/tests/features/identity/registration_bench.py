@@ -76,6 +76,8 @@ TEST_ROUNDS = 4
 SAMPLE_WORDS = "correct horse battery"
 # Почтовый сервер тестам не нужен: письма только пишутся в базу и читаются оттуда.
 UNUSED_SMTP_PORT = 9
+# Адрес клиента по умолчанию у ASGITransport httpx.
+DEFAULT_CLIENT = ("127.0.0.1", 123)
 
 
 @dataclass(frozen=True, slots=True)
@@ -106,12 +108,15 @@ class EuUnreachable:
 
 @dataclass(frozen=True, slots=True)
 class BenchOptions:
-    """What a test changes in the bench: an EU outage, a captcha, provider doubles."""
+    """What a test changes in the bench: an EU outage, a captcha, provider doubles, telemetry."""
 
     directory_transactions: Callable[[HomeTransactions], HomeTransactions] | None = None
     captcha: Captcha | None = None
     providers: Mapping[Provider, SocialProvider] = field(default_factory=dict)
     objects: Mapping[Home, ObjectStorage] = field(default_factory=dict)
+    # Метрики и трейсы приложения стенда: тест приватности читает их; по умолчанию — свои, немые.
+    telemetry: HttpTelemetry | None = None
+    client: tuple[str, int] = DEFAULT_CLIENT
 
 
 @asynccontextmanager
@@ -124,7 +129,10 @@ async def registration_bench(
     """Identity's routes over the slot, with the captcha off and cheap hashing by default."""
     chosen = options or BenchOptions()
     directory_transactions, captcha = chosen.directory_transactions, chosen.captcha
-    registry = CollectorRegistry()
+    telemetry = chosen.telemetry or HttpTelemetry(
+        CollectorRegistry(), TracerProvider(shutdown_on_exit=False)
+    )
+    registry = telemetry.registry
     mail = mail_bench(transactions, UNUSED_SMTP_PORT)
     directory_access = (
         directory_transactions(transactions) if directory_transactions else transactions
@@ -202,9 +210,8 @@ async def registration_bench(
             (chosen.providers, captcha or CaptchaOff(), mail.port),
         ),
     ]  # fmt: skip
-    telemetry = HttpTelemetry(registry, TracerProvider(shutdown_on_exit=False))
     app = build_http_app(WebSettings.model_validate({}), telemetry, routers)
-    transport = httpx.ASGITransport(app=app)
+    transport = httpx.ASGITransport(app=app, client=chosen.client)
     try:
         async with httpx.AsyncClient(
             transport=transport, base_url="https://shosai.example"
