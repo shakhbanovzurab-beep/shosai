@@ -1,0 +1,76 @@
+{
+  "rule_files": [
+    "workspaces.alerts.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_workspaces_policy_rls_disagreements",
+          "values": "0x10 1x10 0x40"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "PolicyDisagreesWithRls",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "inv-14"
+              },
+              "exp_annotations": {
+                "summary": "Политика доступа открывает чужие строки пространств",
+                "description": "Самопроверка нашла строки пространств, которые политика доступа показала бы человеку вне его пространств. Сейчас их скрывает вторая линия защиты в базе, но правило доступа сломано, и данные одной компании могут попасть к другой.",
+                "runbook": "docs/runbooks/alerts.md#policy-disagrees-with-rls",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "PolicyDisagreesWithRls",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_workspaces_over_seats",
+          "values": "0x10 1x10 0x40"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "WorkspaceOverSeats",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "inv-16"
+              },
+              "exp_annotations": {
+                "summary": "В пространстве людей больше, чем оплачено мест",
+                "description": "Участников и приглашений больше оплаченных мест: компания пользуется тем, за что не платит, или оплата уменьшилась без пересчёта мест.",
+                "runbook": "docs/runbooks/alerts.md#workspace-over-seats",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "WorkspaceOverSeats",
+          "exp_alerts": []
+        }
+      ]
+    }
+  ]
+}

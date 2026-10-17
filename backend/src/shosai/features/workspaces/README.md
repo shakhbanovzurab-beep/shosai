@@ -25,3 +25,8 @@ Other slices import only `contracts` (the package) and `contracts.events`:
 - `domain/memberships.py` — `active`, `hidden` (the account's deletion window), `removed`; a workspace always keeps a standing owner; the successor of an erased only owner is the longest-standing admin, else member.
 - `domain/access.py` — levels `owner | selected | organization`, member and team grants, the cabinet's audiences, and `level_admits`, the reference decision the SQL predicate must agree with.
 - `domain/seats.py`, `slugs.py`, `invitations.py`, `domains.py`, `audit.py` — seats held by members and pending invitations; immutable slugs in every script; one-time invitation tokens stored as SHA-256; company domains without public mail services; the closed set of audit actions.
+
+## Monitors and guide
+
+- inv-14: the hourly self-test pages on `PolicyDisagreesWithRls` when the policy would open a workspace row outside a person's workspaces; inv-16: the daily check pages on `WorkspaceOverSeats` ([runbook](../../../../../docs/runbooks/alerts.md#policy-disagrees-with-rls)).
+- Slices with shareable resources follow [docs/access.md](../../../../../docs/access.md).

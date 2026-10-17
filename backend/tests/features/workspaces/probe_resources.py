@@ -16,6 +16,8 @@ from shosai.core.db.migration_scope import (
     disable_company_isolation,
     enable_company_isolation,
     grant_to_application,
+    grant_to_sweeper,
+    revoke_from_sweeper,
 )
 from tests.core.db.operations import run_step_everywhere
 from tests.harness.run_slot import RunSlot
@@ -49,12 +51,14 @@ def create_tables(scope: MigrationScope) -> None:
         op.create_index(f"ix_{table.name}_org", table.name, ["org_id"])
         op.create_index(f"ix_{table.name}_user", table.name, ["user_id"])
         grant_to_application(scope, table.name)
+        grant_to_sweeper(table.name, ("SELECT",))
         enable_company_isolation(table.name)
 
 
 def drop_tables(_scope: MigrationScope) -> None:
     for table in TABLES.values():
         disable_company_isolation(table.name)
+        revoke_from_sweeper(table.name)
         op.drop_table(table.name)
 
 

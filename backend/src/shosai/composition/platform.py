@@ -23,7 +23,7 @@ clients, then the engines.
 
 from collections.abc import AsyncIterator, Mapping, Sequence
 from contextlib import AsyncExitStack, asynccontextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from types import MappingProxyType
 
 import structlog
@@ -33,7 +33,12 @@ from shosai.composition.account_data import check_account_handlers, core_account
 from shosai.composition.agent_tools import install_agent_tools
 from shosai.composition.ai import AiDependencies, PlatformAi, open_ai
 from shosai.composition.email import PlatformEmail, open_email
-from shosai.composition.features import account_data_specs, check_features, platform_events
+from shosai.composition.features import (
+    account_data_specs,
+    check_features,
+    platform_events,
+    shareable_resources,
+)
 from shosai.composition.ports import install_ports
 from shosai.composition.schedule import scheduled_jobs
 from shosai.composition.startup import start_step
@@ -160,6 +165,7 @@ async def open_platform(
             email = open_email(settings, homes.transactions, telemetry.registry)
         writers = _Writers(tasks, outbox, effects, ai, email)
         services = _core_services(process, homes, clients, writers)
+        services = replace(services, shareable=tuple(shareable_resources(features)))
         built: list[FeatureParts] = []
         for feature in features:
             with start_step(f"feature:{feature.name}"):

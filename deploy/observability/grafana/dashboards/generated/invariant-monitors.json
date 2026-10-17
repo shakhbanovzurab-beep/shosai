@@ -642,6 +642,182 @@
         }
       },
       "id": 7
+    },
+    {
+      "type": "stat",
+      "gridPos": {
+        "x": 12,
+        "y": 15,
+        "w": 12,
+        "h": 5
+      },
+      "title": "Политика доступа открывает чужие строки пространств",
+      "description": "Самопроверка нашла строки пространств, которые политика доступа показала бы человеку вне его пространств. Сейчас их скрывает вторая линия защиты в базе, но правило доступа сломано, и данные одной компании могут попасть к другой.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "max(shosai_workspaces_policy_rls_disagreements) or vector(0)",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "нет данных",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#0ca30c",
+                "value": -1000000000000000.0
+              },
+              {
+                "color": "#d03b3b",
+                "value": 1e-09
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": -1000000000000000.0,
+                "to": 0,
+                "result": {
+                  "text": "нет ✓"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1e-09,
+                "to": 1000000000000000.0,
+                "result": {
+                  "text": "да ✗"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 8
+    },
+    {
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 12,
+        "h": 5
+      },
+      "title": "В пространстве людей больше, чем оплачено мест",
+      "description": "Участников и приглашений больше оплаченных мест: компания пользуется тем, за что не платит, или оплата уменьшилась без пересчёта мест.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "max(shosai_workspaces_over_seats) or vector(0)",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "нет данных",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#0ca30c",
+                "value": -1000000000000000.0
+              },
+              {
+                "color": "#d03b3b",
+                "value": 1e-09
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "range",
+              "options": {
+                "from": -1000000000000000.0,
+                "to": 0,
+                "result": {
+                  "text": "нет ✓"
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 1e-09,
+                "to": 1000000000000000.0,
+                "result": {
+                  "text": "да ✗"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 9
     }
   ]
 }

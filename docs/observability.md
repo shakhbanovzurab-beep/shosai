@@ -168,3 +168,4 @@ On staging: `sudo -u deploy docker compose exec api shosai observability debug â
 - New metrics have closed label sets and none of the four reserved names.
 - Objectives and monitors declared on the `FeatureModule`, rules and dashboards rendered with `--update-rules` and committed, a runbook section per alert.
 - `deploy/observability/checks/validate-configs.sh` passes.
+- A slice with shareable resources follows [access.md](access.md): its tables are covered by workspaces' inv-14 self-test only when the sweep role may read them.

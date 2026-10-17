@@ -92,6 +92,8 @@ class CoreServices:
     valkey: Redis
     registry: CollectorRegistry
     tracer_provider: TracerProvider
+    # Разделяемые ресурсы всех срезов: их обходит самопроверка политики доступа (inv-14).
+    shareable: tuple[ShareableResource, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)

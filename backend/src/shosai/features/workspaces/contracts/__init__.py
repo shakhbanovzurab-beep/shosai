@@ -171,7 +171,11 @@ class SeatAllowance(Protocol):
     """Billing's seats of a workspace (fr-15); bound by billing, required for every join."""
 
     async def seats(self, session: AsyncSession, org_id: UUID) -> PaidSeats:
-        """The seats paid for now, read under the workspace's row lock by the caller."""
+        """The seats paid for now, read under the workspace's row lock by the caller.
+
+        The daily inv-16 check calls it in a sweep transaction too, so billing grants the
+        sweep role `SELECT` on what it reads here.
+        """
         ...
 
     async def start_trial(self, session: AsyncSession, org_id: UUID, seats: int) -> PaidSeats:

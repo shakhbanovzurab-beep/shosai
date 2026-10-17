@@ -86,6 +86,24 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Erase the named places for that account id, then fix the owner's `erase` so it covers them, with a test; a row written after the erasure by a late task means that task must check the account's state. The page ends 15 minutes after the last increase.
 
+<a id="policy-disagrees-with-rls"></a>
+### PolicyDisagreesWithRls — inv-14
+
+**Means.** The hourly self-test, run as the sweep role (row-level security off), found workspace rows the access policy would show people outside the workspaces they belong to. Row-level security still hides those rows in requests, so nothing has leaked yet, but the policy — the first line — is broken.
+
+**Look.** `shosai_workspaces_policy_rls_disagreements` by `home`; the `workers-bulk` log line «Политика доступа открывает строки вне пространств человека» with the count. Reproduce with the isolation kit (`tests/support/isolation.py`) on the resource of the last change; the policy's SQL is in `backend/src/shosai/features/workspaces/infrastructure/policy_predicates.py`.
+
+**Fix.** Roll back the release that changed the policy or a slice's read path (§17 rollback), then fix the predicate with a test that fails on the case. The gauge returns to zero at the next hourly pass.
+
+<a id="workspace-over-seats"></a>
+### WorkspaceOverSeats — inv-16
+
+**Means.** The daily check found workspaces whose active and hidden members plus pending invitations exceed the seats billing reports as paid.
+
+**Look.** `shosai_workspaces_over_seats` by `home`; the `workers-bulk` log line «У пространства больше людей, чем оплачено мест» names each workspace id. Compare billing's seats of that workspace with its memberships and invitations.
+
+**Fix.** A seat reduction applied without the membership check → restore the seats or ask the owner to remove members; a join that skipped the count → find the path in workspaces' `Admission` and fix it with a test. The gauge returns to zero at the next daily pass.
+
 ## Tickets (§16.6)
 
 <a id="host-disk-filling"></a>
