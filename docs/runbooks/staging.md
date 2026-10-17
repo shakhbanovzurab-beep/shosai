@@ -73,6 +73,19 @@ install -o root -g root -m 755 /root/shosai/deploy/staging/release.sh /srv/shosa
 
 Do it while no release runs (`flock -n /srv/shosai/releases/.lock true` succeeds).
 
+## Database roles
+
+Each managed home has three roles: the migrator and the application role (Timeweb's panel), and the sweep role `shosai_sweeper` ([ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md) point 2). The sweep role cannot log in; workers and the scheduler switch to it inside a transaction (`SET LOCAL ROLE`), and row-level security lets it read every tenant's rows. The application role must not inherit it, or every request would see every tenant. PostgreSQL 16 or later is required for `WITH INHERIT FALSE`.
+
+Create it once per home, as a role with `CREATEROLE` — on Timeweb the migrator has it — before releasing a commit whose migrations name it. Done on both staging homes on 2026-10-17 (PostgreSQL 18.6):
+
+```sql
+CREATE ROLE shosai_sweeper NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
+GRANT shosai_sweeper TO <application role> WITH INHERIT FALSE, SET TRUE;
+```
+
+Check: `SELECT r.rolname, m.inherit_option, m.set_option FROM pg_auth_members m JOIN pg_roles r ON r.oid = m.roleid JOIN pg_roles u ON u.oid = m.member WHERE u.rolname = '<application role>';` returns `shosai_sweeper | f | t`.
+
 ## TLS certificate
 
 `shosai-certificate.timer` renews it twice a day. Check: `systemctl list-timers shosai-certificate.timer` and `journalctl -u shosai-certificate.service`. Renew by hand: `sh /srv/shosai/deploy/certificate.sh renew /srv/shosai`.

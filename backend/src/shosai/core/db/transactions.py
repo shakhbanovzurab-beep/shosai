@@ -25,6 +25,7 @@ import structlog
 from sqlalchemy import exc, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.db.database_roles import SWEEPER_ROLE
 from shosai.core.db.engines import HomeDatabases
 from shosai.core.db.errors import HomeUnavailableError, connection_failure
 from shosai.core.db.home_checks import HomeGate
@@ -34,12 +35,15 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.observability.log_context import id_fields
 
 # Один оператор — один обмен с сервером; пустая строка означает «нет» для app_*_id().
-SCOPE_STATEMENT: Final = text(
+SCOPE_SETTINGS: Final = (
     "SELECT set_config('statement_timeout', :statement_timeout, true), "
     "set_config('transaction_read_only', :read_only, true), "
     "set_config('app.user_id', :user_id, true), "
     "set_config('app.org_id', :org_id, true)"
 )
+SCOPE_STATEMENT: Final = text(SCOPE_SETTINGS)
+# Обход (ADR 0053 п. 2): та же команда переключает роль до конца транзакции — без лишнего обмена.
+SWEEP_SCOPE_STATEMENT: Final = text(f"{SCOPE_SETTINGS}, set_config('role', :role, true)")
 TRANSACTION_INFO_KEY: Final = "shosai.transaction"
 log = structlog.stdlib.get_logger(__name__)
 
@@ -50,6 +54,10 @@ class TransactionInfo:
 
     scope: TenancyScope
     read_only: bool
+
+
+class SweepNotAllowedError(Exception):
+    """A sweep transaction was asked for in a process role whose profile does not allow it."""
 
 
 class NotAHomeTransactionError(Exception):
@@ -77,19 +85,31 @@ class HomeTransactions:
 
     @asynccontextmanager
     async def begin(
-        self, scope: TenancyScope, *, read_only: bool = False
+        self, scope: TenancyScope, *, read_only: bool = False, sweep: bool = False
     ) -> AsyncIterator[AsyncSession]:
-        """A session in a transaction of the scope's home; commit on exit, rollback on error."""
+        """A session in a transaction of the scope's home; commit on exit, rollback on error.
+
+        `sweep` runs the transaction as the sweep role, which row-level security lets see
+        every tenant's rows (ADR 0053 point 2); only the workers' and the scheduler's
+        profiles allow it, so a request handler can never open one.
+        """
+        if sweep and not self._databases.profile.sweeps:
+            message = "обход по всем тенантам разрешён только воркерам и планировщику"
+            raise SweepNotAllowedError(message)
         await self._gate.ensure_open(scope.home)
         factory = self._databases.sessions(scope.home)
         started = time.perf_counter()
         async with factory() as session, session.begin():
             await self._acquire(session, scope.home)
-            await session.execute(SCOPE_STATEMENT, self._scope_values(scope, read_only=read_only))
+            values = self._scope_values(scope, read_only=read_only)
+            if sweep:
+                await session.execute(SWEEP_SCOPE_STATEMENT, {**values, "role": SWEEPER_ROLE})
+            else:
+                await session.execute(SCOPE_STATEMENT, values)
             session.info[TRANSACTION_INFO_KEY] = TransactionInfo(scope, read_only=read_only)
             yield session
         log.debug(
-            "Транзакция зафиксирована", home=scope.home.value, read_only=read_only,
+            "Транзакция зафиксирована", home=scope.home.value, read_only=read_only, sweep=sweep,
             duration_ms=round((time.perf_counter() - started) * 1000, 1),
             **id_fields(user_id=scope.user_id, org_id=scope.org_id),
         )  # fmt: skip

@@ -46,15 +46,19 @@ class DatabaseProfile:
     pool_size: int
     statement_timeout: timedelta
     pool_timeout: timedelta = timedelta(seconds=2)
+    # Обходы по всем тенантам под ролью shosai_sweeper — только у воркеров и планировщика.
+    sweeps: bool = False
 
 
 DATABASE_PROFILES: Final[Mapping[ProcessRole, DatabaseProfile]] = MappingProxyType(
     {
         ProcessRole.API: DatabaseProfile(pool_size=10, statement_timeout=timedelta(seconds=10)),
         ProcessRole.WS: DatabaseProfile(pool_size=2, statement_timeout=timedelta(seconds=10)),
-        ProcessRole.WORKERS: DatabaseProfile(pool_size=5, statement_timeout=timedelta(seconds=60)),
+        ProcessRole.WORKERS: DatabaseProfile(
+            pool_size=5, statement_timeout=timedelta(seconds=60), sweeps=True
+        ),
         ProcessRole.SCHEDULER: DatabaseProfile(
-            pool_size=2, statement_timeout=timedelta(seconds=10)
+            pool_size=2, statement_timeout=timedelta(seconds=10), sweeps=True
         ),
         # Разовые команды ИИ: пересборка читает суммы месяца по обоим домам.
         ProcessRole.AI: DatabaseProfile(pool_size=1, statement_timeout=timedelta(seconds=60)),

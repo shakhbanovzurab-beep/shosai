@@ -47,12 +47,27 @@ The init script [`deploy/local/postgres/init-home.sh`](../deploy/local/postgres/
 | Role | Rights | Connects | Used by |
 |---|---|---|---|
 | `postgres` | superuser | directly | administration only |
-| `shosai_migrator` | owns the databases and the `public` schema; no `SUPERUSER`, no `BYPASSRLS` | directly (`1543x`) | Alembic migrations, sweeps (target architecture §7) |
+| `shosai_migrator` | owns the databases and the `public` schema; no `SUPERUSER`, no `BYPASSRLS` | directly (`1543x`) | Alembic migrations |
 | `shosai_app` | `CONNECT` and `TEMPORARY` only; no `SUPERUSER`, no `BYPASSRLS` | through PgBouncer (`1643x`) | the application and tests that exercise it |
+| `shosai_sweeper` | no login; rights only through migrations' grants and its own RLS policies | never: `shosai_app` switches to it with `SET LOCAL ROLE`, without inheriting it | cross-tenant sweeps of workers and the scheduler ([ADR 0053](adr/0053-workspaces-access-rls-invitations-and-deletion.md)) |
 
 - Row-level security applies to `shosai_app` for real. A superuser or the table owner would bypass it silently.
 - `shosai_app` cannot create objects. Migrations grant it rights on tables, including the absence of `UPDATE` and `DELETE` on the audit log (§7, §15).
 - The `vector` extension is created in every database by the init script, because pgvector is not a trusted extension and the migration role cannot create it.
+- A server initialised before `shosai_sweeper` existed lacks it, and the workspaces migrations fail on it. Create it once per home without a reset (it is safe to run again):
+
+  ```bash
+  for home in ru eu; do
+    docker compose -f compose.dev.yaml exec -T postgres-$home sh -c 'psql -U "$POSTGRES_USER" -d postgres -v ON_ERROR_STOP=1' <<'SQL'
+  DO $$ BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'shosai_sweeper') THEN
+      CREATE ROLE shosai_sweeper NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
+    END IF;
+  END $$;
+  GRANT shosai_sweeper TO shosai_app WITH INHERIT FALSE, SET TRUE;
+  SQL
+  done
+  ```
 
 ## PgBouncer: transaction mode
 

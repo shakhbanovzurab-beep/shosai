@@ -1,7 +1,7 @@
 """The account transfer saga between the homes (identity step 9, §6)."""
 
 from collections.abc import Mapping
-from uuid import UUID
+from uuid import UUID, uuid4
 
 import pytest
 from prometheus_client import CollectorRegistry
@@ -20,6 +20,8 @@ from shosai.features.identity.application.transfers import Transfers
 from shosai.features.identity.contracts import IDENTITY_EVENTS
 from shosai.features.identity.domain.transfer import FINISHED, TransferStep
 from shosai.features.identity.infrastructure.transfer_metrics import TransferMetrics
+from shosai.features.workspaces.contracts import MEMBERSHIP_READER
+from shosai.features.workspaces.infrastructure.membership_reader import MembershipDirectory
 from tests.core.storage.adapters import slot_storage
 from tests.features.identity.admin_bench import sign_in_admin
 from tests.features.identity.registration_bench import (
@@ -29,6 +31,7 @@ from tests.features.identity.registration_bench import (
 )
 from tests.features.identity.test_profile import bearer, png
 from tests.features.identity.test_sign_in import account, login
+from tests.features.workspaces.rls_world import add_workspace
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
@@ -50,7 +53,12 @@ class Mover:
             IdentityAccountData(transactions, directory, (self.objects, uploads)),
         )
         ports = PortDirectory()
-        ports.install([ACCOUNT_DATA_HANDLERS.bind(handler) for handler in self.handlers])
+        ports.install(
+            [
+                *(ACCOUNT_DATA_HANDLERS.bind(handler) for handler in self.handlers),
+                MEMBERSHIP_READER.bind(MembershipDirectory()),
+            ]
+        )
         outbox = EventOutbox(EventTypes(list(IDENTITY_EVENTS)))
         self.saga = TransferSaga(
             SagaServices(
@@ -59,7 +67,7 @@ class Mover:
                 metrics=TransferMetrics(CollectorRegistry()),
             )
         )  # fmt: skip
-        self.transfers = Transfers(transactions, directory, outbox, allowed=True)
+        self.transfers = Transfers(transactions, directory, outbox, ports, allowed=True)
 
     async def manifest(self, user_id: UUID, home: Home) -> dict[str, Mapping[str, str]]:
         account = AccountRef(user_id, home)
@@ -212,3 +220,16 @@ async def test_transfers_stay_closed_until_the_legal_review(
 
     assert (closed.status_code, closed.json()["error"]["code"]) == (409, "transfers_closed")
     assert (missing.status_code, missing.json()["error"]["code"]) == (404, "transfer_not_found")
+
+
+async def test_a_workspace_member_does_not_move_between_homes(
+    homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis,
+    buckets: Mapping[Home, SlotBucket],
+) -> None:  # fmt: skip
+    async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
+        mover = Mover(bench, homes, buckets)
+        user_id = await account(bench, run_slot)
+        await add_workspace(run_slot.claimed.connections[Home.RU], uuid4(), user_id)
+
+        with pytest.raises(AppError, match="workspace_member"):
+            await mover.transfers.request(user_id, Home.EU)

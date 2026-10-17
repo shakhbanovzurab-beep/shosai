@@ -45,7 +45,7 @@ def admin_routers(
     admin, limiter, ports = access
     users = AdminUsers(transactions, directory, SpendReports(transactions))
     states = AccountStates(transactions, directory[0], markers, outbox)
-    transfers = Transfers(transactions, directory[0], outbox, allowed=False)
+    transfers = Transfers(transactions, directory[0], outbox, ports, allowed=False)
     return (
         build_admin_session_router(admin, ports, limiter, COOKIES),
         build_admin_users_router(users, states, ports),

@@ -20,7 +20,9 @@ def transfer_parts(
 ) -> FeatureParts:
     """What transfers add to identity's parts."""
     allowed = services.settings.features.get(IdentitySettings).identity_transfers_allowed
-    transfers = Transfers(services.transactions, directory, services.outbox, allowed=allowed)
+    transfers = Transfers(
+        services.transactions, directory, services.outbox, services.ports, allowed=allowed
+    )
     saga = TransferSaga(
         SagaServices(
             transactions=services.transactions, ports=services.ports, directory=directory,

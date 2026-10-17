@@ -1,9 +1,10 @@
 """Asking for an account transfer, cancelling it, reading it (identity plan §3.4, §6).
 
 Only the admin asks, and only while the owner has opened transfers after the legal
-review (§22). One transfer of an account is open at a time; a cancel is accepted until the
-directory switch, after which the saga only goes forward. Each request and cancel leaves
-an audit event in the transaction that records it.
+review (§22), and never for a member of a workspace: cross-home membership waits for the
+same review (ADR 0053 point 4). One transfer of an account is open at a time; a cancel
+is accepted until the directory switch, after which the saga only goes forward. Each
+request and cancel leaves an audit event in the transaction that records it.
 """
 
 import asyncio
@@ -22,12 +23,14 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import OperatorActed, OperatorAction
 from shosai.features.identity.domain.accounts import AccountState
 from shosai.features.identity.domain.transfer import CANCELLABLE, MOVABLE, TransferStep
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.records import User
 from shosai.features.identity.infrastructure.transfer_records import OPEN, HomeTransfer
+from shosai.features.workspaces.contracts import MEMBERSHIP_READER
 
 
 @dataclass(frozen=True, slots=True)
@@ -52,12 +55,14 @@ class Transfers:
         transactions: HomeTransactions,
         directory: Directory,
         outbox: EventOutbox,
+        ports: PortDirectory,
         *,
         allowed: bool,
     ) -> None:
         self._transactions = transactions
         self._directory = directory
         self._outbox = outbox
+        self._ports = ports
         self._allowed = allowed
 
     async def request(self, user_id: UUID, to_home: Home) -> TransferView:
@@ -76,6 +81,8 @@ class Transfers:
                 raise AppError("user_not_found", HTTPStatus.NOT_FOUND)
             if AccountState(user.state) not in MOVABLE:
                 raise AppError("account_state_conflict", HTTPStatus.CONFLICT)
+            if await self._ports.get(MEMBERSHIP_READER).has_memberships(session, user_id):
+                raise AppError("workspace_member", HTTPStatus.CONFLICT)
             queued = await session.scalar(
                 insert(HomeTransfer)
                 .values(

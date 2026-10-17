@@ -12,10 +12,14 @@ from shosai.composition.features import FEATURES, account_data_specs
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.account_data.spec import Treatment
 from shosai.core.email.account_data import CoreAccountData
+from shosai.core.events.catalog import EventTypes
+from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.application.account_data import IdentityAccountData
 from shosai.features.identity.application.export_runner import ExportRunner
+from shosai.features.workspaces.application.account_data import WorkspacesAccountData
+from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLog
 from tests.core.storage.adapters import slot_storage
 from tests.features.identity.registration_bench import (
     BenchOptions,
@@ -44,6 +48,11 @@ def runner_of(
         [
             ACCOUNT_DATA_HANDLERS.bind(CoreAccountData(homes.transactions)),
             ACCOUNT_DATA_HANDLERS.bind(identity),
+            ACCOUNT_DATA_HANDLERS.bind(
+                WorkspacesAccountData(
+                    homes.transactions, EventOutbox(EventTypes([])), WorkspaceAuditLog()
+                )
+            ),
         ]
     )
     return ExportRunner(homes.transactions, ports, (objects, uploads), bench.services.email)

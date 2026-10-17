@@ -11,6 +11,9 @@
 #     BYPASSRLS, ходит в PostgreSQL напрямую;
 #   - роль приложения `shosai_app` — без SUPERUSER и BYPASSRLS, ходит через
 #     PgBouncer; под ней RLS действует по-настоящему (§7);
+#   - роль обходов `shosai_sweeper` — без входа; роль приложения переключается на неё
+#     внутри транзакции воркера или планировщика (`SET ROLE`), но не наследует её
+#     права: политики RLS «для обходов» к обычным запросам не применяются (ADR 0053);
 #   - базу дома `shosai` и подготовленные тестовые базы `shosai_test_<N>`
 #     для параллельных прогонов (CLAUDE.md, «Test database»);
 #   - расширение `vector` в каждой базе: оно не trusted, и роль миграций создать
@@ -20,6 +23,7 @@ set -Eeuo pipefail
 
 readonly MIGRATOR_ROLE="shosai_migrator"
 readonly APP_ROLE="shosai_app"
+readonly SWEEPER_ROLE="shosai_sweeper"
 readonly HOME_DATABASE="shosai"
 readonly TEST_DATABASE_PREFIX="shosai_test_"
 readonly MAX_TEST_DATABASES=64
@@ -64,12 +68,15 @@ create_roles() {
   run_sql postgres \
     --set=migrator_role="${MIGRATOR_ROLE}" \
     --set=app_role="${APP_ROLE}" \
+    --set=sweeper_role="${SWEEPER_ROLE}" \
     --set=migrator_password="${SHOSAI_MIGRATOR_PASSWORD}" \
     --set=app_password="${SHOSAI_APP_PASSWORD}" <<'SQL'
 CREATE ROLE :"migrator_role" LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS
   PASSWORD :'migrator_password';
 CREATE ROLE :"app_role" LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS
   PASSWORD :'app_password';
+CREATE ROLE :"sweeper_role" NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOBYPASSRLS;
+GRANT :"sweeper_role" TO :"app_role" WITH INHERIT FALSE, SET TRUE;
 SQL
 }
 
