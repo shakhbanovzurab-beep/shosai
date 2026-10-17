@@ -3,7 +3,9 @@
 A code is percent or fixed per currency; it may be limited to plans, to a period, to the
 first payment, to a number of uses in all and per person, and to dates (inclusive, UTC).
 A fixed discount applies only in a currency it names. A price never goes below zero. A
-use is counted on a successful payment only, by the payment's own transaction.
+use is counted on a successful payment only, by the payment's own transaction. A code
+whose last plan was removed names no plan and stays switched off until it names one.
+Every broken rule carries the API's error code.
 """
 
 import math
@@ -13,6 +15,7 @@ from dataclasses import dataclass, field
 from datetime import date
 from enum import StrEnum
 from typing import Final
+from uuid import UUID
 
 from shosai.features.billing.domain.money import Currency, Money
 from shosai.features.billing.domain.plans import BillingPeriod
@@ -20,10 +23,43 @@ from shosai.features.billing.domain.plans import BillingPeriod
 CODE: Final = re.compile(r"[A-Z0-9_-]{3,32}")
 FIXED_MIN_MINOR: Final = 100
 PERCENT_MAX: Final = 100
+PLANS_MAX: Final = 50
+
+
+class PromoRule(StrEnum):
+    """A rule of a promo code; the value is the API's error code."""
+
+    CODE = "promo_code_invalid"
+    DISCOUNT = "promo_discount_ambiguous"
+    PERCENT = "promo_percent_invalid"
+    AMOUNT = "promo_amount_too_small"
+    LIMITS = "promo_limits_invalid"
+    DATES = "promo_dates_invalid"
+    PLANS = "promo_needs_plans"
+
+
+RULE_MESSAGES: Final = {
+    PromoRule.CODE: "код — A-Z, 0-9, _ и -, 3–32 символа",
+    PromoRule.DISCOUNT: "скидка — либо процент, либо суммы в валютах",
+    PromoRule.PERCENT: "процент скидки — от 1 до 100",
+    PromoRule.AMOUNT: "фиксированная скидка — от 100 минорных единиц",
+    PromoRule.LIMITS: "лимиты активаций — от 1, на человека не больше общего",
+    PromoRule.DATES: "дата начала не позже даты окончания",
+    PromoRule.PLANS: "включённый код по тарифам называет от 1 до 50 тарифов",
+}
+
+
+class PromoRuleError(ValueError):
+    """A promo code breaks a rule."""
+
+    def __init__(self, rule: PromoRule) -> None:
+        super().__init__(RULE_MESSAGES[rule])
+        self.rule = rule
+        self.code = rule.value
 
 
 class PromoStatus(StrEnum):
-    """Where a code stands today."""
+    """Where a code stands today, judged in the cabinet's order (`promoStatus`)."""
 
     ACTIVE = "active"
     SCHEDULED = "scheduled"
@@ -50,7 +86,8 @@ class PromoCode:
     code: str
     percent_off: int | None = None
     amounts_off: Mapping[Currency, int] = field(default_factory=dict)
-    plan_slugs: frozenset[str] | None = None
+    # None — все тарифы, в том числе будущие.
+    plan_ids: frozenset[UUID] | None = None
     period: BillingPeriod | None = None
     max_redemptions: int | None = None
     per_user_limit: int | None = None
@@ -61,31 +98,51 @@ class PromoCode:
     active: bool = True
 
     def __post_init__(self) -> None:
-        if not CODE.fullmatch(self.code):
-            message = "код — A-Z, 0-9, _ и -, 3–32 символа"
-            raise ValueError(message)
-        percent = self.percent_off is not None
-        if percent == bool(self.amounts_off):
-            message = "скидка — либо процент, либо суммы в валютах"
-            raise ValueError(message)
-        if percent and not 1 <= (self.percent_off or 0) <= PERCENT_MAX:
-            message = "процент скидки — от 1 до 100"
-            raise ValueError(message)
-        if any(amount < FIXED_MIN_MINOR for amount in self.amounts_off.values()):
-            message = "фиксированная скидка — от 100 минорных единиц"
-            raise ValueError(message)
+        problem = promo_problem(self)
+        if problem is not None:
+            raise PromoRuleError(problem)
 
     def status(self, today: date) -> PromoStatus:
         """The code's status on a UTC date."""
         if not self.active:
             return PromoStatus.DISABLED
-        if self.valid_from is not None and today < self.valid_from:
-            return PromoStatus.SCHEDULED
         if self.valid_until is not None and today > self.valid_until:
             return PromoStatus.EXPIRED
         if self.max_redemptions is not None and self.redemptions >= self.max_redemptions:
             return PromoStatus.EXHAUSTED
+        if self.valid_from is not None and today < self.valid_from:
+            return PromoStatus.SCHEDULED
         return PromoStatus.ACTIVE
+
+
+def promo_problem(code: PromoCode) -> PromoRule | None:
+    """The first rule the code breaks, or None."""
+    percent = code.percent_off
+    plans = code.plan_ids
+    rules = (
+        (CODE.fullmatch(code.code) is not None, PromoRule.CODE),
+        ((percent is not None) != bool(code.amounts_off), PromoRule.DISCOUNT),
+        (percent is None or 1 <= percent <= PERCENT_MAX, PromoRule.PERCENT),
+        (all(amount >= FIXED_MIN_MINOR for amount in code.amounts_off.values()), PromoRule.AMOUNT),
+        (_limits_hold(code.max_redemptions, code.per_user_limit), PromoRule.LIMITS),
+        (
+            code.valid_from is None
+            or code.valid_until is None
+            or code.valid_from <= code.valid_until,
+            PromoRule.DATES,
+        ),
+        (
+            plans is None or (len(plans) <= PLANS_MAX and (bool(plans) or not code.active)),
+            PromoRule.PLANS,
+        ),
+    )
+    return next((rule for holds, rule in rules if not holds), None)
+
+
+def _limits_hold(total: int | None, per_user: int | None) -> bool:
+    if total is not None and per_user is not None:
+        return 1 <= per_user <= total
+    return all(limit is None or limit >= 1 for limit in (total, per_user))
 
 
 @dataclass(frozen=True, slots=True)
@@ -93,7 +150,7 @@ class Purchase:
     """What a code is applied to."""
 
     price: Money
-    plan_slug: str
+    plan_id: UUID
     period: BillingPeriod
     first_payment: bool
     used_by_person: int
@@ -116,7 +173,7 @@ def _refusal(code: PromoCode, purchase: Purchase) -> PromoRefusal | None:
     checks = (
         (code.status(purchase.today) is PromoStatus.ACTIVE, PromoRefusal.NOT_ACTIVE),
         (
-            code.plan_slugs is None or purchase.plan_slug in code.plan_slugs,
+            code.plan_ids is None or purchase.plan_id in code.plan_ids,
             PromoRefusal.NOT_FOR_PLAN,
         ),
         (code.period is None or code.period is purchase.period, PromoRefusal.NOT_FOR_PERIOD),

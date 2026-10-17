@@ -2641,6 +2641,479 @@
           }
         }
       }
+    },
+    "/v1/admin/plans": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "List Plans",
+        "description": "Every plan, archived ones included, in the pricing page's order.",
+        "operationId": "list_plans_v1_admin_plans_get",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlansView"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Create Plan",
+        "description": "A new plan; its slug must be free (409 `plan_slug_taken`).",
+        "operationId": "create_plan_v1_admin_plans_post",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanDraftBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanView"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/plans/{plan_id}": {
+      "patch": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Change Plan",
+        "description": "Edit, archive or restore; an archived plan is edited only while restored.",
+        "operationId": "change_plan_v1_admin_plans__plan_id__patch",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanView"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Delete Plan",
+        "description": "Delete a plan nobody holds, leaving promo codes; archive one with subscribers.",
+        "operationId": "delete_plan_v1_admin_plans__plan_id__delete",
+        "parameters": [
+          {
+            "name": "plan_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Plan Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanDeletion"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/promo-codes": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "List Promo Codes",
+        "description": "Every code with its status today.",
+        "operationId": "list_promo_codes_v1_admin_promo_codes_get",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromoCodesView"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Create Promo Code",
+        "description": "A new code; the code must be free (409 `promo_code_taken`).",
+        "operationId": "create_promo_code_v1_admin_promo_codes_post",
+        "parameters": [
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromoDraftBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromoView"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/promo-codes/{promo_id}": {
+      "patch": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Change Promo Code",
+        "description": "Edit a code; its use count stays as payments left it.",
+        "operationId": "change_promo_code_v1_admin_promo_codes__promo_id__patch",
+        "parameters": [
+          {
+            "name": "promo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Promo Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromoPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PromoView"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Delete Promo Code",
+        "description": "Delete a code.",
+        "operationId": "delete_promo_code_v1_admin_promo_codes__promo_id__delete",
+        "parameters": [
+          {
+            "name": "promo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Promo Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3006,6 +3479,66 @@
         "title": "AdminUserCard",
         "description": "What the admin sees of one account."
       },
+      "Audience": {
+        "type": "string",
+        "enum": [
+          "individual",
+          "team",
+          "enterprise"
+        ],
+        "title": "Audience",
+        "description": "Who a plan is for: the Upgrade page's tabs."
+      },
+      "CapabilitiesBody": {
+        "properties": {
+          "shared_workspace": {
+            "type": "boolean",
+            "title": "Shared Workspace"
+          },
+          "member_management": {
+            "type": "boolean",
+            "title": "Member Management"
+          },
+          "centralized_billing": {
+            "type": "boolean",
+            "title": "Centralized Billing"
+          },
+          "sso": {
+            "type": "boolean",
+            "title": "Sso"
+          },
+          "admin_controls": {
+            "type": "boolean",
+            "title": "Admin Controls"
+          },
+          "priority_support": {
+            "type": "boolean",
+            "title": "Priority Support"
+          },
+          "usage_analytics": {
+            "type": "boolean",
+            "title": "Usage Analytics"
+          },
+          "frontier_models": {
+            "type": "boolean",
+            "title": "Frontier Models",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "shared_workspace",
+          "member_management",
+          "centralized_billing",
+          "sso",
+          "admin_controls",
+          "priority_support",
+          "usage_analytics"
+        ],
+        "title": "CapabilitiesBody",
+        "description": "The extras a plan switches on."
+      },
       "ChallengeRequest": {
         "properties": {
           "challenge": {
@@ -3162,6 +3695,16 @@
         "type": "object",
         "title": "ConsentsPatch",
         "description": "The consents to change; personal data is not among them."
+      },
+      "Currency": {
+        "type": "string",
+        "enum": [
+          "RUB",
+          "USD",
+          "EUR"
+        ],
+        "title": "Currency",
+        "description": "A currency a plan is priced and paid in."
       },
       "DeletionRequest": {
         "properties": {
@@ -3394,6 +3937,13 @@
         ],
         "title": "DeviceView",
         "description": "A signed-in device: where it signed in and when it was last used."
+      },
+      "DiscountType": {
+        "type": "string",
+        "enum": [
+          "percent",
+          "fixed"
+        ]
       },
       "EmailChallenge": {
         "properties": {
@@ -3822,6 +4372,98 @@
         "title": "InvalidField",
         "description": "Where a request failed validation and why; the submitted value is never echoed."
       },
+      "LimitsBody": {
+        "properties": {
+          "meeting_minutes_per_month": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meeting Minutes Per Month"
+          },
+          "file_manager_gb": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Manager Gb"
+          },
+          "knowledge_base_mb": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Knowledge Base Mb"
+          },
+          "weekly_standard_tokens": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weekly Standard Tokens"
+          },
+          "weekly_frontier_tokens": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weekly Frontier Tokens",
+            "default": 0
+          },
+          "daily_standard_tokens": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000000000000.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daily Standard Tokens"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "meeting_minutes_per_month",
+          "file_manager_gb",
+          "knowledge_base_mb"
+        ],
+        "title": "LimitsBody",
+        "description": "What a plan includes: null is unlimited, 0 is not included."
+      },
       "LoginRequest": {
         "properties": {
           "email": {
@@ -4119,6 +4761,964 @@
         ],
         "title": "Page[DeviceView]"
       },
+      "PeriodScope": {
+        "type": "string",
+        "enum": [
+          "month",
+          "year",
+          "both"
+        ]
+      },
+      "PlanDeletion": {
+        "properties": {
+          "result": {
+            "type": "string",
+            "enum": [
+              "deleted",
+              "archived"
+            ],
+            "title": "Result"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlanView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "promo_codes_updated": {
+            "type": "integer",
+            "title": "Promo Codes Updated"
+          }
+        },
+        "type": "object",
+        "required": [
+          "result",
+          "plan",
+          "promo_codes_updated"
+        ],
+        "title": "PlanDeletion",
+        "description": "A deleted plan and the promo codes it left, or the plan archived instead."
+      },
+      "PlanDraftBody": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "slug": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 2,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "title": "Slug"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 300,
+            "title": "Description"
+          },
+          "audience": {
+            "$ref": "#/components/schemas/Audience"
+          },
+          "seats": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SeatsBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "custom_pricing": {
+            "type": "boolean",
+            "title": "Custom Pricing"
+          },
+          "price_monthly": {
+            "$ref": "#/components/schemas/PriceSet"
+          },
+          "price_yearly": {
+            "$ref": "#/components/schemas/PriceSet"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/LimitsBody"
+          },
+          "capabilities": {
+            "$ref": "#/components/schemas/CapabilitiesBody"
+          },
+          "features": {
+            "items": {
+              "type": "string",
+              "maxLength": 120,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Features"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          },
+          "is_featured": {
+            "type": "boolean",
+            "title": "Is Featured"
+          },
+          "sort_order": {
+            "type": "integer",
+            "maximum": 999.0,
+            "minimum": 0.0,
+            "title": "Sort Order"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "slug",
+          "description",
+          "audience",
+          "seats",
+          "custom_pricing",
+          "price_monthly",
+          "price_yearly",
+          "limits",
+          "capabilities",
+          "features",
+          "is_active",
+          "is_featured",
+          "sort_order"
+        ],
+        "title": "PlanDraftBody",
+        "description": "A plan as the admin's form sends it."
+      },
+      "PlanPatchBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "audience": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Audience"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "seats": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SeatsBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "custom_pricing": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Custom Pricing"
+          },
+          "price_monthly": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceSet"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "price_yearly": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceSet"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "limits": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limits"
+          },
+          "capabilities": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "boolean"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Capabilities"
+          },
+          "features": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Features"
+          },
+          "is_active": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Active"
+          },
+          "is_featured": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Featured"
+          },
+          "sort_order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sort Order"
+          },
+          "archived": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PlanPatchBody",
+        "description": "Any part of the draft; `archived: false` restores, `true` archives."
+      },
+      "PlanView": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "slug": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 2,
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+            "title": "Slug"
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 300,
+            "title": "Description"
+          },
+          "audience": {
+            "$ref": "#/components/schemas/Audience"
+          },
+          "seats": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SeatsBody"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "custom_pricing": {
+            "type": "boolean",
+            "title": "Custom Pricing"
+          },
+          "price_monthly": {
+            "$ref": "#/components/schemas/PriceSet"
+          },
+          "price_yearly": {
+            "$ref": "#/components/schemas/PriceSet"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/LimitsBody"
+          },
+          "capabilities": {
+            "$ref": "#/components/schemas/CapabilitiesBody"
+          },
+          "features": {
+            "items": {
+              "type": "string",
+              "maxLength": 120,
+              "minLength": 1
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Features"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          },
+          "is_featured": {
+            "type": "boolean",
+            "title": "Is Featured"
+          },
+          "sort_order": {
+            "type": "integer",
+            "maximum": 999.0,
+            "minimum": 0.0,
+            "title": "Sort Order"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "subscribers": {
+            "type": "integer",
+            "title": "Subscribers"
+          },
+          "archived": {
+            "type": "boolean",
+            "title": "Archived"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "slug",
+          "description",
+          "audience",
+          "seats",
+          "custom_pricing",
+          "price_monthly",
+          "price_yearly",
+          "limits",
+          "capabilities",
+          "features",
+          "is_active",
+          "is_featured",
+          "sort_order",
+          "id",
+          "subscribers",
+          "archived",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "PlanView",
+        "description": "A plan as the admin's list shows it."
+      },
+      "PlansView": {
+        "properties": {
+          "plans": {
+            "items": {
+              "$ref": "#/components/schemas/PlanView"
+            },
+            "type": "array",
+            "title": "Plans"
+          }
+        },
+        "type": "object",
+        "required": [
+          "plans"
+        ],
+        "title": "PlansView",
+        "description": "Every plan of the catalogue."
+      },
+      "PriceSet": {
+        "properties": {
+          "RUB": {
+            "type": "integer",
+            "maximum": 1000000000.0,
+            "minimum": 0.0,
+            "title": "Rub"
+          },
+          "USD": {
+            "type": "integer",
+            "maximum": 1000000000.0,
+            "minimum": 0.0,
+            "title": "Usd"
+          },
+          "EUR": {
+            "type": "integer",
+            "maximum": 1000000000.0,
+            "minimum": 0.0,
+            "title": "Eur"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "RUB",
+          "USD",
+          "EUR"
+        ],
+        "title": "PriceSet",
+        "description": "A period's price in minor units in every currency."
+      },
+      "PromoCodesView": {
+        "properties": {
+          "promo_codes": {
+            "items": {
+              "$ref": "#/components/schemas/PromoView"
+            },
+            "type": "array",
+            "title": "Promo Codes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "promo_codes"
+        ],
+        "title": "PromoCodesView",
+        "description": "Every promo code, newest first."
+      },
+      "PromoDraftBody": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 3,
+            "title": "Code"
+          },
+          "discount_type": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "percent_off": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent Off"
+          },
+          "amounts_off": {
+            "additionalProperties": {
+              "type": "integer",
+              "maximum": 1000000000.0,
+              "minimum": 100.0
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/Currency"
+            },
+            "type": "object",
+            "title": "Amounts Off"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/PromoScope"
+          },
+          "plan_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 50,
+            "title": "Plan Ids"
+          },
+          "billing_period": {
+            "$ref": "#/components/schemas/PeriodScope"
+          },
+          "max_redemptions": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 10000000.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Redemptions"
+          },
+          "per_user_limit": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 1000.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Per User Limit"
+          },
+          "valid_from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid From"
+          },
+          "valid_until": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid Until"
+          },
+          "first_payment_only": {
+            "type": "boolean",
+            "title": "First Payment Only"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "discount_type",
+          "percent_off",
+          "amounts_off",
+          "scope",
+          "plan_ids",
+          "billing_period",
+          "max_redemptions",
+          "per_user_limit",
+          "valid_from",
+          "valid_until",
+          "first_payment_only",
+          "is_active"
+        ],
+        "title": "PromoDraftBody",
+        "description": "A promo code as the admin's form sends it."
+      },
+      "PromoPatchBody": {
+        "properties": {
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          },
+          "discount_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DiscountType"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "percent_off": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent Off"
+          },
+          "amounts_off": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "propertyNames": {
+                  "$ref": "#/components/schemas/Currency"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amounts Off"
+          },
+          "scope": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PromoScope"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "plan_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Ids"
+          },
+          "billing_period": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PeriodScope"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "max_redemptions": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Redemptions"
+          },
+          "per_user_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Per User Limit"
+          },
+          "valid_from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid From"
+          },
+          "valid_until": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid Until"
+          },
+          "first_payment_only": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Payment Only"
+          },
+          "is_active": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Active"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "PromoPatchBody",
+        "description": "Any part of the draft."
+      },
+      "PromoScope": {
+        "type": "string",
+        "enum": [
+          "all",
+          "plans"
+        ]
+      },
+      "PromoStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "scheduled",
+          "expired",
+          "exhausted",
+          "disabled"
+        ],
+        "title": "PromoStatus",
+        "description": "Where a code stands today, judged in the cabinet's order (`promoStatus`)."
+      },
+      "PromoView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "discount_type": {
+            "$ref": "#/components/schemas/DiscountType"
+          },
+          "percent_off": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent Off"
+          },
+          "amounts_off": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/Currency"
+            },
+            "type": "object",
+            "title": "Amounts Off"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/PromoScope"
+          },
+          "plan_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Plan Ids"
+          },
+          "billing_period": {
+            "$ref": "#/components/schemas/PeriodScope"
+          },
+          "max_redemptions": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Redemptions"
+          },
+          "per_user_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Per User Limit"
+          },
+          "redemptions": {
+            "type": "integer",
+            "title": "Redemptions"
+          },
+          "valid_from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid From"
+          },
+          "valid_until": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Valid Until"
+          },
+          "first_payment_only": {
+            "type": "boolean",
+            "title": "First Payment Only"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PromoStatus"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "code",
+          "discount_type",
+          "percent_off",
+          "amounts_off",
+          "scope",
+          "plan_ids",
+          "billing_period",
+          "max_redemptions",
+          "per_user_limit",
+          "redemptions",
+          "valid_from",
+          "valid_until",
+          "first_payment_only",
+          "is_active",
+          "status",
+          "created_at"
+        ],
+        "title": "PromoView",
+        "description": "A promo code as the admin's list shows it; the status is judged today in UTC."
+      },
       "Provider": {
         "type": "string",
         "enum": [
@@ -4363,6 +5963,37 @@
         ],
         "title": "ResetRequest",
         "description": "The token of the link and the new password."
+      },
+      "SeatsBody": {
+        "properties": {
+          "min": {
+            "type": "integer",
+            "maximum": 100000.0,
+            "minimum": 1.0,
+            "title": "Min"
+          },
+          "max": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 100000.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "min",
+          "max"
+        ],
+        "title": "SeatsBody",
+        "description": "How many users a per-seat plan is for; no upper bound when `max` is null."
       },
       "SignedOutElsewhere": {
         "properties": {

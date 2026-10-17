@@ -25,6 +25,14 @@ class MixedCurrenciesError(ValueError):
     """Two amounts of different currencies were combined."""
 
 
+class PricesError(ValueError):
+    """A period's prices break the catalogue's rules; `code` is the API's error code."""
+
+    def __init__(self, code: str, message: str) -> None:
+        super().__init__(message)
+        self.code = code
+
+
 @dataclass(frozen=True, slots=True, order=True)
 class Money:
     """An amount in minor units of one currency (kopecks, cents)."""
@@ -59,14 +67,14 @@ class Prices:
     def __post_init__(self) -> None:
         if set(self.amounts) != set(Currency):
             message = "цена тарифа задаётся во всех трёх валютах"
-            raise ValueError(message)
+            raise PricesError("plan_prices_incomplete", message)
         values = list(self.amounts.values())
         if not all(0 <= value <= MAX_MINOR for value in values):
             message = f"цена вне 0…{MAX_MINOR} минорных единиц"
-            raise ValueError(message)
+            raise PricesError("plan_prices_out_of_range", message)
         if any(values) and not all(values):
             message = "за период цена либо нулевая во всех валютах, либо положительная во всех"
-            raise ValueError(message)
+            raise PricesError("plan_prices_mixed", message)
 
     @property
     def free(self) -> bool:

@@ -1,6 +1,7 @@
 """Usage windows, token routes, promo codes and money periods (BL-D3, BL-D4, BL-D7, BL-D8)."""
 
 import uuid
+from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
 
 import pytest
@@ -26,12 +27,15 @@ from shosai.features.billing.domain.plans import BillingPeriod, ModelTier
 from shosai.features.billing.domain.promos import (
     PromoCode,
     PromoRefusal,
+    PromoRule,
+    PromoRuleError,
     PromoStatus,
     Purchase,
     discounted,
 )
 
 START = datetime(2026, 10, 1, tzinfo=UTC)
+PROFESSIONAL = uuid.UUID("0199f2a0-0000-7000-8000-0000000000aa")
 moments = st.integers(0, 2 * 365 * 24 * 60).map(lambda minutes: START + timedelta(minutes=minutes))
 
 
@@ -113,21 +117,21 @@ def test_a_promo_code_s_status_and_its_discount() -> None:
     today = date(2026, 10, 17)
     purchase = Purchase(
         Money(Currency.RUB, 149_000),
-        "professional",
+        PROFESSIONAL,
         BillingPeriod.MONTH,
         first_payment=True,
         used_by_person=0,
         today=today,
     )
     fixed = PromoCode(
-        "AUTUMN", amounts_off={Currency.RUB: 50_000}, plan_slugs=frozenset({"professional"})
+        "AUTUMN", amounts_off={Currency.RUB: 50_000}, plan_ids=frozenset({PROFESSIONAL})
     )
 
     assert discounted(PromoCode("HALF", percent_off=50), purchase) == Money(Currency.RUB, 74_500)
     assert discounted(fixed, purchase) == Money(Currency.RUB, 99_000)
     usd = Purchase(
         Money(Currency.USD, 1_500),
-        "professional",
+        PROFESSIONAL,
         BillingPeriod.MONTH,
         first_payment=True,
         used_by_person=0,
@@ -149,10 +153,62 @@ def test_a_promo_code_s_status_and_its_discount() -> None:
     once = PromoCode("ONCE", percent_off=10, per_user_limit=1)
     again = Purchase(
         purchase.price,
-        "professional",
+        PROFESSIONAL,
         BillingPeriod.MONTH,
         first_payment=True,
         used_by_person=1,
         today=today,
     )
     assert discounted(once, again) is PromoRefusal.USED_UP_BY_PERSON
+
+
+def test_a_promo_status_follows_the_cabinet_s_order() -> None:
+    today = date(2026, 10, 17)
+    used_up_before_it_starts = PromoCode(
+        "LATER", percent_off=10, valid_from=date(2026, 11, 1), max_redemptions=1, redemptions=1
+    )
+    off = PromoCode("OFF", percent_off=10, valid_until=date(2026, 10, 1), active=False)
+
+    assert used_up_before_it_starts.status(today) is PromoStatus.EXHAUSTED
+    assert off.status(today) is PromoStatus.DISABLED
+
+
+@pytest.mark.parametrize(
+    ("build", "rule"),
+    [
+        (
+            lambda: PromoCode("CODE", percent_off=10, amounts_off={Currency.RUB: 100}),
+            PromoRule.DISCOUNT,
+        ),
+        (lambda: PromoCode("CODE", percent_off=101), PromoRule.PERCENT),
+        (lambda: PromoCode("CODE", amounts_off={Currency.USD: 99}), PromoRule.AMOUNT),
+        (
+            lambda: PromoCode("CODE", percent_off=5, max_redemptions=2, per_user_limit=3),
+            PromoRule.LIMITS,
+        ),
+        (
+            lambda: PromoCode(
+                "CODE", percent_off=5, valid_from=date(2026, 2, 1), valid_until=date(2026, 1, 1)
+            ),
+            PromoRule.DATES,
+        ),
+        (lambda: PromoCode("CODE", percent_off=5, plan_ids=frozenset()), PromoRule.PLANS),
+        (lambda: PromoCode("lower", percent_off=5), PromoRule.CODE),
+    ],
+)
+def test_a_promo_code_names_the_rule_it_breaks(
+    build: Callable[[], PromoCode], rule: PromoRule
+) -> None:
+    with pytest.raises(PromoRuleError) as refused:
+        build()
+
+    assert refused.value.code == rule.value
+
+
+def test_a_code_left_without_plans_may_exist_switched_off() -> None:
+    assert (
+        PromoCode("ORPHAN", percent_off=5, plan_ids=frozenset(), active=False).status(
+            date(2026, 10, 17)
+        )
+        is PromoStatus.DISABLED
+    )

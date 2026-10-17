@@ -828,6 +828,102 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/admin/plans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Plans
+         * @description Every plan, archived ones included, in the pricing page's order.
+         */
+        get: operations["list_plans_v1_admin_plans_get"];
+        put?: never;
+        /**
+         * Create Plan
+         * @description A new plan; its slug must be free (409 `plan_slug_taken`).
+         */
+        post: operations["create_plan_v1_admin_plans_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/plans/{plan_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Plan
+         * @description Delete a plan nobody holds, leaving promo codes; archive one with subscribers.
+         */
+        delete: operations["delete_plan_v1_admin_plans__plan_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Change Plan
+         * @description Edit, archive or restore; an archived plan is edited only while restored.
+         */
+        patch: operations["change_plan_v1_admin_plans__plan_id__patch"];
+        trace?: never;
+    };
+    "/v1/admin/promo-codes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Promo Codes
+         * @description Every code with its status today.
+         */
+        get: operations["list_promo_codes_v1_admin_promo_codes_get"];
+        put?: never;
+        /**
+         * Create Promo Code
+         * @description A new code; the code must be free (409 `promo_code_taken`).
+         */
+        post: operations["create_promo_code_v1_admin_promo_codes_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/promo-codes/{promo_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Promo Code
+         * @description Delete a code.
+         */
+        delete: operations["delete_promo_code_v1_admin_promo_codes__promo_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Change Promo Code
+         * @description Edit a code; its use count stays as payments left it.
+         */
+        patch: operations["change_promo_code_v1_admin_promo_codes__promo_id__patch"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -984,6 +1080,37 @@ export interface components {
             spend: components["schemas"]["AdminSpend"];
         };
         /**
+         * Audience
+         * @description Who a plan is for: the Upgrade page's tabs.
+         * @enum {string}
+         */
+        Audience: "individual" | "team" | "enterprise";
+        /**
+         * CapabilitiesBody
+         * @description The extras a plan switches on.
+         */
+        CapabilitiesBody: {
+            /** Shared Workspace */
+            shared_workspace: boolean;
+            /** Member Management */
+            member_management: boolean;
+            /** Centralized Billing */
+            centralized_billing: boolean;
+            /** Sso */
+            sso: boolean;
+            /** Admin Controls */
+            admin_controls: boolean;
+            /** Priority Support */
+            priority_support: boolean;
+            /** Usage Analytics */
+            usage_analytics: boolean;
+            /**
+             * Frontier Models
+             * @default false
+             */
+            frontier_models: boolean;
+        };
+        /**
          * ChallengeRequest
          * @description A challenge, for a new code.
          */
@@ -1049,6 +1176,12 @@ export interface components {
             /** Share Location */
             share_location?: boolean | null;
         };
+        /**
+         * Currency
+         * @description A currency a plan is priced and paid in.
+         * @enum {string}
+         */
+        Currency: "RUB" | "USD" | "EUR";
         /**
          * DeletionRequest
          * @description The account's address, typed again to confirm.
@@ -1153,6 +1286,8 @@ export interface components {
             /** Current */
             current: boolean;
         };
+        /** @enum {string} */
+        DiscountType: "percent" | "fixed";
         /**
          * EmailChallenge
          * @description The sealed challenge the browser keeps, and when it may ask for another code.
@@ -1350,6 +1485,27 @@ export interface components {
             type: string;
         };
         /**
+         * LimitsBody
+         * @description What a plan includes: null is unlimited, 0 is not included.
+         */
+        LimitsBody: {
+            /** Meeting Minutes Per Month */
+            meeting_minutes_per_month: number | null;
+            /** File Manager Gb */
+            file_manager_gb: number | null;
+            /** Knowledge Base Mb */
+            knowledge_base_mb: number | null;
+            /** Weekly Standard Tokens */
+            weekly_standard_tokens?: number | null;
+            /**
+             * Weekly Frontier Tokens
+             * @default 0
+             */
+            weekly_frontier_tokens: number | null;
+            /** Daily Standard Tokens */
+            daily_standard_tokens?: number | null;
+        };
+        /**
          * LoginRequest
          * @description Address and password; the captcha token when the sign-in page shows one.
          */
@@ -1439,6 +1595,275 @@ export interface components {
             items: components["schemas"]["DeviceView"][];
             /** Next Cursor */
             next_cursor: string | null;
+        };
+        /** @enum {string} */
+        PeriodScope: "month" | "year" | "both";
+        /**
+         * PlanDeletion
+         * @description A deleted plan and the promo codes it left, or the plan archived instead.
+         */
+        PlanDeletion: {
+            /**
+             * Result
+             * @enum {string}
+             */
+            result: "deleted" | "archived";
+            plan: components["schemas"]["PlanView"] | null;
+            /** Promo Codes Updated */
+            promo_codes_updated: number;
+        };
+        /**
+         * PlanDraftBody
+         * @description A plan as the admin's form sends it.
+         */
+        PlanDraftBody: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description: string;
+            audience: components["schemas"]["Audience"];
+            seats: components["schemas"]["SeatsBody"] | null;
+            /** Custom Pricing */
+            custom_pricing: boolean;
+            price_monthly: components["schemas"]["PriceSet"];
+            price_yearly: components["schemas"]["PriceSet"];
+            limits: components["schemas"]["LimitsBody"];
+            capabilities: components["schemas"]["CapabilitiesBody"];
+            /** Features */
+            features: string[];
+            /** Is Active */
+            is_active: boolean;
+            /** Is Featured */
+            is_featured: boolean;
+            /** Sort Order */
+            sort_order: number;
+        };
+        /**
+         * PlanPatchBody
+         * @description Any part of the draft; `archived: false` restores, `true` archives.
+         */
+        PlanPatchBody: {
+            /** Name */
+            name?: string | null;
+            /** Slug */
+            slug?: string | null;
+            /** Description */
+            description?: string | null;
+            audience?: components["schemas"]["Audience"] | null;
+            seats?: components["schemas"]["SeatsBody"] | null;
+            /** Custom Pricing */
+            custom_pricing?: boolean | null;
+            price_monthly?: components["schemas"]["PriceSet"] | null;
+            price_yearly?: components["schemas"]["PriceSet"] | null;
+            /** Limits */
+            limits?: {
+                [key: string]: number | null;
+            } | null;
+            /** Capabilities */
+            capabilities?: {
+                [key: string]: boolean;
+            } | null;
+            /** Features */
+            features?: string[] | null;
+            /** Is Active */
+            is_active?: boolean | null;
+            /** Is Featured */
+            is_featured?: boolean | null;
+            /** Sort Order */
+            sort_order?: number | null;
+            /** Archived */
+            archived?: boolean | null;
+        };
+        /**
+         * PlanView
+         * @description A plan as the admin's list shows it.
+         */
+        PlanView: {
+            /** Name */
+            name: string;
+            /** Slug */
+            slug: string;
+            /** Description */
+            description: string;
+            audience: components["schemas"]["Audience"];
+            seats: components["schemas"]["SeatsBody"] | null;
+            /** Custom Pricing */
+            custom_pricing: boolean;
+            price_monthly: components["schemas"]["PriceSet"];
+            price_yearly: components["schemas"]["PriceSet"];
+            limits: components["schemas"]["LimitsBody"];
+            capabilities: components["schemas"]["CapabilitiesBody"];
+            /** Features */
+            features: string[];
+            /** Is Active */
+            is_active: boolean;
+            /** Is Featured */
+            is_featured: boolean;
+            /** Sort Order */
+            sort_order: number;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Subscribers */
+            subscribers: number;
+            /** Archived */
+            archived: boolean;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /**
+         * PlansView
+         * @description Every plan of the catalogue.
+         */
+        PlansView: {
+            /** Plans */
+            plans: components["schemas"]["PlanView"][];
+        };
+        /**
+         * PriceSet
+         * @description A period's price in minor units in every currency.
+         */
+        PriceSet: {
+            /** Rub */
+            RUB: number;
+            /** Usd */
+            USD: number;
+            /** Eur */
+            EUR: number;
+        };
+        /**
+         * PromoCodesView
+         * @description Every promo code, newest first.
+         */
+        PromoCodesView: {
+            /** Promo Codes */
+            promo_codes: components["schemas"]["PromoView"][];
+        };
+        /**
+         * PromoDraftBody
+         * @description A promo code as the admin's form sends it.
+         */
+        PromoDraftBody: {
+            /** Code */
+            code: string;
+            discount_type: components["schemas"]["DiscountType"];
+            /** Percent Off */
+            percent_off: number | null;
+            /** Amounts Off */
+            amounts_off: {
+                [key: string]: number;
+            };
+            scope: components["schemas"]["PromoScope"];
+            /** Plan Ids */
+            plan_ids: string[];
+            billing_period: components["schemas"]["PeriodScope"];
+            /** Max Redemptions */
+            max_redemptions: number | null;
+            /** Per User Limit */
+            per_user_limit: number | null;
+            /** Valid From */
+            valid_from: string | null;
+            /** Valid Until */
+            valid_until: string | null;
+            /** First Payment Only */
+            first_payment_only: boolean;
+            /** Is Active */
+            is_active: boolean;
+        };
+        /**
+         * PromoPatchBody
+         * @description Any part of the draft.
+         */
+        PromoPatchBody: {
+            /** Code */
+            code?: string | null;
+            discount_type?: components["schemas"]["DiscountType"] | null;
+            /** Percent Off */
+            percent_off?: number | null;
+            /** Amounts Off */
+            amounts_off?: {
+                [key: string]: number;
+            } | null;
+            scope?: components["schemas"]["PromoScope"] | null;
+            /** Plan Ids */
+            plan_ids?: string[] | null;
+            billing_period?: components["schemas"]["PeriodScope"] | null;
+            /** Max Redemptions */
+            max_redemptions?: number | null;
+            /** Per User Limit */
+            per_user_limit?: number | null;
+            /** Valid From */
+            valid_from?: string | null;
+            /** Valid Until */
+            valid_until?: string | null;
+            /** First Payment Only */
+            first_payment_only?: boolean | null;
+            /** Is Active */
+            is_active?: boolean | null;
+        };
+        /** @enum {string} */
+        PromoScope: "all" | "plans";
+        /**
+         * PromoStatus
+         * @description Where a code stands today, judged in the cabinet's order (`promoStatus`).
+         * @enum {string}
+         */
+        PromoStatus: "active" | "scheduled" | "expired" | "exhausted" | "disabled";
+        /**
+         * PromoView
+         * @description A promo code as the admin's list shows it; the status is judged today in UTC.
+         */
+        PromoView: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Code */
+            code: string;
+            discount_type: components["schemas"]["DiscountType"];
+            /** Percent Off */
+            percent_off: number | null;
+            /** Amounts Off */
+            amounts_off: {
+                [key: string]: number;
+            };
+            scope: components["schemas"]["PromoScope"];
+            /** Plan Ids */
+            plan_ids: string[];
+            billing_period: components["schemas"]["PeriodScope"];
+            /** Max Redemptions */
+            max_redemptions: number | null;
+            /** Per User Limit */
+            per_user_limit: number | null;
+            /** Redemptions */
+            redemptions: number;
+            /** Valid From */
+            valid_from: string | null;
+            /** Valid Until */
+            valid_until: string | null;
+            /** First Payment Only */
+            first_payment_only: boolean;
+            /** Is Active */
+            is_active: boolean;
+            status: components["schemas"]["PromoStatus"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /**
          * Provider
@@ -1533,6 +1958,16 @@ export interface components {
             token: string;
             /** Password */
             password: string;
+        };
+        /**
+         * SeatsBody
+         * @description How many users a per-seat plan is for; no upper bound when `max` is null.
+         */
+        SeatsBody: {
+            /** Min */
+            min: number;
+            /** Max */
+            max: number | null;
         };
         /**
          * SignedOutElsewhere
@@ -3377,6 +3812,276 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Transfer"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_plans_v1_admin_plans_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlansView"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_plan_v1_admin_plans_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlanDraftBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanView"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_plan_v1_admin_plans__plan_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plan_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanDeletion"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_plan_v1_admin_plans__plan_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plan_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlanPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanView"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_promo_codes_v1_admin_promo_codes_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoCodesView"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_promo_code_v1_admin_promo_codes_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PromoDraftBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoView"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_promo_code_v1_admin_promo_codes__promo_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                promo_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_promo_code_v1_admin_promo_codes__promo_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                promo_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PromoPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PromoView"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
