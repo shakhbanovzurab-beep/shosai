@@ -22,10 +22,10 @@ from shosai.features.workspaces.infrastructure.organization_records import (
     Team,
     TeamMember,
 )
-
-# Виды ресурсов, под которыми записи шаринга хранят свои гранты.
-MEETING_KIND = "meeting"
-KNOWLEDGE_ITEM_KIND = "knowledge_item"
+from shosai.features.workspaces.infrastructure.share_records import (
+    KNOWLEDGE_ITEM_KIND,
+    MEETING_KIND,
+)
 
 
 async def withdraw_member(session: AsyncSession, org_id: UUID, membership_id: UUID) -> None:

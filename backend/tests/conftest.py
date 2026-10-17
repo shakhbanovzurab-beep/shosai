@@ -29,6 +29,7 @@ pytest_plugins = (
     "tests.harness.database_access",
     "tests.harness.shared_services",
     "tests.core.db.probe_table",
+    "tests.features.workspaces.probe_resources",
 )
 
 

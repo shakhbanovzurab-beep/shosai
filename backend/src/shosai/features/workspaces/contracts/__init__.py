@@ -72,15 +72,18 @@ class Viewer:
 
 @dataclass(frozen=True, slots=True)
 class AccessChange:
-    """A new access level and grants for one row of a workspace, by an acting member."""
+    """A new access level and grants for one row of a workspace, by whoever asks for it.
+
+    The policy checks that the actor may manage the row; the platform's admin (`None`)
+    may change any row of the workspace.
+    """
 
     resource: ShareableResource
     resource_id: UUID
     org_id: UUID
     level: AccessLevel
     grantees: frozenset[Grantee]
-    # None — администратор платформы.
-    actor_membership_id: UUID | None
+    actor: Viewer | None
 
 
 class AccessPolicy(Protocol):
@@ -105,7 +108,11 @@ class AccessPolicy(Protocol):
         ...
 
     async def set_access(self, session: AsyncSession, change: AccessChange) -> None:
-        """Write the level, the grants, the audit row and the event in the caller's transaction."""
+        """Write the level, the grants, the audit row and the event in the caller's transaction.
+
+        The transaction's scope names the workspace. A row the actor may not manage is
+        answered as missing; a grantee from outside the workspace is refused.
+        """
         ...
 
 

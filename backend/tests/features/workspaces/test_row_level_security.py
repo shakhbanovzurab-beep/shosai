@@ -5,6 +5,7 @@ into the transaction's workspace; the sweep role reads every tenant's rows and o
 workers or scheduler process; the audit log only grows; a workspace always keeps an owner.
 """
 
+import json
 import uuid
 from datetime import timedelta
 
@@ -222,3 +223,19 @@ async def test_the_sweep_role_ends_with_its_transaction_on_a_reused_connection(
     assert len(swept) == 3
     assert after == set()
     assert role != "shosai_sweeper"
+
+
+async def test_the_membership_list_is_computed_once_per_statement(
+    homes: DatabaseAccess, run_slot: RunSlot
+) -> None:
+    world = await world_in(run_slot, Home.RU)
+
+    async with homes.transactions.begin(TenancyScope(Home.RU, world.person)) as session:
+        plan = await session.scalar(
+            sa.text("EXPLAIN (FORMAT JSON, VERBOSE) SELECT name FROM teams")
+        )
+
+    rendered = json.dumps(plan)
+    # Некоррелированный подзапрос политики — InitPlan: один вызов на оператор, не на строку.
+    assert "InitPlan" in rendered
+    assert "app_member_org_ids" in rendered

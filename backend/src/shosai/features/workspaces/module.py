@@ -1,7 +1,7 @@
 """The workspaces slice as composition sees it (workspaces plan §3.1).
 
-The contract, the tables with their row-level security, the membership reader, the audit
-log and the deletion registry's handler are in place; the access policy, the services and
+The contract, the tables with their row-level security, the access policy, the membership
+reader, the audit log and the deletion registry's handler are in place; the services and
 the routes join in the later steps of the plan.
 """
 
@@ -11,8 +11,9 @@ from contextlib import asynccontextmanager
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.features.workspaces.application.access_policy import WorkspaceAccessPolicy
 from shosai.features.workspaces.application.account_data import OWNER, WorkspacesAccountData
-from shosai.features.workspaces.contracts import AUDIT_LOG, MEMBERSHIP_READER
+from shosai.features.workspaces.contracts import ACCESS_POLICY, AUDIT_LOG, MEMBERSHIP_READER
 from shosai.features.workspaces.contracts.events import (
     AccessChanged,
     KnowledgeItemAdded,
@@ -54,11 +55,12 @@ ACCOUNT_DATA = AccountDataSpec(OWNER, (TableCoverage("memberships", Treatment.ER
 
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
-    """Bind the membership reader, the audit log and the deletion registry's handler."""
+    """Bind the access policy, the membership reader, the audit log and the registry's handler."""
     audit = WorkspaceAuditLog()
     account_data = WorkspacesAccountData(services.transactions, services.outbox, audit)
     yield FeatureParts(
         provides=(
+            ACCESS_POLICY.bind(WorkspaceAccessPolicy(services.outbox, audit)),
             MEMBERSHIP_READER.bind(MembershipDirectory()),
             AUDIT_LOG.bind(audit),
             ACCOUNT_DATA_HANDLERS.bind(account_data),
