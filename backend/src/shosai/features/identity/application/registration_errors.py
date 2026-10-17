@@ -10,6 +10,11 @@ def invalid(code: str) -> AppError:
     return AppError(code, HTTPStatus.UNPROCESSABLE_ENTITY)
 
 
+def disposable_domain() -> AppError:
+    """422 `email_domain_not_allowed`: a new account at a disposable mail service (BL-D3)."""
+    return AppError("email_domain_not_allowed", HTTPStatus.UNPROCESSABLE_ENTITY)
+
+
 def captcha_failed() -> AppError:
     """400 `captcha_failed`, as the draft and its clients know it."""
     return AppError("captcha_failed", HTTPStatus.BAD_REQUEST)

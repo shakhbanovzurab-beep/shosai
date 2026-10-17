@@ -42,6 +42,7 @@
     "invalid_email": "メールアドレスを確認してください。",
     "invalid_country": "リストから国を選択してください。",
     "email_registered": "このメールアドレスのアカウントはすでに存在します。ログインしてください。",
+    "email_domain_not_allowed": "これは一時的なメールアドレスのサービスです。アカウントの作成には普段のメールアドレスを使ってください。",
     "password_too_short": "パスワードは 8 文字以上にしてください。",
     "password_too_long": "パスワードが長すぎます。256 文字以内にしてください。",
     "personal_data_consent_required": "アカウントを作成するには、利用規約と個人データの処理に同意してください。",

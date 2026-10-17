@@ -26,7 +26,7 @@ from shosai.features.identity.application.sessions import IssuedTokens, Sessions
 from shosai.features.identity.contracts import AccountRegistered
 from shosai.features.identity.domain.accounts import AccountState, sign_in_refusal
 from shosai.features.identity.domain.directory import email_hmac
-from shosai.features.identity.domain.emails import InvalidEmailError, normalize_email
+from shosai.features.identity.domain.emails import InvalidEmailError, is_disposable, normalize_email
 from shosai.features.identity.domain.homes import CountryCode, InvalidCountryError, home_for_country
 from shosai.features.identity.domain.registration import (
     CONSENT_VERSION,
@@ -110,6 +110,8 @@ class SocialAccounts:
             address = normalize_email(claim.email)
         except InvalidEmailError as error:
             raise errors.invalid("invalid_email") from error
+        if is_disposable(address):
+            raise errors.disposable_domain()
         if not await services.states.spend(form.ticket, CONSENT_LIFETIME):
             raise AppError("social_state_invalid", HTTPStatus.BAD_REQUEST)
         address_hmac = email_hmac(services.directory_key, address)

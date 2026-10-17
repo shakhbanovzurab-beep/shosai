@@ -42,6 +42,7 @@
     "invalid_email": "Revisa la dirección de correo.",
     "invalid_country": "Elige tu país de la lista.",
     "email_registered": "Ya existe una cuenta con este correo. Inicia sesión.",
+    "email_domain_not_allowed": "Este es un servicio de correo temporal. Usa tu correo habitual para crear la cuenta.",
     "password_too_short": "La contraseña necesita al menos 8 caracteres.",
     "password_too_long": "La contraseña es demasiado larga. Usa hasta 256 caracteres.",
     "personal_data_consent_required": "Para crear una cuenta, acepta las condiciones y el tratamiento de tus datos personales.",

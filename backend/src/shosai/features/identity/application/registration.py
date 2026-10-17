@@ -26,6 +26,7 @@ from shosai.features.identity.domain.directory import email_hmac
 from shosai.features.identity.domain.emails import (
     InvalidEmailError,
     NormalizedEmail,
+    is_disposable,
     normalize_email,
 )
 from shosai.features.identity.domain.homes import CountryCode, InvalidCountryError, home_for_country
@@ -200,6 +201,8 @@ def _checked(form: RegistrationForm) -> tuple[NormalizedEmail, Home, str]:
         raise errors.invalid("invalid_email") from error
     except InvalidCountryError as error:
         raise errors.invalid("invalid_country") from error
+    if is_disposable(email):
+        raise errors.disposable_domain()
     problem = new_password_problem(form.password)
     if problem is not None:
         raise errors.invalid(problem.value)

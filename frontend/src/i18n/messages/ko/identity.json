@@ -42,6 +42,7 @@
     "invalid_email": "이메일 주소를 확인하세요.",
     "invalid_country": "목록에서 국가를 선택하세요.",
     "email_registered": "이 이메일로 만든 계정이 이미 있어요. 대신 로그인하세요.",
+    "email_domain_not_allowed": "임시 이메일 서비스예요. 계정을 만들려면 평소에 쓰는 이메일을 사용하세요.",
     "password_too_short": "비밀번호는 8자 이상이어야 해요.",
     "password_too_long": "비밀번호가 너무 길어요. 256자 이하로 입력하세요.",
     "personal_data_consent_required": "계정을 만들려면 약관과 개인정보 처리에 동의하세요.",

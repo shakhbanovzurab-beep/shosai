@@ -14,6 +14,7 @@ export const AUTH_PROBLEMS = [
   "invalid_email",
   "invalid_country",
   "email_registered",
+  "email_domain_not_allowed",
   "password_too_short",
   "password_too_long",
   "personal_data_consent_required",

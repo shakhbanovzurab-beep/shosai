@@ -42,6 +42,7 @@
     "invalid_email": "Controleer het e-mailadres.",
     "invalid_country": "Kies je land uit de lijst.",
     "email_registered": "Er is al een account met dit e-mailadres. Log daarmee in.",
+    "email_domain_not_allowed": "Dit is een dienst voor tijdelijke e-mailadressen. Gebruik je gewone e-mailadres om een account te maken.",
     "password_too_short": "Het wachtwoord moet minstens 8 tekens hebben.",
     "password_too_long": "Het wachtwoord is te lang. Gebruik maximaal 256 tekens.",
     "personal_data_consent_required": "Accepteer de voorwaarden en de verwerking van je persoonsgegevens om een account te maken.",

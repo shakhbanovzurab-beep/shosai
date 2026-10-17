@@ -42,6 +42,7 @@
     "invalid_email": "Periksa alamat email.",
     "invalid_country": "Pilih negara Anda dari daftar.",
     "email_registered": "Akun dengan email ini sudah ada. Masuk saja.",
+    "email_domain_not_allowed": "Ini layanan email sementara. Gunakan email yang biasa Anda pakai untuk membuat akun.",
     "password_too_short": "Kata sandi minimal 8 karakter.",
     "password_too_long": "Kata sandi terlalu panjang. Gunakan maksimal 256 karakter.",
     "personal_data_consent_required": "Untuk membuat akun, setujui ketentuan dan pemrosesan data pribadi Anda.",

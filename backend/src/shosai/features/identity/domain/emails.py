@@ -9,6 +9,8 @@ one address (DATA_MAPPING R4 applies the same rule to migrated accounts).
 from dataclasses import dataclass
 from typing import Final
 
+from shosai.features.identity.domain.disposable_mail_domains import DISPOSABLE_MAIL_DOMAINS
+
 MIN_EMAIL_LENGTH: Final = 3
 MAX_EMAIL_LENGTH: Final = 254
 MAX_LOCAL_PART_LENGTH: Final = 64
@@ -58,3 +60,11 @@ def _ascii_domain(domain: str) -> str:
     except UnicodeError as error:
         message = "домен адреса не кодируется в IDNA"
         raise InvalidEmailError(message) from error
+
+
+def is_disposable(email: NormalizedEmail) -> bool:
+    """Whether the address is at a disposable mail service or a subdomain of one."""
+    labels = email.value.rpartition("@")[2].split(".")
+    return any(
+        ".".join(labels[index:]) in DISPOSABLE_MAIL_DOMAINS for index in range(len(labels) - 1)
+    )

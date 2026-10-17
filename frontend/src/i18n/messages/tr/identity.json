@@ -42,6 +42,7 @@
     "invalid_email": "E-posta adresini kontrol edin.",
     "invalid_country": "Listeden ülkenizi seçin.",
     "email_registered": "Bu e-postayla zaten bir hesap var. Bunun yerine giriş yapın.",
+    "email_domain_not_allowed": "Bu geçici bir e-posta hizmeti. Hesap oluşturmak için her zaman kullandığınız e-postayı girin.",
     "password_too_short": "Şifre en az 8 karakter olmalı.",
     "password_too_long": "Şifre çok uzun. En fazla 256 karakter kullanın.",
     "personal_data_consent_required": "Hesap oluşturmak için koşulları ve kişisel verilerinizin işlenmesini kabul edin.",

@@ -34,7 +34,7 @@ from shosai.features.identity.domain.email_codes import (
     challenge_code_matches,
     new_nonce,
 )
-from shosai.features.identity.domain.emails import InvalidEmailError, normalize_email
+from shosai.features.identity.domain.emails import InvalidEmailError, is_disposable, normalize_email
 from shosai.features.identity.domain.homes import home_for_visitor
 from shosai.features.identity.domain.registration import (
     MAX_RESENDS,
@@ -196,6 +196,9 @@ class EmailSignIn:
             raise errors.invalid_code()
         account = _account(await services.directory.find(address_hmac))
         if account is None:
+            # Новый аккаунт на одноразовом адресе не создаётся; вошедшим раньше это не мешает.
+            if is_disposable(normalize_email(claim.email)):
+                raise errors.disposable_domain()
             consent = ConsentClaim(None, claim.next_path, claim.language, claim.email)
             return EmailVerified(None, services.consent.seal(consent), claim.next_path)
         tokens = await self._signed_in(account, client)

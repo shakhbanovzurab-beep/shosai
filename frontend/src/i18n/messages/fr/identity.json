@@ -42,6 +42,7 @@
     "invalid_email": "Vérifiez l’adresse e-mail.",
     "invalid_country": "Choisissez votre pays dans la liste.",
     "email_registered": "Un compte existe déjà avec cet e-mail. Connectez-vous plutôt.",
+    "email_domain_not_allowed": "Ce service fournit des adresses temporaires. Utilisez votre e-mail habituel pour créer un compte.",
     "password_too_short": "Le mot de passe doit contenir au moins 8 caractères.",
     "password_too_long": "Le mot de passe est trop long. Utilisez 256 caractères au maximum.",
     "personal_data_consent_required": "Pour créer un compte, acceptez les conditions et le traitement de vos données personnelles.",

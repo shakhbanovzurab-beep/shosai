@@ -42,6 +42,7 @@
     "invalid_email": "Hãy kiểm tra địa chỉ email.",
     "invalid_country": "Hãy chọn quốc gia của bạn trong danh sách.",
     "email_registered": "Đã có tài khoản dùng email này. Hãy đăng nhập.",
+    "email_domain_not_allowed": "Đây là dịch vụ email tạm thời. Hãy dùng email thường ngày của bạn để tạo tài khoản.",
     "password_too_short": "Mật khẩu cần ít nhất 8 ký tự.",
     "password_too_long": "Mật khẩu quá dài. Hãy dùng tối đa 256 ký tự.",
     "personal_data_consent_required": "Để tạo tài khoản, hãy chấp nhận điều khoản và việc xử lý dữ liệu cá nhân của bạn.",
