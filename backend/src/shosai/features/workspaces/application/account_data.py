@@ -10,7 +10,6 @@ does not move between homes: identity refuses the request, and `copy` refuses ag
 
 from collections.abc import AsyncIterator, Mapping
 from dataclasses import dataclass
-from datetime import UTC, datetime
 from typing import Final, cast
 from uuid import UUID
 
@@ -23,24 +22,21 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.workspaces.application.departures import Ending, end_membership
 from shosai.features.workspaces.contracts import AuditAction, AuditEntry, AuditLog
 from shosai.features.workspaces.contracts.events import (
-    MemberRemoved,
     MemberRoleChanged,
     WorkspaceDeleted,
 )
 from shosai.features.workspaces.domain.memberships import (
-    STANDING,
     MembershipState,
     RemovalReason,
     RosterChange,
     RosterEntry,
-    apply_change,
     keeps_an_owner,
     successor,
 )
 from shosai.features.workspaces.domain.roles import WorkspaceRole
-from shosai.features.workspaces.infrastructure.member_withdrawal import withdraw_member
 from shosai.features.workspaces.infrastructure.membership_reader import MembershipDirectory
 from shosai.features.workspaces.infrastructure.organization_records import (
     Membership,
@@ -161,62 +157,23 @@ class WorkspacesAccountData:
     async def _end(self, session: AsyncSession, departure: Departure) -> None:
         org_id, membership_id = departure.org_id, departure.membership_id
         leaving = RosterChange(membership_id, state=MembershipState.REMOVED)
-        roster = departure.roster
-        if not keeps_an_owner(roster, leaving):
-            heir = successor(roster, membership_id)
+        if not keeps_an_owner(departure.roster, leaving):
+            heir = successor(departure.roster, membership_id)
             if heir is None:
                 # Больше никого нет: пространство уходит вместе с аккаунтом; строки — каскадом.
                 await session.execute(delete(Organization).where(Organization.id == org_id))
                 await self._outbox.add(session, WorkspaceDeleted(org_id=org_id))
                 return
             await self._hand_over(session, org_id, heir)
-            roster = apply_change(roster, RosterChange(heir, role=WorkspaceRole.OWNER))
-        await session.execute(
-            update(Membership)
-            .where(Membership.id == membership_id)
-            .values(
-                state=MembershipState.REMOVED,
-                removed_at=datetime.now(UTC),
-                removal_reason=RemovalReason.ACCOUNT_ERASED,
-                title=None,
-            )
-        )
-        await withdraw_member(session, org_id, membership_id)
         reason = RemovalReason.ACCOUNT_ERASED
-        await self._record(session, org_id, AuditAction.MEMBER_REMOVED, membership_id, reason)
-        # Созданное человеком в пространстве переходит к владельцу (nfr-16): старейшему из них.
-        owner = min(
-            (
-                e
-                for e in apply_change(roster, leaving)
-                if e.role is WorkspaceRole.OWNER and e.state in STANDING
-            ),
-            key=lambda entry: entry.joined_at,
-        )
-        event = MemberRemoved(
-            org_id=org_id,
-            user_id=departure.user_id,
-            membership_id=membership_id,
-            reason=reason,
-            successor_user_id=departure.users[owner.membership_id],
-        )
-        await self._outbox.add(session, event)
+        ending = Ending(org_id, membership_id, departure.user_id, reason, None)
+        await end_membership(session, ending, self._outbox, self._audit)
 
     async def _hand_over(self, session: AsyncSession, org_id: UUID, heir: UUID) -> None:
         """Make the heir the workspace's owner, with its audit row and event."""
         promote = update(Membership).where(Membership.id == heir).values(role=WorkspaceRole.OWNER)
         await session.execute(promote)
-        await self._record(session, org_id, AuditAction.OWNER_TRANSFERRED, heir, None)
+        entry = AuditEntry(org_id, AuditAction.OWNER_TRANSFERRED, None, "membership", heir)
+        await self._audit.record(session, entry)
         changed = MemberRoleChanged(org_id=org_id, membership_id=heir, role=WorkspaceRole.OWNER)
         await self._outbox.add(session, changed)
-
-    async def _record(
-        self,
-        session: AsyncSession,
-        org_id: UUID,
-        action: AuditAction,
-        target: UUID,
-        value: str | None,
-    ) -> None:
-        entry = AuditEntry(org_id, action, None, "membership", target, value)
-        await self._audit.record(session, entry)

@@ -125,6 +125,8 @@ class Membership(ModelBase):
     removal_reason: Mapped[str | None] = mapped_column(Text)
     # Раз в день при открытии пространства (план §3.6, поток 8).
     last_active_on: Mapped[date | None] = mapped_column(Date)
+    # Время последнего применённого события аккаунта: старое событие не перекрывает новое.
+    account_event_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class Team(ModelBase):
