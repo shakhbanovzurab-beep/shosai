@@ -39,7 +39,7 @@ export type Billing = {
 
 /* ---------- POST /settings/billing/portal ---------- */
 
-/** Asks for the payment provider's hosted page (e.g. a Stripe customer portal or setup session). */
+/** Запрос страницы эквайрера для привязки карты (TBank или CloudPayments, ADR 0054). */
 export type BillingPortalRequest =
   | { intent: "add_payment_method" }
   | { intent: "update_payment_method"; payment_method_id: string };

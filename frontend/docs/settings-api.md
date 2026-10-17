@@ -50,8 +50,9 @@ artifacts, uploaded files, feedback) return when their owners serve them.
 - **Billing / Usage** are read-only. Invoices carry a human-facing `number`, a `description` and a
   `status` of `paid | pending | failed`; `download_url` points at the PDF (null until issued).
   `payment_methods` lists saved cards (exactly one `is_default`). Adding or updating a card never
-  happens in our UI: `POST /billing/portal` returns the payment provider's hosted page (e.g. a Stripe
-  customer portal or setup session) and the browser goes there. The demo answers 501. Usage meters may have `limit: null` for unlimited.
+  happens in our UI: `POST /billing/portal` returns the acquirer's hosted card-binding page (TBank
+  adds the card without a charge, CloudPayments holds 1 ₽ and releases it at once) and the browser
+  goes there. Turning auto-renewal off is a switch in this section ([ADR 0054](../../docs/adr/0054-billing-plans-payments-trials-and-refunds.md)). The demo answers 501. Usage meters may have `limit: null` for unlimited.
 - **Usage is weekly tokens.** `limits` has one entry per tier (`standard`, `frontier`) for the week
   starting `week_start` and resetting at `resets_at`. Only frontier models (the expensive ones —
   Claude Opus, GPT Astra and similar) can get extra tokens: `frontier.extra_tokens` is the bought

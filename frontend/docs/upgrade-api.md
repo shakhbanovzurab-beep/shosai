@@ -58,9 +58,10 @@ The backend enforces every limit, against the effective plan. The frontend only 
 
 ### Checkout and sales
 
-- `POST /billing/checkout` takes the slug of a plan with a price and returns the payment provider's
-  hosted page (Stripe Checkout for an upgrade, the customer portal for a downgrade). Card details are
-  never sent to this API. Errors: `404` unknown plan, `422` custom-priced plan, `409` the current
+- `POST /billing/checkout` takes the slug of a plan with a price and returns the acquirer's hosted
+  payment page: TBank or CloudPayments for roubles, lava.top (cards or PayPal) for other currencies,
+  as the platform's payment routes choose ([ADR 0054](../../docs/adr/0054-billing-plans-payments-trials-and-refunds.md)).
+  A downgrade takes effect at the next renewal and needs no payment. Card details are never sent to this API. Errors: `404` unknown plan, `422` custom-priced plan, `409` the current
   plan. The demo has no provider and answers `501` with an explanation.
 - A custom-priced plan has no checkout: the page sends a sales inquiry. `team_size` is one of
   `1-10`, `11-50`, `51-200`, `201-1000`, `1000+`; `message` may be empty (max 2000 characters),

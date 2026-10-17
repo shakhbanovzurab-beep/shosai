@@ -1,6 +1,6 @@
 # ADR 0007 — Usage tombstones are kept for the lifetime quota
 
-- **Status:** accepted by the owner on 2026-10-01 (D3, decision U-10 in [DATA_MAPPING.md](../plan/DATA_MAPPING.md#10-decisions-for-the-user)).
+- **Status:** accepted by the owner on 2026-10-01 (D3, decision U-10 in [DATA_MAPPING.md](../plan/DATA_MAPPING.md#10-decisions-for-the-user)); **amended on 2026-10-17** by [ADR 0054](0054-billing-plans-payments-trials-and-refunds.md) (BL-D3): the Free quota is monthly.
 - **Package:** D3; applied by S03 and S04.
 - **Context documents:** [ARCHITECTURE.md](../design/ARCHITECTURE.md) §8.2, inv-3, inv-13; [DATA_MAPPING.md](../plan/DATA_MAPPING.md) risk E-2.
 
@@ -30,3 +30,12 @@ Dropping old tombstones would give deleted minutes back. Deleting meetings would
 
 - The tariff model replaces lifetime quotas with periodic ones.
 - The table's size becomes material for backups or restore time.
+
+## Amendment (2026-10-17, ADR 0054, BL-D3)
+
+The Free plan now gives 120 minutes a month; its quota is periodic, the case this ADR foresaw.
+
+- A tombstone counts in the month its meeting happened, so deleting a meeting never gives its minutes back within that month.
+- `usage_events` returns to ordinary partition-drop retention: partitions older than the current and the previous month (the month a late deletion may still fall into) are dropped by core's daily tick. M1 keeps the draft's tombstones until its E-2 check has run.
+- Tombstones still go with their account through the deletion registry.
+- The draft's lifetime counters (`no_logs_minutes_used`, `ai_minutes_used`) are not carried as quotas; migrated Free accounts start a fresh month at cutover.

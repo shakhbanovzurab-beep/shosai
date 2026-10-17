@@ -278,7 +278,7 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 - **Owns:** `subscriptions`, `subscription_segments`, `transactions`, `auto_charge_attempts`, `auto_renew_consents`, `card_bindings`, `recurring_payment_methods`, `premium_credit_ledger`, `usage_events`, `referral_rewards`, `affiliate_*`, `org_invoices`; platform (EU) `tariffs`, `promo_codes`, `payment_routes`. The exchange rate is F6's (ADR 0036).
 - **Routes:** E webhooks; `/v1/billing/*`, `/v1/admin/{plans,promo-codes,billing}*`.
 - **Depends on:** identity, F6 (cost settlement hook F6-C3, exchange rates, email receipts), workspaces (seat changes).
-- **Emits:** `billing.payment_succeeded`, `.subscription_changed`, `.seats_changed`, `.quota_exhausted`.
+- **Emits:** `billing.payment.succeeded`, `billing.payment.refunded`, `billing.subscription.changed`, `billing.seats.changed`, `billing.quota.exhausted` (three-part names, core's event rule). Plan: [slices/billing.md](slices/billing.md); decisions in [ADR 0054](../adr/0054-billing-plans-payments-trials-and-refunds.md).
 - **Leo tools:** inside `account`: plan and usage (read).
 
 #### 4. files

@@ -144,7 +144,7 @@ export type Payout = {
 };
 
 export type Payouts = {
-  /** Payment provider that settles card (and СБП) payments in this currency, e.g. "ЮKassa". */
+  /** Эквайрер, через которого идут платежи картой (и СБП) в этой валюте, например «TBank» или «lava.top». */
   provider: string;
   /** Masked settlement account, e.g. "АО «Т-Банк», р/с •• 4821". */
   account: string;
