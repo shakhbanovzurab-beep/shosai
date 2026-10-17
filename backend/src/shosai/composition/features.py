@@ -15,10 +15,11 @@ from shosai.core.config.sections import SettingsSection
 from shosai.core.events.domain_event import DomainEvent
 from shosai.core.features import FeatureModule
 from shosai.features.alerting.module import ALERTING
+from shosai.features.billing.module import BILLING
 from shosai.features.identity.module import IDENTITY
 from shosai.features.workspaces.module import WORKSPACES
 
-FEATURES: tuple[FeatureModule, ...] = (IDENTITY, WORKSPACES, ALERTING)
+FEATURES: tuple[FeatureModule, ...] = (IDENTITY, WORKSPACES, BILLING, ALERTING)
 
 
 def check_features(features: Sequence[FeatureModule]) -> None:
