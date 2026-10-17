@@ -133,3 +133,35 @@ def test_a_boundary_violation_breaks_its_contract(
 
     assert report.startswith("exit=1"), report
     assert f"{broken} BROKEN" in report
+
+
+def test_a_contracts_package_is_public_with_its_submodules(tmp_path: Path) -> None:
+    tree = {
+        name: source
+        for name, source in BASE_TREE.items()
+        if name != "shosai.features.alpha.contracts"
+    }
+    tree |= {
+        "shosai.features.alpha.contracts.__init__": "import shosai.features.alpha.service\n",
+        "shosai.features.alpha.contracts.events": "import shosai.features.alpha.domain.rules\n",
+        "shosai.features.beta.listener": "import shosai.features.alpha.contracts.events\n",
+    }
+    build_tree(tmp_path, tree)
+
+    report = lint_imports(tmp_path)
+
+    assert report.startswith("exit=0"), report
+
+
+def test_a_slice_package_named_like_contracts_elsewhere_stays_private(tmp_path: Path) -> None:
+    tree = {
+        **BASE_TREE,
+        "shosai.features.alpha.service.contracts": "",
+        "shosai.features.beta.peek": "import shosai.features.alpha.service.contracts\n",
+    }
+    build_tree(tmp_path, tree)
+
+    report = lint_imports(tmp_path)
+
+    assert report.startswith("exit=1"), report
+    assert f"{FEATURES} BROKEN" in report

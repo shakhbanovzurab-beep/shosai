@@ -161,8 +161,14 @@ id = "features-meet-through-contracts"
 name = "Features meet through contracts"
 type = "independence"
 modules = ["shosai.features.*"]
-ignore_imports = ["shosai.features.** -> shosai.features.*.contracts"]
-broken_contract_guidance = "A slice imports another slice only through its contracts module."
+# Контракт среза — модуль contracts.py или пакет contracts/ с подмодулями (события отдельно).
+ignore_imports = [
+    "shosai.features.** -> shosai.features.*.contracts",
+    "shosai.features.** -> shosai.features.*.contracts.**",
+]
+# Пакет contracts/ есть не у каждого среза: несовпавший шаблон — не ошибка.
+unmatched_ignore_imports_alerting = "none"
+broken_contract_guidance = "A slice imports another slice only through its contracts module or package."
 
 [[tool.importlinter.contracts]]
 id = "pure-kernel"

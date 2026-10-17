@@ -24,6 +24,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from prometheus_client import CollectorRegistry
 from redis.asyncio import Redis
 
+from shosai.core.access.shareable import ShareableResource
 from shosai.core.account_data.spec import AccountDataSpec
 from shosai.core.agent_tools.bindings import AgentTool
 from shosai.core.agent_tools.catalog import AgentToolCatalog
@@ -164,6 +165,8 @@ class FeatureModule:
     # Цели путей и мониторы инвариантов среза (§16.3, §16.4): из них рендерятся правила Prometheus.
     objectives: tuple[ServiceLevelObjective, ...] = ()
     monitors: tuple[InvariantMonitor, ...] = ()
+    # Таблицы, строками которых делятся через политику доступа; гейт изоляции читает их (§7).
+    shareable: tuple[ShareableResource, ...] = ()
 
     def __post_init__(self) -> None:
         if not FEATURE_NAME.fullmatch(self.name):

@@ -7,6 +7,7 @@ routes (backend README, "Adding a slice").
 
 from collections.abc import Sequence
 
+from shosai.core.access.shareable import ShareableResource
 from shosai.core.account_data.spec import CORE_ACCOUNT_DATA, AccountDataSpec
 from shosai.core.ai.events import UserSpendExceeded
 from shosai.core.config.gate import ProductionCheck
@@ -15,17 +16,36 @@ from shosai.core.events.domain_event import DomainEvent
 from shosai.core.features import FeatureModule
 from shosai.features.alerting.module import ALERTING
 from shosai.features.identity.module import IDENTITY
+from shosai.features.workspaces.module import WORKSPACES
 
-FEATURES: tuple[FeatureModule, ...] = (IDENTITY, ALERTING)
+FEATURES: tuple[FeatureModule, ...] = (IDENTITY, WORKSPACES, ALERTING)
 
 
 def check_features(features: Sequence[FeatureModule]) -> None:
-    """Refuse a slice listed twice: its tasks and routes would be registered twice."""
+    """Refuse a slice listed twice, or a shareable kind or table declared twice.
+
+    A slice listed twice would register its tasks and routes twice; a resource declared by
+    two slices would get two owners of its access rules (§7).
+    """
     names = [feature.name for feature in features]
     duplicates = sorted({name for name in names if names.count(name) > 1})
     if duplicates:
         message = f"срезы перечислены дважды: {', '.join(duplicates)}"
         raise ValueError(message)
+    resources = shareable_resources(features)
+    for label, values in (
+        ("вид", [resource.kind for resource in resources]),
+        ("таблица", [resource.table.name for resource in resources]),
+    ):
+        repeated = sorted({value for value in values if values.count(value) > 1})
+        if repeated:
+            message = f"разделяемый ресурс объявлен дважды ({label}): {', '.join(repeated)}"
+            raise ValueError(message)
+
+
+def shareable_resources(features: Sequence[FeatureModule]) -> list[ShareableResource]:
+    """Every table the slices share through the access policy (§7)."""
+    return [resource for feature in features for resource in feature.shareable]
 
 
 # События ядра: их, как и события срезов, знают outbox и каталог подписок.
