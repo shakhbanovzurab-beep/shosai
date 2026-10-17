@@ -3,7 +3,7 @@
 What a person or a company has paid for and what they may use: the plan catalogue, the `Entitlements` every slice reads, the usage meters, payments through TBank, CloudPayments and lava.top, auto-renewal, workspace seats and trials, company invoices and refunds.
 
 - Plan: [docs/plan/slices/billing.md](../../../../../docs/plan/slices/billing.md). Decisions: [ADR 0054](../../../../../docs/adr/0054-billing-plans-payments-trials-and-refunds.md).
-- Public surface: `contracts` (`Entitlements`, `MinutesAllowance`, the snapshot and its types) and `contracts.events` (`billing.payment.succeeded`, `.payment.refunded`, `.subscription.changed`, `.seats.changed`, `.quota.exhausted`).
+- Public surface: `contracts` (`Entitlements`, `MinutesAllowance`, `UsageTombstones`, the `MeetingMinutes` port meetings binds, the snapshot, its types and errors) and `contracts.events` (`billing.payment.succeeded`, `.payment.refunded`, `.subscription.changed`, `.seats.changed`, `.quota.exhausted`).
 
 ## Rules the domain holds
 
@@ -24,4 +24,10 @@ What a person or a company has paid for and what they may use: the plan catalogu
 - `subscriptions` (one row per person; `expires_at` is the authority; `version` rises with every change) and `subscription_segments` (plans queued behind it), in each home, personal by row-level security; revision `a4c2e8f61b93`.
 - `SubscriptionLedger.record` is the one way to change what a person holds: it writes the row with its version, replaces the queue, adds `billing.subscription.changed` and raises the cache's version floor before the commit.
 - `Entitlements` (`EntitlementSnapshots`): the entry is cached in Valkey per person until the plan in force changes by time, at most 10 minutes; it is stored only when its version reaches the floor and its catalogue mark is current (one Lua script), so a reader that saw the database before a change never stores it; every committed catalogue edit changes the mark. On a miss the subscription (person's home) and the catalogue (EU) are read at once; an outage of either with no cached entry is `EntitlementsUnavailableError` (503).
-- Billing's part of the native `/v1/auth/me`: `subscription` (the draft's card of the bought plan, none without a subscription), `quota` (the month's minutes; zero used until meetings record, step 4), `features` (teleprompter with a paid plan; voice switches stay the draft's defaults until the agent slice).
+- Billing's part of the native `/v1/auth/me`: `subscription` (the draft's card of the bought plan, none without a subscription), `quota` (the month's minutes), `features` (teleprompter with a paid plan; voice switches stay the draft's defaults until the agent slice).
+
+## Minutes (BL-D3)
+
+- `usage_events` (revision `b7e1d4a90c26`): a tombstone per deleted meeting in the UTC month the meeting started, written once in the deleting transaction through `UsageTombstones`; monthly partitions keep the current and the previous month (ADR 0007 as amended), and a meeting older than that leaves none.
+- `MinutesMeter` counts the month live, never cached: meetings that still exist (`MEETING_MINUTES`, bound by meetings; none until then) plus tombstones. `check` refuses at the limit (402 `minutes_exhausted`), `covers` refuses an upload longer than the minutes left before processing (402 `upload_exceeds_minutes`).
+- `free_plan_devices`: a Free account claims its desktop device by the SHA-256 of its id or machine name on its first check; another Free account on it is refused (403 `free_plan_device_taken`); paid accounts neither claim nor are refused. Claims are per home (inv-2 allows no device hash outside it).

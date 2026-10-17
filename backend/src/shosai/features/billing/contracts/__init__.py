@@ -3,8 +3,10 @@
 Every slice reads what a person or a workspace may use through `Entitlements`: a snapshot
 of the plan in force, its limits and capabilities, cached and versioned, never guessed —
 when it cannot be read the answer is `EntitlementsUnavailableError` (503, inv-3).
-Usage is never in the snapshot: `MinutesAllowance` counts the month's minutes live. The
-events billing publishes are in `contracts.events`.
+Usage is never in the snapshot: `MinutesAllowance` counts the month's minutes live, from
+the live meetings meetings report (`MEETING_MINUTES`, bound by meetings; none until then)
+and the tombstones of deleted ones (`UsageTombstones`). The events billing publishes are
+in `contracts.events`.
 """
 
 from dataclasses import dataclass
@@ -25,7 +27,9 @@ from shosai.features.billing.domain.plans import Audience, Capability, ModelTier
 
 __all__ = [
     "ENTITLEMENTS",
+    "MEETING_MINUTES",
     "MINUTES_ALLOWANCE",
+    "USAGE_TOMBSTONES",
     "Audience",
     "Capability",
     "Currency",
@@ -33,10 +37,15 @@ __all__ = [
     "EntitlementSource",
     "Entitlements",
     "EntitlementsUnavailableError",
+    "FreeDeviceTakenError",
+    "MeetingMinutes",
     "MinutesAllowance",
+    "MinutesExhaustedError",
     "MinutesLeft",
     "ModelTier",
     "PlanLimits",
+    "UploadExceedsMinutesError",
+    "UsageTombstones",
 ]
 
 
@@ -90,13 +99,78 @@ class Entitlements(Protocol):
         ...
 
 
+class MinutesExhaustedError(AppError):
+    """The month's minutes are used up: a meeting does not start (402)."""
+
+    def __init__(self, limit_minutes: int) -> None:
+        super().__init__(
+            "minutes_exhausted",
+            HTTPStatus.PAYMENT_REQUIRED,
+            params={"limit_minutes": limit_minutes},
+        )
+
+
+class UploadExceedsMinutesError(AppError):
+    """A recording is longer than the minutes left: it is not processed (402, BL-D3)."""
+
+    def __init__(self, remaining_minutes: int) -> None:
+        super().__init__(
+            "upload_exceeds_minutes",
+            HTTPStatus.PAYMENT_REQUIRED,
+            params={"remaining_minutes": remaining_minutes},
+        )
+
+
+class FreeDeviceTakenError(AppError):
+    """Another Free account already uses this desktop device (403, BL-D3)."""
+
+    def __init__(self) -> None:
+        super().__init__("free_plan_device_taken", HTTPStatus.FORBIDDEN)
+
+
 class MinutesAllowance(Protocol):
-    """The month's meeting minutes, counted live in the caller's transaction (BL-D3)."""
+    """The month's meeting minutes, counted live in the caller's transaction (BL-D3).
+
+    The caller's transaction is the person's, in their home; `check` writes a Free
+    account's device claim in it, so it is a writing transaction.
+    """
 
     async def check(self, session: AsyncSession, user_id: UUID, device: str | None) -> MinutesLeft:
-        """Minutes left this month; a Free account on a device another one claimed gets none."""
+        """Minutes left this month; raises `MinutesExhaustedError` at the limit and
+        `FreeDeviceTakenError` for a Free account on a device another Free account claimed."""
+        ...
+
+    async def covers(self, session: AsyncSession, user_id: UUID, seconds: int) -> MinutesLeft:
+        """Minutes left when a recording this long fits them; `UploadExceedsMinutesError` if not."""
+        ...
+
+
+class UsageTombstones(Protocol):
+    """The minutes of a deleted meeting, kept in the month it happened (ADR 0007)."""
+
+    async def meeting_deleted(
+        self, session: AsyncSession, user_id: UUID, meeting: tuple[UUID, datetime], seconds: int
+    ) -> None:
+        """Record `(meeting id, start)` with its seconds in the caller's deleting transaction.
+
+        A repeat records nothing more; a meeting older than the previous month is not counted
+        any more and leaves no tombstone.
+        """
+        ...
+
+
+class MeetingMinutes(Protocol):
+    """Seconds of the person's meetings that still exist, by their start (bound by meetings)."""
+
+    async def recorded_seconds(
+        self, session: AsyncSession, user_id: UUID, window: tuple[datetime, datetime]
+    ) -> int:
+        """Seconds of meetings started in `[start, end)`, read in the caller's transaction."""
         ...
 
 
 ENTITLEMENTS: Final = PortKey[Entitlements]("billing.entitlements")
 MINUTES_ALLOWANCE: Final = PortKey[MinutesAllowance]("billing.minutes_allowance")
+USAGE_TOMBSTONES: Final = PortKey[UsageTombstones]("billing.usage_tombstones")
+# Привязывает meetings; пока его нет, порт пуст и живых минут ноль.
+MEETING_MINUTES: Final = PortKey[MeetingMinutes]("billing.meeting_minutes")

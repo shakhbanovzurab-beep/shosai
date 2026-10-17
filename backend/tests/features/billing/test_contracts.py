@@ -25,4 +25,7 @@ def test_every_published_event_is_registered_and_named_for_the_slice() -> None:
 def test_the_ports_are_named_for_the_slice() -> None:
     keys = {value.name for value in vars(contracts).values() if isinstance(value, PortKey)}
 
-    assert keys == {"billing.entitlements", "billing.minutes_allowance"}
+    assert keys == {
+        "billing.entitlements", "billing.minutes_allowance", "billing.usage_tombstones",
+        "billing.meeting_minutes",
+    }  # fmt: skip

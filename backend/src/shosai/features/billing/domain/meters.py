@@ -24,6 +24,16 @@ def month_window(now: datetime) -> tuple[datetime, datetime]:
     return start, start.replace(month=start.month + 1)
 
 
+def tombstones_since(now: datetime) -> datetime:
+    """The earliest meeting start whose tombstone still matters: the previous month's start.
+
+    A meeting deleted late may still fall into last month; older months count no more.
+    """
+    start, _ = month_window(now)
+    previous, _ = month_window(start - timedelta(microseconds=1))
+    return previous
+
+
 def week_window(now: datetime) -> tuple[datetime, datetime]:
     """The UTC week containing `now`, from Monday 00:00 to the next Monday."""
     day = now.astimezone(UTC).replace(hour=0, minute=0, second=0, microsecond=0)

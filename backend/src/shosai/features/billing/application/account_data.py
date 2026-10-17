@@ -1,7 +1,8 @@
-"""Billing's handler of a person's data: the subscription and its queue (ADR 0045 point 7).
+"""Billing's handler of a person's data: subscription, queue, tombstones, device claims.
 
-Export gives both tables, erasure deletes them in the person's home, and a transfer
-copies them whole and purges the source. Payments, kept by law, arrive with their step.
+Export gives every table (a device claim without its hash), erasure deletes them in the
+person's home (ADR 0007: tombstones go with their account), and a transfer copies them
+whole and purges the source. Payments, kept by law, arrive with their step.
 """
 
 from collections.abc import AsyncIterator, Mapping
@@ -12,6 +13,7 @@ from sqlalchemy import delete
 from shosai.core.account_data.handlers import AccountRef, ExportFile
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
 from shosai.core.db.person_rows import (
+    PersonRows,
     copy_person_rows,
     person_digest,
     person_lines,
@@ -21,6 +23,10 @@ from shosai.core.db.person_rows import (
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.billing.infrastructure.minutes_records import (
+    FreePlanDeviceRecord,
+    UsageEventRecord,
+)
 from shosai.features.billing.infrastructure.subscription_records import (
     SubscriptionRecord,
     SubscriptionSegmentRecord,
@@ -32,13 +38,30 @@ ACCOUNT_DATA: Final = AccountDataSpec(
     (
         TableCoverage("subscriptions", Treatment.ERASE),
         TableCoverage("subscription_segments", Treatment.ERASE),
+        TableCoverage("usage_events", Treatment.ERASE),
+        TableCoverage("free_plan_devices", Treatment.ERASE),
     ),
 )
 TABLES: Final = tuple(
     model.metadata.tables[model.__tablename__]
-    for model in (SubscriptionRecord, SubscriptionSegmentRecord)
+    for model in (
+        SubscriptionRecord,
+        SubscriptionSegmentRecord,
+        UsageEventRecord,
+        FreePlanDeviceRecord,
+    )
 )
-ROWS: Final = tuple(whole_rows(table, key="id") for table in TABLES)
+MODELS: Final = (
+    SubscriptionSegmentRecord,
+    SubscriptionRecord,
+    UsageEventRecord,
+    FreePlanDeviceRecord,
+)
+ROWS: Final = (
+    *(whole_rows(table, key="id") for table in TABLES[:3]),
+    whole_rows(TABLES[3], key="device_hash"),
+)
+EXPORTED: Final = (*ROWS[:3], PersonRows(TABLES[3], ("claimed_at",), key="device_hash"))
 
 
 class BillingAccountData:
@@ -55,7 +78,7 @@ class BillingAccountData:
     async def export(self, account: AccountRef) -> AsyncIterator[ExportFile]:
         """One JSON Lines file per table."""
         scope = TenancyScope(account.home, account.user_id)
-        for rows in ROWS:
+        for rows in EXPORTED:
             lines = person_lines(self._transactions, scope, rows, account.user_id)
             yield ExportFile(f"{rows.table.name}.jsonl", lines)
 
@@ -82,7 +105,7 @@ class BillingAccountData:
         """Delete both tables' rows in `account.home`."""
         scope = TenancyScope(account.home, account.user_id)
         async with self._transactions.begin(scope) as session:
-            for model in (SubscriptionSegmentRecord, SubscriptionRecord):
+            for model in MODELS:
                 await session.execute(delete(model).where(model.user_id == account.user_id))
 
     async def remains(self, account: AccountRef) -> tuple[str, ...]:
