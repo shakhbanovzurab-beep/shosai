@@ -16,6 +16,7 @@ from shosai.core.events.catalog import EventTypes
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.billing.application.account_data import BillingAccountData
 from shosai.features.identity.application.account_data import IdentityAccountData
 from shosai.features.identity.application.export_runner import ExportRunner
 from shosai.features.workspaces.application.account_data import WorkspacesAccountData
@@ -53,6 +54,7 @@ def runner_of(
                     homes.transactions, EventOutbox(EventTypes([])), WorkspaceAuditLog()
                 )
             ),
+            ACCOUNT_DATA_HANDLERS.bind(BillingAccountData(homes.transactions)),
         ]
     )
     return ExportRunner(homes.transactions, ports, (objects, uploads), bench.services.email)

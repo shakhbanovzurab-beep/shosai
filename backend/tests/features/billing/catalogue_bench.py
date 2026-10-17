@@ -16,7 +16,7 @@ from psycopg.types.json import Jsonb
 
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
-from shosai.features.billing.application.catalogue import Catalogue
+from shosai.features.billing.application.catalogue import Catalogue, PlanHolding
 from shosai.features.billing.application.promo_codes import PromoCodes
 from shosai.features.billing.channels.http.admin_plans import build_admin_plans_router
 from shosai.features.billing.channels.http.admin_promo_codes import (
@@ -44,13 +44,18 @@ class BenchGate:
 
 @dataclass
 class CountedSubscribers:
-    """Subscribers per plan as the test sets them."""
+    """Subscribers per plan as the test sets them; a held plan is also referenced."""
 
     by_plan: dict[UUID, int] = field(default_factory=dict)
+    changes: list[str] = field(default_factory=list)
 
-    async def counts(self, plan_ids: Collection[UUID]) -> Mapping[UUID, int]:
-        """The test's counts, zero for the rest."""
-        return {plan: self.by_plan.get(plan, 0) for plan in plan_ids}
+    async def counts(self, plan_ids: Collection[UUID]) -> Mapping[UUID, PlanHolding]:
+        """The test's counts, nobody for the rest."""
+        return {plan: PlanHolding(*[self.by_plan.get(plan, 0)] * 2) for plan in plan_ids}
+
+    async def catalogue_changed(self) -> None:
+        """Remember that the catalogue changed."""
+        self.changes.append("catalogue")
 
 
 @dataclass(frozen=True, slots=True)
@@ -72,7 +77,7 @@ async def catalogue(homes: DatabaseAccess, run_slot: RunSlot) -> AsyncIterator[C
     ports.install([ADMIN_GATE.bind(BenchGate())])
     routers = (
         build_admin_plans_router(
-            Catalogue(homes.transactions, subscribers, clock=lambda: TODAY), ports
+            Catalogue(homes.transactions, (subscribers, subscribers), clock=lambda: TODAY), ports
         ),
         build_admin_promo_codes_router(PromoCodes(homes.transactions, clock=lambda: TODAY), ports),
     )

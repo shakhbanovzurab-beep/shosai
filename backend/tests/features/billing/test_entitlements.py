@@ -7,10 +7,12 @@ from hypothesis import strategies as st
 
 from shosai.features.billing.domain.entitlements import (
     RENEWAL_GRACE,
+    QueuedPlan,
     SubscriptionFacts,
     access_deadline,
     days_left,
     entitled,
+    next_change,
 )
 from shosai.features.billing.domain.money import Currency, Prices
 from shosai.features.billing.domain.plans import Audience, BillingPeriod, Plan, PlanLimits
@@ -82,3 +84,41 @@ def test_days_left_round_up_and_never_go_negative(now: datetime) -> None:
     assert left >= 0
     if now < START:
         assert left * timedelta(days=1) >= START - now
+
+
+MAX = Plan(
+    "max",
+    "Max",
+    Audience.INDIVIDUAL,
+    PlanLimits(None, 250, 1024),
+    prices={BillingPeriod.MONTH: PAID_PRICES, BillingPeriod.YEAR: PAID_PRICES},
+)
+
+
+def test_queued_plans_run_one_after_another_from_the_expiry_without_grace() -> None:
+    held = SubscriptionFacts(
+        MAX, START, auto_renew=True, queued=(QueuedPlan(PRO, 10), QueuedPlan(MAX, 5))
+    )
+
+    def plan_at(days: float) -> str:
+        return entitled(held, FREE, START + timedelta(days=days)).plan.slug
+
+    assert [plan_at(d) for d in (-1, 0, 9.9, 10, 14.9, 15)] == [
+        "max", "professional", "professional", "max", "max", "basic",
+    ]  # fmt: skip
+    assert access_deadline(held) == START
+    assert entitled(held, FREE, START + timedelta(days=3)).paid_until == START + timedelta(days=10)
+
+
+@given(facts=facts, now=moments)
+def test_the_plan_in_force_holds_until_the_next_change(
+    facts: SubscriptionFacts, now: datetime
+) -> None:
+    change = next_change(facts, now)
+    before = entitled(facts, FREE, now)
+
+    if change is None:
+        assert entitled(facts, FREE, now + timedelta(days=400)).plan == before.plan
+    else:
+        assert change > now
+        assert entitled(facts, FREE, change - timedelta(microseconds=1)).plan == before.plan

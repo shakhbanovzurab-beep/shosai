@@ -10,11 +10,13 @@ events billing publishes are in `contracts.events`.
 from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
+from http import HTTPStatus
 from typing import Final, Protocol
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.keys import PortKey
 from shosai.features.billing.domain.meters import MinutesLeft
@@ -36,6 +38,10 @@ __all__ = [
     "ModelTier",
     "PlanLimits",
 ]
+
+
+# Через сколько клиенту повторить запрос, когда права не прочитаны.
+RETRY_AFTER_SECONDS: Final = 5
 
 
 class EntitlementSource(StrEnum):
@@ -65,8 +71,15 @@ class EntitlementSnapshot:
     version: int
 
 
-class EntitlementsUnavailableError(Exception):
+class EntitlementsUnavailableError(AppError):
     """The snapshot could not be read; callers refuse (503), never assume a plan (inv-3)."""
+
+    def __init__(self) -> None:
+        super().__init__(
+            "entitlements_unavailable",
+            HTTPStatus.SERVICE_UNAVAILABLE,
+            params={"retry_after_seconds": RETRY_AFTER_SECONDS},
+        )
 
 
 class Entitlements(Protocol):

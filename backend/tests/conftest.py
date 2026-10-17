@@ -31,6 +31,7 @@ pytest_plugins = (
     "tests.core.db.probe_table",
     "tests.features.workspaces.probe_resources",
     "tests.features.billing.catalogue_bench",
+    "tests.features.billing.entitlement_bench",
 )
 
 

@@ -4,7 +4,9 @@ The catalogue lives only in the EU home. A plan with subscribers is archived, ne
 deleted; an archived plan is off sale and cannot be edited until it is restored. A
 removed plan leaves every promo code's scope, and a code left with no plan is switched
 off. The Free plan stays free, individual and on its slug, and is never archived or
-removed: lapsed plans fall back to it (BL-D2).
+removed: lapsed plans fall back to it (BL-D2). A plan any subscription still names is
+archived instead of deleted. After a change commits, cached entitlement snapshots built
+on the old catalogue stop being read.
 """
 
 from collections.abc import Callable, Collection, Mapping, Sequence
@@ -41,11 +43,30 @@ FREE_SLUG: Final = "free"
 log = structlog.stdlib.get_logger(__name__)
 
 
-class PlanSubscribers(Protocol):
-    """How many people and workspaces hold each plan now, over both homes."""
+@dataclass(frozen=True, slots=True)
+class PlanHolding:
+    """Who holds a plan: subscribers now, and every subscription record naming it."""
 
-    async def counts(self, plan_ids: Collection[UUID]) -> Mapping[UUID, int]:
-        """Current subscribers per plan; a plan nobody holds may be absent."""
+    current: int
+    referenced: int
+
+
+NOBODY: Final = PlanHolding(0, 0)
+
+
+class PlanSubscribers(Protocol):
+    """How many hold each plan, over both homes."""
+
+    async def counts(self, plan_ids: Collection[UUID]) -> Mapping[UUID, PlanHolding]:
+        """The holding per plan; a plan nobody holds may be absent."""
+        ...
+
+
+class CatalogueWatcher(Protocol):
+    """Told after a change of the catalogue commits."""
+
+    async def catalogue_changed(self) -> None:
+        """Stop reading what was derived from the previous catalogue."""
         ...
 
 
@@ -110,11 +131,11 @@ class Catalogue:
     def __init__(
         self,
         transactions: HomeTransactions,
-        subscribers: PlanSubscribers,
+        holders: tuple[PlanSubscribers, CatalogueWatcher],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._subscribers = subscribers
+        self._subscribers, self._watcher = holders
         self._clock = clock
 
     async def plans(self) -> list[CataloguePlan]:
@@ -125,7 +146,7 @@ class Catalogue:
         async with self._transactions.begin(CATALOGUE_SCOPE, read_only=True) as session:
             rows = (await session.scalars(statement)).all()
         counts = await self._subscribers.counts([row.id for row in rows])
-        return [catalogue_plan(row, counts.get(row.id, 0)) for row in rows]
+        return [catalogue_plan(row, counts.get(row.id, NOBODY).current) for row in rows]
 
     async def create(self, plan: Plan) -> CataloguePlan:
         """A new plan on its own slug; it starts unarchived."""
@@ -153,23 +174,30 @@ class Catalogue:
             write_plan(row, changed, self._clock())
             await flush_unique(session)
             await session.refresh(row)
+        await self._watcher.catalogue_changed()
         counts = await self._subscribers.counts([plan_id])
         log.info("Тариф изменён", plan_id=str(plan_id), archived=changed.archived)
-        return catalogue_plan(row, counts.get(plan_id, 0))
+        return catalogue_plan(row, counts.get(plan_id, NOBODY).current)
 
     async def remove(self, plan_id: UUID) -> PlanRemoval:
-        """Delete a plan nobody holds, or archive one that has subscribers."""
+        """Delete a plan no subscription names, or archive one that is held."""
         if plan_id == FREE_PLAN_ID:
             raise free_plan_locked()
         async with self._transactions.begin(CATALOGUE_SCOPE) as session:
             row = await locked(session, plan_id)
-            subscribers = (await self._subscribers.counts([plan_id])).get(plan_id, 0)
-            if subscribers > 0:
-                return await self._archive(session, row, subscribers)
-            await session.execute(delete(TariffRecord).where(TariffRecord.id == plan_id))
-            updated = await leave_promo_scopes(session, plan_id)
-        log.info("Тариф удалён", plan_id=str(plan_id), promo_codes_updated=updated)
-        return PlanRemoval(RemovalResult.DELETED, None, updated)
+            holding = (await self._subscribers.counts([plan_id])).get(plan_id, NOBODY)
+            if holding.referenced > 0:
+                removal = await self._archive(session, row, holding.current)
+            else:
+                await session.execute(delete(TariffRecord).where(TariffRecord.id == plan_id))
+                removal = PlanRemoval(
+                    RemovalResult.DELETED, None, await leave_promo_scopes(session, plan_id)
+                )
+        await self._watcher.catalogue_changed()
+        if removal.result is RemovalResult.DELETED:
+            updated = removal.promo_codes_updated
+            log.info("Тариф удалён", plan_id=str(plan_id), promo_codes_updated=updated)
+        return removal
 
     async def _archive(
         self, session: AsyncSession, row: TariffRecord, subscribers: int

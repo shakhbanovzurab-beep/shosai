@@ -120,7 +120,10 @@ def test_every_owner_that_erases_has_one_handler_and_every_handler_an_owner() ->
 def test_core_and_every_slice_of_the_platform_need_exactly_their_handlers() -> None:
     bound, missing = PortDirectory(), PortDirectory()
     bound.install(
-        [ACCOUNT_DATA_HANDLERS.bind(Handler(owner)) for owner in ("core", "identity", "workspaces")]
+        [
+            ACCOUNT_DATA_HANDLERS.bind(Handler(owner))
+            for owner in ("core", "identity", "workspaces", "billing")
+        ]
     )
     missing.install([ACCOUNT_DATA_HANDLERS.bind(Handler("core"))])
 
