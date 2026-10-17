@@ -1,16 +1,21 @@
-"""Sign-in's objectives (§16.3): sign-ins end without a server error, and end fast.
+"""Sign-in's objectives (§16.3) and identity's invariant monitors (§16.4).
 
 Availability counts every sign-in route; latency counts successful password sign-ins, the
 only ones that know the person's home (`note_caller`), per home: the EU's pages, the Russian
-home's is measured separately as a ticket.
+home's is measured separately as a ticket. The monitors guard inv-1 — every address in
+the directory leads to an account in its home — and nfr-13 — nothing of an erased person
+is left behind.
 """
 
 from shosai.core.observability.objectives import (
     AlertClass,
     EventRatio,
+    InvariantMonitor,
     Journey,
     LatencyRatio,
+    NeverIncreases,
     ServiceLevelObjective,
+    StaysAtMost,
 )
 from shosai.core.web.http_metrics import DURATION_METRIC
 
@@ -49,5 +54,29 @@ SIGN_IN_OBJECTIVES = (
         target=0.95,
         indicator=LatencyRatio(DURATION_METRIC, f'{SIGN_IN},home="ru"', LATENCY_THRESHOLD),
         alerting=AlertClass.TICKET,
+    ),
+)
+
+IDENTITY_MONITORS = (
+    InvariantMonitor(
+        name="directory_entry_without_account",
+        invariant="inv-1",
+        summary="В каталоге есть адреса, за которыми нет аккаунта",
+        explanation=(
+            "Каталог говорит, в каком доме живёт аккаунт с этой почтой, но в том доме "
+            "аккаунта нет уже больше 10 минут. Человек с этой почтой не может ни войти, ни "
+            "зарегистрироваться заново."
+        ),
+        condition=StaysAtMost("shosai_identity_directory_orphans"),
+    ),
+    InvariantMonitor(
+        name="erasure_leftovers",
+        invariant="nfr-13",
+        summary="После удаления аккаунта остались данные человека",
+        explanation=(
+            "Проверка после удаления аккаунта нашла данные этого человека: строки, файлы "
+            "или доступы к внешним сервисам. Человек попросил удалить всё, а удалено не всё."
+        ),
+        condition=NeverIncreases("shosai_identity_erasure_leftovers_total"),
     ),
 )

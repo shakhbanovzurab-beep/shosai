@@ -64,7 +64,7 @@ from shosai.features.identity.infrastructure.session_records import SESSION_MODE
 from shosai.features.identity.infrastructure.sign_in_failures import SignInFailures
 from shosai.features.identity.infrastructure.token_codec import TokenCodec
 from shosai.features.identity.infrastructure.transfer_records import TRANSFER_MODELS
-from shosai.features.identity.objectives import SIGN_IN_OBJECTIVES
+from shosai.features.identity.objectives import IDENTITY_MONITORS, SIGN_IN_OBJECTIVES
 from shosai.features.identity.settings import IdentitySettings, identity_secrets_safe
 from shosai.features.identity.social_wiring import social_routers
 from shosai.features.identity.transfer_wiring import transfer_parts
@@ -159,7 +159,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                     ),
                     *social,
                 ),
-                task_handlers=task_handlers(services.transactions, directory),
+                task_handlers=task_handlers(services.transactions, directory, services.registry),
                 subscriptions=SUBSCRIPTIONS,
                 periodic_jobs=PERIODIC_JOBS,
                 email_templates=EMAIL_TEMPLATES,
@@ -247,4 +247,5 @@ IDENTITY: Final = FeatureModule(
     account_data=(IDENTITY_ACCOUNT_DATA,),
     agent_tools=ACCOUNT_TOOLS,
     objectives=SIGN_IN_OBJECTIVES,
+    monitors=IDENTITY_MONITORS,
 )

@@ -2,9 +2,10 @@
 
 Export gives the mail without its encrypted secrets, the unsubscriptions and the cost rows
 of the person's AI calls. Erasure deletes every mail row of the account, whatever its
-status, and the unsubscriptions. A transfer moves mail and unsubscriptions; cost rows are
-accounting records kept by law where they were written, append-only for the application,
-so they are neither moved nor purged. Core's other tables expire on their own.
+status, and the unsubscriptions; the check after it reads both tables again. A transfer
+moves mail and unsubscriptions; cost rows are accounting records kept by law where they
+were written, append-only for the application, so they are neither moved nor purged.
+Core's other tables expire on their own.
 """
 
 from collections.abc import AsyncIterator, Mapping
@@ -20,6 +21,7 @@ from shosai.core.db.person_rows import (
     copy_person_rows,
     person_digest,
     person_lines,
+    tables_holding,
     whole_rows,
 )
 from shosai.core.db.transactions import HomeTransactions
@@ -102,3 +104,9 @@ class CoreAccountData:
             await session.execute(
                 delete(EmailSuppression).where(EmailSuppression.user_id == account.user_id)
             )
+
+    async def remains(self, account: AccountRef) -> tuple[str, ...]:
+        """The mail and unsubscription tables that still hold the account's rows."""
+        scope = TenancyScope(account.home, account.user_id)
+        erased = [TABLES["email_messages"], TABLES["email_suppressions"]]
+        return await tables_holding(self._transactions, scope, erased, account.user_id)

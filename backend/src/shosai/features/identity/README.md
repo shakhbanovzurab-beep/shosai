@@ -19,9 +19,13 @@ The cabinet signs in by an emailed code (`/v1/auth/email/*`, ADR 0048) or throug
 
 ## Export and deletion
 
-identity runs the account data registry (`core/account_data`). Every owner that erases something binds one handler to `core.account_data_handlers`; composition refuses to start otherwise. `POST /v1/me/deletion` hides the account for 7 days, and a sign-in in that window cancels it. After the window, the `identity.erase_due` sweep starts the saga, and `identity.erase_account` runs the handlers with identity's last, journalled in `account_deletions`. An access token is refused by an account marker only when the token is not newer than the marker.
+identity runs the account data registry (`core/account_data`). Every owner that erases something binds one handler to `core.account_data_handlers`; composition refuses to start otherwise. `POST /v1/me/deletion` hides the account for 7 days, and a sign-in in that window cancels it. After the window, the `identity.erase_due` sweep starts the saga, and `identity.erase_account` runs the handlers with identity's last, journalled in `account_deletions`. After the last handler every owner reads its part again (`remains`); anything left increments `shosai_identity_erasure_leftovers_total` and is logged by id, and the `ErasureLeftovers` monitor pages (nfr-13). An access token is refused by an account marker only when the token is not newer than the marker.
 
 `POST /v1/me/exports` queues an archive; the `identity.export_due` sweep and `identity.make_export` stream every handler's files into one ZIP in the home's bucket under `exports/<user_id>/`, kept 7 days.
+
+## Invariant monitors
+
+Two monitors of §16.4 are declared on the module (`objectives.py`) and rendered with `--update-rules`; their runbook sections are in `docs/runbooks/alerts.md`. `DirectoryEntryWithoutAccount` (inv-1): the hourly `identity.check_directory` (EU, after settling the stale claims) looks up every directory entry older than 10 minutes in its home and sets `shosai_identity_directory_orphans{home}`. `ErasureLeftovers` (nfr-13): the check after erasure above.
 
 ## Transfer between homes
 

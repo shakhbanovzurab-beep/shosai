@@ -7,14 +7,15 @@ account row. The row itself stays, anonymised and `deleted`, because money rows 
 referencing it for 5 years (402-FZ). Only then does the directory free the address, so a
 new account with it never meets the old row's email. A transfer copies the account row
 first and every identity table after it, objects under their keys; purge removes them
-from one home, the account row included, and leaves the directory to the saga.
+from one home, the account row included, and leaves the directory to the saga. After
+every owner's erasure the saga reads all of it again for remains (nfr-13).
 """
 
 import hashlib
 from collections.abc import AsyncIterator, Mapping
 from typing import Any, Final
 
-from sqlalchemy import Delete, delete
+from sqlalchemy import Delete, delete, select
 
 from shosai.core.account_data.handlers import AccountRef, ExportFile
 from shosai.core.db.person_rows import (
@@ -22,6 +23,7 @@ from shosai.core.db.person_rows import (
     copy_person_rows,
     person_digest,
     person_lines,
+    tables_holding,
     whole_rows,
 )
 from shosai.core.db.transactions import HomeTransactions
@@ -33,6 +35,7 @@ from shosai.features.identity.application.profile import AVATAR_PREFIX
 from shosai.features.identity.domain.accounts import AccountState
 from shosai.features.identity.domain.deletion import ERASED_NAME, IDENTITY_OWNER, erased_email
 from shosai.features.identity.domain.export import EXPORT_PREFIX
+from shosai.features.identity.domain.registration import DirectoryState
 from shosai.features.identity.infrastructure.deletion_records import AccountDeletion
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.export_records import DataExportJob
@@ -195,6 +198,31 @@ class IdentityAccountData:
             for statement in _erasures(account):
                 await session.execute(statement)
             await session.execute(delete(User).where(User.id == account.user_id))
+
+    async def remains(self, account: AccountRef) -> tuple[str, ...]:
+        """Identity's tables, objects, account fields and address still holding the person."""
+        scope = TenancyScope(account.home, account.user_id)
+        tables = [model.__table__ for model in ERASED_TABLES]
+        found = list(await tables_holding(self._transactions, scope, tables, account.user_id))
+        async with self._transactions.begin(scope, read_only=True) as session:
+            user = await session.get(User, account.user_id)
+        if user is not None and (
+            user.email != erased_email(user.id) or user.password_hash is not None
+        ):
+            found.append("users")
+        storage = self._objects[account.home]
+        for prefix in OBJECT_PREFIXES:
+            async for _item in storage.list_objects(f"{prefix}{account.user_id}/"):
+                found.append(prefix)
+                break
+        directory = TenancyScope(Home.EU, account.user_id)
+        async with self._transactions.begin(directory, read_only=True) as session:
+            listed = await session.scalar(
+                select(DirectoryEntry.state).where(DirectoryEntry.user_id == account.user_id)
+            )
+        if listed is not None and listed != DirectoryState.DELETED.value:
+            found.append("directory_entries")
+        return tuple(found)
 
     async def _delete_objects(self, account: AccountRef) -> None:
         storage = self._objects[account.home]

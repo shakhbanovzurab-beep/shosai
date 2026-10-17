@@ -15,7 +15,7 @@ from datetime import date, datetime
 from typing import Any, Final
 from uuid import UUID
 
-from sqlalchemy import Table, select
+from sqlalchemy import Table, exists, select
 from sqlalchemy.dialects.postgresql import insert
 
 from shosai.core.db.transactions import HomeTransactions
@@ -62,6 +62,18 @@ async def person_lines(
         if len(page) < PAGE_ROWS:
             return
         last = page[-1]["_page_key"]
+
+
+async def tables_holding(
+    transactions: HomeTransactions, scope: TenancyScope, tables: Sequence[Table], user_id: UUID
+) -> tuple[str, ...]:
+    """The tables that still hold a row of the person in the scope's home, in one round trip."""
+    checks = [
+        exists().where(table.c[PERSON_COLUMN] == user_id).label(table.name) for table in tables
+    ]
+    async with transactions.begin(scope, read_only=True) as session:
+        found = (await session.execute(select(*checks))).one()
+    return tuple(table.name for table, holds in zip(tables, found, strict=True) if holds)
 
 
 def whole_rows(table: Table, key: str, person: str = PERSON_COLUMN) -> PersonRows:

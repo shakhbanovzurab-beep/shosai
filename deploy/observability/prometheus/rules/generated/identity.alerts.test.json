@@ -300,6 +300,74 @@
           "exp_alerts": []
         }
       ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_identity_directory_orphans",
+          "values": "0x10 1x10 0x40"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "DirectoryEntryWithoutAccount",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "inv-1"
+              },
+              "exp_annotations": {
+                "summary": "В каталоге есть адреса, за которыми нет аккаунта",
+                "description": "Каталог говорит, в каком доме живёт аккаунт с этой почтой, но в том доме аккаунта нет уже больше 10 минут. Человек с этой почтой не может ни войти, ни зарегистрироваться заново.",
+                "runbook": "docs/runbooks/alerts.md#directory-entry-without-account",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "DirectoryEntryWithoutAccount",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_identity_erasure_leftovers_total",
+          "values": "0x10 1x50"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "ErasureLeftovers",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "nfr-13"
+              },
+              "exp_annotations": {
+                "summary": "После удаления аккаунта остались данные человека",
+                "description": "Проверка после удаления аккаунта нашла данные этого человека: строки, файлы или доступы к внешним сервисам. Человек попросил удалить всё, а удалено не всё.",
+                "runbook": "docs/runbooks/alerts.md#erasure-leftovers",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "ErasureLeftovers",
+          "exp_alerts": []
+        }
+      ]
     }
   ]
 }

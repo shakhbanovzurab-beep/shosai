@@ -90,6 +90,10 @@ class Handler:
     async def purge(self, account: AccountRef) -> None:
         del account
 
+    async def remains(self, account: AccountRef) -> tuple[str, ...]:
+        del account
+        return ()
+
 
 async def _empty() -> AsyncIterator[bytes]:
     yield b""

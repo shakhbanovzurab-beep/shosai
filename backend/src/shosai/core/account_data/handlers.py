@@ -76,6 +76,14 @@ class AccountDataHandler(Protocol):
         """
         ...
 
+    async def remains(self, account: AccountRef) -> tuple[str, ...]:
+        """What the owner still holds of the erased account: its tables, prefixes and grants.
+
+        Read again after every owner's erasure (nfr-13); empty when nothing is left. Rows
+        kept by law, anonymised, are not remains.
+        """
+        ...
+
 
 ACCOUNT_DATA_HANDLERS: Final = PortKey[AccountDataHandler](
     "core.account_data_handlers", Cardinality.MANY

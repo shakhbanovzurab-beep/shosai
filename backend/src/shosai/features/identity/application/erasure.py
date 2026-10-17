@@ -4,9 +4,10 @@ A sweep claims the deletions whose `erase_at` passed and moves each account to `
 its task then queues one erasure task per account. An unfinished erasure comes due again
 when the claim's lease ends, so the sweep queues it again. The erasure runs the handlers
 bound to `core.account_data_handlers`, identity's last, records each finished owner in the
-journal and skips it on a repeat, then deletes the journal row and announces
-`AccountDeleted` in one transaction. Handlers are idempotent: a duplicate erases nothing
-twice.
+journal and skips it on a repeat. Then every owner reads its part again, and anything
+left is counted and logged by id for the nfr-13 monitor; a check that cannot read fails
+the task, which runs it again. Last, one transaction deletes the journal row and
+announces `AccountDeleted`. Handlers are idempotent: a duplicate erases nothing twice.
 """
 
 from datetime import UTC, datetime, timedelta
@@ -107,7 +108,22 @@ class Erasure:
             if owner not in done:
                 await self._run(handlers[owner], account)
                 await self._record(account, owner)
+        await self._check(account, list(handlers.values()))
         await self._finish(account)
+
+    async def _check(self, account: AccountRef, handlers: list[AccountDataHandler]) -> None:
+        """Read every owner's part again (nfr-13): a remain pages, the erasure still ends."""
+        for handler in handlers:
+            remains = await handler.remains(account)
+            if remains:
+                self._metrics.leftovers(handler.owner, len(remains))
+                log.error(
+                    "После стирания у владельца остались данные человека",
+                    handler=handler.owner,
+                    remains=list(remains),
+                    user_id=str(account.user_id),
+                    home=account.home.value,
+                )
 
     async def _erased_owners(self, account: AccountRef) -> frozenset[str] | None:
         scope = TenancyScope(account.home, account.user_id)

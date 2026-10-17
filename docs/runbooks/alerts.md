@@ -68,6 +68,24 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** As above; the gauge returns to zero at the next reconciled hour without a gap.
 
+<a id="directory-entry-without-account"></a>
+### DirectoryEntryWithoutAccount — inv-1
+
+**Means.** The hourly check found directory entries (EU home) older than 10 minutes whose account is missing from the home they name. The address can neither sign in nor register again.
+
+**Look.** `shosai_identity_directory_orphans` by `home`; the `workers-bulk` log line «В каталоге есть адреса без аккаунта в их доме» lists the first account ids. For each id, `directory_entries` in the EU home (state, home, `updated_at`) and `users` in the named home; `home_transfers` in both homes if a transfer ran.
+
+**Fix.** An unfinished transfer → let its saga finish or cancel it (`/v1/admin/transfers/{id}`). An account erased by hand or by a faulty purge → mark the entry `deleted` so the address is free again. The gauge returns to zero at the next hourly check.
+
+<a id="erasure-leftovers"></a>
+### ErasureLeftovers — nfr-13
+
+**Means.** After an account's erasure, an owner's own check found the person's data still there: rows, objects under a prefix, an external grant, a non-anonymised account or an address not freed.
+
+**Look.** `shosai_identity_erasure_leftovers_total` by `handler`; the `workers-bulk` log line «После стирания у владельца остались данные человека» names the owner, the places (`remains`), the account id and the home.
+
+**Fix.** Erase the named places for that account id, then fix the owner's `erase` so it covers them, with a test; a row written after the erasure by a late task means that task must check the account's state. The page ends 15 minutes after the last increase.
+
 ## Tickets (§16.6)
 
 <a id="host-disk-filling"></a>

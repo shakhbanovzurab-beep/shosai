@@ -68,6 +68,9 @@ class Flaky:
     async def purge(self, account: AccountRef) -> None:
         await self._inner.purge(account)
 
+    async def remains(self, account: AccountRef) -> tuple[str, ...]:
+        return await self._inner.remains(account)
+
     async def erase(self, account: AccountRef) -> None:
         self.calls += 1
         if self.calls <= self._failures:
@@ -76,21 +79,69 @@ class Flaky:
         await self._inner.erase(account)
 
 
+class Planting:
+    """Identity's handler that leaves an avatar and an unsubscription behind after erasing."""
+
+    def __init__(
+        self, inner: AccountDataHandler, storage: ObjectStorage, run_slot: RunSlot
+    ) -> None:
+        self._inner = inner
+        self._storage = storage
+        self._run_slot = run_slot
+
+    @property
+    def owner(self) -> str:
+        return self._inner.owner
+
+    def export(self, account: AccountRef) -> AsyncIterator[ExportFile]:
+        return self._inner.export(account)
+
+    async def copy(self, account: AccountRef, to_home: Home) -> None:
+        await self._inner.copy(account, to_home)
+
+    async def manifest(self, account: AccountRef) -> Mapping[str, str]:
+        return await self._inner.manifest(account)
+
+    async def purge(self, account: AccountRef) -> None:
+        await self._inner.purge(account)
+
+    async def remains(self, account: AccountRef) -> tuple[str, ...]:
+        return await self._inner.remains(account)
+
+    async def erase(self, account: AccountRef) -> None:
+        await self._inner.erase(account)
+        key = f"avatars/{account.user_id}/late.webp"
+        await self._storage.put(key, b"RIFF", content_type="image/webp")
+        await self._run_slot.claimed.connections[account.home].execute(
+            "INSERT INTO email_suppressions (user_id, kind, source) "
+            "VALUES (%s, 'newsletter', 'link')",
+            (account.user_id,),
+        )
+
+
 def erasure_of(
     bench: RegistrationBench, homes: DatabaseAccess, objects: Mapping[Home, ObjectStorage],
-    core: AccountDataHandler | None = None,
+    core: AccountDataHandler | None = None, registry: CollectorRegistry | None = None,
 ) -> Erasure:  # fmt: skip
     transactions = homes.transactions
     identity = IdentityAccountData(transactions, bench.services.directory, (objects, {}))
+    return erasure_with(homes, (core or CoreAccountData(transactions), identity), registry)
+
+
+def erasure_with(
+    homes: DatabaseAccess,
+    handlers: tuple[AccountDataHandler, AccountDataHandler],
+    registry: CollectorRegistry | None = None,
+) -> Erasure:
     ports = PortDirectory()
-    ports.install(
-        [
-            ACCOUNT_DATA_HANDLERS.bind(core or CoreAccountData(transactions)),
-            ACCOUNT_DATA_HANDLERS.bind(identity),
-        ]
-    )
+    ports.install([ACCOUNT_DATA_HANDLERS.bind(handler) for handler in handlers])
     outbox = EventOutbox(EventTypes(list(IDENTITY_EVENTS)))
-    return Erasure(transactions, ports, outbox, DeletionMetrics(CollectorRegistry()))
+    metrics = DeletionMetrics(registry or CollectorRegistry())
+    return Erasure(homes.transactions, ports, outbox, metrics)
+
+
+def leftovers(registry: CollectorRegistry, owner: str) -> float | None:
+    return registry.get_sample_value("shosai_identity_erasure_leftovers_total", {"handler": owner})
 
 
 async def due_deletion(bench: RegistrationBench, run_slot: RunSlot) -> UUID:
@@ -121,7 +172,8 @@ async def test_on_day_8_nothing_of_the_person_remains_and_the_address_is_free(
         erased = await due_deletion(bench, run_slot)
         archive = f"exports/{erased}/archive.zip"
         await objects[Home.RU].put(archive, b"PK", content_type="application/zip")
-        erasure = erasure_of(bench, homes, objects)
+        registry = CollectorRegistry()
+        erasure = erasure_of(bench, homes, objects, registry=registry)
         due = await erasure.start_due(Home.RU)
         for user_id in due:
             await erasure.erase(AccountRef(user_id, Home.RU))
@@ -151,6 +203,30 @@ async def test_on_day_8_nothing_of_the_person_remains_and_the_address_is_free(
     assert avatars == []
     assert archives == []
     assert [(row["user_id"], row["state"]) for row in directory] == [(again, "active")]
+    assert "identity.account.deleted" in await events(run_slot)
+    assert (leftovers(registry, "identity"), leftovers(registry, "core")) == (None, None)
+
+
+async def test_data_left_after_the_erasure_is_counted_and_the_erasure_still_ends(
+    homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis,
+    buckets: Mapping[Home, SlotBucket],
+) -> None:  # fmt: skip
+    objects = bucket_objects(buckets)
+    options = BenchOptions(objects=objects)
+    registry = CollectorRegistry()
+    async with registration_bench(homes.transactions, valkey, redis_cache, options) as bench:
+        erased = await due_deletion(bench, run_slot)
+        transactions = homes.transactions
+        identity = IdentityAccountData(transactions, bench.services.directory, (objects, {}))
+        planting = Planting(identity, objects[Home.RU], run_slot)
+        erasure = erasure_with(homes, (CoreAccountData(transactions), planting), registry)
+        await erasure.start_due(Home.RU)
+        await erasure.erase(AccountRef(erased, Home.RU))
+        remains = await identity.remains(AccountRef(erased, Home.RU))
+
+    assert remains == ("avatars/",)
+    assert leftovers(registry, "identity") == 1
+    assert leftovers(registry, "core") == 1
     assert "identity.account.deleted" in await events(run_slot)
 
 
