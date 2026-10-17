@@ -85,7 +85,7 @@ still appears in `GET /workspaces` with `suspended: true`; `/me/*` leaves it out
 | `GET`    | `/me/tasks`                       | —                                                      | `{tasks}` (`MyTask`: + `workspace`, `project_name`) | the account |
 | `GET`    | `/me/meetings`                    | —                                                      | `{workspaces: [{workspace, meetings}]}` (shared with the account, not its own) | the account |
 | `GET`    | `/me/shares`                      | —                                                      | `{recordings, files}` (where the account's things are shared, with live tasks) | the account |
-| `GET`    | `/me/knowledge`                   | —                                                      | `{workspaces: [{workspace, items, meetings, decisions, projects}]}` (what Leo may use for the account in Personal) | the account |
+| `GET`    | `/me/knowledge`                   | —                                                      | `{workspaces: [{workspace, items, meetings, decisions, projects}]}` (what every workspace lets the account use, labeled by workspace; Leo may use it in any space) | the account |
 
 ## Access rules the backend enforces
 
@@ -99,12 +99,18 @@ still appears in `GET /workspaces` with `suspended: true`; `/me/*` leaves it out
 - **Tasks**: visible to whoever can see their meeting; tasks added by hand (no meeting) to everyone; a
   task's assignee always. When its meeting stops being shared, a task stays, visible to its assignee and
   admins only, so the meeting's audience never widens.
-- **Knowledge for Leo**: in a workspace, Leo answers only from that workspace: the meetings,
-  decisions and projects the member can open, and items the member may use as a member (for
-  everyone, their teams, or added by them). Admin rights don't widen it. The check runs before
-  anything reaches the model; the answer says how many items it left out. In Personal, Leo also
-  uses what every workspace lets the member use (`GET /me/knowledge`), labeled by workspace, and only
-  for them; it never brings personal files into a workspace answer.
+- **Knowledge for Leo** ([ADR 0039](../../docs/adr/0039-one-account-per-person-with-workspaces.md),
+  [ADR 0053](../../docs/adr/0053-workspaces-access-rls-invitations-and-deletion.md)): Leo is one per
+  person and reads everything the person may open: their Personal items and, in every workspace they
+  belong to, the meetings, decisions and projects they can open and the items they may use as a
+  member (for everyone, their teams, or added by them). Admin rights don't widen it. **The space of a
+  conversation sets the focus, the access policy sets the bounds:** in a workspace Leo looks there first
+  and writes there by default, and may still use the person's own files and other workspaces; a write
+  into another space names that space before the person confirms it. The check runs in the database
+  before anything reaches the model. Every answer names its sources and the space each comes from
+  (Personal or a workspace). What the person cannot open is never read, mentioned or counted. A
+  suspended workspace, or one the person left, drops out at once. `GET /me/knowledge` lists what every
+  workspace lets the person use, labeled by workspace.
 - **Connected sources** belong to the workspace; disconnecting stops syncing and removes their
   vectors. Nothing changes at the provider.
 - **Seats**: invitations are refused with `409` beyond the seats left; pending invitations hold a seat.

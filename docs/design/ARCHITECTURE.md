@@ -1,6 +1,6 @@
 # Shosai — Target Architecture
 
-- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033); domains and workspaces amended on 2026-10-13 by the slice map ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md), [ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)); identity amended on 2026-10-14 ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md), [ADR 0046](../adr/0046-platform-languages-follow-the-cabinet.md)). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
+- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033); domains and workspaces amended on 2026-10-13 by the slice map ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md), [ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)); identity amended on 2026-10-14 ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md), [ADR 0046](../adr/0046-platform-languages-follow-the-cabinet.md)); workspaces amended on 2026-10-17 ([ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md)). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
 - **Diagram:** [architecture.html](architecture.html).
 - **Scope:** B2C and B2B (small and mid-size companies, 5–200 seats) on one platform.
 - **Placement:** one compute plane in the EU; two data homes — Russia and the EU.
@@ -48,7 +48,7 @@
 | nfr-13 | Deletion | Account deletion removes data from every store and revokes external grants |
 | nfr-14 | Cross-border | Audio and text of Russian users and companies reach foreign AI providers only with consent (user, or company as data operator); a transit node stores nothing |
 | nfr-15 | Company isolation | No API response, search result or Leo answer contains data of another company or a resource the user has no access to |
-| nfr-16 | Member removal | A removed member's sessions are revoked within 1 min; content they created stays with the company |
+| nfr-16 | Member removal | A removed member loses the workspace at the next request; their sessions and Personal stay ([ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)); content they created stays with the company |
 | nfr-17 | Audit | Every administrative action and access change is recorded; retention 12 months |
 | nfr-18 | Company onboarding | Company creation, invitations and card payment are self-service; invoice payment is confirmed by the next business day |
 
@@ -208,10 +208,11 @@
 - The public link visibility (`private | shared | public`) is independent of company access: a private link does not resolve, a shared link hides the title in previews and may carry a password, a public link shows the title.
 - **One access policy** (feature `workspaces`) decides every read and write. Domains call it; they never compare owners themselves. The access check runs in the same query that reads the resource.
 - **Access rights are never cached.** Content may be cached; the right to see it is checked on every access.
-- **Row-level security** is the second line:
+- **Row-level security** is the second line ([ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md)):
   - each transaction starts with `SET LOCAL app.org_id` (and `app.user_id`);
-  - policies on company-scoped tables reject foreign rows;
-  - migrations and sweeps use a dedicated role.
+  - policies on company-scoped tables reject foreign rows: a row is read when it has no company, belongs to the company of the scope, or belongs to a company the person is an active member of (`app_member_org_ids()`, once per statement, never cached); it is written only into the company of the scope;
+  - tables that are personal by nature and never shared reject other people's rows (`user_id = app_user_id()`); shareable tables guard their personal rows by the access policy and the isolation tests; identity's account tables, read before a principal exists, have no policy;
+  - migrations run as the migration role; cross-tenant sweeps switch to the `shosai_sweeper` role inside their transaction (`SET LOCAL ROLE`, one pool), only in the `workers` and `scheduler` roles.
 - **Search and Leo:**
   - Qdrant filters by tenant (`o_<id>` or `u_<id>`) and by the requester's access;
   - every hit is re-checked against PostgreSQL before it is returned, because index payload lags access changes by seconds;
@@ -222,7 +223,7 @@
   - member — own and shared resources;
   - guest — only explicitly granted resources (in the model; no screen yet).
   The last owner cannot leave. Teams group members; a private team is visible only to its members and the admins.
-- **Joining:** invitation token, or a verified email domain (DNS TXT). A join above paid seats returns 402 and notifies the admins.
+- **Joining:** a one-time invitation link sent by email, bound to the invited address (no reusable link at launch), or a verified email domain (DNS TXT; public mail domains refused), which lets a person with a verified address there join with one click. A join above paid seats returns 402 and notifies the admins.
 - **Member removal:** membership → `removed`; the workspace's access ends at the next request, because membership is checked in every reading query and the token carries no workspace roles; the person's sessions and Personal stay untouched; created content stays with the workspace, ownership transferred to an admin.
 - **Audit:** every administrative action and access change writes `org_audit_events` in the same transaction. The application role has no UPDATE or DELETE on that table.
 - **Enterprise sign-in** (SAML, OIDC, SCIM): not built now. The data model leaves room for a per-company identity provider.
@@ -235,7 +236,7 @@
 |---|---|---|---|---|---|---|
 | Account | `users` in its home | UUID, global | home primary | all writes go to one home; writes frozen during transfer | commit before response | deletion request: hidden and sign-in closed at once, a sign-in within 7 days cancels; then erased through the registry and anonymised; directory row kept 30 days after erasure ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md)) |
 | Directory entry | `directory_entries` in the EU home | `email_hmac` PK; `user_id` unique | EU primary | unique index: first registration wins | commit | 30 days after deletion |
-| Workspace | `organizations` | UUID | workspace home; seats and plan under a row lock | one writer | commit + audit event | after contract end and export, deletion saga |
+| Workspace | `organizations` | UUID | workspace home; seats and plan under a row lock | one writer | commit + audit event | the owner's delete hides it at once; cancellable for 7 days by the owner or the platform; then a deletion saga over every slice's company data; the owner can export it first |
 | Membership | `memberships` | (org_id, user_id); a person may belong to several workspaces of their home | workspace home | only admins change roles; last owner stays | commit + audit event; removal ends access at the next request | row kept as `removed` |
 | Access | `org_id`, `access` columns + `resource_grants` | (resource type, resource id, grantee: member or team) | workspace home | last write wins; revocation immediate | commit + audit; index updated via outbox | with the resource |
 | Payment | `transactions`, `auto_charge_attempts`; outbox in the same transaction | UUID; acquirer order id; period key `subscription:date` | home: transaction row and subscription row locks | webhook replay stops at the lock and status | commit before acquirer ack and before the charge call; unknown outcome stays `charging` until reconciliation | never deleted |
@@ -302,8 +303,8 @@
 | End meeting | `POST /v1/me/sessions/{id}/end` → 202 `{run_id}`; `GET /v1/me/runs/{run_id}` | (session_id, source) returns the same run | 300 ms; notes p95 ≤ 10 min | PENDING → SUCCEEDED, PARTIALLY_COMPLETED or FAILED; silent meetings closed after 5 min of silence |
 | Acquirer webhook | `POST /v1/billing/webhook/{provider}` | `external_id` unique | answer within 5 s, after commit | 2xx only after commit; 5xx → acquirer retries; reconciliation every minute |
 | Upload | `POST /v1/me/uploads` → presigned part URLs; PUT to S3; `POST …/complete` | upload id; part replay overwrites | 300 ms for URLs; 15-min signature | READY with run id; REJECTED over size; abandoned uploads removed by lifecycle after 24 h |
-| Invite and join | `POST /v1/workspaces/{id}/invitations`; `POST /v1/workspaces/join {token}`; domain join at registration or later | one-time token; repeat returns the same membership | 300 ms | membership; 402 no seats; 409 the person's home differs from the workspace's (until §22) |
-| Share inside a company | `PUT /v1/{resource}/{id}/access {level, members[]}` | set-state | 300 ms | new access + audit event; 403 without right; revocation immediate |
+| Invite and join | `POST /v1/workspaces/{id}/invitations` (email links); `POST /v1/workspaces/join {token}` or `{workspace_id}` for a verified domain | one-time token bound to the invited address; repeat returns the same membership | 300 ms | membership; 402 no seats; 409 the person's home differs from the workspace's (until §22) |
+| Share inside a company | each share record's own route (`PATCH /v1/workspaces/{id}/meetings/{meeting}`, `PATCH …/knowledge/{item}`), all through the one access policy | set-state | 300 ms | new access + audit event; 403 without right; revocation immediate |
 | Company invoice | `POST /v1/billing/workspaces/{id}/invoices {seats, period, payer}` → number + PDF | invoice number; statement payment matched once | 2 s; seats active by the next business day | `paid`, `issued` or unmatched payment → operator alert after 24 h |
 | Room transcription | LiveKit track egress → WSS to the WS gateway, one participant per stream | (session_id, seq) | line on screen ≤ 2 s | transcript per participant in the room owner's meeting with company access; egress failure → whole-room recording analysed after the meeting |
 | Leo turn and approval | `POST /v1/agent/threads/{id}/turns` → SSE with event ids; resume `GET /v1/agent/runs/{id}/events`; `POST /v1/agent/actions/{id}/approve` | `Idempotency-Key` per user message; approval by one conditional status update; item key `action_id:index` | platform overhead ≤ 500 ms (EU) | exactly one terminal event per run; 409 `thread_busy`; a write executes once or ends `outcome_unknown` ([ADR 0025](../adr/0025-leo-action-gateway.md), [ADR 0032](../adr/0032-leo-stream-protocol-v2.md)) |
@@ -537,6 +538,7 @@ Each of these counters must stay at zero; any non-zero value pages.
 | Leftovers found by the post-deletion check of an account or company | nfr-13 |
 | Directory entries without an account in their home, older than 10 min | inv-1 |
 | Access-policy decisions that disagree with RLS in the isolation self-test | inv-14 |
+| Workspaces whose members and pending invitations exceed their paid seats | inv-16 |
 | A Leo action item executed twice, or executed without approval | inv-12 |
 | An initiative suggestion delivered inside quiet hours | [ADR 0027](../adr/0027-leo-event-driven-proactivity.md) |
 | Leo memory written for a user with memory switched off | [ADR 0030](../adr/0030-leo-memory-v2.md) |
@@ -764,7 +766,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Item | Owner | Needed before |
 |---|---|---|
 | Legal review: email HMAC outside Russia; derived copies in the EU; telemetry without an account in the EU home (ADR 0005); data of people outside Russia kept in the Russian home until their transfer (ADR 0004); files of the EU home while its bucket is in Russia (ADR 0044); cross-border transfer to AI providers; processor agreement (152-FZ) and DPA (GDPR) with the list of subprocessors | owner, lawyer | first transfer of accounts; first company contract |
-| Cross-home workspace membership and sharing ([ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)): the legal basis for a member's profile copy in the workspace's home and for copying a shared item across homes; the account transfer of a person who belongs to workspaces | owner, lawyer | the first workspace with members of both homes; the first transfer of a workspace member |
+| Cross-home workspace membership and sharing ([ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)): the legal basis for a member's profile copy in the workspace's home and for copying a shared item across homes; the account transfer of a person who belongs to workspaces (refused until then, [ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md)) | owner, lawyer | the first workspace with members of both homes; the first transfer of a workspace member |
 | Tax, closing documents, document exchange for Russian legal entities | owner, accountant | first invoice |
 | Legal review of Jev (TypeSafe AI) as a subprocessor: retention, DPA, coverage by cross-border consent | owner, lawyer | enabling Jev on personal data |
 | Provider of the EU PostgreSQL; bank for statement API | owner | building the EU home; first invoice |

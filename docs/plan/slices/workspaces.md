@@ -1,0 +1,263 @@
+# workspaces — slice plan
+
+Prompt: [prompts/S-feature-slice.md](../prompts/S-feature-slice.md), launched through [BACKEND-next-step.md](../prompts/BACKEND-next-step.md). Status: [STATUS.md](../STATUS.md). Slice card: [SLICE_MAP.md §4.2.2](../SLICE_MAP.md#2-workspaces).
+
+`workspaces` gives a company its shared space inside the one account of each person ([ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md)): members, roles, teams, projects, invitations, sharing defaults, and the share records that bring a member's meeting or file into the workspace. It also owns the **one access policy** every slice calls, the row-level security that backs it, and the audit log of every administrative action. Its core comes first, in wave 1, so that `files`, `meetings` and `knowledge` are written against the access policy from their first step. Its screens come in wave 3, after billing sells seats.
+
+- **Status:** written on 2026-10-17 and approved by the owner the same day: WS-D1…WS-D7 accepted as proposed (§2), recorded in [ADR 0053](../../adr/0053-workspaces-access-rls-invitations-and-deletion.md); Leo's scope settled by ADR 0039 (§3.10).
+- **Philosophy check:** colleagues see what they need without anyone re-sending recordings or re-explaining context. A person's own work stays private unless they share it. Leo sees exactly what the person may see, across Personal and every workspace. Administration is a few settings, not a console: defaults decide sharing, and invitations, seats and removal each take one action. The slice adds no notification stream: invitations are one email, and a full seat meter is shown only to the people who can act on it.
+
+---
+
+## 1. Facts this plan rests on
+
+### 1.1 Inputs
+
+| Source | Fact |
+|---|---|
+| [SLICE_MAP](../SLICE_MAP.md) §2.8, §2.10, §4.2.2, §5, §8.1 | Scope: create, members, invitations (email, link, verified domain), roles owner/admin/member/guest, teams, seats (with billing), sharing defaults, auto-share at meeting end, suspension, deletion and leave cascades, per-member usage, projects, share records of meetings and files, workspace knowledge items, the access policy (`resource_grants`, `org_id` and `access` columns, RLS) and `org_audit_events` for every slice, the admin workspaces screen. Owns `organizations`, `memberships`, `invitations`, `teams`, `team_members`, `projects`, `resource_grants`, `org_audit_events`, `workspace_meeting_shares`, `workspace_knowledge_items`, `directory_domains`. No native or external route. Leaks to fix server-side: `GET /workspaces/{id}` gives every member private teams, pending invitation emails and every member's `last_active_at`. Accepting an invitation and joining by domain have no endpoint or screen. Build order: **workspaces·core** (access policy, columns, grants, RLS, audit) in wave 1 before any slice with shareable resources; **workspaces·screens** in wave 3 after billing's payments and seats. SM-1 as narrowed: one account per person, same-home membership only at launch, one Leo per person |
+| Target architecture | fr-12, fr-13, fr-14, fr-15 (billing), fr-17 (later); nfr-4, nfr-14, nfr-15, nfr-16, nfr-17, nfr-18. §6: a workspace's home is fixed at creation and holds all its data; `directory_domains` in the EU home maps a verified domain to the workspace and its home; cross-home joins refused with an explicit error. §7: owner of a resource is `user_id` (personal) or `org_id` plus `access ∈ owner | selected | organization`; `selected` = rows in `resource_grants`, grantee a member or a team; audiences participants → `selected`, team → `selected` with the team, workspace → `organization`; a personal item is shared by a share record, not copied; one access policy decides every read and write, inside the reading query; rights are never cached; RLS as the second line with `SET LOCAL app.org_id`, migrations and sweeps under a dedicated role; Qdrant hits re-checked in PostgreSQL; roles; last owner cannot leave; private teams; join by token or verified domain (DNS TXT), above paid seats 402; removal ends access at the next request, created content stays with the workspace; audit in the same transaction, no UPDATE or DELETE for the application. §8.1 rows Workspace, Membership, Access, Audit event (monthly partitions, 12 months). §9 inv-14, inv-15, inv-16, inv-17. §10 "Invite and join" and "Share inside a company". §13.1: the access policy is a single point of failure, covered by isolation tests on every read path and by RLS. §14 rule 12: the isolation test per read path is a CI gate. §16.4: the monitor "access-policy decisions that disagree with RLS in the isolation self-test" (inv-14). §22: cross-home membership waits for the legal review; RLS overhead on meeting read and search is a measurement gate |
+| [ADR 0039](../../adr/0039-one-account-per-person-with-workspaces.md) | The token carries no workspace roles; membership is checked in every reading query and never cached. Leo reads everything the person may access; a thread's scope focuses, the access policy limits. A workspace request runs in the person's own home at launch. `PrincipalFactory` reads the person's active memberships per run. The account transfer of a workspace member has no rule yet and is settled in this plan |
+| [F1 audit](../audits/F1-audit.md) A2, OD-5; F1 plan F1-C6, F1-C20 | Core sets `app.user_id` and `app.org_id` per transaction (`core/db/transactions.py`), and `enable_company_isolation` installs `org_id IS NULL OR org_id = app_org_id()` (`core/db/migration_scope.py`). Personal rows have no second line (OD-5), and cross-tenant sweeps under RLS have no role yet (F1-C6). Both are this plan's to decide |
+| Cabinet ([frontend/](../../../frontend)) | Routes `/app/w`, `/app/w/new`, `/app/w/:slug/{,decisions,knowledge,meetings,meetings/:id,members,projects,projects/:id,settings,tasks}`, `/admin/workspaces`, `/admin/workspaces/:id`. Contracts in `frontend/docs/workspace-api.md` and `admin-workspaces-api.md`; types in `features/workspace/domain/{contract,content-contract,knowledge-contract,personal-contract}.ts`; MSW mocks in `features/workspace/mocks/` and `features/admin-workspaces/mocks/`, to be deleted when this slice serves them (F2-D1). One fat `GET /workspaces/{id}` → `WorkspaceState` (workspace, `me_id`, members, invitations, teams, projects); every mutation returns the new state. 404 means missing or not a member; 423 means suspended. Roles owner/admin/member (only admin and member assignable; no guest screen). Permissions in `domain/roles.ts`. Seats: members plus pending invitations, an invitation beyond them is 409. Meeting audiences `participants | team | workspace`; the organizer and the participants who are members always see a shared meeting; admins can change who sees a meeting they can see but see nothing more. Knowledge items `team | workspace` with source `upload | personal | connector`. Sharing defaults `private | participants | workspace`, `share_transcripts`, `members_can_invite`; a meeting with an outsider is never auto-shared. Leave or removal withdraws the person's shared recordings and files, keeps their uploads and sources, unassigns their open tasks, clears their leads. Deleting a team narrows its meetings to their participants, refused while knowledge is shared with it. Deleting a workspace keeps recordings and personal files with their owners. Admin: list with KPIs computed in the browser, detail with people, content counts and 12 event kinds; seats, suspend with a reason, resume, owner transfer, delete. The cabinet calls `/api/workspaces/*`, `/api/me/*`, `/api/admin/workspaces/*`: its API modules switch to `/v1/…` when this slice serves them |
+| Draft (`/root/whisperer`) | **No companies, memberships, teams, seats, invitations, domain join, roles beyond `user|admin`, RLS or org audit** (DATA_MAPPING fact 2, R3; FEATURE_MAP §6.2). M1 migrates nothing into this slice; R3: migrated rows are personal, `org_id` NULL, `access` the personal default this plan defines (§3.5) |
+| Core (F1, F5, F6) and identity | `TenancyScope(home, user_id, org_id)`, `HomeTransactions.begin`; home-scoped revisions; `register_monthly_partitions`; outbox events with ids only and three-segment names; `EventSubscription.home`; periodic jobs; `EffectLedger.once` and `IdempotencyKeyHeader`; `Page[T]`; `AppError` with the ADR 0008 envelope; `EmailPort.enqueue`; ports between slices (`FeatureParts.provides`, `FeatureModule.requires`, `ports.all`); `FeatureModule.account_data`, `objectives`, `monitors`; `ToolSpec`. identity: `Principal`, `bearer_principal`, `require_admin` (one admin, ADR 0049), `AccountProfileReader`, events `identity.account.{registered,deletion_scheduled,deletion_cancelled,deleted,transferred}`; the transfer saga refuses a person with workspace memberships "through a `workspaces` port later" (identity plan §3.6) |
+
+### 1.2 The draft, for lessons
+
+The draft has no company model, so every business rule here is new and comes from the target architecture and the cabinet. What it does teach, with its source:
+
+| Draft fact or incident | Rule in v2 |
+|---|---|
+| Ownership compared as `user_id ==` in many places, twice for one resource (`api/meeting_scope.py:20`, `api/sessions.py:31`) | One access policy builds every predicate; slices never compare owners (§7). A test fails when a shareable resource's read path has no isolation test (§3.8) |
+| GRAPH-01: the knowledge graph was built across all tenants because ownership was added after the feature (`docs/AUDIT.md:368`, spec 014); WS-03: a WebSocket room without an ownership check; auto-close by device id ended another account's meeting | The policy exists before the first shareable slice; a foreign id and a missing id answer the same 404; RLS rejects foreign companies' rows even when a query forgets the policy |
+| "The tenant flag is not isolation, the filter is": one scope constructor, no unscoped overload, results validated against the scope (`docs/KNOWLEDGE_ENGINE_TARGET_ARCHITECTURE.md` §5.3, §7.4) | The policy has no "unchecked" variant; search hits are re-checked by `filter_readable` in PostgreSQL before they leave the slice |
+| Share links: three explicit states with an allowlist, unknown state = private; owner match re-checked on every view so a link dies with its owner (`features/meetings/domain/sharing.py:65`, `share_repository.py:104-150`) | Access levels are a closed enum and the predicate lists the open ones; a share record is valid only while its sharer is an active member, checked in the query |
+| The deletion registry fails a test for any table with a users FK it does not cover; admin columns never drive deletion (`services/account_data.py:74-285`) | The same discipline for company data: every table with `org_id` is covered by exactly one workspace-data spec (§3.7); `actor` columns of audit rows never cascade |
+| Paid access survives a lapse for a grace period when auto-renew is on (`features/billing/domain/entitlements.py:42-80`) | Suspension is billing's decision through its port; a lapsed workspace keeps working until billing says otherwise (§13.2: "seats stay active until the end of the paid period + 7 days") |
+
+### 1.3 Versions (2026-10-17)
+
+No new dependency for the core steps. Step 7 adds an async DNS resolver for domain verification, `dnspython` at its latest stable version on that day, after checking that no existing dependency resolves TXT records.
+
+---
+
+## 2. Decisions
+
+Decided by the owner on 2026-10-17: WS-D1 … WS-D7 as proposed; for WS-D7 the owner confirmed that at launch workspaces exist only in tests and that creating one arrives with payment. Recorded in ADR 0053. The table keeps the question, the decision and its trade-off.
+
+| ID | Question | Decision | Trade-off | Blocks |
+|---|---|---|---|---|
+| **WS-D1** | **How RLS lets one person read several workspaces in one query.** Core's policy shows a transaction only the one company of `app.org_id`. Leo, search, `/me/*` views and a personal meeting list that includes shared items read across every space of the person (ADR 0039), so one company per transaction means one transaction per space: N × 4 round trips of 45 ms for a Russian user | **Read rows of every company the person is an active member of; write only into the company of the scope.** A `SECURITY DEFINER` function `app_member_org_ids()` (owned by the migration role, `STABLE`) returns the active memberships of `app_user_id()`; the company policy becomes `USING (org_id IS NULL OR org_id = (SELECT app_org_id()) OR org_id = ANY ((SELECT app_member_org_ids())))` and `WITH CHECK (org_id IS NULL OR org_id = (SELECT app_org_id()))`. Both subqueries are uncorrelated, so PostgreSQL computes them once per statement; membership is read in the same query, never cached, and a removal takes effect at the next statement. `enable_company_isolation` in core is replaced; §7 is amended to describe it | One index lookup per statement instead of one transaction per space; the access policy, not RLS, narrows to the resource's level. RLS no longer pins a transaction to one company, so a workspace route must still set `app.org_id` for its writes. The alternative (one transaction per space) keeps §7's wording and costs Russian users 180 ms per extra space | step 2 |
+| **WS-D2** | **RLS for personal rows (F1 OD-5) and the role for cross-tenant sweeps (F1-C6).** A personal row shared into a workspace must be readable by colleagues, so a "personal rows only for their owner" policy on a shareable table would have to repeat the whole sharing logic. identity's tables are read before any principal exists (sign-in, registration, the admin's search) | **(a)** A `user_isolation` policy (`user_id = (SELECT app_user_id())`) for tables that are personal by nature and never shared — memory facts, Leo threads, hubs, errands and those of later slices — applied by each owner's migration through a core helper. **(b)** Shareable tables (meetings, notes, folders, files, knowledge items) get the company policy only; their personal rows are guarded by the access policy and the isolation tests. **(c)** identity's account tables keep no RLS: they are read before a principal exists and only through identity's repositories. **(d)** Sweeps run as a `NOLOGIN` role `shosai_sweeper` that the application role may `SET ROLE` to (`GRANT … WITH INHERIT FALSE, SET TRUE`), with policies `TO shosai_sweeper USING (true)`. `HomeTransactions.begin(scope, sweep=True)` adds `SET LOCAL ROLE` to the scope statement: one pool, no extra round trip, allowed only in the `workers` and `scheduler` roles. The role is created by `deploy/local/postgres/init-home.sh` and by the staging runbook (the application and migration roles have no `CREATEROLE`) | A second line for every personal-only table at no cost; shareable tables rely on one well-tested policy for their personal rows; sweeps become explicit and greppable. Costs one cluster role per home on staging and production and a change to the local init script. The alternatives: a policy on shareable personal rows that re-implements share records (two sources of truth), or a session flag `app.sweep` that any code can set | step 2 |
+| **WS-D3** | **Invitations and domain join.** fr-12 names links, email and a verified domain; the cabinet has email invitations only and no screen to accept one or to verify a domain | **Email invitations only, no reusable link at launch:** each invitation is a one-time link (32 random bytes, SHA-256 stored, 14 days, a resend rotates it) bound to the invited address; accepting needs an account whose verified email equals it (case-insensitive), in the workspace's home (otherwise 409 `workspace_home_mismatch`). **Domain:** verified by a DNS TXT record (§7), public mail domains (gmail.com and the like, a list kept in the slice) refused; `directory_domains` in the EU home makes a domain belong to one workspace across both homes. A person with a verified email at that domain sees "Join {workspace}" in the workspace list and joins with one click; nobody is added silently. Two new cabinet screens: accept an invitation (`/app/join/:token`) and the domain's verification state in Settings | A link that can be forwarded is the easiest way to leak a workspace; one-time links bound to an address cannot be. A company that wants "anyone with the link" waits for a later need. One click instead of automatic join keeps a person in control of which spaces they belong to | step 7 |
+| **WS-D4** | **A member's account deletion and transfer.** ADR 0039 leaves the transfer of a member open; nothing says what happens to a workspace whose last owner deletes their account | **Deletion:** while the account is hidden (identity's 7 days) its memberships are `hidden`: they hold their seats, the person's shares stop being served, and a cancellation restores them unchanged. At erasure the membership becomes `removed` like a removal (§3.6), and if the person was the only owner, ownership passes to the longest-standing admin, else the longest-standing member; a workspace with no other member is deleted with the account through the workspace deletion saga. **Transfer:** identity's transfer saga is refused while the person has an active or hidden membership (`MembershipReader.has_memberships`); the person leaves their workspaces first, or the transfer waits for the legal review of §22 | A person can always delete their account; a company never ends up without an owner; nothing crosses homes. A member who moves country must leave their workspaces before their account moves | step 4 |
+| **WS-D5** | **Deleting a workspace and exporting its data** (fr-14). §8.1 says "after contract end and export, deletion saga"; the cabinet deletes at once and has no export | **A 7-day window like an account's:** the owner's delete hides the workspace at once (every member gets 404, shares and knowledge stop being served, billing stops renewal), an email to the owner names the erasure date, and the owner or the platform admin can cancel within 7 days. Then a saga runs every slice's workspace-data handler (§3.7) and erases the company's rows and objects; personal recordings and files stay with their owners. **Export:** the owner downloads everything the workspace holds as one ZIP, like the account export (identity step 7b), from Settings; a new item in the danger zone | Protects a company from a mistaken or hostile delete by one owner; the data stays, hidden, for 7 days. One more cabinet control (export) | step 11 |
+| **WS-D6** | **Cross-border consent of a company (nfr-14).** The architecture lets a company consent as data operator by contract; no company contract exists yet, and every Russian-home account already gave its own consent at registration (ID-D2) | **At launch an AI call on workspace data uses the acting person's consent**, as every slice already does through `CallContext`; `organizations.operator_consent_at` is added, empty, and used when the first company contract is signed (§22) | No new consent screen now. A company that withdraws its members' individual consents cannot override them with a contract until that contract exists | — |
+| **WS-D7** | **Seats before billing sells them.** The core steps run in wave 1, billing's payments in wave 3; inv-16 requires active members ≤ paid seats | **Workspaces exist in wave 1 only in tests and through other slices' fixtures; no route creates one until billing's payments ship.** The seat check is a required port (`SeatAllowance`) that billing binds; unbound, every join and invitation is refused (fail closed, inv-3). The slice's status becomes `blocked` on billing payments after step 5, so the backend path moves on to `billing` | No user sees a workspace before it can be paid for; the wave-1 slices still build against the real policy. The alternative of free unlimited workspaces until wave 3 would have to be taken back from real users |  step 6 |
+
+Settled by documents and the cabinet, no decision needed: admins and owners see no resource they could not see as members (cabinet `workspace-api.md`, "Access rules"); pending invitations hold a seat (cabinet); roles and the last-owner rule (§7); same-home membership (ADR 0039); events carry ids only (§12).
+
+---
+
+## 3. Design
+
+### 3.1 Layout
+
+```
+backend/src/shosai/features/workspaces/
+  README.md
+  contracts.py            # public surface: policy port, resource descriptors, viewer, events
+  settings.py             # WorkspacesSettings (WORKSPACES_* variables)
+  module.py               # FeatureModule: models, events, checks, monitors, tool specs, build()
+  domain/                 # pure: roles and permissions, access levels and audiences, seat rule,
+                          #   slug, invitation tokens, domain rules, membership states
+  application/            # use cases: create, settings, members, teams, projects, invitations,
+                          #   join, shares, knowledge items, suspension, deletion, export, audit
+  infrastructure/         # SQLAlchemy models and repositories, the policy's SQL builder,
+                          #   DNS verifier, public-domain list
+  channels/
+    http/                 # routers: workspaces, members, invitations, teams, projects, shares,
+                          #   knowledge, me, admin
+    consumers.py          # identity and meetings events
+    tasks.py              # deletion saga, export, sweeps, the isolation self-test
+    agent_tools.py        # the workspace toolset
+  emails.py               # invitation, joined by domain, deletion scheduled, export ready
+```
+
+`channels` → `application` → `domain`; `infrastructure` implements the ports `application` declares. Every file stays under 300 lines. import-linter forbids other slices from importing anything but `contracts`.
+
+### 3.2 Public surface (`workspaces.contracts`)
+
+| Item | Kind | Used by |
+|---|---|---|
+| `AccessLevel` (`owner`, `selected`, `organization`), `GranteeKind` (`member`, `team`), `Audience` (`participants`, `team`, `workspace`) with the mapping of §7 | enums and a pure function | every slice with shareable resources; the cabinet's terms stay at the HTTP edge |
+| `ShareableResource(kind, table, id, owner, org, access)` | descriptor a slice declares for each table it shares (`FeatureModule.shareable`), naming its columns | meetings, notes, folders, files, knowledge |
+| `Viewer(user_id, focus_org_id)` and `viewer_of(principal, focus)` | value | every read |
+| `AccessPolicy.readable(resource, viewer) -> ColumnElement[bool]` | port: the predicate a slice puts into its own `SELECT`; covers owner, the workspace's level and grants, share records into workspaces where the viewer is an active member, and the hidden state of owners | every read path of a shareable resource |
+| `AccessPolicy.manageable(resource, viewer)` | port: who may change access (owner of the resource, the organizer for a shared meeting, workspace admins for what they can see) | the slices' write paths |
+| `AccessPolicy.filter_readable(session, resource, ids, viewer) -> frozenset[UUID]` | port: one query that re-checks a batch of ids, for search hits and Leo (§7) | knowledge, meetings search, agent |
+| `AccessPolicy.set_access(session, resource, id, level, grantees, actor)` | port: writes the level, the grants, the audit event and `workspaces.access.changed` in the caller's transaction | slices' share routes, Leo's write tools |
+| `WorkspaceMember` dependency (`workspace_member(ports)`) | FastAPI dependency: resolves `/v1/workspaces/{workspace_id}/…` to `(org_id, membership_id, role)` with 404 for missing or not a member and 423 while suspended, and opens transactions with `app.org_id` set | tasks (`/workspaces/{id}/tasks`), commitments (`/decisions`), files (transfer) |
+| `MembershipReader.active(session, user_id)`, `.has_memberships(session, user_id)`, `.members(session, org_id, ids)` | port | agent (`PrincipalFactory`), identity (transfer guard), tasks and commitments (owner names) |
+| `AuditLog.record(session, org_id, action, actor, target, value)` | port: append one `org_audit_events` row in the caller's transaction | any slice with an administrative action inside a workspace (files: `file_transferred`) |
+| `SeatAllowance` | port **required** by this slice, bound by billing: paid seats, trial end, status | invitations, joins, the seat meter |
+| `WorkspaceDataHandler` and `WorkspaceDataSpec` | multi-port and declaration: `export(org_id)`, `erase(org_id)`, tables and prefixes covered | every slice owning rows with `org_id` (§3.7) |
+| Events (ids only) | `workspaces.workspace.created`, `.workspace.suspended`, `.workspace.resumed`, `.workspace.deletion_scheduled`, `.workspace.deletion_cancelled`, `.workspace.deleted`, `.member.joined`, `.member.removed` (`org_id`, `user_id`, `successor_id`, `reason`), `.member.role_changed`, `.team.deleted`, `.project.deleted`, `.access.changed`, `.meeting.shared`, `.meeting.unshared`, `.knowledge_item.added`, `.knowledge_item.removed` | tasks (unassign, project cleared), knowledge (index scope), meetings, agent, proactive, billing (seats), alerting |
+
+SLICE_MAP §4.2.2's two-part event names (`workspaces.member_joined`) do not pass core's three-part rule; the names above replace them on approval.
+
+### 3.3 HTTP interface
+
+Paths follow the cabinet's contract with the `/v1` prefix. Errors use the ADR 0008 envelope; `detail` is the localized message the cabinet shows. All mutations under a workspace return the new `WorkspaceState`, as the cabinet expects.
+
+| Route | Who | Notes |
+|---|---|---|
+| `GET /v1/workspaces` | person | the person's workspaces in their home, with `suspended`; plus `joinable` (workspaces whose verified domain matches the person's email) |
+| `POST /v1/workspaces` | person | `{name ≤ 60, seats 2–100}` → 201; starts billing's trial through `SeatAllowance`; slug from the name, unique per home, immutable |
+| `GET/PATCH/DELETE /v1/workspaces/{id}`, `POST …/leave` | member / admin / owner / not the owner | `GET` filters per viewer: private teams only to their members and admins; invitation emails to admins and to their inviter; `last_active_at` to admins. `PATCH` with `sharing` sets `sharing_reviewed`. `DELETE` schedules deletion (WS-D5) |
+| `POST /v1/workspaces/{id}/invitations`, `DELETE …/{inv}`, `POST …/{inv}/resend` | admin, or member when `members_can_invite`; only admins invite admins | ≤ 20 emails, deduplicated case-insensitively; 409 beyond the seats left; one email each through F6 |
+| `POST /v1/workspaces/join` | person | `{token}` or `{workspace_id}` for a domain join; one-time; a repeat returns the same membership; 402 no seat; 409 `workspace_home_mismatch` or email mismatch |
+| `PUT/DELETE /v1/workspaces/{id}/domain`, `POST …/domain/verify` | admin | the TXT value to publish, its state, the check |
+| `PATCH/DELETE /v1/workspaces/{id}/members/{member}` | admin; a member may change only their own open teams | never the owner, never oneself |
+| `POST/PATCH/DELETE /v1/workspaces/{id}/teams[/{team}]` | admin | delete refused (409) while knowledge is shared with the team |
+| `POST/PATCH/DELETE /v1/workspaces/{id}/projects[/{project}]` | admin or the project's lead | delete keeps meetings, tasks and files (`workspaces.project.deleted`) |
+| `GET/POST /v1/workspaces/{id}/meetings`, `GET/PATCH/DELETE …/{meeting}` | member; the organizer or an admin who can see it edits | share records over meetings' read contract; `transcript: null` unless shared; at most one workspace per recording |
+| `GET/POST /v1/workspaces/{id}/knowledge`, `POST …/publish`, `POST …/sources`, `PATCH/DELETE …/{item}` | member; sources admin-only | items over files and knowledge; the upload goes through files' presigned path, not multipart into this API |
+| `GET /v1/workspaces/{id}/usage` | admin | meetings and minutes per member this month, from meetings through a port |
+| `GET /v1/me/meetings`, `/v1/me/shares`, `/v1/me/knowledge` | person | across the person's active, unsuspended workspaces |
+| `GET /v1/admin/workspaces`, `GET/PATCH/DELETE …/{id}`, `POST …/{id}/suspend`, `…/resume`, `…/owner` | the admin (`require_admin`) | seats through billing; every action audited with `actor = null` |
+
+The share audiences of §10's "Share inside a company" are set through each share record's own route (`PATCH …/meetings/{id}`, `PATCH …/knowledge/{id}`), which calls `AccessPolicy.set_access`; §10's generic `PUT /v1/{resource}/{id}/access` is replaced by these routes on approval (the new UI is the product reference, ADR 0022). `/v1/workspaces/{id}/tasks` and `/decisions` are served by `tasks` and `commitments` under this prefix through `WorkspaceMember`.
+
+### 3.4 Data model
+
+All tables live in the workspace's home (both homes' schema), except `directory_domains` (EU home only). UUIDv7 keys. Every table with `org_id` gets the company policy (WS-D1).
+
+| Table | Columns that matter | Constraints and indexes |
+|---|---|---|
+| `organizations` | `id`, `slug`, `name`, `state` (`active`, `suspended`, `deletion_scheduled`), `sharing_default`, `share_transcripts`, `members_can_invite`, `sharing_reviewed`, `join_domain`, `suspended_at`, `suspension_reason`, `erase_at`, `operator_consent_at` (WS-D6), `created_by`, `created_at` | `slug` unique; the seat count is billing's, read through `SeatAllowance` under the workspace row lock (§8.1) |
+| `memberships` | `id` (the cabinet's member id), `org_id`, `user_id` (global, no FK across slices), `role` (`owner`, `admin`, `member`, `guest`), `state` (`active`, `hidden`, `removed`), `title`, `joined_at`, `removed_at`, `removal_reason`, `last_active_on` | unique `(org_id, user_id)`; partial index `(user_id) WHERE state = 'active'` for `app_member_org_ids()`; a constraint trigger refuses a change that leaves an active workspace without an active owner |
+| `teams`, `team_members` | `name`, `description`, `color`, `private`, `lead_membership_id` | `team_members (team_id, membership_id)` primary key |
+| `projects` | `name`, `description`, `status`, `lead_membership_id`, `team_id`, `target_date` | — |
+| `invitations` | `org_id`, `email` (normalized), `role`, `team_ids`, `token_sha256`, `invited_by`, `sent_at`, `expires_at`, `accepted_membership_id` | unique `(org_id, email)` while pending; unique `token_sha256` |
+| `resource_grants` | `org_id`, `resource_kind`, `resource_id`, `grantee_kind`, `grantee_id` | primary key on all five; index `(grantee_kind, grantee_id)` |
+| `workspace_meeting_shares` | `session_id` (unique: one workspace at a time), `org_id`, `shared_by_membership_id`, `access`, `transcript_shared`, `project_id` | the `participants` audience is `selected` with the participant members as grants |
+| `workspace_knowledge_items` | `org_id`, `source_kind` (`upload`, `personal`, `connector`), `file_id` or `connector_source_id`, `access`, `team_id`, `project_id`, `added_by_membership_id` | one item per (org, file); a personal file may sit in several workspaces |
+| `org_audit_events` | `id`, `org_id`, `at`, `action` (closed enum: the cabinet's 12 plus `access_changed`, `domain_verified`, `deletion_scheduled`, `deletion_cancelled`, `team_*`, `project_*`), `actor_membership_id` or null for the platform, `target_kind`, `target_id`, `value` (codes and numbers, no free text) | monthly partitions kept 12 months; the application role has `INSERT, SELECT` only (inv-17) |
+| `directory_domains` (EU) | `domain` primary key, `org_id`, `home`, `txt_token`, `verified_at` | first verification wins across homes |
+
+Other slices' resource tables carry `org_id uuid NULL` and `access text NULL` (both null for personal rows; a check that they are null or set together). R3's "personal default" is exactly that: `org_id` and `access` NULL.
+
+### 3.5 The access policy
+
+`readable(resource, viewer)` builds, for a row `r` of the slice's table:
+
+```
+r.owner = viewer
+OR (r.org IS NOT NULL AND <viewer is an active member of r.org> AND <r.org is active> AND (
+      r.access = 'organization' AND role <> 'guest'
+   OR r.access = 'selected' AND <a grant on r for viewer's membership or one of their teams>))
+OR (r.org IS NULL AND <a share record of r in an active workspace where viewer is an active member,
+      its sharer still an active member> AND <the share's level or grants admit viewer>)
+```
+
+- Each `<…>` is an `EXISTS` over this slice's tables, built from `infrastructure`; callers get only the `ColumnElement`. The level list is an allowlist: an unknown value admits nobody.
+- No result is cached; there is no variant without the check.
+- A workspace screen passes `within=org_id`, and the predicate then also requires the row to belong to that workspace or to be shared into it, so the screen lists only that workspace. This narrows a screen; it is not a boundary. Leo never passes `within`: the space of its conversation only ranks results (`agent`), and the access policy alone bounds what it reads (ADR 0039, ADR 0053 point 8).
+- `filter_readable` wraps the same predicate in one `SELECT id … WHERE id = ANY(:ids)`.
+- **Measured in step 3:** the predicate and RLS overhead on a meeting read and a list of 50 at the design point (100 companies × 30 members, a year of meetings in one home), against the §22 gate (overhead ≤ 10% of query time, §19). The plan is changed if it fails.
+
+### 3.6 Flows
+
+1. **Create.** One transaction: workspace, owner membership, trial through `SeatAllowance`, audit `workspace_created`, event.
+2. **Invite and join.** Invitation rows and emails in one transaction (`EmailPort` writes into it). Join: lock the workspace row, check `SeatAllowance` (members + pending ≤ seats, else 402 and an admin notice through proactive later), insert or reactivate the membership, consume the invitation, audit, `member.joined`. A repeat with the same token returns the same membership.
+3. **Remove or leave.** The membership becomes `removed` and access ends at the next statement (it is in every predicate). In the same transaction: grants of that member deleted, their share records withdrawn, their team memberships and leads cleared, workspace-owned rows they own get the workspace's owner as successor through `member.removed` (nfr-16), audit. Tasks are unassigned by `tasks` on the event. Sessions and Personal stay untouched (ADR 0039 overrides nfr-16's "sessions revoked"; §2 is amended).
+4. **Account hidden or erased** (identity events) per WS-D4.
+5. **Suspend and resume.** The admin or billing's port sets the state; every route under the workspace answers 423; `/me/*` and the predicate skip suspended workspaces; nothing is deleted.
+6. **Delete** per WS-D5: state `deletion_scheduled`, then at `erase_at` a saga runs each `WorkspaceDataHandler.erase` as a task, records each step, and finally removes the workspace's own rows and its `directory_domains` entry.
+7. **Auto-share at meeting end.** On `meetings.notes_ready`: when every participant of the meeting is an active member of one workspace whose `sharing_default` is not `private`, the meeting is shared there at that level; with an outsider, or when two workspaces qualify, nothing is shared (the cabinet's `shares_with: null`).
+8. **Last active.** Serving `GET /v1/workspaces/{id}` updates `last_active_on` with one conditional statement at most once a day per membership.
+
+### 3.7 Company data registry
+
+Every slice that writes rows with `org_id` declares a `WorkspaceDataSpec` and binds a `WorkspaceDataHandler` (`export`, `erase`). A metadata test fails when a table with an `org_id` column is covered by no spec or by two, the way identity's account-data test does. The handlers serve the workspace deletion saga and the company export (WS-D5). Personal rows shared into a workspace are not company data: deletion only removes their share records.
+
+### 3.8 Isolation tests and invariants
+
+- **Test kit** in `backend/tests/support/isolation.py`: a world with two workspaces, members of each, a member of both, a guest, a private team, a removed member, a hidden owner, personal items shared and not shared. A slice registers a read path and the kit asserts that every viewer sees exactly what a reference model of §7 says. The slice must use the kit for each of its read paths.
+- **CI gate (§14 rule 12):** a test fails when a resource declared in `FeatureModule.shareable` has no test marked `isolation(resource=…)`.
+- **Property test** of the policy against the reference model on random worlds (Hypothesis): members joining and leaving, teams, grants, levels, suspensions, hidden owners.
+- **RLS tests:** a transaction of a person sees no row of a company they do not belong to, even through raw SQL; a write into a company other than the scope's is rejected; the sweep role sees every row; the application role cannot update or delete an audit row.
+- **inv-14 monitor** (§16.4): an hourly self-test per home samples viewers and runs the policy's predicate with RLS bypassed (sweep role), counting rows it admits from companies where the viewer is not an active member. Gauge `shosai_workspaces_policy_rls_disagreements{home}`, monitor `StaysAtMost(…, 0)`.
+- **inv-16 monitor:** a daily check counts workspaces whose members plus pending invitations exceed their paid seats. Gauge `shosai_workspaces_over_seats{home}`, `StaysAtMost(…, 0)`.
+- **inv-17:** each service writes its audit row in the action's transaction, and a test drives every administrative route and asserts exactly one audit row per action.
+- **inv-15:** a join or invitation acceptance from a principal whose home differs from the workspace's is refused with 409 `workspace_home_mismatch`; the token names the home, so no directory read is needed.
+
+### 3.9 Telemetry
+
+- Metrics: `shosai_workspaces_joins_total{via, outcome}`, `shosai_workspaces_invitations_total{outcome}`, `shosai_workspaces_access_changes_total{kind}`, `shosai_workspaces_policy_checks_seconds` (the predicate's added time, sampled in step 3's benchmark only), the two monitor gauges, `shosai_workspaces_deletion_steps_total{handler, outcome}`.
+- Spans: join, removal, set access, each saga step. No names, emails or domains in labels, logs or spans; ids only.
+- Alerts: a workspace deletion saga not finished after 1 h (ticket); the two monitors (page).
+
+### 3.10 Not in workspaces
+
+- Seats, trial, prices, invoices and the decision to suspend for non-payment: `billing`, through `SeatAllowance`.
+- Workspace tasks and decisions: `tasks` and `commitments`, under this slice's URL prefix.
+- Meeting content, transcript, files' bytes, the knowledge index: their owners; this slice holds share records and access only.
+- Enterprise sign-in and SCIM (fr-17), cross-home membership (§22).
+- Leo's ranking by the conversation's space and the answer's source labels: `agent`. **Settled, not open for the agent plan** (owner, 2026-10-17; ADR 0039, ADR 0053 point 8): the space of a conversation sets the focus, the access policy sets the bounds. In a workspace Leo looks there first and writes there by default, and may use anything else the person may open, Personal included. Every answer names its sources and the space of each. What the person cannot open is never read, mentioned or counted. The cabinet's `frontend/docs/workspace-api.md` said the opposite ("only from that workspace", "never brings personal files", "says how many items it left out"); it was corrected with this plan. The cabinet's Leo mock (`frontend/src/features/leo/mocks/knowledge.ts`, `features/workspace/mocks/leo-knowledge.ts`) still follows the old rule and counts hidden items; it is deleted when `agent` serves Leo and is not a reference for it.
+
+---
+
+## 4. Steps
+
+Each step is one session, leaves the project working and ends with the backend gates (and the frontend gate where it touches `frontend/`). "Docker ×4" means the four Docker skills, loaded when the step migrates, runs the compose services or edits the init scripts. Steps 1–5 are **workspaces·core** (wave 1); after step 5 the slice is `blocked` on billing's payments (WS-D7) and the backend path moves on. Steps 6–15 are **workspaces·screens** (wave 3); a step whose "Waits for" slice is not `done` waits for it.
+
+| Step | Content | Skills | Done when |
+|---|---|---|---|
+| 1 | **Contracts and domain.** `features/workspaces` skeleton; `contracts.py` (§3.2) with ports, descriptors, events and the `FeatureModule.shareable` field in core; `WorkspacesSettings`; domain: roles and the permission matrix of the cabinet's `roles.ts`, access levels and audience mapping, seat rule, slug, invitation token, membership state machine, public-domain rule; README | fastapi, python-doctor, api-design | Hypothesis tests of the permission matrix (never the owner, never oneself, only admins invite admins, a member changes only their own open teams) and of the membership state machine (the last owner cannot leave or be demoted); events pass core's checks; import-linter keeps the slice's internals private |
+| 2 | **Data model and RLS.** Revisions for every table of §3.4 (`directory_domains` EU only; `org_audit_events` partitioned, `INSERT, SELECT` only); `app_member_org_ids()`; core: the new company policy (WS-D1), the `user_isolation` helper, the sweep role with `begin(scope, sweep=True)` limited to workers and scheduler (WS-D2); `init-home.sh` creates `shosai_sweeper`; the staging runbook gains the role; the harness migrates both homes up and down | fastapi, python-doctor, data-storage, consistency-coordination, Docker ×4 | RLS tests of §3.8 pass in both homes; the existing tables that used `enable_company_isolation` keep passing; a membership removed in one transaction hides the company's rows from the next statement; the schema returns to its initial state after the harness downgrades |
+| 3 | **The access policy.** `readable`, `manageable`, `filter_readable`, `set_access` (grants, audit, `access.changed`, outbox in the caller's transaction); the isolation kit and the CI gate; the reference model and the property test; benchmark at the design point | fastapi, python-doctor, data-storage, consistency-coordination, Docker ×4 | The property test agrees with the reference model; a fixture resource without an isolation test fails the gate; `filter_readable` drops a hit revoked a moment earlier; the overhead is measured and recorded in §3.5 against the 10% gate |
+| 4 | **Membership services and identity.** Create, role change, team and project services, remove and leave (§3.6 flow 3), suspension state, `MembershipReader` and `AuditLog` bound; `SeatAllowance` required (refusing until billing binds it); identity integration: account-data spec and handler (export memberships and invitations; erase per WS-D4), consumers of `deletion_scheduled`, `deletion_cancelled`, `deleted`, the transfer guard bound for identity | fastapi, python-doctor, api-design, consistency-coordination, Docker ×4 | A removed member's next query sees nothing of the workspace while their Personal still works; the last owner's erasure passes ownership by the WS-D4 order; a hidden owner's shares disappear and return on cancel; a transfer of a member is refused; every action leaves one audit row; joins are refused with `SeatAllowance` unbound |
+| 5 | **Monitors and the guide for slices.** inv-14 self-test and inv-16 check as periodic jobs with their gauges and monitors (§3.8), rules and runbook entries rendered; `docs/access.md`: how a slice declares a shareable resource, uses `readable` and the isolation kit; ARCHITECTURE amendments of §5 below; status → `blocked` on billing payments | fastapi, python-doctor | `promtool` tests of both monitors pass; the self-test fires on a planted policy bug in a test; the guide is linked from `docs/observability.md` and the backend README |
+| 6 | **Workspaces HTTP.** List, create (trial through billing), get state with the per-viewer filtering of §3.3, settings, leave, members, teams, projects, the 404/423 gate as `WorkspaceMember`; OpenAPI and the generated client. *Waits for billing (payments, seats)* | fastapi, python-doctor, api-design | Each route matches the cabinet's types (a contract test against `frontend/src/features/workspace/domain/*.ts` fixtures); a member never receives private teams, invitation emails or `last_active_at`; every mutation returns the new state and one audit row |
+| 7 | **Invitations and joining.** Invitation routes and emails in 16 languages; join by token; domain verification by DNS TXT with `directory_domains`; join by domain (WS-D3); 402 and 409 paths | fastapi, python-doctor, api-design, resilience-failure, Docker ×4 | A token works once under 20 concurrent accepts; another address or another home is refused; an invitation beyond the seats is 409 and a join without a seat 402; a domain verified in one home cannot be claimed in the other; DNS timeouts answer "not verified yet", never verified |
+| 8 | **Meeting shares.** `workspace_meeting_shares` over meetings' read contract; the workspace meetings routes; `/v1/me/meetings` and `/v1/me/shares`; organizer and admin edits; transcript flag. *Waits for meetings* | fastapi, python-doctor, api-design, Docker ×4 | Isolation kit over every route; a recording sits in one workspace at a time; leaving withdraws it; a team deleted narrows its meetings to their participants |
+| 9 | **Knowledge items and file transfer.** Items of three sources, publish, sources (admin), access changes, `/v1/me/knowledge`; files' transfer route records `file_transferred` through `AuditLog`. *Waits for files, knowledge, connectors* | fastapi, python-doctor, api-design, Docker ×4 | A personal item leaves with its owner, an upload and a source stay; a team with shared knowledge cannot be deleted; search hits from the index pass `filter_readable` |
+| 10 | **Usage and auto-share.** Per-member usage through meetings' port; the auto-share consumer of §3.6 flow 7. *Waits for meetings, calendar* | fastapi, python-doctor, messaging-streaming | A meeting with an outsider is never shared; a redelivered `notes_ready` shares once |
+| 11 | **Deletion and export.** The 7-day window, cancellation, the saga over `WorkspaceDataHandler`s, the export ZIP, emails, the metadata test of §3.7 (WS-D5) | fastapi, python-doctor, task-scheduling, consistency-coordination, Docker ×4 | Every member gets 404 at once; a cancel restores everything; after the window no row with that `org_id` remains in any table (the post-deletion check, nfr-13) and personal recordings and files are untouched; the export holds every covered table |
+| 12 | **Admin workspaces.** `/v1/admin/workspaces*`: list with the fields the screen computes KPIs from, detail with people, content counts and events, seats through billing, suspend, resume, owner transfer, delete | fastapi, python-doctor, api-design | Each action writes one audit row with `actor = null`; seats below members plus pending are 409; a suspended workspace answers 423 to its members and stays in their list |
+| 13 | **Leo's workspace toolset.** Members and teams (read), share a meeting (W), set a knowledge item's access (W) through the Action Gateway. *Waits for agent* | fastapi, python-doctor, agent-architecture | Specs pass the model-facing English test; a write runs once after approval; a tool never returns a member of a workspace the caller does not belong to |
+| 14a | **Cabinet: workspace screens on the API.** Prefix switched to `/v1`, the workspace mocks deleted; list, create, gate, members, invitations, teams, projects, settings with the domain state and export; the accept-invitation screen `/app/join/:token` (designed in the new visual language first) | vercel-react-best-practices, vercel-composition-patterns, vercel-react-view-transitions, web-design-guidelines, react-doctor | Screens behave as with the mocks, now on real data, in 16 languages, both themes, 1440 and 390 px; react-doctor 100 |
+| 14b | **Cabinet: shared work and admin.** Meetings, knowledge and the Personal views (`/me/*`) on the API; admin workspaces on the API; the admin mocks deleted | the four Vercel skills, web-design-guidelines, react-doctor | No sample data left for any workspace screen; react-doctor 100 |
+| 15 | **Contract verification and staging.** The cabinet's flows end to end on `shosai.tech` in both homes: create, invite, join by link and by domain, share a meeting, remove a member, suspend, delete with cancel | fastapi, python-doctor | Each flow passes on staging; the isolation gate covers every shareable resource in the codebase; STATUS `done` |
+
+---
+
+## 5. Documents to update on approval
+
+All done on 2026-10-17 with the plan's approval, except the staging runbook, which step 2 updates when it creates the role.
+
+- STATUS.md: workspaces `planned`, plan link.
+- `frontend/docs/workspace-api.md`: Leo's knowledge rule per ADR 0039 and ADR 0053 point 8 (§3.10).
+- SLICE_MAP §4.2.2: three-part event names; `invitations` email-only at launch (WS-D3); routes as in §3.3.
+- ARCHITECTURE:
+  - §2 nfr-16: a removed member loses the workspace at the next request; their sessions and Personal stay (ADR 0039);
+  - §7: the company policy and the personal policy (WS-D1, WS-D2), the sweep role, invitations and domain join (WS-D3);
+  - §8.1 Workspace retention: the 7-day window and the saga (WS-D5);
+  - §10: "Invite and join" with one-time email links; "Share inside a company" through each share record's route;
+  - §16.4: the inv-16 monitor;
+  - §22: the account transfer of a member is refused until the legal review (WS-D4).
+- [ADR 0053](../../adr/0053-workspaces-access-rls-invitations-and-deletion.md) (workspaces: RLS across a person's workspaces, personal policy and sweep role, invitations, member deletion and transfer, workspace deletion window, seats before billing, Leo's scope).
+- `docs/runbooks/staging.md`: the `shosai_sweeper` role in both homes (step 2).
+
+## 6. Risks
+
+| Risk | Mitigation |
+|---|---|
+| The predicate's `EXISTS` branches slow down every list at the design point | Measured in step 3 against the §22 gate before any slice depends on it; indexes of §3.4; the plan changes if the gate fails |
+| A slice forgets the policy on one read path | RLS hides foreign companies' rows; the isolation gate refuses a shareable resource without isolation tests; the inv-14 self-test pages on disagreement |
+| Managed PostgreSQL does not allow the sweep role or `SET ROLE` | Checked on staging in step 2 before any slice uses it; the fallback is a policy keyed on a setting only the scope statement writes, decided with the owner if needed |
+| Wave-1 slices need workspaces to test against while no route creates one | The isolation kit builds worlds through this slice's services; no route is needed until wave 3 |
+| Billing's seat model differs from what step 4 assumes | `SeatAllowance` is a narrow port written with billing's plan; step 6 waits for billing's payments |
