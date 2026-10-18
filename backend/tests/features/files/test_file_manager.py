@@ -29,6 +29,7 @@ from tests.harness.run_slot import RunSlot
 from tests.harness.shared_services import SlotBucket
 
 BODY = b"%PDF report" * 30
+AUDITED = "identity.operator.acted"
 
 
 async def key_of(bench: FileBench, who: Principal, file_id: uuid.UUID) -> str:
@@ -46,11 +47,7 @@ async def purge(bench: FileBench, run_slot: RunSlot, home: Home) -> int:
     async with open_database_access(
         slot_urls(run_slot), ProcessShape(role=ProcessRole.WORKERS)
     ) as workers:
-        hidden = HiddenFiles(
-            workers.transactions,
-            (bench.outbox, bench.uploads.deleter, bench.watch, bench.leo, bench.leo_watch),
-            bench.uploads.clock,
-        )
+        hidden = HiddenFiles(workers.transactions, bench.uploads.deleter, bench.uploads.clock)
         return await hidden.purge(home)
 
 
@@ -109,10 +106,10 @@ async def test_a_deleted_file_is_hidden_out_of_the_quota_restorable_then_purged(
     await file_bench.manager.delete(who, file.id)
     _, after_delete = await file_bench.manager.listing(who)
     used_after_delete = await file_bench.used(who)
-    [kept] = await file_bench.hidden.of_person(Home.RU, who.user_id)
+    [kept] = await file_bench.support.of_person(Home.RU, who.user_id)
     with pytest.raises(AppError, match="file_not_found"):
         await file_bench.downloads.link(who, file.id)
-    await file_bench.hidden.restore(Home.RU, who.user_id, file.id)
+    await file_bench.support.restore(Home.RU, who.user_id, file.id)
     _, after_restore = await file_bench.manager.listing(who)
     used_after_restore = await file_bench.used(who)
     await file_bench.manager.delete(who, file.id)
@@ -123,12 +120,14 @@ async def test_a_deleted_file_is_hidden_out_of_the_quota_restorable_then_purged(
     assert ([view.id for view in after_restore], used_after_restore) == ([file.id], len(BODY))
     assert purged == 1
     assert await objects.head(key) is None
-    assert await file_bench.hidden.of_person(Home.RU, who.user_id) == []
+    assert await file_bench.support.of_person(Home.RU, who.user_id) == []
+    # Каждый просмотр и каждое восстановление поддержкой записаны в аудит.
     assert await file_bench.events(who) == [
-        "files.file.uploaded", "files.file.deleted", "files.file.restored", "files.file.deleted",
+        "files.file.uploaded", "files.file.deleted", AUDITED, "files.file.restored", AUDITED,
+        "files.file.deleted", AUDITED,
     ]  # fmt: skip
     with pytest.raises(AppError, match="hidden_file_not_found"):
-        await file_bench.hidden.restore(Home.RU, who.user_id, file.id)
+        await file_bench.support.restore(Home.RU, who.user_id, file.id)
 
 
 async def test_a_copy_shares_the_object_outlives_the_source_and_goes_with_the_last_row(

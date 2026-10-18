@@ -99,7 +99,8 @@ class QuotaWatch:
     ) -> QuotaAction | None:
         """Take the due step among `allowed` in the caller's transaction of the person."""
         row = await session.get(StorageUsageRecord, user_id, with_for_update=True)
-        if row is None:
+        # В окне удаления аккаунта ни напоминаний, ни удаления: отмена вернёт всё как было.
+        if row is None or row.account_hidden:
             return None
         now = self._clock()
         usage = Usage(row.used_bytes, row.reserved_bytes)

@@ -17,6 +17,7 @@ from uuid import UUID
 from fastapi import Cookie, Header, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.account_data.handlers import AccountRef
 from shosai.core.events.domain_event import DomainEvent, EventCode
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
@@ -56,6 +57,8 @@ class OperatorAction(StrEnum):
     ACCOUNT_UNBLOCKED = "account_unblocked"
     ACCOUNT_TRANSFER_REQUESTED = "account_transfer_requested"
     ACCOUNT_TRANSFER_CANCELLED = "account_transfer_cancelled"
+    FILES_LISTED = "files_listed"
+    FILE_RESTORED = "file_restored"
 
 
 class Authenticator(Protocol):
@@ -97,6 +100,21 @@ class AccountProfileReader(Protocol):
         ...
 
 
+class OperatorAudit(Protocol):
+    """The admin's actions on a person's data in other slices, for the EU audit log."""
+
+    async def acted(
+        self,
+        session: AsyncSession,
+        target: AccountRef,
+        action: OperatorAction,
+        subject_id: UUID | None = None,
+    ) -> None:
+        """Record the action in the caller's transaction of the person's home; `subject_id`
+        names what it touched (a file), never its content."""
+        ...
+
+
 class MeContribution(Protocol):
     """A slice's part of the native `GET /v1/auth/me` (billing, meetings, memory, agent).
 
@@ -114,6 +132,7 @@ ME_CONTRIBUTIONS: Final = PortKey[MeContribution]("identity.me_contribution", Ca
 CONSENT_READER: Final = PortKey[ConsentReader]("identity.consent_reader")
 ACCOUNT_PROFILE_READER: Final = PortKey[AccountProfileReader]("identity.account_profile_reader")
 ADMIN_GATE: Final = PortKey[AdminGate]("identity.admin_gate")
+OPERATOR_AUDIT: Final = PortKey[OperatorAudit]("identity.operator_audit")
 BEARER: Final = "Bearer "
 ADMIN_COOKIE: Final = "shosai_admin"
 ADMIN_COOKIE_LENGTH: Final = 256
@@ -237,6 +256,8 @@ class OperatorActed(DomainEvent):
     target_home: Home
     action: OperatorAction
     reason_code: EventCode | None = None
+    # Что именно затронуто в другом срезе (файл), если действие не над самим аккаунтом.
+    subject_id: UUID | None = None
 
 
 IDENTITY_EVENTS: Final[tuple[type[DomainEvent], ...]] = (

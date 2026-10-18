@@ -28,6 +28,12 @@ async def lock(session: AsyncSession, user_id: UUID) -> None:
     await session.execute(select(USAGE.user_id).where(USAGE.user_id == user_id).with_for_update())
 
 
+async def account_hidden(session: AsyncSession, user_id: UUID) -> bool:
+    """Whether the person's account is in identity's deletion window (files step 7)."""
+    hidden = await session.scalar(select(USAGE.account_hidden).where(USAGE.user_id == user_id))
+    return bool(hidden)
+
+
 async def reserve(session: AsyncSession, user_id: UUID, size: int, limit: int | None) -> bool:
     """Reserve `size` bytes for the person; False when they would pass the limit."""
     if limit is not None and size > limit:

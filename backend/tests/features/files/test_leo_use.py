@@ -226,13 +226,14 @@ async def test_a_deleted_file_leaves_leo_and_support_s_restore_brings_it_back(
         record.leo_on = True
 
     await file_bench.manager.delete(who, notes)
-    await file_bench.hidden.restore(Home.EU, who.user_id, notes)
+    await file_bench.support.restore(Home.EU, who.user_id, notes)
     _, [restored] = await file_bench.manager.listing(who)
 
     assert via_of(restored) is LeoVia.FILE
     assert await file_bench.leo_events(who) == [(notes, True)]
     assert await file_bench.events(who) == [
-        "files.file.deleted", "files.file.restored", "files.leo_use.changed",
+        "files.file.deleted", "files.file.restored", "identity.operator.acted",
+        "files.leo_use.changed",
     ]  # fmt: skip
 
 

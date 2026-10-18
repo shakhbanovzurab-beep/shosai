@@ -68,7 +68,10 @@ class QuotaSweep:
         return taken
 
     async def _page(self, home: Home, after: UUID | None) -> list[StorageUsageRecord]:
-        query = select(USAGE).where(or_(USAGE.used_bytes > 0, USAGE.over_limit_since.is_not(None)))
+        query = select(USAGE).where(
+            or_(USAGE.used_bytes > 0, USAGE.over_limit_since.is_not(None)),
+            USAGE.account_hidden.is_(False),
+        )
         if after is not None:
             query = query.where(USAGE.user_id > after)
         query = query.order_by(USAGE.user_id).limit(PAGE)

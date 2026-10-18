@@ -26,15 +26,19 @@ from shosai.features.files.application.hidden_files import HiddenFiles
 from shosai.features.files.application.leo_use import LeoUse
 from shosai.features.files.application.leo_watch import LeoWatch
 from shosai.features.files.application.quota_watch import QuotaWatch
+from shosai.features.files.application.support_files import SupportFiles
 from shosai.features.files.application.upload_rules import UploadRequest
 from shosai.features.files.domain.purposes import UploadPurpose
 from shosai.features.files.infrastructure.quota_metrics import QuotaMetrics
 from shosai.features.files.infrastructure.upload_records import StorageUsageRecord
 from shosai.features.files.module import FILES
+from shosai.features.identity.application.operator_journal import OperatorJournal
 from shosai.features.identity.contracts import (
     ACCOUNT_PROFILE_READER,
     ADMIN_GATE,
     AUTHENTICATOR,
+    IDENTITY_EVENTS,
+    OPERATOR_AUDIT,
     AccountProfile,
     Principal,
 )
@@ -71,6 +75,7 @@ class FileBench:
     folders: Folders
     downloads: Downloads
     hidden: HiddenFiles
+    support: SupportFiles
     watch: QuotaWatch
     leo: LeoUse
     leo_watch: LeoWatch
@@ -132,14 +137,14 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
     """The File Manager over the upload bench; downloads point at the edge, bearer and admin
     sessions are the test's."""
     transactions = upload_bench.transactions
-    outbox = EventOutbox(EventTypes([*FILES.events, *WORKSPACES.events]))
+    outbox = EventOutbox(EventTypes([*FILES.events, *WORKSPACES.events, *IDENTITY_EVENTS]))
     registry = CollectorRegistry()
     ports = PortDirectory()
     policy = WorkspaceAccessPolicy(outbox, WorkspaceAuditLog())
     ports.install([
         ENTITLEMENTS.bind(upload_bench.plan), ACCESS_POLICY.bind(policy),
         AUTHENTICATOR.bind(BearerOfTheTest()), ADMIN_GATE.bind(BenchGate()),
-        ACCOUNT_PROFILE_READER.bind(Profiles()),
+        ACCOUNT_PROFILE_READER.bind(Profiles()), OPERATOR_AUDIT.bind(OperatorJournal(outbox)),
     ])  # fmt: skip
     mail = mail_bench(transactions, smtp_port=1).port
     metrics = QuotaMetrics(registry)
@@ -153,11 +158,8 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
         manager=FileManager(transactions, (ports, outbox, upload_bench.claims, leo)),
         folders=Folders(transactions, (ports, leo)),
         downloads=Downloads(transactions, (upload_bench.storage.objects, ports), EDGE),
-        hidden=HiddenFiles(
-            transactions,
-            (outbox, upload_bench.deleter, watch, leo, leo_watch),
-            upload_bench.clock,
-        ),
+        hidden=HiddenFiles(transactions, upload_bench.deleter, upload_bench.clock),
+        support=SupportFiles(transactions, (ports, outbox, watch, leo, leo_watch)),
         watch=watch,
         leo=leo,
         leo_watch=leo_watch,

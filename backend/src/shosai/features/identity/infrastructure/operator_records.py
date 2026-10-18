@@ -24,7 +24,7 @@ from shosai.core.kernel.homes import Home
 # Роли операторов и бан ушли (ADR 0049), но их строки за прошлые месяцы остаются в журнале.
 ACTIONS = (
     "'operator_roles_changed', 'account_blocked', 'account_unblocked', 'account_banned', "
-    "'account_transfer_requested', 'account_transfer_cancelled'"
+    "'account_transfer_requested', 'account_transfer_cancelled', 'files_listed', 'file_restored'"
 )
 
 
@@ -55,6 +55,7 @@ class OperatorAuditEvent(ModelBase):
     target_home: Mapped[str] = mapped_column(Text)
     action: Mapped[str] = mapped_column(Text)
     reason_code: Mapped[str | None] = mapped_column(Text)
+    subject_id: Mapped[UUID | None] = mapped_column(Uuid)
 
 
 OPERATOR_MODELS = (OperatorAuditEvent,)

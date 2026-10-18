@@ -94,6 +94,8 @@ class StorageFileRecord(ModelBase):
     modified_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+    # Аккаунт владельца в окне удаления: файл не отдаётся никому (ADR 0045, пункт 6).
+    account_hidden: Mapped[bool] = mapped_column(Boolean, server_default=false())
     # Удалённый файл скрыт 7 дней и не входит в квоту (FL-D5).
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 

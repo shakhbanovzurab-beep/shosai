@@ -24,6 +24,7 @@ async def record_action(
             id=event_id, created_at=occurred_at, operator_id=event.operator_id,
             target_user_id=event.target_user_id, target_home=event.target_home.value,
             action=event.action.value, reason_code=event.reason_code,
+            subject_id=event.subject_id,
         )
         .on_conflict_do_nothing()
     )  # fmt: skip

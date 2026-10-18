@@ -146,7 +146,7 @@ async def test_on_day_90_exactly_the_newest_files_over_the_limit_go_and_the_mark
     await sweep(file_bench, run_slot, Home.EU)
     _, kept = await file_bench.manager.listing(who)
     standing = await file_bench.watch.standing(Home.EU, who.user_id)
-    [hidden] = await file_bench.hidden.of_person(Home.EU, who.user_id)
+    [hidden] = await file_bench.support.of_person(Home.EU, who.user_id)
 
     assert {view.id for view in kept} == {oldest, middle}
     assert hidden.file_id == newest
@@ -164,7 +164,7 @@ async def test_back_under_the_limit_the_mark_clears_and_a_restore_over_it_marks_
     await file_bench.manager.delete(who, last)
     await sweep(file_bench, run_slot, Home.RU)
     cleared = await file_bench.watch.standing(Home.RU, who.user_id)
-    await file_bench.hidden.restore(Home.RU, who.user_id, last)
+    await file_bench.support.restore(Home.RU, who.user_id, last)
     restored = await file_bench.watch.standing(Home.RU, who.user_id)
     file_bench.uploads.plan.file_manager_gb = 2
     async with file_bench.uploads.transactions.begin(who.scope()) as session:

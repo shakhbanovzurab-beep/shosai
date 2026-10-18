@@ -4,10 +4,11 @@ from shosai.core.features import CoreServices, FeatureParts
 from shosai.features.identity.application.account_states import AccountStates
 from shosai.features.identity.application.admin_access import AdminAccess, AdminCredentials
 from shosai.features.identity.application.admin_users import AdminUsers
+from shosai.features.identity.application.operator_journal import OperatorJournal
 from shosai.features.identity.channels.http.admin_session import build_admin_session_router
 from shosai.features.identity.channels.http.admin_users import build_admin_users_router
 from shosai.features.identity.channels.http.cookies import CookiePolicy
-from shosai.features.identity.contracts import ADMIN_GATE
+from shosai.features.identity.contracts import ADMIN_GATE, OPERATOR_AUDIT
 from shosai.features.identity.infrastructure.account_markers import AccountMarkers
 from shosai.features.identity.infrastructure.admin_sessions import AdminSessions
 from shosai.features.identity.infrastructure.directory import Directory
@@ -45,5 +46,8 @@ def admin_parts(
             build_admin_session_router(admin, services.ports, services.rate_limiter, cookies),
             build_admin_users_router(users, states, services.ports),
         ),
-        provides=(ADMIN_GATE.bind(admin),),
+        provides=(
+            ADMIN_GATE.bind(admin),
+            OPERATOR_AUDIT.bind(OperatorJournal(services.outbox)),
+        ),
     )

@@ -70,7 +70,11 @@ async def test_a_plan_change_marks_at_once_and_a_workspace_plan_is_skipped(
 ) -> None:
     who = person(Home.EU, uuid.uuid4())
     await seed(file_bench, who, [400 * MIB] * 3)
-    [follow_plan, _] = subscriptions((file_bench.watch, file_bench.leo_watch))
+    [follow_plan] = [
+        s
+        for s in subscriptions((file_bench.watch, file_bench.leo_watch))
+        if s.consumer == "files.quota_follows_plan"
+    ]
     now = file_bench.uploads.clock.now
 
     async with file_bench.uploads.transactions.begin(who.scope()) as session:

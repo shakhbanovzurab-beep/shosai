@@ -188,7 +188,7 @@ async def test_back_under_the_limit_the_mark_clears_and_a_plan_change_or_restore
     after_clear = await watch.standing(Home.EU, who.user_id)
     await file_bench.manager.delete(who, first)
     await file_bench.manager.update(who, second, FileChanges(leo=True))
-    await file_bench.hidden.restore(Home.EU, who.user_id, first)
+    await file_bench.support.restore(Home.EU, who.user_id, first)
     restored = await watch.standing(Home.EU, who.user_id)
 
     assert followed is QuotaAction.MARK

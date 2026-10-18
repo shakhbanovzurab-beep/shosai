@@ -2,7 +2,8 @@
 
 The admin names the person and their home (both on the account's card): the list holds
 the files deleted within the last 7 days, and a restore brings one back into the person's
-File Manager and quota, shared nowhere.
+File Manager and quota, shared nowhere. Both are audited; an account in its deletion
+window answers 409 `account_deletion_scheduled` to both.
 """
 
 from datetime import datetime
@@ -15,7 +16,7 @@ from pydantic import BaseModel, ConfigDict
 
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
-from shosai.features.files.application.hidden_files import HiddenFiles
+from shosai.features.files.application.support_files import SupportFiles
 from shosai.features.identity.contracts import require_admin
 
 
@@ -42,7 +43,7 @@ class RestoreBody(BaseModel):
     home: Home
 
 
-def build_admin_files_router(hidden: HiddenFiles, ports: PortDirectory) -> APIRouter:
+def build_admin_files_router(support: SupportFiles, ports: PortDirectory) -> APIRouter:
     """Support's routes over deleted files."""
     router = APIRouter(
         prefix="/v1/admin/users", tags=["admin"], dependencies=[Depends(require_admin(ports))]
@@ -51,7 +52,7 @@ def build_admin_files_router(hidden: HiddenFiles, ports: PortDirectory) -> APIRo
     @router.get("/{user_id}/files")
     async def list_hidden_files(user_id: UUID, home: Annotated[Home, Query()]) -> HiddenFilesOut:
         """The person's files deleted within the last 7 days."""
-        found = await hidden.of_person(home, user_id)
+        found = await support.of_person(home, user_id)
         return HiddenFilesOut(
             files=[
                 HiddenFileOut(
@@ -64,7 +65,7 @@ def build_admin_files_router(hidden: HiddenFiles, ports: PortDirectory) -> APIRo
     @router.post("/{user_id}/files/{file_id}/restore", status_code=HTTPStatus.NO_CONTENT)
     async def restore_file(user_id: UUID, file_id: UUID, body: RestoreBody) -> Response:
         """Bring a deleted file back into the person's File Manager and quota."""
-        await hidden.restore(body.home, user_id, file_id)
+        await support.restore(body.home, user_id, file_id)
         return Response(status_code=HTTPStatus.NO_CONTENT)
 
     return router

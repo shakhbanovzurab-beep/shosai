@@ -9,6 +9,7 @@ from uuid import UUID
 
 from sqlalchemy import (
     BigInteger,
+    Boolean,
     CheckConstraint,
     DateTime,
     Index,
@@ -16,6 +17,7 @@ from sqlalchemy import (
     SmallInteger,
     Text,
     Uuid,
+    false,
     func,
     text,
 )
@@ -90,6 +92,9 @@ class StorageUsageRecord(ModelBase):
     reminders_sent: Mapped[int] = mapped_column(SmallInteger, server_default=text("0"))
     leo_over_limit_since: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     leo_reminders_sent: Mapped[int] = mapped_column(SmallInteger, server_default=text("0"))
+    # Окно удаления аккаунта и время последнего применённого события identity (шаг 7).
+    account_hidden: Mapped[bool] = mapped_column(Boolean, server_default=false())
+    account_event_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 

@@ -24,7 +24,7 @@ async def test_the_file_manager_answers_in_the_cabinet_s_shape(file_bench: FileB
     routers = (
         build_files_router((file_bench.manager, file_bench.downloads), file_bench.ports),
         build_folders_router(file_bench.folders, file_bench.ports),
-        build_admin_files_router(file_bench.hidden, file_bench.ports),
+        build_admin_files_router(file_bench.support, file_bench.ports),
     )
     app = build_probe_app(extra=routers).app
     upload_id = await file_bench.uploaded(who, "Plan.pdf", b"%PDF" * 50)

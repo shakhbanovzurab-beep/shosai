@@ -81,7 +81,8 @@ class LeoSweep:
     ) -> tuple[list[StorageUsageRecord], dict[UUID, int]]:
         """A page of usage rows and the bytes Leo uses for each of their people."""
         query = select(USAGE).where(
-            or_(USAGE.used_bytes > 0, USAGE.leo_over_limit_since.is_not(None))
+            or_(USAGE.used_bytes > 0, USAGE.leo_over_limit_since.is_not(None)),
+            USAGE.account_hidden.is_(False),
         )
         if after is not None:
             query = query.where(USAGE.user_id > after)

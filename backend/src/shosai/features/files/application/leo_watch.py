@@ -106,7 +106,8 @@ class LeoWatch:
     ) -> QuotaAction | None:
         """Take the due step among `allowed`; the caller holds the person's Leo lock."""
         row = await session.get(StorageUsageRecord, user_id, with_for_update=True)
-        if row is None:
+        # В окне удаления аккаунта Leo ничего не выключает: отмена вернёт всё как было.
+        if row is None or row.account_hidden:
             return None
         now = self._clock()
         in_use = [file for file in await self._leo.in_use(session, user_id) if file.used]

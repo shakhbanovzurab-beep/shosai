@@ -24,6 +24,7 @@ from shosai.features.files.application.leo_watch import LeoWatch
 from shosai.features.files.application.quota_reconciliation import QuotaReconciliation
 from shosai.features.files.application.quota_sweep import QuotaSweep
 from shosai.features.files.application.quota_watch import QuotaWatch
+from shosai.features.files.application.support_files import SupportFiles
 from shosai.features.files.application.upload_claims import UploadClaims
 from shosai.features.files.application.upload_links import StorageOfHomes
 from shosai.features.files.application.upload_sweep import UploadSweep
@@ -73,7 +74,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     watch = QuotaWatch(transactions, (ports, services.outbox, services.email, metrics))
     leo = LeoUse(ports, services.outbox)
     leo_watch = LeoWatch(transactions, (ports, leo, services.email, metrics))
-    hidden = HiddenFiles(transactions, (services.outbox, deleter, watch, leo, leo_watch))
+    hidden = HiddenFiles(transactions, deleter)
+    support = SupportFiles(transactions, (ports, services.outbox, watch, leo, leo_watch))
     downloads = Downloads(
         transactions, (services.objects, ports), None if base is None else str(base)
     )
@@ -92,7 +94,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             build_files_router((manager, downloads), ports),
             build_folders_router(Folders(transactions, (ports, leo)), ports),
             build_storage_router((watch, leo_watch), ports),
-            build_admin_files_router(hidden, ports),
+            build_admin_files_router(support, ports),
         ),
         task_handlers=task_handlers(jobs),
         periodic_jobs=PERIODIC_JOBS,

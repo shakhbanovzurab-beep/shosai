@@ -75,7 +75,7 @@ async def test_day_90_s_removal_and_a_person_s_change_never_deadlock(
         change = asyncio.create_task(contender(file_bench, who, oldest))
         await waiting(run_slot, Home.RU, 2)
     removed, changed = await asyncio.gather(removal, change, return_exceptions=True)
-    hidden = {h.file_id for h in await file_bench.hidden.of_person(Home.RU, who.user_id)}
+    hidden = {h.file_id for h in await file_bench.support.of_person(Home.RU, who.user_id)}
 
     assert marked is QuotaAction.MARK
     assert removed is QuotaAction.REMOVE
