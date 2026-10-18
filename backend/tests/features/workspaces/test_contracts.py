@@ -44,6 +44,7 @@ def test_ports_are_single_and_named_for_the_slice() -> None:
         "workspaces.membership_reader",
         "workspaces.audit_log",
         "workspaces.seat_allowance",
+        "workspaces.knowledge_transfer",
     }
     assert all(key.cardinality is Cardinality.ONE for key in keys)
 

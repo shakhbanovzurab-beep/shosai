@@ -35,6 +35,7 @@ from shosai.features.workspaces.domain.roles import WorkspaceRole
 __all__ = [
     "ACCESS_POLICY",
     "AUDIT_LOG",
+    "KNOWLEDGE_TRANSFER",
     "MEMBERSHIP_READER",
     "SEAT_ALLOWANCE",
     "AccessChange",
@@ -48,11 +49,13 @@ __all__ = [
     "AuditLog",
     "Grantee",
     "GranteeKind",
+    "KnowledgeTransfer",
     "MembershipReader",
     "MembershipState",
     "PaidSeats",
     "RemovalReason",
     "SeatAllowance",
+    "TransferredFile",
     "Viewer",
     "WorkspaceRole",
 ]
@@ -160,6 +163,34 @@ class AuditLog(Protocol):
 
 
 @dataclass(frozen=True, slots=True)
+class TransferredFile:
+    """A file handed over to a workspace: its knowledge item there and the level it keeps.
+
+    The item's grants now stand under the file, so the owner of the file writes `level`
+    into the file's row and the same people of the workspace keep reading it.
+    """
+
+    item_id: UUID
+    level: AccessLevel
+
+
+class KnowledgeTransfer(Protocol):
+    """Hands a member's shared file over to the workspace, for files' transfer route."""
+
+    async def transfer(
+        self, session: AsyncSession, org_id: UUID, file_id: UUID, actor_id: UUID
+    ) -> TransferredFile:
+        """Make the actor's personal item of the file the workspace's upload, in this transaction.
+
+        The transaction's scope names the receiving workspace. The file's items in every
+        other workspace are withdrawn and one `file_transferred` audit row is written. A
+        missing workspace or a non-member answers 404, a suspended workspace 423, a file the
+        actor has not shared there 409 `share_first`; a repeat answers the same item.
+        """
+        ...
+
+
+@dataclass(frozen=True, slots=True)
 class PaidSeats:
     """The seats billing sells a workspace, and the end of its trial."""
 
@@ -187,3 +218,4 @@ ACCESS_POLICY: Final = PortKey[AccessPolicy]("workspaces.access_policy")
 MEMBERSHIP_READER: Final = PortKey[MembershipReader]("workspaces.membership_reader")
 AUDIT_LOG: Final = PortKey[AuditLog]("workspaces.audit_log")
 SEAT_ALLOWANCE: Final = PortKey[SeatAllowance]("workspaces.seat_allowance")
+KNOWLEDGE_TRANSFER: Final = PortKey[KnowledgeTransfer]("workspaces.knowledge_transfer")

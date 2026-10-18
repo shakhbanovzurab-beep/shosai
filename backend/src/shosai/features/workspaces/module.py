@@ -14,9 +14,15 @@ from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.workspaces.application.access_policy import WorkspaceAccessPolicy
 from shosai.features.workspaces.application.account_data import OWNER, WorkspacesAccountData
 from shosai.features.workspaces.application.invariant_checks import PolicySelfTest, SeatCheck
+from shosai.features.workspaces.application.knowledge_transfer import WorkspaceKnowledgeTransfer
 from shosai.features.workspaces.channels.consumers import AccountWindow
 from shosai.features.workspaces.channels.tasks import PERIODIC_JOBS, task_handlers
-from shosai.features.workspaces.contracts import ACCESS_POLICY, AUDIT_LOG, MEMBERSHIP_READER
+from shosai.features.workspaces.contracts import (
+    ACCESS_POLICY,
+    AUDIT_LOG,
+    KNOWLEDGE_TRANSFER,
+    MEMBERSHIP_READER,
+)
 from shosai.features.workspaces.contracts.events import (
     AccessChanged,
     KnowledgeItemAdded,
@@ -75,6 +81,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             ACCESS_POLICY.bind(policy),
             MEMBERSHIP_READER.bind(MembershipDirectory()),
             AUDIT_LOG.bind(audit),
+            KNOWLEDGE_TRANSFER.bind(WorkspaceKnowledgeTransfer(services.outbox, audit)),
             ACCOUNT_DATA_HANDLERS.bind(account_data),
         ),
     )

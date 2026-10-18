@@ -1,10 +1,11 @@
 """Teams and projects of a workspace (§7, SM-2; the cabinet's teams and projects routes).
 
 Admins make, change and delete teams. A team with knowledge shared to it is not deleted:
-its items would lose their audience (409). Deleting a team removes the grants naming it,
-so its meetings narrow to their participants. Any member but a guest starts a project
-and leads it unless they name someone else; its lead and admins change or delete it, and
-its meetings, tasks and files stay (`project.deleted`).
+its items, and the workspace's files they became, would lose their audience (409).
+Deleting a team removes the grants naming it, so its meetings narrow to their
+participants. Any member but a guest starts a project and leads it unless they name
+someone else; its lead and admins change or delete it, and its meetings, tasks and files
+stay (`project.deleted`).
 """
 
 from collections.abc import Collection
@@ -39,7 +40,7 @@ from shosai.features.workspaces.infrastructure.organization_records import (
     Team,
     TeamMember,
 )
-from shosai.features.workspaces.infrastructure.share_records import KNOWLEDGE_ITEM_KIND
+from shosai.features.workspaces.infrastructure.share_records import FILE_KIND, KNOWLEDGE_ITEM_KIND
 
 
 @dataclass(frozen=True, slots=True)
@@ -115,7 +116,9 @@ class Teams:
                 ResourceGrant.grantee_id == team_id,
             )
             shares_knowledge = exists().where(
-                *names_team, ResourceGrant.resource_kind == KNOWLEDGE_ITEM_KIND
+                *names_team,
+                # Файл пространства — его знание: файлового менеджера у пространства нет.
+                ResourceGrant.resource_kind.in_((KNOWLEDGE_ITEM_KIND, FILE_KIND)),
             )
             if await session.scalar(select(shares_knowledge)):
                 raise AppError("team_has_knowledge", HTTPStatus.CONFLICT)
