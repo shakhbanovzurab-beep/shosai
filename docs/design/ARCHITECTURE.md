@@ -131,7 +131,7 @@
 | Workers → PostgreSQL (home) | SQL | statement 60 s | sweep of unfinished runs; ≤ 3 attempts per stage on every path | pool 5 per process per database |
 | API, Workers → AI | chat, Leo, search, analysis | connect 10 s; stream stall 45 s; 120 s per analysis call | one retry before the first byte; breaker per (provider, model) with fallback along the caller's route (F6-C16); stage ≤ 3 attempts with effect key | provider-wide semaphore in Redis; retry budget 20% |
 | API, Workers → Qdrant | search, indexing | search 2 s; write 60 s | search: none (fallback to PostgreSQL keyword search); indexing: cursor sweep | 32 queries per process, 4 per tenant |
-| Clients → S3 | presigned upload and download | signature valid 15 min | client | size limit in the signature |
+| Clients → S3 | presigned upload straight to the bucket; download through the edge, which streams the presigned object and adds `X-Content-Type-Options: nosniff` and `Content-Security-Policy: sandbox` ([ADR 0055](../adr/0055-object-key-layout-and-bucket-rules.md) point 8) | signature valid 15 min | client | size limit in the signature |
 | API → Payments | checkout, charge | 20 s, outside any transaction | reconciliation every minute by order id | intent committed before the call |
 | Payments → Edge | webhook | answer within 5 s, after commit | acquirer | row lock wait 5 s |
 | Workers → bank | statement | 30 s | next hourly pass | one day of payments |
@@ -738,7 +738,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | One Action Gateway for every Leo write ([ADR 0025](../adr/0025-leo-action-gateway.md)) | inv-12 becomes provable: one winner, a frozen plan, idempotent execution | every write tool implements plan, preview and idempotent execute; `outcome_unknown` is a product state | the owner decides on standing approvals |
 | Leo's Decision Layer on Jev with deterministic rules and fallbacks ([ADR 0026](../adr/0026-leo-decision-layer-on-jev.md)) | measurable, calibrated, cheap decisions for initiative, tool routing, memory and risk | a new external provider; an evaluation in 16 languages per policy | Jev unavailable, or worse than a policy's fallback for 4 weeks |
 | Leo's initiative from events and trigger rows ([ADR 0027](../adr/0027-leo-event-driven-proactivity.md)) | load follows activity; no scans over all users | producer slices emit events | sustained > 20 events/s |
-| Presigned uploads directly to the bucket; lifecycle rules | no DB session or API process held by file transfer | two-step upload; abandoned uploads removed by bucket rules | the storage provider lacks presigned multipart or lifecycle rules |
+| Presigned uploads directly to the bucket; downloads streamed by the edge from presigned links (ADR 0055 point 8); lifecycle rules | no DB session or API process held by file transfer; the browser gets `nosniff` and a sandbox on every file's bytes, which a presigned link cannot add | two-step upload; abandoned uploads removed by bucket rules; download traffic crosses the plane (a Russian person's bytes travel Russia → EU → Russia) | the storage provider lacks presigned multipart or lifecycle rules, or download traffic through the plane becomes material for cost or latency |
 
 ## 20. Accepted trade-offs
 

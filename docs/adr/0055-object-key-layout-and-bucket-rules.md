@@ -21,12 +21,14 @@ Each home has its own bucket (ADR 0044), and a key does not name the home, so an
 5. **Uploads write to the final key.** A File Manager upload is created on the file's key; the multipart upload completes, its size is checked by `HEAD`, and only then is the pointer committed (§8.1).
 6. **Bucket rules on both homes:** abort incomplete multipart uploads after 24 hours; expire objects under `transient/` after 3 days; a CORS rule lets the cabinet's origin `PUT` presigned parts and read their `ETag`. The `shosai files bucket-rules` command applies them to each home's bucket; the owner runs it on the managed buckets with keys that may configure them.
 7. **Deletion.** A row goes first (a file is hidden for 7 days, then its row is purged, FL-D5); the object is deleted after that commit, from a pending-deletion record retried until done.
+8. **Downloads go through the edge** (owner's decision, 2026-10-18). A presigned link cannot add response headers beyond the type, disposition, cache, language, encoding and expiry, so the API answers a link on Shosai's own address; the edge streams the presigned object from the home's bucket and adds `X-Content-Type-Options: nosniff` and `Content-Security-Policy: sandbox` to every file's bytes. The API process holds no download; uploads still go straight to the bucket (point 5).
 
 ## Consequences
 
 - A person's v2 objects share `u/{user_id}/`, so the account data registry copies and erases them by prefix; workspace objects share `o/{org_id}/` for workspaces' data registry.
 - Listing a bucket reveals no names and no home.
 - Draft objects keep their old keys for as long as they exist; v2 objects never use the `u-` form.
+- Download traffic crosses the compute plane; a Russian person's file travels from the Russian bucket through the EU edge and back.
 - A copy costs no bytes and no time; deletion checks for other rows of the key in the same transaction.
 
 ## Revisit when
