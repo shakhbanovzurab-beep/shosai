@@ -97,7 +97,9 @@ async def deliver(
     """One delivery of an identity event to its files consumer, in the person's scope."""
     consumer = "files.hide_with_account" if hidden(event) else "files.show_with_account"
     [subscription] = [
-        s for s in subscriptions((bench.watch, bench.leo_watch)) if s.consumer == consumer
+        s
+        for s in subscriptions((bench.watch, bench.leo_watch), bench.outbox)
+        if s.consumer == consumer
     ]
     async with bench.uploads.transactions.begin(who.scope()) as session:
         received = ReceivedEvent(event, uuid.uuid4(), 1, at, who.scope())

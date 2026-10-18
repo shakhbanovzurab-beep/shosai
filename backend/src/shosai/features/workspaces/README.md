@@ -17,6 +17,7 @@ Other slices import only `contracts` (the package) and `contracts.events`:
 | `MembershipReader` (`MEMBERSHIP_READER`) | A person's active memberships, read in the caller's transaction; the account transfer guard |
 | `AuditLog` (`AUDIT_LOG`) | One audit row in the caller's transaction |
 | `SeatAllowance` (`SEAT_ALLOWANCE`) | Billing's seats; until billing binds it, every join is refused |
+| `KnowledgeTransfer` (`KNOWLEDGE_TRANSFER`) | files' transfer route: the member's shared item becomes the workspace's upload with its level, its grants move under the file, the file's items elsewhere are withdrawn, one `file_transferred` audit row (step 9a) |
 | `contracts.events` | `workspaces.workspace.*`, `.member.*`, `.team.deleted`, `.project.deleted`, `.access.changed`, `.meeting.*`, `.knowledge_item.*` |
 
 ## Rules the domain holds
@@ -30,3 +31,4 @@ Other slices import only `contracts` (the package) and `contracts.events`:
 
 - inv-14: the hourly self-test pages on `PolicyDisagreesWithRls` when the policy would open a workspace row outside a person's workspaces; inv-16: the daily check pages on `WorkspaceOverSeats` ([runbook](../../../../../docs/runbooks/alerts.md#policy-disagrees-with-rls)).
 - Slices with shareable resources follow [docs/access.md](../../../../../docs/access.md).
+- `files.file.deleted` (consumer `workspaces.withdraw_deleted_file`, `channels/file_consumers.py`) takes a deleted personal file out of every workspace it was shared in, with its grants and one `knowledge_item.removed` each.

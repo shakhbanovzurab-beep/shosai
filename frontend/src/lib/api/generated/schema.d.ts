@@ -1156,6 +1156,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/files/{file_id}/transfer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Transfer File
+         * @description Hand a file shared in a workspace over to it; it leaves My files and other workspaces.
+         */
+        post: operations["transfer_file_v1_files__file_id__transfer_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/files/folders": {
         parameters: {
             query?: never;
@@ -1881,6 +1901,17 @@ export interface components {
          * @enum {string}
          */
         FileKind: "document" | "spreadsheet" | "presentation" | "pdf" | "text" | "design" | "image" | "archive" | "other";
+        /**
+         * FileTransferBody
+         * @description The workspace the file is handed over to; the person shared it there first.
+         */
+        FileTransferBody: {
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+        };
         /**
          * FileUpdate
          * @description What the owner changes; `folder_id: null` moves to the root, `leo` is the file's own
@@ -5398,6 +5429,41 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["DownloadOut"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    transfer_file_v1_files__file_id__transfer_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                file_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FileTransferBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

@@ -72,7 +72,7 @@ async def test_a_plan_change_marks_at_once_and_a_workspace_plan_is_skipped(
     await seed(file_bench, who, [400 * MIB] * 3)
     [follow_plan] = [
         s
-        for s in subscriptions((file_bench.watch, file_bench.leo_watch))
+        for s in subscriptions((file_bench.watch, file_bench.leo_watch), file_bench.outbox)
         if s.consumer == "files.quota_follows_plan"
     ]
     now = file_bench.uploads.clock.now

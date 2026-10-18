@@ -1,11 +1,13 @@
 """The person's File Manager (`/v1/files*`), in the cabinet's contract (`contract.ts`).
 
-Uploads come in as ids of ready uploads (FL-D1); a deletion is final for the person and
-hidden for 7 days on the server (FL-D5); a download answers a link on Shosai's address
-(FL-D9); `leo` on files and folders switches Leo's use, within the plan's knowledge limit.
-Errors use the platform's envelope: `file_not_found`, `folder_not_found`, `upload_count`,
-`upload_not_claimable`, `storage_limit`, `name_*`, `leo_limit` (with `limit_bytes`),
-`leo_unreadable`, `leo_not_used`, `entitlements_unavailable`.
+Uploads come in as ids of ready uploads (FL-D1). A deletion is final for the person and
+hidden for 7 days on the server (FL-D5). A download answers a link on Shosai's address
+(FL-D9). `leo` on files and folders switches Leo's use, within the plan's knowledge limit.
+A file shared in a workspace can be handed over to it (step 8a). Errors use the platform's
+envelope: `file_not_found`, `folder_not_found`, `upload_count`, `upload_not_claimable`,
+`storage_limit`, `name_*`, `leo_limit` (with `limit_bytes`), `leo_unreadable`,
+`leo_not_used`, `entitlements_unavailable`, `share_first`, `workspace_not_found`,
+`workspace_suspended`.
 """
 
 from datetime import datetime
@@ -21,6 +23,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.files.application.downloads import Downloads
 from shosai.features.files.application.file_edits import FileChanges
 from shosai.features.files.application.file_manager import FileManager
+from shosai.features.files.application.file_transfer import FileTransfers
 from shosai.features.files.application.file_views import FileView, FolderView
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.contracts import IndexStage
@@ -108,6 +111,12 @@ class CopyBody(Strict):
     name: str | None = None
 
 
+class FileTransferBody(Strict):
+    """The workspace the file is handed over to; the person shared it there first."""
+
+    workspace_id: UUID
+
+
 class FolderBody(Strict):
     """A folder's name."""
 
@@ -159,9 +168,11 @@ def named(raw: str | None) -> str | None:
     return None if raw is None else valid_name(raw)
 
 
-def build_files_router(services: tuple[FileManager, Downloads], ports: PortDirectory) -> APIRouter:
+def build_files_router(
+    services: tuple[FileManager, Downloads, FileTransfers], ports: PortDirectory
+) -> APIRouter:
     """The person's file routes."""
-    manager, downloads = services
+    manager, downloads, transfers = services
     router = APIRouter(prefix="/v1/files", tags=["files"])
     signed_in = bearer_principal(ports)
 
@@ -223,6 +234,14 @@ def build_files_router(services: tuple[FileManager, Downloads], ports: PortDirec
         """A 15-minute link to the bytes, through the edge."""
         link = await downloads.link(principal, file_id)
         return DownloadOut(url=link.url, expires_at=link.expires_at)
+
+    @router.post("/{file_id}/transfer", status_code=HTTPStatus.NO_CONTENT)
+    async def transfer_file(
+        principal: Annotated[Principal, Depends(signed_in)], file_id: UUID, body: FileTransferBody
+    ) -> Response:
+        """Hand a file shared in a workspace over to it; it leaves My files and other workspaces."""
+        await transfers.transfer(principal, file_id, body.workspace_id)
+        return Response(status_code=HTTPStatus.NO_CONTENT)
 
     return router
 

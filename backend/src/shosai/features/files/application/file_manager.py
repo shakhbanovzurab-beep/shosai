@@ -130,6 +130,7 @@ class FileManager:
                 raise storage_refusal(limit)
             taken = set(await session.scalars(select(StorageFileRecord.name).where(
                 StorageFileRecord.user_id == principal.user_id,
+                StorageFileRecord.org_id.is_(None),
                 StorageFileRecord.deleted_at.is_(None),
                 StorageFileRecord.folder_id.is_(None) if source.folder_id is None
                 else StorageFileRecord.folder_id == source.folder_id,
@@ -180,7 +181,8 @@ class FileManager:
         """The file of the upload, and whether it is new; a repeat keeps the file as it is."""
         existing = await session.get(StorageFileRecord, upload_id)
         if existing is not None and existing.user_id == principal.user_id:
-            if existing.deleted_at is not None:
+            # Отданный пространству файл больше не в «Моих файлах»: повтор его не вернёт.
+            if existing.deleted_at is not None or existing.org_id is not None:
                 raise file_gone()
             return existing, False
         folder_id, leo = placement

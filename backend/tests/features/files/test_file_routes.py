@@ -22,7 +22,9 @@ CABINET_FOLDER = {"id", "name", "updated_at", "leo"}
 async def test_the_file_manager_answers_in_the_cabinet_s_shape(file_bench: FileBench) -> None:
     who = person(Home.RU, uuid.uuid4())
     routers = (
-        build_files_router((file_bench.manager, file_bench.downloads), file_bench.ports),
+        build_files_router(
+            (file_bench.manager, file_bench.downloads, file_bench.transfers), file_bench.ports
+        ),
         build_folders_router(file_bench.folders, file_bench.ports),
         build_admin_files_router(file_bench.support, file_bench.ports),
     )
@@ -89,7 +91,9 @@ async def test_leo_s_switches_and_reindex_answer_in_the_cabinet_s_shape(
     who = person(Home.EU, uuid.uuid4())
     file_bench.uploads.plan.knowledge_base_mb = 1
     routers = (
-        build_files_router((file_bench.manager, file_bench.downloads), file_bench.ports),
+        build_files_router(
+            (file_bench.manager, file_bench.downloads, file_bench.transfers), file_bench.ports
+        ),
         build_folders_router(file_bench.folders, file_bench.ports),
     )
     app = build_probe_app(extra=routers).app

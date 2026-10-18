@@ -1,8 +1,8 @@
 """The workspaces slice as composition sees it (workspaces plan §3.1).
 
 Built in every role: the API binds the ports other slices call, the workers run the
-account window's task, its consumers and the invariant checks the scheduler queues. The
-routes join in the later steps of the plan.
+account window's task, its consumers (identity's window, files' deletions) and the
+invariant checks the scheduler queues. The routes join in the later steps of the plan.
 """
 
 from collections.abc import AsyncIterator
@@ -16,6 +16,7 @@ from shosai.features.workspaces.application.account_data import OWNER, Workspace
 from shosai.features.workspaces.application.invariant_checks import PolicySelfTest, SeatCheck
 from shosai.features.workspaces.application.knowledge_transfer import WorkspaceKnowledgeTransfer
 from shosai.features.workspaces.channels.consumers import AccountWindow
+from shosai.features.workspaces.channels.file_consumers import DeletedFiles
 from shosai.features.workspaces.channels.tasks import PERIODIC_JOBS, task_handlers
 from shosai.features.workspaces.contracts import (
     ACCESS_POLICY,
@@ -76,7 +77,10 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     yield FeatureParts(
         task_handlers=task_handlers(services.transactions, checks),
         periodic_jobs=PERIODIC_JOBS,
-        subscriptions=AccountWindow(services.tasks).subscriptions(),
+        subscriptions=(
+            *AccountWindow(services.tasks).subscriptions(),
+            *DeletedFiles(services.outbox).subscriptions(),
+        ),
         provides=(
             ACCESS_POLICY.bind(policy),
             MEMBERSHIP_READER.bind(MembershipDirectory()),

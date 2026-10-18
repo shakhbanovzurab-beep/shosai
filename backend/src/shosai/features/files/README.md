@@ -70,6 +70,13 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 - During the window the daily passes of FL-D2 and FL-D10 leave the person alone: no reminder, no removal, nothing switched off. Erasure and transfer go through the account data handler of step 2, whatever the flags say.
 - Support's list and restore of deleted files live in `application/support_files.py` (`HiddenFiles` keeps the purge): an account in its window answers 409 `account_deletion_scheduled` to both, so only cancelling the deletion brings its files back; every list and restore is recorded through identity's `identity.operator_audit` port (`files_listed`, `file_restored` with the file's id) and reaches the admin's EU audit log.
 
+## Workspaces (step 8a)
+
+- `POST /v1/files/{id}/transfer {workspace_id}` (`application/file_transfer.py`) hands a file the person shared in a workspace over to it, in one transaction scoped to that workspace with the person's locks in their order (Leo lock, usage row, file): workspaces' `KnowledgeTransfer` turns the shared item into the workspace's upload, withdraws the file from every other workspace and writes the audit row; the row then takes `org_id` and the item's level, leaves its folder and the person's Leo, and its bytes leave the person's usage (the workspace's own usage is step 8b, FL-D6). The object keeps its key. A repeat answers 204; a file given elsewhere is `file_not_found`.
+- `workspaces.member.removed` (consumer `files.follow_departure`) passes the departed member's workspace files to the owner the event names (nfr-16); their personal files stay theirs.
+- `workspaces.workspace.deleted` (`files.erase_with_workspace`) erases the workspace's files and uploads, one `files.file.deleted` each for knowledge, and records only the keys no other row names; the upload sweep deletes those objects.
+- A deleted personal file leaves every workspace it was shared in through workspaces' consumer `workspaces.withdraw_deleted_file`.
+
 ## `FileReader` and Leo's `files` toolset (step 9)
 
 - `application/file_reader.py` binds `files.file_reader`: `facts(session, viewer, ids)` in the caller's transaction and `open(home, viewer, id)` after a short access check of its own, both starting from `visible_files`, so a deleted file and a file of an account in its deletion window are read by nobody. Knowledge indexes files and re-checks every search hit through it; the agent's read tool below uses it.

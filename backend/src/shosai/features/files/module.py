@@ -7,6 +7,7 @@
 - 5: the quota's 90 days, its reminders and the inv-11 reconciliation;
 - 6a and 6b: Leo's use within the knowledge limit, reindex, and FL-D10's 90 days;
 - 7: identity's deletion window and support's audited file actions;
+- 8a: the transfer to a workspace and workspaces' events;
 - 9: the `FileReader` port and Leo's `files` toolset.
 """
 
@@ -21,6 +22,7 @@ from shosai.features.files.application.downloads import Downloads
 from shosai.features.files.application.file_edits import FileEdits
 from shosai.features.files.application.file_manager import FileManager
 from shosai.features.files.application.file_reader import FilesReader
+from shosai.features.files.application.file_transfer import FileTransfers
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.application.hidden_files import HiddenFiles
 from shosai.features.files.application.leo_sweep import LeoSweep
@@ -107,14 +109,16 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     yield FeatureParts(
         http_routers=(
             build_uploads_router(UploadService(transactions, storage, (ports, deleter)), ports),
-            build_files_router((manager, downloads), ports),
+            build_files_router(
+                (manager, downloads, FileTransfers(transactions, (ports, leo))), ports
+            ),
             build_folders_router(folders, ports),
             build_storage_router((watch, leo_watch), ports),
             build_admin_files_router(support, ports),
         ),
         task_handlers=task_handlers(jobs),
         periodic_jobs=PERIODIC_JOBS,
-        subscriptions=subscriptions((watch, leo_watch)),
+        subscriptions=subscriptions((watch, leo_watch), services.outbox),
         email_templates=(STORAGE_OVER_LIMIT, LEO_OVER_LIMIT),
         agent_tools=tools,
         provides=(

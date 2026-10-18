@@ -27,6 +27,7 @@ from shosai.features.files.application.downloads import Downloads
 from shosai.features.files.application.file_edits import FileEdits
 from shosai.features.files.application.file_manager import FileManager
 from shosai.features.files.application.file_reader import FilesReader
+from shosai.features.files.application.file_transfer import FileTransfers
 from shosai.features.files.application.file_views import FileView
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.application.hidden_files import HiddenFiles
@@ -52,7 +53,8 @@ from shosai.features.identity.contracts import (
     Principal,
 )
 from shosai.features.workspaces.application.access_policy import WorkspaceAccessPolicy
-from shosai.features.workspaces.contracts import ACCESS_POLICY
+from shosai.features.workspaces.application.knowledge_transfer import WorkspaceKnowledgeTransfer
+from shosai.features.workspaces.contracts import ACCESS_POLICY, KNOWLEDGE_TRANSFER
 from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLog
 from shosai.features.workspaces.module import WORKSPACES
 from tests.core.email.bench import mail_bench
@@ -83,6 +85,7 @@ class FileBench:
     manager: FileManager
     folders: Folders
     downloads: Downloads
+    transfers: FileTransfers
     hidden: HiddenFiles
     support: SupportFiles
     watch: QuotaWatch
@@ -159,8 +162,10 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
     registry = CollectorRegistry()
     ports = PortDirectory()
     policy = WorkspaceAccessPolicy(outbox, WorkspaceAuditLog())
+    transfer = WorkspaceKnowledgeTransfer(outbox, WorkspaceAuditLog())
     ports.install([
         ENTITLEMENTS.bind(upload_bench.plan), ACCESS_POLICY.bind(policy),
+        KNOWLEDGE_TRANSFER.bind(transfer),
         AUTHENTICATOR.bind(BearerOfTheTest()), ADMIN_GATE.bind(BenchGate()),
         ACCOUNT_PROFILE_READER.bind(Profiles()), OPERATOR_AUDIT.bind(OperatorJournal(outbox)),
     ])  # fmt: skip
@@ -180,6 +185,7 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
         manager=FileManager(transactions, (ports, outbox, upload_bench.claims, leo, edits)),
         folders=folders,
         downloads=Downloads(transactions, (upload_bench.storage.objects, ports), EDGE),
+        transfers=FileTransfers(transactions, (ports, leo)),
         hidden=HiddenFiles(transactions, upload_bench.deleter, upload_bench.clock),
         support=SupportFiles(transactions, (ports, outbox, watch, leo, leo_watch)),
         watch=watch,

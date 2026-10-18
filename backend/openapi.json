@@ -3932,6 +3932,69 @@
         }
       }
     },
+    "/v1/files/{file_id}/transfer": {
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Transfer File",
+        "description": "Hand a file shared in a workspace over to it; it leaves My files and other workspaces.",
+        "operationId": "transfer_file_v1_files__file_id__transfer_post",
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "File Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FileTransferBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/files/folders": {
       "post": {
         "tags": [
@@ -5720,6 +5783,22 @@
         ],
         "title": "FileKind",
         "description": "The cabinet's kinds of files."
+      },
+      "FileTransferBody": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "workspace_id"
+        ],
+        "title": "FileTransferBody",
+        "description": "The workspace the file is handed over to; the person shared it there first."
       },
       "FileUpdate": {
         "properties": {

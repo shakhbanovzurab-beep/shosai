@@ -11,18 +11,22 @@ workspaces never deadlock: the second waits, finds its item gone and is refused 
 file never shared there.
 """
 
-from collections.abc import Sequence
 from http import HTTPStatus
-from typing import Final
 from uuid import UUID
 
-from sqlalchemy import Row, delete, select, update
+from sqlalchemy import update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import transaction_info
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.errors import AppError
 from shosai.features.workspaces.application.acting import acting_member
+from shosai.features.workspaces.application.file_items import (
+    ITEM,
+    UPLOAD,
+    locked_items,
+    withdraw_items,
+)
 from shosai.features.workspaces.contracts import (
     AccessLevel,
     AuditAction,
@@ -30,23 +34,11 @@ from shosai.features.workspaces.contracts import (
     AuditLog,
     TransferredFile,
 )
-from shosai.features.workspaces.contracts.events import KnowledgeItemRemoved
-from shosai.features.workspaces.domain.memberships import MembershipState
-from shosai.features.workspaces.infrastructure.access_records import (
-    ResourceGrant,
-    WorkspaceKnowledgeItem,
-)
-from shosai.features.workspaces.infrastructure.organization_records import Membership
+from shosai.features.workspaces.infrastructure.access_records import ResourceGrant
 from shosai.features.workspaces.infrastructure.share_records import (
     FILE_KIND,
     KNOWLEDGE_ITEM_KIND,
 )
-
-PERSONAL: Final = "personal"
-UPLOAD: Final = "upload"
-ITEM: Final = WorkspaceKnowledgeItem
-
-type ItemRow = Row[UUID, UUID, str, str, UUID | None]
 
 
 class TransferScopeMismatchError(ValueError):
@@ -68,7 +60,7 @@ class WorkspaceKnowledgeTransfer:
             message = "передача файла идёт в транзакции принимающего пространства"
             raise TransferScopeMismatchError(message)
         acting = await acting_member(session, org_id, actor_id)
-        items = await _locked_items(session, file_id, actor_id)
+        items = await locked_items(session, file_id, actor_id)
         here = next((item for item in items if item.org_id == org_id), None)
         if here is None or here.added_by_membership_id != acting.actor.membership_id:
             raise AppError("share_first", HTTPStatus.CONFLICT)
@@ -77,46 +69,13 @@ class WorkspaceKnowledgeTransfer:
         if here.source_kind == UPLOAD:
             return transferred
         await _adopt(session, org_id, here.id, file_id)
-        await self._withdraw(session, [item for item in items if item.org_id != org_id])
+        others = [item for item in items if item.org_id != org_id]
+        await withdraw_items(session, self._outbox, others)
         entry = AuditEntry(
             org_id, AuditAction.FILE_TRANSFERRED, acting.actor.membership_id, FILE_KIND, file_id
         )
         await self._audit.record(session, entry)
         return transferred
-
-    async def _withdraw(self, session: AsyncSession, items: Sequence[ItemRow]) -> None:
-        """The file's personal items in other workspaces go, with their grants and events."""
-        withdrawn = [item for item in items if item.source_kind == PERSONAL]
-        if not withdrawn:
-            return
-        ids = [item.id for item in withdrawn]
-        await session.execute(
-            delete(ResourceGrant).where(
-                ResourceGrant.resource_kind == KNOWLEDGE_ITEM_KIND,
-                ResourceGrant.resource_id.in_(ids),
-            )
-        )
-        await session.execute(delete(ITEM).where(ITEM.id.in_(ids)))
-        events = [KnowledgeItemRemoved(org_id=item.org_id, item_id=item.id) for item in withdrawn]
-        await self._outbox.add_all(session, events)
-
-
-async def _locked_items(session: AsyncSession, file_id: UUID, actor_id: UUID) -> list[ItemRow]:
-    """The file's items in the actor's workspaces, locked in id order.
-
-    A personal file is shared only by its owner, and a membership that ends takes its
-    shared files with it, so the actor's active workspaces hold every item of the file.
-    """
-    workspaces = select(Membership.org_id).where(
-        Membership.user_id == actor_id, Membership.state == MembershipState.ACTIVE
-    )
-    query = (
-        select(ITEM.id, ITEM.org_id, ITEM.source_kind, ITEM.access, ITEM.added_by_membership_id)
-        .where(ITEM.file_id == file_id, ITEM.org_id.in_(workspaces))
-        .order_by(ITEM.id)
-        .with_for_update(of=ITEM)
-    )
-    return list((await session.execute(query)).all())
 
 
 async def _adopt(session: AsyncSession, org_id: UUID, item_id: UUID, file_id: UUID) -> None:

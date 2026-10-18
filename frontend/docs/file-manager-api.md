@@ -16,8 +16,10 @@ File Manager is the only place the account's files are stored. Nothing else keep
   indexed once; `FileItem.leo` carries the index status. The Knowledge screen lists these files
   (see `knowledge-base-api.md`) and uploads through the same path with `leo: true`.
 - **Workspaces** point to a file the owner shares there (see `workspace-api.md`). It stays the owner's and
-  leaves the workspace when the owner deletes it. Handing it over to the workspace (`POST /v1/files/{id}/transfer`)
-  follows in files step 8; until then the cabinet shows no transfer.
+  leaves the workspace when the owner deletes it. The owner can hand it over instead (`POST /v1/files/{id}/transfer`,
+  served since files step 8a): it becomes the workspace's, leaves My files and every other workspace, and the same
+  people of that workspace keep reading it. The cabinet shows the transfer once the workspace screens are on the API
+  (workspaces steps 14a–14b); until then workspaces exist only in tests (WS-D7).
 
 ## Endpoints
 
@@ -33,6 +35,7 @@ File Manager is the only place the account's files are stored. Nothing else keep
 | `DELETE` | `/v1/files/{id}`                    | —                                                     | `204`                           |
 | `POST`   | `/v1/files/{id}/copy`               | `{name?}`                                             | `201 FileItem`                  |
 | `POST`   | `/v1/files/{id}/reindex`            | —                                                     | `FileItem`                      |
+| `POST`   | `/v1/files/{id}/transfer`           | `{workspace_id}`                                      | `204`                           |
 | `GET`    | `/v1/files/{id}/download`           | —                                                     | `{url, expires_at}`             |
 | `GET`    | `/v1/files/storage`                 | —                                                     | `StorageStanding`               |
 | `POST`   | `/v1/files/folders`                 | `{name}`                                              | `201 FileFolder`                |
@@ -77,6 +80,10 @@ File Manager is the only place the account's files are stored. Nothing else keep
 - **Errors** the UI words (`domain/problems.ts`): `file_not_found`, `folder_not_found` (409 when moving into a
   folder that is gone), `upload_count`, `upload_not_claimable`, `upload_too_large`, `upload_incomplete`,
   `upload_closed`, `upload_not_found`, `filename_invalid`, the storage, Leo and name codes above.
+- **Transfer** needs the file shared in that workspace by the person (409 `share_first`); a workspace that is
+  missing or not theirs answers 404 `workspace_not_found`, a suspended one 423 `workspace_suspended`. The file
+  keeps the level it was shared at, leaves its folder and the person's Leo, and its bytes leave the person's
+  storage; a repeat answers 204 again, and a file already given elsewhere is `file_not_found`.
 - **Support (admin session):** `GET /v1/admin/users/{user_id}/files?home=` lists the person's files deleted within
   7 days; `POST /v1/admin/users/{user_id}/files/{file_id}/restore {home}` brings one back, shared nowhere. Neither
   works while the account is in its deletion window (409 `account_deletion_scheduled`); both are audited.
