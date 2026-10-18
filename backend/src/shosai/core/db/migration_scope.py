@@ -49,8 +49,13 @@ CREATE_SWEEPER_POLICY: Final = (
     "CREATE POLICY %(policy)s ON %(table)s TO %(role)s USING (true) WITH CHECK (true)"
 )
 DROP_POLICY: Final = "DROP POLICY %(policy)s ON %(table)s"
+REVOKE_FUNCTION: Final = "REVOKE ALL ON FUNCTION %(function)s(%(arguments)s) FROM PUBLIC"
+GRANT_FUNCTION: Final = "GRANT EXECUTE ON FUNCTION %(function)s(%(arguments)s) TO %(role)s"
+DROP_FUNCTION: Final = "DROP FUNCTION %(function)s(%(arguments)s)"
 
 type Privilege = Literal["SELECT", "INSERT", "UPDATE", "DELETE"]
+# Типы аргументов функций, которые открывают ревизии: закрытый набор, как и права.
+type FunctionArgument = Literal["uuid[]", "text[]"]
 APPLICATION_WRITES: Final[tuple[Privilege, ...]] = ("SELECT", "INSERT", "UPDATE", "DELETE")
 
 
@@ -97,11 +102,34 @@ def quote(identifier: str) -> str:
     return op.get_bind().dialect.identifier_preparer.quote_identifier(identifier)
 
 
-def run_ddl(template: str, *, privileges: Sequence[Privilege] = (), **identifiers: str) -> None:
-    """Run a DDL template; every identifier is quoted, privileges come from a closed set."""
+def run_ddl(
+    template: str,
+    *,
+    privileges: Sequence[Privilege] = (),
+    arguments: Sequence[FunctionArgument] = (),
+    **identifiers: str,
+) -> None:
+    """Run a DDL template; every identifier is quoted, privileges and argument types come
+    from closed sets.
+    """
     context = {name: quote(value) for name, value in identifiers.items()}
     context["privileges"] = ", ".join(privileges)
+    context["arguments"] = ", ".join(arguments)
     op.execute(DDL(template, context=context))
+
+
+def open_function(
+    function: str, arguments: Sequence[FunctionArgument], roles: Sequence[str]
+) -> None:
+    """Close a function to PUBLIC and let exactly these roles execute it."""
+    run_ddl(REVOKE_FUNCTION, arguments=arguments, function=function)
+    for role in roles:
+        run_ddl(GRANT_FUNCTION, arguments=arguments, function=function, role=role)
+
+
+def drop_function(function: str, arguments: Sequence[FunctionArgument]) -> None:
+    """Drop a function a revision created (the downgrade of its creation)."""
+    run_ddl(DROP_FUNCTION, arguments=arguments, function=function)
 
 
 def grant_to_application(

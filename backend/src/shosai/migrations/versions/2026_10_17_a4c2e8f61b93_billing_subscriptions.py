@@ -16,11 +16,13 @@ from alembic import op
 
 from shosai.core.db.migration_scope import (
     EVERY_HOME,
+    FunctionArgument,
     MigrationScope,
     disable_user_isolation,
+    drop_function,
     enable_user_isolation,
     grant_to_application,
-    quote,
+    open_function,
     revoke_from_application,
     runs_in,
 )
@@ -32,7 +34,8 @@ depends_on: str | None = None
 applies_to = EVERY_HOME
 
 TABLES = ("subscriptions", "subscription_segments")
-HOLDERS = "FUNCTION billing_plan_holders(uuid[])"
+HOLDERS = "billing_plan_holders"
+HOLDERS_ARGUMENTS: tuple[FunctionArgument, ...] = ("uuid[]",)
 # Счётчики держателей тарифа в обход RLS: функция владельца таблиц отдаёт только числа.
 HOLDERS_FUNCTION = """
 CREATE FUNCTION billing_plan_holders(plans uuid[])
@@ -108,14 +111,13 @@ def upgrade(scope: MigrationScope) -> None:
         enable_user_isolation(table)
         grant_to_application(scope, table)
     op.execute(HOLDERS_FUNCTION)
-    op.execute(f"REVOKE ALL ON {HOLDERS} FROM PUBLIC")
-    op.execute(f"GRANT EXECUTE ON {HOLDERS} TO {quote(scope.application_role)}")
+    open_function(HOLDERS, HOLDERS_ARGUMENTS, (scope.application_role,))
 
 
 @runs_in(applies_to)
 def downgrade(scope: MigrationScope) -> None:
     """Drop the holder counts, the queued plans and the subscriptions."""
-    op.execute(f"DROP {HOLDERS}")
+    drop_function(HOLDERS, HOLDERS_ARGUMENTS)
     for table in reversed(TABLES):
         revoke_from_application(scope, table)
         disable_user_isolation(table)

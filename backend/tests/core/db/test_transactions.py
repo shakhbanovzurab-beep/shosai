@@ -7,6 +7,7 @@ import sqlalchemy as sa
 from sqlalchemy import exc
 
 from shosai.core.config.roles import ProcessRole
+from shosai.core.db import transactions
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from tests.harness.database_access import (
@@ -105,3 +106,9 @@ async def test_workers_get_their_longer_statement_timeout(run_slot: RunSlot) -> 
             row = (await session.execute(SCOPE_SETTINGS)).one()
 
     assert row.statement_timeout == "1min"
+
+
+def test_the_sweep_scope_sets_what_every_scope_sets_and_then_the_role() -> None:
+    assert transactions.SWEEP_SCOPE_STATEMENT.text == transactions.SCOPE_SETTINGS + (
+        ", set_config('role', :role, true)"
+    )

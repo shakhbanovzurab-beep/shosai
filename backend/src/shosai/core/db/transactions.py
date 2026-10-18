@@ -43,7 +43,15 @@ SCOPE_SETTINGS: Final = (
 )
 SCOPE_STATEMENT: Final = text(SCOPE_SETTINGS)
 # Обход (ADR 0053 п. 2): та же команда переключает роль до конца транзакции — без лишнего обмена.
-SWEEP_SCOPE_STATEMENT: Final = text(f"{SCOPE_SETTINGS}, set_config('role', :role, true)")
+# Текст повторяет SCOPE_SETTINGS дословно: semgrep пропускает в text() только литерал; совпадение
+# держит тест tests/core/db/test_transactions.py.
+SWEEP_SCOPE_STATEMENT: Final = text(
+    "SELECT set_config('statement_timeout', :statement_timeout, true), "
+    "set_config('transaction_read_only', :read_only, true), "
+    "set_config('app.user_id', :user_id, true), "
+    "set_config('app.org_id', :org_id, true), "
+    "set_config('role', :role, true)"
+)
 TRANSACTION_INFO_KEY: Final = "shosai.transaction"
 log = structlog.stdlib.get_logger(__name__)
 

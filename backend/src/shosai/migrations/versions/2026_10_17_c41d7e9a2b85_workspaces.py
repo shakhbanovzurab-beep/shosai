@@ -25,7 +25,7 @@ from shosai.core.db.migration_scope import (
     enable_company_isolation,
     grant_to_application,
     grant_to_sweeper,
-    quote,
+    open_function,
     revoke_from_application,
     revoke_from_sweeper,
     runs_in,
@@ -158,10 +158,7 @@ def upgrade(scope: MigrationScope) -> None:
     create_organizations()
     create_memberships()
     op.execute(MEMBER_ORGS_FUNCTION)
-    function = "FUNCTION app_member_org_ids()"
-    op.execute(f"REVOKE ALL ON {function} FROM PUBLIC")
-    op.execute(f"GRANT EXECUTE ON {function} TO {quote(scope.application_role)}")
-    op.execute(f"GRANT EXECUTE ON {function} TO {quote(SWEEPER_ROLE)}")
+    open_function("app_member_org_ids", (), (scope.application_role, SWEEPER_ROLE))
     create_teams()
     create_projects()
     create_invitations()

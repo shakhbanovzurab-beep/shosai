@@ -16,14 +16,16 @@ from alembic import op
 
 from shosai.core.db.migration_scope import (
     EVERY_HOME,
+    FunctionArgument,
     MigrationScope,
     disable_company_isolation,
     disable_user_isolation,
+    drop_function,
     enable_company_isolation,
     enable_user_isolation,
     grant_to_application,
     grant_to_sweeper,
-    quote,
+    open_function,
     revoke_from_application,
     revoke_from_sweeper,
     runs_in,
@@ -41,7 +43,8 @@ PURPOSES = (
 )
 STATES = "'pending', 'ready', 'claimed', 'rejected', 'expired'"
 PERSONAL = ("file_folders", "uploads", "storage_usage")
-KEYS_IN_USE = "FUNCTION files_keys_in_use(text[])"
+KEYS_IN_USE = "files_keys_in_use"
+KEYS_IN_USE_ARGUMENTS: tuple[FunctionArgument, ...] = ("text[]",)
 # Владелец таблиц отвечает, какие ключи ещё названы строками, в обход RLS; строк не отдаёт.
 KEYS_IN_USE_FUNCTION = """
 CREATE FUNCTION files_keys_in_use(keys text[])
@@ -113,8 +116,7 @@ def upgrade(scope: MigrationScope) -> None:
         grant_to_application(scope, table)
     grant_to_application(scope, "object_deletions", ("SELECT", "INSERT", "UPDATE", "DELETE"))
     op.execute(KEYS_IN_USE_FUNCTION)
-    op.execute(f"REVOKE ALL ON {KEYS_IN_USE} FROM PUBLIC")
-    op.execute(f"GRANT EXECUTE ON {KEYS_IN_USE} TO {quote(scope.application_role)}")
+    open_function(KEYS_IN_USE, KEYS_IN_USE_ARGUMENTS, (scope.application_role,))
 
 
 def create_files() -> None:
@@ -206,7 +208,7 @@ def create_uploads() -> None:
 @runs_in(applies_to)
 def downgrade(scope: MigrationScope) -> None:
     """Drop files' tables and the key check."""
-    op.execute(f"DROP {KEYS_IN_USE}")
+    drop_function(KEYS_IN_USE, KEYS_IN_USE_ARGUMENTS)
     revoke_from_application(scope, "object_deletions")
     op.drop_table("object_deletions")
     for table in reversed(PERSONAL):
