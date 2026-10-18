@@ -5,8 +5,10 @@ of the plan in force, its limits and capabilities, cached and versioned, never g
 when it cannot be read the answer is `EntitlementsUnavailableError` (503, inv-3).
 Usage is never in the snapshot: `MinutesAllowance` counts the month's minutes live, from
 the live meetings meetings report (`MEETING_MINUTES`, bound by meetings; none until then)
-and the tombstones of deleted ones (`UsageTombstones`). The events billing publishes are
-in `contracts.events`.
+and the tombstones of deleted ones (`UsageTombstones`). `TokenAllowanceReader` tells the
+agent, before a model request, where its tokens come from: the week's allowance, packs, a
+fall back to a standard model, or a stop with the limit that stopped it (BL-D4). The events
+billing publishes are in `contracts.events`.
 """
 
 from dataclasses import dataclass
@@ -21,7 +23,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.keys import PortKey
-from shosai.features.billing.domain.meters import MinutesLeft
+from shosai.features.billing.domain.meters import (
+    MinutesLeft,
+    TokenDecision,
+    TokenLimit,
+    TokenRoute,
+)
 from shosai.features.billing.domain.money import Currency
 from shosai.features.billing.domain.plans import Audience, Capability, ModelTier, PlanLimits
 
@@ -29,6 +36,7 @@ __all__ = [
     "ENTITLEMENTS",
     "MEETING_MINUTES",
     "MINUTES_ALLOWANCE",
+    "TOKEN_ALLOWANCE",
     "USAGE_TOMBSTONES",
     "Audience",
     "Capability",
@@ -44,6 +52,10 @@ __all__ = [
     "MinutesLeft",
     "ModelTier",
     "PlanLimits",
+    "TokenAllowanceReader",
+    "TokenDecision",
+    "TokenLimit",
+    "TokenRoute",
     "UploadExceedsMinutesError",
     "UsageTombstones",
 ]
@@ -169,8 +181,18 @@ class MeetingMinutes(Protocol):
         ...
 
 
+class TokenAllowanceReader(Protocol):
+    """The route of a person's next model request of a tier, read live (never cached)."""
+
+    async def decision(self, home: Home, user_id: UUID, tier: ModelTier) -> TokenDecision:
+        """Within the allowance, from packs, fall back or stop with its reason; raises
+        `EntitlementsUnavailableError` when it cannot be read."""
+        ...
+
+
 ENTITLEMENTS: Final = PortKey[Entitlements]("billing.entitlements")
 MINUTES_ALLOWANCE: Final = PortKey[MinutesAllowance]("billing.minutes_allowance")
+TOKEN_ALLOWANCE: Final = PortKey[TokenAllowanceReader]("billing.token_allowance")
 USAGE_TOMBSTONES: Final = PortKey[UsageTombstones]("billing.usage_tombstones")
 # Привязывает meetings; пока его нет, порт пуст и живых минут ноль.
 MEETING_MINUTES: Final = PortKey[MeetingMinutes]("billing.meeting_minutes")

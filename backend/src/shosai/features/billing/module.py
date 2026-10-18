@@ -2,8 +2,8 @@
 
 Step 2 added the catalogue in the EU home with the admin's plan and promo code routes;
 step 3 subscriptions, the cached `Entitlements` and billing's part of the native
-`/v1/auth/me`; step 4 the month's minutes with their allowance. Tokens and payments join
-in the later steps.
+`/v1/auth/me`. Step 4 adds the month's minutes with their allowance, and step 5 the weekly
+tokens, the packs ledger and its settlement of cost rows. Payments join in later steps.
 """
 
 from collections.abc import AsyncIterator
@@ -17,11 +17,17 @@ from shosai.features.billing.application.entitlement_snapshots import Entitlemen
 from shosai.features.billing.application.minutes import MinutesMeter
 from shosai.features.billing.application.native_me import BillingMe
 from shosai.features.billing.application.promo_codes import PromoCodes
+from shosai.features.billing.application.tokens import TokenSettlement, TokenStanding
 from shosai.features.billing.channels.http.admin_plans import build_admin_plans_router
 from shosai.features.billing.channels.http.admin_promo_codes import (
     build_admin_promo_codes_router,
 )
-from shosai.features.billing.contracts import ENTITLEMENTS, MINUTES_ALLOWANCE, USAGE_TOMBSTONES
+from shosai.features.billing.contracts import (
+    ENTITLEMENTS,
+    MINUTES_ALLOWANCE,
+    TOKEN_ALLOWANCE,
+    USAGE_TOMBSTONES,
+)
 from shosai.features.billing.contracts.events import (
     PaymentRefunded,
     PaymentSucceeded,
@@ -43,6 +49,10 @@ from shosai.features.billing.infrastructure.promo_records import (
 from shosai.features.billing.infrastructure.subscription_records import (
     SubscriptionRecord,
     SubscriptionSegmentRecord,
+)
+from shosai.features.billing.infrastructure.token_records import (
+    CreditLedgerRecord,
+    TokenUsageRecord,
 )
 from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 
@@ -66,8 +76,10 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             ME_CONTRIBUTIONS.bind(BillingMe(snapshots, meter)),
             MINUTES_ALLOWANCE.bind(meter),
             USAGE_TOMBSTONES.bind(meter),
+            TOKEN_ALLOWANCE.bind(TokenStanding(services.transactions, snapshots)),
             ACCOUNT_DATA_HANDLERS.bind(BillingAccountData(services.transactions)),
         ),
+        cost_settlements=(TokenSettlement(snapshots),),
     )
 
 
@@ -83,6 +95,8 @@ BILLING = FeatureModule(
         SubscriptionSegmentRecord,
         UsageEventRecord,
         FreePlanDeviceRecord,
+        TokenUsageRecord,
+        CreditLedgerRecord,
     ),
     events=(PaymentSucceeded, PaymentRefunded, SubscriptionChanged, SeatsChanged, QuotaExhausted),
 )

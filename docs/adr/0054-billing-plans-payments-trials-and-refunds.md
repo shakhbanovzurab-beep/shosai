@@ -34,3 +34,7 @@ The cabinet's billing screens were designed around Stripe, a monthly Free allowa
 - Free accounts per device or per mail domain are evaded at a material rate → stronger device attestation.
 - The bank for statements is chosen → the matcher replaces the admin's mark.
 - A company needs a longer trial or more seats in it → a sales-led trial set by the admin.
+
+## Amendment (2026-10-17, billing step 5)
+
+The owner chose how BL-D4 is enforced: billing counts the plans' tokens itself, per tier and period, from the cost rows through its `CostSettlement`, and answers the agent before each request (within the allowance, from packs, fall back to a standard model, or stop with the limit). F6's guard keeps only its money ceilings: `SpendPeriod` gains no `WEEK`, and the standard model's daily limit is a token limit of billing, not a ceiling in `CallContext.spend_limits`. Concurrent requests may pass an allowance by what is in flight; packs are never spent twice.

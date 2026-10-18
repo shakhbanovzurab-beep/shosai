@@ -3,7 +3,7 @@
 What a person or a company has paid for and what they may use: the plan catalogue, the `Entitlements` every slice reads, the usage meters, payments through TBank, CloudPayments and lava.top, auto-renewal, workspace seats and trials, company invoices and refunds.
 
 - Plan: [docs/plan/slices/billing.md](../../../../../docs/plan/slices/billing.md). Decisions: [ADR 0054](../../../../../docs/adr/0054-billing-plans-payments-trials-and-refunds.md).
-- Public surface: `contracts` (`Entitlements`, `MinutesAllowance`, `UsageTombstones`, the `MeetingMinutes` port meetings binds, the snapshot, its types and errors) and `contracts.events` (`billing.payment.succeeded`, `.payment.refunded`, `.subscription.changed`, `.seats.changed`, `.quota.exhausted`).
+- Public surface: `contracts` (`Entitlements`, `MinutesAllowance`, `UsageTombstones`, `TokenAllowanceReader`, the `MeetingMinutes` port meetings binds, the snapshot, its types and errors) and `contracts.events` (`billing.payment.succeeded`, `.payment.refunded`, `.subscription.changed`, `.seats.changed`, `.quota.exhausted`).
 
 ## Rules the domain holds
 
@@ -31,3 +31,9 @@ What a person or a company has paid for and what they may use: the plan catalogu
 - `usage_events` (revision `b7e1d4a90c26`): a tombstone per deleted meeting in the UTC month the meeting started, written once in the deleting transaction through `UsageTombstones`; monthly partitions keep the current and the previous month (ADR 0007 as amended), and a meeting older than that leaves none.
 - `MinutesMeter` counts the month live, never cached: meetings that still exist (`MEETING_MINUTES`, bound by meetings; none until then) plus tombstones. `check` refuses at the limit (402 `minutes_exhausted`), `covers` refuses an upload longer than the minutes left before processing (402 `upload_exceeds_minutes`).
 - `free_plan_devices`: a Free account claims its desktop device by the SHA-256 of its id or machine name on its first check; another Free account on it is refused (403 `free_plan_device_taken`); paid accounts neither claim nor are refused. Claims are per home (inv-2 allows no device hash outside it).
+
+## Tokens and packs (BL-D4)
+
+- Billing counts tokens itself (owner's decision, 2026-10-17): F6's guard keeps its money ceilings, the plan's token limits never reach `CallContext.spend_limits`.
+- `TokenSettlement`, billing's `CostSettlement`, runs once per cost row in its transaction: an interactive expensive call counts for the frontier tier, a standard one for the standard tier (essential calls and Leo's background work are not counted); tokens go to the Monday week and, for standard, the UTC day in `token_usage` (one row per person, tier and period; a row of an older period changes nothing); tokens past the frontier week's allowance are debited from `premium_credit_ledger`, keyed by the cost id.
+- `TokenStanding` (`billing.token_allowance`) answers before a request, live: within the allowance, from packs, fall back to a standard model (`frontier_weekly_tokens`) or stop (`standard_daily_tokens`, `standard_weekly_tokens`). Concurrent requests may pass the allowance by what is in flight; packs are never spent twice (the week's row lock).

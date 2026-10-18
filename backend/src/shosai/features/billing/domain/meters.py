@@ -106,3 +106,39 @@ def token_route(allowance: TokenAllowance) -> TokenRoute:
     if allowance.packs_left > 0:
         return TokenRoute.FROM_PACKS
     return TokenRoute.FALL_BACK
+
+
+class TokenLimit(StrEnum):
+    """Which allowance a request ran into; the code the agent and the client read."""
+
+    FRONTIER_WEEK = "frontier_weekly_tokens"
+    STANDARD_DAY = "standard_daily_tokens"
+    STANDARD_WEEK = "standard_weekly_tokens"
+
+
+@dataclass(frozen=True, slots=True)
+class TokenDecision:
+    """The route of the next request and, when it falls back or stops, the limit why."""
+
+    route: TokenRoute
+    reason: TokenLimit | None = None
+
+
+def token_decision(allowance: TokenAllowance) -> TokenDecision:
+    """The route with its reason: a used-up frontier week falls back, a standard limit stops."""
+    route = token_route(allowance)
+    if route is TokenRoute.FALL_BACK:
+        return TokenDecision(route, TokenLimit.FRONTIER_WEEK)
+    if route is not TokenRoute.STOP:
+        return TokenDecision(route)
+    daily = allowance.daily_limit
+    if daily is not None and allowance.used_today >= daily:
+        return TokenDecision(route, TokenLimit.STANDARD_DAY)
+    return TokenDecision(route, TokenLimit.STANDARD_WEEK)
+
+
+def beyond_allowance(limit: int | None, before: int, tokens: int) -> int:
+    """How many of a request's tokens fall past the weekly allowance: what packs pay for."""
+    if limit is None:
+        return 0
+    return max(before + tokens - limit, 0) - max(before - limit, 0)

@@ -34,7 +34,7 @@ async def test_export_transfer_and_erasure_cover_the_subscription_and_its_queue(
 
     assert set(exported) == {
         "subscriptions.jsonl", "subscription_segments.jsonl", "usage_events.jsonl",
-        "free_plan_devices.jsonl",
+        "free_plan_devices.jsonl", "token_usage.jsonl", "premium_credit_ledger.jsonl",
     }  # fmt: skip
     assert pro.encode() in exported["subscriptions.jsonl"]
     assert b'"remaining_days": 7' in exported["subscription_segments.jsonl"]

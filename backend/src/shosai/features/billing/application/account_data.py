@@ -1,4 +1,4 @@
-"""Billing's handler of a person's data: subscription, queue, tombstones, device claims.
+"""Billing's handler of a person's data: subscriptions, minutes, devices, tokens and packs.
 
 Export gives every table (a device claim without its hash), erasure deletes them in the
 person's home (ADR 0007: tombstones go with their account), and a transfer copies them
@@ -31,37 +31,34 @@ from shosai.features.billing.infrastructure.subscription_records import (
     SubscriptionRecord,
     SubscriptionSegmentRecord,
 )
+from shosai.features.billing.infrastructure.token_records import (
+    CreditLedgerRecord,
+    TokenUsageRecord,
+)
 
 OWNER: Final = "billing"
-ACCOUNT_DATA: Final = AccountDataSpec(
-    OWNER,
-    (
-        TableCoverage("subscriptions", Treatment.ERASE),
-        TableCoverage("subscription_segments", Treatment.ERASE),
-        TableCoverage("usage_events", Treatment.ERASE),
-        TableCoverage("free_plan_devices", Treatment.ERASE),
-    ),
-)
-TABLES: Final = tuple(
-    model.metadata.tables[model.__tablename__]
-    for model in (
-        SubscriptionRecord,
-        SubscriptionSegmentRecord,
-        UsageEventRecord,
-        FreePlanDeviceRecord,
-    )
-)
+# Модели в порядке стирания; ключ страницы выгрузки у заявки устройства — её хэш.
 MODELS: Final = (
     SubscriptionSegmentRecord,
     SubscriptionRecord,
     UsageEventRecord,
     FreePlanDeviceRecord,
+    TokenUsageRecord,
+    CreditLedgerRecord,
 )
-ROWS: Final = (
-    *(whole_rows(table, key="id") for table in TABLES[:3]),
-    whole_rows(TABLES[3], key="device_hash"),
+ACCOUNT_DATA: Final = AccountDataSpec(
+    OWNER, tuple(TableCoverage(model.__tablename__, Treatment.ERASE) for model in MODELS)
 )
-EXPORTED: Final = (*ROWS[:3], PersonRows(TABLES[3], ("claimed_at",), key="device_hash"))
+TABLES: Final = tuple(model.metadata.tables[model.__tablename__] for model in MODELS)
+DEVICES: Final = FreePlanDeviceRecord.__tablename__
+ROWS: Final = tuple(
+    whole_rows(table, key="device_hash" if table.name == DEVICES else "id") for table in TABLES
+)
+EXPORTED: Final = tuple(
+    PersonRows(rows.table, ("claimed_at",), key="device_hash") if rows.table.name == DEVICES
+    else rows
+    for rows in ROWS
+)  # fmt: skip
 
 
 class BillingAccountData:

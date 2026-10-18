@@ -179,7 +179,15 @@ class CostWriter:
             model=entry.model,
             feature=entry.feature,
             call_class=entry.call_class,
+            origin=entry.origin,
             cost_usd=entry.cost_usd,
+            created_at=entry.created_at,
+            tokens=(
+                entry.input_tokens
+                + entry.output_tokens
+                + entry.input_audio_tokens
+                + entry.output_audio_tokens
+            ),
         )
         for settlement in self._settlements.all():
             await settlement.settle(session, settled)

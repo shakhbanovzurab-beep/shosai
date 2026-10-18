@@ -8,6 +8,7 @@ makes one row. A settlement makes no external call (§14 rule 1).
 
 from collections.abc import Sequence
 from dataclasses import dataclass
+from datetime import datetime
 from decimal import Decimal
 from typing import Protocol
 from uuid import UUID
@@ -27,7 +28,12 @@ class SettledCost:
     model: str
     feature: str
     call_class: str
+    origin: str
     cost_usd: Decimal
+    # Момент строки и её токены (вход с кешированными, выход, аудио): по ним billing ведёт
+    # недельные и дневные токены тарифа (BL-D4).
+    created_at: datetime
+    tokens: int
 
 
 class CostSettlement(Protocol):

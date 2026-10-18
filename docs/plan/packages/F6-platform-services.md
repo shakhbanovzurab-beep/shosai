@@ -69,7 +69,7 @@ Confirmed by the owner on 2026-10-08:
 | F6-D3 | *Replaced by F6-D5:* the admin HTTP routes were F6's last step, built after `identity` | — |
 | F6-D4 | F6 owns the Central Bank USD/RUB rate (`exchange_rates`, 6-hourly job, read port); `billing` reads it; `billing.refresh_rates` moves to F6 | ADR 0036; FEATURE_MAP §2.5 |
 
-Confirmed by the owner on 2026-10-13 after the re-plan (OD-8), [ADR 0041](../../adr/0041-platform-services-replanned-from-the-product.md); F6-D6 and F6-D8 with the owner's changes, folded in below. **Amended on 2026-10-17 by billing ([ADR 0054](../../adr/0054-billing-plans-payments-trials-and-refunds.md), BL-D4):** `SpendPeriod` gains `WEEK` for the plans' weekly ceilings, added in billing's step 5; the standard model's daily limit per plan reaches the guard through `CallContext.spend_limits` like the other per-user ceilings.
+Confirmed by the owner on 2026-10-13 after the re-plan (OD-8), [ADR 0041](../../adr/0041-platform-services-replanned-from-the-product.md); F6-D6 and F6-D8 with the owner's changes, folded in below. **Amended on 2026-10-17 by billing ([ADR 0054](../../adr/0054-billing-plans-payments-trials-and-refunds.md), BL-D4), revised the same day in billing's step 5 by the owner:** the plans' token limits (weekly per tier, the standard model's daily) are counted and enforced by billing from the cost rows through its `CostSettlement`; F6's guard keeps only its money ceilings, `SpendPeriod` gains no `WEEK`, and `SettledCost` carries the row's origin, moment and tokens.
 
 | ID | Question | Decision | Trade-off |
 |---|---|---|---|
