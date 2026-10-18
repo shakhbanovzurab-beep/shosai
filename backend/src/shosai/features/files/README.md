@@ -53,3 +53,12 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 - Deleting a file announces `files.file.deleted` only; support's restore brings the use back with `files.leo_use.changed` and is not refused by the knowledge limit, as it is not by the storage limit. A lowered limit refuses new use at once; what Leo already uses stays until FL-D10's 90 days run out (step 6b).
 - A person's locks go in one order: the Leo lock, the usage row (`usage_store.lock`), then the files. Day 90's removal holds the row and then every file, so a copy, a deletion, a restore and an erasure take the row before their file.
 - `POST /v1/files/{id}/reindex` asks knowledge to read a file again (`files.leo_use.reindex_requested`) and answers it `queued`; 409 `leo_not_used` when Leo does not use it.
+
+## Over the knowledge limit (step 6b, FL-D10)
+
+- Revision `b6e2d8f4a173`: `storage_usage.leo_over_limit_since` and `leo_reminders_sent` (checked like FL-D2's), `storage_files.leo_held`, and the sweep role reads `file_folders`.
+- `application/leo_watch.py` takes one step at a time under the person's Leo lock and usage row, with FL-D2's rules from `domain/quota.py` over the bytes Leo uses: mark `leo_over_limit_since`, clear it once the bytes fit, a reminder (`files.leo_over_limit`, account mail in 16 languages, 30, 7 and 1 day before the end) counted and written in one transaction, and on day 90 Leo stops using the newest files over the limit — their own switch off, a file Leo read through its folder held — one `files.leo_use.changed` each. No file is deleted.
+- A held file stays out of Leo's use, through its folder too, until the person switches it on (`PATCH {leo: true}`, within the limit); a rename or a folder switch keeps the hold.
+- `files.check_leo_limit` (daily per home) lists the people who hold bytes or carry the mark as the sweep role, with the files Leo uses for a whole page in one query, and takes each one's due step; `billing.subscription.changed` (consumer `files.leo_follows_plan`) and support's restore mark or clear at once. A person's own switch-offs clear the mark at the next daily pass, as deletions do for FL-D2.
+- `GET /v1/files/storage` adds `leo_used_bytes`, `leo_limit_bytes`, `leo_over_limit_since` and `leo_removal_at` for the Knowledge meter and banner; `shosai_files_leo_quota_actions_total{action}` counts the steps.
+

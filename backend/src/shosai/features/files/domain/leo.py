@@ -4,6 +4,8 @@ Leo uses a file it can read when the file's own switch or its folder's is on, an
 which. The bytes of every file Leo uses count against the plan's `knowledge_base_mb`
 (None: unlimited, 0: not included); a change that starts using a file is refused when the
 bytes in use would pass it. Files Leo cannot read never count, whatever their switches.
+A file Leo stopped reading on day 90 over the limit (FL-D10) is held: Leo skips it, even
+through its folder, until the person switches it on.
 """
 
 from collections.abc import Iterable, Mapping
@@ -28,9 +30,9 @@ class KnowledgeLimitError(ValueError):
     """Leo would use more bytes than the plan's knowledge limit."""
 
 
-def leo_use(*, readable: bool, own: bool, folder: bool) -> LeoVia | None:
+def leo_use(*, readable: bool, own: bool, folder: bool, held: bool = False) -> LeoVia | None:
     """How Leo uses a file, or None when it does not."""
-    if not readable:
+    if not readable or held:
         return None
     if own:
         return LeoVia.FILE
@@ -49,19 +51,22 @@ def fits_knowledge(in_use_bytes: int, added_bytes: int, limit: int | None) -> bo
 
 @dataclass(frozen=True, slots=True)
 class LeoCandidate:
-    """A file as Leo's use sees it: its name and size, its own switch and its folder's."""
+    """A file as Leo's use sees it: its name and size, its own switch, its folder's, and
+    whether it is held out of Leo's use (FL-D10)."""
 
     file_id: UUID
     name: str
     size_bytes: int
     own: bool
     folder: bool
+    held: bool = False
 
     @property
     def used(self) -> bool:
         """Whether Leo uses the file."""
         readable = leo_readable(self.name, self.size_bytes)
-        return leo_use(readable=readable, own=self.own, folder=self.folder) is not None
+        via = leo_use(readable=readable, own=self.own, folder=self.folder, held=self.held)
+        return via is not None
 
 
 def bytes_in_use(files: Iterable[LeoCandidate]) -> int:

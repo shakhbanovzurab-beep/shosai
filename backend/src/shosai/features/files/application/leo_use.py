@@ -13,7 +13,7 @@ from http import HTTPStatus
 from uuid import UUID
 
 import structlog
-from sqlalchemy import Select, or_, select
+from sqlalchemy import Result, Select, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.events.outbox import EventOutbox
@@ -36,6 +36,8 @@ from shosai.features.identity.contracts import Principal
 from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
 
 log = structlog.stdlib.get_logger(__name__)
+# Строка запроса файлов Leo: владелец, id, имя, размер, свой переключатель, переключатель папки.
+type InUseRow = tuple[UUID, UUID, str, int, bool, bool]
 
 
 def leo_limit(limit: int | None) -> AppError:
@@ -70,7 +72,9 @@ def leo_folders(folders: Sequence[FileFolderRecord]) -> frozenset[UUID]:
 def candidate(record: StorageFileRecord, leo_folder_ids: frozenset[UUID]) -> LeoCandidate:
     """The file as Leo's use sees it now."""
     folder = record.folder_id is not None and record.folder_id in leo_folder_ids
-    return LeoCandidate(record.id, record.name, record.size_bytes, record.leo_on, folder)
+    return LeoCandidate(
+        record.id, record.name, record.size_bytes, record.leo_on, folder, record.leo_held
+    )
 
 
 def unused(record: StorageFileRecord) -> LeoCandidate:
@@ -100,7 +104,7 @@ class LeoUse:
         if shift.empty:
             return
         if shift.started:
-            in_use = bytes_in_use(await self._in_use(session, user_id))
+            in_use = bytes_in_use(await self.in_use(session, user_id))
             try:
                 shift.check(in_use, limit)
             except KnowledgeLimitError as error:
@@ -122,28 +126,32 @@ class LeoUse:
             started=len(shift.started), stopped=len(shift.stopped),
         )  # fmt: skip
 
-    async def _in_use(self, session: AsyncSession, user_id: UUID) -> list[LeoCandidate]:
-        """The person's own visible files Leo may use: a switch on and at most 50 MiB."""
-        in_leo_folder = StorageFileRecord.folder_id.in_(
-            select(FileFolderRecord.id).where(
-                FileFolderRecord.user_id == user_id, FileFolderRecord.leo
-            )
-        )
-        query = (
-            visible_files(self._ports.get(ACCESS_POLICY), Viewer(user_id))
-            .with_only_columns(
-                StorageFileRecord.id,
-                StorageFileRecord.name,
-                StorageFileRecord.size_bytes,
-                StorageFileRecord.leo_on,
-                in_leo_folder,
-            )
-            .where(
-                StorageFileRecord.user_id == user_id,
-                StorageFileRecord.org_id.is_(None),
-                StorageFileRecord.size_bytes <= LEO_MAX_FILE_BYTES,
-                or_(StorageFileRecord.leo_on, in_leo_folder),
-            )
-        )
-        rows = (await session.execute(query)).all()
-        return [LeoCandidate(row[0], row[1], row[2], row[3], bool(row[4])) for row in rows]
+    async def in_use(self, session: AsyncSession, user_id: UUID) -> list[LeoCandidate]:
+        """The person's own visible files Leo may use: a switch on, not held, at most 50 MiB."""
+        base = visible_files(self._ports.get(ACCESS_POLICY), Viewer(user_id))
+        query = in_use_rows(base.where(StorageFileRecord.user_id == user_id))
+        return [candidate for _, candidate in rows_of(await session.execute(query))]
+
+
+def in_use_rows(base: Select[StorageFileRecord]) -> Select[*InUseRow]:
+    """Files of `base` Leo may use — own, visible, a switch on, not held, at most 50 MiB —
+    as (owner, id, name, size, own switch, folder's switch) rows; readability is the
+    domain's to judge."""
+    files = StorageFileRecord
+    in_leo_folder = files.folder_id.in_(select(FileFolderRecord.id).where(FileFolderRecord.leo))
+    return base.with_only_columns(
+        files.user_id, files.id, files.name, files.size_bytes, files.leo_on, in_leo_folder
+    ).where(
+        files.org_id.is_(None),
+        files.deleted_at.is_(None),
+        files.size_bytes <= LEO_MAX_FILE_BYTES,
+        files.leo_held.is_(False),
+        or_(files.leo_on, in_leo_folder),
+    )
+
+
+def rows_of(result: Result[*InUseRow]) -> list[tuple[UUID, LeoCandidate]]:
+    """The owner and the candidate of each row of `in_use_rows`."""
+    return [
+        (row[0], LeoCandidate(row[1], row[2], row[3], row[4], bool(row[5]))) for row in result.all()
+    ]

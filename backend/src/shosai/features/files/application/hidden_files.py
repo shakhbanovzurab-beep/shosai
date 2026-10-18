@@ -3,7 +3,7 @@
 Support reads a person's hidden files in the person's home and restores one: it comes back
 into the quota (passing the limit starts the 90 days, FL-D2), is shared nowhere, and Leo
 uses it again if its switch or its folder's says so — like the quota, the knowledge limit
-does not refuse support's restore. After
+does not refuse support's restore; passing it starts FL-D10's 90 days. After
 7 days the purge removes the row, and the object when no row of any owner names its key;
 the sweep role only lists what is due, each row goes in its owner's transaction.
 """
@@ -25,6 +25,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.files.application.account_data import unnamed
 from shosai.features.files.application.leo_use import LeoUse, candidate, unused
+from shosai.features.files.application.leo_watch import LeoWatch
 from shosai.features.files.application.quota_watch import QuotaWatch
 from shosai.features.files.contracts.events import FileRestored
 from shosai.features.files.domain.leo import LeoShift
@@ -55,11 +56,11 @@ class HiddenFiles:
     def __init__(
         self,
         transactions: HomeTransactions,
-        services: tuple[EventOutbox, ObjectDeleter, QuotaWatch, LeoUse],
+        services: tuple[EventOutbox, ObjectDeleter, QuotaWatch, LeoUse, LeoWatch],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._outbox, self._deleter, self._watch, self._leo = services
+        self._outbox, self._deleter, self._watch, self._leo, self._leo_watch = services
         self._clock = clock
 
     async def of_person(self, home: Home, user_id: UUID) -> list[HiddenFile]:
@@ -76,6 +77,7 @@ class HiddenFiles:
     async def restore(self, home: Home, user_id: UUID, file_id: UUID) -> None:
         """Bring a hidden file back into the person's File Manager and quota."""
         limit = await self._watch.limit(home, user_id)
+        leo_limit = await self._leo_watch.limit(home, user_id)
         async with self._transactions.begin(TenancyScope(home, user_id)) as session:
             await self._leo.hold(session, user_id)
             await usage_store.lock(session, user_id)
@@ -97,6 +99,7 @@ class HiddenFiles:
             shift = LeoShift.of([(unused(record), candidate(record, in_leo))])
             await self._leo.settle(session, user_id, shift, None)
             await self._watch.apply(session, user_id, limit)
+            await self._leo_watch.apply(session, user_id, leo_limit)
 
     async def purge(self, home: Home) -> int:
         """Remove files hidden for more than 7 days; how many went."""

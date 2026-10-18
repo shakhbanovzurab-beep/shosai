@@ -66,7 +66,8 @@ class UploadRecord(ModelBase):
 
 
 class StorageUsageRecord(ModelBase):
-    """A person's stored and reserved bytes and their time over the limit (FL-D2)."""
+    """A person's stored and reserved bytes, their time over the storage limit (FL-D2) and
+    Leo's time over the knowledge limit (FL-D10)."""
 
     __tablename__ = "storage_usage"
     __table_args__ = (
@@ -75,6 +76,11 @@ class StorageUsageRecord(ModelBase):
         CheckConstraint(
             "over_limit_since IS NOT NULL OR reminders_sent = 0", name="reminders_while_over"
         ),
+        CheckConstraint("leo_reminders_sent BETWEEN 0 AND 3", name="leo_reminders_range"),
+        CheckConstraint(
+            "leo_over_limit_since IS NOT NULL OR leo_reminders_sent = 0",
+            name="leo_reminders_while_over",
+        ),
     )
 
     user_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
@@ -82,6 +88,8 @@ class StorageUsageRecord(ModelBase):
     reserved_bytes: Mapped[int] = mapped_column(BigInteger, server_default=text("0"))
     over_limit_since: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     reminders_sent: Mapped[int] = mapped_column(SmallInteger, server_default=text("0"))
+    leo_over_limit_since: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    leo_reminders_sent: Mapped[int] = mapped_column(SmallInteger, server_default=text("0"))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 

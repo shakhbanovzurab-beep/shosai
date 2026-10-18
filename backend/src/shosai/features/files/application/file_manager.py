@@ -162,6 +162,8 @@ class FileManager:
                 if changes.leo and not leo_readable(record.name, record.size_bytes):
                     raise leo_unreadable()
                 record.leo_on = changes.leo
+                # Включив файл сам, человек снимает удержание FL-D10 — в пределах лимита.
+                record.leo_held = record.leo_held and not changes.leo
             await session.flush()
             shift = LeoShift.of([(before, candidate(record, in_leo))])
             await self._leo.settle(session, principal.user_id, shift, limit)

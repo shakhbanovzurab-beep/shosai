@@ -79,7 +79,7 @@ def file_view(
     """The view of one file row."""
     readable = leo_readable(record.name, record.size_bytes)
     folder = record.folder_id is not None and record.folder_id in leo_folders
-    via = leo_use(readable=readable, own=record.leo_on, folder=folder)
+    via = leo_use(readable=readable, own=record.leo_on, folder=folder, held=record.leo_held)
     leo = None if via is None else LeoUseView(via, states.get(record.id, QUEUED))
     return FileView(
         id=record.id, name=record.name, kind=kind_of(record.name),

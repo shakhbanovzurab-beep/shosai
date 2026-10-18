@@ -28,16 +28,19 @@ candidates = st.builds(
     size_bytes=st.integers(min_value=0, max_value=2 * LEO_MAX_FILE_BYTES),
     own=st.booleans(),
     folder=st.booleans(),
+    held=st.booleans(),
 )
 limits = st.one_of(st.none(), st.integers(min_value=0, max_value=4 * LEO_MAX_FILE_BYTES))
 
 
 @given(st.lists(candidates, max_size=20))
-def test_only_readable_files_leo_uses_count_against_the_limit(
+def test_only_readable_files_leo_uses_and_does_not_hold_count_against_the_limit(
     files: list[LeoCandidate],
 ) -> None:
     expected = sum(
-        f.size_bytes for f in files if leo_readable(f.name, f.size_bytes) and (f.own or f.folder)
+        f.size_bytes
+        for f in files
+        if leo_readable(f.name, f.size_bytes) and not f.held and (f.own or f.folder)
     )
 
     assert bytes_in_use(files) == expected
@@ -47,7 +50,9 @@ def test_only_readable_files_leo_uses_count_against_the_limit(
 def test_a_change_that_starts_use_is_refused_exactly_when_it_passes_the_limit(
     before: LeoCandidate, after: LeoCandidate, others: int, limit: int | None
 ) -> None:
-    after = LeoCandidate(before.file_id, after.name, before.size_bytes, after.own, after.folder)
+    after = LeoCandidate(
+        before.file_id, after.name, before.size_bytes, after.own, after.folder, after.held
+    )
     shift = LeoShift.of([(before, after)])
     in_use_after = others + (after.size_bytes if after.used else 0)
     passes = limit is not None and in_use_after > limit

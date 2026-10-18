@@ -1,6 +1,7 @@
-"""Files' quota metrics: what FL-D2 did and the two gauges of inv-11 (§16.4).
+"""Files' quota metrics: what FL-D2 and FL-D10 did and the two gauges of inv-11 (§16.4).
 
-`shosai_files_quota_actions_total{action}` counts marks, clears, reminders and removals.
+`shosai_files_quota_actions_total{action}` counts marks, clears, reminders and removals;
+`shosai_files_leo_quota_actions_total{action}` the same steps over the knowledge limit.
 `shosai_files_quota_drift{home}` holds the owners whose counter differs from the sum of
 their files at the last reconciliation, `shosai_files_orphaned_objects{home}` the objects
 no row names; both stay at zero while the invariant holds.
@@ -27,6 +28,12 @@ class QuotaMetrics:
             ("action",),
             registry=registry,
         )
+        self._leo_actions = Counter(
+            "shosai_files_leo_quota_actions",
+            "Шаги лимита знаний по FL-D10: отметка, снятие, напоминание, выключение файлов из Leo",
+            ("action",),
+            registry=registry,
+        )
         self._drift = Gauge(
             QUOTA_DRIFT,
             "Владельцы, у которых счётчик места расходится с суммой их файлов",
@@ -43,6 +50,10 @@ class QuotaMetrics:
     def acted(self, action: QuotaAction) -> None:
         """One quota step was taken."""
         self._actions.labels(action=action.value).inc()
+
+    def leo_acted(self, action: QuotaAction) -> None:
+        """One step over the knowledge limit was taken."""
+        self._leo_actions.labels(action=action.value).inc()
 
     def drift(self, home: Home, owners: int) -> None:
         """The reconciliation's count of owners whose counter drifted."""

@@ -48,7 +48,7 @@ async def purge(bench: FileBench, run_slot: RunSlot, home: Home) -> int:
     ) as workers:
         hidden = HiddenFiles(
             workers.transactions,
-            (bench.outbox, bench.uploads.deleter, bench.watch, bench.leo),
+            (bench.outbox, bench.uploads.deleter, bench.watch, bench.leo, bench.leo_watch),
             bench.uploads.clock,
         )
         return await hidden.purge(home)

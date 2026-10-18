@@ -1209,7 +1209,7 @@ export interface paths {
         };
         /**
          * Read Storage
-         * @description Used bytes, the plan's limit and, over it, the date files over it go.
+         * @description Used bytes, the plan's limits and, over them, the dates files over them go.
          */
         get: operations["read_storage_v1_files_storage_get"];
         put?: never;
@@ -2734,6 +2734,14 @@ export interface components {
             over_limit_since: string | null;
             /** Removal At */
             removal_at: string | null;
+            /** Leo Used Bytes */
+            leo_used_bytes: number;
+            /** Leo Limit Bytes */
+            leo_limit_bytes: number | null;
+            /** Leo Over Limit Since */
+            leo_over_limit_since: string | null;
+            /** Leo Removal At */
+            leo_removal_at: string | null;
         };
         /**
          * SubscriptionCardDTO

@@ -4119,7 +4119,7 @@
           "files"
         ],
         "summary": "Read Storage",
-        "description": "Used bytes, the plan's limit and, over it, the date files over it go.",
+        "description": "Used bytes, the plan's limits and, over them, the dates files over them go.",
         "operationId": "read_storage_v1_files_storage_get",
         "parameters": [
           {
@@ -8191,6 +8191,45 @@
               }
             ],
             "title": "Removal At"
+          },
+          "leo_used_bytes": {
+            "type": "integer",
+            "title": "Leo Used Bytes"
+          },
+          "leo_limit_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leo Limit Bytes"
+          },
+          "leo_over_limit_since": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leo Over Limit Since"
+          },
+          "leo_removal_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leo Removal At"
           }
         },
         "type": "object",
@@ -8198,7 +8237,11 @@
           "used_bytes",
           "limit_bytes",
           "over_limit_since",
-          "removal_at"
+          "removal_at",
+          "leo_used_bytes",
+          "leo_limit_bytes",
+          "leo_over_limit_since",
+          "leo_removal_at"
         ],
         "title": "StorageOut",
         "description": "What the person holds against what the plan allows; a null limit is unlimited."

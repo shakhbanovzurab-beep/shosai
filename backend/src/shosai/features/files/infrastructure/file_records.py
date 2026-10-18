@@ -88,6 +88,8 @@ class StorageFileRecord(ModelBase):
     sha256: Mapped[bytes | None] = mapped_column(LargeBinary)
     starred: Mapped[bool] = mapped_column(Boolean, server_default=false())
     leo_on: Mapped[bool] = mapped_column(Boolean, server_default=false())
+    # Leo не читает файл даже через папку, пока человек сам его не включит (FL-D10).
+    leo_held: Mapped[bool] = mapped_column(Boolean, server_default=false())
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     modified_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

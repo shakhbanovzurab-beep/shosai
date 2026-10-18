@@ -24,6 +24,7 @@ from shosai.features.files.application.file_views import FileView
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.application.hidden_files import HiddenFiles
 from shosai.features.files.application.leo_use import LeoUse
+from shosai.features.files.application.leo_watch import LeoWatch
 from shosai.features.files.application.quota_watch import QuotaWatch
 from shosai.features.files.application.upload_rules import UploadRequest
 from shosai.features.files.domain.purposes import UploadPurpose
@@ -72,6 +73,7 @@ class FileBench:
     hidden: HiddenFiles
     watch: QuotaWatch
     leo: LeoUse
+    leo_watch: LeoWatch
     registry: CollectorRegistry
 
     async def uploaded(self, who: Principal, name: str, body: bytes) -> uuid.UUID:
@@ -140,10 +142,10 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
         ACCOUNT_PROFILE_READER.bind(Profiles()),
     ])  # fmt: skip
     mail = mail_bench(transactions, smtp_port=1).port
-    watch = QuotaWatch(
-        transactions, (ports, outbox, mail, QuotaMetrics(registry)), upload_bench.clock
-    )
+    metrics = QuotaMetrics(registry)
+    watch = QuotaWatch(transactions, (ports, outbox, mail, metrics), upload_bench.clock)
     leo = LeoUse(ports, outbox)
+    leo_watch = LeoWatch(transactions, (ports, leo, mail, metrics), upload_bench.clock)
     yield FileBench(
         uploads=upload_bench,
         ports=ports,
@@ -152,9 +154,12 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
         folders=Folders(transactions, (ports, leo)),
         downloads=Downloads(transactions, (upload_bench.storage.objects, ports), EDGE),
         hidden=HiddenFiles(
-            transactions, (outbox, upload_bench.deleter, watch, leo), upload_bench.clock
+            transactions,
+            (outbox, upload_bench.deleter, watch, leo, leo_watch),
+            upload_bench.clock,
         ),
         watch=watch,
         leo=leo,
+        leo_watch=leo_watch,
         registry=registry,
     )

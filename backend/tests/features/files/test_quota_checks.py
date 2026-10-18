@@ -70,7 +70,7 @@ async def test_a_plan_change_marks_at_once_and_a_workspace_plan_is_skipped(
 ) -> None:
     who = person(Home.EU, uuid.uuid4())
     await seed(file_bench, who, [400 * MIB] * 3)
-    [follow_plan] = subscriptions(file_bench.watch)
+    [follow_plan, _] = subscriptions((file_bench.watch, file_bench.leo_watch))
     now = file_bench.uploads.clock.now
 
     async with file_bench.uploads.transactions.begin(who.scope()) as session:
@@ -89,7 +89,8 @@ async def test_the_storage_route_shows_the_meter_and_answers_503_without_a_plan(
 ) -> None:
     who = person(Home.RU, uuid.uuid4())
     await seed(file_bench, who, [300])
-    app = build_probe_app(extra=(build_storage_router(file_bench.watch, file_bench.ports),)).app
+    watches = (file_bench.watch, file_bench.leo_watch)
+    app = build_probe_app(extra=(build_storage_router(watches, file_bench.ports),)).app
     headers = {"Authorization": f"Bearer person:{who.user_id}:{Home.RU.value}"}
     async with client_of(app) as http:
         shown = await http.get("/v1/files/storage", headers=headers)
@@ -98,6 +99,8 @@ async def test_the_storage_route_shows_the_meter_and_answers_503_without_a_plan(
 
     assert shown.json() == {
         "used_bytes": 300, "limit_bytes": 1024**3, "over_limit_since": None, "removal_at": None,
+        "leo_used_bytes": 0, "leo_limit_bytes": 100 * MIB, "leo_over_limit_since": None,
+        "leo_removal_at": None,
     }  # fmt: skip
     assert (unknown.status_code, unknown.json()["error"]["code"]) == (
         503, "entitlements_unavailable",
