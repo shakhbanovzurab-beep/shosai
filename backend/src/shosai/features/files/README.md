@@ -29,7 +29,7 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 - A File Manager upload reserves its bytes against `file_manager_gb` by one conditional upsert (413 `storage_limit`, 403 `storage_not_included` at 0) and lands on the file's final key; other purposes land under `transient/` and reserve nothing.
 - `Uploads.claim(session, upload_id, purpose)` in the uploader's transaction: ready → claimed, a File Manager upload's bytes become used; a repeat answers the same object.
 - Every storage call runs outside a transaction; states change by conditional updates. The sweep (`files.sweep_uploads`, every 15 minutes per home) lists due uploads as the sweep role, closes each in its owner's transaction and retries recorded object deletions.
-- `shosai files bucket-rules [--home ru|eu]` puts ADR 0055's lifecycle and CORS rules on the buckets.
+- `shosai files bucket-rules [--home ru|eu]` puts ADR 0055's lifecycle and CORS rules on the buckets; the CORS rule admits the cabinet's origin from `PUBLIC_BASE_URL` and any in `CORS_ALLOWED_ORIGINS` (a development server).
 
 ## File Manager (step 4)
 

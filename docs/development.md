@@ -124,7 +124,7 @@ Notifications and newsletters to a person carry a signed unsubscribe link once `
 
 ### Buckets
 
-Browsers upload files straight to a home's bucket by presigned part links ([ADR 0055](adr/0055-object-key-layout-and-bucket-rules.md)); each bucket carries lifecycle rules (incomplete multipart uploads aborted after a day, `transient/` expired after 3 days) and a CORS rule for `CORS_ALLOWED_ORIGINS`. Put them on the local SeaweedFS buckets once, and on any new bucket:
+Browsers upload files straight to a home's bucket by presigned part links ([ADR 0055](adr/0055-object-key-layout-and-bucket-rules.md)); each bucket carries lifecycle rules (incomplete multipart uploads aborted after a day, `transient/` expired after 3 days) and a CORS rule for the cabinet's origins: `PUBLIC_BASE_URL`'s and any in `CORS_ALLOWED_ORIGINS`. Put them on the local SeaweedFS buckets once, and on any new bucket:
 
 ```bash
 uv run --env-file ../.env shosai files bucket-rules            # both homes

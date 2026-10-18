@@ -75,7 +75,7 @@ Do it while no release runs (`flock -n /srv/shosai/releases/.lock true` succeeds
 
 ## Bucket rules
 
-Each home's bucket needs ADR 0055's rules before files can be uploaded from the cabinet: run `shosai files bucket-rules` once per new bucket with keys that may configure it (the release's environment, `docker compose run --rm api shosai files bucket-rules`). A failed home is named in the log; a repeat changes nothing.
+Each home's bucket needs ADR 0055's rules before files can be uploaded from the cabinet: run `shosai files bucket-rules` once per new bucket with keys that may configure it (the release's environment, `docker compose run --rm api shosai files bucket-rules`). The CORS rule admits the cabinet's origin from `PUBLIC_BASE_URL` (`https://shosai.tech`); `CORS_ALLOWED_ORIGINS` stays empty on staging, since the cabinet and the API share one origin. A failed home is named in the log; a repeat changes nothing.
 
 ## Downloads
 

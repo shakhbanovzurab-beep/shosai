@@ -1,8 +1,9 @@
 """`shosai files bucket-rules [--home ru|eu]`: the operator puts ADR 0055's rules on the buckets.
 
 Each home's bucket gets its lifecycle rules (incomplete multipart uploads aborted after a
-day, `transient/` expired after 3 days) and the CORS rule for the cabinet's origins
-(`CORS_ALLOWED_ORIGINS`). The keys need the right to configure the bucket; a repeat
+day, `transient/` expired after 3 days) and the CORS rule for the cabinet's origins: the
+public address's (`PUBLIC_BASE_URL`) and any in `CORS_ALLOWED_ORIGINS`, such as a
+development server's. The keys need the right to configure the bucket; a repeat
 changes nothing. The command answers per home and exits non-zero if any home failed.
 """
 
@@ -19,7 +20,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.observability.logs import configure_logging
 from shosai.core.observability.metrics import ObservabilityMetrics, build_metrics_registry
 from shosai.core.storage.s3_client import open_s3_client
-from shosai.features.files.channels.bucket_rules import apply_bucket_rules
+from shosai.features.files.channels.bucket_rules import apply_bucket_rules, cabinet_origins
 
 EXIT_OK: Final = 0
 EXIT_FAILED: Final = 1
@@ -35,7 +36,10 @@ async def run_bucket_rules(environ: Mapping[str, str], homes: Sequence[Home]) ->
     pipeline = configure_logging(
         settings.observability, role, ObservabilityMetrics(build_metrics_registry())
     )
-    origins = [str(origin) for origin in settings.web.cors_allowed_origins]
+    origins = cabinet_origins(
+        str(settings.email.public_base_url),
+        [str(origin) for origin in settings.web.cors_allowed_origins],
+    )
     failed = 0
     try:
         for home in homes:

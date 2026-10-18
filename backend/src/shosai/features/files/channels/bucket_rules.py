@@ -2,13 +2,16 @@
 
 An incomplete multipart upload is aborted a day after it began; an object under
 `transient/` expires after 3 days; the cabinet's origins may PUT presigned parts and read
-their `ETag`. Applying replaces the bucket's lifecycle and CORS configuration with these,
-so a repeat changes nothing.
+their `ETag`. The cabinet runs at the public address (`PUBLIC_BASE_URL`); a development
+server on another origin is added through `CORS_ALLOWED_ORIGINS`. Applying replaces the
+bucket's lifecycle and CORS configuration with these, so a repeat changes nothing.
 """
 
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Final
+from urllib.parse import urlsplit
 
+from shosai.core.config.values import normalize_origin
 from shosai.features.files.domain.keys import TRANSIENT_PREFIX
 
 if TYPE_CHECKING:
@@ -43,10 +46,17 @@ def lifecycle_rules() -> BucketLifecycleConfigurationTypeDef:
     }
 
 
+def cabinet_origins(public_base_url: str, allowed: Sequence[str]) -> list[str]:
+    """The origins the cabinet runs at: the public address's first, then the others, once each."""
+    parts = urlsplit(public_base_url)
+    public = normalize_origin(f"{parts.scheme}://{parts.netloc}")
+    return list(dict.fromkeys([public, *allowed]))
+
+
 def cors_rules(origins: Sequence[str]) -> CORSConfigurationTypeDef:
     """The CORS configuration letting the cabinet's origins send parts and read their ETag."""
     if not origins:
-        message = "у бакета нет разрешённых источников: задайте CORS_ALLOWED_ORIGINS"
+        message = "у бакета нет разрешённых источников: задайте PUBLIC_BASE_URL"
         raise ValueError(message)
     return {
         "CORSRules": [

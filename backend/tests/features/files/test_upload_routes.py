@@ -11,6 +11,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.billing.contracts import ENTITLEMENTS
 from shosai.features.files.channels.bucket_rules import (
     apply_bucket_rules,
+    cabinet_origins,
     cors_rules,
     lifecycle_rules,
 )
@@ -64,8 +65,16 @@ def test_the_rules_abort_incomplete_uploads_expire_transient_objects_and_allow_t
     assert rules["expire-transient"]["Expiration"] == {"Days": 3}
     [cors] = cors_rules([ORIGIN])["CORSRules"]
     assert (cors["AllowedOrigins"], cors["ExposeHeaders"]) == ([ORIGIN], ["ETag"])
-    with pytest.raises(ValueError, match="CORS_ALLOWED_ORIGINS"):
+    with pytest.raises(ValueError, match="PUBLIC_BASE_URL"):
         cors_rules([])
+
+
+def test_the_cabinet_s_origin_is_the_public_address_s_and_a_dev_server_joins_it() -> None:
+    assert cabinet_origins("https://shosai.tech/", []) == [ORIGIN]
+    assert cabinet_origins("https://shosai.tech/app", ["http://localhost:3000", ORIGIN]) == [
+        ORIGIN,
+        "http://localhost:3000",
+    ]
 
 
 async def test_the_rules_land_on_a_bucket_and_a_repeat_changes_nothing(
