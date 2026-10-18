@@ -8,7 +8,9 @@ from dataclasses import dataclass
 
 import httpx
 import pytest_asyncio
+from prometheus_client import CollectorRegistry
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.events.catalog import EventTypes
 from shosai.core.events.outbox import EventOutbox
@@ -21,20 +23,39 @@ from shosai.features.files.application.file_manager import FileManager
 from shosai.features.files.application.file_views import FileView
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.application.hidden_files import HiddenFiles
+from shosai.features.files.application.quota_watch import QuotaWatch
 from shosai.features.files.application.upload_rules import UploadRequest
 from shosai.features.files.domain.purposes import UploadPurpose
+from shosai.features.files.infrastructure.quota_metrics import QuotaMetrics
 from shosai.features.files.infrastructure.upload_records import StorageUsageRecord
 from shosai.features.files.module import FILES
-from shosai.features.identity.contracts import ADMIN_GATE, AUTHENTICATOR, Principal
+from shosai.features.identity.contracts import (
+    ACCOUNT_PROFILE_READER,
+    ADMIN_GATE,
+    AUTHENTICATOR,
+    AccountProfile,
+    Principal,
+)
 from shosai.features.workspaces.application.access_policy import WorkspaceAccessPolicy
 from shosai.features.workspaces.contracts import ACCESS_POLICY
 from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLog
 from shosai.features.workspaces.module import WORKSPACES
+from tests.core.email.bench import mail_bench
 from tests.features.billing.catalogue_bench import BenchGate
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.features.files.upload_bench import UploadBench
 
 EDGE = "https://shosai.tech/dl"
+PERSON_EMAIL = "person@shosai.example"
+
+
+class Profiles:
+    """Every person of the bench reads English mail at one address."""
+
+    async def profile(self, session: AsyncSession, user_id: uuid.UUID) -> AccountProfile | None:
+        """The person's profile with the bench's address."""
+        del session, user_id
+        return AccountProfile("Person", "en", None, None, PERSON_EMAIL)
 
 
 @dataclass(frozen=True, slots=True)
@@ -48,6 +69,8 @@ class FileBench:
     folders: Folders
     downloads: Downloads
     hidden: HiddenFiles
+    watch: QuotaWatch
+    registry: CollectorRegistry
 
     async def uploaded(self, who: Principal, name: str, body: bytes) -> uuid.UUID:
         """A ready File Manager upload of `body`."""
@@ -90,14 +113,20 @@ class FileBench:
 async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
     """The File Manager over the upload bench; downloads point at the edge, bearer and admin
     sessions are the test's."""
+    transactions = upload_bench.transactions
     outbox = EventOutbox(EventTypes([*FILES.events, *WORKSPACES.events]))
+    registry = CollectorRegistry()
     ports = PortDirectory()
     policy = WorkspaceAccessPolicy(outbox, WorkspaceAuditLog())
     ports.install([
         ENTITLEMENTS.bind(upload_bench.plan), ACCESS_POLICY.bind(policy),
         AUTHENTICATOR.bind(BearerOfTheTest()), ADMIN_GATE.bind(BenchGate()),
+        ACCOUNT_PROFILE_READER.bind(Profiles()),
     ])  # fmt: skip
-    transactions = upload_bench.transactions
+    mail = mail_bench(transactions, smtp_port=1).port
+    watch = QuotaWatch(
+        transactions, (ports, outbox, mail, QuotaMetrics(registry)), upload_bench.clock
+    )
     yield FileBench(
         uploads=upload_bench,
         ports=ports,
@@ -105,5 +134,7 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
         manager=FileManager(transactions, (ports, outbox, upload_bench.claims)),
         folders=Folders(transactions),
         downloads=Downloads(transactions, (upload_bench.storage.objects, ports), EDGE),
-        hidden=HiddenFiles(transactions, (outbox, upload_bench.deleter), upload_bench.clock),
+        hidden=HiddenFiles(transactions, (outbox, upload_bench.deleter, watch), upload_bench.clock),
+        watch=watch,
+        registry=registry,
     )

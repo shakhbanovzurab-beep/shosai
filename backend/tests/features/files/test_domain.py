@@ -20,10 +20,13 @@ from shosai.features.files.domain.leo import LeoVia, fits_knowledge, leo_use
 from shosai.features.files.domain.names import NameRule, NameRuleError, checked_name
 from shosai.features.files.domain.purposes import PURPOSES, UploadPurpose, within_cap
 from shosai.features.files.domain.quota import (
+    OverLimitMark,
+    QuotaAction,
     QuotaExceededError,
     StoredFile,
     Usage,
     newest_over_limit,
+    quota_action,
     reminder_due,
     removal_due,
     reserve,
@@ -168,3 +171,21 @@ def test_leo_uses_a_readable_file_by_its_own_switch_or_its_folder_s() -> None:
     assert fits_knowledge(90, 10, 100)
     assert not fits_knowledge(90, 11, 100)
     assert fits_knowledge(10**12, 1, None)
+
+
+def test_the_quota_takes_one_step_at_a_time() -> None:
+    since = datetime(2026, 1, 1, tzinfo=UTC)
+    over, under = Usage(used=11, reserved=0), Usage(used=9, reserved=5)
+
+    assert quota_action(under, 10, OverLimitMark(None, 0), since) is None
+    assert quota_action(under, 10, OverLimitMark(since, 2), since) is QuotaAction.CLEAR
+    assert quota_action(over, None, OverLimitMark(since, 1), since) is QuotaAction.CLEAR
+    assert quota_action(over, 10, OverLimitMark(None, 0), since) is QuotaAction.MARK
+    assert quota_action(over, 10, OverLimitMark(since, 0), since + timedelta(days=59)) is None
+    assert quota_action(over, 10, OverLimitMark(since, 0), since + timedelta(days=60)) is (
+        QuotaAction.REMIND
+    )
+    assert quota_action(over, 10, OverLimitMark(since, 1), since + timedelta(days=61)) is None
+    assert quota_action(over, 10, OverLimitMark(since, 3), since + timedelta(days=90)) is (
+        QuotaAction.REMOVE
+    )

@@ -150,8 +150,9 @@ class Profiles:
         if user is None:
             return None
         return AccountProfile(
-            user.display_name or user.full_name, user.language, user.timezone, user.country
-        )
+            user.display_name or user.full_name, user.language, user.timezone, user.country,
+            user.email,
+        )  # fmt: skip
 
     async def _point(self, principal: Principal, key: str | None) -> ProfileView:
         async with self._transactions.begin(principal.scope()) as session:

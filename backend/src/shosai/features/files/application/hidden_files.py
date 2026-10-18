@@ -22,6 +22,7 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.files.application.account_data import unnamed
+from shosai.features.files.application.quota_watch import QuotaWatch
 from shosai.features.files.contracts.events import FileRestored
 from shosai.features.files.domain.quota import HIDDEN_FOR
 from shosai.features.files.infrastructure import usage_store
@@ -50,11 +51,11 @@ class HiddenFiles:
     def __init__(
         self,
         transactions: HomeTransactions,
-        services: tuple[EventOutbox, ObjectDeleter],
+        services: tuple[EventOutbox, ObjectDeleter, QuotaWatch],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._outbox, self._deleter = services
+        self._outbox, self._deleter, self._watch = services
         self._clock = clock
 
     async def of_person(self, home: Home, user_id: UUID) -> list[HiddenFile]:
@@ -70,6 +71,7 @@ class HiddenFiles:
 
     async def restore(self, home: Home, user_id: UUID, file_id: UUID) -> None:
         """Bring a hidden file back into the person's File Manager and quota."""
+        limit = await self._watch.limit(home, user_id)
         async with self._transactions.begin(TenancyScope(home, user_id)) as session:
             record = await session.get(StorageFileRecord, file_id, with_for_update=True)
             if record is None or record.user_id != user_id or record.deleted_at is None:
@@ -79,6 +81,7 @@ class HiddenFiles:
             await self._outbox.add(
                 session, FileRestored(file_id=file_id, user_id=user_id, org_id=record.org_id)
             )
+            await self._watch.apply(session, user_id, limit)
 
     async def purge(self, home: Home) -> int:
         """Remove files hidden for more than 7 days; how many went."""

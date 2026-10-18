@@ -21,6 +21,7 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.ids import new_id
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.billing.contracts import ENTITLEMENTS
+from shosai.features.files.application.deletion import hide_file
 from shosai.features.files.application.file_views import (
     FileView,
     FolderView,
@@ -30,7 +31,7 @@ from shosai.features.files.application.file_views import (
 from shosai.features.files.application.upload_claims import UploadClaims
 from shosai.features.files.application.uploads import storage_refusal
 from shosai.features.files.application.visibility import visible_files
-from shosai.features.files.contracts.events import FileDeleted, FileUploaded
+from shosai.features.files.contracts.events import FileUploaded
 from shosai.features.files.domain.kinds import kind_of
 from shosai.features.files.domain.names import copy_name
 from shosai.features.files.domain.purposes import FILES_PER_REQUEST, UploadPurpose
@@ -145,11 +146,7 @@ class FileManager:
         """Hide the file now, free its bytes and tell those who used it (FL-D5)."""
         async with self._transactions.begin(principal.scope()) as session:
             record = await self._own(session, principal, file_id)
-            record.deleted_at = datetime.now(UTC)
-            await usage_store.free(session, principal.user_id, record.size_bytes)
-            await self._outbox.add(
-                session, FileDeleted(file_id=record.id, user_id=principal.user_id)
-            )
+            await hide_file(session, self._outbox, record, datetime.now(UTC))
 
     def _own_files(self, principal: Principal) -> Select[StorageFileRecord]:
         viewer = Viewer(principal.user_id)

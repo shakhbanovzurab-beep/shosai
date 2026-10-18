@@ -113,6 +113,24 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Record the payment through the one confirm path with the acquirer's order id (the confirm is idempotent), then check the person's subscription or packs. A repeat means the webhook answered before its commit: find the path and fix it with a test (nfr-10).
 
+<a id="storage-counter-drift"></a>
+### StorageCounterDrift — inv-11
+
+**Means.** The daily reconciliation found people whose counted storage (`storage_usage.used_bytes`) differs from the sum of their visible personal files. The quota then refuses uploads it should allow, or allows bytes over the plan.
+
+**Look.** `shosai_files_quota_drift` by `home`; the `workers-bulk` log line «Счётчик места расходится с файлами» lists the first account ids. For each id in that home: `storage_usage` against `SELECT sum(size_bytes) FROM storage_files WHERE user_id = … AND org_id IS NULL AND deleted_at IS NULL`, and the files changed recently (`created_at`, `deleted_at`).
+
+**Fix.** Find the path that changed bytes without the counter (a claim, a copy, a deletion, a restore, the quota's removal) and fix it with a test; then set the person's `used_bytes` to the sum in one transaction. The gauge returns to zero at the next daily pass.
+
+<a id="orphaned-object"></a>
+### OrphanedObject — inv-11
+
+**Means.** The daily reconciliation listed objects in a home's bucket under `u/` or `o/`, older than a day, that no file row names and no recorded deletion waits for. Nobody can reach them and the service pays for them.
+
+**Look.** `shosai_files_orphaned_objects` by `home`; the `workers-bulk` log line «В бакете есть объекты без строки» with the count. List the bucket's prefix for the account ids in the keys and compare with `storage_files` and `object_deletions`; an upload rejected or swept while its object delete failed is the likely source.
+
+**Fix.** Find the path that dropped a key without `object_deletions` and fix it with a test; then record the orphaned keys in `object_deletions` so the sweep deletes them. The gauge returns to zero at the next daily pass.
+
 ## Tickets (§16.6)
 
 <a id="host-disk-filling"></a>

@@ -1,0 +1,37 @@
+{
+  "groups": [
+    {
+      "name": "files-invariants",
+      "rules": [
+        {
+          "alert": "StorageCounterDrift",
+          "expr": "max(shosai_files_quota_drift) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "inv-11"
+          },
+          "annotations": {
+            "summary": "Счётчик занятого места расходится с файлами",
+            "description": "Ежедневная сверка нашла людей, у которых учтённое место не равно сумме их файлов. Квота считает неверно: человеку могут отказать в загрузке зря или пустить сверх тарифа. Id людей — в журнале сверки; счётчик правят только после разбора причины.",
+            "runbook": "docs/runbooks/alerts.md#storage-counter-drift",
+            "dashboard": "/d/invariant-monitors"
+          }
+        },
+        {
+          "alert": "OrphanedObject",
+          "expr": "max(shosai_files_orphaned_objects) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "inv-11"
+          },
+          "annotations": {
+            "summary": "В бакете есть файлы, на которые не указывает ни одна строка",
+            "description": "Сверка нашла в бакете дома объекты старше суток без строки файла и без ожидающего удаления. Это байты, которые никто не видит и за которые платит сервис; они могли остаться после сбоя удаления. Нужно найти причину, прежде чем удалять объекты.",
+            "runbook": "docs/runbooks/alerts.md#orphaned-object",
+            "dashboard": "/d/invariant-monitors"
+          }
+        }
+      ]
+    }
+  ]
+}

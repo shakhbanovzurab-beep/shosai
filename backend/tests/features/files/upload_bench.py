@@ -32,6 +32,7 @@ from shosai.features.billing.contracts import (
     Audience,
     EntitlementSnapshot,
     EntitlementSource,
+    EntitlementsUnavailableError,
     PlanLimits,
 )
 from shosai.features.files.application.upload_claims import UploadClaims
@@ -62,10 +63,14 @@ class Plan:
     """The storage the person's plan gives, in GB; None is unlimited."""
 
     file_manager_gb: int | None = 1
+    # Тариф не читается: Entitlements отвечает 503, как при недоступном кэше и доме.
+    unavailable: bool = False
 
     async def snapshot(self, home: Home, user_id: UUID) -> EntitlementSnapshot:
         """A snapshot with the test's storage limit."""
         del home
+        if self.unavailable:
+            raise EntitlementsUnavailableError
         return EntitlementSnapshot(
             user_id=user_id, plan_slug="pro", plan_name="Pro", audience=Audience.INDIVIDUAL,
             paid=True, in_grace=False, paid_until=None,

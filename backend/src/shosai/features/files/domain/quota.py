@@ -10,6 +10,7 @@ quota, then gone (FL-D5).
 from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from enum import StrEnum
 from typing import Final
 from uuid import UUID
 
@@ -109,3 +110,40 @@ def newest_over_limit(files: Sequence[StoredFile], used: int, limit: int) -> lis
 def purge_due(deleted_at: datetime, now: datetime) -> bool:
     """Whether a hidden file's 7 days are over."""
     return now >= deleted_at + HIDDEN_FOR
+
+
+class QuotaAction(StrEnum):
+    """What the quota does for an owner now; the value is the metric's label."""
+
+    MARK = "marked"
+    CLEAR = "cleared"
+    REMIND = "reminded"
+    REMOVE = "removed"
+
+
+@dataclass(frozen=True, slots=True)
+class OverLimitMark:
+    """An owner's time over the limit: since when, and how many reminders went."""
+
+    since: datetime | None
+    reminders_sent: int
+
+
+def quota_action(
+    usage: Usage, limit: int | None, mark: OverLimitMark, now: datetime
+) -> QuotaAction | None:
+    """The one step FL-D2 takes for the owner now, or None when nothing is due."""
+    if not over_limit(usage, limit):
+        return QuotaAction.CLEAR if mark.since is not None else None
+    if mark.since is None:
+        return QuotaAction.MARK
+    if removal_due(mark.since, now):
+        return QuotaAction.REMOVE
+    if reminder_due(mark.since, now, mark.reminders_sent) is not None:
+        return QuotaAction.REMIND
+    return None
+
+
+def removal_date(since: datetime) -> datetime:
+    """When the files over the limit go, for the reminders and the banner."""
+    return since + OVER_LIMIT_WINDOW

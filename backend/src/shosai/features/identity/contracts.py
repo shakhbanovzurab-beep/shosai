@@ -76,13 +76,17 @@ class ConsentReader(Protocol):
 
 @dataclass(frozen=True, slots=True)
 class AccountProfile:
-    """How the person is addressed (by Leo, in emails, in their language) and their country."""
+    """How the person is addressed (by Leo, in emails, in their language), their country and
+    the address a slice's account mail goes to.
+    """
 
     display_name: str
     language: str
     timezone: str | None
     # Страна аккаунта (ISO 3166-1 alpha-2): по ней billing выбирает валюту, не по клиенту.
     country: str | None = None
+    # Адрес для писем среза об аккаунте (напоминания квоты files): только в EmailPort, не в журнал.
+    email: str | None = None
 
 
 class AccountProfileReader(Protocol):

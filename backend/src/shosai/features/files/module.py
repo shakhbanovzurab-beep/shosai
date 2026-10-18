@@ -3,8 +3,8 @@
 Step 1 published the contract, the events and the domain; step 2 adds the tables, the
 shareable `file` resource and the account data handler; step 3 the uploads straight to
 the bucket, their claim by other slices and the sweep; step 4 the File Manager, downloads
-through the edge, support's hidden files and their purge. The quota's 90 days and Leo's
-use join in the later steps of the plan.
+through the edge, support's hidden files and their purge; step 5 the quota's 90 days, its
+reminders and the inv-11 reconciliation. Leo's use joins in the later steps of the plan.
 """
 
 from collections.abc import AsyncIterator
@@ -17,14 +17,19 @@ from shosai.features.files.application.downloads import Downloads
 from shosai.features.files.application.file_manager import FileManager
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.application.hidden_files import HiddenFiles
+from shosai.features.files.application.quota_reconciliation import QuotaReconciliation
+from shosai.features.files.application.quota_sweep import QuotaSweep
+from shosai.features.files.application.quota_watch import QuotaWatch
 from shosai.features.files.application.upload_claims import UploadClaims
 from shosai.features.files.application.upload_links import StorageOfHomes
 from shosai.features.files.application.upload_sweep import UploadSweep
 from shosai.features.files.application.uploads import UploadService
 from shosai.features.files.channels.http.admin_files import build_admin_files_router
 from shosai.features.files.channels.http.files import build_files_router, build_folders_router
+from shosai.features.files.channels.http.storage import build_storage_router
 from shosai.features.files.channels.http.uploads import build_uploads_router
-from shosai.features.files.channels.tasks import PERIODIC_JOBS, task_handlers
+from shosai.features.files.channels.subscriptions import subscriptions
+from shosai.features.files.channels.tasks import PERIODIC_JOBS, FilesJobs, task_handlers
 from shosai.features.files.contracts import UPLOADS
 from shosai.features.files.contracts.events import (
     FileDeleted,
@@ -32,45 +37,57 @@ from shosai.features.files.contracts.events import (
     FileUploaded,
     LeoUseChanged,
 )
+from shosai.features.files.emails.storage_over_limit import STORAGE_OVER_LIMIT
 from shosai.features.files.infrastructure.file_records import (
     FILE_RESOURCE,
     FileFolderRecord,
     StorageFileRecord,
 )
 from shosai.features.files.infrastructure.object_deleter import ObjectDeleter
+from shosai.features.files.infrastructure.quota_metrics import QuotaMetrics
 from shosai.features.files.infrastructure.upload_records import (
     ObjectDeletionRecord,
     StorageUsageRecord,
     UploadRecord,
 )
+from shosai.features.files.objectives import FILES_MONITORS
 from shosai.features.files.settings import FilesSettings, downloads_through_edge
 
 
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
-    """Uploads, the File Manager, downloads, hidden files and the account data handler."""
+    """Uploads, the File Manager, downloads, hidden files, the quota and the account data."""
     transactions, ports = services.transactions, services.ports
     base = services.settings.features.get(FilesSettings).files_download_base_url
-    handler = FilesAccountData(transactions, (services.objects, services.uploads))
     deleter = ObjectDeleter(transactions, services.objects)
     storage = StorageOfHomes(services.objects, services.uploads)
-    uploads = UploadService(transactions, storage, (ports, deleter))
-    sweep = UploadSweep(transactions, (services.uploads, deleter))
     claims = UploadClaims()
-    manager = FileManager(transactions, (ports, services.outbox, claims))
+    metrics = QuotaMetrics(services.registry)
+    watch = QuotaWatch(transactions, (ports, services.outbox, services.email, metrics))
+    hidden = HiddenFiles(transactions, (services.outbox, deleter, watch))
     downloads = Downloads(
         transactions, (services.objects, ports), None if base is None else str(base)
     )
-    hidden = HiddenFiles(transactions, (services.outbox, deleter))
+    jobs = FilesJobs(
+        uploads=UploadSweep(transactions, (services.uploads, deleter)),
+        hidden=hidden,
+        quota=QuotaSweep(transactions, watch),
+        reconciliation=QuotaReconciliation(transactions, (services.objects, metrics)),
+    )
+    handler = FilesAccountData(transactions, (services.objects, services.uploads))
+    manager = FileManager(transactions, (ports, services.outbox, claims))
     yield FeatureParts(
         http_routers=(
-            build_uploads_router(uploads, ports),
+            build_uploads_router(UploadService(transactions, storage, (ports, deleter)), ports),
             build_files_router((manager, downloads), ports),
             build_folders_router(Folders(transactions), ports),
+            build_storage_router(watch, ports),
             build_admin_files_router(hidden, ports),
         ),
-        task_handlers=task_handlers(sweep, hidden),
+        task_handlers=task_handlers(jobs),
         periodic_jobs=PERIODIC_JOBS,
+        subscriptions=subscriptions(watch),
+        email_templates=(STORAGE_OVER_LIMIT,),
         provides=(ACCOUNT_DATA_HANDLERS.bind(handler), UPLOADS.bind(claims)),
     )
 
@@ -81,6 +98,7 @@ FILES = FeatureModule(
     settings=(FilesSettings,),
     production_checks=(downloads_through_edge,),
     account_data=(ACCOUNT_DATA,),
+    monitors=FILES_MONITORS,
     shareable=(FILE_RESOURCE,),
     models=(
         FileFolderRecord,

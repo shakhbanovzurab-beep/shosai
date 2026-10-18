@@ -172,8 +172,10 @@ async def test_leo_reads_only_the_account_its_run_acts_for(
     async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
         headers = await signed_in(bench, run_slot)
         await bench.http.patch("/v1/me", headers=headers, json={"display_name": "Аня"})
-        user_id = UUID((await bench.http.get("/v1/me", headers=headers)).json()["id"])
-    [tool] = account_tools(homes.transactions, Profiles(homes.transactions, ConsentJournal(), {}))
+        me = (await bench.http.get("/v1/me", headers=headers)).json()
+        user_id = UUID(me["id"])
+    profiles = Profiles(homes.transactions, ConsentJournal(), {})
+    [tool] = account_tools(homes.transactions, profiles)
     deadline = datetime.now(UTC) + timedelta(seconds=5)
 
     mine = await tool.run(
@@ -188,3 +190,8 @@ async def test_leo_reads_only_the_account_its_run_acts_for(
     assert stranger.output is None
     assert stranger.error is not None
     assert stranger.error.code.value == "not_found"
+    # Читатель профиля для других срезов отдаёт и адрес писем об аккаунте (files, FL-D2).
+    async with homes.transactions.begin(TenancyScope(Home.RU, user_id), read_only=True) as session:
+        profile = await profiles.profile(session, user_id)
+    assert profile is not None
+    assert profile.email == me["email"]

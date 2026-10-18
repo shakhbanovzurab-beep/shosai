@@ -23,6 +23,7 @@
     "GET /v1/auth/social/{provider}/start",
     "GET /v1/billing/plans",
     "GET /v1/files",
+    "GET /v1/files/storage",
     "GET /v1/files/{file_id}/download",
     "GET /v1/health",
     "GET /v1/me",

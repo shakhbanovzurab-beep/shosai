@@ -1180,6 +1180,26 @@ export interface paths {
         patch: operations["rename_folder_v1_files_folders__folder_id__patch"];
         trace?: never;
     };
+    "/v1/files/storage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Storage
+         * @description Used bytes, the plan's limit and, over it, the date files over it go.
+         */
+        get: operations["read_storage_v1_files_storage_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/admin/users/{user_id}/files": {
         parameters: {
             query?: never;
@@ -2662,6 +2682,20 @@ export interface components {
             social_consent: string | null;
             /** Next */
             next: string;
+        };
+        /**
+         * StorageOut
+         * @description What the person holds against what the plan allows; a null limit is unlimited.
+         */
+        StorageOut: {
+            /** Used Bytes */
+            used_bytes: number;
+            /** Limit Bytes */
+            limit_bytes: number | null;
+            /** Over Limit Since */
+            over_limit_since: string | null;
+            /** Removal At */
+            removal_at: string | null;
         };
         /**
          * SubscriptionCardDTO
@@ -5387,6 +5421,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FileFolder"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_storage_v1_files_storage_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StorageOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
