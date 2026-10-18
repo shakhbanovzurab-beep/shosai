@@ -3,7 +3,8 @@
 Step 2 added the catalogue in the EU home with the admin's plan and promo code routes;
 step 3 subscriptions, the cached `Entitlements` and billing's part of the native
 `/v1/auth/me`. Step 4 adds the month's minutes with their allowance, and step 5 the weekly
-tokens, the packs ledger and its settlement of cost rows. Payments join in later steps.
+tokens, the packs ledger and its settlement of cost rows, and step 6 the person's plans,
+usage and sales inquiries. Payments join in later steps.
 """
 
 from collections.abc import AsyncIterator
@@ -16,12 +17,16 @@ from shosai.features.billing.application.catalogue import Catalogue
 from shosai.features.billing.application.entitlement_snapshots import EntitlementSnapshots
 from shosai.features.billing.application.minutes import MinutesMeter
 from shosai.features.billing.application.native_me import BillingMe
+from shosai.features.billing.application.people_views import PeopleViews
 from shosai.features.billing.application.promo_codes import PromoCodes
+from shosai.features.billing.application.sales import SalesInquiries
 from shosai.features.billing.application.tokens import TokenSettlement, TokenStanding
 from shosai.features.billing.channels.http.admin_plans import build_admin_plans_router
 from shosai.features.billing.channels.http.admin_promo_codes import (
     build_admin_promo_codes_router,
 )
+from shosai.features.billing.channels.http.plans import build_plans_router
+from shosai.features.billing.channels.http.usage import build_usage_router
 from shosai.features.billing.contracts import (
     ENTITLEMENTS,
     MINUTES_ALLOWANCE,
@@ -32,6 +37,7 @@ from shosai.features.billing.contracts.events import (
     PaymentRefunded,
     PaymentSucceeded,
     QuotaExhausted,
+    SalesInquiryReceived,
     SeatsChanged,
     SubscriptionChanged,
 )
@@ -46,6 +52,7 @@ from shosai.features.billing.infrastructure.promo_records import (
     PaymentRouteRecord,
     PromoCodeRecord,
 )
+from shosai.features.billing.infrastructure.sales_records import SalesInquiryRecord
 from shosai.features.billing.infrastructure.subscription_records import (
     SubscriptionRecord,
     SubscriptionSegmentRecord,
@@ -63,6 +70,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     cache = EntitlementCache(services.valkey)
     snapshots = EntitlementSnapshots(services.transactions, cache)
     meter = MinutesMeter(services.transactions, (snapshots, services.ports))
+    views = PeopleViews(services.transactions, (snapshots, meter, services.ports))
+    inquiries = SalesInquiries(services.transactions, services.outbox)
     catalogue = Catalogue(
         services.transactions, (SubscriptionHolders(services.transactions), cache)
     )
@@ -70,6 +79,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         http_routers=(
             build_admin_plans_router(catalogue, services.ports),
             build_admin_promo_codes_router(PromoCodes(services.transactions), services.ports),
+            build_plans_router(views, inquiries, services.ports, services.rate_limiter),
+            build_usage_router(views, services.ports),
         ),
         provides=(
             ENTITLEMENTS.bind(snapshots),
@@ -97,6 +108,14 @@ BILLING = FeatureModule(
         FreePlanDeviceRecord,
         TokenUsageRecord,
         CreditLedgerRecord,
+        SalesInquiryRecord,
     ),
-    events=(PaymentSucceeded, PaymentRefunded, SubscriptionChanged, SeatsChanged, QuotaExhausted),
+    events=(
+        PaymentSucceeded,
+        PaymentRefunded,
+        SubscriptionChanged,
+        SeatsChanged,
+        QuotaExhausted,
+        SalesInquiryReceived,
+    ),
 )

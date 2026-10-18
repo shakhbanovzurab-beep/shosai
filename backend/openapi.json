@@ -2675,7 +2675,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PlansView"
+                  "$ref": "#/components/schemas/shosai__features__billing__channels__http__admin_plans__PlansView"
                 }
               }
             }
@@ -3101,6 +3101,166 @@
         "responses": {
           "204": {
             "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/plans": {
+      "get": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "List Plans",
+        "description": "The plans on sale with the person's own, in their currency, and the month's minutes.",
+        "operationId": "list_plans_v1_billing_plans_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/shosai__features__billing__channels__http__plans__PlansView"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/billing/sales-inquiry": {
+      "post": {
+        "tags": [
+          "billing"
+        ],
+        "summary": "Ask Sales",
+        "description": "Store the request; the owner is told with its ids and team size only.",
+        "operationId": "ask_sales_v1_billing_sales_inquiry_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesInquiryBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesInquiryAnswer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/settings/usage": {
+      "get": {
+        "tags": [
+          "settings"
+        ],
+        "summary": "Read Usage",
+        "description": "This week's tokens per tier, the packs left and the frontier models used.",
+        "operationId": "read_usage_v1_settings_usage_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsageView"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error. The body is the error envelope; see `ErrorResponse`.",
@@ -4066,6 +4226,86 @@
         "title": "EmailVerifyRequest",
         "description": "The challenge and the code from the mail."
       },
+      "EntitlementsView": {
+        "properties": {
+          "meeting_minutes_per_month": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meeting Minutes Per Month"
+          },
+          "file_manager_gb": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Manager Gb"
+          },
+          "knowledge_base_mb": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Knowledge Base Mb"
+          },
+          "shared_workspace": {
+            "type": "boolean",
+            "title": "Shared Workspace"
+          },
+          "member_management": {
+            "type": "boolean",
+            "title": "Member Management"
+          },
+          "centralized_billing": {
+            "type": "boolean",
+            "title": "Centralized Billing"
+          },
+          "sso": {
+            "type": "boolean",
+            "title": "Sso"
+          },
+          "admin_controls": {
+            "type": "boolean",
+            "title": "Admin Controls"
+          },
+          "priority_support": {
+            "type": "boolean",
+            "title": "Priority Support"
+          },
+          "usage_analytics": {
+            "type": "boolean",
+            "title": "Usage Analytics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meeting_minutes_per_month",
+          "file_manager_gb",
+          "knowledge_base_mb",
+          "shared_workspace",
+          "member_management",
+          "centralized_billing",
+          "sso",
+          "admin_controls",
+          "priority_support",
+          "usage_analytics"
+        ],
+        "title": "EntitlementsView",
+        "description": "What a plan unlocks: null is unlimited, 0 is not included."
+      },
       "ErrorDescription": {
         "properties": {
           "code": {
@@ -4318,6 +4558,65 @@
         ],
         "title": "ForgotRequest",
         "description": "The address to mail a reset link to; the captcha is always shown here."
+      },
+      "FrontierModelView": {
+        "properties": {
+          "model_id": {
+            "type": "string",
+            "title": "Model Id"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "used_tokens": {
+            "type": "integer",
+            "title": "Used Tokens"
+          }
+        },
+        "type": "object",
+        "required": [
+          "model_id",
+          "provider",
+          "name",
+          "used_tokens"
+        ],
+        "title": "FrontierModelView",
+        "description": "A frontier model's tokens this week."
+      },
+      "FrontierView": {
+        "properties": {
+          "extra_tokens": {
+            "type": "integer",
+            "title": "Extra Tokens"
+          },
+          "models": {
+            "items": {
+              "$ref": "#/components/schemas/FrontierModelView"
+            },
+            "type": "array",
+            "title": "Models"
+          },
+          "packs": {
+            "items": {
+              "$ref": "#/components/schemas/TokenPackView"
+            },
+            "type": "array",
+            "title": "Packs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "extra_tokens",
+          "models",
+          "packs"
+        ],
+        "title": "FrontierView",
+        "description": "Bought tokens left, this week's frontier models and the packs on sale."
       },
       "HealthStatus": {
         "properties": {
@@ -4705,6 +5004,47 @@
         "title": "MePatch",
         "description": "The fields to change; a field left out keeps its value, `null` clears it."
       },
+      "MeetingUsageView": {
+        "properties": {
+          "used_minutes": {
+            "type": "number",
+            "title": "Used Minutes"
+          },
+          "limit_minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limit Minutes"
+          },
+          "resets_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Resets At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "used_minutes",
+          "limit_minutes",
+          "resets_at"
+        ],
+        "title": "MeetingUsageView",
+        "description": "The month's meeting minutes; `limit_minutes` is null on unlimited plans."
+      },
+      "ModelTier": {
+        "type": "string",
+        "enum": [
+          "standard",
+          "frontier"
+        ],
+        "title": "ModelTier",
+        "description": "The classes of models a weekly token allowance is counted in (BL-D4)."
+      },
       "Page_AdminUser_": {
         "properties": {
           "items": {
@@ -4768,6 +5108,73 @@
           "year",
           "both"
         ]
+      },
+      "PlanCard": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "tagline": {
+            "type": "string",
+            "title": "Tagline"
+          },
+          "audience": {
+            "$ref": "#/components/schemas/Audience"
+          },
+          "seats": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SeatsView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "price": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PriceView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "entitlements": {
+            "$ref": "#/components/schemas/EntitlementsView"
+          },
+          "features": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Features"
+          },
+          "highlighted": {
+            "type": "boolean",
+            "title": "Highlighted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "tagline",
+          "audience",
+          "seats",
+          "price",
+          "entitlements",
+          "features",
+          "highlighted"
+        ],
+        "title": "PlanCard",
+        "description": "A plan on the pricing page."
       },
       "PlanDeletion": {
         "properties": {
@@ -5206,23 +5613,6 @@
         "title": "PlanView",
         "description": "A plan as the admin's list shows it."
       },
-      "PlansView": {
-        "properties": {
-          "plans": {
-            "items": {
-              "$ref": "#/components/schemas/PlanView"
-            },
-            "type": "array",
-            "title": "Plans"
-          }
-        },
-        "type": "object",
-        "required": [
-          "plans"
-        ],
-        "title": "PlansView",
-        "description": "Every plan of the catalogue."
-      },
       "PriceSet": {
         "properties": {
           "RUB": {
@@ -5253,6 +5643,30 @@
         ],
         "title": "PriceSet",
         "description": "A period's price in minor units in every currency."
+      },
+      "PriceView": {
+        "properties": {
+          "amount_cents": {
+            "type": "integer",
+            "title": "Amount Cents"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/Currency"
+          },
+          "interval": {
+            "type": "string",
+            "const": "month",
+            "title": "Interval"
+          }
+        },
+        "type": "object",
+        "required": [
+          "amount_cents",
+          "currency",
+          "interval"
+        ],
+        "title": "PriceView",
+        "description": "A monthly price in minor units of the account's currency."
       },
       "PromoCodesView": {
         "properties": {
@@ -5964,6 +6378,82 @@
         "title": "ResetRequest",
         "description": "The token of the link and the new password."
       },
+      "SalesInquiryAnswer": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "received",
+            "title": "Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "title": "SalesInquiryAnswer",
+        "description": "The inquiry was received."
+      },
+      "SalesInquiryBody": {
+        "properties": {
+          "work_email": {
+            "type": "string",
+            "maxLength": 254,
+            "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+            "title": "Work Email"
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Company"
+          },
+          "team_size": {
+            "type": "string",
+            "enum": [
+              "1-10",
+              "11-50",
+              "51-200",
+              "201-1000",
+              "1000+"
+            ],
+            "title": "Team Size"
+          },
+          "message": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "work_email",
+          "company",
+          "team_size",
+          "message"
+        ],
+        "title": "SalesInquiryBody",
+        "description": "An Enterprise request for sales."
+      },
+      "SeatView": {
+        "properties": {
+          "workspace_name": {
+            "type": "string",
+            "title": "Workspace Name"
+          },
+          "plan_id": {
+            "type": "string",
+            "title": "Plan Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_name",
+          "plan_id"
+        ],
+        "title": "SeatView",
+        "description": "A workspace seat whose plan covers the member's own tools."
+      },
       "SeatsBody": {
         "properties": {
           "min": {
@@ -5994,6 +6484,32 @@
         ],
         "title": "SeatsBody",
         "description": "How many users a per-seat plan is for; no upper bound when `max` is null."
+      },
+      "SeatsView": {
+        "properties": {
+          "min": {
+            "type": "integer",
+            "title": "Min"
+          },
+          "max": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max"
+          }
+        },
+        "type": "object",
+        "required": [
+          "min",
+          "max"
+        ],
+        "title": "SeatsView",
+        "description": "How many users a team plan is sold for."
       },
       "SignedOutElsewhere": {
         "properties": {
@@ -6307,6 +6823,35 @@
         "title": "TicketRequest",
         "description": "A session ticket from the redirect or the widget."
       },
+      "TokenPackView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "tokens": {
+            "type": "integer",
+            "title": "Tokens"
+          },
+          "price_cents": {
+            "type": "integer",
+            "title": "Price Cents"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "tokens",
+          "price_cents",
+          "currency"
+        ],
+        "title": "TokenPackView",
+        "description": "A one-off bundle of extra frontier tokens."
+      },
       "TokenResponse": {
         "properties": {
           "access_token": {
@@ -6449,6 +6994,39 @@
         ],
         "title": "UnsubscribeAnswer",
         "description": "The same answer for every token: nothing about the account behind it."
+      },
+      "UsageView": {
+        "properties": {
+          "week_start": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Week Start"
+          },
+          "resets_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Resets At"
+          },
+          "limits": {
+            "items": {
+              "$ref": "#/components/schemas/WeeklyLimitView"
+            },
+            "type": "array",
+            "title": "Limits"
+          },
+          "frontier": {
+            "$ref": "#/components/schemas/FrontierView"
+          }
+        },
+        "type": "object",
+        "required": [
+          "week_start",
+          "resets_at",
+          "limits",
+          "frontier"
+        ],
+        "title": "UsageView",
+        "description": "The week's token usage."
       },
       "UserMeResponse": {
         "properties": {
@@ -6652,6 +7230,36 @@
         "title": "VerifyRequest",
         "description": "The code mailed to the address, with the id of the registration it belongs to."
       },
+      "WeeklyLimitView": {
+        "properties": {
+          "tier": {
+            "$ref": "#/components/schemas/ModelTier"
+          },
+          "used_tokens": {
+            "type": "integer",
+            "title": "Used Tokens"
+          },
+          "limit_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limit Tokens"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tier",
+          "used_tokens",
+          "limit_tokens"
+        ],
+        "title": "WeeklyLimitView",
+        "description": "A tier's tokens this week."
+      },
       "WidgetCodeRequest": {
         "properties": {
           "code": {
@@ -6769,6 +7377,65 @@
         ],
         "title": "WidgetTokenRequest",
         "description": "A token the provider's widget handed the browser."
+      },
+      "shosai__features__billing__channels__http__admin_plans__PlansView": {
+        "properties": {
+          "plans": {
+            "items": {
+              "$ref": "#/components/schemas/PlanView"
+            },
+            "type": "array",
+            "title": "Plans"
+          }
+        },
+        "type": "object",
+        "required": [
+          "plans"
+        ],
+        "title": "PlansView",
+        "description": "Every plan of the catalogue."
+      },
+      "shosai__features__billing__channels__http__plans__PlansView": {
+        "properties": {
+          "plans": {
+            "items": {
+              "$ref": "#/components/schemas/PlanCard"
+            },
+            "type": "array",
+            "title": "Plans"
+          },
+          "current_plan_id": {
+            "type": "string",
+            "title": "Current Plan Id"
+          },
+          "seat": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SeatView"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "effective_plan_id": {
+            "type": "string",
+            "title": "Effective Plan Id"
+          },
+          "usage": {
+            "$ref": "#/components/schemas/MeetingUsageView"
+          }
+        },
+        "type": "object",
+        "required": [
+          "plans",
+          "current_plan_id",
+          "seat",
+          "effective_plan_id",
+          "usage"
+        ],
+        "title": "PlansView",
+        "description": "The plans, the person's own and effective plan, and the month's minutes."
       }
     }
   }

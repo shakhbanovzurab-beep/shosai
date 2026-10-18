@@ -17,7 +17,13 @@ from shosai.core.tasks.declaration import TaskDeclaration
 from shosai.core.tasks.payloads import TaskPayload
 from shosai.core.tasks.queues import TaskQueue
 from shosai.features.alerting.channels.tasks import POST_ALERT, AlertPayload
-from shosai.features.alerting.domain.alerts import BusinessAlert, account_deleted, spend_exceeded
+from shosai.features.alerting.domain.alerts import (
+    BusinessAlert,
+    account_deleted,
+    sales_inquiry,
+    spend_exceeded,
+)
+from shosai.features.billing.contracts.events import SalesInquiryReceived
 from shosai.features.identity.contracts import AccountDeleted
 
 DEADLINE: Final = timedelta(seconds=30)
@@ -72,6 +78,14 @@ class BusinessAlerts:
         del session
         await self.raise_alert(received, account_deleted(self._site, received.event.user_id))
 
+    async def sales_inquiry(
+        self, session: AsyncSession, received: ReceivedEvent[SalesInquiryReceived]
+    ) -> None:
+        """A notice: a person asked sales about a custom-priced plan."""
+        del session
+        event = received.event
+        await self.raise_alert(received, sales_inquiry(self._site, event.user_id, event.team_size))
+
     def subscriptions(self) -> tuple[EventSubscription[Any], ...]:
         """One consumer per event kind; the names are the keys of their delivery marks."""
         return (
@@ -88,5 +102,12 @@ class BusinessAlerts:
                 queue=TaskQueue.DEFAULT,
                 deadline=DEADLINE,
                 handle=self.account_deleted,
+            ),
+            EventSubscription(
+                consumer="alerting.sales_inquiry_notice",
+                event=SalesInquiryReceived,
+                queue=TaskQueue.DEFAULT,
+                deadline=DEADLINE,
+                handle=self.sales_inquiry,
             ),
         )

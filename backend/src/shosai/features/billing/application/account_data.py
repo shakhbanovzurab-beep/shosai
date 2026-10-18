@@ -1,4 +1,4 @@
-"""Billing's handler of a person's data: subscriptions, minutes, devices, tokens and packs.
+"""Billing's handler of a person's data: subscriptions, usage, packs and sales inquiries.
 
 Export gives every table (a device claim without its hash), erasure deletes them in the
 person's home (ADR 0007: tombstones go with their account), and a transfer copies them
@@ -27,6 +27,7 @@ from shosai.features.billing.infrastructure.minutes_records import (
     FreePlanDeviceRecord,
     UsageEventRecord,
 )
+from shosai.features.billing.infrastructure.sales_records import SalesInquiryRecord
 from shosai.features.billing.infrastructure.subscription_records import (
     SubscriptionRecord,
     SubscriptionSegmentRecord,
@@ -45,6 +46,7 @@ MODELS: Final = (
     FreePlanDeviceRecord,
     TokenUsageRecord,
     CreditLedgerRecord,
+    SalesInquiryRecord,
 )
 ACCOUNT_DATA: Final = AccountDataSpec(
     OWNER, tuple(TableCoverage(model.__tablename__, Treatment.ERASE) for model in MODELS)

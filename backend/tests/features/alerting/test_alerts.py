@@ -12,6 +12,7 @@ from shosai.features.alerting.domain.alerts import (
     Severity,
     account_deleted,
     dollars,
+    sales_inquiry,
     spend_exceeded,
 )
 
@@ -27,6 +28,7 @@ def every_alert() -> list[BusinessAlert]:
     return [
         spend_exceeded(SITE, USER_ID, date(2026, 10, 16), 23_456_789, 20_000_000),
         account_deleted(SITE, USER_ID),
+        sales_inquiry(SITE, USER_ID, "51-200"),
     ]
 
 

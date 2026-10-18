@@ -924,6 +924,66 @@ export interface paths {
         patch: operations["change_promo_code_v1_admin_promo_codes__promo_id__patch"];
         trace?: never;
     };
+    "/v1/billing/plans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Plans
+         * @description The plans on sale with the person's own, in their currency, and the month's minutes.
+         */
+        get: operations["list_plans_v1_billing_plans_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/billing/sales-inquiry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Ask Sales
+         * @description Store the request; the owner is told with its ids and team size only.
+         */
+        post: operations["ask_sales_v1_billing_sales_inquiry_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/settings/usage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Usage
+         * @description This week's tokens per tier, the packs left and the frontier models used.
+         */
+        get: operations["read_usage_v1_settings_usage_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1340,6 +1400,32 @@ export interface components {
             code: string;
         };
         /**
+         * EntitlementsView
+         * @description What a plan unlocks: null is unlimited, 0 is not included.
+         */
+        EntitlementsView: {
+            /** Meeting Minutes Per Month */
+            meeting_minutes_per_month: number | null;
+            /** File Manager Gb */
+            file_manager_gb: number | null;
+            /** Knowledge Base Mb */
+            knowledge_base_mb: number | null;
+            /** Shared Workspace */
+            shared_workspace: boolean;
+            /** Member Management */
+            member_management: boolean;
+            /** Centralized Billing */
+            centralized_billing: boolean;
+            /** Sso */
+            sso: boolean;
+            /** Admin Controls */
+            admin_controls: boolean;
+            /** Priority Support */
+            priority_support: boolean;
+            /** Usage Analytics */
+            usage_analytics: boolean;
+        };
+        /**
          * ErrorDescription
          * @description The machine-readable error: a stable code, the request id and optional context.
          */
@@ -1451,6 +1537,32 @@ export interface components {
             email: string;
             /** Captcha Token */
             captcha_token?: string | null;
+        };
+        /**
+         * FrontierModelView
+         * @description A frontier model's tokens this week.
+         */
+        FrontierModelView: {
+            /** Model Id */
+            model_id: string;
+            /** Provider */
+            provider: string;
+            /** Name */
+            name: string;
+            /** Used Tokens */
+            used_tokens: number;
+        };
+        /**
+         * FrontierView
+         * @description Bought tokens left, this week's frontier models and the packs on sale.
+         */
+        FrontierView: {
+            /** Extra Tokens */
+            extra_tokens: number;
+            /** Models */
+            models: components["schemas"]["FrontierModelView"][];
+            /** Packs */
+            packs: components["schemas"]["TokenPackView"][];
         };
         /**
          * HealthStatus
@@ -1582,6 +1694,27 @@ export interface components {
              */
             cross_border_warning_confirmed: boolean;
         };
+        /**
+         * MeetingUsageView
+         * @description The month's meeting minutes; `limit_minutes` is null on unlimited plans.
+         */
+        MeetingUsageView: {
+            /** Used Minutes */
+            used_minutes: number;
+            /** Limit Minutes */
+            limit_minutes: number | null;
+            /**
+             * Resets At
+             * Format: date-time
+             */
+            resets_at: string;
+        };
+        /**
+         * ModelTier
+         * @description The classes of models a weekly token allowance is counted in (BL-D4).
+         * @enum {string}
+         */
+        ModelTier: "standard" | "frontier";
         /** Page[AdminUser] */
         Page_AdminUser_: {
             /** Items */
@@ -1598,6 +1731,26 @@ export interface components {
         };
         /** @enum {string} */
         PeriodScope: "month" | "year" | "both";
+        /**
+         * PlanCard
+         * @description A plan on the pricing page.
+         */
+        PlanCard: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Tagline */
+            tagline: string;
+            audience: components["schemas"]["Audience"];
+            seats: components["schemas"]["SeatsView"] | null;
+            price: components["schemas"]["PriceView"] | null;
+            entitlements: components["schemas"]["EntitlementsView"];
+            /** Features */
+            features: string[];
+            /** Highlighted */
+            highlighted: boolean;
+        };
         /**
          * PlanDeletion
          * @description A deleted plan and the promo codes it left, or the plan archived instead.
@@ -1724,14 +1877,6 @@ export interface components {
             updated_at: string;
         };
         /**
-         * PlansView
-         * @description Every plan of the catalogue.
-         */
-        PlansView: {
-            /** Plans */
-            plans: components["schemas"]["PlanView"][];
-        };
-        /**
          * PriceSet
          * @description A period's price in minor units in every currency.
          */
@@ -1742,6 +1887,20 @@ export interface components {
             USD: number;
             /** Eur */
             EUR: number;
+        };
+        /**
+         * PriceView
+         * @description A monthly price in minor units of the account's currency.
+         */
+        PriceView: {
+            /** Amount Cents */
+            amount_cents: number;
+            currency: components["schemas"]["Currency"];
+            /**
+             * Interval
+             * @constant
+             */
+            interval: "month";
         };
         /**
          * PromoCodesView
@@ -1960,10 +2119,58 @@ export interface components {
             password: string;
         };
         /**
+         * SalesInquiryAnswer
+         * @description The inquiry was received.
+         */
+        SalesInquiryAnswer: {
+            /**
+             * Status
+             * @constant
+             */
+            status: "received";
+        };
+        /**
+         * SalesInquiryBody
+         * @description An Enterprise request for sales.
+         */
+        SalesInquiryBody: {
+            /** Work Email */
+            work_email: string;
+            /** Company */
+            company: string;
+            /**
+             * Team Size
+             * @enum {string}
+             */
+            team_size: "1-10" | "11-50" | "51-200" | "201-1000" | "1000+";
+            /** Message */
+            message: string;
+        };
+        /**
+         * SeatView
+         * @description A workspace seat whose plan covers the member's own tools.
+         */
+        SeatView: {
+            /** Workspace Name */
+            workspace_name: string;
+            /** Plan Id */
+            plan_id: string;
+        };
+        /**
          * SeatsBody
          * @description How many users a per-seat plan is for; no upper bound when `max` is null.
          */
         SeatsBody: {
+            /** Min */
+            min: number;
+            /** Max */
+            max: number | null;
+        };
+        /**
+         * SeatsView
+         * @description How many users a team plan is sold for.
+         */
+        SeatsView: {
             /** Min */
             min: number;
             /** Max */
@@ -2102,6 +2309,20 @@ export interface components {
             ticket: string;
         };
         /**
+         * TokenPackView
+         * @description A one-off bundle of extra frontier tokens.
+         */
+        TokenPackView: {
+            /** Id */
+            id: string;
+            /** Tokens */
+            tokens: number;
+            /** Price Cents */
+            price_cents: number;
+            /** Currency */
+            currency: string;
+        };
+        /**
          * TokenResponse
          * @description A session: the access token, its lifetime in seconds and the CSRF value for refresh.
          */
@@ -2166,6 +2387,25 @@ export interface components {
         UnsubscribeAnswer: {
             /** Unsubscribed */
             unsubscribed: boolean;
+        };
+        /**
+         * UsageView
+         * @description The week's token usage.
+         */
+        UsageView: {
+            /**
+             * Week Start
+             * Format: date-time
+             */
+            week_start: string;
+            /**
+             * Resets At
+             * Format: date-time
+             */
+            resets_at: string;
+            /** Limits */
+            limits: components["schemas"]["WeeklyLimitView"][];
+            frontier: components["schemas"]["FrontierView"];
         };
         /**
          * UserMeResponse
@@ -2235,6 +2475,17 @@ export interface components {
             code: string;
         };
         /**
+         * WeeklyLimitView
+         * @description A tier's tokens this week.
+         */
+        WeeklyLimitView: {
+            tier: components["schemas"]["ModelTier"];
+            /** Used Tokens */
+            used_tokens: number;
+            /** Limit Tokens */
+            limit_tokens: number | null;
+        };
+        /**
          * WidgetCodeRequest
          * @description What the code widget handed the browser after the person allowed sign-in.
          */
@@ -2285,6 +2536,28 @@ export interface components {
              * @default en
              */
             language: string;
+        };
+        /**
+         * PlansView
+         * @description Every plan of the catalogue.
+         */
+        shosai__features__billing__channels__http__admin_plans__PlansView: {
+            /** Plans */
+            plans: components["schemas"]["PlanView"][];
+        };
+        /**
+         * PlansView
+         * @description The plans, the person's own and effective plan, and the month's minutes.
+         */
+        shosai__features__billing__channels__http__plans__PlansView: {
+            /** Plans */
+            plans: components["schemas"]["PlanCard"][];
+            /** Current Plan Id */
+            current_plan_id: string;
+            seat: components["schemas"]["SeatView"] | null;
+            /** Effective Plan Id */
+            effective_plan_id: string;
+            usage: components["schemas"]["MeetingUsageView"];
         };
     };
     responses: never;
@@ -3842,7 +4115,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PlansView"];
+                    "application/json": components["schemas"]["shosai__features__billing__channels__http__admin_plans__PlansView"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
@@ -4082,6 +4355,103 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PromoView"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_plans_v1_billing_plans_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["shosai__features__billing__channels__http__plans__PlansView"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    ask_sales_v1_billing_sales_inquiry_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesInquiryBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesInquiryAnswer"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_usage_v1_settings_usage_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UsageView"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

@@ -231,6 +231,13 @@ The slice `alerting` posts these to Alertmanager from events, not from Prometheu
 
 **Fix.** Nothing to do. A deletion that does not finish is a separate alert of identity's monitors.
 
+<a id="sales-inquiry-received"></a>
+### SalesInquiryReceived — `billing.sales_inquiry.received`, notice
+
+**Means.** A signed-in person sent the Enterprise form on the Upgrade page: a custom-priced plan for a team of the size in the message (billing, step 6). The work email, company and message are in `sales_inquiries` of the person's home, never in the chat.
+
+**Fix.** Answer the person at the work email of the inquiry. Until Admin › Billing lists inquiries (billing step 14), read it in the person's home: `SELECT work_email, company, team_size, message, created_at FROM sales_inquiries WHERE user_id = '<id from the card link>' ORDER BY created_at DESC LIMIT 1;`.
+
 ## Heartbeat
 
 <a id="watchdog"></a>

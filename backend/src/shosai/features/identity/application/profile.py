@@ -149,7 +149,9 @@ class Profiles:
         user = await session.get(User, user_id)
         if user is None:
             return None
-        return AccountProfile(user.display_name or user.full_name, user.language, user.timezone)
+        return AccountProfile(
+            user.display_name or user.full_name, user.language, user.timezone, user.country
+        )
 
     async def _point(self, principal: Principal, key: str | None) -> ProfileView:
         async with self._transactions.begin(principal.scope()) as session:

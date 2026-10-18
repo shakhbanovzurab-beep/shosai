@@ -51,12 +51,13 @@ def row(
     at: datetime,
     tokens: int,
     call: tuple[str, str] = ("expensive", "interactive"),
+    model: str = "probe/chat",
 ) -> CostEntry:
     """A call of `tokens` (input and output halves); `call` is its class and origin."""
     call_class, origin = call
     return CostEntry(
         home=person[0], user_id=person[1], org_id=None, cost_id=new_id(), created_at=at,
-        effect_key=f"leo:{uuid4()}", provider="openrouter", model="probe/chat", kind="chat",
+        effect_key=f"leo:{uuid4()}", provider="openrouter", model=model, kind="chat",
         feature="agent.turn", outcome="ok", input_tokens=tokens // 2,
         output_tokens=tokens - tokens // 2, cost_usd=Decimal("0.01"), cost_source="reported",
         call_class=call_class, origin=origin,

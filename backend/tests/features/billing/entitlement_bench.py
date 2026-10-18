@@ -64,6 +64,7 @@ class EntitlementBench:
     cache: EntitlementCache
     ledger: SubscriptionLedger
     snapshots: EntitlementSnapshots
+    ledger_outbox: EventOutbox
     clock: Clock = field(default_factory=Clock)
 
     def without_database(self) -> EntitlementSnapshots:
@@ -110,5 +111,6 @@ async def entitlements(
         cache=cache,
         ledger=SubscriptionLedger(outbox, cache),
         snapshots=EntitlementSnapshots(homes.transactions, cache, clock),
+        ledger_outbox=outbox,
         clock=clock,
     )

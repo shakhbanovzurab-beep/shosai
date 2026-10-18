@@ -1,7 +1,7 @@
 """The events billing publishes (billing plan §3.2): ids, amounts in minor units, codes, times.
 
-Consumers: workspaces follows seats and suspension, alerting reports payments and refunds
-(ADR 0052), proactive may tell a person their minutes ran out.
+Consumers: workspaces follows seats and suspension, alerting reports payments, refunds and
+sales inquiries (ADR 0052), proactive may tell a person their minutes ran out.
 """
 
 from datetime import datetime
@@ -72,3 +72,13 @@ class QuotaExhausted(DomainEvent):
     version: ClassVar[int] = 1
     user_id: UUID
     meter: Meter
+
+
+class SalesInquiryReceived(DomainEvent):
+    """A person asked sales about a custom-priced plan; the details stay in their home."""
+
+    event_type: ClassVar[str] = "billing.sales_inquiry.received"
+    version: ClassVar[int] = 1
+    inquiry_id: UUID
+    user_id: UUID
+    team_size: EventCode

@@ -15,8 +15,10 @@ answers from an in-memory demo (`src/features/upgrade/server/`). Errors: `{"deta
 
 Plans are managed in **Admin › Plans** (`/api/admin/plans`, `src/features/admin-plans`); the
 catalog returned here is the active, non-archived plans in their `sort_order`, mapped to the
-customer-facing shape (`id` is the plan's slug, `price` is the monthly USD price, `null` when the
-plan has `custom_pricing`). The seeded plans:
+customer-facing shape (`id` is the plan's slug, `price` is the monthly price in the account's currency —
+roubles for Russia, euros for the euro area and its neighbours, dollars elsewhere, chosen by the server from
+the account's country, never the client — and `null` when the plan has `custom_pricing`). The account's own
+plan is listed even when it is no longer on sale. The seeded plans:
 
 | Tab        | Plan         | Price               | Users  | Meetings              | File Manager       | Knowledge for Leo  | Extras |
 | ---------- | ------------ | ------------------- | ------ | --------------------- | ------------------ | ------------------ | ------ |

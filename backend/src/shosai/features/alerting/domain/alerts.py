@@ -86,3 +86,19 @@ def account_deleted(site: str, user_id: UUID) -> BusinessAlert:
         runbook="account-deleted",
         admin_card=admin_card(site, user_id),
     )
+
+
+def sales_inquiry(site: str, user_id: UUID, team_size: str) -> BusinessAlert:
+    """A person asked sales about a custom-priced plan: a notice to answer them."""
+    return BusinessAlert(
+        kind="billing.sales_inquiry.received",
+        name="SalesInquiryReceived",
+        severity=Severity.NOTICE,
+        summary=f"Новая заявка в отдел продаж: команда {team_size} человек",
+        description=(
+            "Человек спросил о тарифе с ценой по договорённости. Рабочая почта, компания и "
+            "сообщение хранятся в его доме; ответьте ему по почте из заявки."
+        ),
+        runbook="sales-inquiry-received",
+        admin_card=admin_card(site, user_id),
+    )
