@@ -56,17 +56,29 @@ class Folders:
         """A folder's new name, or Leo's use of its files switched on or off."""
         limit = await self._leo.limit(principal) if leo else None
         async with self._transactions.begin(principal.scope()) as session:
-            if leo is not None:
-                await self._leo.hold(session, principal.user_id)
-            record = await self._own(session, principal, folder_id)
-            if name is not None and name != record.name:
-                record.name, record.updated_at = name, datetime.now(UTC)
-            if leo is not None and leo != record.leo:
-                files = await self._files_in(session, principal, folder_id)
-                shift = self._switch(record, files, on=leo)
-                record.updated_at = datetime.now(UTC)
-                await session.flush()
-                await self._leo.settle(session, principal.user_id, shift, limit)
+            return await self.change(session, principal, (folder_id, name, leo), limit)
+
+    async def change(
+        self,
+        session: AsyncSession,
+        principal: Principal,
+        target: tuple[UUID, str | None, bool | None],
+        limit: int | None,
+    ) -> FolderView:
+        """The folder's new name or Leo switch in the caller's transaction; `limit` is the
+        knowledge limit, read before the transaction when the switch goes on."""
+        folder_id, name, leo = target
+        if leo is not None:
+            await self._leo.hold(session, principal.user_id)
+        record = await self._own(session, principal, folder_id)
+        if name is not None and name != record.name:
+            record.name, record.updated_at = name, datetime.now(UTC)
+        if leo is not None and leo != record.leo:
+            files = await self._files_in(session, principal, folder_id)
+            shift = self._switch(record, files, on=leo)
+            record.updated_at = datetime.now(UTC)
+            await session.flush()
+            await self._leo.settle(session, principal.user_id, shift, limit)
         return folder_view(record)
 
     async def delete(self, principal: Principal, folder_id: UUID) -> None:

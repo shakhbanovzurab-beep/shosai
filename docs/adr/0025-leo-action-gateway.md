@@ -48,7 +48,7 @@ Underneath, the guarantee does not hold:
 
    Persistent-injection sinks (personalization, prompts, user context) are not writable over MCP.
 10. **Audit:**
-    - item effects through the outbox, `agent.action_item_executed` with ids and codes and no content;
+    - item effects through the outbox, `agent.action_item.executed` with ids and codes and no content (the event type follows `slice.object.happened`);
     - rejections and expiries recorded by the gateway;
     - `agent_audit` is partitioned monthly, kept 12 months, and append-only by role.
 

@@ -33,6 +33,7 @@ __all__ = [
     "FileFacts",
     "FileKind",
     "FileReader",
+    "FileUnreadableError",
     "IndexStage",
     "IndexState",
     "IndexStatus",
@@ -86,8 +87,19 @@ class FileFacts:
     leo_readable: bool
 
 
+class FileUnreadableError(AppError):
+    """No such file the viewer may read: missing, deleted, or not theirs to read (404)."""
+
+    def __init__(self) -> None:
+        super().__init__("file_not_found", HTTPStatus.NOT_FOUND)
+
+
 class FileReader(Protocol):
-    """Files a viewer may read, through workspaces' access policy (inv-14)."""
+    """Files a viewer may read, through workspaces' access policy (inv-14).
+
+    A deleted file and a file of an account in identity's deletion window are read by
+    nobody. Knowledge indexes files and re-checks every search hit through this port.
+    """
 
     async def facts(
         self, session: AsyncSession, viewer: Viewer, file_ids: Sequence[UUID]
@@ -98,7 +110,8 @@ class FileReader(Protocol):
     def open(
         self, home: Home, viewer: Viewer, file_id: UUID
     ) -> AbstractAsyncContextManager[ObjectStream]:
-        """The bytes of a readable file; a file the viewer may not read is not found."""
+        """The bytes of a readable file; `FileUnreadableError` for any other. The bytes are
+        read after the access check's transaction ends."""
         ...
 
 

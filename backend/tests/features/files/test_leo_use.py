@@ -11,7 +11,7 @@ from sqlalchemy.dialects.postgresql import insert
 
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
-from shosai.features.files.application.file_manager import FileChanges
+from shosai.features.files.application.file_edits import FileChanges
 from shosai.features.files.application.file_views import FileView
 from shosai.features.files.contracts import IndexStage
 from shosai.features.files.domain.leo import LeoVia

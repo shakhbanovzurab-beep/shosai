@@ -565,7 +565,7 @@ proposed ──approve──► approved ──claim──► executing ──�
 3. **Expiry.** Interactive proposals expire after 1 h. Proposals produced by initiative expire with their suggestion (≤ 24 h). Errand approvals are valid until their `not_before` plus the lateness tolerance (§9.5).
 4. **Secrets** go through a one-time Valkey vault (`GETDEL`, TTL 5 min). The secret is submitted only with the approval request, never by voice, never in a checkpoint, a message or an action row.
 5. **Batches** apply item by item, with honest partial success; they are never presented as atomic.
-6. **Audit.** Each item's effect emits an outbox event `agent.action_item_executed` (ids, tool, status, codes; no content) in the slice's transaction. The `agent` slice consumes it into `agent_audit` (monthly partitions, 12 months, append-only role). Rejections and expiries are audited by the gateway itself.
+6. **Audit.** Each item's effect emits an outbox event `agent.action_item.executed` (ids, tool, status, codes; no content) in the slice's transaction — core's `ActionItems.once` claims the item key in the effect-key ledger, runs the effect and writes the event together, so a slice's `execute` cannot forget either. The `agent` slice consumes it into `agent_audit` (monthly partitions, 12 months, append-only role). Rejections and expiries are audited by the gateway itself.
 
 **Confirmation channels:**
 

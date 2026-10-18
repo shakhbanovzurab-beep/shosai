@@ -47,6 +47,8 @@ KIND_BY_EXTENSION: Final = {
     "zip": FileKind.ARCHIVE,
     "rar": FileKind.ARCHIVE,
 }
+# Байты этих файлов — уже текст: инструмент чтения Leo цитирует их начало без разбора.
+PLAIN_TEXT_EXTENSIONS: Final = frozenset({"txt", "md", "csv", "json"})
 # Активное содержимое браузер исполнил бы на домене бакета: только скачивание (урок черновика).
 ACTIVE_CONTENT_TYPES: Final = frozenset(
     {
@@ -76,6 +78,11 @@ def leo_readable(name: str, size_bytes: int) -> bool:
     """Whether Leo can read the file at all: a supported extension, up to 50 MiB."""
     lowered = name.lower()
     return size_bytes <= LEO_MAX_FILE_BYTES and any(lowered.endswith(ext) for ext in LEO_EXTENSIONS)
+
+
+def plain_text(name: str) -> bool:
+    """Whether Leo's read tool can quote the file's bytes as text without parsing them."""
+    return extension_of(name) in PLAIN_TEXT_EXTENSIONS
 
 
 def opens_inline(content_type: str) -> bool:

@@ -14,7 +14,7 @@ from sqlalchemy.dialects.postgresql import insert
 from shosai.core.config.roles import ProcessRole
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
-from shosai.features.files.application.file_manager import FileChanges
+from shosai.features.files.application.file_edits import FileChanges
 from shosai.features.files.application.leo_sweep import LeoSweep
 from shosai.features.files.domain.quota import QuotaAction
 from shosai.features.files.infrastructure.file_records import FileFolderRecord, StorageFileRecord

@@ -14,7 +14,7 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
 from shosai.core.storage.port import Disposition, ObjectStorage
-from shosai.features.files.application.file_manager import file_gone
+from shosai.features.files.application.file_edits import file_gone
 from shosai.features.files.application.visibility import visible_files
 from shosai.features.files.domain.kinds import opens_inline
 from shosai.features.files.infrastructure.download_links import edge_link

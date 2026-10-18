@@ -9,6 +9,7 @@ from collections.abc import Sequence
 
 from shosai.core.access.shareable import ShareableResource
 from shosai.core.account_data.spec import CORE_ACCOUNT_DATA, AccountDataSpec
+from shosai.core.agent_tools.events import ActionItemExecuted
 from shosai.core.ai.events import UserSpendExceeded
 from shosai.core.config.gate import ProductionCheck
 from shosai.core.config.sections import SettingsSection
@@ -51,7 +52,7 @@ def shareable_resources(features: Sequence[FeatureModule]) -> list[ShareableReso
 
 
 # События ядра: их, как и события срезов, знают outbox и каталог подписок.
-CORE_EVENTS: tuple[type[DomainEvent], ...] = (UserSpendExceeded,)
+CORE_EVENTS: tuple[type[DomainEvent], ...] = (UserSpendExceeded, ActionItemExecuted)
 
 
 def feature_events(features: Sequence[FeatureModule]) -> list[type[DomainEvent]]:

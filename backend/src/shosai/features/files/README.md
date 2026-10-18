@@ -70,3 +70,11 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 - During the window the daily passes of FL-D2 and FL-D10 leave the person alone: no reminder, no removal, nothing switched off. Erasure and transfer go through the account data handler of step 2, whatever the flags say.
 - Support's list and restore of deleted files live in `application/support_files.py` (`HiddenFiles` keeps the purge): an account in its window answers 409 `account_deletion_scheduled` to both, so only cancelling the deletion brings its files back; every list and restore is recorded through identity's `identity.operator_audit` port (`files_listed`, `file_restored` with the file's id) and reaches the admin's EU audit log.
 
+## `FileReader` and Leo's `files` toolset (step 9)
+
+- `application/file_reader.py` binds `files.file_reader`: `facts(session, viewer, ids)` in the caller's transaction and `open(home, viewer, id)` after a short access check of its own, both starting from `visible_files`, so a deleted file and a file of an account in its deletion window are read by nobody. Knowledge indexes files and re-checks every search hit through it; the agent's read tool below uses it.
+- `channels/agent_tools.py` declares the toolset (Leo §8.1), `channels/agent_tool_reads.py` and `channels/agent_tool_writes.py` bind it:
+  - `files.search` — files the person may read whose name contains the query (any language; `%` and `_` are literal), newest first, at most 20, with `owned` and, for own files, the folder and Leo's use;
+  - `files.read` — a file's facts through `FileReader` and, for txt, md, csv and json, its first 16 KiB as an excerpt of at most 6,000 characters; other kinds answer `no_excerpt: not_text` until knowledge parses them;
+  - `files.set_leo_use` (a file or a folder), `files.move`, `files.delete` — `plan` checks the target is the person's own and freezes it, `preview` is `agent.files.set_leo_use|move|delete` with the names, `execute` applies the plan in the person's transaction through the same edits as the routes (`application/file_edits.py`, `Folders.change`), once per item key with `agent.action_item.executed` (core's `ActionItems`). Refusals become typed tool errors: `not_found`, `limit_reached` (the knowledge limit), `unavailable`, `failed` with the slice's code.
+

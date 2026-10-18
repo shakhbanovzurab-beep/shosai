@@ -12,14 +12,21 @@ from prometheus_client import CollectorRegistry
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.agent_tools.events import ActionItemExecuted
 from shosai.core.events.catalog import EventTypes
+from shosai.core.events.domain_event import DomainEvent
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.events.records import OutboxMessage
+from shosai.core.idempotency.action_items import ActionItems
+from shosai.core.idempotency.ledger import EffectLedger
+from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.billing.contracts import ENTITLEMENTS
 from shosai.features.files.application.downloads import Downloads
+from shosai.features.files.application.file_edits import FileEdits
 from shosai.features.files.application.file_manager import FileManager
+from shosai.features.files.application.file_reader import FilesReader
 from shosai.features.files.application.file_views import FileView
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.application.hidden_files import HiddenFiles
@@ -28,6 +35,8 @@ from shosai.features.files.application.leo_watch import LeoWatch
 from shosai.features.files.application.quota_watch import QuotaWatch
 from shosai.features.files.application.support_files import SupportFiles
 from shosai.features.files.application.upload_rules import UploadRequest
+from shosai.features.files.channels.agent_tool_reads import FileReads
+from shosai.features.files.channels.agent_tool_writes import FileWrites
 from shosai.features.files.domain.purposes import UploadPurpose
 from shosai.features.files.infrastructure.quota_metrics import QuotaMetrics
 from shosai.features.files.infrastructure.upload_records import StorageUsageRecord
@@ -79,6 +88,9 @@ class FileBench:
     watch: QuotaWatch
     leo: LeoUse
     leo_watch: LeoWatch
+    reader: FilesReader
+    reads: FileReads
+    writes: FileWrites
     registry: CollectorRegistry
 
     async def uploaded(self, who: Principal, name: str, body: bytes) -> uuid.UUID:
@@ -137,7 +149,13 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
     """The File Manager over the upload bench; downloads point at the edge, bearer and admin
     sessions are the test's."""
     transactions = upload_bench.transactions
-    outbox = EventOutbox(EventTypes([*FILES.events, *WORKSPACES.events, *IDENTITY_EVENTS]))
+    events: list[type[DomainEvent]] = [
+        *FILES.events,
+        *WORKSPACES.events,
+        *IDENTITY_EVENTS,
+        ActionItemExecuted,
+    ]
+    outbox = EventOutbox(EventTypes(events))
     registry = CollectorRegistry()
     ports = PortDirectory()
     policy = WorkspaceAccessPolicy(outbox, WorkspaceAuditLog())
@@ -151,17 +169,24 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
     watch = QuotaWatch(transactions, (ports, outbox, mail, metrics), upload_bench.clock)
     leo = LeoUse(ports, outbox)
     leo_watch = LeoWatch(transactions, (ports, leo, mail, metrics), upload_bench.clock)
+    edits = FileEdits(ports, outbox, leo)
+    folders = Folders(transactions, (ports, leo))
+    reader = FilesReader(transactions, (ports, upload_bench.storage.objects))
+    items = ActionItems(EffectLedger(EffectKeyMetrics(registry)), outbox)
     yield FileBench(
         uploads=upload_bench,
         ports=ports,
         outbox=outbox,
-        manager=FileManager(transactions, (ports, outbox, upload_bench.claims, leo)),
-        folders=Folders(transactions, (ports, leo)),
+        manager=FileManager(transactions, (ports, outbox, upload_bench.claims, leo, edits)),
+        folders=folders,
         downloads=Downloads(transactions, (upload_bench.storage.objects, ports), EDGE),
         hidden=HiddenFiles(transactions, upload_bench.deleter, upload_bench.clock),
         support=SupportFiles(transactions, (ports, outbox, watch, leo, leo_watch)),
         watch=watch,
         leo=leo,
         leo_watch=leo_watch,
+        reader=reader,
+        reads=FileReads(transactions, (ports, reader)),
+        writes=FileWrites(transactions, (edits, folders, leo, items)),
         registry=registry,
     )

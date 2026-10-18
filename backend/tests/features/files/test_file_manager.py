@@ -14,7 +14,7 @@ from shosai.core.config.roles import ProcessRole
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
-from shosai.features.files.application.file_manager import FileChanges
+from shosai.features.files.application.file_edits import FileChanges
 from shosai.features.files.application.hidden_files import HiddenFiles
 from shosai.features.files.infrastructure.file_records import StorageFileRecord
 from shosai.features.files.infrastructure.upload_records import (

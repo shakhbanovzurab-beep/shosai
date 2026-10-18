@@ -26,6 +26,7 @@ class ToolErrorCode(StrEnum):
     NOT_FOUND = "not_found"
     FORBIDDEN = "forbidden"
     NOT_ENTITLED = "not_entitled"
+    LIMIT_REACHED = "limit_reached"
     SWITCHED_OFF = "switched_off"
     CONFLICT = "conflict"
     TIMEOUT = "timeout"
@@ -42,6 +43,10 @@ TOOL_ERROR_TEXTS: Final[Mapping[ToolErrorCode, str]] = {
     ToolErrorCode.NOT_FOUND: "Nothing was found for these arguments; it may have been deleted.",
     ToolErrorCode.FORBIDDEN: "The user has no access to this. Do not retry; tell the user.",
     ToolErrorCode.NOT_ENTITLED: "The user's plan does not include this tool. Tell the user.",
+    ToolErrorCode.LIMIT_REACHED: (
+        "This would go over a limit of the user's plan. Do not retry; tell the user what "
+        "they can free up or that a larger plan allows it."
+    ),
     ToolErrorCode.SWITCHED_OFF: "The user turned this tool off in settings. Do not retry.",
     ToolErrorCode.CONFLICT: "The data changed since it was read. Read it again before acting.",
     ToolErrorCode.TIMEOUT: "The tool did not answer in time. Retry once at most.",

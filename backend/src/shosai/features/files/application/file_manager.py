@@ -8,12 +8,12 @@ the file at once, frees its bytes and tells knowledge and workspaces (FL-D5); th
 removes it 7 days later. A change that may start or stop Leo's use goes through `LeoUse`.
 """
 
-from dataclasses import dataclass, replace
+from dataclasses import replace
 from datetime import UTC, datetime
 from http import HTTPStatus
 from uuid import UUID
 
-from sqlalchemy import Select, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
@@ -22,7 +22,12 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.ids import new_id
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.billing.contracts import ENTITLEMENTS
-from shosai.features.files.application.deletion import hide_file
+from shosai.features.files.application.file_edits import (
+    FileChanges,
+    FileEdits,
+    check_folder,
+    file_gone,
+)
 from shosai.features.files.application.file_views import (
     QUEUED,
     FileView,
@@ -42,7 +47,6 @@ from shosai.features.files.application.leo_use import (
 )
 from shosai.features.files.application.upload_claims import UploadClaims
 from shosai.features.files.application.uploads import storage_refusal
-from shosai.features.files.application.visibility import visible_files
 from shosai.features.files.contracts.events import FileUploaded, LeoReindexRequested
 from shosai.features.files.domain.kinds import kind_of, leo_readable
 from shosai.features.files.domain.leo import LeoShift, knowledge_limit
@@ -50,40 +54,8 @@ from shosai.features.files.domain.names import copy_name
 from shosai.features.files.domain.purposes import FILES_PER_REQUEST, UploadPurpose
 from shosai.features.files.domain.quota import limit_bytes
 from shosai.features.files.infrastructure import usage_store
-from shosai.features.files.infrastructure.file_records import FileFolderRecord, StorageFileRecord
+from shosai.features.files.infrastructure.file_records import StorageFileRecord
 from shosai.features.identity.contracts import Principal
-from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
-
-
-def file_gone() -> AppError:
-    """No such file the person may use."""
-    return AppError("file_not_found", HTTPStatus.NOT_FOUND)
-
-
-def folder_gone() -> AppError:
-    """The folder named is not the person's any more."""
-    return AppError("folder_not_found", HTTPStatus.CONFLICT)
-
-
-@dataclass(frozen=True, slots=True)
-class FileChanges:
-    """What the owner changes; `move` says whether `folder_id` applies (None is the root)."""
-
-    name: str | None = None
-    move: bool = False
-    folder_id: UUID | None = None
-    starred: bool | None = None
-    leo: bool | None = None
-
-    @property
-    def may_start_leo(self) -> bool:
-        """Whether Leo may start using the file: a rename changes what Leo can read."""
-        return self.leo is True or self.move or self.name is not None
-
-    @property
-    def touches_leo(self) -> bool:
-        """Whether Leo's use of the file may change at all."""
-        return self.leo is not None or self.may_start_leo
 
 
 class FileManager:
@@ -92,10 +64,10 @@ class FileManager:
     def __init__(
         self,
         transactions: HomeTransactions,
-        services: tuple[PortDirectory, EventOutbox, UploadClaims, LeoUse],
+        services: tuple[PortDirectory, EventOutbox, UploadClaims, LeoUse, FileEdits],
     ) -> None:
         self._transactions = transactions
-        self._ports, self._outbox, self._claims, self._leo = services
+        self._ports, self._outbox, self._claims, self._leo, self._edits = services
 
     async def listing(self, principal: Principal) -> tuple[list[FolderView], list[FileView]]:
         """The person's folders by name and files newest first."""
@@ -103,7 +75,7 @@ class FileManager:
             folders = list(await session.scalars(own_folders(principal.user_id)))
             files = list(
                 await session.scalars(
-                    self._own_files(principal).order_by(StorageFileRecord.modified_at.desc())
+                    self._edits.own_files(principal).order_by(StorageFileRecord.modified_at.desc())
                 )
             )
             views = await file_views(session, self._ports, files, leo_folders(folders))
@@ -144,31 +116,7 @@ class FileManager:
         """Rename, move, star a file or switch Leo's use of it."""
         limit = await self._leo.limit(principal) if changes.may_start_leo else None
         async with self._transactions.begin(principal.scope()) as session:
-            if changes.touches_leo:
-                await self._leo.hold(session, principal.user_id)
-            record = await self._own(session, principal, file_id)
-            folders = list(await session.scalars(own_folders(principal.user_id)))
-            in_leo = leo_folders(folders)
-            before = candidate(record, in_leo)
-            if changes.name is not None and changes.name != record.name:
-                record.name = changes.name
-                record.modified_at = datetime.now(UTC)
-            if changes.move:
-                check_folder(folders, changes.folder_id)
-                record.folder_id = changes.folder_id
-            if changes.starred is not None:
-                record.starred = changes.starred
-            if changes.leo is not None:
-                if changes.leo and not leo_readable(record.name, record.size_bytes):
-                    raise leo_unreadable()
-                record.leo_on = changes.leo
-                # Включив файл сам, человек снимает удержание FL-D10 — в пределах лимита.
-                record.leo_held = record.leo_held and not changes.leo
-            await session.flush()
-            shift = LeoShift.of([(before, candidate(record, in_leo))])
-            await self._leo.settle(session, principal.user_id, shift, limit)
-            [view] = await file_views(session, self._ports, [record], in_leo)
-        return view
+            return await self._edits.edit(session, principal, (file_id, changes), limit)
 
     async def copy(self, principal: Principal, file_id: UUID, name: str | None) -> FileView:
         """A new file on the same object in the source's folder; it counts against the limit."""
@@ -177,7 +125,7 @@ class FileManager:
         async with self._transactions.begin(principal.scope()) as session:
             await self._leo.hold(session, principal.user_id)
             await usage_store.lock(session, principal.user_id)
-            source = await self._own(session, principal, file_id)
+            source = await self._edits.own(session, principal, file_id)
             if not await usage_store.charge(session, principal.user_id, source.size_bytes, limit):
                 raise storage_refusal(limit)
             taken = set(await session.scalars(select(StorageFileRecord.name).where(
@@ -208,7 +156,7 @@ class FileManager:
     async def reindex(self, principal: Principal, file_id: UUID) -> FileView:
         """Ask Leo to read a file it uses again; the answer shows it queued."""
         async with self._transactions.begin(principal.scope()) as session:
-            record = await self._own(session, principal, file_id)
+            record = await self._edits.own(session, principal, file_id)
             in_leo = leo_folders(list(await session.scalars(own_folders(principal.user_id))))
             if not candidate(record, in_leo).used:
                 raise leo_not_used()
@@ -220,25 +168,7 @@ class FileManager:
     async def delete(self, principal: Principal, file_id: UUID) -> None:
         """Hide the file now, free its bytes and tell those who used it (FL-D5)."""
         async with self._transactions.begin(principal.scope()) as session:
-            await usage_store.lock(session, principal.user_id)
-            record = await self._own(session, principal, file_id)
-            await hide_file(session, self._outbox, record, datetime.now(UTC))
-
-    def _own_files(self, principal: Principal) -> Select[StorageFileRecord]:
-        viewer = Viewer(principal.user_id)
-        return visible_files(self._ports.get(ACCESS_POLICY), viewer).where(
-            StorageFileRecord.user_id == principal.user_id, StorageFileRecord.org_id.is_(None)
-        )
-
-    async def _own(
-        self, session: AsyncSession, principal: Principal, file_id: UUID
-    ) -> StorageFileRecord:
-        record = await session.scalar(
-            self._own_files(principal).where(StorageFileRecord.id == file_id).with_for_update()
-        )
-        if record is None:
-            raise file_gone()
-        return record
+            await self._edits.remove(session, principal, file_id)
 
     async def _file_of(
         self,
@@ -271,9 +201,3 @@ class FileManager:
         )  # fmt: skip
         await self._outbox.add(session, event)
         return record, True
-
-
-def check_folder(folders: list[FileFolderRecord], folder_id: UUID | None) -> None:
-    """The folder named is one of the person's, or the root."""
-    if folder_id is not None and all(folder.id != folder_id for folder in folders):
-        raise folder_gone()

@@ -19,7 +19,8 @@ from pydantic import BaseModel, ConfigDict, Field
 from shosai.core.kernel.errors import AppError
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.files.application.downloads import Downloads
-from shosai.features.files.application.file_manager import FileChanges, FileManager
+from shosai.features.files.application.file_edits import FileChanges
+from shosai.features.files.application.file_manager import FileManager
 from shosai.features.files.application.file_views import FileView, FolderView
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.contracts import IndexStage
