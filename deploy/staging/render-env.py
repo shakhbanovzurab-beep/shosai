@@ -23,7 +23,7 @@ import secrets
 import string
 import sys
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 DEPLOY_USER = "deploy"
 # Статический адрес Valkey в сети плоскости: гейт пускает redis:// только на IP частной сети.
@@ -32,6 +32,7 @@ EDGE_ADDRESS = "172.30.42.2"
 INTERNAL_CA = "/run/shosai-tls/internal-ca.crt"
 TIMEWEB_CA = "/run/shosai-tls/timeweb-ca.crt"
 STORAGE_ORIGIN_SCHEME = "https://"
+SERVER_NAME = "shosai.tech"
 GENERATED = (
     "VALKEY_PASSWORD",
     "REDIS_CACHE_PASSWORD",
@@ -172,6 +173,8 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
         # Alertmanager (ADR 0052).
         "OTEL_EXPORTER_OTLP_ENDPOINT": "http://collector:4318",
         "ALERTING_ENABLED": "true",
+        # Скачивания идут через edge, который ставит nosniff и песочницу (FL-D9, ADR 0055 п. 8).
+        "FILES_DOWNLOAD_BASE_URL": f"https://{SERVER_NAME}/dl",
     }
     env |= {key: source[key] for key in COPIED if source.get(key)}
     for home in ("RU", "EU"):
@@ -180,6 +183,14 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
             f"pgbouncer-{home.lower()}", "6432", INTERNAL_CA,
         )  # fmt: skip
     return env
+
+
+def storage_origin(endpoint: str) -> str:
+    """The bucket's scheme://host[:port], as the edge's downloads reach it; only over TLS."""
+    parts = urlsplit(endpoint)
+    if parts.scheme != "https" or not parts.netloc:
+        sys.exit(f"хранилище дома не по HTTPS: {parts.scheme}://{parts.netloc}")
+    return f"{parts.scheme}://{parts.netloc}"
 
 
 def probe_targets(source: dict[str, str], domain: str) -> str:
@@ -283,6 +294,10 @@ def main(source_path: Path, target: Path) -> None:
         source[f"HOME_{home}_S3_ENDPOINT_URL"].rstrip("/") for home in ("RU", "EU")
         if source[f"HOME_{home}_S3_ENDPOINT_URL"].startswith(STORAGE_ORIGIN_SCHEME)
     })  # fmt: skip
+    downloads = {
+        f"SHOSAI_DOWNLOAD_{home}_ORIGIN": storage_origin(source[f"HOME_{home}_S3_ENDPOINT_URL"])
+        for home in ("RU", "EU")
+    }
     compose = target / ".env"
     images = read_env(compose) if compose.exists() else {}
     write_private(
@@ -290,8 +305,9 @@ def main(source_path: Path, target: Path) -> None:
         render({
             "SHOSAI_BACKEND_IMAGE": images.get("SHOSAI_BACKEND_IMAGE", "shosai-backend:staging"),
             "SHOSAI_EDGE_IMAGE": images.get("SHOSAI_EDGE_IMAGE", "shosai-edge:staging"),
-            "SHOSAI_SERVER_NAME": "shosai.tech",
+            "SHOSAI_SERVER_NAME": SERVER_NAME,
             "SHOSAI_CSP_STORAGE_ORIGINS": " ".join(origins),
+            **downloads,
         }),
         owner,
     )  # fmt: skip

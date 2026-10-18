@@ -1048,6 +1048,178 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Files
+         * @description The person's folders by name and files newest first.
+         */
+        get: operations["list_files_v1_files_get"];
+        put?: never;
+        /**
+         * Register Files
+         * @description Turn ready uploads into files; a repeat answers the same files.
+         */
+        post: operations["register_files_v1_files_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/files/{file_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete File
+         * @description Delete a file: gone for the person now, kept hidden 7 days for support.
+         */
+        delete: operations["delete_file_v1_files__file_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Update File
+         * @description Rename, move or star a file.
+         */
+        patch: operations["update_file_v1_files__file_id__patch"];
+        trace?: never;
+    };
+    "/v1/files/{file_id}/copy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Copy File
+         * @description An instant copy sharing the stored bytes.
+         */
+        post: operations["copy_file_v1_files__file_id__copy_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/files/{file_id}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download File
+         * @description A 15-minute link to the bytes, through the edge.
+         */
+        get: operations["download_file_v1_files__file_id__download_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/files/folders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Folder
+         * @description A new folder.
+         */
+        post: operations["create_folder_v1_files_folders_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/files/folders/{folder_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Folder
+         * @description Remove a folder; its files move to the root.
+         */
+        delete: operations["delete_folder_v1_files_folders__folder_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Rename Folder
+         * @description A folder's new name.
+         */
+        patch: operations["rename_folder_v1_files_folders__folder_id__patch"];
+        trace?: never;
+    };
+    "/v1/admin/users/{user_id}/files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Hidden Files
+         * @description The person's files deleted within the last 7 days.
+         */
+        get: operations["list_hidden_files_v1_admin_users__user_id__files_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/users/{user_id}/files/{file_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Restore File
+         * @description Bring a deleted file back into the person's File Manager and quota.
+         */
+        post: operations["restore_file_v1_admin_users__user_id__files__file_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1301,6 +1473,14 @@ export interface components {
             share_location?: boolean | null;
         };
         /**
+         * CopyBody
+         * @description The copy's name; a numbered name of the source when left out.
+         */
+        CopyBody: {
+            /** Name */
+            name?: string | null;
+        };
+        /**
          * Currency
          * @description A currency a plan is priced and paid in.
          * @enum {string}
@@ -1412,6 +1592,19 @@ export interface components {
         };
         /** @enum {string} */
         DiscountType: "percent" | "fixed";
+        /**
+         * DownloadOut
+         * @description Where the browser fetches the bytes, for 15 minutes.
+         */
+        DownloadOut: {
+            /** Url */
+            url: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+        };
         /**
          * EmailChallenge
          * @description The sealed challenge the browser keeps, and when it may ask for another code.
@@ -1593,6 +1786,92 @@ export interface components {
             premium_credit_amount: number;
         };
         /**
+         * FileFolder
+         * @description A flat folder.
+         */
+        FileFolder: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Leo */
+            leo: boolean;
+        };
+        /**
+         * FileItem
+         * @description A file of the File Manager.
+         */
+        FileItem: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            kind: components["schemas"]["FileKind"];
+            /** Content Type */
+            content_type: string;
+            /** Size Bytes */
+            size_bytes: number;
+            /** Folder Id */
+            folder_id: string | null;
+            /**
+             * Modified At
+             * Format: date-time
+             */
+            modified_at: string;
+            /** Starred */
+            starred: boolean;
+            /** Leo Readable */
+            leo_readable: boolean;
+            leo: components["schemas"]["LeoUseOut"] | null;
+        };
+        /**
+         * FileKind
+         * @description The cabinet's kinds of files.
+         * @enum {string}
+         */
+        FileKind: "document" | "spreadsheet" | "presentation" | "pdf" | "text" | "design" | "image" | "archive" | "other";
+        /**
+         * FileUpdate
+         * @description What the owner changes; `folder_id: null` moves to the root.
+         */
+        FileUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Folder Id */
+            folder_id?: string | null;
+            /** Starred */
+            starred?: boolean | null;
+        };
+        /**
+         * FilesResponse
+         * @description The person's folders and files, newest first.
+         */
+        FilesResponse: {
+            /** Folders */
+            folders: components["schemas"]["FileFolder"][];
+            /** Files */
+            files: components["schemas"]["FileItem"][];
+        };
+        /**
+         * FolderBody
+         * @description A folder's name.
+         */
+        FolderBody: {
+            /** Name */
+            name: string;
+        };
+        /**
          * ForgotRequest
          * @description The address to mail a reset link to; the captcha is always shown here.
          */
@@ -1640,6 +1919,34 @@ export interface components {
             status: "ok";
         };
         /**
+         * HiddenFileOut
+         * @description A deleted file support may still restore.
+         */
+        HiddenFileOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Size Bytes */
+            size_bytes: number;
+            /**
+             * Deleted At
+             * Format: date-time
+             */
+            deleted_at: string;
+        };
+        /**
+         * HiddenFilesOut
+         * @description A person's deleted files, the latest deletion first.
+         */
+        HiddenFilesOut: {
+            /** Files */
+            files: components["schemas"]["HiddenFileOut"][];
+        };
+        /**
          * Home
          * @description A data home: a separate PostgreSQL cluster in its own jurisdiction.
          *
@@ -1651,6 +1958,12 @@ export interface components {
          */
         Home: "ru" | "eu";
         /**
+         * IndexStage
+         * @description How far knowledge got with a file Leo uses (the cabinet's `IndexStatus`).
+         * @enum {string}
+         */
+        IndexStage: "queued" | "parsing" | "chunking" | "embedding" | "indexed" | "failed";
+        /**
          * InvalidField
          * @description Where a request failed validation and why; the submitted value is never echoed.
          */
@@ -1660,6 +1973,26 @@ export interface components {
             /** Type */
             type: string;
         };
+        /**
+         * LeoUseOut
+         * @description How Leo uses a file and how far its indexing got.
+         */
+        LeoUseOut: {
+            via: components["schemas"]["LeoVia"];
+            status: components["schemas"]["IndexStage"];
+            /** Progress */
+            progress: number;
+            /** Chunk Count */
+            chunk_count: number | null;
+            /** Error */
+            error: string | null;
+        };
+        /**
+         * LeoVia
+         * @description Why Leo uses a file.
+         * @enum {string}
+         */
+        LeoVia: "file" | "folder";
         /**
          * LimitsBody
          * @description What a plan includes: null is unlimited, 0 is not included.
@@ -2148,6 +2481,16 @@ export interface components {
             exhausted: boolean;
         };
         /**
+         * RegisterBody
+         * @description Ready uploads to turn into files, and where to put them.
+         */
+        RegisterBody: {
+            /** Upload Ids */
+            upload_ids: string[];
+            /** Folder Id */
+            folder_id?: string | null;
+        };
+        /**
          * RegistrationRequest
          * @description A new account: the address, a password, the name and where the person lives.
          */
@@ -2202,6 +2545,13 @@ export interface components {
             token: string;
             /** Password */
             password: string;
+        };
+        /**
+         * RestoreBody
+         * @description The person's home, as the account's card shows it.
+         */
+        RestoreBody: {
+            home: components["schemas"]["Home"];
         };
         /**
          * SalesInquiryAnswer
@@ -2520,6 +2870,14 @@ export interface components {
          * @enum {string}
          */
         UploadPurpose: "file_manager" | "recording" | "leo_attachment" | "ticket_attachment" | "workspace_upload" | "app_build";
+        /**
+         * UploadResponse
+         * @description The files made from ready uploads.
+         */
+        UploadResponse: {
+            /** Files */
+            files: components["schemas"]["FileItem"][];
+        };
         /**
          * UploadState
          * @description Where an upload stands.
@@ -4723,6 +5081,384 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["UploadAnswer"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_files_v1_files_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FilesResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    register_files_v1_files_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_file_v1_files__file_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                file_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    update_file_v1_files__file_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                file_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FileUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileItem"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    copy_file_v1_files__file_id__copy_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                file_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["CopyBody"] | null;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileItem"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    download_file_v1_files__file_id__download_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                file_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DownloadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_folder_v1_files_folders_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FolderBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileFolder"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_folder_v1_files_folders__folder_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                folder_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    rename_folder_v1_files_folders__folder_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                folder_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FolderBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileFolder"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_hidden_files_v1_admin_users__user_id__files_get: {
+        parameters: {
+            query: {
+                home: components["schemas"]["Home"];
+            };
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HiddenFilesOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    restore_file_v1_admin_users__user_id__files__file_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+                file_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RestoreBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

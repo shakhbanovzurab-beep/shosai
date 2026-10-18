@@ -3505,6 +3505,696 @@
           }
         }
       }
+    },
+    "/v1/files": {
+      "get": {
+        "tags": [
+          "files"
+        ],
+        "summary": "List Files",
+        "description": "The person's folders by name and files newest first.",
+        "operationId": "list_files_v1_files_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilesResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Register Files",
+        "description": "Turn ready uploads into files; a repeat answers the same files.",
+        "operationId": "register_files_v1_files_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/files/{file_id}": {
+      "patch": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Update File",
+        "description": "Rename, move or star a file.",
+        "operationId": "update_file_v1_files__file_id__patch",
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "File Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FileUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileItem"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Delete File",
+        "description": "Delete a file: gone for the person now, kept hidden 7 days for support.",
+        "operationId": "delete_file_v1_files__file_id__delete",
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "File Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/files/{file_id}/copy": {
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Copy File",
+        "description": "An instant copy sharing the stored bytes.",
+        "operationId": "copy_file_v1_files__file_id__copy_post",
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "File Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/CopyBody"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileItem"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/files/{file_id}/download": {
+      "get": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Download File",
+        "description": "A 15-minute link to the bytes, through the edge.",
+        "operationId": "download_file_v1_files__file_id__download_get",
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "File Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DownloadOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/files/folders": {
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Create Folder",
+        "description": "A new folder.",
+        "operationId": "create_folder_v1_files_folders_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FolderBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileFolder"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/files/folders/{folder_id}": {
+      "patch": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Rename Folder",
+        "description": "A folder's new name.",
+        "operationId": "rename_folder_v1_files_folders__folder_id__patch",
+        "parameters": [
+          {
+            "name": "folder_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Folder Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FolderBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileFolder"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Delete Folder",
+        "description": "Remove a folder; its files move to the root.",
+        "operationId": "delete_folder_v1_files_folders__folder_id__delete",
+        "parameters": [
+          {
+            "name": "folder_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Folder Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/users/{user_id}/files": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "List Hidden Files",
+        "description": "The person's files deleted within the last 7 days.",
+        "operationId": "list_hidden_files_v1_admin_users__user_id__files_get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "home",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Home"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HiddenFilesOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/users/{user_id}/files/{file_id}/restore": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Restore File",
+        "description": "Bring a deleted file back into the person's File Manager and quota.",
+        "operationId": "restore_file_v1_admin_users__user_id__files__file_id__restore_post",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "File Id"
+            }
+          },
+          {
+            "name": "shosai_admin",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 256
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shosai Admin"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RestoreBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -4087,6 +4777,25 @@
         "title": "ConsentsPatch",
         "description": "The consents to change; personal data is not among them."
       },
+      "CopyBody": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "CopyBody",
+        "description": "The copy's name; a numbered name of the source when left out."
+      },
       "Currency": {
         "type": "string",
         "enum": [
@@ -4335,6 +5044,26 @@
           "percent",
           "fixed"
         ]
+      },
+      "DownloadOut": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url",
+          "expires_at"
+        ],
+        "title": "DownloadOut",
+        "description": "Where the browser fetches the bytes, for 15 minutes."
       },
       "EmailChallenge": {
         "properties": {
@@ -4761,6 +5490,209 @@
         "title": "FeaturesOut",
         "description": "Capabilities of the plan; the draft's defaults until billing contributes."
       },
+      "FileFolder": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "leo": {
+            "type": "boolean",
+            "title": "Leo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "updated_at",
+          "leo"
+        ],
+        "title": "FileFolder",
+        "description": "A flat folder."
+      },
+      "FileItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/FileKind"
+          },
+          "content_type": {
+            "type": "string",
+            "title": "Content Type"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "title": "Size Bytes"
+          },
+          "folder_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Folder Id"
+          },
+          "modified_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Modified At"
+          },
+          "starred": {
+            "type": "boolean",
+            "title": "Starred"
+          },
+          "leo_readable": {
+            "type": "boolean",
+            "title": "Leo Readable"
+          },
+          "leo": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LeoUseOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "content_type",
+          "size_bytes",
+          "folder_id",
+          "modified_at",
+          "starred",
+          "leo_readable",
+          "leo"
+        ],
+        "title": "FileItem",
+        "description": "A file of the File Manager."
+      },
+      "FileKind": {
+        "type": "string",
+        "enum": [
+          "document",
+          "spreadsheet",
+          "presentation",
+          "pdf",
+          "text",
+          "design",
+          "image",
+          "archive",
+          "other"
+        ],
+        "title": "FileKind",
+        "description": "The cabinet's kinds of files."
+      },
+      "FileUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "folder_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Folder Id"
+          },
+          "starred": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starred"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "FileUpdate",
+        "description": "What the owner changes; `folder_id: null` moves to the root."
+      },
+      "FilesResponse": {
+        "properties": {
+          "folders": {
+            "items": {
+              "$ref": "#/components/schemas/FileFolder"
+            },
+            "type": "array",
+            "title": "Folders"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/FileItem"
+            },
+            "type": "array",
+            "title": "Files"
+          }
+        },
+        "type": "object",
+        "required": [
+          "folders",
+          "files"
+        ],
+        "title": "FilesResponse",
+        "description": "The person's folders and files, newest first."
+      },
+      "FolderBody": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "FolderBody",
+        "description": "A folder's name."
+      },
       "ForgotRequest": {
         "properties": {
           "email": {
@@ -4864,6 +5796,54 @@
         "title": "HealthStatus",
         "description": "The process answers HTTP requests."
       },
+      "HiddenFileOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "title": "Size Bytes"
+          },
+          "deleted_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Deleted At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "size_bytes",
+          "deleted_at"
+        ],
+        "title": "HiddenFileOut",
+        "description": "A deleted file support may still restore."
+      },
+      "HiddenFilesOut": {
+        "properties": {
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/HiddenFileOut"
+            },
+            "type": "array",
+            "title": "Files"
+          }
+        },
+        "type": "object",
+        "required": [
+          "files"
+        ],
+        "title": "HiddenFilesOut",
+        "description": "A person's deleted files, the latest deletion first."
+      },
       "Home": {
         "type": "string",
         "enum": [
@@ -4872,6 +5852,19 @@
         ],
         "title": "Home",
         "description": "A data home: a separate PostgreSQL cluster in its own jurisdiction.\n\nThe value is the short code carried by the access token and by task payloads.\nThe directory and data without an owner live in the EU home (ADR 0005, ADR 0010).\nEach home has its own bucket; the home is not part of an object key: an object lives\nin the bucket of its pointer's home (ADR 0044)."
+      },
+      "IndexStage": {
+        "type": "string",
+        "enum": [
+          "queued",
+          "parsing",
+          "chunking",
+          "embedding",
+          "indexed",
+          "failed"
+        ],
+        "title": "IndexStage",
+        "description": "How far knowledge got with a file Leo uses (the cabinet's `IndexStatus`)."
       },
       "InvalidField": {
         "properties": {
@@ -4901,6 +5894,61 @@
         ],
         "title": "InvalidField",
         "description": "Where a request failed validation and why; the submitted value is never echoed."
+      },
+      "LeoUseOut": {
+        "properties": {
+          "via": {
+            "$ref": "#/components/schemas/LeoVia"
+          },
+          "status": {
+            "$ref": "#/components/schemas/IndexStage"
+          },
+          "progress": {
+            "type": "integer",
+            "title": "Progress"
+          },
+          "chunk_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunk Count"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "via",
+          "status",
+          "progress",
+          "chunk_count",
+          "error"
+        ],
+        "title": "LeoUseOut",
+        "description": "How Leo uses a file and how far its indexing got."
+      },
+      "LeoVia": {
+        "type": "string",
+        "enum": [
+          "file",
+          "folder"
+        ],
+        "title": "LeoVia",
+        "description": "Why Leo uses a file."
       },
       "LimitsBody": {
         "properties": {
@@ -6525,6 +7573,39 @@
         "title": "QuotaSnapshot",
         "description": "Recording minutes left; billing fills it."
       },
+      "RegisterBody": {
+        "properties": {
+          "upload_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "minItems": 1,
+            "title": "Upload Ids"
+          },
+          "folder_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Folder Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "upload_ids"
+        ],
+        "title": "RegisterBody",
+        "description": "Ready uploads to turn into files, and where to put them."
+      },
       "RegistrationRequest": {
         "properties": {
           "email": {
@@ -6646,6 +7727,20 @@
         ],
         "title": "ResetRequest",
         "description": "The token of the link and the new password."
+      },
+      "RestoreBody": {
+        "properties": {
+          "home": {
+            "$ref": "#/components/schemas/Home"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "home"
+        ],
+        "title": "RestoreBody",
+        "description": "The person's home, as the account's card shows it."
       },
       "SalesInquiryAnswer": {
         "properties": {
@@ -7369,6 +8464,23 @@
         ],
         "title": "UploadPurpose",
         "description": "Who takes the bytes once they are uploaded."
+      },
+      "UploadResponse": {
+        "properties": {
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/FileItem"
+            },
+            "type": "array",
+            "title": "Files"
+          }
+        },
+        "type": "object",
+        "required": [
+          "files"
+        ],
+        "title": "UploadResponse",
+        "description": "The files made from ready uploads."
       },
       "UploadState": {
         "type": "string",

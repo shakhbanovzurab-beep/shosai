@@ -77,6 +77,10 @@ Do it while no release runs (`flock -n /srv/shosai/releases/.lock true` succeeds
 
 Each home's bucket needs ADR 0055's rules before files can be uploaded from the cabinet: run `shosai files bucket-rules` once per new bucket with keys that may configure it (the release's environment, `docker compose run --rm api shosai files bucket-rules`). A failed home is named in the log; a repeat changes nothing.
 
+## Downloads
+
+Files download through the edge (ADR 0055 point 8, FL-D9): the API answers `https://shosai.tech/dl/{home}/…`, and the edge streams the presigned object from that home's bucket (`SHOSAI_DOWNLOAD_RU_ORIGIN`, `SHOSAI_DOWNLOAD_EU_ORIGIN` in `/srv/shosai/.env`) with `X-Content-Type-Options: nosniff` and `Content-Security-Policy: sandbox`. `render-env.py` writes both origins from the homes' `HOME_*_S3_ENDPOINT_URL` (HTTPS only) and `FILES_DOWNLOAD_BASE_URL` for the backend. Without them a release stops before any service changes: run «Change a setting or a secret» first. A download answering 403 from the bucket means the signature did not survive the path; the edge forwards the raw request line, so check that nothing between the browser and the edge rewrites it.
+
 ## Database roles
 
 Each managed home has three roles: the migrator and the application role (Timeweb's panel), and the sweep role `shosai_sweeper` ([ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md) point 2). The sweep role cannot log in; workers and the scheduler switch to it inside a transaction (`SET LOCAL ROLE`), and row-level security lets it read every tenant's rows. The application role must not inherit it, or every request would see every tenant. PostgreSQL 16 or later is required for `WITH INHERIT FALSE`.

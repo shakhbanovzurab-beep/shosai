@@ -1,0 +1,25 @@
+# Скачивание файлов через edge (ADR 0055 п. 8, FL-D9). API отвечает ссылкой
+# https://{домен}/dl/{дом}{путь подписанной ссылки бакета}?{подпись}; edge передаёт бакету дома
+# остаток запроса байт в байт ($shosai_download_path из nginx.conf: сырой $request_uri, без
+# декодирования и нормализации, иначе подпись не сойдётся). Бакеты домов:
+#   SHOSAI_DOWNLOAD_RU_ORIGIN, SHOSAI_DOWNLOAD_EU_ORIGIN — scheme://host[:port] хранилища.
+# Без них файл удаляется до старта (25-shosai-optional-servers.sh), и ссылки идут прямо в бакет.
+location ^~ /dl/ru/ {
+    if ($shosai_download_path = "") {
+        return 404;
+    }
+    otel_trace $shosai_otel_trace;
+    proxy_pass ${SHOSAI_DOWNLOAD_RU_ORIGIN}$shosai_download_path;
+    include /etc/nginx/shosai/download-proxy.conf;
+    add_header X-Robots-Tag "${SHOSAI_ROBOTS_TAG}" always;
+}
+
+location ^~ /dl/eu/ {
+    if ($shosai_download_path = "") {
+        return 404;
+    }
+    otel_trace $shosai_otel_trace;
+    proxy_pass ${SHOSAI_DOWNLOAD_EU_ORIGIN}$shosai_download_path;
+    include /etc/nginx/shosai/download-proxy.conf;
+    add_header X-Robots-Tag "${SHOSAI_ROBOTS_TAG}" always;
+}

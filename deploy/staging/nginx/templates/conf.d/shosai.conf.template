@@ -4,6 +4,8 @@
 #   SHOSAI_WS_UPSTREAM           адрес шлюза ws, host:port;
 #   SHOSAI_TLS_CERTIFICATE       цепочка сертификата; SHOSAI_TLS_CERTIFICATE_KEY — его ключ;
 #   SHOSAI_CSP_STORAGE_ORIGINS   origin-ы бакетов домов через пробел (аватары, выгрузки);
+#   SHOSAI_DOWNLOAD_RU_ORIGIN, SHOSAI_DOWNLOAD_EU_ORIGIN — бакеты домов для скачивания файлов
+#                                (templates/shosai/downloads.conf.template);
 #   SHOSAI_ROBOTS_TAG            X-Robots-Tag (staging: "noindex, nofollow");
 #   SHOSAI_RESOLVER              DNS, у которого edge переспрашивает адреса api и ws (Docker: 127.0.0.11);
 #   SHOSAI_OTEL_ENDPOINT         коллектор OpenTelemetry, host:port его OTLP/gRPC (otel.conf.template);
@@ -121,6 +123,9 @@ server {
         add_header Cache-Control "no-cache" always;
         try_files /app/index.html =404;
     }
+
+    # Скачивание файлов из бакетов домов (FL-D9). Шаблон с маской: без бакетов файла нет.
+    include /tmp/nginx/shosai/downloads*.conf;
 
     # WebSocket: шлюз ws, наименее загруженный процесс; рукопожатие — 5 с (§4.3).
     location /v1/ws/ {

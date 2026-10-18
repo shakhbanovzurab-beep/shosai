@@ -2,7 +2,7 @@
 
 The one path for bytes in Shosai: a person's File Manager (files, flat folders, "Use with Leo"), the presigned uploads every slice that takes bytes goes through, download links, the storage quota, and files shared into or handed over to a workspace.
 
-- Plan: [docs/plan/slices/files.md](../../../../../docs/plan/slices/files.md). Decisions: FL-D1…FL-D8 in the plan; key layout [ADR 0055](../../../../../docs/adr/0055-object-key-layout-and-bucket-rules.md).
+- Plan: [docs/plan/slices/files.md](../../../../../docs/plan/slices/files.md). Decisions: FL-D1…FL-D9 in the plan; key layout [ADR 0055](../../../../../docs/adr/0055-object-key-layout-and-bucket-rules.md).
 - Public surface: `contracts` (`Uploads.claim`, `FileReader`, the `IndexStatus` port knowledge binds, their types and errors) and `contracts.events` (`files.file.uploaded`, `.file.deleted`, `.file.restored`, `files.leo_use.changed`).
 
 ## Rules the domain holds
@@ -30,3 +30,9 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 - `Uploads.claim(session, upload_id, purpose)` in the uploader's transaction: ready → claimed, a File Manager upload's bytes become used; a repeat answers the same object.
 - Every storage call runs outside a transaction; states change by conditional updates. The sweep (`files.sweep_uploads`, every 15 minutes per home) lists due uploads as the sweep role, closes each in its owner's transaction and retries recorded object deletions.
 - `shosai files bucket-rules [--home ru|eu]` puts ADR 0055's lifecycle and CORS rules on the buckets.
+
+## File Manager (step 4)
+
+- `GET /v1/files` — the person's folders by name and own files newest first; `POST /v1/files {upload_ids, folder_id?}` claims 1–20 ready File Manager uploads in one transaction (the file's id is the upload's, so a repeat answers the same files) and emits `files.file.uploaded`; `PATCH /v1/files/{id} {name?, folder_id?, starred?}` (`folder_id: null` moves to the root); `POST /v1/files/{id}/copy {name?}` — a new row on the same object, `Report (2).pdf` by default, charged against the limit by one conditional upsert; folders `POST/PATCH/DELETE /v1/files/folders*`, a deleted folder's files move to the root.
+- `DELETE /v1/files/{id}` hides the file at once (`deleted_at`), frees its bytes and emits `files.file.deleted`. Support lists a person's hidden files and restores one (`/v1/admin/users/{user_id}/files?home=`, `…/{file_id}/restore {home}`, admin session): it returns to the quota, shared nowhere, with `files.file.restored`. `files.purge_hidden` (hourly per home) removes rows hidden for 7 days in their owners' transactions and records the objects no row names for deletion.
+- `GET /v1/files/{id}/download` — for any file the person may read: a 15-minute link with the stored type pinned, active content as attachment, rewritten onto `FILES_DOWNLOAD_BASE_URL` (`{base}/{home}{bucket path}?{signature}`). The edge (`deploy/staging/nginx/templates/shosai/downloads.conf.template`) forwards the raw request line to the home's bucket and adds `nosniff` and `sandbox` (FL-D9). Outside development the base is required by the production check `downloads_through_edge`.

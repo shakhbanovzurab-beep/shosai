@@ -54,3 +54,42 @@ async def settle(session: AsyncSession, user_id: UUID, size: int) -> None:
             updated_at=func.now(),
         )
     )
+
+
+async def charge(session: AsyncSession, user_id: UUID, size: int, limit: int | None) -> bool:
+    """Add a new file's bytes to used while they fit the limit (a copy); False when not."""
+    if limit is not None and size > limit:
+        return False
+    fits = None if limit is None else USAGE.used_bytes + USAGE.reserved_bytes + size <= limit
+    statement = (
+        insert(USAGE)
+        .values(user_id=user_id, used_bytes=size)
+        .on_conflict_do_update(
+            index_elements=[USAGE.user_id],
+            set_={"used_bytes": USAGE.used_bytes + size, "updated_at": func.now()},
+            where=fits,
+        )
+        .returning(USAGE.user_id)
+    )
+    return (await session.scalar(statement)) is not None
+
+
+async def add_used(session: AsyncSession, user_id: UUID, size: int) -> None:
+    """Add bytes to used whatever the limit (a restored file); the quota rules act on it."""
+    await session.execute(
+        insert(USAGE)
+        .values(user_id=user_id, used_bytes=size)
+        .on_conflict_do_update(
+            index_elements=[USAGE.user_id],
+            set_={"used_bytes": USAGE.used_bytes + size, "updated_at": func.now()},
+        )
+    )
+
+
+async def free(session: AsyncSession, user_id: UUID, size: int) -> None:
+    """A file left the quota (hidden): its bytes are free again."""
+    await session.execute(
+        update(USAGE)
+        .where(USAGE.user_id == user_id)
+        .values(used_bytes=func.greatest(USAGE.used_bytes - size, 0), updated_at=func.now())
+    )

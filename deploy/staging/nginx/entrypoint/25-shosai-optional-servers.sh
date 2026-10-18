@@ -6,3 +6,7 @@ set -eu
 if [ -z "${SHOSAI_GRAFANA_SERVER_NAME:-}" ]; then
   rm -f "${NGINX_ENVSUBST_OUTPUT_DIR:?}/conf.d/grafana.conf"
 fi
+# Скачивание через edge (FL-D9) — только когда заданы бакеты обоих домов.
+if [ -z "${SHOSAI_DOWNLOAD_RU_ORIGIN:-}" ] || [ -z "${SHOSAI_DOWNLOAD_EU_ORIGIN:-}" ]; then
+  rm -f "${NGINX_ENVSUBST_OUTPUT_DIR:?}/shosai/downloads.conf"
+fi

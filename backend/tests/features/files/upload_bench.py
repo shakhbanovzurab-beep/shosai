@@ -16,7 +16,9 @@ from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
+from shosai.core.storage.errors import ObjectsNotDeletedError
 from shosai.core.storage.port import (
+    Disposition,
     MultipartUpload,
     MultipartUploads,
     ObjectInfo,
@@ -77,6 +79,8 @@ class Guard:
 
     def __init__(self) -> None:
         self.open = 0
+        # Бакет отказывает в удалении, пока тест не снимет флаг.
+        self.failing_deletes = False
 
     def check(self) -> None:
         """Fail when a transaction is open."""
@@ -119,9 +123,25 @@ class GuardedObjects:
         return self._inner.open(key)
 
     async def delete_many(self, keys: Sequence[str]) -> None:
-        """Delete the objects."""
+        """Delete the objects; a failure the test set comes first."""
         self._guard.check()
+        if self._guard.failing_deletes:
+            raise ObjectsNotDeletedError(list(keys), ["InternalError"])
         await self._inner.delete_many(keys)
+
+    async def presign_get(
+        self,
+        key: str,
+        *,
+        filename: str,
+        disposition: Disposition,
+        content_type: str | None = None,
+    ) -> PresignedRequest:
+        """A download link."""
+        self._guard.check()
+        return await self._inner.presign_get(
+            key, filename=filename, disposition=disposition, content_type=content_type
+        )
 
 
 class GuardedUploads:
@@ -174,6 +194,8 @@ class UploadBench:
     deleter: ObjectDeleter
     plan: Plan
     clock: Clock
+    guard: Guard
+    objects: Mapping[Home, ObjectStorage]
 
     def sweep(self, transactions: HomeTransactions) -> UploadSweep:
         """The sweep over transactions that may run as the sweep role."""
@@ -206,4 +228,7 @@ async def upload_bench(
     storage = StorageOfHomes(objects, uploads)
     deleter = ObjectDeleter(transactions, objects)
     service = UploadService(transactions, storage, (ports, deleter), clock)
-    yield UploadBench(service, UploadClaims(clock), storage, transactions, deleter, plan, clock)
+    yield UploadBench(
+        service, UploadClaims(clock), storage, transactions, deleter, plan, clock, guard,
+        {home: s.objects for home, s in storages.items()},
+    )  # fmt: skip

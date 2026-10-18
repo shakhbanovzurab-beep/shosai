@@ -133,6 +133,8 @@ uv run --env-file ../.env shosai files bucket-rules --home eu  # one home
 
 The keys need the right to configure the bucket; a repeat changes nothing; the command exits with 1 if any home failed. SeaweedFS keeps the first version of a part sent twice with other bytes, where S3 keeps the last; a client's retry sends the same bytes, so uploads behave the same on both.
 
+Downloads leave `FILES_DOWNLOAD_BASE_URL` empty locally: the API answers the presigned link of the bucket itself. On staging and in production the link points at the edge, which adds `nosniff` and a sandbox to the bytes (ADR 0055 point 8); the local edge (`deploy/local/compose.app.yaml`) serves `/dl/` only when `SHOSAI_DOWNLOAD_RU_ORIGIN` and `SHOSAI_DOWNLOAD_EU_ORIGIN` are set.
+
 ### The admin
 
 The admin panel has one admin who signs in with a login and password from the environment ([ADR 0049](adr/0049-one-admin-signed-in-by-env-credentials.md)). Print the hash of a password (at least 16 characters, typed twice without echo):
