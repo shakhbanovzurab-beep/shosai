@@ -1,7 +1,9 @@
 """The events files publishes (files plan §3.2): ids, sizes and codes, nothing personal.
 
 Consumers: knowledge indexes a file Leo starts using and drops the vectors of one it stops
-using or that is deleted; workspaces withdraws a deleted file's knowledge items.
+using or that is deleted, and reads a file again when the person asks; workspaces withdraws
+a deleted file's knowledge items. Each event names one file; a consumer reads the file's
+current state through `FileReader` before it acts.
 """
 
 from typing import ClassVar
@@ -43,7 +45,7 @@ class FileRestored(DomainEvent):
 
 
 class LeoUseChanged(DomainEvent):
-    """Leo started or stopped using a file."""
+    """Leo started or stopped using a file: once per change of a file's use."""
 
     event_type: ClassVar[str] = "files.leo_use.changed"
     version: ClassVar[int] = 1
@@ -51,3 +53,13 @@ class LeoUseChanged(DomainEvent):
     user_id: UUID | None = None
     org_id: UUID | None = None
     used: bool
+
+
+class LeoReindexRequested(DomainEvent):
+    """The person asked Leo to read a file it uses again."""
+
+    event_type: ClassVar[str] = "files.leo_use.reindex_requested"
+    version: ClassVar[int] = 1
+    file_id: UUID
+    user_id: UUID | None = None
+    org_id: UUID | None = None

@@ -60,9 +60,11 @@ class Clock:
 
 @dataclass
 class Plan:
-    """The storage the person's plan gives, in GB; None is unlimited."""
+    """The storage the person's plan gives, in GB, and what Leo may use, in MB; None is
+    unlimited."""
 
     file_manager_gb: int | None = 1
+    knowledge_base_mb: int | None = 100
     # Тариф не читается: Entitlements отвечает 503, как при недоступном кэше и доме.
     unavailable: bool = False
 
@@ -74,7 +76,8 @@ class Plan:
         return EntitlementSnapshot(
             user_id=user_id, plan_slug="pro", plan_name="Pro", audience=Audience.INDIVIDUAL,
             paid=True, in_grace=False, paid_until=None,
-            limits=PlanLimits(None, self.file_manager_gb, 100), capabilities=frozenset(),
+            limits=PlanLimits(None, self.file_manager_gb, self.knowledge_base_mb),
+            capabilities=frozenset(),
             source=EntitlementSource.PERSONAL, workspace_id=None, version=1,
         )  # fmt: skip
 

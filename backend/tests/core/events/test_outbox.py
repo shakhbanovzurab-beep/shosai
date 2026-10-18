@@ -63,6 +63,28 @@ async def test_an_event_is_stored_in_its_home_with_the_scope_trace_and_request_o
     assert await fetch_value(other, "SELECT count(*) FROM outbox_messages") == 0
 
 
+async def test_many_events_are_written_in_one_statement_in_their_order(
+    valkey: Redis, homes: DatabaseAccess, run_slot: RunSlot
+) -> None:
+    bench = event_bench(valkey, homes)
+    records = [uuid.uuid4() for _ in range(3)]
+    events = [NoteWritten(record_id=record, state=NoteState.DRAFT) for record in records]
+
+    async with homes.transactions.begin(TenancyScope(Home.EU, USER_ID)) as session:
+        nothing = await bench.outbox.add_all(session, [])
+        ids = await bench.outbox.add_all(session, events)
+
+    rows = await fetch_rows(
+        run_slot.claimed.connections[Home.EU], "SELECT * FROM outbox_messages ORDER BY id"
+    )
+    assert nothing == []
+    assert [row["id"] for row in rows] == ids
+    assert [row["payload"]["record_id"] for row in rows] == [str(record) for record in records]
+    assert {(row["user_id"], row["event_type"]) for row in rows} == {
+        (USER_ID, "probe.note.written")
+    }
+
+
 async def test_a_rolled_back_effect_leaves_no_event(
     valkey: Redis, homes: DatabaseAccess, probe_table: sa.TableClause, run_slot: RunSlot
 ) -> None:

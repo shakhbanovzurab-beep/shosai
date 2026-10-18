@@ -11,6 +11,7 @@ and keeps the trace context and the request id of the unit of work, so the deliv
 continue the producer's trace and log lines (§16.2).
 """
 
+from collections.abc import Sequence
 from typing import Protocol
 from uuid import UUID
 
@@ -66,26 +67,43 @@ class EventOutbox:
 
     async def add(self, session: AsyncSession, event: DomainEvent) -> UUID:
         """Add the event to the session's transaction; return its id. Commits nothing."""
-        if not self._catalog.lists(event):
-            raise UnlistedEventError(event.event_type)
+        [event_id] = await self.add_all(session, [event])
+        return event_id
+
+    async def add_all(self, session: AsyncSession, events: Sequence[DomainEvent]) -> list[UUID]:
+        """Add the events to the session's transaction in one statement; their ids, in order.
+
+        One change of many records (a folder's files) writes its events in one round trip.
+        Commits nothing; an empty list writes nothing.
+        """
+        for event in events:
+            if not self._catalog.lists(event):
+                raise UnlistedEventError(event.event_type)
+        if not events:
+            return []
         transaction = transaction_info(session)
         if transaction.read_only:
-            raise ReadOnlyEventTransactionError(event.event_type)
-        event_id = new_id()
-        await session.execute(
-            insert(OutboxMessage).values(
-                id=event_id,
-                event_type=event.event_type,
-                version=event.version,
-                payload=event.model_dump(mode="json"),
-                user_id=transaction.scope.user_id,
-                org_id=transaction.scope.org_id,
-                traceparent=current_traceparent(),
-                request_id=bound_request_id(),
-            )
-        )
-        log.debug(
-            "Событие записано в транзакцию", event_type=event.event_type, event_id=str(event_id),
-            **id_fields(user_id=transaction.scope.user_id, org_id=transaction.scope.org_id),
-        )  # fmt: skip
-        return event_id
+            raise ReadOnlyEventTransactionError(events[0].event_type)
+        scope = transaction.scope
+        traceparent, request_id = current_traceparent(), bound_request_id()
+        ids = [new_id() for _ in events]
+        rows = [
+            {
+                "id": event_id,
+                "event_type": event.event_type,
+                "version": event.version,
+                "payload": event.model_dump(mode="json"),
+                "user_id": scope.user_id,
+                "org_id": scope.org_id,
+                "traceparent": traceparent,
+                "request_id": request_id,
+            }
+            for event_id, event in zip(ids, events, strict=True)
+        ]
+        await session.execute(insert(OutboxMessage), rows)
+        for event_id, event in zip(ids, events, strict=True):
+            log.debug(
+                "Событие записано в транзакцию", event_type=event.event_type,
+                event_id=str(event_id), **id_fields(user_id=scope.user_id, org_id=scope.org_id),
+            )  # fmt: skip
+        return ids

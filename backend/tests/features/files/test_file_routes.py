@@ -81,3 +81,47 @@ async def test_the_file_manager_answers_in_the_cabinet_s_shape(file_bench: FileB
     assert [f["id"] for f in hidden["files"]] == [str(upload_id)]
     assert (restored.status_code, again.status_code) == (204, 404)
     assert str(upload_id) in {f["id"] for f in after["files"]}
+
+
+async def test_leo_s_switches_and_reindex_answer_in_the_cabinet_s_shape(
+    file_bench: FileBench,
+) -> None:
+    who = person(Home.EU, uuid.uuid4())
+    file_bench.uploads.plan.knowledge_base_mb = 1
+    routers = (
+        build_files_router((file_bench.manager, file_bench.downloads), file_bench.ports),
+        build_folders_router(file_bench.folders, file_bench.ports),
+    )
+    app = build_probe_app(extra=routers).app
+    small = await file_bench.uploaded(who, "Notes.txt", b"notes" * 20)
+    large = await file_bench.uploaded(who, "Report.pdf", b"%PDF" * 300_000)
+    headers = {"Authorization": f"Bearer person:{who.user_id}:{Home.EU.value}"}
+    async with client_of(app) as http:
+        made = await http.post(
+            "/v1/files", json={"upload_ids": [str(small)], "leo": True}, headers=headers
+        )
+        await http.post("/v1/files", json={"upload_ids": [str(large)]}, headers=headers)
+        unused = await http.post(f"/v1/files/{large}/reindex", headers=headers)
+        over = await http.patch(f"/v1/files/{large}", json={"leo": True}, headers=headers)
+        folder = (
+            await http.post("/v1/files/folders", json={"name": "Leo"}, headers=headers)
+        ).json()
+        switched = await http.patch(
+            f"/v1/files/folders/{folder['id']}", json={"leo": True}, headers=headers
+        )
+        renamed = await http.patch(
+            f"/v1/files/folders/{folder['id']}", json={"name": "Read"}, headers=headers
+        )
+        reread = await http.post(f"/v1/files/{small}/reindex", headers=headers)
+
+    [item] = made.json()["files"]
+    assert (made.status_code, item["leo"]["via"], item["leo"]["status"]) == (201, "file", "queued")
+    assert (unused.status_code, unused.json()["error"]["code"]) == (409, "leo_not_used")
+    assert (over.status_code, over.json()["error"]["code"]) == (409, "leo_limit")
+    assert over.json()["error"]["params"] == {"limit_bytes": 1024**2}
+    assert (switched.json()["leo"], renamed.json()["name"], renamed.json()["leo"]) == (
+        True,
+        "Read",
+        True,
+    )
+    assert (reread.status_code, reread.json()["leo"]["status"]) == (200, "queued")

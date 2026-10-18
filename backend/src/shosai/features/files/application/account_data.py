@@ -33,6 +33,7 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.storage.copy import copy_object
 from shosai.core.storage.port import MultipartUploads, ObjectStorage
 from shosai.features.files.domain.uploads import UploadState
+from shosai.features.files.infrastructure import usage_store
 from shosai.features.files.infrastructure.file_records import FileFolderRecord, StorageFileRecord
 from shosai.features.files.infrastructure.upload_records import StorageUsageRecord, UploadRecord
 
@@ -128,6 +129,7 @@ class FilesAccountData:
         """The person's rows in `account.home`, then the objects no remaining row names."""
         keys = await self._keys(account)
         async with self._transactions.begin(TenancyScope(account.home, account.user_id)) as session:
+            await usage_store.lock(session, account.user_id)
             await session.execute(delete(StorageFileRecord).where(personal_files(account.user_id)))
             for model in (FileFolderRecord, UploadRecord, StorageUsageRecord):
                 await session.execute(delete(model).where(model.user_id == account.user_id))

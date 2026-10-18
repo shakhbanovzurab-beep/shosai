@@ -48,7 +48,7 @@ async def purge(bench: FileBench, run_slot: RunSlot, home: Home) -> int:
     ) as workers:
         hidden = HiddenFiles(
             workers.transactions,
-            (bench.outbox, bench.uploads.deleter, bench.watch),
+            (bench.outbox, bench.uploads.deleter, bench.watch, bench.leo),
             bench.uploads.clock,
         )
         return await hidden.purge(home)
@@ -83,7 +83,7 @@ async def test_files_are_renamed_moved_starred_and_folders_keep_them_on_delete(
     moved = await file_bench.manager.update(
         who, file.id, FileChanges(name="Plan v2.pdf", move=True, folder_id=folder.id, starred=True)
     )
-    renamed = await file_bench.folders.rename(who, folder.id, "Archive")
+    renamed = await file_bench.folders.update(who, folder.id, name="Archive", leo=None)
     await file_bench.folders.delete(who, folder.id)
     _, [rooted] = await file_bench.manager.listing(who)
 
@@ -95,7 +95,7 @@ async def test_files_are_renamed_moved_starred_and_folders_keep_them_on_delete(
     with pytest.raises(AppError, match="file_not_found"):
         await file_bench.manager.update(stranger, file.id, FileChanges(starred=False))
     with pytest.raises(AppError, match="folder_not_found"):
-        await file_bench.folders.rename(stranger, folder.id, "Mine")
+        await file_bench.folders.update(stranger, folder.id, name="Mine", leo=None)
 
 
 async def test_a_deleted_file_is_hidden_out_of_the_quota_restorable_then_purged(

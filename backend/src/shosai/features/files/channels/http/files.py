@@ -2,8 +2,10 @@
 
 Uploads come in as ids of ready uploads (FL-D1); a deletion is final for the person and
 hidden for 7 days on the server (FL-D5); a download answers a link on Shosai's address
-(FL-D9). Errors use the platform's envelope: `file_not_found`, `folder_not_found`,
-`upload_count`, `upload_not_claimable`, `storage_limit`, `name_*`.
+(FL-D9); `leo` on files and folders switches Leo's use, within the plan's knowledge limit.
+Errors use the platform's envelope: `file_not_found`, `folder_not_found`, `upload_count`,
+`upload_not_claimable`, `storage_limit`, `name_*`, `leo_limit` (with `limit_bytes`),
+`leo_unreadable`, `leo_not_used`, `entitlements_unavailable`.
 """
 
 from datetime import datetime
@@ -82,18 +84,21 @@ class UploadResponse(BaseModel):
 
 
 class RegisterBody(Strict):
-    """Ready uploads to turn into files, and where to put them."""
+    """Ready uploads to turn into files, where to put them, and whether Leo uses them."""
 
     upload_ids: Annotated[list[UUID], Field(min_length=1, max_length=FILES_PER_REQUEST)]
     folder_id: UUID | None = None
+    leo: bool = False
 
 
 class FileUpdate(Strict):
-    """What the owner changes; `folder_id: null` moves to the root."""
+    """What the owner changes; `folder_id: null` moves to the root, `leo` is the file's own
+    switch (a file in a folder Leo reads is used either way)."""
 
     name: str | None = None
     folder_id: UUID | None = None
     starred: bool | None = None
+    leo: bool | None = None
 
 
 class CopyBody(Strict):
@@ -106,6 +111,13 @@ class FolderBody(Strict):
     """A folder's name."""
 
     name: str
+
+
+class FolderUpdate(Strict):
+    """A folder's new name, and whether Leo uses every readable file in it."""
+
+    name: str | None = None
+    leo: bool | None = None
 
 
 class DownloadOut(BaseModel):
@@ -165,17 +177,17 @@ def build_files_router(services: tuple[FileManager, Downloads], ports: PortDirec
         principal: Annotated[Principal, Depends(signed_in)], body: RegisterBody
     ) -> UploadResponse:
         """Turn ready uploads into files; a repeat answers the same files."""
-        views = await manager.register(principal, body.upload_ids, body.folder_id)
+        views = await manager.register(principal, body.upload_ids, body.folder_id, leo=body.leo)
         return UploadResponse(files=[item_of(view) for view in views])
 
     @router.patch("/{file_id}")
     async def update_file(
         principal: Annotated[Principal, Depends(signed_in)], file_id: UUID, body: FileUpdate
     ) -> FileItem:
-        """Rename, move or star a file."""
+        """Rename, move, star a file or switch Leo's use of it."""
         changes = FileChanges(
             name=named(body.name), move="folder_id" in body.model_fields_set,
-            folder_id=body.folder_id, starred=body.starred,
+            folder_id=body.folder_id, starred=body.starred, leo=body.leo,
         )  # fmt: skip
         return item_of(await manager.update(principal, file_id, changes))
 
@@ -195,6 +207,13 @@ def build_files_router(services: tuple[FileManager, Downloads], ports: PortDirec
     ) -> FileItem:
         """An instant copy sharing the stored bytes."""
         return item_of(await manager.copy(principal, file_id, named(body.name if body else None)))
+
+    @router.post("/{file_id}/reindex")
+    async def reindex_file(
+        principal: Annotated[Principal, Depends(signed_in)], file_id: UUID
+    ) -> FileItem:
+        """Ask Leo to read a file it uses again."""
+        return item_of(await manager.reindex(principal, file_id))
 
     @router.get("/{file_id}/download")
     async def download_file(
@@ -220,11 +239,12 @@ def build_folders_router(folders: Folders, ports: PortDirectory) -> APIRouter:
         return folder_of(await folders.create(principal, valid_name(body.name)))
 
     @router.patch("/{folder_id}")
-    async def rename_folder(
-        principal: Annotated[Principal, Depends(signed_in)], folder_id: UUID, body: FolderBody
+    async def update_folder(
+        principal: Annotated[Principal, Depends(signed_in)], folder_id: UUID, body: FolderUpdate
     ) -> FileFolder:
-        """A folder's new name."""
-        return folder_of(await folders.rename(principal, folder_id, valid_name(body.name)))
+        """Rename a folder or switch Leo's use of its files."""
+        view = await folders.update(principal, folder_id, name=named(body.name), leo=body.leo)
+        return folder_of(view)
 
     @router.delete("/{folder_id}", status_code=HTTPStatus.NO_CONTENT)
     async def delete_folder(

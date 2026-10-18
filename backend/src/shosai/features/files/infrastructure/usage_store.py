@@ -3,17 +3,29 @@
 A reservation is one conditional upsert: it adds the bytes only while used + reserved +
 the bytes fit the limit, so concurrent uploads never pass it (the draft's rule). Release
 and settlement never take a counter below zero; the database checks it too.
+
+A person's locks are taken in one order — the Leo lock, then the usage row (`lock`), then
+the person's files — so day 90's removal, which locks the row and then every file, never
+deadlocks with a copy, a deletion or a restore.
 """
 
 from uuid import UUID
 
-from sqlalchemy import func, update
+from sqlalchemy import func, select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.features.files.infrastructure.upload_records import StorageUsageRecord
 
 USAGE = StorageUsageRecord
+
+
+async def lock(session: AsyncSession, user_id: UUID) -> None:
+    """Hold the person's usage row until the transaction ends, before any of their files.
+
+    A person without the row has no file to lock either; the statement then holds nothing.
+    """
+    await session.execute(select(USAGE.user_id).where(USAGE.user_id == user_id).with_for_update())
 
 
 async def reserve(session: AsyncSession, user_id: UUID, size: int, limit: int | None) -> bool:

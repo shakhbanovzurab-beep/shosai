@@ -1091,7 +1091,7 @@ export interface paths {
         head?: never;
         /**
          * Update File
-         * @description Rename, move or star a file.
+         * @description Rename, move, star a file or switch Leo's use of it.
          */
         patch: operations["update_file_v1_files__file_id__patch"];
         trace?: never;
@@ -1110,6 +1110,26 @@ export interface paths {
          * @description An instant copy sharing the stored bytes.
          */
         post: operations["copy_file_v1_files__file_id__copy_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/files/{file_id}/reindex": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reindex File
+         * @description Ask Leo to read a file it uses again.
+         */
+        post: operations["reindex_file_v1_files__file_id__reindex_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1174,10 +1194,10 @@ export interface paths {
         options?: never;
         head?: never;
         /**
-         * Rename Folder
-         * @description A folder's new name.
+         * Update Folder
+         * @description Rename a folder or switch Leo's use of its files.
          */
-        patch: operations["rename_folder_v1_files_folders__folder_id__patch"];
+        patch: operations["update_folder_v1_files_folders__folder_id__patch"];
         trace?: never;
     };
     "/v1/files/storage": {
@@ -1863,7 +1883,8 @@ export interface components {
         FileKind: "document" | "spreadsheet" | "presentation" | "pdf" | "text" | "design" | "image" | "archive" | "other";
         /**
          * FileUpdate
-         * @description What the owner changes; `folder_id: null` moves to the root.
+         * @description What the owner changes; `folder_id: null` moves to the root, `leo` is the file's own
+         *     switch (a file in a folder Leo reads is used either way).
          */
         FileUpdate: {
             /** Name */
@@ -1872,6 +1893,8 @@ export interface components {
             folder_id?: string | null;
             /** Starred */
             starred?: boolean | null;
+            /** Leo */
+            leo?: boolean | null;
         };
         /**
          * FilesResponse
@@ -1890,6 +1913,16 @@ export interface components {
         FolderBody: {
             /** Name */
             name: string;
+        };
+        /**
+         * FolderUpdate
+         * @description A folder's new name, and whether Leo uses every readable file in it.
+         */
+        FolderUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Leo */
+            leo?: boolean | null;
         };
         /**
          * ForgotRequest
@@ -2502,13 +2535,18 @@ export interface components {
         };
         /**
          * RegisterBody
-         * @description Ready uploads to turn into files, and where to put them.
+         * @description Ready uploads to turn into files, where to put them, and whether Leo uses them.
          */
         RegisterBody: {
             /** Upload Ids */
             upload_ids: string[];
             /** Folder Id */
             folder_id?: string | null;
+            /**
+             * Leo
+             * @default false
+             */
+            leo: boolean;
         };
         /**
          * RegistrationRequest
@@ -5298,6 +5336,39 @@ export interface operations {
             };
         };
     };
+    reindex_file_v1_files__file_id__reindex_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                file_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FileItem"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     download_file_v1_files__file_id__download_get: {
         parameters: {
             query?: never;
@@ -5397,7 +5468,7 @@ export interface operations {
             };
         };
     };
-    rename_folder_v1_files_folders__folder_id__patch: {
+    update_folder_v1_files_folders__folder_id__patch: {
         parameters: {
             query?: never;
             header?: {
@@ -5410,7 +5481,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["FolderBody"];
+                "application/json": components["schemas"]["FolderUpdate"];
             };
         };
         responses: {

@@ -23,6 +23,7 @@ from shosai.features.files.application.file_manager import FileManager
 from shosai.features.files.application.file_views import FileView
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.application.hidden_files import HiddenFiles
+from shosai.features.files.application.leo_use import LeoUse
 from shosai.features.files.application.quota_watch import QuotaWatch
 from shosai.features.files.application.upload_rules import UploadRequest
 from shosai.features.files.domain.purposes import UploadPurpose
@@ -70,6 +71,7 @@ class FileBench:
     downloads: Downloads
     hidden: HiddenFiles
     watch: QuotaWatch
+    leo: LeoUse
     registry: CollectorRegistry
 
     async def uploaded(self, who: Principal, name: str, body: bytes) -> uuid.UUID:
@@ -108,6 +110,20 @@ class FileBench:
             )
             return list(rows)
 
+    async def leo_events(self, who: Principal) -> list[tuple[uuid.UUID, bool]]:
+        """The person's `files.leo_use.changed` events in order: the file and whether used."""
+        scope = TenancyScope(who.home, who.user_id)
+        async with self.uploads.transactions.begin(scope, read_only=True) as session:
+            payloads = await session.scalars(
+                select(OutboxMessage.payload)
+                .where(
+                    OutboxMessage.user_id == who.user_id,
+                    OutboxMessage.event_type == "files.leo_use.changed",
+                )
+                .order_by(OutboxMessage.id)
+            )
+            return [(uuid.UUID(str(p["file_id"])), bool(p["used"])) for p in payloads]
+
 
 @pytest_asyncio.fixture
 async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
@@ -127,14 +143,18 @@ async def file_bench(upload_bench: UploadBench) -> AsyncIterator[FileBench]:
     watch = QuotaWatch(
         transactions, (ports, outbox, mail, QuotaMetrics(registry)), upload_bench.clock
     )
+    leo = LeoUse(ports, outbox)
     yield FileBench(
         uploads=upload_bench,
         ports=ports,
         outbox=outbox,
-        manager=FileManager(transactions, (ports, outbox, upload_bench.claims)),
-        folders=Folders(transactions),
+        manager=FileManager(transactions, (ports, outbox, upload_bench.claims, leo)),
+        folders=Folders(transactions, (ports, leo)),
         downloads=Downloads(transactions, (upload_bench.storage.objects, ports), EDGE),
-        hidden=HiddenFiles(transactions, (outbox, upload_bench.deleter, watch), upload_bench.clock),
+        hidden=HiddenFiles(
+            transactions, (outbox, upload_bench.deleter, watch, leo), upload_bench.clock
+        ),
         watch=watch,
+        leo=leo,
         registry=registry,
     )

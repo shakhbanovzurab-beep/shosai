@@ -1,7 +1,9 @@
 """Deleted files during their 7 hidden days: support's list and restore, then the purge (FL-D5).
 
 Support reads a person's hidden files in the person's home and restores one: it comes back
-into the quota (passing the limit starts the 90 days, FL-D2) and is shared nowhere. After
+into the quota (passing the limit starts the 90 days, FL-D2), is shared nowhere, and Leo
+uses it again if its switch or its folder's says so — like the quota, the knowledge limit
+does not refuse support's restore. After
 7 days the purge removes the row, and the object when no row of any owner names its key;
 the sweep role only lists what is due, each row goes in its owner's transaction.
 """
@@ -22,11 +24,13 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.files.application.account_data import unnamed
+from shosai.features.files.application.leo_use import LeoUse, candidate, unused
 from shosai.features.files.application.quota_watch import QuotaWatch
 from shosai.features.files.contracts.events import FileRestored
+from shosai.features.files.domain.leo import LeoShift
 from shosai.features.files.domain.quota import HIDDEN_FOR
 from shosai.features.files.infrastructure import usage_store
-from shosai.features.files.infrastructure.file_records import StorageFileRecord
+from shosai.features.files.infrastructure.file_records import FileFolderRecord, StorageFileRecord
 from shosai.features.files.infrastructure.object_deleter import ObjectDeleter, record_deletions
 
 # Строк за один проход очистки.
@@ -51,11 +55,11 @@ class HiddenFiles:
     def __init__(
         self,
         transactions: HomeTransactions,
-        services: tuple[EventOutbox, ObjectDeleter, QuotaWatch],
+        services: tuple[EventOutbox, ObjectDeleter, QuotaWatch, LeoUse],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._outbox, self._deleter, self._watch = services
+        self._outbox, self._deleter, self._watch, self._leo = services
         self._clock = clock
 
     async def of_person(self, home: Home, user_id: UUID) -> list[HiddenFile]:
@@ -73,6 +77,8 @@ class HiddenFiles:
         """Bring a hidden file back into the person's File Manager and quota."""
         limit = await self._watch.limit(home, user_id)
         async with self._transactions.begin(TenancyScope(home, user_id)) as session:
+            await self._leo.hold(session, user_id)
+            await usage_store.lock(session, user_id)
             record = await session.get(StorageFileRecord, file_id, with_for_update=True)
             if record is None or record.user_id != user_id or record.deleted_at is None:
                 raise AppError("hidden_file_not_found", HTTPStatus.NOT_FOUND)
@@ -81,6 +87,15 @@ class HiddenFiles:
             await self._outbox.add(
                 session, FileRestored(file_id=file_id, user_id=user_id, org_id=record.org_id)
             )
+            folder = (
+                None
+                if record.folder_id is None
+                else await session.get(FileFolderRecord, record.folder_id)
+            )
+            in_leo = frozenset({folder.id}) if folder is not None and folder.leo else frozenset()
+            await session.flush()
+            shift = LeoShift.of([(unused(record), candidate(record, in_leo))])
+            await self._leo.settle(session, user_id, shift, None)
             await self._watch.apply(session, user_id, limit)
 
     async def purge(self, home: Home) -> int:

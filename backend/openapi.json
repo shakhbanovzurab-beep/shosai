@@ -3620,7 +3620,7 @@
           "files"
         ],
         "summary": "Update File",
-        "description": "Rename, move or star a file.",
+        "description": "Rename, move, star a file or switch Leo's use of it.",
         "operationId": "update_file_v1_files__file_id__patch",
         "parameters": [
           {
@@ -3812,6 +3812,66 @@
         }
       }
     },
+    "/v1/files/{file_id}/reindex": {
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Reindex File",
+        "description": "Ask Leo to read a file it uses again.",
+        "operationId": "reindex_file_v1_files__file_id__reindex_post",
+        "parameters": [
+          {
+            "name": "file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "File Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileItem"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/files/{file_id}/download": {
       "get": {
         "tags": [
@@ -3937,9 +3997,9 @@
         "tags": [
           "files"
         ],
-        "summary": "Rename Folder",
-        "description": "A folder's new name.",
-        "operationId": "rename_folder_v1_files_folders__folder_id__patch",
+        "summary": "Update Folder",
+        "description": "Rename a folder or switch Leo's use of its files.",
+        "operationId": "update_folder_v1_files_folders__folder_id__patch",
         "parameters": [
           {
             "name": "folder_id",
@@ -3973,7 +4033,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FolderBody"
+                "$ref": "#/components/schemas/FolderUpdate"
               }
             }
           }
@@ -5696,12 +5756,23 @@
               }
             ],
             "title": "Starred"
+          },
+          "leo": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leo"
           }
         },
         "additionalProperties": false,
         "type": "object",
         "title": "FileUpdate",
-        "description": "What the owner changes; `folder_id: null` moves to the root."
+        "description": "What the owner changes; `folder_id: null` moves to the root, `leo` is the file's own\nswitch (a file in a folder Leo reads is used either way)."
       },
       "FilesResponse": {
         "properties": {
@@ -5742,6 +5813,36 @@
         ],
         "title": "FolderBody",
         "description": "A folder's name."
+      },
+      "FolderUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "leo": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leo"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "FolderUpdate",
+        "description": "A folder's new name, and whether Leo uses every readable file in it."
       },
       "ForgotRequest": {
         "properties": {
@@ -7646,6 +7747,11 @@
               }
             ],
             "title": "Folder Id"
+          },
+          "leo": {
+            "type": "boolean",
+            "title": "Leo",
+            "default": false
           }
         },
         "additionalProperties": false,
@@ -7654,7 +7760,7 @@
           "upload_ids"
         ],
         "title": "RegisterBody",
-        "description": "Ready uploads to turn into files, and where to put them."
+        "description": "Ready uploads to turn into files, where to put them, and whether Leo uses them."
       },
       "RegistrationRequest": {
         "properties": {

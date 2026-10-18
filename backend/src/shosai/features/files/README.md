@@ -3,7 +3,7 @@
 The one path for bytes in Shosai: a person's File Manager (files, flat folders, "Use with Leo"), the presigned uploads every slice that takes bytes goes through, download links, the storage quota, and files shared into or handed over to a workspace.
 
 - Plan: [docs/plan/slices/files.md](../../../../../docs/plan/slices/files.md). Decisions: FL-D1…FL-D9 in the plan; key layout [ADR 0055](../../../../../docs/adr/0055-object-key-layout-and-bucket-rules.md).
-- Public surface: `contracts` (`Uploads.claim`, `FileReader`, the `IndexStatus` port knowledge binds, their types and errors) and `contracts.events` (`files.file.uploaded`, `.file.deleted`, `.file.restored`, `files.leo_use.changed`).
+- Public surface: `contracts` (`Uploads.claim`, `FileReader`, the `IndexStatus` port knowledge binds, their types and errors) and `contracts.events` (`files.file.uploaded`, `.file.deleted`, `.file.restored`, `files.leo_use.changed`, `.leo_use.reindex_requested`).
 
 ## Rules the domain holds
 
@@ -13,7 +13,7 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 - `domain/keys.py` — `u/{user_id}/f/{file_id}`, `o/{org_id}/f/{file_id}`, `transient/{purpose}/{upload_id}`: the full owner id, never the home or the name.
 - `domain/uploads.py` — pending → ready (size equal to the declared one) or rejected; ready → claimed; expired after 24 hours; 16 MiB parts within the store's limits.
 - `domain/quota.py` — reservations never pass the limit; over the limit nothing goes for 90 days with reminders 30, 7 and 1 day before, then the newest files over it; a deleted file hidden for 7 days.
-- `domain/leo.py` — Leo uses a readable file by its own switch or its folder's; the bytes it uses fit `knowledge_base_mb`.
+- `domain/leo.py` — Leo uses a readable file by its own switch or its folder's; only readable files in use count; a change that starts using files is refused when the bytes in use would pass `knowledge_base_mb`, one that only stops using files never is.
 
 ## Tables (each home, revision `e7b2c5d9a314`)
 
@@ -44,3 +44,12 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 - `files.check_quota` (daily per home) lists the people who hold bytes or carry a mark as the sweep role and takes each one's due step; a plan change (`billing.subscription.changed`, consumer `files.quota_follows_plan`) and support's restore mark or clear at once. The reminder's address comes from identity's `AccountProfile.email`.
 - `GET /v1/files/storage` answers the meter and the banner: used bytes, the limit, `over_limit_since` and `removal_at`.
 - inv-11: `files.reconcile_storage` (daily per home) counts people whose counter differs from the sum of their visible personal files and objects under `u/` and `o/` older than a day that no row names and no deletion waits for; gauges `shosai_files_quota_drift` and `shosai_files_orphaned_objects`, monitors `StorageCounterDrift` and `OrphanedObject` ([runbook](../../../../../docs/runbooks/alerts.md#storage-counter-drift)); nothing is fixed silently. Revision `a7d3e9f1c428` lets the sweep role read `storage_usage`.
+
+## Leo's use (step 6)
+
+- A file is used when Leo can read it (nine types up to 50 MiB) and its own switch or its folder's is on; `FileItem.leo` says `via` and the indexing stage from knowledge's `IndexStatus` port — `queued` until knowledge binds it.
+- `PATCH /v1/files/{id} {leo}`, `POST /v1/files {…, leo}` and `PATCH /v1/files/folders/{id} {name?, leo?}` switch it; a move or a rename can start or stop it too; a copy starts without its own switch; deleting a folder stops the use of files Leo read only through it. The file's own switch is refused for a file Leo cannot read (409 `leo_unreadable`).
+- `application/leo_use.py` runs every such change the same way: the limit read from `Entitlements` before the transaction when the change may start a use (503 when unread); the person's Leo lock first in the transaction (`infrastructure/leo_lock.py`, a transaction-scoped advisory lock, so a folder switched on while a file moves into it never loses the file); the change flushed; the bytes in use counted (409 `leo_limit` with `limit_bytes` when a started use passes the limit); one `files.leo_use.changed` per file whose use changed, written in one statement (`EventOutbox.add_all`).
+- Deleting a file announces `files.file.deleted` only; support's restore brings the use back with `files.leo_use.changed` and is not refused by the knowledge limit, as it is not by the storage limit. A lowered limit refuses new use at once; what Leo already uses stays until FL-D10's 90 days run out (step 6b).
+- A person's locks go in one order: the Leo lock, the usage row (`usage_store.lock`), then the files. Day 90's removal holds the row and then every file, so a copy, a deletion, a restore and an erasure take the row before their file.
+- `POST /v1/files/{id}/reindex` asks knowledge to read a file again (`files.leo_use.reindex_requested`) and answers it `queued`; 409 `leo_not_used` when Leo does not use it.

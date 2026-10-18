@@ -4,7 +4,8 @@ Step 1 published the contract, the events and the domain; step 2 adds the tables
 shareable `file` resource and the account data handler; step 3 the uploads straight to
 the bucket, their claim by other slices and the sweep; step 4 the File Manager, downloads
 through the edge, support's hidden files and their purge; step 5 the quota's 90 days, its
-reminders and the inv-11 reconciliation. Leo's use joins in the later steps of the plan.
+reminders and the inv-11 reconciliation; step 6 Leo's use of files and folders within the
+knowledge limit, and the reindex request.
 """
 
 from collections.abc import AsyncIterator
@@ -17,6 +18,7 @@ from shosai.features.files.application.downloads import Downloads
 from shosai.features.files.application.file_manager import FileManager
 from shosai.features.files.application.folders import Folders
 from shosai.features.files.application.hidden_files import HiddenFiles
+from shosai.features.files.application.leo_use import LeoUse
 from shosai.features.files.application.quota_reconciliation import QuotaReconciliation
 from shosai.features.files.application.quota_sweep import QuotaSweep
 from shosai.features.files.application.quota_watch import QuotaWatch
@@ -35,6 +37,7 @@ from shosai.features.files.contracts.events import (
     FileDeleted,
     FileRestored,
     FileUploaded,
+    LeoReindexRequested,
     LeoUseChanged,
 )
 from shosai.features.files.emails.storage_over_limit import STORAGE_OVER_LIMIT
@@ -56,7 +59,8 @@ from shosai.features.files.settings import FilesSettings, downloads_through_edge
 
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
-    """Uploads, the File Manager, downloads, hidden files, the quota and the account data."""
+    """Uploads, the File Manager with Leo's use, downloads, hidden files, the quota and the
+    account data."""
     transactions, ports = services.transactions, services.ports
     base = services.settings.features.get(FilesSettings).files_download_base_url
     deleter = ObjectDeleter(transactions, services.objects)
@@ -64,7 +68,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     claims = UploadClaims()
     metrics = QuotaMetrics(services.registry)
     watch = QuotaWatch(transactions, (ports, services.outbox, services.email, metrics))
-    hidden = HiddenFiles(transactions, (services.outbox, deleter, watch))
+    leo = LeoUse(ports, services.outbox)
+    hidden = HiddenFiles(transactions, (services.outbox, deleter, watch, leo))
     downloads = Downloads(
         transactions, (services.objects, ports), None if base is None else str(base)
     )
@@ -75,12 +80,12 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         reconciliation=QuotaReconciliation(transactions, (services.objects, metrics)),
     )
     handler = FilesAccountData(transactions, (services.objects, services.uploads))
-    manager = FileManager(transactions, (ports, services.outbox, claims))
+    manager = FileManager(transactions, (ports, services.outbox, claims, leo))
     yield FeatureParts(
         http_routers=(
             build_uploads_router(UploadService(transactions, storage, (ports, deleter)), ports),
             build_files_router((manager, downloads), ports),
-            build_folders_router(Folders(transactions), ports),
+            build_folders_router(Folders(transactions, (ports, leo)), ports),
             build_storage_router(watch, ports),
             build_admin_files_router(hidden, ports),
         ),
@@ -107,5 +112,5 @@ FILES = FeatureModule(
         StorageUsageRecord,
         ObjectDeletionRecord,
     ),
-    events=(FileUploaded, FileDeleted, FileRestored, LeoUseChanged),
+    events=(FileUploaded, FileDeleted, FileRestored, LeoUseChanged, LeoReindexRequested),
 )
