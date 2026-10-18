@@ -6,14 +6,18 @@ import type { FileManagerView } from "../domain/files";
 import { useFileManager } from "./file-manager-store";
 import { FilesSection } from "./files-section";
 import { FoldersSection } from "./folders-section";
+import { LeoLimitNotice } from "./leo-limit-notice";
+import { StorageMeter } from "./storage-meter";
 
-/** The file manager's home: folders on top, then every file with the folder it lives in. */
+/** The file manager's home: the storage meter, folders, then every file with the folder it lives in. */
 export function AllFilesView({ view }: { view: FileManagerView }) {
   const t = useTranslations("fileManager");
   const { files } = useFileManager();
 
   return (
     <>
+      <StorageMeter />
+      <LeoLimitNotice />
       <FoldersSection view={view} />
       <FilesSection
         files={files}

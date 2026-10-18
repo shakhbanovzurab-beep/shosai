@@ -37,5 +37,31 @@
   "undoFailed": "Não foi possível desfazer",
   "folderDeleted": "“{name}” excluída",
   "folderDeletedFiles": "{count, plural, one {# arquivo movido para Meus arquivos.} many {# de arquivos movidos para Meus arquivos.} other {# arquivos movidos para Meus arquivos.}}",
-  "folderDeleteFailed": "Não foi possível excluir “{name}”"
+  "folderDeleteFailed": "Não foi possível excluir “{name}”",
+  "uploadFailedNamed": "Não foi possível fazer upload de “{name}”",
+  "uploadFailedMany": "{count, plural, one {Não foi possível fazer upload de # arquivo} many {Não foi possível fazer upload de # de arquivos} other {Não foi possível fazer upload de # arquivos}}",
+  "downloadFailed": "Não foi possível baixar “{name}”",
+  "problems": {
+    "file_not_found": "Este arquivo não existe mais.",
+    "folder_not_found": "Esta pasta não existe mais.",
+    "upload_count": "Faça upload de no máximo 20 arquivos por vez.",
+    "upload_not_claimable": "Este upload expirou. Faça upload do arquivo de novo.",
+    "upload_too_large": "Este arquivo é grande demais para o upload.",
+    "upload_incomplete": "O arquivo não chegou inteiro. Faça upload dele de novo.",
+    "upload_closed": "Este upload já terminou. Faça upload do arquivo de novo.",
+    "upload_not_found": "Este upload não existe mais. Faça upload do arquivo de novo.",
+    "filename_invalid": "Não é possível usar este nome de arquivo. Renomeie o arquivo e tente de novo.",
+    "storage_limit": "Isso passaria do armazenamento do seu plano. Libere espaço ou escolha um plano maior.",
+    "storage_not_included": "Seu plano não inclui armazenamento de arquivos.",
+    "leo_limit": "No seu plano, o Leo pode usar até {limit} dos seus arquivos. Pare de usar alguns primeiro.",
+    "leo_unreadable": "O Leo não consegue ler este tipo de arquivo.",
+    "leo_not_used": "O Leo não usa este arquivo.",
+    "entitlements_unavailable": "Não foi possível verificar seu plano agora. Tente de novo em um minuto.",
+    "name_required": "Digite um nome.",
+    "name_too_long": "Este nome é longo demais.",
+    "name_slash": "O nome não pode conter / nem \\.",
+    "name_control_character": "O nome não pode conter caracteres de controle invisíveis.",
+    "upload_rejected": "O arquivo mudou durante o upload. Faça upload dele de novo.",
+    "upload_interrupted": "A conexão caiu durante o upload. Tente de novo."
+  }
 }

@@ -3,8 +3,8 @@ import { kindOf } from "../domain/files";
 import { type StoredFile, seedFiles, seedFolders } from "./demo-files";
 
 /*
- * In-memory stand-in for the files service, used when BACKEND_API_URL is unset. Nothing is stored
- * or parsed: a file Leo uses walks through the index pipeline on a timer. Resets on restart.
+ * In-memory stand-in for the files service in `npm run dev` and tests. Nothing is stored or parsed: a file Leo
+ * uses walks through the index pipeline on a timer. Resets on reload.
  */
 
 export type Store = { folders: FileFolder[]; files: StoredFile[] };
@@ -76,6 +76,9 @@ export function present(file: StoredFile, now = Date.now()): FileItem {
 
 /** Bytes of every file Leo uses: what the plan's knowledge limit counts. */
 export const leoBytes = (s: Store) => s.files.reduce((sum, f) => sum + (usesLeo(s, f) ? f.size_bytes : 0), 0);
+
+/** Bytes every file holds: what the plan's storage counts. */
+export const usedBytes = () => store.files.reduce((sum, f) => sum + f.size_bytes, 0);
 
 export const findFile = (id: string) => store.files.find((f) => f.id === id);
 export const findFolder = (id: string) => store.folders.find((f) => f.id === id);

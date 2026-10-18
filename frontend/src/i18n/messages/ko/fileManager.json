@@ -104,7 +104,9 @@
     "sharing": "워크스페이스 공유 관리…",
     "transferTo": "소유권 이전",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "폴더 삭제"
+    "deleteFolder": "폴더 삭제",
+    "download": "다운로드",
+    "heldOverLimit": "플랜 한도를 넘어 Leo가 더 이상 읽지 않아요"
   },
   "dialogs": {
     "renameFile": "파일 이름 변경",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "업로드",
-    "uploading": "{count, plural, other {파일 #개 업로드 중…}}",
+    "uploading": "{count, plural, other {파일 #개 업로드 중…}} {progress, number, percent}",
     "dropHere": "놓아서 여기에 업로드",
     "skipped": "{count, plural, other {파일 #개를 건너뛰었어요}}",
     "skippedDescription": "비어 있거나 {size}보다 큰 파일은 건너뛰며, 한 번에 최대 {max, number}개까지 업로드할 수 있어요."
@@ -128,5 +130,17 @@
     "noFiles": "아직 파일이 없어요. 먼저 파일 관리자에서 업로드해 주세요.",
     "yourFiles": "내 파일",
     "alreadyShared": "이미 여기에 공유됨"
+  },
+  "storage": {
+    "label": "저장 공간",
+    "title": "저장 공간",
+    "ratio": "{used} / {limit}",
+    "overTitle": "파일이 플랜의 저장 공간을 넘었어요",
+    "overDescription": "모든 파일은 그대로 사용할 수 있고 새 업로드만 일시 중지돼요. {date} 전에 공간을 확보하거나 더 큰 플랜을 선택하세요. 이 날짜가 지나면 한도를 넘는 가장 최근 파일부터 삭제돼요.",
+    "upgrade": "플랜 보기"
+  },
+  "leoLimit": {
+    "title": "Leo가 파일 {used}을(를) 사용 중이에요. 플랜에 포함된 {limit}보다 많아요",
+    "description": "{date}까지는 Leo가 모든 파일을 계속 읽어요. Leo에게 필요 없는 파일을 끄거나 더 큰 플랜을 선택하세요. 이 날짜가 지나면 한도를 넘는 가장 최근 파일부터 Leo가 읽지 않아요. 파일은 삭제되지 않아요."
   }
 }

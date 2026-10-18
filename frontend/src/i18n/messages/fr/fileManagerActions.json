@@ -37,5 +37,31 @@
   "undoFailed": "Impossible d’annuler",
   "folderDeleted": "« {name} » supprimé",
   "folderDeletedFiles": "{count, plural, one {# fichier déplacé vers Mes fichiers.} many {# de fichiers déplacés vers Mes fichiers.} other {# fichiers déplacés vers Mes fichiers.}}",
-  "folderDeleteFailed": "Impossible de supprimer « {name} »"
+  "folderDeleteFailed": "Impossible de supprimer « {name} »",
+  "uploadFailedNamed": "Impossible d’importer « {name} »",
+  "uploadFailedMany": "{count, plural, one {Impossible d’importer # fichier} many {Impossible d’importer # de fichiers} other {Impossible d’importer # fichiers}}",
+  "downloadFailed": "Impossible de télécharger « {name} »",
+  "problems": {
+    "file_not_found": "Ce fichier n’existe plus.",
+    "folder_not_found": "Ce dossier n’existe plus.",
+    "upload_count": "Importez au plus 20 fichiers à la fois.",
+    "upload_not_claimable": "Cette importation a expiré. Importez le fichier à nouveau.",
+    "upload_too_large": "Ce fichier est trop volumineux pour être importé.",
+    "upload_incomplete": "Le fichier n’est pas arrivé en entier. Importez-le à nouveau.",
+    "upload_closed": "Cette importation est déjà terminée. Importez le fichier à nouveau.",
+    "upload_not_found": "Cette importation n’existe plus. Importez le fichier à nouveau.",
+    "filename_invalid": "Ce nom de fichier ne peut pas être utilisé. Renommez le fichier et réessayez.",
+    "storage_limit": "Cela dépasserait le stockage de votre forfait. Libérez de l’espace ou choisissez un forfait plus grand.",
+    "storage_not_included": "Votre forfait n’inclut pas de stockage de fichiers.",
+    "leo_limit": "Avec votre forfait, Leo peut utiliser jusqu’à {limit} de vos fichiers. Retirez-en d’abord quelques-uns.",
+    "leo_unreadable": "Leo ne sait pas lire ce type de fichier.",
+    "leo_not_used": "Leo n’utilise pas ce fichier.",
+    "entitlements_unavailable": "Votre forfait n’a pas pu être vérifié pour l’instant. Réessayez dans une minute.",
+    "name_required": "Saisissez un nom.",
+    "name_too_long": "Ce nom est trop long.",
+    "name_slash": "Un nom ne peut pas contenir / ni \\.",
+    "name_control_character": "Un nom ne peut pas contenir de caractères de contrôle invisibles.",
+    "upload_rejected": "Le fichier a changé pendant l’importation. Importez-le à nouveau.",
+    "upload_interrupted": "La connexion a été interrompue pendant l’importation. Réessayez."
+  }
 }

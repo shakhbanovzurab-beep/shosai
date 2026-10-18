@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Thêm tệp cho Leo",
     "title": "Thả tệp vào đây để Leo dùng",
-    "uploading": "Đang tải lên {count, plural, other {# tệp}}…",
+    "uploading": "Đang tải lên {count, plural, other {# tệp}}… {progress, number, percent}",
     "description": "Tệp được lưu vào Tệp của tôi trong Trình quản lý tệp. {types}, mỗi tệp tối đa {size}.",
     "choose": "Chọn từ tệp của bạn",
     "upload": "Tải tệp mới lên",

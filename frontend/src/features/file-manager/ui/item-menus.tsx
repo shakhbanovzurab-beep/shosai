@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  ArrowRightLeft,
+  Download,
   Files,
   Folder,
   FolderInput,
@@ -18,15 +18,18 @@ import { useFormatter, useTranslations } from "use-intl";
 import type { MenuKit } from "@/components/menu-kit";
 
 import type { FileFolder, FileItem } from "../domain/contract";
-import { folderStats } from "../domain/files";
-import { deleteFile, duplicateFile, moveFile, setFileLeo, toggleStar } from "../model/file-actions";
+import { folderStats, isHeld } from "../domain/files";
+import { deleteFile, downloadFile, duplicateFile, moveFile, setFileLeo, toggleStar } from "../model/file-actions";
 import { deleteFolder, setFolderLeo } from "../model/folder-actions";
 import { useFileActionWords } from "../model/words";
 import { useFileManager } from "./file-manager-store";
 import { useLeoBlocker } from "./leo-blocker";
 import { LeoFileIcon } from "./leo-file-icon";
 
-/** "Use with Leo" for a file: its own choice, unless its folder already decides or Leo can't read it. */
+/**
+ * "Use with Leo" for a file: its own choice, unless its folder already decides or Leo can't read it. A file Leo
+ * stopped reading over the plan's limit (FL-D10) says so; switching it on brings it back within the limit.
+ */
 function LeoItem({ kit: K, file }: { kit: MenuKit; file: FileItem }) {
   const t = useTranslations("fileManager");
   const words = useFileActionWords();
@@ -47,7 +50,14 @@ function LeoItem({ kit: K, file }: { kit: MenuKit; file: FileItem }) {
     );
   return (
     <K.CheckboxItem checked={file.leo !== null} onCheckedChange={(on) => void setFileLeo(file, on === true, words)}>
-      {t("menu.useWithLeo")}
+      {isHeld(file, folders) ? (
+        <span className="flex flex-col">
+          {t("menu.useWithLeo")}
+          <span className="text-muted-foreground text-xs">{t("menu.heldOverLimit")}</span>
+        </span>
+      ) : (
+        t("menu.useWithLeo")
+      )}
     </K.CheckboxItem>
   );
 }
@@ -76,6 +86,10 @@ export function FileMenuItems({ kit: K, file }: { kit: MenuKit; file: FileItem }
         <K.Item onSelect={() => void duplicateFile(file, words)}>
           <Files />
           {common("actions.duplicate")}
+        </K.Item>
+        <K.Item onSelect={() => void downloadFile(file, words)}>
+          <Download />
+          {t("menu.download")}
         </K.Item>
         <K.Sub>
           <K.SubTrigger>
@@ -110,23 +124,6 @@ export function FileMenuItems({ kit: K, file }: { kit: MenuKit; file: FileItem }
           <Share2 />
           {shared.length ? t("menu.sharing") : t("menu.share")}
         </K.Item>
-        {shared.length ? (
-          <K.Sub>
-            <K.SubTrigger>
-              <ArrowRightLeft />
-              {t("menu.transferTo")}
-            </K.SubTrigger>
-            <K.SubContent className="w-48">
-              {shared.map((workspace) => (
-                <K.Item key={workspace.id} onSelect={() => actions.transfer(file, workspace)}>
-                  <span className="truncate" dir="auto">
-                    {t("menu.transferWorkspace", { workspace: workspace.name })}
-                  </span>
-                </K.Item>
-              ))}
-            </K.SubContent>
-          </K.Sub>
-        ) : null}
       </K.Group>
       <K.Separator />
       <K.Group>

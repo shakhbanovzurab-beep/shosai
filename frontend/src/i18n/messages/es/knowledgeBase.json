@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Agregar archivos para Leo",
     "title": "Suelta aquí los archivos que usará Leo",
-    "uploading": "Subiendo {count, plural, one {# archivo} many {# de archivos} other {# archivos}}…",
+    "uploading": "Subiendo {count, plural, one {# archivo} many {# de archivos} other {# archivos}}… {progress, number, percent}",
     "description": "Se guardan en Mis archivos, en el Administrador de archivos. {types}, de hasta {size} cada uno.",
     "choose": "Elegir de tus archivos",
     "upload": "Subir nuevos",

@@ -47,6 +47,16 @@ export function leoBlocker(file: Pick<FileItem, "name" | "size_bytes" | "leo_rea
   return extension ? { reason: "extension", extension } : { reason: "unknownType" };
 }
 
+/**
+ * Whether Leo stopped reading the file on day 90 over the plan's knowledge limit (FL-D10): Leo could read it and
+ * its folder is used, yet the file isn't. Only switching the file on brings it back, within the limit.
+ */
+export const isHeld = (file: FileItem, folders: readonly FileFolder[]) =>
+  file.leo === null &&
+  file.leo_readable &&
+  file.folder_id !== null &&
+  folders.some((folder) => folder.id === file.folder_id && folder.leo);
+
 /** What a folder holds right now: how many files, how big, and when one last changed. */
 export function folderStats(folder: FileFolder, files: FileItem[]) {
   let count = 0;

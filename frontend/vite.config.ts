@@ -29,7 +29,18 @@ export default defineConfig(({ mode }) => ({
   resolve: { alias: { "@": path("./src") } },
   server: {
     port: 3000,
-    proxy: mode === "api" ? { "/v1": process.env.BACKEND_URL ?? "http://localhost:8000" } : undefined,
+    proxy:
+      mode === "api"
+        ? {
+            "/v1": process.env.BACKEND_URL ?? "http://localhost:8000",
+            // Скачивания как через edge (FL-D9): /dl/{дом}/… уходит в бакет тем же запросом.
+            "^/dl/(ru|eu)/": {
+              target: process.env.BUCKET_URL ?? "http://127.0.0.1:18333",
+              changeOrigin: true,
+              rewrite: (url) => url.replace(/^\/dl\/(ru|eu)/, ""),
+            },
+          }
+        : undefined,
   },
   preview: { port: 3000 },
   build: {

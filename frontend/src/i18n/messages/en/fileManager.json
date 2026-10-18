@@ -104,7 +104,9 @@
     "sharing": "Sharing in workspaces…",
     "transferTo": "Transfer to",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Delete folder"
+    "deleteFolder": "Delete folder",
+    "download": "Download",
+    "heldOverLimit": "Leo stopped reading it: over your plan’s limit"
   },
   "dialogs": {
     "renameFile": "Rename file",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Upload",
-    "uploading": "Uploading {count, plural, one {# file} other {# files}}…",
+    "uploading": "Uploading {count, plural, one {# file} other {# files}}… {progress, number, percent}",
     "dropHere": "Drop to upload here",
     "skipped": "{count, plural, one {Skipped # file} other {Skipped # files}}",
     "skippedDescription": "Files that are empty or over {size} are skipped, and at most {max, number} upload at once."
@@ -128,5 +130,17 @@
     "noFiles": "No files yet. Upload some in File Manager first.",
     "yourFiles": "Your files",
     "alreadyShared": "Already shared here"
+  },
+  "storage": {
+    "label": "Storage",
+    "title": "Storage",
+    "ratio": "{used} of {limit}",
+    "overTitle": "Your files are over your plan’s storage",
+    "overDescription": "Everything stays available and new uploads are paused. Free up space or choose a larger plan before {date}: after it, the newest files over the limit will be deleted.",
+    "upgrade": "See plans"
+  },
+  "leoLimit": {
+    "title": "Leo uses {used} of your files, more than the {limit} your plan includes",
+    "description": "Leo keeps reading everything until {date}. Switch off files Leo doesn’t need or choose a larger plan: after that date, Leo stops reading the newest files over the limit. No file is deleted."
   }
 }

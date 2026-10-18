@@ -104,7 +104,9 @@
     "sharing": "工作空間共用設定…",
     "transferTo": "轉移至",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "刪除資料夾"
+    "deleteFolder": "刪除資料夾",
+    "download": "下載",
+    "heldOverLimit": "已超出方案上限，Leo 不再讀取這個檔案"
   },
   "dialogs": {
     "renameFile": "重新命名檔案",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "上傳",
-    "uploading": "正在上傳 {count, plural, other {# 個檔案}}…",
+    "uploading": "正在上傳 {count, plural, other {# 個檔案}}… {progress, number, percent}",
     "dropHere": "放開即可上傳到這裡",
     "skipped": "{count, plural, other {已略過 # 個檔案}}",
     "skippedDescription": "空白檔案或超過 {size} 的檔案會被略過，而且一次最多上傳 {max, number} 個檔案。"
@@ -128,5 +130,17 @@
     "noFiles": "還沒有檔案。請先在檔案管理中上傳檔案。",
     "yourFiles": "你的檔案",
     "alreadyShared": "已在這裡共用"
+  },
+  "storage": {
+    "label": "儲存空間",
+    "title": "儲存空間",
+    "ratio": "{used} / {limit}",
+    "overTitle": "你的檔案已超出方案的儲存空間",
+    "overDescription": "所有檔案仍可使用，只有新的上傳會暫停。請在 {date} 前釋出空間或選擇容量更大的方案；過了這個日期，會從最新的檔案開始刪除超出上限的部分。",
+    "upgrade": "查看方案"
+  },
+  "leoLimit": {
+    "title": "Leo 使用了 {used} 的檔案，超過方案包含的 {limit}",
+    "description": "在 {date} 前，Leo 會繼續讀取所有檔案。請關閉 Leo 不需要的檔案，或選擇容量更大的方案；過了這個日期，Leo 會從最新的檔案開始停止讀取超出上限的部分。檔案不會被刪除。"
   }
 }

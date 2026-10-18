@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "إضافة ملفات لـ Leo",
     "title": "يمكن إفلات الملفات هنا ليستخدمها Leo",
-    "uploading": "جارٍ رفع {count, plural, zero {# ملف} one {ملف واحد} two {ملفين} few {# ملفات} many {# ملفًا} other {# ملف}}…",
+    "uploading": "جارٍ رفع {count, plural, zero {# ملف} one {ملف واحد} two {ملفين} few {# ملفات} many {# ملفًا} other {# ملف}}… {progress, number, percent}",
     "description": "يتم حفظها في «ملفاتي» في مدير الملفات. {types}، بحجم يصل إلى {size} لكل ملف.",
     "choose": "الاختيار من ملفاتك",
     "upload": "رفع ملفات جديدة",

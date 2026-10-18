@@ -11,7 +11,6 @@ export const NAMESPACES = [
   "download",
   "fileManager",
   "fileManagerActions",
-  "fileManagerApi",
   "hub",
   "hubApi",
   "hubBlocks",

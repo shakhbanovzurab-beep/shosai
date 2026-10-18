@@ -37,5 +37,31 @@
   "undoFailed": "Geri alınamadı",
   "folderDeleted": "“{name}” silindi",
   "folderDeletedFiles": "{count, plural, one {# dosya Dosyalarım’a taşındı.} other {# dosya Dosyalarım’a taşındı.}}",
-  "folderDeleteFailed": "“{name}” silinemedi"
+  "folderDeleteFailed": "“{name}” silinemedi",
+  "uploadFailedNamed": "“{name}” yüklenemedi",
+  "uploadFailedMany": "{count, plural, one {# dosya yüklenemedi} other {# dosya yüklenemedi}}",
+  "downloadFailed": "“{name}” indirilemedi",
+  "problems": {
+    "file_not_found": "Bu dosya artık mevcut değil.",
+    "folder_not_found": "Bu klasör artık mevcut değil.",
+    "upload_count": "Tek seferde en fazla 20 dosya yükleyin.",
+    "upload_not_claimable": "Bu yüklemenin süresi doldu. Dosyayı yeniden yükleyin.",
+    "upload_too_large": "Bu dosya yüklenemeyecek kadar büyük.",
+    "upload_incomplete": "Dosyanın tamamı ulaşmadı. Yeniden yükleyin.",
+    "upload_closed": "Bu yükleme zaten bitti. Dosyayı yeniden yükleyin.",
+    "upload_not_found": "Bu yükleme artık mevcut değil. Dosyayı yeniden yükleyin.",
+    "filename_invalid": "Bu dosya adı kullanılamaz. Dosyayı yeniden adlandırıp tekrar deneyin.",
+    "storage_limit": "Bu, planınızın depolama alanını aşar. Yer açın veya daha büyük bir plan seçin.",
+    "storage_not_included": "Planınız dosya depolama içermiyor.",
+    "leo_limit": "Planınızda Leo dosyalarınızın en fazla {limit} kadarını kullanabilir. Önce bazılarının kullanımını durdurun.",
+    "leo_unreadable": "Leo bu türdeki dosyaları okuyamaz.",
+    "leo_not_used": "Leo bu dosyayı kullanmıyor.",
+    "entitlements_unavailable": "Planınız şu anda kontrol edilemedi. Bir dakika sonra tekrar deneyin.",
+    "name_required": "Bir ad girin.",
+    "name_too_long": "Bu ad çok uzun.",
+    "name_slash": "Ad / veya \\ içeremez.",
+    "name_control_character": "Ad görünmez kontrol karakterleri içeremez.",
+    "upload_rejected": "Dosya yüklenirken değişti. Yeniden yükleyin.",
+    "upload_interrupted": "Yükleme sırasında bağlantı kesildi. Tekrar deneyin."
+  }
 }

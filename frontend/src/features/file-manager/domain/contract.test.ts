@@ -2,7 +2,7 @@ import { describe, expectTypeOf, it } from "vitest";
 
 import type { components } from "@/lib/api/generated/schema";
 
-import type { FileFolder, FileItem, FilesResponse, UploadResponse } from "./contract";
+import type { FileFolder, FileItem, FilesResponse, StorageStanding, UploadResponse } from "./contract";
 
 type Schemas = components["schemas"];
 
@@ -13,5 +13,6 @@ describe("file manager contract", () => {
     expectTypeOf<Schemas["FileFolder"]>().toEqualTypeOf<FileFolder>();
     expectTypeOf<Schemas["FilesResponse"]>().toEqualTypeOf<FilesResponse>();
     expectTypeOf<Schemas["UploadResponse"]>().toEqualTypeOf<UploadResponse>();
+    expectTypeOf<Schemas["StorageOut"]>().toEqualTypeOf<StorageStanding>();
   });
 });

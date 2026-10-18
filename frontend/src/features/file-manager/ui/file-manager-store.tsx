@@ -15,7 +15,7 @@ import { folderHref, rootHref } from "../domain/paths";
 import { renameFile } from "../model/file-actions";
 import { createFolder, renameFolder } from "../model/folder-actions";
 import { type FileActionWords, useFileActionWords } from "../model/words";
-import { ShareDialog, TransferDialog } from "./file-dialogs";
+import { ShareDialog } from "./file-dialogs";
 
 /** The grid/list choice in the current URL, so navigating between folders keeps it. Event handlers only. */
 const currentView = (): FileManagerView =>
@@ -30,7 +30,6 @@ type FileManagerActions = {
   renameFolder: (folder: FileFolder) => void;
   newFolder: () => void;
   share: (file: FileItem) => void;
-  transfer: (file: FileItem, workspace: Workspace) => void;
 };
 
 type FileManagerContextValue = FilesResponse & {
@@ -53,12 +52,11 @@ type Dialogs = {
   push: (href: string) => void;
   askName: (request: NameRequest) => void;
   share: (file: FileItem) => void;
-  transfer: (request: { file: FileItem; workspace: Workspace }) => void;
 };
 
-/** The dialogs every page opens: naming, sharing in a workspace, handing over. */
+/** The dialogs every page opens: naming and sharing in a workspace. */
 function makeActions(
-  { push, askName, share, transfer }: Dialogs,
+  { push, askName, share }: Dialogs,
   t: ReturnType<typeof useTranslations<"fileManager">>,
   words: FileActionWords,
 ): FileManagerActions {
@@ -87,11 +85,10 @@ function makeActions(
         onSubmit: (name) => void createFolder(name, words),
       }),
     share,
-    transfer: (file, workspace) => transfer({ file, workspace }),
   };
 }
 
-/** The loaded files with the dialogs every page shares: naming, sharing in a workspace, handing over. */
+/** The loaded files with the dialogs every page shares: naming and sharing in a workspace. */
 export function FileManagerProvider({ data, children }: { data: FilesResponse; children: ReactNode }) {
   const router = useRouter();
   const t = useTranslations("fileManager");
@@ -100,10 +97,9 @@ export function FileManagerProvider({ data, children }: { data: FilesResponse; c
   const [filter, setFilter] = useState(DEFAULT_FILTER);
   const [nameRequest, setNameRequest] = useState<NameRequest | null>(null);
   const [sharing, setSharing] = useState<FileItem | null>(null);
-  const [transferring, setTransferring] = useState<{ file: FileItem; workspace: Workspace } | null>(null);
 
   const value = useMemo(() => {
-    const dialogs = { push: router.push, askName: setNameRequest, share: setSharing, transfer: setTransferring };
+    const dialogs = { push: router.push, askName: setNameRequest, share: setSharing };
     const actions = makeActions(dialogs, t, words);
     const sharedIn = (fileId: string) => (shares.get(fileId) ?? []).map((s) => s.workspace);
     return { ...data, filter, setFilter, sharedIn, actions };
@@ -114,7 +110,6 @@ export function FileManagerProvider({ data, children }: { data: FilesResponse; c
       {children}
       <NameDialog request={nameRequest} onClose={() => setNameRequest(null)} />
       <ShareDialog file={sharing} onClose={() => setSharing(null)} />
-      <TransferDialog request={transferring} onClose={() => setTransferring(null)} />
     </FileManagerContext>
   );
 }

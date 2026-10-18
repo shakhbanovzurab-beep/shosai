@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Add files for Leo",
     "title": "Drop files here for Leo to use",
-    "uploading": "Uploading {count, plural, one {# file} other {# files}}…",
+    "uploading": "Uploading {count, plural, one {# file} other {# files}}… {progress, number, percent}",
     "description": "They’re saved to My files in File Manager. {types}, up to {size} each.",
     "choose": "Choose from your files",
     "upload": "Upload new",

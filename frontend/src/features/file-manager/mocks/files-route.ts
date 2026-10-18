@@ -1,23 +1,19 @@
-import { adoptFile, withdrawFile } from "@/features/workspace/mocks/sharing";
+import { effectiveEntitlements } from "@/features/upgrade/mocks/demo-plans";
+import { withdrawFile } from "@/features/workspace/mocks/sharing";
 import { JsonResponse } from "@/mocks/runtime";
 
-import {
-  type FileItem,
-  type FilesResponse,
-  MAX_FILES_PER_UPLOAD,
-  MAX_UPLOAD_BYTES,
-  type UploadResponse,
-} from "../domain/contract";
-import { findFile, present, store } from "./demo-store";
+import type { FileItem, FilesResponse, UploadResponse } from "../domain/contract";
+import { findFile, leoBytes, present, store, usedBytes } from "./demo-store";
 import { addFiles, copyFile, reindexFile, updateFile } from "./file-ops";
-import { copyWording, isProblem, refuse } from "./problems";
-import { fileUpdateSchema, firstIssue, readJson, transferSchema } from "./schemas";
+import { isProblem, problem, refuse } from "./problems";
+import { fileUpdateSchema, firstIssue, readJson, registerSchema } from "./schemas";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-const gone = () => refuse({ code: "fileGone" }, 404);
+const gone = () => refuse(problem("file_not_found", 404));
+const LINK_MS = 15 * 60_000;
 
-/** /api/files */
+/** /v1/files */
 export const filesRoute = {
   async GET(_request: Request) {
     const now = Date.now();
@@ -27,30 +23,44 @@ export const filesRoute = {
     });
   },
 
-  /** multipart/form-data: one or more `files`, optional `folder_id`, and `leo` = "true" to have Leo use them. */
+  /** Ready uploads become files: `{ upload_ids, folder_id?, leo? }`. */
   async POST(request: Request) {
-    const form = await request.formData().catch(() => null);
-    const files = form?.getAll("files").filter((part): part is File => part instanceof File) ?? [];
-    if (files.length === 0) return refuse({ code: "chooseFile" }, 422);
-    if (files.length > MAX_FILES_PER_UPLOAD) return refuse({ code: "tooManyFiles", max: MAX_FILES_PER_UPLOAD }, 422);
-    const tooBig = files.find((f) => f.size > MAX_UPLOAD_BYTES);
-    if (tooBig) return refuse({ code: "tooLarge", name: tooBig.name, bytes: MAX_UPLOAD_BYTES }, 413);
-    const folder = form?.get("folder_id");
-    const result = addFiles(files, typeof folder === "string" && folder ? folder : null, form?.get("leo") === "true");
-    if (isProblem(result)) return refuse(result, 409);
+    const body = registerSchema.safeParse(await readJson(request));
+    if (!body.success) return refuse(firstIssue(body.error));
+    const result = addFiles(body.data.upload_ids, body.data.folder_id ?? null, body.data.leo ?? false);
+    if (isProblem(result)) return refuse(result);
     return JsonResponse.json<UploadResponse>({ files: result }, { status: 201 });
   },
 };
 
-/** /api/files/[id] */
+/** /v1/files/storage: the stored bytes and Leo's bytes against the demo plan; never over a limit for long. */
+export const storageRoute = {
+  async GET(_request: Request) {
+    const plan = effectiveEntitlements();
+    const gb = plan?.file_manager_gb;
+    const mb = plan?.knowledge_base_mb;
+    return JsonResponse.json({
+      used_bytes: usedBytes(),
+      limit_bytes: gb === null || gb === undefined ? null : gb * 1024 ** 3,
+      over_limit_since: null,
+      removal_at: null,
+      leo_used_bytes: leoBytes(store),
+      leo_limit_bytes: mb === null || mb === undefined ? null : mb * 1024 ** 2,
+      leo_over_limit_since: null,
+      leo_removal_at: null,
+    });
+  },
+};
+
+/** /v1/files/[id] */
 export const fileRoute = {
   async PATCH(request: Request, { params }: Ctx) {
     const { id } = await params;
     const body = fileUpdateSchema.safeParse(await readJson(request));
-    if (!body.success) return refuse(firstIssue(body.error), 422);
+    if (!body.success) return refuse(firstIssue(body.error));
     const result = updateFile(id, body.data);
     if (result === null) return gone();
-    return isProblem(result) ? refuse(result, 409) : JsonResponse.json<FileItem>(result);
+    return isProblem(result) ? refuse(result) : JsonResponse.json<FileItem>(result);
   },
 
   async DELETE(_request: Request, { params }: Ctx) {
@@ -63,36 +73,40 @@ export const fileRoute = {
   },
 };
 
-/** /api/files/[id]/copy */
+/** /v1/files/[id]/copy */
 export const fileCopyRoute = {
   async POST(_request: Request, { params }: Ctx) {
-    const { id } = await params;
-    const copy = copyFile(id, await copyWording());
+    const copy = copyFile((await params).id);
     return copy ? JsonResponse.json<FileItem>(copy, { status: 201 }) : gone();
   },
 };
 
-/** /api/files/[id]/reindex */
+/** /v1/files/[id]/reindex */
 export const fileReindexRoute = {
   async POST(_request: Request, { params }: Ctx) {
-    const { id } = await params;
-    const result = reindexFile(id);
+    const result = reindexFile((await params).id);
     if (result === null) return gone();
-    return isProblem(result) ? refuse(result, 409) : JsonResponse.json<FileItem>(result);
+    return isProblem(result) ? refuse(result) : JsonResponse.json<FileItem>(result);
   },
 };
 
-/** /api/files/[id]/transfer: the workspace takes over a file shared there; it leaves My files. */
-export const fileTransferRoute = {
-  async POST(request: Request, { params }: Ctx) {
+/** /v1/files/[id]/download: a link on this origin, as the edge's `/dl/…` would be. */
+export const fileDownloadRoute = {
+  async GET(_request: Request, { params }: Ctx) {
     const { id } = await params;
-    const body = transferSchema.safeParse(await readJson(request));
-    if (!body.success) return refuse(firstIssue(body.error), 422);
     if (!findFile(id)) return gone();
-    if (!adoptFile(body.data.workspace_id, id)) return refuse({ code: "shareFirst" }, 409);
-    store.files = store.files.filter((f) => f.id !== id);
-    // It no longer exists here, so other workspaces it was shared in lose it.
-    withdrawFile(id);
-    return new Response(null, { status: 204 });
+    const expires_at = new Date(Date.now() + LINK_MS).toISOString();
+    return JsonResponse.json({ url: `/demo-files/${encodeURIComponent(id)}`, expires_at });
+  },
+};
+
+/** /demo-files/[id]: the demo has no bytes, so a download is a short text saying so. */
+export const demoFileBytesRoute = {
+  async GET(_request: Request, { params }: Ctx) {
+    const file = findFile((await params).id);
+    if (!file) return new Response(null, { status: 404 });
+    return new Response(`Demo file: ${file.name}\n`, {
+      headers: { "content-type": "text/plain; charset=utf-8", "content-disposition": "attachment" },
+    });
   },
 };

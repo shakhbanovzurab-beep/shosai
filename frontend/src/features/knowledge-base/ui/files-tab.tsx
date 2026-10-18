@@ -12,6 +12,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { filesResource, useFiles } from "@/features/file-manager/model/files-resource";
 import { setFolderLeo } from "@/features/file-manager/model/folder-actions";
 import { useFileActionWords } from "@/features/file-manager/model/words";
+import { LeoLimitNotice } from "@/features/file-manager/ui/leo-limit-notice";
 
 import { useIndex } from "../model/kb-resources";
 import { indexTotals, leoFiles } from "../model/leo-files";
@@ -37,6 +38,7 @@ export function FilesTab() {
 
   return (
     <div className="flex flex-col gap-6">
+      <LeoLimitNotice />
       {files.status === "ready" ? (
         <IndexSummary
           totals={{ files: used.length, ...indexTotals(used) }}

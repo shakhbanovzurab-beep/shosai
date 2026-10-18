@@ -1,19 +1,7 @@
 /**
- * File Manager API contract: the account's own files, the one place they are stored. The route
- * handlers in `server/` (mounted under `src/app/api/files`) forward to `${BACKEND_API_URL}/v1/files/*`
- * and fall back to an in-memory demo. Field names are snake_case; errors are `{ "detail": string }`.
- * See docs/file-manager-api.md.
- *
- * GET    /files                 → FilesResponse
- * POST   /files                 → 201 UploadResponse   (multipart: `files`, optional `folder_id`, `leo` = "true")
- * PATCH  /files/{id}            → FileItem             (FileUpdate)
- * DELETE /files/{id}            → 204                  (also leaves every workspace it is shared in)
- * POST   /files/{id}/copy       → 201 FileItem
- * POST   /files/{id}/reindex    → FileItem             (Leo reads it again)
- * POST   /files/{id}/transfer   → 204                  (TransferRequest: the workspace takes it over)
- * POST   /files/folders         → 201 FileFolder       ({name})
- * PATCH  /files/folders/{id}    → FileFolder           (FolderUpdate)
- * DELETE /files/folders/{id}    → 204                  (its files move to My files)
+ * File Manager API contract: the account's own files, the one place they are stored, on the backend's
+ * `/v1/files*` and `/v1/me/uploads*` (files slice). These are the shapes the slice uses; `contract.test.ts`
+ * holds them equal to the generated OpenAPI schema. See docs/file-manager-api.md.
  */
 
 export const FILE_KINDS = [
@@ -71,14 +59,26 @@ export type FileFolder = {
 };
 
 export type FilesResponse = { folders: FileFolder[]; files: FileItem[] };
+
+/**
+ * The person's storage and Leo's bytes against the plan (`GET /v1/files/storage`). A null limit is unlimited;
+ * the dates are set only over a limit: storage's 90 days (FL-D2) and Leo's (FL-D10).
+ */
+export type StorageStanding = {
+  used_bytes: number;
+  limit_bytes: number | null;
+  over_limit_since: string | null;
+  removal_at: string | null;
+  leo_used_bytes: number;
+  leo_limit_bytes: number | null;
+  leo_over_limit_since: string | null;
+  leo_removal_at: string | null;
+};
 export type UploadResponse = { files: FileItem[] };
 
 /** `leo` is the file's own choice; a file in a folder Leo reads is used either way. */
 export type FileUpdate = { name?: string; folder_id?: string | null; starred?: boolean; leo?: boolean };
 export type FolderUpdate = { name?: string; leo?: boolean };
-
-/** Hands a file shared in a workspace over to it: it stays there for good and leaves My files. */
-export type TransferRequest = { workspace_id: string };
 
 export const NAME_MAX = 120;
 export const MAX_FILES_PER_UPLOAD = 20;
@@ -92,3 +92,5 @@ export const isLeoReadable = (name: string, size: number) =>
   size <= LEO_MAX_FILE_BYTES && LEO_EXTENSIONS.some((ext) => name.toLowerCase().endsWith(ext));
 
 export const IN_PROGRESS: ReadonlySet<IndexStatus> = new Set(["queued", "parsing", "chunking", "embedding"]);
+/** The steps knowledge is working through now; a queued file only waits for it. */
+export const INDEXING: ReadonlySet<IndexStatus> = new Set(["parsing", "chunking", "embedding"]);

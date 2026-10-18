@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Tambahkan file untuk Leo",
     "title": "Letakkan file di sini agar digunakan Leo",
-    "uploading": "Mengunggah {count, plural, other {# file}}…",
+    "uploading": "Mengunggah {count, plural, other {# file}}… {progress, number, percent}",
     "description": "File disimpan ke File saya di Pengelola file. {types}, masing-masing hingga {size}.",
     "choose": "Pilih dari file Anda",
     "upload": "Unggah baru",

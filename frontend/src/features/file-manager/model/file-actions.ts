@@ -3,11 +3,13 @@
 import { toast } from "sonner";
 
 import { refreshFileShares } from "@/features/workspace/model/resources";
-import { apiErrorDescription } from "@/lib/api/error-description";
+import { saveFile } from "@/lib/save-file";
 
 import { filesApi } from "../api/files-api";
-import type { FileItem, FilesResponse, FileUpdate } from "../domain/contract";
+import type { FileItem, FileUpdate } from "../domain/contract";
 import { filesResource, pendingDeletes } from "./files-resource";
+import { describeError } from "./problem-words";
+import { storageResource } from "./storage-resource";
 import type { FileActionWords } from "./words";
 
 /*
@@ -18,54 +20,24 @@ import type { FileActionWords } from "./words";
 const replaceFile = (next: FileItem) =>
   filesResource.update((data) => ({ ...data, files: data.files.map((f) => (f.id === next.id ? next : f)) }));
 
-const currentFiles = (): FilesResponse | null => {
-  const state = filesResource.getSnapshot();
-  return state.status === "ready" ? state.data : null;
-};
-
-async function patch(id: string, change: FileUpdate, failure: string) {
+async function patch(id: string, change: FileUpdate, failure: string, words: FileActionWords) {
   try {
     const next = await filesApi.update(id, change);
     replaceFile(next);
     return next;
   } catch (error) {
-    toast.error(failure, { description: apiErrorDescription(error) });
+    toast.error(failure, { description: describeError(error, words) });
     void filesResource.refresh();
     return null;
   }
 }
 
-export async function uploadFiles(
-  files: File[],
-  options: { folderId: string | null; leo: boolean },
-  { t }: FileActionWords,
-) {
-  try {
-    const { files: added } = await filesApi.upload(files, options);
-    filesResource.update((data) => ({ ...data, files: [...added, ...data.files] }));
-    const folder = currentFiles()?.folders.find((f) => f.id === options.folderId);
-    const leo = added.some((f) => f.leo);
-    let description: string | undefined;
-    if (leo) description = added.length === 1 ? t("leoReadingFile") : t("leoReadingFiles");
-    if (leo && folder?.leo) description = t("leoReadsFolder", { folder: folder.name });
-    const first = added[0];
-    const title =
-      added.length === 1 && first
-        ? t("uploadedFile", { name: first.name })
-        : t("uploadedFiles", { count: added.length });
-    toast.success(title, { description });
-    return true;
-  } catch (error) {
-    toast.error(t("uploadFailed"), { description: apiErrorDescription(error) });
-    return false;
-  }
-}
+export const renameFile = (id: string, name: string, words: FileActionWords) =>
+  patch(id, { name }, words.t("renameFailed"), words);
 
-export const renameFile = (id: string, name: string, { t }: FileActionWords) => patch(id, { name }, t("renameFailed"));
-
-export const toggleStar = (file: FileItem, { t }: FileActionWords) => {
+export const toggleStar = (file: FileItem, words: FileActionWords) => {
   replaceFile({ ...file, starred: !file.starred });
-  return patch(file.id, { starred: !file.starred }, t("updateFailed"));
+  return patch(file.id, { starred: !file.starred }, words.t("updateFailed"), words);
 };
 
 /** `folderName` is the target as the user reads it: a folder's name, or "My files" in their language. */
@@ -73,20 +45,21 @@ export async function moveFile(file: FileItem, folderId: string | null, folderNa
   const { t, common } = words;
   if (file.folder_id === folderId) return;
   replaceFile({ ...file, folder_id: folderId });
-  const moved = await patch(file.id, { folder_id: folderId }, t("moveFailed"));
+  const moved = await patch(file.id, { folder_id: folderId }, t("moveFailed"), words);
   if (!moved) return;
   toast(t("moved", { name: file.name, folder: folderName }), {
     description: !file.leo && moved.leo ? t("movedLeo") : undefined,
     action: {
       label: common("actions.undo"),
-      onClick: () => void patch(file.id, { folder_id: file.folder_id }, t("moveBackFailed")),
+      onClick: () => void patch(file.id, { folder_id: file.folder_id }, t("moveBackFailed"), words),
     },
   });
 }
 
 /** The file's own "Use with Leo". `quiet` leaves the confirmation to a caller changing several at once. */
-export async function setFileLeo(file: FileItem, on: boolean, { t }: FileActionWords, quiet = false) {
-  const next = await patch(file.id, { leo: on }, on ? t("leoFileFailed") : t("updateFailed"));
+export async function setFileLeo(file: FileItem, on: boolean, words: FileActionWords, quiet = false) {
+  const { t } = words;
+  const next = await patch(file.id, { leo: on }, on ? t("leoFileFailed") : t("updateFailed"), words);
   if (!next) return false;
   if (quiet) return true;
   if (on) toast.success(t("leoFileOn", { name: file.name }), { description: t("leoFileOnDescription") });
@@ -95,24 +68,35 @@ export async function setFileLeo(file: FileItem, on: boolean, { t }: FileActionW
   return true;
 }
 
-export async function duplicateFile(file: FileItem, { t }: FileActionWords) {
+export async function duplicateFile(file: FileItem, words: FileActionWords) {
   try {
     const copy = await filesApi.copy(file.id);
     filesResource.update((data) => {
       const index = data.files.findIndex((f) => f.id === file.id);
       return { ...data, files: data.files.toSpliced(index + 1, 0, copy) };
     });
+    void storageResource.refresh();
   } catch (error) {
-    toast.error(t("duplicateFailed"), { description: apiErrorDescription(error) });
+    toast.error(words.t("duplicateFailed"), { description: describeError(error, words) });
   }
 }
 
-export async function reindexFile(file: FileItem, { t }: FileActionWords) {
+export async function reindexFile(file: FileItem, words: FileActionWords) {
   try {
     replaceFile(await filesApi.reindex(file.id));
-    toast.success(t("reindexed", { name: file.name }));
+    toast.success(words.t("reindexed", { name: file.name }));
   } catch (error) {
-    toast.error(t("reindexFailed"), { description: apiErrorDescription(error) });
+    toast.error(words.t("reindexFailed"), { description: describeError(error, words) });
+  }
+}
+
+/** Saves the file through a 15-minute link on Shosai's address; the edge streams its bytes (FL-D9). */
+export async function downloadFile(file: FileItem, words: FileActionWords) {
+  try {
+    const { url } = await filesApi.download(file.id);
+    saveFile(url, file.name);
+  } catch (error) {
+    toast.error(words.t("downloadFailed", { name: file.name }), { description: describeError(error, words) });
   }
 }
 
@@ -131,11 +115,12 @@ export function deleteFile(file: FileItem, sharedIn: string, words: FileActionWo
     filesApi.remove(file.id).then(
       () => {
         pendingDeletes.files.delete(file.id);
+        void storageResource.refresh();
         if (sharedIn) refreshFileShares();
       },
       (error: unknown) => {
         pendingDeletes.files.delete(file.id);
-        toast.error(t("deleteFailed", { name: file.name }), { description: apiErrorDescription(error) });
+        toast.error(t("deleteFailed", { name: file.name }), { description: describeError(error, words) });
         void filesResource.refresh();
       },
     );
@@ -153,20 +138,4 @@ export function deleteFile(file: FileItem, sharedIn: string, words: FileActionWo
     onAutoClose: commit,
     onDismiss: commit,
   });
-}
-
-/** Hands a shared file over to the workspace: it stays there for good and leaves My files. */
-export async function transferFile(file: FileItem, workspace: { id: string; name: string }, { t }: FileActionWords) {
-  try {
-    await filesApi.transfer(file.id, workspace.id);
-    filesResource.update((data) => ({ ...data, files: data.files.filter((f) => f.id !== file.id) }));
-    refreshFileShares();
-    toast.success(t("transferred", { name: file.name, workspace: workspace.name }), {
-      description: t("transferredDescription"),
-    });
-    return true;
-  } catch (error) {
-    toast.error(t("transferFailed"), { description: apiErrorDescription(error) });
-    return false;
-  }
 }

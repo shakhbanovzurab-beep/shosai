@@ -104,7 +104,9 @@
     "sharing": "Delen in werkruimtes…",
     "transferTo": "Overdragen aan",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Map verwijderen"
+    "deleteFolder": "Map verwijderen",
+    "download": "Downloaden",
+    "heldOverLimit": "Leo leest het niet meer: limiet van je abonnement overschreden"
   },
   "dialogs": {
     "renameFile": "Naam van bestand wijzigen",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Uploaden",
-    "uploading": "{count, plural, one {# bestand uploaden…} other {# bestanden uploaden…}}",
+    "uploading": "{count, plural, one {# bestand uploaden…} other {# bestanden uploaden…}} {progress, number, percent}",
     "dropHere": "Loslaten om hier te uploaden",
     "skipped": "{count, plural, one {# bestand overgeslagen} other {# bestanden overgeslagen}}",
     "skippedDescription": "Lege bestanden en bestanden groter dan {size} worden overgeslagen, en er worden maximaal {max, number} tegelijk geüpload."
@@ -128,5 +130,17 @@
     "noFiles": "Nog geen bestanden. Upload eerst bestanden in Bestandsbeheer.",
     "yourFiles": "Je bestanden",
     "alreadyShared": "Hier al gedeeld"
+  },
+  "storage": {
+    "label": "Opslag",
+    "title": "Opslag",
+    "ratio": "{used} van {limit}",
+    "overTitle": "Je bestanden gaan over de opslag van je abonnement",
+    "overDescription": "Alles blijft beschikbaar en nieuwe uploads zijn gepauzeerd. Maak ruimte vrij of kies vóór {date} een groter abonnement: daarna worden de nieuwste bestanden boven de limiet verwijderd.",
+    "upgrade": "Abonnementen bekijken"
+  },
+  "leoLimit": {
+    "title": "Leo gebruikt {used} van je bestanden, meer dan de {limit} in je abonnement",
+    "description": "Leo blijft alles lezen tot {date}. Zet bestanden uit die Leo niet nodig heeft of kies een groter abonnement: daarna stopt Leo met het lezen van de nieuwste bestanden boven de limiet. Er wordt geen bestand verwijderd."
   }
 }

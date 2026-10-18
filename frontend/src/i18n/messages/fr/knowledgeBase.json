@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Ajouter des fichiers pour Leo",
     "title": "Déposez ici des fichiers que Leo utilisera",
-    "uploading": "Importation de {count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}…",
+    "uploading": "Importation de {count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}… {progress, number, percent}",
     "description": "Ils sont enregistrés dans Mes fichiers, dans le Gestionnaire de fichiers. {types}, {size} maximum chacun.",
     "choose": "Choisir dans vos fichiers",
     "upload": "Importer",

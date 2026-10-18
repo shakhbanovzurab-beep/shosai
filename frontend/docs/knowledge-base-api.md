@@ -40,9 +40,9 @@ Errors use FastAPI's shape: `{"detail": "message"}`, or the standard list of val
 | `DELETE` | `/connectors/{id}`        | —                                     | `204`                                 |
 | `POST`   | `/connectors/{id}/sync`   | —                                     | `Connector`                           |
 
-Adding a file for Leo is `POST /files` with `leo=true` (File Manager); stopping is
-`PATCH /files/{id}` with `{"leo": false}`, or `PATCH /files/folders/{id}` for a folder; re-reading
-one is `POST /files/{id}/reindex`.
+Adding a file for Leo is an upload registered by `POST /v1/files` with `leo: true` (File Manager);
+stopping is `PATCH /v1/files/{id}` with `{"leo": false}`, or `PATCH /v1/files/folders/{id}` for a folder;
+re-reading one is `POST /v1/files/{id}/reindex`.
 
 ## Embeddings
 
@@ -56,7 +56,7 @@ images can be added to `LEO_EXTENSIONS` (File Manager's contract) once the pipel
 - **Indexing runs in the background.** A file Leo starts using is `queued`; its `leo.status` moves
   `queued → parsing → chunking → embedding → indexed`, or to `failed` with a human-readable `error`.
   `progress` is 0–100 within the current step; `chunk_count` is set once chunking is done. The UI
-  polls `GET /files` every 1.5 s while any file is in progress.
+  polls `GET /v1/files` every 1.5 s while a file is being indexed, and for 30 s after the queue changes.
 - **What Leo can read.** `LEO_EXTENSIONS`, up to 50 MB each (`LEO_MAX_FILE_BYTES`); `leo_readable`
   says so per file. Enforce it server-side; the UI checks too, but only as a convenience.
 - **The plan's limit** (`knowledge_base_mb`) counts the bytes of the files Leo uses, not storage.

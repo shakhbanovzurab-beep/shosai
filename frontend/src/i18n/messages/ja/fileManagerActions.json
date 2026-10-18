@@ -37,5 +37,31 @@
   "undoFailed": "元に戻せませんでした",
   "folderDeleted": "「{name}」を削除しました",
   "folderDeletedFiles": "{count, plural, other {# 件のファイルをマイファイルに移動しました。}}",
-  "folderDeleteFailed": "「{name}」を削除できませんでした"
+  "folderDeleteFailed": "「{name}」を削除できませんでした",
+  "uploadFailedNamed": "「{name}」をアップロードできませんでした",
+  "uploadFailedMany": "{count, plural, other {# 件のファイルをアップロードできませんでした}}",
+  "downloadFailed": "「{name}」をダウンロードできませんでした",
+  "problems": {
+    "file_not_found": "このファイルは見つかりません。",
+    "folder_not_found": "このフォルダは見つかりません。",
+    "upload_count": "一度にアップロードできるのは 20 件までです。",
+    "upload_not_claimable": "このアップロードは期限切れです。ファイルをもう一度アップロードしてください。",
+    "upload_too_large": "このファイルは大きすぎてアップロードできません。",
+    "upload_incomplete": "ファイルの一部が届きませんでした。もう一度アップロードしてください。",
+    "upload_closed": "このアップロードはすでに終了しています。ファイルをもう一度アップロードしてください。",
+    "upload_not_found": "このアップロードは見つかりません。ファイルをもう一度アップロードしてください。",
+    "filename_invalid": "このファイル名は使用できません。名前を変更してもう一度お試しください。",
+    "storage_limit": "プランのストレージを超えてしまいます。空き容量を確保するか、容量の大きいプランを選んでください。",
+    "storage_not_included": "現在のプランにはファイルのストレージが含まれていません。",
+    "leo_limit": "現在のプランで Leo が使えるファイルは合計 {limit} までです。先にいくつかの使用を停止してください。",
+    "leo_unreadable": "Leo はこの種類のファイルを読めません。",
+    "leo_not_used": "Leo はこのファイルを使用していません。",
+    "entitlements_unavailable": "今はプランを確認できませんでした。1 分ほどしてからもう一度お試しください。",
+    "name_required": "名前を入力してください。",
+    "name_too_long": "名前が長すぎます。",
+    "name_slash": "名前に / や \\ は使用できません。",
+    "name_control_character": "名前に目に見えない制御文字は使用できません。",
+    "upload_rejected": "アップロード中にファイルが変更されました。もう一度アップロードしてください。",
+    "upload_interrupted": "アップロード中に接続が切れました。もう一度お試しください。"
+  }
 }

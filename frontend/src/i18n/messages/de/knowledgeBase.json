@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Dateien für Leo hinzufügen",
     "title": "Zieh Dateien hierher, damit Leo sie nutzt",
-    "uploading": "{count, plural, one {# Datei wird hochgeladen…} other {# Dateien werden hochgeladen…}}",
+    "uploading": "{count, plural, one {# Datei wird hochgeladen…} other {# Dateien werden hochgeladen…}} {progress, number, percent}",
     "description": "Sie werden unter Meine Dateien im Dateimanager gespeichert. {types}, jeweils bis {size}.",
     "choose": "Aus deinen Dateien wählen",
     "upload": "Neue hochladen",

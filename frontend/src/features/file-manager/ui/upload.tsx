@@ -12,7 +12,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { formatBytes } from "@/i18n/format-units";
 
 import { MAX_FILES_PER_UPLOAD, MAX_UPLOAD_BYTES } from "../domain/contract";
-import { uploadFiles } from "../model/file-actions";
+import { uploadFiles } from "../model/upload-actions";
+import { useUploadProgress } from "../model/upload-progress";
 import { useFileActionWords } from "../model/words";
 
 /** Uploads into `folderId` after checking the limits; one at a time, so the button can show it's busy. */
@@ -44,11 +45,14 @@ export function UploadButton({ folderId }: { folderId: string | null }) {
   const t = useTranslations("fileManager");
   const inputRef = useRef<HTMLInputElement>(null);
   const { busy, upload } = useUpload(folderId);
+  const progress = useUploadProgress();
   return (
     <>
       <Button size="sm" disabled={busy > 0} onClick={() => inputRef.current?.click()}>
         {busy ? <Spinner data-icon="inline-start" /> : <Upload data-icon="inline-start" />}
-        {busy ? t("upload.uploading", { count: busy }) : t("upload.button")}
+        <span className="tabular-nums">
+          {busy ? t("upload.uploading", { count: busy, progress: progress.percent / 100 }) : t("upload.button")}
+        </span>
       </Button>
       <input
         ref={inputRef}

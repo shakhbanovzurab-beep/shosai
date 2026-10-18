@@ -104,7 +104,9 @@
     "sharing": "Berbagi di ruang kerja…",
     "transferTo": "Alihkan ke",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Hapus folder"
+    "deleteFolder": "Hapus folder",
+    "download": "Unduh",
+    "heldOverLimit": "Leo berhenti membacanya: batas paket Anda terlampaui"
   },
   "dialogs": {
     "renameFile": "Ganti nama file",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Unggah",
-    "uploading": "Mengunggah {count, plural, other {# file}}…",
+    "uploading": "Mengunggah {count, plural, other {# file}}… {progress, number, percent}",
     "dropHere": "Letakkan untuk mengunggah ke sini",
     "skipped": "{count, plural, other {# file dilewati}}",
     "skippedDescription": "File yang kosong atau lebih dari {size} akan dilewati, dan paling banyak {max, number} file diunggah sekaligus."
@@ -128,5 +130,17 @@
     "noFiles": "Belum ada file. Unggah file di Pengelola file terlebih dahulu.",
     "yourFiles": "File Anda",
     "alreadyShared": "Sudah dibagikan di sini"
+  },
+  "storage": {
+    "label": "Penyimpanan",
+    "title": "Penyimpanan",
+    "ratio": "{used} dari {limit}",
+    "overTitle": "File Anda melebihi penyimpanan paket Anda",
+    "overDescription": "Semuanya tetap tersedia dan unggahan baru dijeda. Kosongkan ruang atau pilih paket yang lebih besar sebelum {date}: setelah tanggal itu, file terbaru yang melebihi batas akan dihapus.",
+    "upgrade": "Lihat paket"
+  },
+  "leoLimit": {
+    "title": "Leo menggunakan {used} file Anda, lebih dari {limit} dalam paket Anda",
+    "description": "Leo tetap membaca semuanya sampai {date}. Matikan file yang tidak diperlukan Leo atau pilih paket yang lebih besar: setelah tanggal itu, Leo berhenti membaca file terbaru yang melebihi batas. Tidak ada file yang dihapus."
   }
 }

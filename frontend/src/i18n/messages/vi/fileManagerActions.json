@@ -37,5 +37,31 @@
   "undoFailed": "Không thể hoàn tác",
   "folderDeleted": "Đã xóa “{name}”",
   "folderDeletedFiles": "{count, plural, other {Đã chuyển # tệp vào Tệp của tôi.}}",
-  "folderDeleteFailed": "Không thể xóa “{name}”"
+  "folderDeleteFailed": "Không thể xóa “{name}”",
+  "uploadFailedNamed": "Không thể tải “{name}” lên",
+  "uploadFailedMany": "{count, plural, other {Không thể tải # tệp lên}}",
+  "downloadFailed": "Không thể tải xuống “{name}”",
+  "problems": {
+    "file_not_found": "Tệp này không còn tồn tại.",
+    "folder_not_found": "Thư mục này không còn tồn tại.",
+    "upload_count": "Mỗi lần chỉ tải lên tối đa 20 tệp.",
+    "upload_not_claimable": "Lượt tải lên này đã hết hạn. Hãy tải tệp lên lại.",
+    "upload_too_large": "Tệp này quá lớn để tải lên.",
+    "upload_incomplete": "Tệp chưa được gửi đầy đủ. Hãy tải lên lại.",
+    "upload_closed": "Lượt tải lên này đã kết thúc. Hãy tải tệp lên lại.",
+    "upload_not_found": "Lượt tải lên này không còn tồn tại. Hãy tải tệp lên lại.",
+    "filename_invalid": "Không thể dùng tên tệp này. Hãy đổi tên tệp rồi thử lại.",
+    "storage_limit": "Như vậy sẽ vượt quá dung lượng lưu trữ của gói. Hãy giải phóng dung lượng hoặc chọn gói lớn hơn.",
+    "storage_not_included": "Gói của bạn không có dung lượng lưu trữ tệp.",
+    "leo_limit": "Với gói hiện tại, Leo dùng được tối đa {limit} tệp của bạn. Hãy ngừng dùng bớt một số tệp trước.",
+    "leo_unreadable": "Leo không đọc được loại tệp này.",
+    "leo_not_used": "Leo không dùng tệp này.",
+    "entitlements_unavailable": "Hiện không kiểm tra được gói của bạn. Hãy thử lại sau một phút.",
+    "name_required": "Hãy nhập tên.",
+    "name_too_long": "Tên này quá dài.",
+    "name_slash": "Tên không được chứa / hoặc \\.",
+    "name_control_character": "Tên không được chứa ký tự điều khiển vô hình.",
+    "upload_rejected": "Tệp đã thay đổi trong lúc tải lên. Hãy tải lên lại.",
+    "upload_interrupted": "Kết nối bị ngắt trong lúc tải lên. Hãy thử lại."
+  }
 }

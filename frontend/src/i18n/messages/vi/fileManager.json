@@ -104,7 +104,9 @@
     "sharing": "Đang chia sẻ trong không gian làm việc…",
     "transferTo": "Chuyển giao cho",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Xóa thư mục"
+    "deleteFolder": "Xóa thư mục",
+    "download": "Tải xuống",
+    "heldOverLimit": "Leo đã ngừng đọc tệp này: vượt giới hạn của gói"
   },
   "dialogs": {
     "renameFile": "Đổi tên tệp",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Tải lên",
-    "uploading": "Đang tải lên {count, plural, other {# tệp}}…",
+    "uploading": "Đang tải lên {count, plural, other {# tệp}}… {progress, number, percent}",
     "dropHere": "Thả để tải lên đây",
     "skipped": "{count, plural, other {Đã bỏ qua # tệp}}",
     "skippedDescription": "Tệp trống hoặc lớn hơn {size} sẽ bị bỏ qua, và mỗi lần chỉ tải lên tối đa {max, number} tệp."
@@ -128,5 +130,17 @@
     "noFiles": "Chưa có tệp nào. Hãy tải tệp lên Trình quản lý tệp trước.",
     "yourFiles": "Tệp của bạn",
     "alreadyShared": "Đã chia sẻ ở đây"
+  },
+  "storage": {
+    "label": "Dung lượng lưu trữ",
+    "title": "Dung lượng lưu trữ",
+    "ratio": "{used} / {limit}",
+    "overTitle": "Tệp của bạn vượt quá dung lượng lưu trữ của gói",
+    "overDescription": "Mọi thứ vẫn dùng được, chỉ việc tải tệp lên bị tạm dừng. Hãy giải phóng dung lượng hoặc chọn gói lớn hơn trước {date}: sau ngày đó, các tệp mới nhất vượt quá giới hạn sẽ bị xóa.",
+    "upgrade": "Xem gói"
+  },
+  "leoLimit": {
+    "title": "Leo đang dùng {used} tệp của bạn, nhiều hơn {limit} trong gói",
+    "description": "Leo vẫn đọc mọi thứ đến {date}. Hãy tắt những tệp Leo không cần hoặc chọn gói lớn hơn: sau ngày đó, Leo sẽ ngừng đọc các tệp mới nhất vượt quá giới hạn. Không tệp nào bị xóa."
   }
 }

@@ -104,7 +104,9 @@
     "sharing": "ワークスペースでの共有…",
     "transferTo": "譲渡先",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "フォルダを削除"
+    "deleteFolder": "フォルダを削除",
+    "download": "ダウンロード",
+    "heldOverLimit": "プランの上限を超えたため、Leo は読むのをやめました"
   },
   "dialogs": {
     "renameFile": "ファイルの名前を変更",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "アップロード",
-    "uploading": "{count, plural, other {# 件のファイルをアップロード中…}}",
+    "uploading": "{count, plural, other {# 件のファイルをアップロード中…}} {progress, number, percent}",
     "dropHere": "ドロップしてここにアップロード",
     "skipped": "{count, plural, other {# 件のファイルをスキップしました}}",
     "skippedDescription": "空のファイルや {size} を超えるファイルはスキップされます。一度にアップロードできるのは {max, number} 件までです。"
@@ -128,5 +130,17 @@
     "noFiles": "ファイルはまだありません。まずファイル管理でアップロードしてください。",
     "yourFiles": "自分のファイル",
     "alreadyShared": "ここで共有済み"
+  },
+  "storage": {
+    "label": "ストレージ",
+    "title": "ストレージ",
+    "ratio": "{used} / {limit}",
+    "overTitle": "ファイルがプランのストレージを超えています",
+    "overDescription": "すべてのファイルは引き続き利用でき、新しいアップロードだけが一時停止しています。{date} までに空き容量を確保するか、容量の大きいプランを選んでください。この日を過ぎると、上限を超えた分の新しいファイルから削除されます。",
+    "upgrade": "プランを見る"
+  },
+  "leoLimit": {
+    "title": "Leo が使うファイルは {used} で、プランの {limit} を超えています",
+    "description": "{date} までは Leo がすべてを読み続けます。Leo に不要なファイルをオフにするか、容量の大きいプランを選んでください。この日を過ぎると、上限を超えた分の新しいファイルから Leo は読まなくなります。ファイルは削除されません。"
   }
 }

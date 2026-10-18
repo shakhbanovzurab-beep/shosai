@@ -104,7 +104,9 @@
     "sharing": "Condivisione negli spazi di lavoro…",
     "transferTo": "Trasferisci a",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Elimina cartella"
+    "deleteFolder": "Elimina cartella",
+    "download": "Scarica",
+    "heldOverLimit": "Leo ha smesso di leggerlo: limite del tuo piano superato"
   },
   "dialogs": {
     "renameFile": "Rinomina file",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Carica",
-    "uploading": "Caricamento di {count, plural, one {# file} many {# di file} other {# file}}…",
+    "uploading": "Caricamento di {count, plural, one {# file} many {# di file} other {# file}}… {progress, number, percent}",
     "dropHere": "Rilascia per caricare qui",
     "skipped": "{count, plural, one {# file saltato} many {# di file saltati} other {# file saltati}}",
     "skippedDescription": "I file vuoti o più grandi di {size} vengono saltati e se ne possono caricare al massimo {max, number} alla volta."
@@ -128,5 +130,17 @@
     "noFiles": "Ancora nessun file. Prima caricane qualcuno in Gestione file.",
     "yourFiles": "I tuoi file",
     "alreadyShared": "Già condiviso qui"
+  },
+  "storage": {
+    "label": "Spazio di archiviazione",
+    "title": "Spazio di archiviazione",
+    "ratio": "{used} di {limit}",
+    "overTitle": "I tuoi file superano lo spazio del tuo piano",
+    "overDescription": "Tutto resta disponibile e i nuovi caricamenti sono in pausa. Libera spazio o scegli un piano più grande entro il {date}: dopo quella data, i file più recenti oltre il limite verranno eliminati.",
+    "upgrade": "Vedi i piani"
+  },
+  "leoLimit": {
+    "title": "Leo usa {used} dei tuoi file, più dei {limit} del tuo piano",
+    "description": "Leo continua a leggere tutto fino al {date}. Disattiva i file che a Leo non servono o scegli un piano più grande: dopo quella data, Leo smetterà di leggere i file più recenti oltre il limite. Nessun file viene eliminato."
   }
 }

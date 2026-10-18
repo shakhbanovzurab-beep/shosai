@@ -104,7 +104,9 @@
     "sharing": "Compartilhando em espaços de trabalho…",
     "transferTo": "Transferir para",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Excluir pasta"
+    "deleteFolder": "Excluir pasta",
+    "download": "Baixar",
+    "heldOverLimit": "O Leo parou de ler: limite do seu plano excedido"
   },
   "dialogs": {
     "renameFile": "Renomear arquivo",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Fazer upload",
-    "uploading": "Fazendo upload de {count, plural, one {# arquivo} many {# de arquivos} other {# arquivos}}…",
+    "uploading": "Fazendo upload de {count, plural, one {# arquivo} many {# de arquivos} other {# arquivos}}… {progress, number, percent}",
     "dropHere": "Solte para fazer upload aqui",
     "skipped": "{count, plural, one {# arquivo ignorado} many {# de arquivos ignorados} other {# arquivos ignorados}}",
     "skippedDescription": "Arquivos vazios ou maiores que {size} são ignorados, e no máximo {max, number} são enviados de uma vez."
@@ -128,5 +130,17 @@
     "noFiles": "Nenhum arquivo ainda. Primeiro faça upload de alguns no Gerenciador de arquivos.",
     "yourFiles": "Seus arquivos",
     "alreadyShared": "Já compartilhado aqui"
+  },
+  "storage": {
+    "label": "Armazenamento",
+    "title": "Armazenamento",
+    "ratio": "{used} de {limit}",
+    "overTitle": "Seus arquivos passam do armazenamento do seu plano",
+    "overDescription": "Tudo continua disponível e os novos uploads estão pausados. Libere espaço ou escolha um plano maior antes de {date}: depois dessa data, os arquivos mais recentes acima do limite serão excluídos.",
+    "upgrade": "Ver planos"
+  },
+  "leoLimit": {
+    "title": "O Leo usa {used} dos seus arquivos, mais do que os {limit} do seu plano",
+    "description": "O Leo continua lendo tudo até {date}. Desative os arquivos de que o Leo não precisa ou escolha um plano maior: depois dessa data, o Leo deixará de ler os arquivos mais recentes acima do limite. Nenhum arquivo é excluído."
   }
 }

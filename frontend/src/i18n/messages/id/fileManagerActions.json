@@ -37,5 +37,31 @@
   "undoFailed": "Tidak dapat mengurungkan",
   "folderDeleted": "“{name}” dihapus",
   "folderDeletedFiles": "{count, plural, other {# file dipindahkan ke File saya.}}",
-  "folderDeleteFailed": "Tidak dapat menghapus “{name}”"
+  "folderDeleteFailed": "Tidak dapat menghapus “{name}”",
+  "uploadFailedNamed": "Tidak dapat mengunggah “{name}”",
+  "uploadFailedMany": "{count, plural, other {Tidak dapat mengunggah # file}}",
+  "downloadFailed": "Tidak dapat mengunduh “{name}”",
+  "problems": {
+    "file_not_found": "File ini sudah tidak ada.",
+    "folder_not_found": "Folder ini sudah tidak ada.",
+    "upload_count": "Unggah paling banyak 20 file sekaligus.",
+    "upload_not_claimable": "Unggahan ini sudah kedaluwarsa. Unggah file itu lagi.",
+    "upload_too_large": "File ini terlalu besar untuk diunggah.",
+    "upload_incomplete": "File tidak sampai seluruhnya. Unggah lagi.",
+    "upload_closed": "Unggahan ini sudah selesai. Unggah file itu lagi.",
+    "upload_not_found": "Unggahan ini sudah tidak ada. Unggah file itu lagi.",
+    "filename_invalid": "Nama file ini tidak dapat digunakan. Ganti nama file lalu coba lagi.",
+    "storage_limit": "Ini akan melebihi penyimpanan paket Anda. Kosongkan ruang atau pilih paket yang lebih besar.",
+    "storage_not_included": "Paket Anda tidak menyertakan penyimpanan file.",
+    "leo_limit": "Dengan paket Anda, Leo dapat menggunakan hingga {limit} file Anda. Hentikan penggunaan beberapa file terlebih dahulu.",
+    "leo_unreadable": "Leo tidak dapat membaca jenis file ini.",
+    "leo_not_used": "Leo tidak menggunakan file ini.",
+    "entitlements_unavailable": "Paket Anda tidak dapat diperiksa saat ini. Coba lagi dalam satu menit.",
+    "name_required": "Masukkan nama.",
+    "name_too_long": "Nama ini terlalu panjang.",
+    "name_slash": "Nama tidak boleh berisi / atau \\.",
+    "name_control_character": "Nama tidak boleh berisi karakter kontrol yang tak terlihat.",
+    "upload_rejected": "File berubah selama diunggah. Unggah lagi.",
+    "upload_interrupted": "Koneksi terputus selama mengunggah. Coba lagi."
+  }
 }

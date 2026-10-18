@@ -37,5 +37,31 @@
   "undoFailed": "Couldn’t undo",
   "folderDeleted": "Deleted “{name}”",
   "folderDeletedFiles": "{count, plural, one {# file moved to My files.} other {# files moved to My files.}}",
-  "folderDeleteFailed": "Couldn’t delete “{name}”"
+  "folderDeleteFailed": "Couldn’t delete “{name}”",
+  "uploadFailedNamed": "Couldn’t upload “{name}”",
+  "uploadFailedMany": "{count, plural, one {Couldn’t upload # file} other {Couldn’t upload # files}}",
+  "downloadFailed": "Couldn’t download “{name}”",
+  "problems": {
+    "file_not_found": "This file no longer exists.",
+    "folder_not_found": "This folder no longer exists.",
+    "upload_count": "Upload no more than 20 files at a time.",
+    "upload_not_claimable": "This upload has expired. Upload the file again.",
+    "upload_too_large": "This file is too large to upload.",
+    "upload_incomplete": "Not all of the file arrived. Upload it again.",
+    "upload_closed": "This upload has already ended. Upload the file again.",
+    "upload_not_found": "This upload no longer exists. Upload the file again.",
+    "filename_invalid": "This file name can’t be used. Rename the file and try again.",
+    "storage_limit": "This would go over your plan’s storage. Free up space or choose a larger plan.",
+    "storage_not_included": "Your plan doesn’t include file storage.",
+    "leo_limit": "Leo can use up to {limit} of your files on your plan. Stop using some first.",
+    "leo_unreadable": "Leo can’t read this type of file.",
+    "leo_not_used": "Leo doesn’t use this file.",
+    "entitlements_unavailable": "Your plan couldn’t be checked just now. Try again in a minute.",
+    "name_required": "Enter a name.",
+    "name_too_long": "This name is too long.",
+    "name_slash": "A name can’t contain / or \\.",
+    "name_control_character": "A name can’t contain invisible control characters.",
+    "upload_rejected": "The file changed while it was uploading. Upload it again.",
+    "upload_interrupted": "The connection broke while uploading. Try again."
+  }
 }

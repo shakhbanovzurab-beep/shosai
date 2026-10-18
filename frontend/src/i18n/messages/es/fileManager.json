@@ -104,7 +104,9 @@
     "sharing": "Compartido en espacios de trabajo…",
     "transferTo": "Transferir a",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Eliminar carpeta"
+    "deleteFolder": "Eliminar carpeta",
+    "download": "Descargar",
+    "heldOverLimit": "Leo dejó de leerlo: se superó el límite de tu plan"
   },
   "dialogs": {
     "renameFile": "Cambiar nombre del archivo",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Subir",
-    "uploading": "Subiendo {count, plural, one {# archivo} many {# de archivos} other {# archivos}}…",
+    "uploading": "Subiendo {count, plural, one {# archivo} many {# de archivos} other {# archivos}}… {progress, number, percent}",
     "dropHere": "Suelta para subir aquí",
     "skipped": "{count, plural, one {Se omitió # archivo} many {Se omitieron # de archivos} other {Se omitieron # archivos}}",
     "skippedDescription": "Se omiten los archivos vacíos o de más de {size}, y se pueden subir como máximo {max, number} a la vez."
@@ -128,5 +130,17 @@
     "noFiles": "Aún no hay archivos. Primero sube algunos en el Administrador de archivos.",
     "yourFiles": "Tus archivos",
     "alreadyShared": "Ya compartido aquí"
+  },
+  "storage": {
+    "label": "Almacenamiento",
+    "title": "Almacenamiento",
+    "ratio": "{used} de {limit}",
+    "overTitle": "Tus archivos superan el almacenamiento de tu plan",
+    "overDescription": "Todo sigue disponible y las nuevas subidas están en pausa. Libera espacio o elige un plan más grande antes del {date}: después de esa fecha, se eliminarán los archivos más recientes que superen el límite.",
+    "upgrade": "Ver planes"
+  },
+  "leoLimit": {
+    "title": "Leo usa {used} de tus archivos, más que los {limit} de tu plan",
+    "description": "Leo sigue leyendo todo hasta el {date}. Desactiva los archivos que Leo no necesita o elige un plan más grande: después de esa fecha, Leo dejará de leer los archivos más recientes que superen el límite. No se elimina ningún archivo."
   }
 }

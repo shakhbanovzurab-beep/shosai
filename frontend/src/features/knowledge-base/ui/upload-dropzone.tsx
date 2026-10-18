@@ -10,7 +10,8 @@ import { useFormatter, useLocale, useTranslations } from "use-intl";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { LEO_EXTENSIONS, LEO_MAX_FILE_BYTES, MAX_FILES_PER_UPLOAD } from "@/features/file-manager/domain/contract";
-import { uploadFiles } from "@/features/file-manager/model/file-actions";
+import { uploadFiles } from "@/features/file-manager/model/upload-actions";
+import { useUploadProgress } from "@/features/file-manager/model/upload-progress";
 import { useFileActionWords } from "@/features/file-manager/model/words";
 import { formatBytes } from "@/i18n/format-units";
 
@@ -28,6 +29,7 @@ export function UploadDropzone({ onChoose }: { onChoose: () => void }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOver, setIsOver] = useState(false);
   const [uploading, setUploading] = useState(0);
+  const progress = useUploadProgress();
 
   async function upload(files: File[]) {
     const { accepted, rejected } = triage(files);
@@ -66,7 +68,11 @@ export function UploadDropzone({ onChoose }: { onChoose: () => void }) {
         {uploading ? <Spinner /> : <CloudUpload className="size-5 text-muted-foreground" />}
       </div>
       <div className="flex flex-col gap-1">
-        <p className="font-medium">{uploading ? t("dropzone.uploading", { count: uploading }) : t("dropzone.title")}</p>
+        <p className="font-medium tabular-nums">
+          {uploading
+            ? t("dropzone.uploading", { count: uploading, progress: progress.percent / 100 })
+            : t("dropzone.title")}
+        </p>
         <p className="text-muted-foreground text-sm">
           {t("dropzone.description", {
             types: format.list(

@@ -104,7 +104,9 @@
     "sharing": "In Workspaces geteilt…",
     "transferTo": "Übertragen an",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Ordner löschen"
+    "deleteFolder": "Ordner löschen",
+    "download": "Herunterladen",
+    "heldOverLimit": "Leo liest sie nicht mehr: Limit deines Tarifs überschritten"
   },
   "dialogs": {
     "renameFile": "Datei umbenennen",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Hochladen",
-    "uploading": "{count, plural, one {# Datei wird hochgeladen…} other {# Dateien werden hochgeladen…}}",
+    "uploading": "{count, plural, one {# Datei wird hochgeladen…} other {# Dateien werden hochgeladen…}} {progress, number, percent}",
     "dropHere": "Zum Hochladen hier ablegen",
     "skipped": "{count, plural, one {# Datei übersprungen} other {# Dateien übersprungen}}",
     "skippedDescription": "Leere Dateien und Dateien über {size} werden übersprungen; höchstens {max, number} werden gleichzeitig hochgeladen."
@@ -128,5 +130,17 @@
     "noFiles": "Noch keine Dateien. Lade zuerst welche im Dateimanager hoch.",
     "yourFiles": "Deine Dateien",
     "alreadyShared": "Hier bereits geteilt"
+  },
+  "storage": {
+    "label": "Speicher",
+    "title": "Speicher",
+    "ratio": "{used} von {limit}",
+    "overTitle": "Deine Dateien überschreiten den Speicher deines Tarifs",
+    "overDescription": "Alles bleibt verfügbar, neues Hochladen ist pausiert. Schaffe Platz oder wähle bis zum {date} einen größeren Tarif: Danach werden die neuesten Dateien über dem Limit gelöscht.",
+    "upgrade": "Tarife ansehen"
+  },
+  "leoLimit": {
+    "title": "Leo nutzt {used} deiner Dateien, mehr als die {limit} deines Tarifs",
+    "description": "Bis zum {date} liest Leo alles weiter. Schalte Dateien aus, die Leo nicht braucht, oder wähle einen größeren Tarif: Danach liest Leo die neuesten Dateien über dem Limit nicht mehr. Keine Datei wird gelöscht."
   }
 }

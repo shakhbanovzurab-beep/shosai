@@ -37,5 +37,31 @@
   "undoFailed": "No se pudo deshacer",
   "folderDeleted": "Se eliminó «{name}»",
   "folderDeletedFiles": "{count, plural, one {Se movió # archivo a Mis archivos.} many {Se movieron # de archivos a Mis archivos.} other {Se movieron # archivos a Mis archivos.}}",
-  "folderDeleteFailed": "No se pudo eliminar «{name}»"
+  "folderDeleteFailed": "No se pudo eliminar «{name}»",
+  "uploadFailedNamed": "No se pudo subir «{name}»",
+  "uploadFailedMany": "{count, plural, one {No se pudo subir # archivo} many {No se pudieron subir # de archivos} other {No se pudieron subir # archivos}}",
+  "downloadFailed": "No se pudo descargar «{name}»",
+  "problems": {
+    "file_not_found": "Este archivo ya no existe.",
+    "folder_not_found": "Esta carpeta ya no existe.",
+    "upload_count": "Sube como máximo 20 archivos a la vez.",
+    "upload_not_claimable": "Esta subida caducó. Vuelve a subir el archivo.",
+    "upload_too_large": "Este archivo es demasiado grande para subirlo.",
+    "upload_incomplete": "El archivo no llegó completo. Vuelve a subirlo.",
+    "upload_closed": "Esta subida ya terminó. Vuelve a subir el archivo.",
+    "upload_not_found": "Esta subida ya no existe. Vuelve a subir el archivo.",
+    "filename_invalid": "No se puede usar este nombre de archivo. Cambia el nombre e inténtalo de nuevo.",
+    "storage_limit": "Así superarías el almacenamiento de tu plan. Libera espacio o elige un plan más grande.",
+    "storage_not_included": "Tu plan no incluye almacenamiento de archivos.",
+    "leo_limit": "Con tu plan, Leo puede usar hasta {limit} de tus archivos. Primero deja de usar algunos.",
+    "leo_unreadable": "Leo no puede leer este tipo de archivo.",
+    "leo_not_used": "Leo no usa este archivo.",
+    "entitlements_unavailable": "No se pudo comprobar tu plan en este momento. Inténtalo de nuevo en un minuto.",
+    "name_required": "Escribe un nombre.",
+    "name_too_long": "Este nombre es demasiado largo.",
+    "name_slash": "Un nombre no puede contener / ni \\.",
+    "name_control_character": "Un nombre no puede contener caracteres de control invisibles.",
+    "upload_rejected": "El archivo cambió mientras se subía. Vuelve a subirlo.",
+    "upload_interrupted": "La conexión se cortó durante la subida. Inténtalo de nuevo."
+  }
 }

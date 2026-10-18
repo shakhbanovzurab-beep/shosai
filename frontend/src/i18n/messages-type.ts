@@ -4,7 +4,6 @@ import type consent from "./messages/en/consent.json";
 import type download from "./messages/en/download.json";
 import type fileManager from "./messages/en/fileManager.json";
 import type fileManagerActions from "./messages/en/fileManagerActions.json";
-import type fileManagerApi from "./messages/en/fileManagerApi.json";
 import type hub from "./messages/en/hub.json";
 import type hubApi from "./messages/en/hubApi.json";
 import type hubBlocks from "./messages/en/hubBlocks.json";
@@ -78,7 +77,6 @@ export type Messages = {
   download: typeof download;
   fileManager: typeof fileManager;
   fileManagerActions: typeof fileManagerActions;
-  fileManagerApi: typeof fileManagerApi;
   hub: typeof hub;
   hubApi: typeof hubApi;
   hubBlocks: typeof hubBlocks;

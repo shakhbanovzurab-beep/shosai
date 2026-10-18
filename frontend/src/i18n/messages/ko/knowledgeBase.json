@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Leo용 파일 추가",
     "title": "Leo가 사용할 파일을 여기에 끌어다 놓으세요",
-    "uploading": "{count, plural, other {파일 #개 업로드 중…}}",
+    "uploading": "{count, plural, other {파일 #개 업로드 중…}} {progress, number, percent}",
     "description": "파일 관리자의 내 파일에 저장돼요. {types}, 파일당 최대 {size}.",
     "choose": "내 파일에서 선택",
     "upload": "새로 업로드",

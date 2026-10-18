@@ -104,7 +104,9 @@
     "sharing": "Çalışma alanlarında paylaşım…",
     "transferTo": "Aktar",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Klasörü sil"
+    "deleteFolder": "Klasörü sil",
+    "download": "İndir",
+    "heldOverLimit": "Leo bunu okumayı bıraktı: plan sınırı aşıldı"
   },
   "dialogs": {
     "renameFile": "Dosyayı yeniden adlandır",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Dosya yükle",
-    "uploading": "{count, plural, one {# dosya yükleniyor…} other {# dosya yükleniyor…}}",
+    "uploading": "{count, plural, one {# dosya yükleniyor…} other {# dosya yükleniyor…}} {progress, number, percent}",
     "dropHere": "Buraya yüklemek için bırakın",
     "skipped": "{count, plural, one {# dosya atlandı} other {# dosya atlandı}}",
     "skippedDescription": "Boş veya {size} üzerindeki dosyalar atlanır; tek seferde en fazla {max, number} dosya yüklenir."
@@ -128,5 +130,17 @@
     "noFiles": "Henüz dosya yok. Önce Dosya yöneticisinde birkaç dosya yükleyin.",
     "yourFiles": "Dosyalarınız",
     "alreadyShared": "Burada zaten paylaşılmış"
+  },
+  "storage": {
+    "label": "Depolama",
+    "title": "Depolama",
+    "ratio": "{used} / {limit}",
+    "overTitle": "Dosyalarınız planınızın depolama alanını aşıyor",
+    "overDescription": "Her şey erişilebilir kalır ve yeni yüklemeler duraklatılır. {date} tarihinden önce yer açın veya daha büyük bir plan seçin: bu tarihten sonra sınırı aşan en yeni dosyalar silinecek.",
+    "upgrade": "Planları gör"
+  },
+  "leoLimit": {
+    "title": "Leo dosyalarınızın {used} kadarını kullanıyor; planınızdaki {limit} sınırından fazla",
+    "description": "Leo {date} tarihine kadar her şeyi okumaya devam eder. Leo’nun ihtiyaç duymadığı dosyaları kapatın veya daha büyük bir plan seçin: bu tarihten sonra Leo sınırı aşan en yeni dosyaları okumayı bırakacak. Hiçbir dosya silinmez."
   }
 }

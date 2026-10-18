@@ -2,31 +2,31 @@ import { JsonResponse } from "@/mocks/runtime";
 
 import type { FileFolder } from "../domain/contract";
 import { createFolder, deleteFolder, updateFolder } from "./file-ops";
-import { isProblem, refuse } from "./problems";
+import { isProblem, problem, refuse } from "./problems";
 import { firstIssue, folderCreateSchema, folderUpdateSchema, readJson } from "./schemas";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-const gone = () => refuse({ code: "folderGone" }, 404);
+const gone = () => refuse(problem("folder_not_found", 404));
 
-/** /api/files/folders */
+/** /v1/files/folders */
 export const foldersRoute = {
   async POST(request: Request) {
     const body = folderCreateSchema.safeParse(await readJson(request));
-    if (!body.success) return refuse(firstIssue(body.error), 422);
+    if (!body.success) return refuse(firstIssue(body.error));
     return JsonResponse.json<FileFolder>(createFolder(body.data.name), { status: 201 });
   },
 };
 
-/** /api/files/folders/[id] */
+/** /v1/files/folders/[id] */
 export const folderRoute = {
   async PATCH(request: Request, { params }: Ctx) {
     const { id } = await params;
     const body = folderUpdateSchema.safeParse(await readJson(request));
-    if (!body.success) return refuse(firstIssue(body.error), 422);
+    if (!body.success) return refuse(firstIssue(body.error));
     const result = updateFolder(id, body.data);
     if (result === null) return gone();
-    return isProblem(result) ? refuse(result, 409) : JsonResponse.json<FileFolder>(result);
+    return isProblem(result) ? refuse(result) : JsonResponse.json<FileFolder>(result);
   },
 
   async DELETE(_request: Request, { params }: Ctx) {

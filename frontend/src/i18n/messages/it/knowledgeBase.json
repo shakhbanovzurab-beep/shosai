@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Aggiungi file per Leo",
     "title": "Trascina qui i file che Leo deve usare",
-    "uploading": "Caricamento di {count, plural, one {# file} many {# di file} other {# file}}…",
+    "uploading": "Caricamento di {count, plural, one {# file} many {# di file} other {# file}}… {progress, number, percent}",
     "description": "Vengono salvati in I miei file, in Gestione file. {types}, fino a {size} ciascuno.",
     "choose": "Scegli dai tuoi file",
     "upload": "Carica nuovi",

@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Leo için dosya ekle",
     "title": "Leo’nun kullanması için dosyaları buraya bırakın",
-    "uploading": "{count, plural, one {# dosya yükleniyor…} other {# dosya yükleniyor…}}",
+    "uploading": "{count, plural, one {# dosya yükleniyor…} other {# dosya yükleniyor…}} {progress, number, percent}",
     "description": "Dosyalar Dosya yöneticisinde Dosyalarım’a kaydedilir. {types}; her biri en fazla {size}.",
     "choose": "Dosyalarınızdan seçin",
     "upload": "Yeni yükle",

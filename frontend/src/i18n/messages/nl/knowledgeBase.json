@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Bestanden voor Leo toevoegen",
     "title": "Sleep bestanden hierheen zodat Leo ze kan gebruiken",
-    "uploading": "{count, plural, one {# bestand uploaden…} other {# bestanden uploaden…}}",
+    "uploading": "{count, plural, one {# bestand uploaden…} other {# bestanden uploaden…}} {progress, number, percent}",
     "description": "Ze worden opgeslagen in Mijn bestanden in Bestandsbeheer. {types}, maximaal {size} per bestand.",
     "choose": "Kiezen uit je bestanden",
     "upload": "Nieuwe uploaden",

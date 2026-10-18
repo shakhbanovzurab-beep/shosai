@@ -37,5 +37,31 @@
   "undoFailed": "Das konnte nicht rückgängig gemacht werden",
   "folderDeleted": "„{name}“ gelöscht",
   "folderDeletedFiles": "{count, plural, one {# Datei wurde nach Meine Dateien verschoben.} other {# Dateien wurden nach Meine Dateien verschoben.}}",
-  "folderDeleteFailed": "„{name}“ konnte nicht gelöscht werden"
+  "folderDeleteFailed": "„{name}“ konnte nicht gelöscht werden",
+  "uploadFailedNamed": "„{name}“ konnte nicht hochgeladen werden",
+  "uploadFailedMany": "{count, plural, one {# Datei konnte nicht hochgeladen werden} other {# Dateien konnten nicht hochgeladen werden}}",
+  "downloadFailed": "„{name}“ konnte nicht heruntergeladen werden",
+  "problems": {
+    "file_not_found": "Diese Datei existiert nicht mehr.",
+    "folder_not_found": "Dieser Ordner existiert nicht mehr.",
+    "upload_count": "Lade höchstens 20 Dateien auf einmal hoch.",
+    "upload_not_claimable": "Dieses Hochladen ist abgelaufen. Lade die Datei erneut hoch.",
+    "upload_too_large": "Diese Datei ist zu groß zum Hochladen.",
+    "upload_incomplete": "Die Datei ist nicht vollständig angekommen. Lade sie erneut hoch.",
+    "upload_closed": "Dieses Hochladen ist bereits beendet. Lade die Datei erneut hoch.",
+    "upload_not_found": "Dieses Hochladen existiert nicht mehr. Lade die Datei erneut hoch.",
+    "filename_invalid": "Dieser Dateiname kann nicht verwendet werden. Benenne die Datei um und versuche es erneut.",
+    "storage_limit": "Damit würdest du den Speicher deines Tarifs überschreiten. Schaffe Platz oder wähle einen größeren Tarif.",
+    "storage_not_included": "Dein Tarif enthält keinen Dateispeicher.",
+    "leo_limit": "In deinem Tarif kann Leo Dateien mit insgesamt bis zu {limit} nutzen. Deaktiviere zuerst einige.",
+    "leo_unreadable": "Leo kann Dateien dieses Typs nicht lesen.",
+    "leo_not_used": "Leo nutzt diese Datei nicht.",
+    "entitlements_unavailable": "Dein Tarif konnte gerade nicht geprüft werden. Versuche es in einer Minute erneut.",
+    "name_required": "Gib einen Namen ein.",
+    "name_too_long": "Dieser Name ist zu lang.",
+    "name_slash": "Ein Name darf weder / noch \\ enthalten.",
+    "name_control_character": "Ein Name darf keine unsichtbaren Steuerzeichen enthalten.",
+    "upload_rejected": "Die Datei hat sich beim Hochladen geändert. Lade sie erneut hoch.",
+    "upload_interrupted": "Die Verbindung ist beim Hochladen abgebrochen. Versuche es erneut."
+  }
 }

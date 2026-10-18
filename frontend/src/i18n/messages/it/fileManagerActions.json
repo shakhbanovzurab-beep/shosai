@@ -37,5 +37,31 @@
   "undoFailed": "Impossibile annullare",
   "folderDeleted": "«{name}» eliminata",
   "folderDeletedFiles": "{count, plural, one {# file spostato in I miei file.} many {# di file spostati in I miei file.} other {# file spostati in I miei file.}}",
-  "folderDeleteFailed": "Impossibile eliminare «{name}»"
+  "folderDeleteFailed": "Impossibile eliminare «{name}»",
+  "uploadFailedNamed": "Impossibile caricare «{name}»",
+  "uploadFailedMany": "{count, plural, one {Impossibile caricare # file} many {Impossibile caricare # di file} other {Impossibile caricare # file}}",
+  "downloadFailed": "Impossibile scaricare «{name}»",
+  "problems": {
+    "file_not_found": "Questo file non esiste più.",
+    "folder_not_found": "Questa cartella non esiste più.",
+    "upload_count": "Carica al massimo 20 file alla volta.",
+    "upload_not_claimable": "Questo caricamento è scaduto. Carica di nuovo il file.",
+    "upload_too_large": "Questo file è troppo grande da caricare.",
+    "upload_incomplete": "Il file non è arrivato per intero. Caricalo di nuovo.",
+    "upload_closed": "Questo caricamento è già terminato. Carica di nuovo il file.",
+    "upload_not_found": "Questo caricamento non esiste più. Carica di nuovo il file.",
+    "filename_invalid": "Questo nome file non si può usare. Rinomina il file e riprova.",
+    "storage_limit": "Così supereresti lo spazio del tuo piano. Libera spazio o scegli un piano più grande.",
+    "storage_not_included": "Il tuo piano non include lo spazio per i file.",
+    "leo_limit": "Con il tuo piano Leo può usare fino a {limit} dei tuoi file. Smetti prima di usarne alcuni.",
+    "leo_unreadable": "Leo non sa leggere questo tipo di file.",
+    "leo_not_used": "Leo non usa questo file.",
+    "entitlements_unavailable": "Impossibile verificare il tuo piano al momento. Riprova tra un minuto.",
+    "name_required": "Inserisci un nome.",
+    "name_too_long": "Questo nome è troppo lungo.",
+    "name_slash": "Il nome non può contenere / o \\.",
+    "name_control_character": "Il nome non può contenere caratteri di controllo invisibili.",
+    "upload_rejected": "Il file è cambiato durante il caricamento. Caricalo di nuovo.",
+    "upload_interrupted": "La connessione si è interrotta durante il caricamento. Riprova."
+  }
 }

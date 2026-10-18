@@ -104,7 +104,9 @@
     "sharing": "Partage dans les espaces de travail…",
     "transferTo": "Transférer à",
     "transferWorkspace": "{workspace}…",
-    "deleteFolder": "Supprimer le dossier"
+    "deleteFolder": "Supprimer le dossier",
+    "download": "Télécharger",
+    "heldOverLimit": "Leo ne le lit plus : limite de votre forfait dépassée"
   },
   "dialogs": {
     "renameFile": "Renommer le fichier",
@@ -117,7 +119,7 @@
   },
   "upload": {
     "button": "Importer",
-    "uploading": "Importation de {count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}…",
+    "uploading": "Importation de {count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}… {progress, number, percent}",
     "dropHere": "Déposer pour importer ici",
     "skipped": "{count, plural, one {# fichier ignoré} many {# de fichiers ignorés} other {# fichiers ignorés}}",
     "skippedDescription": "Les fichiers vides ou de plus de {size} sont ignorés, et {max, number} fichiers au maximum sont importés à la fois."
@@ -128,5 +130,17 @@
     "noFiles": "Aucun fichier pour l’instant. Importez-en d’abord dans le Gestionnaire de fichiers.",
     "yourFiles": "Vos fichiers",
     "alreadyShared": "Déjà partagé ici"
+  },
+  "storage": {
+    "label": "Stockage",
+    "title": "Stockage",
+    "ratio": "{used} sur {limit}",
+    "overTitle": "Vos fichiers dépassent le stockage de votre forfait",
+    "overDescription": "Tout reste accessible et les nouvelles importations sont suspendues. Libérez de l’espace ou choisissez un forfait plus grand avant le {date} : après cette date, les fichiers les plus récents au-delà de la limite seront supprimés.",
+    "upgrade": "Voir les forfaits"
+  },
+  "leoLimit": {
+    "title": "Leo utilise {used} de vos fichiers, plus que les {limit} de votre forfait",
+    "description": "Leo continue de tout lire jusqu’au {date}. Désactivez les fichiers dont Leo n’a pas besoin ou choisissez un forfait plus grand : après cette date, Leo cessera de lire les fichiers les plus récents au-delà de la limite. Aucun fichier n’est supprimé."
   }
 }

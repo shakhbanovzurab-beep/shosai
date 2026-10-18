@@ -37,5 +37,31 @@
   "undoFailed": "Kan niet ongedaan maken",
   "folderDeleted": "‘{name}’ verwijderd",
   "folderDeletedFiles": "{count, plural, one {# bestand verplaatst naar Mijn bestanden.} other {# bestanden verplaatst naar Mijn bestanden.}}",
-  "folderDeleteFailed": "Kan ‘{name}’ niet verwijderen"
+  "folderDeleteFailed": "Kan ‘{name}’ niet verwijderen",
+  "uploadFailedNamed": "Kan ‘{name}’ niet uploaden",
+  "uploadFailedMany": "{count, plural, one {Kan # bestand niet uploaden} other {Kan # bestanden niet uploaden}}",
+  "downloadFailed": "Kan ‘{name}’ niet downloaden",
+  "problems": {
+    "file_not_found": "Dit bestand bestaat niet meer.",
+    "folder_not_found": "Deze map bestaat niet meer.",
+    "upload_count": "Upload maximaal 20 bestanden tegelijk.",
+    "upload_not_claimable": "Deze upload is verlopen. Upload het bestand opnieuw.",
+    "upload_too_large": "Dit bestand is te groot om te uploaden.",
+    "upload_incomplete": "Het bestand is niet volledig aangekomen. Upload het opnieuw.",
+    "upload_closed": "Deze upload is al beëindigd. Upload het bestand opnieuw.",
+    "upload_not_found": "Deze upload bestaat niet meer. Upload het bestand opnieuw.",
+    "filename_invalid": "Deze bestandsnaam kan niet worden gebruikt. Wijzig de naam en probeer het opnieuw.",
+    "storage_limit": "Dan ga je over de opslag van je abonnement. Maak ruimte vrij of kies een groter abonnement.",
+    "storage_not_included": "Je abonnement bevat geen bestandsopslag.",
+    "leo_limit": "Met je abonnement kan Leo maximaal {limit} van je bestanden gebruiken. Laat Leo eerst een paar bestanden niet meer gebruiken.",
+    "leo_unreadable": "Leo kan dit type bestand niet lezen.",
+    "leo_not_used": "Leo gebruikt dit bestand niet.",
+    "entitlements_unavailable": "Je abonnement kon nu niet worden gecontroleerd. Probeer het over een minuut opnieuw.",
+    "name_required": "Voer een naam in.",
+    "name_too_long": "Deze naam is te lang.",
+    "name_slash": "Een naam mag geen / of \\ bevatten.",
+    "name_control_character": "Een naam mag geen onzichtbare stuurtekens bevatten.",
+    "upload_rejected": "Het bestand is tijdens het uploaden gewijzigd. Upload het opnieuw.",
+    "upload_interrupted": "De verbinding viel weg tijdens het uploaden. Probeer het opnieuw."
+  }
 }

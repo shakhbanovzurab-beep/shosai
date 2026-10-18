@@ -36,7 +36,7 @@
   "dropzone": {
     "label": "Добавить файлы для Leo",
     "title": "Перетащите сюда файлы для Leo",
-    "uploading": "Загрузка {count, plural, one {# файла} few {# файлов} many {# файлов} other {# файла}}…",
+    "uploading": "Загрузка {count, plural, one {# файла} few {# файлов} many {# файлов} other {# файла}}… {progress, number, percent}",
     "description": "Они сохранятся в Моих файлах в разделе «Файлы». {types}, до {size} каждый.",
     "choose": "Выбрать из своих файлов",
     "upload": "Загрузить новые",

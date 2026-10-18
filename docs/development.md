@@ -133,7 +133,7 @@ uv run --env-file ../.env shosai files bucket-rules --home eu  # one home
 
 The keys need the right to configure the bucket; a repeat changes nothing; the command exits with 1 if any home failed. SeaweedFS keeps the first version of a part sent twice with other bytes, where S3 keeps the last; a client's retry sends the same bytes, so uploads behave the same on both.
 
-Downloads leave `FILES_DOWNLOAD_BASE_URL` empty locally: the API answers the presigned link of the bucket itself. On staging and in production the link points at the edge, which adds `nosniff` and a sandbox to the bytes (ADR 0055 point 8); the local edge (`deploy/local/compose.app.yaml`) serves `/dl/` only when `SHOSAI_DOWNLOAD_RU_ORIGIN` and `SHOSAI_DOWNLOAD_EU_ORIGIN` are set.
+Downloads leave `FILES_DOWNLOAD_BASE_URL` empty locally: the API answers the presigned link of the bucket itself. On staging and in production the link points at the edge, which adds `nosniff` and a sandbox to the bytes (ADR 0055 point 8); the local edge (`deploy/local/compose.app.yaml`) serves `/dl/` only when `SHOSAI_DOWNLOAD_RU_ORIGIN` and `SHOSAI_DOWNLOAD_EU_ORIGIN` are set. With the cabinet's `npm run dev:api`, start the API with `FILES_DOWNLOAD_BASE_URL=http://localhost:3000/dl` instead: the dev server forwards `/dl/{home}/` to the local bucket as the edge does, so a download saves without leaving the page; a link on the bucket's own address opens the file in place of saving it.
 
 ### The admin
 
@@ -179,6 +179,8 @@ npm ci                  # once, and after every change of package-lock.json
 npm run dev             # http://localhost:3000/app/ with the sample API mocked in the browser (MSW)
 npm run dev:api         # the same against the local backend: /v1 is proxied to BACKEND_URL (default http://localhost:8000)
 ```
+
+File Manager in `dev:api` uploads straight to the local buckets, so their CORS rule must allow the cabinet: set `CORS_ALLOWED_ORIGINS=http://localhost:3000` and rerun `shosai files bucket-rules` ([Buckets](#buckets)); downloads need `FILES_DOWNLOAD_BASE_URL` as described there, and `BUCKET_URL` names the bucket the dev server forwards `/dl/` to (default `http://127.0.0.1:18333`). Local Grafana listens on port 3000 too; with it running, start the cabinet with `npm run dev:api -- --port 5173` and use that origin in both settings.
 
 The dev server also answers the cabinet's paths outside `/app/` (`/app`, `/admin/*`, `/oauth/callback`, `/unauthorized`) with `index.html`, as the edge does. The mocks exist only in `npm run dev` and in tests ([F2 plan](plan/packages/F2-frontend-foundation.md), F2-D1); `npm run build` fails if mock code reaches `dist/`.
 

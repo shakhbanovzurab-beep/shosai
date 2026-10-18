@@ -37,5 +37,31 @@
   "undoFailed": "無法復原",
   "folderDeleted": "已刪除「{name}」",
   "folderDeletedFiles": "{count, plural, other {已將 # 個檔案移至「我的檔案」。}}",
-  "folderDeleteFailed": "無法刪除「{name}」"
+  "folderDeleteFailed": "無法刪除「{name}」",
+  "uploadFailedNamed": "無法上傳「{name}」",
+  "uploadFailedMany": "{count, plural, other {無法上傳 # 個檔案}}",
+  "downloadFailed": "無法下載「{name}」",
+  "problems": {
+    "file_not_found": "這個檔案已不存在。",
+    "folder_not_found": "這個資料夾已不存在。",
+    "upload_count": "一次最多上傳 20 個檔案。",
+    "upload_not_claimable": "這次上傳已過期。請重新上傳檔案。",
+    "upload_too_large": "這個檔案太大，無法上傳。",
+    "upload_incomplete": "檔案沒有完整送達。請重新上傳。",
+    "upload_closed": "這次上傳已經結束。請重新上傳檔案。",
+    "upload_not_found": "這次上傳已不存在。請重新上傳檔案。",
+    "filename_invalid": "無法使用這個檔案名稱。請重新命名後再試一次。",
+    "storage_limit": "這會超出方案的儲存空間。請釋出空間或選擇容量更大的方案。",
+    "storage_not_included": "你的方案不包含檔案儲存空間。",
+    "leo_limit": "你的方案最多可讓 Leo 使用共 {limit} 的檔案。請先停止使用部分檔案。",
+    "leo_unreadable": "Leo 無法讀取這種類型的檔案。",
+    "leo_not_used": "Leo 沒有使用這個檔案。",
+    "entitlements_unavailable": "目前無法確認你的方案。請一分鐘後再試一次。",
+    "name_required": "請輸入名稱。",
+    "name_too_long": "名稱太長。",
+    "name_slash": "名稱不能包含 / 或 \\。",
+    "name_control_character": "名稱不能包含看不見的控制字元。",
+    "upload_rejected": "上傳期間檔案有所變更。請重新上傳。",
+    "upload_interrupted": "上傳期間連線中斷。請再試一次。"
+  }
 }
