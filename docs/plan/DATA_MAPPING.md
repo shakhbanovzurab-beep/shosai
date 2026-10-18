@@ -508,9 +508,8 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **Owner → home:** own `owner_id`.
 - **Columns:** 10 of 14 move unchanged; exceptions:
   - `s3_key` — *moved*. Verbatim; `u-{owner_id[:8]}/{file_id}/{name}` (section 6, O1, O2).
-  - `share_token` — *moved*. Verbatim: plaintext secret in public file links.
-  - `share_password_hash` — *moved*. Bcrypt, verbatim.
-  - `parent_id` — *moved*. Folder tree; parents load before children.
+  - `share_token`, `share_password_hash`, `share_expires_at`, `share_download_disabled` — *not carried*: public file links are not in v2 ([files plan](slices/files.md) FL-D3); a migrated link answers a page saying it expired.
+  - `parent_id` — v2 folders are flat (files plan, the cabinet's File Manager); how a nested draft tree flattens is decided with M1's plan.
 
 ### 5.4 `meetings`
 
@@ -1312,7 +1311,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 - **A bucket per home** ([ADR 0044](../adr/0044-a-bucket-per-data-home.md), §4.1, §8.1): the draft's objects go to the Russian home's bucket, where every migrated account starts (ADR 0004). Keys do not name the home; the pointer row in the owner's home database does. Platform objects (L1) go under `platform/` in the EU home's bucket. (The first version of this section had a bucket per home; ADR 0014 made it one bucket on 2026-10-02; ADR 0044 restored a bucket per home on 2026-10-14.)
 - **The pointer is the truth.** Every object is reachable from exactly one pointer column that stores the full key. The deletion registry (§14 rule 7) walks the pointers, so legacy keys need no owner prefix to be deletable.
-- **Proposed layout for objects v2 writes** (`files` confirms it with an ADR):
+- **Layout for objects v2 writes**, confirmed by [ADR 0055](../adr/0055-object-key-layout-and-bucket-rules.md) (a person's file `u/{user_id}/f/{file_id}`, a workspace's `o/{org_id}/f/{file_id}`, an upload another slice claims `transient/{purpose}/{upload_id}`; no name and no home in a key; several rows may share one object):
 
   | Key | Content |
   |---|---|
@@ -1460,7 +1459,7 @@ Every risky item names a check. M1 runs it on every rehearsal and on the real ru
 | S-1 | Users and desktop clients are signed out | Live `refresh_sessions` (`id`, `current_jti`, `prev_jti`, `expires_at`) and `users.token_version` are equal. On the rehearsal, a refresh token issued by the draft copy before `T0` rotates successfully in v2, and a draft access token is accepted until it expires |
 | S-2 | Sign-in finds the wrong home or no account | One directory entry per non-anonymised account. `email_hmac` is unique, so normalised-email collisions are zero. Each entry's home equals its user's home. A sign-in smoke test passes for a sample per home |
 | S-3 | A credential becomes unreadable | Every ciphertext column is byte-equal. Inside the v2 runtime, the count of rows whose ciphertext decrypts equals the row count, per column and per key ring (no plaintext leaves the process). Row counts of the `nango` schema are equal, and a Nango proxy call succeeds for a sample connection. A Web Push test succeeds for a sample subscription |
-| S-4 | A public link stops working | `storage_files.share_token`, `meeting_result_shares.token`, `rooms.invite_token`, `users.ical_token` and the password hashes are equal. On the rehearsal, a sample of each link type resolves |
+| S-4 | A public link stops working | `meeting_result_shares.token`, `rooms.invite_token`, `users.ical_token` and the password hashes are equal. On the rehearsal, a sample of each link type resolves |
 | S-5 | External callbacks stop arriving | `calendar_watch_channels` (`channel_id`, `client_state`, `resource_id`) and `jira_links.id` are equal. The v2 routes for calendar notifications, Jira webhooks, acquirer webhooks and the Nango callback answer at the draft paths (checked against the D1 contract) |
 | S-6 | MCP clients lose access | Equal `mcp_tokens.token_hash`. Equal sets of `mcp_registered_clients` and consented `mcp_oauth_clients`. A personal MCP token from the copy authenticates against v2 on the rehearsal |
 

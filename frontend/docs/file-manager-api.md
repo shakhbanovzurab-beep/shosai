@@ -53,3 +53,13 @@ File Manager is the only place the account's files are stored. Nothing else keep
   workspace's knowledge item becomes the workspace's own upload; the file leaves My files and every
   other workspace it was shared in. It can't be undone.
 - **Polling.** The UI re-reads `GET /files` every 1.5 s while any file Leo uses is being indexed.
+
+## Backend contract (files plan, approved 2026-10-18)
+
+The backend serves `/v1/files/*` with these changes to the demo above ([files plan](../../docs/plan/slices/files.md), [ADR 0055](../../docs/adr/0055-object-key-layout-and-bucket-rules.md)); the cabinet moves to them in the plan's step 10:
+
+- **Uploads go straight to the bucket (FL-D1).** `POST /v1/me/uploads {purpose: "file_manager", filename, content_type, size_bytes}` answers an upload id and presigned part URLs signed for exact lengths; the browser `PUT`s each part and sends `POST /v1/me/uploads/{id}/complete`. `POST /v1/files {upload_ids, folder_id?, leo?}` then turns ready uploads into files and answers `201 UploadResponse`.
+- **Download:** `GET /v1/files/{id}/download` → a 15-minute link with the file's name and type; active content (HTML, SVG, scripts) always downloads.
+- **Storage limit (FL-D2):** an upload or a copy over `file_manager_gb` answers 413 `storage_limit`. Over the limit after a plan change nothing is removed for 90 days (reminders 30, 7 and 1 day before); then the newest files over the limit are deleted.
+- **Deletion (FL-D5):** the Undo toast stays as it is; a deleted file is hidden for 7 days, out of the quota, and support can restore it.
+- **Copy** shares the stored bytes and is instant; it counts against the limit like the original.
