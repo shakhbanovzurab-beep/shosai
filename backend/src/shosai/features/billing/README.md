@@ -43,3 +43,8 @@ What a person or a company has paid for and what they may use: the plan catalogu
 - `GET /v1/billing/plans` — the catalogue's plans on sale in the pricing page's order, plus the person's own plan when no longer sold; the monthly price in the account's currency (country, else home: roubles in the Russian home, dollars in the EU one; never the client's), per user on a team plan, null for a custom price; `current_plan_id`, `effective_plan_id` (the own plan until workspace seats, step 12), `seat: null`, the month's minutes and their reset.
 - `GET /v1/settings/usage` — the Monday week's tokens per tier against the plan (`limit_tokens` null when unlimited), the pack tokens left, this week's frontier models most used first; packs to buy arrive with checkout (step 11).
 - `POST /v1/billing/sales-inquiry` (5 an hour per address) — stored in `sales_inquiries` in the person's home with `billing.sales_inquiry.received`; alerting tells the owner with the team size and the account card link only.
+
+## Leo's tools and the inv-4 monitor
+
+- `account.get_plan` and `account.get_usage` join identity's `account` toolset: read tools over the run's person only (the tool context's scope), returning the plan's limits with this month's minutes, and this week's tokens per tier with the route of the next request; a database out of reach is `unavailable`.
+- inv-4: `UnrecordedPayment` pages on any increase of `shosai_billing_unrecorded_payments_total`, exported at zero by every role; reconciliation (step 8) feeds it. Runbook: `unrecorded-payment`.

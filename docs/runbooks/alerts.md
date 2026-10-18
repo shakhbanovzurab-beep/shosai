@@ -104,6 +104,15 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** A seat reduction applied without the membership check → restore the seats or ask the owner to remove members; a join that skipped the count → find the path in workspaces' `Admission` and fix it with a test. The gauge returns to zero at the next daily pass.
 
+<a id="unrecorded-payment"></a>
+### UnrecordedPayment — inv-4
+
+**Means.** Reconciliation found a payment the acquirer reports as paid, and acknowledged by Shosai, with no committed transaction row (billing, from step 8). The person paid; what they paid for may not have been granted, and the money is not in the books.
+
+**Look.** `shosai_billing_unrecorded_payments_total` by `home`; the reconciliation log line names the acquirer and its order id, never the person's data. Find the order in the acquirer's dashboard.
+
+**Fix.** Record the payment through the one confirm path with the acquirer's order id (the confirm is idempotent), then check the person's subscription or packs. A repeat means the webhook answered before its commit: find the path and fix it with a test (nfr-10).
+
 ## Tickets (§16.6)
 
 <a id="host-disk-filling"></a>

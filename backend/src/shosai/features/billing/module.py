@@ -4,7 +4,8 @@ Step 2 added the catalogue in the EU home with the admin's plan and promo code r
 step 3 subscriptions, the cached `Entitlements` and billing's part of the native
 `/v1/auth/me`. Step 4 adds the month's minutes with their allowance, and step 5 the weekly
 tokens, the packs ledger and its settlement of cost rows, and step 6 the person's plans,
-usage and sales inquiries. Payments join in later steps.
+usage and sales inquiries; step 7 Leo's plan and usage tools and the inv-4 monitor.
+Payments join in later steps.
 """
 
 from collections.abc import AsyncIterator
@@ -21,6 +22,7 @@ from shosai.features.billing.application.people_views import PeopleViews
 from shosai.features.billing.application.promo_codes import PromoCodes
 from shosai.features.billing.application.sales import SalesInquiries
 from shosai.features.billing.application.tokens import TokenSettlement, TokenStanding
+from shosai.features.billing.channels.agent_tools import BILLING_TOOLS, billing_tools
 from shosai.features.billing.channels.http.admin_plans import build_admin_plans_router
 from shosai.features.billing.channels.http.admin_promo_codes import (
     build_admin_promo_codes_router,
@@ -46,6 +48,7 @@ from shosai.features.billing.infrastructure.minutes_records import (
     FreePlanDeviceRecord,
     UsageEventRecord,
 )
+from shosai.features.billing.infrastructure.payment_metrics import PaymentMetrics
 from shosai.features.billing.infrastructure.plan_holders import SubscriptionHolders
 from shosai.features.billing.infrastructure.plan_records import TariffRecord
 from shosai.features.billing.infrastructure.promo_records import (
@@ -61,6 +64,7 @@ from shosai.features.billing.infrastructure.token_records import (
     CreditLedgerRecord,
     TokenUsageRecord,
 )
+from shosai.features.billing.objectives import BILLING_MONITORS
 from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 
 
@@ -72,6 +76,9 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     meter = MinutesMeter(services.transactions, (snapshots, services.ports))
     views = PeopleViews(services.transactions, (snapshots, meter, services.ports))
     inquiries = SalesInquiries(services.transactions, services.outbox)
+    standing = TokenStanding(services.transactions, snapshots)
+    # Счётчик inv-4 виден с нуля во всех ролях; растить его будет сверка платежей (шаг 8).
+    PaymentMetrics(services.registry)
     catalogue = Catalogue(
         services.transactions, (SubscriptionHolders(services.transactions), cache)
     )
@@ -87,10 +94,11 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             ME_CONTRIBUTIONS.bind(BillingMe(snapshots, meter)),
             MINUTES_ALLOWANCE.bind(meter),
             USAGE_TOMBSTONES.bind(meter),
-            TOKEN_ALLOWANCE.bind(TokenStanding(services.transactions, snapshots)),
+            TOKEN_ALLOWANCE.bind(standing),
             ACCOUNT_DATA_HANDLERS.bind(BillingAccountData(services.transactions)),
         ),
         cost_settlements=(TokenSettlement(snapshots),),
+        agent_tools=billing_tools(views, standing),
     )
 
 
@@ -98,6 +106,8 @@ BILLING = FeatureModule(
     name="billing",
     build=build,
     account_data=(ACCOUNT_DATA,),
+    monitors=BILLING_MONITORS,
+    agent_tools=BILLING_TOOLS,
     models=(
         TariffRecord,
         PromoCodeRecord,

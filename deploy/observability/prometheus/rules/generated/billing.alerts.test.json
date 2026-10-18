@@ -1,0 +1,42 @@
+{
+  "rule_files": [
+    "billing.alerts.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_billing_unrecorded_payments_total",
+          "values": "0x10 1x50"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "UnrecordedPayment",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "inv-4"
+              },
+              "exp_annotations": {
+                "summary": "Эквайер подтвердил платёж, которого нет в базе",
+                "description": "Сверка нашла оплату, о которой эквайер получил подтверждение, но строки транзакции нет: человек заплатил и может не получить оплаченное, а деньги не учтены. Платёж нужно найти по номеру заказа у эквайера и провести вручную.",
+                "runbook": "docs/runbooks/alerts.md#unrecorded-payment",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "UnrecordedPayment",
+          "exp_alerts": []
+        }
+      ]
+    }
+  ]
+}

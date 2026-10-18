@@ -26,7 +26,7 @@ from shosai.features.billing.application.catalogue import CATALOGUE_SCOPE
 from shosai.features.billing.application.entitlement_snapshots import EntitlementSnapshots
 from shosai.features.billing.application.minutes import MinutesMeter
 from shosai.features.billing.application.tokens import COUNTED_ORIGIN, WEEK, packs_left
-from shosai.features.billing.contracts import EntitlementsUnavailableError
+from shosai.features.billing.contracts import EntitlementSnapshot, EntitlementsUnavailableError
 from shosai.features.billing.domain.currency import account_currency
 from shosai.features.billing.domain.meters import month_window, week_window
 from shosai.features.billing.domain.money import Currency
@@ -56,6 +56,8 @@ class PlansForPerson:
     current: Plan
     currency: Currency
     minutes: MonthMinutes
+    # Действующий тариф по времени: платный ли он и до какого момента.
+    entitled: EntitlementSnapshot
 
 
 @dataclass(frozen=True, slots=True)
@@ -117,7 +119,7 @@ class PeopleViews:
             used, snapshot.limits.meeting_minutes_per_month, month_window(now)[1]
         )
         currency = account_currency(country, russian_home=principal.home is Home.RU)
-        return PlansForPerson(listed, current, currency, minutes)
+        return PlansForPerson(listed, current, currency, minutes, snapshot)
 
     async def usage(self, principal: Principal) -> WeekUsage:
         """The week's tokens per tier with the plan's allowances, packs and frontier models."""

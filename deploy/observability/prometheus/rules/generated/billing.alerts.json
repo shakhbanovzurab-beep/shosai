@@ -1,0 +1,23 @@
+{
+  "groups": [
+    {
+      "name": "billing-invariants",
+      "rules": [
+        {
+          "alert": "UnrecordedPayment",
+          "expr": "sum(increase(shosai_billing_unrecorded_payments_total[15m])) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "inv-4"
+          },
+          "annotations": {
+            "summary": "Эквайер подтвердил платёж, которого нет в базе",
+            "description": "Сверка нашла оплату, о которой эквайер получил подтверждение, но строки транзакции нет: человек заплатил и может не получить оплаченное, а деньги не учтены. Платёж нужно найти по номеру заказа у эквайера и провести вручную.",
+            "runbook": "docs/runbooks/alerts.md#unrecorded-payment",
+            "dashboard": "/d/invariant-monitors"
+          }
+        }
+      ]
+    }
+  ]
+}

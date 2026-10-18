@@ -1,7 +1,8 @@
 """Leo's `account` toolset: how the person wants to be addressed (ADR 0029; SLICE_MAP §4.2.1).
 
 One read tool. It reads only the account of the person the run acts for: the scope of the
-tool context, never an id the model names. The plan summary joins it when billing ships.
+tool context, never an id the model names. Billing adds the plan and usage tools to the
+same toolset.
 """
 
 from datetime import timedelta
