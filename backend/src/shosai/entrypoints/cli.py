@@ -11,6 +11,7 @@
     shosai email check --to ADDRESS    send a check mail of each kind through SMTP
     shosai identity admin-password-hash   print the bcrypt hash of the admin's password
     shosai observability debug --user ID --reason TEXT   DEBUG lines of one account for a while
+    shosai files bucket-rules [--home ru|eu]   put ADR 0055's bucket lifecycle and CORS rules
 
 Every long-running role also serves `/livez`, `/readyz` and `/metrics` on OPS_PORT. The
 settings come from the environment only (`.env.example`, section 2). One process runs
@@ -28,6 +29,7 @@ import uvloop
 from shosai.composition.ai_command import KillSwitchAction, KillSwitchCommand, run_kill_switch
 from shosai.composition.ai_rebuild import run_rebuild
 from shosai.composition.email_command import MailCheckCommand, run_mail_check
+from shosai.composition.files_command import run_bucket_rules
 from shosai.composition.identity_command import run_admin_password_hash
 from shosai.composition.migrate import MigrateAction, run_migrate
 from shosai.composition.observability_command import DebugCommand, run_debug_switch
@@ -35,6 +37,7 @@ from shosai.composition.process import run_process
 from shosai.composition.roles import api_role, scheduler_role, workers_role, ws_role
 from shosai.core.config.roles import ProcessRole
 from shosai.core.i18n.locales import SUPPORTED_LANGUAGES
+from shosai.core.kernel.homes import Home
 from shosai.core.observability.debug_logs import DebugScope
 from shosai.core.observability.debug_switches import LONGEST
 from shosai.core.tasks.queues import TaskQueue
@@ -79,6 +82,14 @@ def build_parser() -> argparse.ArgumentParser:
         "admin-password-hash", help="print the bcrypt hash of the admin's password"
     )
     add_observability(roles)
+    files = roles.add_parser(ProcessRole.FILES.value, help="operator commands of the buckets")
+    bucket_tools = files.add_subparsers(dest="tool", required=True, metavar="TOOL")
+    rules = bucket_tools.add_parser(
+        "bucket-rules", help="put the lifecycle and CORS rules on the homes' buckets"
+    )
+    rules.add_argument(
+        "--home", choices=[home.value for home in Home], help="one home; both when omitted"
+    )
     return parser
 
 
@@ -126,20 +137,29 @@ def command(arguments: argparse.Namespace, environ: Mapping[str, str]) -> Corout
             return run_process(role, environ, scheduler_role)
         case ProcessRole.OBSERVABILITY:
             return run_debug_switch(environ, debug_command(arguments))
-        case ProcessRole.MIGRATE | ProcessRole.AI | ProcessRole.EMAIL | ProcessRole.IDENTITY:
+        case (
+            ProcessRole.MIGRATE
+            | ProcessRole.AI
+            | ProcessRole.EMAIL
+            | ProcessRole.IDENTITY
+            | ProcessRole.FILES
+        ):
             return one_shot(role, arguments, environ)
 
 
 def one_shot(
     role: ProcessRole, arguments: argparse.Namespace, environ: Mapping[str, str]
 ) -> Coroutine[Any, Any, int]:
-    """The coroutine of a one-shot command: migrations, an AI, a mail or an account command."""
+    """The coroutine of a one-shot command: migrations, an AI, mail, account or bucket command."""
     if role is ProcessRole.MIGRATE:
         return run_migrate(environ, MigrateAction(arguments.action))
     if role is ProcessRole.EMAIL:
         return run_mail_check(environ, MailCheckCommand(arguments.recipient, arguments.locale))
     if role is ProcessRole.IDENTITY:
         return run_admin_password_hash()
+    if role is ProcessRole.FILES:
+        homes = list(Home) if arguments.home is None else [Home(arguments.home)]
+        return run_bucket_rules(environ, homes)
     return ai_command(arguments, environ)
 
 

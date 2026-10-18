@@ -22,3 +22,11 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 - `object_deletions` — keys whose last row is gone, until the bucket confirms; keys only.
 - `files_keys_in_use(keys)` — which keys any row still names, past row-level security, keys only.
 - Account data: rows of the person's own files, folders, uploads and usage; objects copied by their keys and deleted only when no row of any owner names them, never by prefix (a file handed to a workspace keeps its key).
+
+## Uploads (step 3)
+
+- `POST /v1/me/uploads {purpose, filename, content_type, size_bytes}` → the part links, each signed 15 minutes for its exact length; `GET /v1/me/uploads/{id}` → parts done and fresh links for the rest; `POST …/{id}/complete` → `ready`, or `rejected` when the object is not the declared size (its object deleted, its bytes released); `DELETE …/{id}` abandons an open upload.
+- A File Manager upload reserves its bytes against `file_manager_gb` by one conditional upsert (413 `storage_limit`, 403 `storage_not_included` at 0) and lands on the file's final key; other purposes land under `transient/` and reserve nothing.
+- `Uploads.claim(session, upload_id, purpose)` in the uploader's transaction: ready → claimed, a File Manager upload's bytes become used; a repeat answers the same object.
+- Every storage call runs outside a transaction; states change by conditional updates. The sweep (`files.sweep_uploads`, every 15 minutes per home) lists due uploads as the sweep role, closes each in its owner's transaction and retries recorded object deletions.
+- `shosai files bucket-rules [--home ru|eu]` puts ADR 0055's lifecycle and CORS rules on the buckets.

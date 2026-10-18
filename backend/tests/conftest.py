@@ -33,6 +33,7 @@ pytest_plugins = (
     "tests.features.billing.catalogue_bench",
     "tests.features.billing.entitlement_bench",
     "tests.features.billing.people_bench",
+    "tests.features.files.upload_bench",
 )
 
 

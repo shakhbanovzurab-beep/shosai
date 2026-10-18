@@ -19,7 +19,7 @@ Each home has its own bucket (ADR 0044), and a key does not name the home, so an
 3. **The pointer is the truth.** Each object has a row that stores its full key; a key is never parsed for an owner. Draft keys stay verbatim in their pointers and are copied, erased and checked only through those pointers, never by prefix (ADR 0006).
 4. **Several rows may point at one object.** Objects are immutable, so a File Manager copy is a new row with the same key (FL-D4); the object is deleted after the commit that removes its last row.
 5. **Uploads write to the final key.** A File Manager upload is created on the file's key; the multipart upload completes, its size is checked by `HEAD`, and only then is the pointer committed (§8.1).
-6. **Bucket rules on both homes:** abort incomplete multipart uploads after 24 hours; expire objects under `transient/` after 3 days; a CORS rule lets the cabinet's origin `PUT` presigned parts and read their `ETag`. A script under `deploy/` applies them to a bucket; the owner runs it on the managed buckets.
+6. **Bucket rules on both homes:** abort incomplete multipart uploads after 24 hours; expire objects under `transient/` after 3 days; a CORS rule lets the cabinet's origin `PUT` presigned parts and read their `ETag`. The `shosai files bucket-rules` command applies them to each home's bucket; the owner runs it on the managed buckets with keys that may configure them.
 7. **Deletion.** A row goes first (a file is hidden for 7 days, then its row is purged, FL-D5); the object is deleted after that commit, from a pending-deletion record retried until done.
 
 ## Consequences

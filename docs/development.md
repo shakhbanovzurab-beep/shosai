@@ -122,6 +122,17 @@ Notifications and newsletters to a person carry a signed unsubscribe link once `
 
 `shosai email check` needs no worker and no database: it sends one check mail of each kind (account, notification, newsletter) straight to the SMTP server from its mailbox, logs whether the server took each one, and exits with 1 if any was refused. The same command against the production mailboxes proves SMTP, TLS and both logins. The mails use every block of the layout, so they also show how mail looks in a client, light and dark.
 
+### Buckets
+
+Browsers upload files straight to a home's bucket by presigned part links ([ADR 0055](adr/0055-object-key-layout-and-bucket-rules.md)); each bucket carries lifecycle rules (incomplete multipart uploads aborted after a day, `transient/` expired after 3 days) and a CORS rule for `CORS_ALLOWED_ORIGINS`. Put them on the local SeaweedFS buckets once, and on any new bucket:
+
+```bash
+uv run --env-file ../.env shosai files bucket-rules            # both homes
+uv run --env-file ../.env shosai files bucket-rules --home eu  # one home
+```
+
+The keys need the right to configure the bucket; a repeat changes nothing; the command exits with 1 if any home failed. SeaweedFS keeps the first version of a part sent twice with other bytes, where S3 keeps the last; a client's retry sends the same bytes, so uploads behave the same on both.
+
 ### The admin
 
 The admin panel has one admin who signs in with a login and password from the environment ([ADR 0049](adr/0049-one-admin-signed-in-by-env-credentials.md)). Print the hash of a password (at least 16 characters, typed twice without echo):

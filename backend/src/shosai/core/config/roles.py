@@ -24,3 +24,5 @@ class ProcessRole(StrEnum):
     IDENTITY = "identity"
     # Разовая команда оператора: отладочные журналы одного аккаунта или компании (§16.7).
     OBSERVABILITY = "observability"
+    # Разовая команда оператора над бакетами домов: правила жизненного цикла и CORS (ADR 0055).
+    FILES = "files"

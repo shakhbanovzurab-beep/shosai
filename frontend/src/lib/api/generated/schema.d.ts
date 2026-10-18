@@ -984,6 +984,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me/uploads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Upload
+         * @description Start an upload: the part links, signed for 15 minutes each.
+         */
+        post: operations["create_upload_v1_me_uploads_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/uploads/{upload_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Upload
+         * @description The upload's state; while pending, the parts done and links for the rest.
+         */
+        get: operations["read_upload_v1_me_uploads__upload_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Cancel Upload
+         * @description Abandon an open upload and free what it reserved.
+         */
+        delete: operations["cancel_upload_v1_me_uploads__upload_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/uploads/{upload_id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Complete Upload
+         * @description Assemble the parts: ready, or rejected when the size is not the declared one.
+         */
+        post: operations["complete_upload_v1_me_uploads__upload_id__complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1729,6 +1793,27 @@ export interface components {
             /** Next Cursor */
             next_cursor: string | null;
         };
+        /**
+         * PartLinkView
+         * @description Where to PUT one part: the URL, the headers to send and the exact length.
+         */
+        PartLinkView: {
+            /** Number */
+            number: number;
+            /** Size Bytes */
+            size_bytes: number;
+            /** Url */
+            url: string;
+            /** Headers */
+            headers: {
+                [key: string]: string;
+            };
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+        };
         /** @enum {string} */
         PeriodScope: "month" | "year" | "both";
         /**
@@ -2388,6 +2473,59 @@ export interface components {
             /** Unsubscribed */
             unsubscribed: boolean;
         };
+        /**
+         * UploadAnswer
+         * @description An upload and, while it is pending, the links of the parts still to send.
+         */
+        UploadAnswer: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            purpose: components["schemas"]["UploadPurpose"];
+            state: components["schemas"]["UploadState"];
+            /** Filename */
+            filename: string;
+            /** Content Type */
+            content_type: string;
+            /** Size Bytes */
+            size_bytes: number;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
+            /** Done Parts */
+            done_parts: number[];
+            /** Parts */
+            parts: components["schemas"]["PartLinkView"][];
+        };
+        /**
+         * UploadBody
+         * @description What the client is about to upload.
+         */
+        UploadBody: {
+            purpose: components["schemas"]["UploadPurpose"];
+            /** Filename */
+            filename: string;
+            /** Content Type */
+            content_type: string;
+            /** Size Bytes */
+            size_bytes: number;
+        };
+        /**
+         * UploadPurpose
+         * @description Who takes the bytes once they are uploaded.
+         * @enum {string}
+         */
+        UploadPurpose: "file_manager" | "recording" | "leo_attachment" | "ticket_attachment" | "workspace_upload" | "app_build";
+        /**
+         * UploadState
+         * @description Where an upload stands.
+         * @enum {string}
+         */
+        UploadState: "pending" | "ready" | "claimed" | "rejected" | "expired";
         /**
          * UsageView
          * @description The week's token usage.
@@ -4452,6 +4590,138 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UsageView"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_upload_v1_me_uploads_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UploadBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadAnswer"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_upload_v1_me_uploads__upload_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                upload_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadAnswer"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    cancel_upload_v1_me_uploads__upload_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                upload_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    complete_upload_v1_me_uploads__upload_id__complete_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                upload_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadAnswer"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

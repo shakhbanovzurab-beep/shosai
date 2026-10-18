@@ -3274,6 +3274,237 @@
           }
         }
       }
+    },
+    "/v1/me/uploads": {
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Create Upload",
+        "description": "Start an upload: the part links, signed for 15 minutes each.",
+        "operationId": "create_upload_v1_me_uploads_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadAnswer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/uploads/{upload_id}": {
+      "get": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Read Upload",
+        "description": "The upload's state; while pending, the parts done and links for the rest.",
+        "operationId": "read_upload_v1_me_uploads__upload_id__get",
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Upload Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadAnswer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Cancel Upload",
+        "description": "Abandon an open upload and free what it reserved.",
+        "operationId": "cancel_upload_v1_me_uploads__upload_id__delete",
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Upload Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/uploads/{upload_id}/complete": {
+      "post": {
+        "tags": [
+          "files"
+        ],
+        "summary": "Complete Upload",
+        "description": "Assemble the parts: ready, or rejected when the size is not the declared one.",
+        "operationId": "complete_upload_v1_me_uploads__upload_id__complete_post",
+        "parameters": [
+          {
+            "name": "upload_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Upload Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UploadAnswer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5100,6 +5331,44 @@
           "next_cursor"
         ],
         "title": "Page[DeviceView]"
+      },
+      "PartLinkView": {
+        "properties": {
+          "number": {
+            "type": "integer",
+            "title": "Number"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "title": "Size Bytes"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "headers": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Headers"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "number",
+          "size_bytes",
+          "url",
+          "headers",
+          "expires_at"
+        ],
+        "title": "PartLinkView",
+        "description": "Where to PUT one part: the URL, the headers to send and the exact length."
       },
       "PeriodScope": {
         "type": "string",
@@ -6994,6 +7263,124 @@
         ],
         "title": "UnsubscribeAnswer",
         "description": "The same answer for every token: nothing about the account behind it."
+      },
+      "UploadAnswer": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "purpose": {
+            "$ref": "#/components/schemas/UploadPurpose"
+          },
+          "state": {
+            "$ref": "#/components/schemas/UploadState"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "content_type": {
+            "type": "string",
+            "title": "Content Type"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "title": "Size Bytes"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "done_parts": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Done Parts"
+          },
+          "parts": {
+            "items": {
+              "$ref": "#/components/schemas/PartLinkView"
+            },
+            "type": "array",
+            "title": "Parts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "purpose",
+          "state",
+          "filename",
+          "content_type",
+          "size_bytes",
+          "expires_at",
+          "done_parts",
+          "parts"
+        ],
+        "title": "UploadAnswer",
+        "description": "An upload and, while it is pending, the links of the parts still to send."
+      },
+      "UploadBody": {
+        "properties": {
+          "purpose": {
+            "$ref": "#/components/schemas/UploadPurpose"
+          },
+          "filename": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Filename"
+          },
+          "content_type": {
+            "type": "string",
+            "maxLength": 255,
+            "title": "Content Type"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Size Bytes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "purpose",
+          "filename",
+          "content_type",
+          "size_bytes"
+        ],
+        "title": "UploadBody",
+        "description": "What the client is about to upload."
+      },
+      "UploadPurpose": {
+        "type": "string",
+        "enum": [
+          "file_manager",
+          "recording",
+          "leo_attachment",
+          "ticket_attachment",
+          "workspace_upload",
+          "app_build"
+        ],
+        "title": "UploadPurpose",
+        "description": "Who takes the bytes once they are uploaded."
+      },
+      "UploadState": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "ready",
+          "claimed",
+          "rejected",
+          "expired"
+        ],
+        "title": "UploadState",
+        "description": "Where an upload stands."
       },
       "UsageView": {
         "properties": {
