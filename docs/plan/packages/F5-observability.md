@@ -67,7 +67,7 @@ deploy/observability/
                             node-exporter, nginx-exporter, blackbox; each read-only, non-root
                             (the collector: uid 0 with only DAC_READ_SEARCH, to read container logs),
                             healthcheck, mem limit (F5-D3), json-file rotation (§14 rule 11)
-  compose.local.yaml        local overlay: the shosai-local network, Grafana on 127.0.0.1:3000
+  compose.local.yaml        local overlay: the shosai-local network, Grafana on 127.0.0.1:3300
   collector/config.yaml     receivers filelog + otlp; processors memory_limiter, privacy, tail_sampling, batch
   loki/loki.yaml            single binary, filesystem, retention 14 d, label limits, ruler → Alertmanager
   loki/rules/               log-based rules (edge 5xx and 429)

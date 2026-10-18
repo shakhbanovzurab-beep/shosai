@@ -31,10 +31,10 @@ services:
       - "127.0.0.1:9090:9090"
 
   # Локально — пароль по умолчанию, только для этой машины (как пароли compose.dev.yaml); файла с
-  # хоста нет, вместо его каталога — пустой tmpfs.
+  # хоста нет, вместо его каталога — пустой tmpfs. На хосте порт 3300: 3000 занимает кабинет (npm run dev).
   grafana:
     environment:
-      GF_SERVER_ROOT_URL: http://127.0.0.1:3000
+      GF_SERVER_ROOT_URL: http://127.0.0.1:3300
       GF_SECURITY_COOKIE_SECURE: "false"
       GF_SECURITY_ADMIN_PASSWORD__FILE: ""
       GF_SECURITY_ADMIN_PASSWORD: ${LOCAL_GRAFANA_PASSWORD:-local-grafana}
@@ -42,14 +42,14 @@ services:
       - type: tmpfs
         target: /run/shosai-grafana
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3300:3000"
 
   # Локально секретов нет — Alertmanager никому не пишет. Для проверки доставки
   # deploy/local/alertmanager-secrets.sh кладёт в deploy/local/secrets/alertmanager бот и чат из .env
   # (никогда не heartbeat: его пингует только staging); после проверки каталог удаляется.
   alertmanager:
     environment:
-      GRAFANA_ROOT_URL: http://127.0.0.1:3000
+      GRAFANA_ROOT_URL: http://127.0.0.1:3300
     volumes:
       - ${ALERTMANAGER_SECRETS_DIR:-../local/secrets/alertmanager}:/run/shosai-alertmanager:ro
     ports:

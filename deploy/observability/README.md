@@ -120,7 +120,7 @@ One bot, one chat (F5-D4); [alertmanager/alertmanager.yml](alertmanager/alertman
 | `SHOSAI_LOG_PROJECTS` | `^shosai-staging$` | Regular expression of the Compose projects whose containers are shipped; locally `^shosai-local(-[a-z]+)?$` |
 | `SHOSAI_ENVIRONMENT` | `staging` | The `environment` external label of every series and alert; locally `local` |
 | `PROMETHEUS_RETENTION_SIZE` | `5GB` | Prometheus's size cap (F5-D3); the time limit is 30 days |
-| `GRAFANA_ROOT_URL` | `https://grafana.shosai.tech` | Grafana's public address, for its links (F5-D1); locally `http://127.0.0.1:3000` |
+| `GRAFANA_ROOT_URL` | `https://grafana.shosai.tech` | Grafana's public address, for its links (F5-D1); locally `http://127.0.0.1:3300` |
 | `GRAFANA_ADMIN_USER` | `admin` | The one Grafana admin's login |
 | `GRAFANA_SECRETS_DIR` | `/srv/shosai/secrets/grafana` | Host directory with the file `admin-password`, readable by Grafana's uid 472; locally a tmpfs replaces it |
 | `ALERTMANAGER_SECRETS_DIR` | `/srv/shosai/secrets/alertmanager` | Host directory with `telegram-bot-token`, `telegram-chat-id` and `heartbeat-url`, readable by uid 65534; locally `deploy/local/secrets/alertmanager` |
