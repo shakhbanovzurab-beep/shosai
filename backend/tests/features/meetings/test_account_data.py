@@ -21,6 +21,7 @@ from shosai.features.meetings.infrastructure.notes_records import (
     SettingsRecord,
     TemplateRecord,
 )
+from shosai.features.meetings.infrastructure.own_notes_records import OwnNotesRecord
 from shosai.features.meetings.infrastructure.run_records import RunRecord
 from shosai.features.meetings.infrastructure.share_records import (
     ShareCommentRecord,
@@ -55,7 +56,16 @@ def meeting_rows(person: uuid.UUID, meeting: uuid.UUID, audio_key: str) -> list[
         ParticipantRecord(
             id=uuid.uuid4(), session_id=meeting, user_id=person, email="anna@example.com"
         ),
-        NotesRecord(session_id=meeting, user_id=person, my_markdown="# Мои заметки"),
+        NotesRecord(session_id=meeting, user_id=person, write_up_template="enhanced"),
+        OwnNotesRecord(
+            id=uuid.uuid4(),
+            session_id=meeting,
+            user_id=person,
+            markdown="# Мои заметки",
+            version=1,
+            client="web",
+            updated_at=STARTED,
+        ),
         FindingRecord(
             id=uuid.uuid4(),
             session_id=meeting,
@@ -107,6 +117,17 @@ async def test_export_transfer_and_erasure_cover_every_table_and_follow_the_poin
         session.add(
             ShareCommentRecord(id=uuid.uuid4(), session_id=meeting, user_id=person, text="Ок")
         )
+    # Заметки человека к чужой встрече: выгружаются и стираются с ним, но не переезжают.
+    stranger, theirs = uuid.uuid4(), uuid.uuid4()
+    async with homes.transactions.begin(TenancyScope(Home.RU, stranger)) as session:
+        session.add(MeetingRecord(id=theirs, user_id=stranger, title="Чужая", started_at=STARTED))
+    async with homes.transactions.begin(TenancyScope(Home.RU, person)) as session:
+        session.add(
+            OwnNotesRecord(
+                id=uuid.uuid4(), session_id=theirs, user_id=person, markdown="К чужой",
+                version=3, client="macos", updated_at=STARTED,
+            )
+        )  # fmt: skip
     russian, european = AccountRef(person, Home.RU), AccountRef(person, Home.EU)
 
     exported = {
@@ -128,7 +149,9 @@ async def test_export_transfer_and_erasure_cover_every_table_and_follow_the_poin
         "meeting_result_shares.jsonl",
         "meeting_share_comments.jsonl",
         "meeting_folders.jsonl",
+        "meeting_own_notes.jsonl",
     } <= set(exported)
+    assert exported["meeting_own_notes.jsonl"].count(b"\n") == 2
     assert exported["transcript_segments.jsonl"].count(b"\n") == 2
     assert TOKEN.encode() not in exported["meeting_result_shares.jsonl"]
     assert same

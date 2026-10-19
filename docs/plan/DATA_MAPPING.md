@@ -556,10 +556,10 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 - **Owner → home:** via `session_id` → `sessions.user_id`.
 - **Columns:** 6 of 9 move unchanged; exceptions:
-  - `draft_markdown` — *moved*. User content: the person's own notes.
+  - `draft_markdown` — *moved* to `meeting_own_notes` as the meeting owner's row (MT-D12: each person's own notes are a row of their own); an empty draft writes no row.
   - `enhanced_markdown` — *transformed*. AI output; becomes the write-up as one Markdown section, copied, never regenerated (costly and non-deterministic).
   - `template_id` — *moved*. String: a built-in key or a `meeting_templates.id`.
-- v2 adds `findings_run_id` (the run whose findings the write-up lists, meetings step 6): NULL for a migrated note, whose write-up lists no findings.
+- v2 adds `findings_run_id` (the run whose findings the write-up lists, meetings step 6): NULL for a migrated note, whose write-up lists no findings. The person's own notes left `meeting_notes` for `meeting_own_notes` (revision `e5c2a8d4f017`).
 
 #### `meeting_map_nodes` → `meeting_notes.map` · **transformed**
 

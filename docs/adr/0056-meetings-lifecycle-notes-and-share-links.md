@@ -22,6 +22,7 @@ The shipped desktop clients start a meeting with `POST /v1/sessions`, end it onl
 10. **Media tools (MT-D10).** `ffmpeg` and `ffprobe` from the runtime image's Debian packages, as subprocesses with time and memory limits, without network, on an allowed list of formats checked before decoding.
 11. **Plans (MT-D11).** Every plan gets the transcript, the write-up, the findings and the map.
 12. **Transcript partitions.** `transcript_segments` is partitioned by the month of the meeting's start, so its unique key is truly `(session_id, seq)` and a meeting lives in one partition.
+13. **Own notes per person (MT-D12, decided by the owner on 2026-10-19).** Whoever may read a meeting keeps notes of their own on it and sees and writes only those; nobody else's are shown to anyone, the meeting's owner included, and a share link never publishes them. The notes are `meeting_own_notes`, one row per meeting and person, with row-level security by writer; the native note routes read and write the current user's. A person who loses access keeps their notes, unreachable until access returns; they go with the meeting.
 
 ## Alternatives considered
 

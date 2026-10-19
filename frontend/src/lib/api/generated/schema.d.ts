@@ -1280,6 +1280,102 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/folders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Folders
+         * @description Your folders, oldest first.
+         */
+        get: operations["list_folders_v1_meetings_folders_get"];
+        put?: never;
+        /**
+         * Create Folder
+         * @description Make a folder in the next colour.
+         */
+        post: operations["create_folder_v1_meetings_folders_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/folders/{folder_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Folder
+         * @description Delete a folder; its meetings stay, in no folder.
+         */
+        delete: operations["delete_folder_v1_meetings_folders__folder_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Rename Folder
+         * @description Rename a folder.
+         */
+        patch: operations["rename_folder_v1_meetings_folders__folder_id__patch"];
+        trace?: never;
+    };
+    "/v1/meetings/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Templates
+         * @description The shipped templates, then yours, oldest first.
+         */
+        get: operations["list_templates_v1_meetings_templates_get"];
+        put?: never;
+        /**
+         * Create Template
+         * @description Make a template of your own.
+         */
+        post: operations["create_template_v1_meetings_templates_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/templates/{template_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Replace Template
+         * @description Replace a template of yours.
+         */
+        put: operations["replace_template_v1_meetings_templates__template_id__put"];
+        post?: never;
+        /**
+         * Delete Template
+         * @description Delete a template of yours.
+         */
+        delete: operations["delete_template_v1_meetings_templates__template_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/sessions": {
         parameters: {
             query?: never;
@@ -1483,6 +1579,70 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/{meeting_id}/my-notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get My Notes
+         * @description Your own notes on the meeting; nobody else's.
+         */
+        get: operations["get_my_notes_v1_meetings__meeting_id__my_notes_get"];
+        /**
+         * Put My Notes
+         * @description Replace your own notes on the meeting.
+         */
+        put: operations["put_my_notes_v1_meetings__meeting_id__my_notes_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/{meeting_id}/participants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Add Participant
+         * @description Add a participant by address; the one already there answers 200.
+         */
+        post: operations["add_participant_v1_meetings__meeting_id__participants_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/{meeting_id}/participants/{participant_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Remove Participant
+         * @description Remove a participant someone added.
+         */
+        delete: operations["remove_participant_v1_meetings__meeting_id__participants__participant_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -2196,6 +2356,39 @@ export interface components {
             name: string;
         };
         /**
+         * FolderColor
+         * @description A folder's colour.
+         * @enum {string}
+         */
+        FolderColor: "green" | "violet" | "red" | "blue" | "amber";
+        /**
+         * FolderIn
+         * @description A folder's name.
+         */
+        FolderIn: {
+            /** Name */
+            name: string;
+        };
+        /**
+         * FolderOut
+         * @description A folder of the person's.
+         */
+        FolderOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            color: components["schemas"]["FolderColor"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
          * FolderUpdate
          * @description A folder's new name, and whether Leo uses every readable file in it.
          */
@@ -2500,13 +2693,18 @@ export interface components {
         };
         /**
          * MeetingChangeIn
-         * @description A new title, a folder, or both; `folder_id: null` takes the meeting out of its folder.
+         * @description A new title, folder or template; `null` takes the folder or the template away.
          */
         MeetingChangeIn: {
             /** Title */
             title?: string | null;
             /** Folder Id */
             folder_id?: string | null;
+            /**
+             * Template Id
+             * @description A shipped template's code or your own template's id; null for Leo's.
+             */
+            template_id?: string | null;
         };
         /**
          * MeetingOut
@@ -2624,11 +2822,57 @@ export interface components {
          */
         ModelTier: "standard" | "frontier";
         /**
+         * MyNotesIn
+         * @description The notes' new text; it replaces the old one.
+         */
+        MyNotesIn: {
+            /**
+             * Text
+             * @description Markdown, at most 50 000.
+             */
+            text: string;
+        };
+        /**
+         * MyNotesOut
+         * @description The person's own notes; null before they have written any.
+         */
+        MyNotesOut: {
+            notes: components["schemas"]["OwnNotesOut"] | null;
+        };
+        /**
+         * NoteClient
+         * @description Which client last wrote the person's notes.
+         * @enum {string}
+         */
+        NoteClient: "web" | "macos" | "windows";
+        /**
          * NotesState
          * @description Where a meeting's notes are.
          * @enum {string}
          */
         NotesState: "none" | "processing" | "ready" | "failed";
+        /**
+         * OwnNotesOut
+         * @description What the person typed about the meeting, and where they last wrote it.
+         */
+        OwnNotesOut: {
+            /**
+             * Text
+             * @description Markdown.
+             */
+            text: string;
+            /**
+             * Version
+             * @description Grows by one with every write, from any client.
+             */
+            version: number;
+            client: components["schemas"]["NoteClient"];
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
         /** Page[AdminUser] */
         Page_AdminUser_: {
             /** Items */
@@ -2647,6 +2891,13 @@ export interface components {
         Page_FindingOut_: {
             /** Items */
             items: components["schemas"]["FindingOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** Page[FolderOut] */
+        Page_FolderOut_: {
+            /** Items */
+            items: components["schemas"]["FolderOut"][];
             /** Next Cursor */
             next_cursor: string | null;
         };
@@ -2691,6 +2942,16 @@ export interface components {
              * Format: date-time
              */
             expires_at: string;
+        };
+        /**
+         * ParticipantIn
+         * @description A participant to add by address.
+         */
+        ParticipantIn: {
+            /** Email */
+            email: string;
+            /** Name */
+            name?: string | null;
         };
         /**
          * ParticipantOut
@@ -3502,6 +3763,76 @@ export interface components {
             price_usd: number;
             /** Storage Limit Bytes */
             storage_limit_bytes?: number | null;
+        };
+        /**
+         * TemplateIcon
+         * @description The icons a template may have.
+         * @enum {string}
+         */
+        TemplateIcon: "briefcase" | "chart" | "handshake" | "landmark" | "lightbulb" | "magnet" | "phone" | "rocket" | "calendar" | "users";
+        /**
+         * TemplateIn
+         * @description A person's template: its name, description, icon and sections.
+         */
+        TemplateIn: {
+            /** Name */
+            name: string;
+            /** Description */
+            description?: string | null;
+            icon: components["schemas"]["TemplateIcon"];
+            /** Sections */
+            sections: components["schemas"]["TemplateSectionIn"][];
+        };
+        /**
+         * TemplateOut
+         * @description A template of Leo's write-up; a shipped one has no words of its own.
+         */
+        TemplateOut: {
+            /** Id */
+            id: string;
+            /** Builtin */
+            builtin: boolean;
+            /** Name */
+            name: string | null;
+            /** Description */
+            description: string | null;
+            /**
+             * Icon
+             * @description One of the ten icons, or `enhanced` for Leo's layout.
+             */
+            icon: string;
+            /** Sections */
+            sections: components["schemas"]["TemplateSectionOut"][];
+        };
+        /**
+         * TemplateSectionIn
+         * @description A section of a person's template.
+         */
+        TemplateSectionIn: {
+            kind: components["schemas"]["SectionKind"];
+            /** Title */
+            title?: string | null;
+        };
+        /**
+         * TemplateSectionOut
+         * @description A section of a template: a shipped heading's code, or the person's own title.
+         */
+        TemplateSectionOut: {
+            kind: components["schemas"]["SectionKind"];
+            /** Heading Code */
+            heading_code: string | null;
+            /** Title */
+            title: string | null;
+        };
+        /**
+         * TemplatesOut
+         * @description Every template the person may use: one page, 9 shipped and at most 50 of their own.
+         */
+        TemplatesOut: {
+            /** Items */
+            items: components["schemas"]["TemplateOut"][];
+            /** Next Cursor */
+            next_cursor?: null;
         };
         /**
          * TicketRequest
@@ -6376,6 +6707,283 @@ export interface operations {
             };
         };
     };
+    list_folders_v1_meetings_folders_get: {
+        parameters: {
+            query?: {
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_FolderOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_folder_v1_meetings_folders_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional: a key unique to one create, repeated on its retries. */
+                "Idempotency-Key"?: string | null;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FolderIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FolderOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_folder_v1_meetings_folders__folder_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                folder_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    rename_folder_v1_meetings_folders__folder_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                folder_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FolderIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FolderOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_templates_v1_meetings_templates_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TemplatesOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_template_v1_meetings_templates_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional: a key unique to one create, repeated on its retries. */
+                "Idempotency-Key"?: string | null;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TemplateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TemplateOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    replace_template_v1_meetings_templates__template_id__put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TemplateIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TemplateOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_template_v1_meetings_templates__template_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                template_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     create_session_v1_sessions_post: {
         parameters: {
             query?: never;
@@ -6800,6 +7408,145 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Page_MapNodeOut_"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_my_notes_v1_meetings__meeting_id__my_notes_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyNotesOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    put_my_notes_v1_meetings__meeting_id__my_notes_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MyNotesIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyNotesOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    add_participant_v1_meetings__meeting_id__participants_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ParticipantIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParticipantOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    remove_participant_v1_meetings__meeting_id__participants__participant_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+                participant_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

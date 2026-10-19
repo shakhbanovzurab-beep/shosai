@@ -4369,6 +4369,537 @@
         }
       }
     },
+    "/v1/meetings/folders": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "List Folders",
+        "description": "Your folders, oldest first.",
+        "operationId": "list_folders_v1_meetings_folders_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page, at most the maximum.",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page, at most the maximum."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The next_cursor of the previous page; absent for the first page.",
+              "title": "Cursor"
+            },
+            "description": "The next_cursor of the previous page; absent for the first page."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_FolderOut_"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Create Folder",
+        "description": "Make a folder in the next colour.",
+        "operationId": "create_folder_v1_meetings_folders_post",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z0-9._:-]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional: a key unique to one create, repeated on its retries.",
+              "title": "Idempotency-Key"
+            },
+            "description": "Optional: a key unique to one create, repeated on its retries."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FolderIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FolderOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/folders/{folder_id}": {
+      "patch": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Rename Folder",
+        "description": "Rename a folder.",
+        "operationId": "rename_folder_v1_meetings_folders__folder_id__patch",
+        "parameters": [
+          {
+            "name": "folder_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Folder Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FolderIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FolderOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Delete Folder",
+        "description": "Delete a folder; its meetings stay, in no folder.",
+        "operationId": "delete_folder_v1_meetings_folders__folder_id__delete",
+        "parameters": [
+          {
+            "name": "folder_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Folder Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/templates": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "List Templates",
+        "description": "The shipped templates, then yours, oldest first.",
+        "operationId": "list_templates_v1_meetings_templates_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplatesOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Create Template",
+        "description": "Make a template of your own.",
+        "operationId": "create_template_v1_meetings_templates_post",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z0-9._:-]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional: a key unique to one create, repeated on its retries.",
+              "title": "Idempotency-Key"
+            },
+            "description": "Optional: a key unique to one create, repeated on its retries."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/templates/{template_id}": {
+      "put": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Replace Template",
+        "description": "Replace a template of yours.",
+        "operationId": "replace_template_v1_meetings_templates__template_id__put",
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Template Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TemplateIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TemplateOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Delete Template",
+        "description": "Delete a template of yours.",
+        "operationId": "delete_template_v1_meetings_templates__template_id__delete",
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Template Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/sessions": {
       "post": {
         "tags": [
@@ -5297,6 +5828,267 @@
                 }
               }
             }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/{meeting_id}/my-notes": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Get My Notes",
+        "description": "Your own notes on the meeting; nobody else's.",
+        "operationId": "get_my_notes_v1_meetings__meeting_id__my_notes_get",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyNotesOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Put My Notes",
+        "description": "Replace your own notes on the meeting.",
+        "operationId": "put_my_notes_v1_meetings__meeting_id__my_notes_put",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MyNotesIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyNotesOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/{meeting_id}/participants": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Add Participant",
+        "description": "Add a participant by address; the one already there answers 200.",
+        "operationId": "add_participant_v1_meetings__meeting_id__participants_post",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParticipantIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParticipantOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/{meeting_id}/participants/{participant_id}": {
+      "delete": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Remove Participant",
+        "description": "Remove a participant someone added.",
+        "operationId": "remove_participant_v1_meetings__meeting_id__participants__participant_id__delete",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "participant_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Participant Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
           },
           "default": {
             "description": "Error. The body is the error envelope; see `ErrorResponse`.",
@@ -6958,6 +7750,65 @@
         "title": "FolderBody",
         "description": "A folder's name."
       },
+      "FolderColor": {
+        "type": "string",
+        "enum": [
+          "green",
+          "violet",
+          "red",
+          "blue",
+          "amber"
+        ],
+        "title": "FolderColor",
+        "description": "A folder's colour."
+      },
+      "FolderIn": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "FolderIn",
+        "description": "A folder's name."
+      },
+      "FolderOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "color": {
+            "$ref": "#/components/schemas/FolderColor"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "color",
+          "created_at"
+        ],
+        "title": "FolderOut",
+        "description": "A folder of the person's."
+      },
       "FolderUpdate": {
         "properties": {
           "name": {
@@ -7770,12 +8621,26 @@
               }
             ],
             "title": "Folder Id"
+          },
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id",
+            "description": "A shipped template's code or your own template's id; null for Leo's."
           }
         },
         "additionalProperties": false,
         "type": "object",
         "title": "MeetingChangeIn",
-        "description": "A new title, a folder, or both; `folder_id: null` takes the meeting out of its folder."
+        "description": "A new title, folder or template; `null` takes the folder or the template away."
       },
       "MeetingOut": {
         "properties": {
@@ -8026,6 +8891,53 @@
         "title": "ModelTier",
         "description": "The classes of models a weekly token allowance is counted in (BL-D4)."
       },
+      "MyNotesIn": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 262144,
+            "title": "Text",
+            "description": "Markdown, at most 50 000."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "MyNotesIn",
+        "description": "The notes' new text; it replaces the old one."
+      },
+      "MyNotesOut": {
+        "properties": {
+          "notes": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OwnNotesOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "notes"
+        ],
+        "title": "MyNotesOut",
+        "description": "The person's own notes; null before they have written any."
+      },
+      "NoteClient": {
+        "type": "string",
+        "enum": [
+          "web",
+          "macos",
+          "windows"
+        ],
+        "title": "NoteClient",
+        "description": "Which client last wrote the person's notes."
+      },
       "NotesState": {
         "type": "string",
         "enum": [
@@ -8036,6 +8948,37 @@
         ],
         "title": "NotesState",
         "description": "Where a meeting's notes are."
+      },
+      "OwnNotesOut": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "Markdown."
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version",
+            "description": "Grows by one with every write, from any client."
+          },
+          "client": {
+            "$ref": "#/components/schemas/NoteClient"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text",
+          "version",
+          "client",
+          "updated_at"
+        ],
+        "title": "OwnNotesOut",
+        "description": "What the person typed about the meeting, and where they last wrote it."
       },
       "Page_AdminUser_": {
         "properties": {
@@ -8120,6 +9063,34 @@
           "next_cursor"
         ],
         "title": "Page[FindingOut]"
+      },
+      "Page_FolderOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/FolderOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "Page[FolderOut]"
       },
       "Page_MapNodeOut_": {
         "properties": {
@@ -8242,6 +9213,35 @@
         ],
         "title": "PartLinkView",
         "description": "Where to PUT one part: the URL, the headers to send and the exact length."
+      },
+      "ParticipantIn": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "maxLength": 254,
+            "minLength": 3,
+            "title": "Email"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "title": "ParticipantIn",
+        "description": "A participant to add by address."
       },
       "ParticipantOut": {
         "properties": {
@@ -10555,6 +11555,205 @@
         ],
         "title": "TariffDTO",
         "description": "A plan of the catalogue, as the draft described it; billing fills it."
+      },
+      "TemplateIcon": {
+        "type": "string",
+        "enum": [
+          "briefcase",
+          "chart",
+          "handshake",
+          "landmark",
+          "lightbulb",
+          "magnet",
+          "phone",
+          "rocket",
+          "calendar",
+          "users"
+        ],
+        "title": "TemplateIcon",
+        "description": "The icons a template may have."
+      },
+      "TemplateIn": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200,
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/TemplateIcon"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/TemplateSectionIn"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "title": "Sections"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "icon",
+          "sections"
+        ],
+        "title": "TemplateIn",
+        "description": "A person's template: its name, description, icon and sections."
+      },
+      "TemplateOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "builtin": {
+            "type": "boolean",
+            "title": "Builtin"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "icon": {
+            "type": "string",
+            "title": "Icon",
+            "description": "One of the ten icons, or `enhanced` for Leo's layout."
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/TemplateSectionOut"
+            },
+            "type": "array",
+            "title": "Sections"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "builtin",
+          "name",
+          "description",
+          "icon",
+          "sections"
+        ],
+        "title": "TemplateOut",
+        "description": "A template of Leo's write-up; a shipped one has no words of its own."
+      },
+      "TemplateSectionIn": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/SectionKind"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "title": "TemplateSectionIn",
+        "description": "A section of a person's template."
+      },
+      "TemplateSectionOut": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/SectionKind"
+          },
+          "heading_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heading Code"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "heading_code",
+          "title"
+        ],
+        "title": "TemplateSectionOut",
+        "description": "A section of a template: a shipped heading's code, or the person's own title."
+      },
+      "TemplatesOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TemplateOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "type": "null",
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "TemplatesOut",
+        "description": "Every template the person may use: one page, 9 shipped and at most 50 of their own."
       },
       "TicketRequest": {
         "properties": {

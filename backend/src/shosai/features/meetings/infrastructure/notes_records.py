@@ -1,8 +1,8 @@
 """A meeting's notes and findings; a person's folders, templates and settings (`a2c7e4f9b318`).
 
-`meeting_notes` holds the person's own notes (last write wins, a growing version), Leo's
-write-up as sections over the findings of one run and the map projected from them
-(`findings_run_id`, `d9f3b7a1c246`). `meeting_findings` holds each run's findings with
+`meeting_notes` holds Leo's write-up as sections over the findings of one run and the map
+projected from them (`findings_run_id`, `d9f3b7a1c246`); each person's own notes are rows of
+`meeting_own_notes` (`e5c2a8d4f017`). `meeting_findings` holds each run's findings with
 their evidence. Folders, templates and the no-logs setting are personal by nature and
 never shared.
 """
@@ -32,15 +32,10 @@ from shosai.features.meetings.infrastructure.meeting_records import meeting_refe
 
 
 class NotesRecord(ModelBase):
-    """The notes of one meeting: the person's own, Leo's write-up and the map."""
+    """The notes of one meeting: Leo's write-up and the map."""
 
     __tablename__ = "meeting_notes"
     __table_args__ = (
-        CheckConstraint("octet_length(my_markdown) <= 262144", name="my_notes_size"),
-        CheckConstraint("my_version >= 0", name="version_not_negative"),
-        CheckConstraint(
-            "my_client IS NULL OR my_client IN ('web', 'macos', 'windows')", name="client_known"
-        ),
         CheckConstraint(
             "write_up IS NULL OR jsonb_typeof(write_up) = 'object'", name="write_up_object"
         ),
@@ -52,10 +47,6 @@ class NotesRecord(ModelBase):
     session_id: Mapped[UUID] = meeting_reference(primary_key=True)
     user_id: Mapped[UUID] = mapped_column(Uuid)
     org_id: Mapped[UUID | None] = mapped_column(Uuid)
-    my_markdown: Mapped[str] = mapped_column(Text, server_default="")
-    my_version: Mapped[int] = mapped_column(Integer, server_default="0")
-    my_client: Mapped[str | None] = mapped_column(Text)
-    my_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     # Пустое значение — SQL NULL, а не JSON null: так его и проверяет схема.
     write_up: Mapped[dict[str, Any] | None] = mapped_column(JSONB(none_as_null=True))
     write_up_template: Mapped[str | None] = mapped_column(Text)

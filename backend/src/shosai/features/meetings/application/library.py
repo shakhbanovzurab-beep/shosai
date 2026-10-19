@@ -27,10 +27,16 @@ from shosai.core.pagination.page import Page, PageRequest, page_of
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal
 from shosai.features.meetings.application.library_cards import MeetingCard, cards_of
-from shosai.features.meetings.application.visibility import meeting_scope, visible_meetings
-from shosai.features.meetings.contracts import MeetingNotFoundError
+from shosai.features.meetings.application.visibility import (
+    meeting_for,
+    meeting_scope,
+    visible_meetings,
+)
+from shosai.features.meetings.application.write_up_layout import layout_of
+from shosai.features.meetings.application.write_up_rewrites import TemplateNotFoundError
 from shosai.features.meetings.domain.meetings import checked_title
 from shosai.features.meetings.domain.reading import filing_refusal
+from shosai.features.meetings.domain.templates import builtin
 from shosai.features.meetings.infrastructure.meeting_records import (
     MEETING_RESOURCE,
     MeetingRecord,
@@ -78,11 +84,16 @@ class LibraryFilter:
 
 @dataclass(frozen=True, slots=True)
 class MeetingChange:
-    """A new title, a new folder, or both; `folder_given` tells "no folder" from "unchanged"."""
+    """A new title, folder or template; `*_given` tells "none" from "unchanged".
+
+    A template is a shipped one's code or the id of the owner's own; None is Leo's layout.
+    """
 
     title: str | None = None
     folder_id: UUID | None = None
     folder_given: bool = False
+    template_id: str | None = None
+    template_given: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -182,6 +193,8 @@ class MeetingLibrary:
                 meeting.title = checked_title(change.title)
             if change.folder_given:
                 await self._file(session, principal, meeting, change.folder_id)
+            if change.template_given:
+                await self._choose(session, principal, meeting, change.template_id)
             meeting.updated_at = self._clock()
             await session.flush()
             return await self._view(session, principal, meeting_id)
@@ -203,22 +216,30 @@ class MeetingLibrary:
                 raise FolderNotFoundError
         meeting.folder_id = folder_id
 
+    async def _choose(
+        self,
+        session: AsyncSession,
+        principal: Principal,
+        meeting: MeetingRecord,
+        template_id: str | None,
+    ) -> None:
+        """The template the meeting's next write-up uses.
+
+        The write-up stage reads it in the owner's scope, so only the owner may choose their
+        own template; another manager chooses a shipped one, or rewrites with theirs.
+        """
+        if template_id is not None and builtin(template_id) is None:
+            if meeting.user_id != principal.user_id:
+                raise AppError("template_not_shipped", HTTPStatus.CONFLICT)
+            if await layout_of(session, template_id) is None:
+                raise TemplateNotFoundError
+        meeting.template_id = template_id
+
     async def _read(
         self, session: AsyncSession, principal: Principal, meeting_id: UUID, *, lock: bool = False
     ) -> tuple[MeetingRecord, bool]:
-        viewer = Viewer(principal.user_id)
-        manageable = self._ports.get(ACCESS_POLICY).manageable(MEETING_RESOURCE, viewer)
-        statement = (
-            self._visible(principal)
-            .add_columns(manageable.label("manageable"))
-            .where(MeetingRecord.id == meeting_id)
-        )
-        if lock:
-            statement = statement.with_for_update(of=MeetingRecord)
-        found = (await session.execute(statement)).first()
-        if found is None:
-            raise MeetingNotFoundError
-        return found[0], bool(found[1])
+        policy = self._ports.get(ACCESS_POLICY)
+        return await meeting_for(session, policy, principal.user_id, meeting_id, lock=lock)
 
     async def _view(
         self, session: AsyncSession, principal: Principal, meeting_id: UUID

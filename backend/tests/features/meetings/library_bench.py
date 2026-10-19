@@ -14,18 +14,28 @@ from typing import Any
 
 import httpx
 import pytest_asyncio
+from prometheus_client import CollectorRegistry
 
 from shosai.core.events.catalog import EventTypes
 from shosai.core.events.outbox import EventOutbox
+from shosai.core.idempotency.ledger import EffectLedger
+from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import AUTHENTICATOR
+from shosai.features.meetings.application.folders import Folders
 from shosai.features.meetings.application.library import MeetingLibrary
 from shosai.features.meetings.application.meeting_content import MeetingContent
+from shosai.features.meetings.application.my_notes import MyNotes
+from shosai.features.meetings.application.participants import Participants
 from shosai.features.meetings.application.run_rows import stage_state
+from shosai.features.meetings.application.templates import Templates
+from shosai.features.meetings.channels.http.folders import build_folders_router
 from shosai.features.meetings.channels.http.meeting_content import build_meeting_content_router
 from shosai.features.meetings.channels.http.meetings import build_meetings_router
+from shosai.features.meetings.channels.http.my_notes import build_my_notes_router
+from shosai.features.meetings.channels.http.templates import build_templates_router
 from shosai.features.meetings.domain.runs import RunSource, initial_progress
 from shosai.features.meetings.infrastructure.meeting_records import (
     MeetingRecord,
@@ -225,10 +235,17 @@ def library_ports() -> PortDirectory:
 @pytest_asyncio.fixture
 async def library_bench(homes: DatabaseAccess) -> AsyncIterator[LibraryBench]:
     """The library and a meeting's content over the slot's homes."""
-    ports = library_ports()
+    ports, transactions = library_ports(), homes.transactions
+    effects = EffectLedger(EffectKeyMetrics(CollectorRegistry()))
+    # Порядок как в модуле: папки и шаблоны раньше /v1/meetings/{meeting_id}.
     routers = (
-        build_meetings_router(MeetingLibrary(homes.transactions, ports), ports),
-        build_meeting_content_router(MeetingContent(homes.transactions, ports), ports),
+        build_folders_router(Folders(transactions, effects), ports),
+        build_templates_router(Templates(transactions, effects), ports),
+        build_meetings_router(MeetingLibrary(transactions, ports), ports),
+        build_meeting_content_router(MeetingContent(transactions, ports), ports),
+        build_my_notes_router(
+            (MyNotes(transactions, ports), Participants(transactions, ports)), ports
+        ),
     )
     async with client_of(build_probe_app(extra=routers).app) as http:
         yield LibraryBench(http, homes)

@@ -48,3 +48,29 @@ async def meeting_scope(
     if row is None:
         raise MeetingNotFoundError
     return TenancyScope(reader.home, reader.user_id, row.org_id)
+
+
+async def meeting_for(
+    session: AsyncSession,
+    policy: AccessPolicy,
+    reader: UUID,
+    meeting_id: UUID,
+    *,
+    lock: bool = False,
+) -> tuple[MeetingRecord, bool]:
+    """The meeting the reader may see and whether they may manage it; locked for a change.
+
+    `MeetingNotFoundError` for a meeting they may not read, however it exists.
+    """
+    viewer = Viewer(reader)
+    statement = (
+        visible_meetings(policy, viewer)
+        .add_columns(policy.manageable(MEETING_RESOURCE, viewer).label("manageable"))
+        .where(MeetingRecord.id == meeting_id)
+    )
+    if lock:
+        statement = statement.with_for_update(of=MeetingRecord)
+    found = (await session.execute(statement)).first()
+    if found is None:
+        raise MeetingNotFoundError
+    return found[0], bool(found[1])

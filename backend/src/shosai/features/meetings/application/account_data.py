@@ -1,15 +1,17 @@
 """Meetings' handler of a person's data: meetings with their transcript, notes and links.
 
 The person's rows are their meetings and everything under them, their runs, folders,
-templates and setting; a meeting of a workspace stays with it (nfr-16). Rows with a
-person column go through core's helpers; the transcript goes meeting by meeting. The
-transient objects of runs are reached only through their pointers: erasing records them
-for deletion in the same transaction that removes their rows, and deletes them after it.
-Export leaves out the share link's token: a secret, not the person's content.
+templates and setting, and their own notes on any meeting they read; a meeting of a
+workspace stays with it (nfr-16). A transfer takes their notes on their own meetings only.
+Rows with a person column go through core's helpers; the transcript goes meeting by
+meeting. The transient objects of runs are reached only through their pointers: erasing
+records them for deletion in the same transaction that removes their rows, and deletes
+them after it. Export leaves out the share link's token: a secret, not the person's content.
 """
 
 import hashlib
 from collections.abc import AsyncIterator, Mapping
+from dataclasses import replace
 from typing import Final, cast
 from uuid import UUID
 
@@ -19,6 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.account_data.handlers import AccountRef, ExportFile
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
+from shosai.core.db.model_base import ModelBase
 from shosai.core.db.person_rows import (
     PersonRows,
     copy_person_rows,
@@ -45,6 +48,7 @@ from shosai.features.meetings.infrastructure.notes_records import (
     SettingsRecord,
     TemplateRecord,
 )
+from shosai.features.meetings.infrastructure.own_notes_records import OwnNotesRecord
 from shosai.features.meetings.infrastructure.run_records import ObjectDeletionRecord, RunRecord
 from shosai.features.meetings.infrastructure.share_records import (
     ShareCommentRecord,
@@ -66,12 +70,13 @@ PERSON_MODELS: Final = (
     SpeakerRecord,
     ParticipantRecord,
     NotesRecord,
+    OwnNotesRecord,
     FindingRecord,
     RunRecord,
     ShareLinkRecord,
     ShareCommentRecord,
 )
-PERSONAL_MODELS: Final = (FolderRecord, TemplateRecord, SettingsRecord)
+PERSONAL_MODELS: Final = (FolderRecord, TemplateRecord, SettingsRecord, OwnNotesRecord)
 ACCOUNT_DATA: Final = AccountDataSpec(
     OWNER,
     tuple(
@@ -84,12 +89,33 @@ KEYS: Final = {
     NotesRecord: "session_id",
     ShareLinkRecord: "session_id",
 }
-COPIED: Final = tuple(
-    whole_rows(cast("Table", model.__table__), KEYS.get(model, "id")) for model in PERSON_MODELS
-)
+
+
+def personal_meetings(user_id: UUID) -> ColumnElement[bool]:
+    """The predicate of the person's own meetings, not a workspace's."""
+    return and_(MeetingRecord.user_id == user_id, MeetingRecord.org_id.is_(None))
+
+
+def notes_that_move(user_id: UUID) -> ColumnElement[bool]:
+    """The person's own notes on their own meetings: the ones a transfer takes along.
+
+    Notes on someone else's meeting stay where that meeting is, so they are exported and
+    erased with the person, never copied to the other home.
+    """
+    return OwnNotesRecord.session_id.in_(select(MeetingRecord.id).where(personal_meetings(user_id)))
+
+
+def _copied(model: type[ModelBase]) -> PersonRows:
+    rows = whole_rows(cast("Table", model.__table__), KEYS.get(model, "id"))
+    return replace(rows, only=notes_that_move) if model is OwnNotesRecord else rows
+
+
+COPIED: Final = tuple(_copied(model) for model in PERSON_MODELS)
 
 
 def _exported(rows: PersonRows) -> PersonRows:
+    if rows.table.name == OwnNotesRecord.__tablename__:
+        return replace(rows, only=None)
     if rows.table.name != ShareLinkRecord.__tablename__:
         return rows
     columns = tuple(name for name in rows.columns if name != "token")
@@ -97,11 +123,6 @@ def _exported(rows: PersonRows) -> PersonRows:
 
 
 EXPORTED: Final = tuple(_exported(rows) for rows in COPIED)
-
-
-def personal_meetings(user_id: UUID) -> ColumnElement[bool]:
-    """The predicate of the person's own meetings, not a workspace's."""
-    return and_(MeetingRecord.user_id == user_id, MeetingRecord.org_id.is_(None))
 
 
 class MeetingsAccountData:

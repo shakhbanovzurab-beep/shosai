@@ -66,3 +66,11 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/visibility.py` — `meeting_scope`: a change is written in the meeting's own scope, since row-level security writes a company's row only there.
 - `domain/reading.py` — the notes' state, who may file a meeting, the map as nodes.
 - `channels/http/meetings.py`, `channels/http/meeting_content.py`, `channels/http/meeting_models.py` — the routes and their snake_case shapes.
+
+## Own notes, participants, folders and templates (step 7b)
+
+- `application/my_notes.py` — each reader's own notes on a meeting (MT-D12): `meeting_own_notes`, one row per meeting and person with row-level security by writer; nobody reads another's, the owner included; empty before a person writes; last write wins, the version grows in the same upsert.
+- `application/participants.py` — add by address (a repeat answers the one there, at most 100), remove only those a person added; whoever may manage.
+- `application/folders.py`, `application/templates.py` — a person's folders (the colour cycle, delete leaves meetings in no folder) and templates (shipped read-only, at most 50 own); creates take an optional `Idempotency-Key`.
+- `application/library.py` — the template choice: a shipped one by any manager, the owner's own only by the owner.
+- `channels/http/my_notes.py`, `channels/http/folders.py`, `channels/http/templates.py`, `channels/http/library_models.py` — the routes; folders and templates are registered before `/v1/meetings/{id}`.

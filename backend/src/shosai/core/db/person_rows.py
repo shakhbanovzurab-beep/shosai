@@ -2,20 +2,21 @@
 
 Each page is read in its own short transaction, ordered by a unique key, so no transaction
 stays open while the archive goes to storage or across both homes (§14 rule 1), and a
-table of any size never sits whole in memory. Export takes only the listed columns:
+table of any size never sits whole in memory. A table may narrow a person's rows (`only`),
+to those that move with them. Export takes only the listed columns:
 hashes, secrets and ciphertexts are never listed. A copy takes whole rows and inserts
 them in the other home, skipping the ones already there, so a repeat adds nothing.
 """
 
 import hashlib
 import json
-from collections.abc import AsyncIterator, Mapping, Sequence
+from collections.abc import AsyncIterator, Callable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import date, datetime
 from typing import Any, Final
 from uuid import UUID
 
-from sqlalchemy import Table, exists, select
+from sqlalchemy import ColumnElement, Table, exists, select
 from sqlalchemy.dialects.postgresql import insert
 
 from shosai.core.db.transactions import HomeTransactions
@@ -35,12 +36,22 @@ class PersonRows:
     key: str
     # Колонка с идентификатором человека; у таблицы аккаунтов это её ключ.
     person: str = PERSON_COLUMN
+    # Сужение строк человека, например до тех, что переезжают с ним; None — все его строки.
+    only: Callable[[UUID], ColumnElement[bool]] | None = None
 
     def __post_init__(self) -> None:
         unknown = {*self.columns, self.key, self.person} - set(self.table.columns.keys())
         if unknown:
             message = f"выгрузка {self.table.name}: нет колонок {sorted(unknown)}"
             raise ValueError(message)
+
+
+def person_filter(rows: PersonRows, user_id: UUID) -> list[ColumnElement[bool]]:
+    """The conditions that pick the person's rows of the table, narrowed when `only` says."""
+    conditions = [rows.table.c[rows.person] == user_id]
+    if rows.only is not None:
+        conditions.append(rows.only(user_id))
+    return conditions
 
 
 async def person_lines(
@@ -51,7 +62,7 @@ async def person_lines(
     last: object = None
     while True:
         query = select(*(table.c[name] for name in rows.columns), key.label("_page_key"))
-        query = query.where(table.c[rows.person] == user_id)
+        query = query.where(*person_filter(rows, user_id))
         if last is not None:
             query = query.where(key > last)
         async with transactions.begin(scope, read_only=True) as session:
@@ -91,7 +102,7 @@ async def copy_person_rows(
     copied = 0
     while True:
         query = select(*(table.c[name] for name in rows.columns), key.label("_page_key"))
-        query = query.where(table.c[rows.person] == user_id)
+        query = query.where(*person_filter(rows, user_id))
         if last is not None:
             query = query.where(key > last)
         async with transactions.begin(TenancyScope(source, user_id), read_only=True) as session:

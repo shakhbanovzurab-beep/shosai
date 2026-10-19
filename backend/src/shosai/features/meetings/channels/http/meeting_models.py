@@ -73,12 +73,20 @@ class MeetingOut(MeetingCardOut):
 
 
 class MeetingChangeIn(BaseModel):
-    """A new title, a folder, or both; `folder_id: null` takes the meeting out of its folder."""
+    """A new title, folder or template; `null` takes the folder or the template away."""
 
     model_config = ConfigDict(extra="forbid")
 
     title: Annotated[str | None, Field(min_length=1, max_length=256)] = None
     folder_id: UUID | None = None
+    template_id: Annotated[
+        str | None,
+        Field(
+            min_length=1,
+            max_length=128,
+            description="A shipped template's code or your own template's id; null for Leo's.",
+        ),
+    ] = None
 
 
 class TranscriptLineOut(BaseModel):

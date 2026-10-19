@@ -4,8 +4,9 @@ The library lists every meeting the person may read, newest first, in cursor pag
 narrows to one of their folders (`folder=<id>`), to their meetings in no folder
 (`folder=none`), or to a workspace. A meeting's page adds its participants, speakers and
 the state of its notes. `PATCH` renames the meeting (whoever may manage it) or files it
-(its owner, a personal meeting). Errors: `meeting_not_found`, `meeting_read_only`,
-`title_empty`, `folder_not_found`, `meeting_not_yours`, `company_meeting_has_no_folder`,
+(its owner, a personal meeting) or chooses its template. Errors: `meeting_not_found`,
+`meeting_read_only`, `title_empty`, `folder_not_found`, `meeting_not_yours`,
+`company_meeting_has_no_folder`, `template_not_found`, `template_not_shipped`,
 `invalid_cursor`.
 """
 
@@ -73,10 +74,13 @@ def build_meetings_router(library: MeetingLibrary, ports: PortDirectory) -> APIR
         body: MeetingChangeIn,
     ) -> MeetingOut:
         """Rename the meeting, or move it into one of your folders or out of it."""
+        given = body.model_fields_set
         change = MeetingChange(
             title=body.title,
             folder_id=body.folder_id,
-            folder_given="folder_id" in body.model_fields_set,
+            folder_given="folder_id" in given,
+            template_id=body.template_id,
+            template_given="template_id" in given,
         )
         try:
             view = await library.change(principal, meeting_id, change)
