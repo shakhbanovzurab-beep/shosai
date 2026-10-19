@@ -15,7 +15,7 @@ from shosai.core.config.sections import SettingsSection
 class MeetingsSettings(SettingsSection):
     """Which model writes the notes of meetings."""
 
-    # Модель OpenRouter для находок и записи Leo, например google/gemini-2.5-flash.
+    # Модель OpenRouter для находок и записи Leo, например google/gemini-3.8-flash.
     meetings_notes_model: str | None = None
     # Запасная модель: ей переходит вызов, когда основная недоступна.
     meetings_notes_fallback_model: str | None = None

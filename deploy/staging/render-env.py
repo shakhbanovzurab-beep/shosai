@@ -33,6 +33,8 @@ INTERNAL_CA = "/run/shosai-tls/internal-ca.crt"
 TIMEWEB_CA = "/run/shosai-tls/timeweb-ca.crt"
 STORAGE_ORIGIN_SCHEME = "https://"
 SERVER_NAME = "shosai.tech"
+# Модель OpenRouter по умолчанию для заметок встреч, та же, что в .env.example.
+NOTES_MODEL = "google/gemini-3.8-flash"
 GENERATED = (
     "VALKEY_PASSWORD",
     "REDIS_CACHE_PASSWORD",
@@ -72,6 +74,8 @@ COPIED = (
     "IDENTITY_TRANSFERS_ALLOWED",
     "IDENTITY_ADMIN_USERNAME",
     "IDENTITY_ADMIN_PASSWORD_HASH",
+    "MEETINGS_NOTES_MODEL",
+    "MEETINGS_NOTES_FALLBACK_MODEL",
     *(f"HOME_{home}_S3_{part}" for home in ("RU", "EU")
       for part in ("ENDPOINT_URL", "REGION", "BUCKET", "ACCESS_KEY_ID", "SECRET_ACCESS_KEY")),
 )
@@ -175,6 +179,8 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
         "ALERTING_ENABLED": "true",
         # Скачивания идут через edge, который ставит nosniff и песочницу (FL-D9, ADR 0055 п. 8).
         "FILES_DOWNLOAD_BASE_URL": f"https://{SERVER_NAME}/dl",
+        # Модель заметок встреч до studio (meetings шаг 6); владелец может задать свою в .env.
+        "MEETINGS_NOTES_MODEL": NOTES_MODEL,
     }
     env |= {key: source[key] for key in COPIED if source.get(key)}
     for home in ("RU", "EU"):
