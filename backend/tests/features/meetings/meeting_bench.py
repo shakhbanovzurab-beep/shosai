@@ -5,8 +5,9 @@ meter counting the meetings through meetings' own binding, and the test's bearer
 """
 
 import uuid
-from collections.abc import AsyncIterator
-from dataclasses import dataclass
+from collections.abc import AsyncIterator, Collection, Mapping
+from contextlib import asynccontextmanager
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 
 import httpx
@@ -14,6 +15,7 @@ import pytest_asyncio
 from prometheus_client import CollectorRegistry
 from sqlalchemy import select
 
+from shosai.core.config.roles import ProcessRole
 from shosai.core.events.catalog import EventTypes
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.events.records import OutboxMessage
@@ -24,12 +26,17 @@ from shosai.features.billing.application.minutes import MinutesMeter
 from shosai.features.billing.contracts import MEETING_MINUTES, MINUTES_ALLOWANCE, USAGE_TOMBSTONES
 from shosai.features.identity.contracts import AUTHENTICATOR
 from shosai.features.meetings.application.lifecycle import MeetingLifecycle
+from shosai.features.meetings.application.live_meetings import LiveMeetingBinder
+from shosai.features.meetings.application.live_transcript import LiveTranscript
 from shosai.features.meetings.application.minutes import MeetingMinutesCount
 from shosai.features.meetings.application.runs_view import RunViews
+from shosai.features.meetings.application.sweeps import MeetingSweeps
 from shosai.features.meetings.channels.http.native_sessions import build_native_sessions_router
 from shosai.features.meetings.channels.http.runs import build_runs_router
+from shosai.features.meetings.contracts import LIVE_SIGNAL
 from shosai.features.meetings.infrastructure.meeting_records import TranscriptLineRecord
 from shosai.features.meetings.infrastructure.metrics import MeetingMetrics
+from shosai.features.meetings.infrastructure.transcript_metrics import TranscriptMetrics
 from shosai.features.meetings.module import MEETINGS
 from shosai.features.workspaces.application.access_policy import WorkspaceAccessPolicy
 from shosai.features.workspaces.contracts import ACCESS_POLICY
@@ -38,7 +45,29 @@ from shosai.features.workspaces.module import WORKSPACES
 from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.billing.entitlement_bench import Clock, EntitlementBench
 from tests.features.billing.people_bench import BearerOfTheTest
-from tests.harness.database_access import DatabaseAccess
+from tests.harness.database_access import (
+    DatabaseAccess,
+    ProcessShape,
+    open_database_access,
+    slot_urls,
+)
+from tests.harness.run_slot import RunSlot
+
+
+@dataclass
+class CaptureSignal:
+    """What capture would report: the last audio and the highest line shown, per meeting."""
+
+    audio: dict[uuid.UUID, datetime] = field(default_factory=dict)
+    shown: dict[uuid.UUID, int] = field(default_factory=dict)
+
+    async def last_audio(self, meeting_ids: Collection[uuid.UUID]) -> Mapping[uuid.UUID, datetime]:
+        """The meetings capture holds."""
+        return {m: self.audio[m] for m in meeting_ids if m in self.audio}
+
+    async def highest_shown(self, meeting_id: uuid.UUID) -> int | None:
+        """The highest line shown, if capture holds the meeting."""
+        return self.shown.get(meeting_id)
 
 
 @dataclass(frozen=True, slots=True)
@@ -51,6 +80,25 @@ class MeetingBench:
     meter: MinutesMeter
     count: MeetingMinutesCount
     clock: Clock
+    transcript: LiveTranscript
+    binder: LiveMeetingBinder
+    signal: CaptureSignal
+    registry: CollectorRegistry
+    metrics: TranscriptMetrics
+    ports: PortDirectory
+    run_slot: RunSlot
+
+    @asynccontextmanager
+    async def sweeps(self) -> AsyncIterator[MeetingSweeps]:
+        """The sweeps as the workers run them: their transactions may take the sweep role."""
+        async with open_database_access(
+            slot_urls(self.run_slot), ProcessShape(role=ProcessRole.WORKERS)
+        ) as workers:
+            yield MeetingSweeps(
+                workers.transactions,
+                (self.ports, self.lifecycle, self.metrics),
+                self.clock,
+            )
 
     async def spoke(
         self, home: Home, meeting_id: uuid.UUID, started_at: datetime, lines: int
@@ -83,11 +131,14 @@ def bearer(home: Home, user_id: uuid.UUID) -> dict[str, str]:
 
 
 @pytest_asyncio.fixture
-async def meeting_bench(entitlements: EntitlementBench) -> AsyncIterator[MeetingBench]:
+async def meeting_bench(
+    entitlements: EntitlementBench, run_slot: RunSlot
+) -> AsyncIterator[MeetingBench]:
     """The native start and end, §10's end and runs over the slot's homes."""
     transactions = entitlements.homes.transactions
     outbox = EventOutbox(EventTypes([*MEETINGS.events, *WORKSPACES.events]))
     ports = PortDirectory()
+    signal = CaptureSignal()
     count = MeetingMinutesCount(entitlements.clock)
     meter = MinutesMeter(transactions, (entitlements.snapshots, ports), entitlements.clock)
     ports.install(
@@ -97,14 +148,21 @@ async def meeting_bench(entitlements: EntitlementBench) -> AsyncIterator[Meeting
             MINUTES_ALLOWANCE.bind(meter),
             USAGE_TOMBSTONES.bind(meter),
             MEETING_MINUTES.bind(count),
+            LIVE_SIGNAL.bind(signal),
         ]
     )
+    registry = CollectorRegistry()
     lifecycle = MeetingLifecycle(
-        transactions, (ports, outbox, MeetingMetrics(CollectorRegistry())), entitlements.clock
+        transactions, (ports, outbox, MeetingMetrics(registry)), entitlements.clock
     )
+    metrics = TranscriptMetrics(registry)
     routers = (
         build_native_sessions_router(lifecycle, ports),
         build_runs_router((lifecycle, RunViews(transactions, ports)), ports),
     )
     async with client_of(build_probe_app(extra=routers).app) as http:
-        yield MeetingBench(http, entitlements.homes, lifecycle, meter, count, entitlements.clock)
+        yield MeetingBench(
+            http, entitlements.homes, lifecycle, meter, count, entitlements.clock,
+            LiveTranscript(transactions, metrics), LiveMeetingBinder(ports), signal,
+            registry, metrics, ports, run_slot,
+        )  # fmt: skip

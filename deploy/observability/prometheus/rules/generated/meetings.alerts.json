@@ -1,0 +1,37 @@
+{
+  "groups": [
+    {
+      "name": "meetings-invariants",
+      "rules": [
+        {
+          "alert": "TranscriptLineLost",
+          "expr": "sum(increase(shosai_meetings_transcript_lines_missing_total[15m])) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "inv-6"
+          },
+          "annotations": {
+            "summary": "Показанная строка расшифровки не сохранена",
+            "description": "Обход закончившейся встречи нашёл, что capture показал человеку строки, которых в базе нет. Человек видел текст, а заметки и поиск его не получат. Строки могли потеряться в очереди Valkey или при сбое слива; id встречи — в журнале обхода.",
+            "runbook": "docs/runbooks/alerts.md#transcript-line-lost",
+            "dashboard": "/d/invariant-monitors"
+          }
+        },
+        {
+          "alert": "MeetingLeftUnprocessed",
+          "expr": "max(shosai_meetings_unsettled) > 0",
+          "labels": {
+            "severity": "page",
+            "invariant": "inv-7"
+          },
+          "annotations": {
+            "summary": "Закончившиеся встречи не досчитаны дольше четверти часа",
+            "description": "Есть встречи, закончившиеся больше 15 минут назад, которые обход ещё не проверил. Среди них может быть встреча с речью без прогона: заметки к ней не появятся. Обход падает или не успевает; смотрите задачу meetings.settle_ended.",
+            "runbook": "docs/runbooks/alerts.md#meeting-left-unprocessed",
+            "dashboard": "/d/invariant-monitors"
+          }
+        }
+      ]
+    }
+  ]
+}

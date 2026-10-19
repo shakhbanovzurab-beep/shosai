@@ -1,0 +1,76 @@
+{
+  "rule_files": [
+    "meetings.alerts.json"
+  ],
+  "evaluation_interval": "1m",
+  "tests": [
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_meetings_transcript_lines_missing_total",
+          "values": "0x10 1x50"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "TranscriptLineLost",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "inv-6"
+              },
+              "exp_annotations": {
+                "summary": "Показанная строка расшифровки не сохранена",
+                "description": "Обход закончившейся встречи нашёл, что capture показал человеку строки, которых в базе нет. Человек видел текст, а заметки и поиск его не получат. Строки могли потеряться в очереди Valkey или при сбое слива; id встречи — в журнале обхода.",
+                "runbook": "docs/runbooks/alerts.md#transcript-line-lost",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "TranscriptLineLost",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "shosai_meetings_unsettled",
+          "values": "0x10 1x10 0x40"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "15m",
+          "alertname": "MeetingLeftUnprocessed",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "invariant": "inv-7"
+              },
+              "exp_annotations": {
+                "summary": "Закончившиеся встречи не досчитаны дольше четверти часа",
+                "description": "Есть встречи, закончившиеся больше 15 минут назад, которые обход ещё не проверил. Среди них может быть встреча с речью без прогона: заметки к ней не появятся. Обход падает или не успевает; смотрите задачу meetings.settle_ended.",
+                "runbook": "docs/runbooks/alerts.md#meeting-left-unprocessed",
+                "dashboard": "/d/invariant-monitors"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "45m",
+          "alertname": "MeetingLeftUnprocessed",
+          "exp_alerts": []
+        }
+      ]
+    }
+  ]
+}

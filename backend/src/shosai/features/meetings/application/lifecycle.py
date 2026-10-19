@@ -11,21 +11,23 @@ kept is removed at its end, its minutes kept as billing's tombstone.
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from typing import Final
 from uuid import UUID
 
 import structlog
-from sqlalchemy import Select, func, select
+from sqlalchemy import Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.kernel.ids import new_id
+from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.billing.contracts import MINUTES_ALLOWANCE, USAGE_TOMBSTONES
 from shosai.features.identity.contracts import Principal
 from shosai.features.meetings.application.run_rows import ensure_run
+from shosai.features.meetings.application.transcript_stats import spoken
 from shosai.features.meetings.contracts import MeetingNotFoundError
 from shosai.features.meetings.contracts.events import MeetingEnded
 from shosai.features.meetings.domain.meetings import (
@@ -43,7 +45,6 @@ from shosai.features.meetings.domain.runs import RunSource, idempotency_key
 from shosai.features.meetings.infrastructure.meeting_records import (
     MEETING_RESOURCE,
     MeetingRecord,
-    TranscriptLineRecord,
 )
 from shosai.features.meetings.infrastructure.metrics import MeetingMetrics
 from shosai.features.meetings.infrastructure.notes_records import SettingsRecord
@@ -160,6 +161,25 @@ class MeetingLifecycle:
             raise MeetingNotFoundError
         return record
 
+    async def close_swept(
+        self, scope: TenancyScope, meeting_id: UUID, cause: EndCause, asked: datetime
+    ) -> bool:
+        """End a meeting the sweep found due, in its owner's scope; False if it already ended."""
+        async with self._transactions.begin(scope) as session:
+            record = await session.scalar(
+                select(MeetingRecord)
+                .where(
+                    MeetingRecord.id == meeting_id,
+                    MeetingRecord.status == MeetingStatus.ACTIVE.value,
+                    MeetingRecord.deleted_at.is_(None),
+                )
+                .with_for_update()
+            )
+            if record is None:
+                return False
+            await self._close(session, record, cause, asked)
+            return True
+
     def _manageable(self, principal: Principal) -> Select[MeetingRecord]:
         viewer = Viewer(principal.user_id)
         policy = self._ports.get(ACCESS_POLICY)
@@ -182,30 +202,11 @@ class MeetingLifecycle:
         for record in stale.all():
             await self._close(session, record, EndCause.REPLACED, record.started_at)
 
-    @staticmethod
-    async def _spoken(session: AsyncSession, record: MeetingRecord) -> tuple[int, datetime | None]:
-        """How many lines the meeting has and when its last one ends."""
-        row = (
-            await session.execute(
-                select(
-                    func.count(),
-                    func.max(TranscriptLineRecord.start_ms + TranscriptLineRecord.duration_ms),
-                ).where(
-                    TranscriptLineRecord.session_id == record.id,
-                    TranscriptLineRecord.meeting_started_at == record.started_at,
-                )
-            )
-        ).one()
-        last_end_ms: int | None = row[1]
-        if last_end_ms is None:
-            return int(row[0]), None
-        return int(row[0]), record.started_at + timedelta(milliseconds=last_end_ms)
-
     async def _close(
         self, session: AsyncSession, record: MeetingRecord, cause: EndCause, asked: datetime | None
     ) -> UUID | None:
         """End a locked meeting once; the live run's id, or None without one."""
-        lines, last_line_end = await self._spoken(session, record)
+        lines, last_line_end = await spoken(session, record)
         clock = MeetingClock(
             record.started_at, MeetingStatus(record.status), record.ended_at, last_line_end
         )

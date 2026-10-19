@@ -131,6 +131,24 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Fix.** Find the path that dropped a key without `object_deletions` and fix it with a test; then record the orphaned keys in `object_deletions` so the sweep deletes them. The gauge returns to zero at the next daily pass.
 
+<a id="transcript-line-lost"></a>
+### TranscriptLineLost — inv-6
+
+**Means.** The settle sweep of an ended meeting found fewer live lines in the database than capture showed the person (meetings, from step 4). The person saw text that the notes, search and Leo will never get.
+
+**Look.** `shosai_meetings_transcript_lines_missing_total` by `home`; the `workers-default` log line «Показанные строки не сохранены» names the meeting id and how many lines. Compare `transcript_segments` of that meeting (by `seq`, `origin = 'live'`) with capture's resume state for it; `shosai_meetings_transcript_lines_total{outcome="failed"}` and the drain's log show whether a batch failed, and a Valkey failover in the same minutes explains a lost second of queue (§20).
+
+**Fix.** Find where the lines went — a failed batch not retried, a drain that dropped a batch, a queue lost with Valkey — and fix that path with a test. Lines that are gone cannot be recovered; the meeting's notes are written from what is stored.
+
+<a id="meeting-left-unprocessed"></a>
+### MeetingLeftUnprocessed — inv-7
+
+**Means.** Meetings ended more than 15 minutes ago are still not settled (meetings, from step 4). Among them a spoken meeting may have no run, so its notes never come.
+
+**Look.** `shosai_meetings_unsettled` by `home`; the task `meetings.settle_ended` in the workers' logs and its errors; `SELECT id, ended_at FROM sessions WHERE status <> 'active' AND settled_at IS NULL AND deleted_at IS NULL ORDER BY ended_at` in that home.
+
+**Fix.** Make the sweep pass again: fix the failing task or the meeting row it stops at, with a test. The next pass settles the backlog oldest first, a batch a minute, and gives each spoken meeting its run; the gauge returns to zero.
+
 ## Tickets (§16.6)
 
 <a id="host-disk-filling"></a>

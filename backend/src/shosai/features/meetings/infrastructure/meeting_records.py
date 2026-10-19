@@ -78,6 +78,11 @@ class MeetingRecord(ModelBase):
             postgresql_where=text("status = 'active'"),
         ),
         Index("ix_sessions_hidden", "deleted_at", postgresql_where=text("deleted_at IS NOT NULL")),
+        Index(
+            "ix_sessions_unsettled",
+            "ended_at",
+            postgresql_where=text("status <> 'active' AND settled_at IS NULL"),
+        ),
     )
 
     id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
@@ -103,6 +108,11 @@ class MeetingRecord(ModelBase):
     indexed_upto_seq: Mapped[int] = mapped_column(Integer, server_default="0")
     notes_revision: Mapped[int] = mapped_column(Integer, server_default="0")
     latest_run_id: Mapped[UUID | None] = mapped_column(Uuid)
+    # Расшифровка закончившейся встречи сверена с показанной, прогон заведён (inv-6, inv-7);
+    # строка, слитая позже, снимает отметку (ревизия `b4e8f2a6c913`).
+    settled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Сколько показанных строк встреча недосчиталась при прошлом досчёте (inv-6).
+    lines_missing: Mapped[int] = mapped_column(Integer, server_default="0")
     # Удалённая встреча скрыта 7 дней (MT-D8).
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
