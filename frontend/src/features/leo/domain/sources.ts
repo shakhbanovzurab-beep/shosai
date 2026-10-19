@@ -55,18 +55,46 @@ export function citedSentences(paragraph: string, sourceCount: number, locale: s
 
 export type QuotePart = { text: string; at: number; lit: boolean };
 
-const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-/** Отрывок, разбитый на части: `lit` — слова, подтверждающие ответ; `at` — начало части в отрывке, ключ для списка. */
-export function quoteParts(quote: string, highlight: readonly string[]): QuotePart[] {
-  const wanted = new Set(highlight.map((h) => h.toLowerCase()));
-  const pieces =
-    highlight.length === 0 ? [quote] : quote.split(new RegExp(`(${highlight.map(escapeRegExp).join("|")})`, "gi"));
-  const parts: QuotePart[] = [];
-  let at = 0;
-  for (const text of pieces) {
-    if (text) parts.push({ text, at, lit: wanted.has(text.toLowerCase()) });
-    at += text.length;
+/** Фразы по первой букве, длинные раньше коротких: на каждой позиции отрывка сравниваются только подходящие. */
+function phrasesByFirstLetter(highlight: readonly string[]): Map<string, string[]> {
+  const byFirst = new Map<string, string[]>();
+  for (const phrase of highlight.map((h) => h.toLowerCase()).toSorted((a, b) => b.length - a.length)) {
+    if (phrase.length === 0) continue;
+    const first = phrase.charAt(0);
+    byFirst.set(first, [...(byFirst.get(first) ?? []), phrase]);
   }
+  return byFirst;
+}
+
+function phraseAt(quote: string, at: number, candidates: readonly string[]): string | null {
+  for (const phrase of candidates) {
+    if (quote.slice(at, at + phrase.length).toLowerCase() === phrase) return phrase;
+  }
+  return null;
+}
+
+/**
+ * Отрывок, разбитый на части: `lit` — слова, подтверждающие ответ; `at` — начало части в отрывке, ключ для списка.
+ * Поиск — простым сравнением без регулярного выражения из пришедших слов; при совпадении в одном месте берётся
+ * самая длинная фраза.
+ */
+export function quoteParts(quote: string, highlight: readonly string[]): QuotePart[] {
+  const byFirst = phrasesByFirstLetter(highlight);
+  const parts: QuotePart[] = [];
+  let start = 0;
+  let at = 0;
+  while (at < quote.length) {
+    const candidates = byFirst.get(quote.charAt(at).toLowerCase());
+    const hit = candidates ? phraseAt(quote, at, candidates) : null;
+    if (hit === null) {
+      at += 1;
+      continue;
+    }
+    if (at > start) parts.push({ text: quote.slice(start, at), at: start, lit: false });
+    parts.push({ text: quote.slice(at, at + hit.length), at, lit: true });
+    at += hit.length;
+    start = at;
+  }
+  if (start < quote.length) parts.push({ text: quote.slice(start), at: start, lit: false });
   return parts;
 }

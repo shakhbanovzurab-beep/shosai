@@ -25,6 +25,12 @@ describe("a cited answer", () => {
       { text: " per seat.", at: 25, lit: false },
     ]);
     expect(quoteParts("No highlight.", [])).toEqual([{ text: "No highlight.", at: 0, lit: false }]);
+    expect(quoteParts("Pay per seat (a+b)*", ["per seat", "seat (a+b)*", ""])).toEqual([
+      { text: "Pay ", at: 0, lit: false },
+      { text: "per seat", at: 4, lit: true },
+      { text: " (a+b)*", at: 12, lit: false },
+    ]);
+    expect(quoteParts("seat (a+b)*", ["seat", "seat (a+b)*"])).toEqual([{ text: "seat (a+b)*", at: 0, lit: true }]);
   });
 });
 
