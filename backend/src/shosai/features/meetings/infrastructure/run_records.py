@@ -50,6 +50,7 @@ class RunRecord(ModelBase):
             "audio_duration_ms IS NULL OR audio_duration_ms >= 0", name="audio_length_not_negative"
         ),
         CheckConstraint("length(error_code) BETWEEN 1 AND 64", name="error_code_length"),
+        CheckConstraint("layout IS NULL OR jsonb_typeof(layout) = 'object'", name="layout_object"),
         Index("uq_meeting_processing_runs_key", "session_id", "idempotency_key", unique=True),
         Index("ix_meeting_processing_runs_user", "user_id"),
         Index(
@@ -84,6 +85,8 @@ class RunRecord(ModelBase):
     raw_transcript_key: Mapped[str | None] = mapped_column(Text)
     turns_key: Mapped[str | None] = mapped_column(Text)
     error_code: Mapped[str | None] = mapped_column(Text)
+    # Раскладка, которую человек выбрал для переписывания: шаблон и его секции на момент запроса.
+    layout: Mapped[dict[str, Any] | None] = mapped_column(JSONB(none_as_null=True))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

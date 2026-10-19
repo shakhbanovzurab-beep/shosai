@@ -4618,6 +4618,90 @@
           }
         }
       }
+    },
+    "/v1/meetings/{meeting_id}/write-up": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Rewrite Write Up",
+        "description": "Rewrite the meeting's write-up by a template, keeping its findings.",
+        "operationId": "rewrite_write_up_v1_meetings__meeting_id__write_up_post",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again.",
+              "title": "Idempotency-Key"
+            },
+            "description": "A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RewriteIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RewriteAccepted"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -8248,6 +8332,39 @@
         ],
         "title": "RestoreBody",
         "description": "The person's home, as the account's card shows it."
+      },
+      "RewriteAccepted": {
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Run Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run_id"
+        ],
+        "title": "RewriteAccepted",
+        "description": "The run that rewrites the notes."
+      },
+      "RewriteIn": {
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Template Id",
+            "description": "A shipped template's code, such as `oneOnOne`, or the id of your own."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "template_id"
+        ],
+        "title": "RewriteIn",
+        "description": "Which template the write-up is rewritten by."
       },
       "RunOut": {
         "properties": {

@@ -1360,6 +1360,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/{meeting_id}/write-up": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Rewrite Write Up
+         * @description Rewrite the meeting's write-up by a template, keeping its findings.
+         */
+        post: operations["rewrite_write_up_v1_meetings__meeting_id__write_up_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2729,6 +2749,28 @@ export interface components {
          */
         RestoreBody: {
             home: components["schemas"]["Home"];
+        };
+        /**
+         * RewriteAccepted
+         * @description The run that rewrites the notes.
+         */
+        RewriteAccepted: {
+            /**
+             * Run Id
+             * Format: uuid
+             */
+            run_id: string;
+        };
+        /**
+         * RewriteIn
+         * @description Which template the write-up is rewritten by.
+         */
+        RewriteIn: {
+            /**
+             * Template Id
+             * @description A shipped template's code, such as `oneOnOne`, or the id of your own.
+             */
+            template_id: string;
         };
         /**
          * RunOut
@@ -6012,6 +6054,45 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RunOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    rewrite_write_up_v1_meetings__meeting_id__write_up_post: {
+        parameters: {
+            query?: never;
+            header: {
+                /** @description A key unique to one logical operation, repeated on each retry of it: a retry returns the first outcome and applies nothing again. */
+                "Idempotency-Key": string;
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RewriteIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RewriteAccepted"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

@@ -47,3 +47,13 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/stage_task.py` — `meetings.run_stage` on the `meeting` queue; a retry rides the broker's back-off.
 - `application/run_recovery.py` — every minute per home: stages lost or held past the hold limit are sent again; the oldest open run is measured.
 - `objectives.py` — the post-meeting objectives; the `MeetingRunOld` ticket is in `deploy/observability/prometheus/rules/tickets.yml`.
+
+## Notes (step 6)
+
+- `application/findings_stage.py` — the transcript in one call, or in windows of whole lines overlapping by eight, asked at once; a window unreadable twice is lost (counted and logged), every window lost retries the attempt; exact repeats of overlapping windows are kept once, then one merging pass; written once per run.
+- `application/write_up_stage.py` — the layout (a rewrite's copy, the meeting's template, or Leo's), the summary from the findings and the closing lines that fit, the other sections listing findings by id, the map; the notes, the meeting's revision and `meetings.notes.ready` in one transaction, once per run.
+- `application/notes_model.py` — calls through the AI port under `meetings:{run}:{stage}:{2n}`, a second asking under `2n + 1`; answers are JSON objects read by their Pydantic shape.
+- `application/write_up_rewrites.py`, `channels/http/write_up.py` — `POST /v1/meetings/{id}/write-up {template_id}`: whoever may manage the meeting, ten a minute, once per `Idempotency-Key`; the findings and their ids are kept.
+- `infrastructure/prompts.py` — English instructions and answer shapes, registered in the model-facing test; the notes are written in the language most of the meeting is spoken in (MT-D9).
+- `settings.py` — `MEETINGS_NOTES_MODEL`, required outside development, and its fallback, until studio's `notes` role.
+- Revision `d9f3b7a1c246` adds `meeting_processing_runs.layout` (a rewrite's template, copied at the request, since a person's template is readable only in their scope) and `meeting_notes.findings_run_id`.

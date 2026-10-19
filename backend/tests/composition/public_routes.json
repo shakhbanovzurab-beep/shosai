@@ -79,6 +79,7 @@
     "POST /v1/me/sessions/{session_id}/end",
     "POST /v1/me/uploads",
     "POST /v1/me/uploads/{upload_id}/complete",
+    "POST /v1/meetings/{meeting_id}/write-up",
     "POST /v1/sessions",
     "POST /v1/unsubscribe",
     "PUT /v1/me/avatar"

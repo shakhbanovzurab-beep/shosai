@@ -36,6 +36,7 @@ pytest_plugins = (
     "tests.features.files.upload_bench",
     "tests.features.files.file_bench",
     "tests.features.meetings.meeting_bench",
+    "tests.features.meetings.notes_bench",
 )
 
 

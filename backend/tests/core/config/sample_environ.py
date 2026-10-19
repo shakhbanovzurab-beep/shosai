@@ -91,6 +91,7 @@ def production_environ(**overrides: str) -> dict[str, str]:
         SMTP_NOTIFICATIONS_PASSWORD=SAMPLE_SECRET,
         EMAIL_LINK_SECRET=SAMPLE_LINK_SECRET,
         FILES_DOWNLOAD_BASE_URL="https://shosai.example/dl",
+        MEETINGS_NOTES_MODEL="probe/notes",
         **PRODUCTION_IDENTITY,
     )
     for home in Home:

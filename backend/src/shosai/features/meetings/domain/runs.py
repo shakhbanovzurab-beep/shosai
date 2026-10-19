@@ -78,6 +78,7 @@ NON_CRITICAL: Final = frozenset({Stage.DIARIZE})
 NEVER_RETRIED: Final = frozenset(
     {
         "transcript_empty",
+        "meeting_gone",
         "consent_required",
         "content_refused",
         "upload_exceeds_minutes",

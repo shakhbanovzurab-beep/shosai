@@ -51,9 +51,16 @@ def progress_of(state: dict[str, Any]) -> dict[Stage, StageRecord]:
 
 
 async def ensure_run(
-    session: AsyncSession, meeting: MeetingRecord, source: RunSource, key: str
+    session: AsyncSession,
+    meeting: MeetingRecord,
+    source: RunSource,
+    key: str,
+    layout: dict[str, Any] | None = None,
 ) -> UUID:
-    """The meeting's run of that key: created now with its stages pending, or the one there."""
+    """The meeting's run of that key: created now with its stages pending, or the one there.
+
+    `layout` is the template a rewrite asked for, kept by the run it creates.
+    """
     created: UUID | None = await session.scalar(
         insert(RunRecord)
         .values(
@@ -65,6 +72,7 @@ async def ensure_run(
             idempotency_key=key,
             state=RunState.PENDING.value,
             stage_state=stage_state(initial_progress(source)),
+            layout=layout,
         )
         .on_conflict_do_nothing(index_elements=["session_id", "idempotency_key"])
         .returning(RunRecord.id)

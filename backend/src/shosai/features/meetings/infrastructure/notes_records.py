@@ -1,9 +1,10 @@
 """A meeting's notes and findings; a person's folders, templates and settings (`a2c7e4f9b318`).
 
 `meeting_notes` holds the person's own notes (last write wins, a growing version), Leo's
-write-up as sections and the map projected from the findings. `meeting_findings` holds a
-revision's findings with their evidence. Folders, templates and the no-logs setting are
-personal by nature and never shared.
+write-up as sections over the findings of one run and the map projected from them
+(`findings_run_id`, `d9f3b7a1c246`). `meeting_findings` holds each run's findings with
+their evidence. Folders, templates and the no-logs setting are personal by nature and
+never shared.
 """
 
 from datetime import date, datetime
@@ -59,6 +60,8 @@ class NotesRecord(ModelBase):
     write_up: Mapped[dict[str, Any] | None] = mapped_column(JSONB(none_as_null=True))
     write_up_template: Mapped[str | None] = mapped_column(Text)
     write_up_run_id: Mapped[UUID | None] = mapped_column(Uuid)
+    # Прогон, чьи находки перечисляет запись: переписывание оставляет прежние находки и их id.
+    findings_run_id: Mapped[UUID | None] = mapped_column(Uuid)
     # Запись Leo, которую человек не выбирал и не переписывал: её перепишет запись с десктопа.
     write_up_automatic: Mapped[bool] = mapped_column(Boolean, server_default=true())
     write_up_written_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

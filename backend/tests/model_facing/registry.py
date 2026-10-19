@@ -20,6 +20,7 @@ from shosai.composition.features import FEATURES
 from shosai.core.agent_tools.results import TOOL_ERROR_TEXTS, ToolErrorCode
 from shosai.core.agent_tools.spec import ToolSpec
 from shosai.core.ai.errors import MODEL_TEXTS
+from shosai.features.meetings.infrastructure.prompts import PROMPT_TEXTS as MEETINGS_PROMPTS
 
 
 @dataclass(frozen=True, slots=True)
@@ -65,5 +66,6 @@ def slice_tool_sources() -> tuple[ModelFacingSource, ...]:
 MODEL_FACING_SOURCES: tuple[ModelFacingSource, ...] = (
     ModelFacingSource(owner="core.ai", name="failure texts", collect=ai_failure_texts),
     ModelFacingSource(owner="core.agent_tools", name="error texts", collect=tool_error_texts),
+    ModelFacingSource(owner="meetings", name="notes prompts", collect=lambda: MEETINGS_PROMPTS),
     *slice_tool_sources(),
 )

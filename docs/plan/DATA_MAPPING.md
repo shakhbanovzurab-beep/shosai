@@ -559,6 +559,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `draft_markdown` — *moved*. User content: the person's own notes.
   - `enhanced_markdown` — *transformed*. AI output; becomes the write-up as one Markdown section, copied, never regenerated (costly and non-deterministic).
   - `template_id` — *moved*. String: a built-in key or a `meeting_templates.id`.
+- v2 adds `findings_run_id` (the run whose findings the write-up lists, meetings step 6): NULL for a migrated note, whose write-up lists no findings.
 
 #### `meeting_map_nodes` → `meeting_notes.map` · **transformed**
 
@@ -598,6 +599,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `raw_transcript_key` — *moved*. Same lifecycle as `audio_key`.
   - `audio_upload_id` — *moved*. An open multipart upload in the draft bucket cannot continue in v2; set to NULL and the run is failed for re-upload (T-3).
   - `user_id` — *moved*. Denormalised owner, no FK.
+- v2 adds `layout` (the template a rewrite asked for, meetings step 6): NULL for a migrated run.
 
 #### `meeting_workspace_impacts` → no v2 table · **dropped**
 
