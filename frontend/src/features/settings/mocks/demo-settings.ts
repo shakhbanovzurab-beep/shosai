@@ -1,23 +1,20 @@
-import type { Memory, MemorySummary } from "../domain/memory-contract";
+import type { MemorySummary } from "../domain/memory-contract";
 import type { SettingsPatch, UserSettings } from "../domain/settings-contract";
 
 /*
  * In-memory stand-in for the settings backend, used when BACKEND_API_URL is unset. On globalThis so
  * every route bundle shares it; resets when the server restarts. Billing and usage samples are in demo-billing.ts.
- * Memories and the summary are what Leo wrote, so they stay as written in every interface language.
+ * The summary is what Leo wrote, so it stays as written in every interface language.
  */
 
 type State = {
   settings: UserSettings;
-  memories: Map<string, Memory>;
   /** The summary Leo wrote, without the user's notes. */
   summary: MemorySummary;
   /** What the user told Leo through "Ask or update", oldest first. */
   notes: string[];
 };
 
-const daysAgo = (days: number) => new Date(Date.now() - days * 86400000).toISOString();
-const memory = (id: string, text: string, days: number): Memory => ({ id, text, created_at: daysAgo(days) });
 const section = (title: string, body: string) => ({ title, body });
 
 const shared = globalThis as typeof globalThis & { settingsDemo?: State };
@@ -33,13 +30,6 @@ shared.settingsDemo ??= {
     memory_enabled: true,
     hotkeys: {},
   },
-  memories: new Map(
-    [
-      memory("m1", "Prefers concise answers with code in Python.", 2),
-      memory("m2", "Preparing for system design interviews at product companies.", 6),
-      memory("m3", "Works in a fintech team using FastAPI and PostgreSQL.", 14),
-    ].map((m) => [m.id, m]),
-  ),
   summary: {
     sections: [
       section(
@@ -95,8 +85,3 @@ export function addSummaryNote(message: string) {
 export function refreshSummary() {
   state.summary = { ...state.summary, updated_at: new Date().toISOString() };
 }
-
-export const listMemories = () =>
-  [...state.memories.values()].toSorted((a, b) => b.created_at.localeCompare(a.created_at));
-export const deleteMemory = (id: string) => state.memories.delete(id);
-export const clearMemories = () => state.memories.clear();

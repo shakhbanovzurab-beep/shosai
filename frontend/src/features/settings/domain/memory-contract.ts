@@ -1,7 +1,4 @@
-/* ---------- Memory: GET|DELETE /settings/memories, DELETE /settings/memories/{id} ---------- */
-
-export type Memory = { id: string; text: string; created_at: string };
-export type MemoriesResponse = { memories: Memory[] };
+// Факты памяти по одному — у слайса `memory` (/v1/agent/memory, SM-6); здесь только сводка.
 
 /*
  * ---------- Memory summary ----------

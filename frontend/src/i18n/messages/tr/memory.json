@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "Leo’nun hatırladıkları",
+    "facts": "{count, plural, one {# bilgi} other {# bilgi}}",
+    "waiting": "{count, plural, one {# bilgi yanıtınızı bekliyor} other {# bilgi yanıtınızı bekliyor}}"
+  },
+  "dialog": {
+    "title": "Leo’nun hatırladıkları",
+    "description": "Leo’nun yanıtlarında kullandığı bilgiler, her biri kaynağıyla birlikte. Hepsini düzeltebilir, sabitleyebilir veya unutturabilirsiniz.",
+    "count": "{count, plural, one {# bilgi} other {# bilgi}}"
+  },
+  "off": "Bellek kapalı: Leo bilgi kullanmıyor ve kaydetmiyor. Buradaki hiçbir şey silinmez.",
+  "candidates": {
+    "title": "Leo bunu hatırlasın mı?",
+    "description": "Siz yanıt verene kadar Leo bunları kullanmaz.",
+    "accept": "Hatırla",
+    "reject": "Hatırlama"
+  },
+  "empty": {
+    "title": "Leo henüz bir şey hatırlamıyor",
+    "description": "Leo, sohbetlerde ve toplantılarda söylediklerinizden öğrenir. Her bilgi kaynağıyla birlikte burada görünür."
+  },
+  "kinds": {
+    "label": "Bilgi türleri",
+    "all": "Tümü",
+    "preference": "Tercihler",
+    "fact": "Hakkınızda",
+    "relationship": "Kişiler",
+    "goal": "Hedefler",
+    "procedure": "Çalışma şekliniz"
+  },
+  "search": "Bellekte ara",
+  "noMatch": "Eşleşen bilgi yok.",
+  "source": {
+    "user_statement": "Bir sohbetten",
+    "meeting": "Bir toplantıdan",
+    "meetingNamed": "“{title}” toplantısından",
+    "settings": "Ayarlarda eklendi",
+    "user_edit": "Sizin düzenlediğiniz"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Sabitlendi",
+  "actions": {
+    "pin": "Sabitle",
+    "edit": "Düzenle",
+    "forget": "Unut"
+  },
+  "editLabel": "Bilgi",
+  "forgotten": "Leo bunu unuttu",
+  "forgetAll": {
+    "button": "Her şeyi unut",
+    "title": "Leo hatırladığı her şeyi unutsun mu?",
+    "description": "Leo {count, plural, one {# bilgiyi} other {# bilginin tümünü}} hemen kullanmayı bırakır. Bu işlem geri alınamaz.",
+    "confirm": "Her şeyi unut",
+    "done": "Leo her şeyi unuttu"
+  },
+  "failed": {
+    "load": "Leo’nun hatırladıkları yüklenemedi",
+    "save": "Değişiklik kaydedilemedi",
+    "forget": "Unutulamadı"
+  },
+  "more": "Daha fazla göster"
+}

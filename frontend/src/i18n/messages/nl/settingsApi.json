@@ -19,7 +19,6 @@
     "mcpNameTooLong": "Die naam is te lang. Kies een kortere.",
     "mcpUrlInvalid": "Vul de http(s)-URL van de server in.",
     "mcpServerNotFound": "Server niet gevonden.",
-    "memoryNotFound": "Herinnering niet gevonden.",
     "summaryMessageRequired": "Schrijf een vraag of een wijziging."
   },
   "avatarTooLarge": "De afbeelding is groter dan {size}.",

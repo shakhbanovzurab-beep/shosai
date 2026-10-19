@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "Cosa ricorda Leo",
+    "facts": "{count, plural, one {# informazione} many {# di informazioni} other {# informazioni}}",
+    "waiting": "{count, plural, one {# attende la tua risposta} many {# attendono la tua risposta} other {# attendono la tua risposta}}"
+  },
+  "dialog": {
+    "title": "Cosa ricorda Leo",
+    "description": "Le informazioni che Leo usa nelle risposte, ognuna con la sua origine. Puoi correggerle, fissarle o fargliele dimenticare.",
+    "count": "{count, plural, one {# informazione} many {# di informazioni} other {# informazioni}}"
+  },
+  "off": "La memoria è disattivata: Leo non usa né salva informazioni. Qui non viene eliminato nulla.",
+  "candidates": {
+    "title": "Leo deve ricordarlo?",
+    "description": "Leo non le userà finché non rispondi.",
+    "accept": "Ricorda",
+    "reject": "Non ricordare"
+  },
+  "empty": {
+    "title": "Leo non ricorda ancora nulla",
+    "description": "Leo impara da ciò che gli dici in chat e riunioni. Ogni informazione comparirà qui con la sua origine."
+  },
+  "kinds": {
+    "label": "Tipi di informazioni",
+    "all": "Tutte",
+    "preference": "Preferenze",
+    "fact": "Su di te",
+    "relationship": "Persone",
+    "goal": "Obiettivi",
+    "procedure": "Come lavori"
+  },
+  "search": "Cerca nella memoria",
+  "noMatch": "Nessuna informazione corrisponde.",
+  "source": {
+    "user_statement": "Da una chat",
+    "meeting": "Da una riunione",
+    "meetingNamed": "Dalla riunione «{title}»",
+    "settings": "Aggiunta nelle impostazioni",
+    "user_edit": "Modificata da te"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Fissata",
+  "actions": {
+    "pin": "Fissa",
+    "edit": "Modifica",
+    "forget": "Dimentica"
+  },
+  "editLabel": "Informazione",
+  "forgotten": "Leo l’ha dimenticata",
+  "forgetAll": {
+    "button": "Dimentica tutto",
+    "title": "Vuoi che Leo dimentichi tutto?",
+    "description": "Leo smetterà subito di usare {count, plural, one {# informazione} many {tutte le # di informazioni} other {tutte le # informazioni}}. Non si può annullare.",
+    "confirm": "Dimentica tutto",
+    "done": "Leo ha dimenticato tutto"
+  },
+  "failed": {
+    "load": "Impossibile caricare cosa ricorda Leo",
+    "save": "Impossibile salvare la modifica",
+    "forget": "Impossibile dimenticarla"
+  },
+  "more": "Mostra altro"
+}

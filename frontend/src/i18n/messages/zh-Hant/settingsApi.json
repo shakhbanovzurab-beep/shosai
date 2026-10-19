@@ -19,7 +19,6 @@
     "mcpNameTooLong": "名稱太長，請改用較短的名稱。",
     "mcpUrlInvalid": "請輸入伺服器的 http(s) 網址。",
     "mcpServerNotFound": "找不到伺服器。",
-    "memoryNotFound": "找不到記憶。",
     "summaryMessageRequired": "請輸入問題或要更新的內容。"
   },
   "avatarTooLarge": "圖片大於 {size}。",

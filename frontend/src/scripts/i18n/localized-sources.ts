@@ -43,6 +43,7 @@ export const LOCALIZED_SOURCES = [
   "src/features/upgrade/",
   "src/features/download/",
   "src/features/mail/",
+  "src/features/memory/",
   "src/features/support/",
   "src/components/page-placeholder.tsx",
   "src/components/filter-select.tsx",

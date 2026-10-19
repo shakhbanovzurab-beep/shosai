@@ -19,7 +19,6 @@
     "mcpNameTooLong": "यह नाम बहुत लंबा है। छोटा नाम रखें।",
     "mcpUrlInvalid": "सर्वर का http(s) URL डालें।",
     "mcpServerNotFound": "सर्वर नहीं मिला।",
-    "memoryNotFound": "मेमोरी नहीं मिली।",
     "summaryMessageRequired": "कोई सवाल या अपडेट लिखें।"
   },
   "avatarTooLarge": "इमेज {size} से बड़ी है।",

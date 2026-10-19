@@ -19,7 +19,6 @@
     "mcpNameTooLong": "Tên này quá dài. Hãy dùng tên ngắn hơn.",
     "mcpUrlInvalid": "Hãy nhập URL http(s) của máy chủ.",
     "mcpServerNotFound": "Không tìm thấy máy chủ.",
-    "memoryNotFound": "Không tìm thấy mục bộ nhớ này.",
     "summaryMessageRequired": "Hãy viết một câu hỏi hoặc một cập nhật."
   },
   "avatarTooLarge": "Ảnh lớn hơn {size}.",

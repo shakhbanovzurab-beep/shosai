@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "Những gì Leo ghi nhớ",
+    "facts": "{count, plural, other {# thông tin}}",
+    "waiting": "{count, plural, other {# đang chờ bạn trả lời}}"
+  },
+  "dialog": {
+    "title": "Những gì Leo ghi nhớ",
+    "description": "Những thông tin Leo dùng trong câu trả lời, kèm nguồn của từng thông tin. Bạn có thể chỉnh sửa, ghim hoặc khiến Leo quên bất kỳ thông tin nào.",
+    "count": "{count, plural, other {# thông tin}}"
+  },
+  "off": "Bộ nhớ đang tắt: Leo không dùng và không lưu thông tin. Không có gì ở đây bị xóa.",
+  "candidates": {
+    "title": "Leo có nên ghi nhớ điều này?",
+    "description": "Leo sẽ không dùng chúng cho đến khi bạn trả lời.",
+    "accept": "Ghi nhớ",
+    "reject": "Không ghi nhớ"
+  },
+  "empty": {
+    "title": "Leo chưa ghi nhớ gì",
+    "description": "Leo học từ những gì bạn nói trong cuộc trò chuyện và cuộc họp. Mỗi thông tin sẽ hiện ở đây kèm nguồn."
+  },
+  "kinds": {
+    "label": "Loại thông tin",
+    "all": "Tất cả",
+    "preference": "Sở thích",
+    "fact": "Về bạn",
+    "relationship": "Mọi người",
+    "goal": "Mục tiêu",
+    "procedure": "Cách bạn làm việc"
+  },
+  "search": "Tìm kiếm trong bộ nhớ",
+  "noMatch": "Không có thông tin phù hợp.",
+  "source": {
+    "user_statement": "Từ một cuộc trò chuyện",
+    "meeting": "Từ một cuộc họp",
+    "meetingNamed": "Từ cuộc họp “{title}”",
+    "settings": "Đã thêm trong Cài đặt",
+    "user_edit": "Do bạn chỉnh sửa"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Đã ghim",
+  "actions": {
+    "pin": "Ghim",
+    "edit": "Chỉnh sửa",
+    "forget": "Quên"
+  },
+  "editLabel": "Thông tin",
+  "forgotten": "Leo đã quên điều này",
+  "forgetAll": {
+    "button": "Quên tất cả",
+    "title": "Quên mọi thứ Leo ghi nhớ?",
+    "description": "Leo sẽ ngừng dùng {count, plural, other {# thông tin}} ngay lập tức. Bạn không thể hoàn tác.",
+    "confirm": "Quên tất cả",
+    "done": "Leo đã quên tất cả"
+  },
+  "failed": {
+    "load": "Không tải được những gì Leo ghi nhớ",
+    "save": "Không lưu được thay đổi",
+    "forget": "Không quên được"
+  },
+  "more": "Hiển thị thêm"
+}

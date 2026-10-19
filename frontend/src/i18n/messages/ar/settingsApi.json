@@ -19,7 +19,6 @@
     "mcpNameTooLong": "الاسم طويل جدًا. يرجى اختيار اسم أقصر.",
     "mcpUrlInvalid": "يرجى إدخال عنوان URL للخادم يبدأ بـ http(s).",
     "mcpServerNotFound": "لم يتم العثور على الخادم.",
-    "memoryNotFound": "لم يتم العثور على عنصر الذاكرة.",
     "summaryMessageRequired": "يرجى كتابة سؤال أو تحديث."
   },
   "avatarTooLarge": "حجم الصورة أكبر من {size}.",

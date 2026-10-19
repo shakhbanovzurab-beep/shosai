@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "Wat Leo onthoudt",
+    "facts": "{count, plural, one {# feit} other {# feiten}}",
+    "waiting": "{count, plural, one {# wacht op je antwoord} other {# wachten op je antwoord}}"
+  },
+  "dialog": {
+    "title": "Wat Leo onthoudt",
+    "description": "Feiten die Leo in antwoorden gebruikt, elk met de herkomst. Je kunt ze allemaal corrigeren, vastzetten of laten vergeten.",
+    "count": "{count, plural, one {# feit} other {# feiten}}"
+  },
+  "off": "Het geheugen staat uit: Leo gebruikt en bewaart geen feiten. Hier wordt niets verwijderd.",
+  "candidates": {
+    "title": "Moet Leo dit onthouden?",
+    "description": "Leo gebruikt ze pas als je antwoordt.",
+    "accept": "Onthouden",
+    "reject": "Niet onthouden"
+  },
+  "empty": {
+    "title": "Leo heeft nog niets onthouden",
+    "description": "Leo leert van wat je in chats en vergaderingen vertelt. Elk feit verschijnt hier met de herkomst."
+  },
+  "kinds": {
+    "label": "Soorten feiten",
+    "all": "Alles",
+    "preference": "Voorkeuren",
+    "fact": "Over jou",
+    "relationship": "Mensen",
+    "goal": "Doelen",
+    "procedure": "Hoe je werkt"
+  },
+  "search": "Zoeken in geheugen",
+  "noMatch": "Geen feiten gevonden.",
+  "source": {
+    "user_statement": "Uit een chat",
+    "meeting": "Uit een vergadering",
+    "meetingNamed": "Uit de vergadering ‘{title}’",
+    "settings": "Toegevoegd in Instellingen",
+    "user_edit": "Door jou bewerkt"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Vastgezet",
+  "actions": {
+    "pin": "Vastzetten",
+    "edit": "Bewerken",
+    "forget": "Vergeten"
+  },
+  "editLabel": "Feit",
+  "forgotten": "Leo is het vergeten",
+  "forgetAll": {
+    "button": "Alles vergeten",
+    "title": "Alles vergeten wat Leo onthoudt?",
+    "description": "Leo stopt meteen met het gebruik van {count, plural, one {# feit} other {alle # feiten}}. Dit kun je niet ongedaan maken.",
+    "confirm": "Alles vergeten",
+    "done": "Leo is alles vergeten"
+  },
+  "failed": {
+    "load": "Kan niet laden wat Leo onthoudt",
+    "save": "Kan de wijziging niet opslaan",
+    "forget": "Kan het niet vergeten"
+  },
+  "more": "Meer tonen"
+}

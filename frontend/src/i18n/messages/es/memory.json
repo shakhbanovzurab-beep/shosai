@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "Lo que recuerda Leo",
+    "facts": "{count, plural, one {# dato} many {# de datos} other {# datos}}",
+    "waiting": "{count, plural, one {# espera tu respuesta} many {# esperan tu respuesta} other {# esperan tu respuesta}}"
+  },
+  "dialog": {
+    "title": "Lo que recuerda Leo",
+    "description": "Datos que Leo usa en sus respuestas, cada uno con su origen. Puedes corregir, fijar u olvidar cualquiera.",
+    "count": "{count, plural, one {# dato} many {# de datos} other {# datos}}"
+  },
+  "off": "La memoria está desactivada: Leo no usa ni guarda datos. Aquí no se borra nada.",
+  "candidates": {
+    "title": "¿Quieres que Leo recuerde esto?",
+    "description": "Leo no los usará hasta que respondas.",
+    "accept": "Recordar",
+    "reject": "No recordar"
+  },
+  "empty": {
+    "title": "Leo aún no recuerda nada",
+    "description": "Leo aprende de lo que le cuentas en chats y reuniones. Cada dato aparecerá aquí con su origen."
+  },
+  "kinds": {
+    "label": "Tipos de datos",
+    "all": "Todo",
+    "preference": "Preferencias",
+    "fact": "Sobre ti",
+    "relationship": "Personas",
+    "goal": "Objetivos",
+    "procedure": "Cómo trabajas"
+  },
+  "search": "Buscar en la memoria",
+  "noMatch": "Ningún dato coincide.",
+  "source": {
+    "user_statement": "De un chat",
+    "meeting": "De una reunión",
+    "meetingNamed": "De la reunión «{title}»",
+    "settings": "Agregado en Configuración",
+    "user_edit": "Editado por ti"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Fijado",
+  "actions": {
+    "pin": "Fijar",
+    "edit": "Editar",
+    "forget": "Olvidar"
+  },
+  "editLabel": "Dato",
+  "forgotten": "Leo lo olvidó",
+  "forgetAll": {
+    "button": "Olvidar todo",
+    "title": "¿Olvidar todo lo que recuerda Leo?",
+    "description": "Leo dejará de usar {count, plural, one {# dato} many {los # de datos} other {los # datos}} de inmediato. No se puede deshacer.",
+    "confirm": "Olvidar todo",
+    "done": "Leo olvidó todo"
+  },
+  "failed": {
+    "load": "No se pudo cargar lo que recuerda Leo",
+    "save": "No se pudo guardar el cambio",
+    "forget": "No se pudo olvidar"
+  },
+  "more": "Mostrar más"
+}

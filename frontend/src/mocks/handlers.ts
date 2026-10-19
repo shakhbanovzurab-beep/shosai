@@ -15,6 +15,7 @@ import { handlers as kanban } from "@/features/kanban/mocks/handlers";
 import { handlers as knowledgeBase } from "@/features/knowledge-base/mocks/handlers";
 import { handlers as leo } from "@/features/leo/mocks/handlers";
 import { handlers as mail } from "@/features/mail/mocks/handlers";
+import { handlers as memory } from "@/features/memory/mocks/handlers";
 import { handlers as notes } from "@/features/notes/mocks/handlers";
 import { handlers as settings } from "@/features/settings/mocks/handlers";
 import { handlers as studio } from "@/features/studio/mocks/handlers";
@@ -43,6 +44,7 @@ export const mockRoutes: readonly MockRoute[] = [
   ...knowledgeBase,
   ...leo,
   ...mail,
+  ...memory,
   ...notes,
   ...settings,
   ...studio,

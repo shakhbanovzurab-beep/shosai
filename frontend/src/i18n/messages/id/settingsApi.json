@@ -19,7 +19,6 @@
     "mcpNameTooLong": "Nama tersebut terlalu panjang. Gunakan nama yang lebih pendek.",
     "mcpUrlInvalid": "Masukkan URL http(s) server.",
     "mcpServerNotFound": "Server tidak ditemukan.",
-    "memoryNotFound": "Memori tidak ditemukan.",
     "summaryMessageRequired": "Tulis pertanyaan atau pembaruan."
   },
   "avatarTooLarge": "Gambar lebih besar dari {size}.",

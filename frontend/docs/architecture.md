@@ -111,6 +111,7 @@ switches its `api/` to the generated client and deletes its mocks, its registry 
 | `preferences`            | Theme and layout preferences, fonts, the pre-paint boot script       | F2 |
 | `leo`, `studio`          | The Leo assistant; context, prompts, skills and models               | S09 |
 | `settings`               | The user's settings dialog, account, billing, data, connectors (OAuth) | S01, S03, S10, S12 |
+| `memory`                 | What Leo remembers, fact by fact: sources, candidates, edit, pin, forget | S09 (`memory`) |
 | `productivity`           | The user panel home with the contribution skyline                    | S16 |
 | `mail`                   | The inbox (`/app/inbox`), its preview page and Leo's triage there    | S12 |
 | `calendar`               | The calendar                                                         | S12 |

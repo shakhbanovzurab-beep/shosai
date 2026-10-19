@@ -27,12 +27,9 @@ artifacts, uploaded files, feedback) return when their owners serve them.
 | `POST`   | `/mcp`            | `McpServerDraft`                            | `201 McpServer`        |
 | `PATCH`  | `/mcp/{id}`       | `{"enabled": bool}`                         | `McpServer`            |
 | `DELETE` | `/mcp/{id}`       | —                                           | `204`                  |
-| `GET`    | `/memories`       | —                                           | `MemoriesResponse`     |
-| `DELETE` | `/memories`       | —                                           | `204` (forget all)     |
 | `GET`    | `/memories/summary` | —                                         | `MemorySummary`        |
 | `POST`   | `/memories/summary` | `{"message": str}` (ask or update)        | `MemorySummary`        |
 | `POST`   | `/memories/summary/refresh` | —                                 | `MemorySummary`        |
-| `DELETE` | `/memories/{id}`  | —                                           | `204`                  |
 
 ## Behaviour the UI relies on
 
@@ -64,7 +61,9 @@ artifacts, uploaded files, feedback) return when their owners serve them.
 - **MCP.** Remote servers only (`streamable_http` or `sse`). `auth_header` is write-only: store it
   encrypted, never return it; report `has_auth` instead. `tools` is the tool count from the last
   successful connection, or `null`.
-- **Memory.** `memory_enabled: false` stops new memories; existing ones stay until deleted.
+- **Memory.** `memory_enabled: false` stops new memories; existing ones stay until deleted. The facts one by
+  one, with their sources, are the `memory` slice's (`/v1/agent/memory`, see `memory-api.md`); Settings ›
+  Memory opens them from its "What Leo remembers" row under the summary.
 - **Hotkeys.** `hotkeys` holds only the desktop app's global shortcuts the user changed, e.g.
   `{"prompter": "Mod+Alt+Y", "close_app": null}`; `null` turns a shortcut off and a missing id uses
   its default. Ids and defaults are in `src/features/settings/domain/hotkeys.ts` (`open_app` ⌥⌘Z,

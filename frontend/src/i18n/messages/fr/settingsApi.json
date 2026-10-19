@@ -19,7 +19,6 @@
     "mcpNameTooLong": "Ce nom est trop long. Choisissez-en un plus court.",
     "mcpUrlInvalid": "Saisissez l’URL http(s) du serveur.",
     "mcpServerNotFound": "Serveur introuvable.",
-    "memoryNotFound": "Élément de mémoire introuvable.",
     "summaryMessageRequired": "Écrivez une question ou ce qu’il faut modifier."
   },
   "avatarTooLarge": "L’image dépasse {size}.",

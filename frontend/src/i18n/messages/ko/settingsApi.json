@@ -19,7 +19,6 @@
     "mcpNameTooLong": "이름이 너무 길어요. 더 짧게 입력해 주세요.",
     "mcpUrlInvalid": "서버의 http(s) URL을 입력해 주세요.",
     "mcpServerNotFound": "서버를 찾을 수 없어요.",
-    "memoryNotFound": "메모리를 찾을 수 없어요.",
     "summaryMessageRequired": "질문이나 업데이트할 내용을 입력해 주세요."
   },
   "avatarTooLarge": "이미지가 {size}보다 커요.",

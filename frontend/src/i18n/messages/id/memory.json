@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "Yang diingat Leo",
+    "facts": "{count, plural, other {# fakta}}",
+    "waiting": "{count, plural, other {# menunggu jawaban Anda}}"
+  },
+  "dialog": {
+    "title": "Yang diingat Leo",
+    "description": "Fakta yang digunakan Leo dalam jawabannya, masing-masing dengan sumbernya. Anda dapat memperbaiki, menyematkan, atau melupakan fakta mana pun.",
+    "count": "{count, plural, other {# fakta}}"
+  },
+  "off": "Memori nonaktif: Leo tidak menggunakan atau menyimpan fakta. Tidak ada yang dihapus di sini.",
+  "candidates": {
+    "title": "Perlukah Leo mengingat ini?",
+    "description": "Leo tidak akan menggunakannya sampai Anda menjawab.",
+    "accept": "Ingat",
+    "reject": "Jangan ingat"
+  },
+  "empty": {
+    "title": "Leo belum mengingat apa pun",
+    "description": "Leo belajar dari apa yang Anda sampaikan di chat dan rapat. Setiap fakta akan muncul di sini beserta sumbernya."
+  },
+  "kinds": {
+    "label": "Jenis fakta",
+    "all": "Semua",
+    "preference": "Preferensi",
+    "fact": "Tentang Anda",
+    "relationship": "Orang",
+    "goal": "Tujuan",
+    "procedure": "Cara Anda bekerja"
+  },
+  "search": "Cari di memori",
+  "noMatch": "Tidak ada fakta yang cocok.",
+  "source": {
+    "user_statement": "Dari chat",
+    "meeting": "Dari rapat",
+    "meetingNamed": "Dari rapat “{title}”",
+    "settings": "Ditambahkan di Pengaturan",
+    "user_edit": "Diedit oleh Anda"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Disematkan",
+  "actions": {
+    "pin": "Sematkan",
+    "edit": "Edit",
+    "forget": "Lupakan"
+  },
+  "editLabel": "Fakta",
+  "forgotten": "Leo melupakannya",
+  "forgetAll": {
+    "button": "Lupakan semuanya",
+    "title": "Lupakan semua yang diingat Leo?",
+    "description": "Leo akan langsung berhenti menggunakan {count, plural, other {# fakta}}. Tindakan ini tidak dapat diurungkan.",
+    "confirm": "Lupakan semuanya",
+    "done": "Leo melupakan semuanya"
+  },
+  "failed": {
+    "load": "Tidak dapat memuat yang diingat Leo",
+    "save": "Tidak dapat menyimpan perubahan",
+    "forget": "Tidak dapat melupakannya"
+  },
+  "more": "Tampilkan lebih banyak"
+}

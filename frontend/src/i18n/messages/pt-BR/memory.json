@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "O que o Leo lembra",
+    "facts": "{count, plural, one {# fato} many {# de fatos} other {# fatos}}",
+    "waiting": "{count, plural, one {# aguarda sua resposta} many {# aguardam sua resposta} other {# aguardam sua resposta}}"
+  },
+  "dialog": {
+    "title": "O que o Leo lembra",
+    "description": "Fatos que o Leo usa nas respostas, cada um com a fonte. Você pode corrigir, fixar ou esquecer qualquer um.",
+    "count": "{count, plural, one {# fato} many {# de fatos} other {# fatos}}"
+  },
+  "off": "A memória está desativada: o Leo não usa nem salva fatos. Nada aqui é excluído.",
+  "candidates": {
+    "title": "O Leo deve lembrar disso?",
+    "description": "O Leo não vai usá-los até você responder.",
+    "accept": "Lembrar",
+    "reject": "Não lembrar"
+  },
+  "empty": {
+    "title": "O Leo ainda não lembra de nada",
+    "description": "O Leo aprende com o que você conta nos chats e reuniões. Cada fato vai aparecer aqui com a fonte."
+  },
+  "kinds": {
+    "label": "Tipos de fatos",
+    "all": "Todos",
+    "preference": "Preferências",
+    "fact": "Sobre você",
+    "relationship": "Pessoas",
+    "goal": "Metas",
+    "procedure": "Como você trabalha"
+  },
+  "search": "Pesquisar na memória",
+  "noMatch": "Nenhum fato encontrado.",
+  "source": {
+    "user_statement": "De um chat",
+    "meeting": "De uma reunião",
+    "meetingNamed": "Da reunião “{title}”",
+    "settings": "Adicionado nas configurações",
+    "user_edit": "Editado por você"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Fixado",
+  "actions": {
+    "pin": "Fixar",
+    "edit": "Editar",
+    "forget": "Esquecer"
+  },
+  "editLabel": "Fato",
+  "forgotten": "O Leo esqueceu isso",
+  "forgetAll": {
+    "button": "Esquecer tudo",
+    "title": "Esquecer tudo o que o Leo lembra?",
+    "description": "O Leo vai parar de usar {count, plural, one {# fato} many {os # de fatos} other {os # fatos}} na hora. Não dá para desfazer.",
+    "confirm": "Esquecer tudo",
+    "done": "O Leo esqueceu tudo"
+  },
+  "failed": {
+    "load": "Não foi possível carregar o que o Leo lembra",
+    "save": "Não foi possível salvar a alteração",
+    "forget": "Não foi possível esquecer"
+  },
+  "more": "Mostrar mais"
+}

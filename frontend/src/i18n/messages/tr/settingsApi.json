@@ -19,7 +19,6 @@
     "mcpNameTooLong": "Bu ad çok uzun. Daha kısa bir ad kullanın.",
     "mcpUrlInvalid": "Sunucunun http(s) URL’sini girin.",
     "mcpServerNotFound": "Sunucu bulunamadı.",
-    "memoryNotFound": "Bellek kaydı bulunamadı.",
     "summaryMessageRequired": "Bir soru veya güncelleme yazın."
   },
   "avatarTooLarge": "Görsel {size} boyutundan büyük.",

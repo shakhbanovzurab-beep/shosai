@@ -29,7 +29,6 @@ export type Problem =
   | "mcpNameTooLong"
   | "mcpUrlInvalid"
   | "mcpServerNotFound"
-  | "memoryNotFound"
   | "summaryMessageRequired";
 
 /** The words for a problem in the request's interface language. */

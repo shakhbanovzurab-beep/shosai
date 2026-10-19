@@ -32,6 +32,7 @@ export const NAMESPACES = [
   "leoActions",
   "mail",
   "mailLeo",
+  "memory",
   "meetings",
   "notes",
   "notesApi",

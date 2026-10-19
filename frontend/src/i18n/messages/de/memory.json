@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "Was Leo sich merkt",
+    "facts": "{count, plural, one {# Fakt} other {# Fakten}}",
+    "waiting": "{count, plural, one {# wartet auf deine Antwort} other {# warten auf deine Antwort}}"
+  },
+  "dialog": {
+    "title": "Was Leo sich merkt",
+    "description": "Fakten, die Leo in Antworten nutzt, jeweils mit ihrer Herkunft. Du kannst jeden korrigieren, anheften oder vergessen lassen.",
+    "count": "{count, plural, one {# Fakt} other {# Fakten}}"
+  },
+  "off": "Das Gedächtnis ist aus: Leo nutzt und speichert keine Fakten. Hier wird nichts gelöscht.",
+  "candidates": {
+    "title": "Soll Leo sich das merken?",
+    "description": "Leo nutzt sie erst, wenn du antwortest.",
+    "accept": "Merken",
+    "reject": "Nicht merken"
+  },
+  "empty": {
+    "title": "Leo hat sich noch nichts gemerkt",
+    "description": "Leo lernt aus dem, was du in Chats und Meetings sagst. Jeder Fakt erscheint hier mit seiner Herkunft."
+  },
+  "kinds": {
+    "label": "Arten von Fakten",
+    "all": "Alle",
+    "preference": "Vorlieben",
+    "fact": "Über dich",
+    "relationship": "Personen",
+    "goal": "Ziele",
+    "procedure": "Wie du arbeitest"
+  },
+  "search": "Im Gedächtnis suchen",
+  "noMatch": "Keine passenden Fakten.",
+  "source": {
+    "user_statement": "Aus einem Chat",
+    "meeting": "Aus einem Meeting",
+    "meetingNamed": "Aus dem Meeting „{title}“",
+    "settings": "In den Einstellungen hinzugefügt",
+    "user_edit": "Von dir bearbeitet"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Angeheftet",
+  "actions": {
+    "pin": "Anheften",
+    "edit": "Bearbeiten",
+    "forget": "Vergessen"
+  },
+  "editLabel": "Fakt",
+  "forgotten": "Leo hat es vergessen",
+  "forgetAll": {
+    "button": "Alles vergessen",
+    "title": "Alles vergessen, was Leo sich merkt?",
+    "description": "Leo nutzt {count, plural, one {# Fakt} other {alle # Fakten}} sofort nicht mehr. Das lässt sich nicht rückgängig machen.",
+    "confirm": "Alles vergessen",
+    "done": "Leo hat alles vergessen"
+  },
+  "failed": {
+    "load": "Was Leo sich merkt, konnte nicht geladen werden",
+    "save": "Änderung konnte nicht gespeichert werden",
+    "forget": "Konnte nicht vergessen werden"
+  },
+  "more": "Mehr anzeigen"
+}

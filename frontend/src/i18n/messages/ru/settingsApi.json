@@ -19,7 +19,6 @@
     "mcpNameTooLong": "Название слишком длинное. Сократите его.",
     "mcpUrlInvalid": "Введите адрес сервера, начинающийся с http(s).",
     "mcpServerNotFound": "Сервер не найден.",
-    "memoryNotFound": "Запись в памяти не найдена.",
     "summaryMessageRequired": "Напишите вопрос или что изменить."
   },
   "avatarTooLarge": "Изображение больше {size}.",

@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "Ce dont Leo se souvient",
+    "facts": "{count, plural, one {# information} many {# d’informations} other {# informations}}",
+    "waiting": "{count, plural, one {# attend votre réponse} many {# attendent votre réponse} other {# attendent votre réponse}}"
+  },
+  "dialog": {
+    "title": "Ce dont Leo se souvient",
+    "description": "Les informations que Leo utilise dans ses réponses, chacune avec sa provenance. Vous pouvez corriger, épingler ou oublier chacune d’elles.",
+    "count": "{count, plural, one {# information} many {# d’informations} other {# informations}}"
+  },
+  "off": "La mémoire est désactivée : Leo n’utilise ni n’enregistre d’informations. Rien n’est supprimé ici.",
+  "candidates": {
+    "title": "Leo doit-il retenir ceci ?",
+    "description": "Leo ne les utilisera pas tant que vous n’aurez pas répondu.",
+    "accept": "Retenir",
+    "reject": "Ne pas retenir"
+  },
+  "empty": {
+    "title": "Leo ne se souvient encore de rien",
+    "description": "Leo apprend de ce que vous lui dites dans les conversations et les réunions. Chaque information apparaîtra ici avec sa provenance."
+  },
+  "kinds": {
+    "label": "Types d’informations",
+    "all": "Tout",
+    "preference": "Préférences",
+    "fact": "À votre sujet",
+    "relationship": "Personnes",
+    "goal": "Objectifs",
+    "procedure": "Votre façon de travailler"
+  },
+  "search": "Rechercher dans la mémoire",
+  "noMatch": "Aucune information ne correspond.",
+  "source": {
+    "user_statement": "D’une conversation",
+    "meeting": "D’une réunion",
+    "meetingNamed": "De la réunion « {title} »",
+    "settings": "Ajouté dans les paramètres",
+    "user_edit": "Modifié par vous"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Épinglé",
+  "actions": {
+    "pin": "Épingler",
+    "edit": "Modifier",
+    "forget": "Oublier"
+  },
+  "editLabel": "Information",
+  "forgotten": "Leo l’a oublié",
+  "forgetAll": {
+    "button": "Tout oublier",
+    "title": "Oublier tout ce dont Leo se souvient ?",
+    "description": "Leo cessera aussitôt d’utiliser {count, plural, one {# information} many {les # d’informations} other {les # informations}}. Cette action est irréversible.",
+    "confirm": "Tout oublier",
+    "done": "Leo a tout oublié"
+  },
+  "failed": {
+    "load": "Impossible de charger la mémoire de Leo",
+    "save": "Impossible d’enregistrer la modification",
+    "forget": "Impossible d’oublier cette information"
+  },
+  "more": "Afficher plus"
+}

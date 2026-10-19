@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "Leo が覚えていること",
+    "facts": "{count, plural, other {# 件}}",
+    "waiting": "{count, plural, other {# 件が回答待ち}}"
+  },
+  "dialog": {
+    "title": "Leo が覚えていること",
+    "description": "Leo が回答に使う情報です。それぞれに出どころが表示されます。どの情報も修正、ピン留め、または忘れさせることができます。",
+    "count": "{count, plural, other {# 件}}"
+  },
+  "off": "メモリはオフです。Leo は情報を使わず、保存もしません。ここにある情報は削除されません。",
+  "candidates": {
+    "title": "Leo にこれを覚えさせますか？",
+    "description": "回答するまで、Leo はこれらを使いません。",
+    "accept": "覚えさせる",
+    "reject": "覚えさせない"
+  },
+  "empty": {
+    "title": "Leo はまだ何も覚えていません",
+    "description": "Leo はチャットや会議で伝えた内容から学びます。覚えた情報は出どころと一緒にここに表示されます。"
+  },
+  "kinds": {
+    "label": "情報の種類",
+    "all": "すべて",
+    "preference": "好み",
+    "fact": "あなたについて",
+    "relationship": "人",
+    "goal": "目標",
+    "procedure": "仕事の進め方"
+  },
+  "search": "メモリを検索",
+  "noMatch": "一致する情報はありません。",
+  "source": {
+    "user_statement": "チャットから",
+    "meeting": "会議から",
+    "meetingNamed": "会議「{title}」から",
+    "settings": "設定で追加",
+    "user_edit": "あなたが編集"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "ピン留め済み",
+  "actions": {
+    "pin": "ピン留め",
+    "edit": "編集",
+    "forget": "忘れる"
+  },
+  "editLabel": "情報",
+  "forgotten": "Leo が忘れました",
+  "forgetAll": {
+    "button": "すべて忘れる",
+    "title": "Leo が覚えていることをすべて忘れさせますか？",
+    "description": "Leo は {count, plural, other {# 件の情報}}をすぐに使わなくなります。元に戻すことはできません。",
+    "confirm": "すべて忘れる",
+    "done": "Leo はすべて忘れました"
+  },
+  "failed": {
+    "load": "Leo が覚えていることを読み込めませんでした",
+    "save": "変更を保存できませんでした",
+    "forget": "忘れさせることができませんでした"
+  },
+  "more": "さらに表示"
+}

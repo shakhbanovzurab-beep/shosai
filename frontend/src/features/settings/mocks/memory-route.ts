@@ -2,31 +2,10 @@ import { z } from "zod";
 
 import { JsonResponse } from "@/mocks/runtime";
 
-import { type MemoriesResponse, type MemorySummary, SUMMARY_MESSAGE_MAX } from "../domain/memory-contract";
-import { addSummaryNote, clearMemories, deleteMemory, getSummary, listMemories, refreshSummary } from "./demo-settings";
+import { type MemorySummary, SUMMARY_MESSAGE_MAX } from "../domain/memory-contract";
+import { addSummaryNote, getSummary, refreshSummary } from "./demo-settings";
 import { readJson, refuse } from "./problems";
 import { notesTitle } from "./summary-words";
-
-/** /api/settings/memories */
-export const memoriesRoute = {
-  async GET(_request: Request) {
-    return JsonResponse.json<MemoriesResponse>({ memories: listMemories() });
-  },
-
-  /** Forgets everything. */
-  async DELETE(_request: Request) {
-    clearMemories();
-    return new Response(null, { status: 204 });
-  },
-};
-
-/** /api/settings/memories/[id] */
-export const memoryRoute = {
-  async DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
-    return deleteMemory(id) ? new Response(null, { status: 204 }) : refuse("memoryNotFound", 404);
-  },
-};
 
 /** /api/settings/memories/summary */
 export const memorySummaryRoute = {

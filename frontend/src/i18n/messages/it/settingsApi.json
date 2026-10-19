@@ -19,7 +19,6 @@
     "mcpNameTooLong": "Il nome è troppo lungo. Usane uno più breve.",
     "mcpUrlInvalid": "Inserisci l’URL http(s) del server.",
     "mcpServerNotFound": "Server non trovato.",
-    "memoryNotFound": "Ricordo non trovato.",
     "summaryMessageRequired": "Scrivi una domanda o un aggiornamento."
   },
   "avatarTooLarge": "L’immagine supera {size}.",

@@ -1,0 +1,63 @@
+{
+  "row": {
+    "title": "What Leo remembers",
+    "facts": "{count, plural, one {# fact} other {# facts}}",
+    "waiting": "{count, plural, one {# waiting for your answer} other {# waiting for your answer}}"
+  },
+  "dialog": {
+    "title": "What Leo remembers",
+    "description": "Facts Leo uses in its answers, each with where it came from. Correct, pin or forget any of them.",
+    "count": "{count, plural, one {# fact} other {# facts}}"
+  },
+  "off": "Memory is off: Leo doesn’t use or save memories. Nothing here is deleted.",
+  "candidates": {
+    "title": "Should Leo remember this?",
+    "description": "Leo won’t use these until you answer.",
+    "accept": "Remember",
+    "reject": "Don’t remember"
+  },
+  "empty": {
+    "title": "Leo doesn’t remember anything yet",
+    "description": "Leo learns from what you tell it in chats and meetings. Each fact shows up here with where it came from."
+  },
+  "kinds": {
+    "label": "Kinds of memories",
+    "all": "All",
+    "preference": "Preferences",
+    "fact": "About you",
+    "relationship": "People",
+    "goal": "Goals",
+    "procedure": "How you work"
+  },
+  "search": "Search memories",
+  "noMatch": "No memories match.",
+  "source": {
+    "user_statement": "From a chat",
+    "meeting": "From a meeting",
+    "meetingNamed": "From the meeting “{title}”",
+    "settings": "Added in Settings",
+    "user_edit": "Edited by you"
+  },
+  "meta": "{source} · {date}",
+  "pinned": "Pinned",
+  "actions": {
+    "pin": "Pin",
+    "edit": "Edit",
+    "forget": "Forget"
+  },
+  "editLabel": "Memory",
+  "forgotten": "Leo forgot it",
+  "forgetAll": {
+    "button": "Forget everything",
+    "title": "Forget everything Leo remembers?",
+    "description": "Leo stops using {count, plural, one {# fact} other {all # facts}} at once. You can’t undo this.",
+    "confirm": "Forget everything",
+    "done": "Leo forgot everything"
+  },
+  "failed": {
+    "load": "Couldn’t load what Leo remembers",
+    "save": "Couldn’t save the change",
+    "forget": "Couldn’t forget it"
+  },
+  "more": "Show more"
+}
