@@ -1280,6 +1280,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Session
+         * @description Start a live meeting on this device.
+         */
+        post: operations["create_session_v1_sessions_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/sessions/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update Session
+         * @description Retitle the meeting, or end it; a repeated end answers the stored meeting.
+         */
+        patch: operations["update_session_v1_sessions__session_id__patch"];
+        trace?: never;
+    };
+    "/v1/me/sessions/{session_id}/end": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * End Session
+         * @description End the meeting; its notes follow from the run.
+         */
+        post: operations["end_session_v1_me_sessions__session_id__end_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Run
+         * @description A run of a meeting the person may read.
+         */
+        get: operations["get_run_v1_me_runs__run_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1715,6 +1795,14 @@ export interface components {
             challenge: string;
             /** Code */
             code: string;
+        };
+        /**
+         * EndAccepted
+         * @description The meeting ended; its notes come from this run, if it has one.
+         */
+        EndAccepted: {
+            /** Run Id */
+            run_id: string | null;
         };
         /**
          * EntitlementsView
@@ -2643,6 +2731,59 @@ export interface components {
             home: components["schemas"]["Home"];
         };
         /**
+         * RunOut
+         * @description A run of a meeting and how far it got.
+         */
+        RunOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Meeting Id
+             * Format: uuid
+             */
+            meeting_id: string;
+            source: components["schemas"]["RunSource"];
+            state: components["schemas"]["RunState"];
+            /** Stages */
+            stages: components["schemas"]["RunStageOut"][];
+            /** Error Code */
+            error_code: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Finished At */
+            finished_at: string | null;
+        };
+        /**
+         * RunSource
+         * @description What asked for the run.
+         * @enum {string}
+         */
+        RunSource: "live" | "import" | "recording" | "regenerate";
+        /**
+         * RunStageOut
+         * @description One stage of a run.
+         */
+        RunStageOut: {
+            stage: components["schemas"]["Stage"];
+            status: components["schemas"]["StageStatus"];
+            /** Attempts */
+            attempts: number;
+            /** Error Code */
+            error_code: string | null;
+        };
+        /**
+         * RunState
+         * @description A run's state as §10 names it.
+         * @enum {string}
+         */
+        RunState: "pending" | "running" | "succeeded" | "partially_completed" | "failed";
+        /**
          * SalesInquiryAnswer
          * @description The inquiry was received.
          */
@@ -2701,6 +2842,59 @@ export interface components {
             max: number | null;
         };
         /**
+         * SessionCreate
+         * @description A new meeting: its title and the device it is recorded on (the machine's name).
+         */
+        SessionCreate: {
+            /** Title */
+            title: string;
+            /** Client Device Id */
+            client_device_id: string;
+        };
+        /**
+         * SessionResponse
+         * @description A meeting as the draft answered it; the clients read its `id`.
+         */
+        SessionResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Ended At */
+            ended_at: string | null;
+            /** Status */
+            status: string;
+            /** Client Device Id */
+            client_device_id: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Updated At */
+            updated_at: string | null;
+        };
+        /**
+         * SessionUpdate
+         * @description A change of a meeting: its title, or its end with the client's time of it.
+         */
+        SessionUpdate: {
+            /** Title */
+            title?: string | null;
+            /** Status */
+            status?: ("active" | "paused" | "completed" | "failed") | null;
+            /** Ended At */
+            ended_at?: string | null;
+        };
+        /**
          * SignedOutElsewhere
          * @description How many other sessions ended.
          */
@@ -2752,6 +2946,18 @@ export interface components {
             /** Next */
             next: string;
         };
+        /**
+         * Stage
+         * @description One stage of a run.
+         * @enum {string}
+         */
+        Stage: "intake" | "transcribe" | "diarize" | "align" | "findings" | "write_up";
+        /**
+         * StageStatus
+         * @description Where a stage stands.
+         * @enum {string}
+         */
+        StageStatus: "pending" | "running" | "done" | "failed";
         /**
          * StorageOut
          * @description What the person holds against what the plan allows; a null limit is unlimited.
@@ -5669,6 +5875,144 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_session_v1_sessions_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SessionCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    update_session_v1_sessions__session_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SessionUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    end_session_v1_me_sessions__session_id__end_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EndAccepted"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_run_v1_me_runs__run_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RunOut"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

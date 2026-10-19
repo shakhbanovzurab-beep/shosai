@@ -27,3 +27,9 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `meeting_object_deletions` — transient keys whose rows are gone, until the bucket confirms.
 - `meetings_shared_meeting(token)` — the link's meeting and company, past row-level security, for a reader without an account.
 - `application/account_data.py` — export, transfer and erasure: rows through core's helpers, the transcript meeting by meeting, transient objects by pointer.
+
+## Lifecycle (step 3)
+
+- `application/lifecycle.py` — the start (minutes and the Free device in the person's transaction, the device's previous meeting ended), the native `PATCH` and §10's end under the meeting's row lock: the first end wins, writes `meetings.meeting.ended` and the one `live` run; a meeting not kept leaves only billing's tombstone.
+- `application/minutes.py` — the `billing.meeting_minutes` binding: live meetings until now within 6 hours, ended ones by their seconds, hidden ones until their purge.
+- `channels/http/native_sessions.py`, `channels/http/runs.py` — `POST /v1/sessions`, `PATCH /v1/sessions/{id}` in the draft's shapes; `POST /v1/me/sessions/{id}/end`, `GET /v1/me/runs/{id}`.

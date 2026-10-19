@@ -4368,6 +4368,256 @@
           }
         }
       }
+    },
+    "/v1/sessions": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Create Session",
+        "description": "Start a live meeting on this device.",
+        "operationId": "create_session_v1_sessions_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}": {
+      "patch": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Update Session",
+        "description": "Retitle the meeting, or end it; a repeated end answers the stored meeting.",
+        "operationId": "update_session_v1_sessions__session_id__patch",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionResponse"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/sessions/{session_id}/end": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "End Session",
+        "description": "End the meeting; its notes follow from the run.",
+        "operationId": "end_session_v1_me_sessions__session_id__end_post",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Session Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EndAccepted"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/runs/{run_id}": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Get Run",
+        "description": "A run of a meeting the person may read.",
+        "operationId": "get_run_v1_me_runs__run_id__get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5358,6 +5608,28 @@
         ],
         "title": "EmailVerifyRequest",
         "description": "The challenge and the code from the mail."
+      },
+      "EndAccepted": {
+        "properties": {
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "run_id"
+        ],
+        "title": "EndAccepted",
+        "description": "The meeting ended; its notes come from this run, if it has one."
       },
       "EntitlementsView": {
         "properties": {
@@ -7977,6 +8249,131 @@
         "title": "RestoreBody",
         "description": "The person's home, as the account's card shows it."
       },
+      "RunOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "meeting_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Meeting Id"
+          },
+          "source": {
+            "$ref": "#/components/schemas/RunSource"
+          },
+          "state": {
+            "$ref": "#/components/schemas/RunState"
+          },
+          "stages": {
+            "items": {
+              "$ref": "#/components/schemas/RunStageOut"
+            },
+            "type": "array",
+            "title": "Stages"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "meeting_id",
+          "source",
+          "state",
+          "stages",
+          "error_code",
+          "created_at",
+          "finished_at"
+        ],
+        "title": "RunOut",
+        "description": "A run of a meeting and how far it got."
+      },
+      "RunSource": {
+        "type": "string",
+        "enum": [
+          "live",
+          "import",
+          "recording",
+          "regenerate"
+        ],
+        "title": "RunSource",
+        "description": "What asked for the run."
+      },
+      "RunStageOut": {
+        "properties": {
+          "stage": {
+            "$ref": "#/components/schemas/Stage"
+          },
+          "status": {
+            "$ref": "#/components/schemas/StageStatus"
+          },
+          "attempts": {
+            "type": "integer",
+            "title": "Attempts"
+          },
+          "error_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Code"
+          }
+        },
+        "type": "object",
+        "required": [
+          "stage",
+          "status",
+          "attempts",
+          "error_code"
+        ],
+        "title": "RunStageOut",
+        "description": "One stage of a run."
+      },
+      "RunState": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "running",
+          "succeeded",
+          "partially_completed",
+          "failed"
+        ],
+        "title": "RunState",
+        "description": "A run's state as §10 names it."
+      },
       "SalesInquiryAnswer": {
         "properties": {
           "status": {
@@ -8110,6 +8507,142 @@
         "title": "SeatsView",
         "description": "How many users a team plan is sold for."
       },
+      "SessionCreate": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "maxLength": 256,
+            "title": "Title"
+          },
+          "client_device_id": {
+            "type": "string",
+            "title": "Client Device Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "client_device_id"
+        ],
+        "title": "SessionCreate",
+        "description": "A new meeting: its title and the device it is recorded on (the machine's name)."
+      },
+      "SessionResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "client_device_id": {
+            "type": "string",
+            "title": "Client Device Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "started_at",
+          "ended_at",
+          "status",
+          "client_device_id",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "SessionResponse",
+        "description": "A meeting as the draft answered it; the clients read its `id`."
+      },
+      "SessionUpdate": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "active",
+                  "paused",
+                  "completed",
+                  "failed"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          }
+        },
+        "type": "object",
+        "title": "SessionUpdate",
+        "description": "A change of a meeting: its title, or its end with the client's time of it."
+      },
       "SignedOutElsewhere": {
         "properties": {
           "ended": {
@@ -8229,6 +8762,30 @@
         ],
         "title": "SocialTickets",
         "description": "`social` for a known person (then `complete`), `social_consent` for a new one."
+      },
+      "Stage": {
+        "type": "string",
+        "enum": [
+          "intake",
+          "transcribe",
+          "diarize",
+          "align",
+          "findings",
+          "write_up"
+        ],
+        "title": "Stage",
+        "description": "One stage of a run."
+      },
+      "StageStatus": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "running",
+          "done",
+          "failed"
+        ],
+        "title": "StageStatus",
+        "description": "Where a stage stands."
       },
       "StorageOut": {
         "properties": {

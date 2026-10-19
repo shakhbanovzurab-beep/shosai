@@ -1,7 +1,9 @@
-"""How the shipped macOS and Windows 1.4.5 clients decode identity's answers (identity step 13).
+"""How the shipped macOS and Windows 1.4.5 clients decode the answers they read.
 
-Each check mirrors the clients' DTOs field by field — `AuthClient.swift` in WhispererKit and
-`AuthClient.cs` in the Windows client, as `contracts/draft/consumers.json` points to them. A
+Identity's (identity step 13) and meetings' (meetings step 3 on). Each check mirrors the
+clients' DTOs field by field — `AuthClient.swift` and `SessionsClient.swift` in WhispererKit,
+`AuthClient.cs` and `SessionsClient.cs` in the Windows client, as
+`contracts/draft/consumers.json` points to them. A
 field a client requires must be present with its type; an optional one may be missing or
 null but never of another type, since one wrong value fails the decoding of the whole body.
 """
@@ -74,3 +76,8 @@ def decode_auth_user(body: Body) -> str:
         _required(features, "voice_translation", (bool,))
         _optional(features, "teleprompter", (bool,))
     return str(_required(body, "email", (str,)))
+
+
+def decode_session_start(body: Body) -> str:
+    """`POST /v1/sessions` as `SessionsClient` reads its raw JSON: the meeting's `id`."""
+    return str(_required(body, "id", (str,)))

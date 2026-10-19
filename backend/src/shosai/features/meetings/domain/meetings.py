@@ -10,7 +10,7 @@ decides when a meeting ended: never before its last line, never after now or its
 
 import unicodedata
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from enum import StrEnum
 from typing import Final
 
@@ -45,6 +45,8 @@ class EndCause(StrEnum):
     CLIENT_FAILED = "client_failed"
     SILENCE = "silence"
     CEILING = "ceiling"
+    # Тот же человек начал новую встречу на том же устройстве.
+    REPLACED = "replaced"
     # Импорт заканчивается длиной своей записи.
     RECORDING = "recording"
 
@@ -64,6 +66,14 @@ def checked_title(raw: str) -> str:
     if not title:
         raise TitleRuleError
     return title[:TITLE_MAX]
+
+
+def title_or_default(raw: str, started_at: datetime) -> str:
+    """The title, or the meeting's start in UTC when the client sent none: no words to translate."""
+    try:
+        return checked_title(raw)
+    except TitleRuleError:
+        return started_at.astimezone(UTC).strftime("%Y-%m-%d %H:%M UTC")
 
 
 def ends_by(started_at: datetime) -> datetime:
