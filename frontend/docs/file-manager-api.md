@@ -51,6 +51,12 @@ File Manager is the only place the account's files are stored. Nothing else keep
   upload that fails for good is cancelled at once; a cancellation that does not arrive is the daily sweep's. Ready
   uploads become files in one `POST /v1/files`; a repeat answers the same files. The links carry signed headers; the
   browser sets `Content-Length` and `Host` itself.
+- **The upload panel.** File Manager and Knowledge show every upload of the tab as a row: waiting, sent bytes with
+  the time left, saving, done. A file refused before it starts (empty, over 2 GB, past 20, a type Leo can't read)
+  is a row with its reason, not a toast. Stopping a row aborts its parts and sends `DELETE /v1/me/uploads/{id}`, so
+  the reservation comes back at once. Retrying a row whose bytes are already in the bucket only registers it again;
+  a registration answering `upload_not_claimable`, `upload_not_found` or `upload_closed` sends the bytes anew. Done
+  rows leave after a few seconds; toasts speak only when no panel is on screen.
 - **Download (FL-D9).** `url` is a 15-minute link on Shosai's own address (`/dl/{home}/…`) with the file's name and
   pinned type, so a plain `<a download>` saves it; the edge streams the bytes with `nosniff` and a sandbox, and
   active content (HTML, SVG, scripts) always downloads. A file shared with the person downloads too.

@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Subir",
-    "uploading": "Subiendo {count, plural, one {# archivo} many {# de archivos} other {# archivos}}… {progress, number, percent}",
     "dropHere": "Suelta para subir aquí",
-    "skipped": "{count, plural, one {Se omitió # archivo} many {Se omitieron # de archivos} other {Se omitieron # archivos}}",
-    "skippedDescription": "Se omiten los archivos vacíos o de más de {size}, y se pueden subir como máximo {max, number} a la vez."
+    "label": "Subidas",
+    "uploading": "Subiendo {count, plural, one {# archivo} many {# de archivos} other {# archivos}}…",
+    "uploaded": "{count, plural, one {Se subió # archivo} many {Se subieron # de archivos} other {Se subieron # archivos}}",
+    "notUploaded": "{count, plural, one {No se subió # archivo} many {No se subieron # de archivos} other {No se subieron # archivos}}",
+    "waiting": "En espera…",
+    "progress": "{sent} de {size}",
+    "progressLeft": "{sent} de {size} · quedan {time}",
+    "finishing": "Terminando…",
+    "done": "Subido",
+    "doneLeo": "Subido · Leo lo está leyendo",
+    "cancel": "Detener la subida de «{name}»",
+    "remove": "Quitar «{name}» de la lista",
+    "clear": "Borrar",
+    "refused": {
+      "empty": "El archivo está vacío",
+      "tooLarge": "Más de {size}",
+      "tooMany": "Más de {max, number} archivos a la vez",
+      "unreadable": "Leo no puede leer este tipo o tamaño"
+    }
   },
   "picker": {
     "search": "Buscar en tus archivos",

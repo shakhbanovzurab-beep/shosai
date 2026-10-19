@@ -16,11 +16,3 @@ export function partRanges(parts: readonly Pick<PartLink, "number" | "size_bytes
   }
   return ranges;
 }
-
-/** How far a batch got, in percent of its bytes, from what each file has sent so far. */
-export function batchPercent(sent: readonly number[], sizes: readonly number[]): number {
-  const total = sizes.reduce((sum, size) => sum + size, 0);
-  if (total === 0) return 0;
-  const done = sent.reduce((sum, bytes, index) => sum + Math.min(bytes, sizes[index] ?? 0), 0);
-  return Math.min(100, Math.floor((done / total) * 100));
-}

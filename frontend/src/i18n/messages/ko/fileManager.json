@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "업로드",
-    "uploading": "{count, plural, other {파일 #개 업로드 중…}} {progress, number, percent}",
     "dropHere": "놓아서 여기에 업로드",
-    "skipped": "{count, plural, other {파일 #개를 건너뛰었어요}}",
-    "skippedDescription": "비어 있거나 {size}보다 큰 파일은 건너뛰며, 한 번에 최대 {max, number}개까지 업로드할 수 있어요."
+    "label": "업로드",
+    "uploading": "{count, plural, other {파일 #개 업로드 중…}}",
+    "uploaded": "{count, plural, other {파일 #개를 업로드했어요}}",
+    "notUploaded": "{count, plural, other {파일 #개를 업로드하지 못했어요}}",
+    "waiting": "대기 중…",
+    "progress": "{sent} / {size}",
+    "progressLeft": "{sent} / {size} · {time} 남음",
+    "finishing": "마무리하는 중…",
+    "done": "업로드됨",
+    "doneLeo": "업로드됨 · Leo가 지금 읽고 있어요",
+    "cancel": "“{name}” 업로드 중지",
+    "remove": "목록에서 “{name}” 제거",
+    "clear": "지우기",
+    "refused": {
+      "empty": "빈 파일이에요",
+      "tooLarge": "{size}보다 커요",
+      "tooMany": "한 번에 {max, number}개를 넘었어요",
+      "unreadable": "Leo가 읽을 수 없는 형식이나 크기예요"
+    }
   },
   "picker": {
     "search": "내 파일 검색",

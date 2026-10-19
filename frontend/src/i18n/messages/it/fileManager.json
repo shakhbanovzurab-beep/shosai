@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Carica",
-    "uploading": "Caricamento di {count, plural, one {# file} many {# di file} other {# file}}… {progress, number, percent}",
     "dropHere": "Rilascia per caricare qui",
-    "skipped": "{count, plural, one {# file saltato} many {# di file saltati} other {# file saltati}}",
-    "skippedDescription": "I file vuoti o più grandi di {size} vengono saltati e se ne possono caricare al massimo {max, number} alla volta."
+    "label": "Caricamenti",
+    "uploading": "Caricamento di {count, plural, one {# file} many {# di file} other {# file}}…",
+    "uploaded": "{count, plural, one {# file caricato} many {# di file caricati} other {# file caricati}}",
+    "notUploaded": "{count, plural, one {# file non caricato} many {# di file non caricati} other {# file non caricati}}",
+    "waiting": "In attesa…",
+    "progress": "{sent} di {size}",
+    "progressLeft": "{sent} di {size} · mancano {time}",
+    "finishing": "Completamento…",
+    "done": "Caricato",
+    "doneLeo": "Caricato · Leo lo sta leggendo",
+    "cancel": "Interrompi il caricamento di «{name}»",
+    "remove": "Rimuovi «{name}» dall’elenco",
+    "clear": "Svuota",
+    "refused": {
+      "empty": "Il file è vuoto",
+      "tooLarge": "Più di {size}",
+      "tooMany": "Più di {max, number} file alla volta",
+      "unreadable": "Leo non può leggere questo tipo o questa dimensione"
+    }
   },
   "picker": {
     "search": "Cerca nei tuoi file",

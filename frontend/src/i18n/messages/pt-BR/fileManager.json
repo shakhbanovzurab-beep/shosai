@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Fazer upload",
-    "uploading": "Fazendo upload de {count, plural, one {# arquivo} many {# de arquivos} other {# arquivos}}… {progress, number, percent}",
     "dropHere": "Solte para fazer upload aqui",
-    "skipped": "{count, plural, one {# arquivo ignorado} many {# de arquivos ignorados} other {# arquivos ignorados}}",
-    "skippedDescription": "Arquivos vazios ou maiores que {size} são ignorados, e no máximo {max, number} são enviados de uma vez."
+    "label": "Uploads",
+    "uploading": "Fazendo upload de {count, plural, one {# arquivo} many {# de arquivos} other {# arquivos}}…",
+    "uploaded": "{count, plural, one {Upload de # arquivo concluído} many {Upload de # de arquivos concluído} other {Upload de # arquivos concluído}}",
+    "notUploaded": "{count, plural, one {Não foi possível fazer upload de # arquivo} many {Não foi possível fazer upload de # de arquivos} other {Não foi possível fazer upload de # arquivos}}",
+    "waiting": "Na fila…",
+    "progress": "{sent} de {size}",
+    "progressLeft": "{sent} de {size} · faltam {time}",
+    "finishing": "Concluindo…",
+    "done": "Upload concluído",
+    "doneLeo": "Upload concluído · O Leo está lendo o arquivo",
+    "cancel": "Parar o upload de “{name}”",
+    "remove": "Remover “{name}” da lista",
+    "clear": "Limpar",
+    "refused": {
+      "empty": "O arquivo está vazio",
+      "tooLarge": "Maior que {size}",
+      "tooMany": "Mais de {max, number} arquivos de uma vez",
+      "unreadable": "O Leo não consegue ler este tipo ou tamanho"
+    }
   },
   "picker": {
     "search": "Pesquisar seus arquivos",

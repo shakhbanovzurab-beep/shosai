@@ -36,13 +36,9 @@
   "dropzone": {
     "label": "新增檔案給 Leo",
     "title": "將檔案拖放到這裡，讓 Leo 使用",
-    "uploading": "正在上傳 {count, plural, other {# 個檔案}}… {progress, number, percent}",
     "description": "檔案會儲存到檔案管理的「我的檔案」中。支援 {types}，每個檔案最大 {size}。",
     "choose": "從你的檔案中選擇",
-    "upload": "上傳新檔案",
-    "skipped": "{count, plural, other {已略過 # 個檔案}}",
-    "unreadable": "{name}：Leo 無法讀取這種類型或大小的檔案",
-    "tooMany": "{name}：一次超過 {max, number} 個檔案"
+    "upload": "上傳新檔案"
   },
   "choose": {
     "title": "從你的檔案中選擇",

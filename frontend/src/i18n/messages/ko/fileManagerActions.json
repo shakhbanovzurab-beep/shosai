@@ -4,7 +4,6 @@
   "leoReadingFile": "Leo가 지금 읽고 있어요.",
   "leoReadingFiles": "Leo가 지금 파일을 읽고 있어요.",
   "leoReadsFolder": "Leo가 “{folder}”의 모든 파일을 읽어요.",
-  "uploadFailed": "파일을 업로드하지 못했어요",
   "renameFailed": "파일 이름을 변경하지 못했어요",
   "updateFailed": "파일을 업데이트하지 못했어요",
   "moveFailed": "파일을 이동하지 못했어요",

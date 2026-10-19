@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Importer",
-    "uploading": "Importation de {count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}… {progress, number, percent}",
     "dropHere": "Déposer pour importer ici",
-    "skipped": "{count, plural, one {# fichier ignoré} many {# de fichiers ignorés} other {# fichiers ignorés}}",
-    "skippedDescription": "Les fichiers vides ou de plus de {size} sont ignorés, et {max, number} fichiers au maximum sont importés à la fois."
+    "label": "Importations",
+    "uploading": "Importation de {count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}…",
+    "uploaded": "{count, plural, one {# fichier importé} many {# de fichiers importés} other {# fichiers importés}}",
+    "notUploaded": "{count, plural, one {# fichier non importé} many {# de fichiers non importés} other {# fichiers non importés}}",
+    "waiting": "En attente…",
+    "progress": "{sent} sur {size}",
+    "progressLeft": "{sent} sur {size} · encore {time}",
+    "finishing": "Finalisation…",
+    "done": "Importé",
+    "doneLeo": "Importé · Leo est en train de le lire",
+    "cancel": "Arrêter l’importation de « {name} »",
+    "remove": "Retirer « {name} » de la liste",
+    "clear": "Effacer",
+    "refused": {
+      "empty": "Le fichier est vide",
+      "tooLarge": "Plus de {size}",
+      "tooMany": "Plus de {max, number} fichiers à la fois",
+      "unreadable": "Leo ne peut pas lire ce type ou cette taille de fichier"
+    }
   },
   "picker": {
     "search": "Rechercher dans vos fichiers",

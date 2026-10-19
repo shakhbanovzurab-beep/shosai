@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Tải lên",
-    "uploading": "Đang tải lên {count, plural, other {# tệp}}… {progress, number, percent}",
     "dropHere": "Thả để tải lên đây",
-    "skipped": "{count, plural, other {Đã bỏ qua # tệp}}",
-    "skippedDescription": "Tệp trống hoặc lớn hơn {size} sẽ bị bỏ qua, và mỗi lần chỉ tải lên tối đa {max, number} tệp."
+    "label": "Tải lên",
+    "uploading": "Đang tải lên {count, plural, other {# tệp}}…",
+    "uploaded": "{count, plural, other {Đã tải lên # tệp}}",
+    "notUploaded": "{count, plural, other {Chưa tải lên được # tệp}}",
+    "waiting": "Đang chờ…",
+    "progress": "{sent} / {size}",
+    "progressLeft": "{sent} / {size} · còn {time}",
+    "finishing": "Đang hoàn tất…",
+    "done": "Đã tải lên",
+    "doneLeo": "Đã tải lên · Leo đang đọc tệp này",
+    "cancel": "Dừng tải lên “{name}”",
+    "remove": "Gỡ “{name}” khỏi danh sách",
+    "clear": "Xóa danh sách",
+    "refused": {
+      "empty": "Tệp trống",
+      "tooLarge": "Lớn hơn {size}",
+      "tooMany": "Quá {max, number} tệp cùng lúc",
+      "unreadable": "Leo không đọc được loại tệp hoặc kích thước này"
+    }
   },
   "picker": {
     "search": "Tìm kiếm tệp của bạn",

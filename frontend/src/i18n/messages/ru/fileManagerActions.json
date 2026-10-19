@@ -4,7 +4,6 @@
   "leoReadingFile": "Leo уже читает его.",
   "leoReadingFiles": "Leo уже читает их.",
   "leoReadsFolder": "Leo читает всё в папке «{folder}».",
-  "uploadFailed": "Не удалось загрузить файлы",
   "renameFailed": "Не удалось переименовать файл",
   "updateFailed": "Не удалось обновить файл",
   "moveFailed": "Не удалось переместить файл",

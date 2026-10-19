@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "上傳",
-    "uploading": "正在上傳 {count, plural, other {# 個檔案}}… {progress, number, percent}",
     "dropHere": "放開即可上傳到這裡",
-    "skipped": "{count, plural, other {已略過 # 個檔案}}",
-    "skippedDescription": "空白檔案或超過 {size} 的檔案會被略過，而且一次最多上傳 {max, number} 個檔案。"
+    "label": "上傳",
+    "uploading": "正在上傳 {count, plural, other {# 個檔案}}…",
+    "uploaded": "{count, plural, other {已上傳 # 個檔案}}",
+    "notUploaded": "{count, plural, other {# 個檔案無法上傳}}",
+    "waiting": "等待中…",
+    "progress": "{sent} / {size}",
+    "progressLeft": "{sent} / {size} · 剩下 {time}",
+    "finishing": "正在完成…",
+    "done": "已上傳",
+    "doneLeo": "已上傳 · Leo 正在讀取這個檔案",
+    "cancel": "停止上傳「{name}」",
+    "remove": "從清單中移除「{name}」",
+    "clear": "清除",
+    "refused": {
+      "empty": "檔案是空的",
+      "tooLarge": "超過 {size}",
+      "tooMany": "一次超過 {max, number} 個檔案",
+      "unreadable": "Leo 無法讀取這種類型或大小的檔案"
+    }
   },
   "picker": {
     "search": "搜尋你的檔案",

@@ -36,13 +36,9 @@
   "dropzone": {
     "label": "Ajouter des fichiers pour Leo",
     "title": "Déposez ici des fichiers que Leo utilisera",
-    "uploading": "Importation de {count, plural, one {# fichier} many {# de fichiers} other {# fichiers}}… {progress, number, percent}",
     "description": "Ils sont enregistrés dans Mes fichiers, dans le Gestionnaire de fichiers. {types}, {size} maximum chacun.",
     "choose": "Choisir dans vos fichiers",
-    "upload": "Importer",
-    "skipped": "{count, plural, one {# fichier ignoré} many {# de fichiers ignorés} other {# fichiers ignorés}}",
-    "unreadable": "{name} : Leo ne peut pas lire ce type ou cette taille de fichier",
-    "tooMany": "{name} : plus de {max, number} fichiers à la fois"
+    "upload": "Importer"
   },
   "choose": {
     "title": "Choisir dans vos fichiers",

@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Hochladen",
-    "uploading": "{count, plural, one {# Datei wird hochgeladen…} other {# Dateien werden hochgeladen…}} {progress, number, percent}",
     "dropHere": "Zum Hochladen hier ablegen",
-    "skipped": "{count, plural, one {# Datei übersprungen} other {# Dateien übersprungen}}",
-    "skippedDescription": "Leere Dateien und Dateien über {size} werden übersprungen; höchstens {max, number} werden gleichzeitig hochgeladen."
+    "label": "Uploads",
+    "uploading": "{count, plural, one {# Datei wird hochgeladen…} other {# Dateien werden hochgeladen…}}",
+    "uploaded": "{count, plural, one {# Datei hochgeladen} other {# Dateien hochgeladen}}",
+    "notUploaded": "{count, plural, one {# Datei nicht hochgeladen} other {# Dateien nicht hochgeladen}}",
+    "waiting": "Wartet…",
+    "progress": "{sent} von {size}",
+    "progressLeft": "{sent} von {size} · noch {time}",
+    "finishing": "Wird abgeschlossen…",
+    "done": "Hochgeladen",
+    "doneLeo": "Hochgeladen · Leo liest sie gerade",
+    "cancel": "Hochladen von „{name}“ stoppen",
+    "remove": "„{name}“ aus der Liste entfernen",
+    "clear": "Leeren",
+    "refused": {
+      "empty": "Die Datei ist leer",
+      "tooLarge": "Größer als {size}",
+      "tooMany": "Mehr als {max, number} Dateien gleichzeitig",
+      "unreadable": "Leo kann diesen Typ oder diese Größe nicht lesen"
+    }
   },
   "picker": {
     "search": "Deine Dateien durchsuchen",

@@ -4,22 +4,19 @@ import { useRef, useState } from "react";
 
 import { cn } from "cn";
 import { CloudUpload, FolderSearch } from "lucide-react";
-import { toast } from "sonner";
 import { useFormatter, useLocale, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { LEO_EXTENSIONS, LEO_MAX_FILE_BYTES, MAX_FILES_PER_UPLOAD } from "@/features/file-manager/domain/contract";
-import { uploadFiles } from "@/features/file-manager/model/upload-actions";
-import { useUploadProgress } from "@/features/file-manager/model/upload-progress";
+import { isLeoReadable, LEO_EXTENSIONS, LEO_MAX_FILE_BYTES } from "@/features/file-manager/domain/contract";
+import { screenFiles } from "@/features/file-manager/domain/upload-queue";
+import { refuseFiles, uploadFiles } from "@/features/file-manager/model/upload-actions";
 import { useFileActionWords } from "@/features/file-manager/model/words";
 import { formatBytes } from "@/i18n/format-units";
 
-import { triage } from "../model/leo-files";
-
 /**
  * Drop or pick files for Leo: they go to My files in File Manager (the one place files live) and are
- * marked "Use with Leo" at once. Or choose files already there.
+ * marked "Use with Leo" at once. Or choose files already there. Как идут файлы, показывает панель загрузок
+ * под этой зоной; файл, который Leo не прочтёт, становится в ней строкой с причиной.
  */
 export function UploadDropzone({ onChoose }: { onChoose: () => void }) {
   const t = useTranslations("knowledgeBase");
@@ -28,22 +25,12 @@ export function UploadDropzone({ onChoose }: { onChoose: () => void }) {
   const words = useFileActionWords();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isOver, setIsOver] = useState(false);
-  const [uploading, setUploading] = useState(0);
-  const progress = useUploadProgress();
 
-  async function upload(files: File[]) {
-    const { accepted, rejected } = triage(files);
-    const reasons = rejected.map(({ name, reason }) =>
-      reason === "unreadable"
-        ? t("dropzone.unreadable", { name })
-        : t("dropzone.tooMany", { name, max: MAX_FILES_PER_UPLOAD }),
-    );
-    if (rejected.length)
-      toast.error(t("dropzone.skipped", { count: rejected.length }), { description: reasons.join("\n") });
-    if (accepted.length === 0) return;
-    setUploading(accepted.length);
-    await uploadFiles(accepted, { folderId: null, leo: true }, words);
-    setUploading(0);
+  function upload(files: File[]) {
+    const target = { folderId: null, leo: true };
+    const { accepted, refused } = screenFiles(files, (file) => isLeoReadable(file.name, file.size));
+    refuseFiles(refused, target);
+    if (accepted.length > 0) void uploadFiles(accepted, target, words);
   }
 
   return (
@@ -57,7 +44,7 @@ export function UploadDropzone({ onChoose }: { onChoose: () => void }) {
       onDrop={(event) => {
         event.preventDefault();
         setIsOver(false);
-        void upload([...event.dataTransfer.files]);
+        upload([...event.dataTransfer.files]);
       }}
       className={cn(
         "flex flex-col items-center gap-3 rounded-xl border border-dashed bg-muted/30 px-6 py-8 text-center transition-colors",
@@ -65,14 +52,10 @@ export function UploadDropzone({ onChoose }: { onChoose: () => void }) {
       )}
     >
       <div className="grid size-11 place-items-center rounded-full border bg-background">
-        {uploading ? <Spinner /> : <CloudUpload className="size-5 text-muted-foreground" />}
+        <CloudUpload className="size-5 text-muted-foreground" />
       </div>
       <div className="flex flex-col gap-1">
-        <p className="font-medium tabular-nums">
-          {uploading
-            ? t("dropzone.uploading", { count: uploading, progress: progress.percent / 100 })
-            : t("dropzone.title")}
-        </p>
+        <p className="font-medium">{t("dropzone.title")}</p>
         <p className="text-muted-foreground text-sm">
           {t("dropzone.description", {
             types: format.list(
@@ -88,7 +71,7 @@ export function UploadDropzone({ onChoose }: { onChoose: () => void }) {
           <FolderSearch data-icon="inline-start" />
           {t("dropzone.choose")}
         </Button>
-        <Button variant="outline" size="sm" disabled={uploading > 0} onClick={() => inputRef.current?.click()}>
+        <Button variant="outline" size="sm" onClick={() => inputRef.current?.click()}>
           {t("dropzone.upload")}
         </Button>
       </div>
@@ -101,7 +84,7 @@ export function UploadDropzone({ onChoose }: { onChoose: () => void }) {
         tabIndex={-1}
         aria-hidden="true"
         onChange={(event) => {
-          void upload([...(event.currentTarget.files ?? [])]);
+          upload([...(event.currentTarget.files ?? [])]);
           event.currentTarget.value = "";
         }}
       />

@@ -36,13 +36,9 @@
   "dropzone": {
     "label": "Dateien für Leo hinzufügen",
     "title": "Zieh Dateien hierher, damit Leo sie nutzt",
-    "uploading": "{count, plural, one {# Datei wird hochgeladen…} other {# Dateien werden hochgeladen…}} {progress, number, percent}",
     "description": "Sie werden unter Meine Dateien im Dateimanager gespeichert. {types}, jeweils bis {size}.",
     "choose": "Aus deinen Dateien wählen",
-    "upload": "Neue hochladen",
-    "skipped": "{count, plural, one {# Datei übersprungen} other {# Dateien übersprungen}}",
-    "unreadable": "{name}: Leo kann diesen Typ oder diese Größe nicht lesen",
-    "tooMany": "{name}: mehr als {max, number} Dateien gleichzeitig"
+    "upload": "Neue hochladen"
   },
   "choose": {
     "title": "Aus deinen Dateien wählen",

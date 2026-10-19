@@ -4,7 +4,6 @@
   "leoReadingFile": "Leo is reading it now.",
   "leoReadingFiles": "Leo is reading them now.",
   "leoReadsFolder": "Leo reads everything in “{folder}”.",
-  "uploadFailed": "Couldn’t upload the files",
   "renameFailed": "Couldn’t rename the file",
   "updateFailed": "Couldn’t update the file",
   "moveFailed": "Couldn’t move the file",

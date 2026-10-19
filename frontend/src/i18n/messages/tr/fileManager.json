@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Dosya yükle",
-    "uploading": "{count, plural, one {# dosya yükleniyor…} other {# dosya yükleniyor…}} {progress, number, percent}",
     "dropHere": "Buraya yüklemek için bırakın",
-    "skipped": "{count, plural, one {# dosya atlandı} other {# dosya atlandı}}",
-    "skippedDescription": "Boş veya {size} üzerindeki dosyalar atlanır; tek seferde en fazla {max, number} dosya yüklenir."
+    "label": "Yüklemeler",
+    "uploading": "{count, plural, one {# dosya yükleniyor…} other {# dosya yükleniyor…}}",
+    "uploaded": "{count, plural, one {# dosya yüklendi} other {# dosya yüklendi}}",
+    "notUploaded": "{count, plural, one {# dosya yüklenemedi} other {# dosya yüklenemedi}}",
+    "waiting": "Sırada…",
+    "progress": "{sent} / {size}",
+    "progressLeft": "{sent} / {size} · {time} kaldı",
+    "finishing": "Tamamlanıyor…",
+    "done": "Yüklendi",
+    "doneLeo": "Yüklendi · Leo şu anda bu dosyayı okuyor",
+    "cancel": "“{name}” yüklemesini durdur",
+    "remove": "“{name}” dosyasını listeden kaldır",
+    "clear": "Temizle",
+    "refused": {
+      "empty": "Dosya boş",
+      "tooLarge": "{size} üzerinde",
+      "tooMany": "Tek seferde {max, number} dosyadan fazlası",
+      "unreadable": "Leo bu türü veya boyutu okuyamaz"
+    }
   },
   "picker": {
     "search": "Dosyalarınızda ara",

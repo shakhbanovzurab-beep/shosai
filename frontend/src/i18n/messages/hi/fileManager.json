@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "अपलोड करें",
-    "uploading": "{count, plural, one {# फ़ाइल अपलोड हो रही है…} other {# फ़ाइलें अपलोड हो रही हैं…}} {progress, number, percent}",
     "dropHere": "यहां अपलोड करने के लिए छोड़ें",
-    "skipped": "{count, plural, one {# फ़ाइल छोड़ दी गई} other {# फ़ाइलें छोड़ दी गईं}}",
-    "skippedDescription": "खाली फ़ाइलें या {size} से बड़ी फ़ाइलें छोड़ दी जाती हैं, और एक बार में ज़्यादा से ज़्यादा {max, number} फ़ाइलें अपलोड होती हैं।"
+    "label": "अपलोड",
+    "uploading": "{count, plural, one {# फ़ाइल अपलोड हो रही है…} other {# फ़ाइलें अपलोड हो रही हैं…}}",
+    "uploaded": "{count, plural, one {# फ़ाइल अपलोड हो गई} other {# फ़ाइलें अपलोड हो गईं}}",
+    "notUploaded": "{count, plural, one {# फ़ाइल अपलोड नहीं हो सकी} other {# फ़ाइलें अपलोड नहीं हो सकीं}}",
+    "waiting": "प्रतीक्षा में…",
+    "progress": "{size} में से {sent}",
+    "progressLeft": "{size} में से {sent} · {time} बाकी",
+    "finishing": "पूरा हो रहा है…",
+    "done": "अपलोड हो गई",
+    "doneLeo": "अपलोड हो गई · Leo अभी इसे पढ़ रहा है",
+    "cancel": "“{name}” का अपलोड रोकें",
+    "remove": "“{name}” को सूची से हटाएं",
+    "clear": "साफ़ करें",
+    "refused": {
+      "empty": "फ़ाइल खाली है",
+      "tooLarge": "{size} से बड़ी",
+      "tooMany": "एक बार में {max, number} से ज़्यादा फ़ाइलें",
+      "unreadable": "Leo इस प्रकार या साइज़ की फ़ाइल नहीं पढ़ सकता"
+    }
   },
   "picker": {
     "search": "अपनी फ़ाइलें खोजें",

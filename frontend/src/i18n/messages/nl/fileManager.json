@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Uploaden",
-    "uploading": "{count, plural, one {# bestand uploaden…} other {# bestanden uploaden…}} {progress, number, percent}",
     "dropHere": "Loslaten om hier te uploaden",
-    "skipped": "{count, plural, one {# bestand overgeslagen} other {# bestanden overgeslagen}}",
-    "skippedDescription": "Lege bestanden en bestanden groter dan {size} worden overgeslagen, en er worden maximaal {max, number} tegelijk geüpload."
+    "label": "Uploads",
+    "uploading": "{count, plural, one {# bestand uploaden…} other {# bestanden uploaden…}}",
+    "uploaded": "{count, plural, one {# bestand geüpload} other {# bestanden geüpload}}",
+    "notUploaded": "{count, plural, one {# bestand niet geüpload} other {# bestanden niet geüpload}}",
+    "waiting": "Wachten…",
+    "progress": "{sent} van {size}",
+    "progressLeft": "{sent} van {size} · nog {time}",
+    "finishing": "Afronden…",
+    "done": "Geüpload",
+    "doneLeo": "Geüpload · Leo leest het nu",
+    "cancel": "Uploaden van ‘{name}’ stoppen",
+    "remove": "‘{name}’ uit de lijst verwijderen",
+    "clear": "Wissen",
+    "refused": {
+      "empty": "Het bestand is leeg",
+      "tooLarge": "Groter dan {size}",
+      "tooMany": "Meer dan {max, number} bestanden tegelijk",
+      "unreadable": "Leo kan dit type of deze grootte niet lezen"
+    }
   },
   "picker": {
     "search": "Je bestanden doorzoeken",

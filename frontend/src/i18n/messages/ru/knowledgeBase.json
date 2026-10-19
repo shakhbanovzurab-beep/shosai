@@ -36,13 +36,9 @@
   "dropzone": {
     "label": "Добавить файлы для Leo",
     "title": "Перетащите сюда файлы для Leo",
-    "uploading": "Загрузка {count, plural, one {# файла} few {# файлов} many {# файлов} other {# файла}}… {progress, number, percent}",
     "description": "Они сохранятся в Моих файлах в разделе «Файлы». {types}, до {size} каждый.",
     "choose": "Выбрать из своих файлов",
-    "upload": "Загрузить новые",
-    "skipped": "{count, plural, one {Пропущен # файл} few {Пропущено # файла} many {Пропущено # файлов} other {Пропущено # файла}}",
-    "unreadable": "{name}: Leo не может прочитать файл такого типа или размера",
-    "tooMany": "{name}: за раз можно не больше {max, number}"
+    "upload": "Загрузить новые"
   },
   "choose": {
     "title": "Выбрать из своих файлов",

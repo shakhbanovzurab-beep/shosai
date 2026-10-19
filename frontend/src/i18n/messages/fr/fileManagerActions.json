@@ -4,7 +4,6 @@
   "leoReadingFile": "Leo est en train de le lire.",
   "leoReadingFiles": "Leo est en train de les lire.",
   "leoReadsFolder": "Leo lit tout le contenu de « {folder} ».",
-  "uploadFailed": "Impossible d’importer les fichiers",
   "renameFailed": "Impossible de renommer le fichier",
   "updateFailed": "Impossible de mettre à jour le fichier",
   "moveFailed": "Impossible de déplacer le fichier",

@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Загрузить",
-    "uploading": "Загрузка {count, plural, one {# файла} few {# файлов} many {# файлов} other {# файла}}… {progress, number, percent}",
     "dropHere": "Отпустите, чтобы загрузить сюда",
-    "skipped": "{count, plural, one {Пропущен # файл} few {Пропущено # файла} many {Пропущено # файлов} other {Пропущено # файла}}",
-    "skippedDescription": "Пустые файлы и файлы больше {size} пропускаются, а за раз загружается не больше {max, number}."
+    "label": "Загрузки",
+    "uploading": "Загрузка {count, plural, one {# файла} few {# файлов} many {# файлов} other {# файла}}…",
+    "uploaded": "{count, plural, one {Загружен # файл} few {Загружено # файла} many {Загружено # файлов} other {Загружено # файла}}",
+    "notUploaded": "{count, plural, one {Не загружен # файл} few {Не загружено # файла} many {Не загружено # файлов} other {Не загружено # файла}}",
+    "waiting": "В очереди…",
+    "progress": "{sent} из {size}",
+    "progressLeft": "{sent} из {size} · осталось {time}",
+    "finishing": "Сохранение…",
+    "done": "Загружен",
+    "doneLeo": "Загружен · Leo уже читает его",
+    "cancel": "Остановить загрузку «{name}»",
+    "remove": "Убрать «{name}» из списка",
+    "clear": "Очистить",
+    "refused": {
+      "empty": "Файл пустой",
+      "tooLarge": "Больше {size}",
+      "tooMany": "Больше {max, number} файлов за раз",
+      "unreadable": "Leo не может прочитать файл такого типа или размера"
+    }
   },
   "picker": {
     "search": "Найти файлы",

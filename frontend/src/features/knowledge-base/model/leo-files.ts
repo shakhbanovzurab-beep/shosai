@@ -5,9 +5,7 @@ import {
   type FileItem,
   IN_PROGRESS,
   type IndexStatus,
-  isLeoReadable,
   type LeoUse,
-  MAX_FILES_PER_UPLOAD,
 } from "@/features/file-manager/domain/contract";
 import { setFileLeo } from "@/features/file-manager/model/file-actions";
 import { setFolderLeo } from "@/features/file-manager/model/folder-actions";
@@ -44,21 +42,6 @@ export function indexTotals(files: (FileItem & { leo: LeoUse })[]) {
     bytes += file.size_bytes;
   }
   return { chunks, processing, failed, bytes };
-}
-
-/** Why a picked file is left out: a type or size Leo can't read, or past the most one upload takes. */
-export type Rejection = { name: string; reason: "unreadable" | "tooMany" };
-
-/** Splits a selection into what Leo can read and a reason for everything else. */
-export function triage<T extends { name: string; size: number }>(files: T[]) {
-  const accepted: T[] = [];
-  const rejected: Rejection[] = [];
-  for (const file of files) {
-    if (!isLeoReadable(file.name, file.size)) rejected.push({ name: file.name, reason: "unreadable" });
-    else if (accepted.length >= MAX_FILES_PER_UPLOAD) rejected.push({ name: file.name, reason: "tooMany" });
-    else accepted.push(file);
-  }
-  return { accepted, rejected };
 }
 
 /** Has Leo use the picked folders and files, with one confirmation for all of them. */

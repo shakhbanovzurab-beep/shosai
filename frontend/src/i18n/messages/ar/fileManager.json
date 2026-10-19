@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "رفع",
-    "uploading": "جارٍ رفع {count, plural, zero {# ملف} one {ملف واحد} two {ملفين} few {# ملفات} many {# ملفًا} other {# ملف}}… {progress, number, percent}",
     "dropHere": "الإفلات للرفع هنا",
-    "skipped": "{count, plural, zero {تم تخطي # ملف} one {تم تخطي ملف واحد} two {تم تخطي ملفين} few {تم تخطي # ملفات} many {تم تخطي # ملفًا} other {تم تخطي # ملف}}",
-    "skippedDescription": "يتم تخطي الملفات الفارغة أو التي يزيد حجمها على {size}، ولا يمكن أن يتجاوز عدد الملفات المرفوعة في المرة الواحدة {max, number}."
+    "label": "عمليات الرفع",
+    "uploading": "جارٍ رفع {count, plural, zero {# ملف} one {ملف واحد} two {ملفين} few {# ملفات} many {# ملفًا} other {# ملف}}…",
+    "uploaded": "{count, plural, zero {تم رفع # ملف} one {تم رفع ملف واحد} two {تم رفع ملفين} few {تم رفع # ملفات} many {تم رفع # ملفًا} other {تم رفع # ملف}}",
+    "notUploaded": "{count, plural, zero {تعذر رفع # ملف} one {تعذر رفع ملف واحد} two {تعذر رفع ملفين} few {تعذر رفع # ملفات} many {تعذر رفع # ملفًا} other {تعذر رفع # ملف}}",
+    "waiting": "في الانتظار…",
+    "progress": "{sent} من {size}",
+    "progressLeft": "{sent} من {size} · متبقٍ {time}",
+    "finishing": "جارٍ الإنهاء…",
+    "done": "تم الرفع",
+    "doneLeo": "تم الرفع · يقرأه Leo الآن",
+    "cancel": "إيقاف رفع «{name}»",
+    "remove": "إزالة «{name}» من القائمة",
+    "clear": "مسح",
+    "refused": {
+      "empty": "الملف فارغ",
+      "tooLarge": "أكبر من {size}",
+      "tooMany": "أكثر من {max, number} ملفات في المرة الواحدة",
+      "unreadable": "لا يمكن لـ Leo قراءة هذا النوع أو هذا الحجم"
+    }
   },
   "picker": {
     "search": "البحث في الملفات",

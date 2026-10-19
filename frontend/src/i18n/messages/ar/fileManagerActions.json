@@ -4,7 +4,6 @@
   "leoReadingFile": "يقرأه Leo الآن.",
   "leoReadingFiles": "يقرؤها Leo الآن.",
   "leoReadsFolder": "يقرأ Leo كل ما في «{folder}».",
-  "uploadFailed": "تعذر رفع الملفات",
   "renameFailed": "تعذرت إعادة تسمية الملف",
   "updateFailed": "تعذر تحديث الملف",
   "moveFailed": "تعذر نقل الملف",

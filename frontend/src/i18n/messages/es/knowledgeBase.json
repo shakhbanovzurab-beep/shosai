@@ -36,13 +36,9 @@
   "dropzone": {
     "label": "Agregar archivos para Leo",
     "title": "Suelta aquí los archivos que usará Leo",
-    "uploading": "Subiendo {count, plural, one {# archivo} many {# de archivos} other {# archivos}}… {progress, number, percent}",
     "description": "Se guardan en Mis archivos, en el Administrador de archivos. {types}, de hasta {size} cada uno.",
     "choose": "Elegir de tus archivos",
-    "upload": "Subir nuevos",
-    "skipped": "{count, plural, one {Se omitió # archivo} many {Se omitieron # de archivos} other {Se omitieron # archivos}}",
-    "unreadable": "{name}: Leo no puede leer este tipo o tamaño",
-    "tooMany": "{name}: más de {max, number} archivos a la vez"
+    "upload": "Subir nuevos"
   },
   "choose": {
     "title": "Elegir de tus archivos",

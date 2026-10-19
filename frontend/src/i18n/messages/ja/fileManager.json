@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "アップロード",
-    "uploading": "{count, plural, other {# 件のファイルをアップロード中…}} {progress, number, percent}",
     "dropHere": "ドロップしてここにアップロード",
-    "skipped": "{count, plural, other {# 件のファイルをスキップしました}}",
-    "skippedDescription": "空のファイルや {size} を超えるファイルはスキップされます。一度にアップロードできるのは {max, number} 件までです。"
+    "label": "アップロード",
+    "uploading": "{count, plural, other {# 件のファイルをアップロード中…}}",
+    "uploaded": "{count, plural, other {# 件のファイルをアップロードしました}}",
+    "notUploaded": "{count, plural, other {# 件のファイルをアップロードできませんでした}}",
+    "waiting": "待機中…",
+    "progress": "{sent} / {size}",
+    "progressLeft": "{sent} / {size} · 残り {time}",
+    "finishing": "仕上げ中…",
+    "done": "アップロード済み",
+    "doneLeo": "アップロード済み · Leo が読み取っています",
+    "cancel": "「{name}」のアップロードを停止",
+    "remove": "「{name}」を一覧から削除",
+    "clear": "クリア",
+    "refused": {
+      "empty": "ファイルが空です",
+      "tooLarge": "{size} を超えています",
+      "tooMany": "一度に {max, number} 件を超えています",
+      "unreadable": "Leo はこの種類またはサイズのファイルを読み取れません"
+    }
   },
   "picker": {
     "search": "ファイルを検索",

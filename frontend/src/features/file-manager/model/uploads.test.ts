@@ -82,6 +82,22 @@ describe("an upload straight to the bucket", () => {
     expect(cancelled).toEqual(["u1"]);
   });
 
+  it("stops at once when the person cancels: no part is tried again or started, and the upload is cancelled", async () => {
+    const { fake, sent, cancelled } = ports();
+    const controller = new AbortController();
+    const put = fake.put;
+    fake.put = async (link, body, onSent, signal) => {
+      // Как XMLHttpRequest: отмена обрывает запрос, и он падает.
+      controller.abort();
+      await put(link, body, onSent, signal);
+      throw new PartFailedError(false);
+    };
+
+    await expect(uploadFile(report, fake, () => undefined, controller.signal)).rejects.toThrow();
+    expect(sent).toEqual(["/bucket/1?round=0"]);
+    expect(cancelled).toEqual(["u1"]);
+  });
+
   it("cancels an upload the server rejects as not the size it was told", async () => {
     const { fake, cancelled } = ports({}, "rejected");
 

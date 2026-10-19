@@ -36,13 +36,9 @@
   "dropzone": {
     "label": "Leo 用のファイルを追加",
     "title": "Leo に使わせるファイルをここにドロップ",
-    "uploading": "{count, plural, other {# 件のファイルをアップロード中…}} {progress, number, percent}",
     "description": "ファイル管理のマイファイルに保存されます。{types}、1 ファイルあたり {size} まで。",
     "choose": "自分のファイルから選択",
-    "upload": "新規アップロード",
-    "skipped": "{count, plural, other {# 件のファイルをスキップしました}}",
-    "unreadable": "{name}：Leo はこの種類またはサイズのファイルを読み取れません",
-    "tooMany": "{name}：一度に {max, number} 件を超えています"
+    "upload": "新規アップロード"
   },
   "choose": {
     "title": "自分のファイルから選択",

@@ -18,6 +18,7 @@ import { FileListView } from "./file-list-view";
 import { useFileManager } from "./file-manager-store";
 import { FileManagerToolbar } from "./file-manager-toolbar";
 import { FileDropZone, UploadButton } from "./upload";
+import { UploadTray } from "./upload-tray";
 
 type FilesSectionProps = {
   files: FileItem[];
@@ -99,6 +100,7 @@ export function FilesSection({ files, view, heading, leading, showFolder, folder
           <UploadButton folderId={folderId} />
         </div>
       </div>
+      <UploadTray />
       {files.length === 0 ? <NothingHere icon={FolderOpen} {...empty} /> : null}
       {files.length > 0 && shown.length === 0 ? (
         <NothingHere

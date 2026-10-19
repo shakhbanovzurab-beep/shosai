@@ -36,13 +36,9 @@
   "dropzone": {
     "label": "Add files for Leo",
     "title": "Drop files here for Leo to use",
-    "uploading": "Uploading {count, plural, one {# file} other {# files}}… {progress, number, percent}",
     "description": "They’re saved to My files in File Manager. {types}, up to {size} each.",
     "choose": "Choose from your files",
-    "upload": "Upload new",
-    "skipped": "{count, plural, one {Skipped # file} other {Skipped # files}}",
-    "unreadable": "{name}: Leo can’t read this type or size",
-    "tooMany": "{name}: more than {max, number} files at once"
+    "upload": "Upload new"
   },
   "choose": {
     "title": "Choose from your files",

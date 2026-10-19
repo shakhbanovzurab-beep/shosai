@@ -13,6 +13,7 @@ import { filesResource, useFiles } from "@/features/file-manager/model/files-res
 import { setFolderLeo } from "@/features/file-manager/model/folder-actions";
 import { useFileActionWords } from "@/features/file-manager/model/words";
 import { LeoLimitNotice } from "@/features/file-manager/ui/leo-limit-notice";
+import { UploadTray } from "@/features/file-manager/ui/upload-tray";
 
 import { useIndex } from "../model/kb-resources";
 import { indexTotals, leoFiles } from "../model/leo-files";
@@ -51,7 +52,10 @@ export function FilesTab() {
           ))}
         </div>
       )}
-      <UploadDropzone onChoose={() => setChoosing(true)} />
+      <div className="flex flex-col gap-3">
+        <UploadDropzone onChoose={() => setChoosing(true)} />
+        <UploadTray />
+      </div>
       {leoFolders.length > 0 ? (
         <section aria-labelledby="leo-folders-heading" className="flex flex-col gap-3">
           <h2 id="leo-folders-heading" className="font-medium text-lg">

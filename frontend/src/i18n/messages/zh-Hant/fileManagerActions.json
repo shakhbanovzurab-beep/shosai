@@ -4,7 +4,6 @@
   "leoReadingFile": "Leo 正在讀取這個檔案。",
   "leoReadingFiles": "Leo 正在讀取這些檔案。",
   "leoReadsFolder": "Leo 會讀取「{folder}」中的所有內容。",
-  "uploadFailed": "無法上傳檔案",
   "renameFailed": "無法重新命名檔案",
   "updateFailed": "無法更新檔案",
   "moveFailed": "無法移動檔案",

@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Upload",
-    "uploading": "Uploading {count, plural, one {# file} other {# files}}… {progress, number, percent}",
     "dropHere": "Drop to upload here",
-    "skipped": "{count, plural, one {Skipped # file} other {Skipped # files}}",
-    "skippedDescription": "Files that are empty or over {size} are skipped, and at most {max, number} upload at once."
+    "label": "Uploads",
+    "uploading": "Uploading {count, plural, one {# file} other {# files}}…",
+    "uploaded": "{count, plural, one {# file uploaded} other {# files uploaded}}",
+    "notUploaded": "{count, plural, one {# file wasn’t uploaded} other {# files weren’t uploaded}}",
+    "waiting": "Waiting…",
+    "progress": "{sent} of {size}",
+    "progressLeft": "{sent} of {size} · {time} left",
+    "finishing": "Finishing…",
+    "done": "Uploaded",
+    "doneLeo": "Uploaded · Leo is reading it",
+    "cancel": "Stop uploading “{name}”",
+    "remove": "Remove “{name}” from the list",
+    "clear": "Clear",
+    "refused": {
+      "empty": "The file is empty",
+      "tooLarge": "Larger than {size}",
+      "tooMany": "More than {max, number} files at once",
+      "unreadable": "Leo can’t read this type or size"
+    }
   },
   "picker": {
     "search": "Search your files",

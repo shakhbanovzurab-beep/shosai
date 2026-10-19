@@ -119,10 +119,26 @@
   },
   "upload": {
     "button": "Unggah",
-    "uploading": "Mengunggah {count, plural, other {# file}}… {progress, number, percent}",
     "dropHere": "Letakkan untuk mengunggah ke sini",
-    "skipped": "{count, plural, other {# file dilewati}}",
-    "skippedDescription": "File yang kosong atau lebih dari {size} akan dilewati, dan paling banyak {max, number} file diunggah sekaligus."
+    "label": "Unggahan",
+    "uploading": "Mengunggah {count, plural, other {# file}}…",
+    "uploaded": "{count, plural, other {# file diunggah}}",
+    "notUploaded": "{count, plural, other {# file tidak diunggah}}",
+    "waiting": "Menunggu…",
+    "progress": "{sent} dari {size}",
+    "progressLeft": "{sent} dari {size} · sisa {time}",
+    "finishing": "Menyelesaikan…",
+    "done": "Diunggah",
+    "doneLeo": "Diunggah · Leo sedang membacanya",
+    "cancel": "Hentikan unggahan “{name}”",
+    "remove": "Hapus “{name}” dari daftar",
+    "clear": "Bersihkan",
+    "refused": {
+      "empty": "File kosong",
+      "tooLarge": "Lebih dari {size}",
+      "tooMany": "Lebih dari {max, number} file sekaligus",
+      "unreadable": "Leo tidak dapat membaca jenis atau ukuran ini"
+    }
   },
   "picker": {
     "search": "Cari file Anda",

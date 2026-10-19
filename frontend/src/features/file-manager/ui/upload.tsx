@@ -4,55 +4,35 @@ import { type ReactNode, useRef, useState } from "react";
 
 import { cn } from "cn";
 import { CloudUpload, Upload } from "lucide-react";
-import { toast } from "sonner";
-import { useLocale, useTranslations } from "use-intl";
+import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
-import { formatBytes } from "@/i18n/format-units";
 
-import { MAX_FILES_PER_UPLOAD, MAX_UPLOAD_BYTES } from "../domain/contract";
-import { uploadFiles } from "../model/upload-actions";
-import { useUploadProgress } from "../model/upload-progress";
+import { screenFiles } from "../domain/upload-queue";
+import { refuseFiles, uploadFiles } from "../model/upload-actions";
 import { useFileActionWords } from "../model/words";
 
-/** Uploads into `folderId` after checking the limits; one at a time, so the button can show it's busy. */
+/** Uploads into `folderId`; what can't go becomes a row of the panel with its reason. */
 function useUpload(folderId: string | null) {
-  const t = useTranslations("fileManager");
-  const locale = useLocale();
   const words = useFileActionWords();
-  const [busy, setBusy] = useState(0);
-  const upload = async (picked: File[]) => {
-    const fits = picked.filter((f) => f.size <= MAX_UPLOAD_BYTES && f.size > 0).slice(0, MAX_FILES_PER_UPLOAD);
-    const skipped = picked.length - fits.length;
-    if (skipped)
-      toast.error(t("upload.skipped", { count: skipped }), {
-        description: t("upload.skippedDescription", {
-          size: formatBytes(locale, MAX_UPLOAD_BYTES),
-          max: MAX_FILES_PER_UPLOAD,
-        }),
-      });
-    if (fits.length === 0) return;
-    setBusy(fits.length);
-    await uploadFiles(fits, { folderId, leo: false }, words);
-    setBusy(0);
+  return (picked: File[]) => {
+    const target = { folderId, leo: false };
+    const { accepted, refused } = screenFiles(picked);
+    refuseFiles(refused, target);
+    if (accepted.length > 0) void uploadFiles(accepted, target, words);
   };
-  return { busy, upload };
 }
 
-/** "Upload" into the folder being shown, or into My files. */
+/** "Upload" into the folder being shown, or into My files. Панель загрузок показывает, как идут файлы. */
 export function UploadButton({ folderId }: { folderId: string | null }) {
   const t = useTranslations("fileManager");
   const inputRef = useRef<HTMLInputElement>(null);
-  const { busy, upload } = useUpload(folderId);
-  const progress = useUploadProgress();
+  const upload = useUpload(folderId);
   return (
     <>
-      <Button size="sm" disabled={busy > 0} onClick={() => inputRef.current?.click()}>
-        {busy ? <Spinner data-icon="inline-start" /> : <Upload data-icon="inline-start" />}
-        <span className="tabular-nums">
-          {busy ? t("upload.uploading", { count: busy, progress: progress.percent / 100 }) : t("upload.button")}
-        </span>
+      <Button size="sm" onClick={() => inputRef.current?.click()}>
+        <Upload data-icon="inline-start" />
+        {t("upload.button")}
       </Button>
       <input
         ref={inputRef}
@@ -62,7 +42,7 @@ export function UploadButton({ folderId }: { folderId: string | null }) {
         tabIndex={-1}
         aria-hidden="true"
         onChange={(event) => {
-          void upload([...(event.currentTarget.files ?? [])]);
+          upload([...(event.currentTarget.files ?? [])]);
           event.currentTarget.value = "";
         }}
       />
@@ -74,7 +54,7 @@ export function UploadButton({ folderId }: { folderId: string | null }) {
 export function FileDropZone({ folderId, children }: { folderId: string | null; children: ReactNode }) {
   const t = useTranslations("fileManager");
   const [over, setOver] = useState(false);
-  const { upload } = useUpload(folderId);
+  const upload = useUpload(folderId);
   const fromComputer = (event: React.DragEvent) => event.dataTransfer.types.includes("Files");
 
   return (
@@ -93,7 +73,7 @@ export function FileDropZone({ folderId, children }: { folderId: string | null; 
         if (!fromComputer(event)) return;
         event.preventDefault();
         setOver(false);
-        void upload([...event.dataTransfer.files]);
+        upload([...event.dataTransfer.files]);
       }}
     >
       {children}

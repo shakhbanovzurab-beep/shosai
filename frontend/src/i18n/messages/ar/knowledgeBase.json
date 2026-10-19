@@ -36,13 +36,9 @@
   "dropzone": {
     "label": "إضافة ملفات لـ Leo",
     "title": "يمكن إفلات الملفات هنا ليستخدمها Leo",
-    "uploading": "جارٍ رفع {count, plural, zero {# ملف} one {ملف واحد} two {ملفين} few {# ملفات} many {# ملفًا} other {# ملف}}… {progress, number, percent}",
     "description": "يتم حفظها في «ملفاتي» في مدير الملفات. {types}، بحجم يصل إلى {size} لكل ملف.",
     "choose": "الاختيار من ملفاتك",
-    "upload": "رفع ملفات جديدة",
-    "skipped": "{count, plural, zero {تم تخطي # ملف} one {تم تخطي ملف واحد} two {تم تخطي ملفين} few {تم تخطي # ملفات} many {تم تخطي # ملفًا} other {تم تخطي # ملف}}",
-    "unreadable": "{name}: لا يمكن لـ Leo قراءة هذا النوع أو هذا الحجم",
-    "tooMany": "{name}: تم تجاوز الحد الأقصى للملفات في المرة الواحدة ({max, number})"
+    "upload": "رفع ملفات جديدة"
   },
   "choose": {
     "title": "الاختيار من ملفاتك",

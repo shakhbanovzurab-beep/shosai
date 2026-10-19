@@ -17,7 +17,7 @@ export type UploadPorts = {
   read: (id: string) => Promise<UploadAnswer>;
   complete: (id: string) => Promise<UploadAnswer>;
   cancel: (id: string) => Promise<void>;
-  put: (link: PartLink, body: Blob, onSent: (bytes: number) => void) => Promise<void>;
+  put: (link: PartLink, body: Blob, onSent: (bytes: number) => void, signal?: AbortSignal) => Promise<void>;
   wait: (ms: number) => Promise<void>;
 };
 
@@ -44,8 +44,16 @@ export async function runLimited<T>(items: readonly T[], limit: number, work: (i
   await Promise.all(Array.from({ length: Math.min(limit, queue.length) }, worker));
 }
 
-/** Uploads `file`; reports the bytes sent so far and answers the ready upload's id for `register`. */
-export async function uploadFile(file: File, ports: UploadPorts, onSent: (bytes: number) => void): Promise<string> {
+/**
+ * Uploads `file`; reports the bytes sent so far and answers the ready upload's id for `register`.
+ * Отмена через `signal` обрывает части в пути без повторов и отменяет загрузку на сервере.
+ */
+export async function uploadFile(
+  file: File,
+  ports: UploadPorts,
+  onSent: (bytes: number) => void,
+  signal?: AbortSignal,
+): Promise<string> {
   const created = await ports.create(file);
   const ranges = partRanges(created.parts);
   const links = new Map(created.parts.map((part) => [part.number, part]));
@@ -58,15 +66,19 @@ export async function uploadFile(file: File, ports: UploadPorts, onSent: (bytes:
   async function sendPart(number: number) {
     const [start, end] = ranges.get(number) ?? [0, 0];
     for (let attempt = 1; ; attempt++) {
+      // Части из очереди после отмены не уходят: уже отменённый сигнал не шлёт события abort.
+      signal?.throwIfAborted();
       const link = links.get(number);
       if (!link) return;
       try {
-        await ports.put(link, file.slice(start, end), (bytes) => report(number, bytes));
+        await ports.put(link, file.slice(start, end), (bytes) => report(number, bytes), signal);
         return;
       } catch (error) {
         report(number, 0);
+        signal?.throwIfAborted();
         if (!(error instanceof PartFailedError) || attempt >= PART_ATTEMPTS) throw error;
         await ports.wait(RETRY_MS * attempt);
+        signal?.throwIfAborted();
         // Свежие ссылки на недошедшие части: так загрузка продолжается, а не начинается заново.
         const fresh = await ports.read(created.id);
         if (fresh.done_parts.includes(number)) return report(number, end - start);
@@ -76,6 +88,7 @@ export async function uploadFile(file: File, ports: UploadPorts, onSent: (bytes:
   }
 
   try {
+    signal?.throwIfAborted();
     const done = new Set(created.done_parts);
     const pending = created.parts.map((part) => part.number).filter((n) => !done.has(n));
     await runLimited(pending, PART_CONCURRENCY, sendPart);
