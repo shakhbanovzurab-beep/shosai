@@ -18,7 +18,7 @@ from typing import Any, Final
 from uuid import UUID
 
 import structlog
-from sqlalchemy import Uuid, bindparam, select, text, update
+from sqlalchemy import Uuid, bindparam, func, select, text, update
 from sqlalchemy.dialects.postgresql import ARRAY, insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -154,13 +154,15 @@ async def _insert(session: AsyncSession, rows: list[dict[str, Any]]) -> int:
     """Insert the rows, a replayed `(meeting, seq)` ignored; how many were new."""
     if not rows:
         return 0
-    statement = (
+    inserted = (
         insert(TranscriptLineRecord)
         .values(rows)
         .on_conflict_do_nothing()
         .returning(TranscriptLineRecord.seq)
+        .cte("inserted")
     )
-    return len((await session.scalars(statement)).all())
+    # Новые строки считает сервер: повторы ON CONFLICT в счёт не входят, строки не едут к нам.
+    return int(await session.scalar(select(func.count()).select_from(inserted)) or 0)
 
 
 async def _unsettle(session: AsyncSession, meeting_ids: list[UUID]) -> None:
