@@ -4701,6 +4701,614 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Get Write Up",
+        "description": "Leo's write-up of the meeting by its template.",
+        "operationId": "get_write_up_v1_meetings__meeting_id__write_up_get",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WriteUpOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "List Meetings",
+        "description": "The meetings you may read, newest first.",
+        "operationId": "list_meetings_v1_meetings_get",
+        "parameters": [
+          {
+            "name": "folder",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "const": "none",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "One of your folders by id, or `none` for your meetings in none.",
+              "title": "Folder"
+            },
+            "description": "One of your folders by id, or `none` for your meetings in none."
+          },
+          {
+            "name": "workspace_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only the meetings readable in this workspace.",
+              "title": "Workspace Id"
+            },
+            "description": "Only the meetings readable in this workspace."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page, at most the maximum.",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page, at most the maximum."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The next_cursor of the previous page; absent for the first page.",
+              "title": "Cursor"
+            },
+            "description": "The next_cursor of the previous page; absent for the first page."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_MeetingCardOut_"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/{meeting_id}": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Get Meeting",
+        "description": "A meeting you may read.",
+        "operationId": "get_meeting_v1_meetings__meeting_id__get",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeetingOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Change Meeting",
+        "description": "Rename the meeting, or move it into one of your folders or out of it.",
+        "operationId": "change_meeting_v1_meetings__meeting_id__patch",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MeetingChangeIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeetingOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/{meeting_id}/transcript": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Get Transcript",
+        "description": "A page of the meeting's lines in the order they were spoken.",
+        "operationId": "get_transcript_v1_meetings__meeting_id__transcript_get",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "description": "Items per page, at most the maximum.",
+              "default": 200,
+              "title": "Limit"
+            },
+            "description": "Items per page, at most the maximum."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The next_cursor of the previous page; absent for the first page.",
+              "title": "Cursor"
+            },
+            "description": "The next_cursor of the previous page; absent for the first page."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_TranscriptLineOut_"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/{meeting_id}/findings": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "List Findings",
+        "description": "A page of the meeting's findings, in the order they came up.",
+        "operationId": "list_findings_v1_meetings__meeting_id__findings_get",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "kind",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/FindingKind"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only findings of this kind.",
+              "title": "Kind"
+            },
+            "description": "Only findings of this kind."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page, at most the maximum.",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page, at most the maximum."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The next_cursor of the previous page; absent for the first page.",
+              "title": "Cursor"
+            },
+            "description": "The next_cursor of the previous page; absent for the first page."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_FindingOut_"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/meetings/{meeting_id}/map": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Get Map",
+        "description": "A page of the mind map's nodes, the root first.",
+        "operationId": "get_map_v1_meetings__meeting_id__map_get",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page, at most the maximum.",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page, at most the maximum."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The next_cursor of the previous page; absent for the first page.",
+              "title": "Cursor"
+            },
+            "description": "The next_cursor of the previous page; absent for the first page."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_MapNodeOut_"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -6234,6 +6842,107 @@
         "title": "FilesResponse",
         "description": "The person's folders and files, newest first."
       },
+      "FindingKind": {
+        "type": "string",
+        "enum": [
+          "key_point",
+          "decision",
+          "action_item",
+          "promise",
+          "risk",
+          "question"
+        ],
+        "title": "FindingKind",
+        "description": "What a finding is."
+      },
+      "FindingOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/FindingKind"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "topic": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Topic"
+          },
+          "owner_speaker": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Speaker"
+          },
+          "owner_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Name"
+          },
+          "due_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due On"
+          },
+          "start_ms": {
+            "type": "integer",
+            "title": "Start Ms"
+          },
+          "end_ms": {
+            "type": "integer",
+            "title": "End Ms"
+          },
+          "quote": {
+            "type": "string",
+            "title": "Quote"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "text",
+          "topic",
+          "owner_speaker",
+          "owner_name",
+          "due_on",
+          "start_ms",
+          "end_ms",
+          "quote"
+        ],
+        "title": "FindingOut",
+        "description": "A finding with the moment that proves it."
+      },
       "FolderBody": {
         "properties": {
           "name": {
@@ -6681,6 +7390,42 @@
         "title": "LogoutRequest",
         "description": "The refresh token of a client that keeps it outside the cookie jar (optional)."
       },
+      "MapNodeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "depth": {
+            "type": "integer",
+            "title": "Depth"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "parent_id",
+          "depth",
+          "label"
+        ],
+        "title": "MapNodeOut",
+        "description": "A node of the mind map in pre-order: the root has no parent."
+      },
       "Me": {
         "properties": {
           "id": {
@@ -6869,6 +7614,377 @@
         "title": "MePatch",
         "description": "The fields to change; a field left out keeps its value, `null` clears it."
       },
+      "MeetingCardOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MeetingStatus"
+          },
+          "source": {
+            "$ref": "#/components/schemas/MeetingSource"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          },
+          "seconds": {
+            "type": "integer",
+            "title": "Seconds",
+            "description": "The meeting's length in seconds."
+          },
+          "owned": {
+            "type": "boolean",
+            "title": "Owned",
+            "description": "Whether the reader owns the meeting."
+          },
+          "folder_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Folder Id",
+            "description": "The owner's folder; null for anyone else."
+          },
+          "participant_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Participant Names",
+            "description": "Up to five participants' names."
+          },
+          "participant_count": {
+            "type": "integer",
+            "title": "Participant Count"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "key_points": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Key Points",
+            "description": "The write-up's first three key points."
+          },
+          "first_decision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Decision"
+          },
+          "action_items": {
+            "type": "integer",
+            "title": "Action Items",
+            "description": "How many action items the write-up lists."
+          },
+          "notes": {
+            "$ref": "#/components/schemas/NotesState"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "status",
+          "source",
+          "started_at",
+          "ended_at",
+          "seconds",
+          "owned",
+          "folder_id",
+          "participant_names",
+          "participant_count",
+          "summary",
+          "key_points",
+          "first_decision",
+          "action_items",
+          "notes"
+        ],
+        "title": "MeetingCardOut",
+        "description": "A meeting in the library: what the timeline, the grid and the list show."
+      },
+      "MeetingChangeIn": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 256,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "folder_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Folder Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "MeetingChangeIn",
+        "description": "A new title, a folder, or both; `folder_id: null` takes the meeting out of its folder."
+      },
+      "MeetingOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "$ref": "#/components/schemas/MeetingStatus"
+          },
+          "source": {
+            "$ref": "#/components/schemas/MeetingSource"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "ended_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ended At"
+          },
+          "seconds": {
+            "type": "integer",
+            "title": "Seconds",
+            "description": "The meeting's length in seconds."
+          },
+          "owned": {
+            "type": "boolean",
+            "title": "Owned",
+            "description": "Whether the reader owns the meeting."
+          },
+          "folder_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Folder Id",
+            "description": "The owner's folder; null for anyone else."
+          },
+          "participant_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Participant Names",
+            "description": "Up to five participants' names."
+          },
+          "participant_count": {
+            "type": "integer",
+            "title": "Participant Count"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "key_points": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Key Points",
+            "description": "The write-up's first three key points."
+          },
+          "first_decision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Decision"
+          },
+          "action_items": {
+            "type": "integer",
+            "title": "Action Items",
+            "description": "How many action items the write-up lists."
+          },
+          "notes": {
+            "$ref": "#/components/schemas/NotesState"
+          },
+          "manageable": {
+            "type": "boolean",
+            "title": "Manageable",
+            "description": "Whether the reader may rename it and rewrite it."
+          },
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id"
+          },
+          "line_count": {
+            "type": "integer",
+            "title": "Line Count"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision",
+            "description": "The notes' revision; it grows with each write-up."
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id",
+            "description": "The latest run; its progress is under /v1/me/runs."
+          },
+          "participants": {
+            "items": {
+              "$ref": "#/components/schemas/ParticipantOut"
+            },
+            "type": "array",
+            "title": "Participants"
+          },
+          "speakers": {
+            "items": {
+              "$ref": "#/components/schemas/SpeakerOut"
+            },
+            "type": "array",
+            "title": "Speakers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "status",
+          "source",
+          "started_at",
+          "ended_at",
+          "seconds",
+          "owned",
+          "folder_id",
+          "participant_names",
+          "participant_count",
+          "summary",
+          "key_points",
+          "first_decision",
+          "action_items",
+          "notes",
+          "manageable",
+          "template_id",
+          "line_count",
+          "revision",
+          "run_id",
+          "participants",
+          "speakers"
+        ],
+        "title": "MeetingOut",
+        "description": "A meeting's page: its card and what only the page shows."
+      },
+      "MeetingSource": {
+        "type": "string",
+        "enum": [
+          "live",
+          "import"
+        ],
+        "title": "MeetingSource",
+        "description": "How the meeting came to Shosai."
+      },
+      "MeetingStatus": {
+        "type": "string",
+        "enum": [
+          "active",
+          "completed",
+          "failed"
+        ],
+        "title": "MeetingStatus",
+        "description": "Where a meeting stands; an ended one never becomes active again."
+      },
       "MeetingUsageView": {
         "properties": {
           "used_minutes": {
@@ -6909,6 +8025,17 @@
         ],
         "title": "ModelTier",
         "description": "The classes of models a weekly token allowance is counted in (BL-D4)."
+      },
+      "NotesState": {
+        "type": "string",
+        "enum": [
+          "none",
+          "processing",
+          "ready",
+          "failed"
+        ],
+        "title": "NotesState",
+        "description": "Where a meeting's notes are."
       },
       "Page_AdminUser_": {
         "properties": {
@@ -6966,6 +8093,118 @@
         ],
         "title": "Page[DeviceView]"
       },
+      "Page_FindingOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/FindingOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "Page[FindingOut]"
+      },
+      "Page_MapNodeOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MapNodeOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "Page[MapNodeOut]"
+      },
+      "Page_MeetingCardOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MeetingCardOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "Page[MeetingCardOut]"
+      },
+      "Page_TranscriptLineOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TranscriptLineOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "Page[TranscriptLineOut]"
+      },
       "PartLinkView": {
         "properties": {
           "number": {
@@ -7003,6 +8242,50 @@
         ],
         "title": "PartLinkView",
         "description": "Where to PUT one part: the URL, the headers to send and the exact length."
+      },
+      "ParticipantOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "email",
+          "source"
+        ],
+        "title": "ParticipantOut",
+        "description": "A participant of the meeting."
       },
       "PeriodScope": {
         "type": "string",
@@ -8624,6 +9907,81 @@
         "title": "SeatsView",
         "description": "How many users a team plan is sold for."
       },
+      "SectionKind": {
+        "type": "string",
+        "enum": [
+          "summary",
+          "key_points",
+          "decisions",
+          "action_items"
+        ],
+        "title": "SectionKind",
+        "description": "What a section of the write-up holds."
+      },
+      "SectionOut": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/SectionKind"
+          },
+          "heading_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heading Code",
+            "description": "A shipped heading, worded by the cabinet."
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title",
+            "description": "The person's own title of the section."
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "items": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/FindingOut"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "heading_code",
+          "title"
+        ],
+        "title": "SectionOut",
+        "description": "A section of the write-up: a summary's text, or the findings it lists."
+      },
       "SessionCreate": {
         "properties": {
           "title": {
@@ -8879,6 +10237,30 @@
         ],
         "title": "SocialTickets",
         "description": "`social` for a known person (then `complete`), `social_consent` for a new one."
+      },
+      "SpeakerOut": {
+        "properties": {
+          "idx": {
+            "type": "integer",
+            "title": "Idx"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "talk_ms": {
+            "type": "integer",
+            "title": "Talk Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "idx",
+          "role",
+          "talk_ms"
+        ],
+        "title": "SpeakerOut",
+        "description": "A speaker by number: their role and how long they spoke."
       },
       "Stage": {
         "type": "string",
@@ -9254,6 +10636,48 @@
         ],
         "title": "TokenResponse",
         "description": "A session: the access token, its lifetime in seconds and the CSRF value for refresh."
+      },
+      "TranscriptLineOut": {
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "title": "Seq"
+          },
+          "start_ms": {
+            "type": "integer",
+            "title": "Start Ms"
+          },
+          "duration_ms": {
+            "type": "integer",
+            "title": "Duration Ms"
+          },
+          "speaker": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speaker",
+            "description": "The speaker's number; null when unknown."
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "seq",
+          "start_ms",
+          "duration_ms",
+          "speaker",
+          "text"
+        ],
+        "title": "TranscriptLineOut",
+        "description": "A line of the transcript: its number, offset, length, speaker and text."
       },
       "Transfer": {
         "properties": {
@@ -9880,6 +11304,52 @@
         ],
         "title": "WidgetTokenRequest",
         "description": "A token the provider's widget handed the browser."
+      },
+      "WriteUpOut": {
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "automatic": {
+            "type": "boolean",
+            "title": "Automatic",
+            "description": "Written after the meeting, not chosen by a person."
+          },
+          "written_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Written At"
+          },
+          "revision": {
+            "type": "integer",
+            "title": "Revision"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/SectionOut"
+            },
+            "type": "array",
+            "title": "Sections"
+          }
+        },
+        "type": "object",
+        "required": [
+          "template_id",
+          "automatic",
+          "written_at",
+          "revision",
+          "sections"
+        ],
+        "title": "WriteUpOut",
+        "description": "Leo's write-up of the meeting by its template."
       },
       "shosai__features__billing__channels__http__admin_plans__PlansView": {
         "properties": {

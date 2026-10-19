@@ -32,6 +32,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal
 from shosai.features.meetings.application.lifecycle import RunStarter
 from shosai.features.meetings.application.run_rows import ensure_run
+from shosai.features.meetings.application.visibility import meeting_scope
 from shosai.features.meetings.application.write_up_layout import layout_of
 from shosai.features.meetings.contracts import MeetingNotFoundError
 from shosai.features.meetings.domain.runs import RunSource, Stage, idempotency_key
@@ -91,10 +92,14 @@ class WriteUpRewrites:
         """Start the rewrite once per key; the run's id, also for a retry."""
         key = account_key(principal.user_id, client_key)
         effect = EffectKey(REWRITES, key, fingerprint_of(request))
-        async with self._transactions.begin(principal.scope()) as session:
+        policy = self._ports.get(ACCESS_POLICY)
+        # Свой шаблон читается в личном скоупе, а встреча компании меняется в скоупе компании.
+        async with self._transactions.begin(principal.scope(), read_only=True) as session:
             layout = await layout_of(session, request.template_id)
             if layout is None:
                 raise TemplateNotFoundError
+            scope = await meeting_scope(session, policy, principal.scope(), request.meeting_id)
+        async with self._transactions.begin(scope) as session:
             outcome = await self._effects.once(
                 session,
                 effect,
@@ -103,7 +108,7 @@ class WriteUpRewrites:
             )
         run_id = outcome.outcome.run_id
         if not outcome.replayed:
-            await self._starter.kick(principal.scope(), run_id, Stage.WRITE_UP)
+            await self._starter.kick(scope, run_id, Stage.WRITE_UP)
             log.info("Запись встречи переписывается", meeting_id=str(request.meeting_id))
         return run_id
 

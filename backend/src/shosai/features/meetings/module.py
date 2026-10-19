@@ -5,7 +5,8 @@
 - 3: the native start and end, §10's end and runs, and billing's count of live meetings;
 - 4: the live transcript's store and socket binding for capture, the live and settle sweeps;
 - 5: the pipeline's engine and the recovery of runs;
-- 6: the findings and write-up stages with the notes' model, and the rewrite of a write-up.
+- 6: the findings and write-up stages with the notes' model, and the rewrite of a write-up;
+- 7a: the cabinet's library and a meeting's page, transcript, write-up, findings and map.
 
 Without `MEETINGS_NOTES_MODEL` (development only: production refuses to start) the two
 stages have no handler, and runs wait for one.
@@ -20,9 +21,11 @@ from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.billing.contracts import MEETING_MINUTES
 from shosai.features.meetings.application.account_data import ACCOUNT_DATA, MeetingsAccountData
 from shosai.features.meetings.application.findings_stage import FindingsStage
+from shosai.features.meetings.application.library import MeetingLibrary
 from shosai.features.meetings.application.lifecycle import MeetingLifecycle
 from shosai.features.meetings.application.live_meetings import LiveMeetingBinder
 from shosai.features.meetings.application.live_transcript import LiveTranscript
+from shosai.features.meetings.application.meeting_content import MeetingContent
 from shosai.features.meetings.application.minutes import MeetingMinutesCount
 from shosai.features.meetings.application.notes_model import NotesModel
 from shosai.features.meetings.application.pipeline import PipelineEngine, StageHandler
@@ -32,6 +35,8 @@ from shosai.features.meetings.application.stage_reads import transcript_budget
 from shosai.features.meetings.application.sweeps import MeetingSweeps
 from shosai.features.meetings.application.write_up_rewrites import WriteUpRewrites
 from shosai.features.meetings.application.write_up_stage import WriteUpStage
+from shosai.features.meetings.channels.http.meeting_content import build_meeting_content_router
+from shosai.features.meetings.channels.http.meetings import build_meetings_router
 from shosai.features.meetings.channels.http.native_sessions import build_native_sessions_router
 from shosai.features.meetings.channels.http.runs import build_runs_router
 from shosai.features.meetings.channels.http.write_up import build_write_up_router
@@ -115,6 +120,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             build_native_sessions_router(lifecycle, ports),
             build_runs_router((lifecycle, RunViews(transactions, ports)), ports),
             build_write_up_router(rewrites, ports, services.rate_limiter),
+            build_meetings_router(MeetingLibrary(transactions, ports), ports),
+            build_meeting_content_router(MeetingContent(transactions, ports), ports),
         ),
         task_handlers=task_handlers(sweeps, (engine, recovery)),
         periodic_jobs=PERIODIC_JOBS,

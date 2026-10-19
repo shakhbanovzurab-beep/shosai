@@ -57,3 +57,12 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `infrastructure/prompts.py` — English instructions and answer shapes, registered in the model-facing test; the notes are written in the language most of the meeting is spoken in (MT-D9).
 - `settings.py` — `MEETINGS_NOTES_MODEL`, required outside development, and its fallback, until studio's `notes` role.
 - Revision `d9f3b7a1c246` adds `meeting_processing_runs.layout` (a rewrite's template, copied at the request, since a person's template is readable only in their scope) and `meeting_notes.findings_run_id`.
+
+## Library and a meeting's page (step 7a)
+
+- `application/library.py` — `GET /v1/meetings` as a keyset over the start and the id, newest first, narrowed to the owner's folder, their meetings in none, or a workspace; a meeting's page; rename by whoever may manage, filing by the owner of a personal meeting.
+- `application/library_cards.py` — a page's cards in four queries: notes, latest runs, the listed findings ranked per kind, the participants ranked per meeting.
+- `application/meeting_content.py` — transcript pages (up to 500 lines, within the meeting's partition), the write-up with its findings inline, findings pages, map pages in pre-order.
+- `application/visibility.py` — `meeting_scope`: a change is written in the meeting's own scope, since row-level security writes a company's row only there.
+- `domain/reading.py` — the notes' state, who may file a meeting, the map as nodes.
+- `channels/http/meetings.py`, `channels/http/meeting_content.py`, `channels/http/meeting_models.py` — the routes and their snake_case shapes.

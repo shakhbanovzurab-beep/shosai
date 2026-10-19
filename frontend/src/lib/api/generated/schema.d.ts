@@ -1367,13 +1367,121 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Get Write Up
+         * @description Leo's write-up of the meeting by its template.
+         */
+        get: operations["get_write_up_v1_meetings__meeting_id__write_up_get"];
         put?: never;
         /**
          * Rewrite Write Up
          * @description Rewrite the meeting's write-up by a template, keeping its findings.
          */
         post: operations["rewrite_write_up_v1_meetings__meeting_id__write_up_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Meetings
+         * @description The meetings you may read, newest first.
+         */
+        get: operations["list_meetings_v1_meetings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/{meeting_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Meeting
+         * @description A meeting you may read.
+         */
+        get: operations["get_meeting_v1_meetings__meeting_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Change Meeting
+         * @description Rename the meeting, or move it into one of your folders or out of it.
+         */
+        patch: operations["change_meeting_v1_meetings__meeting_id__patch"];
+        trace?: never;
+    };
+    "/v1/meetings/{meeting_id}/transcript": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Transcript
+         * @description A page of the meeting's lines in the order they were spoken.
+         */
+        get: operations["get_transcript_v1_meetings__meeting_id__transcript_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/{meeting_id}/findings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Findings
+         * @description A page of the meeting's findings, in the order they came up.
+         */
+        get: operations["list_findings_v1_meetings__meeting_id__findings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/meetings/{meeting_id}/map": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Map
+         * @description A page of the mind map's nodes, the root first.
+         */
+        get: operations["get_map_v1_meetings__meeting_id__map_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2046,6 +2154,40 @@ export interface components {
             files: components["schemas"]["FileItem"][];
         };
         /**
+         * FindingKind
+         * @description What a finding is.
+         * @enum {string}
+         */
+        FindingKind: "key_point" | "decision" | "action_item" | "promise" | "risk" | "question";
+        /**
+         * FindingOut
+         * @description A finding with the moment that proves it.
+         */
+        FindingOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            kind: components["schemas"]["FindingKind"];
+            /** Text */
+            text: string;
+            /** Topic */
+            topic: string | null;
+            /** Owner Speaker */
+            owner_speaker: number | null;
+            /** Owner Name */
+            owner_name: string | null;
+            /** Due On */
+            due_on: string | null;
+            /** Start Ms */
+            start_ms: number;
+            /** End Ms */
+            end_ms: number;
+            /** Quote */
+            quote: string;
+        };
+        /**
          * FolderBody
          * @description A folder's name.
          */
@@ -2227,6 +2369,20 @@ export interface components {
             refresh_token?: string | null;
         };
         /**
+         * MapNodeOut
+         * @description A node of the mind map in pre-order: the root has no parent.
+         */
+        MapNodeOut: {
+            /** Id */
+            id: string;
+            /** Parent Id */
+            parent_id: string | null;
+            /** Depth */
+            depth: number;
+            /** Label */
+            label: string;
+        };
+        /**
          * Me
          * @description The signed-in person as Settings shows them.
          */
@@ -2284,6 +2440,169 @@ export interface components {
             cross_border_warning_confirmed: boolean;
         };
         /**
+         * MeetingCardOut
+         * @description A meeting in the library: what the timeline, the grid and the list show.
+         */
+        MeetingCardOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            status: components["schemas"]["MeetingStatus"];
+            source: components["schemas"]["MeetingSource"];
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Ended At */
+            ended_at: string | null;
+            /**
+             * Seconds
+             * @description The meeting's length in seconds.
+             */
+            seconds: number;
+            /**
+             * Owned
+             * @description Whether the reader owns the meeting.
+             */
+            owned: boolean;
+            /**
+             * Folder Id
+             * @description The owner's folder; null for anyone else.
+             */
+            folder_id: string | null;
+            /**
+             * Participant Names
+             * @description Up to five participants' names.
+             */
+            participant_names: string[];
+            /** Participant Count */
+            participant_count: number;
+            /** Summary */
+            summary: string | null;
+            /**
+             * Key Points
+             * @description The write-up's first three key points.
+             */
+            key_points: string[];
+            /** First Decision */
+            first_decision: string | null;
+            /**
+             * Action Items
+             * @description How many action items the write-up lists.
+             */
+            action_items: number;
+            notes: components["schemas"]["NotesState"];
+        };
+        /**
+         * MeetingChangeIn
+         * @description A new title, a folder, or both; `folder_id: null` takes the meeting out of its folder.
+         */
+        MeetingChangeIn: {
+            /** Title */
+            title?: string | null;
+            /** Folder Id */
+            folder_id?: string | null;
+        };
+        /**
+         * MeetingOut
+         * @description A meeting's page: its card and what only the page shows.
+         */
+        MeetingOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            status: components["schemas"]["MeetingStatus"];
+            source: components["schemas"]["MeetingSource"];
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Ended At */
+            ended_at: string | null;
+            /**
+             * Seconds
+             * @description The meeting's length in seconds.
+             */
+            seconds: number;
+            /**
+             * Owned
+             * @description Whether the reader owns the meeting.
+             */
+            owned: boolean;
+            /**
+             * Folder Id
+             * @description The owner's folder; null for anyone else.
+             */
+            folder_id: string | null;
+            /**
+             * Participant Names
+             * @description Up to five participants' names.
+             */
+            participant_names: string[];
+            /** Participant Count */
+            participant_count: number;
+            /** Summary */
+            summary: string | null;
+            /**
+             * Key Points
+             * @description The write-up's first three key points.
+             */
+            key_points: string[];
+            /** First Decision */
+            first_decision: string | null;
+            /**
+             * Action Items
+             * @description How many action items the write-up lists.
+             */
+            action_items: number;
+            notes: components["schemas"]["NotesState"];
+            /**
+             * Manageable
+             * @description Whether the reader may rename it and rewrite it.
+             */
+            manageable: boolean;
+            /** Template Id */
+            template_id: string | null;
+            /** Line Count */
+            line_count: number;
+            /**
+             * Revision
+             * @description The notes' revision; it grows with each write-up.
+             */
+            revision: number;
+            /**
+             * Run Id
+             * @description The latest run; its progress is under /v1/me/runs.
+             */
+            run_id: string | null;
+            /** Participants */
+            participants: components["schemas"]["ParticipantOut"][];
+            /** Speakers */
+            speakers: components["schemas"]["SpeakerOut"][];
+        };
+        /**
+         * MeetingSource
+         * @description How the meeting came to Shosai.
+         * @enum {string}
+         */
+        MeetingSource: "live" | "import";
+        /**
+         * MeetingStatus
+         * @description Where a meeting stands; an ended one never becomes active again.
+         * @enum {string}
+         */
+        MeetingStatus: "active" | "completed" | "failed";
+        /**
          * MeetingUsageView
          * @description The month's meeting minutes; `limit_minutes` is null on unlimited plans.
          */
@@ -2304,6 +2623,12 @@ export interface components {
          * @enum {string}
          */
         ModelTier: "standard" | "frontier";
+        /**
+         * NotesState
+         * @description Where a meeting's notes are.
+         * @enum {string}
+         */
+        NotesState: "none" | "processing" | "ready" | "failed";
         /** Page[AdminUser] */
         Page_AdminUser_: {
             /** Items */
@@ -2315,6 +2640,34 @@ export interface components {
         Page_DeviceView_: {
             /** Items */
             items: components["schemas"]["DeviceView"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** Page[FindingOut] */
+        Page_FindingOut_: {
+            /** Items */
+            items: components["schemas"]["FindingOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** Page[MapNodeOut] */
+        Page_MapNodeOut_: {
+            /** Items */
+            items: components["schemas"]["MapNodeOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** Page[MeetingCardOut] */
+        Page_MeetingCardOut_: {
+            /** Items */
+            items: components["schemas"]["MeetingCardOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** Page[TranscriptLineOut] */
+        Page_TranscriptLineOut_: {
+            /** Items */
+            items: components["schemas"]["TranscriptLineOut"][];
             /** Next Cursor */
             next_cursor: string | null;
         };
@@ -2338,6 +2691,23 @@ export interface components {
              * Format: date-time
              */
             expires_at: string;
+        };
+        /**
+         * ParticipantOut
+         * @description A participant of the meeting.
+         */
+        ParticipantOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string | null;
+            /** Email */
+            email: string | null;
+            /** Source */
+            source: string;
         };
         /** @enum {string} */
         PeriodScope: "month" | "year" | "both";
@@ -2884,6 +3254,33 @@ export interface components {
             max: number | null;
         };
         /**
+         * SectionKind
+         * @description What a section of the write-up holds.
+         * @enum {string}
+         */
+        SectionKind: "summary" | "key_points" | "decisions" | "action_items";
+        /**
+         * SectionOut
+         * @description A section of the write-up: a summary's text, or the findings it lists.
+         */
+        SectionOut: {
+            kind: components["schemas"]["SectionKind"];
+            /**
+             * Heading Code
+             * @description A shipped heading, worded by the cabinet.
+             */
+            heading_code: string | null;
+            /**
+             * Title
+             * @description The person's own title of the section.
+             */
+            title: string | null;
+            /** Text */
+            text?: string | null;
+            /** Items */
+            items?: components["schemas"]["FindingOut"][] | null;
+        };
+        /**
          * SessionCreate
          * @description A new meeting: its title and the device it is recorded on (the machine's name).
          */
@@ -2987,6 +3384,18 @@ export interface components {
             social_consent: string | null;
             /** Next */
             next: string;
+        };
+        /**
+         * SpeakerOut
+         * @description A speaker by number: their role and how long they spoke.
+         */
+        SpeakerOut: {
+            /** Idx */
+            idx: number;
+            /** Role */
+            role: string;
+            /** Talk Ms */
+            talk_ms: number;
         };
         /**
          * Stage
@@ -3132,6 +3541,25 @@ export interface components {
             token_type: string;
             /** Csrf Token */
             csrf_token?: string | null;
+        };
+        /**
+         * TranscriptLineOut
+         * @description A line of the transcript: its number, offset, length, speaker and text.
+         */
+        TranscriptLineOut: {
+            /** Seq */
+            seq: number;
+            /** Start Ms */
+            start_ms: number;
+            /** Duration Ms */
+            duration_ms: number;
+            /**
+             * Speaker
+             * @description The speaker's number; null when unknown.
+             */
+            speaker: number | null;
+            /** Text */
+            text: string;
         };
         /**
          * Transfer
@@ -3391,6 +3819,25 @@ export interface components {
              * @default en
              */
             language: string;
+        };
+        /**
+         * WriteUpOut
+         * @description Leo's write-up of the meeting by its template.
+         */
+        WriteUpOut: {
+            /** Template Id */
+            template_id: string;
+            /**
+             * Automatic
+             * @description Written after the meeting, not chosen by a person.
+             */
+            automatic: boolean;
+            /** Written At */
+            written_at: string | null;
+            /** Revision */
+            revision: number;
+            /** Sections */
+            sections: components["schemas"]["SectionOut"][];
         };
         /**
          * PlansView
@@ -6067,6 +6514,39 @@ export interface operations {
             };
         };
     };
+    get_write_up_v1_meetings__meeting_id__write_up_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WriteUpOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     rewrite_write_up_v1_meetings__meeting_id__write_up_post: {
         parameters: {
             query?: never;
@@ -6093,6 +6573,232 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RewriteAccepted"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_meetings_v1_meetings_get: {
+        parameters: {
+            query?: {
+                /** @description One of your folders by id, or `none` for your meetings in none. */
+                folder?: string | "none" | null;
+                /** @description Only the meetings readable in this workspace. */
+                workspace_id?: string | null;
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_MeetingCardOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_meeting_v1_meetings__meeting_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_meeting_v1_meetings__meeting_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MeetingChangeIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_transcript_v1_meetings__meeting_id__transcript_get: {
+        parameters: {
+            query?: {
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_TranscriptLineOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_findings_v1_meetings__meeting_id__findings_get: {
+        parameters: {
+            query?: {
+                /** @description Only findings of this kind. */
+                kind?: components["schemas"]["FindingKind"] | null;
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_FindingOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_map_v1_meetings__meeting_id__map_get: {
+        parameters: {
+            query?: {
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_MapNodeOut_"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

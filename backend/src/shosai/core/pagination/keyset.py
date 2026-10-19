@@ -26,7 +26,7 @@ class Keyset:
             message = "ключ сортировки — хотя бы один столбец, уникальный последним"
             raise ValueError(message)
 
-    def page[T: tuple[Any, ...]](
+    def page[T](
         self, statement: Select[T], after: Sequence[object] | None, limit: int
     ) -> Select[T]:
         """The statement limited to the rows after the position, plus one to see a next page."""
