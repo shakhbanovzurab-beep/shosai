@@ -1,5 +1,7 @@
 import { useTranslations } from "use-intl";
 
+import { NeedsYou } from "@/features/leo/ui/needs-you";
+
 import { viewer } from "../data/viewer";
 import { CalendarPanel } from "./calendar-panel";
 import { FocusCard } from "./focus-card";
@@ -16,6 +18,7 @@ export function ProductivityScreen() {
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
       <div className="flex min-w-0 flex-col gap-6 lg:col-span-9">
         <Greeting name={viewer.firstName} />
+        <NeedsYou />
         <ContributionSkyline />
         <TasksSection />
         <ProjectsSection />

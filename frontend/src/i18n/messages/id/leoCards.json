@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Setujui",
+    "decline": "Tolak",
+    "expires": "Kedaluwarsa {time}",
+    "space": "Di {space}",
+    "origin": {
+      "thread": "Dari chat",
+      "errand": "Dari tugas Leo",
+      "mcp": "Dari {app}"
+    },
+    "irreversible": "Tidak dapat diurungkan",
+    "warning": "Periksa sebelum menyetujui",
+    "failed": "Tidak dapat mengirim jawaban Anda",
+    "status": {
+      "proposed": "Menunggu Anda",
+      "executing": "Sedang berjalan",
+      "succeeded": "Selesai",
+      "partially_succeeded": "Sebagian selesai",
+      "failed": "Tidak berhasil",
+      "rejected": "Ditolak",
+      "expired": "Kedaluwarsa",
+      "outcome_unknown": "Mungkin sudah terjadi — periksa sebelum mencoba lagi"
+    }
+  },
+  "diff": {
+    "label": "Perubahan yang disarankan untuk “{target}”",
+    "selected": "{selected, number} dari {total, plural, other {# perubahan}} dipilih",
+    "toggle": "Ganti “{remove}” dengan “{insert}”",
+    "all": "Ambil semua",
+    "none": "Jangan ambil",
+    "apply": "{count, plural, other {Terapkan # perubahan}}"
+  },
+  "inbox": {
+    "title": "Perlu Anda",
+    "description": "Leo menunggu jawaban Anda sebelum melakukannya.",
+    "review": "Tinjau"
+  },
+  "sources": {
+    "count": "{count, plural, other {# sumber}}",
+    "marker": "Sumber {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "Salin kutipan",
+    "copied": "Kutipan disalin",
+    "copyFailed": "Tidak dapat menyalin kutipan"
+  }
+}

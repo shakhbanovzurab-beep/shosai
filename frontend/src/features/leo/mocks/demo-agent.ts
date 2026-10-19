@@ -1,17 +1,11 @@
 import { formatBytes } from "@/i18n/format-units";
 import { DEFAULT_LANGUAGE } from "@/lib/language";
 
-import type { LeoActionId } from "../domain/actions";
 import type { LeoEvent } from "../domain/protocol";
 import type { LeoRequest, LeoTurn } from "../domain/request";
+import { demoProposals } from "./demo-proposals";
+import { type PlannedStep, pickScenario, type Scenario } from "./demo-scenarios";
 import { type KnowledgeScope, knowledgeNote, knowledgeScope, knowledgeStepText } from "./knowledge";
-
-interface PlannedStep {
-  action: LeoActionId;
-  detail?: string;
-  result?: string;
-  ms: number;
-}
 
 const NOT_CONNECTED = "Not connected yet";
 
@@ -108,6 +102,14 @@ function composeAnswer({ messages, files }: LeoRequest, steps: PlannedStep[], sc
   ].join("\n");
 }
 
+/** Шаги сценария между разбором вопроса и сборкой ответа. */
+const scenarioSteps = (scenario: Scenario): PlannedStep[] => [
+  { action: "analyze_request", ms: 500 },
+  { action: "think", ms: 900 },
+  ...scenario.steps,
+  { action: "synthesize", ms: 700 },
+];
+
 const sleep = (ms: number, signal: AbortSignal) =>
   new Promise<void>((resolve) => {
     const timeout = setTimeout(resolve, ms);
@@ -126,7 +128,8 @@ export async function* runAgent(request: LeoTurn, signal: AbortSignal): AsyncGen
   const startedAt = Date.now();
   // The permission check happens here, before anything is planned: Leo only sees what the account may use.
   const scope = knowledgeScope(request);
-  const steps = planSteps(request, scope);
+  const scenario = pickScenario(request.messages[request.messages.length - 1].content);
+  const steps = scenario ? scenarioSteps(scenario) : planSteps(request, scope);
 
   for (const [index, step] of steps.entries()) {
     const id = `step-${index}`;
@@ -136,13 +139,20 @@ export async function* runAgent(request: LeoTurn, signal: AbortSignal): AsyncGen
     yield { type: "step_end", id, status: "done", durationMs: step.ms, result: step.result };
   }
 
+  if (scenario?.sources) yield { type: "sources", sources: scenario.sources };
   const writeStartedAt = Date.now();
   yield { type: "step_start", id: "step-answer", action: "write_answer" };
-  for (const token of composeAnswer(request, steps, scope).match(/\S+\s*|\n/g) ?? []) {
+  const answer = scenario ? scenario.answer : composeAnswer(request, steps, scope);
+  for (const token of answer.match(/\S+\s*|\n/g) ?? []) {
     await sleep(30, signal);
     if (signal.aborted) return;
     yield { type: "text", delta: token };
   }
   yield { type: "step_end", id: "step-answer", status: "done", durationMs: Date.now() - writeStartedAt };
+  if (scenario?.proposal) {
+    const proposal = scenario.proposal();
+    demoProposals.set(proposal.id, proposal);
+    yield { type: "proposal", proposal };
+  }
   yield { type: "done", durationMs: Date.now() - startedAt };
 }

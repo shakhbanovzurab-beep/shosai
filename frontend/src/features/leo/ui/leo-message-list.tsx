@@ -12,11 +12,14 @@ import {
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
 
+import type { LeoSource } from "../domain/sources";
 import type { LeoMessage } from "../domain/types";
+import { CitedAnswer } from "./cited/cited-answer";
 import { CopyAction, MessageAction } from "./leo-message-actions";
 import { LeoRichText } from "./leo-rich-text";
 import { LeoSteps } from "./leo-steps";
 import { LeoUserMessage } from "./leo-user-message";
+import { LeoProposalCard } from "./proposal/leo-proposal";
 
 interface LeoMessageListProps {
   readonly messages: LeoMessage[];
@@ -78,7 +81,10 @@ function AssistantMessage({ message, isLast, canRegenerate, onRegenerate }: Assi
       {message.status === "error" ? <ReplyError /> : null}
       {hasAnswer || showActions ? (
         <div className="flex flex-col gap-1">
-          {hasAnswer ? <AnswerCard text={message.content} isStreaming={isStreaming} /> : null}
+          {hasAnswer ? <AnswerCard text={message.content} sources={message.sources} isStreaming={isStreaming} /> : null}
+          {message.proposals?.map((proposal) => (
+            <LeoProposalCard key={proposal.id} proposal={proposal} />
+          ))}
           {showActions ? (
             <AnswerActions
               message={message}
@@ -102,10 +108,14 @@ function ReplyError() {
   );
 }
 
-function AnswerCard({ text, isStreaming }: { readonly text: string; readonly isStreaming: boolean }) {
+function AnswerCard({ text, sources, isStreaming }: { text: string; sources?: LeoSource[]; isStreaming: boolean }) {
   return (
     <div className="rounded-2xl border bg-card px-4 py-3 text-sm leading-relaxed">
-      <LeoRichText text={text} />
+      {sources?.length ? (
+        <CitedAnswer text={text} sources={sources} isStreaming={isStreaming} />
+      ) : (
+        <LeoRichText text={text} />
+      )}
       {isStreaming ? (
         <span
           className="ms-0.5 inline-block h-4 w-1.5 animate-pulse rounded-full bg-foreground align-middle"

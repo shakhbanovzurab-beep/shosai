@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Approuver",
+    "decline": "Refuser",
+    "expires": "Expire {time}",
+    "space": "Dans {space}",
+    "origin": {
+      "thread": "D’une conversation",
+      "errand": "D’une mission",
+      "mcp": "De {app}"
+    },
+    "irreversible": "Irréversible",
+    "warning": "À vérifier avant d’approuver",
+    "failed": "Impossible d’envoyer votre réponse",
+    "status": {
+      "proposed": "Vous attend",
+      "executing": "En cours",
+      "succeeded": "Terminé",
+      "partially_succeeded": "En partie terminé",
+      "failed": "N’a pas fonctionné",
+      "rejected": "Refusé",
+      "expired": "Expiré",
+      "outcome_unknown": "Peut-être déjà fait — vérifiez avant de réessayer"
+    }
+  },
+  "diff": {
+    "label": "Modifications proposées pour « {target} »",
+    "selected": "{selected, number} sur {total, plural, one {# modification} many {# de modifications} other {# modifications}} retenues",
+    "toggle": "Remplacer « {remove} » par « {insert} »",
+    "all": "Tout retenir",
+    "none": "Ne rien retenir",
+    "apply": "{count, plural, one {Appliquer # modification} many {Appliquer # de modifications} other {Appliquer # modifications}}"
+  },
+  "inbox": {
+    "title": "Vous attend",
+    "description": "Leo attend votre réponse avant de faire ceci.",
+    "review": "Examiner"
+  },
+  "sources": {
+    "count": "{count, plural, one {# source} many {# de sources} other {# sources}}",
+    "marker": "Source {index, number} : {title}",
+    "at": "{space} · {locator}",
+    "copy": "Copier la citation",
+    "copied": "Citation copiée",
+    "copyFailed": "Impossible de copier la citation"
+  }
+}

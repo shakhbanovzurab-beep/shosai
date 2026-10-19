@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Подтвердить",
+    "decline": "Отклонить",
+    "expires": "Истекает {time}",
+    "space": "В {space}",
+    "origin": {
+      "thread": "Из чата",
+      "errand": "Из запланированного действия",
+      "mcp": "Из {app}"
+    },
+    "irreversible": "Нельзя отменить",
+    "warning": "Проверьте перед подтверждением",
+    "failed": "Не удалось отправить ответ",
+    "status": {
+      "proposed": "Ждёт вас",
+      "executing": "Выполняется",
+      "succeeded": "Готово",
+      "partially_succeeded": "Сделано частично",
+      "failed": "Не удалось выполнить",
+      "rejected": "Отклонено",
+      "expired": "Истекло",
+      "outcome_unknown": "Возможно, уже выполнено — проверьте, прежде чем повторять"
+    }
+  },
+  "diff": {
+    "label": "Предложенные правки в «{target}»",
+    "selected": "Выбрано {selected, number} из {total, plural, one {# правки} few {# правок} many {# правок} other {# правки}}",
+    "toggle": "Заменить «{remove}» на «{insert}»",
+    "all": "Взять все",
+    "none": "Не брать",
+    "apply": "{count, plural, one {Применить # правку} few {Применить # правки} many {Применить # правок} other {Применить # правки}}"
+  },
+  "inbox": {
+    "title": "Нужны вы",
+    "description": "Leo ждёт вашего ответа, прежде чем это сделать.",
+    "review": "Посмотреть"
+  },
+  "sources": {
+    "count": "{count, plural, one {# источник} few {# источника} many {# источников} other {# источника}}",
+    "marker": "Источник {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "Копировать цитату",
+    "copied": "Цитата скопирована",
+    "copyFailed": "Не удалось скопировать цитату"
+  }
+}

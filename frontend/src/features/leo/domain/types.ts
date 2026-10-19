@@ -1,4 +1,6 @@
 import type { LeoActionId } from "./actions";
+import type { LeoProposal } from "./proposals";
+import type { LeoSource } from "./sources";
 
 export type LeoMessageStatus = "streaming" | "done" | "stopped" | "error";
 
@@ -27,4 +29,8 @@ export interface LeoMessage {
   attachments?: LeoAttachment[];
   steps?: LeoStep[];
   durationMs?: number;
+  /** Источники ответа; маркеры `[n]` в тексте ссылаются на них по порядку. */
+  sources?: LeoSource[];
+  /** Действия, которые Leo предложил в этом ответе; их состояние дальше ведёт хранилище предложений. */
+  proposals?: LeoProposal[];
 }

@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Approve",
+    "decline": "Decline",
+    "expires": "Expires {time}",
+    "space": "In {space}",
+    "origin": {
+      "thread": "From a chat",
+      "errand": "From an errand",
+      "mcp": "From {app}"
+    },
+    "irreversible": "Can’t be undone",
+    "warning": "Check before approving",
+    "failed": "Couldn’t send your answer",
+    "status": {
+      "proposed": "Waiting for you",
+      "executing": "In progress",
+      "succeeded": "Done",
+      "partially_succeeded": "Partly done",
+      "failed": "Didn’t work",
+      "rejected": "Declined",
+      "expired": "Expired",
+      "outcome_unknown": "May have gone through — check before trying again"
+    }
+  },
+  "diff": {
+    "label": "Suggested changes to “{target}”",
+    "selected": "{selected, number} of {total, plural, one {# change} other {# changes}} taken",
+    "toggle": "Replace “{remove}” with “{insert}”",
+    "all": "Take all",
+    "none": "Take none",
+    "apply": "{count, plural, one {Apply # change} other {Apply # changes}}"
+  },
+  "inbox": {
+    "title": "Needs you",
+    "description": "Leo waits for your answer before doing these.",
+    "review": "Review"
+  },
+  "sources": {
+    "count": "{count, plural, one {# source} other {# sources}}",
+    "marker": "Source {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "Copy quote",
+    "copied": "Quote copied",
+    "copyFailed": "Couldn’t copy the quote"
+  }
+}

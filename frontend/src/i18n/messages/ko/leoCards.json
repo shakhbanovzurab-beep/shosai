@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "승인",
+    "decline": "거절",
+    "expires": "{time} 만료",
+    "space": "{space}에서",
+    "origin": {
+      "thread": "채팅에서",
+      "errand": "Leo에게 맡긴 일에서",
+      "mcp": "{app}에서"
+    },
+    "irreversible": "되돌릴 수 없어요",
+    "warning": "승인하기 전에 확인하세요",
+    "failed": "답변을 보내지 못했어요",
+    "status": {
+      "proposed": "확인 기다리는 중",
+      "executing": "진행 중",
+      "succeeded": "완료",
+      "partially_succeeded": "일부 완료",
+      "failed": "실패했어요",
+      "rejected": "거절됨",
+      "expired": "만료됨",
+      "outcome_unknown": "이미 실행됐을 수 있어요. 다시 시도하기 전에 확인하세요"
+    }
+  },
+  "diff": {
+    "label": "“{target}” 변경 제안",
+    "selected": "{total, plural, other {변경 #개}} 중 {selected, number}개 선택",
+    "toggle": "“{remove}”을(를) “{insert}”(으)로 바꾸기",
+    "all": "모두 적용",
+    "none": "적용 안 함",
+    "apply": "{count, plural, other {변경 #개 적용}}"
+  },
+  "inbox": {
+    "title": "확인 필요",
+    "description": "Leo가 이 일을 하기 전에 답을 기다리고 있어요.",
+    "review": "검토"
+  },
+  "sources": {
+    "count": "{count, plural, other {출처 #개}}",
+    "marker": "출처 {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "인용 복사",
+    "copied": "인용을 복사했어요",
+    "copyFailed": "인용을 복사하지 못했어요"
+  }
+}

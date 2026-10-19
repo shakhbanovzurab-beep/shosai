@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "核准",
+    "decline": "拒絕",
+    "expires": "{time}到期",
+    "space": "在 {space}",
+    "origin": {
+      "thread": "來自對話",
+      "errand": "來自交給 Leo 的工作",
+      "mcp": "來自 {app}"
+    },
+    "irreversible": "無法復原",
+    "warning": "核准前請先確認",
+    "failed": "無法送出你的回覆",
+    "status": {
+      "proposed": "等待你處理",
+      "executing": "進行中",
+      "succeeded": "完成",
+      "partially_succeeded": "部分完成",
+      "failed": "未成功",
+      "rejected": "已拒絕",
+      "expired": "已過期",
+      "outcome_unknown": "可能已經執行，重試前請先確認"
+    }
+  },
+  "diff": {
+    "label": "對「{target}」的建議修改",
+    "selected": "已選擇 {selected, number}/{total, plural, other {# 項修改}}",
+    "toggle": "將「{remove}」換成「{insert}」",
+    "all": "全部採用",
+    "none": "都不採用",
+    "apply": "{count, plural, other {套用 # 項修改}}"
+  },
+  "inbox": {
+    "title": "需要你處理",
+    "description": "Leo 會等你回覆後再執行這些事。",
+    "review": "查看"
+  },
+  "sources": {
+    "count": "{count, plural, other {# 個來源}}",
+    "marker": "來源 {index, number}：{title}",
+    "at": "{space} · {locator}",
+    "copy": "複製引文",
+    "copied": "已複製引文",
+    "copyFailed": "無法複製引文"
+  }
+}

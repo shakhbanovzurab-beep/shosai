@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Goedkeuren",
+    "decline": "Afwijzen",
+    "expires": "Verloopt {time}",
+    "space": "In {space}",
+    "origin": {
+      "thread": "Uit een chat",
+      "errand": "Uit een opdracht",
+      "mcp": "Uit {app}"
+    },
+    "irreversible": "Kan niet ongedaan worden gemaakt",
+    "warning": "Controleer dit voor je goedkeurt",
+    "failed": "Kan je antwoord niet versturen",
+    "status": {
+      "proposed": "Wacht op jou",
+      "executing": "Bezig",
+      "succeeded": "Klaar",
+      "partially_succeeded": "Deels klaar",
+      "failed": "Is niet gelukt",
+      "rejected": "Afgewezen",
+      "expired": "Verlopen",
+      "outcome_unknown": "Is misschien al gebeurd: controleer dit voor je het opnieuw probeert"
+    }
+  },
+  "diff": {
+    "label": "Voorgestelde wijzigingen in ‘{target}’",
+    "selected": "{selected, number} van {total, plural, one {# wijziging} other {# wijzigingen}} gekozen",
+    "toggle": "‘{remove}’ vervangen door ‘{insert}’",
+    "all": "Alles nemen",
+    "none": "Niets nemen",
+    "apply": "{count, plural, one {# wijziging toepassen} other {# wijzigingen toepassen}}"
+  },
+  "inbox": {
+    "title": "Wacht op jou",
+    "description": "Leo wacht op je antwoord voordat het dit doet.",
+    "review": "Bekijken"
+  },
+  "sources": {
+    "count": "{count, plural, one {# bron} other {# bronnen}}",
+    "marker": "Bron {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "Citaat kopiëren",
+    "copied": "Citaat gekopieerd",
+    "copyFailed": "Kan het citaat niet kopiëren"
+  }
+}

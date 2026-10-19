@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "承認",
+    "decline": "却下",
+    "expires": "期限：{time}",
+    "space": "{space} で",
+    "origin": {
+      "thread": "チャットから",
+      "errand": "Leo への依頼から",
+      "mcp": "{app} から"
+    },
+    "irreversible": "元に戻せません",
+    "warning": "承認する前に確認してください",
+    "failed": "回答を送信できませんでした",
+    "status": {
+      "proposed": "あなたの確認待ち",
+      "executing": "実行中",
+      "succeeded": "完了",
+      "partially_succeeded": "一部完了",
+      "failed": "うまくいきませんでした",
+      "rejected": "却下済み",
+      "expired": "期限切れ",
+      "outcome_unknown": "すでに実行された可能性があります。やり直す前に確認してください"
+    }
+  },
+  "diff": {
+    "label": "「{target}」への変更案",
+    "selected": "{total, plural, other {# 件の変更}}のうち {selected, number} 件を選択",
+    "toggle": "「{remove}」を「{insert}」に置き換える",
+    "all": "すべて採用",
+    "none": "採用しない",
+    "apply": "{count, plural, other {# 件の変更を適用}}"
+  },
+  "inbox": {
+    "title": "あなたの確認待ち",
+    "description": "Leo はこれらを実行する前にあなたの返事を待っています。",
+    "review": "確認する"
+  },
+  "sources": {
+    "count": "{count, plural, other {# 件のソース}}",
+    "marker": "ソース {index, number}：{title}",
+    "at": "{space} · {locator}",
+    "copy": "引用をコピー",
+    "copied": "引用をコピーしました",
+    "copyFailed": "引用をコピーできませんでした"
+  }
+}

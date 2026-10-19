@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Aprovar",
+    "decline": "Recusar",
+    "expires": "Expira {time}",
+    "space": "Em {space}",
+    "origin": {
+      "thread": "De um chat",
+      "errand": "De uma tarefa do Leo",
+      "mcp": "De {app}"
+    },
+    "irreversible": "Não dá para desfazer",
+    "warning": "Confira antes de aprovar",
+    "failed": "Não foi possível enviar sua resposta",
+    "status": {
+      "proposed": "Aguardando você",
+      "executing": "Em andamento",
+      "succeeded": "Concluído",
+      "partially_succeeded": "Concluído em parte",
+      "failed": "Não funcionou",
+      "rejected": "Recusado",
+      "expired": "Expirado",
+      "outcome_unknown": "Pode já ter sido feito: confira antes de tentar novamente"
+    }
+  },
+  "diff": {
+    "label": "Mudanças sugeridas em “{target}”",
+    "selected": "{selected, number} de {total, plural, one {# mudança} many {# de mudanças} other {# mudanças}} escolhidas",
+    "toggle": "Trocar “{remove}” por “{insert}”",
+    "all": "Escolher todas",
+    "none": "Nenhuma",
+    "apply": "{count, plural, one {Aplicar # mudança} many {Aplicar # de mudanças} other {Aplicar # mudanças}}"
+  },
+  "inbox": {
+    "title": "Precisa de você",
+    "description": "O Leo aguarda sua resposta antes de fazer isso.",
+    "review": "Revisar"
+  },
+  "sources": {
+    "count": "{count, plural, one {# fonte} many {# de fontes} other {# fontes}}",
+    "marker": "Fonte {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "Copiar citação",
+    "copied": "Citação copiada",
+    "copyFailed": "Não foi possível copiar a citação"
+  }
+}

@@ -77,8 +77,8 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 
 | Screen / state | Needs | Leo | Serves | Slice |
 |---|---|---|---|---|
-| Leo panel (every page, ⌘I; scopes Personal, workspace, hub) | Today `POST /api/leo` with the whole history from localStorage, NDJSON stream. Needed: server threads per scope, SSE v2 with resume (ADR 0024, 0032) | the agent | all six | agent |
-| Step timeline, "Needs approval" badge | The badge is only a label: no approve or reject UI or endpoint. Needed: action cards and an approvals inbox (ADR 0025) | proposals | Cd | agent |
+| Leo panel (every page, ⌘I; scopes Personal, workspace, hub) | Today `POST /api/leo` with the whole history from localStorage, NDJSON stream; an answer's sources show as markers and a source list on sample data (a `sources` event the cabinet proposes, `frontend/docs/leo-actions-api.md`). Needed: server threads per scope, SSE v2 with resume (ADR 0024, 0032) and the owner's decision on how sources travel in it | the agent | all six | agent |
+| Step timeline, "Needs approval" badge | Action cards under the answer (fields, or a text edit word by word with each change taken or left; approve or decline) and "Needs you" on the home screen, on the routes of Leo §13.2 (`/v1/agent/actions*`), answered by mocks until `agent` ships (ADR 0025, `frontend/docs/leo-actions-api.md`) | proposals | Cd | agent |
 | Voice mode | Browser Web Speech only; transcripts sent as messages; no server voice | — | — | agent (client) |
 | Attachments (≤ 5 × 10 MB) | Presigned upload, digests in context | reads them | — | files → agent |
 | Leo in the admin panel | Russian suggestions ("Какие обращения ждут ответа?") imply admin toolsets | — | — | §8 SM-12 |
@@ -112,7 +112,7 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 | `/app/kanban` boards (board, list, table) | Boards with templates and icons, columns, card order with revision, tasks with priority; Jira boards in two-way sync with webhooks; "show my workspace tasks here" | "Which tasks are overdue?" | Tr, Or | tasks |
 | Kanban inert controls | Filter, Sort, Import CSV, From template, Automation have no handler | — | — | dropped from the UI (§2.10) |
 | Workspace tasks, "Needs you", My workspace tasks | One task store with assignee, due date, project, source meeting | tasks from meetings | Tr, Cd | tasks |
-| Home `/app/productivity` | Greeting, "Today" list (local, lost on reload), workspace tasks, projects (static), calendar (no events), recent notes (static), focus timer (localStorage), year skyline with streaks (random data) | "Plan my day" | Tr, Wa | composition: tasks, calendar, meetings, proactive (§8 SM-4) |
+| Home `/app/productivity` | Greeting, "Needs you" (Leo's actions waiting for approval), "Today" list (local, lost on reload), workspace tasks, projects (static), calendar (no events), recent notes (static), focus timer (localStorage), year skyline with streaks (random data) | "Plan my day" | Tr, Wa | composition: tasks, calendar, meetings, proactive, agent (§8 SM-4) |
 | `/app/hub` list | Hubs with computed summary (top gap, rhythm, open topics), board link, archive | — | Or, Wa | hubs |
 | Hub "Today" brief, "Coming up" prep | Fires across hubs (≤ 7), prep per upcoming meeting with its hub's open topics and materials | — | Wa, Cd | hubs |
 | `/app/hub/:id` | Charter (human-written only), unresolved topics with stage, gap, rounds, evidence quotes; done, dismiss for 90 days, assign; digest since the last meeting; feed of facts per meeting; materials (links, uploads, meeting summaries) | daily "going in circles" signal; answers only inside the hub | Tr, Wa, Re, Co | hubs over commitments |

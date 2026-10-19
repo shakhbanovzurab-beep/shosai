@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "موافقة",
+    "decline": "رفض",
+    "expires": "ينتهي {time}",
+    "space": "في {space}",
+    "origin": {
+      "thread": "من محادثة",
+      "errand": "من مهمة لـ Leo",
+      "mcp": "من {app}"
+    },
+    "irreversible": "لا يمكن التراجع عنه",
+    "warning": "تحقق قبل الموافقة",
+    "failed": "تعذر إرسال ردك",
+    "status": {
+      "proposed": "بانتظارك",
+      "executing": "قيد التنفيذ",
+      "succeeded": "تم",
+      "partially_succeeded": "تم جزئيًا",
+      "failed": "لم ينجح",
+      "rejected": "مرفوض",
+      "expired": "منتهي الصلاحية",
+      "outcome_unknown": "ربما تم بالفعل — تحقق قبل المحاولة مرة أخرى"
+    }
+  },
+  "diff": {
+    "label": "تغييرات مقترحة على «{target}»",
+    "selected": "تم اختيار {selected, number} من {total, plural, zero {# تغيير} one {تغيير واحد} two {تغييرين} few {# تغييرات} many {# تغييرًا} other {# تغيير}}",
+    "toggle": "استبدال «{remove}» بـ «{insert}»",
+    "all": "اختيار الكل",
+    "none": "عدم الاختيار",
+    "apply": "{count, plural, zero {تطبيق # تغيير} one {تطبيق تغيير واحد} two {تطبيق تغييرين} few {تطبيق # تغييرات} many {تطبيق # تغييرًا} other {تطبيق # تغيير}}"
+  },
+  "inbox": {
+    "title": "بانتظارك",
+    "description": "ينتظر Leo ردك قبل تنفيذ هذه الأمور.",
+    "review": "مراجعة"
+  },
+  "sources": {
+    "count": "{count, plural, zero {# مصدر} one {مصدر واحد} two {مصدران} few {# مصادر} many {# مصدرًا} other {# مصدر}}",
+    "marker": "المصدر {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "نسخ الاقتباس",
+    "copied": "تم نسخ الاقتباس",
+    "copyFailed": "تعذر نسخ الاقتباس"
+  }
+}

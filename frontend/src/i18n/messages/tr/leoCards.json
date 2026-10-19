@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Onayla",
+    "decline": "Reddet",
+    "expires": "{time} sona eriyor",
+    "space": "{space} içinde",
+    "origin": {
+      "thread": "Bir sohbetten",
+      "errand": "Bir görevden",
+      "mcp": "{app} üzerinden"
+    },
+    "irreversible": "Geri alınamaz",
+    "warning": "Onaylamadan önce kontrol edin",
+    "failed": "Yanıtınız gönderilemedi",
+    "status": {
+      "proposed": "Sizi bekliyor",
+      "executing": "Devam ediyor",
+      "succeeded": "Tamamlandı",
+      "partially_succeeded": "Kısmen tamamlandı",
+      "failed": "Olmadı",
+      "rejected": "Reddedildi",
+      "expired": "Süresi doldu",
+      "outcome_unknown": "Zaten yapılmış olabilir; tekrar denemeden önce kontrol edin"
+    }
+  },
+  "diff": {
+    "label": "“{target}” için önerilen değişiklikler",
+    "selected": "{total, plural, one {# değişiklikten} other {# değişiklikten}} {selected, number} tanesi seçildi",
+    "toggle": "“{remove}” yerine “{insert}” yaz",
+    "all": "Tümünü al",
+    "none": "Hiçbirini alma",
+    "apply": "{count, plural, one {# değişikliği uygula} other {# değişikliği uygula}}"
+  },
+  "inbox": {
+    "title": "Sizi bekliyor",
+    "description": "Leo bunları yapmadan önce yanıtınızı bekliyor.",
+    "review": "İncele"
+  },
+  "sources": {
+    "count": "{count, plural, one {# kaynak} other {# kaynak}}",
+    "marker": "Kaynak {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "Alıntıyı kopyala",
+    "copied": "Alıntı kopyalandı",
+    "copyFailed": "Alıntı kopyalanamadı"
+  }
+}

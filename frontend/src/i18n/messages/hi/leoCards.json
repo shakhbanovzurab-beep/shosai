@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "मंज़ूर करें",
+    "decline": "अस्वीकार करें",
+    "expires": "समय सीमा: {time}",
+    "space": "{space} में",
+    "origin": {
+      "thread": "चैट से",
+      "errand": "काम से",
+      "mcp": "{app} से"
+    },
+    "irreversible": "पहले जैसा नहीं किया जा सकता",
+    "warning": "मंज़ूर करने से पहले जांच लें",
+    "failed": "आपका जवाब नहीं भेजा जा सका",
+    "status": {
+      "proposed": "आपका इंतज़ार है",
+      "executing": "जारी है",
+      "succeeded": "हो गया",
+      "partially_succeeded": "कुछ हिस्सा हुआ",
+      "failed": "नहीं हो सका",
+      "rejected": "अस्वीकार किया गया",
+      "expired": "समय खत्म हो गया",
+      "outcome_unknown": "शायद पहले ही हो चुका है — दोबारा कोशिश करने से पहले जांच लें"
+    }
+  },
+  "diff": {
+    "label": "“{target}” में सुझाए गए बदलाव",
+    "selected": "{total, plural, one {# बदलाव} other {# बदलावों}} में से {selected, number} चुने गए",
+    "toggle": "“{remove}” की जगह “{insert}” लिखें",
+    "all": "सभी लें",
+    "none": "कोई नहीं",
+    "apply": "{count, plural, one {# बदलाव लागू करें} other {# बदलाव लागू करें}}"
+  },
+  "inbox": {
+    "title": "आपकी ज़रूरत है",
+    "description": "ये काम करने से पहले Leo आपके जवाब का इंतज़ार करता है।",
+    "review": "देखें"
+  },
+  "sources": {
+    "count": "{count, plural, one {# स्रोत} other {# स्रोत}}",
+    "marker": "स्रोत {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "उद्धरण कॉपी करें",
+    "copied": "उद्धरण कॉपी किया गया",
+    "copyFailed": "उद्धरण कॉपी नहीं हो सका"
+  }
+}

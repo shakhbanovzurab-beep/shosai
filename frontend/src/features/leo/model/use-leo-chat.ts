@@ -17,6 +17,7 @@ import {
   subscribe,
   updateMessage,
 } from "./chat-store";
+import { proposalArrived } from "./proposals";
 
 /** The conversation of one context; switching context switches conversation, the other stays as it was. */
 export function useLeoChat({ page, context }: { page: string; context: LeoContext }) {
@@ -50,7 +51,10 @@ export function useLeoChat({ page, context }: { page: string; context: LeoContex
         history,
         files: attachmentFiles.get(lastMessage.id) ?? [],
         signal: controller.signal,
-        onEvent: (event) => updateMessage(key, replyId, (m) => applyEvent(m, event)),
+        onEvent: (event) => {
+          updateMessage(key, replyId, (m) => applyEvent(m, event));
+          if (event.type === "proposal") proposalArrived();
+        },
       }).then((status) => {
         // Covers an aborted or failed request, and a stream that ended without a final event.
         updateMessage(key, replyId, (m) => (m.status === "streaming" ? finishMessage(m, status ?? "error") : m));

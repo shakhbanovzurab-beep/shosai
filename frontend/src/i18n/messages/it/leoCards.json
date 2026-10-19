@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Approva",
+    "decline": "Rifiuta",
+    "expires": "Scade {time}",
+    "space": "In {space}",
+    "origin": {
+      "thread": "Da una chat",
+      "errand": "Da un incarico",
+      "mcp": "Da {app}"
+    },
+    "irreversible": "Irreversibile",
+    "warning": "Controlla prima di approvare",
+    "failed": "Impossibile inviare la risposta",
+    "status": {
+      "proposed": "Attende te",
+      "executing": "In corso",
+      "succeeded": "Fatto",
+      "partially_succeeded": "Fatto in parte",
+      "failed": "Non è riuscito",
+      "rejected": "Rifiutato",
+      "expired": "Scaduto",
+      "outcome_unknown": "Potrebbe essere già stato fatto: controlla prima di riprovare"
+    }
+  },
+  "diff": {
+    "label": "Modifiche suggerite a «{target}»",
+    "selected": "{selected, number} di {total, plural, one {# modifica} many {# di modifiche} other {# modifiche}} scelte",
+    "toggle": "Sostituisci «{remove}» con «{insert}»",
+    "all": "Prendi tutte",
+    "none": "Nessuna",
+    "apply": "{count, plural, one {Applica # modifica} many {Applica # di modifiche} other {Applica # modifiche}}"
+  },
+  "inbox": {
+    "title": "Servi tu",
+    "description": "Leo aspetta la tua risposta prima di farlo.",
+    "review": "Rivedi"
+  },
+  "sources": {
+    "count": "{count, plural, one {# fonte} many {# di fonti} other {# fonti}}",
+    "marker": "Fonte {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "Copia citazione",
+    "copied": "Citazione copiata",
+    "copyFailed": "Impossibile copiare la citazione"
+  }
+}

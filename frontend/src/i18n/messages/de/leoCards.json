@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Bestätigen",
+    "decline": "Ablehnen",
+    "expires": "Läuft ab {time}",
+    "space": "In {space}",
+    "origin": {
+      "thread": "Aus einem Chat",
+      "errand": "Aus einem Auftrag",
+      "mcp": "Aus {app}"
+    },
+    "irreversible": "Nicht rückgängig zu machen",
+    "warning": "Vor dem Bestätigen prüfen",
+    "failed": "Deine Antwort konnte nicht gesendet werden",
+    "status": {
+      "proposed": "Wartet auf dich",
+      "executing": "Läuft",
+      "succeeded": "Erledigt",
+      "partially_succeeded": "Teilweise erledigt",
+      "failed": "Hat nicht geklappt",
+      "rejected": "Abgelehnt",
+      "expired": "Abgelaufen",
+      "outcome_unknown": "Möglicherweise schon ausgeführt – prüfe das, bevor du es erneut versuchst"
+    }
+  },
+  "diff": {
+    "label": "Vorgeschlagene Änderungen an „{target}“",
+    "selected": "{selected, number} von {total, plural, one {# Änderung} other {# Änderungen}} übernommen",
+    "toggle": "„{remove}“ durch „{insert}“ ersetzen",
+    "all": "Alle übernehmen",
+    "none": "Keine übernehmen",
+    "apply": "{count, plural, one {# Änderung anwenden} other {# Änderungen anwenden}}"
+  },
+  "inbox": {
+    "title": "Wartet auf dich",
+    "description": "Leo wartet auf deine Antwort, bevor es das erledigt.",
+    "review": "Ansehen"
+  },
+  "sources": {
+    "count": "{count, plural, one {# Quelle} other {# Quellen}}",
+    "marker": "Quelle {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "Zitat kopieren",
+    "copied": "Zitat kopiert",
+    "copyFailed": "Zitat konnte nicht kopiert werden"
+  }
+}

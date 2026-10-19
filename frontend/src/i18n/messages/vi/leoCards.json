@@ -1,0 +1,47 @@
+{
+  "card": {
+    "approve": "Duyệt",
+    "decline": "Từ chối",
+    "expires": "Hết hạn {time}",
+    "space": "Trong {space}",
+    "origin": {
+      "thread": "Từ một cuộc trò chuyện",
+      "errand": "Từ một việc Leo được giao",
+      "mcp": "Từ {app}"
+    },
+    "irreversible": "Không thể hoàn tác",
+    "warning": "Kiểm tra trước khi duyệt",
+    "failed": "Không gửi được câu trả lời của bạn",
+    "status": {
+      "proposed": "Đang chờ bạn",
+      "executing": "Đang thực hiện",
+      "succeeded": "Xong",
+      "partially_succeeded": "Xong một phần",
+      "failed": "Không thành công",
+      "rejected": "Đã từ chối",
+      "expired": "Đã hết hạn",
+      "outcome_unknown": "Có thể đã thực hiện — hãy kiểm tra trước khi thử lại"
+    }
+  },
+  "diff": {
+    "label": "Thay đổi đề xuất cho “{target}”",
+    "selected": "Đã chọn {selected, number}/{total, plural, other {# thay đổi}}",
+    "toggle": "Thay “{remove}” bằng “{insert}”",
+    "all": "Chọn tất cả",
+    "none": "Không chọn",
+    "apply": "{count, plural, other {Áp dụng # thay đổi}}"
+  },
+  "inbox": {
+    "title": "Cần bạn",
+    "description": "Leo chờ câu trả lời của bạn trước khi làm những việc này.",
+    "review": "Xem"
+  },
+  "sources": {
+    "count": "{count, plural, other {# nguồn}}",
+    "marker": "Nguồn {index, number}: {title}",
+    "at": "{space} · {locator}",
+    "copy": "Sao chép trích dẫn",
+    "copied": "Đã sao chép trích dẫn",
+    "copyFailed": "Không sao chép được trích dẫn"
+  }
+}
