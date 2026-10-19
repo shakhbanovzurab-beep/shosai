@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, one {{amount} token} other {{amount} token}}",
-  "resets": "Sınırlar her hafta sıfırlanır. Sonraki sıfırlama: {date}.",
-  "thisWeek": "Bu hafta",
   "tiers": {
     "standard": {
-      "title": "Standart modeller",
-      "description": "Planınıza dahildir. Sınır dolduğunda haftalık sıfırlamayı bekleyin."
+      "title": "Standart modeller"
     },
     "frontier": {
-      "title": "En gelişmiş modeller",
-      "description": "Claude Opus, GPT Astra ve diğer üst düzey modeller. Bu sınır dolduğunda ek token bakiyeniz kullanılır."
+      "title": "En gelişmiş modeller"
     }
   },
   "used": "{count, plural, one {{used} / {limit} token} other {{used} / {limit} token}}",
-  "usedLabel": "{tier}: haftalık token sınırının {percent} kadarı kullanıldı",
   "frontierThisWeek": "Bu hafta en gelişmiş modeller",
   "topUp": {
     "title": "En gelişmiş modeller için ek token",
@@ -22,5 +17,31 @@
     "buyMore": "Daha fazla satın al",
     "buy": "Token satın al",
     "failed": "Satın alma başlatılamadı"
+  },
+  "overview": {
+    "title": "Kullanım",
+    "plan": "{plan} planı",
+    "seePlans": "Planları gör",
+    "noLimit": "{used} · sınırsız",
+    "meterLabel": "{label}: {percent} kullanıldı",
+    "minutesOf": "{used, number} / {limit, plural, one {# dk} other {# dk}}",
+    "minutesUsed": "{used, plural, one {# dk} other {# dk}}",
+    "bytesOf": "{used} / {limit}",
+    "kinds": {
+      "minutes": "Toplantı dakikaları",
+      "storage": "Depolama",
+      "knowledge": "Leo’nun kullandığı dosyalar"
+    },
+    "notes": {
+      "resets": "Yenilenme: {date}",
+      "lowResets": "Azalıyor · yenilenme: {date}",
+      "fullResets": "Tükendi · yenilenme: {date}",
+      "frontierExtra": "Ek tokenlar kullanılıyor: {amount} kaldı",
+      "minutesPaused": "Toplantılar {date} tarihine kadar duraklatıldı.",
+      "minutesPausedUpgrade": "Toplantılar {date} tarihine kadar duraklatıldı. Sınırsız toplantı için {plan} planına yükseltin.",
+      "low": "Azalıyor",
+      "storageFull": "Depolama dolu: yeni yüklemeler duraklatıldı",
+      "knowledgeFull": "Leo’nun sınırına ulaşıldı: Leo yeni dosya kullanamaz"
+    }
   }
 }

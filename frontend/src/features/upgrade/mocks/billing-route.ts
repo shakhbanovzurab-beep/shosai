@@ -24,7 +24,7 @@ const inquirySchema = z.strictObject({
 
 const readJson = (request: Request) => request.json().catch(() => null);
 
-/** /api/billing/plans: the plans, the current one and this month's meeting minutes. */
+/** /v1/billing/plans: the plans, the current one and this month's meeting minutes. */
 export const plansRoute = {
   async GET(_request: Request) {
     return JsonResponse.json<PlansResponse>(demoPlans());

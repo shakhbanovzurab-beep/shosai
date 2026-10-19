@@ -1,3 +1,5 @@
+import { apiClient } from "@/lib/api/app-client";
+import { dataOf } from "@/lib/api/client";
 import { apiRequest, jsonBody } from "@/lib/api/request";
 
 import type {
@@ -22,7 +24,8 @@ export const settingsApi = {
   billing: () => request<Billing>("/billing"),
   billingPortal: (body: BillingPortalRequest) =>
     request<BillingPortalResponse>("/billing/portal", jsonBody("POST", body)),
-  usage: () => request<Usage>("/usage"),
+  /** The week's tokens per tier and the frontier packs: the backend's (billing, step 6). */
+  usage: (): Promise<Usage> => dataOf(apiClient.GET("/v1/settings/usage")),
   topUp: (body: TopUpRequest) => request<TopUpResponse>("/usage/top-up", jsonBody("POST", body)),
   listMcp: () => request<McpServersResponse>("/mcp"),
   addMcp: (draft: McpServerDraft) => request<McpServer>("/mcp", jsonBody("POST", draft)),

@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, =0 {Geen tokens} one {{amount} token} other {{amount} tokens}}",
-  "resets": "Limieten worden elke week vernieuwd. Volgende vernieuwing: {date}.",
-  "thisWeek": "Deze week",
   "tiers": {
     "standard": {
-      "title": "Standaardmodellen",
-      "description": "Inbegrepen in je abonnement. Is het op, wacht dan tot de wekelijkse vernieuwing."
+      "title": "Standaardmodellen"
     },
     "frontier": {
-      "title": "Krachtigste modellen",
-      "description": "Claude Opus, GPT Astra en andere zeer krachtige modellen. Daarna worden je extra tokens gebruikt."
+      "title": "Krachtigste modellen"
     }
   },
   "used": "{count, plural, one {{used} van {limit} token} other {{used} van {limit} tokens}}",
-  "usedLabel": "{tier}: {percent} van de tokens van deze week gebruikt",
   "frontierThisWeek": "Krachtigste modellen deze week",
   "topUp": {
     "title": "Extra tokens voor de krachtigste modellen",
@@ -22,5 +17,31 @@
     "buyMore": "Meer kopen",
     "buy": "Tokens kopen",
     "failed": "Kan de aankoop niet starten"
+  },
+  "overview": {
+    "title": "Gebruik",
+    "plan": "{plan}-abonnement",
+    "seePlans": "Abonnementen bekijken",
+    "noLimit": "{used} · geen limiet",
+    "meterLabel": "{label}: {percent} gebruikt",
+    "minutesOf": "{used, number} van {limit, plural, one {# min} other {# min}}",
+    "minutesUsed": "{used, plural, one {# min} other {# min}}",
+    "bytesOf": "{used} van {limit}",
+    "kinds": {
+      "minutes": "Vergaderminuten",
+      "storage": "Opslag",
+      "knowledge": "Bestanden die Leo gebruikt"
+    },
+    "notes": {
+      "resets": "Wordt gereset op {date}",
+      "lowResets": "Bijna op · wordt gereset op {date}",
+      "fullResets": "Op · wordt gereset op {date}",
+      "frontierExtra": "Extra tokens in gebruik: nog {amount}",
+      "minutesPaused": "Vergaderingen zijn gepauzeerd tot {date}.",
+      "minutesPausedUpgrade": "Vergaderingen zijn gepauzeerd tot {date}. Upgrade naar {plan} voor onbeperkt vergaderen.",
+      "low": "Bijna op",
+      "storageFull": "Opslag vol: nieuwe uploads zijn gepauzeerd",
+      "knowledgeFull": "De limiet van Leo is bereikt: Leo kan geen nieuwe bestanden gebruiken"
+    }
   }
 }

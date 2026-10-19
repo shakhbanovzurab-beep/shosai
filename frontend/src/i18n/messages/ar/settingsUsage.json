@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, zero {{amount} رمز مميز} one {{amount} رمز مميز} two {{amount} رمز مميز} few {{amount} رموز مميزة} many {{amount} رمزًا مميزًا} other {{amount} رمز مميز}}",
-  "resets": "تتم إعادة تعيين الحدود أسبوعيًا. إعادة التعيين التالية: {date}.",
-  "thisWeek": "هذا الأسبوع",
   "tiers": {
     "standard": {
-      "title": "النماذج القياسية",
-      "description": "مضمنة في الخطة. عند بلوغ الحد، يلزم انتظار إعادة التعيين الأسبوعية."
+      "title": "النماذج القياسية"
     },
     "frontier": {
-      "title": "النماذج الرائدة",
-      "description": "Claude Opus و GPT Astra وغيرهما من أقوى النماذج. بعد بلوغ هذا الحد، تُستخدم الرموز المميزة الإضافية."
+      "title": "النماذج الرائدة"
     }
   },
   "used": "{count, plural, zero {{used} من {limit} رمز مميز} one {{used} من {limit} رمز مميز} two {{used} من {limit} رمز مميز} few {{used} من {limit} رموز مميزة} many {{used} من {limit} رمزًا مميزًا} other {{used} من {limit} رمز مميز}}",
-  "usedLabel": "{tier}: تم استخدام {percent} من الرموز المميزة لهذا الأسبوع",
   "frontierThisWeek": "النماذج الرائدة هذا الأسبوع",
   "topUp": {
     "title": "رموز مميزة إضافية للنماذج الرائدة",
@@ -22,5 +17,31 @@
     "buyMore": "شراء المزيد",
     "buy": "شراء رموز مميزة",
     "failed": "تعذر بدء عملية الشراء"
+  },
+  "overview": {
+    "title": "الاستخدام",
+    "plan": "الخطة {plan}",
+    "seePlans": "عرض الخطط",
+    "noLimit": "{used} · بلا حد",
+    "meterLabel": "{label}: تم استخدام {percent}",
+    "minutesOf": "{used, number} من {limit, plural, zero {# دقيقة} one {# دقيقة} two {# دقيقة} few {# دقائق} many {# دقيقة} other {# دقيقة}}",
+    "minutesUsed": "{used, plural, zero {# دقيقة} one {# دقيقة} two {# دقيقة} few {# دقائق} many {# دقيقة} other {# دقيقة}}",
+    "bytesOf": "{used} من {limit}",
+    "kinds": {
+      "minutes": "دقائق الاجتماعات",
+      "storage": "التخزين",
+      "knowledge": "الملفات التي يستخدمها Leo"
+    },
+    "notes": {
+      "resets": "تتم إعادة التعيين في {date}",
+      "lowResets": "أوشك على النفاد · تتم إعادة التعيين في {date}",
+      "fullResets": "نفد · تتم إعادة التعيين في {date}",
+      "frontierExtra": "يتم استخدام الرموز المميزة الإضافية: المتبقي {amount}",
+      "minutesPaused": "الاجتماعات متوقفة مؤقتًا حتى {date}.",
+      "minutesPausedUpgrade": "الاجتماعات متوقفة مؤقتًا حتى {date}. يمكن الترقية إلى {plan} للحصول على اجتماعات غير محدودة.",
+      "low": "أوشك على النفاد",
+      "storageFull": "التخزين ممتلئ: تم إيقاف عمليات الرفع الجديدة مؤقتًا",
+      "knowledgeFull": "تم الوصول إلى حد Leo: لا يمكن لـ Leo استخدام ملفات جديدة"
+    }
   }
 }

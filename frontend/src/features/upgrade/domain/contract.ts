@@ -1,12 +1,12 @@
 /**
- * Upgrade API contract, shared by the Upgrade page and its route handlers in `../server` (served at
- * `/api/billing/*`). They forward to `${BACKEND_API_URL}/v1/billing/*` when it is set and otherwise
- * answer from an in-memory demo. snake_case to match Pydantic; errors are `{ "detail": string }`.
+ * Upgrade API contract. `GET /v1/billing/plans` is the backend's (billing, step 6; `contract.test.ts` holds
+ * `PlansResponse` equal to the generated schema). Checkout and the sales inquiry still go to the sample
+ * `/api/billing/*` routes answered by the mocks: checkout waits for payments (billing steps 8–11).
  * See docs/upgrade-api.md.
  *
- * GET  /billing/plans          → PlansResponse
- * POST /billing/checkout       → CheckoutResponse   (CheckoutRequest; the provider's page for the change)
- * POST /billing/sales-inquiry  → 202 SalesInquiryResponse (SalesInquiryRequest)
+ * GET  /v1/billing/plans           → PlansResponse
+ * POST /api/billing/checkout       → CheckoutResponse   (CheckoutRequest; the provider's page for the change)
+ * POST /api/billing/sales-inquiry  → 202 SalesInquiryResponse (SalesInquiryRequest)
  */
 
 /** A plan's slug, e.g. "basic", "professional", "enterprise"; plans are managed in Admin › Plans. */
@@ -30,6 +30,9 @@ export type Entitlements = {
   usage_analytics: boolean;
 };
 
+/** The account's currency: plans are priced and paid in it (ADR 0054). */
+export type Currency = "RUB" | "USD" | "EUR";
+
 /** The pricing page's tabs. */
 export const PLAN_AUDIENCES = ["individual", "team", "enterprise"] as const;
 export type PlanAudience = (typeof PLAN_AUDIENCES)[number];
@@ -42,7 +45,7 @@ export type Plan = {
   /** For team plans: how many users it can be bought for; the price is then per user. */
   seats: { min: number; max: number | null } | null;
   /** Per month (per user when `seats` is set), in minor units; null for a custom, sales-negotiated price. */
-  price: { amount_cents: number; currency: string; interval: "month" } | null;
+  price: { amount_cents: number; currency: Currency; interval: "month" } | null;
   entitlements: Entitlements;
   /** Extra card lines shown before the limits, e.g. "Everything in Basic". */
   features: string[];

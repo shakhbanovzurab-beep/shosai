@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, other {{amount} 個 Token}}",
-  "resets": "上限每週重設。下次重設：{date}。",
-  "thisWeek": "本週",
   "tiers": {
     "standard": {
-      "title": "標準模型",
-      "description": "已包含在你的方案中。用完後，請等待每週重設。"
+      "title": "標準模型"
     },
     "frontier": {
-      "title": "頂尖模型",
-      "description": "Claude Opus、GPT Astra 和其他頂尖模型。用完後會改用你的額外 Token。"
+      "title": "頂尖模型"
     }
   },
   "used": "{count, plural, other {已使用 {used} / {limit} 個 Token}}",
-  "usedLabel": "{tier}：已使用本週 Token 的 {percent}",
   "frontierThisWeek": "本週的頂尖模型用量",
   "topUp": {
     "title": "頂尖模型的額外 Token",
@@ -22,5 +17,31 @@
     "buyMore": "購買更多",
     "buy": "購買 Token",
     "failed": "無法開始購買"
+  },
+  "overview": {
+    "title": "用量",
+    "plan": "{plan} 方案",
+    "seePlans": "查看方案",
+    "noLimit": "{used} · 無上限",
+    "meterLabel": "{label}：已使用 {percent}",
+    "minutesOf": "{used, number} / {limit, plural, other {# 分鐘}}",
+    "minutesUsed": "{used, plural, other {# 分鐘}}",
+    "bytesOf": "{used} / {limit}",
+    "kinds": {
+      "minutes": "會議時間",
+      "storage": "儲存空間",
+      "knowledge": "Leo 使用的檔案"
+    },
+    "notes": {
+      "resets": "{date} 重設",
+      "lowResets": "即將用完 · {date} 重設",
+      "fullResets": "已用完 · {date} 重設",
+      "frontierExtra": "正在使用額外 Token：剩下 {amount}",
+      "minutesPaused": "會議功能已暫停，直到 {date}。",
+      "minutesPausedUpgrade": "會議功能已暫停，直到 {date}。升級至 {plan} 即可無限制開會。",
+      "low": "即將用完",
+      "storageFull": "儲存空間已滿：新的上傳已暫停",
+      "knowledgeFull": "已達 Leo 的上限：Leo 無法使用新檔案"
+    }
   }
 }

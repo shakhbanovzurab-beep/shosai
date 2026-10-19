@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, one {{amount} token} many {{amount} de tokens} other {{amount} tokens}}",
-  "resets": "Los límites se restablecen cada semana. Próximo restablecimiento: {date}.",
-  "thisWeek": "Esta semana",
   "tiers": {
     "standard": {
-      "title": "Modelos estándar",
-      "description": "Incluido en tu plan. Cuando se agote, espera al restablecimiento semanal."
+      "title": "Modelos estándar"
     },
     "frontier": {
-      "title": "Modelos de vanguardia",
-      "description": "Claude Opus, GPT Astra y otros modelos punteros. Cuando se agote, se usan tus tokens adicionales."
+      "title": "Modelos de vanguardia"
     }
   },
   "used": "{count, plural, one {{used} de {limit} token} many {{used} de {limit} de tokens} other {{used} de {limit} tokens}}",
-  "usedLabel": "{tier}: usado el {percent} de los tokens de esta semana",
   "frontierThisWeek": "Modelos de vanguardia esta semana",
   "topUp": {
     "title": "Tokens adicionales para modelos de vanguardia",
@@ -22,5 +17,31 @@
     "buyMore": "Comprar más",
     "buy": "Comprar tokens",
     "failed": "No se pudo iniciar la compra"
+  },
+  "overview": {
+    "title": "Uso",
+    "plan": "Plan {plan}",
+    "seePlans": "Ver planes",
+    "noLimit": "{used} · sin límite",
+    "meterLabel": "{label}: {percent} usado",
+    "minutesOf": "{used, number} de {limit, plural, one {# min} many {# min} other {# min}}",
+    "minutesUsed": "{used, plural, one {# min} many {# min} other {# min}}",
+    "bytesOf": "{used} de {limit}",
+    "kinds": {
+      "minutes": "Minutos de reuniones",
+      "storage": "Almacenamiento",
+      "knowledge": "Archivos que usa Leo"
+    },
+    "notes": {
+      "resets": "Se restablece el {date}",
+      "lowResets": "Queda poco · se restablece el {date}",
+      "fullResets": "Agotado · se restablece el {date}",
+      "frontierExtra": "Se usan los tokens extra: quedan {amount}",
+      "minutesPaused": "Las reuniones están en pausa hasta el {date}.",
+      "minutesPausedUpgrade": "Las reuniones están en pausa hasta el {date}. Mejora a {plan} para tener reuniones ilimitadas.",
+      "low": "Queda poco",
+      "storageFull": "Almacenamiento lleno: las subidas nuevas están en pausa",
+      "knowledgeFull": "Se alcanzó el límite de Leo: no puede usar archivos nuevos"
+    }
   }
 }

@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, one {{amount} token} many {{amount} di token} other {{amount} token}}",
-  "resets": "I limiti si azzerano ogni settimana. Prossimo azzeramento: {date}.",
-  "thisWeek": "Questa settimana",
   "tiers": {
     "standard": {
-      "title": "Modelli standard",
-      "description": "Inclusi nel tuo piano. Quando li esaurisci, attendi l’azzeramento settimanale."
+      "title": "Modelli standard"
     },
     "frontier": {
-      "title": "Modelli di frontiera",
-      "description": "Claude Opus, GPT Astra e altri modelli di punta. Dopo questo limite vengono usati i tuoi token extra."
+      "title": "Modelli di frontiera"
     }
   },
   "used": "{count, plural, one {{used} di {limit} token} many {{used} di {limit} di token} other {{used} di {limit} token}}",
-  "usedLabel": "{tier}: usato il {percent} dei token di questa settimana",
   "frontierThisWeek": "Modelli di frontiera questa settimana",
   "topUp": {
     "title": "Token extra per i modelli di frontiera",
@@ -22,5 +17,31 @@
     "buyMore": "Acquista altri",
     "buy": "Acquista token",
     "failed": "Impossibile avviare l’acquisto"
+  },
+  "overview": {
+    "title": "Utilizzo",
+    "plan": "Piano {plan}",
+    "seePlans": "Vedi i piani",
+    "noLimit": "{used} · senza limite",
+    "meterLabel": "{label}: {percent} usato",
+    "minutesOf": "{used, number} di {limit, plural, one {# min} many {# min} other {# min}}",
+    "minutesUsed": "{used, plural, one {# min} many {# min} other {# min}}",
+    "bytesOf": "{used} di {limit}",
+    "kinds": {
+      "minutes": "Minuti di riunione",
+      "storage": "Spazio di archiviazione",
+      "knowledge": "File che Leo usa"
+    },
+    "notes": {
+      "resets": "Si azzera il {date}",
+      "lowResets": "Quasi esaurito · si azzera il {date}",
+      "fullResets": "Esaurito · si azzera il {date}",
+      "frontierExtra": "Si usano i token extra: ne restano {amount}",
+      "minutesPaused": "Le riunioni sono sospese fino al {date}.",
+      "minutesPausedUpgrade": "Le riunioni sono sospese fino al {date}. Passa a {plan} per avere riunioni illimitate.",
+      "low": "Quasi esaurito",
+      "storageFull": "Spazio pieno: i nuovi caricamenti sono sospesi",
+      "knowledgeFull": "Limite di Leo raggiunto: Leo non può usare nuovi file"
+    }
   }
 }

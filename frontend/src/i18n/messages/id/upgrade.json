@@ -44,13 +44,8 @@
     "title": "Menit rapat",
     "ratio": "{used, number} / {limit, number}",
     "used": "{used, number} dari {limit, plural, other {# menit}} digunakan",
-    "left": "{left, number} dari {limit, plural, other {# menit rapat}} tersisa",
-    "allUsed": "Anda telah menggunakan semua menit rapat",
-    "resets": "Diatur ulang {date}",
     "leftShort": "{left, plural, other {# mnt}} tersisa · diatur ulang {date}",
     "recordingPaused": "Rekaman dijeda hingga {date}.",
-    "paused": "Rapat dijeda hingga {date}.",
-    "pausedUpgrade": "Rapat dijeda hingga {date}. Tingkatkan ke {plan} untuk rapat tanpa batas.",
     "getUnlimited": "Dapatkan rapat tanpa batas"
   },
   "gate": {

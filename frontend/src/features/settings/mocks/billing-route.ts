@@ -61,7 +61,7 @@ export const invoiceRoute = {
   },
 };
 
-/** /api/settings/usage */
+/** /v1/settings/usage: the week's tokens, as the backend answers them. */
 export const usageRoute = {
   async GET(_request: Request) {
     return JsonResponse.json<Usage>(demoUsage());

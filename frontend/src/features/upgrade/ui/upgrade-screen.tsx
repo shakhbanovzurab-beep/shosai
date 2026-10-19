@@ -8,7 +8,6 @@ import { LoadError } from "@/components/feedback";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { plansResource, usePlans } from "../model/plans-resource";
-import { MeetingUsage } from "./meeting-usage";
 import { PlanComparison } from "./plan-comparison";
 import { PlanTabs } from "./plan-tabs";
 
@@ -27,7 +26,10 @@ function Loading() {
   );
 }
 
-/** The plans on sale in Individual, Team and Enterprise tabs, the current plan marked, then a full comparison. */
+/**
+ * The plans on sale in Individual, Team and Enterprise tabs, the current plan marked, then a full comparison.
+ * Лимиты и расход здесь не показываются: они живут только в Settings › Usage.
+ */
 export function UpgradeScreen() {
   const t = useTranslations("upgrade");
   const state = usePlans();
@@ -37,9 +39,8 @@ export function UpgradeScreen() {
   else if (state.status === "error")
     body = <LoadError title={t("loadFailed")} message={state.message} onRetry={() => void plansResource.refresh()} />;
   else {
-    const { plans, current_plan_id, usage, seat } = state.data;
+    const { plans, current_plan_id, seat } = state.data;
     const seatPlan = seat ? plans.find((p) => p.id === seat.plan_id) : undefined;
-    const unlimited = plans.find((p) => p.entitlements.meeting_minutes_per_month === null && p.price !== null);
     body = (
       <>
         {seat && seatPlan ? (
@@ -51,7 +52,6 @@ export function UpgradeScreen() {
             })}
           </p>
         ) : null}
-        <MeetingUsage usage={usage} unlimitedPlan={unlimited?.name} />
         <PlanTabs plans={plans} currentPlanId={current_plan_id} />
         <PlanComparison plans={plans} />
         <p className="text-center text-muted-foreground text-xs">{t("pricesNote")}</p>

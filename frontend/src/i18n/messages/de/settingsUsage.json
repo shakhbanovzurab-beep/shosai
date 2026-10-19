@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, one {{amount} Token} other {{amount} Tokens}}",
-  "resets": "Die Limits werden jede Woche zurückgesetzt. Nächstes Zurücksetzen: {date}.",
-  "thisWeek": "Diese Woche",
   "tiers": {
     "standard": {
-      "title": "Standardmodelle",
-      "description": "In deinem Tarif enthalten. Wenn sie aufgebraucht sind, warte auf das wöchentliche Zurücksetzen."
+      "title": "Standardmodelle"
     },
     "frontier": {
-      "title": "Spitzenmodelle",
-      "description": "Claude Opus, GPT Astra und andere Topmodelle. Danach werden deine zusätzlichen Tokens genutzt."
+      "title": "Spitzenmodelle"
     }
   },
   "used": "{count, plural, one {{used} von {limit} Token} other {{used} von {limit} Tokens}}",
-  "usedLabel": "{tier}: {percent} der Tokens dieser Woche genutzt",
   "frontierThisWeek": "Spitzenmodelle diese Woche",
   "topUp": {
     "title": "Zusätzliche Tokens für Spitzenmodelle",
@@ -22,5 +17,31 @@
     "buyMore": "Mehr kaufen",
     "buy": "Tokens kaufen",
     "failed": "Der Kauf konnte nicht gestartet werden"
+  },
+  "overview": {
+    "title": "Nutzung",
+    "plan": "{plan}-Tarif",
+    "seePlans": "Tarife ansehen",
+    "noLimit": "{used} · ohne Limit",
+    "meterLabel": "{label}: {percent} genutzt",
+    "minutesOf": "{used, number} von {limit, plural, one {# Min.} other {# Min.}}",
+    "minutesUsed": "{used, plural, one {# Min.} other {# Min.}}",
+    "bytesOf": "{used} von {limit}",
+    "kinds": {
+      "minutes": "Meeting-Minuten",
+      "storage": "Speicher",
+      "knowledge": "Dateien, die Leo nutzt"
+    },
+    "notes": {
+      "resets": "Limit wird am {date} zurückgesetzt",
+      "lowResets": "Fast aufgebraucht · Limit wird am {date} zurückgesetzt",
+      "fullResets": "Aufgebraucht · Limit wird am {date} zurückgesetzt",
+      "frontierExtra": "Zusätzliche Tokens werden genutzt: noch {amount}",
+      "minutesPaused": "Meetings sind bis {date} pausiert.",
+      "minutesPausedUpgrade": "Meetings sind bis {date} pausiert. Mit {plan} hast du unbegrenzt Meetings.",
+      "low": "Fast aufgebraucht",
+      "storageFull": "Speicher voll: Neues Hochladen ist pausiert",
+      "knowledgeFull": "Leos Limit ist erreicht: Leo nimmt keine neuen Dateien an"
+    }
   }
 }

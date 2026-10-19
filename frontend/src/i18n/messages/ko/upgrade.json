@@ -44,13 +44,8 @@
     "title": "회의 시간",
     "ratio": "{used, number} / {limit, number}",
     "used": "{limit, plural, other {#분}} 중 {used, number}분 사용",
-    "left": "회의 시간 {limit, plural, other {#분}} 중 {left, number}분 남음",
-    "allUsed": "회의 시간을 모두 사용했어요",
-    "resets": "{date}에 초기화",
     "leftShort": "{left, plural, other {#분}} 남음 · {date}에 초기화",
     "recordingPaused": "{date}까지 녹음이 일시 중지돼요.",
-    "paused": "{date}까지 회의가 일시 중지돼요.",
-    "pausedUpgrade": "{date}까지 회의가 일시 중지돼요. 회의를 무제한으로 사용하려면 {plan} 플랜으로 업그레이드하세요.",
     "getUnlimited": "회의 무제한 사용하기"
   },
   "gate": {

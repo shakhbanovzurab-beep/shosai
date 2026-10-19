@@ -1,15 +1,19 @@
 # Upgrade API
 
 The contract between the Upgrade page (`/app/upgrade`) and the FastAPI backend. The TypeScript
-types in `src/features/upgrade/domain/contract.ts` are the source of truth (snake_case). The browser
-calls `/api/billing/*`, which forwards to `${BACKEND_API_URL}/v1/billing/*` when set and otherwise
-answers from an in-memory demo (`src/features/upgrade/server/`). Errors: `{"detail": "message"}`.
+types in `src/features/upgrade/domain/contract.ts` are the source of truth (snake_case). The plans are
+read from the backend's `GET /v1/billing/plans` (billing step 6; `contract.test.ts` holds `PlansResponse`
+equal to the generated schema). Checkout and the sales inquiry still go to the sample `/api/billing/*`
+routes answered by the development mocks: checkout waits for payments (billing steps 8–11).
 
-| Method | Path                     | Body                                                     | Response                      |
-| ------ | ------------------------ | -------------------------------------------------------- | ----------------------------- |
-| `GET`  | `/billing/plans`         | —                                                        | `PlansResponse`               |
-| `POST` | `/billing/checkout`      | `{"plan_id": string, "seats"?: number}`                  | `{"url": string}`             |
-| `POST` | `/billing/sales-inquiry` | `{"work_email", "company", "team_size", "message"}`      | `202 {"status": "received"}`  |
+| Method | Path                         | Body                                                     | Response                      |
+| ------ | ---------------------------- | -------------------------------------------------------- | ----------------------------- |
+| `GET`  | `/v1/billing/plans`          | —                                                        | `PlansResponse`               |
+| `POST` | `/api/billing/checkout`      | `{"plan_id": string, "seats"?: number}`                  | `{"url": string}`             |
+| `POST` | `/api/billing/sales-inquiry` | `{"work_email", "company", "team_size", "message"}`      | `202 {"status": "received"}`  |
+
+The page shows plans only, never limits or what has been used: the one usage view lives in
+Settings › Usage, and its "See plans" button leads here.
 
 ## Plans
 

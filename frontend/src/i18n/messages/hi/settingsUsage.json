@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, one {{amount} टोकन} other {{amount} टोकन}}",
-  "resets": "सीमाएं हर हफ़्ते रीसेट होती हैं। अगला रीसेट: {date}।",
-  "thisWeek": "इस हफ़्ते",
   "tiers": {
     "standard": {
-      "title": "स्टैंडर्ड मॉडल",
-      "description": "आपके प्लान में शामिल। सीमा ख़त्म होने पर साप्ताहिक रीसेट का इंतज़ार करें।"
+      "title": "स्टैंडर्ड मॉडल"
     },
     "frontier": {
-      "title": "सबसे सक्षम मॉडल",
-      "description": "Claude Opus, GPT Astra और दूसरे टॉप मॉडल। यह सीमा ख़त्म होने के बाद आपके अतिरिक्त टोकन इस्तेमाल होते हैं।"
+      "title": "सबसे सक्षम मॉडल"
     }
   },
   "used": "{count, plural, one {{limit} में से {used} टोकन} other {{limit} में से {used} टोकन}}",
-  "usedLabel": "{tier}: इस हफ़्ते के {percent} टोकन इस्तेमाल हुए",
   "frontierThisWeek": "इस हफ़्ते सबसे सक्षम मॉडल",
   "topUp": {
     "title": "सबसे सक्षम मॉडल के लिए अतिरिक्त टोकन",
@@ -22,5 +17,31 @@
     "buyMore": "और ख़रीदें",
     "buy": "टोकन ख़रीदें",
     "failed": "ख़रीदारी शुरू नहीं की जा सकी।"
+  },
+  "overview": {
+    "title": "इस्तेमाल",
+    "plan": "{plan} प्लान",
+    "seePlans": "प्लान देखें",
+    "noLimit": "{used} · कोई सीमा नहीं",
+    "meterLabel": "{label}: {percent} इस्तेमाल हुआ",
+    "minutesOf": "{limit, plural, one {# मिनट} other {# मिनट}} में से {used, number}",
+    "minutesUsed": "{used, plural, one {# मिनट} other {# मिनट}}",
+    "bytesOf": "{limit} में से {used}",
+    "kinds": {
+      "minutes": "मीटिंग मिनट",
+      "storage": "स्टोरेज",
+      "knowledge": "Leo जिन फ़ाइलों का इस्तेमाल करता है"
+    },
+    "notes": {
+      "resets": "{date} को रीसेट होगा",
+      "lowResets": "कम बचा है · {date} को रीसेट होगा",
+      "fullResets": "खत्म हो गया · {date} को रीसेट होगा",
+      "frontierExtra": "अतिरिक्त टोकन इस्तेमाल हो रहे हैं: {amount} बाकी",
+      "minutesPaused": "{date} तक मीटिंग रुकी हुई हैं।",
+      "minutesPausedUpgrade": "{date} तक मीटिंग रुकी हुई हैं। असीमित मीटिंग के लिए {plan} पर अपग्रेड करें।",
+      "low": "कम बचा है",
+      "storageFull": "स्टोरेज भर गया है: नए अपलोड रुके हुए हैं",
+      "knowledgeFull": "Leo की सीमा पूरी हो गई: Leo नई फ़ाइलें इस्तेमाल नहीं कर सकता"
+    }
   }
 }

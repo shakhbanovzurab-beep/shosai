@@ -44,13 +44,8 @@
     "title": "मीटिंग मिनट",
     "ratio": "{used, number} / {limit, number}",
     "used": "{limit, plural, one {# मिनट} other {# मिनट}} में से {used, number} इस्तेमाल हुए",
-    "left": "{limit, plural, one {# मीटिंग मिनट} other {# मीटिंग मिनट}} में से {left, number} बचे हैं",
-    "allUsed": "आपने अपने सभी मीटिंग मिनट इस्तेमाल कर लिए हैं",
-    "resets": "{date} को रीसेट होगा",
     "leftShort": "{left, plural, one {# मिनट} other {# मिनट}} बचे · {date} को रीसेट",
     "recordingPaused": "{date} तक रिकॉर्डिंग रुकी हुई है।",
-    "paused": "{date} तक मीटिंग रुकी हुई हैं।",
-    "pausedUpgrade": "{date} तक मीटिंग रुकी हुई हैं। असीमित मीटिंग के लिए {plan} पर अपग्रेड करें।",
     "getUnlimited": "असीमित मीटिंग पाएं"
   },
   "gate": {

@@ -44,13 +44,8 @@
     "title": "Minutos de reuniones",
     "ratio": "{used, number} / {limit, number}",
     "used": "{used, number} de {limit, plural, one {# minuto usado} many {# de minutos usados} other {# minutos usados}}",
-    "left": "Quedan {left, number} de {limit, plural, one {# minuto de reuniones} many {# de minutos de reuniones} other {# minutos de reuniones}}",
-    "allUsed": "Usaste todos tus minutos de reuniones",
-    "resets": "Se restablece el {date}",
     "leftShort": "{left, plural, one {Queda # min} many {Quedan # min} other {Quedan # min}} · se restablece el {date}",
     "recordingPaused": "Grabación en pausa hasta el {date}.",
-    "paused": "Las reuniones están en pausa hasta el {date}.",
-    "pausedUpgrade": "Las reuniones están en pausa hasta el {date}. Mejora a {plan} para tener reuniones ilimitadas.",
     "getUnlimited": "Obtener reuniones ilimitadas"
   },
   "gate": {

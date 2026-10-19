@@ -44,13 +44,8 @@
     "title": "Minuti di riunione",
     "ratio": "{used, number} / {limit, number}",
     "used": "Usati {used, number} su {limit, plural, one {# minuto} many {# di minuti} other {# minuti}}",
-    "left": "Restano {left, number} su {limit, plural, one {# minuto di riunione} many {# di minuti di riunione} other {# minuti di riunione}}",
-    "allUsed": "Hai usato tutti i tuoi minuti di riunione",
-    "resets": "Si azzera il {date}",
     "leftShort": "{left, plural, one {# min rimasto} many {# min rimasti} other {# min rimasti}} · si azzera il {date}",
     "recordingPaused": "Registrazione sospesa fino al {date}.",
-    "paused": "Le riunioni sono sospese fino al {date}.",
-    "pausedUpgrade": "Le riunioni sono sospese fino al {date}. Passa a {plan} per avere riunioni illimitate.",
     "getUnlimited": "Ottieni riunioni illimitate"
   },
   "gate": {

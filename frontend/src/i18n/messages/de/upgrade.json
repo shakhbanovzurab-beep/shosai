@@ -44,13 +44,8 @@
     "title": "Meeting-Minuten",
     "ratio": "{used, number} / {limit, number}",
     "used": "{used, number} von {limit, plural, one {# Minute} other {# Minuten}} genutzt",
-    "left": "{left, number} von {limit, plural, one {# Meeting-Minute} other {# Meeting-Minuten}} übrig",
-    "allUsed": "Du hast alle Meeting-Minuten aufgebraucht",
-    "resets": "Neue Minuten ab {date}",
     "leftShort": "{left, plural, one {# Min.} other {# Min.}} übrig · neu ab {date}",
     "recordingPaused": "Aufnahme bis {date} pausiert.",
-    "paused": "Meetings sind bis {date} pausiert.",
-    "pausedUpgrade": "Meetings sind bis {date} pausiert. Mit {plan} hast du unbegrenzt Meetings.",
     "getUnlimited": "Unbegrenzte Meetings freischalten"
   },
   "gate": {

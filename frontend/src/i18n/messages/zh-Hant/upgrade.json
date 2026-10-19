@@ -44,13 +44,8 @@
     "title": "會議時間",
     "ratio": "{used, number} / {limit, number}",
     "used": "已使用 {used, number} 分鐘，共 {limit, plural, other {# 分鐘}}",
-    "left": "剩餘 {left, number} 分鐘，共 {limit, plural, other {# 分鐘會議時間}}",
-    "allUsed": "你已用完所有會議時間",
-    "resets": "{date} 重設",
     "leftShort": "剩餘 {left, plural, other {# 分鐘}} · {date} 重設",
     "recordingPaused": "錄製已暫停，直到 {date}。",
-    "paused": "會議功能已暫停，直到 {date}。",
-    "pausedUpgrade": "會議功能已暫停，直到 {date}。升級至 {plan} 即可無限制開會。",
     "getUnlimited": "取得無限制會議"
   },
   "gate": {

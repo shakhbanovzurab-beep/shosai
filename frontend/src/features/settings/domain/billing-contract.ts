@@ -45,7 +45,10 @@ export type BillingPortalRequest =
   | { intent: "update_payment_method"; payment_method_id: string };
 export type BillingPortalResponse = { url: string };
 
-/* ---------- Usage: GET /settings/usage, POST /settings/usage/top-up ---------- */
+/*
+ * ---------- Usage: GET /v1/settings/usage (billing, step 6), POST /api/settings/usage/top-up ----------
+ * Чтение — на бэкенде, `billing-contract.test.ts` держит `Usage` равным схеме; покупка пакета ждёт шаг 11.
+ */
 
 /**
  * Standard models only have a weekly allowance. Frontier models (the expensive ones — Claude Opus,
@@ -53,8 +56,8 @@ export type BillingPortalResponse = { url: string };
  */
 export type ModelTier = "standard" | "frontier";
 
-/** Tokens included in the plan for one tier this week. */
-export type WeeklyLimit = { tier: ModelTier; used_tokens: number; limit_tokens: number };
+/** Tokens included in the plan for one tier this week; `limit_tokens` is null on a plan without a limit. */
+export type WeeklyLimit = { tier: ModelTier; used_tokens: number; limit_tokens: number | null };
 
 export type FrontierModelUsage = { model_id: string; provider: string; name: string; used_tokens: number };
 

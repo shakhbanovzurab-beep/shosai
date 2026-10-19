@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, other {{amount} 토큰}}",
-  "resets": "한도는 매주 초기화돼요. 다음 초기화: {date}.",
-  "thisWeek": "이번 주",
   "tiers": {
     "standard": {
-      "title": "표준 모델",
-      "description": "플랜에 포함되어 있어요. 모두 사용하면 매주 초기화될 때까지 기다려 주세요."
+      "title": "표준 모델"
     },
     "frontier": {
-      "title": "최상위 모델",
-      "description": "Claude Opus, GPT Astra 등 최고 성능 모델이에요. 한도를 넘으면 추가 토큰이 사용돼요."
+      "title": "최상위 모델"
     }
   },
   "used": "{count, plural, other {{used} / {limit} 토큰}}",
-  "usedLabel": "{tier}: 이번 주 토큰의 {percent} 사용",
   "frontierThisWeek": "이번 주 최상위 모델",
   "topUp": {
     "title": "최상위 모델용 추가 토큰",
@@ -22,5 +17,31 @@
     "buyMore": "추가 구매",
     "buy": "토큰 구매",
     "failed": "구매를 시작하지 못했어요"
+  },
+  "overview": {
+    "title": "사용량",
+    "plan": "{plan} 플랜",
+    "seePlans": "플랜 보기",
+    "noLimit": "{used} · 한도 없음",
+    "meterLabel": "{label}: {percent} 사용",
+    "minutesOf": "{used, number} / {limit, plural, other {#분}}",
+    "minutesUsed": "{used, plural, other {#분}}",
+    "bytesOf": "{used} / {limit}",
+    "kinds": {
+      "minutes": "회의 시간",
+      "storage": "저장 공간",
+      "knowledge": "Leo가 사용하는 파일"
+    },
+    "notes": {
+      "resets": "{date}에 초기화",
+      "lowResets": "얼마 남지 않았어요 · {date}에 초기화",
+      "fullResets": "모두 사용했어요 · {date}에 초기화",
+      "frontierExtra": "추가 토큰 사용 중: {amount} 남음",
+      "minutesPaused": "{date}까지 회의가 일시 중지돼요.",
+      "minutesPausedUpgrade": "{date}까지 회의가 일시 중지돼요. 회의를 무제한으로 사용하려면 {plan} 플랜으로 업그레이드하세요.",
+      "low": "얼마 남지 않았어요",
+      "storageFull": "저장 공간이 가득 찼어요: 새 업로드가 일시 중지돼요",
+      "knowledgeFull": "Leo 한도에 도달했어요: Leo가 새 파일을 사용할 수 없어요"
+    }
   }
 }

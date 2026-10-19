@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, one {{amount} token} many {{amount} de tokens} other {{amount} tokens}}",
-  "resets": "Os limites são renovados toda semana. Próxima renovação: {date}.",
-  "thisWeek": "Nesta semana",
   "tiers": {
     "standard": {
-      "title": "Modelos padrão",
-      "description": "Incluído no seu plano. Quando acabar, aguarde a renovação semanal."
+      "title": "Modelos padrão"
     },
     "frontier": {
-      "title": "Modelos de ponta",
-      "description": "Claude Opus, GPT Astra e outros modelos de ponta. Quando acabar, seus tokens extras são usados."
+      "title": "Modelos de ponta"
     }
   },
   "used": "{count, plural, one {{used} de {limit} token} many {{used} de {limit} de tokens} other {{used} de {limit} tokens}}",
-  "usedLabel": "{tier}: {percent} dos tokens desta semana já usados",
   "frontierThisWeek": "Modelos de ponta nesta semana",
   "topUp": {
     "title": "Tokens extras para modelos de ponta",
@@ -22,5 +17,31 @@
     "buyMore": "Comprar mais",
     "buy": "Comprar tokens",
     "failed": "Não foi possível iniciar a compra"
+  },
+  "overview": {
+    "title": "Uso",
+    "plan": "Plano {plan}",
+    "seePlans": "Ver planos",
+    "noLimit": "{used} · sem limite",
+    "meterLabel": "{label}: {percent} usado",
+    "minutesOf": "{used, number} de {limit, plural, one {# min} many {# min} other {# min}}",
+    "minutesUsed": "{used, plural, one {# min} many {# min} other {# min}}",
+    "bytesOf": "{used} de {limit}",
+    "kinds": {
+      "minutes": "Minutos de reunião",
+      "storage": "Armazenamento",
+      "knowledge": "Arquivos que o Leo usa"
+    },
+    "notes": {
+      "resets": "Renova em {date}",
+      "lowResets": "Acabando · renova em {date}",
+      "fullResets": "Esgotado · renova em {date}",
+      "frontierExtra": "Usando tokens extras: restam {amount}",
+      "minutesPaused": "As reuniões estão pausadas até {date}.",
+      "minutesPausedUpgrade": "As reuniões estão pausadas até {date}. Faça upgrade para o {plan} e tenha reuniões ilimitadas.",
+      "low": "Acabando",
+      "storageFull": "Armazenamento cheio: novos uploads estão pausados",
+      "knowledgeFull": "O limite do Leo foi atingido: o Leo não pode usar novos arquivos"
+    }
   }
 }

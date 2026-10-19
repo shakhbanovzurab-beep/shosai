@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, other {{amount} トークン}}",
-  "resets": "上限は毎週リセットされます。次回のリセット：{date}。",
-  "thisWeek": "今週",
   "tiers": {
     "standard": {
-      "title": "標準モデル",
-      "description": "プランに含まれています。上限に達したら、週ごとのリセットをお待ちください。"
+      "title": "標準モデル"
     },
     "frontier": {
-      "title": "最先端モデル",
-      "description": "Claude Opus、GPT Astra などの最上位モデルです。上限に達すると、追加トークンが使われます。"
+      "title": "最先端モデル"
     }
   },
   "used": "{count, plural, other {{used} / {limit} トークン}}",
-  "usedLabel": "{tier}：今週のトークンを {percent} 使用",
   "frontierThisWeek": "今週の最先端モデル",
   "topUp": {
     "title": "最先端モデル用の追加トークン",
@@ -22,5 +17,31 @@
     "buyMore": "追加購入",
     "buy": "トークンを購入",
     "failed": "購入を開始できませんでした"
+  },
+  "overview": {
+    "title": "使用量",
+    "plan": "{plan} プラン",
+    "seePlans": "プランを見る",
+    "noLimit": "{used} · 上限なし",
+    "meterLabel": "{label}：{percent} 使用済み",
+    "minutesOf": "{used, number} / {limit, plural, other {# 分}}",
+    "minutesUsed": "{used, plural, other {# 分}}",
+    "bytesOf": "{used} / {limit}",
+    "kinds": {
+      "minutes": "会議時間",
+      "storage": "ストレージ",
+      "knowledge": "Leo が使用するファイル"
+    },
+    "notes": {
+      "resets": "{date} にリセット",
+      "lowResets": "残りわずか · {date} にリセット",
+      "fullResets": "使い切りました · {date} にリセット",
+      "frontierExtra": "追加トークンを使用中：残り {amount}",
+      "minutesPaused": "{date} まで会議を一時停止しています。",
+      "minutesPausedUpgrade": "{date} まで会議を一時停止しています。{plan} にアップグレードすると、会議を無制限に利用できます。",
+      "low": "残りわずか",
+      "storageFull": "ストレージがいっぱいです：新しいアップロードは一時停止中",
+      "knowledgeFull": "Leo の上限に達しました：Leo は新しいファイルを使えません"
+    }
   }
 }

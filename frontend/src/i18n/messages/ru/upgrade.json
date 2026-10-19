@@ -44,13 +44,8 @@
     "title": "Минуты встреч",
     "ratio": "{used, number} / {limit, number}",
     "used": "Использовано {used, number} из {limit, plural, one {# минуты} few {# минут} many {# минут} other {# минуты}}",
-    "left": "Осталось {left, number} из {limit, plural, one {# минуты встреч} few {# минут встреч} many {# минут встреч} other {# минуты встреч}}",
-    "allUsed": "Вы использовали все минуты встреч",
-    "resets": "Лимит обновится {date}",
     "leftShort": "Осталось {left, plural, one {# мин} few {# мин} many {# мин} other {# мин}} · обновится {date}",
     "recordingPaused": "Запись приостановлена до {date}.",
-    "paused": "Встречи приостановлены до {date}.",
-    "pausedUpgrade": "Встречи приостановлены до {date}. Перейдите на {plan}, чтобы встречи были без ограничений.",
     "getUnlimited": "Снять ограничение на встречи"
   },
   "gate": {

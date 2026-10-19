@@ -44,13 +44,8 @@
     "title": "Phút họp",
     "ratio": "{used, number} / {limit, number}",
     "used": "Đã dùng {used, number} trên {limit, plural, other {# phút}}",
-    "left": "Còn {left, number} trên {limit, plural, other {# phút họp}}",
-    "allUsed": "Bạn đã dùng hết phút họp",
-    "resets": "Đặt lại vào {date}",
     "leftShort": "Còn {left, plural, other {# phút}} · đặt lại vào {date}",
     "recordingPaused": "Đã tạm dừng ghi đến {date}.",
-    "paused": "Cuộc họp tạm dừng đến {date}.",
-    "pausedUpgrade": "Cuộc họp tạm dừng đến {date}. Hãy nâng cấp lên {plan} để họp không giới hạn.",
     "getUnlimited": "Họp không giới hạn"
   },
   "gate": {

@@ -44,13 +44,8 @@
     "title": "Toplantı dakikaları",
     "ratio": "{used, number} / {limit, number}",
     "used": "{limit, plural, one {Kullanılan: {used, number} / # dakika} other {Kullanılan: {used, number} / # dakika}}",
-    "left": "{limit, plural, one {Kalan: {left, number} / # dakika toplantı süresi} other {Kalan: {left, number} / # dakika toplantı süresi}}",
-    "allUsed": "Tüm toplantı dakikalarınızı kullandınız",
-    "resets": "Yenilenme: {date}",
     "leftShort": "{left, plural, one {# dk kaldı} other {# dk kaldı}} · yenilenme: {date}",
     "recordingPaused": "Kayıt {date} tarihine kadar duraklatıldı.",
-    "paused": "Toplantılar {date} tarihine kadar duraklatıldı.",
-    "pausedUpgrade": "Toplantılar {date} tarihine kadar duraklatıldı. Sınırsız toplantı için {plan} planına yükseltin.",
     "getUnlimited": "Sınırsız toplantı edinin"
   },
   "gate": {

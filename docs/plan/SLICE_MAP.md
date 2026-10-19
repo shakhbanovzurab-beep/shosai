@@ -177,7 +177,7 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 | Owners as free text (hub topics, kanban cards) | People from `commitments` and members from `workspaces` |
 | Manual filing: folders, hubs, projects | Kept, with Leo's suggestions (A1/A3 in `proactive`) and the hub's series memory |
 | Kanban controls without behaviour | Removed from the UI until a need appears |
-| Two usage meters on two screens (minutes per month, tokens per week) | One usage view owned by `billing`, shown in Settings › Usage and Upgrade |
+| Two usage meters on two screens (minutes per month, tokens per week) | One usage view owned by `billing`, shown only in Settings › Usage; Upgrade shows plans, not limits |
 | Support replies and task assignments notify nobody | Kinds of the one proactive pipeline (`support.replied`, `tasks.assigned`) with its budgets and quiet hours; email only where the user asked |
 | Leo approvals do not exist; chats live in localStorage | Action Gateway and server threads in `agent` |
 | Memory facts cannot be seen one by one | Facts list with sources in `memory` (§8 SM-6) |

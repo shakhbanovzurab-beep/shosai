@@ -1,19 +1,14 @@
 {
   "tokens": "{count, plural, other {{amount} token}}",
-  "resets": "Batas diatur ulang setiap minggu. Pengaturan ulang berikutnya: {date}.",
-  "thisWeek": "Minggu ini",
   "tiers": {
     "standard": {
-      "title": "Model standar",
-      "description": "Termasuk dalam paket Anda. Jika habis, tunggu pengaturan ulang mingguan."
+      "title": "Model standar"
     },
     "frontier": {
-      "title": "Model tercanggih",
-      "description": "Claude Opus, GPT Astra, dan model teratas lainnya. Setelah batas ini habis, token tambahan Anda yang dipakai."
+      "title": "Model tercanggih"
     }
   },
   "used": "{count, plural, other {{used} dari {limit} token}}",
-  "usedLabel": "{tier}: {percent} token minggu ini telah dipakai",
   "frontierThisWeek": "Model tercanggih minggu ini",
   "topUp": {
     "title": "Token tambahan untuk model tercanggih",
@@ -22,5 +17,31 @@
     "buyMore": "Beli lagi",
     "buy": "Beli token",
     "failed": "Tidak dapat memulai pembelian"
+  },
+  "overview": {
+    "title": "Penggunaan",
+    "plan": "Paket {plan}",
+    "seePlans": "Lihat paket",
+    "noLimit": "{used} · tanpa batas",
+    "meterLabel": "{label}: {percent} terpakai",
+    "minutesOf": "{used, number} dari {limit, plural, other {# mnt}}",
+    "minutesUsed": "{used, plural, other {# mnt}}",
+    "bytesOf": "{used} dari {limit}",
+    "kinds": {
+      "minutes": "Menit rapat",
+      "storage": "Penyimpanan",
+      "knowledge": "File yang digunakan Leo"
+    },
+    "notes": {
+      "resets": "Diatur ulang {date}",
+      "lowResets": "Hampir habis · diatur ulang {date}",
+      "fullResets": "Habis · diatur ulang {date}",
+      "frontierExtra": "Token tambahan sedang dipakai: sisa {amount}",
+      "minutesPaused": "Rapat dijeda hingga {date}.",
+      "minutesPausedUpgrade": "Rapat dijeda hingga {date}. Tingkatkan ke {plan} untuk rapat tanpa batas.",
+      "low": "Hampir habis",
+      "storageFull": "Penyimpanan penuh: unggahan baru dijeda",
+      "knowledgeFull": "Batas Leo tercapai: Leo tidak dapat memakai file baru"
+    }
   }
 }

@@ -22,7 +22,7 @@ artifacts, uploaded files, feedback) return when their owners serve them.
 | `GET`    | `/billing/invoices/{id}` | —                                    | the invoice PDF        |
 | `POST`   | `/usage/top-up`   | `{"pack_id": str}`                          | `{"url": str}`         |
 | `POST`   | `/billing/portal` | `BillingPortalRequest` (intent)             | `{"url": str}`         |
-| `GET`    | `/usage`          | —                                           | `Usage`                |
+| `GET`    | `/usage`          | — (served: `GET /v1/settings/usage`, billing step 6) | `Usage`       |
 | `GET`    | `/mcp`            | —                                           | `McpServersResponse`   |
 | `POST`   | `/mcp`            | `McpServerDraft`                            | `201 McpServer`        |
 | `PATCH`  | `/mcp/{id}`       | `{"enabled": bool}`                         | `McpServer`            |
@@ -54,7 +54,10 @@ artifacts, uploaded files, feedback) return when their owners serve them.
   adds the card without a charge, CloudPayments holds 1 ₽ and releases it at once) and the browser
   goes there. Turning auto-renewal off is a switch in this section ([ADR 0054](../../docs/adr/0054-billing-plans-payments-trials-and-refunds.md)). The demo answers 501. Usage meters may have `limit: null` for unlimited.
 - **Usage is weekly tokens.** `limits` has one entry per tier (`standard`, `frontier`) for the week
-  starting `week_start` and resetting at `resets_at`. Only frontier models (the expensive ones —
+  starting `week_start` and resetting at `resets_at`; `limit_tokens` is null on a plan without a limit.
+  The section opens with the one usage view, the only place that shows limits: both tiers, the month's
+  meeting minutes (`GET /v1/billing/plans`), storage and the files Leo uses (`GET /v1/files/storage`),
+  each meter saying when it resets, running low from 80% and what a reached limit stops. Only frontier models (the expensive ones —
   Claude Opus, GPT Astra and similar) can get extra tokens: `frontier.extra_tokens` is the bought
   balance, spent after the weekly frontier allowance and never reset. `POST /usage/top-up` with a
   `packs[].id` returns the provider's checkout URL; the demo answers 501.

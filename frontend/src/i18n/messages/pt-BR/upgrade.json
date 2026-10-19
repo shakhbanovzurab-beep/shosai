@@ -44,13 +44,8 @@
     "title": "Minutos de reunião",
     "ratio": "{used, number} / {limit, number}",
     "used": "{used, number} de {limit, plural, one {# minuto usado} many {# de minutos usados} other {# minutos usados}}",
-    "left": "{left, number} de {limit, plural, one {# minuto de reunião restante} many {# de minutos de reunião restantes} other {# minutos de reunião restantes}}",
-    "allUsed": "Você usou todos os seus minutos de reunião",
-    "resets": "Renova em {date}",
     "leftShort": "{left, plural, one {# min restante} many {# min restantes} other {# min restantes}} · renova em {date}",
     "recordingPaused": "Gravação pausada até {date}.",
-    "paused": "As reuniões estão pausadas até {date}.",
-    "pausedUpgrade": "As reuniões estão pausadas até {date}. Faça upgrade para o {plan} e tenha reuniões ilimitadas.",
     "getUnlimited": "Ter reuniões ilimitadas"
   },
   "gate": {

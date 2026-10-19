@@ -44,13 +44,8 @@
     "title": "Meeting minutes",
     "ratio": "{used, number} / {limit, number}",
     "used": "{used, number} of {limit, plural, one {# minute} other {# minutes}} used",
-    "left": "{left, number} of {limit, plural, one {# meeting minute} other {# meeting minutes}} left",
-    "allUsed": "You’ve used all your meeting minutes",
-    "resets": "Resets {date}",
     "leftShort": "{left, plural, one {# min} other {# min}} left · resets {date}",
     "recordingPaused": "Recording paused until {date}.",
-    "paused": "Meetings are paused until {date}.",
-    "pausedUpgrade": "Meetings are paused until {date}. Upgrade to {plan} for unlimited meetings.",
     "getUnlimited": "Get unlimited meetings"
   },
   "gate": {

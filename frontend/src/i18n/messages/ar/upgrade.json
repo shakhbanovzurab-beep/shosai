@@ -44,13 +44,8 @@
     "title": "دقائق الاجتماعات",
     "ratio": "{used, number} / {limit, number}",
     "used": "تم استخدام {used, number} من {limit, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتين} few {# دقائق} many {# دقيقة} other {# دقيقة}}",
-    "left": "المتبقي {left, number} من {limit, plural, zero {# دقيقة اجتماعات} one {دقيقة اجتماعات واحدة} two {دقيقتي اجتماعات} few {# دقائق اجتماعات} many {# دقيقة اجتماعات} other {# دقيقة اجتماعات}}",
-    "allUsed": "تم استخدام كل دقائق الاجتماعات",
-    "resets": "تتم إعادة التعيين في {date}",
     "leftShort": "المتبقي: {left, plural, zero {# دقيقة} one {دقيقة واحدة} two {دقيقتان} few {# دقائق} many {# دقيقة} other {# دقيقة}} · إعادة التعيين في {date}",
     "recordingPaused": "التسجيل متوقف مؤقتًا حتى {date}.",
-    "paused": "الاجتماعات متوقفة مؤقتًا حتى {date}.",
-    "pausedUpgrade": "الاجتماعات متوقفة مؤقتًا حتى {date}. يمكن الترقية إلى {plan} للحصول على اجتماعات غير محدودة.",
     "getUnlimited": "الحصول على اجتماعات غير محدودة"
   },
   "gate": {

@@ -44,13 +44,8 @@
     "title": "会議時間",
     "ratio": "{used, number} / {limit, number}",
     "used": "{limit, plural, other {# 分}}のうち {used, number} 分を使用済み",
-    "left": "{limit, plural, other {# 分の会議時間}}のうち残り {left, number} 分",
-    "allUsed": "会議時間をすべて使い切りました",
-    "resets": "{date} にリセット",
     "leftShort": "残り {left, plural, other {# 分}} · {date} にリセット",
     "recordingPaused": "{date} までレコーディングを一時停止しています。",
-    "paused": "{date} まで会議を一時停止しています。",
-    "pausedUpgrade": "{date} まで会議を一時停止しています。{plan} にアップグレードすると、会議を無制限に利用できます。",
     "getUnlimited": "会議を無制限に"
   },
   "gate": {
