@@ -32,8 +32,8 @@
   "search": {
     "label": "Cari",
     "placeholder": "Apa yang Anda cari?",
-    "noResults": "Tidak ada hasil.",
-    "pagesGroup": "Halaman"
+    "pagesGroup": "Halaman",
+    "askLeo": "Tanya Leo: “{question}”"
   },
   "userMenu": {
     "settings": "Pengaturan",

@@ -32,8 +32,8 @@
   "search": {
     "label": "بحث",
     "placeholder": "البحث في الصفحات",
-    "noResults": "لا توجد نتائج.",
-    "pagesGroup": "الصفحات"
+    "pagesGroup": "الصفحات",
+    "askLeo": "طرح سؤال على Leo: «{question}»"
   },
   "userMenu": {
     "settings": "الإعدادات",

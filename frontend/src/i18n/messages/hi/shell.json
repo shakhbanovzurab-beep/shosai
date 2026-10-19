@@ -32,8 +32,8 @@
   "search": {
     "label": "खोजें",
     "placeholder": "आप क्या खोज रहे हैं?",
-    "noResults": "कोई नतीजा नहीं मिला।",
-    "pagesGroup": "पेज"
+    "pagesGroup": "पेज",
+    "askLeo": "Leo से पूछें: “{question}”"
   },
   "userMenu": {
     "settings": "सेटिंग",

@@ -32,8 +32,8 @@
   "search": {
     "label": "Pesquisar",
     "placeholder": "O que você está buscando?",
-    "noResults": "Nenhum resultado encontrado.",
-    "pagesGroup": "Páginas"
+    "pagesGroup": "Páginas",
+    "askLeo": "Perguntar ao Leo: “{question}”"
   },
   "userMenu": {
     "settings": "Configurações",

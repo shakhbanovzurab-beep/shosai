@@ -32,8 +32,8 @@
   "search": {
     "label": "Поиск",
     "placeholder": "Что ищете?",
-    "noResults": "Ничего не найдено.",
-    "pagesGroup": "Разделы"
+    "pagesGroup": "Разделы",
+    "askLeo": "Спросить Leo: «{question}»"
   },
   "userMenu": {
     "settings": "Настройки",

@@ -33,6 +33,8 @@ interface LeoComposerProps {
   readonly voiceEnabled: boolean;
   /** A line under the input saying where Leo's answers stop, e.g. inside one hub. */
   readonly caption?: string | null;
+  /** Текст, с которым поле открывается, например вопрос из ⌘K, пока Leo отвечал. */
+  readonly initialValue?: string;
 }
 
 export function LeoComposer({
@@ -43,11 +45,12 @@ export function LeoComposer({
   onStartVoice,
   voiceEnabled,
   caption,
+  initialValue = "",
 }: LeoComposerProps) {
   const t = useTranslations("leo");
   const locale = useLocale();
   const { files, addFiles, removeFile, clearFiles } = attachments;
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState(initialValue);
   // Single row while the text fits on one line; once it wraps, the text takes the full width above the buttons.
   // Like ChatGPT it stays that way until the field is cleared.
   const [isMultiline, setIsMultiline] = React.useState(false);

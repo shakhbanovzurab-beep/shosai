@@ -32,8 +32,8 @@
   "search": {
     "label": "検索",
     "placeholder": "何をお探しですか？",
-    "noResults": "結果が見つかりませんでした。",
-    "pagesGroup": "ページ"
+    "pagesGroup": "ページ",
+    "askLeo": "Leo に質問：「{question}」"
   },
   "userMenu": {
     "settings": "設定",

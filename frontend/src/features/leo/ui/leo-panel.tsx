@@ -3,14 +3,11 @@
 import * as React from "react";
 
 import { cn } from "cn";
-import { AnimatePresence, m } from "framer-motion";
-import { Maximize, Minimize, Paperclip, Plus, X } from "lucide-react";
-import { ThinkingOrb } from "thinking-orbs";
+import { m } from "framer-motion";
+import { Paperclip } from "lucide-react";
 import { useTranslations } from "use-intl";
 
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useVoiceModeEnabled } from "@/features/settings/model/settings-hooks";
 
 import { useLeoAttachments } from "../model/use-leo-attachments";
@@ -19,11 +16,16 @@ import { useLeoVoice } from "../model/use-leo-voice";
 import { LeoComposer } from "./leo-composer";
 import { LeoEmptyState } from "./leo-empty-state";
 import { LeoMessageList } from "./leo-message-list";
+import { LeoPanelHeader } from "./leo-panel-header";
 import type { LeoPlace } from "./leo-place";
 import { LeoVoiceMode } from "./leo-voice-mode";
 
+/** Вопрос, пришедший, пока Leo отвечал: он ждёт в поле ввода; новый id — новое поле с этим текстом. */
+export type LeoDraft = { id: string; text: string };
+
 interface LeoPanelProps {
   readonly chat: ReturnType<typeof useLeoChat>;
+  readonly draft: LeoDraft | null;
   /** Where Leo works ("Personal", "In Lumen"), what it can see there, and what bounds it. */
   readonly place: LeoPlace;
   readonly pathname: string;
@@ -33,7 +35,16 @@ interface LeoPanelProps {
   readonly onClose: () => void;
 }
 
-export function LeoPanel({ chat, place, pathname, expanded, onToggleExpanded, onCollapse, onClose }: LeoPanelProps) {
+export function LeoPanel({
+  chat,
+  draft,
+  place,
+  pathname,
+  expanded,
+  onToggleExpanded,
+  onCollapse,
+  onClose,
+}: LeoPanelProps) {
   const t = useTranslations("leo");
   const { messages, isBusy, send, stop, regenerate, editLast, reset } = chat;
   const attachments = useLeoAttachments();
@@ -89,45 +100,15 @@ export function LeoPanel({ chat, place, pathname, expanded, onToggleExpanded, on
           : "h-[min(38rem,calc(100dvh-7rem))] sm:w-[25rem]",
       )}
     >
-      <m.header layout="position" className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-2 py-2.5">
-        <div className="flex items-center">
-          <HeaderAction label={t("panel.newChat")} onClick={reset} disabled={messages.length === 0}>
-            <Plus />
-          </HeaderAction>
-        </div>
-        {/* The orb hangs off the left edge so the title itself sits exactly in the middle. */}
-        <div className="relative flex flex-col items-center text-center">
-          <span
-            className="absolute end-full top-1/2 me-2.5 flex -translate-y-1/2 [&_canvas]:size-8!"
-            aria-hidden="true"
-          >
-            <ThinkingOrb state={isBusy ? "solving" : "breathing"} size={32} />
-          </span>
-          <h2 className="font-medium text-sm leading-none">Leo</h2>
-          <p className="mt-1 whitespace-nowrap text-muted-foreground text-xs leading-none">
-            {isBusy ? t("panel.working") : place.label}
-          </p>
-        </div>
-        <div className="flex items-center justify-end gap-0.5">
-          <HeaderAction label={expanded ? t("panel.exitFullScreen") : t("panel.fullScreen")} onClick={onToggleExpanded}>
-            <AnimatePresence mode="popLayout" initial={false}>
-              <m.span
-                key={expanded ? "minimize" : "maximize"}
-                className="flex"
-                initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
-                animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
-                transition={{ duration: 0.2 }}
-              >
-                {expanded ? <Minimize /> : <Maximize />}
-              </m.span>
-            </AnimatePresence>
-          </HeaderAction>
-          <HeaderAction label={t("panel.close")} onClick={onClose}>
-            <X />
-          </HeaderAction>
-        </div>
-      </m.header>
+      <LeoPanelHeader
+        isBusy={isBusy}
+        placeLabel={place.label}
+        expanded={expanded}
+        canReset={messages.length > 0}
+        onReset={reset}
+        onToggleExpanded={onToggleExpanded}
+        onClose={onClose}
+      />
       <Separator />
 
       {voice.isActive && voiceEnabled ? (
@@ -144,6 +125,8 @@ export function LeoPanel({ chat, place, pathname, expanded, onToggleExpanded, on
 
           <m.div layout="position">
             <LeoComposer
+              key={draft?.id ?? "composer"}
+              initialValue={draft?.text ?? ""}
               caption={place.caption}
               isBusy={isBusy}
               attachments={attachments}
@@ -163,26 +146,5 @@ export function LeoPanel({ chat, place, pathname, expanded, onToggleExpanded, on
         </div>
       )}
     </m.section>
-  );
-}
-
-function HeaderAction({
-  label,
-  className,
-  ...props
-}: React.ComponentProps<typeof Button> & { readonly label: string }) {
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          aria-label={label}
-          className={cn("text-muted-foreground", className)}
-          {...props}
-        />
-      </TooltipTrigger>
-      <TooltipContent>{label}</TooltipContent>
-    </Tooltip>
   );
 }

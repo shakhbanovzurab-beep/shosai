@@ -8,7 +8,6 @@ import { useTranslations } from "use-intl";
 import {
   Command,
   CommandDialog,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
@@ -16,12 +15,15 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 import { Kbd } from "@/components/ui/kbd";
+import { useSidebar } from "@/components/ui/sidebar";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar-menu";
+import { askLeo } from "@/features/leo/model/leo-questions";
 import { useRouter } from "@/lib/navigation";
 
 import type { Panel } from "../../domain/panel";
 import { adminSidebarItems } from "../admin-navigation";
 import { downloadAppItem, type NavGroup, type NavMainItem, type ShellT, userPanelItems } from "../navigation";
+import { AskLeoItem } from "./ask-leo-item";
 
 type SearchItem = {
   id: string;
@@ -86,7 +88,8 @@ function groupBy(items: SearchItem[]) {
 
 /**
  * Page search. `extraGroups` adds pages that depend on the account, e.g. the open workspace's pages
- * or the list of workspaces, so search also moves between Personal and workspaces.
+ * or the list of workspaces, so search also moves between Personal and workspaces. Набранный текст можно
+ * отдать вопросом Leo — последней строкой списка.
  */
 export function SidebarSearch({ panel, extraGroups = [] }: { panel: Panel; extraGroups?: NavGroup[] }) {
   const t = useTranslations("shell");
@@ -111,6 +114,15 @@ export function SidebarSearch({ panel, extraGroups = [] }: { panel: Panel; extra
   const handleOpenChange = (value: boolean) => {
     setOpen(value);
     if (!value) setQuery("");
+  };
+
+  const { setOpenMobile } = useSidebar();
+  const question = query.trim();
+  // Страница не меняется, поэтому шторку меню на телефоне закрываем сами: иначе она заслонит Leo.
+  const handleAsk = () => {
+    handleOpenChange(false);
+    setOpenMobile(false);
+    askLeo(question);
   };
 
   const handleSelect = (item: SearchItem) => {
@@ -167,8 +179,8 @@ export function SidebarSearch({ panel, extraGroups = [] }: { panel: Panel; extra
         <Command>
           <CommandInput placeholder={t("search.placeholder")} value={query} onValueChange={setQuery} />
           <CommandList>
-            <CommandEmpty>{t("search.noResults")}</CommandEmpty>
             {query ? renderGroups(searchItems) : renderGroups(recommendations)}
+            {question ? <AskLeoItem question={question} onAsk={handleAsk} /> : null}
           </CommandList>
         </Command>
       </CommandDialog>

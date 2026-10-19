@@ -32,8 +32,8 @@
   "search": {
     "label": "搜尋",
     "placeholder": "你想找什麼？",
-    "noResults": "找不到結果。",
-    "pagesGroup": "頁面"
+    "pagesGroup": "頁面",
+    "askLeo": "詢問 Leo：「{question}」"
   },
   "userMenu": {
     "settings": "設定",

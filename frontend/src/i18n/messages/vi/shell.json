@@ -32,8 +32,8 @@
   "search": {
     "label": "Tìm kiếm",
     "placeholder": "Bạn đang tìm gì?",
-    "noResults": "Không tìm thấy kết quả nào.",
-    "pagesGroup": "Trang"
+    "pagesGroup": "Trang",
+    "askLeo": "Hỏi Leo: “{question}”"
   },
   "userMenu": {
     "settings": "Cài đặt",

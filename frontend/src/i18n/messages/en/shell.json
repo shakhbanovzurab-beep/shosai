@@ -32,8 +32,8 @@
   "search": {
     "label": "Search",
     "placeholder": "What are you after?",
-    "noResults": "No results found.",
-    "pagesGroup": "Pages"
+    "pagesGroup": "Pages",
+    "askLeo": "Ask Leo: “{question}”"
   },
   "userMenu": {
     "settings": "Settings",

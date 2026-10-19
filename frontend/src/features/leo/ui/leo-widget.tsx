@@ -12,8 +12,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { usePathname } from "@/lib/navigation";
 
 import { type LeoContext, PERSONAL_CONTEXT } from "../domain/context";
+import { useLeoQuestions } from "../model/leo-questions";
 import { useLeoChat } from "../model/use-leo-chat";
-import { LeoPanel } from "./leo-panel";
+import { type LeoDraft, LeoPanel } from "./leo-panel";
 import { leoPlace } from "./leo-place";
 
 // One spring drives every layout change, so the window, its content and its corners move as a single piece.
@@ -36,9 +37,18 @@ export function LeoWidget({
   const [expanded, setExpanded] = React.useState(false);
   const launcherRef = React.useRef<HTMLButtonElement>(null);
   const chat = useLeoChat({ page: pathname, context });
+  const [draft, setDraft] = React.useState<LeoDraft | null>(null);
+
+  // Вопрос из ⌘K: свободный Leo отвечает сразу; занятый — вопрос ждёт в поле ввода, отправит его человек.
+  useLeoQuestions((question) => {
+    setOpen(true);
+    if (chat.isBusy) setDraft({ id: crypto.randomUUID(), text: question });
+    else void chat.send(question);
+  });
 
   const close = React.useCallback(() => {
     setOpen(false);
+    setDraft(null);
     // The launcher may only mount in this update (closing from full screen), so focus it on the next frame.
     requestAnimationFrame(() => launcherRef.current?.focus());
   }, []);
@@ -91,6 +101,7 @@ export function LeoWidget({
               >
                 <LeoPanel
                   chat={chat}
+                  draft={draft}
                   place={leoPlace(t, context, notice)}
                   pathname={pathname}
                   expanded={expanded}

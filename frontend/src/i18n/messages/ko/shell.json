@@ -32,8 +32,8 @@
   "search": {
     "label": "검색",
     "placeholder": "무엇을 찾으세요?",
-    "noResults": "검색 결과가 없어요.",
-    "pagesGroup": "페이지"
+    "pagesGroup": "페이지",
+    "askLeo": "Leo에게 질문: “{question}”"
   },
   "userMenu": {
     "settings": "설정",

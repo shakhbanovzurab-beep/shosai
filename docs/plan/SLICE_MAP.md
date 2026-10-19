@@ -31,7 +31,7 @@ Columns: **Needs** — what the screen asks of the backend (calls, data, realtim
 | Sign-in, registration, reset, desktop connect | Not in the cabinet: no `/login`, `/register`, `/connect` route; the cabinet assumes a cookie session (`lib/api/client.ts` defers CSRF and refresh to "S01") | — | — | identity (§8 SM-7) |
 | Shell: user menu, Log out, current user | `GET /v1/me` (missing; the shell shows `DEMO_USER`), logout (an empty menu item today), 401 → sign-in redirect, interface language (cookie only) | — | Or | identity |
 | Shell: sidebar, workspace switcher | `GET` workspaces of the account | — | Or, Cd | workspaces |
-| Shell: command palette (⌘K) | Jumps to pages only, client-side; no content search | — | Or | — (client) |
+| Shell: command palette (⌘K) | Jumps to pages, client-side; what was typed can go to Leo as a question (the page's Leo widget opens and asks it, or keeps it in the composer while Leo answers); no content search | — | Or | — (client) |
 | Shell: header weather | Browser → Open-Meteo directly; ignores Settings › Privacy `share_location` (a frontend fix) | — | — | — (client) |
 | Settings › Account | Profile (name, display name, work role), avatar upload, delete account (re-typed email) | name used in greetings | Re | identity |
 | Settings › Privacy | `improve_models`, `share_location`, full export (archive), per-kind data lists (shared chats, artifacts, uploaded files, feedback) | — | — | identity; the export and deletion registry spans every slice |

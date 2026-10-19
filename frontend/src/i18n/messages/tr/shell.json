@@ -32,8 +32,8 @@
   "search": {
     "label": "Ara",
     "placeholder": "Ne arıyorsunuz?",
-    "noResults": "Sonuç bulunamadı.",
-    "pagesGroup": "Sayfalar"
+    "pagesGroup": "Sayfalar",
+    "askLeo": "Leo’ya sor: “{question}”"
   },
   "userMenu": {
     "settings": "Ayarlar",
