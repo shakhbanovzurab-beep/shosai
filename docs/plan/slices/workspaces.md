@@ -177,6 +177,16 @@ OR (r.org IS NULL AND <a share record of r in an active workspace where viewer i
   | every space of a person, 50 newest | 0.052 ms | 22.2 ms | 21.7 ms |
 
   RLS adds about 0.1–0.45 ms to a read: 30–75% of a sub-millisecond query, 0.1–0.25% of a Russian request's 180 ms of database time (§3). The §19 trigger ("RLS overhead > 10% of query time") is met only in the first reading; it is reported to the owner. A person-wide list ordered by a key the filter cannot use walks the key until it has 50 visible rows (0.45% of the table here: 12 000 rows, 22 ms); such lists in Leo go through the search index and `filter_readable`, or through time-bounded queries on each slice's indexes.
+- **Pre-filters as arrays (2026-10-19, after meetings step 7a).** Under the policy's `OR`, an `IN (subquery)` pre-filter is only a filter: PostgreSQL cannot reach the rows through an index, so a person-wide list ordered by a key without an index of its own read the whole table (the meetings library ordered by start: a sequential scan of 205 000 meetings, 203 000 rows thrown away). The member-workspaces pre-filter is now an array, `org_id = ANY (CAST((SELECT array_agg(…)) AS uuid[]))`, computed once per statement and an index condition; the shared-rows pre-filter keeps its hashed `IN` first — one hash probe per row when the planner walks a sort key — and adds the same list as an array for the index (an array alone, as a filter, was compared element by element on every row: 3 333 shared ids made the person-wide benchmark read 153.7 ms). A property test holds the new predicates to a frozen copy of the former ones on random worlds of both share kinds, readable and manageable, across every space and narrowed to each workspace (`test_predicate_forms.py`). Measured with the benchmark above, median of 25, owner / application role with RLS, JIT off in the application's transactions:
+
+  | Read | before | after |
+  |---|---|---|
+  | one row by id | 0.163 / 0.375 ms | 0.194 / 0.378 ms |
+  | a workspace screen, 50 newest | 0.191 / 0.467 ms | 0.211 / 0.378 ms |
+  | every space of a person, 50 newest (walks the id) | 32.6 / 37.3 ms | 38.1 / 44.2 ms |
+  | the meetings library's first page, 2 000 own among 205 000 (no index on its sort key; median of 9, owner) | 59.8 ms | 4.3 ms |
+
+  The person-wide read that walks an indexed key pays about 5 ms more for the array of shared ids; a list whose sort key has no index of its own now reads the viewer's rows through a bitmap of the company, owner and id indexes instead of the whole table, so its cost follows the rows the person may see, not the table.
 
 ### 3.6 Flows
 

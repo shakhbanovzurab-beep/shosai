@@ -4,23 +4,30 @@ A row of a workspace opens to its active members at the row's level in an active
 workspace; its owner reads it while still a member. A personal row opens to its owner,
 and to the members of each active workspace it is shared into, at the share's level,
 while the member who shared it is still an active member there. Every check is an
-`EXISTS` correlated with the resource's own row, so it runs inside the slice's query.
+`EXISTS` correlated with the resource's own row, so it runs inside the slice's query; its
+pre-filters are arrays compared with `= ANY(...)`, so indexes serve them under the `OR`.
 Correlation is explicit at every level (`correlate_except`): SQLAlchemy correlates only
 with the immediately enclosing query, and a nested check would otherwise read every
 row. Aliases are anonymous, so the checks nest without clashing. Unknown levels admit
 nobody.
 """
 
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import (
+    ARRAY,
     ColumnElement,
     FromClause,
     Select,
     Table,
+    Uuid,
     and_,
+    any_,
+    cast,
     exists,
     false,
+    func,
     or_,
     select,
     true,
@@ -102,16 +109,19 @@ def _member_of(
     return member, member.join(workspace, workspace.c.id == member.c.org_id), conditions
 
 
-def _member_orgs(user_id: UUID, within: UUID | None) -> Select[tuple[UUID]]:
-    """The active workspaces the viewer is an active member of: an uncorrelated pre-filter.
+def _member_orgs(user_id: UUID, within: UUID | None) -> ColumnElement[Any]:
+    """The active workspaces the viewer is an active member of, as one array: a pre-filter.
 
-    PostgreSQL computes it once per statement and can reach the resource's rows through its
-    company index; the correlated checks then decide each row exactly.
+    It is uncorrelated, so PostgreSQL computes it once per statement, and an array compared
+    with `= ANY(...)` is an index condition even under the policy's `OR`: the planner can
+    combine the company index with the owner's and the id's (a bitmap OR), where `IN
+    (subquery)` there was only a filter, and a person-wide list read the whole table. The
+    correlated checks then decide each row exactly. An empty array admits no row.
     """
     member = _table(Membership).alias()
     workspace = _table(Organization).alias()
     query = (
-        select(member.c.org_id)
+        select(func.array_agg(member.c.org_id))
         .join(workspace, workspace.c.id == member.c.org_id)
         .where(
             member.c.user_id == user_id,
@@ -119,7 +129,17 @@ def _member_orgs(user_id: UUID, within: UUID | None) -> Select[tuple[UUID]]:
             workspace.c.state == ACTIVE_WORKSPACE,
         )
     )
-    return query.where(member.c.org_id == within) if within is not None else query
+    narrowed = query.where(member.c.org_id == within) if within is not None else query
+    return any_(as_array(narrowed))
+
+
+def as_array(query: Select[Any]) -> ColumnElement[Any]:
+    """A one-column `array_agg` query as an array value: `= ANY (CAST((SELECT …) AS uuid[]))`.
+
+    Without the cast SQLAlchemy writes `= ANY (SELECT …)`, which compares the value with each
+    row of the subquery, here a single row holding the whole array.
+    """
+    return cast(query.scalar_subquery(), ARRAY(Uuid))
 
 
 def workspace_rows(
@@ -138,7 +158,7 @@ def workspace_rows(
         .where(*conditions, or_(owner == user_id, admits))
         .correlate_except(joined)
     )
-    return and_(org.in_(_member_orgs(user_id, within)), in_view)
+    return and_(org == _member_orgs(user_id, within), in_view)
 
 
 def personal_rows(
@@ -191,9 +211,13 @@ def _shared(
         .where(*filters, *conditions, or_(owner == user_id, admits))
         .correlate_except(sources)
     )
-    # Предфильтр без корреляции: ресурсы, поделённые в пространства читателя, — по ключу записи.
-    candidates = records.table.alias()
-    shared_in_mine = select(candidates.c[records.resource]).where(
-        candidates.c[records.org].in_(_member_orgs(user_id, within))
+    # Предфильтр без корреляции, в двух формах одного списка: хэшированный IN первым отсекает
+    # строку за один поиск, а массив в = ANY служит условием индекса под OR политики. Один
+    # массив как фильтр перебирался бы целиком на каждой строке (тысячи поделённых id).
+    hashed, listed = records.table.alias(), records.table.alias()
+    mine = _member_orgs(user_id, within)
+    shared_in_mine = select(hashed.c[records.resource]).where(hashed.c[records.org] == mine)
+    shared_list = select(func.array_agg(listed.c[records.resource])).where(
+        listed.c[records.org] == _member_orgs(user_id, within)
     )
-    return and_(row_id.in_(shared_in_mine), exact)
+    return and_(row_id.in_(shared_in_mine), row_id == any_(as_array(shared_list)), exact)
