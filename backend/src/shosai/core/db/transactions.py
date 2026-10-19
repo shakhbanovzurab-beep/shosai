@@ -2,7 +2,8 @@
 
 `begin(scope)` opens a session on the scope's home and starts a transaction whose first
 statement sets, for this transaction only, the statement timeout of the process role,
-read-only mode and the `app.user_id` and `app.org_id` that row-level security reads.
+read-only mode, JIT compilation off (it cost short reads more than they took) and the
+`app.user_id` and `app.org_id` that row-level security reads.
 `SET LOCAL` dies with the transaction, so nothing reaches the next client of the same
 server connection behind PgBouncer. The block commits on exit and rolls back on error.
 
@@ -35,9 +36,13 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.observability.log_context import id_fields
 
 # Один оператор — один обмен с сервером; пустая строка означает «нет» для app_*_id().
+# JIT выключен: предикаты политики доступа завышают оценку стоимости коротких запросов, и
+# PostgreSQL компилировал их дольше, чем выполнял (страница библиотеки встреч: 74 мс JIT из
+# 106 мс на 5 000 встреч, 976 мс из 1 035 мс на 205 000).
 SCOPE_SETTINGS: Final = (
     "SELECT set_config('statement_timeout', :statement_timeout, true), "
     "set_config('transaction_read_only', :read_only, true), "
+    "set_config('jit', 'off', true), "
     "set_config('app.user_id', :user_id, true), "
     "set_config('app.org_id', :org_id, true)"
 )
@@ -48,6 +53,7 @@ SCOPE_STATEMENT: Final = text(SCOPE_SETTINGS)
 SWEEP_SCOPE_STATEMENT: Final = text(
     "SELECT set_config('statement_timeout', :statement_timeout, true), "
     "set_config('transaction_read_only', :read_only, true), "
+    "set_config('jit', 'off', true), "
     "set_config('app.user_id', :user_id, true), "
     "set_config('app.org_id', :org_id, true), "
     "set_config('role', :role, true)"

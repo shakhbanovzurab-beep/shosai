@@ -21,6 +21,7 @@ from tests.harness.run_slot import RunSlot
 SCOPE_SETTINGS = sa.text(
     "SELECT current_setting('statement_timeout') AS statement_timeout, "
     "current_setting('transaction_read_only') AS read_only, "
+    "current_setting('jit') AS jit, "
     "app_user_id() AS user_id, app_org_id() AS org_id"
 )
 
@@ -40,6 +41,7 @@ async def test_the_first_statement_sets_the_scope_of_the_transaction(
 
     assert row.statement_timeout == "10s"
     assert row.read_only == "off"
+    assert row.jit == "off"
     assert (row.user_id, row.org_id) == (scope.user_id, scope.org_id)
 
 
