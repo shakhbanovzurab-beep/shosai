@@ -1,0 +1,1 @@
+"""Meetings' tables and adapters."""

@@ -525,6 +525,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **New in v2:** `org_id` — NULL (R3).
 - **New in v2:** `access` — The personal default defined by `workspaces` (R3).
 - **New in v2:** `indexed_upto_seq` — 0, so the v2 indexer rebuilds the meeting windows (R7).
+- **Checks M1 must satisfy (meetings step 2):** a title of 1 to 256 characters (an empty one takes a name), `ended_at` set exactly when the status is not `active` and never before `started_at`; rows the draft let a client write otherwise are corrected and counted for the owner.
 - **New in v2 (meetings plan, 2026-10-19):** `seconds` (`ended_at − started_at`, at most 6 h), `source`, `deleted_at` NULL, `notes_revision`; the meeting's no-logs setting moves from `users.no_logs` to `meeting_settings.keep_meetings = NOT no_logs` (MT-D6); `users.meeting_auto_tasks` is not carried (it follows tasks, MT-D4).
 
 #### `transcript_segments` → `transcript_segments` · **transformed**
@@ -538,6 +539,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `speaker_label` — *moved*. Denormalised display name; renames were written to every row.
   - `created_at` — *moved*. Second ordering key for `seq`; NULLs get `started_at` (R10).
 - **New in v2:** `seq` — Derived: `row_number() OVER (PARTITION BY session_id ORDER BY started_at, created_at, id)`, starting at 1 (T-1).
+- `speaker_idx` — *moved*; the draft's `-1` for an undiarised speaker becomes NULL (the check refuses negatives).
 - **New in v2:** `meeting_started_at` — the meeting's `sessions.started_at`: the partition key of the monthly partitions, so `(session_id, seq)` is the unique key and a meeting lives in one partition (meetings plan, §8.1).
 - The draft has no `seq`; v2 identity is `(session_id, seq)` (§8.1).
 - The FK to `sessions` has no ON DELETE: load after `sessions`, delete before.

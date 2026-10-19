@@ -17,3 +17,13 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `domain/mind_map.py` — the map projected from the findings: the title, up to six topics of two to five findings.
 - `domain/sharing.py`, `domain/redaction.py` — one link per meeting with its settings and expiry, one refusal for every link that does not open, comments; a shared page never shows an address and numbers hidden speakers by first appearance.
 - `domain/library.py` — flat folders in five colours, the person's own notes (last write wins, a growing version), participants by address.
+
+## Tables (revision `a2c7e4f9b318`)
+
+- `sessions` — the shareable `meeting` resource under company isolation; read only through `application/visibility.py`, never while hidden by a deletion.
+- `transcript_segments` — partitioned by the month of its meeting's start, so `(session_id, seq)` is its unique key and a meeting lives in one partition; partitions are kept until the transcript archive.
+- `meeting_speakers`, `meeting_participants`, `meeting_notes`, `meeting_findings`, `meeting_processing_runs`, `meeting_result_shares`, `meeting_share_comments` — under company isolation with `org_id` and the meeting's owner; they go with their meeting.
+- `meeting_folders`, `meeting_templates`, `meeting_settings` — personal by nature.
+- `meeting_object_deletions` — transient keys whose rows are gone, until the bucket confirms.
+- `meetings_shared_meeting(token)` — the link's meeting and company, past row-level security, for a reader without an account.
+- `application/account_data.py` — export, transfer and erasure: rows through core's helpers, the transcript meeting by meeting, transient objects by pointer.
