@@ -151,6 +151,15 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 ## Tickets (§16.6)
 
+<a id="meeting-run-old"></a>
+### MeetingRunOld
+
+**Means.** A home's oldest unfinished post-meeting run is older than 10 minutes (meetings, from step 5): a meeting's notes are late, and nfr-8 promises them within 10 minutes for 95 % of meetings.
+
+**Look.** `shosai_meetings_oldest_open_run_seconds` by `home`; `shosai_meetings_stage_seconds` by stage for a slow stage; `shosai_meetings_runs_total` and the `workers-meeting` logs («Стадия прогона упала», «Стадия прогона провалена») for one that keeps failing; `shosai_task_queue_oldest_age_seconds{queue="meeting"}` for a queue that is behind; `SELECT id, source, state, stage_state, updated_at FROM meeting_processing_runs WHERE state IN ('pending', 'running') ORDER BY created_at LIMIT 20` in that home.
+
+**Fix.** A stage slow at a provider: the provider's breaker and slots (`ProviderSlotsExhausted`); a queue behind: more `workers-meeting` processes; a stage failing for a bug: fix it with a test — the recovery sweep sends lost stages again every minute, and the attempts in each run's row keep it within three.
+
 <a id="host-disk-filling"></a>
 ### HostDiskFilling
 

@@ -55,6 +55,16 @@ groups:
           description: 'В очереди «{{ $labels.queue }}» задача ждёт выполнения дольше 10 минут: письма, обработка и другая фоновая работа запаздывают.'
           runbook: docs/runbooks/alerts.md#task-queue-old
 
+      - alert: MeetingRunOld
+        expr: max by (home) (shosai_meetings_oldest_open_run_seconds) > 600
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: 'Обработка встречи идёт дольше 10 минут'
+          description: 'Самый старый незаконченный прогон встречи {{ if eq $labels.home "ru" }}в России{{ else }}в ЕС{{ end }} идёт дольше 10 минут: заметки к встрече запаздывают.'
+          runbook: docs/runbooks/alerts.md#meeting-run-old
+
       - alert: SchedulerLoopStalled
         expr: |
           time() - shosai_loop_last_success_timestamp_seconds

@@ -138,6 +138,15 @@ class MeetingSweeps:
         return len(rows)
 
     async def _settle_one(self, scope: TenancyScope, meeting_id: UUID, shown: int | None) -> None:
+        started = await self._settled(scope, meeting_id, shown)
+        if started is not None:
+            await self._lifecycle.start_run(scope, started, None)
+
+    async def _settled(
+        self, scope: TenancyScope, meeting_id: UUID, shown: int | None
+    ) -> UUID | None:
+        """Settle one meeting in its owner's transaction; the run it started, if any."""
+        started = None
         async with self._transactions.begin(scope) as session:
             record = await session.scalar(
                 select(MeetingRecord)
@@ -145,7 +154,7 @@ class MeetingSweeps:
                 .with_for_update()
             )
             if record is None:
-                return
+                return None
             lines, _ = await spoken(session, record)
             if shown:
                 missing = shown - await live_seqs_up_to(session, record, shown)
@@ -164,5 +173,6 @@ class MeetingSweeps:
                 )
                 if record.latest_run_id is None:
                     log.info("Встрече без прогона заведён прогон", meeting_id=str(meeting_id))
-                    record.latest_run_id = run_id
+                    record.latest_run_id = started = run_id
             record.settled_at = self._clock()
+        return started

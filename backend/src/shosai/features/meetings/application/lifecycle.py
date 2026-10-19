@@ -12,7 +12,7 @@ kept is removed at its end, its minutes kept as billing's tombstone.
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from typing import Final
+from typing import Final, Protocol
 from uuid import UUID
 
 import structlog
@@ -41,7 +41,7 @@ from shosai.features.meetings.domain.meetings import (
     title_or_default,
 )
 from shosai.features.meetings.domain.minutes import seconds_between
-from shosai.features.meetings.domain.runs import RunSource, idempotency_key
+from shosai.features.meetings.domain.runs import RunSource, Stage, idempotency_key, next_stage
 from shosai.features.meetings.infrastructure.meeting_records import (
     MEETING_RESOURCE,
     MeetingRecord,
@@ -84,6 +84,14 @@ def snapshot(record: MeetingRecord) -> MeetingSnapshot:
     )  # fmt: skip
 
 
+class RunStarter(Protocol):
+    """Sends the first stage of a run created by an end, after that end's commit."""
+
+    async def kick(self, scope: TenancyScope, run_id: UUID, stage: Stage) -> None:
+        """Send the stage's task; a failed send is left to the recovery sweep."""
+        ...
+
+
 class MeetingLifecycle:
     """Starts, retitles and ends meetings for the person who manages them."""
 
@@ -92,10 +100,19 @@ class MeetingLifecycle:
         transactions: HomeTransactions,
         collaborators: tuple[PortDirectory, EventOutbox, MeetingMetrics],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        starter: RunStarter | None = None,
     ) -> None:
         self._transactions = transactions
         self._ports, self._outbox, self._metrics = collaborators
         self._clock = clock
+        self._starter = starter
+
+    async def start_run(
+        self, scope: TenancyScope, run_id: UUID | None, before: UUID | None
+    ) -> None:
+        """Send the first stage of a run the transaction just created."""
+        if run_id is not None and run_id != before and self._starter is not None:
+            await self._starter.kick(scope, run_id, first_stage(RunSource.LIVE))
 
     async def start(self, principal: Principal, title: str, device: str) -> MeetingSnapshot:
         """A new live meeting; 402 or 403 from billing when its minutes or device refuse it."""
@@ -138,13 +155,15 @@ class MeetingLifecycle:
             if title is not None:
                 record.title = checked_title(title)
                 record.updated_at = self._clock()
-            run_id = record.latest_run_id
+            before = run_id = record.latest_run_id
             if status in {MeetingStatus.COMPLETED, MeetingStatus.FAILED}:
                 cause = (
                     EndCause.CLIENT if status is MeetingStatus.COMPLETED else EndCause.CLIENT_FAILED
                 )
                 run_id = await self._close(session, record, cause, asked)
-            return Ended(snapshot(record), run_id)
+            ended = Ended(snapshot(record), run_id)
+        await self.start_run(principal.scope(), run_id, before)
+        return ended
 
     async def end(self, principal: Principal, meeting_id: UUID) -> Ended:
         """§10's end: the same end as the client's, answering the live run."""
@@ -177,8 +196,10 @@ class MeetingLifecycle:
             )
             if record is None:
                 return False
-            await self._close(session, record, cause, asked)
-            return True
+            before = record.latest_run_id
+            run_id = await self._close(session, record, cause, asked)
+        await self.start_run(scope, run_id, before)
+        return True
 
     def _manageable(self, principal: Principal) -> Select[MeetingRecord]:
         viewer = Viewer(principal.user_id)
@@ -237,3 +258,12 @@ class MeetingLifecycle:
         run_id = await ensure_run(session, record, RunSource.LIVE, idempotency_key(RunSource.LIVE))
         record.latest_run_id = run_id
         return run_id
+
+
+def first_stage(source: RunSource) -> Stage:
+    """The stage a new run of the source starts with."""
+    stage = next_stage(source, {})
+    if stage is None:
+        message = f"у прогона {source.value} нет стадий"
+        raise ValueError(message)
+    return stage

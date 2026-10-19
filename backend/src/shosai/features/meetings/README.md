@@ -40,3 +40,10 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/live_meetings.py` — capture's `LiveMeetings.bind` for `session.start`.
 - `application/sweeps.py` — every minute per home: meetings silent 5 minutes after their last audio or 6 hours long are ended; ended meetings are settled — inv-6 against what capture showed, the run of a spoken live meeting whose end found no speech yet.
 - `objectives.py` — `TranscriptLineLost` (inv-6) and `MeetingLeftUnprocessed` (inv-7), with runbook sections in `docs/runbooks/alerts.md`.
+
+## Pipeline (step 5)
+
+- `application/pipeline.py` — the engine: a delivery claims its stage under the run's lock and commits the running mark, the handler works without an engine transaction, a second transaction records the outcome, the next stage is sent after that commit.
+- `application/stage_task.py` — `meetings.run_stage` on the `meeting` queue; a retry rides the broker's back-off.
+- `application/run_recovery.py` — every minute per home: stages lost or held past the hold limit are sent again; the oldest open run is measured.
+- `objectives.py` — the post-meeting objectives; the `MeetingRunOld` ticket is in `deploy/observability/prometheus/rules/tickets.yml`.

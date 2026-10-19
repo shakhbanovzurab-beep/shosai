@@ -84,6 +84,7 @@ NEVER_RETRIED: Final = frozenset(
         "recording_too_long",
         "unsupported_audio_format",
         "media_unreadable",
+        "attempts_exhausted",
     }
 )
 TERMINAL: Final = frozenset({RunState.SUCCEEDED, RunState.PARTIALLY_COMPLETED, RunState.FAILED})
@@ -140,6 +141,33 @@ def next_stage(source: RunSource, progress: Progress) -> Stage | None:
             return None
         return stage
     return None
+
+
+class Claim(StrEnum):
+    """What a delivery of a stage's task does with the stage it finds."""
+
+    RUN = "run"
+    # Уже сделана или уже провалена: доставка — повтор, работы нет.
+    FINISHED = "finished"
+    # Идёт у другого воркера, и его аренда ещё не кончилась.
+    HELD = "held"
+    # Три попытки истрачены (воркер умирал посреди стадии): стадия проваливается.
+    EXHAUSTED = "exhausted"
+
+
+def claim(record: StageRecord, *, stale: bool) -> Claim:
+    """Whether a delivery runs the stage now: a stage runs at most three times on any path.
+
+    `stale` says the stage has been running longer than a worker may hold it, so its worker
+    is gone and the stage may be taken over; that take-over is one more attempt.
+    """
+    if record.status in {StageStatus.DONE, StageStatus.FAILED}:
+        return Claim.FINISHED
+    if record.status is StageStatus.RUNNING and not stale:
+        return Claim.HELD
+    if record.attempts >= MAX_ATTEMPTS:
+        return Claim.EXHAUSTED
+    return Claim.RUN
 
 
 @dataclass(frozen=True, slots=True)

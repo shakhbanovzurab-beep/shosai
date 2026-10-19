@@ -61,6 +61,23 @@ tests:
 
   - interval: 1m
     input_series:
+      - series: 'shosai_meetings_oldest_open_run_seconds{home="ru"}'
+        values: "0x5 900x20 0x20"
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: MeetingRunOld
+        exp_alerts:
+          - exp_labels: {severity: ticket, home: ru}
+            exp_annotations:
+              summary: "Обработка встречи идёт дольше 10 минут"
+              description: "Самый старый незаконченный прогон встречи в России идёт дольше 10 минут: заметки к встрече запаздывают."
+              runbook: docs/runbooks/alerts.md#meeting-run-old
+      - eval_time: 40m
+        alertname: MeetingRunOld
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
       - series: 'shosai_task_queue_oldest_age_seconds{queue="default"}'
         values: "0x5 900x20 0x20"
     alert_rule_test:

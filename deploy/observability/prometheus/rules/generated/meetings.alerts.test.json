@@ -8,6 +8,204 @@
       "interval": "1m",
       "input_series": [
         {
+          "series": "slo:post_meeting_failures:bad_ratio:rate5m{slo=\"post_meeting_failures\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:post_meeting_failures:bad_ratio:rate30m{slo=\"post_meeting_failures\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:post_meeting_failures:bad_ratio:rate1h{slo=\"post_meeting_failures\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:post_meeting_failures:bad_ratio:rate6h{slo=\"post_meeting_failures\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:post_meeting_failures:bad_ratio:rate3d{slo=\"post_meeting_failures\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "PostMeetingFailuresBudgetBurnFast",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "post_meeting_failures",
+                "journey": "post_meeting"
+              },
+              "exp_annotations": {
+                "summary": "Заметки после встреч не появляются: обработка встреч заканчивается ошибкой",
+                "description": "Мы обещаем, что после встречи её обработка заканчивается без ошибки в 99 % случаев. Сбоев сейчас очень много: если так продолжится, обещание на этот месяц будет нарушено примерно через 2 дня.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-post-meeting"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "PostMeetingFailuresBudgetBurnSlow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "post_meeting_failures",
+                "journey": "post_meeting"
+              },
+              "exp_annotations": {
+                "summary": "Заметки после встреч не появляются: обработка встреч заканчивается ошибкой",
+                "description": "Мы обещаем, что после встречи её обработка заканчивается без ошибки в 99 % случаев. Сбоев больше нормы уже несколько часов: если так продолжится, обещание на этот месяц будет нарушено примерно через 5 дней.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-post-meeting"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "PostMeetingFailuresBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "post_meeting_failures",
+                "journey": "post_meeting"
+              },
+              "exp_annotations": {
+                "summary": "Заметки после встреч не появляются: обработка встреч заканчивается ошибкой",
+                "description": "Мы обещаем, что после встречи её обработка заканчивается без ошибки в 99 % случаев. Сбоев понемногу больше нормы уже три дня: если ничего не делать, обещание будет нарушено до конца месяца.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-post-meeting"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "PostMeetingFailuresBudgetBurnFast",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "PostMeetingFailuresBudgetBurnSlow",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "PostMeetingFailuresBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
+          "series": "slo:post_meeting_latency:bad_ratio:rate5m{slo=\"post_meeting_latency\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:post_meeting_latency:bad_ratio:rate30m{slo=\"post_meeting_latency\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:post_meeting_latency:bad_ratio:rate1h{slo=\"post_meeting_latency\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:post_meeting_latency:bad_ratio:rate6h{slo=\"post_meeting_latency\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        },
+        {
+          "series": "slo:post_meeting_latency:bad_ratio:rate3d{slo=\"post_meeting_latency\",journey=\"post_meeting\"}",
+          "values": "0x10 1x80 0x60"
+        }
+      ],
+      "alert_rule_test": [
+        {
+          "eval_time": "80m",
+          "alertname": "PostMeetingLatencyBudgetBurnFast",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "post_meeting_latency",
+                "journey": "post_meeting"
+              },
+              "exp_annotations": {
+                "summary": "Заметки после встреч появляются с опозданием",
+                "description": "Мы обещаем, что заметки готовы в течение 10 минут после конца встречи в 95 % случаев. Сбоев сейчас очень много: если так продолжится, обещание на этот месяц будет нарушено примерно через 2 дня.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-post-meeting"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "PostMeetingLatencyBudgetBurnSlow",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "page",
+                "slo": "post_meeting_latency",
+                "journey": "post_meeting"
+              },
+              "exp_annotations": {
+                "summary": "Заметки после встреч появляются с опозданием",
+                "description": "Мы обещаем, что заметки готовы в течение 10 минут после конца встречи в 95 % случаев. Сбоев больше нормы уже несколько часов: если так продолжится, обещание на этот месяц будет нарушено примерно через 5 дней.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-post-meeting"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "80m",
+          "alertname": "PostMeetingLatencyBudgetBurnTicket",
+          "exp_alerts": [
+            {
+              "exp_labels": {
+                "severity": "ticket",
+                "slo": "post_meeting_latency",
+                "journey": "post_meeting"
+              },
+              "exp_annotations": {
+                "summary": "Заметки после встреч появляются с опозданием",
+                "description": "Мы обещаем, что заметки готовы в течение 10 минут после конца встречи в 95 % случаев. Сбоев понемногу больше нормы уже три дня: если ничего не делать, обещание будет нарушено до конца месяца.",
+                "runbook": "docs/runbooks/alerts.md#slo-budget-burn",
+                "dashboard": "/d/journey-post-meeting"
+              }
+            }
+          ]
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "PostMeetingLatencyBudgetBurnFast",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "PostMeetingLatencyBudgetBurnSlow",
+          "exp_alerts": []
+        },
+        {
+          "eval_time": "150m",
+          "alertname": "PostMeetingLatencyBudgetBurnTicket",
+          "exp_alerts": []
+        }
+      ]
+    },
+    {
+      "interval": "1m",
+      "input_series": [
+        {
           "series": "shosai_meetings_transcript_lines_missing_total",
           "values": "0x10 1x50"
         }
