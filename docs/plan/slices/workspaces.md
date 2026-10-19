@@ -186,7 +186,7 @@ OR (r.org IS NULL AND <a share record of r in an active workspace where viewer i
 4. **Account hidden or erased** (identity events) per WS-D4.
 5. **Suspend and resume.** The admin or billing's port sets the state; every route under the workspace answers 423; `/me/*` and the predicate skip suspended workspaces; nothing is deleted.
 6. **Delete** per WS-D5: state `deletion_scheduled`, then at `erase_at` a saga runs each `WorkspaceDataHandler.erase` as a task, records each step, and finally removes the workspace's own rows and its `directory_domains` entry.
-7. **Auto-share at meeting end.** On `meetings.notes_ready`: when every participant of the meeting is an active member of one workspace whose `sharing_default` is not `private`, the meeting is shared there at that level; with an outsider, or when two workspaces qualify, nothing is shared (the cabinet's `shares_with: null`).
+7. **Auto-share at meeting end.** On `meetings.notes.ready`: when every participant of the meeting is an active member of one workspace whose `sharing_default` is not `private`, the meeting is shared there at that level; with an outsider, or when two workspaces qualify, nothing is shared (the cabinet's `shares_with: null`).
 8. **Last active.** Serving `GET /v1/workspaces/{id}` updates `last_active_on` with one conditional statement at most once a day per membership.
 
 ### 3.7 Company data registry

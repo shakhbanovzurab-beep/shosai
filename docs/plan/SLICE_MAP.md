@@ -133,7 +133,7 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 | Projects, project detail | Projects with status, lead, team, target; page aggregates tasks, meetings, decisions, files by `project_id` | — | Or, Tr | workspaces (§8 SM-2) |
 | Knowledge | Uploads, published personal files, connected sources; access workspace or team; indexing status | answers with the member's rights only | Re, Co | workspaces (items) over knowledge (index) |
 | Settings | Rename, join by company email domain, sharing defaults, plan and usage per member, delete or leave | — | — | workspaces; plan in billing |
-| Auto-share at meeting end | Previewed (`shares_with`), not implemented | — | Cd | workspaces (on `meetings.notes_ready`) |
+| Auto-share at meeting end | Previewed (`shares_with`), not implemented | — | Cd | workspaces (on `meetings.notes.ready`) |
 
 **Missing in the UI:** accepting an invitation and joining by domain have no endpoint or screen. **Leaks to fix server-side** (nfr-15): `GET /workspaces/{id}` returns private teams, pending invitation emails and every member's `last_active_at` to all members; the client filters them.
 
@@ -291,10 +291,10 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 
 #### 5. meetings
 - **Scope:** sessions and their lifecycle (start, end, silence sweep, inv-7), transcript storage keyed by `(session_id, seq)` (the WS drain writes through this slice's port), imports and audio uploads, the post-meeting pipeline (write-up, key points, decisions, action items, promises, risks, questions with evidence, mind map, per-minute index windows), templates and regeneration, folders, participants, the user's own notes synced with desktop, share links with comments and their public read API, export; Notes library and detail screens; the native meeting routes.
-- **Owns:** `sessions`, `transcript_segments`, `meeting_speakers`, `meeting_notes`, `meeting_note_action_items` (until SM-3 moves them to tasks), `meeting_map_nodes`, `meeting_tags`, `session_tags`, `meeting_folders`, `meeting_templates`, `meeting_import_jobs`, `meeting_processing_runs`, `meeting_result_shares`, `meeting_share_comments`, `prompt_executions`, `meeting_workspace_impacts`; objects O3–O5; derived meeting windows in Qdrant.
-- **Routes:** N per §3; `/v1/me/sessions/*`, `/v1/me/runs/{id}`, `POST /v1/me/sessions/{id}/end` (§10), `/v1/shared/{token}` (public).
-- **Depends on:** files (uploads, audio), F6 (transcription, diarisation, models, cost), studio (prompt and model of the `notes` role), workspaces (access), billing (minutes), knowledge (index windows), memory (`record_recollections`), tasks (action items).
-- **Emits:** `meetings.ended`, `meetings.notes_ready`, `meetings.deleted`.
+- **Owns:** `sessions`, `transcript_segments`, `meeting_speakers`, `meeting_participants`, `meeting_notes` (the person's notes, the write-up, the map), `meeting_findings`, `meeting_folders`, `meeting_templates`, `meeting_settings` (no-logs), `meeting_processing_runs` (the draft's import jobs folded in), `meeting_result_shares`, `meeting_share_comments`; objects O3–O5; derived meeting windows in Qdrant. Action items are tasks (SM-3); `meeting_note_action_items`, `meeting_map_nodes`, `meeting_tags`, `session_tags`, `prompt_executions` and `meeting_workspace_impacts` are not carried ([meetings plan](slices/meetings.md) MT-D4, MT-D7). Plan: [slices/meetings.md](slices/meetings.md).
+- **Routes:** N per §3 (kept as a compatibility layer; the native list a bare array over the newest 200 meetings, MT-D1); `/v1/meetings/*` for the cabinet and Leo, `/v1/me/runs/{id}`, `POST /v1/me/sessions/{id}/end` (§10), `/v1/shared/{token}` (public).
+- **Depends on:** files (uploads, audio), F6 (transcription, diarisation, models, cost), studio (prompt and model of the `notes` role), workspaces (access), billing (minutes), knowledge (index windows), memory (`record_recollections`), tasks (action items), capture (the last audio of a live meeting, MT-D2).
+- **Emits:** `meetings.meeting.ended`, `meetings.notes.ready`, `meetings.meeting.deleted`, `meetings.meeting.restored` (three-part names, core's event rule).
 - **Leo tools:** `meetings` toolset: search, get, read transcript, list decisions and action items (read); move to folder, regenerate notes, create or revoke a share link (W).
 
 #### 6. capture

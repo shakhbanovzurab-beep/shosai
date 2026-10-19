@@ -10,6 +10,7 @@ Move Shosai's users from the draft to v2 in one night-time maintenance window of
 
 - The cutover date and time, and who is on duty.
 - Confirmation that every slice is `done`, M1 rehearsals passed, and staging has run v2 without open incidents for an agreed period.
+- That `backend/tests/composition/native_routes_not_served.json` is empty — the native `PATCH /v1/me/sessions/{id}/note/action-items/{item_id}`, served only after tasks (meetings plan MT-D4), included.
 
 ## Read first
 

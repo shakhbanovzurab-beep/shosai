@@ -651,7 +651,7 @@ state changes ─┘   (ids)     (pure, features)        drop → record        
 **Signals are event-driven,** never global scans (fixes P3). Inputs:
 
 - outbox subscriptions:
-  - `meetings.notes_ready`, `meetings.ended` (`meetings`);
+  - `meetings.notes.ready`, `meetings.meeting.ended` (`meetings`);
   - `mail.received` (`mail`, from connector sync);
   - `calendar.event_changed` (`calendar`), `tasks.due_changed`, `tasks.assigned` (`tasks`);
   - `commitments.due`, `commitments.topic_looped` (`commitments`);
