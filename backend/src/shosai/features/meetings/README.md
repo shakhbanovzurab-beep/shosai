@@ -74,3 +74,10 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/folders.py`, `application/templates.py` — a person's folders (the colour cycle, delete leaves meetings in no folder) and templates (shipped read-only, at most 50 own); creates take an optional `Idempotency-Key`.
 - `application/library.py` — the template choice: a shipped one by any manager, the owner's own only by the owner.
 - `channels/http/my_notes.py`, `channels/http/folders.py`, `channels/http/templates.py`, `channels/http/library_models.py` — the routes; folders and templates are registered before `/v1/meetings/{id}`.
+
+## Deletion (step 8, MT-D8)
+
+- `application/deletion.py` — the owner hides a meeting that is not live: out of every read at once, its share link gone, `meetings.meeting.deleted`; its minutes stay counted.
+- `application/hidden_meetings.py` — every hour per home, meetings deleted 7 days ago go with everything under them; billing's tombstone once; the runs' objects deleted after the commit (`infrastructure/run_objects.py`).
+- `application/support_meetings.py`, `channels/http/admin_meetings.py` — support's audited page and restore, refused while identity's deletion window runs (`application/account_window.py`, `channels/subscriptions.py`).
+- `channels/http/native_me_sessions.py` — the native rename and deletion.

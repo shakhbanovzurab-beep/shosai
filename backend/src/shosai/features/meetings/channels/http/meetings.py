@@ -4,7 +4,8 @@ The library lists every meeting the person may read, newest first, in cursor pag
 narrows to one of their folders (`folder=<id>`), to their meetings in no folder
 (`folder=none`), or to a workspace. A meeting's page adds its participants, speakers and
 the state of its notes. `PATCH` renames the meeting (whoever may manage it) or files it
-(its owner, a personal meeting) or chooses its template. Errors: `meeting_not_found`,
+(its owner, a personal meeting) or chooses its template; `DELETE` hides the owner's meeting
+for 7 days (MT-D8). Errors: `meeting_not_found`, `meeting_not_yours`, `meeting_active`,
 `meeting_read_only`, `title_empty`, `folder_not_found`, `meeting_not_yours`,
 `company_meeting_has_no_folder`, `template_not_found`, `template_not_shipped`,
 `invalid_cursor`.
@@ -14,12 +15,13 @@ from http import HTTPStatus
 from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Response
 
 from shosai.core.kernel.errors import AppError
 from shosai.core.pagination.page import Page, PageParameters
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal, bearer_principal
+from shosai.features.meetings.application.deletion import MeetingDeletion
 from shosai.features.meetings.application.library import (
     LibraryFilter,
     MeetingChange,
@@ -35,8 +37,11 @@ from shosai.features.meetings.channels.http.meeting_models import (
 from shosai.features.meetings.domain.meetings import TitleRuleError
 
 
-def build_meetings_router(library: MeetingLibrary, ports: PortDirectory) -> APIRouter:
-    """The library and a meeting's page."""
+def build_meetings_router(
+    services: tuple[MeetingLibrary, MeetingDeletion], ports: PortDirectory
+) -> APIRouter:
+    """The library, a meeting's page, its change and its deletion."""
+    library, deletion = services
     router = APIRouter(prefix="/v1/meetings", tags=["meetings"])
     signed_in = bearer_principal(ports)
 
@@ -87,5 +92,13 @@ def build_meetings_router(library: MeetingLibrary, ports: PortDirectory) -> APIR
         except TitleRuleError as error:
             raise AppError(error.code, HTTPStatus.UNPROCESSABLE_ENTITY) from error
         return meeting_out(view)
+
+    @router.delete("/{meeting_id}", status_code=HTTPStatus.NO_CONTENT)
+    async def delete_meeting(
+        principal: Annotated[Principal, Depends(signed_in)], meeting_id: UUID
+    ) -> Response:
+        """Delete your meeting: hidden from everyone at once, gone for good after 7 days."""
+        await deletion.delete(principal, meeting_id)
+        return Response(status_code=HTTPStatus.NO_CONTENT)
 
     return router

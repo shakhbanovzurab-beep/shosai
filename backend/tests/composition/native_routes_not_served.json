@@ -1,5 +1,4 @@
 [
-  "DELETE /v1/me/sessions/{session_id}",
   "DELETE /v1/me/sessions/{session_id}/audio/{run_id}",
   "GET /",
   "GET /app/{full_path:path}",
@@ -10,7 +9,6 @@
   "GET /v1/me/sessions/{session_id}/full",
   "GET /v1/me/sessions/{session_id}/note",
   "GET /{full_path:path}",
-  "PATCH /v1/me/sessions/{session_id}",
   "PATCH /v1/me/sessions/{session_id}/note/action-items/{item_id}",
   "POST /v1/ai/chat/stream",
   "POST /v1/ai/vision/analyze",

@@ -59,6 +59,8 @@ class OperatorAction(StrEnum):
     ACCOUNT_TRANSFER_CANCELLED = "account_transfer_cancelled"
     FILES_LISTED = "files_listed"
     FILE_RESTORED = "file_restored"
+    MEETINGS_LISTED = "meetings_listed"
+    MEETING_RESTORED = "meeting_restored"
 
 
 class Authenticator(Protocol):

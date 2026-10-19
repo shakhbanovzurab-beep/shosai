@@ -1416,6 +1416,30 @@ export interface paths {
         patch: operations["update_session_v1_sessions__session_id__patch"];
         trace?: never;
     };
+    "/v1/me/sessions/{session_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete My Session
+         * @description Delete the meeting: hidden for 7 days, then gone.
+         */
+        delete: operations["delete_my_session_v1_me_sessions__session_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Rename My Session
+         * @description Rename the meeting.
+         */
+        patch: operations["rename_my_session_v1_me_sessions__session_id__patch"];
+        trace?: never;
+    };
     "/v1/me/sessions/{session_id}/end": {
         parameters: {
             query?: never;
@@ -1514,7 +1538,11 @@ export interface paths {
         get: operations["get_meeting_v1_meetings__meeting_id__get"];
         put?: never;
         post?: never;
-        delete?: never;
+        /**
+         * Delete Meeting
+         * @description Delete your meeting: hidden from everyone at once, gone for good after 7 days.
+         */
+        delete: operations["delete_meeting_v1_meetings__meeting_id__delete"];
         options?: never;
         head?: never;
         /**
@@ -1643,6 +1671,46 @@ export interface paths {
          * @description Remove a participant someone added.
          */
         delete: operations["remove_participant_v1_meetings__meeting_id__participants__participant_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/users/{user_id}/meetings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Hidden Meetings
+         * @description The person's meetings deleted within the last 7 days.
+         */
+        get: operations["list_hidden_meetings_v1_admin_users__user_id__meetings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/admin/users/{user_id}/meetings/{meeting_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Restore Meeting
+         * @description Bring a deleted meeting back, shared nowhere.
+         */
+        post: operations["restore_meeting_v1_admin_users__user_id__meetings__meeting_id__restore_post"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2474,6 +2542,31 @@ export interface components {
             files: components["schemas"]["HiddenFileOut"][];
         };
         /**
+         * HiddenMeetingOut
+         * @description A deleted meeting support may still restore.
+         */
+        HiddenMeetingOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Seconds */
+            seconds: number;
+            /**
+             * Deleted At
+             * Format: date-time
+             */
+            deleted_at: string;
+        };
+        /**
          * Home
          * @description A data home: a separate PostgreSQL cluster in its own jurisdiction.
          *
@@ -2789,6 +2882,13 @@ export interface components {
             speakers: components["schemas"]["SpeakerOut"][];
         };
         /**
+         * MeetingRestoreIn
+         * @description The person's home, as the account's card shows it.
+         */
+        MeetingRestoreIn: {
+            home: components["schemas"]["Home"];
+        };
+        /**
          * MeetingSource
          * @description How the meeting came to Shosai.
          * @enum {string}
@@ -2898,6 +2998,13 @@ export interface components {
         Page_FolderOut_: {
             /** Items */
             items: components["schemas"]["FolderOut"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** Page[HiddenMeetingOut] */
+        Page_HiddenMeetingOut_: {
+            /** Items */
+            items: components["schemas"]["HiddenMeetingOut"][];
             /** Next Cursor */
             next_cursor: string | null;
         };
@@ -3552,6 +3659,19 @@ export interface components {
             client_device_id: string;
         };
         /**
+         * SessionRenamed
+         * @description The meeting after its rename, in the draft's shape.
+         */
+        SessionRenamed: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+        };
+        /**
          * SessionResponse
          * @description A meeting as the draft answered it; the clients read its `id`.
          */
@@ -3581,6 +3701,14 @@ export interface components {
             created_at: string;
             /** Updated At */
             updated_at: string | null;
+        };
+        /**
+         * SessionTitleUpdate
+         * @description A meeting's new title, as the draft's clients send it.
+         */
+        SessionTitleUpdate: {
+            /** Title */
+            title: string;
         };
         /**
          * SessionUpdate
@@ -7056,6 +7184,74 @@ export interface operations {
             };
         };
     };
+    delete_my_session_v1_me_sessions__session_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    rename_my_session_v1_me_sessions__session_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SessionTitleUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionRenamed"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     end_session_v1_me_sessions__session_id__end_post: {
         parameters: {
             query?: never;
@@ -7255,6 +7451,37 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["MeetingOut"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_meeting_v1_meetings__meeting_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {
@@ -7540,6 +7767,81 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_hidden_meetings_v1_admin_users__user_id__meetings_get: {
+        parameters: {
+            query: {
+                home: components["schemas"]["Home"];
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_HiddenMeetingOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    restore_meeting_v1_admin_users__user_id__meetings__meeting_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+                meeting_id: string;
+            };
+            cookie?: {
+                shosai_admin?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MeetingRestoreIn"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             204: {

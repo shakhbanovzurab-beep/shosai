@@ -38,6 +38,7 @@ pytest_plugins = (
     "tests.features.meetings.meeting_bench",
     "tests.features.meetings.notes_bench",
     "tests.features.meetings.library_bench",
+    "tests.features.meetings.deletion_bench",
 )
 
 

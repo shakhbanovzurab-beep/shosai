@@ -16,8 +16,6 @@ from typing import Final, cast
 from uuid import UUID
 
 from sqlalchemy import ColumnElement, Table, and_, delete, select
-from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.account_data.handlers import AccountRef, ExportFile
 from shosai.core.account_data.spec import AccountDataSpec, TableCoverage, Treatment
@@ -49,7 +47,12 @@ from shosai.features.meetings.infrastructure.notes_records import (
     TemplateRecord,
 )
 from shosai.features.meetings.infrastructure.own_notes_records import OwnNotesRecord
-from shosai.features.meetings.infrastructure.run_records import ObjectDeletionRecord, RunRecord
+from shosai.features.meetings.infrastructure.run_objects import (
+    RunObjects,
+    record_deletions,
+    run_keys,
+)
+from shosai.features.meetings.infrastructure.run_records import RunRecord
 from shosai.features.meetings.infrastructure.share_records import (
     ShareCommentRecord,
     ShareLinkRecord,
@@ -193,8 +196,8 @@ class MeetingsAccountData:
         meetings = await person_meetings(self._transactions, scope, account.user_id)
         for meeting_id in meetings:
             async with self._transactions.begin(scope) as session:
-                keys = await _run_keys(session, RunRecord.session_id == meeting_id)
-                await _record_deletions(session, keys)
+                keys = await run_keys(session, RunRecord.session_id == meeting_id)
+                await record_deletions(session, keys)
                 await session.execute(
                     delete(MeetingRecord).where(
                         MeetingRecord.id == meeting_id, personal_meetings(account.user_id)
@@ -226,28 +229,7 @@ class MeetingsAccountData:
         """Every transient object the person's runs name, each once."""
         scope = TenancyScope(account.home, account.user_id)
         async with self._transactions.begin(scope, read_only=True) as session:
-            return await _run_keys(session, RunRecord.user_id == account.user_id)
+            return await run_keys(session, RunRecord.user_id == account.user_id)
 
     async def _delete_objects(self, home: Home, keys: list[str]) -> None:
-        """Delete the objects after their rows' commit, then forget them; a failure waits."""
-        if not keys:
-            return
-        await self._objects[home].delete_many(keys)
-        async with self._transactions.begin(TenancyScope(home)) as session:
-            await session.execute(
-                delete(ObjectDeletionRecord).where(ObjectDeletionRecord.object_key.in_(keys))
-            )
-
-
-async def _run_keys(session: AsyncSession, where: ColumnElement[bool]) -> list[str]:
-    """The transient keys named by the runs the predicate picks, each once, in order."""
-    columns = (RunRecord.audio_key, RunRecord.raw_transcript_key, RunRecord.turns_key)
-    rows = (await session.execute(select(*columns).where(where))).all()
-    return sorted({key for row in rows for key in row if key})
-
-
-async def _record_deletions(session: AsyncSession, keys: list[str]) -> None:
-    """Name the keys for deletion in the transaction that removes their rows."""
-    if keys:
-        statement = insert(ObjectDeletionRecord).values([{"object_key": key} for key in keys])
-        await session.execute(statement.on_conflict_do_nothing())
+        await RunObjects(self._transactions, self._objects).delete(home, keys)

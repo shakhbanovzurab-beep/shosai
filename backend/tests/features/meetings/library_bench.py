@@ -24,6 +24,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import AUTHENTICATOR
+from shosai.features.meetings.application.deletion import MeetingDeletion
 from shosai.features.meetings.application.folders import Folders
 from shosai.features.meetings.application.library import MeetingLibrary
 from shosai.features.meetings.application.meeting_content import MeetingContent
@@ -130,6 +131,57 @@ def notes_rows(seed: MeetingSeed, meeting_id: uuid.UUID, run_id: uuid.UUID) -> l
     return [note, *findings]
 
 
+async def seed_meeting(homes: DatabaseAccess, seed: MeetingSeed, home: Home = Home.EU) -> Seeded:
+    """Write a meeting with its lines, people, notes and latest run."""
+    meeting_id, run_id = uuid.uuid4(), uuid.uuid4()
+    ended = seed.started_at + timedelta(seconds=seed.seconds)
+    async with homes.transactions.begin(TenancyScope(home, seed.owner)) as session:
+        session.add(
+            MeetingRecord(
+                id=meeting_id, user_id=seed.owner, title=seed.title, status="completed",
+                started_at=seed.started_at, ended_at=ended, seconds=seed.seconds,
+                folder_id=seed.folder_id, line_count=len(seed.lines), notes_revision=1,
+                latest_run_id=run_id,
+            )
+        )  # fmt: skip
+        await session.flush()
+        session.add(
+            RunRecord(
+                id=run_id, session_id=meeting_id, user_id=seed.owner, source="live",
+                idempotency_key="live", state=seed.run_state,
+                stage_state=stage_state(initial_progress(RunSource.LIVE)),
+            )
+        )  # fmt: skip
+        session.add_all(meeting_children(seed, meeting_id, run_id))
+    return Seeded(home, seed.owner, meeting_id, run_id)
+
+
+def meeting_children(seed: MeetingSeed, meeting_id: uuid.UUID, run_id: uuid.UUID) -> list[Any]:
+    lines = [
+        TranscriptLineRecord(
+            session_id=meeting_id, seq=seq, meeting_started_at=seed.started_at,
+            started_at=seed.started_at + timedelta(seconds=second), start_ms=second * 1000,
+            duration_ms=900, speaker_idx=speaker, text=text,
+        )
+        for seq, (speaker, second, text) in enumerate(seed.lines, 1)
+    ]  # fmt: skip
+    people = [
+        ParticipantRecord(
+            id=uuid.uuid4(), session_id=meeting_id, user_id=seed.owner, name=name,
+            email=email, created_at=seed.started_at + timedelta(seconds=n),
+        )
+        for n, (name, email) in enumerate(seed.participants)
+    ]  # fmt: skip
+    speakers = [
+        SpeakerRecord(
+            id=uuid.uuid4(), session_id=meeting_id, user_id=seed.owner, idx=idx, role=role,
+            talk_ms=talk,
+        )
+        for idx, role, talk in seed.speakers
+    ]  # fmt: skip
+    return [*lines, *people, *speakers, *notes_rows(seed, meeting_id, run_id)]
+
+
 @dataclass
 class LibraryBench:
     """The library's client and the slot's homes."""
@@ -139,52 +191,7 @@ class LibraryBench:
 
     async def seed(self, seed: MeetingSeed, home: Home = Home.EU) -> Seeded:
         """Write a meeting with its lines, people, notes and latest run."""
-        meeting_id, run_id = uuid.uuid4(), uuid.uuid4()
-        ended = seed.started_at + timedelta(seconds=seed.seconds)
-        async with self.homes.transactions.begin(TenancyScope(home, seed.owner)) as session:
-            session.add(
-                MeetingRecord(
-                    id=meeting_id, user_id=seed.owner, title=seed.title, status="completed",
-                    started_at=seed.started_at, ended_at=ended, seconds=seed.seconds,
-                    folder_id=seed.folder_id, line_count=len(seed.lines), notes_revision=1,
-                    latest_run_id=run_id,
-                )
-            )  # fmt: skip
-            await session.flush()
-            session.add(
-                RunRecord(
-                    id=run_id, session_id=meeting_id, user_id=seed.owner, source="live",
-                    idempotency_key="live", state=seed.run_state,
-                    stage_state=stage_state(initial_progress(RunSource.LIVE)),
-                )
-            )  # fmt: skip
-            session.add_all(self._children(seed, meeting_id, run_id))
-        return Seeded(home, seed.owner, meeting_id, run_id)
-
-    def _children(self, seed: MeetingSeed, meeting_id: uuid.UUID, run_id: uuid.UUID) -> list[Any]:
-        lines = [
-            TranscriptLineRecord(
-                session_id=meeting_id, seq=seq, meeting_started_at=seed.started_at,
-                started_at=seed.started_at + timedelta(seconds=second), start_ms=second * 1000,
-                duration_ms=900, speaker_idx=speaker, text=text,
-            )
-            for seq, (speaker, second, text) in enumerate(seed.lines, 1)
-        ]  # fmt: skip
-        people = [
-            ParticipantRecord(
-                id=uuid.uuid4(), session_id=meeting_id, user_id=seed.owner, name=name,
-                email=email, created_at=seed.started_at + timedelta(seconds=n),
-            )
-            for n, (name, email) in enumerate(seed.participants)
-        ]  # fmt: skip
-        speakers = [
-            SpeakerRecord(
-                id=uuid.uuid4(), session_id=meeting_id, user_id=seed.owner, idx=idx, role=role,
-                talk_ms=talk,
-            )
-            for idx, role, talk in seed.speakers
-        ]  # fmt: skip
-        return [*lines, *people, *speakers, *notes_rows(seed, meeting_id, run_id)]
+        return await seed_meeting(self.homes, seed, home)
 
     async def folder(
         self, owner: uuid.UUID, name: str = "Клиенты", home: Home = Home.EU
@@ -219,10 +226,13 @@ def bearer(who: uuid.UUID, home: Home = Home.EU) -> dict[str, str]:
     return {"Authorization": f"Bearer person:{who}:{home.value}"}
 
 
+OUTBOX = EventOutbox(EventTypes([*MEETINGS.events, *WORKSPACES.events]))
+
+
 def library_ports() -> PortDirectory:
     """The test's bearer and workspaces' access policy."""
     ports = PortDirectory()
-    outbox = EventOutbox(EventTypes([*MEETINGS.events, *WORKSPACES.events]))
+    outbox = OUTBOX
     ports.install(
         [
             AUTHENTICATOR.bind(BearerOfTheTest()),
@@ -241,7 +251,10 @@ async def library_bench(homes: DatabaseAccess) -> AsyncIterator[LibraryBench]:
     routers = (
         build_folders_router(Folders(transactions, effects), ports),
         build_templates_router(Templates(transactions, effects), ports),
-        build_meetings_router(MeetingLibrary(transactions, ports), ports),
+        build_meetings_router(
+            (MeetingLibrary(transactions, ports), MeetingDeletion(transactions, (ports, OUTBOX))),
+            ports,
+        ),
         build_meeting_content_router(MeetingContent(transactions, ports), ports),
         build_my_notes_router(
             (MyNotes(transactions, ports), Participants(transactions, ports)), ports

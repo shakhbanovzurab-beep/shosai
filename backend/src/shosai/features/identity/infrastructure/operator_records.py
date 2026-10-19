@@ -24,7 +24,8 @@ from shosai.core.kernel.homes import Home
 # Роли операторов и бан ушли (ADR 0049), но их строки за прошлые месяцы остаются в журнале.
 ACTIONS = (
     "'operator_roles_changed', 'account_blocked', 'account_unblocked', 'account_banned', "
-    "'account_transfer_requested', 'account_transfer_cancelled', 'files_listed', 'file_restored'"
+    "'account_transfer_requested', 'account_transfer_cancelled', 'files_listed', 'file_restored', "
+    "'meetings_listed', 'meeting_restored'"
 )
 
 

@@ -21,6 +21,7 @@ from sqlalchemy import (
     SmallInteger,
     Text,
     Uuid,
+    false,
     func,
     true,
 )
@@ -145,10 +146,14 @@ class TemplateRecord(ModelBase):
 
 
 class SettingsRecord(ModelBase):
-    """A person's meetings setting: whether meetings are kept at all (MT-D6)."""
+    """A person's meetings setting (MT-D6) and whether their account waits for its erasure."""
 
     __tablename__ = "meeting_settings"
 
     user_id: Mapped[UUID] = mapped_column(Uuid, primary_key=True)
     keep_meetings: Mapped[bool] = mapped_column(Boolean, server_default=true())
+    # Окно удаления аккаунта identity (`f2b6d1c9a473`): поддержка не видит и не восстанавливает.
+    account_hidden: Mapped[bool] = mapped_column(Boolean, server_default=false())
+    # Время последнего применённого события окна: старое событие ничего не меняет.
+    account_event_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
