@@ -199,6 +199,17 @@ class MeetingLibrary:
             await session.flush()
             return await self._view(session, principal, meeting_id)
 
+    async def file_in(
+        self, session: AsyncSession, principal: Principal, meeting_id: UUID, folder_id: UUID | None
+    ) -> MeetingRecord:
+        """File the person's own meeting, in the caller's transaction (Leo's write tool)."""
+        meeting, manageable = await self._read(session, principal, meeting_id, lock=True)
+        if not manageable:
+            raise MeetingReadOnlyError
+        await self._file(session, principal, meeting, folder_id)
+        meeting.updated_at = self._clock()
+        return meeting
+
     async def _file(
         self,
         session: AsyncSession,

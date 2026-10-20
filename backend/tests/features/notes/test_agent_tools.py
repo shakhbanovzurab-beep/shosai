@@ -15,7 +15,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.notes.channels.agent_tool_reads import MeetingReads
 from shosai.features.notes.channels.agent_tools import (
-    NOTES_TOOLS,
+    READ_TOOLS,
     TRANSCRIPT_BUDGET,
     ListFindings,
     MeetingId,
@@ -46,12 +46,12 @@ def context(person: uuid.UUID) -> ToolContext:
 
 
 def test_every_meetings_tool_labels_its_result_as_meeting_speech() -> None:
-    assert {spec.name: spec.provenance for spec in NOTES_TOOLS} == {
+    assert {spec.name: spec.provenance for spec in READ_TOOLS} == {
         "notes.search": Provenance.MEETING_SPEECH, "notes.get": Provenance.MEETING_SPEECH,
         "notes.read_transcript": Provenance.MEETING_SPEECH,
         "notes.list_findings": Provenance.MEETING_SPEECH,
     }  # fmt: skip
-    assert {spec.toolset for spec in NOTES_TOOLS} == {"notes"}
+    assert {spec.toolset for spec in READ_TOOLS} == {"notes"}
 
 
 @pytest.mark.isolation(resource="meeting")

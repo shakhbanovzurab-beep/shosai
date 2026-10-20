@@ -18,7 +18,9 @@
 - 13: the share link and its public page and comments (`channels/http/shared.py`);
 - 14: Leo's four read tools over the meetings a person may read (`channels/agent_tools.py`).
 - 15a: identity's deletion window serves an account's meetings to nobody, and the readers
-  other slices use (`application/meeting_reader.py`).
+  other slices use (`application/meeting_reader.py`);
+- 16: Leo's four write tools — a folder, a new write-up, the share link on and off
+  (`channels/agent_write_tools.py`).
 
 The folders' and templates' routes come before `/v1/notes/{meeting_id}`: the first match
 wins, and `folders` is no meeting's id.
@@ -33,7 +35,9 @@ from contextlib import asynccontextmanager
 from fastapi import APIRouter
 
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
+from shosai.core.agent_tools.bindings import AgentTool
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
+from shosai.core.idempotency.action_items import ActionItems
 from shosai.features.billing.contracts import MEETING_MINUTES
 from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 from shosai.features.notes.application.account_data import ACCOUNT_DATA, NotesAccountData
@@ -65,8 +69,11 @@ from shosai.features.notes.application.support_meetings import SupportMeetings
 from shosai.features.notes.application.sweeps import MeetingSweeps
 from shosai.features.notes.application.templates import Templates
 from shosai.features.notes.application.write_up_rewrites import WriteUpRewrites
+from shosai.features.notes.channels.agent_link_writes import LinkWrites
 from shosai.features.notes.channels.agent_tool_reads import MeetingReads
-from shosai.features.notes.channels.agent_tools import NOTES_TOOLS
+from shosai.features.notes.channels.agent_tool_writes import NoteWrites, WriteSteps
+from shosai.features.notes.channels.agent_tools import READ_TOOLS
+from shosai.features.notes.channels.agent_write_tools import WRITE_TOOLS
 from shosai.features.notes.channels.http.admin_meetings import build_admin_meetings_router
 from shosai.features.notes.channels.http.folders import build_folders_router
 from shosai.features.notes.channels.http.imports import build_imports_router
@@ -178,6 +185,18 @@ def http_routers(
     )
 
 
+def agent_tools(services: CoreServices, engine: PipelineEngine) -> tuple[AgentTool, ...]:
+    """Leo's four reads and four writes; a write runs once per item key (`ActionItems`)."""
+    transactions, ports = services.transactions, services.ports
+    steps = WriteSteps(transactions, (ports, ActionItems(services.effects, services.outbox)))
+    rewrites = WriteUpRewrites(transactions, (ports, services.effects, engine))
+    return (
+        *MeetingReads(transactions, ports).bound(),
+        *NoteWrites(steps, (MeetingLibrary(transactions, ports), rewrites)).bound(),
+        *LinkWrites(steps, ShareLinks(transactions, ports)).bound(),
+    )
+
+
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """The lifecycle, the pipeline and their routes, billing's count and the account data."""
@@ -203,7 +222,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         yield FeatureParts(
             http_routers=http_routers(services, (lifecycle, engine), (PartLinks(http), *extras)),
             task_handlers=task_handlers((sweeps, hidden), (engine, recovery)),
-            agent_tools=MeetingReads(transactions, ports).bound(),
+            agent_tools=agent_tools(services, engine),
             subscriptions=subscriptions(),
             periodic_jobs=PERIODIC_JOBS,
             provides=(
@@ -227,7 +246,7 @@ NOTES = FeatureModule(
     objectives=NOTES_OBJECTIVES,
     monitors=NOTES_MONITORS,
     shareable=(MEETING_RESOURCE,),
-    agent_tools=NOTES_TOOLS,
+    agent_tools=(*READ_TOOLS, *WRITE_TOOLS),
     models=(
         FolderRecord,
         TemplateRecord,

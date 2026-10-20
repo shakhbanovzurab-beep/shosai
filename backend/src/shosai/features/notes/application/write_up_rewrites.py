@@ -28,6 +28,7 @@ from shosai.core.idempotency.ledger import (
     fingerprint_of,
 )
 from shosai.core.kernel.errors import AppError
+from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal
 from shosai.features.notes.application.lifecycle import RunStarter
@@ -92,33 +93,47 @@ class WriteUpRewrites:
         """Start the rewrite once per key; the run's id, also for a retry."""
         key = account_key(principal.user_id, client_key)
         effect = EffectKey(REWRITES, key, fingerprint_of(request))
-        policy = self._ports.get(ACCESS_POLICY)
-        # Свой шаблон читается в личном скоупе, а встреча компании меняется в скоупе компании.
-        async with self._transactions.begin(principal.scope(), read_only=True) as session:
-            layout = await layout_of(session, request.template_id)
-            if layout is None:
-                raise TemplateNotFoundError
-            scope = await meeting_scope(session, policy, principal.scope(), request.meeting_id)
+        scope, layout = await self.prepare(principal, request)
         async with self._transactions.begin(scope) as session:
             outcome = await self._effects.once(
                 session,
                 effect,
                 RewriteAccepted,
-                lambda: self._start(session, principal, (request, layout), key),
+                lambda: self.start_in(session, principal, (request, layout), key),
             )
-        run_id = outcome.outcome.run_id
         if not outcome.replayed:
-            await self._starter.kick(scope, run_id, Stage.WRITE_UP)
-            log.info("Запись встречи переписывается", meeting_id=str(request.meeting_id))
-        return run_id
+            await self.kick(scope, request.meeting_id, outcome.outcome.run_id)
+        return outcome.outcome.run_id
 
-    async def _start(
+    async def prepare(
+        self, principal: Principal, request: RewriteRequest
+    ) -> tuple[TenancyScope, tuple[SectionPlan, ...]]:
+        """The scope the meeting changes in and the template's layout.
+
+        A person's own template is read in their scope, and a company's meeting changes in
+        the company's: both are read here, before the meeting's transaction.
+        """
+        policy = self._ports.get(ACCESS_POLICY)
+        async with self._transactions.begin(principal.scope(), read_only=True) as session:
+            layout = await layout_of(session, request.template_id)
+            if layout is None:
+                raise TemplateNotFoundError
+            scope = await meeting_scope(session, policy, principal.scope(), request.meeting_id)
+        return scope, layout
+
+    async def kick(self, scope: TenancyScope, meeting_id: UUID, run_id: UUID) -> None:
+        """Send the started rewrite's stage, after its transaction committed."""
+        await self._starter.kick(scope, run_id, Stage.WRITE_UP)
+        log.info("Запись встречи переписывается", meeting_id=str(meeting_id))
+
+    async def start_in(
         self,
         session: AsyncSession,
         principal: Principal,
         asked: tuple[RewriteRequest, tuple[SectionPlan, ...]],
         key: str,
     ) -> RewriteAccepted:
+        """The rewrite's run, in the caller's transaction of the meeting's scope."""
         request, layout = asked
         policy = self._ports.get(ACCESS_POLICY)
         meeting = await session.scalar(

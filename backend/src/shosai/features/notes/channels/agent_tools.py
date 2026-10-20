@@ -199,4 +199,4 @@ LIST_FINDINGS: Final = ToolSpec(
     input=ListFindings, output=MeetingFindings, effect=ToolEffect.READ,
     result_budget=3_000, timeout=timedelta(seconds=5), provenance=Provenance.MEETING_SPEECH,
 )  # fmt: skip
-NOTES_TOOLS: Final = (SEARCH, GET, READ_TRANSCRIPT, LIST_FINDINGS)
+READ_TOOLS: Final = (SEARCH, GET, READ_TRANSCRIPT, LIST_FINDINGS)
