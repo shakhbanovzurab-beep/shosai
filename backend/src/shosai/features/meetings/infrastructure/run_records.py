@@ -51,6 +51,7 @@ class RunRecord(ModelBase):
         ),
         CheckConstraint("length(error_code) BETWEEN 1 AND 64", name="error_code_length"),
         CheckConstraint("layout IS NULL OR jsonb_typeof(layout) = 'object'", name="layout_object"),
+        CheckConstraint("length(source_filename) BETWEEN 1 AND 512", name="source_filename_length"),
         Index("uq_meeting_processing_runs_key", "session_id", "idempotency_key", unique=True),
         Index("ix_meeting_processing_runs_user", "user_id"),
         Index(
@@ -84,6 +85,8 @@ class RunRecord(ModelBase):
     audio_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     raw_transcript_key: Mapped[str | None] = mapped_column(Text)
     turns_key: Mapped[str | None] = mapped_column(Text)
+    # Имя файла импорта, как его прислали: его показывает задача импорта нативных клиентов.
+    source_filename: Mapped[str | None] = mapped_column(Text)
     error_code: Mapped[str | None] = mapped_column(Text)
     # Раскладка, которую человек выбрал для переписывания: шаблон и его секции на момент запроса.
     layout: Mapped[dict[str, Any] | None] = mapped_column(JSONB(none_as_null=True))

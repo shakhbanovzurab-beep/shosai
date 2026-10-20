@@ -91,3 +91,12 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/transcribe_stage.py` — pauses found, parts cut to Opus, at most four asked at once under `meetings:{run}:transcribe:{n}`, segments moved by their part's start, the raw transcript kept for 72 hours (O4, `transient/transcript/{run}.json`), the lines written once per run with fresh `seq`s.
 - `application/scratch.py` — the stage's scratch directory, the object streamed into it, removed whatever the end.
 - `stage_wiring.py` — a process runs the intake and transcribe stages only with `MEETINGS_TRANSCRIBE_MODEL` and the tools on its path.
+
+## The native import (step 9b)
+
+- `channels/http/native_import.py` — `POST /v1/me/sessions/import` (multipart `file`, 202 `{jobId}`, ten a minute per person) and `GET /v1/me/sessions/import/{job_id}` (`{id, fileName, stage, progress, meetingId, error}`) in the draft's shapes; the refusals keep the draft's order and `detail`: 422 `import_unavailable_no_logs`, 402 `minutes_exhausted`, 422 `unsupported_audio_format`, 422 `empty_file`, 413 `file_too_large`.
+- `channels/http/form_stream.py` — the body parsed as it arrives (python-multipart): the file field's headers, then its bytes; the rest drained before a refusal is answered; a client gone mid-body is 400 `request_incomplete` with its upload aborted.
+- `application/native_imports.py` — the refusals before any row, the file streamed to `transient/import/{id}` in parts of 5 MiB (at most sixteen at once per process, 503 `imports_busy` after ten seconds' wait), then the meeting and its run (`application/import_rows.py`, shared with the cabinet's import); the object goes when the rows cannot be written.
+- `application/import_jobs.py`, `domain/native_import.py` — the job is the person's own import run: `uploading`, `transcribing`, `enhancing`, `ready`, `failed`, with the share of its stages finished, both only growing; `channels/http/native_import_texts.py` words a failure in the person's language.
+- Revision `a8f5b3482221` adds `meeting_processing_runs.source_filename`, the name the file came with.
+

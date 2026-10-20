@@ -4,7 +4,9 @@
 every 30, so its cut has two parts ending in a pause; `seven_hours` is 2 seconds of sound
 whose header claims 7 hours, as a hostile or broken file may. `upload` writes a person's ready
 recording upload the way files leaves one — its row and its object under `transient/` —
-so the import claims it through files' own claim. The AI port is the real one over a
+so the import claims it through files' own claim. The native import (step 9b) streams to
+the same buckets, rate-limited over the slot's Valkey; `languages` is each person's
+language as identity's profile gives it. The AI port is the real one over a
 scripted OpenRouter; the pipeline's engine runs the intake and transcribe stages.
 """
 
@@ -14,7 +16,7 @@ import struct
 import subprocess  # nosec B404 — ffmpeg с постоянными аргументами готовит запись теста
 import uuid
 from collections.abc import AsyncIterator, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Final
@@ -22,24 +24,37 @@ from typing import Final
 import httpx
 import pytest
 import pytest_asyncio
+from fastapi import FastAPI
 from prometheus_client import CollectorRegistry
+from redis.asyncio import Redis
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ai.calls import ModelRef, ModelRoute, Provider
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.kv.metrics import KeyValueMetrics
+from shosai.core.kv.rate_limits import RateLimiter
 from shosai.core.ports.directory import PortDirectory
-from shosai.core.storage.port import ObjectStorage
+from shosai.core.storage.port import MultipartUploads, ObjectStorage
 from shosai.features.billing.application.minutes import MinutesMeter
 from shosai.features.billing.contracts import MINUTES_ALLOWANCE
 from shosai.features.files.application.upload_claims import UploadClaims
 from shosai.features.files.contracts import UPLOADS
 from shosai.features.files.infrastructure.upload_records import UploadRecord
-from shosai.features.identity.contracts import AUTHENTICATOR, CONSENT_READER
+from shosai.features.identity.contracts import (
+    ACCOUNT_PROFILE_READER,
+    AUTHENTICATOR,
+    CONSENT_READER,
+    AccountProfile,
+)
+from shosai.features.meetings.application.import_jobs import ImportJobs
 from shosai.features.meetings.application.imports import RecordingImports
 from shosai.features.meetings.application.intake_stage import IntakeStage
+from shosai.features.meetings.application.native_imports import NativeImports
 from shosai.features.meetings.application.pipeline import PipelineEngine, StageHandler
 from shosai.features.meetings.application.transcribe_stage import TranscribeStage
 from shosai.features.meetings.channels.http.imports import build_imports_router
+from shosai.features.meetings.channels.http.native_import import build_native_import_router
 from shosai.features.meetings.domain.runs import Stage
 from shosai.features.meetings.infrastructure.media_tools import MediaLimits, MediaTools
 from shosai.features.meetings.infrastructure.pipeline_metrics import PipelineMetrics
@@ -133,6 +148,8 @@ class RecordingBench:
     storage: Mapping[Home, ObjectStorage]
     minutes: MinutesMeter
     clock: Clock
+    languages: Languages
+    app: FastAPI
 
     async def upload(self, owner: uuid.UUID, path: Path, content_type: str) -> uuid.UUID:
         """A ready recording upload of the person's, as files leaves one."""
@@ -164,6 +181,18 @@ class RecordingBench:
         return ran
 
 
+@dataclass
+class Languages:
+    """Each person's language, as identity's profile reader gives it; English by default."""
+
+    by_person: dict[uuid.UUID, str] = field(default_factory=dict)
+
+    async def profile(self, session: AsyncSession, user_id: uuid.UUID) -> AccountProfile | None:
+        """The person's profile in their language."""
+        del session
+        return AccountProfile("Person", self.by_person.get(user_id, "en"), None)
+
+
 def stages(
     homes: DatabaseAccess,
     collaborators: tuple[PortDirectory, Mapping[Home, ObjectStorage]],
@@ -183,14 +212,14 @@ def stages(
 
 @pytest_asyncio.fixture
 async def recording_bench(
-    entitlements: EntitlementBench, buckets: Mapping[Home, SlotBucket]
+    entitlements: EntitlementBench, buckets: Mapping[Home, SlotBucket], valkey: Redis
 ) -> AsyncIterator[RecordingBench]:
     """Imports of recordings over the slot's homes and buckets."""
     homes, clock = entitlements.homes, entitlements.clock
     await set_prices(homes.transactions, TRANSCRIBE_MODEL, audio_second="0.0000075")
     await set_rate(homes.transactions, "92.5000")
     providers = ai_bench(homes.transactions, doubles=Doubles())
-    ports, sent = PortDirectory(), Sent()
+    ports, sent, languages = PortDirectory(), Sent(), Languages()
     minutes = MinutesMeter(homes.transactions, (entitlements.snapshots, ports), clock)
     ports.install(
         [
@@ -199,11 +228,12 @@ async def recording_bench(
             UPLOADS.bind(UploadClaims()),
             MINUTES_ALLOWANCE.bind(minutes),
             CONSENT_READER.bind(Consents()),
+            ACCOUNT_PROFILE_READER.bind(languages),
         ]
     )
-    storage: dict[Home, ObjectStorage] = {
-        home: slot_storage(bucket).objects for home, bucket in buckets.items()
-    }
+    slots = {home: slot_storage(bucket) for home, bucket in buckets.items()}
+    storage: dict[Home, ObjectStorage] = {home: slot.objects for home, slot in slots.items()}
+    uploads: dict[Home, MultipartUploads] = {home: slot.uploads for home, slot in slots.items()}
     handlers = stages(homes, (ports, storage), providers)
     engine = PipelineEngine(
         homes.transactions, (sent, PipelineMetrics(CollectorRegistry()), handlers), clock
@@ -211,5 +241,16 @@ async def recording_bench(
     router = build_imports_router(
         RecordingImports(homes.transactions, (ports, engine), clock), ports
     )
-    async with client_of(build_probe_app(extra=(router,)).app) as http:
-        yield RecordingBench(http, homes, engine, sent, providers, storage, minutes, clock)
+    native = build_native_import_router(
+        (
+            NativeImports(homes.transactions, (ports, engine), (uploads, storage), clock),
+            ImportJobs(homes.transactions, ports),
+        ),
+        ports,
+        RateLimiter(valkey, KeyValueMetrics(CollectorRegistry())),
+    )
+    app = build_probe_app(extra=(native, router)).app
+    async with client_of(app) as http:
+        yield RecordingBench(
+            http, homes, engine, sent, providers, storage, minutes, clock, languages, app
+        )

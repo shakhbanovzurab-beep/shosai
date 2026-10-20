@@ -161,6 +161,24 @@ server {
         proxy_read_timeout 30s;
     }
 
+    # Нативный импорт записи (meetings шаг 9b): тело до 25 МиБ идёт в API потоком, без буфера
+    # edge, — буфер отвечал клиентам 408 (2adfda623). Тело не повторить, поэтому без повтора;
+    # ответ ждётся до 60 с: после последнего байта API дописывает объект в бакет.
+    location = /v1/me/sessions/import {
+        otel_trace $shosai_otel_trace;
+        otel_trace_context inject;
+        proxy_pass http://shosai_api;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        include /etc/nginx/shosai/proxy-headers.conf;
+        proxy_connect_timeout 2s;
+        proxy_read_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_request_buffering off;
+        proxy_next_upstream off;
+        client_max_body_size 32m;
+    }
+
     # API: подключение 2 с, ответ 30 с, один повтор только для идемпотентных методов (§4.3).
     # Часть записи встречи — до 32 МБ: слайс встреч задаёт размер части не больше.
     location /v1/ {

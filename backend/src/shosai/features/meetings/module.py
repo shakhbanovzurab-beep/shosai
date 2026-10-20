@@ -10,7 +10,8 @@
 - 7b: each person's own notes, participants, the template choice, folders and templates;
 - 8: the deletion, the purge after 7 days, support's list and restore, the native rename and
   deletion, and identity's deletion window;
-- 9a: the import of recordings with its intake and transcribe stages (`stage_wiring.py`).
+- 9a: the import of recordings with its intake and transcribe stages (`stage_wiring.py`);
+- 9b: the native import streamed to the bucket and its job (`channels/http/native_import.py`).
 
 The folders' and templates' routes come before `/v1/meetings/{meeting_id}`: the first match
 wins, and `folders` is no meeting's id.
@@ -31,6 +32,7 @@ from shosai.features.meetings.application.account_data import ACCOUNT_DATA, Meet
 from shosai.features.meetings.application.deletion import MeetingDeletion
 from shosai.features.meetings.application.folders import Folders
 from shosai.features.meetings.application.hidden_meetings import HiddenMeetings
+from shosai.features.meetings.application.import_jobs import ImportJobs
 from shosai.features.meetings.application.imports import RecordingImports
 from shosai.features.meetings.application.library import MeetingLibrary
 from shosai.features.meetings.application.lifecycle import MeetingLifecycle
@@ -39,6 +41,7 @@ from shosai.features.meetings.application.live_transcript import LiveTranscript
 from shosai.features.meetings.application.meeting_content import MeetingContent
 from shosai.features.meetings.application.minutes import MeetingMinutesCount
 from shosai.features.meetings.application.my_notes import MyNotes
+from shosai.features.meetings.application.native_imports import NativeImports
 from shosai.features.meetings.application.participants import Participants
 from shosai.features.meetings.application.pipeline import PipelineEngine
 from shosai.features.meetings.application.run_recovery import RunRecovery
@@ -53,6 +56,7 @@ from shosai.features.meetings.channels.http.imports import build_imports_router
 from shosai.features.meetings.channels.http.meeting_content import build_meeting_content_router
 from shosai.features.meetings.channels.http.meetings import build_meetings_router
 from shosai.features.meetings.channels.http.my_notes import build_my_notes_router
+from shosai.features.meetings.channels.http.native_import import build_native_import_router
 from shosai.features.meetings.channels.http.native_me_sessions import (
     build_native_me_sessions_router,
 )
@@ -101,7 +105,8 @@ from shosai.features.meetings.stage_wiring import pipeline_stages
 def http_routers(
     services: CoreServices, pipeline: tuple[MeetingLifecycle, PipelineEngine]
 ) -> tuple[APIRouter, ...]:
-    """Meetings' routes; the folders' and templates' come before `/v1/meetings/{meeting_id}`."""
+    """Meetings' routes; the folders' and templates' come before `/v1/meetings/{meeting_id}`,
+    the native import's before `/v1/me/sessions/{session_id}`."""
     transactions, ports = services.transactions, services.ports
     lifecycle, engine = pipeline
     library = MeetingLibrary(transactions, ports)
@@ -109,10 +114,16 @@ def http_routers(
     rewrites = WriteUpRewrites(transactions, (ports, services.effects, engine))
     support = SupportMeetings(transactions, (ports, services.outbox))
     imports = RecordingImports(transactions, (ports, engine))
+    native_imports = NativeImports(
+        transactions, (ports, engine), (services.uploads, services.objects)
+    )
     return (
         build_folders_router(Folders(transactions, services.effects), ports),
         build_templates_router(Templates(transactions, services.effects), ports),
         build_native_sessions_router(lifecycle, ports),
+        build_native_import_router(
+            (native_imports, ImportJobs(transactions, ports)), ports, services.rate_limiter
+        ),
         build_native_me_sessions_router((library, deletion), ports),
         build_runs_router((lifecycle, RunViews(transactions, ports)), ports),
         build_write_up_router(rewrites, ports, services.rate_limiter),

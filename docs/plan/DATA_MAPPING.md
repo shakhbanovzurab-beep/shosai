@@ -631,6 +631,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 #### `meeting_import_jobs` → no v2 table · **dropped**
 
 - Folded into runs (meetings plan MT-D7): the native import job answers from its run; a job unfinished at `T0` follows its run (T-3).
+- `file_name` → `meeting_processing_runs.source_filename` of the job's run (meetings step 9b, revision `a8f5b3482221`), at most 512 characters; the job's `id` is the run's.
 
 #### `prompt_executions` → no v2 table · **dropped**
 

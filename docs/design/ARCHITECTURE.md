@@ -655,6 +655,8 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | google-genai | 2.30.1 | Gemini Live client |
 | Backend | aiosmtplib | 5.1.3 | SMTP client of the mail relay: implicit TLS or STARTTLS with certificate checks, one login per mailbox |
 | Backend | Jinja2 | 3.1.6 | Mail templates: HTML with autoescape and a plain-text part from one body, strict undefined values |
+| Backend | python-multipart | 0.0.32 | The native import's `multipart/form-data` body parsed as it arrives, streamed to the bucket without a disk copy (meetings step 9b) |
+| Backend | FFmpeg (`ffmpeg`, `ffprobe`), Debian packages of the runtime image | 7.1.5 | Recordings read, measured and cut as subprocesses under `prlimit`, without network, on allowed formats (meetings MT-D10) |
 | Backend | aiobotocore | 3.9.2 | S3 client; one per home's bucket ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)); replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |
 | Backend | Own HTTP metric on prometheus-client, recorded by the request boundary under OpenTelemetry's HTTP semantic conventions | 0.26.0 | RED metrics per route template; replaces prometheus-fastapi-instrumentator, which matched every request against the whole route table a second time and let a raw path and a client's method into labels ([ADR 0012](../adr/0012-http-metrics-in-the-request-boundary.md)) |

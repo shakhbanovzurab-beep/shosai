@@ -5030,6 +5030,135 @@
         }
       }
     },
+    "/v1/me/sessions/import": {
+      "post": {
+        "tags": [
+          "native"
+        ],
+        "summary": "Import My Recording",
+        "description": "Send a recording to become a meeting; poll its job.",
+        "operationId": "import_my_recording_v1_me_sessions_import_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportAccepted"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "contentMediaType": "application/octet-stream"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/me/sessions/import/{job_id}": {
+      "get": {
+        "tags": [
+          "native"
+        ],
+        "summary": "Get My Import Job",
+        "description": "The import's stage, progress, meeting and failure.",
+        "operationId": "get_my_import_job_v1_me_sessions_import__job_id__get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportJobView"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/me/sessions/{session_id}": {
       "patch": {
         "tags": [
@@ -8444,6 +8573,20 @@
         "title": "Home",
         "description": "A data home: a separate PostgreSQL cluster in its own jurisdiction.\n\nThe value is the short code carried by the access token and by task payloads.\nThe directory and data without an owner live in the EU home (ADR 0005, ADR 0010).\nEach home has its own bucket; the home is not part of an object key: an object lives\nin the bucket of its pointer's home (ADR 0044)."
       },
+      "ImportAccepted": {
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "title": "Jobid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "jobId"
+        ],
+        "title": "ImportAccepted",
+        "description": "The import's job, to poll."
+      },
       "ImportIn": {
         "properties": {
           "upload_id": {
@@ -8459,6 +8602,61 @@
         ],
         "title": "ImportIn",
         "description": "The upload to turn into a meeting."
+      },
+      "ImportJobView": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "fileName": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "stage": {
+            "$ref": "#/components/schemas/JobStage"
+          },
+          "progress": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Progress"
+          },
+          "meetingId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meetingid"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "fileName",
+          "stage",
+          "progress",
+          "meetingId",
+          "error"
+        ],
+        "title": "ImportJobView",
+        "description": "An import's job as the 1.4.5 clients decode it."
       },
       "ImportStarted": {
         "properties": {
@@ -8522,6 +8720,18 @@
         ],
         "title": "InvalidField",
         "description": "Where a request failed validation and why; the submitted value is never echoed."
+      },
+      "JobStage": {
+        "type": "string",
+        "enum": [
+          "uploading",
+          "transcribing",
+          "enhancing",
+          "ready",
+          "failed"
+        ],
+        "title": "JobStage",
+        "description": "An import job's stage, as the shipped clients decode it."
       },
       "LeoUseOut": {
         "properties": {

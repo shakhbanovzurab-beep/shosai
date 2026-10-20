@@ -1416,6 +1416,46 @@ export interface paths {
         patch: operations["update_session_v1_sessions__session_id__patch"];
         trace?: never;
     };
+    "/v1/me/sessions/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Import My Recording
+         * @description Send a recording to become a meeting; poll its job.
+         */
+        post: operations["import_my_recording_v1_me_sessions_import_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/sessions/import/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get My Import Job
+         * @description The import's stage, progress, meeting and failure.
+         */
+        get: operations["get_my_import_job_v1_me_sessions_import__job_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/me/sessions/{session_id}": {
         parameters: {
             query?: never;
@@ -2598,6 +2638,14 @@ export interface components {
          */
         Home: "ru" | "eu";
         /**
+         * ImportAccepted
+         * @description The import's job, to poll.
+         */
+        ImportAccepted: {
+            /** Jobid */
+            jobId: string;
+        };
+        /**
          * ImportIn
          * @description The upload to turn into a meeting.
          */
@@ -2607,6 +2655,23 @@ export interface components {
              * Format: uuid
              */
             upload_id: string;
+        };
+        /**
+         * ImportJobView
+         * @description An import's job as the 1.4.5 clients decode it.
+         */
+        ImportJobView: {
+            /** Id */
+            id: string;
+            /** Filename */
+            fileName: string;
+            stage: components["schemas"]["JobStage"];
+            /** Progress */
+            progress: number;
+            /** Meetingid */
+            meetingId: string | null;
+            /** Error */
+            error: string | null;
         };
         /**
          * ImportStarted
@@ -2640,6 +2705,12 @@ export interface components {
             /** Type */
             type: string;
         };
+        /**
+         * JobStage
+         * @description An import job's stage, as the shipped clients decode it.
+         * @enum {string}
+         */
+        JobStage: "uploading" | "transcribing" | "enhancing" | "ready" | "failed";
         /**
          * LeoUseOut
          * @description How Leo uses a file and how far its indexing got.
@@ -7218,6 +7289,76 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SessionResponse"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    import_my_recording_v1_me_sessions_import_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportAccepted"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_my_import_job_v1_me_sessions_import__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportJobView"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
