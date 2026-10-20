@@ -86,16 +86,6 @@ COPIED = (
 )
 # Как SMTP_TLS_MODE черновика называется в SMTP_SECURITY.
 SMTP_SECURITY = {"ssl": "tls", "tls": "tls", "starttls": "starttls"}
-# Переход на имена NOTES_* (ADR 0057): на один релиз пишутся и прежние имена с теми же
-# значениями, чтобы прежние образы стартовали после перезагрузки хоста и при
-# `release.sh rollback`. Убираются отдельным коммитом, когда новый релиз здоров.
-RENAMED_SETTINGS = {
-    "NOTES_MODEL": "MEETINGS_NOTES_MODEL",
-    "NOTES_FALLBACK_MODEL": "MEETINGS_NOTES_FALLBACK_MODEL",
-    "NOTES_TRANSCRIBE_MODEL": "MEETINGS_TRANSCRIBE_MODEL",
-    "NOTES_TRANSCRIBE_FALLBACK_MODEL": "MEETINGS_TRANSCRIBE_FALLBACK_MODEL",
-    "NOTES_DIARIZE_MODEL": "MEETINGS_DIARIZE_MODEL",
-}
 
 
 def read_env(path: Path) -> dict[str, str]:
@@ -205,7 +195,6 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
             source[f"HOME_{home}_APP_USER"], source[f"HOME_{home}_APP_PASSWORD"],
             f"pgbouncer-{home.lower()}", "6432", INTERNAL_CA,
         )  # fmt: skip
-    env |= {former: env[current] for current, former in RENAMED_SETTINGS.items() if current in env}
     return env
 
 

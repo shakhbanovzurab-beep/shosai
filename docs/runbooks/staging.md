@@ -51,6 +51,21 @@ cd /srv/shosai && sudo -u deploy docker compose up -d
 
 Compose recreates the services whose environment changed. The cabinet's build variables (`VITE_*`) are compiled into the edge image: change `CABINET_ENV` in the GitHub environment `staging`, then release again.
 
+## Rename a setting
+
+A release whose code reads a setting under a new name must not leave the previous images without the old one: they start again after a host reboot and on `release.sh rollback`. The rename therefore spans two commits (first used for `MEETINGS_*` → `NOTES_*`, ADR 0057):
+
+1. **The rename commit.** The code and `.env.example` use the new name; `render-env.py` writes both names with the same value, through a map from the new name to the old one. Before pushing, render the environment without recreating any service — the running containers keep the environment they were created with, and the release recreates them with the new file:
+
+   ```bash
+   python3 /root/shosai/deploy/staging/render-env.py /root/shosai/.env /srv/shosai
+   ```
+
+   Do not run `docker compose up -d` here: the current images would be recreated against a file they were not released with. Push, then wait for CI and the release.
+2. **The clean-up commit, once that release is healthy.** Remove the old names from `render-env.py` and push. Render the environment again only after this second release: until then the rollback target is still the images from before the rename, which need the old names. From then on `release.sh rollback` returns to the release that reads the new names.
+
+If the owner set the old name in `/root/shosai/.env`, rename it there before the first render (check the key names only: `grep -o '^OLD_PREFIX_[A-Z_]*' /root/shosai/.env`).
+
 ## Replace the deploy key
 
 ```bash
