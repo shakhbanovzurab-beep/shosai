@@ -27,6 +27,7 @@
     "today": "Hôm nay",
     "yesterday": "Hôm qua",
     "empty": "Chưa có ghi chú nào",
-    "emptyHint": "Ghi chú từ các cuộc họp của bạn sẽ xuất hiện ở đây."
+    "emptyHint": "Ghi chú từ các cuộc họp của bạn sẽ xuất hiện ở đây.",
+    "loadFailed": "Không thể tải các ghi chú gần đây."
   }
 }

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { PartFailedError, type UploadAnswer } from "../api/uploads-api";
-import type { PartLink } from "../domain/upload-parts";
-import { type UploadPorts, UploadRejectedError, uploadFile } from "./uploads";
+import { type UploadPorts, UploadRejectedError, uploadFile } from "./upload-file";
+import type { PartLink } from "./upload-parts";
+import { PartFailedError, type UploadAnswer } from "./uploads-api";
 
 const SIZES = [16, 16, 5];
 

@@ -4,10 +4,10 @@ import { Progress } from "@/components/ui/progress";
 
 import { formatTimestamp } from "../domain/format";
 import { speakerStats } from "../domain/speaker-stats";
-import type { MeetingNote } from "../domain/types";
+import type { TranscriptDocument } from "../domain/types";
 
 /** Who spoke: each speaker's share of the talk time, how long that was and how many lines. */
-export function SpeakerStats({ note }: { readonly note: Pick<MeetingNote, "transcript" | "durationMinutes"> }) {
+export function SpeakerStats({ note }: { readonly note: Pick<TranscriptDocument, "transcript" | "durationMinutes"> }) {
   const t = useTranslations("notesNote");
   const format = useFormatter();
   const stats = speakerStats(note);

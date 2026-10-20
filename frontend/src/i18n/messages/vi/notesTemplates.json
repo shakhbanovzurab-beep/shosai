@@ -109,5 +109,6 @@
     "heading": "Tiêu đề cho {section}",
     "sectionsRequired": "Hãy giữ lại ít nhất một phần.",
     "create": "Tạo mẫu"
-  }
+  },
+  "rewriteFailed": "Leo không thể viết lại ghi chú. Hãy thử lại."
 }

@@ -67,6 +67,11 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `domain/reading.py` — the notes' state, who may file a meeting, the map as nodes.
 - `channels/http/meetings.py`, `channels/http/meeting_content.py`, `channels/http/meeting_models.py` — the routes and their snake_case shapes.
 
+## The cabinet's library counts (steps 17–18)
+
+- `application/library_counts.py` — `GET /v1/notes/counts` for the folder pills while the library pages by cursor: every meeting the person may read, through `visible_meetings`, and their own personal meetings per folder, in two statements in one read-only transaction.
+- `channels/http/counts.py` — the route, registered before `/v1/notes/{meeting_id}`.
+
 ## Own notes, participants, folders and templates (step 7b)
 
 - `application/my_notes.py` — each reader's own notes on a meeting (MT-D12): `meeting_own_notes`, one row per meeting and person with row-level security by writer; nobody reads another's, the owner included; empty before a person writes; last write wins, the version grows in the same upsert.

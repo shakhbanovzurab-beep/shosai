@@ -30,15 +30,14 @@
     "dropHint": "mp3, m4a, wav, mp4, webm und mehr · bis {size}",
     "notMedia": "{name} ist keine Audio- oder Videodatei",
     "tooLarge": "{name} ist zu groß",
-    "sizeLimit": "Aufnahmen dürfen bis zu {size} groß sein."
+    "sizeLimit": "Aufnahmen dürfen bis zu {size} groß sein.",
+    "failed": "„{name}“ konnte nicht hochgeladen werden"
   },
   "recordings": {
     "uploading": "Wird hochgeladen",
     "justNow": "Gerade eben",
-    "transcribing": "Wird transkribiert",
     "transcribingNow": "Wird transkribiert…",
-    "waiting": "Wartet auf Transkription…",
-    "timelineStatus": "Wird transkribiert… Notizen, Entscheidungen und eine Mindmap erscheinen hier, sobald es fertig ist."
+    "uploadingShare": "Wird hochgeladen… {share}"
   },
   "remove": "{name} entfernen",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "Neuestes Meeting",
     "keyPoints": "Kernpunkte",
     "openNotes": "Notizen öffnen",
-    "openItems": "{count, plural, one {# offen} other {# offen}}"
+    "openItems": "{count, plural, one {# offen} other {# offen}}",
+    "live": "Meeting läuft",
+    "notesFailed": "Leo konnte keine Notizen zu diesem Meeting schreiben",
+    "noSummary": "Noch keine Zusammenfassung"
   },
   "timeline": {
     "decision": "Entscheidung:",
@@ -81,5 +83,42 @@
     "json": "JSON-Datei"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "„{title}“ gelöscht"
+  "deleted": "„{title}“ gelöscht",
+  "problems": {
+    "meeting_not_found": "Dieses Meeting ist nicht verfügbar. Vielleicht wurde es gelöscht.",
+    "meeting_not_yours": "Das kann nur der Inhaber des Meetings.",
+    "meeting_active": "Das Meeting läuft noch. Versuche es erneut, wenn es zu Ende ist.",
+    "meeting_read_only": "Du kannst dieses Meeting lesen, aber nicht ändern.",
+    "company_meeting_has_no_folder": "Ein Workspace-Meeting kann nicht in deine Ordner verschoben werden.",
+    "folder_not_found": "Diesen Ordner gibt es nicht mehr.",
+    "folder_name_required": "Gib dem Ordner einen Namen.",
+    "folder_name_too_long": "Der Ordnername ist zu lang.",
+    "template_not_found": "Diese Vorlage gibt es nicht mehr.",
+    "template_not_shipped": "Eigene Vorlagen kann hier nur der Inhaber des Meetings verwenden. Wähle eine integrierte.",
+    "template_builtin_read_only": "Integrierte Vorlagen lassen sich nicht ändern.",
+    "templates_limit_reached": "Du hast so viele eigene Vorlagen, wie möglich sind. Lösche eine, um eine neue anzulegen.",
+    "template_name_required": "Gib der Vorlage einen Namen.",
+    "template_name_too_long": "Der Name der Vorlage ist zu lang.",
+    "template_description_too_long": "Die Beschreibung der Vorlage ist zu lang.",
+    "template_section_title_too_long": "Ein Abschnittstitel ist zu lang.",
+    "template_sections_required": "Wähle mindestens einen Abschnitt.",
+    "template_section_repeated": "Jeder Abschnitt darf nur einmal vorkommen.",
+    "notes_not_ready": "Leo hat die Notizen noch nicht geschrieben. Versuche es erneut, sobald sie da sind.",
+    "notes_too_long": "Deine Notizen sind zu lang zum Speichern. Kürze sie und versuche es erneut.",
+    "participant_email_invalid": "Gib eine E-Mail-Adresse ein, etwa name@company.com.",
+    "participants_limit_reached": "Dieses Meeting hat schon so viele Teilnehmer, wie möglich sind.",
+    "participant_not_found": "Dieser Teilnehmer ist nicht mehr im Meeting.",
+    "participant_not_removable": "Entfernen lassen sich nur von Hand hinzugefügte Personen.",
+    "upload_not_claimable": "Dieser Upload lässt sich nicht als Aufnahme verwenden. Lade die Datei noch einmal hoch.",
+    "meetings_not_kept": "In deinem Konto werden keine Meetings gespeichert, deshalb lassen sich keine Aufnahmen hochladen.",
+    "upload_rejected": "Die Datei kam beschädigt an. Lade sie noch einmal hoch.",
+    "upload_interrupted": "Das Hochladen wurde unterbrochen. Prüfe deine Verbindung und lade die Datei noch einmal hoch."
+  },
+  "library": {
+    "loadFailed": "Deine Meetings konnten nicht geladen werden",
+    "more": "Frühere Meetings anzeigen",
+    "moreFailed": "Weitere Meetings konnten nicht geladen werden",
+    "emptyTitle": "Noch keine Meetings",
+    "emptyDescription": "Nimm ein Meeting in der Desktop-App auf oder lade eine Aufnahme hoch. Transkript und Notizen erscheinen hier."
+  }
 }

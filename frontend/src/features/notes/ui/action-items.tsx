@@ -1,49 +1,31 @@
-"use client";
+import { useFormatter, useTranslations } from "use-intl";
 
-import * as React from "react";
+import type { WriteUpFinding } from "../domain/write-up";
 
-import { cn } from "cn";
-
-import { Checkbox } from "@/components/ui/checkbox";
-
-import type { NoteActionItem } from "../domain/types";
-
-export function ActionItems({ items }: { readonly items: NoteActionItem[] }) {
-  const [doneIds, setDoneIds] = React.useState(() => new Set(items.filter((i) => i.done).map((i) => i.id)));
-
-  const toggle = (id: string, done: boolean) => {
-    setDoneIds((current) => {
-      const next = new Set(current);
-      if (done) next.add(id);
-      else next.delete(id);
-      return next;
-    });
-  };
-
+/**
+ * Задачи из записи Leo, только для чтения (MT-D4): что сделать, на ком и к какому сроку, если встреча это
+ * сказала. Отмечать их будет один список задач, когда он появится.
+ */
+export function ActionItems({ items }: { readonly items: readonly WriteUpFinding[] }) {
+  const t = useTranslations("notesNote");
+  const format = useFormatter();
   return (
     <ul className="flex flex-col gap-2.5">
-      {items.map((item) => {
-        const isDone = doneIds.has(item.id);
-        const checkboxId = `action-item-${item.id}`;
-        return (
-          <li key={item.id} className="flex items-start gap-3">
-            <Checkbox
-              id={checkboxId}
-              checked={isDone}
-              onCheckedChange={(checked) => toggle(item.id, checked === true)}
-              className="mt-0.5"
-            />
-            <label htmlFor={checkboxId} className="flex min-w-0 flex-1 cursor-pointer flex-col gap-0.5 text-sm">
-              <span dir="auto" className={cn(isDone && "text-muted-foreground line-through")}>
-                {item.text}
-              </span>
-              <span dir="auto" className="text-muted-foreground text-xs">
-                {item.owner}
-              </span>
-            </label>
-          </li>
-        );
-      })}
+      {items.map((item) => (
+        <li key={item.id} className="flex flex-col gap-0.5 rounded-lg border bg-card px-3 py-2 text-sm">
+          <span dir="auto">{item.text}</span>
+          {item.ownerName || item.dueOn ? (
+            <span className="flex flex-wrap gap-x-3 text-muted-foreground text-xs">
+              {item.ownerName ? <span dir="auto">{item.ownerName}</span> : null}
+              {item.dueOn ? (
+                <time dateTime={item.dueOn}>
+                  {t("actionItems.due", { date: format.dateTime(new Date(item.dueOn), "short") })}
+                </time>
+              ) : null}
+            </span>
+          ) : null}
+        </li>
+      ))}
     </ul>
   );
 }

@@ -9,15 +9,19 @@ import { formatBytes } from "@/i18n/format-units";
 import { Link } from "@/lib/navigation";
 
 import { formatClock } from "../domain/format";
-import type { MeetingNote, NoteFolder, PendingRecording } from "../domain/types";
+import type { MeetingCard } from "../domain/library";
+import type { NoteFolder } from "../domain/types";
+import type { RecordingUpload } from "../model/recording-uploads";
+import { CardSummary } from "./card-summary";
 import { FOLDER_DOT_CLASSES } from "./folder-color-classes";
 import { Participants } from "./note-card";
+import { RecordingStatus } from "./recording-status";
 
 const CHIP_CLASSES =
   "inline-flex items-center gap-1.5 rounded-lg border bg-card px-2.5 py-1 text-foreground/80 text-xs [&_svg]:size-3.5 [&_svg]:text-muted-foreground";
 
 /** The days a group of meetings covers: one day ("Mon, Oct 5"), or the first and last ("Thu, Oct 1 – Fri, Oct 2"). */
-function DateSpan({ notes }: { readonly notes: MeetingNote[] }) {
+function DateSpan({ notes }: { readonly notes: readonly MeetingCard[] }) {
   const format = useFormatter();
   const sorted = notes.map((note) => note.startedAt).toSorted();
   const first = sorted.at(0);
@@ -30,7 +34,7 @@ interface TimelineDayProps {
   readonly label: string;
   /** Shown under the label; the days the group's notes cover when omitted. */
   readonly dates?: string;
-  readonly notes?: MeetingNote[];
+  readonly notes?: readonly MeetingCard[];
   readonly children: React.ReactNode;
 }
 
@@ -60,15 +64,15 @@ function TimelineDot({ className }: { readonly className: string }) {
 }
 
 interface TimelineEntryProps {
-  readonly note: MeetingNote;
+  readonly note: MeetingCard;
   readonly folder: NoteFolder | undefined;
 }
 
 export function TimelineEntry({ note, folder }: TimelineEntryProps) {
   const t = useTranslations("notes");
   const format = useFormatter();
-  const decision = note.decisions.at(0);
-  const openTasks = note.actionItems.filter((item) => !item.done).length;
+  const decision = note.firstDecision;
+  const openTasks = note.actionItems;
 
   return (
     <article className="group/entry relative ps-7 pb-8">
@@ -93,9 +97,7 @@ export function TimelineEntry({ note, folder }: TimelineEntryProps) {
           {note.title}
         </Link>
       </h3>
-      <p dir="auto" className="mb-3.5 max-w-3xl text-muted-foreground text-sm leading-relaxed">
-        {note.summary}
-      </p>
+      <CardSummary note={note} className="mb-3.5 max-w-3xl" />
       <div className="flex flex-wrap items-center gap-2">
         {decision ? (
           <span className={CHIP_CLASSES}>
@@ -111,7 +113,7 @@ export function TimelineEntry({ note, folder }: TimelineEntryProps) {
           </span>
         ) : null}
         <span className="ms-auto">
-          <Participants participants={note.participants} />
+          <Participants note={note} />
         </span>
       </div>
     </article>
@@ -119,37 +121,46 @@ export function TimelineEntry({ note, folder }: TimelineEntryProps) {
 }
 
 interface TimelineRecordingProps {
-  readonly recording: PendingRecording;
+  readonly recording: RecordingUpload;
   readonly onRemove: (id: string) => void;
 }
 
-/** A just-uploaded file on the timeline, waiting for the transcription service. */
+/** Запись, которая загружается, на ленте: ход загрузки или причина отказа. */
 export function TimelineRecording({ recording, onRemove }: TimelineRecordingProps) {
   const t = useTranslations("notes");
   const locale = useLocale();
   return (
     <li className="relative ps-7 pb-8 last:pb-2">
-      <span className="absolute -start-[6px] top-1.5 flex size-[11px]" aria-hidden="true">
-        <span className="absolute inline-flex size-full animate-ping rounded-full bg-amber-500 opacity-60" />
-        <span className="relative inline-flex size-[11px] rounded-full bg-amber-500 ring-4 ring-background" />
-      </span>
+      {recording.failed === null ? (
+        <span className="absolute -start-[6px] top-1.5 flex size-[11px]" aria-hidden="true">
+          <span className="absolute inline-flex size-full animate-ping rounded-full bg-amber-500 opacity-60 motion-reduce:animate-none" />
+          <span className="relative inline-flex size-[11px] rounded-full bg-amber-500 ring-4 ring-background" />
+        </span>
+      ) : (
+        <span
+          className="absolute -start-[6px] top-1.5 size-[11px] rounded-full bg-destructive ring-4 ring-background"
+          aria-hidden="true"
+        />
+      )}
       <p className="font-mono text-muted-foreground text-xs tabular-nums">{formatBytes(locale, recording.size)}</p>
       <div className="mt-1.5 flex items-center gap-2">
         <h3 dir="auto" className="min-w-0 truncate font-medium text-xl tracking-tight">
           {recording.name}
         </h3>
-        <Button
-          variant="ghost"
-          size="icon-xs"
-          className="text-muted-foreground"
-          aria-label={t("remove", { name: recording.name })}
-          onClick={() => onRemove(recording.id)}
-        >
-          <X />
-        </Button>
+        {recording.failed === null ? null : (
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            className="text-muted-foreground"
+            aria-label={t("remove", { name: recording.name })}
+            onClick={() => onRemove(recording.id)}
+          >
+            <X />
+          </Button>
+        )}
       </div>
       <p className="mt-1 text-muted-foreground text-sm" role="status">
-        {t("recordings.timelineStatus")}
+        <RecordingStatus recording={recording} />
       </p>
     </li>
   );

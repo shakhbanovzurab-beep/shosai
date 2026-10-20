@@ -109,5 +109,6 @@
     "heading": "Título de {section}",
     "sectionsRequired": "Mantenha pelo menos uma seção.",
     "create": "Criar template"
-  }
+  },
+  "rewriteFailed": "O Leo não conseguiu reescrever as notas. Tente novamente."
 }

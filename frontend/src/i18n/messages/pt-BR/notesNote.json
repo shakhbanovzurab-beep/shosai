@@ -1,6 +1,5 @@
 {
   "back": "Todas as notas",
-  "notFound": "Nota não encontrada",
   "participants": {
     "count": "{count, plural, one {# participante} many {# de participantes} other {# participantes}}",
     "inMeeting": "{count, plural, one {# pessoa nesta reunião.} many {# de pessoas nesta reunião.} other {# pessoas nesta reunião.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Escrito pelo Leo com base na transcrição da reunião e nas suas notas.",
     "writtenByTemplate": "Escrito pelo Leo com base na transcrição da reunião e nas suas notas, seguindo o template “{template}”.",
     "writing": "Escrevendo as notas aprimoradas…",
-    "nothingFor": "Esta reunião não tem conteúdo para as seções do template “{template}”."
+    "nothingFor": "Esta reunião não tem conteúdo para as seções do template “{template}”.",
+    "loadFailed": "Não foi possível carregar as notas do Leo",
+    "failed": "O Leo não conseguiu escrever notas desta reunião.",
+    "none": "O Leo ainda não escreveu notas desta reunião."
   },
   "export": {
     "button": "Exportar",
@@ -60,7 +62,13 @@
     "position": "{current, number} de {total, number}",
     "previous": "Resultado anterior",
     "next": "Próximo resultado",
-    "clear": "Limpar pesquisa"
+    "clear": "Limpar pesquisa",
+    "you": "Você",
+    "organizer": "Organizador",
+    "speaker": "Falante {n, number}",
+    "unknownSpeaker": "Falante desconhecido",
+    "loadFailed": "Não foi possível carregar a transcrição",
+    "empty": "Nenhuma transcrição ainda."
   },
   "speakers": {
     "title": "Quem falou",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Mapa mental: {topic}",
-    "caption": "Gerado a partir da transcrição da reunião."
+    "caption": "Gerado a partir da transcrição da reunião.",
+    "loadFailed": "Não foi possível carregar o mapa mental",
+    "none": "Nenhum mapa mental ainda. Ele aparece com as notas do Leo."
+  },
+  "notices": {
+    "live": "Esta reunião ainda está em andamento. As notas aparecem quando ela terminar.",
+    "writing": "O Leo está escrevendo as notas. Elas aparecem aqui em alguns minutos.",
+    "speakers": "A transcrição e as notas foram atualizadas com os falantes da gravação.",
+    "failed": {
+      "transcript_empty": "O Leo não conseguiu escrever notas: nenhuma fala foi encontrada na gravação.",
+      "upload_exceeds_minutes": "A gravação é mais longa que os minutos restantes do seu plano, então não foi processada.",
+      "recording_too_long": "A gravação tem mais de 6 horas, então não foi processada.",
+      "unsupported_audio_format": "Este formato de arquivo não é compatível. Faça upload de um áudio ou vídeo em um formato comum.",
+      "media_unreadable": "Não foi possível ler a gravação. Faça upload do arquivo novamente.",
+      "consent_required": "O Leo precisa do seu consentimento para processar a gravação. Dê o consentimento em Configurações › Privacidade.",
+      "content_refused": "O Leo não conseguiu escrever notas desta gravação.",
+      "other": "O Leo não conseguiu escrever notas desta reunião."
+    }
+  },
+  "actionItems": {
+    "due": "Prazo: {date}"
   }
 }

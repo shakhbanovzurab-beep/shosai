@@ -30,15 +30,14 @@
     "dropHint": "mp3, m4a, wav, mp4, webm ve daha fazlası · en fazla {size}",
     "notMedia": "{name} bir ses veya video dosyası değil",
     "tooLarge": "{name} çok büyük",
-    "sizeLimit": "Kayıtlar en fazla {size} olabilir."
+    "sizeLimit": "Kayıtlar en fazla {size} olabilir.",
+    "failed": "“{name}” yüklenemedi"
   },
   "recordings": {
     "uploading": "Yükleniyor",
     "justNow": "Az önce",
-    "transcribing": "Transkript oluşturuluyor",
     "transcribingNow": "Transkript oluşturuluyor…",
-    "waiting": "Transkript sırası bekleniyor…",
-    "timelineStatus": "Transkript oluşturuluyor… Tamamlandığında notlar, kararlar ve zihin haritası burada görünecek."
+    "uploadingShare": "Dosya yükleniyor… {share}"
   },
   "remove": "Kaldır: {name}",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "Son toplantı",
     "keyPoints": "Önemli noktalar",
     "openNotes": "Notları aç",
-    "openItems": "{count, plural, one {# açık} other {# açık}}"
+    "openItems": "{count, plural, one {# açık} other {# açık}}",
+    "live": "Toplantı sürüyor",
+    "notesFailed": "Leo bu toplantı için not yazamadı",
+    "noSummary": "Henüz özet yok"
   },
   "timeline": {
     "decision": "Karar:",
@@ -81,5 +83,42 @@
     "json": "JSON verisi"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "“{title}” silindi"
+  "deleted": "“{title}” silindi",
+  "problems": {
+    "meeting_not_found": "Bu toplantıya erişilemiyor. Silinmiş olabilir.",
+    "meeting_not_yours": "Bunu yalnızca toplantının sahibi yapabilir.",
+    "meeting_active": "Toplantı hâlâ devam ediyor. Bittiğinde tekrar deneyin.",
+    "meeting_read_only": "Bu toplantıyı okuyabilirsiniz ama değiştiremezsiniz.",
+    "company_meeting_has_no_folder": "Bir çalışma alanının toplantısı klasörlerinize konamaz.",
+    "folder_not_found": "Bu klasör artık yok.",
+    "folder_name_required": "Klasöre bir ad verin.",
+    "folder_name_too_long": "Klasör adı çok uzun.",
+    "template_not_found": "Bu şablon artık yok.",
+    "template_not_shipped": "Burada kendi şablonunu yalnızca toplantının sahibi kullanabilir. Hazır bir şablon seçin.",
+    "template_builtin_read_only": "Hazır şablonlar değiştirilemez.",
+    "templates_limit_reached": "Kendi şablon sınırınıza ulaştınız. Yenisini eklemek için birini silin.",
+    "template_name_required": "Şablona bir ad verin.",
+    "template_name_too_long": "Şablon adı çok uzun.",
+    "template_description_too_long": "Şablon açıklaması çok uzun.",
+    "template_section_title_too_long": "Bir bölüm başlığı çok uzun.",
+    "template_sections_required": "En az bir bölüm seçin.",
+    "template_section_repeated": "Her bölüm yalnızca bir kez yer alabilir.",
+    "notes_not_ready": "Leo notları henüz yazmadı. Notlar göründüğünde tekrar deneyin.",
+    "notes_too_long": "Notlarınız kaydedilemeyecek kadar uzun. Kısaltıp tekrar deneyin.",
+    "participant_email_invalid": "name@company.com gibi bir e-posta adresi girin.",
+    "participants_limit_reached": "Bu toplantıda en fazla katılımcı sayısına ulaşıldı.",
+    "participant_not_found": "Bu katılımcı artık toplantıda değil.",
+    "participant_not_removable": "Yalnızca elle eklenen kişiler kaldırılabilir.",
+    "upload_not_claimable": "Bu yükleme kayıt olarak kullanılamaz. Dosyayı yeniden yükleyin.",
+    "meetings_not_kept": "Hesabınızda toplantılar saklanmıyor, bu yüzden kayıt yüklenemez.",
+    "upload_rejected": "Dosya bozuk geldi. Yeniden yükleyin.",
+    "upload_interrupted": "Yükleme yarıda kesildi. Bağlantınızı kontrol edip dosyayı yeniden yükleyin."
+  },
+  "library": {
+    "loadFailed": "Toplantılarınız yüklenemedi",
+    "more": "Önceki toplantıları göster",
+    "moreFailed": "Daha fazla toplantı yüklenemedi",
+    "emptyTitle": "Henüz toplantı yok",
+    "emptyDescription": "Masaüstü uygulamasında bir toplantı kaydedin veya bir kayıt yükleyin. Transkripti ve notları burada görünür."
+  }
 }

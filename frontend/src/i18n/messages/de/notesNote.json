@@ -1,6 +1,5 @@
 {
   "back": "Alle Notizen",
-  "notFound": "Notiz nicht gefunden",
   "participants": {
     "count": "{count, plural, one {# Teilnehmer} other {# Teilnehmer}}",
     "inMeeting": "{count, plural, one {# Person in diesem Meeting.} other {# Personen in diesem Meeting.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Von Leo aus dem Meeting-Transkript und deinen Notizen geschrieben.",
     "writtenByTemplate": "Von Leo aus dem Meeting-Transkript und deinen Notizen geschrieben, aufgebaut nach „{template}“.",
     "writing": "Aufbereitete Notizen werden geschrieben…",
-    "nothingFor": "Dieses Meeting enthält nichts für die Abschnitte von „{template}“."
+    "nothingFor": "Dieses Meeting enthält nichts für die Abschnitte von „{template}“.",
+    "loadFailed": "Leos Notizen konnten nicht geladen werden",
+    "failed": "Leo konnte keine Notizen zu diesem Meeting schreiben.",
+    "none": "Leo hat zu diesem Meeting noch keine Notizen geschrieben."
   },
   "export": {
     "button": "Exportieren",
@@ -60,7 +62,13 @@
     "position": "{current, number} von {total, number}",
     "previous": "Vorheriger Treffer",
     "next": "Nächster Treffer",
-    "clear": "Suche zurücksetzen"
+    "clear": "Suche zurücksetzen",
+    "you": "Du",
+    "organizer": "Organisator",
+    "speaker": "Sprecher {n, number}",
+    "unknownSpeaker": "Unbekannter Sprecher",
+    "loadFailed": "Das Transkript konnte nicht geladen werden",
+    "empty": "Zu diesem Meeting gibt es noch kein Transkript."
   },
   "speakers": {
     "title": "Wer hat gesprochen",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Mindmap: {topic}",
-    "caption": "Aus dem Meeting-Transkript erstellt."
+    "caption": "Aus dem Meeting-Transkript erstellt.",
+    "loadFailed": "Die Mindmap konnte nicht geladen werden",
+    "none": "Noch keine Mindmap. Sie erscheint mit Leos Notizen."
+  },
+  "notices": {
+    "live": "Dieses Meeting läuft noch. Die Notizen erscheinen, wenn es zu Ende ist.",
+    "writing": "Leo schreibt die Notizen. Sie erscheinen hier in ein paar Minuten.",
+    "speakers": "Transkript und Notizen wurden mit den Sprechern aus der Aufnahme aktualisiert.",
+    "failed": {
+      "transcript_empty": "Leo konnte keine Notizen schreiben: In der Aufnahme wurde keine Sprache gefunden.",
+      "upload_exceeds_minutes": "Die Aufnahme ist länger als die verbleibenden Minuten deines Tarifs, deshalb wurde sie nicht verarbeitet.",
+      "recording_too_long": "Die Aufnahme ist länger als 6 Stunden, deshalb wurde sie nicht verarbeitet.",
+      "unsupported_audio_format": "Dieses Dateiformat wird nicht unterstützt. Lade Audio oder Video in einem gängigen Format hoch.",
+      "media_unreadable": "Die Aufnahme konnte nicht gelesen werden. Lade die Datei noch einmal hoch.",
+      "consent_required": "Leo braucht deine Zustimmung, um die Aufnahme zu verarbeiten. Erteile sie unter Einstellungen › Datenschutz.",
+      "content_refused": "Leo konnte zu dieser Aufnahme keine Notizen schreiben.",
+      "other": "Leo konnte keine Notizen zu diesem Meeting schreiben."
+    }
+  },
+  "actionItems": {
+    "due": "Fällig am {date}"
   }
 }

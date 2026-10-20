@@ -30,15 +30,14 @@
     "dropHint": "mp3, m4a, wav, mp4, webm, dan lainnya · hingga {size}",
     "notMedia": "{name} bukan file audio atau video",
     "tooLarge": "{name} terlalu besar",
-    "sizeLimit": "Ukuran rekaman maksimal {size}."
+    "sizeLimit": "Ukuran rekaman maksimal {size}.",
+    "failed": "Tidak dapat mengunggah “{name}”"
   },
   "recordings": {
     "uploading": "Mengunggah",
     "justNow": "Baru saja",
-    "transcribing": "Membuat transkrip",
     "transcribingNow": "Membuat transkrip…",
-    "waiting": "Menunggu pembuatan transkrip…",
-    "timelineStatus": "Membuat transkrip… Catatan, keputusan, dan peta pikiran akan muncul di sini setelah selesai."
+    "uploadingShare": "Mengunggah… {share}"
   },
   "remove": "Hapus {name}",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "Rapat terbaru",
     "keyPoints": "Poin penting",
     "openNotes": "Buka catatan",
-    "openItems": "{count, plural, other {# belum selesai}}"
+    "openItems": "{count, plural, other {# belum selesai}}",
+    "live": "Rapat sedang berlangsung",
+    "notesFailed": "Leo tidak dapat menulis catatan untuk rapat ini",
+    "noSummary": "Belum ada ringkasan"
   },
   "timeline": {
     "decision": "Keputusan:",
@@ -81,5 +83,42 @@
     "json": "Data JSON"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "“{title}” dihapus"
+  "deleted": "“{title}” dihapus",
+  "problems": {
+    "meeting_not_found": "Rapat ini tidak tersedia. Mungkin sudah dihapus.",
+    "meeting_not_yours": "Hanya pemilik rapat yang dapat melakukan ini.",
+    "meeting_active": "Rapat masih berlangsung. Coba lagi setelah selesai.",
+    "meeting_read_only": "Anda dapat membaca rapat ini, tetapi tidak dapat mengubahnya.",
+    "company_meeting_has_no_folder": "Tidak dapat memasukkan rapat ruang kerja ke folder Anda.",
+    "folder_not_found": "Folder ini sudah tidak ada.",
+    "folder_name_required": "Beri nama folder.",
+    "folder_name_too_long": "Nama folder terlalu panjang.",
+    "template_not_found": "Template ini sudah tidak ada.",
+    "template_not_shipped": "Di sini hanya pemilik rapat yang dapat memakai template sendiri. Pilih template bawaan.",
+    "template_builtin_read_only": "Tidak dapat mengubah template bawaan.",
+    "templates_limit_reached": "Anda sudah mencapai batas template sendiri. Hapus satu untuk menambah yang lain.",
+    "template_name_required": "Beri nama template.",
+    "template_name_too_long": "Nama template terlalu panjang.",
+    "template_description_too_long": "Deskripsi template terlalu panjang.",
+    "template_section_title_too_long": "Judul salah satu bagian terlalu panjang.",
+    "template_sections_required": "Pilih setidaknya satu bagian.",
+    "template_section_repeated": "Setiap bagian hanya boleh muncul sekali.",
+    "notes_not_ready": "Leo belum menulis catatan. Coba lagi setelah catatan muncul.",
+    "notes_too_long": "Catatan Anda terlalu panjang untuk disimpan. Persingkat lalu coba lagi.",
+    "participant_email_invalid": "Masukkan alamat email, seperti name@company.com.",
+    "participants_limit_reached": "Rapat ini sudah mencapai jumlah peserta maksimum.",
+    "participant_not_found": "Peserta ini sudah tidak ada di rapat.",
+    "participant_not_removable": "Hanya orang yang ditambahkan secara manual yang dapat dihapus.",
+    "upload_not_claimable": "Tidak dapat memakai unggahan ini sebagai rekaman. Unggah file lagi.",
+    "meetings_not_kept": "Akun Anda tidak menyimpan rapat, jadi Anda tidak dapat mengunggah rekaman.",
+    "upload_rejected": "File tiba dalam keadaan rusak. Unggah lagi.",
+    "upload_interrupted": "Unggahan terputus. Periksa koneksi Anda dan unggah file lagi."
+  },
+  "library": {
+    "loadFailed": "Tidak dapat memuat rapat Anda",
+    "more": "Tampilkan rapat sebelumnya",
+    "moreFailed": "Tidak dapat memuat rapat lainnya",
+    "emptyTitle": "Belum ada rapat",
+    "emptyDescription": "Rekam rapat di aplikasi desktop atau unggah rekaman. Transkrip dan catatannya akan muncul di sini."
+  }
 }

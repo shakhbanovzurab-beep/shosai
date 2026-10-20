@@ -44,7 +44,7 @@ File Manager is the only place the account's files are stored. Nothing else keep
 
 ## Behaviour the UI relies on
 
-- **Uploads go straight to the bucket (FL-D1).** Up to 2 GB a file, 20 at a time (`MAX_UPLOAD_BYTES`,
+- **Uploads go straight to the bucket (FL-D1)** through the shared client in `src/lib/uploads/`, which Notes uses for recordings too. Up to 2 GB a file, 20 at a time (`MAX_UPLOAD_BYTES`,
   `MAX_FILES_PER_UPLOAD`). The server signs every part for its exact length; the browser `PUT`s the parts three at a
   time with progress, two files at a time. A part that fails is sent again up to four times with fresh links from
   `GET /v1/me/uploads/{id}`, so a dropped connection or an expired signature costs that part, not the file. An

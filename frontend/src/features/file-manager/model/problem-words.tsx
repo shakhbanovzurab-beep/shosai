@@ -3,10 +3,10 @@
 import type { ReactNode } from "react";
 
 import { apiErrorDescription } from "@/lib/api/error-description";
+import { UploadRejectedError } from "@/lib/uploads/upload-file";
+import { PartFailedError } from "@/lib/uploads/uploads-api";
 
-import { PartFailedError } from "../api/uploads-api";
 import { fileProblemOf } from "../domain/problems";
-import { UploadRejectedError } from "./uploads";
 import type { FileActionWords } from "./words";
 
 /** A failure as the user reads it: the files API's known codes and the upload's own failures in their words. */

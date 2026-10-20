@@ -1,3 +1,4 @@
+import { cn } from "cn";
 import { X } from "lucide-react";
 import { useLocale, useTranslations } from "use-intl";
 
@@ -5,10 +6,14 @@ import { Button } from "@/components/ui/button";
 import { formatBytes } from "@/i18n/format-units";
 import { Link } from "@/lib/navigation";
 
-import type { MeetingNote, NoteFolder, PendingRecording } from "../domain/types";
+import type { MeetingCard } from "../domain/library";
+import type { NoteFolder } from "../domain/types";
+import type { RecordingUpload } from "../model/recording-uploads";
+import { CardSummary } from "./card-summary";
 import { Duration, FolderBadge, MeetingStart, OpenItems, Participants } from "./note-card";
+import { RecordingStatus } from "./recording-status";
 
-// Shared column template so rows line up like a table; secondary columns drop out on narrow screens.
+// Общая сетка колонок, чтобы строки шли как таблица; второстепенные колонки на узком экране уходят.
 export const ROW_GRID =
   "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 py-3 md:grid-cols-[minmax(0,1fr)_8rem_6rem_6rem] xl:grid-cols-[minmax(0,1fr)_8rem_6rem_6rem_8.5rem]";
 
@@ -29,7 +34,7 @@ export function NoteRowsHeader() {
 }
 
 interface NoteRowProps {
-  readonly note: MeetingNote;
+  readonly note: MeetingCard;
   readonly folder: NoteFolder | undefined;
 }
 
@@ -47,15 +52,13 @@ export function NoteRow({ note, folder }: NoteRowProps) {
           </Link>
           <OpenItems note={note} />
         </h3>
-        <p dir="auto" className="truncate text-muted-foreground text-xs">
-          {note.summary}
-        </p>
+        <CardSummary note={note} className="truncate text-xs" />
       </div>
       <div className="min-w-0 max-md:hidden">
         <FolderBadge folder={folder} />
       </div>
       <div className="max-md:hidden">
-        <Participants participants={note.participants} />
+        <Participants note={note} />
       </div>
       <div className="justify-self-end md:justify-self-start">
         <Duration minutes={note.durationMinutes} />
@@ -66,7 +69,7 @@ export function NoteRow({ note, folder }: NoteRowProps) {
 }
 
 interface RecordingRowProps {
-  readonly recording: PendingRecording;
+  readonly recording: RecordingUpload;
   readonly onRemove: (id: string) => void;
 }
 
@@ -76,12 +79,18 @@ export function RecordingRow({ recording, onRemove }: RecordingRowProps) {
   return (
     <div className={`${ROW_GRID} bg-muted/20`}>
       <div className="flex min-w-0 items-center gap-2">
-        <span className="size-1.5 shrink-0 animate-pulse rounded-full bg-amber-500" aria-hidden="true" />
+        <span
+          className={cn(
+            "size-1.5 shrink-0 rounded-full",
+            recording.failed === null ? "animate-pulse bg-amber-500 motion-reduce:animate-none" : "bg-destructive",
+          )}
+          aria-hidden="true"
+        />
         <span dir="auto" className="truncate font-medium text-sm">
           {recording.name}
         </span>
         <span className="shrink-0 text-muted-foreground text-xs" role="status">
-          {t("recordings.transcribingNow")}
+          <RecordingStatus recording={recording} />
         </span>
       </div>
       <span className="max-md:hidden" />
@@ -90,15 +99,17 @@ export function RecordingRow({ recording, onRemove }: RecordingRowProps) {
         <span className="font-mono text-muted-foreground text-xs tabular-nums">
           {formatBytes(locale, recording.size)}
         </span>
-        <Button
-          variant="ghost"
-          size="icon-xs"
-          className="text-muted-foreground"
-          aria-label={t("remove", { name: recording.name })}
-          onClick={() => onRemove(recording.id)}
-        >
-          <X />
-        </Button>
+        {recording.failed === null ? null : (
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            className="text-muted-foreground"
+            aria-label={t("remove", { name: recording.name })}
+            onClick={() => onRemove(recording.id)}
+          >
+            <X />
+          </Button>
+        )}
       </div>
       <span className="max-xl:hidden" />
     </div>

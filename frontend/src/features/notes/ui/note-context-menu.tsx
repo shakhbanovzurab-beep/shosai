@@ -23,23 +23,24 @@ import { ContextMenuSub, ContextMenuSubContent, ContextMenuSubTrigger } from "@/
 import { copyText } from "@/lib/copy-text";
 import { useRouter } from "@/lib/navigation";
 
+import type { MeetingCard } from "../domain/library";
 import { EXPORT_FORMATS } from "../domain/transcript-export";
-import type { MeetingNote, NoteFolder } from "../domain/types";
+import type { NoteFolder } from "../domain/types";
 import { FOLDER_DOT_CLASSES } from "./folder-color-classes";
 import { useTranscriptDownload } from "./use-transcript-download";
 
 const NO_FOLDER = "none";
 
 interface NoteContextMenuProps {
-  readonly note: MeetingNote;
-  readonly folders: NoteFolder[];
-  readonly onMove: (noteId: string, folderId: string | null, folderName: string) => void;
+  readonly note: MeetingCard;
+  readonly folders: readonly NoteFolder[];
+  readonly onMove: (noteId: string, folderId: string | null) => void;
   readonly onMoveToNewFolder: (noteId: string) => void;
-  readonly onDelete: (noteId: string, title: string) => void;
+  readonly onDelete: () => void;
   readonly children: React.ReactNode;
 }
 
-/** Right-click menu for a note card. */
+/** Контекстное меню встречи в библиотеке. */
 export function NoteContextMenu({
   note,
   folders,
@@ -78,34 +79,36 @@ export function NoteContextMenu({
           {t("menu.openInNewTab")}
         </ContextMenuItem>
         <ContextMenuSeparator />
-        <ContextMenuSub>
-          <ContextMenuSubTrigger>
-            <FolderInput />
-            {t("folders.moveTo")}
-          </ContextMenuSubTrigger>
-          <ContextMenuSubContent className="w-48">
-            <ContextMenuRadioGroup
-              value={note.folderId ?? NO_FOLDER}
-              onValueChange={(value) => {
-                const folder = folders.find((f) => f.id === value);
-                onMove(note.id, folder ? folder.id : null, folder ? folder.name : "");
-              }}
-            >
-              <ContextMenuRadioItem value={NO_FOLDER}>{t("folders.none")}</ContextMenuRadioItem>
-              {folders.map((folder) => (
-                <ContextMenuRadioItem key={folder.id} value={folder.id}>
-                  <span className={cn("size-2 rounded-full", FOLDER_DOT_CLASSES[folder.color])} aria-hidden="true" />
-                  <span dir="auto">{folder.name}</span>
-                </ContextMenuRadioItem>
-              ))}
-            </ContextMenuRadioGroup>
-            <ContextMenuSeparator />
-            <ContextMenuItem onSelect={() => onMoveToNewFolder(note.id)}>
-              <FolderPlus />
-              {t("folders.newMenu")}
-            </ContextMenuItem>
-          </ContextMenuSubContent>
-        </ContextMenuSub>
+        {/* В свою папку кладут только свою встречу: чужую из рабочего пространства не переложить. */}
+        {note.owned ? (
+          <ContextMenuSub>
+            <ContextMenuSubTrigger>
+              <FolderInput />
+              {t("folders.moveTo")}
+            </ContextMenuSubTrigger>
+            <ContextMenuSubContent className="w-48">
+              <ContextMenuRadioGroup
+                value={note.folderId ?? NO_FOLDER}
+                onValueChange={(value) => {
+                  onMove(note.id, folders.some((f) => f.id === value) ? value : null);
+                }}
+              >
+                <ContextMenuRadioItem value={NO_FOLDER}>{t("folders.none")}</ContextMenuRadioItem>
+                {folders.map((folder) => (
+                  <ContextMenuRadioItem key={folder.id} value={folder.id}>
+                    <span className={cn("size-2 rounded-full", FOLDER_DOT_CLASSES[folder.color])} aria-hidden="true" />
+                    <span dir="auto">{folder.name}</span>
+                  </ContextMenuRadioItem>
+                ))}
+              </ContextMenuRadioGroup>
+              <ContextMenuSeparator />
+              <ContextMenuItem onSelect={() => onMoveToNewFolder(note.id)}>
+                <FolderPlus />
+                {t("folders.newMenu")}
+              </ContextMenuItem>
+            </ContextMenuSubContent>
+          </ContextMenuSub>
+        ) : null}
         <ContextMenuItem onSelect={copyLink}>
           <Link2 />
           {common("actions.copyLink")}
@@ -117,19 +120,23 @@ export function NoteContextMenu({
           </ContextMenuSubTrigger>
           <ContextMenuSubContent className="w-52">
             {EXPORT_FORMATS.map((format) => (
-              <ContextMenuItem key={format} onSelect={() => transcript.download(note, format)}>
+              <ContextMenuItem key={format} onSelect={() => void transcript.downloadById(note.id, format)}>
                 {transcript.formatName(format)}
-                {/* A file extension reads left to right in every language. */}
+                {/* Расширение файла читается слева направо на любом языке. */}
                 <ContextMenuShortcut dir="ltr">.{format}</ContextMenuShortcut>
               </ContextMenuItem>
             ))}
           </ContextMenuSubContent>
         </ContextMenuSub>
-        <ContextMenuSeparator />
-        <ContextMenuItem variant="destructive" onSelect={() => onDelete(note.id, note.title)}>
-          <Trash2 />
-          {common("actions.delete")}
-        </ContextMenuItem>
+        {note.owned ? (
+          <>
+            <ContextMenuSeparator />
+            <ContextMenuItem variant="destructive" onSelect={onDelete}>
+              <Trash2 />
+              {common("actions.delete")}
+            </ContextMenuItem>
+          </>
+        ) : null}
       </ContextMenuContent>
     </ContextMenu>
   );

@@ -109,5 +109,6 @@
     "heading": "Titre de {section}",
     "sectionsRequired": "Gardez au moins une rubrique.",
     "create": "Créer le modèle"
-  }
+  },
+  "rewriteFailed": "Leo n’a pas pu réécrire les notes. Réessayez."
 }

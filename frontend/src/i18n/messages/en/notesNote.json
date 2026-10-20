@@ -1,6 +1,5 @@
 {
   "back": "All notes",
-  "notFound": "Note not found",
   "participants": {
     "count": "{count, plural, one {# participant} other {# participants}}",
     "inMeeting": "{count, plural, one {# person in this meeting.} other {# people in this meeting.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Written by Leo from the meeting transcript and your notes.",
     "writtenByTemplate": "Written by Leo from the meeting transcript and your notes, laid out as “{template}”.",
     "writing": "Writing enhanced notes…",
-    "nothingFor": "This meeting has nothing for the sections of “{template}”."
+    "nothingFor": "This meeting has nothing for the sections of “{template}”.",
+    "loadFailed": "Couldn’t load Leo’s notes",
+    "failed": "Leo couldn’t write notes for this meeting.",
+    "none": "Leo hasn’t written notes for this meeting yet."
   },
   "export": {
     "button": "Export",
@@ -60,7 +62,13 @@
     "position": "{current, number} of {total, number}",
     "previous": "Previous match",
     "next": "Next match",
-    "clear": "Clear search"
+    "clear": "Clear search",
+    "you": "You",
+    "organizer": "Organizer",
+    "speaker": "Speaker {n, number}",
+    "unknownSpeaker": "Unknown speaker",
+    "loadFailed": "Couldn’t load the transcript",
+    "empty": "There’s no transcript for this meeting yet."
   },
   "speakers": {
     "title": "Who spoke",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Mind map: {topic}",
-    "caption": "Generated from the meeting transcript."
+    "caption": "Generated from the meeting transcript.",
+    "loadFailed": "Couldn’t load the mind map",
+    "none": "There’s no mind map yet. It appears with Leo’s notes."
+  },
+  "notices": {
+    "live": "This meeting is still going. Its notes appear after it ends.",
+    "writing": "Leo is writing the notes. They appear here in a few minutes.",
+    "speakers": "The transcript and notes were updated with speakers from the recording.",
+    "failed": {
+      "transcript_empty": "Leo couldn’t write notes: no speech was found in the recording.",
+      "upload_exceeds_minutes": "The recording is longer than the minutes left on your plan, so it wasn’t processed.",
+      "recording_too_long": "The recording is longer than 6 hours, so it wasn’t processed.",
+      "unsupported_audio_format": "This file format isn’t supported. Upload an audio or video file in a common format.",
+      "media_unreadable": "The recording couldn’t be read. Upload the file again.",
+      "consent_required": "Leo needs your consent to process the recording. Give it in Settings › Privacy.",
+      "content_refused": "Leo couldn’t write notes for this recording.",
+      "other": "Leo couldn’t write notes for this meeting."
+    }
+  },
+  "actionItems": {
+    "due": "Due {date}"
   }
 }

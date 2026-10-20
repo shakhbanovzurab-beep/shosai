@@ -21,6 +21,8 @@ export function createPollingResource<T>(load: () => Promise<T>, isBusy: (data: 
   const listeners = new Set<() => void>();
   let timer: ReturnType<typeof setTimeout> | undefined;
   let inFlight: Promise<void> | null = null;
+  // Данные положены загрузчиком только что: первый подписчик не просит их второй раз.
+  let seeded = false;
 
   const emit = () => {
     for (const listener of listeners) listener();
@@ -61,7 +63,11 @@ export function createPollingResource<T>(load: () => Promise<T>, isBusy: (data: 
   return {
     subscribe(listener: () => void) {
       listeners.add(listener);
-      if (listeners.size === 1) void refresh();
+      if (listeners.size === 1) {
+        if (seeded) schedule();
+        else void refresh();
+        seeded = false;
+      }
       return () => {
         listeners.delete(listener);
         if (listeners.size === 0) clearTimeout(timer);
@@ -70,6 +76,11 @@ export function createPollingResource<T>(load: () => Promise<T>, isBusy: (data: 
     getSnapshot: () => state,
     getServerSnapshot: (): ResourceState<T> => LOADING,
     refresh,
+    /** Чтение, начатое уже после вызова: идущее могло уйти раньше изменения, и его ответ его не знает. */
+    async reload(): Promise<void> {
+      if (inFlight !== null) await inFlight;
+      await refresh();
+    },
     /** Drops the data (e.g. it belonged to a workspace the user left); it loads afresh when next needed. */
     reset() {
       clearTimeout(timer);
@@ -79,6 +90,13 @@ export function createPollingResource<T>(load: () => Promise<T>, isBusy: (data: 
       setTimeout(() => {
         if (listeners.size > 0 && state.status === "loading") void refresh();
       }, 0);
+    },
+    /** Кладёт данные, уже прочитанные в другом месте (загрузчиком маршрута), и опрашивает дальше, если нужно. */
+    seed(data: T) {
+      state = { status: "ready", data, refreshing: false };
+      seeded = listeners.size === 0;
+      emit();
+      schedule();
     },
     /** Applies a local change straight away (e.g. a new upload) and resumes polling if it is now busy. */
     update(change: (data: T) => T) {

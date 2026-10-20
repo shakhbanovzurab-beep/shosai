@@ -1,6 +1,6 @@
 import { describe, it } from "vitest";
 
-import { formatMeetingDuration, getRecencyGroup } from "./format";
+import { formatMeetingDuration, formatTimestamp, getRecencyGroup } from "./format";
 import assert from "node:assert/strict";
 
 describe("formatMeetingDuration", () => {
@@ -19,5 +19,13 @@ describe("getRecencyGroup", () => {
     assert.equal(getRecencyGroup("2026-10-06T23:50:00Z", now), "yesterday");
     assert.equal(getRecencyGroup("2026-10-02T09:00:00Z", now), "thisWeek");
     assert.equal(getRecencyGroup("2026-09-30T09:00:00Z", now), "earlier");
+  });
+});
+
+describe("formatTimestamp", () => {
+  it("writes a moment as a player does, rounding the server's fractions of a second", () => {
+    assert.equal(formatTimestamp(95), "1:35");
+    assert.equal(formatTimestamp(2.7000000000000046), "0:03");
+    assert.equal(formatTimestamp(59.6), "1:00");
   });
 });

@@ -27,6 +27,7 @@
     "today": "Hari ini",
     "yesterday": "Kemarin",
     "empty": "Belum ada catatan",
-    "emptyHint": "Catatan dari rapat Anda akan muncul di sini."
+    "emptyHint": "Catatan dari rapat Anda akan muncul di sini.",
+    "loadFailed": "Tidak dapat memuat catatan terbaru Anda."
   }
 }

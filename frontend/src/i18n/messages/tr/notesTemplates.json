@@ -109,5 +109,6 @@
     "heading": "{section} başlığı",
     "sectionsRequired": "En az bir bölüm bırakın.",
     "create": "Şablon oluştur"
-  }
+  },
+  "rewriteFailed": "Leo notları yeniden yazamadı. Tekrar deneyin."
 }

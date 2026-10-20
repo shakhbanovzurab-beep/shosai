@@ -1,6 +1,5 @@
 {
   "back": "Toutes les notes",
-  "notFound": "Note introuvable",
   "participants": {
     "count": "{count, plural, one {# participant} many {# de participants} other {# participants}}",
     "inMeeting": "{count, plural, one {# personne dans cette réunion.} many {# de personnes dans cette réunion.} other {# personnes dans cette réunion.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Rédigées par Leo à partir de la transcription de la réunion et de vos notes.",
     "writtenByTemplate": "Rédigées par Leo à partir de la transcription de la réunion et de vos notes, selon le modèle « {template} ».",
     "writing": "Rédaction des notes enrichies…",
-    "nothingFor": "Cette réunion ne contient rien pour les rubriques du modèle « {template} »."
+    "nothingFor": "Cette réunion ne contient rien pour les rubriques du modèle « {template} ».",
+    "loadFailed": "Impossible de charger les notes de Leo",
+    "failed": "Leo n’a pas pu rédiger de notes pour cette réunion.",
+    "none": "Leo n’a pas encore rédigé de notes pour cette réunion."
   },
   "export": {
     "button": "Exporter",
@@ -60,7 +62,13 @@
     "position": "{current, number} sur {total, number}",
     "previous": "Résultat précédent",
     "next": "Résultat suivant",
-    "clear": "Effacer la recherche"
+    "clear": "Effacer la recherche",
+    "you": "Vous",
+    "organizer": "Organisateur",
+    "speaker": "Intervenant {n, number}",
+    "unknownSpeaker": "Intervenant inconnu",
+    "loadFailed": "Impossible de charger la transcription",
+    "empty": "Aucune transcription pour l’instant."
   },
   "speakers": {
     "title": "Qui a parlé",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Carte mentale : {topic}",
-    "caption": "Générée à partir de la transcription de la réunion."
+    "caption": "Générée à partir de la transcription de la réunion.",
+    "loadFailed": "Impossible de charger la carte mentale",
+    "none": "Aucune carte mentale pour l’instant. Elle apparaîtra avec les notes de Leo."
+  },
+  "notices": {
+    "live": "Cette réunion est encore en cours. Ses notes apparaîtront quand elle sera terminée.",
+    "writing": "Leo rédige les notes. Elles apparaîtront ici dans quelques minutes.",
+    "speakers": "La transcription et les notes ont été mises à jour avec les intervenants de l’enregistrement.",
+    "failed": {
+      "transcript_empty": "Leo n’a pas pu rédiger de notes : aucune parole n’a été trouvée dans l’enregistrement.",
+      "upload_exceeds_minutes": "L’enregistrement dépasse les minutes restantes de votre forfait, il n’a donc pas été traité.",
+      "recording_too_long": "L’enregistrement dépasse 6 heures, il n’a donc pas été traité.",
+      "unsupported_audio_format": "Ce format de fichier n’est pas pris en charge. Importez un fichier audio ou vidéo dans un format courant.",
+      "media_unreadable": "Impossible de lire l’enregistrement. Importez le fichier à nouveau.",
+      "consent_required": "Leo a besoin de votre consentement pour traiter l’enregistrement. Donnez-le dans Paramètres › Confidentialité.",
+      "content_refused": "Leo n’a pas pu rédiger de notes pour cet enregistrement.",
+      "other": "Leo n’a pas pu rédiger de notes pour cette réunion."
+    }
+  },
+  "actionItems": {
+    "due": "Échéance le {date}"
   }
 }

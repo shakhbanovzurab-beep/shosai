@@ -1,6 +1,5 @@
 {
   "back": "所有筆記",
-  "notFound": "找不到筆記",
   "participants": {
     "count": "{count, plural, other {# 位參與者}}",
     "inMeeting": "{count, plural, other {這場會議有 # 位參與者。}}",
@@ -21,7 +20,10 @@
     "writtenBy": "由 Leo 根據會議逐字稿和你的筆記撰寫。",
     "writtenByTemplate": "由 Leo 根據會議逐字稿和你的筆記撰寫，採用「{template}」版面。",
     "writing": "正在撰寫強化版筆記…",
-    "nothingFor": "這場會議沒有符合「{template}」各區段的內容。"
+    "nothingFor": "這場會議沒有符合「{template}」各區段的內容。",
+    "loadFailed": "無法載入 Leo 的筆記",
+    "failed": "Leo 無法為這場會議寫筆記。",
+    "none": "Leo 還沒為這場會議寫筆記。"
   },
   "export": {
     "button": "匯出",
@@ -60,7 +62,13 @@
     "position": "第 {current, number} 個，共 {total, number} 個",
     "previous": "上一個相符結果",
     "next": "下一個相符結果",
-    "clear": "清除搜尋"
+    "clear": "清除搜尋",
+    "you": "你",
+    "organizer": "主辦人",
+    "speaker": "發言者 {n, number}",
+    "unknownSpeaker": "不明的發言者",
+    "loadFailed": "無法載入逐字稿",
+    "empty": "這場會議還沒有逐字稿。"
   },
   "speakers": {
     "title": "發言者",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "心智圖：{topic}",
-    "caption": "根據會議逐字稿產生。"
+    "caption": "根據會議逐字稿產生。",
+    "loadFailed": "無法載入心智圖",
+    "none": "還沒有心智圖，會和 Leo 的筆記一起出現。"
+  },
+  "notices": {
+    "live": "這場會議仍在進行中，筆記會在結束後出現。",
+    "writing": "Leo 正在寫筆記，幾分鐘後會顯示在這裡。",
+    "speakers": "已用錄製內容中的發言者更新逐字稿和筆記。",
+    "failed": {
+      "transcript_empty": "Leo 無法寫筆記：錄製內容中找不到說話聲。",
+      "upload_exceeds_minutes": "錄製內容比方案剩餘的分鐘數還長，因此沒有處理。",
+      "recording_too_long": "錄製內容超過 6 小時，因此沒有處理。",
+      "unsupported_audio_format": "不支援這種檔案格式。請上傳常見格式的音訊或影片檔案。",
+      "media_unreadable": "無法讀取錄製內容，請重新上傳檔案。",
+      "consent_required": "Leo 需要你的同意才能處理錄製內容。請在「設定 › 隱私權」中同意。",
+      "content_refused": "Leo 無法為這段錄製內容寫筆記。",
+      "other": "Leo 無法為這場會議寫筆記。"
+    }
+  },
+  "actionItems": {
+    "due": "{date} 到期"
   }
 }

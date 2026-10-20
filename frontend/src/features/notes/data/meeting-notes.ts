@@ -1,4 +1,4 @@
-import type { MeetingNote, NoteFolder } from "../domain/types";
+import type { MeetingNote } from "../domain/types";
 import { sampleMyNotes } from "./sample-my-notes";
 import { hubNotes } from "./sample-notes-hubs";
 import { productNotes } from "./sample-notes-product";
@@ -6,16 +6,8 @@ import { romashkaNotes } from "./sample-notes-romashka";
 import { romashkaLateNotes } from "./sample-notes-romashka-late";
 import { teamNotes } from "./sample-notes-team";
 
-export const noteFolders: NoteFolder[] = [
-  { id: "goal", name: "Goal", color: "red" },
-  { id: "progress", name: "Progress", color: "blue" },
-  { id: "work", name: "Work", color: "amber" },
-];
-
-/** The demo account's address (the settings slice's demo user): it marks "(me)" among a meeting's attendees. */
-export const ACCOUNT_EMAIL = "arham@lumen.so";
-
-// Sample data until meetings are recorded and transcribed for real.
+// Образцы встреч для срезов, что ещё не читают встречи через API (хабы, рабочие пространства, обзор встреч),
+// и для публичной страницы ссылки до шага 19 плана notes. Экраны заметок их не читают.
 export const meetingNotes: MeetingNote[] = [
   ...productNotes,
   ...teamNotes,

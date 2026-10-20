@@ -5,10 +5,10 @@ import { MetaItem } from "@/components/meta-item";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 
 import type { SharedNote } from "../domain/shared-note";
-import { EnhancedNotes } from "./enhanced-notes";
 import { MeetingFacts } from "./meeting-facts";
 import { NoteTranscript } from "./note-transcript";
 import { SharedComments } from "./shared-comments";
+import { SharedEnhancedNotes } from "./shared-enhanced-notes";
 import { enhancedTemplate } from "./template-words";
 
 const PAGE = "mx-auto flex w-full max-w-3xl flex-col gap-10 px-4 py-10 sm:py-16";
@@ -65,7 +65,7 @@ export function SharedNoteScreen({ note }: { readonly note: SharedNote }) {
         </dl>
       </header>
 
-      <EnhancedNotes
+      <SharedEnhancedNotes
         template={enhancedTemplate(templates)}
         generating={false}
         content={{

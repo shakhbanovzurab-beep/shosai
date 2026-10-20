@@ -7,7 +7,7 @@ import { apiErrorDescription } from "@/lib/api/error-description";
 import { copyText } from "@/lib/copy-text";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
 
-import { notesApi } from "../api/notes-api";
+import { shareApi } from "../api/share-api";
 import type { SharedCommentsResponse, ShareLinkSettings } from "../domain/share-link";
 import type { CommonWords, ShareWords } from "./words";
 
@@ -23,8 +23,8 @@ function keyed<T>(load: (key: string) => Promise<T>) {
   };
 }
 
-const linkOf = keyed((noteId) => notesApi.getShareLink(noteId));
-const commentsOf = keyed((token) => notesApi.listComments(token));
+const linkOf = keyed((noteId) => shareApi.getShareLink(noteId));
+const commentsOf = keyed((token) => shareApi.listComments(token));
 
 export const useShareLink = (noteId: string) => usePollingResource(linkOf(noteId));
 export const retryShareLink = (noteId: string) => linkOf(noteId).refresh();
@@ -38,7 +38,7 @@ export async function updateShareLink(noteId: string, settings: ShareLinkSetting
   const previous = before.status === "ready" ? before.data : null;
   resource.update((data) => (data.link ? { link: { ...data.link, settings } } : data));
   try {
-    const saved = await notesApi.saveShareLink(noteId, settings);
+    const saved = await shareApi.saveShareLink(noteId, settings);
     resource.update(() => saved);
   } catch (error) {
     if (previous) resource.update(() => previous);
@@ -50,7 +50,7 @@ export async function updateShareLink(noteId: string, settings: ShareLinkSetting
 export async function stopSharing(noteId: string, t: ShareWords) {
   try {
     linkOf(noteId).update(() => ({ link: null }));
-    await notesApi.revokeShareLink(noteId);
+    await shareApi.revokeShareLink(noteId);
     toast.success(t("panel.turnedOff"));
   } catch (error) {
     void linkOf(noteId).refresh();
@@ -70,7 +70,7 @@ export async function copyShareLink(url: string, common: CommonWords) {
 /** Posts a comment under a shared meeting; true once it's there. */
 export async function postSharedComment(token: string, author: string, text: string, t: ShareWords) {
   try {
-    const saved: SharedCommentsResponse = await notesApi.addComment(token, author, text);
+    const saved: SharedCommentsResponse = await shareApi.addComment(token, author, text);
     commentsOf(token).update(() => saved);
     return true;
   } catch (error) {

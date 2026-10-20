@@ -30,15 +30,14 @@
     "dropHint": "mp3, m4a, wav, mp4, webm y más · hasta {size}",
     "notMedia": "{name} no es un archivo de audio ni de video",
     "tooLarge": "{name} es demasiado grande",
-    "sizeLimit": "Las grabaciones pueden pesar hasta {size}."
+    "sizeLimit": "Las grabaciones pueden pesar hasta {size}.",
+    "failed": "No se pudo subir «{name}»"
   },
   "recordings": {
     "uploading": "Subiendo",
     "justNow": "Ahora mismo",
-    "transcribing": "Transcribiendo",
     "transcribingNow": "Transcribiendo…",
-    "waiting": "Esperando la transcripción…",
-    "timelineStatus": "Transcribiendo… Cuando termine, aquí aparecerán las notas, las decisiones y un mapa mental."
+    "uploadingShare": "Subiendo… {share}"
   },
   "remove": "Quitar {name}",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "Última reunión",
     "keyPoints": "Puntos clave",
     "openNotes": "Abrir notas",
-    "openItems": "{count, plural, one {# pendiente} many {# de pendientes} other {# pendientes}}"
+    "openItems": "{count, plural, one {# pendiente} many {# de pendientes} other {# pendientes}}",
+    "live": "Reunión en curso",
+    "notesFailed": "Leo no pudo escribir notas de esta reunión",
+    "noSummary": "Aún no hay resumen"
   },
   "timeline": {
     "decision": "Decisión:",
@@ -81,5 +83,42 @@
     "json": "Archivo JSON"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "Se eliminó «{title}»"
+  "deleted": "Se eliminó «{title}»",
+  "problems": {
+    "meeting_not_found": "Esta reunión no está disponible. Puede que se haya eliminado.",
+    "meeting_not_yours": "Solo el propietario de la reunión puede hacerlo.",
+    "meeting_active": "La reunión sigue en curso. Inténtalo de nuevo cuando termine.",
+    "meeting_read_only": "Puedes leer esta reunión, pero no cambiarla.",
+    "company_meeting_has_no_folder": "Una reunión de un espacio de trabajo no puede ir a tus carpetas.",
+    "folder_not_found": "Esta carpeta ya no existe.",
+    "folder_name_required": "Ponle un nombre a la carpeta.",
+    "folder_name_too_long": "El nombre de la carpeta es demasiado largo.",
+    "template_not_found": "Esta plantilla ya no existe.",
+    "template_not_shipped": "Aquí solo el propietario de la reunión puede usar su propia plantilla. Elige una integrada.",
+    "template_builtin_read_only": "Las plantillas integradas no se pueden cambiar.",
+    "templates_limit_reached": "Ya tienes todas las plantillas propias que se permiten. Elimina una para agregar otra.",
+    "template_name_required": "Ponle un nombre a la plantilla.",
+    "template_name_too_long": "El nombre de la plantilla es demasiado largo.",
+    "template_description_too_long": "La descripción de la plantilla es demasiado larga.",
+    "template_section_title_too_long": "El título de una sección es demasiado largo.",
+    "template_sections_required": "Elige al menos una sección.",
+    "template_section_repeated": "Cada sección solo puede aparecer una vez.",
+    "notes_not_ready": "Leo aún no ha escrito las notas. Inténtalo de nuevo cuando aparezcan.",
+    "notes_too_long": "Tus notas son demasiado largas para guardarlas. Acórtalas e inténtalo de nuevo.",
+    "participant_email_invalid": "Escribe una dirección de correo, como name@company.com.",
+    "participants_limit_reached": "Esta reunión ya tiene el máximo de participantes.",
+    "participant_not_found": "Este participante ya no está en la reunión.",
+    "participant_not_removable": "Solo se pueden quitar las personas agregadas a mano.",
+    "upload_not_claimable": "Esta subida no se puede usar como grabación. Sube el archivo de nuevo.",
+    "meetings_not_kept": "Tu cuenta no guarda reuniones, así que no se pueden subir grabaciones.",
+    "upload_rejected": "El archivo llegó corrupto. Súbelo de nuevo.",
+    "upload_interrupted": "La subida se interrumpió. Revisa tu conexión y sube el archivo de nuevo."
+  },
+  "library": {
+    "loadFailed": "No se pudieron cargar tus reuniones",
+    "more": "Mostrar reuniones anteriores",
+    "moreFailed": "No se pudieron cargar más reuniones",
+    "emptyTitle": "Aún no hay reuniones",
+    "emptyDescription": "Graba una reunión en la aplicación de escritorio o sube una grabación. Su transcripción y sus notas aparecerán aquí."
+  }
 }

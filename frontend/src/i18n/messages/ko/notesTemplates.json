@@ -109,5 +109,6 @@
     "heading": "{section} 제목",
     "sectionsRequired": "섹션을 하나 이상 남겨 주세요.",
     "create": "템플릿 만들기"
-  }
+  },
+  "rewriteFailed": "Leo가 노트를 다시 쓰지 못했어요. 다시 시도해 주세요."
 }

@@ -4760,6 +4760,56 @@
         }
       }
     },
+    "/v1/notes/counts": {
+      "get": {
+        "tags": [
+          "notes"
+        ],
+        "summary": "Library Counts",
+        "description": "How many meetings the library holds, in all and per folder.",
+        "operationId": "library_counts_v1_notes_counts_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CountsOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/notes/templates": {
       "get": {
         "tags": [
@@ -8356,6 +8406,30 @@
         "title": "CopyBody",
         "description": "The copy's name; a numbered name of the source when left out."
       },
+      "CountsOut": {
+        "properties": {
+          "all": {
+            "type": "integer",
+            "title": "All",
+            "description": "Every meeting the person may read, shared ones included."
+          },
+          "folders": {
+            "items": {
+              "$ref": "#/components/schemas/FolderCountOut"
+            },
+            "type": "array",
+            "title": "Folders",
+            "description": "The person's own meetings in each folder that holds any."
+          }
+        },
+        "type": "object",
+        "required": [
+          "all",
+          "folders"
+        ],
+        "title": "CountsOut",
+        "description": "Every meeting the person may read, and their own meetings per folder."
+      },
       "Currency": {
         "type": "string",
         "enum": [
@@ -9414,6 +9488,26 @@
         ],
         "title": "FolderColor",
         "description": "A folder's colour."
+      },
+      "FolderCountOut": {
+        "properties": {
+          "folder_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Folder Id"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "folder_id",
+          "count"
+        ],
+        "title": "FolderCountOut",
+        "description": "How many of the person's meetings one of their folders holds."
       },
       "FolderIn": {
         "properties": {

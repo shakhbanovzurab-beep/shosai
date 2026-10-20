@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useRef, useState } from "react";
+import { type FormEvent, useRef, useState, useTransition } from "react";
 
 import { cn } from "cn";
 import { useTranslations } from "use-intl";
@@ -18,9 +18,10 @@ import {
 import { Field } from "@/components/ui/field";
 import { FieldError, FieldLabel } from "@/components/ui/field-text";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 
 import { type NoteTemplate, SECTION_KINDS, TEMPLATE_ICONS, type TemplateIcon } from "../domain/templates";
-import { addTemplate } from "../model/templates-store";
+import { createTemplate, templateOf } from "../model/templates";
 import { TEMPLATE_ICON_GLYPHS } from "./template-icons";
 
 const optionClass = (selected: boolean) =>
@@ -35,6 +36,7 @@ const optionClass = (selected: boolean) =>
  */
 function NewTemplateForm({ onDone, onCreated }: { onDone: () => void; onCreated: (template: NoteTemplate) => void }) {
   const t = useTranslations("notesTemplates");
+  const notes = useTranslations("notes");
   const common = useTranslations("common");
   const [icon, setIcon] = useState<TemplateIcon>("briefcase");
   const [sections, setSections] = useState(() =>
@@ -42,6 +44,7 @@ function NewTemplateForm({ onDone, onCreated }: { onDone: () => void; onCreated:
   );
   const [problem, setProblem] = useState<"name" | "sections" | null>(null);
   const nameRef = useRef<HTMLInputElement>(null);
+  const [saving, startSaving] = useTransition();
 
   const updateSection = (index: number, patch: Partial<(typeof sections)[number]>) =>
     setSections((current) => current.map((section, i) => (i === index ? { ...section, ...patch } : section)));
@@ -60,14 +63,20 @@ function NewTemplateForm({ onDone, onCreated }: { onDone: () => void; onCreated:
       setProblem("sections");
       return;
     }
-    onDone();
     const template = {
       name,
       icon,
       description: String(form.get("description") ?? "").trim() || t("dialog.ownDescription"),
       sections: included.map(({ kind, title }) => ({ kind, title: title.trim() || t(`sections.${kind}`) })),
     };
-    onCreated(addTemplate(template, t));
+    // Диалог ждёт ответа сервера: при отказе (тост с причиной) набранное остаётся, сохранённый шаблон сразу
+    // переписывает запись встречи.
+    startSaving(async () => {
+      const created = await createTemplate(template, { t, notes });
+      if (!created) return;
+      onDone();
+      onCreated(templateOf(created, t));
+    });
   };
 
   return (
@@ -153,7 +162,10 @@ function NewTemplateForm({ onDone, onCreated }: { onDone: () => void; onCreated:
         <Button type="button" variant="ghost" onClick={onDone}>
           {common("actions.cancel")}
         </Button>
-        <Button type="submit">{t("dialog.create")}</Button>
+        <Button type="submit" disabled={saving}>
+          {saving ? <Spinner data-icon="inline-start" /> : null}
+          {t("dialog.create")}
+        </Button>
       </DialogFooter>
     </form>
   );

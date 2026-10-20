@@ -1,6 +1,5 @@
 {
   "back": "Tất cả ghi chú",
-  "notFound": "Không tìm thấy ghi chú",
   "participants": {
     "count": "{count, plural, other {# người tham gia}}",
     "inMeeting": "{count, plural, other {# người trong cuộc họp này.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Leo viết dựa trên bản chép lời cuộc họp và ghi chú của bạn.",
     "writtenByTemplate": "Leo viết dựa trên bản chép lời cuộc họp và ghi chú của bạn, theo bố cục “{template}”.",
     "writing": "Đang viết bản ghi chú nâng cao…",
-    "nothingFor": "Cuộc họp này không có nội dung cho các phần của “{template}”."
+    "nothingFor": "Cuộc họp này không có nội dung cho các phần của “{template}”.",
+    "loadFailed": "Không thể tải ghi chú của Leo",
+    "failed": "Leo không thể viết ghi chú cho cuộc họp này.",
+    "none": "Leo chưa viết ghi chú cho cuộc họp này."
   },
   "export": {
     "button": "Xuất",
@@ -60,7 +62,13 @@
     "position": "{current, number} trên {total, number}",
     "previous": "Kết quả trước",
     "next": "Kết quả tiếp theo",
-    "clear": "Xóa nội dung tìm kiếm"
+    "clear": "Xóa nội dung tìm kiếm",
+    "you": "Bạn",
+    "organizer": "Người tổ chức",
+    "speaker": "Người nói {n, number}",
+    "unknownSpeaker": "Người nói không rõ",
+    "loadFailed": "Không thể tải bản chép lời",
+    "empty": "Cuộc họp này chưa có bản chép lời."
   },
   "speakers": {
     "title": "Ai đã nói",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Sơ đồ tư duy: {topic}",
-    "caption": "Được tạo từ bản chép lời cuộc họp."
+    "caption": "Được tạo từ bản chép lời cuộc họp.",
+    "loadFailed": "Không thể tải sơ đồ tư duy",
+    "none": "Chưa có sơ đồ tư duy nào. Sơ đồ sẽ xuất hiện cùng ghi chú của Leo."
+  },
+  "notices": {
+    "live": "Cuộc họp này vẫn đang diễn ra. Ghi chú sẽ xuất hiện sau khi cuộc họp kết thúc.",
+    "writing": "Leo đang viết ghi chú. Ghi chú sẽ hiện ở đây sau vài phút.",
+    "speakers": "Bản chép lời và ghi chú đã được cập nhật với người nói từ bản ghi.",
+    "failed": {
+      "transcript_empty": "Leo không thể viết ghi chú: không tìm thấy lời nói trong bản ghi.",
+      "upload_exceeds_minutes": "Bản ghi dài hơn số phút còn lại trong gói của bạn nên chưa được xử lý.",
+      "recording_too_long": "Bản ghi dài hơn 6 giờ nên chưa được xử lý.",
+      "unsupported_audio_format": "Định dạng tệp này không được hỗ trợ. Hãy tải lên tệp âm thanh hoặc video ở định dạng phổ biến.",
+      "media_unreadable": "Không thể đọc bản ghi. Hãy tải tệp lên lại.",
+      "consent_required": "Leo cần bạn đồng ý để xử lý bản ghi. Hãy đồng ý trong Cài đặt › Quyền riêng tư.",
+      "content_refused": "Leo không thể viết ghi chú cho bản ghi này.",
+      "other": "Leo không thể viết ghi chú cho cuộc họp này."
+    }
+  },
+  "actionItems": {
+    "due": "Hạn chót {date}"
   }
 }

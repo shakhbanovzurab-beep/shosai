@@ -109,5 +109,6 @@
     "heading": "{section} の見出し",
     "sectionsRequired": "セクションを 1 つ以上残してください。",
     "create": "テンプレートを作成"
-  }
+  },
+  "rewriteFailed": "Leo はノートを書き直せませんでした。もう一度お試しください。"
 }

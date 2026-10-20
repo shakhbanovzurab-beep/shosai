@@ -4,42 +4,38 @@ import { useTranslations } from "use-intl";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/lib/navigation";
 
-import type { MeetingNote } from "../domain/types";
-import { ActionItems } from "./action-items";
+import type { MeetingPage } from "../domain/meeting-page";
 import { ExportTranscriptMenu } from "./export-transcript-menu";
 import { MeetingFacts } from "./meeting-facts";
 import { MyNotes } from "./my-notes";
+import { MindMapPanel, TranscriptPanel } from "./note-content-panels";
 import { NoteFolderPicker } from "./note-folder-picker";
-import { NoteMindMap } from "./note-mind-map";
+import { NoteNotices } from "./note-notices";
 import { NoteParticipants } from "./note-participants";
 import { type NoteTab, NoteTabs } from "./note-tabs";
-import { SpeakerStats } from "./speaker-stats";
-import { TranscriptSearch } from "./transcript-search";
 
 interface NoteDetailProps {
-  readonly note: MeetingNote;
-  /** Extra actions next to the download button, e.g. sharing the recording to a workspace. */
+  readonly note: MeetingPage;
+  /** Ещё действия рядом с кнопкой выгрузки, например поделиться записью с рабочим пространством. */
   readonly actions?: React.ReactNode;
-  /** Wraps the note's own action items, e.g. to show them as tasks once the recording is shared. */
+  /** Оборачивает задачи встречи, например чтобы показать их задачами, когда записью поделились. */
   readonly renderActionItems?: (local: React.ReactNode) => React.ReactNode;
-  /** More facts for the row under the title, e.g. the hub the meeting belongs to. */
+  /** Ещё факты в строку под заголовком, например хаб, к которому относится встреча. */
   readonly meta?: React.ReactNode;
-  /** Seconds into the recording a link pointed at: the transcript opens there. */
+  /** На какую секунду записи указывала ссылка: расшифровка открывается там. */
   readonly moment?: number;
 }
 
 const META_ROW = "flex min-h-6 flex-wrap items-center gap-x-5 gap-y-1 text-muted-foreground text-sm sm:flex-nowrap";
 
-/** The tab a note opens on: the transcript at a linked moment, else the user's own notes, else Leo's. */
-function initialTab(note: MeetingNote, moment: number | undefined): NoteTab {
+/** Вкладка, с которой открывается встреча: расшифровка у ссылки на момент, иначе запись Leo, а без неё — свои заметки. */
+function initialTab(note: MeetingPage, moment: number | undefined): NoteTab {
   if (moment !== undefined) return "transcript";
-  return note.myNotes ? "notes" : "enhanced";
+  return note.notes === "ready" ? "enhanced" : "notes";
 }
 
 export function NoteDetail({ note, actions, renderActionItems, meta, moment }: NoteDetailProps) {
   const t = useTranslations("notesNote");
-  const localActionItems = note.actionItems.length > 0 ? <ActionItems items={note.actionItems} /> : null;
-  const actionItems = localActionItems && renderActionItems ? renderActionItems(localActionItems) : localActionItems;
 
   return (
     <article className="mx-auto flex w-full max-w-3xl flex-col gap-6" aria-labelledby="note-title">
@@ -56,29 +52,26 @@ export function NoteDetail({ note, actions, renderActionItems, meta, moment }: N
           </h1>
           <div className="flex shrink-0 flex-wrap items-center gap-2">
             {actions}
-            <ExportTranscriptMenu note={note} />
+            {note.lineCount > 0 ? <ExportTranscriptMenu meetingId={note.id} /> : null}
           </div>
         </div>
-        {/* One row from sm up: the hub, last, is the only value that gives way, by truncating. */}
+        {/* С sm — одна строка: уступает место только последний хаб, обрезаясь. */}
         <dl className={META_ROW}>
           <MeetingFacts startedAt={note.startedAt} durationMinutes={note.durationMinutes} />
-          <NoteParticipants participants={note.participants} />
-          <NoteFolderPicker noteId={note.id} initialFolderId={note.folderId} />
+          <NoteParticipants note={note} />
+          {note.owned ? <NoteFolderPicker noteId={note.id} folderId={note.folderId} /> : null}
           {meta}
         </dl>
+        <NoteNotices note={note} />
       </header>
 
       <NoteTabs
+        note={note}
         defaultTab={initialTab(note, moment)}
         notes={<MyNotes noteId={note.id} />}
-        enhanced={{ summary: note.summary, keyPoints: note.keyPoints, decisions: note.decisions, actionItems }}
-        transcript={
-          <div className="flex flex-col gap-6">
-            <SpeakerStats note={note} />
-            <TranscriptSearch lines={note.transcript} moment={moment} />
-          </div>
-        }
-        mindMap={<NoteMindMap root={note.mindMap} />}
+        renderActionItems={renderActionItems}
+        transcript={<TranscriptPanel note={note} moment={moment} />}
+        mindMap={<MindMapPanel noteId={note.id} />}
       />
     </article>
   );

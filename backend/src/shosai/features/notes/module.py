@@ -22,8 +22,8 @@
 - 16: Leo's four write tools — a folder, a new write-up, the share link on and off
   (`channels/agent_write_tools.py`).
 
-The folders' and templates' routes come before `/v1/notes/{meeting_id}`: the first match
-wins, and `folders` is no meeting's id.
+The folders', counts' and templates' routes come before `/v1/notes/{meeting_id}`: the first
+match wins, and `folders` or `counts` is no meeting's id.
 
 Without `NOTES_MODEL` (development only: production refuses to start) the two
 stages have no handler, and runs wait for one.
@@ -47,6 +47,7 @@ from shosai.features.notes.application.hidden_meetings import HiddenMeetings
 from shosai.features.notes.application.import_jobs import ImportJobs
 from shosai.features.notes.application.imports import RecordingImports
 from shosai.features.notes.application.library import MeetingLibrary
+from shosai.features.notes.application.library_counts import MeetingCounts
 from shosai.features.notes.application.lifecycle import MeetingLifecycle
 from shosai.features.notes.application.live_meetings import LiveMeetingBinder
 from shosai.features.notes.application.live_transcript import LiveTranscript
@@ -75,6 +76,7 @@ from shosai.features.notes.channels.agent_tool_writes import NoteWrites, WriteSt
 from shosai.features.notes.channels.agent_tools import READ_TOOLS
 from shosai.features.notes.channels.agent_write_tools import WRITE_TOOLS
 from shosai.features.notes.channels.http.admin_meetings import build_admin_meetings_router
+from shosai.features.notes.channels.http.counts import build_counts_router
 from shosai.features.notes.channels.http.folders import build_folders_router
 from shosai.features.notes.channels.http.imports import build_imports_router
 from shosai.features.notes.channels.http.meeting_content import build_meeting_content_router
@@ -163,6 +165,7 @@ def http_routers(
     return (
         build_settings_router(settings, ports),
         build_folders_router(Folders(transactions, services.effects), ports),
+        build_counts_router(MeetingCounts(transactions, ports), ports),
         build_templates_router(Templates(transactions, services.effects), ports),
         build_native_sessions_router(lifecycle, ports),
         build_native_import_router(

@@ -27,6 +27,7 @@
     "today": "Bugün",
     "yesterday": "Dün",
     "empty": "Henüz not yok",
-    "emptyHint": "Toplantılarınızın notları burada görünecek."
+    "emptyHint": "Toplantılarınızın notları burada görünecek.",
+    "loadFailed": "Son notlarınız yüklenemedi."
   }
 }

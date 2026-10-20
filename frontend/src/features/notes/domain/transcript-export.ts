@@ -1,6 +1,6 @@
 import { formatTimestamp } from "./format";
 import { transcriptCues } from "./transcript-cues";
-import type { MeetingNote } from "./types";
+import type { TranscriptDocument } from "./types";
 
 /** The formats a transcript downloads in; the UI names each one in the interface language. */
 export const EXPORT_FORMATS = ["txt", "md", "srt", "vtt", "json"] as const;
@@ -30,7 +30,7 @@ const vttEscape = (text: string) => text.replace(/[&<>]/g, (character) => VTT_EN
  * The transcript as a file's contents in the given format. What was said stays as said; `heading` (the date
  * and length of the meeting) comes worded in the interface language, for the text and Markdown files.
  */
-export function exportTranscript(note: MeetingNote, format: ExportFormat, heading: string): string {
+export function exportTranscript(note: TranscriptDocument, format: ExportFormat, heading: string): string {
   switch (format) {
     case "txt":
       return [
@@ -82,4 +82,5 @@ export function exportTranscript(note: MeetingNote, format: ExportFormat, headin
   }
 }
 
-export const exportFileName = (note: MeetingNote, format: ExportFormat) => `${note.id}-transcript.${format}`;
+export const exportFileName = (note: Pick<TranscriptDocument, "id">, format: ExportFormat) =>
+  `${note.id}-transcript.${format}`;

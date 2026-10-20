@@ -30,15 +30,14 @@
     "dropHint": "mp3、m4a、wav、mp4、webm など · 最大 {size}",
     "notMedia": "{name} は音声ファイルでも動画ファイルでもありません",
     "tooLarge": "{name} はサイズが大きすぎます",
-    "sizeLimit": "レコーディングは {size} までです。"
+    "sizeLimit": "レコーディングは {size} までです。",
+    "failed": "「{name}」をアップロードできませんでした"
   },
   "recordings": {
     "uploading": "アップロード中",
     "justNow": "たった今",
-    "transcribing": "文字起こし中",
     "transcribingNow": "文字起こし中…",
-    "waiting": "文字起こしを待っています…",
-    "timelineStatus": "文字起こし中… 完了すると、ノート、決定事項、マインドマップがここに表示されます。"
+    "uploadingShare": "アップロード中… {share}"
   },
   "remove": "{name} を削除",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "最新の会議",
     "keyPoints": "要点",
     "openNotes": "ノートを開く",
-    "openItems": "{count, plural, other {未完了 # 件}}"
+    "openItems": "{count, plural, other {未完了 # 件}}",
+    "live": "会議中",
+    "notesFailed": "Leo はこの会議のノートを書けませんでした",
+    "noSummary": "要約はまだありません"
   },
   "timeline": {
     "decision": "決定事項：",
@@ -81,5 +83,42 @@
     "json": "JSON 形式"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "「{title}」を削除しました"
+  "deleted": "「{title}」を削除しました",
+  "problems": {
+    "meeting_not_found": "この会議は利用できません。削除された可能性があります。",
+    "meeting_not_yours": "この操作は会議のオーナーだけができます。",
+    "meeting_active": "会議はまだ進行中です。終了してからもう一度お試しください。",
+    "meeting_read_only": "この会議は閲覧のみで、変更はできません。",
+    "company_meeting_has_no_folder": "ワークスペースの会議は自分のフォルダに入れられません。",
+    "folder_not_found": "このフォルダはもうありません。",
+    "folder_name_required": "フォルダに名前を付けてください。",
+    "folder_name_too_long": "フォルダ名が長すぎます。",
+    "template_not_found": "このテンプレートはもうありません。",
+    "template_not_shipped": "ここで自分のテンプレートを使えるのは会議のオーナーだけです。組み込みのテンプレートを選んでください。",
+    "template_builtin_read_only": "組み込みのテンプレートは変更できません。",
+    "templates_limit_reached": "作成できるテンプレートの上限に達しました。新しく追加するには1つ削除してください。",
+    "template_name_required": "テンプレートに名前を付けてください。",
+    "template_name_too_long": "テンプレート名が長すぎます。",
+    "template_description_too_long": "テンプレートの説明が長すぎます。",
+    "template_section_title_too_long": "セクションのタイトルが長すぎます。",
+    "template_sections_required": "セクションを1つ以上選んでください。",
+    "template_section_repeated": "同じセクションは1回しか使えません。",
+    "notes_not_ready": "Leo はまだノートを書いていません。ノートが表示されてからもう一度お試しください。",
+    "notes_too_long": "ノートが長すぎて保存できません。短くしてからもう一度お試しください。",
+    "participant_email_invalid": "name@company.com のようなメールアドレスを入力してください。",
+    "participants_limit_reached": "この会議の参加者は上限に達しています。",
+    "participant_not_found": "この参加者はもう会議にいません。",
+    "participant_not_removable": "削除できるのは手動で追加した人だけです。",
+    "upload_not_claimable": "このアップロードはレコーディングとして使えません。ファイルをもう一度アップロードしてください。",
+    "meetings_not_kept": "アカウントで会議を保存しない設定のため、レコーディングをアップロードできません。",
+    "upload_rejected": "ファイルが破損した状態で届きました。もう一度アップロードしてください。",
+    "upload_interrupted": "アップロードが中断されました。接続を確認して、ファイルをもう一度アップロードしてください。"
+  },
+  "library": {
+    "loadFailed": "会議を読み込めませんでした",
+    "more": "以前の会議を表示",
+    "moreFailed": "さらに会議を読み込めませんでした",
+    "emptyTitle": "会議はまだありません",
+    "emptyDescription": "デスクトップアプリで会議をレコーディングするか、レコーディングをアップロードしてください。文字起こしとノートがここに表示されます。"
+  }
 }

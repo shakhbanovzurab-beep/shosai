@@ -27,6 +27,7 @@
     "today": "今天",
     "yesterday": "昨天",
     "empty": "還沒有筆記",
-    "emptyHint": "會議筆記會顯示在這裡。"
+    "emptyHint": "會議筆記會顯示在這裡。",
+    "loadFailed": "無法載入最近的筆記。"
   }
 }

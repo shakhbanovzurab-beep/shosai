@@ -1,6 +1,5 @@
 {
   "back": "すべてのノート",
-  "notFound": "ノートが見つかりません",
   "participants": {
     "count": "{count, plural, other {参加者 # 人}}",
     "inMeeting": "{count, plural, other {この会議の参加者は # 人です。}}",
@@ -21,7 +20,10 @@
     "writtenBy": "会議の文字起こしと自分のノートをもとに Leo が作成しました。",
     "writtenByTemplate": "会議の文字起こしと自分のノートをもとに、「{template}」のレイアウトで Leo が作成しました。",
     "writing": "AI 版ノートを作成中…",
-    "nothingFor": "この会議には「{template}」のセクションに該当する内容がありません。"
+    "nothingFor": "この会議には「{template}」のセクションに該当する内容がありません。",
+    "loadFailed": "Leo のノートを読み込めませんでした",
+    "failed": "Leo はこの会議のノートを書けませんでした。",
+    "none": "Leo はまだこの会議のノートを書いていません。"
   },
   "export": {
     "button": "エクスポート",
@@ -60,7 +62,13 @@
     "position": "{current, number} / {total, number}",
     "previous": "前の一致",
     "next": "次の一致",
-    "clear": "検索をクリア"
+    "clear": "検索をクリア",
+    "you": "自分",
+    "organizer": "主催者",
+    "speaker": "話者 {n, number}",
+    "unknownSpeaker": "不明な話者",
+    "loadFailed": "文字起こしを読み込めませんでした",
+    "empty": "この会議にはまだ文字起こしがありません。"
   },
   "speakers": {
     "title": "発言者",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "マインドマップ：{topic}",
-    "caption": "会議の文字起こしから生成しました。"
+    "caption": "会議の文字起こしから生成しました。",
+    "loadFailed": "マインドマップを読み込めませんでした",
+    "none": "マインドマップはまだありません。Leo のノートと一緒に表示されます。"
+  },
+  "notices": {
+    "live": "この会議はまだ進行中です。ノートは会議の終了後に表示されます。",
+    "writing": "Leo がノートを書いています。数分後にここに表示されます。",
+    "speakers": "レコーディングの話者で文字起こしとノートを更新しました。",
+    "failed": {
+      "transcript_empty": "Leo はノートを書けませんでした。レコーディングに発話が見つかりませんでした。",
+      "upload_exceeds_minutes": "レコーディングがプランの残り時間より長いため、処理しませんでした。",
+      "recording_too_long": "レコーディングが6時間を超えるため、処理しませんでした。",
+      "unsupported_audio_format": "このファイル形式には対応していません。一般的な形式の音声または動画ファイルをアップロードしてください。",
+      "media_unreadable": "レコーディングを読み取れませんでした。ファイルをもう一度アップロードしてください。",
+      "consent_required": "Leo がレコーディングを処理するには同意が必要です。「設定 › プライバシー」で同意してください。",
+      "content_refused": "Leo はこのレコーディングのノートを書けませんでした。",
+      "other": "Leo はこの会議のノートを書けませんでした。"
+    }
+  },
+  "actionItems": {
+    "due": "期限：{date}"
   }
 }

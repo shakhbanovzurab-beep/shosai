@@ -13,11 +13,10 @@ import {
 import { DropdownMenuItem, DropdownMenuLabel, DropdownMenuShortcut } from "@/components/ui/dropdown-menu-items";
 
 import { EXPORT_FORMATS } from "../domain/transcript-export";
-import type { MeetingNote } from "../domain/types";
 import { useTranscriptDownload } from "./use-transcript-download";
 
-/** Export the transcript as text, Markdown, subtitles (SRT, VTT) or JSON. */
-export function ExportTranscriptMenu({ note }: { readonly note: MeetingNote }) {
+/** Выгрузка расшифровки текстом, Markdown, субтитрами (SRT, VTT) или JSON. */
+export function ExportTranscriptMenu({ meetingId }: { readonly meetingId: string }) {
   const t = useTranslations("notesNote");
   const transcript = useTranscriptDownload();
   return (
@@ -33,9 +32,9 @@ export function ExportTranscriptMenu({ note }: { readonly note: MeetingNote }) {
         <DropdownMenuLabel className="text-muted-foreground text-xs">{t("export.transcriptAs")}</DropdownMenuLabel>
         <DropdownMenuGroup>
           {EXPORT_FORMATS.map((format) => (
-            <DropdownMenuItem key={format} onSelect={() => transcript.download(note, format)}>
+            <DropdownMenuItem key={format} onSelect={() => void transcript.downloadById(meetingId, format)}>
               {transcript.formatName(format)}
-              {/* A file extension reads left to right in every language. */}
+              {/* Расширение файла читается слева направо на любом языке. */}
               <DropdownMenuShortcut dir="ltr">.{format}</DropdownMenuShortcut>
             </DropdownMenuItem>
           ))}

@@ -30,15 +30,14 @@
     "dropHint": "mp3, m4a, wav, mp4, webm and more · up to {size}",
     "notMedia": "{name} isn’t an audio or video file",
     "tooLarge": "{name} is too large",
-    "sizeLimit": "Recordings can be up to {size}."
+    "sizeLimit": "Recordings can be up to {size}.",
+    "failed": "Couldn’t upload “{name}”"
   },
   "recordings": {
     "uploading": "Uploading",
     "justNow": "Just now",
-    "transcribing": "Transcribing",
     "transcribingNow": "Transcribing…",
-    "waiting": "Waiting for transcription…",
-    "timelineStatus": "Transcribing… notes, decisions and a mind map will appear here when it’s done."
+    "uploadingShare": "Uploading… {share}"
   },
   "remove": "Remove {name}",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "Latest meeting",
     "keyPoints": "Key points",
     "openNotes": "Open notes",
-    "openItems": "{count, plural, one {# open} other {# open}}"
+    "openItems": "{count, plural, one {# open} other {# open}}",
+    "live": "Meeting in progress",
+    "notesFailed": "Leo couldn’t write notes for this meeting",
+    "noSummary": "No summary yet"
   },
   "timeline": {
     "decision": "Decision:",
@@ -81,5 +83,42 @@
     "json": "JSON"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "“{title}” deleted"
+  "deleted": "“{title}” deleted",
+  "problems": {
+    "meeting_not_found": "This meeting isn’t available. It may have been deleted.",
+    "meeting_not_yours": "Only the meeting’s owner can do this.",
+    "meeting_active": "The meeting is still going. Try again once it ends.",
+    "meeting_read_only": "You can read this meeting but not change it.",
+    "company_meeting_has_no_folder": "A workspace meeting can’t go into your folders.",
+    "folder_not_found": "This folder no longer exists.",
+    "folder_name_required": "Give the folder a name.",
+    "folder_name_too_long": "The folder name is too long.",
+    "template_not_found": "This template no longer exists.",
+    "template_not_shipped": "Only the meeting’s owner can use their own template here. Pick a built-in one.",
+    "template_builtin_read_only": "Built-in templates can’t be changed.",
+    "templates_limit_reached": "You’ve reached the limit of your own templates. Delete one to add another.",
+    "template_name_required": "Give the template a name.",
+    "template_name_too_long": "The template name is too long.",
+    "template_description_too_long": "The template description is too long.",
+    "template_section_title_too_long": "A section title is too long.",
+    "template_sections_required": "Choose at least one section.",
+    "template_section_repeated": "Each section can appear only once.",
+    "notes_not_ready": "Leo hasn’t written the notes yet. Try again once they appear.",
+    "notes_too_long": "Your notes are too long to save. Shorten them and try again.",
+    "participant_email_invalid": "Enter an email address, like name@company.com.",
+    "participants_limit_reached": "This meeting already has as many participants as it can hold.",
+    "participant_not_found": "This participant is no longer in the meeting.",
+    "participant_not_removable": "Only people added by hand can be removed.",
+    "upload_not_claimable": "This upload can’t be used as a recording. Upload the file again.",
+    "meetings_not_kept": "Meetings aren’t kept on your account, so recordings can’t be uploaded.",
+    "upload_rejected": "The file arrived damaged. Upload it again.",
+    "upload_interrupted": "The upload was interrupted. Check your connection and upload the file again."
+  },
+  "library": {
+    "loadFailed": "Couldn’t load your meetings",
+    "more": "Show earlier meetings",
+    "moreFailed": "Couldn’t load more meetings",
+    "emptyTitle": "No meetings yet",
+    "emptyDescription": "Record a meeting in the desktop app or upload a recording. Its transcript and notes appear here."
+  }
 }

@@ -109,5 +109,6 @@
     "heading": "Judul untuk {section}",
     "sectionsRequired": "Pertahankan minimal satu bagian.",
     "create": "Buat template"
-  }
+  },
+  "rewriteFailed": "Leo tidak dapat menulis ulang catatan. Coba lagi."
 }

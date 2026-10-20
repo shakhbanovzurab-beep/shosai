@@ -1,5 +1,3 @@
-import type { RecencyGroup } from "./format";
-
 export interface NoteParticipant {
   name: string;
   role: string;
@@ -30,6 +28,18 @@ export interface TranscriptLine {
   /** Seconds from the start of the recording. */
   at: number;
   text: string;
+  /** Сколько секунд длилась реплика, если сервер это знает; иначе её длину оценивают по словам. */
+  duration?: number;
+}
+
+/** Встреча, какой её выгружает расшифровка: название, начало, длительность, люди и реплики. */
+export interface TranscriptDocument {
+  id: string;
+  title: string;
+  startedAt: string;
+  durationMinutes: number;
+  participants: { name: string; role: string }[];
+  transcript: TranscriptLine[];
 }
 
 export interface MindMapNode {
@@ -62,17 +72,4 @@ export interface MeetingNote {
   actionItems: NoteActionItem[];
   transcript: TranscriptLine[];
   mindMap: MindMapNode;
-}
-
-/** Meetings under one heading of the library, such as today's. */
-export interface NoteGroup {
-  recency: RecencyGroup;
-  items: MeetingNote[];
-}
-
-/** A recording picked or dropped in this session, shown while it "uploads". */
-export interface PendingRecording {
-  id: string;
-  name: string;
-  size: number;
 }

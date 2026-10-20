@@ -1,6 +1,5 @@
 {
   "back": "모든 노트",
-  "notFound": "노트를 찾을 수 없어요",
   "participants": {
     "count": "{count, plural, other {참석자 #명}}",
     "inMeeting": "{count, plural, other {이 회의에 #명이 참석했어요.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "회의 스크립트와 내 노트를 바탕으로 Leo가 작성했어요.",
     "writtenByTemplate": "회의 스크립트와 내 노트를 바탕으로 Leo가 “{template}” 형식으로 작성했어요.",
     "writing": "AI 노트 작성 중…",
-    "nothingFor": "이 회의에는 “{template}” 섹션에 넣을 내용이 없어요."
+    "nothingFor": "이 회의에는 “{template}” 섹션에 넣을 내용이 없어요.",
+    "loadFailed": "Leo의 노트를 불러오지 못했어요",
+    "failed": "Leo가 이 회의의 노트를 쓰지 못했어요.",
+    "none": "Leo가 아직 이 회의의 노트를 쓰지 않았어요."
   },
   "export": {
     "button": "내보내기",
@@ -60,7 +62,13 @@
     "position": "{current, number}/{total, number}",
     "previous": "이전 일치 항목",
     "next": "다음 일치 항목",
-    "clear": "검색 지우기"
+    "clear": "검색 지우기",
+    "you": "나",
+    "organizer": "주최자",
+    "speaker": "화자 {n, number}",
+    "unknownSpeaker": "알 수 없는 화자",
+    "loadFailed": "스크립트를 불러오지 못했어요",
+    "empty": "이 회의에는 아직 스크립트가 없어요."
   },
   "speakers": {
     "title": "발언자",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "마인드맵: {topic}",
-    "caption": "회의 스크립트에서 생성했어요."
+    "caption": "회의 스크립트에서 생성했어요.",
+    "loadFailed": "마인드맵을 불러오지 못했어요",
+    "none": "아직 마인드맵이 없어요. Leo의 노트와 함께 나타나요."
+  },
+  "notices": {
+    "live": "이 회의는 아직 진행 중이에요. 노트는 회의가 끝난 뒤 나타나요.",
+    "writing": "Leo가 노트를 쓰고 있어요. 몇 분 뒤 여기에 나타나요.",
+    "speakers": "녹음에서 찾은 화자로 스크립트와 노트를 업데이트했어요.",
+    "failed": {
+      "transcript_empty": "Leo가 노트를 쓰지 못했어요. 녹음에서 말소리를 찾지 못했어요.",
+      "upload_exceeds_minutes": "녹음이 플랜에 남은 시간보다 길어서 처리하지 않았어요.",
+      "recording_too_long": "녹음이 6시간보다 길어서 처리하지 않았어요.",
+      "unsupported_audio_format": "지원하지 않는 파일 형식이에요. 일반적인 형식의 오디오나 동영상 파일을 업로드해 주세요.",
+      "media_unreadable": "녹음을 읽지 못했어요. 파일을 다시 업로드해 주세요.",
+      "consent_required": "Leo가 녹음을 처리하려면 동의가 필요해요. 설정 › 개인정보 보호에서 동의해 주세요.",
+      "content_refused": "Leo가 이 녹음의 노트를 쓰지 못했어요.",
+      "other": "Leo가 이 회의의 노트를 쓰지 못했어요."
+    }
+  },
+  "actionItems": {
+    "due": "{date} 마감"
   }
 }

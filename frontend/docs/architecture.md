@@ -18,7 +18,7 @@ src/
   mocks/        Development and test mocks of the API (MSW): runtime, registry, worker start
   components/   Shared UI with no business knowledge: ui/ (shadcn), calendar/ (vendored), feedback, menus…
   hooks/        Shared generic React hooks
-  lib/          Shared business-agnostic code: navigation, the data layer (lib/api), cookies, formatting
+  lib/          Shared business-agnostic code: navigation, the data layer (lib/api), uploads to the bucket (lib/uploads), cookies, formatting
   i18n/         Interface languages: catalogue loading, provider, message catalogs, glossary (docs/i18n.md)
   config/       App-wide configuration
   styles/       Theme presets, fonts, preferences
@@ -100,8 +100,15 @@ are listed in `tooling/cabinet-paths.ts`; the edge serves `index.html` for them 
 
 Until a slice publishes its endpoints, its screens call the sample paths documented in `docs/<slice>-api.md`,
 which `features/<slice>/mocks/` answers in `npm run dev` and in tests. When the slice delivers its API, it
-switches its `api/` to the generated client and deletes its mocks, its registry entry in
-`src/mocks/handlers.ts` and its `docs/<slice>-api.md`.
+switches its `api/` to the generated client and deletes its mocks and its registry entry in
+`src/mocks/handlers.ts`; its `docs/<slice>-api.md` then describes the `/v1` contract its screens use, as
+`file-manager-api.md` and `notes-api.md` do.
+
+Without the mocks (`npm run dev:api`, a build) a slice with no API yet would show only errors. Such slices are
+listed by their backend name in `src/config/unserved-slices.ts` (now `hubs`): another slice's screen that composes
+one of their widgets renders it only when `isServed(slice)`, as the meeting page does with the hub chip. Only the
+listed slices are hidden this way; a built slice's failures show as they always do. A slice leaves the list in the
+change that brings its API.
 
 ## Slice catalogue
 

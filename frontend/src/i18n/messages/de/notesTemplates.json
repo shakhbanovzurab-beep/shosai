@@ -109,5 +109,6 @@
     "heading": "Überschrift für {section}",
     "sectionsRequired": "Behalte mindestens einen Abschnitt.",
     "create": "Vorlage erstellen"
-  }
+  },
+  "rewriteFailed": "Leo konnte die Notizen nicht neu schreiben. Versuche es erneut."
 }

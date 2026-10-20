@@ -30,15 +30,14 @@
     "dropHint": "mp3, m4a, wav, mp4, webm en meer · tot {size}",
     "notMedia": "{name} is geen audio- of videobestand",
     "tooLarge": "{name} is te groot",
-    "sizeLimit": "Opnames mogen maximaal {size} zijn."
+    "sizeLimit": "Opnames mogen maximaal {size} zijn.",
+    "failed": "Kan ‘{name}’ niet uploaden"
   },
   "recordings": {
     "uploading": "Uploaden",
     "justNow": "Zojuist",
-    "transcribing": "Transcriberen",
     "transcribingNow": "Transcriberen…",
-    "waiting": "Wachten op transcriptie…",
-    "timelineStatus": "Transcriberen… Notities, besluiten en een mindmap verschijnen hier zodra het klaar is."
+    "uploadingShare": "Uploaden… {share}"
   },
   "remove": "{name} verwijderen",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "Laatste vergadering",
     "keyPoints": "Kernpunten",
     "openNotes": "Notities openen",
-    "openItems": "{count, plural, one {# openstaand} other {# openstaand}}"
+    "openItems": "{count, plural, one {# openstaand} other {# openstaand}}",
+    "live": "Vergadering bezig",
+    "notesFailed": "Leo kon geen notities voor deze vergadering schrijven",
+    "noSummary": "Nog geen samenvatting"
   },
   "timeline": {
     "decision": "Besluit:",
@@ -81,5 +83,42 @@
     "json": "JSON-bestand"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "‘{title}’ verwijderd"
+  "deleted": "‘{title}’ verwijderd",
+  "problems": {
+    "meeting_not_found": "Deze vergadering is niet beschikbaar. Misschien is ze verwijderd.",
+    "meeting_not_yours": "Alleen de eigenaar van de vergadering kan dit doen.",
+    "meeting_active": "De vergadering is nog bezig. Probeer het opnieuw als ze is afgelopen.",
+    "meeting_read_only": "Je kunt deze vergadering lezen, maar niet wijzigen.",
+    "company_meeting_has_no_folder": "Een vergadering van een werkruimte kan niet in je mappen.",
+    "folder_not_found": "Deze map bestaat niet meer.",
+    "folder_name_required": "Geef de map een naam.",
+    "folder_name_too_long": "De naam van de map is te lang.",
+    "template_not_found": "Dit sjabloon bestaat niet meer.",
+    "template_not_shipped": "Hier kan alleen de eigenaar van de vergadering een eigen sjabloon gebruiken. Kies een ingebouwd sjabloon.",
+    "template_builtin_read_only": "Ingebouwde sjablonen kun je niet wijzigen.",
+    "templates_limit_reached": "Je hebt al zoveel eigen sjablonen als mogelijk is. Verwijder er een om een nieuw toe te voegen.",
+    "template_name_required": "Geef het sjabloon een naam.",
+    "template_name_too_long": "De naam van het sjabloon is te lang.",
+    "template_description_too_long": "De beschrijving van het sjabloon is te lang.",
+    "template_section_title_too_long": "Een sectietitel is te lang.",
+    "template_sections_required": "Kies minstens één sectie.",
+    "template_section_repeated": "Elke sectie mag maar één keer voorkomen.",
+    "notes_not_ready": "Leo heeft de notities nog niet geschreven. Probeer het opnieuw als ze er zijn.",
+    "notes_too_long": "Je notities zijn te lang om op te slaan. Maak ze korter en probeer het opnieuw.",
+    "participant_email_invalid": "Voer een e-mailadres in, zoals name@company.com.",
+    "participants_limit_reached": "Deze vergadering heeft al het maximale aantal deelnemers.",
+    "participant_not_found": "Deze deelnemer zit niet meer in de vergadering.",
+    "participant_not_removable": "Alleen mensen die je zelf hebt toegevoegd, kun je verwijderen.",
+    "upload_not_claimable": "Deze upload kan niet als opname worden gebruikt. Upload het bestand opnieuw.",
+    "meetings_not_kept": "Je account bewaart geen vergaderingen, dus je kunt geen opnames uploaden.",
+    "upload_rejected": "Het bestand kwam beschadigd aan. Upload het opnieuw.",
+    "upload_interrupted": "Het uploaden is onderbroken. Controleer je verbinding en upload het bestand opnieuw."
+  },
+  "library": {
+    "loadFailed": "Kan je vergaderingen niet laden",
+    "more": "Eerdere vergaderingen tonen",
+    "moreFailed": "Kan geen eerdere vergaderingen laden",
+    "emptyTitle": "Nog geen vergaderingen",
+    "emptyDescription": "Neem een vergadering op in de desktop-app of upload een opname. De transcriptie en notities verschijnen hier."
+  }
 }

@@ -1,6 +1,5 @@
 {
   "back": "Semua catatan",
-  "notFound": "Catatan tidak ditemukan",
   "participants": {
     "count": "{count, plural, other {# peserta}}",
     "inMeeting": "{count, plural, other {# orang dalam rapat ini.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Ditulis oleh Leo dari transkrip rapat dan catatan Anda.",
     "writtenByTemplate": "Ditulis oleh Leo dari transkrip rapat dan catatan Anda, dengan tata letak “{template}”.",
     "writing": "Menulis catatan yang disempurnakan…",
-    "nothingFor": "Rapat ini tidak memiliki isi untuk bagian-bagian “{template}”."
+    "nothingFor": "Rapat ini tidak memiliki isi untuk bagian-bagian “{template}”.",
+    "loadFailed": "Tidak dapat memuat catatan Leo",
+    "failed": "Leo tidak dapat menulis catatan untuk rapat ini.",
+    "none": "Leo belum menulis catatan untuk rapat ini."
   },
   "export": {
     "button": "Ekspor",
@@ -60,7 +62,13 @@
     "position": "{current, number} dari {total, number}",
     "previous": "Kecocokan sebelumnya",
     "next": "Kecocokan berikutnya",
-    "clear": "Hapus pencarian"
+    "clear": "Hapus pencarian",
+    "you": "Anda",
+    "organizer": "Penyelenggara",
+    "speaker": "Pembicara {n, number}",
+    "unknownSpeaker": "Pembicara tidak dikenal",
+    "loadFailed": "Tidak dapat memuat transkrip",
+    "empty": "Rapat ini belum punya transkrip."
   },
   "speakers": {
     "title": "Siapa yang berbicara",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Peta pikiran: {topic}",
-    "caption": "Dibuat dari transkrip rapat."
+    "caption": "Dibuat dari transkrip rapat.",
+    "loadFailed": "Tidak dapat memuat peta pikiran",
+    "none": "Belum ada peta pikiran. Peta akan muncul bersama catatan Leo."
+  },
+  "notices": {
+    "live": "Rapat ini masih berlangsung. Catatannya akan muncul setelah selesai.",
+    "writing": "Leo sedang menulis catatan. Catatan akan muncul di sini dalam beberapa menit.",
+    "speakers": "Transkrip dan catatan diperbarui dengan pembicara dari rekaman.",
+    "failed": {
+      "transcript_empty": "Leo tidak dapat menulis catatan: tidak ada suara bicara di rekaman.",
+      "upload_exceeds_minutes": "Rekaman lebih panjang dari sisa menit di paket Anda, jadi tidak diproses.",
+      "recording_too_long": "Rekaman lebih dari 6 jam, jadi tidak diproses.",
+      "unsupported_audio_format": "Format file ini tidak didukung. Unggah file audio atau video dengan format umum.",
+      "media_unreadable": "Tidak dapat membaca rekaman. Unggah file lagi.",
+      "consent_required": "Leo memerlukan persetujuan Anda untuk memproses rekaman. Berikan di Pengaturan › Privasi.",
+      "content_refused": "Leo tidak dapat menulis catatan untuk rekaman ini.",
+      "other": "Leo tidak dapat menulis catatan untuk rapat ini."
+    }
+  },
+  "actionItems": {
+    "due": "Tenggat {date}"
   }
 }

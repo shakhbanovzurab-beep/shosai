@@ -30,15 +30,14 @@
     "dropHint": "mp3、m4a、wav、mp4、webm 等格式 · 上限 {size}",
     "notMedia": "{name} 不是音訊或影片檔案",
     "tooLarge": "{name} 太大",
-    "sizeLimit": "錄製內容的上限為 {size}。"
+    "sizeLimit": "錄製內容的上限為 {size}。",
+    "failed": "無法上傳「{name}」"
   },
   "recordings": {
     "uploading": "正在上傳",
     "justNow": "剛剛",
-    "transcribing": "正在轉錄",
     "transcribingNow": "正在轉錄…",
-    "waiting": "正在等待轉錄…",
-    "timelineStatus": "正在轉錄…完成後，筆記、決策和心智圖會顯示在這裡。"
+    "uploadingShare": "正在上傳… {share}"
   },
   "remove": "移除 {name}",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "最近的會議",
     "keyPoints": "重點",
     "openNotes": "開啟筆記",
-    "openItems": "{count, plural, other {# 項未完成}}"
+    "openItems": "{count, plural, other {# 項未完成}}",
+    "live": "會議進行中",
+    "notesFailed": "Leo 無法為這場會議寫筆記",
+    "noSummary": "還沒有摘要"
   },
   "timeline": {
     "decision": "決策：",
@@ -81,5 +83,42 @@
     "json": "JSON 格式"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "已刪除「{title}」"
+  "deleted": "已刪除「{title}」",
+  "problems": {
+    "meeting_not_found": "無法使用這場會議，可能已被刪除。",
+    "meeting_not_yours": "只有會議擁有者可以執行這個操作。",
+    "meeting_active": "會議仍在進行中，請在結束後再試一次。",
+    "meeting_read_only": "你可以閱讀這場會議，但無法變更。",
+    "company_meeting_has_no_folder": "工作空間的會議無法放進你的資料夾。",
+    "folder_not_found": "這個資料夾已不存在。",
+    "folder_name_required": "請為資料夾命名。",
+    "folder_name_too_long": "資料夾名稱太長。",
+    "template_not_found": "這個範本已不存在。",
+    "template_not_shipped": "這裡只有會議擁有者可以使用自己的範本，請選擇內建範本。",
+    "template_builtin_read_only": "內建範本無法變更。",
+    "templates_limit_reached": "你的自訂範本已達上限，請刪除一個再新增。",
+    "template_name_required": "請為範本命名。",
+    "template_name_too_long": "範本名稱太長。",
+    "template_description_too_long": "範本說明太長。",
+    "template_section_title_too_long": "區段標題太長。",
+    "template_sections_required": "請至少選擇一個區段。",
+    "template_section_repeated": "每個區段只能出現一次。",
+    "notes_not_ready": "Leo 還沒寫好筆記，請在筆記出現後再試一次。",
+    "notes_too_long": "筆記太長，無法儲存。請縮短後再試一次。",
+    "participant_email_invalid": "請輸入電子郵件地址，例如 name@company.com。",
+    "participants_limit_reached": "這場會議的參與者已達上限。",
+    "participant_not_found": "這位參與者已不在會議中。",
+    "participant_not_removable": "只能移除手動新增的人。",
+    "upload_not_claimable": "這次上傳無法當作錄製內容使用，請重新上傳檔案。",
+    "meetings_not_kept": "你的帳號不保留會議，因此無法上傳錄製內容。",
+    "upload_rejected": "檔案傳到時已損毀，請重新上傳。",
+    "upload_interrupted": "上傳中斷了。請檢查連線後重新上傳檔案。"
+  },
+  "library": {
+    "loadFailed": "無法載入你的會議",
+    "more": "顯示較早的會議",
+    "moreFailed": "無法載入更多會議",
+    "emptyTitle": "還沒有會議",
+    "emptyDescription": "在桌面應用程式中錄製會議，或上傳錄製內容。逐字稿和筆記會顯示在這裡。"
+  }
 }

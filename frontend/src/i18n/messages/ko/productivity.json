@@ -27,6 +27,7 @@
     "today": "오늘",
     "yesterday": "어제",
     "empty": "아직 노트가 없어요",
-    "emptyHint": "회의 노트가 여기에 표시돼요."
+    "emptyHint": "회의 노트가 여기에 표시돼요.",
+    "loadFailed": "최근 노트를 불러오지 못했어요."
   }
 }

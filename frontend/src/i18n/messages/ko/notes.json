@@ -30,15 +30,14 @@
     "dropHint": "mp3, m4a, wav, mp4, webm 등 · 최대 {size}",
     "notMedia": "{name}은(는) 오디오나 동영상 파일이 아니에요",
     "tooLarge": "{name}이(가) 너무 커요",
-    "sizeLimit": "녹음 파일은 최대 {size}까지 업로드할 수 있어요."
+    "sizeLimit": "녹음 파일은 최대 {size}까지 업로드할 수 있어요.",
+    "failed": "“{name}”을(를) 업로드하지 못했어요"
   },
   "recordings": {
     "uploading": "업로드 중",
     "justNow": "방금",
-    "transcribing": "스크립트 생성 중",
     "transcribingNow": "스크립트 생성 중…",
-    "waiting": "스크립트 생성 대기 중…",
-    "timelineStatus": "스크립트 생성 중… 완료되면 노트, 결정 사항, 마인드맵이 여기에 표시돼요."
+    "uploadingShare": "업로드 중… {share}"
   },
   "remove": "{name} 제거",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "최근 회의",
     "keyPoints": "핵심 내용",
     "openNotes": "노트 열기",
-    "openItems": "{count, plural, other {미완료 #개}}"
+    "openItems": "{count, plural, other {미완료 #개}}",
+    "live": "회의 진행 중",
+    "notesFailed": "Leo가 이 회의의 노트를 쓰지 못했어요",
+    "noSummary": "아직 요약이 없어요"
   },
   "timeline": {
     "decision": "결정 사항:",
@@ -81,5 +83,42 @@
     "json": "JSON 데이터"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "“{title}”을(를) 삭제했어요"
+  "deleted": "“{title}”을(를) 삭제했어요",
+  "problems": {
+    "meeting_not_found": "이 회의를 볼 수 없어요. 삭제되었을 수 있어요.",
+    "meeting_not_yours": "회의 소유자만 할 수 있어요.",
+    "meeting_active": "회의가 아직 진행 중이에요. 끝난 뒤 다시 시도해 주세요.",
+    "meeting_read_only": "이 회의는 읽을 수만 있고 바꿀 수는 없어요.",
+    "company_meeting_has_no_folder": "워크스페이스의 회의는 내 폴더에 넣을 수 없어요.",
+    "folder_not_found": "이 폴더는 더 이상 없어요.",
+    "folder_name_required": "폴더 이름을 입력해 주세요.",
+    "folder_name_too_long": "폴더 이름이 너무 길어요.",
+    "template_not_found": "이 템플릿은 더 이상 없어요.",
+    "template_not_shipped": "여기서는 회의 소유자만 자신의 템플릿을 쓸 수 있어요. 기본 템플릿을 골라 주세요.",
+    "template_builtin_read_only": "기본 템플릿은 바꿀 수 없어요.",
+    "templates_limit_reached": "만들 수 있는 템플릿 수를 모두 채웠어요. 하나를 삭제하고 새로 추가해 주세요.",
+    "template_name_required": "템플릿 이름을 입력해 주세요.",
+    "template_name_too_long": "템플릿 이름이 너무 길어요.",
+    "template_description_too_long": "템플릿 설명이 너무 길어요.",
+    "template_section_title_too_long": "섹션 제목이 너무 길어요.",
+    "template_sections_required": "섹션을 하나 이상 골라 주세요.",
+    "template_section_repeated": "같은 섹션은 한 번만 넣을 수 있어요.",
+    "notes_not_ready": "Leo가 아직 노트를 쓰지 않았어요. 노트가 나타나면 다시 시도해 주세요.",
+    "notes_too_long": "노트가 너무 길어서 저장할 수 없어요. 줄인 뒤 다시 시도해 주세요.",
+    "participant_email_invalid": "name@company.com 같은 이메일 주소를 입력해 주세요.",
+    "participants_limit_reached": "이 회의의 참석자 수가 최대에 도달했어요.",
+    "participant_not_found": "이 참석자는 더 이상 회의에 없어요.",
+    "participant_not_removable": "직접 추가한 사람만 제거할 수 있어요.",
+    "upload_not_claimable": "이 업로드는 녹음으로 쓸 수 없어요. 파일을 다시 업로드해 주세요.",
+    "meetings_not_kept": "계정에 회의가 보관되지 않아서 녹음을 업로드할 수 없어요.",
+    "upload_rejected": "파일이 손상된 채로 도착했어요. 다시 업로드해 주세요.",
+    "upload_interrupted": "업로드가 중단되었어요. 연결을 확인하고 파일을 다시 업로드해 주세요."
+  },
+  "library": {
+    "loadFailed": "회의를 불러오지 못했어요",
+    "more": "이전 회의 보기",
+    "moreFailed": "회의를 더 불러오지 못했어요",
+    "emptyTitle": "아직 회의가 없어요",
+    "emptyDescription": "데스크톱 앱에서 회의를 녹음하거나 녹음 파일을 업로드해 보세요. 스크립트와 노트가 여기에 나타나요."
+  }
 }

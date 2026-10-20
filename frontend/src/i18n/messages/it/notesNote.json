@@ -1,6 +1,5 @@
 {
   "back": "Tutte le note",
-  "notFound": "Nota non trovata",
   "participants": {
     "count": "{count, plural, one {# partecipante} many {# di partecipanti} other {# partecipanti}}",
     "inMeeting": "{count, plural, one {# persona in questa riunione.} many {# di persone in questa riunione.} other {# persone in questa riunione.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Scritte da Leo a partire dalla trascrizione della riunione e dalle tue note.",
     "writtenByTemplate": "Scritte da Leo a partire dalla trascrizione della riunione e dalle tue note, secondo il modello «{template}».",
     "writing": "Scrittura delle note migliorate…",
-    "nothingFor": "In questa riunione non c’è niente per le sezioni di «{template}»."
+    "nothingFor": "In questa riunione non c’è niente per le sezioni di «{template}».",
+    "loadFailed": "Impossibile caricare le note di Leo",
+    "failed": "Leo non è riuscito a scrivere le note di questa riunione.",
+    "none": "Leo non ha ancora scritto le note di questa riunione."
   },
   "export": {
     "button": "Esporta",
@@ -60,7 +62,13 @@
     "position": "{current, number} di {total, number}",
     "previous": "Risultato precedente",
     "next": "Risultato successivo",
-    "clear": "Svuota ricerca"
+    "clear": "Svuota ricerca",
+    "you": "Tu",
+    "organizer": "Organizzatore",
+    "speaker": "Partecipante {n, number}",
+    "unknownSpeaker": "Partecipante sconosciuto",
+    "loadFailed": "Impossibile caricare la trascrizione",
+    "empty": "Ancora nessuna trascrizione per questa riunione."
   },
   "speakers": {
     "title": "Chi ha parlato",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Mappa mentale: {topic}",
-    "caption": "Generata dalla trascrizione della riunione."
+    "caption": "Generata dalla trascrizione della riunione.",
+    "loadFailed": "Impossibile caricare la mappa mentale",
+    "none": "Ancora nessuna mappa mentale. Comparirà con le note di Leo."
+  },
+  "notices": {
+    "live": "Questa riunione è ancora in corso. Le note compariranno quando sarà finita.",
+    "writing": "Leo sta scrivendo le note. Compariranno qui tra pochi minuti.",
+    "speakers": "La trascrizione e le note sono state aggiornate con i partecipanti della registrazione.",
+    "failed": {
+      "transcript_empty": "Leo non è riuscito a scrivere le note: nella registrazione non c’è parlato.",
+      "upload_exceeds_minutes": "La registrazione dura più dei minuti che restano nel tuo piano, quindi non è stata elaborata.",
+      "recording_too_long": "La registrazione dura più di 6 ore, quindi non è stata elaborata.",
+      "unsupported_audio_format": "Questo formato di file non è supportato. Carica un file audio o video in un formato comune.",
+      "media_unreadable": "Impossibile leggere la registrazione. Carica di nuovo il file.",
+      "consent_required": "Leo ha bisogno del tuo consenso per elaborare la registrazione. Dallo in Impostazioni › Privacy.",
+      "content_refused": "Leo non è riuscito a scrivere le note di questa registrazione.",
+      "other": "Leo non è riuscito a scrivere le note di questa riunione."
+    }
+  },
+  "actionItems": {
+    "due": "Scade il {date}"
   }
 }

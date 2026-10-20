@@ -1,4 +1,4 @@
-/** A part of an upload as the server signs it: its number (from 1), its exact length and where to PUT it. */
+/** Часть загрузки, как её подписал сервер: номер (с 1), точная длина и куда её положить PUT-запросом. */
 export type PartLink = {
   number: number;
   size_bytes: number;
@@ -6,7 +6,7 @@ export type PartLink = {
   headers: Record<string, string>;
 };
 
-/** Where each part's bytes lie in the file: parts follow each other in the order of their numbers. */
+/** Где в файле лежат байты каждой части: части идут друг за другом по порядку номеров. */
 export function partRanges(parts: readonly Pick<PartLink, "number" | "size_bytes">[]): Map<number, [number, number]> {
   const ranges = new Map<number, [number, number]>();
   let start = 0;

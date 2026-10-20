@@ -27,6 +27,7 @@
     "today": "Hoje",
     "yesterday": "Ontem",
     "empty": "Nenhuma nota ainda",
-    "emptyHint": "As notas das suas reuniões aparecerão aqui."
+    "emptyHint": "As notas das suas reuniões aparecerão aqui.",
+    "loadFailed": "Não foi possível carregar suas notas recentes."
   }
 }

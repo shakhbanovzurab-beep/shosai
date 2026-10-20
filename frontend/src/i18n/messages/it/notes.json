@@ -30,15 +30,14 @@
     "dropHint": "mp3, m4a, wav, mp4, webm e altri · fino a {size}",
     "notMedia": "{name} non è un file audio o video",
     "tooLarge": "{name} è troppo grande",
-    "sizeLimit": "Le registrazioni possono arrivare fino a {size}."
+    "sizeLimit": "Le registrazioni possono arrivare fino a {size}.",
+    "failed": "Impossibile caricare «{name}»"
   },
   "recordings": {
     "uploading": "Caricamento",
     "justNow": "Adesso",
-    "transcribing": "Trascrizione in corso",
     "transcribingNow": "Trascrizione in corso…",
-    "waiting": "In attesa della trascrizione…",
-    "timelineStatus": "Trascrizione in corso… Al termine, qui compariranno note, decisioni e una mappa mentale."
+    "uploadingShare": "Caricamento… {share}"
   },
   "remove": "Rimuovi {name}",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "Ultima riunione",
     "keyPoints": "Punti chiave",
     "openNotes": "Apri le note",
-    "openItems": "{count, plural, one {# aperta} many {# aperte} other {# aperte}}"
+    "openItems": "{count, plural, one {# aperta} many {# aperte} other {# aperte}}",
+    "live": "Riunione in corso",
+    "notesFailed": "Leo non è riuscito a scrivere le note di questa riunione",
+    "noSummary": "Ancora nessun riepilogo"
   },
   "timeline": {
     "decision": "Decisione:",
@@ -81,5 +83,42 @@
     "json": "File JSON"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "«{title}» eliminata"
+  "deleted": "«{title}» eliminata",
+  "problems": {
+    "meeting_not_found": "Questa riunione non è disponibile. Forse è stata eliminata.",
+    "meeting_not_yours": "Solo il proprietario della riunione può farlo.",
+    "meeting_active": "La riunione è ancora in corso. Riprova quando sarà finita.",
+    "meeting_read_only": "Puoi leggere questa riunione, ma non modificarla.",
+    "company_meeting_has_no_folder": "Una riunione di uno spazio di lavoro non può andare nelle tue cartelle.",
+    "folder_not_found": "Questa cartella non esiste più.",
+    "folder_name_required": "Dai un nome alla cartella.",
+    "folder_name_too_long": "Il nome della cartella è troppo lungo.",
+    "template_not_found": "Questo modello non esiste più.",
+    "template_not_shipped": "Qui solo il proprietario della riunione può usare un proprio modello. Scegline uno integrato.",
+    "template_builtin_read_only": "I modelli integrati non si possono modificare.",
+    "templates_limit_reached": "Hai già tutti i modelli personali consentiti. Eliminane uno per aggiungerne un altro.",
+    "template_name_required": "Dai un nome al modello.",
+    "template_name_too_long": "Il nome del modello è troppo lungo.",
+    "template_description_too_long": "La descrizione del modello è troppo lunga.",
+    "template_section_title_too_long": "Il titolo di una sezione è troppo lungo.",
+    "template_sections_required": "Scegli almeno una sezione.",
+    "template_section_repeated": "Ogni sezione può comparire una sola volta.",
+    "notes_not_ready": "Leo non ha ancora scritto le note. Riprova quando compariranno.",
+    "notes_too_long": "Le tue note sono troppo lunghe da salvare. Accorciale e riprova.",
+    "participant_email_invalid": "Inserisci un indirizzo email, ad esempio name@company.com.",
+    "participants_limit_reached": "Questa riunione ha già il numero massimo di partecipanti.",
+    "participant_not_found": "Questo partecipante non è più nella riunione.",
+    "participant_not_removable": "Si possono rimuovere solo le persone aggiunte a mano.",
+    "upload_not_claimable": "Questo caricamento non si può usare come registrazione. Carica di nuovo il file.",
+    "meetings_not_kept": "Il tuo account non conserva le riunioni, quindi non puoi caricare registrazioni.",
+    "upload_rejected": "Il file è arrivato danneggiato. Caricalo di nuovo.",
+    "upload_interrupted": "Il caricamento si è interrotto. Controlla la connessione e carica di nuovo il file."
+  },
+  "library": {
+    "loadFailed": "Impossibile caricare le tue riunioni",
+    "more": "Mostra riunioni precedenti",
+    "moreFailed": "Impossibile caricare altre riunioni",
+    "emptyTitle": "Ancora nessuna riunione",
+    "emptyDescription": "Registra una riunione nell’app desktop o carica una registrazione. La trascrizione e le note compariranno qui."
+  }
 }

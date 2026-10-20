@@ -2,6 +2,8 @@
 
 import { toast } from "sonner";
 
+import { browserUploadPorts, runLimited, uploadFile } from "@/lib/uploads/upload-file";
+
 import { filesApi } from "../api/files-api";
 import { fileProblemOf } from "../domain/problems";
 import type { Refusal } from "../domain/upload-queue";
@@ -9,11 +11,11 @@ import { filesResource } from "./files-resource";
 import { describeError } from "./problem-words";
 import { storageResource } from "./storage-resource";
 import { isTrayShown, type UploadTarget, uploadQueue } from "./upload-queue";
-import { browserUploadPorts, runLimited, uploadFile } from "./uploads";
 import type { FileActionWords } from "./words";
 
 // Сколько файлов одной пачки идут в бакет одновременно (у каждого ещё до трёх частей сразу).
 const FILE_CONCURRENCY = 2;
+const FILE_PORTS = browserUploadPorts("file_manager");
 // Так регистрация говорит, что готовой загрузки больше нет: повтор отправит байты заново.
 const UPLOAD_GONE: ReadonlySet<string> = new Set(["upload_not_claimable", "upload_not_found", "upload_closed"]);
 
@@ -65,7 +67,7 @@ async function send(id: string): Promise<Sent> {
   if (!started) return null;
   const { file, signal } = started;
   try {
-    const uploadId = await uploadFile(file, browserUploadPorts, (bytes) => uploadQueue.sent(id, bytes), signal);
+    const uploadId = await uploadFile(file, FILE_PORTS, (bytes) => uploadQueue.sent(id, bytes), signal);
     uploadQueue.saving(id, uploadId);
     return { ready: { id, name: file.name, uploadId } };
   } catch (error) {

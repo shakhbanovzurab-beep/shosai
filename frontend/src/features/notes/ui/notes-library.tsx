@@ -8,102 +8,84 @@ import { useLocale, useTranslations } from "use-intl";
 import { formatBytes } from "@/i18n/format-units";
 import { useRouter } from "@/lib/navigation";
 
-import { deriveLibrary } from "../domain/derive-library";
+import { deriveLibrary, hasFeaturedSlot } from "../domain/derive-library";
+import type { LibraryCounts, MeetingCard } from "../domain/library";
 import { buildNotesHref, type NotesView } from "../domain/notes-href";
 import { MAX_RECORDING_BYTES } from "../domain/recordings";
-import type { MeetingNote, NoteGroup, PendingRecording } from "../domain/types";
-import { folderActions, useNoteFolders } from "../model/folders-store";
-import { useNoteEdits } from "../model/use-note-edits";
+import type { NoteFolder } from "../domain/types";
+import { folderActions } from "../model/folders";
+import type { LibraryPages } from "../model/library-resource";
+import { deleteNote } from "../model/note-actions";
+import { removeRecordingUpload, shownUploads, uploadRecordings, useRecordingUploads } from "../model/recording-uploads";
 import { usePageDrop } from "../model/use-page-drop";
+import { LoadMore } from "./load-more";
 import { NoteContextMenu } from "./note-context-menu";
 import { DraggableNote, NotesDndProvider } from "./notes-dnd";
 import { NotesToolbar } from "./notes-toolbar";
-import { EmptyFolder, GridView, ListView, TimelineView } from "./notes-views";
+import { EmptyFolder, EmptyLibrary, GridView, ListView, TimelineView } from "./notes-views";
 
 interface NotesLibraryProps {
-  readonly groups: NoteGroup[];
+  readonly pages: LibraryPages;
+  readonly folders: readonly NoteFolder[];
+  /** Счётчики с сервера; null, пока они едут. */
+  readonly counts: LibraryCounts | null;
   readonly activeFolderId: string | undefined;
   readonly view: NotesView;
 }
 
-let recordingCounter = 0;
+const NO_COUNTS: ReadonlyMap<string, number> = new Map();
 
-export function NotesLibrary({ groups, activeFolderId: requestedFolderId, view }: NotesLibraryProps) {
+export function NotesLibrary({ pages, folders, counts, activeFolderId, view }: NotesLibraryProps) {
   const t = useTranslations("notes");
+  const common = useTranslations("common");
   const locale = useLocale();
   const router = useRouter();
-  const folders = useNoteFolders();
   const [editingId, setEditingId] = React.useState<string | null>(null);
-  const [recordings, setRecordings] = React.useState<PendingRecording[]>([]);
-  const edits = useNoteEdits(groups);
+  const recordings = useRecordingUploads();
+  const notesById = new Map(pages.items.map((note) => [note.id, note]));
+  const { lead, others } = shownUploads(recordings, pages.items, hasFeaturedSlot(activeFolderId, view));
+  const { featured, groups } = deriveLibrary(pages.items, activeFolderId, view, lead !== undefined);
 
-  const { foldersById, activeFolderId, allNotes, countByFolder, featured, visibleGroups } = deriveLibrary(
-    edits.groups,
-    folders,
-    requestedFolderId,
-    view,
-  );
-  const folderOf = (note: MeetingNote) => (note.folderId ? foldersById.get(note.folderId) : undefined);
-
-  const createFolder = () => {
-    const folder = folderActions.create(t("folders.defaultName"));
-    setEditingId(folder.id);
+  const foldersById = new Map(folders.map((folder) => [folder.id, folder]));
+  const folderOf = (note: MeetingCard) => (note.folderId ? foldersById.get(note.folderId) : undefined);
+  const createFolder = async () => {
+    const folder = await folderActions.create(t("folders.defaultName"), t);
+    if (folder) setEditingId(folder.id);
     return folder;
   };
-
-  const moveToNewFolder = (noteId: string) => {
-    const folder = createFolder();
-    edits.moveNote(noteId, folder.id, folder.name);
+  const moveNote = (noteId: string, folderId: string | null) =>
+    void folderActions.move(noteId, folderId ? (foldersById.get(folderId) ?? null) : null, t);
+  const moveToNewFolder = async (noteId: string) => {
+    const folder = await createFolder();
+    if (folder) await folderActions.move(noteId, folder, t);
   };
-
-  const renameFolder = (id: string, name: string) => {
-    folderActions.rename(id, name);
-    setEditingId(null);
-  };
-
   const deleteFolder = (id: string) => {
-    folderActions.remove(id);
+    void folderActions.remove(id, t);
     if (id === activeFolderId) router.push(buildNotesHref({ view }), { scroll: false });
   };
-
-  const addRecordings = (files: File[]) => {
-    const added = files.map((file) => {
-      recordingCounter += 1;
-      return { id: `recording-${recordingCounter}`, name: file.name, size: file.size };
-    });
-    setRecordings((current) => [...added, ...current]);
-  };
-
+  const addRecordings = (files: File[]) => uploadRecordings(files, t);
   const drop = usePageDrop(addRecordings);
 
-  // Every meeting, in every view, gets the same right-click menu.
-  const withMenu = (note: MeetingNote, content: React.ReactNode) => (
+  // Во всех видах у каждой встречи одно и то же контекстное меню.
+  const withMenu = (note: MeetingCard, content: React.ReactNode) => (
     <NoteContextMenu
       key={note.id}
       note={note}
       folders={folders}
-      onMove={edits.moveNote}
-      onMoveToNewFolder={moveToNewFolder}
-      onDelete={edits.deleteNote}
+      onMove={moveNote}
+      onMoveToNewFolder={(noteId) => void moveToNewFolder(noteId)}
+      onDelete={() => deleteNote(note, t, common)}
     >
       <DraggableNote noteId={note.id}>{content}</DraggableNote>
     </NoteContextMenu>
   );
 
-  const notesById = new Map(allNotes.map((note) => [note.id, note]));
   const dropOnFolder = (noteId: string, folderId: string | null) => {
-    if (notesById.get(noteId)?.folderId === (folderId ?? undefined)) return;
-    edits.moveNote(noteId, folderId, folderId ? (foldersById.get(folderId)?.name ?? "") : "");
+    if (notesById.get(noteId)?.folderId !== (folderId ?? undefined)) moveNote(noteId, folderId);
   };
 
-  const viewProps = {
-    groups: visibleGroups,
-    recordings,
-    folderOf,
-    withMenu,
-    onRemoveRecording: (id: string) => setRecordings((current) => current.filter((r) => r.id !== id)),
-  };
-  const isEmpty = !featured && visibleGroups.length === 0 && recordings.length === 0;
+  const viewProps = { groups, recordings: others, folderOf, withMenu, onRemoveRecording: removeRecordingUpload };
+  const isEmpty = !featured && !lead && groups.length === 0 && others.length === 0;
 
   return (
     <NotesDndProvider titleOf={(id) => notesById.get(id)?.title} onDropOnFolder={dropOnFolder}>
@@ -113,23 +95,26 @@ export function NotesLibrary({ groups, activeFolderId: requestedFolderId, view }
           folders={folders}
           activeFolderId={activeFolderId}
           view={view}
-          totalCount={allNotes.length}
-          countByFolder={countByFolder}
+          totalCount={counts?.all ?? pages.items.length}
+          countByFolder={counts?.byFolder ?? NO_COUNTS}
           editingId={editingId}
-          onCreate={() => {
-            createFolder();
-          }}
+          onCreate={() => void createFolder()}
           onStartRename={setEditingId}
-          onRename={renameFolder}
+          onRename={(id, name) => {
+            void folderActions.rename(id, name, t);
+            setEditingId(null);
+          }}
           onCancelRename={() => setEditingId(null)}
           onDelete={deleteFolder}
           onUpload={addRecordings}
         />
 
         {view === "timeline" ? <TimelineView {...viewProps} /> : null}
-        {view === "grid" ? <GridView featured={featured} {...viewProps} /> : null}
+        {view === "grid" ? <GridView featured={featured} lead={lead} {...viewProps} /> : null}
         {view === "list" ? <ListView {...viewProps} /> : null}
-        {isEmpty ? <EmptyFolder /> : null}
+        {isEmpty && activeFolderId ? <EmptyFolder /> : null}
+        {isEmpty && !activeFolderId ? <EmptyLibrary /> : null}
+        {pages.nextCursor === null ? null : <LoadMore folder={activeFolderId} />}
 
         {drop.isDragging ? (
           <div className="pointer-events-none fixed inset-3 z-40 flex flex-col items-center justify-center gap-3 rounded-3xl border-2 border-primary border-dashed bg-background/85 backdrop-blur-sm">

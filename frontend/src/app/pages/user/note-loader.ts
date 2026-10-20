@@ -1,10 +1,14 @@
 import { data, type LoaderFunctionArgs } from "react-router";
 
-import { findMeetingNote } from "@/features/notes/data/meeting-notes";
+import { loadMeeting } from "@/features/notes/model/meeting-resource";
+import { ApiError } from "@/lib/api/errors";
 
-/** Заметка по адресу; неизвестный id — страница «не найдено». */
-export function loader({ params }: LoaderFunctionArgs) {
-  const note = findMeetingNote(params.id ?? "");
-  if (!note) throw data(null, { status: 404 });
-  return note;
+/** Встреча по адресу с сервера; чужая или неизвестная — страница «не найдено». */
+export async function loader({ params }: LoaderFunctionArgs) {
+  try {
+    return await loadMeeting(params.id ?? "");
+  } catch (error) {
+    if (error instanceof ApiError && (error.status === 404 || error.status === 422)) throw data(null, { status: 404 });
+    throw error;
+  }
 }

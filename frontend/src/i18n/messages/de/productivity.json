@@ -27,6 +27,7 @@
     "today": "Heute",
     "yesterday": "Gestern",
     "empty": "Noch keine Notizen",
-    "emptyHint": "Hier erscheinen Notizen aus deinen Meetings."
+    "emptyHint": "Hier erscheinen Notizen aus deinen Meetings.",
+    "loadFailed": "Deine letzten Notizen konnten nicht geladen werden."
   }
 }

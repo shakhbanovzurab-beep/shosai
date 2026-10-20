@@ -1352,6 +1352,26 @@ export interface paths {
         patch: operations["rename_folder_v1_notes_folders__folder_id__patch"];
         trace?: never;
     };
+    "/v1/notes/counts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Library Counts
+         * @description How many meetings the library holds, in all and per folder.
+         */
+        get: operations["library_counts_v1_notes_counts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/notes/templates": {
         parameters: {
             query?: never;
@@ -2314,6 +2334,22 @@ export interface components {
             name?: string | null;
         };
         /**
+         * CountsOut
+         * @description Every meeting the person may read, and their own meetings per folder.
+         */
+        CountsOut: {
+            /**
+             * All
+             * @description Every meeting the person may read, shared ones included.
+             */
+            all: number;
+            /**
+             * Folders
+             * @description The person's own meetings in each folder that holds any.
+             */
+            folders: components["schemas"]["FolderCountOut"][];
+        };
+        /**
          * Currency
          * @description A currency a plan is priced and paid in.
          * @enum {string}
@@ -2766,6 +2802,19 @@ export interface components {
          * @enum {string}
          */
         FolderColor: "green" | "violet" | "red" | "blue" | "amber";
+        /**
+         * FolderCountOut
+         * @description How many of the person's meetings one of their folders holds.
+         */
+        FolderCountOut: {
+            /**
+             * Folder Id
+             * Format: uuid
+             */
+            folder_id: string;
+            /** Count */
+            count: number;
+        };
         /**
          * FolderIn
          * @description A folder's name.
@@ -7866,6 +7915,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["FolderOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    library_counts_v1_notes_counts_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CountsOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

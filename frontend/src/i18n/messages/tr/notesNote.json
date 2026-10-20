@@ -1,6 +1,5 @@
 {
   "back": "Tüm notlar",
-  "notFound": "Not bulunamadı",
   "participants": {
     "count": "{count, plural, one {# katılımcı} other {# katılımcı}}",
     "inMeeting": "{count, plural, one {Bu toplantıda # kişi var.} other {Bu toplantıda # kişi var.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Leo tarafından toplantı transkriptinden ve notlarınızdan yazıldı.",
     "writtenByTemplate": "Leo tarafından toplantı transkriptinden ve notlarınızdan “{template}” düzeninde yazıldı.",
     "writing": "Geliştirilmiş notlar yazılıyor…",
-    "nothingFor": "Bu toplantıda “{template}” bölümlerine uygun içerik yok."
+    "nothingFor": "Bu toplantıda “{template}” bölümlerine uygun içerik yok.",
+    "loadFailed": "Leo’nun notları yüklenemedi",
+    "failed": "Leo bu toplantı için not yazamadı.",
+    "none": "Leo bu toplantı için henüz not yazmadı."
   },
   "export": {
     "button": "Dışa aktar",
@@ -60,7 +62,13 @@
     "position": "{current, number} / {total, number}",
     "previous": "Önceki eşleşme",
     "next": "Sonraki eşleşme",
-    "clear": "Aramayı temizle"
+    "clear": "Aramayı temizle",
+    "you": "Siz",
+    "organizer": "Düzenleyen",
+    "speaker": "Konuşmacı {n, number}",
+    "unknownSpeaker": "Bilinmeyen konuşmacı",
+    "loadFailed": "Transkript yüklenemedi",
+    "empty": "Bu toplantının henüz transkripti yok."
   },
   "speakers": {
     "title": "Kim konuştu",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Zihin haritası: {topic}",
-    "caption": "Toplantı transkriptinden oluşturuldu."
+    "caption": "Toplantı transkriptinden oluşturuldu.",
+    "loadFailed": "Zihin haritası yüklenemedi",
+    "none": "Henüz zihin haritası yok. Leo’nun notlarıyla birlikte görünür."
+  },
+  "notices": {
+    "live": "Bu toplantı hâlâ devam ediyor. Notları bittikten sonra görünür.",
+    "writing": "Leo notları yazıyor. Birkaç dakika içinde burada görünecekler.",
+    "speakers": "Transkript ve notlar, kayıttaki konuşmacılarla güncellendi.",
+    "failed": {
+      "transcript_empty": "Leo not yazamadı: kayıtta konuşma bulunamadı.",
+      "upload_exceeds_minutes": "Kayıt, planınızda kalan dakikalardan uzun olduğu için işlenmedi.",
+      "recording_too_long": "Kayıt 6 saatten uzun olduğu için işlenmedi.",
+      "unsupported_audio_format": "Bu dosya biçimi desteklenmiyor. Yaygın bir biçimde ses veya video dosyası yükleyin.",
+      "media_unreadable": "Kayıt okunamadı. Dosyayı yeniden yükleyin.",
+      "consent_required": "Leo’nun kaydı işlemek için onayınıza ihtiyacı var. Onayı Ayarlar › Gizlilik bölümünde verin.",
+      "content_refused": "Leo bu kayıt için not yazamadı.",
+      "other": "Leo bu toplantı için not yazamadı."
+    }
+  },
+  "actionItems": {
+    "due": "Son tarih: {date}"
   }
 }

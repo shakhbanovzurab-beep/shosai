@@ -1,6 +1,5 @@
 {
   "back": "Todas las notas",
-  "notFound": "No se encontró la nota",
   "participants": {
     "count": "{count, plural, one {# participante} many {# de participantes} other {# participantes}}",
     "inMeeting": "{count, plural, one {# persona en esta reunión.} many {# de personas en esta reunión.} other {# personas en esta reunión.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Leo las escribió a partir de la transcripción de la reunión y tus notas.",
     "writtenByTemplate": "Leo las escribió a partir de la transcripción de la reunión y tus notas, con el formato de «{template}».",
     "writing": "Escribiendo notas mejoradas…",
-    "nothingFor": "Esta reunión no tiene contenido para las secciones de «{template}»."
+    "nothingFor": "Esta reunión no tiene contenido para las secciones de «{template}».",
+    "loadFailed": "No se pudieron cargar las notas de Leo",
+    "failed": "Leo no pudo escribir notas de esta reunión.",
+    "none": "Leo aún no ha escrito notas de esta reunión."
   },
   "export": {
     "button": "Exportar",
@@ -60,7 +62,13 @@
     "position": "{current, number} de {total, number}",
     "previous": "Coincidencia anterior",
     "next": "Coincidencia siguiente",
-    "clear": "Borrar búsqueda"
+    "clear": "Borrar búsqueda",
+    "you": "Tú",
+    "organizer": "Organizador",
+    "speaker": "Hablante {n, number}",
+    "unknownSpeaker": "Hablante desconocido",
+    "loadFailed": "No se pudo cargar la transcripción",
+    "empty": "Esta reunión aún no tiene transcripción."
   },
   "speakers": {
     "title": "Quién habló",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Mapa mental: {topic}",
-    "caption": "Generado a partir de la transcripción de la reunión."
+    "caption": "Generado a partir de la transcripción de la reunión.",
+    "loadFailed": "No se pudo cargar el mapa mental",
+    "none": "Aún no hay mapa mental. Aparecerá con las notas de Leo."
+  },
+  "notices": {
+    "live": "Esta reunión sigue en curso. Sus notas aparecerán cuando termine.",
+    "writing": "Leo está escribiendo las notas. Aparecerán aquí en unos minutos.",
+    "speakers": "La transcripción y las notas se actualizaron con los hablantes de la grabación.",
+    "failed": {
+      "transcript_empty": "Leo no pudo escribir notas: no se encontró voz en la grabación.",
+      "upload_exceeds_minutes": "La grabación dura más que los minutos que te quedan en tu plan, así que no se procesó.",
+      "recording_too_long": "La grabación dura más de 6 horas, así que no se procesó.",
+      "unsupported_audio_format": "Este formato de archivo no es compatible. Sube un archivo de audio o video en un formato común.",
+      "media_unreadable": "No se pudo leer la grabación. Sube el archivo de nuevo.",
+      "consent_required": "Leo necesita tu consentimiento para procesar la grabación. Dalo en Configuración › Privacidad.",
+      "content_refused": "Leo no pudo escribir notas de esta grabación.",
+      "other": "Leo no pudo escribir notas de esta reunión."
+    }
+  },
+  "actionItems": {
+    "due": "Vence el {date}"
   }
 }

@@ -1,5 +1,5 @@
 import { transcriptCues } from "./transcript-cues";
-import type { MeetingNote } from "./types";
+import type { TranscriptDocument } from "./types";
 
 export interface SpeakerStat {
   speaker: string;
@@ -12,7 +12,7 @@ export interface SpeakerStat {
 }
 
 /** Who talked and how much, the biggest share first. */
-export function speakerStats(note: Pick<MeetingNote, "transcript" | "durationMinutes">): SpeakerStat[] {
+export function speakerStats(note: Pick<TranscriptDocument, "transcript" | "durationMinutes">): SpeakerStat[] {
   const bySpeaker = new Map<string, { seconds: number; lines: number }>();
   for (const cue of transcriptCues(note)) {
     const stat = bySpeaker.get(cue.speaker) ?? { seconds: 0, lines: 0 };

@@ -27,6 +27,7 @@
     "today": "Vandaag",
     "yesterday": "Gisteren",
     "empty": "Nog geen notities",
-    "emptyHint": "Notities van je vergaderingen verschijnen hier."
+    "emptyHint": "Notities van je vergaderingen verschijnen hier.",
+    "loadFailed": "Kan je recente notities niet laden."
   }
 }

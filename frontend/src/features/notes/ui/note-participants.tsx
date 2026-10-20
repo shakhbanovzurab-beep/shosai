@@ -3,7 +3,6 @@
 import { type FormEvent, useId, useState } from "react";
 
 import { Users, X } from "lucide-react";
-import { toast } from "sonner";
 import { useTranslations } from "use-intl";
 
 import { META_VALUE_BUTTON, MetaItem } from "@/components/meta-item";
@@ -20,25 +19,22 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useMe } from "@/features/identity/model/session-store";
 import { getInitials } from "@/lib/utils";
 
-import { ACCOUNT_EMAIL } from "../data/meeting-notes";
-import { type AttendeeProblem, attendeeProblem, isOwnEmail, nameFromEmail } from "../domain/attendees";
-import type { NoteParticipant } from "../domain/types";
+import { type AttendeeProblem, attendeeProblem, isOwnEmail } from "../domain/attendees";
+import type { MeetingPage, MeetingParticipant } from "../domain/meeting-page";
+import { addParticipant, removeParticipant } from "../model/participants";
 
-/** How many people were in the meeting, under the title; opens the list, where more can be added by email. */
-export function NoteParticipants({ participants }: { readonly participants: NoteParticipant[] }) {
+const shownName = (person: MeetingParticipant) => person.name ?? person.email ?? "";
+
+/** Сколько людей было на встрече, под заголовком; открывает список, куда можно добавить человека по адресу. */
+export function NoteParticipants({ note }: { readonly note: MeetingPage }) {
   const t = useTranslations("notesNote");
   const notes = useTranslations("notes");
-  // People added here, on top of the meeting's own. Local until notes have an API, like folder moves.
-  const [added, setAdded] = useState<NoteParticipant[]>([]);
-  const attendees = [...participants, ...added];
-  const addedEmails = new Set(added.map((person) => person.email));
-
-  const add = (email: string) => {
-    setAdded((current) => [...current, { name: nameFromEmail(email), role: "", email }]);
-    toast.success(t("participants.added", { email }));
-  };
+  const me = useMe();
+  const people = note.participants;
+  const words = { t, notes };
 
   return (
     <MetaItem label={notes("fields.participants")} className="shrink-0">
@@ -47,40 +43,42 @@ export function NoteParticipants({ participants }: { readonly participants: Note
           <Button variant="ghost" size="xs" className={META_VALUE_BUTTON}>
             <Users className="size-4" aria-hidden="true" />
             <span className="tabular-nums" aria-hidden="true">
-              {attendees.length}
+              {note.participantCount}
             </span>
-            <span className="sr-only">{t("participants.count", { count: attendees.length })}</span>
+            <span className="sr-only">{t("participants.count", { count: note.participantCount })}</span>
           </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="w-80">
           <PopoverHeader>
             <PopoverTitle>{notes("fields.participants")}</PopoverTitle>
-            <PopoverDescription>{t("participants.inMeeting", { count: attendees.length })}</PopoverDescription>
+            <PopoverDescription>{t("participants.inMeeting", { count: note.participantCount })}</PopoverDescription>
           </PopoverHeader>
           <ul className="flex max-h-64 flex-col gap-2.5 overflow-y-auto">
-            {attendees.map((person) => (
-              <li key={person.email} className="flex items-center gap-2.5">
+            {people.map((person) => (
+              <li key={person.id} className="flex items-center gap-2.5">
                 <Avatar size="sm">
-                  <AvatarFallback>{getInitials(person.name)}</AvatarFallback>
+                  <AvatarFallback>{getInitials(shownName(person))}</AvatarFallback>
                 </Avatar>
                 <div className="flex min-w-0 flex-1 flex-col">
                   <span className="truncate text-sm">
-                    {isOwnEmail(person.email, ACCOUNT_EMAIL) ? (
-                      t("participants.you", { name: person.name })
+                    {me && person.email && isOwnEmail(person.email, me.email) ? (
+                      t("participants.you", { name: shownName(person) })
                     ) : (
-                      <span dir="auto">{person.name}</span>
+                      <span dir="auto">{shownName(person)}</span>
                     )}
                   </span>
-                  <span dir="auto" className="truncate text-muted-foreground text-xs">
-                    {person.role || person.email}
-                  </span>
+                  {person.name && person.email ? (
+                    <span dir="auto" className="truncate text-muted-foreground text-xs">
+                      {person.email}
+                    </span>
+                  ) : null}
                 </div>
-                {addedEmails.has(person.email) ? (
+                {note.manageable && person.source === "added" ? (
                   <Button
                     variant="ghost"
                     size="icon-xs"
-                    aria-label={notes("remove", { name: person.name })}
-                    onClick={() => setAdded((current) => current.filter((p) => p.email !== person.email))}
+                    aria-label={notes("remove", { name: shownName(person) })}
+                    onClick={() => void removeParticipant(note.id, person, words)}
                   >
                     <X />
                   </Button>
@@ -88,7 +86,9 @@ export function NoteParticipants({ participants }: { readonly participants: Note
               </li>
             ))}
           </ul>
-          <AddParticipant attendees={attendees} onAdd={add} />
+          {note.manageable ? (
+            <AddParticipant attendees={people} onAdd={(email) => addParticipant(note.id, email, words)} />
+          ) : null}
         </PopoverContent>
       </Popover>
     </MetaItem>
@@ -99,27 +99,30 @@ function AddParticipant({
   attendees,
   onAdd,
 }: {
-  readonly attendees: NoteParticipant[];
-  readonly onAdd: (email: string) => void;
+  readonly attendees: readonly MeetingParticipant[];
+  readonly onAdd: (email: string) => Promise<boolean>;
 }) {
   const t = useTranslations("notesNote");
   const common = useTranslations("common");
   const [problem, setProblem] = useState<AttendeeProblem | null>(null);
+  const [adding, setAdding] = useState(false);
   const errorId = useId();
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const email = String(new FormData(form).get("email") ?? "").trim();
     const found = attendeeProblem(email, attendees);
     setProblem(found);
     if (found) return;
-    onAdd(email);
-    form.reset();
+    setAdding(true);
+    const added = await onAdd(email);
+    setAdding(false);
+    if (added) form.reset();
   };
 
   return (
-    <form onSubmit={submit} noValidate>
+    <form onSubmit={(event) => void submit(event)} noValidate>
       <Field data-invalid={problem !== null || undefined}>
         <InputGroup>
           <InputGroupInput
@@ -134,7 +137,9 @@ function AddParticipant({
             onChange={() => setProblem(null)}
           />
           <InputGroupAddon align="inline-end">
-            <InputGroupButton type="submit">{common("actions.add")}</InputGroupButton>
+            <InputGroupButton type="submit" disabled={adding}>
+              {common("actions.add")}
+            </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>
         {problem ? <FieldError id={errorId}>{t(`participants.${problem}`)}</FieldError> : null}

@@ -1,11 +1,11 @@
-import { PartFailedError, putPart, type UploadAnswer, uploadsApi } from "../api/uploads-api";
-import { type PartLink, partRanges } from "../domain/upload-parts";
+import { type PartLink, partRanges } from "./upload-parts";
+import { PartFailedError, putPart, type UploadAnswer, type UploadPurpose, uploadsApi } from "./uploads-api";
 
 /*
- * One file's upload straight to the home's bucket (FL-D1): the server signs every part for its exact length,
- * the browser PUTs the parts three at a time, and the server assembles them. A part that fails is sent again
- * with a fresh link — a dropped connection or an expired signature costs that part, not the file. An upload
- * that fails for good is cancelled, so its reserved bytes come back at once.
+ * Загрузка одного файла прямо в бакет дома (FL-D1): сервер подписывает каждую часть на её точную длину, браузер
+ * кладёт части по три сразу, сервер собирает их. Не дошедшая часть уходит снова по свежей ссылке — оборванное
+ * соединение или истёкшая подпись стоят этой части, а не файла. Загрузку, не прошедшую окончательно, отменяем,
+ * чтобы зарезервированные байты вернулись сразу. Загрузками пользуются несколько срезов, каждый со своим назначением.
  */
 
 const PART_CONCURRENCY = 3;
@@ -21,7 +21,7 @@ export type UploadPorts = {
   wait: (ms: number) => Promise<void>;
 };
 
-/** The server found the assembled file differs from the size it was told: the upload is rejected. */
+/** Сервер нашёл, что собранный файл не совпал с заявленным размером: загрузка отклонена. */
 export class UploadRejectedError extends Error {
   constructor() {
     super("upload rejected");
@@ -29,13 +29,17 @@ export class UploadRejectedError extends Error {
   }
 }
 
-export const browserUploadPorts: UploadPorts = {
-  ...uploadsApi,
-  put: putPart,
-  wait: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
-};
+/** Порты браузера для загрузки с назначением `purpose`: настоящий API, бакет и таймер. */
+export function browserUploadPorts(purpose: UploadPurpose): UploadPorts {
+  return {
+    ...uploadsApi,
+    create: (file) => uploadsApi.create(file, purpose),
+    put: putPart,
+    wait: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  };
+}
 
-/** Runs `work` over `items`, at most `limit` at a time; the first failure fails the whole run. */
+/** Выполняет `work` над `items`, не больше `limit` сразу; первая же ошибка роняет весь прогон. */
 export async function runLimited<T>(items: readonly T[], limit: number, work: (item: T) => Promise<void>) {
   const queue = [...items];
   const worker = async () => {
@@ -45,7 +49,7 @@ export async function runLimited<T>(items: readonly T[], limit: number, work: (i
 }
 
 /**
- * Uploads `file`; reports the bytes sent so far and answers the ready upload's id for `register`.
+ * Загружает `file`; сообщает, сколько байт уже ушло, и отвечает id готовой загрузки, чтобы срез её забрал.
  * Отмена через `signal` обрывает части в пути без повторов и отменяет загрузку на сервере.
  */
 export async function uploadFile(

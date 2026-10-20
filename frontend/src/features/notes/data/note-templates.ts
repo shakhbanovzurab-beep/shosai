@@ -1,8 +1,7 @@
 import type { SampleTemplate } from "../domain/templates";
 
-// Sample templates until they come from the API. Until the backend writes enhanced notes per template,
-// a template picks, orders and titles the sections Leo already wrote for the meeting. The product ships
-// them, so they are codes here and are worded in the interface language (the `notesTemplates` catalog).
+// Шаблоны, что поставляет продукт, по их кодам: API отдаёт их этими кодами (`builtin`), а кабинет называет их
+// и их заголовки на языке человека по каталогу `notesTemplates`. Коды совпадают с кодами бэкенда.
 export const SAMPLE_TEMPLATES = [
   {
     id: "catchUpInvestor",

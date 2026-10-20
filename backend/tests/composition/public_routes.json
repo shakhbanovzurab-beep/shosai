@@ -45,6 +45,7 @@
     "GET /v1/me/sessions/{session_id}/note",
     "GET /v1/me/uploads/{upload_id}",
     "GET /v1/notes",
+    "GET /v1/notes/counts",
     "GET /v1/notes/folders",
     "GET /v1/notes/settings",
     "GET /v1/notes/templates",

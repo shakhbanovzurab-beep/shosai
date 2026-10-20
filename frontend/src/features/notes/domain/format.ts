@@ -1,5 +1,3 @@
-import type { MeetingNote, NoteGroup } from "./types";
-
 /*
  * Formatting that isn't a date: dates are formatted where they are shown, in the interface language
  * (`useFormatter` with the named formats of src/i18n/formats.ts, in UTC like the demo data).
@@ -29,10 +27,10 @@ export function formatMeetingDuration(locale: string, minutes: number) {
   return new Intl.ListFormat(locale, { type: "unit", style: "narrow" }).format(parts);
 }
 
-/** 95 → "1:35": a moment in the recording, written as media players write it in every language. */
+/** 95 → «1:35»: момент записи, как его пишут плееры на любом языке; доли секунды округляются. */
 export function formatTimestamp(seconds: number) {
-  const minutes = Math.floor(seconds / 60);
-  return `${minutes}:${String(seconds % 60).padStart(2, "0")}`;
+  const whole = Math.round(seconds);
+  return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, "0")}`;
 }
 
 /** 24 → "00:24:00", a running time in the same media-player style. */
@@ -60,8 +58,11 @@ export function getRecencyGroup(iso: string, now: Date): RecencyGroup {
 }
 
 /** Newest first, bucketed into today, yesterday, this week and earlier. */
-export function groupNotesByRecency(notes: MeetingNote[], now = new Date()): NoteGroup[] {
-  const groups = new Map<RecencyGroup, MeetingNote[]>();
+export function groupNotesByRecency<T extends { startedAt: string }>(
+  notes: readonly T[],
+  now = new Date(),
+): { recency: RecencyGroup; items: T[] }[] {
+  const groups = new Map<RecencyGroup, T[]>();
   for (const note of notes.toSorted((a, b) => b.startedAt.localeCompare(a.startedAt))) {
     const group = getRecencyGroup(note.startedAt, now);
     groups.set(group, [...(groups.get(group) ?? []), note]);

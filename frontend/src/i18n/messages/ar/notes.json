@@ -30,15 +30,14 @@
     "dropHint": "mp3، m4a، wav، mp4، webm وغيرها · حتى {size}",
     "notMedia": "{name} ليس ملف صوت أو فيديو",
     "tooLarge": "{name} كبير جدًا",
-    "sizeLimit": "الحد الأقصى لحجم التسجيل {size}."
+    "sizeLimit": "الحد الأقصى لحجم التسجيل {size}.",
+    "failed": "تعذر رفع «{name}»"
   },
   "recordings": {
     "uploading": "جارٍ الرفع",
     "justNow": "الآن",
-    "transcribing": "جارٍ إنشاء النص",
     "transcribingNow": "جارٍ إنشاء النص…",
-    "waiting": "بانتظار إنشاء النص…",
-    "timelineStatus": "جارٍ إنشاء النص… ستظهر هنا الملاحظات والقرارات والخريطة الذهنية عند الانتهاء."
+    "uploadingShare": "جارٍ الرفع… {share}"
   },
   "remove": "إزالة {name}",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "أحدث اجتماع",
     "keyPoints": "النقاط الرئيسية",
     "openNotes": "فتح الملاحظات",
-    "openItems": "{count, plural, zero {# مفتوحة} one {# مفتوحة} two {# مفتوحة} few {# مفتوحة} many {# مفتوحة} other {# مفتوحة}}"
+    "openItems": "{count, plural, zero {# مفتوحة} one {# مفتوحة} two {# مفتوحة} few {# مفتوحة} many {# مفتوحة} other {# مفتوحة}}",
+    "live": "الاجتماع جارٍ",
+    "notesFailed": "تعذر على Leo كتابة ملاحظات لهذا الاجتماع",
+    "noSummary": "لا يوجد ملخص بعد"
   },
   "timeline": {
     "decision": "القرار:",
@@ -81,5 +83,42 @@
     "json": "بيانات JSON"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "تم حذف «{title}»"
+  "deleted": "تم حذف «{title}»",
+  "problems": {
+    "meeting_not_found": "هذا الاجتماع غير متاح. ربما تم حذفه.",
+    "meeting_not_yours": "لا يمكن القيام بذلك إلا لمالك الاجتماع.",
+    "meeting_active": "الاجتماع ما زال جاريًا. يرجى إعادة المحاولة بعد انتهائه.",
+    "meeting_read_only": "يمكن قراءة هذا الاجتماع دون تغييره.",
+    "company_meeting_has_no_folder": "لا يمكن وضع اجتماع مساحة عمل في مجلداتك.",
+    "folder_not_found": "هذا المجلد لم يعد موجودًا.",
+    "folder_name_required": "يرجى إدخال اسم للمجلد.",
+    "folder_name_too_long": "اسم المجلد طويل جدًا.",
+    "template_not_found": "هذا القالب لم يعد موجودًا.",
+    "template_not_shipped": "لا يستخدم قالبه الخاص هنا إلا مالك الاجتماع. يرجى اختيار قالب مدمج.",
+    "template_builtin_read_only": "لا يمكن تغيير القوالب المدمجة.",
+    "templates_limit_reached": "تم بلوغ الحد الأقصى من القوالب الخاصة. يرجى حذف قالب لإضافة آخر.",
+    "template_name_required": "يرجى إدخال اسم للقالب.",
+    "template_name_too_long": "اسم القالب طويل جدًا.",
+    "template_description_too_long": "وصف القالب طويل جدًا.",
+    "template_section_title_too_long": "عنوان أحد الأقسام طويل جدًا.",
+    "template_sections_required": "يرجى اختيار قسم واحد على الأقل.",
+    "template_section_repeated": "لا يظهر كل قسم إلا مرة واحدة.",
+    "notes_not_ready": "لم يكتب Leo الملاحظات بعد. يرجى إعادة المحاولة عند ظهورها.",
+    "notes_too_long": "تعذر حفظ الملاحظات لأنها طويلة جدًا. يرجى اختصارها وإعادة المحاولة.",
+    "participant_email_invalid": "يرجى إدخال عنوان بريد إلكتروني مثل name@company.com.",
+    "participants_limit_reached": "وصل هذا الاجتماع إلى الحد الأقصى من المشاركين.",
+    "participant_not_found": "هذا المشارك لم يعد في الاجتماع.",
+    "participant_not_removable": "لا يمكن إزالة إلا الأشخاص المضافين يدويًا.",
+    "upload_not_claimable": "لا يمكن استخدام هذا الرفع كتسجيل. يرجى رفع الملف مجددًا.",
+    "meetings_not_kept": "حسابك لا يحتفظ بالاجتماعات، لذا لا يمكن رفع التسجيلات.",
+    "upload_rejected": "وصل الملف تالفًا. يرجى رفعه مجددًا.",
+    "upload_interrupted": "توقف الرفع. يرجى التحقق من الاتصال ورفع الملف مجددًا."
+  },
+  "library": {
+    "loadFailed": "تعذر تحميل الاجتماعات",
+    "more": "عرض الاجتماعات السابقة",
+    "moreFailed": "تعذر تحميل مزيد من الاجتماعات",
+    "emptyTitle": "لا توجد اجتماعات بعد",
+    "emptyDescription": "يمكن تسجيل اجتماع في تطبيق سطح المكتب أو رفع تسجيل. سيظهر نصه وملاحظاته هنا."
+  }
 }

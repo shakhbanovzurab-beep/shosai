@@ -50,11 +50,11 @@ function AllMeetingsPill({
 }
 
 export interface FolderPillsProps {
-  readonly folders: NoteFolder[];
+  readonly folders: readonly NoteFolder[];
   readonly activeFolderId: string | undefined;
   readonly view: NotesView;
   readonly totalCount: number;
-  readonly countByFolder: Map<string, number>;
+  readonly countByFolder: ReadonlyMap<string, number>;
   readonly editingId: string | null;
   readonly onCreate: () => void;
   readonly onStartRename: (id: string) => void;

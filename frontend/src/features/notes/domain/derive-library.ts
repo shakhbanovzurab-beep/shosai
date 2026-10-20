@@ -1,32 +1,34 @@
+import { groupNotesByRecency } from "./format";
+import type { MeetingCard } from "./library";
 import type { NotesView } from "./notes-href";
-import type { NoteFolder, NoteGroup } from "./types";
+import type { NoteFolder } from "./types";
 
-/** What the library shows for the current folder: counts, the grid's featured meeting and the groups. */
+/**
+ * Что библиотека показывает для текущей папки: группы по давности и крупную карточку сетки. Папку отбирает
+ * сервер; неизвестная или удалённая папка в адресе показывает все встречи.
+ */
+export function activeFolderOf(folders: readonly NoteFolder[] | null, requested: string | undefined) {
+  if (!requested) return undefined;
+  // Пока папки не прочитаны, верим адресу: сервер сам покажет пустую папку, если её нет.
+  if (folders === null) return requested;
+  return folders.some((folder) => folder.id === requested) ? requested : undefined;
+}
+
+/** Крупная карточка «последней встречи» есть только у сетки «Всех встреч». */
+export const hasFeaturedSlot = (activeFolderId: string | undefined, view: NotesView) =>
+  activeFolderId === undefined && view === "grid";
+
+/**
+ * `slotTaken` — крупную карточку уже заняла загружаемая запись: самая новая встреча тогда идёт в группы, а когда
+ * запись станет встречей, та сама займёт слот, и сетка под ним не сдвинется.
+ */
 export function deriveLibrary(
-  groups: NoteGroup[],
-  folders: NoteFolder[],
-  requestedFolderId: string | undefined,
+  items: readonly MeetingCard[],
+  activeFolderId: string | undefined,
   view: NotesView,
+  slotTaken = false,
 ) {
-  const foldersById = new Map(folders.map((folder) => [folder.id, folder]));
-  // A deleted or unknown folder in the URL falls back to all meetings.
-  const activeFolderId = requestedFolderId && foldersById.has(requestedFolderId) ? requestedFolderId : undefined;
-  const allNotes = groups.flatMap((group) => group.items);
-
-  const countByFolder = new Map<string, number>();
-  for (const note of allNotes) {
-    if (note.folderId) countByFolder.set(note.folderId, (countByFolder.get(note.folderId) ?? 0) + 1);
-  }
-
-  const filtered = groups
-    .map((group) => ({ ...group, items: group.items.filter((n) => !activeFolderId || n.folderId === activeFolderId) }))
-    .filter((group) => group.items.length > 0);
-
-  // Only the grid on "All meetings" gives the newest meeting a large card of its own.
-  const featured = activeFolderId || view !== "grid" ? undefined : filtered.at(0)?.items.at(0);
-  const visibleGroups = filtered
-    .map((group) => ({ ...group, items: group.items.filter((n) => n !== featured) }))
-    .filter((group) => group.items.length > 0);
-
-  return { foldersById, activeFolderId, allNotes, countByFolder, featured, visibleGroups };
+  const featured = hasFeaturedSlot(activeFolderId, view) && !slotTaken ? items.at(0) : undefined;
+  const rest = featured ? items.slice(1) : items;
+  return { featured, groups: groupNotesByRecency(rest) };
 }

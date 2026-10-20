@@ -20,7 +20,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 import type { NoteFolder } from "../domain/types";
-import { folderActions, folderIdAfterMoves, useFolderMoves, useNoteFolders } from "../model/folders-store";
+import { folderActions, useFolders } from "../model/folders";
 import { FOLDER_DOT_CLASSES } from "./folder-color-classes";
 import { FolderNameInput } from "./folder-name-input";
 
@@ -28,12 +28,12 @@ const Dot = ({ folder }: { folder: NoteFolder }) => (
   <span className={cn("size-2 shrink-0 rounded-full", FOLDER_DOT_CLASSES[folder.color])} aria-hidden="true" />
 );
 
-/** The note's folder under the title; opens a searchable list to move it, or to make a new folder for it. */
-export function NoteFolderPicker({ noteId, initialFolderId }: { noteId: string; initialFolderId: string | undefined }) {
+/** Папка встречи под заголовком; открывает список с поиском, чтобы переложить встречу или завести ей новую папку. */
+export function NoteFolderPicker({ noteId, folderId }: { noteId: string; folderId: string | undefined }) {
   const t = useTranslations("notes");
-  const folders = useNoteFolders();
-  const moves = useFolderMoves();
-  const folder = folders.find((f) => f.id === folderIdAfterMoves({ id: noteId, folderId: initialFolderId }, moves));
+  const state = useFolders();
+  const folders = state.status === "ready" ? state.data : [];
+  const folder = folders.find((f) => f.id === folderId);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [naming, setNaming] = useState(false);
@@ -48,7 +48,12 @@ export function NoteFolderPicker({ noteId, initialFolderId }: { noteId: string; 
 
   const moveTo = (target: NoteFolder | null) => {
     openChange(false);
-    if (target?.id !== folder?.id) folderActions.move(noteId, target?.id ?? null, target?.name ?? "", t);
+    if (target?.id !== folder?.id) void folderActions.move(noteId, target, t);
+  };
+
+  const moveToNew = async (name: string) => {
+    const created = await folderActions.create(name, t);
+    if (created) moveTo(created);
   };
 
   return (
@@ -100,7 +105,7 @@ export function NoteFolderPicker({ noteId, initialFolderId }: { noteId: string; 
                 <CommandItem
                   forceMount
                   value="new-folder"
-                  onSelect={() => (newName ? moveTo(folderActions.create(newName)) : setNaming(true))}
+                  onSelect={() => (newName ? void moveToNew(newName) : setNaming(true))}
                 >
                   <FolderPlus />
                   <span className="truncate">
@@ -115,7 +120,7 @@ export function NoteFolderPicker({ noteId, initialFolderId }: { noteId: string; 
               <FolderPlus className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
               <FolderNameInput
                 initialName={t("folders.defaultName")}
-                onSubmit={(name) => moveTo(folderActions.create(name))}
+                onSubmit={(name) => void moveToNew(name)}
                 onCancel={() => setNaming(false)}
               />
             </div>

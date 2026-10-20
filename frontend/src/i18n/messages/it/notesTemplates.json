@@ -109,5 +109,6 @@
     "heading": "Titolo per {section}",
     "sectionsRequired": "Mantieni almeno una sezione.",
     "create": "Crea modello"
-  }
+  },
+  "rewriteFailed": "Leo non è riuscito a riscrivere le note. Riprova."
 }

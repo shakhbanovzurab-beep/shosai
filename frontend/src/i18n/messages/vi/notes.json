@@ -30,15 +30,14 @@
     "dropHint": "mp3, m4a, wav, mp4, webm và nhiều định dạng khác · tối đa {size}",
     "notMedia": "{name} không phải là tệp âm thanh hoặc video",
     "tooLarge": "{name} quá lớn",
-    "sizeLimit": "Bản ghi có dung lượng tối đa {size}."
+    "sizeLimit": "Bản ghi có dung lượng tối đa {size}.",
+    "failed": "Không thể tải “{name}” lên"
   },
   "recordings": {
     "uploading": "Đang tải lên",
     "justNow": "Vừa xong",
-    "transcribing": "Đang chép lời",
     "transcribingNow": "Đang chép lời…",
-    "waiting": "Đang chờ chép lời…",
-    "timelineStatus": "Đang chép lời… Ghi chú, quyết định và sơ đồ tư duy sẽ xuất hiện ở đây khi hoàn tất."
+    "uploadingShare": "Đang tải lên… {share}"
   },
   "remove": "Gỡ {name}",
   "folders": {
@@ -63,7 +62,10 @@
     "latest": "Cuộc họp gần nhất",
     "keyPoints": "Ý chính",
     "openNotes": "Mở ghi chú",
-    "openItems": "{count, plural, other {# chưa xong}}"
+    "openItems": "{count, plural, other {# chưa xong}}",
+    "live": "Cuộc họp đang diễn ra",
+    "notesFailed": "Leo không thể viết ghi chú cho cuộc họp này",
+    "noSummary": "Chưa có tóm tắt nào"
   },
   "timeline": {
     "decision": "Quyết định:",
@@ -81,5 +83,42 @@
     "json": "Dữ liệu JSON"
   },
   "exportHeading": "{date} · {duration}",
-  "deleted": "Đã xóa “{title}”"
+  "deleted": "Đã xóa “{title}”",
+  "problems": {
+    "meeting_not_found": "Cuộc họp này không khả dụng. Có thể nó đã bị xóa.",
+    "meeting_not_yours": "Chỉ chủ sở hữu cuộc họp mới làm được việc này.",
+    "meeting_active": "Cuộc họp vẫn đang diễn ra. Hãy thử lại khi nó kết thúc.",
+    "meeting_read_only": "Bạn có thể đọc cuộc họp này nhưng không thể thay đổi.",
+    "company_meeting_has_no_folder": "Cuộc họp của không gian làm việc không thể đưa vào thư mục của bạn.",
+    "folder_not_found": "Thư mục này không còn nữa.",
+    "folder_name_required": "Hãy đặt tên cho thư mục.",
+    "folder_name_too_long": "Tên thư mục quá dài.",
+    "template_not_found": "Mẫu này không còn nữa.",
+    "template_not_shipped": "Ở đây chỉ chủ sở hữu cuộc họp mới dùng được mẫu riêng. Hãy chọn một mẫu có sẵn.",
+    "template_builtin_read_only": "Không thể thay đổi mẫu có sẵn.",
+    "templates_limit_reached": "Bạn đã đạt giới hạn mẫu riêng. Hãy xóa một mẫu để thêm mẫu khác.",
+    "template_name_required": "Hãy đặt tên cho mẫu.",
+    "template_name_too_long": "Tên mẫu quá dài.",
+    "template_description_too_long": "Mô tả mẫu quá dài.",
+    "template_section_title_too_long": "Tiêu đề một phần quá dài.",
+    "template_sections_required": "Hãy chọn ít nhất một phần.",
+    "template_section_repeated": "Mỗi phần chỉ được xuất hiện một lần.",
+    "notes_not_ready": "Leo chưa viết ghi chú. Hãy thử lại khi ghi chú xuất hiện.",
+    "notes_too_long": "Ghi chú quá dài để lưu. Hãy rút ngắn và thử lại.",
+    "participant_email_invalid": "Nhập địa chỉ email, ví dụ name@company.com.",
+    "participants_limit_reached": "Cuộc họp này đã đủ số người tham gia tối đa.",
+    "participant_not_found": "Người tham gia này không còn trong cuộc họp.",
+    "participant_not_removable": "Chỉ có thể gỡ những người được thêm thủ công.",
+    "upload_not_claimable": "Không thể dùng lần tải lên này làm bản ghi. Hãy tải tệp lên lại.",
+    "meetings_not_kept": "Tài khoản của bạn không lưu cuộc họp nên không thể tải bản ghi lên.",
+    "upload_rejected": "Tệp đến nơi bị hỏng. Hãy tải lên lại.",
+    "upload_interrupted": "Quá trình tải lên bị gián đoạn. Hãy kiểm tra kết nối và tải tệp lên lại."
+  },
+  "library": {
+    "loadFailed": "Không thể tải các cuộc họp của bạn",
+    "more": "Hiện các cuộc họp trước",
+    "moreFailed": "Không thể tải thêm cuộc họp",
+    "emptyTitle": "Chưa có cuộc họp nào",
+    "emptyDescription": "Hãy ghi lại một cuộc họp trong ứng dụng máy tính hoặc tải một bản ghi lên. Bản chép lời và ghi chú sẽ hiện ở đây."
+  }
 }

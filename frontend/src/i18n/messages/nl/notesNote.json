@@ -1,6 +1,5 @@
 {
   "back": "Alle notities",
-  "notFound": "Notitie niet gevonden",
   "participants": {
     "count": "{count, plural, one {# deelnemer} other {# deelnemers}}",
     "inMeeting": "{count, plural, one {# persoon in deze vergadering.} other {# personen in deze vergadering.}}",
@@ -21,7 +20,10 @@
     "writtenBy": "Geschreven door Leo op basis van de transcriptie en je notities.",
     "writtenByTemplate": "Geschreven door Leo op basis van de transcriptie en je notities, opgemaakt volgens ‘{template}’.",
     "writing": "Verrijkte notities schrijven…",
-    "nothingFor": "Deze vergadering bevat niets voor de secties van ‘{template}’."
+    "nothingFor": "Deze vergadering bevat niets voor de secties van ‘{template}’.",
+    "loadFailed": "Kan Leo’s notities niet laden",
+    "failed": "Leo kon geen notities voor deze vergadering schrijven.",
+    "none": "Leo heeft nog geen notities voor deze vergadering geschreven."
   },
   "export": {
     "button": "Exporteren",
@@ -60,7 +62,13 @@
     "position": "{current, number} van {total, number}",
     "previous": "Vorig resultaat",
     "next": "Volgend resultaat",
-    "clear": "Zoekopdracht wissen"
+    "clear": "Zoekopdracht wissen",
+    "you": "Jij",
+    "organizer": "Organisator",
+    "speaker": "Spreker {n, number}",
+    "unknownSpeaker": "Onbekende spreker",
+    "loadFailed": "Kan de transcriptie niet laden",
+    "empty": "Deze vergadering heeft nog geen transcriptie."
   },
   "speakers": {
     "title": "Wie sprak er",
@@ -69,6 +77,26 @@
   },
   "mindMap": {
     "title": "Mindmap: {topic}",
-    "caption": "Gegenereerd uit de transcriptie van de vergadering."
+    "caption": "Gegenereerd uit de transcriptie van de vergadering.",
+    "loadFailed": "Kan de mindmap niet laden",
+    "none": "Nog geen mindmap. Die verschijnt samen met Leo’s notities."
+  },
+  "notices": {
+    "live": "Deze vergadering is nog bezig. De notities verschijnen als ze is afgelopen.",
+    "writing": "Leo schrijft de notities. Ze verschijnen hier over een paar minuten.",
+    "speakers": "De transcriptie en notities zijn bijgewerkt met de sprekers uit de opname.",
+    "failed": {
+      "transcript_empty": "Leo kon geen notities schrijven: er is geen spraak gevonden in de opname.",
+      "upload_exceeds_minutes": "De opname is langer dan de minuten die je abonnement nog heeft, dus ze is niet verwerkt.",
+      "recording_too_long": "De opname is langer dan 6 uur, dus ze is niet verwerkt.",
+      "unsupported_audio_format": "Dit bestandsformaat wordt niet ondersteund. Upload audio of video in een gangbaar formaat.",
+      "media_unreadable": "Kan de opname niet lezen. Upload het bestand opnieuw.",
+      "consent_required": "Leo heeft je toestemming nodig om de opname te verwerken. Geef die in Instellingen › Privacy.",
+      "content_refused": "Leo kon geen notities voor deze opname schrijven.",
+      "other": "Leo kon geen notities voor deze vergadering schrijven."
+    }
+  },
+  "actionItems": {
+    "due": "Deadline {date}"
   }
 }

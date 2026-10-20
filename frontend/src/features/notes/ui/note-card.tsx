@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { ArrowRight, Clock, ListChecks } from "lucide-react";
+import { Clock, ListChecks } from "lucide-react";
 import { useFormatter, useTranslations } from "use-intl";
 
 import { Avatar, AvatarFallback, AvatarGroup, AvatarGroupCount } from "@/components/ui/avatar";
@@ -7,16 +7,19 @@ import { Link } from "@/lib/navigation";
 import { getInitials } from "@/lib/utils";
 
 import { formatClock } from "../domain/format";
-import type { MeetingNote, NoteFolder, NoteParticipant } from "../domain/types";
+import type { MeetingCard } from "../domain/library";
+import type { NoteFolder } from "../domain/types";
+import { CardSummary } from "./card-summary";
 import { FOLDER_DOT_CLASSES } from "./folder-color-classes";
+import { keyed } from "./keyed";
 
 const MAX_AVATARS = 3;
 
-const CARD_CLASSES =
+export const CARD_CLASSES =
   "group/note-card relative flex flex-col overflow-hidden rounded-2xl border bg-card text-card-foreground shadow-xs transition-[translate,box-shadow,border-color] duration-200 hover:-translate-y-0.5 hover:border-foreground/15 hover:shadow-lg focus-within:-translate-y-0.5 focus-within:shadow-lg motion-reduce:transition-none motion-reduce:hover:translate-y-0";
 
-/** The whole card is one link: the title's link stretches over the card, so it is a single keyboard stop. */
-function CardTitleLink({ note, className }: { readonly note: MeetingNote; readonly className?: string }) {
+/** Вся карточка — одна ссылка: ссылка заголовка растянута на карточку, поэтому это одна остановка клавиатуры. */
+export function CardTitleLink({ note, className }: { readonly note: MeetingCard; readonly className?: string }) {
   return (
     <Link
       href={`/app/notes/${note.id}`}
@@ -44,19 +47,17 @@ export function FolderBadge({ folder }: { readonly folder: NoteFolder | undefine
   );
 }
 
-export function Participants({ participants }: { readonly participants: NoteParticipant[] }) {
+/** Кто был на встрече: до трёх аватаров по именам и «+N» за остальных, всего — как считает сервер. */
+export function Participants({ note }: { readonly note: Pick<MeetingCard, "participantNames" | "participantCount"> }) {
   const format = useFormatter();
-  const extra = participants.length - MAX_AVATARS;
+  const names = note.participantNames;
+  const extra = note.participantCount - Math.min(names.length, MAX_AVATARS);
+  if (note.participantCount === 0) return null;
   return (
-    <AvatarGroup
-      aria-label={format.list(
-        participants.map((p) => p.name),
-        { type: "unit", style: "short" },
-      )}
-    >
-      {participants.slice(0, MAX_AVATARS).map((participant) => (
-        <Avatar key={participant.name} size="sm">
-          <AvatarFallback className="text-[10px]">{getInitials(participant.name)}</AvatarFallback>
+    <AvatarGroup aria-label={format.list(names, { type: "unit", style: "short" })}>
+      {keyed(names.slice(0, MAX_AVATARS)).map(({ key, value: name }) => (
+        <Avatar key={key} size="sm">
+          <AvatarFallback className="text-[10px]">{getInitials(name)}</AvatarFallback>
         </Avatar>
       ))}
       {extra > 0 ? (
@@ -66,9 +67,9 @@ export function Participants({ participants }: { readonly participants: NotePart
   );
 }
 
-export function OpenItems({ note }: { readonly note: MeetingNote }) {
+export function OpenItems({ note }: { readonly note: Pick<MeetingCard, "actionItems"> }) {
   const t = useTranslations("notes");
-  const open = note.actionItems.filter((item) => !item.done).length;
+  const open = note.actionItems;
   if (open === 0) return null;
   return (
     <span className="inline-flex items-center gap-1 text-muted-foreground text-xs">
@@ -78,8 +79,14 @@ export function OpenItems({ note }: { readonly note: MeetingNote }) {
   );
 }
 
-/** When the meeting started, as "Oct 5, 9:00 AM" in the interface language (UTC, like the demo data). */
-export function MeetingStart({ note, className }: { readonly note: MeetingNote; readonly className?: string }) {
+/** Начало встречи, как «5 окт., 9:00», на языке и в часовом поясе кабинета (src/i18n/config.ts). */
+export function MeetingStart({
+  note,
+  className,
+}: {
+  readonly note: Pick<MeetingCard, "startedAt">;
+  readonly className?: string;
+}) {
   const format = useFormatter();
   return (
     <time className={className} dateTime={note.startedAt}>
@@ -100,7 +107,7 @@ export function Duration({ minutes }: { readonly minutes: number }) {
 }
 
 interface NoteCardProps {
-  readonly note: MeetingNote;
+  readonly note: MeetingCard;
   readonly folder: NoteFolder | undefined;
 }
 
@@ -115,61 +122,15 @@ export function NoteCard({ note, folder }: NoteCardProps) {
         <h3 className="font-medium text-base leading-snug">
           <CardTitleLink note={note} />
         </h3>
-        <p dir="auto" className="line-clamp-2 text-muted-foreground text-sm leading-relaxed">
-          {note.summary}
-        </p>
+        <CardSummary note={note} className="line-clamp-2" />
       </div>
       <div className="mt-auto flex flex-col gap-4">
         <div className="flex items-center justify-between gap-3">
-          <Participants participants={note.participants} />
+          <Participants note={note} />
           <div className="flex items-center gap-3">
             <OpenItems note={note} />
             <Duration minutes={note.durationMinutes} />
           </div>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-/** The newest meeting, shown large at the top of the library. */
-export function FeaturedNoteCard({ note, folder }: NoteCardProps) {
-  const t = useTranslations("notes");
-  return (
-    <article className={cn(CARD_CLASSES, "gap-6 p-6")}>
-      <div className="grid gap-6 md:grid-cols-[1.3fr_1fr]">
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="font-medium text-primary text-xs uppercase tracking-wider">{t("card.latest")}</span>
-            <FolderBadge folder={folder} />
-          </div>
-          <h3 className="text-2xl leading-tight tracking-tight">
-            <CardTitleLink note={note} />
-          </h3>
-          <p dir="auto" className="text-muted-foreground text-sm leading-relaxed">
-            {note.summary}
-          </p>
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1">
-            <Participants participants={note.participants} />
-            <MeetingStart note={note} className="text-muted-foreground text-xs" />
-            <Duration minutes={note.durationMinutes} />
-            <OpenItems note={note} />
-          </div>
-        </div>
-        <div className="flex flex-col gap-3 rounded-xl bg-muted/50 p-4">
-          <h4 className="font-medium text-muted-foreground text-xs uppercase tracking-wider">{t("card.keyPoints")}</h4>
-          <ul className="flex flex-col gap-2 text-sm">
-            {note.keyPoints.slice(0, 3).map((point) => (
-              <li key={point} className="flex gap-2">
-                <span className="mt-2 size-1 shrink-0 rounded-full bg-foreground/40" aria-hidden="true" />
-                <span dir="auto">{point}</span>
-              </li>
-            ))}
-          </ul>
-          <span className="mt-auto inline-flex items-center gap-1 font-medium text-sm transition-[gap] group-hover/note-card:gap-2">
-            {t("card.openNotes")}
-            <ArrowRight className="size-4 rtl:-scale-x-100" aria-hidden="true" />
-          </span>
         </div>
       </div>
     </article>

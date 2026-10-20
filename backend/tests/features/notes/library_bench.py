@@ -27,11 +27,13 @@ from shosai.features.identity.contracts import AUTHENTICATOR
 from shosai.features.notes.application.deletion import MeetingDeletion
 from shosai.features.notes.application.folders import Folders
 from shosai.features.notes.application.library import MeetingLibrary
+from shosai.features.notes.application.library_counts import MeetingCounts
 from shosai.features.notes.application.meeting_content import MeetingContent
 from shosai.features.notes.application.my_notes import MyNotes
 from shosai.features.notes.application.participants import Participants
 from shosai.features.notes.application.run_rows import stage_state
 from shosai.features.notes.application.templates import Templates
+from shosai.features.notes.channels.http.counts import build_counts_router
 from shosai.features.notes.channels.http.folders import build_folders_router
 from shosai.features.notes.channels.http.meeting_content import build_meeting_content_router
 from shosai.features.notes.channels.http.meetings import build_meetings_router
@@ -247,9 +249,10 @@ async def library_bench(homes: DatabaseAccess) -> AsyncIterator[LibraryBench]:
     """The library and a meeting's content over the slot's homes."""
     ports, transactions = library_ports(), homes.transactions
     effects = EffectLedger(EffectKeyMetrics(CollectorRegistry()))
-    # Порядок как в модуле: папки и шаблоны раньше /v1/notes/{meeting_id}.
+    # Порядок как в модуле: папки, счётчики и шаблоны раньше /v1/notes/{meeting_id}.
     routers = (
         build_folders_router(Folders(transactions, effects), ports),
+        build_counts_router(MeetingCounts(transactions, ports), ports),
         build_templates_router(Templates(transactions, effects), ports),
         build_meetings_router(
             (MeetingLibrary(transactions, ports), MeetingDeletion(transactions, (ports, OUTBOX))),

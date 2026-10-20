@@ -1,21 +1,24 @@
 import type * as React from "react";
 
-import { FolderOpen } from "lucide-react";
+import { FolderOpen, NotebookPen } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 
-import type { MeetingNote, NoteFolder, NoteGroup, PendingRecording } from "../domain/types";
-import { FeaturedNoteCard, NoteCard } from "./note-card";
+import type { CardGroup, MeetingCard } from "../domain/library";
+import type { NoteFolder } from "../domain/types";
+import type { RecordingUpload } from "../model/recording-uploads";
+import { FeaturedNoteCard, FeaturedRecordingCard } from "./featured-card";
+import { NoteCard } from "./note-card";
 import { NoteRow, NoteRowsHeader, RecordingRow } from "./note-row";
 import { TimelineDay, TimelineEntry, TimelineRecording } from "./note-timeline";
 import { RecordingCard } from "./recording-card";
 
 export interface NotesViewProps {
-  readonly groups: NoteGroup[];
-  readonly recordings: PendingRecording[];
-  readonly folderOf: (note: MeetingNote) => NoteFolder | undefined;
-  readonly withMenu: (note: MeetingNote, content: React.ReactNode) => React.ReactNode;
+  readonly groups: readonly CardGroup[];
+  readonly recordings: readonly RecordingUpload[];
+  readonly folderOf: (note: MeetingCard) => NoteFolder | undefined;
+  readonly withMenu: (note: MeetingCard, content: React.ReactNode) => React.ReactNode;
   readonly onRemoveRecording: (id: string) => void;
 }
 
@@ -41,17 +44,18 @@ export function TimelineView({ groups, recordings, folderOf, withMenu, onRemoveR
   );
 }
 
-export function GridView({
-  featured,
-  groups,
-  recordings,
-  folderOf,
-  withMenu,
-  onRemoveRecording,
-}: NotesViewProps & { readonly featured: MeetingNote | undefined }) {
+interface GridViewProps extends NotesViewProps {
+  readonly featured: MeetingCard | undefined;
+  /** Загрузка в слоте последней встречи; остальные загрузки — в `recordings`. */
+  readonly lead: RecordingUpload | undefined;
+}
+
+export function GridView({ featured, lead, groups, recordings, folderOf, withMenu, onRemoveRecording }: GridViewProps) {
   const t = useTranslations("notes");
   return (
     <div className="flex flex-col gap-8">
+      {lead ? <FeaturedRecordingCard recording={lead} onRemove={onRemoveRecording} /> : null}
+      {featured ? withMenu(featured, <FeaturedNoteCard note={featured} folder={folderOf(featured)} />) : null}
       {recordings.length > 0 ? (
         <CardSection label={t("recordings.uploading")}>
           {recordings.map((recording) => (
@@ -59,7 +63,6 @@ export function GridView({
           ))}
         </CardSection>
       ) : null}
-      {featured ? withMenu(featured, <FeaturedNoteCard note={featured} folder={folderOf(featured)} />) : null}
       {groups.map((group) => (
         <CardSection key={group.recency} label={t(`recency.${group.recency}`)}>
           {group.items.map((note) => withMenu(note, <NoteCard note={note} folder={folderOf(note)} />))}
@@ -121,6 +124,22 @@ export function EmptyFolder() {
         </EmptyMedia>
         <EmptyTitle>{t("folders.emptyTitle")}</EmptyTitle>
         <EmptyDescription>{t("folders.emptyDescription", { action: t("folders.moveTo") })}</EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  );
+}
+
+/** Во всей библиотеке ещё нет встреч: откуда они появятся. */
+export function EmptyLibrary() {
+  const t = useTranslations("notes");
+  return (
+    <Empty className="min-h-64 border border-dashed">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <NotebookPen />
+        </EmptyMedia>
+        <EmptyTitle>{t("library.emptyTitle")}</EmptyTitle>
+        <EmptyDescription>{t("library.emptyDescription")}</EmptyDescription>
       </EmptyHeader>
     </Empty>
   );

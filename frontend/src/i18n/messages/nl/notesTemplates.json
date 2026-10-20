@@ -109,5 +109,6 @@
     "heading": "Kop voor {section}",
     "sectionsRequired": "Houd minstens één sectie over.",
     "create": "Sjabloon maken"
-  }
+  },
+  "rewriteFailed": "Leo kon de notities niet herschrijven. Probeer het opnieuw."
 }
