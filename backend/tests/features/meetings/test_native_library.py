@@ -77,7 +77,7 @@ async def listed(bench: NativeBench, owner: uuid.UUID, url: str) -> list[Json]:
 async def test_the_answers_have_the_draft_s_keys_and_types(native_bench: NativeBench) -> None:
     owner = uuid.uuid4()
     written = Written(LINES, write_up=("enhanced", SECTIONS, FINDINGS))
-    meeting_id = await meeting(native_bench, owner, ("Budget", START), written)
+    meeting_id = await meeting(native_bench.homes, owner, ("Budget", START), written)
 
     rows = await listed(native_bench, owner, "/v1/me/sessions?limit=100&q=")
     full = await get(native_bench, owner, f"/v1/me/sessions/{meeting_id}/full")
@@ -100,11 +100,11 @@ async def test_the_list_is_the_newest_two_hundred_that_match(native_bench: Nativ
             )
             for n in range(205)
         )  # fmt: skip
-    special = await meeting(native_bench, owner, ("Q4: 100% plan", START - timedelta(days=1)))
+    special = await meeting(native_bench.homes, owner, ("Q4: 100% plan", START - timedelta(days=1)))
     live = await meeting(
-        native_bench, owner, ("Now", START + timedelta(days=30)), state=("active", True)
+        native_bench.homes, owner, ("Now", START + timedelta(days=30)), state=("active", True)
     )
-    await meeting(native_bench, stranger, ("Not yours", START))
+    await meeting(native_bench.homes, stranger, ("Not yours", START))
 
     first = await listed(native_bench, owner, "/v1/me/sessions?limit=200")
     past = await listed(native_bench, owner, "/v1/me/sessions?limit=50&offset=200")
@@ -128,10 +128,10 @@ async def test_a_voice_is_the_person_s_name_or_speaker_n_in_their_language(
 ) -> None:
     owner = uuid.uuid4()
     native_bench.people.by_person[owner] = ("Мария", "ru")
-    live = await meeting(native_bench, owner, ("Live", START), Written(LINES))
+    live = await meeting(native_bench.homes, owner, ("Live", START), Written(LINES))
     recorded_roles = Written(LINES, roles=("numbered", "owner"))
     recording = await meeting(
-        native_bench, owner, ("Recorded", START + timedelta(hours=1)), recorded_roles
+        native_bench.homes, owner, ("Recorded", START + timedelta(hours=1)), recorded_roles
     )
 
     by_live = await get(native_bench, owner, f"/v1/me/sessions/{live}/full")
@@ -147,7 +147,7 @@ async def test_the_note_is_the_person_s_own_beside_leo_s_write_up(
     owner = uuid.uuid4()
     native_bench.people.by_person[owner] = ("Мария", "ru")
     written = Written(LINES, write_up=("enhanced", SECTIONS, FINDINGS))
-    meeting_id = await meeting(native_bench, owner, ("Budget", START), written)
+    meeting_id = await meeting(native_bench.homes, owner, ("Budget", START), written)
     url = f"/v1/me/sessions/{meeting_id}/note"
 
     empty = await get(native_bench, owner, url)
@@ -182,7 +182,9 @@ async def test_a_meeting_not_kept_stores_no_note_and_no_participant(
     native_bench: NativeBench,
 ) -> None:
     owner = uuid.uuid4()
-    meeting_id = await meeting(native_bench, owner, ("Private", START), state=("active", False))
+    meeting_id = await meeting(
+        native_bench.homes, owner, ("Private", START), state=("active", False)
+    )
     headers = bearer((Home.EU, owner))
 
     native = await native_bench.http.put(

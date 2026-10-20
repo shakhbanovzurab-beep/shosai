@@ -81,7 +81,7 @@ class Written:
 
 
 async def meeting(
-    bench: NativeBench,
+    homes: DatabaseAccess,
     owner: uuid.UUID,
     named: tuple[str, datetime],
     written: Written | None = None,
@@ -91,7 +91,7 @@ async def meeting(
     title, started = named
     written = written or Written()
     status, kept = state
-    async with bench.homes.transactions.begin(TenancyScope(Home.EU, owner)) as session:
+    async with homes.transactions.begin(TenancyScope(Home.EU, owner)) as session:
         record = MeetingRecord(
             id=uuid.uuid4(), user_id=owner, title=title, status=status, source="live",
             started_at=started, kept=kept, line_count=len(written.lines), seconds=1800,

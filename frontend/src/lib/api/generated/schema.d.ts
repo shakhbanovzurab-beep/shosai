@@ -1964,6 +1964,78 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/{meeting_id}/share-link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Share Link
+         * @description The meeting's link; null while it is off.
+         */
+        get: operations["get_share_link_v1_meetings__meeting_id__share_link_get"];
+        /**
+         * Put Share Link
+         * @description Turn the link on with these settings, or change them.
+         */
+        put: operations["put_share_link_v1_meetings__meeting_id__share_link_put"];
+        post?: never;
+        /**
+         * Delete Share Link
+         * @description Turn the link off; its comments go with it.
+         */
+        delete: operations["delete_share_link_v1_meetings__meeting_id__share_link_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/shared/{token}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Shared Meeting
+         * @description The meeting the link shares, as its settings allow.
+         */
+        get: operations["get_shared_meeting_v1_shared__token__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/shared/{token}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Shared Comments
+         * @description The newest comments under the page, oldest first.
+         */
+        get: operations["list_shared_comments_v1_shared__token__comments_get"];
+        put?: never;
+        /**
+         * Post Shared Comment
+         * @description Leave a comment under the page, as a name or a guest.
+         */
+        post: operations["post_shared_comment_v1_shared__token__comments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2978,6 +3050,20 @@ export interface components {
             refresh_token?: string | null;
         };
         /**
+         * MapNodeOut
+         * @description A node of the mind map in pre-order: the root has no parent.
+         */
+        MapNodeOut: {
+            /** Id */
+            id: string;
+            /** Parent Id */
+            parent_id: string | null;
+            /** Depth */
+            depth: number;
+            /** Label */
+            label: string;
+        };
+        /**
          * Me
          * @description The signed-in person as Settings shows them.
          */
@@ -3377,7 +3463,7 @@ export interface components {
         /** Page[MapNodeOut] */
         Page_MapNodeOut_: {
             /** Items */
-            items: components["schemas"]["shosai__features__meetings__channels__http__meeting_models__MapNodeOut"][];
+            items: components["schemas"]["MapNodeOut"][];
             /** Next Cursor */
             next_cursor: string | null;
         };
@@ -4071,7 +4157,7 @@ export interface components {
             /** Segments */
             segments: components["schemas"]["SegmentOut"][];
             /** Map Nodes */
-            map_nodes: components["schemas"]["shosai__features__meetings__channels__http__native_shapes__MapNodeOut"][];
+            map_nodes: components["schemas"]["SessionMapNode"][];
             /** Executions */
             executions: {
                 [key: string]: string;
@@ -4092,6 +4178,36 @@ export interface components {
              * @default false
              */
             mcp_shared: boolean;
+        };
+        /**
+         * SessionMapNode
+         * @description A node of the meeting's map.
+         */
+        SessionMapNode: {
+            /** Id */
+            id: string;
+            /** Type */
+            type: string;
+            /** Title */
+            title: string;
+            /** Parent Id */
+            parent_id: string | null;
+            /** Start Offset Ms */
+            start_offset_ms?: number | null;
+            /** Confidence */
+            confidence?: number | null;
+            /**
+             * Origin
+             * @default ai
+             */
+            origin: string;
+            /**
+             * Edited
+             * @default false
+             */
+            edited: boolean;
+            /** Position */
+            position: number;
         };
         /**
          * SessionRenamed
@@ -4204,6 +4320,208 @@ export interface components {
             status?: ("active" | "paused" | "completed" | "failed") | null;
             /** Ended At */
             ended_at?: string | null;
+        };
+        /**
+         * ShareExpiry
+         * @description How long a link works from when its expiry was chosen.
+         * @enum {string}
+         */
+        ShareExpiry: "never" | "7d" | "30d" | "90d";
+        /**
+         * ShareLinkAnswer
+         * @description The meeting's link, null while it is off.
+         */
+        ShareLinkAnswer: {
+            link: components["schemas"]["ShareLinkOut"] | null;
+        };
+        /**
+         * ShareLinkOut
+         * @description The meeting's link and what its page shows.
+         */
+        ShareLinkOut: {
+            /** Token */
+            token: string;
+            /**
+             * Path
+             * @description The page's path on the site, `/s/{token}`.
+             */
+            path: string;
+            /** Show Transcript */
+            show_transcript: boolean;
+            /** Show Names */
+            show_names: boolean;
+            /** Allow Comments */
+            allow_comments: boolean;
+            expiry: components["schemas"]["ShareExpiry"];
+            /**
+             * Expires At
+             * @description When the link stops working; null never.
+             */
+            expires_at: string | null;
+        };
+        /**
+         * ShareSettingsIn
+         * @description What the link's page shows and allows, and how long it works.
+         */
+        ShareSettingsIn: {
+            /**
+             * Show Transcript
+             * @default true
+             */
+            show_transcript: boolean;
+            /**
+             * Show Names
+             * @default false
+             */
+            show_names: boolean;
+            /**
+             * Allow Comments
+             * @default false
+             */
+            allow_comments: boolean;
+            /** @default never */
+            expiry: components["schemas"]["ShareExpiry"];
+        };
+        /**
+         * SharedCommentIn
+         * @description A reader's comment: a name of at most 60 characters, or none for a guest.
+         */
+        SharedCommentIn: {
+            /** Author */
+            author?: string | null;
+            /** Text */
+            text: string;
+        };
+        /**
+         * SharedCommentOut
+         * @description A comment under the page.
+         */
+        SharedCommentOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Author
+             * @description Null for a guest.
+             */
+            author: string | null;
+            /** Text */
+            text: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /**
+         * SharedCommentsOut
+         * @description The newest comments, oldest first.
+         */
+        SharedCommentsOut: {
+            /** Items */
+            items: components["schemas"]["SharedCommentOut"][];
+        };
+        /**
+         * SharedItemOut
+         * @description A finding the write-up lists, as the page shows it.
+         */
+        SharedItemOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            kind: components["schemas"]["FindingKind"];
+            /** Text */
+            text: string;
+            /**
+             * Owner Name
+             * @description Shown only when the link shows names.
+             */
+            owner_name: string | null;
+            /** Due On */
+            due_on: string | null;
+        };
+        /**
+         * SharedLineOut
+         * @description A transcript line on the page.
+         */
+        SharedLineOut: {
+            /** Start Ms */
+            start_ms: number;
+            /** Duration Ms */
+            duration_ms: number;
+            /**
+             * Speaker
+             * @description The voice's number by first appearance, from 1.
+             */
+            speaker: number | null;
+            /**
+             * Speaker Name
+             * @description The owner's name for their voice, names shown.
+             */
+            speaker_name: string | null;
+            /** Text */
+            text: string;
+        };
+        /**
+         * SharedMeetingOut
+         * @description A meeting as people outside it see it through the link.
+         */
+        SharedMeetingOut: {
+            /** Title */
+            title: string;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Seconds */
+            seconds: number;
+            /**
+             * Participants
+             * @description Names; null when the link hides them.
+             */
+            participants: string[] | null;
+            /** Participant Count */
+            participant_count: number;
+            /** Sections */
+            sections: components["schemas"]["SharedSectionOut"][];
+            /**
+             * Transcript
+             * @description Null when the link hides it.
+             */
+            transcript: components["schemas"]["SharedLineOut"][] | null;
+            /**
+             * Transcript Truncated
+             * @description Whether lines past the first 3 000 are left out.
+             */
+            transcript_truncated: boolean;
+            /** Allow Comments */
+            allow_comments: boolean;
+        };
+        /**
+         * SharedSectionOut
+         * @description A section of the write-up: a summary's text, or the findings it lists.
+         */
+        SharedSectionOut: {
+            kind: components["schemas"]["SectionKind"];
+            /**
+             * Heading Code
+             * @description A shipped heading, worded by the reader's interface.
+             */
+            heading_code: string | null;
+            /**
+             * Title
+             * @description The meeting owner's own title of the section.
+             */
+            title: string | null;
+            /** Text */
+            text?: string | null;
+            /** Items */
+            items?: components["schemas"]["SharedItemOut"][] | null;
         };
         /**
          * SignedOutElsewhere
@@ -4838,50 +5156,6 @@ export interface components {
             /** Effective Plan Id */
             effective_plan_id: string;
             usage: components["schemas"]["MeetingUsageView"];
-        };
-        /**
-         * MapNodeOut
-         * @description A node of the mind map in pre-order: the root has no parent.
-         */
-        shosai__features__meetings__channels__http__meeting_models__MapNodeOut: {
-            /** Id */
-            id: string;
-            /** Parent Id */
-            parent_id: string | null;
-            /** Depth */
-            depth: number;
-            /** Label */
-            label: string;
-        };
-        /**
-         * MapNodeOut
-         * @description A node of the meeting's map.
-         */
-        shosai__features__meetings__channels__http__native_shapes__MapNodeOut: {
-            /** Id */
-            id: string;
-            /** Type */
-            type: string;
-            /** Title */
-            title: string;
-            /** Parent Id */
-            parent_id: string | null;
-            /** Start Offset Ms */
-            start_offset_ms?: number | null;
-            /** Confidence */
-            confidence?: number | null;
-            /**
-             * Origin
-             * @default ai
-             */
-            origin: string;
-            /**
-             * Edited
-             * @default false
-             */
-            edited: boolean;
-            /** Position */
-            position: number;
         };
     };
     responses: never;
@@ -8893,6 +9167,204 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ImportStarted"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_share_link_v1_meetings__meeting_id__share_link_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShareLinkAnswer"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    put_share_link_v1_meetings__meeting_id__share_link_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ShareSettingsIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShareLinkAnswer"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_share_link_v1_meetings__meeting_id__share_link_delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                meeting_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_shared_meeting_v1_shared__token__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SharedMeetingOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_shared_comments_v1_shared__token__comments_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SharedCommentsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    post_shared_comment_v1_shared__token__comments_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                token: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SharedCommentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SharedCommentOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

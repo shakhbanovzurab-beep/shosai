@@ -14,6 +14,7 @@
     "DELETE /v1/meetings/templates/{template_id}",
     "DELETE /v1/meetings/{meeting_id}",
     "DELETE /v1/meetings/{meeting_id}/participants/{participant_id}",
+    "DELETE /v1/meetings/{meeting_id}/share-link",
     "GET /email/{name}",
     "GET /v1/admin/plans",
     "GET /v1/admin/promo-codes",
@@ -51,9 +52,12 @@
     "GET /v1/meetings/{meeting_id}/findings",
     "GET /v1/meetings/{meeting_id}/map",
     "GET /v1/meetings/{meeting_id}/my-notes",
+    "GET /v1/meetings/{meeting_id}/share-link",
     "GET /v1/meetings/{meeting_id}/transcript",
     "GET /v1/meetings/{meeting_id}/write-up",
     "GET /v1/settings/usage",
+    "GET /v1/shared/{token}",
+    "GET /v1/shared/{token}/comments",
     "GET /v1/unsubscribe",
     "PATCH /v1/admin/plans/{plan_id}",
     "PATCH /v1/admin/promo-codes/{promo_id}",
@@ -114,13 +118,15 @@
     "POST /v1/meetings/{meeting_id}/participants",
     "POST /v1/meetings/{meeting_id}/write-up",
     "POST /v1/sessions",
+    "POST /v1/shared/{token}/comments",
     "POST /v1/unsubscribe",
     "PUT /v1/me/avatar",
     "PUT /v1/me/sessions/{session_id}/audio/{run_id}/part/{number}",
     "PUT /v1/me/sessions/{session_id}/note/draft",
     "PUT /v1/meetings/settings",
     "PUT /v1/meetings/templates/{template_id}",
-    "PUT /v1/meetings/{meeting_id}/my-notes"
+    "PUT /v1/meetings/{meeting_id}/my-notes",
+    "PUT /v1/meetings/{meeting_id}/share-link"
   ],
   "ws": [
     "GET /v1/health"

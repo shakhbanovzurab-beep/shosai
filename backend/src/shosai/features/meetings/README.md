@@ -123,3 +123,9 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/meeting_settings.py`, `channels/http/settings.py` — `GET` and `PUT /v1/meetings/settings {keep_meetings}`; the native `/v1/auth/me` gets `no_logs` from it.
 - No-logs (MT-D6): a meeting not kept stores no line, own notes, participant, finding, recording or import (409 `private_meeting`, 422 `import_unavailable_no_logs`); it is purged at its end with only its minutes kept.
 
+## Share links and the public page (step 13, MT-D5, MT-D12)
+
+- `application/share_links.py`, `channels/http/share_links.py` — `GET`, `PUT` and `DELETE /v1/meetings/{id}/share-link` for whoever may manage the meeting: the first `PUT` gives a token, a change keeps it, the expiry is counted anew only when another is chosen; `DELETE` takes the comments with it; a meeting not kept has no link (409 `private_meeting`).
+- `application/shared_links.py` — a token looked up in both homes at once past row-level security, the meeting read in its company's scope, the link checked again in its owner's; every link that does not open is the one 404 `share_not_found`, a silent home 503.
+- `application/shared_pages.py`, `channels/http/shared.py`, `channels/http/shared_shapes.py` — `GET /v1/shared/{token}` (the write-up with its findings, participants, the transcript's first 3 000 lines when shown) and `GET`/`POST …/comments` (the newest 200; a name of at most 60 characters or a guest), sixty reads and six comments a minute per address; never an address, anyone's own notes or the audio; names, owners and the owner's voice only with names shown.
+

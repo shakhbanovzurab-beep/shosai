@@ -7397,6 +7397,328 @@
           }
         }
       }
+    },
+    "/v1/meetings/{meeting_id}/share-link": {
+      "get": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Get Share Link",
+        "description": "The meeting's link; null while it is off.",
+        "operationId": "get_share_link_v1_meetings__meeting_id__share_link_get",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShareLinkAnswer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Put Share Link",
+        "description": "Turn the link on with these settings, or change them.",
+        "operationId": "put_share_link_v1_meetings__meeting_id__share_link_put",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShareSettingsIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShareLinkAnswer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Delete Share Link",
+        "description": "Turn the link off; its comments go with it.",
+        "operationId": "delete_share_link_v1_meetings__meeting_id__share_link_delete",
+        "parameters": [
+          {
+            "name": "meeting_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Meeting Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/shared/{token}": {
+      "get": {
+        "tags": [
+          "shared"
+        ],
+        "summary": "Get Shared Meeting",
+        "description": "The meeting the link shares, as its settings allow.",
+        "operationId": "get_shared_meeting_v1_shared__token__get",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SharedMeetingOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/shared/{token}/comments": {
+      "get": {
+        "tags": [
+          "shared"
+        ],
+        "summary": "List Shared Comments",
+        "description": "The newest comments under the page, oldest first.",
+        "operationId": "list_shared_comments_v1_shared__token__comments_get",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SharedCommentsOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "shared"
+        ],
+        "summary": "Post Shared Comment",
+        "description": "Leave a comment under the page, as a name or a guest.",
+        "operationId": "post_shared_comment_v1_shared__token__comments_post",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "title": "Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SharedCommentIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SharedCommentOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -9727,6 +10049,42 @@
         "title": "LogoutRequest",
         "description": "The refresh token of a client that keeps it outside the cookie jar (optional)."
       },
+      "MapNodeOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "depth": {
+            "type": "integer",
+            "title": "Depth"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "parent_id",
+          "depth",
+          "label"
+        ],
+        "title": "MapNodeOut",
+        "description": "A node of the mind map in pre-order: the root has no parent."
+      },
       "Me": {
         "properties": {
           "id": {
@@ -10711,7 +11069,7 @@
         "properties": {
           "items": {
             "items": {
-              "$ref": "#/components/schemas/shosai__features__meetings__channels__http__meeting_models__MapNodeOut"
+              "$ref": "#/components/schemas/MapNodeOut"
             },
             "type": "array",
             "title": "Items"
@@ -12716,7 +13074,7 @@
           },
           "map_nodes": {
             "items": {
-              "$ref": "#/components/schemas/shosai__features__meetings__channels__http__native_shapes__MapNodeOut"
+              "$ref": "#/components/schemas/SessionMapNode"
             },
             "type": "array",
             "title": "Map Nodes"
@@ -12780,6 +13138,79 @@
         ],
         "title": "SessionFull",
         "description": "A meeting with its transcript and map."
+      },
+      "SessionMapNode": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "start_offset_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Offset Ms"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence"
+          },
+          "origin": {
+            "type": "string",
+            "title": "Origin",
+            "default": "ai"
+          },
+          "edited": {
+            "type": "boolean",
+            "title": "Edited",
+            "default": false
+          },
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "title",
+          "parent_id",
+          "position"
+        ],
+        "title": "SessionMapNode",
+        "description": "A node of the meeting's map."
       },
       "SessionRenamed": {
         "properties": {
@@ -13043,6 +13474,445 @@
         "type": "object",
         "title": "SessionUpdate",
         "description": "A change of a meeting: its title, or its end with the client's time of it."
+      },
+      "ShareExpiry": {
+        "type": "string",
+        "enum": [
+          "never",
+          "7d",
+          "30d",
+          "90d"
+        ],
+        "title": "ShareExpiry",
+        "description": "How long a link works from when its expiry was chosen."
+      },
+      "ShareLinkAnswer": {
+        "properties": {
+          "link": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ShareLinkOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "link"
+        ],
+        "title": "ShareLinkAnswer",
+        "description": "The meeting's link, null while it is off."
+      },
+      "ShareLinkOut": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          },
+          "path": {
+            "type": "string",
+            "title": "Path",
+            "description": "The page's path on the site, `/s/{token}`."
+          },
+          "show_transcript": {
+            "type": "boolean",
+            "title": "Show Transcript"
+          },
+          "show_names": {
+            "type": "boolean",
+            "title": "Show Names"
+          },
+          "allow_comments": {
+            "type": "boolean",
+            "title": "Allow Comments"
+          },
+          "expiry": {
+            "$ref": "#/components/schemas/ShareExpiry"
+          },
+          "expires_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires At",
+            "description": "When the link stops working; null never."
+          }
+        },
+        "type": "object",
+        "required": [
+          "token",
+          "path",
+          "show_transcript",
+          "show_names",
+          "allow_comments",
+          "expiry",
+          "expires_at"
+        ],
+        "title": "ShareLinkOut",
+        "description": "The meeting's link and what its page shows."
+      },
+      "ShareSettingsIn": {
+        "properties": {
+          "show_transcript": {
+            "type": "boolean",
+            "title": "Show Transcript",
+            "default": true
+          },
+          "show_names": {
+            "type": "boolean",
+            "title": "Show Names",
+            "default": false
+          },
+          "allow_comments": {
+            "type": "boolean",
+            "title": "Allow Comments",
+            "default": false
+          },
+          "expiry": {
+            "$ref": "#/components/schemas/ShareExpiry",
+            "default": "never"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ShareSettingsIn",
+        "description": "What the link's page shows and allows, and how long it works."
+      },
+      "SharedCommentIn": {
+        "properties": {
+          "author": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author"
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 10000,
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "SharedCommentIn",
+        "description": "A reader's comment: a name of at most 60 characters, or none for a guest."
+      },
+      "SharedCommentOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "author": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Author",
+            "description": "Null for a guest."
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "author",
+          "text",
+          "created_at"
+        ],
+        "title": "SharedCommentOut",
+        "description": "A comment under the page."
+      },
+      "SharedCommentsOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SharedCommentOut"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "SharedCommentsOut",
+        "description": "The newest comments, oldest first."
+      },
+      "SharedItemOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/FindingKind"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "owner_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Name",
+            "description": "Shown only when the link shows names."
+          },
+          "due_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due On"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "text",
+          "owner_name",
+          "due_on"
+        ],
+        "title": "SharedItemOut",
+        "description": "A finding the write-up lists, as the page shows it."
+      },
+      "SharedLineOut": {
+        "properties": {
+          "start_ms": {
+            "type": "integer",
+            "title": "Start Ms"
+          },
+          "duration_ms": {
+            "type": "integer",
+            "title": "Duration Ms"
+          },
+          "speaker": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speaker",
+            "description": "The voice's number by first appearance, from 1."
+          },
+          "speaker_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speaker Name",
+            "description": "The owner's name for their voice, names shown."
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "start_ms",
+          "duration_ms",
+          "speaker",
+          "speaker_name",
+          "text"
+        ],
+        "title": "SharedLineOut",
+        "description": "A transcript line on the page."
+      },
+      "SharedMeetingOut": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          },
+          "seconds": {
+            "type": "integer",
+            "title": "Seconds"
+          },
+          "participants": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Participants",
+            "description": "Names; null when the link hides them."
+          },
+          "participant_count": {
+            "type": "integer",
+            "title": "Participant Count"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/SharedSectionOut"
+            },
+            "type": "array",
+            "title": "Sections"
+          },
+          "transcript": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SharedLineOut"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transcript",
+            "description": "Null when the link hides it."
+          },
+          "transcript_truncated": {
+            "type": "boolean",
+            "title": "Transcript Truncated",
+            "description": "Whether lines past the first 3 000 are left out."
+          },
+          "allow_comments": {
+            "type": "boolean",
+            "title": "Allow Comments"
+          }
+        },
+        "type": "object",
+        "required": [
+          "title",
+          "started_at",
+          "seconds",
+          "participants",
+          "participant_count",
+          "sections",
+          "transcript",
+          "transcript_truncated",
+          "allow_comments"
+        ],
+        "title": "SharedMeetingOut",
+        "description": "A meeting as people outside it see it through the link."
+      },
+      "SharedSectionOut": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/SectionKind"
+          },
+          "heading_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heading Code",
+            "description": "A shipped heading, worded by the reader's interface."
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title",
+            "description": "The meeting owner's own title of the section."
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "items": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/SharedItemOut"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "heading_code",
+          "title"
+        ],
+        "title": "SharedSectionOut",
+        "description": "A section of the write-up: a summary's text, or the findings it lists."
       },
       "SignedOutElsewhere": {
         "properties": {
@@ -14610,115 +15480,6 @@
         ],
         "title": "PlansView",
         "description": "The plans, the person's own and effective plan, and the month's minutes."
-      },
-      "shosai__features__meetings__channels__http__meeting_models__MapNodeOut": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "parent_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Parent Id"
-          },
-          "depth": {
-            "type": "integer",
-            "title": "Depth"
-          },
-          "label": {
-            "type": "string",
-            "title": "Label"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "parent_id",
-          "depth",
-          "label"
-        ],
-        "title": "MapNodeOut",
-        "description": "A node of the mind map in pre-order: the root has no parent."
-      },
-      "shosai__features__meetings__channels__http__native_shapes__MapNodeOut": {
-        "properties": {
-          "id": {
-            "type": "string",
-            "title": "Id"
-          },
-          "type": {
-            "type": "string",
-            "title": "Type"
-          },
-          "title": {
-            "type": "string",
-            "title": "Title"
-          },
-          "parent_id": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Parent Id"
-          },
-          "start_offset_ms": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Start Offset Ms"
-          },
-          "confidence": {
-            "anyOf": [
-              {
-                "type": "number"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Confidence"
-          },
-          "origin": {
-            "type": "string",
-            "title": "Origin",
-            "default": "ai"
-          },
-          "edited": {
-            "type": "boolean",
-            "title": "Edited",
-            "default": false
-          },
-          "position": {
-            "type": "integer",
-            "title": "Position"
-          }
-        },
-        "type": "object",
-        "required": [
-          "id",
-          "type",
-          "title",
-          "parent_id",
-          "position"
-        ],
-        "title": "MapNodeOut",
-        "description": "A node of the meeting's map."
       }
     }
   }

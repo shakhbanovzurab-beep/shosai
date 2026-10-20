@@ -59,7 +59,7 @@ class SegmentOut(BaseModel):
     confidence: float | None = None
 
 
-class MapNodeOut(BaseModel):
+class SessionMapNode(BaseModel):
     """A node of the meeting's map."""
 
     id: str
@@ -85,7 +85,7 @@ class SessionFull(BaseModel):
     started_at: datetime
     ended_at: datetime | None
     segments: list[SegmentOut]
-    map_nodes: list[MapNodeOut]
+    map_nodes: list[SessionMapNode]
     executions: list[dict[str, str]] = Field(default_factory=list)
     folder_id: str | None = None
     tags: list[dict[str, str]] = Field(default_factory=list)
@@ -164,7 +164,7 @@ def session_full(found: NativeMeeting, words: NativeWords) -> SessionFull:
         for line in found.lines
     ]  # fmt: skip
     nodes = [
-        MapNodeOut(
+        SessionMapNode(
             id=str(row.index), type="root" if row.parent is None else "topic", title=row.label,
             parent_id=None if row.parent is None else str(row.parent), position=row.index,
         )

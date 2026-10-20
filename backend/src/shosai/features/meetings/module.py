@@ -14,7 +14,8 @@
 - 9b: the native import streamed to the bucket and its job (`channels/http/native_import.py`);
 - 10: the speakers of recordings (`application/diarize_stage.py`, `application/align_stage.py`);
 - 11: the desktop recording's resumable upload (`channels/http/native_audio.py`);
-- 12: the native library and notes, the meetings setting and its `no_logs` mirror.
+- 12: the native library and notes, the meetings setting and its `no_logs` mirror;
+- 13: the share link and its public page and comments (`channels/http/shared.py`).
 
 The folders' and templates' routes come before `/v1/meetings/{meeting_id}`: the first match
 wins, and `folders` is no meeting's id.
@@ -53,6 +54,9 @@ from shosai.features.meetings.application.pipeline import PipelineEngine
 from shosai.features.meetings.application.recording_uploads import RecordingUploads
 from shosai.features.meetings.application.run_recovery import RunRecovery
 from shosai.features.meetings.application.runs_view import RunViews
+from shosai.features.meetings.application.share_links import ShareLinks
+from shosai.features.meetings.application.shared_links import SharedLinks
+from shosai.features.meetings.application.shared_pages import SharedPages
 from shosai.features.meetings.application.support_meetings import SupportMeetings
 from shosai.features.meetings.application.sweeps import MeetingSweeps
 from shosai.features.meetings.application.templates import Templates
@@ -73,6 +77,8 @@ from shosai.features.meetings.channels.http.native_sessions import build_native_
 from shosai.features.meetings.channels.http.native_words import NativeWords, load_native_words
 from shosai.features.meetings.channels.http.runs import build_runs_router
 from shosai.features.meetings.channels.http.settings import build_settings_router
+from shosai.features.meetings.channels.http.share_links import build_share_links_router
+from shosai.features.meetings.channels.http.shared import build_shared_router
 from shosai.features.meetings.channels.http.templates import build_templates_router
 from shosai.features.meetings.channels.http.write_up import build_write_up_router
 from shosai.features.meetings.channels.subscriptions import subscriptions
@@ -154,6 +160,10 @@ def http_routers(
         build_my_notes_router((my_notes, Participants(transactions, ports)), ports),
         build_admin_meetings_router(support, ports),
         build_imports_router(imports, ports),
+        build_share_links_router(ShareLinks(transactions, ports), ports),
+        build_shared_router(
+            SharedPages(transactions, (SharedLinks(transactions), ports)), services.rate_limiter
+        ),
     )
 
 
