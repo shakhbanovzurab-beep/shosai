@@ -19,7 +19,7 @@ from shosai.core.agent_tools.results import (
     ToolErrorCode,
     ToolResult,
 )
-from shosai.core.agent_tools.spec import CostClass, Reversibility, ToolEffect
+from shosai.core.agent_tools.spec import CostClass, Provenance, Reversibility, ToolEffect
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from tests.core.agent_tools.probe_tools import (
@@ -164,3 +164,13 @@ def test_the_catalog_holds_each_name_once_and_answers_by_toolset() -> None:
         catalog.install([])
     with pytest.raises(ValueError, match="дважды"):
         AgentToolCatalog().install([SEARCH_TOOL, SEARCH_TOOL])
+
+
+def test_a_result_s_untrusted_text_is_labelled_from_the_closed_set() -> None:
+    labelled = replace(SEARCH, provenance=Provenance.MEETING_SPEECH)
+
+    assert SEARCH.provenance is None
+    assert labelled.provenance == "meeting:speech"
+    assert {label.value for label in Provenance} == {
+        "mail", "web", "file:foreign", "file:own", "meeting:speech", "memory", "skill:user",
+    }  # fmt: skip

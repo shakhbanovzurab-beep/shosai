@@ -15,7 +15,8 @@
 - 10: the speakers of recordings (`application/diarize_stage.py`, `application/align_stage.py`);
 - 11: the desktop recording's resumable upload (`channels/http/native_audio.py`);
 - 12: the native library and notes, the meetings setting and its `no_logs` mirror;
-- 13: the share link and its public page and comments (`channels/http/shared.py`).
+- 13: the share link and its public page and comments (`channels/http/shared.py`);
+- 14: Leo's four read tools over the meetings a person may read (`channels/agent_tools.py`).
 
 The folders' and templates' routes come before `/v1/meetings/{meeting_id}`: the first match
 wins, and `folders` is no meeting's id.
@@ -61,6 +62,8 @@ from shosai.features.meetings.application.support_meetings import SupportMeeting
 from shosai.features.meetings.application.sweeps import MeetingSweeps
 from shosai.features.meetings.application.templates import Templates
 from shosai.features.meetings.application.write_up_rewrites import WriteUpRewrites
+from shosai.features.meetings.channels.agent_tool_reads import MeetingReads
+from shosai.features.meetings.channels.agent_tools import MEETINGS_TOOLS
 from shosai.features.meetings.channels.http.admin_meetings import build_admin_meetings_router
 from shosai.features.meetings.channels.http.folders import build_folders_router
 from shosai.features.meetings.channels.http.imports import build_imports_router
@@ -192,6 +195,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         yield FeatureParts(
             http_routers=http_routers(services, (lifecycle, engine), (PartLinks(http), *extras)),
             task_handlers=task_handlers((sweeps, hidden), (engine, recovery)),
+            agent_tools=MeetingReads(transactions, ports).bound(),
             subscriptions=subscriptions(),
             periodic_jobs=PERIODIC_JOBS,
             provides=(
@@ -213,6 +217,7 @@ MEETINGS = FeatureModule(
     objectives=MEETINGS_OBJECTIVES,
     monitors=MEETINGS_MONITORS,
     shareable=(MEETING_RESOURCE,),
+    agent_tools=MEETINGS_TOOLS,
     models=(
         FolderRecord,
         TemplateRecord,

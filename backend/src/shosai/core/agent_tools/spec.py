@@ -3,9 +3,11 @@
 A spec is the model-facing half of a tool: its namespaced name, its toolset, an English
 description, Pydantic input and output models, and the gates around it — effect,
 reversibility, cost class, entitlement and switch, result budget and timeout, the client
-query domains it invalidates. It holds no code: the slice binds handlers to it when it is
-built (`bindings`). A slice declares its specs on its `FeatureModule`, so the model-facing
-English test reads every description and schema without starting anything.
+query domains it invalidates, and the provenance of the untrusted text its result carries
+(Leo §7.4), which the agent wraps the result with and raises the run's taint by. It holds
+no code: the slice binds handlers to it when it is built (`bindings`). A slice declares its
+specs on its `FeatureModule`, so the model-facing English test reads every description and
+schema without starting anything.
 
 Rules are checked when a spec is built: a malformed spec stops composition, not a turn.
 The input model forbids extra fields: an argument the schema lacks is one the model made up.
@@ -49,6 +51,22 @@ class Reversibility(StrEnum):
     IRREVERSIBLE = "irreversible"
 
 
+class Provenance(StrEnum):
+    """Where untrusted text in a result comes from: the label Leo wraps it with (Leo §7.4).
+
+    A closed set, never attacker text; an external MCP server's label is the agent's,
+    `mcp:<server>`, since a slice's spec cannot know the server.
+    """
+
+    MAIL = "mail"
+    WEB = "web"
+    FILE_FOREIGN = "file:foreign"
+    FILE_OWN = "file:own"
+    MEETING_SPEECH = "meeting:speech"
+    MEMORY = "memory"
+    SKILL_USER = "skill:user"
+
+
 class CostClass(StrEnum):
     """Whether a call spends money beyond the turn's model calls."""
 
@@ -74,6 +92,8 @@ class ToolSpec[I: BaseModel, O: BaseModel]:
     result_budget: int = 2_000
     timeout: timedelta = timedelta(seconds=10)
     invalidates: tuple[str, ...] = field(default_factory=tuple)
+    # Метка недоверенного текста в результате; None — только слова и данные самого человека.
+    provenance: Provenance | None = None
 
     def __post_init__(self) -> None:
         for problem in _problems(self):

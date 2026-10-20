@@ -129,3 +129,8 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/shared_links.py` — a token looked up in both homes at once past row-level security, the meeting read in its company's scope, the link checked again in its owner's; every link that does not open is the one 404 `share_not_found`, a silent home 503.
 - `application/shared_pages.py`, `channels/http/shared.py`, `channels/http/shared_shapes.py` — `GET /v1/shared/{token}` (the write-up with its findings, participants, the transcript's first 3 000 lines when shown) and `GET`/`POST …/comments` (the newest 200; a name of at most 60 characters or a guest), sixty reads and six comments a minute per address; never an address, anyone's own notes or the audio; names, owners and the owner's voice only with names shown.
 
+## Leo's read tools (step 14)
+
+- `channels/agent_tools.py` — `meetings.search`, `meetings.get`, `meetings.read_transcript`, `meetings.list_findings`: English specs, results labelled `meeting:speech` (Leo §7.4, core's `ToolSpec.provenance`).
+- `channels/agent_tool_reads.py` — each sees only what `visible_meetings` admits (a meeting the person may not read is `not_found`); a transcript page holds the lines that fit its 6 000-token budget and names where the next starts.
+
