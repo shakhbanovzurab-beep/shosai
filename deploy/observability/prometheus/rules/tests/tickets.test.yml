@@ -61,7 +61,7 @@ tests:
 
   - interval: 1m
     input_series:
-      - series: 'shosai_meetings_oldest_open_run_seconds{home="ru"}'
+      - series: 'shosai_notes_oldest_open_run_seconds{home="ru"}'
         values: "0x5 900x20 0x20"
     alert_rule_test:
       - eval_time: 20m

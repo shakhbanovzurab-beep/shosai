@@ -76,16 +76,26 @@ COPIED = (
     "IDENTITY_TRANSFERS_ALLOWED",
     "IDENTITY_ADMIN_USERNAME",
     "IDENTITY_ADMIN_PASSWORD_HASH",
-    "MEETINGS_NOTES_MODEL",
-    "MEETINGS_NOTES_FALLBACK_MODEL",
-    "MEETINGS_TRANSCRIBE_MODEL",
-    "MEETINGS_TRANSCRIBE_FALLBACK_MODEL",
-    "MEETINGS_DIARIZE_MODEL",
+    "NOTES_MODEL",
+    "NOTES_FALLBACK_MODEL",
+    "NOTES_TRANSCRIBE_MODEL",
+    "NOTES_TRANSCRIBE_FALLBACK_MODEL",
+    "NOTES_DIARIZE_MODEL",
     *(f"HOME_{home}_S3_{part}" for home in ("RU", "EU")
       for part in ("ENDPOINT_URL", "REGION", "BUCKET", "ACCESS_KEY_ID", "SECRET_ACCESS_KEY")),
 )
 # Как SMTP_TLS_MODE черновика называется в SMTP_SECURITY.
 SMTP_SECURITY = {"ssl": "tls", "tls": "tls", "starttls": "starttls"}
+# Переход на имена NOTES_* (ADR 0057): на один релиз пишутся и прежние имена с теми же
+# значениями, чтобы прежние образы стартовали после перезагрузки хоста и при
+# `release.sh rollback`. Убираются отдельным коммитом, когда новый релиз здоров.
+RENAMED_SETTINGS = {
+    "NOTES_MODEL": "MEETINGS_NOTES_MODEL",
+    "NOTES_FALLBACK_MODEL": "MEETINGS_NOTES_FALLBACK_MODEL",
+    "NOTES_TRANSCRIBE_MODEL": "MEETINGS_TRANSCRIBE_MODEL",
+    "NOTES_TRANSCRIBE_FALLBACK_MODEL": "MEETINGS_TRANSCRIBE_FALLBACK_MODEL",
+    "NOTES_DIARIZE_MODEL": "MEETINGS_DIARIZE_MODEL",
+}
 
 
 def read_env(path: Path) -> dict[str, str]:
@@ -184,10 +194,10 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
         "ALERTING_ENABLED": "true",
         # Скачивания идут через edge, который ставит nosniff и песочницу (FL-D9, ADR 0055 п. 8).
         "FILES_DOWNLOAD_BASE_URL": f"https://{SERVER_NAME}/dl",
-        # Модель заметок встреч до studio (meetings шаг 6); владелец может задать свою в .env.
-        "MEETINGS_NOTES_MODEL": NOTES_MODEL,
-        "MEETINGS_TRANSCRIBE_MODEL": TRANSCRIBE_MODEL,
-        "MEETINGS_DIARIZE_MODEL": DIARIZE_MODEL,
+        # Модель заметок встреч до studio (notes шаг 6); владелец может задать свою в .env.
+        "NOTES_MODEL": NOTES_MODEL,
+        "NOTES_TRANSCRIBE_MODEL": TRANSCRIBE_MODEL,
+        "NOTES_DIARIZE_MODEL": DIARIZE_MODEL,
     }
     env |= {key: source[key] for key in COPIED if source.get(key)}
     for home in ("RU", "EU"):
@@ -195,6 +205,7 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
             source[f"HOME_{home}_APP_USER"], source[f"HOME_{home}_APP_PASSWORD"],
             f"pgbouncer-{home.lower()}", "6432", INTERNAL_CA,
         )  # fmt: skip
+    env |= {former: env[current] for current, former in RENAMED_SETTINGS.items() if current in env}
     return env
 
 

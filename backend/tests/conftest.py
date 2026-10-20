@@ -35,13 +35,13 @@ pytest_plugins = (
     "tests.features.billing.people_bench",
     "tests.features.files.upload_bench",
     "tests.features.files.file_bench",
-    "tests.features.meetings.meeting_bench",
-    "tests.features.meetings.notes_bench",
-    "tests.features.meetings.library_bench",
-    "tests.features.meetings.deletion_bench",
-    "tests.features.meetings.recording_bench",
-    "tests.features.meetings.native_bench",
-    "tests.features.meetings.share_bench",
+    "tests.features.notes.meeting_bench",
+    "tests.features.notes.notes_bench",
+    "tests.features.notes.library_bench",
+    "tests.features.notes.deletion_bench",
+    "tests.features.notes.recording_bench",
+    "tests.features.notes.native_bench",
+    "tests.features.notes.share_bench",
 )
 
 

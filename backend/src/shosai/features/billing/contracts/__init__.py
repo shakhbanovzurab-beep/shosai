@@ -4,7 +4,7 @@ Every slice reads what a person or a workspace may use through `Entitlements`: a
 of the plan in force, its limits and capabilities, cached and versioned, never guessed —
 when it cannot be read the answer is `EntitlementsUnavailableError` (503, inv-3).
 Usage is never in the snapshot: `MinutesAllowance` counts the month's minutes live, from
-the live meetings meetings report (`MEETING_MINUTES`, bound by meetings; none until then)
+the live meetings meetings report (`MEETING_MINUTES`, bound by notes; none until then)
 and the tombstones of deleted ones (`UsageTombstones`). `TokenAllowanceReader` tells the
 agent, before a model request, where its tokens come from: the week's allowance, packs, a
 fall back to a standard model, or a stop with the limit that stopped it (BL-D4). The events
@@ -172,7 +172,7 @@ class UsageTombstones(Protocol):
 
 
 class MeetingMinutes(Protocol):
-    """Seconds of the person's meetings that still exist, by their start (bound by meetings)."""
+    """Seconds of the person's meetings that still exist, by their start (bound by notes)."""
 
     async def recorded_seconds(
         self, session: AsyncSession, user_id: UUID, window: tuple[datetime, datetime]

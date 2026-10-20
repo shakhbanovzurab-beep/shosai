@@ -23,7 +23,7 @@ def entry(home: Home) -> CostEntry:
     return CostEntry(
         home=home, user_id=USER_ID, org_id=ORG_ID, cost_id=new_id(),
         created_at=datetime.now(UTC), effect_key="stage:run-7:notes:1", provider="openrouter",
-        model="probe/chat", kind="chat", feature="meetings.notes", call_class="essential",
+        model="probe/chat", kind="chat", feature="notes.findings", call_class="essential",
         origin="background", outcome="ok", input_tokens=900, output_tokens=300,
         cost_usd=Decimal("0.0042"), cost_source="reported",
     )  # fmt: skip

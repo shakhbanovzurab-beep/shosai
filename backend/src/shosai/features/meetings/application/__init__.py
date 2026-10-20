@@ -1,1 +1,0 @@
-"""Meetings' application services."""

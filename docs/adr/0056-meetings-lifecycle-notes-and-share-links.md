@@ -1,8 +1,9 @@
 # ADR 0056 — Meetings: lifecycle, minutes, notes and share links
 
 - **Status:** accepted by the owner on 2026-10-19 (meetings slice plan, decisions MT-D1…MT-D11 and the transcript's partition key; MT-D1, MT-D2, MT-D3, MT-D4, MT-D5, MT-D8 and MT-D10 with the owner's amendments).
+- **Renamed:** the slice is `notes` and its API area `/v1/notes/*` since [ADR 0057](0057-notes-and-meetings-slice-names.md) (2026-10-20); the decisions below stand as written.
 - **Packages:** `meetings` (owner); capture (the live signal, the 6-hour warning), billing (minutes), workspaces (share records, auto-share), identity (`/v1/auth/me`, the deletion window, the operator audit), tasks (action items), site (the shared pages), M1 (data), M2 (the action-items route).
-- **Context documents:** [meetings plan](../plan/slices/meetings.md); [ARCHITECTURE.md](../design/ARCHITECTURE.md) §7, §8.1, §9 inv-6, inv-7, inv-8, inv-13, §10, §11.3, §14 rules 1, 5, 6; [SLICE_MAP](../plan/SLICE_MAP.md) §4.2.5, SM-3, SM-5; [DATA_MAPPING](../plan/DATA_MAPPING.md) §5.4; [contracts/README.md](../../contracts/README.md); ADR 0007, 0043, 0054, 0055.
+- **Context documents:** [meetings plan](../plan/slices/notes.md); [ARCHITECTURE.md](../design/ARCHITECTURE.md) §7, §8.1, §9 inv-6, inv-7, inv-8, inv-13, §10, §11.3, §14 rules 1, 5, 6; [SLICE_MAP](../plan/SLICE_MAP.md) §4.2.5, SM-3, SM-5; [DATA_MAPPING](../plan/DATA_MAPPING.md) §5.4; [contracts/README.md](../../contracts/README.md); ADR 0007, 0043, 0054, 0055.
 
 ## Context
 

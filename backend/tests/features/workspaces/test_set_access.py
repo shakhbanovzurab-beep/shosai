@@ -15,7 +15,7 @@ from shosai.features.workspaces.contracts import (
     GranteeKind,
     Viewer,
 )
-from tests.features.workspaces.probe_resources import MEETINGS
+from tests.features.workspaces.probe_resources import NOTES
 from tests.features.workspaces.test_access_policy import policy
 from tests.harness.connections import Connection, fetch_rows, fetch_value
 from tests.harness.database_access import DatabaseAccess
@@ -27,7 +27,7 @@ ACCESS_OF_ROW = "SELECT access FROM probe_meetings WHERE id = %s"
 
 async def canon_in(run_slot: RunSlot, home: Home) -> Canon:
     canon = canonical_world("meeting")
-    await write_world(run_slot.claimed.connections[home], MEETINGS, canon.world)
+    await write_world(run_slot.claimed.connections[home], NOTES, canon.world)
     return canon
 
 
@@ -59,7 +59,7 @@ async def change(
     org = canon.workspaces["a"]
     user = canon.people[actor] if actor else None
     viewer = Viewer(user) if user else None
-    request = AccessChange(MEETINGS, bobs_open_row(canon), org, level, grantees, viewer)
+    request = AccessChange(NOTES, bobs_open_row(canon), org, level, grantees, viewer)
     async with homes.transactions.begin(TenancyScope(home, user, org)) as session:
         await policy().set_access(session, request)
 
@@ -147,9 +147,7 @@ async def test_the_change_runs_in_its_workspace_transaction(
 ) -> None:
     canon = await canon_in(run_slot, Home.RU)
     org_a, org_b = canon.workspaces["a"], canon.workspaces["b"]
-    request = AccessChange(
-        MEETINGS, bobs_open_row(canon), org_a, AccessLevel.OWNER, frozenset(), None
-    )
+    request = AccessChange(NOTES, bobs_open_row(canon), org_a, AccessLevel.OWNER, frozenset(), None)
     scope = TenancyScope(Home.RU, None, org_b)
 
     async with homes.transactions.begin(scope) as session:

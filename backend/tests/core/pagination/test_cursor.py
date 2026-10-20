@@ -20,7 +20,7 @@ class SessionPosition(BaseModel):
     id: uuid.UUID
 
 
-MEETINGS = CursorCodec("probe.meetings", SessionPosition)
+NOTES = CursorCodec("probe.meetings", SessionPosition)
 POSITION = SessionPosition(started_at=datetime(2026, 10, 13, 9, 30, tzinfo=UTC), id=uuid.uuid7())
 
 
@@ -31,9 +31,9 @@ def token_of(document: object) -> str:
 
 
 def test_a_cursor_returns_the_position_it_was_made_from() -> None:
-    token = MEETINGS.encode(POSITION)
+    token = NOTES.encode(POSITION)
 
-    assert MEETINGS.decode(token) == POSITION
+    assert NOTES.decode(token) == POSITION
     assert "=" not in token
     assert token.isascii()
 
@@ -51,7 +51,7 @@ def test_a_cursor_returns_the_position_it_was_made_from() -> None:
 )
 def test_a_cursor_of_another_collection_format_or_shape_is_refused(token: str) -> None:
     with pytest.raises(InvalidCursorError) as raised:
-        MEETINGS.decode(token)
+        NOTES.decode(token)
 
     assert (raised.value.code, raised.value.status) == ("invalid_cursor", 422)
 
@@ -59,7 +59,7 @@ def test_a_cursor_of_another_collection_format_or_shape_is_refused(token: str) -
 @given(st.text(max_size=600))
 def test_any_text_either_decodes_or_is_refused_as_invalid(token: str) -> None:
     try:
-        MEETINGS.decode(token)
+        NOTES.decode(token)
     except InvalidCursorError:
         return
 

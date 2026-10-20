@@ -74,7 +74,7 @@ Each slice is a vertical piece of one business capability, built from scratch: b
 | `workspaces` | Shared team space: members, teams, roles, seats, projects, sharing; the access policy and audit for every slice (its core first, its screens in wave 3) | 1, 3 |
 | `billing` | Plans, entitlements, usage meters, payments, seats, company invoices (entitlements first, payments in wave 3) | 1, 3 |
 | `files` | The user's files, uploads and quota — the one path for bytes | 1 |
-| `meetings` | Every recorded meeting becomes notes, transcript, map and facts; share links | 1 |
+| `notes` | Every recorded meeting becomes notes, transcript, map and facts; share links (named `meetings` until ADR 0057) | 1 |
 | `capture` | Live capture, live answers and live translation on the desktop | 1 |
 | `agent` | Leo: threads, runs, tools, Action Gateway, skills, the native model proxy | 1 |
 | `tasks` | One task list: boards, meeting action items, workspace tasks, Jira | 2 |
@@ -93,7 +93,7 @@ Each slice is a vertical piece of one business capability, built from scratch: b
 | `support` | Tickets and newsletters between operators and users | 4 |
 | `releases` | Desktop builds, staged rollout, downloads | 4 |
 | `telemetry` | Client errors as issues; product events; the satisfaction survey | 4 |
-| `rooms` | Shosai video rooms with per-speaker transcription, broadcasts and the room whiteboard | 4 |
+| `meetings` | Shosai video meetings with per-speaker transcription, broadcasts and the room whiteboard; the cabinet's Meetings section (named `rooms` until ADR 0057) | 4 |
 | `site` | The public site in `site/` on Next.js ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)) and the public pages of shared links, SEO per [docs/seo/STRATEGY.md](../seo/STRATEGY.md) | any time after F6 |
 
 The home screen, the Meetings overview, the Settings dialog and the admin dashboard are composition screens: each widget calls its owner's API; no backend slice aggregates them.
@@ -120,10 +120,10 @@ The waves, from [SLICE_MAP.md](SLICE_MAP.md) §5 — each gives the user a worki
 
 | Wave | Goal for the user | Slices, in default order | Exit |
 |---|---|---|---|
-| 1. Record, remember, ask | A person signs in on the web and on the desktop, records or uploads a meeting, reads its notes and asks Leo about it | identity → workspaces (core: access policy, RLS, audit) → billing (entitlements, minutes meter) → files → meetings → capture → agent (core, Action Gateway) | the shipped desktop clients run end to end on v2 staging: sign-in, capture, upload, notes; Leo answers over meetings and files with SSE and approvals |
+| 1. Record, remember, ask | A person signs in on the web and on the desktop, records or uploads a meeting, reads its notes and asks Leo about it | identity → workspaces (core: access policy, RLS, audit) → billing (entitlements, minutes meter) → files → notes → capture → agent (core, Action Gateway) | the shipped desktop clients run end to end on v2 staging: sign-in, capture, upload, notes; Leo answers over notes and files with SSE and approvals |
 | 2. Track and connect | The home screen is real: tasks, calendar, recent notes, hubs that watch what is unresolved | tasks → connectors → calendar → knowledge → commitments → hubs; decisions and memory in parallel | action items are tasks on one board; meetings join calendar events; search and Leo cover knowledge; hubs fill themselves |
 | 3. Team and initiative | Workspaces work together; Leo speaks first when it is worth it | workspaces (screens) → billing (payments, seats, invoices) → proactive → errands → mail → studio → mcp | invite, share, pay per seat; Today feed and reminders; the inbox triaged |
-| 4. Operations and cutover readiness | Operators run the platform; every native and external route answers | support → releases → telemetry → rooms | the D1 gate passes and lists no native route as not served (`backend/tests/composition/native_routes_not_served.json` is empty; external routes are each slice's own design, F1 audit OD-2) |
+| 4. Operations and cutover readiness | Operators run the platform; every native and external route answers | support → releases → telemetry → meetings | the D1 gate passes and lists no native route as not served (`backend/tests/composition/native_routes_not_served.json` is empty; external routes are each slice's own design, F1 audit OD-2) |
 
 - The fixed dependencies are technical: F1 (as the F1 audit decides), F2, F3 and F6 come before any slice; `identity` comes first, because every other slice needs an authenticated user; `workspaces` core comes before any slice with shareable resources, so they are written against the access policy from their first step (nfr-15, inv-14).
 - Within a wave, a later slice may start when the contracts it needs are published; the order above is the default path of [prompts/BACKEND-next-step.md](prompts/BACKEND-next-step.md), which prefers the slice that unblocks the most others. A step of a slice that needs a later slice's contract waits for it; STATUS.md names those steps.

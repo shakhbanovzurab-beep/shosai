@@ -151,9 +151,9 @@ Feature-first, as the target architecture §5 and CLAUDE.md require. Leo is a se
 | `memory` | long-term memory, admission, retrieval, user profile core, personalization; Settings › Memory |
 | `proactive` | signals, triggers, candidates, suggestions, delivery (`/v1/ws/user`, Web Push), feedback; the Today feed |
 | `errands` | delayed actions; the native reminder routes |
-| domain slices | their own tools, as `ToolSpec`s in their contracts: `meetings`, `knowledge`, `files`, `commitments`, `hubs`, `tasks`, `calendar`, `mail`, `workspaces`, `support`, `studio` … |
+| domain slices | their own tools, as `ToolSpec`s in their contracts: `notes`, `knowledge`, `files`, `commitments`, `hubs`, `tasks`, `calendar`, `mail`, `workspaces`, `support`, `studio` … |
 
-- **Models and prompts are not a Leo slice.** The model registry, defaults and role assignments (platform tables), platform and user prompts and the personal context belong to `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md), slice map SM-5). The agent reads them through studio's `ModelRoutes` and `PromptResolver` contracts, as `capture`, `meetings` and `memory` do. The build order of all slices is in the [slice map](../../plan/SLICE_MAP.md) §5.
+- **Models and prompts are not a Leo slice.** The model registry, defaults and role assignments (platform tables), platform and user prompts and the personal context belong to `studio` ([ADR 0038](../../adr/0038-feature-slices-derived-from-the-product.md), slice map SM-5). The agent reads them through studio's `ModelRoutes` and `PromptResolver` contracts, as `capture`, `notes` and `memory` do. The build order of all slices is in the [slice map](../../plan/SLICE_MAP.md) §5.
 - **Tool contract in core.** `core/agent_tools` holds the framework-light tool contract: `ToolSpec`, `ToolContext`, `EffectClass`, `PlannedEffect`, `Preview`, `ToolResult`. `FeatureParts` gains `agent_tools`, and composition hands every slice's specs to `agent`. The agent imports no domain slice. No domain slice imports the agent. This is the fix for C10 ([ADR 0029](../../adr/0029-leo-tools-owned-by-domain-slices.md)).
 - **Clean Architecture inside `agent`:**
   - `domain/` holds the run state machine, action lifecycle, budgets and taint rules. It is pure.
@@ -369,7 +369,7 @@ The cost row is written by the provider port (inv-9), like any model call.
 | Long-term memory | Facts, preferences, relationships, goals, procedures about the user | home DB `memory_facts` | yes | decay plus supersession; user controls |
 | Profile core | Pinned facts, preferences, personalization, locale, timezone, answer language | derived from the above | derived | cached 10 min, invalidated on change |
 | User state | Presence, surface, in-meeting, focus, local time, budgets | Valkey | derived | minutes |
-| Knowledge | Meetings, notes, files, knowledge collections, context graph | owner slices (`meetings`, `knowledge`, `files`, `commitments`) | not Leo's | owner's rules |
+| Knowledge | Meetings, notes, files, knowledge collections, context graph | owner slices (`notes`, `knowledge`, `files`, `commitments`) | not Leo's | owner's rules |
 
 **Knowledge is not memory.** Mail, web pages and documents are searched, never memorised: memory holds what the user said and what was confirmed about them. Decisions and commitments with a lifecycle stay in the context graph (`commitments`), as the draft rightly decided (`recollection.py:3-13`).
 
@@ -394,7 +394,7 @@ The cost row is written by the provider port (inv-9), like any model call.
 4. *Ask when unsure.* Sensitive facts, and facts in the middle band, become `candidate`: shown as "Should I remember…?" in the panel or the memory page. Candidates are not used for answers.
 5. *Respect the switches.* With `memory_enabled=false` or `no_logs`, nothing is extracted or stored, **on every path**: the meeting memory port, consolidation, extraction. This fixes M1, and an isolation test covers each writer.
 
-Meeting recollections (the memory port called by `meetings`) enter with `source_kind=meeting`. They are third-party speech, so they are always rendered as untrusted, with their source.
+Meeting recollections (the memory port called by `notes`) enter with `source_kind=meeting`. They are third-party speech, so they are always rendered as untrusted, with their source.
 
 **Retrieval:**
 
@@ -463,8 +463,8 @@ A domain slice declares its tools in `contracts.agent_tools` as `ToolSpec`s:
 
 | Field | Meaning |
 |---|---|
-| `name` | namespaced, `meetings.search` |
-| `toolset` | `meetings`; ≤ 8 tools per toolset |
+| `name` | namespaced, `notes.search` |
+| `toolset` | `notes`; ≤ 8 tools per toolset |
 | `description` | English; registered in the model-facing test |
 | `input` / `output` | Pydantic models; JSON schema generated; arguments **validated**, invalid → error result (fixes "invalid JSON → `{}`") |
 | `effect` | `read` · `egress` (reads but sends data outside: web, image, external MCP) · `write` · `client` (navigate, theme) |
@@ -507,7 +507,7 @@ About 14 toolsets, each owned by a slice:
 **Routing** combines these signals:
 
 - `decide(turn.route)`;
-- the toolsets of the current surface (a meeting page brings `meetings`);
+- the toolsets of the current surface (a meeting page brings `notes`);
 - the toolsets of mentioned objects;
 - toolsets used in the thread's last 3 turns (sticky);
 - skill-required toolsets.
@@ -652,7 +652,7 @@ state changes ─┘   (ids)     (pure, features)        drop → record        
 **Signals are event-driven,** never global scans (fixes P3). Inputs:
 
 - outbox subscriptions:
-  - `meetings.notes.ready`, `meetings.meeting.ended` (`meetings`);
+  - `notes.meeting.notes_ready`, `notes.meeting.ended` (`notes`);
   - `mail.received` (`mail`, from connector sync);
   - `calendar.event_changed` (`calendar`), `tasks.due_changed`, `tasks.assigned` (`tasks`);
   - `commitments.due`, `commitments.topic_looped` (`commitments`);
@@ -730,7 +730,7 @@ If any check fails, the errand becomes a **new proposal** delivered to the user,
 | home PostgreSQL | `agent_skills` (user-installed) | authoritative | home | with the user | — |
 | EU home (platform) | prompts, skills catalogue, model registry, `decision_policies`, `decision_thresholds` | platform data without owner (§6) | EU | versions retired, not deleted | — |
 | Valkey | thread leases; run checkpoints of **active and paused runs only**; run event logs (stream per run, ≤ 2 000 events, TTL 1 h); vault; user state; "has memories" bits | derived, ≤ 24 h | EU (accepted exception, §6) | TTL | in-flight runs fail; paused actions survive in the DB |
-| Qdrant | knowledge and meeting windows (`knowledge`, `meetings`) | derived | EU | — | rebuild |
+| Qdrant | knowledge and meeting windows (`knowledge`, `notes`) | derived | EU | — | rebuild |
 
 **What changes against §8.1 "Leo state"** ([ADR 0024](../../adr/0024-leo-threads-in-the-home-database.md)):
 
@@ -909,7 +909,7 @@ Each lever has a metric (§11.3) and an eval gate on cost (§11.4).
 | uses | access policy, inside each slice's `execute` and read services | `workspaces` | inv-14 |
 | uses | `ToolSpec`s and event types | the domain slices of §3.3, `errands` | tools, signals |
 | uses | search; people and commitments | `knowledge`; `commitments` | `workspace.search`, knowledge, people and commitments |
-| provides | memory port: `record_recollections(meeting)` | memory → `meetings` | meeting facts with provenance |
+| provides | memory port: `record_recollections(meeting)` | memory → `notes` | meeting facts with provenance |
 | provides | agent port: `run_voice_turn`, `confirm_by_voice` | agent → `capture` | one thread for text and voice |
 | provides | decision port: `decide(point, …)` | decisions → any slice | mail triage (`mail`), hub signal (`hubs`) |
 | provides | registry projection for MCP | agent → `mcp` | external MCP tools under the same gateway |
@@ -1020,10 +1020,10 @@ Phases follow dependencies, not calendar dates. **P0** is needed for a usable Le
 |---|---|---|---|---|
 | 0. Decisions | P0 | Done 2026-10-08: this document, ADRs 0023–0033 and the amendments (§16) accepted. Left: OpenAPI for `/v1/agent/*`, SSE event schema (`agent` plan); `ToolSpec` contract (F6) | — | contract files committed |
 | 1. Prerequisites | P0 | F6 provider port with `decide`, cost rows, spend reserve/settle, breaker per model; `identity`; F2 cabinet on Vite with MSW mocks of `/v1/agent/*` | F1 (done) | F6 and `identity` done |
-| 2. Core | P0 | `agent` slice: threads, messages, runs; lease; run graph (model ⇄ reads); `PrincipalFactory`; context builder v1 (segments 1, 2, 4, 6–8); core toolset; SSE with resume; spans, metrics, `agent_runs`; eval harness with the trajectory and budget suites; model-facing registration. Cabinet: panel on the real API | 1 | turn works end to end on one slice's read tools (the first ready slice, e.g. `meetings`); platform overhead measured ≤ 500 ms EU |
+| 2. Core | P0 | `agent` slice: threads, messages, runs; lease; run graph (model ⇄ reads); `PrincipalFactory`; context builder v1 (segments 1, 2, 4, 6–8); core toolset; SSE with resume; spans, metrics, `agent_runs`; eval harness with the trajectory and budget suites; model-facing registration. Cabinet: panel on the real API | 1 | turn works end to end on one slice's read tools (the first ready slice, e.g. `notes`); platform overhead measured ≤ 500 ms EU |
 | 3. Action Gateway | P0 | `agent_actions`, plan/preview/execute contract, approvals, expiry, vault, outbox audit; action card and approvals inbox; property tests for inv-12 | 2 | invariant suite green; 0 double executions under fault injection |
 | 4. Decision Layer | P0 (parallel to 3) | `decisions` slice: policies, Jev adapter, thresholds, fallbacks, records, shadow; synthetic 16-language sets; `turn.route` and `action.friction` in shadow, then active | 1; legal Q-3 before personal data reaches Jev | calibration gates pass; routing miss (`load_toolset`) ≤ 5% |
-| 5. Memory v2 | P1 | `memory` slice: facts, admission, supersession, retrieval, profile core; compaction; memory page; the memory port for `meetings` | 2, 4 | switches proven on every writer; safety suite green for memory |
+| 5. Memory v2 | P1 | `memory` slice: facts, admission, supersession, retrieval, profile core; compaction; memory page; the memory port for `notes` | 2, 4 | switches proven on every writer; safety suite green for memory |
 | 6. Tool coverage | P0→P1 | Each domain slice ships its toolset in its own plan (§3.3); the agent provides the contract and evals | 2, 3 and the slice | trajectory suite per toolset |
 | 7. Proactivity | P1 | `proactive` slice: signals from outbox, trigger rows, candidates, `proactive.value` and `proactive.moment`, suggestions, delivery via `/v1/ws/user` (native frames kept) and Web Push, seen-based arbitration, feedback; feed and chips; `daily_brief` and `meeting_prep` skills | 4, 5, 6; F6 scheduler | precision and dismissal measured; budgets and quiet hours proven by tests |
 | 8. Errands | P1 | `errands` on the Action Gateway; re-validation; native reminder routes | 3, 7 | late or changed errands become proposals in tests |

@@ -22,7 +22,7 @@ import structlog
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.workspaces.contracts import Viewer
-from tests.features.workspaces.probe_resources import MEETINGS
+from tests.features.workspaces.probe_resources import NOTES
 from tests.features.workspaces.test_access_policy import policy
 from tests.harness.connections import Connection, fetch_value
 from tests.harness.database_access import DatabaseAccess
@@ -125,7 +125,7 @@ async def test_the_policy_overhead_at_the_design_point(
     async with connection.transaction():
         for statement in SEED:
             await connection.execute(statement)
-    table, row_id = MEETINGS.table, MEETINGS.table.c.id
+    table, row_id = NOTES.table, NOTES.table.c.id
     one = await fetch_value(
         connection,
         "SELECT id FROM probe_meetings WHERE org_id = %s AND access = 'organization' LIMIT 1",
@@ -143,7 +143,7 @@ async def test_the_policy_overhead_at_the_design_point(
     owner, app = owner_timer(connection), app_timer(homes)
     dialect = homes.databases.engine(HOME).dialect
     for name, (bare, within) in reads.items():
-        guarded = bare.where(policy().readable(MEETINGS, Viewer(VIEWER, within)))
+        guarded = bare.where(policy().readable(NOTES, Viewer(VIEWER, within)))
         bare_ms = await median(owner, literal(bare, dialect))
         policy_ms = await median(owner, literal(guarded, dialect))
         rls_ms = await median(app, literal(guarded, dialect))

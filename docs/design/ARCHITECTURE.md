@@ -1,6 +1,6 @@
 # Shosai — Target Architecture
 
-- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033); domains and workspaces amended on 2026-10-13 by the slice map ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md), [ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)); identity amended on 2026-10-14 ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md), [ADR 0046](../adr/0046-platform-languages-follow-the-cabinet.md)); workspaces amended on 2026-10-17 ([ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md)); billing amended on 2026-10-17 ([ADR 0054](../adr/0054-billing-plans-payments-trials-and-refunds.md)); meetings amended on 2026-10-19 ([meetings plan](../plan/slices/meetings.md) MT-D1, MT-D2, MT-D5 and the transcript's partition key; recorded in ADR 0056 by the plan's step 1). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
+- **Status:** target state, fixed by the owner on 2026-09-30; web applications amended on 2026-10-07 ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md)); Leo amended on 2026-10-08 ([Leo architecture](leo/ARCHITECTURE.md), ADR 0023–0033); domains and workspaces amended on 2026-10-13 by the slice map ([ADR 0038](../adr/0038-feature-slices-derived-from-the-product.md), [ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)); identity amended on 2026-10-14 ([ADR 0045](../adr/0045-identity-sessions-registration-and-deletion.md), [ADR 0046](../adr/0046-platform-languages-follow-the-cabinet.md)); workspaces amended on 2026-10-17 ([ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md)); billing amended on 2026-10-17 ([ADR 0054](../adr/0054-billing-plans-payments-trials-and-refunds.md)); meetings amended on 2026-10-19 ([notes plan](../plan/slices/notes.md) MT-D1, MT-D2, MT-D5 and the transcript's partition key; recorded in ADR 0056 by the plan's step 1). Normative: where this document and an implementation disagree, the implementation is wrong or this document is updated first.
 - **Diagram:** [architecture.html](architecture.html).
 - **Scope:** B2C and B2B (small and mid-size companies, 5–200 seats) on one platform.
 - **Placement:** one compute plane in the EU; two data homes — Russia and the EU.
@@ -148,9 +148,9 @@
   - `workspaces` — workspaces (a company's shared space), memberships, teams, roles, seats, projects, share records, access policy, audit;
   - `billing` — plans, entitlements, usage meters, subscriptions, acquirers, seats, company invoices;
   - `files` — files and folders, uploads, storage quota: the one path for bytes;
-  - `meetings` — sessions, transcript storage, post-meeting pipeline, notes, share links;
+  - `notes` — recorded meetings: sessions, transcript storage, post-meeting pipeline, notes, share links (named `meetings` until ADR 0057);
   - `capture` — live capture, in-meeting answers, voice translation (the WS gateway role);
-  - `rooms` — LiveKit rooms, recording, track ingest, broadcasts, room whiteboard;
+  - `meetings` — Shosai video meetings: LiveKit rooms, recording, track ingest, broadcasts, room whiteboard; the cabinet's Meetings section (named `rooms` until ADR 0057);
   - `knowledge` — sources, indexing, search;
   - `commitments` — people, decisions, promises and open topics across meetings;
   - `hubs` — personal containers per client or piece of work that watch what is unresolved;
@@ -205,11 +205,11 @@
   The cabinet's audiences map onto the levels: participants → `selected` (the meeting's participants who are members), team → `selected` with the team as grantee, workspace → `organization`.
 - Resources with workspace access: meetings, notes, folders, files, knowledge items.
 - **Sharing a personal item.** A person shares a personal meeting or file into a workspace through a share record owned by `workspaces`; the item is not copied, because at launch both live in the same home. Removing the share or leaving the workspace ends the workspace's access to it.
-- A public link is independent of company access: a meeting has at most one, on or off, with the owner's settings (transcript, names, comments, expiry); no password; a link that is off, expired, revoked or of a hidden meeting or owner does not resolve, with one answer for all of them; previews never show the title and the pages are not indexed (meetings plan MT-D5).
+- A public link is independent of company access: a meeting has at most one, on or off, with the owner's settings (transcript, names, comments, expiry); no password; a link that is off, expired, revoked or of a hidden meeting or owner does not resolve, with one answer for all of them; previews never show the title and the pages are not indexed (notes plan MT-D5).
 - **One access policy** (feature `workspaces`) decides every read and write. Domains call it; they never compare owners themselves. The access check runs in the same query that reads the resource.
 - **Access rights are never cached.** Content may be cached; the right to see it is checked on every access.
 - **Row-level security** is the second line ([ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md)):
-  - each transaction starts with `SET LOCAL app.org_id` (and `app.user_id`); the same statement turns JIT compilation off, since the policy's predicates make the planner overestimate short reads and compiling cost more than running them (meetings plan step 7a: 74 of 106 ms for a library page);
+  - each transaction starts with `SET LOCAL app.org_id` (and `app.user_id`); the same statement turns JIT compilation off, since the policy's predicates make the planner overestimate short reads and compiling cost more than running them (notes plan step 7a: 74 of 106 ms for a library page);
   - policies on company-scoped tables reject foreign rows: a row is read when it has no company, belongs to the company of the scope, or belongs to a company the person is an active member of (`app_member_org_ids()`, once per statement, never cached); it is written only into the company of the scope;
   - tables that are personal by nature and never shared reject other people's rows (`user_id = app_user_id()`); shareable tables guard their personal rows by the access policy and the isolation tests; identity's account tables, read before a principal exists, have no policy;
   - migrations run as the migration role; cross-tenant sweeps switch to the `shosai_sweeper` role inside their transaction (`SET LOCAL ROLE`, one pool), only in the `workers` and `scheduler` roles.
@@ -655,7 +655,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Backend | google-genai | 2.30.1 | Gemini Live client |
 | Backend | aiosmtplib | 5.1.3 | SMTP client of the mail relay: implicit TLS or STARTTLS with certificate checks, one login per mailbox |
 | Backend | Jinja2 | 3.1.6 | Mail templates: HTML with autoescape and a plain-text part from one body, strict undefined values |
-| Backend | python-multipart | 0.0.32 | The native import's `multipart/form-data` body parsed as it arrives, streamed to the bucket without a disk copy (meetings step 9b) |
+| Backend | python-multipart | 0.0.32 | The native import's `multipart/form-data` body parsed as it arrives, streamed to the bucket without a disk copy (notes step 9b) |
 | Backend | FFmpeg (`ffmpeg`, `ffprobe`), Debian packages of the runtime image | 7.1.5 | Recordings read, measured and cut as subprocesses under `prlimit`, without network, on allowed formats (meetings MT-D10) |
 | Backend | aiobotocore | 3.9.2 | S3 client; one per home's bucket ([ADR 0044](../adr/0044-a-bucket-per-data-home.md)); replaces aioboto3, whose latest release pins aiobotocore 2.25.1 and botocore of October 2025 ([ADR 0015](../adr/0015-aiobotocore-instead-of-aioboto3.md)) |
 | Backend | livekit-api, livekit-protocol | 1.2.1, 1.1.27 | Video rooms and egress control |

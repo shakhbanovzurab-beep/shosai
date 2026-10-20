@@ -1280,7 +1280,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/settings": {
+    "/v1/notes/settings": {
         parameters: {
             query?: never;
             header?: never;
@@ -1291,12 +1291,12 @@ export interface paths {
          * Get Meeting Settings
          * @description Whether your meetings are kept.
          */
-        get: operations["get_meeting_settings_v1_meetings_settings_get"];
+        get: operations["get_meeting_settings_v1_notes_settings_get"];
         /**
          * Put Meeting Settings
          * @description Keep, or stop keeping, the meetings you start from now.
          */
-        put: operations["put_meeting_settings_v1_meetings_settings_put"];
+        put: operations["put_meeting_settings_v1_notes_settings_put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1304,7 +1304,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/folders": {
+    "/v1/notes/folders": {
         parameters: {
             query?: never;
             header?: never;
@@ -1315,20 +1315,20 @@ export interface paths {
          * List Folders
          * @description Your folders, oldest first.
          */
-        get: operations["list_folders_v1_meetings_folders_get"];
+        get: operations["list_folders_v1_notes_folders_get"];
         put?: never;
         /**
          * Create Folder
          * @description Make a folder in the next colour.
          */
-        post: operations["create_folder_v1_meetings_folders_post"];
+        post: operations["create_folder_v1_notes_folders_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/folders/{folder_id}": {
+    "/v1/notes/folders/{folder_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1342,17 +1342,17 @@ export interface paths {
          * Delete Folder
          * @description Delete a folder; its meetings stay, in no folder.
          */
-        delete: operations["delete_folder_v1_meetings_folders__folder_id__delete"];
+        delete: operations["delete_folder_v1_notes_folders__folder_id__delete"];
         options?: never;
         head?: never;
         /**
          * Rename Folder
          * @description Rename a folder.
          */
-        patch: operations["rename_folder_v1_meetings_folders__folder_id__patch"];
+        patch: operations["rename_folder_v1_notes_folders__folder_id__patch"];
         trace?: never;
     };
-    "/v1/meetings/templates": {
+    "/v1/notes/templates": {
         parameters: {
             query?: never;
             header?: never;
@@ -1363,20 +1363,20 @@ export interface paths {
          * List Templates
          * @description The shipped templates, then yours, oldest first.
          */
-        get: operations["list_templates_v1_meetings_templates_get"];
+        get: operations["list_templates_v1_notes_templates_get"];
         put?: never;
         /**
          * Create Template
          * @description Make a template of your own.
          */
-        post: operations["create_template_v1_meetings_templates_post"];
+        post: operations["create_template_v1_notes_templates_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/templates/{template_id}": {
+    "/v1/notes/templates/{template_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1388,13 +1388,13 @@ export interface paths {
          * Replace Template
          * @description Replace a template of yours.
          */
-        put: operations["replace_template_v1_meetings_templates__template_id__put"];
+        put: operations["replace_template_v1_notes_templates__template_id__put"];
         post?: never;
         /**
          * Delete Template
          * @description Delete a template of yours.
          */
-        delete: operations["delete_template_v1_meetings_templates__template_id__delete"];
+        delete: operations["delete_template_v1_notes_templates__template_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1708,7 +1708,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/{meeting_id}/write-up": {
+    "/v1/notes/{meeting_id}/write-up": {
         parameters: {
             query?: never;
             header?: never;
@@ -1719,20 +1719,20 @@ export interface paths {
          * Get Write Up
          * @description Leo's write-up of the meeting by its template.
          */
-        get: operations["get_write_up_v1_meetings__meeting_id__write_up_get"];
+        get: operations["get_write_up_v1_notes__meeting_id__write_up_get"];
         put?: never;
         /**
          * Rewrite Write Up
          * @description Rewrite the meeting's write-up by a template, keeping its findings.
          */
-        post: operations["rewrite_write_up_v1_meetings__meeting_id__write_up_post"];
+        post: operations["rewrite_write_up_v1_notes__meeting_id__write_up_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings": {
+    "/v1/notes": {
         parameters: {
             query?: never;
             header?: never;
@@ -1743,7 +1743,7 @@ export interface paths {
          * List Meetings
          * @description The meetings you may read, newest first.
          */
-        get: operations["list_meetings_v1_meetings_get"];
+        get: operations["list_meetings_v1_notes_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1752,7 +1752,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/{meeting_id}": {
+    "/v1/notes/{meeting_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1763,24 +1763,24 @@ export interface paths {
          * Get Meeting
          * @description A meeting you may read.
          */
-        get: operations["get_meeting_v1_meetings__meeting_id__get"];
+        get: operations["get_meeting_v1_notes__meeting_id__get"];
         put?: never;
         post?: never;
         /**
          * Delete Meeting
          * @description Delete your meeting: hidden from everyone at once, gone for good after 7 days.
          */
-        delete: operations["delete_meeting_v1_meetings__meeting_id__delete"];
+        delete: operations["delete_meeting_v1_notes__meeting_id__delete"];
         options?: never;
         head?: never;
         /**
          * Change Meeting
          * @description Rename the meeting, or move it into one of your folders or out of it.
          */
-        patch: operations["change_meeting_v1_meetings__meeting_id__patch"];
+        patch: operations["change_meeting_v1_notes__meeting_id__patch"];
         trace?: never;
     };
-    "/v1/meetings/{meeting_id}/transcript": {
+    "/v1/notes/{meeting_id}/transcript": {
         parameters: {
             query?: never;
             header?: never;
@@ -1791,7 +1791,7 @@ export interface paths {
          * Get Transcript
          * @description A page of the meeting's lines in the order they were spoken.
          */
-        get: operations["get_transcript_v1_meetings__meeting_id__transcript_get"];
+        get: operations["get_transcript_v1_notes__meeting_id__transcript_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1800,7 +1800,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/{meeting_id}/findings": {
+    "/v1/notes/{meeting_id}/findings": {
         parameters: {
             query?: never;
             header?: never;
@@ -1811,7 +1811,7 @@ export interface paths {
          * List Findings
          * @description A page of the meeting's findings, in the order they came up.
          */
-        get: operations["list_findings_v1_meetings__meeting_id__findings_get"];
+        get: operations["list_findings_v1_notes__meeting_id__findings_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1820,7 +1820,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/{meeting_id}/map": {
+    "/v1/notes/{meeting_id}/map": {
         parameters: {
             query?: never;
             header?: never;
@@ -1831,7 +1831,7 @@ export interface paths {
          * Get Map
          * @description A page of the mind map's nodes, the root first.
          */
-        get: operations["get_map_v1_meetings__meeting_id__map_get"];
+        get: operations["get_map_v1_notes__meeting_id__map_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1840,7 +1840,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/{meeting_id}/my-notes": {
+    "/v1/notes/{meeting_id}/my-notes": {
         parameters: {
             query?: never;
             header?: never;
@@ -1851,12 +1851,12 @@ export interface paths {
          * Get My Notes
          * @description Your own notes on the meeting; nobody else's.
          */
-        get: operations["get_my_notes_v1_meetings__meeting_id__my_notes_get"];
+        get: operations["get_my_notes_v1_notes__meeting_id__my_notes_get"];
         /**
          * Put My Notes
          * @description Replace your own notes on the meeting.
          */
-        put: operations["put_my_notes_v1_meetings__meeting_id__my_notes_put"];
+        put: operations["put_my_notes_v1_notes__meeting_id__my_notes_put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1864,7 +1864,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/{meeting_id}/participants": {
+    "/v1/notes/{meeting_id}/participants": {
         parameters: {
             query?: never;
             header?: never;
@@ -1877,14 +1877,14 @@ export interface paths {
          * Add Participant
          * @description Add a participant by address; the one already there answers 200.
          */
-        post: operations["add_participant_v1_meetings__meeting_id__participants_post"];
+        post: operations["add_participant_v1_notes__meeting_id__participants_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/{meeting_id}/participants/{participant_id}": {
+    "/v1/notes/{meeting_id}/participants/{participant_id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -1898,13 +1898,13 @@ export interface paths {
          * Remove Participant
          * @description Remove a participant someone added.
          */
-        delete: operations["remove_participant_v1_meetings__meeting_id__participants__participant_id__delete"];
+        delete: operations["remove_participant_v1_notes__meeting_id__participants__participant_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/admin/users/{user_id}/meetings": {
+    "/v1/admin/users/{user_id}/notes": {
         parameters: {
             query?: never;
             header?: never;
@@ -1915,7 +1915,7 @@ export interface paths {
          * List Hidden Meetings
          * @description The person's meetings deleted within the last 7 days.
          */
-        get: operations["list_hidden_meetings_v1_admin_users__user_id__meetings_get"];
+        get: operations["list_hidden_meetings_v1_admin_users__user_id__notes_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1924,7 +1924,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/v1/admin/users/{user_id}/meetings/{meeting_id}/restore": {
+    "/v1/admin/users/{user_id}/notes/{meeting_id}/restore": {
         parameters: {
             query?: never;
             header?: never;
@@ -1937,14 +1937,14 @@ export interface paths {
          * Restore Meeting
          * @description Bring a deleted meeting back, shared nowhere.
          */
-        post: operations["restore_meeting_v1_admin_users__user_id__meetings__meeting_id__restore_post"];
+        post: operations["restore_meeting_v1_admin_users__user_id__notes__meeting_id__restore_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/imports": {
+    "/v1/notes/imports": {
         parameters: {
             query?: never;
             header?: never;
@@ -1957,14 +1957,14 @@ export interface paths {
          * Import Recording
          * @description Turn your uploaded recording into a meeting with a transcript and notes.
          */
-        post: operations["import_recording_v1_meetings_imports_post"];
+        post: operations["import_recording_v1_notes_imports_post"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/v1/meetings/{meeting_id}/share-link": {
+    "/v1/notes/{meeting_id}/share-link": {
         parameters: {
             query?: never;
             header?: never;
@@ -1975,18 +1975,18 @@ export interface paths {
          * Get Share Link
          * @description The meeting's link; null while it is off.
          */
-        get: operations["get_share_link_v1_meetings__meeting_id__share_link_get"];
+        get: operations["get_share_link_v1_notes__meeting_id__share_link_get"];
         /**
          * Put Share Link
          * @description Turn the link on with these settings, or change them.
          */
-        put: operations["put_share_link_v1_meetings__meeting_id__share_link_put"];
+        put: operations["put_share_link_v1_notes__meeting_id__share_link_put"];
         post?: never;
         /**
          * Delete Share Link
          * @description Turn the link off; its comments go with it.
          */
-        delete: operations["delete_share_link_v1_meetings__meeting_id__share_link_delete"];
+        delete: operations["delete_share_link_v1_notes__meeting_id__share_link_delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -7672,7 +7672,7 @@ export interface operations {
             };
         };
     };
-    get_meeting_settings_v1_meetings_settings_get: {
+    get_meeting_settings_v1_notes_settings_get: {
         parameters: {
             query?: never;
             header?: {
@@ -7703,7 +7703,7 @@ export interface operations {
             };
         };
     };
-    put_meeting_settings_v1_meetings_settings_put: {
+    put_meeting_settings_v1_notes_settings_put: {
         parameters: {
             query?: never;
             header?: {
@@ -7738,7 +7738,7 @@ export interface operations {
             };
         };
     };
-    list_folders_v1_meetings_folders_get: {
+    list_folders_v1_notes_folders_get: {
         parameters: {
             query?: {
                 /** @description Items per page, at most the maximum. */
@@ -7774,7 +7774,7 @@ export interface operations {
             };
         };
     };
-    create_folder_v1_meetings_folders_post: {
+    create_folder_v1_notes_folders_post: {
         parameters: {
             query?: never;
             header?: {
@@ -7811,7 +7811,7 @@ export interface operations {
             };
         };
     };
-    delete_folder_v1_meetings_folders__folder_id__delete: {
+    delete_folder_v1_notes_folders__folder_id__delete: {
         parameters: {
             query?: never;
             header?: {
@@ -7842,7 +7842,7 @@ export interface operations {
             };
         };
     };
-    rename_folder_v1_meetings_folders__folder_id__patch: {
+    rename_folder_v1_notes_folders__folder_id__patch: {
         parameters: {
             query?: never;
             header?: {
@@ -7879,7 +7879,7 @@ export interface operations {
             };
         };
     };
-    list_templates_v1_meetings_templates_get: {
+    list_templates_v1_notes_templates_get: {
         parameters: {
             query?: never;
             header?: {
@@ -7910,7 +7910,7 @@ export interface operations {
             };
         };
     };
-    create_template_v1_meetings_templates_post: {
+    create_template_v1_notes_templates_post: {
         parameters: {
             query?: never;
             header?: {
@@ -7947,7 +7947,7 @@ export interface operations {
             };
         };
     };
-    replace_template_v1_meetings_templates__template_id__put: {
+    replace_template_v1_notes_templates__template_id__put: {
         parameters: {
             query?: never;
             header?: {
@@ -7984,7 +7984,7 @@ export interface operations {
             };
         };
     };
-    delete_template_v1_meetings_templates__template_id__delete: {
+    delete_template_v1_notes_templates__template_id__delete: {
         parameters: {
             query?: never;
             header?: {
@@ -8602,7 +8602,7 @@ export interface operations {
             };
         };
     };
-    get_write_up_v1_meetings__meeting_id__write_up_get: {
+    get_write_up_v1_notes__meeting_id__write_up_get: {
         parameters: {
             query?: never;
             header?: {
@@ -8635,7 +8635,7 @@ export interface operations {
             };
         };
     };
-    rewrite_write_up_v1_meetings__meeting_id__write_up_post: {
+    rewrite_write_up_v1_notes__meeting_id__write_up_post: {
         parameters: {
             query?: never;
             header: {
@@ -8674,7 +8674,7 @@ export interface operations {
             };
         };
     };
-    list_meetings_v1_meetings_get: {
+    list_meetings_v1_notes_get: {
         parameters: {
             query?: {
                 /** @description One of your folders by id, or `none` for your meetings in none. */
@@ -8714,7 +8714,7 @@ export interface operations {
             };
         };
     };
-    get_meeting_v1_meetings__meeting_id__get: {
+    get_meeting_v1_notes__meeting_id__get: {
         parameters: {
             query?: never;
             header?: {
@@ -8747,7 +8747,7 @@ export interface operations {
             };
         };
     };
-    delete_meeting_v1_meetings__meeting_id__delete: {
+    delete_meeting_v1_notes__meeting_id__delete: {
         parameters: {
             query?: never;
             header?: {
@@ -8778,7 +8778,7 @@ export interface operations {
             };
         };
     };
-    change_meeting_v1_meetings__meeting_id__patch: {
+    change_meeting_v1_notes__meeting_id__patch: {
         parameters: {
             query?: never;
             header?: {
@@ -8815,7 +8815,7 @@ export interface operations {
             };
         };
     };
-    get_transcript_v1_meetings__meeting_id__transcript_get: {
+    get_transcript_v1_notes__meeting_id__transcript_get: {
         parameters: {
             query?: {
                 /** @description Items per page, at most the maximum. */
@@ -8853,7 +8853,7 @@ export interface operations {
             };
         };
     };
-    list_findings_v1_meetings__meeting_id__findings_get: {
+    list_findings_v1_notes__meeting_id__findings_get: {
         parameters: {
             query?: {
                 /** @description Only findings of this kind. */
@@ -8893,7 +8893,7 @@ export interface operations {
             };
         };
     };
-    get_map_v1_meetings__meeting_id__map_get: {
+    get_map_v1_notes__meeting_id__map_get: {
         parameters: {
             query?: {
                 /** @description Items per page, at most the maximum. */
@@ -8931,7 +8931,7 @@ export interface operations {
             };
         };
     };
-    get_my_notes_v1_meetings__meeting_id__my_notes_get: {
+    get_my_notes_v1_notes__meeting_id__my_notes_get: {
         parameters: {
             query?: never;
             header?: {
@@ -8964,7 +8964,7 @@ export interface operations {
             };
         };
     };
-    put_my_notes_v1_meetings__meeting_id__my_notes_put: {
+    put_my_notes_v1_notes__meeting_id__my_notes_put: {
         parameters: {
             query?: never;
             header?: {
@@ -9001,7 +9001,7 @@ export interface operations {
             };
         };
     };
-    add_participant_v1_meetings__meeting_id__participants_post: {
+    add_participant_v1_notes__meeting_id__participants_post: {
         parameters: {
             query?: never;
             header?: {
@@ -9038,7 +9038,7 @@ export interface operations {
             };
         };
     };
-    remove_participant_v1_meetings__meeting_id__participants__participant_id__delete: {
+    remove_participant_v1_notes__meeting_id__participants__participant_id__delete: {
         parameters: {
             query?: never;
             header?: {
@@ -9070,7 +9070,7 @@ export interface operations {
             };
         };
     };
-    list_hidden_meetings_v1_admin_users__user_id__meetings_get: {
+    list_hidden_meetings_v1_admin_users__user_id__notes_get: {
         parameters: {
             query: {
                 home: components["schemas"]["Home"];
@@ -9109,7 +9109,7 @@ export interface operations {
             };
         };
     };
-    restore_meeting_v1_admin_users__user_id__meetings__meeting_id__restore_post: {
+    restore_meeting_v1_admin_users__user_id__notes__meeting_id__restore_post: {
         parameters: {
             query?: never;
             header?: never;
@@ -9145,7 +9145,7 @@ export interface operations {
             };
         };
     };
-    import_recording_v1_meetings_imports_post: {
+    import_recording_v1_notes_imports_post: {
         parameters: {
             query?: never;
             header?: {
@@ -9180,7 +9180,7 @@ export interface operations {
             };
         };
     };
-    get_share_link_v1_meetings__meeting_id__share_link_get: {
+    get_share_link_v1_notes__meeting_id__share_link_get: {
         parameters: {
             query?: never;
             header?: {
@@ -9213,7 +9213,7 @@ export interface operations {
             };
         };
     };
-    put_share_link_v1_meetings__meeting_id__share_link_put: {
+    put_share_link_v1_notes__meeting_id__share_link_put: {
         parameters: {
             query?: never;
             header?: {
@@ -9250,7 +9250,7 @@ export interface operations {
             };
         };
     };
-    delete_share_link_v1_meetings__meeting_id__share_link_delete: {
+    delete_share_link_v1_notes__meeting_id__share_link_delete: {
         parameters: {
             query?: never;
             header?: {

@@ -141,7 +141,7 @@ This is the mechanism the Leo architecture's §13.1 ports need too.
 
 The slice map's two-part event names (`identity.account_deleted`) do not pass core's three-part rule. The names above replace them, and SLICE_MAP §4.2.1 is corrected on approval.
 
-Until `billing`, `meetings`, `memory` and `agent` contribute, `/v1/auth/me` returns the draft's defaults:
+Until `billing`, `notes`, `memory` and `agent` contribute, `/v1/auth/me` returns the draft's defaults:
 - `subscription`, `quota`: null;
 - `features`: defaults;
 - `no_logs`, `meeting_auto_tasks`: false;

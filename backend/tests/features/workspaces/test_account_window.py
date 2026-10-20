@@ -20,7 +20,7 @@ from shosai.features.workspaces.application.account_visibility import (
 from shosai.features.workspaces.channels.consumers import AccountWindow
 from shosai.features.workspaces.channels.tasks import APPLY_ACCOUNT_EVENT, AccountVisibilityPayload
 from shosai.features.workspaces.contracts import Viewer
-from tests.features.workspaces.probe_resources import MEETINGS
+from tests.features.workspaces.probe_resources import NOTES
 from tests.features.workspaces.test_access_policy import policy
 from tests.harness.connections import fetch_value
 from tests.harness.database_access import DatabaseAccess
@@ -32,7 +32,7 @@ NOW = datetime(2026, 10, 17, 12, tzinfo=UTC)
 
 async def visible_to(homes: DatabaseAccess, home: Home, user: uuid.UUID) -> set[uuid.UUID]:
     async with homes.transactions.begin(TenancyScope(home, user), read_only=True) as session:
-        query = sa.select(MEETINGS.table.c.id).where(policy().readable(MEETINGS, Viewer(user)))
+        query = sa.select(NOTES.table.c.id).where(policy().readable(NOTES, Viewer(user)))
         return set(await session.scalars(query))
 
 
@@ -41,7 +41,7 @@ async def test_a_hidden_owner_s_shares_disappear_and_return_on_cancel(
 ) -> None:
     canon = canonical_world("meeting")
     connection = run_slot.claimed.connections[Home.RU]
-    await write_world(connection, MEETINGS, canon.world)
+    await write_world(connection, NOTES, canon.world)
     alice, bob = canon.people["alice"], canon.people["bob"]
     before = await visible_to(homes, Home.RU, bob)
 
@@ -67,7 +67,7 @@ async def test_an_older_event_delivered_late_changes_nothing(
 ) -> None:
     canon = canonical_world("file")
     connection = run_slot.claimed.connections[Home.EU]
-    await write_world(connection, MEETINGS, canon.world)
+    await write_world(connection, NOTES, canon.world)
     bob = canon.people["bob"]
 
     await apply_account_event(

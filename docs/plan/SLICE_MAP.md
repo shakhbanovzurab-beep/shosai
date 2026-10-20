@@ -47,18 +47,18 @@ Columns: **Needs** — what the screen asks of the backend (calls, data, realtim
 
 | Screen / state | Needs | Leo | Serves | Slice |
 |---|---|---|---|---|
-| `/app/notes` library (timeline, grid, list) | List of recordings; folders CRUD with colour; move by drag; delete with Undo (soft); export transcript (client-side) | — | Re, Or | meetings |
-| Upload a recording (≤ 25 MB, audio/video) | Presigned upload, then transcription → write-up run; "Transcribing…" status (waits forever today: nothing is wired) | — | Re | files (upload) → meetings (run) |
+| `/app/notes` library (timeline, grid, list) | List of recordings; folders CRUD with colour; move by drag; delete with Undo (soft); export transcript (client-side) | — | Re, Or | notes |
+| Upload a recording (≤ 25 MB, audio/video) | Presigned upload, then transcription → write-up run; "Transcribing…" status (waits forever today: nothing is wired) | — | Re | files (upload) → notes (run) |
 | `/app/notes/:id` header | Participants (add or remove by email), folder, hub chip | hub suggestion ("Looks like X") | Re, Co | meetings; the hub chip is hubs |
-| Tab "Notes" | The user's own Markdown notes, autosaved; written on the web or synced from the desktop app (`PUT …/note/draft` is native) | — | Re | meetings |
-| Tab "Enhanced" | Leo's write-up by a template; 8 shipped templates, user templates, "Regenerate" as an async run | writes summary, key points, decisions, action items | Re, Tr | meetings |
-| Tab "Transcript" | Transcript with speakers, search, deep link `?t=` | — | Re | meetings |
-| Tab "Mind map" | Map tree from the write-up | builds the map | Re, Co | meetings |
+| Tab "Notes" | The user's own Markdown notes, autosaved; written on the web or synced from the desktop app (`PUT …/note/draft` is native) | — | Re | notes |
+| Tab "Enhanced" | Leo's write-up by a template; 8 shipped templates, user templates, "Regenerate" as an async run | writes summary, key points, decisions, action items | Re, Tr | notes |
+| Tab "Transcript" | Transcript with speakers, search, deep link `?t=` | — | Re | notes |
+| Tab "Mind map" | Map tree from the write-up | builds the map | Re, Co | notes |
 | Action items | Checkboxes; once shared to a workspace they become that workspace's tasks — two checkbox systems today | extracts owners and dates | Tr | tasks (§8 SM-3) |
-| Share › Link | One link per meeting: show transcript, show names, comments, expiry; revoke deletes comments | — | Cd | meetings |
+| Share › Link | One link per meeting: show transcript, show names, comments, expiry; revoke deletes comments | — | Cd | notes |
 | Public shared note `/s/:token` | Unauthenticated read; anonymous comments (rate-limited) — component exists, no route mounts it | — | Cd | site renders, meetings serves |
 | Share › Workspace | Share a recording into a workspace with an audience, project, transcript flag; moves it if shared elsewhere | — | Cd | workspaces |
-| `/app/meetings` overview (all, upcoming, live, past) | Read model: calendar events with conference links + recordings + "Shared with you" + minutes allowance; live status from the client clock | "Prepare me for my next call" | Wa, Cd | composition: calendar, meetings, workspaces, billing |
+| `/app/meetings` overview (all, upcoming, live, past) | Read model: calendar events with conference links + recordings + "Shared with you" + minutes allowance; live status from the client clock | "Prepare me for my next call" | Wa, Cd | meetings, composing calendar, notes, workspaces and billing widgets (ADR 0057) |
 
 **Background work:** transcription with diarisation; the post-meeting pipeline (write-up, decisions, action items, map) — also when the client never ends the meeting (inv-7); template regeneration; share-link expiry; per-minute meeting windows indexed for search.
 
@@ -133,7 +133,7 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 | Projects, project detail | Projects with status, lead, team, target; page aggregates tasks, meetings, decisions, files by `project_id` | — | Or, Tr | workspaces (§8 SM-2) |
 | Knowledge | Uploads, published personal files, connected sources; access workspace or team; indexing status | answers with the member's rights only | Re, Co | workspaces (items) over knowledge (index) |
 | Settings | Rename, join by company email domain, sharing defaults, plan and usage per member, delete or leave | — | — | workspaces; plan in billing |
-| Auto-share at meeting end | Previewed (`shares_with`), not implemented | — | Cd | workspaces (on `meetings.notes.ready`) |
+| Auto-share at meeting end | Previewed (`shares_with`), not implemented | — | Cd | workspaces (on `notes.meeting.notes_ready`) |
 
 **Missing in the UI:** accepting an invitation and joining by domain have no endpoint or screen. **Leaks to fix server-side** (nfr-15): `GET /workspaces/{id}` returns private teams, pending invitation emails and every member's `last_active_at` to all members; the client filters them.
 
@@ -159,7 +159,7 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 | Billing | MRR, revenue, churn, ARPU, refunds per currency; transactions with refunds and invoices | billing |
 | AI models | Provider credits, spend today, month, forecast; model catalogue with enable and default | studio (catalogue) over F6 (spend reports) |
 | Platform prompts | Draft, publish, versions of the system prompt, behaviour, guardrails, feature prompts | studio |
-| LiveKit | Server, nodes, rooms, participants, egress; end room, disconnect; 10 s polling | rooms |
+| LiveKit | Server, nodes, rooms, participants, egress; end room, disconnect; 10 s polling | meetings |
 | Apps | Releases per platform, channel and arch; upload with SHA-256, publish, revoke, rollout | releases |
 | Errors, issue | Issues grouped by fingerprint, regressions, crash-free rate (needs desktop session telemetry), assignee, link to support; ingest from clients | telemetry |
 | Support | Three-pane inbox, notes, canned replies, assignee, priority; 5 s polling. Its contract (`conversations`) differs from the user's (`tickets`): one ticket store | support |
@@ -194,8 +194,8 @@ From `contracts/draft/consumers.json` and `websocket.json` (D1). **N** native (m
 | identity | N | `POST /v1/auth/login`, `POST /v1/auth/refresh`, `POST /v1/auth/logout`, `GET /v1/auth/me`, `POST /v1/auth/desktop/exchange`, `POST /v1/auth/desktop/refresh`; the browser connect page `GET /app/connect?state=` (cabinet standalone route) |
 | identity | E | `GET /v1/auth/social/{provider}/callback`, `GET /v1/auth/social/yandex/token-page` |
 | edge + site | N | `GET /`, `GET /{path}` fallback redirects into `/app/…` (including `/cabinet/leo?reminder=` with `%3F`), `/models`, `/knowledge-base` |
-| meetings | N | `POST /v1/sessions`, `PATCH /v1/sessions/{id}`; `GET /v1/me/sessions` (limit/offset kept beside a cursor), `GET …/{id}/full`, `PATCH`, `DELETE`; `POST /v1/me/sessions/import`, `GET …/import/{job_id}`; `GET …/{id}/note`, `PUT …/note/draft`; `PATCH …/note/action-items/{item_id}` (writes through to `tasks`); `POST …/audio/init`, `PUT …/audio/{run_id}/part/{n}`, `GET …/audio/{run_id}`, `POST …/complete`, `DELETE …/audio/{run_id}` |
-| meetings + site | E | `GET /r/{token}` (meeting result link: site renders, meetings serves) |
+| notes | N | `POST /v1/sessions`, `PATCH /v1/sessions/{id}`; `GET /v1/me/sessions` (limit/offset kept beside a cursor), `GET …/{id}/full`, `PATCH`, `DELETE`; `POST /v1/me/sessions/import`, `GET …/import/{job_id}`; `GET …/{id}/note`, `PUT …/note/draft`; `PATCH …/note/action-items/{item_id}` (writes through to `tasks`); `POST …/audio/init`, `PUT …/audio/{run_id}/part/{n}`, `GET …/audio/{run_id}`, `POST …/complete`, `DELETE …/audio/{run_id}` |
+| notes + site | E | `GET /r/{token}` (meeting result link: site renders, notes serves) |
 | capture | N | `WS /v1/ws/realtime` (11 client, 15 server frames), `WS /v1/ws/sessions/{id}`, `WS /v1/ws/voice-translate`, `POST /v1/ai/voice-translate/token`, `POST /v1/ai/voice-translate/usage`, `GET /v1/me/hotkeys` |
 | agent | N | `POST /v1/ai/chat/stream`, `POST /v1/ai/vision/analyze` (raw model proxy through the provider port) |
 | proactive | N | `WS /v1/ws/user`: `hello`, `ping`/`pong` (exact literal), `ack`, `reminder.due`, `reminder.settled`; new frames additive |
@@ -208,7 +208,7 @@ From `contracts/draft/consumers.json` and `websocket.json` (D1). **N** native (m
 | connectors | E | `GET /v1/integrations/oauth/{slack,notion,attio,hubspot}/callback` (§8 SM-11); Nango's own `/nango/*` stays an edge route to the Nango server |
 | mcp | E | `GET/HEAD /.well-known/oauth-authorization-server`, `GET/HEAD /.well-known/oauth-protected-resource`, `GET/POST /mcp`, `POST /v1/mcp/oauth/{register,token,revoke}`, `GET/POST /v1/mcp/oauth/authorize`, `GET /v1/mcp/oauth/callback` |
 | knowledge | E | `GET /v1/knowledge/vault/status`, `GET /v1/knowledge/vault/manifest`, `POST /v1/knowledge/vault/notes` (Obsidian plugin) |
-| rooms | E | `POST /v1/livekit/webhook`; links already sent: `GET /j/{token}`, `/meet/{token}`, `/rooms/join/{token}`, `/live/{token}` (§8 SM-8) |
+| meetings | E | `POST /v1/livekit/webhook`; links already sent: `GET /j/{token}`, `/meet/{token}`, `/rooms/join/{token}`, `/live/{token}` (§8 SM-8) |
 | releases | E | `GET /v1/app/builds/{id}/download` |
 | F6 (email) | E | `GET/POST /v1/unsubscribe`, `GET /email/{name}` (images in sent emails) |
 | site | E | SEO pages, help centre `/docs/*`, `robots.txt`, sitemaps, `llms*.txt`, verification files, `/assets`, `/fonts`, `/img`, `/files`, `/og*` |
@@ -228,7 +228,7 @@ Rules the harness cannot check stay with their owners: TLS chain and base URL (F
 | 2 | `workspaces` | Shared team space: members, teams, roles, seats, sharing, the access policy and audit for every slice | organizations (renamed, §8 SM-15) |
 | 3 | `billing` | Plans, entitlements, usage meters, payments, seats, company invoices | billing |
 | 4 | `files` | The user's files, uploads and quota — the one path for bytes | — (S08 storage) |
-| 5 | `meetings` | Every recorded meeting becomes notes, transcript, map and facts | meetings |
+| 5 | `notes` | Every recorded meeting becomes notes, transcript, map and facts (named `meetings` until ADR 0057) | meetings |
 | 6 | `capture` | Live capture, live answers and live translation on the desktop | realtime (renamed) |
 | 7 | `knowledge` | Indexing and search over files, notes, sources and meetings | knowledge |
 | 8 | `commitments` | People, decisions, promises and open topics across all meetings | new (the draft's context graph) |
@@ -247,7 +247,7 @@ Rules the harness cannot check stay with their owners: TLS chain and base URL (F
 | 21 | `support` | Tickets and newsletters between operators and users | — |
 | 22 | `releases` | Desktop builds, staged rollout, downloads | — |
 | 23 | `telemetry` | Client errors as issues; product events; the satisfaction survey | analytics (renamed) |
-| 24 | `rooms` | Shosai video rooms with per-speaker transcription, broadcasts and the room whiteboard | rooms |
+| 24 | `meetings` | Shosai video meetings with per-speaker transcription, broadcasts and the room whiteboard; the cabinet's Meetings section (named `rooms` until ADR 0057) | rooms |
 | 25 | `site` | The public site and public pages of shared links (S17) | — |
 | 26 | `leads` | New users reach the owner in Telegram, enriched by Clay, with the person's consent ([ADR 0051](../adr/0051-new-user-leads-to-telegram-with-clay-enrichment.md)) | — |
 
@@ -269,7 +269,7 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 - **Scope:** create a workspace, members, invitations (one-time email links; verified domain with a one-click join — no reusable link at launch, [ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md)), roles owner/admin/member/guest, teams, seats (with billing), sharing defaults, auto-share at meeting end, suspension, deletion and leave cascades, the per-member usage table, projects; the share records that put a member's meeting or file into the workspace; workspace knowledge items (upload, published file, connected source) and their access; **the access policy** (one check inside each reading query, `resource_grants`, `org_id` and `access` columns, RLS policies) and `org_audit_events` for every slice; admin workspaces screen. At launch a person joins only workspaces of their own home: invitations and domain joins across homes are refused with an explicit error (§8.1 SM-1, [ADR 0039](../adr/0039-one-account-per-person-with-workspaces.md)).
 - **Owns:** `organizations`, `memberships`, `invitations`, `teams`, `team_members`, `projects`, `resource_grants`, `org_audit_events`, `workspace_meeting_shares`, `workspace_knowledge_items`, `directory_domains`. The draft has none of these (R3: company tables start empty).
 - **Routes:** no native or external; `/v1/workspaces/*` (access set through each share record's route, §10), `/v1/me/{shares,meetings,knowledge}`, `/v1/admin/workspaces*`.
-- **Depends on:** identity (principal, token version bump on removal), billing (seats, plan, trial), meetings, files, knowledge (read contracts for shared content), tasks (cascade: open tasks unassigned), F6 (invitation email).
+- **Depends on:** identity (principal, token version bump on removal), billing (seats, plan, trial), notes, files, knowledge (read contracts for shared content), tasks (cascade: open tasks unassigned), F6 (invitation email).
 - **Emits:** `workspaces.workspace.{created,suspended,resumed,deletion_scheduled,deletion_cancelled,deleted}`, `workspaces.member.{joined,removed,role_changed}`, `workspaces.team.deleted`, `workspaces.project.deleted`, `workspaces.access.changed`, `workspaces.meeting.{shared,unshared}`, `workspaces.knowledge_item.{added,removed}` (three-part names, core's event rule). Plan: [slices/workspaces.md](slices/workspaces.md).
 - **Leo tools:** `workspace` toolset: members and teams (read), share a meeting (W), set access of a knowledge item (W).
 
@@ -289,19 +289,19 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 - **Emits:** `files.uploaded`, `.deleted`, `.leo_use_changed`.
 - **Leo tools:** `files` toolset: search, read (digest), set "use with Leo" (W), move (W), delete (W, irreversible).
 
-#### 5. meetings
+#### 5. notes
 - **Scope:** sessions and their lifecycle (start, end, silence sweep, inv-7), transcript storage keyed by `(session_id, seq)` (the WS drain writes through this slice's port), imports and audio uploads, the post-meeting pipeline (write-up, key points, decisions, action items, promises, risks, questions with evidence, mind map, per-minute index windows), templates and regeneration, folders, participants, the user's own notes synced with desktop, share links with comments and their public read API, export; Notes library and detail screens; the native meeting routes.
-- **Owns:** `sessions`, `transcript_segments`, `meeting_speakers`, `meeting_participants`, `meeting_notes` (the person's notes, the write-up, the map), `meeting_findings`, `meeting_folders`, `meeting_templates`, `meeting_settings` (no-logs), `meeting_processing_runs` (the draft's import jobs folded in), `meeting_result_shares`, `meeting_share_comments`; objects O3–O5; derived meeting windows in Qdrant. Action items are tasks (SM-3); `meeting_note_action_items`, `meeting_map_nodes`, `meeting_tags`, `session_tags`, `prompt_executions` and `meeting_workspace_impacts` are not carried ([meetings plan](slices/meetings.md) MT-D4, MT-D7). Plan: [slices/meetings.md](slices/meetings.md).
-- **Routes:** N per §3 (kept as a compatibility layer; the native list a bare array over the newest 200 meetings, MT-D1); `/v1/meetings/*` for the cabinet and Leo, `/v1/me/runs/{id}`, `POST /v1/me/sessions/{id}/end` (§10), `/v1/shared/{token}` (public).
+- **Owns:** `sessions`, `transcript_segments`, `meeting_speakers`, `meeting_participants`, `meeting_notes` (the person's notes, the write-up, the map), `meeting_findings`, `meeting_folders`, `meeting_templates`, `meeting_settings` (no-logs), `meeting_processing_runs` (the draft's import jobs folded in), `meeting_result_shares`, `meeting_share_comments`; objects O3–O5; derived meeting windows in Qdrant. Action items are tasks (SM-3); `meeting_note_action_items`, `meeting_map_nodes`, `meeting_tags`, `session_tags`, `prompt_executions` and `meeting_workspace_impacts` are not carried ([notes plan](slices/notes.md) MT-D4, MT-D7). Plan: [slices/notes.md](slices/notes.md).
+- **Routes:** N per §3 (kept as a compatibility layer; the native list a bare array over the newest 200 meetings, MT-D1); `/v1/notes/*` for the cabinet and Leo, `/v1/me/runs/{id}`, `POST /v1/me/sessions/{id}/end` (§10), `/v1/shared/{token}` (public).
 - **Depends on:** files (uploads, audio), F6 (transcription, diarisation, models, cost), studio (prompt and model of the `notes` role), workspaces (access), billing (minutes), knowledge (index windows), memory (`record_recollections`), tasks (action items), capture (the last audio of a live meeting, MT-D2).
-- **Emits:** `meetings.meeting.ended`, `meetings.notes.ready`, `meetings.meeting.deleted`, `meetings.meeting.restored` (three-part names, core's event rule).
-- **Leo tools:** `meetings` toolset: search, get, read transcript, list decisions and action items (read); move to folder, regenerate notes, create or revoke a share link (W).
+- **Emits:** `notes.meeting.ended`, `notes.meeting.notes_ready`, `notes.meeting.deleted`, `notes.meeting.restored` (three-part names, core's event rule).
+- **Leo tools:** `notes` toolset: search, get, read transcript, list decisions and action items (read); move to folder, regenerate notes, create or revoke a share link (W).
 
 #### 6. capture
-- **Scope:** the WS gateway role: live transcription with server `seq` and the durable Redis queue before display (inv-6, nfr-9), resume and gap replay, `transcription.busy`, `server.shutdown`, 1013 when full; in-meeting `ask`, `vision`, answers; the phone-to-Mac relay; simultaneous voice translation sessions; the desktop hotkey layout; ingest of LiveKit participant tracks (with rooms).
-- **Owns:** hotkey layouts; Valkey resume state; the transcript queue (drained into meetings). F6 records live sessions as minute rows of `provider_costs`; the draft's `voice_sessions` and `translation_session` are folded into them (ADR 0041).
+- **Scope:** the WS gateway role: live transcription with server `seq` and the durable Redis queue before display (inv-6, nfr-9), resume and gap replay, `transcription.busy`, `server.shutdown`, 1013 when full; in-meeting `ask`, `vision`, answers; the phone-to-Mac relay; simultaneous voice translation sessions; the desktop hotkey layout; ingest of LiveKit participant tracks (with meetings).
+- **Owns:** hotkey layouts; Valkey resume state; the transcript queue (drained into notes). F6 records live sessions as minute rows of `provider_costs`; the draft's `voice_sessions` and `translation_session` are folded into them (ADR 0041).
 - **Routes:** N per §3. No `/v1/ws/voice` and no subtitles (web class, no consumer; §8 SM-8).
-- **Depends on:** meetings (transcript port, start run on end), agent (`run_voice_turn` for answers), memory and studio (user context, role prompts and models), knowledge (live retrieval), F6 (realtime streams, minute cost rows), billing (entitlements, inv-13: no money ceiling stops capture), rooms (track egress).
+- **Depends on:** notes (transcript port, start run on end), agent (`run_voice_turn` for answers), memory and studio (user context, role prompts and models), knowledge (live retrieval), F6 (realtime streams, minute cost rows), billing (entitlements, inv-13: no money ceiling stops capture), rooms (track egress).
 - **Emits:** none of its own; meetings emits on end.
 - **Leo tools:** none; it calls the agent port.
 
@@ -317,15 +317,15 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 - **Scope:** people and organisations resolved from participants, speakers, attendees, senders and members (the one person reference for every slice); facts from meetings and their lifecycle — decisions with supersession, promises with owner and due date, open questions, risks; topics (threads) per container (a hub, a workspace) with stages, rounds, links and gaps; dismissals; due-date triggers instead of daily scans (ADR 0027); the decisions log read model of workspaces.
 - **Owns:** `pcg_entities`, `pcg_edges`, `pcg_facts` (authoritative, nothing rebuilds them, T-2), topics, topic transitions, gap dismissals.
 - **Routes:** no native or external; `/v1/people/*`, `/v1/decisions`, `/v1/topics/*`.
-- **Depends on:** meetings (`notes_ready`, facts with evidence), hubs (filing → container), workspaces (visibility of decisions), mail (evidence that refutes a gap; later), F6 (models).
+- **Depends on:** notes (`notes_ready`, facts with evidence), hubs (filing → container), workspaces (visibility of decisions), mail (evidence that refutes a gap; later), F6 (models).
 - **Emits:** `commitments.due`, `commitments.topic_looped`, `commitments.decision_superseded`.
 - **Leo tools:** `people & commitments` toolset: find a person, open commitments, decisions (read); mark a topic done or abandoned, assign an owner (W).
 
 #### 9. hubs
 - **Scope:** hubs (personal containers per client, internal work or pipeline; ≤ 50), charter, archive, the kanban board a hub's work goes to, filing of meetings with suggestion and series memory, materials (links, uploads, meeting summaries, "gone" sources), the hub list summary, digest since the last meeting, feed, the cross-hub Today brief, meeting prep for the next 7 days, the once-a-day signal with quiet hours (through proactive).
 - **Owns:** `hubs`, `hub_meetings` (filings), `hub_rules` (series memory), `hub_materials`.
-- **Routes:** no native or external; `/v1/hubs/*`, `/v1/meetings/{id}/hub`, `/v1/brief/today`, `/v1/meetings/prep`.
-- **Depends on:** commitments (topics and gaps per hub), meetings (titles, summaries, evidence links), calendar (series, upcoming events), tasks (boards; agreed tasks to the board), files (uploads), proactive (signal delivery).
+- **Routes:** no native or external; `/v1/hubs/*`, `/v1/notes/{id}/hub`, `/v1/brief/today`, `/v1/notes/prep`.
+- **Depends on:** commitments (topics and gaps per hub), notes (titles, summaries, evidence links), calendar (series, upcoming events), tasks (boards; agreed tasks to the board), files (uploads), proactive (signal delivery).
 - **Emits:** `hubs.meeting_filed`, `hubs.topic_looped` (consumed by proactive).
 - **Leo tools:** `hubs` toolset: search, unresolved topics, digest (read); file a meeting (W).
 
@@ -341,7 +341,7 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 - **Scope:** calendars and events (CRUD, recurrence, focus blocks), two-way sync with Google, Microsoft and CalDAV through own OAuth (ADR 0002) and push channels, attendees, conference links, the iCal feed, upcoming events for meetings, hubs and workspaces, pre-meeting triggers for proactive.
 - **Owns:** `calendar_integrations`, `calendar_events`, `calendar_event_moves`, `calendar_event_notifications`, `calendar_sync_state`, `external_event_mapping`, `calendar_watch_channels`.
 - **Routes:** E per §3; `/v1/calendar/*`.
-- **Depends on:** connectors (OAuth grants: `oauth_accounts`), commitments (attendees → people), meetings and rooms (link an event to a session or room).
+- **Depends on:** connectors (OAuth grants: `oauth_accounts`), commitments (attendees → people), notes and meetings (link an event to a recorded meeting or a video meeting).
 - **Emits:** `calendar.event_changed`, `calendar.event_cancelled`.
 - **Leo tools:** `calendar` toolset: search, find free time (read); create, update, cancel an event (W).
 
@@ -403,11 +403,11 @@ Scope, data and routes as the [Leo architecture](../design/leo/ARCHITECTURE.md) 
 - **Routes:** N and E per §3; `/v1/surveys/*`; `/v1/admin/errors*`, `/v1/admin/analytics*`, `/v1/admin/surveys*`.
 - **Depends on:** identity, support (link to a ticket).
 
-#### 24. rooms
-- **Scope:** Shosai video rooms on LiveKit, recording, per-participant track egress to capture (fr-16), the room owner's meeting with company access, the join links already sent, the admin LiveKit screen; broadcasts and the room whiteboard (kept, §8.1 SM-8; their screens are designed in the new visual language before their steps). Subtitles and the room AI panel are dropped.
+#### 24. meetings
+- **Scope:** the cabinet's Meetings section (`/app/meetings`: "New meeting" starts a video call, "Schedule in calendar" hands over to calendar, live meetings and joining, recent recordings from notes; "Upload a recording" stays in Notes, ADR 0057); Shosai video rooms on LiveKit, recording, per-participant track egress to capture (fr-16), the room owner's meeting with company access, the join links already sent, the admin LiveKit screen; broadcasts and the room whiteboard (kept, §8.1 SM-8; their screens are designed in the new visual language before their steps). Subtitles and the room AI panel are dropped.
 - **Owns:** `rooms`, `room_recordings` (O2, dual pointer with `storage_files`), `video_admin_actions`, `streams*`, `room_whiteboards`.
-- **Routes:** E per §3; `/v1/rooms/*`, `/v1/admin/livekit/*`.
-- **Depends on:** capture (track ingest), meetings (owner's meeting), files, workspaces, calendar (rooms of calendar events).
+- **Routes:** E per §3; `/v1/meetings/*`, `/v1/admin/livekit/*`.
+- **Depends on:** capture (track ingest), notes (owner's meeting), files, workspaces, calendar (rooms of calendar events).
 
 #### 25. site
 Scope as S17 today ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite.md), FM-1a, FM-1b), plus the public pages of shared links: the shared note `/s/{token}` with comments and the meeting result `/r/{token}`, served by the meetings API.
@@ -423,10 +423,10 @@ Scope as S17 today ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite
 
 The mirror rule needs these renames, each made in the owning slice's first frontend step (URLs do not change):
 
+The cabinet's `notes` (Notes) and `meetings` (Meetings) keep their names: the backend slices are named after them ([ADR 0057](../adr/0057-notes-and-meetings-slice-names.md), the owner's decision of 2026-10-20). The renames below were derived by an agent from the mirror rule and await the owner's confirmation.
+
 | Cabinet feature today | Becomes | Note |
 |---|---|---|
-| `notes` | `meetings` | the recorded meetings |
-| `meetings` | `meetings` (the overview page) | the overview becomes a page of `meetings` composing calendar and workspaces widgets |
 | `file-manager` | `files` | |
 | `knowledge-base` | `knowledge` | |
 | `kanban` | `tasks` | |
@@ -455,7 +455,7 @@ identity ── workspaces·core ── billing·entitlements ── files ─�
                                                                    │
         workspaces·screens ── billing·payments ── proactive ── errands ── mail ── studio ── mcp
                                                                    │
-        support ── releases ── telemetry ── rooms                  site (any time after F6)
+        support ── releases ── telemetry ── meetings                  site (any time after F6)
                                                                    │
                                                           M1 ── M2
 ```
@@ -469,10 +469,10 @@ identity ── workspaces·core ── billing·entitlements ── files ─�
 
 | Wave | Goal for the user | Slices, in order | Exit |
 |---|---|---|---|
-| 1. Record, remember, ask | A person signs in on the web and on the desktop, records or uploads a meeting, reads its notes and asks Leo about it | identity → workspaces·core → billing·entitlements → files → meetings → capture → agent (core, Action Gateway) | the shipped desktop clients run end to end on v2 staging: sign-in, capture, upload, notes; Leo answers over meetings and files with SSE and approvals |
+| 1. Record, remember, ask | A person signs in on the web and on the desktop, records or uploads a meeting, reads its notes and asks Leo about it | identity → workspaces·core → billing·entitlements → files → notes → capture → agent (core, Action Gateway) | the shipped desktop clients run end to end on v2 staging: sign-in, capture, upload, notes; Leo answers over notes and files with SSE and approvals |
 | 2. Track and connect | The home screen is real: tasks, calendar, recent notes, hubs that watch what is unresolved | tasks → connectors → calendar → knowledge → commitments → hubs; decisions and memory in parallel | action items are tasks on one board; meetings join calendar events; search and Leo cover knowledge; hubs fill themselves |
 | 3. Team and initiative | Companies work together; Leo speaks first when it is worth it | workspaces (screens) → billing (payments, seats, invoices) → proactive → errands → mail → studio → mcp | invite, share, pay per seat; Today feed and reminders; the inbox triaged |
-| 4. Operations and cutover readiness | Operators run the platform; every native and external route answers | support → releases → telemetry → rooms | the D1 gate passes and lists no native route as not served (`backend/tests/composition/native_routes_not_served.json` is empty; external routes are each slice's own design, F1 audit OD-2) |
+| 4. Operations and cutover readiness | Operators run the platform; every native and external route answers | support → releases → telemetry → meetings | the D1 gate passes and lists no native route as not served (`backend/tests/composition/native_routes_not_served.json` is empty; external routes are each slice's own design, F1 audit OD-2) |
 
 - Within a wave, a later slice may start when the contracts it needs are published (§1 rule 3); the column order is the default for the backend path of `BACKEND-next-step.md`, which prefers the slice that unblocks the most others.
 - In wave 2, `connectors` comes before `calendar` and `knowledge`, because both take their grants from it (cards 7 and 11); corrected when the map was applied.
@@ -489,9 +489,9 @@ identity ── workspaces·core ── billing·entitlements ── files ─�
 | S01 Identity | kept; adds operator accounts and roles and the admin users screen; hotkeys move to capture; onboarding tour and interface font have no screen | identity |
 | S02 Organizations | renamed to the product's word; adds teams, projects, share records, workspace knowledge items, usage, suspension; its core (access policy, RLS, audit) moves to the start of wave 1 | workspaces |
 | S03 Billing | kept; adds token meters and packs, sales inquiries; referral and affiliate frozen (SM-9) | billing |
-| S04 Meetings | kept; action items move to tasks (SM-3), hub assignment to hubs, the context-graph projection to commitments | meetings |
+| S04 Meetings | kept; action items move to tasks (SM-3), hub assignment to hubs, the context-graph projection to commitments | notes |
 | S05 Realtime | renamed; subtitles and the web voice assistant dropped (no consumer); hotkeys added | capture |
-| S06 Rooms | kept, last, mandatory; broadcasts and whiteboard kept; the room AI panel dropped (SM-8) | rooms |
+| S06 Rooms | kept, last, mandatory; broadcasts and whiteboard kept; the room AI panel dropped (SM-8) | meetings |
 | S07 Knowledge and search | **split**: indexing and search stay; the context graph becomes its own slice | knowledge, commitments |
 | S08 Storage | renamed; becomes the one upload path for every slice | files |
 | S09 Agent | five Leo slices kept as accepted; `models` merged into studio with prompts and personal context (SM-5) | agent, decisions, memory, proactive, studio |
@@ -509,7 +509,7 @@ identity ── workspaces·core ── billing·entitlements ── files ─�
 - **New slices:** commitments, hubs, tasks, calendar, mail, studio (as a slice), telemetry (as a merge).
 - **Merged:** three task lists → tasks; two connection screens → connectors; errors + analytics → telemetry; models + prompts + personal context → studio; user and admin support contracts → support.
 - **Disappeared as capabilities:** subtitles, the web voice assistant WS, the room AI panel, the top-bar ticker backend (weather, holidays, stats), the onboarding tour, the admin profile and CRM templates, the own-OAuth meeting-result push apps (SM-11), referral and affiliate accrual (SM-9).
-- **Kept although the new cabinet has no screen yet** (§8.1): broadcasts and the room whiteboard (rooms), the satisfaction survey (telemetry), newsletters (support). Each gets a screen in the new visual language before its frontend step.
+- **Kept although the new cabinet has no screen yet** (§8.1): broadcasts and the room whiteboard (meetings), the satisfaction survey (telemetry), newsletters (support). Each gets a screen in the new visual language before its frontend step.
 - **Moved to foundation:** email unsubscribe and suppression → F6.
 
 ---
@@ -538,14 +538,14 @@ DATA_MAPPING §5 is organised by S01–S17. In the follow-up step (§9) each tab
 | T-4 knowledge documents without bytes | knowledge, with files and connectors |
 | F-1 every pointer resolves; `storage_used_bytes` = Σ files | files |
 | A-1 append-only audit across four tables | M1, each owner listed |
-| O2 dual pointer of room recordings | rooms, with files |
+| O2 dual pointer of room recordings | meetings, with files |
 | `meeting_note_action_items`, `tracker_*` | tasks (SM-3) |
 | `hub*` | hubs; `pcg_*` → commitments |
 | `models_registry`, `model_defaults`, `model_role_assignments`, `prompt_templates`, `prompt_skills`, `user_contexts`, `user_context_files` | studio (`prompt_skills`, `agent_skills` → agent) |
 | `proactive_mail_cursors`, `proactive_mail_watches` | mail |
 | `oauth_accounts`, `connector_connections`, `meeting_integrations` | connectors |
 | `jira_links`, `jira_issue_links` | tasks |
-| `satisfaction_surveys` → telemetry; `broadcasts` → support; `streams*`, `room_whiteboards` → rooms; `referral_rewards`, `affiliate_*` → billing as history (SM-8, SM-9, SM-10); `meeting_integrations` dropped (SM-11) |
+| `satisfaction_surveys` → telemetry; `broadcasts` → support; `streams*`, `room_whiteboards` → meetings; `referral_rewards`, `affiliate_*` → billing as history (SM-8, SM-9, SM-10); `meeting_integrations` dropped (SM-11) |
 
 ---
 

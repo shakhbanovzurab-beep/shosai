@@ -78,7 +78,7 @@ These were found in the clients' code. The harness cannot check them; the slice 
 - **Live capture (`/v1/ws/realtime`).** The draft has no protocol version in `hello`, no `seq` replay, and no `transcription.busy` or `server.shutdown` frames; resume is per meeting via `transcript.restore`. v2 may add these as new optional fields and new frame types. WhispererKit and the Windows client ignore unknown frame types. The existing frames stay as they are.
 - **Full plane → 1013.** In the draft any close before `accept()` reaches the client as HTTP 403, and shipped clients treat 403 as an authentication failure and stop reconnecting. v2 must therefore accept the socket and then close it with 1013. Rejecting the handshake would strand those clients.
 - **End meeting, upload, runs.** `POST /v1/me/sessions/{id}/end`, `POST /v1/me/uploads` and `GET /v1/me/runs/{id}` are new. Shipped clients stop a meeting with `PATCH /v1/sessions/{id}` and upload recordings through `/v1/me/sessions/{id}/audio/*`; both stay.
-- **Pagination.** `GET /v1/me/sessions` pages by `limit`/`offset`, and macOS uses it. It stays a bare array with `limit` (1–200) and `offset` over the person's newest 200 meetings and gains no cursor; the cabinet's cursor list is `GET /v1/meetings` ([meetings plan](../docs/plan/slices/meetings.md) MT-D1).
+- **Pagination.** `GET /v1/me/sessions` pages by `limit`/`offset`, and macOS uses it. It stays a bare array with `limit` (1–200) and `offset` over the person's newest 200 meetings and gains no cursor; the cabinet's cursor list is `GET /v1/notes` ([notes plan](../docs/plan/slices/notes.md) MT-D1).
 
 ### Calls that fail today
 

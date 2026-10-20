@@ -1,6 +1,6 @@
 """How the shipped macOS and Windows 1.4.5 clients decode the answers they read.
 
-Identity's (identity step 13) and meetings' (meetings step 3 on). Each check mirrors the
+Identity's (identity step 13) and notes' (notes step 3 on). Each check mirrors the
 clients' DTOs field by field — `AuthClient.swift` and `SessionsClient.swift` in WhispererKit,
 `AuthClient.cs` and `SessionsClient.cs` in the Windows client, as
 `contracts/draft/consumers.json` points to them. A

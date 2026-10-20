@@ -15,7 +15,7 @@ from shosai.features.workspaces.application.invariant_checks import PolicySelfTe
 from shosai.features.workspaces.contracts import Viewer
 from shosai.features.workspaces.contracts.events import JoinChannel
 from shosai.features.workspaces.domain.roles import WorkspaceRole
-from tests.features.workspaces.probe_resources import FILES, MEETINGS
+from tests.features.workspaces.probe_resources import FILES, NOTES
 from tests.features.workspaces.services import FixedSeats, created, ports_with, services
 from tests.features.workspaces.test_access_policy import policy
 from tests.harness.database_access import (
@@ -53,10 +53,10 @@ async def test_the_self_test_is_quiet_on_the_policy_and_fires_on_a_broken_one(
     homes: DatabaseAccess, workers: DatabaseAccess, probe_resources: None, run_slot: RunSlot
 ) -> None:
     connection = run_slot.claimed.connections[Home.RU]
-    await write_world(connection, MEETINGS, canonical_world("meeting").world)
+    await write_world(connection, NOTES, canonical_world("meeting").world)
     await write_world(connection, FILES, canonical_world("file").world)
     quiet, loud = CollectorRegistry(), CollectorRegistry()
-    resources = (MEETINGS, FILES)
+    resources = (NOTES, FILES)
 
     clean = await PolicySelfTest(workers.transactions, policy(), resources, quiet).run(Home.RU)
     found = await PolicySelfTest(workers.transactions, OpenToAll(), resources, loud).run(Home.RU)

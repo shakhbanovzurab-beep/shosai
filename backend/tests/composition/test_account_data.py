@@ -122,7 +122,7 @@ def test_core_and_every_slice_of_the_platform_need_exactly_their_handlers() -> N
     bound.install(
         [
             ACCOUNT_DATA_HANDLERS.bind(Handler(owner))
-            for owner in ("core", "identity", "workspaces", "billing", "files", "meetings")
+            for owner in ("core", "identity", "workspaces", "billing", "files", "notes")
         ]
     )
     missing.install([ACCOUNT_DATA_HANDLERS.bind(Handler("core"))])

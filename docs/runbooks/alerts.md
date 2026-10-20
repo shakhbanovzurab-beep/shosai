@@ -136,7 +136,7 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Means.** The settle sweep of an ended meeting found fewer live lines in the database than capture showed the person (meetings, from step 4). The person saw text that the notes, search and Leo will never get.
 
-**Look.** `shosai_meetings_transcript_lines_missing_total` by `home`; the `workers-default` log line «Показанные строки не сохранены» names the meeting id and how many lines. Compare `transcript_segments` of that meeting (by `seq`, `origin = 'live'`) with capture's resume state for it; `shosai_meetings_transcript_lines_total{outcome="failed"}` and the drain's log show whether a batch failed, and a Valkey failover in the same minutes explains a lost second of queue (§20).
+**Look.** `shosai_notes_transcript_lines_missing_total` by `home`; the `workers-default` log line «Показанные строки не сохранены» names the meeting id and how many lines. Compare `transcript_segments` of that meeting (by `seq`, `origin = 'live'`) with capture's resume state for it; `shosai_notes_transcript_lines_total{outcome="failed"}` and the drain's log show whether a batch failed, and a Valkey failover in the same minutes explains a lost second of queue (§20).
 
 **Fix.** Find where the lines went — a failed batch not retried, a drain that dropped a batch, a queue lost with Valkey — and fix that path with a test. Lines that are gone cannot be recovered; the meeting's notes are written from what is stored.
 
@@ -145,7 +145,7 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Means.** Meetings ended more than 15 minutes ago are still not settled (meetings, from step 4). Among them a spoken meeting may have no run, so its notes never come.
 
-**Look.** `shosai_meetings_unsettled` by `home`; the task `meetings.settle_ended` in the workers' logs and its errors; `SELECT id, ended_at FROM sessions WHERE status <> 'active' AND settled_at IS NULL AND deleted_at IS NULL ORDER BY ended_at` in that home.
+**Look.** `shosai_notes_unsettled` by `home`; the task `notes.settle_ended` in the workers' logs and its errors; `SELECT id, ended_at FROM sessions WHERE status <> 'active' AND settled_at IS NULL AND deleted_at IS NULL ORDER BY ended_at` in that home.
 
 **Fix.** Make the sweep pass again: fix the failing task or the meeting row it stops at, with a test. The next pass settles the backlog oldest first, a batch a minute, and gives each spoken meeting its run; the gauge returns to zero.
 
@@ -156,7 +156,7 @@ Staging commands run on the host in `/srv/shosai` as `sudo -u deploy docker comp
 
 **Means.** A home's oldest unfinished post-meeting run is older than 10 minutes (meetings, from step 5): a meeting's notes are late, and nfr-8 promises them within 10 minutes for 95 % of meetings.
 
-**Look.** `shosai_meetings_oldest_open_run_seconds` by `home`; `shosai_meetings_stage_seconds` by stage for a slow stage; `shosai_meetings_runs_total` and the `workers-meeting` logs («Стадия прогона упала», «Стадия прогона провалена») for one that keeps failing; `shosai_task_queue_oldest_age_seconds{queue="meeting"}` for a queue that is behind; `SELECT id, source, state, stage_state, updated_at FROM meeting_processing_runs WHERE state IN ('pending', 'running') ORDER BY created_at LIMIT 20` in that home.
+**Look.** `shosai_notes_oldest_open_run_seconds` by `home`; `shosai_notes_stage_seconds` by stage for a slow stage; `shosai_notes_runs_total` and the `workers-meeting` logs («Стадия прогона упала», «Стадия прогона провалена») for one that keeps failing; `shosai_task_queue_oldest_age_seconds{queue="meeting"}` for a queue that is behind; `SELECT id, source, state, stage_state, updated_at FROM meeting_processing_runs WHERE state IN ('pending', 'running') ORDER BY created_at LIMIT 20` in that home.
 
 **Fix.** A stage slow at a provider: the provider's breaker and slots (`ProviderSlotsExhausted`); a queue behind: more `workers-meeting` processes; a stage failing for a bug: fix it with a test — the recovery sweep sends lost stages again every minute, and the attempts in each run's row keep it within three.
 

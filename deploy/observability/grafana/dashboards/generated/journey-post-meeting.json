@@ -251,7 +251,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(shosai_meetings_runs_total[5m])) * 60",
+          "expr": "sum(rate(shosai_notes_runs_total[5m])) * 60",
           "legendFormat": "всего",
           "range": true,
           "exemplar": false
@@ -262,7 +262,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(shosai_meetings_runs_total{outcome=\"failed\"}[5m])) * 60",
+          "expr": "sum(rate(shosai_notes_runs_total{outcome=\"failed\"}[5m])) * 60",
           "legendFormat": "со сбоем",
           "range": true,
           "exemplar": false
@@ -450,7 +450,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "histogram_quantile(0.95, sum by (le) (rate(shosai_meetings_notes_ready_seconds_bucket{source=~\".+\"}[5m])))",
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(shosai_notes_notes_ready_seconds_bucket{source=~\".+\"}[5m])))",
           "legendFormat": "95 % быстрее",
           "range": true,
           "exemplar": true
@@ -668,7 +668,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(rate(shosai_meetings_notes_ready_seconds_count{source=~\".+\"}[5m])) * 60",
+          "expr": "sum(rate(shosai_notes_notes_ready_seconds_count{source=~\".+\"}[5m])) * 60",
           "legendFormat": "всего",
           "range": true,
           "exemplar": false

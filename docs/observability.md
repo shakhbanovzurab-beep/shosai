@@ -47,7 +47,7 @@ class MeetingMetrics:
 
     def __init__(self, registry: CollectorRegistry) -> None:
         self._recorded = Counter(
-            "shosai_meetings_recorded",
+            "shosai_notes_recorded",
             "Записанные встречи по исходу",
             ("outcome",),
             registry=registry,
@@ -94,8 +94,8 @@ MEETING_OBJECTIVES = (
         promise="встреча начинается без ошибки с нашей стороны в 99,5 % случаев",
         target=0.995,
         indicator=EventRatio(
-            total='http_server_request_duration_seconds_count{http_route="/v1/meetings"}',
-            bad='http_server_request_duration_seconds_count{http_route="/v1/meetings",error_type!=""}',
+            total='http_server_request_duration_seconds_count{http_route="/v1/notes"}',
+            bad='http_server_request_duration_seconds_count{http_route="/v1/notes",error_type!=""}',
         ),
     ),
 )
@@ -121,7 +121,7 @@ MEETING_MONITORS = (
         invariant="inv-12",
         summary="Есть запись встречи без владельца",
         explanation="Запись должна принадлежать встрече: без владельца её нельзя ни показать, ни удалить.",
-        condition=StaysAtMost("shosai_meetings_orphan_recordings"),
+        condition=StaysAtMost("shosai_notes_orphan_recordings"),
     ),
 )
 ```

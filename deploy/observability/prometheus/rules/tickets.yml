@@ -56,7 +56,7 @@ groups:
           runbook: docs/runbooks/alerts.md#task-queue-old
 
       - alert: MeetingRunOld
-        expr: max by (home) (shosai_meetings_oldest_open_run_seconds) > 600
+        expr: max by (home) (shosai_notes_oldest_open_run_seconds) > 600
         for: 5m
         labels:
           severity: ticket

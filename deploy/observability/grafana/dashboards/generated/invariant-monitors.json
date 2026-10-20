@@ -1104,7 +1104,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "sum(increase(shosai_meetings_transcript_lines_missing_total[15m])) or vector(0)",
+          "expr": "sum(increase(shosai_notes_transcript_lines_missing_total[15m])) or vector(0)",
           "instant": true
         }
       ],
@@ -1192,7 +1192,7 @@
             "type": "prometheus",
             "uid": "prometheus"
           },
-          "expr": "max(shosai_meetings_unsettled) or vector(0)",
+          "expr": "max(shosai_notes_unsettled) or vector(0)",
           "instant": true
         }
       ],

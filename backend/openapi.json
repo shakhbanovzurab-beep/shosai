@@ -4369,14 +4369,14 @@
         }
       }
     },
-    "/v1/meetings/settings": {
+    "/v1/notes/settings": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Get Meeting Settings",
         "description": "Whether your meetings are kept.",
-        "operationId": "get_meeting_settings_v1_meetings_settings_get",
+        "operationId": "get_meeting_settings_v1_notes_settings_get",
         "parameters": [
           {
             "name": "authorization",
@@ -4420,11 +4420,11 @@
       },
       "put": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Put Meeting Settings",
         "description": "Keep, or stop keeping, the meetings you start from now.",
-        "operationId": "put_meeting_settings_v1_meetings_settings_put",
+        "operationId": "put_meeting_settings_v1_notes_settings_put",
         "parameters": [
           {
             "name": "authorization",
@@ -4477,14 +4477,14 @@
         }
       }
     },
-    "/v1/meetings/folders": {
+    "/v1/notes/folders": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "List Folders",
         "description": "Your folders, oldest first.",
-        "operationId": "list_folders_v1_meetings_folders_get",
+        "operationId": "list_folders_v1_notes_folders_get",
         "parameters": [
           {
             "name": "limit",
@@ -4561,11 +4561,11 @@
       },
       "post": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Create Folder",
         "description": "Make a folder in the next colour.",
-        "operationId": "create_folder_v1_meetings_folders_post",
+        "operationId": "create_folder_v1_notes_folders_post",
         "parameters": [
           {
             "name": "Idempotency-Key",
@@ -4639,14 +4639,14 @@
         }
       }
     },
-    "/v1/meetings/folders/{folder_id}": {
+    "/v1/notes/folders/{folder_id}": {
       "patch": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Rename Folder",
         "description": "Rename a folder.",
-        "operationId": "rename_folder_v1_meetings_folders__folder_id__patch",
+        "operationId": "rename_folder_v1_notes_folders__folder_id__patch",
         "parameters": [
           {
             "name": "folder_id",
@@ -4710,11 +4710,11 @@
       },
       "delete": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Delete Folder",
         "description": "Delete a folder; its meetings stay, in no folder.",
-        "operationId": "delete_folder_v1_meetings_folders__folder_id__delete",
+        "operationId": "delete_folder_v1_notes_folders__folder_id__delete",
         "parameters": [
           {
             "name": "folder_id",
@@ -4760,14 +4760,14 @@
         }
       }
     },
-    "/v1/meetings/templates": {
+    "/v1/notes/templates": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "List Templates",
         "description": "The shipped templates, then yours, oldest first.",
-        "operationId": "list_templates_v1_meetings_templates_get",
+        "operationId": "list_templates_v1_notes_templates_get",
         "parameters": [
           {
             "name": "authorization",
@@ -4811,11 +4811,11 @@
       },
       "post": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Create Template",
         "description": "Make a template of your own.",
-        "operationId": "create_template_v1_meetings_templates_post",
+        "operationId": "create_template_v1_notes_templates_post",
         "parameters": [
           {
             "name": "Idempotency-Key",
@@ -4889,14 +4889,14 @@
         }
       }
     },
-    "/v1/meetings/templates/{template_id}": {
+    "/v1/notes/templates/{template_id}": {
       "put": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Replace Template",
         "description": "Replace a template of yours.",
-        "operationId": "replace_template_v1_meetings_templates__template_id__put",
+        "operationId": "replace_template_v1_notes_templates__template_id__put",
         "parameters": [
           {
             "name": "template_id",
@@ -4959,11 +4959,11 @@
       },
       "delete": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Delete Template",
         "description": "Delete a template of yours.",
-        "operationId": "delete_template_v1_meetings_templates__template_id__delete",
+        "operationId": "delete_template_v1_notes_templates__template_id__delete",
         "parameters": [
           {
             "name": "template_id",
@@ -5011,7 +5011,7 @@
     "/v1/sessions": {
       "post": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Create Session",
         "description": "Start a live meeting on this device.",
@@ -5071,7 +5071,7 @@
     "/v1/sessions/{session_id}": {
       "patch": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Update Session",
         "description": "Retitle the meeting, or end it; a repeated end answers the stored meeting.",
@@ -6041,7 +6041,7 @@
     "/v1/me/sessions/{session_id}/end": {
       "post": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "End Session",
         "description": "End the meeting; its notes follow from the run.",
@@ -6101,7 +6101,7 @@
     "/v1/me/runs/{run_id}": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Get Run",
         "description": "A run of a meeting the person may read.",
@@ -6158,14 +6158,14 @@
         }
       }
     },
-    "/v1/meetings/{meeting_id}/write-up": {
+    "/v1/notes/{meeting_id}/write-up": {
       "post": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Rewrite Write Up",
         "description": "Rewrite the meeting's write-up by a template, keeping its findings.",
-        "operationId": "rewrite_write_up_v1_meetings__meeting_id__write_up_post",
+        "operationId": "rewrite_write_up_v1_notes__meeting_id__write_up_post",
         "parameters": [
           {
             "name": "meeting_id",
@@ -6243,11 +6243,11 @@
       },
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Get Write Up",
         "description": "Leo's write-up of the meeting by its template.",
-        "operationId": "get_write_up_v1_meetings__meeting_id__write_up_get",
+        "operationId": "get_write_up_v1_notes__meeting_id__write_up_get",
         "parameters": [
           {
             "name": "meeting_id",
@@ -6300,14 +6300,14 @@
         }
       }
     },
-    "/v1/meetings": {
+    "/v1/notes": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "List Meetings",
         "description": "The meetings you may read, newest first.",
-        "operationId": "list_meetings_v1_meetings_get",
+        "operationId": "list_meetings_v1_notes_get",
         "parameters": [
           {
             "name": "folder",
@@ -6425,14 +6425,14 @@
         }
       }
     },
-    "/v1/meetings/{meeting_id}": {
+    "/v1/notes/{meeting_id}": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Get Meeting",
         "description": "A meeting you may read.",
-        "operationId": "get_meeting_v1_meetings__meeting_id__get",
+        "operationId": "get_meeting_v1_notes__meeting_id__get",
         "parameters": [
           {
             "name": "meeting_id",
@@ -6486,11 +6486,11 @@
       },
       "patch": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Change Meeting",
         "description": "Rename the meeting, or move it into one of your folders or out of it.",
-        "operationId": "change_meeting_v1_meetings__meeting_id__patch",
+        "operationId": "change_meeting_v1_notes__meeting_id__patch",
         "parameters": [
           {
             "name": "meeting_id",
@@ -6554,11 +6554,11 @@
       },
       "delete": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Delete Meeting",
         "description": "Delete your meeting: hidden from everyone at once, gone for good after 7 days.",
-        "operationId": "delete_meeting_v1_meetings__meeting_id__delete",
+        "operationId": "delete_meeting_v1_notes__meeting_id__delete",
         "parameters": [
           {
             "name": "meeting_id",
@@ -6604,14 +6604,14 @@
         }
       }
     },
-    "/v1/meetings/{meeting_id}/transcript": {
+    "/v1/notes/{meeting_id}/transcript": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Get Transcript",
         "description": "A page of the meeting's lines in the order they were spoken.",
-        "operationId": "get_transcript_v1_meetings__meeting_id__transcript_get",
+        "operationId": "get_transcript_v1_notes__meeting_id__transcript_get",
         "parameters": [
           {
             "name": "meeting_id",
@@ -6697,14 +6697,14 @@
         }
       }
     },
-    "/v1/meetings/{meeting_id}/findings": {
+    "/v1/notes/{meeting_id}/findings": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "List Findings",
         "description": "A page of the meeting's findings, in the order they came up.",
-        "operationId": "list_findings_v1_meetings__meeting_id__findings_get",
+        "operationId": "list_findings_v1_notes__meeting_id__findings_get",
         "parameters": [
           {
             "name": "meeting_id",
@@ -6808,14 +6808,14 @@
         }
       }
     },
-    "/v1/meetings/{meeting_id}/map": {
+    "/v1/notes/{meeting_id}/map": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Get Map",
         "description": "A page of the mind map's nodes, the root first.",
-        "operationId": "get_map_v1_meetings__meeting_id__map_get",
+        "operationId": "get_map_v1_notes__meeting_id__map_get",
         "parameters": [
           {
             "name": "meeting_id",
@@ -6901,14 +6901,14 @@
         }
       }
     },
-    "/v1/meetings/{meeting_id}/my-notes": {
+    "/v1/notes/{meeting_id}/my-notes": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Get My Notes",
         "description": "Your own notes on the meeting; nobody else's.",
-        "operationId": "get_my_notes_v1_meetings__meeting_id__my_notes_get",
+        "operationId": "get_my_notes_v1_notes__meeting_id__my_notes_get",
         "parameters": [
           {
             "name": "meeting_id",
@@ -6962,11 +6962,11 @@
       },
       "put": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Put My Notes",
         "description": "Replace your own notes on the meeting.",
-        "operationId": "put_my_notes_v1_meetings__meeting_id__my_notes_put",
+        "operationId": "put_my_notes_v1_notes__meeting_id__my_notes_put",
         "parameters": [
           {
             "name": "meeting_id",
@@ -7029,14 +7029,14 @@
         }
       }
     },
-    "/v1/meetings/{meeting_id}/participants": {
+    "/v1/notes/{meeting_id}/participants": {
       "post": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Add Participant",
         "description": "Add a participant by address; the one already there answers 200.",
-        "operationId": "add_participant_v1_meetings__meeting_id__participants_post",
+        "operationId": "add_participant_v1_notes__meeting_id__participants_post",
         "parameters": [
           {
             "name": "meeting_id",
@@ -7099,14 +7099,14 @@
         }
       }
     },
-    "/v1/meetings/{meeting_id}/participants/{participant_id}": {
+    "/v1/notes/{meeting_id}/participants/{participant_id}": {
       "delete": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Remove Participant",
         "description": "Remove a participant someone added.",
-        "operationId": "remove_participant_v1_meetings__meeting_id__participants__participant_id__delete",
+        "operationId": "remove_participant_v1_notes__meeting_id__participants__participant_id__delete",
         "parameters": [
           {
             "name": "meeting_id",
@@ -7162,14 +7162,14 @@
         }
       }
     },
-    "/v1/admin/users/{user_id}/meetings": {
+    "/v1/admin/users/{user_id}/notes": {
       "get": {
         "tags": [
           "admin"
         ],
         "summary": "List Hidden Meetings",
         "description": "The person's meetings deleted within the last 7 days.",
-        "operationId": "list_hidden_meetings_v1_admin_users__user_id__meetings_get",
+        "operationId": "list_hidden_meetings_v1_admin_users__user_id__notes_get",
         "parameters": [
           {
             "name": "user_id",
@@ -7264,14 +7264,14 @@
         }
       }
     },
-    "/v1/admin/users/{user_id}/meetings/{meeting_id}/restore": {
+    "/v1/admin/users/{user_id}/notes/{meeting_id}/restore": {
       "post": {
         "tags": [
           "admin"
         ],
         "summary": "Restore Meeting",
         "description": "Bring a deleted meeting back, shared nowhere.",
-        "operationId": "restore_meeting_v1_admin_users__user_id__meetings__meeting_id__restore_post",
+        "operationId": "restore_meeting_v1_admin_users__user_id__notes__meeting_id__restore_post",
         "parameters": [
           {
             "name": "user_id",
@@ -7338,14 +7338,14 @@
         }
       }
     },
-    "/v1/meetings/imports": {
+    "/v1/notes/imports": {
       "post": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Import Recording",
         "description": "Turn your uploaded recording into a meeting with a transcript and notes.",
-        "operationId": "import_recording_v1_meetings_imports_post",
+        "operationId": "import_recording_v1_notes_imports_post",
         "parameters": [
           {
             "name": "authorization",
@@ -7398,14 +7398,14 @@
         }
       }
     },
-    "/v1/meetings/{meeting_id}/share-link": {
+    "/v1/notes/{meeting_id}/share-link": {
       "get": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Get Share Link",
         "description": "The meeting's link; null while it is off.",
-        "operationId": "get_share_link_v1_meetings__meeting_id__share_link_get",
+        "operationId": "get_share_link_v1_notes__meeting_id__share_link_get",
         "parameters": [
           {
             "name": "meeting_id",
@@ -7459,11 +7459,11 @@
       },
       "put": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Put Share Link",
         "description": "Turn the link on with these settings, or change them.",
-        "operationId": "put_share_link_v1_meetings__meeting_id__share_link_put",
+        "operationId": "put_share_link_v1_notes__meeting_id__share_link_put",
         "parameters": [
           {
             "name": "meeting_id",
@@ -7527,11 +7527,11 @@
       },
       "delete": {
         "tags": [
-          "meetings"
+          "notes"
         ],
         "summary": "Delete Share Link",
         "description": "Turn the link off; its comments go with it.",
-        "operationId": "delete_share_link_v1_meetings__meeting_id__share_link_delete",
+        "operationId": "delete_share_link_v1_notes__meeting_id__share_link_delete",
         "parameters": [
           {
             "name": "meeting_id",

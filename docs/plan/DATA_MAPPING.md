@@ -269,14 +269,14 @@ Anonymous telemetry has no owner either: `analytics_events` and `client_error_lo
 
 These start empty: `directory_domains`, `organizations`, `memberships`, `resource_grants`, `org_invoices`, `org_audit_events`, `home_transfers`, `processed_events`, `schedule_runs`. A missed periodic interval runs once on start (§12).
 
-**Per slice.** Owners follow the [slice map](SLICE_MAP.md) §4.2 and §7.2. `workspaces`, `capture`, `decisions` and `site` receive no draft tables. The broadcast and whiteboard tables belong to `rooms` (FM-1c, kept by the owner's SM-8), the admin mailings (`broadcasts`) to `support`, the satisfaction survey to `telemetry` (SM-10), action items and Jira links to `tasks` (SM-3), the context graph to `commitments`; the provider cost, metering, abuse and provider error tables to F6 (FM-4), and `exchange_rates` too since [ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md); [ADR 0041](../adr/0041-platform-services-replanned-from-the-product.md) folds the metering tables into `provider_costs` and drops the abuse and provider error tables.
+**Per slice.** Owners follow the [slice map](SLICE_MAP.md) §4.2 and §7.2. `workspaces`, `capture`, `decisions` and `site` receive no draft tables. The broadcast and whiteboard tables belong to `meetings` (named `rooms` until ADR 0057; FM-1c, kept by the owner's SM-8), the admin mailings (`broadcasts`) to `support`, the satisfaction survey to `telemetry` (SM-10), action items and Jira links to `tasks` (SM-3), the context graph to `commitments`; the provider cost, metering, abuse and provider error tables to F6 (FM-4), and `exchange_rates` too since [ADR 0036](../adr/0036-exchange-rate-owned-by-platform-services.md); [ADR 0041](../adr/0041-platform-services-replanned-from-the-product.md) folds the metering tables into `provider_costs` and drops the abuse and provider error tables.
 
 | Slice | Tables | moved | transformed | derived | dropped |
 |---|---|---|---|---|---|
 | `identity` | 9 | 1 | 5 | 0 | 3 |
 | `billing` | 16 | 15 | 1 | 0 | 0 |
 | `files` | 1 | 1 | 0 | 0 | 0 |
-| `meetings` | 16 | 3 | 7 | 1 | 5 |
+| `notes` | 16 | 3 | 7 | 1 | 5 |
 | `knowledge` | 12 | 2 | 4 | 4 | 2 |
 | `commitments` | 3 | 3 | 0 | 0 | 0 |
 | `hubs` | 4 | 4 | 0 | 0 | 0 |
@@ -293,12 +293,12 @@ These start empty: `directory_domains`, `organizations`, `memberships`, `resourc
 | `support` | 4 | 3 | 1 | 0 | 0 |
 | `releases` | 1 | 0 | 1 | 0 | 0 |
 | `telemetry` | 4 | 1 | 3 | 0 | 0 |
-| `rooms` | 10 | 8 | 0 | 0 | 2 |
+| `meetings` | 10 | 8 | 0 | 0 | 2 |
 | F1 — Backend foundation (platform tables) | 1 | 0 | 0 | 0 | 1 |
 | F6 — Platform services | 7 | 1 | 3 | 0 | 3 |
 | **Total** | **131** | **74** | **32** | **5** | **20** |
 
-Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 dropped (columns of derived and dropped tables are counted with their table; the columns of `voice_sessions` and `translation_session`, folded into cost rows, count as transformed). These column totals predate the meetings plan of 2026-10-19, which moved five tables to dropped and four to transformed; M1 recounts them.
+Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 dropped (columns of derived and dropped tables are counted with their table; the columns of `voice_sessions` and `translation_session`, folded into cost rows, count as transformed). These column totals predate the notes plan of 2026-10-19, which moved five tables to dropped and four to transformed; M1 recounts them.
 
 ### 5.1 `identity`
 
@@ -511,7 +511,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `share_token`, `share_password_hash`, `share_expires_at`, `share_download_disabled` — *not carried*: public file links are not in v2 ([files plan](slices/files.md) FL-D3); a migrated link answers a page saying it expired.
   - `parent_id` — v2 folders are flat (files plan, the cabinet's File Manager); how a nested draft tree flattens is decided with M1's plan.
 
-### 5.4 `meetings`
+### 5.4 `notes`
 
 #### `sessions` → `sessions` · **transformed**
 
@@ -520,13 +520,13 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **Columns:** 11 of 15 move unchanged; exceptions:
   - `status` — *moved*. `active`, `completed`, `failed`; `paused` is never written.
   - `latest_run_id` — *moved*. Soft reference to `meeting_processing_runs`.
-  - `ephemeral` — *transformed*. Becomes `kept = NOT ephemeral` ([meetings plan](slices/meetings.md) MT-D6): a meeting not kept carries no transcript; leftover content is a defect to report.
+  - `ephemeral` — *transformed*. Becomes `kept = NOT ephemeral` ([notes plan](slices/notes.md) MT-D6): a meeting not kept carries no transcript; leftover content is a defect to report.
   - `client_device_id` — *moved*. Patterns `import-<uuid>`, `video-meeting`, `room-<id>` are kept.
 - **New in v2:** `org_id` — NULL (R3).
 - **New in v2:** `access` — The personal default defined by `workspaces` (R3).
 - **New in v2:** `indexed_upto_seq` — 0, so the v2 indexer rebuilds the meeting windows (R7).
-- **Checks M1 must satisfy (meetings step 2):** a title of 1 to 256 characters (an empty one takes a name), `ended_at` set exactly when the status is not `active` and never before `started_at`; rows the draft let a client write otherwise are corrected and counted for the owner.
-- **New in v2 (meetings plan, 2026-10-19):** `seconds` (`ended_at − started_at`, at most 6 h), `source`, `deleted_at` NULL, `notes_revision`; the meeting's no-logs setting moves from `users.no_logs` to `meeting_settings.keep_meetings = NOT no_logs` (MT-D6); `users.meeting_auto_tasks` is not carried (it follows tasks, MT-D4).
+- **Checks M1 must satisfy (notes step 2):** a title of 1 to 256 characters (an empty one takes a name), `ended_at` set exactly when the status is not `active` and never before `started_at`; rows the draft let a client write otherwise are corrected and counted for the owner.
+- **New in v2 (notes plan, 2026-10-19):** `seconds` (`ended_at − started_at`, at most 6 h), `source`, `deleted_at` NULL, `notes_revision`; the meeting's no-logs setting moves from `users.no_logs` to `meeting_settings.keep_meetings = NOT no_logs` (MT-D6); `users.meeting_auto_tasks` is not carried (it follows tasks, MT-D4).
 
 #### `transcript_segments` → `transcript_segments` · **transformed**
 
@@ -540,7 +540,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `created_at` — *moved*. Second ordering key for `seq`; NULLs get `started_at` (R10).
 - **New in v2:** `seq` — Derived: `row_number() OVER (PARTITION BY session_id ORDER BY started_at, created_at, id)`, starting at 1 (T-1).
 - `speaker_idx` — *moved*; the draft's `-1` for an undiarised speaker becomes NULL (the check refuses negatives).
-- **New in v2:** `meeting_started_at` — the meeting's `sessions.started_at`: the partition key of the monthly partitions, so `(session_id, seq)` is the unique key and a meeting lives in one partition (meetings plan, §8.1).
+- **New in v2:** `meeting_started_at` — the meeting's `sessions.started_at`: the partition key of the monthly partitions, so `(session_id, seq)` is the unique key and a meeting lives in one partition (notes plan, §8.1).
 - The draft has no `seq`; v2 identity is `(session_id, seq)` (§8.1).
 - The FK to `sessions` has no ON DELETE: load after `sessions`, delete before.
 
@@ -559,12 +559,12 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `draft_markdown` — *moved* to `meeting_own_notes` as the meeting owner's row (MT-D12: each person's own notes are a row of their own); an empty draft writes no row.
   - `enhanced_markdown` — *transformed*. AI output; becomes the write-up as one Markdown section, copied, never regenerated (costly and non-deterministic).
   - `template_id` — *moved*. String: a built-in key or a `meeting_templates.id`.
-- v2 adds `findings_run_id` (the run whose findings the write-up lists, meetings step 6): NULL for a migrated note, whose write-up lists no findings. The person's own notes left `meeting_notes` for `meeting_own_notes` (revision `e5c2a8d4f017`).
+- v2 adds `findings_run_id` (the run whose findings the write-up lists, notes step 6): NULL for a migrated note, whose write-up lists no findings. The person's own notes left `meeting_notes` for `meeting_own_notes` (revision `e5c2a8d4f017`).
 
 #### `meeting_map_nodes` → `meeting_notes.map` · **transformed**
 
 - **Owner → home:** via `session_id` → `sessions.user_id`.
-- Folded into the meeting's map, a tree `{label, children}` built by `parent_node_id` and `position` (meetings plan); user and edited nodes are kept as they are.
+- Folded into the meeting's map, a tree `{label, children}` built by `parent_node_id` and `position` (notes plan); user and edited nodes are kept as they are.
 - **Columns:** 9 of 12 move unchanged; exceptions:
   - `origin` — *moved*. `user` nodes are user content.
   - `edited` — *moved*. An edited AI node is a user decision.
@@ -574,11 +574,11 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 #### `meeting_folders` → `meeting_folders` · **transformed**
 
 - **Owner → home:** own `user_id`.
-- Folders are flat and personal in v2 (meetings plan MT-D7): a subfolder becomes `Parent / Child`, its hex colour is mapped to the nearest of the cabinet's five; `icon`, `favorite`, `position` and `parent_id` are not carried.
+- Folders are flat and personal in v2 (notes plan MT-D7): a subfolder becomes `Parent / Child`, its hex colour is mapped to the nearest of the cabinet's five; `icon`, `favorite`, `position` and `parent_id` are not carried.
 
 #### `meeting_tags` → no v2 table · **dropped**
 
-- Tags are not carried: the cabinet never shows them (meetings plan MT-D7).
+- Tags are not carried: the cabinet never shows them (notes plan MT-D7).
 
 #### `session_tags` → no v2 table · **dropped**
 
@@ -599,16 +599,16 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `raw_transcript_key` — *moved*. Same lifecycle as `audio_key`.
   - `audio_upload_id` — *moved*. An open multipart upload in the draft bucket cannot continue in v2; set to NULL and the run is failed for re-upload (T-3).
   - `user_id` — *moved*. Denormalised owner, no FK.
-- v2 adds `layout` (the template a rewrite asked for, meetings step 6): NULL for a migrated run.
+- v2 adds `layout` (the template a rewrite asked for, notes step 6): NULL for a migrated run.
 
 #### `meeting_workspace_impacts` → no v2 table · **dropped**
 
-- Not carried (meetings plan MT-D7): what a meeting changes is commitments' facts and tasks in v2.
+- Not carried (notes plan MT-D7): what a meeting changes is commitments' facts and tasks in v2.
 
 #### `meeting_result_shares` → `meeting_result_shares` · **transformed**
 
 - **Owner → home:** own `owner_id`.
-- **Rows** (meetings plan MT-D5): `public` and `shared` links without a password are carried, on; `private` links (they never resolved) and links with a password are not — M1 counts them for the owner. Only a link whose `owner_id = sessions.user_id` is carried.
+- **Rows** (notes plan MT-D5): `public` and `shared` links without a password are carried, on; `private` links (they never resolved) and links with a password are not — M1 counts them for the owner. Only a link whose `owner_id = sessions.user_id` is carried.
 - **Columns:**
   - `token` — *moved*. Verbatim: plaintext secret in public URLs.
   - `expires_at` — *moved*.
@@ -630,12 +630,12 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 #### `meeting_import_jobs` → no v2 table · **dropped**
 
-- Folded into runs (meetings plan MT-D7): the native import job answers from its run; a job unfinished at `T0` follows its run (T-3).
-- `file_name` → `meeting_processing_runs.source_filename` of the job's run (meetings step 9b, revision `a8f5b3482221`), at most 512 characters; the job's `id` is the run's.
+- Folded into runs (notes plan MT-D7): the native import job answers from its run; a job unfinished at `T0` follows its run (T-3).
+- `file_name` → `meeting_processing_runs.source_filename` of the job's run (notes step 9b, revision `a8f5b3482221`), at most 512 characters; the job's `id` is the run's.
 
 #### `prompt_executions` → no v2 table · **dropped**
 
-- Assistant answers inside a meeting (the meeting's model executions). Not carried (meetings plan MT-D7): no screen shows them, and in v2 in-meeting answers are turns of the person's Leo thread (agent, capture).
+- Assistant answers inside a meeting (the meeting's model executions). Not carried (notes plan MT-D7): no screen shows them, and in v2 in-meeting answers are turns of the person's Leo thread (agent, capture).
 
 ### 5.5 `knowledge`
 
@@ -1141,7 +1141,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
   - `ip` — *moved*. Personal data.
   - `device_id` — *moved*. Stable device identifier.
 
-### 5.21 `rooms`
+### 5.21 `meetings`
 
 #### `rooms` → `rooms` · **moved**
 
@@ -1169,7 +1169,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 - **Owner → home:** own `owner_id`.
 - **Columns:** all 19 move unchanged.
-- Broadcasts (stream as an entity); owned by `rooms` since D4, kept by the owner's SM-8. Live fields (`status=live`, `pinned_principal`) are reset by M2 if a stream is live at freeze.
+- Broadcasts (stream as an entity); owned by `meetings` (named `rooms` until ADR 0057) since D4, kept by the owner's SM-8. Live fields (`status=live`, `pinned_principal`) are reset by M2 if a stream is live at freeze.
 
 #### `stream_members` → `stream_members` · **moved**
 

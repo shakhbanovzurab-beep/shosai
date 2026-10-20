@@ -35,7 +35,7 @@ TABLES = {
     )
     for kind, name in NAMES.items()
 }
-MEETINGS = ShareableResource("meeting", TABLES["meeting"])
+NOTES = ShareableResource("meeting", TABLES["meeting"])
 FILES = ShareableResource("file", TABLES["file"])
 
 

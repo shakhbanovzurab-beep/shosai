@@ -16,14 +16,14 @@ from shosai.features.workspaces.application.access_policy import WorkspaceAccess
 from shosai.features.workspaces.contracts import Viewer
 from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLog
 from shosai.features.workspaces.module import WORKSPACES
-from tests.features.workspaces.probe_resources import FILES, MEETINGS
+from tests.features.workspaces.probe_resources import FILES, NOTES
 from tests.features.workspaces.random_worlds import worlds
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
 from tests.support.access_model import manageable, readable
 from tests.support.isolation import assert_isolated, canonical_world, write_world
 
-RESOURCES = {"meeting": MEETINGS, "file": FILES}
+RESOURCES = {"meeting": NOTES, "file": FILES}
 POLICY_PROPERTY = settings(
     max_examples=60,
     deadline=None,
@@ -90,12 +90,12 @@ async def test_a_workspace_screen_narrows_to_its_workspace_and_leo_does_not(
     homes: DatabaseAccess, probe_resources: None, run_slot: RunSlot
 ) -> None:
     canon = canonical_world("meeting")
-    await write_world(run_slot.claimed.connections[Home.RU], MEETINGS, canon.world)
+    await write_world(run_slot.claimed.connections[Home.RU], NOTES, canon.world)
     carol = canon.people["carol"]
     org_b = canon.workspaces["b"]
 
-    everywhere = await seen(homes, Home.RU, MEETINGS, Viewer(carol))
-    in_b = await seen(homes, Home.RU, MEETINGS, Viewer(carol, within=org_b))
+    everywhere = await seen(homes, Home.RU, NOTES, Viewer(carol))
+    in_b = await seen(homes, Home.RU, NOTES, Viewer(carol, within=org_b))
 
     assert in_b == readable(canon.world, "meeting", carol, within=org_b)
     assert in_b < everywhere
