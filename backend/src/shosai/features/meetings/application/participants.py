@@ -30,6 +30,7 @@ from shosai.features.meetings.domain.library import (
     participant_name,
     removable,
 )
+from shosai.features.meetings.domain.meetings import PRIVATE_MEETING
 from shosai.features.meetings.infrastructure.meeting_records import (
     ParticipantRecord,
 )
@@ -69,6 +70,8 @@ class Participants:
             )
             if not manageable:
                 raise MeetingReadOnlyError
+            if not meeting.kept:
+                raise AppError(PRIVATE_MEETING, HTTPStatus.CONFLICT)
             by_address = select(ParticipantRecord).where(
                 ParticipantRecord.session_id == meeting.id, ParticipantRecord.email == email
             )

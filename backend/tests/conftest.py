@@ -40,6 +40,7 @@ pytest_plugins = (
     "tests.features.meetings.library_bench",
     "tests.features.meetings.deletion_bench",
     "tests.features.meetings.recording_bench",
+    "tests.features.meetings.native_bench",
 )
 
 

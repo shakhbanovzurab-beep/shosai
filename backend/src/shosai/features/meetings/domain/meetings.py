@@ -20,6 +20,8 @@ WARNING_BEFORE: Final = timedelta(minutes=10)
 # черновик намерил до 92 минут, а запись при этом идёт.
 SILENCE_AFTER: Final = timedelta(minutes=5)
 TITLE_MAX: Final = 256
+# Код отказа для встречи, которую человек не хранит (MT-D6): ей ничего не записывается.
+PRIVATE_MEETING: Final = "private_meeting"
 
 
 class MeetingStatus(StrEnum):

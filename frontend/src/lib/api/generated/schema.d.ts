@@ -1280,6 +1280,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Meeting Settings
+         * @description Whether your meetings are kept.
+         */
+        get: operations["get_meeting_settings_v1_meetings_settings_get"];
+        /**
+         * Put Meeting Settings
+         * @description Keep, or stop keeping, the meetings you start from now.
+         */
+        put: operations["put_meeting_settings_v1_meetings_settings_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/meetings/folders": {
         parameters: {
             query?: never;
@@ -1534,6 +1558,86 @@ export interface paths {
          * @description Assemble the recording; the answer is the receipt to delete the local copy.
          */
         post: operations["complete_audio_upload_v1_me_sessions__session_id__audio__run_id__complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List My Sessions
+         * @description Your newest meetings, at most the 200 newest that match.
+         */
+        get: operations["list_my_sessions_v1_me_sessions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/sessions/{session_id}/full": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get My Session Full
+         * @description The meeting with its transcript and map.
+         */
+        get: operations["get_my_session_full_v1_me_sessions__session_id__full_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/sessions/{session_id}/note": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get My Note
+         * @description Your notes on the meeting, beside Leo's write-up.
+         */
+        get: operations["get_my_note_v1_me_sessions__session_id__note_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/sessions/{session_id}/note/draft": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Update My Note Draft
+         * @description Replace your notes on the meeting; the last write wins.
+         */
+        put: operations["update_my_note_draft_v1_me_sessions__session_id__note_draft_put"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1892,6 +1996,23 @@ export interface components {
          * @enum {string}
          */
         AccountState: "active" | "frozen" | "banned" | "deletion_scheduled" | "deleting" | "transferring" | "deleted";
+        /**
+         * ActionItemOut
+         * @description An action item of Leo's write-up.
+         */
+        ActionItemOut: {
+            /** Id */
+            id: string;
+            /** Text */
+            text: string;
+            /**
+             * Done
+             * @default false
+             */
+            done: boolean;
+            /** Sourcesegmentid */
+            sourceSegmentId: string | null;
+        };
         /**
          * ActionReason
          * @description Why the admin acts, as a code the audit log keeps.
@@ -2857,20 +2978,6 @@ export interface components {
             refresh_token?: string | null;
         };
         /**
-         * MapNodeOut
-         * @description A node of the mind map in pre-order: the root has no parent.
-         */
-        MapNodeOut: {
-            /** Id */
-            id: string;
-            /** Parent Id */
-            parent_id: string | null;
-            /** Depth */
-            depth: number;
-            /** Label */
-            label: string;
-        };
-        /**
          * Me
          * @description The signed-in person as Settings shows them.
          */
@@ -3091,6 +3198,22 @@ export interface components {
             home: components["schemas"]["Home"];
         };
         /**
+         * MeetingSettingsIn
+         * @description Whether to keep the meetings the person starts from now.
+         */
+        MeetingSettingsIn: {
+            /** Keep Meetings */
+            keep_meetings: boolean;
+        };
+        /**
+         * MeetingSettingsOut
+         * @description Whether the person's meetings are kept.
+         */
+        MeetingSettingsOut: {
+            /** Keep Meetings */
+            keep_meetings: boolean;
+        };
+        /**
          * MeetingSource
          * @description How the meeting came to Shosai.
          * @enum {string}
@@ -3147,6 +3270,47 @@ export interface components {
          * @enum {string}
          */
         NoteClient: "web" | "macos" | "windows";
+        /**
+         * NoteDraftUpdate
+         * @description The person's notes as a client sends them; unknown fields are accepted.
+         */
+        NoteDraftUpdate: {
+            /** Markdown */
+            markdown: string;
+            /**
+             * Client
+             * @default web
+             */
+            client: string;
+        };
+        /**
+         * NoteOut
+         * @description The person's notes on a meeting, beside Leo's write-up.
+         */
+        NoteOut: {
+            /**
+             * Meetingid
+             * Format: uuid
+             */
+            meetingId: string;
+            /** Draftmarkdown */
+            draftMarkdown: string;
+            /** Enhancedmarkdown */
+            enhancedMarkdown: string | null;
+            /** Actionitems */
+            actionItems: components["schemas"]["ActionItemOut"][];
+            /** Templateid */
+            templateId: string | null;
+            /**
+             * Updatedat
+             * Format: date-time
+             */
+            updatedAt: string;
+            /** Version */
+            version: number;
+            /** Lastauthoringclient */
+            lastAuthoringClient: string | null;
+        };
         /**
          * NotesState
          * @description Where a meeting's notes are.
@@ -3213,7 +3377,7 @@ export interface components {
         /** Page[MapNodeOut] */
         Page_MapNodeOut_: {
             /** Items */
-            items: components["schemas"]["MapNodeOut"][];
+            items: components["schemas"]["shosai__features__meetings__channels__http__meeting_models__MapNodeOut"][];
             /** Next Cursor */
             next_cursor: string | null;
         };
@@ -3851,6 +4015,29 @@ export interface components {
             items?: components["schemas"]["FindingOut"][] | null;
         };
         /**
+         * SegmentOut
+         * @description A line of the transcript.
+         */
+        SegmentOut: {
+            /** Id */
+            id: string;
+            /** Speaker */
+            speaker: string;
+            /** Speaker Idx */
+            speaker_idx: number | null;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Duration Ms */
+            duration_ms: number;
+            /** Text */
+            text: string;
+            /** Confidence */
+            confidence?: number | null;
+        };
+        /**
          * SessionCreate
          * @description A new meeting: its title and the device it is recorded on (the machine's name).
          */
@@ -3859,6 +4046,52 @@ export interface components {
             title: string;
             /** Client Device Id */
             client_device_id: string;
+        };
+        /**
+         * SessionFull
+         * @description A meeting with its transcript and map.
+         */
+        SessionFull: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /** Status */
+            status: string;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Ended At */
+            ended_at: string | null;
+            /** Segments */
+            segments: components["schemas"]["SegmentOut"][];
+            /** Map Nodes */
+            map_nodes: components["schemas"]["shosai__features__meetings__channels__http__native_shapes__MapNodeOut"][];
+            /** Executions */
+            executions: {
+                [key: string]: string;
+            }[];
+            /** Folder Id */
+            folder_id: string | null;
+            /** Tags */
+            tags: {
+                [key: string]: string;
+            }[];
+            /**
+             * Ephemeral
+             * @default false
+             */
+            ephemeral: boolean;
+            /**
+             * Mcp Shared
+             * @default false
+             */
+            mcp_shared: boolean;
         };
         /**
          * SessionRenamed
@@ -3903,6 +4136,54 @@ export interface components {
             created_at: string;
             /** Updated At */
             updated_at: string | null;
+        };
+        /**
+         * SessionRow
+         * @description A meeting of the native list.
+         */
+        SessionRow: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /** Status */
+            status: string;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+            /** Ended At */
+            ended_at: string | null;
+            /** Duration Ms */
+            duration_ms: number;
+            /** Segments Count */
+            segments_count: number;
+            /** Map Nodes Count */
+            map_nodes_count: number;
+            /** Folder Id */
+            folder_id?: string | null;
+            /** Tags */
+            tags?: {
+                [key: string]: string;
+            }[];
+            /**
+             * Ephemeral
+             * @default false
+             */
+            ephemeral: boolean;
+            /**
+             * Mcp Shared
+             * @default false
+             */
+            mcp_shared: boolean;
+            /** Hub Id */
+            hub_id?: string | null;
+            /** Hub Name */
+            hub_name?: string | null;
         };
         /**
          * SessionTitleUpdate
@@ -4557,6 +4838,50 @@ export interface components {
             /** Effective Plan Id */
             effective_plan_id: string;
             usage: components["schemas"]["MeetingUsageView"];
+        };
+        /**
+         * MapNodeOut
+         * @description A node of the mind map in pre-order: the root has no parent.
+         */
+        shosai__features__meetings__channels__http__meeting_models__MapNodeOut: {
+            /** Id */
+            id: string;
+            /** Parent Id */
+            parent_id: string | null;
+            /** Depth */
+            depth: number;
+            /** Label */
+            label: string;
+        };
+        /**
+         * MapNodeOut
+         * @description A node of the meeting's map.
+         */
+        shosai__features__meetings__channels__http__native_shapes__MapNodeOut: {
+            /** Id */
+            id: string;
+            /** Type */
+            type: string;
+            /** Title */
+            title: string;
+            /** Parent Id */
+            parent_id: string | null;
+            /** Start Offset Ms */
+            start_offset_ms?: number | null;
+            /** Confidence */
+            confidence?: number | null;
+            /**
+             * Origin
+             * @default ai
+             */
+            origin: string;
+            /**
+             * Edited
+             * @default false
+             */
+            edited: boolean;
+            /** Position */
+            position: number;
         };
     };
     responses: never;
@@ -7073,6 +7398,72 @@ export interface operations {
             };
         };
     };
+    get_meeting_settings_v1_meetings_settings_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingSettingsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    put_meeting_settings_v1_meetings_settings_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MeetingSettingsIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MeetingSettingsOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     list_folders_v1_meetings_folders_get: {
         parameters: {
             query?: {
@@ -7651,6 +8042,145 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["UploadStateOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_my_sessions_v1_me_sessions_get: {
+        parameters: {
+            query?: {
+                status?: string | null;
+                q?: string | null;
+                limit?: number;
+                offset?: number;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionRow"][];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_my_session_full_v1_me_sessions__session_id__full_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SessionFull"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    get_my_note_v1_me_sessions__session_id__note_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    update_my_note_draft_v1_me_sessions__session_id__note_draft_put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NoteDraftUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

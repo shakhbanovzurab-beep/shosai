@@ -13,7 +13,8 @@
 - 9a: the import of recordings with its intake and transcribe stages (`stage_wiring.py`);
 - 9b: the native import streamed to the bucket and its job (`channels/http/native_import.py`);
 - 10: the speakers of recordings (`application/diarize_stage.py`, `application/align_stage.py`);
-- 11: the desktop recording's resumable upload (`channels/http/native_audio.py`).
+- 11: the desktop recording's resumable upload (`channels/http/native_audio.py`);
+- 12: the native library and notes, the meetings setting and its `no_logs` mirror.
 
 The folders' and templates' routes come before `/v1/meetings/{meeting_id}`: the first match
 wins, and `folders` is no meeting's id.
@@ -30,6 +31,7 @@ from fastapi import APIRouter
 from shosai.core.account_data.handlers import ACCOUNT_DATA_HANDLERS
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
 from shosai.features.billing.contracts import MEETING_MINUTES
+from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 from shosai.features.meetings.application.account_data import ACCOUNT_DATA, MeetingsAccountData
 from shosai.features.meetings.application.deletion import MeetingDeletion
 from shosai.features.meetings.application.folders import Folders
@@ -41,9 +43,11 @@ from shosai.features.meetings.application.lifecycle import MeetingLifecycle
 from shosai.features.meetings.application.live_meetings import LiveMeetingBinder
 from shosai.features.meetings.application.live_transcript import LiveTranscript
 from shosai.features.meetings.application.meeting_content import MeetingContent
+from shosai.features.meetings.application.meeting_settings import MeetingSettings
 from shosai.features.meetings.application.minutes import MeetingMinutesCount
 from shosai.features.meetings.application.my_notes import MyNotes
 from shosai.features.meetings.application.native_imports import NativeImports
+from shosai.features.meetings.application.native_library import NativeLibrary
 from shosai.features.meetings.application.participants import Participants
 from shosai.features.meetings.application.pipeline import PipelineEngine
 from shosai.features.meetings.application.recording_uploads import RecordingUploads
@@ -61,11 +65,14 @@ from shosai.features.meetings.channels.http.meetings import build_meetings_route
 from shosai.features.meetings.channels.http.my_notes import build_my_notes_router
 from shosai.features.meetings.channels.http.native_audio import build_native_audio_router
 from shosai.features.meetings.channels.http.native_import import build_native_import_router
+from shosai.features.meetings.channels.http.native_library import build_native_library_router
 from shosai.features.meetings.channels.http.native_me_sessions import (
     build_native_me_sessions_router,
 )
 from shosai.features.meetings.channels.http.native_sessions import build_native_sessions_router
+from shosai.features.meetings.channels.http.native_words import NativeWords, load_native_words
 from shosai.features.meetings.channels.http.runs import build_runs_router
+from shosai.features.meetings.channels.http.settings import build_settings_router
 from shosai.features.meetings.channels.http.templates import build_templates_router
 from shosai.features.meetings.channels.http.write_up import build_write_up_router
 from shosai.features.meetings.channels.subscriptions import subscriptions
@@ -108,12 +115,15 @@ from shosai.features.meetings.stage_wiring import pipeline_stages
 
 
 def http_routers(
-    services: CoreServices, pipeline: tuple[MeetingLifecycle, PipelineEngine], links: PartLinks
+    services: CoreServices,
+    pipeline: tuple[MeetingLifecycle, PipelineEngine],
+    extras: tuple[PartLinks, NativeWords, MeetingSettings],
 ) -> tuple[APIRouter, ...]:
     """Meetings' routes; the folders' and templates' come before `/v1/meetings/{meeting_id}`,
     the native import's before `/v1/me/sessions/{session_id}`."""
     transactions, ports = services.transactions, services.ports
     lifecycle, engine = pipeline
+    links, words, settings = extras
     library = MeetingLibrary(transactions, ports)
     deletion = MeetingDeletion(transactions, (ports, services.outbox))
     rewrites = WriteUpRewrites(transactions, (ports, services.effects, engine))
@@ -125,7 +135,9 @@ def http_routers(
     recordings = RecordingUploads(
         transactions, (ports, engine, links), (services.uploads, services.objects)
     )
+    my_notes = MyNotes(transactions, ports)
     return (
+        build_settings_router(settings, ports),
         build_folders_router(Folders(transactions, services.effects), ports),
         build_templates_router(Templates(transactions, services.effects), ports),
         build_native_sessions_router(lifecycle, ports),
@@ -133,14 +145,13 @@ def http_routers(
             (native_imports, ImportJobs(transactions, ports)), ports, services.rate_limiter
         ),
         build_native_audio_router(recordings, ports),
+        build_native_library_router((NativeLibrary(transactions, ports), my_notes, words), ports),
         build_native_me_sessions_router((library, deletion), ports),
         build_runs_router((lifecycle, RunViews(transactions, ports)), ports),
         build_write_up_router(rewrites, ports, services.rate_limiter),
         build_meetings_router((library, deletion), ports),
         build_meeting_content_router(MeetingContent(transactions, ports), ports),
-        build_my_notes_router(
-            (MyNotes(transactions, ports), Participants(transactions, ports)), ports
-        ),
+        build_my_notes_router((my_notes, Participants(transactions, ports)), ports),
         build_admin_meetings_router(support, ports),
         build_imports_router(imports, ports),
     )
@@ -165,9 +176,11 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     sweeps = MeetingSweeps(transactions, (ports, lifecycle, transcript_metrics))
     hidden = HiddenMeetings(transactions, (ports, RunObjects(transactions, services.objects)))
     recovery = RunRecovery(transactions, (engine, pipeline_metrics))
+    settings = MeetingSettings(transactions)
+    extras = (load_native_words(), settings)
     async with part_client() as http:
         yield FeatureParts(
-            http_routers=http_routers(services, (lifecycle, engine), PartLinks(http)),
+            http_routers=http_routers(services, (lifecycle, engine), (PartLinks(http), *extras)),
             task_handlers=task_handlers((sweeps, hidden), (engine, recovery)),
             subscriptions=subscriptions(),
             periodic_jobs=PERIODIC_JOBS,
@@ -176,6 +189,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 MEETING_MINUTES.bind(MeetingMinutesCount()),
                 TRANSCRIPT_STORE.bind(LiveTranscript(transactions, transcript_metrics)),
                 LIVE_MEETINGS.bind(LiveMeetingBinder(ports)),
+                ME_CONTRIBUTIONS.bind(settings),
             ),
         )
 

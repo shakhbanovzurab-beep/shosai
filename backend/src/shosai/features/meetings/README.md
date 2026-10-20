@@ -116,3 +116,10 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/intake_stage.py` — a desktop recording's meeting counts the larger of the live and the recorded length once; only what the recording adds is checked against the minutes left.
 - `application/write_up_stage.py` — a desktop recording rewrites only Leo's automatic write-up; the person's own notes are never written by a run.
 
+## The native library and notes; no-logs (step 12, MT-D1, MT-D6, MT-D12)
+
+- `channels/http/native_library.py`, `channels/http/native_shapes.py` — `GET /v1/me/sessions` (a bare array of the person's newest 200 meetings matching `status` and `q`, `limit` and `offset` within them), `GET …/{id}/full` (lines with their `seq` as string ids, speakers worded, the map in pre-order), `GET …/{id}/note` and `PUT …/note/draft` (the person's own notes beside Leo's write-up as Markdown and its action items) in the draft's shapes.
+- `channels/http/native_words.py`, `native_words.json` — "Speaker N" and the write-up's headings in the 16 languages, the cabinet's own translations, kept equal by a test.
+- `application/meeting_settings.py`, `channels/http/settings.py` — `GET` and `PUT /v1/meetings/settings {keep_meetings}`; the native `/v1/auth/me` gets `no_logs` from it.
+- No-logs (MT-D6): a meeting not kept stores no line, own notes, participant, finding, recording or import (409 `private_meeting`, 422 `import_unavailable_no_logs`); it is purged at its end with only its minutes kept.
+

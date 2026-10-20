@@ -6,7 +6,8 @@ owner — nor published by a share link. Before a person writes any, theirs are 
 write replaces the text — the last write wins — and the version grows by one in the same
 statement, so two clients writing at once both count; the writing client is recorded. The
 cabinet's route keeps the text to 50 000 characters, the native one to 256 KiB. The notes
-are the writer's rows, written in their own scope.
+are the writer's rows, written in their own scope. A meeting that is not kept (MT-D6)
+stores none: 409 `private_meeting`.
 """
 
 from collections.abc import Callable
@@ -25,6 +26,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal
 from shosai.features.meetings.application.visibility import meeting_for
 from shosai.features.meetings.domain.library import LibraryRuleError, NoteClient, checked_notes
+from shosai.features.meetings.domain.meetings import PRIVATE_MEETING
 from shosai.features.meetings.infrastructure.own_notes_records import OwnNotesRecord
 from shosai.features.workspaces.contracts import ACCESS_POLICY
 
@@ -89,6 +91,8 @@ class MyNotes:
         now = self._clock()
         async with self._transactions.begin(principal.scope()) as session:
             meeting, _ = await meeting_for(session, policy, principal.user_id, meeting_id)
+            if not meeting.kept:
+                raise AppError(PRIVATE_MEETING, HTTPStatus.CONFLICT)
             mine = {"markdown": markdown, "client": writer.value, "updated_at": now}
             version = await session.scalar(
                 insert(OwnNotesRecord)

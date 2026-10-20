@@ -33,11 +33,10 @@ from shosai.features.meetings.application.lifecycle import RunStarter
 from shosai.features.meetings.application.run_rows import ensure_run
 from shosai.features.meetings.application.visibility import meeting_scope
 from shosai.features.meetings.contracts import MeetingNotFoundError
-from shosai.features.meetings.domain.meetings import MeetingSource, MeetingStatus
+from shosai.features.meetings.domain.meetings import PRIVATE_MEETING, MeetingSource, MeetingStatus
 from shosai.features.meetings.domain.recording_upload import (
     NO_PARTS,
     NO_UPLOAD,
-    PRIVATE_MEETING,
     UploadState,
     object_key,
     part_refusal,

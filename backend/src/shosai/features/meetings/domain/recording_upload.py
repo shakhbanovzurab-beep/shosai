@@ -19,7 +19,6 @@ FILENAME_MAX: Final = 200
 # Насколько раньше встречи могла начаться запись: не дальше потолка встречи.
 LEAD_MAX_MS: Final = 6 * 3600 * 1000
 
-PRIVATE_MEETING: Final = "private_meeting"
 NO_UPLOAD: Final = "no_upload"
 NO_PARTS: Final = "no_parts"
 BAD_PART: Final = "bad_part"
