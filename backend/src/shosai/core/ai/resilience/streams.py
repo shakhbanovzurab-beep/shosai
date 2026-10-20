@@ -52,11 +52,12 @@ return 1
 class StreamCap:
     """Counts each user's interactive streams and refuses the one over the cap."""
 
-    def __init__(self, client: Redis, cap: int) -> None:
+    def __init__(self, client: Redis, cap: int, deadline: float = VALKEY_DEADLINE) -> None:
         self._client = client
         self._join = client.register_script(JOIN_SCRIPT)
         self._beat = client.register_script(BEAT_SCRIPT)
         self._cap = cap
+        self._deadline = deadline
         self._outages = OutageLog("Valkey не ответил лимиту потоков: лимит не действует")
 
     @asynccontextmanager
@@ -70,7 +71,7 @@ class StreamCap:
         essential = "1" if context.call_class is CallClass.ESSENTIAL else "0"
         args: list[str | int] = [self._cap, STALE_MS, member, essential]
         try:
-            async with asyncio.timeout(VALKEY_DEADLINE):
+            async with asyncio.timeout(self._deadline):
                 joined = int(await self._join(keys=[key], args=args)) == 1
         except REDIS_FAILURES as error:
             self._outages.failed(error, operation="join")
@@ -93,7 +94,7 @@ class StreamCap:
     async def _leave(self, key: str, member: str) -> None:
         """Leave the user's streams; when Valkey is out, the member goes in 120 s unbeaten."""
         try:
-            async with asyncio.timeout(VALKEY_DEADLINE):
+            async with asyncio.timeout(self._deadline):
                 await self._client.zrem(key, member)
         except REDIS_FAILURES as error:
             self._outages.failed(error, operation="leave")
@@ -102,7 +103,7 @@ class StreamCap:
         while True:
             await asyncio.sleep(HEARTBEAT)
             try:
-                async with asyncio.timeout(VALKEY_DEADLINE):
+                async with asyncio.timeout(self._deadline):
                     await self._beat(keys=[key], args=[STALE_MS, member])
             except REDIS_FAILURES as error:
                 self._outages.failed(error, operation="heartbeat")

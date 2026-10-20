@@ -69,6 +69,9 @@ from tests.doubles.pyannote import ScriptedPyannote
 USER_ID = uuid.UUID("0190f0f0-0000-7000-8000-0000000000a1")
 ORG_ID = uuid.UUID("0190f0f0-0000-7000-8000-0000000000b1")
 CHAT_MODEL = ModelRef(Provider.OPENROUTER, "probe/chat")
+# Тесты счёта потоков ждут Valkey дольше 50 мс: под нагрузкой CI ответ опаздывает, а сбой
+# Valkey проигрывают отдельные тесты со своим клиентом.
+COUNTING_DEADLINE = 5.0
 ROUTE = ModelRoute(CHAT_MODEL)
 
 
@@ -242,7 +245,7 @@ def ai_bench(
     sessions = LiveSessions(minutes, spend, connect_timeout=5.0, renew_every=0.2)
     limits = UserGuards(
         InputCaps(context_tokens=32_000, images=6, image_bytes=8 * MEGABYTE),
-        StreamCap(valkey, cap=2),
+        StreamCap(valkey, cap=2, deadline=COUNTING_DEADLINE),
     )
     providers = AiProviders(clients, runner, sessions, limits)
     return AiBench(

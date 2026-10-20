@@ -22,6 +22,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kv.keys import build_key
 from tests.core.ai.bench import (
     CHAT_MODEL,
+    COUNTING_DEADLINE,
     ROUTE,
     USER_ID,
     Doubles,
@@ -49,7 +50,7 @@ def of(call_class: CallClass, origin: CallOrigin = CallOrigin.INTERACTIVE) -> Ca
 async def test_a_third_interactive_stream_is_refused_and_an_essential_one_counts(
     valkey: Redis,
 ) -> None:
-    cap = StreamCap(valkey, cap=2)
+    cap = StreamCap(valkey, cap=2, deadline=COUNTING_DEADLINE)
     streams = build_key("ai", "streams", USER_ID.hex)
 
     async with AsyncExitStack() as held:
@@ -89,7 +90,7 @@ async def test_a_stream_over_the_cap_is_refused_before_the_provider_is_asked(
     )
     bench = ai_bench(homes.transactions, doubles=Doubles(valkey=valkey))
     bench.openrouter.answer("chat/completions", stream_answer(["Hi."], usage(1, 1, cost=0.0)))
-    cap = StreamCap(valkey, cap=2)
+    cap = StreamCap(valkey, cap=2, deadline=COUNTING_DEADLINE)
 
     async with cap.held(of(CallClass.STANDARD)), cap.held(of(CallClass.STANDARD)):
         with pytest.raises(AiCallError) as refused:
