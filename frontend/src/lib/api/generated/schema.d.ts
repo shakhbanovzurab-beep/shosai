@@ -1716,6 +1716,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/meetings/imports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Import Recording
+         * @description Turn your uploaded recording into a meeting with a transcript and notes.
+         */
+        post: operations["import_recording_v1_meetings_imports_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2577,6 +2597,33 @@ export interface components {
          * @enum {string}
          */
         Home: "ru" | "eu";
+        /**
+         * ImportIn
+         * @description The upload to turn into a meeting.
+         */
+        ImportIn: {
+            /**
+             * Upload Id
+             * Format: uuid
+             */
+            upload_id: string;
+        };
+        /**
+         * ImportStarted
+         * @description The meeting an upload became and the run that transcribes it.
+         */
+        ImportStarted: {
+            /**
+             * Meeting Id
+             * Format: uuid
+             */
+            meeting_id: string;
+            /**
+             * Run Id
+             * Format: uuid
+             */
+            run_id: string;
+        };
         /**
          * IndexStage
          * @description How far knowledge got with a file Leo uses (the cabinet's `IndexStatus`).
@@ -7849,6 +7896,41 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    import_recording_v1_meetings_imports_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ImportStarted"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

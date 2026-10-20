@@ -81,3 +81,13 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/hidden_meetings.py` — every hour per home, meetings deleted 7 days ago go with everything under them; billing's tombstone once; the runs' objects deleted after the commit (`infrastructure/run_objects.py`).
 - `application/support_meetings.py`, `channels/http/admin_meetings.py` — support's audited page and restore, refused while identity's deletion window runs (`application/account_window.py`, `channels/subscriptions.py`).
 - `channels/http/native_me_sessions.py` — the native rename and deletion.
+
+## Imports and transcription (step 9a, MT-D10)
+
+- `application/imports.py`, `channels/http/imports.py` — `POST /v1/meetings/imports {upload_id}` (202): files' claim and the meeting (source `import`) with its run in one transaction; a repeat with the same upload answers the same meeting and run; 409 `upload_not_claimable`, 409 `meetings_not_kept`.
+- `domain/recordings.py` — the allowed containers and audio codecs, the 6 hours, parts of at most 5 minutes ending in the latest pause after their first minute.
+- `infrastructure/media_tools.py` — `ffprobe` and `ffmpeg` as subprocesses under `prlimit` (address space, CPU, open files), a wall-clock limit that kills the process group, `PATH` only, the `file` protocol only; a hostile file fails its call, never the worker.
+- `application/intake_stage.py` — the header read before any decoder: `unsupported_audio_format`, `recording_too_long`, billing's `covers` (`upload_exceeds_minutes`); the meeting takes the recording's length.
+- `application/transcribe_stage.py` — pauses found, parts cut to Opus, at most four asked at once under `meetings:{run}:transcribe:{n}`, segments moved by their part's start, the raw transcript kept for 72 hours (O4, `transient/transcript/{run}.json`), the lines written once per run with fresh `seq`s.
+- `application/scratch.py` — the stage's scratch directory, the object streamed into it, removed whatever the end.
+- `stage_wiring.py` — a process runs the intake and transcribe stages only with `MEETINGS_TRANSCRIBE_MODEL` and the tools on its path.

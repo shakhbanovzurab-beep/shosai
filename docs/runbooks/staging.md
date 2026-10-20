@@ -85,6 +85,8 @@ Files download through the edge (ADR 0055 point 8, FL-D9): the API answers `http
 
 Outside development the backend refuses to start without `MEETINGS_NOTES_MODEL` (meetings plan step 6): the OpenRouter model that writes the findings and Leo's write-up until studio assigns the `notes` role. `render-env.py` writes `google/gemini-3.8-flash`, or the owner's `MEETINGS_NOTES_MODEL` and `MEETINGS_NOTES_FALLBACK_MODEL` from `/root/shosai/.env` when set. A release that stops at the `settings` step naming it needs «Change a setting or a secret» first.
 
+The same holds for `MEETINGS_TRANSCRIBE_MODEL` (meetings plan step 9a): the OpenRouter model that transcribes imported recordings with timed segments. `render-env.py` writes `openai/whisper-large-v3` (priced per second of audio by revision `d5e2a7c9f4b1`), or the owner's `MEETINGS_TRANSCRIBE_MODEL` and `MEETINGS_TRANSCRIBE_FALLBACK_MODEL` when set. `MEETINGS_MEDIA_SECONDS` (300) and `MEETINGS_MEDIA_MEMORY_MB` (1024) bound each `ffprobe` and `ffmpeg` call; the defaults need no entry.
+
 ## Database roles
 
 Each managed home has three roles: the migrator and the application role (Timeweb's panel), and the sweep role `shosai_sweeper` ([ADR 0053](../adr/0053-workspaces-access-rls-invitations-and-deletion.md) point 2). The sweep role cannot log in; workers and the scheduler switch to it inside a transaction (`SET LOCAL ROLE`), and row-level security lets it read every tenant's rows. The application role must not inherit it, or every request would see every tenant. PostgreSQL 16 or later is required for `WITH INHERIT FALSE`.

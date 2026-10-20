@@ -35,6 +35,7 @@ STORAGE_ORIGIN_SCHEME = "https://"
 SERVER_NAME = "shosai.tech"
 # Модель OpenRouter по умолчанию для заметок встреч, та же, что в .env.example.
 NOTES_MODEL = "google/gemini-3.8-flash"
+TRANSCRIBE_MODEL = "openai/whisper-large-v3"
 GENERATED = (
     "VALKEY_PASSWORD",
     "REDIS_CACHE_PASSWORD",
@@ -76,6 +77,8 @@ COPIED = (
     "IDENTITY_ADMIN_PASSWORD_HASH",
     "MEETINGS_NOTES_MODEL",
     "MEETINGS_NOTES_FALLBACK_MODEL",
+    "MEETINGS_TRANSCRIBE_MODEL",
+    "MEETINGS_TRANSCRIBE_FALLBACK_MODEL",
     *(f"HOME_{home}_S3_{part}" for home in ("RU", "EU")
       for part in ("ENDPOINT_URL", "REGION", "BUCKET", "ACCESS_KEY_ID", "SECRET_ACCESS_KEY")),
 )
@@ -181,6 +184,7 @@ def backend_env(source: dict[str, str], generated: dict[str, str]) -> dict[str, 
         "FILES_DOWNLOAD_BASE_URL": f"https://{SERVER_NAME}/dl",
         # Модель заметок встреч до studio (meetings шаг 6); владелец может задать свою в .env.
         "MEETINGS_NOTES_MODEL": NOTES_MODEL,
+        "MEETINGS_TRANSCRIBE_MODEL": TRANSCRIBE_MODEL,
     }
     env |= {key: source[key] for key in COPIED if source.get(key)}
     for home in ("RU", "EU"):

@@ -99,6 +99,7 @@
     "POST /v1/me/uploads",
     "POST /v1/me/uploads/{upload_id}/complete",
     "POST /v1/meetings/folders",
+    "POST /v1/meetings/imports",
     "POST /v1/meetings/templates",
     "POST /v1/meetings/{meeting_id}/participants",
     "POST /v1/meetings/{meeting_id}/write-up",

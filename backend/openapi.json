@@ -6450,6 +6450,66 @@
           }
         }
       }
+    },
+    "/v1/meetings/imports": {
+      "post": {
+        "tags": [
+          "meetings"
+        ],
+        "summary": "Import Recording",
+        "description": "Turn your uploaded recording into a meeting with a transcript and notes.",
+        "operationId": "import_recording_v1_meetings_imports_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportStarted"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -8383,6 +8443,43 @@
         ],
         "title": "Home",
         "description": "A data home: a separate PostgreSQL cluster in its own jurisdiction.\n\nThe value is the short code carried by the access token and by task payloads.\nThe directory and data without an owner live in the EU home (ADR 0005, ADR 0010).\nEach home has its own bucket; the home is not part of an object key: an object lives\nin the bucket of its pointer's home (ADR 0044)."
+      },
+      "ImportIn": {
+        "properties": {
+          "upload_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Upload Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "upload_id"
+        ],
+        "title": "ImportIn",
+        "description": "The upload to turn into a meeting."
+      },
+      "ImportStarted": {
+        "properties": {
+          "meeting_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Meeting Id"
+          },
+          "run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Run Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meeting_id",
+          "run_id"
+        ],
+        "title": "ImportStarted",
+        "description": "The meeting an upload became and the run that transcribes it."
       },
       "IndexStage": {
         "type": "string",

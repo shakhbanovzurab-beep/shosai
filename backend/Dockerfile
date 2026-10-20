@@ -32,6 +32,11 @@ LABEL org.opencontainers.image.source="https://github.com/shakhbanovzurab-beep/s
       org.opencontainers.image.title="shosai-backend" \
       org.opencontainers.image.description="Shosai backend: api, ws, workers, scheduler and migrate roles" \
       org.opencontainers.image.licenses="LicenseRef-Shosai-Commercial"
+# ffmpeg и ffprobe — подпроцессы стадий записей (MT-D10): с пределами времени и памяти через
+# prlimit (util-linux образа), без сети. Пакеты Debian, без рекомендованных, списки apt удалены.
+RUN apt-get update \
+    && apt-get install --yes --no-install-recommends ffmpeg \
+    && rm -rf /var/lib/apt/lists/*
 RUN groupadd --system --gid 1001 shosai \
     && useradd --system --uid 1001 --gid 1001 --no-create-home --shell /usr/sbin/nologin shosai
 COPY --link --from=build --chown=1001:1001 /app/.venv /app/.venv

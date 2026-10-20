@@ -188,6 +188,10 @@ jobs:
           cache-dependency-glob: backend/uv.lock
       - name: Install locked dependencies
         run: uv sync --locked
+      - name: Install ffmpeg
+        # The recording tests run the real ffprobe and ffmpeg under prlimit (MT-D10),
+        # as the runtime image does.
+        run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends ffmpeg
       - name: Ruff format
         run: uv run ruff format --check .
       - name: Ruff lint

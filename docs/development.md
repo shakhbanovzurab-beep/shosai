@@ -107,6 +107,7 @@ uv run --env-file ../.env shosai api                # public API on 127.0.0.1:80
 - A role refuses to start while a home's schema is behind the code: run `shosai migrate upgrade` first. A home that is down does not stop the start: its requests get 503 until it answers again, and `/readyz` reports it `down`.
 - `Ctrl+C` or `SIGTERM` stops a role cleanly: it stops taking work, finishes what is in flight, then closes. Logs are JSON lines on stdout.
 - Locally every role listens on `127.0.0.1` only (`BIND_HOST`); the image binds `0.0.0.0` inside its container.
+- Recordings are read, measured and cut by `ffprobe` and `ffmpeg` under `prlimit` (meetings MT-D10). The runtime image has them; on a development machine install them (`sudo apt-get install --no-install-recommends ffmpeg`) and set `MEETINGS_TRANSCRIBE_MODEL`, or a process runs no intake or transcribe stage and imported recordings wait.
 
 ### Mail
 
@@ -207,6 +208,7 @@ Backend tests use them as [ADR 0009](adr/0009-test-databases-claimed-by-advisory
 - On claim it returns the slot to the state the init script prepares — it drops a crashed run's objects and the extensions `shosai_migrator` created, and restores default privileges, rights on the `public` schema and on the database, and database settings — then records a fingerprint of each home's catalog; at the end of the run both catalogs must match it, or the run fails and names the objects.
 - After the claim both homes are migrated to the head; at the end they are downgraded to the base and the version table is dropped. A test that writes application data takes the `homes` fixture, which empties every application table of both homes after it.
 - Run from `backend/` with the environment up: `uv run --env-file ../.env pytest`. Tests that do not touch the databases also run without it.
+- The recording tests run the real `ffprobe` and `ffmpeg`; they need the tools on the path, as CI installs them.
 - More parallel runs need more slots: raise `LOCAL_TEST_DATABASE_COUNT`, reset, and raise `TEST_DATABASE_SLOTS` (at most 15).
 
 The slot also names the run's share of the shared services: database `N` of Valkey and of the Redis cache, and the prefix `tests/slot-<N>/` of the bucket.
