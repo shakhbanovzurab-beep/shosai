@@ -2,19 +2,24 @@
 
 Meetings keeps the window on the person's setting row from identity's events: scheduled
 marks it, cancelled clears it. The row keeps the time of the last event applied, so events
-delivered out of order end where the latest one says, and a repeat changes nothing. While
-it is marked, support neither lists nor restores the person's meetings; serving them to
-nobody joins with plan step 15.
+delivered out of order end where the latest one says, and a repeat changes nothing. The
+same transaction marks every personal meeting of the person, hidden ones included, so
+`visible_meetings` serves them to nobody — their owner, a workspace they are shared in,
+Leo, other slices — and their share links stop opening; a cancellation shows them again,
+unchanged. A meeting made while the mark stands is made hidden. A workspace's meeting is
+the workspace's and stays. While it is marked, support neither lists nor restores the
+person's meetings.
 """
 
 from datetime import datetime
 from uuid import UUID
 
 import structlog
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, or_, select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.features.meetings.infrastructure.meeting_records import MeetingRecord
 from shosai.features.meetings.infrastructure.notes_records import SettingsRecord
 
 log = structlog.stdlib.get_logger(__name__)
@@ -43,7 +48,17 @@ async def apply_account_window(
     if applied is None:
         log.info("Устаревшее событие окна удаления пропущено", user_id=str(user_id))
         return False
-    log.info("Окно удаления аккаунта для встреч", user_id=str(user_id), hidden=hidden)
+    # Через соединение: оператор ядра, и число отмеченных встреч известно без RETURNING.
+    connection = await session.connection()
+    marked = await connection.execute(
+        update(MeetingRecord)
+        .where(MeetingRecord.user_id == user_id, MeetingRecord.org_id.is_(None))
+        .values(account_hidden=hidden)
+    )
+    log.info(
+        "Окно удаления аккаунта для встреч",
+        user_id=str(user_id), hidden=hidden, meetings=marked.rowcount,
+    )  # fmt: skip
     return True
 
 

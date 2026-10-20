@@ -82,6 +82,7 @@ async def open_import(
         title=title_or_default(PurePosixPath(recording.filename).stem, now),
         status=MeetingStatus.COMPLETED.value, source=MeetingSource.IMPORT.value,
         started_at=now, ended_at=now, seconds=0, created_at=now, updated_at=now,
+        account_hidden=settings is not None and settings.account_hidden,
     )  # fmt: skip
     session.add(meeting)
     await session.flush()

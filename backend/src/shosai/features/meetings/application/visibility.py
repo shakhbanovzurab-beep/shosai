@@ -1,9 +1,9 @@
 """Which meetings a person sees: the access policy inside meetings' own query (inv-14).
 
-A meeting is visible when workspaces' policy admits it for the viewer and it is not hidden
-by a deletion (MT-D8). Every list, read, search hit, Leo read and share of meetings starts
-here; identity's deletion window joins the rule with plan step 15. A change is written in
-the meeting's own scope (`meeting_scope`).
+A meeting is visible when workspaces' policy admits it for the viewer, it is not hidden by
+a deletion (MT-D8) and its owner's account is not in identity's deletion window (ADR 0045
+point 6). Every list, read, search hit, Leo read, other slices' read and share of meetings
+starts here. A change is written in the meeting's own scope (`meeting_scope`).
 """
 
 from uuid import UUID
@@ -23,7 +23,9 @@ from shosai.features.workspaces.contracts import AccessPolicy, Viewer
 def visible_meetings(policy: AccessPolicy, viewer: Viewer) -> Select[MeetingRecord]:
     """The meetings the viewer may see now."""
     return select(MeetingRecord).where(
-        policy.readable(MEETING_RESOURCE, viewer), MeetingRecord.deleted_at.is_(None)
+        policy.readable(MEETING_RESOURCE, viewer),
+        MeetingRecord.deleted_at.is_(None),
+        MeetingRecord.account_hidden.is_(False),
     )
 
 

@@ -24,6 +24,7 @@ from sqlalchemy import (
     Table,
     Text,
     Uuid,
+    false,
     func,
     text,
     true,
@@ -115,6 +116,8 @@ class MeetingRecord(ModelBase):
     lines_missing: Mapped[int] = mapped_column(Integer, server_default="0")
     # Удалённая встреча скрыта 7 дней (MT-D8).
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Личная встреча аккаунта в окне удаления не видна никому (ADR 0045, п. 6).
+    account_hidden: Mapped[bool] = mapped_column(Boolean, server_default=false())
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 

@@ -17,6 +17,8 @@
 - 12: the native library and notes, the meetings setting and its `no_logs` mirror;
 - 13: the share link and its public page and comments (`channels/http/shared.py`);
 - 14: Leo's four read tools over the meetings a person may read (`channels/agent_tools.py`).
+- 15a: identity's deletion window serves an account's meetings to nobody, and the readers
+  other slices use (`application/meeting_reader.py`).
 
 The folders' and templates' routes come before `/v1/meetings/{meeting_id}`: the first match
 wins, and `folders` is no meeting's id.
@@ -45,6 +47,7 @@ from shosai.features.meetings.application.lifecycle import MeetingLifecycle
 from shosai.features.meetings.application.live_meetings import LiveMeetingBinder
 from shosai.features.meetings.application.live_transcript import LiveTranscript
 from shosai.features.meetings.application.meeting_content import MeetingContent
+from shosai.features.meetings.application.meeting_reader import MeetingsFindings, MeetingsReader
 from shosai.features.meetings.application.meeting_settings import MeetingSettings
 from shosai.features.meetings.application.minutes import MeetingMinutesCount
 from shosai.features.meetings.application.my_notes import MyNotes
@@ -86,7 +89,12 @@ from shosai.features.meetings.channels.http.templates import build_templates_rou
 from shosai.features.meetings.channels.http.write_up import build_write_up_router
 from shosai.features.meetings.channels.subscriptions import subscriptions
 from shosai.features.meetings.channels.tasks import PERIODIC_JOBS, task_handlers
-from shosai.features.meetings.contracts import LIVE_MEETINGS, TRANSCRIPT_STORE
+from shosai.features.meetings.contracts import (
+    LIVE_MEETINGS,
+    MEETING_FINDINGS,
+    MEETING_READER,
+    TRANSCRIPT_STORE,
+)
 from shosai.features.meetings.contracts.events import (
     MeetingDeleted,
     MeetingEnded,
@@ -203,6 +211,8 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 MEETING_MINUTES.bind(MeetingMinutesCount()),
                 TRANSCRIPT_STORE.bind(LiveTranscript(transactions, transcript_metrics)),
                 LIVE_MEETINGS.bind(LiveMeetingBinder(ports)),
+                MEETING_READER.bind(MeetingsReader(ports)),
+                MEETING_FINDINGS.bind(MeetingsFindings(ports)),
                 ME_CONTRIBUTIONS.bind(settings),
             ),
         )

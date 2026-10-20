@@ -132,6 +132,7 @@ class MeetingLifecycle:
                 started_at=now,
                 client_device_id=clean_device,
                 kept=settings is None or settings.keep_meetings,
+                account_hidden=settings is not None and settings.account_hidden,
                 created_at=now,
                 updated_at=now,
             )

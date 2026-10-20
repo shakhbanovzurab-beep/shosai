@@ -134,3 +134,9 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `channels/agent_tools.py` — `meetings.search`, `meetings.get`, `meetings.read_transcript`, `meetings.list_findings`: English specs, results labelled `meeting:speech` (Leo §7.4, core's `ToolSpec.provenance`).
 - `channels/agent_tool_reads.py` — each sees only what `visible_meetings` admits (a meeting the person may not read is `not_found`); a transcript page holds the lines that fit its 6 000-token budget and names where the next starts.
 
+
+## Other slices' readers and identity's deletion window (step 15a)
+
+- `application/meeting_reader.py` — `meetings.meeting_reader` (`facts`, `transcript`, `readable`) and `meetings.meeting_findings` (`of`), read in the caller's transaction from `visible_meetings` with a meeting not kept left out: the facts of a batch in three queries, transcript pages as spoken by the cabinet's cursor (1 to 500 lines), the current notes' findings in order; a meeting the viewer may not read is absent or `meeting_not_found`.
+- `application/account_window.py` — identity's `deletion_scheduled` marks every personal meeting of the person (`sessions.account_hidden`, revision `d7fdb62f4fd0`) in the delivery's transaction, `deletion_cancelled` clears it, an older event changes nothing; a meeting made while the mark stands is made hidden. `visible_meetings` serves a marked meeting to nobody — its owner, a workspace it is shared in, Leo, the readers — and its link does not open; the pipeline and the sweeps still finish it, so a cancellation brings everything back unchanged.
+- Waits (step 15b): the workspace data spec and handler on workspaces' registry (its step 11), the consumers of `workspaces.member.removed` and `.workspace.deleted`, and the account data's export narrowed to personal meetings — together with the first source of a workspace's own meetings, since every meeting is personal today.
