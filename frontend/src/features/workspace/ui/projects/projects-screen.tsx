@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { differenceInCalendarDays, isSameYear, parseISO } from "date-fns";
 import { FolderKanban, Plus } from "lucide-react";
 import { useFormatter, useTranslations } from "use-intl";
 
@@ -10,10 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { useNow } from "@/hooks/use-now";
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
+import { useTimeZone } from "@/i18n/time-zone";
 import { Link } from "@/lib/navigation";
 
 import type { Task } from "../../domain/content-contract";
 import type { Project } from "../../domain/contract";
+import { daysFromToday, isThisYear } from "../../domain/format";
 import { projectPath } from "../../domain/paths";
 import { progressOf } from "../../domain/tasks";
 import { useTasks, useWorkspace } from "../../model/use-workspace";
@@ -26,21 +28,22 @@ import { ProjectProgress, ProjectStatusBadge } from "./project-meta";
 const ORDER: Record<Project["status"], number> = { active: 0, planned: 1, paused: 2, completed: 3 };
 
 /**
- * "Overdue · Oct 3", "Target today", "Target Fri", "Target Oct 20". Days count in the viewer's calendar, as
- * `now` does; the target is a calendar day, which parses as UTC midnight and is formatted in UTC.
+ * "Overdue · Oct 3", "Target today", "Target Fri", "Target Oct 20". Дни считаются от сегодня в поясе кабинета;
+ * цель — календарный день, полночь UTC, и печатается в UTC.
  */
 function useTargetLabel(now: number) {
   const t = useTranslations("workspaceProjects");
   const format = useFormatter();
+  const zone = useTimeZone();
   return (day: string) => {
     const date = new Date(day);
-    const days = differenceInCalendarDays(parseISO(day), now);
-    const sameYear = isSameYear(parseISO(day), now);
-    if (days < 0) return t("target.overdue", { date: format.dateTime(date, "short") });
+    const days = daysFromToday(day, now, zone);
+    const sameYear = isThisYear(day, now, zone);
+    if (days < 0) return t("target.overdue", { date: format.dateTime(date, "short", CALENDAR_DAY) });
     if (days === 0) return t("target.today");
     if (days === 1) return t("target.tomorrow");
-    if (days < 7) return t("target.on", { date: format.dateTime(date, { weekday: "short" }) });
-    return t("target.on", { date: format.dateTime(date, sameYear ? "short" : "medium") });
+    if (days < 7) return t("target.on", { date: format.dateTime(date, { weekday: "short", ...CALENDAR_DAY }) });
+    return t("target.on", { date: format.dateTime(date, sameYear ? "short" : "medium", CALENDAR_DAY) });
   };
 }
 

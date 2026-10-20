@@ -1,6 +1,8 @@
 import { ThinkingOrb } from "thinking-orbs";
 import { useFormatter, useTranslations } from "use-intl";
 
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
+
 import { FACTS, type LeoNoteTime, meetingClock } from "./poster-script";
 
 // Факты и Leo появляются один раз, когда встреча «прозвучала», и дальше стоят: у истории нет цикла.
@@ -49,7 +51,10 @@ export function PosterLeo({ note: [note, hour, minute] }: { note: LeoNoteTime })
         </span>
         <div key={note} className="fade-in relative animate-in duration-500 motion-reduce:animate-none">
           <div className="font-medium text-[clamp(8px,1.07cqi,13px)] text-muted-foreground">
-            {t(`leo.${note}.when`, { time: format.dateTime(new Date(Date.UTC(2026, 0, 1, hour, minute)), "time") })}
+            {t(`leo.${note}.when`, {
+              // Время-образец на часах постера, а не момент: собрано и печатается в UTC.
+              time: format.dateTime(new Date(Date.UTC(2026, 0, 1, hour, minute)), "time", CALENDAR_DAY),
+            })}
           </div>
           <div className="mt-[0.25em] text-[clamp(11px,1.6cqi,19px)] text-foreground leading-[1.45]">
             {t(`leo.${note}.body`)}

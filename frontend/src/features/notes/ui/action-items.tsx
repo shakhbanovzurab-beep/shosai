@@ -1,5 +1,7 @@
 import { useFormatter, useTranslations } from "use-intl";
 
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
+
 import type { WriteUpFinding } from "../domain/write-up";
 
 /**
@@ -19,7 +21,7 @@ export function ActionItems({ items }: { readonly items: readonly WriteUpFinding
               {item.ownerName ? <span dir="auto">{item.ownerName}</span> : null}
               {item.dueOn ? (
                 <time dateTime={item.dueOn}>
-                  {t("actionItems.due", { date: format.dateTime(new Date(item.dueOn), "short") })}
+                  {t("actionItems.due", { date: format.dateTime(new Date(item.dueOn), "short", CALENDAR_DAY) })}
                 </time>
               ) : null}
             </span>

@@ -26,9 +26,10 @@ export function deriveLibrary(
   items: readonly MeetingCard[],
   activeFolderId: string | undefined,
   view: NotesView,
+  zone: string,
   slotTaken = false,
 ) {
   const featured = hasFeaturedSlot(activeFolderId, view) && !slotTaken ? items.at(0) : undefined;
   const rest = featured ? items.slice(1) : items;
-  return { featured, groups: groupNotesByRecency(rest) };
+  return { featured, groups: groupNotesByRecency(rest, zone) };
 }

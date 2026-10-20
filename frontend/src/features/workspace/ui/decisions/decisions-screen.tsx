@@ -9,6 +9,7 @@ import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNow } from "@/hooks/use-now";
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
 import { Link } from "@/lib/navigation";
 
 import type { Decision } from "../../domain/content-contract";
@@ -39,9 +40,9 @@ export function DecisionsScreen({ initialQuery }: { initialQuery: LibraryQuery }
   const { slug, state, can, path } = useWorkspace();
   const t = useTranslations("workspaceDecisions");
   const format = useFormatter();
-  // "October 2026", in the interface language.
+  // "October 2026", in the interface language: месяц — календарный, его первое число печатается в UTC.
   const monthLabel = (month: string) =>
-    format.dateTime(new Date(`${month}-01T00:00:00Z`), { month: "long", year: "numeric" });
+    format.dateTime(new Date(`${month}-01T00:00:00Z`), { month: "long", year: "numeric", ...CALENDAR_DAY });
   const decisions = useDecisions();
   const resources = useResources();
   const now = useNow();

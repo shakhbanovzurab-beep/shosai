@@ -7,6 +7,7 @@ import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useTimeZone } from "@/i18n/time-zone";
 
 import type { Task } from "../../domain/content-contract";
 import { groupTasks } from "../../domain/tasks";
@@ -32,7 +33,8 @@ export function TaskList({ items, ...rest }: ListProps) {
 
 /** Open tasks under Overdue, Due today, This week, Later and No due date; done ones folded away. */
 export function TaskGroups(props: ListProps) {
-  const { groups, done } = groupTasks(props.items, props.now);
+  const zone = useTimeZone();
+  const { groups, done } = groupTasks(props.items, props.now, zone);
   const [showDone, setShowDone] = useState(false);
   const t = useTranslations("workspaceTasks");
 

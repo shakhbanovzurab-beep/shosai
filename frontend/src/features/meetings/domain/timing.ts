@@ -1,20 +1,22 @@
-import { addDays, differenceInMinutes, isSameDay } from "date-fns";
+import { differenceInMinutes } from "date-fns";
+
+import { dayIn, daysBetween } from "@/i18n/calendar-days";
 
 import type { Meeting } from "./meeting";
 
 /*
- * The minute and day arithmetic behind the meeting times on the page; the UI turns it into words. Days are
- * the viewer's own calendar days (the runtime's time zone): the Meetings page works it out in the browser.
+ * Минуты и дни за временем встреч на странице; слова им даёт интерфейс. Дни — календарные дни пояса кабинета
+ * (src/i18n/time-zone.ts): день — строка «2026-10-20».
  */
 
 export type NearDay = "today" | "tomorrow" | "yesterday";
 
-/** Whether `day` is today, tomorrow or yesterday as seen from `now`; null for any other day. */
-export function nearDay(day: Date, now: number): NearDay | null {
-  const today = new Date(now);
-  if (isSameDay(day, today)) return "today";
-  if (isSameDay(day, addDays(today, 1))) return "tomorrow";
-  if (isSameDay(day, addDays(today, -1))) return "yesterday";
+/** Is `day` today, tomorrow or yesterday as seen from `now` in the zone; null for any other day. */
+export function nearDay(day: string, now: number, zone: string): NearDay | null {
+  const days = daysBetween(dayIn(now, zone), day);
+  if (days === 0) return "today";
+  if (days === 1) return "tomorrow";
+  if (days === -1) return "yesterday";
   return null;
 }
 

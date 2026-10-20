@@ -6,6 +6,7 @@ import { Upload } from "lucide-react";
 import { useLocale, useTranslations } from "use-intl";
 
 import { formatBytes } from "@/i18n/format-units";
+import { useTimeZone } from "@/i18n/time-zone";
 import { useRouter } from "@/lib/navigation";
 
 import { deriveLibrary, hasFeaturedSlot } from "../domain/derive-library";
@@ -42,9 +43,10 @@ export function NotesLibrary({ pages, folders, counts, activeFolderId, view }: N
   const router = useRouter();
   const [editingId, setEditingId] = React.useState<string | null>(null);
   const recordings = useRecordingUploads();
+  const zone = useTimeZone();
   const notesById = new Map(pages.items.map((note) => [note.id, note]));
   const { lead, others } = shownUploads(recordings, pages.items, hasFeaturedSlot(activeFolderId, view));
-  const { featured, groups } = deriveLibrary(pages.items, activeFolderId, view, lead !== undefined);
+  const { featured, groups } = deriveLibrary(pages.items, activeFolderId, view, zone, lead !== undefined);
 
   const foldersById = new Map(folders.map((folder) => [folder.id, folder]));
   const folderOf = (note: MeetingCard) => (note.folderId ? foldersById.get(note.folderId) : undefined);

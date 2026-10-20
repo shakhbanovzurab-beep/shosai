@@ -1,31 +1,32 @@
 import { cn } from "cn";
-import { differenceInCalendarDays, isSameYear, parseISO } from "date-fns";
 import { CornerDownRight, Gavel } from "lucide-react";
 import { useFormatter, useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
+import { useTimeZone } from "@/i18n/time-zone";
 import { Link } from "@/lib/navigation";
 
 import type { Decision } from "../../domain/content-contract";
 import type { Team } from "../../domain/contract";
+import { daysFromToday, isThisYear } from "../../domain/format";
 import { meetingPath } from "../../domain/paths";
 import { TeamDot } from "../shared/badges";
 import { PeopleStack } from "../shared/people";
 
 /**
- * "Today", "Yesterday", "Tomorrow", "Mon, Oct 5", or "Oct 5, 2025" in another year. Days count in the viewer's
- * calendar, as `now` does; the date is formatted in UTC, like the demo timestamps.
+ * "Today", "Yesterday", "Tomorrow", "Mon, Oct 5", or "Oct 5, 2025" in another year: дни и дата — в поясе кабинета.
  */
 function useDayLabel(now: number) {
   const t = useTranslations("workspaceDecisions");
   const format = useFormatter();
+  const zone = useTimeZone();
   return (iso: string) => {
-    const date = parseISO(iso);
-    const days = differenceInCalendarDays(date, now);
+    const date = new Date(iso);
+    const days = daysFromToday(iso, now, zone);
     if (days === 0) return t("day.today");
     if (days === -1) return t("day.yesterday");
     if (days === 1) return t("day.tomorrow");
-    return isSameYear(date, now)
+    return isThisYear(iso, now, zone)
       ? format.dateTime(date, { weekday: "short", month: "short", day: "numeric" })
       : format.dateTime(date, "medium");
   };

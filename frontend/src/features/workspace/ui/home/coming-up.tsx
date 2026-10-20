@@ -4,6 +4,7 @@ import { Lock } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import { Badge } from "@/components/ui/badge";
+import { useTimeZone } from "@/i18n/time-zone";
 
 import type { UpcomingMeeting } from "../../domain/content-contract";
 import type { WorkspaceState } from "../../domain/contract";
@@ -50,6 +51,7 @@ export function ComingUp({
 }) {
   const t = useTranslations("workspaceHome");
   const dates = useWorkspaceDates();
+  const zone = useTimeZone();
   const next = upcoming
     .filter((m) => Date.parse(m.end) > now)
     .sort((a, b) => a.start.localeCompare(b.start))
@@ -60,7 +62,7 @@ export function ComingUp({
     <ul className="divide-y rounded-xl border bg-card">
       {next.map((meeting) => {
         const live = Date.parse(meeting.start) <= now;
-        const today = daysFromToday(meeting.start, now) === 0;
+        const today = daysFromToday(meeting.start, now, zone) === 0;
         return (
           <li key={meeting.id} className="flex gap-3 px-4 py-3">
             <div className="flex w-16 shrink-0 flex-col">

@@ -9,6 +9,7 @@ import { LoadError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNow } from "@/hooks/use-now";
+import { useTimeZone } from "@/i18n/time-zone";
 import { Link } from "@/lib/navigation";
 
 import { filterMeetings, groupByRecency, type LibraryQuery, librarySearch } from "../../domain/library";
@@ -46,6 +47,7 @@ export function TeamMeetingsScreen({ initialQuery }: { initialQuery: LibraryQuer
   const meetings = useMeetings();
   const resources = useResources();
   const now = useNow();
+  const zone = useTimeZone();
   const [query, setQuery] = useState(initialQuery);
   const [sharing, setSharing] = useState(false);
   const teams = visibleTeams(state, can.me, can.admin);
@@ -104,7 +106,7 @@ export function TeamMeetingsScreen({ initialQuery }: { initialQuery: LibraryQuer
     else
       body = (
         <div className="flex flex-col gap-8">
-          {groupByRecency(shown, (m) => m.started_at, now).map((group) => (
+          {groupByRecency(shown, (m) => m.started_at, now, zone).map((group) => (
             <TeamSection
               key={group.label}
               id={slugId("meetings", group.label)}

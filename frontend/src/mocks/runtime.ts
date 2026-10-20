@@ -7,9 +7,9 @@ import {
 } from "use-intl";
 
 import { loadCatalogue } from "@/i18n/catalogues";
-import { TIME_ZONE } from "@/i18n/config";
 import { formats } from "@/i18n/formats";
 import type { Messages } from "@/i18n/messages-type";
+import { cabinetTimeZone } from "@/i18n/time-zone";
 import { interfaceLanguage } from "@/lib/api/interface-language";
 import { isLanguageCode, type LanguageCode } from "@/lib/language";
 
@@ -42,10 +42,11 @@ type Namespace = NamespaceKeys<Messages, NestedKeyOf<Messages>>;
 export async function getTranslations<N extends Namespace>(arg: N | { locale: LanguageCode; namespace: N }) {
   const { locale, namespace } = typeof arg === "string" ? { locale: interfaceLanguage(), namespace: arg } : arg;
   const messages = await loadCatalogue(locale);
-  const translator = createTranslator({ locale, messages, namespace, formats, timeZone: TIME_ZONE });
+  const translator = createTranslator({ locale, messages, namespace, formats, timeZone: cabinetTimeZone() });
   // Тот же переводчик, что у экранов (useTranslations): ключи и аргументы ICU проверяются одинаково.
   return translator as unknown as ReturnType<typeof useTranslations<N>>;
 }
 
 /** Даты и числа на языке страницы, в часовом поясе и именованных форматах приложения. */
-export const getFormatter = async () => createFormatter({ locale: interfaceLanguage(), formats, timeZone: TIME_ZONE });
+export const getFormatter = async () =>
+  createFormatter({ locale: interfaceLanguage(), formats, timeZone: cabinetTimeZone() });

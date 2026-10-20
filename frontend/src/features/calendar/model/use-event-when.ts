@@ -3,9 +3,9 @@
 import { useFormatter } from "use-intl";
 
 /*
- * Events live in the viewer's own time zone (FullCalendar's "local"), while next-intl formats in UTC. These
- * labels only appear after an interaction (menus, dialogs, the clipboard), never in the server HTML, so they
- * are formatted in the browser's zone without a hydration mismatch.
+ * Исключение из пояса кабинета (src/i18n/time-zone.ts): сетка календаря (FullCalendar, `timeZone: "local"`) и
+ * демо-события строятся по локальному времени браузера, поэтому подписи событий печатаются в том же поясе, чтобы
+ * не расходиться с сеткой. Календарь перейдёт на пояс кабинета вместе с переходом на свой API.
  */
 const viewerTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
 

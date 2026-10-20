@@ -1,4 +1,4 @@
-import { differenceInCalendarDays, parseISO, startOfWeek } from "date-fns";
+import { dayIn, dayOf, daysBetween } from "@/i18n/calendar-days";
 
 import type { Decision, TeamMeeting } from "./content-contract";
 
@@ -60,13 +60,18 @@ const RECENCY_LABELS: Record<RecencyGroup, string> = {
   earlier: "Earlier",
 };
 
-/** Newest first under "This week", "Last week" and "Earlier" headings (`key`; `label` is the English heading). */
-export function groupByRecency<T>(items: T[], dateOf: (item: T) => string, now: number) {
-  const thisWeek = startOfWeek(now, { weekStartsOn: 1 });
+/**
+ * Newest first under "This week", "Last week" and "Earlier" headings (`key`; `label` is the English heading).
+ * Неделя начинается с понедельника и считается в поясе кабинета `zone`.
+ */
+export function groupByRecency<T>(items: T[], dateOf: (item: T) => string, now: number, zone: string) {
+  const today = dayIn(now, zone);
+  // Сколько дней прошло с понедельника этой недели.
+  const sinceMonday = (new Date(`${today}T00:00:00Z`).getUTCDay() + 6) % 7;
   const groups: { key: RecencyGroup; label: string; items: T[] }[] = [];
   const sorted = items.toSorted((a, b) => dateOf(b).localeCompare(dateOf(a)));
   for (const item of sorted) {
-    const days = differenceInCalendarDays(parseISO(dateOf(item)), thisWeek);
+    const days = daysBetween(today, dayOf(dateOf(item), zone)) + sinceMonday;
     let key: RecencyGroup = "earlier";
     if (days >= 0) key = "thisWeek";
     else if (days >= -7) key = "lastWeek";

@@ -12,7 +12,7 @@ interface MeetingFactsProps {
 
 /**
  * When a meeting was and how long it ran, for the row of facts under its title, in the interface language.
- * Dates are formatted in UTC like the demo data, so the server's render and the browser's agree.
+ * Начало печатается в поясе кабинета, его даёт форматтер.
  */
 export function MeetingFacts({ startedAt, durationMinutes }: MeetingFactsProps) {
   const t = useTranslations("notes");

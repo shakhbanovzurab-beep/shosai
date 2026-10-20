@@ -13,9 +13,6 @@ import { Block, BlockError } from "../shared/block";
 import { useHubPhrases } from "../shared/phrases";
 import { GapIcon } from "../shared/urgency";
 
-/** The viewer's own time zone, from the browser. */
-const viewerTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
-
 function Part({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -39,9 +36,8 @@ export function PrepCard({ prep }: { prep: MeetingPrep }) {
         { label: blocks("digest.closed"), list: digest.closed },
       ].filter(({ list }) => list.length > 0)
     : [];
-  // When the meeting starts, on the viewer's own clock. Preps load in the browser only (the server
-  // renders the loading state), so the viewer's time zone never meets the server's markup.
-  const startsAt = format.dateTime(new Date(prep.startsAt), "weekdayDateTime", { timeZone: viewerTimeZone() });
+  // Когда начинается встреча — на часах человека, в поясе кабинета.
+  const startsAt = format.dateTime(new Date(prep.startsAt), "weekdayDateTime");
   return (
     <article className="flex flex-col gap-4 rounded-xl border p-4" aria-label={prep.meetingTitle}>
       <header className="flex flex-col gap-0.5">

@@ -3,6 +3,7 @@ import { type ReactNode, useId } from "react";
 import { useTranslations } from "use-intl";
 
 import { ItemGroup } from "@/components/ui/item";
+import { useTimeZone } from "@/i18n/time-zone";
 import { Link } from "@/lib/navigation";
 
 import {
@@ -65,8 +66,9 @@ const LiveList = ({ meetings, now }: { meetings: Meeting[]; now: number }) => (
 
 /** Today (live, then the rest of the day), the next few days, and the latest recaps. */
 function Overview({ buckets, now }: { buckets: MeetingBuckets; now: number }) {
+  const zone = useTimeZone();
   const t = useTranslations("meetings");
-  const { live, laterToday, upcoming, recent } = overviewSections(buckets, now);
+  const { live, laterToday, upcoming, recent } = overviewSections(buckets, now, zone);
   if (live.length + buckets.upcoming.length + buckets.past.length === 0) return <MeetingsEmpty kind="none" />;
   return (
     <div className="flex flex-col gap-8">
@@ -96,10 +98,11 @@ function Overview({ buckets, now }: { buckets: MeetingBuckets; now: number }) {
 /** Upcoming meetings under their days: "Today", "Tomorrow", "Wed, Oct 8". */
 function ByDay({ meetings, now }: { meetings: Meeting[]; now: number }) {
   const times = useMeetingTimes();
+  const zone = useTimeZone();
   return (
     <div className="flex flex-col gap-8">
-      {groupByDay(meetings).map((group) => (
-        <Section key={group.day.getTime()} title={times.day(group.day, now)}>
+      {groupByDay(meetings, zone).map((group) => (
+        <Section key={group.day} title={times.day(group.day, now)}>
           <UpcomingList meetings={group.meetings} now={now} />
         </Section>
       ))}

@@ -1,4 +1,6 @@
-import { addDays, differenceInMinutes, isSameDay, startOfDay } from "date-fns";
+import { differenceInMinutes } from "date-fns";
+
+import { dayIn } from "@/i18n/calendar-days";
 
 /* A meeting as the Meetings page sees it: scheduled, in progress or over, wherever it takes place. */
 
@@ -62,25 +64,25 @@ export function bucketMeetings(meetings: Meeting[], now: number): MeetingBuckets
 }
 
 /** The overview: what's on now and later today, the next few days, and the latest recaps. */
-export function overviewSections(buckets: MeetingBuckets, now: number) {
-  const today = new Date(now);
-  const laterToday = buckets.upcoming.filter((m) => isSameDay(new Date(m.start), today));
-  const tomorrow = startOfDay(addDays(today, 1)).getTime();
+export function overviewSections(buckets: MeetingBuckets, now: number, zone: string) {
+  const today = dayIn(now, zone);
+  // Дни-строки «2026-10-20» сравниваются по порядку как текст.
+  const laterToday = buckets.upcoming.filter((m) => dayIn(m.start, zone) === today);
   return {
     live: buckets.live,
     laterToday,
-    upcoming: buckets.upcoming.filter((m) => Date.parse(m.start) >= tomorrow).slice(0, 4),
+    upcoming: buckets.upcoming.filter((m) => dayIn(m.start, zone) > today).slice(0, 4),
     recent: buckets.past.slice(0, 4),
   };
 }
 
-/** Meetings under their days (the viewer's own calendar days, see timing.ts), in the order given. */
-export function groupByDay(meetings: Meeting[]) {
-  const groups: { day: Date; meetings: Meeting[] }[] = [];
+/** Встречи под их днями (календарные дни пояса кабинета, см. timing.ts), в данном порядке. */
+export function groupByDay(meetings: Meeting[], zone: string) {
+  const groups: { day: string; meetings: Meeting[] }[] = [];
   for (const meeting of meetings) {
-    const day = startOfDay(new Date(meeting.start));
+    const day = dayIn(meeting.start, zone);
     const last = groups.at(-1);
-    if (last && isSameDay(last.day, day)) last.meetings.push(meeting);
+    if (last && last.day === day) last.meetings.push(meeting);
     else groups.push({ day, meetings: [meeting] });
   }
   return groups;

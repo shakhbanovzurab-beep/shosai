@@ -1,27 +1,25 @@
-import {
-  differenceInCalendarDays,
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-  isSameYear,
-  parseISO,
-} from "date-fns";
+import { differenceInDays, differenceInHours, differenceInMinutes, parseISO } from "date-fns";
+
+import { dayIn, dayOf, daysBetween } from "@/i18n/calendar-days";
 
 /*
- * Dates and amounts as numbers and codes; the UI words them in the interface language (`ui/shared/use-dates`).
- * Calendar maths runs in the viewer's time zone, as the helpers are called in the browser after mount.
+ * Даты и суммы числами и кодами; интерфейс называет их на языке человека (`ui/shared/use-dates`). Календарные
+ * дни считаются в поясе кабинета `zone` (src/i18n/time-zone.ts): день без времени остаётся собой, у момента берётся
+ * его день в этом поясе.
  */
 
-/** Calendar days from today to a day or a moment: 0 today, -1 yesterday, 1 tomorrow. */
-export const daysFromToday = (iso: string, now: number) => differenceInCalendarDays(parseISO(iso), now);
+/** Календарных дней от сегодня до дня или момента: 0 — сегодня, −1 — вчера, 1 — завтра. */
+export const daysFromToday = (iso: string, now: number, zone: string) =>
+  daysBetween(dayIn(now, zone), dayOf(iso, zone));
 
-export const isThisYear = (iso: string, now: number) => isSameYear(parseISO(iso), now);
+export const isThisYear = (iso: string, now: number, zone: string) =>
+  dayOf(iso, zone).slice(0, 4) === dayIn(now, zone).slice(0, 4);
 
 export type DueTone = "overdue" | "today" | "soon" | "later";
 
 /** How urgent a due day is, and how many calendar days away (negative once it has passed). */
-export function dueState(dueOn: string, now: number): { days: number; tone: DueTone } {
-  const days = daysFromToday(dueOn, now);
+export function dueState(dueOn: string, now: number, zone: string): { days: number; tone: DueTone } {
+  const days = daysFromToday(dueOn, now, zone);
   if (days < 0) return { days, tone: "overdue" };
   if (days === 0) return { days, tone: "today" };
   return { days, tone: days < 7 ? "soon" : "later" };
@@ -52,7 +50,7 @@ export const isIdle = (iso: string | null, now: number) =>
 /** Cents as a currency amount, for `format.number(…, { style: "currency" })`: whole amounts without cents. */
 export const moneyAmount = (cents: number) => ({ value: cents / 100, digits: cents % 100 === 0 ? 0 : 2 });
 
-/** The local calendar day of a moment as a code, "2026-10-07": what a due date stores. */
+/** Локальный день клетки выбора даты кодом «2026-10-07»: так хранится срок; клетка — локальная полночь браузера. */
 export const dayKey = (now: number) => {
   const date = new Date(now);
   const pad = (part: number) => String(part).padStart(2, "0");

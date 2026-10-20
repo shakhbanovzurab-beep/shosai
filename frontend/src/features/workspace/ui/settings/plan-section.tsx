@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useNow } from "@/hooks/use-now";
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
 import { Link } from "@/lib/navigation";
 
 import { IDLE_DAYS, isIdle, lastActive, moneyAmount } from "../../domain/format";
@@ -43,8 +44,12 @@ function UsageTable() {
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="font-medium text-sm">
           {t("plan.usageIn", {
-            // The month starts at midnight UTC, the formatter's own zone.
-            month: format.dateTime(new Date(usage.data.month_start), { month: "long", year: "numeric" }),
+            // Месяц начинается в полночь UTC: печатается в UTC, чтобы не уйти в соседний.
+            month: format.dateTime(new Date(usage.data.month_start), {
+              month: "long",
+              year: "numeric",
+              ...CALENDAR_DAY,
+            }),
           })}
         </h3>
         {idle.length > 0 ? (
@@ -124,8 +129,8 @@ export function PlanSection() {
             {t("plan.price", {
               perSeat: money(plan.price_per_seat_cents),
               total: money(plan.price_per_seat_cents * plan.seats),
-              // Renewal is a day, starting at midnight UTC: formatted in UTC, the formatter's own zone.
-              renews: format.dateTime(new Date(plan.renews_at), "medium"),
+              // Продление — день, начинается в полночь UTC: печатается в UTC.
+              renews: format.dateTime(new Date(plan.renews_at), "medium", CALENDAR_DAY),
             })}
           </span>
         </div>

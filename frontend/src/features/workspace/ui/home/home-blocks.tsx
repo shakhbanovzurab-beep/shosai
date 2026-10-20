@@ -2,6 +2,7 @@
 
 import { useTranslations } from "use-intl";
 
+import { useTimeZone } from "@/i18n/time-zone";
 import { Link } from "@/lib/navigation";
 
 import { openFor } from "../../domain/tasks";
@@ -16,6 +17,7 @@ const MORE = "text-muted-foreground text-sm underline-offset-4 hover:text-foregr
 
 /** Two rows on wide screens (now: needs you, coming up; then: projects, decisions); one column on phones. */
 export function HomeBlocks({ now }: { now: number }) {
+  const zone = useTimeZone();
   const t = useTranslations("workspaceHome");
   const { ws, slug, state, path } = useWorkspace();
   const resources = useResources();
@@ -45,7 +47,7 @@ export function HomeBlocks({ now }: { now: number }) {
       >
         <BlockState state={tasks} what="yourTasks" onRetry={() => void resources.tasks.refresh()}>
           {(data) => {
-            const mine = openFor(data.tasks, state.me_id, now);
+            const mine = openFor(data.tasks, state.me_id, now, zone);
             if (mine.length === 0) return <QuietEmpty>{t("blocks.nothingWaiting")}</QuietEmpty>;
             return (
               <div className="flex flex-col gap-2">

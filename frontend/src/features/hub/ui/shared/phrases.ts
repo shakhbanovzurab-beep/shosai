@@ -2,17 +2,22 @@
 
 import { useFormatter, useTranslations } from "use-intl";
 
+import { CALENDAR_DAY, dayOf } from "@/i18n/calendar-days";
+import { useTimeZone } from "@/i18n/time-zone";
+
 import type { Gap, ThreadSummary } from "../../domain/contract-threads";
 import { rhythmOf, rowStatus } from "../../domain/phrases";
 
 /*
  * The Hub's recurring phrases in the interface language: dates, gaps, a row's status line, rhythms and
- * quotes. Dates of meetings and due dates are calendar days, formatted in UTC like the demo data.
+ * quotes. Даты встреч и сроки — календарные дни: у момента берётся его день в поясе кабинета, а день печатается
+ * в UTC, где лежит его полночь.
  */
 export function useHubPhrases() {
   const t = useTranslations("hub");
   const format = useFormatter();
-  const date = (iso: string) => format.dateTime(new Date(iso), "short");
+  const zone = useTimeZone();
+  const date = (iso: string) => format.dateTime(new Date(dayOf(iso, zone)), "short", CALENDAR_DAY);
   const gap = (value: Gap) => t(`gap.${value.kind}`, { days: value.days });
   const quote = (text: string) => t("quote", { text });
   return {

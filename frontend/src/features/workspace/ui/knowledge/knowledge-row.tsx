@@ -6,6 +6,7 @@ import { useFormatter, useLocale, useTranslations } from "use-intl";
 import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 import { formatBytes } from "@/i18n/format-units";
+import { useTimeZone } from "@/i18n/time-zone";
 import { Link } from "@/lib/navigation";
 
 import type { Member, Project, Team } from "../../domain/contract";
@@ -62,6 +63,7 @@ export function KnowledgeRow({
   const t = useTranslations("workspaceKnowledge");
   const format = useFormatter();
   const locale = useLocale();
+  const zone = useTimeZone();
   const team = item.access.level === "team" ? ctx.teams.find((t) => t.id === item.access.team_id) : undefined;
   const project = showProject ? ctx.projects.find((p) => p.id === item.project_id) : undefined;
   const who = whoAdded(item, ctx.members, ctx.me.id);
@@ -74,7 +76,7 @@ export function KnowledgeRow({
     kindLabel(t, item.kind),
     size,
     originText(t, item, who, ctx.workspaceName),
-    addedText(t, format, item.added_at, ctx.now),
+    addedText(t, format, item.added_at, ctx.now, zone),
   ];
 
   return (

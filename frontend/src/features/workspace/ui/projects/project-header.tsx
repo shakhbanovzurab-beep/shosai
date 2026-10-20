@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
 import { useRouter } from "@/lib/navigation";
 
 import type { Project } from "../../domain/contract";
@@ -38,9 +39,9 @@ export function ProjectHeader({ project }: { project: Project }) {
   const editable = canEditProject(can.me, project);
   let leadLabel = t("noLead");
   if (lead) leadLabel = t("ledBy", { who: lead.id === state.me_id ? "me" : "member", name: lead.name });
-  // A calendar day parses as UTC midnight, and next-intl formats in UTC, so the day never shifts.
+  // Календарный день — полночь UTC, и печатается он в UTC, поэтому не сдвигается ни в каком поясе.
   const target = project.target_date
-    ? t("target.on", { date: format.dateTime(new Date(project.target_date), "medium") })
+    ? t("target.on", { date: format.dateTime(new Date(project.target_date), "medium", CALENDAR_DAY) })
     : t("target.none");
 
   return (

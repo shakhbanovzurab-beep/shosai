@@ -11,14 +11,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { MyWorkspaceTasks } from "@/features/workspace/ui/personal/my-workspace-tasks";
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
 
 import { type Task, tasks } from "../data/tasks";
 
 /** A time of day ("14:00") in the interface language: "2:00 PM", "14:00". */
 function TaskTime({ time }: { time: string }) {
   const format = useFormatter();
-  // A time of day, not a moment: it sits on a UTC day and is formatted in UTC, so it reads as written everywhere.
-  return <time dateTime={time}>{format.dateTime(new Date(`1970-01-01T${time}:00Z`), "time")}</time>;
+  // Время суток, а не момент: оно стоит на дне UTC и печатается в UTC, поэтому везде читается как записано.
+  return <time dateTime={time}>{format.dateTime(new Date(`1970-01-01T${time}:00Z`), "time", CALENDAR_DAY)}</time>;
 }
 
 function TaskRow({ task, onToggle }: { task: Task; onToggle: (checked: boolean) => void }) {

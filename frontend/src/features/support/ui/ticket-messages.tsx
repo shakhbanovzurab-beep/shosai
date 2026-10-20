@@ -20,12 +20,6 @@ import { getInitials } from "@/lib/utils";
 
 import type { TicketAttachment, TicketMessage } from "../domain/contract";
 
-/*
- * Message times are the viewer's own wall clock, not UTC: the thread is fetched and drawn in the browser
- * only (the store starts empty on the server), so formatting in the browser's time zone can't mismatch.
- */
-const viewerTimeZone = () => Intl.DateTimeFormat().resolvedOptions().timeZone;
-
 function Attachments({ files }: { files: TicketAttachment[] }) {
   const locale = useLocale();
   if (files.length === 0) return null;
@@ -84,9 +78,7 @@ function PersonMessage({ message }: { message: TicketMessage }) {
           </BubbleGroup>
         ) : null}
         <Attachments files={message.attachments} />
-        <MessageFooter>
-          {format.dateTime(new Date(message.created_at), "shortDateTime", { timeZone: viewerTimeZone() })}
-        </MessageFooter>
+        <MessageFooter>{format.dateTime(new Date(message.created_at), "shortDateTime")}</MessageFooter>
       </MessageContent>
     </Message>
   );
@@ -97,7 +89,7 @@ function EventMarker({ message }: { message: TicketMessage }) {
   const t = useTranslations("pagesSupport");
   const format = useFormatter();
   const event = message.event ? t(`events.${message.event}`) : message.body;
-  const date = format.dateTime(new Date(message.created_at), "short", { timeZone: viewerTimeZone() });
+  const date = format.dateTime(new Date(message.created_at), "short");
   return (
     <Marker variant="separator">
       <MarkerContent dir={message.event ? undefined : "auto"}>{t("thread.event", { event, date })}</MarkerContent>

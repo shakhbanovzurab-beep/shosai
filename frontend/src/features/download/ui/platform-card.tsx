@@ -101,7 +101,7 @@ export function PlatformCard({ platform, release, recommended }: PlatformCardPro
                 version: ready.version,
                 size: formatBytes(locale, builds.primary.size_bytes),
                 type: fileType(builds.primary.file_name),
-                // A release day: published_at is UTC and next-intl formats in UTC.
+                // День выпуска — момент `published_at` в поясе кабинета.
                 date: format.dateTime(new Date(ready.published_at), "medium"),
               })}
             </span>

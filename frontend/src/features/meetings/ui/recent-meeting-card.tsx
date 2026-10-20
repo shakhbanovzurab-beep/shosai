@@ -14,7 +14,7 @@ export function RecentMeetingCard({ meeting, now }: { meeting: Meeting; now: num
   const times = useMeetingTimes();
   const { recap } = meeting;
   const when = t("recap.when", {
-    day: times.day(new Date(meeting.start), now),
+    day: times.day(meeting.start, now),
     time: times.range(meeting),
     duration: times.duration(meeting),
   });

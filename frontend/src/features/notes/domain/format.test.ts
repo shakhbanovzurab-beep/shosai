@@ -15,10 +15,15 @@ describe("formatMeetingDuration", () => {
 describe("getRecencyGroup", () => {
   const now = new Date("2026-10-07T08:00:00Z");
   it("buckets by UTC calendar day", () => {
-    assert.equal(getRecencyGroup("2026-10-07T00:10:00Z", now), "today");
-    assert.equal(getRecencyGroup("2026-10-06T23:50:00Z", now), "yesterday");
-    assert.equal(getRecencyGroup("2026-10-02T09:00:00Z", now), "thisWeek");
-    assert.equal(getRecencyGroup("2026-09-30T09:00:00Z", now), "earlier");
+    assert.equal(getRecencyGroup("2026-10-07T00:10:00Z", now, "UTC"), "today");
+    assert.equal(getRecencyGroup("2026-10-06T23:50:00Z", now, "UTC"), "yesterday");
+    assert.equal(getRecencyGroup("2026-10-02T09:00:00Z", now, "UTC"), "thisWeek");
+    assert.equal(getRecencyGroup("2026-09-30T09:00:00Z", now, "UTC"), "earlier");
+  });
+
+  it("counts the days in the cabinet's zone", () => {
+    // 23:50 UTC 6 октября — уже 7-е в Москве, где и «сейчас» 7-е.
+    assert.equal(getRecencyGroup("2026-10-06T23:50:00Z", now, "Europe/Moscow"), "today");
   });
 });
 

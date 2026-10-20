@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
 import { getFormatter, getTranslations, JsonResponse } from "@/mocks/runtime";
 
 import type { Billing, Invoice, Usage } from "../domain/billing-contract";
@@ -33,8 +34,8 @@ async function demoInvoiceText(invoice: Invoice) {
   ]);
   return [
     t("invoice.title", { number: invoice.number }),
-    // Invoices are dated by calendar day in UTC, the time zone next-intl formats in.
-    t("invoice.date", { date: format.dateTime(new Date(invoice.date), "medium") }),
+    // Счёт датирован календарным днём: печатается в UTC, где лежит его полночь.
+    t("invoice.date", { date: format.dateTime(new Date(invoice.date), "medium", CALENDAR_DAY) }),
     t("invoice.description", { description: invoice.description }),
     t("invoice.amount", {
       amount: format.number(invoice.amount_cents / 100, { style: "currency", currency: invoice.currency }),

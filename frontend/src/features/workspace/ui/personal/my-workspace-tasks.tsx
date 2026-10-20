@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNow } from "@/hooks/use-now";
+import { useTimeZone } from "@/i18n/time-zone";
 import { Link } from "@/lib/navigation";
 
 import type { DueTone } from "../../domain/format";
@@ -71,6 +72,7 @@ export function MyWorkspaceTasks() {
   const workspaces = useWorkspaces();
   const tasks = useMyTasks();
   const now = useNow();
+  const zone = useTimeZone();
   const t = useTranslations("workspacePersonal.myTasks");
   const common = useTranslations("common");
   if (workspaces.status !== "ready" || workspaces.data.workspaces.length === 0 || now === null) return null;
@@ -86,7 +88,7 @@ export function MyWorkspaceTasks() {
       </p>
     );
   else if (tasks.status === "ready") {
-    const open = groupTasks(tasks.data.tasks, now).groups.flatMap((g) => g.items);
+    const open = groupTasks(tasks.data.tasks, now, zone).groups.flatMap((g) => g.items);
     body =
       open.length === 0 ? (
         <p className="rounded-xl border border-dashed p-4 text-center text-muted-foreground text-sm">{t("empty")}</p>

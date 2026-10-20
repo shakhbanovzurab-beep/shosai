@@ -29,10 +29,6 @@ export function PromptsTable({ prompts, data, skills, actions }: PromptsTablePro
   const tc = useTranslations("common");
   const format = useFormatter();
   const skillNames = new Map(skills.map((s) => [s.id, s.name]));
-  // The day of the last edit on the viewer's own calendar, as it always was. Never server-rendered: rows come
-  // from promptsResource, whose server snapshot is "loading", so this only runs in the browser after mount.
-  // react-doctor-disable-next-line react-doctor/no-locale-format-in-render
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
     <div className="overflow-hidden rounded-xl border bg-card shadow-xs">
@@ -84,7 +80,7 @@ export function PromptsTable({ prompts, data, skills, actions }: PromptsTablePro
                       {attached.length ? format.list(attached, { type: "unit", style: "short" }) : "—"}
                     </TableCell>
                     <TableCell className="hidden text-end text-muted-foreground tabular-nums sm:table-cell">
-                      {format.dateTime(new Date(prompt.updated_at), "medium", { timeZone })}
+                      {format.dateTime(new Date(prompt.updated_at), "medium")}
                     </TableCell>
                     <TableCell onClick={(event) => event.stopPropagation()}>
                       <Button

@@ -7,6 +7,7 @@ import { useFormatter, useTranslations } from "use-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
 
 import type { BillingPortalRequest, PaymentMethod } from "../../domain/billing-contract";
 import { CARD_BRAND_NAMES } from "../../domain/names";
@@ -27,8 +28,8 @@ function MethodRow({ method }: { method: PaymentMethod }) {
   const { pending, open } = useProviderRedirect();
   const card = method.brand === "unknown" ? t("payment.unknownCard") : CARD_BRAND_NAMES[method.brand];
   const ending = { card, last4: method.last4 };
-  // The expiry is a month, built in UTC like the time zone next-intl formats in, so it never shifts.
-  const expires = format.dateTime(new Date(Date.UTC(method.exp_year, method.exp_month - 1)), "monthYear");
+  // Срок карты — месяц: он собран в UTC и печатается в UTC, поэтому не сдвигается ни в каком поясе.
+  const expires = format.dateTime(new Date(Date.UTC(method.exp_year, method.exp_month - 1)), "monthYear", CALENDAR_DAY);
 
   return (
     <li className="flex items-center gap-3 py-3">

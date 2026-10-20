@@ -6,6 +6,7 @@ import { useFormatter, useTranslations } from "use-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { usePollingResource } from "@/hooks/use-polling-resource";
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
 import { Link } from "@/lib/navigation";
 
 import type { Billing } from "../../domain/billing-contract";
@@ -37,8 +38,10 @@ function BillingContent({ billing }: { billing: Billing }) {
             {billing.renews_at ? (
               <>
                 <span aria-hidden="true">·</span>
-                {/* A renewal falls on a calendar day in UTC, the time zone next-intl formats in. */}
-                <span>{t("plan.renews", { date: format.dateTime(new Date(billing.renews_at), "medium") })}</span>
+                {/* Продление приходится на календарный день UTC: он и печатается в UTC. */}
+                <span>
+                  {t("plan.renews", { date: format.dateTime(new Date(billing.renews_at), "medium", CALENDAR_DAY) })}
+                </span>
               </>
             ) : null}
           </span>

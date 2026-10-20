@@ -38,13 +38,13 @@ describe("deriveLibrary", () => {
   const items = [card("new", "2026-10-20T09:00:00Z"), card("old", "2026-10-19T09:00:00Z")];
 
   it("gives the newest meeting the large card only in the grid of all meetings", () => {
-    assert.equal(deriveLibrary(items, undefined, "grid").featured?.id, "new");
-    assert.equal(deriveLibrary(items, "f1", "grid").featured, undefined);
-    assert.equal(deriveLibrary(items, undefined, "list").featured, undefined);
+    assert.equal(deriveLibrary(items, undefined, "grid", "UTC").featured?.id, "new");
+    assert.equal(deriveLibrary(items, "f1", "grid", "UTC").featured, undefined);
+    assert.equal(deriveLibrary(items, undefined, "list", "UTC").featured, undefined);
   });
 
   it("leaves the large card to an upload that took it, and groups every meeting", () => {
-    const { featured, groups } = deriveLibrary(items, undefined, "grid", true);
+    const { featured, groups } = deriveLibrary(items, undefined, "grid", "UTC", true);
 
     assert.equal(featured, undefined);
     assert.deepEqual(
@@ -54,7 +54,7 @@ describe("deriveLibrary", () => {
   });
 
   it("groups the rest by recency without the featured meeting", () => {
-    const { groups } = deriveLibrary(items, undefined, "grid");
+    const { groups } = deriveLibrary(items, undefined, "grid", "UTC");
     const ids = groups.flatMap((group) => group.items.map((note) => note.id));
 
     assert.deepEqual(ids, ["old"]);

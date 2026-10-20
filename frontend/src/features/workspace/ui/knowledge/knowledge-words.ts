@@ -1,9 +1,9 @@
 "use client";
 
-import { differenceInCalendarDays, isSameYear, parseISO } from "date-fns";
 import type { useFormatter, useTranslations } from "use-intl";
 
 import type { Member, Team } from "../../domain/contract";
+import { daysFromToday, isThisYear } from "../../domain/format";
 import type { KnowledgeAccess, KnowledgeItem } from "../../domain/knowledge-contract";
 import { accessAudiences, accessKey } from "../../domain/visibility";
 
@@ -54,12 +54,11 @@ export function originText(t: KnowledgeWords, item: KnowledgeItem, who: Who, wor
 }
 
 /**
- * When it was added, as the row's last fact: "Today", "5 days ago", then the date. Days count in the
- * viewer's calendar, as `now` does; the date itself is formatted in UTC like the rest of the demo data.
+ * When it was added, as the row's last fact: "Today", "5 days ago", then the date — дни и дата в поясе кабинета
+ * `zone`.
  */
-export function addedText(t: KnowledgeWords, format: Formatter, iso: string, now: number) {
-  const date = parseISO(iso);
-  const days = Math.max(0, differenceInCalendarDays(now, date));
+export function addedText(t: KnowledgeWords, format: Formatter, iso: string, now: number, zone: string) {
+  const days = Math.max(0, -daysFromToday(iso, now, zone));
   if (days < 30) return t("added", { days });
-  return format.dateTime(date, isSameYear(date, now) ? "short" : "medium");
+  return format.dateTime(new Date(iso), isThisYear(iso, now, zone) ? "short" : "medium");
 }

@@ -6,11 +6,14 @@ import { ArrowUpRight } from "lucide-react";
 import { ThinkingOrb } from "thinking-orbs";
 import { useTranslations } from "use-intl";
 
+import { hourIn } from "@/i18n/calendar-days";
+import { cabinetTimeZone } from "@/i18n/time-zone";
+
 import { adminSuggestions, isAdminPath } from "../domain/admin-suggestions";
 import { dayPeriod, SUGGESTION_SLOTS, suggestionSet } from "../domain/suggestions";
 
 // The hour depends on the viewer's clock, so the server renders a neutral fallback.
-const getHour = () => new Date().getHours();
+const getHour = () => hourIn(Date.now(), cabinetTimeZone());
 
 const subscribeToNothing = () => () => undefined;
 const getServerHour = (): number | null => null;

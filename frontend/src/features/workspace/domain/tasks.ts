@@ -1,4 +1,4 @@
-import { differenceInCalendarDays, parseISO } from "date-fns";
+import { dayIn, daysBetween } from "@/i18n/calendar-days";
 
 import type { Task, TaskStatus } from "./content-contract";
 
@@ -49,20 +49,21 @@ export const isOpen = (task: { status: TaskStatus }) => task.status !== "done";
 export const DUE_GROUPS = ["overdue", "today", "week", "later", "undated"] as const;
 export type DueGroup = (typeof DUE_GROUPS)[number];
 
-export function dueGroup(dueOn: string | null, now: number): DueGroup {
+/** Группа срока; дни до срока (календарного дня) считаются от сегодня в поясе кабинета `zone`. */
+export function dueGroup(dueOn: string | null, now: number, zone: string): DueGroup {
   if (dueOn === null) return "undated";
-  const days = differenceInCalendarDays(parseISO(dueOn), now);
+  const days = daysBetween(dayIn(now, zone), dueOn);
   if (days < 0) return "overdue";
   if (days === 0) return "today";
   return days < 7 ? "week" : "later";
 }
 
 /** Open tasks by urgency, soonest first in each group; done ones apart, most recent first. */
-export function groupTasks<T extends Task>(items: T[], now: number) {
+export function groupTasks<T extends Task>(items: T[], now: number, zone: string) {
   const open: Record<DueGroup, T[]> = { overdue: [], today: [], week: [], later: [], undated: [] };
   const done: T[] = [];
   for (const item of items) {
-    if (isOpen(item)) open[dueGroup(item.due_on, now)].push(item);
+    if (isOpen(item)) open[dueGroup(item.due_on, now, zone)].push(item);
     else done.push(item);
   }
   const byDue = (a: T, b: T) => (a.due_on ?? "").localeCompare(b.due_on ?? "");
@@ -72,10 +73,11 @@ export function groupTasks<T extends Task>(items: T[], now: number) {
 }
 
 /** Open tasks of one assignee, overdue first. */
-export function openFor<T extends Task>(items: T[], assigneeId: string, now: number) {
+export function openFor<T extends Task>(items: T[], assigneeId: string, now: number, zone: string) {
   const { groups } = groupTasks(
     items.filter((t) => t.assignee_id === assigneeId),
     now,
+    zone,
   );
   return groups.flatMap((g) => g.items);
 }

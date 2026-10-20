@@ -3,6 +3,7 @@ import { useFormatter, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
 
 import type { Invoice } from "../../domain/billing-contract";
 
@@ -38,8 +39,8 @@ export function InvoicesTable({ invoices }: { invoices: Invoice[] }) {
           {invoices.map((invoice) => (
             <TableRow key={invoice.id}>
               <TableCell className="px-4">
-                {/* Invoices are dated by calendar day in UTC, the time zone next-intl formats in. */}
-                <div className="font-medium">{format.dateTime(new Date(invoice.date), "medium")}</div>
+                {/* Счёт датирован календарным днём: он печатается в UTC, где лежит его полночь. */}
+                <div className="font-medium">{format.dateTime(new Date(invoice.date), "medium", CALENDAR_DAY)}</div>
                 <div className="font-mono text-muted-foreground text-xs">{invoice.number}</div>
               </TableCell>
               <TableCell dir="auto" className="hidden px-4 sm:table-cell">

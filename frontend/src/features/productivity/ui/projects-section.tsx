@@ -3,6 +3,8 @@ import { useFormatter, useNow, useTranslations } from "use-intl";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { CALENDAR_DAY } from "@/i18n/calendar-days";
+import { useTimeZone } from "@/i18n/time-zone";
 
 import { projects } from "../data/projects";
 import { dayFromToday } from "../domain/days";
@@ -12,6 +14,7 @@ export function ProjectsSection() {
   const t = useTranslations("productivity");
   const format = useFormatter();
   const now = useNow();
+  const zone = useTimeZone();
 
   return (
     <section aria-labelledby="projects" className="flex flex-col gap-2">
@@ -20,7 +23,7 @@ export function ProjectsSection() {
       </h2>
       <div className="grid gap-4 md:grid-cols-3">
         {projects.map((project) => {
-          const due = dayFromToday(project.dueInDays, now.getTime());
+          const due = dayFromToday(project.dueInDays, now.getTime(), zone);
           return (
             <Card key={project.id} className="shadow-xs">
               <CardHeader>
@@ -45,7 +48,7 @@ export function ProjectsSection() {
                   </span>
                 </div>
                 <span className="text-muted-foreground text-sm">
-                  {t("projects.due", { date: format.dateTime(due, "short") })}
+                  {t("projects.due", { date: format.dateTime(due, "short", CALENDAR_DAY) })}
                 </span>
               </CardContent>
             </Card>

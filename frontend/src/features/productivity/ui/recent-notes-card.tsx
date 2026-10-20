@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRecentNotes } from "@/features/notes/model/recent-notes";
+import { useTimeZone } from "@/i18n/time-zone";
 import { Link } from "@/lib/navigation";
 
 import { daysAgo } from "../domain/days";
@@ -13,12 +14,13 @@ export function RecentNotesCard() {
   const t = useTranslations("productivity");
   const format = useFormatter();
   const now = useNow();
+  const zone = useTimeZone();
   const state = useRecentNotes();
   const recent = state.status === "ready" ? state.data : [];
 
-  // Время встреч и форматтер — в одном поясе кабинета, поэтому «Сегодня» и даты не расходятся.
+  // Дни и даты — в одном поясе кабинета, поэтому «Сегодня» и даты не расходятся.
   const noteDay = (iso: string) => {
-    const days = daysAgo(iso, now.getTime());
+    const days = daysAgo(iso, now.getTime(), zone);
     if (days === 0) return t("notes.today");
     if (days === 1) return t("notes.yesterday");
     return format.dateTime(new Date(iso), "short");

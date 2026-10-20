@@ -1,9 +1,9 @@
+import { dayIn, daysBetween } from "@/i18n/calendar-days";
+
 /*
  * Formatting that isn't a date: dates are formatted where they are shown, in the interface language
- * (`useFormatter` with the named formats of src/i18n/formats.ts, in UTC like the demo data).
+ * (`useFormatter` with the named formats of src/i18n/formats.ts, в поясе кабинета).
  */
-
-const DAY_MS = 24 * 60 * 60 * 1000;
 
 const unitFormats = new Map<string, Intl.NumberFormat>();
 
@@ -45,12 +45,9 @@ export function formatClock(totalSeconds: number) {
 export const RECENCY_GROUPS = ["today", "yesterday", "thisWeek", "earlier"] as const;
 export type RecencyGroup = (typeof RECENCY_GROUPS)[number];
 
-/** Which heading a meeting falls under, counting calendar days in UTC like the demo data. */
-export function getRecencyGroup(iso: string, now: Date): RecencyGroup {
-  const startOfToday = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  const date = new Date(iso);
-  const startOfDay = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
-  const daysAgo = Math.round((startOfToday - startOfDay) / DAY_MS);
+/** Под каким заголовком встреча: календарные дни считаются в поясе кабинета `zone`. */
+export function getRecencyGroup(iso: string, now: Date, zone: string): RecencyGroup {
+  const daysAgo = daysBetween(dayIn(iso, zone), dayIn(now, zone));
   if (daysAgo <= 0) return "today";
   if (daysAgo === 1) return "yesterday";
   if (daysAgo < 7) return "thisWeek";
@@ -60,11 +57,12 @@ export function getRecencyGroup(iso: string, now: Date): RecencyGroup {
 /** Newest first, bucketed into today, yesterday, this week and earlier. */
 export function groupNotesByRecency<T extends { startedAt: string }>(
   notes: readonly T[],
+  zone: string,
   now = new Date(),
 ): { recency: RecencyGroup; items: T[] }[] {
   const groups = new Map<RecencyGroup, T[]>();
   for (const note of notes.toSorted((a, b) => b.startedAt.localeCompare(a.startedAt))) {
-    const group = getRecencyGroup(note.startedAt, now);
+    const group = getRecencyGroup(note.startedAt, now, zone);
     groups.set(group, [...(groups.get(group) ?? []), note]);
   }
   return Array.from(groups, ([recency, items]) => ({ recency, items }));
