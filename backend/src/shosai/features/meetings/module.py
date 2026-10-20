@@ -11,7 +11,9 @@
 - 8: the deletion, the purge after 7 days, support's list and restore, the native rename and
   deletion, and identity's deletion window;
 - 9a: the import of recordings with its intake and transcribe stages (`stage_wiring.py`);
-- 9b: the native import streamed to the bucket and its job (`channels/http/native_import.py`).
+- 9b: the native import streamed to the bucket and its job (`channels/http/native_import.py`);
+- 10: the speakers of recordings (`application/diarize_stage.py`, `application/align_stage.py`);
+- 11: the desktop recording's resumable upload (`channels/http/native_audio.py`).
 
 The folders' and templates' routes come before `/v1/meetings/{meeting_id}`: the first match
 wins, and `folders` is no meeting's id.
@@ -44,6 +46,7 @@ from shosai.features.meetings.application.my_notes import MyNotes
 from shosai.features.meetings.application.native_imports import NativeImports
 from shosai.features.meetings.application.participants import Participants
 from shosai.features.meetings.application.pipeline import PipelineEngine
+from shosai.features.meetings.application.recording_uploads import RecordingUploads
 from shosai.features.meetings.application.run_recovery import RunRecovery
 from shosai.features.meetings.application.runs_view import RunViews
 from shosai.features.meetings.application.support_meetings import SupportMeetings
@@ -56,6 +59,7 @@ from shosai.features.meetings.channels.http.imports import build_imports_router
 from shosai.features.meetings.channels.http.meeting_content import build_meeting_content_router
 from shosai.features.meetings.channels.http.meetings import build_meetings_router
 from shosai.features.meetings.channels.http.my_notes import build_my_notes_router
+from shosai.features.meetings.channels.http.native_audio import build_native_audio_router
 from shosai.features.meetings.channels.http.native_import import build_native_import_router
 from shosai.features.meetings.channels.http.native_me_sessions import (
     build_native_me_sessions_router,
@@ -89,6 +93,7 @@ from shosai.features.meetings.infrastructure.notes_records import (
     TemplateRecord,
 )
 from shosai.features.meetings.infrastructure.own_notes_records import OwnNotesRecord
+from shosai.features.meetings.infrastructure.part_links import PartLinks, part_client
 from shosai.features.meetings.infrastructure.pipeline_metrics import PipelineMetrics
 from shosai.features.meetings.infrastructure.run_objects import RunObjects
 from shosai.features.meetings.infrastructure.run_records import ObjectDeletionRecord, RunRecord
@@ -103,7 +108,7 @@ from shosai.features.meetings.stage_wiring import pipeline_stages
 
 
 def http_routers(
-    services: CoreServices, pipeline: tuple[MeetingLifecycle, PipelineEngine]
+    services: CoreServices, pipeline: tuple[MeetingLifecycle, PipelineEngine], links: PartLinks
 ) -> tuple[APIRouter, ...]:
     """Meetings' routes; the folders' and templates' come before `/v1/meetings/{meeting_id}`,
     the native import's before `/v1/me/sessions/{session_id}`."""
@@ -117,6 +122,9 @@ def http_routers(
     native_imports = NativeImports(
         transactions, (ports, engine), (services.uploads, services.objects)
     )
+    recordings = RecordingUploads(
+        transactions, (ports, engine, links), (services.uploads, services.objects)
+    )
     return (
         build_folders_router(Folders(transactions, services.effects), ports),
         build_templates_router(Templates(transactions, services.effects), ports),
@@ -124,6 +132,7 @@ def http_routers(
         build_native_import_router(
             (native_imports, ImportJobs(transactions, ports)), ports, services.rate_limiter
         ),
+        build_native_audio_router(recordings, ports),
         build_native_me_sessions_router((library, deletion), ports),
         build_runs_router((lifecycle, RunViews(transactions, ports)), ports),
         build_write_up_router(rewrites, ports, services.rate_limiter),
@@ -143,7 +152,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     transactions, ports = services.transactions, services.ports
     handler = MeetingsAccountData(transactions, (services.objects, services.uploads))
     pipeline_metrics = PipelineMetrics(services.registry)
-    # Стадии записи и разметки появляются в следующих шагах плана: до них их прогоны ждут.
+    # Стадия без обработчика в этом процессе (нет модели или инструментов) ждёт процесса с ним.
     engine = PipelineEngine(
         transactions, (services.tasks, pipeline_metrics, pipeline_stages(services))
     )
@@ -156,18 +165,19 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     sweeps = MeetingSweeps(transactions, (ports, lifecycle, transcript_metrics))
     hidden = HiddenMeetings(transactions, (ports, RunObjects(transactions, services.objects)))
     recovery = RunRecovery(transactions, (engine, pipeline_metrics))
-    yield FeatureParts(
-        http_routers=http_routers(services, (lifecycle, engine)),
-        task_handlers=task_handlers((sweeps, hidden), (engine, recovery)),
-        subscriptions=subscriptions(),
-        periodic_jobs=PERIODIC_JOBS,
-        provides=(
-            ACCOUNT_DATA_HANDLERS.bind(handler),
-            MEETING_MINUTES.bind(MeetingMinutesCount()),
-            TRANSCRIPT_STORE.bind(LiveTranscript(transactions, transcript_metrics)),
-            LIVE_MEETINGS.bind(LiveMeetingBinder(ports)),
-        ),
-    )
+    async with part_client() as http:
+        yield FeatureParts(
+            http_routers=http_routers(services, (lifecycle, engine), PartLinks(http)),
+            task_handlers=task_handlers((sweeps, hidden), (engine, recovery)),
+            subscriptions=subscriptions(),
+            periodic_jobs=PERIODIC_JOBS,
+            provides=(
+                ACCOUNT_DATA_HANDLERS.bind(handler),
+                MEETING_MINUTES.bind(MeetingMinutesCount()),
+                TRANSCRIPT_STORE.bind(LiveTranscript(transactions, transcript_metrics)),
+                LIVE_MEETINGS.bind(LiveMeetingBinder(ports)),
+            ),
+        )
 
 
 MEETINGS = FeatureModule(

@@ -80,7 +80,7 @@ class RunRecord(ModelBase):
     audio_content_type: Mapped[str | None] = mapped_column(Text)
     audio_size_bytes: Mapped[int | None] = mapped_column(BigInteger)
     audio_duration_ms: Mapped[int | None] = mapped_column(Integer)
-    # Смещение начала записи от начала встречи, его шлют десктопы (MT-D3).
+    # На сколько раньше встречи началась запись десктопа: клиенты меряют монотонными часами (MT-D3).
     audio_lead_ms: Mapped[int | None] = mapped_column(Integer)
     audio_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     raw_transcript_key: Mapped[str | None] = mapped_column(Text)

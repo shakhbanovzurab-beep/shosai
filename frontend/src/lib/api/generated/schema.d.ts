@@ -1456,6 +1456,90 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/me/sessions/{session_id}/audio/init": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Init Audio Upload
+         * @description Begin the meeting's recording upload, or find where it stopped.
+         */
+        post: operations["init_audio_upload_v1_me_sessions__session_id__audio_init_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/sessions/{session_id}/audio/{run_id}/part/{number}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Upload Audio Part
+         * @description Send one part; sending a number again replaces it.
+         */
+        put: operations["upload_audio_part_v1_me_sessions__session_id__audio__run_id__part__number__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/sessions/{session_id}/audio/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Audio Upload State
+         * @description How much of the recording the bucket has.
+         */
+        get: operations["audio_upload_state_v1_me_sessions__session_id__audio__run_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Discard Audio Upload
+         * @description Drop the upload under way and its parts.
+         */
+        delete: operations["discard_audio_upload_v1_me_sessions__session_id__audio__run_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/sessions/{session_id}/audio/{run_id}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Complete Audio Upload
+         * @description Assemble the recording; the answer is the receipt to delete the local copy.
+         */
+        post: operations["complete_audio_upload_v1_me_sessions__session_id__audio__run_id__complete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/me/sessions/{session_id}": {
         parameters: {
             query?: never;
@@ -4229,6 +4313,21 @@ export interface components {
             size_bytes: number;
         };
         /**
+         * UploadInit
+         * @description What the desktop says of the file before its bytes; unknown fields are accepted.
+         */
+        UploadInit: {
+            /** Filename */
+            filename: string;
+            /**
+             * Mimetype
+             * @default audio/wav
+             */
+            mimetype: string;
+            /** Audio Lead Ms */
+            audio_lead_ms?: number | null;
+        };
+        /**
          * UploadPurpose
          * @description Who takes the bytes once they are uploaded.
          * @enum {string}
@@ -4248,6 +4347,27 @@ export interface components {
          * @enum {string}
          */
         UploadState: "pending" | "ready" | "claimed" | "rejected" | "expired";
+        /**
+         * UploadStateOut
+         * @description The upload's state, from which the desktop decides what to send next.
+         */
+        UploadStateOut: {
+            /**
+             * Run Id
+             * Format: uuid
+             */
+            run_id: string;
+            /** Upload Id */
+            upload_id: string;
+            /** Part Size */
+            part_size: number;
+            /** Received */
+            received: number[];
+            /** Bytes Received */
+            bytes_received: number;
+            /** Completed */
+            completed: boolean;
+        };
         /**
          * UsageView
          * @description The week's token usage.
@@ -7359,6 +7479,178 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ImportJobView"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    init_audio_upload_v1_me_sessions__session_id__audio_init_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UploadInit"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadStateOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    upload_audio_part_v1_me_sessions__session_id__audio__run_id__part__number__put: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+                run_id: string;
+                number: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadStateOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    audio_upload_state_v1_me_sessions__session_id__audio__run_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadStateOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    discard_audio_upload_v1_me_sessions__session_id__audio__run_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    complete_audio_upload_v1_me_sessions__session_id__audio__run_id__complete_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                session_id: string;
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadStateOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

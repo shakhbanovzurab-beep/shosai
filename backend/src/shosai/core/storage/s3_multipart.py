@@ -81,8 +81,12 @@ class S3MultipartUploads:
         return UploadedPart(number=number, etag=reply["ETag"], size=len(body))
 
     async def list_parts(self, upload: MultipartUpload) -> list[UploadedPart]:
-        """Parts the bucket has accepted, by number; `ObjectNotFoundError` for no such upload."""
-        parts: list[UploadedPart] = []
+        """Parts the bucket has accepted, one per number; `ObjectNotFoundError` for no such upload.
+
+        A part sent again replaces the earlier one, as S3 defines it; a bucket that lists
+        both (SeaweedFS does) gives the last one listed.
+        """
+        parts: dict[int, UploadedPart] = {}
         marker = 0
         while True:
             async with self._calls.call("ListParts"):
@@ -92,12 +96,11 @@ class S3MultipartUploads:
                     UploadId=upload.upload_id,
                     PartNumberMarker=marker,
                 )
-            parts.extend(
-                UploadedPart(number=part["PartNumber"], etag=part["ETag"], size=part["Size"])
-                for part in page.get("Parts", [])
-            )
+            for part in page.get("Parts", []):
+                number = part["PartNumber"]
+                parts[number] = UploadedPart(number=number, etag=part["ETag"], size=part["Size"])
             if not page.get("IsTruncated"):
-                return sorted(parts, key=lambda part: part.number)
+                return [parts[number] for number in sorted(parts)]
             marker = page.get("NextPartNumberMarker", 0)
 
     async def complete(self, upload: MultipartUpload, parts: Sequence[UploadedPart]) -> None:

@@ -4,7 +4,7 @@ The raw transcript (O4) and, when diarization succeeded, the turns (O5) are read
 home's bucket; the speakers are laid over the segments and numbered by first appearance
 (`domain/alignment.py`), and the pieces shaped into lines of about 10 seconds. In one
 transaction under the meeting's lock the lines replace those the recording covers — live
-lines and an earlier recording's, from `audio_lead_ms` for the recording's length — with
+lines and an earlier recording's, over its span (`audio_lead_ms` early, its length) — with
 fresh `seq`s above the meeting's highest (inv-8); the meeting's speakers are written anew,
 the owner of a desktop recording found by overlap with the live "me" lines; the line count
 follows. Lines of the run already written mean the stage ran: nothing is written twice. A
@@ -27,7 +27,7 @@ from shosai.core.kernel.ids import new_id
 from shosai.core.storage.port import ObjectStorage
 from shosai.features.meetings.application.pipeline import StageFailedError, StageWork
 from shosai.features.meetings.application.stage_reads import present_meeting
-from shosai.features.meetings.domain.alignment import Segment, Turn, aligned, talk_times
+from shosai.features.meetings.domain.alignment import Segment, Turn, aligned, covered, talk_times
 from shosai.features.meetings.domain.lines import Line, shape_lines
 from shosai.features.meetings.domain.transcript import (
     SIDE_SPEAKER,
@@ -95,7 +95,7 @@ class AlignStage:
         segments = segments_of(await self._read(home, run.raw_transcript_key))
         turns = turns_of(await self._read(home, run.turns_key)) if run.turns_key else []
         lead = run.audio_lead_ms or 0
-        span = (lead, lead + run.audio_duration_ms)
+        span = covered(lead, run.audio_duration_ms)
         async with self._transactions.begin(work.scope) as session:
             meeting = await session.scalar(
                 select(MeetingRecord).where(MeetingRecord.id == work.meeting_id).with_for_update()

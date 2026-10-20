@@ -104,6 +104,15 @@ Every recorded meeting becomes something the person never has to hold in their h
 
 - `application/diarize_stage.py` — the whole recording as mono Opus at 16 kHz, sent once to pyannote through the AI port (`meetings:{run}:diarize:0`, `ESSENTIAL`); the turns kept for 72 hours (O5, `transient/turns/{run}.json`). Not critical: a failed diarization leaves the transcript without speakers and the run partially completed.
 - `domain/alignment.py` — each segment takes the voice whose turns cover most of it (turns looked up by 10-second buckets), voices numbered by first appearance in the text, the owner of a desktop recording the voice most over the live "me" lines.
-- `application/align_stage.py` — the lines of about 10 seconds replace, under the meeting's lock and with fresh `seq`s, the lines the recording covers (live ones and an earlier recording's, from `audio_lead_ms` for its length); the meeting's speakers are written anew with their talk time; the line count follows. Lines of the run found written mean the stage ran; a recording without speech replaces nothing (`transcript_empty`).
+- `application/align_stage.py` — the lines of about 10 seconds replace, under the meeting's lock and with fresh `seq`s, the lines the recording covers (live ones and an earlier recording's, over its span: it began `audio_lead_ms` before the meeting, speech before the meeting's start held at it); the meeting's speakers are written anew with their talk time; the line count follows. Lines of the run found written mean the stage ran; a recording without speech replaces nothing (`transcript_empty`).
 - `settings.py` — `MEETINGS_DIARIZE_MODEL` (pyannote's `precision-3` by default in `.env.example`), required outside development.
+
+## The desktop recording (step 11, MT-D3)
+
+- `channels/http/native_audio.py` — `POST /v1/me/sessions/{id}/audio/init {filename, mimetype, audio_lead_ms?}`, `PUT …/{run_id}/part/{n}` (raw body, at most 10 MiB), `GET …/{run_id}`, `POST …/{run_id}/complete`, `DELETE …/{run_id}` in the draft's `UploadStateOut`; refusals keep the draft's codes (409 `private_meeting`, `no_upload`, `no_parts`, `bad_part`, `empty_part`; 413 `part_too_large`), a refused part's body is read to its end first.
+- `application/recording_uploads.py` — the meeting owner's, on a live meeting kept; `init` idempotent per meeting (the one `recording` run, its open upload, a new one when it has none, or the receipt when the audio is bound); the state is the bucket's list of parts; `complete` assembles, binds and commits before it answers, then sends the intake when the meeting has ended.
+- `infrastructure/part_links.py` — a part streamed to its presigned link, at most sixteen at once per process (503 `parts_busy` after ten seconds' wait).
+- `application/run_recovery.py` — a recording's run waits, passed by, until its audio is bound and its meeting has ended; then the sweep starts it.
+- `application/intake_stage.py` — a desktop recording's meeting counts the larger of the live and the recorded length once; only what the recording adds is checked against the minutes left.
+- `application/write_up_stage.py` — a desktop recording rewrites only Leo's automatic write-up; the person's own notes are never written by a run.
 

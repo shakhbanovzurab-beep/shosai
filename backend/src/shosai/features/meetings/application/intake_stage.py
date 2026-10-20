@@ -4,8 +4,11 @@ The recording is fetched to a scratch directory; `ffprobe` names its container a
 codec from the header — anything outside the allowed list is refused
 (`unsupported_audio_format`) before any decoder runs — and gives its length. A recording
 over 6 hours is refused (`recording_too_long`), and so is one whose minutes do not fit
-what the person has left (`upload_exceeds_minutes`, billing's `covers`, MT-D3); both end
-the run before any paid call. An admitted recording gives its meeting its length.
+what the person has left (`upload_exceeds_minutes`, billing's `covers`); both end the run
+before any paid call. An import's meeting takes the recording's length. A desktop
+recording (MT-D3) waits for its audio and its meeting's end (`recording_pending`, tried
+again); its meeting counts the larger of the two lengths, once, and only what the
+recording adds is checked against the minutes left.
 """
 
 from collections.abc import Callable, Mapping
@@ -13,6 +16,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Final
 
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
@@ -22,8 +26,15 @@ from shosai.features.billing.contracts import MINUTES_ALLOWANCE, UploadExceedsMi
 from shosai.features.meetings.application.pipeline import StageFailedError, StageWork
 from shosai.features.meetings.application.scratch import fetched, scratch
 from shosai.features.meetings.application.stage_reads import present_meeting
-from shosai.features.meetings.domain.minutes import seconds_between
+from shosai.features.meetings.domain.meetings import MeetingStatus
+from shosai.features.meetings.domain.minutes import (
+    added_by_recording,
+    capped,
+    meeting_seconds,
+    seconds_between,
+)
 from shosai.features.meetings.domain.recordings import MediaFacts, readable, too_long
+from shosai.features.meetings.domain.runs import RunSource
 from shosai.features.meetings.infrastructure.media_tools import (
     UNREADABLE,
     UNSUPPORTED,
@@ -34,6 +45,8 @@ from shosai.features.meetings.infrastructure.meeting_records import MeetingRecor
 from shosai.features.meetings.infrastructure.run_records import RunRecord
 
 TOO_LONG: Final = "recording_too_long"
+# Запись десктопа ещё не собрана или её встреча ещё идёт: стадия пробуется снова.
+PENDING: Final = "recording_pending"
 EXCEEDS_MINUTES: Final = "upload_exceeds_minutes"
 
 
@@ -53,11 +66,16 @@ class IntakeStage:
     async def run(self, work: StageWork) -> None:
         """Admit the recording or end the run with the reason."""
         async with self._transactions.begin(work.scope, read_only=True) as session:
-            await present_meeting(session, work.meeting_id)
+            present = await present_meeting(session, work.meeting_id)
             run = await session.get(RunRecord, work.run_id)
             key = run.audio_key if run is not None else None
+            waiting = run is not None and (
+                run.audio_expires_at is None or present.status == MeetingStatus.ACTIVE.value
+            )
         if key is None:
             raise StageFailedError(UNREADABLE)
+        if waiting:
+            raise StageFailedError(PENDING)
         facts = await self._measured(work.scope.home, key)
         async with self._transactions.begin(work.scope) as session:
             meeting = await session.scalar(
@@ -66,15 +84,25 @@ class IntakeStage:
             run = await session.get(RunRecord, work.run_id)
             if meeting is None or run is None:
                 raise StageFailedError(UNREADABLE)
-            ended_at = meeting.started_at + timedelta(milliseconds=facts.duration_ms)
-            seconds = seconds_between(meeting.started_at, ended_at)
-            try:
-                await self._ports.get(MINUTES_ALLOWANCE).covers(session, meeting.user_id, seconds)
-            except UploadExceedsMinutesError:
-                raise StageFailedError(EXCEEDS_MINUTES) from None
-            meeting.ended_at, meeting.seconds = ended_at, seconds
+            if work.source is RunSource.RECORDING:
+                recorded = capped(facts.duration_ms // 1000)
+                await self._covered(session, meeting, added_by_recording(meeting.seconds, recorded))
+                meeting.seconds = meeting_seconds(meeting.seconds, recorded)
+            else:
+                ended_at = meeting.started_at + timedelta(milliseconds=facts.duration_ms)
+                meeting.ended_at = ended_at
+                meeting.seconds = seconds_between(meeting.started_at, ended_at)
+                await self._covered(session, meeting, meeting.seconds)
             meeting.updated_at = self._clock()
             run.audio_duration_ms = facts.duration_ms
+
+    async def _covered(self, session: AsyncSession, meeting: MeetingRecord, seconds: int) -> None:
+        if seconds <= 0:
+            return
+        try:
+            await self._ports.get(MINUTES_ALLOWANCE).covers(session, meeting.user_id, seconds)
+        except UploadExceedsMinutesError:
+            raise StageFailedError(EXCEEDS_MINUTES) from None
 
     async def _measured(self, home: Home, key: str) -> MediaFacts:
         try:

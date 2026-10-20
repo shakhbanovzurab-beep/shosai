@@ -6,7 +6,9 @@ a stage given back for another attempt and not delivered since, or a stage runni
 than a worker may hold it — its worker died. It sends that stage's task again; the claim
 under the run's lock keeps a duplicate delivery from running the stage twice, and the
 attempts in the row keep any path within three. It also reports the age of the oldest
-unfinished run. The sweep role only lists; the send needs no transaction.
+unfinished run. A desktop recording's run waits, passed by and not counted, until its audio
+is bound and its meeting has ended; then the sweep starts it (MT-D3). The sweep role only
+lists; the send needs no transaction.
 """
 
 from collections.abc import Callable
@@ -14,7 +16,7 @@ from datetime import UTC, datetime, timedelta
 from typing import Final
 
 import structlog
-from sqlalchemy import select
+from sqlalchemy import ColumnElement, and_, or_, select
 
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
@@ -22,6 +24,7 @@ from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.meetings.application.pipeline import PipelineEngine
 from shosai.features.meetings.application.run_rows import progress_of
 from shosai.features.meetings.application.stage_task import RUN_STAGE
+from shosai.features.meetings.domain.meetings import MeetingStatus
 from shosai.features.meetings.domain.runs import (
     RunSource,
     RunState,
@@ -29,6 +32,7 @@ from shosai.features.meetings.domain.runs import (
     StageStatus,
     next_stage,
 )
+from shosai.features.meetings.infrastructure.meeting_records import MeetingRecord
 from shosai.features.meetings.infrastructure.pipeline_metrics import PipelineMetrics
 from shosai.features.meetings.infrastructure.run_records import RunRecord
 
@@ -39,6 +43,22 @@ OPEN_LIMIT: Final = 2000
 LOST_AFTER: Final = timedelta(minutes=3)
 OPEN: Final = (RunState.PENDING.value, RunState.RUNNING.value)
 log = structlog.stdlib.get_logger(__name__)
+
+
+def waiting_for_recording() -> ColumnElement[bool]:
+    """A desktop recording's run whose audio is not bound yet or whose meeting goes on."""
+    live = (
+        select(MeetingRecord.id)
+        .where(
+            MeetingRecord.id == RunRecord.session_id,
+            MeetingRecord.status == MeetingStatus.ACTIVE.value,
+        )
+        .exists()
+    )
+    return and_(
+        RunRecord.source == RunSource.RECORDING.value,
+        or_(RunRecord.audio_expires_at.is_(None), live),
+    )
 
 
 class RunRecovery:
@@ -59,13 +79,17 @@ class RunRecovery:
         now = self._clock()
         stalled = (
             select(RunRecord)
-            .where(RunRecord.state.in_(OPEN), RunRecord.updated_at <= now - LOST_AFTER)
+            .where(
+                RunRecord.state.in_(OPEN),
+                RunRecord.updated_at <= now - LOST_AFTER,
+                ~waiting_for_recording(),
+            )
             .order_by(RunRecord.updated_at)
             .limit(BATCH)
         )
         open_runs = (
             select(RunRecord.created_at, RunRecord.source, RunRecord.stage_state)
-            .where(RunRecord.state.in_(OPEN))
+            .where(RunRecord.state.in_(OPEN), ~waiting_for_recording())
             .order_by(RunRecord.created_at)
             .limit(OPEN_LIMIT)
         )

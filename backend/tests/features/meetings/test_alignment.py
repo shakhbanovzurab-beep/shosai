@@ -8,6 +8,7 @@ from shosai.features.meetings.domain.alignment import (
     Turn,
     TurnIndex,
     aligned,
+    covered,
     overlap,
     speaker_of,
     talk_times,
@@ -26,32 +27,41 @@ def test_a_segment_takes_the_voice_covering_most_of_it_and_none_without_one() ->
 
 def test_voices_are_numbered_as_they_first_speak_and_a_silent_one_gets_none() -> None:
     segments = [
-        Segment(0, 2_000, "Hi."),
-        Segment(3_000, 5_000, "Hey."),
-        Segment(6_000, 8_000, "So."),
+        Segment(60_000, 62_000, "Hi."),
+        Segment(63_000, 65_000, "Hey."),
+        Segment(66_000, 68_000, "So."),
     ]
     turns = [
-        Turn(0, 2_500, 4),
-        Turn(2_500, 5_500, 1),
-        Turn(5_500, 9_000, 4),
-        Turn(9_000, 10_000, 9),
+        Turn(60_000, 62_500, 4),
+        Turn(62_500, 65_500, 1),
+        Turn(65_500, 69_000, 4),
+        Turn(69_000, 70_000, 9),
     ]
 
     result = aligned(segments, turns, lead_ms=60_000)
 
-    assert [(p.start_ms, p.speaker) for p in result.pieces] == [
-        (60_000, 0), (63_000, 1), (66_000, 0),
-    ]  # fmt: skip
+    assert [(p.start_ms, p.speaker) for p in result.pieces] == [(0, 0), (3_000, 1), (6_000, 0)]
     assert (result.speakers, result.owner) == (2, None)
+
+
+def test_a_recording_started_early_is_moved_back_and_held_at_the_meeting_s_start() -> None:
+    early = aligned(
+        [Segment(1_000, 4_000, "Warm-up."), Segment(5_000, 7_000, "Go.")], [], lead_ms=2_000
+    )
+    late = aligned([Segment(0, 1_000, "Late.")], [], lead_ms=-5_000)
+
+    assert [(p.start_ms, p.end_ms) for p in early.pieces] == [(0, 2_000), (3_000, 5_000)]
+    assert [(p.start_ms, p.end_ms) for p in late.pieces] == [(5_000, 6_000)]
+    assert (covered(2_000, 60_000), covered(-5_000, 60_000)) == ((0, 58_000), (5_000, 65_000))
 
 
 def test_the_owner_is_the_voice_most_over_the_live_me_lines() -> None:
     segments = [Segment(0, 4_000, "Mine."), Segment(5_000, 9_000, "Theirs.")]
     turns = [Turn(0, 4_500, 6), Turn(4_500, 9_000, 3)]
 
-    owner_second = aligned(segments, turns, lead_ms=10_000, me=[(15_000, 19_000)])
-    owner_first = aligned(segments, turns, lead_ms=10_000, me=[(10_000, 13_000)])
-    nobody = aligned(segments, turns, lead_ms=10_000, me=[(30_000, 40_000)])
+    owner_second = aligned(segments, turns, lead_ms=2_000, me=[(3_000, 7_000)])
+    owner_first = aligned(segments, turns, lead_ms=2_000, me=[(0, 1_500)])
+    nobody = aligned(segments, turns, lead_ms=2_000, me=[(30_000, 40_000)])
 
     assert (owner_second.owner, owner_first.owner, nobody.owner) == (1, 0, None)
 

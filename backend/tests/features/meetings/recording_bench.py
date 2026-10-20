@@ -5,10 +5,11 @@ every 30, so its cut has two parts ending in a pause; `seven_hours` is 2 seconds
 whose header claims 7 hours, as a hostile or broken file may. `upload` writes a person's ready
 recording upload the way files leaves one — its row and its object under `transient/` —
 so the import claims it through files' own claim. The native import (step 9b) streams to
-the same buckets, rate-limited over the slot's Valkey; `languages` is each person's
-language as identity's profile gives it. Diarization runs on the scripted pyannote, the
-notes' stages finish at once, so a run reaches its end. The AI port is the real one over
-the scripted OpenRouter and pyannote; the pipeline's engine runs every stage it sent.
+the same buckets, rate-limited over the slot's Valkey, and the desktop's parts (step 11)
+go to the bucket's part links; `languages` is each person's language as identity's
+profile gives it. Diarization runs on the scripted pyannote, the notes' stages finish at
+once, so a run reaches its end. The AI port is the real one over the scripted OpenRouter
+and pyannote; the pipeline's engine runs every stage it sent.
 """
 
 import asyncio
@@ -55,12 +56,15 @@ from shosai.features.meetings.application.imports import RecordingImports
 from shosai.features.meetings.application.intake_stage import IntakeStage
 from shosai.features.meetings.application.native_imports import NativeImports
 from shosai.features.meetings.application.pipeline import PipelineEngine, StageHandler, StageWork
+from shosai.features.meetings.application.recording_uploads import RecordingUploads
 from shosai.features.meetings.application.stage_task import StageRetryError
 from shosai.features.meetings.application.transcribe_stage import TranscribeStage
 from shosai.features.meetings.channels.http.imports import build_imports_router
+from shosai.features.meetings.channels.http.native_audio import build_native_audio_router
 from shosai.features.meetings.channels.http.native_import import build_native_import_router
 from shosai.features.meetings.domain.runs import Stage
 from shosai.features.meetings.infrastructure.media_tools import MediaLimits, MediaTools
+from shosai.features.meetings.infrastructure.part_links import PartLinks, part_client
 from shosai.features.meetings.infrastructure.pipeline_metrics import PipelineMetrics
 from shosai.features.workspaces.application.access_policy import WorkspaceAccessPolicy
 from shosai.features.workspaces.contracts import ACCESS_POLICY
@@ -274,8 +278,13 @@ async def recording_bench(
         ports,
         RateLimiter(valkey, KeyValueMetrics(CollectorRegistry())),
     )
-    app = build_probe_app(extra=(native, router)).app
-    async with client_of(app) as http:
-        yield RecordingBench(
-            http, homes, engine, sent, providers, storage, minutes, clock, languages, app
+    async with part_client() as part_http:
+        recordings = RecordingUploads(
+            homes.transactions, (ports, engine, PartLinks(part_http)), (uploads, storage), clock
         )
+        audio = build_native_audio_router(recordings, ports)
+        app = build_probe_app(extra=(native, audio, router)).app
+        async with client_of(app) as http:
+            yield RecordingBench(
+                http, homes, engine, sent, providers, storage, minutes, clock, languages, app
+            )

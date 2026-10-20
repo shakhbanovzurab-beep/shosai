@@ -41,6 +41,23 @@ async def test_an_upload_resumes_from_the_parts_the_bucket_accepted(bucket: Slot
     assert stream.info.content_type == "audio/webm"
 
 
+async def test_a_part_sent_again_is_listed_once_and_assembled_once(bucket: SlotBucket) -> None:
+    storage = slot_storage(bucket)
+    upload = await storage.uploads.create(RECORDING, content_type="audio/webm")
+
+    for body in (FIRST_PART, FIRST_PART, LAST_PART):
+        await send_part(storage, upload, 1 if body is FIRST_PART else 2, body)
+    accepted = await storage.uploads.list_parts(upload)
+    await storage.uploads.complete(upload, accepted)
+
+    stored = await storage.objects.head(RECORDING)
+    assert [(part.number, part.size) for part in accepted] == [
+        (1, len(FIRST_PART)), (2, len(LAST_PART)),
+    ]  # fmt: skip
+    assert stored is not None
+    assert stored.size == len(FIRST_PART) + len(LAST_PART)
+
+
 async def test_an_aborted_upload_is_gone_and_aborting_again_succeeds(bucket: SlotBucket) -> None:
     storage = slot_storage(bucket)
     upload = await storage.uploads.create(RECORDING, content_type="audio/webm")

@@ -177,8 +177,9 @@ async def test_a_desktop_recording_replaces_the_live_lines_it_covers_and_finds_t
     ]
     segments = [segment(5, 13, "Recorded me."), segment(20, 28, "Recorded them.")]
     turns = [turn(4, 14, 1), turn(19, 29, 0)]
+    # Запись началась через 5 секунд после встречи: её время плюс 5 секунд — время встречи.
     work = await recorded(
-        recording_bench, owner, live, (5_000, 60_000, {"parts": [{"segments": segments}]}, turns)
+        recording_bench, owner, live, (-5_000, 60_000, {"parts": [{"segments": segments}]}, turns)
     )
     stage = AlignStage(recording_bench.homes.transactions, recording_bench.storage)
 

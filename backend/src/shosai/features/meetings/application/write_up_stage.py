@@ -7,7 +7,9 @@ every finding keeps its id; any other run lists its own. Only the summary is a m
 text, written from the findings and the end of the transcript that fits the call — cut
 from the head by whole lines, so the closing lines are always read. The notes, the map,
 the meeting's next revision and the event are written in one transaction; a delivery that
-finds the notes written by its run calls nothing and writes nothing (inv-8).
+finds the notes written by its run calls nothing and writes nothing (inv-8). A desktop
+recording's run rewrites the write-up only while it is Leo's automatic one: once the person
+chose a template or rewrote it, the recording leaves it as it is (MT-D3).
 """
 
 import unicodedata
@@ -127,6 +129,9 @@ class WriteUpStage:
             notes = await session.get(NotesRecord, work.meeting_id)
             if notes is not None and notes.write_up_run_id == work.run_id:
                 return None
+            if kept_by_person(work.source, notes):
+                log.info("Запись встречи выбрана человеком: прогон записи её не трогает")
+                return None
             meeting = await present_meeting(session, work.meeting_id)
             template_id, layout = await self._layout(session, meeting, work.run_id)
             findings_run = (
@@ -204,6 +209,11 @@ class WriteUpStage:
             revision=meeting.notes_revision,
             summary=summary is not None,
         )
+
+
+def kept_by_person(source: RunSource, notes: NotesRecord | None) -> bool:
+    """A desktop recording rewrites only Leo's automatic write-up (MT-D3)."""
+    return source is RunSource.RECORDING and notes is not None and not notes.write_up_automatic
 
 
 def ready(meeting: MeetingRecord, run_id: UUID, findings: list[Finding]) -> NotesReady:

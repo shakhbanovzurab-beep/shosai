@@ -3,9 +3,11 @@
 The transcription's timed segments and pyannote's speaker turns are two answers about the
 same audio. A segment takes the speaker whose turns cover most of it, or none when no turn
 touches it; the speakers are then numbered again by their first appearance in the text, so
-a voice that carries no segment gets no number. For a desktop recording the owner is the
-speaker whose turns overlap most with the live "me" lines of the span the recording covers.
-Turns are looked up by 10-second buckets, so a six-hour recording aligns in linear time.
+a voice that carries no segment gets no number. A desktop recording starts `lead_ms` before
+the meeting did (the clients measure it): its time minus the lead is the meeting's, and
+speech recorded before the meeting's start is held at its start. Its owner is the speaker
+whose turns overlap most with the live "me" lines of the span it covers. Turns are looked
+up by 10-second buckets, so a six-hour recording aligns in linear time.
 """
 
 from collections import defaultdict
@@ -43,6 +45,11 @@ class Aligned:
     pieces: tuple[Piece, ...]
     speakers: int
     owner: int | None
+
+
+def covered(lead_ms: int, duration_ms: int) -> tuple[int, int]:
+    """The span of the meeting a recording covers, `lead_ms` early, `duration_ms` long."""
+    return max(0, -lead_ms), max(0, duration_ms - lead_ms)
 
 
 def overlap(a: tuple[int, int], b: tuple[int, int]) -> int:
@@ -88,7 +95,7 @@ def aligned(
     lead_ms: int = 0,
     me: Sequence[tuple[int, int]] = (),
 ) -> Aligned:
-    """The segments as pieces of the meeting, `lead_ms` after its start, with speakers.
+    """The segments as pieces of the meeting, the recording `lead_ms` early, with speakers.
 
     `me` are the spans of the live "me" lines the recording covers, in the meeting's time.
     """
@@ -100,7 +107,7 @@ def aligned(
             numbers[speaker] = len(numbers)
     pieces = tuple(
         Piece(
-            lead_ms + segment.start_ms, lead_ms + segment.end_ms, segment.text,
+            max(0, segment.start_ms - lead_ms), max(0, segment.end_ms - lead_ms), segment.text,
             None if speaker is None else numbers[speaker],
         )
         for segment, speaker in zip(segments, heard, strict=True)
@@ -113,7 +120,7 @@ def _owner(
 ) -> int | None:
     totals: dict[int, int] = defaultdict(int)
     for start, end in me:
-        for speaker, ms in index.shares((start - lead_ms, end - lead_ms)).items():
+        for speaker, ms in index.shares((start + lead_ms, end + lead_ms)).items():
             totals[speaker] += ms
     carried = {speaker: ms for speaker, ms in totals.items() if speaker in numbers}
     if not carried:
