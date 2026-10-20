@@ -88,9 +88,9 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `domain/recordings.py` — the allowed containers and audio codecs, the 6 hours, parts of at most 5 minutes ending in the latest pause after their first minute.
 - `infrastructure/media_tools.py` — `ffprobe` and `ffmpeg` as subprocesses under `prlimit` (address space, CPU, open files), a wall-clock limit that kills the process group, `PATH` only, the `file` protocol only; a hostile file fails its call, never the worker.
 - `application/intake_stage.py` — the header read before any decoder: `unsupported_audio_format`, `recording_too_long`, billing's `covers` (`upload_exceeds_minutes`); the meeting takes the recording's length.
-- `application/transcribe_stage.py` — pauses found, parts cut to Opus, at most four asked at once under `meetings:{run}:transcribe:{n}`, segments moved by their part's start, the raw transcript kept for 72 hours (O4, `transient/transcript/{run}.json`), the lines written once per run with fresh `seq`s.
+- `application/transcribe_stage.py` — pauses found, parts cut to Opus, at most four asked at once under `meetings:{run}:transcribe:{n}`, segments moved by their part's start, the raw transcript kept for 72 hours (O4, `transient/transcript/{run}.json`); since step 10 the align stage writes the lines.
 - `application/scratch.py` — the stage's scratch directory, the object streamed into it, removed whatever the end.
-- `stage_wiring.py` — a process runs the intake and transcribe stages only with `MEETINGS_TRANSCRIBE_MODEL` and the tools on its path.
+- `stage_wiring.py` — a process runs the recording's stages only with `MEETINGS_TRANSCRIBE_MODEL`, `MEETINGS_DIARIZE_MODEL` and the tools on its path.
 
 ## The native import (step 9b)
 
@@ -99,4 +99,11 @@ Every recorded meeting becomes something the person never has to hold in their h
 - `application/native_imports.py` — the refusals before any row, the file streamed to `transient/import/{id}` in parts of 5 MiB (at most sixteen at once per process, 503 `imports_busy` after ten seconds' wait), then the meeting and its run (`application/import_rows.py`, shared with the cabinet's import); the object goes when the rows cannot be written.
 - `application/import_jobs.py`, `domain/native_import.py` — the job is the person's own import run: `uploading`, `transcribing`, `enhancing`, `ready`, `failed`, with the share of its stages finished, both only growing; `channels/http/native_import_texts.py` words a failure in the person's language.
 - Revision `a8f5b3482221` adds `meeting_processing_runs.source_filename`, the name the file came with.
+
+## Diarization and alignment (step 10, MT-D3)
+
+- `application/diarize_stage.py` — the whole recording as mono Opus at 16 kHz, sent once to pyannote through the AI port (`meetings:{run}:diarize:0`, `ESSENTIAL`); the turns kept for 72 hours (O5, `transient/turns/{run}.json`). Not critical: a failed diarization leaves the transcript without speakers and the run partially completed.
+- `domain/alignment.py` — each segment takes the voice whose turns cover most of it (turns looked up by 10-second buckets), voices numbered by first appearance in the text, the owner of a desktop recording the voice most over the live "me" lines.
+- `application/align_stage.py` — the lines of about 10 seconds replace, under the meeting's lock and with fresh `seq`s, the lines the recording covers (live ones and an earlier recording's, from `audio_lead_ms` for its length); the meeting's speakers are written anew with their talk time; the line count follows. Lines of the run found written mean the stage ran; a recording without speech replaces nothing (`transcript_empty`).
+- `settings.py` — `MEETINGS_DIARIZE_MODEL` (pyannote's `precision-3` by default in `.env.example`), required outside development.
 

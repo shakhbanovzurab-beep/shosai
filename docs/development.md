@@ -107,7 +107,7 @@ uv run --env-file ../.env shosai api                # public API on 127.0.0.1:80
 - A role refuses to start while a home's schema is behind the code: run `shosai migrate upgrade` first. A home that is down does not stop the start: its requests get 503 until it answers again, and `/readyz` reports it `down`.
 - `Ctrl+C` or `SIGTERM` stops a role cleanly: it stops taking work, finishes what is in flight, then closes. Logs are JSON lines on stdout.
 - Locally every role listens on `127.0.0.1` only (`BIND_HOST`); the image binds `0.0.0.0` inside its container.
-- Recordings are read, measured and cut by `ffprobe` and `ffmpeg` under `prlimit` (meetings MT-D10). The runtime image has them; on a development machine install them (`sudo apt-get install --no-install-recommends ffmpeg`) and set `MEETINGS_TRANSCRIBE_MODEL`, or a process runs no intake or transcribe stage and imported recordings wait.
+- Recordings are read, measured and cut by `ffprobe` and `ffmpeg` under `prlimit` (meetings MT-D10). The runtime image has them; on a development machine install them (`sudo apt-get install --no-install-recommends ffmpeg`) and set `MEETINGS_TRANSCRIBE_MODEL` and `MEETINGS_DIARIZE_MODEL`, or a process runs none of the recording's stages and imported recordings wait.
 
 ### Mail
 

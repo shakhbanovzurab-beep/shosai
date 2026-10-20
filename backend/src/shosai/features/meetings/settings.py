@@ -1,9 +1,10 @@
 """Meetings' settings (`MEETINGS_*`) and their production check (plan step 6, SM-5).
 
 Until studio ships its `notes` and `transcript` roles (step 25), the findings and the
-write-up are written by one model through OpenRouter, named by `MEETINGS_NOTES_MODEL`, and
-recordings are transcribed by `MEETINGS_TRANSCRIBE_MODEL`, each with an optional fallback.
-Outside development both are required. `ffprobe` and `ffmpeg` calls are bounded by
+write-up are written by one model through OpenRouter, named by `MEETINGS_NOTES_MODEL`,
+recordings are transcribed by `MEETINGS_TRANSCRIBE_MODEL`, each with an optional fallback,
+and their speakers found by pyannote's `MEETINGS_DIARIZE_MODEL`. Outside development all
+three are required. `ffprobe` and `ffmpeg` calls are bounded by
 `MEETINGS_MEDIA_SECONDS` and `MEETINGS_MEDIA_MEMORY_MB` (MT-D10).
 """
 
@@ -26,6 +27,8 @@ class MeetingsSettings(SettingsSection):
     # Модель OpenRouter для расшифровки записей с таймстемпами, например openai/whisper-large-v3.
     meetings_transcribe_model: str | None = None
     meetings_transcribe_fallback_model: str | None = None
+    # Модель pyannote для разметки говорящих в записях, например precision-3.
+    meetings_diarize_model: str | None = None
     # Пределы одного вызова ffprobe или ffmpeg (MT-D10): секунды и мегабайты адресного пространства.
     meetings_media_seconds: PositiveInt = 300
     meetings_media_memory_mb: PositiveInt = 1024
@@ -41,4 +44,8 @@ def notes_model_set(settings: Settings) -> Iterator[GateViolation]:
     if not meetings.meetings_transcribe_model:
         yield GateViolation(
             "MEETINGS_TRANSCRIBE_MODEL", "без модели расшифровки записи встреч не расшифровываются"
+        )
+    if not meetings.meetings_diarize_model:
+        yield GateViolation(
+            "MEETINGS_DIARIZE_MODEL", "без модели разметки записи встреч не обрабатываются"
         )

@@ -4,7 +4,7 @@ import json
 import uuid
 from datetime import timedelta
 from pathlib import Path
-from typing import Any
+from typing import Any, Final
 
 import httpx
 from sqlalchemy import select
@@ -12,11 +12,13 @@ from sqlalchemy import select
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.files.infrastructure.upload_records import UploadRecord
+from shosai.features.meetings.application.diarize_stage import turns_key
 from shosai.features.meetings.application.run_rows import progress_of
 from shosai.features.meetings.application.transcribe_stage import raw_key
-from shosai.features.meetings.domain.runs import RunState, Stage, StageStatus
+from shosai.features.meetings.domain.runs import STAGES, RunSource, RunState, Stage, StageStatus
 from shosai.features.meetings.infrastructure.meeting_records import (
     MeetingRecord,
+    SpeakerRecord,
     TranscriptLineRecord,
 )
 from shosai.features.meetings.infrastructure.notes_records import SettingsRecord
@@ -27,6 +29,13 @@ from tests.harness.connections import fetch_rows
 from tests.harness.run_slot import RunSlot
 
 TRANSCRIPTIONS = "audio/transcriptions"
+# Голоса записи: первый говорит в начале каждой части, второй — с её двадцатой секунды.
+TWO_VOICES: Final = [
+    {"speaker": "SPEAKER_03", "start": 0.0, "end": 12.0},
+    {"speaker": "SPEAKER_01", "start": 15.0, "end": 30.0},
+    {"speaker": "SPEAKER_03", "start": 290.0, "end": 312.0},
+    {"speaker": "SPEAKER_01", "start": 314.0, "end": 330.0},
+]
 type Json = dict[str, Any]
 
 
@@ -88,6 +97,7 @@ async def test_a_video_becomes_a_meeting_with_its_transcript_and_a_repeat_answer
     upload_id = await recording_bench.upload(owner, video, "video/mp4")
     for _ in range(2):
         recording_bench.ai.openrouter.answer(TRANSCRIPTIONS, heard())
+    recording_bench.ai.pyannote.turns = TWO_VOICES
 
     started = await imported(recording_bench, owner, upload_id)
     again = await imported(recording_bench, owner, upload_id)
@@ -104,17 +114,22 @@ async def test_a_video_becomes_a_meeting_with_its_transcript_and_a_repeat_answer
                 .order_by(TranscriptLineRecord.seq)
             )
         ).all()
+    async with recording_bench.homes.transactions.begin(TenancyScope(Home.EU, owner)) as session:
+        found = await session.execute(
+            select(SpeakerRecord.idx, SpeakerRecord.role, SpeakerRecord.talk_ms)
+            .where(SpeakerRecord.session_id == meeting.id)
+            .order_by(SpeakerRecord.idx)
+        )
+        speakers = [(idx, role, talk) for idx, role, talk in found]
     costs = await fetch_rows(
         run_slot.claimed.connections[Home.EU],
-        "SELECT kind, outcome, unit FROM provider_costs WHERE feature = 'meetings.transcribe'",
+        "SELECT feature, kind, outcome, unit FROM provider_costs ORDER BY feature, created_at",
     )
     bodies = recording_bench.ai.openrouter.bodies(TRANSCRIPTIONS)
     second = raw["parts"][1]["start_ms"]
     assert again == started
-    assert ran == [Stage.INTAKE, Stage.TRANSCRIBE]
-    assert [s for s, r in progress_of(run.stage_state).items() if r.status is StageStatus.DONE] == [
-        Stage.INTAKE, Stage.TRANSCRIBE,
-    ]  # fmt: skip
+    assert ran == list(STAGES[RunSource.IMPORT])
+    assert RunState(run.state) is RunState.SUCCEEDED
     assert (meeting.title, meeting.source, meeting.seconds) == ("meeting", "import", VIDEO_SECONDS)
     assert meeting.ended_at is not None
     assert meeting.ended_at - meeting.started_at == timedelta(seconds=VIDEO_SECONDS)
@@ -122,16 +137,21 @@ async def test_a_video_becomes_a_meeting_with_its_transcript_and_a_repeat_answer
     assert [(p["start_ms"], p["end_ms"]) for p in raw["parts"]] == [
         (0, second), (second, run.audio_duration_ms),
     ]  # fmt: skip
-    assert [(line.start_ms, line.text, line.origin) for line in lines] == [
-        (0, "Hello, team.", "recording"), (20_000, "Let us start.", "recording"),
-        (second, "Hello, team.", "recording"), (second + 20_000, "Let us start.", "recording"),
+    assert [(line.start_ms, line.text, line.speaker_idx) for line in lines] == [
+        (0, "Hello, team.", 0), (20_000, "Let us start.", 1),
+        (second, "Hello, team.", 0), (second + 20_000, "Let us start.", 1),
     ]  # fmt: skip
-    assert {line.run_id for line in lines} == {run.id}
+    assert {(line.run_id, line.origin) for line in lines} == {(run.id, "recording")}
     assert (meeting.line_count, run.raw_transcript_key) == (4, raw_key(run.id))
+    assert run.turns_key == turns_key(run.id)
+    assert speakers == [(0, "numbered", 8_000), (1, "numbered", 12_000)]
     assert [(b["input_audio"]["format"], b["response_format"]) for b in bodies] == [
         ("ogg", "verbose_json"), ("ogg", "verbose_json"),
     ]  # fmt: skip
-    assert [tuple(row.values()) for row in costs] == [("transcribe", "ok", "audio_second")] * 2
+    assert [tuple(row.values()) for row in costs] == [
+        ("meetings.diarize", "diarize", "ok", "audio_second"),
+        *[("meetings.transcribe", "transcribe", "ok", "audio_second")] * 2,
+    ]
 
 
 async def test_a_recording_longer_than_the_minutes_left_fails_before_any_paid_call(

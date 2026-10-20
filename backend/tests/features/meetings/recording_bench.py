@@ -6,8 +6,9 @@ whose header claims 7 hours, as a hostile or broken file may. `upload` writes a 
 recording upload the way files leaves one — its row and its object under `transient/` —
 so the import claims it through files' own claim. The native import (step 9b) streams to
 the same buckets, rate-limited over the slot's Valkey; `languages` is each person's
-language as identity's profile gives it. The AI port is the real one over a
-scripted OpenRouter; the pipeline's engine runs the intake and transcribe stages.
+language as identity's profile gives it. Diarization runs on the scripted pyannote, the
+notes' stages finish at once, so a run reaches its end. The AI port is the real one over
+the scripted OpenRouter and pyannote; the pipeline's engine runs every stage it sent.
 """
 
 import asyncio
@@ -47,11 +48,14 @@ from shosai.features.identity.contracts import (
     CONSENT_READER,
     AccountProfile,
 )
+from shosai.features.meetings.application.align_stage import AlignStage
+from shosai.features.meetings.application.diarize_stage import DiarizeStage
 from shosai.features.meetings.application.import_jobs import ImportJobs
 from shosai.features.meetings.application.imports import RecordingImports
 from shosai.features.meetings.application.intake_stage import IntakeStage
 from shosai.features.meetings.application.native_imports import NativeImports
-from shosai.features.meetings.application.pipeline import PipelineEngine, StageHandler
+from shosai.features.meetings.application.pipeline import PipelineEngine, StageHandler, StageWork
+from shosai.features.meetings.application.stage_task import StageRetryError
 from shosai.features.meetings.application.transcribe_stage import TranscribeStage
 from shosai.features.meetings.channels.http.imports import build_imports_router
 from shosai.features.meetings.channels.http.native_import import build_native_import_router
@@ -72,6 +76,7 @@ from tests.harness.database_access import DatabaseAccess
 from tests.harness.shared_services import SlotBucket
 
 TRANSCRIBE_MODEL: Final = ModelRef(Provider.OPENROUTER, "probe/transcribe")
+DIARIZE_MODEL: Final = ModelRef(Provider.PYANNOTE, "precision-3")
 VIDEO_SECONDS: Final = 380
 CLAIMED_SECONDS: Final = 7 * 3600
 LIMITS: Final = MediaLimits(seconds=120, memory_mb=1024)
@@ -168,17 +173,31 @@ class RecordingBench:
             )  # fmt: skip
         return upload_id
 
-    async def drive(self, upto: int = 10) -> list[Stage]:
-        """Run every stage the engine sent, in order; the stages it ran."""
+    async def drive(self, upto: int = 20) -> list[Stage]:
+        """Run every stage the engine sent, in order, again when it is given back; the runs."""
         ran: list[Stage] = []
         done = 0
         while done < len(self.sent.payloads) and len(ran) < upto:
             payload = self.sent.payloads[done]
-            done += 1
-            if self.engine.handles(payload.stage):
+            if not self.engine.handles(payload.stage):
+                done += 1
+                continue
+            ran.append(payload.stage)
+            try:
                 await self.engine.run_stage(payload)
-                ran.append(payload.stage)
+            except StageRetryError:
+                # Брокер доставил бы стадию снова после паузы: стенд делает это сразу.
+                continue
+            done += 1
         return ran
+
+
+class NotesSkipped:
+    """The notes' stages, another bench's subject: here they finish at once."""
+
+    async def run(self, work: StageWork) -> None:
+        """Nothing to write."""
+        del work
 
 
 @dataclass
@@ -198,15 +217,20 @@ def stages(
     collaborators: tuple[PortDirectory, Mapping[Home, ObjectStorage]],
     providers: AiBench,
 ) -> dict[Stage, StageHandler]:
-    """The intake and transcribe stages over the real tools."""
+    """The recording's stages over the real tools; the notes' stages finish at once."""
     ports, storage = collaborators
-    tools = MediaTools(LIMITS)
-    route = ModelRoute(TRANSCRIBE_MODEL)
+    tools, ai = MediaTools(LIMITS), providers.providers
     return {
         Stage.INTAKE: IntakeStage(homes.transactions, (ports, storage, tools)),
         Stage.TRANSCRIBE: TranscribeStage(
-            homes.transactions, (ports, storage, tools), (providers.providers, route)
+            homes.transactions, (ports, storage, tools), (ai, ModelRoute(TRANSCRIBE_MODEL))
         ),
+        Stage.DIARIZE: DiarizeStage(
+            homes.transactions, (ports, storage, tools), (ai, ModelRoute(DIARIZE_MODEL))
+        ),
+        Stage.ALIGN: AlignStage(homes.transactions, storage),
+        Stage.FINDINGS: NotesSkipped(),
+        Stage.WRITE_UP: NotesSkipped(),
     }
 
 
@@ -217,6 +241,7 @@ async def recording_bench(
     """Imports of recordings over the slot's homes and buckets."""
     homes, clock = entitlements.homes, entitlements.clock
     await set_prices(homes.transactions, TRANSCRIBE_MODEL, audio_second="0.0000075")
+    await set_prices(homes.transactions, DIARIZE_MODEL, audio_second="0.00003")
     await set_rate(homes.transactions, "92.5000")
     providers = ai_bench(homes.transactions, doubles=Doubles())
     ports, sent, languages = PortDirectory(), Sent(), Languages()

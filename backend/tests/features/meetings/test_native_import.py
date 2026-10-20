@@ -12,7 +12,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.meetings.channels.http.native_import_texts import FAILURE_TEXTS
 from shosai.features.meetings.domain.native_import import IMPORT_MAX_BYTES
-from shosai.features.meetings.domain.runs import Stage
+from shosai.features.meetings.domain.runs import STAGES, RunSource
 from shosai.features.meetings.infrastructure.meeting_records import MeetingRecord
 from shosai.features.meetings.infrastructure.notes_records import SettingsRecord
 from shosai.features.meetings.infrastructure.run_records import RunRecord
@@ -125,8 +125,8 @@ async def test_a_streamed_recording_becomes_a_job_the_clients_poll_to_its_transc
         "id": job_id, "fileName": "meeting.mp4", "stage": "uploading", "progress": 0.0,
         "meetingId": str(meeting.id), "error": None,
     }  # fmt: skip
-    assert ran == [Stage.INTAKE, Stage.TRANSCRIBE]
-    assert (transcribed.json()["stage"], transcribed.json()["progress"]) == ("transcribing", 0.33)
+    assert ran == list(STAGES[RunSource.IMPORT])
+    assert (transcribed.json()["stage"], transcribed.json()["progress"]) == ("ready", 1.0)
     assert (meeting.title, meeting.source, meeting.line_count) == ("meeting", "import", 4)
     assert run.audio_key.startswith("transient/import/")
     assert stored is not None
