@@ -13,6 +13,7 @@ The owner decided the other way round: the cabinet is the reference. Notes is wh
 ## Decision
 
 1. **The cabinet keeps its names.** `frontend/src/features/notes` (`/app/notes`, "Notes") and `frontend/src/features/meetings` (`/app/meetings`, "Meetings") are not renamed; SLICE_MAP §4.3 loses both rows.
+   No other cabinet feature is renamed either (the owner, the same day): `file-manager`, `knowledge-base`, `kanban`, `workspace`, `leo`, `upgrade` and `download` keep their names beside the slices `files`, `knowledge`, `tasks`, `workspaces`, `agent`, `billing` and `releases`; SLICE_MAP §4.3 pairs them instead of renaming them.
 2. **The backend slice `meetings` becomes `notes`** — code, documents and every name no client uses yet:
 
    | Before | After |

@@ -122,7 +122,7 @@ Every change must be safe, measurable and of real engineering value. No changes 
 
 **Feature-first vertical slices are the only allowed structure, in `backend/`, `frontend/` and `site/`.**
 
-- A slice holds everything its feature needs. Backend: models, schemas, services, endpoints. Frontend: components, hooks, state, API calls. The two sides mirror each other by feature name.
+- A slice holds everything its feature needs. Backend: models, schemas, services, endpoints. Frontend: components, hooks, state, API calls. The two sides mirror each other by feature name. The cabinet's existing feature names are kept: a new backend slice takes the cabinet's name, and where an existing feature's name differs from its slice, [SLICE_MAP §4.3](../docs/plan/SLICE_MAP.md#43-frontend-names) pairs them ([ADR 0057](../docs/adr/0057-notes-and-meetings-slice-names.md)).
 - Clean Architecture sets the direction of dependencies **inside** a slice: domain logic does not depend on the framework, the database or transport.
 - Slices talk to each other only through explicit contracts: a public interface, an event, or the HTTP API. `import-linter` enforces the boundaries on the backend.
 

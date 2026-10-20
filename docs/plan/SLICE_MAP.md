@@ -10,7 +10,7 @@ The feature slices of Shosai, derived from the product: the new cabinet in `fron
 
 ## 1. Rules of the cut
 
-1. **One business capability per slice, named for what it does in Shosai.** A slice owns its tables, its `/v1` routes, its events, its Leo toolset and its screens. Backend `features/<name>/` and frontend `src/features/<name>/` carry the same name (CLAUDE.md "Architecture"); §4.3 lists the frontend renames this requires.
+1. **One business capability per slice, named for what it does in Shosai.** A slice owns its tables, its `/v1` routes, its events, its Leo toolset and its screens. Backend `features/<name>/` and frontend `src/features/<name>/` carry the same name (CLAUDE.md "Architecture"); the cabinet's existing feature names are kept, and §4.3 pairs those that differ from their slice ([ADR 0057](../adr/0057-notes-and-meetings-slice-names.md)).
 2. **One owner per entity.** Where the cabinet keeps one thing in several places (three task lists, two "connect a source" screens, three plan enumerations, two default models, two operator directories), the cut gives it one owner and the other screens read it through that owner's contract. Each such merge removes work from the user, in the philosophy's terms (§2.10).
 3. **Integration through contracts, events and shared context only.** Ports in `features/<x>/contracts`, outbox events with ids only (§12), and the HTTP API. Leo's tools live in the slices that own the data, as `ToolSpec`s (ADR 0029).
 4. **Composition screens own no data.** The home screen (`/app/productivity`), the Meetings overview (`/app/meetings`), the Settings dialog and the admin dashboard compose widgets of several owners. Each widget calls its owner's API; there is no aggregating backend slice and no request waterfall (independent calls run in parallel).
@@ -421,11 +421,9 @@ Scope as S17 today ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite
 
 ### 4.3 Frontend names
 
-The mirror rule needs these renames, each made in the owning slice's first frontend step (URLs do not change):
+The cabinet's feature names stay as they are (the owner's decision of 2026-10-20, [ADR 0057](../adr/0057-notes-and-meetings-slice-names.md)): where a backend slice and a cabinet feature were planned apart, the slice takes the cabinet's name (`notes`, `meetings`), and no cabinet feature is renamed to match a slice. These pairs keep different names:
 
-The cabinet's `notes` (Notes) and `meetings` (Meetings) keep their names: the backend slices are named after them ([ADR 0057](../adr/0057-notes-and-meetings-slice-names.md), the owner's decision of 2026-10-20). The renames below were derived by an agent from the mirror rule and await the owner's confirmation.
-
-| Cabinet feature today | Becomes | Note |
+| Cabinet feature | Backend slice | Note |
 |---|---|---|
 | `file-manager` | `files` | |
 | `knowledge-base` | `knowledge` | |
@@ -434,9 +432,8 @@ The cabinet's `notes` (Notes) and `meetings` (Meetings) keep their names: the ba
 | `leo` | `agent` | the visible name stays Leo (Leo architecture Q-5) |
 | `upgrade` | `billing` | |
 | `download` | `releases` | |
-| `settings` | `settings` (dialog shell) | each section moves to its owner: account and privacy → identity, billing and usage → billing, Leo → agent, memory → memory, connectors → connectors, MCP → mcp, hotkeys → capture |
-| `productivity` | `productivity` (composition) | no backend slice |
-| `admin-*` | the owner's slice, `admin` sub-folder | e.g. `billing/admin/` |
+
+The `settings` dialog stays a shell whose sections live with their owners: account and privacy → identity, billing and usage → billing, Leo → agent, memory → memory, connectors → connectors, MCP → mcp, hotkeys → capture. `productivity` composes other slices' widgets and has no backend slice. The admin's features keep their `admin-*` folders.
 
 ---
 
