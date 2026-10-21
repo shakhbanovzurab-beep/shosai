@@ -1,8 +1,9 @@
 """The person's usage section (`GET /v1/settings/usage`), in the cabinet's contract.
 
 Weekly tokens per tier against the plan's allowance (`limit_tokens` null when unlimited),
-the Monday week in UTC, the pack tokens left and this week's frontier models, most used
-first (`settings/domain/billing-contract.ts`). Packs to buy arrive with checkout (step 11).
+the Monday week of the business calendar, the pack tokens left and this week's frontier
+models, most used first (`settings/domain/billing-contract.ts`). Packs to buy arrive with
+checkout (step 11).
 """
 
 from datetime import datetime

@@ -2,7 +2,8 @@
 
 After a commit writes a user's cost rows and the counters take them, the user's total today
 is compared with `AI_USER_DAILY_ALERT_USD`. The first time it passes, an atomic `SET NX`
-marker that lives to the end of the UTC day decides the one alert of that user and day, and
+marker that lives to the end of the business day (ADR 0058) decides the one alert of that
+user and day, and
 the event `ai.user_spend.exceeded` is written to the outbox in its own small transaction in
 the user's home — not in the cost row's transaction, which makes no external call (§14
 rule 1). If that write fails, the marker is lifted and the next row tries again. The
@@ -13,7 +14,7 @@ to be read: only the attempt's own marker is lifted, never an earlier alert's.
 import asyncio
 import secrets
 from collections.abc import Sequence
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from typing import Final
 from uuid import UUID
 
@@ -27,6 +28,7 @@ from shosai.core.ai.spend.counters import Payer, counters_of
 from shosai.core.db.errors import HomeUnavailableError
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.kv.connection import REDIS_FAILURES
 from shosai.core.kv.keys import build_key
@@ -54,7 +56,9 @@ class SpendAlert:
         transactions: HomeTransactions,
         outbox: EventOutbox,
         threshold_micro: int,
+        calendar: BusinessCalendar,
     ) -> None:
+        self._calendar = calendar
         self._valkey = valkey
         self._check = valkey.register_script(ALERT_SCRIPT)
         self._lift = valkey.register_script(RELEASE_SCRIPT)
@@ -73,9 +77,10 @@ class SpendAlert:
 
     async def _checked(self, user_id: UUID, entry: CostEntry, now: datetime) -> None:
         payer = Payer(user_id, None, CallOrigin.INTERACTIVE, CallClass.STANDARD, now)
-        [total] = [c.key for c in counters_of(payer) if c.limit == "user_total_day"]
-        marker = build_key("ai", "spend", "alerted", user_id.hex, f"{now:%Y%m%d}")
-        day_end = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+        [total] = [c.key for c in counters_of(payer, self._calendar) if c.limit == "user_total_day"]
+        day = self._calendar.date_of(now)
+        marker = build_key("ai", "spend", "alerted", user_id.hex, f"{day:%Y%m%d}")
+        _, day_end = self._calendar.day_window(now)
         ttl = int((day_end - now).total_seconds() * 1000) + 1
         attempt = secrets.token_hex(8)
         try:
@@ -91,7 +96,7 @@ class SpendAlert:
         if not spend:
             return
         event = UserSpendExceeded(
-            user_id=user_id, day=now.date(), spend_micro_usd=spend,
+            user_id=user_id, day=day, spend_micro_usd=spend,
             threshold_micro_usd=self._threshold,
         )  # fmt: skip
         scope = TenancyScope(entry.home, user_id, entry.org_id)

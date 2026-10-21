@@ -7,11 +7,13 @@ import { deviceName } from "@/features/identity/domain/device-name";
 import type { AdminUserCard } from "../domain/contract";
 import { formatDateTime, formatUsd } from "../domain/format";
 import { clientLabel, outcomeLabel } from "../domain/labels";
+import { useDisplayZone } from "./use-display-zone";
 
 type UserCard = AdminUserCard;
 
-/** Расходы на ИИ за сегодня, неделю и месяц по UTC, в обоих домах. */
+/** Расходы на ИИ за сегодня, неделю и месяц делового пояса платформы (ADR 0058), в обоих домах. */
 export function SpendCard({ spend }: { spend: UserCard["spend"] }) {
+  const { label } = useDisplayZone();
   const rows = [
     ["Сегодня", spend.today_usd],
     ["Неделя", spend.week_usd],
@@ -21,7 +23,7 @@ export function SpendCard({ spend }: { spend: UserCard["spend"] }) {
     <Card className="h-fit">
       <CardHeader>
         <CardTitle>Расходы на ИИ</CardTitle>
-        <CardDescription>Себестоимость вызовов моделей, периоды по UTC.</CardDescription>
+        <CardDescription>Себестоимость вызовов моделей, сутки и месяцы по {label}.</CardDescription>
       </CardHeader>
       <CardContent>
         <dl className="flex flex-col gap-2">
@@ -77,6 +79,7 @@ function ActivityCard({
 
 /** Открытые сессии: устройство, адрес и когда им пользовались. */
 export function SessionsCard({ sessions }: { sessions: UserCard["sessions"] }) {
+  const shown = useDisplayZone();
   return (
     <ActivityCard
       title="Сессии"
@@ -88,8 +91,8 @@ export function SessionsCard({ sessions }: { sessions: UserCard["sessions"] }) {
             {deviceName(session.device_label) ?? clientLabel(session.client_kind)}
           </TableCell>
           <TableCell className="font-mono text-xs">{session.ip ?? "—"}</TableCell>
-          <TableCell className="tabular-nums">{formatDateTime(session.created_at)}</TableCell>
-          <TableCell className="pe-6 tabular-nums">{formatDateTime(session.last_used_at)}</TableCell>
+          <TableCell className="tabular-nums">{formatDateTime(session.created_at, shown)}</TableCell>
+          <TableCell className="pe-6 tabular-nums">{formatDateTime(session.last_used_at, shown)}</TableCell>
         </TableRow>
       ))}
     />
@@ -98,6 +101,7 @@ export function SessionsCard({ sessions }: { sessions: UserCard["sessions"] }) {
 
 /** Последние попытки входа и чем они кончились. */
 export function SignInsCard({ signIns }: { signIns: UserCard["sign_ins"] }) {
+  const shown = useDisplayZone();
   return (
     <ActivityCard
       title="Последние входы"
@@ -105,7 +109,7 @@ export function SignInsCard({ signIns }: { signIns: UserCard["sign_ins"] }) {
       columns={["Когда", "Итог", "Откуда", "Адрес"]}
       rows={signIns.map((attempt) => (
         <TableRow key={`${attempt.created_at}-${attempt.outcome}`}>
-          <TableCell className="ps-6 tabular-nums">{formatDateTime(attempt.created_at)}</TableCell>
+          <TableCell className="ps-6 tabular-nums">{formatDateTime(attempt.created_at, shown)}</TableCell>
           <TableCell>{outcomeLabel(attempt.outcome)}</TableCell>
           <TableCell>{clientLabel(attempt.client_kind)}</TableCell>
           <TableCell className="pe-6 font-mono text-xs">{attempt.ip ?? "—"}</TableCell>

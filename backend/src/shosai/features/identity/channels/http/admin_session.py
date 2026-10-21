@@ -2,7 +2,8 @@
 
 The cookie `shosai_admin` is HttpOnly, SameSite=Strict and sent only to `/v1/admin`, so
 no script reads it and no other site's page sends it; it lives 8 hours and signing out
-ends it on the server at once.
+ends it on the server at once. Reading the session also hands the admin panel the
+platform's business time zone, in which it shows its dates (ADR 0058).
 """
 
 from datetime import timedelta
@@ -28,6 +29,14 @@ SIGN_IN_LIMIT: Final = RateLimit("identity.admin_sign_in_address", 5, timedelta(
 ADMIN_PATH: Final = "/v1/admin"
 
 
+class AdminSessionOut(BaseModel):
+    """What the admin panel needs of the platform while the admin is signed in."""
+
+    business_time_zone: str = Field(
+        description="The IANA zone of the platform's days and months; admin dates show in it."
+    )
+
+
 class AdminSignInRequest(BaseModel):
     """The admin's login and password."""
 
@@ -38,9 +47,13 @@ class AdminSignInRequest(BaseModel):
 
 
 def build_admin_session_router(
-    access: AdminAccess, ports: PortDirectory, limiter: RateLimiter, cookies: CookiePolicy
+    access: AdminAccess,
+    ports: PortDirectory,
+    web: tuple[RateLimiter, CookiePolicy],
+    business_time_zone: str,
 ) -> APIRouter:
     """Sign the admin in, tell whether they are signed in, sign them out."""
+    limiter, cookies = web
     router = APIRouter(prefix=f"{ADMIN_PATH}/session", tags=["admin"])
 
     @router.post(
@@ -57,13 +70,10 @@ def build_admin_session_router(
             samesite="strict",
         )  # fmt: skip
 
-    @router.get(
-        "",
-        status_code=HTTPStatus.NO_CONTENT,
-        dependencies=[Depends(require_admin(ports))],
-    )
-    async def read_admin_session() -> None:
-        """204 while the admin is signed in; 401 `admin_sign_in_required` otherwise."""
+    @router.get("", dependencies=[Depends(require_admin(ports))])
+    async def read_admin_session() -> AdminSessionOut:
+        """The platform's business zone while the admin is signed in; 401 otherwise."""
+        return AdminSessionOut(business_time_zone=business_time_zone)
 
     @router.delete("", status_code=HTTPStatus.NO_CONTENT)
     async def sign_out_admin(

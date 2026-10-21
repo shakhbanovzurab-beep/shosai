@@ -39,7 +39,7 @@ class PlanOutput(BaseModel):
         description="Meeting minutes a month; null means unlimited, 0 not included."
     )
     minutes_used_this_month: float = Field(description="Meeting minutes used this month.")
-    minutes_reset_at: datetime = Field(description="When the monthly minutes reset, in UTC.")
+    minutes_reset_at: datetime = Field(description="When the monthly minutes reset.")
     file_manager_gb: int | None = Field(description="File storage in GB; null is unlimited.")
     knowledge_base_mb: int | None = Field(
         description="Files Leo may use as knowledge, in MB; null is unlimited."
@@ -67,7 +67,7 @@ class TierOutput(BaseModel):
 class UsageOutput(BaseModel):
     """This week's tokens per tier and the bought tokens left."""
 
-    week_resets_at: datetime = Field(description="When the weekly allowances reset, in UTC.")
+    week_resets_at: datetime = Field(description="When the weekly allowances reset.")
     tiers: list[TierOutput] = Field(description="Each model tier's use this week.")
     pack_tokens_left: int = Field(
         description="Bought frontier tokens left; spent after the weekly frontier allowance."

@@ -1,7 +1,7 @@
 import { data, type LoaderFunctionArgs, redirect } from "react-router";
 
-import { adminSignedIn } from "@/features/admin-sign-in/api/admin-session-api";
 import { ADMIN_HOME } from "@/features/admin-sign-in/domain/login-path";
+import { adminSignedIn } from "@/features/admin-sign-in/model/admin-guard";
 import { loginPathFor } from "@/features/identity/domain/next-path";
 import type { Me } from "@/features/identity/domain/session";
 import { startSession } from "@/features/identity/model/session";

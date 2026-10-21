@@ -1,44 +1,30 @@
 """The usage windows and allowances: minutes a month, tokens a week (BL-D3, BL-D4).
 
-Minutes reset on the first day of a month in UTC, tokens on Monday 00:00 UTC. Minutes are
+Minutes reset on the first day of a month, tokens on Monday at midnight, both in the
+business time zone (ADR 0058, `BusinessCalendar`). Minutes are
 counted in seconds and judged on the raw total, never on a rounded remainder. A frontier
 request past its weekly allowance spends packs, then falls back to a standard model; a
 standard request past the plan's daily tokens stops with its reason (BL-D4).
 """
 
 from dataclasses import dataclass
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 from enum import StrEnum
 
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.features.billing.domain.plans import ModelTier
 
 SECONDS_IN_MINUTE = 60
-DECEMBER = 12
 
 
-def month_window(now: datetime) -> tuple[datetime, datetime]:
-    """The UTC month containing `now`: its first moment and the next month's."""
-    start = now.astimezone(UTC).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    if start.month == DECEMBER:
-        return start, start.replace(year=start.year + 1, month=1)
-    return start, start.replace(month=start.month + 1)
-
-
-def tombstones_since(now: datetime) -> datetime:
+def tombstones_since(now: datetime, business: BusinessCalendar) -> datetime:
     """The earliest meeting start whose tombstone still matters: the previous month's start.
 
     A meeting deleted late may still fall into last month; older months count no more.
     """
-    start, _ = month_window(now)
-    previous, _ = month_window(start - timedelta(microseconds=1))
+    start, _ = business.month_window(now)
+    previous, _ = business.month_window(start - timedelta(microseconds=1))
     return previous
-
-
-def week_window(now: datetime) -> tuple[datetime, datetime]:
-    """The UTC week containing `now`, from Monday 00:00 to the next Monday."""
-    day = now.astimezone(UTC).replace(hour=0, minute=0, second=0, microsecond=0)
-    start = day - timedelta(days=day.weekday())
-    return start, start + timedelta(days=7)
 
 
 @dataclass(frozen=True, slots=True)

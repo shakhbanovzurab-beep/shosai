@@ -33,6 +33,7 @@ from tests.core.ai.bench import (
 )
 from tests.core.ai.test_spend_reports import OTHER_USER, row
 from tests.core.kv.outages import LateAnswerValkey
+from tests.doubles.business_calendar import MOSCOW
 from tests.doubles.openrouter import stream_answer, usage
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
@@ -141,7 +142,7 @@ async def test_a_user_passing_the_threshold_yields_one_alert_a_day(
 ) -> None:
     writer = ai_bench(homes.transactions, doubles=Doubles(valkey=valkey)).writer
     outbox = EventOutbox(EventTypes([UserSpendExceeded]))
-    writer.observe(SpendAlert(valkey, homes.transactions, outbox, threshold_micro=500_000).observe)
+    writer.observe(SpendAlert(valkey, homes.transactions, outbox, 500_000, MOSCOW).observe)
     now = datetime.now(UTC)
 
     for cost in ("0.30", "0.25", "0.40"):
@@ -155,7 +156,7 @@ async def test_a_user_passing_the_threshold_yields_one_alert_a_day(
     [alert] = [dict(event) for event in events if event["event_type"] == "ai.user_spend.exceeded"]
     assert alert["user_id"] == USER_ID
     assert alert["payload"] == {
-        "user_id": str(USER_ID), "day": now.date().isoformat(),
+        "user_id": str(USER_ID), "day": MOSCOW.date_of(now).isoformat(),
         "spend_micro_usd": 550_000, "threshold_micro_usd": 500_000,
     }  # fmt: skip
 
@@ -165,7 +166,7 @@ async def test_an_alert_marker_set_after_the_deadline_is_taken_back(
 ) -> None:
     outbox = EventOutbox(EventTypes([UserSpendExceeded]))
     alerts = [
-        SpendAlert(client, homes.transactions, outbox, threshold_micro=500_000)
+        SpendAlert(client, homes.transactions, outbox, 500_000, MOSCOW)
         for client in (LateAnswerValkey(connection_pool=valkey.connection_pool), valkey)
     ]
     writer = ai_bench(homes.transactions, doubles=Doubles(valkey=valkey)).writer

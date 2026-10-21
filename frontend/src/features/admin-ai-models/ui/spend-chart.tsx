@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { businessZoneLabel, useBusinessZone } from "@/features/admin-sign-in/model/business-zone";
 import { lazyComponent } from "@/lib/lazy-component";
 
 import type { DailySpend } from "../domain/contract";
@@ -16,13 +17,14 @@ const SpendAreaChart = lazyComponent(
 
 export function SpendChart({ daily }: { daily: DailySpend[] }) {
   const total = daily.reduce((sum, day) => sum + day.cost, 0);
+  const zone = businessZoneLabel(useBusinessZone());
 
   return (
     <Card className="h-full">
       <CardHeader>
         <CardTitle className="font-normal">Расход за 30 дней</CardTitle>
         <CardDescription>
-          Всего <span className="text-foreground tabular-nums">{formatUsd(total)}</span>, по дням (UTC)
+          Всего <span className="text-foreground tabular-nums">{formatUsd(total)}</span>, по дням ({zone})
         </CardDescription>
       </CardHeader>
       <CardContent>

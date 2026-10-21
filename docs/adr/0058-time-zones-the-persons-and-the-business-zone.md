@@ -23,6 +23,11 @@ Until identity's step 16 the cabinet formatted every date in UTC: a meeting at 1
   - F6's spend reports and limits in `core/ai/spend` (day and month starts, the daily series, the per-user daily alert) and the admin AI models screen move in the same billing step, so money and spend change their day boundary together;
   - telemetry: its product reports and the admin dashboard's telemetry block count days and months in the business zone from their first step.
 - Until a step moves its totals, the admin panel keeps showing UTC: a screen moves to "МСК" together with the totals it shows, so a day on screen is always the server's day.
+- How billing's step 7b applied it (2026-10-21): the platform reads `BUSINESS_TIME_ZONE` once and hands a `BusinessCalendar` (`core/kernel/business_calendar.py`) to every service that cuts a day, a Monday week or a month — F6's counters, ceilings, alert, reports and counter rebuild, billing's minutes, tokens, plans, usage and promo codes. Hours stay UTC's: a whole-hour zone shares their boundaries, so the hour counters do not restart at the switch.
+- Kept as it is: the renewal key `<subscription>:<expiry date>` is an idempotency key in the draft's form, not a total; moving its date could make a migrated attempt look new and charge twice.
+- `usage_events` keeps two past months instead of one: its partitions are cut on UTC months, and the previous business month begins at 21:00 UTC on the last day of the UTC month two months back.
+- At the switch, the day and month counters already filled keep the sums of their UTC period under the same label for the rest of that period; `shosai ai rebuild-spend-counters` recounts them from the cost rows with the new boundaries.
+- The admin panel learns the zone from `GET /v1/admin/session` (`business_time_zone`); the account card, Plans and promo codes and AI models moved to "МСК" with the totals they show, Admin › Billing moves with its API.
 - A totals boundary is not a person's day: a person's "today" in the cabinet follows their own zone, the business day follows Moscow, and the two are never mixed on one screen.
 
 ## Rejected

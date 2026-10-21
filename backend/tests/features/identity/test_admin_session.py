@@ -84,7 +84,9 @@ async def test_the_admin_signs_in_and_out_and_the_old_cookie_stops_working(
     flags = signed_in.headers["set-cookie"].lower()
     for flag in ("httponly", "samesite=strict", "path=/v1/admin", "secure", "max-age=28800"):
         assert flag in flags
-    assert (checked.status_code, signed_out.status_code, again.status_code) == (204, 204, 204)
+    assert (checked.status_code, signed_out.status_code, again.status_code) == (200, 204, 204)
+    # Админка показывает даты в деловом поясе платформы и узнаёт его из сессии (ADR 0058).
+    assert checked.json() == {"business_time_zone": "Europe/Moscow"}
     assert (replayed.status_code, replayed.json()["error"]["code"]) == (
         401, "admin_sign_in_required",
     )  # fmt: skip

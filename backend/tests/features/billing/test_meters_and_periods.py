@@ -12,9 +12,8 @@ from shosai.features.billing.domain.meters import (
     MinutesLeft,
     TokenAllowance,
     TokenRoute,
-    month_window,
     token_route,
-    week_window,
+    tombstones_since,
 )
 from shosai.features.billing.domain.money import Currency, Money
 from shosai.features.billing.domain.periods import (
@@ -33,6 +32,7 @@ from shosai.features.billing.domain.promos import (
     Purchase,
     discounted,
 )
+from tests.doubles.business_calendar import MOSCOW
 
 START = datetime(2026, 10, 1, tzinfo=UTC)
 PROFESSIONAL = uuid.UUID("0199f2a0-0000-7000-8000-0000000000aa")
@@ -40,15 +40,16 @@ moments = st.integers(0, 2 * 365 * 24 * 60).map(lambda minutes: START + timedelt
 
 
 @given(now=moments)
-def test_the_month_and_the_week_contain_now_and_start_where_the_cabinet_says(now: datetime) -> None:
-    month_start, next_month = month_window(now)
-    week_start, next_week = week_window(now)
+def test_a_tombstone_still_counts_from_the_previous_business_month_s_first_moment(
+    now: datetime,
+) -> None:
+    month, _ = MOSCOW.month_window(now)
 
-    assert month_start <= now < next_month
-    assert month_start.day == 1
-    assert week_start <= now < next_week
-    assert week_start.weekday() == 0
-    assert next_week - week_start == timedelta(days=7)
+    since = tombstones_since(now, MOSCOW)
+
+    assert since < month
+    assert MOSCOW.month_window(since)[0] == since
+    assert MOSCOW.month_window(since)[1] == month
 
 
 def test_minutes_are_judged_on_raw_seconds_and_uploads_are_checked_before_processing() -> None:

@@ -7,6 +7,7 @@ import { formatDate, formatDateTime } from "../domain/format";
 import { homeLabel } from "../domain/labels";
 import { AccountActions } from "./account-actions";
 import { StateBadge } from "./state-badge";
+import { useDisplayZone } from "./use-display-zone";
 
 function Fact({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -20,6 +21,7 @@ function Fact({ label, children }: { label: string; children: ReactNode }) {
 /** Состояние и дом, имя и почта, факты профиля и то, что администратор может сделать. */
 export function UserHeader({ card }: { card: AdminUserCard }) {
   const { user } = card;
+  const shown = useDisplayZone();
   return (
     <header className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
@@ -36,13 +38,15 @@ export function UserHeader({ card }: { card: AdminUserCard }) {
         <Fact label="Страна">{card.country ?? "не указана"}</Fact>
         <Fact label="Язык">{card.language}</Fact>
         <Fact label="Часовой пояс">{card.timezone ?? "не указан"}</Fact>
-        <Fact label="Почта подтверждена">{card.email_verified_at ? formatDate(card.email_verified_at) : "нет"}</Fact>
+        <Fact label="Почта подтверждена">
+          {card.email_verified_at ? formatDate(card.email_verified_at, shown) : "нет"}
+        </Fact>
         <Fact label="Создан">
-          <time dateTime={user.created_at}>{formatDate(user.created_at)}</time>
+          <time dateTime={user.created_at}>{formatDate(user.created_at, shown)}</time>
         </Fact>
         <Fact label="Последний вход">
           {user.last_login_at ? (
-            <time dateTime={user.last_login_at}>{formatDateTime(user.last_login_at)}</time>
+            <time dateTime={user.last_login_at}>{formatDateTime(user.last_login_at, shown)}</time>
           ) : (
             "ещё не входил"
           )}

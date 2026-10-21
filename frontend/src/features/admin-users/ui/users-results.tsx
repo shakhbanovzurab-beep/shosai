@@ -16,6 +16,7 @@ import { homeLabel } from "../domain/labels";
 import type { UserSearch } from "../domain/search";
 import { useUserSearch } from "../model/users";
 import { StateBadge } from "./state-badge";
+import { useDisplayZone } from "./use-display-zone";
 
 function Hint({ title, description, icon }: { title: string; description: string; icon: React.ReactNode }) {
   return (
@@ -32,6 +33,7 @@ function Hint({ title, description, icon }: { title: string; description: string
 /** Найденные аккаунты; строка ведёт в карточку. */
 export function UsersResults({ search, typed }: { search: UserSearch | null; typed: boolean }) {
   const found = useUserSearch(search);
+  const shown = useDisplayZone();
 
   if (search === null)
     return (
@@ -89,9 +91,9 @@ export function UsersResults({ search, typed }: { search: UserSearch | null; typ
                 <StateBadge state={user.state} />
               </TableCell>
               <TableCell>{homeLabel(user.home)}</TableCell>
-              <TableCell className="tabular-nums">{formatDate(user.created_at)}</TableCell>
+              <TableCell className="tabular-nums">{formatDate(user.created_at, shown)}</TableCell>
               <TableCell className="tabular-nums">
-                {user.last_login_at ? formatDateTime(user.last_login_at) : "ещё не входил"}
+                {user.last_login_at ? formatDateTime(user.last_login_at, shown) : "ещё не входил"}
               </TableCell>
             </TableRow>
           ))}

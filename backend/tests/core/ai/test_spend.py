@@ -40,6 +40,7 @@ from tests.core.ai.bench import (
     set_prices,
 )
 from tests.core.kv.outages import LateAnswerValkey
+from tests.doubles.business_calendar import MOSCOW
 from tests.doubles.openrouter import chat_answer, usage
 from tests.harness.database_access import DatabaseAccess
 
@@ -149,7 +150,8 @@ async def test_without_valkey_an_expensive_call_fails_closed(homes: DatabaseAcce
 def guard_over(valkey: Redis, ceilings: Ceilings) -> SpendGuard:
     """Spend control over the slot's Valkey."""
     registry = CollectorRegistry()
-    return SpendGuard(valkey, ceilings, KillSwitch(valkey, forced=False), SpendMetrics(registry))
+    switch = KillSwitch(valkey, forced=False)
+    return SpendGuard(valkey, ceilings, switch, SpendMetrics(registry), MOSCOW)
 
 
 def metered(context: CallContext) -> MeteredCall:
@@ -219,8 +221,8 @@ async def test_a_recorded_call_fills_its_counters_once_and_frees_its_reservation
         await bench.providers.chat(context, ModelRoute(PREMIUM), QUESTION)
 
     payer = Payer(USER_ID, None, CallOrigin.INTERACTIVE, CallClass.EXPENSIVE, datetime.now(UTC))
-    filled = {c.limit: await valkey.get(c.key) for c in counters_of(payer)}
-    held = [await valkey.hlen(c.held) for c in counters_of(payer)]
+    filled = {c.limit: await valkey.get(c.key) for c in counters_of(payer, MOSCOW)}
+    held = [await valkey.hlen(c.held) for c in counters_of(payer, MOSCOW)]
     # Отчёт провайдера $0.001 — 1000 мкр$; повтор того же ключа ничего не добавил.
     assert set(filled.values()) == {b"1000"}
     assert set(filled) >= {"global_day", SpendPeriod.DAY, SpendPeriod.EXPENSIVE_MONTH}

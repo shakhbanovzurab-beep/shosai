@@ -1,7 +1,8 @@
 """Promo codes: their status and the discount they give (the admin's promo form; draft rules).
 
 A code is percent or fixed per currency; it may be limited to plans, to a period, to the
-first payment, to a number of uses in all and per person, and to dates (inclusive, UTC).
+first payment, to a number of uses in all and per person, and to dates (inclusive, business
+dates of ADR 0058).
 A fixed discount applies only in a currency it names. A price never goes below zero. A
 use is counted on a successful payment only, by the payment's own transaction. A code
 whose last plan was removed names no plan and stays switched off until it names one.
@@ -103,7 +104,7 @@ class PromoCode:
             raise PromoRuleError(problem)
 
     def status(self, today: date) -> PromoStatus:
-        """The code's status on a UTC date."""
+        """The code's status on a business date."""
         if not self.active:
             return PromoStatus.DISABLED
         if self.valid_until is not None and today > self.valid_until:

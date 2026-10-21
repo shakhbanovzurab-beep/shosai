@@ -32,7 +32,9 @@ from shosai.core.config.values import (
     Port,
     ProxyNetworks,
     RedisUrl,
+    TimeZoneName,
 )
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kernel.homes import Home
 
 
@@ -250,3 +252,15 @@ class ExchangeRateSettings(SettingsSection):
     """Where the Central Bank's daily rates are read (ADR 0036)."""
 
     cbr_daily_url: HttpUrl = HttpUrl("https://www.cbr-xml-daily.ru/daily_json.js")
+
+
+class CalendarSettings(SettingsSection):
+    """The platform's business time zone: the days and months of every server total (ADR 0058)."""
+
+    # Сутки и месяцы итогов (выручка, расходы ИИ, минуты, токены, отчёты) — в этом поясе, не в UTC.
+    business_time_zone: TimeZoneName = "Europe/Moscow"
+
+    @property
+    def business(self) -> BusinessCalendar:
+        """The business calendar of the configured zone."""
+        return BusinessCalendar.named(self.business_time_zone)

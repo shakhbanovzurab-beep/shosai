@@ -47,9 +47,9 @@ export type DailySpend = {
 };
 
 export type SpendSummary = {
-  /** USD, since midnight UTC. */
+  /** USD, since midnight of the business day (ADR 0058). */
   today: number;
-  /** USD, since the 1st of the month (UTC). */
+  /** USD, since the 1st of the business month. */
   month: number;
   /** USD, this month's spend extrapolated to the end of the month at the current daily rate. */
   forecast_month: number;

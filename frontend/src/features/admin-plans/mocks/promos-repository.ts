@@ -1,4 +1,6 @@
-import { type PromoCode, type PromoCodeDraft, type PromoCodePatch, promoStatus, todayIso } from "../domain/contract";
+import { businessToday } from "@/features/admin-sign-in/model/business-zone";
+
+import { type PromoCode, type PromoCodeDraft, type PromoCodePatch, promoStatus } from "../domain/contract";
 import { promoDraftSchema } from "../domain/promo-schema";
 import { firstIssue } from "../domain/schema";
 import type { StoredPromo } from "./demo-seed-promos";
@@ -6,7 +8,7 @@ import { fail, now, type Outcome, ok, store } from "./demo-store";
 
 /* Promo codes in the in-memory demo: unique codes, and scopes that only name plans on sale. */
 
-const withStatus = (promo: StoredPromo): PromoCode => ({ ...promo, status: promoStatus(promo, todayIso()) });
+const withStatus = (promo: StoredPromo): PromoCode => ({ ...promo, status: promoStatus(promo, businessToday()) });
 
 export const listPromos = () =>
   [...store.promos.values()].toSorted((a, b) => b.created_at.localeCompare(a.created_at)).map(withStatus);

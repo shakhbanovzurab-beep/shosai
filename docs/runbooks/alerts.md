@@ -272,7 +272,7 @@ The slice `alerting` posts these to Alertmanager from events, not from Prometheu
 <a id="user-spend-exceeded"></a>
 ### UserSpendExceeded — `ai.user_spend.exceeded`, ticket
 
-**Means.** One person's AI spend for a UTC day passed `AI_USER_DAILY_ALERT_USD` (F6-D6; 20 $ by default). At most one message per person and day.
+**Means.** One person's AI spend for a business day (Moscow time by default, `BUSINESS_TIME_ZONE`, ADR 0058) passed `AI_USER_DAILY_ALERT_USD` (F6-D6; 20 $ by default). At most one message per person and day.
 
 **Look.** The card in the admin panel (the link in the message): spend by day and by feature, sign-ins, devices. A steady climb over the day suggests a loop in a client or an agent; a burst from a new account suggests abuse.
 

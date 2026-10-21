@@ -18,6 +18,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.ids import new_id
 from shosai.features.billing.application.catalogue import CATALOGUE_SCOPE
@@ -56,13 +57,16 @@ class PromoCodes:
         self,
         transactions: HomeTransactions,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        *,
+        business: BusinessCalendar,
     ) -> None:
         self._transactions = transactions
         self._clock = clock
+        self._business = business
 
     def today(self) -> date:
-        """The UTC date a code's status is judged on."""
-        return self._clock().astimezone(UTC).date()
+        """The business date a code's status is judged on (ADR 0058)."""
+        return self._business.date_of(self._clock())
 
     async def codes(self) -> list[CataloguePromo]:
         """Every code, newest first."""

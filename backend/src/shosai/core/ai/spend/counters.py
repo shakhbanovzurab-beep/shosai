@@ -1,8 +1,9 @@
 """Spend counters in Valkey: which a call fills and what each is kept for (§3.6).
 
 Money is integer micro-USD. A counter holds what was recorded in its period; a hash beside
-it holds the live reservations, `id → amount:expiry` on Valkey's clock. Periods are UTC:
-the hour, the day and the month of the call. Whose counters a call fills:
+it holds the live reservations, `id → amount:expiry` on Valkey's clock. The day and the month
+of a call are the business calendar's (ADR 0058), its hour is UTC's — the same boundary in a
+whole-hour zone. Whose counters a call fills:
 
 - every call: the global hour and day, whatever its class — the ceilings never stop an
   essential call, but they see it;
@@ -23,6 +24,7 @@ from typing import Final
 from uuid import UUID
 
 from shosai.core.ai.calls import CallClass, CallOrigin, SpendPeriod
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kv.keys import build_key
 
 MICRO: Final = Decimal(1_000_000)
@@ -129,11 +131,11 @@ class Counter:
         return f"{self.key}:held"
 
 
-def periods(at: datetime) -> dict[str, str]:
-    """The UTC hour, day and month of a moment, as key parts."""
-    moment = at.astimezone(UTC)
-    return {"hour": moment.strftime("%Y%m%d%H"), "day": moment.strftime("%Y%m%d"),
-            "month": moment.strftime("%Y%m")}  # fmt: skip
+def periods(at: datetime, calendar: BusinessCalendar) -> dict[str, str]:
+    """The UTC hour and the business day and month of a moment, as key parts."""
+    day = calendar.date_of(at)
+    return {"hour": at.astimezone(UTC).strftime("%Y%m%d%H"), "day": day.strftime("%Y%m%d"),
+            "month": day.strftime("%Y%m")}  # fmt: skip
 
 
 @dataclass(frozen=True, slots=True)
@@ -147,9 +149,9 @@ class Payer:
     at: datetime
 
 
-def counters_of(payer: Payer) -> list[Counter]:
+def counters_of(payer: Payer, calendar: BusinessCalendar) -> list[Counter]:
     """The counters a call fills, each with the limit that may cap it."""
-    when = periods(payer.at)
+    when = periods(payer.at, calendar)
     found = [Counter(build_key("ai", "spend", "global", p, when[p]), TTLS[p], f"global_{p}", p)
              for p in ("hour", "day")]  # fmt: skip
     if payer.platform_account is not None:

@@ -20,10 +20,10 @@ from shosai.core.kernel.ids import new_id
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.billing.application.tokens import TokenSettlement, TokenStanding, packs_left
 from shosai.features.billing.contracts import TokenLimit, TokenRoute
-from shosai.features.billing.domain.meters import week_window
 from shosai.features.billing.domain.plans import ModelTier
 from shosai.features.billing.infrastructure.token_records import CreditLedgerRecord
 from tests.core.ai.bench import RecordingSender, unreachable_valkey
+from tests.doubles.business_calendar import MOSCOW
 from tests.features.billing.catalogue_bench import created, plan_draft
 from tests.features.billing.entitlement_bench import EntitlementBench
 
@@ -37,7 +37,7 @@ def writer(bench: EntitlementBench) -> CostWriter:
     """The cost writer with billing's settlement, as composition installs it."""
     registry = CollectorRegistry()
     settlements = CostSettlements()
-    settlements.install([TokenSettlement(bench.snapshots)])
+    settlements.install([TokenSettlement(bench.snapshots, MOSCOW)])
     keys = EffectKeyMetrics(registry)
     marks = BillingMarks(unreachable_valkey(), registry)
     return CostWriter(
@@ -90,7 +90,12 @@ async def test_packs_pay_only_past_the_weekly_allowance_and_a_redelivered_row_de
     person = await subscribed(entitlements, packs=5000)
     costs, standing = (
         writer(entitlements),
-        TokenStanding(entitlements.homes.transactions, entitlements.snapshots, entitlements.clock),
+        TokenStanding(
+            entitlements.homes.transactions,
+            entitlements.snapshots,
+            entitlements.clock,
+            business=MOSCOW,
+        ),
     )
     now = entitlements.clock.now
     await costs.write(row(person, now, 800))
@@ -110,17 +115,19 @@ async def test_packs_pay_only_past_the_weekly_allowance_and_a_redelivered_row_de
     assert (fallen.route, fallen.reason) == (TokenRoute.FALL_BACK, TokenLimit.FRONTIER_WEEK)
 
 
-async def test_the_standard_day_stops_with_its_reason_and_the_week_resets_on_monday_utc(
+async def test_the_standard_day_stops_with_its_reason_and_the_week_resets_on_the_business_monday(
     entitlements: EntitlementBench,
 ) -> None:
     person = await subscribed(entitlements, packs=0)
     costs, clock = writer(entitlements), entitlements.clock
-    standing = TokenStanding(entitlements.homes.transactions, entitlements.snapshots, clock)
+    standing = TokenStanding(
+        entitlements.homes.transactions, entitlements.snapshots, clock, business=MOSCOW
+    )
     await costs.write(row(person, clock.now, 500, call=("standard", "interactive")))
     await costs.write(row(person, clock.now, 1000))
     stopped = await standing.decision(*person, ModelTier.STANDARD)
     fallen = await standing.decision(*person, ModelTier.FRONTIER)
-    monday = week_window(clock.now)[1]
+    monday = MOSCOW.week_window(clock.now)[1]
     clock.now = monday - timedelta(seconds=1)
     still = await standing.decision(*person, ModelTier.FRONTIER)
     clock.now = monday
@@ -139,12 +146,15 @@ async def test_meetings_background_work_and_last_week_s_rows_are_not_counted(
     person = await subscribed(entitlements, packs=0)
     costs, now = writer(entitlements), entitlements.clock.now
     standing = TokenStanding(
-        entitlements.homes.transactions, entitlements.snapshots, entitlements.clock
+        entitlements.homes.transactions,
+        entitlements.snapshots,
+        entitlements.clock,
+        business=MOSCOW,
     )
     await costs.write(row(person, now, 5000, call=("essential", "interactive")))
     await costs.write(row(person, now, 5000, call=("expensive", "background")))
     await costs.write(row(person, now, 10))
-    await costs.write(row(person, week_window(now)[0] - timedelta(hours=1), 5000))
+    await costs.write(row(person, MOSCOW.week_window(now)[0] - timedelta(hours=1), 5000))
 
     decision = await standing.decision(*person, ModelTier.FRONTIER)
 

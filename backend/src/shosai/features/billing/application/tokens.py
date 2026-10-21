@@ -3,7 +3,8 @@
 The tier follows the call class: an expensive call is a frontier one, a standard call a
 standard one; essential calls (meetings) and Leo's background work are not counted
 (F6-D6, Leo §5.4). `TokenSettlement` runs in the cost row's own transaction, once per
-row: it adds the row's tokens to the Monday week and, for standard, the UTC day, then
+row: it adds the row's tokens to the Monday week and, for standard, the day — both of the
+business calendar (ADR 0058) — then
 debits packs for what the row used past the frontier week's allowance, with the cost id
 as the debit's unique key. The week's row is locked by its update, so two settlements of
 a person never spend the same pack tokens. `TokenStanding` reads the use live and gives
@@ -24,6 +25,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from shosai.core.ai.costs.settlement import SettledCost
 from shosai.core.db.errors import HomeUnavailableError
 from shosai.core.db.transactions import HomeTransactions, transaction_info
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from shosai.core.kernel.tenancy import TenancyScope
@@ -33,7 +35,6 @@ from shosai.features.billing.domain.meters import (
     TokenDecision,
     beyond_allowance,
     token_decision,
-    week_window,
 )
 from shosai.features.billing.domain.plans import ModelTier
 from shosai.features.billing.infrastructure.token_records import (
@@ -49,9 +50,9 @@ DAY: Final = "day"
 log = structlog.stdlib.get_logger(__name__)
 
 
-def week_of(moment: datetime) -> date:
-    """The Monday of the UTC week of a moment."""
-    return week_window(moment)[0].date()
+def week_of(moment: datetime, business: BusinessCalendar) -> date:
+    """The Monday of the business week of a moment."""
+    return business.week_window(moment)[0].date()
 
 
 async def add_tokens(
@@ -94,8 +95,9 @@ async def packs_left(session: AsyncSession, user_id: UUID) -> int:
 class TokenSettlement:
     """The `CostSettlement` of billing: tokens counted, packs debited, once per cost row."""
 
-    def __init__(self, entitlements: Entitlements) -> None:
+    def __init__(self, entitlements: Entitlements, business: BusinessCalendar) -> None:
         self._entitlements = entitlements
+        self._business = business
 
     @property
     def name(self) -> str:
@@ -108,10 +110,12 @@ class TokenSettlement:
         user_id = cost.user_id
         if tier is None or user_id is None or cost.origin != COUNTED_ORIGIN or cost.tokens <= 0:
             return
-        moment = cost.created_at.astimezone(UTC)
-        before = await add_tokens(session, user_id, (tier, WEEK, week_of(moment)), cost.tokens)
+        moment = cost.created_at
+        week = week_of(moment, self._business)
+        before = await add_tokens(session, user_id, (tier, WEEK, week), cost.tokens)
         if tier is ModelTier.STANDARD:
-            await add_tokens(session, user_id, (tier, DAY, moment.date()), cost.tokens)
+            day = self._business.date_of(moment)
+            await add_tokens(session, user_id, (tier, DAY, day), cost.tokens)
         elif before is not None:
             await self._debit_packs(session, cost, user_id, before)
 
@@ -145,16 +149,19 @@ class TokenStanding:
         transactions: HomeTransactions,
         entitlements: Entitlements,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        *,
+        business: BusinessCalendar,
     ) -> None:
         self._transactions = transactions
         self._entitlements = entitlements
         self._clock = clock
+        self._business = business
 
     async def decision(self, home: Home, user_id: UUID, tier: ModelTier) -> TokenDecision:
         """Within the allowance, from packs, fall back or stop, with the limit why."""
         snapshot = await self._entitlements.snapshot(home, user_id)
-        now = self._clock().astimezone(UTC)
-        periods = {WEEK: week_of(now), DAY: now.date()}
+        now = self._clock()
+        periods = {WEEK: week_of(now, self._business), DAY: self._business.date_of(now)}
         try:
             scope = TenancyScope(home, user_id)
             usage = select(TokenUsageRecord).where(

@@ -2047,7 +2047,7 @@
           "admin"
         ],
         "summary": "Read Admin Session",
-        "description": "204 while the admin is signed in; 401 `admin_sign_in_required` otherwise.",
+        "description": "The platform's business zone while the admin is signed in; 401 otherwise.",
         "operationId": "read_admin_session_v1_admin_session_get",
         "parameters": [
           {
@@ -2069,8 +2069,15 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "Successful Response"
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminSessionOut"
+                }
+              }
+            }
           },
           "default": {
             "description": "Error. The body is the error envelope; see `ErrorResponse`.",
@@ -7930,6 +7937,21 @@
         "title": "AdminSession",
         "description": "A live session of the account."
       },
+      "AdminSessionOut": {
+        "properties": {
+          "business_time_zone": {
+            "type": "string",
+            "title": "Business Time Zone",
+            "description": "The IANA zone of the platform's days and months; admin dates show in it."
+          }
+        },
+        "type": "object",
+        "required": [
+          "business_time_zone"
+        ],
+        "title": "AdminSessionOut",
+        "description": "What the admin panel needs of the platform while the admin is signed in."
+      },
       "AdminSignIn": {
         "properties": {
           "created_at": {
@@ -12402,7 +12424,7 @@
           "created_at"
         ],
         "title": "PromoView",
-        "description": "A promo code as the admin's list shows it; the status is judged today in UTC."
+        "description": "A promo code as the admin's list shows it; the status is judged on the business date."
       },
       "Provider": {
         "type": "string",

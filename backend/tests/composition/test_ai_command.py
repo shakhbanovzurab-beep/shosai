@@ -13,6 +13,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from tests.composition.role_process import run_command
 from tests.core.ai.bench import ORG_ID, USER_ID, ai_bench
+from tests.doubles.business_calendar import MOSCOW
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.process_environ import slot_environ
 from tests.harness.run_slot import RunSlot
@@ -84,4 +85,6 @@ async def test_the_cli_rebuilds_the_spend_counters_from_the_cost_rows(
 
     assert code == 0
     assert any(line["message"].startswith("Счётчики расходов пересобраны") for line in lines)
-    assert await valkey.get(f"shosai:ai:spend:global:day:{now:%Y%m%d}") == b"420000"
+    # Сутки счётчика — деловые (Москва, ADR 0058), как их считает команда по настройке по умолчанию.
+    day = MOSCOW.date_of(now)
+    assert await valkey.get(f"shosai:ai:spend:global:day:{day:%Y%m%d}") == b"420000"

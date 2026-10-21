@@ -669,7 +669,7 @@ export interface paths {
         };
         /**
          * Read Admin Session
-         * @description 204 while the admin is signed in; 401 `admin_sign_in_required` otherwise.
+         * @description The platform's business zone while the admin is signed in; 401 otherwise.
          */
         get: operations["read_admin_session_v1_admin_session_get"];
         put?: never;
@@ -2139,6 +2139,17 @@ export interface components {
              * Format: date-time
              */
             last_used_at: string;
+        };
+        /**
+         * AdminSessionOut
+         * @description What the admin panel needs of the platform while the admin is signed in.
+         */
+        AdminSessionOut: {
+            /**
+             * Business Time Zone
+             * @description The IANA zone of the platform's days and months; admin dates show in it.
+             */
+            business_time_zone: string;
         };
         /**
          * AdminSignIn
@@ -3841,7 +3852,7 @@ export interface components {
         PromoStatus: "active" | "scheduled" | "expired" | "exhausted" | "disabled";
         /**
          * PromoView
-         * @description A promo code as the admin's list shows it; the status is judged today in UTC.
+         * @description A promo code as the admin's list shows it; the status is judged on the business date.
          */
         PromoView: {
             /**
@@ -6440,11 +6451,13 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description Successful Response */
-            204: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["AdminSessionOut"];
+                };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

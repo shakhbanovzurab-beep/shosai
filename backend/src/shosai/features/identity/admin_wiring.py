@@ -43,7 +43,12 @@ def admin_parts(
     states = AccountStates(services.transactions, lookup, markers, services.outbox)
     return FeatureParts(
         http_routers=(
-            build_admin_session_router(admin, services.ports, services.rate_limiter, cookies),
+            build_admin_session_router(
+                admin,
+                services.ports,
+                (services.rate_limiter, cookies),
+                services.settings.calendar.business_time_zone,
+            ),
             build_admin_users_router(users, states, services.ports),
         ),
         provides=(

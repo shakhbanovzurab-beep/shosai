@@ -1,17 +1,23 @@
 import { apiClient } from "@/lib/api/app-client";
 import { dataOf } from "@/lib/api/client";
 import { apiErrorOf } from "@/lib/api/errors";
+import type { components } from "@/lib/api/generated/schema";
 
 /*
  * Сессия единственного администратора (ADR 0049): её держит cookie `shosai_admin` на пути /v1/admin, а не вход
  * человека, поэтому запросы идут без его токена.
  */
 
-/** Вошёл ли администратор: 401 — нет; любой другой отказ сервера уходит вызывающему как ошибка. */
-export async function adminSignedIn(): Promise<boolean> {
-  const { error, response } = await apiClient.GET("/v1/admin/session");
-  if (response.ok) return true;
-  if (response.status === 401) return false;
+export type AdminSession = components["schemas"]["AdminSessionOut"];
+
+/**
+ * Сессия вошедшего администратора с деловым поясом платформы, или null — не вошёл (401); любой другой отказ
+ * сервера уходит вызывающему как ошибка.
+ */
+export async function readAdminSession(): Promise<AdminSession | null> {
+  const { data, error, response } = await apiClient.GET("/v1/admin/session");
+  if (response.ok && data) return data;
+  if (response.status === 401) return null;
   throw apiErrorOf(response.status, error ?? null, response.headers);
 }
 

@@ -69,10 +69,11 @@ def spend_control(
     """Spend control and the operator's views over one kill switch."""
     switch = kill_switch(settings.spend, valkey)
     ceilings = ceilings_of(settings.spend)
-    guard = SpendGuard(valkey, ceilings, switch, SpendMetrics(registry))
+    business = settings.calendar.business
+    guard = SpendGuard(valkey, ceilings, switch, SpendMetrics(registry), business)
     operator = SpendOperator(
-        reports=SpendReports(transactions),
-        standing=SpendStanding(valkey, ceilings, switch),
+        reports=SpendReports(transactions, business),
+        standing=SpendStanding(valkey, ceilings, switch, business),
         credits=OpenRouterCredits(credits_client(settings.ai, stack)),
         kill_switch=switch,
     )

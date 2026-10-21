@@ -32,6 +32,7 @@ from shosai.features.identity.contracts import (
     Principal,
 )
 from tests.core.web.probe_app import build_probe_app, client_of
+from tests.doubles.business_calendar import MOSCOW
 from tests.features.billing.entitlement_bench import EntitlementBench
 
 
@@ -82,8 +83,12 @@ async def people(entitlements: EntitlementBench, valkey: Redis) -> AsyncIterator
     ports = PortDirectory()
     ports.install([AUTHENTICATOR.bind(BearerOfTheTest()), ACCOUNT_PROFILE_READER.bind(countries)])
     transactions = entitlements.homes.transactions
-    meter = MinutesMeter(transactions, (entitlements.snapshots, ports), entitlements.clock)
-    views = PeopleViews(transactions, (entitlements.snapshots, meter, ports), entitlements.clock)
+    meter = MinutesMeter(
+        transactions, (entitlements.snapshots, ports), entitlements.clock, business=MOSCOW
+    )
+    views = PeopleViews(
+        transactions, (entitlements.snapshots, meter, ports), entitlements.clock, business=MOSCOW
+    )
     inquiries = SalesInquiries(transactions, entitlements.ledger_outbox)
     limiter = RateLimiter(valkey, KeyValueMetrics(CollectorRegistry()))
     routers = (

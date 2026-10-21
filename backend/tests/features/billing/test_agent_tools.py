@@ -21,6 +21,7 @@ from shosai.features.billing.channels.agent_tools import (
 from shosai.features.billing.domain.meters import TokenLimit, TokenRoute
 from shosai.features.billing.domain.plans import ModelTier
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER
+from tests.doubles.business_calendar import MOSCOW
 from tests.features.billing.catalogue_bench import created, plan_draft
 from tests.features.billing.entitlement_bench import EntitlementBench
 from tests.features.billing.people_bench import Countries
@@ -35,9 +36,9 @@ def tools(
     ports.install([ACCOUNT_PROFILE_READER.bind(Countries())])
     transactions = bench.unreachable() if transactions_down else bench.homes.transactions
     snapshots = bench.without_database() if transactions_down else bench.snapshots
-    meter = MinutesMeter(transactions, (snapshots, ports), bench.clock)
-    views = PeopleViews(transactions, (snapshots, meter, ports), bench.clock)
-    standing = TokenStanding(transactions, snapshots, bench.clock)
+    meter = MinutesMeter(transactions, (snapshots, ports), bench.clock, business=MOSCOW)
+    views = PeopleViews(transactions, (snapshots, meter, ports), bench.clock, business=MOSCOW)
+    standing = TokenStanding(transactions, snapshots, bench.clock, business=MOSCOW)
     return billing_tools(views, standing)
 
 

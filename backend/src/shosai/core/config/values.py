@@ -10,6 +10,7 @@ from enum import StrEnum
 from ipaddress import IPv4Network, IPv6Network, ip_network
 from typing import Annotated
 from urllib.parse import parse_qsl, urlsplit
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import AfterValidator, BeforeValidator, Field, SecretStr
 from pydantic_settings import NoDecode
@@ -139,6 +140,16 @@ def check_fernet_key(key: SecretStr) -> SecretStr:
     return key
 
 
+def check_time_zone(name: str) -> str:
+    """An IANA time zone the server's tzdata knows, such as `Europe/Moscow`."""
+    try:
+        ZoneInfo(name)
+    except (ZoneInfoNotFoundError, ValueError) as error:
+        message = "ожидается часовой пояс IANA, например Europe/Moscow"
+        raise ValueError(message) from error
+    return name
+
+
 # Обычные псевдонимы, а не `type`: pydantic-settings ищет NoDecode в метаданных поля,
 # а псевдоним `type` прячет их внутри своей схемы.
 DatabaseUrl = Annotated[SecretStr, AfterValidator(check_database_url)]
@@ -152,3 +163,4 @@ LogLevelName = Annotated[LogLevel, BeforeValidator(upper_case)]
 Origins = Annotated[tuple[Origin, ...], NoDecode, BeforeValidator(split_commas)]
 ProxyNetworks = Annotated[tuple[ProxyNetwork, ...], NoDecode, BeforeValidator(split_commas)]
 FernetKeys = Annotated[tuple[FernetKey, ...], NoDecode, BeforeValidator(split_commas)]
+TimeZoneName = Annotated[str, AfterValidator(check_time_zone)]

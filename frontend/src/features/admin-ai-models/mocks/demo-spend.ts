@@ -1,3 +1,5 @@
+import { businessZone } from "@/features/admin-sign-in/model/business-zone";
+
 import type { AiModel, DailySpend, SpendSummary } from "../domain/contract";
 import { CATALOG, type CatalogEntry } from "./demo-catalog";
 
@@ -20,6 +22,22 @@ function noise(seed: string) {
 }
 
 const round = (value: number, digits = 2) => Math.round(value * 10 ** digits) / 10 ** digits;
+
+// Часы делового пояса в полях UTC даты: сутки и месяцы образцов — московские, как у сервера (ADR 0058).
+function wallClock(now: Date, zone: string): Date {
+  const parts = new Intl.DateTimeFormat("ru-RU", {
+    timeZone: zone,
+    hourCycle: "h23",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  }).formatToParts(now);
+  const part = (type: Intl.DateTimeFormatPartTypes) => Number(parts.find((item) => item.type === type)?.value);
+  return new Date(Date.UTC(part("year"), part("month") - 1, part("day"), part("hour"), part("minute"), part("second")));
+}
 const isoDate = (date: Date) => date.toISOString().slice(0, 10);
 
 type DayUsage = { requests: number; tokensIn: number; tokensOut: number };
@@ -38,8 +56,9 @@ export function buildModelsAndSpend(
   flagsFor: (id: string) => ModelFlags,
   now: Date,
 ): { models: AiModel[]; spend: SpendSummary } {
-  const today = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-  const todayShare = (now.getTime() - today.getTime()) / 86_400_000;
+  const wall = wallClock(now, businessZone());
+  const today = new Date(Date.UTC(wall.getUTCFullYear(), wall.getUTCMonth(), wall.getUTCDate()));
+  const todayShare = (wall.getTime() - today.getTime()) / 86_400_000;
   const daily = new Map<string, number>();
   let tokensIn = 0;
   let tokensOut = 0;

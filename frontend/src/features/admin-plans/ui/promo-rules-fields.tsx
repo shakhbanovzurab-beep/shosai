@@ -3,6 +3,7 @@
 import type { ChangeEvent } from "react";
 
 import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field";
+import { businessZoneLabel, useBusinessZone } from "@/features/admin-sign-in/model/business-zone";
 
 import type { BillingPeriodScope } from "../domain/contract";
 import { type PromoTextKey, type PromoValues, promoInputId } from "../domain/promo-form-values";
@@ -27,6 +28,7 @@ type RulesProps = {
 
 /** When and how often a code works: billing period, redemption limits, dates and switches. */
 export function PromoRulesFields({ values, errors, disabled, onText, onPeriod, onFlag }: RulesProps) {
+  const zone = businessZoneLabel(useBusinessZone());
   const text = (key: PromoTextKey) => ({
     id: promoInputId(key),
     value: values[key],
@@ -65,11 +67,16 @@ export function PromoRulesFields({ values, errors, disabled, onText, onPeriod, o
             description={UNLIMITED}
             {...text("per_user_limit")}
           />
-          <TextField label="Действует с" type="date" description="Пусто — сразу." {...text("valid_from")} />
+          <TextField
+            label="Действует с"
+            type="date"
+            description={`Дата по ${zone}. Пусто — сразу.`}
+            {...text("valid_from")}
+          />
           <TextField
             label="Действует по"
             type="date"
-            description="Включительно. Пусто — бессрочно."
+            description={`Включительно, дата по ${zone}. Пусто — бессрочно.`}
             {...text("valid_until")}
           />
         </div>

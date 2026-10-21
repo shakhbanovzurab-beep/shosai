@@ -16,6 +16,7 @@ from shosai.core.config.feature_settings import FeatureSettings
 from shosai.core.config.sections import (
     AiGuardSettings,
     AiSettings,
+    CalendarSettings,
     CryptoSettings,
     EmailSettings,
     ExchangeRateSettings,
@@ -79,6 +80,7 @@ class Settings:
     ai_guards: AiGuardSettings
     email: EmailSettings
     exchange_rates: ExchangeRateSettings
+    calendar: CalendarSettings
     # Разделы, которые объявили срезы (FeatureModule.settings), по классу раздела.
     features: FeatureSettings
 
@@ -104,6 +106,7 @@ def load_settings(
     ai_guards = reader.read(AiGuardSettings, "")
     email = reader.read(EmailSettings, "")
     exchange_rates = reader.read(ExchangeRateSettings, "")
+    calendar = reader.read(CalendarSettings, "")
     # Переменные срезов несут префикс среза в имени поля (IDENTITY_…), отдельный префикс не нужен.
     features = [reader.read(section, "") for section in feature_sections]
     if reader.problems:
@@ -122,6 +125,7 @@ def load_settings(
         ai_guards=_present(ai_guards),
         email=_present(email),
         exchange_rates=_present(exchange_rates),
+        calendar=_present(calendar),
         features=FeatureSettings(_present(section) for section in features),
     )
 

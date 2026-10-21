@@ -10,7 +10,7 @@ import asyncio
 import re
 import time
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime
 from decimal import Decimal
 from typing import Final
 
@@ -23,6 +23,7 @@ from shosai.core.ai.calls import CallClass, CallOrigin, PlatformAccount, Provide
 from shosai.core.ai.spend.counters import MICRO, Counter, Payer, counters_of
 from shosai.core.ai.spend.guard import Ceilings
 from shosai.core.ai.spend.kill_switch import KillSwitch, KillSwitchState
+from shosai.core.kernel.business_calendar import BusinessCalendar
 
 VALKEY_DEADLINE: Final = 1.0
 CREDITS_TTL: Final = 300.0
@@ -63,18 +64,21 @@ class Credits:
 class SpendStanding:
     """Reads the platform's counters against its ceilings."""
 
-    def __init__(self, client: Redis, ceilings: Ceilings, kill_switch: KillSwitch) -> None:
+    def __init__(
+        self, client: Redis, ceilings: Ceilings, kill_switch: KillSwitch, calendar: BusinessCalendar
+    ) -> None:
         self._client = client
+        self._calendar = calendar
         self._ceilings = ceilings
         self._kill_switch = kill_switch
 
     async def standing(self, at: datetime) -> Standing:
-        """Global and platform-account ceilings this hour and today."""
+        """Global and platform-account ceilings this hour and this business day."""
         named: list[tuple[str, Counter, int]] = []
         for account in (None, *PlatformAccount):
             payer = Payer(None, account.value if account else None, CallOrigin.SYSTEM,
-                          CallClass.STANDARD, at.astimezone(UTC))  # fmt: skip
-            for counter in counters_of(payer):
+                          CallClass.STANDARD, at)  # fmt: skip
+            for counter in counters_of(payer, self._calendar):
                 name = (
                     str(counter.limit) if account is None else f"{account.value}_{counter.period}"
                 )

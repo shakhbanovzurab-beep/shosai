@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Spinner } from "@/components/ui/spinner";
+import { businessZoneLabel, useBusinessZone } from "@/features/admin-sign-in/model/business-zone";
 
 import type { ConnectionCheckResponse, OpenRouterCredits, ProviderStatus } from "../domain/contract";
 import { formatTime, formatUsd } from "../domain/format";
@@ -105,8 +106,8 @@ function CreditsBalance({ credits, keyConfigured }: { credits: OpenRouterCredits
   );
 }
 
-function describeCheck(check: ConnectionCheckResponse) {
-  const parts = [check.ok ? "Работает" : "Ошибка", formatTime(check.checked_at)];
+function describeCheck(check: ConnectionCheckResponse, zone: string) {
+  const parts = [check.ok ? "Работает" : "Ошибка", formatTime(check.checked_at, zone, businessZoneLabel(zone))];
   if (check.ok && check.latency_ms !== null) parts.push(`${check.latency_ms} мс`);
   return parts.join(" · ");
 }
@@ -114,6 +115,7 @@ function describeCheck(check: ConnectionCheckResponse) {
 function ConnectionCheck() {
   const [checking, setChecking] = useState(false);
   const [lastCheck, setLastCheck] = useState<ConnectionCheckResponse | null>(null);
+  const zone = useBusinessZone();
 
   async function runCheck() {
     setChecking(true);
@@ -128,7 +130,7 @@ function ConnectionCheck() {
         Проверить подключение
       </Button>
       <p className="text-muted-foreground text-xs tabular-nums" aria-live="polite">
-        {lastCheck ? describeCheck(lastCheck) : null}
+        {lastCheck ? describeCheck(lastCheck, zone) : null}
       </p>
     </div>
   );

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { businessZoneLabel, useBusinessZone } from "@/features/admin-sign-in/model/business-zone";
 
 import type { Plan, PromoCode } from "../domain/contract";
 import { formatInteger, validity } from "../domain/format";
@@ -102,6 +103,8 @@ export function PromoTable({
   plansById,
   ...actions
 }: { promos: PromoCode[]; plansById: ReadonlyMap<string, Plan> } & RowActions) {
+  // Даты промокода — деловые (ADR 0058): по ним сервер решает, действует ли код.
+  const zone = businessZoneLabel(useBusinessZone());
   return (
     <div className="overflow-hidden rounded-xl border">
       <Table className="**:data-[slot='table-cell']:px-4 **:data-[slot='table-head']:px-4">
@@ -112,7 +115,7 @@ export function PromoTable({
             <TableHead>Тарифы</TableHead>
             <TableHead>Период</TableHead>
             <TableHead>Активации</TableHead>
-            <TableHead>Срок действия</TableHead>
+            <TableHead>Срок действия, {zone}</TableHead>
             <TableHead>Статус</TableHead>
             <TableHead className="w-10">
               <span className="sr-only">Действия</span>

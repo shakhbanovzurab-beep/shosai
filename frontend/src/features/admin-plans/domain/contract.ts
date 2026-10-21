@@ -187,6 +187,3 @@ export function promoStatus(
   if (promo.valid_from !== null && promo.valid_from > today) return "scheduled";
   return "active";
 }
-
-/** Today as `YYYY-MM-DD` in UTC, the day promo dates are compared against. */
-export const todayIso = () => new Date().toISOString().slice(0, 10);

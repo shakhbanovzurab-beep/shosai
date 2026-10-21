@@ -2,9 +2,10 @@
 
 Prices are in the account's currency — by its country, else by its home — never the
 client's. The plan list is the catalogue's plans on sale in the pricing page's order; the
-person's own plan joins it when it is no longer sold. Meeting minutes are the month's in
-UTC, tokens the Monday week's per tier, with the packs left and the frontier models used
-this week. The catalogue (EU) and the person's home are read at once.
+person's own plan joins it when it is no longer sold. Meeting minutes are the month's and
+tokens the Monday week's per tier, both of the business calendar (ADR 0058), with the packs
+left and the frontier models used this week. The catalogue (EU) and the person's home are
+read at once.
 """
 
 import asyncio
@@ -19,6 +20,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ai.costs.records import ProviderCost
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
@@ -28,7 +30,6 @@ from shosai.features.billing.application.minutes import MinutesMeter
 from shosai.features.billing.application.tokens import COUNTED_ORIGIN, WEEK, packs_left
 from shosai.features.billing.contracts import EntitlementSnapshot, EntitlementsUnavailableError
 from shosai.features.billing.domain.currency import account_currency
-from shosai.features.billing.domain.meters import month_window, week_window
 from shosai.features.billing.domain.money import Currency
 from shosai.features.billing.domain.plans import ModelTier, Plan
 from shosai.features.billing.infrastructure.catalogue_rows import plan_of
@@ -97,10 +98,13 @@ class PeopleViews:
         transactions: HomeTransactions,
         sources: tuple[EntitlementSnapshots, MinutesMeter, PortDirectory],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        *,
+        business: BusinessCalendar,
     ) -> None:
         self._transactions = transactions
         self._snapshots, self._minutes, self._ports = sources
         self._clock = clock
+        self._business = business
 
     async def plans(self, principal: Principal) -> PlansForPerson:
         """The plans on sale with the person's own, priced in their currency, and the minutes."""
@@ -116,7 +120,7 @@ class PeopleViews:
             raise EntitlementsUnavailableError
         listed = on_sale if current in on_sale else (*on_sale, current)
         minutes = MonthMinutes(
-            used, snapshot.limits.meeting_minutes_per_month, month_window(now)[1]
+            used, snapshot.limits.meeting_minutes_per_month, self._business.month_window(now)[1]
         )
         currency = account_currency(country, russian_home=principal.home is Home.RU)
         return PlansForPerson(listed, current, currency, minutes, snapshot)
@@ -125,7 +129,7 @@ class PeopleViews:
         """The week's tokens per tier with the plan's allowances, packs and frontier models."""
         now = self._clock()
         snapshot = await self._snapshots.snapshot(principal.home, principal.user_id)
-        start, end = week_window(now)
+        start, end = self._business.week_window(now)
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
             used = await week_tokens(session, principal.user_id, start)
             packs = await packs_left(session, principal.user_id)
@@ -150,7 +154,8 @@ class PeopleViews:
             profile = await self._ports.get(ACCOUNT_PROFILE_READER).profile(
                 session, principal.user_id
             )
-            used = await self._minutes.used_in(session, principal.user_id, month_window(now))
+            window = self._business.month_window(now)
+            used = await self._minutes.used_in(session, principal.user_id, window)
         return (None if profile is None else profile.country), used
 
 

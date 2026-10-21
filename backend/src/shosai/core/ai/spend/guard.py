@@ -47,6 +47,7 @@ from shosai.core.ai.spend.counters import (
     pending_entry,
 )
 from shosai.core.ai.spend.kill_switch import KILL_SWITCH_KEY, KillSwitch
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kv.connection import REDIS_FAILURES
 from shosai.core.observability.outage_log import OutageLog
 
@@ -101,8 +102,14 @@ class SpendGuard:
     """Reserves, releases and counts the money of model calls."""
 
     def __init__(
-        self, client: Redis, ceilings: Ceilings, kill_switch: KillSwitch, metrics: SpendMetrics
+        self,
+        client: Redis,
+        ceilings: Ceilings,
+        kill_switch: KillSwitch,
+        metrics: SpendMetrics,
+        calendar: BusinessCalendar,
     ) -> None:
+        self._calendar = calendar
         self._reserve = client.register_script(RESERVE_SCRIPT)
         self._shrink = client.register_script(SHRINK_SCRIPT)
         self._count = client.register_script(COUNT_SCRIPT)
@@ -150,7 +157,7 @@ class SpendGuard:
                 entry.user_id, entry.platform_account, CallOrigin(entry.origin),
                 CallClass(entry.call_class), entry.created_at,
             )  # fmt: skip
-            found = counters_of(payer)
+            found = counters_of(payer, self._calendar)
             amount = micro_usd(entry.cost_usd)
             args: list[str | int] = [
                 amount, entry.cost_id.hex, pending_entry(payer, amount),
@@ -206,7 +213,7 @@ class SpendGuard:
         payer = Payer(context.scope.user_id if context.scope else None, account,
                       context.origin, context.call_class, at)  # fmt: skip
         found = []
-        for counter in counters_of(payer):
+        for counter in counters_of(payer, self._calendar):
             ceiling = self._ceiling(context, counter)
             if ceiling is not None:
                 found.append((counter, ceiling))

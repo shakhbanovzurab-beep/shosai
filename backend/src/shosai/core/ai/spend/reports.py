@@ -3,13 +3,14 @@
 Application services, not routes: `studio`'s AI models screen and `identity`'s account card
 call them from their own admin routers. Every report reads `provider_costs` of both homes
 and adds them up; rubles are the sum of each row's own rubles, at the rate of its moment,
-and the rows written without a rate are counted apart. Periods are UTC, like the counters.
+and the rows written without a rate are counted apart. Days, weeks and months are the
+business calendar's (ADR 0058), like the counters'.
 """
 
-import calendar
+from calendar import monthrange
 from collections.abc import Sequence
 from dataclasses import dataclass
-from datetime import UTC, date, datetime, timedelta
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 from enum import StrEnum
 from typing import Any, Final
@@ -19,6 +20,7 @@ from sqlalchemy import Select, func, select
 
 from shosai.core.ai.costs.records import ProviderCost
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 
@@ -86,21 +88,12 @@ class UserSpend:
     month_usd: Decimal
 
 
-def month_start(at: datetime) -> datetime:
-    """Midnight UTC of the first of the month."""
-    return at.astimezone(UTC).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-
-
-def day_start(at: datetime) -> datetime:
-    """Midnight UTC of the day."""
-    return at.astimezone(UTC).replace(hour=0, minute=0, second=0, microsecond=0)
-
-
 class SpendReports:
-    """Reports over the cost rows of both homes."""
+    """Reports over the cost rows of both homes, by the business calendar's periods."""
 
-    def __init__(self, transactions: HomeTransactions) -> None:
+    def __init__(self, transactions: HomeTransactions, business: BusinessCalendar) -> None:
         self._transactions = transactions
+        self._business = business
 
     async def summary(
         self, group: SummaryGroup, period: ReportPeriod, at: datetime
@@ -112,9 +105,10 @@ class SpendReports:
             func.sum(ProviderCost.cost_rub), func.count() - func.count(ProviderCost.cost_rub),
         ).group_by(column)  # fmt: skip
         if period is ReportPeriod.TODAY:
-            statement = statement.where(ProviderCost.created_at >= day_start(at))
+            statement = statement.where(ProviderCost.created_at >= self._business.day_window(at)[0])
         elif period is ReportPeriod.MONTH:
-            statement = statement.where(ProviderCost.created_at >= month_start(at))
+            month, _ = self._business.month_window(at)
+            statement = statement.where(ProviderCost.created_at >= month)
         totals: dict[str, list[Any]] = {}
         for key, calls, usd, rub, unrated in await self._both(statement):
             row = totals.setdefault(str(key), [0, ZERO, ZERO, 0])
@@ -127,8 +121,10 @@ class SpendReports:
 
     async def daily(self, at: datetime, days: int = 30) -> tuple[DailyRow, ...]:
         """Each model's days over the last `days`, oldest first."""
-        # Сутки по UTC, как у счётчиков, а не по часовому поясу сеанса базы.
-        day = func.date_trunc("day", ProviderCost.created_at, "UTC")
+        # Сутки делового пояса, как у счётчиков, а не по часовому поясу сеанса базы.
+        zone = self._business.zone
+        day = func.date_trunc("day", ProviderCost.created_at, self._business.zone_name)
+        first = self._business.midnight(self._business.date_of(at) - timedelta(days=days - 1))
         statement = (
             select(
                 day,
@@ -140,12 +136,12 @@ class SpendReports:
                 func.sum(ProviderCost.input_audio_tokens + ProviderCost.output_audio_tokens),
                 func.sum(ProviderCost.cost_usd),
             )
-            .where(ProviderCost.created_at >= day_start(at) - timedelta(days=days - 1))
+            .where(ProviderCost.created_at >= first)
             .group_by(day, ProviderCost.provider, ProviderCost.model)
         )
         totals: dict[tuple[date, str, str], list[Any]] = {}
         for moment, provider, model, *numbers in await self._both(statement):
-            key = (moment.astimezone(UTC).date(), provider, model)
+            key = (moment.astimezone(zone).date(), provider, model)
             row = totals.setdefault(key, [0, 0, 0, 0, ZERO])
             for index, number in enumerate(numbers):
                 row[index] += number or 0
@@ -153,20 +149,20 @@ class SpendReports:
 
     async def forecast(self, at: datetime) -> Forecast:
         """The month to date, and the month's end at the pace of the days elapsed."""
-        start = month_start(at)
+        start, _ = self._business.month_window(at)
         statement = select(func.sum(ProviderCost.cost_usd)).where(ProviderCost.created_at >= start)
         so_far = sum((usd or ZERO for (usd,) in await self._both(statement)), ZERO)
-        elapsed = max(at.astimezone(UTC) - start, SHORTEST_ELAPSED)
+        elapsed = max(at - start, SHORTEST_ELAPSED)
         elapsed_days = Decimal(elapsed.total_seconds()) / Decimal(86_400)
-        length = calendar.monthrange(start.year, start.month)[1]
+        length = monthrange(start.year, start.month)[1]
         projected = (so_far / elapsed_days * length).quantize(Decimal("0.01"))
         return Forecast(so_far, projected, elapsed_days.quantize(Decimal("0.001")), length)
 
     async def user_spend(self, home: Home, user_id: UUID, at: datetime) -> UserSpend:
         """One person's spend from their home's rows."""
-        today = day_start(at)
-        week = today - timedelta(days=today.weekday())
-        month = month_start(at)
+        today, _ = self._business.day_window(at)
+        week, _ = self._business.week_window(at)
+        month, _ = self._business.month_window(at)
         usd = ProviderCost.cost_usd
         statement = select(
             func.sum(usd).filter(ProviderCost.created_at >= today),

@@ -1,7 +1,7 @@
 """The month's minutes: tombstones, the allowance, the upload pre-check, Free devices (step 4)."""
 
 from collections.abc import Sequence
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from uuid import UUID, uuid4
 
 import pytest
@@ -18,7 +18,8 @@ from shosai.features.billing.contracts import (
     MinutesExhaustedError,
     UploadExceedsMinutesError,
 )
-from shosai.features.billing.domain.meters import MinutesLeft, month_window
+from shosai.features.billing.domain.meters import MinutesLeft, tombstones_since
+from tests.doubles.business_calendar import MOSCOW
 from tests.features.billing.catalogue_bench import created, plan_draft
 from tests.features.billing.entitlement_bench import EntitlementBench
 
@@ -42,7 +43,9 @@ class LiveMeetings:
 def meter(bench: EntitlementBench, bindings: Sequence[PortBinding[object]] = ()) -> MinutesMeter:
     ports = PortDirectory()
     ports.install(bindings)
-    return MinutesMeter(bench.homes.transactions, (bench.snapshots, ports), bench.clock)
+    return MinutesMeter(
+        bench.homes.transactions, (bench.snapshots, ports), bench.clock, business=MOSCOW
+    )
 
 
 async def delete_meeting(
@@ -62,11 +65,11 @@ async def checked(
         return await minutes.check(session, person[1], device)
 
 
-async def test_a_tombstone_counts_once_in_its_month_and_the_month_resets_in_utc(
+async def test_a_tombstone_counts_once_in_its_month_and_the_month_resets_in_the_business_zone(
     entitlements: EntitlementBench,
 ) -> None:
     minutes, person = meter(entitlements), (Home.RU, uuid4())
-    start, _ = month_window(entitlements.clock.now)
+    start, _ = MOSCOW.month_window(entitlements.clock.now)
     last_month = start - timedelta(seconds=1)
     gone = await delete_meeting(entitlements, minutes, person, last_month)
     async with entitlements.homes.transactions.begin(TenancyScope(*person)) as session:
@@ -78,6 +81,21 @@ async def test_a_tombstone_counts_once_in_its_month_and_the_month_resets_in_utc(
     previous = await minutes.used_seconds(*person, last_month)
 
     assert (this_month, previous) == (30 * MINUTE, 30 * MINUTE)
+
+
+async def test_a_tombstone_in_the_first_hours_of_the_previous_business_month_is_kept(
+    entitlements: EntitlementBench,
+) -> None:
+    minutes, person = meter(entitlements), (Home.EU, uuid4())
+    # Первые часы прошлого московского месяца — ещё последний день UTC-месяца двумя месяцами раньше:
+    # его партицию хранит политика двух прошлых месяцев (ADR 0058).
+    first_hours = tombstones_since(entitlements.clock.now, MOSCOW) + timedelta(minutes=30)
+    await delete_meeting(entitlements, minutes, person, first_hours)
+
+    previous = await minutes.used_seconds(*person, first_hours)
+
+    assert first_hours.astimezone(UTC).month != MOSCOW.date_of(first_hours).month
+    assert previous == 30 * MINUTE
 
 
 async def test_the_allowance_refuses_at_the_limit_and_counts_live_meetings(

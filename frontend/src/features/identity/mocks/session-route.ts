@@ -66,7 +66,7 @@ const noContent = () => new Response(null, { status: 204 });
 export const adminSessionRoute = {
   GET() {
     return adminSignedIn
-      ? noContent()
+      ? Response.json({ business_time_zone: "Europe/Moscow" })
       : Response.json({ error: { code: "admin_sign_in_required", request_id: "mock-request" } }, { status: 401 });
   },
   POST() {

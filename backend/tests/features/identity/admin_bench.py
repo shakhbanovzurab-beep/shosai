@@ -21,6 +21,7 @@ from shosai.features.identity.infrastructure.account_markers import AccountMarke
 from shosai.features.identity.infrastructure.admin_sessions import AdminSessions
 from shosai.features.identity.infrastructure.directory import Directory
 from shosai.features.identity.infrastructure.password_hasher import PasswordHasher
+from tests.doubles.business_calendar import MOSCOW
 from tests.features.identity.passwordless_bench import COOKIES, SIGNING_KEYS
 
 ADMIN_USERNAME = "admin"
@@ -43,11 +44,11 @@ def admin_routers(
     """`/v1/admin/session`, `/v1/admin/users*` and the transfer routes over the slot's homes."""
     markers, outbox = events
     admin, limiter, ports = access
-    users = AdminUsers(transactions, directory, SpendReports(transactions))
+    users = AdminUsers(transactions, directory, SpendReports(transactions, MOSCOW))
     states = AccountStates(transactions, directory[0], markers, outbox)
     transfers = Transfers(transactions, directory[0], outbox, ports, allowed=False)
     return (
-        build_admin_session_router(admin, ports, limiter, COOKIES),
+        build_admin_session_router(admin, ports, (limiter, COOKIES), MOSCOW.zone_name),
         build_admin_users_router(users, states, ports),
         build_admin_transfers_router(transfers, ports),
     )

@@ -2,10 +2,11 @@
 
 import { toast } from "sonner";
 
+import { businessToday } from "@/features/admin-sign-in/model/business-zone";
 import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { plansApi } from "../api/plans-api";
-import { type PromoCode, type PromoCodeDraft, promoStatus, todayIso } from "../domain/contract";
+import { type PromoCode, type PromoCodeDraft, promoStatus } from "../domain/contract";
 import type { PromoFormTarget } from "../domain/promo-form-values";
 import { attempt } from "./plan-actions";
 import { dropPromo, putPromo } from "./plans-store";
@@ -22,7 +23,7 @@ export function savePromo(target: PromoFormTarget, draft: PromoCodeDraft) {
 
 /** Switches a code on or off at once, rolling back if the server refuses (e.g. its plans are gone). */
 export async function setPromoActive(promo: PromoCode, is_active: boolean) {
-  putPromo({ ...promo, is_active, status: promoStatus({ ...promo, is_active }, todayIso()) });
+  putPromo({ ...promo, is_active, status: promoStatus({ ...promo, is_active }, businessToday()) });
   try {
     const saved = await plansApi.updatePromo(promo.id, { is_active });
     putPromo(saved);

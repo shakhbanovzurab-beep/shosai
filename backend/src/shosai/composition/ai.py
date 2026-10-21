@@ -55,7 +55,7 @@ from shosai.core.ai.spend.counters import micro_usd
 from shosai.core.ai.spend.operator import SpendOperator
 from shosai.core.ai.telemetry import CallTelemetry
 from shosai.core.config.loading import Settings
-from shosai.core.config.sections import AiSettings, SpendSettings
+from shosai.core.config.sections import AiSettings
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.events.outbox import EventOutbox
 from shosai.core.exchange_rates.fetch import rate_fetch_handler
@@ -143,12 +143,12 @@ def provider_client(
 
 
 def spend_alert(
-    settings: SpendSettings, dependencies: AiDependencies, transactions: HomeTransactions
+    settings: Settings, dependencies: AiDependencies, transactions: HomeTransactions
 ) -> SpendAlert:
-    """The operator's alert on a user's spend today."""
+    """The operator's alert on a user's spend in the business day."""
     return SpendAlert(
         dependencies.valkey, transactions, dependencies.outbox,
-        micro_usd(settings.ai_user_daily_alert_usd),
+        micro_usd(settings.spend.ai_user_daily_alert_usd), settings.calendar.business,
     )  # fmt: skip
 
 
@@ -233,7 +233,7 @@ async def open_ai(
         settings, dependencies.valkey, dependencies.registry, transactions, stack
     )
     writer.observe(spend.count)
-    writer.observe(spend_alert(settings.spend, dependencies, transactions).observe)
+    writer.observe(spend_alert(settings, dependencies, transactions).observe)
     admission = Admission(PriceBook(transactions), metrics)
     telemetry = CallTelemetry(registry, dependencies.tracer_provider)
     runner = RouteRunner(

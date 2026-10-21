@@ -79,7 +79,7 @@ class PromoPatchBody(Strict):
 
 
 class PromoView(BaseModel):
-    """A promo code as the admin's list shows it; the status is judged today in UTC."""
+    """A promo code as the admin's list shows it; the status is judged on the business date."""
 
     id: UUID
     code: str

@@ -24,6 +24,7 @@ from shosai.features.billing.channels.http.admin_promo_codes import (
 )
 from shosai.features.identity.contracts import ADMIN_COOKIE, ADMIN_GATE
 from tests.core.web.probe_app import build_probe_app, client_of
+from tests.doubles.business_calendar import MOSCOW
 from tests.harness.connections import fetch_value
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
@@ -79,7 +80,9 @@ async def catalogue(homes: DatabaseAccess, run_slot: RunSlot) -> AsyncIterator[C
         build_admin_plans_router(
             Catalogue(homes.transactions, (subscribers, subscribers), clock=lambda: TODAY), ports
         ),
-        build_admin_promo_codes_router(PromoCodes(homes.transactions, clock=lambda: TODAY), ports),
+        build_admin_promo_codes_router(
+            PromoCodes(homes.transactions, clock=lambda: TODAY, business=MOSCOW), ports
+        ),
     )
     app = build_probe_app(extra=routers).app
     try:

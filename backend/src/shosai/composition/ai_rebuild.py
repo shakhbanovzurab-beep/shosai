@@ -69,7 +69,10 @@ async def _rebuilt(settings: Settings, stack: AsyncExitStack) -> int:
     stack.push_async_callback(valkey.aclose)
     try:
         await rebuild_spend_counters(
-            HomeTransactions(databases, gate, metrics), valkey, datetime.now(UTC)
+            HomeTransactions(databases, gate, metrics),
+            valkey,
+            datetime.now(UTC),
+            settings.calendar.business,
         )
     except HomeUnavailableError as error:
         log.error("Пересборка прервана: дом недоступен", home=error.home.value)

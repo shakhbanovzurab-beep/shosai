@@ -8,8 +8,8 @@ from sqlalchemy import select
 from shosai.core.events.records import OutboxMessage
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
-from shosai.features.billing.domain.meters import month_window, week_window
 from shosai.features.billing.infrastructure.sales_records import SalesInquiryRecord
+from tests.doubles.business_calendar import MOSCOW
 from tests.features.billing.catalogue_bench import created, plan_draft
 from tests.features.billing.people_bench import PeopleBench, bearer
 from tests.features.billing.test_minutes import delete_meeting, meter
@@ -94,7 +94,7 @@ async def test_plans_come_in_the_cabinet_s_shape_and_the_account_s_currency(
     assert ru["plans"][2]["seats"] == {"min": 2, "max": 100}
     assert (ru["current_plan_id"], ru["effective_plan_id"], ru["seat"]) == ("free", "free", None)
     assert (de["current_plan_id"], de["effective_plan_id"]) == ("legacy", "legacy")
-    _, end = month_window(people.entitlements.clock.now)
+    _, end = MOSCOW.month_window(people.entitlements.clock.now)
     assert ru["usage"]["used_minutes"] == 30.0
     assert ru["usage"]["limit_minutes"] == 120
     assert ru["usage"]["resets_at"].startswith(end.date().isoformat())
@@ -116,7 +116,7 @@ async def test_usage_shows_the_week_s_tokens_packs_and_frontier_models(people: P
     body = answer.json()
     assert set(body) == USAGE
     assert set(body["frontier"]) == FRONTIER
-    assert body["week_start"].startswith(week_window(now)[0].date().isoformat())
+    assert body["week_start"].startswith(MOSCOW.week_window(now)[0].date().isoformat())
     limits = {item["tier"]: (item["used_tokens"], item["limit_tokens"]) for item in body["limits"]}
     assert limits == {"standard": (200, None), "frontier": (900, 1000)}
     assert body["frontier"]["extra_tokens"] == 0

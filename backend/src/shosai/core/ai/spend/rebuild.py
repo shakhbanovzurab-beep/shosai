@@ -42,8 +42,8 @@ from shosai.core.ai.spend.counters import (
     pending_payer,
     periods,
 )
-from shosai.core.ai.spend.reports import month_start
 from shosai.core.db.transactions import HomeTransactions
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 
@@ -69,10 +69,17 @@ def text_of(value: bytes | str) -> str:
 class CounterRebuild:
     """One rebuild: mark, read, write; the mark is lifted however it ends."""
 
-    def __init__(self, transactions: HomeTransactions, valkey: Redis, at: datetime) -> None:
+    def __init__(
+        self,
+        transactions: HomeTransactions,
+        valkey: Redis,
+        at: datetime,
+        business: BusinessCalendar,
+    ) -> None:
         self._transactions = transactions
         self._valkey = valkey
         self._now = at.astimezone(UTC)
+        self._business = business
         self._id = secrets.token_hex(12)
         self._write = valkey.register_script(REBUILD_SCRIPT)
 
@@ -131,8 +138,8 @@ class CounterRebuild:
         return sums, ttls
 
     def _add(self, payer: Payer, amount: int, sums: dict[str, int], ttls: dict[str, int]) -> None:
-        current = periods(self._now)
-        for counter in counters_of(payer):
+        current = periods(self._now, self._business)
+        for counter in counters_of(payer, self._business):
             if counter.key.endswith(f":{current[counter.period]}"):
                 sums[counter.key] += amount
                 ttls[counter.key] = int(counter.ttl.total_seconds() * 1000)
@@ -142,7 +149,8 @@ class CounterRebuild:
         hour = func.date_trunc("hour", ProviderCost.created_at, "UTC")
         columns = (ProviderCost.user_id, ProviderCost.platform_account, ProviderCost.origin,
                    ProviderCost.call_class, hour)  # fmt: skip
-        since = min(month_start(self._now), self._now - timedelta(days=1))
+        month, _ = self._business.month_window(self._now)
+        since = min(month, self._now - timedelta(days=1))
         sums = (
             select(*columns, func.sum(func.ceil(ProviderCost.cost_usd * MICRO_FACTOR)))
             .where(ProviderCost.created_at >= since)
@@ -164,9 +172,9 @@ class CounterRebuild:
 
 
 async def rebuild_spend_counters(
-    transactions: HomeTransactions, valkey: Redis, at: datetime
+    transactions: HomeTransactions, valkey: Redis, at: datetime, business: BusinessCalendar
 ) -> int:
     """Rewrite the current counters from the rows of both homes; return how many."""
-    rebuild = CounterRebuild(transactions, valkey, at)
+    rebuild = CounterRebuild(transactions, valkey, at, business)
     await rebuild.start()
     return await rebuild.finish()

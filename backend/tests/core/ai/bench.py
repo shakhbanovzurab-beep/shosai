@@ -63,6 +63,7 @@ from shosai.core.tasks.declaration import TaskDeclaration
 from shosai.core.tasks.errors import TaskQueueUnavailableError
 from shosai.core.tasks.payloads import TaskPayload
 from tests.core.kv.outages import closed_port, redis_url
+from tests.doubles.business_calendar import MOSCOW
 from tests.doubles.openrouter import ScriptedOpenRouter
 from tests.doubles.pyannote import ScriptedPyannote
 
@@ -232,7 +233,7 @@ def ai_bench(
     )
     spend = SpendGuard(
         valkey, doubles.ceilings or OPEN_CEILINGS,
-        KillSwitch(valkey, forced=doubles.kill_switch), SpendMetrics(registry),
+        KillSwitch(valkey, forced=doubles.kill_switch), SpendMetrics(registry), MOSCOW,
     )  # fmt: skip
     writer.observe(spend.count)
     spans = InMemorySpanExporter()

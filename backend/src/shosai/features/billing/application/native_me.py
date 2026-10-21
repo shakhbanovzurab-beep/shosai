@@ -4,8 +4,8 @@ The shapes are the draft's (`SubscriptionCardDTO`, `QuotaSnapshot`, `FeaturesOut
 by the shipped desktop clients. A person who never had a subscription gets no card, as
 in the draft; the plan's tariff is derived from the catalogue (BL-D2): its price is the
 bought period's in roubles, its period the draft's 31 or 366 days. Minutes come from the
-month's usage in UTC; switches owned by other slices (voice, live translation) keep the
-draft's defaults.
+month's usage, the month of the business calendar (ADR 0058); switches owned by other
+slices (voice, live translation) keep the draft's defaults.
 """
 
 from collections.abc import Callable, Mapping
@@ -13,6 +13,7 @@ from datetime import UTC, datetime
 from typing import Final, Protocol
 from uuid import UUID
 
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kernel.homes import Home
 from shosai.features.billing.application.entitlement_entries import (
     EntitlementEntry,
@@ -20,7 +21,7 @@ from shosai.features.billing.application.entitlement_entries import (
 )
 from shosai.features.billing.application.entitlement_snapshots import EntitlementSnapshots
 from shosai.features.billing.domain.entitlements import days_left
-from shosai.features.billing.domain.meters import SECONDS_IN_MINUTE, MinutesLeft, month_window
+from shosai.features.billing.domain.meters import SECONDS_IN_MINUTE, MinutesLeft
 from shosai.features.billing.domain.money import Currency
 from shosai.features.billing.domain.plans import BillingPeriod
 from shosai.features.identity.contracts import Principal
@@ -47,10 +48,13 @@ class BillingMe:
         snapshots: EntitlementSnapshots,
         minutes: MonthlyMinutes,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        *,
+        business: BusinessCalendar,
     ) -> None:
         self._snapshots = snapshots
         self._minutes = minutes
         self._clock = clock
+        self._business = business
 
     async def native_me(self, principal: Principal) -> Mapping[str, object]:
         """The person's subscription card, minutes and plan switches."""
@@ -71,7 +75,7 @@ class BillingMe:
                 "unlimited": True, "limit_minutes": None, "bonus_minutes": 0,
                 "used_minutes": None, "remaining_minutes": None, "exhausted": False,
             }  # fmt: skip
-        start, _ = month_window(now)
+        start, _ = self._business.month_window(now)
         used = await self._minutes.used_seconds(principal.home, principal.user_id, start)
         left = MinutesLeft(limit, used)
         remaining = max(limit * SECONDS_IN_MINUTE - used, 0) / SECONDS_IN_MINUTE

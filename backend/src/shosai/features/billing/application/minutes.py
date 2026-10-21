@@ -1,6 +1,6 @@
 """The month's meeting minutes: the live count, the allowance and the tombstones (BL-D3).
 
-The month is the UTC calendar month of the meeting's start. Used seconds are the
+The month is the business calendar's month of the meeting's start (ADR 0058). Used seconds are the
 meetings that still exist (meetings' port; none bound yet, so none) plus the tombstones
 of deleted ones; the count is never cached. A Free account claims its desktop device on
 its first check there; a device another Free account claimed refuses it. Paid accounts
@@ -19,6 +19,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions, transaction_info
+from shosai.core.kernel.business_calendar import BusinessCalendar
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from shosai.core.kernel.tenancy import TenancyScope
@@ -31,7 +32,7 @@ from shosai.features.billing.contracts import (
     MinutesExhaustedError,
     UploadExceedsMinutesError,
 )
-from shosai.features.billing.domain.meters import MinutesLeft, month_window, tombstones_since
+from shosai.features.billing.domain.meters import MinutesLeft, tombstones_since
 from shosai.features.billing.infrastructure.minutes_records import (
     FreePlanDeviceRecord,
     UsageEventRecord,
@@ -56,10 +57,13 @@ class MinutesMeter:
         transactions: HomeTransactions,
         sources: tuple[Entitlements, PortDirectory],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+        *,
+        business: BusinessCalendar,
     ) -> None:
         self._transactions = transactions
         self._entitlements, self._ports = sources
         self._clock = clock
+        self._business = business
 
     async def check(self, session: AsyncSession, user_id: UUID, device: str | None) -> MinutesLeft:
         """Minutes left this month; refused at the limit or on another Free account's device."""
@@ -83,7 +87,7 @@ class MinutesMeter:
     ) -> None:
         """Keep a deleted meeting's seconds in its month; nothing for a month no longer counted."""
         meeting_id, started_at = meeting
-        if started_at < tombstones_since(self._clock()):
+        if started_at < tombstones_since(self._clock(), self._business):
             return
         await session.execute(
             insert(UsageEventRecord)
@@ -100,7 +104,7 @@ class MinutesMeter:
     async def used_seconds(self, home: Home, user_id: UUID, since: datetime) -> int:
         """Seconds used in the month starting at `since`, in a transaction of its own."""
         async with self._transactions.begin(TenancyScope(home, user_id), read_only=True) as session:
-            return await self.used_in(session, user_id, month_window(since))
+            return await self.used_in(session, user_id, self._business.month_window(since))
 
     async def used_in(
         self, session: AsyncSession, user_id: UUID, window: tuple[datetime, datetime]
@@ -129,7 +133,7 @@ class MinutesMeter:
         limit = snapshot.limits.meeting_minutes_per_month
         if limit is None:
             return MinutesLeft(None, 0)
-        used = await self.used_in(session, user_id, month_window(self._clock()))
+        used = await self.used_in(session, user_id, self._business.month_window(self._clock()))
         return MinutesLeft(limit, used)
 
 

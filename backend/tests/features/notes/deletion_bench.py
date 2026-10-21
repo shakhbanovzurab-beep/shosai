@@ -53,6 +53,7 @@ from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLo
 from shosai.features.workspaces.module import WORKSPACES
 from tests.core.storage.adapters import slot_storage
 from tests.core.web.probe_app import build_probe_app, client_of
+from tests.doubles.business_calendar import MOSCOW
 from tests.features.billing.entitlement_bench import Clock, EntitlementBench
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.harness.connections import fetch_rows
@@ -132,7 +133,7 @@ async def deletion_bench(
     transactions, clock = entitlements.homes.transactions, entitlements.clock
     outbox = EventOutbox(EventTypes([*NOTES.events, *WORKSPACES.events, *IDENTITY.events]))
     ports = PortDirectory()
-    meter = MinutesMeter(transactions, (entitlements.snapshots, ports), clock)
+    meter = MinutesMeter(transactions, (entitlements.snapshots, ports), clock, business=MOSCOW)
     ports.install(
         [
             AUTHENTICATOR.bind(BearerOfTheTest()),

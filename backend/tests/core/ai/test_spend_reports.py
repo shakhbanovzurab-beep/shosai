@@ -16,16 +16,18 @@ from shosai.core.ai.spend.reports import (
     ReportPeriod,
     SpendReports,
     SummaryGroup,
-    month_start,
 )
 from shosai.core.ai.spend.standing import OpenRouterCredits, SpendStanding
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.ids import new_id
 from tests.core.ai.bench import ORG_ID, USER_ID, Doubles, ai_bench
+from tests.doubles.business_calendar import MOSCOW
 from tests.harness.database_access import DatabaseAccess
 
 OTHER_USER = UUID("0190f0f0-0000-7000-8000-0000000000a2")
-BASE = month_start(datetime.now(UTC))
+# Следующий московский месяц: его начало — 21:00 UTC последнего дня текущего месяца UTC, так что
+# пограничная строка ложится в существующую партицию, а не в прошедший месяц без партиции.
+BASE, _ = MOSCOW.month_window(MOSCOW.month_window(datetime.now(UTC))[1])
 AT = BASE + timedelta(days=2, hours=2)
 
 
@@ -56,7 +58,7 @@ async def seeded(homes: DatabaseAccess) -> SpendReports:
             exchange_rate_used=None, cost_rub=None),
     ):  # fmt: skip
         await writer.write(entry)
-    return SpendReports(homes.transactions)
+    return SpendReports(homes.transactions, MOSCOW)
 
 
 async def test_a_summary_adds_up_both_homes(homes: DatabaseAccess) -> None:
@@ -83,6 +85,9 @@ async def test_a_daily_series_carries_each_model_s_tokens(homes: DatabaseAccess)
     by_day = {(r.day, r.model): (r.calls, r.input_tokens, r.cost_usd) for r in series}
     assert by_day[(AT.date(), "probe/chat")] == (2, 200, Decimal("0.40"))
     assert by_day[(AT.date(), "probe/other")] == (1, 100, Decimal("0.20"))
+    # 01:00 по Москве первого числа — ещё 22:00 UTC последнего дня прошлого месяца: день и месяц
+    # строки — московские (ADR 0058).
+    assert (BASE + timedelta(hours=1)).astimezone(UTC).day != 1
     assert by_day[(BASE.date(), "probe/chat")] == (1, 100, Decimal("0.50"))
 
 
@@ -146,7 +151,8 @@ async def test_the_standing_shows_spent_and_reserved_against_each_ceiling(
         global_hour=400_000_000, global_day=4_000_000_000,
         platform={account.value: (5_000_000, 20_000_000) for account in PlatformAccount},
     )  # fmt: skip
-    standing = await SpendStanding(valkey, ceilings, KillSwitch(valkey, forced=False)).standing(now)
+    switch = KillSwitch(valkey, forced=False)
+    standing = await SpendStanding(valkey, ceilings, switch, MOSCOW).standing(now)
 
     states = {state.name: state for state in standing.ceilings}
     assert (states["global_day"].spent_usd, states["global_day"].ceiling_usd) == (

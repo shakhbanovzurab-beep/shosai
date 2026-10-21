@@ -71,12 +71,15 @@ from shosai.features.identity.contracts import ME_CONTRIBUTIONS
 @asynccontextmanager
 async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """The admin's catalogue routes and the entitlement ports."""
+    business = services.settings.calendar.business
     cache = EntitlementCache(services.valkey)
     snapshots = EntitlementSnapshots(services.transactions, cache)
-    meter = MinutesMeter(services.transactions, (snapshots, services.ports))
-    views = PeopleViews(services.transactions, (snapshots, meter, services.ports))
+    meter = MinutesMeter(services.transactions, (snapshots, services.ports), business=business)
+    views = PeopleViews(
+        services.transactions, (snapshots, meter, services.ports), business=business
+    )
     inquiries = SalesInquiries(services.transactions, services.outbox)
-    standing = TokenStanding(services.transactions, snapshots)
+    standing = TokenStanding(services.transactions, snapshots, business=business)
     # Счётчик inv-4 виден с нуля во всех ролях; растить его будет сверка платежей (шаг 8).
     PaymentMetrics(services.registry)
     catalogue = Catalogue(
@@ -85,19 +88,21 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     yield FeatureParts(
         http_routers=(
             build_admin_plans_router(catalogue, services.ports),
-            build_admin_promo_codes_router(PromoCodes(services.transactions), services.ports),
+            build_admin_promo_codes_router(
+                PromoCodes(services.transactions, business=business), services.ports
+            ),
             build_plans_router(views, inquiries, services.ports, services.rate_limiter),
             build_usage_router(views, services.ports),
         ),
         provides=(
             ENTITLEMENTS.bind(snapshots),
-            ME_CONTRIBUTIONS.bind(BillingMe(snapshots, meter)),
+            ME_CONTRIBUTIONS.bind(BillingMe(snapshots, meter, business=business)),
             MINUTES_ALLOWANCE.bind(meter),
             USAGE_TOMBSTONES.bind(meter),
             TOKEN_ALLOWANCE.bind(standing),
             ACCOUNT_DATA_HANDLERS.bind(BillingAccountData(services.transactions)),
         ),
-        cost_settlements=(TokenSettlement(snapshots),),
+        cost_settlements=(TokenSettlement(snapshots, business),),
         agent_tools=billing_tools(views, standing),
     )
 

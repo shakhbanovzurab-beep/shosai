@@ -72,6 +72,7 @@ from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLo
 from tests.core.ai.bench import AiBench, Doubles, ai_bench, set_prices, set_rate
 from tests.core.storage.adapters import slot_storage
 from tests.core.web.probe_app import build_probe_app, client_of
+from tests.doubles.business_calendar import MOSCOW
 from tests.features.billing.entitlement_bench import Clock, EntitlementBench
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.features.notes.library_bench import OUTBOX
@@ -249,7 +250,9 @@ async def recording_bench(
     await set_rate(homes.transactions, "92.5000")
     providers = ai_bench(homes.transactions, doubles=Doubles())
     ports, sent, languages = PortDirectory(), Sent(), Languages()
-    minutes = MinutesMeter(homes.transactions, (entitlements.snapshots, ports), clock)
+    minutes = MinutesMeter(
+        homes.transactions, (entitlements.snapshots, ports), clock, business=MOSCOW
+    )
     ports.install(
         [
             AUTHENTICATOR.bind(BearerOfTheTest()),

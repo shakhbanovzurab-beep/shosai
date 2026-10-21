@@ -43,6 +43,7 @@ from shosai.features.workspaces.contracts import ACCESS_POLICY
 from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLog
 from shosai.features.workspaces.module import WORKSPACES
 from tests.core.web.probe_app import build_probe_app, client_of
+from tests.doubles.business_calendar import MOSCOW
 from tests.features.billing.entitlement_bench import Clock, EntitlementBench
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.harness.database_access import (
@@ -140,7 +141,9 @@ async def meeting_bench(
     ports = PortDirectory()
     signal = CaptureSignal()
     count = MeetingMinutesCount(entitlements.clock)
-    meter = MinutesMeter(transactions, (entitlements.snapshots, ports), entitlements.clock)
+    meter = MinutesMeter(
+        transactions, (entitlements.snapshots, ports), entitlements.clock, business=MOSCOW
+    )
     ports.install(
         [
             AUTHENTICATOR.bind(BearerOfTheTest()),
