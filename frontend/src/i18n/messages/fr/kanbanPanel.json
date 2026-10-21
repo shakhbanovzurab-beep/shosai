@@ -33,9 +33,10 @@
     "weekdays": "Ces jours-là"
   },
   "value": {
-    "number": "Ajoutez un nombre",
-    "text": "Ajoutez du texte",
-    "clear": "Effacer"
+    "number": "Ajoutez un nombre…",
+    "text": "Ajoutez du texte…",
+    "clear": "Effacer",
+    "invalidNumber": "Saisissez un nombre, par exemple 3 ou 2,5."
   },
   "leo": {
     "filled": "Rempli par Leo",

@@ -40,5 +40,6 @@
   "text": {
     "label": "Chứa",
     "placeholder": "Nhập để lọc…"
-  }
+  },
+  "nothingFound": "Không có kết quả phù hợp"
 }

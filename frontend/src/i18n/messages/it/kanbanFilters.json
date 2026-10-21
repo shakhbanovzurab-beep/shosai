@@ -40,5 +40,6 @@
   "text": {
     "label": "Contiene",
     "placeholder": "Scrivi per filtrare…"
-  }
+  },
+  "nothingFound": "Nessun risultato"
 }

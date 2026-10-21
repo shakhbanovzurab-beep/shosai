@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 
 import { useTranslations } from "use-intl";
 
@@ -64,8 +64,16 @@ function CardBody({
   );
 }
 
-/** Карточка на доске: лицо задачи и «⋮». В закрытой колонке — приглушённая. */
-export function TaskCard({ taskId, columnId }: { taskId: string; columnId: string }) {
+/** Карточка на доске: лицо задачи и «⋮». В закрытой колонке — приглушённая. `handleRef` — ручка перетаскивания. */
+export function TaskCard({
+  taskId,
+  columnId,
+  handleRef,
+}: {
+  taskId: string;
+  columnId: string;
+  handleRef?: Ref<HTMLButtonElement>;
+}) {
   const card = useCard(taskId);
   const state: CardState = useColumn(columnId)?.kind === "done" ? "done" : "open";
   const tc = useTranslations("common");
@@ -75,7 +83,11 @@ export function TaskCard({ taskId, columnId }: { taskId: string; columnId: strin
       <CardBody
         card={card}
         state={state}
-        title={<CardOpenButton onOpen={() => openTask(taskId)}>{card.title}</CardOpenButton>}
+        title={
+          <CardOpenButton onOpen={() => openTask(taskId)} handleRef={handleRef}>
+            {card.title}
+          </CardOpenButton>
+        }
         actions={
           <BoardActionsButton
             target={{ kind: "task", taskId, columnId }}

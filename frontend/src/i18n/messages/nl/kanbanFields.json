@@ -47,6 +47,8 @@
     "title": "‘{name}’ verwijderen?",
     "body": "Het veld gaat van {boards} af en {tasks, plural, one {# taak verliest} other {# taken verliezen}} de waarde ervan. Iedereen die deze taken ziet, ziet het veld niet meer.",
     "bodyNoValues": "Het veld gaat van {boards} af. Nog geen enkele taak heeft er een waarde in.",
-    "confirm": "Veld verwijderen"
-  }
+    "confirm": "Veld verwijderen",
+    "counting": "Borden en taken met dit veld tellen…"
+  },
+  "fromOtherFailed": "Kan je velden niet laden. Probeer het opnieuw."
 }

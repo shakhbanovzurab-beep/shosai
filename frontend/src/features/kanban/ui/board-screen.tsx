@@ -83,7 +83,7 @@ function FilteredViews({ view }: { view: BoardView }) {
 function BoardSkeleton() {
   const tc = useTranslations("common");
   return (
-    <div className="flex min-h-0 flex-1 gap-4 bg-muted/25 p-4 lg:p-5">
+    <div role="status" className="flex min-h-0 flex-1 gap-4 bg-muted/25 p-4 lg:p-5">
       <span className="sr-only">{tc("feedback.loading")}</span>
       {[0, 1, 2].map((i) => (
         <Skeleton key={i} className="h-full w-80 shrink-0 rounded-xl" />

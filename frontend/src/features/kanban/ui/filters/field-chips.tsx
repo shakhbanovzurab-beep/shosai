@@ -135,7 +135,7 @@ export function TextChip({ sticker }: { sticker: CustomSticker }) {
   const text = filter.texts[sticker.id] ?? "";
   const change = (next: string) => setFilter((state) => ({ ...state, texts: { ...state.texts, [sticker.id]: next } }));
   return (
-    <FilterChip field={sticker.name} active={text.trim() ? `“${text.trim()}”` : null} onClear={() => change("")}>
+    <FilterChip field={sticker.name} active={text.trim() || null} onClear={() => change("")}>
       <div className="flex flex-col gap-1">
         <Label htmlFor={inputId} className="font-normal text-xs">
           {t("text.label")}

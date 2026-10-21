@@ -47,6 +47,8 @@
     "title": "Eliminare «{name}»?",
     "body": "Il campo verrà rimosso da {boards} e il suo valore sparirà da {tasks, plural, one {# attività} many {# di attività} other {# attività}}. Chi vede queste attività non lo vedrà più.",
     "bodyNoValues": "Il campo verrà rimosso da {boards}. Nessuna attività ha ancora un valore in questo campo.",
-    "confirm": "Elimina campo"
-  }
+    "confirm": "Elimina campo",
+    "counting": "Conteggio delle bacheche e delle attività che lo usano…"
+  },
+  "fromOtherFailed": "Impossibile caricare i tuoi campi. Riprova."
 }

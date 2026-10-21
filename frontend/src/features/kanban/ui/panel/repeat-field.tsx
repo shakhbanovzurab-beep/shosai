@@ -8,6 +8,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { firstDue, nextDue, recurrenceFor, weekdaysFrom } from "../../domain/recurrence";
 import { type Recurrence, WEEKDAYS, type Weekday } from "../../domain/tasks-contract";
 import { useToday } from "../../model/board-hooks";
+import { useValueLabel } from "./value-label";
 
 type Every = "never" | Recurrence["every"];
 const EVERY: Every[] = ["never", "day", "week", "month"];
@@ -37,6 +38,7 @@ export function RepeatField({
   onChange: (recurrence: Recurrence | null) => void;
 }) {
   const t = useTranslations("kanbanPanel");
+  const valueLabel = useValueLabel(labelId);
   const format = useFormatter();
   const today = useToday();
   const weekdays = useWeekdays();
@@ -50,7 +52,7 @@ export function RepeatField({
           disabled={disabled}
           onValueChange={(every) => onChange(recurrenceFor(every as Every, value, dueOn ?? today))}
         >
-          <SelectTrigger size="sm" aria-labelledby={labelId} className="min-w-36">
+          <SelectTrigger size="sm" {...valueLabel} className="min-w-36">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

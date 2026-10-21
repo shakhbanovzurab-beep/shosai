@@ -47,6 +47,8 @@
     "title": "Excluir “{name}”?",
     "body": "O campo será removido de {boards}, e o valor dele deixará de aparecer em {tasks, plural, one {# tarefa} many {# de tarefas} other {# tarefas}}. Quem vê essas tarefas não vai mais vê-lo.",
     "bodyNoValues": "O campo será removido de {boards}. Nenhuma tarefa tem um valor nele ainda.",
-    "confirm": "Excluir campo"
-  }
+    "confirm": "Excluir campo",
+    "counting": "Contando os quadros e as tarefas que usam este campo…"
+  },
+  "fromOtherFailed": "Não foi possível carregar seus campos. Tente novamente."
 }

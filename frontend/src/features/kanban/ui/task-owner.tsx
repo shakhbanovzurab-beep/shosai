@@ -12,7 +12,8 @@ import { ownerTones, toneOf } from "./tones";
 export function OwnerAvatar({ owner }: { owner: Assignee | null }) {
   if (!owner) return <CircleUserRound className="size-5 text-muted-foreground" aria-hidden="true" />;
   return (
-    <Avatar className={cn("size-5 after:rounded-sm", ownerTones[toneOf(owner.name)])}>
+    // Инициалы — картинка, а не текст: имя рядом читается и так.
+    <Avatar aria-hidden="true" className={cn("size-5 after:rounded-sm", ownerTones[toneOf(owner.name)])}>
       <AvatarFallback className="rounded-sm text-[10px]">{getInitials(owner.name)}</AvatarFallback>
     </Avatar>
   );

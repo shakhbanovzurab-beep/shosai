@@ -47,6 +47,8 @@
     "title": "Hapus “{name}”?",
     "body": "Bidang ini akan dihapus dari papan {boards}, dan nilainya hilang dari {tasks, plural, other {# tugas}}. Semua orang yang melihat tugas tersebut tidak akan melihat bidang ini lagi.",
     "bodyNoValues": "Bidang ini akan dihapus dari papan {boards}. Belum ada tugas yang memiliki nilai di bidang ini.",
-    "confirm": "Hapus bidang"
-  }
+    "confirm": "Hapus bidang",
+    "counting": "Menghitung papan dan tugas yang menggunakannya…"
+  },
+  "fromOtherFailed": "Tidak dapat memuat bidang Anda. Coba lagi."
 }

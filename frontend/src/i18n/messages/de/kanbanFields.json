@@ -47,6 +47,8 @@
     "title": "„{name}“ löschen?",
     "body": "Das Feld verschwindet von {boards}, und {tasks, plural, one {# Aufgabe verliert} other {# Aufgaben verlieren}} seinen Wert. Alle, die diese Aufgaben sehen, sehen das Feld nicht mehr.",
     "bodyNoValues": "Das Feld verschwindet von {boards}. Noch keine Aufgabe hat darin einen Wert.",
-    "confirm": "Feld löschen"
-  }
+    "confirm": "Feld löschen",
+    "counting": "Boards und Aufgaben mit diesem Feld werden gezählt…"
+  },
+  "fromOtherFailed": "Deine Felder konnten nicht geladen werden. Versuche es erneut."
 }

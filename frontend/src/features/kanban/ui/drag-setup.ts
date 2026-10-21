@@ -1,7 +1,7 @@
 "use client";
 
 import type { Plugins, Sensors } from "@dnd-kit/abstract";
-import { Accessibility } from "@dnd-kit/dom";
+import { Accessibility, PointerActivationConstraints } from "@dnd-kit/dom";
 import {
   type DragEndEvent,
   type DragOverEvent,
@@ -24,15 +24,21 @@ type Source = DragStartEvent["operation"]["source"];
 const INTERACTIVE = "input, select, textarea, button, a[href], [contenteditable]:not([contenteditable='false'])";
 
 /**
- * Мышью карточку тянут с любого места: заголовок-кнопка растянут на всю карточку, поэтому он не мешает начать
- * перетаскивание. Остальные кнопки и ссылки карточки работают как обычно.
+ * Мышью карточку тянут с любого места: её заголовок-кнопка растянут на всю карточку и служит ручкой, как кнопка
+ * с точками у колонки. Ручка перетаскиванию не мешает; остальные кнопки и ссылки карточки работают как обычно.
+ * Мышь начинает тянуть после сдвига на 5 px, так что щелчок по карточке её открывает (сама библиотека с ручки
+ * тянула бы сразу и съедала щелчок); палец — долгим нажатием, чтобы доска листалась.
  */
 const pointerSensor = PointerSensor.configure({
-  preventActivation: (event) => {
+  preventActivation: (event, source) => {
     if (!(event.target instanceof Element)) return false;
     const interactive = event.target.closest(INTERACTIVE);
-    return interactive !== null && !interactive.hasAttribute("data-card-open");
+    return interactive !== null && !source.handle?.contains(interactive);
   },
+  activationConstraints: (event) =>
+    event.pointerType === "touch"
+      ? [new PointerActivationConstraints.Delay({ value: 250, tolerance: 5 })]
+      : [new PointerActivationConstraints.Distance({ value: 5 })],
 });
 
 /** Клавиатура поднимает пробелом: Enter на карточке открывает её, в строке подзадачи — ничего не тащит. */

@@ -33,9 +33,10 @@
     "weekdays": "Op deze dagen"
   },
   "value": {
-    "number": "Voeg een getal toe",
-    "text": "Voeg tekst toe",
-    "clear": "Wissen"
+    "number": "Voeg een getal toe…",
+    "text": "Voeg tekst toe…",
+    "clear": "Wissen",
+    "invalidNumber": "Voer een getal in, zoals 3 of 2,5."
   },
   "leo": {
     "filled": "Ingevuld door Leo",

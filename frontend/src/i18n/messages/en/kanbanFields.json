@@ -47,6 +47,8 @@
     "title": "Delete “{name}”?",
     "body": "It comes off {boards}, and its value leaves {tasks, plural, one {# task} other {# tasks}}. Everyone who sees those tasks stops seeing it.",
     "bodyNoValues": "It comes off {boards}. No task has a value in it yet.",
-    "confirm": "Delete field"
-  }
+    "confirm": "Delete field",
+    "counting": "Counting the boards and tasks that use it…"
+  },
+  "fromOtherFailed": "Couldn’t load your fields. Try again."
 }

@@ -47,6 +47,8 @@
     "title": "Xóa “{name}”?",
     "body": "Trường này sẽ bị gỡ khỏi bảng {boards}, và giá trị của nó sẽ mất khỏi {tasks, plural, other {# công việc}}. Những người xem các công việc đó sẽ không còn thấy trường này nữa.",
     "bodyNoValues": "Trường này sẽ bị gỡ khỏi bảng {boards}. Chưa có công việc nào có giá trị trong trường này.",
-    "confirm": "Xóa trường"
-  }
+    "confirm": "Xóa trường",
+    "counting": "Đang đếm các bảng và công việc dùng trường này…"
+  },
+  "fromOtherFailed": "Không thể tải các trường của bạn. Hãy thử lại."
 }

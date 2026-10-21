@@ -14,6 +14,7 @@ import { useBoardCommands, useManagedByJira } from "./board-store";
 import { ColumnDot, ColumnHeader } from "./column-header";
 import { useVisibleCardIds } from "./filters/use-visible-cards";
 import { SWATCHES } from "./palette";
+import { STILL, useReducedMotion } from "./reduced-motion";
 import { RevealMore } from "./reveal-more";
 import { SortableTaskCard } from "./sortable-task-card";
 
@@ -70,6 +71,7 @@ export function KanbanColumn({ columnId, index }: { columnId: string; index: num
   const taskIds = useVisibleCardIds(columnId);
   const head = useColumn(columnId);
   const headingId = useId();
+  const still = useReducedMotion();
   const {
     ref: columnRef,
     handleRef: columnHandleRef,
@@ -77,6 +79,7 @@ export function KanbanColumn({ columnId, index }: { columnId: string; index: num
     isDropTarget: isColumnDropTarget,
   } = useSortable({
     id: `column:${columnId}`,
+    transition: still ? STILL : undefined,
     index,
     // Колонки доски Jira — её.
     disabled: managedByJira,

@@ -13,6 +13,7 @@ import { Link } from "@/lib/navigation";
 import type { Assignee, TaskSpace } from "../../domain/tasks-contract";
 import { useBoardSelector } from "../../model/board-hooks";
 import { OwnerAvatar } from "../task-owner";
+import { useValueLabel } from "./value-label";
 
 /** Имена, которые уже стоят исполнителями на этой доске, — для быстрого выбора. */
 function useKnownNames(): string {
@@ -59,6 +60,7 @@ function PersonalAssignee({
 }) {
   const t = useTranslations("kanbanPanel");
   const tk = useTranslations("kanban");
+  const valueLabel = useValueLabel(labelId);
   const [open, setOpen] = useState(false);
   const [typed, setTyped] = useState("");
   const known = useKnownNames().split("\n").filter(Boolean);
@@ -71,13 +73,7 @@ function PersonalAssignee({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={disabled}
-          aria-labelledby={labelId}
-          className="max-w-full font-normal"
-        >
+        <Button variant="outline" size="sm" disabled={disabled} {...valueLabel} className="max-w-full font-normal">
           {assignee ? <OwnerAvatar owner={assignee} /> : <UserRound data-icon="inline-start" />}
           <span dir="auto" className="truncate">
             {assignee?.name ?? tk("card.unassigned")}

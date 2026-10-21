@@ -15,7 +15,13 @@ export function LeoSource({ source }: { source: TaskSource }) {
   const format = useFormatter();
   const meeting = source.meeting;
   const seconds = source.finding ? Math.floor(source.finding.start_ms / 1000) : 0;
-  const time = format.dateTime(new Date(seconds * 1000), { minute: "2-digit", second: "2-digit", timeZone: "UTC" });
+  // Момент встречи: часы — только у длинной встречи («1:05:00»), иначе минуты и секунды.
+  const time = format.dateTime(new Date(seconds * 1000), {
+    ...(seconds >= 3600 ? { hour: "numeric" as const, hourCycle: "h23" as const } : {}),
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: "UTC",
+  });
   return (
     <Popover>
       <PopoverTrigger asChild>

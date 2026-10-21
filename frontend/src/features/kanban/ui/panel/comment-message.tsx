@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useId, useState } from "react";
 
 import { EllipsisVertical, Pencil, Trash2 } from "lucide-react";
 import { useFormatter, useNow, useTranslations } from "use-intl";
@@ -99,7 +99,15 @@ function CommentEditor({ comment, onDone, edits }: { comment: Comment; onDone: (
   );
 }
 
-function CommentMenu({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => void }) {
+function CommentMenu({
+  describedBy,
+  onEdit,
+  onDelete,
+}: {
+  describedBy: string;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
   const t = useTranslations("kanbanPanel");
   return (
     <DropdownMenu>
@@ -108,6 +116,7 @@ function CommentMenu({ onEdit, onDelete }: { onEdit: () => void; onDelete: () =>
           variant="ghost"
           size="icon-xs"
           aria-label={t("comments.actions")}
+          aria-describedby={describedBy}
           className="ms-auto opacity-0 pointer-coarse:opacity-100 focus-visible:opacity-100 group-hover/message:opacity-100 data-[state=open]:opacity-100"
         >
           <EllipsisVertical />
@@ -136,11 +145,12 @@ export function CommentMessage({ comment, edits }: { comment: Comment; edits: Co
   const now = useNow({ updateInterval: 60_000 });
   const [editing, setEditing] = useState(false);
   const pending = isLocalId(comment.id);
+  const headerId = useId();
   const created = new Date(comment.created_at);
   return (
     <Message>
       <MessageContent className="gap-1.5">
-        <MessageHeader className="gap-2 px-0">
+        <MessageHeader id={headerId} className="gap-2 px-0">
           <OwnerAvatar owner={comment.author} />
           <span dir="auto" className="truncate text-foreground">
             {comment.author.name}
@@ -154,6 +164,7 @@ export function CommentMessage({ comment, edits }: { comment: Comment; edits: Co
           {comment.edited_at ? <span>· {t("comments.edited")}</span> : null}
           {comment.author.is_you && !pending && !editing ? (
             <CommentMenu
+              describedBy={headerId}
               onEdit={() => setEditing(true)}
               onDelete={() => edits.remove(comment, t("comments.deleted"))}
             />

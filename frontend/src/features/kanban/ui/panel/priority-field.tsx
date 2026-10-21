@@ -5,6 +5,7 @@ import { useTranslations } from "use-intl";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 import { PRIORITIES, type Priority } from "../../domain/tasks-contract";
+import { useValueLabel } from "./value-label";
 
 const NONE = "none";
 
@@ -21,13 +22,14 @@ export function PriorityField({
   onChange: (priority: Priority | null) => void;
 }) {
   const t = useTranslations("kanban");
+  const valueLabel = useValueLabel(labelId);
   return (
     <Select
       value={value ?? NONE}
       disabled={disabled}
       onValueChange={(next) => onChange(next === NONE ? null : (next as Priority))}
     >
-      <SelectTrigger size="sm" aria-labelledby={labelId} className="min-w-36">
+      <SelectTrigger size="sm" {...valueLabel} className="min-w-36">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

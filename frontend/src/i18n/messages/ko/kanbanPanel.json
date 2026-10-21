@@ -33,9 +33,10 @@
     "weekdays": "반복 요일"
   },
   "value": {
-    "number": "숫자 추가",
-    "text": "텍스트 추가",
-    "clear": "지우기"
+    "number": "숫자 추가…",
+    "text": "텍스트 추가…",
+    "clear": "지우기",
+    "invalidNumber": "3이나 2.5 같은 숫자를 입력해 주세요."
   },
   "leo": {
     "filled": "Leo가 채움",

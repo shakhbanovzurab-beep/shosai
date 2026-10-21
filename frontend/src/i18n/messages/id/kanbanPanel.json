@@ -33,9 +33,10 @@
     "weekdays": "Hari pengulangan"
   },
   "value": {
-    "number": "Tambahkan angka",
-    "text": "Tambahkan teks",
-    "clear": "Kosongkan"
+    "number": "Tambahkan angka…",
+    "text": "Tambahkan teks…",
+    "clear": "Kosongkan",
+    "invalidNumber": "Masukkan angka, seperti 3 atau 2,5."
   },
   "leo": {
     "filled": "Diisi oleh Leo",

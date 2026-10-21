@@ -33,9 +33,10 @@
     "weekdays": "An diesen Tagen"
   },
   "value": {
-    "number": "Zahl eingeben",
-    "text": "Text eingeben",
-    "clear": "Leeren"
+    "number": "Zahl eingeben…",
+    "text": "Text eingeben…",
+    "clear": "Leeren",
+    "invalidNumber": "Gib eine Zahl ein, etwa 3 oder 2,5."
   },
   "leo": {
     "filled": "Von Leo ausgefüllt",

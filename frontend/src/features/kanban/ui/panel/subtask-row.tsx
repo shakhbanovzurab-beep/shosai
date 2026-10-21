@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { type Subtask, TITLE_MAX } from "../../domain/tasks-contract";
 import { isLocalId } from "../../model/task-sync";
+import { STILL, useReducedMotion } from "../reduced-motion";
 
 type SubtaskEdits = {
   update: (subtaskId: string, patch: { done?: boolean; title?: string }) => Promise<boolean>;
@@ -67,7 +68,13 @@ export function SubtaskRow({
 }) {
   const t = useTranslations("kanbanPanel");
   const pending = isLocalId(subtask.id);
-  const { ref, handleRef, isDragging } = useSortable({ id: subtask.id, index, disabled: !editable || pending });
+  const still = useReducedMotion();
+  const { ref, handleRef, isDragging } = useSortable({
+    id: subtask.id,
+    index,
+    disabled: !editable || pending,
+    transition: still ? STILL : undefined,
+  });
   const title = subtask.title;
 
   return (

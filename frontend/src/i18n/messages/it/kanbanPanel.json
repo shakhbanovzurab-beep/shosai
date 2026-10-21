@@ -33,9 +33,10 @@
     "weekdays": "In questi giorni"
   },
   "value": {
-    "number": "Aggiungi un numero",
-    "text": "Aggiungi testo",
-    "clear": "Svuota"
+    "number": "Aggiungi un numero…",
+    "text": "Aggiungi testo…",
+    "clear": "Svuota",
+    "invalidNumber": "Inserisci un numero, ad esempio 3 o 2,5."
   },
   "leo": {
     "filled": "Compilato da Leo",

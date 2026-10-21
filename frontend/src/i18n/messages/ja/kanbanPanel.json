@@ -33,9 +33,10 @@
     "weekdays": "繰り返す曜日"
   },
   "value": {
-    "number": "数値を追加",
-    "text": "テキストを追加",
-    "clear": "クリア"
+    "number": "数値を追加…",
+    "text": "テキストを追加…",
+    "clear": "クリア",
+    "invalidNumber": "3 や 2.5 のような数値を入力してください。"
   },
   "leo": {
     "filled": "Leo が入力",

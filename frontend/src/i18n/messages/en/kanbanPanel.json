@@ -33,9 +33,10 @@
     "weekdays": "On these days"
   },
   "value": {
-    "number": "Add a number",
-    "text": "Add text",
-    "clear": "Clear"
+    "number": "Add a number…",
+    "text": "Add text…",
+    "clear": "Clear",
+    "invalidNumber": "Enter a number, like 3 or 2.5."
   },
   "leo": {
     "filled": "Filled by Leo",

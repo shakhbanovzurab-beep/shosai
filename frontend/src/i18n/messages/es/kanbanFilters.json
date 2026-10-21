@@ -40,5 +40,6 @@
   "text": {
     "label": "Contiene",
     "placeholder": "Escribe para filtrar…"
-  }
+  },
+  "nothingFound": "No hay coincidencias"
 }

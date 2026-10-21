@@ -15,6 +15,7 @@ import { useOwnedStickers } from "../../model/stickers-resource";
 /** «С других досок»: свои поля человека, которых нет на этой доске, с досками, где они стоят. */
 export function OtherBoardsPicker({ disabled, onPick }: { disabled: boolean; onPick: (stickerId: string) => void }) {
   const t = useTranslations("kanbanFields");
+  const tc = useTranslations("common");
   const format = useFormatter();
   const [open, setOpen] = useState(false);
   const here = new Set(useBoardStickers().map((sticker) => sticker.id));
@@ -32,7 +33,11 @@ export function OtherBoardsPicker({ disabled, onPick }: { disabled: boolean; onP
         <Command>
           <CommandInput placeholder={t("fromOtherSearch")} />
           <CommandList>
-            <CommandEmpty>{t("fromOtherEmpty")}</CommandEmpty>
+            <CommandEmpty>
+              {owned.status === "loading" ? tc("feedback.loading") : null}
+              {owned.status === "error" ? t("fromOtherFailed") : null}
+              {owned.status === "ready" ? t("fromOtherEmpty") : null}
+            </CommandEmpty>
             <CommandGroup>
               {others.map((sticker) => (
                 <CommandItem

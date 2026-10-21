@@ -33,9 +33,10 @@
     "weekdays": "Tekrar günleri"
   },
   "value": {
-    "number": "Sayı ekleyin",
-    "text": "Metin ekleyin",
-    "clear": "Temizle"
+    "number": "Sayı ekleyin…",
+    "text": "Metin ekleyin…",
+    "clear": "Temizle",
+    "invalidNumber": "3 veya 2,5 gibi bir sayı girin."
   },
   "leo": {
     "filled": "Leo doldurdu",

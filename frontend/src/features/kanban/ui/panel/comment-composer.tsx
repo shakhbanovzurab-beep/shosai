@@ -58,7 +58,7 @@ export function CommentComposer({ onSend }: { onSend: (body: string) => Promise<
         <InputGroupText id={hintId} className="text-xs">
           {body.length >= COUNT_FROM
             ? t("comments.length", { count: body.length, max: COMMENT_MAX })
-            : t("comments.sendHint", { shortcut: isMac ? "⌘ Enter" : "Ctrl+Enter" })}
+            : t("comments.sendHint", { shortcut: isMac ? "⌘\u00a0Enter" : "Ctrl+Enter" })}
         </InputGroupText>
         <InputGroupButton variant="default" size="sm" className="ms-auto" disabled={!text} onClick={send}>
           <SendHorizontal data-icon="inline-start" className="rtl:-scale-x-100" />

@@ -40,5 +40,6 @@
   "text": {
     "label": "次を含む",
     "placeholder": "入力して絞り込み…"
-  }
+  },
+  "nothingFound": "一致するものはありません"
 }

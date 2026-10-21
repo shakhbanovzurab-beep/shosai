@@ -33,9 +33,10 @@
     "weekdays": "重複日"
   },
   "value": {
-    "number": "新增數字",
-    "text": "新增文字",
-    "clear": "清除"
+    "number": "新增數字…",
+    "text": "新增文字…",
+    "clear": "清除",
+    "invalidNumber": "請輸入數字，例如 3 或 2.5。"
   },
   "leo": {
     "filled": "由 Leo 填寫",

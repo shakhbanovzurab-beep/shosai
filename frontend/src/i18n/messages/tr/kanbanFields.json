@@ -47,6 +47,8 @@
     "title": "“{name}” silinsin mi?",
     "body": "Alan şu panolardan kaldırılacak: {boards}. Değeri {tasks, plural, one {# görevden} other {# görevden}} silinecek. Bu görevleri gören herkes alanı artık görmeyecek.",
     "bodyNoValues": "Alan şu panolardan kaldırılacak: {boards}. Henüz hiçbir görevde bu alanın değeri yok.",
-    "confirm": "Alanı sil"
-  }
+    "confirm": "Alanı sil",
+    "counting": "Bu alanı kullanan panolar ve görevler sayılıyor…"
+  },
+  "fromOtherFailed": "Alanlarınız yüklenemedi. Tekrar deneyin."
 }

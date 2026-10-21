@@ -47,6 +47,8 @@
     "title": "Supprimer « {name} » ?",
     "body": "Le champ sera retiré de {boards}, et sa valeur disparaîtra de {tasks, plural, one {# tâche} many {# de tâches} other {# tâches}}. Les personnes qui voient ces tâches ne le verront plus.",
     "bodyNoValues": "Le champ sera retiré de {boards}. Aucune tâche n’a encore de valeur dans ce champ.",
-    "confirm": "Supprimer le champ"
-  }
+    "confirm": "Supprimer le champ",
+    "counting": "Comptage des tableaux et des tâches qui l’utilisent…"
+  },
+  "fromOtherFailed": "Impossible de charger vos champs. Réessayez."
 }

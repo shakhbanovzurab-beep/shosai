@@ -55,7 +55,7 @@ await page.mouse.up();
 await page.waitForTimeout(800);
 
 // Клавиатурой: пробел поднимает, стрелка вправо переносит в соседнюю колонку, пробел кладёт.
-await cards.nth(5).focus();
+await cards.nth(5).locator("[data-card-open]").focus();
 for (const key of ["Space", "ArrowRight", "ArrowDown", "Space"]) {
   await page.keyboard.press(key);
   await page.waitForTimeout(300);

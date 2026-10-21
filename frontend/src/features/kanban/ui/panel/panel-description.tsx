@@ -48,7 +48,7 @@ export function ReadOnlyDescription({ text }: { text: string }) {
   return (
     <section aria-label={t("description.label")} className="flex flex-col gap-2">
       <h3 className="font-medium text-sm">{t("description.label")}</h3>
-      <p dir="auto" className="whitespace-pre-wrap text-sm leading-relaxed">
+      <p dir="auto" className="whitespace-pre-wrap break-words text-sm leading-relaxed">
         {text}
       </p>
     </section>

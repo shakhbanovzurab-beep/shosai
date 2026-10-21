@@ -13,6 +13,7 @@ import { taskResource } from "../../model/task-resource";
 import { useBoardCommands } from "../board-store";
 import { PanelMenu } from "./panel-menu";
 import { usePanelActions } from "./use-panel-actions";
+import { useValueLabel } from "./value-label";
 
 /** Название задачи, правится на месте: Enter или уход из поля сохраняют, Esc возвращает прежнее. */
 function TitleInput({ detail, editable }: { detail: TaskDetail; editable: boolean }) {
@@ -51,6 +52,7 @@ function ColumnSelect({ detail, columnId, editable }: { detail: TaskDetail; colu
   const order = useBoardSelector((s) => s.columnOrder);
   const columns = useBoardSelector((s) => s.columns);
   const labelId = useId();
+  const valueLabel = useValueLabel(labelId);
   return (
     <div className="flex items-center gap-2">
       <span id={labelId} className="text-muted-foreground text-sm">
@@ -64,7 +66,7 @@ function ColumnSelect({ detail, columnId, editable }: { detail: TaskDetail; colu
           void cards.moveToEdge(detail.id, next, "top").then(() => taskResource(detail.id).reload())
         }
       >
-        <SelectTrigger size="sm" aria-labelledby={labelId} className="min-w-40">
+        <SelectTrigger size="sm" {...valueLabel} className="min-w-40">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -87,6 +89,7 @@ function StatusSelect({ detail, editable }: { detail: TaskDetail; editable: bool
   const tk = useTranslations("kanban");
   const actions = usePanelActions(detail.id);
   const labelId = useId();
+  const valueLabel = useValueLabel(labelId);
   return (
     <div className="flex items-center gap-2">
       <span id={labelId} className="text-muted-foreground text-sm">
@@ -97,7 +100,7 @@ function StatusSelect({ detail, editable }: { detail: TaskDetail; editable: bool
         disabled={!editable}
         onValueChange={(status) => void actions.patch({ status: status as TaskStatus })}
       >
-        <SelectTrigger size="sm" aria-labelledby={labelId} className="min-w-40">
+        <SelectTrigger size="sm" {...valueLabel} className="min-w-40">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

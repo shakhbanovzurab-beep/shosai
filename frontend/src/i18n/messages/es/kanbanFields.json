@@ -47,6 +47,8 @@
     "title": "¿Eliminar «{name}»?",
     "body": "Se quitará de {boards} y su valor desaparecerá de {tasks, plural, one {# tarea} many {# de tareas} other {# tareas}}. Quienes vean esas tareas dejarán de verlo.",
     "bodyNoValues": "Se quitará de {boards}. Aún ninguna tarea tiene un valor en este campo.",
-    "confirm": "Eliminar campo"
-  }
+    "confirm": "Eliminar campo",
+    "counting": "Contando los tableros y las tareas que lo usan…"
+  },
+  "fromOtherFailed": "No se pudieron cargar tus campos. Inténtalo de nuevo."
 }

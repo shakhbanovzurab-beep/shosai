@@ -37,6 +37,8 @@ export function KanbanToolbar({ boards, current, view, onViewChange, onAddTask, 
   return (
     <div className="flex shrink-0 flex-col gap-3 border-b px-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:px-6">
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center">
+        {/* Заголовок страницы — имя доски; на экране его показывает переключатель досок. */}
+        <h1 className="sr-only">{current.name}</h1>
         <BoardControls boards={boards} current={current} />
         <Tabs value={view} onValueChange={(v) => onViewChange(v as BoardView)} className="min-w-0">
           <TabsList

@@ -33,9 +33,10 @@
     "weekdays": "Ngày lặp lại"
   },
   "value": {
-    "number": "Thêm số",
-    "text": "Thêm văn bản",
-    "clear": "Xóa"
+    "number": "Thêm số…",
+    "text": "Thêm văn bản…",
+    "clear": "Xóa",
+    "invalidNumber": "Nhập một số, ví dụ 3 hoặc 2,5."
   },
   "leo": {
     "filled": "Do Leo điền",

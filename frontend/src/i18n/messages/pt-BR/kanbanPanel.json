@@ -33,9 +33,10 @@
     "weekdays": "Nestes dias"
   },
   "value": {
-    "number": "Adicione um número",
-    "text": "Adicione um texto",
-    "clear": "Limpar"
+    "number": "Adicione um número…",
+    "text": "Adicione um texto…",
+    "clear": "Limpar",
+    "invalidNumber": "Digite um número, como 3 ou 2,5."
   },
   "leo": {
     "filled": "Preenchido por Leo",

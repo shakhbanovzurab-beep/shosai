@@ -40,5 +40,6 @@
   "text": {
     "label": "Enthält",
     "placeholder": "Zum Filtern tippen…"
-  }
+  },
+  "nothingFound": "Keine Treffer"
 }

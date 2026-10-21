@@ -40,5 +40,6 @@
   "text": {
     "label": "İçerir",
     "placeholder": "Filtrelemek için yazın…"
-  }
+  },
+  "nothingFound": "Eşleşen sonuç yok"
 }

@@ -47,6 +47,8 @@
     "title": "要刪除「{name}」嗎？",
     "body": "這個欄位會從 {boards} 移除，{tasks, plural, other {# 項任務}}上的值也會消失。看得到這些任務的人都不會再看到這個欄位。",
     "bodyNoValues": "這個欄位會從 {boards} 移除。目前還沒有任務在這個欄位中填入值。",
-    "confirm": "刪除欄位"
-  }
+    "confirm": "刪除欄位",
+    "counting": "正在計算使用這個欄位的看板和任務…"
+  },
+  "fromOtherFailed": "無法載入你的欄位。請再試一次。"
 }

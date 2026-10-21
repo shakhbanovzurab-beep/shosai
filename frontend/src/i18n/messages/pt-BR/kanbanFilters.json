@@ -40,5 +40,6 @@
   "text": {
     "label": "Contém",
     "placeholder": "Digite para filtrar…"
-  }
+  },
+  "nothingFound": "Nenhum resultado"
 }

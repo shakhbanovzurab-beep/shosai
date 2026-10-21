@@ -40,5 +40,6 @@
   "text": {
     "label": "包含",
     "placeholder": "輸入文字以篩選…"
-  }
+  },
+  "nothingFound": "沒有相符的項目"
 }

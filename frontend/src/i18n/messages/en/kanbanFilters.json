@@ -40,5 +40,6 @@
   "text": {
     "label": "Contains",
     "placeholder": "Type to filter…"
-  }
+  },
+  "nothingFound": "Nothing found"
 }

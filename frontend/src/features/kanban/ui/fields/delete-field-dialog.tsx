@@ -37,18 +37,21 @@ export function DeleteFieldDialog({
   const format = useFormatter();
   const boards = format.list(owned?.boards.map((board) => board.name) ?? [], { type: "conjunction" });
   const tasks = owned?.usage.tasks ?? 0;
+  // Пока не знаем, где поле и сколько задач его несут, удалить нельзя: подтверждение должно это назвать.
+  const deleteText = () => {
+    if (!owned) return t("delete.counting");
+    return tasks > 0 ? t("delete.body", { boards, tasks }) : t("delete.bodyNoValues", { boards });
+  };
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t("delete.title", { name: sticker.name })}</AlertDialogTitle>
-          <AlertDialogDescription>
-            {tasks > 0 ? t("delete.body", { boards, tasks }) : t("delete.bodyNoValues", { boards })}
-          </AlertDialogDescription>
+          <AlertDialogDescription>{deleteText()}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{tc("actions.cancel")}</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={onConfirm}>
+          <AlertDialogAction variant="destructive" disabled={!owned} onClick={onConfirm}>
             {t("delete.confirm")}
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -44,6 +44,7 @@ export function FieldCard({
   const t = useTranslations("kanbanFields");
   const name = useFieldName()(sticker);
   const switchId = useId();
+  const nameId = useId();
   const Icon = ICONS[sticker.kind];
   const custom = isCustomSticker(sticker) ? sticker : null;
   return (
@@ -51,7 +52,7 @@ export function FieldCard({
       <div className="flex items-start gap-2.5">
         <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
         <div className="flex min-w-0 flex-col">
-          <span dir="auto" className="truncate font-medium text-sm">
+          <span id={nameId} dir="auto" className="truncate font-medium text-sm">
             {name}
           </span>
           <span className="text-muted-foreground text-xs">{custom ? t(`kinds.${custom.kind}`) : t("system")}</span>
@@ -71,10 +72,10 @@ export function FieldCard({
       </div>
       {custom && editable ? (
         <div className="-mx-2 -mb-1.5 flex flex-wrap gap-1">
-          <Button variant="ghost" size="sm" onClick={() => onEdit(custom)}>
+          <Button variant="ghost" size="sm" aria-describedby={nameId} onClick={() => onEdit(custom)}>
             {t("edit")}
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => onTakeOff(sticker)}>
+          <Button variant="ghost" size="sm" aria-describedby={nameId} onClick={() => onTakeOff(sticker)}>
             {t("takeOff")}
           </Button>
         </div>

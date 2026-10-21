@@ -15,6 +15,7 @@ import { useDateFnsLocale } from "@/i18n/use-date-fns-locale";
 
 import type { TaskPatch } from "../../domain/tasks-contract";
 import { dayKeyOf, localDay } from "./day-keys";
+import { useValueLabel } from "./value-label";
 
 type Dates = { starts_on: string | null; due_on: string | null };
 export type DeadlineMode = "day" | "range";
@@ -68,6 +69,7 @@ export function DeadlineField({
   onChange: (patch: TaskPatch) => void;
 }) {
   const t = useTranslations("kanbanPanel");
+  const valueLabel = useValueLabel(labelId);
   const format = useFormatter();
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<Mode>(dates.starts_on ? "range" : "day");
@@ -82,7 +84,7 @@ export function DeadlineField({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" disabled={disabled} aria-labelledby={labelId} className="font-normal">
+        <Button variant="outline" size="sm" disabled={disabled} {...valueLabel} className="font-normal">
           <CalendarDays data-icon="inline-start" />
           {text}
         </Button>

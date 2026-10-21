@@ -29,7 +29,7 @@ export function FieldsButton() {
       </SheetTrigger>
       <SheetContent
         side={side}
-        className="w-full gap-0 overflow-y-auto p-5 data-[side=left]:w-full data-[side=right]:w-full sm:p-6 data-[side=left]:sm:max-w-xl data-[side=right]:sm:max-w-xl"
+        className="w-full gap-0 overflow-y-auto overscroll-contain p-5 data-[side=left]:w-full data-[side=right]:w-full sm:p-6 data-[side=left]:sm:max-w-xl data-[side=right]:sm:max-w-xl"
       >
         <SheetHeader className="mb-4 p-0 pe-8">
           <SheetTitle>{t("title")}</SheetTitle>

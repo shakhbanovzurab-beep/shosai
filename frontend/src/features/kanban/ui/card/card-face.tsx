@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 
 import { cn } from "cn";
 import { CircleCheck, MessageSquare, Paperclip } from "lucide-react";
@@ -35,7 +35,7 @@ export function CardRoot({
     <article
       data-state={state}
       className={cn(
-        "relative flex flex-col gap-2.5 rounded-xl border bg-card p-3.5 text-card-foreground shadow-xs",
+        "relative flex flex-col gap-2.5 rounded-xl border bg-card p-3.5 text-card-foreground shadow-xs transition-colors has-[[data-card-open]:hover]:border-foreground/20",
         state === "done" && "bg-card/60 text-muted-foreground",
         className,
       )}
@@ -74,17 +74,27 @@ export function CardHeader({ title, state, children }: { title: ReactNode; state
 }
 
 /**
- * Заголовок как кнопка «открыть»: растянут на всю карточку, поэтому открыть можно щелчком в любом месте,
- * а Enter и пробел на нём — как у любой кнопки. Кнопки и ссылки карточки лежат поверх (`relative z-10`).
+ * Заголовок как кнопка «открыть»: растянут на всю карточку, поэтому открыть можно щелчком в любом месте. Это и
+ * ручка перетаскивания: одна остановка Tab на карточку, Enter открывает, пробел поднимает. Кнопки и ссылки
+ * карточки лежат поверх (`relative z-10`).
  */
-export function CardOpenButton({ onOpen, children }: { onOpen: () => void; children: ReactNode }) {
+export function CardOpenButton({
+  onOpen,
+  handleRef,
+  children,
+}: {
+  onOpen: () => void;
+  handleRef?: Ref<HTMLButtonElement>;
+  children: ReactNode;
+}) {
   return (
     <button
+      ref={handleRef}
       type="button"
       data-card-open
       onClick={onOpen}
-      // Рамка фокуса — на растянутом слое, то есть вокруг всей карточки.
-      className="text-start outline-none after:absolute after:inset-0 after:rounded-xl after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-ring"
+      // Рамка фокуса — внутри растянутого слоя: снаружи её обрезала бы content-visibility карточки.
+      className="text-start outline-none after:absolute after:inset-0 after:rounded-xl after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-ring focus-visible:after:ring-inset"
     >
       {children}
     </button>

@@ -43,6 +43,13 @@ function Gone() {
   );
 }
 
+/** Поле, в котором печатают: Esc в нём относится к нему, а не к панели. */
+function isTextEntry(element: Element | null): element is HTMLElement {
+  if (!(element instanceof HTMLElement)) return false;
+  if (element.isContentEditable || element instanceof HTMLTextAreaElement) return true;
+  return element instanceof HTMLInputElement && !["checkbox", "radio", "button", "submit"].includes(element.type);
+}
+
 // Тело панели — отдельный кусок: доске для первой отрисовки оно не нужно. Браузер берёт его в простое после
 // доски, поэтому первое открытие карточки не ждёт загрузки.
 const loadPanelBody = () => import("./panel-body").then((module) => module.PanelBody);
@@ -77,7 +84,8 @@ function PanelContent({ taskId }: { taskId: string }) {
         onRetry={() => void taskResource(taskId).refresh()}
       />
     );
-  return <PanelBody detail={state.data} />;
+  // Своя копия тела на каждую задачу: недописанные комментарий и подзадача не переезжают в другую задачу.
+  return <PanelBody key={taskId} detail={state.data} />;
 }
 
 /**
@@ -103,12 +111,25 @@ export function TaskPanel() {
         onInteractOutside={(event) => event.preventDefault()}
         // Esc на доске — её дело (например, отмена перетаскивания); панель закрывает только Esc внутри неё.
         onEscapeKeyDown={(event) => {
-          if (!contentRef.current?.contains(document.activeElement)) event.preventDefault();
+          const focused = document.activeElement;
+          if (!contentRef.current?.contains(focused)) {
+            event.preventDefault();
+            return;
+          }
+          // Esc в поле сначала его: правка возвращается, черновик остаётся; закрывает панель следующий Esc. Пока
+          // что-то перетаскивают, Esc отменяет перетаскивание, а не панель.
+          if (isTextEntry(focused) || document.querySelector("[data-dnd-dragging]")) {
+            event.preventDefault();
+            // Фокус уходит из поля на саму панель: правка вернулась, и следующий Esc её закроет.
+            if (isTextEntry(focused)) setTimeout(() => contentRef.current?.focus(), 0);
+          }
         }}
         aria-describedby={undefined}
         className="w-full gap-0 overflow-y-auto overscroll-contain p-5 data-[side=left]:w-full data-[side=right]:w-full sm:p-6 data-[side=left]:sm:max-w-2xl data-[side=right]:sm:max-w-2xl"
         onCloseAutoFocus={(event) => {
-          const card = shown ? document.querySelector<HTMLElement>(`[data-task-id="${CSS.escape(shown)}"]`) : null;
+          const card = shown
+            ? document.querySelector<HTMLElement>(`[data-task-id="${CSS.escape(shown)}"] [data-card-open]`)
+            : null;
           if (!card) return;
           event.preventDefault();
           card.focus();

@@ -50,7 +50,7 @@ export function ChoiceList({
           onChange={(event) => setQuery(event.currentTarget.value)}
         />
       ) : null}
-      {shown.length === 0 ? <p className="text-muted-foreground text-sm">{emptyText}</p> : null}
+      {shown.length === 0 ? <p className="text-muted-foreground text-sm">{emptyText ?? t("nothingFound")}</p> : null}
       <ul className="flex max-h-64 flex-col gap-1 overflow-y-auto">
         {shown.map((choice) => {
           const id = `${baseId}-${choice.value}`;

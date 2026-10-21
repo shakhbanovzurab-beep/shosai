@@ -40,5 +40,6 @@
   "text": {
     "label": "Bevat",
     "placeholder": "Typ om te filteren…"
-  }
+  },
+  "nothingFound": "Niets gevonden"
 }

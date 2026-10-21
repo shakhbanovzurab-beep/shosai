@@ -40,5 +40,6 @@
   "text": {
     "label": "Berisi",
     "placeholder": "Ketik untuk memfilter…"
-  }
+  },
+  "nothingFound": "Tidak ada yang cocok"
 }
