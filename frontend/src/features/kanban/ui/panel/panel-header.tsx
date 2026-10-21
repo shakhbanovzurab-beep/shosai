@@ -11,6 +11,7 @@ import { TASK_STATUSES, type TaskDetail, type TaskStatus, TITLE_MAX } from "../.
 import { useBoardSelector } from "../../model/board-hooks";
 import { taskResource } from "../../model/task-resource";
 import { useBoardCommands } from "../board-store";
+import { PanelMenu } from "./panel-menu";
 import { usePanelActions } from "./use-panel-actions";
 
 /** Название задачи, правится на месте: Enter или уход из поля сохраняют, Esc возвращает прежнее. */
@@ -113,7 +114,7 @@ function StatusSelect({ detail, editable }: { detail: TaskDetail; editable: bool
   );
 }
 
-/** Верх панели: название и где задача на доске. */
+/** Верх панели: название с «⋮» и где задача на доске. */
 export function PanelHeader({ detail, editable }: { detail: TaskDetail; editable: boolean }) {
   const columnId = useBoardSelector((s) => {
     for (const id of s.columnOrder) if (s.cardIds[id]?.includes(detail.id)) return id;
@@ -121,7 +122,10 @@ export function PanelHeader({ detail, editable }: { detail: TaskDetail; editable
   });
   return (
     <header className="flex flex-col gap-3 pe-8">
-      <TitleInput detail={detail} editable={editable} />
+      <div className="flex items-start gap-1">
+        <TitleInput detail={detail} editable={editable} />
+        <PanelMenu detail={detail} />
+      </div>
       {columnId ? (
         <ColumnSelect detail={detail} columnId={columnId} editable={editable} />
       ) : (

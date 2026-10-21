@@ -35,6 +35,11 @@ const pointerSensor = PointerSensor.configure({
   },
 });
 
+/** Клавиатура поднимает пробелом: Enter на карточке открывает её, в строке подзадачи — ничего не тащит. */
+export const keyboardSensor = KeyboardSensor.configure({
+  keyboardCodes: { ...KeyboardSensor.defaults.keyboardCodes, start: ["Space"] },
+});
+
 const columnIdOf = (data: unknown) =>
   typeof data === "object" && data !== null && "columnId" in data && typeof data.columnId === "string"
     ? data.columnId
@@ -78,9 +83,7 @@ export function useDragSetup() {
   const sensors = (defaults: Sensors): Sensors =>
     defaults.map((sensor) => {
       if (sensor === PointerSensor) return pointerSensor;
-      return sensor === KeyboardSensor
-        ? KeyboardSensor.configure({ keyboardCodes: { ...KeyboardSensor.defaults.keyboardCodes, start: ["Space"] } })
-        : sensor;
+      return sensor === KeyboardSensor ? keyboardSensor : sensor;
     });
   return { plugins, sensors };
 }

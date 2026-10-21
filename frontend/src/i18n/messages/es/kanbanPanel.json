@@ -60,5 +60,45 @@
     "gone": "Esta tarea ya no existe",
     "goneHint": "Se eliminó o ya no tienes acceso a ella.",
     "failed": "No se pudo cargar la tarea"
+  },
+  "menu": {
+    "label": "Acciones de la tarea"
+  },
+  "subtasks": {
+    "label": "Subtareas",
+    "progress": "{done, number} de {total, number} completadas",
+    "add": "Agrega una subtarea…",
+    "titleLabel": "Título de la subtarea",
+    "move": "Mover la subtarea «{title}»",
+    "delete": "Eliminar la subtarea «{title}»",
+    "deleted": "Se eliminó la subtarea «{title}»",
+    "full": "Una tarea puede tener hasta {max, number} subtareas.",
+    "dnd": {
+      "instructions": "Para mover una subtarea, presiona Espacio y luego la flecha hacia arriba o hacia abajo. Presiona Espacio otra vez para soltarla ahí o Esc para cancelar.",
+      "pickedUp": "Tomaste la subtarea «{item}».",
+      "over": "La subtarea «{item}» está en la posición {position, number} de {count, number}.",
+      "dropped": "Soltaste la subtarea «{item}» en su nuevo lugar.",
+      "canceled": "Se canceló el movimiento. La subtarea «{item}» volvió a su lugar."
+    }
+  },
+  "comments": {
+    "label": "Comentarios",
+    "empty": "Aún no hay comentarios.",
+    "earlier": "Mostrar comentarios anteriores",
+    "latest": "Ir al comentario más reciente",
+    "placeholder": "Escribe un comentario…",
+    "send": "Enviar",
+    "sendHint": "{shortcut} para enviar",
+    "sending": "Enviando…",
+    "edited": "editado",
+    "actions": "Acciones del comentario",
+    "edit": "Editar",
+    "editLabel": "Editar tu comentario",
+    "delete": "Eliminar",
+    "deleted": "Se eliminó tu comentario",
+    "length": "{count, number} de {max, number} caracteres",
+    "loading": "Cargando comentarios…",
+    "failed": "No se pudieron cargar los comentarios",
+    "earlierFailed": "No se pudieron cargar los comentarios anteriores"
   }
 }

@@ -5,7 +5,7 @@ import { copyText } from "@/lib/copy-text";
 import { boardsApi } from "../api/boards-api";
 import { tasksApi } from "../api/tasks-api";
 import { insertCard, locate, moveToEdge } from "../domain/board-rules";
-import { type Card, type Priority, TITLE_MAX } from "../domain/tasks-contract";
+import { type Card, type JiraIssueRef, type Priority, TITLE_MAX } from "../domain/tasks-contract";
 import type { BoardSnapshot } from "./board-store";
 import { boardResource } from "./boards-resource";
 import {
@@ -108,23 +108,25 @@ export function createCardCommands(ctx: CommandContext) {
           }),
       });
     },
-    duplicateCard(taskId: string) {
+    /** Копия встаёт под оригиналом; отвечает её id (null, если не вышло). */
+    duplicateCard(taskId: string): Promise<string | null> {
       const s = ctx.store.get();
       const at = locate(s.cardIds, taskId);
       const card = s.cards[taskId];
-      if (!at || !card) return;
+      if (!at || !card) return Promise.resolve(null);
       const { t } = words();
       const named = t("commands.copyTitle", { title: card.title });
       const title = named.length > TITLE_MAX ? card.title : named;
       const request = { title, column_id: at.columnId, position: at.index + 1, copy_of: taskId };
-      void save(ctx, t("errors.addTask"), s, () => boardsApi.createCard(id(), request)).then((copy) => {
-        if (!copy) return;
+      return save(ctx, t("errors.addTask"), s, () => boardsApi.createCard(id(), request)).then((copy) => {
+        if (!copy) return null;
         ctx.store.update((n) => ({
           ...n,
           cards: { ...n.cards, [copy.id]: copy },
           cardIds: insertCard(n.cardIds, at.columnId, at.index + 1, copy.id),
         }));
         countChange(ctx, 1);
+        return copy.id;
       });
     },
     deleteCards(taskIds: string[], message: string) {
@@ -141,15 +143,13 @@ export function createCardCommands(ctx: CommandContext) {
           ).then((done) => (done ? countChange(ctx, -taskIds.length) : undefined)),
       });
     },
-    copyLink(taskId: string) {
-      const card = ctx.store.get().cards[taskId];
-      if (!card) return;
+    /** Ссылка на задачу: на этой доске с открытой панелью, у задачи Jira — на Jira; задача может быть и не на доске. */
+    copyLink(taskId: string, jira: JiraIssueRef | null = ctx.store.get().cards[taskId]?.jira ?? null) {
       const { t, tc } = words();
       const params = new URLSearchParams({ board: id(), task: taskId });
-      const url = card.jira?.url ?? `${window.location.origin}/app/kanban?${params}`;
+      const url = jira?.url ?? `${window.location.origin}/app/kanban?${params}`;
       copyText(url).then(
-        () =>
-          toast.success(card.jira ? t("commands.jiraLinkCopied", { key: card.jira.key }) : tc("feedback.linkCopied")),
+        () => toast.success(jira ? t("commands.jiraLinkCopied", { key: jira.key }) : tc("feedback.linkCopied")),
         () => toast.error(tc("feedback.linkCopyFailed")),
       );
     },

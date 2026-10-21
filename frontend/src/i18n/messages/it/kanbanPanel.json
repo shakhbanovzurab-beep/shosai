@@ -60,5 +60,45 @@
     "gone": "Questa attività non c’è più",
     "goneHint": "È stata eliminata, oppure non puoi più vederla.",
     "failed": "Impossibile caricare l’attività"
+  },
+  "menu": {
+    "label": "Azioni per l’attività"
+  },
+  "subtasks": {
+    "label": "Sottoattività",
+    "progress": "{done, number} di {total, number} completate",
+    "add": "Aggiungi una sottoattività…",
+    "titleLabel": "Titolo della sottoattività",
+    "move": "Sposta la sottoattività «{title}»",
+    "delete": "Elimina la sottoattività «{title}»",
+    "deleted": "Sottoattività «{title}» eliminata",
+    "full": "Un’attività può avere fino a {max, number} sottoattività.",
+    "dnd": {
+      "instructions": "Per spostare una sottoattività, premi Spazio e poi la freccia su o giù. Premi di nuovo Spazio per rilasciarla lì, oppure Esc per annullare.",
+      "pickedUp": "Hai preso la sottoattività «{item}».",
+      "over": "La sottoattività «{item}» è in posizione {position, number} di {count, number}.",
+      "dropped": "Hai rilasciato la sottoattività «{item}» nella nuova posizione.",
+      "canceled": "Spostamento annullato. La sottoattività «{item}» è tornata al suo posto."
+    }
+  },
+  "comments": {
+    "label": "Commenti",
+    "empty": "Ancora nessun commento.",
+    "earlier": "Mostra commenti precedenti",
+    "latest": "Vai all’ultimo commento",
+    "placeholder": "Scrivi un commento…",
+    "send": "Invia",
+    "sendHint": "{shortcut} per inviare",
+    "sending": "Invio in corso…",
+    "edited": "modificato",
+    "actions": "Azioni per il commento",
+    "edit": "Modifica",
+    "editLabel": "Modifica il tuo commento",
+    "delete": "Elimina",
+    "deleted": "Commento eliminato",
+    "length": "{count, number} di {max, number} caratteri",
+    "loading": "Caricamento dei commenti…",
+    "failed": "Impossibile caricare i commenti",
+    "earlierFailed": "Impossibile caricare i commenti precedenti"
   }
 }

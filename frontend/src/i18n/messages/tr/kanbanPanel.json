@@ -60,5 +60,45 @@
     "gone": "Bu görev artık yok",
     "goneHint": "Silinmiş ya da artık görüntüleyemiyorsunuz.",
     "failed": "Görev yüklenemedi"
+  },
+  "menu": {
+    "label": "Görev işlemleri"
+  },
+  "subtasks": {
+    "label": "Alt görevler",
+    "progress": "{total, number} alt görevden {done, number} tanesi tamamlandı",
+    "add": "Alt görev ekleyin…",
+    "titleLabel": "Alt görev başlığı",
+    "move": "“{title}” alt görevini taşı",
+    "delete": "“{title}” alt görevini sil",
+    "deleted": "“{title}” alt görevi silindi",
+    "full": "Bir görevde en fazla {max, number} alt görev olabilir.",
+    "dnd": {
+      "instructions": "Bir alt görevi taşımak için Boşluk tuşuna, ardından yukarı veya aşağı ok tuşuna basın. Oraya bırakmak için Boşluk tuşuna yeniden basın, iptal etmek için Esc tuşuna basın.",
+      "pickedUp": "“{item}” alt görevi alındı.",
+      "over": "“{item}” alt görevi: sıra {position, number}/{count, number}.",
+      "dropped": "“{item}” alt görevi yeni yerine bırakıldı.",
+      "canceled": "Taşıma iptal edildi. “{item}” alt görevi eski yerine döndü."
+    }
+  },
+  "comments": {
+    "label": "Yorumlar",
+    "empty": "Henüz yorum yok.",
+    "earlier": "Önceki yorumları göster",
+    "latest": "En son yoruma git",
+    "placeholder": "Yorum yazın…",
+    "send": "Gönder",
+    "sendHint": "Göndermek için {shortcut}",
+    "sending": "Gönderiliyor…",
+    "edited": "düzenlendi",
+    "actions": "Yorum işlemleri",
+    "edit": "Düzenle",
+    "editLabel": "Yorumunuzu düzenle",
+    "delete": "Sil",
+    "deleted": "Yorumunuz silindi",
+    "length": "{count, number}/{max, number} karakter",
+    "loading": "Yorumlar yükleniyor…",
+    "failed": "Yorumlar yüklenemedi",
+    "earlierFailed": "Önceki yorumlar yüklenemedi"
   }
 }

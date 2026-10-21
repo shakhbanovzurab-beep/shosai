@@ -74,8 +74,8 @@ The Kanban package moves the screens from the old sample paths `/api/kanban/*` t
 - Attachments are uploaded through `src/lib/uploads/` with the purpose `task_attachment` (≤ 25 MiB; `workspace_id`
   for a workspace task) and claimed by `upload_id`, or copied from a File Manager file by `file_id` (FL-D4). They
   count in the task owner's storage. Only an image can be the cover (`cover_not_image`).
-- Comments are plain text, ≤ 5 000 characters, newest first by cursor; another person's comment answers
-  `not_comment_author`.
+- Comments are plain text, ≤ 5 000 characters, newest first by an opaque cursor keyed on the last comment
+  returned, so a comment written meanwhile repeats nothing; another person's comment answers `not_comment_author`.
 - A Jira task has no subtasks, comments, attachments, cover, recurrence, range or custom fields
   (`jira_unsupported`, KG-D8).
 

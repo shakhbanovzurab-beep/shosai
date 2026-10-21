@@ -60,5 +60,45 @@
     "gone": "이 작업은 더 이상 없어요",
     "goneHint": "삭제되었거나 더 이상 볼 수 없어요.",
     "failed": "작업을 불러오지 못했어요"
+  },
+  "menu": {
+    "label": "작업 옵션"
+  },
+  "subtasks": {
+    "label": "하위 작업",
+    "progress": "{total, number}개 중 {done, number}개 완료",
+    "add": "하위 작업 추가…",
+    "titleLabel": "하위 작업 제목",
+    "move": "“{title}” 하위 작업 이동",
+    "delete": "“{title}” 하위 작업 삭제",
+    "deleted": "“{title}” 하위 작업을 삭제했어요",
+    "full": "작업 하나에 하위 작업을 최대 {max, number}개까지 추가할 수 있어요.",
+    "dnd": {
+      "instructions": "하위 작업을 옮기려면 스페이스바를 누른 다음 위쪽 또는 아래쪽 화살표 키를 눌러 주세요. 스페이스바를 다시 누르면 그 위치에 내려놓고, Esc를 누르면 취소해요.",
+      "pickedUp": "“{item}” 하위 작업을 들어 올렸어요.",
+      "over": "“{item}” 하위 작업은 {count, number}개 중 {position, number}번째예요.",
+      "dropped": "“{item}” 하위 작업을 새 위치에 내려놓았어요.",
+      "canceled": "이동을 취소했어요. “{item}” 하위 작업이 원래 위치로 돌아갔어요."
+    }
+  },
+  "comments": {
+    "label": "댓글",
+    "empty": "아직 댓글이 없어요.",
+    "earlier": "이전 댓글 보기",
+    "latest": "최신 댓글로 이동",
+    "placeholder": "댓글 작성…",
+    "send": "보내기",
+    "sendHint": "{shortcut}로 보내기",
+    "sending": "보내는 중…",
+    "edited": "편집됨",
+    "actions": "댓글 옵션",
+    "edit": "편집",
+    "editLabel": "내 댓글 편집",
+    "delete": "삭제",
+    "deleted": "댓글을 삭제했어요",
+    "length": "{count, number}/{max, number}자",
+    "loading": "댓글을 불러오는 중…",
+    "failed": "댓글을 불러오지 못했어요",
+    "earlierFailed": "이전 댓글을 불러오지 못했어요"
   }
 }

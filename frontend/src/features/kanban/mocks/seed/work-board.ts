@@ -1,20 +1,7 @@
 import type { StickerValue } from "../../domain/stickers-contract";
 import type { KanbanDemo, StoredBoard, StoredTask } from "../store/types";
-import {
-  assignee,
-  DIEGO,
-  ELENA,
-  fromMeeting,
-  gradientPreview,
-  inDays,
-  MAYA,
-  ME_PERSON,
-  seedAttachment,
-  seedColumn,
-  seedComment,
-  seedSubtasks,
-  seedTask,
-} from "./builders";
+import { assignee, DIEGO, ELENA, fromMeeting, inDays, MAYA, ME_PERSON, seedColumn, seedTask } from "./builders";
+import { seedWorkThreads } from "./work-threads";
 
 /* Доска «Work»: поток продуктовой команды со своими полями — тип, оценка в днях и заказчик. */
 
@@ -119,36 +106,6 @@ const VALUES: [task: string, sticker: string, value: StickerValue][] = [
   ["w-tenders", TYPE, { state_id: "type-feature" }],
 ];
 
-function threads(demo: KanbanDemo) {
-  demo.subtasks.set(
-    "w-schema",
-    seedSubtasks("w-schema", [
-      ["Parties and employees", true],
-      ["Tenders and work orders", true],
-      ["Indexes for search", false],
-    ]),
-  );
-  demo.subtasks.set(
-    "w-sso-crash",
-    seedSubtasks("w-sso-crash", [
-      ["Reproduce", true],
-      ["Fix the redirect", false],
-    ]),
-  );
-  demo.comments.set("w-schema", [
-    seedComment("w-schema-c1", MAYA, "Should work orders keep their history?", 300),
-    seedComment("w-schema-c2", ME_PERSON, "Yes, as a separate table. See https://orm.drizzle.team", 240),
-  ]);
-  demo.comments.set("w-sso-crash", [seedComment("w-sso-crash-c1", ELENA, "Only with the Okta tenant so far.", 90)]);
-  demo.attachments.set("w-schema", [
-    seedAttachment("w-schema-a1", "schema.png", 412_000, ME_PERSON, gradientPreview("#6366f1", "#0ea5e9")),
-    seedAttachment("w-schema-a2", "Data model.pdf", 1_240_000, MAYA, null),
-  ]);
-  demo.attachments.set("w-sso-crash", [
-    seedAttachment("w-sso-crash-a1", "safari-console.png", 230_000, ELENA, gradientPreview("#f43f5e", "#f59e0b")),
-  ]);
-}
-
 export function seedWorkBoard(demo: KanbanDemo) {
   stickers(demo);
   for (const task of Object.values(tasks).flat()) demo.tasks.set(task.id, task);
@@ -156,7 +113,7 @@ export function seedWorkBoard(demo: KanbanDemo) {
     const values = demo.values.get(task) ?? new Map<string, StickerValue>();
     demo.values.set(task, values.set(sticker, value));
   }
-  threads(demo);
+  seedWorkThreads(demo);
   const board: StoredBoard = {
     id: "work",
     name: "Work",

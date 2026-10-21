@@ -105,7 +105,7 @@ export function TaskMenuItems({ kit: K, taskId, columnId }: { kit: MenuKit; task
       <K.Separator />
       <K.Group>
         {managedByJira || task.space ? null : (
-          <K.Item onSelect={() => actions.duplicateCard(taskId)}>
+          <K.Item onSelect={() => void actions.duplicateCard(taskId)}>
             <Copy />
             {tc("actions.duplicate")}
           </K.Item>

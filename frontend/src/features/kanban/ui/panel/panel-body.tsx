@@ -8,19 +8,23 @@ import { Button } from "@/components/ui/button";
 import type { TaskDetail } from "../../domain/tasks-contract";
 import { useBoardSelector } from "../../model/board-hooks";
 import { useEditable } from "../board-store";
+import { PanelComments } from "./panel-comments";
 import { PanelDescription, ReadOnlyDescription } from "./panel-description";
 import { JiraFields, PanelFields } from "./panel-fields";
 import { PanelHeader } from "./panel-header";
 import { PanelSource } from "./panel-source";
+import { PanelSubtasks } from "./panel-subtasks";
 
-/** Задача в приложении: заголовок, поля, описание, откуда она. Подзадачи, вложения и комментарии — шаг 6. */
+/** Задача в приложении: заголовок, поля, описание, подзадачи, откуда она, комментарии. */
 function AppTask({ detail, editable }: { detail: TaskDetail; editable: boolean }) {
   return (
     <div className="flex flex-col gap-6">
       <PanelHeader detail={detail} editable={editable} />
       <PanelFields detail={detail} editable={editable} />
       <PanelDescription key={detail.id} taskId={detail.id} markdown={detail.description} />
+      <PanelSubtasks taskId={detail.id} subtasks={detail.subtasks} editable={editable} />
       <PanelSource source={detail.source} />
+      <PanelComments taskId={detail.id} count={detail.comment_count} />
     </div>
   );
 }

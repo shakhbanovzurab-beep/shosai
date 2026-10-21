@@ -60,5 +60,45 @@
     "gone": "このタスクはもうありません",
     "goneHint": "削除されたか、表示する権限がなくなりました。",
     "failed": "タスクを読み込めませんでした"
+  },
+  "menu": {
+    "label": "タスクの操作"
+  },
+  "subtasks": {
+    "label": "サブタスク",
+    "progress": "{total, number} 件中 {done, number} 件が完了",
+    "add": "サブタスクを追加…",
+    "titleLabel": "サブタスク名",
+    "move": "サブタスク「{title}」を移動",
+    "delete": "サブタスク「{title}」を削除",
+    "deleted": "サブタスク「{title}」を削除しました",
+    "full": "タスクごとに追加できるサブタスクは {max, number} 件までです。",
+    "dnd": {
+      "instructions": "サブタスクを移動するには、スペースキーを押してから上下の矢印キーを押します。もう一度スペースキーを押すとその位置に置き、Esc キーを押すとキャンセルします。",
+      "pickedUp": "サブタスク「{item}」を持ち上げました。",
+      "over": "サブタスク「{item}」は {position, number} 番目です（全 {count, number} 件）。",
+      "dropped": "サブタスク「{item}」を新しい位置に置きました。",
+      "canceled": "移動をキャンセルしました。サブタスク「{item}」は元の位置に戻りました。"
+    }
+  },
+  "comments": {
+    "label": "コメント",
+    "empty": "コメントはまだありません。",
+    "earlier": "以前のコメントを表示",
+    "latest": "最新のコメントへ移動",
+    "placeholder": "コメントを入力…",
+    "send": "送信",
+    "sendHint": "{shortcut} で送信",
+    "sending": "送信中…",
+    "edited": "編集済み",
+    "actions": "コメントの操作",
+    "edit": "編集",
+    "editLabel": "自分のコメントを編集",
+    "delete": "削除",
+    "deleted": "コメントを削除しました",
+    "length": "{count, number} / {max, number} 文字",
+    "loading": "コメントを読み込み中…",
+    "failed": "コメントを読み込めませんでした",
+    "earlierFailed": "以前のコメントを読み込めませんでした"
   }
 }

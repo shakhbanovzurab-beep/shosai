@@ -57,24 +57,33 @@ export function deleteSubtask(task: StoredTask, id: string): Outcome<null> {
   return ok(null);
 }
 
-/* Комментарии: страницы новыми вперёд; курсор — непрозрачный сдвиг. */
+/*
+ * Комментарии: страницы новыми вперёд. Курсор — непрозрачный ключ последнего отданного (время и id), а не сдвиг:
+ * новый комментарий не сдвигает следующую страницу, и ничего не повторяется.
+ */
 
-const encodeCursor = (offset: number) => btoa(`c:${offset}`);
-function decodeCursor(cursor: string | null) {
-  if (!cursor) return 0;
+const keyOf = (comment: StoredComment) => `${comment.created_at}|${comment.id}`;
+const encodeCursor = (key: string) => btoa(`c:${key}`);
+function decodeCursor(cursor: string | null): string | null {
+  if (!cursor) return null;
   try {
-    const offset = Number(atob(cursor).slice(2));
-    return Number.isInteger(offset) && offset >= 0 ? offset : 0;
+    const decoded = atob(cursor);
+    return decoded.startsWith("c:") ? decoded.slice(2) : null;
   } catch {
-    return 0;
+    return null;
   }
 }
 
 export function commentsPage(task: StoredTask, cursor: string | null, limit: number): CommentsPage {
-  const newest = (demo().comments.get(task.id) ?? []).toReversed();
-  const offset = decodeCursor(cursor);
-  const items = newest.slice(offset, offset + limit).map(commentOf);
-  return { items, next_cursor: offset + limit < newest.length ? encodeCursor(offset + limit) : null };
+  const newest = (demo().comments.get(task.id) ?? []).toSorted((a, b) => keyOf(b).localeCompare(keyOf(a)));
+  const after = decodeCursor(cursor);
+  const older = after === null ? newest : newest.filter((comment) => keyOf(comment) < after);
+  const items = older.slice(0, limit);
+  const last = items.at(-1);
+  return {
+    items: items.map(commentOf),
+    next_cursor: older.length > limit && last ? encodeCursor(keyOf(last)) : null,
+  };
 }
 
 /** Повтор с тем же `Idempotency-Key` отвечает тем же комментарием. */

@@ -60,5 +60,45 @@
     "gone": "Diese Aufgabe gibt es nicht mehr",
     "goneHint": "Sie wurde gelöscht, oder du kannst sie nicht mehr sehen.",
     "failed": "Aufgabe konnte nicht geladen werden"
+  },
+  "menu": {
+    "label": "Aufgabenaktionen"
+  },
+  "subtasks": {
+    "label": "Unteraufgaben",
+    "progress": "{done, number} von {total, number} erledigt",
+    "add": "Unteraufgabe hinzufügen…",
+    "titleLabel": "Titel der Unteraufgabe",
+    "move": "Unteraufgabe „{title}“ verschieben",
+    "delete": "Unteraufgabe „{title}“ löschen",
+    "deleted": "Unteraufgabe „{title}“ gelöscht",
+    "full": "Eine Aufgabe kann bis zu {max, number} Unteraufgaben haben.",
+    "dnd": {
+      "instructions": "Um eine Unteraufgabe zu verschieben, drücke die Leertaste und dann die Pfeiltaste nach oben oder unten. Drücke erneut die Leertaste, um sie dort abzulegen, oder Esc, um abzubrechen.",
+      "pickedUp": "Unteraufgabe „{item}“ aufgenommen.",
+      "over": "Unteraufgabe „{item}“ ist an Position {position, number} von {count, number}.",
+      "dropped": "Unteraufgabe „{item}“ an der neuen Stelle abgelegt.",
+      "canceled": "Verschieben abgebrochen. Die Unteraufgabe „{item}“ ist wieder an ihrem alten Platz."
+    }
+  },
+  "comments": {
+    "label": "Kommentare",
+    "empty": "Noch keine Kommentare.",
+    "earlier": "Frühere Kommentare anzeigen",
+    "latest": "Zum neuesten Kommentar springen",
+    "placeholder": "Kommentar schreiben…",
+    "send": "Senden",
+    "sendHint": "{shortcut} zum Senden",
+    "sending": "Wird gesendet…",
+    "edited": "bearbeitet",
+    "actions": "Kommentaraktionen",
+    "edit": "Bearbeiten",
+    "editLabel": "Deinen Kommentar bearbeiten",
+    "delete": "Löschen",
+    "deleted": "Kommentar gelöscht",
+    "length": "{count, number} von {max, number} Zeichen",
+    "loading": "Kommentare werden geladen…",
+    "failed": "Kommentare konnten nicht geladen werden",
+    "earlierFailed": "Frühere Kommentare konnten nicht geladen werden"
   }
 }

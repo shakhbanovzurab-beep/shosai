@@ -112,6 +112,29 @@ describe("field values", () => {
 });
 
 describe("subtasks, comments and attachments", () => {
+  it("pages comments by key, so a comment written meanwhile repeats nothing", async () => {
+    const page = async (cursor: string | null) =>
+      (
+        await call(
+          commentsRoute,
+          "GET",
+          `/v1/tasks/w-sso-crash/comments?limit=5${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`,
+          { params: { id: "w-sso-crash" } },
+        )
+      ).body as CommentsPage;
+    const first = await page(null);
+    await call(commentsRoute, "POST", "/v1/tasks/w-sso-crash/comments", {
+      params: { id: "w-sso-crash" },
+      body: { body: "Written while reading" },
+    });
+    const second = await page(first.next_cursor);
+    const third = await page(second.next_cursor);
+    const seen = [...first.items, ...second.items, ...third.items].map((comment) => comment.id);
+    expect(new Set(seen).size).toBe(seen.length);
+    expect(seen).toHaveLength(12);
+    expect(third.next_cursor).toBeNull();
+  });
+
   it("keeps a checklist in order", async () => {
     await call(subtasksRoute, "POST", "/v1/tasks/w-ai-summaries/subtasks", {
       params: { id: "w-ai-summaries" },

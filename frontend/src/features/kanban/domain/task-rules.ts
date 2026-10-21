@@ -11,6 +11,25 @@ export function leoFieldsAfter(leo: LeoField[], patch: TaskPatch): LeoField[] {
   return leo.filter((field) => !changed.has(field));
 }
 
+/** Счётчики карточки из списков задачи: прогресс подзадач и число вложений идут за панелью сразу. */
+export function withCounts(detail: TaskDetail): TaskDetail {
+  const done = detail.subtasks.filter((subtask) => subtask.done).length;
+  return {
+    ...detail,
+    subtasks_done: done,
+    subtasks_total: detail.subtasks.length,
+    attachment_count: detail.attachments.length,
+  };
+}
+
+/** Список, где элемент `id` стоит на месте `to` (как `position` в API: место после того, как его вынули). */
+export function movedTo<T extends { id: string }>(list: T[], id: string, to: number): T[] {
+  const from = list.findIndex((item) => item.id === id);
+  if (from < 0) return list;
+  const rest = list.toSpliced(from, 1);
+  return rest.toSpliced(Math.min(Math.max(0, to), rest.length), 0, list[from]);
+}
+
 /** Карточка из задачи целиком: поля, которые видит доска. */
 export function cardOf(detail: TaskDetail): Card {
   const {

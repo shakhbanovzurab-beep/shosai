@@ -60,5 +60,45 @@
     "gone": "Cette tâche n’existe plus",
     "goneHint": "Elle a été supprimée, ou vous n’y avez plus accès.",
     "failed": "Impossible de charger la tâche"
+  },
+  "menu": {
+    "label": "Actions sur la tâche"
+  },
+  "subtasks": {
+    "label": "Sous-tâches",
+    "progress": "Terminé : {done, number} sur {total, number}",
+    "add": "Ajoutez une sous-tâche…",
+    "titleLabel": "Titre de la sous-tâche",
+    "move": "Déplacer la sous-tâche « {title} »",
+    "delete": "Supprimer la sous-tâche « {title} »",
+    "deleted": "Sous-tâche « {title} » supprimée",
+    "full": "Une tâche peut avoir jusqu’à {max, number} sous-tâches.",
+    "dnd": {
+      "instructions": "Pour déplacer une sous-tâche, appuyez sur Espace, puis sur la flèche vers le haut ou vers le bas. Appuyez de nouveau sur Espace pour la déposer, ou sur Échap pour annuler.",
+      "pickedUp": "Vous avez pris la sous-tâche « {item} ».",
+      "over": "La sous-tâche « {item} » est en position {position, number} sur {count, number}.",
+      "dropped": "Vous avez déposé la sous-tâche « {item} » à sa nouvelle place.",
+      "canceled": "Déplacement annulé. La sous-tâche « {item} » est revenue à sa place."
+    }
+  },
+  "comments": {
+    "label": "Commentaires",
+    "empty": "Aucun commentaire pour l’instant.",
+    "earlier": "Afficher les commentaires précédents",
+    "latest": "Aller au dernier commentaire",
+    "placeholder": "Écrivez un commentaire…",
+    "send": "Envoyer",
+    "sendHint": "{shortcut} pour envoyer",
+    "sending": "Envoi…",
+    "edited": "modifié",
+    "actions": "Actions sur le commentaire",
+    "edit": "Modifier",
+    "editLabel": "Modifier votre commentaire",
+    "delete": "Supprimer",
+    "deleted": "Commentaire supprimé",
+    "length": "{count, number} sur {max, number} caractères",
+    "loading": "Chargement des commentaires…",
+    "failed": "Impossible de charger les commentaires",
+    "earlierFailed": "Impossible de charger les commentaires précédents"
   }
 }

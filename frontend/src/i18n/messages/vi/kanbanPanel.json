@@ -60,5 +60,45 @@
     "gone": "Công việc này không còn nữa",
     "goneHint": "Công việc đã bị xóa hoặc bạn không còn quyền xem.",
     "failed": "Không thể tải công việc"
+  },
+  "menu": {
+    "label": "Thao tác với công việc"
+  },
+  "subtasks": {
+    "label": "Công việc con",
+    "progress": "Đã hoàn thành {done, number} trên {total, number}",
+    "add": "Thêm công việc con…",
+    "titleLabel": "Tiêu đề công việc con",
+    "move": "Di chuyển công việc con “{title}”",
+    "delete": "Xóa công việc con “{title}”",
+    "deleted": "Đã xóa công việc con “{title}”",
+    "full": "Mỗi công việc có tối đa {max, number} công việc con.",
+    "dnd": {
+      "instructions": "Để di chuyển một công việc con, hãy nhấn phím cách, rồi nhấn mũi tên lên hoặc xuống. Nhấn phím cách lần nữa để đặt vào vị trí đó, hoặc nhấn Esc để hủy.",
+      "pickedUp": "Đã nhấc công việc con “{item}”.",
+      "over": "Công việc con “{item}” đang ở vị trí {position, number} trên {count, number}.",
+      "dropped": "Đã đặt công việc con “{item}” vào vị trí mới.",
+      "canceled": "Đã hủy di chuyển. Công việc con “{item}” đã trở về vị trí cũ."
+    }
+  },
+  "comments": {
+    "label": "Bình luận",
+    "empty": "Chưa có bình luận nào.",
+    "earlier": "Hiện các bình luận trước đó",
+    "latest": "Đi đến bình luận mới nhất",
+    "placeholder": "Viết bình luận…",
+    "send": "Gửi",
+    "sendHint": "{shortcut} để gửi",
+    "sending": "Đang gửi…",
+    "edited": "đã chỉnh sửa",
+    "actions": "Thao tác với bình luận",
+    "edit": "Chỉnh sửa",
+    "editLabel": "Chỉnh sửa bình luận của bạn",
+    "delete": "Xóa",
+    "deleted": "Đã xóa bình luận của bạn",
+    "length": "{count, number}/{max, number} ký tự",
+    "loading": "Đang tải bình luận…",
+    "failed": "Không thể tải bình luận",
+    "earlierFailed": "Không thể tải các bình luận trước đó"
   }
 }

@@ -60,5 +60,45 @@
     "gone": "這項任務已不存在",
     "goneHint": "任務已被刪除，或你已無法查看。",
     "failed": "無法載入任務"
+  },
+  "menu": {
+    "label": "任務動作"
+  },
+  "subtasks": {
+    "label": "子任務",
+    "progress": "已完成 {done, number} 項，共 {total, number} 項",
+    "add": "新增子任務…",
+    "titleLabel": "子任務標題",
+    "move": "移動子任務「{title}」",
+    "delete": "刪除子任務「{title}」",
+    "deleted": "已刪除子任務「{title}」",
+    "full": "每項任務最多可有 {max, number} 項子任務。",
+    "dnd": {
+      "instructions": "如要移動子任務，請按空白鍵，再按向上或向下方向鍵。再按一次空白鍵即可放到該位置，按 Esc 則可取消。",
+      "pickedUp": "已拿起子任務「{item}」。",
+      "over": "子任務「{item}」位於第 {position, number} 個位置，共 {count, number} 個。",
+      "dropped": "已將子任務「{item}」放到新位置。",
+      "canceled": "已取消移動。子任務「{item}」已回到原本的位置。"
+    }
+  },
+  "comments": {
+    "label": "留言",
+    "empty": "還沒有留言。",
+    "earlier": "顯示較早的留言",
+    "latest": "前往最新留言",
+    "placeholder": "輸入留言…",
+    "send": "傳送",
+    "sendHint": "按 {shortcut} 傳送",
+    "sending": "正在傳送…",
+    "edited": "已編輯",
+    "actions": "留言動作",
+    "edit": "編輯",
+    "editLabel": "編輯你的留言",
+    "delete": "刪除",
+    "deleted": "已刪除你的留言",
+    "length": "{count, number} / {max, number} 個字元",
+    "loading": "正在載入留言…",
+    "failed": "無法載入留言",
+    "earlierFailed": "無法載入較早的留言"
   }
 }

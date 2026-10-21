@@ -60,5 +60,45 @@
     "gone": "Esta tarefa não existe mais",
     "goneHint": "Ela foi excluída ou você não pode mais vê-la.",
     "failed": "Não foi possível carregar a tarefa"
+  },
+  "menu": {
+    "label": "Ações da tarefa"
+  },
+  "subtasks": {
+    "label": "Subtarefas",
+    "progress": "{done, number} de {total, number} concluídas",
+    "add": "Adicione uma subtarefa…",
+    "titleLabel": "Título da subtarefa",
+    "move": "Mover a subtarefa “{title}”",
+    "delete": "Excluir a subtarefa “{title}”",
+    "deleted": "Subtarefa “{title}” excluída",
+    "full": "Uma tarefa pode ter até {max, number} subtarefas.",
+    "dnd": {
+      "instructions": "Para mover uma subtarefa, pressione Espaço e depois a seta para cima ou para baixo. Pressione Espaço outra vez para soltá-la ali ou Esc para cancelar.",
+      "pickedUp": "Você pegou a subtarefa “{item}”.",
+      "over": "A subtarefa “{item}” está na posição {position, number} de {count, number}.",
+      "dropped": "Você soltou a subtarefa “{item}” no novo lugar.",
+      "canceled": "Movimentação cancelada. A subtarefa “{item}” voltou para onde estava."
+    }
+  },
+  "comments": {
+    "label": "Comentários",
+    "empty": "Nenhum comentário ainda.",
+    "earlier": "Mostrar comentários anteriores",
+    "latest": "Ir para o comentário mais recente",
+    "placeholder": "Escreva um comentário…",
+    "send": "Enviar",
+    "sendHint": "{shortcut} para enviar",
+    "sending": "Enviando…",
+    "edited": "editado",
+    "actions": "Ações do comentário",
+    "edit": "Editar",
+    "editLabel": "Editar seu comentário",
+    "delete": "Excluir",
+    "deleted": "Comentário excluído",
+    "length": "{count, number} de {max, number} caracteres",
+    "loading": "Carregando comentários…",
+    "failed": "Não foi possível carregar os comentários",
+    "earlierFailed": "Não foi possível carregar os comentários anteriores"
   }
 }

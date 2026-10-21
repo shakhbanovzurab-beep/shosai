@@ -60,5 +60,45 @@
     "gone": "Deze taak bestaat niet meer",
     "goneHint": "Hij is verwijderd, of je kunt hem niet meer zien.",
     "failed": "Kan de taak niet laden"
+  },
+  "menu": {
+    "label": "Acties voor taak"
+  },
+  "subtasks": {
+    "label": "Subtaken",
+    "progress": "{done, number} van {total, number} afgerond",
+    "add": "Voeg een subtaak toe…",
+    "titleLabel": "Subtaaktitel",
+    "move": "Subtaak ‘{title}’ verplaatsen",
+    "delete": "Subtaak ‘{title}’ verwijderen",
+    "deleted": "Subtaak ‘{title}’ verwijderd",
+    "full": "Een taak kan maximaal {max, number} subtaken hebben.",
+    "dnd": {
+      "instructions": "Druk op de spatiebalk en daarna op de pijl omhoog of omlaag om een subtaak te verplaatsen. Druk nog een keer op de spatiebalk om hem daar neer te zetten, of op Esc om te annuleren.",
+      "pickedUp": "Subtaak ‘{item}’ opgepakt.",
+      "over": "Subtaak ‘{item}’ staat op positie {position, number} van {count, number}.",
+      "dropped": "Subtaak ‘{item}’ op de nieuwe plek neergezet.",
+      "canceled": "Verplaatsen geannuleerd. Subtaak ‘{item}’ staat weer op de oude plek."
+    }
+  },
+  "comments": {
+    "label": "Opmerkingen",
+    "empty": "Nog geen opmerkingen.",
+    "earlier": "Eerdere opmerkingen tonen",
+    "latest": "Naar de nieuwste opmerking gaan",
+    "placeholder": "Schrijf een opmerking…",
+    "send": "Versturen",
+    "sendHint": "{shortcut} om te versturen",
+    "sending": "Versturen…",
+    "edited": "bewerkt",
+    "actions": "Acties voor opmerking",
+    "edit": "Bewerken",
+    "editLabel": "Je opmerking bewerken",
+    "delete": "Verwijderen",
+    "deleted": "Opmerking verwijderd",
+    "length": "{count, number} van {max, number} tekens",
+    "loading": "Opmerkingen laden…",
+    "failed": "Kan de opmerkingen niet laden",
+    "earlierFailed": "Kan eerdere opmerkingen niet laden"
   }
 }

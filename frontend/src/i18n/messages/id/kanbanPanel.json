@@ -60,5 +60,45 @@
     "gone": "Tugas ini sudah tidak ada",
     "goneHint": "Tugas ini telah dihapus, atau Anda tidak dapat melihatnya lagi.",
     "failed": "Tidak dapat memuat tugas"
+  },
+  "menu": {
+    "label": "Tindakan tugas"
+  },
+  "subtasks": {
+    "label": "Subtugas",
+    "progress": "{done, number} dari {total, number} selesai",
+    "add": "Tambahkan subtugas…",
+    "titleLabel": "Judul subtugas",
+    "move": "Pindahkan subtugas “{title}”",
+    "delete": "Hapus subtugas “{title}”",
+    "deleted": "Subtugas “{title}” dihapus",
+    "full": "Satu tugas dapat memiliki hingga {max, number} subtugas.",
+    "dnd": {
+      "instructions": "Untuk memindahkan subtugas, tekan Spasi, lalu panah atas atau bawah. Tekan Spasi lagi untuk meletakkannya di sana, atau Esc untuk membatalkan.",
+      "pickedUp": "Subtugas “{item}” diambil.",
+      "over": "Subtugas “{item}” ada di posisi {position, number} dari {count, number}.",
+      "dropped": "Subtugas “{item}” diletakkan di tempat barunya.",
+      "canceled": "Pemindahan dibatalkan. Subtugas “{item}” kembali ke tempat semula."
+    }
+  },
+  "comments": {
+    "label": "Komentar",
+    "empty": "Belum ada komentar.",
+    "earlier": "Tampilkan komentar sebelumnya",
+    "latest": "Ke komentar terbaru",
+    "placeholder": "Tulis komentar…",
+    "send": "Kirim",
+    "sendHint": "{shortcut} untuk mengirim",
+    "sending": "Mengirim…",
+    "edited": "diedit",
+    "actions": "Tindakan komentar",
+    "edit": "Edit",
+    "editLabel": "Edit komentar Anda",
+    "delete": "Hapus",
+    "deleted": "Komentar Anda dihapus",
+    "length": "{count, number} dari {max, number} karakter",
+    "loading": "Memuat komentar…",
+    "failed": "Tidak dapat memuat komentar",
+    "earlierFailed": "Tidak dapat memuat komentar sebelumnya"
   }
 }

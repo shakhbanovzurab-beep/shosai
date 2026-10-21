@@ -60,5 +60,45 @@
     "gone": "This task is gone",
     "goneHint": "It was deleted, or you can no longer see it.",
     "failed": "Couldn’t load the task"
+  },
+  "menu": {
+    "label": "Task actions"
+  },
+  "subtasks": {
+    "label": "Subtasks",
+    "progress": "{done, number} of {total, number} done",
+    "add": "Add a subtask…",
+    "titleLabel": "Subtask title",
+    "move": "Move the subtask “{title}”",
+    "delete": "Delete the subtask “{title}”",
+    "deleted": "Deleted the subtask “{title}”",
+    "full": "A task can have up to {max, number} subtasks.",
+    "dnd": {
+      "instructions": "To move a subtask, press Space, then the up or down arrow. Press Space again to put it there, or Escape to cancel.",
+      "pickedUp": "Picked up the subtask “{item}”.",
+      "over": "The subtask “{item}” is at position {position, number} of {count, number}.",
+      "dropped": "Put the subtask “{item}” in its new place.",
+      "canceled": "Moving canceled. The subtask “{item}” is back where it was."
+    }
+  },
+  "comments": {
+    "label": "Comments",
+    "empty": "No comments yet.",
+    "earlier": "Show earlier comments",
+    "latest": "Go to the latest comment",
+    "placeholder": "Write a comment…",
+    "send": "Send",
+    "sendHint": "{shortcut} to send",
+    "sending": "Sending…",
+    "edited": "edited",
+    "actions": "Comment actions",
+    "edit": "Edit",
+    "editLabel": "Edit your comment",
+    "delete": "Delete",
+    "deleted": "Deleted your comment",
+    "length": "{count, number} of {max, number} characters",
+    "loading": "Loading comments…",
+    "failed": "Couldn’t load the comments",
+    "earlierFailed": "Couldn’t load earlier comments"
   }
 }
