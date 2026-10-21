@@ -35,6 +35,7 @@ from shosai.features.notes.infrastructure.pipeline_metrics import PipelineMetric
 from shosai.features.notes.infrastructure.run_records import RunRecord
 from shosai.features.notes.module import NOTES
 from tests.features.notes.desktop_upload import audio, call, init, live_meeting, put_part
+from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.features.notes.recording_bench import RecordingBench, ffmpeg
 from tests.features.notes.test_imports import TRANSCRIPTIONS
 from tests.harness.database_access import ProcessShape, open_database_access, slot_urls
@@ -174,7 +175,7 @@ async def test_a_write_up_the_person_chose_is_left_as_it_was(
     )
     stage = WriteUpStage(
         recording_bench.homes.transactions,
-        (PortDirectory(), EventOutbox(EventTypes(NOTES.events)), model),
+        (PortDirectory(), EventOutbox(EventTypes(NOTES.events)), model, NO_ARCHIVE),
         10_000,
     )
     scope = TenancyScope(Home.EU, owner)

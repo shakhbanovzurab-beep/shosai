@@ -34,6 +34,7 @@ from shosai.features.notes.domain.transcript import (
     fitted_text,
     offset_ms,
 )
+from shosai.features.notes.domain.transcript_archive import TranscriptLine
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
     TranscriptLineRecord,
@@ -175,7 +176,7 @@ async def _unsettle(session: AsyncSession, meeting_ids: list[UUID]) -> None:
         )
 
 
-def stored_line(row: TranscriptLineRecord) -> StoredLine:
+def stored_line(row: TranscriptLine) -> StoredLine:
     """A stored line as other slices see it."""
     return StoredLine(
         row.seq, row.start_ms, row.duration_ms, row.speaker_idx, row.text, LineOrigin(row.origin)

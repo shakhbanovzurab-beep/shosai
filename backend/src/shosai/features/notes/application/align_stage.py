@@ -8,7 +8,8 @@ lines and an earlier recording's, over its span (`audio_lead_ms` early, its leng
 fresh `seq`s above the meeting's highest (inv-8); the meeting's speakers are written anew,
 the owner of a desktop recording found by overlap with the live "me" lines; the line count
 follows. Lines of the run already written mean the stage ran: nothing is written twice. A
-recording without speech replaces nothing and ends the run (`transcript_empty`).
+recording without speech replaces nothing and ends the run (`transcript_empty`); a meeting
+whose transcript is archived takes no lines (`transcript_archived`, step 20).
 """
 
 import json
@@ -46,6 +47,7 @@ from shosai.features.notes.infrastructure.run_records import RunRecord
 
 Lines = TranscriptLineRecord
 EMPTY: Final = "transcript_empty"
+ARCHIVED: Final = "transcript_archived"
 type Json = dict[str, Any]
 log = structlog.stdlib.get_logger(__name__)
 
@@ -102,6 +104,9 @@ class AlignStage:
             )
             if meeting is None:
                 raise StageFailedError(UNREADABLE)
+            # Расшифровка в архиве неизменна: партиции месяца может уже не быть.
+            if meeting.transcript_archive_key is not None:
+                raise StageFailedError(ARCHIVED)
             if await self._written(session, meeting, run.id):
                 return
             me = await self._me(session, meeting, span)

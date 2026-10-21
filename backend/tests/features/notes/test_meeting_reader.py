@@ -28,8 +28,14 @@ from shosai.features.notes.infrastructure.meeting_records import (
 from shosai.features.notes.infrastructure.notes_records import SettingsRecord
 from shosai.features.workspaces.contracts import Viewer
 from shosai.features.workspaces.infrastructure.share_records import SHARE_RECORDS
-from tests.features.notes.library_bench import MeetingSeed, Notes, library_ports, seed_meeting
+from tests.features.notes.library_bench import (
+    MeetingSeed,
+    Notes,
+    library_ports,
+    seed_meeting,
+)
 from tests.features.notes.meeting_bench import MeetingBench
+from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.features.notes.test_agent_tools import context
 from tests.features.notes.test_library_isolation import meetings, world
 from tests.features.notes.test_native_lifecycle import started
@@ -52,7 +58,7 @@ async def read_by(
     homes: DatabaseAccess, person: uuid.UUID, meeting_ids: list[uuid.UUID]
 ) -> set[uuid.UUID]:
     """The meetings the reader names for the person, after checking the batch agrees."""
-    reader, viewer = MeetingsReader(library_ports()), Viewer(person)
+    reader, viewer = MeetingsReader(homes.transactions, library_ports(), NO_ARCHIVE), Viewer(person)
     async with homes.transactions.begin(scope(person), read_only=True) as session:
         facts = await reader.facts(session, viewer, meeting_ids)
         checked = await reader.readable(session, viewer, meeting_ids)
@@ -63,18 +69,19 @@ async def read_by(
 async def opened_by(homes: DatabaseAccess, person: uuid.UUID, meeting_id: uuid.UUID) -> bool:
     """Whether the person reads the meeting's transcript and findings; both or neither."""
     ports = library_ports()
-    reader, findings, viewer = MeetingsReader(ports), MeetingsFindings(ports), Viewer(person)
+    reader, viewer = MeetingsReader(homes.transactions, ports, NO_ARCHIVE), Viewer(person)
     answers = []
+    try:
+        await reader.transcript(HOME, viewer, meeting_id, None, 10)
+        answers.append(True)
+    except MeetingNotFoundError:
+        answers.append(False)
     async with homes.transactions.begin(scope(person), read_only=True) as session:
-        for read in (
-            reader.transcript(session, viewer, meeting_id, None, 10),
-            findings.of(session, viewer, meeting_id),
-        ):
-            try:
-                await read
-                answers.append(True)
-            except MeetingNotFoundError:
-                answers.append(False)
+        try:
+            await MeetingsFindings(ports).of(session, viewer, meeting_id)
+            answers.append(True)
+        except MeetingNotFoundError:
+            answers.append(False)
     assert answers[0] == answers[1]
     return answers[0]
 
@@ -142,7 +149,7 @@ async def test_an_account_in_its_window_is_read_by_nobody_and_a_cancellation_res
 ) -> None:
     owner, member = uuid.uuid4(), uuid.uuid4()
     meeting_id = await shared_into_a_workspace(homes, run_slot, owner, member)
-    leo = MeetingReads(homes.transactions, library_ports())
+    leo = MeetingReads(homes.transactions, library_ports(), NO_ARCHIVE)
     start = datetime.now(UTC)
     scheduled = AccountDeletionScheduled(user_id=owner, erase_at=start + timedelta(days=7))
 
@@ -173,10 +180,9 @@ async def test_an_account_in_its_window_is_read_by_nobody_and_a_cancellation_res
     assert before == [True] * 8
     assert hidden == [False] * 8
     assert after == [True] * 8
-    async with homes.transactions.begin(scope(member), read_only=True) as session:
-        page = await MeetingsReader(library_ports()).transcript(
-            session, Viewer(member), meeting_id, None, 10
-        )
+    page = await MeetingsReader(homes.transactions, library_ports(), NO_ARCHIVE).transcript(
+        HOME, Viewer(member), meeting_id, None, 10
+    )
     assert [line.text for line in page.lines] == [text for _, _, text in LINES]
 
 
@@ -215,23 +221,23 @@ async def test_facts_findings_and_transcript_pages_of_a_meeting(homes: DatabaseA
     )
     meeting_id = (await seed_meeting(homes, seed, HOME)).meeting_id
     ports, viewer = library_ports(), Viewer(owner)
-    reader = MeetingsReader(ports)
+    reader = MeetingsReader(homes.transactions, ports, NO_ARCHIVE)
 
+    pages, texts = 0, list[str]()
+    cursor: str | None = None
+    while True:
+        page = await reader.transcript(HOME, viewer, meeting_id, cursor, 3)
+        pages, texts = pages + 1, texts + [line.text for line in page.lines]
+        if page.next_cursor is None:
+            break
+        cursor = page.next_cursor
+    with pytest.raises(InvalidCursorError):
+        await reader.transcript(HOME, viewer, meeting_id, "not-a-cursor", 3)
+    with pytest.raises(ValueError, match="страница"):
+        await reader.transcript(HOME, viewer, meeting_id, None, 501)
     async with homes.transactions.begin(scope(owner), read_only=True) as session:
         facts = (await reader.facts(session, viewer, [meeting_id, uuid.uuid4()]))[meeting_id]
         listed = await MeetingsFindings(ports).of(session, viewer, meeting_id)
-        pages, texts = 0, list[str]()
-        cursor: str | None = None
-        while True:
-            page = await reader.transcript(session, viewer, meeting_id, cursor, 3)
-            pages, texts = pages + 1, texts + [line.text for line in page.lines]
-            if page.next_cursor is None:
-                break
-            cursor = page.next_cursor
-        with pytest.raises(InvalidCursorError):
-            await reader.transcript(session, viewer, meeting_id, "not-a-cursor", 3)
-        with pytest.raises(ValueError, match="страница"):
-            await reader.transcript(session, viewer, meeting_id, None, 501)
         assert await reader.facts(session, viewer, []) == {}
         assert await reader.readable(session, viewer, []) == frozenset()
 

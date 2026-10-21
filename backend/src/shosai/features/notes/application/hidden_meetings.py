@@ -2,8 +2,9 @@
 
 The sweep role only lists what is due; each meeting then goes in its own scope's
 transaction, with the deletion of everything under it, billing's tombstone of its minutes
-in its month (written once whatever the repeats) and its runs' transient objects named
-for deletion; the objects are deleted after that commit. A pass takes at most a batch.
+in its month (written once whatever the repeats) and its runs' transient objects and its
+transcript's archive named for deletion; the objects are deleted after that commit. A pass
+takes at most a batch.
 """
 
 from collections.abc import Callable
@@ -75,6 +76,8 @@ class HiddenMeetings:
             if meeting is None:
                 return 0
             keys = await run_keys(session, RunRecord.session_id == meeting.id)
+            if meeting.transcript_archive_key is not None:
+                keys.append(meeting.transcript_archive_key)
             await record_deletions(session, keys)
             await self._ports.get(USAGE_TOMBSTONES).meeting_deleted(
                 session, meeting.user_id, (meeting.id, meeting.started_at), meeting.seconds

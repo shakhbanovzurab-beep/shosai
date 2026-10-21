@@ -13,14 +13,17 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ai.spend.estimates import CHARS_PER_TOKEN
+from shosai.core.kernel.homes import Home
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import CONSENT_READER
 from shosai.features.notes.application.pipeline import StageFailedError
+from shosai.features.notes.domain.transcript_archive import spoken_order
 from shosai.features.notes.domain.transcript_text import SpokenLine, numbered
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
     TranscriptLineRecord,
 )
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 
 MEETING_GONE: Final = "meeting_gone"
 TRANSCRIPT_EMPTY: Final = "transcript_empty"
@@ -63,3 +66,11 @@ async def spoken_lines(session: AsyncSession, meeting: MeetingRecord) -> list[Sp
 async def cross_border(session: AsyncSession, ports: PortDirectory, user_id: UUID) -> bool:
     """Whether the owner consents to their meeting reaching a provider abroad."""
     return await ports.get(CONSENT_READER).cross_border(session, user_id)
+
+
+async def archived_spoken(archive: TranscriptArchive, home: Home, key: str) -> list[SpokenLine]:
+    """An archived meeting's lines, numbered as spoken; read after the stage's transaction."""
+    lines = spoken_order(await archive.lines(home, key))
+    return numbered(
+        [(line.start_ms, line.duration_ms, line.speaker_idx, line.text) for line in lines]
+    )

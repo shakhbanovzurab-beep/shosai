@@ -3,11 +3,14 @@
 import os
 import uuid
 
+from sqlalchemy import update
+
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.features.notes.application.run_rows import ensure_run
 from shosai.features.notes.domain.recording_upload import PART_SIZE
 from shosai.features.notes.domain.runs import RunSource, Stage, idempotency_key
+from shosai.features.notes.domain.transcript_archive import archive_key
 from shosai.features.notes.infrastructure.meeting_records import MeetingRecord
 from shosai.features.notes.infrastructure.run_records import RunRecord
 from tests.features.notes.desktop_upload import (
@@ -103,12 +106,21 @@ async def test_each_refusal_keeps_the_draft_s_code(recording_bench: RecordingBen
     owner, stranger = uuid.uuid4(), uuid.uuid4()
     meeting = await live_meeting(recording_bench, owner)
     private = await live_meeting(recording_bench, owner, state=("completed", False))
+    archived = await live_meeting(recording_bench, owner)
+    async with recording_bench.homes.transactions.begin(TenancyScope(Home.EU, owner)) as session:
+        await session.execute(
+            update(MeetingRecord)
+            .where(MeetingRecord.id == archived)
+            .values(transcript_archive_key=archive_key(archived), transcript_archive_lines=0)
+        )
     run_id = (await init(recording_bench, owner, meeting)).json()["run_id"]
     ids = (meeting, run_id)
 
     answers = [
         await init(recording_bench, owner, private),
         await init(recording_bench, stranger, meeting),
+        # Встреча с расшифровкой в архиве записи не берёт; клиенты бросают такую загрузку.
+        await init(recording_bench, owner, archived),
         await put_part(recording_bench, owner, ids, (2001, b"x")),
         await put_part(recording_bench, owner, ids, (1, b"")),
         await put_part(recording_bench, owner, ids, (1, b"\0" * (10 * MIB + 1))),
@@ -117,7 +129,8 @@ async def test_each_refusal_keeps_the_draft_s_code(recording_bench: RecordingBen
     ]
 
     assert [(a.status_code, a.json()["detail"]) for a in answers] == [
-        (409, "private_meeting"), (404, "meeting_not_found"), (409, "bad_part"),
+        (409, "private_meeting"), (404, "meeting_not_found"), (404, "meeting_not_found"),
+        (409, "bad_part"),
         (409, "empty_part"), (413, "part_too_large"), (409, "no_parts"),
         (404, "meeting_not_found"),
     ]  # fmt: skip

@@ -34,6 +34,7 @@ from tests.features.billing.entitlement_bench import Clock
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.features.notes.library_bench import OUTBOX
 from tests.features.notes.native_bench import People
+from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.harness.database_access import DatabaseAccess
 
 
@@ -72,7 +73,9 @@ async def share_bench(homes: DatabaseAccess, valkey: Redis) -> AsyncIterator[Sha
         ]
     )
     limiter = RateLimiter(valkey, KeyValueMetrics(CollectorRegistry()))
-    pages = SharedPages(homes.transactions, (SharedLinks(homes.transactions, clock), ports), clock)
+    pages = SharedPages(
+        homes.transactions, (SharedLinks(homes.transactions, clock), ports, NO_ARCHIVE), clock
+    )
     routers = (
         build_share_links_router(ShareLinks(homes.transactions, ports, clock), ports),
         build_shared_router(pages, limiter),

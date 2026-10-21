@@ -191,13 +191,17 @@ class MeetingReader(Protocol):
 
     async def transcript(
         self,
-        session: AsyncSession,
+        home: Home,
         viewer: Viewer,
         meeting_id: UUID,
         cursor: str | None,
         limit: int,
     ) -> TranscriptPage:
-        """A page of a readable meeting's transcript; `MeetingNotFoundError` otherwise."""
+        """A page of a readable meeting's transcript; `MeetingNotFoundError` otherwise.
+
+        Called outside a transaction: it opens its own, and an archived transcript is read from
+        the bucket after it (plan step 20).
+        """
         ...
 
     async def readable(

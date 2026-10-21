@@ -8,6 +8,7 @@ stored tree's nodes in pre-order. The write-up inlines the findings each section
 a page of notes reads in one request.
 """
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from datetime import datetime
 from http import HTTPStatus
@@ -29,11 +30,13 @@ from shosai.features.notes.application.visibility import visible_meetings
 from shosai.features.notes.contracts import MeetingNotFoundError
 from shosai.features.notes.domain.findings import FindingKind
 from shosai.features.notes.domain.reading import MapRow, map_rows
+from shosai.features.notes.domain.transcript_archive import TranscriptLine, page_after
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
     TranscriptLineRecord,
 )
 from shosai.features.notes.infrastructure.notes_records import FindingRecord, NotesRecord
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
 
 
@@ -94,9 +97,12 @@ class WriteUp:
 class MeetingContent:
     """Serves the content of meetings a person may read."""
 
-    def __init__(self, transactions: HomeTransactions, ports: PortDirectory) -> None:
+    def __init__(
+        self, transactions: HomeTransactions, ports: PortDirectory, archive: TranscriptArchive
+    ) -> None:
         self._transactions = transactions
         self._ports = ports
+        self._archive = archive
 
     async def _meeting(
         self, session: AsyncSession, principal: Principal, meeting_id: UUID
@@ -113,21 +119,28 @@ class MeetingContent:
 
     async def transcript(
         self, principal: Principal, meeting_id: UUID, request: PageRequest
-    ) -> Page[TranscriptLineRecord]:
-        """A page of the meeting's lines in the order they were spoken."""
+    ) -> Page[TranscriptLine]:
+        """A page of the meeting's lines in the order they were spoken, archived or not."""
         after = None
         if request.cursor is not None:
             position = TRANSCRIPT_CURSOR.decode(request.cursor)
             after = (position.start_ms, position.seq)
+        rows: Sequence[TranscriptLine] = ()
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
             meeting = await self._meeting(session, principal, meeting_id)
-            statement = select(TranscriptLineRecord).where(
-                TranscriptLineRecord.session_id == meeting.id,
-                TranscriptLineRecord.meeting_started_at == meeting.started_at,
-            )
-            rows = (
-                await session.scalars(TRANSCRIPT_ORDER.page(statement, after, request.limit))
-            ).all()
+            archived = meeting.transcript_archive_key
+            if archived is None:
+                statement = select(TranscriptLineRecord).where(
+                    TranscriptLineRecord.session_id == meeting.id,
+                    TranscriptLineRecord.meeting_started_at == meeting.started_at,
+                )
+                rows = (
+                    await session.scalars(TRANSCRIPT_ORDER.page(statement, after, request.limit))
+                ).all()
+        # Архив читается после транзакции: ни одна не держится открытой над хранилищем (§14 п. 8).
+        if archived is not None:
+            lines = await self._archive.lines(principal.home, archived)
+            rows = page_after(lines, after, request.limit)
         return page_of(
             rows, request, TRANSCRIPT_CURSOR, lambda line: line,
             lambda line: LinePosition(start_ms=line.start_ms, seq=line.seq),

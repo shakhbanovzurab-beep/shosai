@@ -5,7 +5,8 @@ them; its children carry `org_id` too, so row-level security's company policy co
 row. `transcript_segments` is partitioned by the month of its meeting's start: the unique
 key of a partitioned table holds its partition key, and the meeting's start is a function
 of the meeting, so the key is truly `(session_id, seq)` and a meeting lives in one
-partition. Partitions are kept until the transcript archive moves them (plan step 20).
+partition. Partitions of months older than 12 months go after the transcript archive keeps their
+meetings (plan step 20).
 """
 
 from datetime import datetime
@@ -49,6 +50,13 @@ def meeting_reference(*, primary_key: bool = False) -> Mapped[UUID]:
     )
 
 
+# Указатель на архив и число строк в нём — вместе или ни одного (ревизия `7df9c7f7dc2e`).
+ARCHIVE_POINTER = (
+    "(transcript_archive_key IS NULL AND transcript_archive_lines IS NULL) OR "
+    "(transcript_archive_key LIKE 'archive/transcripts/%' AND transcript_archive_lines >= 0)"
+)
+
+
 class MeetingRecord(ModelBase):
     """A recorded meeting of a person or a workspace."""
 
@@ -68,6 +76,7 @@ class MeetingRecord(ModelBase):
             "seconds >= 0 AND line_count >= 0 AND indexed_upto_seq >= 0 AND notes_revision >= 0",
             name="counters_not_negative",
         ),
+        CheckConstraint(ARCHIVE_POINTER, name="transcript_archive_pointer"),
         Index("ix_sessions_user_started", "user_id", "started_at"),
         Index("ix_sessions_org", "org_id"),
         Index("ix_sessions_folder", "folder_id"),
@@ -83,6 +92,11 @@ class MeetingRecord(ModelBase):
             "ix_sessions_unsettled",
             "ended_at",
             postgresql_where=text("status <> 'active' AND settled_at IS NULL"),
+        ),
+        Index(
+            "ix_sessions_unarchived",
+            "started_at",
+            postgresql_where=text("transcript_archive_key IS NULL"),
         ),
     )
 
@@ -118,6 +132,9 @@ class MeetingRecord(ModelBase):
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     # Личная встреча аккаунта в окне удаления не видна никому (ADR 0045, п. 6).
     account_hidden: Mapped[bool] = mapped_column(Boolean, server_default=false())
+    # Расшифровка встречи старше 12 месяцев — в бакете дома; сколько в архиве строк (шаг 20).
+    transcript_archive_key: Mapped[str | None] = mapped_column(Text)
+    transcript_archive_lines: Mapped[int | None] = mapped_column(Integer)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 

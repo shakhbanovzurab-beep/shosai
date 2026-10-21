@@ -26,6 +26,7 @@ from shosai.features.notes.domain.findings import FindingKind
 from shosai.features.notes.infrastructure.meeting_records import MEETING_RESOURCE
 from tests.features.notes.library_bench import library_ports
 from tests.features.notes.native_bench import Written, meeting
+from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.features.notes.test_library_isolation import meetings, world
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
@@ -59,7 +60,7 @@ async def test_a_tool_never_returns_a_meeting_the_person_may_not_read(
     homes: DatabaseAccess, run_slot: RunSlot
 ) -> None:
     canon = await world(run_slot)
-    reads = MeetingReads(homes.transactions, library_ports())
+    reads = MeetingReads(homes.transactions, library_ports(), NO_ARCHIVE)
     kind = MEETING_RESOURCE.kind
 
     for name, person in canon.people.items():
@@ -83,7 +84,7 @@ async def test_a_transcript_reads_page_by_page_within_its_budget(homes: Database
     owner = uuid.uuid4()
     lines = [(n * 10_000, n % 3, f"Line {n}: " + "word " * 90) for n in range(400)]
     meeting_id = await meeting(homes, owner, ("Long", START), Written(lines))
-    reads = MeetingReads(homes.transactions, library_ports())
+    reads = MeetingReads(homes.transactions, library_ports(), NO_ARCHIVE)
 
     seen: list[str] = []
     pages, start = 0, 0
@@ -113,7 +114,7 @@ async def test_the_digest_and_findings_of_a_meeting_and_the_search_filters(
     )
     budget = await meeting(homes, owner, ("Budget Q4", START), written)
     await meeting(homes, owner, ("Hiring", START + timedelta(days=2)))
-    reads = MeetingReads(homes.transactions, library_ports())
+    reads = MeetingReads(homes.transactions, library_ports(), NO_ARCHIVE)
 
     digest = await reads.get(MeetingId(meeting_id=budget), context(owner))
     listed = await reads.list_findings(

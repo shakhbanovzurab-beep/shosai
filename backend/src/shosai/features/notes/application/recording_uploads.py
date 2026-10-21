@@ -222,13 +222,17 @@ class RecordingUploads:
     async def _owned(
         self, session: AsyncSession, principal: Principal, meeting_id: UUID
     ) -> MeetingRecord:
-        """The person's own live meeting, locked; `meeting_not_found` for any other."""
+        """The person's own live meeting, locked; `meeting_not_found` for any other.
+
+        A meeting whose transcript is archived takes no recording: its lines no longer change.
+        """
         meeting = await session.scalar(
             select(MeetingRecord)
             .where(
                 MeetingRecord.id == meeting_id, MeetingRecord.user_id == principal.user_id,
                 MeetingRecord.source == MeetingSource.LIVE.value,
                 MeetingRecord.deleted_at.is_(None),
+                MeetingRecord.transcript_archive_key.is_(None),
             )
             .with_for_update()
         )  # fmt: skip

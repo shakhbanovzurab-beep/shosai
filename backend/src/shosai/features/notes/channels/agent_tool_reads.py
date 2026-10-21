@@ -45,6 +45,7 @@ from shosai.features.notes.channels.agent_tools import (
 )
 from shosai.features.notes.domain.findings import FindingKind
 from shosai.features.notes.domain.transcript import SIDE_SPEAKER, Side
+from shosai.features.notes.domain.transcript_archive import TranscriptLine, spoken_order
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
     ParticipantRecord,
@@ -52,6 +53,7 @@ from shosai.features.notes.infrastructure.meeting_records import (
     TranscriptLineRecord,
 )
 from shosai.features.notes.infrastructure.notes_records import FindingRecord, NotesRecord
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
 
 SUMMARY_CHARS: Final = 300
@@ -73,9 +75,12 @@ def clipped(text: str | None, limit: int) -> str | None:
 class MeetingReads:
     """The four read tools over the meetings the person may read."""
 
-    def __init__(self, transactions: HomeTransactions, ports: PortDirectory) -> None:
+    def __init__(
+        self, transactions: HomeTransactions, ports: PortDirectory, archive: TranscriptArchive
+    ) -> None:
         self._transactions = transactions
         self._ports = ports
+        self._archive = archive
 
     def bound(
         self,
@@ -157,24 +162,32 @@ class MeetingReads:
             meeting = await self._visible(session, context, arguments.meeting_id)
             if meeting is None:
                 return ToolResult.failed(ToolErrorCode.NOT_FOUND)
-            lines = list(
-                await session.scalars(
-                    select(Lines)
-                    .where(
-                        Lines.session_id == meeting.id,
-                        Lines.meeting_started_at == meeting.started_at,
-                        Lines.start_ms >= arguments.from_ms,
+            archived = meeting.transcript_archive_key
+            lines: Sequence[TranscriptLine] = ()
+            if archived is None:
+                lines = list(
+                    await session.scalars(
+                        select(Lines)
+                        .where(
+                            Lines.session_id == meeting.id,
+                            Lines.meeting_started_at == meeting.started_at,
+                            Lines.start_ms >= arguments.from_ms,
+                        )
+                        .order_by(Lines.start_ms, Lines.seq)
+                        .limit(LINES_READ + 1)
                     )
-                    .order_by(Lines.start_ms, Lines.seq)
-                    .limit(LINES_READ + 1)
                 )
-            )
             roles = await session.execute(
                 select(SpeakerRecord.idx, SpeakerRecord.role).where(
                     SpeakerRecord.session_id == meeting.id
                 )
             )
             owner = owner_voice({idx: role for idx, role in roles})
+        if archived is not None:
+            spoken = spoken_order(await self._archive.lines(context.scope.home, archived))
+            lines = [line for line in spoken if line.start_ms >= arguments.from_ms][
+                : LINES_READ + 1
+            ]
         return ToolResult(page_of(lines, owner))
 
     async def list_findings(
@@ -253,7 +266,7 @@ def owner_voice(roles: dict[int, str]) -> int | None:
     return None if roles else SIDE_SPEAKER[Side.ME]
 
 
-def page_of(lines: Sequence[TranscriptLineRecord], owner: int | None) -> TranscriptPage:
+def page_of(lines: Sequence[TranscriptLine], owner: int | None) -> TranscriptPage:
     """The lines that fit the budget, and where the next page starts."""
     room = TRANSCRIPT_BUDGET * CHARS_PER_TOKEN
     shown: list[SpokenLine] = []

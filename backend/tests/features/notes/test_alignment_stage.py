@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from sqlalchemy import select
+from sqlalchemy import select, update
 
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
@@ -23,6 +23,7 @@ from shosai.features.notes.domain.runs import (
     StageStatus,
     idempotency_key,
 )
+from shosai.features.notes.domain.transcript_archive import archive_key
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
     SpeakerRecord,
@@ -216,3 +217,27 @@ async def test_a_recording_without_speech_keeps_the_live_lines_and_fails(
     lines, speakers, count = await transcript(recording_bench, work)
     assert failed.value.code == "transcript_empty"
     assert ([text for *_, text in lines], speakers, count) == (["Live me."], [], 1)
+
+
+async def test_a_meeting_with_an_archived_transcript_takes_no_recording_lines(
+    recording_bench: RecordingBench,
+) -> None:
+    owner = uuid.uuid4()
+    live = [(10_000, 8_000, ME, "Live me.")]
+    segments = [segment(5, 13, "Recorded me.")]
+    work = await recorded(
+        recording_bench, owner, live, (0, 60_000, {"parts": [{"segments": segments}]}, [])
+    )
+    async with recording_bench.homes.transactions.begin(work.scope) as session:
+        await session.execute(
+            update(MeetingRecord)
+            .where(MeetingRecord.id == work.meeting_id)
+            .values(transcript_archive_key=archive_key(work.meeting_id), transcript_archive_lines=1)
+        )
+
+    with pytest.raises(StageFailedError) as failed:
+        await AlignStage(recording_bench.homes.transactions, recording_bench.storage).run(work)
+
+    lines, _, count = await transcript(recording_bench, work)
+    assert failed.value.code == "transcript_archived"
+    assert ([text for *_, text in lines], count) == (["Live me."], 1)

@@ -8,7 +8,7 @@ newest 200, oldest first; a link that does not allow them answers 409 `comments_
 A comment is written in the owner's scope, with no reader's id or address kept.
 """
 
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from http import HTTPStatus
@@ -31,6 +31,7 @@ from shosai.features.notes.domain.sharing import (
     CommentRuleError,
     checked_comment,
 )
+from shosai.features.notes.domain.transcript_archive import TranscriptLine, spoken_order
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
     ParticipantRecord,
@@ -42,6 +43,7 @@ from shosai.features.notes.infrastructure.share_records import (
     ShareCommentRecord,
     ShareLinkRecord,
 )
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 
 LINES_SHOWN: Final = 3000
 Lines = TranscriptLineRecord
@@ -56,7 +58,7 @@ class SharedPage:
     participants: list[Person]
     notes: NotesRecord | None
     findings: dict[UUID, Finding]
-    lines: list[TranscriptLineRecord] | None
+    lines: Sequence[TranscriptLine] | None
     truncated: bool
     roles: dict[int, str]
     owner_name: str | None
@@ -75,11 +77,11 @@ class SharedPages:
     def __init__(
         self,
         transactions: HomeTransactions,
-        collaborators: tuple[SharedLinks, PortDirectory],
+        collaborators: tuple[SharedLinks, PortDirectory, TranscriptArchive],
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._links, self._ports = collaborators
+        self._links, self._ports, self._archive = collaborators
         self._clock = clock
 
     async def page(self, token: str) -> SharedPage:
@@ -95,8 +97,9 @@ class SharedPages:
             notes = await session.get(NotesRecord, meeting.id)
             run = notes.findings_run_id if notes is not None else None
             findings = dict(await findings_of(session, meeting.id, run))
-            lines: list[TranscriptLineRecord] | None = None
-            if link.show_transcript:
+            lines: Sequence[TranscriptLine] | None = None
+            archived = meeting.transcript_archive_key if link.show_transcript else None
+            if link.show_transcript and archived is None:
                 lines = list(
                     (
                         await session.scalars(
@@ -121,13 +124,16 @@ class SharedPages:
                     session, meeting.user_id
                 )
                 owner_name = profile.display_name if profile is not None else None
-            return SharedPage(
-                link=link, meeting=meeting,
-                participants=[Person(p.name, p.email) for p in people], notes=notes,
-                findings=findings, lines=None if lines is None else lines[:LINES_SHOWN],
-                truncated=lines is not None and len(lines) > LINES_SHOWN,
-                roles={idx: role for idx, role in roles}, owner_name=owner_name,
-            )  # fmt: skip
+            speakers = {idx: role for idx, role in roles}
+            listed = [Person(p.name, p.email) for p in people]
+        if archived is not None:
+            lines = spoken_order(await self._archive.lines(scope.home, archived))[: LINES_SHOWN + 1]
+        return SharedPage(
+            link=link, meeting=meeting, participants=listed, notes=notes, findings=findings,
+            lines=None if lines is None else lines[:LINES_SHOWN],
+            truncated=lines is not None and len(lines) > LINES_SHOWN,
+            roles=speakers, owner_name=owner_name,
+        )  # fmt: skip
 
     async def comments(self, token: str) -> list[ShareCommentRecord]:
         """The link's newest 200 comments, oldest first."""

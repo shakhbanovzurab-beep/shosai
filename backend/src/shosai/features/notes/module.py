@@ -21,6 +21,8 @@
   other slices use (`application/meeting_reader.py`);
 - 16: Leo's four write tools — a folder, a new write-up, the share link on and off
   (`channels/agent_write_tools.py`).
+- 20: the transcript archive of months ended over a year ago and its minute tick, and every
+  reader's fallback to it (`application/transcript_archiver.py`).
 
 The folders', counts' and templates' routes come before `/v1/notes/{meeting_id}`: the first
 match wins, and `folders` or `counts` is no meeting's id.
@@ -69,6 +71,7 @@ from shosai.features.notes.application.shared_pages import SharedPages
 from shosai.features.notes.application.support_meetings import SupportMeetings
 from shosai.features.notes.application.sweeps import MeetingSweeps
 from shosai.features.notes.application.templates import Templates
+from shosai.features.notes.application.transcript_archiver import TranscriptArchiver
 from shosai.features.notes.application.write_up_rewrites import WriteUpRewrites
 from shosai.features.notes.channels.agent_link_writes import LinkWrites
 from shosai.features.notes.channels.agent_tool_reads import MeetingReads
@@ -110,6 +113,7 @@ from shosai.features.notes.contracts.events import (
     MeetingRestored,
     NotesReady,
 )
+from shosai.features.notes.infrastructure.archive_metrics import ArchiveMetrics
 from shosai.features.notes.infrastructure.meeting_records import (
     MEETING_RESOURCE,
     MeetingRecord,
@@ -134,6 +138,7 @@ from shosai.features.notes.infrastructure.share_records import (
     ShareCommentRecord,
     ShareLinkRecord,
 )
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 from shosai.features.notes.infrastructure.transcript_metrics import TranscriptMetrics
 from shosai.features.notes.objectives import NOTES_MONITORS, NOTES_OBJECTIVES
 from shosai.features.notes.settings import NotesSettings, notes_model_set
@@ -162,6 +167,7 @@ def http_routers(
         transactions, (ports, engine, links), (services.uploads, services.objects)
     )
     my_notes = MyNotes(transactions, ports)
+    archive = TranscriptArchive(services.objects)
     return (
         build_settings_router(settings, ports),
         build_folders_router(Folders(transactions, services.effects), ports),
@@ -172,18 +178,21 @@ def http_routers(
             (native_imports, ImportJobs(transactions, ports)), ports, services.rate_limiter
         ),
         build_native_audio_router(recordings, ports),
-        build_native_library_router((NativeLibrary(transactions, ports), my_notes, words), ports),
+        build_native_library_router(
+            (NativeLibrary(transactions, ports, archive), my_notes, words), ports
+        ),
         build_native_me_sessions_router((library, deletion), ports),
         build_runs_router((lifecycle, RunViews(transactions, ports)), ports),
         build_write_up_router(rewrites, ports, services.rate_limiter),
         build_meetings_router((library, deletion), ports),
-        build_meeting_content_router(MeetingContent(transactions, ports), ports),
+        build_meeting_content_router(MeetingContent(transactions, ports, archive), ports),
         build_my_notes_router((my_notes, Participants(transactions, ports)), ports),
         build_admin_meetings_router(support, ports),
         build_imports_router(imports, ports),
         build_share_links_router(ShareLinks(transactions, ports), ports),
         build_shared_router(
-            SharedPages(transactions, (SharedLinks(transactions), ports)), services.rate_limiter
+            SharedPages(transactions, (SharedLinks(transactions), ports, archive)),
+            services.rate_limiter,
         ),
     )
 
@@ -194,7 +203,7 @@ def agent_tools(services: CoreServices, engine: PipelineEngine) -> tuple[AgentTo
     steps = WriteSteps(transactions, (ports, ActionItems(services.effects, services.outbox)))
     rewrites = WriteUpRewrites(transactions, (ports, services.effects, engine))
     return (
-        *MeetingReads(transactions, ports).bound(),
+        *MeetingReads(transactions, ports, TranscriptArchive(services.objects)).bound(),
         *NoteWrites(steps, (MeetingLibrary(transactions, ports), rewrites)).bound(),
         *LinkWrites(steps, ShareLinks(transactions, ports)).bound(),
     )
@@ -218,13 +227,15 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     transcript_metrics = TranscriptMetrics(services.registry)
     sweeps = MeetingSweeps(transactions, (ports, lifecycle, transcript_metrics))
     hidden = HiddenMeetings(transactions, (ports, RunObjects(transactions, services.objects)))
+    archive = TranscriptArchive(services.objects)
+    archiver = TranscriptArchiver(transactions, (archive, ArchiveMetrics(services.registry)))
     recovery = RunRecovery(transactions, (engine, pipeline_metrics))
     settings = MeetingSettings(transactions)
     extras = (load_native_words(), settings)
     async with part_client() as http:
         yield FeatureParts(
             http_routers=http_routers(services, (lifecycle, engine), (PartLinks(http), *extras)),
-            task_handlers=task_handlers((sweeps, hidden), (engine, recovery)),
+            task_handlers=task_handlers((sweeps, hidden, archiver), (engine, recovery)),
             agent_tools=agent_tools(services, engine),
             subscriptions=subscriptions(),
             periodic_jobs=PERIODIC_JOBS,
@@ -233,7 +244,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
                 MEETING_MINUTES.bind(MeetingMinutesCount()),
                 TRANSCRIPT_STORE.bind(LiveTranscript(transactions, transcript_metrics)),
                 LIVE_MEETINGS.bind(LiveMeetingBinder(ports)),
-                MEETING_READER.bind(MeetingsReader(ports)),
+                MEETING_READER.bind(MeetingsReader(transactions, ports, archive)),
                 MEETING_FINDINGS.bind(MeetingsFindings(ports)),
                 ME_CONTRIBUTIONS.bind(settings),
             ),

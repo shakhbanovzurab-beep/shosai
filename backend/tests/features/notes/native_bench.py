@@ -43,6 +43,7 @@ from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLo
 from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.features.notes.library_bench import OUTBOX
+from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.harness.database_access import DatabaseAccess
 
 type Json = dict[str, Any]
@@ -162,7 +163,8 @@ async def native_bench(homes: DatabaseAccess) -> AsyncIterator[NativeBench]:
     routers = (
         build_settings_router(settings, ports),
         build_native_library_router(
-            (NativeLibrary(homes.transactions, ports), notes, load_native_words()), ports
+            (NativeLibrary(homes.transactions, ports, NO_ARCHIVE), notes, load_native_words()),
+            ports,
         ),
         build_my_notes_router((notes, Participants(homes.transactions, ports)), ports),
     )

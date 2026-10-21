@@ -7,11 +7,17 @@ Rows with a person column go through core's helpers; the transcript goes meeting
 meeting. The transient objects of runs are reached only through their pointers: erasing
 records them for deletion in the same transaction that removes their rows, and deletes
 them after it. Export leaves out the share link's token: a secret, not the person's content.
+
+An archived meeting's lines come from its object: export and digest read it, a copy puts
+it in the other home's bucket, erasing names it for deletion with the meeting. Where a
+meeting's lines live is not the person's content, so the pointer is neither exported nor
+digested: a meeting archived on one side only still compares equal (step 20).
 """
 
 import hashlib
-from collections.abc import AsyncIterator, Mapping
+from collections.abc import AsyncIterator, Callable, Mapping
 from dataclasses import replace
+from datetime import UTC, datetime
 from typing import Final, cast
 from uuid import UUID
 
@@ -33,6 +39,7 @@ from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.storage.copy import copy_object
 from shosai.core.storage.port import MultipartUploads, ObjectStorage
+from shosai.features.notes.domain.transcript_archive import archive_due
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
     ParticipantRecord,
@@ -57,7 +64,9 @@ from shosai.features.notes.infrastructure.share_records import (
     ShareCommentRecord,
     ShareLinkRecord,
 )
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 from shosai.features.notes.infrastructure.transcript_rows import (
+    copy_archives,
     copy_transcripts,
     person_meetings,
     transcript_lines,
@@ -87,6 +96,7 @@ ACCOUNT_DATA: Final = AccountDataSpec(
         for model in (*PERSON_MODELS, TranscriptLineRecord)
     ),
 )
+POINTER: Final = ("transcript_archive_key", "transcript_archive_lines")
 KEYS: Final = {
     SettingsRecord: "user_id",
     NotesRecord: "session_id",
@@ -116,15 +126,23 @@ def _copied(model: type[ModelBase]) -> PersonRows:
 COPIED: Final = tuple(_copied(model) for model in PERSON_MODELS)
 
 
+def _without(rows: PersonRows, left_out: tuple[str, ...]) -> PersonRows:
+    return replace(rows, columns=tuple(name for name in rows.columns if name not in left_out))
+
+
+def _digested(rows: PersonRows) -> PersonRows:
+    return _without(rows, POINTER) if rows.table.name == MeetingRecord.__tablename__ else rows
+
+
 def _exported(rows: PersonRows) -> PersonRows:
     if rows.table.name == OwnNotesRecord.__tablename__:
         return replace(rows, only=None)
-    if rows.table.name != ShareLinkRecord.__tablename__:
-        return rows
-    columns = tuple(name for name in rows.columns if name != "token")
-    return PersonRows(rows.table, columns, rows.key)
+    if rows.table.name == ShareLinkRecord.__tablename__:
+        return PersonRows(rows.table, _without(rows, ("token",)).columns, rows.key)
+    return _digested(rows)
 
 
+DIGESTED: Final = tuple(_digested(rows) for rows in COPIED)
 EXPORTED: Final = tuple(_exported(rows) for rows in COPIED)
 
 
@@ -135,9 +153,12 @@ class NotesAccountData:
         self,
         transactions: HomeTransactions,
         storage: tuple[Mapping[Home, ObjectStorage], Mapping[Home, MultipartUploads]],
+        clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
         self._objects, self._uploads = storage
+        self._archive = TranscriptArchive(self._objects)
+        self._clock = clock
 
     @property
     def owner(self) -> str:
@@ -151,9 +172,8 @@ class NotesAccountData:
             lines = person_lines(self._transactions, scope, rows, account.user_id)
             yield ExportFile(f"{rows.table.name}.jsonl", lines)
         meetings = await person_meetings(self._transactions, scope, account.user_id)
-        yield ExportFile(
-            "transcript_segments.jsonl", transcript_lines(self._transactions, scope, meetings)
-        )
+        lines = transcript_lines(self._transactions, self._archive, scope, meetings)
+        yield ExportFile("transcript_segments.jsonl", lines)
 
     async def erase(self, account: AccountRef) -> None:
         """Delete the person's meetings and rows, then their transient objects."""
@@ -166,7 +186,11 @@ class NotesAccountData:
             await copy_person_rows(self._transactions, rows, account.user_id, homes)
         scope = TenancyScope(account.home, account.user_id)
         meetings = await person_meetings(self._transactions, scope, account.user_id)
-        await copy_transcripts(self._transactions, account.user_id, meetings, homes)
+        now = self._clock()
+        archived = [m for m in meetings if m.archive or archive_due(m.started_at, now)]
+        stored = [m.id for m in meetings if m not in archived]
+        await copy_transcripts(self._transactions, account.user_id, stored, homes)
+        await copy_archives(self._transactions, self._archive, (account.user_id, archived), homes)
         for key in await self._keys(account):
             await copy_object(self._objects[account.home], self._uploads[to_home], key)
 
@@ -175,11 +199,11 @@ class NotesAccountData:
         scope = TenancyScope(account.home, account.user_id)
         digests = {
             rows.table.name: await person_digest(self._transactions, scope, rows, account.user_id)
-            for rows in COPIED
+            for rows in DIGESTED
         }
         meetings = await person_meetings(self._transactions, scope, account.user_id)
         lines = hashlib.sha256()
-        async for chunk in transcript_lines(self._transactions, scope, meetings):
+        async for chunk in transcript_lines(self._transactions, self._archive, scope, meetings):
             lines.update(chunk)
         digests["transcript_segments"] = lines.hexdigest()
         listing = hashlib.sha256()
@@ -194,15 +218,17 @@ class NotesAccountData:
         """The person's rows in `account.home`, meeting by meeting, then their objects."""
         scope = TenancyScope(account.home, account.user_id)
         meetings = await person_meetings(self._transactions, scope, account.user_id)
-        for meeting_id in meetings:
+        for meeting in meetings:
             async with self._transactions.begin(scope) as session:
-                keys = await run_keys(session, RunRecord.session_id == meeting_id)
-                await record_deletions(session, keys)
-                await session.execute(
-                    delete(MeetingRecord).where(
-                        MeetingRecord.id == meeting_id, personal_meetings(account.user_id)
-                    )
+                keys = await run_keys(session, RunRecord.session_id == meeting.id)
+                # Ключ архива берётся из удалённой строки: архиватор мог успеть после списка.
+                archived = await session.scalar(
+                    delete(MeetingRecord)
+                    .where(MeetingRecord.id == meeting.id, personal_meetings(account.user_id))
+                    .returning(MeetingRecord.transcript_archive_key)
                 )
+                keys = sorted({*keys, archived}) if archived else keys
+                await record_deletions(session, keys)
             await self._delete_objects(account.home, keys)
         async with self._transactions.begin(scope) as session:
             for model in PERSONAL_MODELS:

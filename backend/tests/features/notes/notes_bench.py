@@ -58,6 +58,7 @@ from tests.core.ai.bench import Doubles, ai_bench, set_prices, set_rate
 from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.billing.entitlement_bench import Clock
 from tests.features.billing.people_bench import BearerOfTheTest
+from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.features.notes.recorded_model import RecordedModel
 from tests.harness.connections import fetch_rows
 from tests.harness.database_access import DatabaseAccess
@@ -136,9 +137,14 @@ class NotesBench:
         """The two stages over a transcript budget."""
         transactions = self.homes.transactions
         return {
-            Stage.FINDINGS: FindingsStage(transactions, (self.ports, self.notes_model), budget),
+            Stage.FINDINGS: FindingsStage(
+                transactions, (self.ports, self.notes_model, NO_ARCHIVE), budget
+            ),
             Stage.WRITE_UP: WriteUpStage(
-                transactions, (self.ports, self.outbox, self.notes_model), budget, self.clock
+                transactions,
+                (self.ports, self.outbox, self.notes_model, NO_ARCHIVE),
+                budget,
+                self.clock,
             ),
         }
 

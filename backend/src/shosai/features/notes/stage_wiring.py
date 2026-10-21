@@ -26,6 +26,7 @@ from shosai.features.notes.application.write_up_stage import WriteUpStage
 from shosai.features.notes.domain.runs import Stage
 from shosai.features.notes.infrastructure.media_tools import MediaLimits, MediaTools
 from shosai.features.notes.infrastructure.notes_metrics import NotesMetrics
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 from shosai.features.notes.settings import NotesSettings
 
 TOOLS: Final = ("ffprobe", "ffmpeg", "prlimit")
@@ -50,9 +51,12 @@ def notes_stages(services: CoreServices) -> dict[Stage, StageHandler]:
     model = NotesModel(services.ai, route, metrics)
     budget = transcript_budget(services.settings.ai_guards.ai_max_context_tokens)
     transactions, ports = services.transactions, services.ports
+    archive = TranscriptArchive(services.objects)
     return {
-        Stage.FINDINGS: FindingsStage(transactions, (ports, model), budget),
-        Stage.WRITE_UP: WriteUpStage(transactions, (ports, services.outbox, model), budget),
+        Stage.FINDINGS: FindingsStage(transactions, (ports, model, archive), budget),
+        Stage.WRITE_UP: WriteUpStage(
+            transactions, (ports, services.outbox, model, archive), budget
+        ),
     }
 
 

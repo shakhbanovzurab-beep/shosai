@@ -8,6 +8,7 @@ before they write any), Leo's write-up with the findings it lists, and where eac
 starts. The person's language and name word what the clients show.
 """
 
+from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any, Final
 from uuid import UUID
@@ -21,6 +22,7 @@ from shosai.features.notes.application.stored_findings import findings_of
 from shosai.features.notes.application.visibility import meeting_for
 from shosai.features.notes.domain.findings import Finding
 from shosai.features.notes.domain.reading import map_rows
+from shosai.features.notes.domain.transcript_archive import TranscriptLine, spoken_order
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
     SpeakerRecord,
@@ -28,6 +30,7 @@ from shosai.features.notes.infrastructure.meeting_records import (
 )
 from shosai.features.notes.infrastructure.notes_records import NotesRecord
 from shosai.features.notes.infrastructure.own_notes_records import OwnNotesRecord
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 from shosai.features.workspaces.contracts import ACCESS_POLICY
 
 NEWEST: Final = 200
@@ -47,7 +50,7 @@ class NativeMeeting:
     """A meeting with its lines, the roles of its speakers, its map and its reader."""
 
     meeting: MeetingRecord
-    lines: list[TranscriptLineRecord]
+    lines: Sequence[TranscriptLine]
     roles: dict[int, str]
     map: dict[str, Any] | None
     reader: AccountProfile | None
@@ -74,9 +77,12 @@ def searched(text: str) -> str:
 class NativeLibrary:
     """Reads the person's meetings for the shipped clients."""
 
-    def __init__(self, transactions: HomeTransactions, ports: PortDirectory) -> None:
+    def __init__(
+        self, transactions: HomeTransactions, ports: PortDirectory, archive: TranscriptArchive
+    ) -> None:
         self._transactions = transactions
         self._ports = ports
+        self._archive = archive
 
     async def rows(
         self, principal: Principal, filters: tuple[str | None, str | None], page: tuple[int, int]
@@ -113,13 +119,17 @@ class NativeLibrary:
         policy = self._ports.get(ACCESS_POLICY)
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
             meeting, _ = await meeting_for(session, policy, principal.user_id, meeting_id)
-            lines = await session.scalars(
-                select(Lines)
-                .where(
-                    Lines.session_id == meeting.id, Lines.meeting_started_at == meeting.started_at
+            lines: Sequence[TranscriptLine] = ()
+            if meeting.transcript_archive_key is None:
+                found = await session.scalars(
+                    select(Lines)
+                    .where(
+                        Lines.session_id == meeting.id,
+                        Lines.meeting_started_at == meeting.started_at,
+                    )
+                    .order_by(Lines.start_ms, Lines.seq)
                 )
-                .order_by(Lines.start_ms, Lines.seq)
-            )
+                lines = found.all()
             roles = await session.execute(
                 select(SpeakerRecord.idx, SpeakerRecord.role).where(
                     SpeakerRecord.session_id == meeting.id
@@ -131,9 +141,11 @@ class NativeLibrary:
             reader = await self._ports.get(ACCOUNT_PROFILE_READER).profile(
                 session, principal.user_id
             )
-            return NativeMeeting(
-                meeting, list(lines.all()), {idx: role for idx, role in roles}, tree, reader
-            )
+            speakers = {idx: role for idx, role in roles}
+        if meeting.transcript_archive_key is not None:
+            archived = await self._archive.lines(principal.home, meeting.transcript_archive_key)
+            lines = spoken_order(archived)
+        return NativeMeeting(meeting, lines, speakers, tree, reader)
 
     async def note(self, principal: Principal, meeting_id: UUID) -> NativeNote:
         """The person's own notes and Leo's write-up of a meeting they may read."""
@@ -149,17 +161,22 @@ class NativeLibrary:
             notes = await session.get(NotesRecord, meeting.id)
             run = notes.findings_run_id if notes is not None else None
             findings = dict(await findings_of(session, meeting.id, run))
-            starts = await session.execute(
-                select(Lines.seq, Lines.start_ms)
-                .where(
-                    Lines.session_id == meeting.id, Lines.meeting_started_at == meeting.started_at
+            starts: list[tuple[int, int]] = []
+            if meeting.transcript_archive_key is None:
+                found = await session.execute(
+                    select(Lines.seq, Lines.start_ms)
+                    .where(
+                        Lines.session_id == meeting.id,
+                        Lines.meeting_started_at == meeting.started_at,
+                    )
+                    .order_by(Lines.start_ms, Lines.seq)
                 )
-                .order_by(Lines.start_ms, Lines.seq)
-            )
+                starts = [(seq, start) for seq, start in found]
             reader = await self._ports.get(ACCOUNT_PROFILE_READER).profile(
                 session, principal.user_id
             )
             language = reader.language if reader is not None else None
-            return NativeNote(
-                meeting, own, notes, findings, [(seq, start) for seq, start in starts], language
-            )
+        if meeting.transcript_archive_key is not None:
+            archived = await self._archive.lines(principal.home, meeting.transcript_archive_key)
+            starts = [(line.seq, line.start_ms) for line in spoken_order(archived)]
+        return NativeNote(meeting, own, notes, findings, starts, language)

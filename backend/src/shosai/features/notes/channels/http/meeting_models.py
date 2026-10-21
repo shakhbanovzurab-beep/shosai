@@ -18,7 +18,7 @@ from shosai.features.notes.domain.findings import FindingKind
 from shosai.features.notes.domain.meetings import MeetingSource, MeetingStatus
 from shosai.features.notes.domain.reading import MapRow, NotesState
 from shosai.features.notes.domain.templates import SectionKind
-from shosai.features.notes.infrastructure.meeting_records import TranscriptLineRecord
+from shosai.features.notes.domain.transcript_archive import TranscriptLine
 from shosai.features.notes.infrastructure.notes_records import FindingRecord
 
 
@@ -169,7 +169,7 @@ def meeting_out(view: MeetingView) -> MeetingOut:
     )  # fmt: skip
 
 
-def line_out(line: TranscriptLineRecord) -> TranscriptLineOut:
+def line_out(line: TranscriptLine) -> TranscriptLineOut:
     """A stored line."""
     return TranscriptLineOut(
         seq=line.seq, start_ms=line.start_ms, duration_ms=line.duration_ms,

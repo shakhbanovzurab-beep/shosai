@@ -32,6 +32,7 @@ from shosai.features.notes.application.notes_model import NotesModel, Question
 from shosai.features.notes.application.pipeline import StageFailedError, StageWork
 from shosai.features.notes.application.stage_reads import (
     MEETING_GONE,
+    archived_spoken,
     cross_border,
     present_meeting,
     spoken_lines,
@@ -64,6 +65,7 @@ from shosai.features.notes.infrastructure.prompts import (
     SummaryAnswer,
 )
 from shosai.features.notes.infrastructure.run_records import RunRecord
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 
 SUMMARY_TOKENS: Final = 800
 SUMMARY_MAX: Final = 4_000
@@ -103,12 +105,12 @@ class WriteUpStage:
     def __init__(
         self,
         transactions: HomeTransactions,
-        collaborators: tuple[PortDirectory, EventOutbox, NotesModel],
+        collaborators: tuple[PortDirectory, EventOutbox, NotesModel, TranscriptArchive],
         budget: int,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
     ) -> None:
         self._transactions = transactions
-        self._ports, self._outbox, self._model = collaborators
+        self._ports, self._outbox, self._model, self._archive = collaborators
         self._budget = budget
         self._clock = clock
 
@@ -141,8 +143,11 @@ class WriteUpStage:
             )
             findings = await findings_of(session, meeting.id, findings_run)
             summarised = any(plan.kind is SectionKind.SUMMARY for plan in layout)
-            lines = await spoken_lines(session, meeting) if summarised else []
+            archived = meeting.transcript_archive_key if summarised else None
+            lines = await spoken_lines(session, meeting) if summarised and archived is None else []
             consent = summarised and await cross_border(session, self._ports, meeting.user_id)
+        if archived is not None:
+            lines = await archived_spoken(self._archive, work.scope.home, archived)
         return Draft(template_id, layout, findings_run, findings, lines, consent)
 
     async def _layout(

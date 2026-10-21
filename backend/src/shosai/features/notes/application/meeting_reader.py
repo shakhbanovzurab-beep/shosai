@@ -18,6 +18,9 @@ from uuid import UUID
 from sqlalchemy import Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.db.transactions import HomeTransactions
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.notes.application.library_cards import summary_of
 from shosai.features.notes.application.live_transcript import stored_line
@@ -36,12 +39,14 @@ from shosai.features.notes.contracts import (
 )
 from shosai.features.notes.domain.findings import FindingKind
 from shosai.features.notes.domain.meetings import MeetingStatus
+from shosai.features.notes.domain.transcript_archive import TranscriptLine, page_after
 from shosai.features.notes.infrastructure.meeting_records import (
     MeetingRecord,
     ParticipantRecord,
     TranscriptLineRecord,
 )
 from shosai.features.notes.infrastructure.notes_records import FindingRecord, NotesRecord
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
 
 LINES_PER_PAGE: Final = 500
@@ -69,8 +74,12 @@ async def readable_meeting(
 class MeetingsReader:
     """Facts, transcript pages and a batch re-check of the meetings a viewer may read."""
 
-    def __init__(self, ports: PortDirectory) -> None:
+    def __init__(
+        self, transactions: HomeTransactions, ports: PortDirectory, archive: TranscriptArchive
+    ) -> None:
+        self._transactions = transactions
         self._ports = ports
+        self._archive = archive
 
     async def facts(
         self, session: AsyncSession, viewer: Viewer, meeting_ids: Collection[UUID]
@@ -112,7 +121,7 @@ class MeetingsReader:
 
     async def transcript(
         self,
-        session: AsyncSession,
+        home: Home,
         viewer: Viewer,
         meeting_id: UUID,
         cursor: str | None,
@@ -120,7 +129,9 @@ class MeetingsReader:
     ) -> TranscriptPage:
         """A page of a readable meeting's lines as spoken; `MeetingNotFoundError` otherwise.
 
-        A cursor that is not this transcript's is `invalid_cursor`.
+        It opens its own transaction: an archived transcript is read from the bucket after it,
+        never inside one (§14 rule 8). A cursor that is not this transcript's is
+        `invalid_cursor`.
         """
         if not 1 <= limit <= LINES_PER_PAGE:
             message = f"страница расшифровки — от 1 до {LINES_PER_PAGE} строк"
@@ -129,11 +140,18 @@ class MeetingsReader:
         if cursor is not None:
             position = TRANSCRIPT_CURSOR.decode(cursor)
             after = (position.start_ms, position.seq)
-        meeting = await readable_meeting(session, self._ports, viewer, meeting_id)
-        statement = select(Lines).where(
-            Lines.session_id == meeting.id, Lines.meeting_started_at == meeting.started_at
-        )
-        rows = list(await session.scalars(TRANSCRIPT_ORDER.page(statement, after, limit)))
+        rows: Sequence[TranscriptLine] = ()
+        scope = TenancyScope(home, viewer.user_id)
+        async with self._transactions.begin(scope, read_only=True) as session:
+            meeting = await readable_meeting(session, self._ports, viewer, meeting_id)
+            archived = meeting.transcript_archive_key
+            if archived is None:
+                statement = select(Lines).where(
+                    Lines.session_id == meeting.id, Lines.meeting_started_at == meeting.started_at
+                )
+                rows = list(await session.scalars(TRANSCRIPT_ORDER.page(statement, after, limit)))
+        if archived is not None:
+            rows = page_after(await self._archive.lines(home, archived), after, limit)
         shown = rows[:limit]
         following = None
         if len(rows) > limit:

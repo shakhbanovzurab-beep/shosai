@@ -59,6 +59,7 @@ from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLo
 from shosai.features.workspaces.module import WORKSPACES
 from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.billing.people_bench import BearerOfTheTest
+from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.harness.database_access import DatabaseAccess
 
 type Json = dict[str, Any]
@@ -258,7 +259,7 @@ async def library_bench(homes: DatabaseAccess) -> AsyncIterator[LibraryBench]:
             (MeetingLibrary(transactions, ports), MeetingDeletion(transactions, (ports, OUTBOX))),
             ports,
         ),
-        build_meeting_content_router(MeetingContent(transactions, ports), ports),
+        build_meeting_content_router(MeetingContent(transactions, ports, NO_ARCHIVE), ports),
         build_my_notes_router(
             (MyNotes(transactions, ports), Participants(transactions, ports)), ports
         ),

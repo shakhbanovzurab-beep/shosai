@@ -34,6 +34,7 @@ from shosai.features.notes.application.pipeline import StageFailedError, StageWo
 from shosai.features.notes.application.stage_reads import (
     MEETING_GONE,
     TRANSCRIPT_EMPTY,
+    archived_spoken,
     cross_border,
     present_meeting,
     spoken_lines,
@@ -50,6 +51,7 @@ from shosai.features.notes.infrastructure.prompts import (
     FindingsAnswer,
     MergeAnswer,
 )
+from shosai.features.notes.infrastructure.transcript_archive import TranscriptArchive
 
 ANSWERS_UNREADABLE: Final = "model_answer_unreadable"
 # Сорок находок с цитатами на кириллице — до 6–7 тысяч токенов ответа.
@@ -74,11 +76,11 @@ class FindingsStage:
     def __init__(
         self,
         transactions: HomeTransactions,
-        collaborators: tuple[PortDirectory, NotesModel],
+        collaborators: tuple[PortDirectory, NotesModel, TranscriptArchive],
         budget: int,
     ) -> None:
         self._transactions = transactions
-        self._ports, self._model = collaborators
+        self._ports, self._model, self._archive = collaborators
         self._budget = budget
 
     async def run(self, work: StageWork) -> None:
@@ -119,8 +121,11 @@ class FindingsStage:
             if await self._written(session, work):
                 return None
             meeting = await present_meeting(session, work.meeting_id)
-            lines = await spoken_lines(session, meeting)
+            archived = meeting.transcript_archive_key
+            lines = await spoken_lines(session, meeting) if archived is None else []
             consent = await cross_border(session, self._ports, meeting.user_id)
+        if archived is not None:
+            lines = await archived_spoken(self._archive, work.scope.home, archived)
         if not lines:
             raise StageFailedError(TRANSCRIPT_EMPTY)
         length = max(meeting.seconds * 1000, *(line.end_ms for line in lines))
