@@ -41,6 +41,13 @@ Loanwords (file, chat, link, token, team, account, email, hub, skill, prompt, ap
 | status | stato | status | m. |
 | template | modello | template | m.; same word as AI model, context tells them apart |
 | automation | automazione | — | f. |
+| field | campo | sticker | m., pl. campi; Campi della bacheca, Nuovo campo; built-in ones are campi integrati. In code and the API a sticker |
+| state | opzione | — | f.; one choice of a field’s set of states (elenco di opzioni). Not stato, which is status |
+| subtask | sottoattività | — | f., invariable; Aggiungi sottoattività |
+| comment | commento | — | m., pl. commenti |
+| cover | copertina | cover | f.; Imposta come copertina, Rimuovi copertina |
+| repeat | ripetizione | — | f. field label; values Mai, Ogni giorno, Ogni settimana, Ogni mese; a repeating task is un’attività ricorrente |
+| overdue | in ritardo | — | Label In ritardo; in text «in ritardo di # giorni» |
 | meeting | riunione | meeting, incontro | f. |
 | recording | registrazione | — | f.; the verb (Record) is Registra |
 | transcript | trascrizione | — | f. |

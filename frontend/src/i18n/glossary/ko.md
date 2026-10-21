@@ -41,6 +41,13 @@ After names and placeholders choose the particle by sound (Leo가, Studio를, No
 | status | 상태 | 스테이터스 | |
 | template | 템플릿 | 탬플릿, 템플레이트, 서식 파일 | |
 | automation | 자동화 | 오토메이션 | |
+| field | 필드 | 스티커 | 보드 필드, 새 필드; built-in ones are 기본 필드. In code and the API a sticker |
+| state | 옵션 | — | One choice of a field’s set of states; not 상태, which is status |
+| subtask | 하위 작업 | 서브태스크 | 하위 작업 추가 |
+| comment | 댓글 | 코멘트 | As in the card counts (댓글 #개) |
+| cover | 커버 | — | 커버로 설정, 커버 제거 |
+| repeat | 반복 | — | Values 반복 안 함, 매일, 매주, 매월; a repeating task is 반복 작업 |
+| overdue | 기한 지남 | — | As a label; in sentences 기한이 지났어요 |
 | meeting | 회의 | 미팅, 모임 | Calls and in-person alike |
 | recording | 녹음 | 레코딩 | Verb too (녹음 시작); 녹화 only when it is clearly video |
 | transcript | 스크립트 | 트랜스크립트, 전사본, 녹취록 | |

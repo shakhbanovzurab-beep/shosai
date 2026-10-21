@@ -41,6 +41,13 @@ Adjectives and participles agree with the noun’s gender, given in Note (Tarea 
 | status | estado | estatus | m. |
 | template | plantilla | — | f. |
 | automation | automatización | — | f. |
+| field | campo | sticker | m. Campos del tablero, Nuevo campo; built-in ones are campos integrados. In code and the API a sticker |
+| state | opción | — | f.; one choice of a field’s set of states (lista de opciones). Not estado, which is status |
+| subtask | subtarea | — | f. |
+| comment | comentario | — | m. |
+| cover | portada | — | f. Usar como portada, Quitar portada. |
+| repeat | repetición | — | f. field label; values Nunca, Cada día, Cada semana, Cada mes; a repeating task is una tarea recurrente. |
+| overdue | vencido | — | Agrees with the noun: tarea vencida. |
 | meeting | reunión | — | f. Not junta (regional) or cita (appointment). |
 | recording | grabación | — | f. |
 | transcript | transcripción | — | f. |

@@ -47,25 +47,23 @@
     "label": "Prioriteit",
     "high": "Hoog",
     "medium": "Gemiddeld",
-    "low": "Laag"
+    "low": "Laag",
+    "none": "Geen prioriteit"
   },
   "card": {
     "unassigned": "Niet toegewezen",
     "completed": "Afgerond",
-    "fromSource": "Uit {source}",
     "jiraIssue": "{type} (opent Jira in een nieuw tabblad)",
     "workspaceTask": "Een taak in deze werkruimte. Wat je hier wijzigt, verandert daar ook.",
     "insights": {
       "attachments": "{count, plural, one {# bijlage} other {# bijlagen}}",
-      "comments": "{count, plural, one {# opmerking} other {# opmerkingen}}",
-      "documents": "{count, plural, one {# document} other {# documenten}}"
+      "comments": "{count, plural, one {# opmerking} other {# opmerkingen}}"
     }
   },
   "table": {
     "task": "Taak",
     "status": "Status",
     "owner": "Eigenaar",
-    "label": "Label",
     "due": "Deadline",
     "actions": "Acties",
     "empty": "Nog geen taken",

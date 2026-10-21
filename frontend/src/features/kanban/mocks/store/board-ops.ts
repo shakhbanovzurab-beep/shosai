@@ -3,8 +3,14 @@ import { BOARDS_MAX, type Layout } from "../../domain/boards-contract";
 import { NEW_BOARD_SYSTEM_VISIBILITY } from "../../domain/stickers-contract";
 import { jiraRefusal } from "./jira";
 import { fail, type Outcome, ok } from "./outcome";
+import { isShown } from "./present";
 import { demo, now, touch } from "./state";
 import type { StoredBoard } from "./types";
+
+function isShownId(id: string) {
+  const task = demo().tasks.get(id);
+  return task !== undefined && isShown(task);
+}
 
 /* Доски: создание по шаблону, раскладка, удаление (TK-D6), доска входящих (TK-D4). */
 
@@ -74,13 +80,18 @@ export function applyLayout(board: StoredBoard, layout: Layout): Outcome<null> {
   if (refusal) return fail(refusal);
   const byId = new Map(board.columns.map((c) => [c.id, c]));
   if (layout.columns.length !== byId.size || layout.columns.some((c) => !byId.has(c.id))) return fail("board_changed");
+  // Сверяются только карточки, которые доска показывает: закрытые больше 30 дней назад клиент не видит (TK-D5).
+  const shown = (ids: string[]) => ids.filter((id) => isShownId(id));
   for (const column of layout.columns) {
-    const current = (byId.get(column.id)?.card_ids ?? []).toSorted().join();
+    const current = shown(byId.get(column.id)?.card_ids ?? [])
+      .toSorted()
+      .join();
     if (current !== column.task_ids.toSorted().join()) return fail("board_changed");
   }
   board.columns = layout.columns.flatMap((c) => {
     const column = byId.get(c.id);
-    return column ? [{ ...column, title: c.title, card_ids: [...c.task_ids] }] : [];
+    const hidden = (column?.card_ids ?? []).filter((id) => !isShownId(id));
+    return column ? [{ ...column, title: c.title, card_ids: [...c.task_ids, ...hidden] }] : [];
   });
   touch(board);
   return ok(null);

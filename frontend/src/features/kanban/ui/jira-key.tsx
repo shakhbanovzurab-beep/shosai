@@ -3,7 +3,7 @@ import { useTranslations } from "use-intl";
 
 import { SimpleIcon } from "@/components/simple-icon";
 
-import type { JiraIssueRef } from "../domain/board";
+import type { JiraIssueRef } from "../domain/tasks-contract";
 
 /** The Jira issue key, e.g. "WEB-142", linking to the issue in Jira. */
 export function JiraKey({ issue }: { issue: JiraIssueRef }) {

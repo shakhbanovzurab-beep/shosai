@@ -41,6 +41,13 @@ Typography: « … » with U+202F inside, U+202F before : ; ! ?, no space be
 | status | statut | état | Masc. |
 | template | modèle | template, gabarit, canevas | Masc.; same word as AI model, so name the object when unclear: « modèle de tableau ». |
 | automation | automatisation | automatisme | Fem. |
+| field | champ | sticker | Masc., pl. « champs »; « Champs du tableau », « Nouveau champ »; built-in ones are « champs intégrés ». In code and the API a sticker |
+| state | option | état | Fem.; one choice of a field’s set of states (« liste d’options »). Not « état », which reads as status |
+| subtask | sous-tâche | — | Fem., pl. « sous-tâches ». |
+| comment | commentaire | — | Masc. |
+| cover | couverture | — | Fem.; « Définir comme couverture », « Retirer la couverture ». |
+| repeat | répétition | — | Fem. field label; values « Jamais », « Tous les jours », « Toutes les semaines », « Tous les mois »; « tâche récurrente ». |
+| overdue | en retard | — | Label « En retard »; in sentences « en retard de # jours ». |
 | meeting | réunion | meeting, rencontres | Fem.; calls and in-person meetings alike. |
 | recording | enregistrement | captation | Masc.; « Enregistrer » also means Save, so controls say « Lancer l’enregistrement », « Arrêter l’enregistrement ». |
 | transcript | transcription | verbatim, procès-verbal | Fem. |

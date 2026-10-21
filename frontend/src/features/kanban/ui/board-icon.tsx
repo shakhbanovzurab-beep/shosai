@@ -3,7 +3,7 @@ import { siJira } from "simple-icons";
 
 import { SimpleIcon } from "@/components/simple-icon";
 
-import type { BoardSummary } from "../domain/board";
+import type { BoardSummary } from "../domain/boards-contract";
 import { BOARD_ICON_GLYPHS } from "./board-icons";
 
 /** A board's mark: the Jira logo for a synced board, otherwise its chosen icon. */

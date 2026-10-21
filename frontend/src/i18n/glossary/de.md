@@ -41,6 +41,13 @@ Use the generic forms given here (Inhaber, Teilnehmer) or neutral wording (Perso
 | status | Status | — | der Status, Pl. Status |
 | template | Vorlage | Template, Schablone | die Vorlage |
 | automation | Automatisierung | Automation, Automatik | die Automatisierung; automatisch stays fine |
+| field | Feld | Sticker | das Feld, Pl. Felder; Board-Felder, Neues Feld; built-in ones are integrierte Felder. In code and the API a sticker |
+| state | Zustand | — | der Zustand, Pl. Zustände; one choice of a field’s set of states. Not Status |
+| subtask | Unteraufgabe | Teilaufgabe | die Unteraufgabe, Pl. Unteraufgaben; Unteraufgabe hinzufügen |
+| comment | Kommentar | — | der Kommentar, Pl. Kommentare |
+| cover | Titelbild | — | das Titelbild; Als Titelbild festlegen, Titelbild entfernen |
+| repeat | Wiederholung | — | die Wiederholung; values Nie, Täglich, Wöchentlich, Monatlich; a repeating task is eine wiederkehrende Aufgabe |
+| overdue | Überfällig | — | Agrees with the noun: überfällige Aufgabe |
 | meeting | Meeting | Besprechung | das Meeting, Pl. Meetings; calls and in-person alike; a calendar entry is a Termin |
 | recording | Aufnahme | Aufzeichnung, aufgezeichnet, Mitschnitt, Recording | die Aufnahme, Pl. Aufnahmen; verb aufnehmen; while recording: Aufnahme läuft |
 | transcript | Transkript | Abschrift, Mitschrift, Niederschrift | das Transkript, Pl. Transkripte |

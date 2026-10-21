@@ -47,25 +47,23 @@
     "label": "優先度",
     "high": "高",
     "medium": "中",
-    "low": "低"
+    "low": "低",
+    "none": "優先度なし"
   },
   "card": {
     "unassigned": "未割り当て",
     "completed": "完了",
-    "fromSource": "{source} から",
     "jiraIssue": "{type}（Jira を新しいタブで開きます）",
     "workspaceTask": "ワークスペースのタスクです。ここで変更すると、ワークスペースにも反映されます。",
     "insights": {
       "attachments": "{count, plural, other {# 件の添付ファイル}}",
-      "comments": "{count, plural, other {# 件のコメント}}",
-      "documents": "{count, plural, other {# 件のドキュメント}}"
+      "comments": "{count, plural, other {# 件のコメント}}"
     }
   },
   "table": {
     "task": "タスク",
     "status": "ステータス",
     "owner": "オーナー",
-    "label": "ラベル",
     "due": "期限",
     "actions": "操作",
     "empty": "タスクはまだありません",

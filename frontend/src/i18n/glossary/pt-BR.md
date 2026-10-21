@@ -41,6 +41,13 @@ Participles and adjectives agree in gender (Nota excluída, Link copiado); use n
 | status | status | — | Masc., invariable (os status) |
 | template | template | Gabarito, Molde | Masc.; pl. templates; never “modelo”, which is reserved for AI models |
 | automation | automação | Automatização | Fem.; pl. automações |
+| field | campo | Sticker | Masc.; “Campos do quadro”, “Novo campo”; built-in ones are campos integrados. In code and the API a sticker |
+| state | opção | — | Fem.; pl. opções; one choice of a field’s set of states (“lista de opções”) |
+| subtask | subtarefa | — | Fem.; “Adicionar subtarefa” |
+| comment | comentário | — | Masc. |
+| cover | capa | — | Fem.; “Usar como capa”, “Remover capa” |
+| repeat | repetição | — | Fem. field label; values Nunca, Diariamente, Semanalmente, Mensalmente; a repeating task is uma tarefa recorrente |
+| overdue | atrasado | — | Agrees with the noun: tarefa atrasada; “Atrasado · {date}” |
 | meeting | reunião | — | Fem.; pl. reuniões; also for calls |
 | recording | gravação | — | Fem.; verb gravar, in progress “Gravando…” |
 | transcript | transcrição | — | Fem. |

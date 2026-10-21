@@ -69,11 +69,11 @@ function KanbanScreen({ boardId }: { boardId: string | null }) {
       </div>
     );
 
-  const { boards, workspace_tasks } = state.data;
+  const { items: boards, incoming } = state.data;
   // An unknown or deleted board falls back to the first one.
   const current = boards.find((b) => b.id === boardId) ?? boards[0];
   if (!current) return <NoBoards />;
-  return <BoardScreen key={current.id} boards={boards} current={current} workspaceTasks={workspace_tasks} />;
+  return <BoardScreen key={current.id} boards={boards} current={current} incoming={incoming} />;
 }
 
 /** The full-bleed Kanban screen: the board picked in `?board=`, or the first board. */

@@ -21,7 +21,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/compon
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import type { BoardSummary } from "../domain/board";
+import type { BoardSummary } from "../domain/boards-contract";
 import { BoardControls } from "./board-controls";
 import { JiraSyncStatus } from "./jira-sync-status";
 

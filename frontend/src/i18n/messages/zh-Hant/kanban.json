@@ -47,25 +47,23 @@
     "label": "優先順序",
     "high": "高",
     "medium": "中",
-    "low": "低"
+    "low": "低",
+    "none": "無優先順序"
   },
   "card": {
     "unassigned": "未指派",
     "completed": "已完成",
-    "fromSource": "來自 {source}",
     "jiraIssue": "{type}（在新分頁開啟 Jira）",
     "workspaceTask": "這是工作空間中的任務。在這裡所做的變更也會同步到工作空間。",
     "insights": {
       "attachments": "{count, plural, other {# 個附件}}",
-      "comments": "{count, plural, other {# 則留言}}",
-      "documents": "{count, plural, other {# 份文件}}"
+      "comments": "{count, plural, other {# 則留言}}"
     }
   },
   "table": {
     "task": "任務",
     "status": "狀態",
     "owner": "擁有者",
-    "label": "標籤",
     "due": "截止日期",
     "actions": "動作",
     "empty": "還沒有任務",

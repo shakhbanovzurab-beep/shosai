@@ -47,25 +47,23 @@
     "label": "우선순위",
     "high": "높음",
     "medium": "보통",
-    "low": "낮음"
+    "low": "낮음",
+    "none": "우선순위 없음"
   },
   "card": {
     "unassigned": "담당자 없음",
     "completed": "완료",
-    "fromSource": "{source} 워크스페이스",
     "jiraIssue": "{type} (새 탭에서 Jira가 열려요)",
     "workspaceTask": "워크스페이스 작업이에요. 여기서 바꾸면 워크스페이스에도 반영돼요.",
     "insights": {
       "attachments": "{count, plural, other {첨부 파일 #개}}",
-      "comments": "{count, plural, other {댓글 #개}}",
-      "documents": "{count, plural, other {문서 #개}}"
+      "comments": "{count, plural, other {댓글 #개}}"
     }
   },
   "table": {
     "task": "작업",
     "status": "상태",
     "owner": "담당자",
-    "label": "라벨",
     "due": "마감일",
     "actions": "관리",
     "empty": "아직 작업이 없어요",

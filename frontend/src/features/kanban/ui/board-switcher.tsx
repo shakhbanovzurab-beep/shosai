@@ -21,8 +21,9 @@ import {
 import { DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger } from "@/components/ui/dropdown-menu-sub";
 import { Link } from "@/lib/navigation";
 
-import { BOARD_ICONS, type BoardSummary, boardHref } from "../domain/board";
-import { chooseWorkspaceTasksBoard, updateBoard } from "../model/board-actions";
+import { BOARD_ICONS, boardHref } from "../domain/board";
+import type { BoardSummary } from "../domain/boards-contract";
+import { chooseIncomingBoard, updateBoard } from "../model/board-actions";
 import { BoardGlyph } from "./board-icon";
 import { BOARD_ICON_GLYPHS, BOARD_ICON_NAMES } from "./board-icons";
 
@@ -59,6 +60,7 @@ export function BoardSwitcher({
   onIntent: (intent: BoardMenuIntent) => void;
 }) {
   const t = useTranslations("kanbanBoards");
+  const ta = useTranslations("kanbanApi");
   const appBoards = boards.filter((b) => !b.jira);
   const jiraBoards = boards.filter((b) => b.jira);
 
@@ -106,8 +108,10 @@ export function BoardSwitcher({
           </DropdownMenuItem>
           {current.jira ? null : (
             <DropdownMenuCheckboxItem
-              checked={current.receives_workspace_tasks}
-              onCheckedChange={(on) => void chooseWorkspaceTasksBoard(on === true ? current.id : null, current.name, t)}
+              checked={current.incoming}
+              onCheckedChange={(on) =>
+                void chooseIncomingBoard(on === true ? current.id : null, current.name, { t, ta })
+              }
             >
               {t("switcher.showWorkspaceTasks")}
             </DropdownMenuCheckboxItem>
@@ -122,7 +126,7 @@ export function BoardSwitcher({
                 {BOARD_ICONS.map((icon) => {
                   const Icon = BOARD_ICON_GLYPHS[icon];
                   return (
-                    <DropdownMenuItem key={icon} onSelect={() => void updateBoard(current.id, { icon }, t)}>
+                    <DropdownMenuItem key={icon} onSelect={() => void updateBoard(current.id, { icon }, { t, ta })}>
                       <Icon />
                       {t(`icons.${BOARD_ICON_NAMES[icon]}`)}
                       <Check className={icon === current.icon ? "ms-auto" : "invisible ms-auto"} />

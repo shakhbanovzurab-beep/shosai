@@ -47,25 +47,23 @@
     "label": "Prioridade",
     "high": "Alta",
     "medium": "Média",
-    "low": "Baixa"
+    "low": "Baixa",
+    "none": "Sem prioridade"
   },
   "card": {
     "unassigned": "Não atribuída",
     "completed": "Concluída",
-    "fromSource": "De {source}",
     "jiraIssue": "{type} (abre o Jira em uma nova aba)",
     "workspaceTask": "Tarefa deste espaço de trabalho. O que você mudar aqui também muda lá.",
     "insights": {
       "attachments": "{count, plural, one {# anexo} many {# de anexos} other {# anexos}}",
-      "comments": "{count, plural, one {# comentário} many {# de comentários} other {# comentários}}",
-      "documents": "{count, plural, one {# documento} many {# de documentos} other {# documentos}}"
+      "comments": "{count, plural, one {# comentário} many {# de comentários} other {# comentários}}"
     }
   },
   "table": {
     "task": "Tarefa",
     "status": "Status",
     "owner": "Proprietário",
-    "label": "Marcador",
     "due": "Prazo",
     "actions": "Ações",
     "empty": "Nenhuma tarefa ainda",

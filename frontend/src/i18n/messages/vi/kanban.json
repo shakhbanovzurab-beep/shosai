@@ -47,25 +47,23 @@
     "label": "Mức ưu tiên",
     "high": "Cao",
     "medium": "Trung bình",
-    "low": "Thấp"
+    "low": "Thấp",
+    "none": "Không có mức ưu tiên"
   },
   "card": {
     "unassigned": "Chưa giao",
     "completed": "Hoàn thành",
-    "fromSource": "Từ {source}",
     "jiraIssue": "{type} (mở Jira trong thẻ mới)",
     "workspaceTask": "Công việc thuộc không gian làm việc này. Thay đổi ở đây cũng sẽ cập nhật ở đó.",
     "insights": {
       "attachments": "{count, plural, other {# tệp đính kèm}}",
-      "comments": "{count, plural, other {# bình luận}}",
-      "documents": "{count, plural, other {# tài liệu}}"
+      "comments": "{count, plural, other {# bình luận}}"
     }
   },
   "table": {
     "task": "Công việc",
     "status": "Trạng thái",
     "owner": "Chủ sở hữu",
-    "label": "Nhãn",
     "due": "Hạn chót",
     "actions": "Thao tác",
     "empty": "Chưa có công việc nào",

@@ -8,11 +8,11 @@ import { LoadError } from "@/components/feedback";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDismissed } from "@/hooks/use-dismissed";
 
-import type { BoardSummary } from "../domain/board";
-import type { BoardsResponse } from "../domain/contract";
+import type { BoardSummary, BoardsResponse } from "../domain/boards-contract";
+import { useColumnOrder } from "../model/board-hooks";
 import { boardResource, useBoardDetail } from "../model/boards-resource";
-import { FirstSync, JiraErrorBanner, WorkspaceTasksOffer } from "./board-banners";
-import { BoardProvider, useBoard } from "./board-store";
+import { FirstSync, IncomingOffer, JiraErrorBanner } from "./board-banners";
+import { BoardProvider, useBoardCommands, useEditable } from "./board-store";
 import { KanbanBoard } from "./kanban-board";
 import { type BoardView, KanbanToolbar } from "./kanban-toolbar";
 import { TaskListView } from "./task-list-view";
@@ -21,16 +21,18 @@ import { TaskTableView } from "./task-table-view";
 type ViewProps = {
   boards: BoardSummary[];
   current: BoardSummary;
-  workspaceTasks: BoardsResponse["workspace_tasks"];
+  incoming: BoardsResponse["incoming"];
   view: BoardView;
   onViewChange: (view: BoardView) => void;
 };
 
-function BoardBody({ boards, current, workspaceTasks, view, onViewChange }: ViewProps) {
-  const { editable, columnOrder, actions } = useBoard();
+function BoardBody({ boards, current, incoming, view, onViewChange }: ViewProps) {
+  const editable = useEditable();
+  const columnOrder = useColumnOrder();
+  const { cards } = useBoardCommands();
   const [offerDismissed, dismissOffer] = useDismissed("kanban-workspace-tasks-offer");
   const firstSync = current.jira !== null && current.jira.last_synced_at === null;
-  const offer = !offerDismissed && workspaceTasks.board_id === null && workspaceTasks.open > 0 && current.jira === null;
+  const offer = !offerDismissed && incoming.board_id === null && incoming.open > 0 && current.jira === null;
   return (
     <>
       <KanbanToolbar
@@ -38,10 +40,10 @@ function BoardBody({ boards, current, workspaceTasks, view, onViewChange }: View
         current={current}
         view={view}
         onViewChange={onViewChange}
-        onAddTask={editable && columnOrder[0] ? () => actions.addTask(columnOrder[0]) : undefined}
+        onAddTask={editable && columnOrder[0] ? () => cards.addCard(columnOrder[0]) : undefined}
       />
       <JiraErrorBanner board={current} />
-      {offer ? <WorkspaceTasksOffer board={current} open={workspaceTasks.open} onDismiss={dismissOffer} /> : null}
+      {offer ? <IncomingOffer board={current} open={incoming.open} onDismiss={dismissOffer} /> : null}
       {firstSync ? <FirstSync board={current} /> : null}
       {!firstSync && view === "board" ? <KanbanBoard /> : null}
       {!firstSync && view !== "board" ? (
@@ -66,7 +68,7 @@ function BoardSkeleton() {
 }
 
 /** One board: loads its columns and tasks, and re-reads a Jira board when you come back to the tab. */
-export function BoardScreen({ boards, current, workspaceTasks }: Omit<ViewProps, "view" | "onViewChange">) {
+export function BoardScreen({ boards, current, incoming }: Omit<ViewProps, "view" | "onViewChange">) {
   const t = useTranslations("kanban");
   const tc = useTranslations("common");
   const [view, setView] = useState<BoardView>("board");
@@ -100,10 +102,10 @@ export function BoardScreen({ boards, current, workspaceTasks }: Omit<ViewProps,
       </>
     );
 
-  // Remounted whenever the server's copy changes (a sync finished, or Jira sent changes).
+  // Новая версия с сервера (синхронизация закончилась, Jira прислала изменения) ложится в то же хранилище.
   return (
-    <BoardProvider key={`${current.id}:${detail.data.revision}`} initialDetail={detail.data}>
-      <BoardBody boards={boards} current={current} workspaceTasks={workspaceTasks} view={view} onViewChange={setView} />
+    <BoardProvider detail={detail.data}>
+      <BoardBody boards={boards} current={current} incoming={incoming} view={view} onViewChange={setView} />
     </BoardProvider>
   );
 }

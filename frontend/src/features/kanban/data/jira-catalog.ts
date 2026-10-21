@@ -1,17 +1,26 @@
-import type { Column, OwnerTone, Task, TaskPriority } from "../domain/board";
-import { column } from "./demo-rows";
+import type { ColumnKind } from "../domain/board";
 
 /*
- * What the demo pretends the user's Jira site contains. A real backend reads boards, their column
- * configuration and issues through the Jira Cloud REST API with the user's Jira connection.
+ * Что демо выдаёт за сайт Jira человека. Настоящий бэкенд читает доски, их колонки и задачи через Jira Cloud
+ * REST API подключением человека к Jira.
  */
 
 export const JIRA_SITE = "acme.atlassian.net";
 
-/** The issue type Jira gives an issue created from a board here: Jira's own name for it, not the app's. */
+/** Тип задачи Jira, созданной отсюда: собственное имя Jira, а не приложения. */
 export const NEW_ISSUE_TYPE = "Task";
 
-type DemoIssue = [key: string, summary: string, type: string, priority: TaskPriority, assignee: string | null];
+type DemoIssue = [
+  key: string,
+  summary: string,
+  type: string,
+  priority: "High" | "Medium" | "Low",
+  assignee: string | null,
+];
+type DemoColumn = { id: string; title: string; kind: ColumnKind };
+
+/** Колонка Jira: название — то, что написано в Jira, поэтому передаётся позиционно. */
+const column = (id: string, title: string, kind: ColumnKind): DemoColumn => ({ id, title, kind });
 
 export type JiraCatalogBoard = {
   board_id: number;
@@ -19,26 +28,10 @@ export type JiraCatalogBoard = {
   project_key: string;
   project_name: string;
   type: "kanban" | "scrum";
-  columns: Column[];
-  /** Issues per column, by column id. */
+  columns: DemoColumn[];
+  /** Задачи по колонкам, по id колонки. */
   issues: Record<string, DemoIssue[]>;
 };
-
-const TONES: OwnerTone[] = ["indigo", "lime", "fuchsia", "sky", "violet", "pink"];
-const toneOf = (name: string) => TONES[[...name].reduce((sum, ch) => sum + ch.charCodeAt(0), 0) % TONES.length];
-
-export const issueToTask = ([key, summary, type, priority, assignee]: DemoIssue): Task => ({
-  id: `jira-${key}`,
-  title: summary,
-  description: "",
-  priority,
-  dueDate: null,
-  progress: null,
-  owner: assignee ? { name: assignee, tone: toneOf(assignee) } : null,
-  label: type,
-  insights: [],
-  jira: { key, url: `https://${JIRA_SITE}/browse/${key}`, type },
-});
 
 export const JIRA_CATALOG: JiraCatalogBoard[] = [
   {

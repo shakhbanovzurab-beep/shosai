@@ -41,7 +41,7 @@ function BoardChoices({ value, onChange }: { value: string; onChange: (value: st
       </div>
     );
   if (boards.status === "error") return <p className="text-muted-foreground text-sm">{t("dialogs.boardsError")}</p>;
-  const options = [{ id: NONE, name: t("dialogs.boardNone") }, ...boards.data.boards];
+  const options = [{ id: NONE, name: t("dialogs.boardNone") }, ...boards.data.items];
   return (
     <RadioGroup value={value} onValueChange={onChange} aria-label={t("dialogs.boardTitle")} className="gap-3">
       {options.map((board) => (

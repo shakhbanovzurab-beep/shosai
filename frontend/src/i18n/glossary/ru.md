@@ -41,6 +41,13 @@ Leo is masculine and never declined («Leo не смог ответить», «�
 | status | статус | — | Values agree with the noun («Задача выполнена») |
 | template | шаблон | темплейт, заготовк | |
 | automation | автоматизация | автоматика | One rule is «правило» |
+| field | поле | стикер | Neuter («в поле»); «Поля доски», «Новое поле», built-in ones are «встроенные поля». In code and the API a sticker |
+| state | состояние | — | Neuter; one choice of a field’s set of states («Набор состояний»). Not «статус» |
+| subtask | подзадача | — | Feminine; one item of a task’s checklist («Добавить подзадачу») |
+| comment | комментарий | — | Masculine; ICU forms комментарий, комментария, комментариев |
+| cover | обложка | — | Feminine; «Сделать обложкой», «Убрать обложку» |
+| repeat | повтор | — | Masculine field label; values «Не повторять», «Каждый день», «Каждую неделю», «Каждый месяц»; «повторяющаяся задача». Not «Повторить», which is Retry |
+| overdue | просрочено | — | Agrees with the noun («Задача просрочена»); filter «Просроченные» |
 | meeting | встреча | совещани, митинг, созвон | Feminine; covers calls. The live call itself is «звонок» |
 | recording | запись | — | Feminine; «Идёт запись», «Начать запись» |
 | transcript | расшифровка | транскрипт, стенограмм | Feminine; verb «расшифровать» |

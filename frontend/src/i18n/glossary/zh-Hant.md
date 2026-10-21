@@ -41,6 +41,13 @@ Half-width space between Chinese and Latin words, numbers or placeholders (與 L
 | status | 狀態 | 状态 | |
 | template | 範本 | 模板, 模版 | |
 | automation | 自動化 | 自动化 | One rule is 自動化規則 |
+| field | 欄位 | 貼紙 | Counter 個; 看板欄位, 新增欄位; built-in ones are 內建欄位. A board stage is 欄. In code and the API a sticker |
+| state | 選項 | — | One choice of a field’s set of states; not 狀態, which is status; counter 個 |
+| subtask | 子任務 | — | Counter 項; 新增子任務 |
+| comment | 留言 | 評論 | Counter 則, as in the card counts |
+| cover | 封面 | — | 設為封面, 移除封面 |
+| repeat | 重複 | — | Values 不重複, 每天, 每週, 每月; a repeating task is 重複任務 |
+| overdue | 已逾期 | — | As in 已逾期 · {date} |
 | meeting | 會議 | 会议 | Counter 場 |
 | recording | 錄製內容 | 录制, 录音, 录像 | Audio or video; the verb is 錄製 (開始錄製) |
 | transcript | 逐字稿 | 转录, 轉錄稿, 文字稿, 抄本 | Counter 份 |

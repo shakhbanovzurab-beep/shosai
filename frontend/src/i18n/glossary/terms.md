@@ -37,6 +37,13 @@ row per term below, in the same order. Terms in the "Do not translate" list of `
 | status | work | The state of a task, document or payment |
 | template | work | A ready-made starting point (a task, a board) |
 | automation | work | A rule that acts on tasks by itself |
+| field | work | One of a board's fields on its cards: assignee, due date, priority, repeat, or one the person made (a set of states, a number, a text). In code and the API a "sticker" |
+| state | work | One choice of a field's set of states, with a name and a colour (e.g. Bug, Feature) |
+| subtask | work | One item of a task's checklist: a title and a tick |
+| comment | work | A message under a task |
+| cover | work | The image shown at the top of a card |
+| repeat | work | A task that comes back on a schedule: daily, weekly on chosen days, monthly |
+| overdue | work | Past its due date and not done |
 | meeting | meetings | A call or an in-person meeting that Studio records |
 | recording | meetings | The audio or video file of a meeting |
 | transcript | meetings | The text of what was said in a meeting |

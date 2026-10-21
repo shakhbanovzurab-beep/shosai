@@ -11,28 +11,30 @@ import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 
-import type { Task } from "../domain/board";
+import { useCardIds, useColumn } from "../model/board-hooks";
 import { BoardActionsButton, BoardContextMenu } from "./board-menu-triggers";
-import { useBoard } from "./board-store";
+import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
 import { SortableTaskCard } from "./sortable-task-card";
 
 interface KanbanColumnProps {
   columnId: string;
   index: number;
-  tasks: Task[];
 }
 
 /**
  * One column. Columns sit in reading order, so in Arabic the next one is to the left; dragging with the
  * keyboard (Space, then the arrow keys) moves by what is on screen, so ArrowLeft heads for the end there.
  */
-export function KanbanColumn({ columnId, index, tasks }: KanbanColumnProps) {
-  const { columnTitle, actions, editable, managedByJira } = useBoard();
+export function KanbanColumn({ columnId, index }: KanbanColumnProps) {
+  const { cards } = useBoardCommands();
+  const editable = useEditable();
+  const managedByJira = useManagedByJira();
+  const taskIds = useCardIds(columnId);
   const t = useTranslations("kanban");
   const tc = useTranslations("common");
   const headingId = useId();
   const column = { id: columnId };
-  const title = columnTitle(columnId);
+  const title = useColumn(columnId)?.title ?? "";
   const {
     ref: columnRef,
     handleRef: columnHandleRef,
@@ -88,7 +90,7 @@ export function KanbanColumn({ columnId, index, tasks }: KanbanColumnProps) {
               </h2>
             </div>
             <p className="text-muted-foreground text-sm tabular-nums leading-none">
-              {t("taskCount", { count: tasks.length })}
+              {t("taskCount", { count: taskIds.length })}
             </p>
           </div>
           <div className="-me-2 flex items-center gap-0.5 text-muted-foreground">
@@ -97,7 +99,7 @@ export function KanbanColumn({ columnId, index, tasks }: KanbanColumnProps) {
               size="icon-sm"
               aria-label={t("column.addTask", { column: title })}
               disabled={!editable}
-              onClick={() => actions.addTask(column.id)}
+              onClick={() => cards.addCard(column.id)}
             >
               <Plus />
             </Button>
@@ -113,8 +115,8 @@ export function KanbanColumn({ columnId, index, tasks }: KanbanColumnProps) {
         ref={taskDropRef}
         className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-3 [scrollbar-color:var(--border)_transparent] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1"
       >
-        {tasks.map((task, taskIndex) => (
-          <SortableTaskCard key={task.id} task={task} columnId={column.id} index={taskIndex} />
+        {taskIds.map((taskId, taskIndex) => (
+          <SortableTaskCard key={taskId} taskId={taskId} columnId={column.id} index={taskIndex} />
         ))}
       </div>
     </section>

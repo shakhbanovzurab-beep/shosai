@@ -47,25 +47,23 @@
     "label": "الأولوية",
     "high": "عالية",
     "medium": "متوسطة",
-    "low": "منخفضة"
+    "low": "منخفضة",
+    "none": "بلا أولوية"
   },
   "card": {
     "unassigned": "بلا مكلف",
     "completed": "مكتملة",
-    "fromSource": "من {source}",
     "jiraIssue": "{type} (يفتح Jira في علامة تبويب جديدة)",
     "workspaceTask": "مهمة في مساحة العمل هذه. التغييرات التي تُجرى هنا تنطبق عليها هناك.",
     "insights": {
       "attachments": "{count, plural, zero {# مرفق} one {مرفق واحد} two {مرفقان} few {# مرفقات} many {# مرفقًا} other {# مرفق}}",
-      "comments": "{count, plural, zero {# تعليق} one {تعليق واحد} two {تعليقان} few {# تعليقات} many {# تعليقًا} other {# تعليق}}",
-      "documents": "{count, plural, zero {# مستند} one {مستند واحد} two {مستندان} few {# مستندات} many {# مستندًا} other {# مستند}}"
+      "comments": "{count, plural, zero {# تعليق} one {تعليق واحد} two {تعليقان} few {# تعليقات} many {# تعليقًا} other {# تعليق}}"
     }
   },
   "table": {
     "task": "المهمة",
     "status": "الحالة",
     "owner": "المالك",
-    "label": "التصنيف",
     "due": "تاريخ الاستحقاق",
     "actions": "الإجراءات",
     "empty": "لا توجد مهام بعد",

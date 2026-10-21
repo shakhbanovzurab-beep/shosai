@@ -41,6 +41,13 @@ Suffixes after names and codes take ’ and follow pronunciation (Leo’ya, Noti
 | status | durum | statü | |
 | template | şablon | kalıp, template | |
 | automation | otomasyon | — | |
+| field | alan | sticker, çıkartma | alanı, alanlar; Pano alanları, Yeni alan; built-in ones are hazır alanlar. In code and the API a sticker |
+| state | seçenek | — | seçeneği, seçenekler; one choice of a field’s set of states. Not durum, which is status |
+| subtask | alt görev | — | alt görevi, alt görevler; Alt görev ekle |
+| comment | yorum | — | yorumu, yorumlar |
+| cover | kapak | — | Kapak yap, Kapağı kaldır |
+| repeat | tekrarlama | — | Field label Tekrarlama; values Hiçbir zaman, Her gün, Her hafta, Her ay; a repeating task is tekrarlanan görev |
+| overdue | gecikti | — | Label Gecikti; as an adjective gecikmiş görev |
 | meeting | toplantı | miting | Covers calls and in-person meetings. |
 | recording | kayıt | — | kaydı, kayda, kayıtlar. |
 | transcript | transkript | deşifre, döküm, transkripsiyon | transkripti, transkripte. |

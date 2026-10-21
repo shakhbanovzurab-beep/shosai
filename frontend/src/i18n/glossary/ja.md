@@ -41,6 +41,13 @@ Full-width 、。 and 「」 in text, no 。 on buttons, labels or titles; half-
 | status | ステータス | ステイタス | |
 | template | テンプレート | ひな形, 雛形 | |
 | automation | 自動化 | オートメーション | One rule = 自動化ルール |
+| field | フィールド | ステッカー | ボードのフィールド, 新しいフィールド; built-in ones are 組み込みのフィールド. In code and the API a sticker |
+| state | 選択肢 | — | One choice of a field’s set of states; not ステータス |
+| subtask | サブタスク | 子タスク | Add = サブタスクを追加 |
+| comment | コメント | — | Counter 件 (3 件のコメント) |
+| cover | カバー | — | Set as cover = カバーに設定; remove = カバーを削除 |
+| repeat | 繰り返し | リピート | Values しない, 毎日, 毎週, 毎月; a repeating task is 繰り返しのタスク |
+| overdue | 期限切れ | 期限超過 | As in 期限切れ · {date} |
 | meeting | 会議 | ミーティング, 打ち合わせ, 打合せ | Calls and in-person meetings alike |
 | recording | レコーディング | 録画, 録音 | Audio or video alike; in progress = レコーディング中 |
 | transcript | 文字起こし | トランスクリプト, 書き起こし | The text and the feature |

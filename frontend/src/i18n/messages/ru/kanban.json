@@ -47,25 +47,23 @@
     "label": "Приоритет",
     "high": "Высокий",
     "medium": "Средний",
-    "low": "Низкий"
+    "low": "Низкий",
+    "none": "Без приоритета"
   },
   "card": {
     "unassigned": "Не назначен",
     "completed": "Выполнена",
-    "fromSource": "Из «{source}»",
     "jiraIssue": "{type} (откроется в Jira в новой вкладке)",
     "workspaceTask": "Задача этого рабочего пространства. Изменения здесь отразятся и там.",
     "insights": {
       "attachments": "{count, plural, one {# вложение} few {# вложения} many {# вложений} other {# вложения}}",
-      "comments": "{count, plural, one {# комментарий} few {# комментария} many {# комментариев} other {# комментария}}",
-      "documents": "{count, plural, one {# документ} few {# документа} many {# документов} other {# документа}}"
+      "comments": "{count, plural, one {# комментарий} few {# комментария} many {# комментариев} other {# комментария}}"
     }
   },
   "table": {
     "task": "Задача",
     "status": "Статус",
     "owner": "Ответственный",
-    "label": "Ярлык",
     "due": "Срок",
     "actions": "Действия",
     "empty": "Задач пока нет",

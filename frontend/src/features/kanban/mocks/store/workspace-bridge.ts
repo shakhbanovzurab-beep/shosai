@@ -33,7 +33,11 @@ function fromWorkspace(task: MyTask, existing: StoredTask | undefined): StoredTa
     due_on: task.due_on,
     starts_on: task.due_on === null ? null : base.starts_on,
     assignee: { user_id: ME_PERSON.user_id, name: ME_PERSON.name },
-    space: { workspace_id: task.workspace.id, workspace_name: task.workspace.name },
+    space: {
+      workspace_id: task.workspace.id,
+      workspace_slug: task.workspace.slug,
+      workspace_name: task.workspace.name,
+    },
     completed_at,
   };
 }

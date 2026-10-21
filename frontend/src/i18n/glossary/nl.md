@@ -41,6 +41,13 @@ Compounds are one word, hyphenated after names and abbreviations (‘Notion-kopp
 | status | status | toestand | de status, mv. statussen |
 | template | sjabloon | template | het sjabloon, mv. sjablonen |
 | automation | automatisering | automatisatie, automation | de automatisering, mv. automatiseringen |
+| field | veld | sticker | het veld, mv. velden; ‘Bordvelden’, ‘Nieuw veld’; built-in ones are ingebouwde velden. In code and the API a sticker |
+| state | optie | toestand | de optie, mv. opties; one choice of a field’s set of states. Not status |
+| subtask | subtaak | — | de subtaak, mv. subtaken |
+| comment | opmerking | — | de opmerking, mv. opmerkingen; as in the card counts |
+| cover | omslag | — | de omslag; ‘Als omslag instellen’, ‘Omslag verwijderen’ |
+| repeat | herhalen | — | Field label ‘Herhalen’; values ‘Nooit’, ‘Dagelijks’, ‘Wekelijks’, ‘Maandelijks’; a repeating task is een terugkerende taak |
+| overdue | te laat | — | Label ‘Te laat’; in text ‘over de deadline’ |
 | meeting | vergadering | meeting, bijeenkomst | de vergadering; verb vergaderen |
 | recording | opname | recording | de opname, mv. opnames; verb opnemen |
 | transcript | transcriptie | uitschrift | de transcriptie, mv. transcripties |

@@ -1,30 +1,9 @@
-import type { OwnerTone } from "../domain/board";
+export const OWNER_TONES = ["zinc", "lime", "indigo", "fuchsia", "violet", "pink", "sky"] as const;
+export type OwnerTone = (typeof OWNER_TONES)[number];
 
-const LABEL_TONES: Record<string, string> = {
-  Backend: "bg-blue-500/10 text-blue-700 dark:text-blue-300",
-  Data: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  Design: "bg-fuchsia-500/10 text-fuchsia-700 dark:text-fuchsia-300",
-  Docs: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300",
-  "Finance Ops": "bg-teal-500/10 text-teal-700 dark:text-teal-300",
-  Platform: "bg-cyan-500/10 text-cyan-700 dark:text-cyan-300",
-  Product: "bg-orange-500/10 text-orange-700 dark:text-orange-300",
-  QA: "bg-red-500/10 text-red-700 dark:text-red-300",
-  Security: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
-  // Jira issue types.
-  Bug: "bg-red-500/10 text-red-700 dark:text-red-300",
-  Story: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
-  Task: "bg-blue-500/10 text-blue-700 dark:text-blue-300",
-  Epic: "bg-violet-500/10 text-violet-700 dark:text-violet-300",
-  // Personal boards.
-  Home: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
-  Health: "bg-rose-500/10 text-rose-700 dark:text-rose-300",
-  Finance: "bg-teal-500/10 text-teal-700 dark:text-teal-300",
-  Family: "bg-pink-500/10 text-pink-700 dark:text-pink-300",
-  Errands: "bg-lime-500/10 text-lime-700 dark:text-lime-300",
-};
-
-/** A label's colours: a known team, issue type or area, or neutral for anything else. */
-export const labelTone = (label: string) => LABEL_TONES[label] ?? "bg-muted text-muted-foreground";
+/** Цвет аватара по имени: одно имя — один цвет на всех карточках. */
+export const toneOf = (name: string): OwnerTone =>
+  OWNER_TONES[[...name].reduce((sum, ch) => sum + (ch.codePointAt(0) ?? 0), 0) % OWNER_TONES.length];
 
 /** Avatar colours for a task owner, applied to the avatar root. */
 export const ownerTones: Record<OwnerTone, string> = {

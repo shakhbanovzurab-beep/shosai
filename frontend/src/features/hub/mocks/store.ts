@@ -1,4 +1,4 @@
-import { listBoards } from "@/features/kanban/mocks/demo-store";
+import { demo as kanbanDemo } from "@/features/kanban/mocks/store/state";
 
 import { demoNow } from "./clock";
 import { seedDemo } from "./scenario";
@@ -30,9 +30,9 @@ export const materialsOf = (hubId: string) => demo.materials.get(hubId) ?? [];
 
 /** A board's name, or null when there is no such board any more. */
 export const boardName = (boardId: string | null) =>
-  boardId === null ? null : (listBoards().find((b) => b.id === boardId)?.name ?? null);
+  boardId === null ? null : (kanbanDemo().boards.get(boardId)?.name ?? null);
 
-export const boardExists = (boardId: string) => listBoards().some((b) => b.id === boardId);
+export const boardExists = (boardId: string) => kanbanDemo().boards.has(boardId);
 
 export const MAX_HUBS = 50;
 

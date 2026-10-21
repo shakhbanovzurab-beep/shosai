@@ -41,6 +41,13 @@ Sentences end with । (no space before it); buttons, labels and headings take n
 | status | स्थिति | स्टेटस, अवस्था | Feminine |
 | template | टेंप्लेट | टेम्पलेट, टेम्प्लेट, सांचा, साँचा | Masculine |
 | automation | ऑटोमेशन | स्वचालन, आटोमेशन | Masculine; automatic = अपने-आप |
+| field | फ़ील्ड | स्टिकर, फील्ड | Masculine; बोर्ड के फ़ील्ड, नया फ़ील्ड; built-in ones are बिल्ट-इन फ़ील्ड. In code and the API a sticker |
+| state | विकल्प | — | Masculine; one choice of a field’s set of states. Not स्थिति, which is status |
+| subtask | सबटास्क | — | Masculine; plural सबटास्क; सबटास्क जोड़ें |
+| comment | टिप्पणी | कमेंट | Feminine; plural टिप्पणियां |
+| cover | कवर | — | Masculine; कवर बनाएं, कवर हटाएं |
+| repeat | दोहराव | — | Masculine field label; values कभी नहीं, हर दिन, हर हफ़्ते, हर महीने; a repeating task is दोहराया जाने वाला टास्क |
+| overdue | तारीख निकल गई | — | Label, as in तारीख निकल गई · {date}; in text # दिन की देरी |
 | meeting | मीटिंग | बैठक, मीटिंग्स | Feminine (मीटिंग शुरू हुई); plural मीटिंग, oblique मीटिंगों |
 | recording | रिकॉर्डिंग | रेकॉर्डिंग, रिकार्डिंग, अभिलेख | Feminine |
 | transcript | ट्रांसक्रिप्ट | प्रतिलेख, प्रतिलिपि | Masculine |

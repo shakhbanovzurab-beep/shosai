@@ -47,25 +47,23 @@
     "label": "Priority",
     "high": "High",
     "medium": "Medium",
-    "low": "Low"
+    "low": "Low",
+    "none": "No priority"
   },
   "card": {
     "unassigned": "Unassigned",
     "completed": "Done",
-    "fromSource": "From {source}",
     "jiraIssue": "{type} (opens Jira in a new tab)",
     "workspaceTask": "A task in this workspace. Changes here change it there.",
     "insights": {
       "attachments": "{count, plural, one {# attachment} other {# attachments}}",
-      "comments": "{count, plural, one {# comment} other {# comments}}",
-      "documents": "{count, plural, one {# document} other {# documents}}"
+      "comments": "{count, plural, one {# comment} other {# comments}}"
     }
   },
   "table": {
     "task": "Task",
     "status": "Status",
     "owner": "Owner",
-    "label": "Label",
     "due": "Due",
     "actions": "Actions",
     "empty": "No tasks yet",

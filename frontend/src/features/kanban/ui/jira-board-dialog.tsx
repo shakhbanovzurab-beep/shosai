@@ -23,7 +23,7 @@ import { useOpenSettings } from "@/features/settings/model/dialog-store";
 import { Link, useRouter } from "@/lib/navigation";
 
 import { boardHref } from "../domain/board";
-import type { JiraBoard } from "../domain/contract";
+import type { JiraBoard } from "../domain/boards-contract";
 import { connectJiraBoard } from "../model/board-actions";
 import { useJiraBoards } from "../model/boards-resource";
 
@@ -52,6 +52,7 @@ function BoardFacts({ board }: { board: JiraBoard }) {
 
 function JiraPicker({ onDone }: { onDone: () => void }) {
   const t = useTranslations("kanbanBoards");
+  const ta = useTranslations("kanbanApi");
   const tc = useTranslations("common");
   const router = useRouter();
   const openSettings = useOpenSettings();
@@ -87,7 +88,7 @@ function JiraPicker({ onDone }: { onDone: () => void }) {
 
   const sync = (board: JiraBoard) =>
     startTransition(async () => {
-      const created = await connectJiraBoard({ site: board.site, board_id: board.board_id }, t);
+      const created = await connectJiraBoard({ site: board.site, board_id: board.board_id }, { t, ta });
       if (!created) return;
       onDone();
       router.push(boardHref(created.id));
@@ -98,13 +99,13 @@ function JiraPicker({ onDone }: { onDone: () => void }) {
       <p className="text-muted-foreground text-sm">
         {state.data.account ? t("jira.connectedAs", { account: state.data.account }) : t("jira.connected")}
       </p>
-      {state.data.boards.length === 0 ? (
+      {state.data.items.length === 0 ? (
         <p className="rounded-lg border border-dashed px-4 py-6 text-center text-muted-foreground text-sm">
           {t("jira.noBoards")}
         </p>
       ) : (
         <ul className="flex flex-col gap-2" aria-label={t("jira.boardList")}>
-          {state.data.boards.map((board) => (
+          {state.data.items.map((board) => (
             <li key={`${board.site}/${board.board_id}`}>
               {board.synced_board_id ? (
                 <Link

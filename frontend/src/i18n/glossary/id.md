@@ -41,6 +41,13 @@ Nouns never take a plural form: no reduplication in the UI (3 file, semua tugas)
 | status | status | — | |
 | template | template | — | Not templat |
 | automation | otomatisasi | Otomasi, Automasi | Verb otomatiskan |
+| field | bidang | Stiker, Sticker | Bidang papan, Bidang baru; built-in ones are bidang bawaan. Not kolom, which is a column. In code and the API a sticker |
+| state | opsi | — | One choice of a field’s set of states; not status |
+| subtask | subtugas | — | Tambahkan subtugas |
+| comment | komentar | — | |
+| cover | sampul | — | Jadikan sampul, Hapus sampul |
+| repeat | pengulangan | — | Field label Pengulangan; values Tidak pernah, Setiap hari, Setiap minggu, Setiap bulan; a repeating task is tugas berulang |
+| overdue | terlambat | — | Label Terlambat; in text terlambat # hari |
 | meeting | rapat | Pertemuan, Meeting | Join = Gabung |
 | recording | rekaman | — | In progress: Merekam… |
 | transcript | transkrip | — | |

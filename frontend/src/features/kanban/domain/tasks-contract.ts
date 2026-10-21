@@ -24,7 +24,8 @@ export type Recurrence = { every: "day" } | { every: "week"; weekdays: Weekday[]
 /** В пространстве — участник (`user_id`); у личной задачи — имя, как его написали. */
 export type Assignee = { user_id: string | null; name: string };
 export type Cover = { attachment_id: string; preview_url: string | null };
-export type TaskSpace = { workspace_id: string; workspace_name: string };
+/** Пространство задачи; `workspace_slug` — его адрес в кабинете (`/app/w/{slug}`). */
+export type TaskSpace = { workspace_id: string; workspace_slug: string; workspace_name: string };
 export type JiraIssueRef = { key: string; url: string; type: string };
 export type Person = { user_id: string; name: string };
 

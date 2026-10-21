@@ -56,13 +56,14 @@ function TemplateColumns({ template }: { template: BoardTemplate }) {
 /** The form is mounted per opening, so every new board starts from the defaults. */
 function NewBoardForm({ onDone }: { onDone: () => void }) {
   const t = useTranslations("kanbanBoards");
+  const ta = useTranslations("kanbanApi");
   const tc = useTranslations("common");
   const router = useRouter();
   const [icon, setIcon] = useState<BoardIcon>("briefcase");
   const [template, setTemplate] = useState<BoardTemplate>("simple");
   const [, submit, pending] = useActionState(async (_: null, form: FormData) => {
     const name = String(form.get("name") ?? "").trim();
-    const board = await createBoard({ name, icon, template }, t);
+    const board = await createBoard({ name, icon, template }, { t, ta });
     if (board) {
       onDone();
       router.push(boardHref(board.id));

@@ -8,7 +8,7 @@ import { ConfirmDestructive } from "@/components/feedback";
 import { NameDialog } from "@/components/name-dialog";
 import { useRouter } from "@/lib/navigation";
 
-import type { BoardSummary } from "../domain/board";
+import type { BoardSummary } from "../domain/boards-contract";
 import { deleteBoard, updateBoard } from "../model/board-actions";
 import { type BoardMenuIntent, BoardSwitcher } from "./board-switcher";
 import { JiraBoardDialog } from "./jira-board-dialog";
@@ -18,6 +18,7 @@ import { NewBoardDialog } from "./new-board-dialog";
 export function BoardControls({ boards, current }: { boards: BoardSummary[]; current: BoardSummary }) {
   const router = useRouter();
   const t = useTranslations("kanbanBoards");
+  const ta = useTranslations("kanbanApi");
   const tc = useTranslations("common");
   const [intent, setIntent] = useState<BoardMenuIntent | null>(null);
   const close = () => setIntent(null);
@@ -35,7 +36,7 @@ export function BoardControls({ boards, current }: { boards: BoardSummary[]; cur
                 title: t("renameTitle"),
                 initial: current.name,
                 submitLabel: tc("actions.rename"),
-                onSubmit: (name) => void updateBoard(current.id, { name }, t),
+                onSubmit: (name) => void updateBoard(current.id, { name }, { t, ta }),
               }
             : null
         }
@@ -52,7 +53,7 @@ export function BoardControls({ boards, current }: { boards: BoardSummary[]; cur
         onCancel={close}
         onConfirm={() => {
           close();
-          void deleteBoard(current, t).then((deleted) => (deleted ? router.push("/app/kanban") : undefined));
+          void deleteBoard(current, { t, ta }).then((deleted) => (deleted ? router.push("/app/kanban") : undefined));
         }}
       />
     </>

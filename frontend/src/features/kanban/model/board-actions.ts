@@ -2,85 +2,86 @@
 
 import { toast } from "sonner";
 
-import { apiErrorDescription } from "@/lib/api/error-description";
-
-import { kanbanApi } from "../api/kanban-api";
-import type { BoardSummary } from "../domain/board";
-import type { BoardPatch, ConnectJiraBoardRequest, CreateBoardRequest } from "../domain/contract";
+import { boardsApi } from "../api/boards-api";
+import type { BoardCreate, BoardPatch, BoardSummary, JiraConnect } from "../domain/boards-contract";
 import { boardResource, boardsResource, receiveSummary } from "./boards-resource";
-import type { BoardWords } from "./words";
+import { type ApiWords, type BoardWords, describeProblem } from "./words";
 
-const failed = (title: string, error: unknown) => {
-  toast.error(title, { description: apiErrorDescription(error) });
+/* Действия с досками целиком: создать, подключить доску Jira, переименовать, удалить, синхронизировать, входящие. */
+
+export type BoardsWords = { t: BoardWords; ta: ApiWords };
+
+const failed = (title: string, error: unknown, ta: ApiWords) => {
+  toast.error(title, { description: describeProblem(error, ta) });
   return null;
 };
 
-/** Creates an app board; resolves to it, or null after reporting the failure. */
-export async function createBoard(request: CreateBoardRequest, t: BoardWords): Promise<BoardSummary | null> {
+/** Создаёт доску; отдаёт её или null, сообщив о сбое. */
+export async function createBoard(request: BoardCreate, { t, ta }: BoardsWords): Promise<BoardSummary | null> {
   try {
-    const board = await kanbanApi.createBoard(request);
+    const board = await boardsApi.create(request);
     receiveSummary(board);
     return board;
   } catch (error) {
-    return failed(t("toasts.createFailed"), error);
+    return failed(t("toasts.createFailed"), error, ta);
   }
 }
 
-/** Starts a two-way sync with a Jira board; resolves to the new board, which syncs in the background. */
-export async function connectJiraBoard(request: ConnectJiraBoardRequest, t: BoardWords): Promise<BoardSummary | null> {
+/** Начинает двустороннюю синхронизацию с доской Jira; новая доска синхронизируется в фоне. */
+export async function connectJiraBoard(request: JiraConnect, { t, ta }: BoardsWords): Promise<BoardSummary | null> {
   try {
-    const board = await kanbanApi.connectJiraBoard(request);
+    const board = await boardsApi.connectJira(request);
     receiveSummary(board);
     return board;
   } catch (error) {
-    return failed(t("toasts.connectFailed"), error);
+    return failed(t("toasts.connectFailed"), error, ta);
   }
 }
 
-export async function updateBoard(id: string, patch: BoardPatch, t: BoardWords) {
+export async function updateBoard(id: string, patch: BoardPatch, { t, ta }: BoardsWords) {
   try {
-    receiveSummary(await kanbanApi.patchBoard(id, patch));
+    receiveSummary(await boardsApi.patch(id, patch));
   } catch (error) {
-    failed(t("toasts.updateFailed"), error);
+    failed(t("toasts.updateFailed"), error, ta);
   }
 }
 
-/** Resolves to true once the board is gone. */
-export async function deleteBoard(board: BoardSummary, t: BoardWords): Promise<boolean> {
+/** true, когда доски больше нет. */
+export async function deleteBoard(board: BoardSummary, { t, ta }: BoardsWords): Promise<boolean> {
   try {
-    await kanbanApi.deleteBoard(board.id);
-    boardsResource.update((data) => ({ ...data, boards: data.boards.filter((b) => b.id !== board.id) }));
+    await boardsApi.remove(board.id);
+    boardsResource.update((data) => ({ ...data, items: data.items.filter((b) => b.id !== board.id) }));
     toast.success(t(board.jira ? "toasts.stoppedSyncing" : "toasts.deleted", { board: board.name }));
     return true;
   } catch (error) {
-    failed(t("toasts.deleteFailed"), error);
+    failed(t("toasts.deleteFailed"), error, ta);
     return false;
   }
 }
 
-/** Pulls the latest from Jira now; the board re-reads itself when the sync finishes. */
-export async function syncBoard(id: string, t: BoardWords) {
+/** Забрать последнее из Jira сейчас; доска перечитывается, когда синхронизация закончится. */
+export async function syncBoard(id: string, { t, ta }: BoardsWords) {
   try {
-    receiveSummary(await kanbanApi.syncBoard(id));
+    receiveSummary(await boardsApi.sync(id));
     await boardResource(id).refresh();
   } catch (error) {
-    failed(t("toasts.syncFailed"), error);
+    failed(t("toasts.syncFailed"), error, ta);
   }
 }
 
 /**
- * Shows the user's workspace tasks on this board, or nowhere (null). The old board loses those cards
- * and the new one gets them, each in the column matching the task's status.
+ * Доска для задач, которые приходят к человеку (TK-D4), или никакой (null). Прежняя доска их больше не получает,
+ * новая получает каждую в колонку её вида.
  */
-export async function chooseWorkspaceTasksBoard(boardId: string | null, boardName: string, t: BoardWords) {
+export async function chooseIncomingBoard(boardId: string | null, boardName: string, { t, ta }: BoardsWords) {
   try {
-    const response = await kanbanApi.setWorkspaceTasksBoard({ board_id: boardId });
+    const response = await boardsApi.setIncoming({ board_id: boardId });
     boardsResource.update(() => response);
-    for (const board of response.boards) void boardResource(board.id).refresh();
+    for (const board of response.items) void boardResource(board.id).refresh();
     toast.success(boardId ? t("toasts.workspaceTasksOn", { board: boardName }) : t("toasts.workspaceTasksOff"), {
       description: boardId ? t("toasts.workspaceTasksHint") : undefined,
     });
   } catch (error) {
-    failed(t("toasts.workspaceTasksFailed"), error);
+    failed(t("toasts.workspaceTasksFailed"), error, ta);
   }
 }

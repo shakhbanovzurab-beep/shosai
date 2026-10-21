@@ -3,27 +3,26 @@
 import { useSortable } from "@dnd-kit/react/sortable";
 import { cn } from "cn";
 
-import type { Task } from "../domain/board";
 import { BoardContextMenu } from "./board-menu-triggers";
-import { useBoard } from "./board-store";
+import { useEditable } from "./board-store";
 import { TaskCard } from "./task-card";
 
-export function SortableTaskCard({ task, columnId, index }: { task: Task; columnId: string; index: number }) {
-  const { editable } = useBoard();
+export function SortableTaskCard({ taskId, columnId, index }: { taskId: string; columnId: string; index: number }) {
+  const editable = useEditable();
   const { isDragging, ref } = useSortable({
     disabled: !editable,
-    id: task.id,
+    id: taskId,
     index,
     type: "task",
     accept: "task",
     group: columnId,
-    data: { type: "task", task, columnId },
+    data: { type: "task", taskId, columnId },
   });
 
   return (
-    <BoardContextMenu target={{ kind: "task", task, columnId }}>
-      <div ref={ref} data-task-id={task.id} className={cn("touch-none", isDragging && "opacity-30")}>
-        <TaskCard task={task} columnId={columnId} />
+    <BoardContextMenu target={{ kind: "task", taskId, columnId }}>
+      <div ref={ref} data-task-id={taskId} className={cn("touch-none", isDragging && "opacity-30")}>
+        <TaskCard taskId={taskId} columnId={columnId} />
       </div>
     </BoardContextMenu>
   );

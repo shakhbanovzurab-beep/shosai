@@ -47,25 +47,23 @@
     "label": "प्राथमिकता",
     "high": "ज़्यादा",
     "medium": "मध्यम",
-    "low": "कम"
+    "low": "कम",
+    "none": "कोई प्राथमिकता नहीं"
   },
   "card": {
     "unassigned": "असाइन नहीं किया गया",
     "completed": "पूरा हुआ",
-    "fromSource": "{source} से",
     "jiraIssue": "{type} (Jira नए टैब में खुलेगा)",
     "workspaceTask": "यह इस वर्कस्पेस का टास्क है। यहां बदलाव करने पर वहां भी बदल जाएगा।",
     "insights": {
       "attachments": "{count, plural, one {# अटैचमेंट} other {# अटैचमेंट}}",
-      "comments": "{count, plural, one {# टिप्पणी} other {# टिप्पणियां}}",
-      "documents": "{count, plural, one {# दस्तावेज़} other {# दस्तावेज़}}"
+      "comments": "{count, plural, one {# टिप्पणी} other {# टिप्पणियां}}"
     }
   },
   "table": {
     "task": "टास्क",
     "status": "स्थिति",
     "owner": "मालिक",
-    "label": "लेबल",
     "due": "आख़िरी तारीख",
     "actions": "कार्रवाइयां",
     "empty": "अभी तक कोई टास्क नहीं है",

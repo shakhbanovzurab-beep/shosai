@@ -172,7 +172,7 @@ Card         = {id, title, status, priority: high | medium | low | null, starts_
                 assignee: {user_id | null, name} | null, cover: {attachment_id, preview_url | null} | null,
                 values: {sticker_id: StickerValue} (the task's values of the board's custom stickers),
                 subtasks_done, subtasks_total, comment_count, attachment_count, recurring,
-                leo_fields: (assignee | due | priority)[], space: {workspace_id, workspace_name} | null,
+                leo_fields: (assignee | due | priority)[], space: {workspace_id, workspace_slug, workspace_name} | null,
                 jira: {key, url, type} | null,
                 can_delete (the person may delete it: their own task; a workspace task's owner and admins, TK-D2)}
 ColumnHead   = {id, title, kind, color: Color | null, collapsed}

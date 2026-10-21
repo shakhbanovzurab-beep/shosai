@@ -47,25 +47,23 @@
     "label": "Öncelik",
     "high": "Yüksek",
     "medium": "Orta",
-    "low": "Düşük"
+    "low": "Düşük",
+    "none": "Öncelik yok"
   },
   "card": {
     "unassigned": "Atanmamış",
     "completed": "Tamamlandı",
-    "fromSource": "{source} çalışma alanından",
     "jiraIssue": "{type} (Jira yeni sekmede açılır)",
     "workspaceTask": "Bu çalışma alanına ait bir görev. Buradaki değişiklikler oraya da yansır.",
     "insights": {
       "attachments": "{count, plural, one {# ek} other {# ek}}",
-      "comments": "{count, plural, one {# yorum} other {# yorum}}",
-      "documents": "{count, plural, one {# belge} other {# belge}}"
+      "comments": "{count, plural, one {# yorum} other {# yorum}}"
     }
   },
   "table": {
     "task": "Görev",
     "status": "Durum",
     "owner": "Sahip",
-    "label": "Etiket",
     "due": "Son tarih",
     "actions": "İşlemler",
     "empty": "Henüz görev yok",

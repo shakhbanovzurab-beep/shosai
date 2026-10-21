@@ -47,25 +47,23 @@
     "label": "Priorität",
     "high": "Hoch",
     "medium": "Mittel",
-    "low": "Niedrig"
+    "low": "Niedrig",
+    "none": "Keine Priorität"
   },
   "card": {
     "unassigned": "Nicht zugewiesen",
     "completed": "Erledigt",
-    "fromSource": "Aus {source}",
     "jiraIssue": "{type} (öffnet Jira in einem neuen Tab)",
     "workspaceTask": "Eine Aufgabe in diesem Workspace. Änderungen hier gelten auch dort.",
     "insights": {
       "attachments": "{count, plural, one {# Anhang} other {# Anhänge}}",
-      "comments": "{count, plural, one {# Kommentar} other {# Kommentare}}",
-      "documents": "{count, plural, one {# Dokument} other {# Dokumente}}"
+      "comments": "{count, plural, one {# Kommentar} other {# Kommentare}}"
     }
   },
   "table": {
     "task": "Aufgabe",
     "status": "Status",
     "owner": "Inhaber",
-    "label": "Label",
     "due": "Fällig",
     "actions": "Aktionen",
     "empty": "Noch keine Aufgaben",

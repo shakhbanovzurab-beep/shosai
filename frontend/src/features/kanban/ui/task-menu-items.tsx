@@ -17,16 +17,29 @@ import { useTranslations } from "use-intl";
 import type { MenuKit } from "@/components/menu-kit";
 import { useRouter } from "@/lib/navigation";
 
-import { TASK_PRIORITIES, type Task } from "../domain/board";
-import { useBoard } from "./board-store";
-import { PRIORITY_KEYS } from "./priority-keys";
+import { PRIORITIES, type Priority } from "../domain/tasks-contract";
+import { useCard, useColumn, useColumnOrder } from "../model/board-hooks";
+import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
 
-/** Everything you can do to a task, for either the right-click menu or the "⋮" dropdown. */
-export function TaskMenuItems({ kit: K, task, columnId }: { kit: MenuKit; task: Task; columnId: string }) {
-  const { columnOrder, columnTitle, actions, editable, managedByJira } = useBoard();
+const PRIORITY_CHOICES: (Priority | null)[] = [...PRIORITIES, null];
+
+/** Название колонки в подменю «Переместить в». */
+function ColumnName({ columnId }: { columnId: string }) {
+  return <span dir="auto">{useColumn(columnId)?.title ?? ""}</span>;
+}
+
+/** Всё, что можно сделать с задачей, — для меню правой кнопки и для «⋮». */
+export function TaskMenuItems({ kit: K, taskId, columnId }: { kit: MenuKit; taskId: string; columnId: string }) {
+  const task = useCard(taskId);
+  const columnOrder = useColumnOrder();
+  const editable = useEditable();
+  const managedByJira = useManagedByJira();
+  const { cards: actions } = useBoardCommands();
   const router = useRouter();
   const t = useTranslations("kanban");
   const tc = useTranslations("common");
+  if (!task) return null;
+  const deletable = task.can_delete && !managedByJira;
 
   return (
     <>
@@ -37,13 +50,13 @@ export function TaskMenuItems({ kit: K, task, columnId }: { kit: MenuKit; task: 
             {t("taskMenu.openInJira", { key: task.jira.key })}
           </K.Item>
         ) : null}
-        {task.workspace ? (
-          <K.Item onSelect={() => router.push(task.workspace?.url ?? "/app/w")}>
+        {task.space ? (
+          <K.Item onSelect={() => router.push(`/app/w/${encodeURIComponent(task.space?.workspace_slug ?? "")}/tasks`)}>
             <ExternalLink className="rtl:-scale-x-100" />
-            {t("taskMenu.openInWorkspace", { workspace: task.workspace.workspace_name })}
+            {t("taskMenu.openInWorkspace", { workspace: task.space.workspace_name })}
           </K.Item>
         ) : null}
-        <K.Item disabled={!editable} onSelect={() => actions.renameTask(task.id)}>
+        <K.Item disabled={!editable} onSelect={() => actions.renameCard(taskId)}>
           <Pencil />
           {tc("actions.renameMenu")}
         </K.Item>
@@ -53,10 +66,10 @@ export function TaskMenuItems({ kit: K, task, columnId }: { kit: MenuKit; task: 
             {t("priority.label")}
           </K.SubTrigger>
           <K.SubContent className="w-40">
-            {TASK_PRIORITIES.map((priority) => (
-              <K.Item key={priority} onSelect={() => actions.setPriority(task.id, priority)}>
+            {PRIORITY_CHOICES.map((priority) => (
+              <K.Item key={priority ?? "none"} onSelect={() => actions.setPriority(taskId, priority)}>
                 <Check className={task.priority === priority ? undefined : "invisible"} />
-                {t(`priority.${PRIORITY_KEYS[priority]}`)}
+                {t(`priority.${priority ?? "none"}`)}
               </K.Item>
             ))}
           </K.SubContent>
@@ -71,48 +84,51 @@ export function TaskMenuItems({ kit: K, task, columnId }: { kit: MenuKit; task: 
               <K.Item
                 key={id}
                 disabled={id === columnId}
-                onSelect={() => actions.moveTask(task.id, id, "top")}
+                onSelect={() => actions.moveToEdge(taskId, id, "top")}
                 data-target-column-id={id}
               >
                 <Check className={id === columnId ? undefined : "invisible"} />
-                <span dir="auto">{columnTitle(id)}</span>
+                <ColumnName columnId={id} />
               </K.Item>
             ))}
           </K.SubContent>
         </K.Sub>
-        <K.Item disabled={!editable} onSelect={() => actions.moveTask(task.id, columnId, "top")}>
+        <K.Item disabled={!editable} onSelect={() => actions.moveToEdge(taskId, columnId, "top")}>
           <ArrowUpToLine />
           {t("taskMenu.moveToTop")}
         </K.Item>
-        <K.Item disabled={!editable} onSelect={() => actions.moveTask(task.id, columnId, "bottom")}>
+        <K.Item disabled={!editable} onSelect={() => actions.moveToEdge(taskId, columnId, "bottom")}>
           <ArrowDownToLine />
           {t("taskMenu.moveToBottom")}
         </K.Item>
       </K.Group>
       <K.Separator />
       <K.Group>
-        {managedByJira || task.workspace ? null : (
-          <K.Item onSelect={() => actions.duplicateTask(task.id)}>
+        {managedByJira || task.space ? null : (
+          <K.Item onSelect={() => actions.duplicateCard(taskId)}>
             <Copy />
             {tc("actions.duplicate")}
           </K.Item>
         )}
-        <K.Item onSelect={() => actions.copyTaskLink(task.id)}>
+        <K.Item onSelect={() => actions.copyLink(taskId)}>
           <Link2 />
           {tc("actions.copyLink")}
         </K.Item>
       </K.Group>
-      {managedByJira || task.workspace ? null : (
+      {deletable ? (
         <>
           <K.Separator />
           <K.Group>
-            <K.Item variant="destructive" onSelect={() => actions.deleteTask(task.id)}>
+            <K.Item
+              variant="destructive"
+              onSelect={() => actions.deleteCards([taskId], t("commands.deleted", { title: task.title }))}
+            >
               <Trash2 />
               {t("taskMenu.delete")}
             </K.Item>
           </K.Group>
         </>
-      )}
+      ) : null}
     </>
   );
 }

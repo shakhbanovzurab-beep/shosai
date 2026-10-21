@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-import type { BoardSummary, JiraLink } from "../domain/board";
+import type { JiraLink } from "../domain/board";
+import type { BoardSummary } from "../domain/boards-contract";
 import { syncBoard } from "../model/board-actions";
 
 /** "Synced with Jira 5 minutes ago", brought up to date once a minute while the board is open. */
@@ -49,6 +50,7 @@ function Status({ jira }: { jira: JiraLink }) {
 /** Where a synced board stands with Jira, with "Sync now" and a link to the board in Jira. */
 export function JiraSyncStatus({ board }: { board: BoardSummary }) {
   const t = useTranslations("kanbanBoards");
+  const ta = useTranslations("kanbanApi");
   const [pending, startTransition] = useTransition();
   const { jira } = board;
   if (!jira) return null;
@@ -64,7 +66,7 @@ export function JiraSyncStatus({ board }: { board: BoardSummary }) {
             size="icon-sm"
             aria-label={t("sync.syncNow")}
             disabled={busy}
-            onClick={() => startTransition(() => syncBoard(board.id, t))}
+            onClick={() => startTransition(() => syncBoard(board.id, { t, ta }))}
           >
             <RefreshCw className={busy ? "motion-safe:animate-spin" : undefined} />
           </Button>

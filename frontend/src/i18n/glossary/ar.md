@@ -41,6 +41,13 @@ Leo is masculine (يجيب Leo); never glue Arabic letters to Latin names (إل�
 | status | الحالة | — | Pl. الحالات |
 | template | قالب | — | Pl. قوالب; never نموذج (that is model) |
 | automation | أتمتة | تشغيل آلي, التشغيل الآلي, مكننة | One rule = قاعدة أتمتة, pl. قواعد الأتمتة |
+| field | حقل | ملصق, ستيكر | Masc.; pl. حقول; حقول اللوحة، حقل جديد; built-in ones are الحقول المدمجة. In code and the API a sticker |
+| state | خيار | — | Masc.; pl. خيارات; one choice of a field’s set of states. Not الحالة, which is status |
+| subtask | مهمة فرعية | — | Fem.; pl. مهام فرعية |
+| comment | تعليق | — | Masc.; pl. تعليقات |
+| cover | غلاف | — | Masc.; تعيين كغلاف، إزالة الغلاف |
+| repeat | التكرار | — | Field label; values بلا تكرار، يوميًا، أسبوعيًا، شهريًا; a repeating task is مهمة متكررة |
+| overdue | متأخر | — | Agrees with the noun: مهمة متأخرة |
 | meeting | اجتماع | اللقاء | Pl. اجتماعات |
 | recording | تسجيل | — | Pl. تسجيلات |
 | transcript | النص | نسخة مكتوبة, النسخة المكتوبة | نص الاجتماع when context is unclear; not نسخ (that is Copy) |

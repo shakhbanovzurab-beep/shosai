@@ -2,11 +2,9 @@
 // path. The slice deletes this file when it publishes its API (F2-D1).
 import { type MockRoute, mockRoute } from "@/mocks/routing";
 
-import { boardLayoutRoute, boardRoute, boardSyncRoute, boardsRoute, workspaceTasksRoute } from "./boards-route";
-import { jiraBoardsRoute } from "./jira-route";
 import {
-  boardsRoute as boardsV1Route,
-  boardRoute as boardV1Route,
+  boardRoute,
+  boardsRoute,
   incomingRoute,
   jiraAvailableRoute,
   jiraConnectRoute,
@@ -29,28 +27,18 @@ import {
   commentRoute,
   commentsRoute,
   demoTaskFileRoute,
-  tasksDeleteRoute as tasksDeleteV1Route,
-  taskRoute as taskV1Route,
+  taskRoute,
+  tasksDeleteRoute,
   valueRoute,
 } from "./routes/tasks-routes";
-import { taskRoute, tasksDeleteRoute, tasksRoute } from "./tasks-route";
 
+// Контракт `/v1` плана tasks и TK-D12 (KG-D1): статические пути раньше параметрических.
 export const handlers: MockRoute[] = [
-  mockRoute("/api/kanban/boards", boardsRoute, ["GET", "POST"]),
-  mockRoute("/api/kanban/jira/boards", jiraBoardsRoute, ["GET", "POST"]),
-  mockRoute("/api/kanban/workspace-tasks", workspaceTasksRoute, ["PUT"]),
-  mockRoute("/api/kanban/boards/:id", boardRoute, ["GET", "PATCH", "DELETE"]),
-  mockRoute("/api/kanban/boards/:id/layout", boardLayoutRoute, ["PUT"]),
-  mockRoute("/api/kanban/boards/:id/sync", boardSyncRoute, ["POST"]),
-  mockRoute("/api/kanban/boards/:id/tasks", tasksRoute, ["POST"]),
-  mockRoute("/api/kanban/boards/:id/tasks/delete", tasksDeleteRoute, ["POST"]),
-  mockRoute("/api/kanban/boards/:id/tasks/:taskId", taskRoute, ["PATCH"]),
-  // Контракт `/v1` плана tasks и TK-D12 (KG-D1): статические пути раньше параметрических.
-  mockRoute("/v1/boards", boardsV1Route, ["GET", "POST"]),
+  mockRoute("/v1/boards", boardsRoute, ["GET", "POST"]),
   mockRoute("/v1/boards/incoming", incomingRoute, ["PUT"]),
   mockRoute("/v1/boards/jira/available", jiraAvailableRoute, ["GET"]),
   mockRoute("/v1/boards/jira", jiraConnectRoute, ["POST"]),
-  mockRoute("/v1/boards/:id", boardV1Route, ["GET", "PATCH", "DELETE"]),
+  mockRoute("/v1/boards/:id", boardRoute, ["GET", "PATCH", "DELETE"]),
   mockRoute("/v1/boards/:id/layout", layoutRoute, ["PUT"]),
   mockRoute("/v1/boards/:id/sync", syncRoute, ["POST"]),
   mockRoute("/v1/boards/:id/columns", columnsRoute, ["POST"]),
@@ -61,8 +49,8 @@ export const handlers: MockRoute[] = [
   mockRoute("/v1/boards/:id/stickers/:stickerId", boardStickerRoute, ["PATCH", "DELETE"]),
   mockRoute("/v1/stickers", stickersRoute, ["GET"]),
   mockRoute("/v1/stickers/:id", stickerRoute, ["PATCH", "DELETE"]),
-  mockRoute("/v1/tasks/delete", tasksDeleteV1Route, ["POST"]),
-  mockRoute("/v1/tasks/:id", taskV1Route, ["GET", "PATCH", "DELETE"]),
+  mockRoute("/v1/tasks/delete", tasksDeleteRoute, ["POST"]),
+  mockRoute("/v1/tasks/:id", taskRoute, ["GET", "PATCH", "DELETE"]),
   mockRoute("/v1/tasks/:id/subtasks", subtasksRoute, ["POST"]),
   mockRoute("/v1/tasks/:id/subtasks/:subtaskId", subtaskRoute, ["PATCH", "DELETE"]),
   mockRoute("/v1/tasks/:id/comments", commentsRoute, ["GET", "POST"]),

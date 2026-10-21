@@ -5,17 +5,21 @@ import { useTranslations } from "use-intl";
 
 import type { MenuKit } from "@/components/menu-kit";
 
-import { useBoard } from "./board-store";
+import { useCardIds, useColumnOrder } from "../model/board-hooks";
+import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
 
 /** Everything you can do to a column, for either the right-click menu or the "⋮" dropdown. */
 export function ColumnMenuItems({ kit: K, columnId }: { kit: MenuKit; columnId: string }) {
-  const { board, columnOrder, actions, editable, managedByJira } = useBoard();
+  const columnOrder = useColumnOrder();
+  const editable = useEditable();
+  const managedByJira = useManagedByJira();
+  const { cards, columns: actions } = useBoardCommands();
   const t = useTranslations("kanban");
   const position = columnOrder.indexOf(columnId);
-  const tasks = board[columnId] ?? [];
+  const tasks = useCardIds(columnId);
 
   const addTask = (
-    <K.Item disabled={!editable} onSelect={() => actions.addTask(columnId)}>
+    <K.Item disabled={!editable} onSelect={() => cards.addCard(columnId)}>
       <Plus />
       {t("addTask")}
     </K.Item>

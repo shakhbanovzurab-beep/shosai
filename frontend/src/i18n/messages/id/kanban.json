@@ -47,25 +47,23 @@
     "label": "Prioritas",
     "high": "Tinggi",
     "medium": "Sedang",
-    "low": "Rendah"
+    "low": "Rendah",
+    "none": "Tanpa prioritas"
   },
   "card": {
     "unassigned": "Belum ditugaskan",
     "completed": "Selesai",
-    "fromSource": "Dari {source}",
     "jiraIssue": "{type} (membuka Jira di tab baru)",
     "workspaceTask": "Tugas di ruang kerja ini. Perubahan di sini juga berlaku di sana.",
     "insights": {
       "attachments": "{count, plural, other {# lampiran}}",
-      "comments": "{count, plural, other {# komentar}}",
-      "documents": "{count, plural, other {# dokumen}}"
+      "comments": "{count, plural, other {# komentar}}"
     }
   },
   "table": {
     "task": "Tugas",
     "status": "Status",
     "owner": "Pemilik",
-    "label": "Label",
     "due": "Tenggat",
     "actions": "Tindakan",
     "empty": "Belum ada tugas",

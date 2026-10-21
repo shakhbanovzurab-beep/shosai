@@ -47,25 +47,23 @@
     "label": "Priorità",
     "high": "Alta",
     "medium": "Media",
-    "low": "Bassa"
+    "low": "Bassa",
+    "none": "Nessuna priorità"
   },
   "card": {
     "unassigned": "Non assegnata",
     "completed": "Completata",
-    "fromSource": "Da {source}",
     "jiraIssue": "{type} (apre Jira in una nuova scheda)",
     "workspaceTask": "Un’attività di questo spazio di lavoro. Le modifiche fatte qui valgono anche lì.",
     "insights": {
       "attachments": "{count, plural, one {# allegato} many {# di allegati} other {# allegati}}",
-      "comments": "{count, plural, one {# commento} many {# di commenti} other {# commenti}}",
-      "documents": "{count, plural, one {# documento} many {# di documenti} other {# documenti}}"
+      "comments": "{count, plural, one {# commento} many {# di commenti} other {# commenti}}"
     }
   },
   "table": {
     "task": "Attività",
     "status": "Stato",
     "owner": "Proprietario",
-    "label": "Etichetta",
     "due": "Scadenza",
     "actions": "Azioni",
     "empty": "Ancora nessuna attività",

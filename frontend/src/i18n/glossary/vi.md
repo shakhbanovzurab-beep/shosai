@@ -41,6 +41,13 @@ Spell as Apple, Google and Microsoft do: classic tone placement (hóa, hủy, x�
 | status | trạng thái | tình trạng | |
 | template | mẫu | khuôn mẫu | |
 | automation | tự động hóa | tự động hoá | One rule = “quy tắc tự động hóa” |
+| field | trường | nhãn dán | “Trường của bảng”, “Trường mới”; built-in ones are “trường có sẵn”. In code and the API a sticker |
+| state | tùy chọn | — | One choice of a field’s set of states; not “trạng thái”, which is status |
+| subtask | công việc con | — | “Thêm công việc con” |
+| comment | bình luận | — | |
+| cover | ảnh bìa | — | “Đặt làm ảnh bìa”, “Gỡ ảnh bìa” |
+| repeat | lặp lại | — | Values “Không lặp lại”, “Hằng ngày”, “Hằng tuần”, “Hằng tháng”; a repeating task is “công việc lặp lại” |
+| overdue | quá hạn | — | “Quá hạn · {date}” |
 | meeting | cuộc họp | buổi họp, phiên họp | Always with “cuộc” |
 | recording | bản ghi | bản thu âm, bản thu hình | Audio or video; Record = “Ghi” |
 | transcript | bản chép lời | phiên âm, bản ghi chép, bản ghi lời | Not “bản ghi” (that is the recording) |

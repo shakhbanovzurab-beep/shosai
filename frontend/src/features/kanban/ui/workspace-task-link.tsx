@@ -3,19 +3,19 @@ import { useTranslations } from "use-intl";
 
 import { Link } from "@/lib/navigation";
 
-import type { WorkspaceTaskRef } from "../domain/board";
+import type { TaskSpace } from "../domain/tasks-contract";
 
-/** On a card that shows a workspace task: which workspace it lives in, linking there. */
-export function WorkspaceTaskLink({ task }: { task: WorkspaceTaskRef }) {
+/** На карточке задачи пространства: в каком пространстве она живёт, ссылкой на его задачи. */
+export function WorkspaceTaskLink({ space }: { space: TaskSpace }) {
   const t = useTranslations("kanban");
   return (
     <Link
-      href={task.url}
+      href={`/app/w/${encodeURIComponent(space.workspace_slug)}/tasks`}
       onPointerDown={(event) => event.stopPropagation()}
       className="inline-flex w-fit items-center gap-1 rounded text-muted-foreground text-xs hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
     >
       <Building2 className="size-3" aria-hidden="true" />
-      <span dir="auto">{task.workspace_name}</span>
+      <span dir="auto">{space.workspace_name}</span>
       <span className="sr-only">{t("card.workspaceTask")}</span>
     </Link>
   );
