@@ -28,7 +28,14 @@
     "displayNameHint": "Leo sizi selamlarken ve yanıtlarında bu adı kullanır.",
     "workRole": "İşinizi en iyi ne tanımlıyor?",
     "workRoleHint": "Leo, örnekleri ve terimleri alanınıza göre seçmek için bunu kullanır.",
-    "workRolePlaceholder": "Seçin…"
+    "workRolePlaceholder": "Seçin…",
+    "timeZone": "Saat dilimi",
+    "timeZoneHint": "Toplantı saatleri ve tarihler bu dilimde gösterilir, Leo da süreleri buna göre hesaplar. “Otomatik” bu tarayıcıyı izler.",
+    "timeZoneAutomatic": "Otomatik",
+    "timeZoneAutomaticValue": "Otomatik ({zone})",
+    "timeZoneSearch": "Saat dilimi ara",
+    "timeZoneNoMatch": "Eşleşen saat dilimi yok",
+    "timeZoneMore": "Diğer saat dilimlerini ad veya şehirle arayın"
   },
   "workRoles": {
     "product_management": "Ürün yönetimi",

@@ -22,16 +22,13 @@ export interface SocialRegistration {
   country: string;
   language: string;
   consents: SocialConsents;
+  // Пояс браузера; незнакомый серверу он отбрасывает, регистрацию это не отклоняет.
+  timezone: string;
 }
 
 /** Первый вход через сервис: завести аккаунт с отмеченными согласиями и открыть сессию. */
-export function registerWithSocial({
-  ticket,
-  country,
-  language,
-  consents,
-}: SocialRegistration): Promise<SocialSession> {
-  return dataOf(apiClient.POST("/v1/auth/social/register", { body: { ticket, country, language, consents } }));
+export function registerWithSocial(registration: SocialRegistration): Promise<SocialSession> {
+  return dataOf(apiClient.POST("/v1/auth/social/register", { body: registration }));
 }
 
 /** Токен фирменного виджета Яндекса или Google — сервер сверяет его у провайдера и отдаёт билет. */

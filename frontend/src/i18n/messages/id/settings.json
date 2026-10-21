@@ -28,7 +28,14 @@
     "displayNameHint": "Dipakai saat Leo menyapa Anda dan dalam jawabannya.",
     "workRole": "Apa yang paling menggambarkan pekerjaan Anda?",
     "workRoleHint": "Leo memakainya untuk menyesuaikan contoh dan istilah dengan bidang Anda.",
-    "workRolePlaceholder": "Pilih…"
+    "workRolePlaceholder": "Pilih…",
+    "timeZone": "Zona waktu",
+    "timeZoneHint": "Waktu rapat dan tanggal ditampilkan dalam zona ini, dan Leo menghitung tenggat berdasarkannya. “Otomatis” mengikuti browser ini.",
+    "timeZoneAutomatic": "Otomatis",
+    "timeZoneAutomaticValue": "Otomatis ({zone})",
+    "timeZoneSearch": "Cari zona waktu",
+    "timeZoneNoMatch": "Tidak ada zona waktu yang cocok",
+    "timeZoneMore": "Cari zona waktu lain dengan nama atau kota"
   },
   "workRoles": {
     "product_management": "Manajemen produk",

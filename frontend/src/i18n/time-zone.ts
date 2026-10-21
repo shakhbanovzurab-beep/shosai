@@ -11,7 +11,8 @@ let browserZone: string | undefined;
 let profileZone: string | null = null;
 const listeners = new Set<() => void>();
 
-function browserTimeZone(): string {
+/** Пояс браузера: его кабинет сохраняет в профиль при регистрации и в режиме «Автоматически». */
+export function browserTimeZone(): string {
   browserZone ??= Intl.DateTimeFormat().resolvedOptions().timeZone;
   return browserZone;
 }

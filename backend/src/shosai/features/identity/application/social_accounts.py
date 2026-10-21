@@ -28,6 +28,7 @@ from shosai.features.identity.domain.accounts import AccountState, sign_in_refus
 from shosai.features.identity.domain.directory import email_hmac
 from shosai.features.identity.domain.emails import InvalidEmailError, is_disposable, normalize_email
 from shosai.features.identity.domain.homes import CountryCode, InvalidCountryError, home_for_country
+from shosai.features.identity.domain.profile import browser_timezone
 from shosai.features.identity.domain.registration import (
     CONSENT_VERSION,
     ConsentKind,
@@ -56,6 +57,8 @@ class SocialRegistration:
     country: str
     language: str
     consents: RegistrationConsents
+    # Пояс браузера: неизвестный отбрасывается, а не отклоняет регистрацию.
+    timezone: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -119,7 +122,7 @@ class SocialAccounts:
         if await services.directory.claim(address_hmac, user_id, home) is ClaimOutcome.TAKEN:
             raise errors.email_registered()
         async with services.transactions.begin(TenancyScope(home, user_id)) as session:
-            user = _new_user(user_id, address.value, claim, form.country, language)
+            user = _new_user(user_id, address.value, claim, form, language)
             session.add(user)
             await session.flush()
             for consent in _consents(user_id, form.consents, client):
@@ -147,12 +150,14 @@ def _checked(form: SocialRegistration) -> tuple[Home, str]:
     return home, language
 
 
-def _new_user(user_id: UUID, email: str, claim: ConsentClaim, country: str, language: str) -> User:
+def _new_user(
+    user_id: UUID, email: str, claim: ConsentClaim, form: SocialRegistration, language: str
+) -> User:
     name = (claim.display_name or email.partition("@")[0])[:NAME_LENGTH]
     verified_at = datetime.now(UTC) if claim.email_verified else None
     return User(
-        id=user_id, email=email, password_hash=None, full_name=name, country=country,
-        language=language, email_verified_at=verified_at,
+        id=user_id, email=email, password_hash=None, full_name=name, country=form.country,
+        language=language, timezone=browser_timezone(form.timezone), email_verified_at=verified_at,
     )  # fmt: skip
 
 

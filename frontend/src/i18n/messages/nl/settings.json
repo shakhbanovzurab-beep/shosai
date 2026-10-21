@@ -28,7 +28,14 @@
     "displayNameHint": "Leo gebruikt dit om je te begroeten en in antwoorden.",
     "workRole": "Wat beschrijft je werk het best?",
     "workRoleHint": "Leo stemt voorbeelden en termen hiermee af op jouw vakgebied.",
-    "workRolePlaceholder": "Kiezen…"
+    "workRolePlaceholder": "Kiezen…",
+    "timeZone": "Tijdzone",
+    "timeZoneHint": "Vergadertijden en datums worden in deze zone getoond en Leo rekent deadlines ermee uit. ‘Automatisch’ volgt deze browser.",
+    "timeZoneAutomatic": "Automatisch",
+    "timeZoneAutomaticValue": "Automatisch ({zone})",
+    "timeZoneSearch": "Tijdzone zoeken",
+    "timeZoneNoMatch": "Geen tijdzones gevonden",
+    "timeZoneMore": "Zoek andere tijdzones op naam of stad"
   },
   "workRoles": {
     "product_management": "Productmanagement",

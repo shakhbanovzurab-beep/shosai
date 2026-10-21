@@ -62,7 +62,7 @@ async def test_a_new_person_consents_then_signs_in_again_by_the_same_account(
         registered = await bench.http.post(
             "/v1/auth/social/register",
             json={"ticket": first["social_consent"], "country": "DE", "language": "de",
-                  "consents": CONSENTS},
+                  "consents": CONSENTS, "timezone": "Europe/Berlin"},
         )  # fmt: skip
         again = await come_back(bench, Provider.GOOGLE, "new")
         completed = await bench.http.post(
@@ -77,10 +77,11 @@ async def test_a_new_person_consents_then_signs_in_again_by_the_same_account(
     assert (reused.status_code, reused.json()["error"]["code"]) == (401, "social_state_invalid")
     [user] = await fetch_rows(
         run_slot.claimed.connections[Home.EU],
-        "SELECT email, password_hash, email_verified_at IS NOT NULL AS verified FROM users",
+        "SELECT email, password_hash, email_verified_at IS NOT NULL AS verified, timezone "
+        "FROM users",
     )
-    assert (user["email"], user["password_hash"], user["verified"]) == (
-        "new.person@example.com", None, True,
+    assert (user["email"], user["password_hash"], user["verified"], user["timezone"]) == (
+        "new.person@example.com", None, True, "Europe/Berlin",
     )  # fmt: skip
     links = await fetch_rows(
         run_slot.claimed.connections[Home.EU], "SELECT provider, subject FROM user_identities"

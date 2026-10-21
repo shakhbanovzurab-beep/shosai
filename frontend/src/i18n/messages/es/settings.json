@@ -28,7 +28,14 @@
     "displayNameHint": "Leo lo usa al saludarte y en sus respuestas.",
     "workRole": "¿Qué describe mejor tu trabajo?",
     "workRoleHint": "Leo lo usa para adaptar los ejemplos y los términos a tu campo.",
-    "workRolePlaceholder": "Elige…"
+    "workRolePlaceholder": "Elige…",
+    "timeZone": "Zona horaria",
+    "timeZoneHint": "Las horas de las reuniones y las fechas se muestran en esta zona, y Leo calcula los plazos con ella. «Automática» sigue a este navegador.",
+    "timeZoneAutomatic": "Automática",
+    "timeZoneAutomaticValue": "Automática ({zone})",
+    "timeZoneSearch": "Buscar zona horaria",
+    "timeZoneNoMatch": "Ninguna zona horaria coincide",
+    "timeZoneMore": "Busca otras zonas por nombre o ciudad"
   },
   "workRoles": {
     "product_management": "Gestión de producto",

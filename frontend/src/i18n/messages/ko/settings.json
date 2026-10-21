@@ -28,7 +28,14 @@
     "displayNameHint": "Leo가 인사하거나 답변할 때 사용해요.",
     "workRole": "어떤 일을 하시나요?",
     "workRoleHint": "Leo가 하시는 분야에 맞는 예시와 용어를 사용해요.",
-    "workRolePlaceholder": "선택…"
+    "workRolePlaceholder": "선택…",
+    "timeZone": "시간대",
+    "timeZoneHint": "회의 시간과 날짜가 이 시간대로 표시되며, Leo는 이를 기준으로 기한을 계산해요. ‘자동’은 이 브라우저를 따라요.",
+    "timeZoneAutomatic": "자동",
+    "timeZoneAutomaticValue": "자동({zone})",
+    "timeZoneSearch": "시간대 검색",
+    "timeZoneNoMatch": "일치하는 시간대가 없어요",
+    "timeZoneMore": "다른 시간대는 이름이나 도시로 검색해 보세요"
   },
   "workRoles": {
     "product_management": "제품 관리",

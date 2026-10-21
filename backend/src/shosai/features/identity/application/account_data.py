@@ -65,7 +65,7 @@ HOME_ROWS: Final = (
     PersonRows(
         User.metadata.tables["users"],
         ("id", "email", "full_name", "display_name", "work_role", "country", "language",
-         "timezone", "state", "email_verified_at", "last_login_at", "created_at"),
+         "timezone", "timezone_auto", "state", "email_verified_at", "last_login_at", "created_at"),
         key="id", person="id",
     ),
     PersonRows(

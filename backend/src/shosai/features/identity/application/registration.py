@@ -31,6 +31,7 @@ from shosai.features.identity.domain.emails import (
 )
 from shosai.features.identity.domain.homes import CountryCode, InvalidCountryError, home_for_country
 from shosai.features.identity.domain.passwords import new_password_problem
+from shosai.features.identity.domain.profile import browser_timezone
 from shosai.features.identity.domain.registration import (
     MAX_RESENDS,
     PENDING_LIFETIME,
@@ -81,6 +82,8 @@ class RegistrationForm:
     language: str
     consents: RegistrationConsents
     captcha_token: str | None
+    # Пояс браузера: неизвестный отбрасывается, а не отклоняет регистрацию.
+    timezone: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -141,6 +144,7 @@ class Registration:
                     id=registration_id, email=email.value, email_hmac=address_hmac,
                     password_hash=password_hash, full_name=form.full_name.strip(),
                     country=form.country, language=language,
+                    timezone=browser_timezone(form.timezone),
                     consent_cross_border=form.consents.cross_border,
                     consent_marketing=form.consents.marketing, consent_ip=client.ip,
                     consent_user_agent=client.user_agent,

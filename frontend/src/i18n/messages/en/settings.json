@@ -28,7 +28,14 @@
     "displayNameHint": "Used when Leo greets you and in answers.",
     "workRole": "What best describes your work?",
     "workRoleHint": "Leo uses it to pitch examples and terms to your field.",
-    "workRolePlaceholder": "Choose…"
+    "workRolePlaceholder": "Choose…",
+    "timeZone": "Time zone",
+    "timeZoneHint": "Meeting times and dates show in this zone, and Leo counts deadlines by it. Automatic follows this browser.",
+    "timeZoneAutomatic": "Automatic",
+    "timeZoneAutomaticValue": "Automatic ({zone})",
+    "timeZoneSearch": "Search time zones",
+    "timeZoneNoMatch": "No time zones match",
+    "timeZoneMore": "Find other zones by name or city"
   },
   "workRoles": {
     "product_management": "Product management",

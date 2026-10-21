@@ -21,8 +21,8 @@ export function sessionState(): SessionState {
 
 export function updateSession(change: Partial<SessionState>): void {
   state = { ...state, ...change };
-  // Пояс профиля — пояс всего кабинета; без профиля (выход) снова пояс браузера.
-  if ("me" in change) setProfileTimeZone(change.me?.timezone);
+  // Пояс профиля — пояс всего кабинета; в режиме «Автоматически» и без профиля (выход) — пояс браузера.
+  if ("me" in change) setProfileTimeZone(change.me?.timezone_auto === false ? change.me.timezone : null);
   for (const listener of listeners) listener();
 }
 

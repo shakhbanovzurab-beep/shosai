@@ -10242,6 +10242,11 @@
             ],
             "title": "Timezone"
           },
+          "timezone_auto": {
+            "type": "boolean",
+            "title": "Timezone Auto",
+            "description": "Whether the zone follows the browser; false once the person fixed one."
+          },
           "country": {
             "anyOf": [
               {
@@ -10276,6 +10281,7 @@
           "avatar_url",
           "language",
           "timezone",
+          "timezone_auto",
           "country",
           "home",
           "consents",
@@ -10345,6 +10351,18 @@
               }
             ],
             "title": "Timezone"
+          },
+          "timezone_auto": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone Auto",
+            "description": "True: follow the browser; false: keep `timezone` as chosen."
           },
           "consents": {
             "anyOf": [
@@ -12594,6 +12612,19 @@
               }
             ],
             "title": "Captcha Token"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone",
+            "description": "The browser's IANA zone; unknown is ignored."
           }
         },
         "additionalProperties": false,
@@ -14043,6 +14074,19 @@
           },
           "consents": {
             "$ref": "#/components/schemas/Consents-Input"
+          },
+          "timezone": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timezone",
+            "description": "The browser's IANA zone; unknown is ignored."
           }
         },
         "additionalProperties": false,

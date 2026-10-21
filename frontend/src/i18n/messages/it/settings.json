@@ -28,7 +28,14 @@
     "displayNameHint": "Leo lo usa per salutarti e nelle risposte.",
     "workRole": "Cosa descrive meglio il tuo lavoro?",
     "workRoleHint": "Leo lo usa per adattare esempi e termini al tuo settore.",
-    "workRolePlaceholder": "Scegli…"
+    "workRolePlaceholder": "Scegli…",
+    "timeZone": "Fuso orario",
+    "timeZoneHint": "Gli orari delle riunioni e le date sono mostrati in questo fuso, e Leo calcola le scadenze su di esso. «Automatico» segue questo browser.",
+    "timeZoneAutomatic": "Automatico",
+    "timeZoneAutomaticValue": "Automatico ({zone})",
+    "timeZoneSearch": "Cerca fuso orario",
+    "timeZoneNoMatch": "Nessun fuso orario corrisponde",
+    "timeZoneMore": "Cerca altri fusi per nome o città"
   },
   "workRoles": {
     "product_management": "Gestione del prodotto",

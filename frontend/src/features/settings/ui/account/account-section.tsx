@@ -12,6 +12,7 @@ import { AutosaveInput } from "./autosave-input";
 import { AvatarEditor } from "./avatar-editor";
 import { DeleteAccount } from "./delete-account";
 import { Devices } from "./devices";
+import { TimeZoneField } from "./time-zone-field";
 
 /** Settings › Account: профиль, фото, устройства и удаление — всё из identity (`/v1/me*`). */
 export function AccountSection({ me }: { me: Me }) {
@@ -55,6 +56,9 @@ export function AccountSection({ me }: { me: Me }) {
               </SelectGroup>
             </SelectContent>
           </Select>
+        </SettingsRow>
+        <SettingsRow title={t("profile.timeZone")} description={t("profile.timeZoneHint")} htmlFor="settings-time-zone">
+          <TimeZoneField id="settings-time-zone" me={me} />
         </SettingsRow>
       </SettingsGroup>
       <Devices />

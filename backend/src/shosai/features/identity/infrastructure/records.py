@@ -20,6 +20,7 @@ from sqlalchemy import (
     Uuid,
     func,
     text,
+    true,
 )
 from sqlalchemy.dialects.postgresql import INET
 from sqlalchemy.orm import Mapped, mapped_column
@@ -79,6 +80,8 @@ class User(ModelBase):
     country: Mapped[str | None] = mapped_column(Text)
     language: Mapped[str] = mapped_column(Text)
     timezone: Mapped[str | None] = mapped_column(Text)
+    # Пояс следует за браузером, пока человек не выбрал его сам (ADR 0058).
+    timezone_auto: Mapped[bool] = mapped_column(Boolean, server_default=true())
     avatar_key: Mapped[str | None] = mapped_column(Text)
     state: Mapped[str] = mapped_column(Text, server_default="active")
     token_version: Mapped[int] = mapped_column(Integer, server_default="0")
@@ -125,6 +128,9 @@ class PendingRegistration(ModelBase):
         CheckConstraint("country ~ '^[A-Z]{2}$'", name="country_code"),
         CheckConstraint("length(full_name) BETWEEN 1 AND 80", name="full_name_length"),
         CheckConstraint(f"language IN ({LANGUAGES})", name="language_known"),
+        CheckConstraint(
+            "timezone IS NULL OR length(timezone) BETWEEN 1 AND 64", name="timezone_length"
+        ),
         Index("ix_pending_registrations_expires", "expires_at"),
     )
 
@@ -135,6 +141,8 @@ class PendingRegistration(ModelBase):
     full_name: Mapped[str] = mapped_column(Text)
     country: Mapped[str] = mapped_column(Text)
     language: Mapped[str] = mapped_column(Text)
+    # Пояс браузера, из которого человек зарегистрировался; неизвестный не хранится.
+    timezone: Mapped[str | None] = mapped_column(Text)
     consent_cross_border: Mapped[bool] = mapped_column(Boolean)
     consent_marketing: Mapped[bool] = mapped_column(Boolean)
     consent_ip: Mapped[str | None] = mapped_column(INET)

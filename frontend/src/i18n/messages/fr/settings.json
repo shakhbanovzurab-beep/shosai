@@ -28,7 +28,14 @@
     "displayNameHint": "Utilisé quand Leo vous salue et dans ses réponses.",
     "workRole": "Qu’est-ce qui décrit le mieux votre travail ?",
     "workRoleHint": "Leo s’en sert pour adapter ses exemples et son vocabulaire à votre domaine.",
-    "workRolePlaceholder": "Choisir…"
+    "workRolePlaceholder": "Choisir…",
+    "timeZone": "Fuseau horaire",
+    "timeZoneHint": "Les heures des réunions et les dates s’affichent dans ce fuseau, et Leo calcule les échéances avec lui. « Automatique » suit ce navigateur.",
+    "timeZoneAutomatic": "Automatique",
+    "timeZoneAutomaticValue": "Automatique ({zone})",
+    "timeZoneSearch": "Rechercher un fuseau horaire",
+    "timeZoneNoMatch": "Aucun fuseau horaire ne correspond",
+    "timeZoneMore": "Recherchez d’autres fuseaux par nom ou par ville"
   },
   "workRoles": {
     "product_management": "Gestion de produit",

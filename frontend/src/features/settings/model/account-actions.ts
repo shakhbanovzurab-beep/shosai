@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 
-import { clearAvatar, saveProfile, setAvatar } from "@/features/identity/model/profile";
+import { clearAvatar, saveProfile, saveTimeZone, setAvatar } from "@/features/identity/model/profile";
 import { formatBytes } from "@/i18n/format-units";
 import { apiErrorDescription } from "@/lib/api/error-description";
 import { errorMessage } from "@/lib/errors";
@@ -41,6 +41,15 @@ export async function saveProfileField(change: Parameters<typeof saveProfile>[0]
   } catch (error) {
     toast.error(t("saveFailed"), { description: apiErrorDescription(error) });
     throw error;
+  }
+}
+
+/** Пояс из Settings › Account: `null` — «Автоматически». Показан сразу, при отказе возвращается прежний. */
+export async function saveTimeZoneChoice(zone: string | null, t: SettingsWords) {
+  try {
+    await saveTimeZone(zone);
+  } catch (error) {
+    toast.error(t("saveFailed"), { description: apiErrorDescription(error) });
   }
 }
 

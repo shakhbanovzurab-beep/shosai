@@ -119,7 +119,7 @@ class Verification:
         user = User(
             id=user_id, email=pending.email, password_hash=pending.password_hash,
             full_name=pending.full_name, country=pending.country, language=pending.language,
-            email_verified_at=now,
+            timezone=pending.timezone, email_verified_at=now,
         )  # fmt: skip
         session.add(user)
         await session.flush()

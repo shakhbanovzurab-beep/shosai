@@ -28,7 +28,14 @@
     "displayNameHint": "Leo 向你打招呼和回答時會用到。",
     "workRole": "哪一項最符合你的工作？",
     "workRoleHint": "Leo 會據此挑選貼近你領域的範例和用語。",
-    "workRolePlaceholder": "選擇…"
+    "workRolePlaceholder": "選擇…",
+    "timeZone": "時區",
+    "timeZoneHint": "會議時間和日期會以此時區顯示，Leo 也依此計算期限。「自動」會跟隨這個瀏覽器。",
+    "timeZoneAutomatic": "自動",
+    "timeZoneAutomaticValue": "自動（{zone}）",
+    "timeZoneSearch": "搜尋時區",
+    "timeZoneNoMatch": "沒有符合的時區",
+    "timeZoneMore": "其他時區請以名稱或城市搜尋"
   },
   "workRoles": {
     "product_management": "產品管理",

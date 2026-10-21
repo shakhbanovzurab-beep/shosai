@@ -28,7 +28,14 @@
     "displayNameHint": "Leo आपका स्वागत करते समय और जवाबों में यही नाम इस्तेमाल करता है।",
     "workRole": "आप किस क्षेत्र में काम करते हैं?",
     "workRoleHint": "Leo इसके हिसाब से आपके क्षेत्र के उदाहरण और शब्द चुनता है।",
-    "workRolePlaceholder": "चुनें…"
+    "workRolePlaceholder": "चुनें…",
+    "timeZone": "समय क्षेत्र",
+    "timeZoneHint": "मीटिंग का समय और तारीखें इसी क्षेत्र में दिखती हैं, और Leo समय-सीमाएँ इसी से गिनता है। “स्वचालित” इस ब्राउज़र का अनुसरण करता है।",
+    "timeZoneAutomatic": "स्वचालित",
+    "timeZoneAutomaticValue": "स्वचालित ({zone})",
+    "timeZoneSearch": "समय क्षेत्र खोजें",
+    "timeZoneNoMatch": "कोई समय क्षेत्र मेल नहीं खाता",
+    "timeZoneMore": "दूसरे समय क्षेत्र नाम या शहर से खोजें"
   },
   "workRoles": {
     "product_management": "प्रोडक्ट मैनेजमेंट",

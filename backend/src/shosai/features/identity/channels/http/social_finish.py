@@ -40,6 +40,9 @@ class SocialRegisterRequest(BaseModel):
     country: Annotated[str, Field(pattern=r"^[A-Z]{2}$")]
     language: Annotated[str, Field(min_length=2, max_length=16)]
     consents: Consents
+    timezone: Annotated[
+        str | None, Field(max_length=64, description="The browser's IANA zone; unknown is ignored.")
+    ] = None
 
 
 class SocialSession(BaseModel):
@@ -93,6 +96,7 @@ def build_social_finish_router(
                 cross_border=body.consents.cross_border,
                 marketing=body.consents.marketing,
             ),
+            timezone=body.timezone,
         )
         tokens, next_path = await accounts.register(form, client)
         return session(response, tokens, next_path)

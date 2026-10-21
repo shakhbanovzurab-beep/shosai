@@ -7,7 +7,7 @@ import { clearSession, updateSession } from "./session-store";
 
 const browserZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-const person = (timezone: string | null): Me => ({
+const person = (timezone: string | null, timezoneAuto = false): Me => ({
   id: "00000000-0000-7000-8000-000000000001",
   email: "person@example.org",
   full_name: "Person",
@@ -15,6 +15,7 @@ const person = (timezone: string | null): Me => ({
   work_role: null,
   avatar_url: null,
   timezone,
+  timezone_auto: timezoneAuto,
   country: "NL",
   language: "en",
   home: "eu",
@@ -25,7 +26,7 @@ const person = (timezone: string | null): Me => ({
 afterEach(() => clearSession());
 
 describe("session store", () => {
-  it("gives the cabinet the profile's time zone, and the browser's back on sign-out", () => {
+  it("gives the cabinet the zone the person fixed, and the browser's back on sign-out", () => {
     updateSession({ me: person("Asia/Tokyo") });
     expect(cabinetTimeZone()).toBe("Asia/Tokyo");
 
@@ -33,7 +34,10 @@ describe("session store", () => {
     expect(cabinetTimeZone()).toBe(browserZone);
   });
 
-  it("keeps the browser's zone for a profile without one", () => {
+  it("keeps the browser's zone in the automatic mode and for a profile without one", () => {
+    updateSession({ me: person("Asia/Tokyo", true) });
+    expect(cabinetTimeZone()).toBe(browserZone);
+
     updateSession({ me: person(null) });
     expect(cabinetTimeZone()).toBe(browserZone);
   });

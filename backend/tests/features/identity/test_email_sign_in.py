@@ -73,17 +73,21 @@ async def test_a_new_person_gets_an_account_in_the_home_of_the_confirmed_country
         ticket = verified.json()["consent_ticket"]
         registered = await bench.http.post(
             "/v1/auth/social/register",
-            json={"ticket": ticket, "country": "NL", "language": "nl", "consents": CONSENTS},
-        )
+            json={"ticket": ticket, "country": "NL", "language": "nl", "consents": CONSENTS,
+                  "timezone": "Etc/Unknown"},
+        )  # fmt: skip
 
     assert (verified.status_code, verified.json()["session"]) == (200, None)
     assert registered.status_code == 200, registered.text
     assert registered.json()["next"] == "/app/notes"
     [user] = await fetch_rows(
         run_slot.claimed.connections[Home.EU],
-        "SELECT email, password_hash, email_verified_at IS NOT NULL AS verified FROM users",
+        "SELECT email, password_hash, email_verified_at IS NOT NULL AS verified, timezone "
+        "FROM users",
     )
     assert (user["email"], user["password_hash"], user["verified"]) == (NEWCOMER, None, True)
+    # Браузер, не знающий своего пояса, присылает Etc/Unknown: профиль остаётся без пояса.
+    assert user["timezone"] is None
     assert (
         await fetch_rows(run_slot.claimed.connections[Home.EU], "SELECT 1 FROM user_identities")
         == []

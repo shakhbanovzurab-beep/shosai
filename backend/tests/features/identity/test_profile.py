@@ -93,6 +93,30 @@ async def test_the_profile_shows_and_changes_the_persons_fields(
     assert cleared.json()["timezone"] == "Europe/Moscow"
 
 
+async def test_a_chosen_zone_is_fixed_until_the_person_picks_automatic_again(
+    homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
+) -> None:
+    async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
+        headers = await signed_in(bench, run_slot)
+        before = (await bench.http.get("/v1/me", headers=headers)).json()
+        fixed = await bench.http.patch(
+            "/v1/me", headers=headers, json={"timezone": "Asia/Tokyo", "timezone_auto": False}
+        )
+        renamed = await bench.http.patch("/v1/me", headers=headers, json={"full_name": "Anna P."})
+        unset = await bench.http.patch("/v1/me", headers=headers, json={"timezone_auto": None})
+        automatic = await bench.http.patch(
+            "/v1/me", headers=headers, json={"timezone": "Europe/Berlin", "timezone_auto": True}
+        )
+
+    assert before["timezone_auto"] is True
+    assert (fixed.json()["timezone"], fixed.json()["timezone_auto"]) == ("Asia/Tokyo", False)
+    assert (renamed.json()["timezone"], renamed.json()["timezone_auto"]) == ("Asia/Tokyo", False)
+    assert (unset.status_code, unset.json()["error"]["code"]) == (422, "unknown_timezone_mode")
+    assert (automatic.json()["timezone"], automatic.json()["timezone_auto"]) == (
+        "Europe/Berlin", True,
+    )  # fmt: skip
+
+
 async def test_a_consent_change_is_one_journal_row_seen_by_the_next_reader(
     homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
 ) -> None:

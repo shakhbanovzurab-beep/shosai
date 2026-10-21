@@ -28,7 +28,14 @@
     "displayNameHint": "Leo のあいさつや回答で使われます。",
     "workRole": "職種",
     "workRoleHint": "Leo が分野に合った例や用語を選ぶのに使います。",
-    "workRolePlaceholder": "選択…"
+    "workRolePlaceholder": "選択…",
+    "timeZone": "タイムゾーン",
+    "timeZoneHint": "会議の時刻や日付はこのタイムゾーンで表示され、Leo は期限をこれに基づいて計算します。「自動」はこのブラウザに合わせます。",
+    "timeZoneAutomatic": "自動",
+    "timeZoneAutomaticValue": "自動（{zone}）",
+    "timeZoneSearch": "タイムゾーンを検索",
+    "timeZoneNoMatch": "一致するタイムゾーンはありません",
+    "timeZoneMore": "ほかのタイムゾーンは名前か都市名で検索してください"
   },
   "workRoles": {
     "product_management": "プロダクトマネジメント",

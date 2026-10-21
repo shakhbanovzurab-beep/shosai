@@ -64,6 +64,7 @@ class ProfileChange:
     work_role: str | None = None
     language: str | None = None
     timezone: str | None = None
+    timezone_auto: bool | None = None
     consents: Mapping[ConsentKind, bool] = field(default_factory=dict)
     warning_confirmed: bool = False
 
@@ -177,6 +178,12 @@ async def _user(session: AsyncSession, user_id: UUID, *, lock: bool = False) -> 
 
 
 def _apply_fields(user: User, change: ProfileChange) -> None:
+    _apply_names(user, change)
+    _apply_place(user, change)
+    user.updated_at = datetime.now(UTC)
+
+
+def _apply_names(user: User, change: ProfileChange) -> None:
     if "full_name" in change.names:
         name = clean_name(change.full_name or "")
         if name is None:
@@ -188,6 +195,10 @@ def _apply_fields(user: User, change: ProfileChange) -> None:
         if change.work_role is not None and change.work_role not in WORK_ROLES:
             raise errors.invalid(ProfileProblem.UNKNOWN_WORK_ROLE.value)
         user.work_role = change.work_role
+
+
+def _apply_place(user: User, change: ProfileChange) -> None:
+    """The language, the time zone and whether the zone follows the browser."""
     if "language" in change.names:
         language = normalize_language(change.language)
         if language is None:
@@ -197,4 +208,7 @@ def _apply_fields(user: User, change: ProfileChange) -> None:
         if change.timezone is not None and not valid_timezone(change.timezone):
             raise errors.invalid(ProfileProblem.UNKNOWN_TIMEZONE.value)
         user.timezone = change.timezone
-    user.updated_at = datetime.now(UTC)
+    if "timezone_auto" in change.names:
+        if change.timezone_auto is None:
+            raise errors.invalid(ProfileProblem.UNKNOWN_TIMEZONE_MODE.value)
+        user.timezone_auto = change.timezone_auto

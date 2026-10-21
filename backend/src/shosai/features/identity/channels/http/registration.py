@@ -57,6 +57,9 @@ class RegistrationRequest(BaseModel):
     language: Annotated[str, Field(min_length=2, max_length=16)]
     consents: Consents
     captcha_token: Annotated[str | None, Field(max_length=4096)] = None
+    timezone: Annotated[
+        str | None, Field(max_length=64, description="The browser's IANA zone; unknown is ignored.")
+    ] = None
 
 
 class RegistrationStartedResponse(BaseModel):
@@ -130,6 +133,7 @@ def build_registration_router(
                 marketing=body.consents.marketing,
             ),
             captcha_token=body.captcha_token,
+            timezone=body.timezone,
         )
         return _started(await registration.start(form, client))
 

@@ -3136,6 +3136,11 @@ export interface components {
             language: string;
             /** Timezone */
             timezone: string | null;
+            /**
+             * Timezone Auto
+             * @description Whether the zone follows the browser; false once the person fixed one.
+             */
+            timezone_auto: boolean;
             /** Country */
             country: string | null;
             /** Home */
@@ -3162,6 +3167,11 @@ export interface components {
             language?: string | null;
             /** Timezone */
             timezone?: string | null;
+            /**
+             * Timezone Auto
+             * @description True: follow the browser; false: keep `timezone` as chosen.
+             */
+            timezone_auto?: boolean | null;
             consents?: components["schemas"]["ConsentsPatch"] | null;
             /**
              * Cross Border Warning Confirmed
@@ -3947,6 +3957,11 @@ export interface components {
             consents: components["schemas"]["Consents-Input"];
             /** Captcha Token */
             captcha_token?: string | null;
+            /**
+             * Timezone
+             * @description The browser's IANA zone; unknown is ignored.
+             */
+            timezone?: string | null;
         };
         /**
          * RegistrationStartedResponse
@@ -4592,6 +4607,11 @@ export interface components {
             /** Language */
             language: string;
             consents: components["schemas"]["Consents-Input"];
+            /**
+             * Timezone
+             * @description The browser's IANA zone; unknown is ignored.
+             */
+            timezone?: string | null;
         };
         /**
          * SocialSession

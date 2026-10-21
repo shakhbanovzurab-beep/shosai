@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { browserTimeZone } from "@/i18n/time-zone";
 import { Link, useRouter } from "@/lib/navigation";
 
 import { consentsBody, consentsComplete, NO_CONSENTS } from "../domain/consents";
@@ -50,6 +51,7 @@ export function ConsentPanel({
         country,
         language,
         consents: consentsBody(consents, crossBorder),
+        timezone: browserTimeZone(),
       });
       if (outcome.kind === "done") router.replace(outcome.value);
       else setRefusal(outcome);

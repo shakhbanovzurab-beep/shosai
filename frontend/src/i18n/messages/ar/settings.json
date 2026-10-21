@@ -28,7 +28,14 @@
     "displayNameHint": "يُستخدم في تحية Leo وفي إجاباته.",
     "workRole": "ما المجال الذي يصف عملك أفضل وصف؟",
     "workRoleHint": "يستخدمه Leo لتكييف الأمثلة والمصطلحات مع مجالك.",
-    "workRolePlaceholder": "اختيار…"
+    "workRolePlaceholder": "اختيار…",
+    "timeZone": "المنطقة الزمنية",
+    "timeZoneHint": "تظهر أوقات الاجتماعات والتواريخ بهذه المنطقة، ويحسب Leo المواعيد النهائية وفقها. «تلقائي» يتبع هذا المتصفح.",
+    "timeZoneAutomatic": "تلقائي",
+    "timeZoneAutomaticValue": "تلقائي ({zone})",
+    "timeZoneSearch": "بحث عن منطقة زمنية",
+    "timeZoneNoMatch": "لا توجد مناطق زمنية مطابقة",
+    "timeZoneMore": "بحث عن مناطق زمنية أخرى بالاسم أو المدينة"
   },
   "workRoles": {
     "product_management": "إدارة المنتجات",

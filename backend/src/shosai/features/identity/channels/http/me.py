@@ -54,6 +54,9 @@ class Me(BaseModel):
     avatar_url: str | None
     language: str
     timezone: str | None
+    timezone_auto: bool = Field(
+        description="Whether the zone follows the browser; false once the person fixed one."
+    )
     country: str | None
     home: str
     consents: Consents
@@ -81,6 +84,9 @@ class MePatch(BaseModel):
     work_role: Annotated[str | None, Field(max_length=32)] = None
     language: Annotated[str | None, Field(max_length=16)] = None
     timezone: Annotated[str | None, Field(max_length=64)] = None
+    timezone_auto: bool | None = Field(
+        default=None, description="True: follow the browser; false: keep `timezone` as chosen."
+    )
     consents: ConsentsPatch | None = None
     # Отзыв трансграничного согласия — только после показанного предупреждения (ID-D2).
     cross_border_warning_confirmed: bool = False
@@ -93,7 +99,8 @@ def me_of(view: ProfileView) -> Me:
     return Me(
         id=user.id, email=user.email, full_name=user.full_name, display_name=user.display_name,
         work_role=user.work_role, avatar_url=view.avatar_url, language=user.language,
-        timezone=user.timezone, country=user.country, home=view.home.value,
+        timezone=user.timezone, timezone_auto=user.timezone_auto, country=user.country,
+        home=view.home.value,
         consents=Consents.model_validate(consents), created_at=user.created_at,
     )  # fmt: skip
 
@@ -118,7 +125,7 @@ def build_me_router(profiles: Profiles, ports: PortDirectory) -> APIRouter:
         change = ProfileChange(
             names=frozenset(body.model_fields_set - {"consents", "cross_border_warning_confirmed"}),
             full_name=body.full_name, display_name=body.display_name, work_role=body.work_role,
-            language=body.language, timezone=body.timezone,
+            language=body.language, timezone=body.timezone, timezone_auto=body.timezone_auto,
             consents={ConsentKind(kind): value for kind, value in consents.items()},
             warning_confirmed=body.cross_border_warning_confirmed,
         )  # fmt: skip

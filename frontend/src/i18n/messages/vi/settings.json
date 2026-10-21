@@ -28,7 +28,14 @@
     "displayNameHint": "Dùng khi Leo chào bạn và trong các câu trả lời.",
     "workRole": "Điều gì mô tả đúng nhất công việc của bạn?",
     "workRoleHint": "Leo dùng thông tin này để chọn ví dụ và thuật ngữ sát với lĩnh vực của bạn.",
-    "workRolePlaceholder": "Chọn…"
+    "workRolePlaceholder": "Chọn…",
+    "timeZone": "Múi giờ",
+    "timeZoneHint": "Giờ họp và ngày tháng hiển thị theo múi giờ này, và Leo tính hạn chót theo nó. “Tự động” theo trình duyệt này.",
+    "timeZoneAutomatic": "Tự động",
+    "timeZoneAutomaticValue": "Tự động ({zone})",
+    "timeZoneSearch": "Tìm múi giờ",
+    "timeZoneNoMatch": "Không có múi giờ nào phù hợp",
+    "timeZoneMore": "Tìm múi giờ khác theo tên hoặc thành phố"
   },
   "workRoles": {
     "product_management": "Quản lý sản phẩm",

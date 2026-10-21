@@ -1,3 +1,6 @@
+import { browserTimeZone } from "@/i18n/time-zone";
+import { ApiError } from "@/lib/api/errors";
+
 import { deleteAvatar, type MePatch, patchMe, putAvatar } from "../api/profile-api";
 import type { Me } from "../domain/session";
 import { sessionState, updateSession } from "./session-store";
@@ -43,6 +46,35 @@ export function saveConsents(consents: ConsentsPatch, warningConfirmed = false):
     (me) => ({ ...me, consents: { ...me.consents, ...given } }),
     () => patchMe({ consents, cross_border_warning_confirmed: warningConfirmed }),
   );
+}
+
+/**
+ * Пояс из Settings › Account: `null` — «Автоматически», пояс следует за браузером; выбранный вручную пояс
+ * фиксируется и больше сам не меняется (ADR 0058).
+ */
+export function saveTimeZone(zone: string | null): Promise<Me> {
+  const change =
+    zone === null ? { timezone: browserTimeZone(), timezone_auto: true } : { timezone: zone, timezone_auto: false };
+  return optimistic(
+    (me) => ({ ...me, ...change }),
+    () => patchMe({ ...change, cross_border_warning_confirmed: false }),
+  );
+}
+
+/**
+ * Вход в кабинет в режиме «Автоматически»: пояс браузера сохраняется в профиль, если отличается, — по нему
+ * сервер и Leo считают время человека. Кабинет в этом режиме и так печатает время в поясе браузера, поэтому
+ * отказ сервера здесь не мешает работе: профиль догонит браузер при следующем входе.
+ */
+export async function followBrowserZone(me: Me): Promise<void> {
+  const zone = browserTimeZone();
+  if (!me.timezone_auto || me.timezone === zone) return;
+  try {
+    updateSession({ me: await patchMe({ timezone: zone, cross_border_warning_confirmed: false }) });
+  } catch (error) {
+    // Сеть (TypeError) или отказ сервера (незнакомый ему пояс): пробуем при следующем входе.
+    if (!(error instanceof ApiError || error instanceof TypeError)) throw error;
+  }
 }
 
 /** Новый аватар; изображение браузер уже обрезал и уменьшил. */

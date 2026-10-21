@@ -13,6 +13,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from shosai.features.identity.domain.registration import ConsentKind
 
 NAME_LENGTH: Final = 80
+TIMEZONE_LENGTH: Final = 64
 # Роли из настроек кабинета (Settings › Account): по ним Leo подбирает тон ответов.
 WORK_ROLES: Final = frozenset(
     {
@@ -37,6 +38,7 @@ class ProfileProblem(StrEnum):
 
     UNKNOWN_WORK_ROLE = "unknown_work_role"
     UNKNOWN_TIMEZONE = "unknown_timezone"
+    UNKNOWN_TIMEZONE_MODE = "unknown_timezone_mode"
     BLANK_NAME = "blank_name"
     CONSENT_WARNING_REQUIRED = "consent_warning_required"
 
@@ -48,6 +50,13 @@ def valid_timezone(name: str) -> bool:
     except ZoneInfoNotFoundError, ValueError:
         return False
     return True
+
+
+def browser_timezone(name: str | None) -> str | None:
+    """The zone a browser reported, or None when it is not an IANA zone the server knows."""
+    if name is None or len(name) > TIMEZONE_LENGTH or not valid_timezone(name):
+        return None
+    return name
 
 
 def clean_name(name: str) -> str | None:

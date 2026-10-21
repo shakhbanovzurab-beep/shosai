@@ -28,7 +28,14 @@
     "displayNameHint": "Так Leo будет приветствовать вас и обращаться к вам в ответах.",
     "workRole": "Чем вы занимаетесь?",
     "workRoleHint": "Leo подбирает примеры и термины под вашу сферу.",
-    "workRolePlaceholder": "Выберите…"
+    "workRolePlaceholder": "Выберите…",
+    "timeZone": "Часовой пояс",
+    "timeZoneHint": "В нём показывается время встреч и даты, по нему Leo считает сроки. «Автоматически» — пояс этого браузера.",
+    "timeZoneAutomatic": "Автоматически",
+    "timeZoneAutomaticValue": "Автоматически ({zone})",
+    "timeZoneSearch": "Найти пояс",
+    "timeZoneNoMatch": "Подходящих поясов нет",
+    "timeZoneMore": "Другие пояса ищите по названию или городу"
   },
   "workRoles": {
     "product_management": "Управление продуктом",

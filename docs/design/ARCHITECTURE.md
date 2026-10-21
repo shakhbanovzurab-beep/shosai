@@ -267,6 +267,14 @@
   - UUIDv7 keys and monthly partitions: `transcript_segments`, `provider_costs`, `prompt_executions`, `usage_events`, `login_events`, `client_errors`, `agent_audit`, `agent_messages`, `agent_runs`, `agent_decisions`, `org_audit_events`;
   - partitions are kept by core (`core/db/partitions`): each parent's migration registers its policy (months ahead, months kept) in `partition_policies`, and a daily tick per home creates partitions two months ahead and drops expired ones through a function owned by the migration role;
   - retention by dropping partitions, except `usage_events`: its tombstones count toward the lifetime Free quota and live as long as the account ([ADR 0007](../adr/0007-usage-tombstones-kept-for-lifetime-quota.md)).
+- Time ([ADR 0058](../adr/0058-time-zones-the-persons-and-the-business-zone.md)):
+  - moments are stored as `timestamptz` in UTC;
+  - a person sees time in their zone — the profile's (`users.timezone`, saved from the browser at registration and kept
+    by the browser in the "Automatic" mode, fixed by a manual choice), the browser's when the profile has none; a value that
+    is a calendar day (a due date, an invoice day) keeps its day in every zone;
+  - every daily and monthly total the server keeps — revenue and payments, AI spend and its limits, usage periods,
+    reports — counts its days and months in the business zone, a platform setting (`BUSINESS_TIME_ZONE`,
+    `Europe/Moscow`), never in UTC, a browser's or a profile's zone; the admin panel shows dates in it, labelled "МСК".
 - Every store is declared authoritative (with acknowledgement point, RPO, RTO) or derived (with source and cursor).
 - Derived stores are rebuildable:
   - Qdrant — cursor `sessions.indexed_upto_seq` + build version;
@@ -713,6 +721,7 @@ Versions are the latest stable releases as of 2026-09-30, the starting point for
 | Decision | Why | Cost | Revisit when |
 |---|---|---|---|
 | One compute plane in the EU, two data homes | AI reachable directly; one deployment and one release; audio does not cross the border; clients keep one base URL | Russian requests spend 180 ms in the DB; derived data of Russian users in the EU; the RU link stops Russian users | a lawyer rules derived copies abroad inadmissible; p95 cabinet reads from Russia > 300 ms; link availability < 99.9%/month → move compute for Russian users next to their DB |
+| A person's zone in the cabinet; one business zone, Europe/Moscow, for the server's day and month totals ([ADR 0058](../adr/0058-time-zones-the-persons-and-the-business-zone.md)) | a person reads their own clock; the business reads its days in Moscow, and every operator sees the same day | totals no longer align with UTC days; a person's "today" and the business day differ outside Moscow's zone | the business moves its accounting to another zone |
 | Directory with the home in the token | one login without shared primary data; directory off the request path | registration and transfer depend on the EU DB; 60-s cache → transfer bumps token version | email HMAC ruled personal data that cannot leave Russia → separate logins per home |
 | Transcript line: seq, durable Redis queue before display, 500-ms batches | inv-6 and nfr-9 without a DB next to the plane; ≈ 4 held connections instead of 62 | ≈ 2 ms to display; up to 1 s to the DB; Redis becomes part of capture durability | compute moves next to the Russian DB → insert before display; Redis loses data on failover more than once a quarter |
 | PgBouncer and one pool per database per process | pool sum under the server limit | transaction mode forbids session-bound features (prepared statements, session locks, LISTEN) — each use must be checked | the managed database provides a built-in pooler |

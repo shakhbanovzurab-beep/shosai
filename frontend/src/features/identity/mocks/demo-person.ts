@@ -18,6 +18,7 @@ let person: Omit<Me, "language"> = {
   work_role: null,
   avatar_url: null,
   timezone: "Europe/Amsterdam",
+  timezone_auto: true,
   country: "NL",
   home: "eu",
   consents: { personal_data: true, cross_border: true, marketing: false, improve_models: false, share_location: false },
@@ -37,6 +38,8 @@ export function applyPatch(change: MePatch): Me {
     full_name: change.full_name ?? person.full_name,
     display_name: change.display_name ?? person.display_name,
     work_role: change.work_role ?? person.work_role,
+    timezone: change.timezone === undefined ? person.timezone : change.timezone,
+    timezone_auto: change.timezone_auto ?? person.timezone_auto,
     consents: { ...person.consents, ...consents },
   };
   return demoMe();

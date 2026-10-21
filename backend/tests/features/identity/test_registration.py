@@ -85,6 +85,32 @@ async def test_a_russian_registration_creates_one_account_in_its_home_only(
     assert await rows(run_slot, Home.EU, "SELECT id FROM users") == []
 
 
+async def test_the_browsers_zone_becomes_the_profiles_and_an_unknown_one_is_dropped(
+    homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
+) -> None:
+    zones = {EMAIL: "Europe/Moscow", "boris@example.com": "Mars/Base"}
+    async with registration_bench(homes.transactions, valkey, redis_cache) as bench:
+        started = [
+            await register(bench.http, {**form(email), "timezone": zone})
+            for email, zone in zones.items()
+        ]
+        codes = await mailed_codes(run_slot, bench.key_ring, Home.RU)
+        for registration_id, code in zip(started, codes, strict=True):
+            verified = await bench.http.post(
+                "/v1/auth/register/verify",
+                json={"registration_id": str(registration_id), "code": code},
+            )
+            assert verified.status_code == 201, verified.text
+
+    accounts = await rows(
+        run_slot, Home.RU, "SELECT email, timezone, timezone_auto FROM users ORDER BY email"
+    )
+    assert accounts == [
+        {"email": EMAIL, "timezone": "Europe/Moscow", "timezone_auto": True},
+        {"email": "boris@example.com", "timezone": None, "timezone_auto": True},
+    ]
+
+
 async def test_two_homes_confirming_one_address_at_once_make_one_account(
     homes: DatabaseAccess, run_slot: RunSlot, valkey: Redis, redis_cache: Redis
 ) -> None:

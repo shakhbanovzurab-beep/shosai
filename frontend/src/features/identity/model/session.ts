@@ -3,6 +3,7 @@ import { readClientCookie } from "@/lib/cookie.client";
 
 import { endSession, readMe, refreshSession } from "../api/session-api";
 import { CSRF_COOKIE, type Me } from "../domain/session";
+import { followBrowserZone } from "./profile";
 import { clearSession, sessionState, updateSession } from "./session-store";
 import { exclusively, listenToTabs, tellTabs } from "./session-tabs";
 
@@ -56,6 +57,13 @@ function signedOut(broadcast: boolean): null {
   return null;
 }
 
+// Вход в кабинет: профиль, а в режиме «Автоматически» — пояс браузера в профиль, не задерживая вход.
+async function enter(): Promise<Me> {
+  const me = await loadMe();
+  void followBrowserZone(me);
+  return me;
+}
+
 /** Загрузить вошедшего человека заново: после входа, смены профиля или языка. */
 export async function loadMe(): Promise<Me> {
   const me = await readMe();
@@ -71,7 +79,7 @@ export function startSession(): Promise<Me | null> {
   listenToTabs((message) => (message.kind === "token" ? adoptToken(message.token, false) : signedOut(false)));
   // Провал сети или сервера не запоминается: следующая навигация пробует снова.
   started ??= renewSession(null)
-    .then((token) => (token === null ? null : loadMe()))
+    .then((token) => (token === null ? null : enter()))
     .catch((error: unknown) => {
       started = null;
       throw error;
@@ -82,7 +90,7 @@ export function startSession(): Promise<Me | null> {
 /** Принять токен входа этой вкладки, загрузить профиль и сообщить остальным вкладкам. */
 export async function signedIn(token: string): Promise<Me> {
   adoptToken(token, true);
-  const me = loadMe();
+  const me = enter();
   started = me;
   return me;
 }
