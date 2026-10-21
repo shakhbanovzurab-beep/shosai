@@ -100,5 +100,34 @@
     "loading": "Yorumlar yükleniyor…",
     "failed": "Yorumlar yüklenemedi",
     "earlierFailed": "Önceki yorumlar yüklenemedi"
+  },
+  "attachments": {
+    "label": "Ekler",
+    "attach": "Dosya ekle",
+    "fromFiles": "Dosyalarımdan",
+    "drop": "Eklemek için dosyaları buraya bırakın",
+    "empty": "Henüz ek yok. Bir dosya ekleyin veya buraya bırakın.",
+    "limit": "Dosya başına en fazla {size}.",
+    "added": "{name}, {date}",
+    "cover": "Kapak",
+    "makeCover": "Kapak yap",
+    "removeCover": "Kapağı kaldır",
+    "download": "İndir",
+    "delete": "Sil",
+    "actions": "“{name}” için işlemler",
+    "deleted": "“{name}” silindi",
+    "downloadFailed": "“{name}” indirilemedi",
+    "uploading": "Yükleniyor… {sent} / {total}",
+    "copying": "Kopya ekleniyor…",
+    "cancel": "“{name}” yüklemesini iptal et",
+    "dismiss": "“{name}” dosyasını gizle",
+    "failed": "Bu dosya eklenemedi",
+    "full": "Bir görevde en fazla {max, number} ek olabilir.",
+    "picker": {
+      "title": "Dosyalarımdan ekle",
+      "label": "Dosyalarınız",
+      "hint": "Göreve bir kopya eklenir. Dosya yöneticisindeki dosya olduğu gibi kalır.",
+      "attach": "{count, plural, one {# dosya ekle} other {# dosya ekle}}"
+    }
   }
 }

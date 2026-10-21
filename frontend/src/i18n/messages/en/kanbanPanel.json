@@ -100,5 +100,34 @@
     "loading": "Loading comments…",
     "failed": "Couldn’t load the comments",
     "earlierFailed": "Couldn’t load earlier comments"
+  },
+  "attachments": {
+    "label": "Attachments",
+    "attach": "Attach",
+    "fromFiles": "From my files",
+    "drop": "Drop files here to attach them",
+    "empty": "No attachments yet. Attach a file or drop it here.",
+    "limit": "Up to {size} per file.",
+    "added": "{name}, {date}",
+    "cover": "Cover",
+    "makeCover": "Make cover",
+    "removeCover": "Remove cover",
+    "download": "Download",
+    "delete": "Delete",
+    "actions": "Actions for “{name}”",
+    "deleted": "Deleted “{name}”",
+    "downloadFailed": "Couldn’t download “{name}”",
+    "uploading": "Uploading… {sent} of {total}",
+    "copying": "Adding a copy…",
+    "cancel": "Cancel uploading “{name}”",
+    "dismiss": "Dismiss “{name}”",
+    "failed": "Couldn’t attach this file",
+    "full": "A task can have up to {max, number} attachments.",
+    "picker": {
+      "title": "Attach from my files",
+      "label": "Your files",
+      "hint": "A copy goes into the task. The file in File Manager stays as it is.",
+      "attach": "{count, plural, one {Attach # file} other {Attach # files}}"
+    }
   }
 }

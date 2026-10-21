@@ -100,5 +100,34 @@
     "loading": "コメントを読み込み中…",
     "failed": "コメントを読み込めませんでした",
     "earlierFailed": "以前のコメントを読み込めませんでした"
+  },
+  "attachments": {
+    "label": "添付ファイル",
+    "attach": "添付",
+    "fromFiles": "マイファイルから",
+    "drop": "ここにファイルをドロップして添付",
+    "empty": "添付ファイルはまだありません。ファイルを添付するか、ここにドロップしてください。",
+    "limit": "ファイルサイズの上限は {size} です。",
+    "added": "{name}、{date}",
+    "cover": "カバー",
+    "makeCover": "カバーに設定",
+    "removeCover": "カバーを削除",
+    "download": "ダウンロード",
+    "delete": "削除",
+    "actions": "「{name}」の操作",
+    "deleted": "「{name}」を削除しました",
+    "downloadFailed": "「{name}」をダウンロードできませんでした",
+    "uploading": "アップロード中… {sent} / {total}",
+    "copying": "コピーを追加中…",
+    "cancel": "「{name}」のアップロードをキャンセル",
+    "dismiss": "「{name}」を非表示",
+    "failed": "このファイルを添付できませんでした",
+    "full": "タスクごとに添付できるファイルは {max, number} 件までです。",
+    "picker": {
+      "title": "マイファイルから添付",
+      "label": "自分のファイル",
+      "hint": "タスクにはコピーが追加されます。ファイル管理のファイルはそのまま残ります。",
+      "attach": "{count, plural, other {# 件のファイルを添付}}"
+    }
   }
 }

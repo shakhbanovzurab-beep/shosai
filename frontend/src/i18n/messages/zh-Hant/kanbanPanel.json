@@ -100,5 +100,34 @@
     "loading": "正在載入留言…",
     "failed": "無法載入留言",
     "earlierFailed": "無法載入較早的留言"
+  },
+  "attachments": {
+    "label": "附件",
+    "attach": "附加檔案",
+    "fromFiles": "從我的檔案",
+    "drop": "將檔案放到這裡即可附加",
+    "empty": "還沒有附件。附加檔案，或將檔案拖放到這裡。",
+    "limit": "每個檔案最多 {size}。",
+    "added": "{name}，{date}",
+    "cover": "封面",
+    "makeCover": "設為封面",
+    "removeCover": "移除封面",
+    "download": "下載",
+    "delete": "刪除",
+    "actions": "「{name}」的動作",
+    "deleted": "已刪除「{name}」",
+    "downloadFailed": "無法下載「{name}」",
+    "uploading": "正在上傳… {sent} / {total}",
+    "copying": "正在新增副本…",
+    "cancel": "取消上傳「{name}」",
+    "dismiss": "隱藏「{name}」",
+    "failed": "無法附加這個檔案",
+    "full": "每項任務最多可有 {max, number} 個附件。",
+    "picker": {
+      "title": "從我的檔案附加",
+      "label": "你的檔案",
+      "hint": "任務中會加入一份副本，檔案管理中的檔案則維持原狀。",
+      "attach": "{count, plural, other {附加 # 個檔案}}"
+    }
   }
 }

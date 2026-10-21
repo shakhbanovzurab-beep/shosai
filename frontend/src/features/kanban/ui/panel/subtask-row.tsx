@@ -40,7 +40,8 @@ function SubtaskTitle({
       maxLength={TITLE_MAX}
       dir="auto"
       className={cn(
-        "min-w-0 flex-1 truncate rounded-sm bg-transparent px-1 py-0.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        // Текст на другом языке, чем страница, читается в своём направлении, но стоит у начала строки страницы.
+        "min-w-0 flex-1 truncate rounded-sm bg-transparent px-1 py-0.5 text-sm outline-none [text-align:match-parent] focus-visible:ring-2 focus-visible:ring-ring",
         subtask.done && "text-muted-foreground line-through",
       )}
       onBlur={(event) => commit(event.currentTarget.value)}

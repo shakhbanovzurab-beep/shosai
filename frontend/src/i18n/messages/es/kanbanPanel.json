@@ -100,5 +100,34 @@
     "loading": "Cargando comentarios…",
     "failed": "No se pudieron cargar los comentarios",
     "earlierFailed": "No se pudieron cargar los comentarios anteriores"
+  },
+  "attachments": {
+    "label": "Archivos adjuntos",
+    "attach": "Adjuntar",
+    "fromFiles": "Desde mis archivos",
+    "drop": "Suelta los archivos aquí para adjuntarlos",
+    "empty": "Aún no hay archivos adjuntos. Adjunta un archivo o suéltalo aquí.",
+    "limit": "Hasta {size} por archivo.",
+    "added": "{name}, {date}",
+    "cover": "Portada",
+    "makeCover": "Usar como portada",
+    "removeCover": "Quitar portada",
+    "download": "Descargar",
+    "delete": "Eliminar",
+    "actions": "Acciones de «{name}»",
+    "deleted": "Se eliminó «{name}»",
+    "downloadFailed": "No se pudo descargar «{name}»",
+    "uploading": "Subiendo… {sent} de {total}",
+    "copying": "Agregando una copia…",
+    "cancel": "Cancelar la subida de «{name}»",
+    "dismiss": "Descartar «{name}»",
+    "failed": "No se pudo adjuntar este archivo",
+    "full": "Una tarea puede tener hasta {max, number} archivos adjuntos.",
+    "picker": {
+      "title": "Adjuntar desde mis archivos",
+      "label": "Tus archivos",
+      "hint": "Se agrega una copia a la tarea. El archivo del Administrador de archivos queda como está.",
+      "attach": "{count, plural, one {Adjuntar # archivo} many {Adjuntar # de archivos} other {Adjuntar # archivos}}"
+    }
   }
 }

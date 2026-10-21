@@ -100,5 +100,34 @@
     "loading": "Carregando comentários…",
     "failed": "Não foi possível carregar os comentários",
     "earlierFailed": "Não foi possível carregar os comentários anteriores"
+  },
+  "attachments": {
+    "label": "Anexos",
+    "attach": "Anexar",
+    "fromFiles": "Dos meus arquivos",
+    "drop": "Solte os arquivos aqui para anexar",
+    "empty": "Nenhum anexo ainda. Anexe um arquivo ou solte-o aqui.",
+    "limit": "Até {size} por arquivo.",
+    "added": "{name}, {date}",
+    "cover": "Capa",
+    "makeCover": "Usar como capa",
+    "removeCover": "Remover capa",
+    "download": "Baixar",
+    "delete": "Excluir",
+    "actions": "Ações para “{name}”",
+    "deleted": "Anexo “{name}” excluído",
+    "downloadFailed": "Não foi possível baixar “{name}”",
+    "uploading": "Fazendo upload… {sent} de {total}",
+    "copying": "Adicionando uma cópia…",
+    "cancel": "Cancelar o upload de “{name}”",
+    "dismiss": "Ocultar “{name}”",
+    "failed": "Não foi possível anexar este arquivo",
+    "full": "Uma tarefa pode ter até {max, number} anexos.",
+    "picker": {
+      "title": "Anexar dos meus arquivos",
+      "label": "Seus arquivos",
+      "hint": "Uma cópia vai para a tarefa. O arquivo no Gerenciador de arquivos continua como está.",
+      "attach": "{count, plural, one {Anexar # arquivo} many {Anexar # de arquivos} other {Anexar # arquivos}}"
+    }
   }
 }

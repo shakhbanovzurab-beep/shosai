@@ -100,5 +100,34 @@
     "loading": "Kommentare werden geladen…",
     "failed": "Kommentare konnten nicht geladen werden",
     "earlierFailed": "Frühere Kommentare konnten nicht geladen werden"
+  },
+  "attachments": {
+    "label": "Anhänge",
+    "attach": "Anhängen",
+    "fromFiles": "Aus meinen Dateien",
+    "drop": "Lege Dateien hier ab, um sie anzuhängen",
+    "empty": "Noch keine Anhänge. Hänge eine Datei an oder lege sie hier ab.",
+    "limit": "Bis zu {size} pro Datei.",
+    "added": "{name}, {date}",
+    "cover": "Titelbild",
+    "makeCover": "Als Titelbild festlegen",
+    "removeCover": "Titelbild entfernen",
+    "download": "Herunterladen",
+    "delete": "Löschen",
+    "actions": "Aktionen für „{name}“",
+    "deleted": "Anhang „{name}“ gelöscht",
+    "downloadFailed": "„{name}“ konnte nicht heruntergeladen werden",
+    "uploading": "Wird hochgeladen… {sent} von {total}",
+    "copying": "Kopie wird hinzugefügt…",
+    "cancel": "Hochladen von „{name}“ abbrechen",
+    "dismiss": "„{name}“ ausblenden",
+    "failed": "Diese Datei konnte nicht angehängt werden",
+    "full": "Eine Aufgabe kann bis zu {max, number} Anhänge haben.",
+    "picker": {
+      "title": "Aus meinen Dateien anhängen",
+      "label": "Deine Dateien",
+      "hint": "Eine Kopie kommt in die Aufgabe. Die Datei im Dateimanager bleibt unverändert.",
+      "attach": "{count, plural, one {# Datei anhängen} other {# Dateien anhängen}}"
+    }
   }
 }

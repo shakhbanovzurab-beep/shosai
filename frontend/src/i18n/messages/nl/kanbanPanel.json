@@ -100,5 +100,34 @@
     "loading": "Opmerkingen laden…",
     "failed": "Kan de opmerkingen niet laden",
     "earlierFailed": "Kan eerdere opmerkingen niet laden"
+  },
+  "attachments": {
+    "label": "Bijlagen",
+    "attach": "Bijvoegen",
+    "fromFiles": "Uit mijn bestanden",
+    "drop": "Laat bestanden hier los om ze bij te voegen",
+    "empty": "Nog geen bijlagen. Voeg een bestand bij of sleep het hierheen.",
+    "limit": "Maximaal {size} per bestand.",
+    "added": "{name}, {date}",
+    "cover": "Omslag",
+    "makeCover": "Als omslag instellen",
+    "removeCover": "Omslag verwijderen",
+    "download": "Downloaden",
+    "delete": "Verwijderen",
+    "actions": "Acties voor ‘{name}’",
+    "deleted": "Bijlage ‘{name}’ verwijderd",
+    "downloadFailed": "Kan ‘{name}’ niet downloaden",
+    "uploading": "Uploaden… {sent} van {total}",
+    "copying": "Kopie toevoegen…",
+    "cancel": "Uploaden van ‘{name}’ annuleren",
+    "dismiss": "‘{name}’ verbergen",
+    "failed": "Kan dit bestand niet bijvoegen",
+    "full": "Een taak kan maximaal {max, number} bijlagen hebben.",
+    "picker": {
+      "title": "Bijvoegen uit mijn bestanden",
+      "label": "Je bestanden",
+      "hint": "Er komt een kopie in de taak. Het bestand in Bestandsbeheer blijft zoals het is.",
+      "attach": "{count, plural, one {# bestand bijvoegen} other {# bestanden bijvoegen}}"
+    }
   }
 }

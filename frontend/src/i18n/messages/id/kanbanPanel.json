@@ -100,5 +100,34 @@
     "loading": "Memuat komentar…",
     "failed": "Tidak dapat memuat komentar",
     "earlierFailed": "Tidak dapat memuat komentar sebelumnya"
+  },
+  "attachments": {
+    "label": "Lampiran",
+    "attach": "Lampirkan",
+    "fromFiles": "Dari file saya",
+    "drop": "Lepaskan file di sini untuk melampirkannya",
+    "empty": "Belum ada lampiran. Lampirkan file atau lepaskan di sini.",
+    "limit": "Maksimal {size} per file.",
+    "added": "{name}, {date}",
+    "cover": "Sampul",
+    "makeCover": "Jadikan sampul",
+    "removeCover": "Hapus sampul",
+    "download": "Unduh",
+    "delete": "Hapus",
+    "actions": "Tindakan untuk “{name}”",
+    "deleted": "Lampiran “{name}” dihapus",
+    "downloadFailed": "Tidak dapat mengunduh “{name}”",
+    "uploading": "Mengunggah… {sent} dari {total}",
+    "copying": "Menambahkan salinan…",
+    "cancel": "Batalkan unggahan “{name}”",
+    "dismiss": "Sembunyikan “{name}”",
+    "failed": "Tidak dapat melampirkan file ini",
+    "full": "Satu tugas dapat memiliki hingga {max, number} lampiran.",
+    "picker": {
+      "title": "Lampirkan dari file saya",
+      "label": "File Anda",
+      "hint": "Salinannya masuk ke tugas. File di Pengelola file tetap seperti semula.",
+      "attach": "{count, plural, other {Lampirkan # file}}"
+    }
   }
 }

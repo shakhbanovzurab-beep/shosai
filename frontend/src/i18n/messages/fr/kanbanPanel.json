@@ -100,5 +100,34 @@
     "loading": "Chargement des commentaires…",
     "failed": "Impossible de charger les commentaires",
     "earlierFailed": "Impossible de charger les commentaires précédents"
+  },
+  "attachments": {
+    "label": "Pièces jointes",
+    "attach": "Joindre",
+    "fromFiles": "Depuis mes fichiers",
+    "drop": "Déposez des fichiers ici pour les joindre",
+    "empty": "Aucune pièce jointe pour l’instant. Joignez un fichier ou déposez-le ici.",
+    "limit": "Jusqu’à {size} par fichier.",
+    "added": "{name}, {date}",
+    "cover": "Couverture",
+    "makeCover": "Définir comme couverture",
+    "removeCover": "Retirer la couverture",
+    "download": "Télécharger",
+    "delete": "Supprimer",
+    "actions": "Actions pour « {name} »",
+    "deleted": "Pièce jointe « {name} » supprimée",
+    "downloadFailed": "Impossible de télécharger « {name} »",
+    "uploading": "Importation… {sent} sur {total}",
+    "copying": "Ajout d’une copie…",
+    "cancel": "Annuler l’importation de « {name} »",
+    "dismiss": "Masquer « {name} »",
+    "failed": "Impossible de joindre ce fichier",
+    "full": "Une tâche peut avoir jusqu’à {max, number} pièces jointes.",
+    "picker": {
+      "title": "Joindre depuis mes fichiers",
+      "label": "Vos fichiers",
+      "hint": "Une copie est ajoutée à la tâche. Le fichier reste tel quel dans le Gestionnaire de fichiers.",
+      "attach": "{count, plural, one {Joindre # fichier} many {Joindre # de fichiers} other {Joindre # fichiers}}"
+    }
   }
 }

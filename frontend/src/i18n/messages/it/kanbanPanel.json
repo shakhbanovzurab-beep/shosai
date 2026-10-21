@@ -100,5 +100,34 @@
     "loading": "Caricamento dei commenti…",
     "failed": "Impossibile caricare i commenti",
     "earlierFailed": "Impossibile caricare i commenti precedenti"
+  },
+  "attachments": {
+    "label": "Allegati",
+    "attach": "Allega",
+    "fromFiles": "Dai miei file",
+    "drop": "Rilascia qui i file per allegarli",
+    "empty": "Ancora nessun allegato. Allega un file o rilascialo qui.",
+    "limit": "Fino a {size} per file.",
+    "added": "{name}, {date}",
+    "cover": "Copertina",
+    "makeCover": "Imposta come copertina",
+    "removeCover": "Rimuovi copertina",
+    "download": "Scarica",
+    "delete": "Elimina",
+    "actions": "Azioni per «{name}»",
+    "deleted": "Allegato «{name}» eliminato",
+    "downloadFailed": "Impossibile scaricare «{name}»",
+    "uploading": "Caricamento… {sent} di {total}",
+    "copying": "Aggiunta di una copia…",
+    "cancel": "Annulla il caricamento di «{name}»",
+    "dismiss": "Nascondi «{name}»",
+    "failed": "Impossibile allegare questo file",
+    "full": "Un’attività può avere fino a {max, number} allegati.",
+    "picker": {
+      "title": "Allega dai miei file",
+      "label": "I tuoi file",
+      "hint": "Una copia va nell’attività. Il file in Gestione file resta com’è.",
+      "attach": "{count, plural, one {Allega # file} many {Allega # di file} other {Allega # file}}"
+    }
   }
 }

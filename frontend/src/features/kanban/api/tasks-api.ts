@@ -2,10 +2,13 @@ import { apiRequest, jsonBody } from "@/lib/api/request";
 
 import type { StickerValue } from "../domain/stickers-contract";
 import type {
+  Attachment,
+  AttachmentCreate,
   Comment,
   CommentCreate,
   CommentPatch,
   CommentsPage,
+  DownloadLink,
   Subtask,
   SubtaskCreate,
   SubtaskPatch,
@@ -14,7 +17,7 @@ import type {
   TasksDelete,
 } from "../domain/tasks-contract";
 
-/* Задачи на `/v1/tasks*` (план tasks §3.3, TK-D12): поля, значения, подзадачи и комментарии. */
+/* Задачи на `/v1/tasks*` (план tasks §3.3, TK-D12): поля, значения, подзадачи, комментарии и вложения. */
 
 const path = (id: string, rest = "") => `/v1/tasks/${encodeURIComponent(id)}${rest}`;
 
@@ -47,4 +50,10 @@ export const tasksApi = {
     apiRequest<Comment>(path(id, `/comments/${encodeURIComponent(commentId)}`), jsonBody("PATCH", body)),
   removeComment: (id: string, commentId: string) =>
     apiRequest<void>(path(id, `/comments/${encodeURIComponent(commentId)}`), { method: "DELETE" }),
+  addAttachment: (id: string, body: AttachmentCreate) =>
+    apiRequest<Attachment>(path(id, "/attachments"), jsonBody("POST", body)),
+  downloadAttachment: (id: string, attachmentId: string) =>
+    apiRequest<DownloadLink>(path(id, `/attachments/${encodeURIComponent(attachmentId)}/download`)),
+  removeAttachment: (id: string, attachmentId: string) =>
+    apiRequest<void>(path(id, `/attachments/${encodeURIComponent(attachmentId)}`), { method: "DELETE" }),
 };

@@ -100,5 +100,34 @@
     "loading": "댓글을 불러오는 중…",
     "failed": "댓글을 불러오지 못했어요",
     "earlierFailed": "이전 댓글을 불러오지 못했어요"
+  },
+  "attachments": {
+    "label": "첨부 파일",
+    "attach": "파일 첨부",
+    "fromFiles": "내 파일에서",
+    "drop": "첨부할 파일을 여기에 놓아 주세요",
+    "empty": "아직 첨부 파일이 없어요. 파일을 첨부하거나 여기에 놓아 보세요.",
+    "limit": "파일당 최대 {size}까지 첨부할 수 있어요.",
+    "added": "{name}, {date}",
+    "cover": "커버",
+    "makeCover": "커버로 설정",
+    "removeCover": "커버 제거",
+    "download": "다운로드",
+    "delete": "삭제",
+    "actions": "“{name}” 옵션",
+    "deleted": "“{name}” 첨부 파일을 삭제했어요",
+    "downloadFailed": "“{name}”을(를) 다운로드하지 못했어요",
+    "uploading": "업로드 중… {sent} / {total}",
+    "copying": "사본 추가 중…",
+    "cancel": "“{name}” 업로드 취소",
+    "dismiss": "“{name}” 숨기기",
+    "failed": "이 파일을 첨부하지 못했어요",
+    "full": "작업 하나에 파일을 최대 {max, number}개까지 첨부할 수 있어요.",
+    "picker": {
+      "title": "내 파일에서 첨부",
+      "label": "내 파일",
+      "hint": "작업에는 사본이 추가되고, 파일 관리자의 원본 파일은 그대로 남아요.",
+      "attach": "{count, plural, other {파일 #개 첨부}}"
+    }
   }
 }

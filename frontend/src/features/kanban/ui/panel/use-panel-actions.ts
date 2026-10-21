@@ -6,6 +6,7 @@ import { useMe } from "@/features/identity/model/session-store";
 
 import type { StickerValue } from "../../domain/stickers-contract";
 import type { TaskPatch } from "../../domain/tasks-contract";
+import { attachmentActions } from "../../model/attachment-actions";
 import { useBoardStore } from "../../model/board-hooks";
 import { commentActions } from "../../model/comment-actions";
 import { subtaskActions } from "../../model/subtask-actions";
@@ -36,4 +37,9 @@ export function useCommentActions(taskId: string) {
   const me = useMe();
   const author = { user_id: me?.id ?? "", name: me ? (me.display_name ?? me.full_name) : "", is_you: true };
   return commentActions(taskId, author, useBoardStore(), useTaskWords());
+}
+
+/** Готовые вложения задачи из панели: обложка, скачивание, удаление. */
+export function useAttachmentActions(taskId: string) {
+  return attachmentActions(taskId, useBoardStore(), useTaskWords());
 }

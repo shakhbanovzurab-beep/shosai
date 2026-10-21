@@ -31,7 +31,7 @@ function TitleInput({ detail, editable }: { detail: TaskDetail; editable: boolea
       maxLength={TITLE_MAX}
       rows={1}
       dir="auto"
-      className="field-sizing-content min-h-0 resize-none border-transparent px-1 py-0.5 font-semibold text-lg shadow-none focus-visible:border-input md:text-lg dark:bg-transparent"
+      className="field-sizing-content min-h-0 resize-none border-transparent px-1 py-0.5 font-semibold text-lg shadow-none [text-align:match-parent] focus-visible:border-input md:text-lg dark:bg-transparent"
       onBlur={(event) => commit(event.currentTarget.value)}
       onKeyDown={(event) => {
         if (event.key === "Enter") {

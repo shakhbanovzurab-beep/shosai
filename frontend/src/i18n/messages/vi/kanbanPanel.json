@@ -100,5 +100,34 @@
     "loading": "Đang tải bình luận…",
     "failed": "Không thể tải bình luận",
     "earlierFailed": "Không thể tải các bình luận trước đó"
+  },
+  "attachments": {
+    "label": "Tệp đính kèm",
+    "attach": "Đính kèm",
+    "fromFiles": "Từ tệp của tôi",
+    "drop": "Thả tệp vào đây để đính kèm",
+    "empty": "Chưa có tệp đính kèm nào. Hãy đính kèm một tệp hoặc thả tệp vào đây.",
+    "limit": "Tối đa {size} mỗi tệp.",
+    "added": "{name}, {date}",
+    "cover": "Ảnh bìa",
+    "makeCover": "Đặt làm ảnh bìa",
+    "removeCover": "Gỡ ảnh bìa",
+    "download": "Tải xuống",
+    "delete": "Xóa",
+    "actions": "Thao tác với “{name}”",
+    "deleted": "Đã xóa “{name}”",
+    "downloadFailed": "Không thể tải xuống “{name}”",
+    "uploading": "Đang tải lên… {sent} / {total}",
+    "copying": "Đang thêm bản sao…",
+    "cancel": "Hủy tải lên “{name}”",
+    "dismiss": "Ẩn “{name}”",
+    "failed": "Không thể đính kèm tệp này",
+    "full": "Mỗi công việc có tối đa {max, number} tệp đính kèm.",
+    "picker": {
+      "title": "Đính kèm từ tệp của tôi",
+      "label": "Tệp của bạn",
+      "hint": "Một bản sao sẽ được thêm vào công việc. Tệp trong Trình quản lý tệp vẫn giữ nguyên.",
+      "attach": "{count, plural, other {Đính kèm # tệp}}"
+    }
   }
 }
