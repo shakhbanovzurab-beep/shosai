@@ -25,11 +25,11 @@ def test_each_word_equals_the_cabinet_s_in_every_language() -> None:
     assert set(words.by_language) == {locale.code for locale in LOCALES}
     for code, own in words.by_language.items():
         share, templates = cabinet(code, "notesShare.json"), cabinet(code, "notesTemplates.json")
-        page = share["page"]
+        panel = share["panel"]
         sections, headings = templates["sections"], templates["headings"]
-        assert isinstance(page, dict)
+        assert isinstance(panel, dict)
         assert isinstance(sections, dict)
-        assert own.speaker == str(page["speaker"]).replace("{order, number}", "{n}")
+        assert own.speaker == str(panel["speaker"]).replace("{order, number}", "{n}")
         assert own.sections == {kind.value: sections[key] for kind, key in SECTION_KEYS.items()}
         assert own.headings == headings
 

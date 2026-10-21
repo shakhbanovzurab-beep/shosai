@@ -3,7 +3,7 @@
 The shipped clients show a speaker's label and the headings of Leo's write-up as the server
 sends them, so the server words them in the person's language: "Speaker N" for a voice
 without a name, a shipped template's headings and the four sections of Leo's layout.
-`native_words.json` holds the cabinet's own translations (`notesShare.page.speaker`,
+`native_words.json` holds the cabinet's own translations (`notesShare.panel.speaker`,
 `notesTemplates.sections` and `.headings`); a test keeps it equal to them. It is read once,
 when the slice is built.
 """
