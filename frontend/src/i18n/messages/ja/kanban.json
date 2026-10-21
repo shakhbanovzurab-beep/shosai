@@ -14,18 +14,14 @@
     "list": "リスト",
     "table": "テーブル"
   },
-  "toolbar": {
-    "filter": "フィルタ",
-    "sort": "並べ替え",
-    "moreWaysToAdd": "その他のタスク追加方法",
-    "importCsv": "CSV をインポート",
-    "addFromTemplate": "テンプレートから追加",
-    "createAutomation": "自動化ルールを作成"
-  },
   "column": {
     "drag": "「{column}」列をドラッグ",
     "addTask": "「{column}」にタスクを追加",
-    "empty": "「{column}」にタスクはありません"
+    "empty": "「{column}」にタスクはありません",
+    "add": "列を追加",
+    "expand": "「{column}」を展開",
+    "sum": "{field}：{sum}",
+    "sumLabel": "「{column}」の {field} の合計：{sum}"
   },
   "columnMenu": {
     "managedInJira": "列は Jira で管理されています",
@@ -33,7 +29,13 @@
     "sortByPriority": "優先度で並べ替え",
     "moveEarlier": "前に移動",
     "moveLater": "後ろに移動",
-    "clear": "列をクリア"
+    "clear": "列をクリア",
+    "addAfter": "後ろに列を追加",
+    "colour": "色",
+    "collapse": "折りたたむ",
+    "expand": "展開",
+    "delete": "列を削除",
+    "lastOfKind": "この種類の最後の列は削除できません"
   },
   "taskMenu": {
     "openInJira": "Jira で {key} を開く",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} のコピー",
     "deleted": "「{title}」を削除しました",
     "cleared": "{count, plural, other {「{column}」から # 件のタスクを削除しました}}",
-    "jiraLinkCopied": "{key} のリンクをコピーしました"
+    "jiraLinkCopied": "{key} のリンクをコピーしました",
+    "columnDeleted": "列「{column}」を削除しました"
   },
   "errors": {
     "addTask": "タスクを追加できませんでした",
     "saveChange": "変更を保存できませんでした",
     "deleteTasks": "{count, plural, other {タスクを削除できませんでした}}",
-    "saveBoard": "ボードを保存できませんでした"
+    "saveBoard": "ボードを保存できませんでした",
+    "addColumn": "列を追加できませんでした"
+  },
+  "newColumn": {
+    "title": "新しい列",
+    "name": "名前",
+    "kind": "この列のタスク",
+    "colour": "色",
+    "create": "列を追加"
+  },
+  "kinds": {
+    "todo": "未着手",
+    "in_progress": "進行中",
+    "done": "完了"
+  },
+  "colors": {
+    "none": "なし",
+    "gray": "グレー",
+    "red": "赤",
+    "orange": "オレンジ",
+    "amber": "琥珀",
+    "green": "緑",
+    "teal": "青緑",
+    "blue": "青",
+    "violet": "紫",
+    "pink": "ピンク"
   }
 }

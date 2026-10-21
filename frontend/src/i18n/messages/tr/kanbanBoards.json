@@ -5,10 +5,10 @@
     "newBoard": "Yeni pano…",
     "syncJiraBoard": "Jira panosu senkronize et…",
     "rename": "Panoyu yeniden adlandır…",
-    "showWorkspaceTasks": "Çalışma alanı görevlerimi burada göster",
     "changeIcon": "Simgeyi değiştir",
     "delete": "Panoyu sil…",
-    "stopSyncing": "Senkronizasyonu durdur…"
+    "stopSyncing": "Senkronizasyonu durdur…",
+    "incoming": "Bana gelen görevleri burada topla"
   },
   "icons": {
     "work": "İş",
@@ -90,9 +90,9 @@
     "changesPaused": "Değişiklikler duraklatıldı.",
     "importing": "{board} panosu Jira’dan içe aktarılıyor…",
     "importingHint": "Sütunlar ve işler birazdan burada görünecek.",
-    "offer": "{count, plural, one {Çalışma alanlarınızda # açık göreviniz var. “{board}” panosunda gösterilsin mi?} other {Çalışma alanlarınızda # açık göreviniz var. “{board}” panosunda gösterilsin mi?}} Bir kartı taşıdığınızda görev ekibiniz için de güncellenir.",
+    "offer": "{count, plural, one {Size # görev geldi ve henüz hiçbir panoda değil. “{board}” panosuna eklensin mi?} other {Size # görev geldi ve henüz hiçbir panoda değil. “{board}” panosuna eklensin mi?}} Size atanan görevler ve toplantılarınızdan çıkan görevler buraya gelecek.",
     "notNow": "Şimdi değil",
-    "showHere": "{count, plural, one {Burada göster} other {Burada göster}}"
+    "showHere": "{count, plural, one {Buraya ekle} other {Buraya ekle}}"
   },
   "toasts": {
     "createFailed": "Pano oluşturulamadı",
@@ -102,9 +102,9 @@
     "syncFailed": "Jira ile senkronize edilemedi",
     "deleted": "“{board}” silindi",
     "stoppedSyncing": "“{board}” için senkronizasyon durduruldu",
-    "workspaceTasksOn": "Çalışma alanı görevleriniz artık “{board}” panosunda görünüyor",
-    "workspaceTasksOff": "Çalışma alanı görevleriniz artık hiçbir panoda görünmüyor",
-    "workspaceTasksHint": "Bir kartı taşıdığınızda görev kendi çalışma alanında da değişir.",
-    "workspaceTasksFailed": "Çalışma alanı görevlerinin görüneceği yer değiştirilemedi"
+    "incomingOn": "Size gelen görevler artık “{board}” panosuna gidiyor",
+    "incomingOff": "Size gelen görevler artık hiçbir panoya gitmiyor",
+    "incomingHint": "Kart, görevin kendisidir: kartı taşıdığınızda görev her yerde değişir.",
+    "incomingFailed": "Görevlerinizin gideceği yer değiştirilemedi"
   }
 }

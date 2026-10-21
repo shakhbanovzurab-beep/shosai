@@ -5,10 +5,10 @@
     "newBoard": "新增看板…",
     "syncJiraBoard": "同步 Jira 看板…",
     "rename": "重新命名看板…",
-    "showWorkspaceTasks": "在這裡顯示我的工作空間任務",
     "changeIcon": "變更圖示",
     "delete": "刪除看板…",
-    "stopSyncing": "停止同步…"
+    "stopSyncing": "停止同步…",
+    "incoming": "把我收到的任務放在這裡"
   },
   "icons": {
     "work": "工作",
@@ -90,9 +90,9 @@
     "changesPaused": "變更已暫停。",
     "importing": "正在從 Jira 匯入「{board}」…",
     "importingHint": "欄和議題稍後就會出現在這裡。",
-    "offer": "{count, plural, other {你的工作空間中有 # 項未完成的任務。要在「{board}」上顯示嗎？}}移動卡片時，任務也會為你的團隊一併更新。",
+    "offer": "{count, plural, other {你收到的 # 項任務還不在任何看板上。要放到「{board}」嗎？}}指派給你的任務和會議中的任務都會放到這裡。",
     "notNow": "暫時不要",
-    "showHere": "{count, plural, other {在這裡顯示}}"
+    "showHere": "{count, plural, other {放到這裡}}"
   },
   "toasts": {
     "createFailed": "無法建立看板",
@@ -102,9 +102,9 @@
     "syncFailed": "無法與 Jira 同步",
     "deleted": "已刪除「{board}」",
     "stoppedSyncing": "已停止同步「{board}」",
-    "workspaceTasksOn": "你的工作空間任務現在會顯示在「{board}」上",
-    "workspaceTasksOff": "你的工作空間任務已不再顯示於任何看板",
-    "workspaceTasksHint": "移動卡片會變更工作空間中的任務。",
-    "workspaceTasksFailed": "無法變更工作空間任務的顯示位置"
+    "incomingOn": "你收到的任務現在會放到「{board}」",
+    "incomingOff": "你收到的任務不會再放到任何看板",
+    "incomingHint": "卡片就是任務本身：移動卡片，各處的任務都會跟著變更。",
+    "incomingFailed": "無法變更任務的存放位置"
   }
 }

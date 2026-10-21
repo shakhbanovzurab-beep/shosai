@@ -5,10 +5,10 @@
     "newBoard": "Nouveau tableau…",
     "syncJiraBoard": "Synchroniser un tableau Jira…",
     "rename": "Renommer le tableau…",
-    "showWorkspaceTasks": "Afficher ici mes tâches des espaces de travail",
     "changeIcon": "Changer d’icône",
     "delete": "Supprimer le tableau…",
-    "stopSyncing": "Arrêter la synchronisation…"
+    "stopSyncing": "Arrêter la synchronisation…",
+    "incoming": "Mettre ici les tâches qui m’arrivent"
   },
   "icons": {
     "work": "Travail",
@@ -90,9 +90,9 @@
     "changesPaused": "Les modifications sont suspendues.",
     "importing": "Importation de {board} depuis Jira…",
     "importingHint": "Les colonnes et les tickets vont apparaître ici dans un instant.",
-    "offer": "{count, plural, one {Vous avez # tâche ouverte dans vos espaces de travail. L’afficher sur « {board} » ?} many {Vous avez # de tâches ouvertes dans vos espaces de travail. Les afficher sur « {board} » ?} other {Vous avez # tâches ouvertes dans vos espaces de travail. Les afficher sur « {board} » ?}} Déplacer une carte met à jour la tâche pour votre équipe.",
+    "offer": "{count, plural, one {# tâche vous est arrivée et n’est encore sur aucun tableau. La mettre sur « {board} » ?} many {# de tâches vous sont arrivées et ne sont encore sur aucun tableau. Les mettre sur « {board} » ?} other {# tâches vous sont arrivées et ne sont encore sur aucun tableau. Les mettre sur « {board} » ?}} Les tâches qui vous sont attribuées et celles de vos réunions arriveront ici.",
     "notNow": "Pas maintenant",
-    "showHere": "{count, plural, one {L’afficher ici} many {Les afficher ici} other {Les afficher ici}}"
+    "showHere": "{count, plural, one {La mettre ici} many {Les mettre ici} other {Les mettre ici}}"
   },
   "toasts": {
     "createFailed": "Impossible de créer le tableau",
@@ -102,9 +102,9 @@
     "syncFailed": "Impossible de synchroniser avec Jira",
     "deleted": "Tableau « {board} » supprimé",
     "stoppedSyncing": "Synchronisation de « {board} » arrêtée",
-    "workspaceTasksOn": "Vos tâches des espaces de travail s’affichent désormais sur « {board} »",
-    "workspaceTasksOff": "Vos tâches des espaces de travail ne s’affichent plus sur aucun tableau",
-    "workspaceTasksHint": "Déplacer une carte modifie la tâche dans son espace de travail.",
-    "workspaceTasksFailed": "Impossible de changer l’affichage des tâches des espaces de travail"
+    "incomingOn": "Les tâches qui vous arrivent vont désormais sur « {board} »",
+    "incomingOff": "Les tâches qui vous arrivent ne vont plus sur aucun tableau",
+    "incomingHint": "Une carte est la tâche elle-même : la déplacer modifie la tâche partout.",
+    "incomingFailed": "Impossible de changer la destination de vos tâches"
   }
 }

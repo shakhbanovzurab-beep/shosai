@@ -14,18 +14,14 @@
     "list": "Liste",
     "table": "Tablo"
   },
-  "toolbar": {
-    "filter": "Filtrele",
-    "sort": "Sırala",
-    "moreWaysToAdd": "Görev eklemenin diğer yolları",
-    "importCsv": "CSV içe aktar",
-    "addFromTemplate": "Şablondan ekle",
-    "createAutomation": "Otomasyon oluştur"
-  },
   "column": {
     "drag": "{column} sütununu sürükle",
     "addTask": "{column} sütununa görev ekle",
-    "empty": "{column} sütununda görev yok"
+    "empty": "{column} sütununda görev yok",
+    "add": "Sütun ekle",
+    "expand": "{column} sütununu genişlet",
+    "sum": "{field}: {sum}",
+    "sumLabel": "{column} sütununda toplam {field}: {sum}"
   },
   "columnMenu": {
     "managedInJira": "Sütunlar Jira’da yönetiliyor",
@@ -33,7 +29,13 @@
     "sortByPriority": "Önceliğe göre sırala",
     "moveEarlier": "Öne taşı",
     "moveLater": "Arkaya taşı",
-    "clear": "Sütunu boşalt"
+    "clear": "Sütunu boşalt",
+    "addAfter": "Sonrasına sütun ekle",
+    "colour": "Renk",
+    "collapse": "Daralt",
+    "expand": "Genişlet",
+    "delete": "Sütunu sil",
+    "lastOfKind": "Bu türdeki son sütun kalır"
   },
   "taskMenu": {
     "openInJira": "{key} işini Jira’da aç",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} kopyası",
     "deleted": "“{title}” silindi",
     "cleared": "{count, plural, one {{column} sütunundan # görev silindi} other {{column} sütunundan # görev silindi}}",
-    "jiraLinkCopied": "{key} bağlantısı kopyalandı"
+    "jiraLinkCopied": "{key} bağlantısı kopyalandı",
+    "columnDeleted": "“{column}” sütunu silindi"
   },
   "errors": {
     "addTask": "Görev eklenemedi",
     "saveChange": "Değişiklik kaydedilemedi",
     "deleteTasks": "{count, plural, one {Görev silinemedi} other {Görevler silinemedi}}",
-    "saveBoard": "Pano kaydedilemedi"
+    "saveBoard": "Pano kaydedilemedi",
+    "addColumn": "Sütun eklenemedi"
+  },
+  "newColumn": {
+    "title": "Yeni sütun",
+    "name": "Ad",
+    "kind": "Buradaki görevler",
+    "colour": "Renk",
+    "create": "Sütun ekle"
+  },
+  "kinds": {
+    "todo": "Yapılacaklar",
+    "in_progress": "Devam ediyor",
+    "done": "Tamamlandı"
+  },
+  "colors": {
+    "none": "Renk yok",
+    "gray": "Gri",
+    "red": "Kırmızı",
+    "orange": "Turuncu",
+    "amber": "Kehribar",
+    "green": "Yeşil",
+    "teal": "Turkuaz",
+    "blue": "Mavi",
+    "violet": "Mor",
+    "pink": "Pembe"
   }
 }

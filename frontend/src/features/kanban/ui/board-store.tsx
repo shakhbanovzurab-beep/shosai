@@ -11,14 +11,22 @@ import { BoardStoreContext, useBoardSelector } from "../model/board-hooks";
 import { createBoardStore } from "../model/board-store";
 import { type CardCommands, createCardCommands } from "../model/card-commands";
 import { type ColumnCommands, createColumnCommands } from "../model/column-commands";
+import { type ColumnLifecycle, createColumnLifecycle } from "../model/column-lifecycle";
 import type { CommandWords } from "../model/command-context";
+import { NewColumnDialog } from "./column-dialog";
 
 /*
  * Доска, которую человек правит: хранилище создаётся один раз на доску, новые версии с сервера принимаются в него
  * (панель и фокус не теряются); команды работают с хранилищем и словами на языке человека.
  */
 
-type BoardCommandsValue = { cards: CardCommands; columns: ColumnCommands };
+type BoardCommandsValue = {
+  cards: CardCommands;
+  columns: ColumnCommands;
+  lifecycle: ColumnLifecycle;
+  /** Открыть диалог новой колонки на месте `position`. */
+  askNewColumn: (position: number) => void;
+};
 
 const BoardCommandsContext = createContext<BoardCommandsValue | null>(null);
 
@@ -40,11 +48,18 @@ export function BoardProvider({ detail, children }: { detail: BoardDetail; child
   const tc = useTranslations("common");
   const ta = useTranslations("kanbanApi");
   const [nameRequest, setNameRequest] = useState<NameRequest | null>(null);
+  const [newColumnAt, setNewColumnAt] = useState<number | null>(null);
   const [store] = useState(() => createBoardStore(detail));
   // Команды пересоздаются, только когда меняется язык: React Compiler запоминает их по store и переводчикам.
   const ctx = { store, words: (): CommandWords => ({ t, tc, ta }), askName: setNameRequest };
   const cards = createCardCommands(ctx);
-  const commands: BoardCommandsValue = { cards, columns: createColumnCommands(ctx, cards) };
+  const lifecycle = createColumnLifecycle(ctx);
+  const commands: BoardCommandsValue = {
+    cards,
+    columns: createColumnCommands(ctx, cards),
+    lifecycle,
+    askNewColumn: setNewColumnAt,
+  };
 
   // Версия с сервера (опрос Jira, перечитывание) ложится в то же хранилище.
   useEffect(() => store.receive(detail), [store, detail]);
@@ -54,6 +69,7 @@ export function BoardProvider({ detail, children }: { detail: BoardDetail; child
       <BoardCommandsContext value={commands}>
         {children}
         <NameDialog request={nameRequest} onClose={() => setNameRequest(null)} />
+        <NewColumnDialog position={newColumnAt} lifecycle={lifecycle} onClose={() => setNewColumnAt(null)} />
       </BoardCommandsContext>
     </BoardStoreContext>
   );

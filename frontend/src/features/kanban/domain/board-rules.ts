@@ -1,3 +1,4 @@
+import type { ColumnHead } from "./boards-contract";
 import type { Card, Priority } from "./tasks-contract";
 
 /*
@@ -56,4 +57,27 @@ export function shiftColumn(order: string[], columnId: string, by: -1 | 1): stri
   const next = [...order];
   [next[from], next[to]] = [next[to], next[from]];
   return next;
+}
+
+/** Куда уйдут карточки удалённой колонки (KG-D9): первая другая колонка того же вида; null — удалять нельзя. */
+export function heirOf(order: string[], columns: Record<string, ColumnHead>, columnId: string): string | null {
+  const kind = columns[columnId]?.kind;
+  return order.find((id) => id !== columnId && columns[id]?.kind === kind) ?? null;
+}
+
+/**
+ * Сумма числового поля по карточкам колонки, до сотых (Σ в заголовке; сервер её не отдаёт). null, когда ни у
+ * одной карточки значения нет: тогда колонка о поле молчит.
+ */
+export function columnSum(ids: string[], cards: Record<string, Card>, stickerId: string): number | null {
+  let cents = 0;
+  let found = false;
+  for (const id of ids) {
+    const value = cards[id]?.values[stickerId];
+    if (value && "number" in value) {
+      cents += Math.round(value.number * 100);
+      found = true;
+    }
+  }
+  return found ? cents / 100 : null;
 }

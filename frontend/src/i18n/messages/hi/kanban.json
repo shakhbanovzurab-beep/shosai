@@ -14,18 +14,14 @@
     "list": "सूची",
     "table": "टेबल"
   },
-  "toolbar": {
-    "filter": "फ़िल्टर करें",
-    "sort": "क्रम से लगाएं",
-    "moreWaysToAdd": "टास्क जोड़ने के और तरीके",
-    "importCsv": "CSV इंपोर्ट करें",
-    "addFromTemplate": "टेंप्लेट से जोड़ें",
-    "createAutomation": "ऑटोमेशन बनाएं"
-  },
   "column": {
     "drag": "{column} कॉलम को खींचें",
     "addTask": "{column} में टास्क जोड़ें",
-    "empty": "{column} में कोई टास्क नहीं है"
+    "empty": "{column} में कोई टास्क नहीं है",
+    "add": "कॉलम जोड़ें",
+    "expand": "{column} कॉलम बड़ा करें",
+    "sum": "{field}: {sum}",
+    "sumLabel": "{column} में {field} का कुल योग: {sum}"
   },
   "columnMenu": {
     "managedInJira": "कॉलम Jira में मैनेज किए जाते हैं",
@@ -33,7 +29,13 @@
     "sortByPriority": "प्राथमिकता के क्रम से लगाएं",
     "moveEarlier": "शुरुआत की ओर ले जाएं",
     "moveLater": "आख़िर की ओर ले जाएं",
-    "clear": "कॉलम खाली करें"
+    "clear": "कॉलम खाली करें",
+    "addAfter": "इसके बाद कॉलम जोड़ें",
+    "colour": "रंग",
+    "collapse": "छोटा करें",
+    "expand": "बड़ा करें",
+    "delete": "कॉलम मिटाएं",
+    "lastOfKind": "इस तरह का आख़िरी कॉलम मिटाया नहीं जा सकता"
   },
   "taskMenu": {
     "openInJira": "{key} को Jira में खोलें",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} (कॉपी)",
     "deleted": "“{title}” मिटा दिया गया",
     "cleared": "{count, plural, one {{column} से # टास्क मिटा दिया गया} other {{column} से # टास्क मिटा दिए गए}}",
-    "jiraLinkCopied": "{key} का लिंक कॉपी किया गया"
+    "jiraLinkCopied": "{key} का लिंक कॉपी किया गया",
+    "columnDeleted": "“{column}” कॉलम मिटा दिया गया"
   },
   "errors": {
     "addTask": "टास्क नहीं जोड़ा जा सका।",
     "saveChange": "बदलाव सेव नहीं किया जा सका।",
     "deleteTasks": "{count, plural, one {टास्क नहीं मिटाया जा सका।} other {टास्क नहीं मिटाए जा सके।}}",
-    "saveBoard": "बोर्ड सेव नहीं किया जा सका।"
+    "saveBoard": "बोर्ड सेव नहीं किया जा सका।",
+    "addColumn": "कॉलम नहीं जोड़ा जा सका।"
+  },
+  "newColumn": {
+    "title": "नया कॉलम",
+    "name": "नाम",
+    "kind": "यहां के टास्क",
+    "colour": "रंग",
+    "create": "कॉलम जोड़ें"
+  },
+  "kinds": {
+    "todo": "करना है",
+    "in_progress": "चल रहा है",
+    "done": "पूरा हुआ"
+  },
+  "colors": {
+    "none": "कोई रंग नहीं",
+    "gray": "स्लेटी",
+    "red": "लाल",
+    "orange": "नारंगी",
+    "amber": "अंबर",
+    "green": "हरा",
+    "teal": "फ़िरोज़ी",
+    "blue": "नीला",
+    "violet": "बैंगनी",
+    "pink": "गुलाबी"
   }
 }

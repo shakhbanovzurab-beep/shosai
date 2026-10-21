@@ -6,119 +6,114 @@ import { CollisionPriority } from "@dnd-kit/abstract";
 import { useDroppable } from "@dnd-kit/react";
 import { useSortable } from "@dnd-kit/react/sortable";
 import { cn } from "cn";
-import { GripVertical, Plus } from "lucide-react";
 import { useTranslations } from "use-intl";
 
-import { Button } from "@/components/ui/button";
-
 import { useCardIds, useColumn } from "../model/board-hooks";
-import { BoardActionsButton, BoardContextMenu } from "./board-menu-triggers";
-import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
+import { BoardContextMenu } from "./board-menu-triggers";
+import { useBoardCommands, useManagedByJira } from "./board-store";
+import { ColumnDot, ColumnHeader } from "./column-header";
+import { SWATCHES } from "./palette";
 import { SortableTaskCard } from "./sortable-task-card";
 
-interface KanbanColumnProps {
-  columnId: string;
-  index: number;
+/** Свёрнутая колонка: узкая полоса с названием сверху вниз и счётчиком; по нажатию разворачивается. */
+function CollapsedStrip({ columnId }: { columnId: string }) {
+  const { lifecycle } = useBoardCommands();
+  const title = useColumn(columnId)?.title ?? "";
+  const count = useCardIds(columnId).length;
+  const t = useTranslations("kanban");
+  return (
+    <BoardContextMenu target={{ kind: "column", columnId }}>
+      <button
+        type="button"
+        data-column-header
+        onClick={() => lifecycle.setCollapsed(columnId, false)}
+        aria-label={t("column.expand", { column: title })}
+        className="flex min-h-0 flex-1 flex-col items-center gap-2 rounded-t-xl px-1 py-4 text-start hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
+      >
+        <ColumnDot columnId={columnId} />
+        <span className="text-muted-foreground text-xs tabular-nums" aria-hidden="true">
+          {count}
+        </span>
+        <span dir="auto" className="truncate font-medium text-sm [writing-mode:vertical-rl]" aria-hidden="true">
+          {title}
+        </span>
+      </button>
+    </BoardContextMenu>
+  );
+}
+
+/** Пустая колонка говорит об этом спокойно, без лишних кнопок: «+» есть в заголовке. */
+function EmptyColumn({ columnId }: { columnId: string }) {
+  const t = useTranslations("kanban");
+  const title = useColumn(columnId)?.title ?? "";
+  return <p className="px-1 py-6 text-center text-muted-foreground text-sm">{t("column.empty", { column: title })}</p>;
 }
 
 /**
- * One column. Columns sit in reading order, so in Arabic the next one is to the left; dragging with the
- * keyboard (Space, then the arrow keys) moves by what is on screen, so ArrowLeft heads for the end there.
+ * Одна колонка. Колонки идут в порядке чтения, поэтому в арабском следующая — слева; перетаскивание с
+ * клавиатуры (пробел, затем стрелки) движется по экрану, так что там ArrowLeft ведёт к концу доски.
  */
-export function KanbanColumn({ columnId, index }: KanbanColumnProps) {
-  const { cards } = useBoardCommands();
-  const editable = useEditable();
+export function KanbanColumn({ columnId, index }: { columnId: string; index: number }) {
   const managedByJira = useManagedByJira();
   const taskIds = useCardIds(columnId);
-  const t = useTranslations("kanban");
-  const tc = useTranslations("common");
+  const head = useColumn(columnId);
   const headingId = useId();
-  const column = { id: columnId };
-  const title = useColumn(columnId)?.title ?? "";
   const {
     ref: columnRef,
     handleRef: columnHandleRef,
     isDragging: isColumnDragging,
     isDropTarget: isColumnDropTarget,
   } = useSortable({
-    id: `column:${column.id}`,
+    id: `column:${columnId}`,
     index,
-    // Jira owns a synced board's columns.
+    // Колонки доски Jira — её.
     disabled: managedByJira,
     type: "column",
     accept: "column",
     group: "columns",
-    data: { type: "column", columnId: column.id },
+    data: { type: "column", columnId },
   });
   const { ref: taskDropRef, isDropTarget: isTaskDropTarget } = useDroppable({
-    id: column.id,
+    id: columnId,
     type: "task-container",
     accept: "task",
     collisionPriority: CollisionPriority.Low,
-    data: { type: "task-container", columnId: column.id },
+    data: { type: "task-container", columnId },
   });
+  const collapsed = head?.collapsed === true;
 
   return (
     <section
       ref={columnRef}
-      data-column-id={column.id}
-      aria-labelledby={headingId}
+      data-column-id={columnId}
+      data-collapsed={collapsed || undefined}
+      aria-labelledby={collapsed ? undefined : headingId}
+      aria-label={collapsed ? head?.title : undefined}
       className={cn(
-        "flex min-h-0 flex-col rounded-t-xl border bg-muted/50 transition-colors",
+        "flex min-h-0 flex-col rounded-t-xl border bg-muted/50 transition-colors max-sm:snap-start",
+        head?.color && cn("border-t-2", SWATCHES[head.color].rule),
         (isColumnDropTarget || isTaskDropTarget) && "bg-muted/70",
         isColumnDragging && "opacity-60",
       )}
     >
-      <BoardContextMenu target={{ kind: "column", columnId: column.id }}>
-        <div data-column-header className="flex items-start justify-between gap-3 px-4 pt-4 pb-3">
-          <div className="min-w-0 space-y-1">
-            <div className="flex items-center gap-0.5">
-              {managedByJira ? null : (
-                <Button
-                  ref={columnHandleRef}
-                  variant="ghost"
-                  size="icon-xs"
-                  className="-ms-2 cursor-grab text-foreground/70 active:cursor-grabbing"
-                  aria-label={t("column.drag", { column: title })}
-                  data-column-handle
-                >
-                  <GripVertical />
-                </Button>
-              )}
-              <h2 id={headingId} dir="auto" className="truncate font-medium text-base leading-none">
-                {title}
-              </h2>
-            </div>
-            <p className="text-muted-foreground text-sm tabular-nums leading-none">
-              {t("taskCount", { count: taskIds.length })}
-            </p>
-          </div>
-          <div className="-me-2 flex items-center gap-0.5 text-muted-foreground">
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              aria-label={t("column.addTask", { column: title })}
-              disabled={!editable}
-              onClick={() => cards.addCard(column.id)}
-            >
-              <Plus />
-            </Button>
-            <BoardActionsButton
-              target={{ kind: "column", columnId: column.id }}
-              label={tc("actionsFor", { name: title })}
-            />
-          </div>
+      {collapsed ? (
+        <div ref={taskDropRef} className="flex min-h-0 flex-1 flex-col">
+          <CollapsedStrip columnId={columnId} />
         </div>
-      </BoardContextMenu>
-
-      <div
-        ref={taskDropRef}
-        className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-3 [scrollbar-color:var(--border)_transparent] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1"
-      >
-        {taskIds.map((taskId, taskIndex) => (
-          <SortableTaskCard key={taskId} taskId={taskId} columnId={column.id} index={taskIndex} />
-        ))}
-      </div>
+      ) : (
+        <>
+          <ColumnHeader columnId={columnId} headingId={headingId} handleRef={columnHandleRef} />
+          <div
+            ref={taskDropRef}
+            className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-3 [scrollbar-color:var(--border)_transparent] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1"
+          >
+            {taskIds.map((taskId, taskIndex) => (
+              <SortableTaskCard key={taskId} taskId={taskId} columnId={columnId} index={taskIndex} />
+            ))}
+            {taskIds.length === 0 ? <EmptyColumn columnId={columnId} /> : null}
+          </div>
+        </>
+      )}
     </section>
   );
 }

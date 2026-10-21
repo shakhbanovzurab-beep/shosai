@@ -5,10 +5,10 @@
     "newBoard": "新しいボード…",
     "syncJiraBoard": "Jira ボードを同期…",
     "rename": "ボードの名前を変更…",
-    "showWorkspaceTasks": "ワークスペースの自分のタスクをここに表示",
     "changeIcon": "アイコンを変更",
     "delete": "ボードを削除…",
-    "stopSyncing": "同期を停止…"
+    "stopSyncing": "同期を停止…",
+    "incoming": "自分宛てのタスクをここに集める"
   },
   "icons": {
     "work": "仕事",
@@ -90,9 +90,9 @@
     "changesPaused": "変更は一時停止されています。",
     "importing": "Jira から「{board}」を取り込んでいます…",
     "importingHint": "列と課題はまもなくここに表示されます。",
-    "offer": "{count, plural, other {ワークスペースに未完了のタスクが # 件あります。「{board}」に表示しますか？}}カードを移動すると、チームのタスクも更新されます。",
+    "offer": "{count, plural, other {自分宛てに届いたタスク # 件が、まだどのボードにもありません。「{board}」に入れますか？}}自分に割り当てられたタスクと会議のタスクは、今後ここに入ります。",
     "notNow": "後で",
-    "showHere": "{count, plural, other {ここに表示}}"
+    "showHere": "{count, plural, other {ここに入れる}}"
   },
   "toasts": {
     "createFailed": "ボードを作成できませんでした",
@@ -102,9 +102,9 @@
     "syncFailed": "Jira と同期できませんでした",
     "deleted": "「{board}」を削除しました",
     "stoppedSyncing": "「{board}」の同期を停止しました",
-    "workspaceTasksOn": "ワークスペースの自分のタスクが「{board}」に表示されるようになりました",
-    "workspaceTasksOff": "ワークスペースの自分のタスクはボードに表示されなくなりました",
-    "workspaceTasksHint": "カードを移動すると、元のワークスペースのタスクも変更されます。",
-    "workspaceTasksFailed": "ワークスペースのタスクの表示先を変更できませんでした"
+    "incomingOn": "自分宛てのタスクは「{board}」に入るようになりました",
+    "incomingOff": "自分宛てのタスクはボードに入らなくなりました",
+    "incomingHint": "カードはタスクそのものです。移動すると、どこでもタスクが変更されます。",
+    "incomingFailed": "タスクの送り先を変更できませんでした"
   }
 }

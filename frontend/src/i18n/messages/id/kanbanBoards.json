@@ -5,10 +5,10 @@
     "newBoard": "Papan baru…",
     "syncJiraBoard": "Sinkronkan papan Jira…",
     "rename": "Ganti nama papan…",
-    "showWorkspaceTasks": "Tampilkan tugas ruang kerja saya di sini",
     "changeIcon": "Ganti ikon",
     "delete": "Hapus papan…",
-    "stopSyncing": "Hentikan sinkronisasi…"
+    "stopSyncing": "Hentikan sinkronisasi…",
+    "incoming": "Kumpulkan tugas yang datang untuk saya di sini"
   },
   "icons": {
     "work": "Pekerjaan",
@@ -90,9 +90,9 @@
     "changesPaused": "Perubahan dijeda.",
     "importing": "Mengimpor {board} dari Jira…",
     "importingHint": "Kolom dan issue akan segera muncul di sini.",
-    "offer": "{count, plural, other {Ada # tugas terbuka di ruang kerja Anda. Tampilkan di “{board}”?}} Memindahkan kartu akan memperbarui tugas tersebut untuk tim Anda.",
+    "offer": "{count, plural, other {Ada # tugas yang datang untuk Anda dan belum ada di papan mana pun. Letakkan di “{board}”?}} Tugas yang ditugaskan kepada Anda dan tugas dari rapat Anda akan masuk ke sini.",
     "notNow": "Nanti saja",
-    "showHere": "{count, plural, other {Tampilkan di sini}}"
+    "showHere": "{count, plural, other {Letakkan di sini}}"
   },
   "toasts": {
     "createFailed": "Tidak dapat membuat papan",
@@ -102,9 +102,9 @@
     "syncFailed": "Tidak dapat menyinkronkan dengan Jira",
     "deleted": "“{board}” dihapus",
     "stoppedSyncing": "Sinkronisasi “{board}” dihentikan",
-    "workspaceTasksOn": "Tugas ruang kerja Anda kini tampil di “{board}”",
-    "workspaceTasksOff": "Tugas ruang kerja Anda tidak lagi tampil di papan mana pun",
-    "workspaceTasksHint": "Memindahkan kartu akan mengubah tugas di ruang kerjanya.",
-    "workspaceTasksFailed": "Tidak dapat mengubah tempat tugas ruang kerja ditampilkan"
+    "incomingOn": "Tugas yang datang untuk Anda kini masuk ke “{board}”",
+    "incomingOff": "Tugas yang datang untuk Anda tidak lagi masuk ke papan mana pun",
+    "incomingHint": "Kartu adalah tugas itu sendiri: memindahkannya akan mengubah tugas di mana-mana.",
+    "incomingFailed": "Tidak dapat mengubah tujuan tugas Anda"
   }
 }

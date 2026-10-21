@@ -38,7 +38,7 @@ export function BoardActionsButton({
           <MoreVertical />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-52" align="end">
+      <DropdownMenuContent className="w-max min-w-52 max-w-72" align="end">
         {items(target, dropdownKit)}
       </DropdownMenuContent>
     </DropdownMenu>
@@ -50,7 +50,7 @@ export function BoardContextMenu({ target, children }: { target: BoardMenuTarget
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
-      <ContextMenuContent className="w-52">{items(target, contextKit)}</ContextMenuContent>
+      <ContextMenuContent className="w-max min-w-52 max-w-72">{items(target, contextKit)}</ContextMenuContent>
     </ContextMenu>
   );
 }

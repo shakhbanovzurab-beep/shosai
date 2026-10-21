@@ -14,18 +14,14 @@
     "list": "Lista",
     "table": "Tabla"
   },
-  "toolbar": {
-    "filter": "Filtrar",
-    "sort": "Ordenar",
-    "moreWaysToAdd": "Más formas de agregar tareas",
-    "importCsv": "Importar CSV",
-    "addFromTemplate": "Agregar desde plantilla",
-    "createAutomation": "Crear automatización"
-  },
   "column": {
     "drag": "Arrastrar la columna {column}",
     "addTask": "Agregar tarea a {column}",
-    "empty": "No hay tareas en {column}"
+    "empty": "No hay tareas en {column}",
+    "add": "Agregar columna",
+    "expand": "Expandir {column}",
+    "sum": "{field}: {sum}",
+    "sumLabel": "Total de {field} en {column}: {sum}"
   },
   "columnMenu": {
     "managedInJira": "Las columnas se administran en Jira",
@@ -33,7 +29,13 @@
     "sortByPriority": "Ordenar por prioridad",
     "moveEarlier": "Mover antes",
     "moveLater": "Mover después",
-    "clear": "Vaciar columna"
+    "clear": "Vaciar columna",
+    "addAfter": "Agregar columna después",
+    "colour": "Color",
+    "collapse": "Contraer",
+    "expand": "Expandir",
+    "delete": "Eliminar columna",
+    "lastOfKind": "La última columna de su tipo se mantiene"
   },
   "taskMenu": {
     "openInJira": "Abrir {key} en Jira",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} (copia)",
     "deleted": "Se eliminó «{title}»",
     "cleared": "{count, plural, one {Se eliminó # tarea de {column}} many {Se eliminaron # de tareas de {column}} other {Se eliminaron # tareas de {column}}}",
-    "jiraLinkCopied": "Enlace a {key} copiado"
+    "jiraLinkCopied": "Enlace a {key} copiado",
+    "columnDeleted": "Se eliminó la columna «{column}»"
   },
   "errors": {
     "addTask": "No se pudo agregar la tarea",
     "saveChange": "No se pudo guardar el cambio",
     "deleteTasks": "{count, plural, one {No se pudo eliminar la tarea} many {No se pudieron eliminar las tareas} other {No se pudieron eliminar las tareas}}",
-    "saveBoard": "No se pudo guardar el tablero"
+    "saveBoard": "No se pudo guardar el tablero",
+    "addColumn": "No se pudo agregar la columna"
+  },
+  "newColumn": {
+    "title": "Nueva columna",
+    "name": "Nombre",
+    "kind": "Las tareas aquí están",
+    "colour": "Color",
+    "create": "Agregar columna"
+  },
+  "kinds": {
+    "todo": "Por hacer",
+    "in_progress": "En curso",
+    "done": "Listo"
+  },
+  "colors": {
+    "none": "Sin color",
+    "gray": "Gris",
+    "red": "Rojo",
+    "orange": "Naranja",
+    "amber": "Ámbar",
+    "green": "Verde",
+    "teal": "Verde azulado",
+    "blue": "Azul",
+    "violet": "Violeta",
+    "pink": "Rosa"
   }
 }

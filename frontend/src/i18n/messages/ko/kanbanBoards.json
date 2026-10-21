@@ -5,10 +5,10 @@
     "newBoard": "새 보드…",
     "syncJiraBoard": "Jira 보드 동기화…",
     "rename": "보드 이름 변경…",
-    "showWorkspaceTasks": "여기에 내 워크스페이스 작업 표시",
     "changeIcon": "아이콘 변경",
     "delete": "보드 삭제…",
-    "stopSyncing": "동기화 중지…"
+    "stopSyncing": "동기화 중지…",
+    "incoming": "나에게 오는 작업을 여기에 모으기"
   },
   "icons": {
     "work": "업무",
@@ -90,9 +90,9 @@
     "changesPaused": "지금은 변경할 수 없어요.",
     "importing": "Jira에서 {board} 보드를 가져오는 중…",
     "importingHint": "곧 열과 이슈가 여기에 표시돼요.",
-    "offer": "{count, plural, other {워크스페이스에 완료하지 않은 작업이 #개 있어요. “{board}” 보드에 표시할까요?}} 카드를 옮기면 팀 작업에도 반영돼요.",
+    "offer": "{count, plural, other {나에게 온 작업 #개가 아직 어느 보드에도 없어요. “{board}” 보드에 넣을까요?}} 나에게 배정된 작업과 회의에서 나온 작업이 여기에 들어와요.",
     "notNow": "나중에",
-    "showHere": "{count, plural, other {여기에 표시}}"
+    "showHere": "{count, plural, other {여기에 넣기}}"
   },
   "toasts": {
     "createFailed": "보드를 만들지 못했어요",
@@ -102,9 +102,9 @@
     "syncFailed": "Jira와 동기화하지 못했어요",
     "deleted": "“{board}” 보드를 삭제했어요",
     "stoppedSyncing": "“{board}” 보드 동기화를 중지했어요",
-    "workspaceTasksOn": "이제 “{board}” 보드에 워크스페이스 작업이 표시돼요",
-    "workspaceTasksOff": "이제 워크스페이스 작업이 보드에 표시되지 않아요",
-    "workspaceTasksHint": "카드를 옮기면 해당 워크스페이스의 작업도 바뀌어요.",
-    "workspaceTasksFailed": "워크스페이스 작업 표시 위치를 바꾸지 못했어요"
+    "incomingOn": "이제 나에게 오는 작업이 “{board}” 보드에 들어와요",
+    "incomingOff": "이제 나에게 오는 작업이 어느 보드에도 들어오지 않아요",
+    "incomingHint": "카드가 곧 작업이에요. 카드를 옮기면 모든 곳에서 작업이 바뀌어요.",
+    "incomingFailed": "작업이 들어갈 곳을 바꾸지 못했어요"
   }
 }

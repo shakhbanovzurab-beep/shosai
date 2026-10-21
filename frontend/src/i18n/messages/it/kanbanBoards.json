@@ -5,10 +5,10 @@
     "newBoard": "Nuova bacheca…",
     "syncJiraBoard": "Sincronizza una bacheca Jira…",
     "rename": "Rinomina bacheca…",
-    "showWorkspaceTasks": "Mostra qui le mie attività degli spazi di lavoro",
     "changeIcon": "Cambia icona",
     "delete": "Elimina bacheca…",
-    "stopSyncing": "Interrompi sincronizzazione…"
+    "stopSyncing": "Interrompi sincronizzazione…",
+    "incoming": "Metti qui le attività che mi arrivano"
   },
   "icons": {
     "work": "Lavoro",
@@ -90,9 +90,9 @@
     "changesPaused": "Le modifiche sono in pausa.",
     "importing": "Importazione di {board} da Jira…",
     "importingHint": "Colonne e ticket compariranno qui tra poco.",
-    "offer": "{count, plural, one {Hai # attività aperta nei tuoi spazi di lavoro. Vuoi mostrarla su «{board}»?} many {Hai # di attività aperte nei tuoi spazi di lavoro. Vuoi mostrarle su «{board}»?} other {Hai # attività aperte nei tuoi spazi di lavoro. Vuoi mostrarle su «{board}»?}} Se sposti una scheda, l’attività si aggiorna per il tuo team.",
+    "offer": "{count, plural, one {Ti è arrivata # attività che non è ancora su nessuna bacheca. Vuoi metterla su «{board}»?} many {Ti sono arrivate # di attività che non sono ancora su nessuna bacheca. Vuoi metterle su «{board}»?} other {Ti sono arrivate # attività che non sono ancora su nessuna bacheca. Vuoi metterle su «{board}»?}} Le attività assegnate a te e quelle delle tue riunioni arriveranno qui.",
     "notNow": "Non ora",
-    "showHere": "{count, plural, one {Mostrala qui} many {Mostrale qui} other {Mostrale qui}}"
+    "showHere": "{count, plural, one {Mettila qui} many {Mettile qui} other {Mettile qui}}"
   },
   "toasts": {
     "createFailed": "Impossibile creare la bacheca",
@@ -102,9 +102,9 @@
     "syncFailed": "Impossibile sincronizzare con Jira",
     "deleted": "Bacheca «{board}» eliminata",
     "stoppedSyncing": "Sincronizzazione di «{board}» interrotta",
-    "workspaceTasksOn": "Le attività dei tuoi spazi di lavoro ora compaiono su «{board}»",
-    "workspaceTasksOff": "Le attività dei tuoi spazi di lavoro non compaiono più su nessuna bacheca",
-    "workspaceTasksHint": "Se sposti una scheda, l’attività cambia anche nel suo spazio di lavoro.",
-    "workspaceTasksFailed": "Impossibile cambiare dove compaiono le attività degli spazi di lavoro"
+    "incomingOn": "Le attività che ti arrivano ora vanno su «{board}»",
+    "incomingOff": "Le attività che ti arrivano non vanno più su nessuna bacheca",
+    "incomingHint": "Una scheda è l’attività stessa: se la sposti, l’attività cambia ovunque.",
+    "incomingFailed": "Impossibile cambiare dove vanno le tue attività"
   }
 }

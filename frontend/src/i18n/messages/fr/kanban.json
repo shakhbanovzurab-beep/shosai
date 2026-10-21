@@ -14,18 +14,14 @@
     "list": "Liste",
     "table": "Grille"
   },
-  "toolbar": {
-    "filter": "Filtrer",
-    "sort": "Trier",
-    "moreWaysToAdd": "Autres façons d’ajouter des tâches",
-    "importCsv": "Importer un CSV",
-    "addFromTemplate": "Ajouter depuis un modèle",
-    "createAutomation": "Créer une automatisation"
-  },
   "column": {
     "drag": "Faire glisser la colonne {column}",
     "addTask": "Ajouter une tâche dans {column}",
-    "empty": "Aucune tâche dans {column}"
+    "empty": "Aucune tâche dans {column}",
+    "add": "Ajouter une colonne",
+    "expand": "Développer {column}",
+    "sum": "{field} : {sum}",
+    "sumLabel": "Total de {field} dans {column} : {sum}"
   },
   "columnMenu": {
     "managedInJira": "Les colonnes sont gérées dans Jira",
@@ -33,7 +29,13 @@
     "sortByPriority": "Trier par priorité",
     "moveEarlier": "Décaler vers le début",
     "moveLater": "Décaler vers la fin",
-    "clear": "Vider la colonne"
+    "clear": "Vider la colonne",
+    "addAfter": "Ajouter une colonne après",
+    "colour": "Couleur",
+    "collapse": "Réduire",
+    "expand": "Développer",
+    "delete": "Supprimer la colonne",
+    "lastOfKind": "La dernière colonne de ce type reste"
   },
   "taskMenu": {
     "openInJira": "Ouvrir {key} dans Jira",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} (copie)",
     "deleted": "Tâche « {title} » supprimée",
     "cleared": "{count, plural, one {# tâche supprimée de la colonne {column}} many {# de tâches supprimées de la colonne {column}} other {# tâches supprimées de la colonne {column}}}",
-    "jiraLinkCopied": "Lien vers {key} copié"
+    "jiraLinkCopied": "Lien vers {key} copié",
+    "columnDeleted": "Colonne « {column} » supprimée"
   },
   "errors": {
     "addTask": "Impossible d’ajouter la tâche",
     "saveChange": "Impossible d’enregistrer la modification",
     "deleteTasks": "{count, plural, one {Impossible de supprimer la tâche} many {Impossible de supprimer les tâches} other {Impossible de supprimer les tâches}}",
-    "saveBoard": "Impossible d’enregistrer le tableau"
+    "saveBoard": "Impossible d’enregistrer le tableau",
+    "addColumn": "Impossible d’ajouter la colonne"
+  },
+  "newColumn": {
+    "title": "Nouvelle colonne",
+    "name": "Nom",
+    "kind": "Les tâches ici sont",
+    "colour": "Couleur",
+    "create": "Ajouter la colonne"
+  },
+  "kinds": {
+    "todo": "À faire",
+    "in_progress": "En cours",
+    "done": "Terminé"
+  },
+  "colors": {
+    "none": "Sans couleur",
+    "gray": "Gris",
+    "red": "Rouge",
+    "orange": "Orange",
+    "amber": "Ambre",
+    "green": "Vert",
+    "teal": "Bleu canard",
+    "blue": "Bleu",
+    "violet": "Violet",
+    "pink": "Rose"
   }
 }

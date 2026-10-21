@@ -6,9 +6,10 @@ import { move } from "@dnd-kit/helpers";
 import { DragDropProvider, type DragEndEvent, type DragOverEvent, DragOverlay } from "@dnd-kit/react";
 import { isSortable } from "@dnd-kit/react/sortable";
 
-import { useBoardStore, useColumnOrder } from "../model/board-hooks";
+import { useBoardSelector, useBoardStore, useColumnOrder } from "../model/board-hooks";
 import type { BoardSnapshot } from "../model/board-store";
-import { useBoardCommands } from "./board-store";
+import { AddColumnButton } from "./add-column-button";
+import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
 import { KanbanColumn } from "./kanban-column";
 import { TaskCard } from "./task-card";
 
@@ -37,6 +38,14 @@ export function KanbanBoard() {
   const store = useBoardStore();
   const { cards, columns } = useBoardCommands();
   const columnOrder = useColumnOrder();
+  const editable = useEditable();
+  const managedByJira = useManagedByJira();
+  const canAddColumn = editable && !managedByJira;
+  // Свёрнутая колонка — узкая полоса; развёрнутая не уже 20rem и не шире экрана телефона.
+  const tracks = useBoardSelector((s) =>
+    s.columnOrder.map((id) => (s.columns[id]?.collapsed ? "3rem" : "minmax(min(20rem, 85vw), 1fr)")).join(" "),
+  );
+  const gridTracks = canAddColumn ? `${tracks} 12rem` : tracks;
   const beforeDrag = useRef<BoardSnapshot | null>(null);
 
   function handleDragStart() {
@@ -65,14 +74,12 @@ export function KanbanBoard() {
 
   return (
     <DragDropProvider onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
-      <div className="scrollbar-thin min-h-0 min-w-0 flex-1 overflow-x-auto overflow-y-hidden bg-muted/25 px-4 pt-4 pb-0 [scrollbar-color:var(--border)_transparent] lg:px-5 lg:pt-5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1">
-        <div
-          className="inline-grid h-full min-w-full gap-4"
-          style={{ gridTemplateColumns: `repeat(${columnOrder.length}, minmax(20rem, 1fr))` }}
-        >
+      <div className="scrollbar-thin min-h-0 min-w-0 flex-1 overflow-x-auto overflow-y-hidden bg-muted/25 max-sm:snap-x max-sm:snap-mandatory px-4 pt-4 pb-0 [scrollbar-color:var(--border)_transparent] lg:px-5 lg:pt-5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1">
+        <div className="inline-grid h-full min-w-full gap-4" style={{ gridTemplateColumns: gridTracks }}>
           {columnOrder.map((columnId, index) => (
             <KanbanColumn key={columnId} columnId={columnId} index={index} />
           ))}
+          {canAddColumn ? <AddColumnButton position={columnOrder.length} /> : null}
         </div>
       </div>
       <DragOverlay dropAnimation={null}>

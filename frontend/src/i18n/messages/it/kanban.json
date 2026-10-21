@@ -14,18 +14,14 @@
     "list": "Elenco",
     "table": "Tabella"
   },
-  "toolbar": {
-    "filter": "Filtra",
-    "sort": "Ordina",
-    "moreWaysToAdd": "Altri modi per aggiungere attività",
-    "importCsv": "Importa CSV",
-    "addFromTemplate": "Aggiungi da modello",
-    "createAutomation": "Crea automazione"
-  },
   "column": {
     "drag": "Trascina la colonna {column}",
     "addTask": "Aggiungi attività in {column}",
-    "empty": "Nessuna attività in {column}"
+    "empty": "Nessuna attività in {column}",
+    "add": "Aggiungi colonna",
+    "expand": "Espandi {column}",
+    "sum": "{field}: {sum}",
+    "sumLabel": "Totale di {field} in {column}: {sum}"
   },
   "columnMenu": {
     "managedInJira": "Le colonne si gestiscono in Jira",
@@ -33,7 +29,13 @@
     "sortByPriority": "Ordina per priorità",
     "moveEarlier": "Sposta prima",
     "moveLater": "Sposta dopo",
-    "clear": "Svuota colonna"
+    "clear": "Svuota colonna",
+    "addAfter": "Aggiungi colonna dopo",
+    "colour": "Colore",
+    "collapse": "Comprimi",
+    "expand": "Espandi",
+    "delete": "Elimina colonna",
+    "lastOfKind": "L’ultima colonna di questo tipo resta"
   },
   "taskMenu": {
     "openInJira": "Apri {key} in Jira",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} (copia)",
     "deleted": "Attività «{title}» eliminata",
     "cleared": "{count, plural, one {# attività eliminata da {column}} many {# di attività eliminate da {column}} other {# attività eliminate da {column}}}",
-    "jiraLinkCopied": "Link a {key} copiato"
+    "jiraLinkCopied": "Link a {key} copiato",
+    "columnDeleted": "Colonna «{column}» eliminata"
   },
   "errors": {
     "addTask": "Impossibile aggiungere l’attività",
     "saveChange": "Impossibile salvare la modifica",
     "deleteTasks": "{count, plural, one {Impossibile eliminare l’attività} many {Impossibile eliminare le attività} other {Impossibile eliminare le attività}}",
-    "saveBoard": "Impossibile salvare la bacheca"
+    "saveBoard": "Impossibile salvare la bacheca",
+    "addColumn": "Impossibile aggiungere la colonna"
+  },
+  "newColumn": {
+    "title": "Nuova colonna",
+    "name": "Nome",
+    "kind": "Le attività qui sono",
+    "colour": "Colore",
+    "create": "Aggiungi colonna"
+  },
+  "kinds": {
+    "todo": "Da fare",
+    "in_progress": "In corso",
+    "done": "Completate"
+  },
+  "colors": {
+    "none": "Nessun colore",
+    "gray": "Grigio",
+    "red": "Rosso",
+    "orange": "Arancione",
+    "amber": "Ambra",
+    "green": "Verde",
+    "teal": "Verde acqua",
+    "blue": "Blu",
+    "violet": "Viola",
+    "pink": "Rosa"
   }
 }

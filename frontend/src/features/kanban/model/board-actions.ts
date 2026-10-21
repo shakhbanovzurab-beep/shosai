@@ -78,10 +78,10 @@ export async function chooseIncomingBoard(boardId: string | null, boardName: str
     const response = await boardsApi.setIncoming({ board_id: boardId });
     boardsResource.update(() => response);
     for (const board of response.items) void boardResource(board.id).refresh();
-    toast.success(boardId ? t("toasts.workspaceTasksOn", { board: boardName }) : t("toasts.workspaceTasksOff"), {
-      description: boardId ? t("toasts.workspaceTasksHint") : undefined,
+    toast.success(boardId ? t("toasts.incomingOn", { board: boardName }) : t("toasts.incomingOff"), {
+      description: boardId ? t("toasts.incomingHint") : undefined,
     });
   } catch (error) {
-    failed(t("toasts.workspaceTasksFailed"), error, ta);
+    failed(t("toasts.incomingFailed"), error, ta);
   }
 }

@@ -5,10 +5,10 @@
     "newBoard": "Novo quadro…",
     "syncJiraBoard": "Sincronizar quadro do Jira…",
     "rename": "Renomear quadro…",
-    "showWorkspaceTasks": "Mostrar aqui minhas tarefas dos espaços de trabalho",
     "changeIcon": "Alterar ícone",
     "delete": "Excluir quadro…",
-    "stopSyncing": "Parar de sincronizar…"
+    "stopSyncing": "Parar de sincronizar…",
+    "incoming": "Colocar aqui as tarefas que chegam para mim"
   },
   "icons": {
     "work": "Trabalho",
@@ -90,9 +90,9 @@
     "changesPaused": "As alterações estão pausadas.",
     "importing": "Importando {board} do Jira…",
     "importingHint": "As colunas e os itens vão aparecer aqui em instantes.",
-    "offer": "{count, plural, one {Você tem # tarefa em aberto nos seus espaços de trabalho. Mostrá-la em “{board}”?} many {Você tem # de tarefas em aberto nos seus espaços de trabalho. Mostrá-las em “{board}”?} other {Você tem # tarefas em aberto nos seus espaços de trabalho. Mostrá-las em “{board}”?}} Mover um cartão atualiza a tarefa para sua equipe.",
+    "offer": "{count, plural, one {# tarefa chegou para você e ainda não está em nenhum quadro. Colocá-la em “{board}”?} many {# de tarefas chegaram para você e ainda não estão em nenhum quadro. Colocá-las em “{board}”?} other {# tarefas chegaram para você e ainda não estão em nenhum quadro. Colocá-las em “{board}”?}} As tarefas atribuídas a você e as das suas reuniões vão chegar aqui.",
     "notNow": "Agora não",
-    "showHere": "{count, plural, one {Mostrar aqui} many {Mostrar aqui} other {Mostrar aqui}}"
+    "showHere": "{count, plural, one {Colocar aqui} many {Colocar aqui} other {Colocar aqui}}"
   },
   "toasts": {
     "createFailed": "Não foi possível criar o quadro",
@@ -102,9 +102,9 @@
     "syncFailed": "Não foi possível sincronizar com o Jira",
     "deleted": "Quadro “{board}” excluído",
     "stoppedSyncing": "Sincronização de “{board}” interrompida",
-    "workspaceTasksOn": "Suas tarefas dos espaços de trabalho agora aparecem em “{board}”",
-    "workspaceTasksOff": "Suas tarefas dos espaços de trabalho não aparecem mais em nenhum quadro",
-    "workspaceTasksHint": "Mover um cartão altera a tarefa no espaço de trabalho dela.",
-    "workspaceTasksFailed": "Não foi possível alterar onde as tarefas dos espaços de trabalho aparecem"
+    "incomingOn": "As tarefas que chegam para você agora vão para “{board}”",
+    "incomingOff": "As tarefas que chegam para você não vão mais para nenhum quadro",
+    "incomingHint": "Um cartão é a própria tarefa: movê-lo altera a tarefa em todos os lugares.",
+    "incomingFailed": "Não foi possível alterar para onde vão suas tarefas"
   }
 }

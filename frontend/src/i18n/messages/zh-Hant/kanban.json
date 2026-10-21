@@ -14,18 +14,14 @@
     "list": "清單",
     "table": "表格"
   },
-  "toolbar": {
-    "filter": "篩選",
-    "sort": "排序",
-    "moreWaysToAdd": "更多新增任務的方式",
-    "importCsv": "匯入 CSV",
-    "addFromTemplate": "從範本新增",
-    "createAutomation": "建立自動化規則"
-  },
   "column": {
     "drag": "拖曳「{column}」欄",
     "addTask": "在「{column}」新增任務",
-    "empty": "「{column}」中沒有任務"
+    "empty": "「{column}」中沒有任務",
+    "add": "新增欄",
+    "expand": "展開「{column}」",
+    "sum": "{field}：{sum}",
+    "sumLabel": "「{column}」的 {field} 總計：{sum}"
   },
   "columnMenu": {
     "managedInJira": "各欄由 Jira 管理",
@@ -33,7 +29,13 @@
     "sortByPriority": "依優先順序排序",
     "moveEarlier": "往前移",
     "moveLater": "往後移",
-    "clear": "清空此欄"
+    "clear": "清空此欄",
+    "addAfter": "在後面新增欄",
+    "colour": "顏色",
+    "collapse": "收合",
+    "expand": "展開",
+    "delete": "刪除欄",
+    "lastOfKind": "此類型的最後一欄無法刪除"
   },
   "taskMenu": {
     "openInJira": "在 Jira 中開啟 {key}",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} 的副本",
     "deleted": "已刪除「{title}」",
     "cleared": "{count, plural, other {已從「{column}」清除 # 項任務}}",
-    "jiraLinkCopied": "已複製 {key} 的連結"
+    "jiraLinkCopied": "已複製 {key} 的連結",
+    "columnDeleted": "已刪除「{column}」欄"
   },
   "errors": {
     "addTask": "無法新增任務",
     "saveChange": "無法儲存變更",
     "deleteTasks": "{count, plural, other {無法刪除任務}}",
-    "saveBoard": "無法儲存看板"
+    "saveBoard": "無法儲存看板",
+    "addColumn": "無法新增欄"
+  },
+  "newColumn": {
+    "title": "新增欄",
+    "name": "名稱",
+    "kind": "此欄的任務",
+    "colour": "顏色",
+    "create": "新增欄"
+  },
+  "kinds": {
+    "todo": "待辦",
+    "in_progress": "進行中",
+    "done": "完成"
+  },
+  "colors": {
+    "none": "無",
+    "gray": "灰色",
+    "red": "紅色",
+    "orange": "橘色",
+    "amber": "琥珀色",
+    "green": "綠色",
+    "teal": "藍綠色",
+    "blue": "藍色",
+    "violet": "紫色",
+    "pink": "粉紅色"
   }
 }

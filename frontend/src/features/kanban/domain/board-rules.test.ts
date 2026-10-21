@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { locate, moveToEdge, placeCard, shiftColumn, sortByPriority } from "./board-rules";
+import { columnSum, heirOf, locate, moveToEdge, placeCard, shiftColumn, sortByPriority } from "./board-rules";
+import type { ColumnHead } from "./boards-contract";
 import type { Card, Priority } from "./tasks-contract";
 
 const card = (id: string, priority: Priority | null) => ({ id, priority }) as Card;
@@ -30,5 +31,32 @@ describe("card order", () => {
   it("shifts a column within the board and stays put at the edges", () => {
     expect(shiftColumn(["a", "b", "c"], "b", -1)).toEqual(["b", "a", "c"]);
     expect(shiftColumn(["a", "b", "c"], "c", 1)).toEqual(["a", "b", "c"]);
+  });
+});
+
+describe("columns", () => {
+  const head = (id: string, kind: ColumnHead["kind"]): ColumnHead => ({
+    id,
+    title: id,
+    kind,
+    color: null,
+    collapsed: false,
+  });
+  const columns = { a: head("a", "todo"), b: head("b", "in_progress"), c: head("c", "todo"), d: head("d", "done") };
+
+  it("hands a deleted column's cards to the first other column of its kind, or to none", () => {
+    expect(heirOf(["a", "b", "c", "d"], columns, "c")).toBe("a");
+    expect(heirOf(["a", "b", "c", "d"], columns, "a")).toBe("c");
+    expect(heirOf(["a", "b", "c", "d"], columns, "d")).toBeNull();
+  });
+
+  it("sums a number field to the cent, skipping cards without a value", () => {
+    const cards = {
+      x: { values: { est: { number: 0.1 } } },
+      y: { values: { est: { number: 0.2 } } },
+      z: { values: { other: { number: 5 } } },
+    } as unknown as Record<string, Card>;
+    expect(columnSum(["x", "y", "z", "missing"], cards, "est")).toBe(0.3);
+    expect(columnSum(["z", "missing"], cards, "est")).toBeNull();
   });
 });

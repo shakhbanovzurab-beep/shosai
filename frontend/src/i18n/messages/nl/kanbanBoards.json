@@ -5,10 +5,10 @@
     "newBoard": "Nieuw bord…",
     "syncJiraBoard": "Jira-bord synchroniseren…",
     "rename": "Bordnaam wijzigen…",
-    "showWorkspaceTasks": "Mijn werkruimtetaken hier tonen",
     "changeIcon": "Pictogram wijzigen",
     "delete": "Bord verwijderen…",
-    "stopSyncing": "Synchronisatie stoppen…"
+    "stopSyncing": "Synchronisatie stoppen…",
+    "incoming": "Mijn binnenkomende taken hier zetten"
   },
   "icons": {
     "work": "Werk",
@@ -90,9 +90,9 @@
     "changesPaused": "Wijzigingen zijn gepauzeerd.",
     "importing": "{board} wordt uit Jira geïmporteerd…",
     "importingHint": "Kolommen en issues verschijnen hier zo.",
-    "offer": "{count, plural, one {Je hebt # openstaande taak in je werkruimtes. Wil je die op ‘{board}’ tonen?} other {Je hebt # openstaande taken in je werkruimtes. Wil je ze op ‘{board}’ tonen?}} Als je een kaart verplaatst, wordt de taak voor je team bijgewerkt.",
+    "offer": "{count, plural, one {Er is # taak voor je binnengekomen die nog op geen enkel bord staat. Wil je die op ‘{board}’ zetten?} other {Er zijn # taken voor je binnengekomen die nog op geen enkel bord staan. Wil je ze op ‘{board}’ zetten?}} Taken die aan jou zijn toegewezen en taken uit je vergaderingen komen hier terecht.",
     "notNow": "Niet nu",
-    "showHere": "{count, plural, one {Hier tonen} other {Hier tonen}}"
+    "showHere": "{count, plural, one {Hier zetten} other {Hier zetten}}"
   },
   "toasts": {
     "createFailed": "Kan het bord niet maken",
@@ -102,9 +102,9 @@
     "syncFailed": "Kan niet synchroniseren met Jira",
     "deleted": "‘{board}’ verwijderd",
     "stoppedSyncing": "Synchronisatie van ‘{board}’ gestopt",
-    "workspaceTasksOn": "Je werkruimtetaken staan nu op ‘{board}’",
-    "workspaceTasksOff": "Je werkruimtetaken staan niet meer op een bord",
-    "workspaceTasksHint": "Als je een kaart verplaatst, verandert de taak ook in de werkruimte.",
-    "workspaceTasksFailed": "Kan niet wijzigen waar werkruimtetaken worden getoond"
+    "incomingOn": "Je binnenkomende taken gaan nu naar ‘{board}’",
+    "incomingOff": "Je binnenkomende taken gaan niet meer naar een bord",
+    "incomingHint": "Een kaart is de taak zelf: als je hem verplaatst, verandert de taak overal.",
+    "incomingFailed": "Kan niet wijzigen waar je taken heen gaan"
   }
 }

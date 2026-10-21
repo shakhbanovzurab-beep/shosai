@@ -5,10 +5,10 @@
     "newBoard": "Bảng mới…",
     "syncJiraBoard": "Đồng bộ bảng Jira…",
     "rename": "Đổi tên bảng…",
-    "showWorkspaceTasks": "Hiển thị công việc từ không gian làm việc của bạn tại đây",
     "changeIcon": "Đổi biểu tượng",
     "delete": "Xóa bảng…",
-    "stopSyncing": "Dừng đồng bộ…"
+    "stopSyncing": "Dừng đồng bộ…",
+    "incoming": "Đưa công việc gửi đến bạn vào đây"
   },
   "icons": {
     "work": "Công việc",
@@ -90,9 +90,9 @@
     "changesPaused": "Mọi thay đổi đang tạm dừng.",
     "importing": "Đang nhập {board} từ Jira…",
     "importingHint": "Cột và issue sẽ hiện ở đây trong giây lát.",
-    "offer": "{count, plural, other {Bạn có # công việc đang mở trong không gian làm việc. Bạn có muốn hiển thị trên “{board}” không?}} Khi bạn di chuyển thẻ, công việc cũng được cập nhật cho cả nhóm.",
+    "offer": "{count, plural, other {Có # công việc gửi đến bạn chưa nằm trên bảng nào. Bạn có muốn đưa vào “{board}” không?}} Công việc giao cho bạn và công việc từ các cuộc họp của bạn sẽ được đưa vào đây.",
     "notNow": "Để sau",
-    "showHere": "{count, plural, other {Hiển thị tại đây}}"
+    "showHere": "{count, plural, other {Đưa vào đây}}"
   },
   "toasts": {
     "createFailed": "Không thể tạo bảng",
@@ -102,9 +102,9 @@
     "syncFailed": "Không thể đồng bộ với Jira",
     "deleted": "Đã xóa “{board}”",
     "stoppedSyncing": "Đã dừng đồng bộ “{board}”",
-    "workspaceTasksOn": "Công việc từ không gian làm việc của bạn giờ hiển thị trên “{board}”",
-    "workspaceTasksOff": "Công việc từ không gian làm việc của bạn không còn hiển thị trên bảng nào",
-    "workspaceTasksHint": "Khi bạn di chuyển thẻ, công việc trong không gian làm việc cũng thay đổi theo.",
-    "workspaceTasksFailed": "Không thể thay đổi nơi hiển thị công việc từ không gian làm việc"
+    "incomingOn": "Công việc gửi đến bạn giờ sẽ vào “{board}”",
+    "incomingOff": "Công việc gửi đến bạn không còn vào bảng nào",
+    "incomingHint": "Thẻ chính là công việc: di chuyển thẻ sẽ thay đổi công việc ở mọi nơi.",
+    "incomingFailed": "Không thể thay đổi nơi nhận công việc của bạn"
   }
 }

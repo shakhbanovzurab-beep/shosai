@@ -21,7 +21,7 @@ export function SortableTaskCard({ taskId, columnId, index }: { taskId: string; 
 
   return (
     <BoardContextMenu target={{ kind: "task", taskId, columnId }}>
-      <div ref={ref} data-task-id={taskId} className={cn("touch-none", isDragging && "opacity-30")}>
+      <div ref={ref} data-task-id={taskId} className={cn(isDragging && "opacity-30")}>
         <TaskCard taskId={taskId} columnId={columnId} />
       </div>
     </BoardContextMenu>

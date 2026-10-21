@@ -5,10 +5,10 @@
     "newBoard": "New board…",
     "syncJiraBoard": "Sync a Jira board…",
     "rename": "Rename board…",
-    "showWorkspaceTasks": "Show my workspace tasks here",
     "changeIcon": "Change icon",
     "delete": "Delete board…",
-    "stopSyncing": "Stop syncing…"
+    "stopSyncing": "Stop syncing…",
+    "incoming": "Put tasks that come to me here"
   },
   "icons": {
     "work": "Work",
@@ -90,9 +90,9 @@
     "changesPaused": "Changes are paused.",
     "importing": "Importing {board} from Jira…",
     "importingHint": "Columns and issues appear here in a moment.",
-    "offer": "{count, plural, one {You have # open task in your workspaces. Show it on “{board}”?} other {You have # open tasks in your workspaces. Show them on “{board}”?}} Moving a card updates the task for your team.",
+    "offer": "{count, plural, one {# task came to you and is on no board yet. Put it on “{board}”?} other {# tasks came to you and are on no board yet. Put them on “{board}”?}} Tasks assigned to you and the tasks from your meetings will land here.",
     "notNow": "Not now",
-    "showHere": "{count, plural, one {Show it here} other {Show them here}}"
+    "showHere": "{count, plural, one {Put it here} other {Put them here}}"
   },
   "toasts": {
     "createFailed": "Couldn’t create the board",
@@ -102,9 +102,9 @@
     "syncFailed": "Couldn’t sync with Jira",
     "deleted": "Deleted “{board}”",
     "stoppedSyncing": "Stopped syncing “{board}”",
-    "workspaceTasksOn": "Your workspace tasks now show on “{board}”",
-    "workspaceTasksOff": "Your workspace tasks no longer show on a board",
-    "workspaceTasksHint": "Moving a card changes the task in its workspace.",
-    "workspaceTasksFailed": "Couldn’t change where workspace tasks show"
+    "incomingOn": "Tasks that come to you now go to “{board}”",
+    "incomingOff": "Tasks that come to you no longer go to a board",
+    "incomingHint": "A card is the task itself: moving it changes the task everywhere.",
+    "incomingFailed": "Couldn’t change where your tasks go"
   }
 }

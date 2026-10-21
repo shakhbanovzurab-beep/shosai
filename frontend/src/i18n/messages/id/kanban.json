@@ -14,18 +14,14 @@
     "list": "Daftar",
     "table": "Tabel"
   },
-  "toolbar": {
-    "filter": "Filter",
-    "sort": "Urutkan",
-    "moreWaysToAdd": "Cara lain menambahkan tugas",
-    "importCsv": "Impor CSV",
-    "addFromTemplate": "Tambahkan dari template",
-    "createAutomation": "Buat otomatisasi"
-  },
   "column": {
     "drag": "Seret kolom {column}",
     "addTask": "Tambahkan tugas ke {column}",
-    "empty": "Tidak ada tugas di {column}"
+    "empty": "Tidak ada tugas di {column}",
+    "add": "Tambahkan kolom",
+    "expand": "Luaskan {column}",
+    "sum": "{field}: {sum}",
+    "sumLabel": "Total {field} di {column}: {sum}"
   },
   "columnMenu": {
     "managedInJira": "Kolom dikelola di Jira",
@@ -33,7 +29,13 @@
     "sortByPriority": "Urutkan menurut prioritas",
     "moveEarlier": "Pindahkan lebih awal",
     "moveLater": "Pindahkan lebih akhir",
-    "clear": "Kosongkan kolom"
+    "clear": "Kosongkan kolom",
+    "addAfter": "Tambahkan kolom sesudahnya",
+    "colour": "Warna",
+    "collapse": "Ciutkan",
+    "expand": "Luaskan",
+    "delete": "Hapus kolom",
+    "lastOfKind": "Kolom terakhir dari jenis ini tetap ada"
   },
   "taskMenu": {
     "openInJira": "Buka {key} di Jira",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} (salinan)",
     "deleted": "“{title}” dihapus",
     "cleared": "{count, plural, other {# tugas dihapus dari {column}}}",
-    "jiraLinkCopied": "Tautan ke {key} disalin"
+    "jiraLinkCopied": "Tautan ke {key} disalin",
+    "columnDeleted": "Kolom “{column}” dihapus"
   },
   "errors": {
     "addTask": "Tidak dapat menambahkan tugas",
     "saveChange": "Tidak dapat menyimpan perubahan",
     "deleteTasks": "{count, plural, other {Tidak dapat menghapus tugas}}",
-    "saveBoard": "Tidak dapat menyimpan papan"
+    "saveBoard": "Tidak dapat menyimpan papan",
+    "addColumn": "Tidak dapat menambahkan kolom"
+  },
+  "newColumn": {
+    "title": "Kolom baru",
+    "name": "Nama",
+    "kind": "Tugas di sini",
+    "colour": "Warna",
+    "create": "Tambahkan kolom"
+  },
+  "kinds": {
+    "todo": "Belum dikerjakan",
+    "in_progress": "Sedang dikerjakan",
+    "done": "Selesai"
+  },
+  "colors": {
+    "none": "Tanpa warna",
+    "gray": "Abu-abu",
+    "red": "Merah",
+    "orange": "Oranye",
+    "amber": "Kuning",
+    "green": "Hijau",
+    "teal": "Hijau kebiruan",
+    "blue": "Biru",
+    "violet": "Ungu",
+    "pink": "Merah muda"
   }
 }

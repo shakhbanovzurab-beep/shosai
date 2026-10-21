@@ -14,18 +14,14 @@
     "list": "Lista",
     "table": "Tabela"
   },
-  "toolbar": {
-    "filter": "Filtrar",
-    "sort": "Ordenar",
-    "moreWaysToAdd": "Mais formas de adicionar tarefas",
-    "importCsv": "Importar CSV",
-    "addFromTemplate": "Adicionar de um template",
-    "createAutomation": "Criar automação"
-  },
   "column": {
     "drag": "Arrastar a coluna {column}",
     "addTask": "Adicionar tarefa em {column}",
-    "empty": "Nenhuma tarefa em {column}"
+    "empty": "Nenhuma tarefa em {column}",
+    "add": "Adicionar coluna",
+    "expand": "Expandir {column}",
+    "sum": "{field}: {sum}",
+    "sumLabel": "Total de {field} em {column}: {sum}"
   },
   "columnMenu": {
     "managedInJira": "As colunas são gerenciadas no Jira",
@@ -33,7 +29,13 @@
     "sortByPriority": "Ordenar por prioridade",
     "moveEarlier": "Mover para antes",
     "moveLater": "Mover para depois",
-    "clear": "Limpar coluna"
+    "clear": "Limpar coluna",
+    "addAfter": "Adicionar coluna depois",
+    "colour": "Cor",
+    "collapse": "Recolher",
+    "expand": "Expandir",
+    "delete": "Excluir coluna",
+    "lastOfKind": "A última coluna desse tipo permanece"
   },
   "taskMenu": {
     "openInJira": "Abrir {key} no Jira",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} (cópia)",
     "deleted": "Tarefa “{title}” excluída",
     "cleared": "{count, plural, one {# tarefa excluída da coluna {column}} many {# de tarefas excluídas da coluna {column}} other {# tarefas excluídas da coluna {column}}}",
-    "jiraLinkCopied": "Link de {key} copiado"
+    "jiraLinkCopied": "Link de {key} copiado",
+    "columnDeleted": "Coluna “{column}” excluída"
   },
   "errors": {
     "addTask": "Não foi possível adicionar a tarefa",
     "saveChange": "Não foi possível salvar a alteração",
     "deleteTasks": "{count, plural, one {Não foi possível excluir a tarefa} many {Não foi possível excluir as tarefas} other {Não foi possível excluir as tarefas}}",
-    "saveBoard": "Não foi possível salvar o quadro"
+    "saveBoard": "Não foi possível salvar o quadro",
+    "addColumn": "Não foi possível adicionar a coluna"
+  },
+  "newColumn": {
+    "title": "Nova coluna",
+    "name": "Nome",
+    "kind": "As tarefas aqui estão",
+    "colour": "Cor",
+    "create": "Adicionar coluna"
+  },
+  "kinds": {
+    "todo": "A fazer",
+    "in_progress": "Em andamento",
+    "done": "Concluído"
+  },
+  "colors": {
+    "none": "Sem cor",
+    "gray": "Cinza",
+    "red": "Vermelho",
+    "orange": "Laranja",
+    "amber": "Âmbar",
+    "green": "Verde",
+    "teal": "Verde-azulado",
+    "blue": "Azul",
+    "violet": "Violeta",
+    "pink": "Rosa"
   }
 }

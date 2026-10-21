@@ -5,10 +5,10 @@
     "newBoard": "Neues Board…",
     "syncJiraBoard": "Jira-Board synchronisieren…",
     "rename": "Board umbenennen…",
-    "showWorkspaceTasks": "Deine Workspace-Aufgaben hier anzeigen",
     "changeIcon": "Symbol ändern",
     "delete": "Board löschen…",
-    "stopSyncing": "Synchronisierung beenden…"
+    "stopSyncing": "Synchronisierung beenden…",
+    "incoming": "Meine eingehenden Aufgaben hier sammeln"
   },
   "icons": {
     "work": "Arbeit",
@@ -90,9 +90,9 @@
     "changesPaused": "Änderungen sind pausiert.",
     "importing": "{board} wird aus Jira importiert…",
     "importingHint": "Spalten und Vorgänge erscheinen gleich hier.",
-    "offer": "{count, plural, one {Du hast # offene Aufgabe in deinen Workspaces. Auf „{board}“ anzeigen?} other {Du hast # offene Aufgaben in deinen Workspaces. Auf „{board}“ anzeigen?}} Wenn du eine Karte verschiebst, wird die Aufgabe für dein Team aktualisiert.",
+    "offer": "{count, plural, one {# Aufgabe ist bei dir eingegangen und liegt noch auf keinem Board. Auf „{board}“ legen?} other {# Aufgaben sind bei dir eingegangen und liegen noch auf keinem Board. Auf „{board}“ legen?}} Dir zugewiesene Aufgaben und Aufgaben aus deinen Meetings landen dann hier.",
     "notNow": "Nicht jetzt",
-    "showHere": "{count, plural, one {Hier anzeigen} other {Hier anzeigen}}"
+    "showHere": "{count, plural, one {Hierher legen} other {Hierher legen}}"
   },
   "toasts": {
     "createFailed": "Board konnte nicht erstellt werden",
@@ -102,9 +102,9 @@
     "syncFailed": "Board konnte nicht mit Jira synchronisiert werden",
     "deleted": "„{board}“ gelöscht",
     "stoppedSyncing": "Synchronisierung von „{board}“ beendet",
-    "workspaceTasksOn": "Deine Workspace-Aufgaben werden jetzt auf „{board}“ angezeigt",
-    "workspaceTasksOff": "Deine Workspace-Aufgaben werden auf keinem Board mehr angezeigt",
-    "workspaceTasksHint": "Wenn du eine Karte verschiebst, ändert sich die Aufgabe in ihrem Workspace.",
-    "workspaceTasksFailed": "Einstellung für Workspace-Aufgaben konnte nicht geändert werden"
+    "incomingOn": "Deine eingehenden Aufgaben landen jetzt auf „{board}“",
+    "incomingOff": "Deine eingehenden Aufgaben landen auf keinem Board mehr",
+    "incomingHint": "Eine Karte ist die Aufgabe selbst: Wenn du sie verschiebst, ändert sich die Aufgabe überall.",
+    "incomingFailed": "Ziel für deine Aufgaben konnte nicht geändert werden"
   }
 }

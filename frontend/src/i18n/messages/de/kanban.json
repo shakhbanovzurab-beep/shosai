@@ -14,18 +14,14 @@
     "list": "Liste",
     "table": "Tabelle"
   },
-  "toolbar": {
-    "filter": "Filtern",
-    "sort": "Sortieren",
-    "moreWaysToAdd": "Weitere Optionen zum Hinzufügen",
-    "importCsv": "CSV importieren",
-    "addFromTemplate": "Aus Vorlage hinzufügen",
-    "createAutomation": "Automatisierung erstellen"
-  },
   "column": {
     "drag": "Spalte {column} ziehen",
     "addTask": "Aufgabe zu {column} hinzufügen",
-    "empty": "Keine Aufgaben in {column}"
+    "empty": "Keine Aufgaben in {column}",
+    "add": "Spalte hinzufügen",
+    "expand": "{column} ausklappen",
+    "sum": "{field}: {sum}",
+    "sumLabel": "Summe von {field} in {column}: {sum}"
   },
   "columnMenu": {
     "managedInJira": "Spalten werden in Jira verwaltet",
@@ -33,7 +29,13 @@
     "sortByPriority": "Nach Priorität sortieren",
     "moveEarlier": "Nach vorne verschieben",
     "moveLater": "Nach hinten verschieben",
-    "clear": "Spalte leeren"
+    "clear": "Spalte leeren",
+    "addAfter": "Spalte danach hinzufügen",
+    "colour": "Farbe",
+    "collapse": "Einklappen",
+    "expand": "Ausklappen",
+    "delete": "Spalte löschen",
+    "lastOfKind": "Die letzte Spalte dieser Art bleibt"
   },
   "taskMenu": {
     "openInJira": "{key} in Jira öffnen",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} (Kopie)",
     "deleted": "„{title}“ gelöscht",
     "cleared": "{count, plural, one {# Aufgabe aus {column} gelöscht} other {# Aufgaben aus {column} gelöscht}}",
-    "jiraLinkCopied": "Link zu {key} kopiert"
+    "jiraLinkCopied": "Link zu {key} kopiert",
+    "columnDeleted": "Spalte „{column}“ gelöscht"
   },
   "errors": {
     "addTask": "Aufgabe konnte nicht hinzugefügt werden",
     "saveChange": "Änderung konnte nicht gespeichert werden",
     "deleteTasks": "{count, plural, one {Aufgabe konnte nicht gelöscht werden} other {Aufgaben konnten nicht gelöscht werden}}",
-    "saveBoard": "Board konnte nicht gespeichert werden"
+    "saveBoard": "Board konnte nicht gespeichert werden",
+    "addColumn": "Spalte konnte nicht hinzugefügt werden"
+  },
+  "newColumn": {
+    "title": "Neue Spalte",
+    "name": "Name",
+    "kind": "Aufgaben hier sind",
+    "colour": "Farbe",
+    "create": "Spalte hinzufügen"
+  },
+  "kinds": {
+    "todo": "Zu erledigen",
+    "in_progress": "In Arbeit",
+    "done": "Erledigt"
+  },
+  "colors": {
+    "none": "Keine Farbe",
+    "gray": "Grau",
+    "red": "Rot",
+    "orange": "Orange",
+    "amber": "Bernstein",
+    "green": "Grün",
+    "teal": "Blaugrün",
+    "blue": "Blau",
+    "violet": "Violett",
+    "pink": "Rosa"
   }
 }

@@ -113,7 +113,7 @@ export function BoardSwitcher({
                 void chooseIncomingBoard(on === true ? current.id : null, current.name, { t, ta })
               }
             >
-              {t("switcher.showWorkspaceTasks")}
+              {t("switcher.incoming")}
             </DropdownMenuCheckboxItem>
           )}
           {current.jira ? null : (

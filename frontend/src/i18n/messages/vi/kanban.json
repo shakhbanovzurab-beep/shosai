@@ -14,18 +14,14 @@
     "list": "Danh sách",
     "table": "Lưới"
   },
-  "toolbar": {
-    "filter": "Lọc",
-    "sort": "Sắp xếp",
-    "moreWaysToAdd": "Cách khác để thêm công việc",
-    "importCsv": "Nhập tệp CSV",
-    "addFromTemplate": "Thêm từ mẫu",
-    "createAutomation": "Tạo quy tắc tự động hóa"
-  },
   "column": {
     "drag": "Kéo cột {column}",
     "addTask": "Thêm công việc vào {column}",
-    "empty": "Chưa có công việc nào trong {column}"
+    "empty": "Chưa có công việc nào trong {column}",
+    "add": "Thêm cột",
+    "expand": "Mở rộng {column}",
+    "sum": "{field}: {sum}",
+    "sumLabel": "Tổng {field} trong {column}: {sum}"
   },
   "columnMenu": {
     "managedInJira": "Cột được quản lý trong Jira",
@@ -33,7 +29,13 @@
     "sortByPriority": "Sắp xếp theo mức ưu tiên",
     "moveEarlier": "Chuyển lên trước",
     "moveLater": "Chuyển ra sau",
-    "clear": "Làm trống cột"
+    "clear": "Làm trống cột",
+    "addAfter": "Thêm cột sau cột này",
+    "colour": "Màu",
+    "collapse": "Thu gọn",
+    "expand": "Mở rộng",
+    "delete": "Xóa cột",
+    "lastOfKind": "Không thể xóa cột cuối cùng thuộc loại này"
   },
   "taskMenu": {
     "openInJira": "Mở {key} trong Jira",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} (bản sao)",
     "deleted": "Đã xóa “{title}”",
     "cleared": "{count, plural, other {Đã xóa # công việc khỏi {column}}}",
-    "jiraLinkCopied": "Đã sao chép liên kết đến {key}"
+    "jiraLinkCopied": "Đã sao chép liên kết đến {key}",
+    "columnDeleted": "Đã xóa cột “{column}”"
   },
   "errors": {
     "addTask": "Không thể thêm công việc",
     "saveChange": "Không thể lưu thay đổi",
     "deleteTasks": "{count, plural, other {Không thể xóa công việc}}",
-    "saveBoard": "Không thể lưu bảng"
+    "saveBoard": "Không thể lưu bảng",
+    "addColumn": "Không thể thêm cột"
+  },
+  "newColumn": {
+    "title": "Cột mới",
+    "name": "Tên",
+    "kind": "Công việc ở đây",
+    "colour": "Màu",
+    "create": "Thêm cột"
+  },
+  "kinds": {
+    "todo": "Cần làm",
+    "in_progress": "Đang làm",
+    "done": "Hoàn thành"
+  },
+  "colors": {
+    "none": "Không màu",
+    "gray": "Xám",
+    "red": "Đỏ",
+    "orange": "Cam",
+    "amber": "Hổ phách",
+    "green": "Xanh lá",
+    "teal": "Xanh mòng két",
+    "blue": "Xanh dương",
+    "violet": "Tím",
+    "pink": "Hồng"
   }
 }

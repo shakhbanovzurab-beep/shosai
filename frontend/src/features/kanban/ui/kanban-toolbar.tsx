@@ -1,24 +1,9 @@
 "use client";
 
-import {
-  ArrowUpDown,
-  Bot,
-  ChevronDown,
-  Kanban as KanbanIcon,
-  LayoutTemplate,
-  List,
-  type LucideIcon,
-  Plus,
-  SlidersHorizontal,
-  Table2,
-  Upload,
-} from "lucide-react";
+import { Kanban as KanbanIcon, List, type LucideIcon, Plus, Table2 } from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
-import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu-items";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import type { BoardSummary } from "../domain/boards-contract";
@@ -38,11 +23,11 @@ type KanbanToolbarProps = {
   current: BoardSummary;
   view: BoardView;
   onViewChange: (view: BoardView) => void;
-  /** Adds to the first column; undefined while the board can't be edited. */
+  /** Добавляет в первую колонку; undefined, пока доску нельзя менять. */
   onAddTask?: () => void;
 };
 
-/** The board switcher and view tabs, Jira sync status, filter and sort, and "Add task". */
+/** Выбор доски и вида, статус синхронизации с Jira и «Добавить задачу». Кнопок без действия здесь нет. */
 export function KanbanToolbar({ boards, current, view, onViewChange, onAddTask }: KanbanToolbarProps) {
   const t = useTranslations("kanban");
   return (
@@ -66,42 +51,10 @@ export function KanbanToolbar({ boards, current, view, onViewChange, onAddTask }
 
       <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center 2xl:justify-end">
         <JiraSyncStatus board={current} />
-        <Button variant="outline" className="w-full sm:w-auto">
-          <SlidersHorizontal data-icon="inline-start" />
-          {t("toolbar.filter")}
+        <Button className="w-full sm:w-auto" disabled={!onAddTask} onClick={onAddTask}>
+          <Plus data-icon="inline-start" />
+          {t("addTask")}
         </Button>
-        <Button variant="outline" className="w-full sm:w-auto">
-          <ArrowUpDown data-icon="inline-start" />
-          {t("toolbar.sort")}
-        </Button>
-        <ButtonGroup className="w-full sm:w-fit">
-          <Button className="flex-1 sm:flex-none" disabled={!onAddTask} onClick={onAddTask}>
-            <Plus data-icon="inline-start" />
-            {t("addTask")}
-          </Button>
-          <ButtonGroupSeparator />
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button aria-label={t("toolbar.moreWaysToAdd")} disabled={!onAddTask}>
-                <ChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem>
-                <Upload />
-                {t("toolbar.importCsv")}
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <LayoutTemplate />
-                {t("toolbar.addFromTemplate")}
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bot />
-                {t("toolbar.createAutomation")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </ButtonGroup>
       </div>
     </div>
   );

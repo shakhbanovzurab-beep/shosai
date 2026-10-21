@@ -5,10 +5,10 @@
     "newBoard": "Nuevo tablero…",
     "syncJiraBoard": "Sincronizar un tablero de Jira…",
     "rename": "Cambiar nombre del tablero…",
-    "showWorkspaceTasks": "Mostrar aquí mis tareas de espacios de trabajo",
     "changeIcon": "Cambiar icono",
     "delete": "Eliminar tablero…",
-    "stopSyncing": "Dejar de sincronizar…"
+    "stopSyncing": "Dejar de sincronizar…",
+    "incoming": "Poner aquí las tareas que me lleguen"
   },
   "icons": {
     "work": "Trabajo",
@@ -90,9 +90,9 @@
     "changesPaused": "Los cambios están en pausa.",
     "importing": "Importando {board} desde Jira…",
     "importingHint": "Las columnas y las incidencias aparecerán aquí en un momento.",
-    "offer": "{count, plural, one {Tienes # tarea abierta en tus espacios de trabajo. ¿Mostrarla en «{board}»?} many {Tienes # de tareas abiertas en tus espacios de trabajo. ¿Mostrarlas en «{board}»?} other {Tienes # tareas abiertas en tus espacios de trabajo. ¿Mostrarlas en «{board}»?}} Al mover una tarjeta, la tarea se actualiza para tu equipo.",
+    "offer": "{count, plural, one {Te llegó # tarea que aún no está en ningún tablero. ¿Ponerla en «{board}»?} many {Te llegaron # de tareas que aún no están en ningún tablero. ¿Ponerlas en «{board}»?} other {Te llegaron # tareas que aún no están en ningún tablero. ¿Ponerlas en «{board}»?}} Las tareas que te asignen y las de tus reuniones llegarán aquí.",
     "notNow": "Ahora no",
-    "showHere": "{count, plural, one {Mostrarla aquí} many {Mostrarlas aquí} other {Mostrarlas aquí}}"
+    "showHere": "{count, plural, one {Ponerla aquí} many {Ponerlas aquí} other {Ponerlas aquí}}"
   },
   "toasts": {
     "createFailed": "No se pudo crear el tablero",
@@ -102,9 +102,9 @@
     "syncFailed": "No se pudo sincronizar con Jira",
     "deleted": "Se eliminó «{board}»",
     "stoppedSyncing": "Se dejó de sincronizar «{board}»",
-    "workspaceTasksOn": "Tus tareas de espacios de trabajo ahora aparecen en «{board}»",
-    "workspaceTasksOff": "Tus tareas de espacios de trabajo ya no aparecen en ningún tablero",
-    "workspaceTasksHint": "Al mover una tarjeta, la tarea cambia en su espacio de trabajo.",
-    "workspaceTasksFailed": "No se pudo cambiar dónde aparecen las tareas de espacios de trabajo"
+    "incomingOn": "Las tareas que te llegan ahora van a «{board}»",
+    "incomingOff": "Las tareas que te llegan ya no van a ningún tablero",
+    "incomingHint": "Una tarjeta es la tarea misma: al moverla, la tarea cambia en todas partes.",
+    "incomingFailed": "No se pudo cambiar adónde van tus tareas"
   }
 }

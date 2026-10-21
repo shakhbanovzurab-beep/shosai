@@ -14,18 +14,14 @@
     "list": "Lijst",
     "table": "Tabel"
   },
-  "toolbar": {
-    "filter": "Filteren",
-    "sort": "Sorteren",
-    "moreWaysToAdd": "Meer manieren om taken toe te voegen",
-    "importCsv": "CSV importeren",
-    "addFromTemplate": "Uit sjabloon toevoegen",
-    "createAutomation": "Automatisering maken"
-  },
   "column": {
     "drag": "Kolom {column} verslepen",
     "addTask": "Taak toevoegen aan {column}",
-    "empty": "Geen taken in {column}"
+    "empty": "Geen taken in {column}",
+    "add": "Kolom toevoegen",
+    "expand": "{column} uitklappen",
+    "sum": "{field}: {sum}",
+    "sumLabel": "Totaal {field} in {column}: {sum}"
   },
   "columnMenu": {
     "managedInJira": "Kolommen worden in Jira beheerd",
@@ -33,7 +29,13 @@
     "sortByPriority": "Sorteren op prioriteit",
     "moveEarlier": "Naar voren verplaatsen",
     "moveLater": "Naar achteren verplaatsen",
-    "clear": "Kolom leegmaken"
+    "clear": "Kolom leegmaken",
+    "addAfter": "Kolom erna toevoegen",
+    "colour": "Kleur",
+    "collapse": "Inklappen",
+    "expand": "Uitklappen",
+    "delete": "Kolom verwijderen",
+    "lastOfKind": "De laatste kolom van deze soort blijft"
   },
   "taskMenu": {
     "openInJira": "{key} openen in Jira",
@@ -76,12 +78,38 @@
     "copyTitle": "{title} (kopie)",
     "deleted": "‘{title}’ verwijderd",
     "cleared": "{count, plural, one {# taak uit {column} verwijderd} other {# taken uit {column} verwijderd}}",
-    "jiraLinkCopied": "Link naar {key} gekopieerd"
+    "jiraLinkCopied": "Link naar {key} gekopieerd",
+    "columnDeleted": "Kolom ‘{column}’ verwijderd"
   },
   "errors": {
     "addTask": "Kan de taak niet toevoegen",
     "saveChange": "Kan de wijziging niet opslaan",
     "deleteTasks": "{count, plural, one {Kan de taak niet verwijderen} other {Kan de taken niet verwijderen}}",
-    "saveBoard": "Kan het bord niet opslaan"
+    "saveBoard": "Kan het bord niet opslaan",
+    "addColumn": "Kan de kolom niet toevoegen"
+  },
+  "newColumn": {
+    "title": "Nieuwe kolom",
+    "name": "Naam",
+    "kind": "Taken hier zijn",
+    "colour": "Kleur",
+    "create": "Kolom toevoegen"
+  },
+  "kinds": {
+    "todo": "Te doen",
+    "in_progress": "Bezig",
+    "done": "Afgerond"
+  },
+  "colors": {
+    "none": "Geen kleur",
+    "gray": "Grijs",
+    "red": "Rood",
+    "orange": "Oranje",
+    "amber": "Amber",
+    "green": "Groen",
+    "teal": "Blauwgroen",
+    "blue": "Blauw",
+    "violet": "Violet",
+    "pink": "Roze"
   }
 }

@@ -14,18 +14,14 @@
     "list": "قائمة",
     "table": "جدول"
   },
-  "toolbar": {
-    "filter": "تصفية",
-    "sort": "ترتيب",
-    "moreWaysToAdd": "طرق أخرى لإضافة المهام",
-    "importCsv": "استيراد CSV",
-    "addFromTemplate": "إضافة من قالب",
-    "createAutomation": "إنشاء قاعدة أتمتة"
-  },
   "column": {
     "drag": "سحب عمود «{column}»",
     "addTask": "إضافة مهمة إلى «{column}»",
-    "empty": "لا توجد مهام في «{column}»"
+    "empty": "لا توجد مهام في «{column}»",
+    "add": "إضافة عمود",
+    "expand": "توسيع عمود «{column}»",
+    "sum": "{field}: {sum}",
+    "sumLabel": "مجموع {field} في «{column}»: {sum}"
   },
   "columnMenu": {
     "managedInJira": "تتم إدارة الأعمدة في Jira",
@@ -33,7 +29,13 @@
     "sortByPriority": "ترتيب حسب الأولوية",
     "moveEarlier": "تقديم العمود",
     "moveLater": "تأخير العمود",
-    "clear": "إفراغ العمود"
+    "clear": "إفراغ العمود",
+    "addAfter": "إضافة عمود بعده",
+    "colour": "اللون",
+    "collapse": "طي",
+    "expand": "توسيع",
+    "delete": "حذف العمود",
+    "lastOfKind": "لا يمكن حذف آخر عمود من هذا النوع"
   },
   "taskMenu": {
     "openInJira": "فتح {key} في Jira",
@@ -76,12 +78,38 @@
     "copyTitle": "نسخة من {title}",
     "deleted": "تم حذف «{title}»",
     "cleared": "{count, plural, zero {لم تُحذف أي مهمة من «{column}»} one {تم حذف مهمة واحدة من «{column}»} two {تم حذف مهمتين من «{column}»} few {تم حذف # مهام من «{column}»} many {تم حذف # مهمة من «{column}»} other {تم حذف # مهمة من «{column}»}}",
-    "jiraLinkCopied": "تم نسخ رابط {key}"
+    "jiraLinkCopied": "تم نسخ رابط {key}",
+    "columnDeleted": "تم حذف عمود «{column}»"
   },
   "errors": {
     "addTask": "تعذر إضافة المهمة",
     "saveChange": "تعذر حفظ التغيير",
     "deleteTasks": "{count, plural, zero {تعذر حذف المهام} one {تعذر حذف المهمة} two {تعذر حذف المهمتين} few {تعذر حذف المهام} many {تعذر حذف المهام} other {تعذر حذف المهام}}",
-    "saveBoard": "تعذر حفظ اللوحة"
+    "saveBoard": "تعذر حفظ اللوحة",
+    "addColumn": "تعذر إضافة العمود"
+  },
+  "newColumn": {
+    "title": "عمود جديد",
+    "name": "الاسم",
+    "kind": "المهام في هذا العمود",
+    "colour": "اللون",
+    "create": "إضافة عمود"
+  },
+  "kinds": {
+    "todo": "للتنفيذ",
+    "in_progress": "قيد التنفيذ",
+    "done": "مكتملة"
+  },
+  "colors": {
+    "none": "بلا لون",
+    "gray": "رمادي",
+    "red": "أحمر",
+    "orange": "برتقالي",
+    "amber": "كهرماني",
+    "green": "أخضر",
+    "teal": "أزرق مخضر",
+    "blue": "أزرق",
+    "violet": "بنفسجي",
+    "pink": "وردي"
   }
 }
