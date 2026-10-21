@@ -31,7 +31,9 @@ export const folderCreateSchema = z.strictObject({ name });
 export const folderUpdateSchema = z.strictObject({ name: name.optional(), leo: z.boolean().optional() });
 
 export const uploadSchema = z.strictObject({
-  purpose: z.literal("file_manager"),
+  purpose: z.enum(["file_manager", "task_attachment"]),
+  // Вложение задачи пространства резервирует место пространства (FL-D6); демо держит одно общее место.
+  workspace_id: z.string().min(1).max(64).optional(),
   filename: z.string().min(1).max(255),
   content_type: z.string().max(255),
   size_bytes: z.number().int().min(1),

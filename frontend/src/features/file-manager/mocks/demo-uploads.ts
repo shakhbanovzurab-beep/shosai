@@ -13,7 +13,13 @@ import { firstIssue, readJson, uploadSchema } from "./schemas";
  */
 
 type UploadAnswer = components["schemas"]["UploadAnswer"];
-type DemoUpload = Omit<UploadAnswer, "parts" | "done_parts"> & { partSizes: number[]; received: Map<number, number> };
+/** Назначения демо: File Manager и вложения задач, которые канбан ждёт от files (tasks TK-D12, шаг 3). */
+type DemoPurpose = "file_manager" | "task_attachment";
+type DemoAnswer = Omit<UploadAnswer, "purpose"> & { purpose: DemoPurpose };
+type DemoUpload = Omit<DemoAnswer, "parts" | "done_parts"> & { partSizes: number[]; received: Map<number, number> };
+
+/** Предел одной загрузки вложения задачи. */
+const TASK_ATTACHMENT_BYTES = 25 * 1024 * 1024;
 
 const PART_BYTES = 16 * 1024 * 1024;
 const LINK_MS = 15 * 60_000;
@@ -24,7 +30,7 @@ const uploads = shared.fileUploadsDemo;
 const partSizes = (size: number) =>
   Array.from({ length: Math.ceil(size / PART_BYTES) }, (_, i) => Math.min(PART_BYTES, size - i * PART_BYTES));
 
-function answer(upload: DemoUpload): UploadAnswer {
+function answer(upload: DemoUpload): DemoAnswer {
   const { partSizes: sizes, received, ...rest } = upload;
   const expires_at = new Date(Date.now() + LINK_MS).toISOString();
   const parts = sizes
@@ -48,10 +54,10 @@ export function unclaimUpload(id: string) {
   if (upload?.state === "claimed") upload.state = "ready";
 }
 
-/** A ready upload the File Manager may take, once; the problem otherwise. */
-export function claimUpload(id: string): DemoUpload | Problem {
+/** A ready upload of that purpose its slice may take, once; the problem otherwise. */
+export function claimUpload(id: string, purpose: DemoPurpose = "file_manager"): DemoUpload | Problem {
   const upload = uploads.get(id);
-  if (upload?.state !== "ready") return problem("upload_not_claimable", 409);
+  if (upload?.state !== "ready" || upload.purpose !== purpose) return problem("upload_not_claimable", 409);
   upload.state = "claimed";
   return upload;
 }
@@ -66,13 +72,14 @@ export const uploadsRoute = {
   async POST(request: Request) {
     const body = uploadSchema.safeParse(await readJson(request));
     if (!body.success) return refuse(firstIssue(body.error));
-    if (body.data.size_bytes > MAX_UPLOAD_BYTES) return refuse(problem("upload_too_large", 413));
+    const cap = body.data.purpose === "task_attachment" ? TASK_ATTACHMENT_BYTES : MAX_UPLOAD_BYTES;
+    if (body.data.size_bytes > cap) return refuse(problem("upload_too_large", 413));
     const refused = storageRefusal(body.data.size_bytes);
     if (refused) return refuse(refused);
     const { filename, content_type, size_bytes } = body.data;
     const upload: DemoUpload = {
       id: crypto.randomUUID(),
-      purpose: "file_manager",
+      purpose: body.data.purpose,
       state: "pending",
       filename,
       content_type: content_type || "application/octet-stream",

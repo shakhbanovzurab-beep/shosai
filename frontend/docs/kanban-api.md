@@ -1,96 +1,107 @@
 # Kanban API
 
-The contract between the Kanban screen (`/app/kanban`) and the FastAPI backend. The TypeScript types
-in `src/features/kanban/domain/board.ts` and `domain/contract.ts` are the source of truth (snake_case).
-The browser calls `/api/kanban/*`, which forwards to `${BACKEND_API_URL}/v1/kanban/*` when set and
-otherwise answers from an in-memory demo (`src/features/kanban/server/`). Errors: `{"detail": "message"}`.
+The contract between the Kanban screen (`/app/kanban`) and the backend's `tasks` slice: the `/v1` routes of the
+[tasks plan](../../docs/plan/slices/tasks.md) §3.3 and the golden core's TK-D12 (§3.8,
+[ADR 0060](../../docs/adr/0060-kanban-golden-core.md)). Until `tasks` serves them, `npm run dev` answers exactly these
+routes from `src/features/kanban/mocks/` (KG-D1); `tasks` step 9 points `api/` at the generated client and deletes
+the mocks. The shapes are in `src/features/kanban/domain/{boards,tasks,stickers}-contract.ts`; refusals are the
+platform's envelope `{error: {code, request_id, params?}}` (ADR 0008), worded by the cabinet from
+`domain/problems.ts`. Snake_case; calendar days are `"2026-10-21"`.
 
-Words the API writes itself (error details, `sync_error`, the columns of a new board) are in the request's
-interface language; the demo takes it from the `ui_language` cookie (see `docs/i18n.md`). Dates are data:
-`Task.dueDate` is a calendar day (`"2026-06-26"`) or null, and the screen formats it.
+The Kanban package moves the screens from the old sample paths `/api/kanban/*` to these routes in its step 2
+([plan](../../docs/plan/packages/KANBAN-golden-core.md)).
 
-| Method   | Path                                   | Body                                             | Response              |
-| -------- | -------------------------------------- | ------------------------------------------------ | --------------------- |
-| `GET`    | `/kanban/boards`                       | —                                                | `BoardsResponse`      |
-| `POST`   | `/kanban/boards`                       | `{name, icon, template: "simple" \| "project"}`  | `201 BoardSummary`    |
-| `GET`    | `/kanban/boards/{id}`                  | —                                                | `BoardDetail`         |
-| `PATCH`  | `/kanban/boards/{id}`                  | `{name?, icon?}`                                 | `BoardSummary`        |
-| `DELETE` | `/kanban/boards/{id}`                  | —                                                | `204`                 |
-| `PUT`    | `/kanban/boards/{id}/layout`           | `{columns: [{id, title, task_ids}]}`             | `204` (app boards)    |
-| `POST`   | `/kanban/boards/{id}/tasks`            | `{column_id, position, title, copy_of?}`         | `201 Task`            |
-| `PATCH`  | `/kanban/boards/{id}/tasks/{task_id}`  | `{title?, priority?, column_id?, position?}`     | `Task`                |
-| `POST`   | `/kanban/boards/{id}/tasks/delete`     | `{task_ids}`                                     | `204` (app boards)    |
-| `POST`   | `/kanban/boards/{id}/sync`             | —                                                | `BoardSummary`        |
-| `PUT`    | `/kanban/workspace-tasks`              | `{board_id: string \| null}`                     | `BoardsResponse`      |
-| `GET`    | `/kanban/jira/boards`                  | —                                                | `JiraBoardsResponse`  |
-| `POST`   | `/kanban/jira/boards`                  | `{site, board_id}`                               | `201 BoardSummary`    |
+## Boards, columns, cards
 
-## Boards
+| Method   | Path                                       | Body                                              | Response                 |
+| -------- | ------------------------------------------ | ------------------------------------------------- | ------------------------ |
+| `GET`    | `/v1/boards`                               | —                                                 | `BoardsResponse`         |
+| `POST`   | `/v1/boards`                               | `{name, icon, template}`                          | `201 BoardSummary`       |
+| `PUT`    | `/v1/boards/incoming`                      | `{board_id \| null}`                              | `BoardsResponse`         |
+| `GET`    | `/v1/boards/{id}`                          | —                                                 | `BoardDetail`            |
+| `PATCH`  | `/v1/boards/{id}`                          | `{name?, icon?}`                                  | `BoardSummary`           |
+| `DELETE` | `/v1/boards/{id}`                          | —                                                 | `204`                    |
+| `PUT`    | `/v1/boards/{id}/layout`                   | `{columns: [{id, title, task_ids}]}`              | `204`                    |
+| `POST`   | `/v1/boards/{id}/columns`                  | `{title, kind, position, color?}`                 | `201 ColumnHead`         |
+| `PATCH`  | `/v1/boards/{id}/columns/{column_id}`      | `{title?, color?, collapsed?, position?}`         | `ColumnHead`             |
+| `DELETE` | `/v1/boards/{id}/columns/{column_id}`      | —                                                 | `204`                    |
+| `POST`   | `/v1/boards/{id}/cards`                    | `{title, column_id, position, copy_of?}`          | `201 Card`               |
+| `PATCH`  | `/v1/boards/{id}/cards/{task_id}`          | `{title?, priority?, column_id?, position?}`      | `Card`                   |
+| `POST`   | `/v1/boards/{id}/sync`                     | —                                                 | `BoardSummary` (Jira)    |
+| `GET`    | `/v1/boards/jira/available`                | —                                                 | `JiraAvailable`          |
+| `POST`   | `/v1/boards/jira`                          | `{site, board_id}`                                | `201 BoardSummary`       |
 
-A user has any number of boards ("Work", "Home"…), each with its own columns. A column has a `kind`
-(`todo`, `in_progress`, `done`) that drives how cards look (progress while in progress, "Done" when
-done) and maps to Jira's status categories. `BoardDetail.revision` goes up with every change, including
-changes that arrive from Jira; the screen re-reads a board when it is opened again and, for Jira
-boards, when the tab becomes visible.
+- A board holds its open cards and those done in the last 30 days (TK-D5): at most 1 000 open (`board_full`),
+  50 boards (`boards_full`), 20 columns (`board_columns_full`). `revision` goes up with every change.
+- A card is a task; its id is the task's. Moving sends `column_id` and `position` together; a column of another
+  kind changes the task's status. A card whose status changed elsewhere is put at the top of the first column of
+  its kind when the board is read.
+- Deleting a column moves its cards to the top of the first other column of its kind, in their order; the last
+  column of a kind stays (`last_column_of_kind`). The screen hides it at once and sends `DELETE` when the Undo
+  toast closes.
+- The incoming board (TK-D4) receives the tasks assigned to the person in workspaces and the tasks of their
+  meetings that are open and on none of their boards; nothing lands until one is chosen; a Jira board cannot be
+  one (`jira_not_incoming`).
+- Jira boards: columns and deletes are Jira's (`managed_in_jira`); changes wait for the first sync
+  (`first_sync`) and a working connection (`reconnect_jira`); `sync_error` is a code. Colour and collapse of a
+  column are display only and allowed.
 
-- A new board's columns come from its template (`simple`: To do, In progress, Done; `project`: Backlog,
-  To do, In progress, Review, Done), named in the request's language; after that they are the user's.
-- `copy_of` copies a task under the request's `title`, which the screen words ("Plan (copy)").
-- `layout` replaces column order, column titles and the order of tasks in each column at once; the
-  columns and tasks must be the board's own (`409` if the board changed meanwhile).
-- `position` is the index in the target column, `0` is the top. Moving sends `column_id` and
-  `position` together.
-- Deleting is a soft action in the UI: the screen hides the task and sends `tasks/delete` once its
-  Undo toast closes.
+## Tasks
 
-## Workspace tasks on a board
+| Method   | Path                                                     | Body                                      | Response            |
+| -------- | -------------------------------------------------------- | ----------------------------------------- | ------------------- |
+| `GET`    | `/v1/tasks/{id}`                                         | —                                         | `TaskDetail`        |
+| `PATCH`  | `/v1/tasks/{id}`                                         | `TaskPatch` (field presence, `null` clears)| `TaskDetail`        |
+| `DELETE` | `/v1/tasks/{id}`                                         | —                                         | `204`               |
+| `POST`   | `/v1/tasks/delete`                                       | `{task_ids}` (1–500, all or none)         | `204`               |
+| `POST`   | `/v1/tasks/{id}/subtasks`                                | `{title, position?}`                      | `201 Subtask`       |
+| `PATCH`  | `/v1/tasks/{id}/subtasks/{subtask_id}`                   | `{title?, done?, position?}`              | `Subtask`           |
+| `DELETE` | `/v1/tasks/{id}/subtasks/{subtask_id}`                   | —                                         | `204`               |
+| `GET`    | `/v1/tasks/{id}/comments?cursor&limit`                   | —                                         | `CommentsPage`      |
+| `POST`   | `/v1/tasks/{id}/comments`                                | `{body}`, optional `Idempotency-Key`      | `201 Comment`       |
+| `PATCH`  | `/v1/tasks/{id}/comments/{comment_id}`                   | `{body}` (the author only)                | `Comment`           |
+| `DELETE` | `/v1/tasks/{id}/comments/{comment_id}`                   | —                                         | `204`               |
+| `POST`   | `/v1/tasks/{id}/attachments`                             | `{upload_id}` or `{file_id}`              | `201 Attachment`    |
+| `GET`    | `/v1/tasks/{id}/attachments/{attachment_id}/download`    | —                                         | `{url, expires_at}` |
+| `DELETE` | `/v1/tasks/{id}/attachments/{attachment_id}`             | —                                         | `204`               |
+| `PUT`    | `/v1/tasks/{id}/values/{sticker_id}`                     | `{state_id}` \| `{number}` \| `{text}`    | the value           |
+| `DELETE` | `/v1/tasks/{id}/values/{sticker_id}`                     | —                                         | `204`               |
 
-Tasks assigned to the user in their workspaces (see `workspace-api.md`, `GET /me/tasks`) can show on
-one app board of their choice. Nothing lands on a board until they pick one: `BoardsResponse.workspace_tasks`
-is `{board_id, open}` (`board_id` null: nowhere yet; `open`: how many open tasks they have), and the
-chosen board has `receives_workspace_tasks: true`. `PUT /kanban/workspace-tasks` picks a board or, with
-`null`, takes the cards off; a Jira board is refused (`409`).
+- `starts_on` needs `due_on` and is not after it (`range_invalid`). A recurrence on a task without a due day gives
+  it the first date from today. Marking a recurring task done creates the next one, due on the schedule's next
+  date after the original due day, skipping past dates (KG-D5).
+- A person's change of the assignee, the due day or the priority removes that field from `leo_fields` (KG-D10).
+- Attachments are uploaded through `src/lib/uploads/` with the purpose `task_attachment` (≤ 25 MiB; `workspace_id`
+  for a workspace task) and claimed by `upload_id`, or copied from a File Manager file by `file_id` (FL-D4). They
+  count in the task owner's storage. Only an image can be the cover (`cover_not_image`).
+- Comments are plain text, ≤ 5 000 characters, newest first by cursor; another person's comment answers
+  `not_comment_author`.
+- A Jira task has no subtasks, comments, attachments, cover, recurrence, range or custom fields
+  (`jira_unsupported`, KG-D8).
 
-- A card is a view of the workspace task, not a copy: `Task.workspace` is
-  `{workspace_id, workspace_name, task_id, url, source}` (`source`: the project or meeting it came from,
-  or null) and the card's id is `ws:{workspace_id}:{task_id}`.
-  The board stores only where the card sits and its personal `priority`; title, due date and source
-  are read from the workspace task each time the board is read.
-- Reading the board reconciles it: new open assignments go on top of the first column of the matching
-  kind, a task whose status changed in the workspace moves to such a column, and tasks that are done
-  before they ever showed, reassigned, deleted, or no longer visible to the user leave the board.
-- Moving a card to a column of another `kind` sets the workspace task's status (`todo`,
-  `in_progress`, `done`); renaming it renames the workspace task. Other columns of the same kind
-  keep their own order.
-- Refused with `409`: `copy_of` a workspace card, and `tasks/delete` with one in `task_ids` (they
-  leave when they're done or reassigned in the workspace). Clearing a column keeps them.
+## Fields (stickers)
 
-## Jira boards (two-way sync)
+| Method   | Path                                          | Body                                            | Response              |
+| -------- | --------------------------------------------- | ----------------------------------------------- | --------------------- |
+| `GET`    | `/v1/stickers`                                | —                                               | `StickersResponse`    |
+| `PATCH`  | `/v1/stickers/{id}`                           | `{name?, states?}` (the full list of states)    | `CustomSticker`       |
+| `DELETE` | `/v1/stickers/{id}`                           | —                                               | `204`                 |
+| `POST`   | `/v1/boards/{id}/stickers`                    | `{sticker_id}` or `{kind, name, states?}`       | `201 BoardSticker`    |
+| `PATCH`  | `/v1/boards/{id}/stickers/{sticker_id}`       | `{visible}`                                     | `BoardSticker`        |
+| `DELETE` | `/v1/boards/{id}/stickers/{sticker_id}`       | —                                               | `204`                 |
 
-Jira access comes from the Jira connector in Settings › Connectors (OAuth 2.0, Atlassian 3LO; see
-`settings-api.md`). Scopes needed: `read:jira-work`, `write:jira-work`, `read:jira-user`,
-`offline_access`; plus webhook registration.
+- System fields `assignee`, `due`, `priority`, `recurrence` are on every board; a new board shows the first three.
+  They can be shown or hidden, never removed (`system_sticker`).
+- A custom field — a set of states (≤ 20, each with a palette colour), a number or a text — belongs to its board's
+  owner and is reused on the owner's other boards; ≤ 20 per board, ≤ 100 per owner. Its value is part of the task:
+  a value of a field that is not on the reader's board comes in `TaskDetail.other_values`.
+- Editing a set keeps the values of the states it keeps; a state left out clears the values that used it.
+- Palette: `gray, red, orange, amber, green, teal, blue, violet, pink`.
+- Column sums (Σ) are not served: the screen sums the cards it shows.
 
-- `GET /kanban/jira/boards` lists the boards on every site the connection can reach
-  (`/oauth/token/accessible-resources`, then Jira Software `GET /rest/agile/1.0/board`). With no Jira
-  connection it answers `{"connected": false, "account": null, "boards": []}`.
-- `POST /kanban/jira/boards` creates a board with `jira` set and `sync_status: "syncing"`, then imports
-  in the background: columns from `GET /rest/agile/1.0/board/{id}/configuration` (each column with its
-  statuses; `kind` from the status category), issues from `GET /rest/agile/1.0/board/{id}/issue`. Task
-  ids are stable per issue; `jira: {key, url, type}`; `label` is the issue type; `owner` the assignee.
-  The board is read-only until `last_synced_at` is set.
-- Changes made here go to Jira at once:
-  - moving a task → `POST /rest/api/3/issue/{key}/transitions` to the first status of the target
-    column, then rank (`PUT /rest/agile/1.0/issue/rank`) next to its neighbours;
-  - a new task → `POST /rest/api/3/issue` in the board's project with the column's status;
-  - `title` → `summary`, `priority` → the matching Jira priority (High, Medium, Low).
-  If Jira refuses (no transition to that status, missing permission) answer `409` with Jira's reason;
-  the screen puts the card back.
-- Changes made in Jira come back through a registered webhook (`jira:issue_created`,
-  `jira:issue_updated`, `jira:issue_deleted`, `board_configuration_changed`); each one updates the
-  board and bumps `revision`. `POST /sync` pulls everything again on demand.
-- Not available on Jira boards, `409`: `layout` (columns are configured in Jira), `copy_of`,
-  `tasks/delete`. `DELETE /kanban/boards/{id}` only stops syncing and unregisters the webhook; nothing
-  is deleted in Jira.
-- If the Jira connection is removed or its token can't be refreshed: `sync_status: "error"` with
-  `sync_error` saying so, and changes answer `409` until Jira is connected again.
+## Development
+
+`npm run dev` serves these routes from the mocks. The demo boards are Work (custom fields, covers, subtasks,
+comments, attachments, a recurring task, tasks from a meeting with Leo's marks), Home (recurring chores, a range)
+and Romashka. Two generated boards of 300 and 1 000 cards appear after
+`sessionStorage.setItem("kanban-demo-large", "1")` and a reload, for the performance measures.

@@ -31,13 +31,38 @@ export function myTasks(): MyTask[] {
 }
 
 /** Changes one of the account's tasks from Personal (Kanban, Productivity): the workspace's own task. */
-export function updateMyTask(workspaceId: string, taskId: string, patch: { status?: TaskStatus; title?: string }) {
+export function updateMyTask(
+  workspaceId: string,
+  taskId: string,
+  patch: { status?: TaskStatus; title?: string; due_on?: string | null; assignee_id?: string | null },
+) {
   const found = activeMembership(workspaceId);
   const task = found?.data.tasks.find((t) => t.id === taskId && t.assignee_id === found.me.id);
   if (!found || !task) return null;
   if (patch.status) task.status = patch.status;
   if (patch.title) task.title = patch.title;
+  if (patch.due_on !== undefined) task.due_on = patch.due_on;
+  // Канбан переназначает задачу из панели карточки; тогда она уходит из списка аккаунта.
+  if (patch.assignee_id !== undefined) task.assignee_id = patch.assignee_id;
   return myTasks().find((t) => t.id === taskId && t.workspace.id === workspaceId) ?? null;
+}
+
+/** Новая задача пространства, назначенная аккаунту: следующая из повторяющихся, когда её создаёт канбан. */
+export function addMyTask(workspaceId: string, task: { title: string; due_on: string | null }) {
+  const found = activeMembership(workspaceId);
+  if (!found) return null;
+  const id = `t-${crypto.randomUUID()}`;
+  const created_at = new Date().toISOString();
+  found.data.tasks.push({
+    id,
+    status: "todo",
+    assignee_id: found.me.id,
+    project_id: null,
+    meeting_id: null,
+    created_at,
+    ...task,
+  });
+  return id;
 }
 
 /** Meetings others shared with the account, per workspace; its own recordings are in its Notes already. */

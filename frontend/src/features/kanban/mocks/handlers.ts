@@ -4,6 +4,35 @@ import { type MockRoute, mockRoute } from "@/mocks/routing";
 
 import { boardLayoutRoute, boardRoute, boardSyncRoute, boardsRoute, workspaceTasksRoute } from "./boards-route";
 import { jiraBoardsRoute } from "./jira-route";
+import {
+  boardsRoute as boardsV1Route,
+  boardRoute as boardV1Route,
+  incomingRoute,
+  jiraAvailableRoute,
+  jiraConnectRoute,
+  layoutRoute,
+  syncRoute,
+} from "./routes/boards-routes";
+import { cardRoute, cardsRoute, columnRoute, columnsRoute } from "./routes/columns-cards-routes";
+import {
+  boardStickerRoute,
+  boardStickersRoute,
+  stickerRoute,
+  stickersRoute,
+  subtaskRoute,
+  subtasksRoute,
+} from "./routes/subtasks-stickers-routes";
+import {
+  attachmentDownloadRoute,
+  attachmentRoute,
+  attachmentsRoute,
+  commentRoute,
+  commentsRoute,
+  demoTaskFileRoute,
+  tasksDeleteRoute as tasksDeleteV1Route,
+  taskRoute as taskV1Route,
+  valueRoute,
+} from "./routes/tasks-routes";
 import { taskRoute, tasksDeleteRoute, tasksRoute } from "./tasks-route";
 
 export const handlers: MockRoute[] = [
@@ -16,4 +45,31 @@ export const handlers: MockRoute[] = [
   mockRoute("/api/kanban/boards/:id/tasks", tasksRoute, ["POST"]),
   mockRoute("/api/kanban/boards/:id/tasks/delete", tasksDeleteRoute, ["POST"]),
   mockRoute("/api/kanban/boards/:id/tasks/:taskId", taskRoute, ["PATCH"]),
+  // Контракт `/v1` плана tasks и TK-D12 (KG-D1): статические пути раньше параметрических.
+  mockRoute("/v1/boards", boardsV1Route, ["GET", "POST"]),
+  mockRoute("/v1/boards/incoming", incomingRoute, ["PUT"]),
+  mockRoute("/v1/boards/jira/available", jiraAvailableRoute, ["GET"]),
+  mockRoute("/v1/boards/jira", jiraConnectRoute, ["POST"]),
+  mockRoute("/v1/boards/:id", boardV1Route, ["GET", "PATCH", "DELETE"]),
+  mockRoute("/v1/boards/:id/layout", layoutRoute, ["PUT"]),
+  mockRoute("/v1/boards/:id/sync", syncRoute, ["POST"]),
+  mockRoute("/v1/boards/:id/columns", columnsRoute, ["POST"]),
+  mockRoute("/v1/boards/:id/columns/:columnId", columnRoute, ["PATCH", "DELETE"]),
+  mockRoute("/v1/boards/:id/cards", cardsRoute, ["POST"]),
+  mockRoute("/v1/boards/:id/cards/:taskId", cardRoute, ["PATCH"]),
+  mockRoute("/v1/boards/:id/stickers", boardStickersRoute, ["POST"]),
+  mockRoute("/v1/boards/:id/stickers/:stickerId", boardStickerRoute, ["PATCH", "DELETE"]),
+  mockRoute("/v1/stickers", stickersRoute, ["GET"]),
+  mockRoute("/v1/stickers/:id", stickerRoute, ["PATCH", "DELETE"]),
+  mockRoute("/v1/tasks/delete", tasksDeleteV1Route, ["POST"]),
+  mockRoute("/v1/tasks/:id", taskV1Route, ["GET", "PATCH", "DELETE"]),
+  mockRoute("/v1/tasks/:id/subtasks", subtasksRoute, ["POST"]),
+  mockRoute("/v1/tasks/:id/subtasks/:subtaskId", subtaskRoute, ["PATCH", "DELETE"]),
+  mockRoute("/v1/tasks/:id/comments", commentsRoute, ["GET", "POST"]),
+  mockRoute("/v1/tasks/:id/comments/:commentId", commentRoute, ["PATCH", "DELETE"]),
+  mockRoute("/v1/tasks/:id/attachments", attachmentsRoute, ["POST"]),
+  mockRoute("/v1/tasks/:id/attachments/:attachmentId", attachmentRoute, ["DELETE"]),
+  mockRoute("/v1/tasks/:id/attachments/:attachmentId/download", attachmentDownloadRoute, ["GET"]),
+  mockRoute("/v1/tasks/:id/values/:stickerId", valueRoute, ["PUT", "DELETE"]),
+  mockRoute("/demo-task-files/:id/:attachmentId", demoTaskFileRoute, ["GET"]),
 ];

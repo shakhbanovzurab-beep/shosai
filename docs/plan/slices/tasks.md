@@ -171,9 +171,10 @@ StickerValue = {state_id} | {number} (≤ 2 decimals, |x| < 10¹²) | {text} (1�
 Card         = {id, title, status, priority: high | medium | low | null, starts_on, due_on,
                 assignee: {user_id | null, name} | null, cover: {attachment_id, preview_url | null} | null,
                 values: {sticker_id: StickerValue} (the task's values of the board's custom stickers),
-                subtasks: {done, total}, comment_count, attachment_count, recurring,
+                subtasks_done, subtasks_total, comment_count, attachment_count, recurring,
                 leo_fields: (assignee | due | priority)[], space: {workspace_id, workspace_name} | null,
-                jira: {key, url, type} | null}
+                jira: {key, url, type} | null,
+                can_delete (the person may delete it: their own task; a workspace task's owner and admins, TK-D2)}
 ColumnHead   = {id, title, kind, color: Color | null, collapsed}
 BoardDetail  = {board, stickers: BoardSticker[] (system four first, then custom by rank),
                 columns: [ColumnHead & {cards: Card[]}], revision}
