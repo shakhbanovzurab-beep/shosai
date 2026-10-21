@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import { cn } from "cn";
 import { ArrowUpRight, Flame, type LucideIcon, Minus } from "lucide-react";
 import { useTranslations } from "use-intl";
@@ -27,7 +29,16 @@ const priorityBadgeConfig: Record<
   },
 };
 
-export function PriorityBadge({ priority, className }: { priority: Priority; className?: string }) {
+/** Приоритет; `children` — то, что стоит внутри после слова (например, метка Лео). */
+export function PriorityBadge({
+  priority,
+  className,
+  children,
+}: {
+  priority: Priority;
+  className?: string;
+  children?: ReactNode;
+}) {
   const t = useTranslations("kanban");
   const { icon: Icon, variant, className: tone } = priorityBadgeConfig[priority];
   return (
@@ -35,6 +46,7 @@ export function PriorityBadge({ priority, className }: { priority: Priority; cla
       {/* Стрелка «средний» поднимается к концу строки, поэтому поворачивается вместе с направлением чтения. */}
       <Icon data-icon="inline-start" className="rtl:-scale-x-100" />
       {t(`priority.${priority}`)}
+      {children}
     </Badge>
   );
 }

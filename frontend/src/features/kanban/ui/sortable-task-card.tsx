@@ -21,7 +21,12 @@ export function SortableTaskCard({ taskId, columnId, index }: { taskId: string; 
 
   return (
     <BoardContextMenu target={{ kind: "task", taskId, columnId }}>
-      <div ref={ref} data-task-id={taskId} className={cn(isDragging && "opacity-30")}>
+      <div
+        ref={ref}
+        data-task-id={taskId}
+        // Карточки вне экрана не раскладываются: перетаскивание меряет все, и раскладка большой доски дорога.
+        className={cn("[contain-intrinsic-size:auto_7rem] [content-visibility:auto]", isDragging && "opacity-30")}
+      >
         <TaskCard taskId={taskId} columnId={columnId} />
       </div>
     </BoardContextMenu>

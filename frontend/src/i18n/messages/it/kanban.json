@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, one {# allegato} many {# di allegati} other {# allegati}}",
       "comments": "{count, plural, one {# commento} many {# di commenti} other {# commenti}}"
-    }
+    },
+    "overdue": "In ritardo",
+    "repeats": "Attività ricorrente",
+    "leoFilled": "Leo l’ha compilato in base a una riunione",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, one {{done, number} su # sottoattività completata} many {{done, number} su # di sottoattività completate} other {{done, number} su # sottoattività completate}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "Campo {field}"
   },
   "table": {
     "task": "Attività",
@@ -111,5 +118,13 @@
     "blue": "Blu",
     "violet": "Viola",
     "pink": "Rosa"
+  },
+  "dnd": {
+    "instructions": "Per prendere una scheda o una colonna, premi Spazio. Usa i tasti freccia per spostarla, Spazio per rilasciarla ed Esc per annullare.",
+    "pickedUp": "Hai preso {item}.",
+    "over": "{item}: {column}, {position, number} di {count, number}.",
+    "columnOver": "{item}: colonna {position, number} di {count, number}.",
+    "dropped": "Hai rilasciato {item}.",
+    "canceled": "Spostamento di {item} annullato."
   }
 }

@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, other {첨부 파일 #개}}",
       "comments": "{count, plural, other {댓글 #개}}"
-    }
+    },
+    "overdue": "기한 지남",
+    "repeats": "반복 작업",
+    "leoFilled": "Leo가 회의 내용으로 채웠어요",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, other {하위 작업 #개 중 {done, number}개 완료}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "{field} 필드"
   },
   "table": {
     "task": "작업",
@@ -111,5 +118,13 @@
     "blue": "파란색",
     "violet": "보라색",
     "pink": "분홍색"
+  },
+  "dnd": {
+    "instructions": "카드나 열을 들어 올리려면 스페이스바를 눌러 주세요. 화살표 키로 옮기고, 스페이스바를 다시 누르면 내려놓아요. 취소하려면 Esc를 눌러 주세요.",
+    "pickedUp": "{item}을(를) 들어 올렸어요.",
+    "over": "{item}: {column}의 {count, number}개 중 {position, number}번째예요.",
+    "columnOver": "{item}: 열 {count, number}개 중 {position, number}번째예요.",
+    "dropped": "{item}을(를) 내려놓았어요.",
+    "canceled": "{item} 이동을 취소했어요."
   }
 }

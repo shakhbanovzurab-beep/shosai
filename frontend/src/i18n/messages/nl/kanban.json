@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, one {# bijlage} other {# bijlagen}}",
       "comments": "{count, plural, one {# opmerking} other {# opmerkingen}}"
-    }
+    },
+    "overdue": "Te laat",
+    "repeats": "Terugkerende taak",
+    "leoFilled": "Leo heeft dit ingevuld op basis van een vergadering",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, one {{done, number} van # subtaak afgerond} other {{done, number} van # subtaken afgerond}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "Veld {field}"
   },
   "table": {
     "task": "Taak",
@@ -111,5 +118,13 @@
     "blue": "Blauw",
     "violet": "Violet",
     "pink": "Roze"
+  },
+  "dnd": {
+    "instructions": "Druk op de spatiebalk om een kaart of kolom op te pakken. Verplaats hem met de pijltoetsen, zet hem neer met de spatiebalk of annuleer met Esc.",
+    "pickedUp": "{item} opgepakt.",
+    "over": "{item}: {column}, {position, number} van {count, number}.",
+    "columnOver": "{item}: kolom {position, number} van {count, number}.",
+    "dropped": "{item} neergezet.",
+    "canceled": "Verplaatsen van {item} geannuleerd."
   }
 }

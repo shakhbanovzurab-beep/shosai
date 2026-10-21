@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, one {# अटैचमेंट} other {# अटैचमेंट}}",
       "comments": "{count, plural, one {# टिप्पणी} other {# टिप्पणियां}}"
-    }
+    },
+    "overdue": "तारीख निकल गई",
+    "repeats": "दोहराया जाने वाला टास्क",
+    "leoFilled": "Leo ने इसे एक मीटिंग से भरा",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, one {पूरा हुआ सबटास्क: # में से {done, number}} other {पूरे हुए सबटास्क: # में से {done, number}}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "{field} फ़ील्ड"
   },
   "table": {
     "task": "टास्क",
@@ -111,5 +118,13 @@
     "blue": "नीला",
     "violet": "बैंगनी",
     "pink": "गुलाबी"
+  },
+  "dnd": {
+    "instructions": "कार्ड या कॉलम उठाने के लिए Space दबाएं। ऐरो बटन से उसे मूव करें, Space से छोड़ें और Esc से रद्द करें।",
+    "pickedUp": "{item} उठाया गया।",
+    "over": "{item}: {column}, {count, number} में से {position, number}।",
+    "columnOver": "{item}: {count, number} में से कॉलम {position, number}।",
+    "dropped": "{item} छोड़ा गया।",
+    "canceled": "{item} को मूव करना रद्द किया गया।"
   }
 }

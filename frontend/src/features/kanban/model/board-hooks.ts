@@ -8,6 +8,10 @@ import type { BoardSnapshot, BoardStore } from "./board-store";
 
 export const BoardStoreContext = createContext<BoardStore | null>(null);
 
+/** Сегодня человека в его поясе ("2026-10-21"): один на доску, меняется раз в сутки. */
+export const TodayContext = createContext<string>("");
+export const useToday = () => use(TodayContext);
+
 export function useBoardStore(): BoardStore {
   const store = use(BoardStoreContext);
   if (!store) throw new Error("useBoardStore must be used inside the board's store provider");

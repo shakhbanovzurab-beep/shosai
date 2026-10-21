@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, other {# lampiran}}",
       "comments": "{count, plural, other {# komentar}}"
-    }
+    },
+    "overdue": "Terlambat",
+    "repeats": "Tugas berulang",
+    "leoFilled": "Leo mengisi ini dari rapat",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, other {{done, number} dari # subtugas selesai}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "Bidang {field}"
   },
   "table": {
     "task": "Tugas",
@@ -111,5 +118,13 @@
     "blue": "Biru",
     "violet": "Ungu",
     "pink": "Merah muda"
+  },
+  "dnd": {
+    "instructions": "Untuk mengambil kartu atau kolom, tekan Spasi. Gunakan tombol panah untuk memindahkannya, Spasi untuk melepaskannya, dan Esc untuk membatalkan.",
+    "pickedUp": "{item} diambil.",
+    "over": "{item}: {column}, {position, number} dari {count, number}.",
+    "columnOver": "{item}: kolom {position, number} dari {count, number}.",
+    "dropped": "{item} dilepaskan.",
+    "canceled": "Pemindahan {item} dibatalkan."
   }
 }

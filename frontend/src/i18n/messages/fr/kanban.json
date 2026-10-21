@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, one {# pièce jointe} many {# de pièces jointes} other {# pièces jointes}}",
       "comments": "{count, plural, one {# commentaire} many {# de commentaires} other {# commentaires}}"
-    }
+    },
+    "overdue": "En retard",
+    "repeats": "Tâche récurrente",
+    "leoFilled": "Leo l’a rempli à partir d’une réunion",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, one {{done, number} sur # sous-tâche terminée} many {{done, number} sur # de sous-tâches terminées} other {{done, number} sur # sous-tâches terminées}}",
+    "fieldValue": "{field} : {value}",
+    "fieldLabel": "Champ {field}"
   },
   "table": {
     "task": "Tâche",
@@ -111,5 +118,13 @@
     "blue": "Bleu",
     "violet": "Violet",
     "pink": "Rose"
+  },
+  "dnd": {
+    "instructions": "Pour prendre une carte ou une colonne, appuyez sur Espace. Déplacez-la avec les touches fléchées, déposez-la avec Espace ou annulez avec Échap.",
+    "pickedUp": "Vous avez pris {item}.",
+    "over": "{item} : {column}, {position, number} sur {count, number}.",
+    "columnOver": "{item} : colonne {position, number} sur {count, number}.",
+    "dropped": "Vous avez déposé {item}.",
+    "canceled": "Déplacement de {item} annulé."
   }
 }

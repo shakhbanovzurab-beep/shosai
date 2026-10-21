@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, other {# 件の添付ファイル}}",
       "comments": "{count, plural, other {# 件のコメント}}"
-    }
+    },
+    "overdue": "期限切れ",
+    "repeats": "繰り返しのタスク",
+    "leoFilled": "Leo が会議の内容から入力しました",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, other {サブタスク # 件中 {done, number} 件が完了}}",
+    "fieldValue": "{field}：{value}",
+    "fieldLabel": "「{field}」フィールド"
   },
   "table": {
     "task": "タスク",
@@ -111,5 +118,13 @@
     "blue": "青",
     "violet": "紫",
     "pink": "ピンク"
+  },
+  "dnd": {
+    "instructions": "カードや列を持ち上げるには、スペースキーを押します。矢印キーで移動し、スペースキーで置き、Esc キーでキャンセルします。",
+    "pickedUp": "「{item}」を持ち上げました。",
+    "over": "「{item}」は「{column}」の {position, number} 番目です（全 {count, number} 件）。",
+    "columnOver": "「{item}」は {position, number} 列目です（全 {count, number} 列）。",
+    "dropped": "「{item}」を置きました。",
+    "canceled": "「{item}」の移動をキャンセルしました。"
   }
 }

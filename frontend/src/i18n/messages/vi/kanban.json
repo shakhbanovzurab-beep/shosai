@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, other {# tệp đính kèm}}",
       "comments": "{count, plural, other {# bình luận}}"
-    }
+    },
+    "overdue": "Quá hạn",
+    "repeats": "Công việc lặp lại",
+    "leoFilled": "Leo đã điền mục này từ một cuộc họp",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, other {Đã hoàn thành {done, number} trên # công việc con}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "Trường {field}"
   },
   "table": {
     "task": "Công việc",
@@ -111,5 +118,13 @@
     "blue": "Xanh dương",
     "violet": "Tím",
     "pink": "Hồng"
+  },
+  "dnd": {
+    "instructions": "Để nhấc một thẻ hoặc một cột, hãy nhấn phím cách. Dùng các phím mũi tên để di chuyển, phím cách để thả và Esc để hủy.",
+    "pickedUp": "Đã nhấc {item}.",
+    "over": "{item}: {column}, vị trí {position, number} trên {count, number}.",
+    "columnOver": "{item}: cột {position, number} trên {count, number}.",
+    "dropped": "Đã thả {item}.",
+    "canceled": "Đã hủy di chuyển {item}."
   }
 }

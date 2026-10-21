@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, one {# Anhang} other {# Anhänge}}",
       "comments": "{count, plural, one {# Kommentar} other {# Kommentare}}"
-    }
+    },
+    "overdue": "Überfällig",
+    "repeats": "Wiederkehrende Aufgabe",
+    "leoFilled": "Leo hat das aus einem Meeting eingetragen",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, one {{done, number} von # Unteraufgabe erledigt} other {{done, number} von # Unteraufgaben erledigt}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "Feld {field}"
   },
   "table": {
     "task": "Aufgabe",
@@ -111,5 +118,13 @@
     "blue": "Blau",
     "violet": "Violett",
     "pink": "Rosa"
+  },
+  "dnd": {
+    "instructions": "Drücke die Leertaste, um eine Karte oder Spalte aufzunehmen. Verschiebe sie mit den Pfeiltasten, lege sie mit der Leertaste ab oder brich mit Esc ab.",
+    "pickedUp": "{item} aufgenommen.",
+    "over": "{item}: {column}, {position, number} von {count, number}.",
+    "columnOver": "{item}: Spalte {position, number} von {count, number}.",
+    "dropped": "{item} abgelegt.",
+    "canceled": "Verschieben von {item} abgebrochen."
   }
 }

@@ -10,8 +10,9 @@ import { useBoardSelector, useBoardStore, useColumnOrder } from "../model/board-
 import type { BoardSnapshot } from "../model/board-store";
 import { AddColumnButton } from "./add-column-button";
 import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
+import { useDragSetup } from "./drag-setup";
 import { KanbanColumn } from "./kanban-column";
-import { TaskCard } from "./task-card";
+import { DragPreview } from "./task-card";
 
 type CardDragData = { type: "task"; taskId: string; columnId: string };
 
@@ -47,6 +48,7 @@ export function KanbanBoard() {
   );
   const gridTracks = canAddColumn ? `${tracks} 12rem` : tracks;
   const beforeDrag = useRef<BoardSnapshot | null>(null);
+  const dragSetup = useDragSetup();
 
   function handleDragStart() {
     beforeDrag.current = store.get();
@@ -73,7 +75,13 @@ export function KanbanBoard() {
   }
 
   return (
-    <DragDropProvider onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
+    <DragDropProvider
+      plugins={dragSetup.plugins}
+      sensors={dragSetup.sensors}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+    >
       <div className="scrollbar-thin min-h-0 min-w-0 flex-1 overflow-x-auto overflow-y-hidden bg-muted/25 max-sm:snap-x max-sm:snap-mandatory px-4 pt-4 pb-0 [scrollbar-color:var(--border)_transparent] lg:px-5 lg:pt-5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1">
         <div className="inline-grid h-full min-w-full gap-4" style={{ gridTemplateColumns: gridTracks }}>
           {columnOrder.map((columnId, index) => (
@@ -86,7 +94,7 @@ export function KanbanBoard() {
         {(source) => {
           if (source.type !== "task" || !isCardDragData(source.data)) return null;
           const columnId = isSortable(source) && typeof source.group === "string" ? source.group : source.data.columnId;
-          return <TaskCard taskId={source.data.taskId} columnId={columnId} isOverlay />;
+          return <DragPreview taskId={source.data.taskId} columnId={columnId} />;
         }}
       </DragOverlay>
     </DragDropProvider>

@@ -1,132 +1,80 @@
 "use client";
 
-import { cn } from "cn";
-import { BadgeCheck, CalendarDays, type LucideIcon, MessageSquare, Paperclip } from "lucide-react";
-import { useFormatter, useTranslations } from "use-intl";
+import type { ReactNode } from "react";
 
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
+import { useTranslations } from "use-intl";
 
+import type { BoardSticker, SystemStickerId } from "../domain/stickers-contract";
 import type { Card } from "../domain/tasks-contract";
-import { useCard, useColumn } from "../model/board-hooks";
+import { useBoardStickers, useCard, useColumn } from "../model/board-hooks";
 import { BoardActionsButton } from "./board-menu-triggers";
-import { DueDate } from "./due-date";
+import { CardAssignee, CardChips, CardCover, CardFooter, CardHeader, CardRoot, type CardState } from "./card/card-face";
+import { hasFooterFacts } from "./card/footer-facts";
 import { JiraKey } from "./jira-key";
-import { PriorityBadge } from "./priority-badge";
-import { OwnerAvatar, OwnerName } from "./task-owner";
 import { WorkspaceTaskLink } from "./workspace-task-link";
 
-/** Счётчик карточки и его слово в каталоге `kanban.card.insights`. */
-function Count({ icon: Icon, count, kind }: { icon: LucideIcon; count: number; kind: "attachments" | "comments" }) {
-  const t = useTranslations("kanban");
-  const format = useFormatter();
-  return (
-    <span className="flex items-center gap-1.5 text-sm">
-      <Icon className="size-3.5" aria-hidden="true" />
-      <span aria-hidden="true">{format.number(count)}</span>
-      <span className="sr-only">{t(`card.insights.${kind}`, { count })}</span>
-    </span>
-  );
+/** Какие системные поля показаны на этой доске. */
+function visibilityOf(stickers: BoardSticker[]): Record<SystemStickerId, boolean> {
+  const shown = (id: SystemStickerId) => stickers.find((s) => s.id === id)?.visible ?? false;
+  return {
+    assignee: shown("assignee"),
+    due: shown("due"),
+    priority: shown("priority"),
+    recurrence: shown("recurrence"),
+  };
 }
 
-/** Ход подзадач в колонке «в работе». */
-function SubtaskProgress({ done, total }: { done: number; total: number }) {
-  const t = useTranslations("kanban");
-  const format = useFormatter();
-  const progress = done / total;
-  return (
-    <div className="flex flex-col gap-1.5">
-      <div className="flex items-center justify-between text-muted-foreground text-xs">
-        <span className="leading-none">{t("progress")}</span>
-        <span className="tabular-nums leading-none">{format.number(progress, "percent")}</span>
-      </div>
-      {/* Общая полоса заполняется слева; отражённая — от начала строки. */}
-      <Progress value={progress * 100} aria-label={t("progress")} />
-    </div>
-  );
-}
-
-/** Низ карточки: «Выполнена» в закрытой колонке, иначе счётчики вложений и комментариев. */
-function CardFooter({ card, done }: { card: Card; done: boolean }) {
-  const t = useTranslations("kanban");
-  if (!done && card.comment_count === 0 && card.attachment_count === 0) return null;
+/** Тело карточки без действий: обложка, заголовок, где живёт задача, чипы и низ. */
+function CardBody({ card, state, actions }: { card: Card; state: CardState; actions?: ReactNode }) {
+  const stickers = useBoardStickers();
+  const visible = visibilityOf(stickers);
+  const assignee = visible.assignee ? <CardAssignee card={card} /> : null;
   return (
     <>
-      <Separator />
-      {done ? (
-        <div className="flex items-center gap-1 font-medium text-green-700 text-sm dark:text-green-600">
-          <BadgeCheck className="size-4" aria-hidden="true" />
-          {t("card.completed")}
-        </div>
-      ) : (
-        <div className="flex items-center gap-3 text-muted-foreground text-sm">
-          {card.attachment_count > 0 ? (
-            <Count icon={Paperclip} count={card.attachment_count} kind="attachments" />
-          ) : null}
-          {card.comment_count > 0 ? <Count icon={MessageSquare} count={card.comment_count} kind="comments" /> : null}
-        </div>
-      )}
+      {card.cover ? <CardCover previewUrl={card.cover.preview_url} /> : null}
+      <CardHeader title={card.title} state={state}>
+        {actions}
+      </CardHeader>
+      {card.jira ? <JiraKey issue={card.jira} /> : null}
+      {card.space ? <WorkspaceTaskLink space={card.space} /> : null}
+      {/* Исполнитель — в конце нижней строки, а если внизу больше ничего нет, то в конце строки чипов. */}
+      <CardChips card={card} stickers={stickers} visible={visible} trailing={hasFooterFacts(card) ? null : assignee} />
+      <CardFooter card={card} trailing={hasFooterFacts(card) ? assignee : null} />
     </>
   );
 }
 
-/** Задача: заголовок и приоритет, затем исполнитель и срок, а в работе — ход подзадач. */
-export function TaskCard({
-  taskId,
-  columnId,
-  isOverlay = false,
-}: {
-  taskId: string;
-  columnId: string;
-  isOverlay?: boolean;
-}) {
+/** Карточка на доске: лицо задачи и «⋮». В закрытой колонке — приглушённая. */
+export function TaskCard({ taskId, columnId }: { taskId: string; columnId: string }) {
   const card = useCard(taskId);
-  const kind = useColumn(columnId)?.kind;
+  const state: CardState = useColumn(columnId)?.kind === "done" ? "done" : "open";
   const tc = useTranslations("common");
   if (!card) return null;
-
   return (
-    <article
-      className={cn(
-        "flex flex-col gap-3 rounded-xl border bg-card p-4 text-card-foreground shadow-xs",
-        isOverlay && "w-68 rotate-1 shadow-lg",
-      )}
-    >
-      <div className="flex min-w-0 flex-col gap-1.5">
-        <div className="flex items-center gap-2">
-          <h3 dir="auto" className="min-w-0 flex-1 truncate font-medium text-sm leading-none">
-            {card.title}
-          </h3>
-          {card.priority ? <PriorityBadge priority={card.priority} /> : null}
-          {isOverlay ? null : (
-            <BoardActionsButton
-              target={{ kind: "task", taskId, columnId }}
-              label={tc("actionsFor", { name: card.title })}
-              className="-my-1 -me-2 shrink-0 text-muted-foreground"
-            />
-          )}
-        </div>
-        {card.jira ? <JiraKey issue={card.jira} /> : null}
-        {card.space ? <WorkspaceTaskLink space={card.space} /> : null}
-      </div>
-      {kind === "in_progress" && card.subtasks_total > 0 ? (
-        <SubtaskProgress done={card.subtasks_done} total={card.subtasks_total} />
-      ) : null}
-      <div className="flex items-center justify-between gap-3">
-        <span className="flex min-w-0 items-center gap-1.5">
-          <OwnerAvatar owner={card.assignee} />
-          <OwnerName owner={card.assignee} className="text-muted-foreground text-sm" />
-        </span>
-        {card.due_on ? (
-          <span className="flex min-w-0 items-center gap-1.5 text-muted-foreground">
-            <span className="truncate text-sm">
-              <DueDate date={card.due_on} />
-            </span>
-            <CalendarDays className="size-3" aria-hidden="true" />
-          </span>
-        ) : null}
-      </div>
-      <CardFooter card={card} done={kind === "done"} />
-    </article>
+    <CardRoot state={state}>
+      <CardBody
+        card={card}
+        state={state}
+        actions={
+          <BoardActionsButton
+            target={{ kind: "task", taskId, columnId }}
+            label={tc("actionsFor", { name: card.title })}
+            className="-my-1 -me-1.5 shrink-0 text-muted-foreground"
+          />
+        }
+      />
+    </CardRoot>
+  );
+}
+
+/** Превью под пальцем или курсором при перетаскивании: то же лицо, без действий, чуть приподнятое. */
+export function DragPreview({ taskId, columnId }: { taskId: string; columnId: string }) {
+  const card = useCard(taskId);
+  const state: CardState = useColumn(columnId)?.kind === "done" ? "done" : "open";
+  if (!card) return null;
+  return (
+    <CardRoot state={state} className="w-68 rotate-1 shadow-lg">
+      <CardBody card={card} state={state} />
+    </CardRoot>
   );
 }

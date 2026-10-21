@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useState } from "react";
 
 import { CollisionPriority } from "@dnd-kit/abstract";
 import { useDroppable } from "@dnd-kit/react";
@@ -13,7 +13,11 @@ import { BoardContextMenu } from "./board-menu-triggers";
 import { useBoardCommands, useManagedByJira } from "./board-store";
 import { ColumnDot, ColumnHeader } from "./column-header";
 import { SWATCHES } from "./palette";
+import { RevealMore } from "./reveal-more";
 import { SortableTaskCard } from "./sortable-task-card";
+
+/** Сколько карточек колонка показывает сразу и добавляет за раз при прокрутке. */
+const REVEAL_STEP = 12;
 
 /** Свёрнутая колонка: узкая полоса с названием сверху вниз и счётчиком; по нажатию разворачивается. */
 function CollapsedStrip({ columnId }: { columnId: string }) {
@@ -81,6 +85,9 @@ export function KanbanColumn({ columnId, index }: { columnId: string; index: num
     data: { type: "task-container", columnId },
   });
   const collapsed = head?.collapsed === true;
+  // Длинная колонка показывает карточки порциями по мере прокрутки (замер в плане пакета, шаг 4).
+  const [shown, setShown] = useState(REVEAL_STEP);
+  const revealMore = () => setShown((count) => count + REVEAL_STEP);
 
   return (
     <section
@@ -107,9 +114,10 @@ export function KanbanColumn({ columnId, index }: { columnId: string; index: num
             ref={taskDropRef}
             className="scrollbar-thin flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-3 [scrollbar-color:var(--border)_transparent] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:w-1"
           >
-            {taskIds.map((taskId, taskIndex) => (
+            {taskIds.slice(0, shown).map((taskId, taskIndex) => (
               <SortableTaskCard key={taskId} taskId={taskId} columnId={columnId} index={taskIndex} />
             ))}
+            {taskIds.length > shown ? <RevealMore onReveal={revealMore} /> : null}
             {taskIds.length === 0 ? <EmptyColumn columnId={columnId} /> : null}
           </div>
         </>

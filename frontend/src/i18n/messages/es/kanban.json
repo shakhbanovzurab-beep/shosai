@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, one {# adjunto} many {# de adjuntos} other {# adjuntos}}",
       "comments": "{count, plural, one {# comentario} many {# de comentarios} other {# comentarios}}"
-    }
+    },
+    "overdue": "Vencida",
+    "repeats": "Tarea recurrente",
+    "leoFilled": "Leo lo completó a partir de una reunión",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, one {{done, number} de # subtarea completada} many {{done, number} de # de subtareas completadas} other {{done, number} de # subtareas completadas}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "Campo {field}"
   },
   "table": {
     "task": "Tarea",
@@ -111,5 +118,13 @@
     "blue": "Azul",
     "violet": "Violeta",
     "pink": "Rosa"
+  },
+  "dnd": {
+    "instructions": "Para tomar una tarjeta o una columna, presiona Espacio. Usa las teclas de flecha para moverla, Espacio para soltarla y Esc para cancelar.",
+    "pickedUp": "Tomaste {item}.",
+    "over": "{item}: {column}, {position, number} de {count, number}.",
+    "columnOver": "{item}: columna {position, number} de {count, number}.",
+    "dropped": "Soltaste {item}.",
+    "canceled": "Se canceló el movimiento de {item}."
   }
 }

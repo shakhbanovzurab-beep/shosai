@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, other {# 個附件}}",
       "comments": "{count, plural, other {# 則留言}}"
-    }
+    },
+    "overdue": "已逾期",
+    "repeats": "重複任務",
+    "leoFilled": "由 Leo 根據會議內容填寫",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, other {已完成 {done, number} 項子任務，共 # 項}}",
+    "fieldValue": "{field}：{value}",
+    "fieldLabel": "「{field}」欄位"
   },
   "table": {
     "task": "任務",
@@ -111,5 +118,13 @@
     "blue": "藍色",
     "violet": "紫色",
     "pink": "粉紅色"
+  },
+  "dnd": {
+    "instructions": "按空白鍵即可拿起卡片或欄。使用方向鍵移動，按空白鍵放下，按 Esc 取消。",
+    "pickedUp": "已拿起「{item}」。",
+    "over": "「{item}」位於「{column}」第 {position, number} 個位置，共 {count, number} 個。",
+    "columnOver": "「{item}」位於第 {position, number} 欄，共 {count, number} 欄。",
+    "dropped": "已放下「{item}」。",
+    "canceled": "已取消移動「{item}」。"
   }
 }

@@ -15,6 +15,7 @@
     "test": "vitest run",
     "i18n:check": "vitest run src/scripts/i18n.test.ts",
     "i18n:rtl-smoke": "node src/scripts/rtl-smoke.mjs",
+    "perf:kanban": "node src/scripts/perf/kanban-perf.mjs",
     "api:types": "openapi-typescript ../backend/openapi.json --output src/lib/api/generated/schema.d.ts",
     "lint": "biome lint",
     "format": "biome format --write",
@@ -31,6 +32,7 @@
   },
   "dependencies": {
     "@dnd-kit/abstract": "^0.5.0",
+    "@dnd-kit/dom": "0.5.0",
     "@dnd-kit/helpers": "^0.5.0",
     "@dnd-kit/react": "^0.5.0",
     "@floating-ui/dom": "^1.8.0",

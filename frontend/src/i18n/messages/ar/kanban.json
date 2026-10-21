@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, zero {# مرفق} one {مرفق واحد} two {مرفقان} few {# مرفقات} many {# مرفقًا} other {# مرفق}}",
       "comments": "{count, plural, zero {# تعليق} one {تعليق واحد} two {تعليقان} few {# تعليقات} many {# تعليقًا} other {# تعليق}}"
-    }
+    },
+    "overdue": "متأخر",
+    "repeats": "مهمة متكررة",
+    "leoFilled": "ملأ Leo هذا الحقل استنادًا إلى اجتماع",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, zero {اكتمل {done, number} من أصل # مهمة فرعية} one {اكتمل {done, number} من أصل مهمة فرعية واحدة} two {اكتمل {done, number} من أصل مهمتين فرعيتين} few {اكتمل {done, number} من أصل # مهام فرعية} many {اكتمل {done, number} من أصل # مهمة فرعية} other {اكتمل {done, number} من أصل # مهمة فرعية}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "حقل «{field}»"
   },
   "table": {
     "task": "المهمة",
@@ -111,5 +118,13 @@
     "blue": "أزرق",
     "violet": "بنفسجي",
     "pink": "وردي"
+  },
+  "dnd": {
+    "instructions": "يمكن التقاط بطاقة أو عمود بالضغط على مفتاح المسافة، ثم نقله بمفاتيح الأسهم، وإفلاته بمفتاح المسافة، أو الإلغاء بمفتاح Esc.",
+    "pickedUp": "تم التقاط «{item}».",
+    "over": "«{item}»: «{column}»، {position, number} من {count, number}.",
+    "columnOver": "«{item}»: العمود {position, number} من {count, number}.",
+    "dropped": "تم إفلات «{item}».",
+    "canceled": "تم إلغاء نقل «{item}»."
   }
 }

@@ -5,9 +5,12 @@ import { createContext, type ReactNode, use, useEffect, useState } from "react";
 import { useTranslations } from "use-intl";
 
 import { NameDialog, type NameRequest } from "@/components/name-dialog";
+import { useNow } from "@/hooks/use-now";
+import { dayIn } from "@/i18n/calendar-days";
+import { useTimeZone } from "@/i18n/time-zone";
 
 import type { BoardDetail } from "../domain/boards-contract";
-import { BoardStoreContext, useBoardSelector } from "../model/board-hooks";
+import { BoardStoreContext, TodayContext, useBoardSelector } from "../model/board-hooks";
 import { createBoardStore } from "../model/board-store";
 import { type CardCommands, createCardCommands } from "../model/card-commands";
 import { type ColumnCommands, createColumnCommands } from "../model/column-commands";
@@ -50,6 +53,10 @@ export function BoardProvider({ detail, children }: { detail: BoardDetail; child
   const [nameRequest, setNameRequest] = useState<NameRequest | null>(null);
   const [newColumnAt, setNewColumnAt] = useState<number | null>(null);
   const [store] = useState(() => createBoardStore(detail));
+  // Один таймер на доску, а не на каждую карточку: «сегодня» нужно сроку и «просрочено».
+  const now = useNow();
+  const zone = useTimeZone();
+  const today = now === null ? "" : dayIn(new Date(now), zone);
   // Команды пересоздаются, только когда меняется язык: React Compiler запоминает их по store и переводчикам.
   const ctx = { store, words: (): CommandWords => ({ t, tc, ta }), askName: setNameRequest };
   const cards = createCardCommands(ctx);
@@ -66,11 +73,13 @@ export function BoardProvider({ detail, children }: { detail: BoardDetail; child
 
   return (
     <BoardStoreContext value={store}>
-      <BoardCommandsContext value={commands}>
-        {children}
-        <NameDialog request={nameRequest} onClose={() => setNameRequest(null)} />
-        <NewColumnDialog position={newColumnAt} lifecycle={lifecycle} onClose={() => setNewColumnAt(null)} />
-      </BoardCommandsContext>
+      <TodayContext value={today}>
+        <BoardCommandsContext value={commands}>
+          {children}
+          <NameDialog request={nameRequest} onClose={() => setNameRequest(null)} />
+          <NewColumnDialog position={newColumnAt} lifecycle={lifecycle} onClose={() => setNewColumnAt(null)} />
+        </BoardCommandsContext>
+      </TodayContext>
     </BoardStoreContext>
   );
 }

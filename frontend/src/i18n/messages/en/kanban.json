@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, one {# attachment} other {# attachments}}",
       "comments": "{count, plural, one {# comment} other {# comments}}"
-    }
+    },
+    "overdue": "Overdue",
+    "repeats": "Repeats",
+    "leoFilled": "Leo filled this from a meeting",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, one {{done, number} of # subtask done} other {{done, number} of # subtasks done}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "Field {field}"
   },
   "table": {
     "task": "Task",
@@ -111,5 +118,13 @@
     "blue": "Blue",
     "violet": "Violet",
     "pink": "Pink"
+  },
+  "dnd": {
+    "instructions": "To pick up a card or a column, press Space. Use the arrow keys to move it, Space to drop it, Escape to cancel.",
+    "pickedUp": "Picked up {item}.",
+    "over": "{item}: {column}, {position, number} of {count, number}.",
+    "columnOver": "{item}: column {position, number} of {count, number}.",
+    "dropped": "Dropped {item}.",
+    "canceled": "Moving {item} was cancelled."
   }
 }

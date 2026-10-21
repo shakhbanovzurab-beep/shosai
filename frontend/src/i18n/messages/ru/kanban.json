@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, one {# вложение} few {# вложения} many {# вложений} other {# вложения}}",
       "comments": "{count, plural, one {# комментарий} few {# комментария} many {# комментариев} other {# комментария}}"
-    }
+    },
+    "overdue": "Просрочено",
+    "repeats": "Повторяющаяся задача",
+    "leoFilled": "Leo заполнил это по итогам встречи",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, one {Выполнено {done, number} из # подзадачи} few {Выполнено {done, number} из # подзадач} many {Выполнено {done, number} из # подзадач} other {Выполнено {done, number} из # подзадачи}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "Поле «{field}»"
   },
   "table": {
     "task": "Задача",
@@ -111,5 +118,13 @@
     "blue": "Синий",
     "violet": "Фиолетовый",
     "pink": "Розовый"
+  },
+  "dnd": {
+    "instructions": "Чтобы взять карточку или колонку, нажмите Пробел. Клавиши со стрелками перемещают её, Пробел отпускает, Esc отменяет перемещение.",
+    "pickedUp": "Взято: «{item}».",
+    "over": "«{item}»: «{column}», {position, number} из {count, number}.",
+    "columnOver": "«{item}»: колонка {position, number} из {count, number}.",
+    "dropped": "Перемещено: «{item}».",
+    "canceled": "Перемещение «{item}» отменено."
   }
 }

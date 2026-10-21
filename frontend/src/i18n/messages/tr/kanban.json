@@ -60,7 +60,14 @@
     "insights": {
       "attachments": "{count, plural, one {# ek} other {# ek}}",
       "comments": "{count, plural, one {# yorum} other {# yorum}}"
-    }
+    },
+    "overdue": "Gecikti",
+    "repeats": "Tekrarlanan görev",
+    "leoFilled": "Leo bunu bir toplantıya göre doldurdu",
+    "subtasks": "{done, number}/{total, number}",
+    "subtasksLabel": "{total, plural, one {# alt görevden {done, number} tanesi tamamlandı} other {# alt görevden {done, number} tanesi tamamlandı}}",
+    "fieldValue": "{field}: {value}",
+    "fieldLabel": "{field} alanı"
   },
   "table": {
     "task": "Görev",
@@ -111,5 +118,13 @@
     "blue": "Mavi",
     "violet": "Mor",
     "pink": "Pembe"
+  },
+  "dnd": {
+    "instructions": "Bir kartı veya sütunu almak için Boşluk tuşuna basın. Ok tuşlarıyla taşıyın, Boşluk tuşuyla bırakın, Esc tuşuyla iptal edin.",
+    "pickedUp": "{item} alındı.",
+    "over": "{item}: {column}, sıra {position, number}/{count, number}.",
+    "columnOver": "{item}: sütun {position, number}/{count, number}.",
+    "dropped": "{item} bırakıldı.",
+    "canceled": "{item} için taşıma iptal edildi."
   }
 }
