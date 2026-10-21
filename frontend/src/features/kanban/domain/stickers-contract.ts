@@ -37,8 +37,11 @@ export type BoardSticker = Sticker & { visible: boolean };
 
 export type StickerValue = { state_id: string } | { number: number } | { text: string };
 
-/** Своё поле владельца со списком досок, где оно стоит, — для «Поля других досок». */
-export type OwnedSticker = CustomSticker & { boards: { id: string; name: string }[] };
+/** Сколько задач несут значение поля — всего и по состояниям: удаление состояния или поля говорит, что очистит. */
+export type StickerUsage = { tasks: number; states: Record<string, number> };
+
+/** Своё поле владельца: доски, где оно стоит, и сколько задач несут его значения. */
+export type OwnedSticker = CustomSticker & { boards: { id: string; name: string }[]; usage: StickerUsage };
 export type StickersResponse = { items: OwnedSticker[] };
 
 export type NewStateDraft = { name: string; color: Color };
@@ -59,6 +62,9 @@ export const STICKERS_MAX = 100;
 export const STICKER_TEXT_MAX = 200;
 /** Модуль числа строго меньше; дробная часть — не больше двух знаков. */
 export const STICKER_NUMBER_LIMIT = 1e12;
+
+/** Своё поле (не системное): у него есть имя и владелец. */
+export const isCustomSticker = <T extends Sticker>(sticker: T): sticker is T & CustomSticker => sticker.name !== null;
 
 export const isSystemSticker = (id: string): id is SystemStickerId =>
   (SYSTEM_STICKERS as readonly string[]).includes(id);

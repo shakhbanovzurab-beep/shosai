@@ -1,0 +1,52 @@
+{
+  "open": "Campi",
+  "title": "Campi",
+  "description": "Cosa mostrano le schede di questa bacheca. Il valore di un campo appartiene all’attività e la segue ovunque.",
+  "system": "Integrato",
+  "kinds": {
+    "states": "Elenco di opzioni",
+    "number": "Numero",
+    "text": "Testo"
+  },
+  "showOnCards": "Mostra sulle schede",
+  "showOnCardsFor": "Mostra «{name}» sulle schede",
+  "edit": "Modifica",
+  "takeOff": "Rimuovi dalla bacheca",
+  "new": "Nuovo campo",
+  "fromOther": "Da altre bacheche",
+  "fromOtherSearch": "Cerca un campo…",
+  "fromOtherEmpty": "Tutti gli altri tuoi campi sono già su questa bacheca.",
+  "onBoards": "Su {boards}",
+  "onNoBoard": "Su nessuna bacheca",
+  "onlySystem": "Questa bacheca ha solo campi integrati. Aggiungi un campo per organizzare le attività a modo tuo.",
+  "jiraOnly": "Una bacheca Jira mostra i campi propri di Jira.",
+  "boardFull": "Una bacheca può avere fino a {max, number} campi propri.",
+  "dialog": {
+    "newTitle": "Nuovo campo",
+    "editTitle": "Modifica campo",
+    "kind": "Tipo",
+    "name": "Nome",
+    "namePlaceholder": "Categoria, Stima, Cliente…",
+    "states": "Opzioni",
+    "stateName": "Nome dell’opzione",
+    "addState": "Aggiungi opzione",
+    "removeState": "Rimuovi «{name}»",
+    "color": "Colore di «{name}»",
+    "clears": "{count, plural, one {# attività perde il valore di un’opzione rimossa.} many {# di attività perdono il valore di un’opzione rimossa.} other {# attività perdono il valore di un’opzione rimossa.}}",
+    "delete": "Elimina campo"
+  },
+  "problems": {
+    "name_required": "Dai un nome al campo.",
+    "name_too_long": "Il nome è troppo lungo.",
+    "states_required": "Aggiungi almeno un’opzione.",
+    "state_name_required": "Ogni opzione deve avere un nome.",
+    "state_names_repeat": "Le opzioni devono avere nomi diversi.",
+    "states_full": "Un campo può avere fino a {max, number} opzioni."
+  },
+  "delete": {
+    "title": "Eliminare «{name}»?",
+    "body": "Il campo verrà rimosso da {boards} e il suo valore sparirà da {tasks, plural, one {# attività} many {# di attività} other {# attività}}. Chi vede queste attività non lo vedrà più.",
+    "bodyNoValues": "Il campo verrà rimosso da {boards}. Nessuna attività ha ancora un valore in questo campo.",
+    "confirm": "Elimina campo"
+  }
+}

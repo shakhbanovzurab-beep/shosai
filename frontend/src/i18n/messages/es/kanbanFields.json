@@ -1,0 +1,52 @@
+{
+  "open": "Campos",
+  "title": "Campos",
+  "description": "Lo que muestran las tarjetas de este tablero. El valor de un campo pertenece a la tarea, así que va adonde vaya la tarea.",
+  "system": "Integrado",
+  "kinds": {
+    "states": "Lista de opciones",
+    "number": "Número",
+    "text": "Texto"
+  },
+  "showOnCards": "Mostrar en las tarjetas",
+  "showOnCardsFor": "Mostrar «{name}» en las tarjetas",
+  "edit": "Editar",
+  "takeOff": "Quitar del tablero",
+  "new": "Nuevo campo",
+  "fromOther": "De otros tableros",
+  "fromOtherSearch": "Buscar un campo…",
+  "fromOtherEmpty": "Todos tus otros campos ya están en este tablero.",
+  "onBoards": "En {boards}",
+  "onNoBoard": "En ningún tablero",
+  "onlySystem": "Este tablero solo tiene campos integrados. Agrega un campo para organizar las tareas a tu manera.",
+  "jiraOnly": "Un tablero de Jira muestra los campos propios de Jira.",
+  "boardFull": "Un tablero puede tener hasta {max, number} campos propios.",
+  "dialog": {
+    "newTitle": "Nuevo campo",
+    "editTitle": "Editar campo",
+    "kind": "Tipo",
+    "name": "Nombre",
+    "namePlaceholder": "Categoría, Estimación, Cliente…",
+    "states": "Opciones",
+    "stateName": "Nombre de la opción",
+    "addState": "Agregar opción",
+    "removeState": "Quitar «{name}»",
+    "color": "Color de «{name}»",
+    "clears": "{count, plural, one {# tarea pierde el valor de una opción quitada.} many {# de tareas pierden el valor de una opción quitada.} other {# tareas pierden el valor de una opción quitada.}}",
+    "delete": "Eliminar campo"
+  },
+  "problems": {
+    "name_required": "Ponle un nombre al campo.",
+    "name_too_long": "El nombre es demasiado largo.",
+    "states_required": "Agrega al menos una opción.",
+    "state_name_required": "Cada opción necesita un nombre.",
+    "state_names_repeat": "Las opciones necesitan nombres distintos.",
+    "states_full": "Un campo puede tener hasta {max, number} opciones."
+  },
+  "delete": {
+    "title": "¿Eliminar «{name}»?",
+    "body": "Se quitará de {boards} y su valor desaparecerá de {tasks, plural, one {# tarea} many {# de tareas} other {# tareas}}. Quienes vean esas tareas dejarán de verlo.",
+    "bodyNoValues": "Se quitará de {boards}. Aún ninguna tarea tiene un valor en este campo.",
+    "confirm": "Eliminar campo"
+  }
+}

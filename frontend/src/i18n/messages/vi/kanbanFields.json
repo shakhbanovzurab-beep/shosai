@@ -1,0 +1,52 @@
+{
+  "open": "Trường",
+  "title": "Trường",
+  "description": "Những gì thẻ trên bảng này hiển thị. Giá trị của trường thuộc về công việc, nên công việc đi đâu thì giá trị đi theo đó.",
+  "system": "Có sẵn",
+  "kinds": {
+    "states": "Danh sách tùy chọn",
+    "number": "Số",
+    "text": "Văn bản"
+  },
+  "showOnCards": "Hiển thị trên thẻ",
+  "showOnCardsFor": "Hiển thị “{name}” trên thẻ",
+  "edit": "Chỉnh sửa",
+  "takeOff": "Gỡ khỏi bảng",
+  "new": "Trường mới",
+  "fromOther": "Từ bảng khác",
+  "fromOtherSearch": "Tìm kiếm trường…",
+  "fromOtherEmpty": "Tất cả các trường khác của bạn đã có trên bảng này.",
+  "onBoards": "Trên bảng {boards}",
+  "onNoBoard": "Không có trên bảng nào",
+  "onlySystem": "Bảng này chỉ có các trường có sẵn. Hãy thêm một trường để sắp xếp công việc theo cách của bạn.",
+  "jiraOnly": "Bảng Jira hiển thị các trường riêng của Jira.",
+  "boardFull": "Mỗi bảng có tối đa {max, number} trường riêng.",
+  "dialog": {
+    "newTitle": "Trường mới",
+    "editTitle": "Chỉnh sửa trường",
+    "kind": "Loại",
+    "name": "Tên",
+    "namePlaceholder": "Phân loại, Ước tính, Khách hàng…",
+    "states": "Tùy chọn",
+    "stateName": "Tên tùy chọn",
+    "addState": "Thêm tùy chọn",
+    "removeState": "Gỡ “{name}”",
+    "color": "Màu của “{name}”",
+    "clears": "{count, plural, other {# công việc sẽ mất giá trị của tùy chọn đã gỡ.}}",
+    "delete": "Xóa trường"
+  },
+  "problems": {
+    "name_required": "Hãy đặt tên cho trường.",
+    "name_too_long": "Tên quá dài.",
+    "states_required": "Hãy thêm ít nhất một tùy chọn.",
+    "state_name_required": "Mỗi tùy chọn cần có tên.",
+    "state_names_repeat": "Các tùy chọn cần có tên khác nhau.",
+    "states_full": "Mỗi trường có tối đa {max, number} tùy chọn."
+  },
+  "delete": {
+    "title": "Xóa “{name}”?",
+    "body": "Trường này sẽ bị gỡ khỏi bảng {boards}, và giá trị của nó sẽ mất khỏi {tasks, plural, other {# công việc}}. Những người xem các công việc đó sẽ không còn thấy trường này nữa.",
+    "bodyNoValues": "Trường này sẽ bị gỡ khỏi bảng {boards}. Chưa có công việc nào có giá trị trong trường này.",
+    "confirm": "Xóa trường"
+  }
+}

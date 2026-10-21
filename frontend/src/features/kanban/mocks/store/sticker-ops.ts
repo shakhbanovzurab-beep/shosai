@@ -8,6 +8,7 @@ import {
   STICKER_NUMBER_LIMIT,
   STICKERS_MAX,
   type StickerPatch,
+  type StickerUsage,
   type StickerValue,
 } from "../../domain/stickers-contract";
 import { ME_PERSON } from "../seed/builders";
@@ -25,6 +26,18 @@ const isMine = (sticker: CustomSticker) => "user_id" in sticker.owner && sticker
 const withId = (states: { name: string; color: CustomSticker["states"][number]["color"]; id?: string }[]) =>
   states.map((s) => ({ id: s.id ?? crypto.randomUUID(), name: s.name, color: s.color }));
 
+/** Сколько задач несут значение поля, всего и по состояниям. */
+function usageOf(stickerId: string): StickerUsage {
+  const usage: StickerUsage = { tasks: 0, states: {} };
+  for (const values of demo().values.values()) {
+    const value = values.get(stickerId);
+    if (!value) continue;
+    usage.tasks += 1;
+    if ("state_id" in value) usage.states[value.state_id] = (usage.states[value.state_id] ?? 0) + 1;
+  }
+  return usage;
+}
+
 export function ownedStickers(): OwnedSticker[] {
   const d = demo();
   return [...d.stickers.values()].filter(isMine).map((sticker) => ({
@@ -32,6 +45,7 @@ export function ownedStickers(): OwnedSticker[] {
     boards: [...d.boards.values()]
       .filter((board) => board.stickers.some((s) => s.id === sticker.id))
       .map((board) => ({ id: board.id, name: board.name })),
+    usage: usageOf(sticker.id),
   }));
 }
 

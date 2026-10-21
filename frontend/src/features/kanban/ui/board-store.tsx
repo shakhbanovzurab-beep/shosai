@@ -16,6 +16,7 @@ import { type CardCommands, createCardCommands } from "../model/card-commands";
 import { type ColumnCommands, createColumnCommands } from "../model/column-commands";
 import { type ColumnLifecycle, createColumnLifecycle } from "../model/column-lifecycle";
 import type { CommandWords } from "../model/command-context";
+import { createFieldCommands, type FieldCommands } from "../model/field-commands";
 import { NewColumnDialog } from "./column-dialog";
 
 /*
@@ -27,6 +28,7 @@ type BoardCommandsValue = {
   cards: CardCommands;
   columns: ColumnCommands;
   lifecycle: ColumnLifecycle;
+  fields: FieldCommands;
   /** Открыть диалог новой колонки на месте `position`. */
   askNewColumn: (position: number) => void;
 };
@@ -65,6 +67,7 @@ export function BoardProvider({ detail, children }: { detail: BoardDetail; child
     cards,
     columns: createColumnCommands(ctx, cards),
     lifecycle,
+    fields: createFieldCommands(ctx),
     askNewColumn: setNewColumnAt,
   };
 

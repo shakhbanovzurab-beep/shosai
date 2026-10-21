@@ -1,0 +1,52 @@
+{
+  "open": "Fields",
+  "title": "Fields",
+  "description": "What this board’s cards show. A field’s value belongs to the task, so it goes wherever the task does.",
+  "system": "System",
+  "kinds": {
+    "states": "Set of states",
+    "number": "Number",
+    "text": "Text"
+  },
+  "showOnCards": "Show on cards",
+  "showOnCardsFor": "Show “{name}” on cards",
+  "edit": "Edit",
+  "takeOff": "Remove from board",
+  "new": "New field",
+  "fromOther": "From other boards",
+  "fromOtherSearch": "Find a field…",
+  "fromOtherEmpty": "Your other fields are all on this board already.",
+  "onBoards": "On {boards}",
+  "onNoBoard": "On no board",
+  "onlySystem": "Only system fields on this board. Add a field to sort tasks your way.",
+  "jiraOnly": "A Jira board shows Jira’s own fields.",
+  "boardFull": "A board can have up to {max, number} fields of its own.",
+  "dialog": {
+    "newTitle": "New field",
+    "editTitle": "Edit field",
+    "kind": "Kind",
+    "name": "Name",
+    "namePlaceholder": "Type, Estimate, Customer…",
+    "states": "States",
+    "stateName": "State name",
+    "addState": "Add state",
+    "removeState": "Remove “{name}”",
+    "color": "Colour of “{name}”",
+    "clears": "{count, plural, one {# task loses the value of a removed state.} other {# tasks lose the value of a removed state.}}",
+    "delete": "Delete field"
+  },
+  "problems": {
+    "name_required": "Give the field a name.",
+    "name_too_long": "The name is too long.",
+    "states_required": "Add at least one state.",
+    "state_name_required": "Every state needs a name.",
+    "state_names_repeat": "States need different names.",
+    "states_full": "A field can have up to {max, number} states."
+  },
+  "delete": {
+    "title": "Delete “{name}”?",
+    "body": "It comes off {boards}, and its value leaves {tasks, plural, one {# task} other {# tasks}}. Everyone who sees those tasks stops seeing it.",
+    "bodyNoValues": "It comes off {boards}. No task has a value in it yet.",
+    "confirm": "Delete field"
+  }
+}

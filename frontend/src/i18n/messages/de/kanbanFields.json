@@ -1,0 +1,52 @@
+{
+  "open": "Felder",
+  "title": "Felder",
+  "description": "Was die Karten dieses Boards zeigen. Der Wert eines Felds gehört zur Aufgabe und geht überallhin mit ihr mit.",
+  "system": "Integriert",
+  "kinds": {
+    "states": "Liste von Zuständen",
+    "number": "Zahl",
+    "text": "Text"
+  },
+  "showOnCards": "Auf Karten anzeigen",
+  "showOnCardsFor": "„{name}“ auf Karten anzeigen",
+  "edit": "Bearbeiten",
+  "takeOff": "Vom Board entfernen",
+  "new": "Neues Feld",
+  "fromOther": "Aus anderen Boards",
+  "fromOtherSearch": "Feld suchen…",
+  "fromOtherEmpty": "Deine anderen Felder sind schon alle auf diesem Board.",
+  "onBoards": "Auf {boards}",
+  "onNoBoard": "Auf keinem Board",
+  "onlySystem": "Auf diesem Board gibt es nur integrierte Felder. Füge ein Feld hinzu, um Aufgaben auf deine Art zu ordnen.",
+  "jiraOnly": "Ein Jira-Board zeigt die eigenen Felder von Jira.",
+  "boardFull": "Ein Board kann bis zu {max, number} eigene Felder haben.",
+  "dialog": {
+    "newTitle": "Neues Feld",
+    "editTitle": "Feld bearbeiten",
+    "kind": "Art",
+    "name": "Name",
+    "namePlaceholder": "Typ, Schätzung, Kunde…",
+    "states": "Zustände",
+    "stateName": "Name des Zustands",
+    "addState": "Zustand hinzufügen",
+    "removeState": "„{name}“ entfernen",
+    "color": "Farbe von „{name}“",
+    "clears": "{count, plural, one {# Aufgabe verliert den Wert eines entfernten Zustands.} other {# Aufgaben verlieren den Wert eines entfernten Zustands.}}",
+    "delete": "Feld löschen"
+  },
+  "problems": {
+    "name_required": "Gib dem Feld einen Namen.",
+    "name_too_long": "Der Name ist zu lang.",
+    "states_required": "Füge mindestens einen Zustand hinzu.",
+    "state_name_required": "Jeder Zustand braucht einen Namen.",
+    "state_names_repeat": "Zustände brauchen unterschiedliche Namen.",
+    "states_full": "Ein Feld kann bis zu {max, number} Zustände haben."
+  },
+  "delete": {
+    "title": "„{name}“ löschen?",
+    "body": "Das Feld verschwindet von {boards}, und {tasks, plural, one {# Aufgabe verliert} other {# Aufgaben verlieren}} seinen Wert. Alle, die diese Aufgaben sehen, sehen das Feld nicht mehr.",
+    "bodyNoValues": "Das Feld verschwindet von {boards}. Noch keine Aufgabe hat darin einen Wert.",
+    "confirm": "Feld löschen"
+  }
+}

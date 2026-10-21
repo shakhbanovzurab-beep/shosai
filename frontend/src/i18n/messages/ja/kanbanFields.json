@@ -1,0 +1,52 @@
+{
+  "open": "フィールド",
+  "title": "フィールド",
+  "description": "このボードのカードに表示される項目です。フィールドの値はタスクに属するため、タスクがどこへ移っても値は一緒に移ります。",
+  "system": "組み込み",
+  "kinds": {
+    "states": "選択肢リスト",
+    "number": "数値",
+    "text": "テキスト"
+  },
+  "showOnCards": "カードに表示",
+  "showOnCardsFor": "「{name}」をカードに表示",
+  "edit": "編集",
+  "takeOff": "ボードから削除",
+  "new": "新しいフィールド",
+  "fromOther": "他のボードのフィールド",
+  "fromOtherSearch": "フィールドを検索…",
+  "fromOtherEmpty": "他のフィールドはすべてこのボードにあります。",
+  "onBoards": "{boards} にあります",
+  "onNoBoard": "どのボードにもありません",
+  "onlySystem": "このボードには組み込みのフィールドしかありません。フィールドを追加すると、タスクを自分なりに整理できます。",
+  "jiraOnly": "Jira のボードには Jira 独自のフィールドが表示されます。",
+  "boardFull": "ボードごとに追加できる独自のフィールドは {max, number} 個までです。",
+  "dialog": {
+    "newTitle": "新しいフィールド",
+    "editTitle": "フィールドを編集",
+    "kind": "種類",
+    "name": "名前",
+    "namePlaceholder": "種別、見積もり、顧客…",
+    "states": "選択肢",
+    "stateName": "選択肢の名前",
+    "addState": "選択肢を追加",
+    "removeState": "「{name}」を削除",
+    "color": "「{name}」の色",
+    "clears": "{count, plural, other {# 件のタスクで、削除した選択肢の値がなくなります。}}",
+    "delete": "フィールドを削除"
+  },
+  "problems": {
+    "name_required": "フィールドの名前を入力してください。",
+    "name_too_long": "名前が長すぎます。",
+    "states_required": "選択肢を 1 つ以上追加してください。",
+    "state_name_required": "すべての選択肢に名前が必要です。",
+    "state_names_repeat": "選択肢には別々の名前を付けてください。",
+    "states_full": "フィールドごとに追加できる選択肢は {max, number} 個までです。"
+  },
+  "delete": {
+    "title": "「{name}」を削除しますか？",
+    "body": "このフィールドは {boards} から削除され、{tasks, plural, other {# 件のタスク}}の値もなくなります。これらのタスクを見るすべての人に、このフィールドが表示されなくなります。",
+    "bodyNoValues": "このフィールドは {boards} から削除されます。値が入力されているタスクはまだありません。",
+    "confirm": "フィールドを削除"
+  }
+}

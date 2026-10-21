@@ -13,6 +13,7 @@ import { useColumnOrder } from "../model/board-hooks";
 import { boardResource, useBoardDetail } from "../model/boards-resource";
 import { FirstSync, IncomingOffer, JiraErrorBanner } from "./board-banners";
 import { BoardProvider, useBoardCommands, useEditable } from "./board-store";
+import { FieldsButton } from "./fields/fields-sheet";
 import { KanbanBoard } from "./kanban-board";
 import { type BoardView, KanbanToolbar } from "./kanban-toolbar";
 import { TaskPanel } from "./panel/task-panel";
@@ -42,7 +43,9 @@ function BoardBody({ boards, current, incoming, view, onViewChange }: ViewProps)
         view={view}
         onViewChange={onViewChange}
         onAddTask={editable && columnOrder[0] ? () => cards.addCard(columnOrder[0]) : undefined}
-      />
+      >
+        <FieldsButton />
+      </KanbanToolbar>
       <JiraErrorBanner board={current} />
       {offer ? <IncomingOffer board={current} open={incoming.open} onDismiss={dismissOffer} /> : null}
       {firstSync ? <FirstSync board={current} /> : null}

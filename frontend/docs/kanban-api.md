@@ -96,6 +96,8 @@ The Kanban package moves the screens from the old sample paths `/api/kanban/*` t
   owner and is reused on the owner's other boards; ≤ 20 per board, ≤ 100 per owner. Its value is part of the task:
   a value of a field that is not on the reader's board comes in `TaskDetail.other_values`.
 - Editing a set keeps the values of the states it keeps; a state left out clears the values that used it.
+- `GET /v1/stickers` gives each field its boards and `usage`: how many tasks carry a value of it, in all and per
+  state, so removing a state or deleting the field can say what it clears.
 - Palette: `gray, red, orange, amber, green, teal, blue, violet, pink`.
 - Column sums (Σ) are not served: the screen sums the cards it shows.
 

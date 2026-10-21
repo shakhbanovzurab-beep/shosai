@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import { Kanban as KanbanIcon, List, type LucideIcon, Plus, Table2 } from "lucide-react";
 import { useTranslations } from "use-intl";
 
@@ -25,10 +27,12 @@ type KanbanToolbarProps = {
   onViewChange: (view: BoardView) => void;
   /** Добавляет в первую колонку; undefined, пока доску нельзя менять. */
   onAddTask?: () => void;
+  /** Действия доски перед «Добавить задачу» (кнопка «Поля»); их нет, пока доска грузится. */
+  children?: ReactNode;
 };
 
-/** Выбор доски и вида, статус синхронизации с Jira и «Добавить задачу». Кнопок без действия здесь нет. */
-export function KanbanToolbar({ boards, current, view, onViewChange, onAddTask }: KanbanToolbarProps) {
+/** Выбор доски и вида, статус синхронизации с Jira, действия доски и «Добавить задачу». Кнопок без действия здесь нет. */
+export function KanbanToolbar({ boards, current, view, onViewChange, onAddTask, children }: KanbanToolbarProps) {
   const t = useTranslations("kanban");
   return (
     <div className="flex shrink-0 flex-col gap-3 border-b px-4 py-3 lg:flex-row lg:items-center lg:justify-between lg:px-6">
@@ -51,6 +55,7 @@ export function KanbanToolbar({ boards, current, view, onViewChange, onAddTask }
 
       <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center 2xl:justify-end">
         <JiraSyncStatus board={current} />
+        {children}
         <Button className="w-full sm:w-auto" disabled={!onAddTask} onClick={onAddTask}>
           <Plus data-icon="inline-start" />
           {t("addTask")}

@@ -1,0 +1,52 @@
+{
+  "open": "Campos",
+  "title": "Campos",
+  "description": "O que os cartões deste quadro mostram. O valor de um campo pertence à tarefa e vai com ela para onde ela for.",
+  "system": "Integrado",
+  "kinds": {
+    "states": "Lista de opções",
+    "number": "Número",
+    "text": "Texto"
+  },
+  "showOnCards": "Mostrar nos cartões",
+  "showOnCardsFor": "Mostrar “{name}” nos cartões",
+  "edit": "Editar",
+  "takeOff": "Remover do quadro",
+  "new": "Novo campo",
+  "fromOther": "De outros quadros",
+  "fromOtherSearch": "Pesquisar um campo…",
+  "fromOtherEmpty": "Todos os seus outros campos já estão neste quadro.",
+  "onBoards": "Em {boards}",
+  "onNoBoard": "Em nenhum quadro",
+  "onlySystem": "Este quadro só tem campos integrados. Adicione um campo para organizar as tarefas do seu jeito.",
+  "jiraOnly": "Um quadro do Jira mostra os campos do próprio Jira.",
+  "boardFull": "Um quadro pode ter até {max, number} campos próprios.",
+  "dialog": {
+    "newTitle": "Novo campo",
+    "editTitle": "Editar campo",
+    "kind": "Tipo",
+    "name": "Nome",
+    "namePlaceholder": "Categoria, Estimativa, Cliente…",
+    "states": "Opções",
+    "stateName": "Nome da opção",
+    "addState": "Adicionar opção",
+    "removeState": "Remover “{name}”",
+    "color": "Cor de “{name}”",
+    "clears": "{count, plural, one {# tarefa perde o valor de uma opção removida.} many {# de tarefas perdem o valor de uma opção removida.} other {# tarefas perdem o valor de uma opção removida.}}",
+    "delete": "Excluir campo"
+  },
+  "problems": {
+    "name_required": "Dê um nome ao campo.",
+    "name_too_long": "O nome é muito longo.",
+    "states_required": "Adicione pelo menos uma opção.",
+    "state_name_required": "Toda opção precisa de um nome.",
+    "state_names_repeat": "As opções precisam ter nomes diferentes.",
+    "states_full": "Um campo pode ter até {max, number} opções."
+  },
+  "delete": {
+    "title": "Excluir “{name}”?",
+    "body": "O campo será removido de {boards}, e o valor dele deixará de aparecer em {tasks, plural, one {# tarefa} many {# de tarefas} other {# tarefas}}. Quem vê essas tarefas não vai mais vê-lo.",
+    "bodyNoValues": "O campo será removido de {boards}. Nenhuma tarefa tem um valor nele ainda.",
+    "confirm": "Excluir campo"
+  }
+}

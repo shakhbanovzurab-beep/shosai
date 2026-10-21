@@ -1,0 +1,52 @@
+{
+  "open": "Velden",
+  "title": "Velden",
+  "description": "Wat de kaarten van dit bord laten zien. De waarde van een veld hoort bij de taak en gaat overal mee naartoe.",
+  "system": "Ingebouwd",
+  "kinds": {
+    "states": "Lijst met opties",
+    "number": "Getal",
+    "text": "Tekst"
+  },
+  "showOnCards": "Op kaarten tonen",
+  "showOnCardsFor": "‘{name}’ op kaarten tonen",
+  "edit": "Bewerken",
+  "takeOff": "Van bord verwijderen",
+  "new": "Nieuw veld",
+  "fromOther": "Van andere borden",
+  "fromOtherSearch": "Veld zoeken…",
+  "fromOtherEmpty": "Al je andere velden staan al op dit bord.",
+  "onBoards": "Op {boards}",
+  "onNoBoard": "Op geen enkel bord",
+  "onlySystem": "Dit bord heeft alleen ingebouwde velden. Voeg een veld toe om taken op jouw manier te ordenen.",
+  "jiraOnly": "Een Jira-bord toont de eigen velden van Jira.",
+  "boardFull": "Een bord kan maximaal {max, number} eigen velden hebben.",
+  "dialog": {
+    "newTitle": "Nieuw veld",
+    "editTitle": "Veld bewerken",
+    "kind": "Soort",
+    "name": "Naam",
+    "namePlaceholder": "Type, Schatting, Klant…",
+    "states": "Opties",
+    "stateName": "Naam van de optie",
+    "addState": "Optie toevoegen",
+    "removeState": "‘{name}’ verwijderen",
+    "color": "Kleur van ‘{name}’",
+    "clears": "{count, plural, one {# taak verliest de waarde van een verwijderde optie.} other {# taken verliezen de waarde van een verwijderde optie.}}",
+    "delete": "Veld verwijderen"
+  },
+  "problems": {
+    "name_required": "Geef het veld een naam.",
+    "name_too_long": "De naam is te lang.",
+    "states_required": "Voeg minstens één optie toe.",
+    "state_name_required": "Elke optie heeft een naam nodig.",
+    "state_names_repeat": "Opties hebben verschillende namen nodig.",
+    "states_full": "Een veld kan maximaal {max, number} opties hebben."
+  },
+  "delete": {
+    "title": "‘{name}’ verwijderen?",
+    "body": "Het veld gaat van {boards} af en {tasks, plural, one {# taak verliest} other {# taken verliezen}} de waarde ervan. Iedereen die deze taken ziet, ziet het veld niet meer.",
+    "bodyNoValues": "Het veld gaat van {boards} af. Nog geen enkele taak heeft er een waarde in.",
+    "confirm": "Veld verwijderen"
+  }
+}

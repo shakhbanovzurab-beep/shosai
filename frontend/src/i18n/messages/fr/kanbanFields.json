@@ -1,0 +1,52 @@
+{
+  "open": "Champs",
+  "title": "Champs",
+  "description": "Ce que montrent les cartes de ce tableau. La valeur d’un champ appartient à la tâche et la suit partout.",
+  "system": "Intégré",
+  "kinds": {
+    "states": "Liste d’options",
+    "number": "Nombre",
+    "text": "Texte"
+  },
+  "showOnCards": "Afficher sur les cartes",
+  "showOnCardsFor": "Afficher « {name} » sur les cartes",
+  "edit": "Modifier",
+  "takeOff": "Retirer du tableau",
+  "new": "Nouveau champ",
+  "fromOther": "Champs d’autres tableaux",
+  "fromOtherSearch": "Rechercher un champ…",
+  "fromOtherEmpty": "Tous vos autres champs sont déjà sur ce tableau.",
+  "onBoards": "Sur {boards}",
+  "onNoBoard": "Sur aucun tableau",
+  "onlySystem": "Ce tableau n’a que des champs intégrés. Ajoutez un champ pour organiser les tâches à votre façon.",
+  "jiraOnly": "Un tableau Jira affiche les champs propres à Jira.",
+  "boardFull": "Un tableau peut avoir jusqu’à {max, number} champs propres.",
+  "dialog": {
+    "newTitle": "Nouveau champ",
+    "editTitle": "Modifier le champ",
+    "kind": "Type",
+    "name": "Nom",
+    "namePlaceholder": "Catégorie, Estimation, Client…",
+    "states": "Options",
+    "stateName": "Nom de l’option",
+    "addState": "Ajouter une option",
+    "removeState": "Retirer « {name} »",
+    "color": "Couleur de « {name} »",
+    "clears": "{count, plural, one {# tâche perd la valeur d’une option retirée.} many {# de tâches perdent la valeur d’une option retirée.} other {# tâches perdent la valeur d’une option retirée.}}",
+    "delete": "Supprimer le champ"
+  },
+  "problems": {
+    "name_required": "Donnez un nom au champ.",
+    "name_too_long": "Le nom est trop long.",
+    "states_required": "Ajoutez au moins une option.",
+    "state_name_required": "Chaque option doit avoir un nom.",
+    "state_names_repeat": "Les options doivent avoir des noms différents.",
+    "states_full": "Un champ peut avoir jusqu’à {max, number} options."
+  },
+  "delete": {
+    "title": "Supprimer « {name} » ?",
+    "body": "Le champ sera retiré de {boards}, et sa valeur disparaîtra de {tasks, plural, one {# tâche} many {# de tâches} other {# tâches}}. Les personnes qui voient ces tâches ne le verront plus.",
+    "bodyNoValues": "Le champ sera retiré de {boards}. Aucune tâche n’a encore de valeur dans ce champ.",
+    "confirm": "Supprimer le champ"
+  }
+}

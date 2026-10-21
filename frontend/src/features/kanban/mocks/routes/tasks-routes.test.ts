@@ -94,6 +94,19 @@ describe("field values", () => {
     expect(codeOf(reply)).toBe("value_kind_mismatch");
   });
 
+  it("counts the tasks that carry a field's values, in all and per state", async () => {
+    const usage = async () =>
+      ((await call(stickersRoute, "GET", "/v1/stickers")).body as { items: OwnedSticker[] }).items.find(
+        (s) => s.id === "st-type",
+      )?.usage;
+    expect(await usage()).toEqual({ tasks: 6, states: { "type-feature": 4, "type-bug": 1, "type-chore": 1 } });
+    await call(stickerRoute, "PATCH", "/v1/stickers/st-type", {
+      params: { id: "st-type" },
+      body: { states: [{ id: "type-feature", name: "Feature", color: "blue" }] },
+    });
+    expect(await usage()).toEqual({ tasks: 4, states: { "type-feature": 4 } });
+  });
+
   it("a removed state clears the values that used it, and a field is reused on another board", async () => {
     await call(stickerRoute, "PATCH", "/v1/stickers/st-type", {
       params: { id: "st-type" },

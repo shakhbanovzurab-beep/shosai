@@ -1,0 +1,52 @@
+{
+  "open": "Alanlar",
+  "title": "Alanlar",
+  "description": "Bu panonun kartlarında görünenler. Bir alanın değeri göreve aittir, bu yüzden görev nereye giderse onunla gider.",
+  "system": "Hazır",
+  "kinds": {
+    "states": "Seçenek listesi",
+    "number": "Sayı",
+    "text": "Metin"
+  },
+  "showOnCards": "Kartlarda göster",
+  "showOnCardsFor": "“{name}” alanını kartlarda göster",
+  "edit": "Düzenle",
+  "takeOff": "Panodan kaldır",
+  "new": "Yeni alan",
+  "fromOther": "Diğer panolardan",
+  "fromOtherSearch": "Alan ara…",
+  "fromOtherEmpty": "Diğer tüm alanlarınız zaten bu panoda.",
+  "onBoards": "Panolar: {boards}",
+  "onNoBoard": "Hiçbir panoda değil",
+  "onlySystem": "Bu panoda yalnızca hazır alanlar var. Görevleri kendi yönteminizle düzenlemek için bir alan ekleyin.",
+  "jiraOnly": "Jira panosu, Jira’nın kendi alanlarını gösterir.",
+  "boardFull": "Bir panoda en fazla {max, number} özel alan olabilir.",
+  "dialog": {
+    "newTitle": "Yeni alan",
+    "editTitle": "Alanı düzenle",
+    "kind": "Tür",
+    "name": "Ad",
+    "namePlaceholder": "Kategori, Tahmin, Müşteri…",
+    "states": "Seçenekler",
+    "stateName": "Seçenek adı",
+    "addState": "Seçenek ekle",
+    "removeState": "“{name}” seçeneğini kaldır",
+    "color": "“{name}” seçeneğinin rengi",
+    "clears": "{count, plural, one {# görev, kaldırılan bir seçeneğin değerini kaybeder.} other {# görev, kaldırılan bir seçeneğin değerini kaybeder.}}",
+    "delete": "Alanı sil"
+  },
+  "problems": {
+    "name_required": "Alana bir ad verin.",
+    "name_too_long": "Ad çok uzun.",
+    "states_required": "En az bir seçenek ekleyin.",
+    "state_name_required": "Her seçeneğin bir adı olmalı.",
+    "state_names_repeat": "Seçeneklerin adları farklı olmalı.",
+    "states_full": "Bir alanda en fazla {max, number} seçenek olabilir."
+  },
+  "delete": {
+    "title": "“{name}” silinsin mi?",
+    "body": "Alan şu panolardan kaldırılacak: {boards}. Değeri {tasks, plural, one {# görevden} other {# görevden}} silinecek. Bu görevleri gören herkes alanı artık görmeyecek.",
+    "bodyNoValues": "Alan şu panolardan kaldırılacak: {boards}. Henüz hiçbir görevde bu alanın değeri yok.",
+    "confirm": "Alanı sil"
+  }
+}

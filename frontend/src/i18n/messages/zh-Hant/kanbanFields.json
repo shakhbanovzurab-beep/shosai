@@ -1,0 +1,52 @@
+{
+  "open": "欄位",
+  "title": "欄位",
+  "description": "這個看板的卡片會顯示這些欄位。欄位的值屬於任務，任務移到哪裡，值就跟到哪裡。",
+  "system": "內建",
+  "kinds": {
+    "states": "選項清單",
+    "number": "數字",
+    "text": "文字"
+  },
+  "showOnCards": "在卡片上顯示",
+  "showOnCardsFor": "在卡片上顯示「{name}」",
+  "edit": "編輯",
+  "takeOff": "從看板移除",
+  "new": "新增欄位",
+  "fromOther": "來自其他看板",
+  "fromOtherSearch": "搜尋欄位…",
+  "fromOtherEmpty": "你的其他欄位都已在這個看板上。",
+  "onBoards": "在 {boards} 看板上",
+  "onNoBoard": "不在任何看板上",
+  "onlySystem": "這個看板只有內建欄位。新增欄位，就能依你的方式整理任務。",
+  "jiraOnly": "Jira 看板會顯示 Jira 本身的欄位。",
+  "boardFull": "每個看板最多可有 {max, number} 個自訂欄位。",
+  "dialog": {
+    "newTitle": "新增欄位",
+    "editTitle": "編輯欄位",
+    "kind": "種類",
+    "name": "名稱",
+    "namePlaceholder": "類型、預估、客戶…",
+    "states": "選項",
+    "stateName": "選項名稱",
+    "addState": "新增選項",
+    "removeState": "移除「{name}」",
+    "color": "「{name}」的顏色",
+    "clears": "{count, plural, other {# 項任務會失去已移除選項的值。}}",
+    "delete": "刪除欄位"
+  },
+  "problems": {
+    "name_required": "請為欄位命名。",
+    "name_too_long": "名稱太長。",
+    "states_required": "請至少新增一個選項。",
+    "state_name_required": "每個選項都需要名稱。",
+    "state_names_repeat": "選項名稱不能重複。",
+    "states_full": "每個欄位最多可有 {max, number} 個選項。"
+  },
+  "delete": {
+    "title": "要刪除「{name}」嗎？",
+    "body": "這個欄位會從 {boards} 移除，{tasks, plural, other {# 項任務}}上的值也會消失。看得到這些任務的人都不會再看到這個欄位。",
+    "bodyNoValues": "這個欄位會從 {boards} 移除。目前還沒有任務在這個欄位中填入值。",
+    "confirm": "刪除欄位"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "open": "필드",
+  "title": "필드",
+  "description": "이 보드의 카드에 보이는 항목이에요. 필드 값은 작업에 속하기 때문에 작업이 어디로 가든 함께 따라가요.",
+  "system": "기본",
+  "kinds": {
+    "states": "옵션 목록",
+    "number": "숫자",
+    "text": "텍스트"
+  },
+  "showOnCards": "카드에 표시",
+  "showOnCardsFor": "카드에 “{name}” 표시",
+  "edit": "편집",
+  "takeOff": "보드에서 제거",
+  "new": "새 필드",
+  "fromOther": "다른 보드의 필드",
+  "fromOtherSearch": "필드 검색…",
+  "fromOtherEmpty": "다른 필드가 모두 이미 이 보드에 있어요.",
+  "onBoards": "{boards} 보드에 있어요",
+  "onNoBoard": "어느 보드에도 없어요",
+  "onlySystem": "이 보드에는 기본 필드만 있어요. 필드를 추가해 원하는 방식으로 작업을 정리해 보세요.",
+  "jiraOnly": "Jira 보드에는 Jira 자체 필드가 표시돼요.",
+  "boardFull": "보드 하나에 기본 필드 외에 최대 {max, number}개의 필드를 추가할 수 있어요.",
+  "dialog": {
+    "newTitle": "새 필드",
+    "editTitle": "필드 편집",
+    "kind": "종류",
+    "name": "이름",
+    "namePlaceholder": "유형, 예상 시간, 고객…",
+    "states": "옵션",
+    "stateName": "옵션 이름",
+    "addState": "옵션 추가",
+    "removeState": "“{name}” 제거",
+    "color": "“{name}” 색상",
+    "clears": "{count, plural, other {작업 #개에서 제거한 옵션의 값이 사라져요.}}",
+    "delete": "필드 삭제"
+  },
+  "problems": {
+    "name_required": "필드 이름을 입력해 주세요.",
+    "name_too_long": "이름이 너무 길어요.",
+    "states_required": "옵션을 하나 이상 추가해 주세요.",
+    "state_name_required": "모든 옵션에 이름이 있어야 해요.",
+    "state_names_repeat": "옵션 이름은 서로 달라야 해요.",
+    "states_full": "필드 하나에 옵션을 최대 {max, number}개까지 추가할 수 있어요."
+  },
+  "delete": {
+    "title": "“{name}” 필드를 삭제할까요?",
+    "body": "이 필드가 {boards} 보드에서 제거되고, {tasks, plural, other {작업 #개}}에서 값이 사라져요. 이 작업을 보는 모든 사람에게 더 이상 이 필드가 보이지 않아요.",
+    "bodyNoValues": "이 필드가 {boards} 보드에서 제거돼요. 아직 이 필드에 값이 있는 작업은 없어요.",
+    "confirm": "필드 삭제"
+  }
+}

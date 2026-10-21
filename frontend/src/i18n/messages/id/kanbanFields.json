@@ -1,0 +1,52 @@
+{
+  "open": "Bidang",
+  "title": "Bidang",
+  "description": "Yang ditampilkan kartu di papan ini. Nilai bidang adalah milik tugas, jadi nilai itu ikut ke mana pun tugas pergi.",
+  "system": "Bawaan",
+  "kinds": {
+    "states": "Daftar opsi",
+    "number": "Angka",
+    "text": "Teks"
+  },
+  "showOnCards": "Tampilkan di kartu",
+  "showOnCardsFor": "Tampilkan “{name}” di kartu",
+  "edit": "Edit",
+  "takeOff": "Hapus dari papan",
+  "new": "Bidang baru",
+  "fromOther": "Dari papan lain",
+  "fromOtherSearch": "Cari bidang…",
+  "fromOtherEmpty": "Semua bidang Anda yang lain sudah ada di papan ini.",
+  "onBoards": "Di papan {boards}",
+  "onNoBoard": "Tidak ada di papan mana pun",
+  "onlySystem": "Papan ini hanya punya bidang bawaan. Tambahkan bidang untuk mengatur tugas sesuai cara Anda.",
+  "jiraOnly": "Papan Jira menampilkan bidang milik Jira sendiri.",
+  "boardFull": "Satu papan dapat memiliki hingga {max, number} bidang sendiri.",
+  "dialog": {
+    "newTitle": "Bidang baru",
+    "editTitle": "Edit bidang",
+    "kind": "Jenis",
+    "name": "Nama",
+    "namePlaceholder": "Tipe, Estimasi, Pelanggan…",
+    "states": "Opsi",
+    "stateName": "Nama opsi",
+    "addState": "Tambahkan opsi",
+    "removeState": "Hapus “{name}”",
+    "color": "Warna “{name}”",
+    "clears": "{count, plural, other {# tugas kehilangan nilai dari opsi yang dihapus.}}",
+    "delete": "Hapus bidang"
+  },
+  "problems": {
+    "name_required": "Beri nama bidang ini.",
+    "name_too_long": "Nama terlalu panjang.",
+    "states_required": "Tambahkan minimal satu opsi.",
+    "state_name_required": "Setiap opsi harus punya nama.",
+    "state_names_repeat": "Nama opsi harus berbeda-beda.",
+    "states_full": "Satu bidang dapat memiliki hingga {max, number} opsi."
+  },
+  "delete": {
+    "title": "Hapus “{name}”?",
+    "body": "Bidang ini akan dihapus dari papan {boards}, dan nilainya hilang dari {tasks, plural, other {# tugas}}. Semua orang yang melihat tugas tersebut tidak akan melihat bidang ini lagi.",
+    "bodyNoValues": "Bidang ini akan dihapus dari papan {boards}. Belum ada tugas yang memiliki nilai di bidang ini.",
+    "confirm": "Hapus bidang"
+  }
+}
