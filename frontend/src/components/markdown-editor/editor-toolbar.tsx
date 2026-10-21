@@ -19,7 +19,7 @@ const withScheme = (url: string) => (/^[a-z][a-z\d+.-]*:/i.test(url) ? url : `ht
 
 /** The floating toolbar over a selection: link, bold, italic and the block's kind. */
 export function EditorToolbar({ editor }: { editor: Editor }) {
-  const t = useTranslations("notesNote");
+  const t = useTranslations("common");
   const [linking, setLinking] = useState(false);
   const state = useEditorState({
     editor,
@@ -70,7 +70,7 @@ export function EditorToolbar({ editor }: { editor: Editor }) {
 }
 
 function LinkField({ editor, onDone }: { editor: Editor; onDone: () => void }) {
-  const t = useTranslations("notesNote");
+  const t = useTranslations("common");
   const inputRef = useRef<HTMLInputElement>(null);
   // Opened from the link button, which it replaces, so it takes the focus.
   useEffect(() => inputRef.current?.focus(), []);

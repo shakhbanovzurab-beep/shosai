@@ -120,7 +120,7 @@
     "pink": "Rosa"
   },
   "dnd": {
-    "instructions": "Para tomar una tarjeta o una columna, presiona Espacio. Usa las teclas de flecha para moverla, Espacio para soltarla y Esc para cancelar.",
+    "instructions": "Para abrir una tarjeta, presiona Enter. Para tomar una tarjeta o una columna, presiona Espacio. Usa las teclas de flecha para moverla, Espacio para soltarla y Esc para cancelar.",
     "pickedUp": "Tomaste {item}.",
     "over": "{item}: {column}, {position, number} de {count, number}.",
     "columnOver": "{item}: columna {position, number} de {count, number}.",

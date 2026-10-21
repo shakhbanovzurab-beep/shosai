@@ -14,7 +14,7 @@ export function JiraKey({ issue }: { issue: JiraIssueRef }) {
       target="_blank"
       rel="noopener noreferrer"
       onPointerDown={(event) => event.stopPropagation()}
-      className="inline-flex w-fit items-center gap-1 rounded font-mono text-muted-foreground text-xs hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
+      className="relative z-10 inline-flex w-fit items-center gap-1 rounded font-mono text-muted-foreground text-xs hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
     >
       <SimpleIcon icon={siJira} aria-hidden="true" className="size-3 fill-current" />
       {issue.key}

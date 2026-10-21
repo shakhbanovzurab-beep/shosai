@@ -1,6 +1,7 @@
 import { addMyTask } from "@/features/workspace/mocks/personal";
 
 import { nextDue, shiftedStart } from "../../domain/recurrence";
+import { leoFieldsAfter as leoFieldsLeft } from "../../domain/task-rules";
 import type { LeoField, TaskPatch, TaskStatus } from "../../domain/tasks-contract";
 import { today } from "../seed/builders";
 import { demo, firstColumnOf, now, placementOf, touch } from "./state";
@@ -9,14 +10,8 @@ import { pushToWorkspace } from "./workspace-bridge";
 
 /* Правила, общие для изменений задачи с доски и из панели. */
 
-/** Какие метки Лео снимает изменение (KG-D10): человек поменял это поле. */
-export function leoFieldsAfter(task: StoredTask, patch: TaskPatch): LeoField[] {
-  const changed = new Set<LeoField>();
-  if (patch.assignee_id !== undefined || patch.assignee_name !== undefined) changed.add("assignee");
-  if (patch.due_on !== undefined || patch.starts_on !== undefined) changed.add("due");
-  if (patch.priority !== undefined) changed.add("priority");
-  return task.leo_fields.filter((field) => !changed.has(field));
-}
+/** Какие метки Лео остаются после изменения (KG-D10) — то же правило, что видит панель. */
+export const leoFieldsAfter = (task: StoredTask, patch: TaskPatch): LeoField[] => leoFieldsLeft(task.leo_fields, patch);
 
 /** Следующая задача повторяющейся (KG-D5): один раз на закрытую, по расписанию после её срока. */
 function spawnNext(task: StoredTask) {

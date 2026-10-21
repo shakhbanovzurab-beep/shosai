@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Título de la tarea",
+  "column": "Columna",
+  "status": "Estado",
+  "fields": {
+    "assignee": "Responsable",
+    "due": "Fecha límite",
+    "priority": "Prioridad",
+    "recurrence": "Repetición",
+    "other": "De otros tableros"
+  },
+  "notSet": "Sin definir",
+  "assignee": {
+    "placeholder": "Escribe un nombre…",
+    "assign": "Asignar a «{name}»",
+    "clear": "Quitar responsable",
+    "inWorkspace": "Cambiar en {workspace}",
+    "noNames": "Aún no hay nombres. Escribe uno."
+  },
+  "due": {
+    "day": "Día",
+    "range": "Periodo",
+    "clear": "Borrar la fecha",
+    "from": "Desde el {date}"
+  },
+  "repeat": {
+    "never": "Nunca",
+    "day": "Cada día",
+    "week": "Cada semana",
+    "month": "Cada mes",
+    "onDay": "El día {day, number}",
+    "next": "Próxima: {date}",
+    "weekdays": "Estos días"
+  },
+  "value": {
+    "number": "Agrega un número",
+    "text": "Agrega texto",
+    "clear": "Borrar"
+  },
+  "leo": {
+    "filled": "Completado por Leo",
+    "from": "Leo lo tomó de la reunión «{meeting}» del {date}.",
+    "said": "Lo que se dijo en {time}",
+    "open": "Abrir la reunión en este momento"
+  },
+  "description": {
+    "label": "Descripción",
+    "placeholder": "Agrega una descripción…"
+  },
+  "source": {
+    "meeting": "De la reunión «{meeting}» del {date}",
+    "gone": "La reunión de la que salió esta tarea ya no existe."
+  },
+  "jira": {
+    "open": "Abrir {key} en Jira",
+    "elsewhere": "Los comentarios, los archivos adjuntos y lo demás están en Jira."
+  },
+  "states": {
+    "loading": "Cargando la tarea…",
+    "gone": "Esta tarea ya no existe",
+    "goneHint": "Se eliminó o ya no tienes acceso a ella.",
+    "failed": "No se pudo cargar la tarea"
+  }
+}

@@ -2,7 +2,7 @@ import type { Editor } from "@tiptap/core";
 
 export type BlockKind = "text" | "h1" | "h2" | "h3" | "ordered" | "bullet";
 
-/** The kinds of block, with the digit of each one's shortcut; the `notesNote` catalog names them. */
+/** The kinds of block, with the digit of each one's shortcut; the `common` catalog names them (`editor.blocks`). */
 export const BLOCKS: { kind: BlockKind; key: string; className?: string }[] = [
   { kind: "text", key: "0" },
   { kind: "h1", key: "1", className: "font-semibold text-base" },

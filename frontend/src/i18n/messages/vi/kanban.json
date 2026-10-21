@@ -120,7 +120,7 @@
     "pink": "Hồng"
   },
   "dnd": {
-    "instructions": "Để nhấc một thẻ hoặc một cột, hãy nhấn phím cách. Dùng các phím mũi tên để di chuyển, phím cách để thả và Esc để hủy.",
+    "instructions": "Để mở một thẻ, hãy nhấn Enter. Để nhấc một thẻ hoặc một cột, hãy nhấn phím cách. Dùng các phím mũi tên để di chuyển, phím cách để thả và Esc để hủy.",
     "pickedUp": "Đã nhấc {item}.",
     "over": "{item}: {column}, vị trí {position, number} trên {count, number}.",
     "columnOver": "{item}: cột {position, number} trên {count, number}.",

@@ -35,24 +35,7 @@
   },
   "editor": {
     "placeholder": "Tulis catatan Anda…",
-    "label": "Catatan Anda",
-    "toolbar": "Format",
-    "addLink": "Tambahkan tautan",
-    "removeLink": "Hapus tautan",
-    "bold": "Tebal",
-    "italic": "Miring",
-    "linkPlaceholder": "Tempel tautan…",
-    "linkAddress": "Alamat tautan",
-    "link": "Tautan",
-    "turnInto": "Ubah menjadi",
-    "blocks": {
-      "text": "Teks",
-      "h1": "Judul 1",
-      "h2": "Judul 2",
-      "h3": "Judul 3",
-      "ordered": "Daftar bernomor",
-      "bullet": "Daftar berbutir"
-    }
+    "label": "Catatan Anda"
   },
   "transcript": {
     "label": "Transkrip",

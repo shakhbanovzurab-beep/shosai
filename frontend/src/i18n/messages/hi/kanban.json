@@ -120,7 +120,7 @@
     "pink": "गुलाबी"
   },
   "dnd": {
-    "instructions": "कार्ड या कॉलम उठाने के लिए Space दबाएं। ऐरो बटन से उसे मूव करें, Space से छोड़ें और Esc से रद्द करें।",
+    "instructions": "कार्ड खोलने के लिए Enter दबाएं। कार्ड या कॉलम उठाने के लिए Space दबाएं। ऐरो बटन से उसे मूव करें, Space से छोड़ें और Esc से रद्द करें।",
     "pickedUp": "{item} उठाया गया।",
     "over": "{item}: {column}, {count, number} में से {position, number}।",
     "columnOver": "{item}: {count, number} में से कॉलम {position, number}।",

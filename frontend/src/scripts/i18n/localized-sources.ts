@@ -8,6 +8,7 @@ export const LOCALIZED_SOURCES = [
   "src/hooks/use-ui-language.ts",
   "src/hooks/use-switch-language.ts",
   "src/components/feedback.tsx",
+  "src/components/markdown-editor/",
   "src/components/name-dialog.tsx",
   "src/features/shell/",
   "src/features/preferences/ui/layout-controls.tsx",

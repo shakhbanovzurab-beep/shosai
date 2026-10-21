@@ -41,12 +41,12 @@ export function createCardCommands(ctx: CommandContext) {
     if (before?.recurring && card.status === "done" && before.status !== "done") void boardResource(id()).refresh();
   }
 
-  function sendMove(taskId: string, before: BoardSnapshot) {
+  function sendMove(taskId: string, before: BoardSnapshot): Promise<void> {
     const at = locate(ctx.store.get().cardIds, taskId);
-    if (!at) return;
+    if (!at) return Promise.resolve();
     const card = before.cards[taskId];
     ctx.store.update((s) => (card ? { ...s, cards: { ...s.cards, [taskId]: withKindOf(s, card, at.columnId) } } : s));
-    void save(ctx, words().t("errors.saveChange"), before, () =>
+    return save(ctx, words().t("errors.saveChange"), before, () =>
       boardsApi.patchCard(id(), taskId, { column_id: at.columnId, position: at.index }),
     ).then((answer) => moved(card, answer));
   }
@@ -64,14 +64,14 @@ export function createCardCommands(ctx: CommandContext) {
     moveToEdge(taskId: string, columnId: string, edge: "top" | "bottom") {
       const before = ctx.store.get();
       ctx.store.update((s) => ({ ...s, cardIds: moveToEdge(s.cardIds, taskId, columnId, edge) }));
-      sendMove(taskId, before);
+      return sendMove(taskId, before);
     },
     /** После перетаскивания: сохранить, куда легла карточка, если она сдвинулась. */
     commitDrop(taskId: string, before: BoardSnapshot) {
       const from = locate(before.cardIds, taskId);
       const to = locate(ctx.store.get().cardIds, taskId);
       if (!to || (from && from.columnId === to.columnId && from.index === to.index)) return;
-      sendMove(taskId, before);
+      void sendMove(taskId, before);
     },
     renameCard(taskId: string) {
       const card = ctx.store.get().cards[taskId];

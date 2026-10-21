@@ -35,24 +35,7 @@
   },
   "editor": {
     "placeholder": "Notlarınızı yazın…",
-    "label": "Notlarınız",
-    "toolbar": "Biçimlendirme",
-    "addLink": "Bağlantı ekle",
-    "removeLink": "Bağlantıyı kaldır",
-    "bold": "Kalın",
-    "italic": "İtalik",
-    "linkPlaceholder": "Bağlantıyı yapıştırın…",
-    "linkAddress": "Bağlantı adresi",
-    "link": "Bağlantı",
-    "turnInto": "Dönüştür",
-    "blocks": {
-      "text": "Metin",
-      "h1": "Başlık 1",
-      "h2": "Başlık 2",
-      "h3": "Başlık 3",
-      "ordered": "Numaralı liste",
-      "bullet": "Madde işaretli liste"
-    }
+    "label": "Notlarınız"
   },
   "transcript": {
     "label": "Transkript",

@@ -120,7 +120,7 @@
     "pink": "Pembe"
   },
   "dnd": {
-    "instructions": "Bir kartı veya sütunu almak için Boşluk tuşuna basın. Ok tuşlarıyla taşıyın, Boşluk tuşuyla bırakın, Esc tuşuyla iptal edin.",
+    "instructions": "Bir kartı açmak için Enter tuşuna basın. Bir kartı veya sütunu almak için Boşluk tuşuna basın. Ok tuşlarıyla taşıyın, Boşluk tuşuyla bırakın, Esc tuşuyla iptal edin.",
     "pickedUp": "{item} alındı.",
     "over": "{item}: {column}, sıra {position, number}/{count, number}.",
     "columnOver": "{item}: sütun {position, number}/{count, number}.",

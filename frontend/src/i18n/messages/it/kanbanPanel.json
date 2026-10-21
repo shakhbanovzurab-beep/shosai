@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Titolo dell’attività",
+  "column": "Colonna",
+  "status": "Stato",
+  "fields": {
+    "assignee": "Assegnatario",
+    "due": "Scadenza",
+    "priority": "Priorità",
+    "recurrence": "Ripetizione",
+    "other": "Da altre bacheche"
+  },
+  "notSet": "Non impostato",
+  "assignee": {
+    "placeholder": "Scrivi un nome…",
+    "assign": "Assegna a «{name}»",
+    "clear": "Rimuovi assegnatario",
+    "inWorkspace": "Modifica in {workspace}",
+    "noNames": "Ancora nessun nome. Scrivine uno."
+  },
+  "due": {
+    "day": "Giorno",
+    "range": "Intervallo",
+    "clear": "Rimuovi la data",
+    "from": "Dal {date}"
+  },
+  "repeat": {
+    "never": "Mai",
+    "day": "Ogni giorno",
+    "week": "Ogni settimana",
+    "month": "Ogni mese",
+    "onDay": "Il giorno {day, number}",
+    "next": "Prossima: {date}",
+    "weekdays": "In questi giorni"
+  },
+  "value": {
+    "number": "Aggiungi un numero",
+    "text": "Aggiungi testo",
+    "clear": "Svuota"
+  },
+  "leo": {
+    "filled": "Compilato da Leo",
+    "from": "Leo l’ha preso dalla riunione «{meeting}» del {date}.",
+    "said": "Cosa è stato detto a {time}",
+    "open": "Apri la riunione in questo punto"
+  },
+  "description": {
+    "label": "Descrizione",
+    "placeholder": "Aggiungi una descrizione…"
+  },
+  "source": {
+    "meeting": "Dalla riunione «{meeting}» del {date}",
+    "gone": "La riunione da cui proviene questa attività non c’è più."
+  },
+  "jira": {
+    "open": "Apri {key} in Jira",
+    "elsewhere": "Commenti, allegati e il resto sono in Jira."
+  },
+  "states": {
+    "loading": "Caricamento dell’attività…",
+    "gone": "Questa attività non c’è più",
+    "goneHint": "È stata eliminata, oppure non puoi più vederla.",
+    "failed": "Impossibile caricare l’attività"
+  }
+}

@@ -35,24 +35,7 @@
   },
   "editor": {
     "placeholder": "Scrivi le tue note…",
-    "label": "Le tue note",
-    "toolbar": "Formattazione",
-    "addLink": "Aggiungi link",
-    "removeLink": "Rimuovi link",
-    "bold": "Grassetto",
-    "italic": "Corsivo",
-    "linkPlaceholder": "Incolla un link…",
-    "linkAddress": "Indirizzo del link",
-    "link": "Link",
-    "turnInto": "Trasforma in",
-    "blocks": {
-      "text": "Testo",
-      "h1": "Titolo 1",
-      "h2": "Titolo 2",
-      "h3": "Titolo 3",
-      "ordered": "Elenco numerato",
-      "bullet": "Elenco puntato"
-    }
+    "label": "Le tue note"
   },
   "transcript": {
     "label": "Trascrizione",

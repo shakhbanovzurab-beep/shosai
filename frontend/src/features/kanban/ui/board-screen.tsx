@@ -15,6 +15,7 @@ import { FirstSync, IncomingOffer, JiraErrorBanner } from "./board-banners";
 import { BoardProvider, useBoardCommands, useEditable } from "./board-store";
 import { KanbanBoard } from "./kanban-board";
 import { type BoardView, KanbanToolbar } from "./kanban-toolbar";
+import { TaskPanel } from "./panel/task-panel";
 import { TaskListView } from "./task-list-view";
 import { TaskTableView } from "./task-table-view";
 
@@ -106,6 +107,7 @@ export function BoardScreen({ boards, current, incoming }: Omit<ViewProps, "view
   return (
     <BoardProvider detail={detail.data}>
       <BoardBody boards={boards} current={current} incoming={incoming} view={view} onViewChange={setView} />
+      <TaskPanel />
     </BoardProvider>
   );
 }

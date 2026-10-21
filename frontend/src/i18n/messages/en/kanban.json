@@ -120,7 +120,7 @@
     "pink": "Pink"
   },
   "dnd": {
-    "instructions": "To pick up a card or a column, press Space. Use the arrow keys to move it, Space to drop it, Escape to cancel.",
+    "instructions": "To open a card, press Enter. To pick up a card or a column, press Space. Use the arrow keys to move it, Space to drop it, Escape to cancel.",
     "pickedUp": "Picked up {item}.",
     "over": "{item}: {column}, {position, number} of {count, number}.",
     "columnOver": "{item}: column {position, number} of {count, number}.",

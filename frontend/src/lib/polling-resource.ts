@@ -1,6 +1,6 @@
 export type ResourceState<T> =
   | { status: "loading" }
-  | { status: "error"; message: string }
+  | { status: "error"; message: string; cause?: unknown }
   | { status: "ready"; data: T; refreshing: boolean };
 
 const POLL_MS = 1500;
@@ -49,7 +49,7 @@ export function createPollingResource<T>(load: () => Promise<T>, isBusy: (data: 
           // The screen words the failure itself; this is only the backend's detail, if any.
           const message = error instanceof Error ? error.message : "";
           // Keep showing data we already have; only a first load failing is an error state.
-          state = state.status === "ready" ? { ...state, refreshing: false } : { status: "error", message };
+          state = state.status === "ready" ? { ...state, refreshing: false } : { status: "error", message, cause: error };
         },
       )
       .finally(() => {

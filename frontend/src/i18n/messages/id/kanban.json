@@ -120,7 +120,7 @@
     "pink": "Merah muda"
   },
   "dnd": {
-    "instructions": "Untuk mengambil kartu atau kolom, tekan Spasi. Gunakan tombol panah untuk memindahkannya, Spasi untuk melepaskannya, dan Esc untuk membatalkan.",
+    "instructions": "Untuk membuka kartu, tekan Enter. Untuk mengambil kartu atau kolom, tekan Spasi. Gunakan tombol panah untuk memindahkannya, Spasi untuk melepaskannya, dan Esc untuk membatalkan.",
     "pickedUp": "{item} diambil.",
     "over": "{item}: {column}, {position, number} dari {count, number}.",
     "columnOver": "{item}: kolom {position, number} dari {count, number}.",

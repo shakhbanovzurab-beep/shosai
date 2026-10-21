@@ -1,7 +1,17 @@
 import { describe, expect, it } from "vitest";
 
-import { addDays, firstDue, isValidRecurrence, nextDue, occurrenceFrom, shiftedStart, weekdayOf } from "./recurrence";
-import { WEEKDAYS, type Weekday } from "./tasks-contract";
+import {
+  addDays,
+  firstDue,
+  isValidRecurrence,
+  nextDue,
+  occurrenceFrom,
+  recurrenceFor,
+  shiftedStart,
+  weekdayOf,
+  weekdaysFrom,
+} from "./recurrence";
+import { type Recurrence, WEEKDAYS, type Weekday } from "./tasks-contract";
 
 // Все дни года: високосного и обычного.
 const daysOf = (year: number) => {
@@ -70,5 +80,28 @@ describe("occurrences", () => {
     expect(isValidRecurrence({ every: "week", weekdays: ["mon", "mon"] })).toBe(false);
     expect(isValidRecurrence({ every: "month", day: 0 })).toBe(false);
     expect(isValidRecurrence({ every: "month", day: 31 })).toBe(true);
+  });
+});
+
+describe("choosing how a task repeats", () => {
+  it("starts a weekly or monthly rule from the task's day", () => {
+    expect(recurrenceFor("week", null, "2026-10-22")).toEqual({ every: "week", weekdays: ["thu"] });
+    expect(recurrenceFor("month", null, "2026-10-22")).toEqual({ every: "month", day: 22 });
+    expect(recurrenceFor("week", null, null)).toEqual({ every: "week", weekdays: ["mon"] });
+    expect(recurrenceFor("month", null, null)).toEqual({ every: "month", day: 1 });
+  });
+
+  it("keeps the chosen days when the kind stays, and clears the rule for never", () => {
+    const weekly: Recurrence = { every: "week", weekdays: ["tue", "fri"] };
+    expect(recurrenceFor("week", weekly, "2026-10-22")).toBe(weekly);
+    expect(recurrenceFor("month", weekly, "2026-10-22")).toEqual({ every: "month", day: 22 });
+    expect(recurrenceFor("day", weekly, null)).toEqual({ every: "day" });
+    expect(recurrenceFor("never", weekly, null)).toBeNull();
+  });
+
+  it("orders the weekdays from the first day of the person's week", () => {
+    expect(weekdaysFrom(1)).toEqual([...WEEKDAYS]);
+    expect(weekdaysFrom(7)).toEqual(["sun", "mon", "tue", "wed", "thu", "fri", "sat"]);
+    expect(weekdaysFrom(6)).toEqual(["sat", "sun", "mon", "tue", "wed", "thu", "fri"]);
   });
 });

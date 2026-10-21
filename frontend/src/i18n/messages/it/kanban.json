@@ -120,7 +120,7 @@
     "pink": "Rosa"
   },
   "dnd": {
-    "instructions": "Per prendere una scheda o una colonna, premi Spazio. Usa i tasti freccia per spostarla, Spazio per rilasciarla ed Esc per annullare.",
+    "instructions": "Per aprire una scheda, premi Invio. Per prendere una scheda o una colonna, premi Spazio. Usa i tasti freccia per spostarla, Spazio per rilasciarla ed Esc per annullare.",
     "pickedUp": "Hai preso {item}.",
     "over": "{item}: {column}, {position, number} di {count, number}.",
     "columnOver": "{item}: colonna {position, number} di {count, number}.",

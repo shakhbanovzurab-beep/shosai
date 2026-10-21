@@ -20,9 +20,12 @@ const EditorSkeleton = () => (
 );
 
 // The editor is the heaviest part of the page, so it loads only once the Notes tab needs it.
-const NotesEditor = lazyComponent(() => import("./notes-editor").then((module) => module.NotesEditor), {
-  loading: EditorSkeleton,
-});
+const MarkdownEditor = lazyComponent(
+  () => import("@/components/markdown-editor/markdown-editor").then((module) => module.MarkdownEditor),
+  {
+    loading: EditorSkeleton,
+  },
+);
 
 function MyNotesEditor({ noteId, notes }: { noteId: string; notes: ManualNotes | null }) {
   const t = useTranslations("notesNote");
@@ -33,7 +36,16 @@ function MyNotesEditor({ noteId, notes }: { noteId: string; notes: ManualNotes |
     800,
     (retry, error) => reportSaveFailure(noteId, retry, error, t, common),
   );
-  return <NotesEditor initialMarkdown={notes?.text ?? ""} onChange={autosave.schedule} onFlush={autosave.flush} />;
+  return (
+    <MarkdownEditor
+      initialMarkdown={notes?.text ?? ""}
+      onChange={autosave.schedule}
+      onFlush={autosave.flush}
+      label={t("editor.label")}
+      placeholder={t("editor.placeholder")}
+      minHeight="min-h-48"
+    />
+  );
 }
 
 /** The Notes tab: the user’s own notes, from the desktop app or written here, edited in place and saved as typed. */

@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Task title",
+  "column": "Column",
+  "status": "Status",
+  "fields": {
+    "assignee": "Assignee",
+    "due": "Due date",
+    "priority": "Priority",
+    "recurrence": "Repeat",
+    "other": "From other boards"
+  },
+  "notSet": "Not set",
+  "assignee": {
+    "placeholder": "Type a name…",
+    "assign": "Assign “{name}”",
+    "clear": "Unassign",
+    "inWorkspace": "Change it in {workspace}",
+    "noNames": "No names yet. Type one."
+  },
+  "due": {
+    "day": "Day",
+    "range": "Range",
+    "clear": "Clear the date",
+    "from": "From {date}"
+  },
+  "repeat": {
+    "never": "Never",
+    "day": "Daily",
+    "week": "Weekly",
+    "month": "Monthly",
+    "onDay": "On day {day, number}",
+    "next": "Next: {date}",
+    "weekdays": "On these days"
+  },
+  "value": {
+    "number": "Add a number",
+    "text": "Add text",
+    "clear": "Clear"
+  },
+  "leo": {
+    "filled": "Filled by Leo",
+    "from": "Leo took this from the meeting “{meeting}”, {date}.",
+    "said": "What was said, at {time}",
+    "open": "Open the meeting at this moment"
+  },
+  "description": {
+    "label": "Description",
+    "placeholder": "Add a description…"
+  },
+  "source": {
+    "meeting": "From the meeting “{meeting}”, {date}",
+    "gone": "The meeting this task came from is gone."
+  },
+  "jira": {
+    "open": "Open {key} in Jira",
+    "elsewhere": "Comments, attachments and the rest live in Jira."
+  },
+  "states": {
+    "loading": "Loading the task…",
+    "gone": "This task is gone",
+    "goneHint": "It was deleted, or you can no longer see it.",
+    "failed": "Couldn’t load the task"
+  }
+}

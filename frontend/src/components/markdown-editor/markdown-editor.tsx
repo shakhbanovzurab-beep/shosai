@@ -8,7 +8,6 @@ import { Markdown } from "@tiptap/markdown";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
 import { StarterKit } from "@tiptap/starter-kit";
-import { useTranslations } from "use-intl";
 
 import { EditorToolbar } from "./editor-toolbar";
 
@@ -25,7 +24,7 @@ const ListShortcuts = Extension.create({
 
 // Styles for the editable document; the theme has no typography plugin, so each element is styled here.
 const DOCUMENT_CLASS = [
-  "min-h-48 break-words text-sm leading-relaxed outline-none",
+  "break-words text-sm leading-relaxed outline-none",
   "[&>*+*]:mt-3 [&_li+li]:mt-1 [&_li>p]:m-0",
   "[&_h1]:pt-2 [&_h1]:font-semibold [&_h1]:text-xl [&_h2]:pt-1 [&_h2]:font-semibold [&_h2]:text-lg",
   "[&_h3]:font-semibold [&_h3]:text-base [&>:first-child]:pt-0",
@@ -37,27 +36,39 @@ const DOCUMENT_CLASS = [
   "[&_.is-editor-empty:first-child]:before:content-[attr(data-placeholder)]",
 ].join(" ");
 
-const editorAttributes = (label: string) => ({
-  class: DOCUMENT_CLASS,
+const editorAttributes = (label: string, size: string) => ({
+  class: `${DOCUMENT_CLASS} ${size}`,
   "aria-label": label,
   role: "textbox",
   "aria-multiline": "true",
 });
 
-interface NotesEditorProps {
-  /** The notes as Markdown when the editor opens; after that the editor owns the text. */
+interface MarkdownEditorProps {
+  /** Текст в Markdown при открытии; дальше текстом владеет редактор. */
   readonly initialMarkdown: string;
   readonly onChange: (markdown: string) => void;
-  /** Leaving the editor, or ⌘S: save now instead of after the pause. */
+  /** Уход из редактора или ⌘S: сохранить сейчас, а не после паузы. */
   readonly onFlush: () => void;
+  /** Подпись поля для чтения с экрана и подсказка в пустом документе — словами того, кто показывает редактор. */
+  readonly label: string;
+  readonly placeholder: string;
+  /** Высота пустого документа, классом Tailwind (`min-h-48`). */
+  readonly minHeight: string;
 }
 
 /**
- * The user's own notes as an editable document: select text for the formatting toolbar. Each paragraph takes
- * the direction of its own text, so notes in any script read right; the editor's own words follow the interface.
+ * Документ в Markdown для правки: выделите текст — появится панель форматирования. Каждый абзац берёт
+ * направление своего текста, поэтому текст на любом письме читается верно; слова самого редактора — на языке
+ * интерфейса. Им пишут свои заметки в Notes и описание задачи в Канбане.
  */
-export function NotesEditor({ initialMarkdown, onChange, onFlush }: NotesEditorProps) {
-  const t = useTranslations("notesNote");
+export function MarkdownEditor({
+  initialMarkdown,
+  onChange,
+  onFlush,
+  label,
+  placeholder,
+  minHeight,
+}: MarkdownEditorProps) {
   const editor = useEditor({
     immediatelyRender: false,
     textDirection: "auto",
@@ -72,14 +83,14 @@ export function NotesEditor({ initialMarkdown, onChange, onFlush }: NotesEditorP
         underline: false,
         link: { openOnClick: false, autolink: true, defaultProtocol: "https" },
       }),
-      Placeholder.configure({ placeholder: t("editor.placeholder") }),
+      Placeholder.configure({ placeholder }),
       Markdown,
       ListShortcuts,
     ],
     content: initialMarkdown,
     contentType: "markdown",
     editorProps: {
-      attributes: editorAttributes(t("editor.label")),
+      attributes: editorAttributes(label, minHeight),
       handleKeyDown: (_view, event) => {
         if (!((event.metaKey || event.ctrlKey) && event.key === "s")) return false;
         event.preventDefault();
@@ -92,17 +103,17 @@ export function NotesEditor({ initialMarkdown, onChange, onFlush }: NotesEditorP
     onBlur: () => onFlush(),
   });
 
-  // The editor is made once; after a language switch, hand it the new placeholder and label.
+  // Редактор создаётся один раз; после смены языка ему передаются новые подсказка и подпись.
   useEffect(() => {
     if (!editor || editor.isDestroyed) return;
-    const placeholder = editor.extensionManager.extensions.find((extension) => extension.name === "placeholder");
-    if (placeholder) placeholder.options.placeholder = t("editor.placeholder");
+    const extension = editor.extensionManager.extensions.find((item) => item.name === "placeholder");
+    if (extension) extension.options.placeholder = placeholder;
     editor.setOptions({
-      editorProps: { ...editor.options.editorProps, attributes: editorAttributes(t("editor.label")) },
+      editorProps: { ...editor.options.editorProps, attributes: editorAttributes(label, minHeight) },
     });
-    // An empty transaction redraws the placeholder without touching the text.
+    // Пустая транзакция перерисовывает подсказку, не трогая текст.
     editor.view.dispatch(editor.state.tr);
-  }, [editor, t]);
+  }, [editor, label, placeholder, minHeight]);
 
   return (
     <>

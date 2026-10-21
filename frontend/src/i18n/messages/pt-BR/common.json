@@ -29,5 +29,24 @@
     "requestId": "ID da solicitação: {id}",
     "copyRequestId": "Copiar ID da solicitação",
     "requestIdCopied": "ID da solicitação copiado"
+  },
+  "editor": {
+    "toolbar": "Formatação",
+    "addLink": "Adicionar link",
+    "removeLink": "Remover link",
+    "bold": "Negrito",
+    "italic": "Itálico",
+    "linkPlaceholder": "Cole um link…",
+    "linkAddress": "Endereço do link",
+    "link": "Link",
+    "turnInto": "Transformar em",
+    "blocks": {
+      "text": "Texto",
+      "h1": "Título 1",
+      "h2": "Título 2",
+      "h3": "Título 3",
+      "ordered": "Lista numerada",
+      "bullet": "Lista com marcadores"
+    }
   }
 }

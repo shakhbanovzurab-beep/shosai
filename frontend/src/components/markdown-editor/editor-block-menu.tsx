@@ -19,7 +19,7 @@ const isMac = () => typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(n
  * rather than in a portal, so the editor keeps its selection and the floating toolbar stays up.
  */
 export function EditorBlockMenu({ editor, current }: { editor: Editor; current: BlockKind }) {
-  const t = useTranslations("notesNote");
+  const t = useTranslations("common");
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLDivElement>(null);

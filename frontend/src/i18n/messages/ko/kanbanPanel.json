@@ -1,0 +1,64 @@
+{
+  "titleLabel": "작업 제목",
+  "column": "열",
+  "status": "상태",
+  "fields": {
+    "assignee": "담당자",
+    "due": "마감일",
+    "priority": "우선순위",
+    "recurrence": "반복",
+    "other": "다른 보드의 필드"
+  },
+  "notSet": "설정 안 됨",
+  "assignee": {
+    "placeholder": "이름 입력…",
+    "assign": "“{name}” 담당자로 지정",
+    "clear": "담당자 지정 해제",
+    "inWorkspace": "{workspace}에서 변경",
+    "noNames": "아직 이름이 없어요. 이름을 입력해 보세요."
+  },
+  "due": {
+    "day": "날짜",
+    "range": "기간",
+    "clear": "날짜 지우기",
+    "from": "{date}부터"
+  },
+  "repeat": {
+    "never": "반복 안 함",
+    "day": "매일",
+    "week": "매주",
+    "month": "매월",
+    "onDay": "{day, number}일",
+    "next": "다음: {date}",
+    "weekdays": "반복 요일"
+  },
+  "value": {
+    "number": "숫자 추가",
+    "text": "텍스트 추가",
+    "clear": "지우기"
+  },
+  "leo": {
+    "filled": "Leo가 채움",
+    "from": "Leo가 {date}의 “{meeting}” 회의에서 가져왔어요.",
+    "said": "{time}에 나온 말",
+    "open": "이 시점부터 회의 열기"
+  },
+  "description": {
+    "label": "설명",
+    "placeholder": "설명 추가…"
+  },
+  "source": {
+    "meeting": "{date}의 “{meeting}” 회의에서",
+    "gone": "이 작업이 나온 회의가 더 이상 없어요."
+  },
+  "jira": {
+    "open": "Jira에서 {key} 열기",
+    "elsewhere": "댓글, 첨부 파일 등은 Jira에 있어요."
+  },
+  "states": {
+    "loading": "작업을 불러오는 중…",
+    "gone": "이 작업은 더 이상 없어요",
+    "goneHint": "삭제되었거나 더 이상 볼 수 없어요.",
+    "failed": "작업을 불러오지 못했어요"
+  }
+}

@@ -35,7 +35,7 @@ export function CardRoot({
     <article
       data-state={state}
       className={cn(
-        "flex flex-col gap-2.5 rounded-xl border bg-card p-3.5 text-card-foreground shadow-xs",
+        "relative flex flex-col gap-2.5 rounded-xl border bg-card p-3.5 text-card-foreground shadow-xs",
         state === "done" && "bg-card/60 text-muted-foreground",
         className,
       )}
@@ -45,27 +45,23 @@ export function CardRoot({
   );
 }
 
-/** Обложка в рамке 16:9: размер известен заранее, поэтому ничего не сдвигается, пока грузится превью. */
+/**
+ * Обложка в рамке 16:9: размер известен заранее, поэтому ничего не сдвигается, пока грузится превью. Картинка
+ * декоративная (название задачи рядом), поэтому фон, а не <img>; карточку вне экрана браузер не рисует и превью
+ * не грузит.
+ */
 export function CardCover({ previewUrl }: { previewUrl: string | null }) {
   return (
-    <div className="-mx-3.5 -mt-3.5 aspect-video overflow-hidden rounded-t-xl border-b bg-muted">
-      {previewUrl ? (
-        <img
-          src={previewUrl}
-          alt=""
-          width={640}
-          height={360}
-          loading="lazy"
-          decoding="async"
-          className="size-full object-cover"
-        />
-      ) : null}
-    </div>
+    <div
+      aria-hidden="true"
+      className="-mx-3.5 -mt-3.5 aspect-video rounded-t-xl border-b bg-center bg-cover bg-muted"
+      style={previewUrl ? { backgroundImage: `url("${previewUrl.replace(/"/g, "%22")}")` } : undefined}
+    />
   );
 }
 
-/** Заголовок в две строки и место для действий справа. */
-export function CardHeader({ title, state, children }: { title: string; state: CardState; children?: ReactNode }) {
+/** Заголовок в две строки и место для действий справа; `title` — текст или кнопка, открывающая карточку. */
+export function CardHeader({ title, state, children }: { title: ReactNode; state: CardState; children?: ReactNode }) {
   return (
     <div className="flex items-start gap-2">
       {state === "done" ? <CircleCheck className="mt-0.5 size-4 shrink-0 text-emerald-600" aria-hidden="true" /> : null}
@@ -74,6 +70,24 @@ export function CardHeader({ title, state, children }: { title: string; state: C
       </h3>
       {children}
     </div>
+  );
+}
+
+/**
+ * Заголовок как кнопка «открыть»: растянут на всю карточку, поэтому открыть можно щелчком в любом месте,
+ * а Enter и пробел на нём — как у любой кнопки. Кнопки и ссылки карточки лежат поверх (`relative z-10`).
+ */
+export function CardOpenButton({ onOpen, children }: { onOpen: () => void; children: ReactNode }) {
+  return (
+    <button
+      type="button"
+      data-card-open
+      onClick={onOpen}
+      // Рамка фокуса — на растянутом слое, то есть вокруг всей карточки.
+      className="text-start outline-none after:absolute after:inset-0 after:rounded-xl after:content-[''] focus-visible:after:ring-2 focus-visible:after:ring-ring"
+    >
+      {children}
+    </button>
   );
 }
 

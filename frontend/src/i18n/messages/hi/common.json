@@ -29,5 +29,24 @@
     "requestId": "अनुरोध ID: {id}",
     "copyRequestId": "अनुरोध ID कॉपी करें",
     "requestIdCopied": "अनुरोध ID कॉपी हो गई"
+  },
+  "editor": {
+    "toolbar": "फ़ॉर्मैटिंग",
+    "addLink": "लिंक जोड़ें",
+    "removeLink": "लिंक हटाएं",
+    "bold": "बोल्ड",
+    "italic": "इटैलिक",
+    "linkPlaceholder": "लिंक पेस्ट करें…",
+    "linkAddress": "लिंक का पता",
+    "link": "लिंक",
+    "turnInto": "इसमें बदलें",
+    "blocks": {
+      "text": "टेक्स्ट",
+      "h1": "हेडिंग 1",
+      "h2": "हेडिंग 2",
+      "h3": "हेडिंग 3",
+      "ordered": "नंबर वाली सूची",
+      "bullet": "बुलेट वाली सूची"
+    }
   }
 }

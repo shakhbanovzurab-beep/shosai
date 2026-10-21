@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Titre de la tâche",
+  "column": "Colonne",
+  "status": "Statut",
+  "fields": {
+    "assignee": "Responsable",
+    "due": "Échéance",
+    "priority": "Priorité",
+    "recurrence": "Répétition",
+    "other": "Champs d’autres tableaux"
+  },
+  "notSet": "Non défini",
+  "assignee": {
+    "placeholder": "Saisissez un nom…",
+    "assign": "Attribuer à « {name} »",
+    "clear": "Retirer le responsable",
+    "inWorkspace": "Modifier dans {workspace}",
+    "noNames": "Aucun nom pour l’instant. Saisissez-en un."
+  },
+  "due": {
+    "day": "Jour",
+    "range": "Période",
+    "clear": "Effacer la date",
+    "from": "À partir du {date}"
+  },
+  "repeat": {
+    "never": "Jamais",
+    "day": "Tous les jours",
+    "week": "Toutes les semaines",
+    "month": "Tous les mois",
+    "onDay": "Le {day, number} du mois",
+    "next": "Prochaine : {date}",
+    "weekdays": "Ces jours-là"
+  },
+  "value": {
+    "number": "Ajoutez un nombre",
+    "text": "Ajoutez du texte",
+    "clear": "Effacer"
+  },
+  "leo": {
+    "filled": "Rempli par Leo",
+    "from": "Leo l’a repris de la réunion « {meeting} » du {date}.",
+    "said": "Ce qui a été dit à {time}",
+    "open": "Ouvrir la réunion à ce moment"
+  },
+  "description": {
+    "label": "Description",
+    "placeholder": "Ajoutez une description…"
+  },
+  "source": {
+    "meeting": "De la réunion « {meeting} » du {date}",
+    "gone": "La réunion d’où vient cette tâche n’existe plus."
+  },
+  "jira": {
+    "open": "Ouvrir {key} dans Jira",
+    "elsewhere": "Les commentaires, les pièces jointes et le reste se trouvent dans Jira."
+  },
+  "states": {
+    "loading": "Chargement de la tâche…",
+    "gone": "Cette tâche n’existe plus",
+    "goneHint": "Elle a été supprimée, ou vous n’y avez plus accès.",
+    "failed": "Impossible de charger la tâche"
+  }
+}

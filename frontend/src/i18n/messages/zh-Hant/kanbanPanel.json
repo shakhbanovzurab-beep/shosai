@@ -1,0 +1,64 @@
+{
+  "titleLabel": "任務標題",
+  "column": "欄",
+  "status": "狀態",
+  "fields": {
+    "assignee": "負責人",
+    "due": "截止日期",
+    "priority": "優先順序",
+    "recurrence": "重複",
+    "other": "來自其他看板"
+  },
+  "notSet": "未設定",
+  "assignee": {
+    "placeholder": "輸入姓名…",
+    "assign": "指派給「{name}」",
+    "clear": "取消指派",
+    "inWorkspace": "在 {workspace} 中變更",
+    "noNames": "還沒有姓名。請輸入一個姓名。"
+  },
+  "due": {
+    "day": "單日",
+    "range": "期間",
+    "clear": "清除日期",
+    "from": "從 {date} 起"
+  },
+  "repeat": {
+    "never": "不重複",
+    "day": "每天",
+    "week": "每週",
+    "month": "每月",
+    "onDay": "{day, number} 日",
+    "next": "下次：{date}",
+    "weekdays": "重複日"
+  },
+  "value": {
+    "number": "新增數字",
+    "text": "新增文字",
+    "clear": "清除"
+  },
+  "leo": {
+    "filled": "由 Leo 填寫",
+    "from": "Leo 從 {date} 的會議「{meeting}」取得這項資訊。",
+    "said": "{time} 的發言",
+    "open": "從這個時間點開啟會議"
+  },
+  "description": {
+    "label": "說明",
+    "placeholder": "新增說明…"
+  },
+  "source": {
+    "meeting": "來自 {date} 的會議「{meeting}」",
+    "gone": "這項任務來源的會議已不存在。"
+  },
+  "jira": {
+    "open": "在 Jira 中開啟 {key}",
+    "elsewhere": "留言、附件和其他內容都在 Jira 中。"
+  },
+  "states": {
+    "loading": "正在載入任務…",
+    "gone": "這項任務已不存在",
+    "goneHint": "任務已被刪除，或你已無法查看。",
+    "failed": "無法載入任務"
+  }
+}

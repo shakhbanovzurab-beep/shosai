@@ -55,6 +55,28 @@ export function shiftedStart(startsOn: string | null, dueOn: string, nextDueOn: 
   return startsOn === null ? null : addDays(startsOn, daysFrom(dueOn, nextDueOn));
 }
 
+/**
+ * Правило, когда человек выбирает вид повтора: прежнее правило того же вида сохраняется, новое берёт день недели
+ * или день месяца от `anchor` — срока задачи или сегодняшнего дня; без него — понедельник и первое число.
+ */
+export function recurrenceFor(
+  every: Recurrence["every"] | "never",
+  previous: Recurrence | null,
+  anchor: string | null,
+): Recurrence | null {
+  if (every === "never") return null;
+  if (every === "day") return { every: "day" };
+  if (every === "week")
+    return previous?.every === "week" ? previous : { every: "week", weekdays: [anchor ? weekdayOf(anchor) : "mon"] };
+  return previous?.every === "month" ? previous : { every: "month", day: anchor ? Number(anchor.slice(8, 10)) : 1 };
+}
+
+/** Дни недели от первого дня недели в языке человека (`firstDay` из Intl: 1 — понедельник … 7 — воскресенье). */
+export const weekdaysFrom = (firstDay: number): Weekday[] => [
+  ...WEEKDAYS.slice(firstDay - 1),
+  ...WEEKDAYS.slice(0, firstDay - 1),
+];
+
 /** Правило осмысленно: неделя с хотя бы одним днём без повторов, месяц с днём 1–31. */
 export function isValidRecurrence(rule: Recurrence): boolean {
   if (rule.every === "week")

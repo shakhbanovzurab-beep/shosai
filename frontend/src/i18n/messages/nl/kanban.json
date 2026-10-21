@@ -120,7 +120,7 @@
     "pink": "Roze"
   },
   "dnd": {
-    "instructions": "Druk op de spatiebalk om een kaart of kolom op te pakken. Verplaats hem met de pijltoetsen, zet hem neer met de spatiebalk of annuleer met Esc.",
+    "instructions": "Druk op Enter om een kaart te openen. Druk op de spatiebalk om een kaart of kolom op te pakken. Verplaats hem met de pijltoetsen, zet hem neer met de spatiebalk of annuleer met Esc.",
     "pickedUp": "{item} opgepakt.",
     "over": "{item}: {column}, {position, number} van {count, number}.",
     "columnOver": "{item}: kolom {position, number} van {count, number}.",

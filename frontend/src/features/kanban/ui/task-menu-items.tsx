@@ -84,7 +84,7 @@ export function TaskMenuItems({ kit: K, taskId, columnId }: { kit: MenuKit; task
               <K.Item
                 key={id}
                 disabled={id === columnId}
-                onSelect={() => actions.moveToEdge(taskId, id, "top")}
+                onSelect={() => void actions.moveToEdge(taskId, id, "top")}
                 data-target-column-id={id}
               >
                 <Check className={id === columnId ? undefined : "invisible"} />
@@ -93,11 +93,11 @@ export function TaskMenuItems({ kit: K, taskId, columnId }: { kit: MenuKit; task
             ))}
           </K.SubContent>
         </K.Sub>
-        <K.Item disabled={!editable} onSelect={() => actions.moveToEdge(taskId, columnId, "top")}>
+        <K.Item disabled={!editable} onSelect={() => void actions.moveToEdge(taskId, columnId, "top")}>
           <ArrowUpToLine />
           {t("taskMenu.moveToTop")}
         </K.Item>
-        <K.Item disabled={!editable} onSelect={() => actions.moveToEdge(taskId, columnId, "bottom")}>
+        <K.Item disabled={!editable} onSelect={() => void actions.moveToEdge(taskId, columnId, "bottom")}>
           <ArrowDownToLine />
           {t("taskMenu.moveToBottom")}
         </K.Item>

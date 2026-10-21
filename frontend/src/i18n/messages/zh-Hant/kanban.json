@@ -120,7 +120,7 @@
     "pink": "粉紅色"
   },
   "dnd": {
-    "instructions": "按空白鍵即可拿起卡片或欄。使用方向鍵移動，按空白鍵放下，按 Esc 取消。",
+    "instructions": "按 Enter 鍵即可開啟卡片。按空白鍵即可拿起卡片或欄。使用方向鍵移動，按空白鍵放下，按 Esc 取消。",
     "pickedUp": "已拿起「{item}」。",
     "over": "「{item}」位於「{column}」第 {position, number} 個位置，共 {count, number} 個。",
     "columnOver": "「{item}」位於第 {position, number} 欄，共 {count, number} 欄。",

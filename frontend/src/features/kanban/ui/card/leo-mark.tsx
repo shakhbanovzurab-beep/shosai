@@ -14,7 +14,7 @@ export function LeoMark() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className="inline-flex shrink-0 text-violet-600 dark:text-violet-400" data-leo-mark>
+        <span className="relative z-10 inline-flex shrink-0 text-violet-600 dark:text-violet-400" data-leo-mark>
           <Sparkles className="size-3" aria-hidden="true" />
           <span className="sr-only">{t("card.leoFilled")}</span>
         </span>

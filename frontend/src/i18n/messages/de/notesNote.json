@@ -35,24 +35,7 @@
   },
   "editor": {
     "placeholder": "Schreib deine Notizen…",
-    "label": "Deine Notizen",
-    "toolbar": "Formatierung",
-    "addLink": "Link hinzufügen",
-    "removeLink": "Link entfernen",
-    "bold": "Fett",
-    "italic": "Kursiv",
-    "linkPlaceholder": "Link einfügen…",
-    "linkAddress": "Linkadresse",
-    "link": "Link",
-    "turnInto": "Umwandeln in",
-    "blocks": {
-      "text": "Fließtext",
-      "h1": "Überschrift 1",
-      "h2": "Überschrift 2",
-      "h3": "Überschrift 3",
-      "ordered": "Nummerierte Liste",
-      "bullet": "Aufzählung"
-    }
+    "label": "Deine Notizen"
   },
   "transcript": {
     "label": "Transkript",

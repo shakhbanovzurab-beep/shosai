@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Judul tugas",
+  "column": "Kolom",
+  "status": "Status",
+  "fields": {
+    "assignee": "Penerima tugas",
+    "due": "Tenggat",
+    "priority": "Prioritas",
+    "recurrence": "Pengulangan",
+    "other": "Dari papan lain"
+  },
+  "notSet": "Belum diatur",
+  "assignee": {
+    "placeholder": "Ketik nama…",
+    "assign": "Tugaskan ke “{name}”",
+    "clear": "Batalkan penugasan",
+    "inWorkspace": "Ubah di {workspace}",
+    "noNames": "Belum ada nama. Ketik satu nama."
+  },
+  "due": {
+    "day": "Hari",
+    "range": "Rentang",
+    "clear": "Hapus tanggal",
+    "from": "Mulai {date}"
+  },
+  "repeat": {
+    "never": "Tidak pernah",
+    "day": "Setiap hari",
+    "week": "Setiap minggu",
+    "month": "Setiap bulan",
+    "onDay": "Pada tanggal {day, number}",
+    "next": "Berikutnya: {date}",
+    "weekdays": "Hari pengulangan"
+  },
+  "value": {
+    "number": "Tambahkan angka",
+    "text": "Tambahkan teks",
+    "clear": "Kosongkan"
+  },
+  "leo": {
+    "filled": "Diisi oleh Leo",
+    "from": "Leo mengambil ini dari rapat “{meeting}”, {date}.",
+    "said": "Yang dikatakan pada {time}",
+    "open": "Buka rapat di momen ini"
+  },
+  "description": {
+    "label": "Deskripsi",
+    "placeholder": "Tambahkan deskripsi…"
+  },
+  "source": {
+    "meeting": "Dari rapat “{meeting}”, {date}",
+    "gone": "Rapat asal tugas ini sudah tidak ada."
+  },
+  "jira": {
+    "open": "Buka {key} di Jira",
+    "elsewhere": "Komentar, lampiran, dan lainnya ada di Jira."
+  },
+  "states": {
+    "loading": "Memuat tugas…",
+    "gone": "Tugas ini sudah tidak ada",
+    "goneHint": "Tugas ini telah dihapus, atau Anda tidak dapat melihatnya lagi.",
+    "failed": "Tidak dapat memuat tugas"
+  }
+}

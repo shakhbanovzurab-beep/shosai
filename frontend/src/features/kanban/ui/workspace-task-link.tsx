@@ -12,7 +12,7 @@ export function WorkspaceTaskLink({ space }: { space: TaskSpace }) {
     <Link
       href={`/app/w/${encodeURIComponent(space.workspace_slug)}/tasks`}
       onPointerDown={(event) => event.stopPropagation()}
-      className="inline-flex w-fit items-center gap-1 rounded text-muted-foreground text-xs hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
+      className="relative z-10 inline-flex w-fit items-center gap-1 rounded text-muted-foreground text-xs hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring"
     >
       <Building2 className="size-3" aria-hidden="true" />
       <span dir="auto">{space.workspace_name}</span>

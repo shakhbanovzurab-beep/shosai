@@ -35,24 +35,7 @@
   },
   "editor": {
     "placeholder": "Schrijf je notities…",
-    "label": "Je notities",
-    "toolbar": "Opmaak",
-    "addLink": "Link toevoegen",
-    "removeLink": "Link verwijderen",
-    "bold": "Vet",
-    "italic": "Cursief",
-    "linkPlaceholder": "Plak een link…",
-    "linkAddress": "Linkadres",
-    "link": "Link",
-    "turnInto": "Omzetten naar",
-    "blocks": {
-      "text": "Tekst",
-      "h1": "Kop 1",
-      "h2": "Kop 2",
-      "h3": "Kop 3",
-      "ordered": "Genummerde lijst",
-      "bullet": "Lijst met opsommingstekens"
-    }
+    "label": "Je notities"
   },
   "transcript": {
     "label": "Transcriptie",

@@ -1,0 +1,64 @@
+{
+  "titleLabel": "タスク名",
+  "column": "列",
+  "status": "ステータス",
+  "fields": {
+    "assignee": "担当者",
+    "due": "期限",
+    "priority": "優先度",
+    "recurrence": "繰り返し",
+    "other": "他のボードのフィールド"
+  },
+  "notSet": "未設定",
+  "assignee": {
+    "placeholder": "名前を入力…",
+    "assign": "「{name}」を割り当て",
+    "clear": "割り当てを解除",
+    "inWorkspace": "{workspace} で変更",
+    "noNames": "名前はまだありません。名前を入力してください。"
+  },
+  "due": {
+    "day": "日付",
+    "range": "期間",
+    "clear": "日付をクリア",
+    "from": "{date} から"
+  },
+  "repeat": {
+    "never": "しない",
+    "day": "毎日",
+    "week": "毎週",
+    "month": "毎月",
+    "onDay": "{day, number} 日",
+    "next": "次回：{date}",
+    "weekdays": "繰り返す曜日"
+  },
+  "value": {
+    "number": "数値を追加",
+    "text": "テキストを追加",
+    "clear": "クリア"
+  },
+  "leo": {
+    "filled": "Leo が入力",
+    "from": "Leo が会議「{meeting}」（{date}）から取得しました。",
+    "said": "{time} の発言",
+    "open": "この時点から会議を開く"
+  },
+  "description": {
+    "label": "説明",
+    "placeholder": "説明を追加…"
+  },
+  "source": {
+    "meeting": "会議「{meeting}」（{date}）から",
+    "gone": "このタスクの元になった会議は削除されています。"
+  },
+  "jira": {
+    "open": "Jira で {key} を開く",
+    "elsewhere": "コメントや添付ファイルなどは Jira にあります。"
+  },
+  "states": {
+    "loading": "タスクを読み込み中…",
+    "gone": "このタスクはもうありません",
+    "goneHint": "削除されたか、表示する権限がなくなりました。",
+    "failed": "タスクを読み込めませんでした"
+  }
+}

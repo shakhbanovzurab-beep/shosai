@@ -7,6 +7,7 @@ import { BoardContextMenu } from "./board-menu-triggers";
 import { useEditable } from "./board-store";
 import { TaskCard } from "./task-card";
 
+/** Карточка на доске: перетаскивается мышью с любого места и с клавиатуры пробелом; открывается её заголовком. */
 export function SortableTaskCard({ taskId, columnId, index }: { taskId: string; columnId: string; index: number }) {
   const editable = useEditable();
   const { isDragging, ref } = useSortable({

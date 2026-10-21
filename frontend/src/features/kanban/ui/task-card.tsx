@@ -8,9 +8,19 @@ import type { BoardSticker, SystemStickerId } from "../domain/stickers-contract"
 import type { Card } from "../domain/tasks-contract";
 import { useBoardStickers, useCard, useColumn } from "../model/board-hooks";
 import { BoardActionsButton } from "./board-menu-triggers";
-import { CardAssignee, CardChips, CardCover, CardFooter, CardHeader, CardRoot, type CardState } from "./card/card-face";
+import {
+  CardAssignee,
+  CardChips,
+  CardCover,
+  CardFooter,
+  CardHeader,
+  CardOpenButton,
+  CardRoot,
+  type CardState,
+} from "./card/card-face";
 import { hasFooterFacts } from "./card/footer-facts";
 import { JiraKey } from "./jira-key";
+import { openTask } from "./panel/task-address";
 import { WorkspaceTaskLink } from "./workspace-task-link";
 
 /** Какие системные поля показаны на этой доске. */
@@ -25,14 +35,24 @@ function visibilityOf(stickers: BoardSticker[]): Record<SystemStickerId, boolean
 }
 
 /** Тело карточки без действий: обложка, заголовок, где живёт задача, чипы и низ. */
-function CardBody({ card, state, actions }: { card: Card; state: CardState; actions?: ReactNode }) {
+function CardBody({
+  card,
+  state,
+  title,
+  actions,
+}: {
+  card: Card;
+  state: CardState;
+  title: ReactNode;
+  actions?: ReactNode;
+}) {
   const stickers = useBoardStickers();
   const visible = visibilityOf(stickers);
   const assignee = visible.assignee ? <CardAssignee card={card} /> : null;
   return (
     <>
       {card.cover ? <CardCover previewUrl={card.cover.preview_url} /> : null}
-      <CardHeader title={card.title} state={state}>
+      <CardHeader title={title} state={state}>
         {actions}
       </CardHeader>
       {card.jira ? <JiraKey issue={card.jira} /> : null}
@@ -55,11 +75,12 @@ export function TaskCard({ taskId, columnId }: { taskId: string; columnId: strin
       <CardBody
         card={card}
         state={state}
+        title={<CardOpenButton onOpen={() => openTask(taskId)}>{card.title}</CardOpenButton>}
         actions={
           <BoardActionsButton
             target={{ kind: "task", taskId, columnId }}
             label={tc("actionsFor", { name: card.title })}
-            className="-my-1 -me-1.5 shrink-0 text-muted-foreground"
+            className="relative z-10 -my-1 -me-1.5 shrink-0 text-muted-foreground"
           />
         }
       />
@@ -74,7 +95,7 @@ export function DragPreview({ taskId, columnId }: { taskId: string; columnId: st
   if (!card) return null;
   return (
     <CardRoot state={state} className="w-68 rotate-1 shadow-lg">
-      <CardBody card={card} state={state} />
+      <CardBody card={card} state={state} title={card.title} />
     </CardRoot>
   );
 }

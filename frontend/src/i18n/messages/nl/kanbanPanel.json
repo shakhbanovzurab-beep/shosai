@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Taaktitel",
+  "column": "Kolom",
+  "status": "Status",
+  "fields": {
+    "assignee": "Toegewezen aan",
+    "due": "Deadline",
+    "priority": "Prioriteit",
+    "recurrence": "Herhalen",
+    "other": "Van andere borden"
+  },
+  "notSet": "Niet ingesteld",
+  "assignee": {
+    "placeholder": "Typ een naam…",
+    "assign": "‘{name}’ toewijzen",
+    "clear": "Toewijzing verwijderen",
+    "inWorkspace": "Wijzigen in {workspace}",
+    "noNames": "Nog geen namen. Typ er een."
+  },
+  "due": {
+    "day": "Dag",
+    "range": "Periode",
+    "clear": "Datum wissen",
+    "from": "Vanaf {date}"
+  },
+  "repeat": {
+    "never": "Nooit",
+    "day": "Dagelijks",
+    "week": "Wekelijks",
+    "month": "Maandelijks",
+    "onDay": "Op dag {day, number}",
+    "next": "Volgende: {date}",
+    "weekdays": "Op deze dagen"
+  },
+  "value": {
+    "number": "Voeg een getal toe",
+    "text": "Voeg tekst toe",
+    "clear": "Wissen"
+  },
+  "leo": {
+    "filled": "Ingevuld door Leo",
+    "from": "Leo haalde dit uit de vergadering ‘{meeting}’ van {date}.",
+    "said": "Wat er op {time} werd gezegd",
+    "open": "Vergadering op dit moment openen"
+  },
+  "description": {
+    "label": "Beschrijving",
+    "placeholder": "Voeg een beschrijving toe…"
+  },
+  "source": {
+    "meeting": "Uit de vergadering ‘{meeting}’ van {date}",
+    "gone": "De vergadering waar deze taak uit kwam, bestaat niet meer."
+  },
+  "jira": {
+    "open": "{key} openen in Jira",
+    "elsewhere": "Opmerkingen, bijlagen en de rest staan in Jira."
+  },
+  "states": {
+    "loading": "Taak laden…",
+    "gone": "Deze taak bestaat niet meer",
+    "goneHint": "Hij is verwijderd, of je kunt hem niet meer zien.",
+    "failed": "Kan de taak niet laden"
+  }
+}

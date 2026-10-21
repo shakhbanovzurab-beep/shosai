@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Título da tarefa",
+  "column": "Coluna",
+  "status": "Status",
+  "fields": {
+    "assignee": "Responsável",
+    "due": "Prazo",
+    "priority": "Prioridade",
+    "recurrence": "Repetição",
+    "other": "De outros quadros"
+  },
+  "notSet": "Não definido",
+  "assignee": {
+    "placeholder": "Digite um nome…",
+    "assign": "Atribuir a “{name}”",
+    "clear": "Remover responsável",
+    "inWorkspace": "Alterar em {workspace}",
+    "noNames": "Nenhum nome ainda. Digite um."
+  },
+  "due": {
+    "day": "Dia",
+    "range": "Período",
+    "clear": "Remover a data",
+    "from": "A partir de {date}"
+  },
+  "repeat": {
+    "never": "Nunca",
+    "day": "Diariamente",
+    "week": "Semanalmente",
+    "month": "Mensalmente",
+    "onDay": "No dia {day, number}",
+    "next": "Próxima: {date}",
+    "weekdays": "Nestes dias"
+  },
+  "value": {
+    "number": "Adicione um número",
+    "text": "Adicione um texto",
+    "clear": "Limpar"
+  },
+  "leo": {
+    "filled": "Preenchido por Leo",
+    "from": "Leo tirou isto da reunião “{meeting}” de {date}.",
+    "said": "O que foi dito em {time}",
+    "open": "Abrir a reunião neste momento"
+  },
+  "description": {
+    "label": "Descrição",
+    "placeholder": "Adicione uma descrição…"
+  },
+  "source": {
+    "meeting": "Da reunião “{meeting}” de {date}",
+    "gone": "A reunião de onde veio esta tarefa não existe mais."
+  },
+  "jira": {
+    "open": "Abrir {key} no Jira",
+    "elsewhere": "Comentários, anexos e o resto ficam no Jira."
+  },
+  "states": {
+    "loading": "Carregando a tarefa…",
+    "gone": "Esta tarefa não existe mais",
+    "goneHint": "Ela foi excluída ou você não pode mais vê-la.",
+    "failed": "Não foi possível carregar a tarefa"
+  }
+}

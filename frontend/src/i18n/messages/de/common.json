@@ -29,5 +29,24 @@
     "requestId": "Anfrage-ID: {id}",
     "copyRequestId": "Anfrage-ID kopieren",
     "requestIdCopied": "Anfrage-ID kopiert"
+  },
+  "editor": {
+    "toolbar": "Formatierung",
+    "addLink": "Link hinzufügen",
+    "removeLink": "Link entfernen",
+    "bold": "Fett",
+    "italic": "Kursiv",
+    "linkPlaceholder": "Link einfügen…",
+    "linkAddress": "Linkadresse",
+    "link": "Link",
+    "turnInto": "Umwandeln in",
+    "blocks": {
+      "text": "Fließtext",
+      "h1": "Überschrift 1",
+      "h2": "Überschrift 2",
+      "h3": "Überschrift 3",
+      "ordered": "Nummerierte Liste",
+      "bullet": "Aufzählung"
+    }
   }
 }

@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Görev başlığı",
+  "column": "Sütun",
+  "status": "Durum",
+  "fields": {
+    "assignee": "Atanan kişi",
+    "due": "Son tarih",
+    "priority": "Öncelik",
+    "recurrence": "Tekrarlama",
+    "other": "Diğer panolardan"
+  },
+  "notSet": "Ayarlanmadı",
+  "assignee": {
+    "placeholder": "Bir ad yazın…",
+    "assign": "“{name}” adlı kişiye ata",
+    "clear": "Atamayı kaldır",
+    "inWorkspace": "{workspace} çalışma alanında değiştir",
+    "noNames": "Henüz ad yok. Bir ad yazın."
+  },
+  "due": {
+    "day": "Gün",
+    "range": "Aralık",
+    "clear": "Tarihi temizle",
+    "from": "{date} tarihinden itibaren"
+  },
+  "repeat": {
+    "never": "Hiçbir zaman",
+    "day": "Her gün",
+    "week": "Her hafta",
+    "month": "Her ay",
+    "onDay": "Ayın {day, number}. günü",
+    "next": "Sonraki: {date}",
+    "weekdays": "Tekrar günleri"
+  },
+  "value": {
+    "number": "Sayı ekleyin",
+    "text": "Metin ekleyin",
+    "clear": "Temizle"
+  },
+  "leo": {
+    "filled": "Leo doldurdu",
+    "from": "Leo bunu {date} tarihli “{meeting}” toplantısından aldı.",
+    "said": "{time} anında söylenenler",
+    "open": "Toplantıyı bu noktadan aç"
+  },
+  "description": {
+    "label": "Açıklama",
+    "placeholder": "Açıklama ekleyin…"
+  },
+  "source": {
+    "meeting": "{date} tarihli “{meeting}” toplantısından",
+    "gone": "Bu görevin geldiği toplantı artık yok."
+  },
+  "jira": {
+    "open": "{key} işini Jira’da aç",
+    "elsewhere": "Yorumlar, ekler ve geri kalanı Jira’da."
+  },
+  "states": {
+    "loading": "Görev yükleniyor…",
+    "gone": "Bu görev artık yok",
+    "goneHint": "Silinmiş ya da artık görüntüleyemiyorsunuz.",
+    "failed": "Görev yüklenemedi"
+  }
+}

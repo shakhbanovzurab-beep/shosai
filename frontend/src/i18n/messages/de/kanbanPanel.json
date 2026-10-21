@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Aufgabentitel",
+  "column": "Spalte",
+  "status": "Status",
+  "fields": {
+    "assignee": "Zugewiesen an",
+    "due": "Fälligkeitsdatum",
+    "priority": "Priorität",
+    "recurrence": "Wiederholung",
+    "other": "Aus anderen Boards"
+  },
+  "notSet": "Nicht festgelegt",
+  "assignee": {
+    "placeholder": "Name eingeben…",
+    "assign": "„{name}“ zuweisen",
+    "clear": "Zuweisung entfernen",
+    "inWorkspace": "In {workspace} ändern",
+    "noNames": "Noch keine Namen. Gib einen ein."
+  },
+  "due": {
+    "day": "Tag",
+    "range": "Zeitraum",
+    "clear": "Datum entfernen",
+    "from": "Ab {date}"
+  },
+  "repeat": {
+    "never": "Nie",
+    "day": "Täglich",
+    "week": "Wöchentlich",
+    "month": "Monatlich",
+    "onDay": "Am {day, number}.",
+    "next": "Nächste: {date}",
+    "weekdays": "An diesen Tagen"
+  },
+  "value": {
+    "number": "Zahl eingeben",
+    "text": "Text eingeben",
+    "clear": "Leeren"
+  },
+  "leo": {
+    "filled": "Von Leo ausgefüllt",
+    "from": "Leo hat das aus dem Meeting „{meeting}“ vom {date} übernommen.",
+    "said": "Was bei {time} gesagt wurde",
+    "open": "Meeting an dieser Stelle öffnen"
+  },
+  "description": {
+    "label": "Beschreibung",
+    "placeholder": "Beschreibung hinzufügen…"
+  },
+  "source": {
+    "meeting": "Aus dem Meeting „{meeting}“ vom {date}",
+    "gone": "Das Meeting, aus dem diese Aufgabe stammt, gibt es nicht mehr."
+  },
+  "jira": {
+    "open": "{key} in Jira öffnen",
+    "elsewhere": "Kommentare, Anhänge und alles Weitere findest du in Jira."
+  },
+  "states": {
+    "loading": "Aufgabe wird geladen…",
+    "gone": "Diese Aufgabe gibt es nicht mehr",
+    "goneHint": "Sie wurde gelöscht, oder du kannst sie nicht mehr sehen.",
+    "failed": "Aufgabe konnte nicht geladen werden"
+  }
+}

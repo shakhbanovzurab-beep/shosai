@@ -29,5 +29,24 @@
     "requestId": "Identifiant de requête : {id}",
     "copyRequestId": "Copier l’identifiant de requête",
     "requestIdCopied": "Identifiant de requête copié"
+  },
+  "editor": {
+    "toolbar": "Mise en forme",
+    "addLink": "Ajouter un lien",
+    "removeLink": "Retirer le lien",
+    "bold": "Gras",
+    "italic": "Italique",
+    "linkPlaceholder": "Collez un lien…",
+    "linkAddress": "Adresse du lien",
+    "link": "Lien",
+    "turnInto": "Transformer en",
+    "blocks": {
+      "text": "Texte",
+      "h1": "Titre 1",
+      "h2": "Titre 2",
+      "h3": "Titre 3",
+      "ordered": "Liste numérotée",
+      "bullet": "Liste à puces"
+    }
   }
 }

@@ -1,0 +1,64 @@
+{
+  "titleLabel": "Tiêu đề công việc",
+  "column": "Cột",
+  "status": "Trạng thái",
+  "fields": {
+    "assignee": "Người được giao",
+    "due": "Hạn chót",
+    "priority": "Mức ưu tiên",
+    "recurrence": "Lặp lại",
+    "other": "Từ bảng khác"
+  },
+  "notSet": "Chưa đặt",
+  "assignee": {
+    "placeholder": "Nhập tên…",
+    "assign": "Giao cho “{name}”",
+    "clear": "Hủy giao",
+    "inWorkspace": "Thay đổi trong {workspace}",
+    "noNames": "Chưa có tên nào. Hãy nhập một tên."
+  },
+  "due": {
+    "day": "Ngày",
+    "range": "Khoảng ngày",
+    "clear": "Xóa ngày",
+    "from": "Từ {date}"
+  },
+  "repeat": {
+    "never": "Không lặp lại",
+    "day": "Hằng ngày",
+    "week": "Hằng tuần",
+    "month": "Hằng tháng",
+    "onDay": "Vào ngày {day, number}",
+    "next": "Lần tới: {date}",
+    "weekdays": "Ngày lặp lại"
+  },
+  "value": {
+    "number": "Thêm số",
+    "text": "Thêm văn bản",
+    "clear": "Xóa"
+  },
+  "leo": {
+    "filled": "Do Leo điền",
+    "from": "Leo lấy thông tin này từ cuộc họp “{meeting}”, {date}.",
+    "said": "Nội dung được nói lúc {time}",
+    "open": "Mở cuộc họp tại thời điểm này"
+  },
+  "description": {
+    "label": "Mô tả",
+    "placeholder": "Thêm mô tả…"
+  },
+  "source": {
+    "meeting": "Từ cuộc họp “{meeting}”, {date}",
+    "gone": "Cuộc họp tạo ra công việc này không còn nữa."
+  },
+  "jira": {
+    "open": "Mở {key} trong Jira",
+    "elsewhere": "Bình luận, tệp đính kèm và các nội dung khác nằm trong Jira."
+  },
+  "states": {
+    "loading": "Đang tải công việc…",
+    "gone": "Công việc này không còn nữa",
+    "goneHint": "Công việc đã bị xóa hoặc bạn không còn quyền xem.",
+    "failed": "Không thể tải công việc"
+  }
+}

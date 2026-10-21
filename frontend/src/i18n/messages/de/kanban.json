@@ -120,7 +120,7 @@
     "pink": "Rosa"
   },
   "dnd": {
-    "instructions": "Drücke die Leertaste, um eine Karte oder Spalte aufzunehmen. Verschiebe sie mit den Pfeiltasten, lege sie mit der Leertaste ab oder brich mit Esc ab.",
+    "instructions": "Drücke die Eingabetaste, um eine Karte zu öffnen. Drücke die Leertaste, um eine Karte oder Spalte aufzunehmen. Verschiebe sie mit den Pfeiltasten, lege sie mit der Leertaste ab oder brich mit Esc ab.",
     "pickedUp": "{item} aufgenommen.",
     "over": "{item}: {column}, {position, number} von {count, number}.",
     "columnOver": "{item}: Spalte {position, number} von {count, number}.",

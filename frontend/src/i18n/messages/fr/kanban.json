@@ -120,7 +120,7 @@
     "pink": "Rose"
   },
   "dnd": {
-    "instructions": "Pour prendre une carte ou une colonne, appuyez sur Espace. Déplacez-la avec les touches fléchées, déposez-la avec Espace ou annulez avec Échap.",
+    "instructions": "Pour ouvrir une carte, appuyez sur Entrée. Pour prendre une carte ou une colonne, appuyez sur Espace. Déplacez-la avec les touches fléchées, déposez-la avec Espace ou annulez avec Échap.",
     "pickedUp": "Vous avez pris {item}.",
     "over": "{item} : {column}, {position, number} sur {count, number}.",
     "columnOver": "{item} : colonne {position, number} sur {count, number}.",

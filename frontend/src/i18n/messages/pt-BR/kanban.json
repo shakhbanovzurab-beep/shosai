@@ -120,7 +120,7 @@
     "pink": "Rosa"
   },
   "dnd": {
-    "instructions": "Para pegar um cartão ou uma coluna, pressione Espaço. Use as teclas de seta para mover, Espaço para soltar e Esc para cancelar.",
+    "instructions": "Para abrir um cartão, pressione Enter. Para pegar um cartão ou uma coluna, pressione Espaço. Use as teclas de seta para mover, Espaço para soltar e Esc para cancelar.",
     "pickedUp": "Você pegou {item}.",
     "over": "{item}: {column}, {position, number} de {count, number}.",
     "columnOver": "{item}: coluna {position, number} de {count, number}.",

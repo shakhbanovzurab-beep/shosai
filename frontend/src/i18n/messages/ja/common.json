@@ -29,5 +29,24 @@
     "requestId": "リクエスト ID：{id}",
     "copyRequestId": "リクエスト ID をコピー",
     "requestIdCopied": "リクエスト ID をコピーしました"
+  },
+  "editor": {
+    "toolbar": "書式",
+    "addLink": "リンクを追加",
+    "removeLink": "リンクを削除",
+    "bold": "太字",
+    "italic": "斜体",
+    "linkPlaceholder": "リンクを貼り付け…",
+    "linkAddress": "リンクのアドレス",
+    "link": "リンク",
+    "turnInto": "変換",
+    "blocks": {
+      "text": "テキスト",
+      "h1": "見出し 1",
+      "h2": "見出し 2",
+      "h3": "見出し 3",
+      "ordered": "番号付きリスト",
+      "bullet": "箇条書きリスト"
+    }
   }
 }

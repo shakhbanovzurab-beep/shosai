@@ -17,6 +17,7 @@ import type identityRegistration from "./messages/en/identityRegistration.json";
 import type kanban from "./messages/en/kanban.json";
 import type kanbanApi from "./messages/en/kanbanApi.json";
 import type kanbanBoards from "./messages/en/kanbanBoards.json";
+import type kanbanPanel from "./messages/en/kanbanPanel.json";
 import type knowledgeBase from "./messages/en/knowledgeBase.json";
 import type knowledgeBaseApi from "./messages/en/knowledgeBaseApi.json";
 import type knowledgeBaseSources from "./messages/en/knowledgeBaseSources.json";
@@ -91,6 +92,7 @@ export type Messages = {
   kanban: typeof kanban;
   kanbanApi: typeof kanbanApi;
   kanbanBoards: typeof kanbanBoards;
+  kanbanPanel: typeof kanbanPanel;
   knowledgeBase: typeof knowledgeBase;
   knowledgeBaseApi: typeof knowledgeBaseApi;
   knowledgeBaseSources: typeof knowledgeBaseSources;

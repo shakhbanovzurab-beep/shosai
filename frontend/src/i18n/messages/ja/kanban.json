@@ -120,7 +120,7 @@
     "pink": "ピンク"
   },
   "dnd": {
-    "instructions": "カードや列を持ち上げるには、スペースキーを押します。矢印キーで移動し、スペースキーで置き、Esc キーでキャンセルします。",
+    "instructions": "カードを開くには、Enter キーを押します。カードや列を持ち上げるには、スペースキーを押します。矢印キーで移動し、スペースキーで置き、Esc キーでキャンセルします。",
     "pickedUp": "「{item}」を持ち上げました。",
     "over": "「{item}」は「{column}」の {position, number} 番目です（全 {count, number} 件）。",
     "columnOver": "「{item}」は {position, number} 列目です（全 {count, number} 列）。",

@@ -120,7 +120,7 @@
     "pink": "분홍색"
   },
   "dnd": {
-    "instructions": "카드나 열을 들어 올리려면 스페이스바를 눌러 주세요. 화살표 키로 옮기고, 스페이스바를 다시 누르면 내려놓아요. 취소하려면 Esc를 눌러 주세요.",
+    "instructions": "카드를 열려면 Enter를 눌러 주세요. 카드나 열을 들어 올리려면 스페이스바를 눌러 주세요. 화살표 키로 옮기고, 스페이스바를 다시 누르면 내려놓아요. 취소하려면 Esc를 눌러 주세요.",
     "pickedUp": "{item}을(를) 들어 올렸어요.",
     "over": "{item}: {column}의 {count, number}개 중 {position, number}번째예요.",
     "columnOver": "{item}: 열 {count, number}개 중 {position, number}번째예요.",

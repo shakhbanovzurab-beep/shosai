@@ -29,5 +29,24 @@
     "requestId": "معرّف الطلب: {id}",
     "copyRequestId": "نسخ معرّف الطلب",
     "requestIdCopied": "تم نسخ معرّف الطلب"
+  },
+  "editor": {
+    "toolbar": "التنسيق",
+    "addLink": "إضافة رابط",
+    "removeLink": "إزالة الرابط",
+    "bold": "غامق",
+    "italic": "مائل",
+    "linkPlaceholder": "لصق رابط…",
+    "linkAddress": "عنوان الرابط",
+    "link": "رابط",
+    "turnInto": "تحويل إلى",
+    "blocks": {
+      "text": "نص",
+      "h1": "عنوان 1",
+      "h2": "عنوان 2",
+      "h3": "عنوان 3",
+      "ordered": "قائمة مرقمة",
+      "bullet": "قائمة نقطية"
+    }
   }
 }

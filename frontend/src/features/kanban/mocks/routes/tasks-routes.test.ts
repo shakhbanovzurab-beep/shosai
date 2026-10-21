@@ -1,8 +1,11 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
+import type { BoardDetail } from "../../domain/boards-contract";
 import type { OwnedSticker } from "../../domain/stickers-contract";
+import { cardOf } from "../../domain/task-rules";
 import type { Attachment, Comment, CommentsPage, TaskDetail } from "../../domain/tasks-contract";
 import { resetDemo } from "../store/state";
+import { boardRoute } from "./boards-routes";
 import {
   boardStickerRoute,
   boardStickersRoute,
@@ -30,6 +33,13 @@ beforeEach(() => {
 });
 
 describe("a task's fields", () => {
+  it("gives the panel the same card the board shows", async () => {
+    const board = (await call(boardRoute, "GET", "/v1/boards/work", { params: { id: "work" } })).body as BoardDetail;
+    const cards = board.columns.flatMap((column) => column.cards);
+    expect(cards.length).toBeGreaterThan(0);
+    for (const card of cards) expect(cardOf(await task(card.id))).toEqual(card);
+  });
+
   it("drops Leo's mark from the field the person changed, and only from it", async () => {
     await patch("w-pricing-deck", { due_on: "2026-12-01" });
     expect((await task("w-pricing-deck")).leo_fields).toEqual(["assignee", "priority"]);

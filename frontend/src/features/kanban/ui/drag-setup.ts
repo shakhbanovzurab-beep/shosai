@@ -2,7 +2,13 @@
 
 import type { Plugins, Sensors } from "@dnd-kit/abstract";
 import { Accessibility } from "@dnd-kit/dom";
-import { type DragEndEvent, type DragOverEvent, type DragStartEvent, KeyboardSensor } from "@dnd-kit/react";
+import {
+  type DragEndEvent,
+  type DragOverEvent,
+  type DragStartEvent,
+  KeyboardSensor,
+  PointerSensor,
+} from "@dnd-kit/react";
 import { useTranslations } from "use-intl";
 
 import { locate } from "../domain/board-rules";
@@ -14,6 +20,20 @@ import { useBoardStore } from "../model/board-hooks";
  */
 
 type Source = DragStartEvent["operation"]["source"];
+
+const INTERACTIVE = "input, select, textarea, button, a[href], [contenteditable]:not([contenteditable='false'])";
+
+/**
+ * Мышью карточку тянут с любого места: заголовок-кнопка растянут на всю карточку, поэтому он не мешает начать
+ * перетаскивание. Остальные кнопки и ссылки карточки работают как обычно.
+ */
+const pointerSensor = PointerSensor.configure({
+  preventActivation: (event) => {
+    if (!(event.target instanceof Element)) return false;
+    const interactive = event.target.closest(INTERACTIVE);
+    return interactive !== null && !interactive.hasAttribute("data-card-open");
+  },
+});
 
 const columnIdOf = (data: unknown) =>
   typeof data === "object" && data !== null && "columnId" in data && typeof data.columnId === "string"
@@ -56,10 +76,11 @@ export function useDragSetup() {
     Accessibility.configure({ announcements, screenReaderInstructions: { draggable: t("dnd.instructions") } }),
   ];
   const sensors = (defaults: Sensors): Sensors =>
-    defaults.map((sensor) =>
-      sensor === KeyboardSensor
+    defaults.map((sensor) => {
+      if (sensor === PointerSensor) return pointerSensor;
+      return sensor === KeyboardSensor
         ? KeyboardSensor.configure({ keyboardCodes: { ...KeyboardSensor.defaults.keyboardCodes, start: ["Space"] } })
-        : sensor,
-    );
+        : sensor;
+    });
   return { plugins, sensors };
 }

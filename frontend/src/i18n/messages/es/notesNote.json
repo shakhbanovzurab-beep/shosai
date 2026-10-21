@@ -35,24 +35,7 @@
   },
   "editor": {
     "placeholder": "Escribe tus notas…",
-    "label": "Tus notas",
-    "toolbar": "Formato",
-    "addLink": "Agregar enlace",
-    "removeLink": "Quitar enlace",
-    "bold": "Negrita",
-    "italic": "Cursiva",
-    "linkPlaceholder": "Pega un enlace…",
-    "linkAddress": "Dirección del enlace",
-    "link": "Enlace",
-    "turnInto": "Convertir en",
-    "blocks": {
-      "text": "Texto",
-      "h1": "Título 1",
-      "h2": "Título 2",
-      "h3": "Título 3",
-      "ordered": "Lista numerada",
-      "bullet": "Lista con viñetas"
-    }
+    "label": "Tus notas"
   },
   "transcript": {
     "label": "Transcripción",
