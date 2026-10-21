@@ -11,6 +11,8 @@ export interface MeetingCard {
   id: string;
   title: string;
   status: "active" | "completed" | "failed";
+  /** Записана в приложении (`live`) или загружена файлом (`import`). */
+  source: "live" | "import";
   /** Время начала в ISO. */
   startedAt: string;
   durationMinutes: number;

@@ -3,36 +3,39 @@
 import { toast } from "sonner";
 
 import { usePollingResource } from "@/hooks/use-polling-resource";
-import { apiErrorDescription } from "@/lib/api/error-description";
 import { copyText } from "@/lib/copy-text";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
 
 import { shareApi } from "../api/share-api";
-import type { SharedCommentsResponse, ShareLinkSettings } from "../domain/share-link";
-import type { CommonWords, ShareWords } from "./words";
+import type { ShareLinkResponse, ShareLinkSettings } from "../domain/share-link";
+import { describeNoteError } from "./problem-words";
+import type { CommonWords, NotesWords, ShareWords } from "./words";
 
-function keyed<T>(load: (key: string) => Promise<T>) {
-  const made = new Map<string, PollingResource<T>>();
-  return (key: string) => {
-    let resource = made.get(key);
-    if (!resource) {
-      resource = createPollingResource(() => load(key));
-      made.set(key, resource);
-    }
-    return resource;
-  };
+/** Слова тостов панели: её собственные и причины отказа API заметок. */
+export interface ShareLinkWords {
+  share: ShareWords;
+  notes: NotesWords;
 }
 
-const linkOf = keyed((noteId) => shareApi.getShareLink(noteId));
-const commentsOf = keyed((token) => shareApi.listComments(token));
+const links = new Map<string, PollingResource<ShareLinkResponse>>();
+
+function linkOf(noteId: string): PollingResource<ShareLinkResponse> {
+  let resource = links.get(noteId);
+  if (!resource) {
+    resource = createPollingResource(() => shareApi.getShareLink(noteId));
+    links.set(noteId, resource);
+  }
+  return resource;
+}
 
 export const useShareLink = (noteId: string) => usePollingResource(linkOf(noteId));
 export const retryShareLink = (noteId: string) => linkOf(noteId).refresh();
-export const useSharedComments = (token: string) => usePollingResource(commentsOf(token));
-export const retrySharedComments = (token: string) => commentsOf(token).refresh();
 
-/** Turns the link on with `settings`, or changes what it shows; the switch moves at once and moves back if refused. */
-export async function updateShareLink(noteId: string, settings: ShareLinkSettings, t: ShareWords) {
+/**
+ * Включает ссылку с `settings` или меняет, что она показывает. Переключатель двигается сразу, а при отказе
+ * сервера возвращается; срок действия и адрес ссылки приходят из ответа.
+ */
+export async function updateShareLink(noteId: string, settings: ShareLinkSettings, words: ShareLinkWords) {
   const resource = linkOf(noteId);
   const before = resource.getSnapshot();
   const previous = before.status === "ready" ? before.data : null;
@@ -42,19 +45,19 @@ export async function updateShareLink(noteId: string, settings: ShareLinkSetting
     resource.update(() => saved);
   } catch (error) {
     if (previous) resource.update(() => previous);
-    toast.error(t("panel.updateFailed"), { description: apiErrorDescription(error) });
+    toast.error(words.share("panel.updateFailed"), { description: describeNoteError(error, words.notes) });
   }
 }
 
-/** Turns the link off: it stops working for everyone who has it. */
-export async function stopSharing(noteId: string, t: ShareWords) {
+/** Выключает ссылку: она перестаёт работать у всех, у кого есть, а её комментарии удаляются. */
+export async function stopSharing(noteId: string, words: ShareLinkWords) {
   try {
     linkOf(noteId).update(() => ({ link: null }));
     await shareApi.revokeShareLink(noteId);
-    toast.success(t("panel.turnedOff"));
+    toast.success(words.share("panel.turnedOff"));
   } catch (error) {
     void linkOf(noteId).refresh();
-    toast.error(t("panel.turnOffFailed"), { description: apiErrorDescription(error) });
+    toast.error(words.share("panel.turnOffFailed"), { description: describeNoteError(error, words.notes) });
   }
 }
 
@@ -64,17 +67,5 @@ export async function copyShareLink(url: string, common: CommonWords) {
     toast.success(common("feedback.linkCopied"));
   } catch {
     toast.error(common("feedback.linkCopyFailed"));
-  }
-}
-
-/** Posts a comment under a shared meeting; true once it's there. */
-export async function postSharedComment(token: string, author: string, text: string, t: ShareWords) {
-  try {
-    const saved: SharedCommentsResponse = await shareApi.addComment(token, author, text);
-    commentsOf(token).update(() => saved);
-    return true;
-  } catch (error) {
-    toast.error(t("comments.postFailed"), { description: apiErrorDescription(error) });
-    return false;
   }
 }

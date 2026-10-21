@@ -1,7 +1,0 @@
-{
-  "meetingNotFound": "Rapat tidak ditemukan.",
-  "notesTooLong": "Catatan boleh berisi paling banyak {max, number} karakter.",
-  "linkSettingsInvalid": "Ada yang tidak benar dalam pengaturan tautan. Muat ulang halaman dan coba lagi.",
-  "commentsClosed": "Tautan ini tidak menerima komentar.",
-  "commentInvalid": "Tulis komentar paling banyak {max, number} karakter."
-}

@@ -13,6 +13,7 @@ const card = (id: string, day: number): MeetingCard => ({
   owned: true,
   participantNames: [],
   participantCount: 1,
+  source: "live",
   summary: null,
   keyPoints: [],
   firstDecision: null,

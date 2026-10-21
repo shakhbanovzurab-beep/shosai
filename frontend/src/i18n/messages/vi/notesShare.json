@@ -18,6 +18,7 @@
         "description": "Bất kỳ ai có liên kết đều có thể trả lời."
       }
     },
+    "speaker": "Người nói {order, number}",
     "expires": "Hết hạn",
     "never": "Không bao giờ",
     "days": "{count, plural, other {# ngày}}",
@@ -26,29 +27,5 @@
     "updateFailed": "Không thể cập nhật liên kết",
     "turnedOff": "Đã tắt liên kết",
     "turnOffFailed": "Không thể tắt liên kết"
-  },
-  "page": {
-    "unavailable": "Liên kết không khả dụng",
-    "eyebrow": "Ghi chú cuộc họp được chia sẻ",
-    "people": "{count, plural, other {# người}}",
-    "transcript": "Bản chép lời",
-    "done": "Hoàn thành",
-    "open": "Chưa xong",
-    "speaker": "Người nói {order, number}"
-  },
-  "gone": {
-    "title": "Liên kết này không còn hoạt động",
-    "description": "Liên kết có thể đã hết hạn hoặc đã bị tắt. Hãy nhờ người gửi cung cấp liên kết mới."
-  },
-  "comments": {
-    "title": "Bình luận",
-    "loadFailed": "Không thể tải bình luận.",
-    "comment": "Bình luận của bạn",
-    "commentPlaceholder": "Viết câu trả lời…",
-    "name": "Tên của bạn",
-    "namePlaceholder": "Không bắt buộc, nếu bỏ trống sẽ hiển thị là “{guest}”",
-    "guest": "Khách",
-    "post": "Đăng bình luận",
-    "postFailed": "Không thể đăng bình luận của bạn"
   }
 }

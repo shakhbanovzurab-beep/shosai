@@ -111,6 +111,7 @@
     "participant_not_removable": "Seules les personnes ajoutées à la main peuvent être retirées.",
     "upload_not_claimable": "Cette importation ne peut pas servir d’enregistrement. Importez le fichier à nouveau.",
     "meetings_not_kept": "Les réunions ne sont pas conservées sur votre compte, les enregistrements ne peuvent donc pas être importés.",
+    "private_meeting": "Cette réunion n’a pas été conservée : il n’y a rien à partager.",
     "upload_rejected": "Le fichier est arrivé endommagé. Importez-le à nouveau.",
     "upload_interrupted": "L’importation a été interrompue. Vérifiez votre connexion et importez le fichier à nouveau."
   },

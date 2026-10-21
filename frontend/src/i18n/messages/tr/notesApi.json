@@ -1,7 +1,0 @@
-{
-  "meetingNotFound": "Toplantı bulunamadı.",
-  "notesTooLong": "Notlar en fazla {max, number} karakter olabilir.",
-  "linkSettingsInvalid": "Bağlantı ayarlarında bir sorun var. Sayfayı yeniden yükleyip tekrar deneyin.",
-  "commentsClosed": "Bu bağlantı yorumlara kapalı.",
-  "commentInvalid": "En fazla {max, number} karakterlik bir yorum yazın."
-}

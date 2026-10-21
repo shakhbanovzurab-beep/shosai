@@ -25,12 +25,16 @@
   },
   "liveBadge": "Berlangsung",
   "liveSince": "{minutes, plural, =0 {Baru dimulai · berakhir {end}} other {Dimulai # menit lalu · berakhir {end}}}",
+  "recordingSince": "{minutes, plural, =0 {Perekaman baru dimulai} other {Merekam selama # mnt}}",
   "startsIn": "{minutes, plural, =0 {Dimulai sekarang} other {Dalam # menit}}",
   "join": "Gabung ke rapat",
+  "openRecording": "Buka",
   "opensInNewTab": "(terbuka di tab baru)",
   "source": {
     "shosai": "Ruang Shosai",
-    "in_person": "Tatap muka"
+    "in_person": "Tatap muka",
+    "recording": "Direkam di Shosai",
+    "upload": "Rekaman yang diunggah"
   },
   "participants": "Peserta: {names}",
   "recap": {

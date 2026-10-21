@@ -25,12 +25,16 @@
   },
   "liveBadge": "Идёт",
   "liveSince": "{minutes, plural, =0 {Только началась · до {end}} one {Началась # мин назад · до {end}} few {Началась # мин назад · до {end}} many {Началась # мин назад · до {end}} other {Началась # мин назад · до {end}}}",
+  "recordingSince": "{minutes, plural, =0 {Запись только началась} one {Запись идёт # мин} few {Запись идёт # мин} many {Запись идёт # мин} other {Запись идёт # мин}}",
   "startsIn": "{minutes, plural, =0 {Начинается сейчас} one {Через # мин} few {Через # мин} many {Через # мин} other {Через # мин}}",
   "join": "Присоединиться",
+  "openRecording": "Открыть",
   "opensInNewTab": "(откроется в новой вкладке)",
   "source": {
     "shosai": "Комната Shosai",
-    "in_person": "Очно"
+    "in_person": "Очно",
+    "recording": "Записано в Shosai",
+    "upload": "Загруженная запись"
   },
   "participants": "Участники: {names}",
   "recap": {

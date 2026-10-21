@@ -29,7 +29,6 @@ import type mailLeo from "./messages/en/mailLeo.json";
 import type meetings from "./messages/en/meetings.json";
 import type memory from "./messages/en/memory.json";
 import type notes from "./messages/en/notes.json";
-import type notesApi from "./messages/en/notesApi.json";
 import type notesNote from "./messages/en/notesNote.json";
 import type notesShare from "./messages/en/notesShare.json";
 import type notesTemplates from "./messages/en/notesTemplates.json";
@@ -104,7 +103,6 @@ export type Messages = {
   memory: typeof memory;
   meetings: typeof meetings;
   notes: typeof notes;
-  notesApi: typeof notesApi;
   notesNote: typeof notesNote;
   notesShare: typeof notesShare;
   notesTemplates: typeof notesTemplates;

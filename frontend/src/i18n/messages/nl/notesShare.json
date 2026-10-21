@@ -18,6 +18,7 @@
         "description": "Iedereen met de link kan reageren."
       }
     },
+    "speaker": "Spreker {order, number}",
     "expires": "Verloopt",
     "never": "Nooit",
     "days": "{count, plural, one {# dag} other {# dagen}}",
@@ -26,29 +27,5 @@
     "updateFailed": "Kan de link niet bijwerken",
     "turnedOff": "Link uitgeschakeld",
     "turnOffFailed": "Kan de link niet uitschakelen"
-  },
-  "page": {
-    "unavailable": "Link niet beschikbaar",
-    "eyebrow": "Gedeelde vergadernotities",
-    "people": "{count, plural, one {# persoon} other {# personen}}",
-    "transcript": "Transcriptie",
-    "done": "Afgerond",
-    "open": "Openstaand",
-    "speaker": "Spreker {order, number}"
-  },
-  "gone": {
-    "title": "Deze link werkt niet meer",
-    "description": "Hij is misschien verlopen of uitgeschakeld. Vraag de afzender om een nieuwe."
-  },
-  "comments": {
-    "title": "Opmerkingen",
-    "loadFailed": "Kan de opmerkingen niet laden.",
-    "comment": "Je opmerking",
-    "commentPlaceholder": "Schrijf een reactie…",
-    "name": "Je naam",
-    "namePlaceholder": "Optioneel, anders wordt ‘{guest}’ getoond",
-    "guest": "Gast",
-    "post": "Opmerking plaatsen",
-    "postFailed": "Kan je opmerking niet plaatsen"
   }
 }

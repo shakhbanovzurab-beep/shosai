@@ -18,6 +18,7 @@
         "description": "Qualquer pessoa com o link pode responder."
       }
     },
+    "speaker": "Falante {order, number}",
     "expires": "Expiração",
     "never": "Nunca",
     "days": "{count, plural, one {# dia} many {# de dias} other {# dias}}",
@@ -26,29 +27,5 @@
     "updateFailed": "Não foi possível atualizar o link",
     "turnedOff": "Link desativado",
     "turnOffFailed": "Não foi possível desativar o link"
-  },
-  "page": {
-    "unavailable": "Link indisponível",
-    "eyebrow": "Notas de reunião compartilhadas",
-    "people": "{count, plural, one {# pessoa} many {# de pessoas} other {# pessoas}}",
-    "transcript": "Transcrição",
-    "done": "Concluído",
-    "open": "Em aberto",
-    "speaker": "Falante {order, number}"
-  },
-  "gone": {
-    "title": "Este link não funciona mais",
-    "description": "Ele pode ter expirado ou sido desativado. Peça um novo link a quem o enviou."
-  },
-  "comments": {
-    "title": "Comentários",
-    "loadFailed": "Não foi possível carregar os comentários.",
-    "comment": "Seu comentário",
-    "commentPlaceholder": "Escreva uma resposta…",
-    "name": "Seu nome",
-    "namePlaceholder": "Opcional; sem nome, aparece como “{guest}”",
-    "guest": "Visitante",
-    "post": "Publicar comentário",
-    "postFailed": "Não foi possível publicar seu comentário"
   }
 }

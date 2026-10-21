@@ -111,6 +111,7 @@
     "participant_not_removable": "Solo se pueden quitar las personas agregadas a mano.",
     "upload_not_claimable": "Esta subida no se puede usar como grabación. Sube el archivo de nuevo.",
     "meetings_not_kept": "Tu cuenta no guarda reuniones, así que no se pueden subir grabaciones.",
+    "private_meeting": "Esta reunión no se guardó, así que no hay nada que compartir.",
     "upload_rejected": "El archivo llegó corrupto. Súbelo de nuevo.",
     "upload_interrupted": "La subida se interrumpió. Revisa tu conexión y sube el archivo de nuevo."
   },

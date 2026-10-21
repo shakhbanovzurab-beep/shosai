@@ -1,19 +1,49 @@
-import { apiRequest, jsonBody } from "@/lib/api/request";
+import { apiClient } from "@/lib/api/app-client";
+import { dataOf } from "@/lib/api/client";
+import type { components } from "@/lib/api/generated/schema";
 
-import type { SharedCommentsResponse, ShareLinkResponse, ShareLinkSettings } from "../domain/share-link";
+import type { ShareLink, ShareLinkResponse, ShareLinkSettings } from "../domain/share-link";
 
-// Ссылка встречи и её комментарии на образцах `/api/…`, пока шаг 19 плана notes не переведёт их на `/v1`.
-const notePath = (noteId: string, rest: string) => `/api/notes/${encodeURIComponent(noteId)}/${rest}`;
-const commentsPath = (token: string) => `/api/s/${encodeURIComponent(token)}/comments`;
+type ShareLinkOut = components["schemas"]["ShareLinkOut"];
 
+const meeting = (id: string) => ({ params: { path: { meeting_id: id } } });
+
+const linkOf = (link: ShareLinkOut): ShareLink => ({
+  token: link.token,
+  path: link.path,
+  settings: {
+    showTranscript: link.show_transcript,
+    showNames: link.show_names,
+    allowComments: link.allow_comments,
+    expiry: link.expiry,
+  },
+  expiresAt: link.expires_at ?? null,
+});
+
+const answerOf = (answer: { link?: ShareLinkOut | null }): ShareLinkResponse => ({
+  link: answer.link ? linkOf(answer.link) : null,
+});
+
+/** Ссылка встречи на `/v1/notes/{id}/share-link` (план notes, шаг 13): одна на встречу, включена или нет. */
 export const shareApi = {
-  getShareLink: (noteId: string) => apiRequest<ShareLinkResponse>(notePath(noteId, "share-link")),
-  saveShareLink: (noteId: string, settings: ShareLinkSettings) =>
-    apiRequest<ShareLinkResponse>(notePath(noteId, "share-link"), jsonBody("PUT", settings)),
-  revokeShareLink: (noteId: string) =>
-    apiRequest<ShareLinkResponse>(notePath(noteId, "share-link"), { method: "DELETE" }),
-
-  listComments: (token: string) => apiRequest<SharedCommentsResponse>(commentsPath(token)),
-  addComment: (token: string, author: string, text: string) =>
-    apiRequest<SharedCommentsResponse>(commentsPath(token), jsonBody("POST", { author, text })),
+  getShareLink: async (noteId: string): Promise<ShareLinkResponse> =>
+    answerOf(await dataOf(apiClient.GET("/v1/notes/{meeting_id}/share-link", meeting(noteId)))),
+  saveShareLink: async (noteId: string, settings: ShareLinkSettings): Promise<ShareLinkResponse> =>
+    answerOf(
+      await dataOf(
+        apiClient.PUT("/v1/notes/{meeting_id}/share-link", {
+          ...meeting(noteId),
+          body: {
+            show_transcript: settings.showTranscript,
+            show_names: settings.showNames,
+            allow_comments: settings.allowComments,
+            expiry: settings.expiry,
+          },
+        }),
+      ),
+    ),
+  revokeShareLink: async (noteId: string): Promise<ShareLinkResponse> => {
+    await dataOf(apiClient.DELETE("/v1/notes/{meeting_id}/share-link", meeting(noteId)));
+    return { link: null };
+  },
 };

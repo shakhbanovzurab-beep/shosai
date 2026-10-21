@@ -111,6 +111,7 @@
     "participant_not_removable": "Only people added by hand can be removed.",
     "upload_not_claimable": "This upload can’t be used as a recording. Upload the file again.",
     "meetings_not_kept": "Meetings aren’t kept on your account, so recordings can’t be uploaded.",
+    "private_meeting": "This meeting wasn’t kept, so there’s nothing to share.",
     "upload_rejected": "The file arrived damaged. Upload it again.",
     "upload_interrupted": "The upload was interrupted. Check your connection and upload the file again."
   },

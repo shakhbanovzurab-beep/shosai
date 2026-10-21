@@ -25,12 +25,16 @@
   },
   "liveBadge": "In diretta",
   "liveSince": "{minutes, plural, =0 {Appena iniziata · termina alle {end}} one {Iniziata # min fa · termina alle {end}} many {Iniziata # min fa · termina alle {end}} other {Iniziata # min fa · termina alle {end}}}",
+  "recordingSince": "{minutes, plural, =0 {Registrazione appena iniziata} one {In registrazione da # min} many {In registrazione da # min} other {In registrazione da # min}}",
   "startsIn": "{minutes, plural, =0 {Inizia ora} one {Tra # min} many {Tra # min} other {Tra # min}}",
   "join": "Partecipa alla riunione",
+  "openRecording": "Apri",
   "opensInNewTab": "(si apre in una nuova scheda)",
   "source": {
     "shosai": "Stanza Shosai",
-    "in_person": "Di persona"
+    "in_person": "Di persona",
+    "recording": "Registrata in Shosai",
+    "upload": "Registrazione caricata"
   },
   "participants": "Partecipanti: {names}",
   "recap": {

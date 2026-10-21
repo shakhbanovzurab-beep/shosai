@@ -9,7 +9,8 @@ publishes its routes. Errors use `{"detail": "message"}`.
 consents on `GET/PATCH /v1/me` and `PUT/DELETE /v1/me/avatar`; devices on `/v1/me/devices*`; the data
 export on `POST /v1/me/exports` and `GET /v1/me/exports/latest`; account deletion on `POST /v1/me/deletion`
 (7-day window, a fresh sign-in within 15 minutes, re-verified by an emailed code in the dialog). See the
-backend's OpenAPI and `docs/plan/slices/identity.md`. The per-kind data lists of Privacy (shared chats,
+backend's OpenAPI and `docs/plan/slices/identity.md`. Privacy's "Don't keep my meetings" is notes' setting on
+`GET/PUT /v1/notes/settings` (`keep_meetings`, MT-D6), see `notes-api.md`. The per-kind data lists of Privacy (shared chats,
 artifacts, uploaded files, feedback) return when their owners serve them.
 
 ## Endpoints (prefix `/v1/settings`)

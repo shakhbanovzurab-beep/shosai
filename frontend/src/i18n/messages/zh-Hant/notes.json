@@ -111,6 +111,7 @@
     "participant_not_removable": "只能移除手動新增的人。",
     "upload_not_claimable": "這次上傳無法當作錄製內容使用，請重新上傳檔案。",
     "meetings_not_kept": "你的帳號不保留會議，因此無法上傳錄製內容。",
+    "private_meeting": "這場會議沒有保存，因此沒有可分享的內容。",
     "upload_rejected": "檔案傳到時已損毀，請重新上傳。",
     "upload_interrupted": "上傳中斷了。請檢查連線後重新上傳檔案。"
   },

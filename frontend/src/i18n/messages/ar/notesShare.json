@@ -18,6 +18,7 @@
         "description": "يمكن لأي شخص لديه الرابط الرد."
       }
     },
+    "speaker": "المتحدث {order, number}",
     "expires": "انتهاء الصلاحية",
     "never": "أبدًا",
     "days": "{count, plural, zero {# يوم} one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}}",
@@ -26,29 +27,5 @@
     "updateFailed": "تعذر تحديث الرابط",
     "turnedOff": "تم تعطيل الرابط",
     "turnOffFailed": "تعذر تعطيل الرابط"
-  },
-  "page": {
-    "unavailable": "الرابط غير متاح",
-    "eyebrow": "ملاحظات اجتماع مشتركة",
-    "people": "{count, plural, zero {# شخص} one {شخص واحد} two {شخصان} few {# أشخاص} many {# شخصًا} other {# شخص}}",
-    "transcript": "النص",
-    "done": "مكتملة",
-    "open": "مفتوحة",
-    "speaker": "المتحدث {order, number}"
-  },
-  "gone": {
-    "title": "لم يعد هذا الرابط يعمل",
-    "description": "ربما انتهت صلاحيته أو تم تعطيله. يمكن طلب رابط جديد من الشخص الذي أرسله."
-  },
-  "comments": {
-    "title": "التعليقات",
-    "loadFailed": "تعذر تحميل التعليقات.",
-    "comment": "تعليقك",
-    "commentPlaceholder": "كتابة رد…",
-    "name": "اسمك",
-    "namePlaceholder": "اختياري، وإلا فسيظهر «{guest}»",
-    "guest": "ضيف",
-    "post": "نشر التعليق",
-    "postFailed": "تعذر نشر التعليق"
   }
 }

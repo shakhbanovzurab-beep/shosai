@@ -25,12 +25,16 @@
   },
   "liveBadge": "En vivo",
   "liveSince": "{minutes, plural, =0 {Acaba de empezar · termina a las {end}} one {Empezó hace # min · termina a las {end}} many {Empezó hace # min · termina a las {end}} other {Empezó hace # min · termina a las {end}}}",
+  "recordingSince": "{minutes, plural, =0 {La grabación acaba de empezar} one {Grabando desde hace # min} many {Grabando desde hace # min} other {Grabando desde hace # min}}",
   "startsIn": "{minutes, plural, =0 {Empieza ahora} one {En # min} many {En # min} other {En # min}}",
   "join": "Unirse a la reunión",
+  "openRecording": "Abrir",
   "opensInNewTab": "(se abre en una pestaña nueva)",
   "source": {
     "shosai": "Sala de Shosai",
-    "in_person": "Presencial"
+    "in_person": "Presencial",
+    "recording": "Grabada en Shosai",
+    "upload": "Grabación subida"
   },
   "participants": "Participantes: {names}",
   "recap": {

@@ -18,6 +18,7 @@
         "description": "Alle mit dem Link können antworten."
       }
     },
+    "speaker": "Sprecher {order, number}",
     "expires": "Läuft ab",
     "never": "Nie",
     "days": "{count, plural, one {# Tag} other {# Tage}}",
@@ -26,29 +27,5 @@
     "updateFailed": "Der Link konnte nicht aktualisiert werden",
     "turnedOff": "Link deaktiviert",
     "turnOffFailed": "Der Link konnte nicht deaktiviert werden"
-  },
-  "page": {
-    "unavailable": "Link nicht verfügbar",
-    "eyebrow": "Geteilte Meeting-Notizen",
-    "people": "{count, plural, one {# Person} other {# Personen}}",
-    "transcript": "Transkript",
-    "done": "Erledigt",
-    "open": "Offen",
-    "speaker": "Sprecher {order, number}"
-  },
-  "gone": {
-    "title": "Dieser Link funktioniert nicht mehr",
-    "description": "Er ist möglicherweise abgelaufen oder wurde deaktiviert. Bitte die Person, die ihn dir geschickt hat, um einen neuen."
-  },
-  "comments": {
-    "title": "Kommentare",
-    "loadFailed": "Die Kommentare konnten nicht geladen werden.",
-    "comment": "Dein Kommentar",
-    "commentPlaceholder": "Antwort schreiben…",
-    "name": "Dein Name",
-    "namePlaceholder": "Optional, sonst wird „{guest}“ angezeigt",
-    "guest": "Gast",
-    "post": "Kommentar senden",
-    "postFailed": "Dein Kommentar konnte nicht gesendet werden"
   }
 }

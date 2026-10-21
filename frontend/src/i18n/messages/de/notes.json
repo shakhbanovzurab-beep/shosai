@@ -111,6 +111,7 @@
     "participant_not_removable": "Entfernen lassen sich nur von Hand hinzugefügte Personen.",
     "upload_not_claimable": "Dieser Upload lässt sich nicht als Aufnahme verwenden. Lade die Datei noch einmal hoch.",
     "meetings_not_kept": "In deinem Konto werden keine Meetings gespeichert, deshalb lassen sich keine Aufnahmen hochladen.",
+    "private_meeting": "Dieses Meeting wurde nicht gespeichert, daher gibt es nichts zu teilen.",
     "upload_rejected": "Die Datei kam beschädigt an. Lade sie noch einmal hoch.",
     "upload_interrupted": "Das Hochladen wurde unterbrochen. Prüfe deine Verbindung und lade die Datei noch einmal hoch."
   },

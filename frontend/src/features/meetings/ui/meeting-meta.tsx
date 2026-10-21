@@ -1,5 +1,5 @@
 import { cn } from "cn";
-import { MapPin, Users, Video } from "lucide-react";
+import { MapPin, Mic, Upload, Users, Video } from "lucide-react";
 import { siGooglemeet } from "simple-icons";
 import { useFormatter, useTranslations } from "use-intl";
 
@@ -11,7 +11,7 @@ import { getInitials } from "@/lib/utils";
 
 import type { Meeting, MeetingSource } from "../domain/meeting";
 
-type CallService = Exclude<MeetingSource, "shosai" | "in_person">;
+type CallService = Exclude<MeetingSource, "shosai" | "in_person" | "recording" | "upload">;
 
 // The call services' own names, written the same in every language; Studio's words come from the catalog.
 const SERVICE_NAMES: Record<CallService, string> = {
@@ -30,10 +30,12 @@ function SourceIcon({ source }: { source: MeetingSource }) {
   if (source === "zoom") return <Video className={className} aria-hidden="true" />;
   if (source === "teams") return <Users className={className} aria-hidden="true" />;
   if (source === "shosai") return <ShosaiMark className={className} />;
+  if (source === "recording") return <Mic className={className} aria-hidden="true" />;
+  if (source === "upload") return <Upload className={className} aria-hidden="true" />;
   return <MapPin className={className} aria-hidden="true" />;
 }
 
-/** Where the meeting happens: the call service, a Shosai room, or the room for an in-person meeting. */
+/** Where the meeting happens: the call service, a Shosai room, the room for an in-person meeting, or how it was recorded. */
 export function MeetingSourceLabel({ meeting }: { meeting: Pick<Meeting, "source" | "location"> }) {
   const t = useTranslations("meetings");
   const { source, location } = meeting;

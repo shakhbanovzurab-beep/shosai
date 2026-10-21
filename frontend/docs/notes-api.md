@@ -1,7 +1,8 @@
 # Notes API
 
-The contract between Notes (`/app/notes`, a meeting's page `/app/notes/{id}`), the home screen's recent notes and
-the backend's `notes` slice ([notes plan](../../docs/plan/slices/notes.md),
+The contract between Notes (`/app/notes`, a meeting's page `/app/notes/{id}`), the home screen's recent notes, the
+recordings in Meetings (`/app/meetings`), the "Don't keep my meetings" switch in Settings › Privacy and the backend's
+`notes` slice ([notes plan](../../docs/plan/slices/notes.md),
 [ADR 0057](../../docs/adr/0057-notes-and-meetings-slice-names.md)). The OpenAPI schema is the source of truth:
 `src/lib/api/generated/schema.d.ts`. The slice calls `/v1/*` through the typed client in its `api/` layer; its
 `model/` maps the snake_case shapes to the camelCase ones the screens use (`model/library-cards.ts`,
@@ -9,8 +10,9 @@ the backend's `notes` slice ([notes plan](../../docs/plan/slices/notes.md),
 (ADR 0008); `domain/problems.ts` lists the codes the interface words in the person's language, and any other code
 shows the server's text with the request id.
 
-The share link and its comments (`ShareLinkPanel`, the public page) still run on the slice's mocks until step 19 of
-the plan; nothing else in Notes has sample data.
+Nothing in Notes runs on sample data or mocks: in `npm run dev` the slice is not mocked (F2-D1), so its screens need
+`npm run dev:api`. The public page of a share link (`/s/{token}`, with its comments) is the `site` package's; until
+it exists the link the panel gives opens nothing (the owner's decision of 2026-10-21).
 
 ## Routes
 
@@ -31,6 +33,8 @@ the plan; nothing else in Notes has sample data.
 | `GET`, `POST` | `/v1/notes/templates` | Shipped templates by their codes and the person's own; create one |
 | `POST` | `/v1/me/uploads…` (purpose `recording`), then `/v1/notes/imports` | Upload a recording, then claim it as a meeting |
 | `GET` | `/v1/me/runs/{id}` | A run's state and failure code: the rewrite's wait and the page's notices |
+| `GET`, `PUT`, `DELETE` | `/v1/notes/{id}/share-link` | Share › Link: the link is on or off; `PUT` turns it on or changes its settings and answers its `path` and `expires_at`; `DELETE` turns it off with its comments |
+| `GET`, `PUT` | `/v1/notes/settings` | `keep_meetings`: Settings › Privacy › "Don't keep my meetings" (MT-D6) |
 
 ## Behaviour the UI relies on
 
@@ -52,5 +56,14 @@ the plan; nothing else in Notes has sample data.
   on another's, the others "Speaker N", a line with no voice "Unknown speaker" (`domain/meeting-page.ts`, `voiceOf`).
   On a live meeting without diarization voice 0 is the owner's.
 - **Action items** are read-only (MT-D4) until the tasks slice owns them.
+- **Share link.** One per meeting, for whoever may manage it; the address is the server's `path` on the cabinet's
+  origin. A switch moves at once and moves back if refused; `private_meeting` means the meeting was not kept.
+- **Meetings.** The Meetings section (the `meetings` slice, ADR 0057) shows the first page of 50 recordings as its
+  live and past meetings: an active one is live and opens its page, a finished one shows Leo's summary and its task
+  count once its notes are ready; the section reads it again every 1.5 s while one is live or being written
+  (`features/meetings/model/meetings-resource.ts`). Scheduled meetings, the "Upcoming" filter and "New meeting"
+  are the `meetings` slice's samples and show only on the mocks while it has no API (`src/config/unserved-slices.ts`).
+- **Don't keep my meetings.** Turning it on asks first: meetings started from then on are shown live and kept
+  nowhere; meetings already kept stay. Turning it off applies at once.
 - **Rewrites.** A rewrite waits for its run up to 20 minutes; the page shows Leo writing and a toast when the notes
   are back or the run failed.

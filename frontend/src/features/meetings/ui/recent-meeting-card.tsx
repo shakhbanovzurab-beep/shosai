@@ -13,6 +13,8 @@ export function RecentMeetingCard({ meeting, now }: { meeting: Meeting; now: num
   const t = useTranslations("meetings");
   const times = useMeetingTimes();
   const { recap } = meeting;
+  // Страница встречи в «Заметках»: у записи она есть и до того, как Leo написал итог.
+  const noteId = recap?.noteId ?? meeting.recording?.noteId;
   const when = t("recap.when", {
     day: times.day(meeting.start, now),
     time: times.range(meeting),
@@ -23,9 +25,9 @@ export function RecentMeetingCard({ meeting, now }: { meeting: Meeting; now: num
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-0.5">
           <h3 dir="auto" className="truncate font-medium">
-            {recap ? (
+            {noteId ? (
               <Link
-                href={`/app/notes/${recap.noteId}`}
+                href={`/app/notes/${noteId}`}
                 className="outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-3 focus-visible:after:ring-ring/50"
               >
                 {meeting.title}
@@ -35,13 +37,13 @@ export function RecentMeetingCard({ meeting, now }: { meeting: Meeting; now: num
             )}
           </h3>
           <span className="text-muted-foreground text-xs tabular-nums">{when}</span>
-          {recap ? (
+          {noteId ? (
             <span className="mt-1">
-              <RecordingShareBadge recordingId={recap.noteId} />
+              <RecordingShareBadge recordingId={noteId} />
             </span>
           ) : null}
         </div>
-        {recap ? (
+        {noteId ? (
           <ChevronRight
             className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform ltr:group-has-[a:hover]:translate-x-0.5 rtl:-scale-x-100 rtl:group-has-[a:hover]:-translate-x-0.5"
             aria-hidden="true"
@@ -64,7 +66,7 @@ export function RecentMeetingCard({ meeting, now }: { meeting: Meeting; now: num
               {t("recap.tasks", { count: recap.tasks })}
             </span>
           ) : null}
-          {recap && recap.decisions > 0 ? (
+          {recap?.decisions ? (
             <span className="inline-flex items-center gap-1.5">
               <Gavel className="size-3.5 text-muted-foreground" aria-hidden="true" />
               {t("recap.decisions", { count: recap.decisions })}

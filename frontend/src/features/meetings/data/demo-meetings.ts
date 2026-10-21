@@ -14,7 +14,7 @@ const people = (...names: string[]) => names.map((name) => ({ name }));
 const at = (base: Date, dayOffset: number, hour: number, minute = 0) =>
   setMinutes(setHours(addDays(startOfDay(base), dayOffset), hour), minute);
 
-type Draft = Omit<Meeting, "start" | "end" | "recap" | "location"> & {
+type Draft = Omit<Meeting, "start" | "end" | "recap" | "recording" | "location"> & {
   start: Date;
   minutes: number;
   location?: string;
@@ -88,6 +88,7 @@ export function demoMeetings(now = new Date()): Meeting[] {
     end: addMinutes(start, minutes).toISOString(),
     location: location ?? null,
     recap: null,
+    recording: null,
   }));
 }
 

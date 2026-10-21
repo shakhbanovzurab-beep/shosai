@@ -31,6 +31,7 @@ export const NOTE_PROBLEMS = [
   "participant_not_removable",
   "upload_not_claimable",
   "meetings_not_kept",
+  "private_meeting",
 ] as const;
 
 export type NoteProblem = (typeof NOTE_PROBLEMS)[number];

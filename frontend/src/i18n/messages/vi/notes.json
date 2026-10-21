@@ -111,6 +111,7 @@
     "participant_not_removable": "Chỉ có thể gỡ những người được thêm thủ công.",
     "upload_not_claimable": "Không thể dùng lần tải lên này làm bản ghi. Hãy tải tệp lên lại.",
     "meetings_not_kept": "Tài khoản của bạn không lưu cuộc họp nên không thể tải bản ghi lên.",
+    "private_meeting": "Cuộc họp này không được lưu nên không có gì để chia sẻ.",
     "upload_rejected": "Tệp đến nơi bị hỏng. Hãy tải lên lại.",
     "upload_interrupted": "Quá trình tải lên bị gián đoạn. Hãy kiểm tra kết nối và tải tệp lên lại."
   },

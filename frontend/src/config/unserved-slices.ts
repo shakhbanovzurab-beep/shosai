@@ -4,10 +4,10 @@
  * ошибкой. Скрываются только срезы из этого списка: ошибки построенных срезов показываются как обычно. Срез уходит
  * из списка в том же изменении, что приносит его API.
  */
-const UNSERVED_SLICES: ReadonlySet<string> = new Set(["hubs"]);
+const UNSERVED_SLICES: ReadonlySet<string> = new Set(["hubs", "meetings"]);
 
-// То же условие, что включает моки в main.tsx; в сборке оно сворачивается в false.
-const MOCK_API = import.meta.env.DEV && import.meta.env.MODE !== "api";
+/** Работает ли кабинет на моках разработки (`npm run dev`): то же условие, что в main.tsx; в сборке — false. */
+export const MOCK_API = import.meta.env.DEV && import.meta.env.MODE !== "api";
 
 /** Отвечает ли сейчас кому-то API среза сервера `slice`: настоящий или моки разработки. */
 export const isServed = (slice: string) => MOCK_API || !UNSERVED_SLICES.has(slice);

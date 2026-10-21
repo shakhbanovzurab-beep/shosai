@@ -25,12 +25,16 @@
   },
   "liveBadge": "Canlı",
   "liveSince": "{minutes, plural, =0 {Yeni başladı · bitiş: {end}} one {# dk önce başladı · bitiş: {end}} other {# dk önce başladı · bitiş: {end}}}",
+  "recordingSince": "{minutes, plural, =0 {Kayıt yeni başladı} one {# dk’dır kaydediliyor} other {# dk’dır kaydediliyor}}",
   "startsIn": "{minutes, plural, =0 {Şimdi başlıyor} one {# dk sonra} other {# dk sonra}}",
   "join": "Toplantıya katıl",
+  "openRecording": "Aç",
   "opensInNewTab": "(yeni sekmede açılır)",
   "source": {
     "shosai": "Shosai odası",
-    "in_person": "Yüz yüze"
+    "in_person": "Yüz yüze",
+    "recording": "Shosai’de kaydedildi",
+    "upload": "Yüklenen kayıt"
   },
   "participants": "Katılımcılar: {names}",
   "recap": {

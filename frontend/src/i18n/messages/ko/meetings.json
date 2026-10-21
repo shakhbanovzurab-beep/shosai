@@ -25,12 +25,16 @@
   },
   "liveBadge": "진행 중",
   "liveSince": "{minutes, plural, =0 {방금 시작 · {end} 종료} other {#분 전 시작 · {end} 종료}}",
+  "recordingSince": "{minutes, plural, =0 {녹음을 막 시작했어요} other {#분째 녹음 중}}",
   "startsIn": "{minutes, plural, =0 {곧 시작} other {#분 후}}",
   "join": "회의 참여",
+  "openRecording": "열기",
   "opensInNewTab": "(새 탭에서 열림)",
   "source": {
     "shosai": "Shosai 회의실",
-    "in_person": "대면"
+    "in_person": "대면",
+    "recording": "Shosai에서 녹음",
+    "upload": "업로드한 녹음"
   },
   "participants": "참석자: {names}",
   "recap": {

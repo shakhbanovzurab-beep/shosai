@@ -18,6 +18,7 @@
         "description": "任何知道連結的人都能回覆。"
       }
     },
+    "speaker": "發言者 {order, number}",
     "expires": "到期時間",
     "never": "永不",
     "days": "{count, plural, other {# 天}}",
@@ -26,29 +27,5 @@
     "updateFailed": "無法更新連結",
     "turnedOff": "已關閉連結",
     "turnOffFailed": "無法關閉連結"
-  },
-  "page": {
-    "unavailable": "無法使用連結",
-    "eyebrow": "已共用的會議筆記",
-    "people": "{count, plural, other {# 位參與者}}",
-    "transcript": "逐字稿",
-    "done": "已完成",
-    "open": "未完成",
-    "speaker": "發言者 {order, number}"
-  },
-  "gone": {
-    "title": "這個連結已失效",
-    "description": "連結可能已過期或已關閉。請向傳送連結給你的人索取新連結。"
-  },
-  "comments": {
-    "title": "留言",
-    "loadFailed": "無法載入留言。",
-    "comment": "你的留言",
-    "commentPlaceholder": "撰寫回覆…",
-    "name": "你的名稱",
-    "namePlaceholder": "選填，未填寫時會顯示為「{guest}」",
-    "guest": "訪客",
-    "post": "發布留言",
-    "postFailed": "無法發布你的留言"
   }
 }

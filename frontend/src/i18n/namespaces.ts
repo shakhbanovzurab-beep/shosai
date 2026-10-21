@@ -36,7 +36,6 @@ export const NAMESPACES = [
   "memory",
   "meetings",
   "notes",
-  "notesApi",
   "notesNote",
   "notesShare",
   "notesTemplates",

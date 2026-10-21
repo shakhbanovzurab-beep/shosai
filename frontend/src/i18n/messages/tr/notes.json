@@ -111,6 +111,7 @@
     "participant_not_removable": "Yalnızca elle eklenen kişiler kaldırılabilir.",
     "upload_not_claimable": "Bu yükleme kayıt olarak kullanılamaz. Dosyayı yeniden yükleyin.",
     "meetings_not_kept": "Hesabınızda toplantılar saklanmıyor, bu yüzden kayıt yüklenemez.",
+    "private_meeting": "Bu toplantı saklanmadı, bu yüzden paylaşılacak bir şey yok.",
     "upload_rejected": "Dosya bozuk geldi. Yeniden yükleyin.",
     "upload_interrupted": "Yükleme yarıda kesildi. Bağlantınızı kontrol edip dosyayı yeniden yükleyin."
   },

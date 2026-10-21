@@ -111,6 +111,7 @@
     "participant_not_removable": "Hanya orang yang ditambahkan secara manual yang dapat dihapus.",
     "upload_not_claimable": "Tidak dapat memakai unggahan ini sebagai rekaman. Unggah file lagi.",
     "meetings_not_kept": "Akun Anda tidak menyimpan rapat, jadi Anda tidak dapat mengunggah rekaman.",
+    "private_meeting": "Rapat ini tidak disimpan, jadi tidak ada yang bisa dibagikan.",
     "upload_rejected": "File tiba dalam keadaan rusak. Unggah lagi.",
     "upload_interrupted": "Unggahan terputus. Periksa koneksi Anda dan unggah file lagi."
   },

@@ -4,11 +4,15 @@ import { dayIn } from "@/i18n/calendar-days";
 
 /* A meeting as the Meetings page sees it: scheduled, in progress or over, wherever it takes place. */
 
-export const MEETING_SOURCES = ["google_meet", "zoom", "teams", "shosai", "in_person"] as const;
+// `recording` и `upload` — записи «Заметок»: сделанная в приложении и загруженная файлом; площадка звонка у них неизвестна.
+export const MEETING_SOURCES = ["google_meet", "zoom", "teams", "shosai", "in_person", "recording", "upload"] as const;
 export type MeetingSource = (typeof MEETING_SOURCES)[number];
 
-/** What Leo made of a recorded meeting; the full notes live in Notes. */
-export type MeetingRecap = { noteId: string; summary: string; tasks: number; decisions: number };
+/** What Leo made of a recorded meeting; the full notes live in Notes. `decisions` is null when not counted. */
+export type MeetingRecap = { noteId: string; summary: string; tasks: number; decisions: number | null };
+
+/** Запись встречи в «Заметках»: её страница, идёт ли она сейчас и меняется ли ещё (идёт или пишутся заметки). */
+export type MeetingRecording = { noteId: string; live: boolean; busy: boolean };
 
 export type Meeting = {
   id: string;
@@ -23,11 +27,15 @@ export type Meeting = {
   participants: { name: string }[];
   /** Null until the meeting has been recorded and summarized. */
   recap: MeetingRecap | null;
+  /** Null for a meeting that has no recording in Notes. */
+  recording: MeetingRecording | null;
 };
 
 export type MeetingStatus = "live" | "upcoming" | "past";
 
 export function meetingStatus(meeting: Meeting, now: number): MeetingStatus {
+  // Запись идёт, пока её не закончили, сколько бы она ни длилась; конец законченной уже прошёл.
+  if (meeting.recording) return meeting.recording.live ? "live" : "past";
   if (Date.parse(meeting.end) <= now) return "past";
   return Date.parse(meeting.start) <= now ? "live" : "upcoming";
 }

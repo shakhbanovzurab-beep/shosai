@@ -42,6 +42,8 @@ export function useMeetingTimes() {
     /** For a meeting in progress: "Started 18 min ago · ends 11:15 AM". */
     live: (meeting: Meeting, now: number) =>
       t("liveSince", { minutes: minutesSinceStart(meeting, now), end: time(meeting.end) }),
+    /** For a recording in progress, whose end nobody knows yet: "Recording for 18 min". */
+    recording: (meeting: Meeting, now: number) => t("recordingSince", { minutes: minutesSinceStart(meeting, now) }),
     /** For a meeting within the hour: "In 25 min", or "Starting now". */
     startsIn: (meeting: Meeting, now: number) => t("startsIn", { minutes: minutesUntilStart(meeting, now) }),
   };

@@ -25,12 +25,16 @@
   },
   "liveBadge": "लाइव",
   "liveSince": "{minutes, plural, =0 {अभी शुरू हुई · {end} पर ख़त्म होगी} one {# मिनट पहले शुरू हुई · {end} पर ख़त्म होगी} other {# मिनट पहले शुरू हुई · {end} पर ख़त्म होगी}}",
+  "recordingSince": "{minutes, plural, =0 {रिकॉर्डिंग अभी शुरू हुई} one {# मिनट से रिकॉर्डिंग जारी} other {# मिनट से रिकॉर्डिंग जारी}}",
   "startsIn": "{minutes, plural, =0 {अभी शुरू हो रही है} one {# मिनट में} other {# मिनट में}}",
   "join": "मीटिंग में शामिल हों",
+  "openRecording": "खोलें",
   "opensInNewTab": "(नए टैब में खुलता है)",
   "source": {
     "shosai": "Shosai रूम",
-    "in_person": "आमने-सामने"
+    "in_person": "आमने-सामने",
+    "recording": "Shosai में रिकॉर्ड की गई",
+    "upload": "अपलोड की गई रिकॉर्डिंग"
   },
   "participants": "प्रतिभागी: {names}",
   "recap": {

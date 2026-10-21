@@ -18,6 +18,7 @@
         "description": "Siapa saja yang memiliki tautan dapat membalas."
       }
     },
+    "speaker": "Pembicara {order, number}",
     "expires": "Kedaluwarsa",
     "never": "Tidak pernah",
     "days": "{count, plural, other {# hari}}",
@@ -26,29 +27,5 @@
     "updateFailed": "Tidak dapat memperbarui tautan",
     "turnedOff": "Tautan dinonaktifkan",
     "turnOffFailed": "Tidak dapat menonaktifkan tautan"
-  },
-  "page": {
-    "unavailable": "Tautan tidak tersedia",
-    "eyebrow": "Catatan rapat yang dibagikan",
-    "people": "{count, plural, other {# orang}}",
-    "transcript": "Transkrip",
-    "done": "Selesai",
-    "open": "Belum selesai",
-    "speaker": "Pembicara {order, number}"
-  },
-  "gone": {
-    "title": "Tautan ini sudah tidak berfungsi",
-    "description": "Tautan mungkin sudah kedaluwarsa atau dinonaktifkan. Minta tautan baru kepada orang yang mengirimkannya."
-  },
-  "comments": {
-    "title": "Komentar",
-    "loadFailed": "Tidak dapat memuat komentar.",
-    "comment": "Komentar Anda",
-    "commentPlaceholder": "Tulis balasan…",
-    "name": "Nama Anda",
-    "namePlaceholder": "Opsional, jika kosong ditampilkan sebagai “{guest}”",
-    "guest": "Tamu",
-    "post": "Kirim komentar",
-    "postFailed": "Tidak dapat mengirim komentar Anda"
   }
 }

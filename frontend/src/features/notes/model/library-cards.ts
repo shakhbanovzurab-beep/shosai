@@ -8,6 +8,7 @@ export function cardOf(out: MeetingCardOut): MeetingCard {
     id: out.id,
     title: out.title,
     status: out.status,
+    source: out.source,
     startedAt: out.started_at,
     durationMinutes: Math.round(out.seconds / 60),
     owned: out.owned,

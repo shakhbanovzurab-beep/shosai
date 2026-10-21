@@ -111,6 +111,7 @@
     "participant_not_removable": "Alleen mensen die je zelf hebt toegevoegd, kun je verwijderen.",
     "upload_not_claimable": "Deze upload kan niet als opname worden gebruikt. Upload het bestand opnieuw.",
     "meetings_not_kept": "Je account bewaart geen vergaderingen, dus je kunt geen opnames uploaden.",
+    "private_meeting": "Deze vergadering is niet bewaard, dus er is niets om te delen.",
     "upload_rejected": "Het bestand kwam beschadigd aan. Upload het opnieuw.",
     "upload_interrupted": "Het uploaden is onderbroken. Controleer je verbinding en upload het bestand opnieuw."
   },

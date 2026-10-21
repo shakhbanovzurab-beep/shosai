@@ -18,6 +18,7 @@
         "description": "Chiunque abbia il link può rispondere."
       }
     },
+    "speaker": "Partecipante {order, number}",
     "expires": "Scadenza",
     "never": "Mai",
     "days": "{count, plural, one {# giorno} many {# di giorni} other {# giorni}}",
@@ -26,29 +27,5 @@
     "updateFailed": "Impossibile aggiornare il link",
     "turnedOff": "Link disattivato",
     "turnOffFailed": "Impossibile disattivare il link"
-  },
-  "page": {
-    "unavailable": "Link non disponibile",
-    "eyebrow": "Note della riunione condivise",
-    "people": "{count, plural, one {# persona} many {# di persone} other {# persone}}",
-    "transcript": "Trascrizione",
-    "done": "Completata",
-    "open": "Aperta",
-    "speaker": "Partecipante {order, number}"
-  },
-  "gone": {
-    "title": "Questo link non funziona più",
-    "description": "Potrebbe essere scaduto o stato disattivato. Chiedine uno nuovo alla persona che te l’ha inviato."
-  },
-  "comments": {
-    "title": "Commenti",
-    "loadFailed": "Impossibile caricare i commenti.",
-    "comment": "Il tuo commento",
-    "commentPlaceholder": "Scrivi una risposta…",
-    "name": "Il tuo nome",
-    "namePlaceholder": "Facoltativo, altrimenti compari come «{guest}»",
-    "guest": "Ospite",
-    "post": "Pubblica commento",
-    "postFailed": "Impossibile pubblicare il commento"
   }
 }

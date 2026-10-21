@@ -105,8 +105,10 @@ switches its `api/` to the generated client and deletes its mocks and its regist
 `file-manager-api.md` and `notes-api.md` do.
 
 Without the mocks (`npm run dev:api`, a build) a slice with no API yet would show only errors. Such slices are
-listed by their backend name in `src/config/unserved-slices.ts` (now `hubs`): another slice's screen that composes
-one of their widgets renders it only when `isServed(slice)`, as the meeting page does with the hub chip. Only the
+listed by their backend name in `src/config/unserved-slices.ts` (now `hubs` and `meetings`): another slice's screen
+that composes one of their widgets renders it only when `isServed(slice)`, as the meeting page does with the hub chip,
+and a slice's own screen hides its sample parts the same way, as Meetings hides its scheduled meetings and shows notes'
+recordings. Only the
 listed slices are hidden this way; a built slice's failures show as they always do. A slice leaves the list in the
 change that brings its API.
 

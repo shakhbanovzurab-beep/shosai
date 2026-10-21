@@ -5,10 +5,12 @@ import type { Me } from "@/features/identity/domain/session";
 import { SettingsGroup } from "../settings-row";
 import { ConsentSetting } from "./consent-setting";
 import { ConsentSwitch } from "./consent-switch";
+import { KeepMeetingsSetting } from "./keep-meetings-setting";
 import { YourData } from "./your-data";
 
 /**
- * Settings › Privacy: согласия из identity (`PATCH /v1/me`), cookie аналитики и выгрузка всех данных. Согласие на
+ * Settings › Privacy: согласия из identity (`PATCH /v1/me`), хранение встреч из «Заметок» (`/v1/notes/settings`),
+ * cookie аналитики и выгрузка всех данных. Согласие на
  * обработку в ЕС спрашивается только у аккаунта в российском доме — у остальных данные и так в ЕС.
  */
 export function PrivacySection({ me }: { me: Me }) {
@@ -23,6 +25,7 @@ export function PrivacySection({ me }: { me: Me }) {
         <ConsentSwitch me={me} kind="share_location" title={t("shareLocation")} description={t("shareLocationHint")} />
         <ConsentSwitch me={me} kind="marketing" title={t("marketing")} description={t("marketingHint")} />
       </SettingsGroup>
+      <KeepMeetingsSetting />
       <ConsentSetting />
       <YourData />
     </div>

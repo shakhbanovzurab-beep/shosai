@@ -111,6 +111,7 @@
     "participant_not_removable": "Si possono rimuovere solo le persone aggiunte a mano.",
     "upload_not_claimable": "Questo caricamento non si può usare come registrazione. Carica di nuovo il file.",
     "meetings_not_kept": "Il tuo account non conserva le riunioni, quindi non puoi caricare registrazioni.",
+    "private_meeting": "Questa riunione non è stata salvata, quindi non c’è nulla da condividere.",
     "upload_rejected": "Il file è arrivato danneggiato. Caricalo di nuovo.",
     "upload_interrupted": "Il caricamento si è interrotto. Controlla la connessione e carica di nuovo il file."
   },

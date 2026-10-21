@@ -18,6 +18,7 @@
         "description": "Anyone with the link can reply."
       }
     },
+    "speaker": "Speaker {order, number}",
     "expires": "Expires",
     "never": "Never",
     "days": "{count, plural, one {# day} other {# days}}",
@@ -26,29 +27,5 @@
     "updateFailed": "Couldn’t update the link",
     "turnedOff": "Link turned off",
     "turnOffFailed": "Couldn’t turn the link off"
-  },
-  "page": {
-    "unavailable": "Link unavailable",
-    "eyebrow": "Shared meeting notes",
-    "people": "{count, plural, one {# person} other {# people}}",
-    "transcript": "Transcript",
-    "done": "Done",
-    "open": "Open",
-    "speaker": "Speaker {order, number}"
-  },
-  "gone": {
-    "title": "This link doesn’t work anymore",
-    "description": "It may have expired or been turned off. Ask the person who sent it for a new one."
-  },
-  "comments": {
-    "title": "Comments",
-    "loadFailed": "Couldn’t load the comments.",
-    "comment": "Your comment",
-    "commentPlaceholder": "Write a reply…",
-    "name": "Your name",
-    "namePlaceholder": "Optional, shown as “{guest}” otherwise",
-    "guest": "Guest",
-    "post": "Post comment",
-    "postFailed": "Couldn’t post your comment"
   }
 }

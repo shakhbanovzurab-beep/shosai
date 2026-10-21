@@ -18,6 +18,7 @@
         "description": "Bağlantıya sahip herkes yanıt verebilir."
       }
     },
+    "speaker": "Konuşmacı {order, number}",
     "expires": "Geçerlilik süresi",
     "never": "Süresiz",
     "days": "{count, plural, one {# gün} other {# gün}}",
@@ -26,29 +27,5 @@
     "updateFailed": "Bağlantı güncellenemedi",
     "turnedOff": "Bağlantı devre dışı bırakıldı",
     "turnOffFailed": "Bağlantı devre dışı bırakılamadı"
-  },
-  "page": {
-    "unavailable": "Bağlantı kullanılamıyor",
-    "eyebrow": "Paylaşılan toplantı notları",
-    "people": "{count, plural, one {# kişi} other {# kişi}}",
-    "transcript": "Transkript",
-    "done": "Tamamlandı",
-    "open": "Açık",
-    "speaker": "Konuşmacı {order, number}"
-  },
-  "gone": {
-    "title": "Bu bağlantı artık çalışmıyor",
-    "description": "Süresi dolmuş veya devre dışı bırakılmış olabilir. Bağlantıyı gönderen kişiden yenisini isteyin."
-  },
-  "comments": {
-    "title": "Yorumlar",
-    "loadFailed": "Yorumlar yüklenemedi.",
-    "comment": "Yorumunuz",
-    "commentPlaceholder": "Yanıt yazın…",
-    "name": "Adınız",
-    "namePlaceholder": "İsteğe bağlı; boş bırakırsanız “{guest}” olarak görünür",
-    "guest": "Misafir",
-    "post": "Yorum gönder",
-    "postFailed": "Yorumunuz gönderilemedi"
   }
 }

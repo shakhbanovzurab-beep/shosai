@@ -25,12 +25,16 @@
   },
   "liveBadge": "Trực tiếp",
   "liveSince": "{minutes, plural, =0 {Vừa bắt đầu · kết thúc lúc {end}} other {Bắt đầu # phút trước · kết thúc lúc {end}}}",
+  "recordingSince": "{minutes, plural, =0 {Vừa bắt đầu ghi} other {Đang ghi # phút}}",
   "startsIn": "{minutes, plural, =0 {Đang bắt đầu} other {Sau # phút}}",
   "join": "Tham gia cuộc họp",
+  "openRecording": "Mở",
   "opensInNewTab": "(mở trong thẻ mới)",
   "source": {
     "shosai": "Phòng Shosai",
-    "in_person": "Gặp mặt trực tiếp"
+    "in_person": "Gặp mặt trực tiếp",
+    "recording": "Ghi trong Shosai",
+    "upload": "Bản ghi đã tải lên"
   },
   "participants": "Người tham gia: {names}",
   "recap": {

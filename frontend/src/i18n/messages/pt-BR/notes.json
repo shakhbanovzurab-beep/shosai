@@ -111,6 +111,7 @@
     "participant_not_removable": "Só é possível remover pessoas adicionadas manualmente.",
     "upload_not_claimable": "Este upload não pode ser usado como gravação. Faça upload do arquivo novamente.",
     "meetings_not_kept": "Sua conta não guarda reuniões, então não é possível fazer upload de gravações.",
+    "private_meeting": "Esta reunião não foi guardada, então não há nada para compartilhar.",
     "upload_rejected": "O arquivo chegou corrompido. Faça upload dele novamente.",
     "upload_interrupted": "O upload foi interrompido. Verifique sua conexão e faça upload do arquivo novamente."
   },

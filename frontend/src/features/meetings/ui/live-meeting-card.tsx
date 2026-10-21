@@ -1,12 +1,23 @@
+import { ArrowRight } from "lucide-react";
+import { useTranslations } from "use-intl";
+
+import { Button } from "@/components/ui/button";
+import { Link } from "@/lib/navigation";
+
 import type { Meeting } from "../domain/meeting";
 import { JoinButton } from "./join-button";
 import { LiveBadge, MeetingParticipants, MeetingSourceLabel } from "./meeting-meta";
 import { useMeetingTimes } from "./use-meeting-times";
 
-/** The meeting happening now, set apart from everything else on the page. */
+/**
+ * The meeting happening now, set apart from everything else on the page. A call opens to join; a recording
+ * in Notes opens its page with the transcript as it is written.
+ */
 export function LiveMeetingCard({ meeting, now }: { meeting: Meeting; now: number }) {
+  const t = useTranslations("meetings");
   const times = useMeetingTimes();
   const titleId = `meeting-${meeting.id}`;
+  const { recording } = meeting;
   return (
     <article
       aria-labelledby={titleId}
@@ -16,7 +27,7 @@ export function LiveMeetingCard({ meeting, now }: { meeting: Meeting; now: numbe
       <div className="flex min-w-0 flex-col gap-3">
         <div className="flex flex-wrap items-center gap-2 text-muted-foreground text-sm">
           <LiveBadge />
-          <span>{times.live(meeting, now)}</span>
+          <span>{recording ? times.recording(meeting, now) : times.live(meeting, now)}</span>
         </div>
         <h3 id={titleId} dir="auto" className="font-semibold text-xl tracking-tight">
           {meeting.title}
@@ -26,7 +37,16 @@ export function LiveMeetingCard({ meeting, now }: { meeting: Meeting; now: numbe
           <MeetingParticipants people={meeting.participants} max={5} />
         </div>
       </div>
-      <JoinButton meeting={meeting} size="lg" className="shrink-0" />
+      {recording ? (
+        <Button asChild size="lg" variant="outline" className="shrink-0">
+          <Link href={`/app/notes/${recording.noteId}`}>
+            {t("openRecording")}
+            <ArrowRight data-icon="inline-end" className="rtl:-scale-x-100" />
+          </Link>
+        </Button>
+      ) : (
+        <JoinButton meeting={meeting} size="lg" className="shrink-0" />
+      )}
     </article>
   );
 }

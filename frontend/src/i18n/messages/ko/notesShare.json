@@ -18,6 +18,7 @@
         "description": "링크가 있는 누구나 답글을 남길 수 있어요."
       }
     },
+    "speaker": "화자 {order, number}",
     "expires": "만료",
     "never": "없음",
     "days": "{count, plural, other {#일}}",
@@ -26,29 +27,5 @@
     "updateFailed": "링크를 업데이트하지 못했어요",
     "turnedOff": "링크를 비활성화했어요",
     "turnOffFailed": "링크를 비활성화하지 못했어요"
-  },
-  "page": {
-    "unavailable": "링크를 사용할 수 없어요",
-    "eyebrow": "공유된 회의 노트",
-    "people": "{count, plural, other {#명}}",
-    "transcript": "스크립트",
-    "done": "완료",
-    "open": "미완료",
-    "speaker": "화자 {order, number}"
-  },
-  "gone": {
-    "title": "더 이상 사용할 수 없는 링크예요",
-    "description": "만료되었거나 비활성화되었을 수 있어요. 링크를 보낸 사람에게 새 링크를 요청해 주세요."
-  },
-  "comments": {
-    "title": "댓글",
-    "loadFailed": "댓글을 불러오지 못했어요.",
-    "comment": "내 댓글",
-    "commentPlaceholder": "답글 작성…",
-    "name": "내 이름",
-    "namePlaceholder": "선택 사항이에요. 입력하지 않으면 “{guest}”(으)로 표시돼요",
-    "guest": "게스트",
-    "post": "댓글 게시",
-    "postFailed": "댓글을 게시하지 못했어요"
   }
 }

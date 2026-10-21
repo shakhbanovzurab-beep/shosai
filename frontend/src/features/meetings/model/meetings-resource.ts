@@ -2,35 +2,61 @@
 
 import { addMinutes } from "date-fns";
 
-import { meetingNotes } from "@/features/notes/data/meeting-notes";
-import type { MeetingNote } from "@/features/notes/domain/types";
+import { isServed, MOCK_API } from "@/config/unserved-slices";
+import { isBusyCard, type MeetingCard } from "@/features/notes/domain/library";
+import { recentRecordings } from "@/features/notes/model/recent-notes";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource } from "@/lib/polling-resource";
 
-import { demoMeetings, NOTE_SOURCES } from "../data/demo-meetings";
 import type { Meeting } from "../domain/meeting";
 
-/** A recording in Notes as a past meeting, with Leo's recap taken from the note. */
-function fromNote(note: MeetingNote): Meeting {
-  const source = NOTE_SOURCES[note.id] ?? "google_meet";
+/**
+ * Отвечает ли API слайса meetings: без него запланированные встречи (образцы meetings и calendar), фильтр
+ * «Предстоящие» и «Новая встреча» не показываются — раздел состоит из записей «Заметок».
+ */
+export const MEETINGS_SERVED = isServed("meetings");
+// Записи — страница библиотеки «Заметок»: идущие, «Недавние» и «Прошедшие» раздела.
+const RECORDINGS = 50;
+
+/** Запись «Заметок» как встреча: идёт, пока её не закончили; итог Leo — когда заметки готовы. */
+export function meetingOfRecording(card: MeetingCard): Meeting {
   return {
-    id: `note-${note.id}`,
-    title: note.title,
-    start: note.startedAt,
-    end: addMinutes(new Date(note.startedAt), note.durationMinutes).toISOString(),
-    source,
+    id: `note-${card.id}`,
+    title: card.title,
+    start: card.startedAt,
+    end: addMinutes(new Date(card.startedAt), card.durationMinutes).toISOString(),
+    source: card.source === "import" ? "upload" : "recording",
     joinUrl: null,
-    // The room as the invitation names it: data, like the title, not interface copy.
-    location: source === "in_person" ? "Office" : null,
-    participants: note.participants.map(({ name }) => ({ name })),
-    recap: { noteId: note.id, summary: note.summary, tasks: note.actionItems.length, decisions: note.decisions.length },
+    location: null,
+    participants: card.participantNames.map((name) => ({ name })),
+    recap:
+      card.notes === "ready" && card.summary
+        ? { noteId: card.id, summary: card.summary, tasks: card.actionItems, decisions: null }
+        : null,
+    recording: { noteId: card.id, live: card.status === "active", busy: isBusyCard(card) },
   };
 }
 
+// У «Заметок» есть API и нет моков (F2-D1): на моках раздел показывает их образцы, как до API.
+async function recordings(): Promise<Meeting[]> {
+  if (MOCK_API) return (await import("./sample-recordings")).sampleRecordings();
+  return (await recentRecordings(RECORDINGS)).map(meetingOfRecording);
+}
+
+async function scheduled(): Promise<Meeting[]> {
+  return MEETINGS_SERVED ? (await import("../data/demo-meetings")).demoMeetings() : [];
+}
+
 /**
- * The meetings list as a client resource: the scheduled sample meetings plus the recordings in Notes,
- * with loading and error states, and the place to swap in `GET /meetings` once the backend has it.
+ * Встречи раздела: записи «Заметок» и, пока у meetings нет API, их образцы. Опрашивается, пока запись идёт или
+ * её заметки пишутся, — так идущая встреча сама переходит в прошедшие с итогом Leo.
  */
-export const meetingsResource = createPollingResource(async () => [...demoMeetings(), ...meetingNotes.map(fromNote)]);
+export const meetingsResource = createPollingResource(
+  async () => {
+    const [plans, recorded] = await Promise.all([scheduled(), recordings()]);
+    return [...plans, ...recorded];
+  },
+  (meetings) => meetings.some((meeting) => meeting.recording?.busy === true),
+);
 
 export const useMeetings = () => usePollingResource(meetingsResource);

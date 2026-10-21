@@ -18,7 +18,6 @@ import {
   SHARE_EXPIRIES,
   type ShareExpiry,
   type ShareLinkSettings,
-  sharedNotePath,
 } from "../domain/share-link";
 import { copyShareLink, retryShareLink, stopSharing, updateShareLink, useShareLink } from "../model/share-link";
 
@@ -31,7 +30,9 @@ const absoluteUrl = (path: string) =>
 /** Share by link: people outside the meeting open the notes, with what the link shows set here. */
 export function ShareLinkPanel({ noteId }: { readonly noteId: string }) {
   const t = useTranslations("notesShare");
+  const notes = useTranslations("notes");
   const common = useTranslations("common");
+  const words = { share: t, notes };
   const format = useFormatter();
   const state = useShareLink(noteId);
   if (state.status === "loading") return <Skeleton className="h-16" />;
@@ -46,9 +47,9 @@ export function ShareLinkPanel({ noteId }: { readonly noteId: string }) {
     );
 
   const { link } = state.data;
-  const url = link ? absoluteUrl(sharedNotePath(link.token)) : "";
+  const url = link ? absoluteUrl(link.path) : "";
   const change = (patch: Partial<ShareLinkSettings>) =>
-    link ? void updateShareLink(noteId, { ...link.settings, ...patch }, t) : undefined;
+    link ? void updateShareLink(noteId, { ...link.settings, ...patch }, words) : undefined;
   const expiryLabel = (expiry: ShareExpiry) => {
     const days = expiryDays(expiry);
     return days === null ? t("panel.never") : t("panel.days", { count: days });
@@ -56,8 +57,8 @@ export function ShareLinkPanel({ noteId }: { readonly noteId: string }) {
   const toggleDescription = (toggle: (typeof TOGGLES)[number]) =>
     toggle === "showNames"
       ? t("panel.toggles.showNames.description", {
-          first: t("page.speaker", { order: 1 }),
-          second: t("page.speaker", { order: 2 }),
+          first: t("panel.speaker", { order: 1 }),
+          second: t("panel.speaker", { order: 2 }),
         })
       : t(`panel.toggles.${toggle}.description`);
 
@@ -72,7 +73,7 @@ export function ShareLinkPanel({ noteId }: { readonly noteId: string }) {
           id="share-link-on"
           checked={link !== null}
           onCheckedChange={(on) =>
-            void (on ? updateShareLink(noteId, DEFAULT_SHARE_SETTINGS, t) : stopSharing(noteId, t))
+            void (on ? updateShareLink(noteId, DEFAULT_SHARE_SETTINGS, words) : stopSharing(noteId, words))
           }
         />
       </Field>

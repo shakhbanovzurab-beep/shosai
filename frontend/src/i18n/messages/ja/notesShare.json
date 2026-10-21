@@ -18,6 +18,7 @@
         "description": "リンクを知っている人なら誰でも返信できます。"
       }
     },
+    "speaker": "話者 {order, number}",
     "expires": "有効期限",
     "never": "なし",
     "days": "{count, plural, other {# 日}}",
@@ -26,29 +27,5 @@
     "updateFailed": "リンクを更新できませんでした",
     "turnedOff": "リンクを無効にしました",
     "turnOffFailed": "リンクを無効にできませんでした"
-  },
-  "page": {
-    "unavailable": "リンクを利用できません",
-    "eyebrow": "共有された会議ノート",
-    "people": "{count, plural, other {# 人}}",
-    "transcript": "文字起こし",
-    "done": "完了",
-    "open": "未完了",
-    "speaker": "話者 {order, number}"
-  },
-  "gone": {
-    "title": "このリンクは無効になっています",
-    "description": "有効期限が切れたか、無効にされた可能性があります。送信者に新しいリンクを依頼してください。"
-  },
-  "comments": {
-    "title": "コメント",
-    "loadFailed": "コメントを読み込めませんでした。",
-    "comment": "コメント",
-    "commentPlaceholder": "返信を入力…",
-    "name": "名前",
-    "namePlaceholder": "任意（未入力の場合は「{guest}」と表示されます）",
-    "guest": "ゲスト",
-    "post": "コメントを投稿",
-    "postFailed": "コメントを投稿できませんでした"
   }
 }
