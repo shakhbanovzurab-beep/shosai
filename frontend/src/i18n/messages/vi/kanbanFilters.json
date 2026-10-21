@@ -1,0 +1,44 @@
+{
+  "label": "Bộ lọc",
+  "search": "Tìm kiếm công việc",
+  "searchPlaceholder": "Tìm kiếm…",
+  "clear": "Xóa bộ lọc",
+  "clearOne": "Xóa bộ lọc “{field}”",
+  "shown": "Đang hiển thị {shown, number} trên {total, plural, other {# công việc}}",
+  "columnCount": "{shown, number} trên {total, plural, other {# công việc}}",
+  "columnNone": "Không có công việc nào phù hợp ở đây",
+  "noMatches": "Không có công việc nào phù hợp với bộ lọc này",
+  "noMatchesHint": "Hãy thay đổi hoặc xóa bộ lọc để xem mọi công việc.",
+  "active": "{field}: {values}",
+  "unassigned": "Chưa giao",
+  "findPerson": "Tìm người…",
+  "noPeople": "Chưa có ai được giao việc trên bảng này.",
+  "findState": "Tìm tùy chọn…",
+  "empty": "Trống",
+  "due": {
+    "overdue": "Quá hạn",
+    "today": "Hôm nay",
+    "week": "Tuần này",
+    "later": "Sau này",
+    "none": "Không có hạn chót"
+  },
+  "repeat": {
+    "yes": "Lặp lại",
+    "no": "Không lặp lại"
+  },
+  "number": {
+    "label": "Hiển thị",
+    "empty": "Trống",
+    "set": "Không trống",
+    "range": "Trong khoảng",
+    "from": "Từ",
+    "to": "Đến",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} trở lên",
+    "atMost": "{to} trở xuống"
+  },
+  "text": {
+    "label": "Chứa",
+    "placeholder": "Nhập để lọc…"
+  }
+}

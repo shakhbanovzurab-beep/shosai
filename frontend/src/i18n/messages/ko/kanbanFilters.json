@@ -1,0 +1,44 @@
+{
+  "label": "필터",
+  "search": "작업 검색",
+  "searchPlaceholder": "검색…",
+  "clear": "필터 지우기",
+  "clearOne": "“{field}” 필터 지우기",
+  "shown": "{total, plural, other {작업 #개}} 중 {shown, number}개 표시 중",
+  "columnCount": "{total, plural, other {작업 #개}} 중 {shown, number}개",
+  "columnNone": "여기에는 일치하는 작업이 없어요",
+  "noMatches": "필터와 일치하는 작업이 없어요",
+  "noMatchesHint": "모든 작업을 보려면 필터를 바꾸거나 지워 주세요.",
+  "active": "{field}: {values}",
+  "unassigned": "담당자 없음",
+  "findPerson": "사람 검색…",
+  "noPeople": "이 보드에는 아직 담당자가 없어요.",
+  "findState": "옵션 검색…",
+  "empty": "비어 있음",
+  "due": {
+    "overdue": "기한 지남",
+    "today": "오늘",
+    "week": "이번 주",
+    "later": "나중",
+    "none": "마감일 없음"
+  },
+  "repeat": {
+    "yes": "반복 있음",
+    "no": "반복 없음"
+  },
+  "number": {
+    "label": "표시",
+    "empty": "비어 있음",
+    "set": "값 있음",
+    "range": "범위",
+    "from": "최소",
+    "to": "최대",
+    "rangeValue": "{from}~{to}",
+    "atLeast": "{from} 이상",
+    "atMost": "{to} 이하"
+  },
+  "text": {
+    "label": "포함",
+    "placeholder": "필터할 내용 입력…"
+  }
+}

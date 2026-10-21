@@ -1,0 +1,44 @@
+{
+  "label": "عوامل التصفية",
+  "search": "البحث في المهام",
+  "searchPlaceholder": "بحث…",
+  "clear": "مسح عوامل التصفية",
+  "clearOne": "مسح عامل التصفية «{field}»",
+  "shown": "يتم عرض {shown, number} من {total, plural, zero {# مهمة} one {مهمة واحدة} two {مهمتين} few {# مهام} many {# مهمة} other {# مهمة}}",
+  "columnCount": "{shown, number} من {total, plural, zero {# مهمة} one {مهمة واحدة} two {مهمتين} few {# مهام} many {# مهمة} other {# مهمة}}",
+  "columnNone": "لا توجد مهام مطابقة هنا",
+  "noMatches": "لا توجد مهام مطابقة لعوامل التصفية هذه",
+  "noMatchesHint": "يمكن تغيير عوامل التصفية أو مسحها لعرض كل المهام.",
+  "active": "{field}: {values}",
+  "unassigned": "بلا مكلف",
+  "findPerson": "البحث عن شخص…",
+  "noPeople": "لم يتم تكليف أي شخص في هذه اللوحة بعد.",
+  "findState": "البحث عن خيار…",
+  "empty": "فارغ",
+  "due": {
+    "overdue": "متأخرة",
+    "today": "اليوم",
+    "week": "هذا الأسبوع",
+    "later": "لاحقًا",
+    "none": "بلا تاريخ استحقاق"
+  },
+  "repeat": {
+    "yes": "متكررة",
+    "no": "غير متكررة"
+  },
+  "number": {
+    "label": "عرض",
+    "empty": "فارغ",
+    "set": "غير فارغ",
+    "range": "بين",
+    "from": "من",
+    "to": "إلى",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} أو أكثر",
+    "atMost": "{to} أو أقل"
+  },
+  "text": {
+    "label": "يحتوي على",
+    "placeholder": "إدخال نص للتصفية…"
+  }
+}

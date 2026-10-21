@@ -1,0 +1,44 @@
+{
+  "label": "Фильтры",
+  "search": "Поиск по задачам",
+  "searchPlaceholder": "Поиск…",
+  "clear": "Сбросить фильтры",
+  "clearOne": "Сбросить фильтр «{field}»",
+  "shown": "Показано {shown, number} из {total, plural, one {# задачи} few {# задач} many {# задач} other {# задачи}}",
+  "columnCount": "{shown, number} из {total, plural, one {# задачи} few {# задач} many {# задач} other {# задачи}}",
+  "columnNone": "Здесь подходящих задач нет",
+  "noMatches": "Под эти фильтры задачи не подходят",
+  "noMatchesHint": "Измените фильтры или сбросьте их, чтобы увидеть все задачи.",
+  "active": "{field}: {values}",
+  "unassigned": "Не назначен",
+  "findPerson": "Найти человека…",
+  "noPeople": "На этой доске пока никто не назначен.",
+  "findState": "Найти состояние…",
+  "empty": "Пусто",
+  "due": {
+    "overdue": "Просроченные",
+    "today": "Сегодня",
+    "week": "На этой неделе",
+    "later": "Позже",
+    "none": "Без срока"
+  },
+  "repeat": {
+    "yes": "С повтором",
+    "no": "Без повтора"
+  },
+  "number": {
+    "label": "Показать",
+    "empty": "Пусто",
+    "set": "Не пусто",
+    "range": "В диапазоне",
+    "from": "От",
+    "to": "До",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} и больше",
+    "atMost": "{to} и меньше"
+  },
+  "text": {
+    "label": "Содержит",
+    "placeholder": "Введите текст…"
+  }
+}

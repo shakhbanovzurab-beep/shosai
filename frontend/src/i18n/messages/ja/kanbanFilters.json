@@ -1,0 +1,44 @@
+{
+  "label": "フィルタ",
+  "search": "タスクを検索",
+  "searchPlaceholder": "検索…",
+  "clear": "フィルタをクリア",
+  "clearOne": "「{field}」のフィルタをクリア",
+  "shown": "{total, plural, other {# 件のタスク}}のうち {shown, number} 件を表示中",
+  "columnCount": "{total, plural, other {# 件}}中 {shown, number} 件",
+  "columnNone": "一致するタスクはありません",
+  "noMatches": "このフィルタに一致するタスクはありません",
+  "noMatchesHint": "すべてのタスクを表示するには、フィルタを変更するかクリアしてください。",
+  "active": "{field}：{values}",
+  "unassigned": "未割り当て",
+  "findPerson": "担当者を検索…",
+  "noPeople": "このボードにはまだ担当者がいません。",
+  "findState": "選択肢を検索…",
+  "empty": "未設定",
+  "due": {
+    "overdue": "期限切れ",
+    "today": "今日",
+    "week": "今週",
+    "later": "それ以降",
+    "none": "期限なし"
+  },
+  "repeat": {
+    "yes": "繰り返しあり",
+    "no": "繰り返しなし"
+  },
+  "number": {
+    "label": "表示",
+    "empty": "未設定",
+    "set": "設定済み",
+    "range": "範囲内",
+    "from": "最小",
+    "to": "最大",
+    "rangeValue": "{from}～{to}",
+    "atLeast": "{from} 以上",
+    "atMost": "{to} 以下"
+  },
+  "text": {
+    "label": "次を含む",
+    "placeholder": "入力して絞り込み…"
+  }
+}

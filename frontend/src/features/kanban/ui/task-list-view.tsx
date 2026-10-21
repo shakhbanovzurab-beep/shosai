@@ -5,10 +5,11 @@ import { useFormatter, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 
-import { useCard, useCardIds, useColumn, useColumnOrder } from "../model/board-hooks";
+import { useCard, useColumn, useColumnOrder } from "../model/board-hooks";
 import { BoardActionsButton, BoardContextMenu } from "./board-menu-triggers";
 import { useBoardCommands, useEditable } from "./board-store";
 import { DueDate } from "./due-date";
+import { useVisibleCardIds } from "./filters/use-visible-cards";
 import { JiraKey } from "./jira-key";
 import { PriorityBadge } from "./priority-badge";
 import { OwnerAvatar, OwnerName } from "./task-owner";
@@ -55,7 +56,7 @@ function ColumnSection({ columnId }: { columnId: string }) {
   const { cards } = useBoardCommands();
   const editable = useEditable();
   const title = useColumn(columnId)?.title ?? "";
-  const taskIds = useCardIds(columnId);
+  const taskIds = useVisibleCardIds(columnId);
   const t = useTranslations("kanban");
   const tc = useTranslations("common");
   const format = useFormatter();

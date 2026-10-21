@@ -12,6 +12,7 @@ import { useCardIds, useColumn } from "../model/board-hooks";
 import { BoardContextMenu } from "./board-menu-triggers";
 import { useBoardCommands, useManagedByJira } from "./board-store";
 import { ColumnDot, ColumnHeader } from "./column-header";
+import { useVisibleCardIds } from "./filters/use-visible-cards";
 import { SWATCHES } from "./palette";
 import { RevealMore } from "./reveal-more";
 import { SortableTaskCard } from "./sortable-task-card";
@@ -23,7 +24,7 @@ const REVEAL_STEP = 12;
 function CollapsedStrip({ columnId }: { columnId: string }) {
   const { lifecycle } = useBoardCommands();
   const title = useColumn(columnId)?.title ?? "";
-  const count = useCardIds(columnId).length;
+  const count = useVisibleCardIds(columnId).length;
   const t = useTranslations("kanban");
   return (
     <BoardContextMenu target={{ kind: "column", columnId }}>
@@ -46,11 +47,17 @@ function CollapsedStrip({ columnId }: { columnId: string }) {
   );
 }
 
-/** Пустая колонка говорит об этом спокойно, без лишних кнопок: «+» есть в заголовке. */
+/** Пустая колонка говорит об этом спокойно, без лишних кнопок: «+» есть в заголовке. Под фильтром — что совпадений нет. */
 function EmptyColumn({ columnId }: { columnId: string }) {
   const t = useTranslations("kanban");
+  const tf = useTranslations("kanbanFilters");
   const title = useColumn(columnId)?.title ?? "";
-  return <p className="px-1 py-6 text-center text-muted-foreground text-sm">{t("column.empty", { column: title })}</p>;
+  const hidden = useCardIds(columnId).length > 0;
+  return (
+    <p className="px-1 py-6 text-center text-muted-foreground text-sm">
+      {hidden ? tf("columnNone") : t("column.empty", { column: title })}
+    </p>
+  );
 }
 
 /**
@@ -59,7 +66,8 @@ function EmptyColumn({ columnId }: { columnId: string }) {
  */
 export function KanbanColumn({ columnId, index }: { columnId: string; index: number }) {
   const managedByJira = useManagedByJira();
-  const taskIds = useCardIds(columnId);
+  // Под фильтром колонка показывает только совпавшие карточки (план пакета §4.5).
+  const taskIds = useVisibleCardIds(columnId);
   const head = useColumn(columnId);
   const headingId = useId();
   const {

@@ -1,0 +1,44 @@
+{
+  "label": "Filtri",
+  "search": "Cerca attività",
+  "searchPlaceholder": "Cerca…",
+  "clear": "Rimuovi i filtri",
+  "clearOne": "Rimuovi il filtro «{field}»",
+  "shown": "{shown, number} di {total, plural, one {# attività mostrata} many {# di attività mostrate} other {# attività mostrate}}",
+  "columnCount": "{shown, number} di {total, plural, one {# attività} many {# di attività} other {# attività}}",
+  "columnNone": "Nessuna attività corrispondente qui",
+  "noMatches": "Nessuna attività corrisponde a questi filtri",
+  "noMatchesHint": "Modifica i filtri o rimuovili per vedere tutte le attività.",
+  "active": "{field}: {values}",
+  "unassigned": "Non assegnata",
+  "findPerson": "Cerca una persona…",
+  "noPeople": "Ancora nessuna attività assegnata in questa bacheca.",
+  "findState": "Cerca un’opzione…",
+  "empty": "Vuoto",
+  "due": {
+    "overdue": "In ritardo",
+    "today": "Oggi",
+    "week": "Questa settimana",
+    "later": "Più avanti",
+    "none": "Senza scadenza"
+  },
+  "repeat": {
+    "yes": "Ricorrenti",
+    "no": "Non ricorrenti"
+  },
+  "number": {
+    "label": "Mostra",
+    "empty": "Vuoto",
+    "set": "Non vuoto",
+    "range": "Tra",
+    "from": "Da",
+    "to": "A",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} o più",
+    "atMost": "{to} o meno"
+  },
+  "text": {
+    "label": "Contiene",
+    "placeholder": "Scrivi per filtrare…"
+  }
+}

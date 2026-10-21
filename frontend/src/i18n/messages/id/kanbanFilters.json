@@ -1,0 +1,44 @@
+{
+  "label": "Filter",
+  "search": "Cari tugas",
+  "searchPlaceholder": "Cari…",
+  "clear": "Hapus filter",
+  "clearOne": "Hapus filter “{field}”",
+  "shown": "{shown, number} dari {total, plural, other {# tugas}} ditampilkan",
+  "columnCount": "{shown, number} dari {total, plural, other {# tugas}}",
+  "columnNone": "Tidak ada tugas yang cocok di sini",
+  "noMatches": "Tidak ada tugas yang cocok dengan filter ini",
+  "noMatchesHint": "Ubah filter atau hapus semuanya untuk melihat semua tugas.",
+  "active": "{field}: {values}",
+  "unassigned": "Belum ditugaskan",
+  "findPerson": "Cari orang…",
+  "noPeople": "Belum ada yang ditugaskan di papan ini.",
+  "findState": "Cari opsi…",
+  "empty": "Kosong",
+  "due": {
+    "overdue": "Terlambat",
+    "today": "Hari ini",
+    "week": "Minggu ini",
+    "later": "Nanti",
+    "none": "Tanpa tenggat"
+  },
+  "repeat": {
+    "yes": "Berulang",
+    "no": "Tidak berulang"
+  },
+  "number": {
+    "label": "Tampilkan",
+    "empty": "Kosong",
+    "set": "Tidak kosong",
+    "range": "Di antara",
+    "from": "Dari",
+    "to": "Sampai",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} atau lebih",
+    "atMost": "{to} atau kurang"
+  },
+  "text": {
+    "label": "Berisi",
+    "placeholder": "Ketik untuk memfilter…"
+  }
+}

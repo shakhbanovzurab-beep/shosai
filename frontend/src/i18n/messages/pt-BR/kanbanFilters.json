@@ -1,0 +1,44 @@
+{
+  "label": "Filtros",
+  "search": "Pesquisar tarefas",
+  "searchPlaceholder": "Pesquisar…",
+  "clear": "Limpar filtros",
+  "clearOne": "Limpar o filtro “{field}”",
+  "shown": "Mostrando {shown, number} de {total, plural, one {# tarefa} many {# de tarefas} other {# tarefas}}",
+  "columnCount": "{shown, number} de {total, plural, one {# tarefa} many {# de tarefas} other {# tarefas}}",
+  "columnNone": "Nenhuma tarefa correspondente aqui",
+  "noMatches": "Nenhuma tarefa corresponde a esses filtros",
+  "noMatchesHint": "Altere os filtros ou limpe-os para ver todas as tarefas.",
+  "active": "{field}: {values}",
+  "unassigned": "Não atribuída",
+  "findPerson": "Pesquisar uma pessoa…",
+  "noPeople": "Ainda não há responsáveis neste quadro.",
+  "findState": "Pesquisar uma opção…",
+  "empty": "Vazio",
+  "due": {
+    "overdue": "Atrasadas",
+    "today": "Hoje",
+    "week": "Esta semana",
+    "later": "Mais tarde",
+    "none": "Sem prazo"
+  },
+  "repeat": {
+    "yes": "Recorrentes",
+    "no": "Não recorrentes"
+  },
+  "number": {
+    "label": "Mostrar",
+    "empty": "Vazio",
+    "set": "Não vazio",
+    "range": "Entre",
+    "from": "De",
+    "to": "Até",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} ou mais",
+    "atMost": "{to} ou menos"
+  },
+  "text": {
+    "label": "Contém",
+    "placeholder": "Digite para filtrar…"
+  }
+}

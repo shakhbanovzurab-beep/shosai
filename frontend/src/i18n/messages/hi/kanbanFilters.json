@@ -1,0 +1,44 @@
+{
+  "label": "फ़िल्टर",
+  "search": "टास्क खोजें",
+  "searchPlaceholder": "खोजें…",
+  "clear": "फ़िल्टर साफ़ करें",
+  "clearOne": "“{field}” फ़िल्टर साफ़ करें",
+  "shown": "{total, plural, one {# टास्क} other {# टास्कों}} में से {shown, number} दिखाए जा रहे हैं",
+  "columnCount": "{total, plural, one {# टास्क} other {# टास्कों}} में से {shown, number}",
+  "columnNone": "यहां कोई टास्क मेल नहीं खाता",
+  "noMatches": "इन फ़िल्टर से कोई टास्क मेल नहीं खाता",
+  "noMatchesHint": "सभी टास्क देखने के लिए फ़िल्टर बदलें या साफ़ करें।",
+  "active": "{field}: {values}",
+  "unassigned": "असाइन नहीं किया गया",
+  "findPerson": "व्यक्ति खोजें…",
+  "noPeople": "इस बोर्ड पर अभी तक किसी को असाइन नहीं किया गया है।",
+  "findState": "विकल्प खोजें…",
+  "empty": "खाली",
+  "due": {
+    "overdue": "तारीख निकल गई",
+    "today": "आज",
+    "week": "इस हफ़्ते",
+    "later": "बाद में",
+    "none": "कोई आख़िरी तारीख नहीं"
+  },
+  "repeat": {
+    "yes": "दोहराव वाले",
+    "no": "बिना दोहराव के"
+  },
+  "number": {
+    "label": "दिखाएं",
+    "empty": "खाली",
+    "set": "खाली नहीं",
+    "range": "के बीच",
+    "from": "से",
+    "to": "तक",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} या ज़्यादा",
+    "atMost": "{to} या कम"
+  },
+  "text": {
+    "label": "इसमें शामिल है",
+    "placeholder": "फ़िल्टर करने के लिए लिखें…"
+  }
+}

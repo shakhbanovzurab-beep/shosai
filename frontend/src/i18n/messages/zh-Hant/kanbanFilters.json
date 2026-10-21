@@ -1,0 +1,44 @@
+{
+  "label": "篩選條件",
+  "search": "搜尋任務",
+  "searchPlaceholder": "搜尋…",
+  "clear": "清除篩選條件",
+  "clearOne": "清除「{field}」篩選條件",
+  "shown": "顯示 {shown, number} 項，共 {total, plural, other {# 項任務}}",
+  "columnCount": "{shown, number}/{total, plural, other {# 項任務}}",
+  "columnNone": "這裡沒有符合的任務",
+  "noMatches": "沒有符合這些篩選條件的任務",
+  "noMatchesHint": "變更或清除篩選條件，即可查看所有任務。",
+  "active": "{field}：{values}",
+  "unassigned": "未指派",
+  "findPerson": "搜尋人員…",
+  "noPeople": "這個看板還沒有指派任何人。",
+  "findState": "搜尋選項…",
+  "empty": "空白",
+  "due": {
+    "overdue": "已逾期",
+    "today": "今天",
+    "week": "本週",
+    "later": "之後",
+    "none": "沒有截止日期"
+  },
+  "repeat": {
+    "yes": "會重複",
+    "no": "不重複"
+  },
+  "number": {
+    "label": "顯示",
+    "empty": "空白",
+    "set": "非空白",
+    "range": "介於",
+    "from": "最小值",
+    "to": "最大值",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} 以上",
+    "atMost": "{to} 以下"
+  },
+  "text": {
+    "label": "包含",
+    "placeholder": "輸入文字以篩選…"
+  }
+}

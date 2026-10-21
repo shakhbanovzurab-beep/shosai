@@ -1,0 +1,44 @@
+{
+  "label": "Filters",
+  "search": "Taken zoeken",
+  "searchPlaceholder": "Zoeken…",
+  "clear": "Filters wissen",
+  "clearOne": "Filter ‘{field}’ wissen",
+  "shown": "{shown, number} van {total, plural, one {# taak} other {# taken}} weergegeven",
+  "columnCount": "{shown, number} van {total, plural, one {# taak} other {# taken}}",
+  "columnNone": "Hier geen passende taken",
+  "noMatches": "Geen taken voldoen aan deze filters",
+  "noMatchesHint": "Wijzig de filters of wis ze om alle taken te zien.",
+  "active": "{field}: {values}",
+  "unassigned": "Niet toegewezen",
+  "findPerson": "Persoon zoeken…",
+  "noPeople": "Op dit bord is nog niemand aan een taak toegewezen.",
+  "findState": "Optie zoeken…",
+  "empty": "Leeg",
+  "due": {
+    "overdue": "Te laat",
+    "today": "Vandaag",
+    "week": "Deze week",
+    "later": "Later",
+    "none": "Geen deadline"
+  },
+  "repeat": {
+    "yes": "Terugkerend",
+    "no": "Niet terugkerend"
+  },
+  "number": {
+    "label": "Tonen",
+    "empty": "Leeg",
+    "set": "Niet leeg",
+    "range": "Tussen",
+    "from": "Van",
+    "to": "Tot",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} of meer",
+    "atMost": "{to} of minder"
+  },
+  "text": {
+    "label": "Bevat",
+    "placeholder": "Typ om te filteren…"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "label": "Filters",
+  "search": "Search tasks",
+  "searchPlaceholder": "Search…",
+  "clear": "Clear filters",
+  "clearOne": "Clear the “{field}” filter",
+  "shown": "{shown, number} of {total, plural, one {# task} other {# tasks}} shown",
+  "columnCount": "{shown, number} of {total, plural, one {# task} other {# tasks}}",
+  "columnNone": "No matching tasks here",
+  "noMatches": "No tasks match these filters",
+  "noMatchesHint": "Change the filters or clear them to see every task.",
+  "active": "{field}: {values}",
+  "unassigned": "Unassigned",
+  "findPerson": "Find a person…",
+  "noPeople": "No one is assigned on this board yet.",
+  "findState": "Find a state…",
+  "empty": "Empty",
+  "due": {
+    "overdue": "Overdue",
+    "today": "Today",
+    "week": "This week",
+    "later": "Later",
+    "none": "No date"
+  },
+  "repeat": {
+    "yes": "Repeating",
+    "no": "Not repeating"
+  },
+  "number": {
+    "label": "Show",
+    "empty": "Empty",
+    "set": "Not empty",
+    "range": "Between",
+    "from": "From",
+    "to": "To",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} or more",
+    "atMost": "{to} or less"
+  },
+  "text": {
+    "label": "Contains",
+    "placeholder": "Type to filter…"
+  }
+}

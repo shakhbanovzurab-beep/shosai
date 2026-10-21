@@ -1,0 +1,44 @@
+{
+  "label": "Filter",
+  "search": "Aufgaben durchsuchen",
+  "searchPlaceholder": "Suchen…",
+  "clear": "Filter zurücksetzen",
+  "clearOne": "Filter „{field}“ zurücksetzen",
+  "shown": "{shown, number} von {total, plural, one {# Aufgabe} other {# Aufgaben}} angezeigt",
+  "columnCount": "{shown, number} von {total, plural, one {# Aufgabe} other {# Aufgaben}}",
+  "columnNone": "Hier keine passenden Aufgaben",
+  "noMatches": "Keine Aufgaben passen zu diesen Filtern",
+  "noMatchesHint": "Ändere die Filter oder setze sie zurück, um alle Aufgaben zu sehen.",
+  "active": "{field}: {values}",
+  "unassigned": "Nicht zugewiesen",
+  "findPerson": "Person suchen…",
+  "noPeople": "Auf diesem Board ist noch niemandem eine Aufgabe zugewiesen.",
+  "findState": "Zustand suchen…",
+  "empty": "Leer",
+  "due": {
+    "overdue": "Überfällig",
+    "today": "Heute",
+    "week": "Diese Woche",
+    "later": "Später",
+    "none": "Kein Fälligkeitsdatum"
+  },
+  "repeat": {
+    "yes": "Wiederkehrend",
+    "no": "Nicht wiederkehrend"
+  },
+  "number": {
+    "label": "Anzeigen",
+    "empty": "Leer",
+    "set": "Nicht leer",
+    "range": "Zwischen",
+    "from": "Von",
+    "to": "Bis",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} oder mehr",
+    "atMost": "{to} oder weniger"
+  },
+  "text": {
+    "label": "Enthält",
+    "placeholder": "Zum Filtern tippen…"
+  }
+}

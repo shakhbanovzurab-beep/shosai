@@ -1,0 +1,44 @@
+{
+  "label": "Filtreler",
+  "search": "Görevlerde ara",
+  "searchPlaceholder": "Ara…",
+  "clear": "Filtreleri temizle",
+  "clearOne": "“{field}” filtresini temizle",
+  "shown": "{total, plural, one {# görevden {shown, number} tanesi gösteriliyor} other {# görevden {shown, number} tanesi gösteriliyor}}",
+  "columnCount": "{total, plural, one {# görevden {shown, number} tanesi} other {# görevden {shown, number} tanesi}}",
+  "columnNone": "Burada eşleşen görev yok",
+  "noMatches": "Bu filtrelerle eşleşen görev yok",
+  "noMatchesHint": "Tüm görevleri görmek için filtreleri değiştirin veya temizleyin.",
+  "active": "{field}: {values}",
+  "unassigned": "Atanmamış",
+  "findPerson": "Kişi ara…",
+  "noPeople": "Bu panoda henüz kimseye görev atanmadı.",
+  "findState": "Seçenek ara…",
+  "empty": "Boş",
+  "due": {
+    "overdue": "Gecikmiş",
+    "today": "Bugün",
+    "week": "Bu hafta",
+    "later": "Daha sonra",
+    "none": "Son tarih yok"
+  },
+  "repeat": {
+    "yes": "Tekrarlanan",
+    "no": "Tekrarlanmayan"
+  },
+  "number": {
+    "label": "Göster",
+    "empty": "Boş",
+    "set": "Boş değil",
+    "range": "Arasında",
+    "from": "En az",
+    "to": "En fazla",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} veya daha fazla",
+    "atMost": "{to} veya daha az"
+  },
+  "text": {
+    "label": "İçerir",
+    "placeholder": "Filtrelemek için yazın…"
+  }
+}

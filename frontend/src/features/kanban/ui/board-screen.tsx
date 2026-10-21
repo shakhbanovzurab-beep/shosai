@@ -14,6 +14,9 @@ import { boardResource, useBoardDetail } from "../model/boards-resource";
 import { FirstSync, IncomingOffer, JiraErrorBanner } from "./board-banners";
 import { BoardProvider, useBoardCommands, useEditable } from "./board-store";
 import { FieldsButton } from "./fields/fields-sheet";
+import { FilterBar } from "./filters/filter-bar";
+import { NoMatches } from "./filters/no-matches";
+import { useShownCount } from "./filters/use-visible-cards";
 import { KanbanBoard } from "./kanban-board";
 import { type BoardView, KanbanToolbar } from "./kanban-toolbar";
 import { TaskPanel } from "./panel/task-panel";
@@ -48,13 +51,31 @@ function BoardBody({ boards, current, incoming, view, onViewChange }: ViewProps)
       </KanbanToolbar>
       <JiraErrorBanner board={current} />
       {offer ? <IncomingOffer board={current} open={incoming.open} onDismiss={dismissOffer} /> : null}
-      {firstSync ? <FirstSync board={current} /> : null}
-      {!firstSync && view === "board" ? <KanbanBoard /> : null}
-      {!firstSync && view !== "board" ? (
+      {firstSync ? <FirstSync board={current} /> : <FilteredViews view={view} />}
+    </>
+  );
+}
+
+/** Строка фильтра и выбранный вид доски; если под фильтром ничего не нашлось — об этом и «Сбросить фильтры». */
+function FilteredViews({ view }: { view: BoardView }) {
+  const { shown, filtering } = useShownCount();
+  if (filtering && shown === 0)
+    return (
+      <>
+        <FilterBar />
+        <NoMatches />
+      </>
+    );
+  return (
+    <>
+      <FilterBar />
+      {view === "board" ? (
+        <KanbanBoard />
+      ) : (
         <div className="min-h-0 flex-1 overflow-y-auto bg-muted/25 p-4 lg:p-5">
           {view === "list" ? <TaskListView /> : <TaskTableView />}
         </div>
-      ) : null}
+      )}
     </>
   );
 }

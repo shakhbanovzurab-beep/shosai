@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useBoardSelector, useCard, useColumn } from "../model/board-hooks";
 import { BoardActionsButton, BoardContextMenu } from "./board-menu-triggers";
 import { DueDate } from "./due-date";
+import { useVisibleCardLists } from "./filters/use-visible-cards";
 import { JiraKey } from "./jira-key";
 import { PriorityBadge } from "./priority-badge";
 import { OwnerAvatar, OwnerName } from "./task-owner";
@@ -69,7 +70,8 @@ function Row({ taskId, columnId }: { taskId: string; columnId: string }) {
 /** Все задачи одной таблицей, в порядке доски; колонка — статус. */
 export function TaskTableView() {
   const columnOrder = useBoardSelector((s) => s.columnOrder);
-  const cardIds = useBoardSelector((s) => s.cardIds);
+  // Под фильтром таблица показывает только совпавшие задачи.
+  const cardIds = useVisibleCardLists();
   const t = useTranslations("kanban");
   const rows = columnOrder.flatMap((columnId) => (cardIds[columnId] ?? []).map((taskId) => ({ taskId, columnId })));
 

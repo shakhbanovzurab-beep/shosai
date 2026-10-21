@@ -1,0 +1,44 @@
+{
+  "label": "Filtros",
+  "search": "Buscar tareas",
+  "searchPlaceholder": "Buscar…",
+  "clear": "Borrar filtros",
+  "clearOne": "Borrar el filtro «{field}»",
+  "shown": "Mostrando {shown, number} de {total, plural, one {# tarea} many {# de tareas} other {# tareas}}",
+  "columnCount": "{shown, number} de {total, plural, one {# tarea} many {# de tareas} other {# tareas}}",
+  "columnNone": "Aquí no hay tareas que coincidan",
+  "noMatches": "Ninguna tarea coincide con estos filtros",
+  "noMatchesHint": "Cambia los filtros o bórralos para ver todas las tareas.",
+  "active": "{field}: {values}",
+  "unassigned": "Sin asignar",
+  "findPerson": "Buscar una persona…",
+  "noPeople": "Aún no hay nadie asignado en este tablero.",
+  "findState": "Buscar una opción…",
+  "empty": "Vacío",
+  "due": {
+    "overdue": "Vencidas",
+    "today": "Hoy",
+    "week": "Esta semana",
+    "later": "Más adelante",
+    "none": "Sin fecha límite"
+  },
+  "repeat": {
+    "yes": "Recurrentes",
+    "no": "No recurrentes"
+  },
+  "number": {
+    "label": "Mostrar",
+    "empty": "Vacío",
+    "set": "No vacío",
+    "range": "Entre",
+    "from": "Desde",
+    "to": "Hasta",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} o más",
+    "atMost": "{to} o menos"
+  },
+  "text": {
+    "label": "Contiene",
+    "placeholder": "Escribe para filtrar…"
+  }
+}

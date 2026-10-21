@@ -12,6 +12,7 @@ import { columnSum } from "../domain/board-rules";
 import { useBoardSelector, useBoardStickers, useCardIds, useColumn } from "../model/board-hooks";
 import { BoardActionsButton, BoardContextMenu } from "./board-menu-triggers";
 import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
+import { useVisibleCardIds } from "./filters/use-visible-cards";
 import { SWATCHES } from "./palette";
 
 /** Σ одного числового поля в колонке: видимое число и полная фраза для чтения с экрана. */
@@ -19,7 +20,9 @@ function ColumnSum({ columnId, stickerId, field }: { columnId: string; stickerId
   const t = useTranslations("kanban");
   const format = useFormatter();
   const title = useColumn(columnId)?.title ?? "";
-  const total = useBoardSelector((s) => columnSum(s.cardIds[columnId] ?? [], s.cards, stickerId));
+  // Сумма — по карточкам, которые колонка показывает (под фильтром — по совпавшим).
+  const ids = useVisibleCardIds(columnId);
+  const total = useBoardSelector((s) => columnSum(ids, s.cards, stickerId));
   if (total === null) return null;
   const sum = format.number(total);
   return (
@@ -61,8 +64,10 @@ export function ColumnHeader({ columnId, headingId, handleRef }: HeaderProps) {
   const editable = useEditable();
   const managedByJira = useManagedByJira();
   const count = useCardIds(columnId).length;
+  const shown = useVisibleCardIds(columnId).length;
   const title = useColumn(columnId)?.title ?? "";
   const t = useTranslations("kanban");
+  const tf = useTranslations("kanbanFilters");
   const tc = useTranslations("common");
   return (
     <BoardContextMenu target={{ kind: "column", columnId }}>
@@ -86,7 +91,9 @@ export function ColumnHeader({ columnId, headingId, handleRef }: HeaderProps) {
               {title}
             </h2>
           </div>
-          <p className="text-muted-foreground text-sm tabular-nums leading-none">{t("taskCount", { count })}</p>
+          <p className="text-muted-foreground text-sm tabular-nums leading-none">
+            {shown === count ? t("taskCount", { count }) : tf("columnCount", { shown, total: count })}
+          </p>
           <ColumnSums columnId={columnId} />
         </div>
         <div className="-me-2 flex items-center gap-0.5 text-muted-foreground">

@@ -6,11 +6,14 @@ import { move } from "@dnd-kit/helpers";
 import { DragDropProvider, type DragEndEvent, type DragOverEvent, DragOverlay } from "@dnd-kit/react";
 import { isSortable } from "@dnd-kit/react/sortable";
 
-import { useBoardSelector, useBoardStore, useColumnOrder } from "../model/board-hooks";
+import { placeAmongVisible, visibleIds } from "../domain/filtered-move";
+import { useBoardSelector, useBoardStore, useColumnOrder, useToday } from "../model/board-hooks";
 import type { BoardSnapshot } from "../model/board-store";
 import { AddColumnButton } from "./add-column-button";
 import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
 import { useDragSetup } from "./drag-setup";
+import { useFilterAddress } from "./filters/filter-address";
+import { shownSet } from "./filters/use-visible-cards";
 import { KanbanColumn } from "./kanban-column";
 import { DragPreview } from "./task-card";
 
@@ -48,6 +51,8 @@ export function KanbanBoard() {
   );
   const gridTracks = canAddColumn ? `${tracks} 12rem` : tracks;
   const beforeDrag = useRef<BoardSnapshot | null>(null);
+  const filter = useFilterAddress();
+  const today = useToday();
   const dragSetup = useDragSetup();
 
   function handleDragStart() {
@@ -55,7 +60,18 @@ export function KanbanBoard() {
   }
 
   function handleDragOver(event: DragOverEvent) {
-    if (event.operation.source?.type === "task") store.update((s) => ({ ...s, cardIds: move(s.cardIds, event) }));
+    const { source } = event.operation;
+    if (source?.type !== "task") return;
+    const shown = shownSet(store.get(), filter, today);
+    if (!shown) {
+      store.update((s) => ({ ...s, cardIds: move(s.cardIds, event) }));
+      return;
+    }
+    // Под фильтром человек двигает среди видимых: карточка встаёт после видимой над ней, скрытые остаются на местах.
+    const visible = visibleIds(store.get().cardIds, shown);
+    const next = move(visible, event);
+    if (next !== visible)
+      store.update((s) => ({ ...s, cardIds: placeAmongVisible(s.cardIds, next, String(source.id)) }));
   }
 
   function handleDragEnd(event: DragEndEvent) {

@@ -1,0 +1,44 @@
+{
+  "label": "Filtres",
+  "search": "Rechercher des tâches",
+  "searchPlaceholder": "Rechercher…",
+  "clear": "Effacer les filtres",
+  "clearOne": "Effacer le filtre « {field} »",
+  "shown": "{shown, number} sur {total, plural, one {# tâche affichée} many {# de tâches affichées} other {# tâches affichées}}",
+  "columnCount": "{shown, number} sur {total, plural, one {# tâche} many {# de tâches} other {# tâches}}",
+  "columnNone": "Aucune tâche correspondante ici",
+  "noMatches": "Aucune tâche ne correspond à ces filtres",
+  "noMatchesHint": "Modifiez les filtres ou effacez-les pour voir toutes les tâches.",
+  "active": "{field} : {values}",
+  "unassigned": "Non attribuée",
+  "findPerson": "Rechercher une personne…",
+  "noPeople": "Aucune tâche n’est encore attribuée sur ce tableau.",
+  "findState": "Rechercher une option…",
+  "empty": "Vide",
+  "due": {
+    "overdue": "En retard",
+    "today": "Aujourd’hui",
+    "week": "Cette semaine",
+    "later": "Plus tard",
+    "none": "Sans échéance"
+  },
+  "repeat": {
+    "yes": "Récurrente",
+    "no": "Non récurrente"
+  },
+  "number": {
+    "label": "Afficher",
+    "empty": "Vide",
+    "set": "Non vide",
+    "range": "Entre",
+    "from": "De",
+    "to": "À",
+    "rangeValue": "{from} – {to}",
+    "atLeast": "{from} ou plus",
+    "atMost": "{to} ou moins"
+  },
+  "text": {
+    "label": "Contient",
+    "placeholder": "Tapez pour filtrer…"
+  }
+}

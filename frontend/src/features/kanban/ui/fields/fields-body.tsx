@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { BOARD_STICKERS_MAX, isCustomSticker } from "../../domain/stickers-contract";
 import { useBoardStickers } from "../../model/board-hooks";
 import { useBoardCommands, useEditable, useManagedByJira } from "../board-store";
+import { dropFieldFilter } from "../filters/filter-address";
 import { FieldCard } from "./field-card";
 import { FieldDialog, type FieldRequest } from "./field-dialog";
 import { OtherBoardsPicker } from "./other-boards-picker";
@@ -45,7 +46,11 @@ export function FieldsBody() {
             key={sticker.id}
             sticker={sticker}
             editable={editable}
-            onVisible={(visible) => void fields.setVisible(sticker.id, visible)}
+            onVisible={(visible) => {
+              // Скрытое поле теряет и чип фильтра, и сам фильтр в адресе.
+              if (!visible) dropFieldFilter(sticker.id);
+              void fields.setVisible(sticker.id, visible);
+            }}
             onEdit={(owned) => setRequest({ mode: "edit", sticker: owned })}
             onTakeOff={(placed) => void fields.takeOff(placed)}
           />

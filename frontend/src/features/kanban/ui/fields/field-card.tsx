@@ -15,6 +15,7 @@ import {
   isCustomSticker,
   type StickerKind,
 } from "../../domain/stickers-contract";
+import { useFieldName } from "../field-name";
 
 const ICONS: Record<StickerKind, LucideIcon> = {
   assignee: UserRound,
@@ -25,12 +26,6 @@ const ICONS: Record<StickerKind, LucideIcon> = {
   number: Hash,
   text: Type,
 };
-
-/** Имя поля: у системного — на языке человека, у своего — как его назвали. */
-export function useFieldName() {
-  const t = useTranslations("kanbanPanel");
-  return (sticker: BoardSticker) => sticker.name ?? t(`fields.${sticker.kind}`);
-}
 
 /** Поле доски: значок, имя, вид, «Показывать на карточках»; своё ещё правится и снимается с доски. */
 export function FieldCard({
