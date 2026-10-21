@@ -154,6 +154,21 @@ html {
 }
 
 /*
+ * Человек попросил систему меньше двигать экран: панели, диалоги и меню появляются без выезда и масштаба,
+ * переходы и прокрутка — сразу. Спиннер продолжает крутиться: это знак, что идёт загрузка, а не украшение.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *:not(.animate-spin, [data-slot="spinner"]),
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
  * Right to left: shadcn wrappers in components/ui are written for left to right and are not edited here, so
  * they are mirrored from outside. Submenu arrows point towards the end of the line; progress fills from the start.
  */
