@@ -90,6 +90,7 @@ backend/src/shosai/features/files/
 | `IndexStatus` | port bound by knowledge: `LeoUse.status`, `progress`, `chunk_count`, `error` per file | files' list |
 | `ShareableResource("file", storage_files)` | declared on `FeatureModule.shareable` | workspaces' access policy |
 | Events | `files.file.uploaded`, `files.file.deleted`, `files.file.restored`, `files.leo_use.changed`, `files.leo_use.reindex_requested` (ids, sizes, codes) | knowledge (index, drop vectors, read again), workspaces (withdraw a deleted file's items), proactive |
+| **Required by tasks (TK-D12, the owner's decision of 2026-10-21; built additively with tasks' step 3)** | (1) the purpose `task_attachment` (≤ 25 MiB, not in File Manager); (2) `POST /v1/me/uploads` with `workspace_id` for it, so the bytes reserve and count in the workspace's storage (FL-D6) when the task is a workspace's — the uploader must be a member — and in the person's otherwise; (3) a copy of a File Manager file the viewer may read into another slice's object, sharing the stored object (FL-D4), counted in the target owner's storage, the object kept until its last holder — a file row or an attachment — goes; (4) moving an attachment's bytes from a person's storage to a workspace's when its task moves there | tasks |
 
 ### 3.3 Data (each home)
 

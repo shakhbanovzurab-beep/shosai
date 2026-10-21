@@ -802,6 +802,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **Owner → home:** via `project_id` → `tracker_projects.user_id`.
 - **Columns:** all 8 move unchanged.
 - Load before `tracker_tasks` (FK RESTRICT).
+- `color` — *mapped* (tasks TK-D12, the owner's decision of 2026-10-21): to the nearest of the column palette's nine colours by hue; the default grey `#94A3B8` becomes none.
 
 #### `tracker_tasks` → `tracker_tasks` · **moved**
 
@@ -812,11 +813,13 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 - **Owner → home:** via `project_id` → `tracker_projects.user_id`.
 - **Columns:** all 6 move unchanged.
+- **Destination (tasks TK-D12, the owner's decision of 2026-10-21, without loss):** a board whose project has labels gets a field «Labels» (a `states` sticker named in the owner's profile language), one state per label, its colour mapped as `tracker_statuses.color`.
 
 #### `tracker_task_labels` → `tracker_task_labels` · **moved**
 
 - **Owner → home:** via `task_id` → `tracker_tasks`.
 - **Columns:** all 2 move unchanged.
+- **Destination (tasks TK-D12, the owner's decision of 2026-10-21, without loss):** a task's first label by name becomes its «Labels» value; its other labels are appended to its description as one last line, "Labels: B, C" in the owner's profile language.
 
 #### `jira_links` → `jira_links` · **moved**
 

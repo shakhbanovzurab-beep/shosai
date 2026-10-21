@@ -1,0 +1,231 @@
+# Kanban golden core — package plan
+
+Prompt: [prompts/KANBAN-golden-core.md](../prompts/KANBAN-golden-core.md). Status: [STATUS.md](../STATUS.md), row `kanban-golden-core`. Contract: [tasks plan](../slices/tasks.md) TK-D12 and §3.8. Cabinet slice: `frontend/src/features/kanban/`.
+
+- **Status:** written on 2026-10-21 and **approved by the owner the same day**: KG-D1, KG-D2, KG-D6, KG-D8 and KG-D9 as proposed; KG-D3, KG-D4, KG-D5, KG-D7, KG-D10 and the carry-over of draft labels with the owner's amendments (§2); recorded in [ADR 0060](../../adr/0060-kanban-golden-core.md). One point stays open: boards of a workspace (§2, after the table).
+- **Who decided what.** The scope in §1.4 and the decisions of §2 are **the owner's, of 2026-10-21**. The screens, the component design and the steps are this plan's design, derived from them, CLAUDE.md, the tasks plan and the cabinet.
+- **Dependencies:** none to start. The package works on the cabinet's MSW mocks; `tasks` step 9 switches the screens to the API. The tasks plan is itself waiting for approval: TK-D12 is added to it, and its §3.3–§3.4 are the base the mocks follow.
+- **Philosophy check:** the board stays quiet until the person asks for more — a new board shows three fields, a card shows only what is set, nothing on the board asks for attention by itself. What Leo filled is marked and stays the person's to change. One task is one task everywhere: the panel, the subtasks and the comments belong to the task, not to the board, so the same task on another view has them too.
+
+---
+
+## 1. Facts this plan rests on
+
+### 1.1 The current slice (`features/kanban`, 4 153 lines, 54 files)
+
+| Area | What it has | What it lacks for the golden core |
+|---|---|---|
+| Data | Sample paths `/api/kanban/*` (`frontend/docs/kanban-api.md`), errors `{detail}` worded by the mocks in the request's language (`kanbanApi`), `Task` with camelCase `dueDate`, priorities `High \| Medium \| Low`, `owner {name, tone}`, free `label`, static `insights` and `progress`; workspace cards with composite ids `ws:…`; MSW mocks in `mocks/` (in-memory store, Jira "sync") | Not the tasks plan's `/v1` contract (TK-D1): paths, snake_case fields, ADR 0008 codes, cards addressed by the task's id |
+| Boards | Create from templates (`simple`, `project`), rename, icon, delete with confirmation; board switcher; "Show my workspace tasks here" | Nothing new needed beyond TK-D4's words |
+| Columns | Rename (`NameDialog`), reorder by drag handle and by "Move earlier / later", sort by priority, clear with Undo; count in the header; `PUT layout` for all of it | Create, delete, colour, collapse, Σ of a number field |
+| Cards | Title, priority badge (Medium by default on every card), owner avatar and name, due day, progress bar in progress columns, label tone by name, insight counts, "Completed" in done columns; ⋮ and context menus (rename, priority, move to, top/bottom, duplicate, copy link, delete with Undo) | Cover, date range and overdue, the board's stickers, subtask progress, real counts, recurring mark, greyed done cards, Leo's marks; a card cannot be opened at all (`copyTaskLink` builds `?task=` links that open nothing) |
+| Drag and drop | `@dnd-kit/react` 0.5: cards within and between columns, columns by handle, keyboard (Space, arrows, RTL-aware — `src/scripts/rtl-smoke/kanban.mjs`); announcements are dnd-kit's English defaults; cards carry `touch-none`, so a phone cannot scroll a column by swiping over cards | Localised announcements, Enter free for opening a card, touch scrolling |
+| State | `BoardProvider` context holding the whole board in `useState`, remounted on every `revision`; every card reads the context, so any change re-renders every card | A store that re-renders only what changed (INP target on 300 cards) |
+| Views | Board, list, table; inert toolbar buttons Filter, Sort, Import CSV, From template, Automation (dropped by SLICE_MAP §2.10, still on screen) | — |
+| Users of the slice | `hub` imports `useBoards` (board picker) and the mocks' `listBoards`; the RTL smoke opens `/app/kanban` | Both follow the new contract |
+
+### 1.2 Neighbouring screens it must match (survey of 2026-10-21)
+
+| Pattern | Where | Use here |
+|---|---|---|
+| A detail sheet over a list, addressed in the URL, `pushState` so Back closes it, side from `useDirection()`, whole screen on a phone (`w-full`, `sm:max-w-xl`), focus back to the row | Hub `ThreadSheet` (`features/hub/ui/thread/thread-sheet.tsx`, `?open=`) | The card panel, `?task=` |
+| Delete hides at once, the call waits for the Undo toast | Files `deleteFile`, Notes `deleteNote`, kanban `removeWithUndo` | Cards, columns, subtasks, attachments |
+| Uploads straight to the bucket: `browserUploadPorts(purpose)` → `uploadFile` → the owning slice claims the upload id; purposes not kept in File Manager already exist (`recording`, `leo_attachment`, `ticket_attachment`, `workspace_upload`) | `src/lib/uploads/`, Notes recordings, Files' `UploadTray` | Attachments, purpose `task_attachment` |
+| Markdown editing: Tiptap 3 with Markdown in and out, lazy-loaded, `textDirection: "auto"` | Notes "My notes" (`features/notes/ui/notes-editor.tsx`) | The description, the same editor moved to `src/components/` |
+| Thread UI: `MessageScroller`, `Message`, `Bubble`, `Marker`, `Attachment` in `components/ui/`; a person's thread with avatars and dates | Support `ticket-messages.tsx` | Comments |
+| Field rows with a label and a value control | `components/meta-item.tsx` | The panel's fields |
+| A due-day picker (Popover + `Calendar` single, date-fns locale and direction); `Calendar` has range classes; no range picker yet | Workspace `DuePicker` | Deadline: a day or a range |
+| Filters: pills in the URL with an "all" pill (Notes `FolderPills`); one dropdown whose button turns `secondary` and names the active filter, "Clear filters", an empty state with Clear (Files) | Notes, Files | The filter bar |
+| Leo's provenance: Sparkles on Leo's action cards; "why" popovers with meeting, speaker, moment and quote (`SourceCard`, `SaidQuote`) | `leo/ui/proposal`, `hub/ui/why` | Leo's marks (hub imports kanban, so kanban cannot import hub: its own small source card in the same visual language) |
+| Colours: no shared categorical tokens; slices use named Tailwind colours with `dark:` variants (AGENTS.md allows them when no theme token fits); theme presets override only semantic tokens | `kanban/ui/tones.ts`, Notes folder colours, workspace team colours | One palette of named colours for columns and states |
+| No virtualisation library; `@tanstack/react-table` only in admin | — | Measure first (§5.4) |
+
+### 1.3 What the tasks plan's contract already covers (§3.3–§3.4)
+
+Tasks with title, description (plain text ≤ 10 000), status, priority, due day, assignee (`assignee_user_id` in a workspace, `assignee_name` for a personal task), project, source meeting and finding, `created_by`, `version`; boards with columns `{id, title, kind}` and placements by rank; `BoardDetail {board, columns: [{id, title, kind, cards}], revision}` holding every card of the board within TK-D5 (open cards ≤ 1 000 and those done in the last 30 days); `PUT layout`, card create, copy, move and edit; the incoming board; Jira; delete at once with the cabinet's Undo (TK-D6). §3.7 puts **subtasks, comments, attachments and labels outside tasks** — the golden core brings the first three in and replaces labels with stickers; TK-D7 drops draft labels and column colours.
+
+Missing for the golden core — written as TK-D12 in the tasks plan (§3.8 there): a deadline range, an empty priority, a Markdown description, the cover, recurrence and its next task, Leo's per-field marks with their source; column create, delete, colour, collapse; subtasks; comments; attachments; stickers (definitions owned by the board's owner, their place and visibility per board, values on the task, reuse); and the rule for column sums.
+
+### 1.4 The scope (owner's decision of 2026-10-21, from the prompt)
+
+**In:** (1) board and columns — create, rename, reorder by drag and drop, delete with Undo, colour from the theme palette, collapse, card count, Σ of a number field; (2) cards — title, cover, assignee avatar, deadline as a day or a range with overdue shown plainly, priority, visible stickers as chips, subtask progress, comment and attachment counts, recurring mark, done cards greyed in a done column, drag and drop within and between columns by mouse and keyboard; (3) card panel over the board — title, Markdown description, stickers, subtasks (add, tick, reorder, Undo), comments, attachments through files' upload flow, recurrence (daily, weekly on chosen days, monthly), the source meeting with a link; (4) stickers — system (assignee, deadline, priority, recurrence) and custom (a set of states with theme colours, a number, a text), reuse from another board, shown or hidden per board, a settings sheet, a new board shows only assignee, deadline and priority; (5) filter bar — a chip per visible sticker plus text search, combined, visible, cleared in one action; (6) Leo's part — a field Leo filled carries a mark and its source until the person changes it.
+
+**Out (not built, not stubbed):** automations, mirror columns, summary columns, stopwatch, timer, time tracking, sprints, task types beyond state sets, card background colours, board backgrounds. The reference (YouGile, `docs/design/references/kanban/`) is for functionality only; the look is the cabinet's.
+
+---
+
+## 2. Decisions
+
+**Decided by the owner on 2026-10-21**, recorded in ADR 0060 (0059 stays reserved for the tasks plan's step 1). Where the owner amended a proposal, the row says so and holds the decision as amended.
+
+| ID | Question | Proposal | Trade-off |
+|---|---|---|---|
+| **KG-D1** | What do the mocks answer? | **The `/v1` routes of the tasks plan and TK-D12, exactly**: same paths, snake_case shapes, ADR 0008 `{error: {code, params?}}`, `{items, next_cursor}` pages, `Idempotency-Key` accepted; the cabinet words every code in 16 languages (`domain/problems.ts`, as files and notes do). `domain/contract.ts` holds the shapes by hand until the OpenAPI exists; `tasks` step 9 replaces them with the generated types, points `api/` at the generated client and deletes the mocks — nothing else changes | The `/api/kanban/*` sample paths and the mocks' server-side wording go away (steps 1–2); `frontend/docs/kanban-api.md` is rewritten to the `/v1` contract |
+| **KG-D2** | Are subtasks tasks? | **No — a checklist of the task**: a subtask has a title and a tick, ordered; no assignee, date, board or status; it lives and dies with its task and is read and changed by whoever may read and change the task | One task store stays one kind of row (SM-3); Today, boards and Leo never see half-tasks. A subtask that grows into real work is added as a task by hand |
+| **KG-D3** | Where do attachments live? | **Decided with the owner's amendment. They are the task's own objects**, uploaded through files' flow with a new purpose `task_attachment` (uploads up to 25 MiB, not in File Manager — like `ticket_attachment`), claimed by `POST /v1/tasks/{id}/attachments`, downloaded by files' 15-minute link (FL-D9), read by whoever reads the task and deleted with it. **They count in the storage of the task's owner** — the person for a personal task, the workspace for a workspace task (FL-D6), whoever uploads them. **An existing File Manager file can be attached as a copy** (FL-D4: the copy shares the stored object, is instant and counts against the task owner's storage like the original; it stays when the file is renamed or deleted) | A workspace task's attachment opens to the task's readers without sharing a personal file into the workspace; a member's upload never spends their personal storage on company work. An attachment is not listed in File Manager, and Leo does not read it |
+| **KG-D4** | Whose are stickers? | **Decided by the owner, changed from the proposal. A field belongs to the owner of its board**: on a personal board to the person, on a workspace board to the workspace. **A field's value is part of the task** and is seen by everyone who sees the task, on any board and in its panel. Fields are reused across the owner's own boards. The four system fields are the task's own (assignee, deadline, priority, recurrence) | One truth per task: a colleague sees the estimate the assignee wrote. A reader of a workspace task sees the names and states of fields someone else defined, but never their other fields or boards |
+| **KG-D5** | When does a recurring task come back? | **Decided with the owner's amendment. When it is done**: completing it creates the next task — same title, description, priority, assignee, field values, subtasks unticked, the recurrence moved to it — **due on the schedule's next date after the original due day, skipping the dates already past** (the first occurrence after the due day that is not before the person's today, in their zone; never counted from the day it was completed; a range keeps its length), at the top of the first "to do" column of the same board. A recurring task always has a due day: setting a recurrence on one without sets it to the first occurrence from today. Monthly on the 29th–31st falls on a shorter month's last day | Nothing piles up while the person is away; a missed daily task does not spawn seven overdue copies. A task that must reappear on a fixed date whether or not the last one is done is not expressible (it would be an automation, out of scope) |
+| **KG-D6** | A priority on every card? | **Priority may be empty, and a new task has none** (the cabinet shows Medium on every card today); the card shows priority only when set | Quieter board; a sort by priority puts unset tasks last. Jira's unknown priority already maps to none |
+| **KG-D7** | What is "sticker" called on screen? | **Decided by the owner: «поле» / "field"** ("Board fields", "New field", "Fields from other boards"), each other language's plain word for a form field, in the glossary; `sticker` stays the concept's name in code and in the API | Plain words over jargon (GLOSSARY "Voice") |
+| **KG-D8** | Jira boards and the golden core | **A Jira card shows Jira's fields only**: title, description (Jira's text, read-only here), assignee, deadline (a day; no range), priority, and "Open in Jira". Subtasks, comments, attachments, cover, recurrence and custom stickers are not offered on a Jira board (refused with `jira_unsupported`); its settings sheet shows and hides the system stickers only | Everything on a Jira card lives in Jira, so nothing silently stays behind in Shosai (SM-3's spirit); a Jira user works with comments and attachments in Jira |
+| **KG-D9** | Deleting a column that holds cards | **Its cards move to the top of the first other column of the same kind, in their order**; the last column of a kind cannot be deleted (TK-D5: every board keeps a column of each kind). The cabinet hides the column and moves the cards at once, and sends `DELETE` when its Undo toast closes | No card is ever lost with a column and no status changes by surprise; the person cannot delete a column and its cards in one action (clear the column first — it has its own Undo) |
+| **KG-D10** | A filled-by-Leo mark | **Per field — assignee, deadline, priority — on tasks Leo made from a meeting**; the source is the task's meeting and finding (the meeting, the moment, the quote, read when the panel opens). Any change of that field by the person removes its mark; nothing else does. **By the owner's decision, action-item findings get a `priority`** so Leo sets it from the meeting: the notes plan's MT-D13 and its step 26 | The person always sees which values they have not chosen themselves; marks never come back once changed |
+
+**Draft labels (the owner's decision, revising TK-D7):** carried without loss — a board whose draft project has labels gets a field «Labels» (a set of states, one per label); a task's first label by name becomes its value, the others are appended to its description as one line.
+
+**Open: boards of a workspace.** KG-D4 names a workspace board, but no plan has one yet: every board in the tasks plan is a person's (§3.4, TK-D1), and a workspace's Tasks screen is a list. Fields therefore carry their owner (a person or a workspace) from the start, and this package builds personal boards only; whether and where workspace boards are planned is the owner's next decision.
+
+Settled by documents or by the cabinet's rules, no decision needed: the panel's address `?task=` with `pushState` (hub's sheet); Markdown in the Notes editor (one editor in the cabinet); the column sum is derived from the board's cards, not served (every card is in the board read, TK-D5; a served total would lag behind optimistic moves and ignore the filter); the filter lives in the URL, not stored (a link reproduces it, nothing filters a board invisibly next time); no notifications from comments or assignments here (proactive's, TK-D10 of the tasks plan); TK-D4's words for the incoming board come with this package because its mocks follow TK-D4.
+
+---
+
+## 3. Contract additions (TK-D12)
+
+The full contract is written in the tasks plan: TK-D12 in §2, routes and data in **§3.8**, with the amendments of TK-D7 and §3.7. The cabinet's mocks follow it exactly (KG-D1). Summary:
+
+| Resource | Calls | Shape and rules |
+|---|---|---|
+| Task, new fields | `GET`, `PATCH /v1/tasks/{id}` | `starts_on` (with `due_on`, not after it), `priority` nullable, `description` Markdown ≤ 10 000, `recurrence` `{every: "day"} \| {every: "week", weekdays} \| {every: "month", day}` or null, `cover_attachment_id`, `leo_fields`; the detail adds `source` (meeting with title, time and quote), `subtasks`, `attachments`; a person's change of a Leo-filled field drops it from `leo_fields` |
+| Card (in `BoardDetail`) | — | `{id, title, status, priority, starts_on, due_on, assignee, cover, values, subtasks: {done, total}, comment_count, attachment_count, recurring, leo_fields, space, jira}` |
+| Board detail | `GET /v1/boards/{id}` | adds `stickers` (the board's, in order, with `visible`); columns add `color` and `collapsed` |
+| Columns | `POST /v1/boards/{id}/columns`, `PATCH`, `DELETE …/columns/{column_id}` | create `{title, kind, position, color?}` (≤ 20); patch `{title?, color?, collapsed?, position?}`; delete moves cards (KG-D9), `last_column_of_kind` |
+| Subtasks | `POST /v1/tasks/{id}/subtasks`, `PATCH`, `DELETE …/subtasks/{subtask_id}` | `{id, title ≤ 200, done}`, ordered by `position`, ≤ 100 per task |
+| Comments | `GET`, `POST /v1/tasks/{id}/comments`, `PATCH`, `DELETE …/comments/{comment_id}` | cursor pages, newest first; `{id, author {user_id, name, is_you}, body ≤ 5 000 (plain text), created_at, edited_at}`; `Idempotency-Key` on create; edit and delete by the author |
+| Attachments | `POST /v1/me/uploads {purpose: "task_attachment", workspace_id?}` (files), `POST /v1/tasks/{id}/attachments {upload_id} \| {file_id}`, `GET …/{attachment_id}/download`, `DELETE` | `{id, name, content_type, size_bytes, image, preview_url, added_by, added_at}`, ≤ 50 per task; counted in the task owner's storage; `file_id` attaches a copy of a File Manager file (FL-D4); an image gets a preview ≤ 640 px wide for the cover |
+| Stickers | `GET`, `POST /v1/stickers`, `PATCH`, `DELETE /v1/stickers/{id}`; `POST /v1/boards/{id}/stickers`, `PATCH`, `DELETE …/stickers/{sticker_id}`; `PUT`, `DELETE /v1/tasks/{id}/values/{sticker_id}` | kinds `states` (≤ 20 states `{id, name, color}`), `number`, `text`; system ids `assignee`, `due`, `priority`, `recurrence`; a field's owner is its board's owner; values belong to the task; ≤ 20 custom per board, ≤ 100 per owner; a new board: assignee, due and priority visible, recurrence hidden |
+| Colours | — | `gray, red, orange, amber, green, teal, blue, violet, pink` for columns and states; the cabinet maps each to named Tailwind colours with light and dark variants |
+| Column sums | — | Not served: derived in the cabinet from the cards it shows |
+
+---
+
+## 4. Screens and states
+
+Every screen is built from `src/components/ui/` and semantic tokens, in both themes and the existing presets, at 1440 and 390 px, in RTL (`ar`), by mouse and keyboard. Text written by people or by Leo sits in `dir="auto"` elements. All words go through `use-intl` in 16 languages; new terms (field, subtask, comment, cover, repeat, state, overdue, filled by Leo) enter `glossary/terms.md` and the 15 language glossaries in the step that first shows them.
+
+The Web Interface Guidelines (fetched 2026-10-21) shape these screens: every stateful view is in the URL (`?task=`, the filter); every destructive action has an Undo window or a confirmation; drag has tap and keyboard alternatives, and text selection is off while dragging; sheets contain their overscroll; covers are `<img>` with width, height and `loading="lazy"`; long titles and values truncate or clamp (`min-w-0` on flex children); counts and sums use tabular numerals; loading words end with "…"; async changes are announced politely; focus is visible everywhere; `autoFocus` only on desktop for the one input that just opened; an unsent comment stays as a draft while the tab is open. One rule is not followed: the guidelines' Title Case for buttons and headings — the cabinet's glossary requires sentence case.
+
+### 4.1 Board
+
+- **Toolbar:** board switcher, view tabs (board, list, table), Jira sync status, "Fields" (opens the settings sheet), "Add task". The inert Sort, Import CSV, From template and Automation leave (SLICE_MAP §2.10); Filter is replaced by the filter bar (step 8). The incoming-board switch says "Put tasks that come to me here" (TK-D4).
+- **Columns:** a header with an optional colour dot and a thin top rule in that colour, the title, the count (`3 of 12` while filtered), and one line per visible number field: `Σ Estimate in days: 4`, formatted in the interface language; "+" and ⋮. The column body scrolls; an empty column says so and offers "Add task". "Add column" sits after the last column.
+- **Column menu (⋮ and right click, one `MenuKit` body):** add task, rename, colour (swatches with names, "None"), collapse, add column after, move earlier / later, sort by priority, clear (Undo), delete (Undo; disabled with its reason for the last column of a kind). On a Jira board: add task, colour and collapse (display only, never sent to Jira), and today's "Managed in Jira" for the rest.
+- **Collapsed column:** a narrow strip with the title written vertically, the count and the colour; it still takes dropped cards (at the top); a click or Enter expands it.
+- **Mobile 390 px:** columns ≈ 85 vw with horizontal scroll snap; a card drags after a long press, so a swipe scrolls; ⋮ › Move to stays the reliable path.
+- **States:** loading (skeleton in the board's shape), no boards (today's empty state), error (`LoadError` with retry), read-only Jira (first sync and error banners, controls disabled), a full board (`board_full` worded), overflow (TK-D5: a column of 1 000 cards stays responsive, §5.4), no matches under a filter (an empty state with "Clear filters").
+
+### 4.2 Card
+
+Quiet by default: only what is set shows.
+
+- **Face, top to bottom:** cover (16:9 box, `object-cover`, a neutral box until the preview comes, so nothing shifts); title (two lines); chips — priority (when set), deadline (`Oct 24` or `Oct 20 – 24`; overdue in the destructive tone with the word "Overdue" for screen readers), a repeat icon, the visible custom fields (a state: its colour dot and name; a number: `Estimate in days: 4`; a text: truncated); a Leo mark (Sparkles, `size-3`) inside each field Leo filled, with a tooltip "Leo filled this from a meeting"; footer — subtask progress `2/3` with a thin bar, comment and attachment counts, the assignee's avatar at the end; a workspace card names its workspace; a Jira card its key.
+- **Done:** in a done column the card is muted with a check; nothing else changes.
+- **Open:** click, or Enter on the focused card, opens the panel; Space picks it up for keyboard dragging (dnd-kit's keyboard sensor starts on Space only); ⋮ and right click keep today's menu.
+- **Drag preview:** the same face in a `DragPreview` frame — an explicit component, not an `isOverlay` flag.
+
+### 4.3 Card panel
+
+A `Sheet` from the end side (`useDirection()`), `sm:max-w-2xl`, the whole screen on a phone; `?task=<id>` with `pushState`, so Back closes it and a copied link opens it; focus returns to the card. It opens for any task the person may read, also one not on the current board (a link from elsewhere).
+
+- **Header:** the title (inline edit, 200 chars), the column as a select (moving changes status by kind), ⋮ (duplicate, copy link, delete with Undo), close.
+- **Fields:** one row per field of the board (`MetaItem` style), hidden ones included: assignee (a workspace's members for a workspace task; for a personal task the names already used on the person's boards or a new one), deadline (a day or a range: `Calendar` single or range, Clear), priority (High, Medium, Low, None), repeat (Never, Daily, Weekly on chosen days — a `ToggleGroup` of weekdays in the locale's order, Monthly on a day; "Next: Tue, Oct 28"), then the board's custom fields (state select with colours, number input, text input), then "Other fields" — values this task carries from fields not on this board (KG-D4). A Leo-filled row shows "Filled by Leo" with a popover: the meeting, its date, the moment and the quote, and "Open the meeting" (`/app/notes/{id}?t={seconds}`).
+- **Description:** Markdown in the Notes editor, loaded in its own chunk when the panel opens; read-only until it is focused, saved on blur and after a pause.
+- **Subtasks:** progress, the list (checkbox, title, drag handle; keyboard reorder), "Add subtask" input that stays open for the next one, delete with Undo, 100 at most.
+- **Attachments:** "Attach" (upload) and "From my files" (Files' `FilePicker`, attached as a copy) and a drop zone; rows with progress from the shared upload client, refusals as rows (files' rules, the task owner's storage); an image offers "Make cover" / "Remove cover"; download through files' link; delete with Undo.
+- **Source:** "From the meeting «Weekly sync», Oct 12" with a link, or "The meeting is gone" (TK-D3).
+- **Comments:** the thread (`MessageScroller`, `Message`), oldest at the top, "Show earlier" by cursor, your own comments editable and deletable, a composer with Ctrl/⌘+Enter; plain text with links made clickable.
+- **Variants:** a Jira card's panel composes only its sections (KG-D8); a read-only board (Jira first sync or error) shows fields without controls.
+- **States:** loading (skeleton of the sections), not found or no longer readable ("This task is gone", close), error with retry, a failed save (toast, the value goes back), limits reached (worded codes).
+
+### 4.4 Field settings sheet
+
+A `Sheet` from the end side, opened from "Fields". A grid of field cards (two columns from `sm`): icon, name, kind ("System", "Set of states", "Number", "Text"), "Show on cards" `Switch`; custom fields add "Edit" and "Remove from board". Header actions: "New field" (a dialog: kind as a `ToggleGroup`, name, for a set of states an editable list of states with a name and a colour each), "From other boards" (a `Command` list of the person's fields not on this board, with the boards each is on). Editing a set keeps state ids; removing a state that cards use says how many and clears them. "Delete field" (in its dialog) removes it from every board and its values from every task, with a confirmation naming the boards and the number of tasks (others may see those values, KG-D4). A Jira board shows only the system fields. States: empty ("Only system fields on this board"), limits reached, saving, error.
+
+### 4.5 Filter bar
+
+Under the toolbar, one row: search (title and text fields), then a chip per visible field. A chip opens a `Popover` of choices: assignee (people on the board, Unassigned), deadline (Overdue, Today, This week, Later, No date), priority (each, None), repeat (Repeating, Not repeating), a set of states (each state, Empty), a number (Empty, Not empty, a from–to range), a text (contains). Choices within a chip are alternatives; chips and search combine. An active chip is `secondary` and says what it filters ("Priority: High, Low") with its own clear button; "Clear filters" clears all in one action; the count of shown cards is announced politely. The state is in the URL. On a phone the row scrolls sideways. Dragging under a filter places the card after the visible card above it.
+
+---
+
+## 5. Component design
+
+### 5.1 Layers
+
+```
+features/kanban/
+  domain/   contract.ts (TK-D12 shapes, by hand until the OpenAPI), problems.ts (codes the UI words),
+            board rules (placement under a filter, column sums, overdue, deadline range), filters
+            (parse, serialise, match), recurrence (next occurrence — used by the mocks and the panel's
+            "Next:"), stickers (system set, defaults of a new board), palette (colour names)
+  api/      boards, tasks, stickers gateways on /v1 (apiRequest now, the generated client in tasks step 9)
+  model/    board store, task resource and its actions, comments pages, uploads of attachments,
+            sticker actions, filter state in the URL, undo, words
+  ui/       board/, column/, card/, panel/, fields/ (settings sheet), filters/, shared pieces
+  mocks/    /v1 routes of §3 over one in-memory store; seed boards; a generated large board (§5.4)
+```
+
+Files stay ≤ 200 lines; no barrels; imports by path. `domain` stays free of React and `use-intl`.
+
+### 5.2 Composition
+
+- **Data containers apart from presentation.** `BoardScreen` loads and provides; `ColumnView`, `CardFace`, the panel's sections render props they are given. The board's store is provided once per board (`state`, `actions`, `meta` — the composition skill's context interface); presentational components never call the API.
+- **Compound components, no boolean modes.** `CardFace.Root / Cover / Title / Chips / Footer`; `TaskPanel.Root / Header / Fields / Description / Subtasks / Attachments / Source / Comments`, composed differently by `TaskPanel` and `JiraTaskPanel`; `FieldRow` per kind (`StateField`, `NumberField`, `TextField`, `AssigneeField`, `DeadlineField`, `PriorityField`, `RepeatField`) instead of one field with flags; `DragPreview` instead of `isOverlay`.
+- **Shared, business-free pieces move to `src/components/`** when a second slice uses them: the Markdown editor from Notes (step 5), a colour swatch picker if another slice needs one. The Leo source popover is the slice's own (hub imports kanban, so kanban cannot import hub).
+
+### 5.3 State and data
+
+- **Board store.** An external store per board (`useSyncExternalStore`), normalised: columns by id with their card ids, cards by id, stickers. Selectors `useColumnIds`, `useColumn(id)`, `useCardIds(columnId)`, `useCard(id)`: a move re-renders the two columns involved, an edit one card. Optimistic actions with revert and a worded toast on failure, as today. A newer `revision` from a poll is merged when no change is pending instead of remounting the tree, so the panel and focus survive.
+- **Panel.** A task resource by id (the detail with subtasks and attachments) and a cursor-paged comments resource; changes in the panel update the card in the board store at once (the same task).
+- **Undo.** One slice helper over sonner (hide now, send when the toast closes, put back on Undo), used for cards, columns, subtasks and attachments.
+- **Uploads.** `browserUploadPorts("task_attachment")` and `uploadFile` from `src/lib/uploads/` (naming the workspace for a workspace task, so its storage is reserved), two at a time, then the claim; a File Manager file is attached by id; rows show progress; refusals follow files' words.
+
+### 5.4 Drag and drop and performance
+
+- `@dnd-kit/react` stays (already used by kanban, Files and Notes). Pointer with a press delay on touch; keyboard on Space; announcements worded in 16 languages for cards and columns (dnd-kit's accessibility plugin); subtasks reorder with the same library.
+- **Measured, not assumed.** Step 4 measures on generated boards of 300 and 1 000 cards (the mocks add them on a session switch, so the demo stays as it is), with a `playwright-core` scenario like the RTL smoke reading Event Timing and layout shifts: INP < 200 ms dragging a card on 300 cards, CLS ≤ 0.1 while cards load and move. Order of remedies: the store's narrow re-renders; `content-visibility: auto` with an intrinsic size on cards; a virtualised column (`@tanstack/react-virtual`, a new dependency) only if the first two miss, with the before and after numbers.
+- **No layout shift:** covers in fixed boxes, skeletons in the board's shape, tabular numerals for counts and sums, the panel as an overlay.
+- **View transitions:** none by default. A card's move between columns is the drag itself; a candidate is the panel's open and close if it reads as continuity — added only with `startTransition` and reduced-motion CSS, judged in the review.
+
+---
+
+## 6. Steps
+
+Every step loads `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions`, `web-design-guidelines` (with the fetched guidelines, its screens reviewed against them), `shadcn` and `react-doctor`. Every step ends with `npm run typecheck`, `npm test`, `npm run build`, `npm run doctor -- --score` → `100` from `frontend/`; screenshots of each new state in both themes at 1440 and 390 px (Vite and Chromium inside `unshare -n` on this host); Vite stopped and local settings reverted; this table and STATUS updated.
+
+| Step | Content | Skills | Done when |
+|---|---|---|---|
+| 1 | **Contract and mocks.** `domain/contract.ts` for the `/v1` routes of the tasks plan §3.3 that Kanban uses and all of TK-D12; `domain/problems.ts`; the mock store and routes for boards, columns, cards, layout, the incoming board, tasks, subtasks, comments, attachments (claiming uploads from Files' mocks, which learn the `task_attachment` purpose, and copies of their files), stickers and values, Jira; seed boards with fields, covers, subtasks, comments, attachments, recurring and meeting tasks with Leo marks; recurrence's next task; the generated large boards; `docs/kanban-api.md` rewritten. The screens still run on `/api/kanban` | the six above | Unit tests: every route answers its shape and each refusal its code and status; recurrence's next date checked for every day of a leap and a common year, each weekday set and every month day; deleting a column moves its cards to the first column of its kind; a value is the task's, seen from every board |
+| 2 | **Model and switch.** `api/` on the new routes, the board store with selectors, the task resource, problems worded in 16 languages, undo helper; the existing screens (board, list, table, menus, Jira, incoming board) on the new model with today's look; hub's board picker and mocks on the new shapes; the `/api/kanban` mocks and `kanbanApi` wording deleted | the six | The cabinet behaves as before on the new contract; RTL smoke passes; no `/api/kanban` left; react-doctor 100 |
+| 3 | **Board and columns.** Toolbar without the inert controls, TK-D4's words; add column (dialog: name, kind, colour), rename, colour, collapse, reorder by drag and menu, delete with Undo (KG-D9), count, Σ per visible number field, mobile scroll snap and touch drag | the six | Every column action works by mouse, keyboard and touch, in RTL; screenshots |
+| 4 | **Cards.** The new card face (cover, chips, deadline range and overdue, priority only when set, visible fields, subtask progress, counts, repeat mark, Leo marks, done greyed), `DragPreview`, Enter opens / Space drags, localised drag announcements; the performance measurement and its remedies | the six | INP < 200 ms dragging on 300 cards and CLS ≤ 0.1, numbers recorded here; screenshots. **The owner reviews the board (steps 3–4) before step 5** |
+| 5 | **Card panel: frame and fields.** `?task=` sheet, header with title and column, the field rows (system and custom values), deadline day or range, repeat with "Next:", the description in the Notes editor moved to `src/components/`, the source meeting, Leo's provenance popover and the mark removed on change, Jira and read-only variants, not-found and error states | the six | Opening, editing and closing by keyboard and on a phone; a link with `?task=` opens the panel; screenshots |
+| 6 | **Card panel: subtasks, comments, attachments.** Checklist with reorder and Undo; the comments thread with paging, edit and delete; attachments through the upload client with progress and refusals and from my files as copies, cover from an image, download, delete with Undo | the six | Card counts and progress follow the panel at once; an upload refused by size shows as a row; screenshots |
+| 7 | **Field settings.** The sheet, system and custom fields, new field dialog with states and colours, edit and state removal, show on cards, remove from board, from other boards, delete with confirmation; a new board shows three fields; Jira shows system fields only | the six | A field created on one board is reused on another with its values; hiding a field removes its chips and its filter chip; screenshots |
+| 8 | **Filter bar.** Search and a chip per visible field, combined, in the URL, active chips and "Clear filters", the no-match state, drag under a filter, the list and table views filtered too | the six | Filter rules unit-tested; a filtered link reproduces the view; screenshots |
+| 9 | **Accessibility, RTL and performance pass.** The guidelines review of every new screen, focus order and names, reduced motion, RTL smoke scenarios added (open a card by keyboard, drag by keyboard in Arabic), the overflow board, the large-board numbers re-measured; the STATUS row `done` once the owner has reviewed the screens | the six | Definition of done of the prompt holds; react-doctor 100 |
+
+The toolbar's "Fields" button (§4.1) arrives with its sheet in step 7, so no step ships a control without behaviour.
+
+## 7. What the owner provides
+
+- Approval of §2 and of TK-D12: given on 2026-10-21, with amendments.
+- The decision on boards of a workspace (§2, open point).
+- **A design review of the board after step 4**, before the panel, the settings and the filter bar follow its look.
+- A final look at the screens before the package is `done`.
+
+## 8. Documents updated with the approval (2026-10-21)
+
+- Tasks plan: TK-D12 decided, §3.8 as amended; its steps 3, 4, 5 and 9 carry the TK-D12 work.
+- [ADR 0060](../../adr/0060-kanban-golden-core.md): TK-D12 and KG-D1…KG-D10.
+- Notes plan: MT-D13 (a priority on action items) and its step 26.
+- Files plan: the requirements of TK-D12 (the `task_attachment` purpose, the task owner's storage, a copy of a file into an attachment), built with tasks' step 3; `frontend/docs/file-manager-api.md` follows with that step.
+- SLICE_MAP §2.7: the Kanban rows.
+- DATA_MAPPING §5.8: draft column colours and labels carried.
+- STATUS: the row `planned`; the notes row names step 26.
+
+## 9. Risks
+
+- **Step size.** Steps 1, 5 and 6 are the largest; each can split along its sections (for example 6a subtasks and comments, 6b attachments) without changing the order.
+- **Large boards and dnd-kit.** Virtualised lists and sortable drag and drop fight each other; the plan tries narrow re-renders and `content-visibility` first and virtualises only on numbers.
+- **The Notes editor in a sheet** brings Tiptap to the Kanban; it stays out of the board's chunk and loads with the panel, its cost measured in step 5.
+- **Contract drift.** The backend may refine TK-D12 when tasks steps 3–4 implement it; the mocks then follow in the same change, so step 9 stays a swap.
+- **Priority from meetings** depends on notes' extraction learning a priority; until then Leo marks only assignee and deadline.

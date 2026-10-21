@@ -109,8 +109,8 @@ The cabinet has no live screen; capture happens in the shipped macOS and Windows
 
 | Screen / state | Needs | Leo | Serves | Slice |
 |---|---|---|---|---|
-| `/app/kanban` boards (board, list, table) | Boards with templates and icons, columns, card order with revision, tasks with priority; Jira boards in two-way sync with webhooks; "show my workspace tasks here" | "Which tasks are overdue?" | Tr, Or | tasks |
-| Kanban inert controls | Filter, Sort, Import CSV, From template, Automation have no handler | — | — | dropped from the UI (§2.10) |
+| `/app/kanban` boards (board, list, table) | Boards with templates and icons, columns, card order with revision, tasks with priority; Jira boards in two-way sync with webhooks; "show my workspace tasks here". **Golden core (tasks TK-D12, the owner's decision of 2026-10-21):** columns with colour, collapse and Σ of a number field; cards with cover, deadline range, fields, subtask progress and counts, recurring mark, Leo's marks; the card panel (Markdown description, subtasks, comments, attachments, recurrence, source meeting); board fields (sets of states, numbers, texts) shown or hidden per board; the filter bar | "Which tasks are overdue?" | Tr, Or | tasks |
+| Kanban inert controls | Filter, Sort, Import CSV, From template, Automation have no handler | — | — | dropped from the UI (§2.10); Filter returns as the golden core's filter bar (TK-D12) |
 | Workspace tasks, "Needs you", My workspace tasks | One task store with assignee, due date, project, source meeting | tasks from meetings | Tr, Cd | tasks |
 | Home `/app/productivity` | Greeting, "Needs you" (Leo's actions waiting for approval), "Today" list (local, lost on reload), workspace tasks, projects (static), calendar (no events), recent notes (static), focus timer (localStorage), year skyline with streaks (random data) | "Plan my day" | Tr, Wa | composition: tasks, calendar, meetings, proactive, agent (§8 SM-4) |
 | `/app/hub` list | Hubs with computed summary (top gap, rhythm, open topics), board link, archive | — | Or, Wa | hubs |
