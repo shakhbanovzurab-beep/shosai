@@ -2,6 +2,7 @@ import type calendar from "./messages/en/calendar.json";
 import type chats from "./messages/en/chats.json";
 import type chatsApi from "./messages/en/chatsApi.json";
 import type chatsConnect from "./messages/en/chatsConnect.json";
+import type chatsDigest from "./messages/en/chatsDigest.json";
 import type common from "./messages/en/common.json";
 import type consent from "./messages/en/consent.json";
 import type download from "./messages/en/download.json";
@@ -82,6 +83,7 @@ export type Messages = {
   chats: typeof chats;
   chatsApi: typeof chatsApi;
   chatsConnect: typeof chatsConnect;
+  chatsDigest: typeof chatsDigest;
   common: typeof common;
   consent: typeof consent;
   download: typeof download;
