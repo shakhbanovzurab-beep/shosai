@@ -40,5 +40,20 @@
     "label": "Bevat",
     "placeholder": "Typ om te filteren…"
   },
-  "nothingFound": "Niets gevonden"
+  "nothingFound": "Niets gevonden",
+  "stopwatch": {
+    "running": "Loopt",
+    "stopped": "Gestopt",
+    "none": "Niet gestart"
+  },
+  "timer": {
+    "left": "Tijd over",
+    "up": "Tijd is om",
+    "none": "Geen timer"
+  },
+  "tracking": {
+    "over": "Meer dan gepland",
+    "within": "Binnen planning",
+    "none": "Geen planning"
+  }
 }

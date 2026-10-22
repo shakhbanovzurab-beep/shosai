@@ -133,5 +133,32 @@
       "hint": "Eine Kopie kommt in die Aufgabe. Die Datei im Dateimanager bleibt unverändert.",
       "attach": "{count, plural, one {# Datei anhängen} other {# Dateien anhängen}}"
     }
+  },
+  "time": {
+    "notStarted": "Nicht gestartet",
+    "start": "Starten",
+    "stop": "Stoppen",
+    "reset": "Zurücksetzen",
+    "resetTitle": "Stoppuhr zurücksetzen?",
+    "resetText": "Die gemessene Zeit ({time}) und die Zeit pro Spalte werden gelöscht. Das lässt sich nicht rückgängig machen.",
+    "perColumn": "Zeit pro Spalte",
+    "stopped": "Stoppuhr gestoppt: {time}",
+    "addToFact": "{time} zur Ist-Zeit hinzufügen",
+    "setTimer": "Timer stellen",
+    "change": "Ändern",
+    "pause": "Pausieren",
+    "resume": "Fortsetzen",
+    "removeTimer": "Timer entfernen",
+    "left": "Noch {time}",
+    "timeUp": "Zeit abgelaufen · +{time}",
+    "paused": "Pausiert",
+    "presets": "Dauer",
+    "custom": "Eigene Dauer",
+    "startTimer": "Starten",
+    "lengthInvalid": "Gib eine Dauer zwischen 1 Minute und 365 Tagen an.",
+    "plan": "Plan",
+    "fact": "Ist",
+    "durationInvalid": "Gib Stunden und Minuten als Zahlen ein, höchstens 100.000 Stunden.",
+    "overPlan": "Plan überschritten"
   }
 }

@@ -12,6 +12,7 @@ import { columnSum } from "../domain/board-rules";
 import { useBoardSelector, useBoardStickers, useCardIds, useColumn } from "../model/board-hooks";
 import { BoardActionsButton, BoardContextMenu } from "./board-menu-triggers";
 import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
+import { ColumnTimeSums } from "./column-time-sums";
 import { useVisibleCardIds } from "./filters/use-visible-cards";
 import { SWATCHES } from "./palette";
 
@@ -95,6 +96,7 @@ export function ColumnHeader({ columnId, headingId, handleRef }: HeaderProps) {
             {shown === count ? t("taskCount", { count }) : tf("columnCount", { shown, total: count })}
           </p>
           <ColumnSums columnId={columnId} />
+          <ColumnTimeSums columnId={columnId} />
         </div>
         <div className="-me-2 flex items-center gap-0.5 text-muted-foreground">
           <Button

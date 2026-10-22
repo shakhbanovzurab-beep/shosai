@@ -40,5 +40,20 @@
     "label": "Contém",
     "placeholder": "Digite para filtrar…"
   },
-  "nothingFound": "Nenhum resultado"
+  "nothingFound": "Nenhum resultado",
+  "stopwatch": {
+    "running": "Em andamento",
+    "stopped": "Parado",
+    "none": "Não iniciado"
+  },
+  "timer": {
+    "left": "Tempo restante",
+    "up": "Tempo esgotado",
+    "none": "Sem timer"
+  },
+  "tracking": {
+    "over": "Acima do previsto",
+    "within": "Dentro do previsto",
+    "none": "Sem tempo previsto"
+  }
 }

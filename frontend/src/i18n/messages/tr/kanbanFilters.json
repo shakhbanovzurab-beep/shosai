@@ -40,5 +40,20 @@
     "label": "İçerir",
     "placeholder": "Filtrelemek için yazın…"
   },
-  "nothingFound": "Eşleşen sonuç yok"
+  "nothingFound": "Eşleşen sonuç yok",
+  "stopwatch": {
+    "running": "Çalışıyor",
+    "stopped": "Durduruldu",
+    "none": "Başlatılmadı"
+  },
+  "timer": {
+    "left": "Süre var",
+    "up": "Süre doldu",
+    "none": "Zamanlayıcı yok"
+  },
+  "tracking": {
+    "over": "Plan aşıldı",
+    "within": "Plan dahilinde",
+    "none": "Plan yok"
+  }
 }

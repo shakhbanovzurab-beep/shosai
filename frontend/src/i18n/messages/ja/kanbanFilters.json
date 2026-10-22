@@ -40,5 +40,20 @@
     "label": "次を含む",
     "placeholder": "入力して絞り込み…"
   },
-  "nothingFound": "一致するものはありません"
+  "nothingFound": "一致するものはありません",
+  "stopwatch": {
+    "running": "計測中",
+    "stopped": "停止中",
+    "none": "未開始"
+  },
+  "timer": {
+    "left": "残り時間あり",
+    "up": "時間切れ",
+    "none": "タイマーなし"
+  },
+  "tracking": {
+    "over": "予定超過",
+    "within": "予定内",
+    "none": "予定なし"
+  }
 }

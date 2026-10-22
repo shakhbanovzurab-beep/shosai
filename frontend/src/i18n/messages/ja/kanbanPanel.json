@@ -133,5 +133,32 @@
       "hint": "タスクにはコピーが追加されます。ファイル管理のファイルはそのまま残ります。",
       "attach": "{count, plural, other {# 件のファイルを添付}}"
     }
+  },
+  "time": {
+    "notStarted": "未開始",
+    "start": "開始",
+    "stop": "停止",
+    "reset": "リセット",
+    "resetTitle": "ストップウォッチをリセットしますか？",
+    "resetText": "計測した時間（{time}）と列ごとの時間が消去されます。この操作は元に戻せません。",
+    "perColumn": "列ごとの時間",
+    "stopped": "ストップウォッチを停止しました：{time}",
+    "addToFact": "{time} を実績に追加",
+    "setTimer": "タイマーを設定",
+    "change": "変更",
+    "pause": "一時停止",
+    "resume": "再開",
+    "removeTimer": "タイマーを削除",
+    "left": "残り {time}",
+    "timeUp": "時間切れ · +{time}",
+    "paused": "一時停止中",
+    "presets": "時間",
+    "custom": "時間を指定",
+    "startTimer": "開始",
+    "lengthInvalid": "1 分から 365 日までの時間を設定してください。",
+    "plan": "予定",
+    "fact": "実績",
+    "durationInvalid": "時間と分を数字で入力してください（最大 100,000 時間）。",
+    "overPlan": "予定超過"
   }
 }

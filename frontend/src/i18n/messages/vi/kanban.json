@@ -21,7 +21,9 @@
     "add": "Thêm cột",
     "expand": "Mở rộng {column}",
     "sum": "{field}: {sum}",
-    "sumLabel": "Tổng {field} trong {column}: {sum}"
+    "sumLabel": "Tổng {field} trong {column}: {sum}",
+    "timeLabel": "Thời gian trong {column}: {time}",
+    "trackingLabel": "Trong {column}: đã dùng {fact} trên {plan} theo kế hoạch"
   },
   "columnMenu": {
     "managedInJira": "Cột được quản lý trong Jira",

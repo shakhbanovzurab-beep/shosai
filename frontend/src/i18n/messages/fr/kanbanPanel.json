@@ -133,5 +133,32 @@
       "hint": "Une copie est ajoutée à la tâche. Le fichier reste tel quel dans le Gestionnaire de fichiers.",
       "attach": "{count, plural, one {Joindre # fichier} many {Joindre # de fichiers} other {Joindre # fichiers}}"
     }
+  },
+  "time": {
+    "notStarted": "Pas encore lancé",
+    "start": "Lancer",
+    "stop": "Arrêter",
+    "reset": "Réinitialiser",
+    "resetTitle": "Réinitialiser le chronomètre ?",
+    "resetText": "Le temps mesuré ({time}) et le temps par colonne seront effacés. Cette action est irréversible.",
+    "perColumn": "Temps par colonne",
+    "stopped": "Chronomètre arrêté : {time}",
+    "addToFact": "Ajouter {time} au temps réel",
+    "setTimer": "Régler le minuteur",
+    "change": "Modifier",
+    "pause": "Mettre en pause",
+    "resume": "Reprendre",
+    "removeTimer": "Retirer le minuteur",
+    "left": "Il reste {time}",
+    "timeUp": "Temps écoulé · +{time}",
+    "paused": "En pause",
+    "presets": "Durée",
+    "custom": "Durée personnalisée",
+    "startTimer": "Lancer",
+    "lengthInvalid": "Indiquez une durée comprise entre 1 minute et 365 jours.",
+    "plan": "Prévu",
+    "fact": "Réel",
+    "durationInvalid": "Saisissez les heures et les minutes en chiffres, jusqu’à 100 000 heures.",
+    "overPlan": "Temps prévu dépassé"
   }
 }

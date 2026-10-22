@@ -133,5 +133,32 @@
       "hint": "Uma cópia vai para a tarefa. O arquivo no Gerenciador de arquivos continua como está.",
       "attach": "{count, plural, one {Anexar # arquivo} many {Anexar # de arquivos} other {Anexar # arquivos}}"
     }
+  },
+  "time": {
+    "notStarted": "Não iniciado",
+    "start": "Iniciar",
+    "stop": "Parar",
+    "reset": "Zerar",
+    "resetTitle": "Zerar o cronômetro?",
+    "resetText": "O tempo medido ({time}) e o tempo por coluna serão excluídos. Não é possível desfazer essa ação.",
+    "perColumn": "Tempo por coluna",
+    "stopped": "Cronômetro parado: {time}",
+    "addToFact": "Adicionar {time} ao tempo real",
+    "setTimer": "Definir timer",
+    "change": "Alterar",
+    "pause": "Pausar",
+    "resume": "Retomar",
+    "removeTimer": "Remover timer",
+    "left": "Faltam {time}",
+    "timeUp": "Tempo esgotado · +{time}",
+    "paused": "Pausado",
+    "presets": "Duração",
+    "custom": "Duração personalizada",
+    "startTimer": "Iniciar",
+    "lengthInvalid": "Defina uma duração de 1 minuto a 365 dias.",
+    "plan": "Previsto",
+    "fact": "Real",
+    "durationInvalid": "Digite as horas e os minutos em números, até 100.000 horas.",
+    "overPlan": "Acima do previsto"
   }
 }

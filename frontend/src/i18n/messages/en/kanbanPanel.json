@@ -133,5 +133,32 @@
       "hint": "A copy goes into the task. The file in File Manager stays as it is.",
       "attach": "{count, plural, one {Attach # file} other {Attach # files}}"
     }
+  },
+  "time": {
+    "notStarted": "Not started",
+    "start": "Start",
+    "stop": "Stop",
+    "reset": "Reset",
+    "resetTitle": "Reset the stopwatch?",
+    "resetText": "Its {time} and the time per column will be cleared. This can’t be undone.",
+    "perColumn": "Time per column",
+    "stopped": "Stopwatch stopped: {time}",
+    "addToFact": "Add {time} to the fact",
+    "setTimer": "Set timer",
+    "change": "Change",
+    "pause": "Pause",
+    "resume": "Resume",
+    "removeTimer": "Remove timer",
+    "left": "{time} left",
+    "timeUp": "Time is up · +{time}",
+    "paused": "Paused",
+    "presets": "Length",
+    "custom": "Your own length",
+    "startTimer": "Start",
+    "lengthInvalid": "Set a length from 1 minute to 365 days.",
+    "plan": "Plan",
+    "fact": "Fact",
+    "durationInvalid": "Type hours and minutes as numbers, up to 100,000 hours.",
+    "overPlan": "Over plan"
   }
 }

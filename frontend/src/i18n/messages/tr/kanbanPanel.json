@@ -133,5 +133,32 @@
       "hint": "Göreve bir kopya eklenir. Dosya yöneticisindeki dosya olduğu gibi kalır.",
       "attach": "{count, plural, one {# dosya ekle} other {# dosya ekle}}"
     }
+  },
+  "time": {
+    "notStarted": "Başlatılmadı",
+    "start": "Başlat",
+    "stop": "Durdur",
+    "reset": "Sıfırla",
+    "resetTitle": "Kronometre sıfırlansın mı?",
+    "resetText": "Ölçülen süre ({time}) ve sütun başına süreler silinecek. Bu işlem geri alınamaz.",
+    "perColumn": "Sütun başına süre",
+    "stopped": "Kronometre durduruldu: {time}",
+    "addToFact": "Gerçekleşen süreye {time} ekle",
+    "setTimer": "Zamanlayıcı kur",
+    "change": "Değiştir",
+    "pause": "Duraklat",
+    "resume": "Sürdür",
+    "removeTimer": "Zamanlayıcıyı kaldır",
+    "left": "{time} kaldı",
+    "timeUp": "Süre doldu · +{time}",
+    "paused": "Duraklatıldı",
+    "presets": "Süre",
+    "custom": "Özel süre",
+    "startTimer": "Başlat",
+    "lengthInvalid": "1 dakika ile 365 gün arasında bir süre belirleyin.",
+    "plan": "Plan",
+    "fact": "Gerçekleşen",
+    "durationInvalid": "Saatleri ve dakikaları rakamla girin; en fazla 100.000 saat.",
+    "overPlan": "Plan aşıldı"
   }
 }

@@ -9,6 +9,15 @@ import type { Priority } from "./tasks-contract";
 export const DUE_BUCKETS = ["overdue", "today", "week", "later", "none"] as const;
 export type DueBucket = (typeof DUE_BUCKETS)[number];
 
+/** Поля времени (KT-D7): секундомер идёт, стоит или не запускался; у таймера есть время, вышло или его нет;
+ * факт сверх плана, в плане или плана нет. */
+export const STOPWATCH_BUCKETS = ["running", "stopped", "none"] as const;
+export const TIMER_BUCKETS = ["left", "up", "none"] as const;
+export const TRACKING_BUCKETS = ["over", "within", "none"] as const;
+export type StopwatchBucket = (typeof STOPWATCH_BUCKETS)[number];
+export type TimerBucket = (typeof TIMER_BUCKETS)[number];
+export type TrackingBucket = (typeof TRACKING_BUCKETS)[number];
+
 /** Без исполнителя — отдельный выбор рядом с людьми доски. */
 export const UNASSIGNED = "~unassigned";
 /** Поле без значения — выбор рядом с состояниями набора. */
@@ -25,6 +34,9 @@ export type BoardFilter = {
   due: DueBucket[];
   priority: (Priority | "none")[];
   repeat: ("yes" | "no")[];
+  stopwatch: StopwatchBucket[];
+  timer: TimerBucket[];
+  tracking: TrackingBucket[];
   states: Record<string, string[]>;
   numbers: Record<string, NumberFilter>;
   texts: Record<string, string>;
@@ -35,6 +47,9 @@ export const NO_FILTER: BoardFilter = {
   due: [],
   priority: [],
   repeat: [],
+  stopwatch: [],
+  timer: [],
+  tracking: [],
   states: {},
   numbers: {},
   texts: {},

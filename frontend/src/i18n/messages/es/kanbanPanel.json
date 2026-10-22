@@ -133,5 +133,32 @@
       "hint": "Se agrega una copia a la tarea. El archivo del Administrador de archivos queda como está.",
       "attach": "{count, plural, one {Adjuntar # archivo} many {Adjuntar # de archivos} other {Adjuntar # archivos}}"
     }
+  },
+  "time": {
+    "notStarted": "Sin iniciar",
+    "start": "Iniciar",
+    "stop": "Detener",
+    "reset": "Restablecer",
+    "resetTitle": "¿Restablecer el cronómetro?",
+    "resetText": "Se borrarán el tiempo medido ({time}) y el tiempo por columna. Esta acción no se puede deshacer.",
+    "perColumn": "Tiempo por columna",
+    "stopped": "Cronómetro detenido: {time}",
+    "addToFact": "Agregar {time} al tiempo real",
+    "setTimer": "Definir temporizador",
+    "change": "Cambiar",
+    "pause": "Pausar",
+    "resume": "Reanudar",
+    "removeTimer": "Quitar temporizador",
+    "left": "Quedan {time}",
+    "timeUp": "Tiempo agotado · +{time}",
+    "paused": "En pausa",
+    "presets": "Duración",
+    "custom": "Duración personalizada",
+    "startTimer": "Iniciar",
+    "lengthInvalid": "Define una duración de 1 minuto a 365 días.",
+    "plan": "Previsto",
+    "fact": "Real",
+    "durationInvalid": "Escribe las horas y los minutos con números, hasta 100.000 horas.",
+    "overPlan": "Supera lo previsto"
   }
 }

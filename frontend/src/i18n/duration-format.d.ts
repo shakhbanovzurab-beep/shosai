@@ -4,6 +4,7 @@ declare namespace Intl {
 
   interface DurationFormatOptions {
     style?: "long" | "short" | "narrow" | "digital";
+    hoursDisplay?: "always" | "auto";
     minutesDisplay?: "always" | "auto";
     secondsDisplay?: "always" | "auto";
   }

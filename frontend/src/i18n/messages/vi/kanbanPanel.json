@@ -133,5 +133,32 @@
       "hint": "Một bản sao sẽ được thêm vào công việc. Tệp trong Trình quản lý tệp vẫn giữ nguyên.",
       "attach": "{count, plural, other {Đính kèm # tệp}}"
     }
+  },
+  "time": {
+    "notStarted": "Chưa bắt đầu",
+    "start": "Bắt đầu",
+    "stop": "Dừng",
+    "reset": "Đặt lại",
+    "resetTitle": "Đặt lại đồng hồ bấm giờ?",
+    "resetText": "Thời gian đã đo ({time}) và thời gian theo từng cột sẽ bị xóa. Bạn không thể hoàn tác thao tác này.",
+    "perColumn": "Thời gian theo cột",
+    "stopped": "Đã dừng đồng hồ bấm giờ: {time}",
+    "addToFact": "Thêm {time} vào thời gian thực tế",
+    "setTimer": "Đặt hẹn giờ",
+    "change": "Thay đổi",
+    "pause": "Tạm dừng",
+    "resume": "Tiếp tục",
+    "removeTimer": "Gỡ hẹn giờ",
+    "left": "Còn {time}",
+    "timeUp": "Hết giờ · +{time}",
+    "paused": "Tạm dừng",
+    "presets": "Thời lượng",
+    "custom": "Thời lượng tùy chỉnh",
+    "startTimer": "Bắt đầu",
+    "lengthInvalid": "Hãy đặt thời lượng từ 1 phút đến 365 ngày.",
+    "plan": "Kế hoạch",
+    "fact": "Thực tế",
+    "durationInvalid": "Hãy nhập giờ và phút bằng số, tối đa 100.000 giờ.",
+    "overPlan": "Vượt kế hoạch"
   }
 }

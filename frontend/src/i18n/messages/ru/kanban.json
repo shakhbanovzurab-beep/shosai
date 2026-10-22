@@ -21,7 +21,9 @@
     "add": "Добавить колонку",
     "expand": "Развернуть колонку «{column}»",
     "sum": "{field}: {sum}",
-    "sumLabel": "Сумма поля «{field}» в колонке «{column}»: {sum}"
+    "sumLabel": "Сумма поля «{field}» в колонке «{column}»: {sum}",
+    "timeLabel": "Время в колонке «{column}»: {time}",
+    "trackingLabel": "В колонке «{column}»: потрачено {fact} из {plan} по плану"
   },
   "columnMenu": {
     "managedInJira": "Колонки настраиваются в Jira",

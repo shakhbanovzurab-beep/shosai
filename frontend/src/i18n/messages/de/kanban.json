@@ -21,7 +21,9 @@
     "add": "Spalte hinzufügen",
     "expand": "{column} ausklappen",
     "sum": "{field}: {sum}",
-    "sumLabel": "Summe von {field} in {column}: {sum}"
+    "sumLabel": "Summe von {field} in {column}: {sum}",
+    "timeLabel": "Zeit in {column}: {time}",
+    "trackingLabel": "In {column}: {fact} aufgewendet, {plan} geplant"
   },
   "columnMenu": {
     "managedInJira": "Spalten werden in Jira verwaltet",

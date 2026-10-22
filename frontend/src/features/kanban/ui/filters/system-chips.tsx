@@ -25,8 +25,8 @@ export function useChosenText() {
   };
 }
 
-/** Чип с неизменным набором выборов: срок, приоритет, повтор. */
-function FixedChip<T extends string>({
+/** Чип с неизменным набором выборов: срок, приоритет, повтор, поля времени. */
+export function FixedChip<T extends string>({
   field,
   choices,
   selected,

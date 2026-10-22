@@ -1,6 +1,7 @@
 import { type BoardFilter, type DueBucket, EMPTY_STATE, type NumberFilter, UNASSIGNED } from "./filter-contract";
 import { daysFrom } from "./recurrence";
 import type { Assignee, Card } from "./tasks-contract";
+import { stopwatchBucket, timerBucket, trackingBucket } from "./time-rules";
 
 /* Совпадает ли карточка с фильтром доски (план пакета §4.5). */
 
@@ -47,7 +48,17 @@ function stickersMatch(card: Card, filter: BoardFilter) {
   return true;
 }
 
-export function cardMatches(card: Card, filter: BoardFilter, today: string): boolean {
+/** Поля времени; `now` — минута по серверу: таймер, у которого время вышло, переходит в «Время вышло». */
+function timeMatches(card: Card, filter: BoardFilter, now: number) {
+  if (filter.stopwatch.length > 0 && !filter.stopwatch.includes(stopwatchBucket(card.stopwatch))) return false;
+  if (filter.timer.length > 0 && !filter.timer.includes(timerBucket(card.timer, now))) return false;
+  return filter.tracking.length === 0 || filter.tracking.includes(trackingBucket(card.time_tracking));
+}
+
+/** Когда проверяется карточка: сегодня человека и минута по серверу. */
+export type FilterMoment = { today: string; now: number };
+
+export function cardMatches(card: Card, filter: BoardFilter, { today, now }: FilterMoment): boolean {
   if (filter.assignee.length > 0 && !filter.assignee.includes(assigneeKey(card.assignee))) return false;
   if (filter.due.length > 0) {
     const bucket = dueBucket(card, today);
@@ -55,13 +66,14 @@ export function cardMatches(card: Card, filter: BoardFilter, today: string): boo
   }
   if (filter.priority.length > 0 && !filter.priority.includes(card.priority ?? "none")) return false;
   if (filter.repeat.length > 0 && !filter.repeat.includes(card.recurring ? "yes" : "no")) return false;
-  return stickersMatch(card, filter);
+  return timeMatches(card, filter, now) && stickersMatch(card, filter);
 }
 
 /** Фильтр, который что-то отсеивает. */
 export function isFiltering(filter: BoardFilter) {
   return (
     filter.assignee.length + filter.due.length + filter.priority.length + filter.repeat.length > 0 ||
+    filter.stopwatch.length + filter.timer.length + filter.tracking.length > 0 ||
     Object.values(filter.states).some((chosen) => chosen.length > 0) ||
     Object.keys(filter.numbers).length > 0 ||
     Object.values(filter.texts).some((text) => text.trim() !== "")
@@ -78,6 +90,9 @@ export function forVisible(filter: BoardFilter, visible: ReadonlySet<string>): B
     due: visible.has("due") ? filter.due : [],
     priority: visible.has("priority") ? filter.priority : [],
     repeat: visible.has("recurrence") ? filter.repeat : [],
+    stopwatch: visible.has("stopwatch") ? filter.stopwatch : [],
+    timer: visible.has("timer") ? filter.timer : [],
+    tracking: visible.has("time_tracking") ? filter.tracking : [],
     states: keep(filter.states),
     numbers: keep(filter.numbers),
     texts: keep(filter.texts),

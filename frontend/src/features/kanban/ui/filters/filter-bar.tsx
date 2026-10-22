@@ -4,12 +4,13 @@ import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
 
-import { type BoardSticker, isCustomSticker, isTimeSticker } from "../../domain/stickers-contract";
+import { type BoardSticker, isCustomSticker } from "../../domain/stickers-contract";
 import { useBoardStickers } from "../../model/board-hooks";
 import { useFieldName } from "../field-name";
 import { NumberChip, StatesChip, TextChip } from "./field-chips";
 import { clearFilter } from "./filter-address";
 import { AssigneeChip, DueChip, PriorityChip, RepeatChip } from "./system-chips";
+import { StopwatchChip, TimerChip, TrackingChip } from "./time-chips";
 import { useShownCount } from "./use-visible-cards";
 
 /** Чип своего вида для каждого поля, видимого на карточках. */
@@ -19,8 +20,9 @@ function ChipFor({ sticker }: { sticker: BoardSticker }) {
     if (sticker.kind === "states") return <StatesChip sticker={sticker} />;
     return sticker.kind === "number" ? <NumberChip sticker={sticker} /> : <TextChip sticker={sticker} />;
   }
-  // Чипы времени — шаг 3 пакета Kanban time (KT-D7).
-  if (isTimeSticker(sticker.id)) return null;
+  if (sticker.kind === "stopwatch") return <StopwatchChip field={field} />;
+  if (sticker.kind === "timer") return <TimerChip field={field} />;
+  if (sticker.kind === "time_tracking") return <TrackingChip field={field} />;
   if (sticker.kind === "assignee") return <AssigneeChip field={field} />;
   if (sticker.kind === "due") return <DueChip field={field} />;
   return sticker.kind === "priority" ? <PriorityChip field={field} /> : <RepeatChip field={field} />;

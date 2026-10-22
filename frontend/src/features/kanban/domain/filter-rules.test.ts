@@ -7,6 +7,7 @@ import { placeAmongVisible, visibleIds } from "./filtered-move";
 import type { Card } from "./tasks-contract";
 
 const TODAY = "2026-10-21";
+const NOW = Date.parse("2026-10-21T09:00:00.000Z");
 const card = (fields: Partial<Card>): Card =>
   ({
     id: "c",
@@ -17,10 +18,13 @@ const card = (fields: Partial<Card>): Card =>
     assignee: null,
     recurring: false,
     values: {},
+    stopwatch: null,
+    timer: null,
+    time_tracking: null,
     ...fields,
   }) as Card;
 const with_ = (patch: Partial<BoardFilter>): BoardFilter => ({ ...NO_FILTER, ...patch });
-const matches = (c: Card, f: BoardFilter) => cardMatches(c, f, TODAY);
+const matches = (c: Card, f: BoardFilter) => cardMatches(c, f, { today: TODAY, now: NOW });
 
 describe("the deadline buckets", () => {
   it("count from the person's today, and a done task is never overdue", () => {
@@ -103,5 +107,37 @@ describe("a move under a filter", () => {
   it("puts it at the top when no visible card is above it", () => {
     expect(placeAmongVisible(full, { todo: ["a", "b", "c"], done: ["d"] }, "d").done).toEqual(["d", "h3"]);
     expect(placeAmongVisible(full, { todo: ["d", "a", "b", "c"], done: [] }, "d").todo[0]).toBe("d");
+  });
+});
+
+describe("the time filters", () => {
+  const running = { running_since: "2026-10-21T08:00:00.000Z", total_ms: 0, by_column: {} };
+  const up = { length_ms: 60_000, ends_at: "2026-10-21T08:59:00.000Z", paused_left_ms: null };
+
+  it("match running, stopped and never started stopwatches, timers by the server's minute, plan against fact", () => {
+    expect(matches(card({ stopwatch: running }), with_({ stopwatch: ["running"] }))).toBe(true);
+    expect(matches(card({ stopwatch: { ...running, running_since: null } }), with_({ stopwatch: ["running"] }))).toBe(
+      false,
+    );
+    expect(matches(card({}), with_({ stopwatch: ["none"] }))).toBe(true);
+    expect(matches(card({ timer: up }), with_({ timer: ["up"] }))).toBe(true);
+    expect(cardMatches(card({ timer: up }), with_({ timer: ["up"] }), { today: TODAY, now: NOW - 120_000 })).toBe(
+      false,
+    );
+    expect(
+      matches(card({ time_tracking: { plan_minutes: 60, fact_minutes: 61 } }), with_({ tracking: ["over"] })),
+    ).toBe(true);
+    expect(
+      matches(card({ time_tracking: { plan_minutes: null, fact_minutes: 5 } }), with_({ tracking: ["none"] })),
+    ).toBe(true);
+  });
+
+  it("live in the link and stop filtering when their field is hidden", () => {
+    const filter = with_({ stopwatch: ["stopped"], timer: ["up", "none"], tracking: ["over"] });
+    const params = searchWithFilter(new URLSearchParams("board=work&timer=soon"), filter);
+    expect(params.getAll("timer")).toEqual(["up", "none"]);
+    expect(filterFromSearch(params)).toEqual(filter);
+    expect(filterFromSearch(new URLSearchParams("timer=soon")).timer).toEqual([]);
+    expect(isFiltering(forVisible(filter, new Set(["assignee"])))).toBe(false);
   });
 });

@@ -40,5 +40,20 @@
     "label": "Contiene",
     "placeholder": "Escribe para filtrar…"
   },
-  "nothingFound": "No hay coincidencias"
+  "nothingFound": "No hay coincidencias",
+  "stopwatch": {
+    "running": "En marcha",
+    "stopped": "Detenido",
+    "none": "Sin iniciar"
+  },
+  "timer": {
+    "left": "Queda tiempo",
+    "up": "Tiempo agotado",
+    "none": "Sin temporizador"
+  },
+  "tracking": {
+    "over": "Supera lo previsto",
+    "within": "Dentro de lo previsto",
+    "none": "Sin tiempo previsto"
+  }
 }

@@ -40,5 +40,20 @@
     "label": "包含",
     "placeholder": "輸入文字以篩選…"
   },
-  "nothingFound": "沒有相符的項目"
+  "nothingFound": "沒有相符的項目",
+  "stopwatch": {
+    "running": "計時中",
+    "stopped": "已停止",
+    "none": "尚未啟動"
+  },
+  "timer": {
+    "left": "尚有時間",
+    "up": "時間到",
+    "none": "沒有計時器"
+  },
+  "tracking": {
+    "over": "超出預計",
+    "within": "未超出預計",
+    "none": "沒有預計工時"
+  }
 }

@@ -40,5 +40,20 @@
     "label": "Berisi",
     "placeholder": "Ketik untuk memfilter…"
   },
-  "nothingFound": "Tidak ada yang cocok"
+  "nothingFound": "Tidak ada yang cocok",
+  "stopwatch": {
+    "running": "Berjalan",
+    "stopped": "Dihentikan",
+    "none": "Belum dimulai"
+  },
+  "timer": {
+    "left": "Waktu tersisa",
+    "up": "Waktu habis",
+    "none": "Tanpa timer"
+  },
+  "tracking": {
+    "over": "Melebihi rencana",
+    "within": "Sesuai rencana",
+    "none": "Tanpa rencana"
+  }
 }

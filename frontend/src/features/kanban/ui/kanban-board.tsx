@@ -13,7 +13,7 @@ import { AddColumnButton } from "./add-column-button";
 import { useBoardCommands, useEditable, useManagedByJira } from "./board-store";
 import { useDragSetup } from "./drag-setup";
 import { useFilterAddress } from "./filters/filter-address";
-import { shownSet } from "./filters/use-visible-cards";
+import { momentNow, shownSet } from "./filters/use-visible-cards";
 import { KanbanColumn } from "./kanban-column";
 import { DragPreview } from "./task-card";
 
@@ -62,7 +62,7 @@ export function KanbanBoard() {
   function handleDragOver(event: DragOverEvent) {
     const { source } = event.operation;
     if (source?.type !== "task") return;
-    const shown = shownSet(store.get(), filter, today);
+    const shown = shownSet(store.get(), filter, momentNow(filter, today));
     if (!shown) {
       store.update((s) => ({ ...s, cardIds: move(s.cardIds, event) }));
       return;

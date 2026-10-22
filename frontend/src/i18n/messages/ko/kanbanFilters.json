@@ -40,5 +40,20 @@
     "label": "포함",
     "placeholder": "필터할 내용 입력…"
   },
-  "nothingFound": "일치하는 항목이 없어요"
+  "nothingFound": "일치하는 항목이 없어요",
+  "stopwatch": {
+    "running": "작동 중",
+    "stopped": "중지됨",
+    "none": "시작 전"
+  },
+  "timer": {
+    "left": "시간 남음",
+    "up": "시간 종료",
+    "none": "타이머 없음"
+  },
+  "tracking": {
+    "over": "계획 초과",
+    "within": "계획 이내",
+    "none": "계획 없음"
+  }
 }

@@ -84,3 +84,36 @@ export function formatSpan(locale: string, ms: number, smallest: "minute" | "sec
   const zero = shown.length === 1 && shown[0]?.[2] === 0;
   return spanFormat(locale, zero).format(Object.fromEntries(shown.map(([part, , amount]) => [part, amount])));
 }
+
+const clockCache = new Map<string, Intl.DurationFormat>();
+
+/** Идущие часы с секундами: «1:05:03», от суток — с днями, «1 дн. 6:00:12». Знак не печатается. */
+export function formatClock(locale: string, ms: number): string {
+  const total = Math.floor(Math.abs(ms) / 1000);
+  const parts = {
+    days: Math.floor(total / 86_400),
+    hours: Math.floor((total % 86_400) / 3600),
+    minutes: Math.floor((total % 3600) / 60),
+    seconds: total % 60,
+  };
+  if (typeof Intl.DurationFormat !== "function") {
+    const two = new Intl.NumberFormat(locale, { minimumIntegerDigits: 2 });
+    const clock = `${parts.hours}:${two.format(parts.minutes)}:${two.format(parts.seconds)}`;
+    return parts.days > 0 ? `${unitFormat(locale, "day", 0).format(parts.days)} ${clock}` : clock;
+  }
+  let format = clockCache.get(locale);
+  if (!format) {
+    format = new Intl.DurationFormat(locale, { style: "digital", hoursDisplay: "always" });
+    clockCache.set(locale, format);
+  }
+  return format.format(parts);
+}
+
+/** Короткое название единицы на языке человека — подпись поля ввода: «ч», «мин», «hr», «min». */
+export function unitLabel(locale: string, unit: "hour" | "minute"): string {
+  return unitFormat(locale, unit, 0)
+    .formatToParts(2)
+    .filter((part) => part.type === "unit")
+    .map((part) => part.value)
+    .join("");
+}

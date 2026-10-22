@@ -21,7 +21,9 @@
     "add": "Kolom toevoegen",
     "expand": "{column} uitklappen",
     "sum": "{field}: {sum}",
-    "sumLabel": "Totaal {field} in {column}: {sum}"
+    "sumLabel": "Totaal {field} in {column}: {sum}",
+    "timeLabel": "Tijd in {column}: {time}",
+    "trackingLabel": "In {column}: {fact} besteed van {plan} gepland"
   },
   "columnMenu": {
     "managedInJira": "Kolommen worden in Jira beheerd",

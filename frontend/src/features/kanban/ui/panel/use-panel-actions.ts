@@ -8,6 +8,7 @@ import type { StickerValue } from "../../domain/stickers-contract";
 import type { TaskPatch } from "../../domain/tasks-contract";
 import { attachmentActions } from "../../model/attachment-actions";
 import { useBoardStore } from "../../model/board-hooks";
+import { clockActions } from "../../model/clock-actions";
 import { commentActions } from "../../model/comment-actions";
 import { subtaskActions } from "../../model/subtask-actions";
 import { patchTask, setValue } from "../../model/task-actions";
@@ -42,4 +43,9 @@ export function useCommentActions(taskId: string) {
 /** Готовые вложения задачи из панели: обложка, скачивание, удаление. */
 export function useAttachmentActions(taskId: string) {
   return attachmentActions(taskId, useBoardStore(), useTaskWords());
+}
+
+/** Часы задачи из панели: секундомер, таймер, план и факт. */
+export function useClockActions(taskId: string) {
+  return clockActions(taskId, useBoardStore(), useTaskWords());
 }

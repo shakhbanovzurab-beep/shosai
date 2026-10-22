@@ -21,7 +21,9 @@
     "add": "열 추가",
     "expand": "{column} 펼치기",
     "sum": "{field}: {sum}",
-    "sumLabel": "{column}의 {field} 합계: {sum}"
+    "sumLabel": "{column}의 {field} 합계: {sum}",
+    "timeLabel": "{column}의 시간: {time}",
+    "trackingLabel": "{column}: 계획 {plan} 중 {fact} 사용"
   },
   "columnMenu": {
     "managedInJira": "열은 Jira에서 관리돼요",

@@ -21,7 +21,9 @@
     "add": "Sütun ekle",
     "expand": "{column} sütununu genişlet",
     "sum": "{field}: {sum}",
-    "sumLabel": "{column} sütununda toplam {field}: {sum}"
+    "sumLabel": "{column} sütununda toplam {field}: {sum}",
+    "timeLabel": "{column} sütunundaki süre: {time}",
+    "trackingLabel": "{column} sütununda: planlanan {plan}, harcanan {fact}"
   },
   "columnMenu": {
     "managedInJira": "Sütunlar Jira’da yönetiliyor",

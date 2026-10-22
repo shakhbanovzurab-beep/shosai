@@ -13,6 +13,7 @@ import { FieldRow } from "./field-row";
 import { LeoSource } from "./leo-source";
 import { PriorityField } from "./priority-field";
 import { RepeatField } from "./repeat-field";
+import { TimeRows } from "./time-rows";
 import { usePanelActions } from "./use-panel-actions";
 import { ValueField } from "./value-fields";
 
@@ -89,6 +90,7 @@ export function PanelFields({ detail, editable }: Props) {
             onChange={(recurrence) => void actions.patch({ recurrence })}
           />
         </FieldRow>
+        <TimeRows detail={detail} editable={editable} />
         {stickers.map((sticker) =>
           sticker.kind === "states" || sticker.kind === "number" || sticker.kind === "text" ? (
             <CustomRow

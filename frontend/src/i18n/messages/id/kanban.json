@@ -21,7 +21,9 @@
     "add": "Tambahkan kolom",
     "expand": "Luaskan {column}",
     "sum": "{field}: {sum}",
-    "sumLabel": "Total {field} di {column}: {sum}"
+    "sumLabel": "Total {field} di {column}: {sum}",
+    "timeLabel": "Waktu di {column}: {time}",
+    "trackingLabel": "Di {column}: {fact} terpakai dari {plan} yang direncanakan"
   },
   "columnMenu": {
     "managedInJira": "Kolom dikelola di Jira",

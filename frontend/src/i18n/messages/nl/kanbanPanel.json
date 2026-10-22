@@ -133,5 +133,32 @@
       "hint": "Er komt een kopie in de taak. Het bestand in Bestandsbeheer blijft zoals het is.",
       "attach": "{count, plural, one {# bestand bijvoegen} other {# bestanden bijvoegen}}"
     }
+  },
+  "time": {
+    "notStarted": "Niet gestart",
+    "start": "Starten",
+    "stop": "Stoppen",
+    "reset": "Resetten",
+    "resetTitle": "Stopwatch resetten?",
+    "resetText": "De gemeten tijd ({time}) en de tijd per kolom worden gewist. Dit kan niet ongedaan worden gemaakt.",
+    "perColumn": "Tijd per kolom",
+    "stopped": "Stopwatch gestopt: {time}",
+    "addToFact": "{time} toevoegen aan werkelijke tijd",
+    "setTimer": "Timer instellen",
+    "change": "Wijzigen",
+    "pause": "Pauzeren",
+    "resume": "Hervatten",
+    "removeTimer": "Timer verwijderen",
+    "left": "Nog {time}",
+    "timeUp": "Tijd is om · +{time}",
+    "paused": "Gepauzeerd",
+    "presets": "Duur",
+    "custom": "Eigen duur",
+    "startTimer": "Starten",
+    "lengthInvalid": "Stel een duur in van 1 minuut tot 365 dagen.",
+    "plan": "Gepland",
+    "fact": "Werkelijk",
+    "durationInvalid": "Voer uren en minuten in als getallen, tot 100.000 uur.",
+    "overPlan": "Meer dan gepland"
   }
 }

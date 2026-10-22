@@ -133,5 +133,32 @@
       "hint": "任務中會加入一份副本，檔案管理中的檔案則維持原狀。",
       "attach": "{count, plural, other {附加 # 個檔案}}"
     }
+  },
+  "time": {
+    "notStarted": "尚未啟動",
+    "start": "啟動",
+    "stop": "停止",
+    "reset": "重設",
+    "resetTitle": "要重設碼錶嗎？",
+    "resetText": "碼錶記錄的時間（{time}）和各欄時間都會清除。這項操作無法復原。",
+    "perColumn": "各欄時間",
+    "stopped": "碼錶已停止：{time}",
+    "addToFact": "將 {time} 加入實際工時",
+    "setTimer": "設定計時器",
+    "change": "變更",
+    "pause": "暫停",
+    "resume": "繼續",
+    "removeTimer": "移除計時器",
+    "left": "剩餘 {time}",
+    "timeUp": "時間到 · +{time}",
+    "paused": "已暫停",
+    "presets": "時長",
+    "custom": "自訂時長",
+    "startTimer": "啟動",
+    "lengthInvalid": "請設定 1 分鐘到 365 天之間的時長。",
+    "plan": "預計",
+    "fact": "實際",
+    "durationInvalid": "請以數字輸入小時和分鐘，最多 100,000 小時。",
+    "overPlan": "超出預計"
   }
 }

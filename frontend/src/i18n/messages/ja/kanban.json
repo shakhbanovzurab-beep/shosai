@@ -21,7 +21,9 @@
     "add": "列を追加",
     "expand": "「{column}」を展開",
     "sum": "{field}：{sum}",
-    "sumLabel": "「{column}」の {field} の合計：{sum}"
+    "sumLabel": "「{column}」の {field} の合計：{sum}",
+    "timeLabel": "「{column}」の時間：{time}",
+    "trackingLabel": "「{column}」：予定 {plan} のうち実績 {fact}"
   },
   "columnMenu": {
     "managedInJira": "列は Jira で管理されています",

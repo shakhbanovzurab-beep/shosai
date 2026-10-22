@@ -133,5 +133,32 @@
       "hint": "작업에는 사본이 추가되고, 파일 관리자의 원본 파일은 그대로 남아요.",
       "attach": "{count, plural, other {파일 #개 첨부}}"
     }
+  },
+  "time": {
+    "notStarted": "시작 전",
+    "start": "시작",
+    "stop": "중지",
+    "reset": "초기화",
+    "resetTitle": "스톱워치를 초기화할까요?",
+    "resetText": "측정한 시간({time})과 열별 시간이 지워져요. 되돌릴 수 없어요.",
+    "perColumn": "열별 시간",
+    "stopped": "스톱워치를 중지했어요: {time}",
+    "addToFact": "실제 시간에 {time} 추가",
+    "setTimer": "타이머 설정",
+    "change": "변경",
+    "pause": "일시 중지",
+    "resume": "재개",
+    "removeTimer": "타이머 제거",
+    "left": "{time} 남음",
+    "timeUp": "시간 종료 · +{time}",
+    "paused": "일시 중지됨",
+    "presets": "시간",
+    "custom": "직접 설정",
+    "startTimer": "시작",
+    "lengthInvalid": "1분에서 365일 사이로 설정해 주세요.",
+    "plan": "계획",
+    "fact": "실제",
+    "durationInvalid": "시간과 분을 숫자로 입력해 주세요(최대 100,000시간).",
+    "overPlan": "계획 초과"
   }
 }

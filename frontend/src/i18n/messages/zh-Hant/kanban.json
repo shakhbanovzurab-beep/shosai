@@ -21,7 +21,9 @@
     "add": "新增欄",
     "expand": "展開「{column}」",
     "sum": "{field}：{sum}",
-    "sumLabel": "「{column}」的 {field} 總計：{sum}"
+    "sumLabel": "「{column}」的 {field} 總計：{sum}",
+    "timeLabel": "「{column}」的時間：{time}",
+    "trackingLabel": "「{column}」：預計 {plan}，已花費 {fact}"
   },
   "columnMenu": {
     "managedInJira": "各欄由 Jira 管理",

@@ -40,5 +40,20 @@
     "label": "Chứa",
     "placeholder": "Nhập để lọc…"
   },
-  "nothingFound": "Không có kết quả phù hợp"
+  "nothingFound": "Không có kết quả phù hợp",
+  "stopwatch": {
+    "running": "Đang chạy",
+    "stopped": "Đã dừng",
+    "none": "Chưa bắt đầu"
+  },
+  "timer": {
+    "left": "Còn thời gian",
+    "up": "Hết giờ",
+    "none": "Không có hẹn giờ"
+  },
+  "tracking": {
+    "over": "Vượt kế hoạch",
+    "within": "Trong kế hoạch",
+    "none": "Không có kế hoạch"
+  }
 }

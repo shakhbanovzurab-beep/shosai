@@ -133,5 +133,32 @@
       "hint": "Una copia va nell’attività. Il file in Gestione file resta com’è.",
       "attach": "{count, plural, one {Allega # file} many {Allega # di file} other {Allega # file}}"
     }
+  },
+  "time": {
+    "notStarted": "Mai avviato",
+    "start": "Avvia",
+    "stop": "Ferma",
+    "reset": "Azzera",
+    "resetTitle": "Azzerare il cronometro?",
+    "resetText": "Il tempo misurato ({time}) e il tempo per colonna verranno eliminati. Questa azione non si può annullare.",
+    "perColumn": "Tempo per colonna",
+    "stopped": "Cronometro fermato: {time}",
+    "addToFact": "Aggiungi {time} al tempo effettivo",
+    "setTimer": "Imposta timer",
+    "change": "Modifica",
+    "pause": "Metti in pausa",
+    "resume": "Riprendi",
+    "removeTimer": "Rimuovi timer",
+    "left": "Mancano {time}",
+    "timeUp": "Tempo scaduto · +{time}",
+    "paused": "In pausa",
+    "presets": "Durata",
+    "custom": "Durata personalizzata",
+    "startTimer": "Avvia",
+    "lengthInvalid": "Imposta una durata da 1 minuto a 365 giorni.",
+    "plan": "Previsto",
+    "fact": "Effettivo",
+    "durationInvalid": "Inserisci ore e minuti in cifre, fino a 100.000 ore.",
+    "overPlan": "Oltre il previsto"
   }
 }

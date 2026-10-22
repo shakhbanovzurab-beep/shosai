@@ -1,6 +1,6 @@
 import { describe, it } from "vitest";
 
-import { formatBytes, formatDuration, formatSpan } from "./format-units";
+import { formatBytes, formatClock, formatDuration, formatSpan, unitLabel } from "./format-units";
 import assert from "node:assert/strict";
 
 describe("formatBytes", () => {
@@ -44,5 +44,18 @@ describe("formatSpan", () => {
     } finally {
       Object.assign(Intl, { DurationFormat: original });
     }
+  });
+});
+
+describe("formatClock", () => {
+  it("ticks with seconds, and from a day on puts the days first", () => {
+    assert.equal(formatClock("en", (3600 + 5 * 60 + 3) * 1000 + 900), "1:05:03");
+    assert.equal(formatClock("en", 9000), "0:00:09");
+    assert.equal(formatClock("ru", (26 * 3600 + 120) * 1000), "1 дн. 2:02:00");
+  });
+
+  it("names the input units in the person's language", () => {
+    assert.equal(unitLabel("ru", "hour"), "ч");
+    assert.equal(unitLabel("en", "minute"), "min");
   });
 });

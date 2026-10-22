@@ -40,5 +40,20 @@
     "label": "Contains",
     "placeholder": "Type to filter…"
   },
-  "nothingFound": "Nothing found"
+  "nothingFound": "Nothing found",
+  "stopwatch": {
+    "running": "Running",
+    "stopped": "Stopped",
+    "none": "Not started"
+  },
+  "timer": {
+    "left": "Time left",
+    "up": "Time is up",
+    "none": "No timer"
+  },
+  "tracking": {
+    "over": "Over plan",
+    "within": "Within plan",
+    "none": "No plan"
+  }
 }

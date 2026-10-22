@@ -133,5 +133,32 @@
       "hint": "Salinannya masuk ke tugas. File di Pengelola file tetap seperti semula.",
       "attach": "{count, plural, other {Lampirkan # file}}"
     }
+  },
+  "time": {
+    "notStarted": "Belum dimulai",
+    "start": "Mulai",
+    "stop": "Hentikan",
+    "reset": "Atur ulang",
+    "resetTitle": "Atur ulang stopwatch?",
+    "resetText": "Waktu yang terukur ({time}) dan waktu per kolom akan dihapus. Tindakan ini tidak dapat diurungkan.",
+    "perColumn": "Waktu per kolom",
+    "stopped": "Stopwatch dihentikan: {time}",
+    "addToFact": "Tambahkan {time} ke waktu aktual",
+    "setTimer": "Atur timer",
+    "change": "Ubah",
+    "pause": "Jeda",
+    "resume": "Lanjutkan",
+    "removeTimer": "Hapus timer",
+    "left": "Sisa {time}",
+    "timeUp": "Waktu habis · +{time}",
+    "paused": "Dijeda",
+    "presets": "Durasi",
+    "custom": "Durasi kustom",
+    "startTimer": "Mulai",
+    "lengthInvalid": "Tetapkan durasi antara 1 menit dan 365 hari.",
+    "plan": "Rencana",
+    "fact": "Aktual",
+    "durationInvalid": "Masukkan jam dan menit dalam angka, maksimal 100.000 jam.",
+    "overPlan": "Melebihi rencana"
   }
 }

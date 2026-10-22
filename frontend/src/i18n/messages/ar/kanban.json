@@ -21,7 +21,9 @@
     "add": "إضافة عمود",
     "expand": "توسيع عمود «{column}»",
     "sum": "{field}: {sum}",
-    "sumLabel": "مجموع {field} في «{column}»: {sum}"
+    "sumLabel": "مجموع {field} في «{column}»: {sum}",
+    "timeLabel": "الوقت في «{column}»: {time}",
+    "trackingLabel": "في «{column}»: الوقت الفعلي {fact} من أصل {plan} مخطط"
   },
   "columnMenu": {
     "managedInJira": "تتم إدارة الأعمدة في Jira",

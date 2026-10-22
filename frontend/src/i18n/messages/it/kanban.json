@@ -21,7 +21,9 @@
     "add": "Aggiungi colonna",
     "expand": "Espandi {column}",
     "sum": "{field}: {sum}",
-    "sumLabel": "Totale di {field} in {column}: {sum}"
+    "sumLabel": "Totale di {field} in {column}: {sum}",
+    "timeLabel": "Tempo in {column}: {time}",
+    "trackingLabel": "In {column}: {fact} impiegati su {plan} previsti"
   },
   "columnMenu": {
     "managedInJira": "Le colonne si gestiscono in Jira",

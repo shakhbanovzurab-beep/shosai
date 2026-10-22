@@ -21,7 +21,9 @@
     "add": "कॉलम जोड़ें",
     "expand": "{column} कॉलम बड़ा करें",
     "sum": "{field}: {sum}",
-    "sumLabel": "{column} में {field} का कुल योग: {sum}"
+    "sumLabel": "{column} में {field} का कुल योग: {sum}",
+    "timeLabel": "{column} में समय: {time}",
+    "trackingLabel": "{column} में: तय {plan} में से {fact} लगा"
   },
   "columnMenu": {
     "managedInJira": "कॉलम Jira में मैनेज किए जाते हैं",

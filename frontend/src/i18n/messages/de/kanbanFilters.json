@@ -40,5 +40,20 @@
     "label": "Enthält",
     "placeholder": "Zum Filtern tippen…"
   },
-  "nothingFound": "Keine Treffer"
+  "nothingFound": "Keine Treffer",
+  "stopwatch": {
+    "running": "Läuft",
+    "stopped": "Gestoppt",
+    "none": "Nicht gestartet"
+  },
+  "timer": {
+    "left": "Zeit übrig",
+    "up": "Zeit abgelaufen",
+    "none": "Kein Timer"
+  },
+  "tracking": {
+    "over": "Plan überschritten",
+    "within": "Im Plan",
+    "none": "Ohne Plan"
+  }
 }
