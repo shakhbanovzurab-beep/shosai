@@ -17,6 +17,7 @@ export function DurationInputs({
   onKeyDown,
   disabled,
   invalid,
+  errorId,
 }: {
   labelId: string;
   value: DurationDraft;
@@ -24,6 +25,8 @@ export function DurationInputs({
   onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   invalid?: boolean;
+  /** Id текста ошибки: поля ссылаются на него, пока ввод неверен. */
+  errorId?: string;
 }) {
   const locale = useLocale();
   const hoursId = useId();
@@ -41,7 +44,8 @@ export function DurationInputs({
             autoComplete="off"
             value={value[part.key]}
             disabled={disabled}
-            aria-invalid={invalid || undefined}
+            aria-invalid={invalid ? true : undefined}
+            aria-describedby={invalid ? errorId : undefined}
             aria-labelledby={`${labelId} ${part.id}`}
             className="tabular-nums"
             onChange={(event) => onChange({ ...value, [part.key]: event.currentTarget.value })}

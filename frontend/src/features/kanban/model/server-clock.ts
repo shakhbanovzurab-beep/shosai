@@ -76,7 +76,9 @@ export const useServerMinute = () => useSyncExternalStore(minutes.subscribe, min
 /** Сейчас по серверу с точностью до секунды — для часов открытой панели. */
 export const useServerSecond = () => useSyncExternalStore(seconds.subscribe, seconds.snapshot, seconds.snapshot);
 
-const idle = () => () => {};
+// Подписка без такта: отписываться не от чего.
+const unsubscribed = () => undefined;
+const idle = () => unsubscribed;
 const zero = () => 0;
 
 /** Минута по серверу, только пока она нужна (`active`); иначе 0 и никакого такта. */

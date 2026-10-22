@@ -31,6 +31,7 @@ function MinutesInput({
   const t = useTranslations("kanbanPanel");
   const locale = useLocale();
   const labelId = useId();
+  const errorId = useId();
   const [draft, setDraft] = useState<DurationDraft | null>(null);
   const [invalid, setInvalid] = useState(false);
   const commit = () => {
@@ -42,7 +43,8 @@ function MinutesInput({
     if (next !== minutes) onCommit(next);
   };
   return (
-    <div
+    <fieldset
+      aria-labelledby={labelId}
       className="flex flex-col gap-1"
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) commit();
@@ -57,6 +59,7 @@ function MinutesInput({
           value={draft ?? draftOf(minutes, locale)}
           disabled={disabled}
           invalid={invalid}
+          errorId={errorId}
           onChange={setDraft}
           onKeyDown={(event) => {
             if (event.key === "Enter") commit();
@@ -67,8 +70,8 @@ function MinutesInput({
           }}
         />
       </div>
-      {invalid ? <FieldError>{t("time.durationInvalid")}</FieldError> : null}
-    </div>
+      {invalid ? <FieldError id={errorId}>{t("time.durationInvalid")}</FieldError> : null}
+    </fieldset>
   );
 }
 

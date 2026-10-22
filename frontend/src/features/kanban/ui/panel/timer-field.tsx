@@ -25,7 +25,16 @@ export function TimerField({ detail, labelId, disabled }: { detail: TaskDetail; 
   const running = Boolean(timer?.ends_at);
   const now = useServerSecondWhile(running);
   const set = (ms: number) => void clocks.setTimer(ms);
-  if (!timer) return <TimerPicker label={t("time.setTimer")} describedBy={labelId} disabled={disabled} onPick={set} />;
+  if (!timer)
+    return (
+      <TimerPicker
+        label={t("time.setTimer")}
+        action="set-timer"
+        describedBy={labelId}
+        disabled={disabled}
+        onPick={set}
+      />
+    );
   const left = timerLeft(timer, now);
   const up = left <= 0;
   return (
@@ -41,17 +50,25 @@ export function TimerField({ detail, labelId, disabled }: { detail: TaskDetail; 
         size="sm"
         disabled={disabled}
         aria-describedby={labelId}
+        data-clock-action="hold"
         onClick={() => void clocks.hold(running)}
       >
         {running ? <Pause data-icon="inline-start" /> : <Play data-icon="inline-start" />}
         {t(running ? "time.pause" : "time.resume")}
       </Button>
-      <TimerPicker label={t("time.change")} describedBy={labelId} disabled={disabled} onPick={set} />
+      <TimerPicker
+        label={t("time.change")}
+        action="change-timer"
+        describedBy={labelId}
+        disabled={disabled}
+        onPick={set}
+      />
       <Button
         variant="ghost"
         size="icon-sm"
         disabled={disabled}
         aria-label={t("time.removeTimer")}
+        data-clock-action="remove-timer"
         onClick={() => void clocks.removeTimer()}
       >
         <X />

@@ -4,6 +4,7 @@
 
 import { CARD_SCENARIOS } from "./kanban-cards.mjs";
 import { box, column, columnAction, columnAt, columnIds, openBoard, restoreColumn } from "./kanban-helpers.mjs";
+import { TIME_SCENARIOS } from "./kanban-time.mjs";
 
 const moveColumnWithKeyboard = {
   name: "kanban: the keyboard moves a column towards the left",
@@ -64,4 +65,4 @@ const dragColumnWithMouse = {
   },
 };
 
-export const KANBAN_SCENARIOS = [moveColumnWithKeyboard, dragColumnWithMouse, ...CARD_SCENARIOS];
+export const KANBAN_SCENARIOS = [moveColumnWithKeyboard, dragColumnWithMouse, ...CARD_SCENARIOS, ...TIME_SCENARIOS];

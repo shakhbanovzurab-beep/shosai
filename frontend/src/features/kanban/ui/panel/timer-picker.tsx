@@ -21,6 +21,7 @@ function CustomLength({ onPick }: { onPick: (ms: number) => void }) {
   const t = useTranslations("kanbanPanel");
   const locale = useLocale();
   const labelId = useId();
+  const errorId = useId();
   const [draft, setDraft] = useState<DurationDraft>({ hours: "", minutes: "" });
   const [invalid, setInvalid] = useState(false);
   return (
@@ -37,12 +38,12 @@ function CustomLength({ onPick }: { onPick: (ms: number) => void }) {
         {t("time.custom")}
       </span>
       <div className="flex flex-wrap items-center gap-2">
-        <DurationInputs labelId={labelId} value={draft} onChange={setDraft} invalid={invalid} />
+        <DurationInputs labelId={labelId} value={draft} onChange={setDraft} invalid={invalid} errorId={errorId} />
         <Button type="submit" size="sm">
           {t("time.startTimer")}
         </Button>
       </div>
-      {invalid ? <FieldError>{t("time.lengthInvalid")}</FieldError> : null}
+      {invalid ? <FieldError id={errorId}>{t("time.lengthInvalid")}</FieldError> : null}
     </form>
   );
 }
@@ -50,11 +51,14 @@ function CustomLength({ onPick }: { onPick: (ms: number) => void }) {
 /** Выбор длительности таймера (KT-D3): готовые — полчаса, час, четыре часа, день, неделя — или своя. */
 export function TimerPicker({
   label,
+  action,
   describedBy,
   disabled,
   onPick,
 }: {
   label: string;
+  /** Метка кнопки для сценариев проверки: задать таймер или изменить. */
+  action: "set-timer" | "change-timer";
   describedBy: string;
   disabled: boolean;
   onPick: (ms: number) => void;
@@ -69,19 +73,33 @@ export function TimerPicker({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" disabled={disabled} aria-describedby={describedBy}>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={disabled}
+          aria-describedby={describedBy}
+          data-clock-action={action}
+        >
           <TimerIcon data-icon="inline-start" />
           {label}
         </Button>
       </PopoverTrigger>
       <PopoverContent align="start" className="w-[min(22rem,calc(100vw-2rem))] gap-3 p-3">
-        <div role="group" aria-label={t("time.presets")} className="flex flex-wrap gap-1.5">
+        <fieldset className="flex flex-wrap gap-1.5">
+          <legend className="sr-only">{t("time.presets")}</legend>
           {TIMER_PRESETS_MS.map((ms) => (
-            <Button key={ms} variant="secondary" size="sm" className="tabular-nums" onClick={() => pick(ms)}>
+            <Button
+              key={ms}
+              variant="secondary"
+              size="sm"
+              className="tabular-nums"
+              data-timer-preset={ms}
+              onClick={() => pick(ms)}
+            >
               {formatSpan(locale, ms)}
             </Button>
           ))}
-        </div>
+        </fieldset>
         <CustomLength onPick={pick} />
       </PopoverContent>
     </Popover>

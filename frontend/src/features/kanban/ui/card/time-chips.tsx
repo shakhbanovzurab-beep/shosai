@@ -29,7 +29,7 @@ function StopwatchChip({ stopwatch }: { stopwatch: Stopwatch }) {
   const now = useServerMinute();
   const elapsed = stopwatchElapsed(stopwatch, now);
   return (
-    <Chip>
+    <Chip data-time-chip="stopwatch">
       <StopwatchIcon className="size-3 shrink-0" aria-hidden="true" />
       <span className="sr-only">{t("card.time.stopwatch")}</span>
       <span className="truncate tabular-nums">{formatSpan(locale, elapsed)}</span>
@@ -45,7 +45,7 @@ function TimerFace({ left, children }: { left: number; children?: ReactNode }) {
   const up = left <= 0;
   const shown = up ? formatSpan(locale, -left) : formatSpan(locale, Math.max(left, MINUTE_MS));
   return (
-    <Chip tone={up ? "alert" : "quiet"}>
+    <Chip tone={up ? "alert" : "quiet"} data-time-chip="timer">
       <Hourglass className="size-3 shrink-0" aria-hidden="true" />
       <span className="sr-only">{t("card.time.timer")}</span>
       <span className="truncate tabular-nums">
@@ -81,7 +81,7 @@ function TrackingChip({ tracking }: { tracking: TimeTracking }) {
   const span = (minutes: number) => formatSpan(locale, minutes * MINUTE_MS);
   const factOf = (chunks: ReactNode) => <span className={cn(over && "text-destructive")}>{chunks}</span>;
   return (
-    <Chip>
+    <Chip data-time-chip="tracking">
       <Clock className="size-3 shrink-0" aria-hidden="true" />
       <span className="sr-only">{t("card.time.tracking")}</span>
       <span className="truncate tabular-nums">

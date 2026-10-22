@@ -39,19 +39,19 @@ function ColumnTimes({ stopwatch, columnId, now }: { stopwatch: Stopwatch; colum
     .filter((row) => row.ms > 0);
   if (rows.length === 0) return null;
   return (
-    <dl
-      aria-label={t("time.perColumn")}
-      className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-muted-foreground text-xs"
-    >
-      {rows.map((row) => (
-        <div key={row.id} className="contents">
-          <dt dir="auto" className="truncate">
-            {titles[row.id]?.title}
-          </dt>
-          <dd className="tabular-nums">{formatSpan(locale, row.ms)}</dd>
-        </div>
-      ))}
-    </dl>
+    <figure>
+      <figcaption className="sr-only">{t("time.perColumn")}</figcaption>
+      <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-muted-foreground text-xs">
+        {rows.map((row) => (
+          <div key={row.id} className="contents">
+            <dt dir="auto" className="truncate">
+              {titles[row.id]?.title}
+            </dt>
+            <dd className="tabular-nums">{formatSpan(locale, row.ms)}</dd>
+          </div>
+        ))}
+      </dl>
+    </figure>
   );
 }
 
@@ -62,7 +62,13 @@ function ResetButton({ elapsed, describedBy, onReset }: { elapsed: string; descr
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button variant="ghost" size="sm" aria-describedby={describedBy} onClick={() => setOpen(true)}>
+      <Button
+        variant="ghost"
+        size="sm"
+        aria-describedby={describedBy}
+        data-clock-action="reset"
+        onClick={() => setOpen(true)}
+      >
         <RotateCcw data-icon="inline-start" />
         {t("time.reset")}
       </Button>
@@ -74,7 +80,7 @@ function ResetButton({ elapsed, describedBy, onReset }: { elapsed: string; descr
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{tc("actions.cancel")}</AlertDialogCancel>
-            <AlertDialogAction variant="destructive" onClick={onReset}>
+            <AlertDialogAction variant="destructive" data-clock-action="confirm-reset" onClick={onReset}>
               {t("time.reset")}
             </AlertDialogAction>
           </AlertDialogFooter>
@@ -125,6 +131,7 @@ export function StopwatchField({
             size="sm"
             disabled={disabled}
             aria-describedby={labelId}
+            data-clock-action="stop"
             onClick={() => void stop()}
           >
             <Square data-icon="inline-start" />
@@ -136,6 +143,7 @@ export function StopwatchField({
             size="sm"
             disabled={disabled}
             aria-describedby={labelId}
+            data-clock-action="start"
             onClick={() => void clocks.start()}
           >
             <Play data-icon="inline-start" />

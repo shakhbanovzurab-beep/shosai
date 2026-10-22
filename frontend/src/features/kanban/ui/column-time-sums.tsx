@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "use-intl";
 
 import { formatSpan } from "@/i18n/format-units";
 
+import type { Card } from "../domain/tasks-contract";
 import { columnTime, trackingSums } from "../domain/time-rules";
 import { useBoardSelector, useBoardStickers, useColumn } from "../model/board-hooks";
 import { useServerMinuteWhile } from "../model/server-clock";
@@ -17,6 +18,39 @@ import { useVisibleCardIds } from "./filters/use-visible-cards";
  */
 
 const MINUTE_MS = 60_000;
+
+type ColumnClock = { cards: Record<string, Card>; running: boolean; now: number; total: number | null };
+
+// Колонка пересчитывает время, только когда меняются её карточки или минута: шаг перетаскивания в другой колонке,
+// правка карточки в соседней — не повод обходить сотни карточек этой (замер на «Load 1000», шаг 4 пакета).
+const clockCache = new WeakMap<string[], ColumnClock>();
+
+function columnClock(ids: string[], cards: Record<string, Card>): ColumnClock {
+  const hit = clockCache.get(ids);
+  if (hit?.cards === cards) return hit;
+  const made = { cards, running: ids.some((id) => Boolean(cards[id]?.stopwatch?.running_since)), now: -1, total: null };
+  clockCache.set(ids, made);
+  return made;
+}
+
+function columnTotal(ids: string[], cards: Record<string, Card>, columnId: string, now: number) {
+  const clock = columnClock(ids, cards);
+  if (clock.now !== now) Object.assign(clock, { now, total: columnTime(ids, cards, columnId, now) });
+  return clock.total;
+}
+
+const trackingCache = new WeakMap<string[], { cards: Record<string, Card>; key: string | null }>();
+
+/** Σ плана и факта колонки строкой «план:факт» (одно значение для подписки), с тем же кешем по карточкам колонки. */
+function trackingKey(ids: string[], cards: Record<string, Card>) {
+  const hit = trackingCache.get(ids);
+  if (hit?.cards === cards) return hit.key;
+  const sums = trackingSums(ids, cards);
+  const key = sums ? `${sums.plan}:${sums.fact}` : null;
+  trackingCache.set(ids, { cards, key });
+  return key;
+}
+
 const LINE = "flex min-w-0 items-center gap-1 text-muted-foreground text-xs tabular-nums leading-none";
 
 function ColumnStopwatch({ columnId }: { columnId: string }) {
@@ -25,9 +59,9 @@ function ColumnStopwatch({ columnId }: { columnId: string }) {
   const title = useColumn(columnId)?.title ?? "";
   const ids = useVisibleCardIds(columnId);
   // Минута нужна, только пока в колонке что-то идёт.
-  const running = useBoardSelector((s) => ids.some((id) => Boolean(s.cards[id]?.stopwatch?.running_since)));
+  const running = useBoardSelector((s) => columnClock(ids, s.cards).running);
   const now = useServerMinuteWhile(running);
-  const total = useBoardSelector((s) => columnTime(ids, s.cards, columnId, now));
+  const total = useBoardSelector((s) => columnTotal(ids, s.cards, columnId, now));
   if (total === null) return null;
   const time = formatSpan(locale, total);
   return (
@@ -44,10 +78,7 @@ function ColumnTracking({ columnId }: { columnId: string }) {
   const locale = useLocale();
   const title = useColumn(columnId)?.title ?? "";
   const ids = useVisibleCardIds(columnId);
-  const sums = useBoardSelector((s) => {
-    const found = trackingSums(ids, s.cards);
-    return found ? `${found.plan}:${found.fact}` : null;
-  });
+  const sums = useBoardSelector((s) => trackingKey(ids, s.cards));
   if (sums === null) return null;
   const [plan = 0, fact = 0] = sums.split(":").map(Number);
   const span = (minutes: number) => formatSpan(locale, minutes * MINUTE_MS);
