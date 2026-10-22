@@ -135,6 +135,7 @@ Participles and adjectives agree in gender (Nota excluída, Link copiado); use n
 | Filter | Filtrar | — | Noun filtro |
 | Sort | Ordenar | Classificar por | “Ordenar por” |
 | Connect / Disconnect | Conectar / Desconectar | — | |
+| Link / Unlink | Vincular / Desvincular | — | A messenger account; status Vinculado |
 | Log out | Sair | Deslogar, Fazer logout, Terminar sessão | Sign in = Entrar |
 | Manage | Gerenciar | — | Not European “gerir” |
 | Couldn’t … | Não foi possível … | Falha ao, Erro ao, Não conseguimos, Oops | + infinitive: “Não foi possível salvar. Verifique sua conexão.” |

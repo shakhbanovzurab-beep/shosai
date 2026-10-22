@@ -96,5 +96,41 @@
       "web": "ブラウザ",
       "desktop": "デスクトップアプリ"
     }
+  },
+  "messengers": {
+    "title": "メッセンジャー",
+    "description": "メッセンジャーをリンクすると、チームのチャットから Leo に頼めます。そこでは Leo が自分の権限で動きます。",
+    "loadFailed": "メッセンジャーを読み込めませんでした",
+    "notLinked": "未リンク",
+    "linkedOn": "{date} にリンク",
+    "unlink": "リンクを解除",
+    "unlinked": "{messenger} のリンクを解除しました",
+    "unlinkFailed": "リンクを解除できませんでした",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Telegram をリンク",
+      "waiting": "Telegram を待っています… <bot></bot> とのチャットで「Start」を押してください。",
+      "openAgain": "もう一度開く",
+      "linkedAs": "<account></account> としてリンクしました",
+      "expired": "リンクの有効期限が切れました。",
+      "refused": "この Telegram アカウントは別の Shosai アカウントにリンクされています。先にそちらでリンクを解除してください。",
+      "startFailed": "Telegram のリンクを開始できませんでした",
+      "unlinkTitle": "Telegram のリンクを解除しますか？",
+      "unlinkBody": "Telegram からのメッセージに Leo が対応しなくなります。"
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "自分のアカウントですか？<account></account> は同じメールアドレスを使っています。",
+      "confirm": "確認",
+      "notMe": "自分ではない",
+      "confirmed": "Slack アカウントを確認しました",
+      "confirmFailed": "Slack アカウントを確認できませんでした",
+      "notMeFailed": "候補を削除できませんでした",
+      "unlinkTitle": "「{space}」の Slack のリンクを解除しますか？",
+      "unlinkBody": "「{space}」の Slack からのメッセージに Leo が対応しなくなります。"
+    }
   }
 }

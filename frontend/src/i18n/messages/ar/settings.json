@@ -96,5 +96,41 @@
       "web": "المتصفح",
       "desktop": "تطبيق سطح المكتب"
     }
+  },
+  "messengers": {
+    "title": "تطبيقات المراسلة",
+    "description": "يمكن ربط تطبيق المراسلة لطلب المساعدة من Leo في محادثة الفريق. يعمل Leo هناك بصلاحياتك.",
+    "loadFailed": "تعذر تحميل تطبيقات المراسلة",
+    "notLinked": "غير مرتبط",
+    "linkedOn": "تم الربط في {date}",
+    "unlink": "إلغاء الربط",
+    "unlinked": "تم إلغاء ربط {messenger}",
+    "unlinkFailed": "تعذر إلغاء الربط",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "ربط Telegram",
+      "waiting": "في انتظار Telegram… يرجى الضغط على «Start» في المحادثة مع <bot></bot>.",
+      "openAgain": "فتح مرة أخرى",
+      "linkedAs": "تم الربط باسم <account></account>",
+      "expired": "انتهت صلاحية الرابط.",
+      "refused": "حساب Telegram هذا مرتبط بحساب آخر في Shosai. يرجى إلغاء الربط هناك أولًا.",
+      "startFailed": "تعذر بدء ربط Telegram",
+      "unlinkTitle": "إلغاء ربط Telegram؟",
+      "unlinkBody": "سيتوقف Leo عن تنفيذ طلباتك من Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "هل هذا أنت؟ يستخدم <account></account> بريدك الإلكتروني.",
+      "confirm": "تأكيد",
+      "notMe": "ليس أنا",
+      "confirmed": "تم تأكيد حساب Slack",
+      "confirmFailed": "تعذر تأكيد حساب Slack",
+      "notMeFailed": "تعذرت إزالة الاقتراح",
+      "unlinkTitle": "إلغاء ربط Slack في «{space}»؟",
+      "unlinkBody": "سيتوقف Leo عن تنفيذ طلباتك من Slack في «{space}»."
+    }
   }
 }

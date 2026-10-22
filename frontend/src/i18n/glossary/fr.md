@@ -135,6 +135,7 @@ Typography: « … » with U+202F inside, U+202F before : ; ! ?, no space be
 | Filter | Filtrer | — | Noun « filtre ». |
 | Sort | Trier | classer par, ordonner par | « Trier par ». |
 | Connect / Disconnect | Connecter / Déconnecter | — | For services; logging out is « Se déconnecter ». |
+| Link / Unlink | Associer / Dissocier | — | A messenger account; status « Associé » |
 | Log out | Se déconnecter | logout, fermer la session | |
 | Manage | Gérer | administrer | |
 | Couldn’t … | Impossible de … | échec de, échec du, échec d’, oups | « Impossible d’… » before a vowel; a fix may follow as a second sentence. |

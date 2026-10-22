@@ -135,6 +135,7 @@ Leo is masculine and never declined («Leo не смог ответить», «�
 | Filter | Фильтр | — | |
 | Sort | Сортировка | — | Options like «Сначала новые», «По названию» |
 | Connect / Disconnect | Подключить / Отключить | коннект, отсоедин | |
+| Link / Unlink | Привязать / Отвязать | — | A messenger account; status «Привязан» |
 | Log out | Выйти | разлогин, выйти из системы | Sign in is «Войти» |
 | Manage | Управлять | — | |
 | Couldn’t … | Не удалось … | Произошла ошибка, Ошибка при, Не получилось | Perfective infinitive («Не удалось сохранить»), then the fix |

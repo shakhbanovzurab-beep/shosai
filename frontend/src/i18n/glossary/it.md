@@ -135,6 +135,7 @@ Loanwords (file, chat, link, token, team, account, email, hub, skill, prompt, ap
 | Filter | Filtra | — | Button verb; noun filtro |
 | Sort | Ordina | — | Button verb; noun ordinamento |
 | Connect / Disconnect | Collega / Scollega | Connetti | Status Collegato / Non collegato; Reconnect is Ricollega |
+| Link / Unlink | Collega / Scollega | — | A messenger account, same words as Connect |
 | Log out | Esci | logout | Leaving a workspace is Abbandona |
 | Manage | Gestisci | — | |
 | Couldn’t … | Impossibile … | Non è stato possibile, Non siamo riusciti, Errore durante, fallit, Oops, Spiacenti | + infinitive: Impossibile salvare, Impossibile caricare i file |

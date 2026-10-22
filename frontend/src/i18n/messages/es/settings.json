@@ -96,5 +96,41 @@
       "web": "Navegador",
       "desktop": "App de escritorio"
     }
+  },
+  "messengers": {
+    "title": "Mensajería",
+    "description": "Asocia tu app de mensajería para pedirle cosas a Leo desde un chat del equipo. Allí Leo actúa con tus permisos.",
+    "loadFailed": "No se pudieron cargar tus apps de mensajería",
+    "notLinked": "Sin asociar",
+    "linkedOn": "Asociada el {date}",
+    "unlink": "Desasociar",
+    "unlinked": "{messenger} desasociado",
+    "unlinkFailed": "No se pudo desasociar",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Asociar Telegram",
+      "waiting": "Esperando a Telegram… Pulsa «Start» en el chat con <bot></bot>.",
+      "openAgain": "Abrir de nuevo",
+      "linkedAs": "Asociada como <account></account>",
+      "expired": "El enlace caducó.",
+      "refused": "Esta cuenta de Telegram está asociada a otra cuenta de Shosai. Desasóciala allí primero.",
+      "startFailed": "No se pudo empezar a asociar Telegram",
+      "unlinkTitle": "¿Desasociar Telegram?",
+      "unlinkBody": "Leo dejará de atender tus mensajes de Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "¿Eres tú? <account></account> tiene tu correo.",
+      "confirm": "Confirmar",
+      "notMe": "No soy yo",
+      "confirmed": "Cuenta de Slack confirmada",
+      "confirmFailed": "No se pudo confirmar la cuenta de Slack",
+      "notMeFailed": "No se pudo quitar la sugerencia",
+      "unlinkTitle": "¿Desasociar Slack en «{space}»?",
+      "unlinkBody": "Leo dejará de atender tus mensajes de Slack en «{space}»."
+    }
   }
 }

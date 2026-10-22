@@ -135,6 +135,7 @@ Spell as Apple, Google and Microsoft do: classic tone placement (hóa, hủy, x�
 | Filter | Lọc | sàng lọc | The noun is “bộ lọc” |
 | Sort | Sắp xếp | — | “Sắp xếp theo …” |
 | Connect / Disconnect | Kết nối / Ngắt kết nối | hủy kết nối, huỷ kết nối, ngắt liên kết | |
+| Link / Unlink | Liên kết / Hủy liên kết | — | A messenger account |
 | Log out | Đăng xuất | thoát tài khoản | Log in = “Đăng nhập” |
 | Manage | Quản lý | quản lí | |
 | Couldn’t … | Không thể … | thất bại, rất tiếc | Then the fix: “Không thể lưu. Hãy kiểm tra kết nối.” |

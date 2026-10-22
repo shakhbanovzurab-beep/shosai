@@ -135,6 +135,7 @@ Adjectives and participles agree with the noun’s gender, given in Note (Tarea 
 | Filter | Filtrar | — | Noun filtro (m). |
 | Sort | Ordenar | — | Ordenar por. |
 | Connect / Disconnect | Conectar / Desconectar | vincular, enlazar | Status Conectado, Desconectado. |
+| Link / Unlink | Asociar / Desasociar | — | A messenger account; status Asociada |
 | Log out | Cerrar sesión | finalizar sesión, desloguea | Log in = Iniciar sesión. |
 | Manage | Administrar | gestiona | |
 | Couldn’t … | No se pudo … | error al, falló, no pudimos, no se ha podido, no se han podido | Plural object: No se pudieron …, e.g. No se pudieron cargar los archivos. |

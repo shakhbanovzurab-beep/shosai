@@ -84,5 +84,16 @@
     "body": "채널 연결이 해제되고 Shosai는 그곳에서 보관한 메시지를 지워요: {channels}.",
     "bodyEmpty": "Shosai가 이 Slack 워크스페이스를 잊어요. 연결된 채널은 없어요.",
     "done": "Slack 워크스페이스 “{team}” 연결을 해제했어요"
+  },
+  "hint": {
+    "label": "팀 채팅에서 Leo에게 요청하기",
+    "telegram": "Telegram을 연동하면 “<chat></chat>”에서 Leo에게 요청할 수 있어요. <ask></ask>",
+    "telegramShort": "Telegram을 연동하면 “<chat></chat>”에서 Leo에게 요청할 수 있어요.",
+    "ask": "“<bot></bot> 이걸 작업으로 만들어 줘”",
+    "linkTelegram": "Telegram 연동",
+    "slack": "<space></space>의 <account></account> 계정이 내 Slack 계정인가요? 확인하면 <chat></chat>에서 Leo에게 요청할 수 있어요.",
+    "confirm": "확인",
+    "slackConfirmed": "Slack 계정을 확인했어요",
+    "slackFailed": "Slack 계정을 확인하지 못했어요."
   }
 }

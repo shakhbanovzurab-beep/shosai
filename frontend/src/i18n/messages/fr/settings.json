@@ -96,5 +96,41 @@
       "web": "Navigateur",
       "desktop": "Application de bureau"
     }
+  },
+  "messengers": {
+    "title": "Messageries",
+    "description": "Associez votre messagerie pour demander à Leo depuis une conversation d’équipe. Leo y agit avec vos droits.",
+    "loadFailed": "Impossible de charger vos messageries",
+    "notLinked": "Non associé",
+    "linkedOn": "Associé le {date}",
+    "unlink": "Dissocier",
+    "unlinked": "{messenger} dissocié",
+    "unlinkFailed": "Impossible de dissocier",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Associer Telegram",
+      "waiting": "En attente de Telegram… Appuyez sur « Start » dans la conversation avec <bot></bot>.",
+      "openAgain": "Ouvrir à nouveau",
+      "linkedAs": "Associé en tant que <account></account>",
+      "expired": "Le lien a expiré.",
+      "refused": "Ce compte Telegram est associé à un autre compte Shosai. Dissociez-le d’abord là-bas.",
+      "startFailed": "Impossible de commencer l’association de Telegram",
+      "unlinkTitle": "Dissocier Telegram ?",
+      "unlinkBody": "Leo ne donnera plus suite à vos messages venant de Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "Est-ce vous ? <account></account> utilise votre adresse e-mail.",
+      "confirm": "Confirmer",
+      "notMe": "Ce n’est pas moi",
+      "confirmed": "Compte Slack confirmé",
+      "confirmFailed": "Impossible de confirmer le compte Slack",
+      "notMeFailed": "Impossible de retirer la suggestion",
+      "unlinkTitle": "Dissocier Slack dans « {space} » ?",
+      "unlinkBody": "Leo ne donnera plus suite à vos messages venant de Slack dans « {space} »."
+    }
   }
 }

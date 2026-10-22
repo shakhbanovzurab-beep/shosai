@@ -84,5 +84,16 @@
     "body": "Các kênh của nó bị ngắt kết nối và Shosai xóa tin nhắn đã lưu từ các kênh đó: {channels}.",
     "bodyEmpty": "Shosai quên không gian làm việc Slack này. Không có kênh nào của nó được kết nối.",
     "done": "Đã ngắt kết nối không gian làm việc Slack “{team}”"
+  },
+  "hint": {
+    "label": "Nhờ Leo từ cuộc trò chuyện nhóm",
+    "telegram": "Liên kết Telegram để nhờ Leo trong “<chat></chat>”: <ask></ask>",
+    "telegramShort": "Liên kết Telegram để nhờ Leo trong “<chat></chat>”.",
+    "ask": "“<bot></bot> tạo công việc từ tin này”",
+    "linkTelegram": "Liên kết Telegram",
+    "slack": "<account></account> trong <space></space> có phải tài khoản Slack của bạn? Hãy xác nhận để nhờ Leo trong <chat></chat>.",
+    "confirm": "Xác nhận",
+    "slackConfirmed": "Đã xác nhận tài khoản Slack",
+    "slackFailed": "Không thể xác nhận tài khoản Slack"
   }
 }

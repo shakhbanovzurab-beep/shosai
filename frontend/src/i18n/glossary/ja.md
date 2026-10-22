@@ -135,6 +135,7 @@ Full-width 、。 and 「」 in text, no 。 on buttons, labels or titles; half-
 | Filter | フィルタ | フィルター | No ー |
 | Sort | 並べ替え | ソート, 並び替え | |
 | Connect / Disconnect | 接続 / 接続を解除 | 切断, 連携解除, 連携を解除 | Connected = 接続済み |
+| Link / Unlink | リンク / リンクを解除 | — | A messenger account; not 連携 (Connect avoids 連携解除) |
 | Log out | ログアウト | サインアウト | Sign in = ログイン |
 | Manage | 管理 | — | Manage members = メンバーを管理 |
 | Couldn’t … | …できませんでした | 失敗しました, エラーが発生しました, 出来ません | Potential form for non-する verbs: 読み込めませんでした |

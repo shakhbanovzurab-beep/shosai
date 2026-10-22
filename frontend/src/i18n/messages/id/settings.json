@@ -96,5 +96,41 @@
       "web": "Browser",
       "desktop": "Aplikasi desktop"
     }
+  },
+  "messengers": {
+    "title": "Aplikasi pesan",
+    "description": "Tautkan aplikasi pesan Anda untuk meminta bantuan Leo dari chat tim. Di sana Leo bertindak dengan hak akses Anda.",
+    "loadFailed": "Tidak dapat memuat aplikasi pesan",
+    "notLinked": "Belum ditautkan",
+    "linkedOn": "Ditautkan pada {date}",
+    "unlink": "Putuskan tautan",
+    "unlinked": "Tautan {messenger} diputuskan",
+    "unlinkFailed": "Tidak dapat memutuskan tautan",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Tautkan Telegram",
+      "waiting": "Menunggu Telegram… Tekan “Start” di chat dengan <bot></bot>.",
+      "openAgain": "Buka lagi",
+      "linkedAs": "Ditautkan sebagai <account></account>",
+      "expired": "Tautan sudah kedaluwarsa.",
+      "refused": "Akun Telegram ini sudah ditautkan ke akun Shosai lain. Putuskan tautannya di sana terlebih dahulu.",
+      "startFailed": "Tidak dapat mulai menautkan Telegram",
+      "unlinkTitle": "Putuskan tautan Telegram?",
+      "unlinkBody": "Leo tidak akan lagi menindaklanjuti pesan Anda dari Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "Apakah ini Anda? <account></account> memakai email Anda.",
+      "confirm": "Konfirmasi",
+      "notMe": "Bukan saya",
+      "confirmed": "Akun Slack dikonfirmasi",
+      "confirmFailed": "Tidak dapat mengonfirmasi akun Slack",
+      "notMeFailed": "Tidak dapat menghapus saran",
+      "unlinkTitle": "Putuskan tautan Slack di “{space}”?",
+      "unlinkBody": "Leo tidak akan lagi menindaklanjuti pesan Anda dari Slack di “{space}”."
+    }
   }
 }

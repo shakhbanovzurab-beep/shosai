@@ -135,6 +135,7 @@ Sentences end with । (no space before it); buttons, labels and headings take n
 | Filter | फ़िल्टर करें | फिल्टर, छानें | Noun फ़िल्टर (masculine) |
 | Sort | क्रम से लगाएं | सॉर्ट करें, छांटें, छाँटें | |
 | Connect / Disconnect | कनेक्ट करें / डिसकनेक्ट करें | डिस्कनेक्ट, संयोजित, वियोजित | Status: कनेक्ट है / कनेक्ट नहीं है |
+| Link / Unlink | लिंक करें / अनलिंक करें | — | A messenger account |
 | Log out | साइन आउट करें | लॉग आउट, लॉगआउट, लॉग इन | Sign in = साइन इन करें |
 | Manage | मैनेज करें | प्रबंधित, प्रबंध करें | |
 | Couldn’t … | … नहीं किया जा सका | विफल, असफल, नाकाम | Agree with the noun: नहीं की जा सकी (f.), नहीं किए जा सके (pl.); end with । |

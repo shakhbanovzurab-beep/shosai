@@ -96,5 +96,41 @@
       "web": "브라우저",
       "desktop": "데스크톱 앱"
     }
+  },
+  "messengers": {
+    "title": "메신저",
+    "description": "메신저를 연동하면 팀 채팅에서 Leo에게 요청할 수 있어요. 그곳에서 Leo는 내 권한으로 작업해요.",
+    "loadFailed": "메신저를 불러오지 못했어요.",
+    "notLinked": "연동 안 됨",
+    "linkedOn": "{date}에 연동됨",
+    "unlink": "연동 해제",
+    "unlinked": "{messenger} 연동을 해제했어요",
+    "unlinkFailed": "연동을 해제하지 못했어요.",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Telegram 연동",
+      "waiting": "Telegram을 기다리는 중… <bot></bot>과의 채팅에서 “Start”를 눌러 주세요.",
+      "openAgain": "다시 열기",
+      "linkedAs": "<account></account> 계정으로 연동했어요",
+      "expired": "링크가 만료됐어요.",
+      "refused": "이 Telegram 계정은 다른 Shosai 계정에 연동되어 있어요. 먼저 그곳에서 연동을 해제해 주세요.",
+      "startFailed": "Telegram 연동을 시작하지 못했어요.",
+      "unlinkTitle": "Telegram 연동을 해제할까요?",
+      "unlinkBody": "Leo가 Telegram에서 보낸 메시지에 더 이상 응하지 않아요."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "본인인가요? <account></account> 계정이 내 이메일을 쓰고 있어요.",
+      "confirm": "확인",
+      "notMe": "내가 아님",
+      "confirmed": "Slack 계정을 확인했어요",
+      "confirmFailed": "Slack 계정을 확인하지 못했어요.",
+      "notMeFailed": "추천을 삭제하지 못했어요.",
+      "unlinkTitle": "“{space}”의 Slack 연동을 해제할까요?",
+      "unlinkBody": "Leo가 “{space}”의 Slack에서 보낸 메시지에 더 이상 응하지 않아요."
+    }
   }
 }

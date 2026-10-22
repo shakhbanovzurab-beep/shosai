@@ -84,5 +84,16 @@
     "body": "Its channels are disconnected, and Shosai erases the messages it kept from them: {channels}.",
     "bodyEmpty": "Shosai forgets this Slack workspace. None of its channels are connected.",
     "done": "The Slack workspace “{team}” is disconnected"
+  },
+  "hint": {
+    "label": "Ask Leo from your team chats",
+    "telegram": "Link your Telegram to ask Leo in “<chat></chat>”: <ask></ask>",
+    "telegramShort": "Link your Telegram to ask Leo in “<chat></chat>”.",
+    "ask": "“<bot></bot> make this a task”",
+    "linkTelegram": "Link Telegram",
+    "slack": "Is <account></account> in <space></space> your Slack account? Confirm it to ask Leo in <chat></chat>.",
+    "confirm": "Confirm",
+    "slackConfirmed": "Slack account confirmed",
+    "slackFailed": "Couldn’t confirm the Slack account"
   }
 }

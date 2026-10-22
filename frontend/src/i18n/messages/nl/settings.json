@@ -96,5 +96,41 @@
       "web": "Browser",
       "desktop": "Desktopapp"
     }
+  },
+  "messengers": {
+    "title": "Messengers",
+    "description": "Koppel je messenger om Leo vanuit een teamchat iets te vragen. Leo werkt daar met jouw rechten.",
+    "loadFailed": "Kan je messengers niet laden",
+    "notLinked": "Niet gekoppeld",
+    "linkedOn": "Gekoppeld op {date}",
+    "unlink": "Ontkoppelen",
+    "unlinked": "{messenger} ontkoppeld",
+    "unlinkFailed": "Kan niet ontkoppelen",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Telegram koppelen",
+      "waiting": "Wachten op Telegram… Tik op ‘Start’ in de chat met <bot></bot>.",
+      "openAgain": "Opnieuw openen",
+      "linkedAs": "Gekoppeld als <account></account>",
+      "expired": "De link is verlopen.",
+      "refused": "Dit Telegram-account is gekoppeld aan een ander Shosai-account. Ontkoppel het daar eerst.",
+      "startFailed": "Kan het koppelen van Telegram niet starten",
+      "unlinkTitle": "Telegram ontkoppelen?",
+      "unlinkBody": "Leo reageert dan niet meer op je berichten uit Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "Ben jij dit? <account></account> heeft jouw e-mailadres.",
+      "confirm": "Bevestigen",
+      "notMe": "Dat ben ik niet",
+      "confirmed": "Slack-account bevestigd",
+      "confirmFailed": "Kan het Slack-account niet bevestigen",
+      "notMeFailed": "Kan de suggestie niet verwijderen",
+      "unlinkTitle": "Slack in ‘{space}’ ontkoppelen?",
+      "unlinkBody": "Leo reageert dan niet meer op je berichten uit Slack in ‘{space}’."
+    }
   }
 }

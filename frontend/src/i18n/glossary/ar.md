@@ -135,6 +135,7 @@ Leo is masculine (يجيب Leo); never glue Arabic letters to Latin names (إل�
 | Filter | تصفية | فلتر | |
 | Sort | ترتيب | الفرز, فرز حسب | Sort by = ترتيب حسب |
 | Connect / Disconnect | ربط / إلغاء الربط | إلغاء الاتصال, فك الربط | Status: مرتبط |
+| Link / Unlink | ربط / إلغاء الربط | — | A messenger account, same words as Connect |
 | Log out | تسجيل الخروج | — | Log in = تسجيل الدخول |
 | Manage | إدارة | — | |
 | Couldn’t … | تعذر … | فشل في, فشلت, فشل ال, لم نتمكن, عذرا, عذرًا | Followed by a masdar: تعذر حفظ التغييرات |

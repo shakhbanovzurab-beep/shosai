@@ -135,6 +135,7 @@ Compounds are one word, hyphenated after names and abbreviations (‘Notion-kopp
 | Filter | Filteren | — | Noun het filter, mv. filters |
 | Sort | Sorteren | — | Noun sortering |
 | Connect / Disconnect | Koppelen / Ontkoppelen | connect, loskoppelen | Status ‘Gekoppeld’ / ‘Niet gekoppeld’ |
+| Link / Unlink | Koppelen / Ontkoppelen | — | A messenger account, same words as Connect |
 | Log out | Uitloggen | afmelden, log uit | Log in = ‘Inloggen’ |
 | Manage | Beheren | managen | Noun beheer |
 | Couldn’t … | Kan … niet … | fout bij, fout opgetreden, oeps | Present tense: ‘Kan niet opslaan’, ‘Kan de bestanden niet laden’ |

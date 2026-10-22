@@ -84,5 +84,16 @@
     "body": "I suoi canali vengono scollegati e Shosai elimina i messaggi conservati da essi: {channels}.",
     "bodyEmpty": "Shosai dimentica questo spazio di lavoro Slack. Nessuno dei suoi canali è collegato.",
     "done": "Lo spazio di lavoro Slack «{team}» è scollegato"
+  },
+  "hint": {
+    "label": "Chiedi a Leo dalle chat del team",
+    "telegram": "Collega Telegram per chiedere a Leo in «<chat></chat>»: <ask></ask>",
+    "telegramShort": "Collega Telegram per chiedere a Leo in «<chat></chat>».",
+    "ask": "«<bot></bot> trasforma questo in un’attività»",
+    "linkTelegram": "Collega Telegram",
+    "slack": "<account></account> in <space></space> è il tuo account Slack? Confermalo per chiedere a Leo in <chat></chat>.",
+    "confirm": "Conferma",
+    "slackConfirmed": "Account Slack confermato",
+    "slackFailed": "Impossibile confermare l’account Slack"
   }
 }

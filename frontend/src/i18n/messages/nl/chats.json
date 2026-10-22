@@ -84,5 +84,16 @@
     "body": "De kanalen ervan worden ontkoppeld en Shosai wist de berichten die eruit bewaard zijn: {channels}.",
     "bodyEmpty": "Shosai vergeet deze Slack-werkruimte. Geen van de kanalen is gekoppeld.",
     "done": "Slack-werkruimte ‘{team}’ is ontkoppeld"
+  },
+  "hint": {
+    "label": "Leo vragen vanuit teamchats",
+    "telegram": "Koppel je Telegram om Leo iets te vragen in ‘<chat></chat>’: <ask></ask>",
+    "telegramShort": "Koppel je Telegram om Leo iets te vragen in ‘<chat></chat>’.",
+    "ask": "‘<bot></bot> maak hier een taak van’",
+    "linkTelegram": "Telegram koppelen",
+    "slack": "Is <account></account> in <space></space> jouw Slack-account? Bevestig het om Leo iets te vragen in <chat></chat>.",
+    "confirm": "Bevestigen",
+    "slackConfirmed": "Slack-account bevestigd",
+    "slackFailed": "Kan het Slack-account niet bevestigen"
   }
 }

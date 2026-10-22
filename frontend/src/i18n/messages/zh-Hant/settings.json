@@ -96,5 +96,41 @@
       "web": "瀏覽器",
       "desktop": "電腦版應用程式"
     }
+  },
+  "messengers": {
+    "title": "通訊軟體",
+    "description": "連結通訊軟體，就能在團隊對話中請 Leo 幫忙。Leo 在那裡會以你的權限行事。",
+    "loadFailed": "無法載入通訊軟體",
+    "notLinked": "尚未連結",
+    "linkedOn": "{date} 連結",
+    "unlink": "取消連結",
+    "unlinked": "已取消連結 {messenger}",
+    "unlinkFailed": "無法取消連結",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "連結 Telegram",
+      "waiting": "正在等待 Telegram… 請在與 <bot></bot> 的對話中按下「Start」。",
+      "openAgain": "再次開啟",
+      "linkedAs": "已連結為 <account></account>",
+      "expired": "連結已過期。",
+      "refused": "這個 Telegram 帳號已連結到另一個 Shosai 帳號。請先在那裡取消連結。",
+      "startFailed": "無法開始連結 Telegram",
+      "unlinkTitle": "要取消連結 Telegram 嗎？",
+      "unlinkBody": "Leo 將不再處理你在 Telegram 傳送的訊息。"
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "這是你嗎？<account></account> 使用你的電子郵件。",
+      "confirm": "確認",
+      "notMe": "不是我",
+      "confirmed": "已確認 Slack 帳號",
+      "confirmFailed": "無法確認 Slack 帳號",
+      "notMeFailed": "無法移除建議",
+      "unlinkTitle": "要取消連結「{space}」的 Slack 嗎？",
+      "unlinkBody": "Leo 將不再處理你在「{space}」的 Slack 傳送的訊息。"
+    }
   }
 }

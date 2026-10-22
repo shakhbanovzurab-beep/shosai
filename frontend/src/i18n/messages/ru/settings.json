@@ -96,5 +96,41 @@
       "web": "Браузер",
       "desktop": "Приложение для компьютера"
     }
+  },
+  "messengers": {
+    "title": "Мессенджеры",
+    "description": "Привяжите мессенджер, чтобы просить Leo из командного чата. Там Leo действует с вашими правами.",
+    "loadFailed": "Не удалось загрузить мессенджеры",
+    "notLinked": "Не привязан",
+    "linkedOn": "Привязан {date}",
+    "unlink": "Отвязать",
+    "unlinked": "{messenger} отвязан",
+    "unlinkFailed": "Не удалось отвязать",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Привязать Telegram",
+      "waiting": "Ожидание Telegram… Нажмите «Start» в чате с <bot></bot>.",
+      "openAgain": "Открыть снова",
+      "linkedAs": "Привязан как <account></account>",
+      "expired": "Срок ссылки истёк.",
+      "refused": "Этот аккаунт Telegram привязан к другому аккаунту Shosai. Сначала отвяжите его там.",
+      "startFailed": "Не удалось начать привязку Telegram",
+      "unlinkTitle": "Отвязать Telegram?",
+      "unlinkBody": "Leo перестанет выполнять ваши просьбы из Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "Это вы? Почта <account></account> совпадает с вашей.",
+      "confirm": "Подтвердить",
+      "notMe": "Это не я",
+      "confirmed": "Аккаунт Slack подтверждён",
+      "confirmFailed": "Не удалось подтвердить аккаунт Slack",
+      "notMeFailed": "Не удалось убрать предложение",
+      "unlinkTitle": "Отвязать Slack в «{space}»?",
+      "unlinkBody": "Leo перестанет выполнять ваши просьбы из Slack в «{space}»."
+    }
   }
 }

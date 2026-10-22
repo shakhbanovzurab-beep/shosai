@@ -84,5 +84,16 @@
     "body": "它的頻道會中斷連接，Shosai 也會清除從中保存的訊息：{channels}。",
     "bodyEmpty": "Shosai 會忘記這個 Slack 工作空間。它沒有已連接的頻道。",
     "done": "已中斷連接 Slack 工作空間「{team}」"
+  },
+  "hint": {
+    "label": "在團隊對話中請 Leo 幫忙",
+    "telegram": "連結 Telegram，就能在「<chat></chat>」請 Leo 幫忙：<ask></ask>",
+    "telegramShort": "連結 Telegram，就能在「<chat></chat>」請 Leo 幫忙。",
+    "ask": "「<bot></bot> 把這個變成任務」",
+    "linkTelegram": "連結 Telegram",
+    "slack": "<space></space> 的 <account></account> 是你的 Slack 帳號嗎？確認後就能在 <chat></chat> 請 Leo 幫忙。",
+    "confirm": "確認",
+    "slackConfirmed": "已確認 Slack 帳號",
+    "slackFailed": "無法確認 Slack 帳號"
   }
 }

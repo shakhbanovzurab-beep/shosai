@@ -84,5 +84,16 @@
     "body": "Seine Kanäle werden getrennt, und Shosai löscht die daraus gespeicherten Nachrichten: {channels}.",
     "bodyEmpty": "Shosai vergisst diesen Slack-Workspace. Keiner seiner Kanäle ist verbunden.",
     "done": "Slack-Workspace „{team}“ ist getrennt"
+  },
+  "hint": {
+    "label": "Leo aus Teamchats fragen",
+    "telegram": "Verknüpfe Telegram, um Leo in „<chat></chat>“ zu fragen: <ask></ask>",
+    "telegramShort": "Verknüpfe Telegram, um Leo in „<chat></chat>“ zu fragen.",
+    "ask": "„<bot></bot> mach daraus eine Aufgabe“",
+    "linkTelegram": "Telegram verknüpfen",
+    "slack": "Ist <account></account> in <space></space> dein Slack-Konto? Bestätige es, um Leo in <chat></chat> zu fragen.",
+    "confirm": "Bestätigen",
+    "slackConfirmed": "Slack-Konto bestätigt",
+    "slackFailed": "Slack-Konto konnte nicht bestätigt werden"
   }
 }

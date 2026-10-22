@@ -96,5 +96,41 @@
       "web": "Navegador",
       "desktop": "App para computador"
     }
+  },
+  "messengers": {
+    "title": "Mensageiros",
+    "description": "Vincule seu mensageiro para pedir ao Leo a partir de um chat da equipe. Lá, o Leo age com as suas permissões.",
+    "loadFailed": "Não foi possível carregar seus mensageiros",
+    "notLinked": "Não vinculado",
+    "linkedOn": "Vinculado em {date}",
+    "unlink": "Desvincular",
+    "unlinked": "{messenger} desvinculado",
+    "unlinkFailed": "Não foi possível desvincular",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Vincular Telegram",
+      "waiting": "Aguardando o Telegram… Toque em “Start” no chat com <bot></bot>.",
+      "openAgain": "Abrir de novo",
+      "linkedAs": "Vinculado como <account></account>",
+      "expired": "O link expirou.",
+      "refused": "Esta conta do Telegram está vinculada a outra conta do Shosai. Desvincule-a lá primeiro.",
+      "startFailed": "Não foi possível começar a vincular o Telegram",
+      "unlinkTitle": "Desvincular o Telegram?",
+      "unlinkBody": "O Leo vai deixar de atender às suas mensagens do Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "É você? <account></account> usa o seu e-mail.",
+      "confirm": "Confirmar",
+      "notMe": "Não sou eu",
+      "confirmed": "Conta do Slack confirmada",
+      "confirmFailed": "Não foi possível confirmar a conta do Slack",
+      "notMeFailed": "Não foi possível remover a sugestão",
+      "unlinkTitle": "Desvincular o Slack em “{space}”?",
+      "unlinkBody": "O Leo vai deixar de atender às suas mensagens do Slack em “{space}”."
+    }
   }
 }

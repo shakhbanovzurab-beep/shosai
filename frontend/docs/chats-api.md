@@ -85,3 +85,12 @@ states).
 A Slack account matched by email arrives as `proposed` and acts only once the person confirms it (CF-D4);
 `hint_dismissed` closes the workspace hint for the person for good (CF-D9). In the mocks a link request links on its
 first poll after 3 s; `chats-demo` = `expire` or `refuse` (`messenger_account_taken`) changes that.
+
+The cabinet reads them with TanStack Query (`src/features/identity/model/messenger-links.ts`, key
+`["identity", "messenger-links"]`): Settings › Account › Messengers and the workspace home's hint
+(`src/features/chats/ui/hint/link-hint.tsx`) share that one cache. Linking Telegram
+(`src/features/identity/model/telegram-link.ts`) opens the `url` in a tab from the click, then polls the request every
+2 s while the cabinet's tab is visible and at once when it becomes visible again; a linked request refreshes the list.
+Closing the hint hides it in the tab at once and saves the dismissal with three quiet retries; the tab keeps it hidden
+even if saving fails. The hint's "Link Telegram" opens Settings at Account scrolled to Messengers
+(`useOpenSettings()("account", "messengers")`).

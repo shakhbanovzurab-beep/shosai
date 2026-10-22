@@ -96,5 +96,41 @@
       "web": "Browser",
       "desktop": "Desktop app"
     }
+  },
+  "messengers": {
+    "title": "Messengers",
+    "description": "Link your messenger to ask Leo from a team chat. Leo acts there with your rights.",
+    "loadFailed": "Couldn’t load your messengers",
+    "notLinked": "Not linked",
+    "linkedOn": "Linked on {date}",
+    "unlink": "Unlink",
+    "unlinked": "{messenger} unlinked",
+    "unlinkFailed": "Couldn’t unlink",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Link Telegram",
+      "waiting": "Waiting for Telegram… Press Start in the chat with <bot></bot>.",
+      "openAgain": "Open again",
+      "linkedAs": "Linked as <account></account>",
+      "expired": "The link expired.",
+      "refused": "This Telegram account is linked to another Shosai account. Unlink it there first.",
+      "startFailed": "Couldn’t start linking Telegram",
+      "unlinkTitle": "Unlink Telegram?",
+      "unlinkBody": "Leo will stop acting on your messages from Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "Is this you? <account></account> has your email.",
+      "confirm": "Confirm",
+      "notMe": "Not me",
+      "confirmed": "Slack account confirmed",
+      "confirmFailed": "Couldn’t confirm the Slack account",
+      "notMeFailed": "Couldn’t remove the suggestion",
+      "unlinkTitle": "Unlink Slack in {space}?",
+      "unlinkBody": "Leo will stop acting on your messages from Slack in {space}."
+    }
   }
 }

@@ -135,6 +135,7 @@ Half-width space between Chinese and Latin words, numbers or placeholders (與 L
 | Filter | 篩選 | 筛选, 過濾 | |
 | Sort | 排序 | — | Sort by is 排序方式 |
 | Connect / Disconnect | 連接 / 中斷連接 | 斷開, 断开, 连接 | Connected is 已連接; a network connection is 連線 |
+| Link / Unlink | 連結 / 取消連結 | — | A messenger account; status 已連結 |
 | Log out | 登出 | 登錄, 登录, 註銷, 注销 | Sign in is 登入 |
 | Manage | 管理 | — | |
 | Couldn’t … | 無法… | 未能, 糟糕, 哎呀, 出了點問題 | Add the fix as a second sentence |

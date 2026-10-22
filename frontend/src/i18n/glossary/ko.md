@@ -135,6 +135,7 @@ After names and placeholders choose the particle by sound (Leo가, Studio를, No
 | Filter | 필터 | — | |
 | Sort | 정렬 | — | |
 | Connect / Disconnect | 연결 / 연결 해제 | 커넥트, 연결 끊기, 연결해제 | |
+| Link / Unlink | 연동 / 연동 해제 | — | A messenger account; status 연동됨 |
 | Log out | 로그아웃 | 로그 아웃, 사인아웃, 로그오프 | |
 | Manage | 관리 | — | e.g. 구독 관리 |
 | Couldn’t … | …지 못했어요 | 에 실패했, 실패하였, 할 수 없었 | e.g. 저장하지 못했어요, 파일을 불러오지 못했어요 |

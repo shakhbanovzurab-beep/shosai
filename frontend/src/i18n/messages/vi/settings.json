@@ -96,5 +96,41 @@
       "web": "Trình duyệt",
       "desktop": "Ứng dụng máy tính"
     }
+  },
+  "messengers": {
+    "title": "Ứng dụng nhắn tin",
+    "description": "Liên kết ứng dụng nhắn tin để nhờ Leo từ một cuộc trò chuyện nhóm. Ở đó Leo làm việc với quyền của bạn.",
+    "loadFailed": "Không thể tải ứng dụng nhắn tin",
+    "notLinked": "Chưa liên kết",
+    "linkedOn": "Đã liên kết ngày {date}",
+    "unlink": "Hủy liên kết",
+    "unlinked": "Đã hủy liên kết {messenger}",
+    "unlinkFailed": "Không thể hủy liên kết",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Liên kết Telegram",
+      "waiting": "Đang chờ Telegram… Hãy nhấn “Start” trong cuộc trò chuyện với <bot></bot>.",
+      "openAgain": "Mở lại",
+      "linkedAs": "Đã liên kết với <account></account>",
+      "expired": "Liên kết đã hết hạn.",
+      "refused": "Tài khoản Telegram này đã liên kết với một tài khoản Shosai khác. Hãy hủy liên kết ở đó trước.",
+      "startFailed": "Không thể bắt đầu liên kết Telegram",
+      "unlinkTitle": "Hủy liên kết Telegram?",
+      "unlinkBody": "Leo sẽ không xử lý tin nhắn của bạn từ Telegram nữa."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "Đây có phải là bạn? <account></account> dùng email của bạn.",
+      "confirm": "Xác nhận",
+      "notMe": "Không phải tôi",
+      "confirmed": "Đã xác nhận tài khoản Slack",
+      "confirmFailed": "Không thể xác nhận tài khoản Slack",
+      "notMeFailed": "Không thể xóa gợi ý",
+      "unlinkTitle": "Hủy liên kết Slack trong “{space}”?",
+      "unlinkBody": "Leo sẽ không xử lý tin nhắn của bạn từ Slack trong “{space}” nữa."
+    }
   }
 }

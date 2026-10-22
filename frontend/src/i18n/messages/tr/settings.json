@@ -96,5 +96,41 @@
       "web": "Tarayıcı",
       "desktop": "Masaüstü uygulaması"
     }
+  },
+  "messengers": {
+    "title": "Mesajlaşma uygulamaları",
+    "description": "Bir ekip sohbetinden Leo’ya bir şey sormak için mesajlaşma uygulamanızı bağlayın. Leo orada sizin yetkilerinizle çalışır.",
+    "loadFailed": "Mesajlaşma uygulamaları yüklenemedi",
+    "notLinked": "Bağlı değil",
+    "linkedOn": "Bağlanma tarihi: {date}",
+    "unlink": "Bağlantıyı kaldır",
+    "unlinked": "Bağlantı kaldırıldı: {messenger}",
+    "unlinkFailed": "Bağlantı kaldırılamadı",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Telegram hesabını bağla",
+      "waiting": "Telegram bekleniyor… <bot></bot> ile sohbette “Start” düğmesine dokunun.",
+      "openAgain": "Yeniden aç",
+      "linkedAs": "Bağlanan hesap: <account></account>",
+      "expired": "Bağlantının süresi doldu.",
+      "refused": "Bu Telegram hesabı başka bir Shosai hesabına bağlı. Önce oradaki bağlantıyı kaldırın.",
+      "startFailed": "Telegram bağlama işlemi başlatılamadı",
+      "unlinkTitle": "Telegram bağlantısı kaldırılsın mı?",
+      "unlinkBody": "Leo, Telegram’dan gelen mesajlarınıza artık yanıt vermez."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "Bu siz misiniz? <account></account> sizin e-posta adresinizi kullanıyor.",
+      "confirm": "Onayla",
+      "notMe": "Ben değilim",
+      "confirmed": "Slack hesabı onaylandı",
+      "confirmFailed": "Slack hesabı onaylanamadı",
+      "notMeFailed": "Öneri kaldırılamadı",
+      "unlinkTitle": "“{space}” içindeki Slack bağlantısı kaldırılsın mı?",
+      "unlinkBody": "Leo, “{space}” içindeki Slack’ten gelen mesajlarınıza artık yanıt vermez."
+    }
   }
 }

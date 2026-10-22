@@ -84,5 +84,16 @@
     "body": "チャンネルの接続が解除され、Shosai はそこで保存したメッセージを消去します：{channels}。",
     "bodyEmpty": "Shosai はこの Slack ワークスペースを忘れます。接続済みのチャンネルはありません。",
     "done": "Slack ワークスペース「{team}」の接続を解除しました"
+  },
+  "hint": {
+    "label": "チームのチャットから Leo に頼む",
+    "telegram": "Telegram をリンクすると、「<chat></chat>」で Leo に頼めます：<ask></ask>",
+    "telegramShort": "Telegram をリンクすると、「<chat></chat>」で Leo に頼めます。",
+    "ask": "「<bot></bot> これをタスクにして」",
+    "linkTelegram": "Telegram をリンク",
+    "slack": "<space></space> の <account></account> は自分の Slack アカウントですか？確認すると <chat></chat> で Leo に頼めます。",
+    "confirm": "確認",
+    "slackConfirmed": "Slack アカウントを確認しました",
+    "slackFailed": "Slack アカウントを確認できませんでした"
   }
 }

@@ -84,5 +84,16 @@
     "body": "Kanallarının bağlantısı kesilir ve Shosai bunlardan sakladığı mesajları siler: {channels}.",
     "bodyEmpty": "Shosai bu Slack çalışma alanını unutur. Kanallarından hiçbiri bağlı değil.",
     "done": "“{team}” Slack çalışma alanının bağlantısı kesildi"
+  },
+  "hint": {
+    "label": "Ekip sohbetlerinden Leo’ya sorun",
+    "telegram": "“<chat></chat>” içinde Leo’ya sormak için Telegram hesabınızı bağlayın: <ask></ask>",
+    "telegramShort": "“<chat></chat>” içinde Leo’ya sormak için Telegram hesabınızı bağlayın.",
+    "ask": "“<bot></bot> bunu bir görev yap”",
+    "linkTelegram": "Telegram hesabını bağla",
+    "slack": "<space></space> içindeki <account></account> sizin Slack hesabınız mı? <chat></chat> içinde Leo’ya sormak için onaylayın.",
+    "confirm": "Onayla",
+    "slackConfirmed": "Slack hesabı onaylandı",
+    "slackFailed": "Slack hesabı onaylanamadı"
   }
 }

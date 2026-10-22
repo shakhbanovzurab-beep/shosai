@@ -135,6 +135,7 @@ Nouns never take a plural form: no reduplication in the UI (3 file, semua tugas)
 | Filter | Filter | Saring | |
 | Sort | Urutkan | Sortir | Sort by = Urutkan menurut |
 | Connect / Disconnect | Hubungkan / Putuskan koneksi | Sambungkan, Koneksikan, Putuskan sambungan, Putuskan hubungan | State: Terhubung |
+| Link / Unlink | Tautkan / Putuskan tautan | — | A messenger account; status Ditautkan |
 | Log out | Keluar | Logout, Log out | Log in = Masuk |
 | Manage | Kelola | — | |
 | Couldn’t … | Tidak dapat … | Gagal, Tidak bisa | Me- verb: Tidak dapat memuat file; a Failed status is Tidak berhasil |

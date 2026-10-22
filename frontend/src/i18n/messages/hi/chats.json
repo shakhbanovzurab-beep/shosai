@@ -84,5 +84,16 @@
     "body": "इसके चैनल डिसकनेक्ट हो जाएंगे, और Shosai उनसे रखे गए मैसेज मिटा देगा: {channels}।",
     "bodyEmpty": "Shosai इस Slack वर्कस्पेस को भूल जाएगा। इसका कोई चैनल कनेक्ट नहीं है।",
     "done": "Slack वर्कस्पेस “{team}” डिसकनेक्ट हो गया"
+  },
+  "hint": {
+    "label": "टीम चैट से Leo से कहें",
+    "telegram": "“<chat></chat>” में Leo से कहने के लिए अपना Telegram लिंक करें: <ask></ask>",
+    "telegramShort": "“<chat></chat>” में Leo से कहने के लिए अपना Telegram लिंक करें।",
+    "ask": "“<bot></bot> इसे टास्क बना दो”",
+    "linkTelegram": "Telegram लिंक करें",
+    "slack": "क्या <space></space> में <account></account> आपका Slack खाता है? <chat></chat> में Leo से कहने के लिए इसकी पुष्टि करें।",
+    "confirm": "पुष्टि करें",
+    "slackConfirmed": "Slack खाते की पुष्टि हो गई",
+    "slackFailed": "Slack खाते की पुष्टि नहीं की जा सकी"
   }
 }

@@ -135,6 +135,7 @@ Use the generic forms given here (Inhaber, Teilnehmer) or neutral wording (Perso
 | Filter | Filtern | — | Verb on buttons; noun der Filter |
 | Sort | Sortieren | — | Sortieren nach … |
 | Connect / Disconnect | Verbinden / Trennen | Konnektieren, Entkoppeln | Status Verbunden / Getrennt |
+| Link / Unlink | Verknüpfen / Verknüpfung lösen | — | A messenger account; status Verknüpft |
 | Log out | Abmelden | Ausloggen, ausgeloggt, Logout | Log in = Anmelden |
 | Manage | Verwalten | Managen | |
 | Couldn’t … | … konnte nicht … werden | fehlgeschlagen, Fehler beim, Fehler aufgetreten, Hoppla, Wir konnten | Always name the subject: Änderungen konnten nicht gespeichert werden; plural konnten; a failed item’s status is Fehler |

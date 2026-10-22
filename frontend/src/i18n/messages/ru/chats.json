@@ -84,5 +84,16 @@
     "body": "Его каналы отключатся, и Shosai сотрёт сохранённые из них сообщения: {channels}.",
     "bodyEmpty": "Shosai забудет это пространство Slack. Ни один его канал не подключён.",
     "done": "Пространство Slack «{team}» отключено"
+  },
+  "hint": {
+    "label": "Просите Leo из командных чатов",
+    "telegram": "Привяжите Telegram, чтобы просить Leo в «<chat></chat>»: <ask></ask>",
+    "telegramShort": "Привяжите Telegram, чтобы просить Leo в «<chat></chat>».",
+    "ask": "«<bot></bot> сделай из этого задачу»",
+    "linkTelegram": "Привязать Telegram",
+    "slack": "<account></account> в <space></space> — ваш аккаунт Slack? Подтвердите, чтобы просить Leo в <chat></chat>.",
+    "confirm": "Подтвердить",
+    "slackConfirmed": "Аккаунт Slack подтверждён",
+    "slackFailed": "Не удалось подтвердить аккаунт Slack"
   }
 }

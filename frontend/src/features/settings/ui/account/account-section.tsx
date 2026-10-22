@@ -12,9 +12,10 @@ import { AutosaveInput } from "./autosave-input";
 import { AvatarEditor } from "./avatar-editor";
 import { DeleteAccount } from "./delete-account";
 import { Devices } from "./devices";
+import { MessengersGroup } from "./messengers/messengers-group";
 import { TimeZoneField } from "./time-zone-field";
 
-/** Settings › Account: профиль, фото, устройства и удаление — всё из identity (`/v1/me*`). */
+/** Settings › Account: профиль, фото, мессенджеры, устройства и удаление — всё из identity (`/v1/me*`). */
 export function AccountSection({ me }: { me: Me }) {
   const t = useTranslations("settings");
   return (
@@ -61,6 +62,7 @@ export function AccountSection({ me }: { me: Me }) {
           <TimeZoneField id="settings-time-zone" me={me} />
         </SettingsRow>
       </SettingsGroup>
+      <MessengersGroup />
       <Devices />
       <DeleteAccount email={me.email} />
     </div>

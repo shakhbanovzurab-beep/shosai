@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode, Ref } from "react";
 
 /** A setting: what it is and what it does on the left, its control on the right. */
 export function SettingsRow({
@@ -26,9 +26,17 @@ export function SettingsRow({
 }
 
 /** A titled group of rows inside a section. */
-export function SettingsGroup({ title, children }: { title?: string; children: ReactNode }) {
+export function SettingsGroup({
+  title,
+  children,
+  ref,
+}: {
+  title?: string;
+  children: ReactNode;
+  ref?: Ref<HTMLElement>;
+}) {
   return (
-    <section className="flex flex-col">
+    <section ref={ref} className="flex flex-col">
       {title ? <h3 className="font-medium text-muted-foreground text-xs uppercase tracking-wide">{title}</h3> : null}
       <div className="divide-y">{children}</div>
     </section>

@@ -96,5 +96,41 @@
       "web": "Browser",
       "desktop": "App desktop"
     }
+  },
+  "messengers": {
+    "title": "Messaggistica",
+    "description": "Collega la tua app di messaggistica per chiedere a Leo da una chat del team. Lì Leo agisce con i tuoi permessi.",
+    "loadFailed": "Impossibile caricare le app di messaggistica",
+    "notLinked": "Non collegato",
+    "linkedOn": "Collegato il {date}",
+    "unlink": "Scollega",
+    "unlinked": "{messenger} scollegato",
+    "unlinkFailed": "Impossibile scollegare",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Collega Telegram",
+      "waiting": "In attesa di Telegram… Tocca «Start» nella chat con <bot></bot>.",
+      "openAgain": "Apri di nuovo",
+      "linkedAs": "Collegato come <account></account>",
+      "expired": "Il link è scaduto.",
+      "refused": "Questo account Telegram è collegato a un altro account Shosai. Scollegalo prima da lì.",
+      "startFailed": "Impossibile avviare il collegamento di Telegram",
+      "unlinkTitle": "Scollegare Telegram?",
+      "unlinkBody": "Leo non risponderà più ai tuoi messaggi da Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "Sei tu? <account></account> ha la tua email.",
+      "confirm": "Conferma",
+      "notMe": "Non sono io",
+      "confirmed": "Account Slack confermato",
+      "confirmFailed": "Impossibile confermare l’account Slack",
+      "notMeFailed": "Impossibile rimuovere il suggerimento",
+      "unlinkTitle": "Scollegare Slack in «{space}»?",
+      "unlinkBody": "Leo non risponderà più ai tuoi messaggi da Slack in «{space}»."
+    }
   }
 }

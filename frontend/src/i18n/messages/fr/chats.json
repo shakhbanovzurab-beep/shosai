@@ -84,5 +84,16 @@
     "body": "Ses canaux sont déconnectés, et Shosai efface les messages conservés de ces canaux : {channels}.",
     "bodyEmpty": "Shosai oublie cet espace Slack. Aucun de ses canaux n’est connecté.",
     "done": "L’espace Slack « {team} » est déconnecté"
+  },
+  "hint": {
+    "label": "Demander à Leo depuis vos conversations d’équipe",
+    "telegram": "Associez Telegram pour demander à Leo dans « <chat></chat> » : <ask></ask>",
+    "telegramShort": "Associez Telegram pour demander à Leo dans « <chat></chat> ».",
+    "ask": "« <bot></bot> fais-en une tâche »",
+    "linkTelegram": "Associer Telegram",
+    "slack": "<account></account> dans <space></space> est-il votre compte Slack ? Confirmez-le pour demander à Leo dans <chat></chat>.",
+    "confirm": "Confirmer",
+    "slackConfirmed": "Compte Slack confirmé",
+    "slackFailed": "Impossible de confirmer le compte Slack"
   }
 }

@@ -84,5 +84,16 @@
     "body": "Kanal-kanalnya diputus dan Shosai menghapus pesan yang disimpan darinya: {channels}.",
     "bodyEmpty": "Shosai melupakan ruang kerja Slack ini. Tidak ada kanalnya yang terhubung.",
     "done": "Koneksi ruang kerja Slack “{team}” diputuskan"
+  },
+  "hint": {
+    "label": "Minta bantuan Leo dari chat tim",
+    "telegram": "Tautkan Telegram Anda untuk meminta bantuan Leo di “<chat></chat>”: <ask></ask>",
+    "telegramShort": "Tautkan Telegram Anda untuk meminta bantuan Leo di “<chat></chat>”.",
+    "ask": "“<bot></bot> jadikan ini tugas”",
+    "linkTelegram": "Tautkan Telegram",
+    "slack": "Apakah <account></account> di <space></space> akun Slack Anda? Konfirmasi untuk meminta bantuan Leo di <chat></chat>.",
+    "confirm": "Konfirmasi",
+    "slackConfirmed": "Akun Slack dikonfirmasi",
+    "slackFailed": "Tidak dapat mengonfirmasi akun Slack"
   }
 }

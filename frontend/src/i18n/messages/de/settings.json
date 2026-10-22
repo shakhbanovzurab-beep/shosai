@@ -96,5 +96,41 @@
       "web": "Browser",
       "desktop": "Desktop-App"
     }
+  },
+  "messengers": {
+    "title": "Messenger",
+    "description": "Verknüpfe deinen Messenger, um Leo aus einem Teamchat zu fragen. Dort handelt Leo mit deinen Rechten.",
+    "loadFailed": "Messenger konnten nicht geladen werden",
+    "notLinked": "Nicht verknüpft",
+    "linkedOn": "Verknüpft am {date}",
+    "unlink": "Verknüpfung lösen",
+    "unlinked": "Verknüpfung mit {messenger} gelöst",
+    "unlinkFailed": "Verknüpfung konnte nicht gelöst werden",
+    "names": {
+      "telegram": "Telegram",
+      "slack": "Slack"
+    },
+    "telegram": {
+      "link": "Telegram verknüpfen",
+      "waiting": "Warten auf Telegram… Tippe im Chat mit <bot></bot> auf „Start“.",
+      "openAgain": "Erneut öffnen",
+      "linkedAs": "Verknüpft als <account></account>",
+      "expired": "Der Link ist abgelaufen.",
+      "refused": "Dieses Telegram-Konto ist mit einem anderen Shosai-Konto verknüpft. Löse die Verknüpfung zuerst dort.",
+      "startFailed": "Verknüpfung mit Telegram konnte nicht gestartet werden",
+      "unlinkTitle": "Verknüpfung mit Telegram lösen?",
+      "unlinkBody": "Leo reagiert dann nicht mehr auf deine Nachrichten aus Telegram."
+    },
+    "slack": {
+      "space": "Slack · {space}",
+      "proposed": "Bist du das? <account></account> hat deine E-Mail-Adresse.",
+      "confirm": "Bestätigen",
+      "notMe": "Nicht ich",
+      "confirmed": "Slack-Konto bestätigt",
+      "confirmFailed": "Slack-Konto konnte nicht bestätigt werden",
+      "notMeFailed": "Vorschlag konnte nicht entfernt werden",
+      "unlinkTitle": "Verknüpfung mit Slack in „{space}“ lösen?",
+      "unlinkBody": "Leo reagiert dann nicht mehr auf deine Nachrichten aus Slack in „{space}“."
+    }
   }
 }

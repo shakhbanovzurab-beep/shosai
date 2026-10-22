@@ -135,6 +135,7 @@ Suffixes after names and codes take ’ and follow pronunciation (Leo’ya, Noti
 | Filter | Filtrele | süzgeç | Noun filtre. |
 | Sort | Sırala | — | Sort by = Sıralama ölçütü. |
 | Connect / Disconnect | Bağla / Bağlantıyı kes | bağlantıyı kopar | Status Bağlı. |
+| Link / Unlink | Bağla / Bağlantıyı kaldır | — | A messenger account; status Bağlı |
 | Log out | Çıkış yap | oturumu kapat, log out | Log in = Giriş yap. |
 | Manage | Yönet | idare et | |
 | Couldn’t … | … -AmAdI on the passive verb: Kaydedilemedi, Dosyalar yüklenemedi | başarısız oldu, hata oluştu, hay aksi | Then the fix in siz: Bağlantınızı kontrol edin. |

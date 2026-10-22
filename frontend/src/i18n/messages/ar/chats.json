@@ -84,5 +84,16 @@
     "body": "سيُلغى ربط قنواتها، وسيمحو Shosai الرسائل المحفوظة منها: {channels}.",
     "bodyEmpty": "سينسى Shosai مساحة عمل Slack هذه. لا توجد قنوات مربوطة منها.",
     "done": "أُلغي ربط مساحة عمل Slack «{team}»"
+  },
+  "hint": {
+    "label": "طلب المساعدة من Leo في محادثات الفريق",
+    "telegram": "يمكن ربط Telegram لطلب المساعدة من Leo في «<chat></chat>»: <ask></ask>",
+    "telegramShort": "يمكن ربط Telegram لطلب المساعدة من Leo في «<chat></chat>».",
+    "ask": "«<bot></bot> حوّل هذا إلى مهمة»",
+    "linkTelegram": "ربط Telegram",
+    "slack": "هل <account></account> في <space></space> هو حسابك في Slack؟ يرجى التأكيد لطلب المساعدة من Leo في <chat></chat>.",
+    "confirm": "تأكيد",
+    "slackConfirmed": "تم تأكيد حساب Slack",
+    "slackFailed": "تعذر تأكيد حساب Slack"
   }
 }

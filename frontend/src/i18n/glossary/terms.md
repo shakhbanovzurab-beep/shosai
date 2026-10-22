@@ -131,6 +131,7 @@ row per term below, in the same order. Terms in the "Do not translate" list of `
 | Filter | actions | Show only matching items |
 | Sort | actions | Change the order |
 | Connect / Disconnect | actions | Link or unlink an outside service |
+| Link / Unlink | actions | Tie a person's messenger account to their Shosai account, or undo it |
 | Log out | actions | Sign out of Studio |
 | Manage | actions | Open the controls for something |
 | Couldn’t … | patterns | Error message pattern: "Couldn’t save", "Couldn’t load the files" |

@@ -84,5 +84,16 @@
     "body": "Sus canales se desconectan y Shosai borra los mensajes que guardó de ellos: {channels}.",
     "bodyEmpty": "Shosai olvida este espacio de trabajo de Slack. Ninguno de sus canales está conectado.",
     "done": "El espacio de trabajo de Slack «{team}» está desconectado"
+  },
+  "hint": {
+    "label": "Pídele cosas a Leo desde tus chats del equipo",
+    "telegram": "Asocia tu Telegram para pedirle cosas a Leo en «<chat></chat>»: <ask></ask>",
+    "telegramShort": "Asocia tu Telegram para pedirle cosas a Leo en «<chat></chat>».",
+    "ask": "«<bot></bot> convierte esto en una tarea»",
+    "linkTelegram": "Asociar Telegram",
+    "slack": "¿<account></account> en <space></space> es tu cuenta de Slack? Confírmala para pedirle cosas a Leo en <chat></chat>.",
+    "confirm": "Confirmar",
+    "slackConfirmed": "Cuenta de Slack confirmada",
+    "slackFailed": "No se pudo confirmar la cuenta de Slack"
   }
 }
