@@ -26,6 +26,7 @@
   "create_task": "Membuat tugas",
   "update_task": "Memperbarui tugas",
   "move_task": "Memindahkan tugas",
+  "read_chat": "Membaca chat tim",
   "search_files": "Mencari file Anda",
   "read_file": "Membaca file",
   "create_file": "Membuat file",

@@ -140,6 +140,7 @@ export async function* runAgent(request: LeoTurn, signal: AbortSignal): AsyncGen
   }
 
   if (scenario?.sources) yield { type: "sources", sources: scenario.sources };
+  if (scenario?.artifact) yield { type: "artifact", artifact: scenario.artifact() };
   const writeStartedAt = Date.now();
   yield { type: "step_start", id: "step-answer", action: "write_answer" };
   const answer = scenario ? scenario.answer : composeAnswer(request, steps, scope);

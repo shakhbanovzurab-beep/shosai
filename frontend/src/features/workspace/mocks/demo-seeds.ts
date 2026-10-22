@@ -58,6 +58,9 @@ export function seededLumen(): WorkspaceData {
       ["t-beta-email", "Prepare the beta announcement email", "m-arham", 8, "leo-beta", "todo"],
       ["t-agent-qa", "QA pass on the agent steps UI", "m-sofia", 3, "leo-beta", "in_progress"],
       ["t-scorecard", "Write the interview scorecard", "m-maya", 6, "hiring", "todo"],
+      // Из командного чата «Release team» (TK-D13); источник — в моках канбана.
+      ["t-chat-checklist", "Update the release checklist for 2.4", "m-arham", 2, "leo-beta", "todo"],
+      ["t-chat-invites", "Send the beta invite list to support", "m-arham", 3, "leo-beta", "in_progress"],
     ],
     {
       suspended: null,

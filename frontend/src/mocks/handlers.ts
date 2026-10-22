@@ -8,6 +8,7 @@ import { handlers as adminPlatformPrompts } from "@/features/admin-platform-prom
 import { handlers as adminSupport } from "@/features/admin-support/mocks/handlers";
 import { handlers as adminUsers } from "@/features/admin-users/mocks/handlers";
 import { handlers as adminWorkspaces } from "@/features/admin-workspaces/mocks/handlers";
+import { handlers as chats } from "@/features/chats/mocks/handlers";
 import { handlers as fileManager } from "@/features/file-manager/mocks/handlers";
 import { handlers as hub } from "@/features/hub/mocks/handlers";
 import { handlers as identity } from "@/features/identity/mocks/handlers";
@@ -36,6 +37,7 @@ export const mockRoutes: readonly MockRoute[] = [
   ...adminSupport,
   ...adminUsers,
   ...adminWorkspaces,
+  ...chats,
   ...fileManager,
   ...hub,
   ...identity,

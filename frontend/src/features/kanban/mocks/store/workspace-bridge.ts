@@ -22,6 +22,7 @@ function fromWorkspace(task: MyTask, existing: StoredTask | undefined): StoredTa
             kind: "meeting",
             meeting: { id: task.meeting_id, title: task.meeting_title ?? "", started_at: task.created_at },
             finding: null,
+            chat: null,
           }
         : MANUAL,
     });

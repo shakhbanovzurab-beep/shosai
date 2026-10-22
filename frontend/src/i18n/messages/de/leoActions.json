@@ -26,6 +26,7 @@
   "create_task": "Erstellt eine Aufgabe",
   "update_task": "Aktualisiert eine Aufgabe",
   "move_task": "Verschiebt eine Aufgabe",
+  "read_chat": "Liest den Team-Chat",
   "search_files": "Durchsucht deine Dateien",
   "read_file": "Liest eine Datei",
   "create_file": "Erstellt eine Datei",

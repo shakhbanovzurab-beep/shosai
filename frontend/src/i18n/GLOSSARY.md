@@ -33,6 +33,7 @@ English text contains one, the translation must contain it too). Grammar around 
 - `Claude`
 - `GPT Astra`
 - `Slack`
+- `Telegram`
 - `Notion`
 - `GitHub`
 - `GitLab`

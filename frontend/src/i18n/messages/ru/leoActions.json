@@ -26,6 +26,7 @@
   "create_task": "Создаю задачу",
   "update_task": "Меняю задачу",
   "move_task": "Переношу задачу",
+  "read_chat": "Читаю командный чат",
   "search_files": "Ищу файлы",
   "read_file": "Читаю файл",
   "create_file": "Создаю файл",

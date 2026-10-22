@@ -26,6 +26,7 @@
   "create_task": "Creating a task",
   "update_task": "Updating a task",
   "move_task": "Moving a task",
+  "read_chat": "Reading the team chat",
   "search_files": "Searching your files",
   "read_file": "Reading a file",
   "create_file": "Creating a file",

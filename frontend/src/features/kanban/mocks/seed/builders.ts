@@ -5,7 +5,7 @@ import { cabinetTimeZone } from "@/i18n/time-zone";
 import type { ColumnKind } from "../../domain/board";
 import { addDays } from "../../domain/recurrence";
 import type { Color } from "../../domain/stickers-contract";
-import type { Attachment, Person, Subtask, TaskSource } from "../../domain/tasks-contract";
+import type { Attachment, Person, Subtask, TaskChatSource, TaskSource } from "../../domain/tasks-contract";
 import type { StoredColumn, StoredComment, StoredTask } from "../store/types";
 
 /*
@@ -26,7 +26,7 @@ export const inDays = (days: number) => addDays(today(), days);
 const MINUTE = 60_000;
 export const minutesAgo = (minutes: number) => new Date(Date.now() - minutes * MINUTE).toISOString();
 
-export const MANUAL: TaskSource = { kind: "manual", meeting: null, finding: null };
+export const MANUAL: TaskSource = { kind: "manual", meeting: null, finding: null, chat: null };
 
 /** Задача из встречи: её исходная встреча и находка с цитатой и моментом. */
 export function fromMeeting(
@@ -41,7 +41,13 @@ export function fromMeeting(
     kind: "meeting",
     meeting: { id: meetingId, title: meeting, started_at },
     finding: { quote, start_ms: atMs },
+    chat: null,
   };
+}
+
+/** Задача из командного чата (TK-D13): чат и ссылка на сообщение, как были при создании. */
+export function fromChat(chat: TaskChatSource): TaskSource {
+  return { kind: "chat", meeting: null, finding: null, chat };
 }
 
 export function seedTask(id: string, title: string, description: string, fields: Partial<StoredTask> = {}) {

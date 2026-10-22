@@ -79,6 +79,10 @@ The Kanban package moves the screens from the old sample paths `/api/kanban/*` t
   returned, so a comment written meanwhile repeats nothing; another person's comment answers `not_comment_author`.
 - A Jira task has no subtasks, comments, attachments, cover, recurrence, range or custom fields
   (`jira_unsupported`, KG-D8).
+- A task Leo made from a team chat (tasks TK-D13, [chats API](chats-api.md)) has `source.kind = "chat"` with
+  `source.chat {connection_id, messenger, chat_title, message: {url, sent_at}}`, and its card carries
+  `source_chat {messenger, chat_title}` for the face; `connection_id` is null once the chat is disconnected, and
+  `message.url` is null for a Telegram group without message links.
 
 ## Fields (stickers)
 

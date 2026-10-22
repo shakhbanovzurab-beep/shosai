@@ -51,6 +51,8 @@ export type Card = TaskClocks & {
   leo_fields: LeoField[];
   space: TaskSpace | null;
   jira: JiraIssueRef | null;
+  /** Задача из командного чата: мессенджер и чат для строки на лице карточки (TK-D13). */
+  source_chat: CardChatSource | null;
   /** Может ли человек удалить задачу: свою — да, задачу пространства — её владелец и админы (TK-D2). */
   can_delete: boolean;
 };
@@ -78,12 +80,25 @@ export type Comment = {
 };
 export type CommentsPage = { items: Comment[]; next_cursor: string | null };
 
-export type TaskSourceKind = "manual" | "meeting" | "hub" | "mail" | "jira";
+export type TaskSourceKind = "manual" | "meeting" | "hub" | "mail" | "jira" | "chat";
+/** Мессенджеры командных чатов (chats §1.1). */
+export type ChatMessenger = "telegram" | "slack";
+export type CardChatSource = { messenger: ChatMessenger; chat_title: string };
+/**
+ * Чат и сообщение, из которых задача (TK-D13): как были при создании, поэтому строка переживает отключение
+ * чата; подключения тогда уже нет (`connection_id` null), а ссылка ведёт в мессенджер.
+ */
+export type TaskChatSource = CardChatSource & {
+  connection_id: string | null;
+  message: { url: string | null; sent_at: string } | null;
+};
 export type TaskSource = {
   kind: TaskSourceKind;
   /** Встреча, из которой задача; null, если её нет или она удалена. */
   meeting: { id: string; title: string; started_at: string } | null;
   finding: { quote: string; start_ms: number } | null;
+  /** Есть ровно тогда, когда `kind` = chat. */
+  chat: TaskChatSource | null;
 };
 
 export type TaskDetail = Card & {

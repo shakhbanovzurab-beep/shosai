@@ -72,7 +72,9 @@ ChatMessageRef = {id, author_name, sent_at, quote (the message's text, cut to 28
                   url: string | null (Telegram: t.me/c/<chat>/<message> for a supergroup, null for a basic
                                       group, which has no message links; Slack: the message's permalink)}
 DigestItem     = {id, text (Leo's words in the person's answer language, ≤ 300), message: ChatMessageRef,
-                  proposal_id: string | null (the approval card made from it, if any)}
+                  proposal_id: string | null (the approval card made from it, if any),
+                  task_id: string | null (the task that card created; added by the package's step 1,
+                                          agent-derived and additive, so "Task created" can open it, §3.8)}
 DigestPromise  = DigestItem & {who: {user_id: string | null (a matched member), name}, due_on: date | null,
                                when_text: string | null (the time as it was said, when it is not a day)}
 ChatDigest     = {id, chat: {id, workspace_id, messenger, title, binding: Binding}, period: {from, to},
@@ -102,7 +104,7 @@ ChatDigest     = {id, chat: {id, workspace_id, messenger, title, binding: Bindin
 | `GET /v1/workspaces/{id}/chats/slack/installations/{installation_id}/channels` | admin | `?q=` (name contains), page of `SlackChannel`, by name; 409 `token_expired` |
 | `POST /v1/workspaces/{id}/chats/slack` | admin | `{installation_id, channels: [{channel_id, project_id: string \| null}] (1–20), mode, data_notice_accepted: true}` → 201 `{items: ChatConnection[]}`; all or nothing: 409 `channel_already_connected` with `params.channel_ids`, 409 `connections_full`; a private channel Leo is not in is refused with `leo_not_in_channel`. Shosai joins the public ones itself |
 | `GET /v1/workspaces/{id}/chats/{chat_id}/digests/{digest_id}` | the person who asked for it, while a member | `ChatDigest`; kept 30 days and erased with the chat's disconnection or its messages' retention: 404 `digest_not_found` |
-| `POST /v1/workspaces/{id}/chats/{chat_id}/digests/{digest_id}/task-proposals` | the person who asked for the digest | `{item_ids}` (1–20, decisions, questions or promises) → 201 `LeoProposal` (the cabinet's `/v1/agent/actions` shape): one `tasks.create` with a task per item, planned through agent's Action Gateway in the digest's thread, without a model round (CF-D5); each task in the chat's workspace and its binding's project, titled from the item, a promise's matched member as assignee and its day as due; the items record `proposal_id`. An item already in a pending proposal 409 `item_already_proposed` |
+| `POST /v1/workspaces/{id}/chats/{chat_id}/digests/{digest_id}/task-proposals` | the person who asked for the digest | `{item_ids}` (1–20, decisions, questions or promises) → 201 `LeoProposal` (the cabinet's `/v1/agent/actions` shape): one `tasks.create` with a task per item, planned through agent's Action Gateway in the digest's thread, without a model round (CF-D5); each task in the chat's workspace and its binding's project, titled from the item, a promise's matched member as assignee and its day as due; the items record `proposal_id`, and the executed card records each item's `task_id`. An item in a pending proposal or already made a task 409 `item_already_proposed` |
 | `GET /v1/me/messenger-links` | the person | `{items: MessengerLink[], hint_dismissed: bool}`: linked and proposed accounts (identity, below), and whether the person closed the workspace hint for linking (CF-D9) |
 | `POST /v1/me/messenger-links/hint-dismissal` | the person | 204; the hint never shows again for this account, in any workspace or on any device (CF-D9, the owner's change); a repeat changes nothing |
 | `POST /v1/me/messenger-links/telegram` | the person | → 201 `LinkRequest`; 409 `messenger_already_linked` |

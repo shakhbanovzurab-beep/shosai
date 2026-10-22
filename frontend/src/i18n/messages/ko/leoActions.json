@@ -26,6 +26,7 @@
   "create_task": "작업 만드는 중",
   "update_task": "작업 수정 중",
   "move_task": "작업 옮기는 중",
+  "read_chat": "팀 채팅 읽는 중",
   "search_files": "파일 검색 중",
   "read_file": "파일 읽는 중",
   "create_file": "파일 만드는 중",

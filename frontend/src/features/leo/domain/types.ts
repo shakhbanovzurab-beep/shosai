@@ -1,4 +1,5 @@
 import type { LeoActionId } from "./actions";
+import type { LeoArtifact } from "./artifacts";
 import type { LeoProposal } from "./proposals";
 import type { LeoSource } from "./sources";
 
@@ -33,4 +34,6 @@ export interface LeoMessage {
   sources?: LeoSource[];
   /** Действия, которые Leo предложил в этом ответе; их состояние дальше ведёт хранилище предложений. */
   proposals?: LeoProposal[];
+  /** Результаты, которые читаются отдельно по ссылке: дайджест чата (CF-D11). */
+  artifacts?: LeoArtifact[];
 }

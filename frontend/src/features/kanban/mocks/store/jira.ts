@@ -38,7 +38,7 @@ function importIssues(board: StoredBoard, boardId: number) {
         status: column.kind,
         priority: PRIORITY[priority] ?? null,
         assignee: assignee ? { user_id: null, name: assignee } : null,
-        source: { kind: "jira", meeting: null, finding: null },
+        source: { kind: "jira", meeting: null, finding: null, chat: null },
         jira: { key, url: `https://${JIRA_SITE}/browse/${key}`, type },
       });
       d.tasks.set(task.id, task);

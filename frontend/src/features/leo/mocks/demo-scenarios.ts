@@ -1,6 +1,8 @@
 import type { LeoActionId } from "../domain/actions";
+import type { LeoArtifact } from "../domain/artifacts";
 import type { LeoProposal } from "../domain/proposals";
 import type { LeoSource } from "../domain/sources";
+import { digestScenario } from "./digest-scenario";
 
 /*
  * Три сценария демо-агента, чтобы увидеть новые блоки: ответ с источниками (Cited Answer), письмо на одобрение
@@ -19,6 +21,8 @@ export type Scenario = {
   steps: PlannedStep[];
   sources?: LeoSource[];
   proposal?: () => LeoProposal;
+  /** Результат, который карточка читает по ссылке: дайджест чата. */
+  artifact?: () => LeoArtifact;
   answer: string;
 };
 
@@ -155,4 +159,4 @@ const RULES: [RegExp, Scenario][] = [
 ];
 
 export const pickScenario = (question: string): Scenario | null =>
-  RULES.find(([pattern]) => pattern.test(question))?.[1] ?? null;
+  digestScenario(question) ?? RULES.find(([pattern]) => pattern.test(question))?.[1] ?? null;

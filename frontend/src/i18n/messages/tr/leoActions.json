@@ -26,6 +26,7 @@
   "create_task": "Görev oluşturuyorum",
   "update_task": "Bir görevi güncelliyorum",
   "move_task": "Bir görevi taşıyorum",
+  "read_chat": "Ekip sohbetini okuyorum",
   "search_files": "Dosyalarınızda arıyorum",
   "read_file": "Bir dosyayı okuyorum",
   "create_file": "Dosya oluşturuyorum",

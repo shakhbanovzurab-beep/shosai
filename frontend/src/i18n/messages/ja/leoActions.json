@@ -26,6 +26,7 @@
   "create_task": "タスクを作成しています",
   "update_task": "タスクを更新しています",
   "move_task": "タスクを移動しています",
+  "read_chat": "チームのチャットを読んでいます",
   "search_files": "ファイルを検索しています",
   "read_file": "ファイルを読んでいます",
   "create_file": "ファイルを作成しています",

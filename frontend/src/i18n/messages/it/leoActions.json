@@ -26,6 +26,7 @@
   "create_task": "Creo un’attività",
   "update_task": "Aggiorno un’attività",
   "move_task": "Sposto un’attività",
+  "read_chat": "Leggo la chat del team",
   "search_files": "Cerco nei tuoi file",
   "read_file": "Leggo un file",
   "create_file": "Creo un file",

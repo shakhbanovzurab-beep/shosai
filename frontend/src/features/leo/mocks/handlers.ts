@@ -2,6 +2,7 @@
 // бэкенда `/v1/agent/actions*` (Leo §13.2), пока слайс `agent` не опубликует API (F2-D1).
 import { type MockRoute, mockRoute } from "@/mocks/routing";
 
+import { digestTaskProposalsRoute } from "./digest-proposals";
 import { leoRoute } from "./leo-route";
 import { approveRoute, proposalsRoute, rejectRoute } from "./proposals-route";
 
@@ -10,4 +11,6 @@ export const handlers: MockRoute[] = [
   mockRoute("/v1/agent/actions", proposalsRoute, ["GET"]),
   mockRoute("/v1/agent/actions/:id/approve", approveRoute, ["POST"]),
   mockRoute("/v1/agent/actions/:id/reject", rejectRoute, ["POST"]),
+  // «Сделать задачей» из дайджеста чата: путь слайса chats, карточку создаёт агент (CF-D5).
+  mockRoute("/v1/workspaces/:id/chats/:chatId/digests/:digestId/task-proposals", digestTaskProposalsRoute, ["POST"]),
 ];

@@ -18,6 +18,14 @@ import {
   socialProvidersRoute,
   socialSessionRoute,
 } from "./flow-routes";
+import {
+  confirmLinkRoute,
+  hintDismissalRoute,
+  linkRequestRoute,
+  messengerLinkRoute,
+  messengerLinksRoute,
+  telegramLinkRoute,
+} from "./messenger-links";
 import { adminSessionRoute, loginRoute, logoutRoute, meRoute, refreshRoute } from "./session-route";
 
 export const handlers: MockRoute[] = [
@@ -40,5 +48,11 @@ export const handlers: MockRoute[] = [
   mockRoute("/v1/me/exports", exportsRoute, ["POST"]),
   mockRoute("/v1/me/exports/latest", latestExportRoute, ["GET"]),
   mockRoute("/v1/me/deletion", deletionRoute, ["POST"]),
+  mockRoute("/v1/me/messenger-links", messengerLinksRoute, ["GET"]),
+  mockRoute("/v1/me/messenger-links/hint-dismissal", hintDismissalRoute, ["POST"]),
+  mockRoute("/v1/me/messenger-links/telegram", telegramLinkRoute, ["POST"]),
+  mockRoute("/v1/me/messenger-links/telegram/requests/:requestId", linkRequestRoute, ["GET"]),
+  mockRoute("/v1/me/messenger-links/:linkId/confirm", confirmLinkRoute, ["POST"]),
+  mockRoute("/v1/me/messenger-links/:linkId", messengerLinkRoute, ["DELETE"]),
   mockRoute("/v1/admin/session", adminSessionRoute, ["GET", "POST", "DELETE"]),
 ];

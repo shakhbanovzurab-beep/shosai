@@ -53,6 +53,9 @@ export const LEO_ACTIONS = {
   update_task: { category: "workspace", access: "write" },
   move_task: { category: "workspace", access: "write" },
 
+  // Team chats
+  read_chat: { category: "workspace", access: "read" },
+
   // Files
   search_files: { category: "workspace", access: "read" },
   read_file: { category: "workspace", access: "read" },

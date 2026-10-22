@@ -76,14 +76,29 @@ const OUTCOMES: Record<string, (proposal: LeoProposal, accepted: number) => stri
   "notes.update": (_, accepted) => `${accepted} ${accepted === 1 ? "change" : "changes"} applied`,
 };
 
+/**
+ * Что делает решение по предложению, кроме смены статуса: например, создаёт задачи из дайджеста чата. При
+ * одобрении возвращает итог для карточки; при отказе освобождает то, что предложение заняло.
+ */
+export type ProposalEffect = (approve: boolean) => string | null;
+const sharedEffects = globalThis as typeof globalThis & { leoProposalEffects?: Map<string, ProposalEffect> };
+sharedEffects.leoProposalEffects ??= new Map();
+const effects = sharedEffects.leoProposalEffects;
+
+export function onDecision(id: string, effect: ProposalEffect) {
+  effects.set(id, effect);
+}
+
 /** Решение по предложению: одобренное выполняется, отклонённое закрывается. */
 export function decideProposal(id: string, approve: boolean, accepted: number): LeoProposal | null {
   const proposal = demoProposals.get(id);
   if (proposal?.status !== "proposed") return null;
+  const effect = effects.get(id)?.(approve) ?? null;
+  effects.delete(id);
   const decided: LeoProposal = {
     ...proposal,
     status: approve ? "succeeded" : "rejected",
-    outcome: approve ? (OUTCOMES[proposal.tool]?.(proposal, accepted) ?? null) : null,
+    outcome: approve ? (effect ?? OUTCOMES[proposal.tool]?.(proposal, accepted) ?? null) : null,
     resolved_at: new Date().toISOString(),
   };
   demoProposals.set(id, decided);

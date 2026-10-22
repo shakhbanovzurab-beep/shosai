@@ -15,6 +15,7 @@ export const LOCALIZED_SOURCES = [
   "src/features/preferences/ui/preference-toggle.tsx",
   "src/features/leo/",
   "src/features/kanban/",
+  "src/features/chats/",
   "src/features/settings/",
   "src/features/studio/",
   "src/features/productivity/",

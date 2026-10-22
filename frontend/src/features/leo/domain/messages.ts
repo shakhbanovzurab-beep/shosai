@@ -35,6 +35,8 @@ export function applyEvent(message: LeoMessage, event: LeoEvent): LeoMessage {
       return { ...message, sources: event.sources };
     case "proposal":
       return { ...message, proposals: [...(message.proposals ?? []), event.proposal] };
+    case "artifact":
+      return { ...message, artifacts: [...(message.artifacts ?? []), event.artifact] };
     case "done":
       return { ...finishMessage(message, "done"), durationMs: event.durationMs };
     case "error":

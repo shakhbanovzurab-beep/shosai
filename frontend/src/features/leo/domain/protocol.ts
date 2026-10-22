@@ -1,4 +1,5 @@
 import type { LeoActionId } from "./actions";
+import type { LeoArtifact } from "./artifacts";
 import type { LeoProposal } from "./proposals";
 import type { LeoSource } from "./sources";
 
@@ -10,6 +11,8 @@ export type LeoEvent =
   // Источники ответа и предложенные действия — предложение к SSE v2 (ADR 0032), пока только в моках.
   | { type: "sources"; sources: LeoSource[] }
   | { type: "proposal"; proposal: LeoProposal }
+  // Артефакт — событие SSE v2 (Leo §13.2); дайджест чата читается по ссылке (CF-D11).
+  | { type: "artifact"; artifact: LeoArtifact }
   | { type: "done"; durationMs: number }
   | { type: "error"; message: string };
 

@@ -26,6 +26,7 @@
   "create_task": "Đang tạo công việc",
   "update_task": "Đang cập nhật công việc",
   "move_task": "Đang di chuyển công việc",
+  "read_chat": "Đang đọc cuộc trò chuyện của nhóm",
   "search_files": "Đang tìm tệp",
   "read_file": "Đang đọc tệp",
   "create_file": "Đang tạo tệp",

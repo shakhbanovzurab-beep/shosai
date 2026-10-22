@@ -49,6 +49,9 @@ export function cardOf(task: StoredTask, board: StoredBoard | null): Card {
     leo_fields: task.leo_fields,
     space: task.space,
     jira: task.jira,
+    source_chat: task.source.chat
+      ? { messenger: task.source.chat.messenger, chat_title: task.source.chat.chat_title }
+      : null,
     can_delete: task.space === null && task.jira === null,
     ...clocksOf(task),
   };

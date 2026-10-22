@@ -9,12 +9,17 @@ import { getConnector } from "./demo-connectors";
  * Stand-in for a provider's OAuth consent screen while no backend is configured. It is plainly a demo
  * page in the app's own style and never imitates the provider's sign-in.
  */
-export function ConnectorConsentDemo({ connector, state }: { connector: string; state: string }) {
+export function ConnectorConsentDemo({
+  connector,
+  callback,
+}: {
+  connector: string;
+  /** Куда вернуть решение: обратный адрес бэкенда, который подменяют моки. */
+  callback: (decision: "allow" | "deny") => string;
+}) {
   const t = useTranslations("settingsConnectors");
   const common = useTranslations("common");
   const app = getConnector(connector)?.name;
-  const callback = (decision: "allow" | "deny") =>
-    `/api/settings/connectors/${encodeURIComponent(connector)}/callback?${new URLSearchParams({ state, decision })}`;
 
   return (
     <main className="flex min-h-dvh items-center justify-center bg-background p-6">

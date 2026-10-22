@@ -3,6 +3,7 @@ import { NEW_BOARD_SYSTEM_VISIBILITY } from "../../domain/stickers-contract";
 import { DEFAULT_STOPWATCH_AUTOMATIONS } from "../../domain/time-contract";
 import type { KanbanDemo, StoredBoard, StoredTask } from "../store/types";
 import { assignee, DIEGO, ELENA, fromMeeting, inDays, MAYA, ME_PERSON, seedColumn, seedTask } from "./builders";
+import { chatTasks } from "./work-chats";
 import { seedWorkClocks } from "./work-clocks";
 import { seedWorkThreads } from "./work-threads";
 
@@ -30,6 +31,7 @@ function stickers(demo: KanbanDemo) {
 }
 
 const pricing = "Pricing review with Lumen";
+const fromChats = chatTasks();
 const tasks = {
   ideas: [
     seedTask("w-ai-summaries", "AI summaries for long threads", "Summaries of email threads longer than ten messages."),
@@ -53,6 +55,7 @@ const tasks = {
       recurrence: { every: "week", weekdays: ["fri"] },
       assignee: assignee(ME_PERSON),
     }),
+    ...fromChats.planned,
   ],
   building: [
     seedTask("w-schema", "SQLite and Drizzle schema", "Model parties, employees, tenders and work orders.", {
@@ -74,6 +77,7 @@ const tasks = {
       due_on: inDays(4),
       assignee: assignee(DIEGO),
     }),
+    ...fromChats.building,
   ],
   qa: [
     seedTask("w-sso-crash", "Crash on sign-in with SSO", "Reproduced on Safari 18 with the Okta tenant.", {
