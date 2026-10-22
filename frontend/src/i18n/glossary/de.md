@@ -104,6 +104,8 @@ Use the generic forms given here (Inhaber, Teilnehmer) or neutral wording (Perso
 | chat | Chat | — | der Chat, Pl. Chats |
 | message | Nachricht | Mitteilung | die Nachricht; for chat and mail alike |
 | new chat | Neuer Chat | Neues Gespräch | Button |
+| team chat | Teamchat | — | |
+| connect code | Verbindungscode | — | |
 | voice mode | Sprachmodus | Stimmmodus, Voice-Modus, Voice Mode | der Sprachmodus |
 | attach / attachment | Anhängen / Anhang | Attachment, Beilage | der Anhang, Pl. Anhänge |
 | regenerate | Neu generieren | regenerier | Button; result: neu generiert |

@@ -1,0 +1,63 @@
+{
+  "title": "Hubungkan chat",
+  "choose": {
+    "title": "Di mana tim Anda berbincang?",
+    "telegram": "Grup, melalui bot Leo",
+    "slack": "Kanal, melalui aplikasi Slack"
+  },
+  "intro": {
+    "telegram": "Tambahkan Leo ke grup Telegram. Di sana Leo hanya menjawab saat ada yang menulis kepadanya.",
+    "slack": "Pasang aplikasi Slack dan pilih kanal yang boleh dibaca Leo."
+  },
+  "fields": {
+    "binding": "Ke mana tugas masuk",
+    "bindingHint": "Tugas yang dibuat Leo dari chat ini masuk ke sini.",
+    "wholeWorkspace": "Seluruh ruang kerja",
+    "mode": "Apa yang dibaca Leo",
+    "modes": {
+      "mentions": "Hanya pesan untuk Leo",
+      "all": "Setiap pesan, untuk ringkasan"
+    },
+    "notice": "{mode, select, all {Shosai menyimpan setiap pesan chat ini} other {Shosai menyimpan pesan yang ditujukan kepada Leo}} {home, select, ru {di Rusia} other {di UE}} selama {days, plural, other {# hari}}, termasuk pesan dari orang yang tidak memakai Shosai. Semua orang di chat melihat bahwa Leo ada di sana.",
+    "noticeRequired": "Setujui ini untuk menghubungkan chat."
+  },
+  "telegram": {
+    "mentionsHint": "Leo melihat pesan yang menyebut @{bot} atau membalasnya. Ringkasan tidak tersedia.",
+    "allHint": "Leo menyimpan setiap pesan agar bisa membuat ringkasan. Anda akan menjadikan Leo admin grup.",
+    "adminExplained": "Telegram mengirim setiap pesan grup hanya kepada admin. Anda dapat mematikan semua hak admin Leo: Leo tetap menerima pesannya.",
+    "history": "Telegram hanya meneruskan ke Shosai pesan yang ditulis setelah Leo bergabung ke grup.",
+    "getCode": "Dapatkan kode",
+    "gettingCode": "Mendapatkan kode…"
+  },
+  "add": {
+    "code": "Kode sambungan",
+    "copyCode": "Salin kode",
+    "codeCopied": "Kode disalin",
+    "open": "Buka Telegram dan pilih grup",
+    "openAdmin": "Buka Telegram dan tambahkan Leo sebagai admin",
+    "manual": "Atau tambahkan sendiri @{bot} ke grup dan kirim:",
+    "copyCommand": "Salin perintah",
+    "commandCopied": "Perintah disalin",
+    "waiting": "Menunggu grup…",
+    "expiresIn": "{minutes, plural, =0 {Kode akan segera kedaluwarsa} other {Kode berlaku # menit lagi}}",
+    "expired": "Kode sudah kedaluwarsa",
+    "expiredHint": "Dapatkan kode baru dan kirim ke grup selagi masih berlaku.",
+    "newCode": "Dapatkan kode baru"
+  },
+  "refusal": {
+    "title": "Grup tidak terhubung",
+    "chat_already_connected": "Grup ini terhubung ke ruang kerja lain. Putuskan koneksinya di sana dulu.",
+    "not_a_group": "Leo hanya bisa bergabung ke grup. Kirim kode dari grup, bukan dari kanal atau chat pribadi.",
+    "wrong_chat": "Kode datang dari grup lain. Kirim dari grup yang sedang Anda hubungkan ulang.",
+    "connections_full": "Ruang kerja ini sudah punya jumlah chat maksimal."
+  },
+  "connected": {
+    "title": "Terhubung ke “{chat}”",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "Jadikan Leo admin grup agar menerima setiap pesan. Semua hak adminnya boleh dimatikan.",
+    "openAdmin": "Buka Telegram",
+    "done": "Selesai"
+  },
+  "back": "Kembali",
+  "copyFailed": "Tidak dapat menyalin. Pilih teksnya lalu salin."
+}

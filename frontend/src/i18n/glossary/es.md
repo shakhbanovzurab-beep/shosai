@@ -104,6 +104,8 @@ Adjectives and participles agree with the noun’s gender, given in Note (Tarea 
 | chat | chat | charla | m., plural chats. |
 | message | mensaje | — | m. |
 | new chat | Nuevo chat | chat nuevo | |
+| team chat | chat del equipo | — | |
+| connect code | código de conexión | — | |
 | voice mode | modo de voz | modo voz | m. |
 | attach / attachment | Adjuntar / archivo adjunto | anexa, anexo | Short noun: adjunto (m). |
 | regenerate | Regenerar | volver a generar | |

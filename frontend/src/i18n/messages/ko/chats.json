@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "팀 채팅",
+    "description": "팀이 이미 쓰고 있는 채팅을 연결하세요. 요청하면 Leo가 그곳에서 나온 이야기를 작업과 요약으로 만들어요.",
+    "connect": "채팅 연결",
+    "full": "{count, plural, other {이 워크스페이스에는 연결된 채팅이 #개 있어 더 연결할 수 없어요.}}",
+    "listLabel": "연결된 채팅",
+    "loadError": "팀 채팅을 불러오지 못했어요",
+    "loadErrorHint": "연결을 확인하고 다시 시도해 주세요.",
+    "empty": {
+      "title": "아직 연결된 채팅이 없어요",
+      "admin": "Telegram 그룹이나 Slack 채널을 연결하면 그곳에서 Leo에게 물어볼 수 있어요.",
+      "member": "팀의 채팅은 관리자가 연결할 수 있어요."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "확인 필요"
+  },
+  "binding": {
+    "workspace": "워크스페이스 전체",
+    "project": "프로젝트 “{project}”"
+  },
+  "mode": {
+    "mentions": "Leo에게 보낸 메시지만",
+    "all": "모든 메시지(요약용)"
+  },
+  "activity": {
+    "at": "마지막 활동 {when}",
+    "never": "아직 메시지 없음"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo가 “{chat}”에서 제거됐어요.",
+    "botNotInChannel": "Leo가 #{chat}에 없어요.",
+    "botRemovedPrivate": "Leo가 비공개 채널 #{chat}에서 제거됐어요.",
+    "rightsMissing": "Leo가 “{chat}”의 관리자가 아니어서 Leo에게 보낸 메시지만 받아요.",
+    "tokenExpired": "Slack 접근 권한이 만료됐어요. Leo가 #{chat}을 다시 읽을 수 있도록 Slack을 다시 연결하세요."
+  },
+  "retention": {
+    "title": "메시지 보관 기간",
+    "hint": "연결된 채팅의 메시지는 이 워크스페이스의 다른 데이터와 함께 {home, select, ru {러시아} other {EU}}에 보관돼요. 더 오래된 메시지는 지워져요.",
+    "days": "{count, plural, other {#일}}",
+    "shorterTitle": "메시지를 {days} 동안 보관할까요?",
+    "shorterBody": "{days}보다 오래된 메시지는 연결된 모든 채팅에서 지워져요. 되돌릴 수 없어요.",
+    "shorterConfirm": "오래된 메시지 지우기",
+    "saved": "이제 메시지를 {days} 동안 보관해요"
+  }
+}

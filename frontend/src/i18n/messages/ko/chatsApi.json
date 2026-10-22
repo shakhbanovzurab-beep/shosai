@@ -1,0 +1,22 @@
+{
+  "title": "변경 사항을 저장하지 못했어요",
+  "workspace_not_found": "이 워크스페이스를 사용할 수 없어요.",
+  "workspace_suspended": "이 워크스페이스는 일시 중지돼서 채팅을 바꿀 수 없어요.",
+  "chat_not_found": "이 채팅은 더 이상 연결돼 있지 않아요.",
+  "installation_not_found": "이 Slack 워크스페이스는 더 이상 연결돼 있지 않아요.",
+  "code_not_found": "이 연결 코드는 더 이상 쓸 수 없어요. 새 코드를 받으세요.",
+  "item_not_found": "이 항목은 더 이상 요약에 없어요.",
+  "digest_not_found": "이 요약은 더 이상 볼 수 없어요.",
+  "project_not_found": "그 프로젝트는 더 이상 이 워크스페이스에 없어요.",
+  "not_workspace_admin": "워크스페이스의 채팅은 소유자와 관리자만 바꿀 수 있어요.",
+  "data_notice_required": "먼저 Shosai가 채팅 메시지를 보관하는 방식에 동의하세요.",
+  "connections_full": "이 워크스페이스는 연결할 수 있는 채팅 수가 이미 최대예요.",
+  "rejoin_unsupported": "Leo가 스스로 들어갈 수 있는 건 공개 Slack 채널뿐이에요.",
+  "token_expired": "Slack 접근 권한이 만료됐어요. 먼저 Slack을 다시 연결하세요.",
+  "channel_already_connected": "이 채널 중 일부는 이미 연결돼 있어요.",
+  "leo_not_in_channel": "먼저 Leo를 비공개 채널에 초대하세요.",
+  "item_already_proposed": "이 항목은 이미 승인을 기다리고 있거나 작업이 됐어요.",
+  "retention_invalid": "제시된 기간 중 하나를 고르세요.",
+  "mode_invalid": "Leo가 읽을 것을 고르세요.",
+  "validation_error": "일부 항목이 올바르게 입력되지 않았어요."
+}

@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import { Info } from "lucide-react";
 import { useTranslations } from "use-intl";
 
@@ -14,7 +16,12 @@ import { PlanSection } from "./plan-section";
 import { SharingSection } from "./sharing-section";
 
 /** Workspace settings on one page: general, sharing rules, plan and usage, and leaving or deleting it. */
-export function TeamSettingsScreen() {
+export function TeamSettingsScreen({
+  children,
+}: {
+  /** Разделы других слайсов (командные чаты) после общего доступа: их собирает страница, этот слайс их не знает. */
+  children?: ReactNode;
+}) {
   const t = useTranslations("workspaceSettings");
   const { state, can } = useWorkspace();
   const contact = adminContactName(state);
@@ -29,6 +36,7 @@ export function TeamSettingsScreen() {
       ) : null}
       <GeneralSection />
       <SharingSection />
+      {children}
       {can.admin ? <PlanSection /> : null}
       <DangerZone />
     </TeamPage>

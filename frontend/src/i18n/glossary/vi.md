@@ -104,6 +104,8 @@ Spell as Apple, Google and Microsoft do: classic tone placement (hóa, hủy, x�
 | chat | cuộc trò chuyện | đoạn chat, cuộc hội thoại | The verb is “trò chuyện” |
 | message | tin nhắn | lời nhắn | An email itself is “thư” |
 | new chat | Cuộc trò chuyện mới | chat mới | |
+| team chat | cuộc trò chuyện nhóm | — | |
+| connect code | mã kết nối | — | |
 | voice mode | chế độ giọng nói | chế độ thoại, chế độ voice | |
 | attach / attachment | Đính kèm / tệp đính kèm | — | |
 | regenerate | Tạo lại | tái tạo, sinh lại | |

@@ -1,0 +1,22 @@
+{
+  "title": "変更を保存できませんでした",
+  "workspace_not_found": "このワークスペースは利用できません。",
+  "workspace_suspended": "このワークスペースは停止中のため、チャットを変更できません。",
+  "chat_not_found": "このチャットはもう接続されていません。",
+  "installation_not_found": "この Slack ワークスペースはもう接続されていません。",
+  "code_not_found": "この接続コードはもう使えません。新しいコードを取得してください。",
+  "item_not_found": "この項目はもうダイジェストにありません。",
+  "digest_not_found": "このダイジェストはもう利用できません。",
+  "project_not_found": "そのプロジェクトはもうこのワークスペースにありません。",
+  "not_workspace_admin": "ワークスペースのチャットを変更できるのは、オーナーと管理者だけです。",
+  "data_notice_required": "まず、Shosai がチャットのメッセージをどう保存するかに同意してください。",
+  "connections_full": "このワークスペースは接続できるチャットの上限に達しています。",
+  "rejoin_unsupported": "Leo が自分で参加できるのは、公開の Slack チャンネルだけです。",
+  "token_expired": "Slack へのアクセスが切れました。先に Slack を接続し直してください。",
+  "channel_already_connected": "これらのチャンネルの一部はすでに接続されています。",
+  "leo_not_in_channel": "先に Leo をプライベートチャンネルに招待してください。",
+  "item_already_proposed": "この項目はすでに承認待ちか、タスクになっています。",
+  "retention_invalid": "表示された期間から選んでください。",
+  "mode_invalid": "Leo が読むものを選んでください。",
+  "validation_error": "正しく入力されていない項目があります。"
+}

@@ -1,0 +1,63 @@
+{
+  "title": "Chat verbinden",
+  "choose": {
+    "title": "Wo spricht dein Team?",
+    "telegram": "Eine Gruppe, über Leos Bot",
+    "slack": "Kanäle, über die Slack-App"
+  },
+  "intro": {
+    "telegram": "Füge Leo einer Telegram-Gruppe hinzu. Dort antwortet Leo nur, wenn jemand ihm schreibt.",
+    "slack": "Installiere die Slack-App und wähle die Kanäle, die Leo lesen darf."
+  },
+  "fields": {
+    "binding": "Wohin Aufgaben gehen",
+    "bindingHint": "Aufgaben, die Leo aus diesem Chat macht, landen hier.",
+    "wholeWorkspace": "Ganzer Workspace",
+    "mode": "Was Leo liest",
+    "modes": {
+      "mentions": "Nur Nachrichten an Leo",
+      "all": "Jede Nachricht, für Zusammenfassungen"
+    },
+    "notice": "{mode, select, all {Shosai speichert jede Nachricht dieses Chats} other {Shosai speichert die Nachrichten an Leo}} {home, select, ru {in Russland} other {in der EU}} für {days, plural, one {# Tag} other {# Tage}}, auch Nachrichten von Personen, die Shosai nicht nutzen. Alle im Chat sehen, dass Leo dabei ist.",
+    "noticeRequired": "Stimme dem zu, um den Chat zu verbinden."
+  },
+  "telegram": {
+    "mentionsHint": "Leo sieht Nachrichten, die @{bot} erwähnen oder auf ihn antworten. Zusammenfassungen gibt es nicht.",
+    "allHint": "Leo behält jede Nachricht und kann so Zusammenfassungen machen. Du machst Leo zum Admin der Gruppe.",
+    "adminExplained": "Telegram schickt jede Nachricht einer Gruppe nur an ihre Admins. Du kannst alle Admin-Rechte von Leo ausschalten – er bekommt die Nachrichten trotzdem.",
+    "history": "Telegram gibt Shosai nur Nachrichten, die geschrieben werden, nachdem Leo der Gruppe beigetreten ist.",
+    "getCode": "Code holen",
+    "gettingCode": "Code wird geholt…"
+  },
+  "add": {
+    "code": "Verbindungscode",
+    "copyCode": "Code kopieren",
+    "codeCopied": "Code kopiert",
+    "open": "Telegram öffnen und Gruppe wählen",
+    "openAdmin": "Telegram öffnen und Leo als Admin hinzufügen",
+    "manual": "Oder füge @{bot} selbst der Gruppe hinzu und sende:",
+    "copyCommand": "Befehl kopieren",
+    "commandCopied": "Befehl kopiert",
+    "waiting": "Warte auf die Gruppe…",
+    "expiresIn": "{minutes, plural, =0 {Der Code läuft gleich ab} one {Der Code gilt noch # Minute} other {Der Code gilt noch # Minuten}}",
+    "expired": "Der Code ist abgelaufen",
+    "expiredHint": "Hol einen neuen Code und sende ihn in die Gruppe, solange er gilt.",
+    "newCode": "Neuen Code holen"
+  },
+  "refusal": {
+    "title": "Die Gruppe wurde nicht verbunden",
+    "chat_already_connected": "Diese Gruppe ist mit einem anderen Workspace verbunden. Trenne sie zuerst dort.",
+    "not_a_group": "Leo kann nur einer Gruppe beitreten. Sende den Code aus einer Gruppe, nicht aus einem Kanal oder privaten Chat.",
+    "wrong_chat": "Der Code kam aus einer anderen Gruppe. Sende ihn aus der Gruppe, die du neu verbindest.",
+    "connections_full": "Dieser Workspace hat schon die meisten Chats, die er haben kann."
+  },
+  "connected": {
+    "title": "Verbunden mit „{chat}“",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "Mach Leo zum Admin der Gruppe, damit er jede Nachricht bekommt. Alle seine Admin-Rechte können aus sein.",
+    "openAdmin": "Telegram öffnen",
+    "done": "Fertig"
+  },
+  "back": "Zurück",
+  "copyFailed": "Kopieren hat nicht geklappt. Markiere den Text und kopiere ihn."
+}

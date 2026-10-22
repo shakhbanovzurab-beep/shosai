@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "Team chats",
+    "description": "Connect the chats your team already uses. Leo turns what was said there into tasks and digests when you ask.",
+    "connect": "Connect a chat",
+    "full": "{count, plural, one {This workspace has # connected chat, the most it can have.} other {This workspace has # connected chats, the most it can have.}}",
+    "listLabel": "Connected chats",
+    "loadError": "Couldn’t load the team chats",
+    "loadErrorHint": "Check your connection and try again.",
+    "empty": {
+      "title": "No chats connected yet",
+      "admin": "Connect a Telegram group or a Slack channel to ask Leo there.",
+      "member": "An admin can connect your team’s chats."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "Needs attention"
+  },
+  "binding": {
+    "workspace": "Whole workspace",
+    "project": "Project “{project}”"
+  },
+  "mode": {
+    "mentions": "Only messages to Leo",
+    "all": "Every message, for digests"
+  },
+  "activity": {
+    "at": "active {when}",
+    "never": "no messages yet"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo was removed from “{chat}”.",
+    "botNotInChannel": "Leo isn’t in #{chat}.",
+    "botRemovedPrivate": "Leo was removed from the private channel #{chat}.",
+    "rightsMissing": "Leo isn’t an admin of “{chat}”, so it gets only messages written to it.",
+    "tokenExpired": "Slack access ended. Reconnect Slack to read #{chat} again."
+  },
+  "retention": {
+    "title": "Keep messages for",
+    "hint": "Messages of connected chats are stored {home, select, ru {in Russia} other {in the EU}}, with the rest of this workspace’s data. Older ones are erased.",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "shorterTitle": "Keep messages for {days}?",
+    "shorterBody": "Messages older than {days} are erased from every connected chat. This can’t be undone.",
+    "shorterConfirm": "Erase older messages",
+    "saved": "Messages are now kept for {days}"
+  }
+}

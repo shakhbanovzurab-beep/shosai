@@ -104,6 +104,8 @@ Compounds are one word, hyphenated after names and abbreviations (‘Notion-kopp
 | chat | chat | — | de chat, mv. chats; not gesprek, which is a mail thread |
 | message | bericht | boodschap | het bericht, mv. berichten |
 | new chat | Nieuwe chat | nieuw gesprek | Button |
+| team chat | teamchat | — | |
+| connect code | koppelcode | — | |
 | voice mode | spraakmodus | stemmodus, voicemodus | de spraakmodus |
 | attach / attachment | bijvoegen / bijlage | attach, aanhangsel | Button ‘Bijvoegen’; de bijlage, mv. bijlagen; participle bijgevoegd |
 | regenerate | Opnieuw genereren | regenereren, hergenereren | |

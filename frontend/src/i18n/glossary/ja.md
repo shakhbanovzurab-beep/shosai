@@ -104,6 +104,8 @@ Full-width 、。 and 「」 in text, no 。 on buttons, labels or titles; half-
 | chat | チャット | — | A conversation in mail is スレッド |
 | message | メッセージ | — | |
 | new chat | 新しいチャット | 新規チャット, ニューチャット | |
+| team chat | チームのチャット | — | |
+| connect code | 接続コード | — | |
 | voice mode | 音声モード | ボイスモード | |
 | attach / attachment | 添付 / 添付ファイル | アタッチ | |
 | regenerate | 再生成 | 再作成 | |

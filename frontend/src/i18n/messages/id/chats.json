@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "Chat tim",
+    "description": "Hubungkan chat yang sudah dipakai tim Anda. Saat Anda minta, Leo mengubah apa yang dibicarakan di sana menjadi tugas dan ringkasan.",
+    "connect": "Hubungkan chat",
+    "full": "{count, plural, other {Ruang kerja ini punya # chat terhubung, jumlah maksimal.}}",
+    "listLabel": "Chat terhubung",
+    "loadError": "Chat tim tidak dapat dimuat",
+    "loadErrorHint": "Periksa koneksi Anda lalu coba lagi.",
+    "empty": {
+      "title": "Belum ada chat yang terhubung",
+      "admin": "Hubungkan grup Telegram atau kanal Slack untuk bertanya kepada Leo di sana.",
+      "member": "Admin dapat menghubungkan chat tim Anda."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "Perlu perhatian"
+  },
+  "binding": {
+    "workspace": "Seluruh ruang kerja",
+    "project": "Proyek “{project}”"
+  },
+  "mode": {
+    "mentions": "Hanya pesan untuk Leo",
+    "all": "Setiap pesan, untuk ringkasan"
+  },
+  "activity": {
+    "at": "aktif {when}",
+    "never": "belum ada pesan"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo dikeluarkan dari “{chat}”.",
+    "botNotInChannel": "Leo tidak ada di #{chat}.",
+    "botRemovedPrivate": "Leo dikeluarkan dari kanal privat #{chat}.",
+    "rightsMissing": "Leo bukan admin “{chat}”, jadi hanya menerima pesan yang ditujukan kepadanya.",
+    "tokenExpired": "Akses Slack berakhir. Hubungkan Slack lagi agar Leo dapat membaca #{chat} kembali."
+  },
+  "retention": {
+    "title": "Simpan pesan selama",
+    "hint": "Pesan dari chat terhubung disimpan {home, select, ru {di Rusia} other {di UE}}, bersama data lain ruang kerja ini. Pesan yang lebih lama dihapus.",
+    "days": "{count, plural, other {# hari}}",
+    "shorterTitle": "Simpan pesan selama {days}?",
+    "shorterBody": "Pesan yang lebih lama dari {days} dihapus dari semua chat terhubung. Ini tidak dapat dibatalkan.",
+    "shorterConfirm": "Hapus pesan lama",
+    "saved": "Pesan sekarang disimpan selama {days}"
+  }
+}

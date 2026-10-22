@@ -100,6 +100,8 @@ row per term below, in the same order. Terms in the "Do not translate" list of `
 | chat | leo | A conversation with Leo |
 | message | leo | One message in a chat or a mail thread |
 | new chat | leo | Start a conversation from scratch |
+| team chat | chats | A team's Telegram group or Slack channel connected to a workspace; Leo reads it when asked |
+| connect code | chats | A one-time code that connects a Telegram group to a workspace |
 | voice mode | leo | Talking to Leo out loud |
 | attach / attachment | leo | Add a file to a message / the file itself |
 | regenerate | leo | Ask Leo to write the answer again |

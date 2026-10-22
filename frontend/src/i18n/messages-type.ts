@@ -1,4 +1,7 @@
 import type calendar from "./messages/en/calendar.json";
+import type chats from "./messages/en/chats.json";
+import type chatsApi from "./messages/en/chatsApi.json";
+import type chatsConnect from "./messages/en/chatsConnect.json";
 import type common from "./messages/en/common.json";
 import type consent from "./messages/en/consent.json";
 import type download from "./messages/en/download.json";
@@ -76,6 +79,9 @@ import type workspaceTasks from "./messages/en/workspaceTasks.json";
 /** The English catalogs: the shape every language must match, and the source of the typed keys. */
 export type Messages = {
   calendar: typeof calendar;
+  chats: typeof chats;
+  chatsApi: typeof chatsApi;
+  chatsConnect: typeof chatsConnect;
   common: typeof common;
   consent: typeof consent;
   download: typeof download;

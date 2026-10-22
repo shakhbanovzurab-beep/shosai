@@ -1,0 +1,63 @@
+{
+  "title": "Connect a chat",
+  "choose": {
+    "title": "Where does your team talk?",
+    "telegram": "A group, through Leo’s bot",
+    "slack": "Channels, through the Slack app"
+  },
+  "intro": {
+    "telegram": "Add Leo to a Telegram group. Leo answers there only when someone writes to it.",
+    "slack": "Install the Slack app and pick the channels Leo may read."
+  },
+  "fields": {
+    "binding": "Where tasks go",
+    "bindingHint": "Tasks Leo makes from this chat land here.",
+    "wholeWorkspace": "Whole workspace",
+    "mode": "What Leo reads",
+    "modes": {
+      "mentions": "Only messages to Leo",
+      "all": "Every message, for digests"
+    },
+    "notice": "{mode, select, all {Shosai stores every message of this chat} other {Shosai stores the messages written to Leo}} {home, select, ru {in Russia} other {in the EU}} for {days, plural, one {# day} other {# days}}, including messages of people who don’t use Shosai. Everyone in the chat sees that Leo is there.",
+    "noticeRequired": "Accept this to connect the chat."
+  },
+  "telegram": {
+    "mentionsHint": "Leo sees messages that mention @{bot} or reply to it. Digests aren’t available.",
+    "allHint": "Leo keeps every message, so it can make digests. You’ll make Leo an admin of the group.",
+    "adminExplained": "Telegram sends every message of a group only to its admins. You can switch off all of Leo’s admin rights: it still gets the messages.",
+    "history": "Telegram gives Shosai only messages written after Leo joins the group.",
+    "getCode": "Get the code",
+    "gettingCode": "Getting the code…"
+  },
+  "add": {
+    "code": "Connect code",
+    "copyCode": "Copy the code",
+    "codeCopied": "Code copied",
+    "open": "Open Telegram and pick the group",
+    "openAdmin": "Open Telegram and add Leo as an admin",
+    "manual": "Or add @{bot} to the group yourself and send:",
+    "copyCommand": "Copy the command",
+    "commandCopied": "Command copied",
+    "waiting": "Waiting for the group…",
+    "expiresIn": "{minutes, plural, =0 {The code is about to expire} one {The code works for # more minute} other {The code works for # more minutes}}",
+    "expired": "The code expired",
+    "expiredHint": "Get a new code and send it to the group while it works.",
+    "newCode": "Get a new code"
+  },
+  "refusal": {
+    "title": "The group wasn’t connected",
+    "chat_already_connected": "This group is connected to another workspace. Disconnect it there first.",
+    "not_a_group": "Leo can join only a group. Send the code from a group, not a channel or a private chat.",
+    "wrong_chat": "The code came from another group. Send it from the group you’re reconnecting.",
+    "connections_full": "This workspace already has the most chats it can have."
+  },
+  "connected": {
+    "title": "Connected to “{chat}”",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "Make Leo an admin of the group so it gets every message. All its admin rights can be off.",
+    "openAdmin": "Open Telegram",
+    "done": "Done"
+  },
+  "back": "Back",
+  "copyFailed": "Couldn’t copy. Select the text and copy it."
+}

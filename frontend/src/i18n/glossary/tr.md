@@ -104,6 +104,8 @@ Suffixes after names and codes take ’ and follow pronunciation (Leo’ya, Noti
 | chat | sohbet | — | sohbeti, sohbetler. |
 | message | mesaj | iletiyi, iletiler | Chat and mail alike; Gmail’s ileti is not used. |
 | new chat | Yeni sohbet | yeni konuşma | |
+| team chat | ekip sohbeti | — | |
+| connect code | bağlantı kodu | — | |
 | voice mode | sesli mod | ses modu, konuşma modu | |
 | attach / attachment | Dosya ekle / ek | iliştir, eklenti | Plural ekler. |
 | regenerate | Yeniden oluştur | yeniden üret, tekrar üret | |

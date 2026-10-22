@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "Cuộc trò chuyện nhóm",
+    "description": "Kết nối các cuộc trò chuyện mà nhóm của bạn đang dùng. Khi bạn yêu cầu, Leo biến những gì được nói ở đó thành công việc và bản tóm tắt.",
+    "connect": "Kết nối cuộc trò chuyện",
+    "full": "{count, plural, other {Không gian làm việc này có # cuộc trò chuyện đã kết nối, đây là mức tối đa.}}",
+    "listLabel": "Cuộc trò chuyện đã kết nối",
+    "loadError": "Không tải được các cuộc trò chuyện nhóm",
+    "loadErrorHint": "Kiểm tra kết nối của bạn rồi thử lại.",
+    "empty": {
+      "title": "Chưa có cuộc trò chuyện nào được kết nối",
+      "admin": "Kết nối một nhóm Telegram hoặc kênh Slack để hỏi Leo ngay tại đó.",
+      "member": "Quản trị viên có thể kết nối các cuộc trò chuyện của nhóm."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "Cần xem lại"
+  },
+  "binding": {
+    "workspace": "Toàn bộ không gian làm việc",
+    "project": "Dự án “{project}”"
+  },
+  "mode": {
+    "mentions": "Chỉ tin nhắn gửi Leo",
+    "all": "Mọi tin nhắn, để tóm tắt"
+  },
+  "activity": {
+    "at": "hoạt động {when}",
+    "never": "chưa có tin nhắn"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo đã bị xóa khỏi “{chat}”.",
+    "botNotInChannel": "Leo không có trong #{chat}.",
+    "botRemovedPrivate": "Leo đã bị xóa khỏi kênh riêng tư #{chat}.",
+    "rightsMissing": "Leo không phải quản trị viên của “{chat}” nên chỉ nhận tin nhắn gửi cho mình.",
+    "tokenExpired": "Quyền truy cập Slack đã hết. Hãy kết nối lại Slack để Leo đọc lại #{chat}."
+  },
+  "retention": {
+    "title": "Giữ tin nhắn trong",
+    "hint": "Tin nhắn của các cuộc trò chuyện đã kết nối được lưu {home, select, ru {tại Nga} other {tại EU}}, cùng các dữ liệu khác của không gian làm việc này. Tin nhắn cũ hơn sẽ bị xóa.",
+    "days": "{count, plural, other {# ngày}}",
+    "shorterTitle": "Giữ tin nhắn trong {days}?",
+    "shorterBody": "Tin nhắn cũ hơn {days} sẽ bị xóa khỏi mọi cuộc trò chuyện đã kết nối. Không thể hoàn tác.",
+    "shorterConfirm": "Xóa tin nhắn cũ",
+    "saved": "Giờ tin nhắn được giữ trong {days}"
+  }
+}

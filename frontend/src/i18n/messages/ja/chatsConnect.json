@@ -1,0 +1,63 @@
+{
+  "title": "チャットを接続",
+  "choose": {
+    "title": "チームはどこで話していますか？",
+    "telegram": "グループ（Leo のボット経由）",
+    "slack": "チャンネル（Slack アプリ経由）"
+  },
+  "intro": {
+    "telegram": "Leo を Telegram のグループに追加します。Leo は話しかけられたときだけ返信します。",
+    "slack": "Slack アプリをインストールして、Leo が読めるチャンネルを選びます。"
+  },
+  "fields": {
+    "binding": "タスクの追加先",
+    "bindingHint": "このチャットから Leo が作ったタスクはここに入ります。",
+    "wholeWorkspace": "ワークスペース全体",
+    "mode": "Leo が読むもの",
+    "modes": {
+      "mentions": "Leo 宛てのメッセージのみ",
+      "all": "すべてのメッセージ（ダイジェスト用）"
+    },
+    "notice": "{mode, select, all {Shosai はこのチャットのすべてのメッセージを} other {Shosai は Leo 宛てのメッセージを}}{home, select, ru {ロシア} other {EU}}で{days, plural, other {# 日}}間保存します。Shosai を使っていない人のメッセージも含まれます。チャットの全員に Leo がいることが見えます。",
+    "noticeRequired": "チャットを接続するには同意してください。"
+  },
+  "telegram": {
+    "mentionsHint": "Leo は @{bot} がメンションされたメッセージと、Leo への返信を見ます。ダイジェストは使えません。",
+    "allHint": "Leo はすべてのメッセージを保存し、ダイジェストを作れます。Leo をグループの管理者にする必要があります。",
+    "adminExplained": "Telegram はグループのすべてのメッセージを管理者にだけ送ります。Leo の管理者権限はすべてオフにできます。それでもメッセージは届きます。",
+    "history": "Telegram が Shosai に渡すのは、Leo がグループに参加した後のメッセージだけです。",
+    "getCode": "コードを取得",
+    "gettingCode": "コードを取得しています…"
+  },
+  "add": {
+    "code": "接続コード",
+    "copyCode": "コードをコピー",
+    "codeCopied": "コードをコピーしました",
+    "open": "Telegram を開いてグループを選ぶ",
+    "openAdmin": "Telegram を開いて Leo を管理者として追加",
+    "manual": "または、@{bot} を自分でグループに追加して次を送信します：",
+    "copyCommand": "コマンドをコピー",
+    "commandCopied": "コマンドをコピーしました",
+    "waiting": "グループを待っています…",
+    "expiresIn": "{minutes, plural, =0 {まもなくコードの期限が切れます} other {コードはあと # 分有効です}}",
+    "expired": "コードの期限が切れました",
+    "expiredHint": "新しいコードを取得し、有効なうちにグループに送ってください。",
+    "newCode": "新しいコードを取得"
+  },
+  "refusal": {
+    "title": "グループは接続されませんでした",
+    "chat_already_connected": "このグループは別のワークスペースに接続されています。先にそちらで接続を解除してください。",
+    "not_a_group": "Leo が参加できるのはグループだけです。チャンネルや個人チャットではなく、グループからコードを送ってください。",
+    "wrong_chat": "コードは別のグループから届きました。接続し直すグループから送ってください。",
+    "connections_full": "このワークスペースは接続できるチャットの上限に達しています。"
+  },
+  "connected": {
+    "title": "「{chat}」を接続しました",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "すべてのメッセージを受け取れるよう、Leo をグループの管理者にしてください。管理者権限はすべてオフで構いません。",
+    "openAdmin": "Telegram を開く",
+    "done": "完了"
+  },
+  "back": "戻る",
+  "copyFailed": "コピーできませんでした。テキストを選択してコピーしてください。"
+}

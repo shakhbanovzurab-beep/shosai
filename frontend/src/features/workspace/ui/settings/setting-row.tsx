@@ -30,20 +30,26 @@ export function SettingsCard({
   id,
   title,
   description,
+  action,
   children,
 }: {
   id: string;
   title: string;
   description?: ReactNode;
+  /** Главное действие раздела в его шапке, например «Подключить чат». */
+  action?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20 rounded-xl border bg-card">
-      <div className="flex flex-col gap-1 border-b px-5 py-4">
-        <h2 id={`${id}-title`} className="font-medium">
-          {title}
-        </h2>
-        {description ? <p className="text-muted-foreground text-sm">{description}</p> : null}
+      <div className="flex flex-col gap-3 border-b px-5 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+        <div className="flex min-w-0 flex-col gap-1">
+          <h2 id={`${id}-title`} className="font-medium">
+            {title}
+          </h2>
+          {description ? <p className="text-muted-foreground text-sm">{description}</p> : null}
+        </div>
+        {action ? <div className="shrink-0">{action}</div> : null}
       </div>
       <div className="divide-y px-5 py-4">{children}</div>
     </section>

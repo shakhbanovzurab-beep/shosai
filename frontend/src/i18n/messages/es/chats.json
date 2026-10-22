@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "Chats del equipo",
+    "description": "Conecta los chats que tu equipo ya usa. Leo convierte lo que se dijo allí en tareas y resúmenes cuando se lo pides.",
+    "connect": "Conectar un chat",
+    "full": "{count, plural, one {Este espacio de trabajo tiene # chat conectado, el máximo posible.} many {Este espacio de trabajo tiene # chats conectados, el máximo posible.} other {Este espacio de trabajo tiene # chats conectados, el máximo posible.}}",
+    "listLabel": "Chats conectados",
+    "loadError": "No se pudieron cargar los chats del equipo",
+    "loadErrorHint": "Revisa tu conexión e inténtalo de nuevo.",
+    "empty": {
+      "title": "Aún no hay chats conectados",
+      "admin": "Conecta un grupo de Telegram o un canal de Slack para preguntarle a Leo allí.",
+      "member": "Un administrador puede conectar los chats de tu equipo."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "Requiere atención"
+  },
+  "binding": {
+    "workspace": "Todo el espacio de trabajo",
+    "project": "Proyecto «{project}»"
+  },
+  "mode": {
+    "mentions": "Solo mensajes para Leo",
+    "all": "Cada mensaje, para resúmenes"
+  },
+  "activity": {
+    "at": "activo {when}",
+    "never": "aún sin mensajes"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Quitaron a Leo de «{chat}».",
+    "botNotInChannel": "Leo no está en #{chat}.",
+    "botRemovedPrivate": "Quitaron a Leo del canal privado #{chat}.",
+    "rightsMissing": "Leo no es administrador de «{chat}», así que solo recibe los mensajes dirigidos a él.",
+    "tokenExpired": "El acceso a Slack terminó. Vuelve a conectar Slack para que Leo lea #{chat} de nuevo."
+  },
+  "retention": {
+    "title": "Guardar mensajes durante",
+    "hint": "Los mensajes de los chats conectados se guardan {home, select, ru {en Rusia} other {en la UE}}, junto con el resto de los datos de este espacio de trabajo. Los más antiguos se borran.",
+    "days": "{count, plural, one {# día} many {# días} other {# días}}",
+    "shorterTitle": "¿Guardar los mensajes {days}?",
+    "shorterBody": "Los mensajes de más de {days} se borran de todos los chats conectados. No se puede deshacer.",
+    "shorterConfirm": "Borrar mensajes antiguos",
+    "saved": "Ahora los mensajes se guardan {days}"
+  }
+}

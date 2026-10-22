@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "Conversations d’équipe",
+    "description": "Connectez les conversations que votre équipe utilise déjà. Leo transforme ce qui s’y dit en tâches et en synthèses quand vous le demandez.",
+    "connect": "Connecter une conversation",
+    "full": "{count, plural, one {Cet espace de travail a # conversation connectée, le maximum possible.} many {Cet espace de travail a # conversations connectées, le maximum possible.} other {Cet espace de travail a # conversations connectées, le maximum possible.}}",
+    "listLabel": "Conversations connectées",
+    "loadError": "Impossible de charger les conversations d’équipe",
+    "loadErrorHint": "Vérifiez votre connexion et réessayez.",
+    "empty": {
+      "title": "Aucune conversation connectée pour l’instant",
+      "admin": "Connectez un groupe Telegram ou un canal Slack pour y interroger Leo.",
+      "member": "Un administrateur peut connecter les conversations de votre équipe."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "À vérifier"
+  },
+  "binding": {
+    "workspace": "Tout l’espace de travail",
+    "project": "Projet « {project} »"
+  },
+  "mode": {
+    "mentions": "Seulement les messages pour Leo",
+    "all": "Chaque message, pour les synthèses"
+  },
+  "activity": {
+    "at": "active {when}",
+    "never": "aucun message pour l’instant"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo a été retiré de « {chat} ».",
+    "botNotInChannel": "Leo n’est pas dans #{chat}.",
+    "botRemovedPrivate": "Leo a été retiré du canal privé #{chat}.",
+    "rightsMissing": "Leo n’est pas administrateur de « {chat} » et ne reçoit que les messages qui lui sont adressés.",
+    "tokenExpired": "L’accès à Slack a pris fin. Reconnectez Slack pour que Leo lise à nouveau #{chat}."
+  },
+  "retention": {
+    "title": "Conserver les messages",
+    "hint": "Les messages des conversations connectées sont stockés {home, select, ru {en Russie} other {dans l’UE}}, avec les autres données de cet espace de travail. Les plus anciens sont effacés.",
+    "days": "{count, plural, one {# jour} many {# jours} other {# jours}}",
+    "shorterTitle": "Conserver les messages {days} ?",
+    "shorterBody": "Les messages de plus de {days} sont effacés de toutes les conversations connectées. Cette action est irréversible.",
+    "shorterConfirm": "Effacer les anciens messages",
+    "saved": "Les messages sont maintenant conservés {days}"
+  }
+}

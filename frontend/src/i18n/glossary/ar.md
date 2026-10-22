@@ -104,6 +104,8 @@ Leo is masculine (يجيب Leo); never glue Arabic letters to Latin names (إل�
 | chat | محادثة | دردشة | Pl. محادثات |
 | message | رسالة | — | Pl. رسائل |
 | new chat | محادثة جديدة | دردشة جديدة | |
+| team chat | محادثة الفريق | — | |
+| connect code | رمز الربط | — | |
 | voice mode | الوضع الصوتي | النمط الصوتي, نمط الصوت | Mode is always وضع (الوضع الداكن) |
 | attach / attachment | إرفاق / مرفق | ملحق | Pl. مرفقات |
 | regenerate | إعادة الإنشاء | إعادة التوليد, إعادة توليد | |

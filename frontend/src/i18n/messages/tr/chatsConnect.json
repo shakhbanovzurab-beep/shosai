@@ -1,0 +1,63 @@
+{
+  "title": "Sohbet bağla",
+  "choose": {
+    "title": "Ekibiniz nerede konuşuyor?",
+    "telegram": "Bir grup, Leo’nun botu ile",
+    "slack": "Kanallar, Slack uygulaması ile"
+  },
+  "intro": {
+    "telegram": "Leo’yu bir Telegram grubuna ekleyin. Leo orada yalnızca biri ona yazdığında yanıt verir.",
+    "slack": "Slack uygulamasını yükleyin ve Leo’nun okuyabileceği kanalları seçin."
+  },
+  "fields": {
+    "binding": "Görevler nereye gider",
+    "bindingHint": "Leo’nun bu sohbetten oluşturduğu görevler buraya gelir.",
+    "wholeWorkspace": "Tüm çalışma alanı",
+    "mode": "Leo neyi okur",
+    "modes": {
+      "mentions": "Yalnızca Leo’ya yazılanlar",
+      "all": "Her mesaj, özetler için"
+    },
+    "notice": "{mode, select, all {Shosai bu sohbetin her mesajını} other {Shosai Leo’ya yazılan mesajları}} {home, select, ru {Rusya’da} other {AB’de}} {days, plural, one {# gün} other {# gün}} saklar; Shosai kullanmayan kişilerin mesajları da buna dahildir. Sohbetteki herkes Leo’nun orada olduğunu görür.",
+    "noticeRequired": "Sohbeti bağlamak için bunu kabul edin."
+  },
+  "telegram": {
+    "mentionsHint": "Leo, @{bot} adının geçtiği mesajları ve kendisine verilen yanıtları görür. Özetler kullanılamaz.",
+    "allHint": "Leo her mesajı saklar, böylece özet çıkarabilir. Leo’yu grubun yöneticisi yapacaksınız.",
+    "adminExplained": "Telegram bir grubun her mesajını yalnızca yöneticilerine gönderir. Leo’nun tüm yönetici izinlerini kapatabilirsiniz: mesajları yine de alır.",
+    "history": "Telegram, Shosai’ye yalnızca Leo gruba katıldıktan sonra yazılan mesajları verir.",
+    "getCode": "Kodu al",
+    "gettingCode": "Kod alınıyor…"
+  },
+  "add": {
+    "code": "Bağlantı kodu",
+    "copyCode": "Kodu kopyala",
+    "codeCopied": "Kod kopyalandı",
+    "open": "Telegram’ı aç ve grubu seç",
+    "openAdmin": "Telegram’ı aç ve Leo’yu yönetici olarak ekle",
+    "manual": "Ya da @{bot} hesabını gruba kendiniz ekleyip şunu gönderin:",
+    "copyCommand": "Komutu kopyala",
+    "commandCopied": "Komut kopyalandı",
+    "waiting": "Grup bekleniyor…",
+    "expiresIn": "{minutes, plural, =0 {Kodun süresi dolmak üzere} one {Kod # dakika daha geçerli} other {Kod # dakika daha geçerli}}",
+    "expired": "Kodun süresi doldu",
+    "expiredHint": "Yeni bir kod alın ve geçerliyken gruba gönderin.",
+    "newCode": "Yeni kod al"
+  },
+  "refusal": {
+    "title": "Grup bağlanmadı",
+    "chat_already_connected": "Bu grup başka bir çalışma alanına bağlı. Önce orada bağlantısını kesin.",
+    "not_a_group": "Leo yalnızca bir gruba katılabilir. Kodu bir kanaldan veya özel sohbetten değil, bir gruptan gönderin.",
+    "wrong_chat": "Kod başka bir gruptan geldi. Yeniden bağladığınız gruptan gönderin.",
+    "connections_full": "Bu çalışma alanı olabilecek en fazla sohbete zaten sahip."
+  },
+  "connected": {
+    "title": "“{chat}” bağlandı",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "Her mesajı alması için Leo’yu grubun yöneticisi yapın. Tüm yönetici izinleri kapalı olabilir.",
+    "openAdmin": "Telegram’ı aç",
+    "done": "Tamam"
+  },
+  "back": "Geri",
+  "copyFailed": "Kopyalanamadı. Metni seçip kopyalayın."
+}

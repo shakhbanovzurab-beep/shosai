@@ -1,0 +1,63 @@
+{
+  "title": "Kết nối cuộc trò chuyện",
+  "choose": {
+    "title": "Nhóm của bạn trò chuyện ở đâu?",
+    "telegram": "Một nhóm, qua bot của Leo",
+    "slack": "Các kênh, qua ứng dụng Slack"
+  },
+  "intro": {
+    "telegram": "Thêm Leo vào một nhóm Telegram. Ở đó Leo chỉ trả lời khi có người viết cho nó.",
+    "slack": "Cài ứng dụng Slack và chọn các kênh Leo được đọc."
+  },
+  "fields": {
+    "binding": "Công việc đi đâu",
+    "bindingHint": "Công việc Leo tạo từ cuộc trò chuyện này sẽ vào đây.",
+    "wholeWorkspace": "Toàn bộ không gian làm việc",
+    "mode": "Leo đọc gì",
+    "modes": {
+      "mentions": "Chỉ tin nhắn gửi Leo",
+      "all": "Mọi tin nhắn, để tóm tắt"
+    },
+    "notice": "{mode, select, all {Shosai lưu mọi tin nhắn của cuộc trò chuyện này} other {Shosai lưu các tin nhắn gửi Leo}} {home, select, ru {tại Nga} other {tại EU}} trong {days, plural, other {# ngày}}, kể cả tin nhắn của những người không dùng Shosai. Mọi người trong cuộc trò chuyện đều thấy Leo ở đó.",
+    "noticeRequired": "Hãy đồng ý điều này để kết nối cuộc trò chuyện."
+  },
+  "telegram": {
+    "mentionsHint": "Leo thấy các tin nhắn nhắc đến @{bot} hoặc trả lời nó. Không có bản tóm tắt.",
+    "allHint": "Leo lưu mọi tin nhắn để có thể tóm tắt. Bạn sẽ đặt Leo làm quản trị viên của nhóm.",
+    "adminExplained": "Telegram chỉ gửi mọi tin nhắn của nhóm cho quản trị viên. Bạn có thể tắt hết quyền quản trị viên của Leo: nó vẫn nhận tin nhắn.",
+    "history": "Telegram chỉ đưa cho Shosai các tin nhắn được viết sau khi Leo vào nhóm.",
+    "getCode": "Lấy mã",
+    "gettingCode": "Đang lấy mã…"
+  },
+  "add": {
+    "code": "Mã kết nối",
+    "copyCode": "Sao chép mã",
+    "codeCopied": "Đã sao chép mã",
+    "open": "Mở Telegram và chọn nhóm",
+    "openAdmin": "Mở Telegram và thêm Leo làm quản trị viên",
+    "manual": "Hoặc tự thêm @{bot} vào nhóm và gửi:",
+    "copyCommand": "Sao chép lệnh",
+    "commandCopied": "Đã sao chép lệnh",
+    "waiting": "Đang chờ nhóm…",
+    "expiresIn": "{minutes, plural, =0 {Mã sắp hết hạn} other {Mã còn hiệu lực # phút nữa}}",
+    "expired": "Mã đã hết hạn",
+    "expiredHint": "Lấy mã mới và gửi vào nhóm khi mã còn hiệu lực.",
+    "newCode": "Lấy mã mới"
+  },
+  "refusal": {
+    "title": "Nhóm chưa được kết nối",
+    "chat_already_connected": "Nhóm này đã kết nối với một không gian làm việc khác. Hãy ngắt kết nối ở đó trước.",
+    "not_a_group": "Leo chỉ có thể vào một nhóm. Hãy gửi mã từ một nhóm, không phải từ kênh hay cuộc trò chuyện riêng.",
+    "wrong_chat": "Mã đến từ một nhóm khác. Hãy gửi mã từ nhóm bạn đang kết nối lại.",
+    "connections_full": "Không gian làm việc này đã có số cuộc trò chuyện tối đa."
+  },
+  "connected": {
+    "title": "Đã kết nối “{chat}”",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "Hãy đặt Leo làm quản trị viên của nhóm để nó nhận mọi tin nhắn. Mọi quyền quản trị viên của nó có thể tắt.",
+    "openAdmin": "Mở Telegram",
+    "done": "Xong"
+  },
+  "back": "Quay lại",
+  "copyFailed": "Không sao chép được. Hãy chọn văn bản rồi sao chép."
+}

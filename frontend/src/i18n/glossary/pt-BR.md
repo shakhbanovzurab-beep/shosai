@@ -104,6 +104,8 @@ Participles and adjectives agree in gender (Nota excluída, Link copiado); use n
 | chat | chat | Bate-papo | Masc. (o chat); a mail thread is “conversa” |
 | message | mensagem | — | Fem. |
 | new chat | Novo chat | Nova conversa | |
+| team chat | chat da equipe | — | |
+| connect code | código de conexão | — | |
 | voice mode | modo de voz | Modo voz | Masc. |
 | attach / attachment | anexar / anexo | — | Masc. noun; pl. anexos |
 | regenerate | Gerar novamente | Regenerar, Gerar de novo | |

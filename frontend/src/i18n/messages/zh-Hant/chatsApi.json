@@ -1,0 +1,22 @@
+{
+  "title": "無法儲存變更",
+  "workspace_not_found": "你無法使用這個工作空間。",
+  "workspace_suspended": "這個工作空間已暫停，無法變更它的對話。",
+  "chat_not_found": "這個對話已不再連接。",
+  "installation_not_found": "這個 Slack 工作空間已不再連接。",
+  "code_not_found": "這個連線代碼已無法使用。請取得新的代碼。",
+  "item_not_found": "這個項目已不在摘要中。",
+  "digest_not_found": "這份摘要已無法使用。",
+  "project_not_found": "那個專案已不在這個工作空間中。",
+  "not_workspace_admin": "只有工作空間的擁有者和管理員可以變更它的對話。",
+  "data_notice_required": "請先同意 Shosai 保存對話訊息的方式。",
+  "connections_full": "這個工作空間的對話數量已達上限。",
+  "rejoin_unsupported": "Leo 只能自行加入公開的 Slack 頻道。",
+  "token_expired": "Slack 的存取權已結束。請先重新連接 Slack。",
+  "channel_already_connected": "其中一些頻道已經連接。",
+  "leo_not_in_channel": "請先邀請 Leo 加入私人頻道。",
+  "item_already_proposed": "這個項目已在等待你核准，或已成為任務。",
+  "retention_invalid": "請從提供的期限中選擇一個。",
+  "mode_invalid": "請選擇 Leo 讀取的內容。",
+  "validation_error": "部分欄位填寫不正確。"
+}

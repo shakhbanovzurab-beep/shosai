@@ -104,6 +104,8 @@ Nouns never take a plural form: no reduplication in the UI (3 file, semua tugas)
 | chat | chat | Obrolan | Also a verb: chat dengan Leo |
 | message | pesan | — | |
 | new chat | Chat baru | Percakapan baru | |
+| team chat | chat tim | — | |
+| connect code | kode sambungan | — | |
 | voice mode | mode suara | Modus | |
 | attach / attachment | Lampirkan / lampiran | — | |
 | regenerate | Buat ulang | Regenerasi, Hasilkan ulang | |

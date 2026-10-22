@@ -1,0 +1,22 @@
+{
+  "title": "Couldn’t save the change",
+  "workspace_not_found": "This workspace isn’t available to you.",
+  "workspace_suspended": "This workspace is suspended, so its chats can’t change.",
+  "chat_not_found": "This chat isn’t connected any more.",
+  "installation_not_found": "This Slack workspace isn’t connected any more.",
+  "code_not_found": "This connect code doesn’t work any more. Get a new one.",
+  "item_not_found": "This item isn’t in the digest any more.",
+  "digest_not_found": "This digest is no longer available.",
+  "project_not_found": "That project isn’t in this workspace any more.",
+  "not_workspace_admin": "Only owners and admins of the workspace can change its chats.",
+  "data_notice_required": "Accept how Shosai stores the chat’s messages first.",
+  "connections_full": "This workspace already has the most chats it can have.",
+  "rejoin_unsupported": "Leo can join only a public Slack channel by itself.",
+  "token_expired": "Slack access ended. Reconnect Slack first.",
+  "channel_already_connected": "Some of these channels are already connected.",
+  "leo_not_in_channel": "Invite Leo to the private channel first.",
+  "item_already_proposed": "This item is already waiting for your approval or is a task.",
+  "retention_invalid": "Pick one of the offered periods.",
+  "mode_invalid": "Pick what Leo reads.",
+  "validation_error": "Some fields aren’t filled in correctly."
+}

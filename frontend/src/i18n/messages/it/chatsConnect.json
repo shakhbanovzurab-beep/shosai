@@ -1,0 +1,63 @@
+{
+  "title": "Collega una chat",
+  "choose": {
+    "title": "Dove parla il tuo team?",
+    "telegram": "Un gruppo, tramite il bot di Leo",
+    "slack": "Canali, tramite l’app Slack"
+  },
+  "intro": {
+    "telegram": "Aggiungi Leo a un gruppo Telegram. Lì Leo risponde solo quando qualcuno gli scrive.",
+    "slack": "Installa l’app Slack e scegli i canali che Leo può leggere."
+  },
+  "fields": {
+    "binding": "Dove vanno le attività",
+    "bindingHint": "Le attività che Leo crea da questa chat arrivano qui.",
+    "wholeWorkspace": "Tutto lo spazio di lavoro",
+    "mode": "Cosa legge Leo",
+    "modes": {
+      "mentions": "Solo i messaggi per Leo",
+      "all": "Ogni messaggio, per i riepiloghi"
+    },
+    "notice": "{mode, select, all {Shosai conserva ogni messaggio di questa chat} other {Shosai conserva i messaggi rivolti a Leo}} {home, select, ru {in Russia} other {nell’UE}} per {days, plural, one {# giorno} many {# giorni} other {# giorni}}, compresi quelli di persone che non usano Shosai. Tutti nella chat vedono che Leo c’è.",
+    "noticeRequired": "Accetta per collegare la chat."
+  },
+  "telegram": {
+    "mentionsHint": "Leo vede i messaggi che menzionano @{bot} o che gli rispondono. I riepiloghi non sono disponibili.",
+    "allHint": "Leo conserva ogni messaggio per poter fare i riepiloghi. Renderai Leo amministratore del gruppo.",
+    "adminExplained": "Telegram invia ogni messaggio di un gruppo solo ai suoi amministratori. Puoi disattivare tutti i permessi da amministratore di Leo: riceve comunque i messaggi.",
+    "history": "Telegram passa a Shosai solo i messaggi scritti dopo che Leo è entrato nel gruppo.",
+    "getCode": "Ottieni il codice",
+    "gettingCode": "Recupero del codice…"
+  },
+  "add": {
+    "code": "Codice di connessione",
+    "copyCode": "Copia il codice",
+    "codeCopied": "Codice copiato",
+    "open": "Apri Telegram e scegli il gruppo",
+    "openAdmin": "Apri Telegram e aggiungi Leo come amministratore",
+    "manual": "Oppure aggiungi tu @{bot} al gruppo e invia:",
+    "copyCommand": "Copia il comando",
+    "commandCopied": "Comando copiato",
+    "waiting": "In attesa del gruppo…",
+    "expiresIn": "{minutes, plural, =0 {Il codice sta per scadere} one {Il codice vale ancora # minuto} many {Il codice vale ancora # minuti} other {Il codice vale ancora # minuti}}",
+    "expired": "Il codice è scaduto",
+    "expiredHint": "Ottieni un nuovo codice e invialo al gruppo finché è valido.",
+    "newCode": "Ottieni un nuovo codice"
+  },
+  "refusal": {
+    "title": "Il gruppo non è stato collegato",
+    "chat_already_connected": "Questo gruppo è collegato a un altro spazio di lavoro. Scollegalo prima lì.",
+    "not_a_group": "Leo può entrare solo in un gruppo. Invia il codice da un gruppo, non da un canale o da una chat privata.",
+    "wrong_chat": "Il codice è arrivato da un altro gruppo. Invialo dal gruppo che stai ricollegando.",
+    "connections_full": "Questo spazio di lavoro ha già il massimo di chat possibile."
+  },
+  "connected": {
+    "title": "Collegato a «{chat}»",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "Rendi Leo amministratore del gruppo perché riceva ogni messaggio. Tutti i suoi permessi da amministratore possono restare disattivati.",
+    "openAdmin": "Apri Telegram",
+    "done": "Fatto"
+  },
+  "back": "Indietro",
+  "copyFailed": "Impossibile copiare. Seleziona il testo e copialo."
+}

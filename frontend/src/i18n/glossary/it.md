@@ -104,6 +104,8 @@ Loanwords (file, chat, link, token, team, account, email, hub, skill, prompt, ap
 | chat | chat | chats | f., invariable: la chat, le chat |
 | message | messaggio | — | m. |
 | new chat | Nuova chat | Nuova conversazione | Button |
+| team chat | chat del team | — | |
+| connect code | codice di connessione | — | |
 | voice mode | modalità vocale | modalità voce | f. |
 | attach / attachment | Allega / allegato | attach | Button verb / noun (m., pl. allegati) |
 | regenerate | Rigenera | — | Button |

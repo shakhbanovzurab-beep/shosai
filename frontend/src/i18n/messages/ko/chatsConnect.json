@@ -1,0 +1,63 @@
+{
+  "title": "채팅 연결",
+  "choose": {
+    "title": "팀이 어디에서 이야기하나요?",
+    "telegram": "그룹, Leo 봇으로",
+    "slack": "채널, Slack 앱으로"
+  },
+  "intro": {
+    "telegram": "Leo를 Telegram 그룹에 추가하세요. Leo는 누군가 말을 걸 때만 답해요.",
+    "slack": "Slack 앱을 설치하고 Leo가 읽을 수 있는 채널을 고르세요."
+  },
+  "fields": {
+    "binding": "작업이 가는 곳",
+    "bindingHint": "Leo가 이 채팅에서 만든 작업은 여기에 들어가요.",
+    "wholeWorkspace": "워크스페이스 전체",
+    "mode": "Leo가 읽는 것",
+    "modes": {
+      "mentions": "Leo에게 보낸 메시지만",
+      "all": "모든 메시지(요약용)"
+    },
+    "notice": "{mode, select, all {Shosai는 이 채팅의 모든 메시지를} other {Shosai는 Leo에게 보낸 메시지를}} {home, select, ru {러시아} other {EU}}에 {days, plural, other {#일}} 동안 보관해요. Shosai를 쓰지 않는 사람의 메시지도 포함돼요. 채팅에 있는 모두가 Leo가 있다는 걸 볼 수 있어요.",
+    "noticeRequired": "채팅을 연결하려면 동의해 주세요."
+  },
+  "telegram": {
+    "mentionsHint": "Leo는 @{bot}을 언급하거나 Leo에게 답한 메시지를 봐요. 요약은 쓸 수 없어요.",
+    "allHint": "Leo가 모든 메시지를 보관해서 요약을 만들 수 있어요. Leo를 그룹 관리자로 지정하게 돼요.",
+    "adminExplained": "Telegram은 그룹의 모든 메시지를 관리자에게만 보내요. Leo의 관리자 권한은 모두 꺼도 돼요. 그래도 메시지를 받아요.",
+    "history": "Telegram은 Leo가 그룹에 들어온 뒤에 쓴 메시지만 Shosai에 넘겨요.",
+    "getCode": "코드 받기",
+    "gettingCode": "코드를 받는 중…"
+  },
+  "add": {
+    "code": "연결 코드",
+    "copyCode": "코드 복사",
+    "codeCopied": "코드를 복사했어요",
+    "open": "Telegram 열고 그룹 고르기",
+    "openAdmin": "Telegram 열고 Leo를 관리자로 추가",
+    "manual": "또는 @{bot}을 직접 그룹에 추가하고 다음을 보내세요.",
+    "copyCommand": "명령 복사",
+    "commandCopied": "명령을 복사했어요",
+    "waiting": "그룹을 기다리는 중…",
+    "expiresIn": "{minutes, plural, =0 {코드가 곧 만료돼요} other {코드는 #분 더 유효해요}}",
+    "expired": "코드가 만료됐어요",
+    "expiredHint": "새 코드를 받아 유효할 때 그룹에 보내세요.",
+    "newCode": "새 코드 받기"
+  },
+  "refusal": {
+    "title": "그룹이 연결되지 않았어요",
+    "chat_already_connected": "이 그룹은 다른 워크스페이스에 연결돼 있어요. 먼저 그곳에서 연결을 해제하세요.",
+    "not_a_group": "Leo는 그룹에만 들어갈 수 있어요. 채널이나 개인 채팅이 아닌 그룹에서 코드를 보내세요.",
+    "wrong_chat": "코드가 다른 그룹에서 왔어요. 다시 연결하려는 그룹에서 보내세요.",
+    "connections_full": "이 워크스페이스는 연결할 수 있는 채팅 수가 이미 최대예요."
+  },
+  "connected": {
+    "title": "“{chat}” 연결됨",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "Leo가 모든 메시지를 받도록 그룹 관리자로 지정하세요. 관리자 권한은 모두 꺼 둬도 돼요.",
+    "openAdmin": "Telegram 열기",
+    "done": "완료"
+  },
+  "back": "뒤로",
+  "copyFailed": "복사하지 못했어요. 텍스트를 선택해서 복사하세요."
+}

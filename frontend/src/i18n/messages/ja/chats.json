@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "チームのチャット",
+    "description": "チームがすでに使っているチャットを接続します。頼めば、Leo がそこでの会話をタスクやダイジェストにまとめます。",
+    "connect": "チャットを接続",
+    "full": "{count, plural, other {このワークスペースには接続済みのチャットが # 件あり、これ以上は追加できません。}}",
+    "listLabel": "接続済みのチャット",
+    "loadError": "チームのチャットを読み込めませんでした",
+    "loadErrorHint": "接続を確認して、もう一度お試しください。",
+    "empty": {
+      "title": "接続済みのチャットはまだありません",
+      "admin": "Telegram のグループか Slack のチャンネルを接続すると、そこで Leo に質問できます。",
+      "member": "チームのチャットは管理者が接続できます。"
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "要対応"
+  },
+  "binding": {
+    "workspace": "ワークスペース全体",
+    "project": "プロジェクト「{project}」"
+  },
+  "mode": {
+    "mentions": "Leo 宛てのメッセージのみ",
+    "all": "すべてのメッセージ（ダイジェスト用）"
+  },
+  "activity": {
+    "at": "最終アクティビティ {when}",
+    "never": "まだメッセージはありません"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo が「{chat}」から外されました。",
+    "botNotInChannel": "Leo は #{chat} にいません。",
+    "botRemovedPrivate": "Leo がプライベートチャンネル #{chat} から外されました。",
+    "rightsMissing": "Leo は「{chat}」の管理者ではないため、Leo 宛てのメッセージしか受け取れません。",
+    "tokenExpired": "Slack へのアクセスが切れました。Leo が #{chat} をまた読めるよう、Slack を接続し直してください。"
+  },
+  "retention": {
+    "title": "メッセージの保存期間",
+    "hint": "接続済みチャットのメッセージは、このワークスペースのほかのデータと一緒に{home, select, ru {ロシア} other {EU}}で保存されます。古いものは消去されます。",
+    "days": "{count, plural, other {# 日}}",
+    "shorterTitle": "メッセージを {days} 保存しますか？",
+    "shorterBody": "{days}より古いメッセージは、接続済みのすべてのチャットから消去されます。元に戻せません。",
+    "shorterConfirm": "古いメッセージを消去",
+    "saved": "メッセージの保存期間を {days} にしました"
+  }
+}

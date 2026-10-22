@@ -1,0 +1,22 @@
+{
+  "title": "De wijziging kon niet worden opgeslagen",
+  "workspace_not_found": "Deze werkruimte is niet beschikbaar voor jou.",
+  "workspace_suspended": "Deze werkruimte is opgeschort, dus de chats kunnen niet veranderen.",
+  "chat_not_found": "Deze chat is niet meer gekoppeld.",
+  "installation_not_found": "Deze Slack-werkruimte is niet meer gekoppeld.",
+  "code_not_found": "Deze koppelcode werkt niet meer. Haal een nieuwe op.",
+  "item_not_found": "Dit punt staat niet meer in de samenvatting.",
+  "digest_not_found": "Deze samenvatting is niet meer beschikbaar.",
+  "project_not_found": "Dat project staat niet meer in deze werkruimte.",
+  "not_workspace_admin": "Alleen eigenaren en beheerders van de werkruimte kunnen de chats wijzigen.",
+  "data_notice_required": "Ga eerst akkoord met hoe Shosai de berichten van de chat bewaart.",
+  "connections_full": "Deze werkruimte heeft al het maximale aantal chats.",
+  "rejoin_unsupported": "Leo kan alleen zelf een openbaar Slack-kanaal in.",
+  "token_expired": "De toegang tot Slack is verlopen. Koppel Slack eerst opnieuw.",
+  "channel_already_connected": "Sommige van deze kanalen zijn al gekoppeld.",
+  "leo_not_in_channel": "Nodig Leo eerst uit in het privékanaal.",
+  "item_already_proposed": "Dit punt wacht al op je goedkeuring of is al een taak.",
+  "retention_invalid": "Kies een van de aangeboden perioden.",
+  "mode_invalid": "Kies wat Leo leest.",
+  "validation_error": "Sommige velden zijn niet goed ingevuld."
+}

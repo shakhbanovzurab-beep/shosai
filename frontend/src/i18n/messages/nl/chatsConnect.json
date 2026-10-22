@@ -1,0 +1,63 @@
+{
+  "title": "Chat koppelen",
+  "choose": {
+    "title": "Waar praat je team?",
+    "telegram": "Een groep, via de bot van Leo",
+    "slack": "Kanalen, via de Slack-app"
+  },
+  "intro": {
+    "telegram": "Voeg Leo toe aan een Telegram-groep. Daar antwoordt Leo alleen als iemand hem schrijft.",
+    "slack": "Installeer de Slack-app en kies de kanalen die Leo mag lezen."
+  },
+  "fields": {
+    "binding": "Waar taken heen gaan",
+    "bindingHint": "Taken die Leo uit deze chat maakt, komen hier terecht.",
+    "wholeWorkspace": "Hele werkruimte",
+    "mode": "Wat Leo leest",
+    "modes": {
+      "mentions": "Alleen berichten aan Leo",
+      "all": "Elk bericht, voor samenvattingen"
+    },
+    "notice": "{mode, select, all {Shosai bewaart elk bericht van deze chat} other {Shosai bewaart de berichten aan Leo}} {home, select, ru {in Rusland} other {in de EU}} gedurende {days, plural, one {# dag} other {# dagen}}, ook berichten van mensen die Shosai niet gebruiken. Iedereen in de chat ziet dat Leo erbij is.",
+    "noticeRequired": "Ga hiermee akkoord om de chat te koppelen."
+  },
+  "telegram": {
+    "mentionsHint": "Leo ziet berichten die @{bot} noemen of op hem reageren. Samenvattingen zijn niet beschikbaar.",
+    "allHint": "Leo bewaart elk bericht en kan zo samenvattingen maken. Je maakt Leo beheerder van de groep.",
+    "adminExplained": "Telegram stuurt elk bericht van een groep alleen naar de beheerders. Je kunt alle beheerdersrechten van Leo uitzetten: hij krijgt de berichten toch.",
+    "history": "Telegram geeft Shosai alleen berichten die zijn geschreven nadat Leo de groep in kwam.",
+    "getCode": "Code ophalen",
+    "gettingCode": "Code ophalen…"
+  },
+  "add": {
+    "code": "Koppelcode",
+    "copyCode": "Code kopiëren",
+    "codeCopied": "Code gekopieerd",
+    "open": "Telegram openen en de groep kiezen",
+    "openAdmin": "Telegram openen en Leo als beheerder toevoegen",
+    "manual": "Of voeg @{bot} zelf toe aan de groep en stuur:",
+    "copyCommand": "Opdracht kopiëren",
+    "commandCopied": "Opdracht gekopieerd",
+    "waiting": "Wachten op de groep…",
+    "expiresIn": "{minutes, plural, =0 {De code verloopt zo} one {De code werkt nog # minuut} other {De code werkt nog # minuten}}",
+    "expired": "De code is verlopen",
+    "expiredHint": "Haal een nieuwe code op en stuur die naar de groep zolang hij werkt.",
+    "newCode": "Nieuwe code ophalen"
+  },
+  "refusal": {
+    "title": "De groep is niet gekoppeld",
+    "chat_already_connected": "Deze groep is aan een andere werkruimte gekoppeld. Ontkoppel hem daar eerst.",
+    "not_a_group": "Leo kan alleen in een groep komen. Stuur de code vanuit een groep, niet vanuit een kanaal of een privéchat.",
+    "wrong_chat": "De code kwam uit een andere groep. Stuur hem vanuit de groep die je opnieuw koppelt.",
+    "connections_full": "Deze werkruimte heeft al het maximale aantal chats."
+  },
+  "connected": {
+    "title": "Gekoppeld aan ‘{chat}’",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "Maak Leo beheerder van de groep zodat hij elk bericht krijgt. Al zijn beheerdersrechten mogen uit staan.",
+    "openAdmin": "Telegram openen",
+    "done": "Klaar"
+  },
+  "back": "Terug",
+  "copyFailed": "Kopiëren lukte niet. Selecteer de tekst en kopieer hem."
+}

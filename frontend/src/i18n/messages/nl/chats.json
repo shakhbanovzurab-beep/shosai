@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "Teamchats",
+    "description": "Koppel de chats die je team al gebruikt. Leo maakt van wat daar gezegd is taken en samenvattingen als je erom vraagt.",
+    "connect": "Chat koppelen",
+    "full": "{count, plural, one {Deze werkruimte heeft # gekoppelde chat, het maximum.} other {Deze werkruimte heeft # gekoppelde chats, het maximum.}}",
+    "listLabel": "Gekoppelde chats",
+    "loadError": "De teamchats konden niet worden geladen",
+    "loadErrorHint": "Controleer je verbinding en probeer het opnieuw.",
+    "empty": {
+      "title": "Nog geen chats gekoppeld",
+      "admin": "Koppel een Telegram-groep of een Slack-kanaal om Leo daar iets te vragen.",
+      "member": "Een beheerder kan de chats van je team koppelen."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "Vraagt aandacht"
+  },
+  "binding": {
+    "workspace": "Hele werkruimte",
+    "project": "Project ‘{project}’"
+  },
+  "mode": {
+    "mentions": "Alleen berichten aan Leo",
+    "all": "Elk bericht, voor samenvattingen"
+  },
+  "activity": {
+    "at": "actief {when}",
+    "never": "nog geen berichten"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo is uit ‘{chat}’ verwijderd.",
+    "botNotInChannel": "Leo zit niet in #{chat}.",
+    "botRemovedPrivate": "Leo is uit het privékanaal #{chat} verwijderd.",
+    "rightsMissing": "Leo is geen beheerder van ‘{chat}’ en krijgt dus alleen berichten die aan hem gericht zijn.",
+    "tokenExpired": "De toegang tot Slack is verlopen. Koppel Slack opnieuw zodat Leo #{chat} weer leest."
+  },
+  "retention": {
+    "title": "Berichten bewaren",
+    "hint": "Berichten van gekoppelde chats worden {home, select, ru {in Rusland} other {in de EU}} bewaard, samen met de rest van de gegevens van deze werkruimte. Oudere worden gewist.",
+    "days": "{count, plural, one {# dag} other {# dagen}}",
+    "shorterTitle": "Berichten {days} bewaren?",
+    "shorterBody": "Berichten ouder dan {days} worden uit alle gekoppelde chats gewist. Dit kan niet ongedaan worden gemaakt.",
+    "shorterConfirm": "Oudere berichten wissen",
+    "saved": "Berichten worden nu {days} bewaard"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Không lưu được thay đổi",
+  "workspace_not_found": "Bạn không dùng được không gian làm việc này.",
+  "workspace_suspended": "Không gian làm việc này đang bị tạm ngưng nên không thể thay đổi các cuộc trò chuyện.",
+  "chat_not_found": "Cuộc trò chuyện này không còn được kết nối.",
+  "installation_not_found": "Không gian làm việc Slack này không còn được kết nối.",
+  "code_not_found": "Mã kết nối này không còn dùng được. Hãy lấy mã mới.",
+  "item_not_found": "Mục này không còn trong bản tóm tắt.",
+  "digest_not_found": "Bản tóm tắt này không còn nữa.",
+  "project_not_found": "Dự án đó không còn trong không gian làm việc này.",
+  "not_workspace_admin": "Chỉ chủ sở hữu và quản trị viên của không gian làm việc mới thay đổi được các cuộc trò chuyện.",
+  "data_notice_required": "Trước hết, hãy đồng ý với cách Shosai lưu tin nhắn của cuộc trò chuyện.",
+  "connections_full": "Không gian làm việc này đã có số cuộc trò chuyện tối đa.",
+  "rejoin_unsupported": "Leo chỉ tự vào được kênh Slack công khai.",
+  "token_expired": "Quyền truy cập Slack đã hết. Hãy kết nối lại Slack trước.",
+  "channel_already_connected": "Một số kênh trong đây đã được kết nối.",
+  "leo_not_in_channel": "Hãy mời Leo vào kênh riêng tư trước.",
+  "item_already_proposed": "Mục này đang chờ bạn phê duyệt hoặc đã thành công việc.",
+  "retention_invalid": "Hãy chọn một trong các thời hạn được đưa ra.",
+  "mode_invalid": "Hãy chọn Leo đọc gì.",
+  "validation_error": "Một số trường chưa được điền đúng."
+}

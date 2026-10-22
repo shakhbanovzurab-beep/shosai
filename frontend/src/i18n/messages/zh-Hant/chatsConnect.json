@@ -1,0 +1,63 @@
+{
+  "title": "連接對話",
+  "choose": {
+    "title": "你的團隊在哪裡溝通？",
+    "telegram": "群組，透過 Leo 的機器人",
+    "slack": "頻道，透過 Slack 應用程式"
+  },
+  "intro": {
+    "telegram": "把 Leo 加入 Telegram 群組。只有有人對 Leo 說話時，它才會回覆。",
+    "slack": "安裝 Slack 應用程式，並選擇 Leo 可以讀取的頻道。"
+  },
+  "fields": {
+    "binding": "任務的去處",
+    "bindingHint": "Leo 從這個對話建立的任務會放在這裡。",
+    "wholeWorkspace": "整個工作空間",
+    "mode": "Leo 讀取的內容",
+    "modes": {
+      "mentions": "只限給 Leo 的訊息",
+      "all": "所有訊息（用於摘要）"
+    },
+    "notice": "{mode, select, all {Shosai 會把這個對話的所有訊息} other {Shosai 會把給 Leo 的訊息}}存放在{home, select, ru {俄羅斯} other {歐盟}} {days, plural, other {# 天}}，也包括不使用 Shosai 的人的訊息。對話中的每個人都看得到 Leo 在裡面。",
+    "noticeRequired": "請同意此項才能連接對話。"
+  },
+  "telegram": {
+    "mentionsHint": "Leo 會看到提及 @{bot} 或回覆它的訊息。無法使用摘要。",
+    "allHint": "Leo 會保存每則訊息，才能製作摘要。你需要將 Leo 設為群組管理員。",
+    "adminExplained": "Telegram 只會把群組的所有訊息傳給管理員。你可以關閉 Leo 的所有管理員權限，它仍然會收到訊息。",
+    "history": "Telegram 只會把 Leo 加入群組後的訊息交給 Shosai。",
+    "getCode": "取得代碼",
+    "gettingCode": "正在取得代碼…"
+  },
+  "add": {
+    "code": "連線代碼",
+    "copyCode": "複製代碼",
+    "codeCopied": "已複製代碼",
+    "open": "開啟 Telegram 並選擇群組",
+    "openAdmin": "開啟 Telegram 並將 Leo 加為管理員",
+    "manual": "或自行把 @{bot} 加入群組，並傳送：",
+    "copyCommand": "複製指令",
+    "commandCopied": "已複製指令",
+    "waiting": "正在等待群組…",
+    "expiresIn": "{minutes, plural, =0 {代碼即將到期} other {代碼還有 # 分鐘有效}}",
+    "expired": "代碼已到期",
+    "expiredHint": "請取得新代碼，並在有效期間內傳到群組。",
+    "newCode": "取得新代碼"
+  },
+  "refusal": {
+    "title": "群組未連接",
+    "chat_already_connected": "這個群組已連接到另一個工作空間。請先在那裡中斷連接。",
+    "not_a_group": "Leo 只能加入群組。請從群組傳送代碼，而不是頻道或私人對話。",
+    "wrong_chat": "代碼來自另一個群組。請從你要重新連接的群組傳送。",
+    "connections_full": "這個工作空間的對話數量已達上限。"
+  },
+  "connected": {
+    "title": "已連接「{chat}」",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "請將 Leo 設為群組管理員，讓它收到每則訊息。它的管理員權限可以全部關閉。",
+    "openAdmin": "開啟 Telegram",
+    "done": "完成"
+  },
+  "back": "返回",
+  "copyFailed": "無法複製。請選取文字後再複製。"
+}

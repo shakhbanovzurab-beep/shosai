@@ -1,0 +1,22 @@
+{
+  "title": "Değişiklik kaydedilemedi",
+  "workspace_not_found": "Bu çalışma alanı size açık değil.",
+  "workspace_suspended": "Bu çalışma alanı askıya alındı, bu yüzden sohbetleri değişemez.",
+  "chat_not_found": "Bu sohbet artık bağlı değil.",
+  "installation_not_found": "Bu Slack çalışma alanı artık bağlı değil.",
+  "code_not_found": "Bu bağlantı kodu artık geçerli değil. Yeni bir tane alın.",
+  "item_not_found": "Bu madde artık özette yok.",
+  "digest_not_found": "Bu özet artık kullanılamıyor.",
+  "project_not_found": "O proje artık bu çalışma alanında değil.",
+  "not_workspace_admin": "Çalışma alanının sohbetlerini yalnızca sahipleri ve yöneticileri değiştirebilir.",
+  "data_notice_required": "Önce Shosai’nin sohbet mesajlarını nasıl sakladığını kabul edin.",
+  "connections_full": "Bu çalışma alanı olabilecek en fazla sohbete zaten sahip.",
+  "rejoin_unsupported": "Leo kendi başına yalnızca herkese açık bir Slack kanalına katılabilir.",
+  "token_expired": "Slack erişimi sona erdi. Önce Slack’i tekrar bağlayın.",
+  "channel_already_connected": "Bu kanallardan bazıları zaten bağlı.",
+  "leo_not_in_channel": "Önce Leo’yu özel kanala davet edin.",
+  "item_already_proposed": "Bu madde zaten onayınızı bekliyor ya da bir görev oldu.",
+  "retention_invalid": "Sunulan sürelerden birini seçin.",
+  "mode_invalid": "Leo’nun neyi okuyacağını seçin.",
+  "validation_error": "Bazı alanlar doğru doldurulmamış."
+}

@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "Ekip sohbetleri",
+    "description": "Ekibinizin zaten kullandığı sohbetleri bağlayın. İstediğinizde Leo orada konuşulanları görevlere ve özetlere dönüştürür.",
+    "connect": "Sohbet bağla",
+    "full": "{count, plural, one {Bu çalışma alanında # bağlı sohbet var, daha fazlası olamaz.} other {Bu çalışma alanında # bağlı sohbet var, daha fazlası olamaz.}}",
+    "listLabel": "Bağlı sohbetler",
+    "loadError": "Ekip sohbetleri yüklenemedi",
+    "loadErrorHint": "Bağlantınızı kontrol edip tekrar deneyin.",
+    "empty": {
+      "title": "Henüz bağlı sohbet yok",
+      "admin": "Leo’ya oradan soru sormak için bir Telegram grubu veya Slack kanalı bağlayın.",
+      "member": "Ekibinizin sohbetlerini bir yönetici bağlayabilir."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "İlgi gerekiyor"
+  },
+  "binding": {
+    "workspace": "Tüm çalışma alanı",
+    "project": "“{project}” projesi"
+  },
+  "mode": {
+    "mentions": "Yalnızca Leo’ya yazılanlar",
+    "all": "Her mesaj, özetler için"
+  },
+  "activity": {
+    "at": "{when} etkin",
+    "never": "henüz mesaj yok"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo “{chat}” grubundan çıkarıldı.",
+    "botNotInChannel": "Leo #{chat} kanalında değil.",
+    "botRemovedPrivate": "Leo #{chat} özel kanalından çıkarıldı.",
+    "rightsMissing": "Leo “{chat}” grubunun yöneticisi değil, bu yüzden yalnızca kendisine yazılan mesajları alıyor.",
+    "tokenExpired": "Slack erişimi sona erdi. Leo’nun #{chat} kanalını yeniden okuması için Slack’i tekrar bağlayın."
+  },
+  "retention": {
+    "title": "Mesajları saklama süresi",
+    "hint": "Bağlı sohbetlerin mesajları bu çalışma alanının diğer verileriyle birlikte {home, select, ru {Rusya’da} other {AB’de}} saklanır. Daha eski olanlar silinir.",
+    "days": "{count, plural, one {# gün} other {# gün}}",
+    "shorterTitle": "Mesajlar {days} saklansın mı?",
+    "shorterBody": "{days} süresinden eski mesajlar tüm bağlı sohbetlerden silinir. Bu geri alınamaz.",
+    "shorterConfirm": "Eski mesajları sil",
+    "saved": "Mesajlar artık {days} saklanıyor"
+  }
+}

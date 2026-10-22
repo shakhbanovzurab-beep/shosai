@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "Team-Chats",
+    "description": "Verbinde die Chats, die dein Team schon nutzt. Leo macht aus dem Gesagten Aufgaben und Zusammenfassungen, wenn du darum bittest.",
+    "connect": "Chat verbinden",
+    "full": "{count, plural, one {Dieser Workspace hat # verbundenen Chat, mehr geht nicht.} other {Dieser Workspace hat # verbundene Chats, mehr geht nicht.}}",
+    "listLabel": "Verbundene Chats",
+    "loadError": "Die Team-Chats konnten nicht geladen werden",
+    "loadErrorHint": "Prüfe deine Verbindung und versuche es erneut.",
+    "empty": {
+      "title": "Noch keine Chats verbunden",
+      "admin": "Verbinde eine Telegram-Gruppe oder einen Slack-Kanal, um Leo dort zu fragen.",
+      "member": "Ein Admin kann die Chats deines Teams verbinden."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "Braucht Aufmerksamkeit"
+  },
+  "binding": {
+    "workspace": "Ganzer Workspace",
+    "project": "Projekt „{project}“"
+  },
+  "mode": {
+    "mentions": "Nur Nachrichten an Leo",
+    "all": "Jede Nachricht, für Zusammenfassungen"
+  },
+  "activity": {
+    "at": "aktiv {when}",
+    "never": "noch keine Nachrichten"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo wurde aus „{chat}“ entfernt.",
+    "botNotInChannel": "Leo ist nicht in #{chat}.",
+    "botRemovedPrivate": "Leo wurde aus dem privaten Kanal #{chat} entfernt.",
+    "rightsMissing": "Leo ist kein Admin von „{chat}“ und bekommt nur Nachrichten, die an ihn gerichtet sind.",
+    "tokenExpired": "Der Slack-Zugriff ist abgelaufen. Verbinde Slack erneut, damit Leo #{chat} wieder liest."
+  },
+  "retention": {
+    "title": "Nachrichten aufbewahren",
+    "hint": "Nachrichten verbundener Chats werden {home, select, ru {in Russland} other {in der EU}} gespeichert, zusammen mit den übrigen Daten dieses Workspace. Ältere werden gelöscht.",
+    "days": "{count, plural, one {# Tag} other {# Tage}}",
+    "shorterTitle": "Nachrichten {days} aufbewahren?",
+    "shorterBody": "Nachrichten, die älter als {days} sind, werden aus allen verbundenen Chats gelöscht. Das lässt sich nicht rückgängig machen.",
+    "shorterConfirm": "Ältere Nachrichten löschen",
+    "saved": "Nachrichten werden jetzt {days} aufbewahrt"
+  }
+}

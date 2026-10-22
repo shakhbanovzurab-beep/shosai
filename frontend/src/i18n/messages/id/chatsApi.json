@@ -1,0 +1,22 @@
+{
+  "title": "Perubahan tidak dapat disimpan",
+  "workspace_not_found": "Ruang kerja ini tidak tersedia untuk Anda.",
+  "workspace_suspended": "Ruang kerja ini ditangguhkan, jadi chatnya tidak dapat diubah.",
+  "chat_not_found": "Chat ini sudah tidak terhubung.",
+  "installation_not_found": "Ruang kerja Slack ini sudah tidak terhubung.",
+  "code_not_found": "Kode sambungan ini sudah tidak berlaku. Dapatkan kode baru.",
+  "item_not_found": "Butir ini sudah tidak ada di ringkasan.",
+  "digest_not_found": "Ringkasan ini sudah tidak tersedia.",
+  "project_not_found": "Proyek itu sudah tidak ada di ruang kerja ini.",
+  "not_workspace_admin": "Hanya pemilik dan admin ruang kerja yang dapat mengubah chatnya.",
+  "data_notice_required": "Setujui dulu cara Shosai menyimpan pesan chat.",
+  "connections_full": "Ruang kerja ini sudah punya jumlah chat maksimal.",
+  "rejoin_unsupported": "Leo hanya bisa bergabung sendiri ke kanal Slack publik.",
+  "token_expired": "Akses Slack berakhir. Hubungkan Slack lagi terlebih dahulu.",
+  "channel_already_connected": "Beberapa kanal ini sudah terhubung.",
+  "leo_not_in_channel": "Undang Leo ke kanal privat terlebih dahulu.",
+  "item_already_proposed": "Butir ini sudah menunggu persetujuan Anda atau sudah menjadi tugas.",
+  "retention_invalid": "Pilih salah satu jangka waktu yang ditawarkan.",
+  "mode_invalid": "Pilih apa yang dibaca Leo.",
+  "validation_error": "Beberapa kolom belum diisi dengan benar."
+}

@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "Chat del team",
+    "description": "Collega le chat che il tuo team usa già. Leo trasforma quello che si è detto lì in attività e riepiloghi quando glielo chiedi.",
+    "connect": "Collega una chat",
+    "full": "{count, plural, one {Questo spazio di lavoro ha # chat collegata, il massimo possibile.} many {Questo spazio di lavoro ha # chat collegate, il massimo possibile.} other {Questo spazio di lavoro ha # chat collegate, il massimo possibile.}}",
+    "listLabel": "Chat collegate",
+    "loadError": "Impossibile caricare le chat del team",
+    "loadErrorHint": "Controlla la connessione e riprova.",
+    "empty": {
+      "title": "Ancora nessuna chat collegata",
+      "admin": "Collega un gruppo Telegram o un canale Slack per chiedere a Leo lì.",
+      "member": "Un amministratore può collegare le chat del tuo team."
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "Richiede attenzione"
+  },
+  "binding": {
+    "workspace": "Tutto lo spazio di lavoro",
+    "project": "Progetto «{project}»"
+  },
+  "mode": {
+    "mentions": "Solo i messaggi per Leo",
+    "all": "Ogni messaggio, per i riepiloghi"
+  },
+  "activity": {
+    "at": "attiva {when}",
+    "never": "ancora nessun messaggio"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo è stato rimosso da «{chat}».",
+    "botNotInChannel": "Leo non è in #{chat}.",
+    "botRemovedPrivate": "Leo è stato rimosso dal canale privato #{chat}.",
+    "rightsMissing": "Leo non è amministratore di «{chat}», quindi riceve solo i messaggi rivolti a lui.",
+    "tokenExpired": "L’accesso a Slack è scaduto. Ricollega Slack perché Leo legga di nuovo #{chat}."
+  },
+  "retention": {
+    "title": "Conserva i messaggi per",
+    "hint": "I messaggi delle chat collegate sono conservati {home, select, ru {in Russia} other {nell’UE}}, insieme agli altri dati di questo spazio di lavoro. I più vecchi vengono eliminati.",
+    "days": "{count, plural, one {# giorno} many {# giorni} other {# giorni}}",
+    "shorterTitle": "Conservare i messaggi per {days}?",
+    "shorterBody": "I messaggi più vecchi di {days} vengono eliminati da tutte le chat collegate. Non si può annullare.",
+    "shorterConfirm": "Elimina i messaggi vecchi",
+    "saved": "Ora i messaggi sono conservati per {days}"
+  }
+}

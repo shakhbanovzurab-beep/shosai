@@ -1,0 +1,22 @@
+{
+  "title": "Impossibile salvare la modifica",
+  "workspace_not_found": "Questo spazio di lavoro non è disponibile per te.",
+  "workspace_suspended": "Questo spazio di lavoro è sospeso, quindi le sue chat non possono cambiare.",
+  "chat_not_found": "Questa chat non è più collegata.",
+  "installation_not_found": "Questo spazio di lavoro Slack non è più collegato.",
+  "code_not_found": "Questo codice di connessione non vale più. Ottienine uno nuovo.",
+  "item_not_found": "Questa voce non è più nel riepilogo.",
+  "digest_not_found": "Questo riepilogo non è più disponibile.",
+  "project_not_found": "Quel progetto non è più in questo spazio di lavoro.",
+  "not_workspace_admin": "Solo i proprietari e gli amministratori dello spazio di lavoro possono cambiarne le chat.",
+  "data_notice_required": "Prima accetta come Shosai conserva i messaggi della chat.",
+  "connections_full": "Questo spazio di lavoro ha già il massimo di chat possibile.",
+  "rejoin_unsupported": "Leo può entrare da solo solo in un canale Slack pubblico.",
+  "token_expired": "L’accesso a Slack è scaduto. Prima ricollega Slack.",
+  "channel_already_connected": "Alcuni di questi canali sono già collegati.",
+  "leo_not_in_channel": "Prima invita Leo nel canale privato.",
+  "item_already_proposed": "Questa voce aspetta già la tua approvazione o è un’attività.",
+  "retention_invalid": "Scegli uno dei periodi proposti.",
+  "mode_invalid": "Scegli cosa legge Leo.",
+  "validation_error": "Alcuni campi non sono compilati correttamente."
+}

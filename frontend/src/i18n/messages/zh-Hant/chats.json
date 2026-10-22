@@ -1,0 +1,52 @@
+{
+  "section": {
+    "title": "團隊對話",
+    "description": "連接團隊已在使用的對話。只要你開口，Leo 就會把那裡說過的內容整理成任務和摘要。",
+    "connect": "連接對話",
+    "full": "{count, plural, other {這個工作空間已連接 # 個對話，無法再增加。}}",
+    "listLabel": "已連接的對話",
+    "loadError": "無法載入團隊對話",
+    "loadErrorHint": "請檢查網路連線後再試一次。",
+    "empty": {
+      "title": "尚未連接任何對話",
+      "admin": "連接 Telegram 群組或 Slack 頻道，就能在那裡詢問 Leo。",
+      "member": "管理員可以連接團隊的對話。"
+    }
+  },
+  "messenger": {
+    "telegram": "Telegram",
+    "slack": "Slack"
+  },
+  "state": {
+    "needsAttention": "需要處理"
+  },
+  "binding": {
+    "workspace": "整個工作空間",
+    "project": "專案「{project}」"
+  },
+  "mode": {
+    "mentions": "只限給 Leo 的訊息",
+    "all": "所有訊息（用於摘要）"
+  },
+  "activity": {
+    "at": "最近活動 {when}",
+    "never": "尚無訊息"
+  },
+  "meta": "{binding} · {mode} · {activity}",
+  "problem": {
+    "botRemovedGroup": "Leo 已被移出「{chat}」。",
+    "botNotInChannel": "Leo 不在 #{chat}。",
+    "botRemovedPrivate": "Leo 已被移出私人頻道 #{chat}。",
+    "rightsMissing": "Leo 不是「{chat}」的管理員，所以只會收到給它的訊息。",
+    "tokenExpired": "Slack 的存取權已結束。請重新連接 Slack，讓 Leo 能再次讀取 #{chat}。"
+  },
+  "retention": {
+    "title": "訊息保存期限",
+    "hint": "已連接對話的訊息會和這個工作空間的其他資料一起存放在{home, select, ru {俄羅斯} other {歐盟}}。較舊的訊息會被清除。",
+    "days": "{count, plural, other {# 天}}",
+    "shorterTitle": "要將訊息保存 {days} 嗎？",
+    "shorterBody": "超過 {days} 的訊息會從所有已連接的對話中清除。此動作無法復原。",
+    "shorterConfirm": "清除較舊的訊息",
+    "saved": "訊息現在會保存 {days}"
+  }
+}

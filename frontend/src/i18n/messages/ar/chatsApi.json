@@ -1,0 +1,22 @@
+{
+  "title": "تعذّر حفظ التغيير",
+  "workspace_not_found": "مساحة العمل هذه غير متاحة لك.",
+  "workspace_suspended": "مساحة العمل هذه معلّقة، لذا لا يمكن تغيير محادثاتها.",
+  "chat_not_found": "لم تعد هذه المحادثة مربوطة.",
+  "installation_not_found": "لم تعد مساحة عمل Slack هذه مربوطة.",
+  "code_not_found": "لم يعد رمز الربط هذا صالحًا. احصل على رمز جديد.",
+  "item_not_found": "لم يعد هذا البند في الملخص.",
+  "digest_not_found": "لم يعد هذا الملخص متاحًا.",
+  "project_not_found": "لم يعد ذلك المشروع في مساحة العمل هذه.",
+  "not_workspace_admin": "لا يغيّر محادثات مساحة العمل إلا مالكوها ومشرفوها.",
+  "data_notice_required": "وافق أولًا على طريقة حفظ Shosai لرسائل المحادثة.",
+  "connections_full": "وصلت مساحة العمل هذه إلى أقصى عدد من المحادثات.",
+  "rejoin_unsupported": "لا يستطيع Leo الانضمام بنفسه إلا إلى قناة Slack عامة.",
+  "token_expired": "انتهى الوصول إلى Slack. اربط Slack مجددًا أولًا.",
+  "channel_already_connected": "بعض هذه القنوات مربوطة بالفعل.",
+  "leo_not_in_channel": "ادعُ Leo إلى القناة الخاصة أولًا.",
+  "item_already_proposed": "هذا البند ينتظر موافقتك بالفعل أو صار مهمة.",
+  "retention_invalid": "اختر إحدى المدد المعروضة.",
+  "mode_invalid": "اختر ما يقرؤه Leo.",
+  "validation_error": "بعض الحقول غير معبأة بشكل صحيح."
+}

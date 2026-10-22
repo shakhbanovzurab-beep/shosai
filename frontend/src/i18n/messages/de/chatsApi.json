@@ -1,0 +1,22 @@
+{
+  "title": "Die Änderung konnte nicht gespeichert werden",
+  "workspace_not_found": "Dieser Workspace ist für dich nicht verfügbar.",
+  "workspace_suspended": "Dieser Workspace ist gesperrt, seine Chats lassen sich nicht ändern.",
+  "chat_not_found": "Dieser Chat ist nicht mehr verbunden.",
+  "installation_not_found": "Dieser Slack-Workspace ist nicht mehr verbunden.",
+  "code_not_found": "Dieser Verbindungscode gilt nicht mehr. Hol einen neuen.",
+  "item_not_found": "Dieser Punkt ist nicht mehr in der Zusammenfassung.",
+  "digest_not_found": "Diese Zusammenfassung ist nicht mehr verfügbar.",
+  "project_not_found": "Dieses Projekt gibt es in diesem Workspace nicht mehr.",
+  "not_workspace_admin": "Nur Inhaber und Admins des Workspace können seine Chats ändern.",
+  "data_notice_required": "Stimme zuerst zu, wie Shosai die Nachrichten des Chats speichert.",
+  "connections_full": "Dieser Workspace hat schon die meisten Chats, die er haben kann.",
+  "rejoin_unsupported": "Leo kann nur einem öffentlichen Slack-Kanal selbst beitreten.",
+  "token_expired": "Der Slack-Zugriff ist abgelaufen. Verbinde Slack zuerst erneut.",
+  "channel_already_connected": "Einige dieser Kanäle sind schon verbunden.",
+  "leo_not_in_channel": "Lade Leo zuerst in den privaten Kanal ein.",
+  "item_already_proposed": "Dieser Punkt wartet schon auf deine Bestätigung oder ist eine Aufgabe.",
+  "retention_invalid": "Wähle einen der angebotenen Zeiträume.",
+  "mode_invalid": "Wähle, was Leo liest.",
+  "validation_error": "Einige Felder sind nicht richtig ausgefüllt."
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Impossible d’enregistrer la modification",
+  "workspace_not_found": "Cet espace de travail ne vous est pas accessible.",
+  "workspace_suspended": "Cet espace de travail est suspendu, ses conversations ne peuvent pas changer.",
+  "chat_not_found": "Cette conversation n’est plus connectée.",
+  "installation_not_found": "Cet espace Slack n’est plus connecté.",
+  "code_not_found": "Ce code de connexion n’est plus valable. Obtenez-en un nouveau.",
+  "item_not_found": "Cet élément n’est plus dans la synthèse.",
+  "digest_not_found": "Cette synthèse n’est plus disponible.",
+  "project_not_found": "Ce projet n’est plus dans cet espace de travail.",
+  "not_workspace_admin": "Seuls les propriétaires et les administrateurs de l’espace de travail peuvent modifier ses conversations.",
+  "data_notice_required": "Acceptez d’abord la façon dont Shosai conserve les messages de la conversation.",
+  "connections_full": "Cet espace de travail a déjà le maximum de conversations possible.",
+  "rejoin_unsupported": "Leo ne peut rejoindre seul qu’un canal Slack public.",
+  "token_expired": "L’accès à Slack a pris fin. Reconnectez d’abord Slack.",
+  "channel_already_connected": "Certains de ces canaux sont déjà connectés.",
+  "leo_not_in_channel": "Invitez d’abord Leo dans le canal privé.",
+  "item_already_proposed": "Cet élément attend déjà votre approbation ou est devenu une tâche.",
+  "retention_invalid": "Choisissez l’une des durées proposées.",
+  "mode_invalid": "Choisissez ce que lit Leo.",
+  "validation_error": "Certains champs ne sont pas remplis correctement."
+}

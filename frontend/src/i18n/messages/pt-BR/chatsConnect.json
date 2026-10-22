@@ -1,0 +1,63 @@
+{
+  "title": "Conectar um chat",
+  "choose": {
+    "title": "Onde sua equipe conversa?",
+    "telegram": "Um grupo, pelo bot do Leo",
+    "slack": "Canais, pelo app do Slack"
+  },
+  "intro": {
+    "telegram": "Adicione o Leo a um grupo do Telegram. Lá o Leo só responde quando alguém escreve para ele.",
+    "slack": "Instale o app do Slack e escolha os canais que o Leo pode ler."
+  },
+  "fields": {
+    "binding": "Para onde vão as tarefas",
+    "bindingHint": "As tarefas que o Leo criar a partir deste chat chegam aqui.",
+    "wholeWorkspace": "Todo o espaço de trabalho",
+    "mode": "O que o Leo lê",
+    "modes": {
+      "mentions": "Só mensagens para o Leo",
+      "all": "Toda mensagem, para resumos"
+    },
+    "notice": "{mode, select, all {Shosai guarda toda mensagem deste chat} other {Shosai guarda as mensagens dirigidas ao Leo}} {home, select, ru {na Rússia} other {na UE}} por {days, plural, one {# dia} many {# dias} other {# dias}}, incluindo as de pessoas que não usam o Shosai. Todos no chat veem que o Leo está lá.",
+    "noticeRequired": "Aceite isto para conectar o chat."
+  },
+  "telegram": {
+    "mentionsHint": "Leo vê as mensagens que mencionam @{bot} ou que respondem a ele. Resumos não estão disponíveis.",
+    "allHint": "Leo guarda toda mensagem para poder fazer resumos. Você vai tornar o Leo administrador do grupo.",
+    "adminExplained": "O Telegram envia toda mensagem de um grupo só para os administradores. Você pode desligar todas as permissões de administrador do Leo: ele continua recebendo as mensagens.",
+    "history": "O Telegram passa para o Shosai só as mensagens escritas depois que o Leo entra no grupo.",
+    "getCode": "Obter o código",
+    "gettingCode": "Obtendo o código…"
+  },
+  "add": {
+    "code": "Código de conexão",
+    "copyCode": "Copiar o código",
+    "codeCopied": "Código copiado",
+    "open": "Abrir o Telegram e escolher o grupo",
+    "openAdmin": "Abrir o Telegram e adicionar o Leo como administrador",
+    "manual": "Ou adicione você mesmo @{bot} ao grupo e envie:",
+    "copyCommand": "Copiar o comando",
+    "commandCopied": "Comando copiado",
+    "waiting": "Esperando o grupo…",
+    "expiresIn": "{minutes, plural, =0 {O código está quase expirando} one {O código vale por mais # minuto} many {O código vale por mais # minutos} other {O código vale por mais # minutos}}",
+    "expired": "O código expirou",
+    "expiredHint": "Obtenha um código novo e envie ao grupo enquanto ele vale.",
+    "newCode": "Obter um código novo"
+  },
+  "refusal": {
+    "title": "O grupo não foi conectado",
+    "chat_already_connected": "Este grupo está conectado a outro espaço de trabalho. Desconecte-o lá primeiro.",
+    "not_a_group": "O Leo só pode entrar em um grupo. Envie o código de um grupo, não de um canal ou chat privado.",
+    "wrong_chat": "O código veio de outro grupo. Envie-o do grupo que você está reconectando.",
+    "connections_full": "Este espaço de trabalho já tem o máximo de chats possível."
+  },
+  "connected": {
+    "title": "Conectado a “{chat}”",
+    "summary": "{binding} · {mode}",
+    "makeAdmin": "Torne o Leo administrador do grupo para ele receber toda mensagem. Todas as permissões de administrador dele podem ficar desligadas.",
+    "openAdmin": "Abrir o Telegram",
+    "done": "Pronto"
+  },
+  "back": "Voltar",
+  "copyFailed": "Não foi possível copiar. Selecione o texto e copie."
+}
