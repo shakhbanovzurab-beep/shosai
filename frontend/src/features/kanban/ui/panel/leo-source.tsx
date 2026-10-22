@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink, Sparkles } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { useFormatter, useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Link } from "@/lib/navigation";
 
 import type { TaskSource } from "../../domain/tasks-contract";
+import { LeoOrb } from "../leo-orb";
 
 /** «Заполнил Лео» в строке поля: откуда он это взял — встреча, момент и слова; ссылка на этот момент встречи. */
 export function LeoSource({ source }: { source: TaskSource }) {
@@ -26,7 +27,7 @@ export function LeoSource({ source }: { source: TaskSource }) {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="xs" className="text-violet-700 dark:text-violet-300">
-          <Sparkles data-icon="inline-start" />
+          <LeoOrb className="size-4" />
           {t("leo.filled")}
         </Button>
       </PopoverTrigger>
