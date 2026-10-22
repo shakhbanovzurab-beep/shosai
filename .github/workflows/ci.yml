@@ -147,7 +147,9 @@ jobs:
     needs: detect
     if: needs.detect.outputs.backend == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    # 45, not 30: the first run after a new ffmpeg version downloads its packages
+    # from the Ubuntu mirror, which can take most of half an hour (see Install ffmpeg).
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: backend
@@ -188,10 +190,33 @@ jobs:
           cache-dependency-glob: backend/uv.lock
       - name: Install locked dependencies
         run: uv sync --locked
+      # The recording tests run the real ffprobe and ffmpeg under prlimit (MT-D10),
+      # as the runtime image does. The Ubuntu mirror can be slow (on 2026-10-22 it
+      # served ffmpeg's 59 MB at 36 kB/s, 27 minutes, and the job ran out of time),
+      # so the downloaded packages are cached per ffmpeg version and saved as soon
+      # as they are installed, even if a later step fails.
+      - name: Look up the ffmpeg version
+        id: ffmpeg
+        run: |
+          sudo apt-get update
+          echo "version=$(apt-cache policy ffmpeg | awk '/Candidate:/ {print $2}')" >> "$GITHUB_OUTPUT"
+      - name: Restore the ffmpeg packages
+        id: ffmpeg-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/apt-ffmpeg
+          key: apt-ffmpeg-ubuntu-24.04-${{ steps.ffmpeg.outputs.version }}
       - name: Install ffmpeg
-        # The recording tests run the real ffprobe and ffmpeg under prlimit (MT-D10),
-        # as the runtime image does.
-        run: sudo apt-get update && sudo apt-get install --yes --no-install-recommends ffmpeg
+        run: |
+          mkdir -p "$HOME/apt-ffmpeg/partial"
+          sudo apt-get install --yes --no-install-recommends -o Dir::Cache::Archives="$HOME/apt-ffmpeg" ffmpeg
+          sudo chown -R "$USER" "$HOME/apt-ffmpeg"
+      - name: Save the ffmpeg packages
+        if: steps.ffmpeg-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/apt-ffmpeg
+          key: apt-ffmpeg-ubuntu-24.04-${{ steps.ffmpeg.outputs.version }}
       - name: Ruff format
         run: uv run ruff format --check .
       - name: Ruff lint
