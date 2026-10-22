@@ -2,7 +2,7 @@ import { type BoardFilter, DUE_BUCKETS, type DueBucket, NO_FILTER, type NumberFi
 import { PRIORITIES, type Priority } from "./tasks-contract";
 
 /*
- * Фильтр в адресе: `q`, повторяемые `assignee`, `due`, `priority`, `repeat`, а у своих полей — `state.<id>`
+ * Фильтр в адресе: повторяемые `assignee`, `due`, `priority`, `repeat`, а у своих полей — `state.<id>`
  * (повторяемый), `number.<id>` (`empty`, `set`, `range:<от>:<до>`), `text.<id>`. Прочие параметры адреса не
  * трогаются; неизвестные значения отбрасываются.
  */
@@ -10,7 +10,7 @@ import { PRIORITIES, type Priority } from "./tasks-contract";
 const STATE = "state.";
 const NUMBER = "number.";
 const TEXT = "text.";
-const OWN_KEYS = ["q", "assignee", "due", "priority", "repeat"];
+const OWN_KEYS = ["assignee", "due", "priority", "repeat"];
 
 const isFilterKey = (key: string) =>
   OWN_KEYS.includes(key) || key.startsWith(STATE) || key.startsWith(NUMBER) || key.startsWith(TEXT);
@@ -32,7 +32,6 @@ const isPriority = (value: string): value is Priority | "none" =>
 export function filterFromSearch(params: URLSearchParams): BoardFilter {
   const filter: BoardFilter = {
     ...NO_FILTER,
-    q: params.get("q") ?? "",
     assignee: params.getAll("assignee").filter(Boolean),
     due: params.getAll("due").filter((value): value is DueBucket => (DUE_BUCKETS as readonly string[]).includes(value)),
     priority: params.getAll("priority").filter(isPriority),
@@ -58,7 +57,6 @@ export function filterFromSearch(params: URLSearchParams): BoardFilter {
 /** Адрес с этим фильтром: параметры фильтра заменяются, остальные (доска, открытая задача) остаются. */
 export function searchWithFilter(base: URLSearchParams, filter: BoardFilter): URLSearchParams {
   const next = new URLSearchParams([...base].filter(([key]) => !isFilterKey(key)));
-  if (filter.q.trim()) next.set("q", filter.q);
   for (const value of filter.assignee) next.append("assignee", value);
   for (const value of filter.due) next.append("due", value);
   for (const value of filter.priority) next.append("priority", value);

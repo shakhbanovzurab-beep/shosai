@@ -1,6 +1,5 @@
 {
   "label": "フィルタ",
-  "search": "タスクを検索",
   "searchPlaceholder": "検索…",
   "clear": "フィルタをクリア",
   "clearOne": "「{field}」のフィルタをクリア",

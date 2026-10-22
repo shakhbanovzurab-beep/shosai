@@ -1,6 +1,5 @@
 {
   "label": "필터",
-  "search": "작업 검색",
   "searchPlaceholder": "검색…",
   "clear": "필터 지우기",
   "clearOne": "“{field}” 필터 지우기",

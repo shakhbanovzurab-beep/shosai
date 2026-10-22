@@ -1,6 +1,5 @@
 {
   "label": "Filter",
-  "search": "Aufgaben durchsuchen",
   "searchPlaceholder": "Suchen…",
   "clear": "Filter zurücksetzen",
   "clearOne": "Filter „{field}“ zurücksetzen",

@@ -1,6 +1,5 @@
 {
   "label": "عوامل التصفية",
-  "search": "البحث في المهام",
   "searchPlaceholder": "بحث…",
   "clear": "مسح عوامل التصفية",
   "clearOne": "مسح عامل التصفية «{field}»",

@@ -1,6 +1,5 @@
 {
   "label": "Filters",
-  "search": "Search tasks",
   "searchPlaceholder": "Search…",
   "clear": "Clear filters",
   "clearOne": "Clear the “{field}” filter",

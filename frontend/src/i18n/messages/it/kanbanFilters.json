@@ -1,6 +1,5 @@
 {
   "label": "Filtri",
-  "search": "Cerca attività",
   "searchPlaceholder": "Cerca…",
   "clear": "Rimuovi i filtri",
   "clearOne": "Rimuovi il filtro «{field}»",

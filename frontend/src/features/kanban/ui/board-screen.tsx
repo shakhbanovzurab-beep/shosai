@@ -46,6 +46,7 @@ function BoardBody({ boards, current, incoming, view, onViewChange }: ViewProps)
         view={view}
         onViewChange={onViewChange}
         onAddTask={editable && columnOrder[0] ? () => cards.addCard(columnOrder[0]) : undefined}
+        filters={firstSync ? null : <FilterBar />}
       >
         <FieldsButton />
       </KanbanToolbar>
@@ -56,27 +57,16 @@ function BoardBody({ boards, current, incoming, view, onViewChange }: ViewProps)
   );
 }
 
-/** Строка фильтра и выбранный вид доски; если под фильтром ничего не нашлось — об этом и «Сбросить фильтры». */
+/** Выбранный вид доски; если под фильтром ничего не нашлось — об этом и «Сбросить фильтры». */
 function FilteredViews({ view }: { view: BoardView }) {
   const { shown, filtering } = useShownCount();
-  if (filtering && shown === 0)
-    return (
-      <>
-        <FilterBar />
-        <NoMatches />
-      </>
-    );
-  return (
-    <>
-      <FilterBar />
-      {view === "board" ? (
-        <KanbanBoard />
-      ) : (
-        <div className="min-h-0 flex-1 overflow-y-auto bg-muted/25 p-4 lg:p-5">
-          {view === "list" ? <TaskListView /> : <TaskTableView />}
-        </div>
-      )}
-    </>
+  if (filtering && shown === 0) return <NoMatches />;
+  return view === "board" ? (
+    <KanbanBoard />
+  ) : (
+    <div className="min-h-0 flex-1 overflow-y-auto bg-muted/25 p-4 lg:p-5">
+      {view === "list" ? <TaskListView /> : <TaskTableView />}
+    </div>
   );
 }
 

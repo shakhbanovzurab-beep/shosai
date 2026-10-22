@@ -1,6 +1,5 @@
 {
   "label": "Filtros",
-  "search": "Pesquisar tarefas",
   "searchPlaceholder": "Pesquisar…",
   "clear": "Limpar filtros",
   "clearOne": "Limpar o filtro “{field}”",

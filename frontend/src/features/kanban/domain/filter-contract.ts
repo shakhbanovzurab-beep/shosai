@@ -1,8 +1,9 @@
 import type { Priority } from "./tasks-contract";
 
 /*
- * Фильтр доски (план пакета §4.5): поиск и по фильтру на каждое видимое поле. Выборы внутри поля — «или»,
- * поля и поиск вместе — «и». Живёт в адресе, а не хранится: ссылка воспроизводит вид.
+ * Фильтр доски (план пакета §4.5): по фильтру на каждое видимое поле. Выборы внутри поля — «или», поля вместе — «и».
+ * Живёт в адресе, а не хранится: ссылка воспроизводит вид. Своего поиска у доски нет — задачи ищет глобальный
+ * поиск кабинета (решение владельца 2026-10-22).
  */
 
 export const DUE_BUCKETS = ["overdue", "today", "week", "later", "none"] as const;
@@ -19,7 +20,6 @@ export type NumberFilter =
   | { mode: "range"; from: number | null; to: number | null };
 
 export type BoardFilter = {
-  q: string;
   /** Ключ исполнителя: id участника пространства или имя у личной задачи; `UNASSIGNED` — без исполнителя. */
   assignee: string[];
   due: DueBucket[];
@@ -31,7 +31,6 @@ export type BoardFilter = {
 };
 
 export const NO_FILTER: BoardFilter = {
-  q: "",
   assignee: [],
   due: [],
   priority: [],

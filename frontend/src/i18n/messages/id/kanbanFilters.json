@@ -1,6 +1,5 @@
 {
   "label": "Filter",
-  "search": "Cari tugas",
   "searchPlaceholder": "Cari…",
   "clear": "Hapus filter",
   "clearOne": "Hapus filter “{field}”",

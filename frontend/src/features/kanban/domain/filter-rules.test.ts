@@ -20,7 +20,7 @@ const card = (fields: Partial<Card>): Card =>
     ...fields,
   }) as Card;
 const with_ = (patch: Partial<BoardFilter>): BoardFilter => ({ ...NO_FILTER, ...patch });
-const matches = (c: Card, f: BoardFilter) => cardMatches(c, f, TODAY, ["notes"]);
+const matches = (c: Card, f: BoardFilter) => cardMatches(c, f, TODAY);
 
 describe("the deadline buckets", () => {
   it("count from the person's today, and a done task is never overdue", () => {
@@ -40,13 +40,6 @@ describe("a card under a filter", () => {
     expect(matches(high, with_({ priority: ["high"], assignee: ["Maya"] }))).toBe(true);
     expect(matches(high, with_({ priority: ["high"], assignee: [UNASSIGNED] }))).toBe(false);
     expect(matches(card({}), with_({ priority: ["none"], assignee: [UNASSIGNED] }))).toBe(true);
-  });
-
-  it("searches the title and the text fields, ignoring case", () => {
-    const c = card({ title: "Crash on sign-in", values: { notes: { text: "Okta tenant" } } });
-    expect(matches(c, with_({ q: "CRASH" }))).toBe(true);
-    expect(matches(c, with_({ q: "okta" }))).toBe(true);
-    expect(matches(c, with_({ q: "safari" }))).toBe(false);
   });
 
   it("filters states with an empty choice, numbers by kind and range, and texts by contains", () => {
@@ -69,7 +62,6 @@ describe("a card under a filter", () => {
 describe("the filter in the address", () => {
   it("goes there and back, keeping the board and the open task", () => {
     const f = with_({
-      q: "crash",
       assignee: ["Maya Chen", UNASSIGNED],
       due: ["overdue", "today"],
       priority: ["high"],

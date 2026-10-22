@@ -47,15 +47,7 @@ function stickersMatch(card: Card, filter: BoardFilter) {
   return true;
 }
 
-/** Поиск — по названию и текстовым полям доски; `textFields` — их id. */
-function searchMatches(card: Card, q: string, textFields: string[]) {
-  const words = fold(q.trim());
-  if (!words) return true;
-  return [card.title, ...textFields.map((id) => textOf(card, id))].some((text) => contains(fold(text), words));
-}
-
-export function cardMatches(card: Card, filter: BoardFilter, today: string, textFields: string[]): boolean {
-  if (!searchMatches(card, filter.q, textFields)) return false;
+export function cardMatches(card: Card, filter: BoardFilter, today: string): boolean {
   if (filter.assignee.length > 0 && !filter.assignee.includes(assigneeKey(card.assignee))) return false;
   if (filter.due.length > 0) {
     const bucket = dueBucket(card, today);
@@ -69,7 +61,6 @@ export function cardMatches(card: Card, filter: BoardFilter, today: string, text
 /** Фильтр, который что-то отсеивает. */
 export function isFiltering(filter: BoardFilter) {
   return (
-    filter.q.trim() !== "" ||
     filter.assignee.length + filter.due.length + filter.priority.length + filter.repeat.length > 0 ||
     Object.values(filter.states).some((chosen) => chosen.length > 0) ||
     Object.keys(filter.numbers).length > 0 ||

@@ -1,6 +1,5 @@
 {
   "label": "Фильтры",
-  "search": "Поиск по задачам",
   "searchPlaceholder": "Поиск…",
   "clear": "Сбросить фильтры",
   "clearOne": "Сбросить фильтр «{field}»",

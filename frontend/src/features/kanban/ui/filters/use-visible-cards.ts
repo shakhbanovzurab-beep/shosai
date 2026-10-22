@@ -46,10 +46,9 @@ export function shownSet(s: BoardSnapshot, filter: BoardFilter, today: string): 
   const fullKey = `${key}|${today}`;
   const hit = matchCache.get(s.cards);
   if (hit?.key === fullKey) return hit.shown;
-  const texts = s.stickers.filter((sticker) => sticker.kind === "text").map((sticker) => sticker.id);
   const shown = new Set(
     Object.values(s.cards)
-      .filter((card) => cardMatches(card, active, today, texts))
+      .filter((card) => cardMatches(card, active, today))
       .map((card) => card.id),
   );
   matchCache.set(s.cards, { key: fullKey, shown });

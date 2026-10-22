@@ -1,6 +1,5 @@
 {
   "label": "篩選條件",
-  "search": "搜尋任務",
   "searchPlaceholder": "搜尋…",
   "clear": "清除篩選條件",
   "clearOne": "清除「{field}」篩選條件",
