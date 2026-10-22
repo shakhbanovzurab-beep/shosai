@@ -50,5 +50,19 @@
     "confirm": "Alanı sil",
     "counting": "Bu alanı kullanan panolar ve görevler sayılıyor…"
   },
-  "fromOtherFailed": "Alanlarınız yüklenemedi. Tekrar deneyin."
+  "fromOtherFailed": "Alanlarınız yüklenemedi. Tekrar deneyin.",
+  "hintFor": "“{name}” alanı neyi ölçer",
+  "hints": {
+    "stopwatch": "Bir görev üzerinde ne kadar süredir çalışıldığını ölçer. Kronometreyi görevde başlatıp durdurun ya da bunu panoya bırakın: Panonun otomasyonları kronometreyi başlatır, her sütunda yeniden başlatır ve görev tamamlandığında durdurur.",
+    "timer": "Göreve belirlediğiniz süreyi geriye doğru sayar: yarım saat, bir gün, bir hafta. Süre dolduğunda kartta “Süre doldu” yazar ve aşan süre sayılmaya başlar.",
+    "time_tracking": "Görevin planlanan ve gerçekleşen süresi. Kart ikisini yan yana gösterir; gerçekleşen süre planı aştığında kırmızıya döner."
+  },
+  "automations": {
+    "open": "Ayarla",
+    "count": "{count, plural, =0 {Otomasyon yok} one {# otomasyon} other {# otomasyon}}",
+    "title": "Kronometre otomasyonları",
+    "start_on_arrival": "Görev panoda göründüğünde başlat: burada oluşturulduğunda veya başka bir panodan taşındığında",
+    "restart_on_move": "Görev başka bir sütuna geçtiğinde yeniden başlat ve her sütundaki süreyi say",
+    "stop_on_done": "Görev tamamlandığında durdur"
+  }
 }

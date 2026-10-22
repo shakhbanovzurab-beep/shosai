@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, other {하위 작업 #개 중 {done, number}개 완료}}",
     "fieldValue": "{field}: {value}",
-    "fieldLabel": "{field} 필드"
+    "fieldLabel": "{field} 필드",
+    "time": {
+      "stopwatch": "스톱워치 작동 중",
+      "timer": "타이머",
+      "left": "{left} 남음",
+      "timeUp": "시간 종료 · +{over}",
+      "paused": "일시 중지됨",
+      "tracking": "시간 관리",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "계획 초과"
+    }
   },
   "table": {
     "task": "작업",

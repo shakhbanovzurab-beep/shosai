@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { type ComponentProps, createContext, type ReactNode, use, useId } from "react";
 
 import {
   CalendarDays,
@@ -21,12 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 
-import {
-  type BoardSticker,
-  type CustomSticker,
-  isCustomSticker,
-  type StickerKind,
-} from "../../domain/stickers-contract";
+import { type BoardSticker, isCustomSticker, type StickerKind } from "../../domain/stickers-contract";
 import { useFieldName } from "../field-name";
 
 const ICONS: Record<StickerKind, LucideIcon> = {
@@ -42,19 +37,34 @@ const ICONS: Record<StickerKind, LucideIcon> = {
   text: Type,
 };
 
-/** Поле доски: значок, имя, вид, «Показывать на карточках»; своё ещё правится и снимается с доски. */
+const FieldNameId = createContext<string | undefined>(undefined);
+
+/** Строка действий поля под переключателем. */
+export function FieldActions({ children }: { children: ReactNode }) {
+  return <div className="-mx-2 -mb-1.5 flex flex-wrap items-center gap-1">{children}</div>;
+}
+
+/** Действие поля: для чтения с экрана описано именем поля («Изменить» — какое). */
+export function FieldAction(props: ComponentProps<typeof Button>) {
+  return <Button variant="ghost" size="sm" aria-describedby={use(FieldNameId)} {...props} />;
+}
+
+/**
+ * Поле доски: значок, имя, вид, «Показывать на карточках». `hint` — пояснение рядом с именем, `children` — действия
+ * под переключателем (правка своего поля, настройка секундомера).
+ */
 export function FieldCard({
   sticker,
   editable,
   onVisible,
-  onEdit,
-  onTakeOff,
+  hint,
+  children,
 }: {
   sticker: BoardSticker;
   editable: boolean;
   onVisible: (visible: boolean) => void;
-  onEdit: (sticker: CustomSticker) => void;
-  onTakeOff: (sticker: BoardSticker) => void;
+  hint?: ReactNode;
+  children?: ReactNode;
 }) {
   const t = useTranslations("kanbanFields");
   const name = useFieldName()(sticker);
@@ -67,8 +77,11 @@ export function FieldCard({
       <div className="flex items-start gap-2.5">
         <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
         <div className="flex min-w-0 flex-col">
-          <span id={nameId} dir="auto" className="truncate font-medium text-sm">
-            {name}
+          <span className="flex min-w-0 items-center gap-1">
+            <span id={nameId} dir="auto" className="truncate font-medium text-sm">
+              {name}
+            </span>
+            {hint}
           </span>
           <span className="text-muted-foreground text-xs">{custom ? t(`kinds.${custom.kind}`) : t("system")}</span>
         </div>
@@ -85,16 +98,7 @@ export function FieldCard({
           {t("showOnCards")}
         </Label>
       </div>
-      {custom && editable ? (
-        <div className="-mx-2 -mb-1.5 flex flex-wrap gap-1">
-          <Button variant="ghost" size="sm" aria-describedby={nameId} onClick={() => onEdit(custom)}>
-            {t("edit")}
-          </Button>
-          <Button variant="ghost" size="sm" aria-describedby={nameId} onClick={() => onTakeOff(sticker)}>
-            {t("takeOff")}
-          </Button>
-        </div>
-      ) : null}
+      <FieldNameId value={nameId}>{children}</FieldNameId>
     </div>
   );
 }

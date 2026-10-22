@@ -135,6 +135,6 @@ The Kanban package moves the screens from the old sample paths `/api/kanban/*` t
 
 `npm run dev` serves these routes from the mocks. The demo boards are Work (custom fields, covers, subtasks,
 comments, attachments, a recurring task, tasks from a meeting with Leo's marks, a running stopwatch, a timer
-running and one past zero, plan and fact), Home (recurring chores, a range)
-and Romashka. Two generated boards of 300 and 1 000 cards appear after
+running and one past zero, plan and fact), Home (recurring chores, a range) and Romashka. Two generated boards of
+300 and 1 000 cards, every card with a running stopwatch and every fifth with a timer, appear after
 `sessionStorage.setItem("kanban-demo-large", "1")` and a reload, for the performance measures.

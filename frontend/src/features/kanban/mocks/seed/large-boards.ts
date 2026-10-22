@@ -19,6 +19,8 @@ export function largeBoardsOn() {
   }
 }
 
+const MINUTE = 60_000;
+const DAY = 24 * 60 * MINUTE;
 const PEOPLE = [ME_PERSON, MAYA, ELENA, DIEGO];
 const PRIORITIES: (Priority | null)[] = [null, "high", null, "medium", "low", null];
 const LANES: [id: string, title: string, status: TaskStatus][] = [
@@ -29,6 +31,7 @@ const LANES: [id: string, title: string, status: TaskStatus][] = [
 ];
 
 function largeBoard(demo: KanbanDemo, id: string, name: string, cards: number) {
+  const started = Date.now();
   const lanes = LANES.map(([lane, title, status], laneIndex) => {
     const tasks = Array.from({ length: Math.ceil((cards - laneIndex) / LANES.length) }, (_, i) => {
       const n = i * LANES.length + laneIndex + 1;
@@ -39,6 +42,16 @@ function largeBoard(demo: KanbanDemo, id: string, name: string, cards: number) {
         assignee: n % 4 === 0 ? null : assignee(PEOPLE[n % PEOPLE.length]),
       });
       demo.tasks.set(task.id, task);
+      // У каждой карточки идёт секундомер, у каждой пятой — таймер: замер одного такта на всю доску (KT-D6).
+      demo.clocks.set(task.id, [
+        { column_id: `${id}-${lane}`, started_at: started - n * 7 * MINUTE, stopped_at: null },
+      ]);
+      if (n % 5 === 0)
+        demo.timers.set(task.id, {
+          length_ms: DAY,
+          ends_at: new Date(started + (n - 150) * MINUTE).toISOString(),
+          paused_left_ms: null,
+        });
       if (n % 2 === 0) demo.values.set(task.id, new Map([["st-estimate", { number: (n % 5) + 1 }]]));
       if (n % 3 === 0) {
         const values = demo.values.get(task.id) ?? new Map();
@@ -57,7 +70,7 @@ function largeBoard(demo: KanbanDemo, id: string, name: string, cards: number) {
     syncUntil: null,
     revision: 1,
     columns: [...lanes, seedColumn(`${id}-done`, "Done", "done", "green", [])],
-    system: { ...NEW_BOARD_SYSTEM_VISIBILITY },
+    system: { ...NEW_BOARD_SYSTEM_VISIBILITY, stopwatch: true, timer: true },
     stopwatch: { ...DEFAULT_STOPWATCH_AUTOMATIONS },
     stickers: [
       { id: "st-type", visible: true },

@@ -96,4 +96,5 @@ export const NEW_BOARD_SYSTEM_VISIBILITY: Record<SystemStickerId, boolean> = {
 
 /** Поля времени задачи: их нет на доске Jira (KG-D8). */
 export const TIME_STICKERS = ["stopwatch", "timer", "time_tracking"] as const satisfies readonly SystemStickerId[];
-export const isTimeSticker = (id: string) => (TIME_STICKERS as readonly string[]).includes(id);
+export type TimeStickerId = (typeof TIME_STICKERS)[number];
+export const isTimeSticker = (id: string): id is TimeStickerId => (TIME_STICKERS as readonly string[]).includes(id);

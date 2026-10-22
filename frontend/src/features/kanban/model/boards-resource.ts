@@ -5,6 +5,7 @@ import { createPollingResource, type PollingResource } from "@/lib/polling-resou
 
 import { boardsApi } from "../api/boards-api";
 import type { BoardDetail, BoardSummary } from "../domain/boards-contract";
+import { noteServerNow } from "./server-clock";
 
 const isSyncing = (board: BoardSummary) => board.jira?.sync_status === "syncing";
 
@@ -20,7 +21,11 @@ export function boardResource(id: string) {
   const existing = details.get(id);
   if (existing) return existing;
   const created = createPollingResource(
-    () => boardsApi.get(id),
+    () =>
+      boardsApi.get(id).then((detail) => {
+        noteServerNow(detail.server_now);
+        return detail;
+      }),
     (data) => isSyncing(data.board),
   );
   details.set(id, created);

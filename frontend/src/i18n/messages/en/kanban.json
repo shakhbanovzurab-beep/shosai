@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, one {{done, number} of # subtask done} other {{done, number} of # subtasks done}}",
     "fieldValue": "{field}: {value}",
-    "fieldLabel": "Field {field}"
+    "fieldLabel": "Field {field}",
+    "time": {
+      "stopwatch": "Stopwatch running",
+      "timer": "Timer",
+      "left": "{left} left",
+      "timeUp": "Time is up · +{over}",
+      "paused": "Paused",
+      "tracking": "Time tracking",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "Over plan"
+    }
   },
   "table": {
     "task": "Task",

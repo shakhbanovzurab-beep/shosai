@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, other {已完成 {done, number} 項子任務，共 # 項}}",
     "fieldValue": "{field}：{value}",
-    "fieldLabel": "「{field}」欄位"
+    "fieldLabel": "「{field}」欄位",
+    "time": {
+      "stopwatch": "碼錶計時中",
+      "timer": "計時器",
+      "left": "剩餘 {left}",
+      "timeUp": "時間到 · +{over}",
+      "paused": "已暫停",
+      "tracking": "工時追蹤",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "超出預計"
+    }
   },
   "table": {
     "task": "任務",

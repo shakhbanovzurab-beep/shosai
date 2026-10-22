@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, one {{done, number} sur # sous-tâche terminée} many {{done, number} sur # de sous-tâches terminées} other {{done, number} sur # sous-tâches terminées}}",
     "fieldValue": "{field} : {value}",
-    "fieldLabel": "Champ {field}"
+    "fieldLabel": "Champ {field}",
+    "time": {
+      "stopwatch": "Chronomètre en marche",
+      "timer": "Minuteur",
+      "left": "Il reste {left}",
+      "timeUp": "Temps écoulé · +{over}",
+      "paused": "En pause",
+      "tracking": "Suivi du temps",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "Temps prévu dépassé"
+    }
   },
   "table": {
     "task": "Tâche",

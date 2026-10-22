@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, one {Выполнено {done, number} из # подзадачи} few {Выполнено {done, number} из # подзадач} many {Выполнено {done, number} из # подзадач} other {Выполнено {done, number} из # подзадачи}}",
     "fieldValue": "{field}: {value}",
-    "fieldLabel": "Поле «{field}»"
+    "fieldLabel": "Поле «{field}»",
+    "time": {
+      "stopwatch": "Секундомер идёт",
+      "timer": "Таймер",
+      "left": "Осталось {left}",
+      "timeUp": "Время вышло · +{over}",
+      "paused": "На паузе",
+      "tracking": "Учёт времени",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "Больше плана"
+    }
   },
   "table": {
     "task": "Задача",

@@ -50,5 +50,19 @@
     "confirm": "Veld verwijderen",
     "counting": "Borden en taken met dit veld tellen…"
   },
-  "fromOtherFailed": "Kan je velden niet laden. Probeer het opnieuw."
+  "fromOtherFailed": "Kan je velden niet laden. Probeer het opnieuw.",
+  "hintFor": "Wat ‘{name}’ meet",
+  "hints": {
+    "stopwatch": "Meet hoelang een taak al in uitvoering is. Start en stop hem in de taak, of laat dat aan het bord over: de automatiseringen van het bord starten de stopwatch, herstarten hem in elke kolom en stoppen hem als de taak is afgerond.",
+    "timer": "Telt een tijdsduur af die je voor een taak instelt: een halfuur, een dag, een week. Is de tijd om, dan toont de kaart ‘Tijd is om’ en wordt de overschrijding geteld.",
+    "time_tracking": "Geplande en werkelijke tijd van een taak. De kaart toont ze naast elkaar, en de werkelijke tijd wordt rood zodra die de geplande tijd overschrijdt."
+  },
+  "automations": {
+    "open": "Instellen",
+    "count": "{count, plural, =0 {Geen automatiseringen} one {# automatisering} other {# automatiseringen}}",
+    "title": "Automatiseringen voor de stopwatch",
+    "start_on_arrival": "Starten wanneer een taak op het bord verschijnt: hier gemaakt of vanaf een ander bord verplaatst",
+    "restart_on_move": "Opnieuw starten wanneer een taak naar een andere kolom gaat, en de tijd in elke kolom bijhouden",
+    "stop_on_done": "Stoppen wanneer de taak is afgerond"
+  }
 }

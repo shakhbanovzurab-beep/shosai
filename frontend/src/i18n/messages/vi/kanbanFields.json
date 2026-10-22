@@ -50,5 +50,19 @@
     "confirm": "Xóa trường",
     "counting": "Đang đếm các bảng và công việc dùng trường này…"
   },
-  "fromOtherFailed": "Không thể tải các trường của bạn. Hãy thử lại."
+  "fromOtherFailed": "Không thể tải các trường của bạn. Hãy thử lại.",
+  "hintFor": "Trường “{name}” đo gì",
+  "hints": {
+    "stopwatch": "Đo xem công việc đã được thực hiện bao lâu. Bạn có thể bắt đầu và dừng ngay trong công việc, hoặc để bảng tự làm việc đó: các quy tắc tự động hóa của bảng sẽ bắt đầu đồng hồ bấm giờ, chạy lại ở mỗi cột và dừng khi công việc hoàn thành.",
+    "timer": "Đếm ngược khoảng thời gian bạn đặt cho công việc: nửa giờ, một ngày, một tuần. Khi hết thời gian, thẻ hiển thị “Hết giờ” và đếm phần thời gian vượt quá.",
+    "time_tracking": "Thời gian theo kế hoạch và thời gian thực tế của công việc. Thẻ hiển thị hai giá trị cạnh nhau, và thời gian thực tế chuyển sang màu đỏ khi vượt kế hoạch."
+  },
+  "automations": {
+    "open": "Thiết lập",
+    "count": "{count, plural, =0 {Không có quy tắc tự động hóa} other {# quy tắc tự động hóa}}",
+    "title": "Tự động hóa đồng hồ bấm giờ",
+    "start_on_arrival": "Bắt đầu khi công việc xuất hiện trên bảng: được tạo tại đây hoặc chuyển từ bảng khác sang",
+    "restart_on_move": "Chạy lại khi công việc chuyển sang cột khác và đếm thời gian ở từng cột",
+    "stop_on_done": "Dừng khi công việc hoàn thành"
+  }
 }

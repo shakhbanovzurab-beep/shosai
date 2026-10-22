@@ -21,7 +21,7 @@ export const stickersApi = {
   patch: (id: string, body: StickerPatch) => apiRequest<CustomSticker>(sticker(id), jsonBody("PATCH", body)),
   remove: (id: string) => apiRequest<void>(sticker(id), { method: "DELETE" }),
   place: (boardId: string, body: PlaceSticker) => apiRequest<BoardSticker>(onBoard(boardId), jsonBody("POST", body)),
-  show: (boardId: string, stickerId: string, body: BoardStickerPatch) =>
+  patchOnBoard: (boardId: string, stickerId: string, body: BoardStickerPatch) =>
     apiRequest<BoardSticker>(onBoard(boardId, stickerId), jsonBody("PATCH", body)),
   takeOff: (boardId: string, stickerId: string) => apiRequest<void>(onBoard(boardId, stickerId), { method: "DELETE" }),
 };

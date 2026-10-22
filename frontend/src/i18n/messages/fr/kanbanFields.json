@@ -50,5 +50,19 @@
     "confirm": "Supprimer le champ",
     "counting": "Comptage des tableaux et des tâches qui l’utilisent…"
   },
-  "fromOtherFailed": "Impossible de charger vos champs. Réessayez."
+  "fromOtherFailed": "Impossible de charger vos champs. Réessayez.",
+  "hintFor": "Ce que mesure « {name} »",
+  "hints": {
+    "stopwatch": "Mesure depuis combien de temps une tâche est en cours. Lancez-le et arrêtez-le dans la tâche, ou laissez le tableau s’en charger : ses automatisations lancent le chronomètre, le relancent dans chaque colonne et l’arrêtent quand la tâche est terminée.",
+    "timer": "Décompte une durée que vous définissez pour une tâche : une demi-heure, un jour, une semaine. Une fois cette durée écoulée, la carte affiche « Temps écoulé » et compte le dépassement.",
+    "time_tracking": "Temps prévu et temps réel d’une tâche. La carte les affiche côte à côte, et le temps réel passe au rouge quand il dépasse le temps prévu."
+  },
+  "automations": {
+    "open": "Configurer",
+    "count": "{count, plural, =0 {Aucune automatisation} one {# automatisation} many {# d’automatisations} other {# automatisations}}",
+    "title": "Automatisations du chronomètre",
+    "start_on_arrival": "Lancer quand une tâche apparaît sur le tableau : créée ici ou déplacée depuis un autre tableau",
+    "restart_on_move": "Relancer quand une tâche passe dans une autre colonne, et compter le temps dans chaque colonne",
+    "stop_on_done": "Arrêter quand la tâche est terminée"
+  }
 }

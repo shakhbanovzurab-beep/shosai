@@ -50,5 +50,19 @@
     "confirm": "Delete field",
     "counting": "Counting the boards and tasks that use it…"
   },
-  "fromOtherFailed": "Couldn’t load your fields. Try again."
+  "fromOtherFailed": "Couldn’t load your fields. Try again.",
+  "hintFor": "What “{name}” counts",
+  "hints": {
+    "stopwatch": "Counts how long a task has been in work. Start and stop it on the task, or let the board do it: its automations start the stopwatch, restart it in each column and stop it when the task is done.",
+    "timer": "Counts down a length of time you set on a task: half an hour, a day, a week. When it runs out, the card says “Time is up” and counts the overrun.",
+    "time_tracking": "Planned and actual time on a task. The card shows them side by side, and the actual time turns red when it passes the plan."
+  },
+  "automations": {
+    "open": "Set up",
+    "count": "{count, plural, =0 {No automations} one {# automation} other {# automations}}",
+    "title": "Stopwatch automations",
+    "start_on_arrival": "Start when a task appears on the board: created here or moved in from another board",
+    "restart_on_move": "Restart when a task moves to another column, and count the time in each column",
+    "stop_on_done": "Stop when the task is done"
+  }
 }

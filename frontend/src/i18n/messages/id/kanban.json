@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, other {{done, number} dari # subtugas selesai}}",
     "fieldValue": "{field}: {value}",
-    "fieldLabel": "Bidang {field}"
+    "fieldLabel": "Bidang {field}",
+    "time": {
+      "stopwatch": "Stopwatch berjalan",
+      "timer": "Timer",
+      "left": "Sisa {left}",
+      "timeUp": "Waktu habis · +{over}",
+      "paused": "Dijeda",
+      "tracking": "Pelacakan waktu",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "Melebihi rencana"
+    }
   },
   "table": {
     "task": "Tugas",

@@ -50,5 +50,19 @@
     "confirm": "Excluir campo",
     "counting": "Contando os quadros e as tarefas que usam este campo…"
   },
-  "fromOtherFailed": "Não foi possível carregar seus campos. Tente novamente."
+  "fromOtherFailed": "Não foi possível carregar seus campos. Tente novamente.",
+  "hintFor": "O que “{name}” mede",
+  "hints": {
+    "stopwatch": "Mede há quanto tempo uma tarefa está em andamento. Inicie e pare na própria tarefa ou deixe isso com o quadro: as automações do quadro iniciam o cronômetro, o reiniciam em cada coluna e o param quando a tarefa é concluída.",
+    "timer": "Faz a contagem regressiva de um tempo que você define na tarefa: meia hora, um dia, uma semana. Quando ele acaba, o cartão mostra “Tempo esgotado” e conta o tempo excedente.",
+    "time_tracking": "Tempo previsto e tempo real de uma tarefa. O cartão mostra os dois lado a lado, e o tempo real fica vermelho quando passa do previsto."
+  },
+  "automations": {
+    "open": "Configurar",
+    "count": "{count, plural, =0 {Nenhuma automação} one {# automação} many {# de automações} other {# automações}}",
+    "title": "Automações do cronômetro",
+    "start_on_arrival": "Iniciar quando uma tarefa aparece no quadro: criada aqui ou movida de outro quadro",
+    "restart_on_move": "Reiniciar quando uma tarefa muda de coluna e contar o tempo em cada coluna",
+    "stop_on_done": "Parar quando a tarefa é concluída"
+  }
 }

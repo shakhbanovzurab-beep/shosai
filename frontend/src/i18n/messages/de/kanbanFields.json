@@ -50,5 +50,19 @@
     "confirm": "Feld löschen",
     "counting": "Boards und Aufgaben mit diesem Feld werden gezählt…"
   },
-  "fromOtherFailed": "Deine Felder konnten nicht geladen werden. Versuche es erneut."
+  "fromOtherFailed": "Deine Felder konnten nicht geladen werden. Versuche es erneut.",
+  "hintFor": "Was „{name}“ misst",
+  "hints": {
+    "stopwatch": "Misst, wie lange eine Aufgabe schon in Arbeit ist. Starte und stoppe sie in der Aufgabe oder überlass das dem Board: Seine Automatisierungen starten die Stoppuhr, starten sie in jeder Spalte neu und stoppen sie, wenn die Aufgabe erledigt ist.",
+    "timer": "Zählt eine Zeitspanne herunter, die du für eine Aufgabe festlegst: eine halbe Stunde, einen Tag, eine Woche. Ist sie abgelaufen, zeigt die Karte „Zeit abgelaufen“ und zählt die Überschreitung.",
+    "time_tracking": "Geplante und tatsächliche Zeit einer Aufgabe. Die Karte zeigt beide nebeneinander, und die tatsächliche Zeit wird rot, sobald sie den Plan überschreitet."
+  },
+  "automations": {
+    "open": "Einrichten",
+    "count": "{count, plural, =0 {Keine Automatisierungen} one {# Automatisierung} other {# Automatisierungen}}",
+    "title": "Automatisierungen der Stoppuhr",
+    "start_on_arrival": "Starten, wenn eine Aufgabe auf dem Board erscheint: hier erstellt oder von einem anderen Board verschoben",
+    "restart_on_move": "Neu starten, wenn eine Aufgabe in eine andere Spalte wechselt, und die Zeit in jeder Spalte messen",
+    "stop_on_done": "Stoppen, wenn die Aufgabe erledigt ist"
+  }
 }

@@ -50,5 +50,19 @@
     "confirm": "Eliminar campo",
     "counting": "Contando los tableros y las tareas que lo usan…"
   },
-  "fromOtherFailed": "No se pudieron cargar tus campos. Inténtalo de nuevo."
+  "fromOtherFailed": "No se pudieron cargar tus campos. Inténtalo de nuevo.",
+  "hintFor": "Qué mide «{name}»",
+  "hints": {
+    "stopwatch": "Mide cuánto tiempo lleva una tarea en curso. Inícialo y detenlo en la tarea, o deja que lo haga el tablero: sus automatizaciones inician el cronómetro, lo reinician en cada columna y lo detienen cuando la tarea se completa.",
+    "timer": "Cuenta hacia atrás el tiempo que definas en una tarea: media hora, un día, una semana. Cuando se agota, la tarjeta muestra «Tiempo agotado» y cuenta el exceso.",
+    "time_tracking": "Tiempo previsto y tiempo real de una tarea. La tarjeta los muestra uno al lado del otro, y el tiempo real se pone en rojo cuando supera lo previsto."
+  },
+  "automations": {
+    "open": "Configurar",
+    "count": "{count, plural, =0 {Sin automatizaciones} one {# automatización} many {# de automatizaciones} other {# automatizaciones}}",
+    "title": "Automatizaciones del cronómetro",
+    "start_on_arrival": "Iniciar cuando una tarea aparece en el tablero: creada aquí o movida desde otro tablero",
+    "restart_on_move": "Reiniciar cuando una tarea pasa a otra columna y contar el tiempo en cada columna",
+    "stop_on_done": "Detener cuando la tarea se completa"
+  }
 }

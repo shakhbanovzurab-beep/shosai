@@ -50,5 +50,19 @@
     "confirm": "Elimina campo",
     "counting": "Conteggio delle bacheche e delle attività che lo usano…"
   },
-  "fromOtherFailed": "Impossibile caricare i tuoi campi. Riprova."
+  "fromOtherFailed": "Impossibile caricare i tuoi campi. Riprova.",
+  "hintFor": "Cosa misura «{name}»",
+  "hints": {
+    "stopwatch": "Misura da quanto tempo un’attività è in lavorazione. Avvialo e fermalo nell’attività, oppure lascia fare alla bacheca: le sue automazioni avviano il cronometro, lo riavviano in ogni colonna e lo fermano quando l’attività è completata.",
+    "timer": "Conta alla rovescia un tempo che imposti su un’attività: mezz’ora, un giorno, una settimana. Quando scade, la scheda mostra «Tempo scaduto» e conta lo sforamento.",
+    "time_tracking": "Tempo previsto ed effettivo di un’attività. La scheda li mostra affiancati, e il tempo effettivo diventa rosso quando supera il previsto."
+  },
+  "automations": {
+    "open": "Configura",
+    "count": "{count, plural, =0 {Nessuna automazione} one {# automazione} many {# di automazioni} other {# automazioni}}",
+    "title": "Automazioni del cronometro",
+    "start_on_arrival": "Avvia quando un’attività compare sulla bacheca: creata qui o spostata da un’altra bacheca",
+    "restart_on_move": "Riavvia quando un’attività passa a un’altra colonna e conta il tempo in ogni colonna",
+    "stop_on_done": "Ferma quando l’attività è completata"
+  }
 }

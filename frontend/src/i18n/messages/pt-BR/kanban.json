@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, one {{done, number} de # subtarefa concluída} many {{done, number} de # de subtarefas concluídas} other {{done, number} de # subtarefas concluídas}}",
     "fieldValue": "{field}: {value}",
-    "fieldLabel": "Campo {field}"
+    "fieldLabel": "Campo {field}",
+    "time": {
+      "stopwatch": "Cronômetro em andamento",
+      "timer": "Timer",
+      "left": "Faltam {left}",
+      "timeUp": "Tempo esgotado · +{over}",
+      "paused": "Pausado",
+      "tracking": "Controle de tempo",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "Acima do previsto"
+    }
   },
   "table": {
     "task": "Tarefa",

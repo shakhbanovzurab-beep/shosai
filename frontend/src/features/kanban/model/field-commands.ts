@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { stickersApi } from "../api/stickers-api";
 import { cardsWithout, cardsWithValues, valuesOn } from "../domain/field-rules";
 import type { BoardSticker, CustomSticker, PlaceSticker, StickerPatch } from "../domain/stickers-contract";
+import type { StopwatchAutomations } from "../domain/time-contract";
 import type { BoardSnapshot } from "./board-store";
 import { boardResource } from "./boards-resource";
 import { boardIdOf, type CommandContext } from "./command-context";
@@ -35,10 +36,25 @@ export function createFieldCommands(ctx: CommandContext) {
         setStickers((list) => list.map((s) => (s.id === id ? { ...s, visible: shown } : s)));
       show(visible);
       try {
-        await send(stickersApi.show(boardIdOf(ctx), id, { visible }));
+        await send(stickersApi.patchOnBoard(boardIdOf(ctx), id, { visible }));
         return true;
       } catch (error) {
         show(!visible);
+        fail(error);
+        return false;
+      }
+    },
+    /** Автоматизации секундомера доски (KT-D2): видны сразу, отказ возвращает прежние. */
+    async setAutomations(automations: StopwatchAutomations) {
+      const before = ctx.store.get().stickers.find((s) => s.id === "stopwatch")?.automations;
+      const put = (value: StopwatchAutomations | undefined) =>
+        setStickers((list) => list.map((s) => (s.id === "stopwatch" ? { ...s, automations: value } : s)));
+      put(automations);
+      try {
+        await send(stickersApi.patchOnBoard(boardIdOf(ctx), "stopwatch", { automations }));
+        return true;
+      } catch (error) {
+        put(before);
         fail(error);
         return false;
       }

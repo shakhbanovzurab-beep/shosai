@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, other {サブタスク # 件中 {done, number} 件が完了}}",
     "fieldValue": "{field}：{value}",
-    "fieldLabel": "「{field}」フィールド"
+    "fieldLabel": "「{field}」フィールド",
+    "time": {
+      "stopwatch": "ストップウォッチ計測中",
+      "timer": "タイマー",
+      "left": "残り {left}",
+      "timeUp": "時間切れ · +{over}",
+      "paused": "一時停止中",
+      "tracking": "時間管理",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "予定超過"
+    }
   },
   "table": {
     "task": "タスク",

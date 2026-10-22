@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, one {{done, number} van # subtaak afgerond} other {{done, number} van # subtaken afgerond}}",
     "fieldValue": "{field}: {value}",
-    "fieldLabel": "Veld {field}"
+    "fieldLabel": "Veld {field}",
+    "time": {
+      "stopwatch": "Stopwatch loopt",
+      "timer": "Timer",
+      "left": "Nog {left}",
+      "timeUp": "Tijd is om · +{over}",
+      "paused": "Gepauzeerd",
+      "tracking": "Tijdregistratie",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "Meer dan gepland"
+    }
   },
   "table": {
     "task": "Taak",

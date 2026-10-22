@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, one {पूरा हुआ सबटास्क: # में से {done, number}} other {पूरे हुए सबटास्क: # में से {done, number}}}",
     "fieldValue": "{field}: {value}",
-    "fieldLabel": "{field} फ़ील्ड"
+    "fieldLabel": "{field} फ़ील्ड",
+    "time": {
+      "stopwatch": "स्टॉपवॉच चल रही है",
+      "timer": "टाइमर",
+      "left": "{left} बाकी",
+      "timeUp": "समय ख़त्म · +{over}",
+      "paused": "रुका हुआ",
+      "tracking": "समय ट्रैकिंग",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "तय समय से ज़्यादा"
+    }
   },
   "table": {
     "task": "टास्क",

@@ -67,7 +67,17 @@
     "subtasks": "{done, number}/{total, number}",
     "subtasksLabel": "{total, plural, zero {اكتمل {done, number} من أصل # مهمة فرعية} one {اكتمل {done, number} من أصل مهمة فرعية واحدة} two {اكتمل {done, number} من أصل مهمتين فرعيتين} few {اكتمل {done, number} من أصل # مهام فرعية} many {اكتمل {done, number} من أصل # مهمة فرعية} other {اكتمل {done, number} من أصل # مهمة فرعية}}",
     "fieldValue": "{field}: {value}",
-    "fieldLabel": "حقل «{field}»"
+    "fieldLabel": "حقل «{field}»",
+    "time": {
+      "stopwatch": "ساعة الإيقاف تعمل",
+      "timer": "المؤقت",
+      "left": "يتبقى {left}",
+      "timeUp": "انتهى الوقت · +{over}",
+      "paused": "متوقف مؤقتًا",
+      "tracking": "تتبع الوقت",
+      "factOfPlan": "<fact>{spent}</fact> / {plan}",
+      "overPlan": "تجاوز الوقت المخطط"
+    }
   },
   "table": {
     "task": "المهمة",

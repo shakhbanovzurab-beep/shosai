@@ -50,5 +50,19 @@
     "confirm": "Hapus bidang",
     "counting": "Menghitung papan dan tugas yang menggunakannya…"
   },
-  "fromOtherFailed": "Tidak dapat memuat bidang Anda. Coba lagi."
+  "fromOtherFailed": "Tidak dapat memuat bidang Anda. Coba lagi.",
+  "hintFor": "Apa yang dihitung “{name}”",
+  "hints": {
+    "stopwatch": "Menghitung berapa lama tugas sudah dikerjakan. Mulai dan hentikan di tugas, atau serahkan pada papan: otomatisasi papan memulai stopwatch, memulainya ulang di setiap kolom, dan menghentikannya saat tugas selesai.",
+    "timer": "Menghitung mundur durasi yang Anda tetapkan pada tugas: setengah jam, sehari, seminggu. Saat waktunya habis, kartu menampilkan “Waktu habis” dan menghitung kelebihannya.",
+    "time_tracking": "Waktu rencana dan waktu aktual suatu tugas. Kartu menampilkan keduanya berdampingan, dan waktu aktual berubah merah saat melebihi rencana."
+  },
+  "automations": {
+    "open": "Atur",
+    "count": "{count, plural, =0 {Tidak ada otomatisasi} other {# otomatisasi}}",
+    "title": "Otomatisasi stopwatch",
+    "start_on_arrival": "Mulai saat tugas muncul di papan: dibuat di sini atau dipindahkan dari papan lain",
+    "restart_on_move": "Mulai ulang saat tugas pindah ke kolom lain, dan hitung waktu di setiap kolom",
+    "stop_on_done": "Hentikan saat tugas selesai"
+  }
 }

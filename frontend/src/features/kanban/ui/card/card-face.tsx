@@ -14,6 +14,7 @@ import { DeadlineChip } from "./deadline-chip";
 import { FieldChips, RepeatChip } from "./field-chips";
 import { hasFooterFacts } from "./footer-facts";
 import { LeoMark } from "./leo-mark";
+import { TimeChips } from "./time-chips";
 
 /*
  * Лицо карточки по частям (составной компонент): доска и превью перетаскивания собирают его из одних частей.
@@ -125,6 +126,7 @@ export function CardChips({
         <DeadlineChip startsOn={card.starts_on} dueOn={due} done={card.status === "done"} byLeo={leo.has("due")} />
       ) : null}
       {visible.recurrence && card.recurring ? <RepeatChip /> : null}
+      <TimeChips card={card} visible={visible} />
       <FieldChips stickers={stickers} values={card.values} />
       {trailing}
     </div>
