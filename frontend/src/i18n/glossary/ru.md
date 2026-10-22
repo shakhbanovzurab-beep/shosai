@@ -43,6 +43,9 @@ Leo is masculine and never declined («Leo не смог ответить», «�
 | automation | автоматизация | автоматика | One rule is «правило» |
 | field | поле | стикер | Neuter («в поле»); «Поля доски», «Новое поле», built-in ones are «встроенные поля». In code and the API a sticker |
 | state | состояние | — | Neuter; one choice of a field’s set of states («Набор состояний»). Not «статус» |
+| stopwatch | секундомер | — | Masc.; the task’s own clock, not a person’s working time |
+| timer | таймер | — | Masc.; a countdown the person sets. Not «обратный отсчёт» as a field name |
+| time tracking | учёт времени | таймтрекинг | Masc. («учёт»); plan and fact |
 | subtask | подзадача | — | Feminine; one item of a task’s checklist («Добавить подзадачу») |
 | comment | комментарий | — | Masculine; ICU forms комментарий, комментария, комментариев |
 | cover | обложка | — | Feminine; «Сделать обложкой», «Убрать обложку» |

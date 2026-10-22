@@ -1,6 +1,7 @@
 import { BOARD_TEMPLATES, type BoardIcon, type BoardTemplate, type TemplateColumn } from "../../domain/board";
 import { BOARDS_MAX, type Layout } from "../../domain/boards-contract";
 import { NEW_BOARD_SYSTEM_VISIBILITY } from "../../domain/stickers-contract";
+import { DEFAULT_STOPWATCH_AUTOMATIONS } from "../../domain/time-contract";
 import { jiraRefusal } from "./jira";
 import { fail, type Outcome, ok } from "./outcome";
 import { isShown } from "./present";
@@ -40,6 +41,7 @@ export function createBoard(
       card_ids: [],
     })),
     system: { ...NEW_BOARD_SYSTEM_VISIBILITY },
+    stopwatch: { ...DEFAULT_STOPWATCH_AUTOMATIONS },
     stickers: [],
   };
   d.boards.set(board.id, board);

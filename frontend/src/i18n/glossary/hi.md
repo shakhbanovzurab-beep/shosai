@@ -43,6 +43,9 @@ Sentences end with । (no space before it); buttons, labels and headings take n
 | automation | ऑटोमेशन | स्वचालन, आटोमेशन | Masculine; automatic = अपने-आप |
 | field | फ़ील्ड | स्टिकर, फील्ड | Masculine; बोर्ड के फ़ील्ड, नया फ़ील्ड; built-in ones are बिल्ट-इन फ़ील्ड. In code and the API a sticker |
 | state | विकल्प | — | Masculine; one choice of a field’s set of states. Not स्थिति, which is status |
+| stopwatch | स्टॉपवॉच | — | Fem. |
+| timer | टाइमर | — | Masc. |
+| time tracking | समय ट्रैकिंग | — | Fem.; plan and fact |
 | subtask | सबटास्क | — | Masculine; plural सबटास्क; सबटास्क जोड़ें |
 | comment | टिप्पणी | कमेंट | Feminine; plural टिप्पणियां |
 | cover | कवर | — | Masculine; कवर बनाएं, कवर हटाएं |

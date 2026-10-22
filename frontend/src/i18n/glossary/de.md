@@ -43,6 +43,9 @@ Use the generic forms given here (Inhaber, Teilnehmer) or neutral wording (Perso
 | automation | Automatisierung | Automation, Automatik | die Automatisierung; automatisch stays fine |
 | field | Feld | Sticker | das Feld, Pl. Felder; Board-Felder, Neues Feld; built-in ones are integrierte Felder. In code and the API a sticker |
 | state | Zustand | — | der Zustand, Pl. Zustände; one choice of a field’s set of states. Not Status |
+| stopwatch | Stoppuhr | — | die Stoppuhr |
+| timer | Timer | — | der Timer |
+| time tracking | Zeiterfassung | — | die Zeiterfassung; plan and fact |
 | subtask | Unteraufgabe | Teilaufgabe | die Unteraufgabe, Pl. Unteraufgaben; Unteraufgabe hinzufügen |
 | comment | Kommentar | — | der Kommentar, Pl. Kommentare |
 | cover | Titelbild | — | das Titelbild; Als Titelbild festlegen, Titelbild entfernen |

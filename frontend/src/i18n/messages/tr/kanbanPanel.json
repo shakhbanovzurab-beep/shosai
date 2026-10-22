@@ -7,6 +7,9 @@
     "due": "Son tarih",
     "priority": "Öncelik",
     "recurrence": "Tekrarlama",
+    "stopwatch": "Kronometre",
+    "timer": "Zamanlayıcı",
+    "time_tracking": "Zaman takibi",
     "other": "Diğer panolardan"
   },
   "notSet": "Ayarlanmadı",

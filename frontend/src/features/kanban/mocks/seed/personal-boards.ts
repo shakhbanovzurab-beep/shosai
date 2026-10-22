@@ -1,4 +1,5 @@
 import { NEW_BOARD_SYSTEM_VISIBILITY } from "../../domain/stickers-contract";
+import { DEFAULT_STOPWATCH_AUTOMATIONS } from "../../domain/time-contract";
 import type { KanbanDemo, StoredBoard, StoredColumn, StoredTask } from "../store/types";
 import {
   assignee,
@@ -84,13 +85,14 @@ function board(id: string, name: string, icon: StoredBoard["icon"], columns: Sto
     revision: 1,
     columns,
     system: { ...NEW_BOARD_SYSTEM_VISIBILITY, recurrence: id === "home" },
+    stopwatch: { ...DEFAULT_STOPWATCH_AUTOMATIONS },
     stickers: [],
   };
 }
 
 export function seedPersonalBoards(demo: KanbanDemo) {
   for (const task of [...Object.values(home).flat(), ...Object.values(romashka).flat(), ...unplaced])
-    demo.tasks.set(task.id, task);
+    demo.tasks.set(task.id, structuredClone(task));
   demo.subtasks.set(
     "h-vacation",
     seedSubtasks("h-vacation", [

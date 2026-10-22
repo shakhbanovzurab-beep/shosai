@@ -43,6 +43,9 @@ Participles and adjectives agree in gender (Nota excluída, Link copiado); use n
 | automation | automação | Automatização | Fem.; pl. automações |
 | field | campo | Sticker | Masc.; “Campos do quadro”, “Novo campo”; built-in ones are campos integrados. In code and the API a sticker |
 | state | opção | — | Fem.; pl. opções; one choice of a field’s set of states (“lista de opções”) |
+| stopwatch | cronômetro | — | Masc. |
+| timer | timer | — | Masc. |
+| time tracking | controle de tempo | — | Masc.; plan and fact |
 | subtask | subtarefa | — | Fem.; “Adicionar subtarefa” |
 | comment | comentário | — | Masc. |
 | cover | capa | — | Fem.; “Usar como capa”, “Remover capa” |

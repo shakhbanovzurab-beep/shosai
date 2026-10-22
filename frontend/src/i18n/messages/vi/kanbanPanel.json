@@ -7,6 +7,9 @@
     "due": "Hạn chót",
     "priority": "Mức ưu tiên",
     "recurrence": "Lặp lại",
+    "stopwatch": "Đồng hồ bấm giờ",
+    "timer": "Hẹn giờ",
+    "time_tracking": "Theo dõi thời gian",
     "other": "Từ bảng khác"
   },
   "notSet": "Chưa đặt",

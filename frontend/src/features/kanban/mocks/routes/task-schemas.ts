@@ -16,6 +16,7 @@ import {
   TASK_STATUSES,
   WEEKDAYS,
 } from "../../domain/tasks-contract";
+import { TIMER_MAX_MS, TIMER_MIN_MS, TRACKED_MINUTES_MAX } from "../../domain/time-contract";
 import { id, title } from "./board-schemas";
 
 /* Тела запросов задачи, её подзадач, комментариев, вложений и полей. */
@@ -26,6 +27,8 @@ const recurrence = z.discriminatedUnion("every", [
   z.strictObject({ every: z.literal("week"), weekdays: z.array(z.enum(WEEKDAYS)).min(1).max(7) }),
   z.strictObject({ every: z.literal("month"), day: z.int().min(1).max(31) }),
 ]);
+
+const minutes = z.int().min(0).max(TRACKED_MINUTES_MAX);
 
 export const taskPatchSchema = z.strictObject({
   title: title.optional(),
@@ -38,6 +41,8 @@ export const taskPatchSchema = z.strictObject({
   assignee_name: z.string().trim().min(1).max(ASSIGNEE_NAME_MAX).nullable().optional(),
   recurrence: recurrence.nullable().optional(),
   cover_attachment_id: id.nullable().optional(),
+  plan_minutes: minutes.nullable().optional(),
+  fact_minutes: minutes.nullable().optional(),
 });
 export const tasksDeleteSchema = z.strictObject({ task_ids: z.array(id).min(1).max(500) });
 
@@ -66,7 +71,17 @@ export const placeStickerSchema = z.union([
   z.strictObject({ kind: z.enum(CUSTOM_KINDS), name: stickerName, states: states.optional() }),
 ]);
 export const stickerPatchSchema = z.strictObject({ name: stickerName.optional(), states: states.optional() });
-export const boardStickerPatchSchema = z.strictObject({ visible: z.boolean() });
+const automations = z.strictObject({
+  start_on_arrival: z.boolean(),
+  restart_on_move: z.boolean(),
+  stop_on_done: z.boolean(),
+});
+export const boardStickerPatchSchema = z
+  .strictObject({ visible: z.boolean().optional(), automations: automations.optional() })
+  .refine((patch) => patch.visible !== undefined || patch.automations !== undefined, "validation_error");
+
+/** Таймер: длительность от минуты до года (KT-D3). */
+export const timerSchema = z.strictObject({ length_ms: z.int().min(TIMER_MIN_MS).max(TIMER_MAX_MS) });
 
 export const valueSchema = z.union([
   z.strictObject({ state_id: id }),

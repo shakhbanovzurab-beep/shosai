@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import type { BoardDetail, BoardsResponse, ColumnHead } from "../../domain/boards-contract";
 import { nextDue } from "../../domain/recurrence";
 import type { Card } from "../../domain/tasks-contract";
+import { DEFAULT_STOPWATCH_AUTOMATIONS } from "../../domain/time-contract";
 import { today } from "../seed/builders";
 import { resetDemo } from "../store/state";
 import { boardRoute, boardsRoute, incomingRoute } from "./boards-routes";
@@ -35,10 +36,14 @@ describe("boards", () => {
       "due",
       "priority",
       "recurrence",
+      "stopwatch",
+      "timer",
+      "time_tracking",
       "st-type",
       "st-estimate",
       "st-customer",
     ]);
+    expect(work.stickers.find((s) => s.id === "stopwatch")?.automations).toEqual(DEFAULT_STOPWATCH_AUTOMATIONS);
     expect(column(work, "planned")?.color).toBe("blue");
     const schema = column(work, "building")?.cards.find((c) => c.id === "w-schema");
     expect(schema).toMatchObject({ subtasks_done: 2, subtasks_total: 3, comment_count: 2, attachment_count: 2 });

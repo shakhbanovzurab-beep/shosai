@@ -2,6 +2,7 @@ import { NEW_ISSUE_TYPE } from "../../data/jira-catalog";
 import { BOARD_OPEN_CARDS_MAX, type CardCreate, type CardPatch } from "../../domain/boards-contract";
 import type { JiraIssueRef } from "../../domain/tasks-contract";
 import { MANUAL, seedTask } from "../seed/builders";
+import { onArrival, onMove } from "./clock-ops";
 import { jiraRefusal } from "./jira";
 import { fail, type Outcome, ok } from "./outcome";
 import { demo, now, placementOf, touch } from "./state";
@@ -46,6 +47,8 @@ function copyOf(source: StoredTask, id: string, title: string): StoredTask {
     updated_at: created_at,
     completed_at: null,
     recurred_from_id: null,
+    plan_minutes: null,
+    fact_minutes: null,
   };
 }
 
@@ -68,6 +71,7 @@ export function createCard(board: StoredBoard, request: CardCreate): Outcome<Sto
   task.completed_at = task.status === "done" ? now() : null;
   demo().tasks.set(task.id, task);
   column.card_ids.splice(Math.max(0, Math.min(request.position, column.card_ids.length)), 0, task.id);
+  onArrival(board, task.id, column.id);
   touch(board);
   return ok(task);
 }
@@ -84,6 +88,7 @@ export function patchCard(board: StoredBoard, taskId: string, patch: CardPatch):
     at.column.card_ids.splice(at.index, 1);
     target.card_ids.splice(Math.max(0, Math.min(patch.position ?? 0, target.card_ids.length)), 0, taskId);
     setStatus(task, target.kind);
+    onMove(board, taskId, at.column.id, target.id);
   }
   if (patch.priority !== undefined) {
     task.leo_fields = leoFieldsAfter(task, { priority: patch.priority });

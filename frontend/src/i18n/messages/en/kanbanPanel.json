@@ -7,6 +7,9 @@
     "due": "Due date",
     "priority": "Priority",
     "recurrence": "Repeat",
+    "stopwatch": "Stopwatch",
+    "timer": "Timer",
+    "time_tracking": "Time tracking",
     "other": "From other boards"
   },
   "notSet": "Not set",

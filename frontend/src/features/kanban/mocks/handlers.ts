@@ -11,6 +11,14 @@ import {
   layoutRoute,
   syncRoute,
 } from "./routes/boards-routes";
+import {
+  stopwatchResetRoute,
+  stopwatchStartRoute,
+  stopwatchStopRoute,
+  timerPauseRoute,
+  timerResumeRoute,
+  timerRoute,
+} from "./routes/clock-routes";
 import { cardRoute, cardsRoute, columnRoute, columnsRoute } from "./routes/columns-cards-routes";
 import {
   boardStickerRoute,
@@ -59,5 +67,11 @@ export const handlers: MockRoute[] = [
   mockRoute("/v1/tasks/:id/attachments/:attachmentId", attachmentRoute, ["DELETE"]),
   mockRoute("/v1/tasks/:id/attachments/:attachmentId/download", attachmentDownloadRoute, ["GET"]),
   mockRoute("/v1/tasks/:id/values/:stickerId", valueRoute, ["PUT", "DELETE"]),
+  mockRoute("/v1/tasks/:id/stopwatch/start", stopwatchStartRoute, ["POST"]),
+  mockRoute("/v1/tasks/:id/stopwatch/stop", stopwatchStopRoute, ["POST"]),
+  mockRoute("/v1/tasks/:id/stopwatch/reset", stopwatchResetRoute, ["POST"]),
+  mockRoute("/v1/tasks/:id/timer", timerRoute, ["PUT", "DELETE"]),
+  mockRoute("/v1/tasks/:id/timer/pause", timerPauseRoute, ["POST"]),
+  mockRoute("/v1/tasks/:id/timer/resume", timerResumeRoute, ["POST"]),
   mockRoute("/demo-task-files/:id/:attachmentId", demoTaskFileRoute, ["GET"]),
 ];

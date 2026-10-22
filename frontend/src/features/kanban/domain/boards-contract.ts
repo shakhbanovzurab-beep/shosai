@@ -23,7 +23,14 @@ export type BoardSummary = {
 };
 
 /** Доска целиком в пределах TK-D5: открытые карточки и закрытые за последние 30 дней. */
-export type BoardDetail = { board: BoardSummary; stickers: BoardSticker[]; columns: Column[]; revision: number };
+export type BoardDetail = {
+  board: BoardSummary;
+  stickers: BoardSticker[];
+  columns: Column[];
+  revision: number;
+  /** Момент ответа сервера: по нему экран сверяет свои часы (ADR 0061). */
+  server_now: string;
+};
 
 /** `incoming.open` — сколько открытых входящих задач ждёт доску, пока она не выбрана. */
 export type BoardsResponse = { items: BoardSummary[]; incoming: { board_id: string | null; open: number } };

@@ -14,6 +14,7 @@ import type {
   TaskSpace,
   TaskStatus,
 } from "../../domain/tasks-contract";
+import type { StopwatchAutomations, Timer } from "../../domain/time-contract";
 
 /*
  * Как моки хранят задачи и доски: так же, как бэкенд по плану tasks (§3.4, §3.8) — одна задача на все доски,
@@ -40,7 +41,13 @@ export type StoredTask = {
   updated_at: string;
   completed_at: string | null;
   recurred_from_id: string | null;
+  /** План и факт таймтрекинга в минутах (ADR 0061). */
+  plan_minutes: number | null;
+  fact_minutes: number | null;
 };
+
+/** Отрезок секундомера в колонке: идущий — без конца (мс эпохи). */
+export type ClockSpan = { column_id: string | null; started_at: number; stopped_at: number | null };
 
 /** Колонка с порядком карточек — то же, что строки размещения задач на доске. */
 export type StoredColumn = ColumnHead & { card_ids: string[] };
@@ -55,8 +62,10 @@ export type StoredBoard = {
   syncUntil: number | null;
   revision: number;
   columns: StoredColumn[];
-  /** Видимость четырёх системных полей. */
+  /** Видимость системных полей. */
   system: Record<SystemStickerId, boolean>;
+  /** Автоматизации секундомера на этой доске (KT-D2). */
+  stopwatch: StopwatchAutomations;
   /** Свои поля на доске, по порядку. */
   stickers: { id: string; visible: boolean }[];
 };
@@ -72,6 +81,10 @@ export type KanbanDemo = {
   subtasks: Map<string, Subtask[]>;
   comments: Map<string, StoredComment[]>;
   attachments: Map<string, Attachment[]>;
+  /** Отрезки секундомера задачи; пустой список — его не запускали. */
+  clocks: Map<string, ClockSpan[]>;
+  /** Таймер задачи. */
+  timers: Map<string, Timer>;
   /** Доска для входящих задач (TK-D4), null — пока не выбрана. */
   incoming: { board_id: string | null };
 };

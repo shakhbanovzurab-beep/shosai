@@ -31,6 +31,9 @@ function visibilityOf(stickers: BoardSticker[]): Record<SystemStickerId, boolean
     due: shown("due"),
     priority: shown("priority"),
     recurrence: shown("recurrence"),
+    stopwatch: shown("stopwatch"),
+    timer: shown("timer"),
+    time_tracking: shown("time_tracking"),
   };
 }
 

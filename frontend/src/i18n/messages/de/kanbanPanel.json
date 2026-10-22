@@ -7,6 +7,9 @@
     "due": "Fälligkeitsdatum",
     "priority": "Priorität",
     "recurrence": "Wiederholung",
+    "stopwatch": "Stoppuhr",
+    "timer": "Timer",
+    "time_tracking": "Zeiterfassung",
     "other": "Aus anderen Boards"
   },
   "notSet": "Nicht festgelegt",

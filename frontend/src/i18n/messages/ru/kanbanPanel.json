@@ -7,6 +7,9 @@
     "due": "Срок",
     "priority": "Приоритет",
     "recurrence": "Повтор",
+    "stopwatch": "Секундомер",
+    "timer": "Таймер",
+    "time_tracking": "Учёт времени",
     "other": "С других досок"
   },
   "notSet": "Не задано",

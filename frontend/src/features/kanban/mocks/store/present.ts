@@ -1,9 +1,10 @@
 import type { BoardDetail, BoardSummary } from "../../domain/boards-contract";
 import { DONE_VISIBLE_DAYS } from "../../domain/boards-contract";
-import { type BoardSticker, type StickerValue, SYSTEM_STICKERS } from "../../domain/stickers-contract";
+import { type BoardSticker, isTimeSticker, type StickerValue, SYSTEM_STICKERS } from "../../domain/stickers-contract";
 import type { Card, Comment, TaskDetail } from "../../domain/tasks-contract";
 import { ME_PERSON } from "../seed/builders";
-import { demo, placementOf } from "./state";
+import { clocksOf } from "./clock-ops";
+import { demo, now, placementOf } from "./state";
 import type { StoredBoard, StoredComment, StoredTask } from "./types";
 
 /* Ответы API из хранилища: карточка, доска, задача — по формам контракта. */
@@ -49,13 +50,21 @@ export function cardOf(task: StoredTask, board: StoredBoard | null): Card {
     space: task.space,
     jira: task.jira,
     can_delete: task.space === null && task.jira === null,
+    ...clocksOf(task),
   };
 }
 
-/** Поля доски по порядку: системные четыре, затем свои. */
+/** Поля доски по порядку: системные, затем свои. Полей времени на доске Jira нет; у секундомера — автоматизации. */
 export function stickersOf(board: StoredBoard): BoardSticker[] {
-  const system = SYSTEM_STICKERS.map(
-    (id): BoardSticker => ({ id, kind: id, name: null, states: [], visible: board.system[id] }),
+  const system = SYSTEM_STICKERS.filter((id) => !(board.jira && isTimeSticker(id))).map(
+    (id): BoardSticker => ({
+      id,
+      kind: id,
+      name: null,
+      states: [],
+      visible: board.system[id],
+      ...(id === "stopwatch" ? { automations: { ...board.stopwatch } } : {}),
+    }),
   );
   const custom = board.stickers.flatMap(({ id, visible }): BoardSticker[] => {
     const sticker = demo().stickers.get(id);
@@ -95,6 +104,7 @@ export function boardDetailOf(board: StoredBoard): BoardDetail {
       }),
     })),
     revision: board.revision,
+    server_now: now(),
   };
 }
 
@@ -118,6 +128,7 @@ export function taskDetailOf(task: StoredTask): TaskDetail {
     created_at: task.created_at,
     updated_at: task.updated_at,
     completed_at: task.completed_at,
+    server_now: now(),
   };
 }
 

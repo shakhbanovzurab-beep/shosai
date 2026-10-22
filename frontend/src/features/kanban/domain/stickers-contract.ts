@@ -1,3 +1,5 @@
+import type { StopwatchAutomations } from "./time-contract";
+
 /*
  * Поля доски (в коде и API — стикеры, на экране — «поля»): определения, их место на доске и значения задачи.
  * Контракт — TK-D12, план tasks §3.8; поле принадлежит владельцу доски, значение — задаче (KG-D4).
@@ -7,8 +9,19 @@
 export const COLORS = ["gray", "red", "orange", "amber", "green", "teal", "blue", "violet", "pink"] as const;
 export type Color = (typeof COLORS)[number];
 
-/** Системные поля — собственные поля задачи, они есть на каждой доске. */
-export const SYSTEM_STICKERS = ["assignee", "due", "priority", "recurrence"] as const;
+/**
+ * Системные поля — собственные поля задачи, они есть на каждой доске. Последние три — время задачи (ADR 0061):
+ * выключены, пока доска их не покажет, и не бывают на доске Jira.
+ */
+export const SYSTEM_STICKERS = [
+  "assignee",
+  "due",
+  "priority",
+  "recurrence",
+  "stopwatch",
+  "timer",
+  "time_tracking",
+] as const;
 export type SystemStickerId = (typeof SYSTEM_STICKERS)[number];
 
 /** Виды своих полей: набор состояний, число, текст. */
@@ -32,8 +45,8 @@ export type CustomSticker = {
 };
 export type Sticker = SystemSticker | CustomSticker;
 
-/** Поле на доске: системные четыре первыми, затем свои в порядке добавления. */
-export type BoardSticker = Sticker & { visible: boolean };
+/** Поле на доске: системные первыми, затем свои в порядке добавления; у секундомера — его автоматизации. */
+export type BoardSticker = Sticker & { visible: boolean; automations?: StopwatchAutomations };
 
 export type StickerValue = { state_id: string } | { number: number } | { text: string };
 
@@ -52,7 +65,8 @@ export type PlaceSticker = { sticker_id: string } | NewSticker;
 
 /** `states` — полный список: прежние id сохраняют значения, новые приходят без id, пропавшие очищают свои. */
 export type StickerPatch = { name?: string; states?: (NewStateDraft & { id?: string })[] };
-export type BoardStickerPatch = { visible: boolean };
+/** Показ поля на карточках; у секундомера ещё и его автоматизации. */
+export type BoardStickerPatch = { visible?: boolean; automations?: StopwatchAutomations };
 
 export const STICKER_NAME_MAX = 40;
 export const STATE_NAME_MAX = 40;
@@ -75,4 +89,11 @@ export const NEW_BOARD_SYSTEM_VISIBILITY: Record<SystemStickerId, boolean> = {
   due: true,
   priority: true,
   recurrence: false,
+  stopwatch: false,
+  timer: false,
+  time_tracking: false,
 };
+
+/** Поля времени задачи: их нет на доске Jira (KG-D8). */
+export const TIME_STICKERS = ["stopwatch", "timer", "time_tracking"] as const satisfies readonly SystemStickerId[];
+export const isTimeSticker = (id: string) => (TIME_STICKERS as readonly string[]).includes(id);

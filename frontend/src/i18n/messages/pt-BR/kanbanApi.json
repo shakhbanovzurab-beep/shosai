@@ -46,5 +46,6 @@
   "upload_too_large": "Esse arquivo é grande demais para anexar.",
   "storage_limit": "Não há mais armazenamento para isso. Libere espaço ou faça upgrade.",
   "storage_not_included": "Seu plano não inclui armazenamento de arquivos.",
-  "file_not_found": "Arquivo não encontrado."
+  "file_not_found": "Arquivo não encontrado.",
+  "timer_not_set": "Esta tarefa não tem timer."
 }

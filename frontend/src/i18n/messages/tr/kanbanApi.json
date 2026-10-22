@@ -46,5 +46,6 @@
   "upload_too_large": "Bu dosya eklenemeyecek kadar büyük.",
   "storage_limit": "Bunun için depolama alanı kalmadı. Yer açın veya planınızı yükseltin.",
   "storage_not_included": "Planınız dosya depolama içermiyor.",
-  "file_not_found": "Dosya bulunamadı."
+  "file_not_found": "Dosya bulunamadı.",
+  "timer_not_set": "Bu görevin zamanlayıcısı yok."
 }

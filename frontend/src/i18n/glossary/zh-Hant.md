@@ -43,6 +43,9 @@ Half-width space between Chinese and Latin words, numbers or placeholders (與 L
 | automation | 自動化 | 自动化 | One rule is 自動化規則 |
 | field | 欄位 | 貼紙 | Counter 個; 看板欄位, 新增欄位; built-in ones are 內建欄位. A board stage is 欄. In code and the API a sticker |
 | state | 選項 | — | One choice of a field’s set of states; not 狀態, which is status; counter 個 |
+| stopwatch | 碼錶 | 秒表 | Taiwan usage |
+| timer | 計時器 | — | A countdown |
+| time tracking | 工時追蹤 | — | Plan and fact (預計與實際) |
 | subtask | 子任務 | — | Counter 項; 新增子任務 |
 | comment | 留言 | 評論 | Counter 則, as in the card counts |
 | cover | 封面 | — | 設為封面, 移除封面 |

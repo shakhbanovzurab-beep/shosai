@@ -1,8 +1,10 @@
+import type { BoardStickerPatch } from "../../domain/stickers-contract";
 import {
   BOARD_STICKERS_MAX,
   type BoardSticker,
   type CustomSticker,
   isSystemSticker,
+  isTimeSticker,
   type OwnedSticker,
   type PlaceSticker,
   STICKER_NUMBER_LIMIT,
@@ -103,13 +105,19 @@ export function deleteSticker(id: string): Outcome<null> {
   return ok(null);
 }
 
-export function showSticker(board: StoredBoard, id: string, visible: boolean): Outcome<null> {
-  if (isSystemSticker(id)) board.system[id] = visible;
-  else {
-    const placed = board.stickers.find((s) => s.id === id);
-    if (!placed) return fail("sticker_not_on_board");
-    placed.visible = visible;
+/** Показ поля на карточках и автоматизации секундомера; полей времени на доске Jira нет (ADR 0061). */
+export function patchBoardSticker(board: StoredBoard, id: string, patch: BoardStickerPatch): Outcome<null> {
+  if (board.jira && isTimeSticker(id)) return fail("jira_unsupported");
+  if (patch.automations && id !== "stopwatch") return fail("validation_error");
+  if (patch.visible !== undefined) {
+    if (isSystemSticker(id)) board.system[id] = patch.visible;
+    else {
+      const placed = board.stickers.find((s) => s.id === id);
+      if (!placed) return fail("sticker_not_on_board");
+      placed.visible = patch.visible;
+    }
   }
+  if (patch.automations) board.stopwatch = { ...patch.automations };
   touch(board);
   return ok(null);
 }

@@ -7,6 +7,9 @@
     "due": "Tenggat",
     "priority": "Prioritas",
     "recurrence": "Pengulangan",
+    "stopwatch": "Stopwatch",
+    "timer": "Timer",
+    "time_tracking": "Pelacakan waktu",
     "other": "Dari papan lain"
   },
   "notSet": "Belum diatur",

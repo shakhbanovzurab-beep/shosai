@@ -46,5 +46,6 @@
   "upload_too_large": "Questo file è troppo grande da allegare.",
   "storage_limit": "Non c’è più spazio per questo. Libera spazio o esegui l’upgrade.",
   "storage_not_included": "Il tuo piano non include lo spazio per i file.",
-  "file_not_found": "File non trovato."
+  "file_not_found": "File non trovato.",
+  "timer_not_set": "Questa attività non ha un timer."
 }

@@ -43,6 +43,9 @@ Loanwords (file, chat, link, token, team, account, email, hub, skill, prompt, ap
 | automation | automazione | — | f. |
 | field | campo | sticker | m., pl. campi; Campi della bacheca, Nuovo campo; built-in ones are campi integrati. In code and the API a sticker |
 | state | opzione | — | f.; one choice of a field’s set of states (elenco di opzioni). Not stato, which is status |
+| stopwatch | cronometro | — | m. |
+| timer | timer | — | m., invariable |
+| time tracking | monitoraggio del tempo | — | m.; plan and fact |
 | subtask | sottoattività | — | f., invariable; Aggiungi sottoattività |
 | comment | commento | — | m., pl. commenti |
 | cover | copertina | cover | f.; Imposta come copertina, Rimuovi copertina |

@@ -1,6 +1,9 @@
 import type { StickerValue } from "../../domain/stickers-contract";
+import { NEW_BOARD_SYSTEM_VISIBILITY } from "../../domain/stickers-contract";
+import { DEFAULT_STOPWATCH_AUTOMATIONS } from "../../domain/time-contract";
 import type { KanbanDemo, StoredBoard, StoredTask } from "../store/types";
 import { assignee, DIEGO, ELENA, fromMeeting, inDays, MAYA, ME_PERSON, seedColumn, seedTask } from "./builders";
+import { seedWorkClocks } from "./work-clocks";
 import { seedWorkThreads } from "./work-threads";
 
 /* Доска «Work»: поток продуктовой команды со своими полями — тип, оценка в днях и заказчик. */
@@ -108,12 +111,14 @@ const VALUES: [task: string, sticker: string, value: StickerValue][] = [
 
 export function seedWorkBoard(demo: KanbanDemo) {
   stickers(demo);
-  for (const task of Object.values(tasks).flat()) demo.tasks.set(task.id, task);
+  // Копии, а не сами объекты сида: сброс демо (тесты) начинает с чистых задач.
+  for (const task of Object.values(tasks).flat()) demo.tasks.set(task.id, structuredClone(task));
   for (const [task, sticker, value] of VALUES) {
     const values = demo.values.get(task) ?? new Map<string, StickerValue>();
     demo.values.set(task, values.set(sticker, value));
   }
   seedWorkThreads(demo);
+  seedWorkClocks(demo);
   const board: StoredBoard = {
     id: "work",
     name: "Work",
@@ -129,7 +134,9 @@ export function seedWorkBoard(demo: KanbanDemo) {
       seedColumn("qa", "QA", "in_progress", "violet", tasks.qa),
       seedColumn("shipped", "Shipped", "done", "green", tasks.shipped),
     ],
-    system: { assignee: true, due: true, priority: true, recurrence: true },
+    // Доска демо показывает и время задачи (ADR 0061): секундомер по колонкам, таймер, план и факт.
+    system: { ...NEW_BOARD_SYSTEM_VISIBILITY, recurrence: true, stopwatch: true, timer: true, time_tracking: true },
+    stopwatch: { ...DEFAULT_STOPWATCH_AUTOMATIONS },
     stickers: [
       { id: TYPE, visible: true },
       { id: ESTIMATE, visible: true },

@@ -46,5 +46,6 @@
   "upload_too_large": "File itu terlalu besar untuk dilampirkan.",
   "storage_limit": "Penyimpanan tidak cukup untuk ini. Kosongkan ruang atau tingkatkan paket.",
   "storage_not_included": "Paket Anda tidak menyertakan penyimpanan file.",
-  "file_not_found": "File tidak ditemukan."
+  "file_not_found": "File tidak ditemukan.",
+  "timer_not_set": "Tugas ini tidak punya timer."
 }

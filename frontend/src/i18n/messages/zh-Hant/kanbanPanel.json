@@ -7,6 +7,9 @@
     "due": "截止日期",
     "priority": "優先順序",
     "recurrence": "重複",
+    "stopwatch": "碼錶",
+    "timer": "計時器",
+    "time_tracking": "工時追蹤",
     "other": "來自其他看板"
   },
   "notSet": "未設定",

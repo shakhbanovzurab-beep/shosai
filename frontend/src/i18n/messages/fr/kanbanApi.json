@@ -46,5 +46,6 @@
   "upload_too_large": "Ce fichier est trop volumineux pour être joint.",
   "storage_limit": "Il n’y a plus d’espace de stockage pour cela. Libérez de l’espace ou passez à un forfait supérieur.",
   "storage_not_included": "Votre forfait n’inclut pas de stockage de fichiers.",
-  "file_not_found": "Fichier introuvable."
+  "file_not_found": "Fichier introuvable.",
+  "timer_not_set": "Cette tâche n’a pas de minuteur."
 }

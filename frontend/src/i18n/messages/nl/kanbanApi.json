@@ -46,5 +46,6 @@
   "upload_too_large": "Dat bestand is te groot om bij te voegen.",
   "storage_limit": "Hiervoor is geen opslag meer over. Maak ruimte vrij of upgrade je abonnement.",
   "storage_not_included": "Je abonnement bevat geen bestandsopslag.",
-  "file_not_found": "Bestand niet gevonden."
+  "file_not_found": "Bestand niet gevonden.",
+  "timer_not_set": "Deze taak heeft geen timer."
 }

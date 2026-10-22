@@ -65,6 +65,8 @@ export function seedTask(id: string, title: string, description: string, fields:
     updated_at: created_at,
     completed_at: null,
     recurred_from_id: null,
+    plan_minutes: null,
+    fact_minutes: null,
     ...fields,
   };
   if (task.status === "done" && !task.completed_at) task.completed_at = minutesAgo(60 * 24);

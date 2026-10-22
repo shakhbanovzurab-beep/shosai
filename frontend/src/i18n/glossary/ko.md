@@ -43,6 +43,9 @@ After names and placeholders choose the particle by sound (Leo가, Studio를, No
 | automation | 자동화 | 오토메이션 | |
 | field | 필드 | 스티커 | 보드 필드, 새 필드; built-in ones are 기본 필드. In code and the API a sticker |
 | state | 옵션 | — | One choice of a field’s set of states; not 상태, which is status |
+| stopwatch | 스톱워치 | — | — |
+| timer | 타이머 | — | — |
+| time tracking | 시간 관리 | — | Plan and fact (계획과 실제) |
 | subtask | 하위 작업 | 서브태스크 | 하위 작업 추가 |
 | comment | 댓글 | 코멘트 | As in the card counts (댓글 #개) |
 | cover | 커버 | — | 커버로 설정, 커버 제거 |

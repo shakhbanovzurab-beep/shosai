@@ -43,6 +43,9 @@ Typography: « … » with U+202F inside, U+202F before : ; ! ?, no space be
 | automation | automatisation | automatisme | Fem. |
 | field | champ | sticker | Masc., pl. « champs »; « Champs du tableau », « Nouveau champ »; built-in ones are « champs intégrés ». In code and the API a sticker |
 | state | option | état | Fem.; one choice of a field’s set of states (« liste d’options »). Not « état », which reads as status |
+| stopwatch | chronomètre | — | Masc. |
+| timer | minuteur | — | Masc. |
+| time tracking | suivi du temps | — | Masc.; plan and fact |
 | subtask | sous-tâche | — | Fem., pl. « sous-tâches ». |
 | comment | commentaire | — | Masc. |
 | cover | couverture | — | Fem.; « Définir comme couverture », « Retirer la couverture ». |

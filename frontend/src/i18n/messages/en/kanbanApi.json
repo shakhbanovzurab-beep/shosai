@@ -46,5 +46,6 @@
   "upload_too_large": "That file is too large to attach.",
   "storage_limit": "There’s no storage left for this. Free up space or upgrade.",
   "storage_not_included": "Your plan doesn’t include storage for files.",
-  "file_not_found": "File not found."
+  "file_not_found": "File not found.",
+  "timer_not_set": "This task has no timer."
 }

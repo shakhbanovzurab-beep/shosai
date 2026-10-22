@@ -1,4 +1,5 @@
 import type { CustomSticker, StickerValue } from "./stickers-contract";
+import type { TaskClocks } from "./time-contract";
 
 /*
  * Задача, как её видят доска и панель: маршруты `/v1/tasks/*` плана tasks (§3.3) и TK-D12 (§3.8).
@@ -30,7 +31,7 @@ export type JiraIssueRef = { key: string; url: string; type: string };
 export type Person = { user_id: string; name: string };
 
 /** Карточка в чтении доски: только то, что нужно лицу карточки. */
-export type Card = {
+export type Card = TaskClocks & {
   id: string;
   title: string;
   status: TaskStatus;
@@ -97,6 +98,8 @@ export type TaskDetail = Card & {
   created_at: string;
   updated_at: string;
   completed_at: string | null;
+  /** Момент ответа сервера: по нему экран сверяет свои часы (ADR 0061). */
+  server_now: string;
 };
 
 /** Изменение по присутствию поля: `null` очищает. */
@@ -111,6 +114,9 @@ export type TaskPatch = {
   assignee_name?: string | null;
   recurrence?: Recurrence | null;
   cover_attachment_id?: string | null;
+  /** План и факт таймтрекинга в минутах (ADR 0061); null очищает. */
+  plan_minutes?: number | null;
+  fact_minutes?: number | null;
 };
 
 export type TasksDelete = { task_ids: string[] };

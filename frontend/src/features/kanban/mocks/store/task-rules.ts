@@ -4,6 +4,7 @@ import { nextDue, shiftedStart } from "../../domain/recurrence";
 import { leoFieldsAfter as leoFieldsLeft } from "../../domain/task-rules";
 import type { LeoField, TaskPatch, TaskStatus } from "../../domain/tasks-contract";
 import { today } from "../seed/builders";
+import { onArrival, onDone } from "./clock-ops";
 import { demo, firstColumnOf, now, placementOf, touch } from "./state";
 import type { StoredTask } from "./types";
 import { pushToWorkspace } from "./workspace-bridge";
@@ -48,6 +49,7 @@ function spawnNext(task: StoredTask) {
   const column = at ? firstColumnOf(at.board, "todo") : null;
   if (at && column) {
     column.card_ids.unshift(id);
+    onArrival(at.board, id, column.id);
     touch(at.board);
   }
 }
@@ -59,5 +61,8 @@ export function setStatus(task: StoredTask, status: TaskStatus) {
   task.completed_at = status === "done" ? now() : null;
   task.updated_at = now();
   pushToWorkspace(task, { status });
-  if (status === "done") spawnNext(task);
+  if (status === "done") {
+    onDone(task.id);
+    spawnNext(task);
+  }
 }

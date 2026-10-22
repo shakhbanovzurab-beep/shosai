@@ -4,10 +4,10 @@ import { stickersOf } from "../store/present";
 import {
   deleteSticker,
   ownedStickers,
+  patchBoardSticker,
   patchSticker,
   placeSticker,
   removeSticker,
-  showSticker,
 } from "../store/sticker-ops";
 import { createSubtask, deleteSubtask, patchSubtask } from "../store/thread-ops";
 import { bodyOf, json, type Params } from "./http";
@@ -88,7 +88,7 @@ export const boardStickerRoute = {
       const body = await bodyOf(request, boardStickerPatchSchema);
       if ("refusal" in body) return body.refusal;
       const id = await sub(params, "stickerId");
-      const shown = showSticker(board, id, body.data.visible);
+      const shown = patchBoardSticker(board, id, body.data);
       return answer(shown, () => stickersOf(board).find((s) => s.id === id));
     });
   },

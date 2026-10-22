@@ -17,6 +17,8 @@ function seeded(): KanbanDemo {
     subtasks: new Map(),
     comments: new Map(),
     attachments: new Map(),
+    clocks: new Map(),
+    timers: new Map(),
     incoming: { board_id: null },
   };
   seedWorkBoard(demo);

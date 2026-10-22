@@ -43,6 +43,9 @@ Adjectives and participles agree with the noun’s gender, given in Note (Tarea 
 | automation | automatización | — | f. |
 | field | campo | sticker | m. Campos del tablero, Nuevo campo; built-in ones are campos integrados. In code and the API a sticker |
 | state | opción | — | f.; one choice of a field’s set of states (lista de opciones). Not estado, which is status |
+| stopwatch | cronómetro | — | m. |
+| timer | temporizador | — | m. |
+| time tracking | control de tiempo | — | m.; plan and fact |
 | subtask | subtarea | — | f. |
 | comment | comentario | — | m. |
 | cover | portada | — | f. Usar como portada, Quitar portada. |

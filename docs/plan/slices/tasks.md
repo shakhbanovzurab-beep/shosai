@@ -151,7 +151,7 @@ Metrics: `shosai_tasks_created_total{source}`, `shosai_tasks_action_item_project
 
 ### 3.7 Not in tasks
 
-Reminders, due-soon and overdue notices (proactive); people and promises (commitments); hub topics (commitments, hubs); labels as such (TK-D12's stickers replace them), time of day on a task; Kanban's Sort, Import CSV, templates and automation (dropped, §2.10) — its filter is the cabinet's filter bar over the board read, with no API (TK-D12); automations, mirror and summary columns, stopwatch, timer and time tracking, sprints, task types beyond state sets, card and board backgrounds (outside the golden core by the owner's decision of 2026-10-21; separate decisions later); the home's skyline (SM-4); the Jira grant and OAuth (connectors).
+Reminders, due-soon and overdue notices (proactive); people and promises (commitments); hub topics (commitments, hubs); labels as such (TK-D12's stickers replace them), time of day on a task; Kanban's Sort, Import CSV, templates and automation (dropped, §2.10) — its filter is the cabinet's filter bar over the board read, with no API (TK-D12); automations, mirror and summary columns, stopwatch, timer and time tracking, sprints, task types beyond state sets, card and board backgrounds (outside the golden core by the owner's decision of 2026-10-21; separate decisions later — the stopwatch, timer and time tracking since decided, §3.9); the home's skyline (SM-4); the Jira grant and OAuth (connectors).
 
 ### 3.8 The golden core (TK-D12)
 
@@ -232,6 +232,54 @@ Every subtask, comment, attachment, cover, recurrence and custom-sticker call on
 - **Column sums are not served:** the board read carries every card (TK-D5), so the cabinet sums the cards it shows, filtered or not.
 - **No notifications** from comments, attachments or subtasks; proactive may use them later. Comment bodies and sticker texts are `task:foreign` (TK-D9) once a Leo tool reads them; the tools of steps 7–8 do not.
 - **Draft data (revises TK-D7; the owner's decision, without loss):** a draft column colour becomes the nearest `Color` by hue (the draft's default grey `#94A3B8` becomes none); a board whose project has labels gets a `states` sticker named "Labels" in the owner's profile language, one state per label with its colour mapped the same way, visible; a task's first label by name becomes its value, and the other labels are appended to its description as one last line, "Labels: B, C" in the same language.
+
+### 3.9 Time on a task (Kanban time)
+
+Decided by the owner on 2026-10-22 with the [Kanban time plan](../packages/KANBAN-time.md) (KT-D1…KT-D8, [ADR 0061](../../adr/0061-kanban-time.md)); it extends §3.8, and the cabinet's mocks answer exactly this. Steps 3 and 4 implement it with TK-D12's task and board halves.
+
+**Shapes** (additions to §3.8)
+
+```
+Sticker.kind      += stopwatch | timer | time_tracking   (system: name null, on every board, hidden on a new one;
+                                                          never on a Jira board)
+BoardSticker      += {automations: StopwatchAutomations} (the stopwatch's only)
+StopwatchAutomations = {start_on_arrival: bool, restart_on_move: bool, stop_on_done: bool}
+                       (default false, true, true)
+Stopwatch         = {running_since: datetime | null, total_ms, by_column: {column_id: ms}}
+                    (closed spans only; a running one adds now − running_since on screen)
+Timer             = {length_ms, ends_at: datetime | null, paused_left_ms: int | null}
+                    (running while ends_at is set; paused while paused_left_ms is; negative left = overrun)
+TimeTracking      = {plan_minutes: int | null, fact_minutes: int | null}
+Card              += {stopwatch: Stopwatch | null, timer: Timer | null, time_tracking: TimeTracking | null}
+                     (each null while unused, whether the board shows the field or not)
+BoardDetail, TaskDetail += {server_now: datetime} (the moment the server answered)
+```
+
+**Routes**
+
+| Route | Who | Notes |
+|---|---|---|
+| `POST /v1/tasks/{id}/stopwatch/start`, `…/stop`, `…/reset` | who may change the task | → `TaskClocks & {server_now}`; a start while running and a stop while stopped change nothing (idempotent by state); a start opens a span in the task's column on the reader's board (none when unplaced); reset deletes the spans |
+| `PUT /v1/tasks/{id}/timer` | who may change the task | `{length_ms}` 60 000 … 365 days → the clocks; sets the timer anew from now |
+| `POST /v1/tasks/{id}/timer/pause`, `…/resume` | who may change the task | → the clocks; repeating changes nothing; no timer 409 `timer_not_set`; the overrun keeps counting below zero |
+| `DELETE /v1/tasks/{id}/timer` | who may change the task | → the clocks |
+| `PATCH /v1/tasks/{id}` (additions) | who may change the task | `plan_minutes`, `fact_minutes`: integers 0 … 6 000 000, `null` clears |
+| `PATCH /v1/boards/{id}/stickers/stopwatch` (addition) | owner | `{visible?, automations?}`; `automations` on another sticker is a 422 |
+
+Every call on a Jira task, and showing one of the three on a Jira board, answers 409 `jira_unsupported` (KG-D8).
+
+**Data (each home)**
+
+- `task_clock_spans` (company isolation, the task's access, FK `CASCADE` to `tasks`): `task_id`, `column_id` (soft: the column it ran in, null when unplaced), `started_at`, `stopped_at` (null while running; a partial unique index keeps one open span per task), index `(task_id, started_at)`.
+- `tasks` gains `timer_length_ms`, `timer_ends_at`, `timer_paused_left_ms` (checked: all null, or a length with exactly one of the other two), `plan_minutes`, `fact_minutes` (checked 0 … 6 000 000).
+- `boards.system_stickers` gains the three ids; `boards` gains `stopwatch_automations` (jsonb, its shape checked, default false/true/true).
+
+**Rules**
+
+- **Automations (KT-D2)** apply only while the board shows the stopwatch, and only on the reader's board where the task moves; the server applies them in the transaction of the change, under the task's row lock, so a manual stop and an automation land in order. A task that **arrives** on the board (created there, landed as incoming, or placed as a recurring task's next one) starts if `start_on_arrival`. A **move** to another column always closes the open span in the old column; then it stops for good if the task is done and `stop_on_done`, else it starts in the new column if it was running or `restart_on_move`. A task **marked done** without a move (the panel, Today, Leo, a meeting) stops if a board it sits on has `stop_on_done`.
+- **Time is the server's (KT-D6):** a screen derives what it shows from `running_since`, `ends_at` and `server_now`, never from the device's clock alone.
+- **Nothing proactive (KT-D8):** no notice when a timer runs out, and Leo does not start or stop clocks; the values are in the task for Leo to read.
+- **Draft data:** the draft had none of the three; nothing to carry.
 
 ---
 

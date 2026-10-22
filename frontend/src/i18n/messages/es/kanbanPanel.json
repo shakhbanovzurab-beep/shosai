@@ -7,6 +7,9 @@
     "due": "Fecha límite",
     "priority": "Prioridad",
     "recurrence": "Repetición",
+    "stopwatch": "Cronómetro",
+    "timer": "Temporizador",
+    "time_tracking": "Control de tiempo",
     "other": "De otros tableros"
   },
   "notSet": "Sin definir",

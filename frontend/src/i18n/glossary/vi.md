@@ -43,6 +43,9 @@ Spell as Apple, Google and Microsoft do: classic tone placement (hóa, hủy, x�
 | automation | tự động hóa | tự động hoá | One rule = “quy tắc tự động hóa” |
 | field | trường | nhãn dán | “Trường của bảng”, “Trường mới”; built-in ones are “trường có sẵn”. In code and the API a sticker |
 | state | tùy chọn | — | One choice of a field’s set of states; not “trạng thái”, which is status |
+| stopwatch | đồng hồ bấm giờ | — | — |
+| timer | hẹn giờ | — | — |
+| time tracking | theo dõi thời gian | — | Plan and fact (kế hoạch và thực tế) |
 | subtask | công việc con | — | “Thêm công việc con” |
 | comment | bình luận | — | |
 | cover | ảnh bìa | — | “Đặt làm ảnh bìa”, “Gỡ ảnh bìa” |

@@ -3,7 +3,9 @@ import { getConnector } from "@/features/settings/mocks/demo-connectors";
 import { JIRA_CATALOG, JIRA_SITE } from "../../data/jira-catalog";
 import type { JiraBoard } from "../../domain/boards-contract";
 import type { KanbanProblem } from "../../domain/problems";
+import { NEW_BOARD_SYSTEM_VISIBILITY } from "../../domain/stickers-contract";
 import type { Priority } from "../../domain/tasks-contract";
+import { DEFAULT_STOPWATCH_AUTOMATIONS } from "../../domain/time-contract";
 import { seedTask } from "../seed/builders";
 import { demo, now } from "./state";
 import type { StoredBoard, StoredColumn } from "./types";
@@ -105,7 +107,8 @@ export function connectJiraBoard(site: string, boardId: number): StoredBoard | K
     syncUntil: null,
     revision: 1,
     columns: [],
-    system: { assignee: true, due: true, priority: true, recurrence: false },
+    system: { ...NEW_BOARD_SYSTEM_VISIBILITY },
+    stopwatch: { ...DEFAULT_STOPWATCH_AUTOMATIONS },
     stickers: [],
   };
   demo().boards.set(board.id, board);

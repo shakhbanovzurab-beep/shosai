@@ -43,6 +43,7 @@ export function cardOf(detail: TaskDetail): Card {
     created_at: _created,
     updated_at: _updated,
     completed_at: _completed,
+    server_now: _now,
     ...card
   } = detail;
   return card;

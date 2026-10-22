@@ -1,4 +1,6 @@
+import { NEW_BOARD_SYSTEM_VISIBILITY } from "../../domain/stickers-contract";
 import type { Priority, TaskStatus } from "../../domain/tasks-contract";
+import { DEFAULT_STOPWATCH_AUTOMATIONS } from "../../domain/time-contract";
 import type { KanbanDemo, StoredBoard } from "../store/types";
 import { assignee, DIEGO, ELENA, inDays, MAYA, ME_PERSON, seedColumn, seedTask } from "./builders";
 
@@ -55,7 +57,8 @@ function largeBoard(demo: KanbanDemo, id: string, name: string, cards: number) {
     syncUntil: null,
     revision: 1,
     columns: [...lanes, seedColumn(`${id}-done`, "Done", "done", "green", [])],
-    system: { assignee: true, due: true, priority: true, recurrence: false },
+    system: { ...NEW_BOARD_SYSTEM_VISIBILITY },
+    stopwatch: { ...DEFAULT_STOPWATCH_AUTOMATIONS },
     stickers: [
       { id: "st-type", visible: true },
       { id: "st-estimate", visible: true },

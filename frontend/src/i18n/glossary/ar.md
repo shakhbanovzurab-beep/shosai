@@ -43,6 +43,9 @@ Leo is masculine (يجيب Leo); never glue Arabic letters to Latin names (إل�
 | automation | أتمتة | تشغيل آلي, التشغيل الآلي, مكننة | One rule = قاعدة أتمتة, pl. قواعد الأتمتة |
 | field | حقل | ملصق, ستيكر | Masc.; pl. حقول; حقول اللوحة، حقل جديد; built-in ones are الحقول المدمجة. In code and the API a sticker |
 | state | خيار | — | Masc.; pl. خيارات; one choice of a field’s set of states. Not الحالة, which is status |
+| stopwatch | ساعة الإيقاف | — | Fem. |
+| timer | المؤقت | — | Masc. |
+| time tracking | تتبع الوقت | — | Masc.; plan and fact (المخطط والفعلي) |
 | subtask | مهمة فرعية | — | Fem.; pl. مهام فرعية |
 | comment | تعليق | — | Masc.; pl. تعليقات |
 | cover | غلاف | — | Masc.; تعيين كغلاف، إزالة الغلاف |

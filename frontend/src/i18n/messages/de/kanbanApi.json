@@ -46,5 +46,6 @@
   "upload_too_large": "Diese Datei ist zu groß zum Anhängen.",
   "storage_limit": "Dafür ist kein Speicher mehr frei. Schaffe Platz oder wähle einen größeren Tarif.",
   "storage_not_included": "Dein Tarif enthält keinen Dateispeicher.",
-  "file_not_found": "Datei nicht gefunden."
+  "file_not_found": "Datei nicht gefunden.",
+  "timer_not_set": "Diese Aufgabe hat keinen Timer."
 }

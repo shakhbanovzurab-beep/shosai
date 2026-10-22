@@ -7,6 +7,9 @@
     "due": "Échéance",
     "priority": "Priorité",
     "recurrence": "Répétition",
+    "stopwatch": "Chronomètre",
+    "timer": "Minuteur",
+    "time_tracking": "Suivi du temps",
     "other": "Champs d’autres tableaux"
   },
   "notSet": "Non défini",

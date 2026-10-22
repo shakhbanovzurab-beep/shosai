@@ -46,5 +46,6 @@
   "upload_too_large": "這個檔案太大，無法附加。",
   "storage_limit": "儲存空間不足。請釋出空間或升級方案。",
   "storage_not_included": "你的方案不包含檔案儲存空間。",
-  "file_not_found": "找不到這個檔案。"
+  "file_not_found": "找不到這個檔案。",
+  "timer_not_set": "這項任務沒有計時器。"
 }

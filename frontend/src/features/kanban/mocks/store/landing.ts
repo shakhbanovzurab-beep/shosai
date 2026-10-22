@@ -1,3 +1,4 @@
+import { onArrival, onMove } from "./clock-ops";
 import { advanceSync } from "./jira";
 import { demo, firstColumnOf, placementOf } from "./state";
 import type { StoredBoard, StoredTask } from "./types";
@@ -20,6 +21,7 @@ function alignKinds(board: StoredBoard) {
       if (!target) continue;
       column.card_ids.splice(column.card_ids.indexOf(id), 1);
       target.card_ids.unshift(id);
+      onMove(board, id, column.id, target.id);
       moved = true;
     }
   if (moved) board.revision++;
@@ -39,6 +41,7 @@ function landIncoming(mine: Set<string>) {
     const column = firstColumnOf(board, task.status);
     if (!column) continue;
     column.card_ids.unshift(task.id);
+    onArrival(board, task.id, column.id);
     landed = true;
   }
   if (landed) board.revision++;

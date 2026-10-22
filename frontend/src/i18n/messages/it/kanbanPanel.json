@@ -7,6 +7,9 @@
     "due": "Scadenza",
     "priority": "Priorità",
     "recurrence": "Ripetizione",
+    "stopwatch": "Cronometro",
+    "timer": "Timer",
+    "time_tracking": "Monitoraggio del tempo",
     "other": "Da altre bacheche"
   },
   "notSet": "Non impostato",

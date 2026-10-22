@@ -43,6 +43,9 @@ Full-width 、。 and 「」 in text, no 。 on buttons, labels or titles; half-
 | automation | 自動化 | オートメーション | One rule = 自動化ルール |
 | field | フィールド | ステッカー | ボードのフィールド, 新しいフィールド; built-in ones are 組み込みのフィールド. In code and the API a sticker |
 | state | 選択肢 | — | One choice of a field’s set of states; not ステータス |
+| stopwatch | ストップウォッチ | — | — |
+| timer | タイマー | — | — |
+| time tracking | 時間管理 | — | Plan and fact (予定と実績) |
 | subtask | サブタスク | 子タスク | Add = サブタスクを追加 |
 | comment | コメント | — | Counter 件 (3 件のコメント) |
 | cover | カバー | — | Set as cover = カバーに設定; remove = カバーを削除 |

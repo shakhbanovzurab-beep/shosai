@@ -39,6 +39,9 @@ row per term below, in the same order. Terms in the "Do not translate" list of `
 | automation | work | A rule that acts on tasks by itself |
 | field | work | One of a board's fields on its cards: assignee, due date, priority, repeat, or one the person made (a set of states, a number, a text). In code and the API a "sticker" |
 | state | work | One choice of a field's set of states, with a name and a colour (e.g. Bug, Feature) |
+| stopwatch | work | A board field: the task’s own clock — how long it has been in work, and in each column. Not a person’s working time |
+| timer | work | A board field: a countdown of a length the person sets on a task; at zero it says “Time is up” and counts the overrun |
+| time tracking | work | A board field: planned and actual time on a task, typed by the person |
 | subtask | work | One item of a task's checklist: a title and a tick |
 | comment | work | A message under a task |
 | cover | work | The image shown at the top of a card |

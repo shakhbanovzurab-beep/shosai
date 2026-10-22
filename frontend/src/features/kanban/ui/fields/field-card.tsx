@@ -2,7 +2,19 @@
 
 import { useId } from "react";
 
-import { CalendarDays, CircleDot, Flag, Hash, type LucideIcon, Repeat, Type, UserRound } from "lucide-react";
+import {
+  CalendarDays,
+  CircleDot,
+  Clock,
+  Flag,
+  Hash,
+  Hourglass,
+  type LucideIcon,
+  Repeat,
+  Timer,
+  Type,
+  UserRound,
+} from "lucide-react";
 import { useTranslations } from "use-intl";
 
 import { Button } from "@/components/ui/button";
@@ -22,6 +34,9 @@ const ICONS: Record<StickerKind, LucideIcon> = {
   due: CalendarDays,
   priority: Flag,
   recurrence: Repeat,
+  stopwatch: Timer,
+  timer: Hourglass,
+  time_tracking: Clock,
   states: CircleDot,
   number: Hash,
   text: Type,

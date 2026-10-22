@@ -7,6 +7,9 @@
     "due": "期限",
     "priority": "優先度",
     "recurrence": "繰り返し",
+    "stopwatch": "ストップウォッチ",
+    "timer": "タイマー",
+    "time_tracking": "時間管理",
     "other": "他のボードのフィールド"
   },
   "notSet": "未設定",

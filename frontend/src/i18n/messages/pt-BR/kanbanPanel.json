@@ -7,6 +7,9 @@
     "due": "Prazo",
     "priority": "Prioridade",
     "recurrence": "Repetição",
+    "stopwatch": "Cronômetro",
+    "timer": "Timer",
+    "time_tracking": "Controle de tempo",
     "other": "De outros quadros"
   },
   "notSet": "Não definido",

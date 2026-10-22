@@ -22,6 +22,7 @@ export const KANBAN_PROBLEMS = [
   "not_jira_board",
   "jira_not_incoming",
   "jira_unsupported",
+  "timer_not_set",
   "workspace_task_copy",
   "task_not_deletable",
   "validation_error",

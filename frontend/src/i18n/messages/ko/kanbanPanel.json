@@ -7,6 +7,9 @@
     "due": "마감일",
     "priority": "우선순위",
     "recurrence": "반복",
+    "stopwatch": "스톱워치",
+    "timer": "타이머",
+    "time_tracking": "시간 관리",
     "other": "다른 보드의 필드"
   },
   "notSet": "설정 안 됨",

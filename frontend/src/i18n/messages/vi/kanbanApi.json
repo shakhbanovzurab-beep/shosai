@@ -46,5 +46,6 @@
   "upload_too_large": "Tệp đó quá lớn để đính kèm.",
   "storage_limit": "Không còn dung lượng lưu trữ cho việc này. Hãy giải phóng dung lượng hoặc nâng cấp gói.",
   "storage_not_included": "Gói của bạn không có dung lượng lưu trữ tệp.",
-  "file_not_found": "Không tìm thấy tệp."
+  "file_not_found": "Không tìm thấy tệp.",
+  "timer_not_set": "Công việc này không có hẹn giờ."
 }

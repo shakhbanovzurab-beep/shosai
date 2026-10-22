@@ -1,10 +1,11 @@
 # Kanban API
 
 The contract between the Kanban screen (`/app/kanban`) and the backend's `tasks` slice: the `/v1` routes of the
-[tasks plan](../../docs/plan/slices/tasks.md) §3.3 and the golden core's TK-D12 (§3.8,
-[ADR 0060](../../docs/adr/0060-kanban-golden-core.md)). Until `tasks` serves them, `npm run dev` answers exactly these
+[tasks plan](../../docs/plan/slices/tasks.md) §3.3, the golden core's TK-D12 (§3.8,
+[ADR 0060](../../docs/adr/0060-kanban-golden-core.md)) and time on a task (§3.9,
+[ADR 0061](../../docs/adr/0061-kanban-time.md)). Until `tasks` serves them, `npm run dev` answers exactly these
 routes from `src/features/kanban/mocks/` (KG-D1); `tasks` step 9 points `api/` at the generated client and deletes
-the mocks. The shapes are in `src/features/kanban/domain/{boards,tasks,stickers}-contract.ts`; refusals are the
+the mocks. The shapes are in `src/features/kanban/domain/{boards,tasks,stickers,time}-contract.ts`; refusals are the
 platform's envelope `{error: {code, request_id, params?}}` (ADR 0008), worded by the cabinet from
 `domain/problems.ts`. Snake_case; calendar days are `"2026-10-21"`.
 
@@ -98,12 +99,42 @@ The Kanban package moves the screens from the old sample paths `/api/kanban/*` t
 - Editing a set keeps the values of the states it keeps; a state left out clears the values that used it.
 - `GET /v1/stickers` gives each field its boards and `usage`: how many tasks carry a value of it, in all and per
   state, so removing a state or deleting the field can say what it clears.
+- `stopwatch`, `timer` and `time_tracking` are system fields too, hidden on a new board and never on a Jira board
+  (`jira_unsupported`). The stopwatch's `BoardSticker` carries `automations`, changed with
+  `PATCH /v1/boards/{id}/stickers/stopwatch {automations}` (see Time).
 - Palette: `gray, red, orange, amber, green, teal, blue, violet, pink`.
 - Column sums (Σ) are not served: the screen sums the cards it shows.
+
+## Time
+
+| Method   | Path                                   | Body             | Response                     |
+| -------- | -------------------------------------- | ---------------- | ---------------------------- |
+| `POST`   | `/v1/tasks/{id}/stopwatch/start`       | —                | `ClocksReply`                |
+| `POST`   | `/v1/tasks/{id}/stopwatch/stop`        | —                | `ClocksReply`                |
+| `POST`   | `/v1/tasks/{id}/stopwatch/reset`       | —                | `ClocksReply`                |
+| `PUT`    | `/v1/tasks/{id}/timer`                 | `{length_ms}`    | `ClocksReply`                |
+| `POST`   | `/v1/tasks/{id}/timer/pause`           | —                | `ClocksReply`                |
+| `POST`   | `/v1/tasks/{id}/timer/resume`          | —                | `ClocksReply`                |
+| `DELETE` | `/v1/tasks/{id}/timer`                 | —                | `ClocksReply`                |
+
+- Every `Card` carries `stopwatch`, `timer` and `time_tracking`, each `null` while unused; `BoardDetail`,
+  `TaskDetail` and `ClocksReply` carry `server_now`, the moment the server answered. A screen counts a running
+  clock from `running_since` or `ends_at` against `server_now`, not against the device's clock alone (KT-D6).
+- The stopwatch is the task's own clock (KT-D1): `total_ms` and `by_column` count closed spans, a running one adds
+  `now − running_since`. Starting a running one or stopping a stopped one changes nothing; reset clears it.
+- The timer counts down a length the person sets (KT-D3), 1 minute to 365 days: running while `ends_at` is set,
+  paused while `paused_left_ms` is; below zero is the overrun. Pause or resume without a timer is `timer_not_set`.
+- Plan and fact are `plan_minutes` and `fact_minutes` in `PATCH /v1/tasks/{id}` (0 to 6 000 000, `null` clears).
+- The stopwatch's automations (KT-D2; default off, on, on) act while the board shows the stopwatch: start when a
+  task arrives on the board (created, landed as incoming, a recurring task's next one); on a move, close the span
+  in the old column, then stop for good when the task is done and `stop_on_done`, or start in the new column when
+  it ran or `restart_on_move`; stop when the task is marked done and `stop_on_done`.
+- A Jira task has none of the three (`jira_unsupported`).
 
 ## Development
 
 `npm run dev` serves these routes from the mocks. The demo boards are Work (custom fields, covers, subtasks,
-comments, attachments, a recurring task, tasks from a meeting with Leo's marks), Home (recurring chores, a range)
+comments, attachments, a recurring task, tasks from a meeting with Leo's marks, a running stopwatch, a timer
+running and one past zero, plan and fact), Home (recurring chores, a range)
 and Romashka. Two generated boards of 300 and 1 000 cards appear after
 `sessionStorage.setItem("kanban-demo-large", "1")` and a reload, for the performance measures.

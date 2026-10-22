@@ -22,7 +22,9 @@ function jiraProblem(task: StoredTask, patch: TaskPatch) {
     patch.cover_attachment_id !== undefined ||
     patch.description !== undefined ||
     patch.assignee_id !== undefined ||
-    patch.assignee_name !== undefined;
+    patch.assignee_name !== undefined ||
+    patch.plan_minutes !== undefined ||
+    patch.fact_minutes !== undefined;
   return unsupported ? "jira_unsupported" : null;
 }
 
@@ -64,6 +66,8 @@ export function patchTask(task: StoredTask, patch: TaskPatch): Outcome<StoredTas
   if (patch.description !== undefined) task.description = patch.description;
   if (patch.priority !== undefined) task.priority = patch.priority;
   if (patch.cover_attachment_id !== undefined) task.cover_attachment_id = patch.cover_attachment_id;
+  if (patch.plan_minutes !== undefined) task.plan_minutes = patch.plan_minutes;
+  if (patch.fact_minutes !== undefined) task.fact_minutes = patch.fact_minutes;
   if (patch.assignee_name !== undefined)
     task.assignee = patch.assignee_name === null ? null : { user_id: null, name: patch.assignee_name };
   if (patch.assignee_id !== undefined)

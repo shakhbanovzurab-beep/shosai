@@ -7,6 +7,9 @@
     "due": "Deadline",
     "priority": "Prioriteit",
     "recurrence": "Herhalen",
+    "stopwatch": "Stopwatch",
+    "timer": "Timer",
+    "time_tracking": "Tijdregistratie",
     "other": "Van andere borden"
   },
   "notSet": "Niet ingesteld",
