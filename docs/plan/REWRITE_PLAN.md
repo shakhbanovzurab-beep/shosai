@@ -167,5 +167,6 @@ Paste one line as the first message of a new session. Replace `<name>` where sho
 | Backend, next step | `Execute the next backend step from docs/plan/prompts/BACKEND-next-step.md.` — the same line every session; the prompt picks the step: foundation per the F1 audit, then F6, then the slices of SLICE_MAP.md |
 | Kanban golden core | `Execute the Kanban golden core from docs/plan/prompts/KANBAN-golden-core.md.` — the same line every session; the package plan picks the step |
 | Kanban time | `Execute Kanban time from docs/plan/packages/KANBAN-time.md.` — the same line every session; the package plan picks the step |
+| Chats frontend | `Execute Chats frontend from docs/plan/prompts/CHATS-frontend.md.` — the same line every session; the package plan ([CHATS-frontend.md](packages/CHATS-frontend.md)) picks the step |
 | M1 | `Execute work package M1 from docs/plan/prompts/M1-data-migration.md.` |
 | M2 | `Execute work package M2 from docs/plan/prompts/M2-cutover.md.` |

@@ -250,6 +250,7 @@ Rules the harness cannot check stay with their owners: TLS chain and base URL (F
 | 24 | `meetings` | Shosai video meetings with per-speaker transcription, broadcasts and the room whiteboard; the cabinet's Meetings section (named `rooms` until ADR 0057) | rooms |
 | 25 | `site` | The public site and public pages of shared links (S17) | — |
 | 26 | `leads` | New users reach the owner in Telegram, enriched by Clay, with the person's consent ([ADR 0051](../adr/0051-new-user-leads-to-telegram-with-clay-enrichment.md)) | — |
+| 27 | `chats` | The team's Telegram, Slack and other chats connected to a workspace; Leo turns what was said into tasks on request ([ADR 0062](../adr/0062-team-chats-through-leo-on-demand.md)) | — |
 
 The home screen, the Meetings overview, the Settings dialog and the admin dashboard are composition screens (§1 rule 4).
 
@@ -419,6 +420,19 @@ Scope as S17 today ([ADR 0021](../adr/0021-public-site-on-nextjs-cabinet-on-vite
 - **Depends on:** identity (event, profile contract, the consent in `user_consents`, the registration checkbox), F6 (outbox delivery, periodic jobs).
 - **Leo tools:** none.
 
+#### 27. chats
+- **Scope:** connect a team's existing chats to a workspace or one of its projects (Telegram group through Shosai's bot, Slack channel through the Slack app, further messengers by the priority list below); receive the messages of connected chats; "@Leo …" commands in a chat executed for linked members through the Action Gateway, with Leo's short answer in the chat; digests of a chat for a period on request in Shosai; disconnect, retention, erasure. No messenger of Shosai's own (ADR 0062).
+- **Owns:** `chat_connections`, `chat_messages` (monthly partitions, workspace's home, retention from settings), `chat_bot_dialogs`.
+- **Routes:** `/v1/workspaces/{id}/chats*` (connections), the messengers' inbound webhooks (Telegram bot updates, Slack Events API) as external routes; no native route.
+- **Depends on:** identity (messenger account link), workspaces (core: membership, projects), connectors (OAuth of Slack and others), agent (Action Gateway for chat commands), tasks (`chat` source on a task).
+- **Leo tools:** `chats.digest` (decisions, open questions, promises of a chat for a period), `chats.search`; the chat command path hands the request to Leo with the sender as principal. Message text is labelled foreign text.
+- **Messengers, by priority** (bot and API capabilities to be confirmed in the slice plan from each vendor's documentation):
+  1. **Telegram** (groups through a bot; history only from the bot's joining; privacy mode decides whether every message or only "@Leo" reaches Shosai) and **Slack** (Events API, channel history).
+  2. **Microsoft Teams** (Bot Framework, the tenant admin's approval), **Pachca** (Пачка, Russian team messenger with a bot and webhook API), **Discord** (bot with the message-content intent).
+  3. **VK Teams / VK WorkSpace**, **Max** (VK's national messenger, bot platform), **Mattermost** (self-hosted, bot accounts), **Google Chat** (Chat API apps), **Yandex Messenger** (Yandex 360 bots), **Bitrix24** (chat bots over REST).
+  - Out: WhatsApp groups (business bots in groups are not generally available — confirm), personal one-to-one chats of any messenger.
+- **Frontend first:** the screens are built on mocks of this slice's contract by the package [CHATS-frontend](prompts/CHATS-frontend.md); the backend slice then implements exactly that contract.
+
 ### 4.3 Frontend names
 
 The cabinet's feature names stay as they are (the owner's decision of 2026-10-20, [ADR 0057](../adr/0057-notes-and-meetings-slice-names.md)): where a backend slice and a cabinet feature were planned apart, the slice takes the cabinet's name (`notes`, `meetings`), and no cabinet feature is renamed to match a slice. These pairs keep different names:
@@ -583,6 +597,7 @@ Each decision states the proposal first. "Blocks" names the first step that cann
 
 Every decision of §8 is settled; §9 can run.
 
+- **2026-10-22 — new slice `chats`** (ADR 0062), decided by the owner: no messenger in Shosai; a team's chats are connected and Leo acts on request ("@Leo …" in the chat, "go through the chat" in Shosai). Adds to `identity` a messenger account link (Telegram first; one Telegram account per account, Slack accounts one per Slack workspace — CF-D10 of the CHATS-frontend plan, [ADR 0063](../adr/0063-team-chats-contract-and-screens.md)) and to `tasks` a `chat` source (connection, message link). Frontend first, then the backend slice.
 - **2026-10-16 — new slice `leads`** (ADR 0051): new users in the owner's Telegram with Clay enrichment, behind a separate registration consent; built right after `identity`, which adds the consent checkbox and its record.
 
 ---

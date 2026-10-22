@@ -1,0 +1,237 @@
+# Chats frontend — package plan
+
+Prompt: [prompts/CHATS-frontend.md](../prompts/CHATS-frontend.md). Status: [STATUS.md](../STATUS.md), row `chats-frontend`. Contract: [chats plan](../slices/chats.md) §1, [tasks plan](../slices/tasks.md) TK-D13 and §3.10, [identity plan](../slices/identity.md) step 18. Decision: [ADR 0062](../../adr/0062-team-chats-through-leo-on-demand.md). Cabinet slice: `frontend/src/features/chats/` (new), with small additive parts in `workspace`, `settings`, `identity`, `leo` and `kanban`.
+
+- **Status:** written on 2026-10-22 and **approved by the owner the same day**: the contract (chats §1, TK-D13, identity step 18) and CF-D1…CF-D8, CF-D10, CF-D11 as proposed, CF-D9 changed by the owner (the hint's dismissal is the account's); CF-D1 with an addition for the connect screen; CF-D11 recorded as requirement AG-R1 of the [agent plan](../slices/agent.md). Recorded in [ADR 0063](../../adr/0063-team-chats-contract-and-screens.md); ADR 0062 point 5 amended.
+- **Who decided what.** The scope in §1.4 and the decisions of §2 are **the owner's, of 2026-10-22** (the decisions as this plan proposed them, but CF-D9 and CF-D1's addition, which are the owner's own). The contract was proposed by this plan and approved by the owner. The screens, the component design and the steps are this plan's, derived from the scope, CLAUDE.md, the target and Leo architectures, the cabinet and the messengers' own documentation (§1.2).
+- **Dependencies:** none to start. The package works on MSW mocks of the contract; the backend slice `chats` (planned after this package, [S-feature-slice.md](../prompts/S-feature-slice.md)) and identity's step 18 implement it and swap the data source. Leo's `artifact` event and the approval card live in `leo` on the cabinet's mocks today (`agent` is `todo`).
+- **Philosophy check:** nothing here asks for attention. Leo reads a chat only after an admin connects it and acts only when someone asks; the list shows a problem only when something is broken, with the one action that fixes it; the hint for an unlinked member appears once. The person never re-types what was agreed in a chat: a promise in a digest becomes a task in one click and one approval, and the task leads back to the message.
+
+---
+
+## 1. Facts this plan rests on
+
+### 1.1 The cabinet today (survey of 2026-10-22)
+
+| Area | What it has | Use here |
+|---|---|---|
+| Workspace settings | `/app/w/:slug/settings`: one page, `TeamSettingsScreen` (`workspace/ui/settings/settings-screen.tsx`, 36 lines) renders General, Sharing, Plan (admins) and Danger zone as `SettingsCard` sections with `#anchors` (`setting-row.tsx`); members see controls disabled and one "admins only — ask {name}" `Alert`; roles `owner \| admin \| member` (`domain/roles.ts`, `can.admin`, `can.editSettings`); no guest role in the cabinet | "Team chats" is one more section, composed in by the page module (the workspace slice does not import `chats`) |
+| Workspace data | `GET /api/workspaces/{ws}` (sample path) → `WorkspaceState {workspace, me_id, members, invitations, teams, projects}`; mocks answer the legacy `{detail}`; `useWorkspace()` gives `{ws, state, can, path}` under `WorkspaceGate` | Projects for the binding, members for promise owners, the role |
+| Settings dialog | Zustand store (`settings/model/dialog-store.ts`, `useOpenSettings(section)`); sections `account, privacy, billing, usage, leo, mcp, memory, connectors, hotkeys`; Account (`ui/account/account-section.tsx`) on `useMe()` and `PATCH /v1/me` | "Messengers" group in Account; the hint opens Settings › Account |
+| OAuth handoff | Connectors: the backend returns `authorize_url`, a popup, the provider redirects to the backend, the backend to the cabinet's `/oauth/callback?connector=…&status=…`, which posts a message to the opener (`settings/model/use-connector-oauth.ts`, `ui/oauth/oauth-callback.tsx`, demo consent `/oauth/demo-authorize`) | Slack's handoff, with `flow=chats` |
+| Leo | `/api/leo` NDJSON mock with events `step_start`, `step_end`, `text`, `sources`, `proposal`, `done`, `error` (`leo/domain/protocol.ts`; `sources` and `proposal` are the cabinet's proposals for SSE v2); `AssistantMessage` renders steps, answer, then one `LeoProposalCard` per proposal; no renderer registry by tool; the action card is compound (`ActionCardRoot/Header/Taint/Actions/Resolved`), `tasks.create` previews as generic fields; approve `POST /v1/agent/actions/{id}/approve`; scripted scenarios in `leo/mocks/demo-scenarios.ts` | The digest as an artifact rendered in the message; "Make a task" puts a proposal into the same message |
+| Kanban | `TaskSource {kind: manual \| meeting \| hub \| mail \| jira, meeting, finding}` on `TaskDetail` only; `Card` has no source; the panel's `PanelSource` (28 lines) shows the meeting line; the card face shows Leo's marks only | TK-D13: the `chat` kind, the face line and the panel line |
+| Dismissal | `hooks/use-dismissed.ts`: a flag in `localStorage` per browser (the workspace setup checklist, the kanban offer) | Not used for the unlinked-member hint: by CF-D9 its dismissal is the account's (identity) |
+| Brand marks | Slack's logo in `settings/ui/connectors/connector-logo.tsx` and `knowledge-base/ui/connector-icon.tsx`; no Telegram mark | Telegram and Slack marks move to `src/components/brand/` (used by four slices) |
+| Words | `Slack` is in the glossary's do-not-translate list; `Telegram` is not | `Telegram` added |
+| Dependencies between slices | `leo` → `workspace`, `settings`; `kanban` → `workspace`, `settings`, `identity`; `settings` → `identity`; `workspace` → `notes` | `chats` → `workspace`, `identity`, `settings`; `leo` → `chats` (UI only); nothing imports back, so no cycle |
+
+### 1.2 What the messengers' own documentation says
+
+| Source | Fact | Consequence |
+|---|---|---|
+| [Telegram Bot Features, privacy mode](https://core.telegram.org/bots/features#privacy-mode) | All bots in groups run in privacy mode by default and see commands meant for them (`/command@this_bot`), general commands if they were the last bot to post, messages sent via the bot and replies to their messages; service messages always. Privacy mode is the **bot's** setting, changed by its owner in BotFather (`/setprivacy`); a change needs the bot re-added to each group. **Bots that are group admins always receive all messages.** Users see the bot's privacy setting in the member list | A group's admin cannot turn Shosai's privacy mode off; "Every message" is reached by making the bot an administrator (CF-D1) |
+| Same page | A plain `@bot` mention is **not** in the documented list of what a privacy-mode bot receives (a forum quotes BotFather's own description as including mentions — not a vendor document) | How members address Leo in "Only messages to Leo" (CF-D2) |
+| [Bot Features, deep linking](https://core.telegram.org/bots/features#deep-linking); [links](https://core.telegram.org/api/links) | `t.me/<bot>?start=<p>` opens a private chat and the bot gets `/start <p>`; `?startgroup=<p>` lets the user pick a group to add the bot to and the bot gets `/start@bot <p>`; `<p>` is `A–Z a–z 0–9 _ -`, up to 64 characters; `?startgroup=<p>&admin=<rights>` opens the dialog to add the bot as an administrator with the rights named | The connect code travels in `startgroup`; the account link in `start`; "Every message" uses `&admin=` |
+| [Bot API](https://core.telegram.org/bots/api) | Updates arrive as they happen (`getUpdates`, webhooks); no method returns a group's earlier messages; `my_chat_member` reports the bot's own status changes (removed, promoted); `migrate_to_chat_id` when a group becomes a supergroup; `User.language_code` is optional | "Only messages after the bot joined"; the list learns `bot_not_in_chat` and `rights_missing` from Telegram; the sender's language for fixed replies |
+| [Telegram links](https://core.telegram.org/api/links) | Message links exist for public (`t.me/<username>/<id>`) and private supergroups and channels (`t.me/c/<id>/<msg>`); basic groups are not mentioned | A message link may be absent (`url: null`) |
+| [Bot FAQ](https://core.telegram.org/bots/faq) | A bot never sees other bots' messages; in a group a bot sends at most 20 messages per minute | Backend limits; nothing on screen |
+| [Slack: rate limits for non-Marketplace apps, 2025-05-29](https://docs.slack.dev/changelog/2025/05/29/rate-limit-changes-for-non-marketplace-apps) | For new installs of commercially distributed apps not approved for the Marketplace, `conversations.history` and `conversations.replies` are limited to 1 request per minute and 15 messages per request | Reading a channel's past is impractical until Marketplace approval (CF-D3) |
+| [Slack `message.channels`](https://docs.slack.dev/reference/events/message.channels), [`conversations.join`](https://docs.slack.dev/reference/methods/conversations.join) | Message events need `channels:history` (`groups:history` for private channels); a bot joins a public channel itself with `channels:join`, an archived one fails `is_archived` | Shosai joins public channels; private ones need `/invite` first |
+| [Slack `users.info`](https://docs.slack.dev/reference/methods/users.info) | The email needs `users:read.email`; the page says nothing of the address being verified, and the field may be absent | Matching by email needs the person's confirmation (CF-D4) |
+| [Slack `chat.getPermalink`](https://docs.slack.dev/reference/methods/chat.getPermalink) | A message's permalink `https://<team>.slack.com/archives/<channel>/p<ts>`, with `thread_ts` for replies | The digest's and the task's message link |
+
+### 1.3 The contract
+
+Written in the [chats plan](../slices/chats.md) §1 (connections, settings, the Telegram connect code, the Slack handoff and channels, the digest and its task proposals, the messenger links, Leo's chat replies), the [tasks plan](../slices/tasks.md) TK-D13 and §3.10 (the task's `chat` source), and the [identity plan](../slices/identity.md) step 18 (the messenger link, the contract of chats §1 kept as written). The mocks answer exactly that.
+
+### 1.4 The scope (owner's decision of 2026-10-22, from the prompt)
+
+**In:** (1) connect a chat in the workspace's settings, "Team chats" — only messengers that work, at launch Telegram and Slack; Telegram: add the bot, send the one-time code, bind to the workspace or a project, choose "Only messages to Leo" or "Every message, for digests", accept the data notice, told that Telegram gives only messages written after the bot joined; Slack: connect the app (OAuth mocked), pick channels, bind each; (2) the chats list — messenger, name, binding, mode, last activity, state with the one fixing action (bot removed, rights missing, token expired), change binding or mode, disconnect with a confirmation naming what is erased; (3) link my messenger account in account settings — Telegram by a deep link with a one-time token and the state when it comes back, the linked accounts, unlink; Slack by verified email (confirmation proposed in CF-D4); a quiet, once-dismissible hint for an unlinked member; (4) Leo's digest in Leo's conversation — decisions, open questions, promises (who, what, when), each with a link to the message and "Make a task" through Leo's approval card; empty and "no messages before the bot joined" states; (5) the source on a task, "From Telegram · <chat>" with the message link, on the card face and in the card panel; (6) Leo's replies in the chat written as English model-facing templates (chats §1.5).
+
+**Out (not designed, not stubbed):** a messenger of Shosai's own — channels, feed, voice or video notes, polls, reactions (ADR 0062); messengers beyond Telegram and Slack; anything Leo does in a chat on its own.
+
+---
+
+## 2. Decisions for the owner
+
+**Decided by the owner on 2026-10-22**, recorded in ADR 0063. Each row holds the proposal and, where the owner changed or added to it, the decision as it stands.
+
+| ID | Question | Proposal | Trade-off |
+|---|---|---|---|
+| **CF-D1** | ADR 0062 says "reading every message needs the bot's privacy mode off, which the connect screen explains to the admin". Privacy mode is a setting of Shosai's one bot, changed only by Shosai in BotFather, for every group at once (§1.2) — a group's admin cannot change it | **Shosai's bot keeps privacy mode on. "Every message, for digests" means the group makes the bot an administrator**, which Telegram documents as receiving all messages; the screen's link opens Telegram's "add as admin" dialog (`startgroup=<code>&admin=…`, the smallest right Telegram accepts, confirmed on a live bot by the chats slice); until Telegram reports the promotion the chat shows `rights_missing` with "Make Leo an admin". ADR 0062 point 5 is amended with the approval. **Accepted; the owner adds: the connect screen explains that every administrator right of the bot can be switched off — it still receives the messages** | An admin bot appears in the group's admin list, which some teams dislike. The alternative — a second bot with privacy mode off — means two bot names to explain and to add, and a change of mode means swapping bots in the group |
+| **CF-D2** | How members address Leo in a Telegram chat in "Only messages to Leo": Telegram documents commands to the bot and replies to its messages; plain `@bot` mentions are not in its list | **The screens say "Mention @<bot> or reply to Leo's message"**, as ADR 0062's "@Leo …"; the chats slice confirms on a live bot before the screens reach users. If a mention does not arrive in privacy mode, the wording becomes "Start with /leo@<bot> or reply to Leo's message" — one catalog key, no layout change | Natural wording now, at the risk of one text change after the live check |
+| **CF-D3** | Slack can read a channel's past, but new installs of apps outside the Slack Marketplace get 1 request a minute and 15 messages per request (§1.2) | **Shosai keeps Slack messages from the moment a channel is connected, as Telegram does**: one rule on every screen ("Shosai has this chat's messages from {date}"); reading a channel's past is a later decision once Shosai is in the Marketplace | A team that connects Slack today gets no digest of last week; the same is true for Telegram anyway |
+| **CF-D4** | Slack members are matched by an email equal to their Shosai account's — confirmed or not? (the prompt asks for a proposal) | **Confirmed once by the person**: the first time a matched member writes to Leo, Leo answers "not linked" with a link, and Settings › Account shows "Is this you? @mara in Acme (Slack)" — Confirm or Not me. Slack's reference does not say the address is verified, and the address is managed inside the Slack workspace, not by Shosai: without a confirmation, whoever can set a Slack member's address could make Leo act with a Shosai member's rights | One click per person per Slack workspace; a member never confirmed cannot use Leo from Slack |
+| **CF-D5** | "Make a task" on a digest item: a new turn to Leo, or a direct proposal? | **A direct proposal without a model round**: `POST …/digests/{id}/task-proposals {item_ids}` (chats §1.2) plans one `tasks.create` through agent's Action Gateway in the digest's thread; the approval card appears at once in the same message; "Make tasks of all promises" puts them in one card | Needs a small port in agent (create a proposal from a slice's planned tool call); a turn would cost a model call per click, take seconds and could reword the item |
+| **CF-D6** | Leo's replies to people it cannot act for (not linked, not a member, a chat no workspace connected) | **Fixed messages sent without a model**, worded by the backend's i18n in the sender's messenger language (Telegram `language_code`, Slack locale; English otherwise); the three in-run replies (task created, need clarification, no rights) are model-written under the English templates of chats §1.5 | No model spend and no prompt-injection surface for strangers; the fixed text cannot adapt to the message. The prompt asked for model-facing templates for all five: they are written for all five, and two of them are used only if this is declined |
+| **CF-D7** | The prompt puts "From Telegram · <chat>" with a link to the message on the card face too | **The face shows the line as text (the messenger's mark and the chat's name); the link to the message is in the card panel.** A click anywhere on a card opens it, and its one Tab stop is the button that opens and drags it (Kanban golden core step 9); a link on the face would be an interactive element inside that surface — a second Tab stop per card and a click that both opens the card and leaves for the messenger | One more click to reach the message from the board |
+| **CF-D8** | Retention of chat messages ("a retention set in settings", ADR 0062) | **A workspace setting in Team chats: 30, 90 or 365 days, 90 by default**; admins change it; a shorter period erases older messages at the next sweep, after a confirmation saying so | Three choices cover short-lived and yearly reviews; "forever" is not offered, so the store of non-users' messages stays bounded |
+| **CF-D9** | Where and how long the hint for an unlinked member shows | Proposed: on the workspace's home, dismissed per workspace in this browser (`useDismissed`). **Changed by the owner: on the workspace's home, only while the workspace has a working chat in a messenger the person has not linked (Telegram) or a proposed Slack link to confirm; once the person closes it, it is closed for them for good — in every workspace and on every device — as a setting of the account** (`hint_dismissed` in `GET /v1/me/messenger-links`, `POST /v1/me/messenger-links/hint-dismissal`, identity step 18) | One flag on the account and one call; the person never sees the hint twice |
+| **CF-D10** | SLICE_MAP's note says "one link per messenger"; a Slack user id belongs to one Slack workspace | **Telegram: one account per Shosai account. Slack: one account per Slack workspace** (a person in two Slack workspaces links two). SLICE_MAP §8.1's note is amended with the approval | Two rows for a person in two Slack workspaces |
+| **CF-D11** | How the digest reaches the cabinet: Leo §13.2's `artifact` event has kinds image, chart and file | **A new artifact kind `chat_digest`** — `{kind, ref: digest_id, alt, workspace_id, chat_id}` — kept by chats for 30 days and erased with the chat; the cabinet reads it by `GET …/digests/{id}`. **Accepted; by the owner's instruction recorded as requirement AG-R1 of the [agent plan](../slices/agent.md)**, whose planning session amends Leo §13.2 (the port of CF-D5 is AG-R2 there) | One extra request when the card appears; the digest's quotes never sit in the thread's history, so a disconnection erases them everywhere |
+
+Settled by documents, no decision needed: no messenger of Shosai's own and nothing posted on Leo's initiative (ADR 0062); only admins connect, members read (ADR 0062 point 2; the cabinet has no guest role); messages stay in the workspace's home (inv-15) — the notice names it; the cabinet's feature is named `chats` like the backend slice (CLAUDE.md, ADR 0057); text written by people and by Leo sits in `dir="auto"` (frontend i18n guide); destructive actions here are irreversible erasures, so they take a confirmation, not an Undo window (Web Interface Guidelines).
+
+**Open, not part of this package:** a person whose Slack email differs from their Shosai one has no Slack link (a "Sign in with Slack" link would be a later decision); the bot's own confirmation in a group after connecting (backend wording, chats slice).
+
+---
+
+## 3. Screens and states
+
+Every screen is built from `src/components/ui/` and semantic tokens, in both themes and the existing presets, at 1440 and 390 px, in RTL (`ar`), by mouse and keyboard. All words go through `use-intl` in 16 languages; new terms (team chat, connect code, linked account, digest, open question, promise, the two modes) enter `glossary/terms.md` and the 15 language glossaries in the step that first shows them, and `Telegram` joins the do-not-translate list. Chat names, people, quotes and Leo's words sit in `dir="auto"`; codes, commands, handles and URLs in `dir="ltr"` with `translate="no"`.
+
+The Web Interface Guidelines (fetched 2026-10-22) shape these screens: the open dialog step is not in the URL (a code expires; a reload starts over), the section is (`#chats`); async status changes ("Waiting for the group…", "Connected") are announced politely; codes and commands disable spellcheck and copy in one click; erasing actions confirm and name what is erased; loading words end with "…"; counts use tabular numerals; long chat names truncate (`min-w-0`); the code, the waiting line and the result never shift the dialog's layout. As in the Kanban golden core, one rule is not followed: Title Case — the glossary requires sentence case.
+
+### 3.1 Team chats section (`/app/w/:slug/settings#chats`)
+
+- **Place:** after Sharing, before Plan; a `SettingsCard` titled "Team chats": "Connect the chats your team already uses. Leo turns what was said there into tasks and digests when you ask." Header action "Connect a chat" (admins).
+- **Rows** (not a table — the page is `max-w-3xl`): the messenger's mark, the chat's name (truncated), a second line "Project «Launch» · Every message · Active 2 h ago" (binding, mode, last activity); a working chat shows nothing more; ⋮ for admins (Change binding or mode, Disconnect).
+- **Needs attention:** the row gets a `Badge` "Needs attention" and an inline line under it with the problem's words and its one action (§3.4); such rows come first.
+- **Below the list:** "Keep messages for" with a select (30, 90, 365 days; admins) and the region line "Stored in Russia" or "Stored in the EU"; when the workspace has Slack installations, one line each — "Slack: Acme · 3 channels" with Disconnect (admins).
+- **States:** loading (three skeleton rows), empty (`Empty` with both marks: "No chats connected yet" + "Connect a chat" for admins, "An admin can connect your team's chats" for members), error with Retry, read-only for members (no menus, no buttons; the page's existing "admins only — ask {name}" alert stays the only note), 50 chats reached ("Connect a chat" disabled with its reason).
+- **390 px:** the second line wraps; ⋮ stays on the first line; the region and retention rows stack.
+
+### 3.2 Connect a chat: Telegram
+
+A `Dialog` (full height with a sticky footer on a phone). The first step picks a messenger among those served (`ChatSettings.messengers`); with one served, it opens on it.
+
+1. **Set up:** "Where tasks go" — a select of the workspace and its projects; "What Leo reads" — two radio cards: **Only messages to Leo** ("Leo sees messages that mention it or reply to it. Digests aren't available.") and **Every message, for digests** ("Leo keeps every message so it can summarise the chat. You'll make the bot an admin of the group."); under Every message, the admin explanation (CF-D1): "Telegram sends every message of a group only to its admins. You can switch off every admin right of the bot — it still gets the messages."; the data notice as a checkbox whose text follows the choice, the region and the retention: "Shosai stores {the messages written to Leo | every message} of this chat in {Russia | the EU} for {90} days, including messages of people who don't use Shosai. Everyone in the chat sees that Leo is there." and the line "Telegram gives Shosai only messages written after the bot joins." — "Get the code" stays enabled until the request starts.
+2. **Add Leo to the group:** the code large, monospace, with Copy; "Open Telegram" (the `add_url`, or `add_as_admin_url` for Every message) opens Telegram to pick a group; "Or add @<bot> to the group yourself and send:" with the command and Copy; "Waiting for the group…" (polite live region) and "The code works for 29 min" (updated each minute).
+3. **Connected:** "Connected to «Release team»", the binding and mode, and for Every message, until Telegram reports the promotion, "Make Leo an admin of the group so it receives every message. Its admin rights can all be off." with the same link; Done.
+
+States: expired ("The code expired" + "Get a new code"); refused, worded per `refusal` with its way out (`chat_already_connected`: "This group is connected to another workspace. Disconnect it there first."; `not_a_group`; `connections_full`; `wrong_chat` for a reconnect); a failed request (toast, the step stays); closing the dialog while waiting cancels the code (`DELETE`).
+
+### 3.3 Connect a chat: Slack
+
+1. **Slack workspace:** with no installation, "Connect Slack" opens the OAuth popup ("Finish in the Slack window…"; a blocked popup falls back to a link; `denied` and `error` worded); with installations, pick one or "Add another Slack workspace".
+2. **Channels:** a searchable list (`Command`-style, by name) with checkboxes: "# release · 42 members", private ones with a lock; connected ones disabled "Connected"; Leo must be invited to a private channel first — the list says "To connect a private channel, run /invite @<app> in it first" with Copy.
+3. **Bind and confirm:** each picked channel with its "Where tasks go" select (Workspace by default), one "What Leo reads" for all, the data notice (as Telegram's, with "Shosai has the channel's messages from the moment you connect it" per CF-D3), "Connect 3 channels". Refusals are all or nothing and name the channels.
+
+### 3.4 Problems and their one action
+
+| Problem | Words | Action |
+|---|---|---|
+| Telegram `bot_not_in_chat` | "Leo was removed from the group." | **Add Leo again** → the dialog's step 2 with a reconnect code for this chat |
+| Telegram `rights_missing` | "Leo isn't an admin of the group, so it gets only messages written to it." | **Make Leo an admin** → a short dialog: the steps in Telegram, that every admin right may be switched off (CF-D1), and the "add as admin" link; the row updates when Telegram reports it (the mode can still be changed in ⋮) |
+| Slack `bot_not_in_chat`, public | "Leo isn't in #release." | **Add Leo back** → `rejoin` |
+| Slack `bot_not_in_chat`, private | "Leo was removed from this private channel." | **Copy the invite command** → `/invite @<app>`, "Run it in the channel" |
+| Slack `token_expired` | "Slack access ended for Acme." | **Reconnect Slack** → the OAuth popup for that installation |
+
+### 3.5 Change and disconnect
+
+- **Change binding or mode:** a small dialog with the two fields; a change to Every message shows the data notice again and must be accepted; on Telegram it ends in `rights_missing` until the bot is an admin.
+- **Disconnect:** an `AlertDialog` "Disconnect «Release team»?" — "Shosai erases the 1 204 messages it kept from this chat since Oct 3, and Leo leaves the chat. Tasks made from it stay, with their link to the message." Cancel / Disconnect (destructive). The same for a Slack installation, naming its channels. A shorter retention confirms likewise ("Messages older than 30 days are erased").
+
+### 3.6 Messengers in Settings › Account
+
+A "Messengers" group after the profile rows: "Link your messenger to ask Leo from a team chat. Leo acts there with your rights."
+
+- **Telegram, not linked:** "Link Telegram" → the request; Telegram opens in a new tab or the app (from the click); the row says "Waiting for Telegram… Press Start in the chat with @<bot>" with "Open again" and Cancel; when the tab becomes visible again it asks at once, then every 2 s; **linked:** "Linked as @mara" (polite announcement) and the row turns into the linked state. Expired: "The link expired" + "Try again". Refused: "This Telegram account is linked to another Shosai account. Unlink it there first."
+- **Linked:** handle and name, linked date, "Unlink" with a confirmation ("Leo will stop acting on your messages from Telegram").
+- **Slack, proposed:** "Is this you? @mara in Acme (Slack)" — Confirm / Not me; **linked:** "@mara · Acme" with Unlink. No row and no button for Slack otherwise (nothing inert).
+- **States:** loading, error with Retry, 390 px rows stacked.
+
+### 3.7 The hint for an unlinked member
+
+On the workspace's home, a quiet `Alert` line (CF-D9): "Link your Telegram to ask Leo in «Release team»: “@Leo, make this a task”." — **Link Telegram** (opens Settings › Account) and a close button; or, for a proposed Slack link, "Confirm your Slack account to ask Leo in #release." — **Confirm**. Closing it hides it at once and saves the dismissal on the account (`POST /v1/me/messenger-links/hint-dismissal`): it never comes back, in any workspace or on any device; a failed save is retried quietly and the hint stays hidden in this tab. Linking the messenger also ends it.
+
+### 3.8 Leo's digest
+
+Inside Leo's answer, after the steps and Leo's own short text, before the approval cards. A card composed of:
+
+- **Header:** the messenger's mark, "#release", "Oct 15 – 22", "412 messages read".
+- **Coverage notes** (muted `Alert`): when the period starts before `history_from` — "Telegram gives Shosai only messages written after the bot joined on Oct 18, so this covers Oct 18 – 22." (Slack: "Shosai has this channel's messages from Oct 18, when it was connected."); when `truncated` — "The period had more than 5 000 messages; the latest 5 000 were read."
+- **Sections** Decisions, Open questions, Promises; empty sections are left out; each shows five items and "Show all 12". An item: Leo's words; a meta line — author, time, and "Open in Telegram" (an external link, mirrored icon in RTL; no link when `url` is null) — the original message in a popover on the author's button (the `SourcePreview` pattern); **Make a task**. A promise reads "who · what · when": a member's avatar when matched, the name as said otherwise, the day or the words said ("by Friday").
+- **Make a task:** the button shows a spinner, then "Waiting for your approval" (a link that scrolls to the card), and once approved "Task created" with Open (`/app/kanban?task=<id>`); a declined or expired card frees the item again. "Make tasks of all promises" under Promises puts every free promise into one card.
+- **States:** loading (three skeleton lines in the card's shape), no messages in the period, messages but nothing found ("Nothing to note in 412 messages: no decisions, open questions or promises."), gone ("This digest is no longer available: the chat was disconnected or its messages expired."), a failed load with Retry.
+
+### 3.9 The task's source
+
+- **Card face:** a muted line at the footer's start — the messenger's mark and "#release", truncated, with "From Telegram" for screen readers; no link (CF-D7).
+- **Card panel:** the source line becomes "From Telegram · «Release team», Oct 17" with "Open the message" (external link) when there is a URL; after a disconnection the line stays as it was.
+
+---
+
+## 4. Component design
+
+### 4.1 Where the code lives
+
+```
+features/chats/                 the new slice (backend slice chats)
+  domain/   contract.ts, slack-contract.ts, digest-contract.ts (chats §1 by hand until the OpenAPI),
+            problems.ts (codes the UI words), rules (the needs-attention order, the fix for each problem,
+            the notice's variant, the code's display form, coverage of a digest)
+  api/      connections, Telegram codes, Slack installations and channels, digests
+  model/    the connections resource, the connect flows (code polling, the OAuth popup), the
+            change and disconnect actions, the digest resource, words
+  ui/       section/ (Team chats), connect/ (dialog, telegram/, slack/, shared fields), fixes/,
+            digest/ (the card, presentational, with an injected "make a task"), hint/
+  mocks/    every route of chats §1.2 over one in-memory store per workspace; seeds; the OAuth consent
+features/identity/  domain/messenger-links-contract.ts, api/, model/ (links, the link request, the hint's dismissal), mocks/
+features/settings/  ui/account/messengers/* (the Messengers group); /oauth/callback learns flow=chats
+features/workspace/ ui/settings/settings-screen.tsx takes the extra sections as children (additive)
+features/leo/       domain/protocol.ts gains `artifact`; the message renders a chat_digest artifact through
+                    chats' card and adds the proposal "make a task" returns; mocks: the digest scenario
+features/kanban/    TK-D13 in tasks-contract.ts, the face line, PanelSource's chat variant, seeds
+components/brand/   messenger-mark.tsx (Telegram and Slack marks, business-agnostic)
+app/pages/workspace/settings.tsx and home.tsx compose the section and the hint
+```
+
+Files stay ≤ 200 lines; no barrels; imports by path. `domain` stays free of React and `use-intl`. Dependencies: `chats` → `workspace`, `identity`, `settings`; `leo` → `chats` (the card); none back.
+
+### 4.2 Composition
+
+- **Containers apart from presentation.** `TeamChatsSection` loads and provides; `ChatRow` parts render what they are given. The digest: `ChatDigestArtifact` (chats, a container reading the digest) renders `ChatDigestCard` (presentational) and receives `makeTasks(itemIds)` and the items' proposal states from `leo`, so chats never imports leo.
+- **Compound components, no boolean modes.** `ChatRow.Root / Mark / Title / Meta / Problem / Menu`; one fix component per problem (`AddLeoAgain`, `MakeLeoAdmin`, `RejoinChannel`, `CopyInviteCommand`, `ReconnectSlack`) chosen by a map from the problem, not a row with flags; `ConnectDialog` with `TelegramConnect` (`SetupStep`, `AddBotStep`, `ConnectedStep`) and `SlackConnect` (`AuthorizeStep`, `ChannelsStep`, `BindStep`) sharing `BindingField`, `ModeField`, `DataNotice`; `ChatDigestCard.Root / Header / Coverage / Section / Item / Promise / Empty`; `TelegramLinkRow` and `SlackLinkRow` (proposed and linked as explicit variants).
+- **The settings page and the home compose by children**, as the meeting page composes the workspace's share button: the workspace slice knows nothing of chats.
+
+### 4.3 State and data
+
+- **Connections:** one resource per workspace (`GET …/chats` and `…/settings` in parallel), refreshed after each change and on focus; optimistic edits for binding and mode with a worded toast on refusal; disconnection waits for the server (an erasure is not undone).
+- **Polling** (the code, the link request): every 2 s while pending and the tab is visible, at once when it becomes visible, stopped on a final status or expiry, backing off on errors; one poller per open flow, cleaned up on close.
+- **The OAuth popup** reuses the connectors' message protocol with `flow=chats`; the dialog listens only while its step is open.
+- **Digest:** read once per artifact and cached by id; "make a task" adds the returned `LeoProposal` to leo's proposals store and to the message, so the card and the item share one state.
+
+### 4.4 Performance and motion
+
+- The connect dialog and the Slack picker are their own chunk, loaded on "Connect a chat" (prefetched on hover or focus); the digest card is its own chunk loaded when the first `chat_digest` artifact arrives; each step records the chunk sizes and the settings route's growth (target ≤ 5 kB gzip for the section).
+- The settings page's section makes two requests in parallel; nothing polls when no flow is open.
+- No layout shift: the dialog's steps keep their height, the waiting line has a reserved place, the digest's skeleton has the card's shape.
+- **View transitions:** none by default. A candidate is a new row entering the list after a connection (it communicates "appeared"), added only with `startTransition` and reduced-motion CSS if it reads as continuity in the review.
+
+---
+
+## 5. Steps
+
+Every step loads `vercel-react-best-practices`, `vercel-composition-patterns`, `vercel-react-view-transitions`, `web-design-guidelines` (with the fetched guidelines, its screens reviewed against them), `shadcn` (from `frontend/.claude/skills/shadcn`, read directly when the Skill tool does not list it) and `react-doctor` — "the six" below; steps 1 and 5 also `agent-architecture`. Every step ends with `npm run typecheck`, `npm test`, `npm run build`, `npm run doctor -- --score` → `100` from `frontend/`; screenshots of each new state in both themes at 1440 and 390 px (Vite and Chromium inside `unshare -n` on this host); Vite stopped and local settings reverted; this table and STATUS updated.
+
+| Step | Content | Skills | Done when |
+|---|---|---|---|
+| 1 | **Contract and mocks.** `chats/domain` (chats §1), `problems.ts`; identity's messenger-links contract; TK-D13 in kanban's contract and two chat tasks in its seeds; leo's `artifact` event and a scripted "go through #release for the week" scenario that streams a `chat_digest` artifact; the chats mock store (a working Telegram group in Every message, a Telegram group with `rights_missing`, a Slack channel with `token_expired`, a public Slack channel Leo left, a Slack installation with channels, a digest per state) and every route of chats §1.2, `task-proposals` adding to leo's proposals mock; a pending code connects on its first poll after 3 s and a link request links likewise, the expired and refused outcomes reachable by a development switch like Kanban's `kanban-demo-large`; Slack's consent through `/oauth/demo-authorize`; `docs/chats-api.md`; `Telegram` in the glossary's do-not-translate list | the six, agent-architecture | Unit tests: every route answers its shape and each refusal its code and status; codes and link requests run pending → connected or linked, expire and refuse; a disconnection erases the chat's digests; `task-proposals` marks its items and refuses a pending one; no screen changed |
+| 2 | **Team chats section and Telegram.** The section composed into workspace settings (children slot), the list rows with binding, mode and activity, retention and region, read-only for members, loading, empty and error; the connect dialog with the messenger step and the whole Telegram flow (§3.2) with its states; the brand marks in `components/brand/` | the six | The flow works by mouse, keyboard and touch in both themes, 1440 and 390 px and Arabic; the code is cancelled on close; screenshots |
+| 3 | **Slack and the list in full.** The OAuth popup with `flow=chats` on `/oauth/callback`, the channel picker with search, the bindings and the batch connect; installations and their disconnection; every problem with its fix (§3.4); change binding or mode with the notice; disconnect naming what is erased; a shorter retention confirmed | the six | Each problem's action ends in a working chat on the mocks; a refused batch names its channels; screenshots |
+| 4 | **Messenger links and the hint.** Settings › Account › Messengers: link Telegram (request, waiting, the state on return, expired, refused), linked accounts, unlink; Slack proposed and linked rows; the workspace home's hint with its dismissal saved on the account (CF-D9) | the six | Linking completes when the tab comes back; a proposal confirms or goes; the hint shows only when it should, and once closed it stays closed in another workspace and after a reload with cleared storage; screenshots |
+| 5 | **Leo's digest and the task's source.** The `chat_digest` artifact in Leo's message: header, coverage notes, sections with "Show all", message links and the quote popover, "Make a task" and "Make tasks of all promises" through the approval card, every state (§3.8); TK-D13 on the card face and in the panel (§3.9) | the six, agent-architecture | Approving a digest's card shows "Task created" on its items and the task carries "From Telegram · …" on the board and in the panel; screenshots |
+| 6 | **Accessibility, RTL and performance pass.** The guidelines review of every new screen and its fixes; RTL smoke scenarios in Arabic (the connect dialog by keyboard, a digest item's "Make a task"); chunk sizes and the settings route measured against §4.4; reduced motion; the owner's review of the screens; STATUS `done` after it | the six | The prompt's definition of done holds; react-doctor 100 |
+
+## 6. What the owner provides
+
+- Approval of the contract (chats §1, TK-D13, identity step 18) and of CF-D1…CF-D11 (§2): given on 2026-10-22, CF-D9 changed.
+- A look at the screens after steps 2–3 and a final review before `done`.
+
+## 7. Documents updated with the approval (2026-10-22)
+
+- [ADR 0063](../../adr/0063-team-chats-contract-and-screens.md): CF-D1…CF-D11 and the contract; [ADR 0062](../../adr/0062-team-chats-through-leo-on-demand.md) point 5 amended per CF-D1, with the admin-rights explanation.
+- chats plan §1 marked approved, with the hint's dismissal (CF-D9) and Slack's confirm reply; tasks plan TK-D13 and §3.10 marked approved; identity plan step 18 with the hint's dismissal.
+- [agent plan](../slices/agent.md) (new, requirements only): AG-R1 — the `chat_digest` artifact kind (CF-D11), with which agent's planning session amends Leo §13.2; AG-R2 — the port of CF-D5. Leo §7.4's `chat:foreign` label is written by the chats slice's plan; `frontend/docs/leo-actions-api.md` names the digest's task proposals in step 5.
+- SLICE_MAP §8.1's note on the messenger link (CF-D10).
+- STATUS: the row `planned`.
+
+## 8. Risks
+
+- **Telegram mentions in privacy mode** (CF-D2) are undocumented; the live check of the chats slice may change one sentence of the screens.
+- **The admin route for Every message** (CF-D1) depends on the right Telegram accepts in `admin=`; the chats slice confirms it on a live bot and the link changes only in the contract's `add_as_admin_url`.
+- **Contract drift:** the chats slice may refine the contract while planning its data; any change needs the owner, and the mocks follow in the same change, so its frontend step stays a swap.
+- **Leo's wire contract is the cabinet's mock today:** the `artifact` event and the digest card are built on leo's NDJSON mock; agent's SSE v2 carries them unchanged (CF-D11), so the switch is agent's work, not this package's.
+- **Shared files touched by other packages** (kanban's contract and panel, leo's message, workspace settings): every edit is additive and small; a parallel session on the same file is checked in `git status` before each step.

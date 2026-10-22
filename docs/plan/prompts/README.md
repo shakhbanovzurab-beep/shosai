@@ -6,7 +6,7 @@ One file per work package of [the rewrite plan](../REWRITE_PLAN.md). Start a new
 
 | Use | Prompts |
 |---|---|
-| **Live** — start sessions with these | `BACKEND-next-step.md` (every backend session), `S-feature-slice.md` (slice plans and steps, used through the backend prompt), `KANBAN-golden-core.md` (the kanban's visual part), `F4-delivery-staging.md`, `F5-observability.md`, `F6-platform-services.md`, `M1-data-migration.md`, `M2-cutover.md` |
+| **Live** — start sessions with these | `BACKEND-next-step.md` (every backend session), `S-feature-slice.md` (slice plans and steps, used through the backend prompt), `KANBAN-golden-core.md` (the kanban's visual part), `CHATS-frontend.md` (team chats, frontend first; then the `chats` slice through `S-feature-slice.md`), `F4-delivery-staging.md`, `F5-observability.md`, `F6-platform-services.md`, `M1-data-migration.md`, `M2-cutover.md` |
 | **Done** — the record of finished work; do not run again | `D1-contracts.md`, `D3-data-mapping.md`, `F1-backend-foundation.md` (its fixes run from the F1 audit through `BACKEND-next-step.md`), `F2-frontend-foundation.md`, `F3-local-environment.md`, `F1-audit.md`, `SLICE-MAP.md` |
 | **Archived** — superseded; never follow | `D2-visual-parity.md`, `D4-feature-map.md` |
 

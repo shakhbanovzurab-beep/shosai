@@ -67,6 +67,7 @@ From §3 of the target architecture: 19 500 meetings a day; at about three actio
 | **TK-D10** | Events: the card's two-part names are refused by core's three-part rule (as notes found); proactive also needs withdrawal | **`tasks.task.assigned`** (task, org, assignee), **`tasks.task.due_changed`** (task, due day or none), **`tasks.task.completed`**, **`tasks.task.reopened`**, **`tasks.task.deleted`** — ids, codes and the due day only. Proactive withdraws a candidate on completed or deleted. SLICE_MAP §4.2.10 and Leo §9.3 amended | Five events instead of three | 1 |
 | **TK-D11** | What "Today" is on the home screen (SM-3: personal tasks due today) and whose day | **Today = the person's open personal tasks due on or before their today, and those they completed today**; adding one there makes a personal task due today. Overdue ones stay in Today until done or rescheduled — they never vanish at midnight. The cabinet sends its day (`day=YYYY-MM-DD`, the profile's zone, ADR 0058); Leo uses the profile's zone. Workspace tasks stay in "My workspace tasks" beside it | Overdue items keep asking for a decision; the list may grow if the person ignores it (proactive's job to raise, not Today's to hide) | 3, 10 |
 | **TK-D12** | **The golden core** of the Kanban — the parts nearly every team uses. **The scope was decided by the owner on 2026-10-21** ([KANBAN-golden-core prompt](../prompts/KANBAN-golden-core.md)): columns with colour, collapse and Σ of a number field; cards with cover, deadline range, stickers, subtask progress and counts, recurring mark; a card panel with Markdown description, subtasks, comments, attachments, recurrence and the source meeting; stickers per board; Leo's marks on fields it filled. Out: automations, mirror and summary columns, stopwatch, timer and time tracking, sprints, task types beyond state sets, card and board backgrounds | **Decided by the owner on 2026-10-21 with the [Kanban golden-core plan](../packages/KANBAN-golden-core.md) (KG-D1…KG-D10, [ADR 0060](../../adr/0060-kanban-golden-core.md)); the contract is §3.8.** Subtasks are a checklist of the task (KG-D2); attachments are the task's own objects through files' upload flow, purpose `task_attachment`, counted in the task owner's storage, and a File Manager file can be attached as a copy (KG-D3, amended by the owner); a field (sticker) belongs to its board's owner — the person, or the workspace for a workspace board — and is reused across the owner's boards, while its value is part of the task, seen by everyone who sees it (KG-D4, changed by the owner); a recurring task's next one is created when it is done, on the schedule's next date after its due day, past dates skipped (KG-D5, amended by the owner); priority may be empty (KG-D6); the screen's word for a sticker is the glossary's (KG-D7); a Jira card carries Jira's fields only (KG-D8); a column leaves with its cards moved to the first other column of its kind (KG-D9); `leo_fields` per field until the person changes it (KG-D10). **Revises TK-D7 for labels and colours:** draft column colours and labels now have a screen and are carried without loss (§3.8, the owner's decision). **Revises §3.4** (`description` is Markdown, `priority` nullable) **and §3.7** (subtasks, comments and attachments are tasks') | The board stays quiet — a new board shows assignee, deadline and priority, a card only what is set; comments, attachments and field values of a workspace task open to its readers without file sharing. Costs seven tables, about twenty routes, a cover preview job and three additive files contracts; boards of a workspace are not planned yet (the owner's open point) | 3, 4, 5, 9 |
+| **TK-D13** | A task made from a team chat ([ADR 0062](../../adr/0062-team-chats-through-leo-on-demand.md)): "@Leo make this a task" in a connected chat, or "Make a task" on a digest item, creates a workspace task; the person must see where it came from and get back to the message | **A `chat` source** (§3.10): the task keeps the messenger, the chat's title and the message's link and time as written when it was made, so the line survives the chat's disconnection and its messages' retention; shown on the card face as text and in the card panel with the link. The source is set by the server from the run's origin or the digest item, never from the model's arguments. **Scope the owner's; the shape proposed by the CHATS-frontend plan and approved by the owner on 2026-10-22 with its CF-D7 ([ADR 0063](../../adr/0063-team-chats-contract-and-screens.md))** | The link points into the messenger, so a person outside the chat cannot open it; a renamed chat keeps its old title on old tasks | 3 (the column and shape), with chats' steps |
 
 Settled by documents, no decision needed: one store (SM-3); the cabinet's Jira contract (synchronous writes, 409 with the reason, read-only before the first sync); status by category and unknown priority never written (draft lessons); reminders and "overdue" signals are proactive's (§2.10); people come from commitments (card); hub boards are personal (SM-2); the Kanban controls without behaviour are gone (§2.10); due dates are calendar days (ADR 0058).
 
@@ -280,6 +281,30 @@ Every call on a Jira task, and showing one of the three on a Jira board, answers
 - **Time is the server's (KT-D6):** a screen derives what it shows from `running_since`, `ends_at` and `server_now`, never from the device's clock alone.
 - **Nothing proactive (KT-D8):** no notice when a timer runs out, and Leo does not start or stop clocks; the values are in the task for Leo to read.
 - **Draft data:** the draft had none of the three; nothing to carry.
+
+### 3.10 The chat source (TK-D13)
+
+Proposed with the [CHATS-frontend plan](../packages/CHATS-frontend.md) for the scope of [ADR 0062](../../adr/0062-team-chats-through-leo-on-demand.md) and approved by the owner on 2026-10-22 ([ADR 0063](../../adr/0063-team-chats-contract-and-screens.md)). The contract of chats is in [chats.md](chats.md) §1; the cabinet's mocks answer this.
+
+**Shapes** (additions to §3.8)
+
+```
+TaskSource.kind  += chat
+TaskSource       += {chat: {connection_id: string | null (null once the chat is disconnected),
+                            messenger: telegram | slack, chat_title,
+                            message: {url: string | null, sent_at}} | null}   (set exactly when kind = chat)
+Card             += {source_chat: {messenger, chat_title} | null}             (set exactly when kind = chat)
+```
+
+**Data (each home)**
+
+- `tasks.source` gains `chat`; `tasks` gains `source_chat_connection_id` (soft: chats' connection, cleared by chats' disconnection event), `source_chat_messenger`, `source_chat_title` (≤ 255, as the chat was named), `source_chat_message_url` (≤ 2 048, nullable: a Telegram basic group has no message links), `source_chat_message_at`; checked: all set exactly when `source = chat` (the URL and connection may be null).
+
+**Rules**
+
+- Only the chats path sets them: `tasks.create` planned from a chat command's run or from a digest's items (chats §1.2 `task-proposals`) carries the source from the run's origin or the item; a source in the model's arguments is ignored.
+- A chat task is a workspace task (TK-D1, TK-D2) of the chat's workspace, in its binding's project when it has one; `created_by` is `leo`.
+- The source holds no message text and no author: the message stays in the messenger and in chats' store under its retention. The account and workspace data specs carry the columns with the task.
 
 ---
 
