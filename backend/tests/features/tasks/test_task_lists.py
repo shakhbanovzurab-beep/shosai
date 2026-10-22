@@ -7,21 +7,12 @@ from zoneinfo import ZoneInfo
 import pytest
 
 from shosai.core.kernel.homes import Home
-from shosai.features.notes.infrastructure.meeting_records import MEETING_RESOURCE
 from shosai.features.tasks.infrastructure.task_records import TASK_RESOURCE
 from shosai.features.workspaces.contracts import Viewer
-from tests.features.tasks.task_bench import TaskBench
+from tests.features.tasks.task_bench import PARENTS, TaskBench, task_columns
 from tests.harness.run_slot import RunSlot
 from tests.support.access_model import MemberRow, ResourceRow, WorkspaceRow, World
 from tests.support.isolation import assert_isolated, write_world
-
-MEETING_COLUMNS = {"title": "Созвон", "started_at": datetime.now(UTC)}
-PARENTS = {"meeting": (MEETING_RESOURCE, MEETING_COLUMNS)}
-
-
-def task_columns(row: ResourceRow) -> dict[str, object]:
-    """A meeting's task names its source; a task without a parent is a hand-made one."""
-    return {"title": "Задача", "source": "meeting" if row.parent else "manual"}
 
 
 async def listed(bench: TaskBench, who: uuid.UUID, query: str = "") -> list[dict[str, object]]:

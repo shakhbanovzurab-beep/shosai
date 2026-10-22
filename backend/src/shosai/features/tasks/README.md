@@ -10,14 +10,16 @@ The one place a person's work is tracked (SM-3): a task written by hand, an acti
 - `channels/http/tasks.py` — `/v1/tasks`: a list of the tasks the person may read, by due day (no day last) or last change, with its filters and keyset cursors; Today in the person's zone; create once per `Idempotency-Key`; get; patch by field presence; delete and batch delete, all or none. The shapes follow the cabinet's mocks field for field (plan §3.8, §3.11): `channels/http/card_models.py`, `detail_models.py`.
 - `application/task_reads.py`, `task_writes.py`, `task_edits.py` — reads under the access policy's predicate; a write finds the task's space, opens its transaction there and locks the row; the owner, and for a workspace's task its admins, delete (TK-D2); each change publishes its events, touches a meeting's set and raises the revision of the reader's board (`scoping.py`).
 - `application/recurring.py` — a recurring task marked done makes its next one once, keyed by `recurred_from_id`, at the top of the first to-do column of the completer's board.
-- `application/views.py` — names, workspaces, roles and placements are read once per list, and only when a task needs them.
+- `application/views.py` — names, workspaces, roles, placements and the counts of checklists and comments are read once per list, and only when a task needs them.
+- `channels/http/threads.py` (step 3b) — a task's checklist (`/subtasks`: at most 100 lines in fractional order, `subtasks_full`) and its comments (`/comments`: newest first by a keyset cursor, once per `Idempotency-Key`, edited and deleted by the author only), `application/subtasks.py`, `comments.py`; a line or a new or deleted comment raises the revision of the reader's board and touches a meeting's set (plan §3.12).
 
-## Tables (each home, revisions `b3d9e5a7c142`, `c8e4a1f6b293`)
+## Tables (each home, revisions `b3d9e5a7c142`, `c8e4a1f6b293`, `d5f1b8c3e7a4`)
 
 - `tasks` — the shareable resource `task` (company isolation; `starts_on`, `recurrence`, `leo_fields` and `recurred_from_id` since `c8e4a1f6b293`): a meeting's task also opens to the meeting's readers and its assignee (the access policy's parent and named-reader rules, ADR 0059); the database keeps done with its moment, a member only on a workspace's task, a name only without one, one task per action item.
+- `task_subtasks`, `task_comments` — a task's checklist and comments (company isolation, with the task's owner and workspace; deleted with the task): lines ordered by keys unique at commit, comments of 1–5 000 characters by their author.
 - `meeting_task_sets` — per meeting, the revision of its notes applied and whether a task of it was touched (TK-D3).
 - `boards`, `board_columns`, `task_placements`, `task_settings` — personal (user isolation): a card sits in a column of its own board; column positions and card ranks are unique at commit.
-- `application/account_data.py` — a person's personal tasks, sets, boards, columns, placements and settings are exported, copied (placements of personal tasks only) and erased; a workspace's tasks stay with it.
+- `application/account_data.py` — a person's personal tasks with their checklists and comments, sets, boards, columns, placements and settings are exported, copied (placements of personal tasks only) and erased; a workspace's tasks stay with it.
 
 ## Rules the domain holds
 

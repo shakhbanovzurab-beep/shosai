@@ -17,6 +17,7 @@ from zoneinfo import ZoneInfo
 TITLE_MAX: Final = 200
 DESCRIPTION_MAX: Final = 10_000
 ASSIGNEE_NAME_MAX: Final = 80
+COMMENT_MAX: Final = 5_000
 
 
 class TaskStatus(StrEnum):
@@ -70,6 +71,7 @@ class TaskRule(StrEnum):
     DESCRIPTION_TOO_LONG = "description_too_long"
     RANGE_INVALID = "range_invalid"
     RECURRENCE_INVALID = "recurrence_invalid"
+    COMMENT_TOO_LONG = "comment_too_long"
     # Имя исполнителя и вид исполнителя по пространству кабинет отдельным текстом не называет.
     INVALID = "validation_error"
 
@@ -91,6 +93,16 @@ def checked_title(raw: str) -> str:
     if len(title) > TITLE_MAX:
         raise TaskRuleError(TaskRule.TITLE_TOO_LONG)
     return title
+
+
+def checked_comment(raw: str) -> str:
+    """The trimmed comment, plain text of 1 to 5 000 characters, or the rule it breaks."""
+    body = raw.strip()
+    if not body:
+        raise TaskRuleError(TaskRule.INVALID)
+    if len(body) > COMMENT_MAX:
+        raise TaskRuleError(TaskRule.COMMENT_TOO_LONG)
+    return body
 
 
 def checked_description(raw: str) -> str:

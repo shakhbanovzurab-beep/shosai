@@ -2,8 +2,10 @@
 
 The home holds 3 000 tasks of one person — a third done, a sixth in a workspace the person
 is in, assigned to them — among 5 000 tasks of others, half of them in a workspace the
-person is not in. Through the app, a first page, a deep page, a workspace's page and Today
-each answer within the cabinet's read objective: p95 at most 300 ms.
+person is not in; every other task has a checklist of three lines and every third two
+comments, which each card counts. Through the app, a first page, a deep page, a
+workspace's page and Today each answer within the cabinet's read objective: p95 at most
+300 ms.
 """
 
 import statistics
@@ -40,6 +42,16 @@ SELECT md5('t' || g)::uuid,
        now() - g * interval '1 minute', now() - g * interval '1 minute'
 FROM generate_series(1, %(own)s + %(others)s) AS g
 """
+THREADS: Final = """
+INSERT INTO task_subtasks (id, task_id, user_id, org_id, title, done, rank)
+SELECT gen_random_uuid(), t.id, t.user_id, t.org_id, 'Пункт ' || n, n = 1, chr(64 + n)
+FROM tasks AS t CROSS JOIN generate_series(1, 3) AS n
+WHERE get_byte(uuid_send(t.id), 15) % 2 = 0;
+INSERT INTO task_comments (id, task_id, user_id, org_id, author_user_id, body)
+SELECT gen_random_uuid(), t.id, t.user_id, t.org_id, t.user_id, 'Комментарий ' || n
+FROM tasks AS t CROSS JOIN generate_series(1, 2) AS n
+WHERE get_byte(uuid_send(t.id), 15) % 3 = 0
+"""
 
 
 async def seed(connection: Connection, person: uuid.UUID) -> uuid.UUID:
@@ -59,7 +71,9 @@ async def seed(connection: Connection, person: uuid.UUID) -> uuid.UUID:
             )
         params = {"own": OWN, "others": OTHERS, "person": person, "mine": mine, "theirs": theirs}
         await connection.execute(SEED, params)
-        await connection.execute("ANALYZE tasks")
+        for statement in THREADS.split(";"):
+            await connection.execute(statement)
+        await connection.execute("ANALYZE tasks, task_subtasks, task_comments")
     return mine
 
 

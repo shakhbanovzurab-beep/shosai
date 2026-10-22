@@ -102,6 +102,18 @@ class Scoping:
             raise invalid()
 
 
+async def locked_task(
+    session: AsyncSession, ports: PortDirectory, viewer: UUID, task_id: UUID, *, lock: bool = True
+) -> TaskRecord:
+    """The task the viewer may read, its row locked for the write unless told not to; 404."""
+    readable = ports.get(ACCESS_POLICY).readable(TASK_RESOURCE, Viewer(viewer))
+    statement = select(TaskRecord).where(TaskRecord.id == task_id, readable)
+    record = await session.scalar(statement.with_for_update() if lock else statement)
+    if record is None:
+        raise TaskNotFoundError
+    return record
+
+
 def scope_in(principal: Principal, org_id: UUID | None) -> TenancyScope:
     """The person's scope, narrowed to a workspace when the write is one of its tasks."""
     return TenancyScope(home=principal.home, user_id=principal.user_id, org_id=org_id)

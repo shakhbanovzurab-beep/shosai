@@ -21,6 +21,7 @@ from shosai.features.tasks.channels.http.detail_models import (
     SourceFindingOut,
     SourceMeetingOut,
     SourceOut,
+    SubtaskOut,
     TaskDetail,
     TaskItem,
     WeekRule,
@@ -176,6 +177,9 @@ def _card(card: CardView) -> dict[str, object]:
             workspace_id=space.org_id, workspace_slug=space.slug, workspace_name=space.name
         ),
         "can_delete": card.can_delete,
+        "subtasks_done": card.counts.subtasks_done,
+        "subtasks_total": card.counts.subtasks_total,
+        "comment_count": card.counts.comments,
     }
 
 
@@ -218,6 +222,9 @@ def detail_out(view: TaskView) -> TaskDetail:
             "description": view.description,
             "recurrence": rule_of(view.recurrence),
             "source": source,
+            "subtasks": [
+                SubtaskOut(id=line.id, title=line.title, done=line.done) for line in view.subtasks
+            ],
             "placement": None
             if placement is None
             else PlacementOut(board_id=placement[0], column_id=placement[1]),

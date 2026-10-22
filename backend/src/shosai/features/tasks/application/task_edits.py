@@ -15,7 +15,6 @@ from datetime import UTC, date, datetime
 from http import HTTPStatus
 from uuid import UUID
 
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
@@ -27,6 +26,7 @@ from shosai.features.tasks.application.recurring import next_of
 from shosai.features.tasks.application.scoping import (
     Scoping,
     invalid,
+    locked_task,
     raise_revisions,
     rule_failure,
     touch_sets,
@@ -34,7 +34,6 @@ from shosai.features.tasks.application.scoping import (
 from shosai.features.tasks.application.task_events import NEW, before_of, events_of
 from shosai.features.tasks.application.task_reads import TaskReads, zone_of
 from shosai.features.tasks.application.views import TaskView
-from shosai.features.tasks.contracts import TaskNotFoundError
 from shosai.features.tasks.domain.changes import (
     UNSET,
     Schedule,
@@ -51,8 +50,7 @@ from shosai.features.tasks.domain.tasks import (
     TaskStatus,
     completed_at_after,
 )
-from shosai.features.tasks.infrastructure.task_records import TASK_RESOURCE, TaskRecord
-from shosai.features.workspaces.contracts import ACCESS_POLICY, Viewer
+from shosai.features.tasks.infrastructure.task_records import TaskRecord
 
 
 @dataclass(frozen=True, slots=True)
@@ -86,13 +84,8 @@ class TaskEdits:
     async def change(self, principal: Principal, task_id: UUID, edit: Edit) -> TaskView:
         """The task after the person's change, read back as the panel shows it."""
         scope = await self._scoping.space_of(principal, task_id)
-        readable = self._ports.get(ACCESS_POLICY).readable(TASK_RESOURCE, Viewer(principal.user_id))
         async with self._transactions.begin(scope) as session:
-            record = await session.scalar(
-                select(TaskRecord).where(TaskRecord.id == task_id, readable).with_for_update()
-            )
-            if record is None:
-                raise TaskNotFoundError
+            record = await locked_task(session, self._ports, principal.user_id, task_id)
             await self._apply(session, principal.user_id, record, edit)
             return await self._reads.view(session, principal.user_id, task_id)
 

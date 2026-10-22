@@ -2148,6 +2148,98 @@ export interface paths {
         patch: operations["change_task_v1_tasks__task_id__patch"];
         trace?: never;
     };
+    "/v1/tasks/{task_id}/subtasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Subtask
+         * @description Add a line at its position, the end by default; 100 at most.
+         */
+        post: operations["create_subtask_v1_tasks__task_id__subtasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tasks/{task_id}/subtasks/{subtask_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Subtask
+         * @description Remove a line.
+         */
+        delete: operations["delete_subtask_v1_tasks__task_id__subtasks__subtask_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Change Subtask
+         * @description Rename, tick or move a line.
+         */
+        patch: operations["change_subtask_v1_tasks__task_id__subtasks__subtask_id__patch"];
+        trace?: never;
+    };
+    "/v1/tasks/{task_id}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Comments
+         * @description A page of the task's comments, newest first.
+         */
+        get: operations["list_comments_v1_tasks__task_id__comments_get"];
+        put?: never;
+        /**
+         * Create Comment
+         * @description Write a comment; once per `Idempotency-Key` when one is sent.
+         */
+        post: operations["create_comment_v1_tasks__task_id__comments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tasks/{task_id}/comments/{comment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Comment
+         * @description Delete one's own comment.
+         */
+        delete: operations["delete_comment_v1_tasks__task_id__comments__comment_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Edit Comment
+         * @description Edit one's own comment.
+         */
+        patch: operations["edit_comment_v1_tasks__task_id__comments__comment_id__patch"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2450,6 +2542,50 @@ export interface components {
             /** Chat Title */
             chat_title: string;
             message: components["schemas"]["ChatMessageOut"];
+        };
+        /**
+         * CommentAuthorOut
+         * @description Who wrote a comment, and whether it is the reader.
+         */
+        CommentAuthorOut: {
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+            /** Name */
+            name: string;
+            /** Is You */
+            is_you: boolean;
+        };
+        /**
+         * CommentBody
+         * @description A comment's text.
+         */
+        CommentBody: {
+            /** Body */
+            body: string;
+        };
+        /**
+         * CommentOut
+         * @description A comment on a task.
+         */
+        CommentOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            author: components["schemas"]["CommentAuthorOut"];
+            /** Body */
+            body: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Edited At */
+            edited_at: string | null;
         };
         /**
          * Consents
@@ -3761,6 +3897,13 @@ export interface components {
         Page_AdminUser_: {
             /** Items */
             items: components["schemas"]["AdminUser"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
+        /** Page[CommentOut] */
+        Page_CommentOut_: {
+            /** Items */
+            items: components["schemas"]["CommentOut"][];
             /** Next Cursor */
             next_cursor: string | null;
         };
@@ -5142,6 +5285,16 @@ export interface components {
             credits: number;
         };
         /**
+         * SubtaskCreateBody
+         * @description A new line of the checklist, at its position or at the end.
+         */
+        SubtaskCreateBody: {
+            /** Title */
+            title: string;
+            /** Position */
+            position?: number | null;
+        };
+        /**
          * SubtaskOut
          * @description A line of the task's checklist.
          */
@@ -5155,6 +5308,18 @@ export interface components {
             title: string;
             /** Done */
             done: boolean;
+        };
+        /**
+         * SubtaskPatchBody
+         * @description A change of a line by field presence; none of its fields is cleared.
+         */
+        SubtaskPatchBody: {
+            /** Title */
+            title?: string | null;
+            /** Done */
+            done?: boolean | null;
+            /** Position */
+            position?: number | null;
         };
         /**
          * TariffDTO
@@ -10484,6 +10649,260 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["TaskDetail"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_subtask_v1_tasks__task_id__subtasks_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubtaskCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubtaskOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_subtask_v1_tasks__task_id__subtasks__subtask_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+                subtask_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_subtask_v1_tasks__task_id__subtasks__subtask_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+                subtask_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubtaskPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubtaskOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_comments_v1_tasks__task_id__comments_get: {
+        parameters: {
+            query?: {
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_CommentOut_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_comment_v1_tasks__task_id__comments_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional: a key unique to one create, repeated on its retries. */
+                "Idempotency-Key"?: string | null;
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommentOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_comment_v1_tasks__task_id__comments__comment_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+                comment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    edit_comment_v1_tasks__task_id__comments__comment_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+                comment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommentOut"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

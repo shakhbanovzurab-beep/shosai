@@ -1,13 +1,14 @@
 """Tasks' handler of a person's data: personal tasks, boards, their columns and placements.
 
-The person's rows are their personal tasks and the sets of their personal meetings, their
-boards with columns, where tasks sit on them, and their settings. A workspace's task stays
+The person's rows are their personal tasks with their checklists and comments, the sets of
+their personal meetings, their boards with columns, where tasks sit on them, and their
+settings. A workspace's task stays
 with the workspace, whoever made it (nfr-16): it is neither exported nor erased with the
 person, and the workspace passes it to a successor when the member goes (step 6). The
 person's placements of a workspace's tasks are their own rows: exported and erased with
 them, never copied to another home, where those tasks are not. Erasing deletes boards and
-personal tasks, and their placements, columns and settings go with them by the database's
-cascades; a repeat deletes nothing more.
+personal tasks, and their placements, columns, settings, checklists and comments go with
+them by the database's cascades; a repeat deletes nothing more.
 """
 
 from collections.abc import AsyncIterator, Callable, Mapping
@@ -38,11 +39,17 @@ from shosai.features.tasks.infrastructure.board_records import (
     TaskSettingsRecord,
 )
 from shosai.features.tasks.infrastructure.task_records import MeetingTaskSetRecord, TaskRecord
+from shosai.features.tasks.infrastructure.thread_records import (
+    TaskCommentRecord,
+    TaskSubtaskRecord,
+)
 
 OWNER: Final = "tasks"
 # В порядке ссылок: задачи и доски раньше колонок и мест, доски раньше настроек.
 MODELS: Final = (
     TaskRecord,
+    TaskSubtaskRecord,
+    TaskCommentRecord,
     MeetingTaskSetRecord,
     BoardRecord,
     BoardColumnRecord,
@@ -50,6 +57,8 @@ MODELS: Final = (
     TaskSettingsRecord,
 )
 PERSONAL_MODELS: Final = (BoardRecord, BoardColumnRecord, TaskPlacementRecord, TaskSettingsRecord)
+# Строки с пространством: человеку принадлежат только личные, без `org_id`.
+SPACED_MODELS: Final = (TaskRecord, TaskSubtaskRecord, TaskCommentRecord, MeetingTaskSetRecord)
 ACCOUNT_DATA: Final = AccountDataSpec(
     OWNER, tuple(TableCoverage(model.__tablename__, Treatment.ERASE) for model in MODELS)
 )
@@ -73,18 +82,30 @@ def _personal_tasks_only(_user_id: UUID) -> ColumnElement[bool]:
     return TaskRecord.org_id.is_(None)
 
 
+def _of_personal_tasks(
+    model: type[TaskSubtaskRecord | TaskCommentRecord],
+) -> Callable[[UUID], ColumnElement[bool]]:
+    def only(_user_id: UUID) -> ColumnElement[bool]:
+        return model.org_id.is_(None)
+
+    return only
+
+
 def _placements_of_personal_tasks(user_id: UUID) -> ColumnElement[bool]:
     return TaskPlacementRecord.task_id.in_(select(TaskRecord.id).where(personal_tasks(user_id)))
 
 
 NARROWED: Final[Mapping[type[ModelBase], Callable[[UUID], ColumnElement[bool]]]] = {
     TaskRecord: _personal_tasks_only,
+    TaskSubtaskRecord: _of_personal_tasks(TaskSubtaskRecord),
+    TaskCommentRecord: _of_personal_tasks(TaskCommentRecord),
     MeetingTaskSetRecord: _personal_sets,
 }
 
 
 # Таблицы с отложенным уникальным порядком: копия пропускает уже перенесённые по первичному ключу.
 ARBITERS: Final[Mapping[type[ModelBase], tuple[str, ...]]] = {
+    TaskSubtaskRecord: ("id",),
     BoardColumnRecord: ("id",),
     TaskPlacementRecord: ("user_id", "task_id"),
 }
@@ -169,19 +190,17 @@ class TasksAccountData:
         found = list(await tables_holding(self._transactions, scope, tables, account.user_id))
         user_id = account.user_id
         async with self._transactions.begin(scope, read_only=True) as session:
-            tasks_left, sets_left = (
+            held = (
                 await session.execute(
                     select(
-                        exists().where(personal_tasks(user_id)),
-                        exists().where(
-                            MeetingTaskSetRecord.user_id == user_id,
-                            MeetingTaskSetRecord.org_id.is_(None),
-                        ),
+                        *(
+                            exists().where(model.user_id == user_id, model.org_id.is_(None))
+                            for model in SPACED_MODELS
+                        )
                     )
                 )
             ).one()
-        if tasks_left:
-            found.append(TaskRecord.__tablename__)
-        if sets_left:
-            found.append(MeetingTaskSetRecord.__tablename__)
+        found += [
+            model.__tablename__ for model, left in zip(SPACED_MODELS, held, strict=True) if left
+        ]
         return tuple(found)

@@ -1,10 +1,11 @@
 """A recurring task's next one, made when it is marked done (KG-D5; tasks plan §3.8).
 
-The next task copies its words, priority, who does it and its project, takes the schedule
-over and is due on the schedule's first date after the original due day, not before the
-completer's today; a range keeps its length. It goes to the top of the first to-do column of
-the board the completed task sits on for the completer. One completed task makes at most one
-next one — the unique link to it holds that under a repeat or a redelivery.
+The next task copies its words, priority, who does it, its project and its checklist
+unticked — not its comments — takes the schedule over and is due on the schedule's first
+date after the original due day, not before the completer's today; a range keeps its
+length. It goes to the top of the first to-do column of the board the completed task sits
+on for the completer. One completed task makes at most one next one — the unique link to it
+holds that under a repeat or a redelivery.
 """
 
 from datetime import date, datetime
@@ -21,6 +22,7 @@ from shosai.features.tasks.domain.recurrence import next_due, recurrence_of, shi
 from shosai.features.tasks.domain.tasks import TaskStatus
 from shosai.features.tasks.infrastructure.board_records import TaskPlacementRecord
 from shosai.features.tasks.infrastructure.task_records import TaskRecord
+from shosai.features.tasks.infrastructure.thread_records import TaskSubtaskRecord
 
 TASKS = cast("Table", TaskRecord.__table__)
 
@@ -67,8 +69,27 @@ async def next_of(
     record.recurrence = None
     if made is None:
         return None
+    await _copy_checklist(session, record, task_id, now)
     await _place_like(session, record.id, task_id, viewer, now)
     return await session.get(TaskRecord, task_id)
+
+
+async def _copy_checklist(
+    session: AsyncSession, done: TaskRecord, task_id: UUID, now: datetime
+) -> None:
+    """The done task's lines, in their order and unticked, on the next task."""
+    lines = await session.execute(
+        select(TaskSubtaskRecord.title, TaskSubtaskRecord.rank).where(
+            TaskSubtaskRecord.task_id == done.id
+        )
+    )
+    session.add_all(
+        TaskSubtaskRecord(
+            id=new_id(), task_id=task_id, user_id=done.user_id, org_id=done.org_id, title=title,
+            done=False, rank=rank, created_at=now, updated_at=now,
+        )
+        for title, rank in lines
+    )  # fmt: skip
 
 
 async def _place_like(

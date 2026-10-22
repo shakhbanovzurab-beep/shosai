@@ -15,11 +15,16 @@ from shosai.features.tasks.infrastructure.board_records import (
     TaskSettingsRecord,
 )
 from shosai.features.tasks.infrastructure.task_records import MeetingTaskSetRecord, TaskRecord
+from shosai.features.tasks.infrastructure.thread_records import (
+    TaskCommentRecord,
+    TaskSubtaskRecord,
+)
 from tests.harness.database_access import DatabaseAccess
 
 
 async def seed(homes: DatabaseAccess, person: uuid.UUID, org: uuid.UUID) -> tuple[uuid.UUID, ...]:
-    """A board with a personal task and a workspace task on it, a set and the settings."""
+    """A board with a personal and a workspace task, each with a line and a comment, a set and
+    the settings."""
     board, column, own, shared = (uuid.uuid4() for _ in range(4))
     async with homes.transactions.begin(TenancyScope(Home.RU, person, org)) as session:
         session.add(
@@ -43,6 +48,20 @@ async def seed(homes: DatabaseAccess, person: uuid.UUID, org: uuid.UUID) -> tupl
                 )
             )
         session.add(TaskSettingsRecord(user_id=person, incoming_board_id=board))
+    for task, org_id in ((own, None), (shared, org)):
+        async with homes.transactions.begin(TenancyScope(Home.RU, person, org_id)) as session:
+            session.add(
+                TaskSubtaskRecord(
+                    id=uuid.uuid4(), task_id=task, user_id=person, org_id=org_id, title="Пункт",
+                    rank="V",
+                )
+            )  # fmt: skip
+            session.add(
+                TaskCommentRecord(
+                    id=uuid.uuid4(), task_id=task, user_id=person, org_id=org_id,
+                    author_user_id=person, body="Комментарий",
+                )
+            )  # fmt: skip
     return own, shared
 
 
@@ -63,21 +82,26 @@ async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
     same = await handler.manifest(russian) == await handler.manifest(european)
     async with homes.transactions.begin(TenancyScope(Home.EU, person), read_only=True) as session:
         moved = set(await session.scalars(select(TaskPlacementRecord.task_id)))
+        lines_moved = set(await session.scalars(select(TaskSubtaskRecord.task_id)))
     await handler.erase(russian)
     await handler.erase(russian)
     await handler.purge(european)
     async with homes.transactions.begin(TenancyScope(Home.RU, person, org)) as session:
         left = set(await session.scalars(select(TaskRecord.id)))
+        comments_left = set(await session.scalars(select(TaskCommentRecord.task_id)))
 
     assert set(exported) == {
         "tasks.jsonl", "meeting_task_sets.jsonl", "boards.jsonl", "board_columns.jsonl",
-        "task_placements.jsonl", "task_settings.jsonl",
+        "task_placements.jsonl", "task_settings.jsonl", "task_subtasks.jsonl",
+        "task_comments.jsonl",
     }  # fmt: skip
+    assert str(own).encode() in exported["task_comments.jsonl"]
+    assert str(shared).encode() not in exported["task_subtasks.jsonl"]
     assert str(own).encode() in exported["tasks.jsonl"]
     assert str(shared).encode() not in exported["tasks.jsonl"]
     assert str(shared).encode() in exported["task_placements.jsonl"]
     assert same
-    assert moved == {own}
-    assert left == {shared}
+    assert moved == lines_moved == {own}
+    assert left == comments_left == {shared}
     assert await handler.remains(russian) == ()
     assert await handler.remains(european) == ()

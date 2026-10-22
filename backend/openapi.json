@@ -8245,6 +8245,540 @@
           }
         }
       }
+    },
+    "/v1/tasks/{task_id}/subtasks": {
+      "post": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Create Subtask",
+        "description": "Add a line at its position, the end by default; 100 at most.",
+        "operationId": "create_subtask_v1_tasks__task_id__subtasks_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubtaskCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubtaskOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}/subtasks/{subtask_id}": {
+      "patch": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Change Subtask",
+        "description": "Rename, tick or move a line.",
+        "operationId": "change_subtask_v1_tasks__task_id__subtasks__subtask_id__patch",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "subtask_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Subtask Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubtaskPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubtaskOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Delete Subtask",
+        "description": "Remove a line.",
+        "operationId": "delete_subtask_v1_tasks__task_id__subtasks__subtask_id__delete",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "subtask_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Subtask Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}/comments": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "List Comments",
+        "description": "A page of the task's comments, newest first.",
+        "operationId": "list_comments_v1_tasks__task_id__comments_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Items per page, at most the maximum.",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page, at most the maximum."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The next_cursor of the previous page; absent for the first page.",
+              "title": "Cursor"
+            },
+            "description": "The next_cursor of the previous page; absent for the first page."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_CommentOut_"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Create Comment",
+        "description": "Write a comment; once per `Idempotency-Key` when one is sent.",
+        "operationId": "create_comment_v1_tasks__task_id__comments_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z0-9._:-]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional: a key unique to one create, repeated on its retries.",
+              "title": "Idempotency-Key"
+            },
+            "description": "Optional: a key unique to one create, repeated on its retries."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}/comments/{comment_id}": {
+      "patch": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Edit Comment",
+        "description": "Edit one's own comment.",
+        "operationId": "edit_comment_v1_tasks__task_id__comments__comment_id__patch",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "comment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Comment Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Delete Comment",
+        "description": "Delete one's own comment.",
+        "operationId": "delete_comment_v1_tasks__task_id__comments__comment_id__delete",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "comment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Comment Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -8930,6 +9464,89 @@
         ],
         "title": "ChatSourceOut",
         "description": "The team chat a task was made from (TK-D13)."
+      },
+      "CommentAuthorOut": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "is_you": {
+            "type": "boolean",
+            "title": "Is You"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "name",
+          "is_you"
+        ],
+        "title": "CommentAuthorOut",
+        "description": "Who wrote a comment, and whether it is the reader."
+      },
+      "CommentBody": {
+        "properties": {
+          "body": {
+            "type": "string",
+            "title": "Body"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "body"
+        ],
+        "title": "CommentBody",
+        "description": "A comment's text."
+      },
+      "CommentOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "author": {
+            "$ref": "#/components/schemas/CommentAuthorOut"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "edited_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Edited At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "author",
+          "body",
+          "created_at",
+          "edited_at"
+        ],
+        "title": "CommentOut",
+        "description": "A comment on a task."
       },
       "Consents-Input": {
         "properties": {
@@ -11907,6 +12524,34 @@
           "next_cursor"
         ],
         "title": "Page[AdminUser]"
+      },
+      "Page_CommentOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CommentOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "Page[CommentOut]"
       },
       "Page_DeviceView_": {
         "properties": {
@@ -15567,6 +16212,33 @@
         "title": "SubscriptionCardDTO",
         "description": "The person's subscription; billing fills it."
       },
+      "SubtaskCreateBody": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "SubtaskCreateBody",
+        "description": "A new line of the checklist, at its position or at the end."
+      },
       "SubtaskOut": {
         "properties": {
           "id": {
@@ -15591,6 +16263,48 @@
         ],
         "title": "SubtaskOut",
         "description": "A line of the task's checklist."
+      },
+      "SubtaskPatchBody": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "done": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Done"
+          },
+          "position": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Position"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SubtaskPatchBody",
+        "description": "A change of a line by field presence; none of its fields is cleared."
       },
       "TariffDTO": {
         "properties": {

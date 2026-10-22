@@ -9,7 +9,7 @@ import uuid
 from collections.abc import AsyncIterator, Collection, Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, Final
 
 import httpx
 import pytest_asyncio
@@ -31,10 +31,13 @@ from shosai.features.notes.application.meeting_reader import MeetingsFindings, M
 from shosai.features.notes.contracts import MEETING_FINDINGS, MEETING_READER
 from shosai.features.notes.infrastructure.meeting_records import MEETING_RESOURCE
 from shosai.features.notes.module import NOTES
+from shosai.features.tasks.application.comments import Comments
+from shosai.features.tasks.application.subtasks import Subtasks
 from shosai.features.tasks.application.task_edits import TaskEdits
 from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import TaskWrites
 from shosai.features.tasks.channels.http.tasks import build_tasks_router
+from shosai.features.tasks.channels.http.threads import build_threads_router
 from shosai.features.tasks.infrastructure.board_records import (
     BoardColumnRecord,
     BoardRecord,
@@ -57,11 +60,25 @@ from shosai.features.workspaces.module import WORKSPACES
 from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.features.notes.no_archive import NO_ARCHIVE
+from tests.harness.connections import Connection
 from tests.harness.database_access import DatabaseAccess
+from tests.harness.run_slot import RunSlot
+from tests.support.access_model import MemberRow, ResourceRow, WorkspaceRow, World
+from tests.support.isolation import write_world
 
 type Json = dict[str, Any]
 HOME = Home.EU
 OUTBOX = EventOutbox(EventTypes([*TASKS.events, *NOTES.events, *WORKSPACES.events]))
+
+
+MEETING_COLUMNS: Final = {"title": "Созвон", "started_at": datetime.now(UTC)}
+# Родитель задачи встречи для набора изоляции: сама встреча.
+PARENTS: Final = {"meeting": (MEETING_RESOURCE, MEETING_COLUMNS)}
+
+
+def task_columns(row: ResourceRow) -> dict[str, object]:
+    """A meeting's task names its source; a task without a parent is a hand-made one."""
+    return {"title": "Задача", "source": "meeting" if row.parent else "manual"}
 
 
 @dataclass
@@ -99,6 +116,8 @@ class TaskBench:
     http: httpx.AsyncClient
     homes: DatabaseAccess
     profiles: Profiles
+    # Соединение слота в доме EU: миры пространств пишет набор изоляции.
+    connection: Connection
 
     async def call(
         self, who: uuid.UUID, method: str, path: str, body: object = None, **headers: str
@@ -119,6 +138,17 @@ class TaskBench:
         async with self.homes.transactions.begin(scope) as session:
             session.add(TaskRecord(id=task_id, user_id=owner, org_id=org, **values))
         return task_id
+
+    async def workspace(self, org: uuid.UUID, owner: uuid.UUID, *members: uuid.UUID) -> None:
+        """An active workspace with its owner and members."""
+        world = World(
+            workspaces=[WorkspaceRow(org, "active")],
+            members=[
+                MemberRow(uuid.uuid4(), org, owner, "owner", "active"),
+                *(MemberRow(uuid.uuid4(), org, member, "member", "active") for member in members),
+            ],
+        )
+        await write_world(self.connection, TASK_RESOURCE, world)
 
     async def board(
         self, owner: uuid.UUID, kinds: tuple[str, ...] = ("todo", "done")
@@ -190,7 +220,7 @@ def task_ports(profiles: Profiles, transactions: HomeTransactions) -> PortDirect
 
 
 @pytest_asyncio.fixture
-async def task_bench(homes: DatabaseAccess) -> AsyncIterator[TaskBench]:
+async def task_bench(homes: DatabaseAccess, run_slot: RunSlot) -> AsyncIterator[TaskBench]:
     """The task routes over the slot's homes."""
     profiles = Profiles()
     transactions = homes.transactions
@@ -201,6 +231,11 @@ async def task_bench(homes: DatabaseAccess) -> AsyncIterator[TaskBench]:
         TaskWrites(transactions, ports, (OUTBOX, effects)),
         TaskEdits(transactions, ports, OUTBOX),
     )
-    router = build_tasks_router(services, ports)
-    async with client_of(build_probe_app(extra=(router,)).app) as http:
-        yield TaskBench(http, homes, profiles)
+    routers = (
+        build_tasks_router(services, ports),
+        build_threads_router(
+            (Subtasks(transactions, ports), Comments(transactions, ports, effects)), ports
+        ),
+    )
+    async with client_of(build_probe_app(extra=routers).app) as http:
+        yield TaskBench(http, homes, profiles, run_slot.claimed.connections[HOME])

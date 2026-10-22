@@ -8,7 +8,7 @@ and those they completed that day in their zone (TK-D11).
 """
 
 from collections.abc import Collection, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date, datetime, time, timedelta
 from enum import StrEnum
 from typing import Final, cast
@@ -26,7 +26,7 @@ from shosai.core.pagination.page import Page, PageRequest, page_of
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER, Principal
 from shosai.features.tasks.application.sources import with_source
-from shosai.features.tasks.application.views import TaskView, context_of, task_of
+from shosai.features.tasks.application.views import TaskView, context_of, subtasks_of, task_of
 from shosai.features.tasks.contracts import TaskFacts, TaskNotFoundError
 from shosai.features.tasks.domain.tasks import Assignee, Priority, TaskSource, TaskStatus
 from shosai.features.tasks.infrastructure.task_records import TASK_RESOURCE, TaskRecord
@@ -172,9 +172,10 @@ class TaskReads:
         if record is None:
             raise TaskNotFoundError
         context = await context_of(session, self._ports, viewer, [record], placed=True)
-        return await with_source(
-            session, self._ports, Viewer(viewer), task_of(record, viewer, context)
+        view = replace(
+            task_of(record, viewer, context), subtasks=await subtasks_of(session, task_id)
         )
+        return await with_source(session, self._ports, Viewer(viewer), view)
 
     async def facts(
         self, session: AsyncSession, viewer: Viewer, task_ids: Collection[UUID]
