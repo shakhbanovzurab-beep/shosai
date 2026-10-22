@@ -130,7 +130,10 @@
       "confirmFailed": "Tidak dapat mengonfirmasi akun Slack",
       "notMeFailed": "Tidak dapat menghapus saran",
       "unlinkTitle": "Putuskan tautan Slack di “{space}”?",
-      "unlinkBody": "Leo tidak akan lagi menindaklanjuti pesan Anda dari Slack di “{space}”."
+      "unlinkBody": "Leo tidak akan lagi menindaklanjuti pesan Anda dari Slack di “{space}”.",
+      "notMeTitle": "Bukan akun Slack Anda?",
+      "notMeBody": "Shosai tidak akan menyarankan <account></account> di <space></space> lagi, dan Leo tidak akan menindaklanjuti pesannya.",
+      "notMeConfirm": "Bukan saya"
     }
   }
 }

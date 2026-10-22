@@ -41,7 +41,7 @@ function QuoteButton({ message }: { message: ChatMessageRef }) {
         <span className="text-muted-foreground text-xs">
           <bdi>{message.author_name}</bdi> · {format.dateTime(new Date(message.sent_at), "shortDateTime")}
         </span>
-        <blockquote dir="auto" className="whitespace-pre-line border-s-2 ps-3 leading-relaxed">
+        <blockquote dir="auto" className="whitespace-pre-line break-words border-s-2 ps-3 leading-relaxed">
           {message.quote}
         </blockquote>
       </PopoverContent>
@@ -109,7 +109,7 @@ export function DigestItemRow({ item, messenger }: { item: DigestItem; messenger
   return (
     <li className="flex @md:flex-row flex-col @md:items-start @md:gap-4 gap-2 py-3">
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <p className={cn("text-sm leading-relaxed", done && "text-muted-foreground")}>
+        <p className={cn("break-words text-sm leading-relaxed", done && "text-muted-foreground")}>
           {isPromise(item) ? <PromiseText promise={item} /> : <span dir="auto">{item.text}</span>}
         </p>
         <MessageMeta message={item.message} messenger={messenger} />

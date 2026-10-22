@@ -18,7 +18,7 @@ export function DigestHeader({ digest }: { digest: ChatDigest }) {
     <header className="flex items-center gap-3">
       <MessengerTile messenger={chat.messenger} />
       <div className="flex min-w-0 flex-col">
-        <h3 className="truncate font-medium text-sm">
+        <h3 title={title} className="truncate font-medium text-sm">
           <bdi>{title}</bdi>
         </h3>
         <p className="text-muted-foreground text-xs">

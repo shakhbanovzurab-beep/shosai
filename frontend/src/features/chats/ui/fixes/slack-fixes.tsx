@@ -28,7 +28,7 @@ export function RejoinChannel({ workspaceId, connection }: { workspaceId: string
     });
   return (
     <Button size="sm" variant="outline" disabled={busy} onClick={run}>
-      {busy ? <Spinner data-icon="inline-start" /> : null}
+      {busy ? <Spinner aria-hidden="true" data-icon="inline-start" /> : null}
       {t("fix.rejoin")}
     </Button>
   );
@@ -56,7 +56,7 @@ export function ReconnectSlack({ workspaceId, installationId }: { workspaceId: s
   const handoff = useSlackHandoff(workspaceId, { t: tc, ta }, () => toast.success(t("fix.slackReconnected")));
   return (
     <Button size="sm" variant="outline" disabled={handoff.waiting} onClick={() => void handoff.start(installationId)}>
-      {handoff.waiting ? <Spinner data-icon="inline-start" /> : null}
+      {handoff.waiting ? <Spinner aria-hidden="true" data-icon="inline-start" /> : null}
       {t("fix.reconnectSlack")}
     </Button>
   );

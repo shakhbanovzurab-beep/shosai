@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, type ReactNode, use, useState } from "react";
+import { createContext, type ReactNode, use, useRef, useState } from "react";
 
+import { focusBack } from "@/lib/focus-back";
 import { lazyComponent } from "@/lib/lazy-component";
 
 import type { ConnectCode, ConnectCodeCreate } from "../../domain/telegram-contract";
@@ -19,8 +20,14 @@ const ReconnectDialog = lazyComponent(() => import("./reconnect-dialog").then((m
 
 export function ReconnectHost({ workspaceId, children }: { workspaceId: string; children: ReactNode }) {
   const [open, setOpen] = useState<ReconnectRequest | null>(null);
+  // Кнопка починки, с которой открыли окно: фокус вернётся к ней, если строка ещё не починена.
+  const opener = useRef<HTMLElement | null>(null);
+  const show = (next: ReconnectRequest) => {
+    if (open === null) opener.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    setOpen(next);
+  };
   return (
-    <ReconnectContext value={setOpen}>
+    <ReconnectContext value={show}>
       {children}
       {open ? (
         <ReconnectDialog
@@ -31,6 +38,7 @@ export function ReconnectHost({ workspaceId, children }: { workspaceId: string; 
           code={open.code}
           onNewCode={(code) => setOpen({ ...open, code })}
           onClose={() => setOpen(null)}
+          onCloseAutoFocus={(event) => focusBack(event, opener)}
         />
       ) : null}
     </ReconnectContext>

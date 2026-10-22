@@ -28,6 +28,7 @@ function MessengerChoice({ choices, onPick }: { choices: Messenger[]; onPick: (m
         <button
           key={messenger}
           type="button"
+          data-messenger={messenger}
           onClick={() => onPick(messenger)}
           className="flex items-center gap-3 rounded-lg border p-3 text-start transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring"
         >
@@ -47,10 +48,12 @@ export function ConnectDialog({
   workspaceId,
   settings,
   onClose,
+  onCloseAutoFocus,
 }: {
   workspaceId: string;
   settings: ChatSettings;
   onClose: () => void;
+  onCloseAutoFocus?: (event: Event) => void;
 }) {
   const t = useTranslations("chatsConnect");
   const choices = settings.messengers.map((m) => m.messenger).filter((m) => FLOWS.includes(m));
@@ -60,7 +63,7 @@ export function ConnectDialog({
 
   return (
     <Dialog open onOpenChange={(open) => (open ? undefined : onClose())}>
-      <DialogContent className="flex max-h-[90dvh] flex-col sm:max-w-lg">
+      <DialogContent className="flex max-h-[90dvh] flex-col sm:max-w-lg" onCloseAutoFocus={onCloseAutoFocus}>
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{messenger === null ? t("choose.title") : t(`intro.${messenger}`)}</DialogDescription>

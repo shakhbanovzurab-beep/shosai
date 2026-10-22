@@ -130,7 +130,10 @@
       "confirmFailed": "Slack खाते की पुष्टि नहीं की जा सकी",
       "notMeFailed": "सुझाव हटाया नहीं जा सका",
       "unlinkTitle": "“{space}” में Slack अनलिंक करें?",
-      "unlinkBody": "Leo, “{space}” में Slack से आए आपके मैसेज पर काम करना बंद कर देगा।"
+      "unlinkBody": "Leo, “{space}” में Slack से आए आपके मैसेज पर काम करना बंद कर देगा।",
+      "notMeTitle": "क्या यह आपका Slack खाता नहीं है?",
+      "notMeBody": "Shosai अब <space></space> में <account></account> का सुझाव नहीं देगा, और Leo उसके मैसेज पर काम नहीं करेगा।",
+      "notMeConfirm": "यह मैं नहीं हूं"
     }
   }
 }

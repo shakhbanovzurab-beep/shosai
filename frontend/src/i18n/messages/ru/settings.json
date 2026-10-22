@@ -130,7 +130,10 @@
       "confirmFailed": "Не удалось подтвердить аккаунт Slack",
       "notMeFailed": "Не удалось убрать предложение",
       "unlinkTitle": "Отвязать Slack в «{space}»?",
-      "unlinkBody": "Leo перестанет выполнять ваши просьбы из Slack в «{space}»."
+      "unlinkBody": "Leo перестанет выполнять ваши просьбы из Slack в «{space}».",
+      "notMeTitle": "Это не ваш аккаунт Slack?",
+      "notMeBody": "Shosai больше не будет предлагать <account></account> в <space></space>, а Leo не будет выполнять просьбы из его сообщений.",
+      "notMeConfirm": "Это не я"
     }
   }
 }

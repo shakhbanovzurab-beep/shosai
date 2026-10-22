@@ -53,6 +53,8 @@ type ConfirmDestructiveProps = {
   onConfirm: () => void;
   onCancel: () => void;
   cancelLabel?: string;
+  /** Куда вернуть фокус, когда окно открыл не его Trigger (см. `focusBack`). */
+  onCloseAutoFocus?: (event: Event) => void;
 };
 
 /** Confirms an action the server can't undo, such as deleting vectors or credentials. */
@@ -64,11 +66,12 @@ export function ConfirmDestructive({
   onConfirm,
   onCancel,
   cancelLabel,
+  onCloseAutoFocus,
 }: ConfirmDestructiveProps) {
   const t = useTranslations("common");
   return (
     <AlertDialog open={open} onOpenChange={(next) => (next ? undefined : onCancel())}>
-      <AlertDialogContent>
+      <AlertDialogContent onCloseAutoFocus={onCloseAutoFocus}>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

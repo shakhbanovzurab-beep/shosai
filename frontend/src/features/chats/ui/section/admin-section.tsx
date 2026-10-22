@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { useTranslations } from "use-intl";
 
 import { SettingsCard } from "@/features/workspace/ui/settings/setting-row";
+import { focusBack } from "@/lib/focus-back";
 
 import type { ChatConnection, ChatConnectionsPage, ChatSettings } from "../../domain/contract";
 import { useChatSettings, useConnections } from "../../model/resources";
@@ -55,6 +56,7 @@ export function AdminTeamChats({ workspaceId }: { workspaceId: string }) {
   const settings = useChatSettings(workspaceId);
   const connections = useConnections(workspaceId);
   const [connecting, setConnecting] = useState(false);
+  const connectButton = useRef<HTMLButtonElement>(null);
   const ready = settings.status === "ready" ? settings.data : null;
   const page = connections.status === "ready" ? connections.data : null;
   const full = ready !== null && page !== null && page.items.length >= ready.limits.connections;
@@ -65,7 +67,7 @@ export function AdminTeamChats({ workspaceId }: { workspaceId: string }) {
         id="chats"
         title={t("section.title")}
         description={t("section.description")}
-        action={<ConnectButton settings={ready} full={full} onOpen={() => setConnecting(true)} />}
+        action={<ConnectButton ref={connectButton} settings={ready} full={full} onOpen={() => setConnecting(true)} />}
       >
         {ready && page ? (
           <AdminBody workspaceId={workspaceId} settings={ready} page={page} />
@@ -80,7 +82,12 @@ export function AdminTeamChats({ workspaceId }: { workspaceId: string }) {
         ) : null}
       </SettingsCard>
       {connecting && ready ? (
-        <ConnectDialog workspaceId={workspaceId} settings={ready} onClose={() => setConnecting(false)} />
+        <ConnectDialog
+          workspaceId={workspaceId}
+          settings={ready}
+          onClose={() => setConnecting(false)}
+          onCloseAutoFocus={(event) => focusBack(event, connectButton)}
+        />
       ) : null}
     </>
   );

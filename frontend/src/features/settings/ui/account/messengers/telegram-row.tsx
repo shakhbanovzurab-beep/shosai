@@ -39,7 +39,7 @@ function Waiting({ flow, onCancel }: { flow: Extract<TelegramLinkFlow, { step: "
       title={t("messengers.names.telegram")}
       status={
         <span className="flex items-start gap-1.5">
-          <Spinner className="mt-px size-3 shrink-0" />
+          <Spinner aria-hidden="true" className="mt-px size-3 shrink-0" />
           <span>{t.rich("messengers.telegram.waiting", { bot: () => <bdi dir="ltr">@{flow.bot}</bdi> })}</span>
         </span>
       }
@@ -100,7 +100,7 @@ export function LinkingTelegram({
       return (
         <MessengerRow messenger="telegram" title={name} status={t("messengers.notLinked")}>
           <Button variant="outline" size="sm" disabled={flow.step === "starting"} onClick={onBegin}>
-            {flow.step === "starting" ? <Spinner data-icon="inline-start" /> : null}
+            {flow.step === "starting" ? <Spinner aria-hidden="true" data-icon="inline-start" /> : null}
             {t("messengers.telegram.link")}
           </Button>
         </MessengerRow>

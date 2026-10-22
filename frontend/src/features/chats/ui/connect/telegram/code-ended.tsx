@@ -52,7 +52,7 @@ export function CodeEnded({
           {t("back")}
         </Button>
         <Button type="submit" disabled={pending}>
-          {pending ? <Spinner data-icon="inline-start" /> : null}
+          {pending ? <Spinner aria-hidden="true" data-icon="inline-start" /> : null}
           {t("add.newCode")}
         </Button>
       </DialogFooter>

@@ -45,7 +45,7 @@ function TelegramFix({
   };
   return (
     <Button size="sm" variant="outline" disabled={busy} onClick={start}>
-      {busy ? <Spinner data-icon="inline-start" /> : null}
+      {busy ? <Spinner aria-hidden="true" data-icon="inline-start" /> : null}
       {label}
     </Button>
   );

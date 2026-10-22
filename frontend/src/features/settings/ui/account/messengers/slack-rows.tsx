@@ -9,24 +9,24 @@ import { useMessengerLinkActions } from "@/features/identity/model/messenger-lin
 import { apiErrorDescription } from "@/lib/api/error-description";
 
 import { AccountName, LinkedStatus, MessengerRow } from "./messenger-row";
+import { NotMeButton } from "./not-me-button";
 import { UnlinkButton } from "./unlink-button";
 
 /*
  * Аккаунты Slack — по одному на пространство Slack (CF-D10). Совпадение по почте человек подтверждает сам
- * (CF-D4): «Это не я» убирает предложение, и этот аккаунт Slack больше не предлагается.
+ * (CF-D4) или отвечает «Это не я» (`not-me-button.tsx`).
  */
 
 export function SlackProposal({ link }: { link: MessengerLink }) {
   const t = useTranslations("settings");
-  const { confirm, remove } = useMessengerLinkActions();
-  const busy = confirm.isPending || remove.isPending;
+  const { confirm } = useMessengerLinkActions();
+  const busy = confirm.isPending;
   const title = t("messengers.slack.space", { space: link.space?.name ?? "" });
-  const failed = (title: string) => (error: unknown) => toast.error(title, { description: apiErrorDescription(error) });
 
   return (
     <MessengerRow
       messenger="slack"
-      title={<bdi>{title}</bdi>}
+      title={title}
       status={t.rich("messengers.slack.proposed", { account: () => <AccountName account={link.account} /> })}
     >
       <Button
@@ -36,20 +36,14 @@ export function SlackProposal({ link }: { link: MessengerLink }) {
         onClick={() =>
           confirm.mutate(link.id, {
             onSuccess: () => toast.success(t("messengers.slack.confirmed")),
-            onError: failed(t("messengers.slack.confirmFailed")),
+            onError: (error) =>
+              toast.error(t("messengers.slack.confirmFailed"), { description: apiErrorDescription(error) }),
           })
         }
       >
         {t("messengers.slack.confirm")}
       </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        disabled={busy}
-        onClick={() => remove.mutate(link.id, { onError: failed(t("messengers.slack.notMeFailed")) })}
-      >
-        {t("messengers.slack.notMe")}
-      </Button>
+      <NotMeButton link={link} disabled={busy} />
     </MessengerRow>
   );
 }
@@ -59,7 +53,7 @@ export function SlackLinked({ link }: { link: MessengerLink }) {
   const space = link.space?.name ?? "";
   const title = t("messengers.slack.space", { space });
   return (
-    <MessengerRow messenger="slack" title={<bdi>{title}</bdi>} status={<LinkedStatus link={link} />}>
+    <MessengerRow messenger="slack" title={title} status={<LinkedStatus link={link} />}>
       <UnlinkButton
         link={link}
         title={t("messengers.slack.unlinkTitle", { space })}

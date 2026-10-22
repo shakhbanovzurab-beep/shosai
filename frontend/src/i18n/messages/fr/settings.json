@@ -130,7 +130,10 @@
       "confirmFailed": "Impossible de confirmer le compte Slack",
       "notMeFailed": "Impossible de retirer la suggestion",
       "unlinkTitle": "Dissocier Slack dans « {space} » ?",
-      "unlinkBody": "Leo ne donnera plus suite à vos messages venant de Slack dans « {space} »."
+      "unlinkBody": "Leo ne donnera plus suite à vos messages venant de Slack dans « {space} ».",
+      "notMeTitle": "Ce n’est pas votre compte Slack ?",
+      "notMeBody": "Shosai ne proposera plus <account></account> dans <space></space>, et Leo ne donnera plus suite à ses messages.",
+      "notMeConfirm": "Ce n’est pas moi"
     }
   }
 }

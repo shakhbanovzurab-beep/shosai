@@ -19,7 +19,8 @@
       "all": "Toda mensagem, para resumos"
     },
     "notice": "{mode, select, all {Shosai guarda toda mensagem deste chat} other {Shosai guarda as mensagens dirigidas ao Leo}} {home, select, ru {na Rússia} other {na UE}} por {days, plural, one {# dia} many {# dias} other {# dias}}, incluindo as de pessoas que não usam o Shosai. Todos no chat veem que o Leo está lá.",
-    "noticeRequired": "Aceite isto para conectar o chat."
+    "noticeRequired": "Aceite isto para conectar o chat.",
+    "noticeRequiredChange": "Aceite para salvar a alteração."
   },
   "telegram": {
     "mentionsHint": "Leo vê as mensagens que mencionam @{bot} ou que respondem a ele. Resumos não estão disponíveis.",
@@ -68,7 +69,8 @@
       "connected": "O Slack está conectado",
       "denied": "O Slack não foi conectado",
       "error": "Não foi possível conectar o Slack",
-      "back": "Voltar para o Shosai"
+      "back": "Voltar para o Shosai",
+      "errorHint": "Volte ao Shosai e conecte o Slack de novo."
     },
     "channelsConnected": "{count, plural, =0 {Nenhum canal conectado ainda} one {# canal conectado} many {# canais conectados} other {# canais conectados}}",
     "loadError": "Não foi possível carregar seus espaços de trabalho do Slack",
@@ -93,6 +95,10 @@
     "history": "O Shosai tem as mensagens de um canal a partir do momento em que você o conecta.",
     "connect": "{count, plural, one {Conectar # canal} many {Conectar # canais} other {Conectar # canais}}",
     "connected": "{count, plural, one {# canal conectado} many {# canais conectados} other {# canais conectados}}",
-    "alreadyConnected": "Já conectados: {channels}."
+    "alreadyConnected": "Já conectados: {channels}.",
+    "limit": "{count, plural, one {Você pode conectar até # canal por vez.} many {Você pode conectar até # canais por vez.} other {Você pode conectar até # canais por vez.}}",
+    "firstPage": "{count, plural, one {Mostrando o primeiro canal. Pesquise para encontrar os outros.} many {Mostrando os primeiros # canais. Pesquise para encontrar os outros.} other {Mostrando os primeiros # canais. Pesquise para encontrar os outros.}}",
+    "noChannelsYet": "Nenhum canal ainda. Para um canal privado, convide o Leo com o comando abaixo.",
+    "found": "{count, plural, =0 {Nenhum canal encontrado} one {# canal encontrado} many {# canais encontrados} other {# canais encontrados}}"
   }
 }

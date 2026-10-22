@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { startTransition, useActionState, useRef, useState } from "react";
 
 import { Info } from "lucide-react";
 import { useTranslations } from "use-intl";
@@ -54,7 +54,14 @@ export function SetupStep({
   }, null);
 
   return (
-    <form action={submit} className="flex min-h-0 flex-col gap-4">
+    <form
+      // Не `action`: после него React 19 сбрасывает форму, и Radix вернул бы режим и привязку к начальным.
+      onSubmit={(event) => {
+        event.preventDefault();
+        startTransition(() => submit());
+      }}
+      className="flex min-h-0 flex-col gap-4"
+    >
       <div className="-mx-1 flex min-h-0 flex-col gap-4 overflow-y-auto px-1">
         <FieldGroup>
           <BindingField id="chat-binding" value={projectId} onChange={setProjectId} />
@@ -91,7 +98,7 @@ export function SetupStep({
           </Button>
         </DialogClose>
         <Button type="submit" disabled={pending}>
-          {pending ? <Spinner data-icon="inline-start" /> : null}
+          {pending ? <Spinner aria-hidden="true" data-icon="inline-start" /> : null}
           {pending ? t("telegram.gettingCode") : t("telegram.getCode")}
         </Button>
       </DialogFooter>

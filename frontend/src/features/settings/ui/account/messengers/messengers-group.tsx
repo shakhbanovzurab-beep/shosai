@@ -48,7 +48,7 @@ export function MessengersGroup() {
   return (
     <SettingsGroup ref={group} title={t("messengers.title")}>
       <p className="text-muted-foreground text-sm">{t("messengers.description")}</p>
-      {links.isPending ? <Spinner className="my-3" /> : null}
+      {links.isPending ? <Spinner aria-label={common("feedback.loading")} className="my-3" /> : null}
       {links.isError ? (
         <div role="alert" className="flex items-center gap-3 py-2 text-sm">
           {t("messengers.loadFailed")}

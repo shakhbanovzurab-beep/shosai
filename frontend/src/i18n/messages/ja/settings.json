@@ -130,7 +130,10 @@
       "confirmFailed": "Slack アカウントを確認できませんでした",
       "notMeFailed": "候補を削除できませんでした",
       "unlinkTitle": "「{space}」の Slack のリンクを解除しますか？",
-      "unlinkBody": "「{space}」の Slack からのメッセージに Leo が対応しなくなります。"
+      "unlinkBody": "「{space}」の Slack からのメッセージに Leo が対応しなくなります。",
+      "notMeTitle": "自分の Slack アカウントではありませんか？",
+      "notMeBody": "Shosai は <space></space> の <account></account> を今後提案しません。Leo もそのメッセージに対応しません。",
+      "notMeConfirm": "自分ではない"
     }
   }
 }

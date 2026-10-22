@@ -19,7 +19,8 @@
       "all": "Every message, for digests"
     },
     "notice": "{mode, select, all {Shosai stores every message of this chat} other {Shosai stores the messages written to Leo}} {home, select, ru {in Russia} other {in the EU}} for {days, plural, one {# day} other {# days}}, including messages of people who don’t use Shosai. Everyone in the chat sees that Leo is there.",
-    "noticeRequired": "Accept this to connect the chat."
+    "noticeRequired": "Accept this to connect the chat.",
+    "noticeRequiredChange": "Accept this to save the change."
   },
   "telegram": {
     "mentionsHint": "Leo sees messages that mention @{bot} or reply to it. Digests aren’t available.",
@@ -68,7 +69,8 @@
       "connected": "Slack is connected",
       "denied": "Slack wasn’t connected",
       "error": "Couldn’t connect Slack",
-      "back": "Back to Shosai"
+      "back": "Back to Shosai",
+      "errorHint": "Go back to Shosai and connect Slack again."
     },
     "channelsConnected": "{count, plural, =0 {No channels connected yet} one {# channel connected} other {# channels connected}}",
     "loadError": "Couldn’t load your Slack workspaces",
@@ -93,6 +95,10 @@
     "history": "Shosai has a channel’s messages from the moment you connect it.",
     "connect": "{count, plural, one {Connect # channel} other {Connect # channels}}",
     "connected": "{count, plural, one {# channel connected} other {# channels connected}}",
-    "alreadyConnected": "Already connected: {channels}."
+    "alreadyConnected": "Already connected: {channels}.",
+    "limit": "{count, plural, one {You can connect up to # channel at a time.} other {You can connect up to # channels at a time.}}",
+    "firstPage": "{count, plural, one {Showing the first # channel. Search to find the others.} other {Showing the first # channels. Search to find the others.}}",
+    "noChannelsYet": "No channels to show yet. For a private channel, invite Leo with the command below.",
+    "found": "{count, plural, =0 {No channels found} one {# channel found} other {# channels found}}"
   }
 }

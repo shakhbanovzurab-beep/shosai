@@ -130,7 +130,10 @@
       "confirmFailed": "Kan het Slack-account niet bevestigen",
       "notMeFailed": "Kan de suggestie niet verwijderen",
       "unlinkTitle": "Slack in ‘{space}’ ontkoppelen?",
-      "unlinkBody": "Leo reageert dan niet meer op je berichten uit Slack in ‘{space}’."
+      "unlinkBody": "Leo reageert dan niet meer op je berichten uit Slack in ‘{space}’.",
+      "notMeTitle": "Niet jouw Slack-account?",
+      "notMeBody": "Shosai stelt <account></account> in <space></space> niet meer voor, en Leo reageert niet op de berichten ervan.",
+      "notMeConfirm": "Dat ben ik niet"
     }
   }
 }

@@ -29,7 +29,7 @@ function InstallationButton({ item, onPick }: { item: SlackInstallation; onPick:
     >
       <MessengerTile messenger="slack" />
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="truncate font-medium">
+        <span title={item.team.name} className="truncate font-medium">
           <bdi>{item.team.name}</bdi>
         </span>
         <span className="text-muted-foreground text-xs">
@@ -61,7 +61,7 @@ export function WorkspaceStep({ workspaceId, onPick }: { workspaceId: string; on
   if (handoff.waiting)
     return (
       <p role="status" className="flex items-center gap-2 py-6 text-sm">
-        <Spinner />
+        <Spinner aria-hidden="true" />
         {t("slack.finishInSlack")}
       </p>
     );
@@ -74,7 +74,7 @@ export function WorkspaceStep({ workspaceId, onPick }: { workspaceId: string; on
         ) : (
           <div key={item.id} className="flex items-center gap-3 rounded-lg border p-3">
             <MessengerTile messenger="slack" />
-            <span className="min-w-0 flex-1 truncate font-medium">
+            <span title={item.team.name} className="min-w-0 flex-1 truncate font-medium">
               <bdi>{item.team.name}</bdi>
             </span>
             <Badge variant="destructive">{t("slack.accessEnded")}</Badge>

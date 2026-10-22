@@ -1,5 +1,7 @@
 "use client";
 
+import type { Ref } from "react";
+
 import { Plus } from "lucide-react";
 import { useTranslations } from "use-intl";
 
@@ -26,16 +28,21 @@ export function ConnectButton({
   settings,
   full,
   onOpen,
+  ref,
 }: {
   settings: ChatSettings | null;
   full: boolean;
   onOpen: () => void;
+  ref?: Ref<HTMLButtonElement>;
 }) {
   const t = useTranslations("chats");
   return (
     <Button
+      ref={ref}
+      data-chats-action="connect"
       size="sm"
-      disabled={settings === null || full}
+      // Установка без мессенджеров с путём подключения: окну нечего предложить.
+      disabled={settings === null || full || settings.messengers.length === 0}
       onPointerEnter={prefetchConnect}
       onFocus={prefetchConnect}
       onClick={onOpen}

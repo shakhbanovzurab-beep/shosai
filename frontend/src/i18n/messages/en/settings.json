@@ -130,7 +130,10 @@
       "confirmFailed": "Couldn’t confirm the Slack account",
       "notMeFailed": "Couldn’t remove the suggestion",
       "unlinkTitle": "Unlink Slack in {space}?",
-      "unlinkBody": "Leo will stop acting on your messages from Slack in {space}."
+      "unlinkBody": "Leo will stop acting on your messages from Slack in {space}.",
+      "notMeTitle": "Not your Slack account?",
+      "notMeBody": "Shosai won’t suggest <account></account> in <space></space> again, and Leo won’t act on its messages.",
+      "notMeConfirm": "It’s not me"
     }
   }
 }

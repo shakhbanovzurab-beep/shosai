@@ -14,7 +14,9 @@ export function ChatSourceLine({ source }: { source: CardChatSource }) {
     <span className="flex min-w-0 items-center gap-1">
       <MessengerMark messenger={source.messenger} className="size-3.5 shrink-0" />
       <span className="sr-only">{t("card.fromChat", { messenger: name })}</span>
-      <bdi className="truncate">{source.chat_title}</bdi>
+      <bdi title={source.chat_title} className="truncate">
+        {source.chat_title}
+      </bdi>
     </span>
   );
 }

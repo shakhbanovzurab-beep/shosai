@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { EllipsisVertical, SlidersHorizontal, Unplug } from "lucide-react";
 import { useFormatter, useTranslations } from "use-intl";
@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu-items";
+import { focusBack } from "@/lib/focus-back";
 
 import type { ChatConnection, ChatSettings } from "../../domain/contract";
 import { disconnectChat } from "../../model/connection-actions";
@@ -38,6 +39,8 @@ export function ChatMenu({
   const ta = useTranslations("chatsApi");
   const format = useFormatter();
   const [open, setOpen] = useState<"change" | "disconnect" | null>(null);
+  // Окна открываются из пунктов меню: фокус после них — снова на «⋮» этой строки.
+  const trigger = useRef<HTMLButtonElement>(null);
   const { messages, oldest_at: oldest } = connection.stored;
   const erased = oldest
     ? t("disconnect.body", { count: messages, since: format.dateTime(new Date(oldest), "short") })
@@ -47,7 +50,12 @@ export function ChatMenu({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon-sm" aria-label={tc("actionsFor", { name: connection.title })}>
+          <Button
+            ref={trigger}
+            variant="ghost"
+            size="icon-sm"
+            aria-label={tc("actionsFor", { name: connection.title })}
+          >
             <EllipsisVertical />
           </Button>
         </DropdownMenuTrigger>
@@ -73,6 +81,7 @@ export function ChatMenu({
           settings={settings}
           connection={connection}
           onClose={() => setOpen(null)}
+          onCloseAutoFocus={(event) => focusBack(event, trigger)}
         />
       ) : null}
       <ConfirmDestructive
@@ -85,6 +94,7 @@ export function ChatMenu({
           void disconnectChat(workspaceId, connection, t("disconnect.done", { chat: connection.title }), ta);
         }}
         onCancel={() => setOpen(null)}
+        onCloseAutoFocus={(event) => focusBack(event, trigger)}
       />
     </>
   );

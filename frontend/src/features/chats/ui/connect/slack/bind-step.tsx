@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { startTransition, useActionState, useState } from "react";
 
 import { useTranslations } from "use-intl";
 
@@ -55,7 +55,14 @@ export function BindStep({
   }, null);
 
   return (
-    <form action={submit} className="flex min-h-0 flex-col gap-4">
+    <form
+      // Не `action`: после него React 19 сбрасывает форму, и Radix вернул бы режим и привязку к начальным.
+      onSubmit={(event) => {
+        event.preventDefault();
+        startTransition(() => submit());
+      }}
+      className="flex min-h-0 flex-col gap-4"
+    >
       <div className="-mx-1 flex min-h-0 flex-col gap-4 overflow-y-auto px-1">
         <FieldGroup>
           <FieldSet>
@@ -63,7 +70,7 @@ export function BindStep({
             <ul className="flex flex-col gap-2">
               {picked.map((channel) => (
                 <li key={channel.id} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] items-center gap-3">
-                  <span dir="auto" className="truncate text-sm">
+                  <span dir="auto" title={`#${channel.name}`} className="truncate text-sm">
                     #{channel.name}
                   </span>
                   <BindingSelect
@@ -99,7 +106,7 @@ export function BindStep({
           {t("back")}
         </Button>
         <Button type="submit" disabled={pending}>
-          {pending ? <Spinner data-icon="inline-start" /> : null}
+          {pending ? <Spinner aria-hidden="true" data-icon="inline-start" /> : null}
           {t("slack.connect", { count: picked.length })}
         </Button>
       </DialogFooter>

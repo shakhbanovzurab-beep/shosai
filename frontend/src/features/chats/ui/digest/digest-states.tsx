@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export function DigestFrame({ label, busy, children }: { label: string; busy?: boolean; children: ReactNode }) {
   return (
     <article
+      data-chat-digest
       aria-label={label}
       aria-busy={busy}
       className="@container flex flex-col gap-4 rounded-2xl border bg-card px-4 py-3.5 text-card-foreground"

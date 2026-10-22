@@ -130,7 +130,10 @@
       "confirmFailed": "Slack hesabı onaylanamadı",
       "notMeFailed": "Öneri kaldırılamadı",
       "unlinkTitle": "“{space}” içindeki Slack bağlantısı kaldırılsın mı?",
-      "unlinkBody": "Leo, “{space}” içindeki Slack’ten gelen mesajlarınıza artık yanıt vermez."
+      "unlinkBody": "Leo, “{space}” içindeki Slack’ten gelen mesajlarınıza artık yanıt vermez.",
+      "notMeTitle": "Bu Slack hesabı sizin değil mi?",
+      "notMeBody": "Shosai, <space></space> içindeki <account></account> hesabını bir daha önermez ve Leo bu hesabın mesajlarına yanıt vermez.",
+      "notMeConfirm": "Ben değilim"
     }
   }
 }

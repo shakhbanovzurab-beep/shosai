@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { useTranslations } from "use-intl";
 
@@ -8,6 +8,7 @@ import { MessengerTile } from "@/components/brand/messenger-mark";
 import { ConfirmDestructive } from "@/components/feedback";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { focusBack } from "@/lib/focus-back";
 
 import type { ChatConnection } from "../../domain/contract";
 import type { SlackInstallation } from "../../domain/slack-contract";
@@ -32,13 +33,14 @@ function InstallationRow({
   const t = useTranslations("chats");
   const ta = useTranslations("chatsApi");
   const [confirming, setConfirming] = useState(false);
+  const disconnect = useRef<HTMLButtonElement>(null);
   const body =
     channels.length > 0 ? t("installations.body", { channels: channels.join(", ") }) : t("installations.bodyEmpty");
   return (
     <li className="flex flex-wrap items-center gap-3 py-3 first:pt-0">
       <MessengerTile messenger="slack" />
       <span className="flex min-w-0 flex-1 flex-col">
-        <span className="truncate font-medium text-sm">
+        <span title={item.team.name} className="truncate font-medium text-sm">
           <bdi>{item.team.name}</bdi>
         </span>
         <span className="text-muted-foreground text-xs">
@@ -51,7 +53,7 @@ function InstallationRow({
           <ReconnectSlack workspaceId={workspaceId} installationId={item.id} />
         </>
       ) : null}
-      <Button size="sm" variant="ghost" onClick={() => setConfirming(true)}>
+      <Button ref={disconnect} size="sm" variant="ghost" onClick={() => setConfirming(true)}>
         {t("installations.disconnect")}
       </Button>
       <ConfirmDestructive
@@ -64,6 +66,7 @@ function InstallationRow({
           void removeInstallation(workspaceId, item, t("installations.done", { team: item.team.name }), ta);
         }}
         onCancel={() => setConfirming(false)}
+        onCloseAutoFocus={(event) => focusBack(event, disconnect)}
       />
     </li>
   );

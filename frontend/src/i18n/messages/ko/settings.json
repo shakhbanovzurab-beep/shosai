@@ -130,7 +130,10 @@
       "confirmFailed": "Slack 계정을 확인하지 못했어요.",
       "notMeFailed": "추천을 삭제하지 못했어요.",
       "unlinkTitle": "“{space}”의 Slack 연동을 해제할까요?",
-      "unlinkBody": "Leo가 “{space}”의 Slack에서 보낸 메시지에 더 이상 응하지 않아요."
+      "unlinkBody": "Leo가 “{space}”의 Slack에서 보낸 메시지에 더 이상 응하지 않아요.",
+      "notMeTitle": "내 Slack 계정이 아닌가요?",
+      "notMeBody": "Shosai는 <space></space>의 <account></account> 계정을 다시 추천하지 않고, Leo도 이 계정의 메시지에 응하지 않아요.",
+      "notMeConfirm": "내가 아님"
     }
   }
 }

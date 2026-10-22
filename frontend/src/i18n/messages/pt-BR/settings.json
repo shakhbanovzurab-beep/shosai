@@ -130,7 +130,10 @@
       "confirmFailed": "Não foi possível confirmar a conta do Slack",
       "notMeFailed": "Não foi possível remover a sugestão",
       "unlinkTitle": "Desvincular o Slack em “{space}”?",
-      "unlinkBody": "O Leo vai deixar de atender às suas mensagens do Slack em “{space}”."
+      "unlinkBody": "O Leo vai deixar de atender às suas mensagens do Slack em “{space}”.",
+      "notMeTitle": "Não é sua conta do Slack?",
+      "notMeBody": "O Shosai não vai mais sugerir <account></account> em <space></space>, e o Leo não vai atender às mensagens dela.",
+      "notMeConfirm": "Não sou eu"
     }
   }
 }

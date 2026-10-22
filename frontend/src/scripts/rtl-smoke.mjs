@@ -25,6 +25,8 @@ const SCREENS = [
   "/app/calendar",
   "/app/hub",
   "/app/inbox",
+  "/app/w/lumen",
+  "/app/w/lumen/settings",
 ];
 const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900 },

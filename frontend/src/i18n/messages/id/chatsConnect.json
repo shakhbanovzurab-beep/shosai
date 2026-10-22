@@ -19,7 +19,8 @@
       "all": "Setiap pesan, untuk ringkasan"
     },
     "notice": "{mode, select, all {Shosai menyimpan setiap pesan chat ini} other {Shosai menyimpan pesan yang ditujukan kepada Leo}} {home, select, ru {di Rusia} other {di UE}} selama {days, plural, other {# hari}}, termasuk pesan dari orang yang tidak memakai Shosai. Semua orang di chat melihat bahwa Leo ada di sana.",
-    "noticeRequired": "Setujui ini untuk menghubungkan chat."
+    "noticeRequired": "Setujui ini untuk menghubungkan chat.",
+    "noticeRequiredChange": "Setujui ini untuk menyimpan perubahan."
   },
   "telegram": {
     "mentionsHint": "Leo melihat pesan yang menyebut @{bot} atau membalasnya. Ringkasan tidak tersedia.",
@@ -68,7 +69,8 @@
       "connected": "Slack terhubung",
       "denied": "Slack tidak terhubung",
       "error": "Slack tidak dapat dihubungkan",
-      "back": "Kembali ke Shosai"
+      "back": "Kembali ke Shosai",
+      "errorHint": "Kembali ke Shosai dan hubungkan Slack lagi."
     },
     "channelsConnected": "{count, plural, =0 {Belum ada kanal terhubung} other {# kanal terhubung}}",
     "loadError": "Ruang kerja Slack Anda tidak dapat dimuat",
@@ -93,6 +95,10 @@
     "history": "Shosai punya pesan sebuah kanal sejak Anda menghubungkannya.",
     "connect": "{count, plural, other {Hubungkan # kanal}}",
     "connected": "{count, plural, other {# kanal terhubung}}",
-    "alreadyConnected": "Sudah terhubung: {channels}."
+    "alreadyConnected": "Sudah terhubung: {channels}.",
+    "limit": "{count, plural, other {Anda dapat menghubungkan hingga # saluran sekaligus.}}",
+    "firstPage": "{count, plural, other {Menampilkan # saluran pertama. Cari untuk menemukan yang lain.}}",
+    "noChannelsYet": "Belum ada saluran. Untuk saluran privat, undang Leo dengan perintah di bawah.",
+    "found": "{count, plural, =0 {Tidak ada saluran yang ditemukan} other {# saluran ditemukan}}"
   }
 }

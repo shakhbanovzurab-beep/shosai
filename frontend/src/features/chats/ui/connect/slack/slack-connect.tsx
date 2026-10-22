@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import type { ChatSettings } from "../../../domain/contract";
 import type { SlackChannel } from "../../../domain/slack-contract";
+import { StepFocus } from "../step-focus";
 import { BindStep } from "./bind-step";
 import { ChannelsStep } from "./channels-step";
 import { WorkspaceStep } from "./workspace-step";
@@ -33,31 +34,37 @@ export function SlackConnect({
 
   if (phase.step === "workspace")
     return (
-      <WorkspaceStep
-        workspaceId={workspaceId}
-        onPick={(installationId) => setPhase({ step: "channels", installationId, picked: [] })}
-      />
+      <StepFocus key="workspace">
+        <WorkspaceStep
+          workspaceId={workspaceId}
+          onPick={(installationId) => setPhase({ step: "channels", installationId, picked: [] })}
+        />
+      </StepFocus>
     );
   if (phase.step === "channels")
     return (
-      <ChannelsStep
-        workspaceId={workspaceId}
-        installationId={phase.installationId}
-        app={app}
-        initial={phase.picked}
-        onBack={() => setPhase({ step: "workspace" })}
-        onNext={(picked) => setPhase({ step: "bind", installationId: phase.installationId, picked })}
-      />
+      <StepFocus key="channels">
+        <ChannelsStep
+          workspaceId={workspaceId}
+          installationId={phase.installationId}
+          app={app}
+          initial={phase.picked}
+          onBack={() => setPhase({ step: "workspace" })}
+          onNext={(picked) => setPhase({ step: "bind", installationId: phase.installationId, picked })}
+        />
+      </StepFocus>
     );
   return (
-    <BindStep
-      workspaceId={workspaceId}
-      settings={settings}
-      app={app}
-      installationId={phase.installationId}
-      picked={phase.picked}
-      onBack={() => setPhase({ step: "channels", installationId: phase.installationId, picked: phase.picked })}
-      onDone={onDone}
-    />
+    <StepFocus key="bind">
+      <BindStep
+        workspaceId={workspaceId}
+        settings={settings}
+        app={app}
+        installationId={phase.installationId}
+        picked={phase.picked}
+        onBack={() => setPhase({ step: "channels", installationId: phase.installationId, picked: phase.picked })}
+        onDone={onDone}
+      />
+    </StepFocus>
   );
 }

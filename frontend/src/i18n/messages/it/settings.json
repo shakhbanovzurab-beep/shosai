@@ -130,7 +130,10 @@
       "confirmFailed": "Impossibile confermare l’account Slack",
       "notMeFailed": "Impossibile rimuovere il suggerimento",
       "unlinkTitle": "Scollegare Slack in «{space}»?",
-      "unlinkBody": "Leo non risponderà più ai tuoi messaggi da Slack in «{space}»."
+      "unlinkBody": "Leo non risponderà più ai tuoi messaggi da Slack in «{space}».",
+      "notMeTitle": "Non è il tuo account Slack?",
+      "notMeBody": "Shosai non suggerirà più <account></account> in <space></space>, e Leo non risponderà ai suoi messaggi.",
+      "notMeConfirm": "Non sono io"
     }
   }
 }

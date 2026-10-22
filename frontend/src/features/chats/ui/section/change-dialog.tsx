@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { startTransition, useActionState, useRef, useState } from "react";
 
 import { useTranslations } from "use-intl";
 
@@ -23,11 +23,13 @@ export function ChangeChatDialog({
   settings,
   connection,
   onClose,
+  onCloseAutoFocus,
 }: {
   workspaceId: string;
   settings: ChatSettings;
   connection: ChatConnection;
   onClose: () => void;
+  onCloseAutoFocus?: (event: Event) => void;
 }) {
   const t = useTranslations("chats");
   const tc = useTranslations("common");
@@ -37,6 +39,8 @@ export function ChangeChatDialog({
   const [projectId, setProjectId] = useState<string | null>(initialProject);
   const [mode, setMode] = useState<ChatMode>(connection.mode);
   const [accepted, setAccepted] = useState(false);
+  const [missing, setMissing] = useState(false);
+  const notice = useRef<HTMLDivElement>(null);
   const needsNotice = mode === "all" && connection.mode !== "all";
   const app = settings.messengers.find((m) => m.messenger === "slack");
   const bot = settings.messengers.find((m) => m.messenger === "telegram");
@@ -51,6 +55,12 @@ export function ChangeChatDialog({
           all: tconnect("slack.allHint"),
         };
   const [, submit, pending] = useActionState(async () => {
+    // Без согласия «Сохранить» не молчит: под флажком — почему, и фокус на нём (как при подключении).
+    if (needsNotice && !accepted) {
+      setMissing(true);
+      notice.current?.querySelector("button")?.focus();
+      return null;
+    }
     const patch = { project_id: projectId, mode, ...(needsNotice ? { data_notice_accepted: accepted } : {}) };
     if (await changeChat(workspaceId, connection.id, patch, t("change.saved", { chat: connection.title }), ta))
       onClose();
@@ -59,8 +69,15 @@ export function ChangeChatDialog({
 
   return (
     <Dialog open onOpenChange={(open) => (open ? undefined : onClose())}>
-      <DialogContent className="flex max-h-[90dvh] flex-col sm:max-w-lg">
-        <form action={submit} className="flex min-h-0 flex-col gap-4">
+      <DialogContent className="flex max-h-[90dvh] flex-col sm:max-w-lg" onCloseAutoFocus={onCloseAutoFocus}>
+        <form
+          // Не `action`: после него React 19 сбрасывает форму, и Radix вернул бы режим и привязку к начальным.
+          onSubmit={(event) => {
+            event.preventDefault();
+            startTransition(() => submit());
+          }}
+          className="flex min-h-0 flex-col gap-4"
+        >
           <DialogHeader>
             <DialogTitle>{t("change.title", { chat: connection.title })}</DialogTitle>
           </DialogHeader>
@@ -69,7 +86,16 @@ export function ChangeChatDialog({
               <BindingField id="chat-change-binding" value={projectId} onChange={setProjectId} />
               <ModeField value={mode} onChange={setMode} hints={hints} />
               {needsNotice ? (
-                <DataNotice mode={mode} settings={settings} checked={accepted} invalid={false} onChange={setAccepted} />
+                <div ref={notice}>
+                  <DataNotice
+                    mode={mode}
+                    settings={settings}
+                    checked={accepted}
+                    invalid={missing && !accepted}
+                    onChange={setAccepted}
+                    required={tconnect("fields.noticeRequiredChange")}
+                  />
+                </div>
               ) : null}
             </FieldGroup>
           </div>
@@ -79,8 +105,8 @@ export function ChangeChatDialog({
                 {tc("actions.cancel")}
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={pending || (needsNotice && !accepted)}>
-              {pending ? <Spinner data-icon="inline-start" /> : null}
+            <Button type="submit" disabled={pending}>
+              {pending ? <Spinner data-icon="inline-start" aria-hidden="true" /> : null}
               {tc("actions.save")}
             </Button>
           </DialogFooter>

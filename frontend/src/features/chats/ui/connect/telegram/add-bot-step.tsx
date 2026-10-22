@@ -81,7 +81,7 @@ export function AddBotStep({
           />
         </div>
         <p role="status" className="flex items-center gap-2 text-sm">
-          <Spinner />
+          <Spinner aria-hidden="true" />
           {t("add.waiting")}
         </p>
         {now === null ? null : (

@@ -34,6 +34,8 @@ export function ChatDigestCard({ digest, label, host }: { digest: DigestRef; lab
       setMaking((current) => new Set([...current, ...itemIds]));
       void host.makeTasks(itemIds).then((proposalId) => {
         if (proposalId) markItemsProposed(digest, itemIds, proposalId);
+        // «Все договорённости»: кнопка уходит вместе со свободными пунктами — фокус переходит к карточке одобрения.
+        if (proposalId && itemIds.length > 1) host.showProposal(proposalId);
         const done = new Set(itemIds);
         setMaking((current) => new Set([...current].filter((id) => !done.has(id))));
       });

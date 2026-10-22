@@ -1,5 +1,6 @@
 // Interactive scenarios of the RTL smoke test: each gets a fresh page whose language cookie is `language`.
 
+import { CHATS_SCENARIOS } from "./chats.mjs";
 import { KANBAN_SCENARIOS } from "./kanban.mjs";
 
 /** Picking a language in the user menu re-renders the page in it, in place, without a reload. */
@@ -26,4 +27,4 @@ const switchLanguage = {
   },
 };
 
-export const SCENARIOS = [switchLanguage, ...KANBAN_SCENARIOS];
+export const SCENARIOS = [switchLanguage, ...KANBAN_SCENARIOS, ...CHATS_SCENARIOS];

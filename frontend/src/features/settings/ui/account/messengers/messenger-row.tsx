@@ -13,7 +13,8 @@ export function MessengerRow({
   children,
 }: {
   messenger: LinkedMessenger;
-  title: ReactNode;
+  /** Мессенджер или «Slack · пространство»: обрезается, полностью — во всплывающей подсказке. */
+  title: string;
   status: ReactNode;
   children?: ReactNode;
 }) {
@@ -22,7 +23,9 @@ export function MessengerRow({
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <MessengerTile messenger={messenger} />
         <div className="flex min-w-0 flex-col gap-0.5">
-          <span className="truncate font-medium text-sm">{title}</span>
+          <span title={title} className="truncate font-medium text-sm">
+            <bdi>{title}</bdi>
+          </span>
           <span className="text-muted-foreground text-xs">{status}</span>
         </div>
       </div>

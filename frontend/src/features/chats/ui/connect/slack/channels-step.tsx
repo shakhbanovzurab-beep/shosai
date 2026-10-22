@@ -10,8 +10,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DialogFooter } from "@/components/ui/dialog";
-import { Field } from "@/components/ui/field";
-import { FieldLabel } from "@/components/ui/field-text";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -27,32 +25,41 @@ import { CopyValue } from "../copy-value";
 function ChannelOption({
   channel,
   checked,
+  blocked,
   onToggle,
 }: {
   channel: SlackChannel;
   checked: boolean;
+  /** Отмечено уже 20: остальные каналы ждут, пока снимут отметку с какого-то. */
+  blocked: boolean;
   onToggle: () => void;
 }) {
   const t = useTranslations("chatsConnect");
   const id = `slack-channel-${channel.id}`;
   const connected = channel.connection_id !== null;
+  // Вся строка — подпись флажка: щелчок между флажком и названием тоже отмечает канал.
   return (
-    <Field orientation="horizontal" data-disabled={connected || undefined} className="py-2">
-      <Checkbox id={id} checked={checked || connected} disabled={connected} onCheckedChange={onToggle} />
-      <FieldLabel htmlFor={id} className="flex min-w-0 flex-1 items-center gap-2 font-normal">
-        <span dir="auto" className="min-w-0 truncate">
-          #{channel.name}
-        </span>
-        {channel.private ? <Lock aria-label={t("slack.private")} className="size-3.5 text-muted-foreground" /> : null}
-        <span className="ms-auto shrink-0 text-muted-foreground text-xs tabular-nums">
-          {connected ? (
-            <Badge variant="secondary">{t("slack.alreadyIn")}</Badge>
-          ) : (
-            t("slack.members", { count: channel.member_count ?? 0 })
-          )}
-        </span>
-      </FieldLabel>
-    </Field>
+    <label
+      htmlFor={id}
+      className="flex cursor-pointer items-center gap-3 py-2 text-sm has-disabled:cursor-default has-disabled:opacity-60"
+    >
+      <Checkbox
+        id={id}
+        checked={checked || connected}
+        disabled={connected || (blocked && !checked)}
+        onCheckedChange={onToggle}
+      />
+      <span dir="auto" title={`#${channel.name}`} className="min-w-0 truncate">
+        #{channel.name}
+      </span>
+      {channel.private ? (
+        <Lock aria-label={t("slack.private")} className="size-3.5 shrink-0 text-muted-foreground" />
+      ) : null}
+      <span className="ms-auto shrink-0 text-muted-foreground text-xs tabular-nums">
+        {connected ? <Badge variant="secondary">{t("slack.alreadyIn")}</Badge> : null}
+        {!connected && channel.member_count !== null ? t("slack.members", { count: channel.member_count }) : null}
+      </span>
+    </label>
   );
 }
 
@@ -77,6 +84,7 @@ export function ChannelsStep({
   const [picked, setPicked] = useState<SlackChannel[]>(initial);
   const q = useDeferredValue(query.trim());
   const state = useChannels(workspaceId, installationId, q);
+  const full = picked.length >= SLACK_CHANNELS_PER_CONNECT;
   const toggle = (channel: SlackChannel) =>
     setPicked((current) => {
       if (current.some((c) => c.id === channel.id)) return current.filter((c) => c.id !== channel.id);
@@ -110,7 +118,9 @@ export function ChannelsStep({
           />
         ) : null}
         {state.status === "ready" && state.data.items.length === 0 ? (
-          <p className="py-6 text-center text-muted-foreground text-sm">{t("slack.noChannels")}</p>
+          <p className="py-6 text-center text-muted-foreground text-sm">
+            {q === "" ? t("slack.noChannelsYet") : t("slack.noChannels")}
+          </p>
         ) : null}
         {state.status === "ready"
           ? state.data.items.map((channel) => (
@@ -118,11 +128,23 @@ export function ChannelsStep({
                 key={channel.id}
                 channel={channel}
                 checked={picked.some((c) => c.id === channel.id)}
+                blocked={full}
                 onToggle={() => toggle(channel)}
               />
             ))
           : null}
+        {state.status === "ready" && state.data.next_cursor !== null ? (
+          <p className="py-2 text-muted-foreground text-xs">
+            {t("slack.firstPage", { count: state.data.items.length })}
+          </p>
+        ) : null}
       </div>
+      <p role="status" className="sr-only">
+        {state.status === "ready" ? t("slack.found", { count: state.data.items.length }) : null}
+      </p>
+      {full ? (
+        <p className="text-muted-foreground text-xs">{t("slack.limit", { count: SLACK_CHANNELS_PER_CONNECT })}</p>
+      ) : null}
       <div className="flex flex-col gap-1.5">
         <p className="text-muted-foreground text-xs">{t("slack.privateHint")}</p>
         <CopyValue

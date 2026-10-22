@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import type { ChatSettings } from "../../../domain/contract";
 import type { ConnectCode, ConnectCodeCreate } from "../../../domain/telegram-contract";
+import { StepFocus } from "../step-focus";
 import { AddBotStep } from "./add-bot-step";
 import { SetupStep } from "./setup-step";
 
@@ -27,22 +28,25 @@ export function TelegramConnect({
 
   if (issued === null)
     return (
-      <SetupStep
-        workspaceId={workspaceId}
-        settings={settings}
-        bot={bot}
-        onCode={(request, code) => setIssued({ request, code })}
-      />
+      <StepFocus key="setup">
+        <SetupStep
+          workspaceId={workspaceId}
+          settings={settings}
+          bot={bot}
+          onCode={(request, code) => setIssued({ request, code })}
+        />
+      </StepFocus>
     );
   return (
-    <AddBotStep
-      key={issued.code.id}
-      workspaceId={workspaceId}
-      request={issued.request}
-      code={issued.code}
-      onNewCode={(code) => setIssued({ request: issued.request, code })}
-      onBack={() => setIssued(null)}
-      onDone={onDone}
-    />
+    <StepFocus key={issued.code.id}>
+      <AddBotStep
+        workspaceId={workspaceId}
+        request={issued.request}
+        code={issued.code}
+        onNewCode={(code) => setIssued({ request: issued.request, code })}
+        onBack={() => setIssued(null)}
+        onDone={onDone}
+      />
+    </StepFocus>
   );
 }

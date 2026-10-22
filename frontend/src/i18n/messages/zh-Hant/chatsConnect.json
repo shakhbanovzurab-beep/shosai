@@ -19,7 +19,8 @@
       "all": "所有訊息（用於摘要）"
     },
     "notice": "{mode, select, all {Shosai 會把這個對話的所有訊息} other {Shosai 會把給 Leo 的訊息}}存放在{home, select, ru {俄羅斯} other {歐盟}} {days, plural, other {# 天}}，也包括不使用 Shosai 的人的訊息。對話中的每個人都看得到 Leo 在裡面。",
-    "noticeRequired": "請同意此項才能連接對話。"
+    "noticeRequired": "請同意此項才能連接對話。",
+    "noticeRequiredChange": "請同意才能儲存變更。"
   },
   "telegram": {
     "mentionsHint": "Leo 會看到提及 @{bot} 或回覆它的訊息。無法使用摘要。",
@@ -68,7 +69,8 @@
       "connected": "已連接 Slack",
       "denied": "Slack 未連接",
       "error": "無法連接 Slack",
-      "back": "返回 Shosai"
+      "back": "返回 Shosai",
+      "errorHint": "請回到 Shosai，再連接一次 Slack。"
     },
     "channelsConnected": "{count, plural, =0 {尚未連接任何頻道} other {已連接 # 個頻道}}",
     "loadError": "無法載入你的 Slack 工作空間",
@@ -93,6 +95,10 @@
     "history": "Shosai 從你連接頻道的那一刻起取得頻道訊息。",
     "connect": "{count, plural, other {連接 # 個頻道}}",
     "connected": "{count, plural, other {已連接 # 個頻道}}",
-    "alreadyConnected": "已連接：{channels}。"
+    "alreadyConnected": "已連接：{channels}。",
+    "limit": "{count, plural, other {一次最多可連接 # 個頻道。}}",
+    "firstPage": "{count, plural, other {目前顯示前 # 個頻道。請搜尋以找到其他頻道。}}",
+    "noChannelsYet": "還沒有頻道。如果是私人頻道，請用下方指令邀請 Leo。",
+    "found": "{count, plural, =0 {找不到頻道} other {找到 # 個頻道}}"
   }
 }

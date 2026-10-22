@@ -1,7 +1,7 @@
 import { useTranslations } from "use-intl";
 
 import { PageMeta } from "@/app/root/page-meta";
-import { TeamChatsSection } from "@/features/chats/ui/section/team-chats-section";
+import { LazyTeamChatsSection } from "@/features/chats/ui/section/lazy-team-chats";
 import { TeamSettingsScreen } from "@/features/workspace/ui/settings/settings-screen";
 
 export function Component() {
@@ -10,7 +10,7 @@ export function Component() {
     <>
       <PageMeta title={t("meta.settings")} />
       <TeamSettingsScreen>
-        <TeamChatsSection />
+        <LazyTeamChatsSection />
       </TeamSettingsScreen>
     </>
   );

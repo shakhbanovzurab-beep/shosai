@@ -19,7 +19,8 @@
       "all": "Elk bericht, voor samenvattingen"
     },
     "notice": "{mode, select, all {Shosai bewaart elk bericht van deze chat} other {Shosai bewaart de berichten aan Leo}} {home, select, ru {in Rusland} other {in de EU}} gedurende {days, plural, one {# dag} other {# dagen}}, ook berichten van mensen die Shosai niet gebruiken. Iedereen in de chat ziet dat Leo erbij is.",
-    "noticeRequired": "Ga hiermee akkoord om de chat te koppelen."
+    "noticeRequired": "Ga hiermee akkoord om de chat te koppelen.",
+    "noticeRequiredChange": "Ga akkoord om de wijziging op te slaan."
   },
   "telegram": {
     "mentionsHint": "Leo ziet berichten die @{bot} noemen of op hem reageren. Samenvattingen zijn niet beschikbaar.",
@@ -68,7 +69,8 @@
       "connected": "Slack is gekoppeld",
       "denied": "Slack is niet gekoppeld",
       "error": "Slack kon niet worden gekoppeld",
-      "back": "Terug naar Shosai"
+      "back": "Terug naar Shosai",
+      "errorHint": "Ga terug naar Shosai en koppel Slack opnieuw."
     },
     "channelsConnected": "{count, plural, =0 {Nog geen kanalen gekoppeld} one {# kanaal gekoppeld} other {# kanalen gekoppeld}}",
     "loadError": "Je Slack-werkruimtes konden niet worden geladen",
@@ -93,6 +95,10 @@
     "history": "Shosai heeft de berichten van een kanaal vanaf het moment dat je het koppelt.",
     "connect": "{count, plural, one {# kanaal koppelen} other {# kanalen koppelen}}",
     "connected": "{count, plural, one {# kanaal gekoppeld} other {# kanalen gekoppeld}}",
-    "alreadyConnected": "Al gekoppeld: {channels}."
+    "alreadyConnected": "Al gekoppeld: {channels}.",
+    "limit": "{count, plural, one {Je kunt tot # kanaal tegelijk koppelen.} other {Je kunt tot # kanalen tegelijk koppelen.}}",
+    "firstPage": "{count, plural, one {Het eerste kanaal wordt getoond. Zoek om de andere te vinden.} other {De eerste # kanalen worden getoond. Zoek om de andere te vinden.}}",
+    "noChannelsYet": "Nog geen kanalen. Nodig Leo voor een privékanaal uit met de opdracht hieronder.",
+    "found": "{count, plural, =0 {Geen kanalen gevonden} one {# kanaal gevonden} other {# kanalen gevonden}}"
   }
 }

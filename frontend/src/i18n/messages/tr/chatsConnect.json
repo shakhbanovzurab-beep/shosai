@@ -19,7 +19,8 @@
       "all": "Her mesaj, özetler için"
     },
     "notice": "{mode, select, all {Shosai bu sohbetin her mesajını} other {Shosai Leo’ya yazılan mesajları}} {home, select, ru {Rusya’da} other {AB’de}} {days, plural, one {# gün} other {# gün}} saklar; Shosai kullanmayan kişilerin mesajları da buna dahildir. Sohbetteki herkes Leo’nun orada olduğunu görür.",
-    "noticeRequired": "Sohbeti bağlamak için bunu kabul edin."
+    "noticeRequired": "Sohbeti bağlamak için bunu kabul edin.",
+    "noticeRequiredChange": "Değişikliği kaydetmek için bunu kabul edin."
   },
   "telegram": {
     "mentionsHint": "Leo, @{bot} adının geçtiği mesajları ve kendisine verilen yanıtları görür. Özetler kullanılamaz.",
@@ -68,7 +69,8 @@
       "connected": "Slack bağlandı",
       "denied": "Slack bağlanmadı",
       "error": "Slack bağlanamadı",
-      "back": "Shosai’ye dön"
+      "back": "Shosai’ye dön",
+      "errorHint": "Shosai’ye dönün ve Slack’i yeniden bağlayın."
     },
     "channelsConnected": "{count, plural, =0 {Henüz bağlı kanal yok} one {# kanal bağlı} other {# kanal bağlı}}",
     "loadError": "Slack çalışma alanlarınız yüklenemedi",
@@ -93,6 +95,10 @@
     "history": "Shosai bir kanalın mesajlarını kanalı bağladığınız andan itibaren alır.",
     "connect": "{count, plural, one {# kanalı bağla} other {# kanalı bağla}}",
     "connected": "{count, plural, one {# kanal bağlandı} other {# kanal bağlandı}}",
-    "alreadyConnected": "Zaten bağlı: {channels}."
+    "alreadyConnected": "Zaten bağlı: {channels}.",
+    "limit": "{count, plural, one {Tek seferde en fazla # kanal bağlayabilirsiniz.} other {Tek seferde en fazla # kanal bağlayabilirsiniz.}}",
+    "firstPage": "{count, plural, one {İlk # kanal gösteriliyor. Diğerlerini bulmak için arayın.} other {İlk # kanal gösteriliyor. Diğerlerini bulmak için arayın.}}",
+    "noChannelsYet": "Henüz kanal yok. Özel bir kanal için Leo’yu aşağıdaki komutla davet edin.",
+    "found": "{count, plural, =0 {Kanal bulunamadı} one {# kanal bulundu} other {# kanal bulundu}}"
   }
 }

@@ -130,7 +130,10 @@
       "confirmFailed": "Không thể xác nhận tài khoản Slack",
       "notMeFailed": "Không thể xóa gợi ý",
       "unlinkTitle": "Hủy liên kết Slack trong “{space}”?",
-      "unlinkBody": "Leo sẽ không xử lý tin nhắn của bạn từ Slack trong “{space}” nữa."
+      "unlinkBody": "Leo sẽ không xử lý tin nhắn của bạn từ Slack trong “{space}” nữa.",
+      "notMeTitle": "Đây không phải tài khoản Slack của bạn?",
+      "notMeBody": "Shosai sẽ không gợi ý <account></account> trong <space></space> nữa, và Leo sẽ không xử lý tin nhắn từ tài khoản này.",
+      "notMeConfirm": "Không phải tôi"
     }
   }
 }

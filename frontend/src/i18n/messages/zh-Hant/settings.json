@@ -130,7 +130,10 @@
       "confirmFailed": "無法確認 Slack 帳號",
       "notMeFailed": "無法移除建議",
       "unlinkTitle": "要取消連結「{space}」的 Slack 嗎？",
-      "unlinkBody": "Leo 將不再處理你在「{space}」的 Slack 傳送的訊息。"
+      "unlinkBody": "Leo 將不再處理你在「{space}」的 Slack 傳送的訊息。",
+      "notMeTitle": "這不是你的 Slack 帳號嗎？",
+      "notMeBody": "Shosai 不會再建議 <space></space> 的 <account></account>，Leo 也不會處理這個帳號的訊息。",
+      "notMeConfirm": "不是我"
     }
   }
 }

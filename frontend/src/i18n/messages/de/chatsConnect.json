@@ -19,7 +19,8 @@
       "all": "Jede Nachricht, für Zusammenfassungen"
     },
     "notice": "{mode, select, all {Shosai speichert jede Nachricht dieses Chats} other {Shosai speichert die Nachrichten an Leo}} {home, select, ru {in Russland} other {in der EU}} für {days, plural, one {# Tag} other {# Tage}}, auch Nachrichten von Personen, die Shosai nicht nutzen. Alle im Chat sehen, dass Leo dabei ist.",
-    "noticeRequired": "Stimme dem zu, um den Chat zu verbinden."
+    "noticeRequired": "Stimme dem zu, um den Chat zu verbinden.",
+    "noticeRequiredChange": "Stimme dem zu, um die Änderung zu speichern."
   },
   "telegram": {
     "mentionsHint": "Leo sieht Nachrichten, die @{bot} erwähnen oder auf ihn antworten. Zusammenfassungen gibt es nicht.",
@@ -68,7 +69,8 @@
       "connected": "Slack ist verbunden",
       "denied": "Slack wurde nicht verbunden",
       "error": "Slack konnte nicht verbunden werden",
-      "back": "Zurück zu Shosai"
+      "back": "Zurück zu Shosai",
+      "errorHint": "Geh zurück zu Shosai und verbinde Slack erneut."
     },
     "channelsConnected": "{count, plural, =0 {Noch keine Kanäle verbunden} one {# Kanal verbunden} other {# Kanäle verbunden}}",
     "loadError": "Deine Slack-Workspaces konnten nicht geladen werden",
@@ -93,6 +95,10 @@
     "history": "Shosai hat die Nachrichten eines Kanals ab dem Moment, in dem du ihn verbindest.",
     "connect": "{count, plural, one {# Kanal verbinden} other {# Kanäle verbinden}}",
     "connected": "{count, plural, one {# Kanal verbunden} other {# Kanäle verbunden}}",
-    "alreadyConnected": "Schon verbunden: {channels}."
+    "alreadyConnected": "Schon verbunden: {channels}.",
+    "limit": "{count, plural, one {Du kannst bis zu # Kanal auf einmal verbinden.} other {Du kannst bis zu # Kanäle auf einmal verbinden.}}",
+    "firstPage": "{count, plural, one {Der erste # Kanal wird angezeigt. Finde die anderen über die Suche.} other {Die ersten # Kanäle werden angezeigt. Finde die anderen über die Suche.}}",
+    "noChannelsYet": "Noch keine Kanäle. Für einen privaten Kanal lade Leo mit dem Befehl unten ein.",
+    "found": "{count, plural, =0 {Keine Kanäle gefunden} one {# Kanal gefunden} other {# Kanäle gefunden}}"
   }
 }

@@ -19,7 +19,8 @@
       "all": "모든 메시지(요약용)"
     },
     "notice": "{mode, select, all {Shosai는 이 채팅의 모든 메시지를} other {Shosai는 Leo에게 보낸 메시지를}} {home, select, ru {러시아} other {EU}}에 {days, plural, other {#일}} 동안 보관해요. Shosai를 쓰지 않는 사람의 메시지도 포함돼요. 채팅에 있는 모두가 Leo가 있다는 걸 볼 수 있어요.",
-    "noticeRequired": "채팅을 연결하려면 동의해 주세요."
+    "noticeRequired": "채팅을 연결하려면 동의해 주세요.",
+    "noticeRequiredChange": "변경 사항을 저장하려면 동의해 주세요."
   },
   "telegram": {
     "mentionsHint": "Leo는 @{bot}을 언급하거나 Leo에게 답한 메시지를 봐요. 요약은 쓸 수 없어요.",
@@ -68,7 +69,8 @@
       "connected": "Slack을 연결했어요",
       "denied": "Slack이 연결되지 않았어요",
       "error": "Slack을 연결하지 못했어요",
-      "back": "Shosai로 돌아가기"
+      "back": "Shosai로 돌아가기",
+      "errorHint": "Shosai로 돌아가서 Slack을 다시 연결해 주세요."
     },
     "channelsConnected": "{count, plural, =0 {아직 연결된 채널 없음} other {채널 #개 연결됨}}",
     "loadError": "Slack 워크스페이스를 불러오지 못했어요",
@@ -93,6 +95,10 @@
     "history": "Shosai는 채널을 연결한 순간부터 그 채널의 메시지를 받아요.",
     "connect": "{count, plural, other {채널 #개 연결}}",
     "connected": "{count, plural, other {채널 #개를 연결했어요}}",
-    "alreadyConnected": "이미 연결됨: {channels}."
+    "alreadyConnected": "이미 연결됨: {channels}.",
+    "limit": "{count, plural, other {한 번에 채널을 최대 #개까지 연결할 수 있어요.}}",
+    "firstPage": "{count, plural, other {처음 채널 #개를 보여 주고 있어요. 다른 채널은 검색해 주세요.}}",
+    "noChannelsYet": "아직 채널이 없어요. 비공개 채널은 아래 명령으로 Leo를 초대해 주세요.",
+    "found": "{count, plural, =0 {채널을 찾지 못했어요} other {채널 #개를 찾았어요}}"
   }
 }

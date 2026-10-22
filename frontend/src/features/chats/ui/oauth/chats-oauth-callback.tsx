@@ -46,6 +46,11 @@ export function ChatsOAuthCallback({
       <div className="flex max-w-sm flex-col items-center gap-3 text-center">
         <Icon className="size-10 text-muted-foreground" aria-hidden="true" />
         <h1 className="font-medium text-xl">{t(`slack.callback.${status}`)}</h1>
+        {status === "error" ? (
+          <p className="text-muted-foreground text-sm">
+            {error === "authorization_expired" ? t("slack.expired") : t("slack.callback.errorHint")}
+          </p>
+        ) : null}
         <Button variant="outline" asChild>
           <Link href="/app">{t("slack.callback.back")}</Link>
         </Button>

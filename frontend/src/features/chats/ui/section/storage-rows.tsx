@@ -1,12 +1,13 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 
 import { useTranslations } from "use-intl";
 
 import { ConfirmDestructive } from "@/components/feedback";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SettingRow } from "@/features/workspace/ui/settings/setting-row";
+import { focusBack } from "@/lib/focus-back";
 
 import { shortensRetention } from "../../domain/chat-rules";
 import { type ChatSettings, RETENTION_DAYS, type RetentionDays } from "../../domain/contract";
@@ -24,6 +25,7 @@ export function RetentionControl({ workspaceId, current }: { workspaceId: string
   const t = useTranslations("chats");
   const ta = useTranslations("chatsApi");
   const [shorter, setShorter] = useState<RetentionDays | null>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
   const daysText = (days: RetentionDays) => t("retention.days", { count: days });
   const save = (days: RetentionDays) =>
     void setRetention(workspaceId, days, t("retention.saved", { days: daysText(days) }), ta);
@@ -39,7 +41,7 @@ export function RetentionControl({ workspaceId, current }: { workspaceId: string
           else save(days);
         }}
       >
-        <SelectTrigger id="chats-retention" className="w-full sm:w-40">
+        <SelectTrigger ref={trigger} id="chats-retention" className="w-full sm:w-40">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
@@ -62,6 +64,7 @@ export function RetentionControl({ workspaceId, current }: { workspaceId: string
           setShorter(null);
         }}
         onCancel={() => setShorter(null)}
+        onCloseAutoFocus={(event) => focusBack(event, trigger)}
       />
     </>
   );

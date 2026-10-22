@@ -111,12 +111,15 @@ export function DataNotice({
   checked,
   invalid,
   onChange,
+  required,
 }: {
   mode: ChatMode;
   settings: ChatSettings;
   checked: boolean;
   invalid: boolean;
   onChange: (checked: boolean) => void;
+  /** Почему без согласия нельзя: по умолчанию — «чтобы подключить чат». */
+  required?: string;
 }) {
   const t = useTranslations("chatsConnect");
   return (
@@ -125,6 +128,7 @@ export function DataNotice({
         id="chat-data-notice"
         checked={checked}
         aria-invalid={invalid || undefined}
+        aria-describedby={invalid ? "chat-data-notice-required" : undefined}
         onCheckedChange={(next) => onChange(next === true)}
       />
       <FieldContent>
@@ -132,7 +136,9 @@ export function DataNotice({
           {t("fields.notice", { mode, home: settings.home, days: settings.retention_days })}
         </FieldLabel>
         {invalid ? (
-          <FieldDescription className="text-destructive">{t("fields.noticeRequired")}</FieldDescription>
+          <FieldDescription id="chat-data-notice-required" className="text-destructive">
+            {required ?? t("fields.noticeRequired")}
+          </FieldDescription>
         ) : null}
       </FieldContent>
     </Field>

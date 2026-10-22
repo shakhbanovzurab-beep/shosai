@@ -17,6 +17,7 @@ export function ReconnectDialog({
   code,
   onNewCode,
   onClose,
+  onCloseAutoFocus,
 }: {
   workspaceId: string;
   title: string;
@@ -25,11 +26,12 @@ export function ReconnectDialog({
   code: ConnectCode;
   onNewCode: (code: ConnectCode) => void;
   onClose: () => void;
+  onCloseAutoFocus?: (event: Event) => void;
 }) {
   const tc = useTranslations("common");
   return (
     <Dialog open onOpenChange={(open) => (open ? undefined : onClose())}>
-      <DialogContent className="flex max-h-[90dvh] flex-col sm:max-w-lg">
+      <DialogContent className="flex max-h-[90dvh] flex-col sm:max-w-lg" onCloseAutoFocus={onCloseAutoFocus}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{intro}</DialogDescription>

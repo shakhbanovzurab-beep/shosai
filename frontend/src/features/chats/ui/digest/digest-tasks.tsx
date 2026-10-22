@@ -47,6 +47,7 @@ export function ItemTaskAction({ item }: { item: DigestItem }) {
         <Button
           variant="link"
           size="sm"
+          data-digest-task="waiting"
           className="shrink-0 self-start px-0"
           onClick={() => showProposal(task.proposalId)}
         >
@@ -55,14 +56,18 @@ export function ItemTaskAction({ item }: { item: DigestItem }) {
       );
     default:
       return (
+        // Пока готовится — aria-disabled, а не disabled: фокус остаётся на кнопке, и она же станет «Ждёт одобрения».
         <Button
           variant="outline"
           size="sm"
-          className="shrink-0 self-start"
-          disabled={task.kind === "making"}
-          onClick={() => make([item.id])}
+          data-digest-task={task.kind}
+          className="shrink-0 self-start aria-disabled:opacity-50"
+          aria-disabled={task.kind === "making" || undefined}
+          onClick={() => {
+            if (task.kind === "free") make([item.id]);
+          }}
         >
-          {task.kind === "making" ? <Spinner data-icon="inline-start" /> : null}
+          {task.kind === "making" ? <Spinner aria-hidden="true" data-icon="inline-start" /> : null}
           {t("task.make")}
         </Button>
       );
@@ -79,9 +84,11 @@ export function MakeAllPromises({ digest }: { digest: ChatDigest }) {
     <Button
       variant="outline"
       size="sm"
-      className="self-start"
-      disabled={making.size > 0}
-      onClick={() => make(free.map((promise) => promise.id))}
+      className="self-start aria-disabled:opacity-50"
+      aria-disabled={making.size > 0 || undefined}
+      onClick={() => {
+        if (making.size === 0) make(free.map((promise) => promise.id));
+      }}
     >
       {t("task.makeAll", { count: free.length })}
     </Button>

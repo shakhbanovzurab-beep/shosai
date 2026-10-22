@@ -130,7 +130,10 @@
       "confirmFailed": "تعذر تأكيد حساب Slack",
       "notMeFailed": "تعذرت إزالة الاقتراح",
       "unlinkTitle": "إلغاء ربط Slack في «{space}»؟",
-      "unlinkBody": "سيتوقف Leo عن تنفيذ طلباتك من Slack في «{space}»."
+      "unlinkBody": "سيتوقف Leo عن تنفيذ طلباتك من Slack في «{space}».",
+      "notMeTitle": "أليس هذا حسابك في Slack؟",
+      "notMeBody": "لن يقترح Shosai الحساب <account></account> في <space></space> مرة أخرى، ولن ينفذ Leo طلبات رسائله.",
+      "notMeConfirm": "ليس أنا"
     }
   }
 }

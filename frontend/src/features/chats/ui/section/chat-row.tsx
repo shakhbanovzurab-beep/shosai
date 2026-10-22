@@ -29,7 +29,7 @@ export function ChatRowTitle({ connection }: { connection: ChatConnection }) {
   return (
     <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
       <span className="sr-only">{t(`messenger.${connection.messenger}`)}</span>
-      <span dir="auto" className="min-w-0 truncate font-medium text-sm">
+      <span dir="auto" title={connection.title} className="min-w-0 truncate font-medium text-sm">
         {connection.title}
       </span>
       {connection.state === "needs_attention" ? <Badge variant="destructive">{t("state.needsAttention")}</Badge> : null}

@@ -19,7 +19,8 @@
       "all": "すべてのメッセージ（ダイジェスト用）"
     },
     "notice": "{mode, select, all {Shosai はこのチャットのすべてのメッセージを} other {Shosai は Leo 宛てのメッセージを}}{home, select, ru {ロシア} other {EU}}で{days, plural, other {# 日}}間保存します。Shosai を使っていない人のメッセージも含まれます。チャットの全員に Leo がいることが見えます。",
-    "noticeRequired": "チャットを接続するには同意してください。"
+    "noticeRequired": "チャットを接続するには同意してください。",
+    "noticeRequiredChange": "変更を保存するには、これに同意してください。"
   },
   "telegram": {
     "mentionsHint": "Leo は @{bot} がメンションされたメッセージと、Leo への返信を見ます。ダイジェストは使えません。",
@@ -68,7 +69,8 @@
       "connected": "Slack を接続しました",
       "denied": "Slack は接続されませんでした",
       "error": "Slack を接続できませんでした",
-      "back": "Shosai に戻る"
+      "back": "Shosai に戻る",
+      "errorHint": "Shosai に戻って、もう一度 Slack を接続してください。"
     },
     "channelsConnected": "{count, plural, =0 {まだチャンネルは接続されていません} other {# 件のチャンネルを接続済み}}",
     "loadError": "Slack ワークスペースを読み込めませんでした",
@@ -93,6 +95,10 @@
     "history": "Shosai がチャンネルのメッセージを受け取るのは、接続した時点からです。",
     "connect": "{count, plural, other {# 件のチャンネルを接続}}",
     "connected": "{count, plural, other {# 件のチャンネルを接続しました}}",
-    "alreadyConnected": "接続済み：{channels}。"
+    "alreadyConnected": "接続済み：{channels}。",
+    "limit": "{count, plural, other {一度に接続できるチャンネルは # 件までです。}}",
+    "firstPage": "{count, plural, other {最初の # 件のチャンネルを表示しています。ほかのチャンネルは検索してください。}}",
+    "noChannelsYet": "まだチャンネルはありません。非公開チャンネルの場合は、下のコマンドで Leo を招待してください。",
+    "found": "{count, plural, =0 {チャンネルが見つかりません} other {# 件のチャンネルが見つかりました}}"
   }
 }
