@@ -204,8 +204,8 @@ From `contracts/draft/consumers.json` and `websocket.json` (D1). **N** native (m
 | telemetry | E | `POST /v1/client/csp-report` |
 | billing | E | `POST /v1/billing/webhook/{provider}`, `…/{provider}/{kind}` (tbank, cloudpayments, lava, lava_paypal, legacy moneta) |
 | calendar | E | `GET /v1/integrations/oauth/{google,microsoft}/callback`, `POST /v1/integrations/google/notifications`, `POST /v1/integrations/microsoft/notifications`, `GET /v1/calendar/export.ics` |
-| tasks | E | `GET /v1/jira/oauth/callback`, `POST /v1/jira/webhook/{link_id}` |
-| connectors | E | `GET /v1/integrations/oauth/{slack,notion,attio,hubspot}/callback` (§8 SM-11); Nango's own `/nango/*` stays an edge route to the Nango server |
+| tasks | E | `POST /v1/jira/webhook/{link_id}` (the Jira OAuth callback is connectors', tasks TK-D8, [ADR 0059](../adr/0059-tasks-one-store-boards-action-items-and-jira.md)) |
+| connectors | E | `GET /v1/integrations/oauth/{slack,notion,attio,hubspot}/callback` (§8 SM-11); `GET /v1/jira/oauth/callback` (tasks TK-D8); Nango's own `/nango/*` stays an edge route to the Nango server |
 | mcp | E | `GET/HEAD /.well-known/oauth-authorization-server`, `GET/HEAD /.well-known/oauth-protected-resource`, `GET/POST /mcp`, `POST /v1/mcp/oauth/{register,token,revoke}`, `GET/POST /v1/mcp/oauth/authorize`, `GET /v1/mcp/oauth/callback` |
 | knowledge | E | `GET /v1/knowledge/vault/status`, `GET /v1/knowledge/vault/manifest`, `POST /v1/knowledge/vault/notes` (Obsidian plugin) |
 | meetings | E | `POST /v1/livekit/webhook`; links already sent: `GET /j/{token}`, `/meet/{token}`, `/rooms/join/{token}`, `/live/{token}` (§8 SM-8) |
@@ -331,12 +331,12 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 - **Leo tools:** `hubs` toolset: search, unresolved topics, digest (read); file a meeting (W).
 
 #### 10. tasks
-- **Scope:** one task store (§8 SM-3): personal and workspace tasks with title, status (todo, in progress, done), assignee (a person or a member), due date, priority, project, source (meeting, hub topic, mail, Jira); boards with columns, order and revision; the projection of workspace tasks onto a personal board; meeting action items as tasks; the home screen's "Today" as personal tasks due today; Jira boards in two-way sync with webhooks; the Kanban screen and the workspace Tasks screen.
-- **Owns:** `tracker_projects` → boards, `tracker_statuses` → columns, `tracker_tasks`, `tracker_labels`, `tracker_task_labels`, `jira_links`, `jira_issue_links`; action items moved from meetings.
-- **Routes:** E Jira; `/v1/tasks/*`, `/v1/boards/*`.
-- **Depends on:** connectors (Jira grant, ADR 0002), workspaces (access, projects), commitments (people), F6.
-- **Emits:** `tasks.assigned`, `tasks.due_changed`, `tasks.completed`.
-- **Leo tools:** `tasks` toolset: search, list a board (read); create, update, complete, move (W).
+- **Scope:** one task store (§8 SM-3): personal and workspace tasks with title, status (todo, in progress, done), assignee (a person or a member), due date, priority, project, source (meeting, hub topic, mail, Jira); boards with columns, order and revision; the projection of workspace tasks onto a personal board; meeting action items as tasks; the home screen's "Today" as personal tasks due today; Jira boards in two-way sync with webhooks; the Kanban screen and the workspace Tasks screen. Decided with the plan on 2026-10-22 ([ADR 0059](../adr/0059-tasks-one-store-boards-action-items-and-jira.md)): one task API for every space (TK-D1, no `/v1/workspaces/{id}/tasks`), workspace tasks under the access policy with a parent and a named-reader rule (TK-D2), one incoming board (TK-D4); the golden core of [ADR 0060](../adr/0060-kanban-golden-core.md) (TK-D12).
+- **Owns:** `tracker_projects` → boards, `tracker_statuses` → columns, `tracker_tasks`, `tracker_labels` and `tracker_task_labels` → a «Labels» field (TK-D12); action items moved from meetings (TK-D3). Draft `jira_links` and `jira_issue_links` are not carried (TK-D8).
+- **Routes:** E `POST /v1/jira/webhook/{link_id}`; `/v1/tasks/*`, `/v1/boards/*`, `/v1/stickers/*`.
+- **Depends on:** connectors (the Jira grant and its OAuth callback, ADR 0002, TK-D8), workspaces (access, projects), notes (findings), commitments (people), files (attachments), F6.
+- **Emits:** `tasks.task.assigned`, `tasks.task.due_changed`, `tasks.task.completed`, `tasks.task.reopened`, `tasks.task.deleted` (TK-D10).
+- **Leo tools:** `tasks` toolset: search, list a board (read, labelled `task:foreign`, TK-D9); create, update, complete, move (W).
 
 #### 11. calendar
 - **Scope:** calendars and events (CRUD, recurrence, focus blocks), two-way sync with Google, Microsoft and CalDAV through own OAuth (ADR 0002) and push channels, attendees, conference links, the iCal feed, upcoming events for meetings, hubs and workspaces, pre-meeting triggers for proactive.
@@ -357,7 +357,7 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 #### 13. connectors
 - **Scope:** the registry of connected services for every slice (Settings › Connectors; Knowledge › Sources and Kanban › Jira pick from it), Nango per home for Leo's connectors and knowledge sources, own OAuth grants for calendars and Jira (ADR 0002), token encryption in the home, revocation on disconnect and on account deletion, connection health (`connectors.broken`); provider read and act ports used by knowledge, mail and Leo.
 - **Owns:** `connector_connections`, `oauth_accounts`, `meeting_integrations` (per §8 SM-11), the Nango schema per home.
-- **Routes:** E integration OAuth callbacks per §3; `/v1/connectors/*`; the `/oauth/callback` cabinet page.
+- **Routes:** E integration OAuth callbacks per §3, the Jira one included (tasks TK-D8); `/v1/connectors/*`; the `/oauth/callback` cabinet page.
 - **Depends on:** identity (deletion registry), F6.
 - **Emits:** `connectors.connected`, `connectors.broken`, `connectors.revoked`.
 - **Leo tools:** provider actions exposed through the owning slices (mail, calendar, tasks, knowledge); push a meeting result to Notion, Slack or a CRM (W, per §8 SM-11).

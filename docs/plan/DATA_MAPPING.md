@@ -526,7 +526,7 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **New in v2:** `access` — The personal default defined by `workspaces` (R3).
 - **New in v2:** `indexed_upto_seq` — 0, so the v2 indexer rebuilds the meeting windows (R7).
 - **Checks M1 must satisfy (notes step 2):** a title of 1 to 256 characters (an empty one takes a name), `ended_at` set exactly when the status is not `active` and never before `started_at`; rows the draft let a client write otherwise are corrected and counted for the owner.
-- **New in v2 (notes plan, 2026-10-19):** `seconds` (`ended_at − started_at`, at most 6 h), `source`, `deleted_at` NULL, `notes_revision`; the meeting's no-logs setting moves from `users.no_logs` to `meeting_settings.keep_meetings = NOT no_logs` (MT-D6); `users.meeting_auto_tasks` is not carried (it follows tasks, MT-D4).
+- **New in v2 (notes plan, 2026-10-19):** `seconds` (`ended_at − started_at`, at most 6 h), `source`, `deleted_at` NULL, `notes_revision`; the meeting's no-logs setting moves from `users.no_logs` to `meeting_settings.keep_meetings = NOT no_logs` (MT-D6); `users.meeting_auto_tasks` is not carried: action items are always tasks (tasks TK-D3, ADR 0059), so the native `/v1/auth/me` answers `true` from notes' step 22.
 
 #### `transcript_segments` → `transcript_segments` · **transformed**
 
@@ -785,29 +785,33 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 
 ### 5.8 `tasks`
 
-#### `meeting_note_action_items` → `meeting_note_action_items` · **moved**
+#### `meeting_note_action_items` → `tasks` · **transformed**
 
+- **Decided with the tasks plan on 2026-10-22 (TK-D3, [ADR 0059](../adr/0059-tasks-one-store-boards-action-items-and-jira.md)):** each draft action item becomes a task of its meeting's owner, in the meeting's space, `source = meeting`; the table itself is not carried (SLICE_MAP §4.2.5, notes MT-D4).
 - **Owner → home:** via `note_id` → `meeting_notes` → `sessions.user_id`.
-- **Columns:** 6 of 8 move unchanged; exceptions:
-  - `done` — *moved*. User decision on AI output.
-  - `source_segment_id` — *moved*. Soft reference, may dangle.
+- **Columns:**
+  - `id` — *moved* verbatim into `tasks.source_finding_id`, so a 1.4.5 client's tick of a draft item still finds its task.
+  - `text` — *transformed* into `title` (trimmed; over 200 characters cut with "…", the full text in `description`).
+  - `done` — *moved* as the status (`done` or `todo`); a done item's `completed_at` is its `updated_at`. User decision on AI output.
+  - `source_segment_id`, `position` — *dropped*: the task keeps no transcript pointer; the meeting's tasks keep the items' order by creation.
+- No due date and no board; the meeting's set (`meeting_task_sets`) is written touched, so no later revision of its notes replaces them.
 
-#### `tracker_projects` → `tracker_projects` · **moved**
+#### `tracker_projects` → `boards` · **transformed**
 
 - **Owner → home:** own `user_id`.
-- **Columns:** all 9 move unchanged.
+- **Columns (TK-D7, ADR 0059):** `name` → `name` cut to 60; `icon` = `briefcase`; `key`, `description`, `archived` and `position` *dropped* (an archived project becomes an ordinary board); M1 counts each loss for the owner.
 
-#### `tracker_statuses` → `tracker_statuses` · **moved**
+#### `tracker_statuses` → `board_columns` · **transformed**
 
 - **Owner → home:** via `project_id` → `tracker_projects.user_id`.
-- **Columns:** all 8 move unchanged.
+- `name` → `title` cut to 60; `category` → `kind`; `position` kept. A board missing a kind gets an empty column of it, named in the owner's profile language.
 - Load before `tracker_tasks` (FK RESTRICT).
 - `color` — *mapped* (tasks TK-D12, the owner's decision of 2026-10-21): to the nearest of the column palette's nine colours by hue; the default grey `#94A3B8` becomes none.
 
-#### `tracker_tasks` → `tracker_tasks` · **moved**
+#### `tracker_tasks` → `tasks`, `task_placements` · **transformed**
 
 - **Owner → home:** via `project_id` → `tracker_projects.user_id`.
-- **Columns:** all 10 move unchanged.
+- **Columns (TK-D7):** `title`, `description` kept; `priority` kept, `urgent` → `high`; the status is its column's kind; `due_at` → `due_on`, the day in the owner's profile zone (Europe/Moscow when none); `source = manual`. `status_id` and `position` become the task's placement on its board, re-ranked in the column's order.
 
 #### `tracker_labels` → `tracker_labels` · **moved**
 
@@ -821,16 +825,9 @@ Columns: 1458 in mapped tables — 1255 moved, 40 transformed, 38 derived, 125 d
 - **Columns:** all 2 move unchanged.
 - **Destination (tasks TK-D12, the owner's decision of 2026-10-21, without loss):** a task's first label by name becomes its «Labels» value; its other labels are appended to its description as one last line, "Labels: B, C" in the owner's profile language.
 
-#### `jira_links` → `jira_links` · **moved**
+#### `jira_links`, `jira_issue_links` → — · **dropped**
 
-- **Owner → home:** own `user_id`.
-- **Columns:** 17 of 18 move unchanged; exceptions:
-  - `id` — *moved*. Verbatim: the Jira webhook URL carries it and is its only authentication.
-
-#### `jira_issue_links` → `jira_issue_links` · **moved**
-
-- **Owner → home:** via `link_id` → `jira_links.user_id`.
-- **Columns:** all 9 move unchanged.
+- **Decided with the tasks plan on 2026-10-22 (TK-D8, ADR 0059):** draft links are not carried. A linked project's board and tasks are carried as above; each linked task's issue key and URL are appended to its description as one last line, and the person syncs a Jira board once more. The draft's webhooks expire within 30 days; their ids need not be kept (risk S-5 closed). M1 counts the links for the owner.
 
 ### 5.9 `calendar`
 
@@ -1393,7 +1390,7 @@ These external systems refer to our ids and URLs, so the ids (R1) and the public
 |---|---|
 | Acquirers | lava subscriptions (parent contract = first transaction), saved cards keyed by `customer_key = user_id.hex`, open holds |
 | Google and Microsoft calendars | Watch channels posting to `/v1/integrations/{google,microsoft}/notifications` |
-| Jira | Webhooks posting to `/v1/jira/webhook/{link_id}` |
+| Jira | Webhooks posting to `/v1/jira/webhook/{link_id}`; not carried (tasks TK-D8): they expire within 30 days, and an unknown link id answers 404 |
 | External MCP servers | OAuth clients we registered with them |
 | LiveKit | No state of ours beyond recordings already in S3 |
 
@@ -1459,7 +1456,7 @@ Every risky item names a check. M1 runs it on every rehearsal and on the real ru
 | S-2 | Sign-in finds the wrong home or no account | One directory entry per non-anonymised account. `email_hmac` is unique, so normalised-email collisions are zero. Each entry's home equals its user's home. A sign-in smoke test passes for a sample per home |
 | S-3 | A credential becomes unreadable | Every ciphertext column is byte-equal. Inside the v2 runtime, the count of rows whose ciphertext decrypts equals the row count, per column and per key ring (no plaintext leaves the process). Row counts of the `nango` schema are equal, and a Nango proxy call succeeds for a sample connection. A Web Push test succeeds for a sample subscription |
 | S-4 | A public link stops working | `meeting_result_shares.token`, `rooms.invite_token`, `users.ical_token` and the password hashes are equal. On the rehearsal, a sample of each link type resolves |
-| S-5 | External callbacks stop arriving | `calendar_watch_channels` (`channel_id`, `client_state`, `resource_id`) and `jira_links.id` are equal. The v2 routes for calendar notifications, Jira webhooks, acquirer webhooks and the Nango callback answer at the draft paths (checked against the D1 contract) |
+| S-5 | External callbacks stop arriving | `calendar_watch_channels` (`channel_id`, `client_state`, `resource_id`) are equal (draft Jira links are not carried, tasks TK-D8). The v2 routes for calendar notifications, acquirer webhooks and the Nango callback answer at the draft paths (checked against the D1 contract) |
 | S-6 | MCP clients lose access | Equal `mcp_tokens.token_hash`. Equal sets of `mcp_registered_clients` and consented `mcp_oauth_clients`. A personal MCP token from the copy authenticates against v2 on the rehearsal |
 
 ### 8.7 Files

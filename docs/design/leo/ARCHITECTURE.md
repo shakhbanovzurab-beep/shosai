@@ -439,7 +439,7 @@ Recall does **not** refresh decay. Only use the model cites, or the user's confi
 
 ### 7.4 Untrusted content and taint
 
-- **One wrapper, v2.** A per-run random boundary token, escaping of any boundary-like sequence inside the data, and a provenance label from a closed set (`mail`, `web`, `file:foreign`, `file:own`, `meeting:speech`, `memory`, `mcp:<server>`, `skill:user`). Labels are never attacker text. This fixes A4.
+- **One wrapper, v2.** A per-run random boundary token, escaping of any boundary-like sequence inside the data, and a provenance label from a closed set (`mail`, `web`, `file:foreign`, `file:own`, `meeting:speech`, `task:foreign`, `memory`, `mcp:<server>`, `skill:user`; `task:foreign` is text in tasks the person did not write — a colleague's, a meeting's through extraction, a Jira user's, [ADR 0059](../../adr/0059-tasks-one-store-boards-action-items-and-jira.md)). Labels are never attacker text. This fixes A4.
 - **Taint level of a run:**
   - `none`: only the user's own words and own structured data;
   - `external`: any external text entered the context;
@@ -654,7 +654,7 @@ state changes ─┘   (ids)     (pure, features)        drop → record        
 - outbox subscriptions:
   - `notes.meeting.notes_ready`, `notes.meeting.ended` (`notes`);
   - `mail.received` (`mail`, from connector sync);
-  - `calendar.event_changed` (`calendar`), `tasks.due_changed`, `tasks.assigned` (`tasks`);
+  - `calendar.event_changed` (`calendar`), `tasks.task.due_changed`, `tasks.task.assigned` (`tasks`; `tasks.task.completed` and `tasks.task.deleted` withdraw a task's candidate, ADR 0059);
   - `commitments.due`, `commitments.topic_looped` (`commitments`);
   - `connectors.broken` (`connectors`), `hubs.topic_looped` (`hubs`), `support.replied` (`support`), `errands.failed`;
 - **time triggers** as rows in `proactive_triggers` (`run_at`, kind, subject), run by the scheduler with `FOR UPDATE SKIP LOCKED`, the same way as errands (§12). Calendar changes upsert the pre-meeting triggers; the morning brief is one row per user per day;

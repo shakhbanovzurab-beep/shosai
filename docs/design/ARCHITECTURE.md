@@ -203,7 +203,7 @@
   - workspace resources — `org_id` plus an access level: `owner | selected | organization`;
   - selected — rows in `resource_grants`; a grantee is a member or a team.
   The cabinet's audiences map onto the levels: participants → `selected` (the meeting's participants who are members), team → `selected` with the team as grantee, workspace → `organization`.
-- Resources with workspace access: meetings, notes, folders, files, knowledge items.
+- Resources with workspace access: meetings, notes, folders, files, knowledge items, tasks. A resource may also open to whoever may read its *parent* row now (a meeting's task opens to the meeting's readers) and to the active member a *named reader* column names (a task's assignee); both are rules of the one policy, evaluated in the reading query, never copied ([ADR 0059](../adr/0059-tasks-one-store-boards-action-items-and-jira.md)).
 - **Sharing a personal item.** A person shares a personal meeting or file into a workspace through a share record owned by `workspaces`; the item is not copied, because at launch both live in the same home. Removing the share or leaving the workspace ends the workspace's access to it.
 - A public link is independent of company access: a meeting has at most one, on or off, with the owner's settings (transcript, names, comments, expiry); no password; a link that is off, expired, revoked or of a hidden meeting or owner does not resolve, with one answer for all of them; previews never show the title and the pages are not indexed (notes plan MT-D5).
 - **One access policy** (feature `workspaces`) decides every read and write. Domains call it; they never compare owners themselves. The access check runs in the same query that reads the resource.

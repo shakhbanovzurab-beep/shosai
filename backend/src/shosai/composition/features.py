@@ -20,9 +20,18 @@ from shosai.features.billing.module import BILLING
 from shosai.features.files.module import FILES
 from shosai.features.identity.module import IDENTITY
 from shosai.features.notes.module import NOTES
+from shosai.features.tasks.module import TASKS
 from shosai.features.workspaces.module import WORKSPACES
 
-FEATURES: tuple[FeatureModule, ...] = (IDENTITY, WORKSPACES, BILLING, FILES, NOTES, ALERTING)
+FEATURES: tuple[FeatureModule, ...] = (
+    IDENTITY,
+    WORKSPACES,
+    BILLING,
+    FILES,
+    NOTES,
+    TASKS,
+    ALERTING,
+)
 
 
 def check_features(features: Sequence[FeatureModule]) -> None:
