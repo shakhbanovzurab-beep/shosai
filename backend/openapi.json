@@ -7776,6 +7776,475 @@
           }
         }
       }
+    },
+    "/v1/tasks": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "List Tasks",
+        "description": "A page of the tasks the person may read, by due day (no day last) or newest change.",
+        "operationId": "list_tasks_v1_tasks_get",
+        "parameters": [
+          {
+            "name": "params",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TaskListParams"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "description": "Items per page, at most the maximum.",
+              "default": 50,
+              "title": "Limit"
+            },
+            "description": "Items per page, at most the maximum."
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 512
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The next_cursor of the previous page; absent for the first page.",
+              "title": "Cursor"
+            },
+            "description": "The next_cursor of the previous page; absent for the first page."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_TaskItem_"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Create Task",
+        "description": "A task made by hand; once per `Idempotency-Key` when one is sent.",
+        "operationId": "create_task_v1_tasks_post",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "pattern": "^[A-Za-z0-9._:-]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optional: a key unique to one create, repeated on its retries.",
+              "title": "Idempotency-Key"
+            },
+            "description": "Optional: a key unique to one create, repeated on its retries."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskCreateBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDetail"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/today": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Read Today",
+        "description": "Open personal tasks due on or before the day, and those completed on it.",
+        "operationId": "read_today_v1_tasks_today_get",
+        "parameters": [
+          {
+            "name": "day",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Day"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodayOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/delete": {
+      "post": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Delete Tasks",
+        "description": "Delete tasks after the cabinet's Undo, all or none.",
+        "operationId": "delete_tasks_v1_tasks_delete_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TasksDeleteBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Read Task",
+        "description": "A task the person may read, as its panel shows it.",
+        "operationId": "read_task_v1_tasks__task_id__get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDetail"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Change Task",
+        "description": "Change a task by field presence: a field left out stays, `null` clears it.",
+        "operationId": "change_task_v1_tasks__task_id__patch",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskPatchBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskDetail"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Delete Task",
+        "description": "Delete a task at once; the cabinet's Undo delays the call.",
+        "operationId": "delete_task_v1_tasks__task_id__delete",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -8192,6 +8661,90 @@
         "title": "AdminUserCard",
         "description": "What the admin sees of one account."
       },
+      "AssigneeOut": {
+        "properties": {
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "name"
+        ],
+        "title": "AssigneeOut",
+        "description": "Who does the task: a member by id and name, or a name as written."
+      },
+      "AttachmentOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "content_type": {
+            "type": "string",
+            "title": "Content Type"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "title": "Size Bytes"
+          },
+          "image": {
+            "type": "boolean",
+            "title": "Image"
+          },
+          "preview_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview Url"
+          },
+          "added_by": {
+            "$ref": "#/components/schemas/PersonOut"
+          },
+          "added_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Added At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "content_type",
+          "size_bytes",
+          "image",
+          "preview_url",
+          "added_by",
+          "added_at"
+        ],
+        "title": "AttachmentOut",
+        "description": "A file of the task."
+      },
       "Audience": {
         "type": "string",
         "enum": [
@@ -8297,6 +8850,86 @@
         ],
         "title": "ChangeRequest",
         "description": "The current password (none for an account without one) and the new one."
+      },
+      "ChatLineOut": {
+        "properties": {
+          "messenger": {
+            "$ref": "#/components/schemas/Messenger"
+          },
+          "chat_title": {
+            "type": "string",
+            "title": "Chat Title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "messenger",
+          "chat_title"
+        ],
+        "title": "ChatLineOut",
+        "description": "The team chat a task came from, as the card's face names it."
+      },
+      "ChatMessageOut": {
+        "properties": {
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "sent_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Sent At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url",
+          "sent_at"
+        ],
+        "title": "ChatMessageOut",
+        "description": "The chat message a task was made from: its link, when the messenger has one."
+      },
+      "ChatSourceOut": {
+        "properties": {
+          "connection_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connection Id"
+          },
+          "messenger": {
+            "$ref": "#/components/schemas/Messenger"
+          },
+          "chat_title": {
+            "type": "string",
+            "title": "Chat Title"
+          },
+          "message": {
+            "$ref": "#/components/schemas/ChatMessageOut"
+          }
+        },
+        "type": "object",
+        "required": [
+          "connection_id",
+          "messenger",
+          "chat_title",
+          "message"
+        ],
+        "title": "ChatSourceOut",
+        "description": "The team chat a task was made from (TK-D13)."
       },
       "Consents-Input": {
         "properties": {
@@ -8452,6 +9085,33 @@
         "title": "CountsOut",
         "description": "Every meeting the person may read, and their own meetings per folder."
       },
+      "CoverOut": {
+        "properties": {
+          "attachment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Attachment Id"
+          },
+          "preview_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Preview Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "attachment_id",
+          "preview_url"
+        ],
+        "title": "CoverOut",
+        "description": "The card's cover: an image attachment of the task and its preview, once made."
+      },
       "Currency": {
         "type": "string",
         "enum": [
@@ -8461,6 +9121,71 @@
         ],
         "title": "Currency",
         "description": "A currency a plan is priced and paid in."
+      },
+      "CustomStickerOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "states",
+              "number",
+              "text"
+            ],
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "states": {
+            "items": {
+              "$ref": "#/components/schemas/StickerStateOut"
+            },
+            "type": "array",
+            "title": "States"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PersonOwner"
+              },
+              {
+                "$ref": "#/components/schemas/WorkspaceOwner"
+              }
+            ],
+            "title": "Owner"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "states",
+          "owner"
+        ],
+        "title": "CustomStickerOut",
+        "description": "A field of the boards' owner: a set of states, a number or a text."
+      },
+      "DayRule": {
+        "properties": {
+          "every": {
+            "type": "string",
+            "const": "day",
+            "title": "Every"
+          }
+        },
+        "type": "object",
+        "required": [
+          "every"
+        ],
+        "title": "DayRule",
+        "description": "Every day."
       },
       "DeletionRequest": {
         "properties": {
@@ -9953,6 +10678,30 @@
         "title": "InvalidField",
         "description": "Where a request failed validation and why; the submitted value is never echoed."
       },
+      "JiraOut": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "url",
+          "type"
+        ],
+        "title": "JiraOut",
+        "description": "The Jira issue a card mirrors."
+      },
       "JobStage": {
         "type": "string",
         "enum": [
@@ -9964,6 +10713,16 @@
         ],
         "title": "JobStage",
         "description": "An import job's stage, as the shipped clients decode it."
+      },
+      "LeoField": {
+        "type": "string",
+        "enum": [
+          "assignee",
+          "due",
+          "priority"
+        ],
+        "title": "LeoField",
+        "description": "A field Leo filled from a meeting and the person has not changed since (KG-D10)."
       },
       "LeoUseOut": {
         "properties": {
@@ -10867,6 +11626,15 @@
         "title": "MeetingUsageView",
         "description": "The month's meeting minutes; `limit_minutes` is null on unlimited plans."
       },
+      "Messenger": {
+        "type": "string",
+        "enum": [
+          "telegram",
+          "slack"
+        ],
+        "title": "Messenger",
+        "description": "A messenger a team chat lives in."
+      },
       "ModelTier": {
         "type": "string",
         "enum": [
@@ -10875,6 +11643,28 @@
         ],
         "title": "ModelTier",
         "description": "The classes of models a weekly token allowance is counted in (BL-D4)."
+      },
+      "MonthRule": {
+        "properties": {
+          "every": {
+            "type": "string",
+            "const": "month",
+            "title": "Every"
+          },
+          "day": {
+            "type": "integer",
+            "maximum": 31.0,
+            "minimum": 1.0,
+            "title": "Day"
+          }
+        },
+        "type": "object",
+        "required": [
+          "every",
+          "day"
+        ],
+        "title": "MonthRule",
+        "description": "Every month on this day; 29 to 31 fall on a shorter month's last day."
       },
       "MyNotesIn": {
         "properties": {
@@ -11027,6 +11817,37 @@
         ],
         "title": "NotesState",
         "description": "Where a meeting's notes are."
+      },
+      "NumberValue": {
+        "properties": {
+          "number": {
+            "type": "number",
+            "title": "Number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "number"
+        ],
+        "title": "NumberValue",
+        "description": "A field value: a number."
+      },
+      "OtherValueOut": {
+        "properties": {
+          "sticker": {
+            "$ref": "#/components/schemas/CustomStickerOut"
+          },
+          "value": {
+            "$ref": "#/components/schemas/StickerValue"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sticker",
+          "value"
+        ],
+        "title": "OtherValueOut",
+        "description": "A value of a field that is not on the reader's board, with the field."
       },
       "OwnNotesOut": {
         "properties": {
@@ -11255,6 +12076,34 @@
         ],
         "title": "Page[MeetingCardOut]"
       },
+      "Page_TaskItem_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TaskItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "Page[TaskItem]"
+      },
       "Page_TranscriptLineOut_": {
         "properties": {
           "items": {
@@ -11401,6 +12250,62 @@
           "year",
           "both"
         ]
+      },
+      "PersonOut": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "name"
+        ],
+        "title": "PersonOut",
+        "description": "A person by id and name."
+      },
+      "PersonOwner": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id"
+        ],
+        "title": "PersonOwner",
+        "description": "A field of a person's boards."
+      },
+      "PlacementOut": {
+        "properties": {
+          "board_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Board Id"
+          },
+          "column_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Column Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "board_id",
+          "column_id"
+        ],
+        "title": "PlacementOut",
+        "description": "Where the reader's card of the task sits."
       },
       "PlanCard": {
         "properties": {
@@ -11960,6 +12865,16 @@
         ],
         "title": "PriceView",
         "description": "A monthly price in minor units of the account's currency."
+      },
+      "Priority": {
+        "type": "string",
+        "enum": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "title": "Priority",
+        "description": "How urgent a task is, the most urgent first; a task may have none."
       },
       "PromoCodesView": {
         "properties": {
@@ -12548,6 +13463,27 @@
         ],
         "title": "QuotaSnapshot",
         "description": "Recording minutes left; billing fills it."
+      },
+      "Recurrence": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/DayRule"
+          },
+          {
+            "$ref": "#/components/schemas/WeekRule"
+          },
+          {
+            "$ref": "#/components/schemas/MonthRule"
+          }
+        ],
+        "discriminator": {
+          "propertyName": "every",
+          "mapping": {
+            "day": "#/components/schemas/DayRule",
+            "month": "#/components/schemas/MonthRule",
+            "week": "#/components/schemas/WeekRule"
+          }
+        }
       },
       "RegisterBody": {
         "properties": {
@@ -14194,6 +15130,121 @@
         "title": "SocialTickets",
         "description": "`social` for a known person (then `complete`), `social_consent` for a new one."
       },
+      "SourceFindingOut": {
+        "properties": {
+          "quote": {
+            "type": "string",
+            "title": "Quote"
+          },
+          "start_ms": {
+            "type": "integer",
+            "title": "Start Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "quote",
+          "start_ms"
+        ],
+        "title": "SourceFindingOut",
+        "description": "The moment of the meeting that proves the action item."
+      },
+      "SourceMeetingOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Started At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "started_at"
+        ],
+        "title": "SourceMeetingOut",
+        "description": "The meeting a task came from."
+      },
+      "SourceOut": {
+        "properties": {
+          "kind": {
+            "$ref": "#/components/schemas/TaskSource"
+          },
+          "meeting": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceMeetingOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "finding": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SourceFindingOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "chat": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatSourceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "meeting",
+          "finding"
+        ],
+        "title": "SourceOut",
+        "description": "Where a task came from."
+      },
+      "SpaceOut": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          },
+          "workspace_slug": {
+            "type": "string",
+            "title": "Workspace Slug"
+          },
+          "workspace_name": {
+            "type": "string",
+            "title": "Workspace Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id",
+          "workspace_slug",
+          "workspace_name"
+        ],
+        "title": "SpaceOut",
+        "description": "The workspace a task belongs to, with its address in the cabinet."
+      },
       "SpeakerOut": {
         "properties": {
           "idx": {
@@ -14241,6 +15292,119 @@
         ],
         "title": "StageStatus",
         "description": "Where a stage stands."
+      },
+      "StateValue": {
+        "properties": {
+          "state_id": {
+            "type": "string",
+            "title": "State Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state_id"
+        ],
+        "title": "StateValue",
+        "description": "A field value: one of its states."
+      },
+      "StatusFilter": {
+        "type": "string",
+        "enum": [
+          "open",
+          "done",
+          "todo",
+          "in_progress"
+        ],
+        "title": "StatusFilter",
+        "description": "Which statuses a list shows."
+      },
+      "StickerColor": {
+        "type": "string",
+        "enum": [
+          "gray",
+          "red",
+          "orange",
+          "amber",
+          "green",
+          "teal",
+          "blue",
+          "violet",
+          "pink"
+        ],
+        "title": "StickerColor",
+        "description": "The palette of fields' states and columns."
+      },
+      "StickerStateOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "color": {
+            "$ref": "#/components/schemas/StickerColor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "color"
+        ],
+        "title": "StickerStateOut",
+        "description": "A state of a field."
+      },
+      "StickerValue": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/StateValue"
+          },
+          {
+            "$ref": "#/components/schemas/NumberValue"
+          },
+          {
+            "$ref": "#/components/schemas/TextValue"
+          }
+        ]
+      },
+      "StopwatchOut": {
+        "properties": {
+          "running_since": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Running Since"
+          },
+          "total_ms": {
+            "type": "integer",
+            "title": "Total Ms"
+          },
+          "by_column": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "By Column"
+          }
+        },
+        "type": "object",
+        "required": [
+          "running_since",
+          "total_ms",
+          "by_column"
+        ],
+        "title": "StopwatchOut",
+        "description": "The stopwatch: closed time, per column, and since when it runs, if it runs."
       },
       "StorageOut": {
         "properties": {
@@ -14403,6 +15567,31 @@
         "title": "SubscriptionCardDTO",
         "description": "The person's subscription; billing fills it."
       },
+      "SubtaskOut": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "done": {
+            "type": "boolean",
+            "title": "Done"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "done"
+        ],
+        "title": "SubtaskOut",
+        "description": "A line of the task's checklist."
+      },
       "TariffDTO": {
         "properties": {
           "id": {
@@ -14511,6 +15700,913 @@
         ],
         "title": "TariffDTO",
         "description": "A plan of the catalogue, as the draft described it; billing fills it."
+      },
+      "TaskCreateBody": {
+        "properties": {
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "default": ""
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatus",
+            "default": "todo"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Priority"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "starts_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts On"
+          },
+          "due_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due On"
+          },
+          "recurrence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Recurrence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "workspace_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workspace Id"
+          },
+          "assignee_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assignee Id"
+          },
+          "assignee_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assignee Name"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "title": "TaskCreateBody",
+        "description": "A task made by hand, in the person's space or in a workspace."
+      },
+      "TaskDetail": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Priority"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "starts_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts On"
+          },
+          "due_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due On"
+          },
+          "assignee": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AssigneeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cover": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CoverOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "values": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/StickerValue"
+            },
+            "type": "object",
+            "title": "Values"
+          },
+          "subtasks_done": {
+            "type": "integer",
+            "title": "Subtasks Done",
+            "default": 0
+          },
+          "subtasks_total": {
+            "type": "integer",
+            "title": "Subtasks Total",
+            "default": 0
+          },
+          "comment_count": {
+            "type": "integer",
+            "title": "Comment Count",
+            "default": 0
+          },
+          "attachment_count": {
+            "type": "integer",
+            "title": "Attachment Count",
+            "default": 0
+          },
+          "recurring": {
+            "type": "boolean",
+            "title": "Recurring"
+          },
+          "leo_fields": {
+            "items": {
+              "$ref": "#/components/schemas/LeoField"
+            },
+            "type": "array",
+            "title": "Leo Fields"
+          },
+          "space": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SpaceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "jira": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JiraOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_chat": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatLineOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "can_delete": {
+            "type": "boolean",
+            "title": "Can Delete"
+          },
+          "stopwatch": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StopwatchOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimerOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "time_tracking": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeTrackingOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "recurrence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Recurrence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "other_values": {
+            "items": {
+              "$ref": "#/components/schemas/OtherValueOut"
+            },
+            "type": "array",
+            "title": "Other Values"
+          },
+          "source": {
+            "$ref": "#/components/schemas/SourceOut"
+          },
+          "subtasks": {
+            "items": {
+              "$ref": "#/components/schemas/SubtaskOut"
+            },
+            "type": "array",
+            "title": "Subtasks"
+          },
+          "attachments": {
+            "items": {
+              "$ref": "#/components/schemas/AttachmentOut"
+            },
+            "type": "array",
+            "title": "Attachments"
+          },
+          "placement": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlacementOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "server_now": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Server Now"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "status",
+          "priority",
+          "starts_on",
+          "due_on",
+          "assignee",
+          "recurring",
+          "leo_fields",
+          "space",
+          "can_delete",
+          "description",
+          "recurrence",
+          "source",
+          "placement",
+          "created_at",
+          "updated_at",
+          "completed_at",
+          "server_now"
+        ],
+        "title": "TaskDetail",
+        "description": "A task as its panel shows it."
+      },
+      "TaskItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "$ref": "#/components/schemas/TaskStatus"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Priority"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "starts_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts On"
+          },
+          "due_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due On"
+          },
+          "assignee": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AssigneeOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cover": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CoverOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "values": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/StickerValue"
+            },
+            "type": "object",
+            "title": "Values"
+          },
+          "subtasks_done": {
+            "type": "integer",
+            "title": "Subtasks Done",
+            "default": 0
+          },
+          "subtasks_total": {
+            "type": "integer",
+            "title": "Subtasks Total",
+            "default": 0
+          },
+          "comment_count": {
+            "type": "integer",
+            "title": "Comment Count",
+            "default": 0
+          },
+          "attachment_count": {
+            "type": "integer",
+            "title": "Attachment Count",
+            "default": 0
+          },
+          "recurring": {
+            "type": "boolean",
+            "title": "Recurring"
+          },
+          "leo_fields": {
+            "items": {
+              "$ref": "#/components/schemas/LeoField"
+            },
+            "type": "array",
+            "title": "Leo Fields"
+          },
+          "space": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SpaceOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "jira": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/JiraOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "source_chat": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ChatLineOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "can_delete": {
+            "type": "boolean",
+            "title": "Can Delete"
+          },
+          "stopwatch": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StopwatchOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "timer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimerOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "time_tracking": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TimeTrackingOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "meeting_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meeting Id"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "status",
+          "priority",
+          "starts_on",
+          "due_on",
+          "assignee",
+          "recurring",
+          "leo_fields",
+          "space",
+          "can_delete",
+          "project_id",
+          "meeting_id",
+          "created_at",
+          "updated_at",
+          "completed_at"
+        ],
+        "title": "TaskItem",
+        "description": "A task in a list: its card, its project and meeting, and its moments."
+      },
+      "TaskListParams": {
+        "properties": {
+          "workspace_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workspace Id"
+          },
+          "personal": {
+            "type": "boolean",
+            "title": "Personal",
+            "default": false
+          },
+          "assignee": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assignee"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StatusFilter"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "meeting_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meeting Id"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "due_before": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due Before"
+          },
+          "q": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 200,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Q"
+          },
+          "sort": {
+            "$ref": "#/components/schemas/TaskSort",
+            "default": "due"
+          }
+        },
+        "type": "object",
+        "title": "TaskListParams",
+        "description": "What a list of tasks holds and its order."
+      },
+      "TaskPatchBody": {
+        "properties": {
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TaskStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Priority"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "starts_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Starts On"
+          },
+          "due_on": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due On"
+          },
+          "assignee_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assignee Id"
+          },
+          "assignee_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assignee Name"
+          },
+          "recurrence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Recurrence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "cover_attachment_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cover Attachment Id"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "TaskPatchBody",
+        "description": "A change of a task by field presence: a field left out stays, `null` clears it."
+      },
+      "TaskSort": {
+        "type": "string",
+        "enum": [
+          "due",
+          "recent"
+        ],
+        "title": "TaskSort",
+        "description": "The order of a list of tasks."
+      },
+      "TaskSource": {
+        "type": "string",
+        "enum": [
+          "manual",
+          "meeting",
+          "hub",
+          "mail",
+          "jira"
+        ],
+        "title": "TaskSource",
+        "description": "Where a task came from."
+      },
+      "TaskStatus": {
+        "type": "string",
+        "enum": [
+          "todo",
+          "in_progress",
+          "done"
+        ],
+        "title": "TaskStatus",
+        "description": "Where a task stands; a board's column of the same kind shows it."
+      },
+      "TasksDeleteBody": {
+        "properties": {
+          "task_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 500,
+            "minItems": 1,
+            "title": "Task Ids"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "task_ids"
+        ],
+        "title": "TasksDeleteBody",
+        "description": "Tasks to delete after the cabinet's Undo, all or none."
       },
       "TemplateIcon": {
         "type": "string",
@@ -14711,6 +16807,20 @@
         "title": "TemplatesOut",
         "description": "Every template the person may use: one page, 9 shipped and at most 50 of their own."
       },
+      "TextValue": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "TextValue",
+        "description": "A field value: a text."
+      },
       "TicketRequest": {
         "properties": {
           "ticket": {
@@ -14727,6 +16837,95 @@
         ],
         "title": "TicketRequest",
         "description": "A session ticket from the redirect or the widget."
+      },
+      "TimeTrackingOut": {
+        "properties": {
+          "plan_minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Plan Minutes"
+          },
+          "fact_minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fact Minutes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "plan_minutes",
+          "fact_minutes"
+        ],
+        "title": "TimeTrackingOut",
+        "description": "Plan and fact in minutes."
+      },
+      "TimerOut": {
+        "properties": {
+          "length_ms": {
+            "type": "integer",
+            "title": "Length Ms"
+          },
+          "ends_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends At"
+          },
+          "paused_left_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Paused Left Ms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "length_ms",
+          "ends_at",
+          "paused_left_ms"
+        ],
+        "title": "TimerOut",
+        "description": "The timer: running while `ends_at` is set, paused while `paused_left_ms` is."
+      },
+      "TodayOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TaskItem"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "title": "TodayOut",
+        "description": "The person's Today."
       },
       "TokenPackView": {
         "properties": {
@@ -15388,6 +17587,45 @@
         "title": "VerifyRequest",
         "description": "The code mailed to the address, with the id of the registration it belongs to."
       },
+      "WeekRule": {
+        "properties": {
+          "every": {
+            "type": "string",
+            "const": "week",
+            "title": "Every"
+          },
+          "weekdays": {
+            "items": {
+              "$ref": "#/components/schemas/Weekday"
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 1,
+            "title": "Weekdays"
+          }
+        },
+        "type": "object",
+        "required": [
+          "every",
+          "weekdays"
+        ],
+        "title": "WeekRule",
+        "description": "Every week on these days."
+      },
+      "Weekday": {
+        "type": "string",
+        "enum": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ],
+        "title": "Weekday",
+        "description": "A day of the week, Monday first, as `date.weekday()` counts them."
+      },
       "WeeklyLimitView": {
         "properties": {
           "tier": {
@@ -15535,6 +17773,21 @@
         ],
         "title": "WidgetTokenRequest",
         "description": "A token the provider's widget handed the browser."
+      },
+      "WorkspaceOwner": {
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Workspace Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workspace_id"
+        ],
+        "title": "WorkspaceOwner",
+        "description": "A field of a workspace's boards."
       },
       "WriteUpOut": {
         "properties": {

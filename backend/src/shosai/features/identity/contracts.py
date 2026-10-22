@@ -6,7 +6,7 @@ in the steps that build them: the authenticator with sign-in, consents and the p
 with Settings. Events carry ids only (§12).
 """
 
-from collections.abc import Awaitable, Callable, Mapping
+from collections.abc import Awaitable, Callable, Collection, Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from enum import StrEnum
@@ -99,6 +99,10 @@ class AccountProfileReader(Protocol):
 
     async def profile(self, session: AsyncSession, user_id: UUID) -> AccountProfile | None:
         """The profile, or None for an account that no longer exists."""
+        ...
+
+    async def names(self, session: AsyncSession, user_ids: Collection[UUID]) -> Mapping[UUID, str]:
+        """How each of these people is addressed, in one read; a gone account is absent."""
         ...
 
 

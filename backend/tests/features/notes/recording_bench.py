@@ -17,7 +17,7 @@ import shutil
 import struct
 import subprocess  # nosec B404 — ffmpeg с постоянными аргументами готовит запись теста
 import uuid
-from collections.abc import AsyncIterator, Mapping
+from collections.abc import AsyncIterator, Collection, Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -79,6 +79,7 @@ from tests.features.notes.library_bench import OUTBOX
 from tests.features.notes.notes_bench import Consents, Sent
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.shared_services import SlotBucket
+from tests.support.profiles import names_by_profile
 
 TRANSCRIBE_MODEL: Final = ModelRef(Provider.OPENROUTER, "probe/transcribe")
 DIARIZE_MODEL: Final = ModelRef(Provider.PYANNOTE, "precision-3")
@@ -215,6 +216,12 @@ class Languages:
         """The person's profile in their language."""
         del session
         return AccountProfile("Person", self.by_person.get(user_id, "en"), None)
+
+    async def names(
+        self, session: AsyncSession, user_ids: Collection[uuid.UUID]
+    ) -> Mapping[uuid.UUID, str]:
+        """Each person's profile name."""
+        return await names_by_profile(self.profile, session, user_ids)
 
 
 def stages(

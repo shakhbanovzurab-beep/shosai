@@ -23,6 +23,7 @@ from shosai.features.workspaces.contracts import (
     AUDIT_LOG,
     KNOWLEDGE_TRANSFER,
     MEMBERSHIP_READER,
+    WORKSPACE_READER,
 )
 from shosai.features.workspaces.contracts.events import (
     AccessChanged,
@@ -50,7 +51,10 @@ from shosai.features.workspaces.infrastructure.access_records import (
 )
 from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLog
 from shosai.features.workspaces.infrastructure.audit_records import DirectoryDomain, OrgAuditEvent
-from shosai.features.workspaces.infrastructure.membership_reader import MembershipDirectory
+from shosai.features.workspaces.infrastructure.membership_reader import (
+    MembershipDirectory,
+    WorkspaceDirectory,
+)
 from shosai.features.workspaces.infrastructure.organization_records import (
     Membership,
     Organization,
@@ -84,6 +88,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
         provides=(
             ACCESS_POLICY.bind(policy),
             MEMBERSHIP_READER.bind(MembershipDirectory()),
+            WORKSPACE_READER.bind(WorkspaceDirectory()),
             AUDIT_LOG.bind(audit),
             KNOWLEDGE_TRANSFER.bind(WorkspaceKnowledgeTransfer(services.outbox, audit)),
             ACCOUNT_DATA_HANDLERS.bind(account_data),

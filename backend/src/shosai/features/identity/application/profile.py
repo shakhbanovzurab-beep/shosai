@@ -8,13 +8,14 @@ port: how Leo and the mail of other slices address the person.
 """
 
 import hashlib
-from collections.abc import Mapping
+from collections.abc import Collection, Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from http import HTTPStatus
 from uuid import UUID
 
 import structlog
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
@@ -154,6 +155,15 @@ class Profiles:
             user.display_name or user.full_name, user.language, user.timezone, user.country,
             user.email,
         )  # fmt: skip
+
+    async def names(self, session: AsyncSession, user_ids: Collection[UUID]) -> Mapping[UUID, str]:
+        """The port's names: the display name, or the full name, of each existing account."""
+        if not user_ids:
+            return {}
+        rows = await session.execute(
+            select(User.id, User.display_name, User.full_name).where(User.id.in_(list(user_ids)))
+        )
+        return {user_id: display or full for user_id, display, full in rows}
 
     async def _point(self, principal: Principal, key: str | None) -> ProfileView:
         async with self._transactions.begin(principal.scope()) as session:

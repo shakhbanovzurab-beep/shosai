@@ -6,7 +6,7 @@ write-up with its findings and map — so the native answers are read from real 
 """
 
 import uuid
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncIterator, Collection, Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from typing import Any
@@ -45,6 +45,7 @@ from tests.features.billing.people_bench import BearerOfTheTest
 from tests.features.notes.library_bench import OUTBOX
 from tests.features.notes.no_archive import NO_ARCHIVE
 from tests.harness.database_access import DatabaseAccess
+from tests.support.profiles import names_by_profile
 
 type Json = dict[str, Any]
 
@@ -60,6 +61,12 @@ class People:
         del session
         name, language = self.by_person.get(user_id, ("Anna", "en"))
         return AccountProfile(name, language, None)
+
+    async def names(
+        self, session: AsyncSession, user_ids: Collection[uuid.UUID]
+    ) -> Mapping[uuid.UUID, str]:
+        """Each person's profile name."""
+        return await names_by_profile(self.profile, session, user_ids)
 
 
 @dataclass(frozen=True, slots=True)

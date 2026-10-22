@@ -2056,6 +2056,98 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Tasks
+         * @description A page of the tasks the person may read, by due day (no day last) or newest change.
+         */
+        get: operations["list_tasks_v1_tasks_get"];
+        put?: never;
+        /**
+         * Create Task
+         * @description A task made by hand; once per `Idempotency-Key` when one is sent.
+         */
+        post: operations["create_task_v1_tasks_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tasks/today": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Today
+         * @description Open personal tasks due on or before the day, and those completed on it.
+         */
+        get: operations["read_today_v1_tasks_today_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tasks/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Delete Tasks
+         * @description Delete tasks after the cabinet's Undo, all or none.
+         */
+        post: operations["delete_tasks_v1_tasks_delete_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tasks/{task_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Task
+         * @description A task the person may read, as its panel shows it.
+         */
+        get: operations["read_task_v1_tasks__task_id__get"];
+        put?: never;
+        post?: never;
+        /**
+         * Delete Task
+         * @description Delete a task at once; the cabinet's Undo delays the call.
+         */
+        delete: operations["delete_task_v1_tasks__task_id__delete"];
+        options?: never;
+        head?: never;
+        /**
+         * Change Task
+         * @description Change a task by field presence: a field left out stays, `null` clears it.
+         */
+        patch: operations["change_task_v1_tasks__task_id__patch"];
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2240,6 +2332,43 @@ export interface components {
             spend: components["schemas"]["AdminSpend"];
         };
         /**
+         * AssigneeOut
+         * @description Who does the task: a member by id and name, or a name as written.
+         */
+        AssigneeOut: {
+            /** User Id */
+            user_id: string | null;
+            /** Name */
+            name: string;
+        };
+        /**
+         * AttachmentOut
+         * @description A file of the task.
+         */
+        AttachmentOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /** Content Type */
+            content_type: string;
+            /** Size Bytes */
+            size_bytes: number;
+            /** Image */
+            image: boolean;
+            /** Preview Url */
+            preview_url: string | null;
+            added_by: components["schemas"]["PersonOut"];
+            /**
+             * Added At
+             * Format: date-time
+             */
+            added_at: string;
+        };
+        /**
          * Audience
          * @description Who a plan is for: the Upgrade page's tabs.
          * @enum {string}
@@ -2287,6 +2416,40 @@ export interface components {
             current_password?: string | null;
             /** New Password */
             new_password: string;
+        };
+        /**
+         * ChatLineOut
+         * @description The team chat a task came from, as the card's face names it.
+         */
+        ChatLineOut: {
+            messenger: components["schemas"]["Messenger"];
+            /** Chat Title */
+            chat_title: string;
+        };
+        /**
+         * ChatMessageOut
+         * @description The chat message a task was made from: its link, when the messenger has one.
+         */
+        ChatMessageOut: {
+            /** Url */
+            url: string | null;
+            /**
+             * Sent At
+             * Format: date-time
+             */
+            sent_at: string;
+        };
+        /**
+         * ChatSourceOut
+         * @description The team chat a task was made from (TK-D13).
+         */
+        ChatSourceOut: {
+            /** Connection Id */
+            connection_id: string | null;
+            messenger: components["schemas"]["Messenger"];
+            /** Chat Title */
+            chat_title: string;
+            message: components["schemas"]["ChatMessageOut"];
         };
         /**
          * Consents
@@ -2361,11 +2524,57 @@ export interface components {
             folders: components["schemas"]["FolderCountOut"][];
         };
         /**
+         * CoverOut
+         * @description The card's cover: an image attachment of the task and its preview, once made.
+         */
+        CoverOut: {
+            /**
+             * Attachment Id
+             * Format: uuid
+             */
+            attachment_id: string;
+            /** Preview Url */
+            preview_url: string | null;
+        };
+        /**
          * Currency
          * @description A currency a plan is priced and paid in.
          * @enum {string}
          */
         Currency: "RUB" | "USD" | "EUR";
+        /**
+         * CustomStickerOut
+         * @description A field of the boards' owner: a set of states, a number or a text.
+         */
+        CustomStickerOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "states" | "number" | "text";
+            /** Name */
+            name: string;
+            /** States */
+            states: components["schemas"]["StickerStateOut"][];
+            /** Owner */
+            owner: components["schemas"]["PersonOwner"] | components["schemas"]["WorkspaceOwner"];
+        };
+        /**
+         * DayRule
+         * @description Every day.
+         */
+        DayRule: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            every: "day";
+        };
         /**
          * DeletionRequest
          * @description The account's address, typed again to confirm.
@@ -3043,11 +3252,29 @@ export interface components {
             type: string;
         };
         /**
+         * JiraOut
+         * @description The Jira issue a card mirrors.
+         */
+        JiraOut: {
+            /** Key */
+            key: string;
+            /** Url */
+            url: string;
+            /** Type */
+            type: string;
+        };
+        /**
          * JobStage
          * @description An import job's stage, as the shipped clients decode it.
          * @enum {string}
          */
         JobStage: "uploading" | "transcribing" | "enhancing" | "ready" | "failed";
+        /**
+         * LeoField
+         * @description A field Leo filled from a meeting and the person has not changed since (KG-D10).
+         * @enum {string}
+         */
+        LeoField: "assignee" | "due" | "priority";
         /**
          * LeoUseOut
          * @description How Leo uses a file and how far its indexing got.
@@ -3397,11 +3624,30 @@ export interface components {
             resets_at: string;
         };
         /**
+         * Messenger
+         * @description A messenger a team chat lives in.
+         * @enum {string}
+         */
+        Messenger: "telegram" | "slack";
+        /**
          * ModelTier
          * @description The classes of models a weekly token allowance is counted in (BL-D4).
          * @enum {string}
          */
         ModelTier: "standard" | "frontier";
+        /**
+         * MonthRule
+         * @description Every month on this day; 29 to 31 fall on a shorter month's last day.
+         */
+        MonthRule: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            every: "month";
+            /** Day */
+            day: number;
+        };
         /**
          * MyNotesIn
          * @description The notes' new text; it replaces the old one.
@@ -3474,6 +3720,22 @@ export interface components {
          */
         NotesState: "none" | "processing" | "ready" | "failed";
         /**
+         * NumberValue
+         * @description A field value: a number.
+         */
+        NumberValue: {
+            /** Number */
+            number: number;
+        };
+        /**
+         * OtherValueOut
+         * @description A value of a field that is not on the reader's board, with the field.
+         */
+        OtherValueOut: {
+            sticker: components["schemas"]["CustomStickerOut"];
+            value: components["schemas"]["StickerValue"];
+        };
+        /**
          * OwnNotesOut
          * @description What the person typed about the meeting, and where they last wrote it.
          */
@@ -3544,6 +3806,13 @@ export interface components {
             /** Next Cursor */
             next_cursor: string | null;
         };
+        /** Page[TaskItem] */
+        Page_TaskItem_: {
+            /** Items */
+            items: components["schemas"]["TaskItem"][];
+            /** Next Cursor */
+            next_cursor: string | null;
+        };
         /** Page[TranscriptLineOut] */
         Page_TranscriptLineOut_: {
             /** Items */
@@ -3601,6 +3870,46 @@ export interface components {
         };
         /** @enum {string} */
         PeriodScope: "month" | "year" | "both";
+        /**
+         * PersonOut
+         * @description A person by id and name.
+         */
+        PersonOut: {
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+            /** Name */
+            name: string;
+        };
+        /**
+         * PersonOwner
+         * @description A field of a person's boards.
+         */
+        PersonOwner: {
+            /**
+             * User Id
+             * Format: uuid
+             */
+            user_id: string;
+        };
+        /**
+         * PlacementOut
+         * @description Where the reader's card of the task sits.
+         */
+        PlacementOut: {
+            /**
+             * Board Id
+             * Format: uuid
+             */
+            board_id: string;
+            /**
+             * Column Id
+             * Format: uuid
+             */
+            column_id: string;
+        };
         /**
          * PlanCard
          * @description A plan on the pricing page.
@@ -3773,6 +4082,12 @@ export interface components {
             interval: "month";
         };
         /**
+         * Priority
+         * @description How urgent a task is, the most urgent first; a task may have none.
+         * @enum {string}
+         */
+        Priority: "high" | "medium" | "low";
+        /**
          * PromoCodesView
          * @description Every promo code, newest first.
          */
@@ -3932,6 +4247,7 @@ export interface components {
             /** Exhausted */
             exhausted: boolean;
         };
+        Recurrence: components["schemas"]["DayRule"] | components["schemas"]["WeekRule"] | components["schemas"]["MonthRule"];
         /**
          * RegisterBody
          * @description Ready uploads to turn into files, where to put them, and whether Leo uses them.
@@ -4656,6 +4972,59 @@ export interface components {
             next: string;
         };
         /**
+         * SourceFindingOut
+         * @description The moment of the meeting that proves the action item.
+         */
+        SourceFindingOut: {
+            /** Quote */
+            quote: string;
+            /** Start Ms */
+            start_ms: number;
+        };
+        /**
+         * SourceMeetingOut
+         * @description The meeting a task came from.
+         */
+        SourceMeetingOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /**
+             * Started At
+             * Format: date-time
+             */
+            started_at: string;
+        };
+        /**
+         * SourceOut
+         * @description Where a task came from.
+         */
+        SourceOut: {
+            kind: components["schemas"]["TaskSource"];
+            meeting: components["schemas"]["SourceMeetingOut"] | null;
+            finding: components["schemas"]["SourceFindingOut"] | null;
+            chat?: components["schemas"]["ChatSourceOut"] | null;
+        };
+        /**
+         * SpaceOut
+         * @description The workspace a task belongs to, with its address in the cabinet.
+         */
+        SpaceOut: {
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
+            /** Workspace Slug */
+            workspace_slug: string;
+            /** Workspace Name */
+            workspace_name: string;
+        };
+        /**
          * SpeakerOut
          * @description A speaker by number: their role and how long they spoke.
          */
@@ -4679,6 +5048,55 @@ export interface components {
          * @enum {string}
          */
         StageStatus: "pending" | "running" | "done" | "failed";
+        /**
+         * StateValue
+         * @description A field value: one of its states.
+         */
+        StateValue: {
+            /** State Id */
+            state_id: string;
+        };
+        /**
+         * StatusFilter
+         * @description Which statuses a list shows.
+         * @enum {string}
+         */
+        StatusFilter: "open" | "done" | "todo" | "in_progress";
+        /**
+         * StickerColor
+         * @description The palette of fields' states and columns.
+         * @enum {string}
+         */
+        StickerColor: "gray" | "red" | "orange" | "amber" | "green" | "teal" | "blue" | "violet" | "pink";
+        /**
+         * StickerStateOut
+         * @description A state of a field.
+         */
+        StickerStateOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            color: components["schemas"]["StickerColor"];
+        };
+        StickerValue: components["schemas"]["StateValue"] | components["schemas"]["NumberValue"] | components["schemas"]["TextValue"];
+        /**
+         * StopwatchOut
+         * @description The stopwatch: closed time, per column, and since when it runs, if it runs.
+         */
+        StopwatchOut: {
+            /** Running Since */
+            running_since: string | null;
+            /** Total Ms */
+            total_ms: number;
+            /** By Column */
+            by_column: {
+                [key: string]: number;
+            };
+        };
         /**
          * StorageOut
          * @description What the person holds against what the plan allows; a null limit is unlimited.
@@ -4722,6 +5140,21 @@ export interface components {
             bonus_minutes: number;
             /** Credits */
             credits: number;
+        };
+        /**
+         * SubtaskOut
+         * @description A line of the task's checklist.
+         */
+        SubtaskOut: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            /** Done */
+            done: boolean;
         };
         /**
          * TariffDTO
@@ -4772,6 +5205,270 @@ export interface components {
             price_usd: number;
             /** Storage Limit Bytes */
             storage_limit_bytes?: number | null;
+        };
+        /**
+         * TaskCreateBody
+         * @description A task made by hand, in the person's space or in a workspace.
+         */
+        TaskCreateBody: {
+            /** Title */
+            title: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** @default todo */
+            status: components["schemas"]["TaskStatus"];
+            priority?: components["schemas"]["Priority"] | null;
+            /** Starts On */
+            starts_on?: string | null;
+            /** Due On */
+            due_on?: string | null;
+            recurrence?: components["schemas"]["Recurrence"] | null;
+            /** Workspace Id */
+            workspace_id?: string | null;
+            /** Assignee Id */
+            assignee_id?: string | null;
+            /** Assignee Name */
+            assignee_name?: string | null;
+            /** Project Id */
+            project_id?: string | null;
+        };
+        /**
+         * TaskDetail
+         * @description A task as its panel shows it.
+         */
+        TaskDetail: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            status: components["schemas"]["TaskStatus"];
+            priority: components["schemas"]["Priority"] | null;
+            /** Starts On */
+            starts_on: string | null;
+            /** Due On */
+            due_on: string | null;
+            assignee: components["schemas"]["AssigneeOut"] | null;
+            cover?: components["schemas"]["CoverOut"] | null;
+            /** Values */
+            values?: {
+                [key: string]: components["schemas"]["StickerValue"];
+            };
+            /**
+             * Subtasks Done
+             * @default 0
+             */
+            subtasks_done: number;
+            /**
+             * Subtasks Total
+             * @default 0
+             */
+            subtasks_total: number;
+            /**
+             * Comment Count
+             * @default 0
+             */
+            comment_count: number;
+            /**
+             * Attachment Count
+             * @default 0
+             */
+            attachment_count: number;
+            /** Recurring */
+            recurring: boolean;
+            /** Leo Fields */
+            leo_fields: components["schemas"]["LeoField"][];
+            space: components["schemas"]["SpaceOut"] | null;
+            jira?: components["schemas"]["JiraOut"] | null;
+            source_chat?: components["schemas"]["ChatLineOut"] | null;
+            /** Can Delete */
+            can_delete: boolean;
+            stopwatch?: components["schemas"]["StopwatchOut"] | null;
+            timer?: components["schemas"]["TimerOut"] | null;
+            time_tracking?: components["schemas"]["TimeTrackingOut"] | null;
+            /** Description */
+            description: string;
+            recurrence: components["schemas"]["Recurrence"] | null;
+            /** Other Values */
+            other_values?: components["schemas"]["OtherValueOut"][];
+            source: components["schemas"]["SourceOut"];
+            /** Subtasks */
+            subtasks?: components["schemas"]["SubtaskOut"][];
+            /** Attachments */
+            attachments?: components["schemas"]["AttachmentOut"][];
+            placement: components["schemas"]["PlacementOut"] | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Completed At */
+            completed_at: string | null;
+            /**
+             * Server Now
+             * Format: date-time
+             */
+            server_now: string;
+        };
+        /**
+         * TaskItem
+         * @description A task in a list: its card, its project and meeting, and its moments.
+         */
+        TaskItem: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Title */
+            title: string;
+            status: components["schemas"]["TaskStatus"];
+            priority: components["schemas"]["Priority"] | null;
+            /** Starts On */
+            starts_on: string | null;
+            /** Due On */
+            due_on: string | null;
+            assignee: components["schemas"]["AssigneeOut"] | null;
+            cover?: components["schemas"]["CoverOut"] | null;
+            /** Values */
+            values?: {
+                [key: string]: components["schemas"]["StickerValue"];
+            };
+            /**
+             * Subtasks Done
+             * @default 0
+             */
+            subtasks_done: number;
+            /**
+             * Subtasks Total
+             * @default 0
+             */
+            subtasks_total: number;
+            /**
+             * Comment Count
+             * @default 0
+             */
+            comment_count: number;
+            /**
+             * Attachment Count
+             * @default 0
+             */
+            attachment_count: number;
+            /** Recurring */
+            recurring: boolean;
+            /** Leo Fields */
+            leo_fields: components["schemas"]["LeoField"][];
+            space: components["schemas"]["SpaceOut"] | null;
+            jira?: components["schemas"]["JiraOut"] | null;
+            source_chat?: components["schemas"]["ChatLineOut"] | null;
+            /** Can Delete */
+            can_delete: boolean;
+            stopwatch?: components["schemas"]["StopwatchOut"] | null;
+            timer?: components["schemas"]["TimerOut"] | null;
+            time_tracking?: components["schemas"]["TimeTrackingOut"] | null;
+            /** Project Id */
+            project_id: string | null;
+            /** Meeting Id */
+            meeting_id: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Completed At */
+            completed_at: string | null;
+        };
+        /**
+         * TaskListParams
+         * @description What a list of tasks holds and its order.
+         */
+        TaskListParams: {
+            /** Workspace Id */
+            workspace_id?: string | null;
+            /**
+             * Personal
+             * @default false
+             */
+            personal: boolean;
+            /** Assignee */
+            assignee?: string | null;
+            status?: components["schemas"]["StatusFilter"] | null;
+            /** Meeting Id */
+            meeting_id?: string | null;
+            /** Project Id */
+            project_id?: string | null;
+            /** Due Before */
+            due_before?: string | null;
+            /** Q */
+            q?: string | null;
+            /** @default due */
+            sort: components["schemas"]["TaskSort"];
+        };
+        /**
+         * TaskPatchBody
+         * @description A change of a task by field presence: a field left out stays, `null` clears it.
+         */
+        TaskPatchBody: {
+            /** Title */
+            title?: string | null;
+            /** Description */
+            description?: string | null;
+            status?: components["schemas"]["TaskStatus"] | null;
+            priority?: components["schemas"]["Priority"] | null;
+            /** Starts On */
+            starts_on?: string | null;
+            /** Due On */
+            due_on?: string | null;
+            /** Assignee Id */
+            assignee_id?: string | null;
+            /** Assignee Name */
+            assignee_name?: string | null;
+            recurrence?: components["schemas"]["Recurrence"] | null;
+            /** Cover Attachment Id */
+            cover_attachment_id?: string | null;
+            /** Project Id */
+            project_id?: string | null;
+        };
+        /**
+         * TaskSort
+         * @description The order of a list of tasks.
+         * @enum {string}
+         */
+        TaskSort: "due" | "recent";
+        /**
+         * TaskSource
+         * @description Where a task came from.
+         * @enum {string}
+         */
+        TaskSource: "manual" | "meeting" | "hub" | "mail" | "jira";
+        /**
+         * TaskStatus
+         * @description Where a task stands; a board's column of the same kind shows it.
+         * @enum {string}
+         */
+        TaskStatus: "todo" | "in_progress" | "done";
+        /**
+         * TasksDeleteBody
+         * @description Tasks to delete after the cabinet's Undo, all or none.
+         */
+        TasksDeleteBody: {
+            /** Task Ids */
+            task_ids: string[];
         };
         /**
          * TemplateIcon
@@ -4844,12 +5541,50 @@ export interface components {
             next_cursor?: null;
         };
         /**
+         * TextValue
+         * @description A field value: a text.
+         */
+        TextValue: {
+            /** Text */
+            text: string;
+        };
+        /**
          * TicketRequest
          * @description A session ticket from the redirect or the widget.
          */
         TicketRequest: {
             /** Ticket */
             ticket: string;
+        };
+        /**
+         * TimeTrackingOut
+         * @description Plan and fact in minutes.
+         */
+        TimeTrackingOut: {
+            /** Plan Minutes */
+            plan_minutes: number | null;
+            /** Fact Minutes */
+            fact_minutes: number | null;
+        };
+        /**
+         * TimerOut
+         * @description The timer: running while `ends_at` is set, paused while `paused_left_ms` is.
+         */
+        TimerOut: {
+            /** Length Ms */
+            length_ms: number;
+            /** Ends At */
+            ends_at: string | null;
+            /** Paused Left Ms */
+            paused_left_ms: number | null;
+        };
+        /**
+         * TodayOut
+         * @description The person's Today.
+         */
+        TodayOut: {
+            /** Items */
+            items: components["schemas"]["TaskItem"][];
         };
         /**
          * TokenPackView
@@ -5134,6 +5869,25 @@ export interface components {
             code: string;
         };
         /**
+         * WeekRule
+         * @description Every week on these days.
+         */
+        WeekRule: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            every: "week";
+            /** Weekdays */
+            weekdays: components["schemas"]["Weekday"][];
+        };
+        /**
+         * Weekday
+         * @description A day of the week, Monday first, as `date.weekday()` counts them.
+         * @enum {string}
+         */
+        Weekday: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+        /**
          * WeeklyLimitView
          * @description A tier's tokens this week.
          */
@@ -5195,6 +5949,17 @@ export interface components {
              * @default en
              */
             language: string;
+        };
+        /**
+         * WorkspaceOwner
+         * @description A field of a workspace's boards.
+         */
+        WorkspaceOwner: {
+            /**
+             * Workspace Id
+             * Format: uuid
+             */
+            workspace_id: string;
         };
         /**
          * WriteUpOut
@@ -9478,6 +10243,247 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SharedCommentOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_tasks_v1_tasks_get: {
+        parameters: {
+            query: {
+                params: components["schemas"]["TaskListParams"];
+                /** @description Items per page, at most the maximum. */
+                limit?: number;
+                /** @description The next_cursor of the previous page; absent for the first page. */
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_TaskItem_"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_task_v1_tasks_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                /** @description Optional: a key unique to one create, repeated on its retries. */
+                "Idempotency-Key"?: string | null;
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskDetail"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_today_v1_tasks_today_get: {
+        parameters: {
+            query?: {
+                day?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TodayOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_tasks_v1_tasks_delete_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TasksDeleteBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    read_task_v1_tasks__task_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskDetail"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_task_v1_tasks__task_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    change_task_v1_tasks__task_id__patch: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TaskPatchBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TaskDetail"];
                 };
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */

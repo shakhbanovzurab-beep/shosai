@@ -9,7 +9,7 @@ bind, and until it is bound every join is refused (ADR 0053 point 7). The events
 workspaces publishes are in `contracts.events`.
 """
 
-from collections.abc import Collection
+from collections.abc import Collection, Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Final, Protocol
@@ -38,6 +38,7 @@ __all__ = [
     "KNOWLEDGE_TRANSFER",
     "MEMBERSHIP_READER",
     "SEAT_ALLOWANCE",
+    "WORKSPACE_READER",
     "AccessChange",
     "AccessLevel",
     "AccessPolicy",
@@ -57,6 +58,8 @@ __all__ = [
     "SeatAllowance",
     "TransferredFile",
     "Viewer",
+    "WorkspaceFacts",
+    "WorkspaceReader",
     "WorkspaceRole",
 ]
 
@@ -139,6 +142,40 @@ class MembershipReader(Protocol):
         """Whether the person holds an active or hidden membership (the transfer guard)."""
         ...
 
+    async def members(
+        self, session: AsyncSession, org_id: UUID, user_ids: Collection[UUID]
+    ) -> Mapping[UUID, ActiveMembership]:
+        """The active members of an active workspace among `user_ids`, by person.
+
+        Tasks checks an assignee and names its people through it (tasks plan step 3a).
+        """
+        ...
+
+
+@dataclass(frozen=True, slots=True)
+class WorkspaceFacts:
+    """A workspace as other slices name it: its id, its address in the cabinet and its name."""
+
+    org_id: UUID
+    slug: str
+    name: str
+
+
+class WorkspaceReader(Protocol):
+    """Workspaces and their projects, read in the caller's transaction (tasks plan step 3a)."""
+
+    async def workspaces(
+        self, session: AsyncSession, org_ids: Collection[UUID]
+    ) -> Mapping[UUID, WorkspaceFacts]:
+        """The workspaces among `org_ids` the transaction's person may read."""
+        ...
+
+    async def projects(
+        self, session: AsyncSession, org_id: UUID, project_ids: Collection[UUID]
+    ) -> frozenset[UUID]:
+        """The projects of the workspace among `project_ids`."""
+        ...
+
 
 @dataclass(frozen=True, slots=True)
 class AuditEntry:
@@ -219,3 +256,4 @@ MEMBERSHIP_READER: Final = PortKey[MembershipReader]("workspaces.membership_read
 AUDIT_LOG: Final = PortKey[AuditLog]("workspaces.audit_log")
 SEAT_ALLOWANCE: Final = PortKey[SeatAllowance]("workspaces.seat_allowance")
 KNOWLEDGE_TRANSFER: Final = PortKey[KnowledgeTransfer]("workspaces.knowledge_transfer")
+WORKSPACE_READER: Final = PortKey[WorkspaceReader]("workspaces.workspace_reader")

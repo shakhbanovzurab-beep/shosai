@@ -1,0 +1,206 @@
+"""The one task API over the slot's homes: its routes, people's tokens, seeded tasks and boards.
+
+People sign in with the test's bearer; identity's profile reader is replaced by names and
+zones the test sets. Workspaces are written with the isolation kit's world. Every request
+runs in the EU home unless a test names another.
+"""
+
+import uuid
+from collections.abc import AsyncIterator, Collection, Mapping
+from dataclasses import dataclass, field
+from datetime import UTC, datetime
+from typing import Any
+
+import httpx
+import pytest_asyncio
+from prometheus_client import CollectorRegistry
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from shosai.core.db.transactions import HomeTransactions
+from shosai.core.events.catalog import EventTypes
+from shosai.core.events.outbox import EventOutbox
+from shosai.core.events.records import OutboxMessage
+from shosai.core.idempotency.ledger import EffectLedger
+from shosai.core.idempotency.metrics import EffectKeyMetrics
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.ports.directory import PortDirectory
+from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER, AUTHENTICATOR, AccountProfile
+from shosai.features.notes.application.meeting_reader import MeetingsFindings, MeetingsReader
+from shosai.features.notes.contracts import MEETING_FINDINGS, MEETING_READER
+from shosai.features.notes.infrastructure.meeting_records import MEETING_RESOURCE
+from shosai.features.notes.module import NOTES
+from shosai.features.tasks.application.task_edits import TaskEdits
+from shosai.features.tasks.application.task_reads import TaskReads
+from shosai.features.tasks.application.task_writes import TaskWrites
+from shosai.features.tasks.channels.http.tasks import build_tasks_router
+from shosai.features.tasks.infrastructure.board_records import (
+    BoardColumnRecord,
+    BoardRecord,
+    TaskPlacementRecord,
+)
+from shosai.features.tasks.infrastructure.task_records import TASK_RESOURCE, TaskRecord
+from shosai.features.tasks.module import TASKS
+from shosai.features.workspaces.application.access_policy import WorkspaceAccessPolicy
+from shosai.features.workspaces.contracts import (
+    ACCESS_POLICY,
+    MEMBERSHIP_READER,
+    WORKSPACE_READER,
+)
+from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLog
+from shosai.features.workspaces.infrastructure.membership_reader import (
+    MembershipDirectory,
+    WorkspaceDirectory,
+)
+from shosai.features.workspaces.module import WORKSPACES
+from tests.core.web.probe_app import build_probe_app, client_of
+from tests.features.billing.people_bench import BearerOfTheTest
+from tests.features.notes.no_archive import NO_ARCHIVE
+from tests.harness.database_access import DatabaseAccess
+
+type Json = dict[str, Any]
+HOME = Home.EU
+OUTBOX = EventOutbox(EventTypes([*TASKS.events, *NOTES.events, *WORKSPACES.events]))
+
+
+@dataclass
+class Profiles:
+    """Identity's profile reader of the test: names and zones the test sets."""
+
+    names_by_person: dict[uuid.UUID, str] = field(default_factory=dict)
+    zones: dict[uuid.UUID, str] = field(default_factory=dict)
+
+    async def profile(self, session: AsyncSession, user_id: uuid.UUID) -> AccountProfile | None:
+        """The person's name and zone."""
+        del session
+        name = self.names_by_person.get(user_id, "Человек")
+        return AccountProfile(name, "ru", self.zones.get(user_id))
+
+    async def names(
+        self, session: AsyncSession, user_ids: Collection[uuid.UUID]
+    ) -> Mapping[uuid.UUID, str]:
+        """The names the test set, of these people."""
+        del session
+        return {
+            user: self.names_by_person[user] for user in user_ids if user in self.names_by_person
+        }
+
+
+def bearer(who: uuid.UUID, home: Home = HOME) -> dict[str, str]:
+    """The person's Authorization header."""
+    return {"Authorization": f"Bearer person:{who}:{home.value}"}
+
+
+@dataclass
+class TaskBench:
+    """The task routes, the slot's homes and the test's profiles."""
+
+    http: httpx.AsyncClient
+    homes: DatabaseAccess
+    profiles: Profiles
+
+    async def call(
+        self, who: uuid.UUID, method: str, path: str, body: object = None, **headers: str
+    ) -> httpx.Response:
+        """A request as the person."""
+        return await self.http.request(method, path, json=body, headers={**bearer(who), **headers})
+
+    async def task(
+        self, owner: uuid.UUID, org: uuid.UUID | None = None, **fields: object
+    ) -> uuid.UUID:
+        """A task written straight to the home, as other steps leave one."""
+        task_id = uuid.uuid4()
+        now = datetime.now(UTC)
+        values = {"title": "Позвонить", "created_at": now, "updated_at": now, **fields}
+        if org is not None:
+            values.setdefault("access", "organization")
+        scope = TenancyScope(HOME, owner, org)
+        async with self.homes.transactions.begin(scope) as session:
+            session.add(TaskRecord(id=task_id, user_id=owner, org_id=org, **values))
+        return task_id
+
+    async def board(
+        self, owner: uuid.UUID, kinds: tuple[str, ...] = ("todo", "done")
+    ) -> list[uuid.UUID]:
+        """A board of the person with a column of each kind given: its id, then the columns'."""
+        board_id = uuid.uuid4()
+        columns = [uuid.uuid4() for _ in kinds]
+        async with self.homes.transactions.begin(TenancyScope(HOME, owner)) as session:
+            session.add(BoardRecord(id=board_id, user_id=owner, name="Работа", icon="briefcase"))
+            await session.flush()
+            for position, (column_id, kind) in enumerate(zip(columns, kinds, strict=True)):
+                session.add(
+                    BoardColumnRecord(
+                        id=column_id, board_id=board_id, user_id=owner, title=kind, kind=kind,
+                        position=position,
+                    )
+                )  # fmt: skip
+        return [board_id, *columns]
+
+    async def place(self, owner: uuid.UUID, task_id: uuid.UUID, board: list[uuid.UUID]) -> None:
+        """Put the task in the board's first column."""
+        async with self.homes.transactions.begin(TenancyScope(HOME, owner)) as session:
+            session.add(
+                TaskPlacementRecord(
+                    user_id=owner, task_id=task_id, board_id=board[0], column_id=board[1], rank="V"
+                )
+            )
+
+    async def revision(self, owner: uuid.UUID, board_id: uuid.UUID) -> int:
+        """The board's revision, read as its owner."""
+        scope = TenancyScope(HOME, owner)
+        async with self.homes.transactions.begin(scope, read_only=True) as session:
+            found = await session.scalar(
+                select(BoardRecord.revision).where(BoardRecord.id == board_id)
+            )
+        assert found is not None
+        return found
+
+    async def events(self, task_id: uuid.UUID) -> list[str]:
+        """The events published about the task, oldest first."""
+        async with self.homes.transactions.begin(TenancyScope(HOME), read_only=True) as session:
+            rows = await session.execute(
+                select(OutboxMessage.event_type, OutboxMessage.payload).order_by(
+                    OutboxMessage.occurred_at, OutboxMessage.id
+                )
+            )
+            return [kind for kind, payload in rows if payload.get("task_id") == str(task_id)]
+
+
+def task_ports(profiles: Profiles, transactions: HomeTransactions) -> PortDirectory:
+    """The test's bearer, workspaces' policy and readers, notes' readers, the test's profiles."""
+    ports = PortDirectory()
+    ports.install(
+        [
+            AUTHENTICATOR.bind(BearerOfTheTest()),
+            ACCESS_POLICY.bind(
+                WorkspaceAccessPolicy(
+                    OUTBOX, WorkspaceAuditLog(), (MEETING_RESOURCE, TASK_RESOURCE)
+                )
+            ),
+            MEMBERSHIP_READER.bind(MembershipDirectory()),
+            WORKSPACE_READER.bind(WorkspaceDirectory()),
+            ACCOUNT_PROFILE_READER.bind(profiles),
+            MEETING_READER.bind(MeetingsReader(transactions, ports, NO_ARCHIVE)),
+            MEETING_FINDINGS.bind(MeetingsFindings(ports)),
+        ]
+    )
+    return ports
+
+
+@pytest_asyncio.fixture
+async def task_bench(homes: DatabaseAccess) -> AsyncIterator[TaskBench]:
+    """The task routes over the slot's homes."""
+    profiles = Profiles()
+    transactions = homes.transactions
+    ports = task_ports(profiles, transactions)
+    effects = EffectLedger(EffectKeyMetrics(CollectorRegistry()))
+    services = (
+        TaskReads(transactions, ports),
+        TaskWrites(transactions, ports, (OUTBOX, effects)),
+        TaskEdits(transactions, ports, OUTBOX),
+    )
+    router = build_tasks_router(services, ports)
+    async with client_of(build_probe_app(extra=(router,)).app) as http:
+        yield TaskBench(http, homes, profiles)

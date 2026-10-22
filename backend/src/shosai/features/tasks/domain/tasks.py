@@ -54,12 +54,22 @@ class CreatedBy(StrEnum):
     SYNC = "sync"
 
 
+class LeoField(StrEnum):
+    """A field Leo filled from a meeting and the person has not changed since (KG-D10)."""
+
+    ASSIGNEE = "assignee"
+    DUE = "due"
+    PRIORITY = "priority"
+
+
 class TaskRule(StrEnum):
     """A rule of tasks; the value is the API's error code."""
 
     TITLE_REQUIRED = "title_required"
     TITLE_TOO_LONG = "title_too_long"
     DESCRIPTION_TOO_LONG = "description_too_long"
+    RANGE_INVALID = "range_invalid"
+    RECURRENCE_INVALID = "recurrence_invalid"
     # Имя исполнителя и вид исполнителя по пространству кабинет отдельным текстом не называет.
     INVALID = "validation_error"
 

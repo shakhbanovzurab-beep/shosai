@@ -4,7 +4,7 @@ A bearer token `person:<uuid>:<home>` signs that person in; their country comes 
 test's profile map, as identity's profile reader would give it.
 """
 
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Collection, Mapping
 from dataclasses import dataclass, field
 from http import HTTPStatus
 from uuid import UUID
@@ -58,6 +58,11 @@ class Countries:
         """The person's profile with their country."""
         del session
         return AccountProfile("Person", "en", None, self.by_person.get(user_id))
+
+    async def names(self, session: AsyncSession, user_ids: Collection[UUID]) -> Mapping[UUID, str]:
+        """Every person is "Person" here."""
+        del session
+        return dict.fromkeys(user_ids, "Person")
 
 
 @dataclass(frozen=True, slots=True)

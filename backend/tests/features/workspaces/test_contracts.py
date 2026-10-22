@@ -42,6 +42,7 @@ def test_ports_are_single_and_named_for_the_slice() -> None:
     assert {key.name for key in keys} == {
         "workspaces.access_policy",
         "workspaces.membership_reader",
+        "workspaces.workspace_reader",
         "workspaces.audit_log",
         "workspaces.seat_allowance",
         "workspaces.knowledge_transfer",

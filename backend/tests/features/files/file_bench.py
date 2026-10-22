@@ -3,7 +3,7 @@ the outbox, downloads with an edge base and support's hidden files.
 """
 
 import uuid
-from collections.abc import AsyncIterator
+from collections.abc import AsyncIterator, Collection, Mapping
 from dataclasses import dataclass
 
 import httpx
@@ -61,6 +61,7 @@ from tests.core.email.bench import mail_bench
 from tests.features.billing.catalogue_bench import BenchGate
 from tests.features.billing.people_bench import BearerOfTheTest
 from tests.features.files.upload_bench import UploadBench
+from tests.support.profiles import names_by_profile
 
 EDGE = "https://shosai.tech/dl"
 PERSON_EMAIL = "person@shosai.example"
@@ -73,6 +74,12 @@ class Profiles:
         """The person's profile with the bench's address."""
         del session, user_id
         return AccountProfile("Person", "en", None, None, PERSON_EMAIL)
+
+    async def names(
+        self, session: AsyncSession, user_ids: Collection[uuid.UUID]
+    ) -> Mapping[uuid.UUID, str]:
+        """Each person's profile name."""
+        return await names_by_profile(self.profile, session, user_ids)
 
 
 @dataclass(frozen=True, slots=True)

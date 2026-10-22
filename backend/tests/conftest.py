@@ -43,6 +43,7 @@ pytest_plugins = (
     "tests.features.notes.native_bench",
     "tests.features.notes.share_bench",
     "tests.features.notes.write_bench",
+    "tests.features.tasks.task_bench",
 )
 
 

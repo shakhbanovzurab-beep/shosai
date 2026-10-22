@@ -1,4 +1,6 @@
-"""Tasks and the sets of meetings' tasks in each home (tasks plan §3.4; revision `b3d9e5a7c142`).
+"""Tasks and the sets of meetings' tasks in each home (tasks plan §3.4, §3.8).
+
+Revisions `b3d9e5a7c142` and `c8e4a1f6b293`.
 
 `tasks` is the shareable resource `task`: `user_id`, `org_id` and `access` as workspaces'
 access policy reads them, its assignee the named reader and its meeting the parent, so a
@@ -14,9 +16,11 @@ from typing import Final, cast
 from uuid import UUID
 
 from sqlalchemy import (
+    ARRAY,
     CheckConstraint,
     Date,
     DateTime,
+    ForeignKey,
     Index,
     Integer,
     Table,
@@ -25,6 +29,7 @@ from sqlalchemy import (
     func,
     text,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from shosai.core.access.shareable import ShareableResource
@@ -72,6 +77,23 @@ class TaskRecord(ModelBase):
         ),
         CheckConstraint(f"created_by IN ({CREATORS})", name="creator_known"),
         CheckConstraint("version >= 1", name="version_positive"),
+        CheckConstraint(
+            "starts_on IS NULL OR (due_on IS NOT NULL AND starts_on <= due_on)", name="range"
+        ),
+        CheckConstraint(
+            "recurrence IS NULL OR recurrence ->> 'every' IN ('day', 'week', 'month')",
+            name="recurrence_known",
+        ),
+        CheckConstraint(
+            "leo_fields <@ ARRAY['assignee', 'due', 'priority']::text[]", name="leo_fields_known"
+        ),
+        # Одна следующая задача на закрытую повторяющуюся (KG-D5).
+        Index(
+            "uq_tasks_recurred_from",
+            "recurred_from_id",
+            unique=True,
+            postgresql_where=text("recurred_from_id IS NOT NULL"),
+        ),
         Index("ix_tasks_user", "user_id"),
         Index("ix_tasks_org", "org_id", postgresql_where=text("org_id IS NOT NULL")),
         Index("ix_tasks_open_user_due", "user_id", "due_on", postgresql_where=text(OPEN)),
@@ -112,7 +134,13 @@ class TaskRecord(ModelBase):
     description: Mapped[str] = mapped_column(Text, server_default="")
     status: Mapped[str] = mapped_column(Text, server_default="todo")
     priority: Mapped[str | None] = mapped_column(Text)
+    starts_on: Mapped[date | None] = mapped_column(Date)
     due_on: Mapped[date | None] = mapped_column(Date)
+    recurrence: Mapped[dict[str, object] | None] = mapped_column(JSONB)
+    leo_fields: Mapped[list[str]] = mapped_column(ARRAY(Text), server_default=text("'{}'::text[]"))
+    recurred_from_id: Mapped[UUID | None] = mapped_column(
+        Uuid, ForeignKey("tasks.id", ondelete="SET NULL")
+    )
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     assignee_user_id: Mapped[UUID | None] = mapped_column(Uuid)
     assignee_name: Mapped[str | None] = mapped_column(Text)
