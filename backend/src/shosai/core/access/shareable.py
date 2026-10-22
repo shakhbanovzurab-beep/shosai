@@ -6,6 +6,11 @@ reads: the row's id, its personal owner, its workspace and its access level. The
 (`workspaces`) builds its predicate from these columns, and the isolation gate refuses a
 declared resource whose read paths have no isolation test (§14 rule 12). The declaration
 lives in core because core's `FeatureModule` lists it and core cannot import a slice.
+
+A workspace's row may also open to whoever may read its *parent* row now — a resource of
+another kind, named by kind and reached through a column of this table — and to the active
+member a *named reader* column names (ADR 0059): a meeting's task opens to the meeting's
+readers and to its assignee. Both rules widen reading only, never managing access.
 """
 
 import re
@@ -35,12 +40,22 @@ class ShareableResource:
     owner: str = "user_id"
     org: str = "org_id"
     access: str = "access"
+    # Родитель строки: вид его ресурса и колонка этой таблицы с id родителя.
+    parent: tuple[str, str] | None = None
+    # Колонка с пользователем-участником, которому строка пространства видна всегда.
+    reader: str | None = None
 
     def __post_init__(self) -> None:
         if not RESOURCE_KIND.fullmatch(self.kind):
             message = f"ресурс {self.kind!r}: вид — snake_case до 32 символов"
             raise ShareableResourceError(message)
-        missing = [name for name in self.column_names() if name not in self.table.c]
+        if self.parent is not None and (
+            not RESOURCE_KIND.fullmatch(self.parent[0]) or self.parent[0] == self.kind
+        ):
+            message = f"ресурс {self.kind}: родитель — другой вид в snake_case"
+            raise ShareableResourceError(message)
+        named = [*self.column_names(), *self.rule_columns()]
+        missing = [name for name in named if name not in self.table.c]
         if missing:
             message = f"ресурс {self.kind}: в таблице {self.table.name} нет колонок {missing}"
             raise ShareableResourceError(message)
@@ -48,3 +63,9 @@ class ShareableResource:
     def column_names(self) -> tuple[str, str, str, str]:
         """The names of the id, owner, workspace and access columns, in that order."""
         return (self.id, self.owner, self.org, self.access)
+
+    def rule_columns(self) -> tuple[str, ...]:
+        """The columns of the parent and named-reader rules, those the resource declares."""
+        parent = (self.parent[1],) if self.parent is not None else ()
+        reader = (self.reader,) if self.reader is not None else ()
+        return (*parent, *reader)

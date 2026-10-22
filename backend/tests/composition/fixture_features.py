@@ -18,6 +18,7 @@ from uuid import UUID
 from fastapi import APIRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from shosai.core.access.shareable import ShareableResource
 from shosai.core.events.domain_event import DomainEvent
 from shosai.core.events.subscriptions import EventSubscription, ReceivedEvent
 from shosai.core.features import CoreServices, FeatureModule, FeatureParts
@@ -141,10 +142,15 @@ def broken_feature(lifecycle: Lifecycle) -> FeatureModule:
     return FeatureModule(name="broken", build=build)
 
 
-def native_breaking_feature(name: str, events: tuple[type[DomainEvent], ...] = ()) -> FeatureModule:
+def native_breaking_feature(
+    name: str,
+    events: tuple[type[DomainEvent], ...] = (),
+    shareable: tuple[ShareableResource, ...] = (),
+) -> FeatureModule:
     """A slice serving a native route with a response the shipped clients cannot decode.
 
-    It declares the `events` of the slice it replaces: other slices subscribe to them.
+    It declares the `events` of the slice it replaces, which other slices subscribe to, and
+    its `shareable` resources, which other slices' resources name as parents.
     """
 
     @asynccontextmanager
@@ -158,7 +164,7 @@ def native_breaking_feature(name: str, events: tuple[type[DomainEvent], ...] = (
 
         yield FeatureParts(http_routers=(router,))
 
-    return FeatureModule(name=name, build=build, events=events)
+    return FeatureModule(name=name, build=build, events=events, shareable=shareable)
 
 
 class Clock:

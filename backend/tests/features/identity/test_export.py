@@ -21,6 +21,7 @@ from shosai.features.files.application.account_data import FilesAccountData
 from shosai.features.identity.application.account_data import IdentityAccountData
 from shosai.features.identity.application.export_runner import ExportRunner
 from shosai.features.notes.application.account_data import NotesAccountData
+from shosai.features.tasks.application.account_data import TasksAccountData
 from shosai.features.workspaces.application.account_data import WorkspacesAccountData
 from shosai.features.workspaces.infrastructure.audit_log import WorkspaceAuditLog
 from tests.core.storage.adapters import slot_storage
@@ -59,6 +60,7 @@ def runner_of(
             ACCOUNT_DATA_HANDLERS.bind(BillingAccountData(homes.transactions)),
             ACCOUNT_DATA_HANDLERS.bind(FilesAccountData(homes.transactions, (objects, uploads))),
             ACCOUNT_DATA_HANDLERS.bind(NotesAccountData(homes.transactions, (objects, uploads))),
+            ACCOUNT_DATA_HANDLERS.bind(TasksAccountData(homes.transactions)),
         ]
     )
     return ExportRunner(homes.transactions, ports, (objects, uploads), bench.services.email)

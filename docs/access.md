@@ -15,6 +15,7 @@ access: Mapped[str | None]                  # owner | selected | organization; e
 - A check keeps `org_id` and `access` empty together or set together.
 - Indexes on `org_id` and on `user_id`: the policy's pre-filters reach rows through them.
 - Declare it on the slice's `FeatureModule`: `shareable=(ShareableResource("meeting", Meeting.__table__),)` (`core/access/shareable.py`). Column names other than these defaults are named in the declaration. One kind and one table per declaration across slices.
+- **A parent and a named reader** ([ADR 0059](adr/0059-tasks-one-store-boards-action-items-and-jira.md)). A workspace's row may also open to whoever may read its parent row now, and to the active member a column names: `ShareableResource("task", tasks, parent=("meeting", "source_meeting_id"), reader="assignee_user_id")`. The parent is another declared kind, found by the policy among every slice's declarations, and has no parent of its own (composition refuses a chain or an undeclared kind). Both rules widen reading inside the row's workspace only — the reader must be an active member there, and a parent read through another workspace opens nothing — and neither lets anyone manage the row's access. The parent's predicate runs in an `EXISTS` of the same query, so the right is never copied.
 
 ## 2. The migration
 
@@ -66,7 +67,7 @@ async def test_the_meeting_list_obeys_the_access_rules(homes, run_slot) -> None:
     await assert_isolated(run_slot.claimed.connections[Home.RU], MEETINGS, path)
 ```
 
-- `tests/support/isolation.py` writes the canonical world — two workspaces, a member of both, a guest, a private team, a removed member, a hidden owner, personal rows shared and not — and names any row a person sees or misses against `tests/support/access_model.py`.
+- `tests/support/isolation.py` writes the canonical world (`tests/support/isolation_world.py`) — two workspaces, a member of both, a guest, a private team, a removed member, a hidden owner, personal rows shared and not — and names any row a person sees or misses against `tests/support/access_model.py`. A resource with a named reader gets rows naming each kind of person; a resource with a parent gets the parent kind's world, written to the parent's table through `parents={"meeting": (MEETING_RESOURCE, columns)}`, a child under each parent, a child in the other workspace and one whose parent is gone. `extra` may be a function of the row, for columns that depend on it.
 - `tests/architecture/test_isolation_gate.py` fails while a declared kind has no marked test under `tests/features/<slice>/`.
 
 ## 6. Events to follow

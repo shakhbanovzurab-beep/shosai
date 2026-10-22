@@ -77,3 +77,53 @@ def test_one_kind_and_one_table_have_one_owner(second: ShareableResource, label:
 
     with pytest.raises(ValueError, match=label):
         check_features(features)
+
+
+TASKS = Table(
+    "fixture_tasks",
+    METADATA,
+    Column("id", Uuid, primary_key=True),
+    Column("user_id", Uuid),
+    Column("org_id", Uuid),
+    Column("access", Text),
+    Column("note_id", Uuid),
+    Column("assignee_id", Uuid),
+)
+
+
+def test_a_declaration_may_name_a_parent_and_a_reader() -> None:
+    tasks = ShareableResource("task", TASKS, parent=("note", "note_id"), reader="assignee_id")
+
+    assert tasks.rule_columns() == ("note_id", "assignee_id")
+    assert ShareableResource("note", NOTES).rule_columns() == ()
+
+
+@pytest.mark.parametrize(
+    ("parent", "reader", "match"),
+    [
+        (("note", "missing_id"), None, "missing_id"),
+        (None, "missing_id", "missing_id"),
+        (("task", "note_id"), None, "родитель"),
+        (("Note", "note_id"), None, "родитель"),
+    ],
+)
+def test_the_rule_columns_and_the_parent_kind_are_checked(
+    parent: tuple[str, str] | None, reader: str | None, match: str
+) -> None:
+    with pytest.raises(ShareableResourceError, match=match):
+        ShareableResource("task", TASKS, parent=parent, reader=reader)
+
+
+def test_a_parent_no_slice_declares_or_a_chain_of_parents_is_refused() -> None:
+    notes = ShareableResource("note", NOTES)
+    tasks = ShareableResource("task", TASKS, parent=("note", "note_id"))
+    folders = ShareableResource("folder", FOLDERS, id="folder_id", owner="owner_id")
+    chained = ShareableResource(
+        "folder", FOLDERS, id="folder_id", owner="owner_id", parent=("task", "org_id")
+    )
+
+    check_features([FeatureModule(name="alpha", shareable=(notes, tasks, folders))])
+    with pytest.raises(ValueError, match="родитель note"):
+        check_features([FeatureModule(name="alpha", shareable=(tasks, folders))])
+    with pytest.raises(ValueError, match="родитель task"):
+        check_features([FeatureModule(name="alpha", shareable=(notes, tasks, chained))])

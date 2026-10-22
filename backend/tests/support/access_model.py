@@ -1,8 +1,9 @@
 """The access rules of §7 in plain Python: the oracle the SQL policy is compared with.
 
 A world holds workspaces, memberships, teams, rows of shareable resources, grants and
-share records. `readable` and `manageable` answer from the rules of the plan (§3.5) and
-the cabinet's access notes, written independently of the SQL predicates.
+share records; a workspace's row may name a reader and a parent row (ADR 0059).
+`readable` and `manageable` answer from the rules of the plan (§3.5) and the cabinet's
+access notes, written independently of the SQL predicates.
 """
 
 from dataclasses import dataclass, field
@@ -33,6 +34,10 @@ class ResourceRow:
     owner: UUID
     org_id: UUID | None
     access: str | None
+    # Участник, которому строка пространства видна всегда (исполнитель задачи).
+    reader: UUID | None = None
+    # Родительская строка другого вида: её читатели видят и эту строку пространства.
+    parent: UUID | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -126,7 +131,9 @@ def _sees(
         in_view = within is None or row.org_id == within
         level = (row.access, (row.kind, row.id))
         people = (row.owner, user_id)
-        return in_view and _admitted(world, row.org_id, people, level, manage=manage)
+        admitted = _admitted(world, row.org_id, people, level, manage=manage)
+        widened = not manage and _widened(world, row, user_id, within)
+        return in_view and (admitted or widened)
     if row.owner == user_id and (within is None or manage):
         return True
     return any(
@@ -143,6 +150,16 @@ def _sees(
         )
         for share in world.shares
     )
+
+
+def _widened(world: World, row: ResourceRow, user_id: UUID, within: UUID | None) -> bool:
+    """An active member of the row's workspace it names, or who may read its parent now."""
+    if row.org_id is None or world.active_member(row.org_id, user_id) is None:
+        return False
+    if row.reader == user_id:
+        return True
+    parent = next((other for other in world.rows if other.id == row.parent), None)
+    return parent is not None and _sees(world, parent, user_id, within, manage=False)
 
 
 def _sharer_stands(world: World, share: ShareRow, owner: UUID) -> bool:

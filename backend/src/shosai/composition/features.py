@@ -54,6 +54,26 @@ def check_features(features: Sequence[FeatureModule]) -> None:
         if repeated:
             message = f"разделяемый ресурс объявлен дважды ({label}): {', '.join(repeated)}"
             raise ValueError(message)
+    check_parents(resources)
+
+
+def check_parents(resources: Sequence[ShareableResource]) -> None:
+    """Refuse a parent kind no slice declares, or a parent that has a parent of its own.
+
+    The policy opens a row to its parent's readers through one level only, so a chain of
+    parents never makes a read path the isolation tests did not cover (ADR 0059).
+    """
+    by_kind = {resource.kind: resource for resource in resources}
+    for resource in resources:
+        if resource.parent is None:
+            continue
+        parent = by_kind.get(resource.parent[0])
+        if parent is None or parent.parent is not None:
+            message = (
+                f"разделяемый ресурс {resource.kind}: родитель {resource.parent[0]} не объявлен "
+                "или сам имеет родителя"
+            )
+            raise ValueError(message)
 
 
 def shareable_resources(features: Sequence[FeatureModule]) -> list[ShareableResource]:

@@ -5,6 +5,13 @@ The one place a person's work is tracked (SM-3): a task written by hand, an acti
 - Plan: [docs/plan/slices/tasks.md](../../../../../docs/plan/slices/tasks.md). Decisions: TK-D1…TK-D11 in the plan and [ADR 0059](../../../../../docs/adr/0059-tasks-one-store-boards-action-items-and-jira.md); TK-D12, the Kanban golden core, in [ADR 0060](../../../../../docs/adr/0060-kanban-golden-core.md).
 - Public surface: `contracts` (`MeetingTasks`, `TaskReader`, `TaskIntake`, `BoardReader`, their types and errors) and `contracts.events` (`tasks.task.assigned`, `.due_changed`, `.completed`, `.reopened`, `.deleted`).
 
+## Tables (each home, revision `b3d9e5a7c142`)
+
+- `tasks` — the shareable resource `task` (company isolation): a meeting's task also opens to the meeting's readers and its assignee (the access policy's parent and named-reader rules, ADR 0059); the database keeps done with its moment, a member only on a workspace's task, a name only without one, one task per action item.
+- `meeting_task_sets` — per meeting, the revision of its notes applied and whether a task of it was touched (TK-D3).
+- `boards`, `board_columns`, `task_placements`, `task_settings` — personal (user isolation): a card sits in a column of its own board; column positions and card ranks are unique at commit.
+- `application/account_data.py` — a person's personal tasks, sets, boards, columns, placements and settings are exported, copied (placements of personal tasks only) and erased; a workspace's tasks stay with it.
+
 ## Rules the domain holds
 
 - `domain/tasks.py` — three statuses, an optional priority, where a task came from; a trimmed title of 1–200 characters, a Markdown description up to 10 000; a member does a workspace task, a name as written stands where no member is named; done exactly while `completed_at` is set; Today holds open personal tasks due on or before the day and those completed that day in the person's zone.

@@ -38,9 +38,15 @@ class PersonRows:
     person: str = PERSON_COLUMN
     # Сужение строк человека, например до тех, что переезжают с ним; None — все его строки.
     only: Callable[[UUID], ColumnElement[bool]] | None = None
+    # Ключ, по которому копия пропускает строки, уже лежащие в доме; пусто — любой уникальный.
+    # Таблица с отложенным уникальным ограничением называет его: PostgreSQL не принимает такое
+    # ограничение целью `ON CONFLICT`.
+    arbiter: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
-        unknown = {*self.columns, self.key, self.person} - set(self.table.columns.keys())
+        unknown = {*self.columns, self.key, self.person, *self.arbiter} - set(
+            self.table.columns.keys()
+        )
         if unknown:
             message = f"выгрузка {self.table.name}: нет колонок {sorted(unknown)}"
             raise ValueError(message)
@@ -110,8 +116,11 @@ async def copy_person_rows(
         if not page:
             return copied
         values = [{name: row[name] for name in rows.columns} for row in page]
+        arbiter = [table.c[name] for name in rows.arbiter] or None
         async with transactions.begin(TenancyScope(target, user_id)) as session:
-            await session.execute(insert(table).values(values).on_conflict_do_nothing())
+            await session.execute(
+                insert(table).values(values).on_conflict_do_nothing(index_elements=arbiter)
+            )
         copied += len(page)
         if len(page) < PAGE_ROWS:
             return copied

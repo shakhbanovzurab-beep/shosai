@@ -1,0 +1,83 @@
+"""Tasks' part of a person's export, transfer and erasure (ADR 0045 point 7)."""
+
+import uuid
+
+from sqlalchemy import select
+
+from shosai.core.account_data.handlers import AccountRef
+from shosai.core.kernel.homes import Home
+from shosai.core.kernel.tenancy import TenancyScope
+from shosai.features.tasks.application.account_data import TasksAccountData
+from shosai.features.tasks.infrastructure.board_records import (
+    BoardColumnRecord,
+    BoardRecord,
+    TaskPlacementRecord,
+    TaskSettingsRecord,
+)
+from shosai.features.tasks.infrastructure.task_records import MeetingTaskSetRecord, TaskRecord
+from tests.harness.database_access import DatabaseAccess
+
+
+async def seed(homes: DatabaseAccess, person: uuid.UUID, org: uuid.UUID) -> tuple[uuid.UUID, ...]:
+    """A board with a personal task and a workspace task on it, a set and the settings."""
+    board, column, own, shared = (uuid.uuid4() for _ in range(4))
+    async with homes.transactions.begin(TenancyScope(Home.RU, person, org)) as session:
+        session.add(
+            TaskRecord(id=shared, user_id=person, org_id=org, access="organization", title="Общее")
+        )
+    async with homes.transactions.begin(TenancyScope(Home.RU, person)) as session:
+        session.add(BoardRecord(id=board, user_id=person, name="Работа", icon="briefcase"))
+        session.add(TaskRecord(id=own, user_id=person, title="Своё", status="todo"))
+        session.add(MeetingTaskSetRecord(meeting_id=uuid.uuid4(), user_id=person, revision=1))
+        await session.flush()
+        session.add(
+            BoardColumnRecord(
+                id=column, board_id=board, user_id=person, title="К работе", kind="todo", position=0
+            )
+        )
+        await session.flush()
+        for task, rank in ((own, "V"), (shared, "k")):
+            session.add(
+                TaskPlacementRecord(
+                    user_id=person, task_id=task, board_id=board, column_id=column, rank=rank
+                )
+            )
+        session.add(TaskSettingsRecord(user_id=person, incoming_board_id=board))
+    return own, shared
+
+
+async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
+    homes: DatabaseAccess,
+) -> None:
+    person, org = uuid.uuid4(), uuid.uuid4()
+    own, shared = await seed(homes, person, org)
+    handler = TasksAccountData(homes.transactions)
+    russian, european = AccountRef(person, Home.RU), AccountRef(person, Home.EU)
+
+    exported = {
+        item.name: b"".join([chunk async for chunk in item.chunks])
+        async for item in handler.export(russian)
+    }
+    await handler.copy(russian, Home.EU)
+    await handler.copy(russian, Home.EU)
+    same = await handler.manifest(russian) == await handler.manifest(european)
+    async with homes.transactions.begin(TenancyScope(Home.EU, person), read_only=True) as session:
+        moved = set(await session.scalars(select(TaskPlacementRecord.task_id)))
+    await handler.erase(russian)
+    await handler.erase(russian)
+    await handler.purge(european)
+    async with homes.transactions.begin(TenancyScope(Home.RU, person, org)) as session:
+        left = set(await session.scalars(select(TaskRecord.id)))
+
+    assert set(exported) == {
+        "tasks.jsonl", "meeting_task_sets.jsonl", "boards.jsonl", "board_columns.jsonl",
+        "task_placements.jsonl", "task_settings.jsonl",
+    }  # fmt: skip
+    assert str(own).encode() in exported["tasks.jsonl"]
+    assert str(shared).encode() not in exported["tasks.jsonl"]
+    assert str(shared).encode() in exported["task_placements.jsonl"]
+    assert same
+    assert moved == {own}
+    assert left == {shared}
+    assert await handler.remains(russian) == ()
+    assert await handler.remains(european) == ()

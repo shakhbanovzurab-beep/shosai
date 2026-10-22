@@ -129,9 +129,10 @@ def test_the_native_routes_not_served_yet_are_recorded(
 async def test_a_slice_breaking_a_native_route_fails_the_gate_whatever_its_name(
     run_slot: RunSlot, harness_settings: HarnessSettings, name: str
 ) -> None:
-    # Срез-нарушитель занимает место настоящего среза с тем же именем и с его событиями.
+    # Срез-нарушитель занимает место настоящего среза с тем же именем, событиями и ресурсами.
     events = tuple(event for f in FEATURES if f.name == name for event in f.events)
-    breaking = native_breaking_feature(name, events)
+    shareable = tuple(resource for f in FEATURES if f.name == name for resource in f.shareable)
+    breaking = native_breaking_feature(name, events, shareable)
     features = (*(f for f in FEATURES if f.name != name), breaking)
     async with compose(run_slot, harness_settings, features) as apps:
         report = native_contract(apps)

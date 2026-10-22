@@ -5,13 +5,17 @@ check runs with the read and nothing is cached. `filter_readable` re-checks a ba
 ids — search hits, Leo's sources — in one query. `set_access` is the only way to change a
 workspace row's level and grants: in the caller's transaction, with its audit row and
 event, and only by someone who may manage the row.
+
+A resource with a parent (a meeting's task, ADR 0059) also opens to whoever may read its
+parent row now: the parent's own predicate runs in an `EXISTS` of the same query, so the
+right is never copied. The policy knows every declared resource to find the parent by kind.
 """
 
-from collections.abc import Collection
+from collections.abc import Collection, Sequence
 from http import HTTPStatus
 from uuid import UUID
 
-from sqlalchemy import ColumnElement, delete, func, insert, or_, select, update
+from sqlalchemy import ColumnElement, delete, exists, func, insert, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.access.shareable import ShareableResource
@@ -44,15 +48,46 @@ class AccessScopeMismatchError(ValueError):
 class WorkspaceAccessPolicy:
     """Builds the predicates of every read and applies every access change."""
 
-    def __init__(self, outbox: EventOutbox, audit: AuditLog) -> None:
+    def __init__(
+        self,
+        outbox: EventOutbox,
+        audit: AuditLog,
+        resources: Sequence[ShareableResource] = (),
+    ) -> None:
         self._outbox = outbox
         self._audit = audit
+        self._resources = {resource.kind: resource for resource in resources}
 
     def readable(self, resource: ShareableResource, viewer: Viewer) -> ColumnElement[bool]:
         """The predicate that admits exactly the rows the viewer may read."""
+        parent = self._through_parent(resource, viewer)
         return or_(
-            workspace_rows(resource, viewer.user_id, viewer.within, manage=False),
+            workspace_rows(
+                resource, viewer.user_id, viewer.within, manage=False, through_parent=parent
+            ),
             personal_rows(resource, viewer.user_id, viewer.within, manage=False),
+        )
+
+    def _through_parent(
+        self, resource: ShareableResource, viewer: Viewer
+    ) -> ColumnElement[bool] | None:
+        """Whether the viewer may read the row's parent now, in an `EXISTS` of the same query."""
+        if resource.parent is None:
+            return None
+        kind, column = resource.parent
+        parent = self._resources.get(kind)
+        if parent is None or parent.parent is not None:
+            message = f"родитель {kind} ресурса {resource.kind} не объявлен или сам с родителем"
+            raise ValueError(message)
+        rows = parent.table
+        return (
+            exists()
+            .select_from(rows)
+            .where(
+                rows.c[parent.id] == resource.table.c[column],
+                self.readable(parent, viewer),
+            )
+            .correlate_except(rows)
         )
 
     def manageable(self, resource: ShareableResource, viewer: Viewer) -> ColumnElement[bool]:

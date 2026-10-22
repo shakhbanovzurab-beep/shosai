@@ -143,19 +143,34 @@ def as_array(query: Select[Any]) -> ColumnElement[Any]:
 
 
 def workspace_rows(
-    resource: ShareableResource, user_id: UUID, within: UUID | None, *, manage: bool
+    resource: ShareableResource,
+    user_id: UUID,
+    within: UUID | None,
+    *,
+    manage: bool,
+    through_parent: ColumnElement[bool] | None = None,
 ) -> ColumnElement[bool]:
-    """Rows of a workspace the viewer may read, or manage when `manage` is set."""
+    """Rows of a workspace the viewer may read, or manage when `manage` is set.
+
+    Reading also admits the active member the row's reader column names, and whoever may
+    read its parent row (`through_parent`, built by the policy); neither manages access.
+    """
     table = resource.table
     row_id, owner, org, level = (table.c[name] for name in resource.column_names())
     member, joined, conditions = _member_of(org, user_id)
     admits = level_admits(level, org, (resource.kind, row_id), member)
+    widened: list[ColumnElement[bool]] = []
     if manage:
         admits = and_(member.c.role.in_(MANAGERS), admits)
+    else:
+        if resource.reader is not None:
+            widened.append(table.c[resource.reader] == user_id)
+        if through_parent is not None:
+            widened.append(through_parent)
     in_view = (
         exists()
         .select_from(joined)
-        .where(*conditions, or_(owner == user_id, admits))
+        .where(*conditions, or_(owner == user_id, admits, *widened))
         .correlate_except(joined)
     )
     return and_(org == _member_orgs(user_id, within), in_view)

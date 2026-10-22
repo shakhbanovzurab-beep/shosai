@@ -69,7 +69,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     """Bind the ports and the registry's handler; register the account window's task."""
     audit = WorkspaceAuditLog()
     account_data = WorkspacesAccountData(services.transactions, services.outbox, audit)
-    policy = WorkspaceAccessPolicy(services.outbox, audit)
+    policy = WorkspaceAccessPolicy(services.outbox, audit, services.shareable)
     checks = (
         PolicySelfTest(services.transactions, policy, services.shareable, services.registry),
         SeatCheck(services.transactions, services.ports, services.registry),
