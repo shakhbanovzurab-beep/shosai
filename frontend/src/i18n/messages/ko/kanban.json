@@ -79,6 +79,11 @@
       "tracking": "시간 관리",
       "factOfPlan": "<fact>{spent}</fact> / {plan}",
       "overPlan": "계획 초과"
+    },
+    "fromChat": "{messenger}에서 가져옴",
+    "messengers": {
+      "telegram": "Telegram",
+      "slack": "Slack"
     }
   },
   "table": {

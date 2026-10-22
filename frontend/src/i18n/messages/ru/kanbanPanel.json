@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "Со встречи «{meeting}», {date}",
-    "gone": "Встречи, из которой пришла эта задача, больше нет."
+    "gone": "Встречи, из которой пришла эта задача, больше нет.",
+    "chat": "Из {messenger} · «<chat></chat>»",
+    "chatOn": "Из {messenger} · «<chat></chat>», {date}",
+    "openMessage": "Открыть сообщение"
   },
   "jira": {
     "open": "Открыть {key} в Jira",

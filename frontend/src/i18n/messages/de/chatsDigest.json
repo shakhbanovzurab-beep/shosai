@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {Keine Nachrichten gelesen} one {# Nachricht gelesen} other {# Nachrichten gelesen}}",
+  "coverage": {
+    "telegram": "Telegram gibt Shosai nur Nachrichten, die nach dem Beitritt des Bots am {date} geschrieben wurden. Die Zusammenfassung umfasst daher {range}.",
+    "slack": "Shosai hat die Nachrichten dieses Kanals ab dem {date}, als er verbunden wurde.",
+    "truncated": "Im Zeitraum gab es mehr als {limit, number} Nachrichten; gelesen wurden die letzten {limit, number}."
+  },
+  "sections": {
+    "decisions": "Entscheidungen",
+    "questions": "Offene Fragen",
+    "promises": "Vereinbarungen"
+  },
+  "showAll": "Alle {count, number} anzeigen",
+  "showFewer": "Weniger anzeigen",
+  "item": {
+    "openIn": "In {messenger} öffnen",
+    "quoteOf": "Nachricht von {author} anzeigen"
+  },
+  "task": {
+    "make": "Aufgabe erstellen",
+    "makeAll": "{count, plural, one {Aufgabe aus # Vereinbarung erstellen} other {Aufgaben aus allen # Vereinbarungen erstellen}}",
+    "waiting": "Wartet auf deine Bestätigung",
+    "created": "Aufgabe erstellt",
+    "open": "Öffnen",
+    "failed": "Aufgabe konnte nicht erstellt werden"
+  },
+  "states": {
+    "loading": "Zusammenfassung wird geladen…",
+    "noMessages": "In „<chat></chat>“ gab es in diesem Zeitraum keine Nachrichten.",
+    "nothingFound": "{count, plural, one {In # Nachricht gibt es nichts festzuhalten: keine Entscheidungen, offenen Fragen oder Vereinbarungen.} other {In # Nachrichten gibt es nichts festzuhalten: keine Entscheidungen, offenen Fragen oder Vereinbarungen.}}",
+    "gone": "Diese Zusammenfassung ist nicht mehr verfügbar: Der Chat wurde getrennt oder seine Nachrichten sind abgelaufen.",
+    "failed": "Zusammenfassung konnte nicht geladen werden"
+  }
+}

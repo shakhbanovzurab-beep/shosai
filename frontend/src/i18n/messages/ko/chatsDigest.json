@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {읽은 메시지가 없어요} other {메시지 #개를 읽었어요}}",
+  "coverage": {
+    "telegram": "Telegram은 {date}에 봇이 참여한 후에 쓴 메시지만 Shosai에 보내 줘요. 그래서 이 요약은 {range} 기간을 다뤄요.",
+    "slack": "Shosai에는 이 채널이 연결된 {date}부터의 메시지가 있어요.",
+    "truncated": "기간 중 메시지가 {limit, number}개를 넘어서 최근 {limit, number}개를 읽었어요."
+  },
+  "sections": {
+    "decisions": "결정 사항",
+    "questions": "미해결 질문",
+    "promises": "약속"
+  },
+  "showAll": "모두 보기({count, number})",
+  "showFewer": "간단히 보기",
+  "item": {
+    "openIn": "{messenger}에서 열기",
+    "quoteOf": "{author}의 메시지 보기"
+  },
+  "task": {
+    "make": "작업 만들기",
+    "makeAll": "{count, plural, other {약속 #개를 모두 작업으로 만들기}}",
+    "waiting": "승인 대기 중",
+    "created": "작업을 만들었어요",
+    "open": "열기",
+    "failed": "작업을 만들지 못했어요."
+  },
+  "states": {
+    "loading": "요약을 불러오는 중…",
+    "noMessages": "이 기간에는 “<chat></chat>”에 메시지가 없어요.",
+    "nothingFound": "{count, plural, other {메시지 #개에서 기록할 내용이 없어요. 결정 사항, 미해결 질문, 약속이 없어요.}}",
+    "gone": "이 요약은 더 이상 볼 수 없어요. 채팅 연결이 해제되었거나 메시지 보관 기간이 지났어요.",
+    "failed": "요약을 불러오지 못했어요."
+  }
+}

@@ -1,9 +1,7 @@
-import { LUMEN } from "@/features/workspace/mocks/demo-lumen";
-
-import type { Binding, Messenger } from "../../domain/contract";
-import type { ChatDigest, ChatMessageRef, DigestItem, DigestPromise } from "../../domain/digest-contract";
+import type { ChatDigest } from "../../domain/digest-contract";
 import type { ChatsDemo } from "../store/types";
-import { ago, PRICING_CHAT, project, RELEASE_CHAT, SUPPORT_CHAT } from "./connections";
+import { PRICING_CHAT, project, RELEASE_CHAT, SUPPORT_CHAT } from "./connections";
+import { chatRef, digest, item, made, message, promise, TG } from "./digest-builders";
 
 /*
  * Дайджесты демо — по одному на каждое состояние карточки: полный, период раньше входа бота, сообщения есть,
@@ -11,62 +9,10 @@ import { ago, PRICING_CHAT, project, RELEASE_CHAT, SUPPORT_CHAT } from "./connec
  * по-английски, как и цитаты, которые написали люди.
  */
 
-const HOUR = 3_600_000;
-const DAY = 24 * HOUR;
-const inDays = (days: number) => new Date(Date.now() + days * DAY).toISOString().slice(0, 10);
-
 export const RELEASE_DIGEST = "dg-release-week";
 export const SUPPORT_DIGEST = "dg-support-week";
 export const PRICING_DIGEST = "dg-pricing-week";
 export const QUIET_DIGEST = "dg-release-weekend";
-
-function message(url: string | null, n: number, author_name: string, hoursAgo: number, quote: string): ChatMessageRef {
-  return { id: `msg-${n}`, author_name, sent_at: ago(hoursAgo * HOUR), quote, url: url ? `${url}/${n}` : null };
-}
-
-const item = (id: string, text: string, ref: ChatMessageRef): DigestItem => ({
-  id,
-  text,
-  message: ref,
-  proposal_id: null,
-  task_id: null,
-});
-
-function promise(
-  id: string,
-  who: DigestPromise["who"],
-  text: string,
-  due: number | string | null,
-  ref: ChatMessageRef,
-) {
-  const day = typeof due === "number" ? inDays(due) : null;
-  return { ...item(id, text, ref), who, due_on: day, when_text: typeof due === "string" ? due : null };
-}
-
-const TG = "https://t.me/c/2093847561";
-
-/** Дайджест за дни `[fromDaysAgo, toDaysAgo]` без пунктов; пункты добавляет тот, кто его строит. */
-function digest(id: string, chat: ChatDigest["chat"], historyDaysAgo: number, read: number, days = [7, 0]): ChatDigest {
-  return {
-    id,
-    chat,
-    period: { from: ago(days[0] * DAY), to: ago(days[1] * DAY) },
-    created_at: ago(0),
-    coverage: { history_from: ago(historyDaysAgo * DAY), messages_read: read, truncated: false },
-    decisions: [],
-    questions: [],
-    promises: [],
-  };
-}
-
-/** Чат дайджеста. Название — позиционно: его написали люди. */
-const chatRef = (id: string, messenger: Messenger, name: string, binding: Binding): ChatDigest["chat"] => ({
-  id,
-  workspace_id: LUMEN,
-  messenger,
-  title: name,
-  binding,
-});
 
 const release = () => chatRef(RELEASE_CHAT, "telegram", "Release team", project("leo-beta", "Leo beta launch"));
 
@@ -104,19 +50,25 @@ function releaseWeek(): ChatDigest {
       ),
     ],
     promises: [
-      promise(
-        "p1",
-        { user_id: "u-maya", name: "Maya Chen" },
-        "Update the release checklist for 2.4",
-        2,
-        m(8815, "Maya Chen", 68, "I'll update the checklist for 2.4 by Wednesday"),
+      made(
+        promise(
+          "p1",
+          { user_id: "u-maya", name: "Maya Chen" },
+          "Update the release checklist for 2.4",
+          2,
+          m(8815, "Maya Chen", 68, "I'll update the checklist for 2.4 by Wednesday"),
+        ),
+        "t-chat-checklist",
       ),
-      promise(
-        "p2",
-        { user_id: "u-diego", name: "Diego Alvarez" },
-        "Send the beta invite list to support",
-        "by Friday",
-        m(8846, "Diego Alvarez", 44, "will send the invite list to support by Friday"),
+      made(
+        promise(
+          "p2",
+          { user_id: "u-diego", name: "Diego Alvarez" },
+          "Send the beta invite list to support",
+          "by Friday",
+          m(8846, "Diego Alvarez", 44, "will send the invite list to support by Friday"),
+        ),
+        "t-chat-invites",
       ),
       promise(
         "p3",
@@ -131,6 +83,27 @@ function releaseWeek(): ChatDigest {
         "Draft the onboarding email copy",
         null,
         m(8873, "Sofia Rossi", 19, "I'll draft the onboarding copy"),
+      ),
+      promise(
+        "p5",
+        { user_id: "u-diego", name: "Diego Alvarez" },
+        "Book feedback calls with the first beta customers",
+        "next week",
+        m(8881, "Diego Alvarez", 8, "I'll book feedback calls with the first beta folks next week"),
+      ),
+      promise(
+        "p6",
+        { user_id: "u-maya", name: "Maya Chen" },
+        "Write the release notes for 2.4",
+        3,
+        m(8884, "Maya Chen", 6, "release notes for 2.4 are on me, by Sunday"),
+      ),
+      promise(
+        "p7",
+        { user_id: null, name: "Lena from design" },
+        "Share the final onboarding screens",
+        1,
+        m(8890, "Sofia Rossi", 3, "Lena promised the final onboarding screens tomorrow"),
       ),
     ],
   };

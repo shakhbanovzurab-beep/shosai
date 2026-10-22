@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "{date} की “{meeting}” मीटिंग से",
-    "gone": "जिस मीटिंग से यह टास्क आया था, वह अब नहीं है।"
+    "gone": "जिस मीटिंग से यह टास्क आया था, वह अब नहीं है।",
+    "chat": "{messenger} से · “<chat></chat>”",
+    "chatOn": "{messenger} से · “<chat></chat>”, {date}",
+    "openMessage": "मैसेज खोलें"
   },
   "jira": {
     "open": "{key} को Jira में खोलें",

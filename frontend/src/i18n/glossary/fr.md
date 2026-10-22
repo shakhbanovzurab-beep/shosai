@@ -106,6 +106,8 @@ Typography: « … » with U+202F inside, U+202F before : ; ! ?, no space be
 | new chat | Nouvelle conversation | nouveau chat, nouvelle discussion | |
 | team chat | conversation d’équipe | — | |
 | connect code | code de connexion | — | |
+| digest | synthèse | — | Fem.; the summary of a meeting stays « résumé » |
+| open question | question ouverte | — | Fem. |
 | voice mode | mode vocal | mode voix | Masc. |
 | attach / attachment | Joindre / pièce jointe | fichier attaché, fichiers attachés, pièce attachée | Fem., pl. « pièces jointes ». |
 | regenerate | Régénérer | générer à nouveau, générer de nouveau | |

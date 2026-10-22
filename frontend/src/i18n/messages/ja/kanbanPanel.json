@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "会議「{meeting}」（{date}）から",
-    "gone": "このタスクの元になった会議は削除されています。"
+    "gone": "このタスクの元になった会議は削除されています。",
+    "chat": "{messenger} から ·「<chat></chat>」",
+    "chatOn": "{messenger} から ·「<chat></chat>」、{date}",
+    "openMessage": "メッセージを開く"
   },
   "jira": {
     "open": "Jira で {key} を開く",

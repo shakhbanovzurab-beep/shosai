@@ -79,6 +79,11 @@
       "tracking": "Tijdregistratie",
       "factOfPlan": "<fact>{spent}</fact> / {plan}",
       "overPlan": "Meer dan gepland"
+    },
+    "fromChat": "Uit {messenger}",
+    "messengers": {
+      "telegram": "Telegram",
+      "slack": "Slack"
     }
   },
   "table": {

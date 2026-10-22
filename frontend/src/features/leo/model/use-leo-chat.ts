@@ -7,6 +7,7 @@ import { useUiLanguage } from "@/hooks/use-ui-language";
 import { streamReply } from "../api/leo-api";
 import { contextKey, type LeoContext } from "../domain/context";
 import { applyEvent, finishMessage } from "../domain/messages";
+import type { LeoProposal } from "../domain/proposals";
 import type { LeoAttachment, LeoMessage } from "../domain/types";
 import {
   attachmentFiles,
@@ -102,11 +103,18 @@ export function useLeoChat({ page, context }: { page: string; context: LeoContex
     [isBusy, messages, requestReply],
   );
 
+  // Карточка одобрения из артефакта ответа (дайджест чата) встаёт в тот же ответ, под его текстом.
+  const addProposal = React.useCallback(
+    (messageId: string, proposal: LeoProposal) =>
+      updateMessage(key, messageId, (m) => ({ ...m, proposals: [...(m.proposals ?? []), proposal] })),
+    [key],
+  );
+
   const reset = React.useCallback(() => {
     abortRef.current?.abort();
     attachmentFiles.clear();
     setMessages(key, () => []);
   }, [key]);
 
-  return { messages, isBusy, send, stop, regenerate, editLast, reset };
+  return { messages, isBusy, send, stop, regenerate, editLast, addProposal, reset };
 }

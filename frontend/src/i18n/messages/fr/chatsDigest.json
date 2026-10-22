@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {Aucun message lu} one {# message lu} many {# messages lus} other {# messages lus}}",
+  "coverage": {
+    "telegram": "Telegram ne donne à Shosai que les messages écrits après l’arrivée du bot le {date} : cette synthèse couvre donc {range}.",
+    "slack": "Shosai a les messages de ce canal depuis le {date}, date de sa connexion.",
+    "truncated": "La période comptait plus de {limit, number} messages ; les {limit, number} derniers ont été lus."
+  },
+  "sections": {
+    "decisions": "Décisions",
+    "questions": "Questions ouvertes",
+    "promises": "Engagements"
+  },
+  "showAll": "Tout afficher ({count, number})",
+  "showFewer": "Afficher moins",
+  "item": {
+    "openIn": "Ouvrir dans {messenger}",
+    "quoteOf": "Afficher le message de {author}"
+  },
+  "task": {
+    "make": "Créer une tâche",
+    "makeAll": "{count, plural, one {Créer une tâche pour # engagement} many {Créer des tâches pour les # engagements} other {Créer des tâches pour les # engagements}}",
+    "waiting": "En attente de votre approbation",
+    "created": "Tâche créée",
+    "open": "Ouvrir",
+    "failed": "Impossible de créer la tâche"
+  },
+  "states": {
+    "loading": "Chargement de la synthèse…",
+    "noMessages": "Aucun message dans « <chat></chat> » sur cette période.",
+    "nothingFound": "{count, plural, one {Rien à noter dans # message : ni décision, ni question ouverte, ni engagement.} many {Rien à noter dans # messages : ni décision, ni question ouverte, ni engagement.} other {Rien à noter dans # messages : ni décision, ni question ouverte, ni engagement.}}",
+    "gone": "Cette synthèse n’est plus disponible : la conversation a été déconnectée ou ses messages ont expiré.",
+    "failed": "Impossible de charger la synthèse"
+  }
+}

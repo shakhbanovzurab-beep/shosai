@@ -79,6 +79,11 @@
       "tracking": "Zaman takibi",
       "factOfPlan": "<fact>{spent}</fact> / {plan}",
       "overPlan": "Plan aşıldı"
+    },
+    "fromChat": "Kaynak: {messenger}",
+    "messengers": {
+      "telegram": "Telegram",
+      "slack": "Slack"
     }
   },
   "table": {

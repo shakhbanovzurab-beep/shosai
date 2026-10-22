@@ -106,6 +106,8 @@ Adjectives and participles agree with the noun’s gender, given in Note (Tarea 
 | new chat | Nuevo chat | chat nuevo | |
 | team chat | chat del equipo | — | |
 | connect code | código de conexión | — | |
+| digest | resumen | — | Same word as summary |
+| open question | pregunta abierta | — | f. |
 | voice mode | modo de voz | modo voz | m. |
 | attach / attachment | Adjuntar / archivo adjunto | anexa, anexo | Short noun: adjunto (m). |
 | regenerate | Regenerar | volver a generar | |

@@ -79,6 +79,11 @@
       "tracking": "時間管理",
       "factOfPlan": "<fact>{spent}</fact> / {plan}",
       "overPlan": "予定超過"
+    },
+    "fromChat": "{messenger} から",
+    "messengers": {
+      "telegram": "Telegram",
+      "slack": "Slack"
     }
   },
   "table": {

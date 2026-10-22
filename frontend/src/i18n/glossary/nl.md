@@ -106,6 +106,8 @@ Compounds are one word, hyphenated after names and abbreviations (‘Notion-kopp
 | new chat | Nieuwe chat | nieuw gesprek | Button |
 | team chat | teamchat | — | |
 | connect code | koppelcode | — | |
+| digest | samenvatting | — | Same word as summary |
+| open question | open vraag | — | de open vraag, mv. open vragen |
 | voice mode | spraakmodus | stemmodus, voicemodus | de spraakmodus |
 | attach / attachment | bijvoegen / bijlage | attach, aanhangsel | Button ‘Bijvoegen’; de bijlage, mv. bijlagen; participle bijgevoegd |
 | regenerate | Opnieuw genereren | regenereren, hergenereren | |

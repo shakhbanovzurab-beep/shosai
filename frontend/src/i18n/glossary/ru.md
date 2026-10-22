@@ -106,6 +106,8 @@ Leo is masculine and never declined («Leo не смог ответить», «�
 | new chat | Новый чат | — | |
 | team chat | командный чат | — | |
 | connect code | код подключения | — | |
+| digest | дайджест | — | Masculine |
+| open question | открытый вопрос | — | |
 | voice mode | голосовой режим | — | |
 | attach / attachment | прикрепить / вложение | аттач, атач | Button «Прикрепить файл»; state «Прикреплённые файлы» |
 | regenerate | Повторить | регенер | Same word as Retry, as in the existing Leo copy |

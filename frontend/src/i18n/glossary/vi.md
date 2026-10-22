@@ -106,6 +106,8 @@ Spell as Apple, Google and Microsoft do: classic tone placement (hóa, hủy, x�
 | new chat | Cuộc trò chuyện mới | chat mới | |
 | team chat | cuộc trò chuyện nhóm | — | |
 | connect code | mã kết nối | — | |
+| digest | bản tóm tắt | — | Same word as summary |
+| open question | câu hỏi còn bỏ ngỏ | — | |
 | voice mode | chế độ giọng nói | chế độ thoại, chế độ voice | |
 | attach / attachment | Đính kèm / tệp đính kèm | — | |
 | regenerate | Tạo lại | tái tạo, sinh lại | |

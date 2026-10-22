@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {Nenhuma mensagem lida} one {# mensagem lida} many {# mensagens lidas} other {# mensagens lidas}}",
+  "coverage": {
+    "telegram": "O Telegram só passa ao Shosai as mensagens escritas depois que o bot entrou em {date}, então este resumo cobre {range}.",
+    "slack": "O Shosai tem as mensagens deste canal desde {date}, quando ele foi conectado.",
+    "truncated": "O período teve mais de {limit, number} mensagens; as últimas {limit, number} foram lidas."
+  },
+  "sections": {
+    "decisions": "Decisões",
+    "questions": "Perguntas em aberto",
+    "promises": "Acordos"
+  },
+  "showAll": "Mostrar todos ({count, number})",
+  "showFewer": "Mostrar menos",
+  "item": {
+    "openIn": "Abrir no {messenger}",
+    "quoteOf": "Mostrar a mensagem de {author}"
+  },
+  "task": {
+    "make": "Criar tarefa",
+    "makeAll": "{count, plural, one {Criar tarefa de # acordo} many {Criar tarefas de todos os # acordos} other {Criar tarefas de todos os # acordos}}",
+    "waiting": "Aguardando sua aprovação",
+    "created": "Tarefa criada",
+    "open": "Abrir",
+    "failed": "Não foi possível criar a tarefa"
+  },
+  "states": {
+    "loading": "Carregando o resumo…",
+    "noMessages": "Nenhuma mensagem em “<chat></chat>” neste período.",
+    "nothingFound": "{count, plural, one {Nada a destacar em # mensagem: nenhuma decisão, pergunta em aberto ou acordo.} many {Nada a destacar em # mensagens: nenhuma decisão, pergunta em aberto ou acordo.} other {Nada a destacar em # mensagens: nenhuma decisão, pergunta em aberto ou acordo.}}",
+    "gone": "Este resumo não está mais disponível: o chat foi desconectado ou as mensagens dele expiraram.",
+    "failed": "Não foi possível carregar o resumo"
+  }
+}

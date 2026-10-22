@@ -48,7 +48,7 @@ const RELEASE: DigestCase = {
   digest: RELEASE_DIGEST,
   chatName: "Release team",
   answer:
-    "Here’s the week in Release team: three decisions, two open questions and four promises. Make any of them a task and I’ll prepare it for your approval.",
+    "Here’s the week in Release team: three decisions, two open questions and seven agreements. Make any of them a task and I’ll prepare it for your approval.",
 };
 
 function scenarioOf(found: DigestCase): Scenario {

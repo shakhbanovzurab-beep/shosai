@@ -79,6 +79,11 @@
       "tracking": "समय ट्रैकिंग",
       "factOfPlan": "<fact>{spent}</fact> / {plan}",
       "overPlan": "तय समय से ज़्यादा"
+    },
+    "fromChat": "{messenger} से",
+    "messengers": {
+      "telegram": "Telegram",
+      "slack": "Slack"
     }
   },
   "table": {

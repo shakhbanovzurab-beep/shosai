@@ -12,9 +12,11 @@ import {
   MessageScrollerViewport,
 } from "@/components/ui/message-scroller";
 
+import type { LeoProposal } from "../domain/proposals";
 import type { LeoSource } from "../domain/sources";
 import type { LeoMessage } from "../domain/types";
 import { CitedAnswer } from "./cited/cited-answer";
+import { LeoArtifacts } from "./leo-artifacts";
 import { CopyAction, MessageAction } from "./leo-message-actions";
 import { LeoRichText } from "./leo-rich-text";
 import { LeoSteps } from "./leo-steps";
@@ -26,9 +28,11 @@ interface LeoMessageListProps {
   readonly isBusy: boolean;
   readonly onRegenerate: () => void;
   readonly onEditLast: (content: string) => void;
+  /** Карточка одобрения, сделанная из артефакта ответа (дайджест чата), — в этот же ответ. */
+  readonly onProposal: (messageId: string, proposal: LeoProposal) => void;
 }
 
-export function LeoMessageList({ messages, isBusy, onRegenerate, onEditLast }: LeoMessageListProps) {
+export function LeoMessageList({ messages, isBusy, onRegenerate, onEditLast, onProposal }: LeoMessageListProps) {
   const lastAssistantId = messages.findLast((m) => m.role === "assistant")?.id;
   const lastUserId = messages.findLast((m) => m.role === "user")?.id;
 
@@ -51,6 +55,7 @@ export function LeoMessageList({ messages, isBusy, onRegenerate, onEditLast }: L
                     isLast={message.id === lastAssistantId}
                     canRegenerate={!isBusy}
                     onRegenerate={onRegenerate}
+                    onProposal={(proposal) => onProposal(message.id, proposal)}
                   />
                 )}
               </MessageScrollerItem>
@@ -70,18 +75,26 @@ interface AssistantMessageProps {
   readonly onRegenerate: () => void;
 }
 
-function AssistantMessage({ message, isLast, canRegenerate, onRegenerate }: AssistantMessageProps) {
+function AssistantMessage({
+  message,
+  isLast,
+  canRegenerate,
+  onRegenerate,
+  onProposal,
+}: AssistantMessageProps & { readonly onProposal: (proposal: LeoProposal) => void }) {
   const isStreaming = message.status === "streaming";
   const hasAnswer = message.content.length > 0;
+  const artifacts = message.artifacts ?? [];
   const showActions = !isStreaming && (hasAnswer || isLast);
 
   return (
     <div className="flex flex-col gap-3">
       <LeoSteps message={message} />
       {message.status === "error" ? <ReplyError /> : null}
-      {hasAnswer || showActions ? (
+      {hasAnswer || showActions || artifacts.length > 0 ? (
         <div className="flex flex-col gap-1">
           {hasAnswer ? <AnswerCard text={message.content} sources={message.sources} isStreaming={isStreaming} /> : null}
+          {artifacts.length > 0 ? <LeoArtifacts artifacts={artifacts} onProposal={onProposal} /> : null}
           {message.proposals?.map((proposal) => (
             <LeoProposalCard key={proposal.id} proposal={proposal} />
           ))}

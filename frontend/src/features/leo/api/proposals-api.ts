@@ -15,4 +15,13 @@ export const proposalsApi = {
   approve: (id: string, acceptedChanges?: number[]): Promise<LeoProposal> =>
     apiRequest(`${action(id)}/approve`, jsonBody("POST", { accepted_changes: acceptedChanges })),
   reject: (id: string): Promise<LeoProposal> => apiRequest(`${action(id)}/reject`, { method: "POST" }),
+  /** Карточка `tasks.create` из пунктов дайджеста чата — без вызова модели (CF-D5, AG-R2). */
+  fromDigest: (
+    ref: { workspaceId: string; chatId: string; digestId: string },
+    itemIds: string[],
+  ): Promise<LeoProposal> =>
+    apiRequest(
+      `/v1/workspaces/${encodeURIComponent(ref.workspaceId)}/chats/${encodeURIComponent(ref.chatId)}/digests/${encodeURIComponent(ref.digestId)}/task-proposals`,
+      jsonBody("POST", { item_ids: itemIds }),
+    ),
 };

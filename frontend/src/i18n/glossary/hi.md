@@ -106,6 +106,8 @@ Sentences end with । (no space before it); buttons, labels and headings take n
 | new chat | नई चैट | नया चैट, नई बातचीत | Button |
 | team chat | टीम चैट | — | |
 | connect code | कनेक्ट कोड | — | |
+| digest | सारांश | — | Same word as summary |
+| open question | खुला सवाल | — | Pl. खुले सवाल |
 | voice mode | वॉइस मोड | वॉयस, ध्वनि मोड, आवाज़ मोड | Masculine |
 | attach / attachment | अटैच करें / अटैचमेंट | संलग्न, अटेच | अटैचमेंट is masculine |
 | regenerate | फिर से जनरेट करें | रीजनरेट, पुनर्जनन | Button |

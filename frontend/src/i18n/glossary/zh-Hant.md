@@ -106,6 +106,8 @@ Half-width space between Chinese and Latin words, numbers or placeholders (與 L
 | new chat | 新對話 | 新聊天, 新建對話 | |
 | team chat | 團隊對話 | — | |
 | connect code | 連線代碼 | — | |
+| digest | 摘要 | — | Same word as summary |
+| open question | 待解決的問題 | — | |
 | voice mode | 語音模式 | 语音模式 | |
 | attach / attachment | 附加 / 附件 | 附檔 | The button is 附加檔案 |
 | regenerate | 重新產生 | 重新生成 | |

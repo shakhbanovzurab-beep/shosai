@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {Tidak ada pesan yang dibaca} other {# pesan dibaca}}",
+  "coverage": {
+    "telegram": "Telegram hanya meneruskan ke Shosai pesan yang ditulis setelah bot bergabung pada {date}, jadi ringkasan ini mencakup {range}.",
+    "slack": "Shosai memiliki pesan saluran ini sejak {date}, saat saluran dihubungkan.",
+    "truncated": "Periode ini memiliki lebih dari {limit, number} pesan; {limit, number} pesan terakhir telah dibaca."
+  },
+  "sections": {
+    "decisions": "Keputusan",
+    "questions": "Pertanyaan terbuka",
+    "promises": "Kesepakatan"
+  },
+  "showAll": "Tampilkan semua ({count, number})",
+  "showFewer": "Tampilkan lebih sedikit",
+  "item": {
+    "openIn": "Buka di {messenger}",
+    "quoteOf": "Tampilkan pesan dari {author}"
+  },
+  "task": {
+    "make": "Buat tugas",
+    "makeAll": "{count, plural, other {Buat tugas dari semua # kesepakatan}}",
+    "waiting": "Menunggu persetujuan Anda",
+    "created": "Tugas dibuat",
+    "open": "Buka",
+    "failed": "Tidak dapat membuat tugas"
+  },
+  "states": {
+    "loading": "Memuat ringkasan…",
+    "noMessages": "Tidak ada pesan di “<chat></chat>” pada periode ini.",
+    "nothingFound": "{count, plural, other {Tidak ada yang perlu dicatat dari # pesan: tidak ada keputusan, pertanyaan terbuka, atau kesepakatan.}}",
+    "gone": "Ringkasan ini sudah tidak tersedia: chat diputuskan koneksinya atau pesannya sudah kedaluwarsa.",
+    "failed": "Tidak dapat memuat ringkasan"
+  }
+}

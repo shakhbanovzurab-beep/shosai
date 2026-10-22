@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {Nessun messaggio letto} one {# messaggio letto} many {# di messaggi letti} other {# messaggi letti}}",
+  "coverage": {
+    "telegram": "Telegram dà a Shosai solo i messaggi scritti dopo l’ingresso del bot il {date}, quindi questo riepilogo copre {range}.",
+    "slack": "Shosai ha i messaggi di questo canale dal {date}, quando è stato collegato.",
+    "truncated": "Nel periodo c’erano più di {limit, number} messaggi; sono stati letti gli ultimi {limit, number}."
+  },
+  "sections": {
+    "decisions": "Decisioni",
+    "questions": "Domande aperte",
+    "promises": "Impegni"
+  },
+  "showAll": "Mostra tutti ({count, number})",
+  "showFewer": "Mostra meno",
+  "item": {
+    "openIn": "Apri in {messenger}",
+    "quoteOf": "Mostra il messaggio di {author}"
+  },
+  "task": {
+    "make": "Crea attività",
+    "makeAll": "{count, plural, one {Crea un’attività da # impegno} many {Crea attività da tutti i # di impegni} other {Crea attività da tutti i # impegni}}",
+    "waiting": "In attesa della tua approvazione",
+    "created": "Attività creata",
+    "open": "Apri",
+    "failed": "Impossibile creare l’attività"
+  },
+  "states": {
+    "loading": "Caricamento del riepilogo…",
+    "noMessages": "Nessun messaggio in «<chat></chat>» in questo periodo.",
+    "nothingFound": "{count, plural, one {Niente da segnalare in # messaggio: nessuna decisione, domanda aperta o impegno.} many {Niente da segnalare in # di messaggi: nessuna decisione, domanda aperta o impegno.} other {Niente da segnalare in # messaggi: nessuna decisione, domanda aperta o impegno.}}",
+    "gone": "Questo riepilogo non è più disponibile: la chat è stata scollegata o i suoi messaggi sono scaduti.",
+    "failed": "Impossibile caricare il riepilogo"
+  }
+}

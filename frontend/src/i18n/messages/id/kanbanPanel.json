@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "Dari rapat “{meeting}”, {date}",
-    "gone": "Rapat asal tugas ini sudah tidak ada."
+    "gone": "Rapat asal tugas ini sudah tidak ada.",
+    "chat": "Dari {messenger} · “<chat></chat>”",
+    "chatOn": "Dari {messenger} · “<chat></chat>”, {date}",
+    "openMessage": "Buka pesan"
   },
   "jira": {
     "open": "Buka {key} di Jira",

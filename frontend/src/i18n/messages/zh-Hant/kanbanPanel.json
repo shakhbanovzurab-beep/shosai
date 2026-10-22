@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "來自 {date} 的會議「{meeting}」",
-    "gone": "這項任務來源的會議已不存在。"
+    "gone": "這項任務來源的會議已不存在。",
+    "chat": "來自 {messenger} ·「<chat></chat>」",
+    "chatOn": "來自 {messenger} ·「<chat></chat>」，{date}",
+    "openMessage": "開啟訊息"
   },
   "jira": {
     "open": "在 Jira 中開啟 {key}",

@@ -79,6 +79,11 @@
       "tracking": "Theo dõi thời gian",
       "factOfPlan": "<fact>{spent}</fact> / {plan}",
       "overPlan": "Vượt kế hoạch"
+    },
+    "fromChat": "Từ {messenger}",
+    "messengers": {
+      "telegram": "Telegram",
+      "slack": "Slack"
     }
   },
   "table": {

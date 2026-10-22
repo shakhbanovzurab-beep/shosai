@@ -52,6 +52,9 @@ export type ChatDigest = {
 
 export type DigestSection = "decisions" | "questions" | "promises";
 
+/** Адрес дайджеста: артефакт `chat_digest` в ответе Leo несёт ровно это. */
+export type DigestRef = { workspaceId: string; chatId: string; digestId: string };
+
 /** «Сделать задачей»: пункты дайджеста в одну карточку одобрения `tasks.create` (CF-D5). */
 export type TaskProposalsCreate = { item_ids: string[] };
 

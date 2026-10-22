@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {Okunan mesaj yok} one {# mesaj okundu} other {# mesaj okundu}}",
+  "coverage": {
+    "telegram": "Telegram, Shosai’ye yalnızca botun {date} tarihinde katılmasından sonra yazılan mesajları verir; bu yüzden bu özet {range} dönemini kapsar.",
+    "slack": "Shosai bu kanalın mesajlarına kanalın bağlandığı {date} tarihinden beri sahip.",
+    "truncated": "Dönemde {limit, number} mesajdan fazlası vardı; son {limit, number} mesaj okundu."
+  },
+  "sections": {
+    "decisions": "Kararlar",
+    "questions": "Açık sorular",
+    "promises": "Taahhütler"
+  },
+  "showAll": "Tümünü göster ({count, number})",
+  "showFewer": "Daha az göster",
+  "item": {
+    "openIn": "{messenger} içinde aç",
+    "quoteOf": "Mesajı göster: {author}"
+  },
+  "task": {
+    "make": "Görev oluştur",
+    "makeAll": "{count, plural, one {# taahhütten görev oluştur} other {# taahhüdün tümünden görev oluştur}}",
+    "waiting": "Onayınızı bekliyor",
+    "created": "Görev oluşturuldu",
+    "open": "Aç",
+    "failed": "Görev oluşturulamadı"
+  },
+  "states": {
+    "loading": "Özet yükleniyor…",
+    "noMessages": "Bu dönemde “<chat></chat>” içinde mesaj yok.",
+    "nothingFound": "{count, plural, one {# mesajda not edilecek bir şey yok: karar, açık soru veya taahhüt yok.} other {# mesajda not edilecek bir şey yok: karar, açık soru veya taahhüt yok.}}",
+    "gone": "Bu özet artık kullanılamıyor: sohbetin bağlantısı kesildi veya mesajlarının süresi doldu.",
+    "failed": "Özet yüklenemedi"
+  }
+}

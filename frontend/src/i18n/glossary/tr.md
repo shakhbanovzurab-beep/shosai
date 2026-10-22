@@ -106,6 +106,8 @@ Suffixes after names and codes take ’ and follow pronunciation (Leo’ya, Noti
 | new chat | Yeni sohbet | yeni konuşma | |
 | team chat | ekip sohbeti | — | |
 | connect code | bağlantı kodu | — | |
+| digest | özet | — | Same word as summary |
+| open question | açık soru | — | |
 | voice mode | sesli mod | ses modu, konuşma modu | |
 | attach / attachment | Dosya ekle / ek | iliştir, eklenti | Plural ekler. |
 | regenerate | Yeniden oluştur | yeniden üret, tekrar üret | |

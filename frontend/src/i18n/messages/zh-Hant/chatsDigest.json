@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {沒有讀取任何訊息} other {已讀取 # 則訊息}}",
+  "coverage": {
+    "telegram": "Telegram 只會提供 Shosai 在機器人於 {date} 加入後寫下的訊息，因此這份摘要涵蓋 {range}。",
+    "slack": "Shosai 擁有這個頻道自 {date} 連接以來的訊息。",
+    "truncated": "這段期間的訊息超過 {limit, number} 則，已讀取最新的 {limit, number} 則。"
+  },
+  "sections": {
+    "decisions": "決策",
+    "questions": "待解決的問題",
+    "promises": "承諾"
+  },
+  "showAll": "顯示全部 {count, number} 項",
+  "showFewer": "顯示較少",
+  "item": {
+    "openIn": "在 {messenger} 中開啟",
+    "quoteOf": "顯示 {author} 的訊息"
+  },
+  "task": {
+    "make": "建立任務",
+    "makeAll": "{count, plural, other {將全部 # 項承諾建立為任務}}",
+    "waiting": "等待你核准",
+    "created": "已建立任務",
+    "open": "開啟",
+    "failed": "無法建立任務"
+  },
+  "states": {
+    "loading": "正在載入摘要…",
+    "noMessages": "這段期間「<chat></chat>」沒有訊息。",
+    "nothingFound": "{count, plural, other {# 則訊息中沒有需要記下的內容：沒有決策、待解決的問題或承諾。}}",
+    "gone": "這份摘要已無法使用：對話已中斷連接，或訊息已過期。",
+    "failed": "無法載入摘要"
+  }
+}

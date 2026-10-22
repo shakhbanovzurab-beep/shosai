@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "From the meeting “{meeting}”, {date}",
-    "gone": "The meeting this task came from is gone."
+    "gone": "The meeting this task came from is gone.",
+    "chat": "From {messenger} · “<chat></chat>”",
+    "chatOn": "From {messenger} · “<chat></chat>”, {date}",
+    "openMessage": "Open the message"
   },
   "jira": {
     "open": "Open {key} in Jira",

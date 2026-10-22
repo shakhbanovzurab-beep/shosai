@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {Chưa đọc tin nhắn nào} other {Đã đọc # tin nhắn}}",
+  "coverage": {
+    "telegram": "Telegram chỉ cho Shosai các tin nhắn viết sau khi bot tham gia vào {date}, nên bản tóm tắt này bao gồm {range}.",
+    "slack": "Shosai có tin nhắn của kênh này từ {date}, khi kênh được kết nối.",
+    "truncated": "Khoảng thời gian này có hơn {limit, number} tin nhắn; đã đọc {limit, number} tin nhắn mới nhất."
+  },
+  "sections": {
+    "decisions": "Quyết định",
+    "questions": "Câu hỏi còn bỏ ngỏ",
+    "promises": "Thỏa thuận"
+  },
+  "showAll": "Hiện tất cả {count, number}",
+  "showFewer": "Ẩn bớt",
+  "item": {
+    "openIn": "Mở trong {messenger}",
+    "quoteOf": "Hiện tin nhắn của {author}"
+  },
+  "task": {
+    "make": "Tạo công việc",
+    "makeAll": "{count, plural, other {Tạo công việc từ cả # thỏa thuận}}",
+    "waiting": "Đang chờ bạn phê duyệt",
+    "created": "Đã tạo công việc",
+    "open": "Mở",
+    "failed": "Không thể tạo công việc"
+  },
+  "states": {
+    "loading": "Đang tải bản tóm tắt…",
+    "noMessages": "Không có tin nhắn nào trong “<chat></chat>” trong khoảng thời gian này.",
+    "nothingFound": "{count, plural, other {Không có gì cần ghi lại trong # tin nhắn: không có quyết định, câu hỏi còn bỏ ngỏ hay thỏa thuận nào.}}",
+    "gone": "Bản tóm tắt này không còn nữa: cuộc trò chuyện đã bị ngắt kết nối hoặc tin nhắn đã hết hạn.",
+    "failed": "Không thể tải bản tóm tắt"
+  }
+}

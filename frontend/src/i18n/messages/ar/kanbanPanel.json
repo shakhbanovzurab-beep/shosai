@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "من اجتماع «{meeting}» بتاريخ {date}",
-    "gone": "لم يعد الاجتماع الذي جاءت منه هذه المهمة موجودًا."
+    "gone": "لم يعد الاجتماع الذي جاءت منه هذه المهمة موجودًا.",
+    "chat": "من {messenger} · «<chat></chat>»",
+    "chatOn": "من {messenger} · «<chat></chat>»، {date}",
+    "openMessage": "فتح الرسالة"
   },
   "jira": {
     "open": "فتح {key} في Jira",

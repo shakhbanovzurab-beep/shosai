@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {No messages read} one {# message read} other {# messages read}}",
+  "coverage": {
+    "telegram": "Telegram gives Shosai only messages written after the bot joined on {date}, so this covers {range}.",
+    "slack": "Shosai has this channel’s messages from {date}, when it was connected.",
+    "truncated": "The period had more than {limit, number} messages; the latest {limit, number} were read."
+  },
+  "sections": {
+    "decisions": "Decisions",
+    "questions": "Open questions",
+    "promises": "Agreements"
+  },
+  "showAll": "Show all {count, number}",
+  "showFewer": "Show fewer",
+  "item": {
+    "openIn": "Open in {messenger}",
+    "quoteOf": "Show the message from {author}"
+  },
+  "task": {
+    "make": "Make a task",
+    "makeAll": "{count, plural, one {Make a task of # agreement} other {Make tasks of all # agreements}}",
+    "waiting": "Waiting for your approval",
+    "created": "Task created",
+    "open": "Open",
+    "failed": "Couldn’t make a task"
+  },
+  "states": {
+    "loading": "Loading the digest…",
+    "noMessages": "No messages in <chat></chat> in this period.",
+    "nothingFound": "{count, plural, one {Nothing to note in # message: no decisions, open questions or agreements.} other {Nothing to note in # messages: no decisions, open questions or agreements.}}",
+    "gone": "This digest is no longer available: the chat was disconnected or its messages expired.",
+    "failed": "Couldn’t load the digest"
+  }
+}

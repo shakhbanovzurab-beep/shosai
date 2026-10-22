@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {Geen berichten gelezen} one {# bericht gelezen} other {# berichten gelezen}}",
+  "coverage": {
+    "telegram": "Telegram geeft Shosai alleen berichten die zijn geschreven nadat de bot op {date} binnenkwam, dus deze samenvatting beslaat {range}.",
+    "slack": "Shosai heeft de berichten van dit kanaal vanaf {date}, toen het werd gekoppeld.",
+    "truncated": "De periode had meer dan {limit, number} berichten; de laatste {limit, number} zijn gelezen."
+  },
+  "sections": {
+    "decisions": "Besluiten",
+    "questions": "Open vragen",
+    "promises": "Afspraken"
+  },
+  "showAll": "Alle {count, number} tonen",
+  "showFewer": "Minder tonen",
+  "item": {
+    "openIn": "Openen in {messenger}",
+    "quoteOf": "Bericht van {author} tonen"
+  },
+  "task": {
+    "make": "Taak maken",
+    "makeAll": "{count, plural, one {Taak maken van # afspraak} other {Taken maken van alle # afspraken}}",
+    "waiting": "Wacht op je goedkeuring",
+    "created": "Taak gemaakt",
+    "open": "Openen",
+    "failed": "Kan de taak niet maken"
+  },
+  "states": {
+    "loading": "Samenvatting laden…",
+    "noMessages": "Geen berichten in ‘<chat></chat>’ in deze periode.",
+    "nothingFound": "{count, plural, one {Niets te noteren in # bericht: geen besluiten, open vragen of afspraken.} other {Niets te noteren in # berichten: geen besluiten, open vragen of afspraken.}}",
+    "gone": "Deze samenvatting is niet meer beschikbaar: de chat is ontkoppeld of de berichten zijn verlopen.",
+    "failed": "Kan de samenvatting niet laden"
+  }
+}

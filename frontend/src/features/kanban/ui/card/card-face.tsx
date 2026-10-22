@@ -10,6 +10,7 @@ import type { BoardSticker, SystemStickerId } from "../../domain/stickers-contra
 import type { Card } from "../../domain/tasks-contract";
 import { PriorityBadge } from "../priority-badge";
 import { OwnerAvatar } from "../task-owner";
+import { ChatSourceLine } from "./chat-source";
 import { DeadlineChip } from "./deadline-chip";
 import { FieldChips, RepeatChip } from "./field-chips";
 import { hasFooterFacts } from "./footer-facts";
@@ -165,7 +166,7 @@ function Count({
   );
 }
 
-/** Низ: ход подзадач, счётчики вложений и комментариев; `trailing` — в конце строки (исполнитель). */
+/** Низ: чат-источник, ход подзадач, счётчики вложений и комментариев; `trailing` — в конце строки (исполнитель). */
 export function CardFooter({ card, trailing }: { card: Card; trailing?: ReactNode }) {
   const t = useTranslations("kanban");
   if (!hasFooterFacts(card) && !trailing) return null;
@@ -173,6 +174,7 @@ export function CardFooter({ card, trailing }: { card: Card; trailing?: ReactNod
   const share = hasSubtasks ? (card.subtasks_done / card.subtasks_total) * 100 : 0;
   return (
     <div className="flex items-center gap-3 text-muted-foreground text-xs tabular-nums">
+      {card.source_chat ? <ChatSourceLine source={card.source_chat} /> : null}
       {hasSubtasks ? (
         <span className="flex items-center gap-1.5">
           <span className="h-1 w-10 overflow-hidden rounded-full bg-muted" aria-hidden="true">

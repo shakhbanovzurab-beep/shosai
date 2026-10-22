@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "{date}의 “{meeting}” 회의에서",
-    "gone": "이 작업이 나온 회의가 더 이상 없어요."
+    "gone": "이 작업이 나온 회의가 더 이상 없어요.",
+    "chat": "{messenger}에서 가져옴 · “<chat></chat>”",
+    "chatOn": "{messenger}에서 가져옴 · “<chat></chat>”, {date}",
+    "openMessage": "메시지 열기"
   },
   "jira": {
     "open": "Jira에서 {key} 열기",

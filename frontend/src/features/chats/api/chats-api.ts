@@ -7,6 +7,7 @@ import type {
   ChatSettings,
   ChatSettingsPatch,
 } from "../domain/contract";
+import type { ChatDigest } from "../domain/digest-contract";
 import type {
   SlackChannelsPage,
   SlackConnect,
@@ -48,6 +49,8 @@ export function chatsApi(workspaceId: string) {
         `${slack}/installations/${part(installationId)}/channels?${new URLSearchParams({ q, limit: "100" })}`,
       ),
     connectSlack: (body: SlackConnect) => apiRequest<SlackConnectResponse>(slack, jsonBody("POST", body)),
+    digest: (chatId: string, digestId: string) =>
+      apiRequest<ChatDigest>(`${base}/${part(chatId)}/digests/${part(digestId)}`),
   };
 }
 

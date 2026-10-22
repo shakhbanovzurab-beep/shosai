@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 
-import type { LeoProposal, ProposalStatus } from "../../domain/proposals";
+import { type LeoProposal, type ProposalStatus, proposalCardId } from "../../domain/proposals";
 
 /*
  * Карточка предложенного действия (Leo §13.3: ActionCard Root/Header/Preview/Actions). Превью считает сервер;
@@ -56,11 +56,16 @@ export function ActionCardRoot({
   };
   return (
     <Card
+      id={proposalCardId(proposal.id)}
+      tabIndex={-1}
       size="sm"
       role="group"
       aria-label={proposal.title}
       onKeyDown={keys}
-      className={cn(proposal.warning && "ring-amber-500/50")}
+      className={cn(
+        "scroll-my-4 outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        proposal.warning && "ring-amber-500/50",
+      )}
     >
       {children}
     </Card>

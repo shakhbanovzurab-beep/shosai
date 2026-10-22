@@ -71,6 +71,14 @@ conversation (CF-D5); once approved, the items carry `task_id` and the tasks car
 In the demo, ask Leo to "go through #release for the week" (or name `support`, `pricing` or `weekend` for the other
 states).
 
+The card is chats' (`src/features/chats/ui/digest/`, loaded lazily); Leo renders it inside its answer, after the text
+and before the approval cards, and injects how a task is made (`src/features/leo/model/digest-tasks.ts`): the
+returned proposal joins the same answer, and "Waiting for your approval" scrolls to it. Each digest is one resource
+(`src/features/chats/model/digests.ts`); taken items show as waiting at once, and when the card is decided (approved
+or declined, in the chat or in "Needs you") the digests holding it are read again, so items show "Task created" or
+are free again. The interface calls the third section "Agreements", the glossary's word for a promise someone made;
+the contract keeps `promises`.
+
 ## Messenger links (identity)
 
 | Method   | Path                                                       | Body | Response                  |

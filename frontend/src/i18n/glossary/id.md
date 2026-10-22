@@ -106,6 +106,8 @@ Nouns never take a plural form: no reduplication in the UI (3 file, semua tugas)
 | new chat | Chat baru | Percakapan baru | |
 | team chat | chat tim | — | |
 | connect code | kode sambungan | — | |
+| digest | ringkasan | — | Same word as summary |
+| open question | pertanyaan terbuka | — | |
 | voice mode | mode suara | Modus | |
 | attach / attachment | Lampirkan / lampiran | — | |
 | regenerate | Buat ulang | Regenerasi, Hasilkan ulang | |

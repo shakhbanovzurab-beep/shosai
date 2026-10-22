@@ -25,8 +25,8 @@ row per term below, in the same order. Terms in the "Do not translate" list of `
 | board | work | A Kanban board of columns |
 | column | work | A stage on a board (e.g. Ideas, Planned, Shipped) |
 | project | work | A group of tasks with a goal and a due date |
-| decision | work | Something agreed in a meeting, tracked in a workspace |
-| agreement | work | A promise someone made in a meeting ("I'll send it by Friday") |
+| decision | work | Something agreed in a meeting or a team chat, tracked in a workspace |
+| agreement | work | A promise someone made in a meeting or a team chat ("I'll send it by Friday") |
 | action item | work | A follow-up task taken from a meeting |
 | due date | work | When a task must be done |
 | owner | work | The person who owns a file, meeting or workspace; also the access role |
@@ -102,6 +102,8 @@ row per term below, in the same order. Terms in the "Do not translate" list of `
 | new chat | leo | Start a conversation from scratch |
 | team chat | chats | A team's Telegram group or Slack channel connected to a workspace; Leo reads it when asked |
 | connect code | chats | A one-time code that connects a Telegram group to a workspace |
+| digest | chats | Leo's account of a team chat over a period: decisions, open questions and agreements |
+| open question | chats | A question asked in a team chat that nobody answered |
 | voice mode | leo | Talking to Leo out loud |
 | attach / attachment | leo | Add a file to a message / the file itself |
 | regenerate | leo | Ask Leo to write the answer again |

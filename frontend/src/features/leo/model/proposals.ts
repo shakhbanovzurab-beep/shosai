@@ -4,6 +4,7 @@ import { useSyncExternalStore } from "react";
 
 import { toast } from "sonner";
 
+import { digestProposalDecided } from "@/features/chats/model/digests";
 import { usePollingResource } from "@/hooks/use-polling-resource";
 import { apiErrorDescription } from "@/lib/api/error-description";
 import { createPollingResource } from "@/lib/polling-resource";
@@ -56,6 +57,8 @@ async function decide(proposal: LeoProposal, request: () => Promise<LeoProposal>
   try {
     const decided = await request();
     set((s) => ({ ...s, latest: new Map([...s.latest, [decided.id, decided]]) }));
+    // Карточку могли собрать из пунктов дайджеста: он перечитается и покажет задачи или свободные пункты.
+    digestProposalDecided(decided.id);
     pendingResource.update((page) => ({ ...page, actions: page.actions.filter((a) => a.id !== decided.id) }));
   } catch (error) {
     toast.error(words.failed, { description: apiErrorDescription(error) });

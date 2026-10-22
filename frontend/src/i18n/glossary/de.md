@@ -106,6 +106,8 @@ Use the generic forms given here (Inhaber, Teilnehmer) or neutral wording (Perso
 | new chat | Neuer Chat | Neues Gespräch | Button |
 | team chat | Teamchat | — | |
 | connect code | Verbindungscode | — | |
+| digest | Zusammenfassung | — | Same word as summary |
+| open question | offene Frage | — | |
 | voice mode | Sprachmodus | Stimmmodus, Voice-Modus, Voice Mode | der Sprachmodus |
 | attach / attachment | Anhängen / Anhang | Attachment, Beilage | der Anhang, Pl. Anhänge |
 | regenerate | Neu generieren | regenerier | Button; result: neu generiert |

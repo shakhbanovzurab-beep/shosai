@@ -9,6 +9,7 @@ export const NAMESPACES = [
   "chats",
   "chatsApi",
   "chatsConnect",
+  "chatsDigest",
   "common",
   "consent",
   "download",

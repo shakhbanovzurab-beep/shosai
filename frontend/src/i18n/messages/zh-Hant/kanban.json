@@ -79,6 +79,11 @@
       "tracking": "工時追蹤",
       "factOfPlan": "<fact>{spent}</fact> / {plan}",
       "overPlan": "超出預計"
+    },
+    "fromChat": "來自 {messenger}",
+    "messengers": {
+      "telegram": "Telegram",
+      "slack": "Slack"
     }
   },
   "table": {

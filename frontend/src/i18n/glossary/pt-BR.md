@@ -106,6 +106,8 @@ Participles and adjectives agree in gender (Nota excluída, Link copiado); use n
 | new chat | Novo chat | Nova conversa | |
 | team chat | chat da equipe | — | |
 | connect code | código de conexão | — | |
+| digest | resumo | — | Same word as summary |
+| open question | pergunta em aberto | — | Fem. |
 | voice mode | modo de voz | Modo voz | Masc. |
 | attach / attachment | anexar / anexo | — | Masc. noun; pl. anexos |
 | regenerate | Gerar novamente | Regenerar, Gerar de novo | |

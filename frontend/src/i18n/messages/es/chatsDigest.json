@@ -1,0 +1,34 @@
+{
+  "messagesRead": "{count, plural, =0 {Ningún mensaje leído} one {# mensaje leído} many {# mensajes leídos} other {# mensajes leídos}}",
+  "coverage": {
+    "telegram": "Telegram solo le da a Shosai los mensajes escritos después de que el bot entró el {date}, así que este resumen cubre {range}.",
+    "slack": "Shosai tiene los mensajes de este canal desde el {date}, cuando se conectó.",
+    "truncated": "El período tuvo más de {limit, number} mensajes; se leyeron los últimos {limit, number}."
+  },
+  "sections": {
+    "decisions": "Decisiones",
+    "questions": "Preguntas abiertas",
+    "promises": "Compromisos"
+  },
+  "showAll": "Mostrar los {count, number}",
+  "showFewer": "Mostrar menos",
+  "item": {
+    "openIn": "Abrir en {messenger}",
+    "quoteOf": "Mostrar el mensaje de {author}"
+  },
+  "task": {
+    "make": "Crear tarea",
+    "makeAll": "{count, plural, one {Crear una tarea del # compromiso} many {Crear tareas de los # compromisos} other {Crear tareas de los # compromisos}}",
+    "waiting": "Esperando tu aprobación",
+    "created": "Tarea creada",
+    "open": "Abrir",
+    "failed": "No se pudo crear la tarea"
+  },
+  "states": {
+    "loading": "Cargando el resumen…",
+    "noMessages": "No hubo mensajes en «<chat></chat>» en este período.",
+    "nothingFound": "{count, plural, one {Nada que destacar en # mensaje: ni decisiones, ni preguntas abiertas, ni compromisos.} many {Nada que destacar en # mensajes: ni decisiones, ni preguntas abiertas, ni compromisos.} other {Nada que destacar en # mensajes: ni decisiones, ni preguntas abiertas, ni compromisos.}}",
+    "gone": "Este resumen ya no está disponible: el chat se desconectó o sus mensajes caducaron.",
+    "failed": "No se pudo cargar el resumen"
+  }
+}

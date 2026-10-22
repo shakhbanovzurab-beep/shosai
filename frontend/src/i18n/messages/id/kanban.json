@@ -79,6 +79,11 @@
       "tracking": "Pelacakan waktu",
       "factOfPlan": "<fact>{spent}</fact> / {plan}",
       "overPlan": "Melebihi rencana"
+    },
+    "fromChat": "Dari {messenger}",
+    "messengers": {
+      "telegram": "Telegram",
+      "slack": "Slack"
     }
   },
   "table": {

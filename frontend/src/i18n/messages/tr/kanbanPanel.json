@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "{date} tarihli “{meeting}” toplantısından",
-    "gone": "Bu görevin geldiği toplantı artık yok."
+    "gone": "Bu görevin geldiği toplantı artık yok.",
+    "chat": "Kaynak: {messenger} · “<chat></chat>”",
+    "chatOn": "Kaynak: {messenger} · “<chat></chat>”, {date}",
+    "openMessage": "Mesajı aç"
   },
   "jira": {
     "open": "{key} işini Jira’da aç",

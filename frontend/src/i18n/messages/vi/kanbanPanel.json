@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "Từ cuộc họp “{meeting}”, {date}",
-    "gone": "Cuộc họp tạo ra công việc này không còn nữa."
+    "gone": "Cuộc họp tạo ra công việc này không còn nữa.",
+    "chat": "Từ {messenger} · “<chat></chat>”",
+    "chatOn": "Từ {messenger} · “<chat></chat>”, {date}",
+    "openMessage": "Mở tin nhắn"
   },
   "jira": {
     "open": "Mở {key} trong Jira",

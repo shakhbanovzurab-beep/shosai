@@ -79,6 +79,11 @@
       "tracking": "Monitoraggio del tempo",
       "factOfPlan": "<fact>{spent}</fact> / {plan}",
       "overPlan": "Oltre il previsto"
+    },
+    "fromChat": "Da {messenger}",
+    "messengers": {
+      "telegram": "Telegram",
+      "slack": "Slack"
     }
   },
   "table": {

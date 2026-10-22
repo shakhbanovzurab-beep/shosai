@@ -106,6 +106,8 @@ After names and placeholders choose the particle by sound (Leo가, Studio를, No
 | new chat | 새 채팅 | 새로운 채팅, 새 대화 | |
 | team chat | 팀 채팅 | — | |
 | connect code | 연결 코드 | — | |
+| digest | 요약 | — | Same word as summary |
+| open question | 미해결 질문 | — | |
 | voice mode | 음성 모드 | 보이스 모드, 음성모드 | |
 | attach / attachment | 첨부 / 첨부 파일 | 첨부파일 | Button: 파일 첨부 |
 | regenerate | 다시 생성 | 재생성 | |

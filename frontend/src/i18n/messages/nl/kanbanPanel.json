@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "Uit de vergadering ‘{meeting}’ van {date}",
-    "gone": "De vergadering waar deze taak uit kwam, bestaat niet meer."
+    "gone": "De vergadering waar deze taak uit kwam, bestaat niet meer.",
+    "chat": "Uit {messenger} · ‘<chat></chat>’",
+    "chatOn": "Uit {messenger} · ‘<chat></chat>’, {date}",
+    "openMessage": "Bericht openen"
   },
   "jira": {
     "open": "{key} openen in Jira",

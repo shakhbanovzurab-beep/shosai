@@ -46,7 +46,7 @@ export function LeoPanel({
   onClose,
 }: LeoPanelProps) {
   const t = useTranslations("leo");
-  const { messages, isBusy, send, stop, regenerate, editLast, reset } = chat;
+  const { messages, isBusy, send, stop, regenerate, editLast, addProposal, reset } = chat;
   const attachments = useLeoAttachments();
   const voice = useLeoVoice({ onSend: send });
   const voiceEnabled = useVoiceModeEnabled();
@@ -119,7 +119,13 @@ export function LeoPanel({
             {messages.length === 0 ? (
               <LeoEmptyState pathname={pathname} scope={place.scope} notice={place.notice} onSelect={send} />
             ) : (
-              <LeoMessageList messages={messages} isBusy={isBusy} onRegenerate={regenerate} onEditLast={editLast} />
+              <LeoMessageList
+                messages={messages}
+                isBusy={isBusy}
+                onRegenerate={regenerate}
+                onEditLast={editLast}
+                onProposal={addProposal}
+              />
             )}
           </m.div>
 

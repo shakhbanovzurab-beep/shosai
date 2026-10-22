@@ -53,6 +53,9 @@ export type LeoProposal = {
 
 export const isPending = (proposal: Pick<LeoProposal, "status">) => proposal.status === "proposed";
 
+/** Ид карточки одобрения на странице: к ней ведёт «Ждёт вашего одобрения» из дайджеста. */
+export const proposalCardId = (proposalId: string) => `leo-proposal-${proposalId}`;
+
 /** Номера замен в превью-сравнении: по ним человек выбирает, какие принять. */
 export const changeIndexes = (segments: readonly DiffSegment[]) =>
   segments.flatMap((segment, index) => (segment.type === "change" ? [index] : []));

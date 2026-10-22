@@ -53,7 +53,10 @@
   },
   "source": {
     "meeting": "De la reunión «{meeting}» del {date}",
-    "gone": "La reunión de la que salió esta tarea ya no existe."
+    "gone": "La reunión de la que salió esta tarea ya no existe.",
+    "chat": "Desde {messenger} · «<chat></chat>»",
+    "chatOn": "Desde {messenger} · «<chat></chat>», {date}",
+    "openMessage": "Abrir el mensaje"
   },
   "jira": {
     "open": "Abrir {key} en Jira",
