@@ -26,6 +26,7 @@ export function AddBotStep({
   code,
   onNewCode,
   onBack,
+  backLabel,
   onDone,
 }: {
   workspaceId: string;
@@ -33,6 +34,8 @@ export function AddBotStep({
   code: ConnectCode;
   onNewCode: (code: ConnectCode) => void;
   onBack: () => void;
+  /** Подпись кнопки ухода: «Назад» в окне подключения, «Закрыть» в окне починки. */
+  backLabel?: string;
   onDone: () => void;
 }) {
   const t = useTranslations("chatsConnect");
@@ -89,7 +92,7 @@ export function AddBotStep({
       </div>
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onBack}>
-          {t("back")}
+          {backLabel ?? t("back")}
         </Button>
       </DialogFooter>
     </div>

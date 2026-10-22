@@ -59,5 +59,40 @@
     "done": "Done"
   },
   "back": "Back",
-  "copyFailed": "Couldn’t copy. Select the text and copy it."
+  "copyFailed": "Couldn’t copy. Select the text and copy it.",
+  "slack": {
+    "denied": "Slack wasn’t connected",
+    "failed": "Couldn’t connect Slack",
+    "expired": "The Slack sign-in took too long. Try again.",
+    "callback": {
+      "connected": "Slack is connected",
+      "denied": "Slack wasn’t connected",
+      "error": "Couldn’t connect Slack",
+      "back": "Back to Shosai"
+    },
+    "channelsConnected": "{count, plural, =0 {No channels connected yet} one {# channel connected} other {# channels connected}}",
+    "loadError": "Couldn’t load your Slack workspaces",
+    "loadErrorHint": "Check your connection and try again.",
+    "finishInSlack": "Finish in the Slack window…",
+    "accessEnded": "Access ended",
+    "reconnect": "Reconnect",
+    "addAnother": "Add another Slack workspace",
+    "connectSlack": "Connect Slack",
+    "private": "Private channel",
+    "alreadyIn": "Connected",
+    "members": "{count, plural, one {# member} other {# members}}",
+    "search": "Search channels…",
+    "searchLabel": "Search channels",
+    "channelsError": "Couldn’t load the channels",
+    "noChannels": "No channels match.",
+    "privateHint": "To connect a private channel, run this in it first:",
+    "continue": "{count, plural, =0 {Continue} one {Continue with # channel} other {Continue with # channels}}",
+    "bindingFor": "Where tasks from #{channel} go",
+    "mentionsHint": "Leo sees messages that mention @{app} or reply to it. Digests aren’t available.",
+    "allHint": "Leo keeps every message of the channel, so it can make digests.",
+    "history": "Shosai has a channel’s messages from the moment you connect it.",
+    "connect": "{count, plural, one {Connect # channel} other {Connect # channels}}",
+    "connected": "{count, plural, one {# channel connected} other {# channels connected}}",
+    "alreadyConnected": "Already connected: {channels}."
+  }
 }

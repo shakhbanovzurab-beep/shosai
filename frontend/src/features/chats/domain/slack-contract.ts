@@ -45,3 +45,17 @@ export type SlackConnectResponse = { items: ChatConnection[] };
 
 export const SLACK_CHANNELS_PER_CONNECT = 20;
 export const SLACK_INSTALLATIONS_MAX = 10;
+
+/** Чем кончилась передача OAuth: так её сообщает окну кабинета страница `/oauth/callback?flow=chats`. */
+export type SlackHandoffStatus = "connected" | "denied" | "error";
+export const CHATS_OAUTH_MESSAGE_TYPE = "shosai:chats-oauth";
+export type ChatsOAuthMessage = {
+  type: typeof CHATS_OAUTH_MESSAGE_TYPE;
+  status: SlackHandoffStatus;
+  installation_id: string | null;
+  /** Код отказа передачи, например `authorization_expired`. */
+  error: string | null;
+};
+
+export const isChatsOAuthMessage = (data: unknown): data is ChatsOAuthMessage =>
+  typeof data === "object" && data !== null && (data as { type?: unknown }).type === CHATS_OAUTH_MESSAGE_TYPE;

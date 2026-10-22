@@ -59,5 +59,40 @@
     "done": "Terminé"
   },
   "back": "Retour",
-  "copyFailed": "Impossible de copier. Sélectionnez le texte et copiez-le."
+  "copyFailed": "Impossible de copier. Sélectionnez le texte et copiez-le.",
+  "slack": {
+    "denied": "Slack n’a pas été connecté",
+    "failed": "Impossible de connecter Slack",
+    "expired": "La connexion à Slack a pris trop de temps. Réessayez.",
+    "callback": {
+      "connected": "Slack est connecté",
+      "denied": "Slack n’a pas été connecté",
+      "error": "Impossible de connecter Slack",
+      "back": "Revenir à Shosai"
+    },
+    "channelsConnected": "{count, plural, =0 {Aucun canal connecté pour l’instant} one {# canal connecté} many {# canaux connectés} other {# canaux connectés}}",
+    "loadError": "Impossible de charger vos espaces Slack",
+    "loadErrorHint": "Vérifiez votre connexion et réessayez.",
+    "finishInSlack": "Terminez dans la fenêtre Slack…",
+    "accessEnded": "Accès terminé",
+    "reconnect": "Reconnecter",
+    "addAnother": "Ajouter un autre espace Slack",
+    "connectSlack": "Connecter Slack",
+    "private": "Canal privé",
+    "alreadyIn": "Connecté",
+    "members": "{count, plural, one {# membre} many {# membres} other {# membres}}",
+    "search": "Rechercher des canaux…",
+    "searchLabel": "Rechercher des canaux",
+    "channelsError": "Impossible de charger les canaux",
+    "noChannels": "Aucun canal ne correspond.",
+    "privateHint": "Pour connecter un canal privé, exécutez d’abord ceci dedans :",
+    "continue": "{count, plural, =0 {Continuer} one {Continuer avec # canal} many {Continuer avec # canaux} other {Continuer avec # canaux}}",
+    "bindingFor": "Où vont les tâches de #{channel}",
+    "mentionsHint": "Leo voit les messages qui mentionnent @{app} ou qui lui répondent. Les synthèses ne sont pas disponibles.",
+    "allHint": "Leo conserve chaque message du canal pour pouvoir faire des synthèses.",
+    "history": "Shosai a les messages d’un canal à partir du moment où vous le connectez.",
+    "connect": "{count, plural, one {Connecter # canal} many {Connecter # canaux} other {Connecter # canaux}}",
+    "connected": "{count, plural, one {# canal connecté} many {# canaux connectés} other {# canaux connectés}}",
+    "alreadyConnected": "Déjà connectés : {channels}."
+  }
 }

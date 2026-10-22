@@ -48,5 +48,41 @@
     "shorterBody": "Pesan yang lebih lama dari {days} dihapus dari semua chat terhubung. Ini tidak dapat dibatalkan.",
     "shorterConfirm": "Hapus pesan lama",
     "saved": "Pesan sekarang disimpan selama {days}"
+  },
+  "fix": {
+    "addAgain": "Tambahkan Leo lagi",
+    "addAgainIntro": "Tambahkan Leo ke “{chat}” lagi: buka Telegram lewat tautan di bawah atau kirim perintah di grup.",
+    "makeAdmin": "Jadikan Leo admin",
+    "makeAdminIntro": "Di Telegram, buka “{chat}”, masuk ke daftar admin, lalu tambahkan Leo. Anda dapat mematikan semua hak admin Leo: Leo tetap menerima setiap pesan.",
+    "rejoin": "Ajak Leo kembali",
+    "rejoined": "Leo kembali di #{chat}",
+    "copyInvite": "Salin perintah undangan",
+    "inviteCopied": "Perintah undangan disalin. Jalankan di kanal.",
+    "reconnectSlack": "Hubungkan Slack lagi",
+    "slackReconnected": "Slack terhubung lagi"
+  },
+  "menu": {
+    "change": "Ubah tujuan atau mode…",
+    "disconnect": "Putuskan koneksi…"
+  },
+  "change": {
+    "title": "Ubah “{chat}”",
+    "saved": "Perubahan “{chat}” disimpan"
+  },
+  "disconnect": {
+    "title": "Putuskan koneksi “{chat}”?",
+    "body": "{count, plural, other {Shosai menghapus # pesan yang disimpan dari chat ini sejak {since}, dan Leo keluar dari chat. Tugas yang dibuat darinya tetap ada, dengan tautan ke pesannya.}}",
+    "bodyEmpty": "Leo keluar dari chat. Shosai belum menyimpan pesan apa pun dari chat ini.",
+    "confirm": "Putuskan koneksi",
+    "done": "Koneksi “{chat}” diputuskan"
+  },
+  "installations": {
+    "heading": "Ruang kerja Slack",
+    "channels": "{count, plural, =0 {Tidak ada kanal terhubung} other {# kanal terhubung}}",
+    "disconnect": "Putuskan koneksi",
+    "title": "Putuskan koneksi ruang kerja Slack “{team}”?",
+    "body": "Kanal-kanalnya diputus dan Shosai menghapus pesan yang disimpan darinya: {channels}.",
+    "bodyEmpty": "Shosai melupakan ruang kerja Slack ini. Tidak ada kanalnya yang terhubung.",
+    "done": "Koneksi ruang kerja Slack “{team}” diputuskan"
   }
 }

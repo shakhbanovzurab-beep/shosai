@@ -59,5 +59,40 @@
     "done": "完了"
   },
   "back": "戻る",
-  "copyFailed": "コピーできませんでした。テキストを選択してコピーしてください。"
+  "copyFailed": "コピーできませんでした。テキストを選択してコピーしてください。",
+  "slack": {
+    "denied": "Slack は接続されませんでした",
+    "failed": "Slack を接続できませんでした",
+    "expired": "Slack へのサインインに時間がかかりすぎました。もう一度お試しください。",
+    "callback": {
+      "connected": "Slack を接続しました",
+      "denied": "Slack は接続されませんでした",
+      "error": "Slack を接続できませんでした",
+      "back": "Shosai に戻る"
+    },
+    "channelsConnected": "{count, plural, =0 {まだチャンネルは接続されていません} other {# 件のチャンネルを接続済み}}",
+    "loadError": "Slack ワークスペースを読み込めませんでした",
+    "loadErrorHint": "接続を確認して、もう一度お試しください。",
+    "finishInSlack": "Slack のウィンドウで完了してください…",
+    "accessEnded": "アクセス終了",
+    "reconnect": "接続し直す",
+    "addAnother": "別の Slack ワークスペースを追加",
+    "connectSlack": "Slack を接続",
+    "private": "プライベートチャンネル",
+    "alreadyIn": "接続済み",
+    "members": "{count, plural, other {メンバー # 人}}",
+    "search": "チャンネルを検索…",
+    "searchLabel": "チャンネルを検索",
+    "channelsError": "チャンネルを読み込めませんでした",
+    "noChannels": "一致するチャンネルはありません。",
+    "privateHint": "プライベートチャンネルを接続するには、先にそのチャンネルで次を実行してください：",
+    "continue": "{count, plural, =0 {続ける} other {# 件のチャンネルで続ける}}",
+    "bindingFor": "#{channel} のタスクの追加先",
+    "mentionsHint": "Leo は @{app} がメンションされたメッセージと、Leo への返信を見ます。ダイジェストは使えません。",
+    "allHint": "Leo はチャンネルのすべてのメッセージを保存し、ダイジェストを作れます。",
+    "history": "Shosai がチャンネルのメッセージを受け取るのは、接続した時点からです。",
+    "connect": "{count, plural, other {# 件のチャンネルを接続}}",
+    "connected": "{count, plural, other {# 件のチャンネルを接続しました}}",
+    "alreadyConnected": "接続済み：{channels}。"
+  }
 }

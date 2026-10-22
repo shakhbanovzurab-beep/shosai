@@ -65,8 +65,8 @@ export function ChatRowProblem({ connection, children }: { connection: ChatConne
   );
 }
 
-/** Строка чата целиком: так её видят все; действия для админов приходят частями. */
-export function ConnectionRow({ connection, actions }: { connection: ChatConnection; actions?: ReactNode }) {
+/** Строка чата целиком, как её видят участники; у админа своя строка из тех же частей (`admin-row.tsx`). */
+export function ConnectionRow({ connection }: { connection: ChatConnection }) {
   return (
     <ChatRowRoot>
       <MessengerTile messenger={connection.messenger} />
@@ -75,7 +75,6 @@ export function ConnectionRow({ connection, actions }: { connection: ChatConnect
         <ChatRowMeta connection={connection} />
         <ChatRowProblem connection={connection} />
       </ChatRowBody>
-      {actions}
     </ChatRowRoot>
   );
 }

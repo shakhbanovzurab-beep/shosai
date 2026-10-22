@@ -9,14 +9,15 @@ import { MessengerTile } from "@/components/brand/messenger-mark";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 import type { ChatSettings, Messenger } from "../../domain/contract";
+import { SlackConnect } from "./slack/slack-connect";
 import { TelegramConnect } from "./telegram/telegram-connect";
 
 /*
  * Окно «Подключить чат»: сначала мессенджер — только из тех, что обслуживает установка и для которых у
- * кабинета есть путь подключения (сейчас Telegram); когда такой один, окно сразу открывается на нём.
+ * кабинета есть путь подключения; когда такой один, окно сразу открывается на нём.
  */
 
-const FLOWS: readonly Messenger[] = ["telegram"];
+const FLOWS: readonly Messenger[] = ["telegram", "slack"];
 
 function MessengerChoice({ choices, onPick }: { choices: Messenger[]; onPick: (messenger: Messenger) => void }) {
   const t = useTranslations("chatsConnect");
@@ -55,6 +56,7 @@ export function ConnectDialog({
   const choices = settings.messengers.map((m) => m.messenger).filter((m) => FLOWS.includes(m));
   const [messenger, setMessenger] = useState<Messenger | null>(choices.length === 1 ? choices[0] : null);
   const bot = settings.messengers.find((m) => m.messenger === "telegram");
+  const slack = settings.messengers.find((m) => m.messenger === "slack");
 
   return (
     <Dialog open onOpenChange={(open) => (open ? undefined : onClose())}>
@@ -66,6 +68,9 @@ export function ConnectDialog({
         {messenger === null ? <MessengerChoice choices={choices} onPick={setMessenger} /> : null}
         {messenger === "telegram" && bot?.messenger === "telegram" ? (
           <TelegramConnect workspaceId={workspaceId} settings={settings} bot={bot.bot_username} onDone={onClose} />
+        ) : null}
+        {messenger === "slack" && slack?.messenger === "slack" ? (
+          <SlackConnect workspaceId={workspaceId} settings={settings} app={slack.app_name} onDone={onClose} />
         ) : null}
       </DialogContent>
     </Dialog>

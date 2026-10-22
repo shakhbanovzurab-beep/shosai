@@ -48,5 +48,41 @@
     "shorterBody": "{days} süresinden eski mesajlar tüm bağlı sohbetlerden silinir. Bu geri alınamaz.",
     "shorterConfirm": "Eski mesajları sil",
     "saved": "Mesajlar artık {days} saklanıyor"
+  },
+  "fix": {
+    "addAgain": "Leo’yu yeniden ekle",
+    "addAgainIntro": "Leo’yu “{chat}” grubuna yeniden ekleyin: aşağıdaki bağlantıyla Telegram’ı açın ya da komutu grupta gönderin.",
+    "makeAdmin": "Leo’yu yönetici yap",
+    "makeAdminIntro": "Telegram’da “{chat}” grubunu açın, yöneticilere gidin ve Leo’yu ekleyin. Leo’nun tüm yönetici izinlerini kapatabilirsiniz: her mesajı yine de alır.",
+    "rejoin": "Leo’yu geri getir",
+    "rejoined": "Leo #{chat} kanalına geri döndü",
+    "copyInvite": "Davet komutunu kopyala",
+    "inviteCopied": "Davet komutu kopyalandı. Kanalda çalıştırın.",
+    "reconnectSlack": "Slack’i yeniden bağla",
+    "slackReconnected": "Slack yeniden bağlandı"
+  },
+  "menu": {
+    "change": "Hedefi veya modu değiştir…",
+    "disconnect": "Bağlantıyı kes…"
+  },
+  "change": {
+    "title": "“{chat}” sohbetini değiştir",
+    "saved": "“{chat}” değişiklikleri kaydedildi"
+  },
+  "disconnect": {
+    "title": "“{chat}” bağlantısı kesilsin mi?",
+    "body": "{count, plural, one {Shosai bu sohbetten {since} tarihinden beri sakladığı # mesajı siler ve Leo sohbetten çıkar. Buradan oluşan görevler mesaj bağlantılarıyla birlikte kalır.} other {Shosai bu sohbetten {since} tarihinden beri sakladığı # mesajı siler ve Leo sohbetten çıkar. Buradan oluşan görevler mesaj bağlantılarıyla birlikte kalır.}}",
+    "bodyEmpty": "Leo sohbetten çıkar. Shosai henüz bu sohbetten mesaj saklamadı.",
+    "confirm": "Bağlantıyı kes",
+    "done": "“{chat}” bağlantısı kesildi"
+  },
+  "installations": {
+    "heading": "Slack çalışma alanları",
+    "channels": "{count, plural, =0 {Bağlı kanal yok} one {# kanal bağlı} other {# kanal bağlı}}",
+    "disconnect": "Bağlantıyı kes",
+    "title": "“{team}” Slack çalışma alanının bağlantısı kesilsin mi?",
+    "body": "Kanallarının bağlantısı kesilir ve Shosai bunlardan sakladığı mesajları siler: {channels}.",
+    "bodyEmpty": "Shosai bu Slack çalışma alanını unutur. Kanallarından hiçbiri bağlı değil.",
+    "done": "“{team}” Slack çalışma alanının bağlantısı kesildi"
   }
 }

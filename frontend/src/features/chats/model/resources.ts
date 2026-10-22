@@ -4,6 +4,7 @@ import { usePollingResource } from "@/hooks/use-polling-resource";
 import { createPollingResource, type PollingResource } from "@/lib/polling-resource";
 
 import { chatsApi } from "../api/chats-api";
+import type { SlackChannelsPage } from "../domain/slack-contract";
 import type { ConnectStatus } from "../domain/telegram-contract";
 
 /*
@@ -45,10 +46,23 @@ function createChatResources(workspaceId: string) {
   const api = chatsApi(workspaceId);
   const connections = createPollingResource(api.list);
   const codes = new Map<string, PollingResource<ConnectStatus>>();
+  const channels = new Map<string, PollingResource<SlackChannelsPage>>();
   return {
     api,
     settings: createPollingResource(api.settings),
     connections,
+    installations: createPollingResource(api.installations),
+    /** Каналы установки по строке поиска; каждый запрос помнится, пока открыто окно. */
+    channels(installationId: string, q: string) {
+      const key = `${installationId}\n${q}`;
+      let resource = channels.get(key);
+      if (!resource) {
+        resource = createPollingResource(() => api.channels(installationId, q));
+        channels.set(key, resource);
+      }
+      return resource;
+    },
+    forgetChannels: () => channels.clear(),
     code(id: string) {
       let resource = codes.get(id);
       if (!resource) {
@@ -83,3 +97,6 @@ export const useChatSettings = (workspaceId: string) => usePollingResource(chatR
 export const useConnections = (workspaceId: string) => usePollingResource(chatResources(workspaceId).connections);
 export const useCodeStatus = (workspaceId: string, codeId: string) =>
   usePollingResource(chatResources(workspaceId).code(codeId));
+export const useInstallations = (workspaceId: string) => usePollingResource(chatResources(workspaceId).installations);
+export const useChannels = (workspaceId: string, installationId: string, q: string) =>
+  usePollingResource(chatResources(workspaceId).channels(installationId, q));

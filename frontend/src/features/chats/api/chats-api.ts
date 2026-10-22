@@ -7,6 +7,14 @@ import type {
   ChatSettings,
   ChatSettingsPatch,
 } from "../domain/contract";
+import type {
+  SlackChannelsPage,
+  SlackConnect,
+  SlackConnectResponse,
+  SlackHandoff,
+  SlackHandoffCreate,
+  SlackInstallationsResponse,
+} from "../domain/slack-contract";
 import type { ConnectCode, ConnectCodeCreate, ConnectStatus } from "../domain/telegram-contract";
 
 /*
@@ -19,6 +27,7 @@ const part = encodeURIComponent;
 export function chatsApi(workspaceId: string) {
   const base = `/v1/workspaces/${part(workspaceId)}/chats`;
   const codes = `${base}/telegram/connect-codes`;
+  const slack = `${base}/slack`;
   return {
     settings: () => apiRequest<ChatSettings>(`${base}/settings`),
     patchSettings: (body: ChatSettingsPatch) => apiRequest<ChatSettings>(`${base}/settings`, jsonBody("PATCH", body)),
@@ -30,6 +39,15 @@ export function chatsApi(workspaceId: string) {
     createCode: (body: ConnectCodeCreate) => apiRequest<ConnectCode>(codes, jsonBody("POST", body)),
     pollCode: (id: string) => apiRequest<ConnectStatus>(`${codes}/${part(id)}`),
     cancelCode: (id: string) => apiRequest<void>(`${codes}/${part(id)}`, { method: "DELETE" }),
+    installations: () => apiRequest<SlackInstallationsResponse>(`${slack}/installations`),
+    beginSlack: (body: SlackHandoffCreate) =>
+      apiRequest<SlackHandoff>(`${slack}/installations`, jsonBody("POST", body)),
+    removeInstallation: (id: string) => apiRequest<void>(`${slack}/installations/${part(id)}`, { method: "DELETE" }),
+    channels: (installationId: string, q: string) =>
+      apiRequest<SlackChannelsPage>(
+        `${slack}/installations/${part(installationId)}/channels?${new URLSearchParams({ q, limit: "100" })}`,
+      ),
+    connectSlack: (body: SlackConnect) => apiRequest<SlackConnectResponse>(slack, jsonBody("POST", body)),
   };
 }
 

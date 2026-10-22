@@ -18,6 +18,41 @@ import { CHAT_MODES, type ChatMode, type ChatSettings } from "../../domain/contr
 
 const WHOLE_WORKSPACE = "workspace";
 
+/** Выбор привязки без подписи: всё пространство или проект; `null` — всё пространство. */
+export function BindingSelect({
+  id,
+  value,
+  onChange,
+  label,
+}: {
+  id: string;
+  value: string | null;
+  onChange: (projectId: string | null) => void;
+  /** Подпись для чтения с экрана, когда видимой нет. */
+  label?: string;
+}) {
+  const t = useTranslations("chatsConnect");
+  const { state } = useWorkspace();
+  const projects = state.projects.filter((project) => project.status !== "completed");
+  return (
+    <Select value={value ?? WHOLE_WORKSPACE} onValueChange={(next) => onChange(next === WHOLE_WORKSPACE ? null : next)}>
+      <SelectTrigger id={id} aria-label={label} className="w-full">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem value={WHOLE_WORKSPACE}>{t("fields.wholeWorkspace")}</SelectItem>
+          {projects.map((project) => (
+            <SelectItem key={project.id} value={project.id}>
+              <span dir="auto">{project.name}</span>
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+}
+
 /** Привязка: всё пространство или проект; `null` — всё пространство. */
 export function BindingField({
   id,
@@ -29,29 +64,10 @@ export function BindingField({
   onChange: (projectId: string | null) => void;
 }) {
   const t = useTranslations("chatsConnect");
-  const { state } = useWorkspace();
-  const projects = state.projects.filter((project) => project.status !== "completed");
   return (
     <Field>
       <FieldLabel htmlFor={id}>{t("fields.binding")}</FieldLabel>
-      <Select
-        value={value ?? WHOLE_WORKSPACE}
-        onValueChange={(next) => onChange(next === WHOLE_WORKSPACE ? null : next)}
-      >
-        <SelectTrigger id={id} className="w-full">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectItem value={WHOLE_WORKSPACE}>{t("fields.wholeWorkspace")}</SelectItem>
-            {projects.map((project) => (
-              <SelectItem key={project.id} value={project.id}>
-                <span dir="auto">{project.name}</span>
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <BindingSelect id={id} value={value} onChange={onChange} />
       <FieldDescription>{t("fields.bindingHint")}</FieldDescription>
     </Field>
   );

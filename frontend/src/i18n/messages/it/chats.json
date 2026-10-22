@@ -48,5 +48,41 @@
     "shorterBody": "I messaggi più vecchi di {days} vengono eliminati da tutte le chat collegate. Non si può annullare.",
     "shorterConfirm": "Elimina i messaggi vecchi",
     "saved": "Ora i messaggi sono conservati per {days}"
+  },
+  "fix": {
+    "addAgain": "Aggiungi di nuovo Leo",
+    "addAgainIntro": "Aggiungi di nuovo Leo a «{chat}»: apri Telegram con il link qui sotto o invia il comando nel gruppo.",
+    "makeAdmin": "Rendi Leo amministratore",
+    "makeAdminIntro": "In Telegram apri «{chat}», vai agli amministratori e aggiungi Leo. Puoi disattivare tutti i suoi permessi da amministratore: riceve comunque ogni messaggio.",
+    "rejoin": "Riporta Leo",
+    "rejoined": "Leo è di nuovo in #{chat}",
+    "copyInvite": "Copia il comando di invito",
+    "inviteCopied": "Comando di invito copiato. Eseguilo nel canale.",
+    "reconnectSlack": "Ricollega Slack",
+    "slackReconnected": "Slack è di nuovo collegato"
+  },
+  "menu": {
+    "change": "Modifica destinazione o modalità…",
+    "disconnect": "Scollega…"
+  },
+  "change": {
+    "title": "Modifica «{chat}»",
+    "saved": "Modifiche a «{chat}» salvate"
+  },
+  "disconnect": {
+    "title": "Scollegare «{chat}»?",
+    "body": "{count, plural, one {Shosai elimina il # messaggio conservato da questa chat dal {since}, e Leo esce dalla chat. Le attività nate da qui restano, con il link al messaggio.} many {Shosai elimina i # messaggi conservati da questa chat dal {since}, e Leo esce dalla chat. Le attività nate da qui restano, con il link al messaggio.} other {Shosai elimina i # messaggi conservati da questa chat dal {since}, e Leo esce dalla chat. Le attività nate da qui restano, con il link al messaggio.}}",
+    "bodyEmpty": "Leo esce dalla chat. Shosai non ne ha ancora conservato nessun messaggio.",
+    "confirm": "Scollega",
+    "done": "«{chat}» è scollegata"
+  },
+  "installations": {
+    "heading": "Spazi di lavoro Slack",
+    "channels": "{count, plural, =0 {Nessun canale collegato} one {# canale collegato} many {# canali collegati} other {# canali collegati}}",
+    "disconnect": "Scollega",
+    "title": "Scollegare lo spazio di lavoro Slack «{team}»?",
+    "body": "I suoi canali vengono scollegati e Shosai elimina i messaggi conservati da essi: {channels}.",
+    "bodyEmpty": "Shosai dimentica questo spazio di lavoro Slack. Nessuno dei suoi canali è collegato.",
+    "done": "Lo spazio di lavoro Slack «{team}» è scollegato"
   }
 }

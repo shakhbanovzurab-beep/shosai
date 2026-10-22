@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 
 import { MessagesSquare } from "lucide-react";
 import { useTranslations } from "use-intl";
@@ -17,7 +17,7 @@ import { ConnectionRow } from "./chat-row";
 
 /*
  * Список подключённых чатов в состояниях загрузки, ошибки и пустоты. Сервер уже упорядочил его: сначала то,
- * что требует внимания. Действия над строкой (для админов) приходят через `actionsFor`.
+ * что требует внимания. Строку для админа (с починкой и меню) даёт `rowFor`, иначе — строка для всех.
  */
 
 const SKELETON_ROWS = ["a", "b", "c"];
@@ -63,13 +63,13 @@ export function ChatList({
   workspaceId,
   state,
   empty,
-  actionsFor,
+  rowFor,
 }: {
   workspaceId: string;
   state: ResourceState<ChatConnectionsPage>;
   /** Что показать, когда чатов нет. */
   empty: ReactNode;
-  actionsFor?: (connection: ChatConnection) => ReactNode;
+  rowFor?: (connection: ChatConnection) => ReactNode;
 }) {
   const t = useTranslations("chats");
   const tc = useTranslations("common");
@@ -87,9 +87,13 @@ export function ChatList({
   if (items.length === 0) return empty;
   return (
     <ul aria-label={t("section.listLabel")} className="flex flex-col divide-y">
-      {items.map((connection) => (
-        <ConnectionRow key={connection.id} connection={connection} actions={actionsFor?.(connection)} />
-      ))}
+      {items.map((connection) =>
+        rowFor ? (
+          <Fragment key={connection.id}>{rowFor(connection)}</Fragment>
+        ) : (
+          <ConnectionRow key={connection.id} connection={connection} />
+        ),
+      )}
     </ul>
   );
 }

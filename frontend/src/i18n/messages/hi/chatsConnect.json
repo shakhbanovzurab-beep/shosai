@@ -59,5 +59,40 @@
     "done": "हो गया"
   },
   "back": "वापस",
-  "copyFailed": "कॉपी नहीं हो सका। टेक्स्ट चुनें और कॉपी करें।"
+  "copyFailed": "कॉपी नहीं हो सका। टेक्स्ट चुनें और कॉपी करें।",
+  "slack": {
+    "denied": "Slack कनेक्ट नहीं हुआ",
+    "failed": "Slack कनेक्ट नहीं हो सका",
+    "expired": "Slack में साइन इन करने में बहुत समय लगा। फिर से कोशिश करें।",
+    "callback": {
+      "connected": "Slack कनेक्ट हो गया",
+      "denied": "Slack कनेक्ट नहीं हुआ",
+      "error": "Slack कनेक्ट नहीं हो सका",
+      "back": "Shosai पर वापस जाएं"
+    },
+    "channelsConnected": "{count, plural, =0 {अभी कोई चैनल कनेक्ट नहीं} one {# चैनल कनेक्ट है} other {# चैनल कनेक्ट हैं}}",
+    "loadError": "आपके Slack वर्कस्पेस लोड नहीं हो सके",
+    "loadErrorHint": "अपना कनेक्शन जाँचें और फिर से कोशिश करें।",
+    "finishInSlack": "Slack विंडो में पूरा करें…",
+    "accessEnded": "पहुँच खत्म हो गई",
+    "reconnect": "फिर से कनेक्ट करें",
+    "addAnother": "एक और Slack वर्कस्पेस जोड़ें",
+    "connectSlack": "Slack कनेक्ट करें",
+    "private": "निजी चैनल",
+    "alreadyIn": "कनेक्ट है",
+    "members": "{count, plural, one {# सदस्य} other {# सदस्य}}",
+    "search": "चैनल खोजें…",
+    "searchLabel": "चैनल खोजें",
+    "channelsError": "चैनल लोड नहीं हो सके",
+    "noChannels": "कोई चैनल मेल नहीं खाता।",
+    "privateHint": "निजी चैनल कनेक्ट करने के लिए पहले उसमें यह चलाएं:",
+    "continue": "{count, plural, =0 {जारी रखें} one {# चैनल के साथ जारी रखें} other {# चैनलों के साथ जारी रखें}}",
+    "bindingFor": "#{channel} के टास्क कहाँ जाएं",
+    "mentionsHint": "Leo वे मैसेज देखता है जिनमें @{app} का ज़िक्र हो या जो उसे जवाब दें। सारांश उपलब्ध नहीं हैं।",
+    "allHint": "Leo चैनल का हर मैसेज रखता है ताकि सारांश बना सके।",
+    "history": "Shosai के पास किसी चैनल के मैसेज उसे कनेक्ट करने के समय से होते हैं।",
+    "connect": "{count, plural, one {# चैनल कनेक्ट करें} other {# चैनल कनेक्ट करें}}",
+    "connected": "{count, plural, one {# चैनल कनेक्ट हुआ} other {# चैनल कनेक्ट हुए}}",
+    "alreadyConnected": "पहले से कनेक्ट: {channels}।"
+  }
 }

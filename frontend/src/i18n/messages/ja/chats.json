@@ -48,5 +48,41 @@
     "shorterBody": "{days}より古いメッセージは、接続済みのすべてのチャットから消去されます。元に戻せません。",
     "shorterConfirm": "古いメッセージを消去",
     "saved": "メッセージの保存期間を {days} にしました"
+  },
+  "fix": {
+    "addAgain": "Leo をもう一度追加",
+    "addAgainIntro": "Leo を「{chat}」にもう一度追加します。下のリンクで Telegram を開くか、グループでコマンドを送ってください。",
+    "makeAdmin": "Leo を管理者にする",
+    "makeAdminIntro": "Telegram で「{chat}」を開き、管理者の設定で Leo を追加してください。Leo の管理者権限はすべてオフにできます。それでもすべてのメッセージが届きます。",
+    "rejoin": "Leo を戻す",
+    "rejoined": "Leo が #{chat} に戻りました",
+    "copyInvite": "招待コマンドをコピー",
+    "inviteCopied": "招待コマンドをコピーしました。チャンネルで実行してください。",
+    "reconnectSlack": "Slack を接続し直す",
+    "slackReconnected": "Slack を接続し直しました"
+  },
+  "menu": {
+    "change": "追加先またはモードを変更…",
+    "disconnect": "接続を解除…"
+  },
+  "change": {
+    "title": "「{chat}」を変更",
+    "saved": "「{chat}」の変更を保存しました"
+  },
+  "disconnect": {
+    "title": "「{chat}」の接続を解除しますか？",
+    "body": "{count, plural, other {{since}からこのチャットで保存した # 件のメッセージを Shosai が消去し、Leo はチャットから退出します。ここから作ったタスクは、メッセージへのリンクとともに残ります。}}",
+    "bodyEmpty": "Leo はチャットから退出します。Shosai はまだこのチャットのメッセージを保存していません。",
+    "confirm": "接続を解除",
+    "done": "「{chat}」の接続を解除しました"
+  },
+  "installations": {
+    "heading": "Slack ワークスペース",
+    "channels": "{count, plural, =0 {接続済みのチャンネルはありません} other {# 件のチャンネルを接続済み}}",
+    "disconnect": "接続を解除",
+    "title": "Slack ワークスペース「{team}」の接続を解除しますか？",
+    "body": "チャンネルの接続が解除され、Shosai はそこで保存したメッセージを消去します：{channels}。",
+    "bodyEmpty": "Shosai はこの Slack ワークスペースを忘れます。接続済みのチャンネルはありません。",
+    "done": "Slack ワークスペース「{team}」の接続を解除しました"
   }
 }

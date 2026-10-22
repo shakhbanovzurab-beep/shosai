@@ -59,5 +59,40 @@
     "done": "Pronto"
   },
   "back": "Voltar",
-  "copyFailed": "Não foi possível copiar. Selecione o texto e copie."
+  "copyFailed": "Não foi possível copiar. Selecione o texto e copie.",
+  "slack": {
+    "denied": "O Slack não foi conectado",
+    "failed": "Não foi possível conectar o Slack",
+    "expired": "O login no Slack demorou demais. Tente de novo.",
+    "callback": {
+      "connected": "O Slack está conectado",
+      "denied": "O Slack não foi conectado",
+      "error": "Não foi possível conectar o Slack",
+      "back": "Voltar para o Shosai"
+    },
+    "channelsConnected": "{count, plural, =0 {Nenhum canal conectado ainda} one {# canal conectado} many {# canais conectados} other {# canais conectados}}",
+    "loadError": "Não foi possível carregar seus espaços de trabalho do Slack",
+    "loadErrorHint": "Verifique sua conexão e tente de novo.",
+    "finishInSlack": "Termine na janela do Slack…",
+    "accessEnded": "Acesso encerrado",
+    "reconnect": "Conectar de novo",
+    "addAnother": "Adicionar outro espaço de trabalho do Slack",
+    "connectSlack": "Conectar o Slack",
+    "private": "Canal privado",
+    "alreadyIn": "Conectado",
+    "members": "{count, plural, one {# membro} many {# membros} other {# membros}}",
+    "search": "Buscar canais…",
+    "searchLabel": "Buscar canais",
+    "channelsError": "Não foi possível carregar os canais",
+    "noChannels": "Nenhum canal corresponde.",
+    "privateHint": "Para conectar um canal privado, primeiro execute isto nele:",
+    "continue": "{count, plural, =0 {Continuar} one {Continuar com # canal} many {Continuar com # canais} other {Continuar com # canais}}",
+    "bindingFor": "Para onde vão as tarefas de #{channel}",
+    "mentionsHint": "O Leo vê as mensagens que mencionam @{app} ou que respondem a ele. Resumos não estão disponíveis.",
+    "allHint": "O Leo guarda toda mensagem do canal para poder fazer resumos.",
+    "history": "O Shosai tem as mensagens de um canal a partir do momento em que você o conecta.",
+    "connect": "{count, plural, one {Conectar # canal} many {Conectar # canais} other {Conectar # canais}}",
+    "connected": "{count, plural, one {# canal conectado} many {# canais conectados} other {# canais conectados}}",
+    "alreadyConnected": "Já conectados: {channels}."
+  }
 }

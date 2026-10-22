@@ -59,5 +59,40 @@
     "done": "完成"
   },
   "back": "返回",
-  "copyFailed": "無法複製。請選取文字後再複製。"
+  "copyFailed": "無法複製。請選取文字後再複製。",
+  "slack": {
+    "denied": "Slack 未連接",
+    "failed": "無法連接 Slack",
+    "expired": "登入 Slack 花了太久時間。請再試一次。",
+    "callback": {
+      "connected": "已連接 Slack",
+      "denied": "Slack 未連接",
+      "error": "無法連接 Slack",
+      "back": "返回 Shosai"
+    },
+    "channelsConnected": "{count, plural, =0 {尚未連接任何頻道} other {已連接 # 個頻道}}",
+    "loadError": "無法載入你的 Slack 工作空間",
+    "loadErrorHint": "請檢查網路連線後再試一次。",
+    "finishInSlack": "請在 Slack 視窗中完成…",
+    "accessEnded": "存取已結束",
+    "reconnect": "重新連接",
+    "addAnother": "新增另一個 Slack 工作空間",
+    "connectSlack": "連接 Slack",
+    "private": "私人頻道",
+    "alreadyIn": "已連接",
+    "members": "{count, plural, other {# 位成員}}",
+    "search": "搜尋頻道…",
+    "searchLabel": "搜尋頻道",
+    "channelsError": "無法載入頻道",
+    "noChannels": "沒有符合的頻道。",
+    "privateHint": "若要連接私人頻道，請先在頻道中執行：",
+    "continue": "{count, plural, =0 {繼續} other {以 # 個頻道繼續}}",
+    "bindingFor": "#{channel} 的任務去處",
+    "mentionsHint": "Leo 會看到提及 @{app} 或回覆它的訊息。無法使用摘要。",
+    "allHint": "Leo 會保存頻道的每則訊息，才能製作摘要。",
+    "history": "Shosai 從你連接頻道的那一刻起取得頻道訊息。",
+    "connect": "{count, plural, other {連接 # 個頻道}}",
+    "connected": "{count, plural, other {已連接 # 個頻道}}",
+    "alreadyConnected": "已連接：{channels}。"
+  }
 }

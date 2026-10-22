@@ -59,5 +59,40 @@
     "done": "Selesai"
   },
   "back": "Kembali",
-  "copyFailed": "Tidak dapat menyalin. Pilih teksnya lalu salin."
+  "copyFailed": "Tidak dapat menyalin. Pilih teksnya lalu salin.",
+  "slack": {
+    "denied": "Slack tidak terhubung",
+    "failed": "Slack tidak dapat dihubungkan",
+    "expired": "Masuk ke Slack terlalu lama. Coba lagi.",
+    "callback": {
+      "connected": "Slack terhubung",
+      "denied": "Slack tidak terhubung",
+      "error": "Slack tidak dapat dihubungkan",
+      "back": "Kembali ke Shosai"
+    },
+    "channelsConnected": "{count, plural, =0 {Belum ada kanal terhubung} other {# kanal terhubung}}",
+    "loadError": "Ruang kerja Slack Anda tidak dapat dimuat",
+    "loadErrorHint": "Periksa koneksi Anda lalu coba lagi.",
+    "finishInSlack": "Selesaikan di jendela Slack…",
+    "accessEnded": "Akses berakhir",
+    "reconnect": "Hubungkan lagi",
+    "addAnother": "Tambahkan ruang kerja Slack lain",
+    "connectSlack": "Hubungkan Slack",
+    "private": "Kanal privat",
+    "alreadyIn": "Terhubung",
+    "members": "{count, plural, other {# anggota}}",
+    "search": "Cari kanal…",
+    "searchLabel": "Cari kanal",
+    "channelsError": "Kanal tidak dapat dimuat",
+    "noChannels": "Tidak ada kanal yang cocok.",
+    "privateHint": "Untuk menghubungkan kanal privat, jalankan ini di kanal itu dulu:",
+    "continue": "{count, plural, =0 {Lanjutkan} other {Lanjutkan dengan # kanal}}",
+    "bindingFor": "Ke mana tugas dari #{channel} masuk",
+    "mentionsHint": "Leo melihat pesan yang menyebut @{app} atau membalasnya. Ringkasan tidak tersedia.",
+    "allHint": "Leo menyimpan setiap pesan kanal agar bisa membuat ringkasan.",
+    "history": "Shosai punya pesan sebuah kanal sejak Anda menghubungkannya.",
+    "connect": "{count, plural, other {Hubungkan # kanal}}",
+    "connected": "{count, plural, other {# kanal terhubung}}",
+    "alreadyConnected": "Sudah terhubung: {channels}."
+  }
 }

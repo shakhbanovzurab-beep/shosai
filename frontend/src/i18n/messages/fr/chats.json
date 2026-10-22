@@ -48,5 +48,41 @@
     "shorterBody": "Les messages de plus de {days} sont effacés de toutes les conversations connectées. Cette action est irréversible.",
     "shorterConfirm": "Effacer les anciens messages",
     "saved": "Les messages sont maintenant conservés {days}"
+  },
+  "fix": {
+    "addAgain": "Rajouter Leo",
+    "addAgainIntro": "Rajoutez Leo à « {chat} » : ouvrez Telegram avec le lien ci-dessous ou envoyez la commande dans le groupe.",
+    "makeAdmin": "Faire de Leo un administrateur",
+    "makeAdminIntro": "Dans Telegram, ouvrez « {chat} », allez dans les administrateurs et ajoutez Leo. Vous pouvez désactiver tous ses droits d’administrateur : il reçoit quand même chaque message.",
+    "rejoin": "Faire revenir Leo",
+    "rejoined": "Leo est de retour dans #{chat}",
+    "copyInvite": "Copier la commande d’invitation",
+    "inviteCopied": "Commande d’invitation copiée. Exécutez-la dans le canal.",
+    "reconnectSlack": "Reconnecter Slack",
+    "slackReconnected": "Slack est de nouveau connecté"
+  },
+  "menu": {
+    "change": "Modifier l’affectation ou le mode…",
+    "disconnect": "Déconnecter…"
+  },
+  "change": {
+    "title": "Modifier « {chat} »",
+    "saved": "Modifications de « {chat} » enregistrées"
+  },
+  "disconnect": {
+    "title": "Déconnecter « {chat} » ?",
+    "body": "{count, plural, one {Shosai efface le # message conservé de cette conversation depuis le {since}, et Leo quitte la conversation. Les tâches qui en viennent restent, avec leur lien vers le message.} many {Shosai efface les # messages conservés de cette conversation depuis le {since}, et Leo quitte la conversation. Les tâches qui en viennent restent, avec leur lien vers le message.} other {Shosai efface les # messages conservés de cette conversation depuis le {since}, et Leo quitte la conversation. Les tâches qui en viennent restent, avec leur lien vers le message.}}",
+    "bodyEmpty": "Leo quitte la conversation. Shosai n’en a encore conservé aucun message.",
+    "confirm": "Déconnecter",
+    "done": "« {chat} » est déconnectée"
+  },
+  "installations": {
+    "heading": "Espaces Slack",
+    "channels": "{count, plural, =0 {Aucun canal connecté} one {# canal connecté} many {# canaux connectés} other {# canaux connectés}}",
+    "disconnect": "Déconnecter",
+    "title": "Déconnecter l’espace Slack « {team} » ?",
+    "body": "Ses canaux sont déconnectés, et Shosai efface les messages conservés de ces canaux : {channels}.",
+    "bodyEmpty": "Shosai oublie cet espace Slack. Aucun de ses canaux n’est connecté.",
+    "done": "L’espace Slack « {team} » est déconnecté"
   }
 }

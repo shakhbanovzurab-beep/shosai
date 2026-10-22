@@ -48,5 +48,41 @@
     "shorterBody": "Mensagens com mais de {days} são excluídas de todos os chats conectados. Isso não pode ser desfeito.",
     "shorterConfirm": "Excluir mensagens antigas",
     "saved": "Agora as mensagens ficam guardadas por {days}"
+  },
+  "fix": {
+    "addAgain": "Adicionar o Leo de novo",
+    "addAgainIntro": "Adicione o Leo a “{chat}” de novo: abra o Telegram pelo link abaixo ou envie o comando no grupo.",
+    "makeAdmin": "Tornar o Leo administrador",
+    "makeAdminIntro": "No Telegram, abra “{chat}”, vá aos administradores e adicione o Leo. Você pode desligar todas as permissões de administrador dele: ele continua recebendo toda mensagem.",
+    "rejoin": "Trazer o Leo de volta",
+    "rejoined": "O Leo voltou para #{chat}",
+    "copyInvite": "Copiar o comando de convite",
+    "inviteCopied": "Comando de convite copiado. Execute-o no canal.",
+    "reconnectSlack": "Conectar o Slack de novo",
+    "slackReconnected": "O Slack está conectado de novo"
+  },
+  "menu": {
+    "change": "Mudar o destino ou o modo…",
+    "disconnect": "Desconectar…"
+  },
+  "change": {
+    "title": "Mudar “{chat}”",
+    "saved": "Alterações em “{chat}” salvas"
+  },
+  "disconnect": {
+    "title": "Desconectar “{chat}”?",
+    "body": "{count, plural, one {O Shosai exclui a # mensagem guardada deste chat desde {since}, e o Leo sai do chat. As tarefas criadas a partir dele ficam, com o link para a mensagem.} many {O Shosai exclui as # mensagens guardadas deste chat desde {since}, e o Leo sai do chat. As tarefas criadas a partir dele ficam, com o link para a mensagem.} other {O Shosai exclui as # mensagens guardadas deste chat desde {since}, e o Leo sai do chat. As tarefas criadas a partir dele ficam, com o link para a mensagem.}}",
+    "bodyEmpty": "O Leo sai do chat. O Shosai ainda não guardou mensagens dele.",
+    "confirm": "Desconectar",
+    "done": "“{chat}” foi desconectado"
+  },
+  "installations": {
+    "heading": "Espaços de trabalho do Slack",
+    "channels": "{count, plural, =0 {Nenhum canal conectado} one {# canal conectado} many {# canais conectados} other {# canais conectados}}",
+    "disconnect": "Desconectar",
+    "title": "Desconectar o espaço de trabalho do Slack “{team}”?",
+    "body": "Os canais dele são desconectados, e o Shosai exclui as mensagens guardadas deles: {channels}.",
+    "bodyEmpty": "O Shosai esquece este espaço de trabalho do Slack. Nenhum canal dele está conectado.",
+    "done": "O espaço de trabalho do Slack “{team}” foi desconectado"
   }
 }

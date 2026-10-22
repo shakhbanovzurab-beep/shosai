@@ -48,5 +48,41 @@
     "shorterBody": "Messages older than {days} are erased from every connected chat. This can’t be undone.",
     "shorterConfirm": "Erase older messages",
     "saved": "Messages are now kept for {days}"
+  },
+  "fix": {
+    "addAgain": "Add Leo again",
+    "addAgainIntro": "Add Leo to “{chat}” again: open Telegram with the link below or send the command in the group.",
+    "makeAdmin": "Make Leo an admin",
+    "makeAdminIntro": "In Telegram, open “{chat}”, go to the administrators and add Leo. You can switch off all its admin rights: it still gets every message.",
+    "rejoin": "Add Leo back",
+    "rejoined": "Leo is back in #{chat}",
+    "copyInvite": "Copy the invite command",
+    "inviteCopied": "Invite command copied. Run it in the channel.",
+    "reconnectSlack": "Reconnect Slack",
+    "slackReconnected": "Slack is connected again"
+  },
+  "menu": {
+    "change": "Change binding or mode…",
+    "disconnect": "Disconnect…"
+  },
+  "change": {
+    "title": "Change “{chat}”",
+    "saved": "Changes to “{chat}” saved"
+  },
+  "disconnect": {
+    "title": "Disconnect “{chat}”?",
+    "body": "{count, plural, one {Shosai erases the # message it kept from this chat since {since}, and Leo leaves the chat. Tasks made from it stay, with their link to the message.} other {Shosai erases the # messages it kept from this chat since {since}, and Leo leaves the chat. Tasks made from it stay, with their link to the message.}}",
+    "bodyEmpty": "Leo leaves the chat. Shosai has kept no messages from it yet.",
+    "confirm": "Disconnect",
+    "done": "“{chat}” is disconnected"
+  },
+  "installations": {
+    "heading": "Slack workspaces",
+    "channels": "{count, plural, =0 {No channels connected} one {# channel connected} other {# channels connected}}",
+    "disconnect": "Disconnect",
+    "title": "Disconnect the Slack workspace “{team}”?",
+    "body": "Its channels are disconnected, and Shosai erases the messages it kept from them: {channels}.",
+    "bodyEmpty": "Shosai forgets this Slack workspace. None of its channels are connected.",
+    "done": "The Slack workspace “{team}” is disconnected"
   }
 }

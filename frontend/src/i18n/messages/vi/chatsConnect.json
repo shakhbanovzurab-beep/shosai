@@ -59,5 +59,40 @@
     "done": "Xong"
   },
   "back": "Quay lại",
-  "copyFailed": "Không sao chép được. Hãy chọn văn bản rồi sao chép."
+  "copyFailed": "Không sao chép được. Hãy chọn văn bản rồi sao chép.",
+  "slack": {
+    "denied": "Slack chưa được kết nối",
+    "failed": "Không kết nối được Slack",
+    "expired": "Đăng nhập Slack mất quá lâu. Hãy thử lại.",
+    "callback": {
+      "connected": "Đã kết nối Slack",
+      "denied": "Slack chưa được kết nối",
+      "error": "Không kết nối được Slack",
+      "back": "Quay lại Shosai"
+    },
+    "channelsConnected": "{count, plural, =0 {Chưa có kênh nào được kết nối} other {Đã kết nối # kênh}}",
+    "loadError": "Không tải được các không gian làm việc Slack của bạn",
+    "loadErrorHint": "Kiểm tra kết nối của bạn rồi thử lại.",
+    "finishInSlack": "Hoàn tất trong cửa sổ Slack…",
+    "accessEnded": "Hết quyền truy cập",
+    "reconnect": "Kết nối lại",
+    "addAnother": "Thêm không gian làm việc Slack khác",
+    "connectSlack": "Kết nối Slack",
+    "private": "Kênh riêng tư",
+    "alreadyIn": "Đã kết nối",
+    "members": "{count, plural, other {# thành viên}}",
+    "search": "Tìm kênh…",
+    "searchLabel": "Tìm kênh",
+    "channelsError": "Không tải được các kênh",
+    "noChannels": "Không có kênh nào khớp.",
+    "privateHint": "Để kết nối kênh riêng tư, trước tiên hãy chạy lệnh này trong kênh:",
+    "continue": "{count, plural, =0 {Tiếp tục} other {Tiếp tục với # kênh}}",
+    "bindingFor": "Công việc từ #{channel} đi đâu",
+    "mentionsHint": "Leo thấy các tin nhắn nhắc đến @{app} hoặc trả lời nó. Không có bản tóm tắt.",
+    "allHint": "Leo lưu mọi tin nhắn của kênh để có thể tóm tắt.",
+    "history": "Shosai có tin nhắn của một kênh từ lúc bạn kết nối kênh đó.",
+    "connect": "{count, plural, other {Kết nối # kênh}}",
+    "connected": "{count, plural, other {Đã kết nối # kênh}}",
+    "alreadyConnected": "Đã kết nối từ trước: {channels}."
+  }
 }

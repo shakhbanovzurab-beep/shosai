@@ -59,5 +59,40 @@
     "done": "완료"
   },
   "back": "뒤로",
-  "copyFailed": "복사하지 못했어요. 텍스트를 선택해서 복사하세요."
+  "copyFailed": "복사하지 못했어요. 텍스트를 선택해서 복사하세요.",
+  "slack": {
+    "denied": "Slack이 연결되지 않았어요",
+    "failed": "Slack을 연결하지 못했어요",
+    "expired": "Slack 로그인에 시간이 너무 오래 걸렸어요. 다시 시도해 주세요.",
+    "callback": {
+      "connected": "Slack을 연결했어요",
+      "denied": "Slack이 연결되지 않았어요",
+      "error": "Slack을 연결하지 못했어요",
+      "back": "Shosai로 돌아가기"
+    },
+    "channelsConnected": "{count, plural, =0 {아직 연결된 채널 없음} other {채널 #개 연결됨}}",
+    "loadError": "Slack 워크스페이스를 불러오지 못했어요",
+    "loadErrorHint": "연결을 확인하고 다시 시도해 주세요.",
+    "finishInSlack": "Slack 창에서 마무리하세요…",
+    "accessEnded": "접근 만료",
+    "reconnect": "다시 연결",
+    "addAnother": "다른 Slack 워크스페이스 추가",
+    "connectSlack": "Slack 연결",
+    "private": "비공개 채널",
+    "alreadyIn": "연결됨",
+    "members": "{count, plural, other {멤버 #명}}",
+    "search": "채널 검색…",
+    "searchLabel": "채널 검색",
+    "channelsError": "채널을 불러오지 못했어요",
+    "noChannels": "일치하는 채널이 없어요.",
+    "privateHint": "비공개 채널을 연결하려면 먼저 그 채널에서 다음을 실행하세요.",
+    "continue": "{count, plural, =0 {계속} other {채널 #개로 계속}}",
+    "bindingFor": "#{channel}의 작업이 가는 곳",
+    "mentionsHint": "Leo는 @{app}을 언급하거나 Leo에게 답한 메시지를 봐요. 요약은 쓸 수 없어요.",
+    "allHint": "Leo가 채널의 모든 메시지를 보관해서 요약을 만들 수 있어요.",
+    "history": "Shosai는 채널을 연결한 순간부터 그 채널의 메시지를 받아요.",
+    "connect": "{count, plural, other {채널 #개 연결}}",
+    "connected": "{count, plural, other {채널 #개를 연결했어요}}",
+    "alreadyConnected": "이미 연결됨: {channels}."
+  }
 }

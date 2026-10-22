@@ -48,5 +48,41 @@
     "shorterBody": "超過 {days} 的訊息會從所有已連接的對話中清除。此動作無法復原。",
     "shorterConfirm": "清除較舊的訊息",
     "saved": "訊息現在會保存 {days}"
+  },
+  "fix": {
+    "addAgain": "再次加入 Leo",
+    "addAgainIntro": "請再次把 Leo 加入「{chat}」：用下方連結開啟 Telegram，或在群組中傳送指令。",
+    "makeAdmin": "將 Leo 設為管理員",
+    "makeAdminIntro": "在 Telegram 開啟「{chat}」，前往管理員設定並加入 Leo。你可以關閉 Leo 的所有管理員權限，它仍會收到每則訊息。",
+    "rejoin": "讓 Leo 回來",
+    "rejoined": "Leo 已回到 #{chat}",
+    "copyInvite": "複製邀請指令",
+    "inviteCopied": "已複製邀請指令。請在頻道中執行。",
+    "reconnectSlack": "重新連接 Slack",
+    "slackReconnected": "Slack 已重新連接"
+  },
+  "menu": {
+    "change": "變更去處或模式…",
+    "disconnect": "中斷連接…"
+  },
+  "change": {
+    "title": "變更「{chat}」",
+    "saved": "已儲存「{chat}」的變更"
+  },
+  "disconnect": {
+    "title": "要中斷連接「{chat}」嗎？",
+    "body": "{count, plural, other {Shosai 會清除自 {since} 起從這個對話保存的 # 則訊息，Leo 也會離開對話。從中建立的任務會保留，並附上訊息連結。}}",
+    "bodyEmpty": "Leo 會離開對話。Shosai 尚未保存這個對話的任何訊息。",
+    "confirm": "中斷連接",
+    "done": "已中斷連接「{chat}」"
+  },
+  "installations": {
+    "heading": "Slack 工作空間",
+    "channels": "{count, plural, =0 {沒有已連接的頻道} other {已連接 # 個頻道}}",
+    "disconnect": "中斷連接",
+    "title": "要中斷連接 Slack 工作空間「{team}」嗎？",
+    "body": "它的頻道會中斷連接，Shosai 也會清除從中保存的訊息：{channels}。",
+    "bodyEmpty": "Shosai 會忘記這個 Slack 工作空間。它沒有已連接的頻道。",
+    "done": "已中斷連接 Slack 工作空間「{team}」"
   }
 }

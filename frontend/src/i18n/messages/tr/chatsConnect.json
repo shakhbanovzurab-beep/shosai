@@ -59,5 +59,40 @@
     "done": "Tamam"
   },
   "back": "Geri",
-  "copyFailed": "Kopyalanamadı. Metni seçip kopyalayın."
+  "copyFailed": "Kopyalanamadı. Metni seçip kopyalayın.",
+  "slack": {
+    "denied": "Slack bağlanmadı",
+    "failed": "Slack bağlanamadı",
+    "expired": "Slack’e giriş çok uzun sürdü. Tekrar deneyin.",
+    "callback": {
+      "connected": "Slack bağlandı",
+      "denied": "Slack bağlanmadı",
+      "error": "Slack bağlanamadı",
+      "back": "Shosai’ye dön"
+    },
+    "channelsConnected": "{count, plural, =0 {Henüz bağlı kanal yok} one {# kanal bağlı} other {# kanal bağlı}}",
+    "loadError": "Slack çalışma alanlarınız yüklenemedi",
+    "loadErrorHint": "Bağlantınızı kontrol edip tekrar deneyin.",
+    "finishInSlack": "Slack penceresinde tamamlayın…",
+    "accessEnded": "Erişim sona erdi",
+    "reconnect": "Yeniden bağla",
+    "addAnother": "Başka bir Slack çalışma alanı ekle",
+    "connectSlack": "Slack’i bağla",
+    "private": "Özel kanal",
+    "alreadyIn": "Bağlı",
+    "members": "{count, plural, one {# üye} other {# üye}}",
+    "search": "Kanal ara…",
+    "searchLabel": "Kanal ara",
+    "channelsError": "Kanallar yüklenemedi",
+    "noChannels": "Eşleşen kanal yok.",
+    "privateHint": "Özel bir kanalı bağlamak için önce kanalda şunu çalıştırın:",
+    "continue": "{count, plural, =0 {Devam} one {# kanalla devam et} other {# kanalla devam et}}",
+    "bindingFor": "#{channel} kanalından gelen görevler nereye gider",
+    "mentionsHint": "Leo, @{app} adının geçtiği mesajları ve kendisine verilen yanıtları görür. Özetler kullanılamaz.",
+    "allHint": "Leo kanalın her mesajını saklar, böylece özet çıkarabilir.",
+    "history": "Shosai bir kanalın mesajlarını kanalı bağladığınız andan itibaren alır.",
+    "connect": "{count, plural, one {# kanalı bağla} other {# kanalı bağla}}",
+    "connected": "{count, plural, one {# kanal bağlandı} other {# kanal bağlandı}}",
+    "alreadyConnected": "Zaten bağlı: {channels}."
+  }
 }

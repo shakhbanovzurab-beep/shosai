@@ -48,5 +48,41 @@
     "shorterBody": "Nachrichten, die älter als {days} sind, werden aus allen verbundenen Chats gelöscht. Das lässt sich nicht rückgängig machen.",
     "shorterConfirm": "Ältere Nachrichten löschen",
     "saved": "Nachrichten werden jetzt {days} aufbewahrt"
+  },
+  "fix": {
+    "addAgain": "Leo wieder hinzufügen",
+    "addAgainIntro": "Füge Leo wieder zu „{chat}“ hinzu: Öffne Telegram über den Link unten oder sende den Befehl in der Gruppe.",
+    "makeAdmin": "Leo zum Admin machen",
+    "makeAdminIntro": "Öffne in Telegram „{chat}“, geh zu den Admins und füge Leo hinzu. Du kannst alle Admin-Rechte von Leo ausschalten – er bekommt trotzdem jede Nachricht.",
+    "rejoin": "Leo wieder einladen",
+    "rejoined": "Leo ist wieder in #{chat}",
+    "copyInvite": "Einladungsbefehl kopieren",
+    "inviteCopied": "Einladungsbefehl kopiert. Führe ihn im Kanal aus.",
+    "reconnectSlack": "Slack neu verbinden",
+    "slackReconnected": "Slack ist wieder verbunden"
+  },
+  "menu": {
+    "change": "Zuordnung oder Modus ändern…",
+    "disconnect": "Trennen…"
+  },
+  "change": {
+    "title": "„{chat}“ ändern",
+    "saved": "Änderungen an „{chat}“ gespeichert"
+  },
+  "disconnect": {
+    "title": "„{chat}“ trennen?",
+    "body": "{count, plural, one {Shosai löscht die # Nachricht, die seit {since} aus diesem Chat gespeichert wurde, und Leo verlässt den Chat. Aufgaben daraus bleiben, mit dem Link zur Nachricht.} other {Shosai löscht die # Nachrichten, die seit {since} aus diesem Chat gespeichert wurden, und Leo verlässt den Chat. Aufgaben daraus bleiben, mit dem Link zur Nachricht.}}",
+    "bodyEmpty": "Leo verlässt den Chat. Shosai hat noch keine Nachrichten daraus gespeichert.",
+    "confirm": "Trennen",
+    "done": "„{chat}“ ist getrennt"
+  },
+  "installations": {
+    "heading": "Slack-Workspaces",
+    "channels": "{count, plural, =0 {Keine Kanäle verbunden} one {# Kanal verbunden} other {# Kanäle verbunden}}",
+    "disconnect": "Trennen",
+    "title": "Slack-Workspace „{team}“ trennen?",
+    "body": "Seine Kanäle werden getrennt, und Shosai löscht die daraus gespeicherten Nachrichten: {channels}.",
+    "bodyEmpty": "Shosai vergisst diesen Slack-Workspace. Keiner seiner Kanäle ist verbunden.",
+    "done": "Slack-Workspace „{team}“ ist getrennt"
   }
 }

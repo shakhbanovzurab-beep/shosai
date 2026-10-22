@@ -59,5 +59,40 @@
     "done": "Klaar"
   },
   "back": "Terug",
-  "copyFailed": "Kopiëren lukte niet. Selecteer de tekst en kopieer hem."
+  "copyFailed": "Kopiëren lukte niet. Selecteer de tekst en kopieer hem.",
+  "slack": {
+    "denied": "Slack is niet gekoppeld",
+    "failed": "Slack kon niet worden gekoppeld",
+    "expired": "Aanmelden bij Slack duurde te lang. Probeer het opnieuw.",
+    "callback": {
+      "connected": "Slack is gekoppeld",
+      "denied": "Slack is niet gekoppeld",
+      "error": "Slack kon niet worden gekoppeld",
+      "back": "Terug naar Shosai"
+    },
+    "channelsConnected": "{count, plural, =0 {Nog geen kanalen gekoppeld} one {# kanaal gekoppeld} other {# kanalen gekoppeld}}",
+    "loadError": "Je Slack-werkruimtes konden niet worden geladen",
+    "loadErrorHint": "Controleer je verbinding en probeer het opnieuw.",
+    "finishInSlack": "Rond het af in het Slack-venster…",
+    "accessEnded": "Toegang verlopen",
+    "reconnect": "Opnieuw koppelen",
+    "addAnother": "Nog een Slack-werkruimte toevoegen",
+    "connectSlack": "Slack koppelen",
+    "private": "Privékanaal",
+    "alreadyIn": "Gekoppeld",
+    "members": "{count, plural, one {# lid} other {# leden}}",
+    "search": "Kanalen zoeken…",
+    "searchLabel": "Kanalen zoeken",
+    "channelsError": "De kanalen konden niet worden geladen",
+    "noChannels": "Geen kanalen gevonden.",
+    "privateHint": "Voer dit eerst uit in een privékanaal om het te koppelen:",
+    "continue": "{count, plural, =0 {Doorgaan} one {Doorgaan met # kanaal} other {Doorgaan met # kanalen}}",
+    "bindingFor": "Waar taken uit #{channel} heen gaan",
+    "mentionsHint": "Leo ziet berichten die @{app} noemen of op hem reageren. Samenvattingen zijn niet beschikbaar.",
+    "allHint": "Leo bewaart elk bericht van het kanaal en kan zo samenvattingen maken.",
+    "history": "Shosai heeft de berichten van een kanaal vanaf het moment dat je het koppelt.",
+    "connect": "{count, plural, one {# kanaal koppelen} other {# kanalen koppelen}}",
+    "connected": "{count, plural, one {# kanaal gekoppeld} other {# kanalen gekoppeld}}",
+    "alreadyConnected": "Al gekoppeld: {channels}."
+  }
 }

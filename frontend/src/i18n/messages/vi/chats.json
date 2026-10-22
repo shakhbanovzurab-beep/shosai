@@ -48,5 +48,41 @@
     "shorterBody": "Tin nhắn cũ hơn {days} sẽ bị xóa khỏi mọi cuộc trò chuyện đã kết nối. Không thể hoàn tác.",
     "shorterConfirm": "Xóa tin nhắn cũ",
     "saved": "Giờ tin nhắn được giữ trong {days}"
+  },
+  "fix": {
+    "addAgain": "Thêm lại Leo",
+    "addAgainIntro": "Thêm lại Leo vào “{chat}”: mở Telegram bằng liên kết bên dưới hoặc gửi lệnh trong nhóm.",
+    "makeAdmin": "Đặt Leo làm quản trị viên",
+    "makeAdminIntro": "Trong Telegram, mở “{chat}”, vào phần quản trị viên và thêm Leo. Bạn có thể tắt hết quyền quản trị viên của Leo: nó vẫn nhận mọi tin nhắn.",
+    "rejoin": "Đưa Leo trở lại",
+    "rejoined": "Leo đã trở lại #{chat}",
+    "copyInvite": "Sao chép lệnh mời",
+    "inviteCopied": "Đã sao chép lệnh mời. Hãy chạy lệnh trong kênh.",
+    "reconnectSlack": "Kết nối lại Slack",
+    "slackReconnected": "Đã kết nối lại Slack"
+  },
+  "menu": {
+    "change": "Đổi nơi nhận hoặc chế độ…",
+    "disconnect": "Ngắt kết nối…"
+  },
+  "change": {
+    "title": "Thay đổi “{chat}”",
+    "saved": "Đã lưu thay đổi của “{chat}”"
+  },
+  "disconnect": {
+    "title": "Ngắt kết nối “{chat}”?",
+    "body": "{count, plural, other {Shosai xóa # tin nhắn đã lưu từ cuộc trò chuyện này kể từ {since}, và Leo rời cuộc trò chuyện. Công việc tạo từ đây vẫn còn, kèm liên kết tới tin nhắn.}}",
+    "bodyEmpty": "Leo rời cuộc trò chuyện. Shosai chưa lưu tin nhắn nào từ đây.",
+    "confirm": "Ngắt kết nối",
+    "done": "Đã ngắt kết nối “{chat}”"
+  },
+  "installations": {
+    "heading": "Không gian làm việc Slack",
+    "channels": "{count, plural, =0 {Chưa có kênh nào được kết nối} other {Đã kết nối # kênh}}",
+    "disconnect": "Ngắt kết nối",
+    "title": "Ngắt kết nối không gian làm việc Slack “{team}”?",
+    "body": "Các kênh của nó bị ngắt kết nối và Shosai xóa tin nhắn đã lưu từ các kênh đó: {channels}.",
+    "bodyEmpty": "Shosai quên không gian làm việc Slack này. Không có kênh nào của nó được kết nối.",
+    "done": "Đã ngắt kết nối không gian làm việc Slack “{team}”"
   }
 }

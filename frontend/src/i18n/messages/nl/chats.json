@@ -48,5 +48,41 @@
     "shorterBody": "Berichten ouder dan {days} worden uit alle gekoppelde chats gewist. Dit kan niet ongedaan worden gemaakt.",
     "shorterConfirm": "Oudere berichten wissen",
     "saved": "Berichten worden nu {days} bewaard"
+  },
+  "fix": {
+    "addAgain": "Leo opnieuw toevoegen",
+    "addAgainIntro": "Voeg Leo opnieuw toe aan ‘{chat}’: open Telegram via de link hieronder of stuur de opdracht in de groep.",
+    "makeAdmin": "Leo beheerder maken",
+    "makeAdminIntro": "Open in Telegram ‘{chat}’, ga naar de beheerders en voeg Leo toe. Je kunt alle beheerdersrechten van Leo uitzetten: hij krijgt toch elk bericht.",
+    "rejoin": "Leo terughalen",
+    "rejoined": "Leo zit weer in #{chat}",
+    "copyInvite": "Uitnodigingsopdracht kopiëren",
+    "inviteCopied": "Uitnodigingsopdracht gekopieerd. Voer hem uit in het kanaal.",
+    "reconnectSlack": "Slack opnieuw koppelen",
+    "slackReconnected": "Slack is weer gekoppeld"
+  },
+  "menu": {
+    "change": "Bestemming of modus wijzigen…",
+    "disconnect": "Ontkoppelen…"
+  },
+  "change": {
+    "title": "‘{chat}’ wijzigen",
+    "saved": "Wijzigingen in ‘{chat}’ opgeslagen"
+  },
+  "disconnect": {
+    "title": "‘{chat}’ ontkoppelen?",
+    "body": "{count, plural, one {Shosai wist het # bericht dat sinds {since} uit deze chat bewaard is, en Leo verlaat de chat. Taken eruit blijven, met hun link naar het bericht.} other {Shosai wist de # berichten die sinds {since} uit deze chat bewaard zijn, en Leo verlaat de chat. Taken eruit blijven, met hun link naar het bericht.}}",
+    "bodyEmpty": "Leo verlaat de chat. Shosai heeft er nog geen berichten uit bewaard.",
+    "confirm": "Ontkoppelen",
+    "done": "‘{chat}’ is ontkoppeld"
+  },
+  "installations": {
+    "heading": "Slack-werkruimtes",
+    "channels": "{count, plural, =0 {Geen kanalen gekoppeld} one {# kanaal gekoppeld} other {# kanalen gekoppeld}}",
+    "disconnect": "Ontkoppelen",
+    "title": "Slack-werkruimte ‘{team}’ ontkoppelen?",
+    "body": "De kanalen ervan worden ontkoppeld en Shosai wist de berichten die eruit bewaard zijn: {channels}.",
+    "bodyEmpty": "Shosai vergeet deze Slack-werkruimte. Geen van de kanalen is gekoppeld.",
+    "done": "Slack-werkruimte ‘{team}’ is ontkoppeld"
   }
 }

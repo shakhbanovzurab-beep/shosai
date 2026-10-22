@@ -1,6 +1,7 @@
 import { useTranslations } from "use-intl";
 
 import { PageMeta } from "@/app/root/page-meta";
+import { ChatsOAuthCallback } from "@/features/chats/ui/oauth/chats-oauth-callback";
 import { OAuthCallback } from "@/features/settings/ui/oauth/oauth-callback";
 import { useSearchParams } from "@/lib/navigation";
 
@@ -12,7 +13,15 @@ export function Component() {
   return (
     <>
       <PageMeta title={t("callback.metaTitle")} />
-      <OAuthCallback connector={params.get("connector") ?? ""} status={result} error={params.get("error")} />
+      {params.get("flow") === "chats" ? (
+        <ChatsOAuthCallback
+          status={result}
+          installationId={params.get("installation_id")}
+          error={params.get("error")}
+        />
+      ) : (
+        <OAuthCallback connector={params.get("connector") ?? ""} status={result} error={params.get("error")} />
+      )}
     </>
   );
 }

@@ -48,5 +48,41 @@
     "shorterBody": "{days}보다 오래된 메시지는 연결된 모든 채팅에서 지워져요. 되돌릴 수 없어요.",
     "shorterConfirm": "오래된 메시지 지우기",
     "saved": "이제 메시지를 {days} 동안 보관해요"
+  },
+  "fix": {
+    "addAgain": "Leo 다시 추가",
+    "addAgainIntro": "Leo를 “{chat}”에 다시 추가하세요. 아래 링크로 Telegram을 열거나 그룹에서 명령을 보내세요.",
+    "makeAdmin": "Leo를 관리자로 지정",
+    "makeAdminIntro": "Telegram에서 “{chat}”을 열고 관리자 설정에서 Leo를 추가하세요. Leo의 관리자 권한은 모두 꺼도 돼요. 그래도 모든 메시지를 받아요.",
+    "rejoin": "Leo 다시 데려오기",
+    "rejoined": "Leo가 #{chat}에 다시 들어왔어요",
+    "copyInvite": "초대 명령 복사",
+    "inviteCopied": "초대 명령을 복사했어요. 채널에서 실행하세요.",
+    "reconnectSlack": "Slack 다시 연결",
+    "slackReconnected": "Slack을 다시 연결했어요"
+  },
+  "menu": {
+    "change": "연결 대상이나 모드 변경…",
+    "disconnect": "연결 해제…"
+  },
+  "change": {
+    "title": "“{chat}” 변경",
+    "saved": "“{chat}” 변경 사항을 저장했어요"
+  },
+  "disconnect": {
+    "title": "“{chat}” 연결을 해제할까요?",
+    "body": "{count, plural, other {Shosai가 {since}부터 이 채팅에서 보관한 메시지 #개를 지우고, Leo는 채팅에서 나가요. 이 채팅에서 만든 작업은 메시지 링크와 함께 남아요.}}",
+    "bodyEmpty": "Leo가 채팅에서 나가요. Shosai는 아직 이 채팅의 메시지를 보관하지 않았어요.",
+    "confirm": "연결 해제",
+    "done": "“{chat}” 연결을 해제했어요"
+  },
+  "installations": {
+    "heading": "Slack 워크스페이스",
+    "channels": "{count, plural, =0 {연결된 채널 없음} other {채널 #개 연결됨}}",
+    "disconnect": "연결 해제",
+    "title": "Slack 워크스페이스 “{team}” 연결을 해제할까요?",
+    "body": "채널 연결이 해제되고 Shosai는 그곳에서 보관한 메시지를 지워요: {channels}.",
+    "bodyEmpty": "Shosai가 이 Slack 워크스페이스를 잊어요. 연결된 채널은 없어요.",
+    "done": "Slack 워크스페이스 “{team}” 연결을 해제했어요"
   }
 }
