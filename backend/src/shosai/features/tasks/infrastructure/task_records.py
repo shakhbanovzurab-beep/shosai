@@ -79,13 +79,13 @@ class TaskRecord(ModelBase):
             "ix_tasks_open_org_due",
             "org_id",
             "due_on",
-            postgresql_where=text(f"{OPEN} AND org_id IS NOT NULL"),
+            postgresql_where=text("status <> 'done' AND org_id IS NOT NULL"),
         ),
         Index(
             "ix_tasks_open_assignee_due",
             "assignee_user_id",
             "due_on",
-            postgresql_where=text(f"{OPEN} AND assignee_user_id IS NOT NULL"),
+            postgresql_where=text("status <> 'done' AND assignee_user_id IS NOT NULL"),
         ),
         # Одна задача на пункт встречи; заодно индекс задач встречи.
         Index(

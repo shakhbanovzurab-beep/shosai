@@ -162,13 +162,13 @@ def index_tasks() -> None:
         "ix_tasks_open_org_due",
         "tasks",
         ["org_id", "due_on"],
-        postgresql_where=sa.text(f"{OPEN} AND org_id IS NOT NULL"),
+        postgresql_where=sa.text("status <> 'done' AND org_id IS NOT NULL"),
     )
     op.create_index(
         "ix_tasks_open_assignee_due",
         "tasks",
         ["assignee_user_id", "due_on"],
-        postgresql_where=sa.text(f"{OPEN} AND assignee_user_id IS NOT NULL"),
+        postgresql_where=sa.text("status <> 'done' AND assignee_user_id IS NOT NULL"),
     )
     op.create_index(
         "uq_tasks_meeting_finding",
