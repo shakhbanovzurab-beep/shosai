@@ -8,6 +8,7 @@
 - 6a and 6b: Leo's use within the knowledge limit, reindex, and FL-D10's 90 days;
 - 7: identity's deletion window and support's audited file actions;
 - 8a: the transfer to a workspace and workspaces' events;
+- 8c: objects other slices hold (`HeldObjects`) and their previews;
 - 9: the `FileReader` port and Leo's `files` toolset.
 """
 
@@ -24,10 +25,12 @@ from shosai.features.files.application.file_manager import FileManager
 from shosai.features.files.application.file_reader import FilesReader
 from shosai.features.files.application.file_transfer import FileTransfers
 from shosai.features.files.application.folders import Folders
+from shosai.features.files.application.held_objects import HeldObjectsService
 from shosai.features.files.application.hidden_files import HiddenFiles
 from shosai.features.files.application.leo_sweep import LeoSweep
 from shosai.features.files.application.leo_use import LeoUse
 from shosai.features.files.application.leo_watch import LeoWatch
+from shosai.features.files.application.previews import Previews
 from shosai.features.files.application.quota_reconciliation import QuotaReconciliation
 from shosai.features.files.application.quota_sweep import QuotaSweep
 from shosai.features.files.application.quota_watch import QuotaWatch
@@ -53,6 +56,7 @@ from shosai.features.files.contracts.events import (
     LeoReindexRequested,
     LeoUseChanged,
 )
+from shosai.features.files.contracts.held_objects import HELD_OBJECTS
 from shosai.features.files.emails.leo_over_limit import LEO_OVER_LIMIT
 from shosai.features.files.emails.storage_over_limit import STORAGE_OVER_LIMIT
 from shosai.features.files.infrastructure.file_records import (
@@ -60,6 +64,7 @@ from shosai.features.files.infrastructure.file_records import (
     FileFolderRecord,
     StorageFileRecord,
 )
+from shosai.features.files.infrastructure.held_records import HeldObjectRecord
 from shosai.features.files.infrastructure.object_deleter import ObjectDeleter
 from shosai.features.files.infrastructure.quota_metrics import QuotaMetrics
 from shosai.features.files.infrastructure.upload_records import (
@@ -86,11 +91,14 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     leo_watch = LeoWatch(transactions, (ports, leo, services.email, metrics))
     hidden = HiddenFiles(transactions, deleter)
     support = SupportFiles(transactions, (ports, services.outbox, watch, leo, leo_watch))
-    downloads = Downloads(
-        transactions, (services.objects, ports), None if base is None else str(base)
+    edge = None if base is None else str(base)
+    previews = Previews(transactions, (services.objects, deleter), services.tasks)
+    held = HeldObjectsService(
+        transactions, ports, (services.objects, deleter, edge), (services.tasks, claims)
     )
     jobs = FilesJobs(
         uploads=UploadSweep(transactions, (services.uploads, deleter)),
+        previews=previews,
         hidden=hidden,
         quota=QuotaSweep(transactions, watch),
         leo=LeoSweep(transactions, leo_watch),
@@ -101,6 +109,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
     manager = FileManager(transactions, (ports, services.outbox, claims, leo, edits))
     folders = Folders(transactions, (ports, leo))
     reader = FilesReader(transactions, (ports, services.objects))
+    downloads = Downloads(transactions, (services.objects, ports), edge)
     items = ActionItems(services.effects, services.outbox)
     tools = (
         *FileReads(transactions, (ports, reader)).bound(),
@@ -125,6 +134,7 @@ async def build(services: CoreServices) -> AsyncIterator[FeatureParts]:
             ACCOUNT_DATA_HANDLERS.bind(handler),
             UPLOADS.bind(claims),
             FILE_READER.bind(reader),
+            HELD_OBJECTS.bind(held),
         ),
     )
 
@@ -144,6 +154,7 @@ FILES = FeatureModule(
         UploadRecord,
         StorageUsageRecord,
         ObjectDeletionRecord,
+        HeldObjectRecord,
     ),
     events=(FileUploaded, FileDeleted, FileRestored, LeoUseChanged, LeoReindexRequested),
 )

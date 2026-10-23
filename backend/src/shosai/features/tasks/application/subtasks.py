@@ -26,14 +26,12 @@ from shosai.features.identity.contracts import Principal
 from shosai.features.tasks.application.scoping import (
     Scoping,
     locked_task,
-    raise_revisions,
     rule_failure,
-    touch_sets,
+    task_changed,
 )
-from shosai.features.tasks.application.views import SubtaskView
+from shosai.features.tasks.application.task_parts import SubtaskView
 from shosai.features.tasks.domain.ranks import needs_rebalance, rank_at, spaced_ranks
 from shosai.features.tasks.domain.tasks import TaskRuleError, TaskSource, checked_title
-from shosai.features.tasks.infrastructure.task_records import TaskRecord
 from shosai.features.tasks.infrastructure.thread_records import TaskSubtaskRecord
 
 SUBTASKS_MAX: Final = 100
@@ -89,7 +87,7 @@ class Subtasks:
             )
             _put(lines, line, len(lines) if position is None else position)
             session.add(line)
-            await self._changed(session, principal.user_id, task, now)
+            await task_changed(session, principal.user_id, task, now)
             return _view(line)
 
     async def change(
@@ -113,7 +111,7 @@ class Subtasks:
                 lines.remove(line)
                 _put(lines, line, change.position)
             line.updated_at = now
-            await self._changed(session, principal.user_id, task, now)
+            await task_changed(session, principal.user_id, task, now)
             return _view(line)
 
     async def delete(self, principal: Principal, task_id: UUID, subtask_id: UUID) -> None:
@@ -129,16 +127,7 @@ class Subtasks:
             if line is None:
                 raise AppError("subtask_not_found", HTTPStatus.NOT_FOUND)
             await session.delete(line)
-            await self._changed(session, principal.user_id, task, self._clock())
-
-    async def _changed(
-        self, session: AsyncSession, viewer: UUID, task: TaskRecord, now: datetime
-    ) -> None:
-        task.updated_at = now
-        await session.flush()
-        if task.source_meeting_id is not None:
-            await touch_sets(session, [task.source_meeting_id], now)
-        await raise_revisions(session, viewer, [task.id], now)
+            await task_changed(session, principal.user_id, task, self._clock())
 
 
 def _title(raw: str) -> str:

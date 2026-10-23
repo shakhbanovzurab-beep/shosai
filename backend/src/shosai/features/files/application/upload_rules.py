@@ -10,6 +10,7 @@ import unicodedata
 from dataclasses import dataclass
 from http import HTTPStatus
 from typing import Final
+from uuid import UUID
 
 from shosai.core.kernel.errors import AppError
 from shosai.features.files.domain.names import NameRuleError, checked_name
@@ -30,10 +31,20 @@ class UploadRequest:
     filename: str
     content_type: str
     size_bytes: int
+    # Пространство, в чьё место ляжет вложение задачи пространства (FL-D6).
+    workspace_id: UUID | None = None
 
 
 def checked_request(request: UploadRequest) -> UploadRequest:
-    """The request with its name and type normalised, or the refusal with its code."""
+    """The request with its name and type normalised, or the refusal with its code.
+
+    Only an object files holds may name a workspace, and a workspace's storage opens with
+    files' step 8b (FL-D6): until then such an upload is not included.
+    """
+    if request.workspace_id is not None:
+        if not PURPOSES[request.purpose].held:
+            raise AppError("validation_error", HTTPStatus.UNPROCESSABLE_CONTENT)
+        raise AppError("storage_not_included", HTTPStatus.FORBIDDEN)
     if not within_cap(request.purpose, request.size_bytes):
         raise AppError(
             "upload_too_large",

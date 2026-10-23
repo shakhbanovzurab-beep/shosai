@@ -3,9 +3,10 @@
 A task is made in the person's own space or in a workspace they are an active member of,
 once per `Idempotency-Key` when one is sent. A hand-made workspace task opens to every
 member (`organization`). A task is deleted at once, by its owner, or for a workspace's task
-also by the workspace's owner and admins; a Jira task only goes with its board. A batch is
-all or none, and names tasks of one space at most besides the person's own: row-level
-security writes a workspace's rows only in a transaction scoped to it.
+also by the workspace's owner and admins; a Jira task only goes with its board. The objects
+of a deleted task's attachments go back to files after the commit. A batch is all or none,
+and names tasks of one space at most besides the person's own: row-level security writes a
+workspace's rows only in a transaction scoped to it.
 """
 
 from collections.abc import Callable, Sequence
@@ -32,6 +33,7 @@ from shosai.core.kernel.errors import AppError
 from shosai.core.kernel.ids import new_id
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal
+from shosai.features.tasks.application.attachment_releases import AttachmentReleases
 from shosai.features.tasks.application.scoping import (
     Scoping,
     raise_revisions,
@@ -133,6 +135,7 @@ class TaskWrites:
         self._clock = clock
         self._scoping = Scoping(transactions, ports)
         self._reads = TaskReads(transactions, ports)
+        self._releases = AttachmentReleases(transactions, ports)
 
     async def create(
         self, principal: Principal, draft: NewTask, client_key: str | None
@@ -161,7 +164,8 @@ class TaskWrites:
                 task_id = (
                     await self._effects.once(session, effect, TaskMade, make)
                 ).outcome.task_id
-            return await self._reads.view(session, principal.user_id, task_id)
+            view = await self._reads.view(session, principal.user_id, task_id)
+        return await self._reads.signed(principal, view)
 
     async def _admit(self, session: AsyncSession, principal: Principal, draft: NewTask) -> None:
         if draft.workspace_id is not None:
@@ -240,3 +244,7 @@ class TaskWrites:
             for row in rows:
                 await self._outbox.add(session, deleted_of(row))
                 await session.delete(row)
+        # Объекты вложений удалённых задач возвращаются files после коммита (ADR 0064).
+        await self._releases.owner(scope_in(principal, None))
+        if org_id is not None:
+            await self._releases.owner(scope_in(principal, org_id))

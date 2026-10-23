@@ -3,9 +3,9 @@
 A task's row says who does it by id; the card names that member, names the workspace a
 task belongs to, and says whether the reader may delete it — their own task, or a workspace
 task they made or administer (TK-D2); a Jira task never here. What the reader needs beyond
-the rows — names, workspaces, their roles, where their cards sit, the counts of checklists
-and comments — is read once for a whole list, and only when the list holds a task that
-needs it.
+the rows — names, workspaces, their roles, where their cards sit, the counts of checklists,
+comments and attachments, the covers — is read once for a whole list, and only when the list
+holds a task that needs it.
 """
 
 from collections.abc import Collection, Mapping, Sequence
@@ -13,16 +13,23 @@ from dataclasses import dataclass
 from datetime import date, datetime
 from uuid import UUID
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER
+from shosai.features.tasks.application.part_reads import counts_of, covers_of
+from shosai.features.tasks.application.task_parts import (
+    NONE_COUNTED,
+    AttachmentView,
+    Counts,
+    CoverRef,
+    SubtaskView,
+)
 from shosai.features.tasks.domain.recurrence import Recurrence, recurrence_of
 from shosai.features.tasks.domain.tasks import LeoField, Priority, TaskSource, TaskStatus
 from shosai.features.tasks.infrastructure.board_records import TaskPlacementRecord
 from shosai.features.tasks.infrastructure.task_records import TaskRecord
-from shosai.features.tasks.infrastructure.thread_records import TaskCommentRecord, TaskSubtaskRecord
 from shosai.features.workspaces.contracts import (
     MEMBERSHIP_READER,
     WORKSPACE_READER,
@@ -42,27 +49,6 @@ class Who:
 
 
 @dataclass(frozen=True, slots=True)
-class Counts:
-    """What a card counts of a task's checklist and comments."""
-
-    subtasks_done: int = 0
-    subtasks_total: int = 0
-    comments: int = 0
-
-
-NONE_COUNTED = Counts()
-
-
-@dataclass(frozen=True, slots=True)
-class SubtaskView:
-    """A line of a task's checklist."""
-
-    id: UUID
-    title: str
-    done: bool
-
-
-@dataclass(frozen=True, slots=True)
 class CardView:
     """What a board's card and a list's item show of a task."""
 
@@ -78,6 +64,7 @@ class CardView:
     space: WorkspaceFacts | None
     can_delete: bool
     counts: Counts = NONE_COUNTED
+    cover: CoverRef | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -115,6 +102,7 @@ class TaskView:
     meeting: MeetingRef | None = None
     finding: FindingRef | None = None
     subtasks: tuple[SubtaskView, ...] = ()
+    attachments: tuple[AttachmentView, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -126,6 +114,8 @@ class ViewContext:
     roles: Mapping[UUID, WorkspaceRole]
     placements: Mapping[UUID, tuple[UUID, UUID]]
     counts: Mapping[UUID, Counts]
+    # Обложка карточки: вложение и объект files, который за ним держится.
+    covers: Mapping[UUID, UUID]
 
 
 async def context_of(
@@ -150,43 +140,10 @@ async def context_of(
         roles = {membership.org_id: membership.role for membership in memberships}
     ids = [record.id for record in records]
     placements = await _placements(session, viewer, ids) if placed else {}
-    return ViewContext(names, spaces, roles, placements, await _counts(session, ids))
-
-
-async def _counts(session: AsyncSession, task_ids: Collection[UUID]) -> Mapping[UUID, Counts]:
-    """The counts of the tasks' checklists and comments, one aggregate each."""
-    if not task_ids:
-        return {}
-    ids = list(task_ids)
-    lines = await session.execute(
-        select(
-            TaskSubtaskRecord.task_id,
-            func.count().filter(TaskSubtaskRecord.done),
-            func.count(),
-        )
-        .where(TaskSubtaskRecord.task_id.in_(ids))
-        .group_by(TaskSubtaskRecord.task_id)
+    covers = await covers_of(
+        session, [r.cover_attachment_id for r in records if r.cover_attachment_id]
     )
-    comments = await session.execute(
-        select(TaskCommentRecord.task_id, func.count())
-        .where(TaskCommentRecord.task_id.in_(ids))
-        .group_by(TaskCommentRecord.task_id)
-    )
-    written = {task_id: count for task_id, count in comments}
-    found = {task_id: (done, total) for task_id, done, total in lines}
-    return {
-        task_id: Counts(*found.get(task_id, (0, 0)), written.get(task_id, 0)) for task_id in ids
-    }
-
-
-async def subtasks_of(session: AsyncSession, task_id: UUID) -> tuple[SubtaskView, ...]:
-    """A task's checklist in its order."""
-    rows = await session.execute(
-        select(TaskSubtaskRecord.id, TaskSubtaskRecord.title, TaskSubtaskRecord.done)
-        .where(TaskSubtaskRecord.task_id == task_id)
-        .order_by(TaskSubtaskRecord.rank)
-    )
-    return tuple(SubtaskView(line_id, title, done) for line_id, title, done in rows)
+    return ViewContext(names, spaces, roles, placements, await counts_of(session, ids), covers)
 
 
 async def _placements(
@@ -228,7 +185,14 @@ def card_of(record: TaskRecord, viewer: UUID, context: ViewContext) -> CardView:
         space=context.spaces.get(record.org_id) if record.org_id else None,
         can_delete=may_delete(record, viewer, context.roles),
         counts=context.counts.get(record.id, NONE_COUNTED),
+        cover=_cover(record, context),
     )
+
+
+def _cover(record: TaskRecord, context: ViewContext) -> CoverRef | None:
+    cover = record.cover_attachment_id
+    held = None if cover is None else context.covers.get(cover)
+    return None if cover is None or held is None else CoverRef(cover, held)
 
 
 def _who(record: TaskRecord, context: ViewContext) -> Who | None:

@@ -33,6 +33,7 @@ class UploadBody(BaseModel):
     filename: Annotated[str, Field(min_length=1, max_length=255)]
     content_type: Annotated[str, Field(max_length=255)]
     size_bytes: Annotated[int, Field(ge=1)]
+    workspace_id: UUID | None = None
 
 
 class PartLinkView(BaseModel):
@@ -85,7 +86,9 @@ def build_uploads_router(uploads: UploadService, ports: PortDirectory) -> APIRou
         principal: Annotated[Principal, Depends(signed_in)], body: UploadBody
     ) -> UploadAnswer:
         """Start an upload: the part links, signed for 15 minutes each."""
-        request = UploadRequest(body.purpose, body.filename, body.content_type, body.size_bytes)
+        request = UploadRequest(
+            body.purpose, body.filename, body.content_type, body.size_bytes, body.workspace_id
+        )
         return answer_of(await uploads.create(principal, request))
 
     @router.get("/{upload_id}")

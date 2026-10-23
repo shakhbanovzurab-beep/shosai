@@ -11,11 +11,14 @@ from pydantic import BaseModel, ConfigDict, Field
 from shosai.core.idempotency.http import CLIENT_KEY_MAX_LENGTH, IDEMPOTENCY_KEY_HEADER
 from shosai.core.kernel.errors import AppError
 from shosai.features.tasks.application.task_edits import Edit
+from shosai.features.tasks.application.task_parts import AttachmentView
 from shosai.features.tasks.application.views import CardView, TaskView
-from shosai.features.tasks.channels.http.card_models import AssigneeOut, Card, SpaceOut
+from shosai.features.tasks.channels.http.card_models import AssigneeOut, Card, CoverOut, SpaceOut
 from shosai.features.tasks.channels.http.detail_models import (
+    AttachmentOut,
     DayRule,
     MonthRule,
+    PersonOut,
     PlacementOut,
     Recurrence,
     SourceFindingOut,
@@ -180,6 +183,10 @@ def _card(card: CardView) -> dict[str, object]:
         "subtasks_done": card.counts.subtasks_done,
         "subtasks_total": card.counts.subtasks_total,
         "comment_count": card.counts.comments,
+        "attachment_count": card.counts.attachments,
+        "cover": None
+        if card.cover is None
+        else CoverOut(attachment_id=card.cover.attachment_id, preview_url=card.cover.preview_url),
     }
 
 
@@ -225,6 +232,7 @@ def detail_out(view: TaskView) -> TaskDetail:
             "subtasks": [
                 SubtaskOut(id=line.id, title=line.title, done=line.done) for line in view.subtasks
             ],
+            "attachments": [attachment_out(attachment) for attachment in view.attachments],
             "placement": None
             if placement is None
             else PlacementOut(board_id=placement[0], column_id=placement[1]),
@@ -234,3 +242,13 @@ def detail_out(view: TaskView) -> TaskDetail:
             "server_now": datetime.now(UTC),
         }
     )
+
+
+def attachment_out(view: AttachmentView) -> AttachmentOut:
+    """A file of a task as the panel lists it."""
+    who = view.added_by
+    return AttachmentOut(
+        id=view.id, name=view.name, content_type=view.content_type, size_bytes=view.size_bytes,
+        image=view.image, preview_url=view.preview_url,
+        added_by=PersonOut(user_id=who.user_id, name=who.name), added_at=view.added_at,
+    )  # fmt: skip

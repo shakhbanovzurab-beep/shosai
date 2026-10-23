@@ -147,3 +147,15 @@ async def raise_revisions(
         .where(BoardRecord.id.in_(boards))
         .values(revision=BoardRecord.revision + 1, updated_at=now)
     )
+
+
+async def task_changed(
+    session: AsyncSession, viewer: UUID, task: TaskRecord, now: datetime
+) -> None:
+    """A person changed what hangs on the task — its checklist, its files: its change time
+    moves, a meeting's set is touched and the reader's board's revision goes up."""
+    task.updated_at = now
+    await session.flush()
+    if task.source_meeting_id is not None:
+        await touch_sets(session, [task.source_meeting_id], now)
+    await raise_revisions(session, viewer, [task.id], now)

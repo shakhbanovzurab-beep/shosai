@@ -157,3 +157,17 @@ def test_the_openapi_document_matches_the_api_app(
         f"OpenAPI api-приложения изменился; перепишите {OPENAPI_DOCUMENT.name} опцией "
         "--update-openapi, затем в frontend/ выполните npm run api:types и закоммитьте оба файла"
     )
+
+
+def test_every_schema_keeps_its_own_name_in_the_openapi_document(
+    composed_apps: dict[str, FastAPI],
+) -> None:
+    schemas = composed_apps["api"].openapi()["components"]["schemas"]
+    # Два одноимённых вида billing существовали до этого теста; новые совпадения запрещены:
+    # FastAPI переименовывает их по модулю и ломает сгенерированные типы кабинета.
+    known = {
+        "shosai__features__billing__channels__http__admin_plans__PlansView",
+        "shosai__features__billing__channels__http__plans__PlansView",
+    }
+
+    assert {name for name in schemas if "__" in name} == known

@@ -8779,6 +8779,217 @@
           }
         }
       }
+    },
+    "/v1/tasks/{task_id}/attachments": {
+      "post": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Create Attachment",
+        "description": "Attach an upload or a File Manager file; at most 50 to a task.",
+        "operationId": "create_attachment_v1_tasks__task_id__attachments_post",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/UploadSourceBody"
+                  },
+                  {
+                    "$ref": "#/components/schemas/FileSourceBody"
+                  }
+                ],
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}/attachments/{attachment_id}/download": {
+      "get": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Download Attachment",
+        "description": "A 15-minute link to the attachment's bytes.",
+        "operationId": "download_attachment_v1_tasks__task_id__attachments__attachment_id__download_get",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "attachment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Attachment Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttachmentDownloadOut"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/tasks/{task_id}/attachments/{attachment_id}": {
+      "delete": {
+        "tags": [
+          "tasks"
+        ],
+        "summary": "Delete Attachment",
+        "description": "Remove an attachment; it stops being the cover.",
+        "operationId": "delete_attachment_v1_tasks__task_id__attachments__attachment_id__delete",
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Task Id"
+            }
+          },
+          {
+            "name": "attachment_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Attachment Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "default": {
+            "description": "Error. The body is the error envelope; see `ErrorResponse`.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -9221,6 +9432,26 @@
         ],
         "title": "AssigneeOut",
         "description": "Who does the task: a member by id and name, or a name as written."
+      },
+      "AttachmentDownloadOut": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url",
+          "expires_at"
+        ],
+        "title": "AttachmentDownloadOut",
+        "description": "A short-lived link to an attachment's bytes."
       },
       "AttachmentOut": {
         "properties": {
@@ -10630,6 +10861,22 @@
         ],
         "title": "FileKind",
         "description": "The cabinet's kinds of files."
+      },
+      "FileSourceBody": {
+        "properties": {
+          "file_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "File Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "file_id"
+        ],
+        "title": "FileSourceBody",
+        "description": "A File Manager file the person may read, attached as a copy on its object."
       },
       "FileTransferBody": {
         "properties": {
@@ -17935,6 +18182,18 @@
             "type": "integer",
             "minimum": 1.0,
             "title": "Size Bytes"
+          },
+          "workspace_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workspace Id"
           }
         },
         "additionalProperties": false,
@@ -17989,7 +18248,8 @@
           "leo_attachment",
           "ticket_attachment",
           "workspace_upload",
-          "app_build"
+          "app_build",
+          "task_attachment"
         ],
         "title": "UploadPurpose",
         "description": "Who takes the bytes once they are uploaded."
@@ -18010,6 +18270,22 @@
         ],
         "title": "UploadResponse",
         "description": "The files made from ready uploads."
+      },
+      "UploadSourceBody": {
+        "properties": {
+          "upload_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Upload Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "upload_id"
+        ],
+        "title": "UploadSourceBody",
+        "description": "The person's ready `task_attachment` upload."
       },
       "UploadState": {
         "type": "string",

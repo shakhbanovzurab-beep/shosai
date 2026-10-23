@@ -1,14 +1,15 @@
 """Tasks' handler of a person's data: personal tasks, boards, their columns and placements.
 
-The person's rows are their personal tasks with their checklists and comments, the sets of
-their personal meetings, their boards with columns, where tasks sit on them, and their
-settings. A workspace's task stays
+The person's rows are their personal tasks with their checklists, comments and attachments
+(files keeps the attachments' bytes, ADR 0064), the sets of their personal meetings, their
+boards with columns, where tasks sit on them, and their settings. A workspace's task stays
 with the workspace, whoever made it (nfr-16): it is neither exported nor erased with the
 person, and the workspace passes it to a successor when the member goes (step 6). The
 person's placements of a workspace's tasks are their own rows: exported and erased with
 them, never copied to another home, where those tasks are not. Erasing deletes boards and
-personal tasks, and their placements, columns, settings, checklists and comments go with
-them by the database's cascades; a repeat deletes nothing more.
+personal tasks, and their placements, columns, settings, checklists, comments and
+attachments go with them by the database's cascades; the attachments' held objects then go
+back to files, so nothing of them remains; a repeat deletes nothing more.
 """
 
 from collections.abc import AsyncIterator, Callable, Mapping
@@ -32,6 +33,12 @@ from shosai.core.db.person_rows import (
 from shosai.core.db.transactions import HomeTransactions
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.ports.directory import PortDirectory
+from shosai.features.tasks.application.attachment_releases import AttachmentReleases
+from shosai.features.tasks.infrastructure.attachment_records import (
+    TaskAttachmentRecord,
+    TaskAttachmentReleaseRecord,
+)
 from shosai.features.tasks.infrastructure.board_records import (
     BoardColumnRecord,
     BoardRecord,
@@ -50,6 +57,8 @@ MODELS: Final = (
     TaskRecord,
     TaskSubtaskRecord,
     TaskCommentRecord,
+    TaskAttachmentRecord,
+    TaskAttachmentReleaseRecord,
     MeetingTaskSetRecord,
     BoardRecord,
     BoardColumnRecord,
@@ -58,12 +67,28 @@ MODELS: Final = (
 )
 PERSONAL_MODELS: Final = (BoardRecord, BoardColumnRecord, TaskPlacementRecord, TaskSettingsRecord)
 # Строки с пространством: человеку принадлежат только личные, без `org_id`.
-SPACED_MODELS: Final = (TaskRecord, TaskSubtaskRecord, TaskCommentRecord, MeetingTaskSetRecord)
+SPACED_MODELS: Final = (
+    TaskRecord,
+    TaskSubtaskRecord,
+    TaskCommentRecord,
+    TaskAttachmentRecord,
+    TaskAttachmentReleaseRecord,
+    MeetingTaskSetRecord,
+)
+# Очередь возврата объектов хранит одни идентификаторы и пустеет сама за такт (ADR 0064).
 ACCOUNT_DATA: Final = AccountDataSpec(
-    OWNER, tuple(TableCoverage(model.__tablename__, Treatment.ERASE) for model in MODELS)
+    OWNER,
+    tuple(
+        TableCoverage(
+            model.__tablename__,
+            Treatment.EXPIRES if model is TaskAttachmentReleaseRecord else Treatment.ERASE,
+        )
+        for model in MODELS
+    ),
 )
 KEYS: Final[Mapping[type[ModelBase], str]] = {
     MeetingTaskSetRecord: "meeting_id",
+    TaskAttachmentReleaseRecord: "held_object_id",
     TaskPlacementRecord: "task_id",
     TaskSettingsRecord: "user_id",
 }
@@ -82,9 +107,15 @@ def _personal_tasks_only(_user_id: UUID) -> ColumnElement[bool]:
     return TaskRecord.org_id.is_(None)
 
 
-def _of_personal_tasks(
-    model: type[TaskSubtaskRecord | TaskCommentRecord],
-) -> Callable[[UUID], ColumnElement[bool]]:
+type Spaced = (
+    type[TaskSubtaskRecord]
+    | type[TaskCommentRecord]
+    | type[TaskAttachmentRecord]
+    | type[TaskAttachmentReleaseRecord]
+)
+
+
+def _of_personal_tasks(model: Spaced) -> Callable[[UUID], ColumnElement[bool]]:
     def only(_user_id: UUID) -> ColumnElement[bool]:
         return model.org_id.is_(None)
 
@@ -99,6 +130,8 @@ NARROWED: Final[Mapping[type[ModelBase], Callable[[UUID], ColumnElement[bool]]]]
     TaskRecord: _personal_tasks_only,
     TaskSubtaskRecord: _of_personal_tasks(TaskSubtaskRecord),
     TaskCommentRecord: _of_personal_tasks(TaskCommentRecord),
+    TaskAttachmentRecord: _of_personal_tasks(TaskAttachmentRecord),
+    TaskAttachmentReleaseRecord: _of_personal_tasks(TaskAttachmentReleaseRecord),
     MeetingTaskSetRecord: _personal_sets,
 }
 
@@ -118,7 +151,10 @@ def _rows(model: type[ModelBase]) -> PersonRows:
     return rows if only is None else replace(rows, only=only)
 
 
-EXPORTED: Final = tuple(_rows(model) for model in MODELS)
+# Очередь возврата объектов не выгружается и не переезжает: её строки истекают сами.
+EXPORTED: Final = tuple(
+    _rows(model) for model in MODELS if model is not TaskAttachmentReleaseRecord
+)
 # Переезжают только личные задачи, поэтому и места — только у них.
 COPIED: Final = tuple(
     replace(rows, only=_placements_of_personal_tasks)
@@ -131,8 +167,9 @@ COPIED: Final = tuple(
 class TasksAccountData:
     """The `core.account_data_handlers` binding of tasks."""
 
-    def __init__(self, transactions: HomeTransactions) -> None:
+    def __init__(self, transactions: HomeTransactions, ports: PortDirectory) -> None:
         self._transactions = transactions
+        self._releases = AttachmentReleases(transactions, ports)
 
     @property
     def owner(self) -> str:
@@ -182,6 +219,8 @@ class TasksAccountData:
                     MeetingTaskSetRecord.user_id == user_id, MeetingTaskSetRecord.org_id.is_(None)
                 )
             )
+        while await self._releases.owner(TenancyScope(account.home, user_id)):
+            pass
 
     async def remains(self, account: AccountRef) -> tuple[str, ...]:
         """The tables still holding the person's rows; a workspace's tasks are not remains."""

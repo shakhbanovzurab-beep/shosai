@@ -1,5 +1,7 @@
 """Uploads, a person's storage usage and pending object deletions (revision `e7b2c5d9a314`).
 
+Revision `f2b8d4a6c931` adds the purpose `task_attachment` (ADR 0064).
+
 Uploads and usage are personal. An upload reserves its declared bytes while pending or
 ready. `object_deletions` names keys whose last row is gone, until the bucket confirms.
 """
@@ -27,7 +29,7 @@ from shosai.core.db.model_base import ModelBase
 
 PURPOSES = (
     "'file_manager', 'recording', 'leo_attachment', 'ticket_attachment', 'workspace_upload', "
-    "'app_build'"
+    "'app_build', 'task_attachment'"
 )
 STATES = "'pending', 'ready', 'claimed', 'rejected', 'expired'"
 

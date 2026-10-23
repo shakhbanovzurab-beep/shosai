@@ -1,15 +1,17 @@
 """Files' handler of a person's data: personal files with their bytes, folders, uploads, usage.
 
-Rows are the person's: files without a workspace, their folders, uploads and usage; a
+Rows are the person's: files without a workspace, their folders, uploads, usage and the
+objects files holds for their personal rows elsewhere (a task's attachments, ADR 0064); a
 file handed over to a workspace is the workspace's and stays. Objects are reached only
 through their pointers (ADR 0055 point 3): an object is copied by its key, and deleted
 only when no row of any owner still names it — a transferred file keeps its key under
 the person's prefix, so nothing is ever deleted by prefix. Export gives the rows and the
-bytes of every personal file that is not hidden.
+bytes of every personal file that is not hidden and of every personal held object.
 """
 
 import hashlib
 from collections.abc import AsyncIterator, Mapping, Sequence
+from dataclasses import replace
 from typing import Final
 from uuid import UUID
 
@@ -35,6 +37,7 @@ from shosai.core.storage.port import MultipartUploads, ObjectStorage
 from shosai.features.files.domain.uploads import UploadState
 from shosai.features.files.infrastructure import usage_store
 from shosai.features.files.infrastructure.file_records import FileFolderRecord, StorageFileRecord
+from shosai.features.files.infrastructure.held_records import HeldObjectRecord
 from shosai.features.files.infrastructure.upload_records import StorageUsageRecord, UploadRecord
 
 OWNER: Final = "files"
@@ -42,7 +45,13 @@ CHUNK_BYTES: Final = 1024 * 1024
 KEYS_IN_USE_SQL: Final = text("SELECT files_keys_in_use(:keys)").bindparams(
     bindparam("keys", type_=ARRAY(Text()))
 )
-MODELS: Final = (StorageFileRecord, FileFolderRecord, UploadRecord, StorageUsageRecord)
+MODELS: Final = (
+    StorageFileRecord,
+    FileFolderRecord,
+    UploadRecord,
+    StorageUsageRecord,
+    HeldObjectRecord,
+)
 ACCOUNT_DATA: Final = AccountDataSpec(
     OWNER, tuple(TableCoverage(model.__tablename__, Treatment.ERASE) for model in MODELS)
 )
@@ -55,7 +64,13 @@ ROWS: Final = (
     whole_rows(TABLES["storage_files"], key="id"),
     whole_rows(TABLES["uploads"], key="id"),
     PersonRows(TABLES["storage_usage"], tuple(TABLES["storage_usage"].columns.keys()), "user_id"),
+    replace(whole_rows(TABLES["held_objects"], key="id"), only=lambda _user: personal_held()),
 )
+
+
+def personal_held() -> ColumnElement[bool]:
+    """The objects files holds for a person's own rows, not a workspace's."""
+    return HeldObjectRecord.org_id.is_(None)
 
 
 def personal_files(user_id: UUID) -> ColumnElement[bool]:
@@ -93,9 +108,15 @@ class FilesAccountData:
         )
         async with self._transactions.begin(scope, read_only=True) as session:
             files = (await session.execute(statement)).all()
+        held = select(HeldObjectRecord.id, HeldObjectRecord.filename, HeldObjectRecord.object_key)
+        held = held.where(HeldObjectRecord.user_id == account.user_id, personal_held())
+        async with self._transactions.begin(scope, read_only=True) as session:
+            objects = (await session.execute(held)).all()
         storage = self._objects[account.home]
         for file_id, name, key in files:
             yield ExportFile(f"files/{file_id}/{name}", _object_chunks(storage, key))
+        for held_id, name, key in objects:
+            yield ExportFile(f"held/{held_id}/{name}", _object_chunks(storage, key))
 
     async def erase(self, account: AccountRef) -> None:
         """Delete the person's rows, then the objects no other row names."""
@@ -131,6 +152,11 @@ class FilesAccountData:
         async with self._transactions.begin(TenancyScope(account.home, account.user_id)) as session:
             await usage_store.lock(session, account.user_id)
             await session.execute(delete(StorageFileRecord).where(personal_files(account.user_id)))
+            await session.execute(
+                delete(HeldObjectRecord).where(
+                    HeldObjectRecord.user_id == account.user_id, personal_held()
+                )
+            )
             for model in (FileFolderRecord, UploadRecord, StorageUsageRecord):
                 await session.execute(delete(model).where(model.user_id == account.user_id))
             orphaned = await unnamed(session, keys)
@@ -146,19 +172,31 @@ class FilesAccountData:
             left = await session.scalar(
                 select(StorageFileRecord.id).where(personal_files(account.user_id)).limit(1)
             )
+            held = await session.scalar(
+                select(HeldObjectRecord.id)
+                .where(HeldObjectRecord.user_id == account.user_id, personal_held())
+                .limit(1)
+            )
         if left is not None:
             found.append("storage_files")
+        if held is not None:
+            found.append("held_objects")
         return tuple(found)
 
     async def _keys(self, account: AccountRef) -> list[str]:
-        """Every object key the person's files and uploads name, each once."""
+        """Every object key the person's files, uploads and held objects name, each once."""
         scope = TenancyScope(account.home, account.user_id)
         files = select(StorageFileRecord.object_key).where(personal_files(account.user_id))
+        held = select(HeldObjectRecord.object_key, HeldObjectRecord.preview_key).where(
+            HeldObjectRecord.user_id == account.user_id, personal_held()
+        )
         uploads = select(UploadRecord.object_key).where(
             UploadRecord.user_id == account.user_id, UploadRecord.state == UploadState.READY.value
         )
         async with self._transactions.begin(scope, read_only=True) as session:
             named = [*(await session.scalars(files)).all(), *(await session.scalars(uploads)).all()]
+            for object_key, preview in await session.execute(held):
+                named += [key for key in (object_key, preview) if key is not None]
         return sorted(set(named))
 
 

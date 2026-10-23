@@ -20,7 +20,7 @@ from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal, bearer_principal
 from shosai.features.tasks.application.comments import Comments, CommentView
 from shosai.features.tasks.application.subtasks import SubtaskChange, Subtasks
-from shosai.features.tasks.application.views import SubtaskView
+from shosai.features.tasks.application.task_parts import SubtaskView
 from shosai.features.tasks.channels.http.detail_models import SubtaskOut
 from shosai.features.tasks.channels.http.shapes import OptionalIdempotencyKey, Strict, invalid
 

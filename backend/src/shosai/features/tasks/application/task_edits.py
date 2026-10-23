@@ -15,6 +15,7 @@ from datetime import UTC, date, datetime
 from http import HTTPStatus
 from uuid import UUID
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shosai.core.db.transactions import HomeTransactions
@@ -47,9 +48,11 @@ from shosai.features.tasks.domain.recurrence import recurrence_json, recurrence_
 from shosai.features.tasks.domain.tasks import (
     LeoField,
     TaskRuleError,
+    TaskSource,
     TaskStatus,
     completed_at_after,
 )
+from shosai.features.tasks.infrastructure.attachment_records import TaskAttachmentRecord
 from shosai.features.tasks.infrastructure.task_records import TaskRecord
 
 
@@ -87,7 +90,8 @@ class TaskEdits:
         async with self._transactions.begin(scope) as session:
             record = await locked_task(session, self._ports, principal.user_id, task_id)
             await self._apply(session, principal.user_id, record, edit)
-            return await self._reads.view(session, principal.user_id, task_id)
+            view = await self._reads.view(session, principal.user_id, task_id)
+        return await self._reads.signed(principal, view)
 
     async def _apply(
         self, session: AsyncSession, viewer: UUID, record: TaskRecord, edit: Edit
@@ -100,6 +104,8 @@ class TaskEdits:
             await self._scoping.check_member(session, record.org_id, change.assignee.user_id)
         if not isinstance(change.project_id, Unset):
             await self._scoping.check_project(session, record.org_id, change.project_id)
+        if not isinstance(edit.cover, Unset):
+            await _set_cover(session, record, edit.cover)
         before = before_of(record)
         _write(record, change, days)
         leo = tuple(LeoField(field) for field in record.leo_fields)
@@ -139,14 +145,28 @@ class TaskEdits:
 
 
 def _refuse_misfits(record: TaskRecord, edit: Edit) -> None:
-    """A member only on a workspace's task, a name only on a personal one, a known cover."""
+    """A member only on a workspace's task, a name only on a personal one."""
     if (record.org_id is None and edit.sent_assignee_id) or (
         record.org_id is not None and edit.sent_assignee_name
     ):
         raise invalid()
-    if edit.cover is not UNSET and edit.cover is not None:
-        # Вложений у задачи пока нет: обложкой может стать только её картинка (шаг 3c).
-        raise AppError("attachment_not_found", HTTPStatus.NOT_FOUND)
+
+
+async def _set_cover(session: AsyncSession, record: TaskRecord, cover: UUID | None) -> None:
+    """The cover is an image attachment of the task, or none (KG-D3; a Jira task has none)."""
+    if record.source == TaskSource.JIRA.value:
+        raise AppError("jira_unsupported", HTTPStatus.CONFLICT)
+    if cover is not None:
+        image = await session.scalar(
+            select(TaskAttachmentRecord.image).where(
+                TaskAttachmentRecord.id == cover, TaskAttachmentRecord.task_id == record.id
+            )
+        )
+        if image is None:
+            raise AppError("attachment_not_found", HTTPStatus.NOT_FOUND)
+        if not image:
+            raise AppError("cover_not_image", HTTPStatus.CONFLICT)
+    record.cover_attachment_id = cover
 
 
 def _checked(record: TaskRecord, change: TaskChange, today: date) -> tuple[TaskChange, Schedule]:

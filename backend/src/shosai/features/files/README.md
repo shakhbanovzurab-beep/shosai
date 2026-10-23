@@ -18,7 +18,7 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 ## Tables (each home, revision `e7b2c5d9a314`)
 
 - `storage_files` — the shareable `file` resource (company isolation; personal rows guarded by workspaces' access policy, WS-D2); `object_key` is the full key, legacy keys verbatim, several rows may share one (FL-D4); `deleted_at` hides a file for 7 days (FL-D5). Every read starts from `application/visibility.py`: the policy's predicate plus "not hidden".
-- `file_folders`, `uploads`, `storage_usage` (a person's used and reserved bytes, never negative, and the 90-day mark) — personal; a workspace's own quota comes with step 8.
+- `file_folders`, `uploads`, `storage_usage` (a person's used and reserved bytes — their files' and the objects files holds for them — never negative, and the 90-day mark) — personal; a workspace's own quota comes with step 8b.
 - `object_deletions` — keys whose last row is gone, until the bucket confirms; keys only.
 - `files_keys_in_use(keys)` — which keys any row still names, past row-level security, keys only.
 - Account data: rows of the person's own files, folders, uploads and usage; objects copied by their keys and deleted only when no row of any owner names them, never by prefix (a file handed to a workspace keeps its key).
@@ -76,6 +76,14 @@ The one path for bytes in Shosai: a person's File Manager (files, flat folders, 
 - `workspaces.member.removed` (consumer `files.follow_departure`) passes the departed member's workspace files to the owner the event names (nfr-16); their personal files stay theirs.
 - `workspaces.workspace.deleted` (`files.erase_with_workspace`) erases the workspace's files and uploads, one `files.file.deleted` each for knowledge, and records only the keys no other row names; the upload sweep deletes those objects.
 - A deleted personal file leaves every workspace it was shared in through workspaces' consumer `workspaces.withdraw_deleted_file`.
+
+## Objects other slices hold (step 8c, ADR 0064)
+
+- Revision `f2b8d4a6c931`: `held_objects` (company isolation) — an object files keeps for another slice's row, a task's attachment; `uploads.purpose` gains `task_attachment`; `files_keys_in_use` answers for held objects and their previews as for file rows.
+- A `task_attachment` upload (≤ 25 MiB) reserves and counts in the owner's storage and lands at its final key `u/{user_id}/h/{id}`, never `transient/`; `workspace_id` on an upload answers 403 `storage_not_included` until step 8b opens a workspace's storage (FL-D6).
+- `contracts/held_objects.py`, bound by `application/held_objects.py`: `from_upload` holds the person's ready upload once, its reservation settled by the claim; `from_file` holds a File Manager file the viewer may read on its own object (FL-D4), the file's row locked after the person's usage row against its purge, and charges it; `release` frees the bytes and records the deletion of what no file row or held object names, `discard` deletes it after the holder's commit; `links` and `previews` sign 15-minute edge links after files' own short read (FL-D9); `prepare` queues previews.
+- `application/previews.py`: `files.make_preview` on the bulk queue makes a WebP ≤ 640 px wide with Pillow (`infrastructure/image_previews.py`), never decoding past 25 MiB or 40 megapixels; a broken image is marked `failed`; the upload sweep queues again a preview waiting over ten minutes.
+- inv-11's reconciliation sums files and held objects; held objects go with the person's export (rows and bytes), copy to the other home and erasure.
 
 ## `FileReader` and Leo's `files` toolset (step 9)
 

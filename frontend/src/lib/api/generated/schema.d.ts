@@ -2240,6 +2240,66 @@ export interface paths {
         patch: operations["edit_comment_v1_tasks__task_id__comments__comment_id__patch"];
         trace?: never;
     };
+    "/v1/tasks/{task_id}/attachments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Attachment
+         * @description Attach an upload or a File Manager file; at most 50 to a task.
+         */
+        post: operations["create_attachment_v1_tasks__task_id__attachments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tasks/{task_id}/attachments/{attachment_id}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download Attachment
+         * @description A 15-minute link to the attachment's bytes.
+         */
+        get: operations["download_attachment_v1_tasks__task_id__attachments__attachment_id__download_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/tasks/{task_id}/attachments/{attachment_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Attachment
+         * @description Remove an attachment; it stops being the cover.
+         */
+        delete: operations["delete_attachment_v1_tasks__task_id__attachments__attachment_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2432,6 +2492,19 @@ export interface components {
             user_id: string | null;
             /** Name */
             name: string;
+        };
+        /**
+         * AttachmentDownloadOut
+         * @description A short-lived link to an attachment's bytes.
+         */
+        AttachmentDownloadOut: {
+            /** Url */
+            url: string;
+            /**
+             * Expires At
+             * Format: date-time
+             */
+            expires_at: string;
         };
         /**
          * AttachmentOut
@@ -3074,6 +3147,17 @@ export interface components {
          * @enum {string}
          */
         FileKind: "document" | "spreadsheet" | "presentation" | "pdf" | "text" | "design" | "image" | "archive" | "other";
+        /**
+         * FileSourceBody
+         * @description A File Manager file the person may read, attached as a copy on its object.
+         */
+        FileSourceBody: {
+            /**
+             * File Id
+             * Format: uuid
+             */
+            file_id: string;
+        };
         /**
          * FileTransferBody
          * @description The workspace the file is handed over to; the person shared it there first.
@@ -5890,6 +5974,8 @@ export interface components {
             content_type: string;
             /** Size Bytes */
             size_bytes: number;
+            /** Workspace Id */
+            workspace_id?: string | null;
         };
         /**
          * UploadInit
@@ -5911,7 +5997,7 @@ export interface components {
          * @description Who takes the bytes once they are uploaded.
          * @enum {string}
          */
-        UploadPurpose: "file_manager" | "recording" | "leo_attachment" | "ticket_attachment" | "workspace_upload" | "app_build";
+        UploadPurpose: "file_manager" | "recording" | "leo_attachment" | "ticket_attachment" | "workspace_upload" | "app_build" | "task_attachment";
         /**
          * UploadResponse
          * @description The files made from ready uploads.
@@ -5919,6 +6005,17 @@ export interface components {
         UploadResponse: {
             /** Files */
             files: components["schemas"]["FileItem"][];
+        };
+        /**
+         * UploadSourceBody
+         * @description The person's ready `task_attachment` upload.
+         */
+        UploadSourceBody: {
+            /**
+             * Upload Id
+             * Format: uuid
+             */
+            upload_id: string;
         };
         /**
          * UploadState
@@ -10904,6 +11001,109 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["CommentOut"];
                 };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    create_attachment_v1_tasks__task_id__attachments_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UploadSourceBody"] | components["schemas"]["FileSourceBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AttachmentOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    download_attachment_v1_tasks__task_id__attachments__attachment_id__download_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+                attachment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AttachmentDownloadOut"];
+                };
+            };
+            /** @description Error. The body is the error envelope; see `ErrorResponse`. */
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    delete_attachment_v1_tasks__task_id__attachments__attachment_id__delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                task_id: string;
+                attachment_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
             /** @description Error. The body is the error envelope; see `ErrorResponse`. */
             default: {

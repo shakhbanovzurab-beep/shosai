@@ -60,7 +60,7 @@ def runner_of(
             ACCOUNT_DATA_HANDLERS.bind(BillingAccountData(homes.transactions)),
             ACCOUNT_DATA_HANDLERS.bind(FilesAccountData(homes.transactions, (objects, uploads))),
             ACCOUNT_DATA_HANDLERS.bind(NotesAccountData(homes.transactions, (objects, uploads))),
-            ACCOUNT_DATA_HANDLERS.bind(TasksAccountData(homes.transactions)),
+            ACCOUNT_DATA_HANDLERS.bind(TasksAccountData(homes.transactions, ports)),
         ]
     )
     return ExportRunner(homes.transactions, ports, (objects, uploads), bench.services.email)

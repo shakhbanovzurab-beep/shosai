@@ -26,16 +26,20 @@ from shosai.core.idempotency.metrics import EffectKeyMetrics
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
 from shosai.core.ports.directory import PortDirectory
+from shosai.features.billing.contracts import ENTITLEMENTS
+from shosai.features.files.contracts.held_objects import HELD_OBJECTS
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER, AUTHENTICATOR, AccountProfile
 from shosai.features.notes.application.meeting_reader import MeetingsFindings, MeetingsReader
 from shosai.features.notes.contracts import MEETING_FINDINGS, MEETING_READER
 from shosai.features.notes.infrastructure.meeting_records import MEETING_RESOURCE
 from shosai.features.notes.module import NOTES
+from shosai.features.tasks.application.attachments import Attachments
 from shosai.features.tasks.application.comments import Comments
 from shosai.features.tasks.application.subtasks import Subtasks
 from shosai.features.tasks.application.task_edits import TaskEdits
 from shosai.features.tasks.application.task_reads import TaskReads
 from shosai.features.tasks.application.task_writes import TaskWrites
+from shosai.features.tasks.channels.http.attachments import build_attachments_router
 from shosai.features.tasks.channels.http.tasks import build_tasks_router
 from shosai.features.tasks.channels.http.threads import build_threads_router
 from shosai.features.tasks.infrastructure.board_records import (
@@ -59,7 +63,9 @@ from shosai.features.workspaces.infrastructure.membership_reader import (
 from shosai.features.workspaces.module import WORKSPACES
 from tests.core.web.probe_app import build_probe_app, client_of
 from tests.features.billing.people_bench import BearerOfTheTest
+from tests.features.files.upload_bench import UploadBench
 from tests.features.notes.no_archive import NO_ARCHIVE
+from tests.features.tasks.holding_bench import Holding, holding
 from tests.harness.connections import Connection
 from tests.harness.database_access import DatabaseAccess
 from tests.harness.run_slot import RunSlot
@@ -118,6 +124,8 @@ class TaskBench:
     profiles: Profiles
     # Соединение слота в доме EU: миры пространств пишет набор изоляции.
     connection: Connection
+    files: Holding
+    ports: PortDirectory
 
     async def call(
         self, who: uuid.UUID, method: str, path: str, body: object = None, **headers: str
@@ -198,12 +206,16 @@ class TaskBench:
             return [kind for kind, payload in rows if payload.get("task_id") == str(task_id)]
 
 
-def task_ports(profiles: Profiles, transactions: HomeTransactions) -> PortDirectory:
-    """The test's bearer, workspaces' policy and readers, notes' readers, the test's profiles."""
-    ports = PortDirectory()
+def install_ports(
+    ports: PortDirectory, profiles: Profiles, transactions: HomeTransactions, files: Holding
+) -> None:
+    """The test's bearer, workspaces' policy and readers, notes' readers, the test's profiles
+    and plan, files' held objects."""
     ports.install(
         [
             AUTHENTICATOR.bind(BearerOfTheTest()),
+            ENTITLEMENTS.bind(files.uploads.plan),
+            HELD_OBJECTS.bind(files.held),
             ACCESS_POLICY.bind(
                 WorkspaceAccessPolicy(
                     OUTBOX, WorkspaceAuditLog(), (MEETING_RESOURCE, TASK_RESOURCE)
@@ -216,26 +228,30 @@ def task_ports(profiles: Profiles, transactions: HomeTransactions) -> PortDirect
             MEETING_FINDINGS.bind(MeetingsFindings(ports)),
         ]
     )
-    return ports
 
 
 @pytest_asyncio.fixture
-async def task_bench(homes: DatabaseAccess, run_slot: RunSlot) -> AsyncIterator[TaskBench]:
-    """The task routes over the slot's homes."""
+async def task_bench(
+    homes: DatabaseAccess, run_slot: RunSlot, upload_bench: UploadBench
+) -> AsyncIterator[TaskBench]:
+    """The task routes over the slot's homes, with files' held objects over its buckets."""
     profiles = Profiles()
     transactions = homes.transactions
-    ports = task_ports(profiles, transactions)
+    ports = PortDirectory()
     effects = EffectLedger(EffectKeyMetrics(CollectorRegistry()))
-    services = (
-        TaskReads(transactions, ports),
-        TaskWrites(transactions, ports, (OUTBOX, effects)),
-        TaskEdits(transactions, ports, OUTBOX),
-    )
-    routers = (
-        build_tasks_router(services, ports),
-        build_threads_router(
-            (Subtasks(transactions, ports), Comments(transactions, ports, effects)), ports
-        ),
-    )
-    async with client_of(build_probe_app(extra=routers).app) as http:
-        yield TaskBench(http, homes, profiles, run_slot.claimed.connections[HOME])
+    async with holding(upload_bench, ports, run_slot) as files:
+        install_ports(ports, profiles, transactions, files)
+        services = (
+            TaskReads(transactions, ports),
+            TaskWrites(transactions, ports, (OUTBOX, effects)),
+            TaskEdits(transactions, ports, OUTBOX),
+        )
+        threads = (Subtasks(transactions, ports), Comments(transactions, ports, effects))
+        routers = (
+            build_tasks_router(services, ports),
+            build_threads_router(threads, ports),
+            build_attachments_router(Attachments(transactions, ports), ports),
+        )
+        async with client_of(build_probe_app(extra=routers).app) as http:
+            connection = run_slot.claimed.connections[HOME]
+            yield TaskBench(http, homes, profiles, connection, files, ports)

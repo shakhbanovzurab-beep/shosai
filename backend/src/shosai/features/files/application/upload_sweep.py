@@ -78,7 +78,7 @@ class UploadSweep:
         async with self._transactions.begin(scope) as session:
             moved = await move_state(session, record.id, state, UploadState.EXPIRED)
             if moved is not None:
-                if PURPOSES[UploadPurpose(record.purpose)].in_file_manager:
+                if PURPOSES[UploadPurpose(record.purpose)].counted:
                     await usage_store.release(session, record.user_id, record.size_bytes)
                 await record_deletions(session, [record.object_key])
         if moved is None:

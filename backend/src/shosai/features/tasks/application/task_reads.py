@@ -25,8 +25,10 @@ from shosai.core.pagination.keyset import Keyset
 from shosai.core.pagination.page import Page, PageRequest, page_of
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import ACCOUNT_PROFILE_READER, Principal
+from shosai.features.tasks.application.attachment_views import attachments_of, with_previews
+from shosai.features.tasks.application.part_reads import subtasks_of
 from shosai.features.tasks.application.sources import with_source
-from shosai.features.tasks.application.views import TaskView, context_of, subtasks_of, task_of
+from shosai.features.tasks.application.views import TaskView, context_of, task_of
 from shosai.features.tasks.contracts import TaskFacts, TaskNotFoundError
 from shosai.features.tasks.domain.tasks import Assignee, Priority, TaskSource, TaskStatus
 from shosai.features.tasks.infrastructure.task_records import TASK_RESOURCE, TaskRecord
@@ -119,7 +121,11 @@ class TaskReads:
                 moved = (after.updated_at, after.task_id) if after else None
                 rows = await _rows(session, BY_CHANGE.page(statement, moved, request.limit))
             context = await context_of(session, self._ports, principal.user_id, rows)
-        views = [task_of(row, principal.user_id, context) for row in rows]
+        views = await with_previews(
+            self._ports,
+            principal.scope(),
+            [task_of(row, principal.user_id, context) for row in rows],
+        )
         if query.sort is TaskSort.DUE:
             return page_of(
                 views, request, BY_DUE_CURSOR, lambda view: view,
@@ -157,12 +163,19 @@ class TaskReads:
             )
             rows = await _rows(session, statement)
             context = await context_of(session, self._ports, principal.user_id, rows)
-        return [task_of(row, principal.user_id, context) for row in rows]
+        views = [task_of(row, principal.user_id, context) for row in rows]
+        return await with_previews(self._ports, principal.scope(), views)
 
     async def detail(self, principal: Principal, task_id: UUID) -> TaskView:
         """One task the person may read, with where their card sits; 404 otherwise."""
         async with self._transactions.begin(principal.scope(), read_only=True) as session:
-            return await self.view(session, principal.user_id, task_id)
+            view = await self.view(session, principal.user_id, task_id)
+        return await self.signed(principal, view)
+
+    async def signed(self, principal: Principal, view: TaskView) -> TaskView:
+        """The task with its previews' links, signed after the transaction that read it."""
+        (signed,) = await with_previews(self._ports, principal.scope(), [view])
+        return signed
 
     async def view(self, session: AsyncSession, viewer: UUID, task_id: UUID) -> TaskView:
         """One task the viewer may read, in the caller's transaction."""
@@ -173,7 +186,9 @@ class TaskReads:
             raise TaskNotFoundError
         context = await context_of(session, self._ports, viewer, [record], placed=True)
         view = replace(
-            task_of(record, viewer, context), subtasks=await subtasks_of(session, task_id)
+            task_of(record, viewer, context),
+            subtasks=await subtasks_of(session, task_id),
+            attachments=await attachments_of(session, self._ports, task_id),
         )
         return await with_source(session, self._ports, Viewer(viewer), view)
 

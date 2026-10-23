@@ -27,6 +27,8 @@ dependencies = [
     "opentelemetry-exporter-otlp-proto-http>=1.45.0",
     "opentelemetry-instrumentation-redis>=0.66b0",
     "opentelemetry-sdk>=1.45.0",
+    # Превью картинок-вложений задач: WebP до 640 px в воркере (files шаг 8c, ADR 0064).
+    "pillow>=13.0.0",
     "prometheus-client>=0.26.0",
     "psycopg[binary]>=3.3.6",
     "pydantic>=2.13.5",

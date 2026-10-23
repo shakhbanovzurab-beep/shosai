@@ -32,7 +32,7 @@ from shosai.features.files.application.upload_links import (
     view_of,
 )
 from shosai.features.files.application.upload_rules import UploadRequest, checked_request
-from shosai.features.files.domain.keys import PersonOwner, file_key, transient_key
+from shosai.features.files.domain.keys import PersonOwner, file_key, held_key, transient_key
 from shosai.features.files.domain.purposes import PURPOSES, UploadPurpose
 from shosai.features.files.domain.quota import limit_bytes
 from shosai.features.files.domain.uploads import (
@@ -77,14 +77,10 @@ class UploadService:
     async def create(self, principal: Principal, raw: UploadRequest) -> UploadView:
         """Reserve, start the multipart upload and sign a link per part."""
         request = checked_request(raw)
-        counted = PURPOSES[request.purpose].in_file_manager
-        limit = await self._limit(principal) if counted else None
+        rules = PURPOSES[request.purpose]
+        limit = await self._limit(principal) if rules.counted else None
         upload_id, now = new_id(), self._clock()
-        key = (
-            file_key(PersonOwner(principal.user_id), upload_id)
-            if counted
-            else transient_key(request.purpose, upload_id)
-        )
+        key = _key_of(request.purpose, PersonOwner(principal.user_id), upload_id)
         multipart = await self._storage.uploads[principal.home].create(
             key, content_type=request.content_type
         )
@@ -96,7 +92,7 @@ class UploadService:
         )  # fmt: skip
         try:
             async with self._transactions.begin(principal.scope()) as session:
-                if counted and not await usage_store.reserve(
+                if rules.counted and not await usage_store.reserve(
                     session, principal.user_id, request.size_bytes, limit
                 ):
                     raise storage_refusal(limit)
@@ -164,7 +160,7 @@ class UploadService:
         async with self._transactions.begin(principal.scope()) as session:
             closed_record = await move_state(session, record.id, UploadState(record.state), to)
             if closed_record is not None:
-                if PURPOSES[UploadPurpose(record.purpose)].in_file_manager:
+                if PURPOSES[UploadPurpose(record.purpose)].counted:
                     await usage_store.release(session, record.user_id, record.size_bytes)
                 await record_deletions(session, [record.object_key])
         if closed_record is None:
@@ -195,6 +191,17 @@ class UploadService:
     async def _limit(self, principal: Principal) -> int | None:
         snapshot = await self._ports.get(ENTITLEMENTS).snapshot(principal.home, principal.user_id)
         return limit_bytes(snapshot.limits.file_manager_gb)
+
+
+def _key_of(purpose: UploadPurpose, owner: PersonOwner, upload_id: UUID) -> str:
+    """Where an upload's object lands: a File Manager file's or a held object's final key in
+    the owner's prefix, or a transient key its claimer moves."""
+    rules = PURPOSES[purpose]
+    if rules.in_file_manager:
+        return file_key(owner, upload_id)
+    if rules.held:
+        return held_key(owner, upload_id)
+    return transient_key(purpose, upload_id)
 
 
 def storage_refusal(limit: int | None) -> AppError:

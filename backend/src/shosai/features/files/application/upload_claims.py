@@ -1,8 +1,9 @@
 """The `files.uploads` binding: a slice takes a ready upload in its own transaction.
 
 The caller's transaction is the uploader's, in their home: row-level security shows only
-their uploads. A ready, unexpired upload of the purpose becomes claimed; a File Manager
-upload's reserved bytes become used in the same transaction. A second claim of the same
+their uploads. A ready, unexpired upload of the purpose becomes claimed; the reserved bytes
+of an upload counted in storage (File Manager, an object files holds) become used in the
+same transaction. A second claim of the same
 upload for the same purpose answers the same object; anything else is not claimable.
 """
 
@@ -42,7 +43,7 @@ class UploadClaims:
         if record.state == UploadState.READY.value and self._clock() < record.expires_at:
             record.state = UploadState.CLAIMED.value
             record.finished_at = self._clock()
-            if PURPOSES[purpose].in_file_manager:
+            if PURPOSES[purpose].counted:
                 await usage_store.settle(session, record.user_id, record.size_bytes)
         elif record.state != UploadState.CLAIMED.value:
             raise UploadNotClaimableError

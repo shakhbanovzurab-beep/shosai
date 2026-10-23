@@ -130,6 +130,16 @@ class GuardedObjects:
         self._guard.check()
         return self._inner.open(key)
 
+    async def put(self, key: str, body: bytes, *, content_type: str) -> ObjectInfo:
+        """Write a small object."""
+        self._guard.check()
+        return await self._inner.put(key, body, content_type=content_type)
+
+    def list_objects(self, prefix: str) -> AsyncIterator[ObjectInfo]:
+        """The objects under the prefix."""
+        self._guard.check()
+        return self._inner.list_objects(prefix)
+
     async def delete_many(self, keys: Sequence[str]) -> None:
         """Delete the objects; a failure the test set comes first."""
         self._guard.check()

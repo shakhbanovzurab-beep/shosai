@@ -1,13 +1,19 @@
 """Tasks' part of a person's export, transfer and erasure (ADR 0045 point 7)."""
 
 import uuid
+from collections.abc import Collection
+from dataclasses import dataclass, field
+from typing import cast
 
 from sqlalchemy import select
 
 from shosai.core.account_data.handlers import AccountRef
 from shosai.core.kernel.homes import Home
 from shosai.core.kernel.tenancy import TenancyScope
+from shosai.core.ports.directory import PortDirectory
+from shosai.features.files.contracts.held_objects import HELD_OBJECTS, HeldObjects
 from shosai.features.tasks.application.account_data import TasksAccountData
+from shosai.features.tasks.infrastructure.attachment_records import TaskAttachmentRecord
 from shosai.features.tasks.infrastructure.board_records import (
     BoardColumnRecord,
     BoardRecord,
@@ -20,6 +26,8 @@ from shosai.features.tasks.infrastructure.thread_records import (
     TaskSubtaskRecord,
 )
 from tests.harness.database_access import DatabaseAccess
+
+HELD = uuid.uuid4()
 
 
 async def seed(homes: DatabaseAccess, person: uuid.UUID, org: uuid.UUID) -> tuple[uuid.UUID, ...]:
@@ -62,7 +70,32 @@ async def seed(homes: DatabaseAccess, person: uuid.UUID, org: uuid.UUID) -> tupl
                     author_user_id=person, body="Комментарий",
                 )
             )  # fmt: skip
+            if org_id is None:
+                session.add(
+                    TaskAttachmentRecord(
+                        id=uuid.uuid4(), task_id=task, user_id=person, name="Схема.png",
+                        content_type="image/png", size_bytes=8, image=True, added_by=person,
+                        held_object_id=HELD,
+                    )
+                )  # fmt: skip
     return own, shared
+
+
+@dataclass
+class Released:
+    """Files' held objects as the test sees them: what tasks gave back."""
+
+    ids: list[uuid.UUID] = field(default_factory=list)
+
+    async def release(self, session: object, held_ids: Collection[uuid.UUID]) -> tuple[str, ...]:
+        """Note the ids; nothing to discard."""
+        del session
+        self.ids += held_ids
+        return ()
+
+    async def discard(self, home: Home, keys: Collection[str]) -> None:
+        """Nothing was released to discard."""
+        del home, keys
 
 
 async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
@@ -70,7 +103,10 @@ async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
 ) -> None:
     person, org = uuid.uuid4(), uuid.uuid4()
     own, shared = await seed(homes, person, org)
-    handler = TasksAccountData(homes.transactions)
+    released = Released()
+    ports = PortDirectory()
+    ports.install([HELD_OBJECTS.bind(cast("HeldObjects", released))])
+    handler = TasksAccountData(homes.transactions, ports)
     russian, european = AccountRef(person, Home.RU), AccountRef(person, Home.EU)
 
     exported = {
@@ -93,7 +129,7 @@ async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
     assert set(exported) == {
         "tasks.jsonl", "meeting_task_sets.jsonl", "boards.jsonl", "board_columns.jsonl",
         "task_placements.jsonl", "task_settings.jsonl", "task_subtasks.jsonl",
-        "task_comments.jsonl",
+        "task_comments.jsonl", "task_attachments.jsonl",
     }  # fmt: skip
     assert str(own).encode() in exported["task_comments.jsonl"]
     assert str(shared).encode() not in exported["task_subtasks.jsonl"]
@@ -103,5 +139,6 @@ async def test_export_transfer_and_erasure_leave_a_workspaces_tasks_with_it(
     assert same
     assert moved == lines_moved == {own}
     assert left == comments_left == {shared}
+    assert released.ids == [HELD, HELD]
     assert await handler.remains(russian) == ()
     assert await handler.remains(european) == ()

@@ -284,7 +284,7 @@ Each card: **Scope** · **Owns** (tables; draft sources from DATA_MAPPING) · **
 
 #### 4. files
 - **Scope:** files and folders of a person or a workspace; presigned multipart uploads (§10) used by every slice that takes bytes (recordings, Leo attachments, ticket attachments, hub materials, workspace uploads); download URLs (the missing open and download); the storage quota and `storage_used_bytes` (F-1); the "use with Leo" flags; transfer of a file to a workspace; deletion with Undo.
-- **Owns:** `storage_files` (O1), `uploads`; the S08 key-layout ADR (DATA_MAPPING §6.2).
+- **Owns:** `storage_files` (O1), `uploads`, `held_objects` (objects other slices hold, ADR 0064); the S08 key-layout ADR (DATA_MAPPING §6.2).
 - **Routes:** no native or external; `/v1/files/*`, `/v1/me/uploads*`.
 - **Depends on:** identity, workspaces (access), billing (`file_manager_gb`).
 - **Emits:** `files.uploaded`, `.deleted`, `.leo_use_changed`.

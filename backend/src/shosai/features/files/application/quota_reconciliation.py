@@ -1,11 +1,12 @@
 """inv-11's daily reconciliation per home: counters against files, objects against rows.
 
 The sweep role compares each person's `used_bytes` with the sum of their visible personal
-files in one statement, so a claim or a deletion never shows half done. The home's bucket
-is then listed under the v2 prefixes a page at a time, outside any transaction; an object
-older than a day (uploads expire within 24 hours) whose key no row names and no deletion
-waits for is an orphan. Both counts become the monitors' gauges and are logged with the
-first ids; nothing is fixed silently. A home or bucket out of reach keeps its gauge.
+files and of the objects files holds for them (ADR 0064) in one statement, so a claim or a
+deletion never shows half done. The home's bucket is then listed under the v2 prefixes a
+page at a time, outside any transaction; an object older than a day (uploads expire within
+24 hours) whose key no file row or held object names and no deletion waits for is an
+orphan. Both counts become the monitors' gauges and are logged with the first ids; nothing
+is fixed silently. A home or bucket out of reach keeps its gauge.
 """
 
 from collections.abc import Callable, Mapping, Sequence
@@ -29,10 +30,14 @@ ORPHAN_AGE: Final = timedelta(hours=25)
 PREFIXES: Final = ("u/", "o/")
 BATCH: Final = 1000
 LOGGED_IDS: Final = 20
+# Место человека — его видимые личные файлы и объекты, которые files держит для других
+# срезов (ADR 0064).
 DRIFT_SQL: Final = text(
     "SELECT coalesce(u.user_id, f.user_id) FROM storage_usage u FULL JOIN ("
-    " SELECT user_id, sum(size_bytes) AS total FROM storage_files"
-    " WHERE org_id IS NULL AND deleted_at IS NULL GROUP BY user_id"
+    " SELECT user_id, sum(size_bytes) AS total FROM ("
+    " SELECT user_id, size_bytes FROM storage_files WHERE org_id IS NULL AND deleted_at IS NULL"
+    " UNION ALL SELECT user_id, size_bytes FROM held_objects WHERE org_id IS NULL"
+    ") counted GROUP BY user_id"
     ") f ON f.user_id = u.user_id"
     " WHERE coalesce(u.used_bytes, 0) <> coalesce(f.total, 0)"
 )

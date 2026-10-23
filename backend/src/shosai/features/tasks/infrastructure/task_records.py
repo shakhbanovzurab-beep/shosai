@@ -1,6 +1,6 @@
 """Tasks and the sets of meetings' tasks in each home (tasks plan §3.4, §3.8).
 
-Revisions `b3d9e5a7c142` and `c8e4a1f6b293`.
+Revisions `b3d9e5a7c142`, `c8e4a1f6b293` and `a4c6e8b2d397` (the cover).
 
 `tasks` is the shareable resource `task`: `user_id`, `org_id` and `access` as workspaces'
 access policy reads them, its assignee the named reader and its meeting the parent, so a
@@ -21,6 +21,7 @@ from sqlalchemy import (
     Date,
     DateTime,
     ForeignKey,
+    ForeignKeyConstraint,
     Index,
     Integer,
     Table,
@@ -87,6 +88,20 @@ class TaskRecord(ModelBase):
         CheckConstraint(
             "leo_fields <@ ARRAY['assignee', 'due', 'priority']::text[]", name="leo_fields_known"
         ),
+        # Обложка — вложение этой же задачи; удаление вложения снимает её (ADR 0064).
+        ForeignKeyConstraint(
+            ["cover_attachment_id"],
+            ["task_attachments.id"],
+            name="fk_tasks_cover_attachment_id_task_attachments",
+            ondelete="SET NULL",
+            use_alter=True,
+        ),
+        ForeignKeyConstraint(
+            ["id", "cover_attachment_id"],
+            ["task_attachments.task_id", "task_attachments.id"],
+            name="fk_tasks_cover_of_the_task",
+            use_alter=True,
+        ),
         # Одна следующая задача на закрытую повторяющуюся (KG-D5).
         Index(
             "uq_tasks_recurred_from",
@@ -150,6 +165,7 @@ class TaskRecord(ModelBase):
     # Встреча — мягкая ссылка: задача, которую тронули, остаётся и после встречи.
     source_meeting_id: Mapped[UUID | None] = mapped_column(Uuid)
     source_finding_id: Mapped[UUID | None] = mapped_column(Uuid)
+    cover_attachment_id: Mapped[UUID | None] = mapped_column(Uuid)
     created_by: Mapped[str] = mapped_column(Text, server_default="person")
     version: Mapped[int] = mapped_column(Integer, server_default="1")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
