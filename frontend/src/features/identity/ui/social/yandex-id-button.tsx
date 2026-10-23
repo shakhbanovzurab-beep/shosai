@@ -4,7 +4,7 @@ import { useLocale } from "use-intl";
 
 import { usePreferencesStore } from "@/features/preferences/model/preferences-provider";
 
-import { mountYandexButton } from "../../model/brand-widgets";
+import { mountYandexButton, YandexIdUnavailableError } from "../../model/brand-widgets";
 
 interface YandexIdButtonProps {
   clientId: string;
@@ -43,8 +43,11 @@ function YandexWidget({
   const theme = usePreferencesStore((state) => state.resolvedThemeMode);
   const locale = useLocale();
   const tokenArrived = useEffectEvent(onToken);
-  // SDK на странице есть — человек закрыл окно: кнопка нужна снова. Нет — сервис недоступен.
-  const stopped = useEffectEvent(() => ("YaAuthSuggest" in window ? onCancel() : onUnavailable()));
+  // SDK не поставил кнопку — она не появится до перезагрузки, остаётся ссылка. Иначе окно Яндекса закрылось без
+  // входа, SDK убрал свой фрейм, и кнопка нужна снова.
+  const stopped = useEffectEvent((error: unknown) =>
+    error instanceof YandexIdUnavailableError ? onUnavailable() : onCancel(),
+  );
 
   useEffect(() => {
     let alive = true;
@@ -54,8 +57,8 @@ function YandexWidget({
       .then((token) => {
         if (alive) tokenArrived(token);
       })
-      .catch(() => {
-        if (alive) stopped();
+      .catch((error: unknown) => {
+        if (alive) stopped(error);
       });
     return () => {
       alive = false;
@@ -63,11 +66,12 @@ function YandexWidget({
     };
   }, [containerId, clientId, theme, locale]);
 
-  // Кнопка SDK рисуется под ссылкой и открывается, когда готова: ни пустого места, ни скачка высоты.
+  // Кнопка SDK рисуется под ссылкой и открывается, когда готова: ни пустого места, ни скачка высоты. Пока она под
+  // ссылкой, inert убирает её фрейм из фокуса и дерева доступности.
   return (
     // isolate: SDK ставит своему фрейму z-index, и без своего слоя наложения он перекрывал бы меню страницы.
     <div className="relative isolate h-11 w-full">
-      <div id={containerId} className="h-11 w-full overflow-hidden rounded-lg" aria-hidden={!shown} />
+      <div id={containerId} className="h-11 w-full overflow-hidden rounded-lg" inert={!shown} />
       {shown ? null : <div className="absolute inset-0">{fallback}</div>}
     </div>
   );

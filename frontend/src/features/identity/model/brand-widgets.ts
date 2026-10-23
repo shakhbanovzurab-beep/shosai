@@ -12,13 +12,22 @@ export type WidgetTheme = "light" | "dark";
 // запасная ссылка.
 export const GOOGLE_BUTTON_FILL = "#202124";
 
+type YandexTokenHandler = () => Promise<{ access_token?: string }>;
+
 interface YandexSuggest {
   init(
     oauth: { client_id: string; response_type: "token"; redirect_uri: string },
     tokenPageOrigin: string,
     suggest: Record<string, string | number>,
-  ): Promise<{ status: string; handler?: () => Promise<{ access_token?: string }>; code?: string }>;
+  ): Promise<{ status: string; handler?: YandexTokenHandler; code?: string }>;
 }
+
+/**
+ * SDK Яндекса не поставил кнопку: не загрузился скрипт, `init` отказал или ответил ошибкой. Так бывает через VPN:
+ * загрузчик SDK ждёт ответа `autofill.yandex.ru` не дольше 5 с и после этого до перезагрузки страницы отказывает
+ * в каждом `init` — повторять бесполезно, на месте кнопки остаётся ссылка входа.
+ */
+export class YandexIdUnavailableError extends Error {}
 
 interface GoogleIdentity {
   initialize(config: {
@@ -42,7 +51,8 @@ export function preloadYandexSdk(): void {
 
 /**
  * Кнопка «Войти с Яндекс ID» SDK Яндекса в элементе с `containerId`; `onShown` — когда SDK её нарисовал,
- * промис отдаёт токен, когда человек разрешил вход. Отказ — SDK не загрузился или человек закрыл окно.
+ * промис отдаёт токен, когда человек разрешил вход. Отказ `YandexIdUnavailableError` — кнопки не будет; любой
+ * другой — окно Яндекса закрылось без токена, и SDK убрал свой фрейм.
  */
 export async function mountYandexButton(
   containerId: string,
@@ -50,6 +60,23 @@ export async function mountYandexButton(
   look: { theme: WidgetTheme; russian: boolean },
   onShown: () => void,
 ): Promise<string> {
+  let waitForToken: YandexTokenHandler;
+  try {
+    waitForToken = await startYandexButton(containerId, clientId, look);
+  } catch (error) {
+    throw new YandexIdUnavailableError("Yandex ID button did not start", { cause: error });
+  }
+  onShown();
+  const answer = await waitForToken();
+  if (!answer.access_token) throw new Error("Yandex ID answered no token");
+  return answer.access_token;
+}
+
+async function startYandexButton(
+  containerId: string,
+  clientId: string,
+  look: { theme: WidgetTheme; russian: boolean },
+): Promise<YandexTokenHandler> {
   await loadSdk(YANDEX_SDK);
   const sdk = (window as BrandWindow).YaAuthSuggest;
   if (sdk === undefined) throw new Error("Yandex ID SDK is missing after load");
@@ -68,10 +95,7 @@ export async function mountYandexButton(
     },
   );
   if (widget.status !== "ok" || widget.handler === undefined) throw new Error(`Yandex ID: ${widget.code ?? "error"}`);
-  onShown();
-  const answer = await widget.handler();
-  if (!answer.access_token) throw new Error("Yandex ID answered no token");
-  return answer.access_token;
+  return widget.handler.bind(widget);
 }
 
 /** Кнопка Google Identity Services; `onCredential` получает ID-токен, когда человек выбрал аккаунт. */

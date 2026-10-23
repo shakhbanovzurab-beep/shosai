@@ -17,6 +17,7 @@ interface VkOneTapLook {
 interface VkOneTapEvents {
   onShown: () => void;
   onCode: (answer: VkCode) => void;
+  /** SDK отдал вход без кода, state или device_id — обменять нечего. */
   onFailed: () => void;
 }
 
@@ -65,6 +66,10 @@ function watchWidgetState(container: HTMLElement, onReady: () => void): () => vo
  * получает state и хеш. SDK грузится отдельным чанком только здесь — на экране, где есть кнопка VK. `onShown` —
  * виджет нарисовал свою кнопку: «Продолжить как …» или, если человек не вошёл в VK, «Войти с VK ID». Возвращает
  * функцию, закрывающую виджет; отказ — SDK не загрузился или сервер не открыл поток.
+ *
+ * Событие ошибки виджета на ссылку входа не меняет: SDK справляется с ним сам. Фрейм не загрузился за 5 с (через
+ * VPN так бывает) или сообщил об ошибке — SDK ставит свою кнопку «Войти с VK ID», ей фрейм не нужен. Окно VK ID
+ * закрыли без входа — виджет остаётся, и человек может попробовать снова.
  */
 export async function mountVkOneTap(
   container: HTMLElement,
@@ -89,7 +94,6 @@ export async function mountVkOneTap(
       styles: { height: 44, borderRadius: 8 },
       showAlternativeLogin: false,
     })
-    .on(vkid.WidgetEvents.ERROR, events.onFailed)
     .on(vkid.OneTapInternalEvents.LOGIN_SUCCESS, (payload: LoginSuccess) => {
       const { code, state, device_id: deviceId } = payload;
       if (typeof code === "string" && typeof state === "string" && typeof deviceId === "string") {

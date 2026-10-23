@@ -39,15 +39,20 @@ function SimpleMark({ path }: { path: string }) {
   );
 }
 
-// Знак Яндекса — красный круг с «Я», как на кнопке «Войти с Яндекс ID».
+// Знак Яндекса с кнопки «Войти с Яндекс ID» — те же контуры, цвет и размер 24 px, что у кнопки SDK Яндекса, поэтому
+// ссылка сменяется кнопкой SDK без скачка: «Я» на русском экране, «Y» на остальных (так же выбирает знак и SDK).
+const YANDEX_GLYPH_RU =
+  "M24.7407 33.9778H29.0889V9.04443H22.7592C16.3929 9.04443 13.0538 12.303 13.0538 17.1176C13.0538 21.2731 15.2187 23.6163 19.0532 26.1609L21.3832 27.6987L18.3927 25.1907L12.4667 33.9778H17.1818L23.5115 24.5317L21.3098 23.0671C18.6496 21.2731 17.3469 19.8818 17.3469 16.8613C17.3469 14.2068 19.2183 12.4128 22.7776 12.4128H24.7223V33.9778H24.7407Z";
+const YANDEX_GLYPH_LATIN =
+  "M22.9515 24.2897C24.2907 27.223 24.737 28.2433 24.737 31.7665V36.4375H19.9544V28.5621L10.9313 8.9375H15.9211L22.9515 24.2897ZM28.8501 8.9375L22.9994 22.2332H27.8617L33.7284 8.9375H28.8501Z";
+
 function YandexMark() {
+  const glyph = useLocale() === "ru" ? YANDEX_GLYPH_RU : YANDEX_GLYPH_LATIN;
   return (
-    <span
-      aria-hidden="true"
-      className="grid size-5 place-items-center rounded-full bg-red-600 font-bold text-[0.75rem] text-white"
-    >
-      {/* i18n-ignore: буква знака Яндекса, не текст интерфейса */}Я
-    </span>
+    <svg viewBox="0 0 44 44" className="size-6" aria-hidden="true">
+      <circle cx="22" cy="22" r="22" fill="#FC3F1D" />
+      <path fill="white" d={glyph} />
+    </svg>
   );
 }
 
@@ -58,7 +63,8 @@ const BRANDS: Record<
   SocialProvider,
   { className: string; style?: CSSProperties; mark: ReactNode; markAtStart?: boolean }
 > = {
-  yandex: { className: "bg-black text-white dark:border-white/20", mark: <YandexMark />, markAtStart: true },
+  // Цвета — как у кнопки SDK Яндекса: чёрная в светлой теме, белая в тёмной.
+  yandex: { className: "bg-black text-white dark:bg-white dark:text-black", mark: <YandexMark />, markAtStart: true },
   vk: { className: "text-white", style: { backgroundColor: `#${siVk.hex}` }, mark: <SimpleMark path={siVk.path} /> },
   google: {
     className: "border-zinc-300 bg-white text-zinc-900 dark:border-white/20 dark:bg-(--google-fill) dark:text-white",

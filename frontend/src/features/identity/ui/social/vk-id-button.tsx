@@ -14,8 +14,10 @@ interface VkIdButtonProps {
 }
 
 /**
- * Кнопка VK ID OneTap, нарисованная SDK VK: «Продолжить как …» для человека, вошедшего в VK. Пока виджет грузится,
- * на её месте — фирменная ссылка входа (`fallback`); она же остаётся, если SDK не загрузился.
+ * Кнопка VK ID OneTap, нарисованная SDK VK: «Продолжить как …» для человека, вошедшего в VK, иначе «Войти с VK ID».
+ * Пока виджет грузится, на её месте — фирменная ссылка входа (`fallback`); она же остаётся, если не загрузился сам
+ * SDK или сервер не открыл поток. Сбой фрейма VK (например, через VPN) ссылкой не заменяется: SDK ставит свою
+ * кнопку, которая открывает окно VK ID.
  */
 export function VkIdButton({ appId, next, onCode, fallback }: VkIdButtonProps) {
   const slot = useRef<HTMLDivElement>(null);
@@ -55,10 +57,11 @@ export function VkIdButton({ appId, next, onCode, fallback }: VkIdButtonProps) {
   }, [appId, theme, language, next]);
 
   if (failed) return fallback;
-  // isolate: фрейм VK ставит свой z-index; без своего слоя наложения он перекрывал бы меню страницы.
+  // isolate: фрейм VK ставит свой z-index; без своего слоя наложения он перекрывал бы меню страницы. Пока виджет под
+  // ссылкой, inert убирает его кнопку и фрейм из фокуса и дерева доступности.
   return (
     <div className="relative isolate h-11 w-full">
-      <div ref={slot} aria-hidden={!shown} className="h-11 w-full overflow-hidden rounded-lg" />
+      <div ref={slot} inert={!shown} className="h-11 w-full overflow-hidden rounded-lg" />
       {shown ? null : <div className="absolute inset-0">{fallback}</div>}
     </div>
   );
