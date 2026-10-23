@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "use-intl";
 
 import { formatSpan } from "@/i18n/format-units";
 
+import { automationsOf } from "../domain/stickers-contract";
 import type { Card } from "../domain/tasks-contract";
 import { columnTime, trackingSums } from "../domain/time-rules";
 import { useBoardSelector, useBoardStickers, useColumn } from "../model/board-hooks";
@@ -102,7 +103,7 @@ export function ColumnTimeSums({ columnId }: { columnId: string }) {
   const tracking = stickers.find((sticker) => sticker.id === "time_tracking");
   return (
     <>
-      {stopwatch?.visible && stopwatch.automations?.restart_on_move ? <ColumnStopwatch columnId={columnId} /> : null}
+      {stopwatch?.visible && automationsOf(stopwatch)?.restart_on_move ? <ColumnStopwatch columnId={columnId} /> : null}
       {tracking?.visible ? <ColumnTracking columnId={columnId} /> : null}
     </>
   );

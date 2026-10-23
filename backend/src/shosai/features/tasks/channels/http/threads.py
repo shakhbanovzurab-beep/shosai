@@ -13,7 +13,7 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Response
-from pydantic import BaseModel, Field
+from pydantic import Field
 
 from shosai.core.pagination.page import Page, PageRequest, page_parameters
 from shosai.core.ports.directory import PortDirectory
@@ -22,6 +22,7 @@ from shosai.features.tasks.application.comments import Comments, CommentView
 from shosai.features.tasks.application.subtasks import SubtaskChange, Subtasks
 from shosai.features.tasks.application.task_parts import SubtaskView
 from shosai.features.tasks.channels.http.detail_models import SubtaskOut
+from shosai.features.tasks.channels.http.out import Out
 from shosai.features.tasks.channels.http.shapes import OptionalIdempotencyKey, invalid
 from shosai.features.tasks.channels.http.strict import Strict
 
@@ -49,7 +50,7 @@ class CommentBody(Strict):
     body: str
 
 
-class CommentAuthorOut(BaseModel):
+class CommentAuthorOut(Out):
     """Who wrote a comment, and whether it is the reader."""
 
     user_id: UUID
@@ -57,7 +58,7 @@ class CommentAuthorOut(BaseModel):
     is_you: bool
 
 
-class CommentOut(BaseModel):
+class CommentOut(Out):
     """A comment on a task."""
 
     id: UUID

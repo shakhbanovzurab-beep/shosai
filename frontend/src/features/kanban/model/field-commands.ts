@@ -4,7 +4,13 @@ import { toast } from "sonner";
 
 import { stickersApi } from "../api/stickers-api";
 import { cardsWithout, cardsWithValues, valuesOn } from "../domain/field-rules";
-import type { BoardSticker, CustomSticker, PlaceSticker, StickerPatch } from "../domain/stickers-contract";
+import {
+  automationsOf,
+  type BoardSticker,
+  type CustomSticker,
+  type PlaceSticker,
+  type StickerPatch,
+} from "../domain/stickers-contract";
 import type { StopwatchAutomations } from "../domain/time-contract";
 import type { BoardSnapshot } from "./board-store";
 import { boardResource } from "./boards-resource";
@@ -46,7 +52,7 @@ export function createFieldCommands(ctx: CommandContext) {
     },
     /** Автоматизации секундомера доски (KT-D2): видны сразу, отказ возвращает прежние. */
     async setAutomations(automations: StopwatchAutomations) {
-      const before = ctx.store.get().stickers.find((s) => s.id === "stopwatch")?.automations;
+      const before = automationsOf(ctx.store.get().stickers.find((s) => s.id === "stopwatch"));
       const put = (value: StopwatchAutomations | undefined) =>
         setStickers((list) => list.map((s) => (s.id === "stopwatch" ? { ...s, automations: value } : s)));
       put(automations);

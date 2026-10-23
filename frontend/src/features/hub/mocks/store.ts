@@ -1,5 +1,3 @@
-import { demo as kanbanDemo } from "@/features/kanban/mocks/store/state";
-
 import { demoNow } from "./clock";
 import { seedDemo } from "./scenario";
 import { chronological } from "./sessions";
@@ -28,11 +26,13 @@ export const factsOf = (hubId: string) => demo.facts.get(hubId) ?? [];
 
 export const materialsOf = (hubId: string) => demo.materials.get(hubId) ?? [];
 
-/** A board's name, or null when there is no such board any more. */
-export const boardName = (boardId: string | null) =>
-  boardId === null ? null : (kanbanDemo().boards.get(boardId)?.name ?? null);
+/*
+ * Доски — настоящие (`/v1/boards`, план tasks, шаг 9), а моки хаба их не видят: имя доски им неизвестно, и
+ * выбранную доску они принимают как есть. Имя назовёт API хабов через BoardReader задач.
+ */
+export const boardName = (_boardId: string | null): string | null => null;
 
-export const boardExists = (boardId: string) => kanbanDemo().boards.has(boardId);
+export const boardExists = (_boardId: string) => true;
 
 export const MAX_HUBS = 50;
 

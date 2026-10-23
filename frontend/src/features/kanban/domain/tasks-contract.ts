@@ -1,147 +1,69 @@
-import type { CustomSticker, StickerValue } from "./stickers-contract";
-import type { TaskClocks } from "./time-contract";
+import type { components } from "@/lib/api/generated/schema";
 
 /*
- * Задача, как её видят доска и панель: маршруты `/v1/tasks/*` плана tasks (§3.3) и TK-D12 (§3.8).
- * snake_case, ошибки — коды ADR 0008 (`problems.ts`), страницы — `{items, next_cursor}`.
+ * Задача, как её видят доска и панель: маршруты `/v1/tasks/*` плана tasks (§3.3) и TK-D12 (§3.8). Формы — из
+ * сгенерированного контракта бэкенда (`openapi.json`); здесь их имена в языке слайса и пределы, которые проверяет
+ * экран. Ошибки — коды ADR 0008 (`problems.ts`).
  */
 
-export const TASK_STATUSES = ["todo", "in_progress", "done"] as const;
-export type TaskStatus = (typeof TASK_STATUSES)[number];
+type Schemas = components["schemas"];
+
+export type TaskStatus = Schemas["TaskStatus"];
+export const TASK_STATUSES = ["todo", "in_progress", "done"] as const satisfies readonly TaskStatus[];
 
 /** От самого срочного; приоритета может не быть (KG-D6). */
-export const PRIORITIES = ["high", "medium", "low"] as const;
-export type Priority = (typeof PRIORITIES)[number];
+export type Priority = Schemas["Priority"];
+export const PRIORITIES = ["high", "medium", "low"] as const satisfies readonly Priority[];
 
 /** Поля, которые Лео заполнил из встречи и человек ещё не менял (KG-D10). */
-export const LEO_FIELDS = ["assignee", "due", "priority"] as const;
-export type LeoField = (typeof LEO_FIELDS)[number];
+export type LeoField = Schemas["LeoField"];
+export const LEO_FIELDS = ["assignee", "due", "priority"] as const satisfies readonly LeoField[];
 
-export const WEEKDAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
-export type Weekday = (typeof WEEKDAYS)[number];
+export type Weekday = Schemas["Weekday"];
+export const WEEKDAYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const satisfies readonly Weekday[];
 
-export type Recurrence = { every: "day" } | { every: "week"; weekdays: Weekday[] } | { every: "month"; day: number };
+export type Recurrence = Schemas["Recurrence"];
 
 /** В пространстве — участник (`user_id`); у личной задачи — имя, как его написали. */
-export type Assignee = { user_id: string | null; name: string };
-export type Cover = { attachment_id: string; preview_url: string | null };
+export type Assignee = Schemas["AssigneeOut"];
+export type Cover = Schemas["CoverOut"];
 /** Пространство задачи; `workspace_slug` — его адрес в кабинете (`/app/w/{slug}`). */
-export type TaskSpace = { workspace_id: string; workspace_slug: string; workspace_name: string };
-export type JiraIssueRef = { key: string; url: string; type: string };
-export type Person = { user_id: string; name: string };
+export type TaskSpace = Schemas["SpaceOut"];
+export type JiraIssueRef = Schemas["JiraOut"];
+export type Person = Schemas["PersonOut"];
 
 /** Карточка в чтении доски: только то, что нужно лицу карточки. */
-export type Card = TaskClocks & {
-  id: string;
-  title: string;
-  status: TaskStatus;
-  priority: Priority | null;
-  /** Календарные дни "2026-10-20"; начало — только вместе со сроком и не позже него. */
-  starts_on: string | null;
-  due_on: string | null;
-  assignee: Assignee | null;
-  cover: Cover | null;
-  /** Значения своих полей этой доски. */
-  values: Record<string, StickerValue>;
-  subtasks_done: number;
-  subtasks_total: number;
-  comment_count: number;
-  attachment_count: number;
-  recurring: boolean;
-  leo_fields: LeoField[];
-  space: TaskSpace | null;
-  jira: JiraIssueRef | null;
-  /** Задача из командного чата: мессенджер и чат для строки на лице карточки (TK-D13). */
-  source_chat: CardChatSource | null;
-  /** Может ли человек удалить задачу: свою — да, задачу пространства — её владелец и админы (TK-D2). */
-  can_delete: boolean;
-};
+export type Card = Schemas["Card"];
+export type Subtask = Schemas["SubtaskOut"];
+/** Превью картинки не шире 640 px; null, пока его делают. */
+export type Attachment = Schemas["AttachmentOut"];
+export type Comment = Schemas["CommentOut"];
+export type CommentsPage = Schemas["Page_CommentOut_"];
 
-export type Subtask = { id: string; title: string; done: boolean };
-
-export type Attachment = {
-  id: string;
-  name: string;
-  content_type: string;
-  size_bytes: number;
-  image: boolean;
-  /** Превью картинки не шире 640 px; null, пока его делают. */
-  preview_url: string | null;
-  added_by: Person;
-  added_at: string;
-};
-
-export type Comment = {
-  id: string;
-  author: Person & { is_you: boolean };
-  body: string;
-  created_at: string;
-  edited_at: string | null;
-};
-export type CommentsPage = { items: Comment[]; next_cursor: string | null };
-
-export type TaskSourceKind = "manual" | "meeting" | "hub" | "mail" | "jira" | "chat";
+export type TaskSourceKind = Schemas["TaskSource"];
 /** Мессенджеры командных чатов (chats §1.1). */
-export type ChatMessenger = "telegram" | "slack";
-export type CardChatSource = { messenger: ChatMessenger; chat_title: string };
+export type ChatMessenger = Schemas["Messenger"];
+export type CardChatSource = Schemas["ChatLineOut"];
 /**
  * Чат и сообщение, из которых задача (TK-D13): как были при создании, поэтому строка переживает отключение
  * чата; подключения тогда уже нет (`connection_id` null), а ссылка ведёт в мессенджер.
  */
-export type TaskChatSource = CardChatSource & {
-  connection_id: string | null;
-  message: { url: string | null; sent_at: string } | null;
-};
-export type TaskSource = {
-  kind: TaskSourceKind;
-  /** Встреча, из которой задача; null, если её нет или она удалена. */
-  meeting: { id: string; title: string; started_at: string } | null;
-  finding: { quote: string; start_ms: number } | null;
-  /** Есть ровно тогда, когда `kind` = chat. */
-  chat: TaskChatSource | null;
-};
+export type TaskChatSource = Schemas["ChatSourceOut"];
+export type TaskSource = Schemas["SourceOut"];
 
-export type TaskDetail = Card & {
-  description: string;
-  recurrence: Recurrence | null;
-  /** Значения полей, которых нет на доске читающего, с их определениями (KG-D4). */
-  other_values: { sticker: CustomSticker; value: StickerValue }[];
-  source: TaskSource;
-  subtasks: Subtask[];
-  attachments: Attachment[];
-  placement: { board_id: string; column_id: string } | null;
-  created_at: string;
-  updated_at: string;
-  completed_at: string | null;
-  /** Момент ответа сервера: по нему экран сверяет свои часы (ADR 0061). */
-  server_now: string;
-};
+/** Задача в панели: карточка, описание, источник, чек-лист, вложения и момент ответа сервера (ADR 0061). */
+export type TaskDetail = Schemas["TaskDetail"];
 
 /** Изменение по присутствию поля: `null` очищает. */
-export type TaskPatch = {
-  title?: string;
-  description?: string;
-  status?: TaskStatus;
-  priority?: Priority | null;
-  starts_on?: string | null;
-  due_on?: string | null;
-  assignee_id?: string | null;
-  assignee_name?: string | null;
-  recurrence?: Recurrence | null;
-  cover_attachment_id?: string | null;
-  /** План и факт таймтрекинга в минутах (ADR 0061); null очищает. */
-  plan_minutes?: number | null;
-  fact_minutes?: number | null;
-};
-
-export type TasksDelete = { task_ids: string[] };
-export type SubtaskCreate = { title: string; position?: number };
-export type SubtaskPatch = { title?: string; done?: boolean; position?: number };
-export type CommentCreate = { body: string };
-export type CommentPatch = { body: string };
+export type TaskPatch = Schemas["TaskPatchBody"];
+export type TasksDelete = Schemas["TasksDeleteBody"];
+export type SubtaskCreate = Schemas["SubtaskCreateBody"];
+export type SubtaskPatch = Schemas["SubtaskPatchBody"];
+export type CommentCreate = Schemas["CommentBody"];
+export type CommentPatch = Schemas["CommentBody"];
 /** Загрузка с назначением `task_attachment` или копия файла из File Manager (FL-D4). */
-export type AttachmentCreate = { upload_id: string } | { file_id: string };
-export type DownloadLink = { url: string; expires_at: string };
+export type AttachmentCreate = Schemas["UploadSourceBody"] | Schemas["FileSourceBody"];
+export type DownloadLink = Schemas["AttachmentDownloadOut"];
 
 export const TITLE_MAX = 200;
 export const DESCRIPTION_MAX = 10_000;

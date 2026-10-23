@@ -3,14 +3,12 @@
 The contract between the Kanban screen (`/app/kanban`) and the backend's `tasks` slice: the `/v1` routes of the
 [tasks plan](../../docs/plan/slices/tasks.md) §3.3, the golden core's TK-D12 (§3.8,
 [ADR 0060](../../docs/adr/0060-kanban-golden-core.md)) and time on a task (§3.9,
-[ADR 0061](../../docs/adr/0061-kanban-time.md)). Until `tasks` serves them, `npm run dev` answers exactly these
-routes from `src/features/kanban/mocks/` (KG-D1); `tasks` step 9 points `api/` at the generated client and deletes
-the mocks. The shapes are in `src/features/kanban/domain/{boards,tasks,stickers,time}-contract.ts`; refusals are the
+[ADR 0061](../../docs/adr/0061-kanban-time.md)). `tasks` serves them (its step 9): `api/` calls them through the
+generated client, and `src/features/kanban/domain/{boards,tasks,stickers,time}-contract.ts` name the generated
+schemas of `backend/openapi.json` in the slice's words, next to the limits the screens check; refusals are the
 platform's envelope `{error: {code, request_id, params?}}` (ADR 0008), worded by the cabinet from
-`domain/problems.ts`. Snake_case; calendar days are `"2026-10-21"`.
-
-The Kanban package moves the screens from the old sample paths `/api/kanban/*` to these routes in its step 2
-([plan](../../docs/plan/packages/KANBAN-golden-core.md)).
+`domain/problems.ts`. Snake_case; calendar days are `"2026-10-21"`. Without a backend (`npm run dev`) the Kanban has
+no data; run the API and `npm run dev:api`.
 
 ## Boards, columns, cards
 
@@ -137,8 +135,6 @@ The Kanban package moves the screens from the old sample paths `/api/kanban/*` t
 
 ## Development
 
-`npm run dev` serves these routes from the mocks. The demo boards are Work (custom fields, covers, subtasks,
-comments, attachments, a recurring task, tasks from a meeting with Leo's marks, a running stopwatch, a timer
-running and one past zero, plan and fact), Home (recurring chores, a range) and Romashka. Two generated boards of
-300 and 1 000 cards, every card with a running stopwatch and every fifth with a timer, appear after
-`sessionStorage.setItem("kanban-demo-large", "1")` and a reload, for the performance measures.
+`npm run dev:api` with the backend's API from source (see `docs/development.md`) serves real boards. The chats
+mocks still create chat tasks in `src/features/kanban/mocks/store/chat-tasks.ts` until chats serves its API; the
+board does not read them.

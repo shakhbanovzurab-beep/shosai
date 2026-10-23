@@ -1,16 +1,34 @@
-// Замер доски Канбана на демо-данных (план пакета Kanban golden core, §5.4): INP перетаскивания карточки мышью и
+// Замер доски Канбана на настоящем API (план пакета Kanban golden core, §5.4): INP перетаскивания карточки мышью и
 // клавиатурой на доске из 300 карточек и CLS, пока карточки грузятся и двигаются. Цели: INP < 200 мс, CLS ≤ 0,1.
-// Нужен запущенный кабинет на моках: npm run perf:kanban -- --base http://localhost:3417 [--board load-300] [--cpu 4]
+// Нужны API и кабинет (`npm run dev:api`), доска из 300 карточек и cookie сессии из входа (JSON `{cookies: [...]}`):
+// npm run perf:kanban -- --base http://localhost:3417 --board <id> --session session.json [--cpu 4]
 
 import { chromium } from "playwright-core";
 
+import { readFileSync } from "node:fs";
 import { parseArgs } from "node:util";
 
 const { values } = parseArgs({
-  options: { base: { type: "string" }, board: { type: "string" }, cpu: { type: "string" } },
+  options: {
+    base: { type: "string" },
+    board: { type: "string" },
+    session: { type: "string" },
+    cpu: { type: "string" },
+  },
 });
 const BASE = new URL(values.base ?? "http://localhost:3000");
-const BOARD = values.board ?? "load-300";
+if (!values.board || !values.session) throw new Error("нужны --board и --session");
+const BOARD = values.board;
+// Refresh-cookie живёт на пути /v1/auth, как её ставит сервер: иначе после поворота их две.
+const COOKIES = JSON.parse(readFileSync(values.session, "utf8")).cookies.map(({ name, value }) => ({
+  name,
+  value,
+  domain: BASE.hostname,
+  path: name === "meetassist_refresh" ? "/v1/auth" : "/",
+  secure: true,
+  httpOnly: name === "meetassist_refresh",
+  sameSite: "Lax",
+}));
 const CPU = Number(values.cpu ?? "1");
 
 // Собирает задержки взаимодействий (Event Timing) и сдвиги без недавнего ввода (layout-shift) с первой отрисовки.
@@ -29,7 +47,7 @@ const OBSERVE = () => {
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
 const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: "en-US" });
 await context.addCookies([{ name: "ui_language", value: "en", url: BASE.origin }]);
-await context.addInitScript(() => sessionStorage.setItem("kanban-demo-large", "1"));
+await context.addCookies(COOKIES);
 await context.addInitScript(OBSERVE);
 const page = await context.newPage();
 if (CPU > 1) await (await context.newCDPSession(page)).send("Emulation.setCPUThrottlingRate", { rate: CPU });

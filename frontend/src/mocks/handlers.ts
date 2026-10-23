@@ -12,7 +12,6 @@ import { handlers as chats } from "@/features/chats/mocks/handlers";
 import { handlers as fileManager } from "@/features/file-manager/mocks/handlers";
 import { handlers as hub } from "@/features/hub/mocks/handlers";
 import { handlers as identity } from "@/features/identity/mocks/handlers";
-import { handlers as kanban } from "@/features/kanban/mocks/handlers";
 import { handlers as knowledgeBase } from "@/features/knowledge-base/mocks/handlers";
 import { handlers as leo } from "@/features/leo/mocks/handlers";
 import { handlers as mail } from "@/features/mail/mocks/handlers";
@@ -41,7 +40,6 @@ export const mockRoutes: readonly MockRoute[] = [
   ...fileManager,
   ...hub,
   ...identity,
-  ...kanban,
   ...knowledgeBase,
   ...leo,
   ...mail,

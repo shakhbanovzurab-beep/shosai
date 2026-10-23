@@ -13,12 +13,12 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Response
-from pydantic import BaseModel
 
 from shosai.core.ports.directory import PortDirectory
 from shosai.features.identity.contracts import Principal, bearer_principal
 from shosai.features.tasks.application.attachments import Attachments, FromFile, FromUpload
 from shosai.features.tasks.channels.http.detail_models import AttachmentOut
+from shosai.features.tasks.channels.http.out import Out
 from shosai.features.tasks.channels.http.shapes import attachment_out
 from shosai.features.tasks.channels.http.strict import Strict
 
@@ -35,7 +35,7 @@ class FileSourceBody(Strict):
     file_id: UUID
 
 
-class AttachmentDownloadOut(BaseModel):
+class AttachmentDownloadOut(Out):
     """A short-lived link to an attachment's bytes."""
 
     url: str

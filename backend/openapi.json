@@ -11698,6 +11698,7 @@
           "id",
           "name",
           "icon",
+          "jira",
           "incoming",
           "task_count",
           "created_at"
@@ -11965,10 +11966,21 @@
           "starts_on",
           "due_on",
           "assignee",
+          "cover",
+          "values",
+          "subtasks_done",
+          "subtasks_total",
+          "comment_count",
+          "attachment_count",
           "recurring",
           "leo_fields",
           "space",
-          "can_delete"
+          "jira",
+          "source_chat",
+          "can_delete",
+          "stopwatch",
+          "timer",
+          "time_tracking"
         ],
         "title": "Card",
         "description": "A card: what a board shows of a task."
@@ -19311,7 +19323,8 @@
         "required": [
           "kind",
           "meeting",
-          "finding"
+          "finding",
+          "chat"
         ],
         "title": "SourceOut",
         "description": "Where a task came from."
@@ -19660,7 +19673,14 @@
             "$ref": "#/components/schemas/SystemSticker"
           },
           "name": {
-            "type": "null",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Name"
           },
           "states": {
@@ -19682,6 +19702,8 @@
         "required": [
           "id",
           "kind",
+          "name",
+          "states",
           "visible",
           "automations"
         ],
@@ -19966,7 +19988,14 @@
             "$ref": "#/components/schemas/SystemSticker"
           },
           "name": {
-            "type": "null",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Name"
           },
           "states": {
@@ -19985,6 +20014,8 @@
         "required": [
           "id",
           "kind",
+          "name",
+          "states",
           "visible"
         ],
         "title": "SystemStickerOut",
@@ -20469,13 +20500,27 @@
           "starts_on",
           "due_on",
           "assignee",
+          "cover",
+          "values",
+          "subtasks_done",
+          "subtasks_total",
+          "comment_count",
+          "attachment_count",
           "recurring",
           "leo_fields",
           "space",
+          "jira",
+          "source_chat",
           "can_delete",
+          "stopwatch",
+          "timer",
+          "time_tracking",
           "description",
           "recurrence",
+          "other_values",
           "source",
+          "subtasks",
+          "attachments",
           "placement",
           "created_at",
           "updated_at",
@@ -20711,10 +20756,21 @@
           "starts_on",
           "due_on",
           "assignee",
+          "cover",
+          "values",
+          "subtasks_done",
+          "subtasks_total",
+          "comment_count",
+          "attachment_count",
           "recurring",
           "leo_fields",
           "space",
+          "jira",
+          "source_chat",
           "can_delete",
+          "stopwatch",
+          "timer",
+          "time_tracking",
           "project_id",
           "meeting_id",
           "created_at",

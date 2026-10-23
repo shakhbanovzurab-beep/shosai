@@ -3101,7 +3101,7 @@ export interface components {
             /** Name */
             name: string;
             icon: components["schemas"]["BoardIcon"];
-            jira?: components["schemas"]["JiraLinkOut"] | null;
+            jira: components["schemas"]["JiraLinkOut"] | null;
             /** Incoming */
             incoming: boolean;
             /** Task Count */
@@ -3171,9 +3171,9 @@ export interface components {
             /** Due On */
             due_on: string | null;
             assignee: components["schemas"]["AssigneeOut"] | null;
-            cover?: components["schemas"]["CoverOut"] | null;
+            cover: components["schemas"]["CoverOut"] | null;
             /** Values */
-            values?: {
+            values: {
                 [key: string]: components["schemas"]["StickerValue"];
             };
             /**
@@ -3201,13 +3201,13 @@ export interface components {
             /** Leo Fields */
             leo_fields: components["schemas"]["LeoField"][];
             space: components["schemas"]["SpaceOut"] | null;
-            jira?: components["schemas"]["JiraOut"] | null;
-            source_chat?: components["schemas"]["ChatLineOut"] | null;
+            jira: components["schemas"]["JiraOut"] | null;
+            source_chat: components["schemas"]["ChatLineOut"] | null;
             /** Can Delete */
             can_delete: boolean;
-            stopwatch?: components["schemas"]["StopwatchOut"] | null;
-            timer?: components["schemas"]["TimerOut"] | null;
-            time_tracking?: components["schemas"]["TimeTrackingOut"] | null;
+            stopwatch: components["schemas"]["StopwatchOut"] | null;
+            timer: components["schemas"]["TimerOut"] | null;
+            time_tracking: components["schemas"]["TimeTrackingOut"] | null;
         };
         /**
          * CardCreateBody
@@ -6180,7 +6180,7 @@ export interface components {
             kind: components["schemas"]["TaskSource"];
             meeting: components["schemas"]["SourceMeetingOut"] | null;
             finding: components["schemas"]["SourceFindingOut"] | null;
-            chat?: components["schemas"]["ChatSourceOut"] | null;
+            chat: components["schemas"]["ChatSourceOut"] | null;
         };
         /**
          * SpaceOut
@@ -6349,9 +6349,9 @@ export interface components {
             id: components["schemas"]["SystemSticker"];
             kind: components["schemas"]["SystemSticker"];
             /** Name */
-            name?: null;
+            name: string | null;
             /** States */
-            states?: components["schemas"]["StickerStateOut"][];
+            states: components["schemas"]["StickerStateOut"][];
             /** Visible */
             visible: boolean;
             automations: components["schemas"]["AutomationsOut"];
@@ -6451,9 +6451,9 @@ export interface components {
             id: components["schemas"]["SystemSticker"];
             kind: components["schemas"]["SystemSticker"];
             /** Name */
-            name?: null;
+            name: string | null;
             /** States */
-            states?: components["schemas"]["StickerStateOut"][];
+            states: components["schemas"]["StickerStateOut"][];
             /** Visible */
             visible: boolean;
         };
@@ -6555,9 +6555,9 @@ export interface components {
             /** Due On */
             due_on: string | null;
             assignee: components["schemas"]["AssigneeOut"] | null;
-            cover?: components["schemas"]["CoverOut"] | null;
+            cover: components["schemas"]["CoverOut"] | null;
             /** Values */
-            values?: {
+            values: {
                 [key: string]: components["schemas"]["StickerValue"];
             };
             /**
@@ -6585,23 +6585,23 @@ export interface components {
             /** Leo Fields */
             leo_fields: components["schemas"]["LeoField"][];
             space: components["schemas"]["SpaceOut"] | null;
-            jira?: components["schemas"]["JiraOut"] | null;
-            source_chat?: components["schemas"]["ChatLineOut"] | null;
+            jira: components["schemas"]["JiraOut"] | null;
+            source_chat: components["schemas"]["ChatLineOut"] | null;
             /** Can Delete */
             can_delete: boolean;
-            stopwatch?: components["schemas"]["StopwatchOut"] | null;
-            timer?: components["schemas"]["TimerOut"] | null;
-            time_tracking?: components["schemas"]["TimeTrackingOut"] | null;
+            stopwatch: components["schemas"]["StopwatchOut"] | null;
+            timer: components["schemas"]["TimerOut"] | null;
+            time_tracking: components["schemas"]["TimeTrackingOut"] | null;
             /** Description */
             description: string;
             recurrence: components["schemas"]["Recurrence"] | null;
             /** Other Values */
-            other_values?: components["schemas"]["OtherValueOut"][];
+            other_values: components["schemas"]["OtherValueOut"][];
             source: components["schemas"]["SourceOut"];
             /** Subtasks */
-            subtasks?: components["schemas"]["SubtaskOut"][];
+            subtasks: components["schemas"]["SubtaskOut"][];
             /** Attachments */
-            attachments?: components["schemas"]["AttachmentOut"][];
+            attachments: components["schemas"]["AttachmentOut"][];
             placement: components["schemas"]["PlacementOut"] | null;
             /**
              * Created At
@@ -6640,9 +6640,9 @@ export interface components {
             /** Due On */
             due_on: string | null;
             assignee: components["schemas"]["AssigneeOut"] | null;
-            cover?: components["schemas"]["CoverOut"] | null;
+            cover: components["schemas"]["CoverOut"] | null;
             /** Values */
-            values?: {
+            values: {
                 [key: string]: components["schemas"]["StickerValue"];
             };
             /**
@@ -6670,13 +6670,13 @@ export interface components {
             /** Leo Fields */
             leo_fields: components["schemas"]["LeoField"][];
             space: components["schemas"]["SpaceOut"] | null;
-            jira?: components["schemas"]["JiraOut"] | null;
-            source_chat?: components["schemas"]["ChatLineOut"] | null;
+            jira: components["schemas"]["JiraOut"] | null;
+            source_chat: components["schemas"]["ChatLineOut"] | null;
             /** Can Delete */
             can_delete: boolean;
-            stopwatch?: components["schemas"]["StopwatchOut"] | null;
-            timer?: components["schemas"]["TimerOut"] | null;
-            time_tracking?: components["schemas"]["TimeTrackingOut"] | null;
+            stopwatch: components["schemas"]["StopwatchOut"] | null;
+            timer: components["schemas"]["TimerOut"] | null;
+            time_tracking: components["schemas"]["TimeTrackingOut"] | null;
             /** Project Id */
             project_id: string | null;
             /** Meeting Id */

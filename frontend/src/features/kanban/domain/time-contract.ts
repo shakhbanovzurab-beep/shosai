@@ -1,41 +1,30 @@
+import type { components } from "@/lib/api/generated/schema";
+
 /*
  * Время задачи (пакет Kanban time, ADR 0061; дополнение TK-D12, план tasks §3.8): секундомер — часы самой задачи
  * с временем по колонкам, таймер — обратный отсчёт заданной человеком длительности, план и факт. Время — сервера:
  * идущие часы — это момент начала, экран считает от `server_now` ответа.
  */
 
+type Schemas = components["schemas"];
+
 /** Секундомер: закрытые отрезки (всего и по колонкам) и момент начала идущего, если он идёт. */
-export type Stopwatch = {
-  running_since: string | null;
-  total_ms: number;
-  by_column: Record<string, number>;
-};
+export type Stopwatch = Schemas["StopwatchOut"];
 
 /** Таймер: идёт, пока задан `ends_at`; на паузе — `paused_left_ms` (после нуля — отрицательный, это перерасход). */
-export type Timer = { length_ms: number; ends_at: string | null; paused_left_ms: number | null };
+export type Timer = Schemas["TimerOut"];
 
 /** План и факт в минутах; null — не задано. */
-export type TimeTracking = { plan_minutes: number | null; fact_minutes: number | null };
+export type TimeTracking = Schemas["TimeTrackingOut"];
 
 /** Три поля времени на задаче; каждое null, пока им не пользовались. */
-export type TaskClocks = {
-  stopwatch: Stopwatch | null;
-  timer: Timer | null;
-  time_tracking: TimeTracking | null;
-};
+export type TaskClocks = Pick<Schemas["Card"], "stopwatch" | "timer" | "time_tracking">;
 
 /** Ответ действий с часами: поля времени и момент ответа сервера. */
-export type ClocksReply = TaskClocks & { server_now: string };
+export type ClocksReply = Schemas["ClocksReply"];
 
-/** Автоматизации секундомера на доске (KT-D2). */
-export type StopwatchAutomations = {
-  /** Запускать, когда задача появляется на доске: создана на ней или пришла с другой. */
-  start_on_arrival: boolean;
-  /** Перезапускать при переносе между колонками и показывать сумму по колонке. */
-  restart_on_move: boolean;
-  /** Останавливать, когда задача выполнена. */
-  stop_on_done: boolean;
-};
+/** Автоматизации секундомера на доске (KT-D2): при появлении задачи, при переносе, при выполнении. */
+export type StopwatchAutomations = Schemas["AutomationsOut"];
 
 /** Как в референсе: доска, включившая секундомер, перезапускает его по колонкам и останавливает на выполненной. */
 export const DEFAULT_STOPWATCH_AUTOMATIONS: StopwatchAutomations = {
@@ -44,7 +33,7 @@ export const DEFAULT_STOPWATCH_AUTOMATIONS: StopwatchAutomations = {
   stop_on_done: true,
 };
 
-export type TimerSet = { length_ms: number };
+export type TimerSet = Schemas["TimerBody"];
 
 const MINUTE_MS = 60_000;
 const HOUR_MS = 60 * MINUTE_MS;

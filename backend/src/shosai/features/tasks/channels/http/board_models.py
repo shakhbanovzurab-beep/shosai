@@ -9,17 +9,18 @@ from datetime import datetime
 from typing import Annotated, Literal
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 
 from shosai.features.tasks.channels.http.card_models import Card
 from shosai.features.tasks.channels.http.detail_models import CustomStickerOut, StickerStateOut
+from shosai.features.tasks.channels.http.out import Out
 from shosai.features.tasks.channels.http.strict import Strict
 from shosai.features.tasks.domain.board_fields import Color, SystemSticker
 from shosai.features.tasks.domain.boards import BoardIcon, BoardTemplate
 from shosai.features.tasks.domain.tasks import Priority, TaskStatus
 
 
-class JiraLinkOut(BaseModel):
+class JiraLinkOut(Out):
     """Where a synced board comes from in Jira, and how its sync goes."""
 
     site: str
@@ -32,7 +33,7 @@ class JiraLinkOut(BaseModel):
     last_synced_at: datetime | None
 
 
-class BoardSummaryOut(BaseModel):
+class BoardSummaryOut(Out):
     """A board in the person's list."""
 
     id: UUID
@@ -44,21 +45,21 @@ class BoardSummaryOut(BaseModel):
     created_at: datetime
 
 
-class IncomingOut(BaseModel):
+class IncomingOut(Out):
     """The board incoming work lands on, and how much waits while there is none."""
 
     board_id: UUID | None
     open: int
 
 
-class BoardsOut(BaseModel):
+class BoardsOut(Out):
     """The person's boards."""
 
     items: list[BoardSummaryOut]
     incoming: IncomingOut
 
 
-class ColumnHeadOut(BaseModel):
+class ColumnHeadOut(Out):
     """A column of a board."""
 
     id: UUID
@@ -74,7 +75,7 @@ class ColumnOut(ColumnHeadOut):
     cards: list[Card]
 
 
-class AutomationsOut(BaseModel):
+class AutomationsOut(Out):
     """What the stopwatch does by itself on the board."""
 
     start_on_arrival: bool
@@ -82,12 +83,14 @@ class AutomationsOut(BaseModel):
     stop_on_done: bool
 
 
-class SystemStickerOut(BaseModel):
+class SystemStickerOut(Out):
     """A system field of the board and whether its cards show it."""
 
     id: SystemSticker
     kind: SystemSticker
-    name: None = None
+    # Всегда null: у системного поля нет своего имени; тип не «null», а строка или null, потому что
+    # openapi-fetch выбрасывает из ответа свойства, чей тип — один null.
+    name: str | None = None
     states: list[StickerStateOut] = Field(default_factory=list)
     visible: bool
 
@@ -104,14 +107,14 @@ class CustomBoardStickerOut(CustomStickerOut):
     visible: bool
 
 
-class StickerBoardOut(BaseModel):
+class StickerBoardOut(Out):
     """A board a sticker is on."""
 
     id: UUID
     name: str
 
 
-class StickerUsageOut(BaseModel):
+class StickerUsageOut(Out):
     """How many tasks carry a value of a sticker, in all and per state."""
 
     tasks: int
@@ -125,13 +128,13 @@ class OwnedStickerOut(CustomStickerOut):
     usage: StickerUsageOut
 
 
-class StickersOut(BaseModel):
+class StickersOut(Out):
     """The person's stickers."""
 
     items: list[OwnedStickerOut]
 
 
-class BoardDetailOut(BaseModel):
+class BoardDetailOut(Out):
     """A board as its screen shows it."""
 
     board: BoardSummaryOut
@@ -212,7 +215,7 @@ class CardPatchBody(Strict):
     position: Annotated[int | None, Field(ge=0)] = None
 
 
-class JiraBoardOut(BaseModel):
+class JiraBoardOut(Out):
     """A Jira board the person's connection sees."""
 
     site: str
@@ -224,7 +227,7 @@ class JiraBoardOut(BaseModel):
     synced_board_id: UUID | None
 
 
-class JiraAvailableOut(BaseModel):
+class JiraAvailableOut(Out):
     """The Jira boards the person's connection sees; none without a connection."""
 
     connected: bool

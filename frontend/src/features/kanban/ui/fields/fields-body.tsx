@@ -8,6 +8,7 @@ import { useTranslations } from "use-intl";
 import { Button } from "@/components/ui/button";
 
 import {
+  automationsOf,
   BOARD_STICKERS_MAX,
   type BoardSticker,
   type CustomSticker,
@@ -28,7 +29,7 @@ import { StopwatchSetup } from "./stopwatch-setup";
 function ActionsFor({ sticker, onEdit }: { sticker: BoardSticker; onEdit: (sticker: CustomSticker) => void }) {
   const t = useTranslations("kanbanFields");
   const { fields } = useBoardCommands();
-  if (sticker.id === "stopwatch") return <StopwatchSetup automations={sticker.automations} />;
+  if (sticker.id === "stopwatch") return <StopwatchSetup automations={automationsOf(sticker)} />;
   if (!isCustomSticker(sticker)) return null;
   return (
     <FieldActions>

@@ -13,6 +13,7 @@ from uuid import UUID
 from pydantic import BaseModel, Field
 
 from shosai.features.tasks.channels.http.card_models import Card, StickerValue
+from shosai.features.tasks.channels.http.out import Out
 from shosai.features.tasks.domain.chat_source import Messenger
 from shosai.features.tasks.domain.recurrence import Weekday
 from shosai.features.tasks.domain.tasks import TaskSource
@@ -41,7 +42,7 @@ class MonthRule(BaseModel):
 type Recurrence = Annotated[DayRule | WeekRule | MonthRule, Field(discriminator="every")]
 
 
-class SourceMeetingOut(BaseModel):
+class SourceMeetingOut(Out):
     """The meeting a task came from."""
 
     id: UUID
@@ -49,21 +50,21 @@ class SourceMeetingOut(BaseModel):
     started_at: datetime
 
 
-class SourceFindingOut(BaseModel):
+class SourceFindingOut(Out):
     """The moment of the meeting that proves the action item."""
 
     quote: str
     start_ms: int
 
 
-class ChatMessageOut(BaseModel):
+class ChatMessageOut(Out):
     """The chat message a task was made from: its link, when the messenger has one."""
 
     url: str | None
     sent_at: datetime
 
 
-class ChatSourceOut(BaseModel):
+class ChatSourceOut(Out):
     """The team chat a task was made from (TK-D13)."""
 
     connection_id: UUID | None
@@ -72,7 +73,7 @@ class ChatSourceOut(BaseModel):
     message: ChatMessageOut
 
 
-class SourceOut(BaseModel):
+class SourceOut(Out):
     """Where a task came from."""
 
     kind: TaskSource
@@ -81,14 +82,14 @@ class SourceOut(BaseModel):
     chat: ChatSourceOut | None = None
 
 
-class PlacementOut(BaseModel):
+class PlacementOut(Out):
     """Where the reader's card of the task sits."""
 
     board_id: UUID
     column_id: UUID
 
 
-class SubtaskOut(BaseModel):
+class SubtaskOut(Out):
     """A line of the task's checklist."""
 
     id: UUID
@@ -96,14 +97,14 @@ class SubtaskOut(BaseModel):
     done: bool
 
 
-class PersonOut(BaseModel):
+class PersonOut(Out):
     """A person by id and name."""
 
     user_id: UUID
     name: str
 
 
-class AttachmentOut(BaseModel):
+class AttachmentOut(Out):
     """A file of the task."""
 
     id: UUID
@@ -130,7 +131,7 @@ class StickerColor(StrEnum):
     PINK = "pink"
 
 
-class StickerStateOut(BaseModel):
+class StickerStateOut(Out):
     """A state of a field."""
 
     id: UUID
@@ -138,19 +139,19 @@ class StickerStateOut(BaseModel):
     color: StickerColor
 
 
-class PersonOwner(BaseModel):
+class PersonOwner(Out):
     """A field of a person's boards."""
 
     user_id: UUID
 
 
-class WorkspaceOwner(BaseModel):
+class WorkspaceOwner(Out):
     """A field of a workspace's boards."""
 
     workspace_id: UUID
 
 
-class CustomStickerOut(BaseModel):
+class CustomStickerOut(Out):
     """A field of the boards' owner: a set of states, a number or a text."""
 
     id: UUID
@@ -160,7 +161,7 @@ class CustomStickerOut(BaseModel):
     owner: PersonOwner | WorkspaceOwner
 
 
-class OtherValueOut(BaseModel):
+class OtherValueOut(Out):
     """A value of a field that is not on the reader's board, with the field."""
 
     sticker: CustomStickerOut
@@ -193,7 +194,7 @@ class TaskItem(Card):
     completed_at: datetime | None
 
 
-class TodayOut(BaseModel):
+class TodayOut(Out):
     """The person's Today."""
 
     items: list[TaskItem]

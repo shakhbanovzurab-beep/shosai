@@ -10,27 +10,28 @@ The panel's shapes are in `detail_models`.
 from datetime import date, datetime
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import Field
 
+from shosai.features.tasks.channels.http.out import Out
 from shosai.features.tasks.domain.chat_source import Messenger
 from shosai.features.tasks.domain.tasks import LeoField, Priority, TaskStatus
 
 
-class AssigneeOut(BaseModel):
+class AssigneeOut(Out):
     """Who does the task: a member by id and name, or a name as written."""
 
     user_id: UUID | None
     name: str
 
 
-class CoverOut(BaseModel):
+class CoverOut(Out):
     """The card's cover: an image attachment of the task and its preview, once made."""
 
     attachment_id: UUID
     preview_url: str | None
 
 
-class SpaceOut(BaseModel):
+class SpaceOut(Out):
     """The workspace a task belongs to, with its address in the cabinet."""
 
     workspace_id: UUID
@@ -38,7 +39,7 @@ class SpaceOut(BaseModel):
     workspace_name: str
 
 
-class JiraOut(BaseModel):
+class JiraOut(Out):
     """The Jira issue a card mirrors."""
 
     key: str
@@ -46,26 +47,26 @@ class JiraOut(BaseModel):
     type: str
 
 
-class ChatLineOut(BaseModel):
+class ChatLineOut(Out):
     """The team chat a task came from, as the card's face names it."""
 
     messenger: Messenger
     chat_title: str
 
 
-class StateValue(BaseModel):
+class StateValue(Out):
     """A field value: one of its states."""
 
     state_id: str
 
 
-class NumberValue(BaseModel):
+class NumberValue(Out):
     """A field value: a number."""
 
     number: float
 
 
-class TextValue(BaseModel):
+class TextValue(Out):
     """A field value: a text."""
 
     text: str
@@ -74,7 +75,7 @@ class TextValue(BaseModel):
 type StickerValue = StateValue | NumberValue | TextValue
 
 
-class StopwatchOut(BaseModel):
+class StopwatchOut(Out):
     """The stopwatch: closed time, per column, and since when it runs, if it runs."""
 
     running_since: datetime | None
@@ -82,7 +83,7 @@ class StopwatchOut(BaseModel):
     by_column: dict[str, int]
 
 
-class TimerOut(BaseModel):
+class TimerOut(Out):
     """The timer: running while `ends_at` is set, paused while `paused_left_ms` is."""
 
     length_ms: int
@@ -90,14 +91,14 @@ class TimerOut(BaseModel):
     paused_left_ms: int | None
 
 
-class TimeTrackingOut(BaseModel):
+class TimeTrackingOut(Out):
     """Plan and fact in minutes."""
 
     plan_minutes: int | None
     fact_minutes: int | None
 
 
-class Card(BaseModel):
+class Card(Out):
     """A card: what a board shows of a task."""
 
     id: UUID

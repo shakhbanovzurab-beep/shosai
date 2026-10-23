@@ -1,4 +1,5 @@
-import { apiRequest, jsonBody } from "@/lib/api/request";
+import { apiClient } from "@/lib/api/app-client";
+import { dataOf } from "@/lib/api/client";
 
 import type {
   BoardCreate,
@@ -18,32 +19,34 @@ import type {
 } from "../domain/boards-contract";
 import type { Card } from "../domain/tasks-contract";
 
-/*
- * Доски, колонки и карточки на `/v1/boards*` (план tasks §3.3, TK-D12). Пока у `tasks` нет API, им отвечают моки
- * слайса; шаг 9 плана tasks переводит этот шлюз на сгенерированный клиент.
- */
+/* Доски, колонки и карточки на `/v1/boards*` (план tasks §3.3, TK-D12). */
 
-const path = (id: string, rest = "") => `/v1/boards/${encodeURIComponent(id)}${rest}`;
-const part = (id: string) => encodeURIComponent(id);
+const board = (id: string) => ({ params: { path: { board_id: id } } });
+const column = (id: string, columnId: string) => ({ params: { path: { board_id: id, column_id: columnId } } });
+const card = (id: string, taskId: string) => ({ params: { path: { board_id: id, task_id: taskId } } });
 
 export const boardsApi = {
-  list: () => apiRequest<BoardsResponse>("/v1/boards"),
-  create: (body: BoardCreate) => apiRequest<BoardSummary>("/v1/boards", jsonBody("POST", body)),
-  setIncoming: (body: IncomingTarget) => apiRequest<BoardsResponse>("/v1/boards/incoming", jsonBody("PUT", body)),
-  get: (id: string) => apiRequest<BoardDetail>(path(id)),
-  patch: (id: string, body: BoardPatch) => apiRequest<BoardSummary>(path(id), jsonBody("PATCH", body)),
-  remove: (id: string) => apiRequest<void>(path(id), { method: "DELETE" }),
-  saveLayout: (id: string, body: Layout) => apiRequest<void>(path(id, "/layout"), jsonBody("PUT", body)),
-  sync: (id: string) => apiRequest<BoardSummary>(path(id, "/sync"), { method: "POST" }),
-  createColumn: (id: string, body: ColumnCreate) =>
-    apiRequest<ColumnHead>(path(id, "/columns"), jsonBody("POST", body)),
-  patchColumn: (id: string, columnId: string, body: ColumnPatch) =>
-    apiRequest<ColumnHead>(path(id, `/columns/${part(columnId)}`), jsonBody("PATCH", body)),
-  removeColumn: (id: string, columnId: string) =>
-    apiRequest<void>(path(id, `/columns/${part(columnId)}`), { method: "DELETE" }),
-  createCard: (id: string, body: CardCreate) => apiRequest<Card>(path(id, "/cards"), jsonBody("POST", body)),
-  patchCard: (id: string, taskId: string, body: CardPatch) =>
-    apiRequest<Card>(path(id, `/cards/${part(taskId)}`), jsonBody("PATCH", body)),
-  jiraAvailable: () => apiRequest<JiraAvailable>("/v1/boards/jira/available"),
-  connectJira: (body: JiraConnect) => apiRequest<BoardSummary>("/v1/boards/jira", jsonBody("POST", body)),
+  list: (): Promise<BoardsResponse> => dataOf(apiClient.GET("/v1/boards")),
+  create: (body: BoardCreate): Promise<BoardSummary> => dataOf(apiClient.POST("/v1/boards", { body })),
+  setIncoming: (body: IncomingTarget): Promise<BoardsResponse> =>
+    dataOf(apiClient.PUT("/v1/boards/incoming", { body })),
+  get: (id: string): Promise<BoardDetail> => dataOf(apiClient.GET("/v1/boards/{board_id}", board(id))),
+  patch: (id: string, body: BoardPatch): Promise<BoardSummary> =>
+    dataOf(apiClient.PATCH("/v1/boards/{board_id}", { ...board(id), body })),
+  remove: (id: string): Promise<void> => dataOf(apiClient.DELETE("/v1/boards/{board_id}", board(id))),
+  saveLayout: (id: string, body: Layout): Promise<void> =>
+    dataOf(apiClient.PUT("/v1/boards/{board_id}/layout", { ...board(id), body })),
+  sync: (id: string): Promise<BoardSummary> => dataOf(apiClient.POST("/v1/boards/{board_id}/sync", board(id))),
+  createColumn: (id: string, body: ColumnCreate): Promise<ColumnHead> =>
+    dataOf(apiClient.POST("/v1/boards/{board_id}/columns", { ...board(id), body })),
+  patchColumn: (id: string, columnId: string, body: ColumnPatch): Promise<ColumnHead> =>
+    dataOf(apiClient.PATCH("/v1/boards/{board_id}/columns/{column_id}", { ...column(id, columnId), body })),
+  removeColumn: (id: string, columnId: string): Promise<void> =>
+    dataOf(apiClient.DELETE("/v1/boards/{board_id}/columns/{column_id}", column(id, columnId))),
+  createCard: (id: string, body: CardCreate): Promise<Card> =>
+    dataOf(apiClient.POST("/v1/boards/{board_id}/cards", { ...board(id), body })),
+  patchCard: (id: string, taskId: string, body: CardPatch): Promise<Card> =>
+    dataOf(apiClient.PATCH("/v1/boards/{board_id}/cards/{task_id}", { ...card(id, taskId), body })),
+  jiraAvailable: (): Promise<JiraAvailable> => dataOf(apiClient.GET("/v1/boards/jira/available")),
+  connectJira: (body: JiraConnect): Promise<BoardSummary> => dataOf(apiClient.POST("/v1/boards/jira", { body })),
 };

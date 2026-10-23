@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { formatClock, formatSpan } from "@/i18n/format-units";
 
+import { automationsOf } from "../../domain/stickers-contract";
 import type { TaskDetail } from "../../domain/tasks-contract";
 import type { Stopwatch } from "../../domain/time-contract";
 import { runningSpan, stopwatchElapsed } from "../../domain/time-rules";
@@ -111,7 +112,9 @@ export function StopwatchField({
   const { stopwatch } = detail;
   const running = Boolean(stopwatch?.running_since);
   const now = useServerSecondWhile(running);
-  const perColumn = useBoardSelector((s) => s.stickers.find((x) => x.id === "stopwatch")?.automations?.restart_on_move);
+  const perColumn = useBoardSelector(
+    (s) => automationsOf(s.stickers.find((x) => x.id === "stopwatch"))?.restart_on_move,
+  );
   const elapsed = stopwatch ? formatClock(locale, stopwatchElapsed(stopwatch, now)) : null;
   const stop = async () => {
     const minutes = Math.floor(((await clocks.stop()) ?? 0) / MINUTE_MS);

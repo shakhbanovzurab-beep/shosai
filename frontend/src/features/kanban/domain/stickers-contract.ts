@@ -1,3 +1,5 @@
+import type { components } from "@/lib/api/generated/schema";
+
 import type { StopwatchAutomations } from "./time-contract";
 
 /*
@@ -6,13 +8,22 @@ import type { StopwatchAutomations } from "./time-contract";
  */
 
 /** Палитра колонок и состояний; кабинет сопоставляет каждому имени цвета Tailwind для светлой и тёмной темы. */
-export const COLORS = ["gray", "red", "orange", "amber", "green", "teal", "blue", "violet", "pink"] as const;
-export type Color = (typeof COLORS)[number];
+type Schemas = components["schemas"];
 
-/**
- * Системные поля — собственные поля задачи, они есть на каждой доске. Последние три — время задачи (ADR 0061):
- * выключены, пока доска их не покажет, и не бывают на доске Jira.
- */
+export type Color = Schemas["StickerColor"];
+export const COLORS = [
+  "gray",
+  "red",
+  "orange",
+  "amber",
+  "green",
+  "teal",
+  "blue",
+  "violet",
+  "pink",
+] as const satisfies readonly Color[];
+
+export type SystemStickerId = Schemas["SystemSticker"];
 export const SYSTEM_STICKERS = [
   "assignee",
   "due",
@@ -21,52 +32,41 @@ export const SYSTEM_STICKERS = [
   "stopwatch",
   "timer",
   "time_tracking",
-] as const;
-export type SystemStickerId = (typeof SYSTEM_STICKERS)[number];
+] as const satisfies readonly SystemStickerId[];
 
-/** Виды своих полей: набор состояний, число, текст. */
-export const CUSTOM_KINDS = ["states", "number", "text"] as const;
-export type CustomKind = (typeof CUSTOM_KINDS)[number];
+export type CustomKind = Schemas["StickerKind"];
+export const CUSTOM_KINDS = ["states", "number", "text"] as const satisfies readonly CustomKind[];
 export type StickerKind = SystemStickerId | CustomKind;
 
-export type StickerState = { id: string; name: string; color: Color };
+export type StickerState = Schemas["StickerStateOut"];
 
-/** Владелец своего поля — владелец досок, на которых оно стоит: человек или пространство. */
-export type StickerOwner = { user_id: string } | { workspace_id: string };
+export type StickerOwner = Schemas["PersonOwner"] | Schemas["WorkspaceOwner"];
 
-export type SystemSticker = { id: SystemStickerId; kind: SystemStickerId; name: null; states: [] };
-export type CustomSticker = {
-  id: string;
-  kind: CustomKind;
-  name: string;
-  /** Только у набора состояний, иначе пусто. */
-  states: StickerState[];
-  owner: StickerOwner;
-};
+export type SystemSticker = Omit<Schemas["SystemStickerOut"], "visible">;
+export type CustomSticker = Schemas["CustomStickerOut"];
 export type Sticker = SystemSticker | CustomSticker;
 
-/** Поле на доске: системные первыми, затем свои в порядке добавления; у секундомера — его автоматизации. */
-export type BoardSticker = Sticker & { visible: boolean; automations?: StopwatchAutomations };
+/** Поле на доске: системное (у секундомера — его автоматизации) или своё, показанное на карточках или нет. */
+export type BoardSticker = Schemas["BoardStickerOut"];
 
-export type StickerValue = { state_id: string } | { number: number } | { text: string };
+export type StickerValue = Schemas["StickerValue"];
 
-/** Сколько задач несут значение поля — всего и по состояниям: удаление состояния или поля говорит, что очистит. */
-export type StickerUsage = { tasks: number; states: Record<string, number> };
+/** Автоматизации секундомера доски: их несёт только поле секундомера, у прочих — undefined. */
+export const automationsOf = (sticker: BoardSticker | undefined): StopwatchAutomations | undefined =>
+  sticker !== undefined && "automations" in sticker ? sticker.automations : undefined;
 
-/** Своё поле владельца: доски, где оно стоит, и сколько задач несут его значения. */
-export type OwnedSticker = CustomSticker & { boards: { id: string; name: string }[]; usage: StickerUsage };
-export type StickersResponse = { items: OwnedSticker[] };
+export type StickerUsage = Schemas["StickerUsageOut"];
 
-export type NewStateDraft = { name: string; color: Color };
-export type NewSticker = { kind: CustomKind; name: string; states?: NewStateDraft[] };
+export type OwnedSticker = Schemas["OwnedStickerOut"];
+export type StickersResponse = Schemas["StickersOut"];
 
-/** Поставить на доску: уже существующее поле владельца или новое. */
-export type PlaceSticker = { sticker_id: string } | NewSticker;
+export type NewStateDraft = Omit<Schemas["StateBody"], "id">;
+export type NewSticker = Schemas["PlaceNewBody"];
 
-/** `states` — полный список: прежние id сохраняют значения, новые приходят без id, пропавшие очищают свои. */
-export type StickerPatch = { name?: string; states?: (NewStateDraft & { id?: string })[] };
-/** Показ поля на карточках; у секундомера ещё и его автоматизации. */
-export type BoardStickerPatch = { visible?: boolean; automations?: StopwatchAutomations };
+export type PlaceSticker = Schemas["PlaceExistingBody"] | Schemas["PlaceNewBody"];
+
+export type StickerPatch = Schemas["StickerPatchBody"];
+export type BoardStickerPatch = Schemas["BoardStickerPatchBody"];
 
 export const STICKER_NAME_MAX = 40;
 export const STATE_NAME_MAX = 40;

@@ -3,19 +3,18 @@
 
 from datetime import datetime
 
-from pydantic import BaseModel
-
 from shosai.features.tasks.channels.http.card_models import (
     StopwatchOut,
     TimerOut,
     TimeTrackingOut,
 )
 from shosai.features.tasks.channels.http.detail_models import ChatMessageOut, ChatSourceOut
+from shosai.features.tasks.channels.http.out import Out
 from shosai.features.tasks.domain.chat_source import ChatOrigin
 from shosai.features.tasks.domain.clocks import TaskClocks
 
 
-class ClocksReply(BaseModel):
+class ClocksReply(Out):
     """What a clock's action answers: the three time fields and the server's moment."""
 
     stopwatch: StopwatchOut | None
